@@ -89,9 +89,6 @@ class SPDefsClass;
 class SPRoot;
 class SPRootClass;
 
-class SPHeader;
-class SPHeaderClass;
-
 class SPNamedView;
 class SPNamedViewClass;
 
