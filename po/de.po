@@ -1384,7 +1384,7 @@ msgstr "Argument:"
 #. TRANSLATORS: this is "T-zero", not "to"
 #: src/dialogs/object-attributes.cpp:68
 msgid "T0:"
-msgstr "NACH:"
+msgstr "T0:"
 
 #: src/dialogs/object-attributes.cpp:73
 msgid "URL:"
@@ -3122,7 +3122,7 @@ msgstr "Größe der Trägheit, die den Stift beeinflußt"
 #. TRANSLATORS: "drag" means "resistance" here
 #: src/toolbox.cpp:1657
 msgid "Drag:"
-msgstr "Ziehen:"
+msgstr ""
 
 #: src/toolbox.cpp:1657
 msgid "How much resistance affects the movement of the pen"
