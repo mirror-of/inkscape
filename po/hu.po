@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-06 12:45+0100\n"
-"PO-Revision-Date: 2004-11-06 13:31+0100\n"
+"PO-Revision-Date: 2004-11-06 13:39+0100\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -3964,7 +3964,7 @@ msgstr "A művészi toll szélessége (a látható rajzvászon-területhez viszo
 
 #: src/toolbox.cpp:1841
 msgid "Thinning:"
-msgstr "Vékonyítás:"
+msgstr "Keskenyítés:"
 
 #: src/toolbox.cpp:1841
 msgid ""
