@@ -791,7 +791,6 @@ sp_selection_scale_relative (SPSelection *selection, NRPoint *align, double dx, 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
 }
 
-
 void
 sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble angle)
 {
@@ -806,7 +805,6 @@ sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble a
 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
 }
-
 
 void
 sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, double dy)
@@ -828,7 +826,6 @@ sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, d
 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
 }
-
 
 void
 sp_selection_move_relative (SPSelection * selection, double dx, double dy)
@@ -873,6 +870,8 @@ sp_selection_rotate (SPSelection *selection, gdouble angle)
 	center.x = 0.5 * (bbox.x0 + bbox.x1);
 	center.y = 0.5 * (bbox.y0 + bbox.y1);
 
+	//	g_print ("%g  %g  %g  %g\n", bbox.x0, bbox.x1, bbox.y0, bbox.y1);
+
 	sp_selection_rotate_relative (selection, &center, angle);
 
 	sp_selection_changed (selection);
@@ -901,6 +900,73 @@ sp_selection_rotate_screen (SPSelection *selection,  gdouble angle)
 	zangle = 180 * atan2 (zmove, r) / M_PI;
 
 	sp_selection_rotate_relative (selection, &center, zangle);
+
+	sp_selection_changed (selection);
+	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+}
+
+void
+sp_selection_scale (SPSelection *selection, gdouble grow)
+{
+	NRRect bbox;
+	NRPoint center;
+	gdouble times;
+
+	sp_selection_bbox (selection, &bbox);
+
+	center.x = 0.5 * (bbox.x0 + bbox.x1);
+	center.y = 0.5 * (bbox.y0 + bbox.y1);
+
+	gdouble r = MAX (bbox.x1 - bbox.x0, bbox.y1 - bbox.y0);
+
+	if (r + 2 * grow <= 0) return;
+
+	times = 1.0 + grow / r;
+
+	sp_selection_scale_relative (selection, &center, times, times);
+
+	sp_selection_changed (selection);
+	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+}
+
+void
+sp_selection_scale_screen (SPSelection *selection, gdouble grow_pixels)
+{
+	NRRect bbox;
+	NRPoint center;
+	gdouble times;
+
+	sp_selection_bbox (selection, &bbox);
+
+	center.x = 0.5 * (bbox.x0 + bbox.x1);
+	center.y = 0.5 * (bbox.y0 + bbox.y1);
+
+	grow_pixels = grow_pixels / SP_DESKTOP_ZOOM (selection->desktop);
+
+	gdouble r = MAX (bbox.x1 - bbox.x0, bbox.y1 - bbox.y0);
+
+	if (r + 2 * grow_pixels <= 0) return;
+
+	times = 1.0 + grow_pixels / r;
+
+	sp_selection_scale_relative (selection, &center, times, times);
+
+	sp_selection_changed (selection);
+	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+}
+
+void
+sp_selection_scale_times (SPSelection *selection, gdouble times)
+{
+	NRRect bbox;
+	NRPoint center;
+
+	sp_selection_bbox (selection, &bbox);
+
+	center.x = 0.5 * (bbox.x0 + bbox.x1);
+	center.y = 0.5 * (bbox.y0 + bbox.y1);
+
+	sp_selection_scale_relative (selection, &center, times, times);
 
 	sp_selection_changed (selection);
 	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
