@@ -4,7 +4,7 @@
 	support for preserving line widths when scaling.  Thanks to Bulia
 	for telling me what to do :)
 	* src/dialogs/align.cpp: refactor some cut-and-paste code into
-	a separate function.
+	a separate function.  Remove NRRect.  Declaration-to-first-use cleanups.
 
 2004-05-09  MenTaLguY <mental@rydia.net>
 
