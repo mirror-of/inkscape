@@ -67,7 +67,7 @@ Shape::Reoriente (Shape * a)
   Reset (0, 0);
   if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1)
     return 0;
-  if (a->Eulerian (true) == false)
+  if (directedEulerian(a) == false)
     return shape_input_err;
 
   _pts = a->_pts;
@@ -151,7 +151,7 @@ Shape::Reoriente (Shape * a)
   MakeEdgeData (false);
   MakeSweepDestData (false);
 
-  if (Eulerian (true) == false)
+  if (directedEulerian(this) == false)
     {
 //              printf( "pas euclidian2");
       _pts.clear();
@@ -171,7 +171,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     return 0;
   if ( directed == fill_justDont ) {
   } else {
-    if (a->Eulerian (true) == false)
+    if (directedEulerian(a) == false)
       return shape_input_err;
   }
   
@@ -884,7 +884,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     }
   if ( directed == fill_justDont ) {
   } else {
-    if (Eulerian (true) == false)
+    if (directedEulerian(this) == false)
     {
 //      Validate();
       //              printf( "pas euclidian2");
@@ -1795,7 +1795,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   a->CleanupSweep ();
   b->CleanupSweep ();
 
-  if (Eulerian (true) == false)
+  if (directedEulerian(this) == false)
     {
 //              printf( "pas euclidian2");
       _pts.clear();

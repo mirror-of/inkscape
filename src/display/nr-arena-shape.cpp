@@ -827,10 +827,10 @@ nr_arena_shape_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int 
 	}
 	if (delta > 1e-3) {
 	    if (shape->fill_shp && (shape->_fill.paint.type() != NRArenaShape::Paint::NONE)) {
-		if (shape->fill_shp->DistanceLE(p, delta)) return item;
+		if (distanceLessThanOrEqual(shape->fill_shp, p, delta)) return item;
 	    }
 	    if (shape->stroke_shp && (shape->_stroke.paint.type() != NRArenaShape::Paint::NONE)) {
-		if ( shape->stroke_shp->DistanceLE(p, delta)) return item;
+		if (distanceLessThanOrEqual(shape->stroke_shp, p, delta)) return item;
 	    }
 	}
     } else {

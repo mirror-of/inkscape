@@ -1953,31 +1953,6 @@ Shape::DisconnectEnd (int b)
   _aretes[b].en = -1;
 }
 
-bool
-Shape::Eulerian (bool directed)
-{
-  if (directed)
-    {
-      for (int i = 0; i < numberOfPoints(); i++)
-	{
-	  if (getPoint(i).dI != getPoint(i).dO)
-	    {
-	      return false;
-	    }
-	}
-    }
-  else
-    {
-      for (int i = 0; i < numberOfPoints(); i++)
-	{
-	  if (getPoint(i).totalDegree() % 2 == 1)
-	    {
-	      return false;
-	    }
-	}
-    }
-  return true;
-}
 
 void
 Shape::Inverse (int b)
@@ -2052,106 +2027,6 @@ Shape::CalcBBox (bool strict_degree)
   }
 }
 
-/** Returns true iff the L2 distance from \a thePt to this shape is <= \a max_l2.
-*  Distance = the min of distance to its points and distance to its edges.
-*  Points without edges are considered, which is maybe unwanted...
-*/
-bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
-{
-  if ( hasPoints() == false ) {
-    return false;
-  }
-  
-  /* TODO: Consider using bbox to return early, perhaps conditional on nbPt or nbAr. */
-  
-  /* Test thePt against pts[i].x for all i. */
-  {
-    /* effic: In one test case (scribbling with the freehand tool to create a small number of long
-    * path elements), changing from a Distance method to a DistanceLE method reduced this
-* function's CPU time from about 21% of total inkscape CPU time to 14-15% of total inkscape
-* CPU time, due to allowing early termination.  I don't know how much the L1 test helps, it
-* may well be a case of premature optimization.  Consider testing dot(offset, offset)
-* instead.
-*/
-    double const max_l1 = max_l2 * M_SQRT2;
-    for (int i = 0; i < numberOfPoints(); i++) {
-      NR::Point const offset( thePt - getPoint(i).x );
-      double const l1 = NR::L1(offset);
-      if ( ( l1 <= max_l2 )
-           || ( ( l1 <= max_l1 )
-                && ( NR::L2(offset) <= max_l2 ) ) )
-      {
-        return true;
-      }
-    }
-  }
-  
-  for (int i = 0; i < numberOfEdges(); i++) {
-    if ( getEdge(i).st >= 0 &&
-         getEdge(i).en >= 0 ) {
-      NR::Point const st(getPoint(getEdge(i).st).x);
-      NR::Point const en(getPoint(getEdge(i).en).x);
-      NR::Point const d( thePt - st );
-      NR::Point const e( en - st );
-      double const el = NR::L2(e);
-      if ( el > 0.001 ) {
-        NR::Point const e_unit( e / el );
-        double const npr = NR::dot(d, e_unit);
-        if ( npr > 0 && npr < el ) {
-          double const nl = fabs( NR::cross(d, e_unit) );
-          if ( nl <= max_l2 ) {
-            return true;
-          }
-        }
-      }
-    }
-  }
-  return false;
-}
-/** Returns true iff the L2 distance from \a thePt to this shape is <= \a max_l2.
-*  Distance = the min of distance to its points and distance to its edges.
-*  Points without edges are considered, which is maybe unwanted...
-*/
-double Shape::Distance(NR::Point const thePt)
-{
-  if ( hasPoints() == false) {
-    return 0.0;
-  }
-  
-  double bdot=NR::dot(thePt-getPoint(0).x,thePt-getPoint(0).x);
-  {
-    for (int i = 0; i < numberOfPoints(); i++) {
-      NR::Point const offset( thePt - getPoint(i).x );
-      double ndot=NR::dot(offset,offset);
-      if ( ndot < bdot ) {
-        bdot=ndot;
-      }
-    }
-  }
-  
-  for (int i = 0; i < numberOfEdges(); i++) {
-    if ( getEdge(i).st >= 0 &&
-         getEdge(i).en >= 0 ) {
-      NR::Point const st(getPoint(getEdge(i).st).x);
-      NR::Point const en(getPoint(getEdge(i).en).x);
-      NR::Point const d( thePt - st );
-      NR::Point const e( en - st );
-      double const el = NR::dot(e,e);
-      if ( el > 0.001 ) {
-        double const npr = NR::dot(d, e);
-        if ( npr > 0 && npr < el ) {
-          double const nl = fabs( NR::cross(d, e) );
-          double ndot=nl*nl/el;
-          if ( ndot < bdot ) {
-            bdot=ndot;
-          }
-        }
-      }
-    }
-  }
-  return sqrt(bdot);
-}
-
 // winding of a point with respect to the Shape
 // 0= outside
 // 1= inside (or -1, that usually the same)
@@ -2208,6 +2083,145 @@ Shape::PtWinding (const NR::Point px) const
     }
   }
   return lr + (ll + rr) / 2;
+}
+
+
+
+/**
+ *    A directed graph is Eulerian iff every vertex has equal indegree and outdegree.
+ *    http://mathworld.wolfram.com/EulerianGraph.html
+ *
+ *    \param s Directed shape.
+ *    \return true if s is Eulerian.
+ */
+
+bool directedEulerian(Shape const *s)
+{
+    for (int i = 0; i < s->numberOfPoints(); i++) {
+	if (s->getPoint(i).dI != s->getPoint(i).dO) {
+	    return false;
+	}
+    }
+
+    return true;
+}
+
+
+
+/**
+ *    \param s Shape.
+ *    \param p Point.
+ *    \return Minimum distance from p to any of the points or edges of s.
+ */
+
+double distance(Shape const *s, NR::Point const &p)
+{
+    if ( s->hasPoints() == false) {
+	return 0.0;
+    }
+
+    /* Find the minimum distance from p to one of the points on s.
+    ** Computing the dot product of the difference vector gives
+    ** us the distance squared; we can leave the square root
+    ** until the end.
+    */
+    double bdot = NR::dot(p - s->getPoint(0).x, p - s->getPoint(0).x);
+
+    for (int i = 0; i < s->numberOfPoints(); i++) {
+	NR::Point const offset( p - s->getPoint(i).x );
+	double ndot = NR::dot(offset, offset);
+	if ( ndot < bdot ) {
+	    bdot = ndot;
+	}
+    }
+
+    for (int i = 0; i < s->numberOfEdges(); i++) {
+	if ( s->getEdge(i).st >= 0 && s->getEdge(i).en >= 0 ) {
+	    /* The edge has start and end points */
+	    NR::Point const st(s->getPoint(s->getEdge(i).st).x); // edge start
+	    NR::Point const en(s->getPoint(s->getEdge(i).en).x); // edge end
+
+	    NR::Point const d(p - st);       // vector between p and edge start
+	    NR::Point const e(en - st);      // vector of the edge
+	    double const el = NR::dot(e, e); // edge length
+
+	    /* Update bdot if appropriate */
+	    if ( el > 0.001 ) {
+		double const npr = NR::dot(d, e);
+		if ( npr > 0 && npr < el ) {
+		    double const nl = fabs( NR::cross(d, e) );
+		    double ndot = nl * nl / el;
+		    if ( ndot < bdot ) {
+			bdot = ndot;
+		    }
+		}
+	    }
+	}
+    }
+    
+    return sqrt(bdot);
+}
+
+
+
+/**
+ *    Returns true iff the L2 distance from \a thePt to this shape is <= \a max_l2.
+ *    Distance = the min of distance to its points and distance to its edges.
+ *    Points without edges are considered, which is maybe unwanted...
+ *
+ *    This is largely similar to distance().
+ *
+ *    \param s Shape.
+ *    \param p Point.
+ *    \param max_l2 L2 distance.
+ */
+
+bool distanceLessThanOrEqual(Shape const *s, NR::Point const &p, double const max_l2)
+{
+    if ( s->hasPoints() == false ) {
+	return false;
+    }
+    
+    /* TODO: Consider using bbox to return early, perhaps conditional on nbPt or nbAr. */
+    
+    /* TODO: Efficiency: In one test case (scribbling with the freehand tool to create a small number of long
+    ** path elements), changing from a Distance method to a DistanceLE method reduced this
+    ** function's CPU time from about 21% of total inkscape CPU time to 14-15% of total inkscape
+    ** CPU time, due to allowing early termination.  I don't know how much the L1 test helps, it
+    ** may well be a case of premature optimization.  Consider testing dot(offset, offset)
+    ** instead.
+    */
+  
+    double const max_l1 = max_l2 * M_SQRT2;
+    for (int i = 0; i < s->numberOfPoints(); i++) {
+	NR::Point const offset( p - s->getPoint(i).x );
+	double const l1 = NR::L1(offset);
+	if ( (l1 <= max_l2) || ((l1 <= max_l1) && (NR::L2(offset) <= max_l2)) ) {
+	    return true;
+	}
+    }
+    
+    for (int i = 0; i < s->numberOfEdges(); i++) {
+	if ( s->getEdge(i).st >= 0 && s->getEdge(i).en >= 0 ) {
+	    NR::Point const st(s->getPoint(s->getEdge(i).st).x);
+	    NR::Point const en(s->getPoint(s->getEdge(i).en).x);
+	    NR::Point const d(p - st);
+	    NR::Point const e(en - st);
+	    double const el = NR::L2(e);
+	    if ( el > 0.001 ) {
+		NR::Point const e_unit(e / el);
+		double const npr = NR::dot(d, e_unit);
+		if ( npr > 0 && npr < el ) {
+		    double const nl = fabs(NR::cross(d, e_unit));
+		    if ( nl <= max_l2 ) {
+			return true;
+		    }
+		}
+	    }
+	}
+    }
+    
+    return false;
 }
 
 //};

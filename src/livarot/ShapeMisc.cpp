@@ -36,7 +36,7 @@ Shape::ConvertToForme (Path * dest)
 {
   if (numberOfPoints() <= 1 || numberOfEdges() <= 1)
     return;
-  if (Eulerian (true) == false)
+  if (directedEulerian(this) == false)
     return;
   
   // prepare

@@ -252,10 +252,10 @@ sp_canvas_bpath_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_it
 	    *actual_item = item;
 	    return 0.0;
 	}
-	return cbp->stroke_shp->Distance(p);
+	return distance(cbp->stroke_shp, p);
     }
     if (cbp->fill_shp) {
-	return cbp->fill_shp->Distance(p);
+        return distance(cbp->fill_shp, p);
     }
 	
     return BIGVAL;

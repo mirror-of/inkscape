@@ -338,9 +338,6 @@ public:
 
   // miscanellous routines
   void Inverse (int b);		// reverses edge b (start <-> end)
-  bool Eulerian (bool directed);	// is the graph eulerian, considered directed if directed=true and
-  // undirected if not?
-  // nota: a polygon is always eulerian
   void CalcBBox (bool strict_degree=false);		// calc bounding box and sets leftX,rightX,topY and bottomY to their values
 
   // debug function: plots the graph (mac only)
@@ -397,8 +394,6 @@ public:
   // the result is NOT a polygon; you need a subsequent call to ConvertToShape to get a real polygon
   int MakeOffset (Shape * of, double dec, JoinType join, double miter);
   
-  bool DistanceLE(NR::Point thePt, double const max_dist);
-  double  Distance(NR::Point thePt);
   int               PtWinding (const NR::Point px) const ; // plus rapide
   int               Winding (const NR::Point px) const ;
   
@@ -531,5 +526,9 @@ private:
   };
   
 };
+
+bool directedEulerian(Shape const *s);
+double distance(Shape const *s, NR::Point const &p);
+bool distanceLessThanOrEqual(Shape const *s, NR::Point const &p, double const max_l2);
 
 #endif
