@@ -238,6 +238,13 @@ sp_desktop_dispose (GObject *object)
 {
     SPDesktop *dt = SP_DESKTOP (object);
 
+    while (dt->event_context) {
+        SPEventContext *ec = dt->event_context;
+        dt->event_context = ec->next;
+        sp_event_context_finish (ec);
+        g_object_unref (G_OBJECT (ec));
+    }
+
     dt->sel_modified_connection.disconnect();
     dt->sel_modified_connection.~connection();
 
@@ -255,13 +262,6 @@ sp_desktop_dispose (GObject *object)
     if (dt->inkscape) {
         inkscape_remove_desktop (dt);
         dt->inkscape = NULL;
-    }
-
-    while (dt->event_context) {
-        SPEventContext *ec = dt->event_context;
-        dt->event_context = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
     }
 
     if (dt->selection) {
