@@ -167,14 +167,16 @@ public:
   // t=0 means it's at the start of the command's chunk, t=1 it's at the end
   struct path_lineto
   {
+    path_lineto(bool m, NR::Point pp) : isMoveTo(m), p(pp), piece(-1), t(0) {}
+    path_lineto(bool m, NR::Point pp, int pie, double tt) : isMoveTo(m), p(pp), piece(pie), t(tt) {}
+    
     int isMoveTo;
     NR::Point  p;
     int piece;
     double t;
   };
   
-  int     nbPt, maxPt, sizePt;
-  char    *pts;
+  std::vector<path_lineto> pts;
 
   bool back;
 
@@ -209,7 +211,7 @@ public:
 
   // creation of the polyline (you can tinker with these function if you want)
   void SetBackData (bool nVal);	// has back data?
-  void ResetPoints (int expected = 0);	// resets to the empty polyline
+  void ResetPoints(); // resets to the empty polyline
   int AddPoint ( NR::Point const &iPt, bool mvto = false);	// add point
   int AddPoint ( NR::Point const &iPt, int ip, double it, bool mvto = false);
   int AddForcedPoint ( NR::Point const &iPt);	// add point
@@ -317,7 +319,7 @@ private:
  
   // creation of dashes: take the polyline given by spP (length spL) and dash it according to head, body, etc. put the result in
   // the polyline of this instance
-  void DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset);
+  void DashSubPath(int spL, int spP, std::vector<path_lineto> const &orig_pts, float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset);
 
   // Functions used by the conversion.
   // they append points to the polyline

@@ -29,8 +29,6 @@ Path::Path()
 	pending_moveto_cmd = -1;
   
 	back = false;
-	nbPt = maxPt = sizePt = 0;
-	pts = NULL;
 }
 
 Path::~Path()
@@ -38,12 +36,10 @@ Path::~Path()
     for (std::vector<path_descr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
         delete *i;
     }
-	g_free(descr_data);
-	descr_data = NULL;
-	g_free(pts);
-	pts = NULL;
-	ddata_max = ddata_nb = 0;
-	nbPt = maxPt = sizePt = 0;
+
+    g_free(descr_data);
+    descr_data = NULL;
+    ddata_max = ddata_nb = 0;
 }
 
 // debug function do dump the path contents on stdout
@@ -113,7 +109,7 @@ Path::Reset()
 void
 Path::Copy (Path * who)
 {
-	ResetPoints (0);
+    ResetPoints();
 	if (who->ddata_nb > ddata_max)
 	{
 		ddata_max = who->ddata_nb;
@@ -666,163 +662,109 @@ Path::SetBackData (bool nVal)
 	if (back == false) {
 		if (nVal == true && back == false) {
 			back = true;
-			ResetPoints (nbPt);
+			ResetPoints();
 		} else if (nVal == false && back == true) {
 			back = false;
-			ResetPoints (nbPt);
+			ResetPoints();
 		}
 	} else {
 		if (nVal == true && back == false) {
 			back = true;
-			ResetPoints (nbPt);
+			ResetPoints();
 		} else if (nVal == false && back == true) {
 			back = false;
-			ResetPoints (nbPt);
+			ResetPoints();
 		}
 	}
 }
-void
-Path::ResetPoints (int expected)
+
+
+void Path::ResetPoints()
 {
-	nbPt = 0;
-        sizePt = expected * sizeof (path_lineto);
-	if (sizePt > maxPt) {
-		maxPt = sizePt;
-		pts = (char *) g_realloc(pts, maxPt);
-	}
+    pts.clear();
 }
-int
-Path::AddPoint (NR::Point const &iPt, bool mvto)
+
+
+int Path::AddPoint(NR::Point const &iPt, bool mvto)
 {
-	if (back) {
-		return AddPoint (iPt, -1, 0.0, mvto);
-	}
+    if (back) {
+        return AddPoint (iPt, -1, 0.0, mvto);
+    }
   
-	int nextSize = sizePt + sizeof (path_lineto);
-	if (nextSize > maxPt) {
-		maxPt = 2 * sizePt + sizeof (path_lineto);
-		pts = (char *) g_realloc(pts, maxPt);
-	}
-	if ( !mvto
-	     && ( nbPt > 0 )
-	     && ( ((path_lineto *) pts)[nbPt - 1].p == iPt ) )
-	{
-		return -1;
-	}
-	int n = nbPt++;
-	sizePt = nextSize;
-	reinterpret_cast<path_lineto *>(pts)[n].isMoveTo = ( mvto
-							     ? polyline_moveto
-							     : polyline_lineto );
-	reinterpret_cast<path_lineto *>(pts)[n].p = iPt;
-	return n;
-}
-
-
-int
-Path::AddPoint (NR::Point const &iPt, int ip, double it, bool mvto)
-{
-	if (back) {
-	} else {
-		return AddPoint (iPt, mvto);
-	}
-	int nextSize = sizePt + sizeof (path_lineto);
-	if (nextSize > maxPt) {
-		maxPt = 2 * sizePt + sizeof (path_lineto);
-		pts = (char *) g_realloc(pts, maxPt);
-	}
-	if ( !mvto
-	     && ( nbPt > 0 )
-	     && ( ((path_lineto *) pts)[nbPt - 1].p == iPt ) )
-	{
-		return -1;
-	}
-	int n = nbPt++;
-	sizePt = nextSize;
-	reinterpret_cast<path_lineto *>(pts)[n].isMoveTo = ( mvto
-							       ? polyline_moveto
-							       : polyline_lineto );
-	reinterpret_cast<path_lineto *>(pts)[n].p = iPt;
-	reinterpret_cast<path_lineto *>(pts)[n].piece = ip;
-	reinterpret_cast<path_lineto *>(pts)[n].t = it;
-	return n;
-}
-
-int
-Path::AddForcedPoint (NR::Point const &iPt)
-{
-	if (back) {
-		return AddForcedPoint (iPt, -1, 0.0);
-	}
-	int nextSize = sizePt + sizeof (path_lineto);
-	if (nextSize > maxPt) {
-		maxPt = 2 * sizePt + sizeof (path_lineto);
-		pts = (char *) g_realloc(pts, maxPt);
-	}
-	if ( ( nbPt <= 0 )
-	     || ( ((path_lineto *) pts)[nbPt - 1].isMoveTo != polyline_lineto ) )
-	{
-		return -1;
-	}
-	int n = nbPt++;
-	sizePt = nextSize;
-	((path_lineto *) pts)[n].isMoveTo = polyline_forced;
-	((path_lineto *) pts)[n].p = ((path_lineto *) pts)[n - 1].p;
-	return n;
-}
-int
-Path::AddForcedPoint (NR::Point const &iPt, int /*ip*/, double /*it*/)
-{
-	/* FIXME: ip & it aren't used.  Is this deliberate? */
-	if (!back) {
-		return AddForcedPoint (iPt);
-	}
-	int nextSize = sizePt + sizeof (path_lineto);
-	if (nextSize > maxPt) {
-		maxPt = 2 * sizePt + sizeof (path_lineto);
-		pts = (char *) g_realloc(pts, maxPt);
-	}
-	if ( ( nbPt <= 0 )
-	     || ( ((path_lineto *) pts)[nbPt - 1].isMoveTo != polyline_lineto ) )
-	{
-		return -1;
-	}
-	int n = nbPt++;
-	sizePt = nextSize;
-	((path_lineto *) pts)[n].isMoveTo = polyline_forced;
-	((path_lineto *) pts)[n].p = ((path_lineto *) pts)[n - 1].p;
-	((path_lineto *) pts)[n].piece = ((path_lineto *) pts)[n - 1].piece;
-	((path_lineto *) pts)[n].t = ((path_lineto *) pts)[n - 1].t;
-	return n;
-}
-
-void        
-Path::PolylineBoundingBox(double &l,double &t,double &r,double &b)
-{
-  l=t=r=b=0.0;
-  if ( nbPt <= 0 ) return;
-  if ( back ) {
-    path_lineto*  tp=(path_lineto*)pts;
-    l=r=tp[0].p[0];
-    t=b=tp[0].p[1];
-    if ( nbPt <= 1 ) return;
-    for (int i=1;i<nbPt;i++) {
-      if ( tp[i].p[0] > r ) r=tp[i].p[0];
-      if ( tp[i].p[0] < l ) l=tp[i].p[0];
-      if ( tp[i].p[1] > b ) b=tp[i].p[1];
-      if ( tp[i].p[1] < t ) t=tp[i].p[1];
+    if ( !mvto && pts.empty() == false && pts.back().p == iPt ) {
+        return -1;
     }
-  } else {
-    path_lineto*  tp=(path_lineto*)pts;
-    l=r=tp[0].p[0];
-    t=b=tp[0].p[1];
-    if ( nbPt <= 1 ) return;
-    for (int i=1;i<nbPt;i++) {
-      if ( tp[i].p[0] > r ) r=tp[i].p[0];
-      if ( tp[i].p[0] < l ) l=tp[i].p[0];
-      if ( tp[i].p[1] > b ) b=tp[i].p[1];
-      if ( tp[i].p[1] < t ) t=tp[i].p[1];
+    
+    int const n = pts.size();
+    pts.push_back(path_lineto(mvto ? polyline_moveto : polyline_lineto, iPt));
+    return n;
+}
+
+
+int Path::AddPoint(NR::Point const &iPt, int ip, double it, bool mvto)
+{
+    if (back == false) {
+        return AddPoint (iPt, mvto);
     }
+    
+    if ( !mvto && pts.empty() == false && pts.back().p == iPt ) {
+        return -1;
+    }
+    
+    int const n = pts.size();
+    pts.push_back(path_lineto(mvto ? polyline_moveto : polyline_lineto, iPt, ip, it));
+    return n;
+}
+
+int Path::AddForcedPoint(NR::Point const &iPt)
+{
+    if (back) {
+        return AddForcedPoint (iPt, -1, 0.0);
+    }
+    
+    if ( pts.empty() || pts.back().isMoveTo != polyline_lineto ) {
+        return -1;
+    }
+    
+    int const n = pts.size();
+    pts.push_back(path_lineto(polyline_forced, pts[n - 1].p));
+    return n;
+}
+
+
+int Path::AddForcedPoint(NR::Point const &iPt, int /*ip*/, double /*it*/)
+{
+    /* FIXME: ip & it aren't used.  Is this deliberate? */
+    if (!back) {
+        return AddForcedPoint (iPt);
+    }
+    
+    if ( pts.empty() || pts.back().isMoveTo != polyline_lineto ) {
+        return -1;
+    }
+    
+    int const n = pts.size();
+    pts.push_back(path_lineto(polyline_forced, pts[n - 1].p, pts[n - 1].piece, pts[n - 1].t));
+    return n;
+}
+
+void Path::PolylineBoundingBox(double &l, double &t, double &r, double &b)
+{
+  l = t = r = b = 0.0;
+  if ( pts.empty() ) {
+      return;
+  }
+
+  std::vector<path_lineto>::const_iterator i = pts.begin();
+  l = r = i->p[NR::X];
+  t = b = i->p[NR::Y];
+  i++;
+
+  for (; i != pts.end(); i++) {
+      r = std::max(r, i->p[NR::X]);
+      l = std::min(l, i->p[NR::X]);
+      b = std::max(b, i->p[NR::Y]);
+      t = std::min(t, i->p[NR::Y]);
   }
 }
 

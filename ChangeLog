@@ -1,3 +1,10 @@
+2004-10-19  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/livarot/Path.cpp, src/livarot/Path.h,
+	src/livarot/PathConversion.cpp, src/livarot/PathCutting.cpp,
+	src/livarot/PathSimplify.cpp, src/livarot/PathStroke.cpp: use a
+	std::vector for Path::pts.
+
 2004-10-18  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/livarot/Path.h, src/livarot/PathSimplify.cpp: coding style

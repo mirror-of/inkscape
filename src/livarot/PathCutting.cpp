@@ -58,69 +58,40 @@ static inline unsigned SizeForData(int const typ)
 void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset)
 {
   if ( nbD <= 0 || body <= 0.0001 ) return; // pas de tirets, en fait
-  
-  int    origNb=nbPt;
-  char*  origPts=pts;
-  nbPt=maxPt=0;
-  pts=NULL;
+
+  std::vector<path_lineto> orig_pts = pts;
+  pts.clear();
   
   int       lastMI=-1;
-  char*     curP=origPts;
-  char*     lastMP=NULL;
+  int curP = 0;
+  int lastMP = -1;
   
-  for (int i=0;i<origNb;i++) {
-    int const typ = ((path_lineto*)curP)->isMoveTo;
-    if ( typ == polyline_moveto ) {
+  for (int i = 0; i < int(orig_pts.size()); i++) {
+    if ( orig_pts[curP].isMoveTo == polyline_moveto ) {
       if ( lastMI >= 0 && lastMI < i-1 ) { // au moins 2 points
-        DashSubPath(i-lastMI,lastMP,head,tail,body,nbD,dashs,stPlain,stOffset);
+        DashSubPath(i-lastMI,lastMP, orig_pts, head,tail,body,nbD,dashs,stPlain,stOffset);
       }
       lastMI=i;
       lastMP=curP;
-    } else if ( typ == polyline_forced ) {
-    } else {
     }
-    curP+=sizeof(path_lineto);
+    curP++;
   }
-  if ( lastMI >= 0 && lastMI < origNb-1 ) {
-    DashSubPath(origNb-lastMI,lastMP,head,tail,body,nbD,dashs,stPlain,stOffset);
+  if ( lastMI >= 0 && lastMI < int(orig_pts.size()) - 1 ) {
+    DashSubPath(orig_pts.size() - lastMI, lastMP, orig_pts, head, tail, body, nbD, dashs, stPlain, stOffset);
   }
-  
-  curP+=sizeof(path_lineto);
-  g_free(origPts);
-  
-/*  for (int i=0;i<nbPt;i++) {
-    NR::Point  np;
-    int        nm;
-    if ( back ) np=((path_lineto_b*)pts)[i].p; else np=((path_lineto*)pts)[i].p;
-    if ( back ) nm=((path_lineto_b*)pts)[i].isMoveTo; else nm=((path_lineto*)pts)[i].isMoveTo;
-    printf("(%f %f  %i) ",np[0],np[1],nm); // localizing ok
-  }
-  printf("\n");*/
 }
 
 
 
-void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset)
+void Path::DashSubPath(int spL, int spP, std::vector<path_lineto> const &orig_pts, float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset)
 {
-/*  printf("%f [%f : %i ",head,body,nbD); // localizing ok
-  for (int i=0;i<nbD;i++) printf("%f ",dashs[i]); // localizing ok
-  printf("]* %f\n",tail); // localizing ok
-  for (int i=0;i<spL;i++) {
-    NR::Point  np;
-    int        nm;
-    if ( back ) np=((path_lineto_b*)spP)[i].p; else np=((path_lineto*)spP)[i].p;
-    if ( back ) nm=((path_lineto_b*)spP)[i].isMoveTo; else nm=((path_lineto*)spP)[i].isMoveTo;
-    printf("(%f %f  %i) ",np[0],np[1],nm); // localizing ok
-  }
-  printf("\n");*/
-
-  if ( spL <= 0 || spP == NULL ) return;
+  if ( spL <= 0 || spP == -1 ) return;
   
   double      totLength=0;
   NR::Point   lastP;
-  lastP=((path_lineto*)spP)[0].p;
+  lastP = orig_pts[spP].p;
   for (int i=1;i<spL;i++) {
-    NR::Point const n = ((path_lineto*)spP)[i].p;
+    NR::Point const n = orig_pts[spP + i].p;
     NR::Point d=n-lastP;
     double    nl=NR::L2(d);
     if ( nl > 0.0001 ) {
@@ -137,17 +108,17 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
   bool      dashPlain=false;
   double    lastT=0;
   int       lastPiece=-1;
-  lastP=((path_lineto*)spP)[0].p;
+  lastP = orig_pts[spP].p;
   for (int i=1;i<spL;i++) {
     NR::Point   n;
     int         nPiece=-1;
     double      nT=0;
     if ( back ) {
-      n=((path_lineto*)spP)[i].p;
-      nPiece=((path_lineto*)spP)[i].piece;
-      nT=((path_lineto*)spP)[i].t;
+      n = orig_pts[spP + i].p;
+      nPiece = orig_pts[spP + i].piece;
+      nT = orig_pts[spP + i].t;
     } else {
-      n=((path_lineto*)spP)[i].p;
+      n = orig_pts[spP + i].p;
     }
     NR::Point d=n-lastP;
     double    nl=NR::L2(d);
@@ -504,50 +475,60 @@ void  Path::LoadArtBPath(void *iV,NR::Matrix const &trans,bool doTransformation)
     if (closed) Close ();
   }
 }
-double      Path::Length(void)
+
+
+/**
+ *    \return Length of the lines in the pts vector.
+ */
+
+double Path::Length()
 {
-  double   len=0;
-  if ( nbPt <= 0 ) return 0;
-  NR::Point  lastM;
-  NR::Point  lastP;
-  lastM=((path_lineto *) pts)[0].p;
-  lastP=lastM;
-  for (int i=0;i<nbPt;i++) {
-    path_lineto  cur;
-    cur.p=((path_lineto *) pts)[i].p;
-    cur.isMoveTo=((path_lineto *) pts)[i].isMoveTo;
-    if ( cur.isMoveTo == polyline_moveto ) {
-      lastP=lastM=cur.p;
-    } else {
-      len+=NR::L2(cur.p-lastP);
-      lastP=cur.p;
+    if ( pts.empty() ) {
+        return 0;
     }
-  }
-  return len;
+
+    NR::Point lastP = pts[0].p;
+
+    double len = 0;
+    for (std::vector<path_lineto>::const_iterator i = pts.begin(); i != pts.end(); i++) {
+
+        if ( i->isMoveTo != polyline_moveto ) {
+            len += NR::L2(i->p - lastP);
+        }
+
+        lastP = i->p;
+    }
+    
+    return len;
 }
-double      Path::Surface(void)
+
+
+double Path::Surface()
 {
-  double   surf=0;
-  if ( nbPt <= 0 ) return 0;
-  NR::Point  lastM;
-  NR::Point  lastP;
-  lastM=((path_lineto *) pts)[0].p;
-  lastP=lastM;
-  for (int i=0;i<nbPt;i++) {
-    path_lineto  cur;
-    cur.p=((path_lineto *) pts)[i].p;
-    cur.isMoveTo=((path_lineto *) pts)[i].isMoveTo;
-    if ( cur.isMoveTo == polyline_moveto ) {
-      surf+=NR::cross(lastM-lastP,lastM);
-      lastP=lastM=cur.p;
-    } else {
-      surf+=NR::cross(cur.p-lastP,cur.p);
-      lastP=cur.p;
+    if ( pts.empty() ) {
+        return 0;
     }
-  }
-  
+    
+    NR::Point lastM = pts[0].p;
+    NR::Point lastP = lastM;
+
+    double surf = 0;
+    for (std::vector<path_lineto>::const_iterator i = pts.begin(); i != pts.end(); i++) {
+
+        if ( i->isMoveTo == polyline_moveto ) {
+            surf += NR::cross(lastM - lastP, lastM);
+            lastP = lastM = i->p;
+        } else {
+            surf += NR::cross(i->p - lastP, i->p);
+            lastP = i->p;
+        }
+        
+    }
+    
   return surf;
 }
+
+
 Path**      Path::SubPaths(int &outNb,bool killNoSurf)
 {
   int      nbRes=0;
@@ -880,54 +861,63 @@ static int       CmpCurv(const void * p1, const void * p2) {
   if ( *cp1 > *cp2 ) return 1;
   return 0;
 }
-Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut)
+
+
+Path::cut_position* Path::CurvilignToPosition(int nbCv, double *cvAbs, int &nbCut)
 {
-  if ( nbCv <= 0 ) return NULL;
-  if ( nbPt <= 0 ) return NULL;
-  if ( back == false ) return NULL;
-  
-  qsort(cvAbs, nbCv, sizeof(double), CmpCurv);
-  
-  cut_position *res=NULL;
-  nbCut=0;
-  int      curCv=0;
-  
-  double   len=0;
-  NR::Point  lastM;
-  NR::Point  lastP;
-  double     lastT=0;
-  int        lastPiece=-1;
-  lastM=((path_lineto *) pts)[0].p;
-  
-  lastP=lastM;
-  for (int i=0;i<nbPt;i++) {
-    path_lineto  cur;
-    cur=((path_lineto *) pts)[i];
-    if ( cur.isMoveTo == polyline_moveto ) {
-      lastP=lastM=cur.p;
-      lastT=cur.t;
-      lastPiece=cur.piece;
-    } else {
-      double add=NR::L2(cur.p-lastP);
-      double curPos=len,curAdd=add;
-      while ( curAdd > 0.0001 && curCv < nbCv && curPos+curAdd >= cvAbs[curCv] ) {
-        double theta=(cvAbs[curCv]-len)/add;
-        res=(cut_position*)g_realloc(res,(nbCut+1)*sizeof(cut_position));
-        res[nbCut].piece=cur.piece;
-        res[nbCut].t=theta*cur.t+(1-theta)*((lastPiece!=cur.piece)?0:lastT);
-        nbCut++;
-        curAdd-=cvAbs[curCv]-curPos;
-        curPos=cvAbs[curCv];
-        curCv++;
-      }
-      len+=add;
-      lastPiece=cur.piece;
-      lastP=cur.p;
-      lastT=cur.t;
+    if ( nbCv <= 0 || pts.empty() || back == false ) {
+        return NULL;
     }
-  }
-  return res;
+  
+    qsort(cvAbs, nbCv, sizeof(double), CmpCurv);
+  
+    cut_position *res = NULL;
+    nbCut = 0;
+    int curCv = 0;
+  
+    double len = 0;
+    double lastT = 0;
+    int lastPiece = -1;
+
+    NR::Point lastM = pts[0].p;
+    NR::Point lastP = lastM;
+
+    for (std::vector<path_lineto>::const_iterator i = pts.begin(); i != pts.end(); i++) {
+
+        if ( i->isMoveTo == polyline_moveto ) {
+
+            lastP = lastM = i->p;
+            lastT = i->t;
+            lastPiece = i->piece;
+
+        } else {
+            
+            double const add = NR::L2(i->p - lastP);
+            double curPos = len;
+            double curAdd = add;
+            
+            while ( curAdd > 0.0001 && curCv < nbCv && curPos + curAdd >= cvAbs[curCv] ) {
+                double const theta = (cvAbs[curCv] - len) / add;
+                res = (cut_position*) g_realloc(res, (nbCut + 1) * sizeof(cut_position));
+                res[nbCut].piece = i->piece;
+                res[nbCut].t = theta * i->t + (1 - theta) * ( (lastPiece != i->piece) ? 0 : lastT);
+                nbCut++;
+                curAdd -= cvAbs[curCv] - curPos;
+                curPos = cvAbs[curCv];
+                curCv++;
+            }
+            
+            len += add;
+            lastPiece = i->piece;
+            lastP = i->p;
+            lastT = i->t;
+        }
+    }
+    
+    return res;
 }
+
+
 int         Path::DataPosForAfter(int cmd)
 {
   if ( cmd < 0 ) return 0;
@@ -958,7 +948,7 @@ void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
           int  add=SizeForData(descr_lineto);
           ShiftDData(lastPos,add);
           
-          descr_cmd[i]->dStart=lastPos; // dStart a ete changB par shift
+          descr_cmd[i]->dStart=lastPos; // dStart a ete changBÂ par shift
           descr_cmd[i]->setType(descr_lineto);
           path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i]->dStart );
           int fp=i-1;

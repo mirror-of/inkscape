@@ -46,20 +46,21 @@
 
 void Path::Simplify(double treshhold)
 {
-    if (nbPt <= 1) {
+    if (pts.size() <= 1) {
         return;
     }
     
     Reset();
   
     int lastM = 0;
-    while (lastM < nbPt) {
+    while (lastM < int(pts.size())) {
         int lastP = lastM + 1;
-        path_lineto *tp = (path_lineto *) pts;
-        while (lastP < nbPt
-               && ((tp + lastP)->isMoveTo == polyline_lineto
-                   || (tp + lastP)->isMoveTo == polyline_forced))
+        while (lastP < int(pts.size())
+               && (pts[lastP].isMoveTo == polyline_lineto
+                   || pts[lastP].isMoveTo == polyline_forced))
+        {
             lastP++;
+        }
         
         DoSimplify(lastM, lastP - lastM, treshhold);
 
@@ -164,7 +165,7 @@ void Path::DoSimplify(int off, int N, double treshhold)
     data.totLen = 0;
     data.nbPt = data.maxPt = data.inPt = 0;
   
-    NR::Point const moveToPt = ((path_lineto *) pts)[off].p;
+    NR::Point const moveToPt = pts[off].p;
     MoveTo(moveToPt);
     NR::Point endToPt = moveToPt;
   
@@ -185,7 +186,7 @@ void Path::DoSimplify(int off, int N, double treshhold)
             int worstP = -1;
             
             do {
-                if ((((path_lineto *) pts) + off + lastP)->isMoveTo == polyline_forced) {
+                if (pts[off + lastP].isMoveTo == polyline_forced) {
                     contains_forced = true;
                 }
                 forced_pt = lastP;
@@ -214,7 +215,7 @@ void Path::DoSimplify(int off, int N, double treshhold)
             step /= 2;
         }
     
-        endToPt = ((path_lineto *) pts)[off + lastP].p;
+        endToPt = pts[off + lastP].p;
         if (M <= 2) {
             LineTo(endToPt);
         } else {
@@ -318,10 +319,6 @@ bool Path::FitCubic(NR::Point const &start, path_descr_cubicto &res,
 }
 
 
-/**
- *    Uses pts.
- */
-
 bool Path::ExtendFit(int off, int N, fitting_tables &data, double treshhold, path_descr_cubicto &res, int &worstP)
 {
     if ( N >= data.maxPt ) {
@@ -335,11 +332,10 @@ bool Path::ExtendFit(int off, int N, fitting_tables &data, double treshhold, pat
     }
     
     if ( N > data.inPt ) {
-        path_lineto const *tp = ((path_lineto *) pts) + off;
         for (int i = data.inPt; i < N; i++) {
-            data.Xk[i] = tp[i].p[NR::X];
-            data.Yk[i] = tp[i].p[NR::Y];
-            data.fk[i] = ( tp[i].isMoveTo == polyline_forced ) ? 0x01 : 0x00;        
+            data.Xk[i] = pts[off + i].p[NR::X];
+            data.Yk[i] = pts[off + i].p[NR::Y];
+            data.fk[i] = ( pts[off + i].isMoveTo == polyline_forced ) ? 0x01 : 0x00;        
         }
         data.lk[0] = 0;
         data.tk[0] = 0;
@@ -444,7 +440,7 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
     NR::Point cp1, cp2;
   
     worstP = 1;
-    if (nbPt == 2) {
+    if (pts.size() == 2) {
         return true;
     }
   
@@ -456,7 +452,7 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
     end[1] = data.Yk[data.nbPt - 1];
     cp2 = cp1;
   
-    if (nbPt == 3) {
+    if (pts.size()  == 3) {
         // start -> cp1 -> end
         res.stD = cp1 - start;
         res.enD = end - cp1;
@@ -740,10 +736,6 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
 }
 
 
-/**
- *    Uses pts.
- */
-
 bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto &res,int &worstP)
 {
     NR::Point start;
@@ -765,10 +757,9 @@ bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto 
         return true;
     }
   
-    path_lineto const *tp = ((path_lineto *) pts) + off;
-    start = tp[0].p;
-    cp1 = tp[1].p;
-    end = tp[N - 1].p;
+    start = pts[off].p;
+    cp1 = pts[off + 1].p;
+    end = pts[off + N - 1].p;
   
     res.p = end;
     res.stD[0] = res.stD[1] = 0;
@@ -795,11 +786,10 @@ bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto 
     {
         NR::Point prevP = start;
         for (int i = 1; i < N; i++) {
-            path_lineto const *tp = ((path_lineto *) pts) + off;
-            Xk[i] = tp[i].p[NR::X];
-            Yk[i] = tp[i].p[NR::Y];
+            Xk[i] = pts[off + i].p[NR::X];
+            Yk[i] = pts[off + i].p[NR::Y];
             
-            if ( tp[i].isMoveTo == polyline_forced ) {
+            if ( pts[off + i].isMoveTo == polyline_forced ) {
                 fk[i] = 0x01;
             } else {
                 fk[i] = 0;

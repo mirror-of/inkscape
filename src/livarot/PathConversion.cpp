@@ -32,7 +32,7 @@ void Path::ConvertWithBackData(double treshhold)
     }
     
     SetBackData(true);
-    ResetPoints(descr_cmd.size());
+    ResetPoints();
     if ( descr_cmd.empty() ) {
         return;
     }
@@ -74,7 +74,7 @@ void Path::ConvertWithBackData(double treshhold)
             
         } else if ( nType == descr_close ) {
 
-            nextX = ((path_lineto*) pts)[lastMoveTo].p;
+            nextX = pts[lastMoveTo].p;
             AddPoint(nextX, curP, 1.0, false);
             curP++;
             
@@ -186,7 +186,7 @@ void Path::ConvertForOffset(double treshhold,Path* orig,double off_dec)
     }
     
     SetBackData(true);
-    ResetPoints(descr_cmd.size());
+    ResetPoints();
     if ( descr_cmd.empty() ) {
         return;
     }
@@ -232,7 +232,7 @@ void Path::ConvertForOffset(double treshhold,Path* orig,double off_dec)
 
         } else if ( nType == descr_close ) {
 
-            nextX = ((path_lineto *) pts)[lastMoveTo].p;
+            nextX = pts[lastMoveTo].p;
             AddPoint(nextX, curP, 1.0, false);
             curP++;
             
@@ -379,7 +379,7 @@ void Path::Convert(double treshhold)
     }
     
     SetBackData(false);
-    ResetPoints(descr_cmd.size());
+    ResetPoints();
     if ( descr_cmd.empty() ) {
         return;
     }
@@ -424,7 +424,7 @@ void Path::Convert(double treshhold)
             
         } else if ( nType == descr_close ) {
             
-            nextX = ((path_lineto *) pts)[lastMoveTo].p;
+            nextX = pts[lastMoveTo].p;
             descr_cmd[curP]->associated = AddPoint(nextX, false);
             if ( descr_cmd[curP]->associated < 0 ) {
                 if ( curP == 0 ) {
@@ -586,7 +586,7 @@ void Path::ConvertEvenLines(double treshhold)
     }
     
     SetBackData(false);
-    ResetPoints(descr_cmd.size());
+    ResetPoints();
     if ( descr_cmd.empty() ) {
         return;
     }
@@ -630,7 +630,7 @@ void Path::ConvertEvenLines(double treshhold)
             
         } else if ( nType == descr_close ) {
             
-            nextX = ((path_lineto *) pts)[lastMoveTo].p;
+            nextX = pts[lastMoveTo].p;
             {
                 NR::Point nexcur;
                 nexcur = nextX - curX;
@@ -1445,10 +1445,10 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
     }
     
     if ( justAdd == false ) {
-        dest->Reset(nbPt, nbPt);
+        dest->Reset(pts.size(), pts.size());
     }
     
-    if ( nbPt <= 1 ) {
+    if ( pts.size() <= 1 ) {
         return;
     }
     
@@ -1463,8 +1463,8 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
         if ( back ) {
             {
                 // invert && back && !weighted
-                for (int i = 0; i < nbPt; i++) {
-                    dest->AddPoint(((path_lineto *) pts)[i].p);
+                for (int i = 0; i < int(pts.size()); i++) {
+                    dest->AddPoint(pts[i].p);
                 }
                 int lastM = 0;
                 int curP = 1;
@@ -1472,12 +1472,12 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                 bool closed = false;
                 int lEdge = -1;
                 
-                while ( curP < nbPt ) {
-                    path_lineto* sbp = ((path_lineto *) pts) + curP;
-                    path_lineto* lm = ((path_lineto *) pts) + lastM;
-                    path_lineto* prp = ((path_lineto*) pts) + pathEnd;
+                while ( curP < int(pts.size()) ) {
+                    int sbp = curP;
+                    int lm = lastM;
+                    int prp = pathEnd;
                     
-                    if ( sbp->isMoveTo == polyline_moveto ) {
+                    if ( pts[sbp].isMoveTo == polyline_moveto ) {
 
                         if ( closeIfNeeded ) {
                             if ( closed && lEdge >= 0 ) {
@@ -1487,7 +1487,7 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                                 lEdge = dest->AddEdge(first + lastM, first+pathEnd);
                                 if ( lEdge >= 0 ) {
                                     dest->ebData[lEdge].pathID = pathID;
-                                    dest->ebData[lEdge].pieceID = lm->piece;
+                                    dest->ebData[lEdge].pieceID = pts[lm].piece;
                                     dest->ebData[lEdge].tSt = 1.0;
                                     dest->ebData[lEdge].tEn = 0.0;
                                 }
@@ -1501,21 +1501,21 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                         
                     } else {
                         
-                        if ( NR::LInfty(sbp->p - prp->p) >= 0.00001 ) {
+                        if ( NR::LInfty(pts[sbp].p - pts[prp].p) >= 0.00001 ) {
                             lEdge = dest->AddEdge(first + curP, first + pathEnd);
                             if ( lEdge >= 0 ) {
                                 dest->ebData[lEdge].pathID = pathID;
-                                dest->ebData[lEdge].pieceID = sbp->piece;
-                                if ( sbp->piece == prp->piece ) {
-                                    dest->ebData[lEdge].tSt = sbp->t;
-                                    dest->ebData[lEdge].tEn = prp->t;
+                                dest->ebData[lEdge].pieceID = pts[sbp].piece;
+                                if ( pts[sbp].piece == pts[prp].piece ) {
+                                    dest->ebData[lEdge].tSt = pts[sbp].t;
+                                    dest->ebData[lEdge].tEn = pts[prp].t;
                                 } else {
-                                    dest->ebData[lEdge].tSt = sbp->t;
+                                    dest->ebData[lEdge].tSt = pts[sbp].t;
                                     dest->ebData[lEdge].tEn = 0.0;
                                 }
                             }
                             pathEnd = curP;
-                            if ( NR::LInfty(sbp->p - lm->p) < 0.00001 ) {
+                            if ( NR::LInfty(pts[sbp].p - pts[lm].p) < 0.00001 ) {
                                 closed = true;
                             } else {
                                 closed = false;
@@ -1531,11 +1531,11 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                         dest->DisconnectStart(lEdge);
                         dest->ConnectStart(first + lastM, lEdge);
                     } else {
-                        path_lineto* lm = ((path_lineto *) pts) + lastM;
+                        int lm = lastM;
                         lEdge = dest->AddEdge(first + lastM, first + pathEnd);
                         if ( lEdge >= 0 ) {
                             dest->ebData[lEdge].pathID = pathID;
-                            dest->ebData[lEdge].pieceID = lm->piece;
+                            dest->ebData[lEdge].pieceID = pts[lm].piece;
                             dest->ebData[lEdge].tSt = 1.0;
                             dest->ebData[lEdge].tEn = 0.0;
                         }
@@ -1547,19 +1547,19 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
             
             {
                 // invert && !back && !weighted
-                for (int i = 0; i < nbPt; i++) {
-                    dest->AddPoint(((path_lineto *) pts)[i].p);
+                for (int i = 0; i < int(pts.size()); i++) {
+                    dest->AddPoint(pts[i].p);
                 }
                 int lastM = 0;
                 int curP = 1;
                 int pathEnd = 0;
                 bool closed = false;
                 int lEdge = -1;
-                while ( curP < nbPt ) {
-                    path_lineto* sbp = ((path_lineto *) pts) + curP;
-                    path_lineto* lm = ((path_lineto *) pts) + lastM;
-                    path_lineto* prp = ((path_lineto *) pts) + pathEnd;
-                    if ( sbp->isMoveTo == polyline_moveto ) {
+                while ( curP < int(pts.size()) ) {
+                    int sbp = curP;
+                    int lm = lastM;
+                    int prp = pathEnd;
+                    if ( pts[sbp].isMoveTo == polyline_moveto ) {
                         if ( closeIfNeeded ) {
                             if ( closed && lEdge >= 0 ) {
                                 dest->DisconnectStart(lEdge);
@@ -1573,10 +1573,10 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                         closed = false;
                         lEdge = -1;
                     } else {
-                        if ( NR::LInfty(sbp->p - prp->p) >= 0.00001 ) {
+                        if ( NR::LInfty(pts[sbp].p - pts[prp].p) >= 0.00001 ) {
                             lEdge = dest->AddEdge(first+curP, first+pathEnd);
                             pathEnd = curP;
-                            if ( NR::LInfty(sbp->p - lm->p) < 0.00001 ) {
+                            if ( NR::LInfty(pts[sbp].p - pts[lm].p) < 0.00001 ) {
                                 closed = true;
                             } else {
                                 closed = false;
@@ -1603,8 +1603,8 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
         if ( back ) {
             {
                 // !invert && back && !weighted
-                for (int i = 0; i < nbPt;i++) {
-                    dest->AddPoint(((path_lineto *) pts)[i].p);
+                for (int i = 0; i < int(pts.size()); i++) {
+                    dest->AddPoint(pts[i].p);
                 }
                 
                 int lastM = 0;
@@ -1612,11 +1612,11 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                 int pathEnd = 0;
                 bool closed = false;
                 int lEdge = -1;
-                while ( curP < nbPt ) {
-                    path_lineto *sbp = ((path_lineto*) pts) + curP;
-                    path_lineto *lm = ((path_lineto*) pts) + lastM;
-                    path_lineto *prp = ((path_lineto*) pts) + pathEnd;
-                    if ( sbp->isMoveTo == polyline_moveto ) {
+                while ( curP < int(pts.size()) ) {
+                    int sbp = curP;
+                    int lm = lastM;
+                    int prp = pathEnd;
+                    if ( pts[sbp].isMoveTo == polyline_moveto ) {
                         if ( closeIfNeeded ) {
                             if ( closed && lEdge >= 0 ) {
                                 dest->DisconnectEnd(lEdge);
@@ -1625,7 +1625,7 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                                 lEdge = dest->AddEdge(first + pathEnd, first+lastM);
                                 if ( lEdge >= 0 ) {
                                     dest->ebData[lEdge].pathID = pathID;
-                                    dest->ebData[lEdge].pieceID = lm->piece;
+                                    dest->ebData[lEdge].pieceID = pts[lm].piece;
                                     dest->ebData[lEdge].tSt = 0.0;
                                     dest->ebData[lEdge].tEn = 1.0;
                                 }
@@ -1636,19 +1636,19 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                         closed = false;
                         lEdge = -1;
                     } else {
-                        if ( NR::LInfty(sbp->p - prp->p) >= 0.00001 ) {
+                        if ( NR::LInfty(pts[sbp].p - pts[prp].p) >= 0.00001 ) {
                             lEdge = dest->AddEdge(first + pathEnd, first + curP);
                             dest->ebData[lEdge].pathID = pathID;
-                            dest->ebData[lEdge].pieceID = sbp->piece;
-                            if ( sbp->piece == prp->piece ) {
-                                dest->ebData[lEdge].tSt = prp->t;
-                                dest->ebData[lEdge].tEn = sbp->t;
+                            dest->ebData[lEdge].pieceID = pts[sbp].piece;
+                            if ( pts[sbp].piece == pts[prp].piece ) {
+                                dest->ebData[lEdge].tSt = pts[prp].t;
+                                dest->ebData[lEdge].tEn = pts[sbp].t;
                             } else {
                                 dest->ebData[lEdge].tSt = 0.0;
-                                dest->ebData[lEdge].tEn = sbp->t;
+                                dest->ebData[lEdge].tEn = pts[sbp].t;
                             }
                             pathEnd = curP;
-                            if ( NR::LInfty(sbp->p - lm->p) < 0.00001 ) {
+                            if ( NR::LInfty(pts[sbp].p - pts[lm].p) < 0.00001 ) {
                                 closed = true;
                             } else {
                                 closed = false;
@@ -1663,11 +1663,11 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                         dest->DisconnectEnd(lEdge);
                         dest->ConnectEnd(first + lastM, lEdge);
                     } else {
-                        path_lineto *lm = ((path_lineto *) pts) + lastM;
+                        int lm = lastM;
                         lEdge = dest->AddEdge(first + pathEnd, first + lastM);
                         if ( lEdge >= 0 ) {
                             dest->ebData[lEdge].pathID = pathID;
-                            dest->ebData[lEdge].pieceID = lm->piece;
+                            dest->ebData[lEdge].pieceID = pts[lm].piece;
                             dest->ebData[lEdge].tSt = 0.0;
                             dest->ebData[lEdge].tEn = 1.0;
                         }
@@ -1678,8 +1678,8 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
         } else {
             {
                 // !invert && !back && !weighted
-                for (int i = 0;i < nbPt; i++) {
-                    dest->AddPoint(((path_lineto *) pts)[i].p);
+                for (int i = 0;i < int(pts.size()); i++) {
+                    dest->AddPoint(pts[i].p);
                 }
                 
                 int lastM = 0;
@@ -1687,11 +1687,11 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                 int pathEnd = 0;
                 bool closed = false;
                 int lEdge = -1;
-                while ( curP < nbPt ) {
-                    path_lineto *sbp = ((path_lineto * )pts) + curP;
-                    path_lineto *lm = ((path_lineto *) pts) + lastM;
-                    path_lineto *prp = ((path_lineto *) pts) + pathEnd;
-                    if ( sbp->isMoveTo == polyline_moveto ) {
+                while ( curP < int(pts.size()) ) {
+                    int sbp = curP;
+                    int lm = lastM;
+                    int prp = pathEnd;
+                    if ( pts[sbp].isMoveTo == polyline_moveto ) {
                         if ( closeIfNeeded ) {
                             if ( closed && lEdge >= 0 ) {
                                 dest->DisconnectEnd(lEdge);
@@ -1705,10 +1705,10 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                         closed = false;
                         lEdge = -1;
                     } else {
-                        if ( NR::LInfty(sbp->p - prp->p) >= 0.00001 ) {
+                        if ( NR::LInfty(pts[sbp].p - pts[prp].p) >= 0.00001 ) {
                             lEdge = dest->AddEdge(first+pathEnd, first+curP);
                             pathEnd = curP;
-                            if ( NR::LInfty(sbp->p - lm->p) < 0.00001 ) {
+                            if ( NR::LInfty(pts[sbp].p - pts[lm].p) < 0.00001 ) {
                                 closed = true;
                             } else {
                                 closed = false;
