@@ -18,6 +18,7 @@
 #include "attributes.h"
 #include "sp-polygon.h"
 #include "helper/sp-intl.h"
+#include "stringstream.h"
 
 static void sp_polygon_class_init (SPPolygonClass *klass);
 static void sp_polygon_init (SPPolygon *polygon);
@@ -96,20 +97,17 @@ sp_polygon_build (SPObject * object, SPDocument * document, SPRepr * repr)
 static gchar *
 sp_svg_write_polygon (const ArtBpath * bpath)
 {
-	GString *result;
+	Inkscape::SVGOStringStream os;
 	int i;
-	char *res;
 	
 	g_return_val_if_fail (bpath != NULL, NULL);
-
-	result = g_string_sized_new (40);
 
 	for (i = 0; bpath[i].code != ART_END; i++){
 		switch (bpath [i].code){
 		case ART_LINETO:
 		case ART_MOVETO:
 		case ART_MOVETO_OPEN:
-			g_string_sprintfa (result, "%g,%g ", bpath [i].x3, bpath [i].y3);
+			os << bpath [i].x3 << "," << bpath [i].y3 << " ";
 			break;
 
 		case ART_CURVETO:
@@ -117,10 +115,8 @@ sp_svg_write_polygon (const ArtBpath * bpath)
 			g_assert_not_reached ();
 		}
 	}
-	res = result->str;
-	g_string_free (result, FALSE);
-
-	return res;
+	
+	return g_strdup (os.str().c_str());
 }
 
 static SPRepr *
