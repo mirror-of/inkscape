@@ -98,7 +98,7 @@ private:
     bool check_compression_method(guint16 method, guint16 flags);
     guint8 *get_compressed_file(guint32 compressed_size,
 				unsigned int& file_length,
-				guint32 crc);
+				guint32 oldcrc, guint16 flags);
     guint8 *get_uncompressed_file(guint32 compressed_szie, guint32 crc, 
 				  guint16 eflen, guint16 flags);
 }; // class JarFile

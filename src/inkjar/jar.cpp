@@ -15,6 +15,8 @@
  * - remove a few g_free/g_mallocs
  * - unseekable files
  * - move to LGPL by rewriting macros
+ * - crcs for compressed files
+ * - put in eof
  */
 
 #include "config.h"
@@ -73,7 +75,7 @@ JarFile::JarFile(gchar const*new_filename)
 //       use strdup
 gchar *JarFile::get_last_filename() const
 {
-    return (strdup(_last_filename));
+    return (_last_filename != NULL ? strdup(_last_filename) : NULL);
 }
 
 JarFile::~JarFile()
@@ -143,11 +145,9 @@ bool JarFile::read_signature()
 	    g_free(bytes);
 	    return false;
 	}
-	g_free(bytes);
     } else if (signature == 0x02014b50 || signature == 0x04034b50) {
 	return true;
     } else {
-	g_free(bytes);
 	return false;
     }
     return false;
@@ -209,6 +209,15 @@ GByteArray *JarFile::get_next_file_contents()
     guint16 flags = UNPACK_UB2(bytes, LOC_EXTRA);
     guint16 method = UNPACK_UB2(bytes, LOC_COMP);
 
+    if (filename_length == 0) {
+	g_byte_array_free(gba, TRUE);
+	if (_last_filename != NULL)
+	    g_free(_last_filename);
+	_last_filename = NULL;
+	return NULL;
+    }
+
+
 #ifdef DEBUG    
     std::printf("Compressed size is %u\n", compressed_size);
     std::printf("Filename length is %hu\n", filename_length);
@@ -247,9 +256,9 @@ GByteArray *JarFile::get_next_file_contents()
 	unsigned int file_length = 0;//uncompressed file length
 	lseek(fd, eflen, SEEK_CUR);
 	guint8 *file_data = get_compressed_file(compressed_size, file_length, 
-						crc);
+						crc, flags);
 	if (file_data == NULL) {
-	    g_byte_array_free(gba, TRUE);
+	    g_byte_array_free(gba, FALSE);
 	    return NULL;
 	}
 	g_byte_array_append(gba, file_data, file_length);
@@ -263,7 +272,7 @@ GByteArray *JarFile::get_next_file_contents()
 	}
 	g_byte_array_append(gba, file_data, compressed_size);
     }
-    
+        
     
     return gba;
 }
@@ -320,15 +329,16 @@ guint8 *JarFile::get_uncompressed_file(guint32 compressed_size, guint32 crc,
 	crc2 = UNPACK_UB4(bytes, 4);
 	
     }
-    
+    g_free(bytes);
+    bytes = gba->data;
+    g_byte_array_free(gba, FALSE);//FALSE argument does not free actual data
+
     if(crc2 != crc) {
 	std::fprintf(stderr, "Error! CRCs do not match! Got %x, expected %x\n",
 		     crc2, crc);
 	return NULL;
     }
-    g_free(bytes);
-    bytes = gba->data;
-    g_byte_array_free(gba, FALSE);//FALSE argument does not free actual data
+    
     return bytes;
 }
 
@@ -344,7 +354,7 @@ int JarFile::read(guint8 *buf, int count)
 
 guint8 *JarFile::get_compressed_file(guint32 compressed_size, 
 				     unsigned int& file_length,
-				     guint32 crc)
+				     guint32 oldcrc, guint16 flags)
 {
     if (compressed_size == 0)
 	return NULL;
@@ -352,51 +362,83 @@ guint8 *JarFile::get_compressed_file(guint32 compressed_size,
     guint8 in_buffer[RDSZ];
     guint8 out_buffer[RDSZ];
     int nbytes;
+    unsigned int leftover_in = compressed_size;
+    guint32 crc2 = 0;
     GByteArray *gba = g_byte_array_new();
     
     _zs.avail_in = 0;
-    crc = crc32(crc, Z_NULL, 0);
+    guint32 crc = crc32(crc, Z_NULL, 0);
     do {
 		
 	if (!_zs.avail_in) {
-	    
-	    if ((nbytes = ::read(fd, in_buffer, RDSZ)) < 0) {
+	
+	    if ((nbytes = ::read(fd, in_buffer, 
+				 (leftover_in < RDSZ ? leftover_in : RDSZ))) 
+		< 0) {
 		fprintf(stderr, "jarfile read error");
 	    }
 	    _zs.avail_in = nbytes;
 	    _zs.next_in = in_buffer;
 	    crc = crc32(crc, in_buffer, _zs.avail_in);
+	    leftover_in -= RDSZ;
 	}
 	_zs.next_out = out_buffer;
 	_zs.avail_out = RDSZ;
 	
 	int ret = inflate(&_zs, Z_NO_FLUSH);
 	if (RDSZ != _zs.avail_out) {
+	    unsigned int tmp_len = RDSZ - _zs.avail_out;
 	    guint8 *tmp_bytes = (guint8 *)g_malloc(sizeof(guint8) 
-						   * _zs.avail_out);
-	    memcpy(tmp_bytes, _zs.next_out, _zs.avail_out);
-	    
-	    g_byte_array_append(gba, tmp_bytes, _zs.avail_out);
+						   * tmp_len);
+	    memcpy(tmp_bytes, out_buffer, tmp_len);
+	    g_byte_array_append(gba, tmp_bytes, tmp_len);
 	}
+	
 	if (ret == Z_STREAM_END) {
 	    break;
 	}
 	if (ret != Z_OK)
 	    std::printf("decompression error %d\n", ret);
-    } while (_zs.avail_out);
-
+    } while (_zs.total_in < compressed_size);
+    
+    file_length = _zs.total_out;
 #ifdef DEBUG
     std::printf("done inflating\n");
     std::printf("%d bytes left over\n", _zs.avail_in);
     std::printf("CRC is %x\n", crc);
 #endif
     
-    //fixme check crc
-
-    guint8 *ret_bytes = gba->data;
+    guint8 *ret_bytes;
+    if (gba->len > 0)
+	ret_bytes = gba->data;
+    else 
+	ret_bytes = NULL;
     g_byte_array_free(gba, FALSE);
 
-    inflateReset(&_zs);
+    /* if there is a data descriptor left, compare the CRC */
+    if(flags & 0x0008) {
+	guint8 *bytes = (guint8 *)g_malloc(sizeof(guint8) * 16);
+	if (!read(bytes, 16)) {
+	    g_free(bytes);
+	    return NULL;
+	}
+	
+	guint32 signature = UNPACK_UB4(bytes, 0);
+	g_free(bytes);
+	if(signature != 0x08074b50) {
+	    fprintf(stderr, "missing data descriptor!\n");
+	    //exit(1);
+	}
+	
+	crc2 = UNPACK_UB4(bytes, 4);
+	
+    }
+
+    if(crc2 != crc) {
+	std::fprintf(stderr, "Error! CRCs do not match! Got %x, expected %x\n",
+		     oldcrc, crc);
+    }
+    inflateReset(&_zs); 
     return ret_bytes;
 }
 
@@ -476,13 +518,14 @@ JarFileReader::JarFileReader(JarFileReader const& rhs)
 #if 0 //testing code
 #include "jar.h"
 /*
- * This program writes all the contents of a jarfile to stdout.
+ * This program writes all the files from a jarfile to stdout and inflates
+ * where needed.
  */
 int main(int argc, char *argv[])
 {
     gchar *filename;
     if (argc < 2) {
-	filename = "./Intro.sxw\0";
+	filename = "./new.jar\0";
     } else {
 	filename = argv[1];
     }
@@ -491,18 +534,20 @@ int main(int argc, char *argv[])
     
     for (;;) {
 	GByteArray *gba = jar_file_reader.get_next_file();
-	char *c_ptr;
-	gchar *last_filename = jar_file_reader.get_last_filename();
-	if ((c_ptr = std::strrchr(last_filename, '/')) != NULL) {
-	    if (*(++c_ptr) == '\0') {
-		g_free(last_filename);
-		g_byte_array_free(gba, TRUE);//TRUE frees actual data
-		continue;
+	if (gba == NULL) {
+	    char *c_ptr;
+	    gchar *last_filename = jar_file_reader.get_last_filename();
+	    if (last_filename == NULL)
+		break;
+	    if ((c_ptr = std::strrchr(last_filename, '/')) != NULL) {
+		if (*(++c_ptr) == '\0') {
+		    g_free(last_filename);
+		    continue;
+		}
 	    }
+	} else if (gba->len > 0)
 	    ::write(1, gba->data, gba->len);
-	    g_free(last_filename);
-	    g_byte_array_free(gba, TRUE);//TRUE frees actual data
-	} else if (gba == NULL)
+	else
 	    break;
     }
     return 0;
