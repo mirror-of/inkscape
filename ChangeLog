@@ -1,3 +1,8 @@
+2004-11-23  Bryce Harrington <bryce@bryceharrington.org>
+
+	* src/dialogs/layer-properties.cpp:  Fixing bug causing two new
+	  layers to get created when hitting enter
+
 2004-11-23  Kees Cook  <kees@outflux.net>
 
 	* share/tutorials: added Josh's changes, resized, repositioned for

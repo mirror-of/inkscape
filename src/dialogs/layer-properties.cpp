@@ -91,7 +91,6 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", 
                       G_CALLBACK(unhideCallback), (void *)this );
 
-    set_default_response(Gtk::RESPONSE_APPLY);
     sp_transientize(dlg);
     show_all_children();
 }
@@ -129,15 +128,15 @@ LayerPropertiesDialog::_close()
 }
 
 void LayerPropertiesDialog::Rename::setup(LayerPropertiesDialog &dialog) {
-    SPDesktop *desktop=SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     dialog.set_title(_("Rename Layer"));
-    gchar const *name=desktop->currentLayer()->label();
+    gchar const *name = desktop->currentLayer()->label();
     dialog._layer_name_entry.set_text(( name ? name : "" ));
     dialog._apply_button.set_label(_("_Rename"));
 }
 
 void LayerPropertiesDialog::Rename::perform(LayerPropertiesDialog &dialog) {
-    SPDesktop *desktop=SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     Glib::ustring name(dialog._layer_name_entry.get_text());
     desktop->currentLayer()->setLabel(
         ( name.empty() ? NULL : (gchar *)name.c_str() )
@@ -154,8 +153,8 @@ void LayerPropertiesDialog::Create::setup(LayerPropertiesDialog &dialog) {
 }
 
 void LayerPropertiesDialog::Create::perform(LayerPropertiesDialog &dialog) {
-    SPDesktop *desktop=SP_ACTIVE_DESKTOP;
-    SPObject *layer=Inkscape::create_layer(desktop->currentRoot(), desktop->currentLayer());
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPObject *layer    = Inkscape::create_layer(desktop->currentRoot(), desktop->currentLayer());
     desktop->setCurrentLayer(layer);
     SP_DT_SELECTION(desktop)->clear();
     Glib::ustring name(dialog._layer_name_entry.get_text());
