@@ -44,7 +44,7 @@ SectionEnd
 Section "Uninstall"
 
   MessageBox MB_YESNO|MB_ICONQUESTION "Would you like to uninstall Inkscape?" IDNO NoDelete
-    RMDir "$INSTDIR" ; skipped if no
+    RMDir /r "$INSTDIR" ; skipped if no
   NoDelete:
   
   IfFileExists "$INSTDIR" 0 NoErrorMsg
