@@ -74,8 +74,8 @@ bool SweepEventQueue::peek(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &p
     
     SweepEvent const &e = events[inds[0]];
 
-    iLeft = e.leftSweep;
-    iRight = e.rightSweep;
+    iLeft = e.sweep[LEFT];
+    iRight = e.sweep[RIGHT];
     px = e.posx;
     itl = e.tl;
     itr = e.tr;
@@ -91,8 +91,8 @@ bool SweepEventQueue::extract(SweepTree * &iLeft, SweepTree * &iRight, NR::Point
 
     SweepEvent &e = events[inds[0]];
     
-    iLeft = e.leftSweep;
-    iRight = e.rightSweep;
+    iLeft = e.sweep[LEFT];
+    iRight = e.sweep[RIGHT];
     px = e.posx;
     itl = e.tl;
     itr = e.tr;
@@ -216,8 +216,8 @@ void SweepEventQueue::relocate(SweepEvent *e, int to)
 
     events[to] = *e;
 
-    e->leftSweep->rightEvt = events + to;
-    e->rightSweep->leftEvt = events + to;
+    e->sweep[LEFT]->evt[RIGHT] = events + to;
+    e->sweep[RIGHT]->evt[LEFT] = events + to;
     inds[e->ind] = to;
 }
 
@@ -246,44 +246,44 @@ SweepEvent::MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, doubl
   posx = px;
   tl = itl;
   tr = itr;
-  leftSweep = iLeft;
-  rightSweep = iRight;
-  leftSweep->rightEvt = this;
-  rightSweep->leftEvt = this;
+  sweep[LEFT] = iLeft;
+  sweep[RIGHT] = iRight;
+  sweep[LEFT]->evt[RIGHT] = this;
+  sweep[RIGHT]->evt[LEFT] = this;
 }
 
 void
 SweepEvent::MakeDelete (void)
 {
-  if (leftSweep)
+  if (sweep[LEFT])
     {
-      if (leftSweep->src->getEdge(leftSweep->bord).st <
-	  leftSweep->src->getEdge(leftSweep->bord).en)
+      if (sweep[LEFT]->src->getEdge(sweep[LEFT]->bord).st <
+	  sweep[LEFT]->src->getEdge(sweep[LEFT]->bord).en)
 	{
-	  leftSweep->src->pData[leftSweep->src->getEdge(leftSweep->bord).en].
+	  sweep[LEFT]->src->pData[sweep[LEFT]->src->getEdge(sweep[LEFT]->bord).en].
 	    pending--;
 	}
       else
 	{
-	  leftSweep->src->pData[leftSweep->src->getEdge(leftSweep->bord).st].
+	  sweep[LEFT]->src->pData[sweep[LEFT]->src->getEdge(sweep[LEFT]->bord).st].
 	    pending--;
 	}
-      leftSweep->rightEvt = NULL;
+      sweep[LEFT]->evt[RIGHT] = NULL;
     }
-  if (rightSweep)
+  if (sweep[RIGHT])
     {
-      if (rightSweep->src->getEdge(rightSweep->bord).st <
-	  rightSweep->src->getEdge(rightSweep->bord).en)
+      if (sweep[RIGHT]->src->getEdge(sweep[RIGHT]->bord).st <
+	  sweep[RIGHT]->src->getEdge(sweep[RIGHT]->bord).en)
 	{
-	  rightSweep->src->pData[rightSweep->src->getEdge(rightSweep->bord).
+	  sweep[RIGHT]->src->pData[sweep[RIGHT]->src->getEdge(sweep[RIGHT]->bord).
 				 en].pending--;
 	}
       else
 	{
-	  rightSweep->src->pData[rightSweep->src->getEdge(rightSweep->bord).
+	  sweep[RIGHT]->src->pData[sweep[RIGHT]->src->getEdge(sweep[RIGHT]->bord).
 				 st].pending--;
 	}
-      rightSweep->leftEvt = NULL;
+      sweep[RIGHT]->evt[LEFT] = NULL;
     }
-  leftSweep = rightSweep = NULL;
+  sweep[LEFT] = sweep[RIGHT] = NULL;
 }

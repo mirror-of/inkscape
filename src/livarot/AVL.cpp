@@ -37,110 +37,37 @@ AVLTree::MakeDelete (void)
   DblLinked::MakeDelete ();
 }
 
-AVLTree *
-AVLTree::Leftmost (void)
+AVLTree *AVLTree::Leftmost()
 {
-  return LeftLeaf (NULL, true);
+    return leafFromDad(NULL, LEFT);
 }
 
-AVLTree *
-AVLTree::LeftLeaf (AVLTree * from, bool from_dad)
+AVLTree *AVLTree::leaf(AVLTree *from, Side s)
 {
-  if (from_dad)
-    {
-      if (son[LEFT])
-	{
-	  return son[LEFT]->LeftLeaf (this, true);
+    if (from == son[1 - s]) {
+	if (son[s]) {
+	    return son[s]->leafFromDad(this, s);
 	}
-      else
-	{
-	  return this;
+	else if (dad) {
+	    return dad->leaf(this, s);
 	}
     }
-  else
-    {
-      if (from == son[RIGHT])
-	{
-	  if (son[LEFT])
-	    {
-	      return son[LEFT]->LeftLeaf (this, true);
-	    }
-	  else if (dad)
-	    {
-	      return dad->LeftLeaf (this, false);
-	    }
-	  else
-	    {
-	      return NULL;
-	    }
-	}
-      else if (from == son[LEFT])
-	{
-	  if (dad)
-	    {
-	      return dad->LeftLeaf (this, false);
-	    }
-	  else
-	    {
-	      return NULL;
-	    }
-	}
-      else
-	{
-	  return NULL;
+    else if (from == son[s]) {
+	if (dad) {
+	    return dad->leaf(this, s);
 	}
     }
-  return NULL;
+
+    return NULL;
 }
 
-AVLTree *
-AVLTree::RightLeaf (AVLTree * from, bool from_dad)
+AVLTree *AVLTree::leafFromDad(AVLTree *from, Side s)
 {
-  if (from_dad)
-    {
-      if (son[RIGHT])
-	{
-	  return son[RIGHT]->RightLeaf (this, true);
-	}
-      else
-	{
-	  return this;
-	}
+    if (son[s]) {
+	return son[s]->leafFromDad(this, s);
     }
-  else
-    {
-      if (from == son[LEFT])
-	{
-	  if (son[RIGHT])
-	    {
-	      return son[RIGHT]->RightLeaf (this, true);
-	    }
-	  else if (dad)
-	    {
-	      return dad->RightLeaf (this, false);
-	    }
-	  else
-	    {
-	      return NULL;
-	    }
-	}
-      else if (from == son[RIGHT])
-	{
-	  if (dad)
-	    {
-	      return dad->RightLeaf (this, false);
-	    }
-	  else
-	    {
-	      return NULL;
-	    }
-	}
-      else
-	{
-	  return NULL;
-	}
-    }
-  return NULL;
+
+    return this;
 }
 
 int
@@ -736,7 +663,7 @@ AVLTree::Remove (AVLTree * &racine, AVLTree * &startNode, int &diff)
 
   if (son[LEFT] && son[RIGHT])
     {
-      AVLTree *newMe = son[LEFT]->RightLeaf (this, true);
+      AVLTree *newMe = son[LEFT]->leafFromDad(this, RIGHT);
       if (newMe == NULL || newMe->son[RIGHT])
 	{
 //                      cout << "pas normal\n";
@@ -940,7 +867,7 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 
 	  if (insertL->son[RIGHT])
 	    {
-	      insertL = insertL->son[RIGHT]->LeftLeaf (insertL, true);
+		insertL = insertL->son[RIGHT]->leafFromDad(insertL, LEFT);
 	      if (insertL->son[LEFT])
 		{
 //                                      cout << "ngou?\n";
@@ -989,3 +916,14 @@ AVLTree::Relocate (AVLTree * to)
   to->son[RIGHT] = son[RIGHT];
   to->son[LEFT] = son[LEFT];
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

@@ -29,8 +29,7 @@ public:
 class SweepTree:public AVLTree
 {
 public:
-  SweepEvent * leftEvt;		// intersection with the edge on the left (if any)
-  SweepEvent *rightEvt;		// intersection with the edge on the right (if any)
+  SweepEvent *evt[2];	        // intersection with the edge on the left and right (if any)
 
   Shape *src;			// Shape from which the edge comes (when doing boolean operation on polygons, edges can come
   // from 2 different polygons)
@@ -58,9 +57,9 @@ public:
   int Find (NR::Point const &iPt, SweepTree * &insertL, SweepTree * &insertR);
   // removes sweepevents attached to this node
   void RemoveEvents (SweepEventQueue & queue);
-  // onLeft=true: only remove left sweepevent
-  // onLeft=false: only remove right sweepevent
-  void RemoveEvent (SweepEventQueue & queue, bool onLeft);
+
+  void RemoveEvent(SweepEventQueue &queue, Side s);
+  
   // overrides of the AVLTree functions, to account for the sorting in the tree
   // and some other stuff
   int Remove (SweepTreeList & list, SweepEventQueue & queue, bool rebalance =

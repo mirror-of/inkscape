@@ -10,8 +10,7 @@ class SweepTree;
 class SweepEvent
 {
 public:
-    SweepTree *leftSweep;   ///< Sweep element associated with the left edge of the intersection.
-    SweepTree *rightSweep;  ///< Sweep element associated with the right edge.
+    SweepTree *sweep[2];   ///< Sweep element associated with the left and right edge of the intersection.
 
     NR::Point posx;         ///< Coordinates of the intersection.
     double tl, tr;          ///< Coordinates of the intersection on the left edge (tl) and on the right edge (tr).

@@ -76,6 +76,20 @@ public:
 
   // called when this node is relocated to a new position in memory, to update pointers to him
   void Relocate (AVLTree * to);
+
+  AVLTree *leaf(AVLTree *from, Side s);
+  AVLTree *leafFromDad(AVLTree *from, Side s);
 };
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

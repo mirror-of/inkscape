@@ -331,8 +331,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       if (isIntersection)
 	{
 //                      printf("(%i %i [%i %i]) ",intersL->bord,intersR->bord,intersL->startPoint,intersR->startPoint);
-	  intersL->RemoveEvent (*sEvts, true);
-	  intersR->RemoveEvent (*sEvts, false);
+	  intersL->RemoveEvent (*sEvts, LEFT);
+	  intersR->RemoveEvent (*sEvts, RIGHT);
 
 	  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, INTERSECTION,
 		   intersL->src, intersL->bord, intersR->src, intersR->bord);
@@ -1155,8 +1155,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	{
 	  // les 2 events de part et d'autre de l'intersection
 	  // (celui de l'intersection a deja ete depile)
-	  intersL->RemoveEvent (*sEvts, true);
-	  intersR->RemoveEvent (*sEvts, false);
+	  intersL->RemoveEvent (*sEvts, LEFT);
+	  intersR->RemoveEvent (*sEvts, RIGHT);
 
 	  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, INTERSECTION,
 		   intersL->src, intersL->bord, intersR->src, intersR->bord);

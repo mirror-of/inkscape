@@ -48,7 +48,7 @@ SweepTree::SweepTree (void)
   src = NULL;
   bord = -1;
   startPoint = -1;
-  leftEvt = rightEvt = NULL;
+  evt[LEFT] = evt[RIGHT] = NULL;
   sens = true;
 //      invDirLength=1;
 }
@@ -69,7 +69,7 @@ SweepTree::ConvertTo (Shape * iSrc, int iBord, int iWeight, int iStartPoint)
 {
   src = iSrc;
   bord = iBord;
-  leftEvt = rightEvt = NULL;
+  evt[LEFT] = evt[RIGHT] = NULL;
   startPoint = iStartPoint;
   if (src->getEdge(bord).st < src->getEdge(bord).en)
     {
@@ -88,18 +88,17 @@ SweepTree::ConvertTo (Shape * iSrc, int iBord, int iWeight, int iStartPoint)
 //      invDirLength=src->eData[bord].isqlength;
 //      invDirLength=1/sqrt(src->getEdge(bord).dx*src->getEdge(bord).dx+src->getEdge(bord).dy*src->getEdge(bord).dy);
 }
-void
-SweepTree::MakeDelete (void)
+
+
+void SweepTree::MakeDelete()
 {
-  if (leftEvt)
-    {
-      leftEvt->rightSweep = NULL;
+  for (int i = 0; i < 2; i++) {
+    if (evt[i]) {
+      evt[i]->sweep[1 - i] = NULL;
     }
-  if (rightEvt)
-    {
-      rightEvt->leftSweep = NULL;
-    }
-  leftEvt = rightEvt = NULL;
+    evt[i] = NULL;
+  }
+
   AVLTree::MakeDelete ();
 }
 
@@ -290,32 +289,18 @@ SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
 void
 SweepTree::RemoveEvents (SweepEventQueue & queue)
 {
-  RemoveEvent (queue, true);
-  RemoveEvent (queue, false);
+  RemoveEvent(queue, LEFT);
+  RemoveEvent(queue, RIGHT);
 }
 
-void
-SweepTree::RemoveEvent (SweepEventQueue & queue, bool onLeft)
+void SweepTree::RemoveEvent(SweepEventQueue &queue, Side s)
 {
-  if (onLeft)
-    {
-      if (leftEvt)
-	{
-	  queue.remove(leftEvt);
-//                      leftEvt->MakeDelete(); // fait dans SupprFromQueue
-	}
-      leftEvt = NULL;
-    }
-  else
-    {
-      if (rightEvt)
-	{
-	  queue.remove(rightEvt);
-//                      rightEvt->MakeDelete(); // fait dans SupprFromQueue
-	}
-      rightEvt = NULL;
-    }
+  if (evt[s]) {
+    queue.remove(evt[s]);
+    evt[s] = NULL;
+  }
 }
+
 int
 SweepTree::Remove (SweepTreeList & list, SweepEventQueue & queue,
 		   bool rebalance)
@@ -353,32 +338,20 @@ SweepTree::Insert (SweepTreeList & list, SweepEventQueue & queue,
   int insertion =
     list.racine->Find (iDst->getPoint(iAtPoint).x, this,
 		       insertL, insertR, sweepSens);
-  if (insertion == found_on_left)
-    {
-    }
-  else if (insertion == found_on_right)
-    {
-    }
-  else if (insertion == found_exact)
-    {
-      if (insertR)
-	insertR->RemoveEvent (queue, true);
-      if (insertL)
-	insertL->RemoveEvent (queue, false);
-//              insertL->startPoint=startPoint;
-    }
-  else if (insertion == found_between)
-    {
-      insertR->RemoveEvent (queue, true);
-      insertL->RemoveEvent (queue, false);
+  
+    if (insertion == found_exact) {
+	if (insertR) {
+	    insertR->RemoveEvent(queue, LEFT);
+	}
+	if (insertL) {
+	    insertL->RemoveEvent(queue, RIGHT);
+	}
+
+    } else if (insertion == found_between) {
+      insertR->RemoveEvent (queue, LEFT);
+      insertL->RemoveEvent (queue, RIGHT);
     }
 
-  //      if ( insertL ) cout << insertL->bord; else cout << "-1";
-  //     cout << "  <   ";
-  //     cout << bord;
-  //     cout << "  <   ";
-  //     if ( insertR ) cout << insertR->bord; else cout << "-1";
-  //     cout << endl;
   AVLTree *tempR = static_cast < AVLTree * >(list.racine);
   int err =
     AVLTree::Insert (tempR, insertion, static_cast < AVLTree * >(insertL),
@@ -518,36 +491,26 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
     }
 
   int insertion = found_between;
-  if (insertL == NULL)
-    insertion = found_on_left;
-  if (insertR == NULL)
-    insertion = found_on_right;
-  if (insertion == found_on_left)
-    {
-    }
-  else if (insertion == found_on_right)
-    {
-    }
-  else if (insertion == found_exact)
-    {
-      if (insertR)
-	insertR->RemoveEvent (queue, true);
-      if (insertL)
-	insertL->RemoveEvent (queue, false);
-//              insertL->startPoint=startPoint;
-    }
-  else if (insertion == found_between)
-    {
-      insertR->RemoveEvent (queue, true);
-      insertL->RemoveEvent (queue, false);
-    }
 
-  //      if ( insertL ) cout << insertL->bord; else cout << "-1";
-  //     cout << "  <   ";
-  //     cout << bord;
-  //     cout << "  <   ";
-  //     if ( insertR ) cout << insertR->bord; else cout << "-1";
-  //     cout << endl;
+  if (insertL == NULL) {
+    insertion = found_on_left;
+  }
+  if (insertR == NULL) {
+    insertion = found_on_right;
+  }
+  
+  if (insertion == found_exact) {
+      /* FIXME: surely this can never be called? */
+      if (insertR) {
+	  insertR->RemoveEvent(queue, LEFT);
+      }
+      if (insertL) {
+	  insertL->RemoveEvent(queue, RIGHT);
+      }
+  } else if (insertion == found_between) {
+      insertR->RemoveEvent(queue, LEFT);
+      insertL->RemoveEvent(queue, RIGHT);
+  }
 
   AVLTree *tempR = static_cast < AVLTree * >(list.racine);
   int err =
@@ -566,17 +529,17 @@ SweepTree::Relocate (SweepTree * to)
   to->src = src;
   to->bord = bord;
   to->sens = sens;
-  to->leftEvt = leftEvt;
-  to->rightEvt = rightEvt;
+  to->evt[LEFT] = evt[LEFT];
+  to->evt[RIGHT] = evt[RIGHT];
   to->startPoint = startPoint;
   if (unsigned(bord) < src->swsData.size())
     src->swsData[bord].misc = to;
   if (unsigned(bord) < src->swrData.size())
     src->swrData[bord].misc = to;
-  if (leftEvt)
-    leftEvt->rightSweep = to;
-  if (rightEvt)
-    rightEvt->leftSweep = to;
+  if (evt[LEFT])
+    evt[LEFT]->sweep[RIGHT] = to;
+  if (evt[RIGHT])
+    evt[RIGHT]->sweep[LEFT] = to;
 }
 
 void
@@ -634,3 +597,14 @@ SweepTree::Avance (Shape * dstPts, int curPoint, Shape * a, Shape * b)
 		startPoint=curPoint;
 	}*/
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
