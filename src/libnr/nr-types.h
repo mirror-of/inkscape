@@ -113,7 +113,7 @@ inline double
 cross(Point const &a, Point const &b) {
 	double ret = 0;
 	for(int i = 0; i < 2; i++)
-		ret = a.pt[i] * b.pt[1-i] - ret;
+		ret = a.pt[1-i] * b.pt[i] - ret;
 	return ret;
 }
 
