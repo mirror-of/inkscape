@@ -40,7 +40,6 @@ static void sp_group_order_changed (SPObject * object, SPRepr * child, SPRepr * 
 static void sp_group_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_group_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_group_modified (SPObject *object, guint flags);
-static gint sp_group_sequence (SPObject *object, gint seq);
 static SPRepr *sp_group_write (SPObject *object, SPRepr *repr, guint flags);
 
 static void sp_group_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
@@ -93,7 +92,6 @@ sp_group_class_init (SPGroupClass *klass)
 	sp_object_class->set = sp_group_set;
 	sp_object_class->update = sp_group_update;
 	sp_object_class->modified = sp_group_modified;
-	sp_object_class->sequence = sp_group_sequence;
 	sp_object_class->write = sp_group_write;
 
 	item_class->bbox = sp_group_bbox;
@@ -247,20 +245,6 @@ sp_group_modified (SPObject *object, guint flags)
 		}
 		g_object_unref (G_OBJECT (child));
 	}
-}
-
-static gint
-sp_group_sequence (SPObject *object, gint seq)
-{
-	SPObject *child;
-
-	seq += 1;
-
-	for ( child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		seq = sp_object_sequence (child, seq);
-	}
-
-	return seq;
 }
 
 static SPRepr *

@@ -5,12 +5,26 @@
 	  things, <use> transform attributes weren't getting written
 
 	* src/sp-object.h, src/sp-object.cpp:
+
 	  designate a "successor" object so we still perform as
 	  expected if objects are replaced in the middle of e.g. a 
 	  bulk delete operation
 
 	* src/sp-use.cpp: cleanups and succession logic for <use>
 	  deletion
+
+    * src/widgets/sp-hwrap-box.cpp, src/widgets/sp-hwrap-box.h,
+	  src/widgets/sp-vwrap-box.cpp, src/widgets/sp-vwrap-box.h,
+	  src/widgets/sp-wrap-box.cpp, src/widgets/sp-wrap-box.h,
+	  src/widgets/test-wrapbox.cpp, src/widgets/Makefile_insert:
+
+	  Removed unused (and imperfect) "wrapbox" widgets.
+
+    * src/sp-object.h, src/sp-object.cpp, src/sp-item-group.cpp:
+
+	  Removed unused sp_object_invoke_forall and sp_object_sequence
+	  methods.  (forall might be nice to have, but we can do better
+	  implementation-wise now that we're in C++-land)
 
 2004-04-30 njh <njh@mail.csse.monash.edu.au>
 

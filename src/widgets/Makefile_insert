@@ -72,8 +72,7 @@ widgets/button.$(OBJEXT): helper/sp-marshal.h
 widgets/menu.$(OBJEXT): helper/sp-marshal.h
 
 
-#noinst_PROGRAMS = test-widgets test-wrapbox
-#noinst_PROGRAMS = test-wrapbox
+#noinst_PROGRAMS = test-widgets 
 
 #test_widgets_SOURCES =	\
 #	test-widgets.cpp	\
@@ -83,10 +82,3 @@ widgets/menu.$(OBJEXT): helper/sp-marshal.h
 
 #test_widgets_LDADD = $(INKSCAPE_LIBS)
 
-#test_wrapbox_SOURCES =	\
-#	test-wrapbox.cpp	\
-#	sp-wrap-box.cpp sp-wrap-box.h	\
-#	sp-hwrap-box.cpp sp-hwrap-box.h	\
-#	sp-vwrap-box.cpp sp-vwrap-box.h
-
-#test_wrapbox_LDADD = $(INKSCAPE_LIBS)

@@ -681,27 +681,6 @@ sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gch
 		(*((SPObjectClass *) G_OBJECT_GET_CLASS(object))->read_content) (object);
 }
 
-void
-sp_object_invoke_forall (SPObject *object, SPObjectMethod func, gpointer data)
-{
-	SPRepr *repr, *child;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (SP_IS_OBJECT (object));
-	g_return_if_fail (func != NULL);
-
-	func (object, data);
-
-	repr = SP_OBJECT_REPR (object);
-	for (child = repr->children; child != NULL; child = child->next) {
-		const gchar *id;
-		SPObject *cho;
-		id = sp_repr_attr (child, "id");
-		cho = sp_document_lookup_id (SP_OBJECT_DOCUMENT (object), id);
-		if (cho) sp_object_invoke_forall (cho, func, data);
-	}
-}
-
 static const gchar*
 sp_xml_get_space_string(unsigned int space)
 {
@@ -868,16 +847,6 @@ sp_object_invoke_modified (SPObject *object, unsigned int flags)
 	g_object_ref (G_OBJECT (object));
 	g_signal_emit (G_OBJECT (object), object_signals[MODIFIED], 0, flags);
 	g_object_unref (G_OBJECT (object));
-}
-
-/* Sequence */
-gint
-sp_object_sequence (SPObject *object, gint seq)
-{
-	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->sequence)
-		return (*((SPObjectClass *) G_OBJECT_GET_CLASS(object))->sequence) (object, seq);
-
-	return seq + 1;
 }
 
 /*

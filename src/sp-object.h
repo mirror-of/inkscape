@@ -147,7 +147,7 @@ struct SPObject : public GObject {
 	/* successor is the SPObject which has replaced this one (if any);
 	 * it is mainly useful for ensuring we can correctly perform a
 	 * series of moves or deletes, even if the objects in question
-	 * have been replaced in the middle of the sequence of operations.
+	 * have been replaced in the middle of the sequence.
 	 */
 	SPObject *successor() { return _successor; }
 	void setSuccessor(SPObject *successor) {
@@ -183,10 +183,6 @@ struct SPObjectClass {
 	/* Modification handler */
 	void (* modified) (SPObject *object, unsigned int flags);
 
-	/* Compute next sequence number */
-	gint (* sequence) (SPObject *object, gint seq);
-	void (* forall) (SPObject *object, SPObjectMethod func, gpointer data);
-
 	SPRepr * (* write) (SPObject *object, SPRepr *repr, unsigned int flags);
 };
 
@@ -215,15 +211,15 @@ void sp_object_read_attr (SPObject *object, const gchar *key);
 /* Styling */
 
 /* Modification */
+
+/* update arena items */
 void sp_object_request_update (SPObject *object, unsigned int flags);
 void sp_object_invoke_update (SPObject *object, SPCtx *ctx, unsigned int flags);
+
+/* notify any interested listeners of modifications */
 void sp_object_request_modified (SPObject *object, unsigned int flags);
 void sp_object_invoke_modified (SPObject *object, unsigned int flags);
 
-/* Sequence */
-gint sp_object_sequence (SPObject *object, gint seq);
-
-void sp_object_invoke_forall (SPObject *object, SPObjectMethod func, gpointer data);
 /* Write object to repr */
 SPRepr *sp_object_invoke_write (SPObject *object, SPRepr *repr, unsigned int flags);
 
