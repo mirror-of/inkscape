@@ -160,68 +160,49 @@ Shape::Reoriente (Shape * a)
 int
 Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 {
-  Reset (0, 0);
-  if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1)
-    return 0;
-  if ( directed == fill_justDont ) {
-  } else {
-    if (directedEulerian(a) == false)
-      return shape_input_err;
-  }
+    Reset (0, 0);
+
+    if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1) {
+	return 0;
+    }
+    
+    if ( directed != fill_justDont && directedEulerian(a) == false ) {
+	return shape_input_err;
+    }
   
-  a->ResetSweep ();
+    a->ResetSweep();
 
-  if (sTree == NULL) {
-      sTree = new SweepTreeList(a->numberOfEdges());
-  }
-  if (sEvts == NULL) {
-      sEvts = new SweepEventQueue(a->numberOfEdges());
-  }
+    if (sTree == NULL) {
+	sTree = new SweepTreeList(a->numberOfEdges());
+    }
+    if (sEvts == NULL) {
+	sEvts = new SweepEventQueue(a->numberOfEdges());
+    }
   
-  MakePointData (true);
-  MakeEdgeData (true);
-  MakeSweepSrcData (true);
-  MakeSweepDestData (true);
-  MakeBackData(a->_has_back_data);
+    MakePointData(true);
+    MakeEdgeData(true);
+    MakeSweepSrcData(true);
+    MakeSweepDestData(true);
+    MakeBackData(a->_has_back_data);
 
-  a->initialisePointData();
-  a->initialiseEdgeData();
+    a->initialisePointData();
+    a->initialiseEdgeData();
 
-  a->SortPointsRounded ();
+    a->SortPointsRounded();
 
-//      a->Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
+    chgts.clear();
 
-  chgts = NULL;
-  nbChgt = maxChgt = 0;
+    double lastChange = a->pData[0].rx[1] - 1.0;
+    int lastChgtPt = 0;
+    int edgeHead = -1;
+    Shape *shapeHead = NULL;
 
-  double lastChange = a->pData[0].rx[1] - 1.0;
-  int lastChgtPt = 0;
-  int edgeHead = -1;
-  Shape *shapeHead = NULL;
+    clearIncidenceData();
+    
+    int curAPt = 0;
 
-  iData = NULL;
-  nbInc = maxInc = 0;
-
-  int curAPt = 0;
-
-  while (curAPt < a->numberOfPoints() || sEvts->size() > 0)
-    {
-/*		if ( nbPt > 0 && pts[nbPt-1].y >= 250.4 && pts[nbPt-1].y <= 250.6 ) {
-			for (int i=0;i<sEvts.nbEvt;i++) {
-				printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord); // localizing ok
-			}
-			//		cout << endl;
-			if ( sTree.racine ) {
-				SweepTree*  ct=static_cast <SweepTree*> (sTree.racine->Leftmost());
-				while ( ct ) {
-					printf("%i %i\n",ct->bord,ct->startPoint);
-					ct=static_cast <SweepTree*> (ct->rightElem);
-				}
-			}
-		}*/
-//              cout << endl << endl;
-
-    NR::Point ptX;
+    while (curAPt < a->numberOfPoints() || sEvts->size() > 0) {
+	NR::Point ptX;
       double ptL, ptR;
       SweepTree *intersL = NULL;
       SweepTree *intersR = NULL;
@@ -286,7 +267,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	      curSh = neSh;
 	    }
 
-	  for (int i = 0; i < nbChgt; i++)
+	  for (unsigned int i = 0; i < chgts.size(); i++)
 	    {
 	      chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
 	      if (chgts[i].type == 0)
@@ -341,7 +322,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 	  lastChgtPt = lastPointNo;
 	  lastChange = rPtX[1];
-	  nbChgt = 0;
+	  chgts.clear();
 	  edgeHead = -1;
 	  shapeHead = NULL;
 	}
@@ -600,7 +581,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	curSh = neSh;
       }
 
-    for (int i = 0; i < nbChgt; i++)
+    for (unsigned int i = 0; i < chgts.size(); i++)
       {
 	chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
 	if (chgts[i].type == 0)
@@ -650,9 +631,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     shapeHead = NULL;
   }
 
-  g_free(chgts);
-  chgts = NULL;
-  nbChgt = maxChgt = 0;
+    chgts.clear();
 
 //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
 //      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
@@ -662,9 +641,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 //      GetAdjacencies(a);
 
 //      MakeAretes(a);
-  g_free(iData);
-  iData = NULL;
-  nbInc = maxInc = 0;
+    clearIncidenceData();
 
   AssembleAretes (directed);
 
@@ -919,8 +896,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   a->SortPointsRounded ();
   b->SortPointsRounded ();
 
-  chgts = NULL;
-  nbChgt = maxChgt = 0;
+  chgts.clear();
 
   double lastChange =
     (a->pData[0].rx[1] <
@@ -929,8 +905,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   int edgeHead = -1;
   Shape *shapeHead = NULL;
 
-  iData = NULL;
-  nbInc = maxInc = 0;
+  clearIncidenceData();
 
   int curAPt = 0;
   int curBPt = 0;
@@ -1111,7 +1086,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	      curSh = neSh;
 	    }
 
-	  for (int i = 0; i < nbChgt; i++)
+	  for (unsigned int i = 0; i < chgts.size(); i++)
 	    {
 	      chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
 	      if (chgts[i].type == 0)
@@ -1170,7 +1145,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 	  lastChgtPt = lastPointNo;
 	  lastChange = rPtX[1];
-	  nbChgt = 0;
+	  chgts.clear();
 	  edgeHead = -1;
 	  shapeHead = NULL;
 	}
@@ -1441,7 +1416,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	curSh = neSh;
       }
 
-    for (int i = 0; i < nbChgt; i++)
+    /* FIXME: this kind of code seems to appear frequently */
+    for (unsigned int i = 0; i < chgts.size(); i++)
       {
 	chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
 	if (chgts[i].type == 0)
@@ -1491,21 +1467,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     shapeHead = NULL;
   }
 
-  g_free(chgts);
-  chgts = NULL;
-  nbChgt = maxChgt = 0;
-
-
-//      MakeAretes(a,true);
-/*	if ( mod == bool_op_diff || mod == bool_op_symdiff ) {
-		MakeAretes(b,false);
-	} else {
-		MakeAretes(b,true);
-	}*/
-
-  g_free(iData);
-  iData = NULL;
-  nbInc = maxInc = 0;
+  chgts.clear();
+  clearIncidenceData();
 
 //      Plot(190,70,6,400,400,true,false,true,true);
 
@@ -2782,7 +2745,7 @@ void
 Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * shapeHead,
 			 int edgeHead)
 {
-  for (int cCh = 0; cCh < nbChgt; cCh++)
+  for (unsigned int cCh = 0; cCh < chgts.size(); cCh++)
     {
       int chLeN = chgts[cCh].ptNo;
       int chRiN = chgts[cCh].ptNo;
@@ -2977,117 +2940,94 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * shapeHead,
     }
 }
 
-void
-Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
-		int &edgeHead, sTreeChangeType type, Shape * lS, int lB, Shape * rS,
-		int rB)
+
+void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
+		    int &edgeHead, sTreeChangeType type, Shape * lS, int lB, Shape * rS,
+		    int rB)
 {
-  if (nbChgt >= maxChgt)
-    {
-      maxChgt = 2 * nbChgt + 1;
-      chgts = (sTreeChange *) g_realloc(chgts, maxChgt * sizeof (sTreeChange));
-    }
-  int nCh = nbChgt++;
-  chgts[nCh].ptNo = lastPointNo;
-  chgts[nCh].type = type;
-  chgts[nCh].src = lS;
-  chgts[nCh].bord = lB;
-  chgts[nCh].osrc = rS;
-  chgts[nCh].obord = rB;
-  if (lS)
-    {
-      SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
-      if (lE && lE->leftElem)
-	{
-	  SweepTree *llE = static_cast < SweepTree * >(lE->leftElem);
-	  chgts[nCh].lSrc = llE->src;
-	  chgts[nCh].lBrd = llE->bord;
-	}
-      else
-	{
-	  chgts[nCh].lSrc = NULL;
-	  chgts[nCh].lBrd = -1;
+    sTreeChange c;
+    c.ptNo = lastPointNo;
+    c.type = type;
+    c.src = lS;
+    c.bord = lB;
+    c.osrc = rS;
+    c.obord = rB;
+    chgts.push_back(c);
+    const int nCh = chgts.size() - 1;
+
+    /* FIXME: this looks like a cut and paste job */
+
+    if (lS) {
+	SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
+	if (lE && lE->leftElem) {
+	    SweepTree *llE = static_cast < SweepTree * >(lE->leftElem);
+	    chgts[nCh].lSrc = llE->src;
+	    chgts[nCh].lBrd = llE->bord;
+	} else {
+	    chgts[nCh].lSrc = NULL;
+	    chgts[nCh].lBrd = -1;
 	}
 
-      if (lS->swsData[lB].leftRnd < lastChgtPt)
-	{
-	  lS->swsData[lB].leftRnd = lastPointNo;
-	  lS->swsData[lB].nextSh = shapeHead;
-	  lS->swsData[lB].nextBo = edgeHead;
-	  edgeHead = lB;
-	  shapeHead = lS;
-	}
-      else
-	{
-	  int old = lS->swsData[lB].leftRnd;
-	  if (getPoint(old).x[0] > getPoint(lastPointNo).x[0])
+	if (lS->swsData[lB].leftRnd < lastChgtPt) {
 	    lS->swsData[lB].leftRnd = lastPointNo;
+	    lS->swsData[lB].nextSh = shapeHead;
+	    lS->swsData[lB].nextBo = edgeHead;
+	    edgeHead = lB;
+	    shapeHead = lS;
+	} else {
+	    int old = lS->swsData[lB].leftRnd;
+	    if (getPoint(old).x[0] > getPoint(lastPointNo).x[0]) {
+		lS->swsData[lB].leftRnd = lastPointNo;
+	    }
 	}
-      if (lS->swsData[lB].rightRnd < lastChgtPt)
-	{
-	  lS->swsData[lB].rightRnd = lastPointNo;
-	}
-      else
-	{
-	  int old = lS->swsData[lB].rightRnd;
-	  if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
+	if (lS->swsData[lB].rightRnd < lastChgtPt) {
 	    lS->swsData[lB].rightRnd = lastPointNo;
+	} else {
+	    int old = lS->swsData[lB].rightRnd;
+	    if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
+		lS->swsData[lB].rightRnd = lastPointNo;
 	}
     }
 
-  if (rS)
-    {
-      SweepTree *rE = static_cast < SweepTree * >(rS->swsData[rB].misc);
-      if (rE->rightElem)
-	{
-	  SweepTree *rrE = static_cast < SweepTree * >(rE->rightElem);
-	  chgts[nCh].rSrc = rrE->src;
-	  chgts[nCh].rBrd = rrE->bord;
+    if (rS) {
+	SweepTree *rE = static_cast < SweepTree * >(rS->swsData[rB].misc);
+	if (rE->rightElem) {
+	    SweepTree *rrE = static_cast < SweepTree * >(rE->rightElem);
+	    chgts[nCh].rSrc = rrE->src;
+	    chgts[nCh].rBrd = rrE->bord;
+	} else {
+	    chgts[nCh].rSrc = NULL;
+	    chgts[nCh].rBrd = -1;
 	}
-      else
-	{
-	  chgts[nCh].rSrc = NULL;
-	  chgts[nCh].rBrd = -1;
-	}
-
-      if (rS->swsData[rB].leftRnd < lastChgtPt)
-	{
-	  rS->swsData[rB].leftRnd = lastPointNo;
-	  rS->swsData[rB].nextSh = shapeHead;
-	  rS->swsData[rB].nextBo = edgeHead;
-	  edgeHead = rB;
-	  shapeHead = rS;
-	}
-      else
-	{
-	  int old = rS->swsData[rB].leftRnd;
-	  if (getPoint(old).x[0] > getPoint(lastPointNo).x[0])
+	
+	if (rS->swsData[rB].leftRnd < lastChgtPt) {
 	    rS->swsData[rB].leftRnd = lastPointNo;
+	    rS->swsData[rB].nextSh = shapeHead;
+	    rS->swsData[rB].nextBo = edgeHead;
+	    edgeHead = rB;
+	    shapeHead = rS;
+	} else {
+	    int old = rS->swsData[rB].leftRnd;
+	    if (getPoint(old).x[0] > getPoint(lastPointNo).x[0]) {
+		rS->swsData[rB].leftRnd = lastPointNo;
+	    }
 	}
-      if (rS->swsData[rB].rightRnd < lastChgtPt)
-	{
-	  rS->swsData[rB].rightRnd = lastPointNo;
-	}
-      else
-	{
-	  int old = rS->swsData[rB].rightRnd;
-	  if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
+	if (rS->swsData[rB].rightRnd < lastChgtPt) {
 	    rS->swsData[rB].rightRnd = lastPointNo;
+	} else {
+	    int old = rS->swsData[rB].rightRnd;
+	    if (getPoint(old).x[0] < getPoint(lastPointNo).x[0])
+		rS->swsData[rB].rightRnd = lastPointNo;
 	}
-    }
-  else
-    {
-      SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
-      if (lE && lE->rightElem)
-	{
-	  SweepTree *rlE = static_cast < SweepTree * >(lE->rightElem);
-	  chgts[nCh].rSrc = rlE->src;
-	  chgts[nCh].rBrd = rlE->bord;
-	}
-      else
-	{
-	  chgts[nCh].rSrc = NULL;
-	  chgts[nCh].rBrd = -1;
+    } else {
+	SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
+	if (lE && lE->rightElem) {
+	    SweepTree *rlE = static_cast < SweepTree * >(lE->rightElem);
+	    chgts[nCh].rSrc = rlE->src;
+	    chgts[nCh].rBrd = rlE->bord;
+	} else {
+	    chgts[nCh].rSrc = NULL;
+	    chgts[nCh].rBrd = -1;
 	}
     }
 }
@@ -3124,7 +3064,7 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 		   BooleanOp mod)
 {
 
-  for (int cCh = 0; cCh < nbChgt; cCh++)
+  for (unsigned int cCh = 0; cCh < chgts.size(); cCh++)
     {
       if (chgts[cCh].type == 0)
 	{
@@ -3133,7 +3073,7 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 	  lS->swsData[lB].curPoint = chgts[cCh].ptNo;
 	}
     }
-  for (int cCh = 0; cCh < nbChgt; cCh++)
+  for (unsigned int cCh = 0; cCh < chgts.size(); cCh++)
     {
 //              int   chLeN=chgts[cCh].ptNo;
 //              int   chRiN=chgts[cCh].ptNo;
