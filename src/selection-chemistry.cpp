@@ -1764,13 +1764,13 @@ sp_selection_create_bitmap_copy ()
 
     // Calculate resolution
     double res;
-    uint prefs_res = prefs_get_int_attribute ("options.createbitmap", "resolution", 0);
-    if (prefs_res != 0) {
+    int const prefs_res = prefs_get_int_attribute ("options.createbitmap", "resolution", 0);
+    if (0 < prefs_res) {
         // If it's given explicitly in prefs, take it
         res = prefs_res;
     } else {
         // Otherwise look up minimum bitmap size (default 250 pixels) and calculate resolution from it
-        uint prefs_min = prefs_get_int_attribute ("options.createbitmap", "minsize", 250);
+        int const prefs_min = prefs_get_int_attribute ("options.createbitmap", "minsize", 250);
         res = prefs_min / MIN ((bbox.x1 - bbox.x0), (bbox.y1 - bbox.y0));
     }
 
