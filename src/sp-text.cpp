@@ -1007,29 +1007,76 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 						
 						if ( curF ) {
 							if ( with_path ) {
+								// dummy?
 								int   nb_glyph_p;
-								double glyph_a=base_pt[0];
-								Path::cut_position* glyph_p=with_path->CurvilignToPosition(1,&glyph_a,nb_glyph_p);
-								if ( glyph_p ) {
-									if ( glyph_p[0].piece >= 0 ) {
-										NR::Point  g_pos,g_tgt,g_nor;
-										with_path->PointAndTangentAt (glyph_p[0].piece,glyph_p[0].t,g_pos,g_tgt);
-										g_nor=g_tgt.ccw();
-										double g_wid=curF->Advance(str_text->glyph_text[i].gl, (metrics));
-										g_pos+=base_pt[1]*g_nor+0.5*g_wid*g_tgt;
-										g_tgt*=size;
-										g_nor*=size;
-										NR::Matrix  a;
-										a[0]=g_tgt[0];
-										a[2]=g_nor[0];
-										a[4]=g_pos[0];
-										a[1]=g_tgt[1];
-										a[3]=g_nor[1];
-										a[5]=g_pos[1];
-										sp_chars_add_element (chars, str_text->glyph_text[i].gl, (font_instance*)curF, a);
+
+								//startpoint-on-the-path is the point on the path ... which is startOffset distance along the path 
+								//from the start of the path, calculated using the user agent's distance along the path algorithm.
+								double startOffset=base_pt[0];
+								Path::cut_position* startpoint_otp = with_path->CurvilignToPosition(1, &startOffset, nb_glyph_p);
+
+								//Determine the glyph's charwidth (i.e., the amount which the current text position advances 
+								//horizontally when the glyph is drawn using horizontal text layout). 
+								double charwidth = size * curF->Advance(str_text->glyph_text[i].gl, (metrics));
+
+								//Determine the point on the curve which is charwidth distance along the path from the 
+								//startpoint-on-the-path for this glyph, calculated using the user agent's distance along the path algorithm.
+								double endOffset = base_pt[0] + charwidth;
+								Path::cut_position* endpoint_otp = with_path->CurvilignToPosition(1, &endOffset, nb_glyph_p);
+
+								//Determine the midpoint-on-the-path, which is the point on the path which is "halfway" (user agents can 
+								//choose either a distance calculation or a parametric calculation) between the startpoint-on-the-path 
+								//and the endpoint-on-the-path.
+								double midOffset = base_pt[0] + 0.5 * charwidth;
+								Path::cut_position* midpoint_otp = with_path->CurvilignToPosition(1, &midOffset, nb_glyph_p);
+
+								// only glyphs whose midpoint is on path are rendered
+								if ( midpoint_otp && midpoint_otp[0].piece >= 0) {
+
+									// find out coords and tangent at the midpoint_otp
+									NR::Point  midpoint, mid_tangent;
+									with_path->PointAndTangentAt (midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, mid_tangent);
+
+									NR::Point tangent;
+
+									if (startpoint_otp && startpoint_otp[0].piece >= 0 && endpoint_otp && endpoint_otp[0].piece >= 0) {
+										// if both start and endpoints are also on the path,
+
+										// find out coords and tangent at startpoint and endpoint
+										NR::Point  startpoint, start_tangent;
+										with_path->PointAndTangentAt (startpoint_otp[0].piece, startpoint_otp[0].t, startpoint, start_tangent);
+										NR::Point  endpoint, end_tangent;
+										with_path->PointAndTangentAt (endpoint_otp[0].piece, endpoint_otp[0].t, endpoint, end_tangent);
+
+										// get the vector from start to end and normalize it so that its length is 1
+										tangent = (endpoint - startpoint);
+										tangent.normalize();
+									} else {
+										// The spec is a bit bogus here; it says to render glyph if one of the start/end points is on path,
+										// but the algorithm for tangent (see sibling branch above) needs both of them.
+										// We work around this by just taking the path tangent at the midpoint.
+										tangent = mid_tangent;
 									}
-									free(glyph_p);
+
+									// glyph origin: baseline of glyph must be on midpoint, so we step back half of charwidth from midpoint
+									// in the direction of the tangent
+									NR::Point origin = midpoint - 0.5 * charwidth * tangent;
+
+									// scale as needed, create a perpendicular vector
+									tangent *= size;
+									NR::Point normal = tangent.ccw();
+
+									// construct the matrix for the glyph
+									NR::Matrix a (tangent[NR::X], tangent[NR::Y], normal[NR::X], normal[NR::Y], origin[NR::X], origin[NR::Y]);
+
+									// add glyph
+									sp_chars_add_element (chars, str_text->glyph_text[i].gl, (font_instance*)curF, a);
 								}
+
+								if (startpoint_otp) free(startpoint_otp);
+								if (midpoint_otp) free(midpoint_otp);
+								if (endpoint_otp) free(endpoint_otp);
+
 							} else {
 								NR::Matrix add_rot=NR::identity();
 								if ( ly->rotate_set ) add_rot=NR::identity()*NR::rotate(M_PI*ly->rotate/180);
