@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-01 19:51+0100\n"
+"POT-Creation-Date: 2005-02-04 23:47+0100\n"
 "PO-Revision-Date: 2005-01-29 12:40+0100\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: sl_SI <sl@li.org>\n"
@@ -1628,14 +1628,14 @@ msgstr "Vse datoteke"
 msgid "All Inkscape Files"
 msgstr "Vse Inkscape datoteke"
 
-#: src/dialogs/filedialog.cpp:1156
+#: src/dialogs/filedialog.cpp:1162
 msgid "Guess from extension"
 msgstr "Ugani iz končnice"
 
 #. ###### Add the file types menu
 #. createFilterMenu();
 #. ###### Do we want the .xxx extension automatically added?
-#: src/dialogs/filedialog.cpp:1234
+#: src/dialogs/filedialog.cpp:1240
 msgid "Append filename extension automatically"
 msgstr "Samodejno dodaj končnico datoteki"
 
@@ -2765,52 +2765,23 @@ msgstr ""
 "<b>Shift</b> izberete barvo obrobe. Če <b>držite in povlečete</b>, izberete "
 "povprečno barvo območja."
 
-#: src/extension/dependency.cpp:29
-msgid "executable"
-msgstr "zagonski"
-
-#: src/extension/dependency.cpp:30
-msgid "file"
-msgstr "datoteka"
-
-#: src/extension/dependency.cpp:31
-msgid "extension"
-msgstr "razširitev"
-
-#: src/extension/dependency.cpp:32
-msgid "plugin"
-msgstr "dodatek"
-
-#. TRANSLATORS: "path" refers to "filesystem path" here
-#: src/extension/dependency.cpp:37
-msgid "path"
-msgstr "pot"
-
-#: src/extension/dependency.cpp:38
-msgid "extensions"
-msgstr "razširitve"
-
-#: src/extension/dependency.cpp:39
-msgid "absolute"
-msgstr "absolutno"
-
-#: src/extension/dependency.cpp:238
+#: src/extension/dependency.cpp:239
 msgid "Dependency::"
 msgstr "Odvisnost::"
 
-#: src/extension/dependency.cpp:239
+#: src/extension/dependency.cpp:240
 msgid "  type: "
 msgstr "  vrsta: "
 
-#: src/extension/dependency.cpp:240
+#: src/extension/dependency.cpp:241
 msgid "  location: "
 msgstr "  položaj: "
 
-#: src/extension/dependency.cpp:241
+#: src/extension/dependency.cpp:242
 msgid "  string: "
 msgstr "  niz: "
 
-#: src/extension/dependency.cpp:244
+#: src/extension/dependency.cpp:245
 msgid "  description: "
 msgstr "  opis: "
 
@@ -2861,13 +2832,14 @@ msgstr "Nisem mogel izvoziti v datoteko %s.\n"
 
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:54
+#, fuzzy
 msgid ""
-"<span weight=\"bold\" size=\"larger\">One or more extensions failed to load."
-"</span>\n"
+"<span weight=\"bold\" size=\"larger\">One or more extensions failed to load</"
+"span>\n"
 "\n"
 "The failed extensions have been skipped.  Inkscape will continue to run "
 "normally but those extensions will be unavailable.  For details to "
-"troubleshoot this problem, please refer to the error log located at:"
+"troubleshoot this problem, please refer to the error log located at: "
 msgstr ""
 "<span weight=\"bold\" size=\"larger\">Najmanj ena razširitev se ni uspela "
 "naložiti.</span>\n"
@@ -3468,7 +3440,7 @@ msgstr ""
 msgid "Node or handle drag canceled."
 msgstr "Preklican premik vozlišča ali ročice."
 
-#: src/libnrtype/FontFactory.cpp:342
+#: src/libnrtype/FontFactory.cpp:343
 msgid "Ignoring font without family that will crash Pango"
 msgstr ""
 
@@ -4217,12 +4189,12 @@ msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>Ukrivi</b>: %0.2f%% x %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:978
+#: src/seltrans.cpp:984
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Zavrti</b>: %0.2f stopinj;s <b>Ctrl</b> preskakuj po kotih "
 
-#: src/seltrans.cpp:1007
+#: src/seltrans.cpp:1013
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Premakni <b>središče</b> na %s, %s"
@@ -4417,11 +4389,11 @@ msgstr "Izberite <b>nekaj črt</b> za zamikanje."
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "Med izbiro <b>ni črt</b>, ki bi jih lahko razširil ali zožal."
 
-#: src/splivarot.cpp:1416
+#: src/splivarot.cpp:1419
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Izberite <b>nekaj črt</b> za poenostavljanje."
 
-#: src/splivarot.cpp:1443
+#: src/splivarot.cpp:1446
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "Med izbiro <b>ni črt</b>, ki bi jih lahko poenostavil."
 
@@ -4473,30 +4445,30 @@ msgstr "V izbiri <b>ni besedil na poti</b>, ki bi jih lahko obrnil."
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Izberite <b>besedila</b> za odstranitev zgoščevanj."
 
-#: src/text-context.cpp:356
+#: src/text-context.cpp:363
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
 msgstr ""
 "<b>Trenutni sloj je skrit</b>. Če želite dodajati besedilo ga odkrijte."
 
-#: src/text-context.cpp:360
+#: src/text-context.cpp:367
 msgid "<b>Current layer is locked</b>. Unlock it to be able to add text."
 msgstr ""
 "<b>Trenutni sloj je zaklenjen</b>. Če želite dodajati besedilo ga odkrijte."
 
-#: src/text-context.cpp:412
+#: src/text-context.cpp:419
 msgid "No-break space"
 msgstr "Presledek brez preloma"
 
-#: src/text-context.cpp:423
+#: src/text-context.cpp:430
 msgid "Unicode: "
 msgstr "Unicode: "
 
-#: src/text-context.cpp:437
+#: src/text-context.cpp:444
 #, c-format
 msgid "Unicode: %c%c%c%c"
 msgstr "Unicode: %c%c%c%c"
 
-#: src/text-context.cpp:450
+#: src/text-context.cpp:457
 msgid "Non-printable character"
 msgstr "Neizpisljiva črka"
 
@@ -6171,38 +6143,38 @@ msgstr "V dokumentu ni prelivov"
 msgid "No gradient selected"
 msgstr "Izbran ni noben preliv"
 
-#: src/widgets/gradient-vector.cpp:538
+#: src/widgets/gradient-vector.cpp:546
 msgid "No stops in gradient"
 msgstr "Preliv brez postankov"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: src/widgets/gradient-vector.cpp:774
+#: src/widgets/gradient-vector.cpp:798
 msgid "Add stop"
 msgstr "Dodaj postanek"
 
-#: src/widgets/gradient-vector.cpp:777
+#: src/widgets/gradient-vector.cpp:801
 msgid "Add another control stop to gradient"
 msgstr "Dodaj nov postanek za preliv"
 
-#: src/widgets/gradient-vector.cpp:779
+#: src/widgets/gradient-vector.cpp:803
 msgid "Delete stop"
 msgstr "Izbriši postanek"
 
-#: src/widgets/gradient-vector.cpp:782
+#: src/widgets/gradient-vector.cpp:806
 msgid "Delete current control stop from gradient"
 msgstr "Izbriši trenuten konec iz preliva"
 
 #. Label
-#: src/widgets/gradient-vector.cpp:793
+#: src/widgets/gradient-vector.cpp:817
 msgid "Offset:"
 msgstr "Zamik:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: src/widgets/gradient-vector.cpp:838
+#: src/widgets/gradient-vector.cpp:862
 msgid "Stop Color"
 msgstr "Barva za konec"
 
-#: src/widgets/gradient-vector.cpp:864
+#: src/widgets/gradient-vector.cpp:888
 msgid "Gradient editor"
 msgstr "Urejevalnik preliva"
 
@@ -6393,6 +6365,27 @@ msgstr "Lastnost"
 #: src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Vrednost"
+
+#~ msgid "executable"
+#~ msgstr "zagonski"
+
+#~ msgid "file"
+#~ msgstr "datoteka"
+
+#~ msgid "extension"
+#~ msgstr "razširitev"
+
+#~ msgid "plugin"
+#~ msgstr "dodatek"
+
+#~ msgid "path"
+#~ msgstr "pot"
+
+#~ msgid "extensions"
+#~ msgstr "razširitve"
+
+#~ msgid "absolute"
+#~ msgstr "absolutno"
 
 #~ msgid ""
 #~ "<b>0</b> out of <b>%i</b> node selected. Click, Shift+click, or drag "

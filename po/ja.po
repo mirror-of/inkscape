@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-01 19:51+0100\n"
+"POT-Creation-Date: 2005-02-04 23:47+0100\n"
 "PO-Revision-Date: 2004-10-26 23:26+0900\n"
 "Last-Translator: shivaken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -1609,14 +1609,14 @@ msgstr "全てのファイル"
 msgid "All Inkscape Files"
 msgstr "全てのInkscapeファイル"
 
-#: src/dialogs/filedialog.cpp:1156
+#: src/dialogs/filedialog.cpp:1162
 msgid "Guess from extension"
 msgstr "拡張子で判断"
 
 #. ###### Add the file types menu
 #. createFilterMenu();
 #. ###### Do we want the .xxx extension automatically added?
-#: src/dialogs/filedialog.cpp:1234
+#: src/dialogs/filedialog.cpp:1240
 msgid "Append filename extension automatically"
 msgstr "自動的に拡張子を追加"
 
@@ -2760,60 +2760,25 @@ msgstr ""
 "クリックでフィルの色を、Shift＋クリックでストローク色を、ドラッグで平均の色を"
 "抽出"
 
-#: src/extension/dependency.cpp:29
-#, fuzzy
-msgid "executable"
-msgstr "矩形"
-
-#: src/extension/dependency.cpp:30
-#, fuzzy
-msgid "file"
-msgstr "タイル化"
-
-#: src/extension/dependency.cpp:31
-#, fuzzy
-msgid "extension"
-msgstr "展開係数:"
-
-#: src/extension/dependency.cpp:32
-msgid "plugin"
-msgstr ""
-
-#. TRANSLATORS: "path" refers to "filesystem path" here
-#: src/extension/dependency.cpp:37
-#, fuzzy
-msgid "path"
-msgstr "パス(_P)"
-
-#: src/extension/dependency.cpp:38
-#, fuzzy
-msgid "extensions"
-msgstr "展開係数:"
-
-#: src/extension/dependency.cpp:39
-#, fuzzy
-msgid "absolute"
-msgstr " 絶対位置 "
-
-#: src/extension/dependency.cpp:238
+#: src/extension/dependency.cpp:239
 msgid "Dependency::"
 msgstr ""
 
-#: src/extension/dependency.cpp:239
+#: src/extension/dependency.cpp:240
 #, fuzzy
 msgid "  type: "
 msgstr "タイプ:"
 
-#: src/extension/dependency.cpp:240
+#: src/extension/dependency.cpp:241
 #, fuzzy
 msgid "  location: "
 msgstr "関連"
 
-#: src/extension/dependency.cpp:241
+#: src/extension/dependency.cpp:242
 msgid "  string: "
 msgstr ""
 
-#: src/extension/dependency.cpp:244
+#: src/extension/dependency.cpp:245
 #, fuzzy
 msgid "  description: "
 msgstr "記述"
@@ -2865,12 +2830,12 @@ msgstr "%sにエクスポートできませんでした。\n"
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:54
 msgid ""
-"<span weight=\"bold\" size=\"larger\">One or more extensions failed to load."
-"</span>\n"
+"<span weight=\"bold\" size=\"larger\">One or more extensions failed to load</"
+"span>\n"
 "\n"
 "The failed extensions have been skipped.  Inkscape will continue to run "
 "normally but those extensions will be unavailable.  For details to "
-"troubleshoot this problem, please refer to the error log located at:"
+"troubleshoot this problem, please refer to the error log located at: "
 msgstr ""
 
 #. This is some filler text, needs to change before relase
@@ -3465,7 +3430,7 @@ msgstr "%sは存在します。現在のドキュメントで上書きします�
 msgid "Node or handle drag canceled."
 msgstr "ノードかドラッグはキャンセルされました。"
 
-#: src/libnrtype/FontFactory.cpp:342
+#: src/libnrtype/FontFactory.cpp:343
 msgid "Ignoring font without family that will crash Pango"
 msgstr ""
 
@@ -4186,12 +4151,12 @@ msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>傾き</b>: %0.2f%$ x %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:978
+#: src/seltrans.cpp:984
 #, fuzzy, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>回転</b>: %0.2f度; <b>Ctrl</b>: 角度をスナップ"
 
-#: src/seltrans.cpp:1007
+#: src/seltrans.cpp:1013
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "移動 <b>中心</b>を%s, %s"
@@ -4382,11 +4347,11 @@ msgstr "拡大／縮小するパスを選択してください。"
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "拡大／縮小するパスが選択されていません。"
 
-#: src/splivarot.cpp:1416
+#: src/splivarot.cpp:1419
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "簡略化するパスを選択してください。"
 
-#: src/splivarot.cpp:1443
+#: src/splivarot.cpp:1446
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "選択オブジェクトに簡略化するパスがありません。"
 
@@ -4436,28 +4401,28 @@ msgstr "選択済みのパス上にテキストはありません。"
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "逆転させるパスを1つ以上選択してください。"
 
-#: src/text-context.cpp:356
+#: src/text-context.cpp:363
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
 msgstr ""
 
-#: src/text-context.cpp:360
+#: src/text-context.cpp:367
 msgid "<b>Current layer is locked</b>. Unlock it to be able to add text."
 msgstr ""
 
-#: src/text-context.cpp:412
+#: src/text-context.cpp:419
 msgid "No-break space"
 msgstr "非分割スペース"
 
-#: src/text-context.cpp:423
+#: src/text-context.cpp:430
 msgid "Unicode: "
 msgstr "ユニコード: "
 
-#: src/text-context.cpp:437
+#: src/text-context.cpp:444
 #, c-format
 msgid "Unicode: %c%c%c%c"
 msgstr "ユニコード: %c%c%c%c"
 
-#: src/text-context.cpp:450
+#: src/text-context.cpp:457
 msgid "Non-printable character"
 msgstr "印刷不可能な文字"
 
@@ -6147,38 +6112,38 @@ msgstr "ドキュメントにグラデーションがありません"
 msgid "No gradient selected"
 msgstr "グラデーションが選択されていません"
 
-#: src/widgets/gradient-vector.cpp:538
+#: src/widgets/gradient-vector.cpp:546
 msgid "No stops in gradient"
 msgstr "グラデーション色がありません"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: src/widgets/gradient-vector.cpp:774
+#: src/widgets/gradient-vector.cpp:798
 msgid "Add stop"
 msgstr "色を追加"
 
-#: src/widgets/gradient-vector.cpp:777
+#: src/widgets/gradient-vector.cpp:801
 msgid "Add another control stop to gradient"
 msgstr "グラデーションに制御色を追加"
 
-#: src/widgets/gradient-vector.cpp:779
+#: src/widgets/gradient-vector.cpp:803
 msgid "Delete stop"
 msgstr "色を削除"
 
-#: src/widgets/gradient-vector.cpp:782
+#: src/widgets/gradient-vector.cpp:806
 msgid "Delete current control stop from gradient"
 msgstr "グラデーションから制御色を削除"
 
 #. Label
-#: src/widgets/gradient-vector.cpp:793
+#: src/widgets/gradient-vector.cpp:817
 msgid "Offset:"
 msgstr "オフセット:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: src/widgets/gradient-vector.cpp:838
+#: src/widgets/gradient-vector.cpp:862
 msgid "Stop Color"
 msgstr "色"
 
-#: src/widgets/gradient-vector.cpp:864
+#: src/widgets/gradient-vector.cpp:888
 msgid "Gradient editor"
 msgstr "グラデーションエディタ"
 
@@ -6372,6 +6337,30 @@ msgstr "属性"
 #: src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "値"
+
+#, fuzzy
+#~ msgid "executable"
+#~ msgstr "矩形"
+
+#, fuzzy
+#~ msgid "file"
+#~ msgstr "タイル化"
+
+#, fuzzy
+#~ msgid "extension"
+#~ msgstr "展開係数:"
+
+#, fuzzy
+#~ msgid "path"
+#~ msgstr "パス(_P)"
+
+#, fuzzy
+#~ msgid "extensions"
+#~ msgstr "展開係数:"
+
+#, fuzzy
+#~ msgid "absolute"
+#~ msgstr " 絶対位置 "
 
 #~ msgid "Could not create sodipodi-svg-doc factory"
 #~ msgstr "inkscape-svg-docファクトリを作成できません"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-01 19:51+0100\n"
+"POT-Creation-Date: 2005-02-04 23:47+0100\n"
 "PO-Revision-Date: 2004-11-25 01:41+0300\n"
 "Last-Translator: Alexandre Prokoudine <avp@localhost.localdomain>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -1668,14 +1668,14 @@ msgstr "Все файлы"
 msgid "All Inkscape Files"
 msgstr "Все файлы Inkscape"
 
-#: src/dialogs/filedialog.cpp:1156
+#: src/dialogs/filedialog.cpp:1162
 msgid "Guess from extension"
 msgstr "Догадаться по расширению"
 
 #. ###### Add the file types menu
 #. createFilterMenu();
 #. ###### Do we want the .xxx extension automatically added?
-#: src/dialogs/filedialog.cpp:1234
+#: src/dialogs/filedialog.cpp:1240
 msgid "Append filename extension automatically"
 msgstr "Добавить расширение автоматически"
 
@@ -2825,60 +2825,25 @@ msgstr ""
 "<b>Щелчок</b> берет цвет заливки, <b>Shift+щелчок</b> берет цвет штриха, "
 "<b>перетаскивание</b> берет усреднённый цвет в области."
 
-#: src/extension/dependency.cpp:29
-#, fuzzy
-msgid "executable"
-msgstr "Прямоугольник"
-
-#: src/extension/dependency.cpp:30
-#, fuzzy
-msgid "file"
-msgstr "Название"
-
-#: src/extension/dependency.cpp:31
-#, fuzzy
-msgid "extension"
-msgstr "Растяжение:"
-
-#: src/extension/dependency.cpp:32
-msgid "plugin"
-msgstr ""
-
-#. TRANSLATORS: "path" refers to "filesystem path" here
-#: src/extension/dependency.cpp:37
-#, fuzzy
-msgid "path"
-msgstr "_Контур"
-
-#: src/extension/dependency.cpp:38
-#, fuzzy
-msgid "extensions"
-msgstr "Растяжение:"
-
-#: src/extension/dependency.cpp:39
-#, fuzzy
-msgid "absolute"
-msgstr " абсолютно к "
-
-#: src/extension/dependency.cpp:238
+#: src/extension/dependency.cpp:239
 msgid "Dependency::"
 msgstr ""
 
-#: src/extension/dependency.cpp:239
+#: src/extension/dependency.cpp:240
 #, fuzzy
 msgid "  type: "
 msgstr "_Тип: "
 
-#: src/extension/dependency.cpp:240
+#: src/extension/dependency.cpp:241
 #, fuzzy
 msgid "  location: "
 msgstr "Смежный"
 
-#: src/extension/dependency.cpp:241
+#: src/extension/dependency.cpp:242
 msgid "  string: "
 msgstr ""
 
-#: src/extension/dependency.cpp:244
+#: src/extension/dependency.cpp:245
 #, fuzzy
 msgid "  description: "
 msgstr "Описание"
@@ -2930,12 +2895,12 @@ msgstr "Невозможно экспортировать в файл %s.\n"
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:54
 msgid ""
-"<span weight=\"bold\" size=\"larger\">One or more extensions failed to load."
-"</span>\n"
+"<span weight=\"bold\" size=\"larger\">One or more extensions failed to load</"
+"span>\n"
 "\n"
 "The failed extensions have been skipped.  Inkscape will continue to run "
 "normally but those extensions will be unavailable.  For details to "
-"troubleshoot this problem, please refer to the error log located at:"
+"troubleshoot this problem, please refer to the error log located at: "
 msgstr ""
 
 #. This is some filler text, needs to change before relase
@@ -3541,7 +3506,7 @@ msgstr "Файл %s существует. Записать в этот файл 
 msgid "Node or handle drag canceled."
 msgstr "Перемещение отменено."
 
-#: src/libnrtype/FontFactory.cpp:342
+#: src/libnrtype/FontFactory.cpp:343
 msgid "Ignoring font without family that will crash Pango"
 msgstr ""
 
@@ -4304,12 +4269,12 @@ msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>Перекашиваем</b>: %0.2f%% x %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:978
+#: src/seltrans.cpp:984
 #, fuzzy, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Вращаем</b>: %0.2f градуса; <b>Ctrl</b> ограничит угол"
 
-#: src/seltrans.cpp:1007
+#: src/seltrans.cpp:1013
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Переместить <b>центр</b> в %s, %s"
@@ -4510,11 +4475,11 @@ msgstr "Выделите <b>контур</b> для втяжки/растяжк�
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "В выделении <b>нет контуров</b> для втяжки/растяжки."
 
-#: src/splivarot.cpp:1416
+#: src/splivarot.cpp:1419
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Выделите <b>контур(ы)</b> для упрощения."
 
-#: src/splivarot.cpp:1443
+#: src/splivarot.cpp:1446
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "В выделении <b>нет контуров</b> для упрощения."
 
@@ -4566,28 +4531,28 @@ msgstr "В выделении нет <b>текста на контуре</b>."
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Выделите <b>текст</b> для удаления ручного кернинга."
 
-#: src/text-context.cpp:356
+#: src/text-context.cpp:363
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
 msgstr ""
 
-#: src/text-context.cpp:360
+#: src/text-context.cpp:367
 msgid "<b>Current layer is locked</b>. Unlock it to be able to add text."
 msgstr ""
 
-#: src/text-context.cpp:412
+#: src/text-context.cpp:419
 msgid "No-break space"
 msgstr "Неразрывный пробел"
 
-#: src/text-context.cpp:423
+#: src/text-context.cpp:430
 msgid "Unicode: "
 msgstr "Unicode: "
 
-#: src/text-context.cpp:437
+#: src/text-context.cpp:444
 #, c-format
 msgid "Unicode: %c%c%c%c"
 msgstr "Unicode: %c%c%c%c"
 
-#: src/text-context.cpp:450
+#: src/text-context.cpp:457
 msgid "Non-printable character"
 msgstr "Непечатаемый символ"
 
@@ -6277,38 +6242,38 @@ msgstr "Документ не содержит градиентов"
 msgid "No gradient selected"
 msgstr "Градиент не выбран"
 
-#: src/widgets/gradient-vector.cpp:538
+#: src/widgets/gradient-vector.cpp:546
 msgid "No stops in gradient"
 msgstr "В градиенте нет опорных точек"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: src/widgets/gradient-vector.cpp:774
+#: src/widgets/gradient-vector.cpp:798
 msgid "Add stop"
 msgstr "Добавить опорную точку"
 
-#: src/widgets/gradient-vector.cpp:777
+#: src/widgets/gradient-vector.cpp:801
 msgid "Add another control stop to gradient"
 msgstr "Добавить еще одну опорную точку в градиент"
 
-#: src/widgets/gradient-vector.cpp:779
+#: src/widgets/gradient-vector.cpp:803
 msgid "Delete stop"
 msgstr "Удалить опорную точку"
 
-#: src/widgets/gradient-vector.cpp:782
+#: src/widgets/gradient-vector.cpp:806
 msgid "Delete current control stop from gradient"
 msgstr "Удалить опорную точку градиента"
 
 #. Label
-#: src/widgets/gradient-vector.cpp:793
+#: src/widgets/gradient-vector.cpp:817
 msgid "Offset:"
 msgstr "Смещение"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: src/widgets/gradient-vector.cpp:838
+#: src/widgets/gradient-vector.cpp:862
 msgid "Stop Color"
 msgstr "Цвет опорной точки"
 
-#: src/widgets/gradient-vector.cpp:864
+#: src/widgets/gradient-vector.cpp:888
 msgid "Gradient editor"
 msgstr "Редактор градиентов"
 
@@ -6500,6 +6465,30 @@ msgstr "Атрибут"
 #: src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Значение"
+
+#, fuzzy
+#~ msgid "executable"
+#~ msgstr "Прямоугольник"
+
+#, fuzzy
+#~ msgid "file"
+#~ msgstr "Название"
+
+#, fuzzy
+#~ msgid "extension"
+#~ msgstr "Растяжение:"
+
+#, fuzzy
+#~ msgid "path"
+#~ msgstr "_Контур"
+
+#, fuzzy
+#~ msgid "extensions"
+#~ msgstr "Растяжение:"
+
+#, fuzzy
+#~ msgid "absolute"
+#~ msgstr " абсолютно к "
 
 #~ msgid "Could not create sodipodi-svg-doc factory"
 #~ msgstr "Не удалось создать фабрику sodipodi-svg-doc"
