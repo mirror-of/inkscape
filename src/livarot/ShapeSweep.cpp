@@ -174,7 +174,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   if (_has_sweep_data == false)
     {
       SweepTree::CreateList (sTree, a->numberOfEdges());
-      SweepEvent::CreateQueue (sEvts, a->numberOfEdges());
+      sEvts = new SweepEventQueue(a->numberOfEdges());
       _has_sweep_data = true;
     }
   MakePointData (true);
@@ -203,7 +203,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   int curAPt = 0;
 
-  while (curAPt < a->numberOfPoints() || sEvts.nbEvt > 0)
+  while (curAPt < a->numberOfPoints() || sEvts->nbEvt > 0)
     {
 /*		if ( nbPt > 0 && pts[nbPt-1].y >= 250.4 && pts[nbPt-1].y <= 250.6 ) {
 			for (int i=0;i<sEvts.nbEvt;i++) {
@@ -227,16 +227,15 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       int nPt = -1;
       Shape *ptSh = NULL;
       bool isIntersection = false;
-      if (SweepEvent::
-	  PeekInQueue (intersL, intersR, ptX, ptL, ptR, sEvts))
+      if (sEvts->peek(intersL, intersR, ptX, ptL, ptR))
 	{
 	  if (a->pData[curAPt].pending > 0
 	      || (a->pData[curAPt].rx[1] > ptX[1]
 		  || (a->pData[curAPt].rx[1] == ptX[1]
 		      && a->pData[curAPt].rx[0] > ptX[0])))
 	    {
-	      SweepEvent::ExtractFromQueue (intersL, intersR, ptX, ptL,
-					    ptR, sEvts);
+	      /* FIXME: could just be pop? */
+	      sEvts->extract(intersL, intersR, ptX, ptL, ptR);
 	      isIntersection = true;
 	    }
 	  else
@@ -350,13 +349,13 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       if (isIntersection)
 	{
 //                      printf("(%i %i [%i %i]) ",intersL->bord,intersR->bord,intersL->startPoint,intersR->startPoint);
-	  intersL->RemoveEvent (sEvts, true);
-	  intersR->RemoveEvent (sEvts, false);
+	  intersL->RemoveEvent (*sEvts, true);
+	  intersR->RemoveEvent (*sEvts, false);
 
 	  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, 2,
 		   intersL->src, intersL->bord, intersR->src, intersR->bord);
 
-	  intersL->SwapWithRight (sTree, sEvts);
+	  intersL->SwapWithRight (sTree, *sEvts);
 
 	  TesteIntersection (intersL, true, false);
 	  TesteIntersection (intersR, false, false);
@@ -446,7 +445,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 				     SweepTree * >(node->rightElem))->src;
 				}
 
-			      node->Remove (sTree, sEvts, true);
+			      node->Remove (sTree, *sEvts, true);
 			      if (onLeftS && onRightS)
 				{
 				  SweepTree *onLeft =
@@ -494,7 +493,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 		  ptSh->swsData[upNo].misc = NULL;
 
-		  node->RemoveEvents (sEvts);
+		  node->RemoveEvents (*sEvts);
 		  node->ConvertTo (ptSh, dnNo, 1, lastPointNo);
 		  ptSh->swsData[dnNo].misc = node;
 		  TesteIntersection (node, false, false);
@@ -511,7 +510,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 		    SweepTree::AddInList (ptSh, dnNo, 1, lastPointNo, sTree,
 					  this);
 		  ptSh->swsData[dnNo].misc = node;
-		  node->Insert (sTree, sEvts, this, lastPointNo, true);
+		  node->Insert (sTree, *sEvts, this, lastPointNo, true);
 		  if (doWinding)
 		    {
 		      SweepTree *myLeft =
@@ -553,7 +552,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 			    SweepTree::AddInList (ptSh, cb, 1, lastPointNo,
 						  sTree, this);
 			  ptSh->swsData[cb].misc = node;
-			  node->InsertAt (sTree, sEvts, this, insertionNode,
+			  node->InsertAt (sTree, *sEvts, this, insertionNode,
 					  nPt, true);
 			  if (doWinding)
 			    {
@@ -842,7 +841,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   if (_has_sweep_data)
     {
       SweepTree::DestroyList (sTree);
-      SweepEvent::DestroyQueue (sEvts);
+      delete sEvts;
+      sEvts = NULL;
       _has_sweep_data = false;
     }
   if ( directed == fill_justDont ) {
@@ -898,7 +898,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   if (_has_sweep_data == false)
     {
       SweepTree::CreateList (sTree, a->numberOfEdges() + b->numberOfEdges());
-      SweepEvent::CreateQueue (sEvts, a->numberOfEdges() + b->numberOfEdges());
+      sEvts = new SweepEventQueue(a->numberOfEdges() + b->numberOfEdges());
       _has_sweep_data = true;
     }
   MakePointData (true);
@@ -939,7 +939,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   int curAPt = 0;
   int curBPt = 0;
 
-  while (curAPt < a->numberOfPoints() || curBPt < b->numberOfPoints() || sEvts.nbEvt > 0)
+  while (curAPt < a->numberOfPoints() || curBPt < b->numberOfPoints() || sEvts->nbEvt > 0)
     {
 /*		for (int i=0;i<sEvts.nbEvt;i++) {
 			printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord); // localizing ok
@@ -962,8 +962,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       Shape *ptSh = NULL;
       bool isIntersection = false;
 
-      if (SweepEvent::
-	  PeekInQueue (intersL, intersR, ptX, ptL, ptR, sEvts))
+      if (sEvts->peek(intersL, intersR, ptX, ptL, ptR))
 	{
 	  if (curAPt < a->numberOfPoints())
 	    {
@@ -978,7 +977,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			      || (a->pData[curAPt].rx[1] == ptX[1]
 				  && a->pData[curAPt].rx[0] > ptX[0])))
 			{
-			  SweepEvent::ExtractFromQueue (intersL, intersR, ptX, ptL, ptR, sEvts);
+			  /* FIXME: could be pop? */
+			  sEvts->extract(intersL, intersR, ptX, ptL, ptR);
 			  isIntersection = true;
 			}
 		      else
@@ -996,7 +996,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			      || (b->pData[curBPt].rx[1] == ptX[1]
 				  && b->pData[curBPt].rx[0] > ptX[0])))
 			{
-			  SweepEvent::ExtractFromQueue (intersL, intersR, ptX, ptL, ptR, sEvts);
+			  /* FIXME: could be pop? */
+			  sEvts->extract(intersL, intersR, ptX, ptL, ptR);
 			  isIntersection = true;
 			}
 		      else
@@ -1015,7 +1016,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			  || (a->pData[curAPt].rx[1] == ptX[1]
 			      && a->pData[curAPt].rx[0] > ptX[0])))
 		    {
-		      SweepEvent::ExtractFromQueue (intersL, intersR, ptX, ptL, ptR, sEvts);
+		      /* FIXME: could be pop? */
+		      sEvts->extract(intersL, intersR, ptX, ptL, ptR);
 		      isIntersection = true;
 		    }
 		  else
@@ -1034,7 +1036,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		      || (b->pData[curBPt].rx[1] == ptX[1]
 			  && b->pData[curBPt].rx[0] > ptX[0])))
 		{
-		  SweepEvent::ExtractFromQueue (intersL, intersR, ptX,  ptL, ptR, sEvts);
+		  /* FIXME: could be pop? */
+		  sEvts->extract(intersL, intersR, ptX,  ptL, ptR);
 		  isIntersection = true;
 		}
 	      else
@@ -1181,13 +1184,13 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	{
 	  // les 2 events de part et d'autre de l'intersection
 	  // (celui de l'intersection a deja ete depile)
-	  intersL->RemoveEvent (sEvts, true);
-	  intersR->RemoveEvent (sEvts, false);
+	  intersL->RemoveEvent (*sEvts, true);
+	  intersR->RemoveEvent (*sEvts, false);
 
 	  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, 2,
 		   intersL->src, intersL->bord, intersR->src, intersR->bord);
 
-	  intersL->SwapWithRight (sTree, sEvts);
+	  intersL->SwapWithRight (sTree, *sEvts);
 
 	  TesteIntersection (intersL, true, true);
 	  TesteIntersection (intersR, false, true);
@@ -1279,7 +1282,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 				     SweepTree * >(node->rightElem))->src;
 				}
 
-			      node->Remove (sTree, sEvts, true);
+			      node->Remove (sTree, *sEvts, true);
 			      if (onLeftS && onRightS)
 				{
 				  SweepTree *onLeft =
@@ -1328,7 +1331,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 		  ptSh->swsData[upNo].misc = NULL;
 
-		  node->RemoveEvents (sEvts);
+		  node->RemoveEvents (*sEvts);
 		  node->ConvertTo (ptSh, dnNo, 1, lastPointNo);
 		  ptSh->swsData[dnNo].misc = node;
 		  TesteIntersection (node, false, true);
@@ -1346,7 +1349,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		    SweepTree::AddInList (ptSh, dnNo, 1, lastPointNo, sTree,
 					  this);
 		  ptSh->swsData[dnNo].misc = node;
-		  node->Insert (sTree, sEvts, this, lastPointNo, true);
+		  node->Insert (sTree, *sEvts, this, lastPointNo, true);
 
 		  if (doWinding)
 		    {
@@ -1391,8 +1394,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			    SweepTree::AddInList (ptSh, cb, 1, lastPointNo,
 						  sTree, this);
 			  ptSh->swsData[cb].misc = node;
-//                                                      node->Insert(sTree,sEvts,this,lastPointNo,true);
-			  node->InsertAt (sTree, sEvts, this, insertionNode,
+//                                                      node->Insert(sTree,*sEvts,this,lastPointNo,true);
+			  node->InsertAt (sTree, *sEvts, this, insertionNode,
 					  nPt, true);
 
 			  if (doWinding)
@@ -1683,7 +1686,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   if (_has_sweep_data)
     {
       SweepTree::DestroyList (sTree);
-      SweepEvent::DestroyQueue (sEvts);
+      delete sEvts;
+      sEvts = NULL;
       _has_sweep_data = false;
     }
   if ( mod == bool_op_cut ) {
@@ -1721,7 +1725,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
         double     atl, atr;
 	  if (TesteIntersection (tL, t, atx, atl, atr, onlyDiff))
 	    {
-	      SweepEvent::AddInQueue (tL, t, atx, atl, atr, sEvts);
+	      sEvts->add(tL, t, atx, atl, atr);
 	    }
 	}
     }
@@ -1734,7 +1738,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
 	  double atl, atr;
 	  if (TesteIntersection (t, tR, atx, atl, atr, onlyDiff))
 	    {
-	      SweepEvent::AddInQueue (t, tR, atx, atl, atr, sEvts);
+	      sEvts->add(t, tR, atx, atl, atr);
 	    }
 	}
     }

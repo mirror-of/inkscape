@@ -3,6 +3,105 @@
 #include "livarot/sweep-event.h"
 #include "livarot/Shape.h"
 
+SweepEventQueue::SweepEventQueue(int size) : nbEvt(0), maxEvt(size)
+{
+    /* FIXME: use new[] for this, but this causes problems when delete[]
+    ** calls the SweepEvent destructors.
+    */
+    events = (SweepEvent *) g_malloc(maxEvt * sizeof(SweepEvent));
+    inds = new int[maxEvt];
+}
+
+SweepEventQueue::~SweepEventQueue()
+{
+    g_free(events);
+    delete []inds;
+}
+
+SweepEvent *SweepEventQueue::add(SweepTree *iLeft, SweepTree *iRight, NR::Point &px, double itl, double itr)
+{
+    if (nbEvt > maxEvt) {
+	return NULL;
+    }
+    
+    int const n = nbEvt++;
+    events[n].MakeNew (iLeft, iRight, px, itl, itr);
+
+    if (iLeft->src->getEdge(iLeft->bord).st < iLeft->src->getEdge(iLeft->bord).en) {
+	iLeft->src->pData[iLeft->src->getEdge(iLeft->bord).en].pending++;
+    } else {
+	iLeft->src->pData[iLeft->src->getEdge(iLeft->bord).st].pending++;
+    }
+    
+    if (iRight->src->getEdge(iRight->bord).st < iRight->src->getEdge(iRight->bord).en) {
+	iRight->src->pData[iRight->src->getEdge(iRight->bord).en].pending++;
+    } else {
+	iRight->src->pData[iRight->src->getEdge(iRight->bord).st].pending++;
+    }
+
+    events[n].ind = n;
+    inds[n] = n;
+
+    int curInd = n;
+    while (curInd > 0) {
+	int const half = (curInd - 1) / 2;
+	int const no = inds[half];
+	if (px[1] < events[no].posx[1]
+	    || (px[1] == events[no].posx[1] && px[0] < events[no].posx[0]))
+	{
+	    events[n].ind = half;
+	    events[no].ind = curInd;
+	    inds[half] = n;
+	    inds[curInd] = no;
+	} else {
+	    break;
+	}
+	
+	curInd = half;
+    }
+  
+    return events + n;
+}
+
+
+
+bool SweepEventQueue::peek(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &px, double &itl, double &itr)
+{
+    if (nbEvt <= 0) {
+	return false;
+    }
+    
+    SweepEvent const &e = events[inds[0]];
+
+    iLeft = e.leftSweep;
+    iRight = e.rightSweep;
+    px = e.posx;
+    itl = e.tl;
+    itr = e.tr;
+    
+    return true;
+}
+
+bool SweepEventQueue::extract(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &px, double &itl, double &itr)
+{
+    if (nbEvt <= 0) {
+	return false;
+    }
+
+    SweepEvent &e = events[inds[0]];
+    
+    iLeft = e.leftSweep;
+    iRight = e.rightSweep;
+    px = e.posx;
+    itl = e.tl;
+    itr = e.tr;
+    e.SupprFromQueue (*this);
+    
+    return true;
+}
+
+
+
 /*
  * a simple binary heap
  * it only contains intersection events
@@ -69,76 +168,6 @@ SweepEvent::MakeDelete (void)
   leftSweep = rightSweep = NULL;
 }
 
-void
-SweepEvent::CreateQueue (SweepEventQueue & queue, int size)
-{
-  queue.nbEvt = 0;
-  queue.maxEvt = size;
-  queue.events = (SweepEvent *) g_malloc(queue.maxEvt * sizeof (SweepEvent));
-  queue.inds = (int *) g_malloc(queue.maxEvt * sizeof (int));
-}
-
-void
-SweepEvent::DestroyQueue (SweepEventQueue & queue)
-{
-  g_free(queue.events);
-  g_free(queue.inds);
-  queue.nbEvt = queue.maxEvt = 0;
-  queue.inds = NULL;
-  queue.events = NULL;
-}
-
-SweepEvent *
-SweepEvent::AddInQueue (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, double itl, double itr,
-			SweepEventQueue & queue)
-{
-  if (queue.nbEvt >= queue.maxEvt)
-    return NULL;
-  int n = queue.nbEvt++;
-  queue.events[n].MakeNew (iLeft, iRight, px, itl, itr);
-
-  if (iLeft->src->getEdge(iLeft->bord).st < iLeft->src->getEdge(iLeft->bord).en)
-    {
-      iLeft->src->pData[iLeft->src->getEdge(iLeft->bord).en].pending++;
-    }
-  else
-    {
-      iLeft->src->pData[iLeft->src->getEdge(iLeft->bord).st].pending++;
-    }
-  if (iRight->src->getEdge(iRight->bord).st <
-      iRight->src->getEdge(iRight->bord).en)
-    {
-      iRight->src->pData[iRight->src->getEdge(iRight->bord).en].pending++;
-    }
-  else
-    {
-      iRight->src->pData[iRight->src->getEdge(iRight->bord).st].pending++;
-    }
-
-  queue.events[n].ind = n;
-  queue.inds[n] = n;
-
-  int curInd = n;
-  while (curInd > 0)
-    {
-      int half = (curInd - 1) / 2;
-      int no = queue.inds[half];
-      if (px[1] < queue.events[no].posx[1]
-	  || (px[1] == queue.events[no].posx[1] && px[0] < queue.events[no].posx[0]))
-	{
-	  queue.events[n].ind = half;
-	  queue.events[no].ind = curInd;
-	  queue.inds[half] = n;
-	  queue.inds[curInd] = no;
-	}
-      else
-	{
-	  break;
-	}
-      curInd = half;
-    }
-  return queue.events + n;
-}
 
 void
 SweepEvent::SupprFromQueue (SweepEventQueue & queue)
@@ -250,35 +279,7 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
 	}
     }
 }
-bool
-SweepEvent::PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, NR::Point &px, double &itl, double &itr,
-			 SweepEventQueue & queue)
-{
-  if (queue.nbEvt <= 0)
-    return false;
-  iLeft = queue.events[queue.inds[0]].leftSweep;
-  iRight = queue.events[queue.inds[0]].rightSweep;
-  px = queue.events[queue.inds[0]].posx;
-  itl = queue.events[queue.inds[0]].tl;
-  itr = queue.events[queue.inds[0]].tr;
-  return true;
-}
 
-bool
-SweepEvent::ExtractFromQueue (SweepTree * &iLeft, SweepTree * &iRight,
-                              NR::Point &px, double &itl, double &itr,
-			      SweepEventQueue & queue)
-{
-  if (queue.nbEvt <= 0)
-    return false;
-  iLeft = queue.events[queue.inds[0]].leftSweep;
-  iRight = queue.events[queue.inds[0]].rightSweep;
-  px = queue.events[queue.inds[0]].posx;
-  itl = queue.events[queue.inds[0]].tl;
-  itr = queue.events[queue.inds[0]].tr;
-  queue.events[queue.inds[0]].SupprFromQueue (queue);
-  return true;
-}
 
 void
 SweepEvent::Relocate (SweepEventQueue & queue, int to)

@@ -19,7 +19,8 @@
  */
 
 Shape::Shape (void)
-  : _need_points_sorting(false),
+  : sEvts(NULL),
+    _need_points_sorting(false),
     _need_edges_sorting(false),
     _has_points_data(false),
     _has_edges_data(false),
@@ -242,7 +243,8 @@ Shape::Copy (Shape * who)
   if (_has_sweep_data)
     {
       SweepTree::DestroyList (sTree);
-      SweepEvent::DestroyQueue (sEvts);
+      delete sEvts;
+      sEvts = NULL;
       _has_sweep_data = false;
     }
 

@@ -319,7 +319,7 @@ public:
     incidenceData *iData;
     // these ones are defined in ShapeUtils.h, allocated at the beginning of each sweep and freed at the end of the sweep
     SweepTreeList sTree;
-    SweepEventQueue sEvts;
+    SweepEventQueue *sEvts;
     
     // bounding box stuff
     double leftX, topY, rightX, bottomY;
@@ -367,6 +367,7 @@ private:
 
     friend class SweepTree;
     friend class SweepEvent;
+    friend class SweepEventQueue;
   
     // temporary data for the various algorithms
     struct edge_data
