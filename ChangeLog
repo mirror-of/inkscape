@@ -2,11 +2,19 @@
 
 	* src/inkscape.cpp: correcting windows path for preferences.  Closes
 	bug #933461.
+
 	* src/file.cpp, src/nodepath.cpp, src/selection-describer.cpp,
 	src/seltrans.cpp, src/sp-item-group.cpp, src/sp-path.cpp,
 	src/sp-spiral.cpp, src/sp-star.cpp, src/dialogs/find.cpp:
 	Using ngettext for plural localized strings.  Please try to keep this
 	up.  Closes bug #1076872.
+
+	* share/icons/Makefile.am, share/icons/icons.svg, src/inkscape-stock.cpp,
+	src/inkscape-stock.h, src/dialogs/stroke-style.cpp, 
+	src/dialogs/text-edit.cpp, src/dialogs/transformation.cpp, 
+	src/dialogs/xml-tree.cpp: Finished the last of the missing pixmap
+	replacements from Andreas Nilsson.  Fixed some mistakes in the earlier
+	changes (need to call sp_icon_new_scaled not sp_icon_new).
 
 2004-01-14  MenTaLguY  <mental@rydia.net>
 

@@ -54,8 +54,10 @@
 //#define INKSCAPE_STOCK_DIMENSION_HOR         "dimension_hor"
 //#define INKSCAPE_STOCK_DIMENSION_VER         "dimension_ver"
 
+/* text editor */
 #define INKSCAPE_STOCK_WRITING_MODE_LR       "writing_mode_lr"
 #define INKSCAPE_STOCK_WRITING_MODE_TB       "writing_mode_tb"
+
 /*xml-tree*/
 #define INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE  "add_xml_element_node"
 #define INKSCAPE_STOCK_ADD_XML_TEXT_NODE     "add_xml_text_node"
@@ -63,6 +65,7 @@
 #define INKSCAPE_STOCK_DELETE_XML_NODE       "delete_xml_node"
 #define INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE  "delete_xml_attribute"
 #define INKSCAPE_STOCK_SET                   "set"
+
 /*paint-selector*/
 #define INKSCAPE_STOCK_FILL_NONE             "fill_none"
 #define INKSCAPE_STOCK_FILL_SOLID            "fill_solid"

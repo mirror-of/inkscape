@@ -61,16 +61,16 @@ static struct StockIcon
   //{INKSCAPE_STOCK_ARROWS_VER,                    "arrows_ver.xpm"          },
   //{INKSCAPE_STOCK_DIMENSION_HOR,                 "dimension_hor.xpm"       },
 
-    {INKSCAPE_STOCK_WRITING_MODE_LR,               "writing_mode_lr.xpm"     },
-    {INKSCAPE_STOCK_WRITING_MODE_TB,               "writing_mode_tb.xpm"     },
+  //{INKSCAPE_STOCK_WRITING_MODE_LR,               "writing_mode_lr.xpm"     },
+  //{INKSCAPE_STOCK_WRITING_MODE_TB,               "writing_mode_tb.xpm"     },
 
     /*xml-tree */
-    {INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE,          "add_xml_element_node.xpm"},
-    {INKSCAPE_STOCK_ADD_XML_TEXT_NODE,             "add_xml_text_node.xpm"   },
-    {INKSCAPE_STOCK_DUPLICATE_XML_NODE,            "duplicate_xml_node.xpm"  },
-    {INKSCAPE_STOCK_DELETE_XML_NODE,               "delete_xml_node.xpm"     },
-    {INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE,          "delete_xml_attribute.xpm"},
-    {INKSCAPE_STOCK_SET,                           "set.xpm"                 },
+  //{INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE,          "add_xml_element_node.xpm"},
+  //{INKSCAPE_STOCK_ADD_XML_TEXT_NODE,             "add_xml_text_node.xpm"   },
+  //{INKSCAPE_STOCK_DUPLICATE_XML_NODE,            "duplicate_xml_node.xpm"  },
+  //{INKSCAPE_STOCK_DELETE_XML_NODE,               "delete_xml_node.xpm"     },
+  //{INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE,          "delete_xml_attribute.xpm"},
+  //{INKSCAPE_STOCK_SET,                           "set.xpm"                 },
 
   //{INKSCAPE_STOCK_FILL_NONE,                     "fill_none.xpm"           },
   //{INKSCAPE_STOCK_FILL_SOLID,                    "fill_solid.xpm"          },

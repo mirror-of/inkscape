@@ -53,6 +53,7 @@
 #include "../widgets/sp-xmlview-attr-list.h"
 
 #include "../inkscape-stock.h"
+#include "widgets/icon.h"
 
 #include "dialog-events.h"
 #include "../prefs-utils.h"
@@ -299,8 +300,8 @@ sp_xml_tree_dialog (void)
                 NULL,
                 _("New element node"),
                 NULL,
-                gtk_image_new_from_stock ( INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE,
-                                        GTK_ICON_SIZE_LARGE_TOOLBAR ),
+                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                                    INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE ),
                 G_CALLBACK (cmd_new_element_node),
                 NULL);
 
@@ -320,8 +321,8 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("New text node"), NULL,
-                gtk_image_new_from_stock ( INKSCAPE_STOCK_ADD_XML_TEXT_NODE,
-                                           GTK_ICON_SIZE_LARGE_TOOLBAR ),
+                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                             INKSCAPE_STOCK_ADD_XML_TEXT_NODE ),
                 G_CALLBACK (cmd_new_text_node),
                 NULL);
 
@@ -341,8 +342,8 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Duplicate node"), NULL,
-                gtk_image_new_from_stock ( INKSCAPE_STOCK_DUPLICATE_XML_NODE,
-                                           GTK_ICON_SIZE_LARGE_TOOLBAR ),
+                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                             INKSCAPE_STOCK_DUPLICATE_XML_NODE ),
                 G_CALLBACK (cmd_duplicate_node),
                 NULL);
 
@@ -362,8 +363,8 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Delete node"), NULL,
-                gtk_image_new_from_stock ( INKSCAPE_STOCK_DELETE_XML_NODE,
-                                           GTK_ICON_SIZE_LARGE_TOOLBAR ),
+                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                             INKSCAPE_STOCK_DELETE_XML_NODE ),
                                            G_CALLBACK (cmd_delete_node), NULL );
 
         gtk_signal_connect_while_alive (GTK_OBJECT (tree), "tree_select_row",
@@ -462,8 +463,8 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Delete attribute"), NULL,
-                gtk_image_new_from_stock (INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE,
-                GTK_ICON_SIZE_LARGE_TOOLBAR),
+                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                             INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE ),
                 (GCallback) cmd_delete_attr, NULL);
 
         gtk_signal_connect_while_alive (GTK_OBJECT (attributes), "select_row",

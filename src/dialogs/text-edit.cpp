@@ -48,6 +48,7 @@ extern "C" {
 #include "../verbs.h"
 #include "../interface.h"
 #include "../svg/stringstream.h"
+#include "widgets/icon.h"
 #include <xml/repr.h>
 
 #include "text-edit.h"
@@ -266,7 +267,8 @@ sp_text_edit_dialog (void)
 
                     // horizontal
                     {
-                        GtkWidget *px = gtk_image_new_from_stock ( INKSCAPE_STOCK_WRITING_MODE_LR, GTK_ICON_SIZE_LARGE_TOOLBAR );
+                        GtkWidget *px = sp_icon_new_scaled ( SP_ICON_SIZE_NOTEBOOK,
+                                                      INKSCAPE_STOCK_WRITING_MODE_LR );
                         GtkWidget *b = group = gtk_radio_button_new (NULL);
                         gtk_tooltips_set_tip (tt, b, _("Horizontal text"), NULL);
                         gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
@@ -274,12 +276,13 @@ sp_text_edit_dialog (void)
                         gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
                         gtk_container_add (GTK_CONTAINER (b), px);
                         gtk_box_pack_start (GTK_BOX (row), b, FALSE, FALSE, 0);
-                        g_object_set_data (G_OBJECT (dlg), "writing_mode_lr", b);
+                        g_object_set_data (G_OBJECT (dlg), INKSCAPE_STOCK_WRITING_MODE_LR, b);
                     }
 
                     // vertical
                     {
-                        GtkWidget *px = gtk_image_new_from_stock ( INKSCAPE_STOCK_WRITING_MODE_TB, GTK_ICON_SIZE_LARGE_TOOLBAR );
+                        GtkWidget *px = sp_icon_new_scaled ( SP_ICON_SIZE_NOTEBOOK,
+                                                      INKSCAPE_STOCK_WRITING_MODE_TB );
                         GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
                         gtk_tooltips_set_tip (tt, b, _("Vertical text"), NULL);
                         gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
@@ -287,7 +290,7 @@ sp_text_edit_dialog (void)
                         gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
                         gtk_container_add (GTK_CONTAINER (b), px);
                         gtk_box_pack_start (GTK_BOX (row), b, FALSE, FALSE, 0);
-                        g_object_set_data (G_OBJECT (dlg), "writing_mode_tb", b);
+                        g_object_set_data (G_OBJECT (dlg), INKSCAPE_STOCK_WRITING_MODE_TB, b);
                     }
 
                     gtk_box_pack_start (GTK_BOX (l_vb), row, FALSE, FALSE, 0);
@@ -530,7 +533,7 @@ sp_text_edit_dialog_update_object_style ( SPText *text, SPRepr *repr )
             }
         }
         
-        b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "writing_mode_lr");
+        b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), INKSCAPE_STOCK_WRITING_MODE_LR );
         
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))) {
             sp_repr_css_set_property (css, "writing-mode", "lr");
@@ -739,10 +742,10 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
         
         if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR) {
             b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
-                                                "writing_mode_lr" );
+                                                INKSCAPE_STOCK_WRITING_MODE_LR );
         } else {
             b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
-                                                "writing_mode_tb" );
+                                                INKSCAPE_STOCK_WRITING_MODE_TB );
         }
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
         combo = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
