@@ -21,7 +21,7 @@
 <xsl:variable name="space-group" select="3"/>
 <xsl:variable name="skip-group-content" select="1.5"/>
 
-<xsl:variable name="style-title" select="'fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:italic;font-weight:bold;font-size:7.4;text-anchor:start;writing-mode:lr;letter-spacing:-0.2;'"/>
+<xsl:variable name="style-title" select="'fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:oblique;font-weight:bold;font-size:7.4;text-anchor:start;writing-mode:lr;letter-spacing:-0.2;'"/>
 <xsl:variable name="space-title" select="7"/>
 <xsl:variable name="skip-title-content" select="5"/>
 
@@ -529,7 +529,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
        y="0.77243602"
        ry="0.38310501" />
     <text
-       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:italic;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:oblique;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
        x="1.37996908"
        y="4.35733509"
        id="text685"
@@ -558,7 +558,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
        y="0.77"
        ry="0.38310501" />
     <text
-       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:italic;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:oblique;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
        x="1.3"
        y="4.35733509"
        id="text697"
@@ -587,7 +587,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
        y="0.77"
        ry="0.38310501" />
     <text
-       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:italic;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:oblique;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
        x="1.3"
        y="4.35733509"
        id="text705"
@@ -601,7 +601,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
   <g
      id="left">
     <text
-       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:italic;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;letter-spacing:-0.3;"
+       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:oblique;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;letter-spacing:-0.3;"
        x="1.3"
        y="4.35733509"
        sodipodi:linespacing="100%"><tspan
@@ -614,7 +614,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
   <g
      id="right">
     <text
-       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:italic;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;letter-spacing:-0.3;"
+       style="fill:black;stroke:none;font-family:Bitstream Vera Sans;font-style:oblique;font-weight:normal;font-size:4;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;letter-spacing:-0.3;"
        x="1.3"
        y="4.35733509"
        sodipodi:linespacing="100%"><tspan
