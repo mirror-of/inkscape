@@ -29,7 +29,7 @@ void Layout::_clearOutputObjects()
     _paragraphs.clear();
     _lines.clear();
     _chunks.clear();
-    for(std::vector<Span>::iterator it_span = _spans.begin() ; it_span != _spans.end() ; it_span++)
+    for (std::vector<Span>::iterator it_span = _spans.begin() ; it_span != _spans.end() ; it_span++)
         if (it_span->font) it_span->font->Unref();
     _spans.clear();
     _characters.clear();
@@ -77,7 +77,7 @@ void Layout::show(NRArenaGroup *in_arena, NRRect const *paintbox) const
             if (_characters[_glyphs[glyph_index].in_character].in_glyph != -1) {
                 NRMatrix glyph_matrix;
                 _getGlyphTransformMatrix(glyph_index, &glyph_matrix);
-                nr_arena_glyphs_group_add_component (nr_group, _spans[span_index].font, _glyphs[glyph_index].glyph, &glyph_matrix);
+                nr_arena_glyphs_group_add_component(nr_group, _spans[span_index].font, _glyphs[glyph_index].glyph, &glyph_matrix);
             }
             glyph_index++;
         }
@@ -96,28 +96,30 @@ void Layout::getBoundingBox(NRRect *bounding_box, NR::Matrix const &transform) c
         NR::Matrix total_transform = glyph_matrix;
         total_transform *= transform;
         NR::Rect glyph_rect = _glyphs[glyph_index].span(this).font->BBox(_glyphs[glyph_index].glyph);
-		NR::Point bmi=glyph_rect.min(),bma=glyph_rect.max();
-		NR::Point tlp(bmi[0],bmi[1]),trp(bma[0],bmi[1]),blp(bmi[0],bma[1]),brp(bma[0],bma[1]);
-		tlp *= total_transform;
-		trp *= total_transform;
-		blp *= total_transform;
-		brp *= total_transform;
-		glyph_rect=NR::Rect(tlp,trp);
-		glyph_rect.expandTo(blp);
-		glyph_rect.expandTo(brp);
-		if ( (glyph_rect.min())[0] < bounding_box->x0 ) bounding_box->x0=(glyph_rect.min())[0];
-		if ( (glyph_rect.max())[0] > bounding_box->x1 ) bounding_box->x1=(glyph_rect.max())[0];
-		if ( (glyph_rect.min())[1] < bounding_box->y0 ) bounding_box->y0=(glyph_rect.min())[1];
-		if ( (glyph_rect.max())[1] > bounding_box->y1 ) bounding_box->y1=(glyph_rect.max())[1];
+        NR::Point bmi = glyph_rect.min(), bma = glyph_rect.max();
+        NR::Point tlp(bmi[0],bmi[1]), trp(bma[0],bmi[1]), blp(bmi[0],bma[1]), brp(bma[0],bma[1]);
+        tlp *= total_transform;
+        trp *= total_transform;
+        blp *= total_transform;
+        brp *= total_transform;
+        glyph_rect = NR::Rect(tlp,trp);
+        glyph_rect.expandTo(blp);
+        glyph_rect.expandTo(brp);
+        if ( (glyph_rect.min())[0] < bounding_box->x0 ) bounding_box->x0=(glyph_rect.min())[0];
+        if ( (glyph_rect.max())[0] > bounding_box->x1 ) bounding_box->x1=(glyph_rect.max())[0];
+        if ( (glyph_rect.min())[1] < bounding_box->y0 ) bounding_box->y0=(glyph_rect.min())[1];
+        if ( (glyph_rect.max())[1] > bounding_box->y1 ) bounding_box->y1=(glyph_rect.max())[1];
     }
 }
 
-void Layout::print(SPPrintContext *ctx, NRRect const *pbox, NRRect const *dbox, NRRect const *bbox, NRMatrix const &ctm) const
+void Layout::print(SPPrintContext *ctx,
+                   NRRect const *pbox, NRRect const *dbox, NRRect const *bbox,
+                   NRMatrix const &ctm) const
 {
     if (_input_stream.empty()) return;
 
     Direction block_progression = _blockProgression();
-	bool text_to_path = ctx->module->textToPath();
+    bool text_to_path = ctx->module->textToPath();
     for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; ) {
         if (_characters[_glyphs[glyph_index].in_character].in_glyph == -1) {
             // invisible glyphs
@@ -133,14 +135,14 @@ void Layout::print(SPPrintContext *ctx, NRRect const *pbox, NRRect const *dbox, 
             NRBPath bpath;
             bpath.path = (NArtBpath*)span.font->ArtBPath(_glyphs[glyph_index].glyph);
             if (bpath.path) {
-	            NRBPath abp;
+                NRBPath abp;
                 _getGlyphTransformMatrix(glyph_index, &glyph_matrix);
-	            abp.path = nr_artpath_affine(bpath.path, glyph_matrix);
-	            if (text_source->style->fill.type != SP_PAINT_TYPE_NONE)
-		            sp_print_fill(ctx, &abp, &ctm, text_source->style, pbox, dbox, bbox);
-	            if (text_source->style->stroke.type != SP_PAINT_TYPE_NONE)
-		            sp_print_stroke(ctx, &abp, &ctm, text_source->style, pbox, dbox, bbox);
-	            nr_free(abp.path);
+                abp.path = nr_artpath_affine(bpath.path, glyph_matrix);
+                if (text_source->style->fill.type != SP_PAINT_TYPE_NONE)
+                    sp_print_fill(ctx, &abp, &ctm, text_source->style, pbox, dbox, bbox);
+                if (text_source->style->stroke.type != SP_PAINT_TYPE_NONE)
+                    sp_print_stroke(ctx, &abp, &ctm, text_source->style, pbox, dbox, bbox);
+                nr_free(abp.path);
             }
             glyph_index++;
         } else {
@@ -177,15 +179,15 @@ void Layout::print(SPPrintContext *ctx, NRRect const *pbox, NRRect const *dbox, 
             } while (glyph_index < _glyphs.size()
                      && _characters[_glyphs[glyph_index].in_character].in_span == this_span_index
                      && fabs(char_x - _characters[_glyphs[glyph_index].in_character].x) < FLT_EPSILON);
-			sp_print_bind(ctx, glyph_matrix, 1.0);
-			sp_print_text (ctx, span_string.c_str(), g_pos, text_source->style);
-			sp_print_release(ctx);
+            sp_print_bind(ctx, glyph_matrix, 1.0);
+            sp_print_text(ctx, span_string.c_str(), g_pos, text_source->style);
+            sp_print_release(ctx);
         }
     }
 }
 
 // these functions are for dumpAsText() only. No need to translate
-static char const * direction_to_text(Layout::Direction d)
+static char const *direction_to_text(Layout::Direction d)
 {
     switch (d) {
         case Layout::LEFT_TO_RIGHT: return "ltr";
@@ -196,7 +198,7 @@ static char const * direction_to_text(Layout::Direction d)
     return "???";
 }
 
-static char const * style_to_text(PangoStyle s)
+static char const *style_to_text(PangoStyle s)
 {
     switch (s) {
         case PANGO_STYLE_NORMAL: return "upright";
@@ -206,7 +208,7 @@ static char const * style_to_text(PangoStyle s)
     return "???";
 }
 
-static char const * weight_to_text(PangoWeight w)
+static char const *weight_to_text(PangoWeight w)
 {
     switch (w) {
         case PANGO_WEIGHT_ULTRALIGHT: return "ultralight";
@@ -231,15 +233,15 @@ Glib::ustring Layout::dumpAsText() const
         snprintf(line, sizeof(line), "==== span %d\n", span_index);
         result += line;
         snprintf(line, sizeof(line), "  in para %d (direction=%s)\n", _lines[_chunks[_spans[span_index].in_chunk].in_line].in_paragraph,
-                                                                      direction_to_text(_paragraphs[_lines[_chunks[_spans[span_index].in_chunk].in_line].in_paragraph].base_direction));
+                 direction_to_text(_paragraphs[_lines[_chunks[_spans[span_index].in_chunk].in_line].in_paragraph].base_direction));
         result += line;
         snprintf(line, sizeof(line), "  in source %d (type=%d, cookie=%p)\n", _spans[span_index].in_input_stream_item,
-                                                                               _input_stream[_spans[span_index].in_input_stream_item]->Type(),
-                                                                               _input_stream[_spans[span_index].in_input_stream_item]->source_cookie);
+                 _input_stream[_spans[span_index].in_input_stream_item]->Type(),
+                 _input_stream[_spans[span_index].in_input_stream_item]->source_cookie);
         result += line;
         snprintf(line, sizeof(line), "  in line %d (baseline=%f, shape=%d)\n", _chunks[_spans[span_index].in_chunk].in_line,
-                                                                               _lines[_chunks[_spans[span_index].in_chunk].in_line].baseline_y,
-                                                                               _lines[_chunks[_spans[span_index].in_chunk].in_line].in_shape);
+                 _lines[_chunks[_spans[span_index].in_chunk].in_line].baseline_y,
+                 _lines[_chunks[_spans[span_index].in_chunk].in_line].in_shape);
         result += line;
         snprintf(line, sizeof(line), "  in chunk %d (x=%f, baselineshift=%f)\n", _spans[span_index].in_chunk, _chunks[_spans[span_index].in_chunk].left_x, _spans[span_index].baseline_shift);
         result += line;
@@ -316,7 +318,7 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
         } else {
             next_cluster_glyph_index = _characters[next_cluster_char_index].in_glyph;
             character_advance =   (_glyphs[next_cluster_glyph_index].x + _glyphs[next_cluster_glyph_index].chunk(this).left_x)
-                                - (_glyphs[_characters[char_index].in_glyph].x + span.chunk(this).left_x);
+                - (_glyphs[_characters[char_index].in_glyph].x + span.chunk(this).left_x);
         }
 
         double start_offset = offset + span.x_start + _characters[char_index].x;
@@ -329,7 +331,7 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
 
         int unused = 0;
         double midpoint_offset = (start_offset + end_offset) * 0.5;
-            // as far as I know these functions are const, they're just not marked as such
+        // as far as I know these functions are const, they're just not marked as such
         Path::cut_position *midpoint_otp = const_cast<Path&>(path).CurvilignToPosition(1, &midpoint_offset, unused);
         if (midpoint_offset >= 0.0 && midpoint_otp != NULL && midpoint_otp[0].piece >= 0) {
             NR::Point midpoint;
@@ -362,9 +364,9 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
     _path_fitted = &path;
 }
 
-SPCurve* Layout::convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const
+SPCurve *Layout::convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const
 {
-	GSList *cc = NULL;
+    GSList *cc = NULL;
 
     for (int glyph_index = from_glyph._glyph_index ; glyph_index < to_glyph._glyph_index ; glyph_index++) {
         NRMatrix glyph_matrix;
@@ -375,29 +377,29 @@ SPCurve* Layout::convertToCurves(iterator const &from_glyph, iterator const &to_
         bpath.path = (NArtBpath*)span.font->ArtBPath(_glyphs[glyph_index].glyph);
         if (bpath.path) {
             NArtBpath *abp = nr_artpath_affine(bpath.path, glyph_matrix);
-            SPCurve *c = sp_curve_new_from_bpath (abp);
+            SPCurve *c = sp_curve_new_from_bpath(abp);
             if (c) cc = g_slist_prepend(cc, c);
         }
     }
-    cc = g_slist_reverse (cc);
+    cc = g_slist_reverse(cc);
 
     SPCurve *curve;
     if ( cc ) {
-        curve = sp_curve_concat (cc);
+        curve = sp_curve_concat(cc);
     } else {
         curve = sp_curve_new();
     }
 
     while (cc) {
         /* fixme: This is dangerous, as we are mixing art_alloc and g_new */
-        sp_curve_unref ((SPCurve *) cc->data);
-        cc = g_slist_remove (cc, cc->data);
+        sp_curve_unref((SPCurve *) cc->data);
+        cc = g_slist_remove(cc, cc->data);
     }
 
     return curve;
 }
 
-void Layout::transform(const NR::Matrix &transform)
+void Layout::transform(NR::Matrix const &transform)
 {
     // this is all massively oversimplified
     // I can't actually think of anybody who'll want to use it at the moment, so it'll stay simple
@@ -411,3 +413,15 @@ void Layout::transform(const NR::Matrix &transform)
 
 }//namespace Text
 }//namespace Inkscape
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
