@@ -483,7 +483,7 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp, gchar const *default_ns, bool com
 
     out->writeString( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" );
 
-    str = sp_repr_attr ((SPRepr *) doc, "doctype");
+    str = ((SPRepr *)doc)->attribute("doctype");
     if (str) {
         out->writeString( str );
     }

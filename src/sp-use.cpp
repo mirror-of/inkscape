@@ -648,7 +648,7 @@ sp_use_unlink(SPUse *use)
     SP_OBJECT(use)->deleteObject(false);
 
     // give the copy our old id and let go of our old repr
-    sp_repr_set_attr(copy, "id", sp_repr_attr(repr, "id"));
+    sp_repr_set_attr(copy, "id", repr->attribute("id"));
     sp_repr_unref(repr);
 
     // remove tiled clone attrs

@@ -367,14 +367,14 @@ void attribute_changed(SPRepr *repr, gchar const *name,
 }
 
 void node_added(SPRepr *parent, SPRepr *child, SPRepr *ref, void *data) {
-    gchar const *mode=sp_repr_attr(child, "inkscape:groupmode");
+    gchar const *mode=child->attribute("inkscape:groupmode");
     if ( mode && !std::strcmp(mode, "layer") ) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     }
 }
 
 void node_removed(SPRepr *parent, SPRepr *child, SPRepr *ref, void *data) {
-    gchar const *mode=sp_repr_attr(child, "inkscape:groupmode");
+    gchar const *mode=child->attribute("inkscape:groupmode");
     if ( mode && !std::strcmp(mode, "layer") ) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     }
@@ -383,7 +383,7 @@ void node_removed(SPRepr *parent, SPRepr *child, SPRepr *ref, void *data) {
 void node_reordered(SPRepr *parent, SPRepr *child,
                     SPRepr *old_ref, SPRepr *new_ref, void *data)
 {
-    gchar const *mode=sp_repr_attr(child, "inkscape:groupmode");
+    gchar const *mode=child->attribute("inkscape:groupmode");
     if ( mode && !std::strcmp(mode, "layer") ) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     }

@@ -283,7 +283,7 @@ double sp_repr_get_double_attribute (SPRepr * repr, const char * key, double def
     g_return_val_if_fail (repr != NULL, def);
     g_return_val_if_fail (key != NULL, def);
 
-    result = (char *) sp_repr_attr (repr, key);
+    result = (char *) repr->attribute(key);
 
     if (result == NULL) return def;
 
@@ -297,7 +297,7 @@ int sp_repr_get_int_attribute (SPRepr * repr, const char * key, int def)
     g_return_val_if_fail (repr != NULL, def);
     g_return_val_if_fail (key != NULL, def);
 
-    result = (char *) sp_repr_attr (repr, key);
+    result = (char *) repr->attribute(key);
 
     if (result == NULL) return def;
 
@@ -425,7 +425,7 @@ sp_repr_get_boolean (SPRepr *repr, const gchar *key, unsigned int *val)
     g_return_val_if_fail (key != NULL, FALSE);
     g_return_val_if_fail (val != NULL, FALSE);
 
-    v = sp_repr_attr (repr, key);
+    v = repr->attribute(key);
 
     if (v != NULL) {
         if (!g_strcasecmp (v, "true") ||
@@ -452,7 +452,7 @@ sp_repr_get_int (SPRepr *repr, const gchar *key, int *val)
     g_return_val_if_fail (key != NULL, FALSE);
     g_return_val_if_fail (val != NULL, FALSE);
 
-    v = sp_repr_attr (repr, key);
+    v = repr->attribute(key);
 
     if (v != NULL) {
         *val = atoi (v);
@@ -471,7 +471,7 @@ sp_repr_get_double (SPRepr *repr, const gchar *key, double *val)
     g_return_val_if_fail (key != NULL, FALSE);
     g_return_val_if_fail (val != NULL, FALSE);
 
-    v = sp_repr_attr (repr, key);
+    v = repr->attribute(key);
 
     if (v != NULL) {
         *val = g_ascii_strtod (v, NULL);

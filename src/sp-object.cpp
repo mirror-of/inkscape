@@ -638,7 +638,7 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 
 		if ( object->repr->type() == SP_XML_ELEMENT_NODE ) {
 			/* If we are not cloned, force unique id */
-			const gchar *id = sp_repr_attr (object->repr, "id");
+			const gchar *id = object->repr->attribute("id");
 			gchar *realid = sp_object_get_unique_id (object, id);
 			g_assert (realid != NULL);
 
@@ -841,7 +841,7 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 	unsigned int keyid = sp_attribute_lookup (key);
 	if (keyid != SP_ATTR_INVALID) {
 		/* Retrieve the 'key' attribute from the object's XML representation */
-		const gchar *value = sp_repr_attr (object->repr, key);
+		const gchar *value = object->repr->attribute(key);
 
 		sp_object_set (object, keyid, value);
 	}
@@ -1122,7 +1122,7 @@ sp_object_getAttribute (const SPObject *object, const gchar *key, SPException *e
 	}
 
 	/* fixme: Exception if object is NULL? */
-	return (const gchar *) sp_repr_attr (object->repr, key);
+	return (const gchar *) object->repr->attribute(key);
 }
 
 void
@@ -1201,7 +1201,7 @@ sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *d
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (key != NULL, NULL);
 
-	const gchar *style = sp_repr_attr (object->repr, "style");
+	const gchar *style = object->repr->attribute("style");
 	if (style) {
 		size_t const len = strlen(key);
 		char const *p;
@@ -1215,7 +1215,7 @@ sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *d
 			if (*p) return p;
 		}
 	}
-	const gchar *val = sp_repr_attr (object->repr, key);
+	const gchar *val = object->repr->attribute(key);
 	if (val) {
 		return val;
 	}

@@ -78,7 +78,7 @@ sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr)
 	g_assert (repr != NULL);
 	g_assert (attr != NULL);
 
-	const char *data = sp_repr_attr (repr, attr);
+	const char *data = repr->attribute(attr);
 
 	sp_repr_css_attr_add_from_string (css, data);
 
@@ -93,7 +93,7 @@ sp_repr_css_property (SPCSSAttr * css, const gchar * name, const gchar * defval)
 	g_assert (css != NULL);
 	g_assert (name != NULL);
 
-	attr = sp_repr_attr ((SPRepr *) css, name);
+	attr = ((SPRepr *)css)->attribute(name);
 
 	if (attr == NULL) return defval;
 
@@ -231,4 +231,3 @@ sp_repr_css_change_recursive (SPRepr * repr, SPCSSAttr * css, const gchar * attr
 		sp_repr_css_change_recursive (child, css, attr);
 	}
 }
-

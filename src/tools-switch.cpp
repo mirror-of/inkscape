@@ -94,14 +94,14 @@ tools_isactive (SPDesktop *dt, unsigned num)
 {
 	g_assert( num < G_N_ELEMENTS(tool_ids) );
 	if (SP_IS_EVENT_CONTEXT(dt->event_context))
-		return (!strcmp (sp_repr_attr (dt->event_context->repr, "id"), tool_ids[num]));
+		return (!strcmp (dt->event_context->repr->attribute("id"), tool_ids[num]));
 	else return FALSE;
 }
 
 int
 tools_active (SPDesktop *dt)
 {
-	return (tools_id2num (sp_repr_attr (dt->event_context->repr, "id")));
+	return (tools_id2num (dt->event_context->repr->attribute("id")));
 }
 
 void

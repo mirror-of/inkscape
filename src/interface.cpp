@@ -1266,7 +1266,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 		}
 
 		SPRepr *repr = sp_repr_document_root (rnewdoc);
-		const gchar *style = sp_repr_attr (repr, "style");
+		const gchar *style = repr->attribute("style");
 
 		SPRepr *newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);

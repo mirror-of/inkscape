@@ -465,7 +465,7 @@ sp_export_dialog (void)
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
             const gchar *uri = SP_DOCUMENT_URI (doc);
             SPRepr * repr = sp_document_repr_root(doc);
-            const gchar * text_extension = sp_repr_attr(repr, "inkscape:output_extension");
+            const gchar * text_extension = repr->attribute("inkscape:output_extension");
             Inkscape::Extension::Output * oextension = NULL;
 
             if (text_extension != NULL) {
@@ -760,16 +760,16 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                 SPRepr * repr = sp_document_repr_root(doc);
                 const gchar * dpi_string;
 
-                filename = sp_repr_attr(repr, "inkscape:export-filename");
+                filename = repr->attribute("inkscape:export-filename");
 
                 dpi_string = NULL;
-                dpi_string = sp_repr_attr(repr, "inkscape:export-xdpi");
+                dpi_string = repr->attribute("inkscape:export-xdpi");
                 if (dpi_string != NULL) {
                     xdpi = atof(dpi_string);
                 }
 
                 dpi_string = NULL;
-                dpi_string = sp_repr_attr(repr, "inkscape:export-ydpi");
+                dpi_string = repr->attribute("inkscape:export-ydpi");
                 if (dpi_string != NULL) {
                     ydpi = atof(dpi_string);
                 }
@@ -801,14 +801,14 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                         SPRepr * repr = (SPRepr *)reprlst->data;
 
                         if (filename_search) {
-                            filename = sp_repr_attr(repr, "inkscape:export-filename");
+                            filename = repr->attribute("inkscape:export-filename");
                             if (filename != NULL)
                                 filename_search = FALSE;
                         }
 
                         if (xdpi_search) {
                             dpi_string = NULL;
-                            dpi_string = sp_repr_attr(repr, "inkscape:export-xdpi");
+                            dpi_string = repr->attribute("inkscape:export-xdpi");
                             if (dpi_string != NULL) {
                                 xdpi = atof(dpi_string);
                                 xdpi_search = FALSE;
@@ -817,7 +817,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 
                         if (ydpi_search) {
                             dpi_string = NULL;
-                            dpi_string = sp_repr_attr(repr, "inkscape:export-ydpi");
+                            dpi_string = repr->attribute("inkscape:export-ydpi");
                             if (dpi_string != NULL) {
                                 ydpi = atof(dpi_string);
                                 ydpi_search = FALSE;
@@ -832,8 +832,8 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                         reprlst = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->reprList();
                         for(; reprlst != NULL; reprlst = reprlst->next) {
                             SPRepr * repr = (SPRepr *)reprlst->data;
-                            if (sp_repr_attr(repr, "id")) {
-                                id = sp_repr_attr(repr, "id");
+                            if (repr->attribute("id")) {
+                                id = repr->attribute("id");
                                 break;
                             }
                         }
@@ -1047,17 +1047,17 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             gboolean saved = sp_document_get_undo_sensitive(doc);
             sp_document_set_undo_sensitive(doc, FALSE);
 
-            temp_string = sp_repr_attr(repr, "inkscape:export-filename");
+            temp_string = repr->attribute("inkscape:export-filename");
             if (temp_string == NULL || strcmp(temp_string, filename)) {
                 sp_repr_set_attr(repr, "inkscape:export-filename", filename);
                 modified = TRUE;
             }
-            temp_string = sp_repr_attr(repr, "inkscape:export-xdpi");
+            temp_string = repr->attribute("inkscape:export-xdpi");
             if (temp_string == NULL || xdpi != atof(temp_string)) {
                 sp_repr_set_double(repr, "inkscape:export-xdpi", xdpi);
                 modified = TRUE;
             }
-            temp_string = sp_repr_attr(repr, "inkscape:export-ydpi");
+            temp_string = repr->attribute("inkscape:export-ydpi");
             if (temp_string == NULL || xdpi != atof(temp_string)) {
                 sp_repr_set_double(repr, "inkscape:export-ydpi", ydpi);
                 modified = TRUE;
@@ -1081,22 +1081,22 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
                 SPRepr * repr = (SPRepr *)reprlst->data;
                 const gchar * temp_string;
 
-                if (sp_repr_attr(repr, "id") == NULL ||
-                        !(g_strrstr(filename, sp_repr_attr(repr,"id")) != NULL &&
+                if (repr->attribute("id") == NULL ||
+                        !(g_strrstr(filename, repr->attribute("id")) != NULL &&
                           (!SP_DOCUMENT_URI(SP_ACTIVE_DOCUMENT) || 
                             strcmp(g_dirname(filename), g_dirname(SP_DOCUMENT_URI(SP_ACTIVE_DOCUMENT))) == 0))) {
-                    temp_string = sp_repr_attr(repr, "inkscape:export-filename");
+                    temp_string = repr->attribute("inkscape:export-filename");
                     if (temp_string == NULL || strcmp(temp_string, filename)) {
                         sp_repr_set_attr(repr, "inkscape:export-filename", filename);
                         modified = TRUE;
                     }
                 }
-                temp_string = sp_repr_attr(repr, "inkscape:export-xdpi");
+                temp_string = repr->attribute("inkscape:export-xdpi");
                 if (temp_string == NULL || xdpi != atof(temp_string)) {
                     sp_repr_set_double(repr, "inkscape:export-xdpi", xdpi);
                     modified = TRUE;
                 }
-                temp_string = sp_repr_attr(repr, "inkscape:export-ydpi");
+                temp_string = repr->attribute("inkscape:export-ydpi");
                 if (temp_string == NULL || xdpi != atof(temp_string)) {
                     sp_repr_set_double(repr, "inkscape:export-ydpi", ydpi);
                     modified = TRUE;

@@ -739,7 +739,7 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
         combo = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
                                                 "line_spacing" );
-        sstr = (repr) ? sp_repr_attr (repr, "sodipodi:linespacing") : NULL;
+        sstr = (repr) ? repr->attribute("sodipodi:linespacing") : NULL;
         gtk_entry_set_text ((GtkEntry *) ((GtkCombo *) (combo))->entry, 
                     (sstr) ? sstr : (const gchar *) "100%");
     }

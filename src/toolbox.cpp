@@ -1010,7 +1010,7 @@ static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
     } else if (!strcmp(name, "inkscape:flatsided")) {
         GtkWidget *fscb = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "flat_checkbox");
         GtkWidget *prop_widget = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "prop_widget");
-        const char *flatsides = sp_repr_attr(repr,"inkscape:flatsided");
+        const char *flatsides = repr->attribute("inkscape:flatsided");
         if (flatsides && !strcmp (flatsides,"false" )) {
             gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
             gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), TRUE);
@@ -2072,7 +2072,7 @@ static void arc_tb_event_attr_changed (SPRepr * repr, const gchar * name, const 
 
     GtkWidget *ocb = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "open_checkbox");
     const char *openstr = NULL;
-    openstr = sp_repr_attr(repr,"sodipodi:open");
+    openstr = repr->attribute("sodipodi:open");
 
     if (adj1->value == 0 && adj2->value == 0) 
 	gtk_widget_set_sensitive (GTK_WIDGET (ocb), FALSE);

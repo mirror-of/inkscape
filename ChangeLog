@@ -1,3 +1,8 @@
+2005-02-15 SwinginCelt  <swinginceltgmail.com>
+
+	* Replaced some sp_repr_attr calls with direct call to
+	  repr->attribute.
+
 2005-02-16 John Cliff <simarilius@yahoo.com>
 	* src/dialogs/tiledialog.h, src/dialogs/tiledialog.cpp,
 	  src/dialogs/makefile_insert, src/verbs.cpp, src/verbs.h

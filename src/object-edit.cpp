@@ -264,7 +264,7 @@ sp_rect_rx_knot_click (SPItem *item, guint state)
 		sp_repr_set_attr (SP_OBJECT_REPR(rect), "rx", NULL);
 		sp_repr_set_attr (SP_OBJECT_REPR(rect), "ry", NULL);
 	} else if (state & GDK_CONTROL_MASK) {
-		sp_repr_set_attr (SP_OBJECT_REPR(rect), "ry", sp_repr_attr (SP_OBJECT_REPR(rect), "rx"));
+		sp_repr_set_attr (SP_OBJECT_REPR(rect), "ry", SP_OBJECT_REPR(rect)->attribute("rx"));
 	}
 }
 
@@ -277,7 +277,7 @@ sp_rect_ry_knot_click (SPItem *item, guint state)
 		sp_repr_set_attr (SP_OBJECT_REPR(rect), "rx", NULL);
 		sp_repr_set_attr (SP_OBJECT_REPR(rect), "ry", NULL);
 	} else if (state & GDK_CONTROL_MASK) {
-		sp_repr_set_attr (SP_OBJECT_REPR(rect), "rx", sp_repr_attr (SP_OBJECT_REPR(rect), "ry"));
+		sp_repr_set_attr (SP_OBJECT_REPR(rect), "rx", SP_OBJECT_REPR(rect)->attribute("ry"));
 	}
 }
 
@@ -960,9 +960,3 @@ sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder)
 																		 _("<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"));
         }
 }
-
-
-
-
-
-

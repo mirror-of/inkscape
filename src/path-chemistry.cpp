@@ -86,10 +86,10 @@ sp_selected_path_combine (void)
 	gint topmost = (SP_OBJECT_REPR ((SPItem *) g_slist_last(items)->data))->position();
 
 	// remember the id of the bottomost object
-	const char *id = sp_repr_attr (SP_OBJECT_REPR ((SPItem *) items->data), "id");
+	const char *id = sp_repr_attr(SP_OBJECT_REPR ((SPItem *) items->data), "id");
 
 	// FIXME: merge styles of combined objects instead of using the first one's style
-	gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR ((SPItem *) items->data), "style"));
+	gchar *style = g_strdup (sp_repr_attr(SP_OBJECT_REPR ((SPItem *) items->data), "style"));
 
 	GString *dstring = g_string_new("");
 	for (GSList *i = items; i != NULL; i = i->next) {
@@ -106,7 +106,7 @@ sp_selected_path_combine (void)
 		g_free (str);
 
 		// if this is the bottommost object,
-		if (!strcmp (sp_repr_attr (SP_OBJECT_REPR (path), "id"), id)) {
+		if (!strcmp (sp_repr_attr(SP_OBJECT_REPR (path), "id"), id)) {
 			// delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
 			SP_OBJECT (path)->deleteObject(false);
 		} else {
@@ -178,9 +178,9 @@ sp_selected_path_break_apart (void)
 
 		SPRepr *parent = SP_OBJECT_REPR (item)->parent();
 		gint pos = SP_OBJECT_REPR (item)->position();
-		const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+		const char *id = sp_repr_attr(SP_OBJECT_REPR (item), "id");
 
-		gchar *style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
+		gchar *style = g_strdup (sp_repr_attr(SP_OBJECT (item)->repr, "style"));
 
 		NArtBpath *abp = nr_artpath_affine (curve->bpath, sp_item_i2root_affine (SP_ITEM (path)));
 
@@ -275,7 +275,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		// remember parent
 		SPRepr *parent = SP_OBJECT_REPR (item)->parent();
 		// remember id
-		const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+		const char *id = sp_repr_attr(SP_OBJECT_REPR (item), "id");
 
 		selection->removeItem (item);
 
@@ -322,7 +322,7 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 	SPRepr *repr = sp_repr_new ("svg:path");
 	/* Transformation */
 	sp_repr_set_attr (repr, "transform", 
-			  sp_repr_attr (SP_OBJECT_REPR (item), "transform"));
+			  sp_repr_attr(SP_OBJECT_REPR (item), "transform"));
 	/* Style */
 	gchar *style_str = sp_style_write_difference (SP_OBJECT_STYLE (item), 
 					       SP_OBJECT_STYLE (SP_OBJECT_PARENT (item)));

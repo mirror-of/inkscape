@@ -388,7 +388,7 @@ void SPSelection::_removeObjectChildren(SPObject *obj) {
 
 SPObject *SPSelection::_objectForRepr(SPRepr *repr) const {
     g_return_val_if_fail(repr != NULL, NULL);
-    gchar const *id = sp_repr_attr(repr, "id");
+    gchar const *id = repr->attribute("id");
     g_return_val_if_fail(id != NULL, NULL);
     SPObject *object=SP_DT_DOCUMENT(_desktop)->getObjectById(id);
     g_return_val_if_fail(object != NULL, NULL);

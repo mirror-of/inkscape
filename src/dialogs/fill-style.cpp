@@ -892,7 +892,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                 } else {
                     SPRepr *patrepr = SP_OBJECT_REPR(pattern);
                     SPCSSAttr *css = sp_repr_css_attr_new ();
-                    gchar *urltext = g_strdup_printf ("url(#%s)", sp_repr_attr (patrepr, "id"));
+                    gchar *urltext = g_strdup_printf ("url(#%s)", patrepr->attribute("id"));
                     sp_repr_css_set_property (css, "fill", urltext);
 
                     for (GSList const *i = items; i != NULL; i = i->next) {

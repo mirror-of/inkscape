@@ -502,7 +502,7 @@ sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
 	if (((SPObjectClass *) (parent_class))->child_added)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
-	id = sp_repr_attr (child, "id");
+	id = child->attribute("id");
 	no = object->document->getObjectById(id);
 	g_assert (SP_IS_OBJECT (no));
 

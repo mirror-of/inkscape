@@ -188,7 +188,7 @@ item_id_match (SPItem *item, const gchar *id, bool exact)
     if (SP_IS_STRING(item)) // SPStrings have "on demand" ids which are useless for searching
         return false;
 
-    const gchar *item_id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+    const gchar *item_id = (SP_OBJECT_REPR (item))->attribute("id");
     if (item_id == NULL)
         return false;
 
@@ -224,7 +224,7 @@ item_style_match (SPItem *item, const gchar *text, bool exact)
     if (SP_OBJECT_REPR (item) == NULL)
         return false;
 
-    const gchar *item_text = sp_repr_attr (SP_OBJECT_REPR (item), "style");
+    const gchar *item_text = (SP_OBJECT_REPR (item))->attribute("style");
     if (item_text == NULL)
         return false;
 
@@ -242,7 +242,7 @@ item_attr_match (SPItem *item, const gchar *name, bool exact)
         return false;
 
     if (exact) {
-        const gchar *attr_value = sp_repr_attr (SP_OBJECT_REPR (item), name);
+        const gchar *attr_value = (SP_OBJECT_REPR (item))->attribute(name);
         return ((bool) (attr_value != NULL));
     } else {
         return SP_OBJECT_REPR (item)->matchAttributeName(name);

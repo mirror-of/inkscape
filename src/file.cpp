@@ -211,7 +211,7 @@ sp_file_revert_dialog()
     }
 
     bool do_revert = true;
-    if (sp_repr_attr(repr, "sodipodi:modified") != NULL) {
+    if (repr->attribute("sodipodi:modified") != NULL) {
         gchar *text = g_strdup_printf(_("Changes will be lost!  Are you sure you want to reload document %s?"), uri);
 
         GtkWidget *dialog = gtk_message_dialog_new(
@@ -511,7 +511,7 @@ sp_file_save_dialog(SPDocument *doc)
     Inkscape::Extension::Output *extension;
     gchar *save_path = NULL;
 
-    default_extension = sp_repr_attr(repr, "inkscape:output_extension");
+    default_extension = repr->attribute("inkscape:output_extension");
     if (default_extension == NULL) {
         default_extension = prefs_get_string_attribute("dialogs.save_as", "default");
     }
@@ -653,15 +653,15 @@ sp_file_save_document(SPDocument *doc)
 
     SPRepr *repr = sp_document_repr_root(doc);
 
-    gchar const *fn = sp_repr_attr(repr, "sodipodi:modified");
+    gchar const *fn = repr->attribute("sodipodi:modified");
     if (fn != NULL) {
         if (doc->uri == NULL
-            || sp_repr_attr(repr, "inkscape:output_extension") == NULL)
+            || repr->attribute("inkscape:output_extension") == NULL)
         {
             return sp_file_save_dialog(doc);
         } else {
             fn = g_strdup(doc->uri);
-            gchar const *ext = sp_repr_attr(repr, "inkscape:output_extension");
+            gchar const *ext = repr->attribute("inkscape:output_extension");
             success = file_save(doc, fn, Inkscape::Extension::db.get(ext), FALSE);
             g_free((void *) fn);
         }
@@ -727,7 +727,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
     if (doc != NULL) {
         // the import extension has passed us a document, now we need to embed it into our document
         if ( 0 ) {
-//            const gchar *docbase = sp_repr_attr( sp_repr_document_root( sp_repr_document( repr ) ), "sodipodi:docbase" );
+//            const gchar *docbase = (sp_repr_document_root( sp_repr_document( repr ))->attribute("sodipodi:docbase" );
             g_message(" settings  uri  [%s]", doc->uri );
             g_message("           base [%s]", doc->base );
             g_message("           name [%s]", doc->name );
@@ -754,7 +754,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             if (SP_IS_ITEM(child))
                 items_count ++;
         }
-        gchar const *style = sp_repr_attr(repr, "style");
+        gchar const *style = repr->attribute("style");
 
         SPObject *new_obj = NULL;
 
@@ -1217,12 +1217,12 @@ void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns
     for (GSList const *l = images; l != NULL; l = l->next) {
         SPRepr *ir = SP_OBJECT_REPR(l->data);
 
-        const gchar *href = sp_repr_attr(ir, "xlink:href");
+        const gchar *href = ir->attribute("xlink:href");
 
         // First try to figure out an absolute path to the asset
         //g_message("image href [%s]", href );
         if (spns && !g_path_is_absolute(href)) {
-            const gchar *absref = sp_repr_attr(ir, "sodipodi:absref");
+            const gchar *absref = ir->attribute("sodipodi:absref");
             //g_message("      absr [%s]", absref );
 
             if ( absref && Inkscape::IO::file_test(absref, G_FILE_TEST_EXISTS) )

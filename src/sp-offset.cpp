@@ -199,28 +199,28 @@ sp_offset_build(SPObject *object, SPDocument *document, SPRepr *repr)
     if (((SPObjectClass *) parent_class)->build)
         ((SPObjectClass *) parent_class)->build (object, document, repr);
   
-    if ( sp_repr_attr (object->repr, "inkscape:radius") ) {
+    if (object->repr->attribute("inkscape:radius")) {
         sp_object_read_attr (object, "inkscape:radius");
     } else {
-        gchar const *oldA = sp_repr_attr(object->repr, "sodipodi:radius");
+        gchar const *oldA = object->repr->attribute("sodipodi:radius");
         sp_repr_set_attr(object->repr,"inkscape:radius",oldA);
         sp_repr_set_attr(object->repr,"sodipodi:radius",NULL);
     
         sp_object_read_attr (object, "inkscape:radius");
     }
-    if (sp_repr_attr(object->repr, "inkscape:original")) {
+    if (object->repr->attribute("inkscape:original")) {
         sp_object_read_attr (object, "inkscape:original");
     } else {    
-        gchar const *oldA = sp_repr_attr(object->repr, "sodipodi:original");
+        gchar const *oldA = object->repr->attribute("sodipodi:original");
         sp_repr_set_attr(object->repr,"inkscape:original",oldA);
         sp_repr_set_attr(object->repr,"sodipodi:original",NULL);
 
         sp_object_read_attr (object, "inkscape:original");
     }
-    if (sp_repr_attr(object->repr, "xlink:href")) {
+    if (object->repr->attribute("xlink:href")) {
         sp_object_read_attr(object, "xlink:href");
     } else {
-        gchar const *oldA = sp_repr_attr(object->repr, "inkscape:href");
+        gchar const *oldA = object->repr->attribute("inkscape:href");
         if (oldA) {
             size_t lA = strlen(oldA);
             char *nA=(char*)malloc((lA+1)*sizeof(char));
@@ -490,7 +490,7 @@ sp_offset_set_shape(SPShape *shape)
         // just put the source shape as the offseted one, no one will notice
         // it's also useless to compute the offset with a 0 radius
     
-        const char *res_d = sp_repr_attr(SP_OBJECT(shape)->repr,"inkscape:original");
+        const char *res_d = SP_OBJECT(shape)->repr->attribute("inkscape:original");
         if ( res_d ) {
             NArtBpath *bpath = sp_svg_read_path (res_d);
             SPCurve *c = sp_curve_new_from_bpath (bpath);

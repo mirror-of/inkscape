@@ -59,7 +59,7 @@ test_gradient()
         SPRepr *repr = sp_repr_new("svg:radialGradient");
         SP_OBJECT(gr)->updateRepr(repr, SP_OBJECT_WRITE_ALL);
         {
-            gchar const *tr = sp_repr_attr(repr, "gradientTransform");
+            gchar const *tr = repr->attribute("gradientTransform");
             NR::Matrix svd;
             bool const valid = sp_svg_transform_read(tr, &svd);
             UTEST_ASSERT(valid);

@@ -1107,7 +1107,7 @@ on_attr_row_changed ( GtkCList *list, gint row, gpointer data )
         /*
         // get current attr values
         const gchar * name = g_quark_to_string (sp_xmlview_attr_list_get_row_key (list, row));
-        const gchar * value = sp_repr_attr (selected_repr, name);
+        const gchar * value = selected_repr->attribute(name);
 
         g_warning("value: '%s'",value);
 
@@ -1161,7 +1161,7 @@ on_attr_select_row_set_value_content ( GtkCList *list, gint row, gint column,
     const gchar *name, *value;
     tb = gtk_text_view_get_buffer (GTK_TEXT_VIEW (data));
     name = g_quark_to_string (sp_xmlview_attr_list_get_row_key (list, row));
-    value = sp_repr_attr (selected_repr, name);
+    value = selected_repr->attribute(name);
     if (!value) {
         value = "";
     }

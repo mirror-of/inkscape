@@ -680,7 +680,7 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                 } else {
                     SPRepr *patrepr = SP_OBJECT_REPR(pattern);
                     SPCSSAttr *css = sp_repr_css_attr_new ();
-                    gchar *urltext = g_strdup_printf ("url(#%s)", sp_repr_attr (patrepr, "id"));
+                    gchar *urltext = g_strdup_printf ("url(#%s)", patrepr->attribute("id"));
                     sp_repr_css_set_property (css, "stroke", urltext);
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
@@ -954,14 +954,14 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
 
         SPRepr *repr = SP_OBJECT_REPR((SPItem *) ml->data);
 
-        if (markers_doc && sp_repr_attr(repr,"inkscape:stockid")) {
+        if (markers_doc && repr->attribute("inkscape:stockid")) {
             // find out if markers_doc has a marker with the same stockid, and if so, skip this
             for (SPObject *child = sp_object_first_child(SP_OBJECT(SP_DOCUMENT_DEFS(markers_doc))) ;
                  child != NULL;
                  child = SP_OBJECT_NEXT(child) )
             {
-                if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") &&
-                    !strcmp(sp_repr_attr(repr,"inkscape:stockid"), sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
+                if (SP_OBJECT_REPR(child)->attribute("inkscape:stockid") &&
+                    !strcmp(repr->attribute("inkscape:stockid"), SP_OBJECT_REPR(child)->attribute("inkscape:stockid")) &&
                     SP_IS_MARKER(child))
                     continue; // stock item, dont add to list from current doc
             }
@@ -971,12 +971,12 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
         GtkWidget *i = gtk_menu_item_new();
         gtk_widget_show(i);
 
-        if (sp_repr_attr(repr, "inkscape:stockid"))
+        if (repr->attribute("inkscape:stockid"))
             g_object_set_data (G_OBJECT(i), "stockid", (void *) "true");
         else
             g_object_set_data (G_OBJECT(i), "stockid", (void *) "false");
 
-        gchar const *markid = sp_repr_attr(repr, "id");
+        gchar const *markid = repr->attribute("id");
         g_object_set_data (G_OBJECT(i), "marker", (void *) markid);
 
         GtkWidget *hb = gtk_hbox_new(FALSE, MARKER_ITEM_MARGIN);
@@ -988,7 +988,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
         gtk_box_pack_start(GTK_BOX(hb), prv, FALSE, FALSE, 6);
 
         // create label
-        GtkWidget *l = gtk_label_new(sp_repr_attr(repr, "id"));
+        GtkWidget *l = gtk_label_new(repr->attribute("id"));
         gtk_widget_show(l);
         gtk_misc_set_alignment(GTK_MISC(l), 0.0, 0.5);
 
@@ -1149,7 +1149,7 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
        SPObject *mark = get_stock_item(markurn);
        if (mark) {
             SPRepr *repr = SP_OBJECT_REPR(mark);
-            marker = g_strconcat("url(#", sp_repr_attr(repr,"id"), ")", NULL);
+            marker = g_strconcat("url(#", repr->attribute("id"), ")", NULL);
         }
     } else {
         marker = markid;
@@ -2231,14 +2231,14 @@ ink_marker_menu_set_current(SPObject *marker, GtkOptionMenu *mnu)
     GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu(mnu));
     if (marker != NULL) {
         bool mark_is_stock = false;
-        if (sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid"))
+        if (SP_OBJECT_REPR(marker)->attribute("inkscape:stockid"))
             mark_is_stock = true;
 
         gchar *markname;
         if (mark_is_stock)
-            markname = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid"));
+            markname = g_strdup(SP_OBJECT_REPR(marker)->attribute("inkscape:stockid"));
         else
-            markname = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker), "id"));
+            markname = g_strdup(SP_OBJECT_REPR(marker)->attribute("id"));
 
         int markpos = 0;
         GList *kids = GTK_MENU_SHELL(m)->children;

@@ -606,15 +606,15 @@ clonetiler_remove (GtkWidget *widget, void *)
 
     SPObject *obj = SP_OBJECT(selection->singleItem());
     SPRepr *obj_repr = SP_OBJECT_REPR(obj);
-    const char *id_href = g_strdup_printf("#%s", sp_repr_attr (obj_repr, "id"));
+    const char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     SPObject *parent = SP_OBJECT_PARENT (obj);
 
 // remove old tiling
     GSList *to_delete = NULL;
     for (SPObject *child = sp_object_first_child(parent); child != NULL; child = SP_OBJECT_NEXT(child)) {
         if (SP_IS_USE(child) && 
-            !strcmp(id_href, sp_repr_attr(SP_OBJECT_REPR(child), "xlink:href")) && 
-            !strcmp(id_href, sp_repr_attr(SP_OBJECT_REPR(child), "inkscape:tiled-clone-of"))) {
+            !strcmp(id_href, (SP_OBJECT_REPR(child)->attribute("xlink:href"))) && 
+            !strcmp(id_href, (SP_OBJECT_REPR(child))->attribute("inkscape:tiled-clone-of"))) {
             to_delete = g_slist_prepend (to_delete, child);
         }
     }
@@ -688,10 +688,10 @@ clonetiler_apply (GtkWidget *widget, void *)
     double h;
 
     if (keepbbox && 
-        sp_repr_attr(obj_repr, "inkscape:tile-w") &&
-        sp_repr_attr(obj_repr, "inkscape:tile-h") &&
-        sp_repr_attr(obj_repr, "inkscape:tile-cx") &&
-        sp_repr_attr(obj_repr, "inkscape:tile-cy")) {
+        obj_repr->attribute("inkscape:tile-w") &&
+        obj_repr->attribute("inkscape:tile-h") &&
+        obj_repr->attribute("inkscape:tile-cx") &&
+        obj_repr->attribute("inkscape:tile-cy")) {
 
         double cx = sp_repr_get_double_attribute (obj_repr, "inkscape:tile-cx", 0);
         double cy = sp_repr_get_double_attribute (obj_repr, "inkscape:tile-cy", 0);

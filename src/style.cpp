@@ -447,7 +447,7 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     }
 
     /* 1. Style itself */
-    val = sp_repr_attr (repr, "style");
+    val = repr->attribute("style");
     if (val != NULL) {
         sp_style_merge_from_style_string (style, val);
     }
@@ -471,14 +471,14 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 
     /* opacity */
     if (!style->opacity.set) {
-        val = sp_repr_attr (repr, "opacity");
+        val = repr->attribute("opacity");
         if (val) {
             sp_style_read_iscale24 (&style->opacity, val);
         }
     }
       /* color */
        if (!style->color.set) {
-               val = sp_repr_attr (repr, "color");
+               val = repr->attribute("color");
                if (val) {
                        /* fixme: Disallow parsing paintservers */
              sp_style_read_icolor (&style->color, val, style, (object) ? SP_OBJECT_DOCUMENT (object) : NULL);
@@ -486,14 +486,14 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
        }
     /* fill */
     if (!style->fill.set) {
-        val = sp_repr_attr (repr, "fill");
+        val = repr->attribute("fill");
         if (val) {
             sp_style_read_ipaint (&style->fill, val, style, (object) ? SP_OBJECT_DOCUMENT (object) : NULL);
         }
     }
     /* fill-opacity */
     if (!style->fill_opacity.set) {
-        val = sp_repr_attr (repr, "fill-opacity");
+        val = repr->attribute("fill-opacity");
         if (val) {
             sp_style_read_iscale24 (&style->fill_opacity, val);
         }
@@ -502,7 +502,7 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     SPS_READ_PENUM_IF_UNSET(&style->fill_rule, repr, "fill-rule", enum_fill_rule, true);
     /* stroke */
     if (!style->stroke.set) {
-        val = sp_repr_attr (repr, "stroke");
+        val = repr->attribute("stroke");
         if (val) {
             sp_style_read_ipaint (&style->stroke, val, style, (object) ? SP_OBJECT_DOCUMENT (object) : NULL);
         }
@@ -513,25 +513,25 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
  
     /* markers */
     if (!style->marker[SP_MARKER_LOC].set) {
-        val = sp_repr_attr (repr, "marker");
+        val = repr->attribute("marker");
         if (val) {
             sp_style_read_istring (&style->marker[SP_MARKER_LOC], val);
         }
     }
     if (!style->marker[SP_MARKER_LOC_START].set) {
-        val = sp_repr_attr (repr, "marker-start");
+        val = repr->attribute("marker-start");
         if (val) {
             sp_style_read_istring (&style->marker[SP_MARKER_LOC_START], val);
         }
     }
     if (!style->marker[SP_MARKER_LOC_MID].set) {
-        val = sp_repr_attr (repr, "marker-mid");
+        val = repr->attribute("marker-mid");
         if (val) {
             sp_style_read_istring (&style->marker[SP_MARKER_LOC_MID], val);
         }
     }
     if (!style->marker[SP_MARKER_LOC_END].set) {
-        val = sp_repr_attr (repr, "marker-end");
+        val = repr->attribute("marker-end");
         if (val) {
             sp_style_read_istring (&style->marker[SP_MARKER_LOC_END], val);
         }
@@ -539,20 +539,20 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 
      /* stroke-opacity */
     if (!style->stroke_opacity.set) {
-        val = sp_repr_attr (repr, "stroke-opacity");
+        val = repr->attribute("stroke-opacity");
         if (val) {
             sp_style_read_iscale24 (&style->stroke_opacity, val);
         }
     }
     if (!style->stroke_dasharray_set) {
-        val = sp_repr_attr (repr, "stroke-dasharray");
+        val = repr->attribute("stroke-dasharray");
         if (val) {
             sp_style_read_dash(style, val);
         }
     }
     if (!style->stroke_dashoffset_set) {
         /* fixme */
-        val = sp_repr_attr (repr, "stroke-dashoffset");
+        val = repr->attribute("stroke-dashoffset");
         if (sp_svg_number_read_d (val, &style->stroke_dash.offset)) {
             style->stroke_dashoffset_set = TRUE;
         } else {
@@ -562,7 +562,7 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 
     /* font-family */
     if (!style->text_private || !style->text->font_family.set) {
-        val = sp_repr_attr (repr, "font-family");
+        val = repr->attribute("font-family");
         if (val) {
             if (!style->text_private) sp_style_privatize_text (style);
             sp_style_read_istring (&style->text->font_family, val);
@@ -2226,7 +2226,7 @@ sp_style_read_penum(SPIEnum *val, SPRepr *repr, gchar const *key, SPStyleEnum co
                     bool const can_explicitly_inherit)
 {
     const gchar *str;
-    str = sp_repr_attr (repr, key);
+    str = repr->attribute(key);
     if (str) {
         sp_style_read_ienum(val, str, dict, can_explicitly_inherit);
     }
@@ -2241,7 +2241,7 @@ static void
 sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key)
 {
     const gchar *str;
-    str = sp_repr_attr (repr, key);
+    str = repr->attribute(key);
     if (str) {
         sp_style_read_ilength (val, str);
     }
@@ -2256,7 +2256,7 @@ static void
 sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key)
 {
     const gchar *str;
-    str = sp_repr_attr (repr, key);
+    str = repr->attribute(key);
     if (str) {
         sp_style_read_ifontsize (val, str);
     }

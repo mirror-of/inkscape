@@ -465,7 +465,7 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             return temp->content();
 
         case RDF_RESOURCE:
-            return sp_repr_attr(repr, "rdf:resource");
+            return repr->attribute("rdf:resource");
 
         case RDF_XML:
             return "xml goes here";
@@ -817,7 +817,7 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
          current;
          current = sp_repr_next ( current ) ) {
 
-        gchar const * attr = sp_repr_attr ( current, "rdf:resource" );
+        gchar const * attr = current->attribute("rdf:resource");
         if ( attr == NULL ) continue;
 
 #ifdef DEBUG_MATCH

@@ -416,7 +416,7 @@ inkscape_segv_handler (int signum)
         SPRepr *repr;
         doc = (SPDocument *) l->data;
         repr = sp_document_repr_root (doc);
-        if (sp_repr_attr (repr, "sodipodi:modified")) {
+        if (repr->attribute("sodipodi:modified")) {
             const gchar *docname, *d0, *d;
             gchar n[64], c[1024];
             FILE *file;
@@ -465,7 +465,7 @@ inkscape_segv_handler (int signum)
                 savednames = g_slist_prepend (savednames, g_strdup (c));
                 fclose (file);
             } else {
-                docname = sp_repr_attr (repr, "sodipodi:docname");
+                docname = repr->attribute("sodipodi:docname");
                 failednames = g_slist_prepend (failednames, (docname) ? g_strdup (docname) : g_strdup (_("Untitled document")));
             }
             count++;
@@ -731,7 +731,7 @@ inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
         
         SPRepr* child;
         for (child = repr->firstChild(); child != NULL; child = child->next()) {
-            gchar const *id = sp_repr_attr (child, "id");
+            gchar const *id = child->attribute("id");
             if ((id) && (strlen (id) == len) && (!strncmp (id, s, len)))
             {
                 break;

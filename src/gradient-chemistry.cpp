@@ -255,20 +255,20 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
         // copy all the attributes to it
         SPRepr *repr_new = SP_OBJECT_REPR(gr_new);
         SPRepr *repr = SP_OBJECT_REPR(gr);
-        sp_repr_set_attr(repr_new, "gradientUnits", sp_repr_attr(repr, "gradientUnits"));
-        sp_repr_set_attr(repr_new, "gradientTransform", sp_repr_attr(repr, "gradientTransform"));
-        sp_repr_set_attr(repr_new, "spreadMethod", sp_repr_attr(repr, "spreadMethod"));
+        sp_repr_set_attr(repr_new, "gradientUnits", repr->attribute("gradientUnits"));
+        sp_repr_set_attr(repr_new, "gradientTransform", repr->attribute("gradientTransform"));
+        sp_repr_set_attr(repr_new, "spreadMethod", repr->attribute("spreadMethod"));
         if (SP_IS_RADIALGRADIENT(gr)) {
-            sp_repr_set_attr(repr_new, "cx", sp_repr_attr(repr, "cx"));
-            sp_repr_set_attr(repr_new, "cy", sp_repr_attr(repr, "cy"));
-            sp_repr_set_attr(repr_new, "fx", sp_repr_attr(repr, "fx"));
-            sp_repr_set_attr(repr_new, "fy", sp_repr_attr(repr, "fy"));
-            sp_repr_set_attr(repr_new, "r", sp_repr_attr(repr, "r"));
+            sp_repr_set_attr(repr_new, "cx", repr->attribute("cx"));
+            sp_repr_set_attr(repr_new, "cy", repr->attribute("cy"));
+            sp_repr_set_attr(repr_new, "fx", repr->attribute("fx"));
+            sp_repr_set_attr(repr_new, "fy", repr->attribute("fy"));
+            sp_repr_set_attr(repr_new, "r", repr->attribute("r"));
         } else {
-            sp_repr_set_attr(repr_new, "x1", sp_repr_attr(repr, "x1"));
-            sp_repr_set_attr(repr_new, "y1", sp_repr_attr(repr, "y1"));
-            sp_repr_set_attr(repr_new, "x2", sp_repr_attr(repr, "x2"));
-            sp_repr_set_attr(repr_new, "y2", sp_repr_attr(repr, "y2"));
+            sp_repr_set_attr(repr_new, "x1", repr->attribute("x1"));
+            sp_repr_set_attr(repr_new, "y1", repr->attribute("y1"));
+            sp_repr_set_attr(repr_new, "x2", repr->attribute("x2"));
+            sp_repr_set_attr(repr_new, "y2", repr->attribute("y2"));
         }
 
         return gr_new;

@@ -273,7 +273,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
         {
         //we are a <script> node
         //#1 check for 'javascript' or 'ecmascript'
-        char *val = (char *)sp_repr_attr(node, "type");
+        char *val = (char *)node->attribute("type");
         if (val && strcmp("text/ecmascript", val)==0)
             {
             //#2 get text
@@ -310,7 +310,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
         {
         //we are a normal node
         //#1 check for onClick=""
-        char *val = (char *)sp_repr_attr(node, "onclick");
+        char *val = (char *)node->attribute("onclick");
         //trace("val:%s", val);
         if (val)
             {
