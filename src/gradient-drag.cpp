@@ -35,7 +35,10 @@
 #define GR_KNOT_COLOR_NORMAL 0xffffff00
 #define GR_KNOT_COLOR_SELECTED 0x0000ff00
 
-#define SNAP_DIST 10
+// screen pixels between knots when they snap:
+#define SNAP_DIST 4 
+
+// absolute distance between gradient points for them to become a single dragger when the drag is created:
 #define MERGE_DIST 0.1
 
 static void 
@@ -87,16 +90,17 @@ GrDrag::GrDrag(SPDesktop *desktop) {
     this->updateLines ();
 }
 
-GrDrag::~GrDrag() {
+GrDrag::~GrDrag() 
+{
 	this->sel_changed_connection.disconnect();
 	this->sel_modified_connection.disconnect();
 
 	for (GSList *l = this->draggers; l != NULL; l = l->next) {
           delete ((GrDragger *) l->data);
-         //gtk_object_destroy( GTK_OBJECT (l->data));
 	}
 	g_slist_free (this->draggers);
 	this->draggers = NULL;
+	this->selected = NULL;
 
 	for (GSList *l = this->lines; l != NULL; l = l->next) {
          gtk_object_destroy( GTK_OBJECT (l->data));
@@ -104,26 +108,6 @@ GrDrag::~GrDrag() {
 	g_slist_free (this->lines);
 	this->lines = NULL;
 
-}
-
-// debugging, show a dragger as a simple canvas control
-void
-drag_mark (GrDrag *d, NR::Point p) 
-{
-    SPCanvasItem *box = sp_canvas_item_new (SP_DT_CONTROLS (d->desktop),
-                                            SP_TYPE_CTRL,
-                                            "mode", SP_CTRL_MODE_XOR,
-                                            "shape", SP_CTRL_SHAPE_DIAMOND,
-                                            "size", 5.0,
-                                            "filled", TRUE,
-                                            "fill_color", 0x000000ff,
-                                            "stroked", FALSE,
-                                            "stroke_color", 0x000000ff,
-                                            NULL);
-    sp_canvas_item_show (box);
-    SP_CTRL(box)->moveto (p);
-    sp_canvas_item_move_to_z (box, 0); // just low enough to not get in the way of other draggable knots
-    d->draggers = g_slist_append (d->draggers, box);
 }
 
 GrDraggable::GrDraggable (SPItem *item, guint point_num, bool fill_or_stroke)
@@ -152,6 +136,27 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
         dragger->parent->local_change = true;
         sp_item_gradient_set_coords (draggable->item, draggable->point_num, *p, false);
     }
+
+    // See if we need to snap to another dragger
+    double snap_dist = SNAP_DIST / SP_DESKTOP_ZOOM (dragger->parent->desktop);
+    for (GSList *l = dragger->parent->draggers; l != NULL; l = l->next) {
+        GrDragger *d_new = (GrDragger *) l->data;
+        if (d_new == dragger)
+            continue;
+        if (NR::L2 (d_new->point - *p) < snap_dist) {
+            for (GSList const* l = dragger->draggables; l != NULL; l = l->next) { // for all draggables of dragger
+                GrDraggable *draggable = (GrDraggable *) l->data;
+                // copy draggable to d_new:
+                d_new->addDraggable (new GrDraggable (draggable->item, draggable->point_num, draggable->fill_or_stroke)); 
+            }
+            dragger->parent->draggers = g_slist_remove (dragger->parent->draggers, dragger);
+            delete dragger;
+            d_new->parent->updateLines();
+            sp_document_done (SP_DT_DOCUMENT (d_new->parent->desktop));
+            return;
+        }
+    }
+
 }
 
 static void
@@ -211,8 +216,11 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, gchar const *tip, GrDraggable
 
 GrDragger::~GrDragger ()
 {
-	/* unref should call destroy */
-	g_object_unref (G_OBJECT (this->knot));
+    /* unref should call destroy */
+    g_object_unref (G_OBJECT (this->knot));
+
+    if (this->parent->selected == this)
+        this->parent->selected = NULL;
 
     for (GSList const* l = this->draggables; l != NULL; l = l->next) {
         delete ((GrDraggable *) l->data);
@@ -228,7 +236,8 @@ GrDrag::setSelected (GrDragger *dragger)
        this->selected->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_NORMAL;
        g_object_set (G_OBJECT (this->selected->knot->item), "fill_color", GR_KNOT_COLOR_NORMAL, NULL);
     }
-    dragger->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_SELECTED;
+    if (dragger)
+        dragger->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_SELECTED;
     this->selected = dragger;
 }
 
@@ -249,6 +258,7 @@ GrDrag::addDragger (NR::Point p, const gchar *tip, GrDraggable *draggable)
     for (GSList *l = this->draggers; l != NULL; l = l->next) {
         GrDragger *dragger = (GrDragger *) l->data;
         if (NR::L2 (dragger->point - p) < MERGE_DIST) {
+            // distance is small, merge this draggable into dragger, no need to create new dragger
             dragger->addDraggable (draggable);
             return;
         }
