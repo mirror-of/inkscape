@@ -7,8 +7,8 @@
    inkscape:version="0.38cvs"
    width="256pt"
    height="2900pt"
-   sodipodi:docname="/usr/src/inkscape-project/inkscape/share/tutorials/elementsofdesign.svg"
-   sodipodi:docbase="/usr/src/inkscape-project/inkscape/share/tutorials"
+   sodipodi:docname="elementsofdesign.svg"
+   sodipodi:docbase="/home/d/ink/inkscape/share/tutorials"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -344,8 +344,8 @@
      inkscape:cy="2814.8024"
      inkscape:window-width="640"
      inkscape:window-height="501"
-     inkscape:window-x="71"
-     inkscape:window-y="122" />
+     inkscape:window-x="74"
+     inkscape:window-y="318" />
   <g
      id="g2131"
      transform="matrix(-2.475098e-2,1.428998e-2,-1.428998e-2,-2.475098e-2,241.1984,3141.798)"
@@ -649,7 +649,7 @@
      style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:11;text-anchor:start;writing-mode:lr;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;"
      x="5.5156250"
      y="3425.7184"
-     id="text1638"
+     id="text1642"
      sodipodi:linespacing="100%"><tspan
        x="5.5156250"
        y="3425.7185"
@@ -660,7 +660,7 @@
      style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Serif;font-style:normal;font-weight:normal;font-size:8.4;text-anchor:start;writing-mode:lr;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;"
      x="6.1679688"
      y="3448.8976"
-     id="text1641"
+     id="text1645"
      sodipodi:linespacing="133%"><tspan
        x="6.1679688"
        y="3448.8977"
@@ -6971,13 +6971,13 @@
        id="tspan2645">[ insert a finished composition here ]</tspan></text>
   <text
      xml:space="preserve"
-     style="fill:#ffffff;fill-opacity:1;stroke:none;font-family:ClassicGaramondSmcOsf;font-style:normal;font-weight:normal;font-size:12;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
-     x="201.13826"
-     y="20.709681"
+     style="font-size:7;font-weight:normal;stroke-width:3pt;font-family:Bitstream Vera Sans;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;fill:#ffffff;fill-opacity:1;"
+     x="177.58583"
+     y="18.600645"
      id="text1920"
      sodipodi:linespacing="100%"
-     transform="scale(0.995670,0.995670)"><tspan
-       id="tspan5124"
-       style="letter-spacing:2.18131;"
-       dx="0 -0.57057059 0 0 0 0 0 0 0 0">::elements</tspan></text>
+     transform="scale(1.130730,1.130730)"><tspan
+       id="tspan2612"
+       dx="0 -0.57057059 0 0 0 0 0 0 0 0"
+       style="letter-spacing:2.18131;fill:#ffffff;fill-opacity:1;">::ELEMENTS</tspan></text>
 </svg>
