@@ -100,12 +100,15 @@ static void sp_export_filename_modified (GtkObject * object, gpointer data);
 static inline void sp_export_find_default_selection(GtkWidget * dlg);
 static void sp_export_detect_size(GtkObject * base);
 
+static const gchar *prefs_path = "dialogs.export";
+
+// these all need to be reinitialized to their defaults during dialog_destroy
 static GtkWidget *dlg = NULL;
 static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
-static const gchar *prefs_path = "dialogs.export";
 static gchar * original_name = NULL;
 static gchar * doc_export_name = NULL;
+static bool was_empty = TRUE;
 
 /** What type of button is being pressed */
 enum selection_type {
@@ -129,10 +132,15 @@ static void
 sp_export_dialog_destroy ( GtkObject *object, gpointer data )
 {
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
+
     wd.win = dlg = NULL;
     wd.stop = 0;
+    x = -1000; y = -1000; w = 0; h = 0;
     g_free(original_name);
+    original_name = NULL;
     g_free(doc_export_name);
+    doc_export_name = NULL;
+    was_empty = TRUE;
 
     return;
 } // end of sp_export_dialog_destroy()
@@ -580,8 +588,6 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
                               SPDesktop *desktop, 
                               GtkObject *base )
 {
-//  std::cout << "Selection Changed" << std::endl;
-    static bool was_empty = TRUE;
     selection_type current_key;
     current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
 

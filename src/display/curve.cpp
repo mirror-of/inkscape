@@ -1027,7 +1027,7 @@ sp_curve_distance_including_space(SPCurve const *const curve, double seg2len[])
     NR::Point prev(curve->bpath->c(3));
     for (gint i = 1; i < curve->end; ++i) {
         NArtBpath &p = curve->bpath[i];
-        double seg_len;
+        double seg_len = 0;
         switch (p.code) {
             case NR_MOVETO_OPEN:
             case NR_MOVETO:

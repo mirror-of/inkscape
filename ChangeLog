@@ -1,3 +1,9 @@
+2004-10-29  Kees Cook  <kees@outflux.net>
+
+	* src/dialogs/export.cpp: moved function-based static state variable
+	  into the dialog state variables.  Closes bug #993447.
+	* src/display/curve.cpp: fixed compile warning.
+
 2004-10-29  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/sp-image.cpp, src/extension/internal/gdkpixbuf-input.cpp:
