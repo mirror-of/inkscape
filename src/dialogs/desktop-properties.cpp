@@ -1302,7 +1302,6 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "grid_units");
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(o), nv->gridunit);
 
-        SPUnit const * const pt = &sp_unit_get_by_id(SP_UNIT_PT);
         gdouble val = nv->gridorigin[NR::X];
         val = sp_pixels_get_units (val, *(nv->gridunit));
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "gridoriginx");
