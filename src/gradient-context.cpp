@@ -425,33 +425,36 @@ static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint st
     SPDocument *document = SP_DT_DOCUMENT(desktop);
     SPEventContext *ec = SP_EVENT_CONTEXT(&rc);
 
-            if (!selection->isEmpty()) {
-                SPGradient *vector;
-                if (ec->item_to_select) {
-                    vector = sp_gradient_vector_for_object(document, desktop, ec->item_to_select, true);
-                } else {
-                    vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(selection->itemList()->data), true);
-                }
-                for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
-                    sp_item_set_gradient(SP_ITEM(i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
-                    sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, true, true);
-                    sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, true, true);
-                    SP_OBJECT (i->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
-                }
-                if (ec->_grdrag) {
-                    ec->_grdrag->updateDraggers();
-                    // prevent regenerating draggers by selection modified signal, which sometimes
-                    // comes too late and thus destroys the knot which we will now grab:
-                    ec->_grdrag->local_change = true;
-                    // give the grab out-of-bounds values of xp/yp because we're already dragging
-                    // and therefore are already out of tolerance
-                    ec->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data), POINT_LG_P2, true, 99999, 99999, etime);
-                }
-                sp_document_done (document);
-            }
+    if (!selection->isEmpty()) {
+        SPGradient *vector;
+        if (ec->item_to_select) {
+            vector = sp_gradient_vector_for_object(document, desktop, ec->item_to_select, true);
+        } else {
+            vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(selection->itemList()->data), true);
+        }
+        for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
+            sp_item_set_gradient(SP_ITEM(i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
+            sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, true, true);
+            sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, true, true);
+            SP_OBJECT (i->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        }
+        if (ec->_grdrag) {
+            ec->_grdrag->updateDraggers();
+            // prevent regenerating draggers by selection modified signal, which sometimes
+            // comes too late and thus destroys the knot which we will now grab:
+            ec->_grdrag->local_change = true;
+            // give the grab out-of-bounds values of xp/yp because we're already dragging
+            // and therefore are already out of tolerance
+            ec->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data), POINT_LG_P2, true, 99999, 99999, etime);
+        }
+        sp_document_done (document);
 
-    // status text
-    rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"), g_slist_length((GSList *) selection->itemList()));
+        // status text; we do not track coords because this branch is run once, not all the time
+        // during drag
+        rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"), g_slist_length((GSList *) selection->itemList()));
+    } else {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> on which to create gradient."));
+    }
 }
 
 
