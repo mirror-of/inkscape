@@ -25,7 +25,6 @@
 #include "svg/stringstream.h"
 #include "attributes.h"
 #include "document.h"
-#include "display/bezier-utils.h"
 #include "display/curve.h"
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
