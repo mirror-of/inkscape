@@ -1,3 +1,13 @@
+2004-05-07  Carl Hetherington <inkscape@carlh.net>
+
+	* src/desktop.cpp: make sure that a SPNamedView's modified signal
+	is connected to the SPDesktop even when a file is loaded into an
+	existing SPDesktop.  Fixes problems whereby grid snap does not
+	work for the first file loaded in a session.  Fix a && -> & typo.
+
+	* src/sp-object.cpp: declaration-to-first-use and coding style
+	cleanups.
+
 2004-05-05 Spundun Bhatt <spundun@isi.edu>
  
         * configure.in: Stole Nathan's configure hack and used it to 
