@@ -70,8 +70,6 @@ gboolean
 sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 {
 	gboolean ret = FALSE; 
-	GtkWindow *w;
-	SPDesktopWidget *dtw;
 
 	switch (event->type) {
 	case GDK_KEY_PRESS:
