@@ -13,7 +13,7 @@
 ##    markers \
 ##    tutorials
 
-SUBDIRS = icons screens extensions
+SUBDIRS = icons screens extensions tutorials
 
 ## COPY THE REST OF THE FOLDERS TO THE PROPER LOCATION
 
