@@ -42,6 +42,7 @@
 #include "display/nr-arena-glyphs.h"
 #include "attributes.h"
 #include "document.h"
+#include "desktop.h"
 #include "style.h"
 #include "version.h"
 #include "inkscape.h"
@@ -185,19 +186,31 @@ sp_letterspacing_advance (const SPStyle *style)
 	NR::Point letterspacing_adv;
 	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
 		if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
-			letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value, 0.0);
+			if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+				letterspacing_adv = NR::Point(0.0, style->font_size.computed * style->text->letterspacing.value);
+			} else {
+				letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value, 0.0);
+			}
 		} else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
 			// I did not invent this 0.5 multiplier; it's what lauris uses in style.cpp
 			// Someone knowledgeable must find out how to extract the real em and ex values from the font!
-			letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value * 0.5, 0.0);
-		} 
+			if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+				letterspacing_adv = NR::Point(0.0, style->font_size.computed * style->text->letterspacing.value * 0.5);
+			} else {
+				letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value * 0.5, 0.0);
+			}
+		} else { // unknown unit - should not happen
+			letterspacing_adv = NR::Point(0.0, 0.0);
+		}
 	} else { // there's a real value in .computed, or it's zero
-		letterspacing_adv = NR::Point(style->text->letterspacing.computed, 0.0);
+		if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+			letterspacing_adv = NR::Point(0.0, style->text->letterspacing.computed);
+		} else {
+			letterspacing_adv = NR::Point(style->text->letterspacing.computed, 0.0);
+		}
 	} 
 	return letterspacing_adv;
 }
-
-/* Vertical metric simulator */
 
 static void
 sp_string_calculate_dimensions (SPString *string)
@@ -2142,3 +2155,57 @@ sp_text_update_length (SPSVGLength *length, gdouble em, gdouble ex, gdouble scal
 	}
 }
 
+/**
+\brief   Adjusts letterspacing in pos'th line of text so that the length of the line is changed by by visible pixels at the current zoom
+*/
+void
+sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop, gdouble by)
+{
+	gdouble val;
+	gdouble zoom, zby;
+
+	SPObject *child;
+	child = sp_text_get_child_by_position (text, pos);
+	if (!child) return;
+
+	SPStyle *style = SP_OBJECT_STYLE (child);
+	SPString *string = SP_TEXT_CHILD_STRING (child);
+
+	// calculate real value
+	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
+		if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
+			val = style->font_size.computed * style->text->letterspacing.value;
+		} else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
+			val = style->font_size.computed * style->text->letterspacing.value * 0.5;
+		} else { // unknown unit - should not happen
+			val = 0.0;
+		}
+	} else { // there's a real value in .computed, or it's zero
+		val = style->text->letterspacing.computed;
+	}
+
+	// divide increment by zoom and by the number of characters in the line,
+	// so that the entire line is expanded by by pixels, no matter what its length
+	zoom = SP_DESKTOP_ZOOM (desktop);
+	zby = by / (zoom * (string->length > 1 ? string->length - 1 : 1));
+
+	val += zby;
+
+	// set back value
+	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
+		if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
+			style->text->letterspacing.value = val / style->font_size.computed;
+		} else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
+			style->text->letterspacing.value = val / style->font_size.computed * 2;
+		} 
+	} else { 
+		style->text->letterspacing.computed = val;
+	}
+
+	style->text->letterspacing.set = TRUE;
+
+	gchar *str;
+	str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT (text)));
+	sp_repr_set_attr (SP_OBJECT_REPR (child), "style", str);
+	g_free (str);
+}

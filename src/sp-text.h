@@ -158,6 +158,6 @@ gint sp_text_end_of_line (SPText *text, gint pos);
 
 void sp_text_get_cursor_coords (SPText *text, gint position, NR::Point &p0, NR::Point &p1);
 
-
+void sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop, gdouble by);
 
 #endif
