@@ -672,10 +672,7 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
             vector = sp_gradient_ensure_vector_normalized (vector);
             const GSList *items = sp_widget_get_item_list (spw);
             for (const GSList *i = items; i != NULL; i = i->next) {
-                SPGradient *lg;
-                lg = sp_item_force_fill_lineargradient_vector ( SP_ITEM
-                                                                    (i->data),
-                                                                vector );
+                SPGradient *lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
                 sp_paint_selector_write_lineargradient ( psel,
                                                          SP_LINEARGRADIENT (lg),
                                                          SP_ITEM (i->data) );
@@ -689,9 +686,7 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
             vector = sp_gradient_ensure_vector_normalized (vector);
             const GSList *items = sp_widget_get_item_list (spw);
             for (const GSList *i = items; i != NULL; i = i->next) {
-                SPGradient *rg = sp_item_force_fill_radialgradient_vector ( SP_ITEM
-                                                                            (i->data),
-                                                                            vector );
+                SPGradient *rg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
                 sp_paint_selector_write_radialgradient ( psel,
                                                          SP_RADIALGRADIENT (rg),
                                                          SP_ITEM (i->data) );
@@ -839,26 +834,25 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     /* No vector in paint selector should mean that we just
                      * changed mode
                      */
-                    vector = sp_document_default_gradient_vector
-                                 (SP_WIDGET_DOCUMENT (spw));
+                    vector = sp_document_default_gradient_vector (SP_WIDGET_DOCUMENT (spw));
 
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                        sp_item_force_fill_lineargradient_vector
-                            (SP_ITEM (i->data), vector );
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+
+                        sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
                     }
                 } else {
 
                     vector = sp_gradient_ensure_vector_normalized (vector);
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                        SPGradient *lg = sp_item_force_fill_lineargradient_vector
-                                 (SP_ITEM (i->data), vector );
+                        //FIXME: see above
+                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+
+                        SPGradient *lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
                         sp_paint_selector_write_lineargradient ( psel,
                                 SP_LINEARGRADIENT (lg), SP_ITEM (i->data));
                         SP_OBJECT(lg)->updateRepr();
-                        //FIXME: see above
-                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
                     }
                 }
 
@@ -884,22 +878,22 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                                  (SP_WIDGET_DOCUMENT (spw));
 
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                        sp_item_force_fill_radialgradient_vector
-                            (SP_ITEM (i->data), vector );
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+
+                        sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
                     }
 
                 } else {
                     vector = sp_gradient_ensure_vector_normalized (vector);
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                        SPGradient *rg = sp_item_force_fill_radialgradient_vector
-                            (SP_ITEM (i->data), vector);
+                        //FIXME: see above
+                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+
+                        SPGradient *rg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
                         sp_paint_selector_write_radialgradient (psel,
                                 SP_RADIALGRADIENT (rg), SP_ITEM (i->data));
                         SP_OBJECT(rg)->updateRepr();
-                        //FIXME: see above
-                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
                     }
                 } 
 

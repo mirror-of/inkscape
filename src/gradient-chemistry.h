@@ -31,8 +31,7 @@ SPGradient *sp_gradient_ensure_vector_normalized (SPGradient *gradient);
  * Vector has to be normalized beforehand
  */
 
-SPGradient *sp_gradient_ensure_private_normalized (SPGradient *gradient, SPGradient *vector);
-SPGradient *sp_gradient_ensure_radial_private_normalized (SPGradient *gradient, SPGradient *vector);
+SPGradient *sp_gradient_ensure_private_normalized (SPGradient *gradient, SPGradient *vector, SPGradientType type);
 
 /*
  * Sets item fill/stroke to lineargradient with given vector, creating
@@ -40,10 +39,7 @@ SPGradient *sp_gradient_ensure_radial_private_normalized (SPGradient *gradient, 
  * gr has to be normalized vector
  */
 
-SPGradient *sp_item_force_fill_lineargradient_vector (SPItem *item, SPGradient *gradient);
-SPGradient *sp_item_force_stroke_lineargradient_vector (SPItem *item, SPGradient *gradient);
-SPGradient *sp_item_force_fill_radialgradient_vector (SPItem *item, SPGradient *gradient);
-SPGradient *sp_item_force_stroke_radialgradient_vector (SPItem *item, SPGradient *gradient);
+SPGradient *sp_item_set_gradient (SPItem *item, SPGradient *gr, SPGradientType type, bool is_fill);
 
 /*
  * Get default normalized gradient vector of document, create if there is none

@@ -501,9 +501,7 @@ sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw)
             vector = sp_gradient_ensure_vector_normalized(vector);
             GSList const *items = sp_widget_get_item_list(spw);
             for (GSList const *i = items; i != NULL; i = i->next) {
-                SPGradient *lg
-                    = sp_item_force_stroke_lineargradient_vector(SP_ITEM(i->data),
-                                                                 vector);
+                SPGradient *lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
                 sp_paint_selector_write_lineargradient(psel,
                                                        SP_LINEARGRADIENT(lg),
                                                        SP_ITEM(i->data) );
@@ -517,9 +515,7 @@ sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw)
             vector = sp_gradient_ensure_vector_normalized(vector);
             GSList const *items = sp_widget_get_item_list(spw);
             for (GSList const *i = items; i != NULL; i = i->next) {
-                SPGradient *rg
-                    = sp_item_force_stroke_radialgradient_vector(SP_ITEM(i->data),
-                                                                 vector);
+                SPGradient *rg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
                 sp_paint_selector_write_radialgradient(psel,
                                                        SP_RADIALGRADIENT(rg),
                                                        SP_ITEM(i->data));
@@ -638,30 +634,29 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 
             if (items) {
                 SPGradient *vector = sp_paint_selector_get_gradient_vector(psel);
+                SPGradient *lg;
 
                 if (!vector) {
                     /* No vector in paint selector should mean that we just
                      * changed mode
                      */
-                    vector =
-                        sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw));
+                    vector = sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw));
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        sp_item_force_stroke_lineargradient_vector(SP_ITEM(i->data), vector);
+                        lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
+                        SP_OBJECT(lg)->updateRepr();
                     }
                 } else {
                     vector = sp_gradient_ensure_vector_normalized(vector);
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        SPGradient *lg;
-                        lg = sp_item_force_stroke_lineargradient_vector(SP_ITEM(i->data), vector);
-                        sp_paint_selector_write_lineargradient(psel,
-                                                               SP_LINEARGRADIENT(lg),
-                                                               SP_ITEM(i->data));
-
+                        lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
+                        sp_paint_selector_write_lineargradient(psel, SP_LINEARGRADIENT(lg), SP_ITEM(i->data));
                         SP_OBJECT(lg)->updateRepr();
                     }
                 }
+
                 sp_document_done(SP_WIDGET_DOCUMENT(spw));
+
             }
             break;
 
@@ -674,13 +669,12 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                      */
                     vector = sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw));
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        sp_item_force_stroke_radialgradient_vector(SP_ITEM(i->data), vector);
+                        sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
                     }
                 } else {
                     vector = sp_gradient_ensure_vector_normalized(vector);
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        SPGradient *lg
-                            = sp_item_force_stroke_radialgradient_vector(SP_ITEM(i->data), vector);
+                        SPGradient *lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
                         sp_paint_selector_write_radialgradient(psel,
                                                                SP_RADIALGRADIENT(lg),
                                                                SP_ITEM(i->data));
