@@ -30,6 +30,15 @@ NR::Coord NR::atan2(Point const p) {
     return std::atan2(p[NR::Y], p[NR::X]);
 }
 
+/** Returns a version of \a a scaled to be a unit vector (within rounding error).
+ *
+ *  The current version tries to handle infinite coordinates gracefully,
+ *  but it's not clear that any callers need that.
+ *
+ *  \pre a != Point(0, 0).
+ *  \pre Neither coordinate is NaN.
+ *  \post L2(ret) very near 1.0.
+ */
 Point NR::unit_vector(Point const &a)
 {
     Point ret(a);
