@@ -15,8 +15,8 @@
 #endif
 
 #include "tracedialog.h"
-#include <trace.h>
-#include <potrace/inkscape-potrace.h>
+#include <trace/trace.h>
+#include <trace/potrace/inkscape-potrace.h>
 
 #include <gtkmm.h>
 #include <gtkmm/box.h>

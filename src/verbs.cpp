@@ -40,7 +40,7 @@
 #include "dialogs/find.h"
 #include "dialogs/debugdialog.h"
 
-#include "trace.h"
+#include "trace/trace.h"
 
 #include "tools-switch.h"
 #include "inkscape-private.h"

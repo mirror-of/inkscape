@@ -13,7 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <trace.h>
+#include <trace/trace.h>
 
 namespace Inkscape
 {
