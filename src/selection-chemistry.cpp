@@ -223,33 +223,37 @@ void sp_edit_select_all()
     bool onlyvisible = prefs_get_int_attribute ("options.kbselection", "onlyvisible", 1);
     bool onlysensitive = prefs_get_int_attribute ("options.kbselection", "onlysensitive", 1);
 
+    GSList *items = NULL;
+
     if (inlayer) {
 
         if ( (onlysensitive && SP_ITEM(dt->currentLayer())->isLocked()) ||
              (onlyvisible && dt->itemIsHidden(SP_ITEM(dt->currentLayer()))) )
         return;
 
-        GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
-        while (items) {
-            SPRepr *repr = SP_OBJECT_REPR(items->data);
-            if ((!onlysensitive || !SP_ITEM(items->data)->isLocked()) && 
-                (!onlyvisible || !dt->itemIsHidden(SP_ITEM(items->data))) &&
-                !dt->isLayer(SP_ITEM(items->data)) &&
-                !selection->includesRepr(repr)) {
-                selection->addRepr(repr);
+        GSList *all_items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
+
+        for (GSList *i = all_items; i; i = i->next) {
+            SPItem *item = SP_ITEM (i->data);
+
+            if (item && (!onlysensitive || !item->isLocked())) {
+                if (!onlyvisible || !dt->itemIsHidden(item)) {
+                    if (!dt->isLayer(item)) {
+                        items = g_slist_prepend (items, item); // leave it in the list
+                    }
+                }
             }
-            items = g_slist_remove(items, items->data);
         }
+
+        g_slist_free (all_items);
+
     } else {
-        GSList *all_items = get_all_items (NULL, dt->currentRoot(), dt, onlyvisible, onlysensitive);
-        for ( GSList const *iter = all_items ; iter != NULL ; iter = iter->next ) {
-            SPObject *const obj = SP_OBJECT(iter->data);
-            if (obj == NULL) {
-                g_warning("get_all_items returned null element");
-            } else if (!selection->includes(obj)) {
-                selection->add(obj);
-            }
-        }
+        items = get_all_items (NULL, dt->currentRoot(), dt, onlyvisible, onlysensitive);
+    }
+
+    if (items) {
+        selection->setList (items);
+        g_slist_free (items);
     }
 }
 
