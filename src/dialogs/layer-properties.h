@@ -17,6 +17,8 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/label.h>
 #include <gtkmm/table.h>
 
 #include "selection.h"
@@ -39,8 +41,9 @@ class LayerPropertiesDialog : public Gtk::Dialog {
     LayerPropertiesDialog(const LayerPropertiesDialog&);
     LayerPropertiesDialog& operator=(const LayerPropertiesDialog&);
 
-    Gtk::HBox         _hbox;
-    Gtk::VBox         _vbox;
+    Gtk::HBox         _layer_name_hbox;
+    Gtk::Label        _layer_name_label;
+    Gtk::Entry        _layer_name_entry;
     Gtk::HButtonBox   _hbuttonbox;
     Gtk::Button       _button_apply;
     Gtk::Button       _button_close;

@@ -20,6 +20,7 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/table.h>
 
+#include "dialogs/dialog-events.h"
 #include "helper/sp-intl.h"
 #include "inkscape.h"
 #include "desktop.h"
@@ -33,18 +34,29 @@ namespace UI {
 namespace Dialogs {
 
 LayerPropertiesDialog::LayerPropertiesDialog()
-    : _vbox(false, 4)
+    : _button_apply(_("Apply")),
+      _button_close(_("Close"))
 {
-    set_title(_("Layer Properties"));
-//    sp_transientize();
+    GtkWidget *dlg = GTK_WIDGET(gobj());
+    g_assert(dlg);
 
-    add(_hbox);
-    _hbox.pack_start(_vbox, true, true);
+    set_title(_("Layer Properties"));
+
+    sp_transientize(dlg);
+
+//    set_size_request(200,200);
+
+    Gtk::VBox *mainVBox = get_vbox();
+
+    _layer_name_label.set_label(_("Layer Name:"));
+    _layer_name_hbox.pack_end(_layer_name_entry, false, false, 4);
+    _layer_name_hbox.pack_end(_layer_name_label, false, false, 4);
+    mainVBox->pack_start(_layer_name_hbox, false, false, 4);
 
     // Buttons
-    _vbox.pack_start(_hbuttonbox, false, false);
     _hbuttonbox.pack_start(_button_apply, false, false);
     _hbuttonbox.pack_start(_button_close, false, false);
+    mainVBox->pack_end(_hbuttonbox, false, false);
 
     _button_apply.signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::apply));
