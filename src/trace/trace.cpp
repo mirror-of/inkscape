@@ -58,7 +58,7 @@ Trace::getSelectedSPImage()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop)
         {
-        g_warning("Trace: no active desktop\n");
+        g_warning("Trace: No active desktop\n");
         return NULL;
         }
 
@@ -128,13 +128,13 @@ void Trace::convertImageToPathThread()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop)
         {
-        g_warning("Trace: no active desktop\n");
+        g_warning("Trace: No active desktop\n");
         return;
         }
 
     if (!SP_ACTIVE_DOCUMENT)
         {
-        char *msg = _("Trace: no active document");
+        char *msg = _("Trace: No active document");
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         engine = NULL;
@@ -155,7 +155,7 @@ void Trace::convertImageToPathThread()
 
     if (!pixbuf)
         {
-        char *msg = _("Trace: mage has no bitmap data");
+        char *msg = _("Trace: Image has no bitmap data");
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         engine = NULL;
