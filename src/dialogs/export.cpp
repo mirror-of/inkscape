@@ -17,7 +17,10 @@
 #include <math.h>
 #include <string.h>
 #include <glib.h>
+#include <gtk/gtkfilesel.h>
+#include <gtk/gtkmain.h>
 #include <gtk/gtksignal.h>
+#include <gtk/gtkstock.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkframe.h>
