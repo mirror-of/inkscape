@@ -24,6 +24,7 @@
 #include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-ops.h>
 
+static void knot_clicked_handler (SPKnot *knot, guint state, gpointer data);
 static void knot_moved_handler (SPKnot *knot, NR::Point *p, guint state, gpointer data);
 static void knot_ungrabbed_handler (SPKnot *knot, unsigned int state, SPKnotHolder *kh);
 
@@ -84,15 +85,16 @@ sp_knot_holder_destroy	(SPKnotHolder *kh)
 }
 
 void
-sp_knot_holder_add (SPKnotHolder *knot_holder, SPKnotHolderSetFunc knot_set, SPKnotHolderGetFunc knot_get, const gchar *tip)
+sp_knot_holder_add (SPKnotHolder *knot_holder, SPKnotHolderSetFunc knot_set, SPKnotHolderGetFunc knot_get, void (* knot_click) (SPItem *item, guint state), const gchar *tip)
 {
-	sp_knot_holder_add_full (knot_holder, knot_set, knot_get, SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR, tip);
+	sp_knot_holder_add_full (knot_holder, knot_set, knot_get, knot_click, SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR, tip);
 }
 
 void
 sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 			 SPKnotHolderSetFunc knot_set,
 			 SPKnotHolderGetFunc knot_get,
+			 void (* knot_click) (SPItem *item, guint state),
 			 SPKnotShapeType     shape,
 			 SPKnotModeType      mode,
 			 const gchar *tip)
@@ -108,6 +110,11 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 	e->knot = sp_knot_new (knot_holder->desktop, tip);
 	e->knot_set = knot_set;
 	e->knot_get = knot_get;
+	if (knot_click) {
+		e->knot_click = knot_click;
+	} else {
+		e->knot_click = NULL;
+	}
 
 	g_object_set (G_OBJECT (e->knot->item), "shape", shape, NULL);
 	g_object_set (G_OBJECT (e->knot->item), "mode", mode, NULL);
@@ -118,6 +125,7 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 	sp_knot_set_position (e->knot, &dp, SP_KNOT_STATE_NORMAL);
 
 	e->handler_id = g_signal_connect (G_OBJECT (e->knot), "moved", G_CALLBACK (knot_moved_handler), knot_holder);
+	g_signal_connect (G_OBJECT (e->knot), "clicked", G_CALLBACK (knot_clicked_handler), knot_holder);
 
 	g_signal_connect (G_OBJECT (e->knot), "ungrabbed", G_CALLBACK (knot_ungrabbed_handler), knot_holder);
 
@@ -125,6 +133,24 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 	g_signal_connect (ob, "destroy", sp_knot_holder_debug, "SPKnotHolder::knot");
 #endif
 	sp_knot_show (e->knot);
+}
+
+static void
+knot_clicked_handler (SPKnot *knot, guint state, gpointer data)
+{
+	SPKnotHolder *knot_holder = (SPKnotHolder *) data;
+	SPItem *item  = SP_ITEM (knot_holder->item);
+
+	for (GSList *el = knot_holder->entity; el; el = el->next) {
+		SPKnotHolderEntity *e = (SPKnotHolderEntity *) el->data;
+		if (e->knot == knot) {
+			if (e->knot_click)
+				e->knot_click (item, state);
+			break;
+		}
+	}
+
+	sp_shape_set_shape (SP_SHAPE (item));
 }
 
 static void

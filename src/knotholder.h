@@ -34,6 +34,7 @@ struct SPKnotHolderEntity {
 	guint   handler_id;
 	void (* knot_set) (SPItem *item, NR::Point const &p, guint state);
 	NR::Point (* knot_get) (SPItem *item);
+	void (* knot_click) (SPItem *item, guint state);
 };
 
 struct SPKnotHolder {
@@ -54,10 +55,11 @@ SPKnotHolder *sp_knot_holder_new (SPDesktop *desktop, SPItem *item, SPKnotHolder
 
 void sp_knot_holder_destroy (SPKnotHolder *knots);
 
-void sp_knot_holder_add (SPKnotHolder *knot_holder, SPKnotHolderSetFunc knot_set, SPKnotHolderGetFunc knot_get, const gchar *tip);
+void sp_knot_holder_add (SPKnotHolder *knot_holder, SPKnotHolderSetFunc knot_set, SPKnotHolderGetFunc knot_get, void (* knot_click) (SPItem *item, guint state), const gchar *tip);
 void sp_knot_holder_add_full (SPKnotHolder *knot_holder,
 			      SPKnotHolderSetFunc knot_set,
 			      SPKnotHolderGetFunc knot_get,
+                         void (* knot_click) (SPItem *item, guint state),
 			      SPKnotShapeType shape,
 			      SPKnotModeType mode,
 				const gchar *tip);
