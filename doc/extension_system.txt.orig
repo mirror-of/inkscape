@@ -1,0 +1,954 @@
+
+== 1.0.0  Introduction ===
+
+The extensions system in Inkscape is a way for adding functionality to
+Inkscape, without affecting the core of the program itself.  We want
+Inkscape to follow a core-plus-modules approach similar to that adopted
+by many successful open source projects such as the Linux kernel, Perl,
+Apache, Gimp, and so on.  There are many different types of extension
+mechanisms, including file format conversion tools, filter scripts that
+process SVG, user interface elements that can be added at runtime, and
+so forth.
+
+This proposal defines a design for handling this wide variety of
+extensions in a flexible manner.
+
+
+=== 2.0.0  Terminology ===
+
+Extension - An extension is something that extends the functionality
+of Inkscape without being directly part of the core.   This implies
+that it should be easy to remove or add, and nothing in the core
+should depend on it directly.
+
+Extension Type - Establishes the functional interface that the
+Extension provides, including the types of messages it handles and
+what is contained in its data structures.
+
+Extension Implementation - Defines how the extension is accessed;
+i.e. through message passing, pipe/exec calls with commandline
+arguments, direct function calls, etc.
+
+Plug-in - An extension that is implemented through a loadable
+library.  This is a .o file on Unix-like systems or a .dll on Win32.
+The libraries should not be loaded until they are used.
+
+Script - A script is a type of extension that is implemented through
+an external program that recieves and sets SVG data through files and
+pipes.  This allows Inkscape to use programs that handle SVG but are
+targeted differently, seemlessly inside of Inkscape.
+
+Language Binding - A special type of plug-in that wrappers a script
+language interpreter such as Perl, Python, Lisp, etc.  A user
+interested in programmatic access to Inkscape's internals via one of
+these languages can install (or create) the relevant Language Binding
+Plug-in to achieve this.
+
+INX - 'INkscape eXtension' - The filename extension used for XML
+metadata files that describe each Inkscape Extension.
+
+
+=== 3.0.0  Requirements ===
+
+* Uses a general language binding system so it's easy to add new language
+  binding support
+* Allows direct interaction with the document object model including changing
+  styles, adding/removing defs and elements, etc.
+* Allows some limited interaction with the Inkscape UI such as manipulating
+  grids, overlays, etc.
+* Allows direct interaction with file load/save/export/print subsystem
+* Guaranteed to work properly with the undo system, even if the extension is
+  not written carefully
+* Well documented so is easy for people to learn how to make new extensions
+* Each extension can be implemented, distributed, and managed independently of
+  the core project
+* Icons, buttons, and other UI elements for extensions fit seamlessly into
+  main application GUI
+* User can easily select which extensions to automatically load into
+  application at startup
+* Loading of extensions shall not seriously slow startup time or make a major
+  impact on memory footprint
+* Failure of a extension shall not leave the drawing in an inconsistent state
+* Main application must gracefully recover from extension crashes or other
+  serious problems with extension execution
+* Dependencies for particular extensions must be clearly identified for user
+  if missing
+
+=== 4.0.0  Overview ===
+
+Different kinds of extensions can be categorized in two ways.  First,
+but what the extension does: File format converters, printing, SVG
+manipulation, symbol libraries, etc.  Second, by how the extension is
+implemented: command-line scripts, dynamically loaded libraries,
+internal compiled-in code, etc.
+
+The first kind of categorization is called the Extension Type.  This
+essentially establishes a calling interface and the set of messages the
+extension must be able to receive and handle.  For example, extensions
+of type Print must have a way to handle 'print' message.
+
+The second is the Extension Implementation.  This defines the mechanism
+Inkscape must use for passing messages to the extension.  For example,
+commandline scripts would have messages passed as commandline arguments,
+whereas loadable plug-ins would have the messages passed to the
+plug-in's message handler routine.
+
+The categories of both Extension Types and Extension Implementations are
+left open ended.  This way, if someone comes up with new ideas for ways
+to extend Inkscape that doesn't fit within the existing models, they can
+add these mechanisms in a straightforward fashion.
+
+For the purposes of this document, however, we focus on just the
+following Types and Implementations:
+
+ Extension Types
+    Input    - loading various file formats
+    Output   - saving as various file formats
+    Effect   - apply some sort of change to SVG elements in the doc
+    Print    - prints using different drivers or modes
+
+ Extension Implementations
+    Internal - code callable directly within Inkscape,
+    Script   - a cmdline program that takes an SVG document to its STDIN
+               and emits a modified SVG document to its STDOUT, with
+               control messages given as commandline parameters.
+    Plug-in  - a loadable module with a message handler routine that
+               receives messages and that operates on the Inkscape API
+               functions directly.
+    Library  - a collection of SVG files that can be queried and loaded
+               from the file system into the document.  Each item in a
+               library has a thumbnail and metadata.
+
+
+=== 5.0.0  Extension System Basics ===
+
+Leaving the topic of Types and Implementations aside, we can make some
+generalizations about how all Extensions work, and behaviors or
+attributes that all Extensions share.  This includes how they are
+registered, how they handle preferences, how dependency resolution is
+achieved, and versioning.  These common behaviors are all established
+via a base class that all Extension Types derive from.
+
+
+==== 5.1.0  Extension Base Class ====
+
+The Extension base class holds the attribute data that all extensions
+must have and establishes the base functionality that all extensions
+share.
+
+ class Extension {
+    gchar *       id;
+    gchar *       name;
+    state_t       state;
+    SPRepr *      repr;
+    GSList *      parameters;
+
+ public:
+    void          set_state    (state_t in_state);
+    state_t       get_state    ();
+    bool          loaded       ();
+    virtual bool  check        ();
+    SPRepr *      get_repr     ();
+    gchar *       get_id       ();
+    gchar *       get_name     ();
+    void          deactivate   ();
+    bool          deactivated  ();
+    void          get_param    (gchar * name, bool *   value);
+    void          get_param    (gchar * name, int *    value);
+    void          get_param    (gchar * name, gchar ** value);
+    bool          set_param    (gchar * name, bool     value);
+    int           set_param    (gchar * name, int      value);
+    gchar *       set_param    (gchar * name, gchar *  value);
+ };
+
+==== 5.2.0  Extension Registry ====
+
+Inkscape maintains a data structure of all the registered extensions.
+This registry can be queried against to retrieve lists of extensions
+meeting various conditions (such as recently-used extensions, or all
+Input extensions).
+
+
+===== 5.2.1  Extension Attributes =====
+
+ name      - the human readible name of the extension, with spaces and
+             capitalization, suitable for display in dropdown menus.
+             E.g. 'Dia Import'
+
+ id        - a unique key for identifying the extension, using the
+             java-style naming convention.  E.g.,
+             'org.inkscape.input.dia'
+
+ last_used - an indicator of the time that the extension was last
+             invoked.  This permits Inkscape to identify extensions not
+             in regular use, and unload them to conserve memory.
+
+ num_used  - the number of times the extension has been used since
+             program start-up.  This allows Inkscape to keep heavily
+             used extensions in memory, even if they've not been used in
+             a while.
+
+===== 5.2.2  Extension Functionality =====
+
+ load      - allocates memory usage when extension is to be used.
+             E.g., loadable libraries can be loaded up
+
+ unload    - deallocates memory when extension is not in use, to help
+             conserve memory.  E.g., loadable libraries can be freed
+
+ register  - called by the Extension constructor to add the extension to
+             the Extension Registry
+
+ unregister -called by the Extension destructor to dereference the
+             extension from the Extension Registry
+
+===== 5.2.3 Refreshing Registry =====
+
+Inkscape will have a command accessible from its menus for reloading the
+entirety of the registry.  This provides a mechanism for the user to
+access newly-installed extensions without needing to restart Inkscape.
+
+When the registry is refreshed, all currently-loaded extensions should
+first be unloaded.  When refreshed, no extensions (except for the
+standard defaults) should be loaded in memory.
+
+==== 5.3.0  Handling Preferences ====
+
+Extensions may wish to persist certain values or settings selected by
+the user or specified at installation time.
+
+User settings can be handled via the Inkscape Preferences system.  This
+is particularly appropriate for setting expected to change during use
+and that have suitable defaults that can be used if this is the first
+time the user has run it.   See section 7.1.6 for details on use of this
+system.
+
+Installation settings are best handled by writing into the extension
+metadata file (*.inx, see below) during installation.  These files are
+stored in a global location and shared by all users on the system, thus
+are appropriate for storing general defaults or values that won't change
+during use.  This is covered in the following section.
+
+
+==== 5.4.0  INX File Format ====
+
+Every Extension must have a definition file, *.inx.  Inkscape loads
+these files during initialization (and subsequently as requested) to
+learn what extensions are available to it.  The file is an XML format
+with a top-level element 'inkscape-extension', which contains the
+following sub-elements:
+
+    name      - required
+    id        - required
+    version   - required
+    deps      - optional; lists the dependencies
+    type      - "input", "output", etc.
+    impl      - "internal", "script", "plug-in", etc.
+
+The deps section contains a list of elements that indicate
+pre-requisites for use of the extension.  For instance, it may require
+that other extensions be present, or require a certain version level of
+internal functionality, or require the presence of a certain file in the
+file system, or require a certain service be active like a database or
+mail service.  Each dependency can also be marked as required or
+optional, or if it satisfies another dependency.
+
+ Deps
+    type      - required; "extension", "file", "service", etc.
+    id        - required; the identity of the dependency it requires.
+                E.g., 'org.inkscape.dia_import', '/etc/foo.conf', 'mysqld'
+    version   - optional; a simple regexp pattern used to find if the
+                available version is sufficient to satisfy the dependency
+    required  - if present, the dependency is required; if not present,
+                it's treated as an optional dependency
+    satisfies - optional; gives a list of other deps that it will
+                satisfy.  For instance, either 'postgres' or 'mysql' could
+                satisfy a 'sql_database' dependency.
+
+The type and impl elements can contain sub-elements of their own:
+
+ Type
+    extension
+    mimetype
+    filetypename
+    filetypetooltip
+
+ Impl
+    command
+    helper_extension
+    check
+
+Also see section 8.4.0.
+
+
+==== 5.5.0  Checking Dependencies ====
+
+Inkscape loads all of the *.inx files by default.  Later, it performs a
+dependency check on all of the extensions, dropping any whose dependency
+needs have not been met.  This is performed by first checking that there
+is a valid extension id matching the deps->id, and then comparing each
+of the deps->version regexp patterns against the available extension
+version.
+
+
+==== 5.6.0  Accessing the Inkscape Internal APIs ====
+
+Extensions interact with the published API's of other extensions and
+with Inkscape itself.  Inkscape provides its internal functionality via
+special "Internal" Extensions.  See Section 7.1 for details of what is
+available.
+
+The manner that the internal API's are invoked is dependent on the kind
+of Extension Implementation.  Plug-ins, for instance, generate messages
+that are returned to the application.  Scripts, on the other hand, do
+not handle messages or work interactively, but instructions can be
+passed via commandline arguments.
+
+
+=== 6.0.0  Extension Types ===
+
+Each Extension is identified by it's 'Type'.  This determines the type
+of programmatic interface that it adheres to, enabling Inkscape to know
+what functionality it can expect from the extension.
+
+==== 6.1.0  Input ====
+
+An input extension provides a way to get data into Inkscape.  This type of
+extension creates a document given a filename.  This is done by using
+the 'open' method within the class.  Also, there is a 'prefs' function
+which will generate a GtkDialog.  This dialog is then used to get any
+settings that the incomming file and extension my use.  This function is
+executed, and the dialog returns, before the open method is called.
+
+There are also several other settings stored in an Input extension.
+This includes information on the type of file the input module can take
+in including its filename extension and mime type.  Also, there is a
+space to store a tooltip for additional information on the file type in
+the file dialog.  Lastly, there is the key of which Output extension is
+recommended for saving this filetype.  This is useful, as there is no
+other direct links between the Input and Ouput functions, and a user
+expects to be able to open and save without using the 'Save As...'
+dialog.
+
+ class Input : public Extension {
+    gchar *     mimetype;          // What is the mime type this inputs?
+    gchar *     extension;         // The extension of the input files
+    gchar *     filetypename;      // A userfriendly name for the file type
+    gchar *     filetypetooltip;   // A more detailed description of the
+    filetype
+    gchar *     output_extension;  // Setting of what output extension should
+    be used
+
+    virtual bool  check                ();
+    SPDocument *  open                 (gchar const *uri);
+    gchar *       get_extension        ();
+    gchar *       get_filetypename     ();
+    gchar *       get_filetypetooltip  ();
+    GtkDialog *   prefs                (gchar const *uri);
+ };
+
+==== 6.2.0  Output ====
+
+An output extension controls how SVG documents are exported from Inkscape.
+This type of extension creates a file given a document object.  This is
+done using the 'save' method within the class.
+
+The method for how files are exported depends on what type of
+Implementation is used.  For Scripts, the file is first saved as a
+temporary SVG file, and then processed by calling the commandline
+programs to convert it.  For Plug-ins, the document object is passed to
+the extension with a 'save' message and a filename, and the extension
+program performs the file save operation itself.
+
+ class Output : public Extension {
+    gchar *mimetype;             // What is the mime type this inputs?
+    gchar *extension;            // The extension of the input files
+    gchar *filetypename;         // A userfriendly name for the file type
+    gchar *filetypetooltip;      // A more detailed description of the
+    filetype
+    bool   dataloss;             // The extension causes data loss on save
+
+ public:
+    virtual bool check                (void);
+    void         save (SPDocument *doc,
+                       gchar const *uri);
+    GtkDialog *  prefs ();
+    gchar *      get_extension();
+    gchar *      get_filetypename();
+    gchar *      get_filetypetooltip();
+ };
+
+==== 6.3.0  Effect ====
+
+Effect extensions cause a modification of a loaded document.  For
+example, it might add a new shape to the drawing, or change all selected
+objects to be purple with green dotted borders.
+
+ class Effect : public Extension {
+
+ public:
+    virtual bool check   ();
+    GtkDialog *  prefs   ();
+    void         effect  (SPDocument * doc);
+ };
+
+==== 6.4.0  Print ====
+
+The Print Extension Type is for extensions that interface with printing
+subsystems.  Examples would be Win32, postscript, and GNOME Print.
+
+ class Print : public Extension {
+    SPItem *base;
+    NRArena *arena;
+    NRArenaItem *root;
+    unsigned int dkey;
+
+ public:
+    bool          check       ();
+
+    /* FALSE means user hit cancel */
+    unsigned int  setup       ();
+    unsigned int  set_preview ();
+
+    unsigned int  begin       (SPDocument *doc);
+    unsigned int  finish      ();
+
+    /* Rendering methods */
+    unsigned int  bind        (NRMatrix const *transform,
+                               float opacity);
+    unsigned int  release     ();
+    unsigned int  fill        (NRBPath const *bpath,
+                               NRMatrix const *ctm,
+                               SPStyle const *style,
+                               NRRect const *pbox,
+                               NRRect const *dbox,
+                               NRRect const *bbox);
+    unsigned int  stroke      (NRBPath const *bpath,
+                               NRMatrix const *transform,
+                               SPStyle const *style,
+                               NRRect const *pbox,
+                               NRRect const *dbox,
+                               NRRect const *bbox);
+    unsigned int  image       (unsigned char *px,
+                               unsigned int w,
+                               unsigned int h,
+                               unsigned int rs,
+                               NRMatrix const *transform,
+                               SPStyle const *style);
+    unsigned int  text        (char const *text,
+                               NR::Point p,
+                               SPStyle const *style);
+    bool          textToPath  ();
+ };
+
+
+
+=== 7.0.0  Extension Implementations ===
+
+==== 7.1.0  Internal ====
+
+Access to Inkscape internals is provided through the Internal classes.
+These classes expose APIs for various compiled-in functionality that can
+be used by other extensions.
+
+The Internal functionality is grouped into different sets, as follows.
+
+===== 7.1.1  File Operations =====
+
+Ability to load/print/save/close documents
+
+     doc    file_open (gchar * uri, Inkscape::Extension::Input
+                  * ext)
+
+     bool   file_save (SPDocument * doc, gchar * uri,
+                 Inkscape::Extension::Output * ext)
+
+     bool   print_doc (SPDOcument * doc)
+
+===== 7.1.2  SVG DOM Object Hierarchy =====
+
+Access to the document's SVG::DOM object hierarchy
+
+     array  getElements(string element_name)
+     string getElementName()
+     string getElementByID(string id)
+     string getElementID()
+     hash   getAttributes()
+     string getAttribute(string attribute)
+     bool   SetAttribute(string name, string value)
+     bool   SetAttributes(hash)
+     bool   hasChildren()
+     array  getChildren()
+     obj    getFirstChild()
+     obj    getLastChild()
+     array  getSiblings()
+     obj    getNextSibling()
+     obj    getPrevSibling()
+     int    getChildIndex()
+     obj    getChildAtIndex(int index)
+     obj    getParent()
+     array  getParents()
+     bool   isAncestor(obj)
+     bool   isDescendant(obj)
+     cdata  getCDATA()
+
+
+===== 7.1.5  Inkscape Verbs =====
+
+A verb is an identifier used to retrieve standard Actions for particular
+views.  Verbs are used to invoke a wide variety of operations, called
+Actions, in the Inkscape application.  For instance, typical verbs
+include 'FileOpen', 'FileImport', 'EditDuplicate', 'SelectionLower',
+'ObjectToCurve', 'DrawText', 'ToggleGrid', and the like.  Essentially,
+everything invokable via a menu in Inkscape can be similarly activated
+using its verb.
+
+The following routines are provided to extensions in order to interact
+with the verb system:
+
+     int    verb_find(string verb_name) - looks up the numerical ID
+            of the given verb name.  (E.g., it could pull it out of the
+            SPVerbActionDef props[] static object)
+
+     action verb_get_action(int verb, view) - retrieves the Action
+            object for the verb in the given view
+
+     view   action_get_view(action) - retrieves the view, given the
+            action object
+
+     void   action_perform(action, data, pdata) - invokes the Action
+            for the verb.  It validates the parameters and calls the
+            appropriate listener that will handle the action.
+
+     void   action_set_active(action, state, data)
+
+     void   action_set_sensitive(action, state, data)
+
+
+===== 7.1.6  Inkscape Preferences =====
+
+These Internal methods permit access to the Inkscape Preferences
+system.  Extensions can look up, set, or add values to the user
+preferences, and they will be persistently stored in the file
+~/.inkscape/preferences.xml
+
+    void    prefs_set_int_attribute(string path, string attr, int value);
+
+    int     prefs_get_int_attribute(string path, string attr, gint def);
+
+    int     prefs_get_int_attribute_limited(string path, string attr,
+                  int def, int min, int max);
+
+    void    prefs_set_double_attribute(string path, string attr,
+                  double value);
+
+    double  prefs_get_double_attribute(string path, string attr,
+                  double def);
+
+    double  prefs_get_double_attribute_limited(string path,
+                   string attr, double def, double min, double max);
+
+    string  prefs_get_string_attribute(string path, string attr);
+
+    void    prefs_set_string_attribute(string path, string attr,
+                   string value);
+
+    void    prefs_set_recent_file(string uri, string name);
+
+    string[] prefs_get_recent_files();
+
+See HandlingPreferences in Wiki for further details.
+
+===== 7.1.7  Stock SVG Defs =====
+
+These routines provide access to the default SVG defs in Inkscape,
+including things like gradients, markers, and patterns.  Note that this
+does not cover the defs in the documents themselves, which can be
+accessed via the document's SVG DOM.
+
+    obj get_stock_item(string urn) - returns a pointer to an instance of
+            the desired stock object in the current doc, importing the
+            object if necessary.
+
+    void set_stock_item_from_svg(???) - adds a new stock SVG def to the
+            Inkscape Application.  All currently loaded and new
+            documents will have access to the item.
+
+
+===== 7.1.8  Extension based variables
+
+These are the variables that control settings for the individual
+extension.  Things that are held internally, but should be saved with
+the Inkscape preferences.  These are:
+
+     get_param (gchar * name, [bool, int, gchar *] data) - This function
+            gets the variable by the name 'name' with the data in
+            'data'.  It can be a boolean, integer or a string.
+
+     set_param (gchar * name, [bool, int, gchar *] data) - This function
+            sets the variable by the name 'name' with the data in
+            'data'.  It can be a boolean, integer or a string.  In the
+            case of the string it is copied.
+
+For examples of API functions, see the perl SVG, SVG::DOM, et al modules
+
+===== 7.1.9  Extension Manager =====
+
+The Extension Manager Extension enables extensions such as Plug-ins to
+access other extensions.
+
+    acquireExtension(extension_name, extension_version, &ext_obj);
+
+    releaseExtension(extension_name, extension_version);
+
+
+==== 7.2.0  Scripts ====
+
+Script Extensions are external executables that Inkscape can invoke to
+enact needed changes.  A Perl script such as ill2svg.pl is a typical
+example, but the Script Extension actually need not be a scripting
+language at all - it could be a binary application such as Sketch.  The
+key thing is that it must operate like a commandline utility, taking
+input from STDIN and producing its changed version to STDOUT.
+
+The class Extension::Implementation::Script is the interface to the
+scripts, and includes the following methods:
+
+
+    SPDocument *open(Extension *key, gchar const *filename);
+
+    void        save(Extension *key, SPDocument *doc, gchar const *filename,
+                     bool setextension, bool check_overwrite, bool official);
+
+    void        filter(GtkObject *object, gchar const *key);
+
+    Print *     get_print(gchar const *key);
+
+    Extension * build_from_file(gchar const *filename);
+
+    Extension * build_from_mem(gchar const *buffer,
+                              Implementation *in_imp);
+
+
+==== 7.3.0  Plug-Ins ====
+
+Plug-ins are extensions implemented via loadable modules such as DLL's
+(on Windows) or .so's (on *nix), using C linkage.  Each plug-in has a
+message handler function that Inkscape can call.
+
+A plug-in is able to request access to blocks of functionality, such
+as data structure functions or UI elements.  The plug-in can use the
+blocks of functionality it has been granted access to.  The plug-in can
+also publish its own block of functions, to be used by other plug-ins.
+
+Each block of functionality can be versioned, so that interfaces can
+change with backwards compatibility later.
+
+
+===== 7.3.1  Plug-in Shared Object Format =====
+
+A Plug-in must define a function with C binding to create the extension.
+This function creates an Extension object for itself and returns the
+memory pointer:
+
+  extern "C" void *CreateExtension()
+  {
+    return (void *)new MyPluginExtension();
+  }
+
+The Plug-in's Extension returned by this function must behave according
+to the Extension base class; it must provide member functions for
+load, unload, register, and unregister.
+
+Additionally, Plug-ins must support the following interface:
+
+    error do_message(char *message_sender,
+                     char *message_category,
+                     char *message_action,
+                     void *data,
+                     void *extensions)
+
+All Plug-ins must handle the following five message actions:
+
+    'load'     - load into memory and setup or restore state info
+    'unload'   - unload from memory, saving state info if appropriate
+    'startup'  - allocate global memory, add UI elements, register, etc.
+    'shutdown' - flush files, preserve preferences, etc.
+    'about'    - info about the plug-in
+
+Additionally, the Plug-in will receive messages particular to its
+Extension Type.  File export extensions will receive the 'save' message,
+for example.  Inkscape will indicate a message_action each time it calls
+the Plug-in, to specify what should be done or to signal it that an
+event has occurred.
+
+The Plug-in may register listeners for events that it would like
+Inkscape to notify it about.  Plug-ins can also generate their own
+events to send to other extensions.
+
+The data argument of the do_message() routine permits passing an
+arbitrary structure to the Plug-in.  The type of structure used is
+indicated by the message_category parameter.  For example, this data
+object can provide a way for the plug-in to preserve information between
+calls (such as in a memory block allocated by the Plug-in during startup
+that will be preserved if the Plug-in is unloaded and loaded).
+
+The extensions argument is a collection of interfaces to other
+extensions that the Plug-in is allowed to call.  These enable the
+Plug-in to access other functionality within Inkscape.  Typically, these
+will be Internal Extensions (see Section 7.1), which provide access to
+core functionality in Inkscape, but from the Plug-in's perspective it is
+transparent whether the extensions it uses are internal core
+functionality or other external plugins.
+
+To use a function in another extension, the Plug-in must first 'acquire'
+the extension.  This lets Inkscape know that it should load the
+extension into memory if it isn't already.  When it has finished with
+the extension, the Plug-in should 'release' the extension, allowing
+Inkscape to recover the memory for other things if needed.
+
+When the Plug-in is first called, it will be passed a single extension,
+the ExtensionManager.  The Plug-in can then request additional
+extensions through it.
+
+===== 7.3.2  Plug-in Initialization Algorithm =====
+
+On the application side, Inkscape uses the following pseudocode to load
+the Plug-in:
+
+  // determine the path and filename of the shared object
+  filename = "/usr/share/inkscape/extensions/foo/foo.so"
+
+  // load the library and get the extension creation function
+  #if USE_DLOPEN
+  void *obj = dlopen(filename, RTLD_LAZY|RTLD_GLOBAL)
+  f_createExtension = dlsym(obj, "CreateExtension")
+
+  #else
+  HMODULE obj = LoadLibrary(filename)
+
+  f_createExtension = GetProcAddress(obj, "CreateExtension")
+  #endif
+
+  extension = (Extension *) f_createExtension()
+
+  // When the extension is needed, load it into memory
+  extension->load()
+
+  // Pass messages to and from the extension
+  extension->do_message(my_message)
+
+  // When done, remove it from memory
+  extension->shutdown()
+
+See experimental/extension_example in Inkscape CVS for a working
+example.
+
+
+===== 7.3.3  Scripting Language Bindings =====
+
+Scripting support is provided via special kinds of Plug-Ins called
+Language Bindings.  These provide loadable script interpreter modules.
+These may be useful for users to quickly program custom functionality,
+for testers to automate testing procedures, and so forth.
+
+These bindings can be operated in one of three ways:
+
+    Document - The code to be interpreted is embedded in the SVG
+        document itself.  The language interpreter thus parses the
+        document and invokes a given function within it.  For example,
+        it could run some embedded ECMA script.
+
+    User - The code to be interpreted is typed in by the user
+        themselves.  For example, this could be done via a pop-up text
+        editor dialog the user types or pastes code into, or it could be
+        passed to Inkscape via its STDIN when using inkscape in
+        commandline mode, or it could be provided by another extension
+        (such as one that loads it from a database).
+
+    File - The code to be interpreted is loaded from a file stored in
+        the file system.
+
+===== 7.4.0  SVG Libraries =====
+
+Library Extensions are interfaces to collections of data files that can
+be queried and loaded directly into the document.
+
+    int  library_count(query_condition) - returns the quantity of items
+        meeting the query condition.
+
+    item[] library_list(query_condition, int start, int end) - returns a
+        list of items meeting the query condition.  Optionally, the
+        requestor can specify that a subset specified by [start,end] be
+        returned (this is for paging purposes).
+
+    doc  library_get_item(id) - retrieves a specific item from the
+        library.
+
+Each item in a library has the following data items associated with it:
+
+    id         - the unique identifier for the library item
+    thumbnail  - a rendered bitmap that illustrates what the item would
+                 look like in the document.
+    metadata   - a collection of RDF data for the object, including
+                 information such as the author, license, title, etc.
+
+
+=== 8.0.0  Creating Extensions ===
+
+In this chapter, we discuss how to create an extension from scratch,
+incorporate into Inkscape, and release it for the general Inkscape
+community to use.  This chapter can be read independently of the rest of
+the document, using the rest as reference material.
+
+==== 8.1.0  Selecting an Extension Strategy ====
+
+First of all, you will need to select the method you'll use for creating
+your extension.
+
+Scripts are the simplest extensions to create, because they work through
+STDIN/STDOUT, so you need to know very little about Inkscape internals
+to make them work.  However, their ability to interact with the Inkscape
+internals is limited compared with other approaches.  For file format
+converters, this is usually fine.  You can also create filters programs
+that take the entire document to its STDIN, process it, and return a
+modified copy to STDOUT.  Some control of the extension is possible via
+its commandline arguments.
+
+One of the nice things about Scripts is that they can be written in any
+language.  It need not even be a scripting language - as long as it
+handles STDIN and STDOUT and uses commandline arguments, you can write
+it however you wish.
+
+Plug-ins are more powerful than Scripts, but require more knowledge of
+Inkscape internals, and must be written according to specific criteria.
+Generally, since these are loaded as dynamic objects, they'll need to be
+written in a language that can generate them, such as C or C++.
+
+The best of both worlds can be available through Language Bindings,
+which are Plug-ins that wrapper a script interpreter.  This enables you
+to call various Inkscape internal routines through your scripting
+language's functions.  If someone has created a Language Binding for
+your language of choice, you're all set, otherwise you'll have to create
+a Plug-in for it.  Language Binding Plug-ins have a few more
+requirements than ordinary Plug-ins, and require a greater amount of
+knowledge of the Inkscape internals, so it can take quite some time to
+do properly.
+
+Library Extensions are basically collections of symbols that can be
+queried, browsed, and imported into documents in Inkscape.  An example
+might be drawing symbols for electrical diagrams.
+
+Internal Extensions are in a way the reverse of a normal Extension, in
+that instead of providing a way to hook into Inkscape from the outside,
+they provide hooks from inside Inkscape.  These can be used directly by
+Inkscape, such as in the case of compiled-in printing modules, or used
+by other extensions, such as to provide access to the verb system.
+
+
+==== 8.2.0  Writing Your Extension ====
+
+This section provides some guidance and examples for implementing
+different kinds of Extensions.
+
+===== 8.2.1  Writing Internal Extensions =====
+
+# TODO
+
+===== 8.2.2  Writing Script Extensions =====
+
+# TODO
+
+===== 8.2.3  Writing Plug-in Extensions =====
+
+# TODO
+
+===== 8.2.4  Writing Language Binding Plug-in Extensions =====
+
+# TODO
+
+===== 8.2.5  Writing Library Extensions =====
+
+# TODO
+
+
+==== 8.3.0  Creating an INX File ====
+
+Every extension must have a corrosponding *.inx file.  This is an XML
+file that provides Inkscape with information about the module and allows
+it to load the info without needing to access the module itself.  The
+*.inx file contains enough info for Inkscape to set up menu items and
+know what kinds of functionality to expect from the extension.
+
+# TODO:  Insert an example INX XML here
+
+==== 8.4.0  Packaging Your Extension ====
+
+==== 8.5.0  Contributing Your Extension to the Inkscape Community ====
+
+Once your extension is complete, you may wish to share it with the
+community.  There are of course no hard and fast rules for how to share
+your work, but this section illustrates some approaches.
+
+===== 8.5.1  Listing Your Extension =====
+
+First, you will need to put your extension someplace that others can
+find and download it.  If you have adequate webspace, you could simply
+upload it to your web server.  More typically, you will want to upload
+it to a mirroring system like SourceForge (http://www.sourceforge.net),
+CPAN (http://www.cpan.org), and the like.  The Inkscape project may also
+be willing to host your extension; contact the admins for more info.
+
+It can also be helpful to list your extension with one of the various
+software registries, such as Freshmeat (http://www.freshmeat.net).  You
+should also list it on the Inkscape Wiki site.
+
+===== 8.5.2  Announcing Your Extension =====
+
+After posting your extension someplace from which it can be downloaded,
+you should also announce its availability, by sending an email to
+inkscape-announce@lists.sourceforge.net.  You may also want to announce
+it on other related sites; for instance, if you've written a plug-in to
+allow operation of Imagemagick from within Inkscape, it could be a good
+idea to announce it to the Imagemagick list.
+
+===== 8.5.3  Incorporating Your Extension to Inkscape =====
+
+Because the intent with the extension system is to break things *out*
+from the core, most extensions should be packaged and distributed
+independently of the main Inkscape distribution.  However, for ease of
+user installation, an extension-pack can be shipped along with the core
+Inkscape package.  Also, certain extensions may be so critical to
+Inkscape operation (such as for printing) that they should be included
+in the core.
+
+If your extension seems like it should be incorporated into the Inkscape
+core, contact the Inkscape developers about this, and discuss how best
+to include it in the distribution with them.
+
+
+=== 9.0.0  Conclusion ===
+
+It is anticipated that the incorporation of this extensions capability
+will bring Inkscape added power and flexibility while avoiding bloating
+the core with cool-but-rarely-used functionality.  Further, it empowers
+users and non-core Inkscape developers to extend the application with
+their own new capabilities, without needing to gain special access and
+acceptance by the project.  Dynamic loading of functionality will also
+allow Inkscape to remain 'lean and mean', loading up functionality on an
+as-needed basis, and conserving memory by unloading functionality when
+it is not needed.
+
+The key point of this design specification is the architectural concept
+of separately identifying an extension's interface type, or 'Extension
+Type', from its implementation method, or 'Extension Implementation'.
+This feature enables Inkscape to be extended in a variety of mechanisms,
+including ways not yet foreseen.
+
+10.  History and References
+
+Base design taken from Ted Gould's Extension System work
+
+Dynamically loaded plug-in system taken from an example created by Ishmal
+
+This document originally authored by Bryce Harrington, July 2004
