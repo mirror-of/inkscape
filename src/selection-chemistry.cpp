@@ -37,6 +37,7 @@
 #include "sp-use.h"
 #include "sp-text.h"
 #include "text-context.h"
+#include "dropper-context.h"
 #include "helper/sp-intl.h"
 #include "display/sp-canvas.h"
 #include "path-chemistry.h"
@@ -677,6 +678,11 @@ void sp_selection_copy()
         return;
 
     SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    if (tools_isactive (desktop, TOOLS_DROPPER)) {
+        sp_dropper_context_copy(desktop->event_context);
+        return; // copied color under cursor, nothing else to do
+    }
 
     // check if something is selected
     if (selection->isEmpty()) {

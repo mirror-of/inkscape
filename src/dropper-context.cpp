@@ -16,6 +16,8 @@
 #endif
 #include <gdk/gdkkeysyms.h>
 
+#include <gtkmm.h>
+
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 
@@ -136,6 +138,27 @@ sp_dropper_context_finish (SPEventContext *ec)
 	if (dc->area) {
 		gtk_object_destroy (GTK_OBJECT (dc->area));
 		dc->area = NULL;
+	}
+}
+
+void
+sp_dropper_context_copy (SPEventContext *ec)
+{
+	SPDropperContext *dc = SP_DROPPER_CONTEXT (ec);
+
+	guint32 c32 = SP_RGBA32_F_COMPOSE (dc->R, dc->G, dc->B, dc->alpha);
+
+	gchar c[64];
+
+	int pick = prefs_get_int_attribute ("tools.dropper", "pick", SP_DROPPER_PICK_VISIBLE);
+
+	g_snprintf (c, 64, "%06x%02x", c32 >> 8, pick == SP_DROPPER_PICK_ACTUAL? SP_COLOR_F_TO_U(dc->alpha) : 255);
+
+	Glib::ustring text;
+	text += c;
+	if (!text.empty()) {
+		Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+		refClipboard->set_text(text);
 	}
 }
 

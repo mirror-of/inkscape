@@ -51,4 +51,6 @@ struct SPDropperContextClass {
 
 GType sp_dropper_context_get_type (void);
 
+void sp_dropper_context_copy (SPEventContext *ec);
+
 #endif
