@@ -1,3 +1,8 @@
+2004-06-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/helper/Makefile_insert (helper_units_test_LDADD): Fix the previous
+	  commit: -lglib-2.0 instead of -lglib.
+
 2004-06-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/Makefile.am:

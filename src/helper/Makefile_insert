@@ -48,4 +48,4 @@ helper/sp-marshal.cpp: helper/sp-marshal.list helper/sp-marshal.h
 helper/sp-marshal.cpp helper/sp-marshal.h: Makefile
 
 helper_units_test_SOURCES = helper/units-test.cpp
-helper_units_test_LDADD = helper/libspchelp.a -lglib
+helper_units_test_LDADD = helper/libspchelp.a -lglib-2.0
