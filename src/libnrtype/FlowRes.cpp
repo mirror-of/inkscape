@@ -229,7 +229,7 @@ void               flow_res::AddText(char* iText,int iLen)
 	if ( nbChunk <= 0 || nbSpan <= 0 || nbLetter <= 0 ) return;
 	
 	if ( nbChar+iLen >= maxChar ) {
-		maxChar=2*nbChar+iLen;
+		maxChar=2*nbChar+iLen+1;
 		chars=(char*)realloc(chars,maxChar*sizeof(char));
 	}
 	
