@@ -185,6 +185,14 @@ static const SPStyleProp props[] = {
 	/* XML */
 	{SP_ATTR_XML_SPACE, "xml:space"},
 
+  /* typeset */
+  {SP_ATTR_TEXT_NOMARKUP, "srcNoMarkup"},
+  {SP_ATTR_TEXT_PANGOMARKUP, "srcPango" },
+  {SP_ATTR_TEXT_INSHAPE, "dstShape"},
+  {SP_ATTR_TEXT_ONPATH, "dstPath"},
+  {SP_ATTR_TEXT_INBOX,"dstBox"},
+  {SP_ATTR_TEXT_INCOLUMN,"dstColumn"},
+    
 	/* CSS2 */
 	/* Font */
 	{SP_PROP_FONT, "font"},

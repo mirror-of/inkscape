@@ -37,6 +37,7 @@
 #include "sp-mask.h"
 #include "sp-anchor.h"
 #include "sp-animation.h"
+#include "sp-typeset.h"
 #include "sp-object-repr.h"
 #include "xml/repr-private.h"
 
@@ -116,6 +117,7 @@ sp_object_type_lookup (const gchar * name)
 		g_hash_table_insert (dtable, (void *)"text", GINT_TO_POINTER (SP_TYPE_TEXT));
 		g_hash_table_insert (dtable, (void *)"tspan", GINT_TO_POINTER (SP_TYPE_TSPAN));
 		g_hash_table_insert (dtable, (void *)"use", GINT_TO_POINTER (SP_TYPE_USE));
+		g_hash_table_insert (dtable, (void *)"typeset", GINT_TO_POINTER (SP_TYPE_TYPESET));
 	}
 
 	data = g_hash_table_lookup (dtable, name);

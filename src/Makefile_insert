@@ -128,6 +128,8 @@ libinkpre_a_SOURCES =	\
 	sp-star.cpp sp-star.h	\
 	sp-symbol.cpp sp-symbol.h	\
 	sp-text.cpp sp-text.h	\
+	sp-typeset.cpp sp-typeset.h	\
+	sp-typeset-layout.cpp sp-typeset.h	\
 	sp-use.cpp sp-use.h	\
 	star-context.cpp star-context.h	\
 	streams-gzip.h streams-gzip.cpp	\
