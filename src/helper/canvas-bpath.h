@@ -34,6 +34,35 @@ typedef struct _SPCanvasBPathClass SPCanvasBPathClass;
 #include "sp-canvas.h"
 #include "curve.h"
 
+
+/* stroke-linejoin */
+
+typedef enum {
+	SP_STROKE_LINEJOIN_MITER,
+	SP_STROKE_LINEJOIN_ROUND,
+	SP_STROKE_LINEJOIN_BEVEL
+} SPStrokeJoinType;
+
+/* stroke-linecap */
+
+typedef enum {
+	SP_STROKE_LINECAP_BUTT,
+	SP_STROKE_LINECAP_ROUND,
+	SP_STROKE_LINECAP_SQUARE
+} SPStrokeCapType;
+
+
+/* fill-rule */
+/* clip-rule */
+
+typedef enum {
+	SP_WIND_RULE_NONZERO,
+	SP_WIND_RULE_INTERSECT,
+	SP_WIND_RULE_EVENODD,
+	SP_WIND_RULE_POSITIVE
+} SPWindRule;
+
+
 struct _SPCanvasBPath {
 	SPCanvasItem item;
 
@@ -42,13 +71,13 @@ struct _SPCanvasBPath {
 
 	/* Fill attributes */
 	guint32 fill_rgba;
-	ArtWindRule fill_rule;
+	SPWindRule fill_rule;
 
 	/* Line attributes */
 	guint32 stroke_rgba;
 	gdouble stroke_width;
-	ArtPathStrokeJoinType stroke_linejoin;
-	ArtPathStrokeCapType stroke_linecap;
+	SPStrokeJoinType stroke_linejoin;
+	SPStrokeCapType stroke_linecap;
 	gdouble stroke_miterlimit;
 
 	/* State */

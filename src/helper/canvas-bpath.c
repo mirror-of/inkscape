@@ -75,12 +75,12 @@ static void
 sp_canvas_bpath_init (SPCanvasBPath * bpath)
 {
 	bpath->fill_rgba = 0x000000ff;
-	bpath->fill_rule = ART_WIND_RULE_ODDEVEN;
+	bpath->fill_rule = SP_WIND_RULE_EVENODD;
 
 	bpath->stroke_rgba = 0x00000000;
 	bpath->stroke_width = 1.0;
-	bpath->stroke_linejoin = ART_PATH_STROKE_JOIN_MITER;
-	bpath->stroke_linecap = ART_PATH_STROKE_CAP_BUTT;
+	bpath->stroke_linejoin = SP_STROKE_LINEJOIN_MITER;
+	bpath->stroke_linecap = SP_STROKE_LINECAP_BUTT;
 	bpath->stroke_miterlimit = 11.0;
 
 	bpath->fill_svp = NULL;
@@ -157,14 +157,14 @@ sp_canvas_bpath_update (SPCanvasItem *item, double *affine, unsigned int flags)
 			svpa = art_svp_from_vpath (pp);
 			svpb = art_svp_uncross (svpa);
 			art_svp_free (svpa);
-			cbp->fill_svp = art_svp_rewind_uncrossed (svpb, cbp->fill_rule);
+			cbp->fill_svp = art_svp_rewind_uncrossed (svpb, (ArtWindRule)cbp->fill_rule);
 			art_svp_free (svpb);
 			art_drect_svp (&pbox, cbp->fill_svp);
 			art_drect_union (&dbox, &dbox, &pbox);
 		}
 
 		if ((cbp->stroke_rgba & 0xff) && (cbp->curve->end > 1)) {
-			cbp->stroke_svp = art_svp_vpath_stroke (pp, cbp->stroke_linejoin, cbp->stroke_linecap,
+			cbp->stroke_svp = art_svp_vpath_stroke (pp, (ArtPathStrokeJoinType)cbp->stroke_linejoin, (ArtPathStrokeCapType)cbp->stroke_linecap,
 								cbp->stroke_width, cbp->stroke_miterlimit, 0.25);
 			art_drect_svp (&pbox, cbp->stroke_svp);
 			art_drect_union (&dbox, &dbox, &pbox);
@@ -280,7 +280,7 @@ sp_canvas_bpath_set_bpath (SPCanvasBPath *cbp, SPCurve *curve)
 }
 
 void
-sp_canvas_bpath_set_fill (SPCanvasBPath *cbp, guint32 rgba, ArtWindRule rule)
+sp_canvas_bpath_set_fill (SPCanvasBPath *cbp, guint32 rgba, SPWindRule rule)
 {
 	g_return_if_fail (cbp != NULL);
 	g_return_if_fail (SP_IS_CANVAS_BPATH (cbp));
@@ -292,7 +292,7 @@ sp_canvas_bpath_set_fill (SPCanvasBPath *cbp, guint32 rgba, ArtWindRule rule)
 }
 
 void
-sp_canvas_bpath_set_stroke (SPCanvasBPath *cbp, guint32 rgba, gdouble width, ArtPathStrokeJoinType join, ArtPathStrokeCapType cap)
+sp_canvas_bpath_set_stroke (SPCanvasBPath *cbp, guint32 rgba, gdouble width, SPStrokeJoinType join, SPStrokeCapType cap)
 {
 	g_return_if_fail (cbp != NULL);
 	g_return_if_fail (SP_IS_CANVAS_BPATH (cbp));
