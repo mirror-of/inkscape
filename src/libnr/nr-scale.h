@@ -1,5 +1,7 @@
 #ifndef SEEN_NR_SCALE_H
 #define SEEN_NR_SCALE_H
+#include <libnr/nr-point.h>
+#include <libnr/nr-point-ops.h>
 
 namespace NR {
 
