@@ -100,11 +100,7 @@ NRArenaShape* sp_te_create_selection_arena_item(SPItem *item, NRArena *arena, In
     if (layout == NULL)
         return NULL;
 
-    SPCurve *sel_curve;
-    if (start < end)
-        sel_curve = layout->createSelectionShape(start, end, transform);
-    else
-        sel_curve = layout->createSelectionShape(end, start, transform);
+    SPCurve *sel_curve = layout->createSelectionShape(start, end, transform);
 
     NRRect  paintbox;
     NRBPath bp;

@@ -399,8 +399,17 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
 SPCurve* Layout::createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const
 {
     SPCurve *selection_curve = sp_curve_new();
-
-    for (unsigned char_index = it_start._char_index ; char_index < it_end._char_index ; ) {
+    unsigned char_index;
+    unsigned end_char_index;
+    
+    if (it_start._char_index < it_end._char_index) {
+        char_index = it_start._char_index;
+        end_char_index = it_end._char_index;
+    } else {
+        char_index = it_end._char_index;
+        end_char_index = it_start._char_index;
+    }
+    for ( ; char_index < end_char_index ; ) {
         if (_characters[char_index].in_glyph == -1) {
             char_index++;
             continue;
@@ -418,7 +427,7 @@ SPCurve* Layout::createSelectionShape(iterator const &it_start, iterator const &
             char_rotation = _glyphs[_characters[char_index].in_glyph].rotation;
             double span_x = _spans[span_index].x_start + _spans[span_index].chunk(this).left_x;
             top_left[NR::X] = span_x + _characters[char_index].x;
-            while (char_index < it_end._char_index && _characters[char_index].in_span == span_index)
+            while (char_index < end_char_index && _characters[char_index].in_span == span_index)
                 char_index++;
             if (_characters[char_index].in_span != span_index)
                 bottom_right[NR::X] = _spans[span_index].x_end + _spans[span_index].chunk(this).left_x;
@@ -431,6 +440,8 @@ SPCurve* Layout::createSelectionShape(iterator const &it_start, iterator const &
         }
 
         NR::Rect char_box(top_left, bottom_right);
+        if (char_box.extent(NR::X) == 0.0 || char_box.extent(NR::Y) == 0.0)
+            continue;
         NR::Point center_of_rotation((top_left[NR::X] + bottom_right[NR::X]) * 0.5,
                                      top_left[NR::Y] + _spans[span_index].line_height.ascent);
         NR::Matrix total_transform = NR::translate(-center_of_rotation) * NR::rotate(char_rotation) * NR::translate(center_of_rotation) * transform;
