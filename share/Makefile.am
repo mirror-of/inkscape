@@ -25,7 +25,8 @@ SUBDIRS = clipart \
           patterns \
           screens \
           templates \
-          tutorials
+          tutorials \
+          ui
 
 ## COPY THE REST OF THE FOLDERS TO THE PROPER LOCATION
 

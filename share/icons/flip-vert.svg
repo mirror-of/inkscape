@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   width="24.000000pt"
+   height="24.000000pt"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   id="svg2111"
+   sodipodi:version="0.32"
+   inkscape:version="0.40"
+   sodipodi:docbase="/usr/share/inkscape/icons"
+   sodipodi:docname="flip-vert.svg">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient2761">
+      <stop
+         style="stop-color:#2a2a2c;stop-opacity:1.0000000;"
+         offset="0.0000000"
+         id="stop2762" />
+      <stop
+         style="stop-color:#454646;stop-opacity:1.0000000;"
+         offset="1.0000000"
+         id="stop2763" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="15.125000"
+     inkscape:cx="12.000000"
+     inkscape:cy="12.000000"
+     inkscape:current-layer="svg2111"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     gridspacingy="1.0000000pt"
+     gridspacingx="1.0000000pt"
+     gridoriginy="0.0000000pt"
+     gridoriginx="0.0000000pt"
+     inkscape:window-width="640"
+     inkscape:window-height="539"
+     inkscape:window-x="13"
+     inkscape:window-y="28" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF
+       id="RDF5">
+      <cc:Work
+         rdf:about=""
+         id="Work6">
+        <dc:format
+           id="format7">image/svg+xml</dc:format>
+        <dc:type
+           id="type9"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="object_flip_ver"
+     transform="translate(-171.2055,-192.5000)">
+    <rect
+       style="font-size:12.000000;fill:none;fill-rule:evenodd;stroke:none;stroke-width:0.052083399;stroke-opacity:1.0000000"
+       id="rect1073"
+       width="25.000004"
+       height="24.999990"
+       x="174.04541"
+       y="194.99998" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ff000f;stroke-width:2.1250000;stroke-dasharray:2.1250000 2.1250000 ;stroke-dashoffset:0.0000000"
+       d="M 198.70553,207.50000 L 173.70553,207.50000"
+       id="path1074"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linejoin:round;stroke-opacity:1.0000000"
+       d="M 177.58881,204.37500 L 177.58881,196.87500 L 196.33881,204.37500 L 177.58881,204.37500 z "
+       id="path1075"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#d7ff17;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linejoin:round"
+       d="M 177.58881,210.62500 L 177.58881,218.12500 L 196.33881,210.62500 L 177.58881,210.62500 z "
+       id="path1076"
+       sodipodi:nodetypes="cccc" />
+  </g>
+</svg>

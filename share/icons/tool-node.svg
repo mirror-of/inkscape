@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   width="24.000000pt"
+   height="24.000000pt"
+   id="svg3215"
+   sodipodi:version="0.32"
+   inkscape:version="0.40"
+   sodipodi:docbase="/usr/share/inkscape/share/icons"
+   sodipodi:docname="tool-node.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.197802"
+     inkscape:cx="16.000000"
+     inkscape:cy="8.9003918"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     gridspacingy="1.0000000pt"
+     gridspacingx="1.0000000pt"
+     gridoriginy="0.0000000pt"
+     gridoriginx="0.0000000pt"
+     inkscape:window-width="640"
+     inkscape:window-height="539"
+     inkscape:window-x="220"
+     inkscape:window-y="144" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF
+       id="RDF5">
+      <cc:Work
+         rdf:about=""
+         id="Work6">
+        <dc:format
+           id="format7">image/svg+xml</dc:format>
+        <dc:type
+           id="type9"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <g
+       id="draw_node"
+       transform="translate(-22.50000,-192.5000)">
+      <rect
+         style="font-size:12.000000;fill:none;fill-rule:evenodd;stroke:none;stroke-width:0.052083399"
+         id="rect750"
+         width="25.000004"
+         height="24.999990"
+         x="24.999998"
+         y="219.99998"
+         transform="translate(0.000000,-25.00000)" />
+      <path
+         style="font-size:12.000000;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;stroke-linecap:square"
+         d="M 26.875000,210.62500 C 26.875000,210.62500 28.750000,201.25000 32.500000,198.75000 C 35.625000,196.25000 45.625000,196.87500 45.625000,196.87500"
+         id="path762"
+         sodipodi:nodetypes="ccc" />
+      <rect
+         style="font-size:12.000000;fill:#0000ff;fill-opacity:0.29803899;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.0000000pt"
+         id="rect763"
+         width="2.5000000"
+         height="2.5000000"
+         x="25.625000"
+         y="209.37500" />
+      <rect
+         style="font-size:12.000000;fill:#0000ff;fill-opacity:0.29999998;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.0000000pt"
+         id="rect765"
+         width="2.5000000"
+         height="2.5000000"
+         x="44.375000"
+         y="195.62500" />
+      <rect
+         style="font-size:12.000000;fill:#0000ff;fill-opacity:0.29999998;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.0000000pt"
+         id="rect761"
+         width="6.2500000"
+         height="6.2500000"
+         x="29.375000"
+         y="195.62500" />
+      <path
+         style="font-size:12.000000;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.95588398;stroke-linejoin:round;stroke-opacity:1.0000000"
+         d="M 8.7500100,202.05900 C 8.7500100,202.05900 18.786800,213.53000 18.786800,213.53000 C 18.786800,213.53000 13.051500,216.87600 13.051500,216.87600 C 13.051500,216.87600 8.7500100,202.05900 8.7500100,202.05900 z "
+         id="path751"
+         sodipodi:nodetypes="csss"
+         transform="matrix(1.307690,0.000000,0.000000,1.307690,21.05770,-65.48060)" />
+    </g>
+  </g>
+</svg>
