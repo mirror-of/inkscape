@@ -19,14 +19,13 @@
 #define SP_IS_INKSCAPE(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_INKSCAPE))
 #define SP_IS_INKSCAPE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_INKSCAPE))
 
+#include "forward.h"
 #include "inkscape.h"
 
 GType inkscape_get_type (void);
 
 void inkscape_ref (void);
 void inkscape_unref (void);
-
-class SPSelection;
 
 /*
  * These are meant solely for desktop, document etc. implementations

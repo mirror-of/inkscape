@@ -17,8 +17,6 @@
 #include "forward.h"
 #include "libnr/nr-forward.h"
 
-class SPSelection;
-
 void sp_selection_cleanup();
 
 void sp_selection_delete();

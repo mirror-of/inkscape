@@ -17,10 +17,9 @@
 #include <sigc++/sigc++.h>
 #include "display/curve.h"
 #include "event-context.h"
+#include <forward.h>
 #include <helper/helper-forward.h>
 #include <libnr/nr-point.h>
-
-class SPSelection;
 
 /* Freehand context */
 

@@ -16,12 +16,11 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
-#include "knot.h"
 #include "desktop-handles.h"
+#include "forward.h"
+#include "knot.h"
 #include "selcue.h"
 #include <vector>
-
-class SPSelection;
 
 class SPSelTrans;
 

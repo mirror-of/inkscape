@@ -88,8 +88,6 @@ struct StopOnTrue {
 };
 
 
-class SPSelection;
-
 struct SPDesktop {
 	SPView view;
 
