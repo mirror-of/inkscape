@@ -1434,6 +1434,11 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
             default:
                 break;
             }
+        } else if (event->button.button == 3) {
+            if (dc->npoints != 0) {
+                spdc_pen_finish(pc, FALSE);
+                ret = TRUE;
+            }
         }
         break;
     case GDK_MOTION_NOTIFY:
@@ -1613,15 +1618,19 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
         }
         break;
     case GDK_2BUTTON_PRESS:
-        spdc_pen_finish(pc, FALSE);
-        ret = TRUE;
+        if (dc->npoints != 0) {
+            spdc_pen_finish(pc, FALSE);
+            ret = TRUE;
+        }
         break;
     case GDK_KEY_PRESS:
         /* fixme: */
         switch (event->key.keyval) {
         case GDK_Return:
-            spdc_pen_finish(pc, FALSE);
-            ret = TRUE;
+            if (dc->npoints != 0) {
+                spdc_pen_finish(pc, FALSE);
+                ret = TRUE;
+            }
             break;
         case GDK_Escape:
             pc->state = SP_PEN_CONTEXT_STOP;
