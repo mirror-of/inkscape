@@ -217,7 +217,9 @@ gfloat ColorSelector::getAlpha() const
     return _alpha;
 }
 
-// Called from the outside to set the color
+/**
+Called from the outside to set the color; emits no signal
+*/
 void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha )
 {
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
@@ -231,13 +233,6 @@ void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha )
         sp_color_copy (&_color, &color);
         _alpha = alpha;
         _colorChanged( color, alpha );
-
-#ifdef DUMP_CHANGE_INFO
-        g_message ("%s:%d: About to signal %s to color %08x in %s", __FILE__, __LINE__,
-                   (_held ? "CHANGED" : "DRAGGED" ),
-                   sp_color_get_rgba32_falpha(&color,alpha), FOO_NAME(_csel));
-#endif
-        gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[_held ? CHANGED : DRAGGED]);
     }
 }
 
