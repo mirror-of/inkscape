@@ -515,6 +515,45 @@ PrintPS::release (Inkscape::Extension::Print *mod)
 	return fprintf (_stream, "grestore\n");
 }
 
+void
+PrintPS::print_fill_style (SVGOStringStream &os, const SPStyle *style)
+{
+		float rgb[3];
+		sp_color_get_rgb_floatv (&style->fill.value.color, rgb);
+
+		os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+}
+
+void
+PrintPS::print_stroke_style (SVGOStringStream &os, const SPStyle *style)
+{
+	float rgb[3];
+	sp_color_get_rgb_floatv (&style->stroke.value.color, rgb);
+
+	os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+
+	if (style->stroke_dasharray_set) {
+		if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
+			int i;
+			os << "[";
+			for (i = 0; i < style->stroke_dash.n_dash; i++) {
+				if ((i)) {
+					os << " ";
+				}
+				os << style->stroke_dash.dash[i];
+			}
+			os << "] " << style->stroke_dash.offset << " setdash\n";
+		}
+	} else {
+		os << "[] 0 setdash\n";
+	}
+
+	os << style->stroke_width.computed << " setlinewidth\n";
+	os << style->stroke_linejoin.computed << " setlinejoin\n";
+	os << style->stroke_linecap.computed << " setlinecap\n";
+}
+
+
 unsigned int
 PrintPS::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
@@ -523,12 +562,9 @@ PrintPS::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMa
 	if (_bitmap) return 0;
 
 	if (style->fill.type == SP_PAINT_TYPE_COLOR) {
-		float rgb[3];
         	Inkscape::SVGOStringStream os;
 
-		sp_color_get_rgb_floatv (&style->fill.value.color, rgb);
-
-		os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+		print_fill_style (os, style);
 
 		print_bpath (os, bpath->path);
 
@@ -543,6 +579,7 @@ PrintPS::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMa
 	return 0;
 }
 
+
 unsigned int
 PrintPS::stroke (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			      const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
@@ -551,34 +588,12 @@ PrintPS::stroke (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NR
 	if (_bitmap) return 0;
 
 	if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
-		float rgb[3];
         	Inkscape::SVGOStringStream os;
 
-		sp_color_get_rgb_floatv (&style->stroke.value.color, rgb);
-
-		os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+		print_stroke_style (os, style);
 
 		print_bpath (os, bpath->path);
 
-		if (style->stroke_dasharray_set) {
-			if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
-				int i;
-				os << "[";
-				for (i = 0; i < style->stroke_dash.n_dash; i++) {
-					if ((i)) {
-						os << " ";
-					}
-					os << style->stroke_dash.dash[i];
-				}
-				os << "] " << style->stroke_dash.offset << " setdash\n";
-			}
-		} else {
-			os << "[] 0 setdash\n";
-		}
-
-		os << style->stroke_width.computed << " setlinewidth\n";
-		os << style->stroke_linejoin.computed << " setlinejoin\n";
-		os << style->stroke_linecap.computed << " setlinecap\n";
 		os << "stroke\n";
 
 		fprintf (_stream, "%s", os.str().c_str());
@@ -644,20 +659,38 @@ PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
 
   Inkscape::SVGOStringStream os;
 
-	// FlowResOut feeds us text char by char
-	if (!strcmp (text, "(")) {
-		text = "\\(";
-	} else if (!strcmp (text, ")")) {
-		text = "\\)";
-	} else if (!strcmp (text, "\\")) {
-		text = "\\\\";
-	}
+  // Escape chars
+  // FlowResOut feeds us text char by char
+  if (!strcmp (text, "(")) {
+	text = "\\(";
+  } else if (!strcmp (text, ")")) {
+	text = "\\)";
+  } else if (!strcmp (text, "\\")) {
+	text = "\\\\";
+  }
 
+  // set font
   os << "/" << g_strdelimit (style->text->font_family.value, " ", '-') << " findfont\n";
   os << style->font_size.computed << " scalefont\n";
-  os << "setfont newpath\n";
-  os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
-  os << "(" << text << ") show\n";
+  os << "setfont\n";
+
+  if (style->fill.type == SP_PAINT_TYPE_COLOR) {
+	// set fill style
+	print_fill_style (os, style);
+	// paint fill
+	os << "newpath\n";
+	os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
+	os << "(" << text << ") show\n";
+  }
+
+  if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
+ 	// set stroke style
+	print_stroke_style (os, style);
+	// paint stroke
+	os << "newpath\n";
+	os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
+	os << "(" << text << ") false charpath stroke\n";
+  }
 
   fprintf (_stream, "%s", os.str().c_str());
 

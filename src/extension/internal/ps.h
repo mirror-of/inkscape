@@ -32,6 +32,10 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
     bool   _bitmap;
 
 	void print_bpath (SVGOStringStream &os, const NArtBpath *bp);
+
+	void PrintPS::print_fill_style (SVGOStringStream &os, const SPStyle *style);
+	void PrintPS::print_stroke_style (SVGOStringStream &os, const SPStyle *style);
+
 	unsigned int print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
 				       const NRMatrix *transform);
 	void compress_packbits (int nin, guchar *src, int *nout, guchar *dst);
