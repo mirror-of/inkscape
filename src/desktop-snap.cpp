@@ -277,7 +277,7 @@ bool desktop_will_snap_something(SPDesktop const *dt)
 
 Snapper::Snapper(NR::Coord const d) : _distance(d), _enabled(false)
 {
-
+    setSnapTo(BBOX_POINT, true);
 }
 
 void Snapper::setEnabled(bool s)
