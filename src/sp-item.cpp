@@ -34,6 +34,7 @@
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "sp-item.h"
+#include "libnr/nr-rect.h"
 
 #define noSP_ITEM_DEBUG_IDLE
 

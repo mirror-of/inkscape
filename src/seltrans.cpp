@@ -487,7 +487,7 @@ static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans)
 	}
 
 	seltrans.box = sp_selection_bbox(selection);
-	if (seltrans.box.is_empty()) {
+	if (seltrans.box.isEmpty()) {
 		seltrans.empty = TRUE;
 		return;
 	}

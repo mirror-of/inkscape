@@ -14,6 +14,7 @@
 
 #include <libnr/nr-types.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-rect.h>
 #include "knot.h"
 #include "desktop-handles.h"
 #include <vector>

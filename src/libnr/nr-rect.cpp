@@ -254,7 +254,7 @@ void Rect::offset(Point p) {
 }
 
 /** Makes this rectangle large enough to include the point p. */
-void Rect::expand_to(Point p) {
+void Rect::expandTo(Point p) {
 	for ( int i=0 ; i < 2 ; i++ ) {
 		_min[i] = MIN(_min[i], p[i]);
 		_max[i] = MAX(_max[i], p[i]);

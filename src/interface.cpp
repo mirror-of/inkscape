@@ -681,14 +681,24 @@ sp_menu_append_recent_documents (GtkWidget *menu)
 	if (recent) {
 		SPRepr *child;
 		for (child = recent->children; child != NULL; child = child->next) {
+			GtkWidget *item;
 			const gchar *uri, *name;
 			uri = sp_repr_attr (child, "uri");
 			name = sp_repr_attr (child, "name");
-			sp_ui_menu_append_item (GTK_MENU (menu), NULL, name, G_CALLBACK(sp_recent_open), (gpointer) uri, FALSE);
+
+			item = gtk_menu_item_new_with_label (name);
+			gtk_widget_show(item);
+			g_signal_connect(G_OBJECT(item),
+					"clicked",
+					G_CALLBACK(sp_recent_open),
+					(gpointer)uri);
+			gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 		}
 	} else {
-		GtkWidget *item = sp_ui_menu_append_item (GTK_MENU (menu), NULL, "None", NULL, NULL);
+		GtkWidget *item = gtk_menu_item_new_with_label(_("None"));
+		gtk_widget_show(item);
 		gtk_widget_set_sensitive(item, FALSE);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
 }
 

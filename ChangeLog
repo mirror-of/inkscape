@@ -7,9 +7,16 @@
 
 2004-02-16  MenTaLguY <mental@rydia.net>
 
-	* src/libnr/nr-types.h, src/libnr/nr-rect.cpp, src/libnr/nr-maybe.h,
-	  src/seltrans.cpp:
-	  started on revising the NR::Rect stuff, and introduced NR::ConvexHull
+    * src/interface.cpp: fixed bug with underscores in 'open recent' filenames
+
+    * src/libnr/nr-rect.h, src/libnr/nr-types.h: moved NR::Rect to nr-rect.h,
+	  minor updates
+
+    * src/libnr/nr-maybe.h: continued work on maybe implementation
+
+    * src/libnr/nr-types.h, src/libnr/nr-rect.cpp, src/libnr/nr-maybe.h,
+      src/seltrans.cpp:
+      started on revising the NR::Rect stuff, and introduced NR::ConvexHull
 
 2004-02-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
