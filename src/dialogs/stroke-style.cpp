@@ -1304,7 +1304,7 @@ sp_stroke_style_line_widget_new(void)
 
     a = gtk_adjustment_new(1.0, 0.0, 1000.0, 0.1, 10.0, 10.0);
     gtk_object_set_data(GTK_OBJECT(spw), "width", a);
-    sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
+    sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 3);
     gtk_tooltips_set_tip(tt, sb, _("Stroke width"), NULL);
     gtk_widget_show(sb);
 
