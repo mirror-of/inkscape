@@ -522,6 +522,7 @@ sp_use_delete_self(SPObject *deleted, SPUse *self)
     // always delete uses which are used in flowtext 
     if (SP_OBJECT_PARENT(self) && SP_IS_FLOWREGION(SP_OBJECT_PARENT(self))) {
         SP_OBJECT(self)->deleteObject();
+        return;
     }
 
     guint const mode = prefs_get_int_attribute("options.cloneorphans", "value",
