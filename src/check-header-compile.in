@@ -1,0 +1,25 @@
+#! /bin/sh
+# Check that each .h file has all the includes it needs.
+
+# Probably requires gnu find (for -printf '%P\n').
+
+# This script hereby placed into the public domain.
+
+set -e
+mydir=`dirname "$0"`
+cd "$mydir"
+srcdir="@srcdir@"
+CXX="@CXX@"
+INKSCAPE_CFLAGS="@INKSCAPE_CFLAGS@"
+OBJEXT="@OBJEXT@"
+config_h_dir=..
+
+for i in `find "$srcdir" -name bonobo -prune \
+	-o -name '*.h' \
+	   \! -name gnome.h \! -name win32.h \! -name nr-type-gnome.h \! -name nr-type-w32.h \! -name Livarot.h \! -name radial.h \
+	   -printf '%P\n'`
+do
+	(echo "#include <$i>"; echo "int header_tst_dummy;") > header-tst.cpp
+	$CXX -c -I. -I"$srcdir" -I$config_h_dir $INKSCAPE_CFLAGS header-tst.cpp
+done
+rm header-tst.cpp header-tst.$OBJEXT

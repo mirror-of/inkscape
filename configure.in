@@ -410,6 +410,7 @@ dnl Have to add module makefiles (lauris)
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
+src/check-header-compile
 src/dialogs/makefile
 src/display/makefile
 src/extension/makefile

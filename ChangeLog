@@ -1,5 +1,8 @@
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/check-header-compile.in: New script.
+	* configure.in: Add it to list of files for substitution.
+
 	* src/star-context.cpp: Minor cleanups, and use g_strdup_printf instead
 	  of fixed-size buffer for translated string.
 
