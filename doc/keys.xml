@@ -242,7 +242,10 @@ can leave your ideas and requests there.</p>
 <keys><key><ctrl/>-</key>  <action>difference</action></keys>
 <keys><key><ctrl/>*</key>  <action>intersection</action></keys>
 <keys><key><ctrl/>^</key>  <action>exclusive OR (XOR)</action></keys>
-<keys><key><ctrl/>/</key>  <action>division (cutting)</action></keys>
+<keys><key><ctrl/>/</key>  <action>division (cut)</action></keys>
+<note>The Division command cuts the bottom shape into pieces by the top path, preserving the fill and stroke of the bottom shape.</note>
+<keys><key><ctrl/><alt/>/</key>  <action>cut path</action></keys>
+<note>The Cut Path command cuts the bottom path (outline) where it is intersected by the top path, removing any fill from the result.</note>
 </group>
 
 <group>
