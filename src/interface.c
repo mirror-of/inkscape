@@ -229,7 +229,7 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 	}
 }
 
-static void
+void
 sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 {
 	const gchar *as, *cs, *ss;
@@ -237,6 +237,24 @@ sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 	cs = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "";
 	ss = (shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "";
 	g_snprintf (c, 256, "%s%s%s%s", as, cs, ss, gdk_keyval_name (shortcut & 0xffffff));
+}
+
+void
+sp_ui_dialog_title_string (unsigned int verb, gchar* c)
+{
+	SPAction *action;
+	gchar *s; 
+	gchar key[256];
+
+	action = sp_verb_get_action (verb);
+	if (!action) return; 
+	s = g_stpcpy (c, action->name);
+	if (action->shortcut) {
+		s = g_stpcpy (s, " (");
+		sp_ui_shortcut_string (action->shortcut, key);
+		s = g_stpcpy (s, key);
+		s = g_stpcpy (s, ")");
+	}
 }
 
 static GtkWidget *

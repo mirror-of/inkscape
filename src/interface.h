@@ -31,4 +31,6 @@ GtkWidget *sp_ui_generic_menu (SPView *v, SPItem *item);
 
 void sp_menu_append_recent_documents (GtkWidget *menu);
 
+void sp_ui_dialog_title_string (unsigned int verb, gchar* c);
+
 #endif
