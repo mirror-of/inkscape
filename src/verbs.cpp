@@ -293,7 +293,7 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
             if (tools_isactive (dt, TOOLS_NODES)) {
                 sp_nodepath_deselect (SP_NODE_CONTEXT(ec)->nodepath);
             } else {
-                sp_selection_empty (SP_DT_SELECTION(dt));
+                SP_DT_SELECTION(dt)->clear();
             }
             break;
         default:
