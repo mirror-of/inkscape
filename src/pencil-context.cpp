@@ -27,6 +27,7 @@
 #include "display/canvas-bpath.h"
 #include "display/sp-canvas.h"
 #include "helper/sp-intl.h"
+#include "libnr/in-svg-plane.h"
 #include "libnr/n-art-bpath.h"
 
 static void sp_pencil_context_class_init(SPPencilContextClass *klass);
@@ -348,8 +349,10 @@ static void
 spdc_set_startpoint(SPPencilContext *const pc, NR::Point const p)
 {
     pc->npoints = 0;
-    pc->p[pc->npoints++] = p;
     pc->red_curve_is_valid = false;
+    if (in_svg_plane(p)) {
+        pc->p[pc->npoints++] = p;
+    }
 }
 
 /**
@@ -365,16 +368,29 @@ spdc_set_startpoint(SPPencilContext *const pc, NR::Point const p)
 static void
 spdc_set_endpoint(SPPencilContext *const pc, NR::Point const p)
 {
-    g_assert( pc->npoints > 0 );
-
-    pc->p[1] = p;
-    pc->npoints = 2;
+    if (pc->npoints == 0) {
+        return;
+        /* May occur if first point wasn't in SVG plane (e.g. weird w2d transform, perhaps from bad
+         * zoom setting).
+         */
+    }
+    g_return_if_fail( pc->npoints > 0 );
 
     sp_curve_reset(pc->red_curve);
-    sp_curve_moveto(pc->red_curve, pc->p[0]);
-    sp_curve_lineto(pc->red_curve, pc->p[1]);
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
-    pc->red_curve_is_valid = true;
+    if ( ( p == pc->p[0] )
+         || !in_svg_plane(p) )
+    {
+        pc->npoints = 1;
+    } else {
+        pc->p[1] = p;
+        pc->npoints = 2;
+
+        sp_curve_moveto(pc->red_curve, pc->p[0]);
+        sp_curve_lineto(pc->red_curve, pc->p[1]);
+        pc->red_curve_is_valid = true;
+
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
+    }
 }
 
 /**
@@ -403,7 +419,11 @@ static void
 spdc_add_freehand_point(SPPencilContext *pc, NR::Point p, guint state)
 {
     g_assert( pc->npoints > 0 );
-    if ( p != pc->p[ pc->npoints - 1 ] ) {
+    g_return_if_fail(unsigned(pc->npoints) < G_N_ELEMENTS(pc->p));
+
+    if ( ( p != pc->p[ pc->npoints - 1 ] )
+         && in_svg_plane(p) )
+    {
         pc->p[pc->npoints++] = p;
         fit_and_split(pc);
     }

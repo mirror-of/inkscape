@@ -1,11 +1,14 @@
 2004-10-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/pencil-context.cpp: Ensure that data points array p is uniqued
+	  and contains no NaNs. 
+
 	* src/libnr/nr-point-fns.cpp (LInfty): Fix bug with NaN coordinates:
 	  return NaN (rather than unspecified behaviour).
 	* src/libnr/nr-point-fns-test.cpp: Add test cases for L1,L2,LInfty
 	  handling of NaN.
 
-	* src/pencil-context.cpp: Fix bug: undesirable interaction between
+	* src/pencil-context.cpp: Fix bug: undesirable interactions between
 	  snapping and snap-to-anchor.
 
 2004-10-21  MenTaLguY  <mental@rydia.net>
