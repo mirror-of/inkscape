@@ -931,7 +931,7 @@ sp_update_pattern_list ( SPPaintSelector *psel,  SPPattern *pattern)
 
 	/* Set history */
 
-	if (!gtk_object_get_data(GTK_OBJECT(mnu), "update")) {
+	if (pattern && !gtk_object_get_data(GTK_OBJECT(mnu), "update")) {
 
 		gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(TRUE));
 
@@ -957,7 +957,6 @@ sp_update_pattern_list ( SPPaintSelector *psel,  SPPattern *pattern)
 	//gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
 }
 
-
 static void
 sp_paint_selector_set_mode_pattern (SPPaintSelector *psel, SPPaintSelectorMode mode)
 {
@@ -978,29 +977,30 @@ sp_paint_selector_set_mode_pattern (SPPaintSelector *psel, SPPaintSelectorMode m
 		tbl = gtk_vbox_new (FALSE, 4);
 		gtk_widget_show (tbl);
 
+		{
 		GtkWidget *hb = gtk_hbox_new (FALSE, 1);
 
-		/*
-		 * We want to keep this menu widget around since it takes
-		 * time to generate.  As a result, we must either locate the
-		 * existing one, or generate a new one and bump the ref
-		 * count up before adding it to the container.
-		 */
-		GtkWidget *mnu = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (psel), "patternmenu");
-		if ( mnu == NULL ) {
-			mnu = gtk_option_menu_new ();
-			ink_pattern_menu (mnu);
-			gtk_signal_connect (GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_psel_pattern_change), psel);
-			gtk_signal_connect (GTK_OBJECT (mnu), "destroy", GTK_SIGNAL_FUNC (sp_psel_pattern_destroy), psel);
-			gtk_object_set_data (GTK_OBJECT (psel), "patternmenu", mnu);
-			g_object_ref( G_OBJECT (mnu));
-		}
-		gtk_widget_show (mnu);
+		GtkWidget *mnu = gtk_option_menu_new ();
+		ink_pattern_menu (mnu);
+		gtk_signal_connect (GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_psel_pattern_change), psel);
+		gtk_signal_connect (GTK_OBJECT (mnu), "destroy", GTK_SIGNAL_FUNC (sp_psel_pattern_destroy), psel);
+		gtk_object_set_data (GTK_OBJECT (psel), "patternmenu", mnu);
+		g_object_ref( G_OBJECT (mnu));
+
 		gtk_container_add (GTK_CONTAINER (hb), mnu);
-
 		gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+		}
 
-		gtk_widget_show (hb);
+		{
+		GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+		GtkWidget *l = gtk_label_new (NULL);
+		gtk_label_set_markup (GTK_LABEL(l), _("Use <b>Edit > Tile</b> to create a new pattern from selection."));
+		gtk_label_set_line_wrap (GTK_LABEL(l), true);
+		gtk_widget_set_size_request (l, 180, -1);
+		gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, AUX_BETWEEN_BUTTON_GROUPS);
+		gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+		}
+
 		gtk_widget_show_all (tbl);
 
 		gtk_container_add (GTK_CONTAINER (psel->frame), tbl);
