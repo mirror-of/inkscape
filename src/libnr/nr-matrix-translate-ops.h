@@ -3,7 +3,13 @@
 
 /** \file Declarations (and definition if inline) of operator blah (NR::Matrix, NR::translate). */
 
-#include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-translate.h"
+
+//NR::Matrix operator*(NR::Matrix const &m, NR::translate const &t);
+namespace NR {
+Matrix operator*(Matrix const &m, translate const &t);
+};
 
 inline NR::Matrix
 operator/(NR::Matrix const &numer, NR::translate const &denom)
