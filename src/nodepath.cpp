@@ -784,7 +784,7 @@ static void sp_nodepath_selected_nodes_move(Path::Path *nodepath, gdouble dx, gd
 		Path::Node *n = (Path::Node *) l->data;
 		NR::Point p = n->pos + delta;
 		for(int dim = 0; dim < 2; dim++) {
-			dist = sp_desktop_dim_snap (nodepath->desktop, p, NR::Dim2(dim));
+			dist = sp_desktop_dim_snap (nodepath->desktop, Snapper::SNAP_POINT, p, NR::Dim2(dim));
 			if (dist < best[dim]) {
 				g_message("Snapping %d", dim);
 				best[dim] = dist;
@@ -2134,9 +2134,9 @@ static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpoin
 			scal = dot(delta, ndelta) / linelen;
 			(*p) = n->pos + (scal / linelen) * ndelta;
 		}
-		sp_desktop_vector_snap (n->subpath->nodepath->desktop, *p, ndelta);
+		sp_desktop_vector_snap (n->subpath->nodepath->desktop, Snapper::SNAP_POINT, *p, ndelta);
 	} else {
-		sp_desktop_free_snap (n->subpath->nodepath->desktop, *p);
+		sp_desktop_free_snap (n->subpath->nodepath->desktop, Snapper::SNAP_POINT, *p);
 	}
 
 	sp_node_adjust_knot (n, -which);
