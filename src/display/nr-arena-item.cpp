@@ -273,8 +273,13 @@ nr_arena_item_invoke_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigne
 	return item->state;
 }
 
-unsigned int
-nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags)
+/**
+ *    Render item to pixblock.
+ *
+ *    \return Has NR_ARENA_ITEM_STATE_RENDER set on success.
+ */
+
+unsigned int nr_arena_item_invoke_render(NRArenaItem *item, NRRectL const *area, NRPixBlock *pb, unsigned int flags)
 {
 	NRRectL carea;
 	NRPixBlock *dpb;

@@ -146,13 +146,7 @@ void nr_arena_item_set_child_position (NRArenaItem *item, NRArenaItem *child, NR
 
 unsigned int nr_arena_item_invoke_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int state, unsigned int reset);
 
-/*
- * Render item to pixblock
- *
- * Return value has NR_ARENA_ITEM_STATE_RENDER set on success
- */
-
-unsigned int nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags);
+unsigned int nr_arena_item_invoke_render(NRArenaItem *item, NRRectL const *area, NRPixBlock *pb, unsigned int flags);
 
 unsigned int nr_arena_item_invoke_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb);
 NRArenaItem *nr_arena_item_invoke_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int sticky);
