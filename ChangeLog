@@ -1,3 +1,11 @@
+2004-03-30  Jon Phillips <kidproto@users.sf.net>
+
+    * share/icons/icons.svg src/interface.cpp src/verbs.cpp src/verbs.h: 
+      Added rest of icons for the menu. I think they are a good start. 
+      There still needs to be continuity between styles, but at least 
+      all needed icons are present. I didn't create icons for elements 
+      that are going to be removed eventually.
+
 2004-03-30  Ted Gould  <ted@gould.cx>
 
     * src/file.cpp, src/file.h, src/dialogs/filedialog-win32.cpp,
