@@ -18,7 +18,7 @@ typedef struct _NRTypeFace NRTypeFace;
 typedef struct _NRTypeFaceClass NRTypeFaceClass;
 
 typedef struct _NRTypeFaceDef NRTypeFaceDef;
-typedef struct _NRTypePosDef NRTypePosDef;
+class NRTypePosDef;
 
 #include <libnr/nr-types.h>
 #include <libnr/nr-path.h>

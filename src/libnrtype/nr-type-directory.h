@@ -12,9 +12,10 @@
 
 #include <libnrtype/nr-type-primitives.h>
 #include <libnrtype/nr-typeface.h>
+#include <libnrtype/nr-type-pos-def.h>
 
 NRTypeFace *nr_type_directory_lookup (const gchar *name);
-NRTypeFace *nr_type_directory_lookup_fuzzy (const gchar *family, const gchar *style);
+NRTypeFace *nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos);
 
 NRNameList *nr_type_directory_family_list_get (NRNameList *flist);
 NRNameList *nr_type_directory_style_list_get (const gchar *family, NRNameList *slist);

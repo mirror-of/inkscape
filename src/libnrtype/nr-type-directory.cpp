@@ -45,6 +45,7 @@
 #endif
 
 #include "nr-type-directory.h"
+#include "nr-type-pos-def.h"
 
 typedef struct _NRFamilyDef NRFamilyDef;
 
@@ -54,15 +55,7 @@ struct _NRFamilyDef {
 	NRTypeFaceDef *faces;
 };
 
-struct _NRTypePosDef {
-	unsigned int italic : 1;
-	unsigned int oblique : 1;
-	unsigned int weight : 8;
-	unsigned int stretch : 8;
-};
-
 static void nr_type_directory_build (void);
-static void nr_type_calculate_position (NRTypePosDef *pdef, const gchar *name);
 static unsigned nr_type_distance_family (gchar const *ask, gchar const *bid);
 static double nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid);
 
@@ -98,11 +91,10 @@ nr_type_directory_lookup (const gchar *name)
 }
 
 NRTypeFace *
-nr_type_directory_lookup_fuzzy (const gchar *family, const gchar *description)
+nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 {
 	NRFamilyDef *fdef, *bestfdef;
 	NRTypeFaceDef *tdef, *besttdef;
-	NRTypePosDef apos;
 
 	if (!typedict) nr_type_directory_build ();
 
@@ -126,7 +118,6 @@ nr_type_directory_lookup_fuzzy (const gchar *family, const gchar *description)
 	besttdef = NULL;
 
 	/* fixme: In reality the latter method reqires full qualified name */
-	nr_type_calculate_position (&apos, description);
 
 	for (tdef = bestfdef->faces; tdef; tdef = tdef->next) {
 		double dist = nr_type_distance_position (&apos, tdef->pdef);
@@ -317,65 +308,9 @@ nr_type_directory_build (void)
 		NRTypeFaceDef *tdef;
 		for (tdef = fdef->faces; tdef; tdef = tdef->next) {
 			tdef->pdef = pdefs + pos;
-			nr_type_calculate_position (tdef->pdef, tdef->name);
-			pos += 1;
+			*tdef->pdef = NRTypePosDef(tdef->name);
+			++pos;
 		}
-	}
-}
-
-static void
-nr_type_calculate_position (NRTypePosDef *pdef, const gchar *name)
-{
-	gchar c[256];
-	gchar *p;
-
-	strncpy (c, name, 255);
-	c[255] = 0;
-	for (p = c; *p; p++) *p = tolower (*p);
-
-	pdef->italic = (strstr (c, "italic") != NULL);
-	pdef->oblique = (strstr (c, "oblique") != NULL);
-	if (strstr (c, "thin")) {
-		pdef->weight = 32;
-	} else if (strstr (c, "extra light")) {
-		pdef->weight = 64;
-	} else if (strstr (c, "ultra light")) {
-		pdef->weight = 64;
-	} else if (strstr (c, "light")) {
-		pdef->weight = 96;
-	} else if (strstr (c, "book")) {
-		pdef->weight = 128;
-	} else if (strstr (c, "medium")) {
-		pdef->weight = 144;
-	} else if (strstr (c, "semi bold")) {
-		pdef->weight = 160;
-	} else if (strstr (c, "semibold")) {
-		pdef->weight = 160;
-	} else if (strstr (c, "demi bold")) {
-		pdef->weight = 160;
-	} else if (strstr (c, "demibold")) {
-		pdef->weight = 160;
-	} else if (strstr (c, "ultra bold")) {
-		pdef->weight = 224;
-	} else if (strstr (c, "extra bold")) {
-		pdef->weight = 224;
-	} else if (strstr (c, "black")) {
-		pdef->weight = 255;
-	} else if (strstr (c, "bold")) {
-		/* Must come after the checks for `blah bold'. */
-		pdef->weight = 192;
-	} else {
-		pdef->weight = 128;
-	}
-
-	if (strstr (c, "narrow")) {
-		pdef->stretch = 64;
-	} else if (strstr (c, "condensed")) {
-		pdef->stretch = 64;
-	} else if (strstr (c, "wide")) {
-		pdef->stretch = 192;
-	} else {
-		pdef->stretch = 128;
 	}
 }
 

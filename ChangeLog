@@ -1,5 +1,15 @@
 2004-01-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/nr-type-directory.h,
+	src/libnrtype/nr-type-directory.cpp (nr_type_directory_lookup_fuzzy):
+	Change second arg from char const* to NRTypePosDef.
+	(nr_type_calculate_position) Move to nr-type-pos-def.cpp as implicit
+	NRTypePosDef constructor from string.
+	* src/libnrtype/nr-typeface.h: NRTypePosDef changed from struct to class.
+	* src/libnrtype/nr-type-pos-def.h, src/libnrtype/nr-type-pos-def.cpp:
+	new files.
+	* src/libnrtype/Makefile.am: Mention the new files.
+
 	* src/sp-text.cpp (sp_text_font_style_to_lookup): Fix segfault I
 	introduced, reported by ishmal.
 
