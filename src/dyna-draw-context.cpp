@@ -505,6 +505,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
         break;
 
     case GDK_BUTTON_RELEASE:
+        sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
         if ( event->button.button == 1
              && dc->use_timeout
              && dc->timer_id != 0 )
@@ -540,8 +541,6 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                     }
                 }
             }
-
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
             ret = TRUE;
         }
         break;
