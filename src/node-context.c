@@ -244,43 +244,43 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			ret = TRUE;
 			break;
 		case GDK_C:
-			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
+			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_type (SP_PATHNODE_CUSP);
 				ret = TRUE;
 			}
 			break;
 		case GDK_S:
-			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
+			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_type (SP_PATHNODE_SMOOTH);
 				ret = TRUE;
 			}
 			break;
 		case GDK_Y:
-			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
+			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_type (SP_PATHNODE_SYMM);
 				ret = TRUE;
 			}
 			break;
 		case GDK_B:
-			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
+			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_break ();
 				ret = TRUE;
 			}
 			break;
 		case GDK_J:
-			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
+			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_join ();
 				ret = TRUE;
 			}
 			break;
 		case GDK_L:
-			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
+			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_line_type (ART_LINETO);
 				ret = TRUE;
 			}
 			break;
 		case GDK_K:
-			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
+			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_line_type (ART_CURVETO);
 				ret = TRUE;
 			}
@@ -300,13 +300,13 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			// maybe we could make this a shared function?
 		case GDK_Left: // move selection left
 		case GDK_KP_Left: 
-			if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
-				if (event->key.state & GDK_MOD1_MASK) { // alt
-					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move_screen (-10, 0); // shift
+			if (!MOD__CTRL) { // not ctrl
+				if (MOD__ALT) { // alt
+					if (MOD__SHIFT) sp_node_selected_move_screen (-10, 0); // shift
 					else sp_node_selected_move_screen (-1, 0); // no shift
 				}
 				else { // no alt
-					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move (-10, 0); // shift
+					if (MOD__SHIFT) sp_node_selected_move (-10, 0); // shift
 					else sp_node_selected_move (-1, 0); // no shift
 				}
 				ret = TRUE;
@@ -314,13 +314,13 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			break;
 		case GDK_Up: // move selection up
 		case GDK_KP_Up: 
-			if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
-				if (event->key.state & GDK_MOD1_MASK) { // alt
-					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move_screen (0, 10); // shift
+			if (!MOD__CTRL) { // not ctrl
+				if (MOD__ALT) { // alt
+					if (MOD__SHIFT) sp_node_selected_move_screen (0, 10); // shift
 					else sp_node_selected_move_screen (0, 1); // no shift
 				}
 				else { // no alt
-					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move (0, 10); // shift
+					if (MOD__SHIFT) sp_node_selected_move (0, 10); // shift
 					else sp_node_selected_move (0, 1); // no shift
 				}
 				ret = TRUE;
@@ -328,13 +328,13 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			break;
 		case GDK_Right: // move selection right
 		case GDK_KP_Right: 
-			if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
-				if (event->key.state & GDK_MOD1_MASK) { // alt
-					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move_screen (10, 0); // shift
+			if (!MOD__CTRL) { // not ctrl
+				if (MOD__ALT) { // alt
+					if (MOD__SHIFT) sp_node_selected_move_screen (10, 0); // shift
 					else sp_node_selected_move_screen (1, 0); // no shift
 				}
 				else { // no alt
-					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move (10, 0); // shift
+					if (MOD__SHIFT) sp_node_selected_move (10, 0); // shift
 					else sp_node_selected_move (1, 0); // no shift
 				}
 				ret = TRUE;
@@ -342,13 +342,13 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			break;
 		case GDK_Down: // move selection down
 		case GDK_KP_Down: 
-			if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
-				if (event->key.state & GDK_MOD1_MASK) { // alt
-					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move_screen (0, -10); // shift
+			if (!MOD__CTRL) { // not ctrl
+				if (MOD__ALT) { // alt
+					if (MOD__SHIFT) sp_node_selected_move_screen (0, -10); // shift
 					else sp_node_selected_move_screen (0, -1); // no shift
 				}
 				else { // no alt
-					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move (0, -10); // shift
+					if (MOD__SHIFT) sp_node_selected_move (0, -10); // shift
 					else sp_node_selected_move (0, -1); // no shift
 				}
 				ret = TRUE;
