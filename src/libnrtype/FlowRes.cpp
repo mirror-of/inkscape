@@ -28,44 +28,27 @@
 flow_res::flow_res(void)
 {
 	nbGlyph=maxGlyph=0;
-	glyphs=NULL;
 	nbGroup=maxGroup=0;
-	groups=NULL;
 	nbChar=maxChar=0;
-	chars=NULL;
 	nbChunk=maxChunk=0;
-	chunks=NULL;
 	nbSpan=maxSpan=0;
-	spans=NULL;
 	nbLetter=maxLetter=0;
-	letters=NULL;
 
 	last_style_set=false;
 	last_c_style=NULL;
 	last_rtl=false;
 	cur_ascent=cur_descent=cur_leading=0;
 	cur_offset=0;
+	cur_mommy = NULL;
 }
 flow_res::~flow_res(void)
 {
-	if ( letters ) free(letters);
-	if ( spans ) free(spans);
-	if ( chunks ) free(chunks);
-	if ( chars ) free(chars);
-	if ( glyphs ) free(glyphs);
-	if ( groups ) free(groups);
 	nbGlyph=maxGlyph=0;
-	glyphs=NULL;
 	nbGroup=maxGroup=0;
-	groups=NULL;
 	nbChar=maxChar=0;
-	chars=NULL;
 	nbChunk=maxChunk=0;
-	chunks=NULL;
 	nbSpan=maxSpan=0;
-	spans=NULL;
 	nbLetter=maxLetter=0;
-	letters=NULL;
 }
 void               flow_res::Reset(void)
 {
@@ -95,7 +78,7 @@ void               flow_res::AfficheOutput(void)
 				char  savC=chars[letters[k].t_en];
 				chars[letters[k].t_en]=0;
 				printf("   letter %i : no=%i text=(%i->%i utf8 %d)", k, letters[k].no, letters[k].t_st, letters[k].t_en, letters[k].utf8_offset);
-				if ( chars[letters[k].t_st] == '\n' ) printf("\\n "); else printf("%s ",chars+letters[k].t_st);
+				if ( chars[letters[k].t_st] == '\n' ) printf("\\n "); else printf("%s ", chars[letters[k].t_st]);
 				printf("p=(%f:%f/%f) k=(%f:%f)\n",letters[k].x_st,letters[k].x_en,letters[k].y,letters[k].kern_x,letters[k].kern_y);
 				chars[letters[k].t_en]=savC;
 			}
@@ -105,9 +88,10 @@ void               flow_res::AfficheOutput(void)
 void               flow_res::AddGroup(text_style* g_s)
 {
 	if ( nbGroup >= maxGroup ) {
-		maxGroup=2*nbGroup+1;
-		groups=(flow_glyph_group*)realloc(groups,maxGroup*sizeof(flow_glyph_group));
+		maxGroup = 2*nbGroup+1;
+		groups.resize (maxGroup);
 	}
+
 	groups[nbGroup].st=nbGlyph;
 	groups[nbGroup].en=nbGlyph;
 	groups[nbGroup].style=g_s;
@@ -118,8 +102,9 @@ void               flow_res::AddGlyph(int g_id,double g_x,double g_y,double g_w)
 {
 	if ( nbGlyph >= maxGlyph ) {
 		maxGlyph=2*nbGlyph+1;
-		glyphs=(flow_glyph*)realloc(glyphs,maxGlyph*sizeof(flow_glyph));
+		glyphs.resize (maxGlyph);
 	}
+
 	if ( nbGroup <= 0 || groups[nbGroup-1].style != last_c_style ) AddGroup(last_c_style);
 	glyphs[nbGlyph].g_id=g_id;
 	glyphs[nbGlyph].let=nbLetter-1;
@@ -144,8 +129,9 @@ void               flow_res::StartChunk(double i_x_st,double i_x_en,double i_y,b
 {
 	if ( nbChunk >= maxChunk ) {
 		maxChunk=2*nbChunk+1;
-		chunks=(flow_styled_chunk*)realloc(chunks,maxChunk*sizeof(flow_styled_chunk));
+		chunks.resize (maxChunk);
 	}
+
 	chunks[nbChunk].s_st=chunks[nbChunk].s_en=nbSpan;
 	chunks[nbChunk].l_st=chunks[nbChunk].l_en=nbLetter;
 	chunks[nbChunk].rtl=i_rtl;
@@ -178,8 +164,9 @@ void               flow_res::StartSpan(text_style* i_style,bool i_rtl)
 {
 	if ( nbSpan >= maxSpan ) {
 		maxSpan=2*nbSpan+1;
-		spans=(flow_styled_span*)realloc(spans,maxSpan*sizeof(flow_styled_span));
+		spans.resize (maxSpan);
 	}
+
 	spans[nbSpan].l_st=spans[nbSpan].l_en=nbLetter;
 	spans[nbSpan].rtl=i_rtl;
 	spans[nbSpan].c_style=i_style;
@@ -203,8 +190,9 @@ void               flow_res::StartLetter(text_style* i_style,bool i_rtl,double k
 	
 	if ( nbLetter >= maxLetter ) {
 		maxLetter=2*nbLetter+1;
-		letters=(flow_styled_letter*)realloc(letters,maxLetter*sizeof(flow_styled_letter));
+		letters.resize (maxLetter);
 	}
+
 	letters[nbLetter].t_st=letters[nbLetter].t_en=nbChar;
 	letters[nbLetter].g_st=letters[nbLetter].g_en=nbGlyph;
 	letters[nbLetter].ucs4_offset=0;
@@ -228,12 +216,13 @@ void               flow_res::AddText(char* iText,int iLen)
 	
 	if ( nbChar+iLen >= maxChar ) {
 		maxChar=2*nbChar+iLen+1;
-		chars=(char*)realloc(chars,maxChar*sizeof(char));
+		chars.resize (maxChar);
 	}
 	
 	//bool      line_rtl=chunks[nbChunk-1].rtl;
 	//bool      word_rtl=spans[nbSpan-1].rtl;
-	memcpy(chars+nbChar,iText,iLen*sizeof(char));
+
+	memcpy(&chars[nbChar], iText, iLen*sizeof(char));
 	if ( nbLetter > 0 ) letters[nbLetter-1].t_en=nbChar+iLen;
 	nbChar+=iLen;
 	chars[nbChar]=0;
