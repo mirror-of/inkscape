@@ -35,6 +35,7 @@
 #include "sp-item-group.h"
 #include "sp-namedview.h"
 #include "prefs-utils.h"
+#include "desktop.h"
 
 #include "isnan.h" //temp fox for isnan().  include last
 
@@ -122,6 +123,8 @@ sp_namedview_init (SPNamedView * nv)
 	nv->guides = NULL;
 	nv->viewcount = 0;
 
+	nv->default_layer_id = 0;
+
 	new (&nv->grid_snapper) GridSnapper(nv, 0);
 	new (&nv->guide_snapper) GuideSnapper(nv, 0);
 }
@@ -175,6 +178,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "inkscape:guide-bbox");
 	sp_object_read_attr (object, "inkscape:grid-points");
 	sp_object_read_attr (object, "inkscape:guide-points");
+	sp_object_read_attr (object, "inkscape:current-layer");
 
 	/* Construct guideline list */
 
@@ -436,6 +440,10 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		nv->guide_snapper.setSnapTo(Snapper::SNAP_POINT, sp_str_to_bool(value));
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+	case SP_ATTR_INKSCAPE_CURRENT_LAYER:
+		nv->default_layer_id = value ? g_quark_from_string(value) : 0;
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)
 			((SPObjectClass *) (parent_class))->set (object, key, value);
@@ -592,6 +600,28 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 		g_list_free (desktop->zooms_past);
 		desktop->zooms_past = NULL;
 	}
+
+	SPObject *layer=NULL;
+	SPDocument *document=SP_VIEW_DOCUMENT(desktop);
+	if ( nv->default_layer_id != 0 ) {
+		layer = document->getObjectById(g_quark_to_string(nv->default_layer_id));
+	}
+	// don't use that object if it's not at least group
+	if ( !layer || !SP_IS_GROUP(layer) ) {
+		layer = NULL;
+	}
+	// if that didn't work out, look for the topmost layer
+	if (!layer) {
+		SPObject *iter=sp_object_first_child(SP_DOCUMENT_ROOT(document));
+		for ( ; iter ; iter = SP_OBJECT_NEXT(iter) ) {
+			if (desktop->isLayer(iter)) {
+				layer = iter;
+			}
+		}
+	}
+	if (layer) {
+		desktop->setCurrentLayer(layer);
+	}
 }
 
 void 
@@ -620,6 +650,8 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 		sp_repr_set_int (view, "inkscape:window-x", x);
 		sp_repr_set_int (view, "inkscape:window-y", y);
 	}
+
+	sp_repr_set_attr(view, "inkscape:current-layer", SP_OBJECT_ID(desktop->currentLayer()));
 
 	// restore undoability
 	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), TRUE);

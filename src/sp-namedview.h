@@ -61,6 +61,8 @@ struct SPNamedView {
 	const SPUnit *guidetoleranceunit;
 	gdouble guidetolerance;
 
+	GQuark default_layer_id;
+
 	guint32 gridcolor;
 	guint32 gridempcolor;
 	guint32 guidecolor;

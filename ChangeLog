@@ -1,3 +1,10 @@
+2004-09-03  MenTaLguY <mental@rydia.net>
+
+	* src/attributes.cpp, src/attributes.h, src/sp-namedview.cpp,
+	  src/sp-namedview.h:
+
+	  remember previously selected layer on load
+
 2004-09-02  MenTaLguY <mental@rydia.net>
 
 	* src/attributes.cpp, src/attributes.h, src/sp-item-group.cpp:
