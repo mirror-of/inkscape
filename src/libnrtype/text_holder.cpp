@@ -14,7 +14,7 @@
 #include <pango/pango.h>
 #include <glib.h>
 
-#define NOTtext_holder_verbose
+#define ntext_holder_verbose
 
 text_holder::text_holder(void)
 {
@@ -45,13 +45,14 @@ text_holder::~text_holder(void)
 	nb_kern_x=nb_kern_y=0;
 }
 
-int          text_holder::AppendUTF8(char* iText,int iLen,int &rLen,bool preserve)
+int          text_holder::AppendUTF8(char* iText,int iLen,int &rLen,bool preserve,bool eat_leading)
 {
 	if ( iLen < 0 ) iLen=strlen(iText);
 	int   add_len=0;
 	int   add_st=utf8_length;
 	{
-		bool  in_white=true;
+		//printf("add utf8 eat %i str %s\n",(eat_leading)?1:0,iText);
+		bool  in_white=(eat_leading)?true:false;
 		for (int curLen=0;curLen<iLen;) {
 			char*    p=iText+curLen;
 			char*    np=g_utf8_next_char(p);
@@ -86,7 +87,7 @@ int          text_holder::AppendUTF8(char* iText,int iLen,int &rLen,bool preserv
 	utf8_text=(char*)realloc(utf8_text,(add_st+add_len+1)*sizeof(char));
 	int    add_pos=0;
 	{
-		bool in_white=true;
+		bool in_white=(eat_leading)?true:false;
 		for (int curLen=0;curLen<iLen;) {
 			char*    p=iText+curLen;
 			char*    np=g_utf8_next_char(p);
@@ -412,6 +413,9 @@ void           text_holder::AfficheBoxes(void)
  */
 void           text_holder::DoChunking(flow_styles* style_holder)
 {
+#ifdef text_holder_verbose
+	printf("chunk %s\n",utf8_text);
+#endif
 	PangoContext*  pContext=(font_factory::Default())->fontContext;
 	PangoAttrList* pAttr=pango_attr_list_new();
 	GList* pItems=pango_itemize(pContext,utf8_text,0,utf8_length,pAttr,NULL);
@@ -635,7 +639,8 @@ void           text_holder::MeasureText(int p_st,int p_en,box_sizes &n_a,PangoAn
 	int    s_p_st=p_st,s_p_en=p_st;
 	do {
 		NextSpanOfTyp(ctrl_style,s_p_st,s_st,s_en);
-		if ( s_st < nbCtrl && ctrls[s_st].pos <= p_st && ctrls[s_en].pos > p_st ) {
+		//printf("measure style %i %i =(%i -> %i)\n",s_st,s_en,(s_st>=0&&s_st<nbCtrl)?ctrls[s_st].pos,(s_en>=0&&s_en<nbCtrl)?ctrls[s_en].pos);
+		if ( s_st < nbCtrl && ( ctrls[s_st].pos < p_en && ctrls[s_en].pos > p_st ) ) {
 			s_p_st=ctrls[s_st].pos;
 			s_p_en=ctrls[s_en].pos;
 			int   i_p_st=(p_st>s_p_st)?p_st:s_p_st;
@@ -696,6 +701,7 @@ void           text_holder::ComputeBoxes(void)
 		if ( b_st >= nbCtrl || b_en < 0 ) break;
 		int    p_st=ctrls[b_st].pos;
 		int    p_en=ctrls[b_en].pos;
+		//printf("do box %i %i = (%i -> %i)\n",b_st,b_en,p_st,p_en);
 		if ( p_st < p_en ) {
 			// collect shaper info
 			int    cur_b_st=b_st;
@@ -877,6 +883,7 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 		for (int i=st_pos;i>=0&&i<en_pos;i=boxes[i].next) {
 			int    p_st=boxes[i].st;
 			int    p_en=boxes[i].en;
+			//printf("feed box %i (%i -> %i)\n",i,p_st,p_en);
 			if ( p_st < p_en ) {
 				if ( boxes[i].rtl == flow_rtl ) {
 					if ( p_en > utf8_end ) {
@@ -900,7 +907,8 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 				int    s_p_st=p_st,s_p_en=p_st;
 				do {
 					NextSpanOfTyp(ctrl_style,s_p_st,s_st,s_en);
-					if ( s_st < nbCtrl && ctrls[s_st].pos <= p_st && ctrls[s_en].pos > p_st ) {
+					//printf("span style %i %i =(%i -> %i)\n",s_st,s_en,(s_st>=0&&s_st<nbCtrl)?ctrls[s_st].pos:-1,(s_en>=0&&s_en<nbCtrl)?ctrls[s_en].pos:-1);
+					if ( s_st < nbCtrl && ( ctrls[s_st].pos < p_en && ctrls[s_en].pos > p_st ) ) {
 						s_p_st=ctrls[s_st].pos;
 						s_p_en=ctrls[s_en].pos;
 						int   i_p_st=(p_st>s_p_st)?p_st:s_p_st;
@@ -941,7 +949,7 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 				int    s_p_st=p_st,s_p_en=p_st;
 				do {
 					NextSpanOfTyp(ctrl_style,s_p_st,s_st,s_en);
-					if ( s_st < nbCtrl && ctrls[s_st].pos <= p_st && ctrls[s_en].pos > p_st ) {
+					if ( s_st < nbCtrl && ( ctrls[s_st].pos < p_en && ctrls[s_en].pos > p_st ) ) {
 						s_p_st=ctrls[s_st].pos;
 						s_p_en=ctrls[s_en].pos;
 						int   i_p_st=(p_st>s_p_st)?p_st:s_p_st;
@@ -950,6 +958,107 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 							text_style* c_style=ctrls[s_st].data.s;
 							int         offset=(boxes[i].st>ctrls[s_st].pos)?boxes[i].ucs4_offset:ctrls[s_st].ucs4_offset;
 							c_style->Feed(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
+						}
+					} else {
+						break;
+					}
+					s_p_st=s_p_en;
+				} while ( s_p_st < p_en );
+			}
+		}
+	}
+}
+void					 text_holder::Construct(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* baby)
+{
+	if ( nbBox <= 0 ) return;
+	if ( flow_rtl == boxes[0].rtl ) {
+		int st_pos=i_st_pos;
+		int en_pos=i_en_pos;
+		if ( st_pos >= nbBox ) return;
+		PangoAnalysis b_pan;
+		b_pan.language=NULL;
+		b_pan.level=0;
+		b_pan.shape_engine=NULL;
+		b_pan.lang_engine=NULL;
+		b_pan.extra_attrs=NULL;
+		b_pan.font=NULL;
+		int        utf8_end=(en_pos<nbBox)?boxes[en_pos].st:utf8_length;
+		for (int i=st_pos;i>=0&&i<en_pos;i=boxes[i].next) {
+			int    p_st=boxes[i].st;
+			int    p_en=boxes[i].en;
+			if ( p_st < p_en ) {
+				if ( boxes[i].rtl == flow_rtl ) {
+					if ( p_en > utf8_end ) {
+						i=boxes[i].first;
+						for (;i>=0&&i<nbBox;i=boxes[i].link) {
+							if ( flow_rtl == true && boxes[i].st == utf8_end ) break;
+							if ( flow_rtl == false && boxes[i].en == utf8_end ) break;
+						}
+						if ( i < 0 || i >= nbBox ) break;
+						p_st=boxes[i].st;
+						p_en=boxes[i].en;
+					}
+				} else {
+					// do not hyphenate counterdiractional boxes
+				}
+				baby->StartBox(boxes[i].rtl,boxes[i].meas.nb_letter,boxes[i].meas.width);
+				// collect shaper info
+				UpdatePangoAnalysis(0,p_st,p_en,b_pan);
+				// go through the successive styles of this box
+				int    s_st=-1,s_en=0;
+				int    s_p_st=p_st,s_p_en=p_st;
+				do {
+					NextSpanOfTyp(ctrl_style,s_p_st,s_st,s_en);
+					if ( s_st < nbCtrl && ( ctrls[s_st].pos < p_en && ctrls[s_en].pos > p_st ) ) {
+						s_p_st=ctrls[s_st].pos;
+						s_p_en=ctrls[s_en].pos;
+						int   i_p_st=(p_st>s_p_st)?p_st:s_p_st;
+						int   i_p_en=(p_en<s_p_en)?p_en:s_p_en;
+						if ( i_p_st < i_p_en ) {
+							text_style* c_style=ctrls[s_st].data.s;
+							int         offset=(boxes[i].st>ctrls[s_st].pos)?boxes[i].ucs4_offset:ctrls[s_st].ucs4_offset;
+							c_style->Construct(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
+						}
+					} else {
+						break;
+					}
+					s_p_st=s_p_en;
+				} while ( s_p_st < p_en );
+			}
+		}
+	} else {
+		// no hyphenation in this backward case
+		int st_pos=nbBox-1-i_st_pos;
+		int en_pos=nbBox-1-i_en_pos;
+		if ( st_pos < 0 ) return;
+		PangoAnalysis b_pan;
+		b_pan.language=NULL;
+		b_pan.level=0;
+		b_pan.shape_engine=NULL;
+		b_pan.lang_engine=NULL;
+		b_pan.extra_attrs=NULL;
+		b_pan.font=NULL;
+		for (int i=st_pos;i>=0&&i>en_pos;i=boxes[i].prev) {
+			int    p_st=boxes[i].st;
+			int    p_en=boxes[i].en;
+			if ( p_st < p_en ) {
+				baby->StartBox(boxes[i].rtl,boxes[i].meas.nb_letter,boxes[i].meas.width);
+				// collect shaper info
+				UpdatePangoAnalysis(0,p_st,p_en,b_pan);
+				// go through the successive styles of this box
+				int    s_st=-1,s_en=0;
+				int    s_p_st=p_st,s_p_en=p_st;
+				do {
+					NextSpanOfTyp(ctrl_style,s_p_st,s_st,s_en);
+					if ( s_st < nbCtrl && ( ctrls[s_st].pos < p_en && ctrls[s_en].pos > p_st ) ) {
+						s_p_st=ctrls[s_st].pos;
+						s_p_en=ctrls[s_en].pos;
+						int   i_p_st=(p_st>s_p_st)?p_st:s_p_st;
+						int   i_p_en=(p_en<s_p_en)?p_en:s_p_en;
+						if ( i_p_st < i_p_en ) {
+							text_style* c_style=ctrls[s_st].data.s;
+							int         offset=(boxes[i].st>ctrls[s_st].pos)?boxes[i].ucs4_offset:ctrls[s_st].ucs4_offset;
+							c_style->Construct(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
 						}
 					} else {
 						break;

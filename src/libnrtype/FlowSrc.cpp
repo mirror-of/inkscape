@@ -10,8 +10,6 @@
 	
 #include <math.h>
 
-#define NOTflow_src_verbose
-
 flow_src::flow_src(void)
 {
 	nbElem=maxElem=0;
@@ -81,7 +79,9 @@ void                flow_src::AddUTF8(char* iText,int iLen,bool force)
 		return;
 	}
 	stack_elem* cur=stacks+(nbStack-1);
+	bool  eat_leading=false;
 	if ( cur->elem < 0 || force ) {
+		eat_leading=true;
 		if ( nbElem >= maxElem ) {
 			maxElem=2*nbElem+1;
 			elems=(one_elem*)realloc(elems,maxElem*sizeof(one_elem));
@@ -96,7 +96,7 @@ void                flow_src::AddUTF8(char* iText,int iLen,bool force)
 	int     old_ucs4_length=th->ucs4_length;
 	int     old_ucs4_en=cur->ucs4_en;
 	int     ucs4_offset=old_ucs4_en-old_ucs4_length;
-	o=th->AppendUTF8(iText,iLen,l);
+	o=th->AppendUTF8(iText,iLen,l,false,eat_leading);
 	int			added_ucs4=th->ucs4_length-old_ucs4_length;
 	cur->ucs4_en+=added_ucs4;
 	
@@ -260,6 +260,19 @@ void                flow_src::Feed(int st_no,int st_pos,int en_no,int en_pos,boo
 		}
 	}
 }
+void                flow_src::Construct(int st_no,int st_pos,int en_no,int en_pos,bool flow_rtl,flow_eater* baby)
+{
+	for (int i=st_no;i<en_no;i++) {
+		if ( elems[i].type == flw_text ) {
+			elems[i].text->Construct((i==st_no)?st_pos:0,elems[i].text->nbBox+1,flow_rtl,baby);
+		}
+	}
+	if ( en_pos > 0 ) {
+		if ( elems[en_no].type == flw_text ) {
+			elems[en_no].text->Construct((en_no<=st_no)?st_pos:0,en_pos,flow_rtl,baby);
+		}
+	}
+}
 
 /*
  *
@@ -339,19 +352,14 @@ bool						line_solutions::PushBox(box_sizes &s,int end_no,int end_pos,bool is_wh
 	
 //	printf("sols pushbox (%i %i) l=%f w=%i iw=%i\n",end_no,end_pos,s.width,(is_white)?1:0,(is_word)?1:0);
 	bool   style_change=false;
-	if ( s.descent > l_descent || s.ascent+s.leading > l_ascent+l_leading) {
+	if ( s.descent > l_descent+0.001 || s.ascent+s.leading > l_ascent+l_leading+0.001 ) {
 		// doesn't fit in the line
-
-#ifdef flow_src_verbose
-		printf("oversized box: begin line enlarge  %i %i\n",end_no,end_pos);
-#endif
-
+		//printf("oversized box: begin line enlarge  %i %i\n",end_no,end_pos);
 		style_change=true;
-
 		style_end_ascent=(s.ascent>l_ascent)?s.ascent:l_ascent;
 		style_end_descent=(s.descent>l_descent)?s.descent:l_descent;
-		style_end_leading=(s.leading+s.ascent>l_ascent+l_leading)?s.leading+s.ascent-style_end_ascent:l_leading+l_ascent-style_end_ascent;
-
+		style_end_leading=(s.ascent+s.leading>l_ascent+l_leading)?s.ascent+s.leading:l_ascent+l_leading;
+		style_end_leading-=style_end_ascent;
 		style_end_no=end_no;
 		style_end_pos=end_pos;
 		

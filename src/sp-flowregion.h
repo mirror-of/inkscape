@@ -62,8 +62,9 @@ public:
 };
 
 struct SPFlowregion : public SPItem {
-	flow_dest*       computed;
-
+	int              nbComp,maxComp;
+	flow_dest*       *computed;
+	
 	void             UpdateComputed(void);
 };
 

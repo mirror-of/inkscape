@@ -27,27 +27,33 @@
 static void sp_flowdiv_class_init (SPFlowdivClass *klass);
 static void sp_flowdiv_init (SPFlowdiv *group);
 static SPRepr *sp_flowdiv_write (SPObject *object, SPRepr *repr, guint flags);
-static gchar * sp_flowdiv_description (SPItem * item);
-static void sp_flowdiv_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_flowdiv_modified (SPObject *object, guint flags);
 
 static void sp_flowtspan_class_init (SPFlowtspanClass *klass);
 static void sp_flowtspan_init (SPFlowtspan *group);
 static SPRepr *sp_flowtspan_write (SPObject *object, SPRepr *repr, guint flags);
-static gchar * sp_flowtspan_description (SPItem * item);
-static void sp_flowtspan_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_flowtspan_modified (SPObject *object, guint flags);
 
 static void sp_flowpara_class_init (SPFlowparaClass *klass);
 static void sp_flowpara_init (SPFlowpara *group);
 static SPRepr *sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags);
-static gchar * sp_flowpara_description (SPItem * item);
-static void sp_flowpara_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_flowpara_modified (SPObject *object, guint flags);
+
+static void sp_flowline_class_init (SPFlowlineClass *klass);
+static void sp_flowline_init (SPFlowline *group);
+static SPRepr *sp_flowline_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_flowline_modified (SPObject *object, guint flags);
+
+static void sp_flowregionbreak_class_init (SPFlowregionbreakClass *klass);
+static void sp_flowregionbreak_init (SPFlowregionbreak *group);
+static SPRepr *sp_flowregionbreak_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_flowregionbreak_modified (SPObject *object, guint flags);
 
 static SPItemClass * flowdiv_parent_class;
 static SPItemClass * flowtspan_parent_class;
 static SPItemClass * flowpara_parent_class;
+static SPObjectClass * flowline_parent_class;
+static SPObjectClass * flowregionbreak_parent_class;
 
 GType
 sp_flowdiv_get_type (void)
@@ -76,19 +82,14 @@ sp_flowdiv_class_init (SPFlowdivClass *klass)
 {
 	GObjectClass * object_class;
 	SPObjectClass * sp_object_class;
-	SPItemClass * item_class;
 	
 	object_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
-	item_class = (SPItemClass *) klass;
 	
 	flowdiv_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
 	sp_object_class->write = sp_flowdiv_write;
-	sp_object_class->update = sp_flowdiv_update;
 	sp_object_class->modified = sp_flowdiv_modified;
-	
-	item_class->description = sp_flowdiv_description;
 }
 
 static void
@@ -97,47 +98,6 @@ sp_flowdiv_init (SPFlowdiv */*group*/)
 }
 
 static void
-sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-	SPFlowdiv *group;
-	SPObject *child;
-	SPItemCtx *ictx, cctx;
-	GSList *l;
-	
-	group = SP_FLOWDIV (object);
-	ictx = (SPItemCtx *) ctx;
-	cctx = *ictx;
-	
-	if (((SPObjectClass *) (flowdiv_parent_class))->update)
-		((SPObjectClass *) (flowdiv_parent_class))->update (object, ctx, flags);
-	
-	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
-	flags &= SP_OBJECT_MODIFIED_CASCADE;
-	
-	l = NULL;
-	for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		g_object_ref (G_OBJECT (child));
-		l = g_slist_prepend (l, child);
-	}
-	l = g_slist_reverse (l);
-	while (l) {
-		child = SP_OBJECT (l->data);
-		l = g_slist_remove (l, child);
-		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			if (SP_IS_ITEM (child)) {
-				SPItem *chi;
-				chi = SP_ITEM (child);
-				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
-				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
-				child->updateDisplay((SPCtx *)&cctx, flags);
-			} else {
-				child->updateDisplay(ctx, flags);
-			}
-		}
-		g_object_unref (G_OBJECT (child));
-	}
-}
-static void
 sp_flowdiv_modified (SPObject *object, guint flags)
 {
 	SPFlowdiv *group;
@@ -145,6 +105,9 @@ sp_flowdiv_modified (SPObject *object, guint flags)
 	GSList *l;
 	
 	group = SP_FLOWDIV (object);	
+	
+	if (((SPObjectClass *) (flowdiv_parent_class))->modified)
+		((SPObjectClass *) (flowdiv_parent_class))->modified (object, flags);
 	
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
@@ -207,17 +170,6 @@ sp_flowdiv_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 
-
-static gchar * sp_flowdiv_description (SPItem * item)
-{
-	SPFlowdiv * group;
-	
-	group = SP_FLOWDIV (item);
-	
-	//	return g_strdup_printf(_("Flow text"));
-	return g_strdup_printf("Flow division");
-}
-
 /*
  *
  */
@@ -249,19 +201,14 @@ sp_flowtspan_class_init (SPFlowtspanClass *klass)
 {
 	GObjectClass * object_class;
 	SPObjectClass * sp_object_class;
-	SPItemClass * item_class;
 	
 	object_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
-	item_class = (SPItemClass *) klass;
-	
+
 	flowtspan_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
 	sp_object_class->write = sp_flowtspan_write;
-	sp_object_class->update = sp_flowtspan_update;
 	sp_object_class->modified = sp_flowtspan_modified;
-	
-	item_class->description = sp_flowtspan_description;
 }
 
 static void
@@ -270,47 +217,6 @@ sp_flowtspan_init (SPFlowtspan */*group*/)
 }
 
 static void
-sp_flowtspan_update (SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-	SPFlowtspan *group;
-	SPObject *child;
-	SPItemCtx *ictx, cctx;
-	GSList *l;
-	
-	group = SP_FLOWTSPAN (object);
-	ictx = (SPItemCtx *) ctx;
-	cctx = *ictx;
-	
-	if (((SPObjectClass *) (flowtspan_parent_class))->update)
-		((SPObjectClass *) (flowtspan_parent_class))->update (object, ctx, flags);
-	
-	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
-	flags &= SP_OBJECT_MODIFIED_CASCADE;
-	
-	l = NULL;
-	for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		g_object_ref (G_OBJECT (child));
-		l = g_slist_prepend (l, child);
-	}
-	l = g_slist_reverse (l);
-	while (l) {
-		child = SP_OBJECT (l->data);
-		l = g_slist_remove (l, child);
-		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			if (SP_IS_ITEM (child)) {
-				SPItem *chi;
-				chi = SP_ITEM (child);
-				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
-				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
-				child->updateDisplay((SPCtx *)&cctx, flags);
-			} else {
-				child->updateDisplay(ctx, flags);
-			}
-		}
-		g_object_unref (G_OBJECT (child));
-	}
-}
-static void
 sp_flowtspan_modified (SPObject *object, guint flags)
 {
 	SPFlowtspan *group;
@@ -318,6 +224,9 @@ sp_flowtspan_modified (SPObject *object, guint flags)
 	GSList *l;
 	
 	group = SP_FLOWTSPAN (object);	
+	
+	if (((SPObjectClass *) (flowtspan_parent_class))->modified)
+		((SPObjectClass *) (flowtspan_parent_class))->modified (object, flags);
 	
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
@@ -381,16 +290,6 @@ sp_flowtspan_write (SPObject *object, SPRepr *repr, guint flags)
 
 
 
-static gchar * sp_flowtspan_description (SPItem * item)
-{
-	SPFlowtspan * group;
-	
-	group = SP_FLOWTSPAN (item);
-	
-	//	return g_strdup_printf(_("Flow text"));
-	return g_strdup_printf("Flow tspan");
-}
-
 /*
  *
  */
@@ -422,19 +321,14 @@ sp_flowpara_class_init (SPFlowparaClass *klass)
 {
 	GObjectClass * object_class;
 	SPObjectClass * sp_object_class;
-	SPItemClass * item_class;
 	
 	object_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
-	item_class = (SPItemClass *) klass;
 	
 	flowpara_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
 	sp_object_class->write = sp_flowpara_write;
-	sp_object_class->update = sp_flowpara_update;
 	sp_object_class->modified = sp_flowpara_modified;
-	
-	item_class->description = sp_flowpara_description;
 }
 
 static void
@@ -442,47 +336,6 @@ sp_flowpara_init (SPFlowpara */*group*/)
 {
 }
 
-static void
-sp_flowpara_update (SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-	SPFlowpara *group;
-	SPObject *child;
-	SPItemCtx *ictx, cctx;
-	GSList *l;
-	
-	group = SP_FLOWPARA (object);
-	ictx = (SPItemCtx *) ctx;
-	cctx = *ictx;
-	
-	if (((SPObjectClass *) (flowpara_parent_class))->update)
-		((SPObjectClass *) (flowpara_parent_class))->update (object, ctx, flags);
-	
-	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
-	flags &= SP_OBJECT_MODIFIED_CASCADE;
-	
-	l = NULL;
-	for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		g_object_ref (G_OBJECT (child));
-		l = g_slist_prepend (l, child);
-	}
-	l = g_slist_reverse (l);
-	while (l) {
-		child = SP_OBJECT (l->data);
-		l = g_slist_remove (l, child);
-		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			if (SP_IS_ITEM (child)) {
-				SPItem *chi;
-				chi = SP_ITEM (child);
-				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
-				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
-				child->updateDisplay((SPCtx *)&cctx, flags);
-			} else {
-				child->updateDisplay(ctx, flags);
-			}
-		}
-		g_object_unref (G_OBJECT (child));
-	}
-}
 static void
 sp_flowpara_modified (SPObject *object, guint flags)
 {
@@ -492,6 +345,9 @@ sp_flowpara_modified (SPObject *object, guint flags)
 	
 	group = SP_FLOWPARA (object);	
 	
+	if (((SPObjectClass *) (flowpara_parent_class))->modified)
+		((SPObjectClass *) (flowpara_parent_class))->modified (object, flags);
+
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 	
@@ -513,7 +369,7 @@ sp_flowpara_modified (SPObject *object, guint flags)
 static SPRepr *
 sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags)
 {
-//	SPFlowpara *group = SP_FLOWPARA (object);
+	//	SPFlowpara *group = SP_FLOWPARA (object);
 	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
 		if ( repr == NULL ) repr = sp_repr_new ("flowPara");
@@ -523,7 +379,7 @@ sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags)
 			if ( SP_IS_FLOWTSPAN (child) ) {
 				c_repr = child->updateRepr(NULL, flags);
 			} else if ( SP_IS_FLOWPARA (child) ) {
-					c_repr = child->updateRepr(NULL, flags);
+				c_repr = child->updateRepr(NULL, flags);
 			} else if ( SP_IS_STRING(child) ) {
 				c_repr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (child));
 			}
@@ -539,7 +395,7 @@ sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags)
 			if ( SP_IS_FLOWTSPAN (child) ) {
 				child->updateRepr(flags);
 			} else if ( SP_IS_FLOWPARA (child) ) {
-					child->updateRepr(flags);
+				child->updateRepr(flags);
 			} else if ( SP_IS_STRING(child) ) {
 				sp_repr_set_content (SP_OBJECT_REPR (child), SP_STRING_TEXT (child));
 			}
@@ -552,17 +408,156 @@ sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags)
 	return repr;
 }
 
+/*
+ *
+ */
 
-
-static gchar * sp_flowpara_description (SPItem * item)
+GType
+sp_flowline_get_type (void)
 {
-	SPFlowpara * group;
-	
-	group = SP_FLOWPARA (item);
-	
-	//	return g_strdup_printf(_("Flow text"));
-	return g_strdup_printf("Flow paragraph");
+	static GType group_type = 0;
+	if (!group_type) {
+		GTypeInfo group_info = {
+			sizeof (SPFlowlineClass),
+			NULL,	/* base_init */
+			NULL,	/* base_finalize */
+			(GClassInitFunc) sp_flowline_class_init,
+			NULL,	/* class_finalize */
+			NULL,	/* class_data */
+			sizeof (SPFlowline),
+			16,	/* n_preallocs */
+			(GInstanceInitFunc) sp_flowline_init,
+			NULL,	/* value_table */
+		};
+		group_type = g_type_register_static (SP_TYPE_OBJECT, "SPFlowline", &group_info, (GTypeFlags)0);
+	}
+	return group_type;
 }
+
+static void
+sp_flowline_class_init (SPFlowlineClass *klass)
+{
+	GObjectClass * object_class;
+	SPObjectClass * sp_object_class;
+	
+	object_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	
+	flowline_parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
+	
+	sp_object_class->write = sp_flowline_write;
+	sp_object_class->modified = sp_flowline_modified;
+}
+
+static void
+sp_flowline_init (SPFlowline */*group*/)
+{
+}
+
+static void
+sp_flowline_modified (SPObject *object, guint flags)
+{
+	SPFlowline *group;
+	
+	group = SP_FLOWLINE (object);	
+	
+	if (((SPObjectClass *) (flowline_parent_class))->modified)
+		((SPObjectClass *) (flowline_parent_class))->modified (object, flags);
+	
+	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	flags &= SP_OBJECT_MODIFIED_CASCADE;
+}
+static SPRepr *
+sp_flowline_write (SPObject *object, SPRepr *repr, guint flags)
+{
+	//	SPFlowline *group = SP_FLOWLINE (object);
+	
+	if ( flags&SP_OBJECT_WRITE_BUILD ) {
+		if ( repr == NULL ) repr = sp_repr_new ("flowLine");
+	} else {
+	}
+		
+	if (((SPObjectClass *) (flowline_parent_class))->write)
+		((SPObjectClass *) (flowline_parent_class))->write (object, repr, flags);
+	
+	return repr;
+}
+
+/*
+ *
+ */
+
+GType
+sp_flowregionbreak_get_type (void)
+{
+	static GType group_type = 0;
+	if (!group_type) {
+		GTypeInfo group_info = {
+			sizeof (SPFlowregionbreakClass),
+			NULL,	/* base_init */
+			NULL,	/* base_finalize */
+			(GClassInitFunc) sp_flowregionbreak_class_init,
+			NULL,	/* class_finalize */
+			NULL,	/* class_data */
+			sizeof (SPFlowregionbreak),
+			16,	/* n_preallocs */
+			(GInstanceInitFunc) sp_flowregionbreak_init,
+			NULL,	/* value_table */
+		};
+		group_type = g_type_register_static (SP_TYPE_OBJECT, "SPFlowregionbreak", &group_info, (GTypeFlags)0);
+	}
+	return group_type;
+}
+
+static void
+sp_flowregionbreak_class_init (SPFlowregionbreakClass *klass)
+{
+	GObjectClass * object_class;
+	SPObjectClass * sp_object_class;
+	
+	object_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	
+	flowregionbreak_parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
+	
+	sp_object_class->write = sp_flowregionbreak_write;
+	sp_object_class->modified = sp_flowregionbreak_modified;
+}
+
+static void
+sp_flowregionbreak_init (SPFlowregionbreak */*group*/)
+{
+}
+
+static void
+sp_flowregionbreak_modified (SPObject *object, guint flags)
+{
+	SPFlowregionbreak *group;
+	
+	group = SP_FLOWREGIONBREAK (object);	
+	
+	if (((SPObjectClass *) (flowregionbreak_parent_class))->modified)
+		((SPObjectClass *) (flowregionbreak_parent_class))->modified (object, flags);
+	
+	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	flags &= SP_OBJECT_MODIFIED_CASCADE;
+}
+static SPRepr *
+sp_flowregionbreak_write (SPObject *object, SPRepr *repr, guint flags)
+{
+	//	SPFlowregionbreak *group = SP_FLOWREGIONBREAK (object);
+	
+	if ( flags&SP_OBJECT_WRITE_BUILD ) {
+		if ( repr == NULL ) repr = sp_repr_new ("flowLine");
+	} else {
+	}
+		
+	if (((SPObjectClass *) (flowregionbreak_parent_class))->write)
+		((SPObjectClass *) (flowregionbreak_parent_class))->write (object, repr, flags);
+	
+	return repr;
+}
+
 
 /*
  *
@@ -584,11 +579,17 @@ void                SPFlowpara::CollectFlow(flow_src* collector)
 {
 	DoCollectFlow(SP_OBJECT(this),collector,true,false);
 }
+void                SPFlowline::CollectFlow(flow_src* collector)
+{
+	collector->AddControl(flw_line_brk);
+}
+void                SPFlowregionbreak::CollectFlow(flow_src* collector)
+{
+	collector->AddControl(flw_rgn_brk);
+}
 
 static void DoCollectFlow(SPObject* object,flow_src* collector,bool add_line_brk,bool add_rgn_brk)
 {
-	SPItem*   item=SP_ITEM(object);
-	
 	text_style*      n_style=new text_style;
 	n_style->SetStyle(SP_OBJECT_STYLE (object));
 	bool             do_preserve=(object->xml_space.value == SP_XML_SPACE_PRESERVE);
@@ -645,6 +646,12 @@ static void DoCollectFlow(SPObject* object,flow_src* collector,bool add_line_brk
 			c_child->CollectFlow(collector);
 		} else if ( SP_IS_FLOWPARA (child) ) {
 			SPFlowpara*       c_child=SP_FLOWPARA(child);
+			c_child->CollectFlow(collector);
+		} else if ( SP_IS_FLOWLINE (child) ) {
+			SPFlowline*       c_child=SP_FLOWLINE(child);
+			c_child->CollectFlow(collector);
+		} else if ( SP_IS_FLOWREGIONBREAK (child) ) {
+			SPFlowregionbreak*       c_child=SP_FLOWREGIONBREAK(child);
 			c_child->CollectFlow(collector);
 		} else if ( SP_IS_STRING(child) ) {
 			SPString*         c_child=SP_STRING(child);

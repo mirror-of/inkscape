@@ -15,7 +15,7 @@
 #include "../sp-flowregion.h"
 #include "../sp-flowtext.h"
 
-#define NOTflow_maker_verbose
+#define nflow_maker_verbose
 
 flow_eater::flow_eater(void)
 {
@@ -36,6 +36,10 @@ void          flow_eater::StartLine(bool rtl,double x,double y,double l_spacing)
 	line_st_y=y;
 	line_spc=l_spacing;
 	first_letter=true;
+	if ( the_flow ) {
+		the_flow->cur_spacing=line_spc;
+		the_flow->last_c_style=NULL;
+	}
 }
 void          flow_eater::StartWord(bool rtl,int nb_letter,double length)
 {
@@ -121,6 +125,47 @@ void          flow_eater::Eat(int g_id,text_style* g_s,double g_x,double g_y,dou
 		} else {
 			word_length-=g_w;
 		}
+	}
+}
+void          flow_eater::StartBox(bool rtl,int nb_letter,double length)
+{
+	//printf("start box rtl=%i nb_l=%i l=%f\n",(rtl)?1:0,nb_letter,length);
+	cur_length=next_length;
+	cur_letter=next_letter;
+	next_length+=length+nb_letter*line_spc;
+	next_letter+=nb_letter;
+	if ( first_letter ) next_length-=line_spc;
+	word_rtl=rtl;
+	if ( word_rtl == line_rtl ) {
+		word_letter=cur_letter;
+		word_length=cur_length;
+	} else {
+		if ( the_flow ) {
+			the_flow->last_c_style=NULL;
+		}
+		word_letter=cur_letter+nb_letter;
+		word_length=cur_length+length+nb_letter*line_spc;
+		if ( first_letter ) word_length-=line_spc;
+	}
+}
+void          flow_eater::Eat(char* iText,int iLen,double i_w,int i_l,text_style* i_style,double* k_x,double* k_y,int k_offset)
+{
+	double   px=line_st_x;
+	if ( line_rtl ) {
+		px-=word_length;
+		if ( word_rtl ) px-=i_w;
+	} else {
+		px+=word_length;
+	}
+	
+	if ( the_flow ) the_flow->AddChunk(iText,iLen,i_style,px,line_st_y,word_rtl);
+	
+	if ( word_rtl == line_rtl ) {
+		word_length+=i_w;
+		word_letter+=i_l;
+	} else {
+		word_length-=i_w;
+		word_letter-=i_l;
 	}
 }
 
@@ -463,7 +508,7 @@ flow_res*          flow_maker::StdAlgo(void)
 		double  delta=used_length-sol_length;
 #ifdef flow_maker_verbose
 		printf("b=%i e_no=%i e_pos=%i (%i %i %i %i) x=%f y=%f\n",i,brks[i].elem_no,brks[i].elem_pos,
-				 brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,brks[i].used_box.x_end,brks[i].used_box.y);
+					 brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,brks[i].used_box.x_end,brks[i].used_box.y);
 #endif
 		if ( brks[i].sol_box.nb_letter > 0 ) delta/=(brks[i].sol_box.nb_letter-1); else delta=0;
 		if ( justify == false ) delta=0;
@@ -473,6 +518,22 @@ flow_res*          flow_maker::StdAlgo(void)
 			baby->StartLine(line_rtl,brks[i].used_box.x_start,line_y,delta);
 		}
 		f_src->Feed(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
+	}
+	for (int i=brk_start;i >= 0 && i < nbBrk;i=brks[i].next) {
+		bool    line_rtl=brks[i].rtl;
+		double  line_y=brks[i].used_box.y;
+		double  used_length=brks[i].used_box.x_end-brks[i].used_box.x_start;
+		double  sol_length=brks[i].sol_box.width;
+		double  delta=used_length-sol_length;
+
+		if ( brks[i].sol_box.nb_letter > 0 ) delta/=(brks[i].sol_box.nb_letter-1); else delta=0;
+		if ( justify == false ) delta=0;
+		if ( line_rtl ) {
+			baby->StartLine(line_rtl,brks[i].used_box.x_end,line_y,delta);
+		} else {
+			baby->StartLine(line_rtl,brks[i].used_box.x_start,line_y,delta);
+		}
+		f_src->Construct(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
 	}
 	
 	delete baby;
@@ -631,6 +692,21 @@ flow_res*          flow_maker::KPAlgo(void)
 			baby->StartLine(line_rtl,brks[i].used_box.x_start,line_y,delta);
 		}
 		f_src->Feed(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
+	}
+	for (int i=brk_start;i >= 0 && i < nbBrk;i=brks[i].next) {
+		bool    line_rtl=brks[i].rtl;
+		double  line_y=brks[i].used_box.y;
+		double  used_length=brks[i].used_box.x_end-brks[i].used_box.x_start;
+		double  sol_length=brks[i].sol_box.width;
+		double  delta=used_length-sol_length;
+		if ( brks[i].sol_box.nb_letter > 0 ) delta/=(brks[i].sol_box.nb_letter-1); else delta=0;
+		if ( justify == false ) delta=0;
+		if ( line_rtl ) {
+			baby->StartLine(line_rtl,brks[i].used_box.x_end,line_y,delta);
+		} else {
+			baby->StartLine(line_rtl,brks[i].used_box.x_start,line_y,delta);
+		}
+		f_src->Construct(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
 	}
 	
 	delete baby;

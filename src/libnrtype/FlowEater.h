@@ -36,6 +36,9 @@ public:
 	void          StartWord(bool rtl,int nb_letter,double length);
 	void          StartLetter(void);
 	void          Eat(int g_id,text_style* g_font,double g_x,double g_y,double g_w);
+	
+	void          StartBox(bool rtl,int nb_letter,double length);
+	void          Eat(char* iText,int iLen,double i_w,int i_l,text_style* i_style,double* k_x,double* k_y,int k_offset);
 };
 
 class flow_maker {

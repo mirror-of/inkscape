@@ -34,6 +34,12 @@ public:
 		NRArenaGlyphs*  g_gl;
 		int            g_st,g_en;
 	} flow_glyph;
+	typedef struct flow_styled_chunk {
+		int            c_len;
+		char*          c_txt;
+		text_style*    c_style;
+		double         x,y,spc;
+	} flow_styled_chunk;
 	
 	int                nbGroup,maxGroup;
 	flow_glyph_group*  groups;
@@ -43,6 +49,11 @@ public:
 	int                nbChar,maxChar;
 	char*              chars;
 	
+	int                nbChunk,maxChunk;
+	flow_styled_chunk* chunks;
+	text_style*        last_c_style;
+	double             cur_spacing;
+	
 	flow_res(void);
 	~flow_res(void);
 	
@@ -51,6 +62,8 @@ public:
 	void               AddGlyph(int g_id,double g_x,double g_y,text_style* g_s);
 	
 	void							 SetLastText(char* iText,int iLen);
+	void							 AddChunk(char* iText,int iLen,text_style* i_style,double x,double y,bool rtl);
+	void               AfficheChunks(void);
 };
 
 struct SPFlowtext : public SPItem {
@@ -79,5 +92,7 @@ struct SPFlowtextClass {
 GType sp_flowtext_get_type (void);
 
 void sp_item_flowtext_to_text (SPFlowtext *flowt);
+
+void convert_to_text(void);
 
 #endif

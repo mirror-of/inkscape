@@ -6,14 +6,23 @@
 #include <config.h>
 #include <string.h>
 
-#include <xml/repr.h>
+#include "helper/sp-intl.h"
 
-#include "sp-object.h"
-#include "sp-item.h"
-#include "style.h"
 #include "attributes.h"
+#include "xml/repr.h"
+#include "svg/svg.h"
+#include "style.h"
+#include "inkscape.h"
 #include "document.h"
+#include "selection.h"
+#include "desktop-handles.h"
+#include "desktop.h"
 #include "print.h"
+
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-point.h"
+#include "xml/repr.h"
+#include "xml/repr-private.h"
 
 #include "sp-flowdiv.h"
 #include "sp-flowregion.h"
@@ -90,15 +99,15 @@ sp_flowtext_class_init (SPFlowtextClass *klass)
 	GObjectClass * object_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
-
+	
 	object_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 	item_class = (SPItemClass *) klass;
-
+	
 	parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
-
+	
 	object_class->dispose = sp_flowtext_dispose;
-
+	
 	sp_object_class->child_added = sp_flowtext_child_added;
 	sp_object_class->remove_child = sp_flowtext_remove_child;
 	sp_object_class->update = sp_flowtext_update;
@@ -130,7 +139,7 @@ sp_flowtext_dispose(GObject *object)
 {
 	SPFlowtext* group=(SPFlowtext*)object;
 	
-//	if ( group->f_dst ) delete group->f_dst;
+	//	if ( group->f_dst ) delete group->f_dst;
 	if ( group->f_excl ) delete group->f_excl;
 	if ( group->f_res ) delete group->f_res;
 	if ( group->f_src ) delete group->f_src;
@@ -140,12 +149,12 @@ static void
 sp_flowtext_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 {
 	SPItem *item;
-
+	
 	item = SP_ITEM (object);
-
+	
 	if (((SPObjectClass *) (parent_class))->child_added)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
-
+	
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -156,7 +165,7 @@ sp_flowtext_remove_child (SPObject * object, SPRepr * child)
 {
 	if (((SPObjectClass *) (parent_class))->remove_child)
 		(* ((SPObjectClass *) (parent_class))->remove_child) (object, child);
-
+	
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -174,7 +183,7 @@ sp_flowtext_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	
 	if (((SPObjectClass *) (parent_class))->update)
 		((SPObjectClass *) (parent_class))->update (object, ctx, flags);
-
+	
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 	
@@ -200,7 +209,7 @@ sp_flowtext_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		}
 		g_object_unref (G_OBJECT (child));
 	}
-
+	
 	group->UpdateFlowSource();
 	group->UpdateFlowDest();
 	group->ComputeFlowRes();
@@ -209,8 +218,8 @@ sp_flowtext_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 static void
 sp_flowtext_modified (SPObject */*object*/, guint /*flags*/)
 {
-/*	SPFlowtext *group;
-
+	/*	SPFlowtext *group;
+	
 	group = SP_FLOWTEXT (object);*/
 }
 
@@ -281,9 +290,9 @@ static SPRepr *
 sp_flowtext_write (SPObject *object, SPRepr *repr, guint flags)
 {
 	SPFlowtext *group;
-
+	
 	group = SP_FLOWTEXT (object);
-
+	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
 		if ( repr == NULL ) repr = sp_repr_new ("flowRoot");
 		GSList *l = NULL;
@@ -314,10 +323,10 @@ sp_flowtext_write (SPObject *object, SPRepr *repr, guint flags)
 			}
 		}
 	}
-
+	
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
-
+	
 	return repr;
 }
 
@@ -378,9 +387,9 @@ sp_flowtext_print (SPItem * item, SPPrintContext *ctx)
 		for (int i=0;i<comp->nbGroup;i++) {
 			text_style*     curS=comp->groups[i].style;
 			font_instance*  curF=curS->theFont;
-			char*           curFam= (char *) pango_font_description_get_family(curF->descr);
-			char*           savFam=curS->with_style->text->font_family.value;
-			curS->with_style->text->font_family.value=curFam;
+			const char*     curFam = pango_font_description_get_family(curF->descr);
+			char*           savFam = curS->with_style->text->font_family.value;
+			curS->with_style->text->font_family.value = (gchar*) curFam;
 			for (int j=comp->groups[i].st;j<comp->groups[i].en;j++) {
 				NR::Point   g_pos(comp->glyphs[j].g_x,comp->glyphs[j].g_y);
 				char*       g_txt=comp->chars+comp->glyphs[j].g_st;
@@ -393,17 +402,12 @@ sp_flowtext_print (SPItem * item, SPPrintContext *ctx)
 			curS->with_style->text->font_family.value=savFam;
 		}
 	}
-
+	
 }
 
 static gchar * sp_flowtext_description (SPItem * /*item*/)
 {
-/*	SPFlowtext * group;
-
-	group = SP_FLOWTEXT (item);*/
-
-//	return g_strdup_printf(_("Text flow"));
-	return g_strdup_printf("Flow text");
+	return g_strdup_printf(_("Flowed text"));
 }
 
 static NRArenaItem *
@@ -411,7 +415,7 @@ sp_flowtext_show (SPItem *item, NRArena *arena, unsigned int/* key*/, unsigned i
 {
 	SPFlowtext *group;
 	group = (SPFlowtext *) item;
-
+	
 	NRArenaGroup* flowed=NRArenaGroup::create(arena);
 	nr_arena_group_set_transparent (flowed, FALSE);
 	
@@ -424,9 +428,9 @@ static void
 sp_flowtext_hide (SPItem *item, unsigned int key)
 {
 	SPFlowtext * group;
-
+	
 	group = (SPFlowtext *) item;
-
+	
 	if (((SPItemClass *) parent_class)->hide)
 		((SPItemClass *) parent_class)->hide (item, key);
 }
@@ -444,9 +448,15 @@ flow_res::flow_res(void)
 	groups=NULL;
 	nbChar=maxChar=0;
 	chars=NULL;
+	nbChunk=maxChunk=0;
+	chunks=NULL;
 }
 flow_res::~flow_res(void)
 {
+	for (int i=0;i<nbChunk;i++) {
+		if ( chunks[i].c_txt ) free(chunks[i].c_txt);
+	}
+	if ( chunks ) free(chunks);
 	if ( chars ) free(chars);
 	if ( glyphs ) free(glyphs);
 	if ( groups ) free(groups);
@@ -454,11 +464,17 @@ flow_res::~flow_res(void)
 	glyphs=NULL;
 	nbGroup=maxGroup=0;
 	groups=NULL;
+	nbChar=maxChar=0;
+	chars=NULL;
+	nbChunk=maxChunk=0;
+	chunks=NULL;
 }
 void               flow_res::Reset(void)
 {
 	nbGlyph=nbGroup=0;
 	nbChar=0;
+	last_c_style=NULL;
+	cur_spacing=0;
 }
 void               flow_res::AddGroup(text_style* g_s)
 {
@@ -503,7 +519,48 @@ void							 flow_res::SetLastText(char* iText,int iLen)
 		glyphs[nbGlyph-1].g_en=nbChar;
 	}
 }
-
+void							 flow_res::AddChunk(char* iText,int iLen,text_style* i_style,double x,double y,bool rtl)
+{
+	if ( i_style == NULL ) {
+		last_c_style=NULL;
+		return;
+	}
+	if ( iLen <= 0 ) return;
+	double the_x=x;
+	if ( last_c_style != i_style ) {
+		if ( nbChunk >= maxChunk ) {
+			maxChunk=2*nbChunk+1;
+			chunks=(flow_styled_chunk*)realloc(chunks,maxChunk*sizeof(flow_styled_chunk));
+		}
+		chunks[nbChunk].c_txt=(char*)malloc(sizeof(char));
+		chunks[nbChunk].c_len=0;
+		chunks[nbChunk].c_txt[0]=0;
+		chunks[nbChunk].c_style=i_style;
+		chunks[nbChunk].x=x;
+		chunks[nbChunk].y=y;
+		chunks[nbChunk].spc=cur_spacing;
+		nbChunk++;
+	} else {
+		if ( nbChunk > 0 ) {
+			if ( rtl == false ) the_x=chunks[nbChunk-1].x;
+		}
+	}
+	last_c_style=i_style;
+	if ( nbChunk <= 0 ) return;
+	flow_styled_chunk* cur=chunks+(nbChunk-1);
+	cur->x=the_x;
+	cur->c_txt=(char*)realloc(cur->c_txt,(cur->c_len+iLen+1)*sizeof(char));
+	memcpy(cur->c_txt+cur->c_len,iText,iLen*sizeof(char));
+	cur->c_len+=iLen;
+	cur->c_txt[cur->c_len]=0;
+}
+void              flow_res::AfficheChunks(void)
+{
+	printf("%i chunks\n",nbChunk);
+	for (int i=0;i<nbChunk;i++) {
+		printf("txt=%s pos=(%f %f) spc=%f\n",chunks[i].c_txt,chunks[i].x,chunks[i].y,chunks[i].spc);
+	}
+}
 /*
  *
  */
@@ -539,6 +596,7 @@ void              SPFlowtext::BuildFlow(NRArenaGroup* in_arena)
 			}
 		}
 		nr_arena_item_request_update (NR_ARENA_ITEM (in_arena), NR_ARENA_ITEM_STATE_ALL, FALSE);
+		//comp->AfficheChunks();
 	}
 }
 
@@ -546,7 +604,7 @@ void              SPFlowtext::UpdateFlowSource(void)
 {
 	SPItem*   item=SP_ITEM((SPFlowtext*)this);
 	SPObject* object=SP_OBJECT(item);
-
+	
 	if ( f_src ) delete f_src;
 	f_src=new flow_src;
 	
@@ -563,7 +621,7 @@ void              SPFlowtext::UpdateFlowSource(void)
 	c_face->Unref();
 	
 	f_src->Push(n_style);
-
+	
 	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
 		if ( SP_IS_FLOWDIV (child) ) {
 			SPFlowdiv*   c_child=SP_FLOWDIV(child);
@@ -576,7 +634,7 @@ void              SPFlowtext::UpdateFlowSource(void)
 	f_src->Pop();
 	
 	f_src->Prepare();
-//	f_src->Affiche();
+	//	f_src->Affiche();
 }
 void              SPFlowtext::UpdateFlowDest(void)
 {
@@ -586,14 +644,13 @@ void              SPFlowtext::UpdateFlowDest(void)
 	if ( f_excl ) delete f_excl;
 	f_excl=new flow_dest;
 	
-//	printf("update flow dest\n");
-
+	//	printf("update flow dest\n");
+	
 	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
 		if ( SP_IS_FLOWDIV (child) ) {
 		} else if ( SP_IS_FLOWREGION (child) ) {
 		} else if ( SP_IS_FLOWREGIONEXCLUDE(child) ) {
 			SPFlowregionExclude*   c_child=SP_FLOWREGIONEXCLUDE(child);
-//			c_child->UpdateComputed();
 			f_excl->AddShape(c_child->computed->rgn_dest);
 		}
 	}
@@ -604,19 +661,21 @@ void              SPFlowtext::UpdateFlowDest(void)
 		if ( SP_IS_FLOWDIV (child) ) {
 		} else if ( SP_IS_FLOWREGION (child) ) {
 			SPFlowregion*   c_child=SP_FLOWREGION(child);
-//			c_child->UpdateComputed();
-			c_child->computed->rgn_flow->Reset();
-			if ( f_excl->rgn_dest->nbAr > 0 ) {
-				c_child->computed->rgn_flow->Booleen(c_child->computed->rgn_dest,f_excl->rgn_dest,bool_op_diff);
-			} else {
-				c_child->computed->rgn_flow->Copy(c_child->computed->rgn_dest);
+			for (int i=0;i<c_child->nbComp;i++) {
+				flow_dest* n_d=c_child->computed[i];
+				n_d->rgn_flow->Reset();
+				if ( f_excl->rgn_dest->nbAr > 0 ) {
+					n_d->rgn_flow->Booleen(n_d->rgn_dest,f_excl->rgn_dest,bool_op_diff);
+				} else {
+					n_d->rgn_flow->Copy(n_d->rgn_dest);
+				}
+				n_d->Prepare();
+				
+				n_d->next_in_flow=NULL;
+				if ( last_dest ) last_dest->next_in_flow=n_d;
+				last_dest=n_d;
+				if ( f_dst == NULL ) f_dst=n_d;
 			}
-			c_child->computed->Prepare();
-			
-			c_child->computed->next_in_flow=NULL;
-			if ( last_dest ) last_dest->next_in_flow=c_child->computed;
-			last_dest=c_child->computed;
-			if ( f_dst == NULL ) f_dst=c_child->computed;
 		} else if ( SP_IS_FLOWREGIONEXCLUDE(child) ) {
 		}
 	}
@@ -647,15 +706,15 @@ void              SPFlowtext::ComputeFlowRes(void)
 		f_mak->algo=0;
 	} else if ( algo == 1 ) {
 		f_mak->strictBefore=false;
-		f_mak->strictAfter=false;
+		f_mak->strictAfter=true;
 		f_mak->min_scale=0.8;
 		f_mak->max_scale=1.2;
 		f_mak->algo=0;
 	} else {
 		f_mak->strictBefore=false;
 		f_mak->strictAfter=false;
-		f_mak->min_scale=0.9;
-		f_mak->max_scale=1.1;
+		f_mak->min_scale=0.8;
+		f_mak->max_scale=1.2;
 		f_mak->algo=1;
 	}
 	f_res=f_mak->Work();
@@ -664,17 +723,94 @@ void              SPFlowtext::ComputeFlowRes(void)
 	for (SPItemView* v = item->display; v != NULL; v = v->next) {
 		BuildFlow(NR_ARENA_GROUP(v->arenaitem));
 	}
-
+	
 	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
 		if ( SP_IS_FLOWDIV (child) ) {
 		} else if ( SP_IS_FLOWREGION (child) ) {
 			SPFlowregion*   c_child=SP_FLOWREGION(child);
-			c_child->computed->UnPrepare();
+			for (int i=0;i<c_child->nbComp;i++) {
+				flow_dest* n_d=c_child->computed[i];
+				n_d->UnPrepare();
+			}
 		} else if ( SP_IS_FLOWREGIONEXCLUDE(child) ) {
 		}
 	}
 }
 
+void convert_to_text(void)
+{
+	SPDesktop*   desktop = SP_ACTIVE_DESKTOP;
+	if (!SP_IS_DESKTOP (desktop)) return;
+	SPSelection* selection = SP_DT_SELECTION (desktop);
+	SPItem*      item = selection->singleItem();
+	SPObject*    object=SP_OBJECT(item);
+	if ( SP_IS_FLOWTEXT(object) == false ) return;
+	SPFlowtext*  group=SP_FLOWTEXT(object);
+	
+	group->UpdateFlowSource();
+	group->UpdateFlowDest();
+	group->ComputeFlowRes();
+	
+	flow_res*  comp=group->f_res;
+	if ( comp == NULL || comp->nbGroup <= 0 || comp->nbGlyph <= 0 || comp->nbChunk <= 0) {
+		// exmpty text, no need to produce anything...
+		return;
+	}
+	
+	selection->clear();
 
+	SPRepr  *parent = SP_OBJECT_REPR (object)->parent;
+	SPRepr  *repr = sp_repr_new ("text");
 
+	sp_repr_set_attr (repr, "style", sp_repr_attr (SP_OBJECT_REPR (object), "style"));
+
+	sp_repr_set_attr (repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
+
+	sp_repr_append_child (parent, repr);
+	// add a tspan for each chunk of the flow
+	for (int i=0;i<comp->nbChunk;i++) {
+		if ( comp->chunks[i].c_len > 0 && comp->chunks[i].c_style && comp->chunks[i].c_style->with_style ) {
+			SPRepr  *srepr = sp_repr_new ("tspan");
+			// set the good font family (may differ if pango needed a different one)
+			text_style*     curS=comp->chunks[i].c_style;
+			font_instance*  curF=curS->theFont;
+			SPStyle*        curSPS=curS->with_style;
+			const char*     curFam=pango_font_description_get_family(curF->descr);
+			char*           savFam=curSPS->text->font_family.value;
+			curS->with_style->text->font_family.value = (gchar*) curFam;
+			SPILength				sav_spc=curSPS->text->letterspacing;
+			curSPS->text->letterspacing.set=1;
+			curSPS->text->letterspacing.inherit=0;
+			curSPS->text->letterspacing.unit=SP_CSS_UNIT_PX;
+			curSPS->text->letterspacing.computed=comp->chunks[i].spc;
+			curSPS->text->letterspacing.value=comp->chunks[i].spc;
+			gchar   *nstyle=sp_style_write_string (comp->chunks[i].c_style->with_style, SP_STYLE_FLAG_ALWAYS);
+			curSPS->text->letterspacing=sav_spc;
+			curS->with_style->text->font_family.value=savFam;
+			
+			sp_repr_set_double (srepr, "x", comp->chunks[i].x);
+			sp_repr_set_double (srepr, "y", comp->chunks[i].y);
+			sp_repr_set_attr (srepr, "style", nstyle);
+			g_free(nstyle);
+			
+			SPRepr* rstr = sp_xml_document_createTextNode (sp_repr_document (repr),comp->chunks[i].c_txt);
+			sp_repr_append_child (srepr, rstr);
+			sp_repr_unref (rstr);
+
+			sp_repr_append_child (repr, srepr);
+			sp_repr_unref (srepr);
+			
+		}
+	}
+	SPItem  *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
+	NR::Matrix const transform = NR::Matrix (item->transform);
+	sp_item_write_transform (nitem, repr, transform);
+	SP_OBJECT (nitem)->updateRepr();
+		
+	sp_repr_unref (repr);
+	selection->setItem (nitem);
+	object->deleteObject();
+
+	sp_document_done (SP_DT_DOCUMENT (desktop));
+}
 

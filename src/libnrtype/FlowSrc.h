@@ -105,6 +105,7 @@ public:
 	void                MetricsAt(int from_no,int from_pos,double &ascent,double &descent,double &leading,bool &flow_rtl);
 	void                ComputeSol(int from_no,int from_pos,line_solutions *sols,bool &flow_rtl);
 	void                Feed(int st_no,int st_pos,int en_no,int en_pos,bool flow_rtl,flow_eater* baby);
+	void                Construct(int st_no,int st_pos,int en_no,int en_pos,bool flow_rtl,flow_eater* baby);
 
 	void                Affiche(void);
 };

@@ -33,6 +33,7 @@ public:
 	
 	void             Measure(char* iText,int iLen,box_sizes *sizes,int hyphen,PangoAnalysis pan,double *kern_x,double *kern_y);
 	void             Feed(char* iText,int iLen,int hyphen,PangoAnalysis pan,flow_eater* baby,double *kern_x,double *kern_y);
+	void             Construct(char* iText,int iLen,int hyphen,PangoAnalysis pan,flow_eater* baby,double *kern_x,double *kern_y);
 };
 
 class flow_styles {

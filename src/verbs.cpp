@@ -52,6 +52,7 @@
 #include "prefs-utils.h"
 #include "splivarot.h"
 #include "sp-namedview.h"
+#include "sp-flowtext.h"
 
 #include "select-context.h"
 #include "node-context.h"
@@ -440,6 +441,9 @@ static void sp_verb_action_object_perform ( SPAction *action, void *data,
             break;
         case SP_VERB_OBJECT_TO_CURVE:
             sp_selected_path_to_curves ();
+            break;
+        case SP_VERB_OBJECT_FLOWTEXT_TO_TEXT:
+            convert_to_text ();
             break;
         case SP_VERB_OBJECT_FLIP_HORIZONTAL:
             // TODO: make tool-sensitive, in node edit flip selected node(s)
@@ -937,6 +941,8 @@ static const SPVerbActionDef props[] = {
         N_("Remove transformations from object"), "object_reset"},
     {SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("_Object to Path"),
         N_("Convert selected object(s) to path(s)"), "object_tocurve"},
+    {SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Unflow text"),
+        N_("Convert selected flowtext to text"), NULL},
     {SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally",
         N_("Flip _Horizontally"), N_("Flip selection horizontally"),
         "object_flip_hor"},

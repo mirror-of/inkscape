@@ -76,12 +76,13 @@ public:
 	text_holder(void);
 	~text_holder(void);
 	
-	int            AppendUTF8(char* iText,int iLen,int &rLen,bool preserve=false);
+	int            AppendUTF8(char* iText,int iLen,int &rLen,bool preserve=false,bool eat_leading=true);
 	void           DoChunking(flow_styles* style_holder);
 	void           ComputeBoxes(void);
 	bool           MetricsAt(int from_box,double &ascent,double &descent,double &leading,bool flow_rtl);
 	bool           ComputeSols(int from_box,line_solutions* sols,int with_no,bool last_in_para,bool last_in_rgn,bool flow_rtl);
 	void					 Feed(int st_pos,int en_pos,bool flow_rtl,flow_eater* baby);
+	void					 Construct(int st_pos,int en_pos,bool flow_rtl,flow_eater* baby);
 	
 	void           AddCtrl(int pos,int typ);
 	void           AddSpan(int st,int en,int typ);

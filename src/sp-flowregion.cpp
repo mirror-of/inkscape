@@ -13,6 +13,7 @@
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "sp-use.h"
+#include "style.h"
 
 #include "sp-flowregion.h"
 
@@ -56,6 +57,9 @@ static SPRepr *sp_flowregionexclude_write (SPObject *object, SPRepr *repr, guint
 static gchar * sp_flowregionexclude_description (SPItem * item);
 
 static SPItemClass * flowregionexclude_parent_class;
+
+
+static void         GetDest(SPObject* child,flow_dest* computed,NR::Matrix itr_mat);
 
 GType
 sp_flowregion_get_type (void)
@@ -106,14 +110,18 @@ sp_flowregion_class_init (SPFlowregionClass *klass)
 static void
 sp_flowregion_init (SPFlowregion *group)
 {
-	group->computed=new flow_dest;
+	group->nbComp=group->maxComp=0;
+	group->computed=NULL;
 }
 
 static void
 sp_flowregion_dispose(GObject *object)
 {
 	SPFlowregion *group=(SPFlowregion *)object;
-	delete group->computed;
+	for (int i=0;i<group->nbComp;i++) delete group->computed[i];
+	if ( group->computed ) free(group->computed);
+	group->nbComp=group->maxComp=0;
+	group->computed=NULL;
 }
 
 static void
@@ -184,11 +192,25 @@ sp_flowregion_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 
 	group->UpdateComputed();
 }
-static void         CollectDest(SPObject* object,flow_dest* computed);
 
 void             SPFlowregion::UpdateComputed(void)
 {
-	CollectDest(SP_OBJECT(this),computed);
+	SPObject* object=SP_OBJECT(this);
+	
+	NR::Matrix itr_mat=sp_item_i2root_affine (SP_ITEM(object));
+	itr_mat=itr_mat.inverse();
+	
+	for (int i=0;i<nbComp;i++) delete computed[i];
+	nbComp=0;
+	
+	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+		if ( nbComp >= maxComp ) {
+			maxComp=2*nbComp+1;
+			computed=(flow_dest**)realloc(computed,maxComp*sizeof(flow_dest*));
+		}
+		computed[nbComp++]=new flow_dest,
+		GetDest(child,computed[nbComp-1],itr_mat);
+	}
 }
 
 static void
@@ -380,7 +402,15 @@ sp_flowregionexclude_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 }
 void             SPFlowregionExclude::UpdateComputed(void)
 {
-	CollectDest(SP_OBJECT(this),computed);
+	SPObject* object=SP_OBJECT(this);
+	
+	computed->Reset();
+	NR::Matrix itr_mat=sp_item_i2root_affine (SP_ITEM(object));
+	itr_mat=itr_mat.inverse();
+	
+	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+		GetDest(child,computed,itr_mat);
+	}
 }
 
 static void
@@ -795,43 +825,44 @@ void                  flow_dest::ComputeLine(float y,float a,float d)
 }
 
 
-static void         CollectDest(SPObject* object,flow_dest* computed)
+static void         GetDest(SPObject* child,flow_dest* computed,NR::Matrix itr_mat)
 {	
-	computed->Reset();
-	NR::Matrix itr_mat=sp_item_i2root_affine (SP_ITEM(object));
-	itr_mat=itr_mat.inverse();
+	if ( child == NULL ) return;
 	
-	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-    SPCurve *curve=NULL;
+	SPCurve *curve=NULL;
 		
-		SPObject* u_child=child;
-		if ( SP_IS_USE(u_child) ) {
-			u_child=SP_USE(u_child)->child;
-		}
-		if ( SP_IS_SHAPE (u_child) ) {
-			curve = sp_shape_get_curve (SP_SHAPE (u_child));
-    } else if ( SP_IS_TEXT (u_child) ) {
-			curve = sp_text_normalized_bpath (SP_TEXT (u_child));
-    }
-		
-    if ( curve ) {
-		  Path*   temp=new Path;
-			NR::Matrix tr_mat=sp_item_i2root_affine (SP_ITEM(u_child));
-			tr_mat=itr_mat*tr_mat;
-			temp->LoadArtBPath(curve->bpath,tr_mat,true);
-			Shape*  n_shp=new Shape;
-			temp->Convert(0.25);
-			temp->Fill(n_shp,0);
-			Shape*  uncross=new Shape;
-			uncross->ConvertToShape(n_shp,fill_nonZero);
-			computed->AddShape(uncross);
-			delete uncross;
-			delete n_shp;
-			delete temp;
-			sp_curve_unref(curve);
+	SPObject* u_child=child;
+	if ( SP_IS_USE(u_child) ) {
+		u_child=SP_USE(u_child)->child;
+	}
+	if ( SP_IS_SHAPE (u_child) ) {
+		curve = sp_shape_get_curve (SP_SHAPE (u_child));
+	} else if ( SP_IS_TEXT (u_child) ) {
+	curve = sp_text_normalized_bpath (SP_TEXT (u_child));
+	}
+	
+	if ( curve ) {
+		Path*   temp=new Path;
+		NR::Matrix tr_mat=sp_item_i2root_affine (SP_ITEM(u_child));
+		tr_mat=itr_mat*tr_mat;
+		temp->LoadArtBPath(curve->bpath,tr_mat,true);
+		Shape*  n_shp=new Shape;
+		temp->Convert(0.25);
+		temp->Fill(n_shp,0);
+		Shape*  uncross=new Shape;
+		SPStyle* style=SP_OBJECT_STYLE(child);
+		if ( style && style->fill_rule.computed == 1 ) {
+			uncross->ConvertToShape(n_shp,fill_oddEven);
 		} else {
-			printf("no curve\n");
+			uncross->ConvertToShape(n_shp,fill_nonZero);
 		}
+		computed->AddShape(uncross);
+		delete uncross;
+		delete n_shp;
+		delete temp;
+		sp_curve_unref(curve);
+	} else {
+		printf("no curve\n");
 	}
 }
 
