@@ -33,6 +33,61 @@ class SPDesktopWidgetClass;
 #include "forward.h"
 #include "view.h"
 
+enum ColorComponent {
+  COMPONENT_R,
+  COMPONENT_G,
+  COMPONENT_B,
+  COMPONENT_A,
+
+  COMPONENT_H,
+  COMPONENT_S,
+  COMPONENT_V,
+
+  COMPONENT_C,
+  COMPONENT_Y,
+  COMPONENT_M,
+  COMPONENT_K
+};
+
+class ColorRGBA {
+public:
+	ColorRGBA(float c0, float c1, float c2, float c3)
+	{
+		_c[0] = c0; _c[1] = c1;
+		_c[2] = c2; _c[3] = c3;
+	}
+
+
+	ColorRGBA &operator=(ColorRGBA const &m) {
+		for (unsigned i = 0 ; i < 4 ; ++i) {
+			_c[i] = m._c[i];
+		}
+		return *this;
+	}
+
+	float operator[](int const i) const {
+		g_assert( unsigned(i) < 4 );
+		return _c[i];
+	}
+
+private:
+  float _c[4];
+};
+
+// the marshaler for the set_color signals
+struct StopOnTrue {
+      typedef bool InType;
+      typedef bool OutType;
+      OutType  return_value_;
+
+      OutType value() { return return_value_; }
+      static OutType default_value() { return false; }
+      bool marshal(const InType& val) { return_value_ = val; return val; }
+
+      StopOnTrue() : return_value_(false) {}
+};
+
+
 class SPSelection;
 
 struct SPDesktop {
@@ -42,7 +97,7 @@ struct SPDesktop {
 	Inkscape::Application *inkscape;
 
 	SPNamedView *namedview;
-        SPSelection *selection; ///< current selection; will never generally be NULL
+	SPSelection *selection; ///< current selection; will never generally be NULL
 	SigC::Connection sel_modified_connection;
 	SPEventContext *event_context;
 
@@ -73,6 +128,14 @@ struct SPDesktop {
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	gboolean is_fullscreen;
 #endif /* HAVE_GTK_FULLSCREEN */
+
+	// current values
+	ColorRGBA fill_color;
+	ColorRGBA stroke_color;
+	gdouble stroke_width;
+
+	SigC::Signal4<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
+	SigC::Signal3<bool, const ColorRGBA &, bool, bool, StopOnTrue> _set_color_signal;
 };
 
 struct SPDesktopClass {
@@ -208,5 +271,7 @@ void fullscreen(SPDesktop *dt);
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 
 void sp_desktop_widget_layout (SPDesktopWidget *dtw);
+
+void sp_desktop_set_color (SPDesktop *desktop, const ColorRGBA &color, bool is_relative, bool fill);
 
 #endif

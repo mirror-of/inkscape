@@ -30,6 +30,8 @@
 #include "inkscape-private.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"
+#include "selection.h"
+#include "document.h"
 
 #include "dropper-context.h"
 #include <libnr/nr-point-fns.h>
@@ -144,7 +146,14 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 
 			if (dc->dragging) { 
 				// calculate average
+
+				// radius
 				rw = std::min(NR::L2(NR::Point(event->button.x, event->button.y) - dc->centre), 400.0);
+
+				if (rw == 0) { // happens sometimes, little idea why...
+					break;
+				}
+
 				NR::Point cd = sp_desktop_w2d_xy_point (ec->desktop, dc->centre);
 				NR::Matrix w2dt = sp_desktop_w2dt_affine (ec->desktop);
 				const double scale = rw * NR_MATRIX_DF_EXPANSION (&w2dt);
@@ -261,9 +270,9 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			dc->dragging = FALSE;
 
 			// do the actual color setting
-			SPColor color;
-			sp_color_set_rgb_float (&color, dc->R, dc->G, dc->B);
-			inkscape_set_color (&color, dc->alpha);
+			sp_desktop_set_color (ec->desktop, ColorRGBA(dc->R, dc->G, dc->B, dc->alpha), false, !(event->button.state & GDK_SHIFT_MASK));
+			if (!(ec->desktop->selection->isEmpty()))
+				sp_document_done (SP_DT_DOCUMENT(ec->desktop));
 
 			ret = TRUE;
 		}

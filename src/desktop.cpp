@@ -58,6 +58,8 @@
 #include "dialogs/dialog-events.h"
 #include "toolbox.h"
 #include "prefs-utils.h"
+#include "color.h"
+#include "svg/stringstream.h"
 
 #include "file.h"
 
@@ -1941,6 +1943,55 @@ fullscreen(SPDesktop *dt)
     }
 }
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+
+// color signals
+
+void
+sp_desktop_set_color (SPDesktop *desktop, const ColorRGBA &color, bool is_relative, bool fill)
+{
+
+// 1. Set internal values
+
+    if (is_relative) {
+       // FIXME: relative setting not yet implemented
+        return;
+    }
+
+    if (fill) {
+        desktop->fill_color = color;
+    } else {
+        desktop->stroke_color = color;
+    }
+
+// 2. Emit signal
+    bool intercepted = desktop->_set_color_signal.emit(color, is_relative, fill);
+
+// 3. If nobody has intercepted the signal, apply the color to the selection
+    if (!intercepted) {
+        guint32 rgba = SP_RGBA32_F_COMPOSE(color[0], color[1], color[2], color[3]);
+        gchar b[64];
+        sp_svg_write_color (b, 64, rgba);
+        SPCSSAttr *css = sp_repr_css_attr_new ();
+        if (fill) {
+            sp_repr_css_set_property (css, "fill", b);
+            Inkscape::SVGOStringStream osalpha;
+            osalpha << color[3];
+            sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
+        } else {
+            sp_repr_css_set_property (css, "stroke", b);
+            Inkscape::SVGOStringStream osalpha;
+            osalpha << color[3];
+            sp_repr_css_set_property (css, "stroke-opacity", osalpha.str().c_str());
+        }
+        for (const GSList *i = desktop->selection->itemList(); i != NULL; i = i->next) {
+            sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+        }
+        sp_repr_css_attr_unref (css);
+    }
+
+}
+
+
 
 /*
   Local Variables:

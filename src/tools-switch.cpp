@@ -174,7 +174,7 @@ tools_switch (SPDesktop *dt, int num)
 		sp_desktop_set_event_context (dt, SP_TYPE_DROPPER_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), _("Click to pick a color, click and drag to pick the average color of an area."));
+		sp_view_set_statusf (SP_VIEW(dt), _("Click to set fill color, Shift+click to set stroke color. Click and drag to pick the average color of an area."));
 		break;
 	}
 }
