@@ -1,3 +1,22 @@
+2003-12-19  bulia byak <bulia@dr.com>
+
+	* src/sp-item.cpp src/sp-item.h: new sp_item_get_arenaitem (by mental)
+
+	* src/main.cpp src/file.cpp src/file.h src/dialogs/export.cpp: export UI improvements
+	(patches from the tracker)
+
+	* src/select-context.cpp: shift-click selection is now in root_handler, uses
+	sp_document_item_at_point(); changed shift-rubberband selection to always select
+	instead of toggle
+
+	* src/document.h src/document.cpp: wrong order of arguments in overlap() fixed; new:
+	sp_document_item_at_point(), uses sp_item_get_arenaitem
+
+	* src/Makefile.am: fix: ps.c -> ps.cpp
+
+	* src/nodepath.cpp: dragging node with ctrl+alt restricts it to the directions of its
+	handles and their perpendiculars
+
 2003-12-19  MenTaLguY <mental@rydia.net>
 
 	* Fixed most shortcut key regressions from the SPAction rework
