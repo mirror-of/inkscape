@@ -247,12 +247,19 @@ static const SPStyleEnum enum_text_anchor[] = {
 };
 
 static const SPStyleEnum enum_writing_mode[] = {
-    {"lr", SP_CSS_WRITING_MODE_LR},
-    {"rl", SP_CSS_WRITING_MODE_RL},
-    {"tb", SP_CSS_WRITING_MODE_TB},
+    /* Note that using the same enumerator for lr as lr-tb means we write as lr-tb even if the
+     * input file said lr.  We prefer writing lr-tb on the grounds that the spec says the initial
+     * value is lr-tb rather than lr.
+     *
+     * ECMA scripts may be surprised to find tb-rl in DOM if they set the attribute to rl, so
+     * sharing enumerators for different strings may be a bug (once we support ecma script).
+     */
     {"lr-tb", SP_CSS_WRITING_MODE_LR},
     {"rl-tb", SP_CSS_WRITING_MODE_RL},
     {"tb-rl", SP_CSS_WRITING_MODE_TB},
+    {"lr", SP_CSS_WRITING_MODE_LR},
+    {"rl", SP_CSS_WRITING_MODE_RL},
+    {"tb", SP_CSS_WRITING_MODE_TB},
     {NULL, -1}
 };
 

@@ -1,3 +1,8 @@
+2004-12-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/style.cpp: Prefer to write lr-tb etc. rather than the
+	  abbreviations lr etc.  (Also add comment saying why.)
+
 2004-12-03  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/xml-tree.cpp (on_attr_select_row_set_value_content):
