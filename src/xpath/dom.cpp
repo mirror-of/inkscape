@@ -950,7 +950,7 @@ NodeList *ElementImpl::getElementsByTagNameNS(const DOMString& namespaceURI,
  */
 bool ElementImpl::hasAttribute(const DOMString& name)
 {
-
+    return false;
 }
 
 
@@ -960,6 +960,7 @@ bool ElementImpl::hasAttribute(const DOMString& name)
 bool ElementImpl::hasAttributeNS(const DOMString& namespaceURI, 
                         const DOMString& localName)
 {
+    return false;
 
 }
 
@@ -976,7 +977,8 @@ bool ElementImpl::hasAttributeNS(const DOMString& namespaceURI,
  */
 Text *TextImpl::splitText(unsigned long offset) throw(DOMException)
 {
-
+    Text *text = new Text();
+    return text;
 }
 
 
@@ -1008,7 +1010,8 @@ Text *TextImpl::splitText(unsigned long offset) throw(DOMException)
  */
 DOMString DocumentTypeImpl::getName()
 {
-
+    DOMString str;
+    return str;
 }
 
 
@@ -1035,6 +1038,8 @@ NamedNodeMap *DocumentTypeImpl::getNotations()
  */
 DOMString DocumentTypeImpl::getPublicId()
 {
+    DOMString str;
+    return str;
 
 }
 
@@ -1044,6 +1049,8 @@ DOMString DocumentTypeImpl::getPublicId()
  */
 DOMString DocumentTypeImpl::getSystemId()
 {
+    DOMString str;
+    return str;
 
 }
 
@@ -1053,6 +1060,8 @@ DOMString DocumentTypeImpl::getSystemId()
  */
 DOMString DocumentTypeImpl::getInternalSubset()
 {
+    DOMString str;
+    return str;
 
 }
 
@@ -1071,6 +1080,8 @@ DOMString DocumentTypeImpl::getInternalSubset()
  */
 DOMString NotationImpl::getPublicId()
 {
+    DOMString str;
+    return str;
 
 }
 
@@ -1080,6 +1091,8 @@ DOMString NotationImpl::getPublicId()
  */
 DOMString NotationImpl::getSystemId()
 {
+    DOMString str;
+    return str;
 
 }
 
@@ -1098,6 +1111,8 @@ DOMString NotationImpl::getSystemId()
  */
 DOMString EntityImpl::getPublicId()
 {
+    DOMString str;
+    return str;
 
 }
 
@@ -1107,6 +1122,8 @@ DOMString EntityImpl::getPublicId()
  */
 DOMString EntityImpl::DocumentTypeImpl::getSystemId()
 {
+    DOMString str;
+    return str;
 
 }
 
@@ -1116,6 +1133,8 @@ DOMString EntityImpl::DocumentTypeImpl::getSystemId()
  */
 DOMString EntityImpl::DocumentTypeImpl::getNotationName()
 {
+    DOMString str;
+    return str;
 
 }
 
