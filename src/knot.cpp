@@ -301,7 +301,7 @@ sp_knot_init (SPKnot * knot)
 	knot->fill [SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
 	knot->fill [SP_KNOT_STATE_DRAGGING] = 0x0000ffff;
 
-	knot->stroke [SP_KNOT_STATE_NORMAL] = 0xffffff77;
+	knot->stroke [SP_KNOT_STATE_NORMAL] = 0xffffffb0;
 	knot->stroke [SP_KNOT_STATE_MOUSEOVER] = 0x000000ff;
 	knot->stroke [SP_KNOT_STATE_DRAGGING] = 0x000000ff;
 
@@ -609,7 +609,7 @@ sp_knot_new (SPDesktop * desktop)
 		"filled", TRUE,
 		"fill_color", 0xffffff00,
 		"stroked", TRUE,
-		"stroke_color", 0xffffff77,
+		"stroke_color", 0xffffffb0,
 		NULL);
 
 	gtk_signal_connect (GTK_OBJECT (knot->item), "event",
