@@ -19,8 +19,8 @@
  */
 
 Shape::Shape (void)
-  : sEvts(NULL),
-    sTree(NULL),
+  : sTree(NULL),
+    sEvts(NULL),
     _need_points_sorting(false),
     _need_edges_sorting(false),
     _has_points_data(false),
