@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-05 19:14+0200\n"
+"POT-Creation-Date: 2004-06-07 20:23+0200\n"
 "PO-Revision-Date: 2004-05-31 19:27+0200\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -370,7 +370,7 @@ msgstr "Enote:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:720 src/dialogs/export.cpp:320
 #: src/dialogs/export.cpp:355 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1198
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1199
 #: src/toolbox.cpp:1572
 msgid "Width:"
 msgstr "Širina:"
@@ -412,7 +412,7 @@ msgstr "Točka izbire na predmet"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:367
 #: src/dialogs/display-settings.cpp:422 src/dialogs/display-settings.cpp:1200
-#: src/interface.cpp:949 src/verbs.cpp:788
+#: src/interface.cpp:953 src/verbs.cpp:788
 msgid "None"
 msgstr "Brez"
 
@@ -1026,20 +1026,20 @@ msgstr "Območje izbrano za izvoz ni veljavno"
 msgid "Select a filename for exporting"
 msgstr "Izberi ime datoteke za izvoz"
 
-#: src/dialogs/filedialog.cpp:187 src/dialogs/filedialog.cpp:327
+#: src/dialogs/filedialog.cpp:188 src/dialogs/filedialog.cpp:328
 #: src/extension/db.cpp:180 src/extension/db.cpp:193
 msgid "Autodetect"
 msgstr "Samodejno"
 
-#: src/dialogs/filedialog.cpp:212 src/dialogs/filedialog.cpp:366
+#: src/dialogs/filedialog.cpp:213 src/dialogs/filedialog.cpp:367
 msgid "File type:"
 msgstr "Vrsta datoteke:"
 
-#: src/dialogs/filedialog.cpp:370
+#: src/dialogs/filedialog.cpp:371
 msgid "Append filename extension automatically"
 msgstr "Samodejno dodaj končnico datoteki"
 
-#: src/dialogs/filedialog.cpp:420
+#: src/dialogs/filedialog.cpp:421
 msgid "No filename specified.  Unable to save."
 msgstr "Ni podano ime datoteke. Ne morem shraniti."
 
@@ -1476,39 +1476,39 @@ msgstr "Prostoročno"
 msgid "Calligraphic line"
 msgstr "Riši kaligrafske črte"
 
-#: src/dialogs/stroke-style.cpp:1048 src/widgets/gradient-vector.cpp:262
+#: src/dialogs/stroke-style.cpp:1049 src/widgets/gradient-vector.cpp:262
 msgid "No document selected"
 msgstr "Izbran ni noben dokument"
 
-#: src/dialogs/stroke-style.cpp:1205
+#: src/dialogs/stroke-style.cpp:1206
 msgid "Stroke width"
 msgstr "Debelina črte"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1225
+#: src/dialogs/stroke-style.cpp:1226
 msgid "Join:"
 msgstr "Spoj:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1239
+#: src/dialogs/stroke-style.cpp:1240
 msgid "Miter join"
 msgstr "Spoj pod kotom"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1249
+#: src/dialogs/stroke-style.cpp:1250
 msgid "Round join"
 msgstr "Zaobljen spoj"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1259
+#: src/dialogs/stroke-style.cpp:1260
 msgid "Bevel join"
 msgstr "Nagnjen spoj"
 
@@ -1519,54 +1519,54 @@ msgstr "Nagnjen spoj"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1270
+#: src/dialogs/stroke-style.cpp:1271
 msgid "Miter limit:"
 msgstr "Spoj pod kotom:"
 
-#: src/dialogs/stroke-style.cpp:1278
+#: src/dialogs/stroke-style.cpp:1279
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "Najdaljša črta (v enotah kot debelina)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1291
+#: src/dialogs/stroke-style.cpp:1292
 msgid "Cap:"
 msgstr "Konec:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1304
+#: src/dialogs/stroke-style.cpp:1305
 msgid "Butt cap"
 msgstr "Kvadratast konec"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1313
+#: src/dialogs/stroke-style.cpp:1314
 msgid "Round cap"
 msgstr "Zaobljen konec"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1322
+#: src/dialogs/stroke-style.cpp:1323
 msgid "Square cap"
 msgstr "Kvadraten konec"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1328
+#: src/dialogs/stroke-style.cpp:1329
 msgid "Pattern:"
 msgstr "Vzorec:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1349
+#: src/dialogs/stroke-style.cpp:1350
 msgid "Start Markers:"
 msgstr "Začetne oznake:"
 
-#: src/dialogs/stroke-style.cpp:1359
+#: src/dialogs/stroke-style.cpp:1360
 msgid "Mid Markers:"
 msgstr "Vmesne oznake"
 
-#: src/dialogs/stroke-style.cpp:1370
+#: src/dialogs/stroke-style.cpp:1371
 msgid "End Markers:"
 msgstr "Končne oznake:"
 
@@ -1683,17 +1683,17 @@ msgstr "Prekliči"
 msgid "Create"
 msgstr "Ustvari"
 
-#: src/document.cpp:394
+#: src/document.cpp:419
 #, c-format
 msgid "New document %d"
 msgstr "Nov dokument %d"
 
-#: src/document.cpp:423
+#: src/document.cpp:448
 #, c-format
 msgid "Memory document %d"
 msgstr "Pomnilniški dokument %d"
 
-#: src/document.cpp:510
+#: src/document.cpp:535
 #, c-format
 msgid "Unnamed document %d"
 msgstr "Neimenovan dokument %d"
@@ -1775,11 +1775,11 @@ msgstr "Ustvari obrobo okrog cele strani"
 msgid "Convert text to path"
 msgstr "Pretvori besedilo v krivulje"
 
-#: src/extension/internal/gnome.cpp:72
+#: src/extension/internal/gnome.cpp:73
 msgid "Select printer"
 msgstr "Izberi tiskalnik"
 
-#: src/extension/internal/gnome.cpp:123
+#: src/extension/internal/gnome.cpp:124
 #, c-format
 msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Inkscape (ime dokumenta %s..): Predogled Tiskanja"
@@ -2056,27 +2056,27 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Kvadrati ex"
 
-#: src/inkscape.cpp:462
+#: src/inkscape.cpp:464
 msgid "Untitled document"
 msgstr "Neimenovan dokument"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:493
+#: src/inkscape.cpp:495
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Inkscape se je spotaknil ob notranjo napako in se bo zato zaprl.\n"
 
-#: src/inkscape.cpp:494
+#: src/inkscape.cpp:496
 msgid ""
 "Automatic backups of unsaved documents were done to following locations:\n"
 msgstr ""
 "Samodejno shranjevanje neshranjenih dokumentov je bilo opravljeno, na "
 "sledeče lokacije:\n"
 
-#: src/inkscape.cpp:495
+#: src/inkscape.cpp:497
 msgid "Automatic backup of following documents failed:\n"
 msgstr "Samodejno shranjevanje sledečih dokumentov ni uspelo:\n"
 
-#: src/inkscape.cpp:652
+#: src/inkscape.cpp:659
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
@@ -2085,7 +2085,7 @@ msgstr ""
 "%s ni običajna datoteka.\n"
 "%s"
 
-#: src/inkscape.cpp:653
+#: src/inkscape.cpp:660
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -2096,7 +2096,7 @@ msgstr ""
 "pa zanjo nimate pravice branja.\n"
 "%s"
 
-#: src/inkscape.cpp:655
+#: src/inkscape.cpp:662
 #, c-format
 msgid ""
 "%s is not valid preferences file.\n"
@@ -2105,7 +2105,7 @@ msgstr ""
 "Datoteka %s ne vsebuje nastavitev.\n"
 "%s"
 
-#: src/inkscape.cpp:656
+#: src/inkscape.cpp:663
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
@@ -2113,7 +2113,7 @@ msgstr ""
 "Inkscape se bo zagnal s privzetimi nastavitvami.\n"
 "Nove nastavitve ne bodo shranjene."
 
-#: src/inkscape.cpp:1177
+#: src/inkscape.cpp:1184
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -2122,7 +2122,7 @@ msgstr ""
 "Ne morem ustvariti mape %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1178
+#: src/inkscape.cpp:1185
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -2131,7 +2131,7 @@ msgstr ""
 "Mapa %s ni veljavna.\n"
 "%s"
 
-#: src/inkscape.cpp:1179
+#: src/inkscape.cpp:1186
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -2140,7 +2140,7 @@ msgstr ""
 "Ne morem ustvariti datoteke %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1180
+#: src/inkscape.cpp:1187
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -2149,7 +2149,7 @@ msgstr ""
 "Ne morem zapisati datoteke %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1181
+#: src/inkscape.cpp:1188
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
@@ -2157,76 +2157,57 @@ msgstr ""
 "Inkscape bo sicer deloval, a z privzetimi nastavitvami.\n"
 "Spremembe nastavitev se ne bodo shranile."
 
-#: src/interface.cpp:599
+#: src/interface.cpp:603
 msgid "Open _Recent"
 msgstr "Odpri Nedavno"
 
-#: src/interface.cpp:599
+#: src/interface.cpp:603
 msgid "Open one of the recently visited documents"
 msgstr "Odpri nedavno uporabljan dokument"
 
-#: src/interface.cpp:762
+#: src/interface.cpp:766
 #, fuzzy
 msgid "_Show/Hide"
 msgstr "Kaži vodniške črte"
 
-#: src/interface.cpp:762
+#: src/interface.cpp:766
 msgid ""
 "Show or hide parts of the document window (differently for normal and "
 "fullscreen modes)"
 msgstr ""
 
-#: src/interface.cpp:765
+#: src/interface.cpp:769
 #, fuzzy
 msgid "_Menu"
 msgstr "Počisti"
 
-#: src/interface.cpp:765
+#: src/interface.cpp:769
 #, fuzzy
 msgid "Show or hide the menu bar"
 msgstr "Kaži ali skrij ravnila"
 
-#: src/interface.cpp:767
+#: src/interface.cpp:771
 msgid "Top _Panel"
 msgstr ""
 
-#: src/interface.cpp:767
+#: src/interface.cpp:771
 msgid "Show or hide the top panel (under the menu)"
 msgstr ""
 
-#: src/interface.cpp:769
+#: src/interface.cpp:773
 #, fuzzy
 msgid "_Toolbox"
 msgstr "Orodja"
 
-#: src/interface.cpp:769
+#: src/interface.cpp:773
 msgid "Show or hide the main toolbox (on the left)"
 msgstr ""
 
-#: src/interface.cpp:771
-#, fuzzy
-msgid "_Rulers"
-msgstr "Ravnila"
-
-#: src/interface.cpp:771
-#, fuzzy
-msgid "Show or hide the canvas rulers"
-msgstr "Kaži ali skrij ravnila"
-
-#: src/interface.cpp:773 src/verbs.cpp:963
-msgid "Scroll_bars"
-msgstr "Drsniki"
-
-#: src/interface.cpp:773
-#, fuzzy
-msgid "Show or hide the canvas scrollbars"
-msgstr "Kaži ali skrij gibalo"
-
-#: src/interface.cpp:775
+#: src/interface.cpp:779
 msgid "_Statusbar"
 msgstr ""
 
-#: src/interface.cpp:775
+#: src/interface.cpp:779
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr ""
 
@@ -2234,31 +2215,31 @@ msgstr ""
 #. * list of verb arguments) in the verb system right now, so we have to build
 #. * the submenu by hand.  Luckily, we can populate it using the same verb system.
 #.
-#: src/interface.cpp:814
+#: src/interface.cpp:818
 msgid "_Tutorials"
 msgstr "Navodila"
 
-#: src/interface.cpp:814
+#: src/interface.cpp:818
 msgid "Interactive Inkscape tutorials"
 msgstr "Navodila za uporabo"
 
-#: src/interface.cpp:840
+#: src/interface.cpp:844
 msgid "_File"
 msgstr "Datoteka"
 
-#: src/interface.cpp:846
+#: src/interface.cpp:850
 msgid "_Edit"
 msgstr "Uredi"
 
-#: src/interface.cpp:852
+#: src/interface.cpp:856
 msgid "_View"
 msgstr "Pogled"
 
-#: src/interface.cpp:858
+#: src/interface.cpp:862
 msgid "_Object"
 msgstr "Predmet"
 
-#: src/interface.cpp:864
+#: src/interface.cpp:868
 msgid "_Path"
 msgstr "Črte"
 
@@ -2267,20 +2248,20 @@ msgstr "Črte"
 #. sp_ui_dialogs_menu (GTK_MENU (menu), NULL, view);
 #. gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 #. gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
-#: src/interface.cpp:876
+#: src/interface.cpp:880
 msgid "_Help"
 msgstr "Pomoč"
 
-#: src/interface.cpp:985
+#: src/interface.cpp:989
 msgid "Could not parse SVG data"
 msgstr "Ne morem uvoziti podatkov SVG"
 
-#: src/interface.cpp:1147
+#: src/interface.cpp:1151
 #, c-format
 msgid "Overwrite %s"
 msgstr "Prepiši %s"
 
-#: src/interface.cpp:1165
+#: src/interface.cpp:1169
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -2377,7 +2358,7 @@ msgstr ""
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr "Naredi raje rasterske (xpm) ikone, kot pa vektorske (svg)"
 
-#: src/main.cpp:252 src/main.cpp:343
+#: src/main.cpp:250 src/main.cpp:339
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -3754,15 +3735,22 @@ msgid "Zoom out"
 msgstr "Oddalji"
 
 #: src/verbs.cpp:962
-msgid "Ru_lers"
+#, fuzzy
+msgid "_Rulers"
 msgstr "Ravnila"
 
 #: src/verbs.cpp:962
-msgid "Show or hide rulers"
+#, fuzzy
+msgid "Show or hide the canvas rulers"
 msgstr "Kaži ali skrij ravnila"
 
 #: src/verbs.cpp:963
-msgid "Show or hide scrollbars"
+msgid "Scroll_bars"
+msgstr "Drsniki"
+
+#: src/verbs.cpp:963
+#, fuzzy
+msgid "Show or hide the canvas scrollbars"
 msgstr "Kaži ali skrij gibalo"
 
 #: src/verbs.cpp:964
@@ -4292,6 +4280,15 @@ msgstr "Lastnost"
 #: src/widgets/sp-xmlview-attr-list.cpp:56
 msgid "Value"
 msgstr "Vrednost"
+
+#~ msgid "Ru_lers"
+#~ msgstr "Ravnila"
+
+#~ msgid "Show or hide rulers"
+#~ msgstr "Kaži ali skrij ravnila"
+
+#~ msgid "Show or hide scrollbars"
+#~ msgstr "Kaži ali skrij gibalo"
 
 #~ msgid ""
 #~ "Zoom the drawing when document window is resized, to keep the same area "
