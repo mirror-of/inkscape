@@ -961,12 +961,12 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_widget_set_usize(dtw->layer_selector, -1, SP_ICON_SIZE_BUTTON);
     gtk_box_pack_start(GTK_BOX(dtw->statusbar), dtw->layer_selector, FALSE, FALSE, 1);
 
-    // statusbar
-    dtw->select_status = gtk_statusbar_new ();
+    dtw->select_status = gtk_label_new (NULL);//gtk_statusbar_new ();
+    gtk_misc_set_alignment (GTK_MISC (dtw->select_status), 0.0, 0.5);
+    gtk_widget_set_size_request (dtw->select_status, 1, -1);
     sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);
     // display the initial welcome message in the statusbar
-    gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, _("Welcome to Inkscape! Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
-    gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->select_status), TRUE);
+    gtk_label_set_markup (GTK_LABEL (dtw->select_status), _("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->select_status, TRUE, TRUE, 0);
 
     gtk_widget_show_all (dtw->vbox);
@@ -1437,9 +1437,8 @@ void SPDesktop::_selection_changed(SPSelection *selection, SPDesktop *desktop)
 
 void SPDesktopWidget::setMessage(Inkscape::MessageType type, const gchar *message)
 {
-    GtkStatusbar *sb=GTK_STATUSBAR(this->select_status);
-    gtk_statusbar_pop(sb, 0);
-    gtk_statusbar_push(sb, 0, ( message ? message : "" ));
+    GtkLabel *sb=GTK_LABEL(this->select_status);
+    gtk_label_set_markup (sb, message ? message : "");
 }
 
 static void

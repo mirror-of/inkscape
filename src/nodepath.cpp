@@ -2674,7 +2674,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", NODE_FILL_HI,
                  "stroke", NODE_STROKE,
                  "stroke_mouseover", NODE_STROKE_HI,
-                 "tip", _("Drag the node to edit the path; with Ctrl to snap to horizontal/vertical, with Ctrl+Alt to snap to handles' directions"),
+                 "tip", _("<b>Node:</b> drag to edit the path; with <b>Ctrl</b> to snap to horizontal/vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"),
                  NULL);
     if (n->type == Path::NODE_CUSP)
         g_object_set(G_OBJECT(n->knot), "shape", SP_KNOT_SHAPE_DIAMOND, "size", 9, NULL);
@@ -2698,7 +2698,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", KNOT_FILL_HI,
                  "stroke", KNOT_STROKE,
                  "stroke_mouseover", KNOT_STROKE_HI,
-                 "tip", _("Drag the node handle; with Ctrl to snap angle, with Alt to lock length, with Shift to rotate the opposite handle in sync"),
+                 "tip", _("<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length, with <b>Shift</b> to rotate the opposite handle in sync"),
                  NULL);
     g_signal_connect(G_OBJECT(n->p.knot), "clicked", G_CALLBACK(node_ctrl_clicked), n);
     g_signal_connect(G_OBJECT(n->p.knot), "grabbed", G_CALLBACK(node_ctrl_grabbed), n);
@@ -2722,7 +2722,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", KNOT_FILL_HI,
                  "stroke", KNOT_STROKE,
                  "stroke_mouseover", KNOT_STROKE_HI,
-                 "tip", _("Drag the node handle; with Ctrl to snap angle, with Alt to lock length, with Shift to rotate the opposite handle in sync"),
+                 "tip", _("<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length, with <b>Shift</b> to rotate the opposite handle in sync"),
                  NULL);
     g_signal_connect(G_OBJECT(n->n.knot), "clicked", G_CALLBACK(node_ctrl_clicked), n);
     g_signal_connect(G_OBJECT(n->n.knot), "grabbed", G_CALLBACK(node_ctrl_grabbed), n);
@@ -2872,22 +2872,26 @@ sp_nodepath_update_statusbar(Path::Path *nodepath)
     }
 
     gint selected = g_list_length(nodepath->selected);
+    SPEventContext *ec = nodepath->desktop->event_context;
+    if (!ec) return;
+    Inkscape::MessageContext *mc = ec->defaultMessageContext();
+    if (!mc) return;
 
     if (selected == 0) {
         SPSelection *sel = nodepath->desktop->selection;
         if (!sel || sel->isEmpty()) {
-            nodepath->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE,
+            mc->setF(Inkscape::NORMAL_MESSAGE,
                                                      _("Select one path object with selector first, then switch back to node tool."));
         } else {
-            nodepath->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
-                                                      _("0 out of %i nodes selected. Click, Shift+click, or drag around nodes to select."), total);
+            mc->setF(Inkscape::NORMAL_MESSAGE,
+                                                      _("<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around nodes to select."), total);
         }
     } else if (selected == 1) {
-        nodepath->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
-                                                  _("%i of %i nodes selected; %s. %s."), selected, total, sp_node_type_description((Path::Node *) nodepath->selected->data), when_selected);
+        mc->setF(Inkscape::NORMAL_MESSAGE,
+                                                  _("<b>%i</b> of <b>%i</b> nodes selected; %s. %s."), selected, total, sp_node_type_description((Path::Node *) nodepath->selected->data), when_selected);
     } else {
-        nodepath->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
-                                                  _("%i of %i nodes selected. %s."), selected, total, when_selected);
+        mc->setF(Inkscape::NORMAL_MESSAGE,
+                                                  _("<b>%i</b> of <b>%i</b> nodes selected. %s."), selected, total, when_selected);
     }
 }
 

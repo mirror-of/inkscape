@@ -484,7 +484,7 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
                          "stroke", 0x000000ff,
                          "stroke_mouseover", 0xff0000b0,
                          "pixbuf", handles[handle_center.control],
-                         "tip", _("Drag to position the center of rotation and skewing; scaling with Shift also uses this center"),
+                         "tip", _("<b>Center</b> of rotation and skewing: drag to reposition; scaling with Shift also uses this center"),
                          NULL);
             g_signal_connect(G_OBJECT(seltrans.chandle), "request",
                              G_CALLBACK (sp_sel_trans_handle_request), (gpointer) &handle_center);
@@ -500,13 +500,13 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
 	if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
 		sp_remove_handles(seltrans.rhandle, 8);
 		sp_show_handles(seltrans, seltrans.shandle, handles_scale, 8,
-                    _("Squeeze or stretch selection; with Ctrl to scale uniformly; with Shift to scale around rotation center"), 
-                    _("Scale selection; with Ctrl to scale uniformly; with Shift to scale around rotation center"));
+                    _("<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center"), 
+                    _("<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center"));
 	} else {
 		sp_remove_handles(seltrans.shandle, 8);
 		sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8,
-                    _("Skew selection; with Shift to skew around the opposite side"), // fixme: CTRL SNAP!!! remove "skew and scale"
-                    _("Rotate selection; with Ctrl to snap angle; with Shift to rotate around the opposite corner"));
+                    _("<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"), // fixme: CTRL SNAP!!! remove "skew and scale"
+                    _("<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to rotate around the opposite corner"));
 	}
         if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
 		sp_knot_hide(seltrans.chandle);

@@ -644,11 +644,11 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         || (event->key.keyval == GDK_Meta_L) || (event->key.keyval == GDK_Meta_R);
 
                     gchar *tip = g_strdup_printf ("%s%s%s%s%s", 
-                                                  ctrl? _("Ctrl+click: select in groups") : "",
+                                                  ctrl? _("<b>Ctrl:</b> select in groups, move hor/vert") : "",
                                                   ctrl && shift? "; " : "",
-                                                  shift? _("Shift+click: add to selection, toggle") : "",
+                                                  shift? _("<b>Shift:</b> toggle select, force rubberband") : "",
                                                   (ctrl || shift) && alt? "; " : "",
-                                                  alt? _("Alt+click: select under") : ""
+                                                  alt? _("<b>Alt:</b> select under, move selected") : ""
                         );
 			event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, tip);
                 }
