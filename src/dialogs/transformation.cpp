@@ -66,26 +66,19 @@ static void sp_transformation_dialog_close (GObject *object, GtkWidget *dlg);
 
 static GtkWidget *sp_transformation_page_move_new (GObject *obj);
 static void sp_transformation_move_update (GObject *dlg, SPSelection *selection);
-static void sp_transformation_move_apply ( GObject *dlg, SPSelection *selection,
-                                           unsigned int copy );
+static void sp_transformation_move_apply(GObject *dlg, SPSelection *selection);
 
 static GtkWidget *sp_transformation_page_scale_new (GObject *obj);
 static void sp_transformation_scale_update ( GObject *dlg, 
                                              SPSelection *selection );
-static void sp_transformation_scale_apply ( GObject *dlg, 
-                                            SPSelection *selection, 
-                                            unsigned int copy );
+static void sp_transformation_scale_apply(GObject *dlg, SPSelection *selection);
 
 static GtkWidget *sp_transformation_page_rotate_new (GObject *obj);
 static void sp_transformation_rotate_update ( GObject *dlg, 
                                               SPSelection *selection );
-static void sp_transformation_rotate_apply ( GObject *dlg, 
-                                             SPSelection *selection, 
-                                             unsigned int copy );
+static void sp_transformation_rotate_apply(GObject *dlg, SPSelection *selection);
 
-static void sp_transformation_skew_apply ( GObject *dlg, 
-                                           SPSelection *selection, 
-                                           unsigned int copy );
+static void sp_transformation_skew_apply(GObject *dlg, SPSelection *selection);
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
@@ -127,8 +120,7 @@ sp_transformation_dialog_skew (void)
 
 
 
-static void
-sp_transformation_dialog_destroy (GtkObject *object, gpointer data)
+static void sp_transformation_dialog_destroy(GtkObject *object, gpointer)
 {
     sp_signal_disconnect_by_data (INKSCAPE, object);
     wd.win = dlg = NULL;
@@ -137,12 +129,16 @@ sp_transformation_dialog_destroy (GtkObject *object, gpointer data)
 
 
 
-static gboolean
-sp_transformation_dialog_delete ( GtkObject *object, GdkEvent *event, 
-                                  gpointer data )
+static gboolean sp_transformation_dialog_delete(GtkObject *, GdkEvent *, gpointer data)
 {
-    gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
-    gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
+    if ( data != static_cast<gpointer>(dlg) ) {
+        g_warning("possible bug: dlg differs from passed data");
+        /* E.g. maybe we shouldn't update the global x,y,w,h, or maybe we should use dlg instead of
+           dead_dlg below. */
+    }
+    GtkWindow &dead_dlg = *static_cast<GtkWindow *>(data);
+    gtk_window_get_position(&dead_dlg, &x, &y);
+    gtk_window_get_size(&dead_dlg, &w, &h);
 
     prefs_set_int_attribute (prefs_path, "x", x);
     prefs_set_int_attribute (prefs_path, "y", y);
@@ -209,14 +205,10 @@ sp_transformation_dialog_selection_changed ( Inkscape::Application *inkscape,
                                              SPSelection *selection, 
                                              GObject *obj )
 {
-    GObject *notebook;
-    int page;
-
-    notebook = G_OBJECT(g_object_get_data (obj, "notebook"));
-    page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+    GObject &notebook = *G_OBJECT(g_object_get_data(obj, "notebook"));
+    int const page = gtk_notebook_get_current_page(GTK_NOTEBOOK(&notebook));
 
     sp_transformation_dialog_update_selection (obj, page, selection);
-    
 }
 
 
@@ -294,7 +286,7 @@ sp_transformation_dialog_new (void)
                              
         gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", 
                              G_CALLBACK (sp_transformation_dialog_destroy), 
-                             dlg );
+                             NULL );
                              
         gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", 
                              G_CALLBACK (sp_transformation_dialog_delete), dlg);
@@ -393,45 +385,38 @@ sp_transformation_dialog_new (void)
 
 
 
-static void
-sp_transformation_dialog_apply (GObject *object, GObject *dlg)
+static void sp_transformation_dialog_apply(GObject *, GObject *dlg)
 {
-    SPDesktop *desktop;
-    SPSelection *selection;
-    GtkWidget *nbookw, *apply;
-    int page;
-
-    desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop * const desktop = SP_ACTIVE_DESKTOP;
     g_return_if_fail (desktop != NULL);
-    selection = SP_DT_SELECTION (desktop);
+    SPSelection * const selection = SP_DT_SELECTION(desktop);
     g_return_if_fail (!sp_selection_is_empty (selection));
 
-    nbookw = GTK_WIDGET(g_object_get_data (dlg, "notebook"));
-    page = gtk_notebook_get_current_page (GTK_NOTEBOOK (nbookw));
+    GtkWidget * const nbookw = GTK_WIDGET(g_object_get_data(dlg, "notebook"));
+    int const page = gtk_notebook_get_current_page (GTK_NOTEBOOK (nbookw));
 
     switch (page) {
         case SP_TRANSFORMATION_MOVE:
-            sp_transformation_move_apply (dlg, selection, FALSE);
+            sp_transformation_move_apply(dlg, selection);
             break;
         case SP_TRANSFORMATION_ROTATE:
-            sp_transformation_rotate_apply (dlg, selection, FALSE);
+            sp_transformation_rotate_apply(dlg, selection);
             break;
         case SP_TRANSFORMATION_SCALE:
-            sp_transformation_scale_apply (dlg, selection, FALSE);
+            sp_transformation_scale_apply(dlg, selection);
             break;
         case SP_TRANSFORMATION_SKEW:
-            sp_transformation_skew_apply (dlg, selection, FALSE);
+            sp_transformation_skew_apply(dlg, selection);
             break;
     }
 
-    apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
+    GtkWidget *apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
     gtk_widget_set_sensitive (apply, TRUE);
 }
 
 
 
-static void
-sp_transformation_dialog_close (GObject *object, GtkWidget *dlg)
+static void sp_transformation_dialog_close(GObject *, GtkWidget *dlg)
 {
     gtk_widget_destroy (dlg);
 }
@@ -442,15 +427,12 @@ sp_transformation_dialog_close (GObject *object, GtkWidget *dlg)
  * \brief  Move implementation
  *
  */
-static void
-sp_transformation_move_value_changed (GtkAdjustment *adj, GObject *dlg)
+static void sp_transformation_move_value_changed(GtkAdjustment *, GObject *dlg)
 {
-    GtkWidget *apply;
-
     if (g_object_get_data (dlg, "update"))
         return;
 
-    apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
+    GtkWidget *apply = GTK_WIDGET(g_object_get_data(dlg, "apply"));
     gtk_widget_set_sensitive (apply, TRUE);
 }
 
@@ -618,10 +600,7 @@ sp_transformation_move_update (GObject *dlg, SPSelection *selection)
 
 
 
-static void
-sp_transformation_move_apply ( GObject *dlg, 
-                               SPSelection *selection, 
-                               unsigned int copy )
+static void sp_transformation_move_apply(GObject *dlg, SPSelection *selection)
 {
     SPUnitSelector *us;
     GtkAdjustment *ax, *ay;
@@ -655,11 +634,10 @@ sp_transformation_move_apply ( GObject *dlg,
  * \brief  Scale implementation
  *
  */
-static gboolean
-sp_transformation_scale_set_unit ( SPUnitSelector *us, 
-                                   const SPUnit *old, 
-                                   const SPUnit *new_units, 
-                                   GObject *dlg )
+static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
+                                                 SPUnit const *old,
+                                                 SPUnit const *new_units,
+                                                 GObject *dlg)
 {
     SPDesktop *desktop;
     SPSelection *selection;
@@ -721,15 +699,12 @@ sp_transformation_scale_set_unit ( SPUnitSelector *us,
 
 
 
-static void
-sp_transformation_scale_value_changed (GtkAdjustment *adj, GObject *dlg)
+static void sp_transformation_scale_value_changed(GtkAdjustment *, GObject * const dlg)
 {
-    GtkWidget *apply;
-
     if (g_object_get_data (dlg, "update"))
         return;
 
-    apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
+    GtkWidget *apply = GTK_WIDGET(g_object_get_data(dlg, "apply"));
     gtk_widget_set_sensitive (apply, TRUE);
 }
 
@@ -841,10 +816,7 @@ sp_transformation_scale_update (GObject *dlg, SPSelection *selection)
 
 
 
-static void
-sp_transformation_scale_apply ( GObject *dlg, 
-                                SPSelection *selection, 
-                                unsigned int copy )
+static void sp_transformation_scale_apply(GObject *dlg, SPSelection *selection)
 {
     SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data(dlg, "scale_units"));
     GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data(dlg, "scale_dimension_x"));
@@ -876,15 +848,12 @@ sp_transformation_scale_apply ( GObject *dlg,
  * \brief  Rotate implementation
  *
  */
-static void
-sp_transformation_rotate_value_changed (GtkAdjustment *adj, GObject *dlg)
+static void sp_transformation_rotate_value_changed(GtkAdjustment *, GObject * const dlg)
 {
-    GtkWidget *apply;
-
     if (g_object_get_data (dlg, "update"))
         return;
 
-    apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
+    GtkWidget *apply = GTK_WIDGET(g_object_get_data(dlg, "apply"));
     gtk_widget_set_sensitive (apply, TRUE);
 }
 
@@ -947,15 +916,9 @@ sp_transformation_rotate_update (GObject *dlg, SPSelection *selection)
 
 
 
-static void
-sp_transformation_rotate_apply ( GObject *dlg, 
-                                 SPSelection *selection, 
-                                 unsigned int copy )
+static void sp_transformation_rotate_apply(GObject *dlg, SPSelection *selection)
 {
-
-    GtkAdjustment *a;
-
-    a = GTK_ADJUSTMENT(g_object_get_data (dlg, "rotate_angle"));
+    GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(dlg, "rotate_angle"));
 
     NRRect bbox_compat;
     sp_selection_bbox (selection, &bbox_compat);
@@ -967,10 +930,7 @@ sp_transformation_rotate_apply ( GObject *dlg,
         sp_document_done (SP_DT_DOCUMENT (selection->desktop));
 }
 
-static void
-sp_transformation_skew_apply ( GObject *dlg, 
-                               SPSelection *selection, 
-                               unsigned int copy )
+static void sp_transformation_skew_apply(GObject *dlg, SPSelection *selection)
 {
 }
 

@@ -1,6 +1,11 @@
 2004-03-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/dialogs/align.cpp: Cleanups.
+	* src/dialogs/transformation.cpp (sp_transformation_move_apply,
+	sp_transformation_scale_apply, sp_transformation_rotate_apply,
+	sp_transformation_skew_apply):
+	Remove unused `copy' parameter.  Update caller.
+
+	* src/dialogs/align.cpp, src/dialogs/transformation.cpp: Cleanups.
 
 	* src/display/nr-arena-shape.cpp (nr_arena_shape_set_path):
 	Remove affine argument (all current callers were passing NULL) and
