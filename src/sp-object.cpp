@@ -642,23 +642,21 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 	if (!SP_OBJECT_IS_CLONED (object)) {
 		object->document->bindObjectToRepr(object->repr, object);
 
-		/* If we are not cloned, force unique id */
-		const gchar *id = sp_repr_attr (object->repr, "id");
-		gchar *realid = sp_object_get_unique_id (object, id);
-		g_assert (realid != NULL);
+		if ( object->repr->type() == SP_XML_ELEMENT_NODE ) {
+			/* If we are not cloned, force unique id */
+			const gchar *id = sp_repr_attr (object->repr, "id");
+			gchar *realid = sp_object_get_unique_id (object, id);
+			g_assert (realid != NULL);
 
-		object->document->bindObjectToId(realid, object);
-		object->id = realid;
+			object->document->bindObjectToId(realid, object);
+			object->id = realid;
 
-		/* Redefine ID, if required */
-		if ((id == NULL) || (strcmp (id, realid) != 0)) {
-			gboolean undo_sensitive=sp_document_get_undo_sensitive(document);
-			sp_document_set_undo_sensitive(document, FALSE);
-			int ret = sp_repr_set_attr (object->repr, "id", realid);
-			sp_document_set_undo_sensitive(document, undo_sensitive);
-
-			if (!ret) {
-				g_error ("Update id %s to unique id %s has been vetoed; cannot maintain SPObject <-> SPRepr binding", id, realid);
+			/* Redefine ID, if required */
+			if ((id == NULL) || (strcmp (id, realid) != 0)) {
+				gboolean undo_sensitive=sp_document_get_undo_sensitive(document);
+				sp_document_set_undo_sensitive(document, FALSE);
+				sp_repr_set_attr (object->repr, "id", realid);
+				sp_document_set_undo_sensitive(document, undo_sensitive);
 			}
 		}
 	} else {
@@ -758,8 +756,11 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 
 	switch (key) {
 	case SP_ATTR_ID:
-		if (!SP_OBJECT_IS_CLONED (object)) {
-			SPObject *conflict = object->document->getObjectById((const char *)value);
+		if ( !SP_OBJECT_IS_CLONED (object) && object->repr->type() == SP_XML_ELEMENT_NODE ) {
+			SPObject *conflict=NULL;
+			if (value) {
+				conflict = object->document->getObjectById((const char *)value);
+			}
 			if (conflict) {
 				sp_object_ref(conflict, NULL);
 				// give the conflicting object a new ID
@@ -780,8 +781,8 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 				object->id = g_strdup ((const char*)value);
 				object->document->bindObjectToId(object->id, object);
 			} else {
-				object->id = NULL;
 				g_warning("id binding cleared on bound object %s", object->id);
+				object->id = NULL;
 			}
 
 			g_free(object->_default_label);

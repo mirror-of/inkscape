@@ -1,4 +1,8 @@
-2004-01-15  MenTaLguY  <mental@rydia.net>
+2005-01-16  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-object.cpp: non-elements no longer get ids assigned
+
+2005-01-15  MenTaLguY  <mental@rydia.net>
 
 	* src/arc-context.cpp, src/document-private.h, src/document.cpp,
 	  src/document.h, src/event-context.cpp, src/node-context.cpp,
@@ -18,7 +22,7 @@
 	  anything breaking (hopefully).  For now we will still assign ids
 	  to everything by default...
 
-2004-01-15  MenTaLguY  <mental@rydia.net>
+2005-01-15  MenTaLguY  <mental@rydia.net>
 
 	* src/arc-context.cpp, src/event-context.cpp, src/node-context.cpp,
 	  src/rect-context.cpp, src/sp-object.cpp, src/spiral-context.cpp,
@@ -31,7 +35,7 @@
 
 	  remove all veto callbacks but setting attributes
 
-2004-01-15  Kees Cook  <kees@outflux.net>
+2005-01-15  Kees Cook  <kees@outflux.net>
 
 	* src/inkscape.cpp: correcting windows path for preferences.  Closes
 	bug #933461.
@@ -49,13 +53,13 @@
 	replacements from Andreas Nilsson.  Fixed some mistakes in the earlier
 	changes (need to call sp_icon_new_scaled not sp_icon_new).
 
-2004-01-14  MenTaLguY  <mental@rydia.net>
+2005-01-14  MenTaLguY  <mental@rydia.net>
 
 	* src/gc.cpp: leave the free space multiplier at the default, which
 	  will hopefully (according to Hans) avoid some of the odd gc issues
 	  we've had, if nothing else does
 
-2004-01-14  Kees Cook  <kees@outflux.net>
+2005-01-14  Kees Cook  <kees@outflux.net>
 
     * share/icons/Makefile.am, share/icons/icons.svg, src/inkscape-stock.cpp,
 	src/inkscape-stock.h, src/verbs.cpp, src/dialogs/stroke-style.cpp,
@@ -64,17 +68,17 @@
 	Fixed up code and replaced pixmaps with icons from myself and
 	Andreas Nilsson.
 
-2004-01-11  MenTaLguY  <mental@rydia.net>
+2005-01-11  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-io.cpp: promote non-namespaced SVG documents into SVG
 	  namespace
 
-2004-01-08  MenTaLguY  <mental@rydia.net>
+2005-01-08  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile_insert, src/gc-anchored.cpp, src/gc-anchored.h:
 	  abstracted allocation of anchors
 
-2004-01-06  Ted Gould  <ted@gould.cx>
+2005-01-06  Ted Gould  <ted@gould.cx>
 
 	* src/interface.cpp, src/extension/effect.cpp,
 	src/extension/implementation/implementation.cpp,
@@ -90,7 +94,7 @@
 	will allow out of process GUIs to work too.  This is a first pass with
 	nothing beautiful, but it does seem to work.
 
-2004-01-03  MenTaLguY  <mental@rydia.net>
+2005-01-03  MenTaLguY  <mental@rydia.net>
 
 	* src/document.cpp, src/main.cpp, src/sp-root.cpp:
 	  get rid of ugly xmlns hacks
@@ -100,7 +104,7 @@
 	  and make a best effort at using a default namespace when requested
 	  and possible
 
-2004-01-02  Kees Cook  <kees@outflux.net>
+2005-01-02  Kees Cook  <kees@outflux.net>
 
     * share/icons/icons.svg: updated view and location
     * src/document.cpp, src/dialogs/rdf.cpp: fixed another bug in metadata
