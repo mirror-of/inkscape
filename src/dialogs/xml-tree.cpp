@@ -1154,9 +1154,12 @@ on_tree_select_row_enable_if_indentable ( GtkCTree * tree, GtkCTreeNode * node,
     if ( repr->parent && repr != repr->parent->children ) {
         g_assert (repr->parent->children);
 
-        for ( prev = repr->parent->children ; prev != repr ;
-            prev = prev->next );
-        if (SP_REPR_TYPE (prev) == SP_XML_ELEMENT_NODE) {
+        // skip to the child just before the current repr
+        for ( prev = repr->parent->children ;
+              prev && prev->next != repr ;
+              prev = prev->next );
+
+        if (prev && SP_REPR_TYPE (prev) == SP_XML_ELEMENT_NODE) {
             indentable = TRUE;
         }
     }

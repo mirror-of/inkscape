@@ -6,6 +6,7 @@
 	* src/Makefile_insert, src/sp-skeleton.cpp, src/sp-skeleton.h:
 	  created some example SPObject implementations for a basis for any
 	  new SPObjects in the future.
+	* src/dialogs/xml-tree.cpp: fixing logic bug in identability checker.
 
 2004-11-20  Jon A. Cruz  <jon@joncruz.org>
 
