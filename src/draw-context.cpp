@@ -431,6 +431,11 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
     sp_curve_reset(dc->red_curve);
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
 
+    if (sp_curve_empty(c)) {
+        sp_curve_unref(c);
+        return;
+    }
+
     /* Step A - test, whether we ended on green anchor */
     if ( forceclosed || ( dc->green_anchor && dc->green_anchor->active ) ) {
         // We hit green anchor, closing Green-Blue-Red

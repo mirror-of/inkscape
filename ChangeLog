@@ -1,5 +1,9 @@
 2004-11-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/draw-context.cpp (spdc_concat_colors_and_flush):
+	  Do nothing if empty curve; in particular, don't try to close an
+	  empty curve.
+
 	* src/pen-context.cpp (spdc_endpoint_snap):
 	  Fix use of uninitialized value when snapping.
 
