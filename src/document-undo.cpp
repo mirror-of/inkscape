@@ -74,6 +74,8 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 	g_assert (doc->priv != NULL);
 	g_assert (doc->priv->sensitive);
 
+	sp_document_ensure_up_to_date (doc);
+
 	sp_document_clear_redo (doc);
 
 	log = sp_repr_coalesce_log (doc->priv->partial, sp_repr_commit_undoable (doc->rdoc));
