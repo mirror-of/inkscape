@@ -101,7 +101,7 @@ sp_group_class_init (SPGroupClass *klass)
 static void
 sp_group_init (SPGroup *group)
 {
-	group->mode = SP_GROUP_MODE_GROUP;
+	group->mode = SPGroup::GROUP;
 }
 
 static void
@@ -329,7 +329,7 @@ sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 
 	ai = NRArenaGroup::create(arena);
 	nr_arena_group_set_transparent (NR_ARENA_GROUP (ai),
-	                                group->mode != SP_GROUP_MODE_GROUP);
+	                                group->mode != SPGroup::GROUP);
 
 	ar = NULL;
 
@@ -501,32 +501,21 @@ sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *nam
 	return child;
 }
 
-SPGroupMode
-sp_item_group_get_mode (SPGroup *group)
-{
-	return group->mode;
-}
-
-void
-sp_item_group_set_mode (SPGroup *group, SPGroupMode mode)
+void SPGroup::setLayerMode(SPGroup::LayerMode mode)
 {
 	SPItemView *view;
 
-	if (group->mode == mode) return;
+	if (this->mode == mode) return;
 
-	group->mode = mode;
+	this->mode = mode;
 
 	/* FIXME !!! this probably dips a little too deeply into
 	             SPItem's internals... */
-	for ( view = group->display ; view ; view = view->next ) {
-		NRArenaGroup *arena_group=NR_ARENA_GROUP (view->arenaitem);
-		if (!arena_group) {
-			g_warning ("SPGroup has a non-NRArenaGroup attached to an SPItemView");
-			continue;
+	for ( view = this->display ; view ; view = view->next ) {
+		NRArenaGroup *arena_group=NR_ARENA_GROUP(view->arenaitem);
+		if (arena_group) {
+			nr_arena_group_set_transparent(arena_group, mode != SPGroup::GROUP);
 		}
-		nr_arena_group_set_transparent (arena_group,
-			                        group->mode !=
-			                          SP_GROUP_MODE_GROUP);
 	}
 }
 

@@ -119,8 +119,6 @@ sp_root_init (SPRoot *root)
 	root->version.inkscape = root->original.inkscape =
 	  root->version.sodipodi = root->original.sodipodi = zero_version;
 
-	root->group.mode = SP_GROUP_MODE_LAYER;
-
 	sp_svg_length_unset (&root->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&root->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&root->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
@@ -164,8 +162,6 @@ sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 
 	if (((SPObjectClass *) parent_class)->build)
 		(* ((SPObjectClass *) parent_class)->build) (object, document, repr);
-
-	group->mode = SP_GROUP_MODE_LAYER;
 
 	/* Search for first <defs> node */
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL; o = SP_OBJECT_NEXT(o) ) {

@@ -422,10 +422,12 @@ void sp_object_detach (SPObject *parent, SPObject *object) {
 
 	*ref = object->next;
 	object->next = NULL;
-	object->parent = NULL;
 
 	sp_object_invoke_release (object);
 	parent->_updateTotalHRefCount(-object->_total_hrefcount);
+
+	// we've left the parent link in place during "release" emission
+	object->parent = NULL;
 }
 
 void sp_object_detach_unref (SPObject *parent, SPObject *object)
@@ -605,8 +607,8 @@ sp_object_invoke_release (SPObject *object)
 	g_assert (object != NULL);
 	g_assert (SP_IS_OBJECT (object));
 
-	/* Parent refcount us, so there shouldn't be any */
-	g_assert (!object->parent);
+	// we need to remember our parent
+	// g_assert (!object->parent);
 	g_assert (!object->next);
 	g_assert (object->document);
 	g_assert (object->repr);
@@ -615,7 +617,7 @@ sp_object_invoke_release (SPObject *object)
 
 	g_signal_emit (G_OBJECT (object), object_signals[RELEASE], 0);
 
-	/* all hrefs should be released by the "release" handler */
+	/* all hrefs should be released by the "release" handlers */
 	g_assert (object->hrefcount == 0);
 
 	if (!SP_OBJECT_IS_CLONED (object)) {

@@ -145,6 +145,10 @@ struct SPObject : public GObject {
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
 
+	bool isSiblingOf(SPObject *object) {
+		g_return_val_if_fail(object != NULL, false);
+		return this->parent && this->parent == object->parent;
+	}
 	bool isAncestorOf(SPObject *object);
 	SPObject *nearestCommonAncestor(SPObject *object);
 

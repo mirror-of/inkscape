@@ -75,11 +75,18 @@ private:
     ObjectHierarchy(ObjectHierarchy const &); // no copy
     void operator=(ObjectHierarchy const &); // no assign
 
+    /// @brief adds objects in range [senior, junior) to the top
     void _addTop(SPObject *senior, SPObject *junior);
+    /// @brief adds one object to the top
+    void _addTop(SPObject *object);
+    /// @brief removes all objects above the limit object
     void _trimAbove(SPObject *limit);
 
+    /// @brief adds objects in range (senior, junior] to the bottom
     void _addBottom(SPObject *senior, SPObject *junior);
+    /// @brief adds one object to the bottom
     void _addBottom(SPObject *object);
+    /// @brief removes all objects below the limit object
     void _trimBelow(SPObject *limit);
 
     Record _attach(SPObject *object);

@@ -26,6 +26,7 @@
 #include "inkscape-private.h"
 #include "inkscape_version.h"
 #include "sp-object-repr.h"
+#include "sp-item-group.h"
 #include "sp-root.h"
 #include "sp-namedview.h"
 #include "document-private.h"
@@ -749,7 +750,7 @@ find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) &&
-		    SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER)
+		    SP_GROUP (o)->layerMode() == SPGroup::LAYER )
 		{
 			s = find_items_in_area (s, SP_GROUP (o), area, test);
 		} else {
@@ -774,7 +775,7 @@ find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_
 
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
-		if (SP_IS_GROUP (o) && (SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER || into_groups))	{
+		if (SP_IS_GROUP (o) && (SP_GROUP (o)->layerMode() == SPGroup::LAYER || into_groups))	{
 			// if nothing found yet, recurse into the group
 			newseen = find_item_at_point (dkey, SP_GROUP (o), p, into_groups);
 			if (newseen) {
@@ -802,7 +803,7 @@ find_group_at_point (gint dkey, SPGroup *group, NR::Point const p)
 
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
-		if (SP_IS_GROUP (o) && SP_GROUP (o)->mode != SP_GROUP_MODE_LAYER) {
+		if (SP_IS_GROUP (o) && SP_GROUP (o)->layerMode() != SPGroup::LAYER ) {
 			SPItem *child = SP_ITEM(o);
 			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 

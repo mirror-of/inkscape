@@ -927,17 +927,13 @@ sp_ui_context_menu (SPView *view, SPItem *item)
         if ( dt && ( dt->currentLayer() != dt->currentRoot() || SP_IS_GROUP(item) && item != dt->currentLayer() ) ) {
             sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
             if ( dt->currentLayer() != dt->currentRoot() ) {
-                gchar *label=g_strdup_printf(_("Leave Group #%s"), SP_OBJECT_ID(dt->currentLayer()));
-                GtkWidget *w = gtk_menu_item_new_with_label(label);
-                g_free(label);
+                GtkWidget *w = gtk_menu_item_new_with_label(_("Ascend to Parent Layer"));
                 g_signal_connect(G_OBJECT(w), "activate", GCallback(leave_group), dt);
                 gtk_widget_show(w);
                 gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
             }
             if ( SP_IS_GROUP(item) && item != dt->currentLayer() ) {
-                gchar *label=g_strdup_printf(_("Enter Group #%s"), SP_OBJECT_ID(item));
-                GtkWidget *w = gtk_menu_item_new_with_label(label);
-                g_free(label);
+                GtkWidget *w = gtk_menu_item_new_with_label(_("Make Current Layer"));
                 g_object_set_data(G_OBJECT(w), "group", item);
                 g_signal_connect(G_OBJECT(w), "activate", GCallback(enter_group), dt);
                 gtk_widget_show(w);

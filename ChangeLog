@@ -1,3 +1,25 @@
+2004-07-03  MenTaLguY  <mental@rydia.net>
+
+	* src/desktop.cpp, src/document.cpp: 
+
+	  siblings of a layer now become layers too
+
+	* src/interface.cpp: switched to command names suggested by bulia
+
+	* src/object-hierarchy.cpp, src/object-hierarchy.h:
+
+	  bugfixes and cleanups
+	
+	* src/sp-item-group.cpp, src/sp-item-group.h, src/sp-root.cpp:
+
+	  new layerMode() and setLayerMode() methods; SPGroupMode becomes
+	  SPGroup::LayerMode
+
+	* src/sp-object.h: added isSiblingOf() method
+
+	* src/sp-object.cpp: leave parent pointer in place until after
+	  "release" handlers finish
+
 2004-07-02  Kees Cook  <kees@outflux.net>
 
 	* src/document.cpp, src/dialogs/desktop-properties.cpp, 

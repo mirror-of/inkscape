@@ -49,14 +49,14 @@ void ObjectHierarchy::setTop(SPObject *object) {
     }
 
     if (!top()) {
-        _addBottom(object);
+        _addTop(object);
     } else if (object->isAncestorOf(top())) {
-        _addTop(object, SP_OBJECT_PARENT(top()));
+        _addTop(object, top());
     } else if ( object == bottom() || object->isAncestorOf(bottom()) ) {
         _trimAbove(object);
     } else {
         _clear();
-        _addBottom(object);
+        _addTop(object);
     }
 
     _changed_signal.emit(top(), bottom());
@@ -66,13 +66,17 @@ void ObjectHierarchy::_addTop(SPObject *senior, SPObject *junior) {
     g_assert(junior != NULL);
     g_assert(senior != NULL);
 
-    SPObject *object=junior;
-    while ( object != senior ) {
-        g_assert(object != NULL);
-        _hierarchy.push_back(_attach(object));
-        _added_signal.emit(object);
+    SPObject *object=SP_OBJECT_PARENT(junior);
+    do {
+        _addTop(object);
         object = SP_OBJECT_PARENT(object);
-    }
+    } while ( object != senior );
+}
+
+void ObjectHierarchy::_addTop(SPObject *object) {
+    g_assert(object != NULL);
+    _hierarchy.push_back(_attach(object));
+    _added_signal.emit(object);
 }
 
 void ObjectHierarchy::_trimAbove(SPObject *limit) {
@@ -98,8 +102,19 @@ void ObjectHierarchy::setBottom(SPObject *object) {
         _addBottom(object);
     } else if (bottom()->isAncestorOf(object)) {
         _addBottom(bottom(), object);
-    } else if ( top() == object || top()->isAncestorOf(object)) {
-        _trimBelow(object);
+    } else if ( top() == object ) {
+        _trimBelow(top());
+    } else if (top()->isAncestorOf(object)) {
+        if (object->isAncestorOf(bottom())) {
+            _trimBelow(object);
+        } else { // object is a sibling or cousin of bottom()
+            SPObject *saved_top=top();
+            sp_object_ref(saved_top, NULL);
+            _clear();
+            _addBottom(saved_top);
+            _addBottom(saved_top, object);
+            sp_object_unref(saved_top, NULL);
+        }
     } else {
         _clear();
         _addBottom(object);

@@ -53,6 +53,7 @@
 #include "select-context.h"
 #include "sp-namedview.h"
 #include "sp-item.h"
+#include "sp-item-group.h"
 #include "sp-root.h"
 #include "interface.h"
 #include "dialogs/dialog-events.h"
@@ -1328,18 +1329,34 @@ void SPDesktop::_set_status_message(SPView *view, Inkscape::MessageType type, co
     }
 }
 
-void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
-    g_return_if_fail(SP_IS_GROUP(layer));
+namespace {
+
+void apply_layer_mode(SPGroup *layer, SPGroup::LayerMode mode) {
     // TODO - this mode needs to be settable on a per-desktop basis
     //        (see comments in sp-item-group.h)
-    sp_item_group_set_mode(SP_GROUP(layer), SP_GROUP_MODE_LAYER);
+    if (SP_OBJECT_PARENT(layer)) {
+        SPObject *iter=sp_object_first_child(SP_OBJECT_PARENT(layer));
+        while (iter) {
+            if (SP_IS_GROUP(iter)) {
+                SP_GROUP(iter)->setLayerMode(mode);
+            }
+            iter = SP_OBJECT_NEXT(iter);
+        }
+    } else {
+        SP_GROUP(layer)->setLayerMode(mode);
+    }
+}
+
+void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
+    g_return_if_fail(SP_IS_GROUP(layer));
+    apply_layer_mode(SP_GROUP(layer), SPGroup::LAYER);
 }
 
 void SPDesktop::_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
     g_return_if_fail(SP_IS_GROUP(layer));
-    // TODO - this mode needs to be settable on a per-desktop basis
-    //        (see comments in sp-item-group.h)
-    sp_item_group_set_mode(SP_GROUP(layer), SP_GROUP_MODE_GROUP);
+    apply_layer_mode(SP_GROUP(layer), SPGroup::GROUP);
+}
+
 }
 
 void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
