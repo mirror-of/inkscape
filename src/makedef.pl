@@ -17,7 +17,11 @@ sub doMakeDef()
     open (PIPE, "nm libinkscape.a |");
     while(<PIPE>)
         {
-        if ($_ =~ /T _/)
+        if ($_ =~ /\./)
+            {
+            next;
+            }
+        elsif ($_ =~ /T _/)
             {
             $line = $_;
             $line =~ s/.* T _//;
