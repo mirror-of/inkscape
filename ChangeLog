@@ -1,3 +1,51 @@
+2004-03-19  bulia byak <bulia@users.sourceforge.net>
+
+	* src/selection-chemistry.cpp: Prevent it from scaling above 1e6 pt
+
+	* src/preferences-skeleton.h src/dialogs/dialog-events.cpp: "Skip taskbar" hint
+	for dialogs
+ 
+	* src/selection-chemistry.cpp: Patch for copying gradients from johncliff
+
+	* src/event-context.cpp: Increased accelerated-scroll delay
+
+	* nr-pixops.h: INK_COMPOSE: Always-visible inversion compose method
+
+	* sp-gradient.cpp: Default linear gradient goes through center
+ 
+	* nr-plain-stuff.cpp: Tweaked checkerboard size and color
+ 
+	* gradient-position.cpp: Inverse colors for handles, axes, and bbox; dragging
+	snaps with Ctrl; radius handle in radial gradient
+ 
+	* src/sp-rect.cpp src/sp-path.cpp: Finished fixing 918478
+
+	* src/gradient-chemistry.cpp src/widgets/gradient-vector.cpp: Fix for 902319,
+	remove some debug output
+ 
+	* src/toolbox.cpp: Polygon mode off by default
+
+	* src/toolbox.cpp: Crash fix, reported by David Christian Berg
+
+	* src/radial.h src/nodepath.cpp: Moved Radial:: to nodepath.h for now
+
+	* stringstream.h: New stream class for serialization
+
+	* svg-path.cpp: Use new stream class
+
+	* src/toolbox.cpp: Smarter Sharpness, r1 and r2 undistinguishable for the user
+
+	* src/svg/svg-path.cpp: Restore mising break (fixes smearing for paths with h and v)
+
+	* src/dialogs/align.cpp src/dialogs/transformation.cpp: Reverse pjrm's change in delete
+	handlers (fixes crash on closing)
+
+	* src/splivarot.cpp: Simplify threshold depends on selection size, not item size
+
+	* src/select-toolbar.cpp: Reordered select toolbar buttons
+
+	* icons.svg: Reworked selector toolbar icons
+
 2004-03-17  Ted Gould <ted@gould.cx>
 
 	* src/extension/db.h, src/extension/db.cpp, src/extension/extension.cpp,
