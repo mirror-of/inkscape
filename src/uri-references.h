@@ -13,10 +13,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
-#include <sigc++/sigc++.h>
-#include <exception>
-#include "uri.h"
+#include <sigc++/connection.h>
+#include <sigc++/trackable.h>
+
+#include "bad-uri-exception.h"
 #include "forward.h"
 
 namespace Inkscape {
