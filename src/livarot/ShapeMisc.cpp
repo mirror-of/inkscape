@@ -7,9 +7,9 @@
  */
 
 #include "Shape.h"
-#include "Path.h"
 #include "../libnr/nr-types.h"
 //#include "MyMath.h"
+#include "Path.h"
 
 // until i find something better
 #define MiscNormalize(v) {\
@@ -30,7 +30,6 @@ Shape::ConvertToForme (Path * dest)
     return;
   
   dest->Reset ();
-  dest->SetWeighted (false);
   
   MakePointData (true);
   MakeEdgeData (true);
@@ -164,7 +163,6 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
   }
   
   dest->Reset ();
-  dest->SetWeighted (false);
   
   MakePointData (true);
   MakeEdgeData (true);
@@ -366,7 +364,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     stD = a->aretes[stB].dx;
     seD = a->aretes[i].dx;
     enD = a->aretes[enB].dx;
-     
+    
     stL = sqrt (dot(stD,stD));
     seL = sqrt (dot(seD,seD));
     enL = sqrt (dot(enD,enD));
@@ -397,7 +395,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     }
     else
     {
-     Path::DoLeftJoin (this, -dec, join, ptP, stD, seD, miter, stL, seL,
+      Path::DoLeftJoin (this, -dec, join, ptP, stD, seD, miter, stL, seL,
                         stNo, enNo,usePathID,usePieceID,useT);
       a->swsData[i].stPt = enNo;
       a->swsData[stB].enPt = stNo;
@@ -458,7 +456,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord,
 	    }
       else
 	    {
-	      int nType = from->descr_data[nPiece].flags & descr_type_mask;
+	      int nType = from->descr_cmd[nPiece].flags & descr_type_mask;
 	      if (nType == descr_close || nType == descr_moveto
             || nType == descr_forced)
         {
@@ -480,7 +478,8 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord,
         }
 	      else if (nType == descr_bezierto)
         {
-          if (from->descr_data[nPiece].d.b.nb == 0)
+          Path::Path::path_descr_bezierto* nBData=(Path::Path::path_descr_bezierto*)(from->descr_data+from->descr_cmd[nPiece].dStart);
+          if (nBData->nb == 0)
           {
             bord = ReFormeLineTo (bord, curBord, dest, from);
           }
@@ -547,7 +546,7 @@ Shape::ReFormeLineTo (int bord, int curBord, Path * dest, Path * orig)
       if (fabs (te - ebData[bord].tSt) > 0.0001)
         break;
       nx = pts[aretes[bord].en].x;
-       te = ebData[bord].tEn;
+      te = ebData[bord].tEn;
     }
     else
     {
@@ -593,13 +592,10 @@ Shape::ReFormeArcTo (int bord, int curBord, Path * dest, Path * from)
     bord = swdData[bord].suivParc;
   }
   double sang, eang;
-  bool nLarge = from->descr_data[nPiece].d.a.large;
-  bool nClockwise = from->descr_data[nPiece].d.a.clockwise;
-  Path::ArcAngles (from->PrevPoint (nPiece - 1), from->descr_data[nPiece].d.a.p,
-                   from->descr_data[nPiece].d.a.rx,
-                   from->descr_data[nPiece].d.a.ry,
-                   from->descr_data[nPiece].d.a.angle, nLarge, nClockwise,
-                   sang, eang);
+  Path::path_descr_arcto* nData=(Path::path_descr_arcto*)(from->descr_data+from->descr_cmd[nPiece].dStart);
+  bool nLarge = nData->large;
+  bool nClockwise = nData->clockwise;
+  Path::ArcAngles (from->PrevPoint (nPiece - 1), nData->p,nData->rx,nData->ry,nData->angle, nLarge, nClockwise,  sang, eang);
   if (nClockwise)
   {
     if (sang < eang)
@@ -636,9 +632,8 @@ Shape::ReFormeArcTo (int bord, int curBord, Path * dest, Path * from)
 		}
 	}*/
   {
-    dest->ArcTo (nx, from->descr_data[nPiece].d.a.rx,
-                 from->descr_data[nPiece].d.a.ry,
-                 from->descr_data[nPiece].d.a.angle, nLarge, nClockwise);
+    Path::path_descr_arcto* nData=(Path::path_descr_arcto*)(from->descr_data+from->descr_cmd[nPiece].dStart);
+    dest->ArcTo (nx, nData->rx,nData->ry,nData->angle, nLarge, nClockwise);
   }
   return bord;
 }
@@ -676,14 +671,11 @@ Shape::ReFormeCubicTo (int bord, int curBord, Path * dest, Path * from)
   NR::Point prevx = from->PrevPoint (nPiece - 1);
   
   NR::Point sDx, eDx;
-  Path::CubicTangent (ts, sDx, prevx,
-                      from->descr_data[nPiece].d.c.stD,
-                      from->descr_data[nPiece].d.c.p,
-                      from->descr_data[nPiece].d.c.enD);
-  Path::CubicTangent (te, eDx, prevx,
-                      from->descr_data[nPiece].d.c.stD,
-                      from->descr_data[nPiece].d.c.p,
-                      from->descr_data[nPiece].d.c.enD);
+  {
+    Path::path_descr_cubicto* nData=(Path::path_descr_cubicto*)(from->descr_data+from->descr_cmd[nPiece].dStart);
+    Path::CubicTangent (ts, sDx, prevx,nData->stD,nData->p,nData->enD);
+    Path::CubicTangent (te, eDx, prevx,nData->stD,nData->p,nData->enD);
+  }
   sDx *= (te - ts);
   eDx *= (te - ts);
   {
@@ -703,22 +695,25 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
   NR::Point nx = pts[aretes[bord].en].x;
   int inBezier = -1, nbInterm = -1;
   int typ;
-  typ = from->descr_data[nPiece].flags & descr_type_mask;
+  typ = from->descr_cmd[nPiece].flags & descr_type_mask;
+  Path::path_descr_bezierto* nBData;
   if (typ == descr_bezierto)
   {
+    nBData=(Path::path_descr_bezierto*)(from->descr_data+from->descr_cmd[nPiece].dStart);
     inBezier = nPiece;
-    nbInterm = from->descr_data[nPiece].d.b.nb;
+    nbInterm = nBData->nb;
   }
   else
   {
     int n = nPiece - 1;
     while (n > 0)
     {
-      typ = from->descr_data[n].flags & descr_type_mask;
+      typ = from->descr_cmd[n].flags & descr_type_mask;
       if (typ == descr_bezierto)
       {
         inBezier = n;
-        nbInterm = from->descr_data[n].d.b.nb;
+        nBData=(Path::path_descr_bezierto*)(from->descr_data+from->descr_cmd[n].dStart);
+        nbInterm = nBData->nb;
         break;
       }
       n--;
@@ -763,7 +758,7 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
   }
   
   NR::Point bstx = from->PrevPoint (inBezier - 1);
-  NR::Point benx = from->descr_data[inBezier].d.b.p;
+  NR::Point benx = nBData->p;
   
   if (pe == ps)
   {
@@ -779,20 +774,24 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
         dest->BezierTo (nx);
         for (int i = ps; i <= pe; i++)
         {
-          dest->IntermBezierTo (from->descr_data[i + 1].d.i.p);
+          Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[i+1].dStart);
+          dest->IntermBezierTo (nData->p);
         }
         dest->EndBezierTo ();
       }
       else
       {
         NR::Point tx;
-        tx =
-          (from->descr_data[pe + 1].d.i.p +
-           from->descr_data[pe].d.i.p) / 2;
+        {
+          Path::path_descr_intermbezierto* psData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[pe].dStart);
+          Path::path_descr_intermbezierto* pnData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[pe+1].dStart);
+          tx = (pnData->p + psData->p) / 2;
+        }
         dest->BezierTo (tx);
         for (int i = ps; i < pe; i++)
         {
-          dest->IntermBezierTo (from->descr_data[i + 1].d.i.p);
+          Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[i+1].dStart);
+          dest->IntermBezierTo (nData->p);
         }
         dest->EndBezierTo ();
         ReFormeBezierChunk (tx, nx, dest, inBezier, nbInterm,
@@ -804,33 +803,41 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
       if (te > 0.9999)
       {
         NR::Point tx;
-        tx =
-          (from->descr_data[ps + 1].d.i.p +
-           from->descr_data[ps + 2].d.i.p) / 2;
+        {
+          Path::path_descr_intermbezierto* psData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[ps+1].dStart);
+          Path::path_descr_intermbezierto* pnData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[ps+2].dStart);
+          tx = (psData->p +  pnData->p) / 2;
+        }
         ReFormeBezierChunk (px, tx, dest, inBezier, nbInterm,
                             from, ps, ts, 1.0);
         dest->BezierTo (nx);
         for (int i = ps + 1; i <= pe; i++)
         {
-          dest->IntermBezierTo (from->descr_data[i + 1].d.i.p);
+          Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[i+1].dStart);
+          dest->IntermBezierTo (nData->p);
         }
         dest->EndBezierTo ();
       }
       else
       {
         NR::Point tx;
-        tx =
-          (from->descr_data[ps + 1].d.i.p +
-           from->descr_data[ps + 2].d.i.p) / 2;
+        {
+          Path::path_descr_intermbezierto* psData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[ps+1].dStart);
+          Path::path_descr_intermbezierto* pnData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[ps+2].dStart);
+          tx = (pnData->p + psData->p) / 2;
+        }
         ReFormeBezierChunk (px, tx, dest, inBezier, nbInterm,
                             from, ps, ts, 1.0);
-        tx =
-          (from->descr_data[pe + 1].d.i.p +
-           from->descr_data[pe].d.i.p )/ 2;
-        dest->BezierTo (tx);
+        {
+          Path::path_descr_intermbezierto* psData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[pe].dStart);
+          Path::path_descr_intermbezierto* pnData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[pe+1].dStart);
+          tx = (pnData->p + psData->p) / 2;
+        }
+         dest->BezierTo (tx);
         for (int i = ps + 1; i <= pe; i++)
         {
-          dest->IntermBezierTo (from->descr_data[i + 1].d.i.p);
+          Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[i+1].dStart);
+          dest->IntermBezierTo (nData->p);
         }
         dest->EndBezierTo ();
         ReFormeBezierChunk (tx, nx, dest, inBezier, nbInterm,
@@ -847,20 +854,24 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
         dest->BezierTo (nx);
         for (int i = ps; i >= pe; i--)
         {
-          dest->IntermBezierTo (from->descr_data[i + 1].d.i.p);
+          Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[i+1].dStart);
+          dest->IntermBezierTo (nData->p);
         }
         dest->EndBezierTo ();
       }
       else
       {
         NR::Point tx;
-        tx =
-          (from->descr_data[pe + 1].d.i.p +
-           from->descr_data[pe + 2].d.i.p) / 2;
+        {
+          Path::path_descr_intermbezierto* psData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[pe+1].dStart);
+          Path::path_descr_intermbezierto* pnData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[pe+2].dStart);
+          tx = (pnData->p + psData->p) / 2;
+        }
         dest->BezierTo (tx);
         for (int i = ps; i > pe; i--)
         {
-          dest->IntermBezierTo (from->descr_data[i + 1].d.i.p);
+          Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[i+1].dStart);
+          dest->IntermBezierTo (nData->p);
         }
         dest->EndBezierTo ();
         ReFormeBezierChunk (tx, nx, dest, inBezier, nbInterm,
@@ -872,33 +883,41 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
       if (te < 0.0001)
       {
         NR::Point tx;
-        tx =
-          (from->descr_data[ps + 1].d.i.p +
-           from->descr_data[ps].d.i.p) / 2;
-        ReFormeBezierChunk (px, tx, dest, inBezier, nbInterm,
+        {
+          Path::path_descr_intermbezierto* psData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[ps].dStart);
+          Path::path_descr_intermbezierto* pnData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[ps+1].dStart);
+          tx = (pnData->p + psData->p) / 2;
+        }
+         ReFormeBezierChunk (px, tx, dest, inBezier, nbInterm,
                             from, ps, ts, 0.0);
         dest->BezierTo (nx);
         for (int i = ps + 1; i >= pe; i--)
         {
-          dest->IntermBezierTo (from->descr_data[i].d.i.p);
+          Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[i].dStart);
+          dest->IntermBezierTo (nData->p);
         }
         dest->EndBezierTo ();
       }
       else
       {
         NR::Point tx;
-        tx =
-          (from->descr_data[ps + 1].d.i.p +
-           from->descr_data[ps].d.i.p) / 2;
+        {
+          Path::path_descr_intermbezierto* psData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[ps].dStart);
+          Path::path_descr_intermbezierto* pnData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[ps+1].dStart);
+          tx = (pnData->p + psData->p) / 2;
+        }
         ReFormeBezierChunk (px, tx, dest, inBezier, nbInterm,
                             from, ps, ts, 0.0);
-        tx =
-          (from->descr_data[pe + 1].d.i.p +
-           from->descr_data[pe + 2].d.i.p) / 2;
+        {
+          Path::path_descr_intermbezierto* psData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[pe+1].dStart);
+          Path::path_descr_intermbezierto* pnData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[pe+2].dStart);
+          tx = (pnData->p + psData->p) / 2;
+        }
         dest->BezierTo (tx);
         for (int i = ps + 1; i > pe; i--)
         {
-          dest->IntermBezierTo (from->descr_data[i].d.i.p);
+          Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[i].dStart);
+          dest->IntermBezierTo (nData->p);
         }
         dest->EndBezierTo ();
         ReFormeBezierChunk (tx, nx, dest, inBezier, nbInterm,
@@ -914,8 +933,9 @@ Shape::ReFormeBezierChunk (NR::Point px, NR::Point nx,
                            Path * dest, int inBezier, int nbInterm,
                            Path * from, int p, double ts, double te)
 {
+  Path::path_descr_bezierto* nBData=(Path::path_descr_bezierto*)(from->descr_data+from->descr_cmd[inBezier].dStart);
   NR::Point bstx = from->PrevPoint (inBezier - 1);
-  NR::Point benx = from->descr_data[inBezier].d.b.p;
+  NR::Point benx = nBData->p;
   
   NR::Point mx;
   if (p == inBezier)
@@ -924,13 +944,16 @@ Shape::ReFormeBezierChunk (NR::Point px, NR::Point nx,
     if (nbInterm <= 1)
     {
       // seul bout de la spline
-      mx = from->descr_data[inBezier + 1].d.i.p;
+      Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[inBezier+1].dStart);
+      mx = nData->p;
     }
     else
     {
       // premier bout d'une spline qui en contient plusieurs
-      mx = from->descr_data[inBezier + 1].d.i.p;
-      benx = (from->descr_data[inBezier + 2].d.i.p + mx) / 2;
+      Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[inBezier+1].dStart);
+      mx = nData->p;
+      nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[inBezier+2].dStart);
+      benx = (nData->p + mx) / 2;
     }
   }
   else if (p == inBezier + nbInterm - 1)
@@ -938,15 +961,20 @@ Shape::ReFormeBezierChunk (NR::Point px, NR::Point nx,
     // dernier bout
     // si nbInterm == 1, le cas a deja ete traite
     // donc dernier bout d'une spline qui en contient plusieurs
-    mx = from->descr_data[inBezier + nbInterm].d.i.p;
-    bstx = (from->descr_data[inBezier + nbInterm - 1].d.i.p + mx) / 2;
+    Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[inBezier+nbInterm].dStart);
+    mx = nData->p;
+   nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[inBezier+nbInterm-1].dStart);
+    bstx = (nData->p + mx) / 2;
   }
   else
   {
     // la spline contient forcément plusieurs bouts, et ce n'est ni le premier ni le dernier
-    mx = from->descr_data[p + 1].d.i.p;
-    bstx = (from->descr_data[p].d.i.p + mx) / 2;
-    benx = (from->descr_data[p + 2].d.i.p + mx) / 2;
+    Path::path_descr_intermbezierto* nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[p+1].dStart);
+    mx = nData->p;
+   nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[p].dStart);
+    bstx = (nData->p + mx) / 2;
+    nData=(Path::path_descr_intermbezierto*)(from->descr_data+from->descr_cmd[p+2].dStart);
+    benx = (nData->p + mx) / 2;
   }
   NR::Point cx;
   {

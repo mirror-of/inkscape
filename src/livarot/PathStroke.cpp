@@ -42,17 +42,6 @@ Path::Stroke (Shape * dest, bool doClose, double width, JoinType join,
     int lastP = lastM + 1;
     if (back)
     {
-      if (weighted)
-	    {
-	      path_lineto_wb *tp = (path_lineto_wb *) savPts;
-	      while (lastP < savNbPt
-               && ((tp + lastP)->isMoveTo == polyline_lineto
-                   || (tp + lastP)->isMoveTo == polyline_forced))
-          lastP++;
-	      pts = (char *) (tp + lastM);
-	      nbPt = lastP - lastM;
-	    }
-      else
 	    {
 	      path_lineto_b *tp = (path_lineto_b *) savPts;
 	      while (lastP < savNbPt
@@ -65,17 +54,6 @@ Path::Stroke (Shape * dest, bool doClose, double width, JoinType join,
     }
     else
     {
-      if (weighted)
-	    {
-	      path_lineto_w *tp = (path_lineto_w *) savPts;
-	      while (lastP < savNbPt
-               && ((tp + lastP)->isMoveTo == polyline_lineto
-                   || (tp + lastP)->isMoveTo == polyline_forced))
-          lastP++;
-	      pts = (char *) (tp + lastM);
-	      nbPt = lastP - lastM;
-	    }
-      else
 	    {
 	      path_lineto *tp = (path_lineto *) savPts;
 	      while (lastP < savNbPt
@@ -102,16 +80,11 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     return;
   
   NR::Point curP, prevP, nextP;
-  double curW, prevW, nextW;
   int curI, prevI, nextI;
   int upTo;
   
   curI = 0;
   curP = ((path_lineto *) pts)[0].p;
-  if (weighted)
-    curW = ((path_lineto_w *) pts)[0].w;
-  else
-    curW = 1;
   
   if (doClose)
   {
@@ -119,22 +92,12 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     prevI = nbPt - 1;
     if (back)
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           prevI * sizeof (path_lineto_wb));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            prevI * sizeof (path_lineto_b));
     }
     else
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           prevI * sizeof (path_lineto_w));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            prevI * sizeof (path_lineto));
@@ -142,10 +105,6 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     while (prevI > 0)
     {
       prevP = curPt->p;
-      if (weighted)
-        prevW = ((path_lineto_w *) curPt)->w;
-      else
-        prevW = 1;
       NR::Point diff=curP-prevP;
       double dist =dot(diff,diff);
       if (dist > 0.001)
@@ -155,20 +114,11 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
       prevI--;
       if (back)
 	    {
-	      if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) -
-                             sizeof (path_lineto_wb));
-	      else
           curPt =
             (path_lineto *) (((char *) curPt) - sizeof (path_lineto_b));
 	    }
       else
 	    {
-	      if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) - sizeof (path_lineto_w));
-	      else
           curPt =
             (path_lineto *) (((char *) curPt) - sizeof (path_lineto));
 	    }
@@ -180,7 +130,6 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
   else
   {
     prevP = curP;
-    prevW = curW;
     prevI = curI;
     upTo = nbPt - 1;
   }
@@ -189,33 +138,19 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     nextI = 1;
     if (back)
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           nextI * sizeof (path_lineto_wb));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            nextI * sizeof (path_lineto_b));
     }
     else
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           nextI * sizeof (path_lineto_w));
-      else
-        curPt =
+         curPt =
           (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
     }
     while (nextI <= upTo)
     {
       nextP = curPt->p;
-      if (weighted)
-        nextW = ((path_lineto_w *) curPt)->w;
-      else
-        nextW = 1;
-      NR::Point diff=curP-nextP;
+       NR::Point diff=curP-nextP;
       double dist =dot(diff,diff);
       if (dist > 0.001)
       {
@@ -224,19 +159,11 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
       nextI++;
       if (back)
       {
-        if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) + sizeof (path_lineto_wb));
-        else
           curPt =
             (path_lineto *) (((char *) curPt) + sizeof (path_lineto_b));
       }
       else
       {
-        if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) + sizeof (path_lineto_w));
-        else
           curPt =
             (path_lineto *) (((char *) curPt) + sizeof (path_lineto));
       }
@@ -257,45 +184,33 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
   StrokeNormalize (nextD);
   if (doClose)
   {
-    DoJoin (dest, curW * width, join, curP, prevD, nextD, miter, prevLe,
+    DoJoin (dest,  width, join, curP, prevD, nextD, miter, prevLe,
             nextLe, startLeft, lastLeft, startRight, lastRight);
   }
   else
   {
     nextD = -nextD;
-    DoButt (dest, curW * width, butt, curP, nextD, lastRight, lastLeft);
+    DoButt (dest,  width, butt, curP, nextD, lastRight, lastLeft);
     nextD = -nextD;
   }
   do
   {
     prevP = curP;
     prevI = curI;
-    prevW = curW;
     curP = nextP;
     curI = nextI;
-    curW = nextW;
     prevD = nextD;
     prevLe = nextLe;
     nextI++;
     path_lineto *curPt = (path_lineto *) pts;
     if (back)
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           nextI * sizeof (path_lineto_wb));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            nextI * sizeof (path_lineto_b));
     }
     else
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           nextI * sizeof (path_lineto_w));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            nextI * sizeof (path_lineto));
@@ -303,11 +218,7 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     while (nextI <= upTo)
     {
       nextP = curPt->p;
-      if (weighted)
-        nextW = ((path_lineto_w *) curPt)->w;
-      else
-        nextW = 1;
-      NR::Point diff=curP-nextP;
+       NR::Point diff=curP-nextP;
       double dist =dot(diff,diff);
       if (dist > 0.001)
 	    {
@@ -316,20 +227,11 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
       nextI++;
       if (back)
 	    {
-	      if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) +
-                             sizeof (path_lineto_wb));
-	      else
           curPt =
             (path_lineto *) (((char *) curPt) + sizeof (path_lineto_b));
 	    }
       else
 	    {
-	      if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) + sizeof (path_lineto_w));
-	      else
           curPt =
             (path_lineto *) (((char *) curPt) + sizeof (path_lineto));
 	    }
@@ -341,7 +243,7 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     nextLe = sqrt (dot(nextD,nextD));
     StrokeNormalize (nextD);
     int nStL = -1, nStR = -1, nEnL = -1, nEnR = -1;
-    DoJoin (dest, curW * width, join, curP, prevD, nextD, miter, prevLe,
+    DoJoin (dest,  width, join, curP, prevD, nextD, miter, prevLe,
             nextLe, nStL, nEnL, nStR, nEnR);
     dest->AddEdge (nStL, lastLeft);
     lastLeft = nEnL;
@@ -353,23 +255,17 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
   {
     /*		prevP=curP;
 		prevI=curI;
-		prevW=curW;
 		curP=nextP;
 		curI=nextI;
-		curW=nextW;
 		prevD=nextD;*/
     path_lineto *curPt = (path_lineto *) pts;
     nextP = curPt->p;
-    if (weighted)
-      nextW = ((path_lineto_w *) curPt)->w;
-    else
-      nextW = 1;
-    
+
     nextD = nextP - curP;
     nextLe = sqrt (dot(nextD,nextD));
     StrokeNormalize (nextD);
     int nStL = -1, nStR = -1, nEnL = -1, nEnR = -1;
-    DoJoin (dest, curW * width, join, curP, prevD, nextD, miter, prevLe,
+    DoJoin (dest,  width, join, curP, prevD, nextD, miter, prevLe,
             nextLe, nStL, nEnL, nStR, nEnR);
     dest->AddEdge (nStL, lastLeft);
     lastLeft = nEnL;
@@ -382,7 +278,7 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
   else
   {
     int endRight, endLeft;
-    DoButt (dest, curW * width, butt, curP, prevD, endLeft, endRight);
+    DoButt (dest,  width, butt, curP, prevD, endLeft, endRight);
     dest->AddEdge (endLeft, lastLeft);
     dest->AddEdge (lastRight, endRight);
   }
@@ -1140,17 +1036,6 @@ Path::Stroke (Shape * dest, bool doClose, double width, JoinType join,
     int lastP = lastM + 1;
     if (back)
     {
-      if (weighted)
-	    {
-	      path_lineto_wb *tp = (path_lineto_wb *) savPts;
-	      while (lastP < savNbPt
-               && ((tp + lastP)->isMoveTo == polyline_lineto
-                   || (tp + lastP)->isMoveTo == polyline_forced))
-          lastP++;
-	      pts = (char *) (tp + lastM);
-	      nbPt = lastP - lastM;
-	    }
-      else
 	    {
 	      path_lineto_b *tp = (path_lineto_b *) savPts;
 	      while (lastP < savNbPt
@@ -1163,17 +1048,6 @@ Path::Stroke (Shape * dest, bool doClose, double width, JoinType join,
     }
     else
     {
-      if (weighted)
-	    {
-	      path_lineto_w *tp = (path_lineto_w *) savPts;
-	      while (lastP < savNbPt
-               && ((tp + lastP)->isMoveTo == polyline_lineto
-                   || (tp + lastP)->isMoveTo == polyline_forced))
-          lastP++;
-	      pts = (char *) (tp + lastM);
-	      nbPt = lastP - lastM;
-	    }
-      else
 	    {
 	      path_lineto *tp = (path_lineto *) savPts;
 	      while (lastP < savNbPt
@@ -1204,7 +1078,6 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     return;
   
   NR::Point curP, prevP, nextP;
-  double curW, prevW, nextW;
   int curI, prevI, nextI;
   int upTo;
   double curA, prevA, nextA;
@@ -1213,10 +1086,6 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
   
   curI = 0;
   curP = ((path_lineto *) pts)[0].p;
-  if (weighted)
-    curW = ((path_lineto_w *) pts)[0].w;
-  else
-    curW = 1;
   
   if (doClose)
   {
@@ -1224,22 +1093,12 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     prevI = nbPt - 1;
     if (back)
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           prevI * sizeof (path_lineto_wb));
-      else
-        curPt =
+         curPt =
           (path_lineto *) (((char *) curPt) +
                            prevI * sizeof (path_lineto_b));
     }
     else
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           prevI * sizeof (path_lineto_w));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            prevI * sizeof (path_lineto));
@@ -1247,10 +1106,6 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     while (prevI > 0)
     {
       prevP = curPt->p;
-      if (weighted)
-        prevW = ((path_lineto_w *) curPt)->w;
-      else
-        prevW = 1;
       NR::Point diff=curP-prevP;
       double dist =dot(diff,diff);
       if (dist > 0.001)
@@ -1260,20 +1115,11 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
       prevI--;
       if (back)
 	    {
-	      if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) -
-                             sizeof (path_lineto_wb));
-	      else
           curPt =
             (path_lineto *) (((char *) curPt) - sizeof (path_lineto_b));
 	    }
       else
 	    {
-	      if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) - sizeof (path_lineto_w));
-	      else
           curPt =
             (path_lineto *) (((char *) curPt) - sizeof (path_lineto));
 	    }
@@ -1285,7 +1131,6 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
   else
   {
     prevP = curP;
-    prevW = curW;
     prevI = curI;
     upTo = nbPt - 1;
   }
@@ -1294,32 +1139,18 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     nextI = 1;
     if (back)
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           nextI * sizeof (path_lineto_wb));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            nextI * sizeof (path_lineto_b));
     }
     else
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           nextI * sizeof (path_lineto_w));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
     }
     while (nextI <= upTo)
     {
       nextP = curPt->p;
-      if (weighted)
-        nextW = ((path_lineto_w *) curPt)->w;
-      else
-        nextW = 1;
       NR::Point diff=curP-nextP;
       double dist =dot(diff,diff);
       if (dist > 0.001)
@@ -1329,19 +1160,11 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
       nextI++;
       if (back)
       {
-        if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) + sizeof (path_lineto_wb));
-        else
           curPt =
             (path_lineto *) (((char *) curPt) + sizeof (path_lineto_b));
       }
       else
       {
-        if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) + sizeof (path_lineto_w));
-        else
           curPt =
             (path_lineto *) (((char *) curPt) + sizeof (path_lineto));
       }
@@ -1395,7 +1218,7 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     else
     {
       noStartJoin = false;
-      DoJoin (dest, curW * width, join, curP, prevD, nextD, miter, prevLe,
+      DoJoin (dest,  width, join, curP, prevD, nextD, miter, prevLe,
               nextLe, startLeft, lastLeft, startRight, lastRight);
       inGap = false;
     }
@@ -1409,7 +1232,7 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     else
     {
       nextD = -nextD;
-      DoButt (dest, curW * width, butt, curP, nextD, lastRight, lastLeft);
+      DoButt (dest,  width, butt, curP, nextD, lastRight, lastLeft);
       nextD = -nextD;
       inGap = false;
     }
@@ -1418,11 +1241,9 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
   {
     prevP = curP;
     prevI = curI;
-    prevW = curW;
     prevA = curA;
     curP = nextP;
     curI = nextI;
-    curW = nextW;
     curA = nextA;
     prevLe = nextLe;
     prevD = nextD;
@@ -1430,22 +1251,12 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     path_lineto *curPt = (path_lineto *) pts;
     if (back)
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           nextI * sizeof (path_lineto_wb));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            nextI * sizeof (path_lineto_b));
     }
     else
     {
-      if (weighted)
-        curPt =
-          (path_lineto *) (((char *) curPt) +
-                           nextI * sizeof (path_lineto_w));
-      else
         curPt =
           (path_lineto *) (((char *) curPt) +
                            nextI * sizeof (path_lineto));
@@ -1453,10 +1264,6 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     while (nextI <= upTo)
     {
       nextP = curPt->p;
-      if (weighted)
-        nextW = ((path_lineto_w *) curPt)->w;
-      else
-        nextW = 1;
       NR::Point   diff=curP-nextP;
       double dist =dot(diff,diff);
       if (dist > 0.001)
@@ -1466,20 +1273,11 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
       nextI++;
       if (back)
 	    {
-	      if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) +
-                             sizeof (path_lineto_wb));
-	      else
           curPt =
             (path_lineto *) (((char *) curPt) + sizeof (path_lineto_b));
 	    }
       else
 	    {
-	      if (weighted)
-          curPt =
-            (path_lineto *) (((char *) curPt) + sizeof (path_lineto_w));
-	      else
           curPt =
             (path_lineto *) (((char *) curPt) + sizeof (path_lineto));
 	    }
@@ -1496,8 +1294,8 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     dTo.prevP = prevP;
     dTo.curP = curP;
     dTo.prevD = prevD;
-    dTo.prevW = prevW * width;
-    dTo.curW = curW * width;
+    dTo.prevW =  width;
+    dTo.curW =  width;
     
     DashTo (dest, &dTo, dashAbs, dashNo, dashPos, inGap, lastLeft,
             lastRight, nbDash, dashs);
@@ -1505,7 +1303,7 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     if (inGap == false)
     {
       int nStL = -1, nStR = -1, nEnL = -1, nEnR = -1;
-      DoJoin (dest, curW * width, join, curP, prevD, nextD, miter, prevLe,
+      DoJoin (dest,  width, join, curP, prevD, nextD, miter, prevLe,
               nextLe, nStL, nEnL, nStR, nEnR);
       dest->AddEdge (nStL, lastLeft);
       lastLeft = nEnL;
@@ -1518,19 +1316,13 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
   {
     /*		prevP=curP;
 		prevI=curI;
-		prevW=curW;
 		prevA=curA;
 		curP=nextP;
 		curI=nextI;
-		curW=nextW;
 		curA=nextA;
 		prevD=nextD;*/
     path_lineto *curPt = (path_lineto *) pts;
     nextP = curPt->p;
-    if (weighted)
-      nextW = ((path_lineto_w *) curPt)->w;
-    else
-      nextW = 1;
     
     nextD = nextP - curP;
     nextA = curA + sqrt (dot(nextD,nextD));
@@ -1541,15 +1333,15 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     dTo.prevP = prevP;
     dTo.curP = curP;
     dTo.prevD = prevD;
-    dTo.prevW = prevW * width;
-    dTo.curW = curW * width;
+    dTo.prevW = width;
+    dTo.curW =  width;
     
     DashTo (dest, &dTo, dashAbs, dashNo, dashPos, inGap, lastLeft,
             lastRight, nbDash, dashs);
     if (inGap == false)
     {
       int nStL = -1, nStR = -1, nEnL = -1, nEnR = -1;
-      DoJoin (dest, curW * width, join, curP, prevD, nextD, miter, prevLe,
+      DoJoin (dest,  width, join, curP, prevD, nextD, miter, prevLe,
               nextLe, nStL, nEnL, nStR, nEnR);
       dest->AddEdge (nStL, lastLeft);
       lastLeft = nEnL;
@@ -1560,8 +1352,8 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     dTo.prevP = curP;
     dTo.curP = nextP;
     dTo.prevD = nextD;
-    dTo.prevW = curW * width;
-    dTo.curW = nextW * width;
+    dTo.prevW =  width;
+    dTo.curW =  width;
     
     DashTo (dest, &dTo, dashAbs, dashNo, dashPos, inGap, lastLeft,
             lastRight, nbDash, dashs);
@@ -1592,15 +1384,15 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
     dTo.prevP = prevP;
     dTo.curP = curP;
     dTo.prevD = prevD;
-    dTo.prevW = prevW * width;
-    dTo.curW = curW * width;
+    dTo.prevW =  width;
+    dTo.curW =  width;
     
     DashTo (dest, &dTo, dashAbs, dashNo, dashPos, inGap, lastLeft,
             lastRight, nbDash, dashs);
     if (inGap == false)
     {
       int endRight, endLeft;
-      DoButt (dest, curW * width, butt, curP, prevD, endLeft, endRight);
+      DoButt (dest,  width, butt, curP, prevD, endLeft, endRight);
       dest->AddEdge (endLeft, lastLeft);
       dest->AddEdge (lastRight, endRight);
     }
