@@ -58,12 +58,18 @@ sp_desktop_set_color (SPDesktop *desktop, const ColorRGBA &color, bool is_relati
 void
 sp_desktop_apply_css_recursive (SPObject *o, SPCSSAttr *css, bool skip_lines)
 {
-    // tspans with role=line are not regular objects in that they are not assignable style of their own,
-    // but must always inherit from the parent text
-    // However, if the line tspan contains some style (old file?), we reluctantly set our style to it too
-    if (!(skip_lines && SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE && !sp_repr_attr(SP_OBJECT_REPR(o), "style"))) {
+    // tspans with role=line are not regular objects in that they are not supposed to have style of their own,
+    // but must always inherit from the parent text. Same for textPath.
+    // However, if the line tspan or textPath contains some style (old file?), we reluctantly set our style to it too
+    if (!(skip_lines 
+          && ((SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE) || SP_IS_TEXTPATH(o))
+          && !sp_repr_attr(SP_OBJECT_REPR(o), "style"))) {
         sp_repr_css_change (SP_OBJECT_REPR (o), css, "style");
     }
+
+    // Unset properties which are accumulating and thus should not be set recursively. 
+    // For example, setting opacity 0.5 on a group recursively would result in the visible opacity of 0.25 for an item in the group.
+    sp_repr_css_set_property (css, "opacity", NULL);
 
     for (SPObject *child = sp_object_first_child(SP_OBJECT(o)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         sp_desktop_apply_css_recursive (child, css, skip_lines);
