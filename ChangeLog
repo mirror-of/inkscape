@@ -1,3 +1,16 @@
+2004-05-30  MenTaLguY  <mental@rydia.net>
+
+	* src/selection.h, src/selection.cpp:
+	  rework SPSelection to be SPObject- rather than SPItem- oriented;
+	  this will be needed later for the layers/document tree dialog
+      (and could prove useful for the XML editor later too)
+
+	* src/sp-item.h: make SPItem a proper C++ subclass of SPObject
+
+	* src/dialogs/item-properties.cpp:
+	  correct overly intimate knowledge of SPObject (use SP_OBJECT_ID rather
+	  than directly accessing the SPObject::id member)
+
 2004-05-27  Kees Cook  <kees@outflux.net>
 
 	* src/extension/internal/ps.h, src/extension/internal/ps.cpp:

@@ -6,9 +6,11 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   MenTaLguY <mental@rydia.net>
  *
- * Copyright (C) 1999-2002 authors
+ * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2001-2002 Ximian, Inc.
+ * Copyright (C) 2004 MenTaLguY
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -16,17 +18,18 @@
 #include <sigc++/sigc++.h>
 #include "forward.h"
 #include "xml/repr.h"
+#include "sp-item.h"
 #include "libnr/nr-rect.h"
 
 /**
- * @brief The set of selected SPItems for a given desktop.
+ * @brief The set of selected SPObjects for a given desktop.
  *
  * This class represents the set of selected SPItems for a given
  * SPDesktop.
  *
- * An SPItem and its parent cannot be simultaneously selected;
- * selecting an SPItem has the side-effect of unselecting any of its
- * children which might have been selected.
+ * An SPObject and its parent cannot be simultaneously selected;
+ * selecting an SPObjects has the side-effect of unselecting any of
+ * its children which might have been selected.
  *
  */
 struct SPSelection {
@@ -75,90 +78,132 @@ public:
 	}
 
 	/**
-	 * @brief Add an SPItem to the set of selected items.
+	 * @brief Add an SPObject to the set of selected objects
+	 *
+	 * @param obj the SPObject to add
+	 */
+	void add(SPObject *obj);
+	/**
+	 * @brief Add an SPItem to the set of selected objects.
 	 *
 	 * @param item the item to add
 	 */
-	void addItem(SPItem *item);
+	void addItem(SPItem *item) { add(item); }
 	/**
-	 * @brief Add an SPRepr to the set of selected items
+	 * @brief Add an XML node's SPObject to the set of selected objects
 	 *
 	 * @param the xml node of the item to add
 	 */
-	void addRepr(SPRepr *repr);
+	void addRepr(SPRepr *repr) { add(_objectForRepr(repr)); }
 	/**
-	 * @brief Clear the existing set of items and select a new one
+	 * @brief Set the selection to a single specific object
+	 *
+	 * @param obj the object to select
+	 */
+	void set(SPObject *obj);
+	/**
+	 * @brief Set the selection to a single specific object
 	 *
 	 * @param item the item to select
 	 */
-	void setItem(SPItem *item);
+	void setItem(SPItem *item) { set(item); }
 	/**
-	 * @brief Clear the existing set of items and select a new one
+	 * @brief Set the selection to an XML node's SPObject
 	 *
 	 * @param repr the xml node of the item to select
 	 */
-	void setRepr(SPRepr *repr);
+	void setRepr(SPRepr *repr) { set(_objectForRepr(repr)); }
+
 	/**
-	 * @brief Removes an item from the set of selected items
+	 * @brief Removes an item from the set of selected objects
 	 *
 	 * It is ok to call this method for an unselected item.
 	 *
 	 * @param item the item to unselect
 	 */
-	void removeItem(SPItem *item);
+	void remove(SPObject *obj);
 	/**
-	 * @brief Removes an item from the set of selected items
+	 * @brief Removes an item from the set of selected objects
+	 *
+	 * It is ok to call this method for an unselected item.
+	 *
+	 * @param item the item to unselect
+	 */
+	void removeItem(SPItem *item) { remove(item); }
+	/**
+	 * @brief Removes an item from the set of selected objects
 	 *
 	 * It is ok to call this method for an unselected item.
 	 *
 	 * @param repr the xml node of the item to remove
 	 */
-	void removeRepr(SPRepr *repr);
+	void removeRepr(SPRepr *repr) { remove(_objectForRepr(repr)); }
 	/**
-	 * @brief Clears the selection and selects the specified items
+	 * @brief Selects exactly the specified objects
+	 *
+	 * @param objs the objects to select
+	 */
+	void setList(GSList const *objs);
+	/**
+	 * @brief Clears the selection and selects the specified objects 
 	 *
 	 * @param items a list of items to select
 	 */
-	void setItemList(GSList const *items);
+	void setItemList(GSList const *items) { setList(items); }
 	/**
-	 * @brief Clears the selection and selects the specified items
+	 * @brief Clears the selection and selects the specified objects
 	 *
 	 * @param repr a list of xml nodes for the items to select
 	 */
 	void setReprList(GSList const *reprs);
 	/**
-	 * @brief Unselects all selected items.
+	 * @brief Unselects all selected objects.
 	 */
 	void clear();
 
 	/**
 	 * @brief Returns true if no items are selected
 	 */
-	bool isEmpty() const { return _items == NULL; }
+	bool isEmpty() const { return _objs == NULL; }
+	/**
+	 * @brief Returns true if the given object is selected
+	 */
+	bool includes(SPObject *obj) const;
 	/**
 	 * @brief Returns true if the given item is selected
 	 */
-	bool includesItem(SPItem *item) const;
+	bool includesItem(SPItem *item) const { return includes(item); }
 	/**
 	 * @brief Returns true if the given item is selected
 	 */
-	bool includesRepr(SPRepr *repr) const;
+	bool includesRepr(SPRepr *repr) const {
+		return includes(_objectForRepr(repr));
+	}
 
+	/**
+	 * @brief Returns a single selected object
+	 *
+	 * @return NULL unless exactly one object is selected
+	 */
+	SPObject *single();
 	/**
 	 * @brief Returns a single selected item
 	 *
-	 * @return NULL unless exactly one item is selected
+	 * @return NULL unless exactly one object is selected
 	 */
 	SPItem *singleItem();
 	/**
-	 * @brief Returns a single selected item's xml node
+	 * @brief Returns a single selected object's xml node
 	 *
-	 * @return NULL unless exactly one item is selected
+	 * @return NULL unless exactly one object is selected
 	 */
 	SPRepr *singleRepr();
-	/** @brief Returns the list of selected items */
+
+	/** @breif Returns the list of selected objects */
+	GSList const *list();
+	/** @brief Returns the list of selected SPItems */
 	GSList const *itemList();
-	/** @brief Returns a list of the xml nodes of all selected items */
+	/** @brief Returns a list of the xml nodes of all selected objects */
 	GSList const *reprList();
 
 	/** @brief Returns the bounding rectangle of the selection */
@@ -196,7 +241,7 @@ public:
 	 * @brief Connects a slot to be notified of selection changes
 	 *
 	 * This method connects the given slot such that it will
-	 * be called upon any change in the set of selected items.
+	 * be called upon any change in the set of selected objects.
 	 *
 	 * @param slot the slot to connect
 	 *
@@ -231,24 +276,31 @@ private:
 	/** @brief Issues modification notification signals */
 	static gboolean _emit_modified(SPSelection *selection);
 	/** @brief Schedules an item modification signal to be sent */
-	static void _schedule_modified(SPItem *item, guint flags, SPSelection *selection);
-	/** @brief Releases a selected item that is being removed */
-	static void _release_item(SPItem *item, SPSelection *selection);
+	static void _schedule_modified(SPObject *obj, guint flags, SPSelection *selection);
+	/** @brief Releases a selected object that is being removed */
+	static void _release(SPObject *obj, SPSelection *selection);
 
 	/** @breif Issues modified selection signal */
 	void _emitModified(guint flags);
 	/** @breif Issues changed selection signal */
 	void _emitChanged();
 
+	void _invalidateCachedLists();
+
 	/** @brief unselect all children of the given item */
-	void _removeItemChildren(SPItem *item);
+	void _removeObjectChildren(SPObject *obj);
 	/** @brief clears the selection (without issuing a notification) */
 	void _clear();
-	/** @brief returns the SPItem corresponding to an xml node (if any) */
-	SPItem *_itemForRepr(SPRepr *repr);
+	/** @brief adds an object (without issuing a notification) */
+	void _add(SPObject *obj);
+	/** @brief removes an object (without issuing a notification) */
+	void _remove(SPObject *obj);
+	/** @brief returns the SPObject corresponding to an xml node (if any) */
+	SPObject *_objectForRepr(SPRepr *repr) const;
 
-	GSList *_reprs;
-	GSList *_items;
+	GSList *_objs;
+	mutable GSList *_reprs;
+	mutable GSList *_items;
 	SPDesktop *_desktop;
 	guint _flags;
 	guint _idle;

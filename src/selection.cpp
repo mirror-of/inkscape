@@ -30,7 +30,8 @@
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
 SPSelection::SPSelection(SPDesktop *desktop)
-: _reprs(NULL), _items(NULL), _desktop(desktop), _flags(0), _idle(0), _refcount(1)
+: _objs(NULL), _reprs(NULL), _items(NULL), _desktop(desktop),
+  _flags(0), _idle(0), _refcount(1)
 {
 }
 
@@ -44,15 +45,15 @@ SPSelection::~SPSelection() {
 }
 
 void
-SPSelection::_release_item(SPItem *item, SPSelection *selection)
+SPSelection::_release(SPObject *obj, SPSelection *selection)
 {
-	selection->removeItem(item);
+	selection->remove(obj);
 }
 
 /* Handler for selected objects "modified" signal */
 
 void
-SPSelection::_schedule_modified(SPItem *item, guint flags, SPSelection *selection)
+SPSelection::_schedule_modified(SPObject *obj, guint flags, SPSelection *selection)
 {
 	if (!selection->_idle) {
 		/* Request handling to be run in _idle loop */
@@ -87,259 +88,263 @@ void SPSelection::_emitChanged() {
     _changed_signal.emit(this);
 }
 
+void SPSelection::_invalidateCachedLists() {
+    g_slist_free(_items);
+    _items = NULL;
+
+    g_slist_free(_reprs);
+    _reprs = NULL;
+}
+
 void SPSelection::_clear()
 {
-	g_slist_free(_reprs);
-	_reprs = NULL;
-
-	while (_items) {
-		SPItem *item=SP_ITEM(_items->data);
-		sp_signal_disconnect_by_data(item, this);
-		_items = g_slist_remove(_items, item);
-	}
+    _invalidateCachedLists();
+    while (_objs) {
+        SPObject *obj=reinterpret_cast<SPObject *>(_objs->data);
+        sp_signal_disconnect_by_data(obj, this);
+        _objs = g_slist_remove(_objs, obj);
+    }
 }
 
-bool SPSelection::includesItem(SPItem *item) const {
-	g_return_val_if_fail (item != NULL, FALSE);
+bool SPSelection::includes(SPObject *obj) const {
+    g_return_val_if_fail (obj != NULL, FALSE);
+    g_return_val_if_fail(SP_IS_OBJECT(obj), FALSE);
 
-	if (!SP_IS_ITEM(item)) {
-		return FALSE;
-	} else {
-		return ( g_slist_find(_items, item) != NULL );
-	}
+    return ( g_slist_find(_objs, obj) != NULL );
 }
 
-bool SPSelection::includesRepr(SPRepr *repr) const {
-	g_return_val_if_fail (repr != NULL, FALSE);
+void SPSelection::add(SPObject *obj) {
+    g_return_if_fail(obj != NULL);
+    g_return_if_fail(SP_IS_OBJECT(obj));
+    g_return_if_fail(!includes(obj));
 
-	for (GSList *l = _items; l != NULL; l = l->next) {
-		if (((SPObject *)l->data)->repr == repr) return TRUE;
-	}
-
-	return FALSE;
+    _invalidateCachedLists();
+    _add(obj);
+    _emitChanged();
 }
 
-void SPSelection::addItem(SPItem *item) {
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (SP_IS_ITEM (item));
-	g_return_if_fail (!includesItem(item));
+void SPSelection::_add(SPObject *obj) {
+    // unselect any of the item's children which may be selected
+    // (to prevent double-selection)
+    // TODO: what if we are adding the child of an already selected object?
+    _removeObjectChildren(obj);
 
-	g_slist_free (_reprs);
-	_reprs = NULL;
-
-	_items = g_slist_prepend (_items, item);
-	g_signal_connect (G_OBJECT (item), "release",
-			  G_CALLBACK(&SPSelection::_release_item), this);
-	g_signal_connect (G_OBJECT (item), "modified",
-			  G_CALLBACK(&SPSelection::_schedule_modified), this);
-
-	// unselect any of the item's children which may be selected
-	// (to prevent double-selection)
-	_removeItemChildren(item);
-
-        _emitChanged();
+    _objs = g_slist_prepend(_objs, obj);
+    g_signal_connect(G_OBJECT(obj), "release",
+                     G_CALLBACK(&SPSelection::_release), this);
+    g_signal_connect(G_OBJECT(obj), "modified",
+                     G_CALLBACK(&SPSelection::_schedule_modified), this);
 }
 
-void SPSelection::addRepr(SPRepr *repr) {
-	addItem(_itemForRepr(repr));
+void SPSelection::set(SPObject *object) {
+    _clear();
+    add(object);
 }
 
-void SPSelection::setItem(SPItem *item) {
-	_clear();
-	addItem(item);
+void SPSelection::remove(SPObject *obj) {
+    g_return_if_fail(obj != NULL);
+    g_return_if_fail(SP_IS_OBJECT(obj));
+    g_return_if_fail(includes(obj));
+
+    _invalidateCachedLists();
+    _remove(obj);
+    _emitChanged();
 }
 
-void SPSelection::setRepr(SPRepr *repr) {
-	setItem(_itemForRepr(repr));
+void SPSelection::_remove(SPObject *obj) {
+    sp_signal_disconnect_by_data(obj, this);
+    _objs = g_slist_remove(_objs, obj);
 }
 
-void SPSelection::removeItem(SPItem *item) {
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (SP_IS_ITEM (item));
-	g_return_if_fail (includesItem(item));
+void SPSelection::setList(GSList const *list) {
+    _clear();
 
-	g_slist_free(_reprs);
-	_reprs = NULL;
+    if ( list != NULL ) {
+        for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
+            _add(reinterpret_cast<SPObject *>(iter->data));
+        }
+    }
 
- 	sp_signal_disconnect_by_data (item, this);
-	_items = g_slist_remove (_items, item);
-
-        _emitChanged();
-}
-
-void SPSelection::removeRepr(SPRepr *repr) {
-	removeItem(_itemForRepr(repr));
-}
-
-void SPSelection::setItemList(GSList const *list) {
-	_clear();
-
-	if (list != NULL) {
-		for (GSList const *l = list; l != NULL; l = l->next) {
-			SPItem *i = (SPItem *) l->data;
-			if (!SP_IS_ITEM (i)) break;
-			_items = g_slist_prepend (_items, i);
-			g_signal_connect (G_OBJECT (i), "release",
-					  G_CALLBACK (&SPSelection::_release_item), this);
-			g_signal_connect (G_OBJECT (i), "modified",
-					  G_CALLBACK (&SPSelection::_schedule_modified), this);
-		}
-	}
-
-        _emitChanged();
+    _emitChanged();
 }
 
 void SPSelection::setReprList(GSList const *list) {
-	GSList *itemlist=NULL;
+    _clear();
 
-	for (GSList const *l = list; l != NULL; l = l->next) {
-		SPItem *item=_itemForRepr((SPRepr *)l->data);
-		if (item) {
-			itemlist = g_slist_prepend(itemlist, item);
-		}
-	}
+    for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
+        SPObject *obj=_objectForRepr(reinterpret_cast<SPRepr *>(iter->data));
+        if (obj) {
+            _add(obj);
+        }
+    }
 
-	itemlist = g_slist_reverse(itemlist);
-
-	setItemList(itemlist);
-
-	g_slist_free (itemlist);
+    _emitChanged();
 }
 
 void SPSelection::clear() {
-	_clear();
-        _emitChanged();
+    _clear();
+    _emitChanged();
+}
+
+GSList const *SPSelection::list() {
+    return _objs;
 }
 
 GSList const *SPSelection::itemList() {
-	return _items;
+    if (_items) {
+        return _items;
+    }
+
+    for ( GSList *iter=_objs ; iter != NULL ; iter = iter->next ) {
+        SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+        if (SP_IS_ITEM(obj)) {
+            _items = g_slist_prepend(_items, SP_ITEM(obj));
+        }
+    }
+    _items = g_slist_reverse(_items);
+
+    return _items;
 }
 
 GSList const *SPSelection::reprList() {
-	if (_reprs) { return _reprs; }
+    if (_reprs) { return _reprs; }
 
-	for (GSList *l = _items; l != NULL; l = l->next) {
-		SPItem *i = (SPItem *) l->data;
-		_reprs = g_slist_prepend(_reprs, SP_OBJECT_REPR(SP_OBJECT(i)));
-	}
+    for ( GSList *iter = _items ; iter != NULL ; iter = iter->next ) {
+        SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+        _reprs = g_slist_prepend(_reprs, SP_OBJECT_REPR(obj));
+    }
+    _reprs = g_slist_reverse(_reprs);
 
-	return _reprs;
+    return _reprs;
+}
+
+SPObject *SPSelection::single() {
+    if ( _objs != NULL && _objs->next == NULL ) {
+        return reinterpret_cast<SPObject *>(_objs->data);
+    } else {
+        return NULL;
+    }
 }
 
 SPItem *SPSelection::singleItem() {
-	if ( _items == NULL || _items->next != NULL ) return NULL;
-	return SP_ITEM(_items->data);
+    GSList const *items=itemList();
+    if ( items != NULL && items->next == NULL ) {
+        return reinterpret_cast<SPItem *>(items->data);
+    } else {
+        return NULL;
+    }
 }
 
 SPRepr *SPSelection::singleRepr() {
-	SPItem *item=this->singleItem();
-	return item ? SP_OBJECT_REPR(item) : NULL;
+    SPObject *obj=single();
+    return obj ? SP_OBJECT_REPR(obj) : NULL;
 }
 
 NRRect *SPSelection::bounds(NRRect *bbox) const {
-	g_return_val_if_fail (bbox != NULL, NULL);
+    g_return_val_if_fail (bbox != NULL, NULL);
 
-	if (isEmpty()) {
-		bbox->x0 = bbox->y0 = bbox->x1 = bbox->y1 = 0.0;
-		return bbox;
-	}
+    GSList const *items=const_cast<SPSelection *>(this)->itemList();
+    if (!items) {
+        bbox->x0 = bbox->y0 = bbox->x1 = bbox->y1 = 0.0;
+        return bbox;
+    }
 
-	bbox->x0 = bbox->y0 = 1e18;
-	bbox->x1 = bbox->y1 = -1e18;
+    bbox->x0 = bbox->y0 = 1e18;
+    bbox->x1 = bbox->y1 = -1e18;
 
-	for (GSList *l = _items; l != NULL; l = l-> next) {
-		SPItem *item = SP_ITEM (l->data);
-		NRRect b;
-		sp_item_bbox_desktop (item, &b);
-		if (b.x0 < bbox->x0) bbox->x0 = b.x0;
-		if (b.y0 < bbox->y0) bbox->y0 = b.y0;
-		if (b.x1 > bbox->x1) bbox->x1 = b.x1;
-		if (b.y1 > bbox->y1) bbox->y1 = b.y1;
-	}
+    for ( GSList const *iter=items ; iter != NULL ; iter = iter->next ) {
+        SPItem *item=SP_ITEM(iter->data);
+        NRRect b;
+        sp_item_bbox_desktop(item, &b);
+        if (b.x0 < bbox->x0) bbox->x0 = b.x0;
+        if (b.y0 < bbox->y0) bbox->y0 = b.y0;
+        if (b.x1 > bbox->x1) bbox->x1 = b.x1;
+        if (b.y1 > bbox->y1) bbox->y1 = b.y1;
+    }
 
-	return bbox;
+    return bbox;
 }
 
 NR::Rect SPSelection::bounds() const {
-	NRRect r;
-	return NR::Rect(*bounds(&r));
+    NRRect r;
+    return NR::Rect(*bounds(&r));
 }
 
 NRRect *SPSelection::boundsInDocument(NRRect *bbox) const {
-	g_return_val_if_fail (bbox != NULL, NULL);
+    g_return_val_if_fail (bbox != NULL, NULL);
 
-	if (isEmpty()) {
-		bbox->x0 = bbox->y0 = bbox->x1 = bbox->y1 = 0.0;
-		return bbox;
-	}
+    GSList const *items=const_cast<SPSelection *>(this)->itemList();
+    if (!items) {
+        bbox->x0 = bbox->y0 = bbox->x1 = bbox->y1 = 0.0;
+        return bbox;
+    }
 
-	bbox->x0 = bbox->y0 = 1e18;
-	bbox->x1 = bbox->y1 = -1e18;
+    bbox->x0 = bbox->y0 = 1e18;
+    bbox->x1 = bbox->y1 = -1e18;
 
-	for (GSList *l = _items; l != NULL; l = l-> next) {
-		SPItem * const item = SP_ITEM(l->data);
-		NR::Matrix const i2doc(sp_item_i2doc_affine(item));
-		sp_item_invoke_bbox(item, bbox, i2doc, FALSE);
-	}
+    for ( GSList const *iter=items ; iter != NULL ; iter = iter->next ) {
+        SPItem *item=SP_ITEM(iter->data);
+        NR::Matrix const i2doc(sp_item_i2doc_affine(item));
+        sp_item_invoke_bbox(item, bbox, i2doc, FALSE);
+    }
 
-	return bbox;
+    return bbox;
 }
 
 NR::Rect SPSelection::boundsInDocument() const {
-	NRRect r;
-	return NR::Rect(*boundsInDocument(&r));
+    NRRect r;
+    return NR::Rect(*boundsInDocument(&r));
 }
 
 /**
  * Compute the list of points in the selection that are to be considered for snapping.
  */
 int SPSelection::getSnapPoints(NR::Point points[], int size) const {
-	if (!_items) { // no items
-		return 0;
-	} else if (!_items->next) { // one item
-		/* selection has only one item -> take snappoints of item */
-		return sp_item_snappoints (SP_ITEM (_items->data), points, size);
-	} else { // multiple items
-		/* selection has more than one item -> take corners of selection */
-		/* Just a pair of opposite corners of the bounding box suffices given that we don't
-		   yet support angled guide lines. */
-		NR::Rect bbox = bounds();
-		int pos = 0;
-		if ( pos < size ) {
-			points[pos++] = bbox.min();
-		}
-		if ( pos < size ) {
-			points[pos++] = bbox.max();
-		}
-		return pos;
-	}
+    GSList const *items=const_cast<SPSelection *>(this)->itemList();
+    if (!items) { // no items
+        return 0;
+    } else if (!items->next) { // one item
+        /* selection has only one item -> take snappoints of item */
+        return sp_item_snappoints(const_cast<SPSelection *>(this)->singleItem(), points, size);
+    } else { // multiple items
+        /* selection has more than one item -> take corners of selection */
+        /* Just a pair of opposite corners of the bounding box suffices given that we don't
+           yet support angled guide lines. */
+        NR::Rect bbox = bounds();
+        int pos = 0;
+        if ( pos < size ) {
+            points[pos++] = bbox.min();
+        }
+        if ( pos < size ) {
+            points[pos++] = bbox.max();
+        }
+        return pos;
+    }
 }
 
-void SPSelection::_removeItemChildren(SPItem *item) {
-	SPObject *object=SP_OBJECT(item);
-	GSList *iter, *next;
-	for ( iter = _items ; iter ; iter = next ) {
-		next = iter->next;
-		SPItem *sel_item=(SPItem *)iter->data;
-		SPObject *parent=SP_OBJECT_PARENT(SP_OBJECT(sel_item));
-		while (parent) {
-			if ( parent == object ) {
-				removeItem(item);
-				break;
-			}
-			parent = SP_OBJECT_PARENT(parent);
-		}
-	}
+void SPSelection::_removeObjectChildren(SPObject *obj) {
+    GSList *iter, *next;
+    for ( iter = _objs ; iter ; iter = next ) {
+        next = iter->next;
+        SPObject *sel_obj=reinterpret_cast<SPObject *>(iter->data);
+        SPObject *parent=SP_OBJECT_PARENT(sel_obj);
+        while (parent) {
+            if ( parent == obj ) {
+                _remove(sel_obj);
+                break;
+            }
+            parent = SP_OBJECT_PARENT(parent);
+        }
+    }
 }
 
-SPItem *SPSelection::_itemForRepr(SPRepr *repr) {
-	g_return_val_if_fail(repr != NULL, NULL);
-	gchar const *id = sp_repr_attr(repr, "id");
-	g_return_val_if_fail(id != NULL, NULL);
-	SPObject *object = sp_document_lookup_id(SP_DT_DOCUMENT(_desktop), id);
-	g_return_val_if_fail(object != NULL, NULL);
-	g_return_val_if_fail(SP_IS_ITEM(object), NULL);
-	return SP_ITEM(object);
+SPObject *SPSelection::_objectForRepr(SPRepr *repr) const {
+    g_return_val_if_fail(repr != NULL, NULL);
+    gchar const *id = sp_repr_attr(repr, "id");
+    g_return_val_if_fail(id != NULL, NULL);
+    SPObject *object=sp_document_lookup_id(SP_DT_DOCUMENT(_desktop), id);
+    g_return_val_if_fail(object != NULL, NULL);
+    return object;
 }
 
 /*

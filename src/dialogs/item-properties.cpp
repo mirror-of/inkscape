@@ -389,7 +389,7 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
     } else {
         
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
-        gtk_entry_set_text (GTK_ENTRY (w), item->object.id);
+        gtk_entry_set_text (GTK_ENTRY (w), SP_OBJECT_ID(item));
         gtk_widget_set_sensitive (w, TRUE);
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
         gtk_label_set_text (GTK_LABEL (w), _("ID"));

@@ -84,9 +84,7 @@ struct SPItemCtx {
 	NRMatrix i2vp;
 };
 
-struct SPItem {
-	SPObject object;
-
+struct SPItem : public SPObject {
 	unsigned int sensitive : 1;
 	unsigned int printable : 1;
 	unsigned int stop_paint: 1;
