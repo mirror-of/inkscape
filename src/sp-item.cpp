@@ -639,8 +639,6 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Ma
 	} else {
 		advertized_move = sp_item_transform_delta (item, transform);
 	}
-	item->_transformed_signal.emit (&advertized_move, item);
-
 	NR::Matrix xform(transform);
 
 	gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
@@ -653,6 +651,8 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Ma
 		}
 		sp_item_set_item_transform(item, xform);
 	}
+
+	item->_transformed_signal.emit (&advertized_move, item);
 
 	sp_object_invoke_write(SP_OBJECT(item), SP_OBJECT_REPR(item), SP_OBJECT_WRITE_EXT);
 }
