@@ -90,18 +90,17 @@ void sp_sel_trans_reset_state(SPSelTrans *seltrans);
 void sp_sel_trans_increase_state(SPSelTrans *seltrans);
 void sp_sel_trans_set_center(SPSelTrans *seltrans, gdouble x, gdouble y);
 
-void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const p, gdouble x, gdouble y, gboolean show_handles);
+void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdouble y, gboolean show_handles);
 void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, NR::Point const &norm);
 void sp_sel_trans_ungrab(SPSelTrans *seltrans);
 void sp_sel_trans_stamp(SPSelTrans *seltrans);
 
-NRPoint *sp_sel_trans_point_desktop(SPSelTrans const *seltrans, NRPoint *p);
-NRPoint *sp_sel_trans_origin_desktop(SPSelTrans const *seltrans, NRPoint *p);
-
-inline NR::Point sp_sel_trans_point_desktop(SPSelTrans const *seltrans)
-{
+inline NR::Point sp_sel_trans_point_desktop(SPSelTrans const *seltrans) {
 	return seltrans->point;
 }
 
+inline NR::Point sp_sel_trans_origin_desktop(SPSelTrans const *seltrans) {
+	return seltrans->origin;
+}
 
 #endif

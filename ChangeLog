@@ -1,3 +1,10 @@
+2004-02-23  MenTaLguY <mental@rydia.net>
+
+	* src/selection-chemistry.cpp, src/selection-chemistry.h,
+	  src/seltrans.cpp, src/seltrans.h, src/verbs.cpp,
+	  src/dialogs/transformation.cpp, src/libnr/nr-point-fns.h,
+	  src/libnr/nr-point.h, src/libnr/nr-rect.h: more NRPoint removal
+
 2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-item-transform.cpp (sp_item_rotate_rel):

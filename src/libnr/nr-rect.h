@@ -14,6 +14,7 @@
  * This code is in public domain
  */
 
+#include <stdexcept>
 #include <libnr/nr-coord.h>
 #include <libnr/nr-i-coord.h>
 #include <libnr/nr-dim2.h>
@@ -121,6 +122,29 @@ public:
 		return contains<X>(p) && contains<Y>(p);
 	}
 
+    double area() const {
+        return extent<X>() * extent<Y>();
+    }
+
+    double maxExtent() const {
+        return MAX(extent<X>(), extent<Y>());
+    }
+
+    double extent(Dim2 axis) const {
+        switch (axis) {
+        case X: return extent<X>();
+        case Y: return extent<Y>();
+        };
+    }
+
+    double extent(unsigned i) const throw(std::out_of_range) {
+        switch (i) {
+        case 0: return extent<X>();
+        case 1: return extent<Y>();
+        default: throw std::out_of_range("Dimension out of range");
+        };
+    }
+
 	/** Translates the rectangle by p. */
 	void offset(Point p);
 	
@@ -139,6 +163,11 @@ public:
 private:
 	Rect() {}
 
+    template <NR::Dim2 axis>
+    double extent() const {
+        return _max[axis] - _min[axis];
+    }
+
 	template <Dim2 axis>
 	bool isEmpty() const {
 		return !( _min[axis] < _max[axis] );
@@ -146,8 +175,7 @@ private:
 
 	template <Dim2 axis>
 	bool intersects(const Rect &r) const {
-		return r._min[axis] <=   _max[axis] &&
-		         _min[axis] <= r._max[axis];
+		return _max[axis] >= r._min[axis] && _min[axis] <= r._max[axis];
 	}
 
 	template <Dim2 axis>

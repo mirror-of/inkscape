@@ -680,12 +680,12 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 
 
 void
-sp_selection_scale_relative (SPSelection *selection, NRPoint *align, double dx, double dy)
+sp_selection_scale_relative (SPSelection *selection, NR::Point const &align, double dx, double dy)
 {
 	NRMatrix scale, n2d, d2n, final, s;
 
-	nr_matrix_set_translate (&n2d, -align->x, -align->y);
-	nr_matrix_set_translate (&d2n, align->x, align->y);
+	nr_matrix_set_translate (&n2d, -align[NR::X], -align[NR::Y]);
+	nr_matrix_set_translate (&d2n, align[NR::X], align[NR::Y]);
 	nr_matrix_set_scale (&scale, dx, dy);
 
 	nr_matrix_multiply (&s, &n2d, &scale);
@@ -695,11 +695,11 @@ sp_selection_scale_relative (SPSelection *selection, NRPoint *align, double dx, 
 }
 
 void
-sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble angle_degrees)
+sp_selection_rotate_relative (SPSelection *selection, NR::Point const &center, gdouble angle_degrees)
 {
 	NRMatrix rotate, n2d, d2n, final, s;
 
-	nr_matrix_set_translate (&n2d, -center->x, -center->y);
+	nr_matrix_set_translate (&n2d, -center[NR::X], -center[NR::Y]);
 	nr_matrix_invert (&d2n, &n2d);
 	sp_matrix_d_set_rotate (&rotate, angle_degrees);
 
@@ -710,11 +710,11 @@ sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble a
 }
 
 void
-sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, double dy)
+sp_selection_skew_relative (SPSelection *selection, NR::Point const &align, double dx, double dy)
 {
 	NRMatrix skew, n2d, d2n, final, s;
 
-	nr_matrix_set_translate (&n2d, -align->x, -align->y);
+	nr_matrix_set_translate (&n2d, -align[NR::X], -align[NR::Y]);
 	nr_matrix_invert (&d2n, &n2d);
 
 	skew.c[0] = 1;
@@ -757,14 +757,10 @@ void
 sp_selection_rotate (SPSelection *selection, gdouble angle_degrees)
 {
 	NRRect bbox;
-	NRPoint center;
-
 	sp_selection_bbox (selection, &bbox);
+	NR::Point center = NR::Rect(bbox).midpoint();
 
-	center.x = 0.5 * (bbox.x0 + bbox.x1);
-	center.y = 0.5 * (bbox.y0 + bbox.y1);
-
-	sp_selection_rotate_relative (selection, &center, angle_degrees);
+	sp_selection_rotate_relative (selection, center, angle_degrees);
 
 	if ( angle_degrees > 0 )
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
@@ -776,24 +772,22 @@ sp_selection_rotate (SPSelection *selection, gdouble angle_degrees)
 \param  angle   the angle in "angular pixels", i.e. how many visible pixels must move the outermost point of the rotated object
 */
 void
-sp_selection_rotate_screen (SPSelection *selection,  gdouble angle)
+sp_selection_rotate_screen (SPSelection *selection, gdouble angle)
 {
 	gdouble zoom, zmove, zangle, r;
-	NRRect bbox;
-	NRPoint center;
 
-	sp_selection_bbox (selection, &bbox);
-
-	center.x = 0.5 * (bbox.x0 + bbox.x1);
-	center.y = 0.5 * (bbox.y0 + bbox.y1);
+	NRRect bbox_compat;
+	sp_selection_bbox (selection, &bbox_compat);
+	NR::Rect bbox(bbox_compat);
+	NR::Point center = bbox.midpoint();
 
 	zoom = SP_DESKTOP_ZOOM (selection->desktop);
 	zmove = angle / zoom;
-	r = hypot(bbox.x1 - center.x, bbox.y1 - center.y);
+	r = NR::L2(bbox.max() - center);
 
 	zangle = 180 * atan2 (zmove, r) / M_PI;
 
-	sp_selection_rotate_relative (selection, &center, zangle);
+	sp_selection_rotate_relative (selection, center, zangle);
 
 	if (angle > 0)
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
@@ -805,22 +799,20 @@ sp_selection_rotate_screen (SPSelection *selection,  gdouble angle)
 void
 sp_selection_scale (SPSelection *selection, gdouble grow)
 {
-	NRRect bbox;
-	NRPoint center;
+	NRRect bbox_compat;
 	gdouble times;
 
-	sp_selection_bbox (selection, &bbox);
+	sp_selection_bbox (selection, &bbox_compat);
+	NR::Rect bbox(bbox_compat);
+	NR::Point center = bbox.midpoint();
 
-	center.x = 0.5 * (bbox.x0 + bbox.x1);
-	center.y = 0.5 * (bbox.y0 + bbox.y1);
-
-	gdouble r = MAX (bbox.x1 - bbox.x0, bbox.y1 - bbox.y0);
+	gdouble r = bbox.maxExtent();
 
 	if (r + 2 * grow <= 0) return;
 
 	times = 1.0 + grow / r;
 
-	sp_selection_scale_relative (selection, &center, times, times);
+	sp_selection_scale_relative (selection, center, times, times);
 
 	if (grow > 0)
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:larger");
@@ -832,24 +824,22 @@ sp_selection_scale (SPSelection *selection, gdouble grow)
 void
 sp_selection_scale_screen (SPSelection *selection, gdouble grow_pixels)
 {
-	NRRect bbox;
-	NRPoint center;
+	NRRect bbox_compat;
 	gdouble times;
 
-	sp_selection_bbox (selection, &bbox);
-
-	center.x = 0.5 * (bbox.x0 + bbox.x1);
-	center.y = 0.5 * (bbox.y0 + bbox.y1);
+	sp_selection_bbox (selection, &bbox_compat);
+	NR::Rect bbox(bbox_compat);
+	NR::Point center = bbox.midpoint();
 
 	grow_pixels = grow_pixels / SP_DESKTOP_ZOOM (selection->desktop);
 
-	gdouble r = MAX (bbox.x1 - bbox.x0, bbox.y1 - bbox.y0);
+	gdouble r = bbox.maxExtent();
 
 	if (r + 2 * grow_pixels <= 0) return;
 
 	times = 1.0 + grow_pixels / r;
 
-	sp_selection_scale_relative (selection, &center, times, times);
+	sp_selection_scale_relative (selection, center, times, times);
 
 	if (grow_pixels > 0)
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:larger");
@@ -860,15 +850,12 @@ sp_selection_scale_screen (SPSelection *selection, gdouble grow_pixels)
 void
 sp_selection_scale_times (SPSelection *selection, gdouble times)
 {
-	NRRect bbox;
-	NRPoint center;
+	NRRect bbox_compat;
+	sp_selection_bbox (selection, &bbox_compat);
+	NR::Rect bbox(bbox_compat);
+	NR::Point center = bbox.midpoint();
 
-	sp_selection_bbox (selection, &bbox);
-
-	center.x = 0.5 * (bbox.x0 + bbox.x1);
-	center.y = 0.5 * (bbox.y0 + bbox.y1);
-
-	sp_selection_scale_relative (selection, &center, times, times);
+	sp_selection_scale_relative (selection, center, times, times);
 
 	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
 }

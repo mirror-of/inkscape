@@ -1,5 +1,7 @@
 #ifndef SEEN_NR_POINT_H
 #define SEEN_NR_POINT_H
+
+#include <math.h>
 #include <stdexcept>
 
 #include <libnr/nr-coord.h>
@@ -18,28 +20,24 @@ public:
     Point()
     { }
 
-    Point(Coord x, Coord y)
-    {
+    Point(Coord x, Coord y) {
         _pt[X] = x;
         _pt[Y] = y;
     }
 
-    Point(NRPoint const &p)
-    {
+    Point(NRPoint const &p) {
         _pt[X] = p.x;
         _pt[Y] = p.y;
     }
 
-    Coord operator[](unsigned i) const throw(std::out_of_range)
-    {
+    Coord operator[](unsigned i) const throw(std::out_of_range) {
         if ( i > Y ) {
             throw std::out_of_range("index out of range");
         }
         return _pt[i];
     }
 
-    Coord &operator[](unsigned i) throw(std::out_of_range)
-    {
+    Coord &operator[](unsigned i) throw(std::out_of_range) {
         if ( i > Y ) {
             throw std::out_of_range("index out of range");
         }
@@ -53,8 +51,7 @@ public:
         (If the y axis grows downwards and the x axis grows to the
         right, then this is 90 degrees counter-clockwise.)
     **/
-    Point ccw() const
-    {
+    Point ccw() const {
         return Point(_pt[Y], -_pt[X]);
     }
 
@@ -62,8 +59,7 @@ public:
         (If the y axis grows downwards and the x axis grows to the
         right, then this is 90 degrees clockwise.)
     **/
-    Point cw() const
-    {
+    Point cw() const {
         return Point(-_pt[Y], _pt[X]);
     }
 
@@ -76,40 +72,36 @@ public:
         return nrp;
     }
 
-    Point &operator+=(Point const &o)
-    {
-        for (unsigned i = 0; i < 2; ++i) {
+    Point &operator+=(Point const &o) {
+        for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] += o._pt[i];
         }
         return *this;
     }
   
-    Point &operator-=(Point const &o)
-    {
+    Point &operator-=(Point const &o) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] -= o._pt[i];
         }
         return *this;
     }
   
-    Point &operator/=(double const s)
-    {
+    Point &operator/=(double const s) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] /= s;
         }
         return *this;
     }
 
-    Point &operator*=(double const s)
-    {
+    Point &operator*=(double const s) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] *= s;
         }
         return *this;
     }
   
-    Point &operator*=(Point const &s)
-    {
+    __attribute__((__deprecated__))
+    Point &operator*=(Point const &s) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] *= s[i];
         }
@@ -135,5 +127,5 @@ private:
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=4 :
 */

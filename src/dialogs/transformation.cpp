@@ -842,31 +842,30 @@ sp_transformation_scale_apply ( GObject *dlg,
                                 SPSelection *selection, 
                                 unsigned int copy )
 {
-    GtkAdjustment *ax, *ay;
+    GtkAdjustment *a[2];
     SPUnitSelector *us;
     const SPUnit *unit;
-    NRRect bbox;
-    NRPoint c;
-    float x, y;
 
     us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
-    ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
-    ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
+    a[NR::X] = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
+    a[NR::Y] = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
 
-    sp_selection_bbox (selection, &bbox);
-    c.x = 0.5 * (bbox.x0 + bbox.x1);
-    c.y = 0.5 * (bbox.y0 + bbox.y1);
+    NRRect bbox_compat;
+    sp_selection_bbox (selection, &bbox_compat);
+    NR::Rect bbox(bbox_compat);
+    NR::Point center = bbox.midpoint();
+
     unit = sp_unit_selector_get_unit (us);
     
     if (unit->base == SP_UNIT_ABSOLUTE) {
-        x = sp_unit_selector_get_value_in_points (us, ax);
-        y = sp_unit_selector_get_value_in_points (us, ay);
-        sp_selection_scale_relative (selection, &c, 
-                                     x / (bbox.x1 - bbox.x0), 
-                                     y / (bbox.y1 - bbox.y0) );
+        NR::Point s;
+	for ( unsigned i = 0 ; i < 2 ; i++ ) {
+		s[i] = sp_unit_selector_get_value_in_points(us, a[i]) / bbox.extent(i);
+	}
+        sp_selection_scale_relative (selection, center, s[NR::X], s[NR::Y]);
     } else {
-        sp_selection_scale_relative ( selection, &c, 0.01 * ax->value, 
-                                      0.01 * ay->value );
+        sp_selection_scale_relative ( selection, center, 0.01 * a[NR::X]->value,
+                                      0.01 * a[NR::Y]->value );
     }
 
     if (selection) sp_document_done (SP_DT_DOCUMENT (selection->desktop));
@@ -955,15 +954,14 @@ sp_transformation_rotate_apply ( GObject *dlg,
 {
 
     GtkAdjustment *a;
-    NRRect bbox;
-    NRPoint c;
 
     a = GTK_ADJUSTMENT(g_object_get_data (dlg, "rotate_angle"));
 
-    sp_selection_bbox (selection, &bbox);
-    c.x = 0.5 * (bbox.x0 + bbox.x1);
-    c.y = 0.5 * (bbox.y0 + bbox.y1);
-    sp_selection_rotate_relative (selection, &c, a->value);
+    NRRect bbox_compat;
+    sp_selection_bbox (selection, &bbox_compat);
+    NR::Rect bbox(bbox_compat);
+    NR::Point center = bbox.midpoint();
+    sp_selection_rotate_relative (selection, center, a->value);
 
     if (selection)
         sp_document_done (SP_DT_DOCUMENT (selection->desktop));
