@@ -33,7 +33,10 @@ GrayMap *gdkPixbufToGrayMap(GdkPixbuf *buf)
         guchar *p = pixdata + row;
         for (x=0 ; x<width ; x++)
             {
-            unsigned long bright = (int)p[0] + (int)p[1] +(int)p[2];
+            int alpha = (int)p[3];
+            int white = 3 * (255-alpha);
+            unsigned long sample = (int)p[0] + (int)p[1] +(int)p[2];
+            unsigned long bright = sample * alpha / 256 + white;
             grayMap->setPixel(grayMap, x, y, bright);
             p += n_channels;
             }
@@ -107,8 +110,13 @@ RgbMap *gdkPixbufToRgbMap(GdkPixbuf *buf)
         guchar *p = pixdata + row;
         for (x=0 ; x<width ; x++)
             {
-            rgbMap->setPixel(rgbMap, x, y, 
-                 (int)p[0], (int)p[1], (int)p[2] );
+            int alpha = (int)p[3];
+            int white = 255 - alpha;
+            int r     = (int)p[0];  r = r * alpha / 256 + white;
+            int g     = (int)p[1];  g = g * alpha / 256 + white;
+            int b     = (int)p[2];  b = b * alpha / 256 + white;
+
+            rgbMap->setPixel(rgbMap, x, y, r, g, b);
             p += n_channels;
             }
         row += rowstride;
