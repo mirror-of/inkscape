@@ -192,7 +192,6 @@ libnr/nr-svp-uncross.cpp
 libnr/nr-svp-uncross.h
 libnr/nr-svp.cpp
 libnr/nr-svp.h
-libnr/nr-types-test.cpp
 libnr/nr-types.cpp
 libnr/nr-types.h
 libnr/nr-uta.cpp
@@ -401,7 +400,6 @@ svg/svg-length.cpp
 svg/svg-path.cpp
 svg/svg-types.h
 svg/svg.h
-test.c
 text-context.cpp
 text-context.h
 toolbox.cpp
@@ -467,6 +465,7 @@ widgets/sp-xmlview-tree.h
 widgets/spw-utilities.cpp
 widgets/spw-utilities.h
 widgets/test-wrapbox.cpp
+widgets/widget-sizes.h
 winmain.cpp
 xml/repr-action-test.cpp
 xml/repr-action.cpp

@@ -89,6 +89,7 @@ desktop-events.o: \
 	helper/helper-forward.h \
 	helper/helper-forward.h \
 	helper/sp-canvas.h \
+	helper/sp-intl.h \
 	helper/unit-menu.h \
 	helper/units.h \
 	helper/units.h \
@@ -132,10 +133,12 @@ desktop-snap.o: \
 	desktop-snap.h \
 	desktop.h \
 	forward.h \
+	geom.h \
 	helper/helper-forward.h \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -1193,6 +1196,7 @@ file.o: \
 geom.o: \
 	geom.cpp \
 	geom.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-types.h
 
 gradient-chemistry.o: \
@@ -1424,7 +1428,9 @@ helper/unit-menu.o: \
 	helper/unit-menu.cpp \
 	helper/sp-marshal.h \
 	helper/unit-menu.h \
-	helper/units.h
+	helper/units.h \
+	widgets/spw-utilities.h \
+	widgets/widget-sizes.h
 
 helper/units.o: \
 	helper/units.cpp \
@@ -1753,12 +1759,6 @@ libnr/nr-svp.o: \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
 	libnr/nr-values.h
-
-libnr/nr-types-test.o: \
-	libnr/nr-types-test.cpp \
-	libnr/nr-point-fns.h \
-	libnr/nr-types.h \
-	utest/utest.h
 
 libnr/nr-types.o: \
 	libnr/nr-types.cpp \
@@ -2342,6 +2342,7 @@ nodepath.o: \
 	helper/sp-canvas-util.h \
 	helper/sp-canvas.h \
 	helper/sp-ctrlline.h \
+	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
 	knot.h \
@@ -2381,6 +2382,7 @@ object-edit.o: \
 	helper/units.h \
 	knot.h \
 	knotholder.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
 	object-edit.h \
 	sp-ellipse.h \
@@ -2721,6 +2723,8 @@ select-toolbar.o: \
 	widgets/button.h \
 	widgets/icon.h \
 	widgets/sp-widget.h \
+	widgets/spw-utilities.h \
+	widgets/widget-sizes.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -2772,6 +2776,7 @@ selection.o: \
 	document.h \
 	forward.h \
 	helper/helper-forward.h \
+	helper/sp-intl.h \
 	helper/sp-marshal.h \
 	helper/units.h \
 	inkscape-private.h \
@@ -3062,6 +3067,7 @@ sp-guide.o: \
 	helper/helper-forward.h \
 	helper/helper-forward.h \
 	helper/sp-canvas.h \
+	helper/sp-intl.h \
 	libnr/nr-macros.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -3985,6 +3991,7 @@ star-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -4181,6 +4188,7 @@ toolbox.o: \
 	view.h \
 	widgets/button.h \
 	widgets/icon.h \
+	widgets/widget-sizes.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -4203,6 +4211,7 @@ tools-switch.o: \
 	helper/action.h \
 	helper/curve.h \
 	helper/helper-forward.h \
+	helper/sp-intl.h \
 	helper/units.h \
 	inkscape-private.h \
 	inkscape.h \

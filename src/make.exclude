@@ -14,6 +14,7 @@ display/nr-uta.cpp
 display/testnr.cpp
 helper/bezier-utils-test.cpp
 inkview.cpp
+libnr/nr-types-test.cpp
 libnrtype/nr-type-gnome.cpp
 libnrtype/nr-type-xft.cpp
 modules/gnome.cpp

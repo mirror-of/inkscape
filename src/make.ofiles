@@ -92,7 +92,6 @@ OBJECTS = \
 	libnr/nr-svp-render.o \
 	libnr/nr-svp-uncross.o \
 	libnr/nr-svp.o \
-	libnr/nr-types-test.o \
 	libnr/nr-types.o \
 	libnr/nr-uta.o \
 	libnr/nr-values.o \
@@ -339,7 +338,6 @@ LINTS = \
 	libnr/nr-svp-render.lint \
 	libnr/nr-svp-uncross.lint \
 	libnr/nr-svp.lint \
-	libnr/nr-types-test.lint \
 	libnr/nr-types.lint \
 	libnr/nr-uta.lint \
 	libnr/nr-values.lint \
@@ -454,7 +452,6 @@ LINTS = \
 	svg/svg-color.lint \
 	svg/svg-length.lint \
 	svg/svg-path.lint \
-	test.lint \
 	text-context.lint \
 	toolbox.lint \
 	tools-switch.lint \
