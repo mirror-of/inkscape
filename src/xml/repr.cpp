@@ -304,7 +304,7 @@ sp_repr_attr (const SPRepr *repr, const gchar *key)
 
 	for (ra = repr->attributes; ra != NULL; ra = ra->next)
 	{
-		if ( ra->key == q ) {
+		if ( ra->key == static_cast<int>(q) ) {
 			return ra->value;
 		}
 	}
@@ -366,7 +366,7 @@ sp_repr_del_attr (SPRepr *repr, const gchar *key)
 
 	q = g_quark_from_string (key);
 	prev = NULL;
-	for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next)
+	for (attr = repr->attributes; attr && (attr->key != static_cast<int>(q)); attr = attr->next)
 	{
 		prev = attr;
 	}
@@ -420,7 +420,7 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value)
 	oldval = NULL;
 	q = g_quark_from_string (key);
 	prev = NULL;
-	for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next)
+	for (attr = repr->attributes; attr && (attr->key != static_cast<int>(q)); attr = attr->next)
 	{
 		prev = attr;
 	}
