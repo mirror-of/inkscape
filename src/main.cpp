@@ -332,8 +332,11 @@ GSList *fixupFilenameEncoding( GSList* fl )
             if ( newFileName ) {
                 if ( !g_utf8_validate(newFileName, -1, NULL) ) {
                     g_warning( "input filename did not yield UTF-8 for #%d", count );
+                    g_free( newFileName );
+                } else {
+                    g_free( fn );
+                    fn = newFileName;
                 }
-                g_free( newFileName );
                 newFileName = 0;
             } else {
                 g_warning( "input filename conversion failed for #%d", count );
