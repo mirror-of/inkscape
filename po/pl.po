@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-28 00:51+0200\n"
+"POT-Creation-Date: 2004-06-29 19:18+0200\n"
 "PO-Revision-Date: 2003-07-28 02:03+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -27,7 +27,7 @@ msgstr "Pokaz slajdów Sodipodi"
 msgid "SVG Vector Illustrator"
 msgstr "Program do tworzenia ilustracji wektorowych"
 
-#: src/arc-context.cpp:465
+#: src/arc-context.cpp:467
 #, c-format
 msgid "Draw arc: %s x %s"
 msgstr ""
@@ -47,38 +47,38 @@ msgstr ""
 msgid "Move %s"
 msgstr "Przesunięcie"
 
-#: src/desktop.cpp:804
+#: src/desktop.cpp:825
 #, fuzzy
 msgid "Zoom drawing if window size changes"
 msgstr "Dopasowuje rozmiar całego rysunek do okna"
 
-#: src/desktop.cpp:826 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
+#: src/desktop.cpp:847 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
 msgid "Zoom"
 msgstr "Powiększenie"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:850
+#: src/desktop.cpp:871
 msgid "Cursor coordinates"
 msgstr ""
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:860
+#: src/desktop.cpp:881
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:899
+#: src/desktop.cpp:920
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:901
+#: src/desktop.cpp:922
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1043
+#: src/desktop.cpp:1064
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -87,11 +87,11 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1057 src/desktop.cpp:1116
+#: src/desktop.cpp:1078 src/desktop.cpp:1137
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1101
+#: src/desktop.cpp:1122
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -100,25 +100,25 @@ msgid ""
 "Do you want to save this file in another format?"
 msgstr ""
 
-#: src/desktop.cpp:1458
+#: src/desktop.cpp:1486
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1487
+#: src/desktop.cpp:1515
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1885 src/dialogs/align.cpp:445
+#: src/desktop.cpp:1913 src/dialogs/align.cpp:445
 #: src/dialogs/desktop-properties.cpp:690 src/dialogs/export.cpp:277
 msgid "Page"
 msgstr "Strona"
 
-#: src/desktop.cpp:1889 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
+#: src/desktop.cpp:1917 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
 msgid "Drawing"
 msgstr "Rysunek"
 
-#: src/desktop.cpp:1893 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
+#: src/desktop.cpp:1921 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
 msgid "Selection"
 msgstr "Zaznaczenie"
 
@@ -392,7 +392,7 @@ msgstr "Jednostki:"
 #: src/dialogs/desktop-properties.cpp:810 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
-#: src/toolbox.cpp:1626
+#: src/toolbox.cpp:1748
 msgid "Width:"
 msgstr "Szerokość:"
 
@@ -451,7 +451,7 @@ msgstr ""
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
 #: src/dialogs/display-settings.cpp:420 src/dialogs/display-settings.cpp:1206
-#: src/interface.cpp:964 src/verbs.cpp:797
+#: src/interface.cpp:971 src/verbs.cpp:797
 msgid "None"
 msgstr "Brak"
 
@@ -1823,17 +1823,17 @@ msgstr ""
 msgid "Closing path."
 msgstr ""
 
-#: src/draw-context.cpp:812
+#: src/draw-context.cpp:814
 #, c-format
 msgid "Creating anchor at (%g,%g)"
 msgstr ""
 
 #. Write curves to object
-#: src/draw-context.cpp:1064
+#: src/draw-context.cpp:1066
 msgid "Finishing freehand"
 msgstr ""
 
-#: src/draw-context.cpp:1832
+#: src/draw-context.cpp:1834
 msgid "Finishing pen"
 msgstr ""
 
@@ -2260,36 +2260,40 @@ msgid ""
 "fullscreen modes)"
 msgstr ""
 
-#: src/interface.cpp:776
-msgid "_Menu"
+#. sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
+#. checkitem_toggled, checkitem_update, 0);
+#: src/interface.cpp:778
+msgid "Commands Bar"
 msgstr ""
 
-#: src/interface.cpp:776
+#: src/interface.cpp:778
 #, fuzzy
-msgid "Show or hide the menu bar"
+msgid "Show or hide the Commands bar (under the menu)"
 msgstr "Wyświetlanie prowadnic"
 
-#: src/interface.cpp:778
-msgid "Top _Panel"
-msgstr ""
-
-#: src/interface.cpp:778
-msgid "Show or hide the top panel (under the menu)"
-msgstr ""
+#: src/interface.cpp:780
+#, fuzzy
+msgid "Tool Controls"
+msgstr "Opcje narzędzia"
 
 #: src/interface.cpp:780
+#, fuzzy
+msgid "Show or hide the Tool Controls panel"
+msgstr "Wyświetlanie prowadnic"
+
+#: src/interface.cpp:782
 msgid "_Toolbox"
 msgstr ""
 
-#: src/interface.cpp:780
+#: src/interface.cpp:782
 msgid "Show or hide the main toolbox (on the left)"
 msgstr ""
 
-#: src/interface.cpp:786
+#: src/interface.cpp:788
 msgid "_Statusbar"
 msgstr ""
 
-#: src/interface.cpp:786
+#: src/interface.cpp:788
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr ""
 
@@ -2297,57 +2301,56 @@ msgstr ""
 #. * list of verb arguments) in the verb system right now, so we have to build
 #. * the submenu by hand.  Luckily, we can populate it using the same verb system.
 #.
-#: src/interface.cpp:825
+#: src/interface.cpp:827
 msgid "_Tutorials"
 msgstr ""
 
-#: src/interface.cpp:825
+#: src/interface.cpp:827
 msgid "Interactive Inkscape tutorials"
 msgstr ""
 
-#: src/interface.cpp:851
+#: src/interface.cpp:853
 #, fuzzy
 msgid "_File"
 msgstr "Plik"
 
-#: src/interface.cpp:857
+#: src/interface.cpp:859
 #, fuzzy
 msgid "_Edit"
 msgstr "Edycja"
 
-#: src/interface.cpp:863
+#: src/interface.cpp:865
 #, fuzzy
 msgid "_View"
 msgstr "Widok"
 
-#: src/interface.cpp:869
+#: src/interface.cpp:871
 #, fuzzy
 msgid "_Object"
 msgstr "Obiekt"
 
-#: src/interface.cpp:875
+#: src/interface.cpp:877
 msgid "_Path"
 msgstr ""
 
-#. mitem = gtk_menu_item_new_with_mnemonic (_("_Dialogs"));
-#. menu = gtk_menu_new ();
-#. sp_ui_dialogs_menu (GTK_MENU (menu), NULL, view);
-#. gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
-#. gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
-#: src/interface.cpp:887
+#: src/interface.cpp:883
 msgid "_Help"
 msgstr ""
 
-#: src/interface.cpp:1000
+#: src/interface.cpp:925
+msgid "Leave Group"
+msgstr ""
+
+#: src/interface.cpp:1007
 msgid "Could not parse SVG data"
 msgstr ""
 
-#: src/interface.cpp:1162
+#: src/interface.cpp:1169
 #, c-format
 msgid "Overwrite %s"
 msgstr ""
 
-#: src/interface.cpp:1180
+#: src/interface.cpp:1187
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -2545,61 +2548,65 @@ msgid "_Create Link"
 msgstr "Utwórz odnośnik"
 
 #. "Ungroup"
-#: src/object-ui.cpp:243 src/verbs.cpp:875
+#: src/object-ui.cpp:244 src/verbs.cpp:875
 #, fuzzy
 msgid "_Ungroup"
 msgstr "Rozgrupuj"
 
+#: src/object-ui.cpp:250
+msgid "Enter Group"
+msgstr ""
+
 #. Link dialog
-#: src/object-ui.cpp:285
+#: src/object-ui.cpp:298
 #, fuzzy
 msgid "Link _Properties"
 msgstr "Właściwości odnośnika"
 
 #. Select item
-#: src/object-ui.cpp:295
+#: src/object-ui.cpp:308
 #, fuzzy
 msgid "_Follow Link"
 msgstr "Uaktywnij odnośnik"
 
 #. Reset transformations
-#: src/object-ui.cpp:300
+#: src/object-ui.cpp:313
 #, fuzzy
 msgid "_Remove Link"
 msgstr "Usuń odnośnik"
 
 #. Link dialog
-#: src/object-ui.cpp:349
+#: src/object-ui.cpp:362
 #, fuzzy
 msgid "Image _Properties"
 msgstr "Właściwości obrazu"
 
 #. Autotrace dialog
-#: src/object-ui.cpp:357
+#: src/object-ui.cpp:370
 #, fuzzy
 msgid "_Trace"
 msgstr "Ślad"
 
 #. Item dialog
-#: src/object-ui.cpp:398
+#: src/object-ui.cpp:411
 #, fuzzy
 msgid "_Fill and Stroke"
 msgstr "Wypełnienie i kreska"
 
 #. Link dialog
-#: src/object-ui.cpp:418
+#: src/object-ui.cpp:431
 #, fuzzy
 msgid "Rectangle _Properties"
 msgstr "Właściwości prostokąta"
 
 #. Link dialog
-#: src/object-ui.cpp:444
+#: src/object-ui.cpp:457
 #, fuzzy
 msgid "Star _Properties"
 msgstr "Właściwości gwiazdy"
 
 #. Link dialog
-#: src/object-ui.cpp:470
+#: src/object-ui.cpp:483
 #, fuzzy
 msgid "Spiral _Properties"
 msgstr "Właściwości spirali"
@@ -2645,7 +2652,7 @@ msgstr "Wysuwa zaznaczone obiekty na wierzch"
 msgid "No paths to reverse in the selection."
 msgstr ""
 
-#: src/rect-context.cpp:515
+#: src/rect-context.cpp:517
 #, c-format
 msgid "Draw rectangle: %s x %s"
 msgstr ""
@@ -2665,23 +2672,23 @@ msgstr "Zaznaczenie"
 msgid "Move by %s, %s"
 msgstr "Przesunięcie"
 
-#: src/select-toolbar.cpp:390
+#: src/select-toolbar.cpp:383
 msgid "Horizontal coordinate of selection"
 msgstr ""
 
-#: src/select-toolbar.cpp:393
+#: src/select-toolbar.cpp:386
 msgid "Vertical coordinate of selection"
 msgstr ""
 
-#: src/select-toolbar.cpp:397
+#: src/select-toolbar.cpp:390
 msgid "Width of selection"
 msgstr ""
 
-#: src/select-toolbar.cpp:405
+#: src/select-toolbar.cpp:398
 msgid "Change both width and height by the same proportion"
 msgstr ""
 
-#: src/select-toolbar.cpp:412
+#: src/select-toolbar.cpp:405
 msgid "Height of selection"
 msgstr ""
 
@@ -2907,7 +2914,7 @@ msgstr "URI obrazu:"
 msgid "Group of %d objects"
 msgstr "Grupa %d obiektów"
 
-#: src/sp-item.cpp:491
+#: src/sp-item.cpp:515
 msgid "Object"
 msgstr "Obiekt"
 
@@ -2926,7 +2933,7 @@ msgstr ""
 msgid "Polygon of %d sides"
 msgstr ""
 
-#: src/sp-text.cpp:2010
+#: src/sp-text.cpp:2009
 #, c-format
 msgid "Text (%s, %.5gpt)"
 msgstr ""
@@ -2958,7 +2965,7 @@ msgstr ""
 msgid "Orphaned clone"
 msgstr ""
 
-#: src/spiral-context.cpp:437
+#: src/spiral-context.cpp:439
 #, c-format
 msgid "Draw spiral at (%s,%s)"
 msgstr ""
@@ -3015,240 +3022,240 @@ msgstr "Wycina zaznaczone obiekty do schowka"
 msgid "No paths to simplify in the selection."
 msgstr ""
 
-#: src/star-context.cpp:469
+#: src/star-context.cpp:471
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr ""
 
-#: src/star-context.cpp:470
+#: src/star-context.cpp:472
 #, c-format
 msgid "Draw star at (%s,%s)"
 msgstr ""
 
-#: src/text-context.cpp:392
+#: src/text-context.cpp:394
 msgid "No-break space"
 msgstr ""
 
-#: src/text-context.cpp:403
+#: src/text-context.cpp:405
 msgid "Unicode: "
 msgstr ""
 
-#: src/text-context.cpp:417
+#: src/text-context.cpp:419
 #, c-format
 msgid "Unicode: %c%c%c%c"
 msgstr ""
 
-#: src/text-context.cpp:430
+#: src/text-context.cpp:432
 msgid "Non-printable character"
 msgstr ""
 
-#: src/toolbox.cpp:345
+#: src/toolbox.cpp:379
 msgid "Insert new nodes into selected segments"
 msgstr "Dołącza nowe węzły do zaznaczonych segmentów"
 
-#: src/toolbox.cpp:347
+#: src/toolbox.cpp:381
 msgid "Delete selected nodes"
 msgstr "Usuwa zaznaczone węzły"
 
-#: src/toolbox.cpp:352
+#: src/toolbox.cpp:386
 #, fuzzy
 msgid "Join paths at selected nodes"
 msgstr "Łączy linie w zaznaczonych węzłach"
 
-#: src/toolbox.cpp:354
+#: src/toolbox.cpp:388
 #, fuzzy
 msgid "Join paths at selected nodes with new segment"
 msgstr "Łączy linie w zaznaczonych węzłach"
 
-#: src/toolbox.cpp:357
+#: src/toolbox.cpp:391
 msgid "Split path between two non-endpoint nodes"
 msgstr ""
 
-#: src/toolbox.cpp:360
+#: src/toolbox.cpp:394
 #, fuzzy
 msgid "Break path at selected nodes"
 msgstr "Ostrze krzywej przy zaznaczonych węzłach"
 
-#: src/toolbox.cpp:365
+#: src/toolbox.cpp:399
 msgid "Make selected nodes corner"
 msgstr "Konwertuje zaznaczone węzły na narożniki"
 
-#: src/toolbox.cpp:368
+#: src/toolbox.cpp:402
 #, fuzzy
 msgid "Make selected nodes smooth"
 msgstr "Usuwa zaznaczone węzły"
 
-#: src/toolbox.cpp:371
+#: src/toolbox.cpp:405
 #, fuzzy
 msgid "Make selected nodes symmetric"
 msgstr "Usuwa zaznaczone węzły"
 
-#: src/toolbox.cpp:376
+#: src/toolbox.cpp:410
 msgid "Make selected segments lines"
 msgstr "Konwertuje zaznaczone segmenty na linie"
 
-#: src/toolbox.cpp:379
+#: src/toolbox.cpp:413
 msgid "Make selected segments curves"
 msgstr "Konwertuje zaznaczone segmenty na krzywe"
 
-#: src/toolbox.cpp:966
+#: src/toolbox.cpp:1088
 msgid "Corners:"
 msgstr "Narożniki:"
 
-#: src/toolbox.cpp:966
+#: src/toolbox.cpp:1088
 msgid "Number of corners of a polygon or star"
 msgstr ""
 
-#: src/toolbox.cpp:979
+#: src/toolbox.cpp:1101
 msgid "Polygon"
 msgstr ""
 
-#: src/toolbox.cpp:986
+#: src/toolbox.cpp:1108
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr ""
 
-#: src/toolbox.cpp:996
+#: src/toolbox.cpp:1118
 #, fuzzy
 msgid "Spoke ratio:"
 msgstr "Proporcja:"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:999
+#: src/toolbox.cpp:1121
 msgid "Base radius to tip radius ratio"
 msgstr ""
 
-#: src/toolbox.cpp:1014
+#: src/toolbox.cpp:1136
 msgid "Roundedness:"
 msgstr ""
 
-#: src/toolbox.cpp:1014
+#: src/toolbox.cpp:1136
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
-#: src/toolbox.cpp:1027 src/toolbox.cpp:1540 src/toolbox.cpp:1669
+#: src/toolbox.cpp:1149 src/toolbox.cpp:1662 src/toolbox.cpp:1791
 msgid "Defaults"
 msgstr "Domyślne"
 
-#: src/toolbox.cpp:1030 src/toolbox.cpp:1541 src/toolbox.cpp:1670
+#: src/toolbox.cpp:1152 src/toolbox.cpp:1663 src/toolbox.cpp:1792
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
 
-#: src/toolbox.cpp:1265
+#: src/toolbox.cpp:1387
 #, fuzzy
 msgid "Rx:"
 msgstr "x0:"
 
-#: src/toolbox.cpp:1265
+#: src/toolbox.cpp:1387
 msgid "Horizontal radius of rounded corner"
 msgstr ""
 
-#: src/toolbox.cpp:1275
+#: src/toolbox.cpp:1397
 #, fuzzy
 msgid "Ry:"
 msgstr "y0:"
 
-#: src/toolbox.cpp:1275
+#: src/toolbox.cpp:1397
 msgid "Vertical radius of rounded corner"
 msgstr ""
 
-#: src/toolbox.cpp:1291
+#: src/toolbox.cpp:1413
 msgid "Not rounded"
 msgstr ""
 
-#: src/toolbox.cpp:1292
+#: src/toolbox.cpp:1414
 msgid "Make corners sharp"
 msgstr ""
 
-#: src/toolbox.cpp:1509
+#: src/toolbox.cpp:1631
 #, fuzzy
 msgid "Turns:"
 msgstr "Przekształcenie:"
 
-#: src/toolbox.cpp:1509
+#: src/toolbox.cpp:1631
 msgid "Number of revolutions"
 msgstr ""
 
-#: src/toolbox.cpp:1519
+#: src/toolbox.cpp:1641
 msgid "Divergence:"
 msgstr ""
 
-#: src/toolbox.cpp:1519
+#: src/toolbox.cpp:1641
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 
-#: src/toolbox.cpp:1529
+#: src/toolbox.cpp:1651
 msgid "Inner radius:"
 msgstr "Wewnętrzny promień:"
 
-#: src/toolbox.cpp:1529
+#: src/toolbox.cpp:1651
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 
-#: src/toolbox.cpp:1626
+#: src/toolbox.cpp:1748
 msgid "The width of the calligraphic pen"
 msgstr ""
 
-#: src/toolbox.cpp:1636
+#: src/toolbox.cpp:1758
 msgid "Angle:"
 msgstr "Kąt:"
 
-#: src/toolbox.cpp:1636
+#: src/toolbox.cpp:1758
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr ""
 
-#: src/toolbox.cpp:1646
+#: src/toolbox.cpp:1768
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1646
+#: src/toolbox.cpp:1768
 msgid "How much inertia affects the movement of the pen"
 msgstr ""
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1657
+#: src/toolbox.cpp:1779
 #, fuzzy
 msgid "Drag:"
 msgstr "Rysowanie"
 
-#: src/toolbox.cpp:1657
+#: src/toolbox.cpp:1779
 msgid "How much resistance affects the movement of the pen"
 msgstr ""
 
-#: src/toolbox.cpp:1969
+#: src/toolbox.cpp:2091
 #, fuzzy
 msgid "Start:"
 msgstr "Gwiazda"
 
-#: src/toolbox.cpp:1969
+#: src/toolbox.cpp:2091
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr ""
 
-#: src/toolbox.cpp:1979
+#: src/toolbox.cpp:2101
 msgid "End:"
 msgstr ""
 
-#: src/toolbox.cpp:1979
+#: src/toolbox.cpp:2101
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 
-#: src/toolbox.cpp:1990
+#: src/toolbox.cpp:2112
 #, fuzzy
 msgid "Open arc"
 msgstr "Otwórz"
 
-#: src/toolbox.cpp:1991
+#: src/toolbox.cpp:2113
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 
-#: src/toolbox.cpp:2018
+#: src/toolbox.cpp:2140
 msgid "Make whole"
 msgstr ""
 
-#: src/toolbox.cpp:2019
+#: src/toolbox.cpp:2141
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr ""
 
@@ -4737,9 +4744,6 @@ msgstr "Wartość"
 
 #~ msgid "Fill Rule"
 #~ msgstr "Zasada wypełnienia"
-
-#~ msgid "Tool options"
-#~ msgstr "Opcje narzędzia"
 
 #~ msgid "Tool has no options"
 #~ msgstr "Narzędzie nie posiada opcji"
