@@ -139,11 +139,15 @@ bool SVGPreview::setDocument(SPDocument *doc)
     return true;
 }
 
-bool SVGPreview::setFileName(Glib::ustring &fileName)
+bool SVGPreview::setFileName(Glib::ustring &theFileName)
 { 
+    Glib::ustring fileName = theFileName;
+
+    fileName = Glib::filename_to_utf8(fileName);
+
     SPDocument *doc = sp_document_new (fileName.c_str(), 0, 0);
     if (!doc) {
-        g_warning("SVGView: error loading document '%s'\n",fileName.c_str());
+        g_warning("SVGView: error loading document '%s'\n", fileName.c_str());
         return false;
     }
 
@@ -158,6 +162,9 @@ bool SVGPreview::setFileName(Glib::ustring &fileName)
 
 bool SVGPreview::setFromMem(char const *xmlBuffer)
 { 
+    if (!xmlBuffer)
+        return false;
+
     gint len = (gint)strlen(xmlBuffer);
     SPDocument *doc = sp_document_new_from_mem(xmlBuffer, len, 0, 0);
     if (!doc) {
@@ -172,8 +179,11 @@ bool SVGPreview::setFromMem(char const *xmlBuffer)
 
 
 
-void SVGPreview::showImage(Glib::ustring &fileName)
+void SVGPreview::showImage(Glib::ustring &theFileName)
 {
+    Glib::ustring fileName = theFileName;
+
+
     /*#####################################
     # LET'S HAVE SOME FUN WITH SVG!
     # Instead of just loading an image, why
@@ -235,6 +245,9 @@ void SVGPreview::showImage(Glib::ustring &fileName)
           "    font-family:Bitstream Vera Sans;\"\n"
           "  x=\"10\" y=\"26\">%d x %d</text>\n"
           "</svg>\n\n";
+
+    //if (!Glib::get_charset()) //If we are not utf8
+    fileName = Glib::filename_to_utf8(fileName);
 
     //Fill in the template
     /* FIXME: Do proper XML quoting for fileName. */
@@ -652,15 +665,11 @@ private:
 void FileOpenDialogImpl::updatePreviewCallback()
 {
     Glib::ustring fileName = get_preview_filename();
-    fileName = Glib::locale_to_utf8(fileName);
+
     if (fileName.length() < 1)
         return;
 
     svgPreview.set(fileName, dialogType);
-    //leave the preview always on for now
-    //bool retval = svgPreview.set(fName, dialogType);
-    //set_preview_widget_active(retval);
-
 }
 
 
@@ -672,26 +681,30 @@ void FileOpenDialogImpl::updatePreviewCallback()
  */
 void FileOpenDialogImpl::fileNameEntryChangedCallback()
 {
-    Glib::ustring fName = fileNameEntry.get_text();
+    Glib::ustring fileName = fileNameEntry.get_text();
+    
+    if (!Glib::get_charset()) //If we are not utf8
+        fileName = Glib::filename_from_utf8(fileName);
+
     //g_message("User hit return.  Text is '%s'\n", fName.c_str());
 
-    if (!Glib::path_is_absolute(fName)) {
+    if (!Glib::path_is_absolute(fileName)) {
         //try appending to the current path
-        // not this way: fName = get_current_folder() + "/" + fName;
+        // not this way: fileName = get_current_folder() + "/" + fName;
         std::vector<Glib::ustring> pathSegments;
         pathSegments.push_back( get_current_folder() );
-        pathSegments.push_back( fName );
-        fName = Glib::build_filename(pathSegments);
+        pathSegments.push_back( fileName );
+        fileName = Glib::build_filename(pathSegments);
     }
 
     //g_message("path:'%s'\n", fName.c_str());
 
-    if (Glib::file_test(fName, Glib::FILE_TEST_IS_DIR)) {
-        set_current_folder(fName);
-    } else if (Glib::file_test(fName, Glib::FILE_TEST_IS_REGULAR)) {
+    if (Glib::file_test(fileName, Glib::FILE_TEST_IS_DIR)) {
+        set_current_folder(fileName);
+    } else if (Glib::file_test(fileName, Glib::FILE_TEST_IS_REGULAR)) {
         //dialog with either (1) select a regular file or (2) cd to dir
         //simulate an 'OK'
-        set_filename(fName);
+        set_filename(fileName);
         response(GTK_RESPONSE_OK);
     }
 }
@@ -705,10 +718,13 @@ void FileOpenDialogImpl::fileNameEntryChangedCallback()
  */
 void FileOpenDialogImpl::fileSelectedCallback()
 {
+    Glib::ustring fileName     = get_filename();
+    if (!Glib::get_charset()) //If we are not utf8
+        fileName = Glib::filename_to_utf8(fileName);
     //g_message("User selected '%s'\n",
-    //       get_filename().c_str());
+    //       filename().c_str());
 
-    fileNameEntry.set_text(get_filename());
+    fileNameEntry.set_text(fileName);
 }
 
 
@@ -1069,26 +1085,30 @@ void FileSaveDialogImpl::fileNameEntryChangedCallback()
 {
     if (!fileNameEntry)
         return;
-    Glib::ustring fName = fileNameEntry->get_text();
-    //g_message("User hit return.  Text is '%s'\n", fName.c_str());
 
-    if (!Glib::path_is_absolute(fName)) {
+    Glib::ustring fileName = fileNameEntry->get_text();
+    if (!Glib::get_charset()) //If we are not utf8
+        fileName = Glib::filename_to_utf8(fileName);
+
+    //g_message("User hit return.  Text is '%s'\n", fileName.c_str());
+
+    if (!Glib::path_is_absolute(fileName)) {
         //try appending to the current path
-        // not this way: fName = get_current_folder() + "/" + fName;
+        // not this way: fileName = get_current_folder() + "/" + fileName;
         std::vector<Glib::ustring> pathSegments;
         pathSegments.push_back( get_current_folder() );
-        pathSegments.push_back( fName );
-        fName = Glib::build_filename(pathSegments);
+        pathSegments.push_back( fileName );
+        fileName = Glib::build_filename(pathSegments);
     }
 
-    //g_message("path:'%s'\n", fName.c_str());
+    //g_message("path:'%s'\n", fileName.c_str());
 
-    if (Glib::file_test(fName, Glib::FILE_TEST_IS_DIR)) {
-        set_current_folder(fName);
-    } else if (/*Glib::file_test(fName, Glib::FILE_TEST_IS_REGULAR)*/1) {
+    if (Glib::file_test(fileName, Glib::FILE_TEST_IS_DIR)) {
+        set_current_folder(fileName);
+    } else if (/*Glib::file_test(fileName, Glib::FILE_TEST_IS_REGULAR)*/1) {
         //dialog with either (1) select a regular file or (2) cd to dir
         //simulate an 'OK'
-        set_filename(fName);
+        set_filename(fileName);
         response(GTK_RESPONSE_OK);
     }
 }
