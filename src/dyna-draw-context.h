@@ -21,11 +21,11 @@
 #include "helper/curve.h"
 #include "event-context.h"
 
-#define SP_TYPE_DYNA_DRAW_CONTEXT (sp_dyna_draw_context_get_type ())
-#define SP_DYNA_DRAW_CONTEXT(o) (GTK_CHECK_CAST ((o), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContext))
-#define SP_DYNA_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContextClass))
-#define SP_IS_DYNA_DRAW_CONTEXT(o) (GTK_CHECK_TYPE ((o), SP_TYPE_DYNA_DRAW_CONTEXT))
-#define SP_IS_DYNA_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_DYNA_DRAW_CONTEXT))
+#define SP_TYPE_DYNA_DRAW_CONTEXT (sp_dyna_draw_context_get_type())
+#define SP_DYNA_DRAW_CONTEXT(o) (GTK_CHECK_CAST((o), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContext))
+#define SP_DYNA_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_CAST((k), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContextClass))
+#define SP_IS_DYNA_DRAW_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_DYNA_DRAW_CONTEXT))
+#define SP_IS_DYNA_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_DYNA_DRAW_CONTEXT))
 
 typedef struct _SPDynaDrawContext SPDynaDrawContext;
 typedef struct _SPDynaDrawContextClass SPDynaDrawContextClass;
@@ -34,50 +34,61 @@ typedef struct _SPDynaDrawContextClass SPDynaDrawContextClass;
 
 struct _SPDynaDrawContext
 {
-	SPEventContext event_context;
+    SPEventContext event_context;
 
-	SPCurve *accumulated;
-	GSList *segments;
-	/* current shape and curves */
-	SPCanvasItem *currentshape;
-	SPCurve *currentcurve;
-	SPCurve *cal1;
-	SPCurve *cal2;
-	/* temporary work area */
-	NR::Point point1[SAMPLING_SIZE];
-	NR::Point point2[SAMPLING_SIZE];
-	gint npoints;
+    SPCurve *accumulated;
+    GSList *segments;
+    /* current shape and curves */
+    SPCanvasItem *currentshape;
+    SPCurve *currentcurve;
+    SPCurve *cal1;
+    SPCurve *cal2;
+    /* temporary work area */
+    NR::Point point1[SAMPLING_SIZE];
+    NR::Point point2[SAMPLING_SIZE];
+    gint npoints;
 
-	/* repr */
-	SPRepr *repr;
+    /* repr */
+    SPRepr *repr;
 
-	/* time_id if use timeout */
-	gint timer_id;
+    /* time_id if use timeout */
+    gint timer_id;
 
-	/* DynaDraw */
-	NR::Point cur;
-	NR::Point vel;
-	NR::Point acc;
-	NR::Point ang;
-	NR::Point last;
-	NR::Point del;
-	/* attributes */
-	/* fixme: shuld be merge dragging and dynahand ?? */
-	guint dragging : 1;           /* mouse state: mouse is dragging */
-	guint dynahand : 1;           /* mouse state: mouse is in draw */
-	guint use_timeout : 1;
-	guint use_calligraphic : 1;
-	guint fixed_angle : 1;
-	double mass, drag;
-	double angle;
-	double width;
+    /* DynaDraw */
+    NR::Point cur;
+    NR::Point vel;
+    NR::Point acc;
+    NR::Point ang;
+    NR::Point last;
+    NR::Point del;
+    /* attributes */
+    /* fixme: shuld be merge dragging and dynahand ?? */
+    guint dragging : 1;           /* mouse state: mouse is dragging */
+    guint dynahand : 1;           /* mouse state: mouse is in draw */
+    guint use_timeout : 1;
+    guint use_calligraphic : 1;
+    guint fixed_angle : 1;
+    double mass, drag;
+    double angle;
+    double width;
 };
 
 struct _SPDynaDrawContextClass
 {
-	SPEventContextClass parent_class;
+    SPEventContextClass parent_class;
 };
 
-GtkType sp_dyna_draw_context_get_type (void);
+GtkType sp_dyna_draw_context_get_type(void);
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

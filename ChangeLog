@@ -1,6 +1,11 @@
+2004-03-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dyna-draw-context.h, src/dyna-draw-context.cpp: Cleanup:
+	Greater conformance to CodingStyle.  Mostly whitespace changes.
+
 2004-03-24  Ted Gould <ted@gould.cx>
 
-    * src/extension/db.[ch]: Adding in functions to get lists of 
+	* src/extension/db.[ch]: Adding in functions to get lists of 
 	  input and output extensions for the file dialogs
 
 2004-03-25  Alexander Clausen <alex@skip86.com>
@@ -86,35 +91,34 @@
 
 2004-03-16  Ted Gould <ted@gould.cx>
 
-    * src/file.cpp,
-      src/file.h,
-      src/extension/Makefile.am,
-      src/extension/extension.cpp,
-      src/extension/extension.h,
-      src/extension/menu.cpp,
-      src/extension/system.cpp,
-      src/extension/implementation/implementation.cpp,
-      src/extension/implementation/implementation.h,
-      src/extension/implementation/script.cpp,
-      src/extension/implementation/script.h:
-     A few of changes.
-     1) removed the extensions menu stuff from the build as it seems
-        no one is using it.
-     2) Changing Filter to Effect internally to the extensions
-     3) Adding an exception to the save and open extensions to
-        signal a failure.  There is no way to test this currently,
-        but it doesn't break anything.
+	* src/file.cpp,
+	  src/file.h,
+	  src/extension/Makefile.am,
+	  src/extension/extension.cpp,
+	  src/extension/extension.h,
+	  src/extension/menu.cpp,
+	  src/extension/system.cpp,
+	  src/extension/implementation/implementation.cpp,
+	  src/extension/implementation/implementation.h,
+	  src/extension/implementation/script.cpp,
+	  src/extension/implementation/script.h:
+	 A few of changes.
+	 1) removed the extensions menu stuff from the build as it seems
+	    no one is using it.
+	 2) Changing Filter to Effect internally to the extensions
+	 3) Adding an exception to the save and open extensions to
+	    signal a failure.  There is no way to test this currently,
+	    but it doesn't break anything.
 
 2004-03-16  jon phillips <kidproto@users.sf.net>
 
-    * share/icons/icons.svg: Added a couple of icons but haven't linked them 
-      to the code yet.
+	* share/icons/icons.svg: Added a couple of icons but haven't linked them
+	  to the code yet.
 
-    * share/tutorials/elementsofdesign.svg: Added the first part of the basic 
-      graphics for this tutorial. I added boxes for the rest, which I need to 
-      finish. I need to use Bulia's tutorial top part to keep the 
-      tutorials consistent.
-
+	* share/tutorials/elementsofdesign.svg: Added the first part of the
+	  basic graphics for this tutorial.  I added boxes for the rest, which
+	  I need to finish.  I need to use Bulia's tutorial top part to keep
+	  the tutorials consistent.
 
 2004-03-16  bulia byak <bulia@users.sourceforge.net>
 
@@ -193,7 +197,7 @@
 	  list -- i.e. removing in roughly the order in which they were added)
 	  This should help bug #896706 a little more.
 
-    * src/event-context.cpp, src/node-context.cpp, src/rect-context.cpp,
+	* src/event-context.cpp, src/node-context.cpp, src/rect-context.cpp,
 	  src/sp-object.cpp, src/sp-offset.cpp, src/dialogs/desktop-properties.cpp,
 	  src/dialogs/xml-tree.cpp, src/widgets/sp-widget.cpp,
 	  src/widgets/sp-xmlview-attr-list.cpp, src/widgets/sp-xmlview-tree.cpp,
@@ -289,7 +293,7 @@
 	* samples: Moved the contents of samples into the proper share dirs.
 
 	* share/tutorials/tutorial.svg: Moved the default tutorial.svg to this
-          location. It was in the wrong place.
+	  location.  It was in the wrong place.
 
 	* share/tutorials/elementsofdesign.svg src/help.cpp src/interface.cpp:
 	  Added the textual gloss of this new tutorial. I need to add some
