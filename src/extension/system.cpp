@@ -97,7 +97,6 @@ sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filen
 	sp_repr_set_attr (repr, "sodipodi:modified", NULL);
 	sp_document_set_undo_sensitive (doc, TRUE);
 
-	sp_repr_set_attr(repr, "sodipodi:docname", filename);
 	sp_document_set_uri (doc, filename);
 
 	return doc;
@@ -164,6 +163,8 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 	\param    key       Identifier of which module to use
 	\param    doc       The document to be saved
 	\param    filename  The file that the document should be saved to
+      \param official  (optional) whether to set :output_module and :modified in the 
+                        document; is true for normal save, false for temporary saves
 
 	First things first, are we looking at an autodetection?  Well if
 	that's the case then the module needs to be found, and that is done
@@ -183,7 +184,7 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 	Lastly, the save function is called in the module itself.
 */
 void
-sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, const gchar * filename)
+sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, const gchar * filename, bool official)
 {
 	Inkscape::Extension::Output * omod;
 	gpointer parray[2];
@@ -215,11 +216,13 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 		gtk_dialog_run(prefs);
 	}
 
-	repr = sp_document_repr_root (doc);
-	sp_document_set_undo_sensitive (doc, FALSE);
-	sp_repr_set_attr (repr, "sodipodi:modified", NULL);
-	sp_repr_set_attr (repr, "inkscape:output_extension", omod->get_id());
-	sp_document_set_undo_sensitive (doc, TRUE);
+	if (official) {
+		repr = sp_document_repr_root (doc);
+		sp_document_set_undo_sensitive (doc, FALSE);
+		sp_repr_set_attr (repr, "sodipodi:modified", NULL);
+		sp_repr_set_attr (repr, "inkscape:output_extension", omod->get_id());
+		sp_document_set_undo_sensitive (doc, TRUE);
+	}
 
 	return omod->save(doc, filename);
 }

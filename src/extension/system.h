@@ -24,7 +24,7 @@ SPDocument * sp_module_system_open                (Inkscape::Extension::Extensio
                                                    const gchar *  filename);
 void         sp_module_system_save                (Inkscape::Extension::Extension * key,
                                                    SPDocument *   doc,
-                                                   const gchar *  filename);
+                                                   const gchar *  filename, bool official = false);
 void         sp_module_system_filter              (GtkObject * object,
                                                    const gchar *  key);
 Inkscape::Extension::Print * sp_module_system_get_print (const gchar * key);
