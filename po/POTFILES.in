@@ -21,6 +21,7 @@ src/dialogs/desktop-properties.cpp
 src/dialogs/dialog-events.cpp
 src/dialogs/display-settings.cpp
 src/dialogs/export.cpp
+src/dialogs/filedialog.cpp
 src/dialogs/fill-style.cpp
 src/dialogs/item-properties.cpp
 src/dialogs/object-attributes.cpp
@@ -249,6 +250,7 @@ src/widgets/sp-color-preview.cpp
 src/widgets/sp-color-scales.cpp
 src/widgets/sp-color-selector.cpp
 src/widgets/sp-color-slider.cpp
+src/widgets/sp-color-wheel-selector.cpp
 src/widgets/sp-hwrap-box.cpp
 src/widgets/sp-vwrap-box.cpp
 src/widgets/sp-widget.cpp
