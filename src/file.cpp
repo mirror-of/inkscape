@@ -1,5 +1,7 @@
 #define __SP_FILE_C__
 
+/* ex:set et sw=4 ts=4: */
+
 /*
  * File/Print operations
  *
@@ -148,30 +150,46 @@ sp_file_open (const gchar *uri, const gchar *key)
 static void
 file_open_dialog_ok (GtkWidget *widget, GtkFileSelection *fs)
 {
-    gchar *filename = g_strdup (gtk_file_selection_get_filename (fs));
-
-    if (filename && g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-        g_free (open_path);
-        if (filename[strlen(filename) - 1] != G_DIR_SEPARATOR) {
-            open_path = g_strconcat (filename, G_DIR_SEPARATOR_S, NULL);
-            g_free (filename);
-        } else {
-            open_path = filename;
-        }
-        gtk_file_selection_set_filename (fs, open_path);
+    const gchar *native_filename = gtk_file_selection_get_filename(fs);
+    if ( !native_filename || !strlen(native_filename) ) {
         return;
     }
 
-    if (filename != NULL) {
-        g_free (open_path);
-        open_path = g_dirname (filename);
-        if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
+    gchar *filename = g_filename_to_utf8(native_filename, -1, NULL, NULL, NULL);                                                                                
+    if (g_file_test(native_filename, G_FILE_TEST_IS_DIR)) {
+        gchar *temp = g_strconcat(filename, G_DIR_SEPARATOR, NULL);
+        gchar *native = g_filename_from_utf8(temp, -1, NULL, NULL, NULL);
+        gtk_file_selection_set_filename(fs, native);
+        g_free(native);
+        g_free(temp);
+    } else {
+        const gchar *ext = sp_extension_from_path(filename);
+        if ( !ext || ( g_ascii_strcasecmp(ext, "svg") && g_ascii_strcasecmp(ext, "xml") ) ) {
+            gchar *temp = g_strconcat(filename, ".svg", NULL);
+            g_free(filename);
+            filename = temp;
+        }
+
+        if (open_path) {
+            g_free(open_path);
+        }
+        open_path = g_path_get_dirname(filename);
+        if (open_path) {
+            gchar *temp = g_strconcat(open_path, G_DIR_SEPARATOR_S, NULL);
+            g_free(open_path);
+            open_path = temp;
+        }
+
+        gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
+
         gchar *key = (gchar*)g_object_get_data (G_OBJECT (fs), "type-key");
         sp_file_open (filename, key);
-        g_free (filename);
+
+        gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
+        gtk_widget_destroy (GTK_WIDGET (fs));
     }
 
-    gtk_widget_destroy (GTK_WIDGET (fs));
+    g_free(filename);
 }
 
 /**
@@ -347,37 +365,32 @@ sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, gchar const *key)
 
     GtkFileSelection *fs = GTK_FILE_SELECTION (save_dialog);
 
-    const gchar *filename = gtk_file_selection_get_filename (fs);
-    gchar *ext = (gchar *)sp_extension_from_path ((const gchar *)filename);
-    if (!ext || (strcmp(ext, "svg") && strcmp(ext, "xml"))) {
-        gchar *oldFileName = filename;
-        filename = g_strconcat (oldFileName, ".svg", NULL);
-        g_free (oldFileName);
+    const gchar *native_filename = gtk_file_selection_get_filename(fs);
+    if ( !native_filename || !strlen(native_filename) ) {
+        return;
     }
-    const gchar *raw_filename = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
 
-    g_assert (filename && raw_filename);
+    gchar *filename = g_filename_to_utf8(native_filename, -1, NULL, NULL, NULL);
 
-    if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
-        if (g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-            if (filename[strlen (filename) - 1] != G_DIR_SEPARATOR) {
-                gchar *s = g_strconcat (filename, G_DIR_SEPARATOR_S, NULL);
-                gtk_file_selection_set_filename (fs, s);
-                g_free (s);
-            } else {
-                gtk_file_selection_set_filename (fs, filename);
-            }
-        } else {
-            /* TODO: Handle overwriting files differently - TJG */
-            gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
-            file_save (doc, filename, key);
-            gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
-        }
+    if (g_file_test(native_filename, G_FILE_TEST_IS_DIR)) {
+        gchar *temp = g_strconcat(filename, G_DIR_SEPARATOR, NULL);
+        gchar *native = g_filename_from_utf8(temp, -1, NULL, NULL, NULL);
+        gtk_file_selection_set_filename(fs, native);
+        g_free(native);
+        g_free(temp);
     } else {
+        const gchar *ext = sp_extension_from_path(filename);
+        if ( !ext || ( g_ascii_strcasecmp(ext, "svg") && g_ascii_strcasecmp(ext, "xml") ) ) {
+            gchar *temp = g_strconcat(filename, ".svg", NULL);
+            g_free(filename);
+            filename = temp;
+        }
         gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
         file_save (doc, filename, key);
         gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
     }
+
+    g_free(filename);
 }
 #endif
 

@@ -1,3 +1,9 @@
+2004-02-17  MenTaLguY <mental@rydia.net>
+
+    * src/interface.cpp: fixed signal connection in recent items menu
+
+	* src/file.cpp: fix compile and pass UTF-8 "URIs" down to module code
+
 2004-02-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-guide.h, src/sp-guide.cpp (sp_guide_moveto,

@@ -689,7 +689,7 @@ sp_menu_append_recent_documents (GtkWidget *menu)
 			item = gtk_menu_item_new_with_label (name);
 			gtk_widget_show(item);
 			g_signal_connect(G_OBJECT(item),
-					"clicked",
+					"activate",
 					G_CALLBACK(sp_recent_open),
 					(gpointer)uri);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
