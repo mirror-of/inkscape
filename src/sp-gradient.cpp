@@ -249,8 +249,8 @@ sp_gradient_init (SPGradient *gr)
 	gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
 	gr->units_set = FALSE;
 
-	nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (gr->transform));
-	gr->transform_set = FALSE;
+	nr_matrix_set_identity (&(gr->gradientTransform));
+	gr->gradientTransform_set = FALSE;
 
 	gr->spread = SP_GRADIENT_SPREAD_PAD;
 	gr->spread_set = FALSE;
@@ -340,6 +340,7 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 			}
 			gr->units_set = TRUE;
 		} else {
+			gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
 			gr->units_set = FALSE;
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -349,11 +350,11 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value && sp_svg_transform_read (value, &t)) {
 			int i;
 			for (i = 0; i < 6; i++) 
-				gr->transform[i] = t.c[i];
-			gr->transform_set = TRUE;
+				gr->gradientTransform[i] = t.c[i];
+			gr->gradientTransform_set = TRUE;
 		} else {
-			nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (gr->transform));
-			gr->transform_set = FALSE;
+			nr_matrix_set_identity (&(gr->gradientTransform));
+			gr->gradientTransform_set = FALSE;
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
@@ -518,12 +519,9 @@ sp_gradient_write (SPObject *object, SPRepr *repr, guint flags)
 		}
 	}
 
-	if ((flags & SP_OBJECT_WRITE_ALL) || gr->transform_set) {
+	if ((flags & SP_OBJECT_WRITE_ALL) || gr->gradientTransform_set) {
 		gchar c[256];
-		NRMatrix t;
-		int i;
-		for (i = 0; i < 6; i++) t.c[i] = gr->transform[i];
-		if (sp_svg_transform_write (c, 256, &t)) {
+		if (sp_svg_transform_write (c, 256, &(gr->gradientTransform))) {
 			sp_repr_set_attr (repr, "gradientTransform", c);
 		} else {
 			sp_repr_set_attr (repr, "gradientTransform", NULL);
@@ -1018,10 +1016,10 @@ sp_gradient_get_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMa
 		bb2u.c[4] = bbox->x0;
 		bb2u.c[5] = bbox->y0;
 
-		nr_matrix_multiply (&gs2u, (NRMatrix *) gr->transform, &bb2u);
+		nr_matrix_multiply (&gs2u, &(gr->gradientTransform), &bb2u);
 		nr_matrix_multiply (gs2d, &gs2u, ctm);
 	} else {
-		nr_matrix_multiply (gs2d, (NRMatrix *) gr->transform, ctm);
+		nr_matrix_multiply (gs2d, &(gr->gradientTransform), ctm);
 	}
 
 	return gs2d;
@@ -1065,9 +1063,9 @@ sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMa
 	SP_PRINT_MATRIX ("* GS2G:", &gs2g);
 	
 	for(int i = 0; i < 6; i++)
-		gr->transform[i] = gs2g.c[i];
+		gr->gradientTransform[i] = gs2g.c[i];
 
-	gr->transform_set = TRUE;
+	gr->gradientTransform_set = TRUE;
 
 	SP_OBJECT (gr)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -1264,7 +1262,7 @@ sp_lineargradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transfo
 		NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0, 0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
 		NR::Matrix color2pos = color2norm * norm2pos;
-		NR::Matrix color2tpos = color2pos * NR::Matrix ((NRMatrix *) &gr->transform);
+		NR::Matrix color2tpos = color2pos * NR::Matrix (gr->gradientTransform);
 		NR::Matrix color2user = color2tpos * bbox2user;
 		color2px = color2user * full_transform;
 
@@ -1274,7 +1272,7 @@ sp_lineargradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transfo
 
 		NR::Matrix norm2pos (NR::identity());
 		NR::Matrix color2pos = color2norm * norm2pos;
-		NR::Matrix color2tpos = color2pos * NR::Matrix ((NRMatrix *) &gr->transform);
+		NR::Matrix color2tpos = color2pos * NR::Matrix (gr->gradientTransform);
 		color2px = color2tpos * full_transform;
 
 	}
@@ -1518,14 +1516,14 @@ sp_radialgradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transfo
 		/* BBox to user coordinate system */
 		NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0, 0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
-		NR::Matrix gs2user = NR::Matrix ((NRMatrix *) &gr->transform) * bbox2user;
+		NR::Matrix gs2user = NR::Matrix (gr->gradientTransform) * bbox2user;
 
 		gs2px = gs2user * full_transform;
 	} else {
 		/* Problem: What to do, if we have mixed lengths and percentages? */
 		/* Currently we do ignore percentages at all, but that is not good (lauris) */
 
-		gs2px = NR::Matrix ((NRMatrix *) &gr->transform) * full_transform;
+		gs2px = NR::Matrix (gr->gradientTransform) * full_transform;
 	}
 
 	NRMatrix gs2px_nr;

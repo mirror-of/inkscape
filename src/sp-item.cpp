@@ -664,6 +664,22 @@ sp_item_adjust_pattern_recursive(SPItem *item, NR::Matrix advertized_transform)
     }
 }
 
+/**
+ Recursively compensate gradient fill's transform
+*/
+void
+sp_item_adjust_gradient_recursive(SPItem *item, NR::Matrix advertized_transform)
+{
+    if (SP_IS_ITEM (item)) {
+        sp_shape_adjust_gradient (item, advertized_transform.inverse());
+    }
+
+    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+        if (SP_IS_ITEM(o))
+            sp_item_adjust_gradient_recursive(SP_ITEM(o), advertized_transform);
+    }
+}
+
 /** 
 A temporary wrapper for the next function accepting the NRMatrix instead of NR::Matrix
 */
@@ -712,6 +728,11 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform,
     // here we post-multiply the old transform inverse because patterns are transformed before item they're applied to
     if (prefs_get_int_attribute("options.transform", "pattern", 1) == 0) {
         sp_item_adjust_pattern_recursive(item, transform * sp_item_transform_old_inverse (item));
+    }
+
+    // compensate gradient fill if requested; 
+    if (prefs_get_int_attribute("options.transform", "gradient", 1) == 0) {
+        sp_item_adjust_gradient_recursive(item, transform * sp_item_transform_old_inverse (item));
     }
 
     // run the object's set_transform if transforms are stored optimized

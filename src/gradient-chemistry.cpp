@@ -20,6 +20,11 @@
 #include "document-private.h"
 #include "sp-root.h"
 #include "gradient-chemistry.h"
+#include "libnr/nr-point-ops.h"
+#include <libnr/nr-rect.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
+
 
 // Terminology:
 // "vector" is a gradient that has stops but not position coords. It can be referenced by one or more privates. Objects should not refer to it directly. It has no radial/linear distinction.
@@ -123,7 +128,7 @@ sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector, SP
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (vector != NULL, NULL);
 	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
-	g_return_val_if_fail (vector->state == SP_GRADIENT_STATE_VECTOR, NULL);
+	g_return_val_if_fail (SP_GRADIENT_HAS_STOPS(vector), NULL);
 
 	SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
 
@@ -165,7 +170,7 @@ sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGr
 	g_return_val_if_fail (gr != NULL, NULL);
 	g_return_val_if_fail (vector != NULL, NULL);
 	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
-	g_return_val_if_fail (vector->state == SP_GRADIENT_STATE_VECTOR, NULL);
+	g_return_val_if_fail (SP_GRADIENT_HAS_STOPS(vector), NULL);
 
 	/* If we are already normalized private, change href and return */
 	if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT (gr) == 1)) {
@@ -184,7 +189,20 @@ sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGr
 	    (SP_OBJECT_PARENT (gr) != SP_OBJECT (defs)) ||
 	    (SP_OBJECT_HREFCOUNT (gr) > 1)) {
        	// we have to clone a fresh new private gradient for the given vector
-		return sp_gradient_get_private_normalized (doc, vector, type);
+		SPGradient *gr_new = sp_gradient_get_private_normalized (doc, vector, type);
+		SPRepr *repr_new = SP_OBJECT_REPR (gr_new);
+		SPRepr *repr = SP_OBJECT_REPR (gr);
+		sp_repr_set_attr (repr_new, "gradientUnits", sp_repr_attr (repr, "gradientUnits"));
+		sp_repr_set_attr (repr_new, "gradientTransform", sp_repr_attr (repr, "gradientTransform"));
+		sp_repr_set_attr (repr_new, "spreadMethod", sp_repr_attr (repr, "spreadMethod"));
+		if (SP_IS_RADIALGRADIENT (gr)) {
+		} else {
+		sp_repr_set_attr (repr_new, "x1", sp_repr_attr (repr, "x1"));
+		sp_repr_set_attr (repr_new, "y1", sp_repr_attr (repr, "y1"));
+		sp_repr_set_attr (repr_new, "x2", sp_repr_attr (repr, "x2"));
+		sp_repr_set_attr (repr_new, "y2", sp_repr_attr (repr, "y2"));
+		}
+		return gr_new;
 	} else {
 		/* Set state */
 		gr->state = SP_GRADIENT_STATE_PRIVATE;
@@ -205,10 +223,53 @@ sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector, SPGra
 
 	gr = sp_gradient_clone_private_if_necessary (gr, vector, type);
 
-	// add converting to userspaceonuse here
+	return gr;
+}
+
+SPGradient *
+sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, bool is_fill)
+{
+	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
+
+	gr = sp_gradient_clone_private_if_necessary (gr, sp_gradient_get_vector (gr, FALSE), 
+					 SP_IS_RADIALGRADIENT (gr) ? SP_GRADIENT_TYPE_RADIAL : SP_GRADIENT_TYPE_LINEAR);
+
+	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+
+		SPRepr *repr = SP_OBJECT_REPR (gr);
+
+		NRRect bbox;
+		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+		NR::Matrix bbox2user (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+
+		if (SP_IS_RADIALGRADIENT (gr)) {
+
+		} else {
+			SPLinearGradient *lg = SP_LINEARGRADIENT (gr);
+
+			//g_print ("bbox %g %g %g %g    p1 %g %g    p2 %g %g\n", bbox.x0, bbox.y0, bbox.x1, bbox.y1, lg->x1.computed, lg->y1.computed, lg->x2.computed, lg->y2.computed);
+
+			NR::Point p1 = NR::Point (lg->x1.computed, lg->y1.computed) * bbox2user;
+			NR::Point p2 = NR::Point (lg->x2.computed, lg->y2.computed) * bbox2user;
+
+			sp_repr_set_double (repr, "x1", p1[NR::X]);
+			sp_repr_set_double (repr, "y1", p1[NR::Y]);
+			sp_repr_set_double (repr, "x2", p2[NR::X]);
+			sp_repr_set_double (repr, "y2", p2[NR::Y]);
+
+			//g_print ("x1 %g  y1 %g  x2 %g  y2 %g\n", p1[NR::X], p1[NR::Y], p2[NR::X], p2[NR::Y]);
+		}
+
+		sp_repr_set_attr (repr, "gradientUnits", "userSpaceOnUse");
+		SP_OBJECT(gr)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+	}
+
+	sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), is_fill? "fill" : "stroke", gr);
 
 	return gr;
 }
+
 
 /**
 Count how many times gr is used by the styles of o and its descendants

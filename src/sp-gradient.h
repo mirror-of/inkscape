@@ -128,8 +128,8 @@ struct SPGradient {
 	SPGradientUnits units;
 	guint units_set : 1;
 	/* gradientTransform attribute */
-	gdouble transform[6];
-	guint transform_set : 1;
+	NRMatrix gradientTransform;
+	guint gradientTransform_set : 1;
 	/* spreadMethod attribute */
 	SPGradientSpread spread;
 	guint spread_set : 1;

@@ -44,6 +44,8 @@
 #include "sp-shape.h"
 #include "sp-path.h"
 #include "sp-pattern.h"
+#include "sp-gradient.h"
+#include "gradient-chemistry.h"
 #include "sp-defs.h"
 
 #define noSHAPE_VERBOSE
@@ -907,7 +909,7 @@ sp_shape_adjust_pattern (SPItem *item, /* NR::Matrix const &premul, */ NR::Matri
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
-    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { // fixme: do the same for stroke
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         if (SP_IS_PATTERN (server)) {
 
@@ -941,6 +943,36 @@ sp_shape_adjust_pattern (SPItem *item, /* NR::Matrix const &premul, */ NR::Matri
                 sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", c);
             } else {
                 sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", NULL);
+            }
+        }
+    }
+}
+
+void
+sp_shape_adjust_gradient (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { // fixme: do the same for stroke
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+        if (SP_IS_GRADIENT (server)) {
+
+            SPGradient *gradient = SP_GRADIENT (server);
+
+            gradient = sp_gradient_convert_to_userspace (gradient, item, true);
+
+            if (set) {
+                gradient->gradientTransform = postmul;
+            } else {
+                gradient->gradientTransform = NR::Matrix(gradient->gradientTransform) * postmul; // fixme: get gradient transform by climbing to parents?
+            }
+            gradient->gradientTransform_set = TRUE;
+
+            gchar c[256];
+            if (sp_svg_transform_write(c, 256, &(gradient->gradientTransform))) {
+                sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", c);
+            } else {
+                sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", NULL);
             }
         }
     }
