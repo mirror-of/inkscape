@@ -9,6 +9,9 @@ EXTRA_DIST = API \
              coding-style.txt \
              coordinates.txt \
              fonts.txt \
-             keyboard-shortcuts.txt \
              sp2ink_rfe.gnumeric \
-             sp_bugs.gnumeric 
+             sp_bugs.gnumeric \
+             keys.xml \
+             keys-svg.xsl \
+             keys-html.xsl \
+             keys.html
