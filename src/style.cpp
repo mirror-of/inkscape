@@ -126,7 +126,6 @@ static void sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *st
 static void sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ifontsize (SPIFontSize *val, const gchar *str);
 
-static void sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const gchar *key);
 static void sp_style_read_penum (SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, unsigned int inherit);
 static void sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key);
 static void sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key);
@@ -142,9 +141,6 @@ static gint sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIF
 static SPColor *sp_style_read_color_cmyk (SPColor *color, const gchar *str);
 
 static void sp_style_paint_clear (SPStyle *style, SPIPaint *paint, unsigned int hunref, unsigned int unset);
-
-#define SPS_READ_IFLOAT_IF_UNSET(v,s) if (!(v)->set) {sp_style_read_ifloat ((v), (s));}
-#define SPS_READ_PFLOAT_IF_UNSET(v,r,k) if (!(v)->set) {sp_style_read_pfloat ((v), (r), (k));}
 
 #define SPS_READ_IENUM_IF_UNSET(v,s,d,i) if (!(v)->set) {sp_style_read_ienum ((v), (s), (d), (i));}
 #define SPS_READ_PENUM_IF_UNSET(v,r,k,d,i) if (!(v)->set) {sp_style_read_penum ((v), (r), (k), (d), (i));}
@@ -1813,16 +1809,6 @@ sp_style_read_ifontsize (SPIFontSize *val, const gchar *str)
 			val->computed = value;
 			return;
 		}
-	}
-}
-
-static void
-sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const gchar *key)
-{
-	const gchar *str;
-	str = sp_repr_attr (repr, key);
-	if (str) {
-		sp_style_read_ifloat (val, str);
 	}
 }
 
