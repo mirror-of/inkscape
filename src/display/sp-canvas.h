@@ -53,6 +53,7 @@ struct SPCanvasItem : public GtkObject{
 	SPCanvasItem *parent;
 
 	double x1, y1, x2, y2;
+	NR::Rect bounds;
 	NR::Matrix xform;
 };
 

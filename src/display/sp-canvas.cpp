@@ -40,13 +40,19 @@ enum {
     SP_CANVAS_ITEM_NEED_AFFINE = 1 << 9
 };
 
-struct SPCanvasGroup : public SPCanvasItem{
+struct SPCanvasGroup {
+    SPCanvasItem item;
+
     GList *items, *last;
 };
 
-struct SPCanvasGroupClass :public SPCanvasItemClass {};
+struct SPCanvasGroupClass {
+    SPCanvasItemClass parent_class;
+};
 
-struct SPCanvasClass : public GtkWidgetClass{};
+struct SPCanvasClass {
+    GtkWidgetClass parent_class;
+};
 
 static void group_add (SPCanvasGroup *group, SPCanvasItem *item);
 static void group_remove (SPCanvasGroup *group, SPCanvasItem *item);
@@ -101,7 +107,7 @@ sp_canvas_item_class_init (SPCanvasItemClass *klass)
     item_signals[ITEM_EVENT] = g_signal_new ("event",
                                              G_TYPE_FROM_CLASS (klass),
                                              G_SIGNAL_RUN_LAST,
-                                             0,
+                                             G_STRUCT_OFFSET (SPCanvasItemClass, event),
                                              NULL, NULL,
                                              sp_marshal_BOOLEAN__POINTER,
                                              G_TYPE_BOOLEAN, 1,
