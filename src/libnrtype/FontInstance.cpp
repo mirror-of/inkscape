@@ -18,16 +18,14 @@
 #include <livarot/Shape.h>
 
 #include "RasterFont.h"
-#ifdef WITH_XFT
+#if defined(WITH_XFT)
 # include <freetype/ftoutln.h>
 # include <freetype/ftbbox.h>
 # include <freetype/internal/tttypes.h>
 # include <freetype/internal/ftstream.h>
 # include <freetype/tttags.h>
 # include <pango/pangoft2.h>
-#endif
-
-#ifdef WIN32
+#elif defined(WIN32)
 # include <pango/pangowin32.h>
 # include <windows.h>
 #endif
@@ -167,10 +165,9 @@ font_instance::font_instance(void)
 	daddy=NULL;
 	nbGlyph=maxGlyph=0;
 	glyphs=NULL;
-#ifdef WITH_XFT
+#if defined(WITH_XFT)
 	theFace=NULL;
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	theLogFont=NULL;
 	wFont=NULL;
 #endif
@@ -187,8 +184,7 @@ font_instance::~font_instance(void)
 #ifdef WITH_XFT
 	//	if ( theFace ) FT_Done_Face(theFace); // owned by pFont. don't touch
 	theFace=NULL;
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	if ( wFont ) {
 		font_factory* f_src=daddy;
 		if ( f_src == NULL ) f_src=font_factory::Default();
@@ -343,8 +339,7 @@ void font_instance::InstallFace(PangoFont* iFace)
 			theFace=NULL;
 		}
 	}
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	HDC  wDev=NULL;
 	if ( daddy ) {
 		wDev=daddy->wDevice;
@@ -365,8 +360,7 @@ void font_instance::InstallFace(PangoFont* iFace)
 	if ( pFont && IsOutlineFont() == false ) {
 #ifdef WITH_XFT
 		theFace=NULL;
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 		if ( wFont && daddy ) {
 			pango_win32_font_cache_unload(daddy->wCache,wFont);
 			wFont=NULL;
@@ -383,8 +377,7 @@ bool	font_instance::IsOutlineFont(void)
 #ifdef WITH_XFT
 	theFace=pango_ft2_font_get_face(pFont);
 	return FT_IS_SCALABLE(theFace);
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	HDC  wDev=NULL;
 	if ( daddy ) {
 		wDev=daddy->wDevice;
@@ -415,8 +408,7 @@ int font_instance::MapUnicodeChar(gunichar c)
 	} else {
 		res=FT_Get_Char_Index(theFace, c);
 	}
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	if ( c > 0xf0000 ) {
 		res=CLAMP(c,0xf0000,0x1fffff)-0xf0000;
 	} else {
@@ -436,8 +428,7 @@ void font_instance::LoadGlyph(int glyph_id)
 #ifdef WITH_XFT
 	theFace=pango_ft2_font_get_face(pFont);
 	if ( theFace->units_per_EM == 0 ) return; // bitmap font
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	HDC  wDev=NULL;
 	if ( daddy ) {
 		wDev=daddy->wDevice;
@@ -490,8 +481,7 @@ void font_instance::LoadGlyph(int glyph_id)
 			}
 			doAdd=true;
 		}
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 		if ( wFont ) {
 			MAT2          mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
 			GLYPHMETRICS  gmetrics;
@@ -576,8 +566,7 @@ bool font_instance::FontMetrics(double &ascent,double &descent,double &leading)
 #ifdef WITH_XFT
 	theFace=pango_ft2_font_get_face(pFont);
 	if ( theFace->units_per_EM == 0 ) return false; // bitmap font
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	HDC  wDev=NULL;
 	if ( daddy ) {
 		wDev=daddy->wDevice;
@@ -600,8 +589,7 @@ bool font_instance::FontMetrics(double &ascent,double &descent,double &leading)
 	descent=fabs(((double)theFace->descender)/((double)theFace->units_per_EM));
 	leading=fabs(((double)theFace->height)/((double)theFace->units_per_EM));
 	leading-=ascent+descent;
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	if ( wFont == NULL ) return false;
 	ascent=fabs(((double)otm.otmAscent)/((double)otm.otmEMSquare));
 	descent=fabs(((double)otm.otmDescent)/((double)otm.otmEMSquare));

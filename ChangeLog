@@ -1,5 +1,14 @@
 2004-06-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/FontFactory.cpp, src/libnrtype/FontInstance.cpp,
+	  src/libnrtype/font-instance.h: If both WIN32 and WITH_XFT are
+	  defined, then use just the WITH_XFT code.  (I don't know if it's
+	  possible for both to be defined, but we might as well document
+	  that the existing code doesn't handle both being defined, AFAICT.)
+
+	* src/libnrtype/FontFactory.cpp (ink_strstr): Document brokenness.
+	  (is_regular, is_nonbold, is_italic, etc.): Mark as static.
+
 	* src/Makefile.am (EXTRA_DIST): Remove reference to deleted files
 	  libnrtype/nr-type-w32.cpp, libnrtype/nr-type-w32.h,
 	  libnrtype/nr-type-xft.cpp, libnrtype/nr-type-xft.h.

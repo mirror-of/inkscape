@@ -4,6 +4,7 @@
 #include <ext/hash_map>
 #include <pango/pango-types.h>
 #include <pango/pango-font.h>
+#include <require-config.h>
 #ifdef WITH_XFT
 //# include <freetype/freetype.h>
 # include <ft2build.h>
@@ -32,10 +33,9 @@ public:
     __gnu_cxx::hash_map<font_style, raster_font*, font_style_hash, font_style_equal>     loadedStyles;
 
     PangoFont*            pFont;
-#ifdef WITH_XFT
+#if defined(WITH_XFT)
     FT_Face               theFace;
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
     LOGFONT*              theLogFont;
     HFONT                 wFont;
     OUTLINETEXTMETRIC     otm;

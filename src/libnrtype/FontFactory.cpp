@@ -15,10 +15,9 @@
 #endif
 
 #ifdef WITH_XFT
-#include <pango/pangoft2.h>
-#endif
-#ifdef WIN32
-#include <pango/pangowin32.h>
+# include <pango/pangoft2.h>
+#elif defined(WIN32)
+# include <pango/pangowin32.h>
 #endif
 
 // need to avoid using the size field
@@ -55,7 +54,7 @@ bool  font_descr_equal::operator()( PangoFontDescription* const&a, PangoFontDesc
 /**
  * A wrapper for strcasestr that also provides an implementation for Win32.
  */
-bool
+static bool
 ink_strstr (const char *haystack, const char *pneedle)
 {
 #ifndef WIN32
@@ -63,6 +62,16 @@ ink_strstr (const char *haystack, const char *pneedle)
 #else
 	// windows has no strcasestr implementation, so here is ours...
 	// stolen from nmap
+        /* FIXME: This is broken for e.g. ink_strstr("aab", "ab").  Report to nmap.
+         *
+         * Also, suggest use of g_ascii_todown instead of buffer stuff, and g_ascii_tolower instead
+         * of tolower.  Given that haystack is a font name (i.e. fairly short), it should be ok to
+         * do g_ascii_strdown on both haystack and pneedle, and do normal strstr.
+         *
+         * Rather than fixing in inkscape, consider getting rid of this routine, instead using
+         * strdown and plain strstr at caller.  We have control over the needle values, so we can
+         * modify the callers rather than calling strdown there.
+         */
 	char buf[512];
 	register const char *p;
 	char *needle, *q, *foundto;
@@ -90,7 +99,7 @@ ink_strstr (const char *haystack, const char *pneedle)
  * Regular fonts are 'Regular', 'Roman', 'Normal', or 'Plain'
  */
 // FIXME: make this UTF8, add non-English style names
-bool
+static bool
 is_regular (const char *s)
 {
 	if (ink_strstr(s, "Regular")) return true;
@@ -103,7 +112,7 @@ is_regular (const char *s)
 /**
  * Non-bold fonts are 'Medium' or 'Book'
  */
-bool
+static bool
 is_nonbold (const char *s)
 {
 	if (ink_strstr(s, "Medium")) return true;
@@ -114,7 +123,7 @@ is_nonbold (const char *s)
 /**
  * Italic fonts are 'Italic', 'Oblique', or 'Slanted'
  */
-bool
+static bool
 is_italic (const char *s)
 {
 	if (ink_strstr(s, "Italic")) return true;
@@ -126,7 +135,7 @@ is_italic (const char *s)
 /**
  * Bold fonts are 'Bold'
  */
-bool
+static bool
 is_bold (const char *s)
 {
 	if (ink_strstr(s, "Bold")) return true;
@@ -136,17 +145,19 @@ is_bold (const char *s)
 /**
  * Caps fonts are 'Caps'
  */
-bool
+static bool
 is_caps (const char *s)
 {
 	if (ink_strstr(s, "Caps")) return true;
 	return false;
 }
 
+#if 0 /* FIXME: These are all unused.  Please delete them or use them (presumably in
+       * style_name_compare). */
 /**
  * Monospaced fonts are 'Mono'
  */
-bool
+static bool
 is_mono (const char *s)
 {
 	if (ink_strstr(s, "Mono")) return true;
@@ -156,7 +167,7 @@ is_mono (const char *s)
 /**
  * Rounded fonts are 'Round'
  */
-bool
+static bool
 is_round (const char *s)
 {
 	if (ink_strstr(s, "Round")) return true;
@@ -166,7 +177,7 @@ is_round (const char *s)
 /**
  * Outline fonts are 'Outline'
  */
-bool
+static bool
 is_outline (const char *s)
 {
 	if (ink_strstr(s, "Outline")) return true;
@@ -176,12 +187,13 @@ is_outline (const char *s)
 /**
  * Swash fonts are 'Swash'
  */
-bool
+static bool
 is_swash (const char *s)
 {
 	if (ink_strstr(s, "Swash")) return true;
 	return false;
 }
+#endif
 
 /**
  * Determines if two style names match.  This allows us to match
@@ -536,7 +548,11 @@ NRStyleList* font_factory::Styles(const gchar *family, NRStyleList *slist)
 	slist->length = nr;
 
 	qsort (slist->records, slist->length, sizeof (NRStyleRecord), style_record_compare);
-	
+        /* effic: Consider doing strdown and all the is_italic etc. tests once off and store the
+         * results in a table, rather than having the sort invoke multiple is_italic tests per
+         * record.
+         */
+
 	g_free(faces);
 	
 	return slist;
