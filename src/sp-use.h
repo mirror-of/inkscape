@@ -16,6 +16,17 @@
 #include "svg/svg-types.h"
 #include "sp-item.h"
 
+class SPUseReference : public Inkscape::URIReference {
+public:
+	SPUseReference(SPObject *obj) : URIReference(obj) {}
+	SPItem *getObject() const {
+		return (SPItem *)URIReference::getObject();
+	}
+protected:
+	bool _acceptObject(SPObject *obj) const {
+		return SP_IS_ITEM(obj);
+	}
+};
 
 
 #define SP_TYPE_USE            (sp_use_get_type ())
@@ -28,13 +39,21 @@ class SPUse;
 class SPUseClass;
 
 struct SPUse {
+	// this item (invisible)
 	SPItem item;
+
+	// item built from the original's repr (the visible clone)
 	SPObject *child;
+
+	// SVG attrs
 	SPSVGLength x;
 	SPSVGLength y;
 	SPSVGLength width;
 	SPSVGLength height;
 	gchar *href;
+
+	// the reference to the original object
+	SPUseReference *ref;
 };
 
 struct SPUseClass {
@@ -44,5 +63,6 @@ struct SPUseClass {
 GType sp_use_get_type (void);
 
 SPItem *sp_use_unlink (SPUse *use);
+SPItem *sp_use_get_original (SPUse *use);
 
 #endif

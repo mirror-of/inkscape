@@ -22,6 +22,8 @@
 #include "attributes.h"
 #include "document.h"
 #include "sp-object-repr.h"
+#include "uri-references.h"
+
 #include "sp-use.h"
 
 /* fixme: */
@@ -43,7 +45,8 @@ static gchar * sp_use_description (SPItem * item);
 static NRArenaItem *sp_use_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_use_hide (SPItem *item, unsigned int key);
 
-static void sp_use_href_changed (SPUse * use);
+//static void sp_use_href_changed (SPUse * use);
+static void sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use);
 
 static SPItemClass * parent_class;
 
@@ -99,6 +102,9 @@ sp_use_class_init (SPUseClass *classname)
 static void
 sp_use_init (SPUse * use)
 {
+	use->ref = new SPUseReference(SP_OBJECT(use));
+	use->ref->changedSignal().connect(SigC::bind(SigC::slot(sp_use_href_changed), use));
+
 	sp_svg_length_unset (&use->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&use->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
@@ -109,9 +115,9 @@ sp_use_init (SPUse * use)
 static void
 sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 {
-	SPUse * use;
-
-	use = SP_USE (object);
+	if (((SPObjectClass *) parent_class)->build) {
+		(* ((SPObjectClass *) parent_class)->build) (object, document, repr);
+	}
 
 	sp_object_read_attr (object, "x");
 	sp_object_read_attr (object, "y");
@@ -119,26 +125,9 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "height");
 	sp_object_read_attr (object, "xlink:href");
 
-	if (((SPObjectClass *) parent_class)->build) {
-		(* ((SPObjectClass *) parent_class)->build) (object, document, repr);
-	}
-
-	if (use->href) {
-		SPObject *refobj;
-		refobj = sp_document_lookup_id (document, use->href);
-		if (refobj) {
-			SPRepr *childrepr;
-			GType type;
-			childrepr = SP_OBJECT_REPR (refobj);
-			type = sp_repr_type_lookup (childrepr);
-			g_return_if_fail (type > G_TYPE_NONE);
-			if (g_type_is_a (type, SP_TYPE_ITEM)) {
-				use->child = (SPObject*)g_object_new (type, 0);
-				sp_object_attach_reref (object, use->child, NULL);
-				sp_object_invoke_build (use->child, document, childrepr, TRUE);
-			}
-		}
-	}
+	// We don't need to create child here: 
+	// reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
+	// which will call sp_use_href_changed, and that will take care of the child
 }
 
 static void
@@ -153,6 +142,11 @@ sp_use_release (SPObject *object)
 
 	g_free (use->href);
 
+	if (use->ref) {
+		use->ref->detach();
+		delete use->ref;
+		use->ref = NULL;
+	}
 }
 
 static void
@@ -189,21 +183,29 @@ sp_use_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_XLINK_HREF: {
 		if (value) {
+			// first, set the href field, because sp_use_href_changed will need it
 			if (use->href) {
-				if (strcmp (value, use->href) == 0) return;
+				if (strcmp (value, use->href) == 0) 
+					break;
 				g_free (use->href);
-				// FIXME: add proper URI parsing instead of just skipping the first char (and hoping it's #)
-				use->href = g_strdup (value + 1);
+				use->href = g_strdup (value);
 			} else {
-				use->href = g_strdup (value + 1);
+				use->href = g_strdup (value);
+			}
+			// now do the attaching, which emits the changed signal
+			try {
+				use->ref->attach(Inkscape::URI(value));
+			} catch (Inkscape::BadURIException &e) {
+				g_warning("%s", e.what());
+				use->ref->detach();
 			}
 		} else {
 			if (use->href) {
 				g_free (use->href);
 				use->href = NULL;
 			}
+			use->ref->detach();
 		}
-		sp_use_href_changed (use);
 		break;
 	}
 	default:
@@ -225,11 +227,16 @@ sp_use_write (SPObject *object, SPRepr *repr, guint flags)
 	}
 
 	sp_repr_set_attr (repr, "id", object->id);
-	sp_repr_set_attr (repr, "xlink:href", use->href);
 	sp_repr_set_double (repr, "x", use->x.computed);
 	sp_repr_set_double (repr, "y", use->y.computed);
 	sp_repr_set_double (repr, "width", use->width.computed);
 	sp_repr_set_double (repr, "height", use->height.computed);
+
+	if (use->ref->getURI()) {
+		gchar *uri_string = use->ref->getURI()->toString();
+		sp_repr_set_attr(repr, "xlink:href", uri_string);
+		g_free(uri_string);
+	}
 
 	return repr;
 }
@@ -272,7 +279,7 @@ sp_use_description (SPItem * item)
 	use = SP_USE (item);
 
 	if (use->child) 
-		return g_strdup_printf (_("Clone of: %s"), sp_item_description (SP_ITEM (use->child))); // add "; use <key> to look up parent"
+		return g_strdup_printf (_("Clone of: %s. Use Shift+D to look up original"), sp_item_description (SP_ITEM (use->child))); 
 
 	return g_strdup ("Orphaned clone");
 }
@@ -316,11 +323,9 @@ sp_use_hide (SPItem * item, unsigned int key)
 }
 
 static void
-sp_use_href_changed (SPUse * use)
+sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 {
-	SPItem * item;
-
-	item = SP_ITEM (use);
+	SPItem *item = SP_ITEM (use);
 
 	if (use->child) {
 		sp_object_detach_unref (SP_OBJECT (use), use->child);
@@ -328,20 +333,17 @@ sp_use_href_changed (SPUse * use)
 	}
 
 	if (use->href) {
-		SPObject * refobj;
-		refobj = sp_document_lookup_id (SP_OBJECT (use)->document, use->href);
+		SPItem *refobj = use->ref->getObject();
 		if (refobj) {
-			SPRepr * repr;
-			GType type;
-			repr = refobj->repr;
-			type = sp_repr_type_lookup (repr);
+			SPRepr *childrepr = SP_OBJECT_REPR (refobj);
+			GType type = sp_repr_type_lookup (childrepr);
 			g_return_if_fail (type > G_TYPE_NONE);
 			if (g_type_is_a (type, SP_TYPE_ITEM)) {
-				SPItemView * v;
 				use->child = (SPObject*)g_object_new (type, 0);
-				sp_object_attach_reref (SP_OBJECT (use), use->child, NULL);
-				sp_object_invoke_build (use->child, SP_OBJECT (use)->document, repr, TRUE);
-				for (v = item->display; v != NULL; v = v->next) {
+				sp_object_attach_reref (SP_OBJECT(use), use->child, NULL);
+				sp_object_invoke_build (use->child, SP_OBJECT (use)->document, childrepr, TRUE);
+
+				for (SPItemView *v = item->display; v != NULL; v = v->next) {
 					NRArenaItem *ai;
 					ai = sp_item_invoke_show (SP_ITEM (use->child), NR_ARENA_ITEM_ARENA (v->arenaitem), v->key, v->flags);
 					if (ai) {
@@ -349,10 +351,22 @@ sp_use_href_changed (SPUse * use)
 						nr_arena_item_unref (ai);
 					}
 				}
+
 			}
 		}
 	}
+
+	//TODO: use this sample to code signal callbacks for adjusting use's transform when the original is moved,
+	// to implement "stays unmoved" and "preserves relative distance" modes (user-selectable)
+// 	if (old_ref) {
+// 		sp_signal_disconnect_by_data(old_ref, gr);
+// 	}
+// 	if (SP_IS_GRADIENT (ref)) {
+// 		g_signal_connect(G_OBJECT (ref), "modified", G_CALLBACK (gradient_ref_modified), gr);
+// 	}
 }
+
+
 static void
 sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
@@ -499,4 +513,11 @@ sp_use_unlink (SPUse *use)
 	sp_repr_unparent (SP_OBJECT_REPR (use));
 
 	return SP_ITEM(unlinked);
+}
+
+SPItem *
+sp_use_get_original (SPUse *use)
+{
+	SPItem *ref = use->ref->getObject();
+	return ref;
 }
