@@ -7,7 +7,7 @@
  * Copyright (C) 2004 Bob Jamison
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
- * 
+ *
  * Potrace, the wonderful tracer located at http://potrace.sourceforge.net,
  * is provided by the generosity of Peter Selinger, to whom we are grateful.
  *
@@ -182,7 +182,7 @@ class PotraceTracingEngine : public TracingEngine
      */
     int keepGoing;
 
-    
+
 
     private:
 
@@ -206,8 +206,12 @@ class PotraceTracingEngine : public TracingEngine
     bool multiScanStack; //do we tile or stack?
     bool multiScanSmooth;//do we use gaussian filter?
 
-    char *grayMapToPath(GrayMap *gm);
-    
+    /**
+     * This is the actual wrapper of the call to Potrace.  nodeCount
+     * returns the count of nodes created.  May be NULL if ignored.
+     */
+    char *grayMapToPath(GrayMap *gm, long *nodeCount);
+
     TracingEngineResult *traceBrightnessMulti(GdkPixbuf *pixbuf, int *nrPaths);
     TracingEngineResult *traceQuant(GdkPixbuf *pixbuf, int *nrPaths);
     TracingEngineResult *traceSingle(GdkPixbuf *pixbuf, int *nrPaths);

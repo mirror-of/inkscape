@@ -182,7 +182,7 @@ void Tracer::traceThread()
     int nrPaths;
     TracingEngineResult *results = engine->trace(pixbuf, &nrPaths);
     //printf("nrPaths:%d\n", nrPaths);
-    
+
     //### Check if we should stop
     if (!keepGoing || !results || nrPaths<1)
         {
@@ -218,7 +218,7 @@ void Tracer::traceThread()
 
     double iwscale = width  / iwidth;
     double ihscale = height / iheight;
-    
+
     NR::Matrix scal(NR::scale(iwscale, ihscale));
 
     //# Convolve scale, translation, and the original transform
@@ -238,9 +238,13 @@ void Tracer::traceThread()
         sp_repr_add_child(par, groupRepr, imgRepr);
         }
 
+    long totalNodeCount = 0L;
+
     for (TracingEngineResult *result=results ;
                   result ; result=result->next)
         {
+	    totalNodeCount += result->getNodeCount();
+
         Inkscape::XML::Node *pathRepr = sp_repr_new("svg:path");
         sp_repr_set_attr(pathRepr, "style", result->getStyle());
         sp_repr_set_attr(pathRepr, "d",     result->getPathData());
@@ -281,8 +285,9 @@ void Tracer::traceThread()
 
     engine = NULL;
 
-    char *msg = _("Trace: Done");
+    char *msg = g_strdup_printf(_("Trace: Done. %ld nodes created"), totalNodeCount);
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+    g_free(msg);
 
 }
 

@@ -7,7 +7,7 @@
  * Copyright (C) 2004 Bob Jamison
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
- * 
+ *
  * Potrace, the wonderful tracer located at http://potrace.sourceforge.net,
  * is provided by the generosity of Peter Selinger, to whom we are grateful.
  *
@@ -63,7 +63,7 @@ static int potraceStatus(char *msg, void *userData)
 
     Inkscape::Trace::Potrace::PotraceTracingEngine *engine =
           (Inkscape::Trace::Potrace::PotraceTracingEngine *)userData;
-    
+
     return engine->keepGoing;
 
 }
@@ -165,12 +165,13 @@ hasPoint(std::vector<Point> &points, double x, double y)
 /**
  *  Recursively descend the path_t node tree, writing paths in SVG
  *  format into the output stream.  The Point vector is used to prevent
- *  redundant paths.
+ *  redundant paths.  Returns number of paths processed.
  */
-static void
+static long
 writePaths(PotraceTracingEngine *engine, path_t *plist,
             Inkscape::SVGOStringStream& data, std::vector<Point> &points)
 {
+    long nodeCount = 0L;
 
     path_t *node;
     for (node=plist; node ; node=node->sibling)
@@ -198,10 +199,12 @@ writePaths(PotraceTracingEngine *engine, path_t *plist,
             points.push_back(p);
             }
         data << "M " << x2 << " " << y2 << " ";
+        nodeCount++;
+
         for (int i=0 ; i<node->fm ; i++)
             {
             if (!potraceStatus("wp", (void *)engine))
-                return;
+                return 0L;
             pt = node->fcurve[i].c;
             x0 = pt[0].x;
             y0 = pt[0].y;
@@ -224,14 +227,18 @@ writePaths(PotraceTracingEngine *engine, path_t *plist,
                 default:
                 break;
                 }
+            nodeCount++;
             }
         data << "z";
 
         for (path_t *child=node->childlist; child ; child=child->sibling)
             {
-            writePaths(engine, child, data, points);
+            nodeCount += writePaths(engine, child, data, points);
             }
         }
+
+    return nodeCount;
+
 }
 
 
@@ -258,7 +265,7 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         }
 
     /*### Brightness threshold ###*/
-    else if ( engine.getTraceType() == TRACE_BRIGHTNESS || 
+    else if ( engine.getTraceType() == TRACE_BRIGHTNESS ||
               engine.getTraceType() == TRACE_BRIGHTNESS_MULTI )
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
@@ -402,7 +409,7 @@ PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
 
 
 //*This is the core inkscape-to-potrace binding
-char *PotraceTracingEngine::grayMapToPath(GrayMap *grayMap)
+char *PotraceTracingEngine::grayMapToPath(GrayMap *grayMap, long *nodeCount)
 {
 
     bitmap_t *bm = bm_new(grayMap->width, grayMap->height);
@@ -463,7 +470,7 @@ char *PotraceTracingEngine::grayMapToPath(GrayMap *grayMap)
 
     //## copy the path information into our d="" attribute string
     std::vector<Point> points;
-    writePaths(this, plist, data, points);
+    long thisNodeCount = writePaths(this, plist, data, points);
 
     //# we are done with the pathlist
     pathlist_free(plist);
@@ -472,7 +479,9 @@ char *PotraceTracingEngine::grayMapToPath(GrayMap *grayMap)
         return NULL;
 
     char *d     = strdup((char *)data.str().c_str());
-    
+    if ( nodeCount)
+        *nodeCount = thisNodeCount;
+
     return d;
 
 }
@@ -490,29 +499,30 @@ PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
         return NULL;
 
     brightnessFloor = 0.0; //important to set this
-    
+
     GrayMap *grayMap = filter(*this, thePixbuf);
     if (!grayMap)
         return NULL;
 
-    char *d = grayMapToPath(grayMap);
-    
+    long nodeCount;
+    char *d = grayMapToPath(grayMap, &nodeCount);
+
     grayMap->destroy(grayMap);
-    
+
     if (!d)
         {
         *nrPaths = 0;
         return NULL;
         }
     char *style = "fill:#000000";
-    
+
     //g_message("### GOT '%s' \n", d);
-    TracingEngineResult *result = new TracingEngineResult(style, d);
+    TracingEngineResult *result = new TracingEngineResult(style, d, nodeCount);
 
     free(d);
-    
+
     *nrPaths = 1;
-    
+
     return result;
 }
 
@@ -526,53 +536,47 @@ PotraceTracingEngine::traceBrightnessMulti(GdkPixbuf * thePixbuf, int *nrPaths)
 
     if (!thePixbuf)
         return NULL;
-        
+
     double low     = 0.2; //bottom of range
     double high    = 0.9; //top of range
     double delta   = (high - low ) / ((double)multiScanNrColors);
-    
+
     brightnessFloor = 0.0; //Set bottom to black
-    
+
     int traceCount = 0;
-    
+
     TracingEngineResult *results = NULL;
     for ( brightnessThreshold = low ;
           brightnessThreshold <= high ;
           brightnessThreshold += delta)
-    
+
         {
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        if (desktop)
-            {
-            gchar *msg = g_strdup_printf(_("Trace: %d"), traceCount++);
-            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
-            g_free(msg);
-            }
-        
+
         GrayMap *grayMap = filter(*this, thePixbuf);
         if (!grayMap)
             return NULL;
 
-        char *d = grayMapToPath(grayMap);
-    
+        long nodeCount;
+        char *d = grayMapToPath(grayMap, &nodeCount);
+
         grayMap->destroy(grayMap);
-    
+
         if (!d)
             {
             *nrPaths = 0;
             return NULL;
             }
-            
+
         int grayVal = (int)(256.0 * brightnessThreshold);
         char style[31];
         sprintf(style, "fill-opacity:1.0;fill:#%02x%02x%02x",
                     grayVal, grayVal, grayVal);
-    
+
         //g_message("### GOT '%s' \n", d);
-        TracingEngineResult *result = new TracingEngineResult(style, d);
-        
+        TracingEngineResult *result = new TracingEngineResult(style, d, nodeCount);
+
         free(d);
-    
+
         if (!results)
             {
             results = result; //first one
@@ -589,12 +593,19 @@ PotraceTracingEngine::traceBrightnessMulti(GdkPixbuf * thePixbuf, int *nrPaths)
         if (!multiScanStack)
             brightnessFloor = brightnessThreshold;
 
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop)
+            {
+            gchar *msg = g_strdup_printf(_("Trace: %d.  %ld nodes"), traceCount++, nodeCount);
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+            g_free(msg);
+            }
         }
-    
+
     //report the count of paths processed
     *nrPaths = multiScanNrColors;
 
-    
+
     return results;
 }
 
@@ -614,24 +625,16 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
         return NULL;
 
     TracingEngineResult *results = NULL;
-    
+
     //Create and clear a gray map
     GrayMap *gm = GrayMapCreate(iMap->width, iMap->height);
     for (int row=0 ; row<gm->height ; row++)
         for (int col=0 ; col<gm->width ; col++)
             gm->setPixel(gm, col, row, GRAYMAP_WHITE);
 
-    
+
     for (int colorIndex=0 ; colorIndex<iMap->nrColors ; colorIndex++)
         {
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        if (desktop)
-            {
-            gchar *msg = g_strdup_printf(_("Trace: %d"), colorIndex);
-            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
-            g_free(msg);
-            }
-
 
         /*Make a gray map for each color index */
         for (int row=0 ; row<iMap->height ; row++)
@@ -652,24 +655,25 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
             }
 
         //## Now we have a traceable graymap
-        char *d = grayMapToPath(gm);
-    
+        long nodeCount;
+        char *d = grayMapToPath(gm, &nodeCount);
+
         if (!d)
             {
             *nrPaths = 0;
             return NULL;
             }
-        
+
         //### get style info
         char style[13];
         RGB rgb = iMap->clut[colorIndex];
         sprintf(style, "fill:#%02x%02x%02x", rgb.r, rgb.g, rgb.b);
-    
+
         //g_message("### GOT '%s' \n", d);
-        TracingEngineResult *result = new TracingEngineResult(style, d);
+        TracingEngineResult *result = new TracingEngineResult(style, d, nodeCount);
 
         free(d);
-    
+
         if (!results)
             {
             results = result; //first one
@@ -681,7 +685,7 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
             result->next = results;
             results = result;
             */
-            
+
             //append
             TracingEngineResult *r;
             for (r=results ; r->next ; r=r->next)
@@ -690,15 +694,23 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
             }
 
 
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop)
+            {
+            gchar *msg = g_strdup_printf(_("Trace: %d.  %ld nodes"), colorIndex, nodeCount);
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+            g_free(msg);
+            }
+
 
         }
-    
+
     //report the count of paths processed
     *nrPaths = iMap->nrColors;
 
     gm->destroy(gm);
-    iMap->destroy(iMap);  
-    
+    iMap->destroy(iMap);
+
     return results;
 }
 

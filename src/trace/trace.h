@@ -40,11 +40,12 @@ public:
     /**
      *
      */
-    TracingEngineResult(char *theStyle, char *thePathData)
+    TracingEngineResult(char *theStyle, char *thePathData, long theNodeCount)
         {
-        next     = NULL;
-        style    = strdup(theStyle);
-        pathData = strdup(thePathData);
+        next      = NULL;
+        style     = strdup(theStyle);
+        pathData  = strdup(thePathData);
+        nodeCount = theNodeCount;
         }
 
     /**
@@ -76,6 +77,12 @@ public:
     /**
      *
      */
+    long getNodeCount()
+        { return nodeCount; }
+
+    /**
+     *
+     */
     TracingEngineResult *next;
 
 private:
@@ -83,6 +90,8 @@ private:
     char *style;
 
     char *pathData;
+
+    long nodeCount;
 
 };
 
@@ -140,7 +149,7 @@ class TracingEngine
 /**
  *  This simple class allows a generic wrapper around a given
  *  TracingEngine object.  Its purpose is to provide a gateway
- *  to a variety of tracing engines, while maintaining a 
+ *  to a variety of tracing engines, while maintaining a
  *  consistent interface.
  */
 class Tracer
