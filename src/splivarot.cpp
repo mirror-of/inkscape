@@ -73,6 +73,16 @@ sp_selected_path_symdiff ()
 {
   sp_selected_path_boolop (bool_op_symdiff);
 }
+void
+sp_selected_path_cut ()
+{
+  sp_selected_path_boolop (bool_op_cut);
+}
+void
+sp_selected_path_slice ()
+{
+  sp_selected_path_boolop (bool_op_slice);
+}
 
 void
 sp_selected_path_boolop (bool_op bop)
@@ -99,7 +109,7 @@ sp_selected_path_boolop (bool_op bop)
   
   if (g_slist_length (il) > 2)
   {
-    if (bop == bool_op_diff || bop == bool_op_symdiff)
+    if (bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice )
     {
       sp_view_set_statusf_error(SP_VIEW(desktop), _("Select exactly 2 paths to perform difference or XOR."));
       return;
@@ -109,7 +119,7 @@ sp_selected_path_boolop (bool_op bop)
   
   bool reverseOrderForOp = false;
   // mettre les elements de la liste dans l'ordre pour ces operations
-  if (bop == bool_op_diff || bop == bool_op_symdiff)
+  if (bop == bool_op_diff || bop == bool_op_symdiff|| bop == bool_op_cut || bop == bool_op_slice)
   {
     SPRepr *a = SP_OBJECT_REPR (il->data);
     SPRepr *b = SP_OBJECT_REPR (il->next->data);
@@ -166,16 +176,28 @@ sp_selected_path_boolop (bool_op bop)
   // choper les originaux pour faire l'operation demandÂŽe
   int nbOriginaux = g_slist_length (il);
   Path *originaux[nbOriginaux];
+  FillRule  origWind[nbOriginaux];
   int curOrig;
   {
     curOrig = 0;
     for (l = il; l != NULL; l = l->next)
     {
+      SPCSSAttr *css;
+      const gchar *val;
+      css = sp_repr_css_attr (SP_OBJECT_REPR (il->data), "style");
+      val = sp_repr_css_property (css, "fill-rule", NULL);
+      if (val && strcmp (val, "nonzero") == 0) {
+        origWind[curOrig]= fill_nonZero;
+      } else if (val && strcmp (val, "evenodd") == 0) {
+        origWind[curOrig]= fill_oddEven;
+      } else {
+        origWind[curOrig]= fill_nonZero;
+      }
+
       originaux[curOrig] = Path_for_item ((SPItem *) l->data,true);
       if (originaux[curOrig] == NULL || originaux[curOrig]->descr_nb <= 1)
       {
-        for (int i = curOrig; i >= 0; i--)
-          delete originaux[i];
+        for (int i = curOrig; i >= 0; i--) delete originaux[i];
         g_slist_free (il);
         return;
       }
@@ -183,123 +205,150 @@ sp_selected_path_boolop (bool_op bop)
     }
   }
   
+  if ( reverseOrderForOp ) {
+    Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
+    FillRule swai=origWind[0]; origWind[0]=origWind[1]; origWind[1]=swai;
+  }
+  
   Shape *theShapeA = new Shape;
   Shape *theShapeB = new Shape;
   Shape *theShape = new Shape;
   Path *res = new Path;
   res->SetBackData (false);
+  Path::cut_position  *toCut=NULL;
+  int                  nbToCut=0;
   
-  {
-    SPCSSAttr *css;
-    const gchar *val;
-    
+  if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
     originaux[0]->ConvertWithBackData (1.0);
      
     originaux[0]->Fill (theShape, 0);
- /*   { // fait dans PathForItem
-      NRMatrix i2root;
-      sp_item_i2root_affine (SP_ITEM (il->data), &i2root);
-      for (int i = 0; i < theShape->nbPt; i++)
-      {
-        NR::Point x;
-        x[0]=
-        i2root.c[0] * theShape->pts[i].x[0] +
-        i2root.c[2] * theShape->pts[i].x[1] + i2root.c[4];
-        x[1] =
-          i2root.c[1] * theShape->pts[i].x[0] +
-          i2root.c[3] * theShape->pts[i].x[1] + i2root.c[5];
-        theShape->pts[i].x[0] = x[0];
-        theShape->pts[i].x[1] = x[1];
-      }
-    }*/
-    css = sp_repr_css_attr (SP_OBJECT_REPR (il->data), "style");
-    val = sp_repr_css_property (css, "fill-rule", NULL);
-    if (val && strcmp (val, "nonzero") == 0)
-    {
-      theShapeA->ConvertToShape (theShape, fill_nonZero);
-    }
-    else if (val && strcmp (val, "evenodd") == 0)
-    {
-      theShapeA->ConvertToShape (theShape, fill_oddEven);
-    }
-    else
-    {
-      theShapeA->ConvertToShape (theShape, fill_nonZero);
-    }
-  }
-  
-  curOrig = 1;
-  for (l = il->next; l != NULL; l = l->next)
-  {
-    SPCSSAttr *css;
-    const gchar *val;
+
+    theShapeA->ConvertToShape (theShape, origWind[0]);
     
-    originaux[curOrig]->ConvertWithBackData (1.0);
-    
-    originaux[curOrig]->Fill (theShape, curOrig);
-    
-/*    {
-      NRMatrix i2root;
-      sp_item_i2root_affine (SP_ITEM (l->data), &i2root);
-      for (int i = 0; i < theShape->nbPt; i++)
-      {
-        NR::Point x;
-        x[0]=
-	      i2root.c[0] * theShape->pts[i].x[0] +
-	      i2root.c[2] * theShape->pts[i].x[1] + i2root.c[4];
-        x[1] =
-          i2root.c[1] * theShape->pts[i].x[0] +
-          i2root.c[3] * theShape->pts[i].x[1] + i2root.c[5];
-        theShape->pts[i].x[0] = x[0];
-        theShape->pts[i].x[1] = x[1];
-      }
-    }*/
-    css = sp_repr_css_attr (SP_OBJECT_REPR (l->data), "style");
-    val = sp_repr_css_property (css, "fill-rule", NULL);
-    if (val && strcmp (val, "nonzero") == 0)
-    {
-      theShapeB->ConvertToShape (theShape, fill_nonZero);
-    }
-    else if (val && strcmp (val, "evenodd") == 0)
-    {
-      theShapeB->ConvertToShape (theShape, fill_oddEven);
-    }
-    else
-    {
-      theShapeB->ConvertToShape (theShape, fill_nonZero);
-    }
-    
-    // les elements arrivent en ordre inverse dans la liste
-    if (reverseOrderForOp)
-    {
-      theShape->Booleen (theShapeA, theShapeB, bop);
-    }
-    else
-    {
+    curOrig = 1;
+    for (l = il->next; l != NULL; l = l->next) {    
+      originaux[curOrig]->ConvertWithBackData (1.0);
+      
+      originaux[curOrig]->Fill (theShape, curOrig);
+      
+      theShapeB->ConvertToShape (theShape, origWind[curOrig]);
+      
+      // les elements arrivent en ordre inverse dans la liste
       theShape->Booleen (theShapeB, theShapeA, bop);
+      
+      {
+        Shape *swap = theShape;
+        theShape = theShapeA;
+        theShapeA = swap;
+      }
+      curOrig++;
     }
-    
     {
       Shape *swap = theShape;
       theShape = theShapeA;
       theShapeA = swap;
     }
-    curOrig++;
-  }
-  // pour compenser le swap juste avant
+  } else if ( bop == bool_op_cut ) {
+    // inversion pour l'opŽration
   {
-    Shape *swap = theShape;
-    theShape = theShapeA;
-    theShapeA = swap;
+    Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
+    int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
+  }
+    originaux[0]->ConvertWithBackData (1.0);
+    
+    originaux[0]->Fill (theShape, 0);
+    
+    theShapeA->ConvertToShape (theShape, origWind[0]);
+
+    originaux[1]->ConvertWithBackData (1.0);
+    
+    originaux[1]->Fill (theShape, 1,false,false,false); // c'est la coupe-> doit avoir le + gd pathID
+    
+    theShapeB->ConvertToShape (theShape, fill_justDont);
+    
+    // les elements arrivent en ordre inverse dans la liste
+    theShape->Booleen (theShapeB, theShapeA, bool_op_cut,1);
+    
+  } else if ( bop == bool_op_slice ) {
+    // inversion pour l'opŽration
+  {
+    Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
+    int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
+  }
+    originaux[0]->ConvertWithBackData (1.0);
+    
+    originaux[0]->Fill (theShapeA, 0,false,false,false); 
+        
+    originaux[1]->ConvertWithBackData (1.0);
+    
+    originaux[1]->Fill (theShapeA, 1,true,false,false);// c'est la coupe-> doit avoir le + gd pathID
+    
+    theShape->ConvertToShape (theShapeA, fill_justDont);
+  
+    if ( theShape->HasBackData() ) {
+      {
+        for (int i=0;i<theShape->nbPt;i++) {
+          if ( theShape->pts[i].dI+theShape->pts[i].dO > 2 ) {
+            int   cb=theShape->pts[i].firstA;
+            int   nbOrig=0;
+            int   nbOther=0;
+            int   piece=-1;
+            float t=0.0;
+            while ( cb >= 0 && cb < theShape->nbAr ) {
+              if ( theShape->ebData[cb].pathID == 0 ) {
+                piece=theShape->ebData[cb].pieceID;
+                if ( theShape->aretes[cb].st == i ) {
+                  t=theShape->ebData[cb].tSt;
+                } else {
+                  t=theShape->ebData[cb].tEn;
+                }
+                nbOrig++;
+              }
+              if ( theShape->ebData[cb].pathID == 1 ) nbOther++;
+              cb=theShape->NextAt(i,cb);
+            }
+            if ( nbOrig > 0 && nbOther > 0 ) {
+              toCut=(Path::cut_position*)realloc(toCut,(nbToCut+1)*sizeof(Path::cut_position));
+              toCut[nbToCut].piece=piece;
+              toCut[nbToCut].t=t;
+              nbToCut++;
+            }
+          }
+        }
+      }
+      {
+        int i=theShape->nbAr-1;
+        for (;i>=0;i--) {
+          if ( theShape->ebData[i].pathID == 1 ) {
+            theShape->SubEdge(i);
+          }
+        }
+      }
+      
+    }
   }
   
-  theShape->ConvertToForme (res, nbOriginaux, originaux);
+  int*    nesting=NULL;
+  int*    conts=NULL;
+  int     nbNest=0;
+  // pour compenser le swap juste avant
+  if ( bop == bool_op_slice ) {
+//    theShape->ConvertToForme (res, nbOriginaux, originaux,true);
+//    res->ConvertForcedToMoveTo();
+    res->Copy(originaux[0]);
+    res->ConvertPositionsToMoveTo(nbToCut,toCut);
+    free(toCut);
+  } else if ( bop == bool_op_cut ) {
+    // il faut appeler pour desallouer PointData (pas vital, mais bon)
+    theShape->ConvertToFormeNested (res,nbOriginaux, originaux, 1,nbNest,nesting,conts);
+  } else {
+    theShape->ConvertToForme (res, nbOriginaux, originaux);
+  }
   
   delete theShape;
   delete theShapeA;
   delete theShapeB;
-  for (int i = 0; i < nbOriginaux; i++)
-    delete originaux[i];
+  for (int i = 0; i < nbOriginaux; i++)  delete originaux[i];
   
   if (res->descr_nb <= 1)
   {
@@ -316,17 +365,19 @@ sp_selected_path_boolop (bool_op bop)
     g_slist_free (il);
     return;
   }
-  d = liv_svg_dump_path (res);
-  delete res;
   
-  if (reverseOrderForOp)
-  {
+  if ( bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice ) {
+    if (reverseOrderForOp)
+    {
+      style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
+    }
+    else
+    {
+      style = g_strdup (sp_repr_attr ((SP_OBJECT (il->next->data))->repr, "style"));
+    }
+  } else {
+    // on prend le style du premier
     style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
-  }
-  else
-  {
-    style =
-    g_strdup (sp_repr_attr ((SP_OBJECT (il->next->data))->repr, "style"));
   }
   
   for (l = il; l != NULL; l = l->next)
@@ -336,17 +387,52 @@ sp_selected_path_boolop (bool_op bop)
   
   g_slist_free (il);
   
-  repr = sp_repr_new ("path");
-  sp_repr_set_attr (repr, "style", style);
-  g_free (style);
-  sp_repr_set_attr (repr, "d", d);
-  g_free (d);
-  item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
-  sp_document_done (SP_DT_DOCUMENT (desktop));
-  sp_repr_unref (repr);
-  
   sp_selection_empty (selection);
-  sp_selection_set_item (selection, item);
+
+  if ( bop == bool_op_cut || bop == bool_op_slice ) {
+    int    nbRP=0;
+    Path** resPath;
+    if ( bop == bool_op_slice ) {
+      resPath=res->SubPaths(nbRP,false);
+    } else {
+      resPath=res->SubPathsWithNesting(nbRP,true,nbNest,nesting,conts);
+      
+      // pas oublier
+      if ( conts ) free(conts);
+      if ( nesting ) free(nesting);
+    }
+    for (int i=0;i<nbRP;i++) {
+      d = liv_svg_dump_path (resPath[i]);
+      
+      repr = sp_repr_new ("path");
+      sp_repr_set_attr (repr, "style", style);
+      sp_repr_set_attr (repr, "d", d);
+      g_free (d);
+      item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+      sp_document_done (SP_DT_DOCUMENT (desktop));
+      sp_repr_unref (repr);
+      
+      sp_selection_add_item (selection, item);
+      
+      delete resPath[i];
+    }
+    if ( resPath ) free(resPath);
+    g_free (style);
+  } else {
+    d = liv_svg_dump_path (res);
+
+    repr = sp_repr_new ("path");
+    sp_repr_set_attr (repr, "style", style);
+    g_free (style);
+    sp_repr_set_attr (repr, "d", d);
+    g_free (d);
+    item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+    sp_repr_unref (repr);
+  
+    sp_selection_set_item (selection, item);
+  }
+  delete res;
 }
 
 void

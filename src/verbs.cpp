@@ -316,6 +316,13 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
 		sp_selected_path_symdiff ();
 		break;
 
+	case SP_VERB_SELECTION_CUT:
+		sp_selected_path_cut ();
+		break;
+	case SP_VERB_SELECTION_SLICE:
+		sp_selected_path_slice ();
+		break;
+
 	case SP_VERB_SELECTION_OFFSET:
 		sp_selected_path_offset ();
 		break;
@@ -637,6 +644,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("_Intersection"), N_("Intersection of selected objects"), NULL},
 	{SP_VERB_SELECTION_DIFF, "SelectionDiff", N_("_Difference"), N_("Difference of selected objects"), NULL},
 	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("E_xclusion"), N_("Exclusive OR of selected objects"), NULL},
+	{SP_VERB_SELECTION_CUT, "SelectionDivide", N_("Division"), N_("Cut the bottom object into pieces"), NULL},
+	{SP_VERB_SELECTION_SLICE, "SelectionCutPath", N_("Cut Path"), N_("Cut the bottom path into pieces"), NULL},
 	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("O_utset Path"), N_("Outset selected paths"), NULL},
 	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset Path"), N_("Inset selected paths"), NULL},
 	{SP_VERB_SELECTION_DYNAMIC_OFFSET, "SelectionDynOffset", N_("D_ynamic Offset"), N_("Create a dynamic offset object"), NULL},

@@ -261,6 +261,9 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_asciicircum, SP_VERB_SELECTION_SYMDIFF, true);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_asciicircum, SP_VERB_SELECTION_SYMDIFF, false);
 
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_slash, SP_VERB_SELECTION_CUT, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_slash, SP_VERB_SELECTION_CUT, false);
+
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_parenright, SP_VERB_SELECTION_OFFSET, true);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_parenright, SP_VERB_SELECTION_OFFSET, false);
 

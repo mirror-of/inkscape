@@ -250,6 +250,7 @@ sp_key_name (guint keyval)
 	else if (!strcmp (n, "grave"      ))  return "`";
 	else if (!strcmp (n, "numbersign" ))  return "#";
 	else if (!strcmp (n, "bar" ))  return "|";
+	else if (!strcmp (n, "slash" ))  return "/";
 	else return n;
 }
 
@@ -452,6 +453,8 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 		SP_VERB_SELECTION_DIFF,
 		SP_VERB_SELECTION_INTERSECT,
 		SP_VERB_SELECTION_SYMDIFF,
+		SP_VERB_SELECTION_CUT,
+		SP_VERB_SELECTION_SLICE,
 
 		SP_VERB_NONE,
 		SP_VERB_SELECTION_COMBINE,
