@@ -74,8 +74,6 @@ sp_document_reset_key (Inkscape::Application *inkscape, SPDesktop *desktop, GtkO
 void
 sp_document_maybe_done (SPDocument *doc, const gchar *key)
 {
-	SPReprAction *log;
-
 	g_assert (doc != NULL);
 	g_assert (SP_IS_DOCUMENT (doc));
 	g_assert (doc->priv != NULL);
@@ -85,7 +83,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 
 	sp_document_clear_redo (doc);
 
-	log = sp_repr_coalesce_log (doc->priv->partial, sp_repr_commit_undoable (doc->rdoc));
+	SPReprAction *log = sp_repr_coalesce_log (doc->priv->partial, sp_repr_commit_undoable (doc->rdoc));
 	doc->priv->partial = NULL;
 
 	if (!log) {
