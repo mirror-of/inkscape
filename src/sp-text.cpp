@@ -98,7 +98,7 @@ static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned key, un
 static void sp_text_hide (SPItem *item, unsigned key);
 static char *sp_text_description (SPItem *item);
 static void sp_text_snappoints(SPItem const *item, SnapPointsIter p);
-//static NR::Matrix sp_text_set_transform(SPItem *item, NR::Matrix const &xform);
+static NR::Matrix sp_text_set_transform(SPItem *item, NR::Matrix const &xform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
 static void sp_text_request_relayout (SPText *text, guint flags);
@@ -153,7 +153,7 @@ sp_text_class_init (SPTextClass *classname)
     item_class->hide = sp_text_hide;
     item_class->description = sp_text_description;
     item_class->snappoints = sp_text_snappoints;
-//    item_class->set_transform = sp_text_set_transform;
+    item_class->set_transform = sp_text_set_transform;
     item_class->print = sp_text_print;
 }
 
@@ -692,15 +692,83 @@ static void sp_text_snappoints(SPItem const *item, SnapPointsIter p)
     }
 }
 
-#if 0 /* set_transform disabled for now (2004-10-13). */
+void
+sp_text_adjust_fontsize_recursive (SPItem *item, double ex)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+
+    if (style && !NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
+        style->font_size.computed *= ex;
+        style->font_size.set = TRUE;
+        if (style->text) {
+            style->text->letterspacing.computed *= ex;
+            style->text->letterspacing.set = TRUE;
+            style->text->wordspacing.computed *= ex;
+            style->text->wordspacing.set = TRUE;
+        }
+        SP_OBJECT(item)->updateRepr();
+    }
+
+    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+        if (SP_IS_ITEM(o))
+            sp_text_adjust_fontsize_recursive (SP_ITEM(o), ex);
+    }
+}
+
 static NR::Matrix
 sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 {
+    SPText *text = SP_TEXT(item);
+
+    // we cannot optimize textpath because changing its fontsize will break its match to the path
+    if (SP_IS_TEXT_TEXTPATH (text))
+        return xform;
+
+    /* This function takes care of scaling only, we return whatever parts we can't
+       handle. */
+    double ex = xform.expansion();
+    if (ex == 0)
+        return xform;
+
+    NR::Matrix ret(NR::transform(xform));
+    ret[0] /= ex;
+    ret[1] /= ex;
+    ret[2] /= ex;
+    ret[3] /= ex;
+
+    /* Recalculate x/y lists */
+    text->contents.TransformXY (xform * ret.inverse());
+    if ( text->contents.nb_x > 0 ) {
+        text->x=text->contents.x_s[0];
+        text->x.set=1;
+    } else {
+        text->x.set=0;
+    }
+    if ( text->contents.nb_y > 0 ) {
+        text->y=text->contents.y_s[0];
+        text->y.set=1;
+    } else {
+        text->y.set=0;
+    }
+
+    text->contents.ScaleDXDY (ex);
+
+    // Adjust font size
+    sp_text_adjust_fontsize_recursive (item, ex);
+
+    // Adjust stroke width
+    sp_shape_adjust_stroke(item, ex);
+
+    // Adjust pattern fill
+    sp_shape_adjust_pattern(item, xform * ret.inverse());
+
+    // Adjust gradient fill
+    sp_shape_adjust_gradient(item, xform * ret.inverse());
+
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 
-    return xform;
+    return ret;
 }
-#endif
 
 static void
 sp_text_print (SPItem *item, SPPrintContext *ctx)
@@ -1094,8 +1162,8 @@ sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR:
     by_x.value=by_x.computed=by[0];
     by_y.value=by_y.computed=by[1];
     while ( cur ) {
-        cur->AddValue(position,by_x,2,true);
-        cur->AddValue(position,by_y,3,true);
+        cur->AddValue(position, by_x, 2, true, false);
+        cur->AddValue(position, by_y, 3, true, false);
         cur=cur->next;
     }
     SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
