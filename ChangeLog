@@ -8,6 +8,10 @@
 	  the error dialog doesn't come up if you hit cancel in the
 	  'Save As...' dialog.  Whew!
 
+	* src/preferences-skeleton.h:  Added in settings to make the save
+	  extension global, along with whether or not the files should have
+	  extensions tacked on the end of them.
+
 2004-03-31  Ted Gould <ted@gould.cx>
 
 	* src/interface.cpp, src/interface.h, src/file.cpp:
