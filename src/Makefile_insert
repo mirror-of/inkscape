@@ -65,7 +65,11 @@ libinkpre_a_SOURCES =	\
 	knot.cpp knot.h	\
 	knotholder.cpp knotholder.h	\
 	macros.h	\
+	managed.h \
 	marker-status.cpp marker-status.h	\
+	message.h \
+	message-context.cpp message-context.h \
+	message-stack.cpp message-stack.h \
 	mod360.cpp mod360.h	\
 	node-context.cpp node-context.h	\
 	nodepath.cpp nodepath.h	\

@@ -90,6 +90,10 @@ struct StopOnTrue {
 class SPSelection;
 
 struct SPDesktop : public SPView {
+	Inkscape::MessageContext *guidesMessageContext() {
+		return _guides_message_context;
+	}
+
 	SPDesktopWidget *owner;
 	Inkscape::Application *inkscape;
 
@@ -130,8 +134,12 @@ struct SPDesktop : public SPView {
 	SPObject *currentRoot();
 	SPObject *currentLayer();
 
+	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
+
 	SigC::Signal4<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
 	SigC::Signal3<bool, const ColorRGBA &, bool, bool, StopOnTrue> _set_color_signal;
+
+	Inkscape::MessageContext *_guides_message_context;
 };
 
 struct SPDesktopClass {
@@ -246,6 +254,8 @@ struct SPDesktopWidget {
 	SPCanvas *canvas;
 
 	GtkAdjustment *hadj, *vadj;
+
+	void setMessage(Inkscape::MessageType type, gchar const *message);
 };
 
 struct SPDesktopWidgetClass {

@@ -42,6 +42,7 @@
 #include "macros.h"
 #include "tools-switch.h"
 #include "prefs-utils.h"
+#include "message-context.h"
 
 static void sp_event_context_class_init (SPEventContextClass *klass);
 static void sp_event_context_init (SPEventContext *event_context);
@@ -109,6 +110,7 @@ sp_event_context_init (SPEventContext *event_context)
 {
 	event_context->desktop = NULL;
 	event_context->cursor = NULL;
+	event_context->_message_context = NULL;
 }
 
 static void
@@ -117,6 +119,10 @@ sp_event_context_dispose (GObject *object)
 	SPEventContext *ec;
 
 	ec = SP_EVENT_CONTEXT (object);
+
+	if (ec->_message_context) {
+		delete ec->_message_context;
+	}
 
 	if (ec->cursor != NULL) {
 		gdk_cursor_unref (ec->cursor);
@@ -599,6 +605,7 @@ sp_event_context_new (GType type, SPDesktop *desktop, SPRepr *repr, unsigned int
 	ec = (SPEventContext*)g_object_new (type, NULL);
 
 	ec->desktop = desktop;
+	ec->_message_context = new Inkscape::MessageContext(desktop->messageStack());
 	ec->key = key;
 	ec->repr = repr;
 	if (ec->repr) {

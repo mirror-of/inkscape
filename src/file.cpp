@@ -45,6 +45,7 @@
 #include "print.h"
 #include "file.h"
 #include "dialogs/dialog-events.h"
+#include "message-stack.h"
 
 #include "dialogs/filedialog.h"
 #include "prefs-utils.h"
@@ -175,7 +176,7 @@ sp_file_revert_dialog()
 
     gchar const *uri = doc->uri;
     if (!uri) {
-        sp_view_set_statusf_flash(SP_VIEW(desktop), _("Document not saved yet.  Cannot revert."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved yet.  Cannot revert."));
         return;
     }
 
@@ -201,14 +202,14 @@ sp_file_revert_dialog()
         }
 
         if (reverted) {
-            sp_view_set_statusf_flash(SP_VIEW(desktop), _("Document reverted."));
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Document reverted."));
         }
         else {
-            sp_view_set_statusf_flash(SP_VIEW(desktop), _("Document not reverted."));
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not reverted."));
         }
     }
     else {
-        sp_view_set_statusf_flash(SP_VIEW(desktop), _("Document not modified.  No need to revert."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Document not modified.  No need to revert."));
     }
 }
 
@@ -292,13 +293,13 @@ file_save(SPDocument *doc, gchar const *uri, Inkscape::Extension::Extension *key
                                   saveas, TRUE); // save officially, with inkscape: attributes set
     } catch (Inkscape::Extension::Output::no_extension_found &e) {
         gchar *text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);
-        sp_view_set_statusf_flash(SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text);
         g_free(text);
         return FALSE;
     } catch (Inkscape::Extension::Output::save_failed &e) {
         gchar *text = g_strdup_printf(_("File %s could not be saved."), uri);
-        sp_view_set_statusf_flash(SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text);
         g_free(text);
         return FALSE;
@@ -306,7 +307,7 @@ file_save(SPDocument *doc, gchar const *uri, Inkscape::Extension::Extension *key
         return sp_file_save_dialog(doc);
     }
 
-    sp_view_set_statusf_flash(SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
+    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Document saved."));
     return TRUE;
 }
 
@@ -439,7 +440,7 @@ sp_file_save_document(SPDocument *doc)
             g_free((void *) fn);
         }
     } else {
-        sp_view_set_statusf_flash(SP_VIEW(SP_ACTIVE_DESKTOP), _("No changes need to be saved."));
+        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No changes need to be saved."));
         success = TRUE;
     }
     

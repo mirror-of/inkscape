@@ -50,6 +50,8 @@
 
 #include "dialogs/dialog-events.h"
 
+#include "message-context.h"
+
 /* forward declaration */
 static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
 
@@ -219,27 +221,27 @@ sp_ui_menu_activate (void *object, SPAction *action)
 static void
 sp_ui_menu_select_action (void *object, SPAction *action)
 {
-	sp_view_set_statusf (action->view, "%s", action->tip);
+        action->view->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, action->tip);
 }
 
 static void
 sp_ui_menu_deselect_action (void *object, SPAction *action)
 {
-	sp_view_pop_statusf (action->view);
+        action->view->tipsMessageContext()->clear();
 }
 
 static void
 sp_ui_menu_select (gpointer object, gpointer tip)
 {
 	SPView *view = SP_VIEW (g_object_get_data (G_OBJECT (object), "view"));
-	sp_view_set_statusf (view, "%s", (gchar *) tip);
+        view->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, (gchar *)tip);
 }
 
 static void
 sp_ui_menu_deselect (gpointer object)
 {
 	SPView *view = SP_VIEW (g_object_get_data (G_OBJECT (object), "view"));
-	sp_view_pop_statusf (view);
+        view->tipsMessageContext()->clear();
 }
 
 /**

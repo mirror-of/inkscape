@@ -22,14 +22,47 @@ class SPViewClass;
 #define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, SPView))
 #define SP_IS_VIEW(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_VIEW))
 
-#include <stdarg.h>
+#include <sigc++/sigc++.h>
 #include <gtk/gtkeventbox.h>
 #include "forward.h"
+#include "message.h"
+#include "message-stack.h"
+#include "message-context.h"
+
+namespace Inkscape {
+	class MessageContext;
+	class MessageStack;
+}
 
 struct SPView {
 	GObject object;
 
 	SPDocument *doc;
+
+	static void init(SPView *view);
+	static void dispose(GObject *obj);
+
+	Inkscape::MessageStack *messageStack() {
+		return _message_stack;
+	}
+
+	Inkscape::MessageContext *tipsMessageContext() {
+		return _tips_message_context;
+	}
+
+	/* don't use this in new code */
+	Inkscape::MessageContext *legacyMessageContext() {
+		return _legacy_message_context;
+	}
+
+private:
+	static void _set_status_message(Inkscape::MessageType type, gchar const *message, SPView *view);
+
+	Inkscape::MessageStack *_message_stack;
+	Inkscape::MessageContext *_tips_message_context;
+	Inkscape::MessageContext *_legacy_message_context;
+
+	SigC::Connection _message_changed_connection;
 };
 
 struct SPViewClass {
@@ -51,8 +84,7 @@ struct SPViewClass {
 	/* Cursor position */
 	void (* position_set) (SPView *view, gdouble x, gdouble y);
 	/* Status */
-	void (* status_set) (SPView *view, const guchar *status, guint msec);
-	void (* status_pop) (SPView *view);
+	void (* set_status_message) (SPView *view, Inkscape::MessageType type, gchar const *message);
 };
 
 GType sp_view_get_type (void);
@@ -68,18 +100,6 @@ inline void sp_view_set_position(SPView *view, NR::Point const &p)
 {
 	sp_view_set_position(view, p[NR::X], p[NR::Y]);
 }
-
-//new
-void sp_view_set_statusf (SPView *view, const gchar *format, ...);
-void sp_view_pop_statusf (SPView *view);
-void sp_view_set_statusf_timeout (SPView *view, guint msec, const gchar *format, ...);
-void sp_view_set_statusf_flash (SPView *view, const gchar *format, ...);
-void sp_view_set_statusf_error (SPView *view, const gchar *format, ...);
-void sp_view_set_statusf_va (SPView *view, guint msec, const gchar *format, va_list args);
-void sp_view_clear_status (SPView *view);
-
-//deprecated
-void sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault);
 
 gboolean sp_view_shutdown (SPView *view);
 void sp_view_request_redraw (SPView *view);
@@ -121,5 +141,58 @@ void sp_view_widget_set_view (SPViewWidget *vw, SPView *view);
 
 /* Allows presenting 'save changes' dialog, FALSE - continue, TRUE - cancel */
 gboolean sp_view_widget_shutdown (SPViewWidget *vw);
+
+inline __attribute__((deprecated)) void sp_view_set_statusf(SPView *view, gchar const *format, ...) {
+	va_list args;
+	va_start(args, format);
+	view->legacyMessageContext()->setVF(Inkscape::NORMAL_MESSAGE, format, args);
+	va_end(args);
+}
+
+inline __attribute__((deprecated)) void sp_view_pop_statusf(SPView *view) {
+	view->legacyMessageContext()->clear();
+}
+
+inline __attribute__((deprecated)) void sp_view_set_statusf_timeout(SPView *view, guint msec, gchar const *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	if (msec) {
+		view->messageStack()->flashVF(Inkscape::NORMAL_MESSAGE, format, args);
+	} else {
+		view->legacyMessageContext()->setVF(Inkscape::NORMAL_MESSAGE, format, args);
+	}
+	va_end(args);
+}
+
+inline __attribute__((deprecated)) void sp_view_set_statusf_flash(SPView *view, gchar const *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	view->messageStack()->flashVF(Inkscape::NORMAL_MESSAGE, format, args);
+	va_end(args);
+}
+
+inline __attribute__((deprecated)) void sp_view_set_statusf_error(SPView *view, gchar const *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	view->messageStack()->flashVF(Inkscape::ERROR_MESSAGE, format, args);
+	va_end(args);
+}
+
+inline __attribute__((deprecated)) void sp_view_set_statusf_va(SPView *view, gchar const *format, va_list args)
+{
+	view->legacyMessageContext()->setVF(Inkscape::NORMAL_MESSAGE, format, args);
+}
+
+inline __attribute__((deprecated)) void sp_view_clear_status(SPView *view) {
+	view->legacyMessageContext()->clear();
+}
+
+inline __attribute__((deprecated)) void sp_view_set_status(SPView *view, gchar const *status, gboolean)
+{
+	view->legacyMessageContext()->set(Inkscape::NORMAL_MESSAGE, status);
+}
 
 #endif

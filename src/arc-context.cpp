@@ -36,6 +36,7 @@
 #include "object-edit.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
+#include "message-context.h"
 #include "desktop.h"
 
 #include "arc-context.h"
@@ -458,15 +459,11 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 
 	sp_arc_position_set (SP_ARC (ac->item), (x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2);
 
-	// status text
-	gchar status[80];
 	GString *xs = SP_PT_TO_METRIC_STRING (fabs(x1-x0), SP_DEFAULT_METRIC);
 	GString *ys = SP_PT_TO_METRIC_STRING (fabs(y1-y0), SP_DEFAULT_METRIC);
-	sprintf (status, _("Draw arc: %s x %s"), xs->str, ys->str);
-	sp_view_set_status (SP_VIEW (desktop), status, FALSE);
+	ac->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("Draw arc: %s x %s"), xs->str, ys->str);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);
-	/* FIXME: The above looks like a memory leak: I think arg2 should be TRUE. */
 }
 
 static void sp_arc_finish(SPArcContext *ac)

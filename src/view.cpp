@@ -19,20 +19,18 @@
 #include "document.h"
 #include "view.h"
 #include "inkscape.h"
+#include "message-stack.h"
+#include "message-context.h"
 
 enum {
 	SHUTDOWN,
 	URI_SET,
 	RESIZED,
 	POSITION_SET,
-	STATUS_SET,
-	STATUS_POP,
 	LAST_SIGNAL
 };
 
 static void sp_view_class_init (SPViewClass *klass);
-static void sp_view_init (SPView *view);
-static void sp_view_dispose (GObject *object);
 
 static void sp_view_document_uri_set (SPDocument *doc, const guchar *uri, SPView *view);
 static void sp_view_document_resized (SPDocument *doc, gdouble width, gdouble height, SPView *view);
@@ -54,7 +52,7 @@ sp_view_get_type (void)
 			NULL, NULL,
 			sizeof (SPView),
 			4,
-			(GInstanceInitFunc) sp_view_init,
+			(GInstanceInitFunc)&SPView::init,
 			NULL
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPView", &info, (GTypeFlags)0);
@@ -140,42 +138,45 @@ sp_view_class_init (SPViewClass *klass)
 					      sp_marshal_NONE__DOUBLE_DOUBLE,
 					      G_TYPE_NONE, 2,
 					      G_TYPE_DOUBLE, G_TYPE_DOUBLE);
-	signals[STATUS_SET] =   g_signal_new ("status_set",
-					      G_TYPE_FROM_CLASS(klass),
-					      G_SIGNAL_RUN_FIRST,
-					      G_STRUCT_OFFSET (SPViewClass, status_set),
-					      NULL, NULL,
-					      sp_marshal_NONE__POINTER_UINT,
-					      G_TYPE_NONE, 2,
-					      G_TYPE_POINTER, G_TYPE_UINT);
-	signals[STATUS_POP] =   g_signal_new ("status_pop",
-					      G_TYPE_FROM_CLASS(klass),
-					      G_SIGNAL_RUN_FIRST,
-					      G_STRUCT_OFFSET (SPViewClass, status_pop),
-					      NULL, NULL,
-					      sp_marshal_NONE__NONE,
-					      G_TYPE_NONE, 0);
 
-	object_class->dispose = sp_view_dispose;
+	object_class->dispose = &SPView::dispose;
 }
 
-static void
-sp_view_init (SPView *view)
-{
+void SPView::init(SPView *view) {
 	view->doc = NULL;
+
+	new (&view->_message_changed_connection) SigC::Connection();
+
+	view->_message_stack = new Inkscape::MessageStack();
+
+	view->_tips_message_context = new Inkscape::MessageContext(view->_message_stack);
+	view->_legacy_message_context = new Inkscape::MessageContext(view->_message_stack);
+
+	view->_message_changed_connection = view->_message_stack->connectChanged(SigC::bind(SigC::slot(&SPView::_set_status_message), view));
 }
 
-static void
-sp_view_dispose (GObject *object)
-{
+void SPView::dispose(GObject *object) {
 	SPView *view;
 
 	view = SP_VIEW (object);
+
+	view->_message_changed_connection.disconnect();
+
+	delete view->_tips_message_context;
+	view->_tips_message_context = NULL;
+
+	delete view->_legacy_message_context;
+	view->_legacy_message_context = NULL;
+
+	Inkscape::Managed::release(view->_message_stack);
+	view->_message_stack = NULL;
 
 	if (view->doc) {
 		sp_signal_disconnect_by_data (view->doc, view);
 		view->doc = sp_document_unref (view->doc);
 	}
+
+	view->_message_changed_connection.~Connection();
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
@@ -196,6 +197,13 @@ sp_view_shutdown (SPView *view)
 	g_signal_emit (G_OBJECT (view), signals[SHUTDOWN], 0, &result);
 
 	return result;
+}
+
+void SPView::_set_status_message(Inkscape::MessageType type, gchar const *message, SPView *view)
+{
+	if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->set_status_message) {
+		((SPViewClass *) G_OBJECT_GET_CLASS(view))->set_status_message(view, type, message);
+	}
 }
 
 void
@@ -250,126 +258,6 @@ sp_view_set_position (SPView *view, gdouble x, gdouble y)
 
 	g_signal_emit (G_OBJECT (view), signals[POSITION_SET], 0, x, y);
 }
-
-/**
-\brief Sets statusbar message permanently. The format string and the rest of arguments
-are as in printf(). Use it only if you plan to pop the message using sp_view_pop_statusf.
-Otherwise message never disappears unless replaced by another message. In the majority of 
-situations, one of the _flash or _error functions should be used instead.
-*/
-void
-sp_view_set_statusf (SPView *view, const gchar *format, ...)
-{
-	va_list args;
-	va_start (args, format);
-	sp_view_set_statusf_va (view, 0, format, args);
-	va_end (args);
-}
-
-/**
-\brief Remove statusbar message set by sp_view_set_statusf, restoring the message which was
-in the statusbar before that.
-*/
-void
-sp_view_pop_statusf (SPView *view)
-{
-
-	g_return_if_fail (view != NULL);
-	g_return_if_fail (SP_IS_VIEW (view));
-
-	g_signal_emit (G_OBJECT (view), signals[STATUS_POP], 0);
-}
-
-/**
-\brief Sets statusbar message with a given timeout.
-*/
-void
-sp_view_set_statusf_timeout (SPView *view, guint msec, const gchar *format, ...)
-{
-	va_list args;
-	va_start (args, format);
-	sp_view_set_statusf_va (view, msec, format, args);
-	va_end (args);
-}
-
-//TODO: make user-settable
-#define STATUSBAR_FLASH_MSEC 2000
-#define STATUSBAR_ERROR_MSEC 5000
-
-/**
-\brief Displays message temporarily for 1 second; when the message disappears, the one
-that was in the statusbar before is restored. The format string and the rest of
-arguments are as in printf(). Use this function for short helpful hints or explanations
-of non-trivial actions. Examples: "No-break space" when you press ctrl-space in text
-object; "Closing path" when hitting the anchor in freehand; "Selection cancelled" when
-pressing Esc cancelled rubberband selection.
-*/
-void
-sp_view_set_statusf_flash (SPView *view, const gchar *format, ...)
-{
-	va_list args;
-	va_start (args, format);
-	sp_view_set_statusf_va (view, STATUSBAR_FLASH_MSEC, format, args);
-	va_end (args);
-}
-
-/**
-\brief Displays message temporarily for 5 seconds; when the message disappears, the one
-that was in the statusbar before it is restored. The format string and the rest of
-arguments are as in printf(). Use this function for most non-fatal error messages
-(unless they are so important as to warrant a modal messagebox). Examples: "To join, you
-must have two endnodes selected" when you try to join nodes that are not exactly two
-endpoints; "To subtract, you must have two objects selected" for the boolean difference
-operation.
-*/
-void
-sp_view_set_statusf_error (SPView *view, const gchar *format, ...)
-{
-	va_list args;
-	va_start (args, format);
-	sp_view_set_statusf_va (view, STATUSBAR_ERROR_MSEC, format, args);
-	va_end (args);
-}
-
-void
-sp_view_set_statusf_va (SPView *view, guint msec, const gchar *format, va_list args)
-{
-	gchar *status;
-
-	g_return_if_fail (view != NULL);
-	g_return_if_fail (SP_IS_VIEW (view));
-
-	status = g_strdup_vprintf (format, args);
-
-	g_return_if_fail (status != NULL);
-
-	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, status, msec);
-	g_free (status);
-}
-
-/**
-\brief Clears statusbar message permanently, until the next sp_view_pop_statusf. In the majority of
-situations, one of the _flash or _error functions should be used instead.
-*/
-void
-sp_view_clear_status (SPView *view)
-{
-	g_return_if_fail (view != NULL);
-	g_return_if_fail (SP_IS_VIEW (view));
-
-	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, NULL, 0);
-}
-
-//deprecated, eliminate
-void
-sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault)
-{
-	g_return_if_fail (view != NULL);
-	g_return_if_fail (SP_IS_VIEW (view));
-
-	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, status, 0);
-}
-
 
 static void
 sp_view_document_uri_set (SPDocument *doc, const guchar *uri, SPView *view)

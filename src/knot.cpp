@@ -29,6 +29,7 @@
 #include "document.h"
 #include "prefs-utils.h"
 #include <libnr/nr-point-fns.h>
+#include "message-stack.h"
 
 #include "sp-guide.h"
 
@@ -560,7 +561,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 					       knot_signals[UNGRABBED], 0,
 					       event->button.state);
 				sp_document_undo (SP_DT_DOCUMENT (knot->desktop));
-				sp_view_set_statusf_flash (SP_VIEW(knot->desktop), _("Node or handle drag cancelled."));
+				knot->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Node or handle drag cancelled."));
 				transform_escaped = true;
 				consumed = TRUE;
 			} 

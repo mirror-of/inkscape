@@ -41,6 +41,8 @@
 #include "sp-item.h"
 #include "desktop-snap.h"
 #include "prefs-utils.h"
+#include "message-context.h"
+#include "message-stack.h"
 
 static void sp_select_context_class_init(SPSelectContextClass *klass);
 static void sp_select_context_init(SPSelectContext *select_context);
@@ -640,14 +642,14 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             sp_document_undo(SP_DT_DOCUMENT(desktop));
                             drag_escaped = 1;
                             sp_select_context_update_statusbar(sc);
-                            sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), _("Move cancelled."));
+                            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move cancelled."));
                         }
                     } else {
                         if (sp_rubberband_rect(&b)) { // cancel rubberband
                             sp_rubberband_stop();
                             rb_escaped = 1;
                             sp_select_context_update_statusbar(sc);
-                            sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), _("Selection cancelled."));
+                            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection cancelled."));
                         } else {
                             selection->clear();
                         }
@@ -805,11 +807,11 @@ static void sp_select_context_update_statusbar(SPSelectContext *sc) {
     char const *when_selected = _("Click selection to toggle scale/rotation handles");
     GSList const *items = SP_DT_SELECTION(ec->desktop)->itemList();
     if (!items) { // no items
-        sp_view_set_statusf(SP_VIEW(ec->desktop), _("No objects selected. Click, Shift+click, drag around objects to select."));
+        ec->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("No objects selected. Click, Shift+click, drag around objects to select."));
     } else if (!items->next) { // one item
-        sp_view_set_statusf(SP_VIEW(ec->desktop), "%s. %s.", sp_item_description(SP_ITEM(items->data)), when_selected);
+        ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE, "%s. %s.", sp_item_description(SP_ITEM(items->data)), when_selected);
     } else { // multiple items
-        sp_view_set_statusf(SP_VIEW(ec->desktop), _("%i objects selected. %s."), g_slist_length((GSList *)items), when_selected);
+        ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("%i objects selected. %s."), g_slist_length((GSList *)items), when_selected);
     }
 }
 

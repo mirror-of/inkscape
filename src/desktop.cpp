@@ -60,6 +60,8 @@
 #include "prefs-utils.h"
 #include "color.h"
 #include "svg/stringstream.h"
+#include "message-stack.h"
+#include "message-context.h"
 
 #include "file.h"
 
@@ -173,6 +175,7 @@ sp_desktop_class_init (SPDesktopClass *klass)
     view_class->request_redraw = sp_desktop_request_redraw;
     view_class->set_document = sp_desktop_set_document;
     view_class->document_resized = sp_desktop_document_resized;
+    view_class->set_status_message = &SPDesktop::_set_status_message;
 }
 
 static void
@@ -200,6 +203,8 @@ sp_desktop_init (SPDesktop *desktop)
     desktop->is_fullscreen = FALSE;
 
     new (&desktop->sel_modified_connection) SigC::Connection();
+
+    desktop->_guides_message_context = new Inkscape::MessageContext(desktop->messageStack());
 }
 
 static void
@@ -228,6 +233,9 @@ sp_desktop_dispose (GObject *object)
         sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (dt))), dt->dkey);
         dt->drawing = NULL;
     }
+
+    delete dt->_guides_message_context;
+    dt->_guides_message_context = NULL;
 
     G_OBJECT_CLASS (parent_class)->dispose (object);
 
@@ -682,9 +690,6 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 static void sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDesktopWidget *dtw);
-static void sp_desktop_widget_view_status_set (SPView *view, const gchar *status, guint msec, SPDesktopWidget *dtw);
-static void sp_desktop_widget_view_status_pop (SPView *view, SPDesktopWidget *dtw);
-gboolean sp_desktop_widget_view_status_remove (gpointer data);
 
 static void sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw);
 static void sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw);
@@ -1215,8 +1220,6 @@ sp_desktop_widget_new (SPNamedView *namedview)
     sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), SP_VIEW (dtw->desktop));
 
     g_signal_connect (G_OBJECT (dtw->desktop), "position_set", G_CALLBACK (sp_desktop_widget_view_position_set), dtw);
-    g_signal_connect (G_OBJECT (dtw->desktop), "status_set", G_CALLBACK (sp_desktop_widget_view_status_set), dtw);
-    g_signal_connect (G_OBJECT (dtw->desktop), "status_pop", G_CALLBACK (sp_desktop_widget_view_status_pop), dtw);
 
     /* Connect activation signals to update indicator */
     g_signal_connect (G_OBJECT (dtw->desktop), "activate", G_CALLBACK (sp_dtw_desktop_activate), dtw);
@@ -1272,33 +1275,19 @@ typedef struct {
     guint message_id; 
 } statusbar_data;
 
-static void 
-sp_desktop_widget_view_status_set (SPView *view, const gchar *status, guint msec, SPDesktopWidget *dtw)
+void SPDesktop::_set_status_message(SPView *view, Inkscape::MessageType type, const gchar *message)
 {
-    guint message_id = gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, status ? status : "");
-
-    if (msec != 0) { // we want to remove the message after msec milliseconds
-        // save  the statusbar pointer and the message id
-        statusbar_data *d = (statusbar_data *) g_malloc (sizeof (statusbar_data));
-        d->sb = GTK_STATUSBAR (dtw->select_status);
-        d->message_id = message_id; 
-        // call the remove function with this data
-        gtk_timeout_add (msec, (GtkFunction) sp_desktop_widget_view_status_remove, d);  
+    SPDesktop *desktop=SP_DESKTOP(view);
+    if (desktop->owner) {
+        desktop->owner->setMessage(type, message);
     }
 }
 
-static void 
-sp_desktop_widget_view_status_pop (SPView *view, SPDesktopWidget *dtw)
+void SPDesktopWidget::setMessage(Inkscape::MessageType type, const gchar *message)
 {
-    gtk_statusbar_pop (GTK_STATUSBAR (dtw->select_status), 0);
-}
-
-gboolean
-sp_desktop_widget_view_status_remove (gpointer d)
-{
-    gtk_statusbar_remove ((GtkStatusbar *) ((statusbar_data *) d)->sb, 0, ((statusbar_data *) d)->message_id);
-    g_free (d); // freeing memory that was allocated in _status_set; ugly, but inevitable
-    return FALSE; // this is a one-time timeout
+    GtkStatusbar *sb=GTK_STATUSBAR(this->select_status);
+    gtk_statusbar_pop(sb, 0);
+    gtk_statusbar_push(sb, 0, ( message ? message : "" ));
 }
 
 static void
@@ -1462,7 +1451,7 @@ void
 sp_desktop_prev_zoom (SPDesktop *dt)
 {
     if (dt->zooms_past == NULL || dt->zooms_past->next == NULL) {
-        sp_view_set_statusf_flash (SP_VIEW(dt), _("No previous zoom."));
+        dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No previous zoom."));
         return;
     }
 
@@ -1491,7 +1480,7 @@ void
 sp_desktop_next_zoom (SPDesktop *dt)
 {
     if (dt->zooms_future == NULL || dt->can_go_forward == FALSE) {
-        sp_view_set_statusf_flash (SP_VIEW(dt), _("No next zoom."));
+        dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No next zoom."));
         return;
     }
 

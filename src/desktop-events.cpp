@@ -37,6 +37,7 @@
 #include "desktop-events.h"
 #include "helper/sp-intl.h"
 #include "dialogs/dialog-events.h"
+#include "message-context.h"
 
 static void sp_dt_simple_guide_dialog (SPGuide * guide, SPDesktop * desktop);
 
@@ -238,18 +239,21 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 		}
 	case GDK_ENTER_NOTIFY:
 	{
+		
 		sp_guideline_set_color (SP_GUIDELINE (item), guide->hicolor);
+
 		GString *position_string = SP_PT_TO_METRIC_STRING (guide->position, SP_DEFAULT_METRIC);
 		char *guide_description = sp_guide_description(guide);
-		char *msg = g_strdup_printf(_("%s at %s"), guide_description, position_string->str);
+
+		desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("%s at %s"), guide_description, position_string->str);
+
 		g_free(guide_description);
 		g_string_free(position_string, TRUE);
-		sp_view_set_status (SP_VIEW (desktop), msg, FALSE);
        		break;
 	}
 	case GDK_LEAVE_NOTIFY:
 		sp_guideline_set_color (SP_GUIDELINE (item), guide->color);
-		sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
+		desktop->guidesMessageContext()->clear();
 		break;
 	default:
 		break;

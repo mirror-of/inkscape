@@ -30,8 +30,7 @@
 class SPArcContext;
 class SPArcContextClass;
 
-struct SPArcContext {
-    SPEventContext event_context;
+struct SPArcContext : public SPEventContext {
     SPItem *item;
     NR::Point center;
 
@@ -39,7 +38,6 @@ struct SPArcContext {
 
     SPKnotHolder *knot_holder;
     SPRepr *repr;
-
 };
 
 struct SPArcContextClass {

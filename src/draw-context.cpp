@@ -43,6 +43,7 @@
 #include "desktop-snap.h"
 #include "style.h"
 #include "draw-context.h"
+#include "message-stack.h"
 
 #include <libnr/nr-point-fns.h>
 
@@ -288,13 +289,11 @@ spdc_set_attach(SPDrawContext *dc, gboolean attach)
     if (attach) {
         dc->attach = TRUE;
         spdc_attach_selection(dc, dc->selection);
-        sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT_DESKTOP(dc)),
-                                  _("Appending to selection"));
+        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selection"));
     } else {
         dc->attach = FALSE;
         spdc_detach_selection(dc, dc->selection);
-        sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT_DESKTOP(dc)),
-                                  _("Creating new curve"), FALSE);
+        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new curve"));
     }
 }
 
@@ -480,7 +479,7 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
     /* Step A - test, whether we ended on green anchor */
     if ( forceclosed || ( dc->green_anchor && dc->green_anchor->active ) ) {
         // We hit green anchor, closing Green-Blue-Red
-        sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT_DESKTOP(dc)), "Path is closed.");
+        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
         sp_curve_closepath_current(c);
         /* Closed path, just flush */
         spdc_flush_white(dc, c);
@@ -501,7 +500,7 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
       }
       if ( doItLad ) {
         // We hit bot start and end of single curve, closing paths
-          sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT_DESKTOP(dc)), "Closing path.");
+          SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
         if (dc->sa->start && !(dc->sa->curve->closed) ) {
             SPCurve *r;
             // Reversing curve
@@ -810,7 +809,7 @@ sp_draw_anchor_new(SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point 
 {
     SPDesktop *dt=SP_EVENT_CONTEXT_DESKTOP(SP_EVENT_CONTEXT(dc));
 
-    sp_view_set_statusf_flash(SP_VIEW(dt), _("Creating anchor at (%g,%g)"), delta[NR::X], delta[NR::Y]);
+    dt->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Creating anchor at (%g,%g)"), delta[NR::X], delta[NR::Y]);
 
     SPDrawAnchor *a = g_new(SPDrawAnchor, 1);
 
@@ -1063,7 +1062,7 @@ sp_pencil_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 dc->ea = anchor;
                 /* Write curves to object */
 
-                sp_view_set_statusf_flash(SP_VIEW(dt), _("Finishing freehand"));
+                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand"));
 
                 spdc_concat_colors_and_flush(dc, FALSE);
                 dc->sa = NULL;
@@ -1831,8 +1830,8 @@ static void
 spdc_pen_finish(SPPenContext *pc, gboolean closed)
 {
     SPDrawContext *dc = SP_DRAW_CONTEXT(pc);
-
-    sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT(dc)->desktop), _("Finishing pen"));
+    SPDesktop *desktop=SP_EVENT_CONTEXT(dc)->desktop;
+    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing pen"));
 
     sp_curve_reset(dc->red_curve);
     spdc_concat_colors_and_flush(dc, closed);

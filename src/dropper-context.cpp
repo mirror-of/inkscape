@@ -37,6 +37,7 @@
 #include "pixmaps/cursor-dropper.xpm"
 
 #include "dropper-context.h"
+#include "message-context.h"
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <algorithm>
@@ -268,14 +269,13 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			// message, to show in the statusbar
 			const gchar *message = dc->dragging ? _("Release mouse to set color.") : _("Click to pick fill color, Shift+click to pick stroke color. Drag to pick the average color of an area.");
 
-			gchar *status = g_strdup_printf ("%s%s%s. %s", 
-										 c, 
-										 (pick == SP_DROPPER_PICK_VISIBLE)? "" : alpha, 
-										 where, 
-										 message);
-			sp_view_set_status (SP_VIEW (ec->desktop), status, FALSE);
+			ec->defaultMessageContext()->setF(
+				Inkscape::NORMAL_MESSAGE,
+				"%s%s%s. %s", c,
+				(pick == SP_DROPPER_PICK_VISIBLE)? "" : alpha,
+				where, message
+			);
 
-			g_free (status);
 			g_free (where);
 			g_free (alpha);
 
