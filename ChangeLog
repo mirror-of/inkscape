@@ -1,3 +1,11 @@
+2004-08-17  Bryce Harrington  <bryce@bryceharrington.com>
+
+	*  nodepath.cpp path-chemistry.cpp selection-chemistry.cpp,
+	   seltrans.cpp sp-typeset.cpp splivarot.cpp text-context.cpp, 
+	   tools-switch.cpp dialogs/find.cpp:  Converting statusbar
+	   messages from old style to new, as per
+	   http://inkscape.org/cgi-bin/wiki.pl?StatusbarAPI 
+
 2004-06-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/mkdep.pl: Add `by mkdep.pl' to `automatically generated' line.
