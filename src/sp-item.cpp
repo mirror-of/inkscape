@@ -632,8 +632,10 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 
 	NR::Matrix ret(NR::identity());
 	g_assert(ret.test_identity());
-	for (SPItem const *parent ; NULL != (parent = SP_ITEM(SP_OBJECT_PARENT(item))) ; item = parent) {
+	while ( NULL != SP_OBJECT_PARENT(item) )
+	{
 		ret *= NR::Matrix(&item->transform);
+		item = SP_ITEM(SP_OBJECT_PARENT(item));
 	}
 	g_assert(SP_IS_ROOT(item));
 	SPRoot const *root = SP_ROOT(item);
