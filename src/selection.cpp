@@ -38,25 +38,30 @@
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
-SPSelection::SPSelection(SPDesktop *desktop)
-: _objs(NULL), _reprs(NULL), _items(NULL), _desktop(desktop),
-  _flags(0), _idle(0), _refcount(1)
+SPSelection::SPSelection(SPDesktop *desktop) :
+    _objs(NULL),
+    _reprs(NULL),
+    _items(NULL),
+    _desktop(desktop),
+    _flags(0),
+    _idle(0),
+    _refcount(1)
 {
 }
 
 SPSelection::~SPSelection() {
-	_clear();
-	_desktop = NULL;
-	if (_idle) {
-		g_source_remove(_idle);
-		_idle = 0;
-	}
+    _clear();
+    _desktop = NULL;
+    if (_idle) {
+        g_source_remove(_idle);
+        _idle = 0;
+    }
 }
 
 void
 SPSelection::_release(SPObject *obj, SPSelection *selection)
 {
-	selection->remove(obj);
+    selection->remove(obj);
 }
 
 /* Handler for selected objects "modified" signal */
@@ -64,27 +69,27 @@ SPSelection::_release(SPObject *obj, SPSelection *selection)
 void
 SPSelection::_schedule_modified(SPObject *obj, guint flags, SPSelection *selection)
 {
-	if (!selection->_idle) {
-		/* Request handling to be run in _idle loop */
-		selection->_idle = g_idle_add_full(SP_SELECTION_UPDATE_PRIORITY, GSourceFunc(&SPSelection::_emit_modified), selection, NULL);
-	}
+    if (!selection->_idle) {
+        /* Request handling to be run in _idle loop */
+        selection->_idle = g_idle_add_full(SP_SELECTION_UPDATE_PRIORITY, GSourceFunc(&SPSelection::_emit_modified), selection, NULL);
+    }
 
-	/* Collect all flags */
-	selection->_flags |= flags;
+    /* Collect all flags */
+    selection->_flags |= flags;
 }
 
 gboolean
 SPSelection::_emit_modified(SPSelection *selection)
 {
-	/* force new handler to be created if requested before we return */
-	selection->_idle = 0;
-	guint flags = selection->_flags;
-	selection->_flags = 0;
+    /* force new handler to be created if requested before we return */
+    selection->_idle = 0;
+    guint flags = selection->_flags;
+    selection->_flags = 0;
 
-        selection->_emitModified(flags);
+    selection->_emitModified(flags);
 
-	/* drop this handler */
-	return FALSE;
+    /* drop this handler */
+    return FALSE;
 }
 
 void SPSelection::_emitModified(guint flags) {
@@ -129,8 +134,9 @@ void SPSelection::add(SPObject *obj) {
     g_return_if_fail(obj != NULL);
     g_return_if_fail(SP_IS_OBJECT(obj));
 
-    if (includes(obj))
-	return;
+    if (includes(obj)) {
+        return;
+    }
 
     _invalidateCachedLists();
     _add(obj);
@@ -187,10 +193,10 @@ void SPSelection::addList(GSList const *list) {
 
     if ( list != NULL ) {
         for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
-		SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
-		if (includes(obj)) {
-			continue;
-		}
+            SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+            if (includes(obj)) {
+                continue;
+            }
             _add (obj);
         }
     }
@@ -341,7 +347,7 @@ std::vector<NR::Point> SPSelection::getSnapPoints() const {
     GSList const *items = const_cast<SPSelection *>(this)->itemList();
     std::vector<NR::Point> p;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-	sp_item_snappoints(SP_ITEM(iter->data), SnapPointsIter(p));
+        sp_item_snappoints(SP_ITEM(iter->data), SnapPointsIter(p));
     }
 
     return p;
@@ -351,10 +357,10 @@ std::vector<NR::Point> SPSelection::getBBoxPoints() const {
     GSList const *items = const_cast<SPSelection *>(this)->itemList();
     std::vector<NR::Point> p;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-	NRRect b;
-	sp_item_bbox_desktop(SP_ITEM(iter->data), &b);
-	p.push_back(NR::Point(b.x0, b.y0));
-	p.push_back(NR::Point(b.x1, b.y1));
+        NRRect b;
+        sp_item_bbox_desktop(SP_ITEM(iter->data), &b);
+        p.push_back(NR::Point(b.x0, b.y0));
+        p.push_back(NR::Point(b.x1, b.y1));
     }
 
     return p;
@@ -389,9 +395,9 @@ SPObject *SPSelection::_objectForRepr(SPRepr *repr) const {
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
-  c-basic-offset:8
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
