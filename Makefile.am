@@ -28,6 +28,7 @@ EXTRA_DIST = \
 	intltool-update.in	\
 	mkinstalldirs		\
 	$(Graphics_in_files)	\
+	po/check-markup \
 	inkscape.1		\
 	inkscape.pod		\
 	inkscape.spec.in	\
