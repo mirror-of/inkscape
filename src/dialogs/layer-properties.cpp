@@ -54,8 +54,6 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     GtkWidget *dlg = GTK_WIDGET(gobj());
     g_assert(dlg);
 
-    set_title(_("Layer Properties"));
-
     Gtk::VBox *mainVBox = get_vbox();
 
     // Rename Layer widgets
@@ -64,7 +62,7 @@ LayerPropertiesDialog::LayerPropertiesDialog()
         _layer_name_entry.set_text(name);
     }
     _layer_name_entry.signal_activate()
-        .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::apply));
+        .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::_apply));
     _layer_name_entry.set_activates_default(true);
     _layer_name_hbox.pack_end(_layer_name_entry, false, false, 4);
     _layer_name_label.set_label(_("Layer Name:"));
@@ -72,12 +70,15 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     mainVBox->pack_start(_layer_name_hbox, false, false, 4);
 
     // Buttons
-    add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY)
-        ->signal_clicked()
-        .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::apply));
-    add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE)
-        ->signal_clicked()
-        .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::close));
+    _apply_button.set_flags(Gtk::CAN_DEFAULT);
+
+    _close_button.signal_clicked()
+        .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::_close));
+    _apply_button.signal_clicked()
+        .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::_apply));
+
+    add_action_widget(_close_button, Gtk::RESPONSE_CLOSE);
+    add_action_widget(_apply_button, Gtk::RESPONSE_APPLY);
 
     // Event Handlers
     // TODO:  Gtkmmify
@@ -98,20 +99,15 @@ LayerPropertiesDialog::~LayerPropertiesDialog()
 }
 
 void
-LayerPropertiesDialog::apply()
+LayerPropertiesDialog::_apply()
 {
-    // Retrieve text from the dialog
-    Glib::ustring name = _layer_name_entry.get_text();
-
-    setLayerName((gchar*)name.c_str());
-
-    // Grey out the apply button
-// TODO:  Make entry in the entry box set this sensitive
-//    _button_apply.set_sensitive(false);
+    setLayerName((gchar*)_layer_name_entry.get_text().c_str());
+    userHidden(true);
+    hide();
 }
 
 void
-LayerPropertiesDialog::close()
+LayerPropertiesDialog::_close()
 {
     userHidden(true);
     hide();
@@ -126,10 +122,10 @@ LayerPropertiesDialog::update()
     if (name != NULL) {
         // update based on the currently selected layer
         _layer_name_entry.set_text(name);
-//        _button_apply.set_sensitive( true );
+        _apply_button.set_sensitive(true);
     } else {
         _layer_name_entry.set_text("");
-//        _button_apply.set_sensitive( false );
+        _apply_button.set_sensitive(false);
     }
 }
 
@@ -152,6 +148,15 @@ void LayerPropertiesDialog::showInstance()
     dlg->show();
     dlg->present();
     dlg->userHidden(false);
+
+    dlg->set_title(_("Rename Layer"));
+
+    dlg->_close_button.set_use_stock(true);
+    dlg->_close_button.set_label(Gtk::Stock::CANCEL.id);
+
+    dlg->_apply_button.set_use_stock(false);
+    dlg->_apply_button.set_use_underline(true);
+    dlg->_apply_button.set_label(_("_Rename"));
 }
 
 void

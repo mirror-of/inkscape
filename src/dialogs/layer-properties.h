@@ -49,13 +49,15 @@ class LayerPropertiesDialog : public Gtk::Dialog {
     Gtk::Label        _layer_name_label;
     Gtk::Entry        _layer_name_entry;
 
-    void apply();
-    void close();
+    Gtk::Button       _close_button;
+    Gtk::Button       _apply_button;
+
+    void _apply();
+    void _close();
     void update();
 
     void setLayerName(gchar const * name);
     gchar const * getLayerName() const;
-
 };
 
 } // namespace

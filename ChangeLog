@@ -2,6 +2,9 @@
 
 	* src/rect-context.cpp: disallow drawing on locked or invisible layers
 
+	* src/widgets/layer-properties.h, src/widgets/layer-properties.cpp:
+	  slight HIG-ification
+
 2004-11-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/bezier-utils.cpp (generate_bezier): For the sake of
