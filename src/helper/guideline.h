@@ -2,7 +2,7 @@
 #define __SP_GUIDELINE_H__
 
 /*
- * Infinite horizontal/vertical line
+ * Infinite horizontal/vertical line; the visual representation of SPGuide.
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
