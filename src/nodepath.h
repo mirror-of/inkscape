@@ -297,11 +297,10 @@ void sp_node_selected_move (gdouble dx, gdouble dy);
 void sp_node_selected_move_screen (gdouble dx, gdouble dy);
 
 
-
-
-
-
-
+void sp_nodepath_selected_nodes_rotate (SPNodePath * nodepath, gdouble angle, int which);
+void sp_nodepath_selected_nodes_rotate_screen (SPNodePath * nodepath, gdouble angle, int which);
+void sp_nodepath_selected_nodes_scale (SPNodePath * nodepath, gdouble grow, int which);
+void sp_nodepath_selected_nodes_scale_screen (SPNodePath * nodepath, gdouble grow, int which);
 
 
 

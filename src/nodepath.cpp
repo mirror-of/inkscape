@@ -2531,6 +2531,206 @@ node_ctrl_event (SPKnot * knot, GdkEvent * event, SPPathNode * n)
 	return ret;
 }
 
+void
+node_rotate (SPPathNode *n, gdouble angle, int which)
+{
+	SPPathNodeSide *me, *other;
+	gboolean both = FALSE;
+	radial rme, rother;
+	NRPoint o;
+
+	if (which > 0) {
+		me = &(n->n);
+		other = &(n->p);
+	} else if (which < 0){
+		me = &(n->p);
+		other = &(n->n);
+	} else {
+		me = &(n->n);
+		other = &(n->p);
+		both = TRUE;
+	}
+
+	xy_to_radial (me->pos.x - n->pos.x, me->pos.y - n->pos.y, &rme);
+	xy_to_radial (other->pos.x - n->pos.x, other->pos.y - n->pos.y, &rother);
+
+	rme.a += angle; 
+	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) 
+		rother.a += angle;
+
+	radial_to_xy (&rme, &(n->pos), &o);
+	me->pos.x = o.x;
+	me->pos.y = o.y;
+	sp_knot_set_position (me->knot, &(me->pos), 0);
+
+	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) {
+		radial_to_xy (&rother, &(n->pos), &o);
+		other->pos.x = o.x;
+		other->pos.y = o.y;
+		sp_knot_set_position (other->knot, &(other->pos), 0);
+	}
+
+	update_object (n->subpath->nodepath);
+}
+
+void
+node_rotate_screen (SPPathNode *n, gdouble angle, int which)
+{
+	SPPathNodeSide *me, *other;
+	gboolean both = FALSE;
+	radial rme, rother;
+	NRPoint o;
+	gdouble r;
+
+	if (which > 0) {
+		me = &(n->n);
+		other = &(n->p);
+	} else if (which < 0){
+		me = &(n->p);
+		other = &(n->n);
+	} else {
+		me = &(n->n);
+		other = &(n->p);
+		both = TRUE;
+	}
+
+	xy_to_radial (me->pos.x - n->pos.x, me->pos.y - n->pos.y, &rme);
+	xy_to_radial (other->pos.x - n->pos.x, other->pos.y - n->pos.y, &rother);
+
+	angle = angle / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop);
+
+	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) 
+		r = MAX (rme.r, rother.r);
+	else 
+		r = rme.r;
+
+	angle = atan2 (angle, r);
+
+	rme.a += angle; 
+	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM)  
+		rother.a += angle;
+
+	radial_to_xy (&rme, &(n->pos), &o);
+	me->pos.x = o.x;
+	me->pos.y = o.y;
+	sp_knot_set_position (me->knot, &(me->pos), 0);
+
+	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) {
+		radial_to_xy (&rother, &(n->pos), &o);
+		other->pos.x = o.x;
+		other->pos.y = o.y;
+		sp_knot_set_position (other->knot, &(other->pos), 0);
+	}
+
+	update_object (n->subpath->nodepath);
+}
+
+void
+sp_nodepath_selected_nodes_rotate (SPNodePath * nodepath, gdouble angle, int which)
+{
+	GList * l;
+	SPPathNode * n;
+
+	for (l = nodepath->selected; l != NULL; l = l->next) {
+		n = (SPPathNode *) l->data;
+		node_rotate (n, angle, which);
+	}
+
+	update_object (nodepath);
+}
+
+void
+sp_nodepath_selected_nodes_rotate_screen (SPNodePath * nodepath, gdouble angle, int which)
+{
+	GList * l;
+	SPPathNode * n;
+
+	for (l = nodepath->selected; l != NULL; l = l->next) {
+		n = (SPPathNode *) l->data;
+		node_rotate_screen (n, angle, which);
+	}
+
+	update_object (nodepath);
+}
+
+void
+node_scale (SPPathNode *n, gdouble grow, int which)
+{
+	SPPathNodeSide *me, *other;
+	gboolean both = FALSE;
+	radial rme, rother;
+	NRPoint o;
+
+	if (which > 0) {
+		me = &(n->n);
+		other = &(n->p);
+	} else if (which < 0){
+		me = &(n->p);
+		other = &(n->n);
+	} else {
+		me = &(n->n);
+		other = &(n->p);
+		both = TRUE;
+	}
+
+	xy_to_radial (me->pos.x - n->pos.x, me->pos.y - n->pos.y, &rme);
+	xy_to_radial (other->pos.x - n->pos.x, other->pos.y - n->pos.y, &rother);
+
+	rme.r += grow; 
+	if (both || n->type == SP_PATHNODE_SYMM) 
+		rother.r += grow;
+
+	radial_to_xy (&rme, &(n->pos), &o);
+	me->pos.x = o.x;
+	me->pos.y = o.y;
+	sp_knot_set_position (me->knot, &(me->pos), 0);
+
+	if (both || n->type == SP_PATHNODE_SYMM) {
+		radial_to_xy (&rother, &(n->pos), &o);
+		other->pos.x = o.x;
+		other->pos.y = o.y;
+		sp_knot_set_position (other->knot, &(other->pos), 0);
+	}
+
+	update_object (n->subpath->nodepath);
+}
+
+void
+node_scale_screen (SPPathNode *n, gdouble grow, int which)
+{
+	grow = grow / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop);
+	node_scale (n, grow, which);
+}
+
+void
+sp_nodepath_selected_nodes_scale (SPNodePath * nodepath, gdouble grow, int which)
+{
+	GList * l;
+	SPPathNode * n;
+
+	for (l = nodepath->selected; l != NULL; l = l->next) {
+		n = (SPPathNode *) l->data;
+		node_scale (n, grow, which);
+	}
+
+	update_object (nodepath);
+}
+
+void
+sp_nodepath_selected_nodes_scale_screen (SPNodePath * nodepath, gdouble grow, int which)
+{
+	GList * l;
+	SPPathNode * n;
+
+	for (l = nodepath->selected; l != NULL; l = l->next) {
+		n = (SPPathNode *) l->data;
+		node_scale_screen (n, grow, which);
+	}
+
+	update_object (nodepath);
+}
+
+
 /*
  * Constructors and destructors
  */
