@@ -57,6 +57,17 @@ static const SPAttrDesc star_desc[] = {
     { NULL, NULL}
 };
 
+static const SPAttrDesc ellipse_desc[] = {
+    { N_("Center X:"), "sodipodi:cx"},
+    { N_("Center Y:"), "sodipodi:cy"},
+    { N_("Radius X:"), "sodipodi:rx"},
+    { N_("Radius Y:"), "sodipodi:ry"},
+    { N_("Start Angle:"), "sodipodi:start"},
+    { N_("End Angle:"), "sodipodi:end"},
+    { N_("Open:"), "sodipodi:open"},
+    { NULL, NULL}
+};
+
 static const SPAttrDesc spiral_desc[] = {
     { N_("Center X:"), "sodipodi:cx"},
     { N_("Center Y:"), "sodipodi:cy"},
@@ -158,6 +169,8 @@ sp_object_attributes_dialog (SPObject *object, const gchar *tag)
         sp_object_attr_show_dialog (object, anchor_desc, tag);
     } else if (!strcmp (tag, "SPStar")) {
         sp_object_attr_show_dialog (object, star_desc, tag);
+    } else if (!strcmp (tag, "SPEllipse")) {
+        sp_object_attr_show_dialog (object, ellipse_desc, tag);
     } else if (!strcmp (tag, "SPSpiral")) {
         sp_object_attr_show_dialog (object, spiral_desc, tag);
     } else if (!strcmp (tag, "SPImage")) {

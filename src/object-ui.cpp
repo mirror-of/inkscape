@@ -43,6 +43,7 @@ sp_object_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 #include "sp-image.h"
 #include "sp-rect.h"
 #include "sp-star.h"
+#include "sp-ellipse.h"
 #include "sp-spiral.h"
 
 #include "document.h"
@@ -68,6 +69,7 @@ static void sp_image_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 static void sp_shape_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 static void sp_rect_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 static void sp_star_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
+static void sp_ellipse_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 static void sp_spiral_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 
 static void
@@ -84,6 +86,7 @@ sp_object_type_menu (GType type, SPObject *object, SPDesktop *desktop, GtkMenu *
 		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_SHAPE), (void*)sp_shape_menu);
 		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_RECT), (void*)sp_rect_menu);
 		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_STAR), (void*)sp_star_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_GENERICELLIPSE), (void*)sp_ellipse_menu);
 		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_SPIRAL), (void*)sp_spiral_menu);
 	}
 	handler = (void (*)(SPObject*, SPDesktop*, GtkMenu*))g_hash_table_lookup (t2m, GUINT_TO_POINTER (type));
@@ -517,6 +520,34 @@ sp_star_star_properties (GtkMenuItem *menuitem, SPAnchor *anchor)
 {
 	sp_object_attributes_dialog (SP_OBJECT (anchor), "SPStar");
 }
+
+
+/* SPEllipse */
+
+static void sp_ellipse_ellipse_properties (GtkMenuItem *menuitem, SPAnchor *anchor);
+
+static void
+sp_ellipse_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
+{
+	SPItem *item;
+	GtkWidget *w;
+
+	item = (SPItem *) object;
+
+	/* Link dialog */
+	w = gtk_menu_item_new_with_mnemonic (_("Ellipse _Properties"));
+	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
+	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_ellipse_ellipse_properties), item);
+	gtk_widget_show (w);
+	gtk_menu_append (GTK_MENU (m), w);
+}
+
+static void
+sp_ellipse_ellipse_properties (GtkMenuItem *menuitem, SPAnchor *anchor)
+{
+	sp_object_attributes_dialog (SP_OBJECT (anchor), "SPEllipse");
+}
+
 
 /* SPSpiral */
 
