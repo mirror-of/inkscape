@@ -338,10 +338,10 @@ void font_instance::InstallFace(PangoFont* iFace)
 	theFace=pango_ft2_font_get_face(pFont);
 	FT_Error ftresult=FT_Select_Charmap(theFace,ft_encoding_unicode);
 	if ( ftresult ) {
-		printf("failed to load unicode charmap\n");
+		//g_print("failed to load unicode charmap\n");
 		ftresult=FT_Select_Charmap(theFace,ft_encoding_symbol);
 		if ( ftresult ) {
-			printf("and failed to load symbol charmap\n");
+			//g_print("and failed to load symbol charmap\n");
 			if ( pFont ) g_object_unref(pFont);
 			pFont=NULL;
 			theFace=NULL;
@@ -584,11 +584,11 @@ void font_instance::RemoveRasterFont(raster_font* who)
 {
 	if ( who == NULL ) return;
 	if ( loadedStyles.find(who->style) == loadedStyles.end() ) {
-		printf("RemoveRasterFont failed \n");
+		//g_print("RemoveRasterFont failed \n");
 		// not found
 	} else {
 		loadedStyles.erase(loadedStyles.find(who->style));
-		//printf("RemoveRasterFont ");
+		//g_print("RemoveRasterFont\n");
 		Unref();
 	}
 }

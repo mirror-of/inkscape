@@ -317,6 +317,7 @@ font_instance* font_factory::FaceFromDescr(const char* descr)
         // workaround for bug #1025565.
         if (pango_font_description_get_family(temp_descr)==NULL) {
             pango_font_description_set_family(temp_descr,descr);
+            //g_warning(_("Font '%s' didn't have a default family\n"),descr);
         }
 	font_instance *res=Face(temp_descr);
 	pango_font_description_free(temp_descr);
