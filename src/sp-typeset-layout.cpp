@@ -863,17 +863,13 @@ void   sp_typeset_relayout(SPTypeset *typeset)
   // create offspring
   {
     SPRepr *parent = SP_OBJECT_REPR(SP_OBJECT(typeset));
-    char *style = sp_repr_attr (parent, "style");
-    if ( style ) {
-      style=strdup(style);
-    } else {
-      style=(char*)malloc(256*sizeof(char));
-      sprintf(style,"font-family:Sans;font-size:12;");
+    char const *style = sp_repr_attr (parent, "style");
+    if (!style) {
+	    style = "font-family:Sans;font-size:12;";
     }
     
     SPRepr* text_repr = sp_repr_new ("text");
     sp_repr_set_attr (text_repr, "style", style);
-    free(style);
     sp_repr_append_child (parent, text_repr);
     sp_repr_unref (text_repr);
 
