@@ -364,7 +364,7 @@ Script::prefs_effect (Inkscape::Extension::Effect * module, SPView * view)
     \param   filename File to open.
 
     First things first, this function needs a temporary file name.  To
-    create on of those the function g_mkstemp is used, with a filename with
+    create on of those the function g_file_open_tmp is used with
     the header of ink_ext_.
 
     The extension is then executed using the 'execute' function
@@ -379,13 +379,12 @@ Script::prefs_effect (Inkscape::Extension::Effect * module, SPView * view)
 SPDocument *
 Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 {
-    char tempfilename_out_x[] = "/tmp/ink_ext_XXXXXX";
     gchar * tempfilename_out;
     SPDocument * mydoc;
+    gint tempfd;
 
-    tempfilename_out = (gchar *)tempfilename_out_x;
-
-    if (g_mkstemp((char *)tempfilename_out) == -1) {
+    // FIXME: process the GError instead of passing NULL
+    if ((tempfd=g_file_open_tmp("ink_ext_XXXXXX",&tempfilename_out,NULL)) == -1) {
         /* Error, couldn't create temporary filename */
         if (errno == EINVAL) {
             /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -407,8 +406,7 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
     gchar* local_filename = g_filename_from_utf8 ( filename,
                                  -1,  &bytesRead,  &bytesWritten, &error);
 
-    execute(command, local_filename, (gchar *)tempfilename_out);
-
+    execute(command, local_filename, tempfilename_out);
     g_free(local_filename);
 
     if (helper_extension == NULL) {
@@ -419,7 +417,11 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 
     sp_document_set_uri(mydoc, (const gchar *)filename);
 
-    unlink((char *)tempfilename_out);
+    // make sure we don't leak file descriptors from g_file_open_tmp
+    close(tempfd);
+    // FIXME: convert to utf8 (from "filename encoding") and unlink_utf8name
+    unlink(tempfilename_out);
+    g_free(tempfilename_out);
 
     return mydoc;
 }
@@ -439,8 +441,8 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
     do that eh?
 
     First things first, the document is saved to a temporary file that
-    is an SVG file.  To get the temporary filename g_mkstemp is used with
-    sp_ext_ as a prefix.  Don't worry, this file gets deleted at the
+    is an SVG file.  To get the temporary filename g_file_open_tmp is used with
+    ink_ext_ as a prefix.  Don't worry, this file gets deleted at the
     end of the function.
 
     After we have the SVG file, then extention_execute is called with
@@ -451,12 +453,11 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 void
 Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gchar * filename)
 {
-    gchar tempfilename_in_x[] = "/tmp/ink_ext_XXXXXX";
     gchar * tempfilename_in;
+    gint tempfd;
 
-    tempfilename_in = tempfilename_in_x;
-
-    if (g_mkstemp(tempfilename_in) == -1) {
+    // FIXME: process the GError instead of passing NULL
+    if ((tempfd=g_file_open_tmp("ink_ext_XXXXXX",&tempfilename_in,NULL)) == -1) {
         /* Error, couldn't create temporary filename */
         if (errno == EINVAL) {
             /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -484,11 +485,15 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
     gchar* local_filename = g_filename_from_utf8 ( filename,
                                  -1,  &bytesRead,  &bytesWritten, &error);
 
-    execute(command, (gchar *)tempfilename_in, local_filename);
+    execute(command, tempfilename_in, local_filename);
 
     g_free(local_filename);
 
+    // make sure we don't leak file descriptors from g_file_open_tmp
+    close(tempfd);
+    // FIXME: convert to utf8 (from "filename encoding") and unlink_utf8name
     unlink(tempfilename_in);
+    g_free(tempfilename_in);
 
     return;
 }
@@ -501,7 +506,7 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 
     This function is a little bit trickier than the previous two.  It
     needs two temporary files to get it's work done.  Both of these
-    files have random names created for them using the g_mkstemp function
+    files have random names created for them using the g_file_open_temp function
     with the sp_ext_ prefix in the temporary directory.  Like the other
     functions, the temporary files are deleted at the end.
 
@@ -524,15 +529,13 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 void
 Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
 {
-    char tempfilename_in_x[] = "/tmp/ink_ext_XXXXXX";
     gchar * tempfilename_in;
-    char tempfilename_out_x[] = "/tmp/ink_ext_XXXXXX";
     gchar * tempfilename_out;
     SPDocument * mydoc;
+    gint tempfd_in, tempfd_out;
 
-    tempfilename_in = (char *)tempfilename_in_x;
-
-    if (g_mkstemp(tempfilename_in) == -1) {
+    // FIXME: process the GError instead of passing NULL
+    if ((tempfd_in=g_file_open_tmp("ink_ext_XXXXXX",&tempfilename_in,NULL)) == -1) {
         /* Error, couldn't create temporary filename */
         if (errno == EINVAL) {
             /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -548,9 +551,8 @@ Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
         }
     }
 
-    tempfilename_out = (char *)tempfilename_out_x;
-
-    if (g_mkstemp(tempfilename_out) == -1) {
+    // FIXME: process the GError instead of passing NULL
+    if ((tempfd_out=g_file_open_tmp("ink_ext_XXXXXX",&tempfilename_out,NULL)) == -1) {
         /* Error, couldn't create temporary filename */
         if (errno == EINVAL) {
             /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -591,8 +593,14 @@ Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
 
     mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
 
+    // make sure we don't leak file descriptors from g_file_open_tmp
+    close(tempfd_in);
+    close(tempfd_out);
+    // FIXME: convert to utf8 (from "filename encoding") and unlink_utf8name
     unlink(tempfilename_in);
+    g_free(tempfilename_in);
     unlink(tempfilename_out);
+    g_free(tempfilename_out);
 
     /* Do something with mydoc.... */
     /* TODO: This creates a new window, which really isn't

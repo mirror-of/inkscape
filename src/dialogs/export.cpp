@@ -859,7 +859,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 
                         if (directory == NULL) {
                             // std::cout << "Home Directory" << std::endl;
-                            directory = g_strdup(g_get_home_dir());
+                            directory = homedir_path(NULL);
                         }
 
                         gchar * id_ext = g_strconcat(id, ".png", NULL);
@@ -1136,7 +1136,7 @@ sp_export_browse_clicked (GtkButton *button, gpointer userdata)
     filename = gtk_entry_get_text (GTK_ENTRY (fe));
 
     if(strlen(filename) == 0) {
-        filename = g_build_filename (g_get_home_dir(), G_DIR_SEPARATOR_S, NULL);
+        filename = homedir_path(NULL);
     }
 
     gtk_file_selection_set_filename (GTK_FILE_SELECTION (fs), filename);
@@ -1172,8 +1172,9 @@ sp_export_browse_store (GtkButton *button, gpointer userdata)
     fe = (GtkWidget *)g_object_get_data (G_OBJECT (dlg), "filename");
 
     file = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
-
-    gtk_entry_set_text (GTK_ENTRY (fe), file);
+    gchar * utf8file = g_filename_to_utf8( file, -1, NULL, NULL, NULL );
+    gtk_entry_set_text (GTK_ENTRY (fe), utf8file);
+    g_free(utf8file);
 
     g_object_set_data (G_OBJECT (dlg), "filename", fe);
 

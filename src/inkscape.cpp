@@ -441,7 +441,7 @@ inkscape_segv_handler (int signum)
             if (!docname || !*docname) docname = "emergency";
             // try saving to the profile location
             g_snprintf (c, 1024, "%.256s.%s.%d", docname, sptstr, count);
-            gchar * location = profile_path(c);
+            gchar * location = homedir_path(c);
             Inkscape::IO::dump_fopen_call(location, "E");
             file = Inkscape::IO::fopen_utf8name(location, "w");
             g_free(location);
@@ -1238,6 +1238,36 @@ inkscape_exit (Inkscape::Application *inkscape)
     gtk_main_quit ();
 }
 
+gchar *
+homedir_path(const char *filename)
+{
+    static const gchar *homedir = NULL;
+    if (!homedir) {
+        homedir = g_get_home_dir();
+        gchar* utf8Path = g_filename_to_utf8( homedir, -1, NULL, NULL, NULL );
+        if ( utf8Path )
+        {
+                homedir = utf8Path;
+                if (!g_utf8_validate(homedir, -1, NULL)) {
+                    g_warning( "g_get_home_dir() post A IS NOT UTF-8" );
+                }
+        }
+    }
+    if (!homedir) {
+        gchar * path = g_path_get_dirname(INKSCAPE->argv0);
+        gchar* utf8Path = g_filename_to_utf8( path, -1, NULL, NULL, NULL );
+        g_free(path);
+        if ( utf8Path )
+        {
+            homedir = utf8Path;
+            if (!g_utf8_validate(homedir, -1, NULL)) {
+                g_warning( "g_get_home_dir() post B IS NOT UTF-8" );
+            }
+        }
+    }
+    return g_build_filename(homedir, filename, NULL);
+}
+
 
 /**
  * Get, or guess, or decide the location where the preferences.xml
@@ -1246,13 +1276,13 @@ inkscape_exit (Inkscape::Application *inkscape)
 gchar *
 profile_path(const char *filename)
 {
-    static const gchar *homedir = NULL;
-    if (!homedir) {
+    static const gchar *prefdir = NULL;
+    if (!prefdir) {
 #ifdef HAS_SHGetSpecialFolderPath
         // prefer c:\Documents and Settings\UserName\Application Data\ to
         // c:\Documents and Settings\userName\; this
         // closes bug #933461
-        if (!homedir) {
+        if (!prefdir) {
             gchar * utf8Path = NULL;
             if ( PrintWin32::is_os_wide() )
             {
@@ -1273,41 +1303,15 @@ profile_path(const char *filename)
             }
             if ( utf8Path )
             {
-                homedir = utf8Path;
+                prefdir = utf8Path;
             }
         }
 #endif
-        if (!homedir) {
-            homedir = g_get_home_dir();
-            if (!g_utf8_validate(homedir, -1, NULL)) {
-                g_warning( "g_get_home_dir() IS NOT UTF-8" );
-            }
-            gchar* utf8Path = g_filename_to_utf8( homedir, -1, NULL, NULL, NULL );
-            if ( utf8Path )
-            {
-                homedir = utf8Path;
-                if (!g_utf8_validate(homedir, -1, NULL)) {
-                    g_warning( "g_get_home_dir() post A IS NOT UTF-8" );
-                }
-            }
-        }
-        if (!homedir) {
-            gchar * path = g_path_get_dirname(INKSCAPE->argv0);
-            if (!g_utf8_validate(path, -1, NULL)) {
-                g_warning( "g_path_get_dirname() IS NOT UTF-8" );
-            }
-            gchar* utf8Path = g_filename_to_utf8( path, -1, NULL, NULL, NULL );
-            g_free(path);
-            if ( utf8Path )
-            {
-                homedir = utf8Path;
-                if (!g_utf8_validate(homedir, -1, NULL)) {
-                    g_warning( "g_get_home_dir() post B IS NOT UTF-8" );
-                }
-            }
+        if (!prefdir) {
+            prefdir = homedir_path(NULL);
         }
     }
-    return g_build_filename(homedir, INKSCAPE_PROFILE_DIR, filename, NULL);
+    return g_build_filename(prefdir, INKSCAPE_PROFILE_DIR, filename, NULL);
 }
 
 

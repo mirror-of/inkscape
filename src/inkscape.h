@@ -35,6 +35,7 @@ SPDocument * inkscape_active_document (void);
 #define SP_ACTIVE_DESKTOP inkscape_active_desktop ()
 SPDesktop * inkscape_active_desktop (void);
 
+gchar *homedir_path(const char *filename);
 gchar *profile_path(const char *filename);
 
 void inkscape_switch_desktops_next ();

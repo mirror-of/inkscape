@@ -1,3 +1,11 @@
+2005-02-08  Kees Cook  <kees@outflux.net>
+
+	* src/extension/implementation/script.cpp: proper /tmp handling.
+	  Closes bug #1074996.
+	* src/inkscape.cpp, src/inkscape.h, src/dialogs/export.cpp: correction
+	  for export dialog paths.  Closes bug #1114714.
+	* inkscape.nsi, Makefile.mingw.common: version bumps
+
 2005-02-08  Ted Gould  <ted@gould.cx>
 
 	* Released 0.41
