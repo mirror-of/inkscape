@@ -201,13 +201,13 @@ sp_repr_attach (SPRepr *parent, SPRepr *child)
 SPRepr *
 sp_repr_duplicate (const SPRepr *repr)
 {
-	SPRepr *new;
+	SPRepr *new_repr;
 
-	new = sp_repr_new_from_code (repr->type, repr->name);
+	new_repr = sp_repr_new_from_code (repr->type, repr->name);
 
-	repr->type->copy (new, repr);
+	repr->type->copy (new_repr, repr);
 
-	return new;
+	return new_repr;
 }
 
 void
@@ -373,7 +373,7 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value)
 	SPReprAttr *prev, *attr;
 	SPReprListener *rl;
 	unsigned int allowed;
-	char *oldval;
+	gchar *oldval;
 	unsigned int q;
 
 	g_return_val_if_fail (repr != NULL, FALSE);
@@ -880,29 +880,29 @@ sp_repr_merge (SPRepr *repr, const SPRepr *src, const gchar *key)
 static SPReprAttr *
 sp_attribute_duplicate (const SPReprAttr *attr)
 {
-	SPReprAttr *new;
+	SPReprAttr *new_attr;
 
-	new = sp_attribute_alloc ();
+	new_attr = sp_attribute_alloc ();
 
-	new->next = NULL;
-	new->key = attr->key;
-	new->value = g_strdup (attr->value);
+	new_attr->next = NULL;
+	new_attr->key = attr->key;
+	new_attr->value = g_strdup (attr->value);
 
-	return new;
+	return new_attr;
 }
 
 static SPReprAttr *
 sp_attribute_new_from_code (int key, const gchar *value)
 {
-	SPReprAttr *new;
+	SPReprAttr *new_attr;
 
-	new = sp_attribute_alloc ();
+	new_attr = sp_attribute_alloc ();
 
-	new->next = NULL;
-	new->key = key;
-	new->value = g_strdup (value);
+	new_attr->next = NULL;
+	new_attr->key = key;
+	new_attr->value = g_strdup (value);
 
-	return new;
+	return new_attr;
 }
 
 #define SP_REPR_CHUNK_SIZE 32

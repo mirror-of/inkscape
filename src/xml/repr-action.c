@@ -13,6 +13,7 @@
  */
 
 #include <glib.h>
+#include <string.h>
 
 #include "repr.h"
 #include "repr-private.h"
@@ -313,8 +314,8 @@ sp_repr_log_remove (SPReprAction *log, SPRepr *repr,
 
 SPReprAction *
 sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr,
-                     int key, unsigned char *oldval,
-                     const unsigned char *newval)
+                     int key, gchar *oldval,
+                     const gchar *newval)
 {
 	SPReprAction *action;
 
@@ -330,7 +331,7 @@ sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr,
 
 SPReprAction *
 sp_repr_log_chgcontent (SPReprAction *log, SPRepr *repr,
-                        unsigned char *oldval, const unsigned char *newval)
+                        gchar *oldval, const gchar *newval)
 {
 	SPReprAction *action;
 

@@ -33,7 +33,7 @@ struct _SPReprClass {
 struct _SPReprAttr {
 	SPReprAttr *next;
 	int key;
-	unsigned char *value;
+	gchar *value;
 };
 
 struct _SPReprListener {
@@ -49,10 +49,10 @@ struct _SPReprEventVector {
 	void (* child_added) (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
 	unsigned int (* remove_child) (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
 	void (* child_removed) (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
-	unsigned int (* change_attr) (SPRepr *repr, const unsigned char *key, const unsigned char *oldval, const unsigned char *newval, void * data);
-	void (* attr_changed) (SPRepr *repr, const unsigned char *key, const unsigned char *oldval, const unsigned char *newval, void * data);
-	unsigned int (* change_content) (SPRepr *repr, const unsigned char *oldcontent, const unsigned char *newcontent, void * data);
-	void (* content_changed) (SPRepr *repr, const unsigned char *oldcontent, const unsigned char *newcontent, void * data);
+	unsigned int (* change_attr) (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, void * data);
+	void (* attr_changed) (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, void * data);
+	unsigned int (* change_content) (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data);
+	void (* content_changed) (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data);
 	unsigned int (* change_order) (SPRepr *repr, SPRepr *child, SPRepr *oldref, SPRepr *newref, void * data);
 	void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr *oldref, SPRepr *newref, void * data);
 };
@@ -70,7 +70,7 @@ struct _SPRepr {
 
 	SPReprAttr *attributes;
 	SPReprListener *listeners;
-	unsigned char *content;
+	gchar *content;
 };
 
 struct _SPReprDoc {

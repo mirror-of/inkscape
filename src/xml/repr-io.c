@@ -24,16 +24,16 @@
 
 #include "repr-private.h"
 
-static const unsigned char *sp_svg_doctype_str =
+static const gchar *sp_svg_doctype_str =
 "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\"\n"
 "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n";
-static const unsigned char *sp_comment_str =
+static const gchar *sp_comment_str =
 "<!-- Created with Inkscape (\"http://www.inkscape.org/\") -->\n";
 
 static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
 static SPRepr * sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
-static void sp_repr_set_xmlns_attr (const unsigned char *prefix, const unsigned char *uri, SPRepr *repr);
-static gint sp_repr_qualified_name (unsigned char *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
+static void sp_repr_set_xmlns_attr (const gchar *prefix, const gchar *uri, SPRepr *repr);
+static gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
 
 #ifdef HAVE_LIBWMF
 static xmlDocPtr sp_wmf_convert (const char * file_name);
@@ -140,7 +140,7 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 }
 
 void
-sp_repr_set_xmlns_attr (const unsigned char *prefix, const unsigned char *uri, SPRepr *repr)
+sp_repr_set_xmlns_attr (const gchar *prefix, const gchar *uri, SPRepr *repr)
 {
 	gchar *name;
 	name = g_strconcat ("xmlns:", prefix, NULL);
@@ -149,16 +149,16 @@ sp_repr_set_xmlns_attr (const unsigned char *prefix, const unsigned char *uri, S
 }
 
 gint
-sp_repr_qualified_name (unsigned char *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map)
+sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map)
 {
-	const gchar *prefix;
+	const xmlChar *prefix;
 	if (ns) {
 		if (!ns->href) {
 			prefix = ns->prefix;
-		} else if (default_ns && !strcmp (ns->href, default_ns)) {
+		} else if (default_ns && !strcmp ((gchar*)ns->href, default_ns)) {
 			prefix = NULL;
 		} else {
-			prefix = sp_xml_ns_uri_prefix (ns->href, ns->prefix);
+			prefix = (xmlChar*)sp_xml_ns_uri_prefix ((gchar*)ns->href, (char*)ns->prefix);
 			g_hash_table_insert (prefix_map, (gpointer)prefix, (gpointer)ns->href);
 		}
 	} else {
@@ -166,7 +166,7 @@ sp_repr_qualified_name (unsigned char *p, gint len, xmlNsPtr ns, const xmlChar *
 	}
 
 	if (prefix) {
-		return g_snprintf (p, len, "%s:%s", prefix, name);
+		return g_snprintf (p, len, "%s:%s", (gchar*)prefix, name);
 	} else {
 		return g_snprintf (p, len, "%s", name);
 	}
@@ -190,11 +190,11 @@ sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default
 		for (p = node->content; p && *p; p++) {
 			if (!isspace (*p)) {
 				xmlChar *e;
-				unsigned char *s;
+				gchar *s;
 				SPRepr *rdoc;
-				e = p + strlen (p) - 1;
+				e = p + strlen ((gchar*)p) - 1;
 				while (*e && isspace (*e)) e -= 1;
-				s = g_new (unsigned char, e - p + 2);
+				s = g_new (gchar, e - p + 2);
 				memcpy (s, p, e - p + 1);
 				s[e - p + 1] = '\0';
 				rdoc = sp_xml_document_createTextNode (doc, s);
@@ -214,12 +214,12 @@ sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default
 	for (prop = node->properties; prop != NULL; prop = prop->next) {
 		if (prop->children) {
 			sp_repr_qualified_name (c, 256, prop->ns, prop->name, default_ns, prefix_map);
-			sp_repr_set_attr (repr, c, prop->children->content);
+			sp_repr_set_attr (repr, c, (gchar*)prop->children->content);
 		}
 	}
 
 	if (node->content)
-		sp_repr_set_content (repr, node->content);
+		sp_repr_set_content (repr, (gchar*)node->content);
 
 	child = node->xmlChildrenNode;
 	for (child = node->xmlChildrenNode; child != NULL; child = child->next) {
@@ -237,7 +237,7 @@ void
 sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
 {
 	SPRepr *repr;
-	const unsigned char *str;
+	const gchar *str;
 
 	/* fixme: do this The Right Way */
 

@@ -390,18 +390,18 @@ void sp_repr_unparent (SPRepr * repr)
 
 SPRepr * sp_repr_duplicate_and_parent (SPRepr * repr)
 {
-	SPRepr * parent, * new;
+	SPRepr * parent, * new_repr;
 
 	g_assert (repr != NULL);
 
 	parent = sp_repr_parent (repr);
 	g_assert (parent != NULL);
 
-	new = sp_repr_duplicate (repr);
-	sp_repr_append_child (parent, new);
-	sp_repr_unref (new);
+	new_repr = sp_repr_duplicate (repr);
+	sp_repr_append_child (parent, new_repr);
+	sp_repr_unref (new_repr);
 
-	return new;
+	return new_repr;
 }
 
 void

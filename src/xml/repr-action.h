@@ -29,11 +29,11 @@ struct _SPReprActionDel {
 
 struct _SPReprActionChgAttr {
 	int key;
-	unsigned char *oldval, *newval;
+	gchar *oldval, *newval;
 };
 
 struct _SPReprActionChgContent {
-	unsigned char *oldval, *newval;
+	gchar *oldval, *newval;
 };
 
 struct _SPReprActionChgOrder {
@@ -72,11 +72,11 @@ SPReprAction *sp_repr_log_remove (SPReprAction *log, SPRepr *repr,
 
 /* these two reference oldval directly */
 SPReprAction *sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr, int key,
-                                   unsigned char *oldval,
-                                   const unsigned char *newval);
+                                   gchar *oldval,
+                                   const gchar *newval);
 SPReprAction *sp_repr_log_chgcontent (SPReprAction *log, SPRepr *repr,
-                                      unsigned char *oldval,
-                                      const unsigned char *newval);
+                                      gchar *oldval,
+                                      const gchar *newval);
 
 SPReprAction *sp_repr_log_chgorder (SPReprAction *log, SPRepr *repr,
                                     SPRepr *child,
