@@ -250,6 +250,18 @@ sp_select_context_abort(SPEventContext *event_context)
     }
 }
 
+bool 
+key_is_a_modifier (guint key) {
+    return (key == GDK_Alt_L ||
+                key == GDK_Alt_R ||
+                key == GDK_Control_L ||
+                key == GDK_Control_R ||
+                key == GDK_Shift_L ||
+                key == GDK_Shift_R ||
+                key == GDK_Meta_L ||  // Meta is when you press Shift+Alt (at least on my machine)
+            key == GDK_Meta_R);
+}
+
 static gint
 sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
@@ -580,20 +592,18 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
             break;
 
         case GDK_KEY_PRESS: // keybindings for select context
-            switch (get_group0_keyval (&event->key)) {
-                case GDK_Alt_L:
-                case GDK_Alt_R:
-                case GDK_Control_L:
-                case GDK_Control_R:
-                case GDK_Shift_L:
-                case GDK_Shift_R:
-                case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
-                case GDK_Meta_R:
+
+            if (!key_is_a_modifier (get_group0_keyval (&event->key))) {
+                    event_context->defaultMessageContext()->clear();
+            } else {
                     sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
                                                 _("<b>Ctrl</b>: select in groups, move hor/vert"),
                                                 _("<b>Shift</b>: toggle select, force rubberband, disable snapping"),
                                                 _("<b>Alt</b>: select under, move selected"));
                     break;
+            }
+
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_Left: // move selection left
                 case GDK_KP_Left:
                 case GDK_KP_4:
@@ -742,20 +752,9 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
             }
             break;
         case GDK_KEY_RELEASE:
-            switch (get_group0_keyval (&event->key)) {
-                case GDK_Alt_L:
-                case GDK_Alt_R:
-                case GDK_Control_L:
-                case GDK_Control_R:
-                case GDK_Shift_L:
-                case GDK_Shift_R:
-                case GDK_Meta_L:  // Meta is when you press Shift+Alt
-                case GDK_Meta_R:
-                    event_context->defaultMessageContext()->clear();
-                    break;
-                default:
-                    break;
-            }
+            if (key_is_a_modifier (get_group0_keyval (&event->key)))
+                event_context->defaultMessageContext()->clear();
+            break;
         default:
             break;
     }
