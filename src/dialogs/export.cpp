@@ -69,15 +69,6 @@ static void sp_export_value_set_pt (GtkObject *base, const gchar *key, float val
 static float sp_export_value_get (GtkObject *base, const gchar *key);
 static float sp_export_value_get_pt (GtkObject *base, const gchar *key);
 
-typedef struct {
-  GtkToggleButton *tb;
-  GtkObject *base;
-  SPSelection* selection;
-  guint changedId;
-} ActiveSelection;
-
-static ActiveSelection activeSelection={0,0,0,0};
-
 static GtkWidget *dlg = NULL;
 static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
@@ -243,10 +234,6 @@ sp_export_dialog (void)
 
 		gtk_widget_show_all (f);
 
-		//for now, make sekection toggled by default
-		//fixme: make it remember user choice between invoications
-		//sp_export_area_toggled ((GtkToggleButton *) b, (GtkObject *) dlg); 
-
 		/* Bitmap size frame */
 		f = gtk_frame_new (_("Bitmap size"));
 		gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
@@ -260,7 +247,9 @@ sp_export_dialog (void)
 					  _("Width:"), _("pixels"), 0, 1,
 					  G_CALLBACK (sp_export_bitmap_width_value_changed), dlg);
 
-		sp_export_spinbutton_new ("xdpi", 72.0, 1.0, 9600.0, 0.1, 1.0, NULL, t, 3, 0,
+		sp_export_spinbutton_new ("xdpi", 
+					  prefs_get_double_attribute ("dialogs.export.defaultxdpi", "value", 72.0), 
+					  1.0, 9600.0, 0.1, 1.0, NULL, t, 3, 0,
 					  NULL, _("dpi"), 2, 1,
 					  G_CALLBACK (sp_export_xdpi_value_changed), dlg);
 
@@ -268,7 +257,10 @@ sp_export_dialog (void)
 					  _("Height:"), _("pixels"), 0, 0,
 					  NULL, dlg);
 
-		sp_export_spinbutton_new ("ydpi", 72.0, 1.0, 9600.0, 0.1, 1.0, NULL, t, 3, 1,
+		// FIXME: there's no way to set ydpi currently, so we use the defaultxdpi value here, too
+		sp_export_spinbutton_new ("ydpi", 
+					  prefs_get_double_attribute ("dialogs.export.defaultxdpi", "value", 72.0), 
+					  1.0, 9600.0, 0.1, 1.0, NULL, t, 3, 1,
 					  NULL, _("dpi"), 2, 0,
 					  NULL, dlg);
 
@@ -311,7 +303,7 @@ sp_export_dialog (void)
 		gtk_box_pack_start (GTK_BOX (hb), fe, TRUE, TRUE, 0);
 		gtk_object_set_data (GTK_OBJECT (dlg), "filename", fe);
 		gtk_widget_show_all (f);
-		// enter in filename field is the same as clicking export:
+		// pressing enter in the filename field is the same as clicking export:
 		g_signal_connect (G_OBJECT (fe), "activate", G_CALLBACK (sp_export_export_clicked), dlg);
 
 		/* Buttons */
@@ -331,19 +323,37 @@ sp_export_dialog (void)
 
 	gtk_window_present ((GtkWindow *) dlg);
 
-	// if there's a selection, set up to export it by default
-	if (!sp_selection_is_empty (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))) {
-		GtkWidget *button = sp_search_by_value_recursive (dlg, "key", "selection");
+	// restore area setting
+	const gchar *what = NULL;
+	GtkWidget *button;
+	what = prefs_get_string_attribute ("dialogs.export.exportarea", "value");
+	if (what && !strcmp (what, "page")) {
+		button = sp_search_by_value_recursive (dlg, "key", "page");
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+	} else if (what && !strcmp (what, "drawing")) {
+		button = sp_search_by_value_recursive (dlg, "key", "drawing");
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+	} else { // either selection or no preference; set up to export selection by default
+		button = sp_search_by_value_recursive (dlg, "key", "selection");
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 	}
 }
 
+/**
+\brief  If selection changed or a different document activated, we must recalculate any chosen areas
+*/
 static void
 sp_export_selection_changed (Inkscape::Application *inkscape, SPDesktop *desktop, GtkObject *base)
 {
-	GtkWidget *button = sp_search_by_value_recursive ((GtkWidget *) base, "key", "selection");
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-			sp_export_area_toggled (GTK_TOGGLE_BUTTON (button), base);
+	GtkWidget *button_sel = sp_search_by_value_recursive ((GtkWidget *) base, "key", "selection");
+	GtkWidget *button_dra = sp_search_by_value_recursive ((GtkWidget *) base, "key", "drawing");
+	GtkWidget *button_pag = sp_search_by_value_recursive ((GtkWidget *) base, "key", "page");
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_sel)))
+			sp_export_area_toggled (GTK_TOGGLE_BUTTON (button_sel), base);
+	else 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_dra)))
+			sp_export_area_toggled (GTK_TOGGLE_BUTTON (button_dra), base);
+	else 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_pag)))
+			sp_export_area_toggled (GTK_TOGGLE_BUTTON (button_pag), base);
 }
 
 static void
@@ -371,10 +381,36 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 				bbox.y0 = 0.0;
 				bbox.x1 = sp_document_width (doc);
 				bbox.y1 = sp_document_height (doc);
+
+				// remember area setting
+				prefs_set_string_attribute ("dialogs.export.exportarea", "value", "page");
+
 			} else if (!strcmp (key, "drawing")) {
+				// FIXME: this returns wrong values if the document has a viewBox
 				sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
+				if (bbox.x0 > bbox.x1 && bbox.y0 > bbox.y1) { // there's no drawing, set area to page
+					bbox.x0 = 0.0;
+					bbox.y0 = 0.0;
+					bbox.x1 = sp_document_width (doc);
+					bbox.y1 = sp_document_height (doc);
+				}
+
+				// remember area setting
+				prefs_set_string_attribute ("dialogs.export.exportarea", "value", "drawing");
+
 			} else {
-				sp_selection_bbox (SP_DT_SELECTION (SP_ACTIVE_DESKTOP), &bbox);
+				if (!sp_selection_is_empty (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))) {
+					sp_selection_bbox (SP_DT_SELECTION (SP_ACTIVE_DESKTOP), &bbox);
+				} else { // there's no selection, set area to page
+					bbox.x0 = 0.0;
+					bbox.y0 = 0.0;
+					bbox.x1 = sp_document_width (doc);
+					bbox.y1 = sp_document_height (doc);
+				}
+
+				// remember area setting
+				prefs_set_string_attribute ("dialogs.export.exportarea", "value", "selection");
+
 			}
 			sp_export_set_area (base, bbox.x0, bbox.y0, bbox.x1, bbox.y1);
 		}
@@ -385,7 +421,6 @@ static gint
 sp_export_progress_delete (GtkWidget *widget, GdkEvent *event, GObject *base)
 {
       g_object_set_data (base, "cancel", (gpointer) 1);
-      //g_print ("_progress_delete\n");
       return TRUE;
 }
 
@@ -393,7 +428,6 @@ static void
 sp_export_progress_cancel (GtkWidget *widget, GObject *base)
 {
       g_object_set_data (base, "cancel", (gpointer) 1);
-      //g_print ("_progress_cancel\n");
 }
 
 static unsigned int
@@ -406,13 +440,10 @@ sp_export_progress_callback (float value, void *data)
       gtk_progress_bar_set_fraction ((GtkProgressBar *) prg, value);
       evtcount = 0;
       while ((evtcount < 16) && gdk_events_pending ()) {
-              //g_print ("Iteration %d\n", evtcount);
               gtk_main_iteration_do (FALSE);
               evtcount += 1;
       }
       gtk_main_iteration_do (FALSE);
-
-      //g_print ("Done.\n");
 
       return TRUE;
 }
@@ -708,11 +739,17 @@ sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base)
 	x1 = sp_export_value_get_pt (base, "x1");
 	xdpi = sp_export_value_get (base, "xdpi");
 
+	// remember xdpi setting
+	prefs_set_double_attribute ("dialogs.export.defaultxdpi", "value", xdpi);
+
 	bmwidth = (x1 - x0) * xdpi / 72.0;
 
 	if (bmwidth < SP_EXPORT_MIN_SIZE) {
 		bmwidth = SP_EXPORT_MIN_SIZE;
-		xdpi = bmwidth * 72.0 / (x1 - x0);
+		if (x1 != x0) 
+			xdpi = bmwidth * 72.0 / (x1 - x0);
+		else 
+			xdpi = 72.0;
 		sp_export_value_set (base, "xdpi", xdpi);
 	}
 
