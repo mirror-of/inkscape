@@ -1434,8 +1434,7 @@ gboolean node_key (GdkEvent * event)
 	if ((event->type == GDK_KEY_PRESS) && !(event->key.state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
 		ret = FALSE;
 		switch (event->key.keyval) {
-		case GDK_Delete:
-		case GDK_KP_Delete:
+		case GDK_BackSpace:
 			np = active_node->subpath->nodepath;
 			sp_nodepath_node_destroy (active_node);
 			update_repr (np);
