@@ -53,6 +53,8 @@ void inkscape_dialogs_hide ();
 void inkscape_dialogs_unhide ();
 void inkscape_dialogs_toggle ();
 
+void inkscape_external_change ();
+
 /*
  * fixme: This has to be rethought
  */

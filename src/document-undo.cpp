@@ -30,6 +30,7 @@
 #include "document-private.h"
 #include "document.h"
 #include "selection.h"
+#include "inkscape.h"
 
 /*
  * Undo & redo
@@ -175,6 +176,9 @@ sp_document_undo (SPDocument *doc)
 
 	doc->priv->sensitive = TRUE;
 
+	if (ret) 
+		inkscape_external_change();
+
 	return ret;
 }
 
@@ -213,6 +217,9 @@ sp_document_redo (SPDocument *doc)
 	sp_repr_begin_transaction (doc->rdoc);
 
 	doc->priv->sensitive = TRUE;
+
+	if (ret) 
+		inkscape_external_change();
 
 	return ret;
 }

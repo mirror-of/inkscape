@@ -77,15 +77,17 @@ static Inkscape::Application *inkscape = NULL;
 #include "preferences-skeleton.h"
 
 enum {
-    MODIFY_SELECTION,
-    CHANGE_SELECTION,
-    SET_SELECTION,
-    SET_EVENTCONTEXT,
-    ACTIVATE_DESKTOP,
-    DEACTIVATE_DESKTOP,
-    SHUTDOWN_SIGNAL,
-    DIALOGS_HIDE,
-    DIALOGS_UNHIDE,
+    MODIFY_SELECTION, // global: one of selections modified
+    CHANGE_SELECTION, // global: one of selections changed
+    SET_SELECTION, // global: one of selections set
+    SET_EVENTCONTEXT, // tool switched
+    ACTIVATE_DESKTOP, // some desktop got focus
+    DEACTIVATE_DESKTOP, // some desktop lost focus
+    SHUTDOWN_SIGNAL, // inkscape is quitting
+    DIALOGS_HIDE, // user pressed F12
+    DIALOGS_UNHIDE, // user pressed F12
+    EXTERNAL_CHANGE, // a document was changed by some external means (undo or XML editor); this
+                     // may not be reflected by a selection change and thus needs a separate signal
     LAST_SIGNAL
 };
 
@@ -144,6 +146,7 @@ struct Inkscape::ApplicationClass {
     void (* shut_down) (Inkscape::Application *inkscape);
     void (* dialogs_hide) (Inkscape::Application *inkscape);
     void (* dialogs_unhide) (Inkscape::Application *inkscape);
+    void (* external_change) (Inkscape::Application *inkscape);
 };
 
 static GObjectClass * parent_class;
@@ -263,6 +266,13 @@ inkscape_class_init (Inkscape::ApplicationClass * klass)
                                G_TYPE_FROM_CLASS (klass),
                                G_SIGNAL_RUN_FIRST,
                                G_STRUCT_OFFSET (Inkscape::ApplicationClass, dialogs_unhide),
+                               NULL, NULL,
+                               g_cclosure_marshal_VOID__VOID,
+                               G_TYPE_NONE, 0);
+    inkscape_signals[EXTERNAL_CHANGE] =   g_signal_new ("external_change",
+                               G_TYPE_FROM_CLASS (klass),
+                               G_SIGNAL_RUN_FIRST,
+                               G_STRUCT_OFFSET (Inkscape::ApplicationClass, external_change),
                                NULL, NULL,
                                g_cclosure_marshal_VOID__VOID,
                                G_TYPE_NONE, 0);
@@ -1002,6 +1012,13 @@ inkscape_dialogs_toggle ()
     }
 }
 
+void
+inkscape_external_change ()
+{
+    g_return_if_fail (inkscape != NULL);
+
+    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[EXTERNAL_CHANGE], 0);
+}
 
 /**
  * fixme: These need probably signals too
