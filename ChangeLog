@@ -1,3 +1,8 @@
+2004-01-11  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/repr-io.cpp: promote non-namespaced SVG documents into SVG
+	  namespace
+
 2004-01-08  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile_insert, src/gc-anchored.cpp, src/gc-anchored.h:

@@ -35,10 +35,6 @@
 #include <glibmm/quark.h>
 #include "util/shared-c-string.h"
 
-static const gchar *sp_svg_doctype_str =
-"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\"\n"
-"\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n";
-
 static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
 static SPRepr *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
 static gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
@@ -119,6 +115,57 @@ sp_repr_read_mem (const gchar * buffer, gint length, const gchar *default_ns)
     return rdoc;
 }
 
+namespace Inkscape {
+
+struct compare_quark_ids {
+    bool operator()(Glib::QueryQuark const &a, Glib::QueryQuark const &b) {
+        return a.id() < b.id();
+    }
+};
+
+}
+
+namespace {
+
+typedef std::map<Glib::QueryQuark, Glib::QueryQuark, Inkscape::compare_quark_ids> PrefixMap;
+
+Glib::QueryQuark qname_prefix(Glib::QueryQuark qname) {
+    static PrefixMap prefix_map;
+    PrefixMap::iterator iter = prefix_map.find(qname);
+    if ( iter != prefix_map.end() ) {
+        return (*iter).second;
+    } else {
+        gchar const *name_string=g_quark_to_string(qname);
+        gchar const *prefix_end=strchr(name_string, ':');
+        if (prefix_end) {
+            Glib::Quark prefix=Glib::ustring(name_string, prefix_end);
+            prefix_map.insert(PrefixMap::value_type(qname, prefix));
+            return prefix;
+        } else {
+            return GQuark(0);
+        }
+    }
+}
+
+}
+
+namespace {
+
+void promote_to_svg_namespace(SPRepr *repr) {
+    if ( repr->type() == SP_XML_ELEMENT_NODE ) {
+        if (!qname_prefix(repr->name).id()) {
+            gchar *svg_name = g_strconcat("svg:", g_quark_to_string(repr->name), NULL);
+            repr->name = g_quark_from_string(svg_name);
+            g_free(svg_name);
+        }
+        for ( SPRepr *child = sp_repr_children(repr) ; child ; child = sp_repr_next(child) ) {
+            promote_to_svg_namespace(child);
+        }
+    }
+}
+
+}
+
 /**
  * Reads in a XML file to create a SPReprDoc
  */
@@ -157,11 +204,12 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     if (root != NULL) {
         rdoc = sp_repr_document_new_list(reprs);
 
-        /* TODO: if the root is just "svg", go through and "promote" all the
-         *       names without prefixes into the SVG namespace */
-
-        if (!strcmp (sp_repr_name (root), "svg:svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
-            sp_repr_set_attr ((SPRepr *) rdoc, "doctype", sp_svg_doctype_str);
+        /* promote elements of SVG documents that don't use namespaces
+         * into the SVG namespace */
+        if ( default_ns && !strcmp(default_ns, SP_SVG_NS_URI)
+             && !strcmp(sp_repr_name(root), "svg") )
+        {
+            promote_to_svg_namespace(root);
         }
     }
 
@@ -333,39 +381,10 @@ repr_quote_write (FILE * file, const gchar * val)
     }
 }
 
-namespace Inkscape {
-
-struct compare_quark_ids {
-    bool operator()(Glib::QueryQuark const &a, Glib::QueryQuark const &b) {
-        return a.id() < b.id();
-    }
-};
-
-}
-
 namespace {
 
-typedef std::map<Glib::QueryQuark, Inkscape::Util::SharedCString, Inkscape::compare_quark_ids> NSMap;
-typedef std::map<Glib::QueryQuark, Glib::QueryQuark, Inkscape::compare_quark_ids> PrefixMap;
 typedef std::map<Glib::QueryQuark, gchar const *, Inkscape::compare_quark_ids> LocalNameMap;
-
-Glib::QueryQuark qname_prefix(Glib::QueryQuark qname) {
-    static PrefixMap prefix_map;
-    PrefixMap::iterator iter = prefix_map.find(qname);
-    if ( iter != prefix_map.end() ) {
-        return (*iter).second;
-    } else {
-        gchar const *name_string=g_quark_to_string(qname);
-        gchar const *prefix_end=strchr(name_string, ':');
-        if (prefix_end) {
-            Glib::Quark prefix=Glib::ustring(name_string, prefix_end);
-            prefix_map.insert(PrefixMap::value_type(qname, prefix));
-            return prefix;
-        } else {
-            return GQuark(0);
-        }
-    }
-}
+typedef std::map<Glib::QueryQuark, Inkscape::Util::SharedCString, Inkscape::compare_quark_ids> NSMap;
 
 gchar const *qname_local_name(Glib::QueryQuark qname) {
     static LocalNameMap local_name_map;
