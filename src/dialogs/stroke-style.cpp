@@ -651,7 +651,6 @@ sp_stroke_style_line_widget_new (void)
 	gtk_signal_connect (GTK_OBJECT (ds), "changed", GTK_SIGNAL_FUNC (sp_stroke_style_line_dash_changed), spw);
 	i++;
 
-#ifdef MARKERS
 	/* Start Marker */
 	spw_label(t, _("Start Markers:"), 0, i);
 	hb = spw_hbox(t, 3, 1, i);
@@ -659,13 +658,13 @@ sp_stroke_style_line_widget_new (void)
 	
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_NONE,
-			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
+			       INKSCAPE_GLADEDIR "/marker_none_start.xpm",
 			       hb, spw, "start_marker", "none");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_FILLED_ARROW,
-			       INKSCAPE_GLADEDIR "/cap_round.xpm",
+			       INKSCAPE_GLADEDIR "/marker_triangle_start.xpm",
 			       hb, spw, "start_marker", "mTriangle");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_HOLLOW_ARROW,
-			       INKSCAPE_GLADEDIR "/cap_square.xpm",
+			       INKSCAPE_GLADEDIR "/marker_arrow_start.xpm",
 			       hb, spw, "start_marker", "mArrow");
 	i++;
 
@@ -676,13 +675,13 @@ sp_stroke_style_line_widget_new (void)
 	
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_NONE,
-			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
+			       INKSCAPE_GLADEDIR "/marker_none_end.xpm",
 			       hb, spw, "mid_marker", "none");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_FILLED_ARROW,
-			       INKSCAPE_GLADEDIR "/cap_round.xpm",
+			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
 			       hb, spw, "mid_marker", "mTriangle");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_HOLLOW_ARROW,
-			       INKSCAPE_GLADEDIR "/cap_square.xpm",
+			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
 			       hb, spw, "mid_marker", "mArrow");
 	i++;
 
@@ -693,16 +692,16 @@ sp_stroke_style_line_widget_new (void)
 	
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_NONE,
-			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
+			       INKSCAPE_GLADEDIR "/marker_none_end.xpm",
 			       hb, spw, "end_marker", "none");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_FILLED_ARROW,
-			       INKSCAPE_GLADEDIR "/cap_round.xpm",
+			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
 			       hb, spw, "end_marker", "mTriangle");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_HOLLOW_ARROW,
-			       INKSCAPE_GLADEDIR "/cap_square.xpm",
+			       INKSCAPE_GLADEDIR "/marker_arrow_end.xpm",
 			       hb, spw, "end_marker", "mArrow");
 	i++;
-#endif
+
 
 	/* General (I think) style dialog signals */
 	gtk_signal_connect (GTK_OBJECT (spw), "construct", GTK_SIGNAL_FUNC (sp_stroke_style_line_construct), NULL);
