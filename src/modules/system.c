@@ -60,6 +60,8 @@ sp_module_system_open (const gchar * key, const gchar * filename)
 	gpointer parray[2];
 	SPModuleInput * imod = NULL;
 	GtkDialog * prefs = NULL;
+	SPDocument * doc;
+	SPRepr * repr;
 
 	if (!strcmp(key, SP_MODULE_KEY_AUTODETECT)) {
 		parray[0] = (gpointer)filename;
@@ -80,7 +82,19 @@ sp_module_system_open (const gchar * key, const gchar * filename)
 		}
 	}
 
-	return imod->open(SP_MODULE(imod), filename);
+	doc = imod->open(SP_MODULE(imod), filename);
+
+	/* This kinda overkill as most of these are already set, but I want
+	   to make sure for this release -- TJG */
+	repr = sp_document_repr_root (doc);
+	sp_document_set_undo_sensitive (doc, FALSE);
+	sp_repr_set_attr (repr, "sodipodi:modified", NULL);
+	sp_document_set_undo_sensitive (doc, TRUE);
+
+	sp_repr_set_attr(repr, "sodipodi:docname", filename);
+	sp_document_set_uri (doc, filename);
+
+	return doc;
 }
 
 /**
