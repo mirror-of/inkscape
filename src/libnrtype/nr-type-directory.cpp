@@ -365,7 +365,6 @@ nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 
 static gchar privatename[] = "/.inkscape/private-fonts";
 
-/*#if 0*/
 #if defined (_WIN32) || defined(__WIN32__)
 static unsigned int
 nr_type_next_token (const gchar *img, unsigned int len, unsigned int p, int *tokenp)
@@ -408,7 +407,6 @@ nr_type_read_private_list (void)
 #define O_BINARY 0
 #endif
 
-/*#if 1*/
 #if !defined (_WIN32) && !defined(__WIN32__)
 	if (!stat (filename, &st) && S_ISREG (st.st_mode) && (st.st_size > 8)) {
 		gchar *cdata;

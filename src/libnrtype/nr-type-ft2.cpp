@@ -165,9 +165,7 @@ nr_typeface_ft2_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 	ft_result = FT_Select_Charmap (ft_face, ft_encoding_unicode);
 	if (ft_result != FT_Err_Ok) {
 		tff->unimap = 0;
-#if 0
-		fprintf (stderr, "Typeface %s does not have unicode charmap", def->name);
-#endif
+		/* Typeface %s does not have unicode charmap", def->name); */
 	} else {
 		int cp, nglyphs;
 		tff->unimap = 1;
@@ -478,11 +476,6 @@ nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph)
 			slot->area.y1 = -tff->ft_face->glyph->metrics.vertBearingY * tff->ft2ps;
 			slot->area.y0 = slot->area.y1 - tff->ft_face->glyph->metrics.height * tff->ft2ps;
 			slot->advance = NR::Point(0.0, -tff->ft_face->glyph->metrics.vertAdvance * tff->ft2ps);
-#if 0
-			printf ("VM %d - %f %f %f %f - %f %f\n", glyph,
-				slot->area.x0, slot->area.y0, slot->area.x1, slot->area.y1,
-				slot->advance[NR::X], slot->advance[NR::Y]);
-#endif
 		} else {
 			FT_Load_Glyph (tff->ft_face, glyph, FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP);
 			slot->area.x0 = -0.5 * tff->ft_face->glyph->metrics.width * tff->ft2ps;
@@ -511,21 +504,14 @@ nr_typeface_ft2_ensure_outline (NRTypeFaceFT2 *tff, NRTypeFaceGlyphFT2 *slot, un
 	float a[6];
 
 	FT_Load_Glyph (tff->ft_face, glyph, FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP);
-
+	
+	// FIXME: use matrix.
 	a[0] = a[3] = tff->ft2ps;
 	a[1] = a[2] = 0.0;
 
 	if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
-#if 0
-		FT_BBox bbox;
-		/* Metrics are always loaded if we have slot */
-		FT_Outline_Get_BBox (&tff->ft_face->glyph->outline, &bbox);
-		a[4] = slot->area.x0 - bbox.xMin * tff->ft2ps;
-		a[5] = slot->area.y0 - bbox.yMin * tff->ft2ps;
-#else
 		a[4] = slot->area.x0 - tff->ft_face->glyph->metrics.horiBearingX * tff->ft2ps;
 		a[5] = slot->area.y1 - tff->ft_face->glyph->metrics.horiBearingY * tff->ft2ps;
-#endif
 	} else {
 		a[4] = 0.0;
 		a[5] = 0.0;
