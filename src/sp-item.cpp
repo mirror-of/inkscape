@@ -604,10 +604,10 @@ sp_item_invoke_hide(SPItem *item, unsigned key)
 }
 
 /**
-Find out the difference between the previous transform of an item (from its repr) and the new transform
+Find out the inverse of previous transform of an item (from its repr)
 */
 NR::Matrix
-sp_item_transform_delta(SPItem *item, NRMatrix *transform)
+sp_item_transform_old_inverse (SPItem *item)
 {
     NR::Matrix t_old(NR::identity());
     gchar const *t_attr = sp_repr_attr(SP_OBJECT_REPR(item), "transform");
@@ -617,8 +617,10 @@ sp_item_transform_delta(SPItem *item, NRMatrix *transform)
             t_old = t;
         }
     }
-    return t_old.inverse() * NR::Matrix(transform);
+
+    return t_old.inverse();
 }
+
 
 /**
  Scale stroke width in the item; both style field and the CSS in the repr are written to
@@ -669,6 +671,22 @@ sp_item_adjust_rects_recursive(SPItem *item, NR::Matrix advertized_transform)
 }
 
 /**
+ Recursively compensate pattern fill's transform
+*/
+void
+sp_item_adjust_pattern_recursive(SPItem *item, NR::Matrix advertized_transform)
+{
+    if (SP_IS_ITEM (item)) {
+        sp_shape_adjust_pattern (item, NR::identity(), advertized_transform.inverse());
+    }
+
+    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+        if (SP_IS_ITEM(o))
+            sp_item_adjust_pattern_recursive(SP_ITEM(o), advertized_transform);
+    }
+}
+
+/**
 Set a new transform on an object. Compensate for stroke scaling and gradient/pattern
 fill transform, if necessary. Call the object's set_transform method if transforms are
 stored optimized. Send _transformed_signal. Invoke _write method so that the repr is
@@ -686,7 +704,7 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
     if (adv != NULL) {
         advertized_transform = *adv;
     } else {
-        advertized_transform = sp_item_transform_delta(item, transform);
+        advertized_transform = sp_item_transform_old_inverse (item) * NR::Matrix (transform);
     }
 
     NR::Matrix xform(transform);
@@ -697,9 +715,15 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
         sp_item_adjust_stroke_width_recursive(item, expansion);
     }
 
-    // compensate rx/ry of a rect if possible
+    // compensate rx/ry of a rect if requested
     if (prefs_get_int_attribute("options.transform", "rectcorners", 1) == 0) {
         sp_item_adjust_rects_recursive(item, advertized_transform);
+    }
+
+    // compensate pattern fill if requested; 
+    // here we post-multiply the old transform inverse because patterns are transformed before item they're applied to
+    if (prefs_get_int_attribute("options.transform", "pattern", 1) == 0) {
+        sp_item_adjust_pattern_recursive(item, NR::Matrix (transform) * sp_item_transform_old_inverse (item));
     }
 
     // run the object's set_transform if transforms are stored optimized

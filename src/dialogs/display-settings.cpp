@@ -1118,6 +1118,14 @@ options_checkbox (
     options_changed_boolean
     );
 
+options_checkbox (
+    _("Transform pattern fill"), 
+    _("Apply the transform of an object to its pattern fill"), tt,
+    vb,
+    "options.transform", "pattern", 1,
+    options_changed_boolean
+    );
+
      // Store transformation (global)
         {
             GtkWidget *f = gtk_frame_new (_("Store transformation:"));
