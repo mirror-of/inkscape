@@ -1,7 +1,10 @@
 2004-06-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dialogs/desktop-properties.cpp:
+	  Greater conformance to CodingStyle.  Add FIXME comment.
+
 	* src/sp-namedview.cpp: Tighter scoping for iteration var.
-        Simplify some code by greater use of cheap sp_unit_get_by_id.
+	  Simplify some code by greater use of cheap sp_unit_get_by_id.
 
 2004-06-17  MenTaLguY  <mental@rydia.net>
 
