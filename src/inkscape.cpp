@@ -23,6 +23,7 @@
 #else
 #include <direct.h>
 #define _WIN32_IE 0x0400
+#define USE_SHGetSpecialFolderPath
 #include <shlobj.h> //to get appdata path
 #endif
 
@@ -1125,7 +1126,7 @@ profile_path(const char *filename)
 	static const gchar *homedir=NULL;
 	if (!homedir) {
 		homedir = g_get_home_dir();
-#ifdef WIN32
+#ifdef USE_SHGetSpecialFolderPath
 		if (!homedir) { //only try this is previous attempt fails
 			char pathBuf[MAX_PATH];
 			if (SHGetSpecialFolderPath(NULL, pathBuf, CSIDL_APPDATA, 1))
