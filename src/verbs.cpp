@@ -136,27 +136,27 @@ sp_verb_get_action (sp_verb_t verb, SPView * view)
 	}
 }
 
-/*
-	Return the name without underscores and ellipsis, for use in dialog titles, etc
-	Allocated memory must be freed by caller
+/**
+	Return the name without underscores and ellipsis, for use in dialog titles, etc.
+	Allocated memory must be freed by caller.
 */
 gchar *
 sp_action_get_title (const SPAction *action)
 {
-	gchar *s;
-	gint i, j;
-	
-	s = g_new (gchar, 256);
-	
-	for (i = j = 0; i < static_cast<gint>(strlen(action->name)); i++)  {
-		if ( action->name[i] != '_' && action->name[i] != '.' ) {
-			s[j] = action->name[i];
-			j++;
+	char const *src = action->name;
+	gchar *ret = g_new (gchar, strlen(src) + 1);
+	unsigned ri = 0;
+
+	for (unsigned si = 0 ; ; si++)  {
+		int const c = src[si];
+		if ( c != '_' && c != '.' ) {
+			ret[ri] = c;
+			ri++;
+			if (c == '\0') {
+				return ret;
+			}
 		}
 	}
-	s[j] = '\0';	
-	
-	return s;
 }
 
 static void

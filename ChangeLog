@@ -1,5 +1,7 @@
 2004-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/verbs.cpp (sp_action_get_title): Get rid of fixed-sized buffer.
+
 	* src/nodepath.cpp: Miscellaneous cleanups including fixing
 	erroneous indentation, changing `g_list_length(foo) == 0' to `foo
 	== NULL', removing unused function closest_of_three, specifying
