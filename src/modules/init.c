@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include <xml/repr.h>
+#include <helper/sp-intl.h>
 
 #include <module.h>
 #include "system.h"
@@ -68,7 +69,7 @@ build_module_from_dir (const gchar * dirname)
 
 	directory = opendir(dirname);
 	if (directory == NULL) {
-		g_warning("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded.", dirname);
+		g_warning(_("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded."), dirname);
 		return;
 	}
 
