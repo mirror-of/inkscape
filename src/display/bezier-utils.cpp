@@ -45,7 +45,13 @@
 typedef NR::Point BezierCurve[];
 
 /* Forward declarations */
-static void generate_bezier(NR::Point b[], NR::Point const d[], gdouble const uPrime[], unsigned len, NR::Point const &tHat1, NR::Point const &tHat2);
+static void generate_bezier(NR::Point b[], NR::Point const d[], gdouble const u[], unsigned len,
+                            NR::Point const &tHat1, NR::Point const &tHat2, double tolerance_sq);
+static void estimate_lengths(NR::Point bezier[],
+                             NR::Point const data[], gdouble const u[], unsigned len,
+                             NR::Point const &tHat1, NR::Point const &tHat2);
+static void estimate_bi(NR::Point b[4], unsigned ei,
+                        NR::Point const data[], double const u[], unsigned len);
 static void reparameterize(NR::Point const d[], unsigned len, double u[], BezierCurve const bezCurve);
 static gdouble NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble u);
 static NR::Point bezier_pt(unsigned degree, NR::Point const V[], gdouble t);
@@ -211,7 +217,7 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
             return 0;
         }
 
-        generate_bezier(bezier, data, u, len, tHat1, tHat2);
+        generate_bezier(bezier, data, u, len, tHat1, tHat2, error);
         reparameterize(data, len, u, bezier);
 
         /* Find max deviation of points to fitted curve. */
@@ -227,7 +233,7 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
         /* If error not too large, then try some reparameterization and iteration. */
         if ( 0.0 <= maxErrorRatio && maxErrorRatio <= 3.0 ) {
             for (int i = 0; i < maxIterations; i++) {
-                generate_bezier(bezier, data, u, len, tHat1, tHat2);
+                generate_bezier(bezier, data, u, len, tHat1, tHat2, error);
                 reparameterize(data, len, u, bezier);
                 maxErrorRatio = compute_max_error_ratio(data, u, len, bezier, tolerance, &splitPoint);
                 if ( fabs(maxErrorRatio) <= 1.0 ) {
@@ -313,15 +319,54 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
     }
 }
 
-/*
- *  generate_bezier :
- *  Use least-squares method to find Bezier control points for region.
+
+/**
+ * Fill in \a bezier[] based on the given data and tangent requirements, using
+ * a least-squares fit.
  *
+ * Each of tHat1 and tHat2 should be either a zero vector or a unit vector.
+ * If it is zero, then bezier[1 or 2] is estimated without constraint; otherwise,
+ * it bezier[1 or 2] is placed in the specified direction from bezier[0 or 3].
+ *
+ * \param tolerance_sq Used only for an initial guess as to tangent directions
+ *   when \a tHat1 or \a tHat2 is zero.
  */
 static void
 generate_bezier(NR::Point bezier[],
-                NR::Point const data[], gdouble const uPrime[], unsigned len,
-                NR::Point const &tHat1, NR::Point const &tHat2)
+                NR::Point const data[], gdouble const u[], unsigned const len,
+                NR::Point const &tHat1, NR::Point const &tHat2,
+                double const tolerance_sq)
+{
+    bool const est1 = is_zero(tHat1);
+    bool const est2 = is_zero(tHat2);
+    NR::Point est_tHat1( est1
+                         ? sp_darray_left_tangent(data, len, tolerance_sq)
+                         : tHat1 );
+    NR::Point est_tHat2( est2
+                         ? sp_darray_right_tangent(data, len, tolerance_sq)
+                         : tHat2 );
+    estimate_lengths(bezier, data, u, len, est_tHat1, est_tHat2);
+    if (est1) {
+        estimate_bi(bezier, 1, data, u, len);
+    }
+    if (est2) {
+        estimate_bi(bezier, 2, data, u, len);
+    }
+    if (est1 || est2) {
+        if (est1 && (bezier[1] != bezier[0])) {
+            est_tHat1 = unit_vector(bezier[1] - bezier[0]);
+        }
+        if (est2 && (bezier[2] != bezier[3])) {
+            est_tHat2 = unit_vector(bezier[2] - bezier[3]);
+        }
+        estimate_lengths(bezier, data, u, len, est_tHat1, est_tHat2);
+    }
+}
+
+static void
+estimate_lengths(NR::Point bezier[],
+                 NR::Point const data[], gdouble const uPrime[], unsigned const len,
+                 NR::Point const &tHat1, NR::Point const &tHat2)
 {
     double C[2][2];   /* Matrix C. */
     double X[2];      /* Matrix X. */
@@ -423,6 +468,41 @@ generate_bezier(NR::Point bezier[],
 
 static double lensq(NR::Point const p) {
     return dot(p, p);
+}
+
+static void
+estimate_bi(NR::Point bezier[4], unsigned const ei,
+            NR::Point const data[], double const u[], unsigned const len)
+{
+    g_return_if_fail(1 <= ei && ei <= 2);
+    unsigned const oi = 3 - ei;
+    double num[2] = {0., 0.};
+    double den = 0.;
+    for (unsigned i = 0; i < len; ++i) {
+        double const ui = u[i];
+        double const b[4] = {
+            B0(ui),
+            B1(ui),
+            B2(ui),
+            B3(ui)
+        };
+
+        for (unsigned d = 0; d < 2; ++d) {
+            num[d] += b[ei] * (b[0]  * bezier[0][d] +
+                               b[oi] * bezier[oi][d] +
+                               b[3]  * bezier[3][d] +
+                               - data[i][d]);
+        }
+        den -= b[ei] * b[ei];
+    }
+
+    if (den != 0.) {
+        for (unsigned d = 0; d < 2; ++d) {
+            bezier[ei][d] = num[d] / den;
+        }
+    } else {
+        bezier[ei] = ( oi * bezier[0] + ei * bezier[3] ) / 3.;
+    }
 }
 
 /**

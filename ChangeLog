@@ -1,5 +1,10 @@
 2004-11-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/bezier-utils.cpp (generate_bezier):
+	  If either end tangent is specified as zero then estimate the
+	  corresponding control point without constraining its direction
+	  from the endpoint.
+
 	* src/pencil-context.h, src/pencil-context.cpp
 	  (fit_and_split, sp_pencil_context_init): Explicitly remember required
 	  tangent instead of using "first two points" hack.

@@ -255,7 +255,7 @@ int main(int argc, char *argv[]) {
 
     UTEST_TEST("generate_bezier") {
         Point est_b[4];
-        generate_bezier(est_b, d, t, n, tHat1, tHat2);
+        generate_bezier(est_b, d, t, n, tHat1, tHat2, 1.0);
 
         compare_ctlpts(est_b, src_b);
 
