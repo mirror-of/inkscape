@@ -176,7 +176,7 @@ void LayerPropertiesDialog::_setDesktop(SPDesktop *desktop) {
 
 void LayerPropertiesDialog::_setLayer(SPObject *layer) {
     if (layer) {
-        sp_object_ref(_layer, NULL);
+        sp_object_ref(layer, NULL);
     }
     if (_layer) {
         sp_object_unref(_layer, NULL);
