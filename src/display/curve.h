@@ -30,7 +30,7 @@ struct SPCurve {
     NR::Point movePos;
     bool sbpath : 1;
     bool hascpt : 1;
-    bool posset : 1;
+    bool posSet : 1;
     bool moving : 1;
     bool closed : 1;
 };

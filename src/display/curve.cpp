@@ -57,11 +57,11 @@ sp_curve_new_sized(gint length)
     curve->end = 0;
     curve->length = length;
     curve->substart = 0;
-    curve->sbpath = FALSE;
-    curve->hascpt = FALSE;
-    curve->posset = FALSE;
-    curve->moving = FALSE;
-    curve->closed = FALSE;
+    curve->sbpath = false;
+    curve->hascpt = false;
+    curve->posSet = false;
+    curve->moving = false;
+    curve->closed = false;
 
     return curve;
 }
@@ -95,15 +95,20 @@ sp_curve_new_from_bpath(NArtBpath *bpath)
             (curve->bpath[i].code == NR_MOVETO_OPEN))
             break;
     curve->substart = i;
-    curve->sbpath = FALSE;
-    curve->hascpt = FALSE;
-    curve->posset = FALSE;
-    curve->moving = FALSE;
+    curve->sbpath = false;
+    curve->hascpt = false;
+    curve->posSet = false;
+    curve->moving = false;
     curve->closed = sp_bpath_closed(bpath);
 
     return curve;
 }
 
+/** Construct an SPCurve from read-only, static storage.
+ *
+ *  We could treat read-onliness and staticness (i.e. can't call free on bpath) as orthogonal
+ *  attributes, but at the time of writing we have only one caller.
+ */
 SPCurve *
 sp_curve_new_from_static_bpath(NArtBpath const *bpath)
 {
@@ -132,9 +137,9 @@ sp_curve_new_from_static_bpath(NArtBpath const *bpath)
             break;
     curve->substart = i;
     curve->sbpath = sbpath;
-    curve->hascpt = FALSE;
-    curve->posset = FALSE;
-    curve->moving = FALSE;
+    curve->hascpt = false;
+    curve->posSet = false;
+    curve->moving = false;
     curve->closed = sp_bpath_closed(bpath);
 
     return curve;
@@ -210,9 +215,9 @@ sp_curve_finish(SPCurve *curve)
         curve->bpath = nr_renew(curve->bpath, NArtBpath, curve->end);
     }
 
-    curve->hascpt = FALSE;
-    curve->posset = FALSE;
-    curve->moving = FALSE;
+    curve->hascpt = false;
+    curve->posSet = false;
+    curve->moving = false;
 }
 
 void
@@ -356,10 +361,10 @@ sp_curve_reset(SPCurve *curve)
     curve->bpath->code = NR_END;
     curve->end = 0;
     curve->substart = 0;
-    curve->hascpt = FALSE;
-    curve->posset = FALSE;
-    curve->moving = FALSE;
-    curve->closed = FALSE;
+    curve->hascpt = false;
+    curve->posSet = false;
+    curve->moving = false;
+    curve->closed = false;
 }
 
 /* Several consecutive movetos are ALLOWED */
@@ -378,8 +383,8 @@ sp_curve_moveto(SPCurve *curve, NR::Point const &p)
     g_return_if_fail(!curve->moving);
 
     curve->substart = curve->end;
-    curve->hascpt = TRUE;
-    curve->posset = TRUE;
+    curve->hascpt = true;
+    curve->posSet = true;
     curve->movePos = p;
 }
 
@@ -398,17 +403,17 @@ sp_curve_lineto(SPCurve *curve, gdouble x, gdouble y)
 
     if (curve->moving) {
         /* fix endpoint */
-        g_return_if_fail(!curve->posset);
+        g_return_if_fail(!curve->posSet);
         g_return_if_fail(curve->end > 1);
         NArtBpath *bp = curve->bpath + curve->end - 1;
         g_return_if_fail(bp->code == NR_LINETO);
         bp->x3 = x;
         bp->y3 = y;
-        curve->moving = FALSE;
+        curve->moving = false;
         return;
     }
 
-    if (curve->posset) {
+    if (curve->posSet) {
         /* start a new segment */
         sp_curve_ensure_space(curve, 2);
         NArtBpath *bp = curve->bpath + curve->end;
@@ -421,8 +426,8 @@ sp_curve_lineto(SPCurve *curve, gdouble x, gdouble y)
         bp++;
         bp->code = NR_END;
         curve->end += 2;
-        curve->posset = FALSE;
-        curve->closed = FALSE;
+        curve->posSet = false;
+        curve->closed = false;
         return;
     }
 
@@ -448,7 +453,7 @@ sp_curve_lineto_moving(SPCurve *curve, gdouble x, gdouble y)
 
     if (curve->moving) {
         /* change endpoint */
-        g_return_if_fail(!curve->posset);
+        g_return_if_fail(!curve->posSet);
         g_return_if_fail(curve->end > 1);
         NArtBpath *bp = curve->bpath + curve->end - 1;
         g_return_if_fail(bp->code == NR_LINETO);
@@ -457,7 +462,7 @@ sp_curve_lineto_moving(SPCurve *curve, gdouble x, gdouble y)
         return;
     }
 
-    if (curve->posset) {
+    if (curve->posSet) {
         /* start a new segment */
         sp_curve_ensure_space(curve, 2);
         NArtBpath *bp = curve->bpath + curve->end;
@@ -470,9 +475,9 @@ sp_curve_lineto_moving(SPCurve *curve, gdouble x, gdouble y)
         bp++;
         bp->code = NR_END;
         curve->end += 2;
-        curve->posset = FALSE;
-        curve->moving = TRUE;
-        curve->closed = FALSE;
+        curve->posSet = false;
+        curve->moving = true;
+        curve->closed = false;
         return;
     }
 
@@ -487,7 +492,7 @@ sp_curve_lineto_moving(SPCurve *curve, gdouble x, gdouble y)
     bp++;
     bp->code = NR_END;
     curve->end++;
-    curve->moving = TRUE;
+    curve->moving = true;
 }
 
 void
@@ -509,7 +514,7 @@ sp_curve_curveto(SPCurve *curve, gdouble x0, gdouble y0, gdouble x1, gdouble y1,
     g_return_if_fail(curve->hascpt);
     g_return_if_fail(!curve->moving);
 
-    if (curve->posset) {
+    if (curve->posSet) {
         /* start a new segment */
         sp_curve_ensure_space(curve, 2);
         NArtBpath *bp = curve->bpath + curve->end;
@@ -526,8 +531,8 @@ sp_curve_curveto(SPCurve *curve, gdouble x0, gdouble y0, gdouble x1, gdouble y1,
         bp++;
         bp->code = NR_END;
         curve->end += 2;
-        curve->posset = FALSE;
-        curve->closed = FALSE;
+        curve->posSet = false;
+        curve->closed = false;
         return;
     }
 
@@ -554,7 +559,7 @@ sp_curve_closepath(SPCurve *curve)
     g_return_if_fail(curve != NULL);
     g_return_if_fail(!curve->sbpath);
     g_return_if_fail(curve->hascpt);
-    g_return_if_fail(!curve->posset);
+    g_return_if_fail(!curve->posSet);
     g_return_if_fail(!curve->moving);
     g_return_if_fail(!curve->closed);
     /* We need at least moveto, curveto, end. */
@@ -570,17 +575,17 @@ sp_curve_closepath(SPCurve *curve)
 
         bs->code = NR_MOVETO;
     }
-    curve->closed = TRUE;
+    curve->closed = true;
 
     for (NArtBpath const *bp = curve->bpath; bp->code != NR_END; bp++) {
         /* effic: Maintain a count of NR_MOVETO_OPEN's (e.g. instead of the closed boolean). */
         if (bp->code == NR_MOVETO_OPEN) {
-            curve->closed = FALSE;
+            curve->closed = false;
             break;
         }
     }
 
-    curve->hascpt = FALSE;
+    curve->hascpt = false;
 }
 
 /** Like sp_curve_closepath but sets the end point of the current
@@ -594,7 +599,7 @@ sp_curve_closepath_current(SPCurve *curve)
     g_return_if_fail(curve != NULL);
     g_return_if_fail(!curve->sbpath);
     g_return_if_fail(curve->hascpt);
-    g_return_if_fail(!curve->posset);
+    g_return_if_fail(!curve->posSet);
     g_return_if_fail(!curve->closed);
     /* We need at least moveto, curveto, end. */
     g_return_if_fail(curve->end - curve->substart > 1);
@@ -608,18 +613,18 @@ sp_curve_closepath_current(SPCurve *curve)
 
         bs->code = NR_MOVETO;
     }
-    curve->closed = TRUE;
+    curve->closed = true;
 
     for (NArtBpath const *bp = curve->bpath; bp->code != NR_END; bp++) {
         /* effic: Maintain a count of NR_MOVETO_OPEN's (e.g. instead of the closed boolean). */
         if (bp->code == NR_MOVETO_OPEN) {
-            curve->closed = FALSE;
+            curve->closed = false;
             break;
         }
     }
 
-    curve->hascpt = FALSE;
-    curve->moving = FALSE;
+    curve->hascpt = false;
+    curve->moving = false;
 }
 
 gboolean
@@ -847,9 +852,9 @@ sp_curve_backspace(SPCurve *curve)
             if ((bp->code == NR_MOVETO)     ||
                 (bp->code == NR_MOVETO_OPEN)  )
             {
-                curve->hascpt = TRUE;
-                curve->posset = TRUE;
-                curve->closed = FALSE;
+                curve->hascpt = true;
+                curve->posSet = true;
+                curve->closed = false;
                 curve->movePos = bp->c(3);
                 curve->end -= 1;
             }
@@ -1157,7 +1162,7 @@ sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &new_p0, NR::Point co
  * True iff currentpoint is defined.
  */
 
-/** \var SPCurve::posset
+/** \var SPCurve::posSet
  *
  * True iff previous was moveto.
  */

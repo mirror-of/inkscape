@@ -2,6 +2,7 @@
 
 	* src/display/curve.h, src/display/curve.cpp:
 	  Change x,y members to NR::Point.
+	  Rename posset (spiced&spiked hot milk) to posSet as per CodingStyle.
 
 	* src/display/curve.cpp (sp_curve_reverse): Previously this
 	  routine returned only the last subpath, and made it an open
