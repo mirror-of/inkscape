@@ -1,8 +1,8 @@
 #ifndef __SP_DISPLAY_SETTINGS_H__
 #define __SP_DISPLAY_SETTINGS_H__
 
-/*
- * Display settings dialog
+/**
+ * \brief Display settings dialog
  *
  * Author:
  *   Lauris Kaplinski <lauris@ximian.com>
@@ -17,9 +17,9 @@
 
 #include <gtk/gtkwidget.h>
 
-void sp_display_dialog (void);
-void sp_display_dialog_apply (GtkWidget * widget);
-void sp_display_dialog_close (GtkWidget * widget);
+void sp_display_dialog       ( void );
+void sp_display_dialog_apply ( GtkWidget * widget );
+void sp_display_dialog_close ( GtkWidget * widget );
 
 
 

@@ -2,7 +2,7 @@
 #define __SP_DESKTOP_PROPERTIES_H__
 
 /**
- * \brief Desktop configuration dialog
+ * \brief  Desktop configuration dialog
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>

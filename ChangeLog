@@ -1,7 +1,7 @@
 2004-02-04  Ted Gould <ted@gould.cx>
 
-	* src/desktop-snap.cpp: Removing some unused code that had
-	  been replaced.
+    * src/desktop-snap.cpp: Removing some unused code that had
+    been replaced.
 
 2004-02-04  jon phillips <kidproto@user.sf.net>
 
@@ -18,6 +18,11 @@
       src/dialogs/dialog-events.cpp, src/dialogs/dialog-events.h: Converted 
       the following files to use our coding convention.
 
+    * src/dialogs/desktop-properties.cpp, src/dialogs/desktop-properties.h, 
+      src/dialogs/display-settings.cpp, src/dialogs/display-settings.h, 
+      src/dialogs/export.cpp, src/dialogs/export.h: converted the aforementioned
+      files to new coding conventions.
+      
 
 2004-02-04  bulia byak <bulia@users.sourceforge.net>
 

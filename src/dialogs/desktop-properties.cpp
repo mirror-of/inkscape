@@ -1,7 +1,7 @@
 #define __SP_DESKTOP_PROPERTIES_C__
 
 /**
- * \brief Desktop configuration dialog
+ * \brief  Desktop configuration dialog
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>

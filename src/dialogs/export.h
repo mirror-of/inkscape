@@ -1,8 +1,8 @@
 #ifndef SP_EXPORT_H
 #define SP_EXPORT_H
 
-/*
- * text-edit
+/**
+ * \brief text-edit
  *
  * Text editing and font changes
  *
