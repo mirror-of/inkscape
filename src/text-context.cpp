@@ -502,8 +502,6 @@ static void
 sp_text_context_selection_modified (SPSelection *selection, guint flags, SPTextContext *tc)
 {
 	sp_text_context_update_cursor (tc);
-	// FIXME: this is only needed for when a text is edited in XML editor - perhaps there's a better way to make that undoable?
-	sp_document_done (SP_DT_DOCUMENT (((SPEventContext *) tc)->desktop));
 }
 
 static void
