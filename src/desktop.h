@@ -105,7 +105,8 @@ void sp_desktop_pop_event_context (SPDesktop *desktop, unsigned int key);
 #define SP_COORDINATES_UNDERLINE_Y (1 << 1)
 
 void sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guint underline);
-SPItem *sp_desktop_item_at_point (SPDesktop *desktop, gdouble x, gdouble y);
+SPItem *sp_desktop_item_at_point (SPDesktop *desktop, gdouble x, gdouble y, gboolean into_groups);
+SPItem *sp_desktop_group_at_point (SPDesktop *desktop, gdouble x, gdouble y);
 
 NRRect *sp_desktop_get_display_area (SPDesktop *dt, NRRect *area);
 
