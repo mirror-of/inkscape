@@ -1,3 +1,37 @@
+2003-12-16  bulia byak <bulia@dr.com>
+
+	* src/seltrans.cpp: fix for 860201; ctrl restricts rotation by 15 degrees (from
+	sodipodi); used new status display function
+
+	* src/sp-text.cpp: removed non-printable char error into text-context, removed
+	extraneous assignment
+
+	* src/verbs.cpp: typo fix
+
+	* src/knot.cpp: in cancelling drag, use the knot's desktop instead of active; add
+	statusbar flash
+
+	* src/draw-context.cpp: changing useful messages to statusf_flash, removing useless
+	debug output
+
+	* src/nodepath.cpp: statusbar error message if joining nodes fails; expanded
+	update_statusbar
+ 
+	* src/select-context.cpp: statusbar flash when esc cancels selection or drag
+
+	* src/selection.cpp: expanded update_statusbar
+
+	* src/text-context.cpp: used statusf_flash for no-break space, added non-printable
+	char error
+
+	* src/tools-switch.cpp: added default statusbar message for each tool
+
+	* src/desktop.cpp: new handler for status_set, with timeout; initialize message in
+	statusbar
+
+	* src/view.cpp src/view.h: status_set signal: added msec, removed isdefault; added
+	_flash and _error functions for temporary statusbar display; added docs
+
 2003-12-14  Ted Gould <ted@gould.cx>
 
 	* src/widgets/button.cpp, src/helper/action.h, src/helper/action.cpp,
