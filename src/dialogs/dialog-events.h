@@ -30,4 +30,7 @@ void sp_dialog_defocus_on_enter (GtkWidget *w);
 void sp_transientize (GtkWidget *win);
 void sp_transientize_callback (Inkscape::Application *inkscape, SPDesktop *desktop, win_data *wd);
 
+gboolean sp_dialog_hide (GtkObject *object, gpointer data);
+gboolean sp_dialog_unhide (GtkObject *object, gpointer data);
+
 #endif

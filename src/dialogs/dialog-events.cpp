@@ -28,7 +28,9 @@
 
 #include "dialog-events.h"
 
-// this function is called to zero the transientize semaphore by a timeout
+/**
+\brief   This function is called to zero the transientize semaphore by a timeout
+*/
 gboolean 
 sp_allow_again (gpointer *wd) 
 {
@@ -37,7 +39,7 @@ sp_allow_again (gpointer *wd)
 }
 
 /**
-\brief remove focus from window to whoever it is transient for
+\brief   Remove focus from window to whoever it is transient for
 */
 void
 sp_dialog_defocus (GtkWindow *win)
@@ -52,7 +54,7 @@ sp_dialog_defocus (GtkWindow *win)
 }
 
 /**
-\brief callback to defocus a widget's parent dialog
+\brief  Callback to defocus a widget's parent dialog
 */
 void
 sp_dialog_defocus_callback (GtkWindow *win, gpointer data)
@@ -106,6 +108,10 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 	return ret; 
 }
 
+
+/**
+\brief  Make the argument dialog transient to the currently active document window
+*/
 void
 sp_transientize (GtkWidget *dialog)
 {
@@ -137,7 +143,8 @@ sp_transientize_callback (Inkscape::Application *inkscape, SPDesktop *desktop, w
 		/* Uncomment the following line if you want "aggressive" transientization,
 		i.e. dialogs always emerging on top when you switch documents. Note however
 		that this breaks "click to raise" policy of a window manager because the switched-to
-		document will be raised at once (so that its transients also could raise) */
+		document will be raised at once (so that its transients also could raise) 
+             FIXME: make this settable in preferences */
 		//gtk_window_present (w); // without this, a transient window not always emerges on top
 	}
 	// we're done, allow next retransientizing not sooner than after 6 msec
@@ -145,3 +152,20 @@ sp_transientize_callback (Inkscape::Application *inkscape, SPDesktop *desktop, w
 #endif
 }
 
+gboolean
+sp_dialog_hide (GtkObject *object, gpointer data)
+{
+	GtkWidget *dlg = (GtkWidget *) data;
+	if (dlg)
+		gtk_widget_hide_all (dlg);
+	return TRUE;
+}
+
+gboolean
+sp_dialog_unhide (GtkObject *object, gpointer data)
+{
+	GtkWidget *dlg = (GtkWidget *) data;
+	if (dlg)
+		gtk_widget_show_all (dlg);
+	return TRUE;
+}
