@@ -1821,7 +1821,6 @@ sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data)
         *new_val = sp_dtw_zoom_display_to_value (new_typed);
     }
     
-    spinbutton_defocus (GTK_OBJECT (spin));
     return TRUE;
 }
 
