@@ -63,6 +63,13 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     _apply_button.signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::_apply));
 
+    signal_delete_event().connect(
+        sigc::bind_return(
+            sigc::hide(sigc::mem_fun(*this, &LayerPropertiesDialog::_close)),
+            true
+        )
+    );
+
     add_action_widget(_close_button, Gtk::RESPONSE_CLOSE);
     add_action_widget(_apply_button, Gtk::RESPONSE_APPLY);
 
@@ -87,6 +94,7 @@ void LayerPropertiesDialog::_showDialog(LayerPropertiesDialog::Strategy &strateg
 
     dialog->set_modal(true);
     gtk_window_set_transient_for(GTK_WINDOW(dialog->gobj()), GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(desktop->owner))));
+    dialog->property_destroy_with_parent() = true;
 
     dialog->show();
     dialog->present();
@@ -99,21 +107,22 @@ LayerPropertiesDialog::_apply()
 
     _strategy->perform(*this);
     sp_document_done(SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP));
-    hide();
 
-    _setDesktop(NULL);
-    _setLayer(NULL);
+    _close();
 }
 
 void
 LayerPropertiesDialog::_close()
 {
-    g_assert(_strategy != NULL);
-
-    hide();
-
-    _setDesktop(NULL);
     _setLayer(NULL);
+    _setDesktop(NULL);
+    destroy_();
+    Glib::signal_idle().connect(
+        sigc::bind_return(
+            sigc::bind(sigc::ptr_fun(&::operator delete), this),
+            false 
+        )
+    );
 }
 
 void LayerPropertiesDialog::Rename::setup(LayerPropertiesDialog &dialog) {
@@ -144,7 +153,7 @@ void LayerPropertiesDialog::Create::setup(LayerPropertiesDialog &dialog) {
 void LayerPropertiesDialog::Create::perform(LayerPropertiesDialog &dialog) {
     SPDesktop *desktop=dialog._desktop;
     SPObject *new_layer=Inkscape::create_layer(
-        desktop->currentLayer(), dialog._layer
+        desktop->currentRoot(), dialog._layer
     );
     Glib::ustring name(dialog._layer_name_entry.get_text());
     if (!name.empty()) {

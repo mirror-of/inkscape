@@ -1,5 +1,11 @@
 2004-11-25  MenTaLguY  <mental@rydia.net>
 
+	* src/layer-fns.cpp: fix layer creation within sublayers
+
+	* src/dialogs/layer-properties.cpp: fix dialog leak
+
+2004-11-25  MenTaLguY  <mental@rydia.net>
+
 	* src/inkscape.cpp: eliminate duplicated code across #ifdefs
 
 	* src/verbs.cpp, src/dialogs/layer-properties.cpp,

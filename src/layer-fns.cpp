@@ -25,6 +25,8 @@ namespace Inkscape {
  *  by the string "layerNN", then creates a new group object of 
  *  that id with attribute inkscape:groupmode='layer', and finally
  *  appends the new group object to \a root after object \a layer.
+ *
+ *  \pre \a root should be either \a layer or an ancestor of it
  */
 SPObject *create_layer(SPObject *root, SPObject *layer) {
     SPDocument *document=SP_OBJECT_DOCUMENT(root);
@@ -44,7 +46,8 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
     if ( root == layer ) {
         sp_repr_append_child(SP_OBJECT_REPR(root), repr);
     } else {
-        sp_repr_add_child(SP_OBJECT_REPR(root), repr, SP_OBJECT_REPR(layer));
+        SPRepr *layer_repr=SP_OBJECT_REPR(layer);
+        sp_repr_add_child(sp_repr_parent(layer_repr), repr, layer_repr);
     }
 
     return document->getObjectByRepr(repr);
