@@ -368,10 +368,18 @@ spdc_detach_selection (SPDrawContext *dc, SPSelection *sel)
 	dc->ea = NULL;
 }
 
+// FIXME: to preferences!
 #define NUMBER_OF_TURNS 12
 
+/**
+\brief  Snaps node or handle to 15 degree increments
+\param dc  draw context
+\param p  cursor point (to be changed by snapping)
+\param o  origin point 
+\param state  keyboard state to check if ctrl was pressed
+*/
 static void
-spdc_endpoint_snap (SPDrawContext *dc, NRPoint *p, guint state)
+spdc_endpoint_snap_internal (SPDrawContext *dc, NRPoint *p, NRPoint *o, guint state)
 {
 	if (state & GDK_CONTROL_MASK) {
 		/* Constrained motion */
@@ -382,8 +390,9 @@ spdc_endpoint_snap (SPDrawContext *dc, NRPoint *p, guint state)
 		double vx = 0, vy = 1;
 		double const r00 = cos (M_PI / NUMBER_OF_TURNS), r01 = sin (M_PI / NUMBER_OF_TURNS);
 		double const r10 = -r01, r11 = r00;
-		double const dx = p->x - dc->p[0].x;
-		double const dy = p->y - dc->p[0].y;
+
+		double const dx = p->x - o->x;
+		double const dy = p->y - o->y;
 
 		for(unsigned i = 0; i < NUMBER_OF_TURNS; i++) {
 			double const ndot = fabs(vy*dx - vx*dy);
@@ -402,8 +411,9 @@ spdc_endpoint_snap (SPDrawContext *dc, NRPoint *p, guint state)
 		}
 
 		if (fabs (bdot) > 0) {
-			p->x = dc->p[0].x + bdot * bx;
-			p->y = dc->p[0].y + bdot * by;
+			p->x = o->x + bdot * bx;
+			p->y = o->y + bdot * by;
+
 			/* Snap it along best vector */
 			sp_desktop_vector_snap (SP_EVENT_CONTEXT_DESKTOP (dc), p, bx, by);
 		}
@@ -412,6 +422,28 @@ spdc_endpoint_snap (SPDrawContext *dc, NRPoint *p, guint state)
 		sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), p);
 	}
 }
+
+/**
+\brief  Snaps new node relative to the previous node
+*/
+static void
+spdc_endpoint_snap (SPDrawContext *dc, NRPoint *p, guint state)
+{
+	spdc_endpoint_snap_internal (dc, p, &(dc->p[0]), state);
+}
+
+/**
+\brief  Snaps new node's handle relative to the new node
+*/
+static void
+spdc_endpoint_snap_handle (SPDrawContext *dc, NRPoint *p, guint state)
+{
+	if (dc->npoints == 5)
+		spdc_endpoint_snap_internal (dc, p, &(dc->p[3]), state);
+	else 
+		spdc_endpoint_snap_internal (dc, p, &(dc->p[0]), state);
+}
+
 
 /*
  * Concats red, blue and green
@@ -1386,7 +1418,10 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					} else {
 						/* Set end anchor */
 						dc->ea = anchor;
+					if (!anchor) { 	/* Snap node only if not hitting anchor */
 						spdc_endpoint_snap (dc, &p, event->motion.state);
+					}
+					//						spdc_endpoint_snap (dc, &p, event->motion.state);
 						spdc_pen_set_subsequent_point (pc, &p);
 						if (dc->green_anchor && dc->green_anchor->active) {
 							pc->state = SP_PEN_CONTEXT_CLOSE;
@@ -1429,12 +1464,9 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		sp_desktop_w2d_xy_point (dt, &fp, event->motion.x, event->motion.y);
 		p.x = fp.x;
 		p.y = fp.y;
+
 		/* Test, whether we hit any anchor */
 		anchor = test_inside (dc, event->button.x, event->button.y);
-		if (!anchor) {
-			/* Snap only if not hitting anchor */
-			spdc_endpoint_snap (dc, &p, event->motion.state);
-		}
 
 		switch (pc->mode) {
 		case SP_PEN_CONTEXT_MODE_CLICK:
@@ -1442,7 +1474,6 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			case SP_PEN_CONTEXT_POINT:
 				if (dc->npoints != 0) {
 					/* Only set point, if we are already appending */
-					/* fixme: Snapping */
 					spdc_endpoint_snap (dc, &p, event->motion.state);
 					spdc_pen_set_subsequent_point (pc, &p);
 					ret = TRUE;
@@ -1451,7 +1482,6 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			case SP_PEN_CONTEXT_CONTROL:
 			case SP_PEN_CONTEXT_CLOSE:
 				/* Placing controls is last operation in CLOSE state */
-				/* fixme: Snapping */
 				spdc_endpoint_snap (dc, &p, event->motion.state);
 				spdc_pen_set_ctrl (pc, &p, event->motion.state);
 				ret = TRUE;
@@ -1468,7 +1498,11 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			case SP_PEN_CONTEXT_POINT:
 				if (dc->npoints > 0) {
 					/* Only set point, if we are already appending */
-					/* fixme: Snapping */
+
+					if (!anchor) { 	/* Snap node only if not hitting anchor */
+						spdc_endpoint_snap (dc, &p, event->motion.state);
+					}
+
 					spdc_pen_set_subsequent_point (pc, &p);
 					ret = TRUE;
 				}
@@ -1476,7 +1510,10 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			case SP_PEN_CONTEXT_CONTROL:
 			case SP_PEN_CONTEXT_CLOSE:
 				/* Placing controls is last operation in CLOSE state */
-				/* fixme: Snapping */
+
+				// snap the handle
+				spdc_endpoint_snap_handle (dc, &p, event->motion.state);
+
 				spdc_pen_set_ctrl (pc, &p, event->motion.state);
 				ret = TRUE;
 				break;
@@ -1529,7 +1566,9 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					break;
 				case SP_PEN_CONTEXT_CLOSE:
 					/* End current segment */
-					spdc_endpoint_snap (dc, &p, event->motion.state);
+					if (!anchor) { 	/* Snap node only if not hitting anchor */
+						spdc_endpoint_snap (dc, &p, event->motion.state);
+					}
 					spdc_pen_finish_segment (pc, &p, event->button.state);
 					spdc_pen_finish (pc, TRUE);
 					pc->state = SP_PEN_CONTEXT_POINT;
