@@ -69,8 +69,8 @@ sp_shortcut_init ()
 /*	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_p, SP_VERB_FILE_PRINT_PREVIEW, true);*/
 /*	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_P, SP_VERB_FILE_PRINT_PREVIEW, false);*/
 
-	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_e, SP_VERB_FILE_EXPORT, true);
-	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_E, SP_VERB_FILE_EXPORT, false);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_e, SP_VERB_FILE_EXPORT, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_E, SP_VERB_FILE_EXPORT, false);
 
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_i, SP_VERB_FILE_IMPORT, true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_I, SP_VERB_FILE_IMPORT, false);
@@ -159,6 +159,8 @@ sp_shortcut_init ()
 	sp_shortcut_set (GDK_KP_5, SP_VERB_ZOOM_PAGE, false);
 
 	sp_shortcut_set (GDK_6, SP_VERB_ZOOM_PAGE_WIDTH, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_e, SP_VERB_ZOOM_PAGE_WIDTH, false);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_E, SP_VERB_ZOOM_PAGE_WIDTH, false);
 
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_r, SP_VERB_TOGGLE_RULERS, true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_R, SP_VERB_TOGGLE_RULERS, false);
