@@ -8,6 +8,9 @@
 	* src/modules/svg.c: change "...with xmlns:sodipodi namespace" to
 	  "...with extension namespaces"
 
+	* src/xml/repr-action.c: fixed log optimizer to check
+	  SPReprAction::type before coalescing adjacent actions
+
 2003-11-27 Bryce <bryce@osdl.org>
 	* doc/architecture.svg: Added architecture.svg to try to capture
 	  the subsystems at a block layer level.

@@ -203,16 +203,17 @@ static void
 coalesce_chgattr (SPReprAction *action)
 {
 	SPReprAction *iter, *prev, *next;
-	static int id_key;
-
-	if (!action) return;
+	static int id_key=0;
 
 	if (!id_key) id_key = g_quark_from_static_string ("id");
 
-	if ( action->act.chgattr.key == id_key ) return;
+	if (!action) return;
 
 	prev = action;
-	for ( iter = action->next ; iter ; iter = next ) {
+	for ( iter = action->next ;
+	      iter && iter->type == SP_REPR_ACTION_CHGATTR ;
+	      iter = next )
+	{
 		next = iter->next;
 		if ( action->repr == iter->repr &&
 		     action->act.chgattr.key == iter->act.chgattr.key )
@@ -228,6 +229,9 @@ coalesce_chgattr (SPReprAction *action)
 			iter->act.chgattr.oldval = NULL;
 			free_action (iter);
 			prev->next = next;
+		} else if ( action->act.chgattr.key == id_key ) {
+			/* id changes tend to be sensitive to reordering */
+			break;
 		} else {
 			prev = iter;
 		}
@@ -242,7 +246,10 @@ coalesce_chgcontent (SPReprAction *action)
 	if (!action) return;
 
 	prev = action;
-	for ( iter = action->next ; iter ; iter = next ) {
+	for ( iter = action->next ;
+	      iter && iter->type == SP_REPR_ACTION_CHGCONTENT ;
+	      iter = next )
+	{
 		next = iter->next;
 		if ( action->repr == iter->repr ) {
 			/* ensure changes are continuous */
