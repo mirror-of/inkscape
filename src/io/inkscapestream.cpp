@@ -83,7 +83,7 @@ int BasicInputStream::get()
 {
     if (closed)
         return -1;
-    source.get();
+    return source.get();
 }
    
 
@@ -539,7 +539,7 @@ Writer &BasicWriter::writeChar(char ch)
  */ 
 Writer &BasicWriter::writeUString(Glib::ustring &str)
 {
-    for (int i=0; i< str.size(); i++)
+    for (int i=0; i< (int)str.size(); i++)
         put(str[i]);
     return *this;
 }
