@@ -126,7 +126,7 @@ sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass)
 			NULL, NULL,
 			sp_marshal_NONE__UINT,
 			G_TYPE_NONE, 1,
-			G_TYPE_INT);
+			G_TYPE_UINT);
 }
 
 void
