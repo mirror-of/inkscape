@@ -135,6 +135,13 @@ sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 		val = SP_REPR_ATTRIBUTE_VALUE (a);
 		p += g_snprintf (p, c + 4096 - p, "%s:%s;", key, val);
 	}
+
+	/* Get rid of trailing `;'. */
+	if (p != c) {
+		--p;
+		*p = '\0';
+	}
+
 	/* g_print ("style: %s\n", c); */
 	sp_repr_set_attr (repr, attr, (c[0]) ? c : NULL);
 }
