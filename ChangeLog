@@ -48,6 +48,11 @@
 	  Slight simplification: don't handle impossible condition npoints < 2.
 	* src/proofs: Update accordingly.  (Also add some bezier-utils proofs.)
 
+2004-08-04  David Turner <novalis@gnu.org>
+
+	* sp-path.cpp: 'd' is a required attribute for paths.  Ensure that
+	all paths have it.
+
 2004-08-03  MenTaLguY  <mental@rydia.net>
 
 	* src/dialogs/rdf.cpp, src/xml/repr-util.cpp, src/xml/repr.h:
@@ -58,6 +63,12 @@
 	  src/livarot/ShapeSweep.cpp, src/livarot/ShapeMisc.cpp:
 	  
 	  experiment to replace ad-hoc realloc() arrays with std::vector
+
+2004-08-02  David Turner <novalis@gnu.org>
+
+	* file.cpp, file.h, interface.cpp, toolbox.cpp, verbs.cpp, verbs.h: 
+
+	Added vacuum command to remove unused defs.
 
 2004-08-02  MenTaLguY  <mental@rydia.net>
 
@@ -78,7 +89,7 @@
 	* src/display/curve.cpp, src/display/curve.h:
 	  Greater conformance with CodingStyle.
 
-2004-07-31  David Turner
+2004-07-31  David Turner <novalis@gnu.org>
 
 	* dialogs/xml-tree.cpp: Improved focus, added keystroke for attr commit.
 
@@ -104,7 +115,7 @@
 	  anymore - this was flaky.  Also added a document to the prototype so
 	  that document specific parameters can be supported in the future.
 
-2004-07-28  David Turner
+2004-07-28  David Turner <novalis@gnu.org>
 
 	* sp-gradient.cpp, widgets/gradient-vector.cpp: fixed gradient handling to
 	properly render gradients with sharp color boundaries
