@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-22 22:02+0200\n"
+"POT-Creation-Date: 2004-06-23 19:33+0200\n"
 "PO-Revision-Date: 2004-05-31 19:27+0200\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -44,7 +44,7 @@ msgstr "Premakni %s"
 msgid "Zoom drawing if window size changes"
 msgstr "Približaj na velikost risbe"
 
-#: src/desktop.cpp:824 src/dialogs/display-settings.cpp:925 src/verbs.cpp:969
+#: src/desktop.cpp:824 src/dialogs/display-settings.cpp:890 src/verbs.cpp:969
 msgid "Zoom"
 msgstr "Povečava"
 
@@ -384,7 +384,7 @@ msgstr "Enote:"
 #: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1361
-#: src/toolbox.cpp:1573
+#: src/toolbox.cpp:1625
 msgid "Width:"
 msgstr "Širina:"
 
@@ -398,88 +398,62 @@ msgstr "Višina:"
 msgid "Close"
 msgstr "Zapri"
 
-#: src/dialogs/display-settings.cpp:201
+#: src/dialogs/display-settings.cpp:192
 msgid "When transforming, show:"
 msgstr "Ob preoblikovanju kaži:"
 
-#: src/dialogs/display-settings.cpp:212
+#: src/dialogs/display-settings.cpp:203
 msgid "Objects"
 msgstr "Predmete"
 
-#: src/dialogs/display-settings.cpp:212
+#: src/dialogs/display-settings.cpp:203
 msgid "Show the actual objects when moving or transforming"
 msgstr "Ob premikanju in spreminjanju prikazuj dejanske predmete"
 
-#: src/dialogs/display-settings.cpp:218
+#: src/dialogs/display-settings.cpp:209
 msgid "Box outline"
 msgstr "Zgolj obroba"
 
-#: src/dialogs/display-settings.cpp:218
+#: src/dialogs/display-settings.cpp:209
 msgid "Show only a box outline of the objects when moving or transforming"
 msgstr "Pri premikanju in spreminjanju kaži le obrise predmetov"
 
-#: src/dialogs/display-settings.cpp:223
+#: src/dialogs/display-settings.cpp:214
 msgid "Per-object selection cue:"
 msgstr "Točka izbire na predmet"
 
 #. sorationsnapsperpi == 0 means no snapping
-#: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:367
-#: src/dialogs/display-settings.cpp:422 src/dialogs/display-settings.cpp:1208
+#: src/dialogs/display-settings.cpp:225 src/dialogs/display-settings.cpp:332
+#: src/dialogs/display-settings.cpp:387 src/dialogs/display-settings.cpp:1173
 #: src/interface.cpp:964 src/verbs.cpp:797
 msgid "None"
 msgstr "Brez"
 
-#: src/dialogs/display-settings.cpp:234
+#: src/dialogs/display-settings.cpp:225
 msgid "No per-object selection indication"
 msgstr "Brez kazalca izbire na predmet"
 
-#: src/dialogs/display-settings.cpp:240
+#: src/dialogs/display-settings.cpp:231
 msgid "Mark"
 msgstr "Oznaka"
 
-#: src/dialogs/display-settings.cpp:240
+#: src/dialogs/display-settings.cpp:231
 msgid "Each selected object has a diamond mark in the top left corner"
 msgstr "Vsak izbran predmet ima v zgornjem levem kotu karo oznako"
 
-#: src/dialogs/display-settings.cpp:246
+#: src/dialogs/display-settings.cpp:237
 msgid "Box"
 msgstr "Okvir"
 
-#: src/dialogs/display-settings.cpp:246
+#: src/dialogs/display-settings.cpp:237
 msgid "Each selected object displays its bounding box"
 msgstr "Vsak izbran predmet pokaže svoj okvir"
 
-#: src/dialogs/display-settings.cpp:251
-msgid "Default action when moving with grid enabled:"
-msgstr ""
-
-#: src/dialogs/display-settings.cpp:262
-#, fuzzy
-msgid "Snap points to the grid"
-msgstr "Preskakuj do mreže"
-
-#: src/dialogs/display-settings.cpp:263
-msgid ""
-"Default action is to snap the points of objects to the grid, even if the "
-"object was not previously snapped.  Shift+drag selects the alternative "
-"behaviour."
-msgstr ""
-
-#: src/dialogs/display-settings.cpp:270
-msgid "Snap objects to their current grid offset"
-msgstr ""
-
-#: src/dialogs/display-settings.cpp:271
-msgid ""
-"Default action is to snap objects to having the same offset from the grid as "
-"they did before the move.  Shift+drag selects the alternative behaviour."
-msgstr ""
-
-#: src/dialogs/display-settings.cpp:323
+#: src/dialogs/display-settings.cpp:288
 msgid "degrees"
 msgstr "stopinj"
 
-#: src/dialogs/display-settings.cpp:332
+#: src/dialogs/display-settings.cpp:297
 msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
@@ -487,11 +461,11 @@ msgstr ""
 "Vrtenje ob držanju tipke Ctrl se ustavlja na vsakih toliko stopinj; tudi "
 "pritiskanje [ or ] zavrti za toliko stopinj. "
 
-#: src/dialogs/display-settings.cpp:388
+#: src/dialogs/display-settings.cpp:353
 msgid "Rotation snaps every:"
 msgstr "Vrtenje se ustavi vsakih:"
 
-#: src/dialogs/display-settings.cpp:411
+#: src/dialogs/display-settings.cpp:376
 msgid ""
 "None: dialogs are treated as regular windows; Normal: dialogs stay on top of "
 "document windows; Aggressive: same as Normal but may work better with some "
@@ -501,37 +475,37 @@ msgstr ""
 "dokumenti; Agresivno: enako kot Običajno, toda dela bolje z nekaterimi "
 "upravljalniki oken."
 
-#: src/dialogs/display-settings.cpp:432
+#: src/dialogs/display-settings.cpp:397
 msgid "Normal"
 msgstr "Običajno"
 
-#: src/dialogs/display-settings.cpp:442
+#: src/dialogs/display-settings.cpp:407
 msgid "Aggressive"
 msgstr "Agresivno"
 
-#: src/dialogs/display-settings.cpp:456
+#: src/dialogs/display-settings.cpp:421
 msgid "Dialogs on top:"
 msgstr "Pogovorna okna:"
 
-#: src/dialogs/display-settings.cpp:626
+#: src/dialogs/display-settings.cpp:591
 #, fuzzy
 msgid "Show selection cue"
 msgstr "Točka izbire na predmet"
 
-#: src/dialogs/display-settings.cpp:627
+#: src/dialogs/display-settings.cpp:592
 msgid ""
 "Whether selected objects display a selection cue (the same as in selector)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:644
+#: src/dialogs/display-settings.cpp:609
 msgid "Picking colors:"
 msgstr "Izberi barvo:"
 
-#: src/dialogs/display-settings.cpp:655
+#: src/dialogs/display-settings.cpp:620
 msgid "Pick visible color (no alpha)"
 msgstr "Izberi vidno barvo (brez prosojnosti)"
 
-#: src/dialogs/display-settings.cpp:655
+#: src/dialogs/display-settings.cpp:620
 msgid ""
 "Pick the visible color under cursor, taking into account the page background "
 "and disregarding the transparency of objects"
@@ -539,11 +513,11 @@ msgstr ""
 "Izbere barvo pod kazalcem, upoštevajoč barvo ozadja in ne upoštevajoč "
 "prosojnosti predmetov"
 
-#: src/dialogs/display-settings.cpp:662
+#: src/dialogs/display-settings.cpp:627
 msgid "Pick objects' color (including alpha)"
 msgstr "Izberi barvo predmeta (vključno s prosojnostjo)"
 
-#: src/dialogs/display-settings.cpp:662
+#: src/dialogs/display-settings.cpp:627
 msgid ""
 "Pick the actual color of object(s) under cursor, including their accumulated "
 "transparency"
@@ -551,47 +525,47 @@ msgstr ""
 "Izbere dejansko barvo predmeta pod kazalcem, vključno s skupno prosojnostjo"
 
 #. Mouse
-#: src/dialogs/display-settings.cpp:754
+#: src/dialogs/display-settings.cpp:719
 msgid "Mouse"
 msgstr "Miška"
 
-#: src/dialogs/display-settings.cpp:757
+#: src/dialogs/display-settings.cpp:722
 msgid "Grab sensitivity:"
 msgstr "Občutljivost oprijema:"
 
-#: src/dialogs/display-settings.cpp:758
+#: src/dialogs/display-settings.cpp:723
 msgid ""
 "How close you need to be to an object to be able to grab it with mouse (in "
 "pixels)"
 msgstr ""
 "Kako blizu predmetu morate priti s kazalcem, da ga lahko zagrabite (v pikah)."
 
-#: src/dialogs/display-settings.cpp:759 src/dialogs/display-settings.cpp:770
-#: src/dialogs/display-settings.cpp:785 src/dialogs/display-settings.cpp:803
-#: src/dialogs/display-settings.cpp:843 src/helper/units.cpp:36
+#: src/dialogs/display-settings.cpp:724 src/dialogs/display-settings.cpp:735
+#: src/dialogs/display-settings.cpp:750 src/dialogs/display-settings.cpp:768
+#: src/dialogs/display-settings.cpp:808 src/helper/units.cpp:36
 msgid "px"
 msgstr "pik"
 
-#: src/dialogs/display-settings.cpp:768
+#: src/dialogs/display-settings.cpp:733
 msgid "Click/drag threshold:"
 msgstr "Natančnost miške"
 
-#: src/dialogs/display-settings.cpp:769
+#: src/dialogs/display-settings.cpp:734
 msgid "Maximum mouse drag (in pixels) which is considered a click, not a drag"
 msgstr ""
 "Najdaljši poteg kazalca (v pikah), ki se še obravnava kot klik in še ne "
 "poteg."
 
 #. Scrolling
-#: src/dialogs/display-settings.cpp:780
+#: src/dialogs/display-settings.cpp:745
 msgid "Scrolling"
 msgstr "Kolešček"
 
-#: src/dialogs/display-settings.cpp:783
+#: src/dialogs/display-settings.cpp:748
 msgid "Mouse wheel scrolls by:"
 msgstr "Kolešček premika po:"
 
-#: src/dialogs/display-settings.cpp:784
+#: src/dialogs/display-settings.cpp:749
 msgid ""
 "One mouse wheel notch scrolls by this distance in pixels (horizontally with "
 "Shift)"
@@ -599,23 +573,23 @@ msgstr ""
 "Vsak premik koleščka povzroči premik v tem obsegu navpično (skupaj s Shiftom "
 "vodoravno)"
 
-#: src/dialogs/display-settings.cpp:793
+#: src/dialogs/display-settings.cpp:758
 msgid "Ctrl+arrows"
 msgstr "Ctrl+smerniki"
 
-#: src/dialogs/display-settings.cpp:801
+#: src/dialogs/display-settings.cpp:766
 msgid "Scroll by:"
 msgstr "Preskakuj po:"
 
-#: src/dialogs/display-settings.cpp:802
+#: src/dialogs/display-settings.cpp:767
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in pixels)"
 msgstr "Pritiskanje Ctrl in smernih tipk premika po sliki za toliko točk"
 
-#: src/dialogs/display-settings.cpp:812
+#: src/dialogs/display-settings.cpp:777
 msgid "Acceleration:"
 msgstr "Pospeševanje:"
 
-#: src/dialogs/display-settings.cpp:813
+#: src/dialogs/display-settings.cpp:778
 msgid ""
 "Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no "
 "acceleration)"
@@ -623,15 +597,15 @@ msgstr ""
 "Tiščanje Ctrl in smerne tipke bo sčasoma pospeševalo premikanje (0 za izklop "
 "tega)"
 
-#: src/dialogs/display-settings.cpp:822
+#: src/dialogs/display-settings.cpp:787
 msgid "Autoscrolling"
 msgstr "Samosledenje"
 
-#: src/dialogs/display-settings.cpp:830
+#: src/dialogs/display-settings.cpp:795
 msgid "Speed:"
 msgstr "Hitrost:"
 
-#: src/dialogs/display-settings.cpp:831
+#: src/dialogs/display-settings.cpp:796
 msgid ""
 "How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn "
 "autoscroll off)"
@@ -639,11 +613,11 @@ msgstr ""
 "Kako hitro po dosegu robu, se bo slika sledila kazalcu (0 izključi to "
 "možnost)"
 
-#: src/dialogs/display-settings.cpp:841
+#: src/dialogs/display-settings.cpp:806
 msgid "Threshold:"
 msgstr "Doseg:"
 
-#: src/dialogs/display-settings.cpp:842
+#: src/dialogs/display-settings.cpp:807
 msgid ""
 "How far (in pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
@@ -652,15 +626,15 @@ msgstr ""
 "pozitivno za zunaj polja, negativno za znotraj."
 
 #. Steps
-#: src/dialogs/display-settings.cpp:852
+#: src/dialogs/display-settings.cpp:817
 msgid "Steps"
 msgstr "Korakov"
 
-#: src/dialogs/display-settings.cpp:855
+#: src/dialogs/display-settings.cpp:820
 msgid "Arrow keys move by:"
 msgstr "Smerne tipke premikajo za:"
 
-#: src/dialogs/display-settings.cpp:856
+#: src/dialogs/display-settings.cpp:821
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance "
 "(in points)"
@@ -668,34 +642,34 @@ msgstr ""
 "Pritisk smerne tipke bo izbrane predmete ali vozlišča premaknil ta toliko "
 "točk."
 
-#: src/dialogs/display-settings.cpp:857 src/dialogs/display-settings.cpp:868
-#: src/dialogs/display-settings.cpp:879 src/helper/units.cpp:35
+#: src/dialogs/display-settings.cpp:822 src/dialogs/display-settings.cpp:833
+#: src/dialogs/display-settings.cpp:844 src/helper/units.cpp:35
 msgid "pt"
 msgstr "pik"
 
-#: src/dialogs/display-settings.cpp:866
+#: src/dialogs/display-settings.cpp:831
 msgid "> and < scale by:"
 msgstr "> in < raztegneta:"
 
-#: src/dialogs/display-settings.cpp:867
+#: src/dialogs/display-settings.cpp:832
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in points)"
 msgstr "Pritiskanje na < ali > raztegne ali skrči izbrano za toliko točk."
 
-#: src/dialogs/display-settings.cpp:877
+#: src/dialogs/display-settings.cpp:842
 msgid "Inset/Outset by:"
 msgstr "Razširi/zoži za:"
 
-#: src/dialogs/display-settings.cpp:878
+#: src/dialogs/display-settings.cpp:843
 msgid ""
 "Inset and Outset commands displace the path by this distance (in points)"
 msgstr "Ukaza razširi in zoži bosta na črto delovala za toliko točk"
 
-#: src/dialogs/display-settings.cpp:890
+#: src/dialogs/display-settings.cpp:855
 msgid "Zoom in/out by:"
 msgstr "Povečava:"
 
-#: src/dialogs/display-settings.cpp:891
+#: src/dialogs/display-settings.cpp:856
 msgid ""
 "Zoom tool click, +/- keys, and middle click zoom in and out by this "
 "multiplier"
@@ -703,61 +677,61 @@ msgstr ""
 "Orodje za povečavo, pritisk na +/-, približevanje s srednjim gumbom miške, "
 "bodo delovali s tem faktorjem"
 
-#: src/dialogs/display-settings.cpp:892 src/helper/units.cpp:39
+#: src/dialogs/display-settings.cpp:857 src/helper/units.cpp:39
 msgid "%"
 msgstr "%"
 
 #. Tools
-#: src/dialogs/display-settings.cpp:901
+#: src/dialogs/display-settings.cpp:866
 msgid "Tools"
 msgstr "Orodja"
 
-#: src/dialogs/display-settings.cpp:909
+#: src/dialogs/display-settings.cpp:874
 msgid "Selector"
 msgstr "Izbirnik"
 
-#: src/dialogs/display-settings.cpp:918
+#: src/dialogs/display-settings.cpp:883
 #, fuzzy
 msgid "Node"
 msgstr "Brez"
 
 #. The 4 shape tools
-#: src/dialogs/display-settings.cpp:931
+#: src/dialogs/display-settings.cpp:896
 #, fuzzy
 msgid "Shapes"
 msgstr "Ostrina:"
 
 #. Rect
-#: src/dialogs/display-settings.cpp:938 src/sp-rect.cpp:259 src/verbs.cpp:953
+#: src/dialogs/display-settings.cpp:903 src/sp-rect.cpp:259 src/verbs.cpp:953
 msgid "Rectangle"
 msgstr "Pravokotnik"
 
 #. Ellipse
-#: src/dialogs/display-settings.cpp:941 src/sp-ellipse.cpp:443
+#: src/dialogs/display-settings.cpp:906 src/sp-ellipse.cpp:443
 #: src/verbs.cpp:955
 msgid "Ellipse"
 msgstr "Elipsa"
 
 #. Star
-#: src/dialogs/display-settings.cpp:944 src/verbs.cpp:957
+#: src/dialogs/display-settings.cpp:909 src/verbs.cpp:957
 msgid "Star"
 msgstr "Zvezda"
 
 #. Spiral
-#: src/dialogs/display-settings.cpp:947 src/sp-spiral.cpp:259
+#: src/dialogs/display-settings.cpp:912 src/sp-spiral.cpp:259
 #: src/verbs.cpp:959
 msgid "Spiral"
 msgstr "Spirala"
 
-#: src/dialogs/display-settings.cpp:955 src/verbs.cpp:961
+#: src/dialogs/display-settings.cpp:920 src/verbs.cpp:961
 msgid "Pencil"
 msgstr "Svinčnik"
 
-#: src/dialogs/display-settings.cpp:958
+#: src/dialogs/display-settings.cpp:923
 msgid "Tolerance:"
 msgstr "Strpnost:"
 
-#: src/dialogs/display-settings.cpp:959
+#: src/dialogs/display-settings.cpp:924
 msgid ""
 "This value affects the amount of smoothing applied to freehand lines; lower "
 "values produce more uneven paths with more nodes"
@@ -765,29 +739,29 @@ msgstr ""
 "To določa količino mehčanja prostoročnih črt; manjša količina pomeni manj "
 "enotne črte z več vozlišči"
 
-#: src/dialogs/display-settings.cpp:973 src/verbs.cpp:963
+#: src/dialogs/display-settings.cpp:938 src/verbs.cpp:963
 msgid "Pen"
 msgstr "Pero"
 
-#: src/dialogs/display-settings.cpp:980 src/dialogs/object-properties.cpp:287
+#: src/dialogs/display-settings.cpp:945 src/dialogs/object-properties.cpp:287
 #: src/verbs.cpp:967
 msgid "Text"
 msgstr "Besedilo"
 
-#: src/dialogs/display-settings.cpp:987 src/verbs.cpp:971
+#: src/dialogs/display-settings.cpp:952 src/verbs.cpp:971
 msgid "Dropper"
 msgstr "Povzem"
 
 #. Windows
-#: src/dialogs/display-settings.cpp:996
+#: src/dialogs/display-settings.cpp:961
 msgid "Windows"
 msgstr "Okna"
 
-#: src/dialogs/display-settings.cpp:1001
+#: src/dialogs/display-settings.cpp:966
 msgid "Save window geometry"
 msgstr "Shrani obliko okna"
 
-#: src/dialogs/display-settings.cpp:1002
+#: src/dialogs/display-settings.cpp:967
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
@@ -795,19 +769,19 @@ msgstr ""
 "Shrani velikost in položaj okna za vsak dokument (samo v Inkscape SVG "
 "formatu)"
 
-#: src/dialogs/display-settings.cpp:1009
+#: src/dialogs/display-settings.cpp:974
 msgid "Dialogs are hidden in taskbar"
 msgstr "Skria pogovorna okna"
 
-#: src/dialogs/display-settings.cpp:1010
+#: src/dialogs/display-settings.cpp:975
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr "Ali se pogovorna okna vidijo v opravilni vrstici upravljalnika oken"
 
-#: src/dialogs/display-settings.cpp:1017
+#: src/dialogs/display-settings.cpp:982
 msgid "Zoom when window is resized"
 msgstr "Približaj ob spremembi velikosti"
 
-#: src/dialogs/display-settings.cpp:1018
+#: src/dialogs/display-settings.cpp:983
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
@@ -815,102 +789,102 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1026 src/dialogs/find.cpp:561
+#: src/dialogs/display-settings.cpp:991 src/dialogs/find.cpp:561
 msgid "Clones"
 msgstr "Kloni"
 
-#: src/dialogs/display-settings.cpp:1030
+#: src/dialogs/display-settings.cpp:995
 msgid "When the original moves, its clones:"
 msgstr "Če premaknem izvirnik, se kloni:"
 
-#: src/dialogs/display-settings.cpp:1042
+#: src/dialogs/display-settings.cpp:1007
 msgid "Move in parallel"
 msgstr "Premaknejo vzporedno"
 
-#: src/dialogs/display-settings.cpp:1042
+#: src/dialogs/display-settings.cpp:1007
 msgid "Clones are translated by the same vector as their original."
 msgstr "Kloni se premaknejo po istem vektorju kot izvirnik"
 
-#: src/dialogs/display-settings.cpp:1048
+#: src/dialogs/display-settings.cpp:1013
 msgid "Stay unmoved"
 msgstr "Ostanejo pri miru"
 
-#: src/dialogs/display-settings.cpp:1048
+#: src/dialogs/display-settings.cpp:1013
 msgid "Clones preserve their positions when their original is moved."
 msgstr "Kloni se ne premikajo, čeprav se njihov izvirnik"
 
-#: src/dialogs/display-settings.cpp:1054
+#: src/dialogs/display-settings.cpp:1019
 msgid "Move according to transform"
 msgstr "Premaknejo v skladu s preobrazbo"
 
-#: src/dialogs/display-settings.cpp:1054
+#: src/dialogs/display-settings.cpp:1019
 msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
 "original."
 msgstr "Vsak klon se premakne v skladu s svojo"
 
-#: src/dialogs/display-settings.cpp:1062
+#: src/dialogs/display-settings.cpp:1027
 msgid "When the original is deleted, its clones:"
 msgstr "Če pobrišem izvirnik, se kloni:"
 
-#: src/dialogs/display-settings.cpp:1074
+#: src/dialogs/display-settings.cpp:1039
 msgid "Are unlinked"
 msgstr "Odvežejo"
 
-#: src/dialogs/display-settings.cpp:1074
+#: src/dialogs/display-settings.cpp:1039
 msgid "Orphaned clones are converted to regular objects."
 msgstr "Kloni-sirote se pretvorijo v običajne predmete"
 
-#: src/dialogs/display-settings.cpp:1080
+#: src/dialogs/display-settings.cpp:1045
 msgid "Are deleted"
 msgstr "so izbrisani"
 
-#: src/dialogs/display-settings.cpp:1080
+#: src/dialogs/display-settings.cpp:1045
 msgid "Orphaned clones are deleted along with their original."
 msgstr "Kloni-sirote se pobrišejo skupaj z zvirnikom"
 
 #. Transforms
-#: src/dialogs/display-settings.cpp:1095
+#: src/dialogs/display-settings.cpp:1060
 #, fuzzy
 msgid "Transforms"
 msgstr "Preoblikuj..."
 
-#: src/dialogs/display-settings.cpp:1098
+#: src/dialogs/display-settings.cpp:1063
 #, fuzzy
 msgid "Scale stroke width"
 msgstr "Debelina črte"
 
-#: src/dialogs/display-settings.cpp:1099
+#: src/dialogs/display-settings.cpp:1064
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1106
+#: src/dialogs/display-settings.cpp:1071
 msgid "Scale rounded corners in rectangles"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1107
+#: src/dialogs/display-settings.cpp:1072
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1114
+#: src/dialogs/display-settings.cpp:1079
 #, fuzzy
 msgid "Transform pattern fill"
 msgstr "Nastavitve preoblikovanja"
 
-#: src/dialogs/display-settings.cpp:1115
+#: src/dialogs/display-settings.cpp:1080
 msgid "Apply the transform of an object to its pattern fill"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1123
+#: src/dialogs/display-settings.cpp:1088
 msgid "Store transformation:"
 msgstr "Shrani preoblikovanje"
 
-#: src/dialogs/display-settings.cpp:1134
+#: src/dialogs/display-settings.cpp:1099
 msgid "Optimized"
 msgstr "Učinkovite"
 
-#: src/dialogs/display-settings.cpp:1134
+#: src/dialogs/display-settings.cpp:1099
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
@@ -918,57 +892,57 @@ msgstr ""
 "Če je mogoče, preoblikuje predmete, ne da bi spreminjal lastnost "
 "preoblikovanje"
 
-#: src/dialogs/display-settings.cpp:1140
+#: src/dialogs/display-settings.cpp:1105
 msgid "Preserved"
 msgstr "Ohranjene"
 
-#: src/dialogs/display-settings.cpp:1140
+#: src/dialogs/display-settings.cpp:1105
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr "Vedno shrani preoblikovanja kot predmetovo lastnost preoblikovanje="
 
 #. To be broken into: Display, Save, Export, SVG, Commands
-#: src/dialogs/display-settings.cpp:1148
+#: src/dialogs/display-settings.cpp:1113
 msgid "Misc"
 msgstr "Razno"
 
-#: src/dialogs/display-settings.cpp:1151
+#: src/dialogs/display-settings.cpp:1116
 msgid "Default export resolution:"
 msgstr "Privzeta ločljivost pri izvažanju"
 
-#: src/dialogs/display-settings.cpp:1152
+#: src/dialogs/display-settings.cpp:1117
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr "Privzeta ločljivost slik (v DPI) v pogovornem oknu Izvoz"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1153 src/dialogs/export.cpp:366
+#: src/dialogs/display-settings.cpp:1118 src/dialogs/export.cpp:366
 #: src/dialogs/export.cpp:382
 msgid "dpi"
 msgstr "pik na palec"
 
-#: src/dialogs/display-settings.cpp:1162
+#: src/dialogs/display-settings.cpp:1127
 #, fuzzy
 msgid "Import bitmap as <image>"
 msgstr "V dokument uvozi sliko ali SVG"
 
-#: src/dialogs/display-settings.cpp:1163
+#: src/dialogs/display-settings.cpp:1128
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
 "rectangle with bitmap fill"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1170
+#: src/dialogs/display-settings.cpp:1135
 msgid "Max recent documents:"
 msgstr "Nedavnih dokumentov:"
 
-#: src/dialogs/display-settings.cpp:1171
+#: src/dialogs/display-settings.cpp:1136
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr "Dolžina spiska nedavno odprtih dokumentov v meniju Datoteka"
 
-#: src/dialogs/display-settings.cpp:1181
+#: src/dialogs/display-settings.cpp:1146
 msgid "Simplification threshold:"
 msgstr "Doseg poenostavljanja"
 
-#: src/dialogs/display-settings.cpp:1182
+#: src/dialogs/display-settings.cpp:1147
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
@@ -978,23 +952,23 @@ msgstr ""
 "se bo obnašal agresivneje. Če ga izberete po krajšem premoru, bo spet "
 "privzeto močen."
 
-#: src/dialogs/display-settings.cpp:1197
+#: src/dialogs/display-settings.cpp:1162
 msgid "Oversample bitmaps:"
 msgstr "Prevzorči rastrske slike:"
 
-#: src/dialogs/display-settings.cpp:1214
+#: src/dialogs/display-settings.cpp:1179
 msgid "2x2"
 msgstr "2x2"
 
-#: src/dialogs/display-settings.cpp:1220
+#: src/dialogs/display-settings.cpp:1185
 msgid "4x4"
 msgstr "4x4"
 
-#: src/dialogs/display-settings.cpp:1226
+#: src/dialogs/display-settings.cpp:1191
 msgid "8x8"
 msgstr "8x8"
 
-#: src/dialogs/display-settings.cpp:1232
+#: src/dialogs/display-settings.cpp:1197
 msgid "16x16"
 msgstr "16x16"
 
@@ -2098,16 +2072,16 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Kvadrati ex"
 
-#: src/inkscape.cpp:467
+#: src/inkscape.cpp:461
 msgid "Untitled document"
 msgstr "Neimenovan dokument"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:498
+#: src/inkscape.cpp:492
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Inkscape se je spotaknil ob notranjo napako in se bo zato zaprl.\n"
 
-#: src/inkscape.cpp:499
+#: src/inkscape.cpp:493
 #, fuzzy
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
@@ -2116,12 +2090,12 @@ msgstr ""
 "Samodejno shranjevanje neshranjenih dokumentov je bilo opravljeno, na "
 "sledeče lokacije:\n"
 
-#: src/inkscape.cpp:500
+#: src/inkscape.cpp:494
 #, fuzzy
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "Samodejno shranjevanje sledečih dokumentov ni uspelo:\n"
 
-#: src/inkscape.cpp:662
+#: src/inkscape.cpp:653
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
@@ -2130,7 +2104,7 @@ msgstr ""
 "%s ni običajna datoteka.\n"
 "%s"
 
-#: src/inkscape.cpp:663
+#: src/inkscape.cpp:654
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -2141,7 +2115,7 @@ msgstr ""
 "pa zanjo nimate pravice branja.\n"
 "%s"
 
-#: src/inkscape.cpp:665
+#: src/inkscape.cpp:656
 #, fuzzy, c-format
 msgid ""
 "%s is not a valid preferences file.\n"
@@ -2150,7 +2124,7 @@ msgstr ""
 "Datoteka %s ne vsebuje nastavitev.\n"
 "%s"
 
-#: src/inkscape.cpp:666
+#: src/inkscape.cpp:657
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
@@ -2158,7 +2132,7 @@ msgstr ""
 "Inkscape se bo zagnal s privzetimi nastavitvami.\n"
 "Nove nastavitve ne bodo shranjene."
 
-#: src/inkscape.cpp:1158
+#: src/inkscape.cpp:1148
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -2167,7 +2141,7 @@ msgstr ""
 "Ne morem ustvariti mape %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1159
+#: src/inkscape.cpp:1149
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -2176,7 +2150,7 @@ msgstr ""
 "Mapa %s ni veljavna.\n"
 "%s"
 
-#: src/inkscape.cpp:1160
+#: src/inkscape.cpp:1150
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -2185,7 +2159,7 @@ msgstr ""
 "Ne morem ustvariti datoteke %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1161
+#: src/inkscape.cpp:1151
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -2194,7 +2168,7 @@ msgstr ""
 "Ne morem zapisati datoteke %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1162
+#: src/inkscape.cpp:1152
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
@@ -2418,45 +2392,45 @@ msgid ""
 "Available options:"
 msgstr ""
 
-#: src/nodepath.cpp:1001 src/nodepath.cpp:1013 src/nodepath.cpp:1093
-#: src/nodepath.cpp:1105
+#: src/nodepath.cpp:1003 src/nodepath.cpp:1015 src/nodepath.cpp:1095
+#: src/nodepath.cpp:1107
 msgid "To join, you must have two endnodes selected."
 msgstr "Za združitev morate izbrati vsaj dve vozlišči."
 
-#: src/nodepath.cpp:1230 src/nodepath.cpp:1244
+#: src/nodepath.cpp:1232 src/nodepath.cpp:1246
 msgid ""
 "You must select two non-endpoint nodes on a path between which to delete "
 "segments."
 msgstr "Da bi izbrisali del črte, morate na njej izbrati dve vmesni vozlišči."
 
-#: src/nodepath.cpp:1340
+#: src/nodepath.cpp:1342
 msgid "Cannot find path between nodes."
 msgstr "Ne najdem poti med vozlišči."
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: src/nodepath.cpp:2712
+#: src/nodepath.cpp:2719
 msgid "cusp"
 msgstr "ostro"
 
-#: src/nodepath.cpp:2714
+#: src/nodepath.cpp:2721
 msgid "smooth"
 msgstr "gladka"
 
-#: src/nodepath.cpp:2716
+#: src/nodepath.cpp:2723
 msgid "symmetric"
 msgstr "simetrična"
 
-#: src/nodepath.cpp:2726
+#: src/nodepath.cpp:2733
 msgid "Drag nodes or control points to edit the path"
 msgstr "Za urejanje črte povleci vozlišča ali kontrolne točke"
 
-#: src/nodepath.cpp:2741
+#: src/nodepath.cpp:2748
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 "Najprej izberite črto z izbirnikom, nato ponovno izberite orodje za vozlišča."
 
-#: src/nodepath.cpp:2744
+#: src/nodepath.cpp:2751
 #, fuzzy, c-format
 msgid ""
 "0 out of %i nodes selected. Click, Shift+click, or drag around nodes to "
@@ -2465,12 +2439,12 @@ msgstr ""
 "Nobeno od %i vozlišč ni izbrano. Izberite jih s klikom, Shift+klikom ali "
 "potegom okrog njih."
 
-#: src/nodepath.cpp:2748
+#: src/nodepath.cpp:2755
 #, c-format
 msgid "%i of %i nodes selected; %s. %s."
 msgstr "%i of %i izbrana vozlišča; %s. %s."
 
-#: src/nodepath.cpp:2751
+#: src/nodepath.cpp:2758
 #, c-format
 msgid "%i of %i nodes selected. %s."
 msgstr "Izbranih %i od %i vozlišč. %s."
@@ -2605,7 +2579,7 @@ msgstr "Premik preklican"
 msgid "Selection cancelled."
 msgstr "Prekliči izbiro"
 
-#: src/select-context.cpp:805
+#: src/select-context.cpp:801
 #, c-format
 msgid "Move by %s, %s"
 msgstr "Premakni za %s, %s"
@@ -2852,12 +2826,12 @@ msgstr "Predmet"
 msgid "Path (%i nodes)"
 msgstr "Črta (%i vozlišč)"
 
-#: src/sp-star.cpp:253
+#: src/sp-star.cpp:273
 #, c-format
 msgid "Star of %d sides"
 msgstr "Zvezda z %d kraki"
 
-#: src/sp-star.cpp:254
+#: src/sp-star.cpp:274
 #, c-format
 msgid "Polygon of %d sides"
 msgstr "%d-kotnik (poligon)"
@@ -2952,12 +2926,12 @@ msgstr "Izberite nekaj črt za poenostavljanje."
 msgid "No paths to simplify in the selection."
 msgstr "Med izbiro ni črt, ki bi jih lahko poenostavil."
 
-#: src/star-context.cpp:466
+#: src/star-context.cpp:471
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr "Nariši poligon na (%s,%s)"
 
-#: src/star-context.cpp:467
+#: src/star-context.cpp:472
 #, c-format
 msgid "Draw star at (%s,%s)"
 msgstr "Nariši zvezdo na (%s,%s)"
@@ -3023,37 +2997,46 @@ msgstr "Pretvori izbrane odseke v črte"
 msgid "Make selected segments curves"
 msgstr "Pretvori izbrane odseke v krivulje"
 
-#: src/toolbox.cpp:926
+#: src/toolbox.cpp:966
 msgid "Corners:"
 msgstr "Oglišča:"
 
-#: src/toolbox.cpp:926
+#: src/toolbox.cpp:966
 msgid "Number of corners of a polygon or star"
 msgstr "Število kotov poligona ali zvezde"
 
-#: src/toolbox.cpp:939
+#: src/toolbox.cpp:979
 msgid "Polygon"
 msgstr "Poligon"
 
-#: src/toolbox.cpp:946
+#: src/toolbox.cpp:986
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Običajen poligon (z eno ročico) namesto zvezde"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:958
-msgid "Sharpness:"
-msgstr "Ostrina:"
+#: src/toolbox.cpp:998
+#, fuzzy
+msgid "Spoke ratio:"
+msgstr "Shrani preoblikovanje"
 
-#: src/toolbox.cpp:958
+#: src/toolbox.cpp:998
 msgid "Base radius to tip radius ratio"
 msgstr "Razmerje med bližnjo in oddaljeno točko"
 
-#: src/toolbox.cpp:974 src/toolbox.cpp:1487 src/toolbox.cpp:1615
+#: src/toolbox.cpp:1013
+msgid "Roundedness:"
+msgstr ""
+
+#: src/toolbox.cpp:1013
+msgid "How much rounded are the corners (0 for sharp)"
+msgstr ""
+
+#: src/toolbox.cpp:1026 src/toolbox.cpp:1539 src/toolbox.cpp:1667
 msgid "Defaults"
 msgstr "Privzeto"
 
-#: src/toolbox.cpp:977 src/toolbox.cpp:1488 src/toolbox.cpp:1616
+#: src/toolbox.cpp:1029 src/toolbox.cpp:1540 src/toolbox.cpp:1668
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3061,117 +3044,117 @@ msgstr ""
 "Povrni lastnosti oblike na privzete (uporabite Nastavitve Inkscapea >Orodja "
 "za nastavitev privzetih vrednosti)"
 
-#: src/toolbox.cpp:1212
+#: src/toolbox.cpp:1264
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1212
+#: src/toolbox.cpp:1264
 #, fuzzy
 msgid "Horizontal radius of rounded corner"
 msgstr "Vodoravna koordinata izbire"
 
-#: src/toolbox.cpp:1222
+#: src/toolbox.cpp:1274
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1222
+#: src/toolbox.cpp:1274
 #, fuzzy
 msgid "Vertical radius of rounded corner"
 msgstr "Navpična koordinata izbire"
 
-#: src/toolbox.cpp:1238
+#: src/toolbox.cpp:1290
 msgid "Not rounded"
 msgstr "Nezaobljeno"
 
-#: src/toolbox.cpp:1239
+#: src/toolbox.cpp:1291
 msgid "Make corners sharp"
 msgstr "Naj bodo koti ostri"
 
-#: src/toolbox.cpp:1456
+#: src/toolbox.cpp:1508
 msgid "Turns:"
 msgstr "Obrati:"
 
-#: src/toolbox.cpp:1456
+#: src/toolbox.cpp:1508
 msgid "Number of revolutions"
 msgstr "Število obhodov"
 
-#: src/toolbox.cpp:1466
+#: src/toolbox.cpp:1518
 msgid "Divergence:"
 msgstr "Divergenca:"
 
-#: src/toolbox.cpp:1466
+#: src/toolbox.cpp:1518
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "Zgoščevanje ali zredčevanje obhodov navzven; 1 = enakomerno"
 
-#: src/toolbox.cpp:1476
+#: src/toolbox.cpp:1528
 msgid "Inner radius:"
 msgstr "Notranji radij:"
 
-#: src/toolbox.cpp:1476
+#: src/toolbox.cpp:1528
 #, fuzzy
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Polmer najmanjšega obhoda"
 
-#: src/toolbox.cpp:1573
+#: src/toolbox.cpp:1625
 msgid "The width of the calligraphic pen"
 msgstr "Debelina kaligrafskega peresa"
 
-#: src/toolbox.cpp:1583
+#: src/toolbox.cpp:1635
 msgid "Angle:"
 msgstr "Kot:"
 
-#: src/toolbox.cpp:1583
+#: src/toolbox.cpp:1635
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr "Kot kaligrafskega peresa (v stopinjah)"
 
-#: src/toolbox.cpp:1593
+#: src/toolbox.cpp:1645
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1593
+#: src/toolbox.cpp:1645
 msgid "How much inertia affects the movement of the pen"
 msgstr "Koliko vztrajnost vpliva na gibanje peresa"
 
-#: src/toolbox.cpp:1603
+#: src/toolbox.cpp:1655
 msgid "Drag:"
 msgstr "Upor:"
 
-#: src/toolbox.cpp:1603
+#: src/toolbox.cpp:1655
 msgid "How much resistance affects the movement of the pen"
 msgstr "Koliko upor vpliva na gibanje peresa"
 
-#: src/toolbox.cpp:1915
+#: src/toolbox.cpp:1967
 msgid "Start:"
 msgstr "Začetek:"
 
-#: src/toolbox.cpp:1915
+#: src/toolbox.cpp:1967
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Kot med vodoravnico in začetno točko loka."
 
-#: src/toolbox.cpp:1925
+#: src/toolbox.cpp:1977
 msgid "End:"
 msgstr "Konec:"
 
-#: src/toolbox.cpp:1925
+#: src/toolbox.cpp:1977
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Kot med vodoravnico in končno točko loka."
 
-#: src/toolbox.cpp:1936
+#: src/toolbox.cpp:1988
 msgid "Open arc"
 msgstr "Odpri krog"
 
-#: src/toolbox.cpp:1937
+#: src/toolbox.cpp:1989
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Izberi med lokom (nezaključena oblika) in odsekom (zaprta oblika z dvema "
 "polmeroma)"
 
-#: src/toolbox.cpp:1964
+#: src/toolbox.cpp:2016
 msgid "Make whole"
 msgstr "Celota"
 
-#: src/toolbox.cpp:1965
+#: src/toolbox.cpp:2017
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Naj bo predmet cela elipsa in ne le odsek ali lok"
 
@@ -4434,6 +4417,13 @@ msgstr "Lastnost"
 #: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
 msgstr "Vrednost"
+
+#, fuzzy
+#~ msgid "Snap points to the grid"
+#~ msgstr "Preskakuj do mreže"
+
+#~ msgid "Sharpness:"
+#~ msgstr "Ostrina:"
 
 #, fuzzy
 #~ msgid "Rect"

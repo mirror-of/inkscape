@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-22 22:02+0200\n"
+"POT-Creation-Date: 2004-06-23 19:33+0200\n"
 "PO-Revision-Date: 2004-03-19 00:55+0900\n"
 "Last-Translator: shivken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -54,7 +54,7 @@ msgstr "移動"
 msgid "Zoom drawing if window size changes"
 msgstr "描画をウィンドウに合わせる"
 
-#: src/desktop.cpp:824 src/dialogs/display-settings.cpp:925 src/verbs.cpp:969
+#: src/desktop.cpp:824 src/dialogs/display-settings.cpp:890 src/verbs.cpp:969
 msgid "Zoom"
 msgstr "ズーム"
 
@@ -390,7 +390,7 @@ msgstr "ユニット:"
 #: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1361
-#: src/toolbox.cpp:1573
+#: src/toolbox.cpp:1625
 msgid "Width:"
 msgstr "幅:"
 
@@ -404,406 +404,380 @@ msgstr "高さ:"
 msgid "Close"
 msgstr "閉じる"
 
-#: src/dialogs/display-settings.cpp:201
+#: src/dialogs/display-settings.cpp:192
 #, fuzzy
 msgid "When transforming, show:"
 msgstr "オブジェクトの変形"
 
-#: src/dialogs/display-settings.cpp:212
+#: src/dialogs/display-settings.cpp:203
 #, fuzzy
 msgid "Objects"
 msgstr "オブジェクト"
 
-#: src/dialogs/display-settings.cpp:212
+#: src/dialogs/display-settings.cpp:203
 msgid "Show the actual objects when moving or transforming"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:218
+#: src/dialogs/display-settings.cpp:209
 #, fuzzy
 msgid "Box outline"
 msgstr "アウトラインの表示"
 
-#: src/dialogs/display-settings.cpp:218
+#: src/dialogs/display-settings.cpp:209
 msgid "Show only a box outline of the objects when moving or transforming"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:223
+#: src/dialogs/display-settings.cpp:214
 msgid "Per-object selection cue:"
 msgstr ""
 
 #. sorationsnapsperpi == 0 means no snapping
-#: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:367
-#: src/dialogs/display-settings.cpp:422 src/dialogs/display-settings.cpp:1208
+#: src/dialogs/display-settings.cpp:225 src/dialogs/display-settings.cpp:332
+#: src/dialogs/display-settings.cpp:387 src/dialogs/display-settings.cpp:1173
 #: src/interface.cpp:964 src/verbs.cpp:797
 msgid "None"
 msgstr "なし"
 
-#: src/dialogs/display-settings.cpp:234
+#: src/dialogs/display-settings.cpp:225
 msgid "No per-object selection indication"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:240
+#: src/dialogs/display-settings.cpp:231
 msgid "Mark"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:240
+#: src/dialogs/display-settings.cpp:231
 msgid "Each selected object has a diamond mark in the top left corner"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:246
+#: src/dialogs/display-settings.cpp:237
 msgid "Box"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:246
+#: src/dialogs/display-settings.cpp:237
 msgid "Each selected object displays its bounding box"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:251
-msgid "Default action when moving with grid enabled:"
-msgstr ""
-
-#: src/dialogs/display-settings.cpp:262
-#, fuzzy
-msgid "Snap points to the grid"
-msgstr "グリッドにあわせる"
-
-#: src/dialogs/display-settings.cpp:263
-msgid ""
-"Default action is to snap the points of objects to the grid, even if the "
-"object was not previously snapped.  Shift+drag selects the alternative "
-"behaviour."
-msgstr ""
-
-#: src/dialogs/display-settings.cpp:270
-msgid "Snap objects to their current grid offset"
-msgstr ""
-
-#: src/dialogs/display-settings.cpp:271
-msgid ""
-"Default action is to snap objects to having the same offset from the grid as "
-"they did before the move.  Shift+drag selects the alternative behaviour."
-msgstr ""
-
-#: src/dialogs/display-settings.cpp:323
+#: src/dialogs/display-settings.cpp:288
 #, fuzzy
 msgid "degrees"
 msgstr "度"
 
-#: src/dialogs/display-settings.cpp:332
+#: src/dialogs/display-settings.cpp:297
 msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:388
+#: src/dialogs/display-settings.cpp:353
 msgid "Rotation snaps every:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:411
+#: src/dialogs/display-settings.cpp:376
 msgid ""
 "None: dialogs are treated as regular windows; Normal: dialogs stay on top of "
 "document windows; Aggressive: same as Normal but may work better with some "
 "window managers."
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:432
+#: src/dialogs/display-settings.cpp:397
 msgid "Normal"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:442
+#: src/dialogs/display-settings.cpp:407
 msgid "Aggressive"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:456
+#: src/dialogs/display-settings.cpp:421
 #, fuzzy
 msgid "Dialogs on top:"
 msgstr "ダイアログ"
 
-#: src/dialogs/display-settings.cpp:626
+#: src/dialogs/display-settings.cpp:591
 #, fuzzy
 msgid "Show selection cue"
 msgstr "選択オブジェクトを背面に移動"
 
-#: src/dialogs/display-settings.cpp:627
+#: src/dialogs/display-settings.cpp:592
 msgid ""
 "Whether selected objects display a selection cue (the same as in selector)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:644
+#: src/dialogs/display-settings.cpp:609
 #, fuzzy
 msgid "Picking colors:"
 msgstr "ハイライトカラー:"
 
-#: src/dialogs/display-settings.cpp:655
+#: src/dialogs/display-settings.cpp:620
 msgid "Pick visible color (no alpha)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:655
+#: src/dialogs/display-settings.cpp:620
 msgid ""
 "Pick the visible color under cursor, taking into account the page background "
 "and disregarding the transparency of objects"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:662
+#: src/dialogs/display-settings.cpp:627
 msgid "Pick objects' color (including alpha)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:662
+#: src/dialogs/display-settings.cpp:627
 msgid ""
 "Pick the actual color of object(s) under cursor, including their accumulated "
 "transparency"
 msgstr ""
 
 #. Mouse
-#: src/dialogs/display-settings.cpp:754
+#: src/dialogs/display-settings.cpp:719
 #, fuzzy
 msgid "Mouse"
 msgstr "移動"
 
-#: src/dialogs/display-settings.cpp:757
+#: src/dialogs/display-settings.cpp:722
 #, fuzzy
 msgid "Grab sensitivity:"
 msgstr "センシティブに設定"
 
-#: src/dialogs/display-settings.cpp:758
+#: src/dialogs/display-settings.cpp:723
 msgid ""
 "How close you need to be to an object to be able to grab it with mouse (in "
 "pixels)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:759 src/dialogs/display-settings.cpp:770
-#: src/dialogs/display-settings.cpp:785 src/dialogs/display-settings.cpp:803
-#: src/dialogs/display-settings.cpp:843 src/helper/units.cpp:36
+#: src/dialogs/display-settings.cpp:724 src/dialogs/display-settings.cpp:735
+#: src/dialogs/display-settings.cpp:750 src/dialogs/display-settings.cpp:768
+#: src/dialogs/display-settings.cpp:808 src/helper/units.cpp:36
 msgid "px"
 msgstr "px"
 
-#: src/dialogs/display-settings.cpp:768
+#: src/dialogs/display-settings.cpp:733
 msgid "Click/drag threshold:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:769
+#: src/dialogs/display-settings.cpp:734
 msgid "Maximum mouse drag (in pixels) which is considered a click, not a drag"
 msgstr ""
 
 #. Scrolling
-#: src/dialogs/display-settings.cpp:780
+#: src/dialogs/display-settings.cpp:745
 #, fuzzy
 msgid "Scrolling"
 msgstr "スクロールバー"
 
-#: src/dialogs/display-settings.cpp:783
+#: src/dialogs/display-settings.cpp:748
 msgid "Mouse wheel scrolls by:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:784
+#: src/dialogs/display-settings.cpp:749
 msgid ""
 "One mouse wheel notch scrolls by this distance in pixels (horizontally with "
 "Shift)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:793
+#: src/dialogs/display-settings.cpp:758
 msgid "Ctrl+arrows"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:801
+#: src/dialogs/display-settings.cpp:766
 #, fuzzy
 msgid "Scroll by:"
 msgstr "スクロールバー"
 
-#: src/dialogs/display-settings.cpp:802
+#: src/dialogs/display-settings.cpp:767
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in pixels)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:812
+#: src/dialogs/display-settings.cpp:777
 #, fuzzy
 msgid "Acceleration:"
 msgstr "選択"
 
-#: src/dialogs/display-settings.cpp:813
+#: src/dialogs/display-settings.cpp:778
 msgid ""
 "Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no "
 "acceleration)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:822
+#: src/dialogs/display-settings.cpp:787
 msgid "Autoscrolling"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:830
+#: src/dialogs/display-settings.cpp:795
 #, fuzzy
 msgid "Speed:"
 msgstr "赤:"
 
-#: src/dialogs/display-settings.cpp:831
+#: src/dialogs/display-settings.cpp:796
 msgid ""
 "How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn "
 "autoscroll off)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:841
+#: src/dialogs/display-settings.cpp:806
 msgid "Threshold:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:842
+#: src/dialogs/display-settings.cpp:807
 msgid ""
 "How far (in pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
 msgstr ""
 
 #. Steps
-#: src/dialogs/display-settings.cpp:852
+#: src/dialogs/display-settings.cpp:817
 #, fuzzy
 msgid "Steps"
 msgstr " スタイル"
 
-#: src/dialogs/display-settings.cpp:855
+#: src/dialogs/display-settings.cpp:820
 msgid "Arrow keys move by:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:856
+#: src/dialogs/display-settings.cpp:821
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance "
 "(in points)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:857 src/dialogs/display-settings.cpp:868
-#: src/dialogs/display-settings.cpp:879 src/helper/units.cpp:35
+#: src/dialogs/display-settings.cpp:822 src/dialogs/display-settings.cpp:833
+#: src/dialogs/display-settings.cpp:844 src/helper/units.cpp:35
 msgid "pt"
 msgstr "ポイント"
 
-#: src/dialogs/display-settings.cpp:866
+#: src/dialogs/display-settings.cpp:831
 msgid "> and < scale by:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:867
+#: src/dialogs/display-settings.cpp:832
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in points)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:877
+#: src/dialogs/display-settings.cpp:842
 msgid "Inset/Outset by:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:878
+#: src/dialogs/display-settings.cpp:843
 msgid ""
 "Inset and Outset commands displace the path by this distance (in points)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:890
+#: src/dialogs/display-settings.cpp:855
 #, fuzzy
 msgid "Zoom in/out by:"
 msgstr "ズームアウト"
 
-#: src/dialogs/display-settings.cpp:891
+#: src/dialogs/display-settings.cpp:856
 msgid ""
 "Zoom tool click, +/- keys, and middle click zoom in and out by this "
 "multiplier"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:892 src/helper/units.cpp:39
+#: src/dialogs/display-settings.cpp:857 src/helper/units.cpp:39
 msgid "%"
 msgstr "%"
 
 #. Tools
-#: src/dialogs/display-settings.cpp:901
+#: src/dialogs/display-settings.cpp:866
 msgid "Tools"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:909
+#: src/dialogs/display-settings.cpp:874
 #, fuzzy
 msgid "Selector"
 msgstr "選択"
 
-#: src/dialogs/display-settings.cpp:918
+#: src/dialogs/display-settings.cpp:883
 #, fuzzy
 msgid "Node"
 msgstr "なし"
 
 #. The 4 shape tools
-#: src/dialogs/display-settings.cpp:931
+#: src/dialogs/display-settings.cpp:896
 msgid "Shapes"
 msgstr ""
 
 #. Rect
-#: src/dialogs/display-settings.cpp:938 src/sp-rect.cpp:259 src/verbs.cpp:953
+#: src/dialogs/display-settings.cpp:903 src/sp-rect.cpp:259 src/verbs.cpp:953
 msgid "Rectangle"
 msgstr "矩形"
 
 #. Ellipse
-#: src/dialogs/display-settings.cpp:941 src/sp-ellipse.cpp:443
+#: src/dialogs/display-settings.cpp:906 src/sp-ellipse.cpp:443
 #: src/verbs.cpp:955
 msgid "Ellipse"
 msgstr "楕円"
 
 #. Star
-#: src/dialogs/display-settings.cpp:944 src/verbs.cpp:957
+#: src/dialogs/display-settings.cpp:909 src/verbs.cpp:957
 msgid "Star"
 msgstr "星"
 
 #. Spiral
-#: src/dialogs/display-settings.cpp:947 src/sp-spiral.cpp:259
+#: src/dialogs/display-settings.cpp:912 src/sp-spiral.cpp:259
 #: src/verbs.cpp:959
 msgid "Spiral"
 msgstr "螺旋"
 
-#: src/dialogs/display-settings.cpp:955 src/verbs.cpp:961
+#: src/dialogs/display-settings.cpp:920 src/verbs.cpp:961
 msgid "Pencil"
 msgstr "鉛筆"
 
-#: src/dialogs/display-settings.cpp:958
+#: src/dialogs/display-settings.cpp:923
 #, fuzzy
 msgid "Tolerance:"
 msgstr "トレース"
 
-#: src/dialogs/display-settings.cpp:959
+#: src/dialogs/display-settings.cpp:924
 msgid ""
 "This value affects the amount of smoothing applied to freehand lines; lower "
 "values produce more uneven paths with more nodes"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:973 src/verbs.cpp:963
+#: src/dialogs/display-settings.cpp:938 src/verbs.cpp:963
 msgid "Pen"
 msgstr "ペン"
 
-#: src/dialogs/display-settings.cpp:980 src/dialogs/object-properties.cpp:287
+#: src/dialogs/display-settings.cpp:945 src/dialogs/object-properties.cpp:287
 #: src/verbs.cpp:967
 msgid "Text"
 msgstr "テキスト"
 
-#: src/dialogs/display-settings.cpp:987 src/verbs.cpp:971
+#: src/dialogs/display-settings.cpp:952 src/verbs.cpp:971
 msgid "Dropper"
 msgstr "スポイト"
 
 #. Windows
-#: src/dialogs/display-settings.cpp:996
+#: src/dialogs/display-settings.cpp:961
 msgid "Windows"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1001
+#: src/dialogs/display-settings.cpp:966
 #, fuzzy
 msgid "Save window geometry"
 msgstr "ドキュメントの保存"
 
-#: src/dialogs/display-settings.cpp:1002
+#: src/dialogs/display-settings.cpp:967
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1009
+#: src/dialogs/display-settings.cpp:974
 msgid "Dialogs are hidden in taskbar"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1010
+#: src/dialogs/display-settings.cpp:975
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1017
+#: src/dialogs/display-settings.cpp:982
 #, fuzzy
 msgid "Zoom when window is resized"
 msgstr "ウィンドウサイズの変更で画像も拡大/縮小"
 
-#: src/dialogs/display-settings.cpp:1018
+#: src/dialogs/display-settings.cpp:983
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
@@ -811,188 +785,188 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1026 src/dialogs/find.cpp:561
+#: src/dialogs/display-settings.cpp:991 src/dialogs/find.cpp:561
 #, fuzzy
 msgid "Clones"
 msgstr "閉じる"
 
-#: src/dialogs/display-settings.cpp:1030
+#: src/dialogs/display-settings.cpp:995
 msgid "When the original moves, its clones:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1042
+#: src/dialogs/display-settings.cpp:1007
 msgid "Move in parallel"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1042
+#: src/dialogs/display-settings.cpp:1007
 msgid "Clones are translated by the same vector as their original."
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1048
+#: src/dialogs/display-settings.cpp:1013
 msgid "Stay unmoved"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1048
+#: src/dialogs/display-settings.cpp:1013
 msgid "Clones preserve their positions when their original is moved."
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1054
+#: src/dialogs/display-settings.cpp:1019
 msgid "Move according to transform"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1054
+#: src/dialogs/display-settings.cpp:1019
 msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
 "original."
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1062
+#: src/dialogs/display-settings.cpp:1027
 msgid "When the original is deleted, its clones:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1074
+#: src/dialogs/display-settings.cpp:1039
 msgid "Are unlinked"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1074
+#: src/dialogs/display-settings.cpp:1039
 msgid "Orphaned clones are converted to regular objects."
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1080
+#: src/dialogs/display-settings.cpp:1045
 #, fuzzy
 msgid "Are deleted"
 msgstr "最初の選択部分"
 
-#: src/dialogs/display-settings.cpp:1080
+#: src/dialogs/display-settings.cpp:1045
 msgid "Orphaned clones are deleted along with their original."
 msgstr ""
 
 #. Transforms
-#: src/dialogs/display-settings.cpp:1095
+#: src/dialogs/display-settings.cpp:1060
 #, fuzzy
 msgid "Transforms"
 msgstr "変形"
 
-#: src/dialogs/display-settings.cpp:1098
+#: src/dialogs/display-settings.cpp:1063
 #, fuzzy
 msgid "Scale stroke width"
 msgstr "ペイント無し"
 
-#: src/dialogs/display-settings.cpp:1099
+#: src/dialogs/display-settings.cpp:1064
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1106
+#: src/dialogs/display-settings.cpp:1071
 msgid "Scale rounded corners in rectangles"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1107
+#: src/dialogs/display-settings.cpp:1072
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1114
+#: src/dialogs/display-settings.cpp:1079
 #, fuzzy
 msgid "Transform pattern fill"
 msgstr "変形行列"
 
-#: src/dialogs/display-settings.cpp:1115
+#: src/dialogs/display-settings.cpp:1080
 msgid "Apply the transform of an object to its pattern fill"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1123
+#: src/dialogs/display-settings.cpp:1088
 #, fuzzy
 msgid "Store transformation:"
 msgstr "オブジェクトの変形"
 
-#: src/dialogs/display-settings.cpp:1134
+#: src/dialogs/display-settings.cpp:1099
 #, fuzzy
 msgid "Optimized"
 msgstr "最適化"
 
-#: src/dialogs/display-settings.cpp:1134
+#: src/dialogs/display-settings.cpp:1099
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1140
+#: src/dialogs/display-settings.cpp:1105
 #, fuzzy
 msgid "Preserved"
 msgstr "保護"
 
-#: src/dialogs/display-settings.cpp:1140
+#: src/dialogs/display-settings.cpp:1105
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
 
 #. To be broken into: Display, Save, Export, SVG, Commands
-#: src/dialogs/display-settings.cpp:1148
+#: src/dialogs/display-settings.cpp:1113
 msgid "Misc"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1151
+#: src/dialogs/display-settings.cpp:1116
 msgid "Default export resolution:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1152
+#: src/dialogs/display-settings.cpp:1117
 #, fuzzy
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr "ビットマップ解像度(インチあたりのドット数)"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1153 src/dialogs/export.cpp:366
+#: src/dialogs/display-settings.cpp:1118 src/dialogs/export.cpp:366
 #: src/dialogs/export.cpp:382
 msgid "dpi"
 msgstr "dpi"
 
-#: src/dialogs/display-settings.cpp:1162
+#: src/dialogs/display-settings.cpp:1127
 #, fuzzy
 msgid "Import bitmap as <image>"
 msgstr "ビットマップまたはSVGイメージをインポート"
 
-#: src/dialogs/display-settings.cpp:1163
+#: src/dialogs/display-settings.cpp:1128
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
 "rectangle with bitmap fill"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1170
+#: src/dialogs/display-settings.cpp:1135
 #, fuzzy
 msgid "Max recent documents:"
 msgstr "ドキュメントを印刷"
 
-#: src/dialogs/display-settings.cpp:1171
+#: src/dialogs/display-settings.cpp:1136
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1181
+#: src/dialogs/display-settings.cpp:1146
 msgid "Simplification threshold:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1182
+#: src/dialogs/display-settings.cpp:1147
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
 "invoking it again after a pause restores the default threshold."
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1197
+#: src/dialogs/display-settings.cpp:1162
 msgid "Oversample bitmaps:"
 msgstr "オーバーサンプルビットマップ:"
 
-#: src/dialogs/display-settings.cpp:1214
+#: src/dialogs/display-settings.cpp:1179
 msgid "2x2"
 msgstr "2x2"
 
-#: src/dialogs/display-settings.cpp:1220
+#: src/dialogs/display-settings.cpp:1185
 msgid "4x4"
 msgstr "4x4"
 
-#: src/dialogs/display-settings.cpp:1226
+#: src/dialogs/display-settings.cpp:1191
 msgid "8x8"
 msgstr "8x8"
 
-#: src/dialogs/display-settings.cpp:1232
+#: src/dialogs/display-settings.cpp:1197
 msgid "16x16"
 msgstr "16x16"
 
@@ -2106,35 +2080,35 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "EX スクエア"
 
-#: src/inkscape.cpp:467
+#: src/inkscape.cpp:461
 msgid "Untitled document"
 msgstr "無題ドキュメント"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:498
+#: src/inkscape.cpp:492
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Inkscapeは内部エラーが発生しました。今すぐ終了します。\n"
 
-#: src/inkscape.cpp:499
+#: src/inkscape.cpp:493
 #, fuzzy
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
 msgstr "未保存ドキュメントの自動バックアップを次の場所に行いました:\n"
 
-#: src/inkscape.cpp:500
+#: src/inkscape.cpp:494
 #, fuzzy
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "次のドキュメントの自動バックアップに失敗しました:\n"
 
-#: src/inkscape.cpp:662
+#: src/inkscape.cpp:653
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:663
+#: src/inkscape.cpp:654
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -2142,48 +2116,48 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:665
+#: src/inkscape.cpp:656
 #, c-format
 msgid ""
 "%s is not a valid preferences file.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:666
+#: src/inkscape.cpp:657
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
 msgstr ""
 
-#: src/inkscape.cpp:1158
+#: src/inkscape.cpp:1148
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1159
+#: src/inkscape.cpp:1149
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1160
+#: src/inkscape.cpp:1150
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1161
+#: src/inkscape.cpp:1151
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1162
+#: src/inkscape.cpp:1152
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
@@ -2404,57 +2378,57 @@ msgid ""
 "Available options:"
 msgstr ""
 
-#: src/nodepath.cpp:1001 src/nodepath.cpp:1013 src/nodepath.cpp:1093
-#: src/nodepath.cpp:1105
+#: src/nodepath.cpp:1003 src/nodepath.cpp:1015 src/nodepath.cpp:1095
+#: src/nodepath.cpp:1107
 msgid "To join, you must have two endnodes selected."
 msgstr ""
 
-#: src/nodepath.cpp:1230 src/nodepath.cpp:1244
+#: src/nodepath.cpp:1232 src/nodepath.cpp:1246
 msgid ""
 "You must select two non-endpoint nodes on a path between which to delete "
 "segments."
 msgstr ""
 
-#: src/nodepath.cpp:1340
+#: src/nodepath.cpp:1342
 #, fuzzy
 msgid "Cannot find path between nodes."
 msgstr "選択ノードで線を結合"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: src/nodepath.cpp:2712
+#: src/nodepath.cpp:2719
 msgid "cusp"
 msgstr ""
 
-#: src/nodepath.cpp:2714
+#: src/nodepath.cpp:2721
 msgid "smooth"
 msgstr ""
 
-#: src/nodepath.cpp:2716
+#: src/nodepath.cpp:2723
 msgid "symmetric"
 msgstr ""
 
-#: src/nodepath.cpp:2726
+#: src/nodepath.cpp:2733
 msgid "Drag nodes or control points to edit the path"
 msgstr ""
 
-#: src/nodepath.cpp:2741
+#: src/nodepath.cpp:2748
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 
-#: src/nodepath.cpp:2744
+#: src/nodepath.cpp:2751
 #, c-format
 msgid ""
 "0 out of %i nodes selected. Click, Shift+click, or drag around nodes to "
 "select."
 msgstr ""
 
-#: src/nodepath.cpp:2748
+#: src/nodepath.cpp:2755
 #, c-format
 msgid "%i of %i nodes selected; %s. %s."
 msgstr ""
 
-#: src/nodepath.cpp:2751
+#: src/nodepath.cpp:2758
 #, fuzzy, c-format
 msgid "%i of %i nodes selected. %s."
 msgstr "選択ノードで線を結合"
@@ -2597,7 +2571,7 @@ msgstr ""
 msgid "Selection cancelled."
 msgstr "選択"
 
-#: src/select-context.cpp:805
+#: src/select-context.cpp:801
 #, fuzzy, c-format
 msgid "Move by %s, %s"
 msgstr "移動"
@@ -2849,12 +2823,12 @@ msgstr "オブジェクト"
 msgid "Path (%i nodes)"
 msgstr ""
 
-#: src/sp-star.cpp:253
+#: src/sp-star.cpp:273
 #, c-format
 msgid "Star of %d sides"
 msgstr ""
 
-#: src/sp-star.cpp:254
+#: src/sp-star.cpp:274
 #, c-format
 msgid "Polygon of %d sides"
 msgstr ""
@@ -2952,12 +2926,12 @@ msgstr "複製するオブジェクトを選択してください"
 msgid "No paths to simplify in the selection."
 msgstr "解除するグループがありません"
 
-#: src/star-context.cpp:466
+#: src/star-context.cpp:471
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr ""
 
-#: src/star-context.cpp:467
+#: src/star-context.cpp:472
 #, c-format
 msgid "Draw star at (%s,%s)"
 msgstr ""
@@ -3024,153 +2998,162 @@ msgstr "選択セグメントを折線にする"
 msgid "Make selected segments curves"
 msgstr "選択セグメントを曲線にする"
 
-#: src/toolbox.cpp:926
+#: src/toolbox.cpp:966
 msgid "Corners:"
 msgstr "角数:"
 
-#: src/toolbox.cpp:926
+#: src/toolbox.cpp:966
 msgid "Number of corners of a polygon or star"
 msgstr ""
 
-#: src/toolbox.cpp:939
+#: src/toolbox.cpp:979
 msgid "Polygon"
 msgstr ""
 
-#: src/toolbox.cpp:946
+#: src/toolbox.cpp:986
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr ""
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:958
-msgid "Sharpness:"
-msgstr ""
+#: src/toolbox.cpp:998
+#, fuzzy
+msgid "Spoke ratio:"
+msgstr "比率"
 
-#: src/toolbox.cpp:958
+#: src/toolbox.cpp:998
 msgid "Base radius to tip radius ratio"
 msgstr ""
 
-#: src/toolbox.cpp:974 src/toolbox.cpp:1487 src/toolbox.cpp:1615
+#: src/toolbox.cpp:1013
+msgid "Roundedness:"
+msgstr ""
+
+#: src/toolbox.cpp:1013
+msgid "How much rounded are the corners (0 for sharp)"
+msgstr ""
+
+#: src/toolbox.cpp:1026 src/toolbox.cpp:1539 src/toolbox.cpp:1667
 msgid "Defaults"
 msgstr "既定値"
 
-#: src/toolbox.cpp:977 src/toolbox.cpp:1488 src/toolbox.cpp:1616
+#: src/toolbox.cpp:1029 src/toolbox.cpp:1540 src/toolbox.cpp:1668
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
 
-#: src/toolbox.cpp:1212
+#: src/toolbox.cpp:1264
 #, fuzzy
 msgid "Rx:"
 msgstr "x0:"
 
-#: src/toolbox.cpp:1212
+#: src/toolbox.cpp:1264
 msgid "Horizontal radius of rounded corner"
 msgstr ""
 
-#: src/toolbox.cpp:1222
+#: src/toolbox.cpp:1274
 #, fuzzy
 msgid "Ry:"
 msgstr "y0:"
 
-#: src/toolbox.cpp:1222
+#: src/toolbox.cpp:1274
 msgid "Vertical radius of rounded corner"
 msgstr ""
 
-#: src/toolbox.cpp:1238
+#: src/toolbox.cpp:1290
 msgid "Not rounded"
 msgstr ""
 
-#: src/toolbox.cpp:1239
+#: src/toolbox.cpp:1291
 msgid "Make corners sharp"
 msgstr ""
 
-#: src/toolbox.cpp:1456
+#: src/toolbox.cpp:1508
 msgid "Turns:"
 msgstr ""
 
-#: src/toolbox.cpp:1456
+#: src/toolbox.cpp:1508
 msgid "Number of revolutions"
 msgstr ""
 
-#: src/toolbox.cpp:1466
+#: src/toolbox.cpp:1518
 #, fuzzy
 msgid "Divergence:"
 msgstr "差分"
 
-#: src/toolbox.cpp:1466
+#: src/toolbox.cpp:1518
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 
-#: src/toolbox.cpp:1476
+#: src/toolbox.cpp:1528
 msgid "Inner radius:"
 msgstr "内半径:"
 
-#: src/toolbox.cpp:1476
+#: src/toolbox.cpp:1528
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 
-#: src/toolbox.cpp:1573
+#: src/toolbox.cpp:1625
 msgid "The width of the calligraphic pen"
 msgstr ""
 
-#: src/toolbox.cpp:1583
+#: src/toolbox.cpp:1635
 msgid "Angle:"
 msgstr "角度:"
 
-#: src/toolbox.cpp:1583
+#: src/toolbox.cpp:1635
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr ""
 
-#: src/toolbox.cpp:1593
+#: src/toolbox.cpp:1645
 msgid "Mass:"
 msgstr "質量:"
 
-#: src/toolbox.cpp:1593
+#: src/toolbox.cpp:1645
 msgid "How much inertia affects the movement of the pen"
 msgstr ""
 
-#: src/toolbox.cpp:1603
+#: src/toolbox.cpp:1655
 msgid "Drag:"
 msgstr "重み:"
 
-#: src/toolbox.cpp:1603
+#: src/toolbox.cpp:1655
 msgid "How much resistance affects the movement of the pen"
 msgstr ""
 
-#: src/toolbox.cpp:1915
+#: src/toolbox.cpp:1967
 #, fuzzy
 msgid "Start:"
 msgstr "星"
 
-#: src/toolbox.cpp:1915
+#: src/toolbox.cpp:1967
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr ""
 
-#: src/toolbox.cpp:1925
+#: src/toolbox.cpp:1977
 msgid "End:"
 msgstr ""
 
-#: src/toolbox.cpp:1925
+#: src/toolbox.cpp:1977
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 
-#: src/toolbox.cpp:1936
+#: src/toolbox.cpp:1988
 #, fuzzy
 msgid "Open arc"
 msgstr "最近開いたファイル"
 
-#: src/toolbox.cpp:1937
+#: src/toolbox.cpp:1989
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 
-#: src/toolbox.cpp:1964
+#: src/toolbox.cpp:2016
 msgid "Make whole"
 msgstr ""
 
-#: src/toolbox.cpp:1965
+#: src/toolbox.cpp:2017
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr ""
 
@@ -4489,6 +4472,10 @@ msgid "Value"
 msgstr "値"
 
 #, fuzzy
+#~ msgid "Snap points to the grid"
+#~ msgstr "グリッドにあわせる"
+
+#, fuzzy
 #~ msgid "Rect"
 #~ msgstr "矩形"
 
@@ -4641,9 +4628,6 @@ msgstr "値"
 
 #~ msgid "Show content"
 #~ msgstr "内容を表示"
-
-#~ msgid "Proportion:"
-#~ msgstr "比率"
 
 #~ msgid "Inkscape _Options"
 #~ msgstr "Inkscape オプション"
