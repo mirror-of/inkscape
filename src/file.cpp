@@ -161,13 +161,24 @@ void
 sp_file_revert_dialog ()
 {
     SPDesktop  *desktop = SP_ACTIVE_DESKTOP;
+    g_assert(desktop != NULL);
+
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
+    g_assert(doc != NULL);
+
     SPRepr     *repr = sp_document_repr_root (doc);
+    g_assert(repr != NULL);
+
+    const gchar *uri = doc->uri;
+    if (!uri) {
+        sp_view_set_statusf_flash (SP_VIEW(desktop), _("Document not saved yet.  Cannot revert."));
+        return;
+    }
 
     if (sp_repr_attr (repr, "sodipodi:modified") != NULL) {
         GtkWidget *dialog;
 	gchar * text;
-        const gchar * uri = doc->uri;
+        bool reverted = FALSE;
 
 	text = g_strdup_printf(_("Changes will be lost!  Are you sure you want to reload document %s?"), uri);
 
@@ -184,13 +195,18 @@ sp_file_revert_dialog ()
         if (response == GTK_RESPONSE_YES) {
             // allow overwriting of current document
             doc->virgin=TRUE;
-            sp_file_open(uri,NULL);
+            reverted = sp_file_open(uri,NULL);
         }
 
-        sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document reverted."));
+        if (reverted) {
+            sp_view_set_statusf_flash (SP_VIEW(desktop), _("Document reverted."));
+        }
+        else {
+            sp_view_set_statusf_flash (SP_VIEW(desktop), _("Document not reverted."));
+        }
     }
     else {
-        sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not modified.  No need to revert."));
+        sp_view_set_statusf_flash (SP_VIEW(desktop), _("Document not modified.  No need to revert."));
     }
 }
 

@@ -17,7 +17,8 @@
 	* configure.in: Implemented gcc version test for >= 3.0.0
 	* src/file.cpp, src/interface.cpp, share/icons/icons.svg, src/verbs.cbb:
 	  finished "File / Revert" implementation.  Found a memory leak in
-      "file_save".
+      "file_save".  Added more sanity checking to "sp_file_revert" and more
+	  status messages.
 	* src/main.cpp, src/file.h, src/file.cpp: removed redundant code, implemented
 	  in "sp_file_open".
 
