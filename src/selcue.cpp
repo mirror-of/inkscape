@@ -16,6 +16,7 @@
 #include "selection.h"
 #include "desktop.h"
 #include "display/sp-canvas.h"
+#include "display/sp-canvas-util.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sodipodi-ctrlrect.h"
 #include "prefs-utils.h"
@@ -107,7 +108,7 @@ sp_sel_cue_update_item_bboxes (SPSelCue * selcue)
                      sp_canvas_item_show (box);
                      SP_CTRL(box)->moveto (NR::Point(b.x0, b.y1));
 
-                     sp_canvas_item_lower (box, 1000); // just low enough to not get in the way of other draggable knots
+                     sp_canvas_item_move_to_z (box, 0); // just low enough to not get in the way of other draggable knots
 		 }
 		 else if (mode == SP_SELCUE_BBOX)
 		 {
@@ -122,7 +123,7 @@ sp_sel_cue_update_item_bboxes (SPSelCue * selcue)
                      sp_ctrlrect_set_color (SP_CTRLRECT (box), 0x000000a0, 0, 0);
                      sp_ctrlrect_set_dashed (SP_CTRLRECT (box), 1);
 
-                     sp_canvas_item_lower (box, 1000);
+                     sp_canvas_item_move_to_z (box, 0);
 		 }
                  
 		 if (box)

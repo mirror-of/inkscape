@@ -116,6 +116,9 @@ void sp_canvas_item_move_to_z (SPCanvasItem * item, gint z)
 
 	gint current_z = sp_canvas_item_order (item);
 
+	if (current_z == -1) // not found in its parent
+		return;
+
 	if (z == current_z)
 		return;
 
