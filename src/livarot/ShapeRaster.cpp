@@ -15,6 +15,7 @@
 
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
+#include "livarot/sweep-event-queue.h"
 
 /*
  * polygon rasterization: the sweepline algorithm in all its glory

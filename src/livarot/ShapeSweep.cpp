@@ -9,7 +9,7 @@
 #include <glib/gmem.h>
 #include "Shape.h"
 #include "LivarotDefs.h"
-//#include "MyMath.h"
+#include "livarot/sweep-event-queue.h"
 
 #include "../libnr/nr-matrix.h"
 
