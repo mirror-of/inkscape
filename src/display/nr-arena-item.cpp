@@ -146,7 +146,7 @@ nr_arena_item_last_child (NRArenaItem *item)
 	nr_return_val_if_fail (NR_IS_ARENA_ITEM (item), NULL);
 
 	if (NR_ARENA_ITEM_VIRTUAL (item, last_child)) {
-		return NR_ARENA_ITEM_VIRTUAL (item, children) (item);
+		return NR_ARENA_ITEM_VIRTUAL (item, last_child) (item);
 	} else {
 		NRArenaItem *ref;
 		ref = nr_arena_item_children (item);

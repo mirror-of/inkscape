@@ -1,3 +1,10 @@
+2005-03-17  MenTaLguY  <mental@rydia.net>
+
+    * src/display/nr-arena-group.cpp, src/display/nr-arena-item.cpp:
+
+	  whoops, we were calling the 'children' vfunc rather than
+	  'last_child' when appending, hence the bug... fixed now.
+
 2005-03-14  Jon Phillips <jon@rejon.org>
 	* src/attributes-test.cpp, src/attributes.cpp, src/attributes.h,
 	  src/desktop.cpp, src/sp-namedview.cpp, src/sp-namedview.h,
