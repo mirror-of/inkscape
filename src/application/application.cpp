@@ -118,7 +118,7 @@ Application::run()
         result = 0;
 
     } else if (_use_gui) {
-        g_warning("Running old gtk interface\n");
+//        g_warning("Running old gtk interface\n");
         result = sp_main_gui(_argc, (const char**)_argv);
 
     } else {
