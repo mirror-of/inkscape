@@ -1,10 +1,15 @@
+2004-04-03  Peter  <pmoulder@river>
+
+	* src/helper/bezier-utils.cpp (NewtonRaphsonRootFind): Fix my
+	previous commit.
+
 2004-04-02  Ted Gould <ted@gould.cx>
-    * share/extensions/svgz_output.inkmod, src/main.cpp, src/print.cpp,
-      src/extension/init.cpp, src/extension/implementation/script.cpp,
-      src/extension/implementation/script.h,
+	* share/extensions/svgz_output.inkmod, src/main.cpp, src/print.cpp,
+	  src/extension/init.cpp, src/extension/implementation/script.cpp,
+	  src/extension/implementation/script.h,
 	  src/extension/internal/Makefile.am, src/extension/internal/ps-out.cpp,
-      src/extension/internal/ps-out.h, src/extension/internal/ps.cpp:
-    Fixing the commandline printing.  This required fixing both the
+	  src/extension/internal/ps-out.h, src/extension/internal/ps.cpp:
+	Fixing the commandline printing.  This required fixing both the
 	print driver to handle the newer extensions stuff.  It seems
 	happy now.  I went ahead and implemented save as postscript
 	while I was at it.
