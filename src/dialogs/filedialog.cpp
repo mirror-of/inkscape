@@ -148,7 +148,7 @@ bool SVGPreview::setDocument(SPDocument *doc)
 }
 
 bool SVGPreview::setFileName(Glib::ustring &theFileName)
-{ 
+{
     Glib::ustring fileName = theFileName;
 
     fileName = Glib::filename_to_utf8(fileName);
@@ -169,7 +169,7 @@ bool SVGPreview::setFileName(Glib::ustring &theFileName)
 
 
 bool SVGPreview::setFromMem(char const *xmlBuffer)
-{ 
+{
     if (!xmlBuffer)
         return false;
 
@@ -222,14 +222,14 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
     gint scaledImgHeight = (int) (scaleFactor * (double)imgHeight);
 
     //center the image on the area
-    gint imgX = (previewWidth  - scaledImgWidth)  / 2;        
+    gint imgX = (previewWidth  - scaledImgWidth)  / 2;
     gint imgY = (previewHeight - scaledImgHeight) / 2;
 
     //wrap a rectangle around the image
-    gint rectX      = imgX-1;        
-    gint rectY      = imgY-1;        
-    gint rectWidth  = scaledImgWidth +2;        
-    gint rectHeight = scaledImgHeight+2;        
+    gint rectX      = imgX-1;
+    gint rectY      = imgY-1;
+    gint rectWidth  = scaledImgWidth +2;
+    gint rectHeight = scaledImgHeight+2;
 
     //Our template.  Modify to taste
     gchar const *xformat =
@@ -261,7 +261,7 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
 
     //Fill in the template
     /* FIXME: Do proper XML quoting for fileName. */
-    gchar *xmlBuffer = g_strdup_printf(xformat, 
+    gchar *xmlBuffer = g_strdup_printf(xformat,
            previewWidth, previewHeight,
            imgX, imgY, scaledImgWidth, scaledImgHeight,
            fileName.c_str(),
@@ -360,7 +360,7 @@ void SVGPreview::showNoPreview()
           "</svg>\n\n";
 
     //Fill in the template
-    gchar *xmlBuffer = g_strdup_printf(xformat, 
+    gchar *xmlBuffer = g_strdup_printf(xformat,
            previewWidth, previewHeight, _("No preview"));
 
     //g_message("%s\n", xmlBuffer);
@@ -460,7 +460,7 @@ void SVGPreview::showTooLarge(long fileLength)
     //Fill in the template
     double floatFileLength = ((double)fileLength) / 1048576.0;
     //printf("%ld %f\n", fileLength, floatFileLength);
-    gchar *xmlBuffer = g_strdup_printf(xformat, 
+    gchar *xmlBuffer = g_strdup_printf(xformat,
            previewWidth, previewHeight, floatFileLength,
            _("too large for preview"));
 
@@ -478,13 +478,21 @@ hasSuffix(Glib::ustring &str, Glib::ustring &ext)
     int strLen = str.length();
     int extLen = ext.length();
     if (extLen > strLen)
+    {
         return false;
+    }
     int strpos = strLen-1;
     for (int extpos = extLen-1 ; extpos>=0 ; extpos--, strpos--)
+    {
+        Glib::ustring::value_type ch = str[strpos];
+        if (ch != ext[extpos])
         {
-        if (str[strpos] != ext[extpos])
-            return false;
+            if ( ((ch & 0xff80) == 0) && g_ascii_tolower((gchar)0x07f & ch) != ext[extpos] )
+            {
+                return false;
+            }
         }
+    }
     return true;
 }
 
@@ -495,7 +503,6 @@ hasSuffix(Glib::ustring &str, Glib::ustring &ext)
 static bool
 isValidImageFile(Glib::ustring &fileName)
 {
-    Glib::ustring lowName = fileName.lowercase();
     std::vector<Gdk::PixbufFormat>formats = Gdk::Pixbuf::get_formats();
     for (unsigned int i=0; i<formats.size(); i++)
         {
@@ -504,7 +511,7 @@ isValidImageFile(Glib::ustring &fileName)
         for (unsigned int j=0; j<extensions.size(); j++)
             {
             Glib::ustring ext = extensions[j];
-            if (hasSuffix(lowName, ext))
+            if (hasSuffix(fileName, ext))
                 {
                 return true;
                 }
@@ -549,7 +556,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
         bool retval = setFileName(fileName);
         showingNoPreview = false;
         return retval;
-        } 
+        }
     else if (isValidImageFile(fileName))
         {
         showImage(fileName);
@@ -629,7 +636,7 @@ private:
     void updatePreviewCallback();
 
     /**
-     * Fix to allow the user to type the file name 
+     * Fix to allow the user to type the file name
      */
     Gtk::Entry fileNameEntry;
 
@@ -767,13 +774,13 @@ void FileOpenDialogImpl::createFilterMenu()
     Gtk::FileFilter svgFilter;
     svgFilter.set_name(_("SVG Files"));
     extensionMap[Glib::ustring(_("SVG Files"))]=NULL;
-    svgFilter.add_pattern("*.svg");
+    svgFilter.add_pattern("*.[Ss][Vv][Gg]");
     add_filter(svgFilter);
 
     Gtk::FileFilter svgzFilter;
     svgzFilter.set_name(_("Compressed SVG Files"));
     extensionMap[Glib::ustring(_("Compressed SVG Files"))]=NULL;
-    svgzFilter.add_pattern("*.svgz");
+    svgzFilter.add_pattern("*.[Ss][Vv][Gg][Zz]");
     add_filter(svgzFilter);
 
     /*We need to find out how to do a menu separator
@@ -792,7 +799,7 @@ void FileOpenDialogImpl::createFilterMenu()
     for (GSList *current_item = g_slist_next(extension_list);
          current_item; current_item = g_slist_next(current_item))
         {
-        Inkscape::Extension::DB::IOExtensionDescription * ioext = 
+        Inkscape::Extension::DB::IOExtensionDescription * ioext =
               reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
         Glib::ustring upattern("*");
@@ -852,7 +859,7 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
     set_preview_widget_active(true);
 
     //Catch selection-changed events, so we can adjust the text widget
-    signal_update_preview().connect( 
+    signal_update_preview().connect(
          sigc::mem_fun(*this, &FileOpenDialogImpl::updatePreviewCallback) );
 
 
@@ -862,11 +869,11 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
     fileNameEntry.grab_focus();
 
     //Catch when user hits [return] on the text field
-    fileNameEntry.signal_activate().connect( 
+    fileNameEntry.signal_activate().connect(
          sigc::mem_fun(*this, &FileOpenDialogImpl::fileNameEntryChangedCallback) );
 
     //Catch selection-changed events, so we can adjust the text widget
-    signal_selection_changed().connect( 
+    signal_selection_changed().connect(
          sigc::mem_fun(*this, &FileOpenDialogImpl::fileSelectedCallback) );
 
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
@@ -881,7 +888,7 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
 /**
  * Public factory.  Called by file.cpp, among others.
  */
-FileOpenDialog *FileOpenDialog::create(char const *path, 
+FileOpenDialog *FileOpenDialog::create(char const *path,
                                        FileDialogType fileTypes,
                                        char const *title)
 {
@@ -942,7 +949,7 @@ FileOpenDialogImpl::show()
  */
 Inkscape::Extension::Extension *
 FileOpenDialogImpl::getSelectionType()
-{ 
+{
     return extension;
 }
 
@@ -952,7 +959,7 @@ FileOpenDialogImpl::getSelectionType()
  */
 gchar *
 FileOpenDialogImpl::getFilename (void)
-{ 
+{
     return g_strdup(myFilename.c_str());
 }
 
@@ -1012,7 +1019,7 @@ private:
     SVGPreview svgPreview;
 
     /**
-     * Fix to allow the user to type the file name 
+     * Fix to allow the user to type the file name
      */
     Gtk::Entry *fileNameEntry;
 
@@ -1171,7 +1178,7 @@ void FileSaveDialogImpl::createFileTypeMenu()
     for (GSList *current_item = g_slist_next(extension_list);
          current_item; current_item = g_slist_next(current_item))
         {
-        Inkscape::Extension::DB::IOExtensionDescription * ioext = 
+        Inkscape::Extension::DB::IOExtensionDescription * ioext =
               reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
         if ( ( strcmp(".svg",  ioext->file_extension)==0 ||
@@ -1245,7 +1252,7 @@ void findExpanderWidgets(Gtk::Container *parent, std::vector<Gtk::Expander *> &r
 /**
  * Constructor
  */
-FileSaveDialogImpl::FileSaveDialogImpl(char const *dir, 
+FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
                                        FileDialogType fileTypes,
                                        char const *title,
                                        char const *default_key) :
@@ -1279,7 +1286,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
     fileTypeBox.pack_start(fileTypeCheckbox);
     createFileTypeMenu();
     fileTypeComboBox.set_size_request(200,40);
-    fileTypeComboBox.signal_changed().connect( 
+    fileTypeComboBox.signal_changed().connect(
          sigc::mem_fun(*this, &FileSaveDialogImpl::fileTypeChangedCallback) );
 
     fileTypeBox.pack_start(fileTypeComboBox);
@@ -1293,7 +1300,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
     set_preview_widget_active(true);
 
     //Catch selection-changed events, so we can adjust the text widget
-    signal_update_preview().connect( 
+    signal_update_preview().connect(
          sigc::mem_fun(*this, &FileSaveDialogImpl::updatePreviewCallback) );
 
 
@@ -1307,7 +1314,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
         {
         //Catch when user hits [return] on the text field
         fileNameEntry = entries[0];
-        fileNameEntry->signal_activate().connect( 
+        fileNameEntry->signal_activate().connect(
              sigc::mem_fun(*this, &FileSaveDialogImpl::fileNameEntryChangedCallback) );
         }
 
@@ -1337,7 +1344,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
 /**
  * Public factory method.  Used in file.cpp
  */
-FileSaveDialog *FileSaveDialog::create(char const *path, 
+FileSaveDialog *FileSaveDialog::create(char const *path,
                                        FileDialogType fileTypes,
                                        char const *title,
                                        char const *default_key)
@@ -1388,12 +1395,12 @@ FileSaveDialogImpl::show()
 
         append_extension = checkbox.get_active();
         prefs_set_int_attribute("dialogs.save_as", "append_extension", append_extension);
-        prefs_set_string_attribute("dialogs.save_as", "default", 
+        prefs_set_string_attribute("dialogs.save_as", "default",
                   ( extension != NULL ? extension->get_id() : "" ));
         */
         return TRUE;
         }
-    else 
+    else
         {
         return FALSE;
         }
@@ -1415,7 +1422,7 @@ FileSaveDialogImpl::getSelectionType()
  */
 gchar *
 FileSaveDialogImpl::getFilename()
-{ 
+{
     return g_strdup(myFilename.c_str());
 }
 
