@@ -13,6 +13,10 @@
  */
 
 
+struct SPAction;
+struct SPActionClass;
+struct SPActionEventVector;
+
 struct SPUnit;
 struct SPUnitSelector;
 struct SPUnitSelectorClass;
