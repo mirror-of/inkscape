@@ -18,6 +18,8 @@
 #include <config.h>
 #include <string.h>
 #include <glib.h>
+#include <errno.h>
+#include <stdlib.h>
 #include <gtk/gtkmain.h>
 #include "xml/repr.h"
 #include "xml/repr-action.h"
@@ -53,6 +55,8 @@ static void sp_document_init (SPDocument *document);
 static void sp_document_dispose (GObject *object);
 
 static gint sp_document_idle_handler (gpointer data);
+
+char *g_rel2abs (const char *path, const char *base, char *result, const size_t size);
 
 gboolean sp_document_resource_list_free (gpointer key, gpointer value, gpointer data);
 
@@ -212,6 +216,7 @@ sp_document_dispose (GObject *object)
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
+
 static SPDocument *
 sp_document_create (SPReprDoc *rdoc,
 		    const gchar *uri,
@@ -223,6 +228,7 @@ sp_document_create (SPReprDoc *rdoc,
 	SPDocument *document;
 	SPRepr *rroot;
 	SPVersion sodipodi_version;
+	char *full_path;
 
 	rroot = sp_repr_document_root (rdoc);
 
@@ -234,7 +240,21 @@ sp_document_create (SPReprDoc *rdoc,
 	document->rdoc = rdoc;
 	document->rroot = rroot;
 
+#ifndef WIN32
+	if (uri) { // compute absolute path
+		full_path = (char *) g_malloc (1000);
+		g_rel2abs (uri, g_get_current_dir(), full_path, 1000);
+		document->uri = g_strdup (full_path);
+		g_free (full_path);
+	} else {
+		document->uri = NULL;
+	}
+#else
 	document->uri = g_strdup (uri);
+#endif
+
+	// base is simply the part of the path before filename; e.g. when running "inkscape ../file.svg" the base is "../"
+	// which is why we use g_get_current_dir() in calculating the abs path above
 	document->base = g_strdup (base);
 	document->name = g_strdup (name);
 
@@ -801,3 +821,107 @@ sp_document_resource_list_free (gpointer key, gpointer value, gpointer data)
 	return TRUE;
 }
 
+
+// g_rel2abs function by Shigio Yamaguchi
+
+/* current == "./", parent == "../" */
+static char dots[] = {'.', '.', G_DIR_SEPARATOR, '\0'};
+static char *parent = dots;
+static char *current = dots + 1;
+
+/**
+ * \brief   Convert an relative path name into absolute.
+ *
+ *	\param path	relative path
+ *	\param base	base directory (must be absolute path)
+ *	\param result	result buffer
+ *	\param size	size of result buffer
+ *	\return		!= NULL: absolute path
+ *			== NULL: error
+ */
+char *
+g_rel2abs (const char *path, const char *base, char *result, const size_t size)
+{
+  const char *pp, *bp;
+  /* endp points the last position which is safe in the result buffer. */
+  const char *endp = result + size - 1;
+  char *rp;
+  int length;
+  if (*path == G_DIR_SEPARATOR)
+    {
+      if (strlen (path) >= size)
+	goto erange;
+      strcpy (result, path);
+      goto finish;
+    }
+  else if (*base != G_DIR_SEPARATOR || !size)
+    {
+      errno = EINVAL;
+      return (NULL);
+    }
+  else if (size == 1)
+    goto erange;
+  if (!strcmp (path, ".") || !strcmp (path, current))
+    {
+      if (strlen (base) >= size)
+	goto erange;
+      strcpy (result, base);
+      /* rp points the last char. */
+      rp = result + strlen (base) - 1;
+      if (*rp == G_DIR_SEPARATOR)
+	*rp = 0;
+      else
+	rp++;
+      /* rp point NULL char */
+      if (*++path == G_DIR_SEPARATOR)
+	{
+	  /* Append G_DIR_SEPARATOR to the tail of path name. */
+	  *rp++ = G_DIR_SEPARATOR;
+	  if (rp > endp)
+	    goto erange;
+	  *rp = 0;
+	}
+      goto finish;
+    }
+  bp = base + strlen (base);
+  if (*(bp - 1) == G_DIR_SEPARATOR)
+    --bp;
+  /* up to root. */
+  for (pp = path; *pp && *pp == '.';)
+    {
+      if (!strncmp (pp, parent, 3))
+	{
+	  pp += 3;
+	  while (bp > base && *--bp != G_DIR_SEPARATOR)
+	    ;
+	}
+      else if (!strncmp (pp, current, 2))
+	{
+	  pp += 2;
+	}
+      else if (!strncmp (pp, "..\0", 3))
+	{
+	  pp += 2;
+	  while (bp > base && *--bp != G_DIR_SEPARATOR)
+	    ;
+	}
+      else
+	break;
+    }
+  /* down to leaf. */
+  length = bp - base;
+  if (length >= size)
+    goto erange;
+  strncpy (result, base, length);
+  rp = result + length;
+  if (*pp || *(pp - 1) == G_DIR_SEPARATOR || length == 0)
+    *rp++ = G_DIR_SEPARATOR;
+  if (rp + strlen (pp) > endp)
+    goto erange;
+  strcpy (rp, pp);
+finish:
+  return result;
+erange:
+  errno = ERANGE;
+  return (NULL);
+}
