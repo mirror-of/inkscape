@@ -549,13 +549,13 @@ DialogAlign::DialogAlign():
     //Rest of the widgetry
         
 
-    _combo.append_text("Last selected");
-    _combo.append_text("First selected");
-    _combo.append_text("Biggest item");
-    _combo.append_text("Smallest item");
-    _combo.append_text("Page");
-    _combo.append_text("Drawing");
-    _combo.append_text("Selection");
+    _combo.append_text(_("Last selected"));
+    _combo.append_text(_("First selected"));
+    _combo.append_text(_("Biggest item"));
+    _combo.append_text(_("Smallest item"));
+    _combo.append_text(_("Page"));
+    _combo.append_text(_("Drawing"));
+    _combo.append_text(_("Selection"));
         
     _combo.set_active(6);
     _combo.signal_changed().connect(sigc::mem_fun(*this, &DialogAlign::on_ref_change));

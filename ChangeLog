@@ -1,3 +1,8 @@
+2004-11-01  Kees Cook  <kees@outflux.net>
+
+	* src/dialogs/align.cpp, src/dialogs/debugdialog.cpp: localized
+	some missed strings.
+
 2004-11-01  MenTaLguY  <mental@rydia.net>
 
 	* share/icons/icons.svg: gave bulia's eye icons ids
