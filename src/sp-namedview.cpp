@@ -208,17 +208,11 @@ sp_namedview_release (SPObject * object)
 static void
 sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPNamedView *nv;
-	const SPUnit *pt = NULL;
-	const SPUnit *px = NULL;
-	const SPUnit *mm = NULL;
-	GSList * l;
+	SPNamedView *nv = SP_NAMEDVIEW(object);
 
-	nv = SP_NAMEDVIEW (object);
-
-	if (!pt) pt = &sp_unit_get_by_id(SP_UNIT_PT);
-	if (!px) px = &sp_unit_get_by_id(SP_UNIT_PX);
-	if (!mm) mm = &sp_unit_get_by_id(SP_UNIT_MM);
+	SPUnit const * const pt = &sp_unit_get_by_id(SP_UNIT_PT);
+	SPUnit const * const px = &sp_unit_get_by_id(SP_UNIT_PX);
+	SPUnit const * const mm = &sp_unit_get_by_id(SP_UNIT_MM);
 
 	switch (key) {
 	case SP_ATTR_VIEWONLY:
@@ -310,7 +304,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			nv->guidecolor = (nv->guidecolor & 0xff) | sp_svg_read_color (value, nv->guidecolor);
 		}
-		for (l = nv->guides; l != NULL; l = l->next) {
+		for (GSList *l = nv->guides; l != NULL; l = l->next) {
 			g_object_set (G_OBJECT (l->data), "color", nv->guidecolor, NULL);
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -318,7 +312,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_GUIDEOPACITY:
 		nv->guidecolor = (nv->guidecolor & 0xffffff00) | (DEFAULTGUIDECOLOR & 0xff);
 		sp_nv_read_opacity (value, &nv->guidecolor);
-		for (l = nv->guides; l != NULL; l = l->next) {
+		for (GSList *l = nv->guides; l != NULL; l = l->next) {
 			g_object_set (G_OBJECT (l->data), "color", nv->guidecolor, NULL);
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -328,7 +322,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			nv->guidehicolor = (nv->guidehicolor & 0xff) | sp_svg_read_color (value, nv->guidehicolor);
 		}
-		for (l = nv->guides; l != NULL; l = l->next) {
+		for (GSList *l = nv->guides; l != NULL; l = l->next) {
 			g_object_set (G_OBJECT (l->data), "hicolor", nv->guidehicolor, NULL);
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -336,7 +330,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_GUIDEHIOPACITY:
 		nv->guidehicolor = (nv->guidehicolor & 0xffffff00) | (DEFAULTGUIDEHICOLOR & 0xff);
 		sp_nv_read_opacity (value, &nv->guidehicolor);
-		for (l = nv->guides; l != NULL; l = l->next) {
+		for (GSList *l = nv->guides; l != NULL; l = l->next) {
 			g_object_set (G_OBJECT (l->data), "hicolor", nv->guidehicolor, NULL);
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -733,15 +727,11 @@ sp_namedview_setup_grid (SPNamedView * nv)
 static void
 sp_namedview_setup_grid_item (SPNamedView * nv, SPCanvasItem * item)
 {
-	const SPUnit *pt = NULL;
-
 	if (nv->showgrid) {
 		sp_canvas_item_show (item);
 	} else {
 		sp_canvas_item_hide (item);
 	}
-
-	if (!pt) pt = sp_unit_get_identity (SP_UNIT_ABSOLUTE);
 
 	sp_canvas_item_set ((GtkObject *) item,
 			       "color", nv->gridcolor,
@@ -810,37 +800,23 @@ sp_nv_read_length (const gchar *str, guint base, gdouble *val, const SPUnit **un
 
 	if (base & SP_UNIT_DEVICE) {
 		if (u[0] && u[1] && !isalnum (u[2]) && !strncmp (u, "px", 2)) {
-			static const SPUnit *device = NULL;
-			if (!device) device = sp_unit_get_identity (SP_UNIT_DEVICE);
-			*unit = device;
+			*unit = &sp_unit_get_by_id(SP_UNIT_PX);
 			*val = v;
 			return TRUE;
 		}
 	}
 
 	if (base & SP_UNIT_ABSOLUTE) {
-		static const SPUnit *pt = NULL;
-		static const SPUnit *mm = NULL;
-		static const SPUnit *cm = NULL;
-		static const SPUnit *m = NULL;
-		static const SPUnit *in = NULL;
-		if (!pt) {
-			pt = sp_unit_get_by_abbreviation ("pt");
-			mm = sp_unit_get_by_abbreviation ("mm");
-			cm = sp_unit_get_by_abbreviation ("cm");
-			m = sp_unit_get_by_abbreviation ("m");
-			in = sp_unit_get_by_abbreviation ("in");
-		}
 		if (!strncmp (u, "pt", 2)) {
-			*unit = pt;
+			*unit = &sp_unit_get_by_id(SP_UNIT_PT);
 		} else if (!strncmp (u, "mm", 2)) {
-			*unit = mm;
+			*unit = &sp_unit_get_by_id(SP_UNIT_MM);
 		} else if (!strncmp (u, "cm", 2)) {
-			*unit = cm;
+			*unit = &sp_unit_get_by_id(SP_UNIT_CM);
 		} else if (!strncmp (u, "m", 1)) {
-			*unit = m;
+			*unit = &sp_unit_get_by_id(SP_UNIT_M);
 		} else if (!strncmp (u, "in", 2)) {
-			*unit = in;
+			*unit = &sp_unit_get_by_id(SP_UNIT_IN);
 		} else {
 			return FALSE;
 		}
