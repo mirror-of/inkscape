@@ -311,9 +311,9 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 
 	root = sp_canvas_root (canvas);
 
+	/* Setup adminstrative layers */
 	desktop->acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, NULL);
 	g_signal_connect (G_OBJECT (desktop->acetate), "event", G_CALLBACK (sp_desktop_root_handler), desktop);
-	/* Setup adminstrative layers */
 	desktop->main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, NULL);
 	g_signal_connect (G_OBJECT (desktop->main), "event", G_CALLBACK (sp_desktop_root_handler), desktop);
 	/* fixme: */
@@ -720,7 +720,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (dtw), vbox);
 
-       	sbar = gtk_hbox_new (FALSE, 0);
+       sbar = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_end (GTK_BOX (vbox), sbar, FALSE, TRUE, 0);
 
 	hbox = gtk_hbox_new (FALSE, 0);
@@ -775,8 +775,8 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	g_signal_connect (G_OBJECT (dtw->canvas), "event", G_CALLBACK (sp_desktop_widget_event), dtw);
       	gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (dtw->canvas));
 
-	/* Status bars */
 
+	/* Status bars */
 	dtw->sticky_zoom = sp_button_new_from_data (SP_ICON_SIZE_BUTTON,
 						    SP_BUTTON_TYPE_TOGGLE,
 	                                            NULL,
@@ -789,8 +789,10 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_tooltips_set_tip (tt, dtw->zoom_status, _("Zoom"), _("Zoom"));
 	gtk_widget_set_usize (dtw->zoom_status, 64, -1);
 	gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 5);
+
 	gtk_editable_set_editable (GTK_EDITABLE (dtw->zoom_status), FALSE);
 	g_object_set (G_OBJECT (dtw->zoom_status), "can-focus", (gboolean) FALSE, NULL);
+
 	gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->zoom_status), FALSE);
 	gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->zoom_status), GTK_UPDATE_ALWAYS);
 	g_signal_connect (G_OBJECT (dtw->zoom_status), "input", G_CALLBACK (sp_dtw_zoom_input), dtw);
@@ -941,8 +943,18 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
 		}
 	}
 
-	if (GTK_WIDGET_CLASS (dtw_parent_class)->event)
+	if (GTK_WIDGET_CLASS (dtw_parent_class)->event) {
 		return (* GTK_WIDGET_CLASS (dtw_parent_class)->event) (widget, event);
+	} else {
+		// The keypress events need to be passed to desktop handler explicitly, 
+		// because otherwise the event contexts only receive keypresses when the mouse cursor 
+		// is over the canvas. This redirection is only done for keypresses and only if there's no 
+		// current item on the canvas, because item events and all mouse events are caught
+		// and passed on by the canvas acetate (I think). --bb
+		if (event->type == GDK_KEY_PRESS && !dtw->canvas->current_item) {
+			return sp_desktop_root_handler (NULL, event, dtw->desktop);
+		}
+	 }
 
 	return FALSE;
 }
@@ -1084,8 +1096,6 @@ sp_desktop_widget_new (SPNamedView *namedview)
 	sp_tool_toolbox_set_desktop (dtw->tool_toolbox, dtw->desktop);
 	sp_aux_toolbox_set_desktop (dtw->aux_toolbox, dtw->desktop);
 	
-	// gtk_widget_grab_focus ((GtkWidget *) dtw->canvas);
-
 	return SP_VIEW_WIDGET (dtw);
 }
 
