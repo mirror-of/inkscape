@@ -455,6 +455,7 @@ static void
 sp_ui_dialog_menu (GtkMenu *menu, SPDocument *doc)
 {
 	static const unsigned int verbs[] = {
+		SP_VERB_DIALOG_TOOLBOX,
 		SP_VERB_DIALOG_FILL_STROKE,
 		SP_VERB_DIALOG_TEXT,
 		SP_VERB_DIALOG_SIZE_POSITION,
@@ -469,8 +470,6 @@ sp_ui_dialog_menu (GtkMenu *menu, SPDocument *doc)
 		SP_VERB_DIALOG_DISPLAY,
 		SP_VERB_LAST
 	};
-	// fixme: redo toolbox as a verb too
-	sp_ui_menu_append_item (menu, NULL, _("Toolbox"), G_CALLBACK (sp_ui_view_show_toolbox), NULL);
 	sp_ui_menu_append (menu, verbs);
 }
 

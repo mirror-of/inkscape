@@ -380,6 +380,9 @@ sp_verb_action_dialog_perform (SPAction *action, void *data)
 	case SP_VERB_DIALOG_XML_EDITOR:
 		sp_xml_tree_dialog ();
 		break;
+	case SP_VERB_DIALOG_TOOLBOX:
+		sp_maintoolbox_create_toplevel ();
+		break;
 	case SP_VERB_DIALOG_ITEM:
 		sp_item_dialog ();
 		break;
@@ -490,6 +493,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("Align and Distribute"), N_("Align and distribute"), "object_align"},
 	{SP_VERB_DIALOG_TEXT, "Dialogtext", N_("Text and Font"), N_("Text editing and font settings"), "object_font"},
 	{SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("XML Editor"), N_("XML Editor"), NULL},
+	{SP_VERB_DIALOG_TOOLBOX, "DialogToolbox", N_("Toolbox"), N_("Toolbox"), NULL},
 	{SP_VERB_DIALOG_ITEM, "DialogItem", N_("Item Properties"), N_("Item properties"), NULL},
 	/* Footer */
 	{SP_VERB_LAST, NULL, NULL, NULL, NULL}
