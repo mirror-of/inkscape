@@ -2,7 +2,7 @@
 	<name>AI Input</name>
 	<id>modules.input.AdobeIllustrator</id>
 	<input>
-		<extension>ai</extension>
+		<extension>.ai</extension>
 		<mimetype>image/x-adobe-illustrator</mimetype>
 		<filetypename>Adobe Illustrator</filetypename>
 		<filetypetooltip>Open files saved with Adobe Illustrator</filetypetooltip>
