@@ -1,4 +1,10 @@
-2005-02-20 SwinginCelt  <swinginceltgmail.com>
+2005-02-28 SwinginCelt  <swinginceltgmail.com>
+
+	* Fixed an improper conversion of sp_repr_document_merge that was causing
+	  extra data being written to the prefrences file every time inkscape
+	  exited.
+
+2005-02-26 SwinginCelt  <swinginceltgmail.com>
 
 	* Replaced all sp_repr_set_content calls with direct call to
 	  repr->setContent.
