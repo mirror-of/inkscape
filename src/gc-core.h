@@ -12,9 +12,17 @@
 #ifndef SEEN_INKSCAPE_GC_CORE_H
 #define SEEN_INKSCAPE_GC_CORE_H
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <new>
 #include <cstdlib>
-#include <gc/gc.h>
+#ifdef HAVE_GC_GC_H
+# include <gc/gc.h>
+#else
+# include <gc.h>
+#endif
 #include <glib/gmain.h>
 
 //#define SUPPRESS_LIBGC

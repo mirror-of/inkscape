@@ -1,3 +1,7 @@
+2004-11-10  Kees Cook  <kees@outflux.net>
+
+	* configure.ac, src/gc-core.h: corrected gc.h path detection.
+
 2004-11-09  MenTaLguY  <mental@rydia.net>
 
 	* src/dialogs/fileselector.cpp: fixed cut-and-paste refcount bug
