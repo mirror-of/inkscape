@@ -1047,23 +1047,6 @@ static const SPVerbActionDef props[] = {
 };
 
 
-/*
- * \return  numerical verb id.  SP_VERB_INVALID if no such verb exists
- * \brief   Looks up the numerical ID of the given verb name for future
- *          external extension system that won't exactly know what the
- *          verb enums are.
- * \param   name   Name of the verb to look up ("FileSave" etc)
- */
-sp_verb_t
-sp_verb_find (gchar const * name) {
-    SPVerbActionDef const * list=NULL;
-    for (list = props; list->code != SP_VERB_LAST; list++) {
-        if (!list->name) continue;
-        if (!strcmp(name,list->name)) break;
-    }
-    if (list->code == SP_VERB_LAST) return SP_VERB_INVALID;
-    return list->code;
-}
 
 static SPAction *
 make_action (sp_verb_t verb, SPView *view)
