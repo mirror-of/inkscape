@@ -54,6 +54,7 @@
 #include "inkscape.h"
 #include "sp-item.h"
 #include "style.h"
+#include "inkscape_version.h"
 
 #include "ps.h"
 #include <extension/system.h>
@@ -322,6 +323,7 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
 	NRRect d;
 	bool   pageBoundingBox;
+	bool   pageLandscape;
 	pageBoundingBox = mod->get_param_bool("pageBoundingBox");
 	// printf("Page Bounding Box: %s\n", pageBoundingBox ? "TRUE" : "FALSE");
 	if (pageBoundingBox)
@@ -337,20 +339,38 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 	}
 
 	if (res >= 0) {
-		os << "%%BoundingBox: " << (int) d.x0 << " "
-					<< (int) d.y0 << " "
-					<< (int) ceil (d.x1) << " "
-					<< (int) ceil (d.y1) << "\n";
-	}
-	if (res >= 0) {
-		os << "%%HiResBoundingBox: " << d.x0 << " "
-					<< d.y0 << " "
-					<< d.x1 << " "
-					<< d.y1 << "\n";
+
+		os << "%%Creator: Inkscape " << INKSCAPE_VERSION << "\n";
+		
+		pageLandscape = (d.x1 > d.y1) ? true : false;
+
+		if (pageLandscape) {
+			os << "%%Orientation: Landscape\n";
+			os << "%%BoundingBox: " << (int) d.x0 << " "
+						<< (int) d.y0 << " "
+						<< (int) ceil (d.y1) << " "
+						<< (int) ceil (d.x1) << "\n";
+			os << "%%HiResBoundingBox: " << d.x0 << " "
+						<< d.y0 << " "
+						<< d.y1 << " "
+						<< d.x1 << "\n";
+			os << 90 << " rotate\n";
+		}
+		else
+		{
+			os << "%%BoundingBox: " << (int) d.x0 << " "
+						<< (int) d.y0 << " "
+						<< (int) ceil (d.x1) << " "
+						<< (int) ceil (d.y1) << "\n";
+			os << "%%HiResBoundingBox: " << d.x0 << " "
+						<< d.y0 << " "
+						<< d.x1 << " "
+						<< d.y1 << "\n";
+			os << "0.0 " << sp_document_height (doc) << " translate\n";
+		}
+		os << "0.8 -0.8 scale\n";
 	}
 
-	os << "0.0 " << sp_document_height (doc) << " translate\n";
-	os << "0.8 -0.8 scale\n";
 
 	return fprintf (_stream, "%s", os.str().c_str());
 }
