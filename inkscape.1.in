@@ -129,9 +129,9 @@
 .\" ========================================================================
 .\"
 .IX Title "INKSCAPE 1"
-.TH INKSCAPE 1 "2003-11-29" "Inkscape @VERSION@" "GNOME Documentation"
+.TH INKSCAPE 1 "2003-12-06" "Scalable Vector Graphics Application" "Inkscape-0.36"
 .SH "NAME"
-\&\fBInkscape\fR \- a 2D vector graphics editing program.
+Inkscape \- a 2D Scalable Vector Graphics editing program.
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
 \&\f(CW\*(C`inkscape [options] [filename ...]\*(C'\fR
@@ -158,13 +158,13 @@ options:
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
 \&\fBInkscape\fR is a \s-1GUI\s0 editor for \fBScalable Vector Graphics (\s-1SVG\s0)\fR format
-drawing files, with capabilities similar to \fBIllustrator\fR, \fBCorelDraw\fR,
-\&\fBVisio\fR, etc. Supported \s-1SVG\s0 features include basic shapes, paths, text,
-alpha blending, transforms, gradients, node editing, svg-to-png export,
-grouping, and more.  .  The interface is designed to be comfortable and
-efficient for skilled users, while remaining conformant to \fB\s-1GNOME\s0\fR
-standards so that users familiar with other \s-1GNOME\s0 applications can learn
-it's interface rapidly.
+drawing files, with capabilities similar to \fBAdobe Illustrator\fR,
+\&\fBCorelDraw\fR, \fBVisio\fR, etc. Supported \s-1SVG\s0 features include basic
+shapes, paths, text, alpha blending, transforms, gradients, node
+editing, svg-to-png export, grouping, and more.  .  The interface is
+designed to be comfortable and efficient for skilled users, while
+remaining conformant to \fB\s-1GNOME\s0\fR standards so that users familiar with
+other \s-1GNOME\s0 applications can learn it's interface rapidly.
 .PP
 \&\fB\s-1SVG\s0\fR is a W3C standard \s-1XML\s0 format for 2D vector drawing, that allows
 defining objects in the drawing using points, paths, and primitive
@@ -266,6 +266,9 @@ Convert an \s-1SVG\s0 document using items in the sodipodi namespace to plain
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
 \&\fB\s-1DISPLAY\s0\fR to get the default host and display number.
+.PP
+\&\fB\s-1TMPDIR\s0\fR to set the default path of the directory to use for temporary
+files.  The directory must exist.
 .SH "FILES"
 .IX Header "FILES"
 \&\fB$HOME\fR/.inkscape/preferences.xml \- The user's preference settings. 
@@ -280,7 +283,8 @@ documentation, tutorials, user manual, examples, mailing list archives,
 the latest released version of the program, and more. 
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-\&\fIgimp\fR\|(1)
+\&\fIgimp\fR\|(1), autotrace, frontline, ill2svg, \fIrsvg\fR\|(1), \fIxfig\fR\|(1), sodipodi,
+karbon14, dia(1X), batik.
 .SH "NOTES"
 .IX Header "NOTES"
 Ctrl & Shift modify dragging behaviour in some modes
