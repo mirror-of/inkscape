@@ -699,7 +699,11 @@ void        sp_selected_path_do_offset(bool expand)
 			theRes->ConvertToShape(theShape,fill_nonZero);
 		}
 		
-		theShape->MakeOffset(theRes,0.5*o_width,o_join,o_miter);
+		if ( expand ) {
+			theShape->MakeOffset(theRes,0.5*o_width,o_join,o_miter);
+		} else {
+			theShape->MakeOffset(theRes,-0.5*o_width,o_join,o_miter);
+		}
 		theRes->ConvertToShape(theShape,fill_positive);
 		theRes->ConvertToForme(res);
 		
