@@ -94,6 +94,8 @@ static const char preferences_skeleton[] =
 "    <group id=\"showscrollbars\" value=\"1\"/>"
 "    <group id=\"maxrecentdocuments\" value=\"20\"/>"
 "    <group id=\"zoomincrement\" value=\"1.414213562\"/>"
+"    <group id=\"keyscroll\" value=\"10\"/>"
+"    <group id=\"wheelscroll\" value=\"40\"/>"
 "  </group>"
 
 "</inkscape>";

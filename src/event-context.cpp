@@ -197,6 +197,8 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 	gdouble zoom_inc = prefs_get_double_attribute_limited ("options.zoomincrement", "value", 1.414213562, 1.01, 10);
+	int key_scroll = prefs_get_int_attribute_limited ("options.keyscroll", "value", 10, 0, 1000);
+	int wheel_scroll = prefs_get_int_attribute_limited ("options.wheelscroll", "value", 40, 0, 1000);
 
 	switch (event->type) {
 	case GDK_2BUTTON_PRESS:
@@ -337,25 +339,25 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			break;
 		case GDK_Left: // Ctrl Left 
 			if (event->key.state & GDK_CONTROL_MASK) {
-				sp_desktop_scroll_world (event_context->desktop, 10, 0);
+				sp_desktop_scroll_world (event_context->desktop, key_scroll, 0);
 				ret = TRUE;
 			}
 			break;
 		case GDK_Up: // Ctrl Up
 			if (event->key.state & GDK_CONTROL_MASK) {
-				sp_desktop_scroll_world (event_context->desktop, 0, +10);
+				sp_desktop_scroll_world (event_context->desktop, 0, key_scroll);
 				ret = TRUE;
 			}
 			break;
 		case GDK_Right: // Ctrl Right
 			if (event->key.state & GDK_CONTROL_MASK) {
-				sp_desktop_scroll_world (event_context->desktop, -10, 0);
+				sp_desktop_scroll_world (event_context->desktop, -key_scroll, 0);
 				ret = TRUE;
 			}
 			break;
 		case GDK_Down: // Ctrl Down
 			if (event->key.state & GDK_CONTROL_MASK) {
-				sp_desktop_scroll_world (event_context->desktop, 0, -10);
+				sp_desktop_scroll_world (event_context->desktop, 0, -key_scroll);
 				ret = TRUE;
 			}
 			break;
@@ -379,10 +381,10 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		if (event->scroll.state & GDK_CONTROL_MASK) {
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
-				sp_desktop_scroll_world (desktop, SP_MOUSEMOVE_STEP, 0);
+				sp_desktop_scroll_world (desktop, wheel_scroll, 0);
 				break;
 			case GDK_SCROLL_DOWN:
-				sp_desktop_scroll_world (desktop, -SP_MOUSEMOVE_STEP, 0);
+				sp_desktop_scroll_world (desktop, -wheel_scroll, 0);
 				break;
 			default:
 				break;
@@ -406,16 +408,16 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		} else {
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
-				sp_desktop_scroll_world (desktop, 0, SP_MOUSEMOVE_STEP);
+				sp_desktop_scroll_world (desktop, 0, wheel_scroll);
 				break;
 			case GDK_SCROLL_DOWN:
-				sp_desktop_scroll_world (desktop, 0, -SP_MOUSEMOVE_STEP);
+				sp_desktop_scroll_world (desktop, 0, -wheel_scroll);
 				break;
 			case GDK_SCROLL_LEFT:
-				sp_desktop_scroll_world (desktop, SP_MOUSEMOVE_STEP, 0);
+				sp_desktop_scroll_world (desktop, wheel_scroll, 0);
 				break;
 			case GDK_SCROLL_RIGHT:
-				sp_desktop_scroll_world (desktop, -SP_MOUSEMOVE_STEP, 0);
+				sp_desktop_scroll_world (desktop, -wheel_scroll, 0);
 				break;
 			}
 		}
