@@ -517,13 +517,13 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 		while ( w > 0 )
 		{
 			gdk_draw_line (widget->window, widget->style->white_gc, x, y1, x + w - 1, y1 );
-			gdk_draw_line (widget->window, widget->style->black_gc, x, y2, x + w - 1, y2 );
+			gdk_draw_line (widget->window, widget->style->white_gc, x, y2, x + w - 1, y2 );
 			w -=2;
 			x++;
 			if ( w > 0 )
 			{
 				gdk_draw_line (widget->window, widget->style->black_gc, x, y1, x + w - 1, y1 );
-				gdk_draw_line (widget->window, widget->style->white_gc, x, y2, x + w - 1, y2 );
+				gdk_draw_line (widget->window, widget->style->black_gc, x, y2, x + w - 1, y2 );
 			}
 			y1++;
 			y2--;
