@@ -1,7 +1,7 @@
 #ifndef __STREAMS_JAR_H_
 #define __STREAMS_JAR_H_
 
-#include "../streams-zlib.h"
+#include "streams-zlib.h"
 
 namespace Inkscape {
 
