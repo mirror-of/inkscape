@@ -1,5 +1,9 @@
 2003-11-25 bulia byak <bulia@dr.com>
 
+	* src/select-context.c src/preferences-skeleton.h: new option: drag tolerance
+
+2003-11-25 bulia byak <bulia@dr.com>
+
 	* src/dialogs/dialog-events.c src/dialogs/dialog-events.h: new callback and utility
 	  functions for defocusing
 	* src/widgets/sp-color-selector.c src/widgets/dash-selector.c
