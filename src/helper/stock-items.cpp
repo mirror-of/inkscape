@@ -75,8 +75,9 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             SPRepr *mark_repr = sp_repr_duplicate(SP_OBJECT_REPR(object));
             sp_repr_add_child (SP_OBJECT_REPR(defs), mark_repr, NULL);
+            SPObject *cloned_item = sp_document_lookup_id(current_doc, sp_repr_attr(mark_repr,"id"));
             sp_repr_unref(mark_repr);
-            return object;
+            return cloned_item;
         }
     }
     return NULL;
@@ -155,7 +156,7 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
     if (!edoc && doc) {
         /* Get the gradient we want */
         SPObject *object = sp_document_lookup_id(doc, name);
-        if (object && SP_IS_PATTERN(object)) {
+        if (object && SP_IS_GRADIENT(object)) {
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             SPRepr *pat_repr = sp_repr_duplicate(SP_OBJECT_REPR(object));
             sp_repr_add_child (SP_OBJECT_REPR(defs), pat_repr, NULL);
@@ -174,12 +175,10 @@ SPObject*
 get_stock_item(gchar const *urn)
 {
     const gchar *e;
-    g_print("\n urn as recieved by stock: %s",urn);
 
     g_assert(urn!=NULL);
     /* check its an inkscape URN */
     if (!strncmp (urn, "urn:inkscape:", 13)) {
-    g_print("\n urn : %s",urn);
     e = urn + 13;
     int a =0;
     gchar *name = g_strdup(e);
@@ -189,19 +188,16 @@ get_stock_item(gchar const *urn)
     }
     if (*name ==':') name++;
     gchar *base = g_strndup(e,a);
-    g_print("\n base : %s",base);
-    g_print("\n name : %s",name);
 
 
     SPDesktop *desktop = inkscape_active_desktop();
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
     SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
 
-    SPObject *object = NULL;
+    SPObject *object;
     bool exists = false;
     SPObject *child;
     if (!strcmp(base,"marker"))  {
-                                    g_print("\n checking for marker in current doc. ");
                                    for (child = sp_object_first_child(SP_OBJECT(defs)) ;
                                         child != NULL;
                                         child = SP_OBJECT_NEXT(child) )
@@ -246,10 +242,8 @@ get_stock_item(gchar const *urn)
                     }
 
     if (!exists) {
-                   g_print("\n not in current doc. ");
 
                    if (!strcmp(base,"marker"))  {
-                       g_print("\n loading %s from markers.svg",name);
                            object = sp_marker_load_from_svg( name, doc);
                         }
                    else if (!strcmp(base,"pattern"))  {
@@ -267,6 +261,7 @@ get_stock_item(gchar const *urn)
          SPDesktop *desktop = inkscape_active_desktop();
          SPDocument *doc = SP_DT_DOCUMENT(desktop);
          SPObject *object =  sp_document_lookup_id (doc, urn);
+
          return object;
     }
 }
