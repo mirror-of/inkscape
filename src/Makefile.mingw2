@@ -8,6 +8,26 @@ include ../Makefile.mingw.common
 
 
 
+OBJ = \
+arc-context.o attributes.o color.o desktop-affine.o desktop-events.o \
+desktop-handles.o desktop.o desktop-snap.o dir-util.o document.o \
+document-undo.o draw-context.o dropper-context.o dyna-draw-context.o \
+event-context.o file.o gradient-chemistry.o help.o inkscape.o \
+inkscape-stock.o interface.o knotholder.o knot.o main.o module.o \
+node-context.o nodepath.o object-edit.o object-ui.o path-chemistry.o \
+prefs-utils.o print.o rect-context.o rubberband.o select-context.o \
+selection-chemistry.o selection.o seltrans-handles.o seltrans.o \
+shortcuts.o slideshow.o sp-anchor.o sp-animation.o sp-chars.o \
+sp-clippath.o sp-cursor.o sp-defs.o sp-ellipse.o sp-gradient.o \
+sp-guide.o sp-image.o spiral-context.o sp-item-group.o sp-item.o \
+sp-item-transform.o sp-line.o splivarot.o sp-marker.o sp-mask.o \
+sp-metrics.o sp-namedview.o sp-object-group.o sp-object.o \
+sp-object-repr.o sp-offset.o sp-paint-server.o sp-path.o sp-pattern.o \
+sp-polygon.o sp-polyline.o sp-rect.o sp-root.o sp-shape.o sp-spiral.o \
+sp-star.o sp-symbol.o sp-text.o sp-use.o star-context.o style.o \
+svg-view.o text-context.o toolbox.o tools-switch.o uri-references.o \
+verbs.o version.o view.o zoom-context.o
+
 #Check for 'generated' files
 all: helper/sp-marshal.h inkscape.exe
 
@@ -15,30 +35,103 @@ helper/sp-marshal.h:
 	make -C helper     -f Makefile.mingw
 
 
-include ./make.ofiles
-include ./make.dep
+#INKLIBS = libinkscape.a dialogs/libdialogs.a display/libdisplay.a  helper/libhelper.a \
+#libnr/libnr.a libnrtype/libnrtype.a livarot/libvarot.a modules/libinkmodules.a libarikkei/libarikkei.a \
+#svg/libinksvg.a widgets/libinkwidgets.a xml/libinkxml.a
 
-INC += $(INCLUDEPATH)
 
-OBJ = $(OBJECTS)
-
-RES=inkres.o
-#RES=
+#RES=inkres.o
+RES=
 
 inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
 	$(CXX) -o inkscape.exe main.o winmain.o inkscape.o $(RES) libinkscape.a $(LIBS)
 	strip inkscape.exe
 
+inkscape_s.exe: libinkscape.a main.o winmain.o inkres.o
+	$(CXX) -o inkscape_s.exe  main.o winmain.o inkscape.o inkres.o libinkscape.a $(GTKSLIB)
+
 inkres.o: inkscape.rc
 	$(WINDRES) inkscape.rc $(RES)
 
 libinkscape.a: $(OBJ)
-	ar crv libinkscape.a $(OBJ)
+	make -C dialogs    -f Makefile.mingw
+	make -C display    -f Makefile.mingw
+	make -C helper     -f Makefile.mingw
+	make -C libarikkei -f Makefile.mingw
+	make -C libnr      -f Makefile.mingw
+	make -C libnrtype  -f Makefile.mingw
+	make -C livarot    -f Makefile.mingw
+	make -C modules    -f Makefile.mingw
+	make -C svg        -f Makefile.mingw
+	make -C widgets    -f Makefile.mingw
+	make -C xml        -f Makefile.mingw
+	ar crv libinkscape.a $(OBJ) \
+	dialogs/*.o \
+	display/*.o \
+	helper/*.o \
+	libnr/*.o \
+	libnrtype/*.o \
+	libarikkei/*.o \
+	livarot/*.o \
+	modules/*.o \
+	svg/*.o \
+	widgets/*.o \
+	xml/*.o
 	ranlib libinkscape.a
+
+#libinkscape.a: $(OBJ)
+#	ar crv $@ $(OBJ)
+#	ranlib $@
+
+dialogs/libdialogs.a:
+	make -C dialogs    -f Makefile.mingw
+
+display/libdisplay.a:
+	make -C display    -f Makefile.mingw
+
+helper/libhelper.a:
+	make -C helper     -f Makefile.mingw
+
+libarikkei/libarikkei.a:
+	make -C libarikkei -f Makefile.mingw
+
+libnr/libnr.a:
+	make -C libnr      -f Makefile.mingw
+
+libnrtype/libnrtype.a:
+	make -C libnrtype  -f Makefile.mingw
+
+livarot/libvarot.a:
+	make -C livarot    -f Makefile.mingw
+
+modules/libinkmodules.a:
+	make -C modules    -f Makefile.mingw
+
+svg/libinksvg.a:
+	make -C svg        -f Makefile.mingw
+
+widgets/libinkwidgets.a:
+	make -C widgets    -f Makefile.mingw
+
+xml/libinkxml.a:
+	make -C xml        -f Makefile.mingw
+
+
 
 
 clean:
-	$(foreach a, $(OBJ), $(shell $(RM) $(subst /,$(S), $(a))))
+	$(RM) *.o
 	$(RM) *.a
+	make -C dialogs    -f Makefile.mingw clean
+	make -C display    -f Makefile.mingw clean
+	make -C helper     -f Makefile.mingw clean
+	make -C libarikkei -f Makefile.mingw clean
+	make -C libnr      -f Makefile.mingw clean
+	make -C libnrtype  -f Makefile.mingw clean
+	make -C livarot    -f Makefile.mingw clean
+	make -C modules    -f Makefile.mingw clean
+	make -C svg        -f Makefile.mingw clean
+	make -C widgets    -f Makefile.mingw clean
+	make -C xml        -f Makefile.mingw clean
 
 
