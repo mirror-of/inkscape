@@ -411,6 +411,8 @@ public:
   
   void              Scan(float &pos,int &curP,float to,float step);
   void              QuickScan(float &pos,int &curP,float to,bool doSort,float step);
+  void              DirectScan(float &pos,int &curP,float to,float step);
+  void              DirectQuickScan(float &pos,int &curP,float to,bool doSort,float step);
 
   void              Scan(float &pos,int &curP,float to,FloatLigne* line,bool exact,float step);
   void              Scan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool exact,float step);

@@ -1209,12 +1209,12 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
   // version par FloatLigne
   int    curPt;
   float  curY;
-  theS->BeginRaster(curY,curPt,1.0);
+  theS->BeginQuickRaster(curY,curPt,1.0);
   
   FloatLigne* theI=new FloatLigne();
   IntLigne*   theIL=new IntLigne();
   
-  theS->Scan(curY,curPt,(float)(it),1.0);
+  theS->DirectQuickScan(curY,curPt,(float)(it),true,1.0);
   
   char* mdata=(char*)m.data.px;
   if ( m.size == NR_PIXBLOCK_SIZE_TINY ) mdata=(char*)m.data.p;
@@ -1222,9 +1222,9 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
   for (int y=it;y<ib;y++) {
     theI->Reset();
     if ( y&0x00000003 ) {
-      theS->Scan(curY,curPt,((float)(y+1)),theI,false,1.0);
+      theS->QuickScan(curY,curPt,((float)(y+1)),theI,false,1.0);
     } else {
-      theS->Scan(curY,curPt,((float)(y+1)),theI,true,1.0);
+      theS->QuickScan(curY,curPt,((float)(y+1)),theI,true,1.0);
     }
     theI->Flatten();
     theIL->Copy(theI);
@@ -1238,7 +1238,7 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     theIL->Raster(dest,NULL,shape_run_A8_OR);
     ligStart=((uint32_t*)(((char*)ligStart)+m.rs));
   }
-  theS->EndRaster();
+  theS->EndQuickRaster();
   delete theI;
   delete theIL;
   
@@ -1293,7 +1293,7 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
   for (int i=0;i<4;i++) theI[i]=new BitLigne(il,ir);
   IntLigne*   theIL=new IntLigne();
   
-  theS->QuickScan(curY,curPt,(float)(it),true,0.25);
+  theS->DirectQuickScan(curY,curPt,(float)(it),true,0.25);
   
   char* mdata=(char*)m.data.px;
   if ( m.size == NR_PIXBLOCK_SIZE_TINY ) mdata=(char*)m.data.p;

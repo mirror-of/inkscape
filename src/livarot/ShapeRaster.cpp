@@ -52,6 +52,7 @@ SweepEvent::CreateQueue(sEvts,nbAr);
 		pData[i].rx[1]=/*Round(*/pts[i].x[1]/*)*/;
 	}
 	for (int i=0;i<nbAr;i++) {
+    swrData[i].misc=NULL;
 		eData[i].rdx=pData[aretes[i].en].rx-pData[aretes[i].st].rx;
 	}
 }
@@ -91,6 +92,7 @@ void              Shape::BeginQuickRaster(float &pos,int &curPt,float /*step*/)
 		pData[i].rx[1]=Round(pts[i].x[1]);
 	}
 	for (int i=0;i<nbAr;i++) {
+    qrsData[i].ind=-1;
 		eData[i].rdx=pData[aretes[i].en].rx-pData[aretes[i].st].rx;
 	}
 	SortPoints();
@@ -118,7 +120,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
-
+      
       // treat a new point: remove and add edges incident to it
 			int    cb;
 			int    nbUp=0,nbDn=0;
@@ -137,14 +139,14 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 				}
 				cb=NextAt(nPt,cb);
 			}
-
+      
 			if ( nbDn <= 0 ) {
 				upNo=-1;
 			}
 			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
 				upNo=-1;
 			}
-
+      
 			if ( nbUp > 0 ) {
         // first remove edges coming from above
 				cb=pts[nPt].firstA;
@@ -163,7 +165,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 					cb=NextAt(nPt,cb);
 				}
 			}
-
+      
 			// if there is one edge going down and one edge coming from above, we don't Insert() the new edge,
       // but replace the upNo edge by the new one (faster)
 			SweepTree* insertionNode=NULL;
@@ -172,9 +174,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 					SweepTree* node=swrData[upNo].misc;
 					swrData[upNo].misc=NULL;
 					DestroyEdge(upNo,to,step);
-
+          
 					node->ConvertTo(this,dnNo,1,nPt);
-
+          
 					swrData[dnNo].misc=node;
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
@@ -186,7 +188,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 					CreateEdge(dnNo,to,step);
 				}
 			}
-
+      
       // add the remaining edges
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
@@ -211,7 +213,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 		while ( curPt > 0 && pts[curPt-1].x[1] >= to ) {
 			int           nPt=-1;
 			nPt=--curPt;
-
+      
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
@@ -227,14 +229,14 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 				}
 				cb=NextAt(nPt,cb);
 			}
-
+      
 			if ( nbDn <= 0 ) {
 				upNo=-1;
 			}
 			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
 				upNo=-1;
 			}
-
+      
 			if ( nbUp > 0 ) {
 				cb=pts[nPt].firstA;
 				while ( cb >= 0 && cb < nbAr ) {
@@ -251,7 +253,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 					cb=NextAt(nPt,cb);
 				}
 			}
-
+      
 			// traitement du "upNo devient dnNo"
 			SweepTree* insertionNode=NULL;
 			if ( dnNo >= 0 ) {
@@ -259,9 +261,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 					SweepTree* node=swrData[upNo].misc;
 					swrData[upNo].misc=NULL;
 					DestroyEdge(upNo,to,step);
-
+          
 					node->ConvertTo(this,dnNo,1,Other(nPt,dnNo));
-
+          
 					swrData[dnNo].misc=node;
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
@@ -274,7 +276,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 					CreateEdge(dnNo,to,step);
 				}
 			}
-
+      
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
 				while ( cb >= 0 && cb < nbAr ) {
@@ -588,6 +590,7 @@ void              Shape::QuickRasterSubEdge(int bord)
   qrsData[no]=qrsData[--nbQRas];
   qrsData[no].ind=savInd;
   qrsData[qrsData[no].bord].ind=no;
+  qrsData[bord].ind=-1;
   
   if ( nbQRas > 0 ) {
     if ( firstQRas == nbQRas ) firstQRas=no;
@@ -615,6 +618,15 @@ void              Shape::QuickRasterSwapEdge(int a,int b)
 void              Shape::QuickRasterSort(void)
 {
   if ( nbQRas <= 1 ) return;
+/*  qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
+  for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
+  for (int i=1;i<nbQRas;i++) qrsData[i].prev=i-1;
+  for (int i=0;i<nbQRas-1;i++) qrsData[i].next=i+1;
+  qrsData[0].prev=-1;
+  qrsData[nbQRas-1].next=-1;
+  firstQRas=0;
+  lastQRas=nbQRas-1;*/
+  
   int    cb=qrsData[firstQRas].bord;
   while ( cb >= 0 ) {
     int bI=qrsData[cb].ind;
@@ -635,6 +647,142 @@ void              Shape::QuickRasterSort(void)
     }
   }
 }
+// direct scan to a given position. goes through the edge list to keep only the ones intersecting the target sweepline
+// good for initial setup of scanline algo, bad for incremental changes
+void              Shape::DirectScan(float &pos,int &curP,float to,float step)
+{
+  if ( nbAr <= 1 ) return;
+	if ( pos == to ) return;
+	if ( pos < to ) {
+    // we're moving downwards
+    // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
+    // until we reach the wanted position to.
+    // don't forget to update curP and pos when we're done
+		int    curPt=curP;
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) curPt++;
+    for (int i=0;i<nbAr;i++) {
+      if ( swrData[i].misc ) {
+        SweepTree* node=swrData[i].misc;
+        swrData[i].misc=NULL;
+        node->Remove(sTree,sEvts,true);
+        DestroyEdge(i,to,step);
+      }
+    }
+    for (int i=0;i<nbAr;i++) {
+      if ( ( aretes[i].st < curPt && aretes[i].en >= curPt ) || ( aretes[i].en < curPt && aretes[i].st >= curPt )) {
+        // crosses sweepline
+        int nPt=(aretes[i].st<curPt)?aretes[i].st:aretes[i].en;
+        SweepTree* node=SweepTree::AddInList(this,i,1,nPt,sTree,this);
+        swrData[i].misc=node;
+        node->Insert(sTree,sEvts,this,nPt,true);
+        CreateEdge(i,to,step);
+      }
+    }
+    
+		curP=curPt;
+		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
+	} else {
+    // same thing, but going up. so the sweepSens is inverted for the Find() function
+		int    curPt=curP;
+		while ( curPt > 0 && pts[curPt-1].x[1] >= to ) curPt--;
+
+    for (int i=0;i<nbAr;i++) {
+      if ( swrData[i].misc ) {
+        SweepTree* node=swrData[i].misc;
+        swrData[i].misc=NULL;
+        node->Remove(sTree,sEvts,true);
+        DestroyEdge(i,to,step);
+      }
+    }
+    for (int i=0;i<nbAr;i++) {
+      if ( ( aretes[i].st > curPt-1 && aretes[i].en <= curPt-1 ) || ( aretes[i].en > curPt-1 && aretes[i].st <= curPt-1 )) {
+        // crosses sweepline
+        int nPt=(aretes[i].st>curPt)?aretes[i].st:aretes[i].en;
+        SweepTree* node=SweepTree::AddInList(this,i,1,nPt,sTree,this);
+        swrData[i].misc=node;
+        node->Insert(sTree,sEvts,this,nPt,false);
+        node->startPoint=Other(nPt,i);
+        CreateEdge(i,to,step);
+      }
+    }
+		
+    curP=curPt;
+		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
+	}
+  // the final touch: edges intersecting the sweepline must be update so that their intersection with
+  // said sweepline is correct.
+	if ( sTree.racine ) {
+		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
+		while ( curS ) {
+			int    cb=curS->bord;
+			AvanceEdge(cb,to,true,step);
+			curS=static_cast <SweepTree*> (curS->rightElem);
+		}
+	}
+}
+void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSort,float step)
+{
+  if ( nbAr <= 1 ) return;
+	if ( pos == to ) return;
+	if ( pos < to ) {
+    // we're moving downwards
+    // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
+    // until we reach the wanted position to.
+    // don't forget to update curP and pos when we're done
+		int    curPt=curP;
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) curPt++;
+    for (int i=0;i<nbAr;i++) {
+      if ( qrsData[i].ind < 0 ) {
+        QuickRasterSubEdge(i);
+        DestroyEdge(i,to,step);
+      }
+    }
+    for (int i=0;i<nbAr;i++) {
+      if ( ( aretes[i].st < curPt && aretes[i].en >= curPt ) || ( aretes[i].en < curPt && aretes[i].st >= curPt )) {
+        // crosses sweepline
+        int nPt=(aretes[i].st<aretes[i].en)?aretes[i].st:aretes[i].en;
+        QuickRasterAddEdge(i,pts[nPt].x[0],-1);
+        CreateEdge(i,to,step);
+      }
+    }
+    
+		curP=curPt;
+		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
+	} else {
+    // same thing, but going up. so the sweepSens is inverted for the Find() function
+		int    curPt=curP;
+		while ( curPt > 0 && pts[curPt-1].x[1] >= to ) curPt--;
+    
+    for (int i=0;i<nbAr;i++) {
+      if ( qrsData[i].ind < 0 ) {
+        QuickRasterSubEdge(i);
+        DestroyEdge(i,to,step);
+      }
+    }
+    for (int i=0;i<nbAr;i++) {
+      if ( ( aretes[i].st < curPt-1 && aretes[i].en >= curPt-1 ) || ( aretes[i].en < curPt-1 && aretes[i].st >= curPt-1 )) {
+        // crosses sweepline
+        int nPt=(aretes[i].st>aretes[i].en)?aretes[i].st:aretes[i].en;
+        QuickRasterAddEdge(i,pts[nPt].x[0],-1);
+        CreateEdge(i,to,step);
+      }
+    }
+		
+    curP=curPt;
+		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
+	}
+	for (int i=0;i<nbQRas;i++) {
+		int cb=qrsData[i].bord;
+		AvanceEdge(cb,to,true,step);
+		qrsData[i].x=swrData[cb].curX;
+	}
+  QuickRasterSort();
+  /*	if ( nbQRas > 1 && doSort) {
+		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
+		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
+	}*/
+}
+
 
 // scan and compute coverage, FloatLigne version
 // coverage of the line is bult in 2 parts: first a set of rectangles of height the height of the line (here: "step")
@@ -1130,16 +1278,16 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			int curW=0;
 			float  lastX=0,lastY=0;
 			int    lastGuess=-1,lastB=-1;
-			for (int i=0;i<nbQRas;i++) {
+			for (int i=firstQRas;i>=0&&i<nbQRas;i=qrsData[i].next) {
 				int   cb=qrsData[i].bord;
 				int   oW=curW;
 				if ( swrData[cb].sens ) curW++; else curW--;
 
-				if ( curW == 0 && oW != 0) {
-					lastGuess=line->AddBord(lastX,to-lastY,swrData[cb].curX,to-swrData[cb].curY,0.0,lastGuess);
+				if ( curW%2 == 0 && oW%2 != 0) {
+					lastGuess=line->AppendBord(swrData[lastB].curX,to-swrData[lastB].curY,swrData[cb].curX,to-swrData[cb].curY,0.0);
 					swrData[cb].guess=lastGuess;
 					if ( lastB >= 0 ) swrData[lastB].guess=lastGuess-1;
-				} else if ( curW != 0 && oW == 0 ) {
+				} else if ( curW%2 != 0 && oW%2 == 0 ) {
 					lastX=swrData[cb].curX;
 					lastY=swrData[cb].curY;
 					lastB=cb;
