@@ -115,7 +115,7 @@ static void sp_style_clear (SPStyle *style);
 static void sp_style_merge_property (SPStyle *style, gint id, const gchar *val);
 
 static void sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent);
-static void sp_style_read_dash (NRVpathDash *dash, const gchar *str);
+static void sp_style_read_dash(SPStyle *style, gchar const *str);
 
 static SPTextStyle *sp_text_style_new (void);
 static void sp_text_style_clear (SPTextStyle *ts);
@@ -510,10 +510,9 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     }
     if (!style->stroke_dasharray_set) {
         val = sp_repr_attr (repr, "stroke-dasharray");
-			if ( val ) {
-        sp_style_read_dash (&style->stroke_dash, val);
-        style->stroke_dasharray_set = TRUE;
-			}
+        if (val) {
+            sp_style_read_dash(style, val);
+        }
     }
     if (!style->stroke_dashoffset_set) {
         /* fixme */
@@ -606,11 +605,13 @@ sp_style_privatize_text (SPStyle *style)
 
 
 /**
- *
+ * \pre val != NULL.
  */
 static void
 sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 {
+    g_return_if_fail(val != NULL);
+
     switch (id) {
     /* CSS2 */
     /* Font */
@@ -824,8 +825,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         break;
     case SP_PROP_STROKE_DASHARRAY:
         if (!style->stroke_dasharray_set) {
-            sp_style_read_dash (&style->stroke_dash, val);
-            style->stroke_dasharray_set = TRUE;
+            sp_style_read_dash(style, val);
         }
         break;
     case SP_PROP_STROKE_DASHOFFSET:
@@ -988,7 +988,6 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
         p = e + 1;
     }
 }
-
 
 
 /**
@@ -1319,11 +1318,12 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
     p += sp_style_write_ifloat (p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, flags);
 
     /* fixme: */
-    if ((flags & SP_STYLE_FLAG_ALWAYS)
-        || (style->stroke_dasharray_set
-            && (flags & SP_STYLE_FLAG_IFSET)))
+    if ((flags == SP_STYLE_FLAG_ALWAYS)
+        || style->stroke_dasharray_set)
     {
-        if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
+        if (style->stroke_dasharray_inherit) {
+            p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:inherit;");
+        } else if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
             p += g_snprintf (p, c + BMAX - p, "stroke-dasharray:");
             gint i;
             for (i = 0; i < style->stroke_dash.n_dash; i++) {
@@ -1412,7 +1412,9 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
                     &from->stroke_miterlimit, &to->stroke_miterlimit, SP_STYLE_FLAG_IFDIFF);
     /* fixme: */
     if (from->stroke_dasharray_set) {
-        if (from->stroke_dash.n_dash && from->stroke_dash.dash) {
+        if (from->stroke_dasharray_inherit) {
+            p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:inherit;");
+        } else if (from->stroke_dash.n_dash && from->stroke_dash.dash) {
             gint i;
             p += g_snprintf (p, c + BMAX - p, "stroke-dasharray:");
             for (i = 0; i < from->stroke_dash.n_dash; i++) {
@@ -1576,16 +1578,32 @@ sp_style_clear (SPStyle *style)
  *
  */
 static void
-sp_style_read_dash (NRVpathDash *dash, const gchar *str)
+sp_style_read_dash(SPStyle *style, gchar const *str)
 {
-    gint n_dash;
-    gdouble d[64];
-    gchar *e;
+    /* Ref: http://www.w3.org/TR/SVG11/painting.html#StrokeDasharrayProperty */
+    style->stroke_dasharray_set = TRUE;
 
-    n_dash = 0;
-    e = NULL;
+    if (strcmp(str, "inherit") == 0) {
+        style->stroke_dasharray_inherit = true;
+        return;
+    }
+    style->stroke_dasharray_inherit = false;
+
+    NRVpathDash &dash = style->stroke_dash;
+    g_free(dash.dash);
+    dash.dash = NULL;
+
+    if (strcmp(str, "none") == 0) {
+        dash.n_dash = 0;
+        return;
+    }
+
+    gint n_dash = 0;
+    gdouble d[64];
+    gchar *e = NULL;
 
     while (e != str && n_dash < 64) {
+        /* TODO: Should allow <length> rather than just a unitless (px) number. */
         d[n_dash] = g_ascii_strtod (str, (char **) &e);
         if (e != str) {
             n_dash += 1;
@@ -1595,9 +1613,9 @@ sp_style_read_dash (NRVpathDash *dash, const gchar *str)
     }
 
     if (n_dash > 0) {
-        dash->dash = g_new (gdouble, n_dash);
-        memcpy (dash->dash, d, sizeof (gdouble) * n_dash);
-        dash->n_dash = n_dash;
+        dash.dash = g_new(gdouble, n_dash);
+        memcpy(dash.dash, d, sizeof(gdouble) * n_dash);
+        dash.n_dash = n_dash;
     }
 }
 

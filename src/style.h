@@ -225,6 +225,7 @@ struct SPStyle {
 	/** stroke-dash* */
 	NRVpathDash stroke_dash;
 	unsigned int stroke_dasharray_set : 1;
+	unsigned int stroke_dasharray_inherit : 1;
 	unsigned int stroke_dashoffset_set : 1;
 	/** stroke-opacity */
 	SPIScale24 stroke_opacity;

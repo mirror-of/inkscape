@@ -1,7 +1,13 @@
 2004-12-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/style.cpp (sp_style_merge_from_parent): Fix one of two bugs
-	  in our display of Units.svg from SVG11/coords.html.
+	* src/style.cpp (sp_style_merge_from_parent):
+	  Fix bug with specifying stroke-width with unit of em or ex.
+	  (We were ignoring the number, treating it as 1em or 1ex.)
+
+	* src/style.h, src/style.cpp (sp_style_read_dash,
+	  sp_style_write_string, sp_style_write_difference):
+	  Allow `inherit' as a value for dasharray.
+	  (Also plug small memory leak in sp_style_read_dash.)
 
 2004-12-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
