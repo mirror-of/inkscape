@@ -28,11 +28,7 @@
 
 #include <helper/helper-forward.h>
 
-#define canvas_tiled_redraw
-
-#ifdef canvas_tiled_redraw
 #include <stdint.h>
-#endif
 
 enum {
 	SP_CANVAS_UPDATE_REQUESTED  = 1 << 0,
@@ -87,8 +83,6 @@ void sp_canvas_item_hide (SPCanvasItem *item);
 int sp_canvas_item_grab (SPCanvasItem *item, unsigned int event_mask, GdkCursor *cursor, guint32 etime);
 void sp_canvas_item_ungrab (SPCanvasItem *item, guint32 etime);
 
-void sp_canvas_item_w2i(SPCanvasItem const *item, double *x, double *y);
-void sp_canvas_item_i2w(SPCanvasItem const *item, double *x, double *y);
 NR::Matrix sp_canvas_item_i2w_affine(SPCanvasItem const *item);
 
 void sp_canvas_item_grab_focus (SPCanvasItem *item);
@@ -112,13 +106,9 @@ struct _SPCanvas {
 	int x0, y0;
 
 	/* Area that needs redrawing, stored as a microtile array */
-#ifndef canvas_tiled_redraw
-	ArtUta *redraw_area;
-#else
-  int    tLeft,tTop,tRight,tBottom;
-  int    tileH,tileV;
-  uint8_t *tiles;
-#endif
+	int    tLeft,tTop,tRight,tBottom;
+	int    tileH,tileV;
+	uint8_t *tiles;
   
 	/* Last known modifier state, for deferred repick when a button is down */
 	int state;
