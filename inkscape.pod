@@ -31,10 +31,10 @@ options:
 
     -p, --print=PRINTER
 
-    -x, --bitmap-icons                
-
     -g, --with-gui                    
     -z, --without-gui                 
+
+        --g-fatal-warnings
 
 =head1 DESCRIPTION
 
@@ -158,12 +158,6 @@ then the filename hint will be ignored and the filename from the command line wi
 The width of generated bitmap in pixels.
 This value overrides the --export-dpi setting (or the DPI hint if used with --export-use-hints). 
 
-=item B<-x>, B<--bitmap-icons>
-
-Use bitmap (XPM) icons in the GUI instead of SVG ones.
-By default, Inkscape raterizes icons on-the-fly from share/inkscape/icons/icons.svg.
-Use this option to turn this off if there is any problem with SVG icons. 
-
 =item B<-y> I<VALUE>, B<--export-background-opacity>=I<VALUE>
 
 Opacity of the background of exported PNG.
@@ -177,6 +171,12 @@ then the value of 255 (full opacity) will be used.
 
 Do not open the GUI (on Unix, do not use X server); only process the files from console.
 This is assumed for -p, -e, and -l options. 
+
+=item B<--g-fatal-warnings>
+
+Part of the standard GTK option that are recognized.  This forces any GTK
+warnings to cause Inkscape to abort.  This option is listed because it gets
+used for debugging.
 
 =item B<--usage>
 
@@ -276,12 +276,28 @@ B<DISPLAY> to get the default host and display number.
 B<TMPDIR> to set the default path of the directory to use for temporary
 files.  The directory must exist.
 
+=head1 THEMES
+
+To load different icons sets instead of the default
+B<$PREFIX>/share/inkscape/icons/icons.svg file, the directory
+B<$HOME>/.inkscape/icons/ is used.  Icons are loaded by name
+(e.g. I<fill_none.svg>), or if not found, then from I<icons.svg>.  If the
+icon is not loaded from either of those locations, it falls back to the
+default system location.
+
+The needed icons are loaded from SVG files by searching for the SVG id with
+the matching icon name.  (For example, to load the "fill_none" icon from
+a file, the bounding box seen for SVG id "fill_none" is rendered as the
+icon, whether it comes from I<fill_none.svg> or I<icons.svg>.)
+
 =head1 FILES
 
 B<$HOME>/.inkscape/preferences.xml - The user's preference settings. 
 
 B<$HOME>/.inkscape/extensions.xml - The filter programs to be used in
 the application.
+
+B<$HOME>/.inkscape/icons/{*,icons}.svg - Icons to overload for themes.
 
 =head1 OTHER INFO
 

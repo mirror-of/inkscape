@@ -1,6 +1,7 @@
 2005-01-19  Kees Cook  <kees@outflux.net>
 
     * configure.ac: trying to correct the -lgc detection.
+    * inkscape.pod: added theme details.
 
 2005-01-18  Kees Cook  <kees@outflux.net>
 
