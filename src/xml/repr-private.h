@@ -110,6 +110,7 @@ void sp_repr_synthesize_events (SPRepr *repr, const SPReprEventVector *vector, v
 void sp_repr_add_listener (SPRepr *repr, const SPReprEventVector *vector, void * data);
 void sp_repr_remove_listener_by_data (SPRepr *repr, void * data);
 
-void sp_repr_document_set_root (SPReprDoc *doc, SPRepr *repr);
+SPReprDoc *sp_repr_document_new_list (GSList *reprs);
+SPRepr *sp_repr_document_first_child(SPReprDoc const *doc);
 
 #endif

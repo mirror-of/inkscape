@@ -29,7 +29,7 @@ static const gchar *sp_svg_doctype_str =
 "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n";
 
 static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
-static SPRepr * sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
+static SPRepr *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
 static void sp_repr_set_xmlns_attr (const gchar *prefix, const gchar *uri, SPRepr *repr);
 static gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
 
@@ -111,46 +111,60 @@ sp_repr_read_mem (const gchar * buffer, gint length, const gchar *default_ns)
 SPReprDoc *
 sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 {
-    SPReprDoc * rdoc;
-    SPRepr * repr;
-    GHashTable * prefix_map;
-    xmlNodePtr node;
-
     if (doc == NULL) return NULL;
-    node = xmlDocGetRootElement (doc);
+    xmlNodePtr node=xmlDocGetRootElement (doc);
     if (node == NULL) return NULL;
-    rdoc = sp_repr_document_new ("void");
 
-
+    GHashTable * prefix_map;
     prefix_map = g_hash_table_new (g_str_hash, g_str_equal);
 
-    repr = NULL;
+    GSList *reprs=NULL;
+    SPRepr *root=NULL;
+
     for (node = xmlDocGetRootElement(doc); node != NULL; node = node->next) {
         if (node->type == XML_ELEMENT_NODE) {
-            repr = sp_repr_svg_read_node (rdoc, node, default_ns, prefix_map);
-            break;
-        }
+	    SPRepr *repr=sp_repr_svg_read_node (node, default_ns, prefix_map);
+	    reprs = g_slist_append(reprs, repr);
+
+	    if (!root) {
+	        root = repr;
+	    } else {
+		root = NULL;
+		break;
+	    }
+        } else if ( node->type == XML_COMMENT_NODE ) {
+	    SPRepr *comment=sp_repr_svg_read_node(node, default_ns, prefix_map);
+	    reprs = g_slist_append(reprs, comment);
+	}
     }
 
-    if (repr != NULL) {
-        if (default_ns) {
-            sp_repr_set_attr (repr, "xmlns", default_ns);
-        }
-        g_hash_table_foreach (prefix_map, (GHFunc)sp_repr_set_xmlns_attr, repr);
-        /* always include Sodipodi and Inkscape namespaces */
-        sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_SODIPODI_NS_URI, "sodipodi"), SP_SODIPODI_NS_URI, repr);
-        sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_INKSCAPE_NS_URI, "inkscape"), SP_INKSCAPE_NS_URI, repr);
+    SPReprDoc *rdoc=NULL;
 
-        if (!strcmp (sp_repr_name (repr), "svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
+    if (root != NULL) {
+        if (default_ns) {
+            sp_repr_set_attr (root, "xmlns", default_ns);
+        }
+        g_hash_table_foreach (prefix_map, (GHFunc)sp_repr_set_xmlns_attr, root);
+        /* always include Sodipodi and Inkscape namespaces */
+        sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_SODIPODI_NS_URI, "sodipodi"), SP_SODIPODI_NS_URI, root);
+        sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_INKSCAPE_NS_URI, "inkscape"), SP_INKSCAPE_NS_URI, root);
+
+	rdoc = sp_repr_document_new_list(reprs);
+
+        if (!strcmp (sp_repr_name (root), "svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
             
             sp_repr_set_attr ((SPRepr *) rdoc, "doctype", sp_svg_doctype_str);
             /* always include XLink namespace */
-            sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_XLINK_NS_URI, "xlink"), SP_XLINK_NS_URI, repr);
+            sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_XLINK_NS_URI, "xlink"), SP_XLINK_NS_URI, root);
         }
-
-        sp_repr_document_set_root (rdoc, repr);
-        sp_repr_unref (repr);
     }
+
+    for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
+        SPRepr *repr=(SPRepr *)iter->data;
+	sp_repr_unref(repr);
+    }
+    g_slist_free(reprs);
+
     g_hash_table_destroy (prefix_map);
 
     return rdoc;
@@ -189,7 +203,7 @@ sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, co
 }
 
 static SPRepr *
-sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map)
+sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map)
 {
     SPRepr *repr, *crepr;
     xmlAttrPtr prop;
@@ -215,9 +229,7 @@ sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default
             return NULL; // we do not preserve all-whitespace nodes unless we are asked to
         }
 
-        gchar *s = g_strdup ((const gchar*) node->content); // otherwise, use the node verbatim
-        SPRepr *rdoc = sp_xml_document_createTextNode (doc, s);
-        g_free (s);
+        SPRepr *rdoc = sp_repr_new_text((const gchar *)node->content);
         return rdoc;
     }
 
@@ -241,7 +253,7 @@ sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default
 
     child = node->xmlChildrenNode;
     for (child = node->xmlChildrenNode; child != NULL; child = child->next) {
-        crepr = sp_repr_svg_read_node (doc, child, default_ns, prefix_map);
+        crepr = sp_repr_svg_read_node (child, default_ns, prefix_map);
         if (crepr) {
             sp_repr_append_child (repr, crepr);
             sp_repr_unref (crepr);
@@ -264,9 +276,12 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
     str = sp_repr_attr ((SPRepr *) doc, "doctype");
     if (str) fputs (str, fp);
 
-    repr = sp_repr_document_root (doc);
-
-    sp_repr_write_stream (repr, fp, 0, TRUE);
+    repr = sp_repr_document_first_child(doc);
+    for ( repr = sp_repr_document_first_child(doc) ;
+          repr ; repr = sp_repr_next(repr) )
+    {
+        sp_repr_write_stream(repr, fp, 0, TRUE);
+    }
 }
 
 /* Returns TRUE if file successfully saved; FALSE if not

@@ -852,16 +852,28 @@ sp_repr_document_unref (SPReprDoc * doc)
 	sp_repr_unref ((SPRepr *) doc);
 }
 
-void
-sp_repr_document_set_root (SPReprDoc *doc, SPRepr *repr)
+SPReprDoc *
+sp_repr_document_new_list (GSList *reprs)
 {
-	g_assert (doc != NULL);
-	g_assert (repr != NULL);
-	g_assert (doc->repr.children != NULL);
-	g_assert (repr->doc == NULL || repr->doc == doc);
+	g_assert (reprs != NULL);
 
+	SPReprDoc *doc=sp_repr_document_new("void");
 	sp_repr_remove_child (&doc->repr, doc->repr.children);
-	sp_repr_add_child (&doc->repr, repr, NULL);
+
+	for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
+		SPRepr *repr=(SPRepr *)iter->data;
+		sp_repr_add_child (&doc->repr, repr, NULL);
+	}
+
+	g_assert(sp_repr_document_root(doc) != NULL);
+
+	return doc;
+}
+
+SPRepr *
+sp_repr_document_first_child (SPReprDoc const *doc)
+{
+	return doc->repr.children;
 }
 
 SPReprDoc *

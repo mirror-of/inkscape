@@ -1,3 +1,12 @@
+2004-04-04  MenTaLguY <mental@rydia.net>
+
+	* src/xml/repr-io.cpp, src/xml/repr.cpp, src/xml/repr-private.h:
+	Added API for coping with comments at the root level (i.e. siblings
+	of the root XML node), and made corresponding changes to the repr-io
+	code.  In theory this should be enough to preserve them upon loading, 
+	though in practice it still doesn't appear to be working (bug #929348).
+	Is there some libxml thing we need to do?
+
 2004-04-04  Ted Gould <ted@gould.cx>
 
 	* a bunch of files
