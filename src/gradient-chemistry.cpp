@@ -21,15 +21,9 @@
 #include "sp-root.h"
 #include "gradient-chemistry.h"
 
-/*
- * fixme: This sucks a lot - basically we keep moving gradients around
- * all the time, causing LOT of unnecessary parsing
- *
- * This should be fixed by SPHeader fine grouping, but I am
- * currently too tired to write it
- *
- * Lauris
- */
+// Terminology:
+// "vector" is a gradient that has stops but not position coords. It can be referenced by one or more privates. Objects should not refer to it directly. It has no radial/linear distinction.
+// "private" is a gradient that has no stops but has position coords (e.g. center, radius etc for a radial). It references a vector for the actual colors. Each private is only used by one object. It is either linear or radial.
 
 static SPGradient *sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector);
 static SPGradient *sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vector);
@@ -43,9 +37,6 @@ static gchar *sp_style_change_property (const gchar *sstr, const gchar *key, con
 SPGradient *
 sp_gradient_ensure_vector_normalized (SPGradient *gr)
 {
-	SPDocument *doc;
-	SPDefs *defs;
-
 	g_return_val_if_fail (gr != NULL, NULL);
 	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
 
@@ -59,8 +50,8 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 
 	//g_print ("GVECTORNORM: Requested vector normalization of gradient %s\n", SP_OBJECT_ID (gr));
 
-	doc = SP_OBJECT_DOCUMENT (gr);
-	defs = (SPDefs *) SP_DOCUMENT_DEFS (doc);
+	SPDocument *doc = SP_OBJECT_DOCUMENT (gr);
+	SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS (doc);
 
 	if (SP_OBJECT_PARENT (gr) != SP_OBJECT (defs)) {
 		SPGradient *spnew;
@@ -99,52 +90,29 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		/* Now we have successfully created new normalized vector, and cleared old stops */
 		return spnew;
 	} else {
-		SPObject *child;
 		/* Gradient is in <defs> */
 		//g_print ("GVECTORNORM: Gradient %s IS in <defs>\n", SP_OBJECT_ID (gr));
-		/* First make sure we have vector directly defined */
+
+		/* First make sure we have vector directly defined (i.e. gr has its own stops) */
 		if (!gr->has_stops) {
 			/* We do not have stops ourselves, so flatten stops as well */
 			sp_gradient_ensure_vector (gr);
 			g_assert (gr->vector);
+			// this adds stops from gr->vector as children to gr
 			sp_gradient_repr_set_vector (gr, SP_OBJECT_REPR (gr), gr->vector);
-			g_print ("GVECTORNORM: Added stops to %s\n", SP_OBJECT_ID (gr));
+			//g_print ("GVECTORNORM: Added stops to %s\n", SP_OBJECT_ID (gr));
 		}
-		/* Nof break free hrefing */
+
+		/* If gr hrefs some other gradient, remove the href */
 		if (gr->ref->getObject()) {
 			/* We are hrefing someone, so require flattening */
 			SP_OBJECT(gr)->updateRepr(((SPObject *) gr)->repr, SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
 			g_print ("GVECTORNORM: Gradient %s attributes flattened\n", SP_OBJECT_ID (gr));
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), NULL);
 		}
-		/* Now we can be sure we are in good condition */
-		/* Still have to ensure we are in vector position */
-		for (child = sp_object_first_child(SP_OBJECT(defs)); child != NULL; child = SP_OBJECT_NEXT(child)) {
-			if (SP_IS_GRADIENT (child)) {
-				SPGradient *gchild;
-				gchild = SP_GRADIENT (child);
-				if (gchild == gr) {
-					/* Everything is OK, set state flag */
-					/* fixme: I am not sure, whether one should clone, if hrefcount > 1 */
-					gr->state = SP_GRADIENT_STATE_VECTOR;
-					//g_print ("GVECTORNORM: Found gradient %s in right position\n", SP_OBJECT_ID (gr));
-					return gr;
-				}
-				/* If there is private gradient, we have to rearrange ourselves */
-				if (gchild->state == SP_GRADIENT_STATE_PRIVATE) break;
-			}
-		}
-		/* If we didn't find ourselves, <defs> is probably messed up */
-		g_assert (child != NULL);
-		/* Now we have to move ourselves to the beggining of <defs> */
-		g_print ("GVECTORNORM: Moving %s to the beginning of <defs>\n", SP_OBJECT_ID (gr));
-		if (!sp_repr_change_order (SP_OBJECT_REPR (defs), SP_OBJECT_REPR (gr), NULL)) {
-			g_warning ("file %s: line %d: Cannot move gradient %s to vector position", __FILE__, __LINE__, SP_OBJECT_ID (gr));
-			return NULL;
-		}
+
 		/* Everything is OK, set state flag */
 		gr->state = SP_GRADIENT_STATE_VECTOR;
-		g_print ("GVECTORNORM: Moved gradient %s to the right position\n", SP_OBJECT_ID (gr));
 		return gr;
 	}
 }
@@ -158,9 +126,6 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 SPGradient *
 sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector)
 {
-	SPDocument *doc;
-	SPObject *defs;
-
 	g_return_val_if_fail (gr != NULL, NULL);
 	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
 	g_return_val_if_fail (vector != NULL, NULL);
@@ -170,37 +135,25 @@ sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector)
 	/* If we are already normalized private, change href and return */
 	if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT (gr) == 1)) {
 		if ( gr->ref->getObject() != vector) {
-			/* href is not vector */
+			/* href is not vector; relink */
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), vector);
 		}
 		return gr;
 	}
 
-	g_print ("Private normalization of gradient %s requested\n", SP_OBJECT_ID (gr));
+	//g_print ("Private normalization of gradient %s requested\n", SP_OBJECT_ID (gr));
 
-	doc = SP_OBJECT_DOCUMENT (gr);
-	defs = SP_DOCUMENT_DEFS (doc);
+	SPDocument *doc = SP_OBJECT_DOCUMENT (gr);
+	SPObject *defs = SP_DOCUMENT_DEFS (doc);
 
-	/* Determine, whether we have to clone fresh new gradient */
 	if ((gr->has_stops) ||
 	    (gr->state != SP_GRADIENT_STATE_UNKNOWN) ||
 	    (SP_OBJECT_PARENT (gr) != SP_OBJECT (defs)) ||
 	    (SP_OBJECT_HREFCOUNT (gr) > 1)) {
+       	// we have to clone a fresh new private gradient for the given vector
 		return sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (gr), vector);
 	} else {
-		SPObject *sibling;
-		/* We still have to determine, whether we have to change our position */
-		for (sibling = SP_OBJECT_NEXT (gr); sibling != NULL; sibling = SP_OBJECT_NEXT (sibling)) {
-			if (SP_IS_GRADIENT (sibling) && SP_GRADIENT (sibling)->state == SP_GRADIENT_STATE_VECTOR) {
-				/* Found vector after us, so move */
-				while (SP_OBJECT_NEXT (sibling)) sibling = SP_OBJECT_NEXT (sibling);
-				if (!sp_repr_change_order (SP_OBJECT_REPR (defs), SP_OBJECT_REPR (gr), SP_OBJECT_REPR (sibling))) {
-					g_warning ("Cannot move gradient %s to private position", SP_OBJECT_ID (gr));
-					return NULL;
-				}
-				break;
-			}
-		}
+
 		/* Set state */
 		gr->state = SP_GRADIENT_STATE_PRIVATE;
 		return gr;
@@ -225,7 +178,7 @@ sp_gradient_ensure_radial_private_normalized (SPGradient *gr, SPGradient *vector
 		return gr;
 	}
 
-	g_print ("Private normalization of radial gradient %s requested\n", SP_OBJECT_ID (gr));
+	//	g_print ("Private normalization of radial gradient %s requested\n", SP_OBJECT_ID (gr));
 
 	SPDocument *doc = SP_OBJECT_DOCUMENT (gr);
 	SPObject *defs = SP_DOCUMENT_DEFS (doc);
@@ -237,19 +190,7 @@ sp_gradient_ensure_radial_private_normalized (SPGradient *gr, SPGradient *vector
 	    (SP_OBJECT_HREFCOUNT (gr) > 1)) {
 		return sp_gradient_get_radial_private_normalized (SP_OBJECT_DOCUMENT (gr), vector);
 	} else {
-		SPObject *sibling;
-		/* We still have to determine, whether we have to change our position */
-		for (sibling = SP_OBJECT_NEXT (gr); sibling != NULL; sibling = SP_OBJECT_NEXT (sibling)) {
-			if (SP_IS_GRADIENT (sibling) && SP_GRADIENT (sibling)->state == SP_GRADIENT_STATE_VECTOR) {
-				/* Found vector after us, so move */
-				while (SP_OBJECT_NEXT (sibling)) sibling = SP_OBJECT_NEXT (sibling);
-				if (!sp_repr_change_order (SP_OBJECT_REPR (defs), SP_OBJECT_REPR (gr), SP_OBJECT_REPR (sibling))) {
-					g_warning ("Cannot move gradient %s to private position", SP_OBJECT_ID (gr));
-					return NULL;
-				}
-				break;
-			}
-		}
+
 		/* Set state */
 		gr->state = SP_GRADIENT_STATE_PRIVATE;
 		return gr;
