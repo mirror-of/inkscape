@@ -1136,10 +1136,10 @@ sp_stb_defaults(GtkWidget *widget, SPWidget *tbl)
 
 
 void
-sp_toolbox_add_label(GtkWidget *tbl, gchar const *title)
+sp_toolbox_add_label(GtkWidget *tbl, gchar const *title, bool wide = true)
 {
     GtkWidget *boxl = gtk_hbox_new(FALSE, 0);
-    gtk_widget_set_size_request(boxl, MODE_LABEL_WIDTH, -1);
+    if (wide) gtk_widget_set_size_request(boxl, MODE_LABEL_WIDTH, -1);
     GtkWidget *l = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(l), title);
     gtk_box_pack_end(GTK_BOX(boxl), l, FALSE, FALSE, 0);
@@ -2248,6 +2248,18 @@ static void gr_toggle_type (GtkWidget *button, gpointer data) {
     }
 }
 
+static void gr_toggle_fillstroke (GtkWidget *button, gpointer data) {
+    GtkWidget *fill = (GtkWidget *) g_object_get_data (G_OBJECT(data), "fill");
+    GtkWidget *stroke = (GtkWidget *) g_object_get_data (G_OBJECT(data), "stroke");
+    if (button == fill && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (fill))) {
+        prefs_set_int_attribute ("tools.gradient", "newfillorstroke", 1);
+        if (stroke) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (stroke), FALSE);
+    } else if (button == stroke && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (stroke))) {
+        prefs_set_int_attribute ("tools.gradient", "newfillorstroke", 0);
+        if (fill) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fill), FALSE);
+    }
+}
+
 static GtkWidget *
 sp_gradient_toolbox_new(SPDesktop *desktop)
 {
@@ -2260,7 +2272,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
 
     sp_toolbox_add_label(tbl, _("<b>New:</b>"));
 
-    aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+    aux_toolbox_space(tbl, AUX_SPACING);
 
     {
     GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
@@ -2297,6 +2309,49 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(tbl), cvbox, FALSE, FALSE, 0);
     }
+
+    aux_toolbox_space(tbl, AUX_SPACING);
+
+    sp_toolbox_add_label(tbl, _("on"), false);
+
+    aux_toolbox_space(tbl, AUX_SPACING);
+
+    {
+    GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
+    GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
+
+    {
+    GtkWidget *button = sp_button_new_from_data(11,
+                                              SP_BUTTON_TYPE_TOGGLE,
+                                              NULL,
+                                              "controls_fill",
+                                              _("Create gradient in the fill"),
+                                              tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_fillstroke), tbl);
+    g_object_set_data(G_OBJECT(tbl), "fill", button);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
+                                  prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1) == 1);
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    {
+    GtkWidget *button = sp_button_new_from_data(11,
+                                              SP_BUTTON_TYPE_TOGGLE,
+                                              NULL,
+                                              "controls_stroke",
+                                              _("Create gradient in the stroke"),
+                                              tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_fillstroke), tbl);
+    g_object_set_data(G_OBJECT(tbl), "stroke", button);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
+                                  prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1) == 0);
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(tbl), cvbox, FALSE, FALSE, 0);
+    }
+
 
     gtk_widget_show_all(tbl);
     sp_set_font_size(tbl, AUX_FONT_SIZE);

@@ -426,21 +426,24 @@ static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint st
     SPEventContext *ec = SP_EVENT_CONTEXT(&rc);
 
     if (!selection->isEmpty()) {
+        int type = prefs_get_int_attribute ("tools.gradient", "newgradient", 1);
+        int fill_or_stroke = prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1);
+
         SPGradient *vector;
         if (ec->item_to_select) {
-            vector = sp_gradient_vector_for_object(document, desktop, ec->item_to_select, true);
+            vector = sp_gradient_vector_for_object(document, desktop, ec->item_to_select, fill_or_stroke);
         } else {
-            vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(selection->itemList()->data), true);
+            vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(selection->itemList()->data), fill_or_stroke);
         }
-        int type = prefs_get_int_attribute ("tools.gradient", "newgradient", 1);
+
         for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
-            sp_item_set_gradient(SP_ITEM(i->data), vector, (SPGradientType) type, true);
+            sp_item_set_gradient(SP_ITEM(i->data), vector, (SPGradientType) type, fill_or_stroke);
             if (type == SP_GRADIENT_TYPE_LINEAR) {
-                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, true, true, false);
-                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, true, true, false);
+                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, fill_or_stroke, true, false);
+                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, fill_or_stroke, true, false);
             } else if (type == SP_GRADIENT_TYPE_RADIAL) {
-                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_RG_CENTER, rc.origin, true, true, false);
-                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_RG_R1, pt, true, true, false);
+                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_RG_CENTER, rc.origin, fill_or_stroke, true, false);
+                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_RG_R1, pt, fill_or_stroke, true, false);
             }
             SP_OBJECT (i->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
@@ -453,7 +456,7 @@ static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint st
             // and therefore are already out of tolerance
             ec->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data), 
                                    type == SP_GRADIENT_TYPE_LINEAR? POINT_LG_P2 : POINT_RG_R1, 
-                                   true, 99999, 99999, etime);
+                                   fill_or_stroke, 99999, 99999, etime);
         }
         // We did an undoable action, but sp_document_done will be called by the knot when released
 
