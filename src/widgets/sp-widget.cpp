@@ -403,7 +403,7 @@ sp_widget_get_item_list (SPWidget *spw)
 	g_return_val_if_fail (SP_IS_WIDGET (spw), NULL);
 
 	if (spw->inkscape) {
-		return sp_selection_item_list (SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
+		return SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
 	}
 
 	return NULL;
