@@ -1,5 +1,13 @@
 2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/desktop-snap.h, src/desktop-snap.cpp
+	(sp_desktop_horizontal_snap, sp_desktop_vertical_snap,
+	sp_desktop_horizontal_snap_list_scale,
+	sp_desktop_vertical_snap_list_scale,
+	sp_desktop_horizontal_snap_list_skew,
+	sp_desktop_vertical_snap_list_skew):
+	Remove these now-unused functions.
+
 	* src/arc-context.cpp (sp_arc_drag):
 	* src/rect-context.cpp (sp_rect_drag):
 	Simplification: use sp_desktop_dim_snap instead of
