@@ -2715,8 +2715,7 @@ sp_nodepath_selected_nodes_scale (SPNodePath * nodepath, gdouble grow, int which
 
 	update_object (nodepath);
 	// fixme: use _keyed
-	if (n && nodepath->selected)
-		update_repr (n->subpath->nodepath);
+	update_repr (nodepath);
 }
 
 void
@@ -2734,8 +2733,7 @@ sp_nodepath_selected_nodes_scale_screen (SPNodePath * nodepath, gdouble grow, in
 
 	update_object (nodepath);
 	// fixme: use _keyed
-	if (n && nodepath->selected)
-		update_repr (n->subpath->nodepath);
+	update_repr (nodepath);
 }
 
 
