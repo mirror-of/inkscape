@@ -103,7 +103,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 
 			// explicitly show guidelines; if I draw a guide, I want them on
 			sp_repr_set_boolean (repr, "showguides", TRUE);
-			sp_repr_set_boolean (repr, "snaptoguides", TRUE);
+			sp_repr_set_boolean (repr, "inkscape:guide-bbox", TRUE);
 
 			double const guide_pos_dt = event_dt[ horiz
 							      ? NR::Y
