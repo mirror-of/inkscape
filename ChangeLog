@@ -1,3 +1,8 @@
+2004-04-07  MenTaLguY <mental@rydia.net>
+
+	* src/xml/repr.cpp: adjusted the advertising comment in the default
+	  document template (we need a real default document template, btw)
+
 2004-04-07  bulia byak <bulia@users.sourceforge.net>
 
 	* icons.svg: Alignment fix

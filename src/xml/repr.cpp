@@ -828,13 +828,14 @@ sp_repr_document_new (const char *rootname)
 		sp_repr_set_attr (&doc->repr, "doctype",
 				  "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\"\n"
 				  "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
-		sp_repr_set_attr (&doc->repr, "comment",
-				  "<!-- Created with Inkscape (http://www.inkscape.org/) -->\n");
+
+		SPRepr *comment = sp_repr_new_comment(" Created with Inkscape (http://www.inkscape.org/) ");
+		sp_repr_append_child(&doc->repr, comment);
+		sp_repr_unref(comment);
 	}
 
 	root = sp_repr_new (rootname);
-
-	sp_repr_add_child (&doc->repr, root, 0);
+	sp_repr_append_child(&doc->repr, root);
 	sp_repr_unref (root);
 
 	return doc;
