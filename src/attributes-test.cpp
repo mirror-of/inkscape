@@ -1,12 +1,8 @@
 #include <glib/gmacros.h>
-#include <string.h>
 #include <vector>
 #include "utest/utest.h"
 #include "attributes.h"
-
-static bool streq(char const *a, char const *b) {
-    return strcmp(a, b) == 0;
-}
+#include "streq.h"
 
 /* Extracted mechanically from http://www.w3.org/TR/SVG11/attindex.html:
 

@@ -2,15 +2,9 @@
 #include <cstring>
 #include <cmath>
 #include "utest/utest.h"
+#include "streq.h"
+#include "strneq.h"
 #include "style.h"
-
-static bool streq(char const *a, char const *b) {
-    return std::strcmp(a, b) == 0;
-}
-
-static bool strneq(char const *a, char const *b, size_t const len) {
-    return std::strncmp(a, b, len) == 0;
-}
 
 /* Extracted mechanically from http://www.w3.org/TR/SVG11/types.html#ColorKeywords:
  *
