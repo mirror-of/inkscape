@@ -36,13 +36,8 @@ URIReference::~URIReference() {
 
 void URIReference::attach(const URI &uri) throw(BadURIException)
 {
-	SPDocument *document;
-	const gchar *fragment;
-	gchar *id;
-
-	document = SP_OBJECT_DOCUMENT(_owner);
-
-	fragment = uri.getFragment();
+	SPDocument *document = SP_OBJECT_DOCUMENT(_owner);
+	gchar const *fragment = uri.getFragment();
 	if ( !uri.isRelative() || uri.getQuery() || !fragment ) {
 		throw UnsupportedURIException();
 	}
@@ -51,11 +46,15 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
 	/* for now this handles the minimal xpointer form that SVG 1.0
 	 * requires of us
 	 */
+	gchar *id;
 	if (!strncmp(fragment, "xpointer(", 9)) {
 		/* FIXME !!! this is wasteful */
+		/* FIXME: It looks as though this is including "))" in the id.  I suggest moving
+		   the strlen calculation and validity testing to before strdup, and copying just
+		   the id without the "))".  -- pjrm */
 		if (!strncmp(fragment, "xpointer(id(", 12)) {
 			id = g_strdup(fragment+12);
-			int len=strlen(id);
+			size_t const len = strlen(id);
 			if ( len < 3 || strcmp(id+len-2, "))") ) {
 				g_free(id);
 				throw MalformedURIException();
