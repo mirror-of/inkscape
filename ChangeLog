@@ -1,5 +1,10 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/tools-switch.cpp, src/tools-switch.h: Make some functions static.
+	(tools_num2name): Remove unused function.
+	(tools_isactive): Add assertion of not accessing past the end of the
+	array.
+
 	* src/knot.cpp (sp_knot_handler): Fix bug where event wasn't
 	getting consumed.
 	Get rid of hypot macro.

@@ -36,7 +36,7 @@
 
 #include "tools-switch.h"
 
-static char *tool_names[] = {
+static char const *tool_names[] = {
   NULL,
   "tools.select",
   "tools.nodes",
@@ -53,7 +53,7 @@ static char *tool_names[] = {
   NULL
 };
 
-static char *tool_ids[] = {
+static char const *tool_ids[] = {
   NULL,
   "select",
   "nodes",
@@ -70,7 +70,7 @@ static char *tool_ids[] = {
   NULL
 };
 
-int 
+static int
 tools_id2num (const char *id) 
 {
   int i = 1;
@@ -79,18 +79,14 @@ tools_id2num (const char *id)
       return i; 
     else i++;
   }
+  g_assert( 0 == TOOLS_INVALID );
   return 0; //nothing found
 }
 
-char* 
-tools_num2name (int num) 
-{
-  return tool_names[num];
-}
-
 int
-tools_isactive (SPDesktop *dt, int num)
+tools_isactive (SPDesktop *dt, unsigned num)
 {
+	g_assert( num < G_N_ELEMENTS(tool_ids) );
 	return (!strcmp (sp_repr_attr (dt->event_context->repr, "id"), tool_ids[num]));
 }
 
