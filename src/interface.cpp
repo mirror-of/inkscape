@@ -21,7 +21,6 @@
 #include <gtk/gtk.h>
 #include "inkscape.h"
 #include "inkscape-private.h"
-#include "extension/menu.h"
 #include "extension/db.h"
 #include "widgets/icon.h"
 #include "prefs-utils.h"

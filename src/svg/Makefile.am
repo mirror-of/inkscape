@@ -9,6 +9,7 @@
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/svg \
 	$(INKSCAPE_CFLAGS) \
 	-I$(includedir)
 
@@ -21,4 +22,5 @@ libspsvg_a_SOURCES = \
 	svg-color.cpp \
 	svg-affine.cpp \
 	svg-path.cpp \
+	stringstream.h \
 	gnome-canvas-bpath-util.cpp gnome-canvas-bpath-util.h
