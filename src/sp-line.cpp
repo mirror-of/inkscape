@@ -200,10 +200,6 @@ sp_line_set_transform (SPItem *item, NR::Matrix const &xform)
 static void
 sp_line_set_shape (SPLine * line)
 {
-	if (hypot (line->x2.computed - line->x1.computed, line->y2.computed - line->y1.computed) < 1e-12) {
-                return;
-        }
-
 	SPCurve *c = sp_curve_new ();
 
 	sp_curve_moveto (c, line->x1.computed, line->y1.computed);
