@@ -154,10 +154,11 @@ gr_item_activate (GtkMenuItem *menuitem, gpointer data)
 }
 
 gchar *
-gr_prepare_label (gchar *id)
+gr_prepare_label (SPObject *obj)
 {
-    if (strlen(id) > 14 && (!strncmp (id, "linearGradient", 14) || !strncmp (id, "radialGradient", 14))) 
-        return g_strdup_printf ("<small>%s</small>", id+14);
+    const gchar *id = obj->defaultLabel();
+    if (strlen(id) > 15 && (!strncmp (id, "#linearGradient", 15) || !strncmp (id, "#radialGradient", 15))) 
+        return g_strdup_printf ("<small>#%s</small>", id+15);
     return g_strdup_printf ("<small>%s</small>", id);
 }
 
@@ -233,7 +234,7 @@ gr_vector_list (SPDesktop *desktop, bool selection_empty, SPGradient *gr_selecte
 
             GtkWidget *hb = gtk_hbox_new (FALSE, 4);
             GtkWidget *l = gtk_label_new ("");
-            gchar *label = gr_prepare_label (SP_OBJECT_ID (gradient));
+            gchar *label = gr_prepare_label (SP_OBJECT(gradient));
             gtk_label_set_markup (GTK_LABEL(l), label);
             g_free (label);
             gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
@@ -445,7 +446,7 @@ gr_change_widget (SPDesktop *desktop)
     /* Fork */
     {
         GtkWidget *hb = gtk_hbox_new(FALSE, 1);
-        GtkWidget *b = gtk_button_new_with_label(_("Fork"));
+        GtkWidget *b = gtk_button_new_with_label(_("Duplicate"));
         gtk_tooltips_set_tip(tt, b, _("If the gradient is used by more than one object, create a copy of it for the selected object(s)"), NULL);
         gtk_widget_show(b);
         gtk_container_add(GTK_CONTAINER(hb), b);
