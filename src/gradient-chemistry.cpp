@@ -202,7 +202,7 @@ count_gradient_hrefs (SPObject *o, SPGradient *gr)
 
 
 /**
- * If gr has other users, create a new private; also check if gr links to vector, relinks if not
+ * If gr has other users, create a new private; also check if gr links to vector, relink if not
  */
 SPGradient *
 sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGradientType type, SPObject *o)
@@ -463,6 +463,7 @@ sp_item_set_gradient (SPItem *item, SPGradient *gr, SPGradientType type, bool is
 	} else {
 		/* Current fill style is not a gradient or wrong type, so construct everything */
 		SPGradient *constructed = sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (item), gr, type);
+		constructed = sp_gradient_convert_to_userspace (constructed, item, is_fill? "fill" : "stroke");
 		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), is_fill? "fill" : "stroke", constructed, true);
 		SP_OBJECT (item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 		return constructed;
