@@ -53,20 +53,20 @@ public:
 	/**
 	 * Destructor.
 	 */
-	~URIReference();
+	virtual ~URIReference();
 
 	/**
 	 * Accessor for the reference's change notification signal.
 	 * @returns a signal; its parameter is a newly referenced SPObject or NULL
 	 */
-	SigC::Signal1<void, SPObject *> changedSignal();
+	inline SigC::Signal1<void, SPObject *> changedSignal();
 
 	/**
 	 * Returns a pointer to the SPObject the reference currently
 	 * refers to (if any).
 	 * @return a pointer to the referenced SPObject or NULL
 	 */
-	SPObject *getObject();
+	inline SPObject *getObject();
 
 private:
 	SigC::Connection _connection;
@@ -74,14 +74,14 @@ private:
 
 	SigC::Signal1<void, SPObject *> _changed_signal;
 
-	void _onIDChanged(SPObject *object);
+	void _setObject(SPObject *object);
 };
 
-inline SigC::Signal1<void, SPObject *> URIReference::changedSignal() {
+SigC::Signal1<void, SPObject *> URIReference::changedSignal() {
 	return _changed_signal;
 }
 
-inline SPObject *URIReference::getObject() {
+SPObject *URIReference::getObject() {
 	return _obj;
 }
 

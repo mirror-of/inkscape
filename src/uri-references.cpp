@@ -34,7 +34,7 @@ URIReference::URIReference(SPDocument *rel_document, const gchar *uri) {
 		sp_object_href(_obj, NULL);
 	}
 
-	_connection = sp_document_id_changed_connect(rel_document, id, SigC::slot(*this, &URIReference::_onIDChanged));
+	_connection = sp_document_id_changed_connect(rel_document, id, SigC::slot(*this, &URIReference::_setObject));
 
 	g_free(id);
 }
@@ -47,7 +47,7 @@ URIReference::~URIReference() {
 	}
 }
 
-void URIReference::_onIDChanged(SPObject *obj) {
+void URIReference::_setObject(SPObject *obj) {
 
 	if (obj == _obj) return;
 
