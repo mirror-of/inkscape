@@ -17,6 +17,9 @@
 
 typedef struct GrayMap_def GrayMap;
 
+#define GRAYMAP_BLACK 0
+#define GRAYMAP_WHITE 765
+
 /**
  *
  */

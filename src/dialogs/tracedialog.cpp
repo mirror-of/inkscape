@@ -232,6 +232,7 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     int multiScanNrColors = potraceMultiScanNrColorSpinner.get_value_as_int();
     pte.setMultiScanNrColors(multiScanNrColors);
     bool do_i_stack = potraceMultiScanStackButton.get_active();
+    pte.setMultiScanStack(do_i_stack);
 
     //##### Get intermediate bitmap image
     GdkPixbuf *pixbuf = tracer.getSelectedImage();
@@ -487,7 +488,7 @@ TraceDialogImpl::TraceDialogImpl()
 
     //---Lower hbox
     potraceMultiScanStackButton.set_label(_("Stack"));
-    potraceMultiScanStackButton.set_active(false);
+    potraceMultiScanStackButton.set_active(true);
     potraceMultiScanLowerBox.pack_end(potraceMultiScanStackButton, false, false, MARGIN);
 
     potraceMultiScanVBox.pack_start(potraceMultiScanLowerBox, false, false, MARGIN);

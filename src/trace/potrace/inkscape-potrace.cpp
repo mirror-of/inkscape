@@ -263,6 +263,8 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
 
         newGm = GrayMapCreate(gm->width, gm->height);
+        double floor =  3.0 *
+               ( engine.getBrightnessFloor() * 256.0 );
         double cutoff =  3.0 *
                ( engine.getBrightnessThreshold() * 256.0 );
         for (int y=0 ; y<gm->height ; y++)
@@ -270,10 +272,10 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
             for (int x=0 ; x<gm->width ; x++)
                 {
                 double brightness = (double)gm->getPixel(gm, x, y);
-                if (brightness > cutoff)
-                    newGm->setPixel(newGm, x, y, 765);
+                if (brightness >= floor && brightness < cutoff)
+                    newGm->setPixel(newGm, x, y, GRAYMAP_BLACK);  //black pixel
                 else
-                    newGm->setPixel(newGm, x, y, 0);
+                    newGm->setPixel(newGm, x, y, GRAYMAP_WHITE); //white pixel
                 }
             }
 
@@ -472,6 +474,8 @@ PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
     if (!thePixbuf)
         return NULL;
 
+    brightnessFloor = 0.0; //important to set this
+    
     GrayMap *grayMap = filter(*this, thePixbuf);
     if (!grayMap)
         return NULL;
@@ -508,9 +512,11 @@ PotraceTracingEngine::traceBrightnessMulti(GdkPixbuf * thePixbuf, int *nrPaths)
     if (!thePixbuf)
         return NULL;
         
-    double low  = 0.2;
-    double high = 0.9;
-    double delta = (high - low ) / ((double)multiScanNrColors);
+    double low     = 0.2; //bottom of range
+    double high    = 0.9; //top of range
+    double delta   = (high - low ) / ((double)multiScanNrColors);
+    
+    brightnessFloor = 0.0; //Set bottom to black
 
     TracingEngineResult *results = NULL;
     for ( brightnessThreshold = low ;
@@ -555,7 +561,8 @@ PotraceTracingEngine::traceBrightnessMulti(GdkPixbuf * thePixbuf, int *nrPaths)
             r->next = result;
             }
 
-
+        if (!multiScanStack)
+            brightnessFloor = brightnessThreshold;
 
         }
     
@@ -583,7 +590,12 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
 
     TracingEngineResult *results = NULL;
     
+    //Create and clear a gray map
     GrayMap *gm = GrayMapCreate(iMap->width, iMap->height);
+    for (int row=0 ; row<gm->height ; row++)
+        for (int col=0 ; col<gm->width ; col++)
+            gm->setPixel(gm, col, row, GRAYMAP_WHITE);
+
     
     for (int colorIndex=0 ; colorIndex<iMap->nrColors ; colorIndex++)
         {
@@ -595,9 +607,14 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
                 {
                 int indx = (int) iMap->getPixel(iMap, col, row);
                 if (indx == colorIndex)
-                    gm->setPixel(gm, col, row, 0);
+                    {
+                    gm->setPixel(gm, col, row, GRAYMAP_BLACK); //black
+                    }
                 else
-                    gm->setPixel(gm, col, row, 765);
+                    {
+                    if (!multiScanStack)
+                        gm->setPixel(gm, col, row, GRAYMAP_WHITE);//white
+                    }
                 }
             }
 
@@ -626,7 +643,13 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
             }
         else
             {
-            //walk to end of list
+            //prepend
+            /*
+            result->next = results;
+            results = result;
+            */
+            
+            //append
             TracingEngineResult *r;
             for (r=results ; r->next ; r=r->next)
                 {}

@@ -99,6 +99,18 @@ class PotraceTracingEngine : public TracingEngine
         }
 
     /**
+     * Sets the lower consideration point for black/white
+     */
+    void setBrightnessFloor(double val)
+        {
+        brightnessFloor = val;
+        }
+    double getBrightnessFloor()
+        {
+        return brightnessFloor;
+        }
+
+    /**
      * Sets upper cutoff for canny non-maximalizing
      */
     void setCannyHighThreshold(double val)
@@ -120,6 +132,18 @@ class PotraceTracingEngine : public TracingEngine
     int getMultiScanNrColors()
         {
         return multiScanNrColors;
+        }
+
+    /**
+     * Sets whether we tile regions side-by-side or stack them
+     */
+    void setMultiScanStack(bool val)
+        {
+        multiScanStack = val;
+        }
+    bool setMultiScanStack()
+        {
+        return multiScanStack;
         }
 
 
@@ -160,12 +184,14 @@ class PotraceTracingEngine : public TracingEngine
 
     //## brightness items
     double brightnessThreshold;
+    double brightnessFloor; //usually 0.0
 
     //## canny items
     double cannyHighThreshold;
 
     //## Color-->multiscan quantization
     int multiScanNrColors;
+    bool multiScanStack;//do we tile or stack?
 
     char *grayMapToPath(GrayMap *gm);
     
