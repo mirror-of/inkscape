@@ -134,6 +134,8 @@ struct Inkscape::Application {
     GSList *desktops;
     gchar *argv0;
     gboolean dialogs_toggle;
+    gboolean use_gui;         // may want to consider a virtual function
+                              // for overriding things like the warning dlg's
 };
 
 struct Inkscape::ApplicationClass {
@@ -553,7 +555,7 @@ inkscape_segv_handler (int signum)
 
 
 void
-inkscape_application_init (const gchar *argv0)
+inkscape_application_init (const gchar *argv0, gboolean use_gui)
 {
     inkscape = (Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
     /* fixme: load application defaults */
@@ -566,6 +568,7 @@ inkscape_application_init (const gchar *argv0)
 #endif    
     signal (SIGABRT, inkscape_segv_handler);
 
+    inkscape->use_gui = use_gui;
     inkscape->argv0 = g_strdup(argv0);
 
     /* Attempt to load the preferences, and set the save_preferences flag to TRUE
@@ -1112,20 +1115,32 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     if (!g_file_test(dn, G_FILE_TEST_EXISTS)) {
         if (mkdir (dn, S_IRWXU | S_IRGRP | S_IXGRP))
         {
-            /* Cannot create directory */
-            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, dn, warn);
+            if (inkscape->use_gui) {
+                /* Cannot create directory */
+                GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, dn, warn);
+                gtk_dialog_run (GTK_DIALOG (w));
+                gtk_widget_destroy (w);
+                g_free (dn);
+                return;
+            } else {
+                g_warning(e_mkdir, dn, warn);
+                g_free (dn);
+                return;
+            }
+        }
+    } else if (!g_file_test(dn, G_FILE_TEST_IS_DIR)) {
+        if (inkscape->use_gui) {
+            /* Not a directory */
+            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn, warn);
             gtk_dialog_run (GTK_DIALOG (w));
             gtk_widget_destroy (w);
             g_free (dn);
             return;
+        } else {
+            g_warning(e_notdir, dn, warn);
+            g_free(dn);
+            return;
         }
-    } else if (!g_file_test(dn, G_FILE_TEST_IS_DIR)) {
-        /* Not a directory */
-        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn, warn);
-        gtk_dialog_run (GTK_DIALOG (w));
-        gtk_widget_destroy (w);
-        g_free (dn);
-        return;
     }
     g_free (dn);
 
@@ -1134,21 +1149,34 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     Inkscape::IO::dump_fopen_call(fn, "H");
     FILE *fh = Inkscape::IO::fopen_utf8name(fn, "w");
     if (!fh) {
-        /* Cannot create file */
-        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn, warn);
-        gtk_dialog_run (GTK_DIALOG (w));
-        gtk_widget_destroy (w);
-        g_free (fn);
-        return;
+        if (inkscape->use_gui) {
+            /* Cannot create file */
+            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn, warn);
+            gtk_dialog_run (GTK_DIALOG (w));
+            gtk_widget_destroy (w);
+            g_free (fn);
+            return;
+        } else {
+            g_warning(e_ccf, fn, warn);
+            g_free(fn);
+            return;
+        }
     }
     if ( fwrite(skeleton, 1, skel_size, fh) != skel_size ) {
-        /* Cannot create file */
-        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, fn, warn);
-        gtk_dialog_run (GTK_DIALOG (w));
-        gtk_widget_destroy (w);
-        g_free (fn);
-        fclose(fh);
-        return;
+        if (inkscape->use_gui) {
+            /* Cannot create file */
+            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, fn, warn);
+            gtk_dialog_run (GTK_DIALOG (w));
+            gtk_widget_destroy (w);
+            g_free (fn);
+            fclose(fh);
+            return;
+        } else {
+            g_warning(e_cwf, fn, warn);
+            g_free(fn);
+            fclose(fh);
+            return;
+        }
     }
 
     g_free(fn);

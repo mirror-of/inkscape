@@ -359,7 +359,7 @@ sp_main_gui(int argc, char const **argv)
         gboolean create_new = TRUE;
 
         // FIXME BROKEN - non-UTF-8 sneaks in here.
-        inkscape_application_init(argv[0]);
+        inkscape_application_init(argv[0], true);
 
         while (fl) {
             if (sp_file_open((gchar *)fl->data,NULL)) {
@@ -375,7 +375,7 @@ sp_main_gui(int argc, char const **argv)
         if (fl) {
             GtkWidget *ss;
             // FIXME BROKEN - non-UTF-8 sneaks in here.
-            inkscape_application_init(argv[0]);
+            inkscape_application_init(argv[0], true);
             ss = sp_slideshow_new(fl);
             if (ss) gtk_widget_show(ss);
             inkscape_unref();
@@ -454,7 +454,7 @@ sp_main_console(int argc, char const **argv)
 
     /* Start up g type system, without requiring X */
     g_type_init(); /* this is already called above... ? */
-    inkscape_application_init(argv[0]);
+    inkscape_application_init(argv[0], false);
 
     while (fl) {
         SPDocument *doc;

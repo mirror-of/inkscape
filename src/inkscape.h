@@ -17,7 +17,7 @@
 
 #define INKSCAPE inkscape_get_instance()
 
-void inkscape_application_init (const gchar *argv0);
+void inkscape_application_init (const gchar *argv0, gboolean use_gui);
 
 /* Preference management */
 gboolean inkscape_load_preferences (Inkscape::Application * inkscape);

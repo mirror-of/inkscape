@@ -8,6 +8,11 @@
  	  so won't crash when running from commandline.  Fixes bug
 	  1000350. 
 
+	* inkscape.cpp, inkscape.h, main.cpp, dialogs/filedialog.cpp:
+	  Adding Inkscape::Application::use_gui flag as temporary hack to
+	  prevent gui dialogs from being used when running from
+	  commandline.  Fixes bug 1045067.
+	
 2004-10-26  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/livarot/PathCutting.cpp: fix a couple of bugs that I
