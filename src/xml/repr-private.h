@@ -104,8 +104,6 @@ extern SPReprClass _sp_repr_xml_comment_class;
 #define SP_XML_TEXT_NODE &_sp_repr_xml_text_class
 #define SP_XML_COMMENT_NODE &_sp_repr_xml_comment_class
 
-SPRepr *sp_repr_nth_child (const SPRepr *repr, int n);
-
 unsigned int sp_repr_change_order (SPRepr *repr, SPRepr *child, SPRepr *ref);
 
 void sp_repr_synthesize_events (SPRepr *repr, const SPReprEventVector *vector, void * data);
