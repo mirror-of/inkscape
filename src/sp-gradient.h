@@ -39,7 +39,6 @@
 #define SP_IS_RADIALGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_RADIALGRADIENT))
 #define SP_IS_RADIALGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_RADIALGRADIENT))
 
-#include <libnr/nr-types.h>
 #include "svg/svg-types.h"
 #include "forward.h"
 #include "color.h"

@@ -10,7 +10,6 @@
  * This code is in public domain
  */
 
-#include <libnr/nr-types.h>
 #include <libnr/nr-path.h>
 #include "forward.h"
 

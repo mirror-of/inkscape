@@ -13,7 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-types.h>
 #include "forward.h"
 #include "xml/repr.h"
 
