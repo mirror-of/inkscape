@@ -6,10 +6,11 @@
 
 	* src/style.cpp (sp_style_read_from_object): Additional check.
 
-	* src/rect-context.cpp: Minor cleanups (mostly fixing mixed tab usage).
+	* src/rect-context.cpp: Cleanup: Coding Style conformance,
+	move declarations to first use.
 
 	* src/sp-gradient.cpp (sp_gradient_rebuild_vector): Add assertion.
-	
+
 2004-03-15  Ted Gould <ted@gould.cx>
 
 	* src/extension/extension.cpp:  Adding in some comments for my
@@ -78,7 +79,7 @@
 
 2004-03-14  rejon <jon@protofunk.org>
 
-	* src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 
+	* src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding
 	  standards. I also have begun to add new icons to our program.
 
 2004-03-13  MenTaLguY <mental@rydia.net>
@@ -111,7 +112,7 @@
 	g_ascii_tolower in ink_strstr), implement caching of looked-up faces
 
 2004-03-10  bulia byak <bulia@users.sourceforge.net>
- 
+
 	* src/sp-offset.cpp: Coalesce threshold depends on item size (less transform),
 	guarding against invalid item bbox, comments
 
@@ -140,9 +141,9 @@
 
 	* src/verbs.cpp: raise/lower commands named more consistently
 
-	* src/sp-item.cpp src/sp-item.h: Sorting function for items 
+	* src/sp-item.cpp src/sp-item.h: Sorting function for items
 
-	* src/selection-chemistry.cpp: fix for 910017 
+	* src/selection-chemistry.cpp: fix for 910017
 
 	* src/splivarot.cpp: Remove fill for slice
 
@@ -150,7 +151,7 @@
 
 	* samples: Moved the contents of samples into the proper share dirs.
 
-	* share/tutorials/tutorial.svg: Moved the default tutorial.svg to this 
+	* share/tutorials/tutorial.svg: Moved the default tutorial.svg to this
           location. It was in the wrong place.
 
 	* share/tutorials/elementsofdesign.svg src/help.cpp src/interface.cpp:
@@ -229,7 +230,7 @@
 	* src/dialogs/text-edit.cpp: do not rebuild text of object if not changed in the
 	dialog, fixes 906279
 
-	* src/selection.cpp: suppress a few meningless warnings 
+	* src/selection.cpp: suppress a few meaningless warnings
 
 	* src/xml/repr.cpp: fix for 907056, 906222
 
@@ -451,7 +452,7 @@
 	Remove unused function.
 
 2004-02-24  Alexander Clausen <alex@skip86.com>
-	
+
 	* src/desktop-events.cpp: Fix crash when opening the guide dialog for
 	the second time
 
@@ -817,11 +818,11 @@
 	several places.
 
 2004-02-13  Johan Ceuppens  <jceuppen@easynet.be>
-	
+
 	* src/inkjar/{jar.cpp,jar.h}: changed some file offsets,
 	uncompressing multiple files in a jar works now. There
 	is an improved testing program at the end of jar.cpp.
-	
+
 2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/seltrans.cpp (sp_sel_trans_update_volatile_state):
@@ -862,7 +863,7 @@
 	  functions
 
 2004-02-12  Johan Ceuppens  <jceuppen@easynet.be>
-	
+
 	* configure.in src/Makefile.am: --with-inkjar (default no)
 	* src/inkjar/Makefile.am src/inkjar/jar.cpp src/inkjar/jar.h:
 	inital import of libinkjar, this can be moved to LGPL after
@@ -3044,7 +3045,7 @@
 
 2003-11-24 bulia byak <bulia@dr.com>
 
-	New keys in node editor:	
+	New keys in node editor:
 	* esc deselects and cancels rubberband and node dragging
 	* ctrl-a selects all nodes
 	* tab and shift-tab cycle through nodes of the current shape

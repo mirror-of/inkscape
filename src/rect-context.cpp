@@ -40,568 +40,579 @@
 #include "prefs-utils.h"
 
 
-static void sp_rect_context_class_init (SPRectContextClass * klass);
-static void sp_rect_context_init (SPRectContext * rect_context);
-static void sp_rect_context_dispose (GObject *object);
+static void sp_rect_context_class_init(SPRectContextClass *klass);
+static void sp_rect_context_init(SPRectContext *rect_context);
+static void sp_rect_context_dispose(GObject *object);
 
-static void sp_rect_context_setup (SPEventContext *ec);
-static void sp_rect_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
+static void sp_rect_context_setup(SPEventContext *ec);
+static void sp_rect_context_set(SPEventContext *ec, gchar const *key, gchar const *val);
 
-static gint sp_rect_context_root_handler (SPEventContext * event_context, GdkEvent * event);
-static gint sp_rect_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
-static GtkWidget *sp_rect_context_config_widget (SPEventContext *ec);
+static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent *event);
+static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
+static GtkWidget *sp_rect_context_config_widget(SPEventContext *ec);
 
 static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state);
-static void sp_rect_finish (SPRectContext * rc);
+static void sp_rect_finish(SPRectContext *rc);
 
-static SPEventContextClass * parent_class;
+static SPEventContextClass *parent_class;
 
 
-GtkType
-sp_rect_context_get_type (void)
+GtkType sp_rect_context_get_type()
 {
-	static GType type = 0;
-	if (!type) {
-		GTypeInfo info = {
-			sizeof (SPRectContextClass),
-			NULL, NULL,
-			(GClassInitFunc) sp_rect_context_class_init,
-			NULL, NULL,
-			sizeof (SPRectContext),
-			4,
-			(GInstanceInitFunc) sp_rect_context_init,
-			NULL,	/* value_table */
-		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPRectContext", &info, (GTypeFlags)0);
-	}
-	return type;
+    static GType type = 0;
+    if (!type) {
+        GTypeInfo info = {
+            sizeof(SPRectContextClass),
+            NULL, NULL,
+            (GClassInitFunc) sp_rect_context_class_init,
+            NULL, NULL,
+            sizeof(SPRectContext),
+            4,
+            (GInstanceInitFunc) sp_rect_context_init,
+            NULL,    /* value_table */
+        };
+        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPRectContext", &info, (GTypeFlags) 0);
+    }
+    return type;
 }
 
-static void
-sp_rect_context_class_init (SPRectContextClass * klass)
+static void sp_rect_context_class_init(SPRectContextClass *klass)
 {
-	GObjectClass *object_class;
-	SPEventContextClass * event_context_class;
+    GObjectClass *object_class = (GObjectClass *) klass;
+    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
 
-	object_class = (GObjectClass *) klass;
-	event_context_class = (SPEventContextClass *) klass;
+    parent_class = (SPEventContextClass *) g_type_class_peek_parent(klass);
 
-	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
-
-	object_class->dispose = sp_rect_context_dispose;
+    object_class->dispose = sp_rect_context_dispose;
 
 #if 1
-	event_context_class->setup = sp_rect_context_setup;
-	event_context_class->set = sp_rect_context_set;
+    event_context_class->setup = sp_rect_context_setup;
+    event_context_class->set = sp_rect_context_set;
 #endif
-	event_context_class->root_handler  = sp_rect_context_root_handler;
-	event_context_class->item_handler  = sp_rect_context_item_handler;
-	event_context_class->config_widget = sp_rect_context_config_widget;
+    event_context_class->root_handler  = sp_rect_context_root_handler;
+    event_context_class->item_handler  = sp_rect_context_item_handler;
+    event_context_class->config_widget = sp_rect_context_config_widget;
 }
 
-static void
-sp_rect_context_init (SPRectContext * rect_context)
+static void sp_rect_context_init(SPRectContext *rect_context)
 {
-	SPEventContext * event_context;
-	
-	event_context = SP_EVENT_CONTEXT (rect_context);
+    SPEventContext *event_context = SP_EVENT_CONTEXT(rect_context);
 
-	event_context->cursor_shape = cursor_rect_xpm;
-	event_context->hot_x = 4;
-	event_context->hot_y = 4;
-	event_context->xp = 0;
-	event_context->yp = 0;
-	event_context->tolerance = 0;
-	event_context->within_tolerance = false;
-	event_context->item_to_select = NULL;
+    event_context->cursor_shape = cursor_rect_xpm;
+    event_context->hot_x = 4;
+    event_context->hot_y = 4;
+    event_context->xp = 0;
+    event_context->yp = 0;
+    event_context->tolerance = 0;
+    event_context->within_tolerance = false;
+    event_context->item_to_select = NULL;
 
-	rect_context->item = NULL;
+    rect_context->item = NULL;
 
-	rect_context->rx_ratio = 0.0;
-	rect_context->ry_ratio = 0.0;
+    rect_context->rx_ratio = 0.0;
+    rect_context->ry_ratio = 0.0;
 }
 
-static void
-sp_rect_context_dispose (GObject *object)
+static void sp_rect_context_dispose(GObject *object)
 {
-	SPRectContext * rc;
-	SPEventContext * ec;
+    SPRectContext *rc = SP_RECT_CONTEXT(object);
+    SPEventContext *ec = SP_EVENT_CONTEXT(object);
 
-	rc = SP_RECT_CONTEXT (object);
-	ec = SP_EVENT_CONTEXT (object);
+    /* fixme: This is necessary because we do not grab */
+    if (rc->item) {
+        sp_rect_finish(rc);
+    }
 
-	/* fixme: This is necessary because we do not grab */
-	if (rc->item) sp_rect_finish (rc);
+    if (rc->knot_holder) {
+        sp_knot_holder_destroy(rc->knot_holder);
+        rc->knot_holder = NULL;
+    }
 
-	if (rc->knot_holder) {
-		sp_knot_holder_destroy (rc->knot_holder);
-		rc->knot_holder = NULL;
-	}
+    if (rc->repr) { // remove old listener
+        sp_repr_remove_listener_by_data(rc->repr, ec);
+        sp_repr_unref(rc->repr);
+        rc->repr = 0;
+    }
 
-	if (rc->repr) { // remove old listener
-		sp_repr_remove_listener_by_data (rc->repr, ec);
-		sp_repr_unref (rc->repr);
-		rc->repr = 0;
-	}
+    if (SP_EVENT_CONTEXT_DESKTOP(rc)) {
+        sp_signal_disconnect_by_data(SP_DT_SELECTION(SP_EVENT_CONTEXT_DESKTOP(rc)), rc);
+    }
 
-	if (SP_EVENT_CONTEXT_DESKTOP (rc)) {
-		sp_signal_disconnect_by_data (SP_DT_SELECTION (SP_EVENT_CONTEXT_DESKTOP (rc)), rc);
-	}
-
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+    G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
-static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
+static void shape_event_attr_changed(SPRepr *repr,
+                                     gchar const *name, gchar const *old_value, gchar const *new_value,
+                                     bool const is_interactive, gpointer const data)
 {
-	SPRectContext *rc;
-	SPEventContext *ec;
-	
-	rc = SP_RECT_CONTEXT (data);
-	ec = SP_EVENT_CONTEXT (rc);
+    SPRectContext *rc = SP_RECT_CONTEXT(data);
+    SPEventContext *ec = SP_EVENT_CONTEXT(rc);
 
-	if (rc->knot_holder) {
-		sp_knot_holder_destroy (rc->knot_holder);
-	}
-	rc->knot_holder = NULL;
+    if (rc->knot_holder) {
+        sp_knot_holder_destroy(rc->knot_holder);
+    }
+    rc->knot_holder = NULL;
 
-	SPDesktop *desktop = ec->desktop;
+    SPDesktop *desktop = ec->desktop;
 
-	SPItem *item = sp_selection_item (SP_DT_SELECTION(desktop));
+    SPItem *item = sp_selection_item(SP_DT_SELECTION(desktop));
 
-	if (item) {
-		rc->knot_holder = sp_item_knot_holder (item, desktop);
-	}
+    if (item) {
+        rc->knot_holder = sp_item_knot_holder(item, desktop);
+    }
 }
 
 static SPReprEventVector shape_repr_events = {
-	NULL, /* destroy */
-	NULL, /* add_child */
-	NULL, /* child_added */
-	NULL, /* remove_child */
-	NULL, /* child_removed */
-	NULL, /* change_attr */
-	shape_event_attr_changed,
-	NULL, /* change_list */
-	NULL, /* content_changed */
-	NULL, /* change_order */
-	NULL  /* order_changed */
+    NULL, /* destroy */
+    NULL, /* add_child */
+    NULL, /* child_added */
+    NULL, /* remove_child */
+    NULL, /* child_removed */
+    NULL, /* change_attr */
+    shape_event_attr_changed,
+    NULL, /* change_list */
+    NULL, /* content_changed */
+    NULL, /* change_order */
+    NULL  /* order_changed */
 };
 
 /**
-\brief  Callback that processes the "changed" signal on the selection; 
+\brief  Callback that processes the "changed" signal on the selection;
 destroys old and creates new knotholder
 */
-void
-sp_rect_context_selection_changed (SPSelection * selection, gpointer data)
+void sp_rect_context_selection_changed(SPSelection *selection, gpointer data)
 {
-	SPRectContext *rc = SP_RECT_CONTEXT(data);
-	SPEventContext *ec = SP_EVENT_CONTEXT(rc);
+    SPRectContext *rc = SP_RECT_CONTEXT(data);
+    SPEventContext *ec = SP_EVENT_CONTEXT(rc);
 
-	if (rc->knot_holder) { // destroy knotholder
-		sp_knot_holder_destroy (rc->knot_holder);
-		rc->knot_holder = NULL;
-	}
+    if (rc->knot_holder) { // destroy knotholder
+        sp_knot_holder_destroy(rc->knot_holder);
+        rc->knot_holder = NULL;
+    }
 
-	if (rc->repr) { // remove old listener
-		sp_repr_remove_listener_by_data (rc->repr, ec);
-		sp_repr_unref (rc->repr);
-		rc->repr = 0;
-	}
+    if (rc->repr) { // remove old listener
+        sp_repr_remove_listener_by_data(rc->repr, ec);
+        sp_repr_unref(rc->repr);
+        rc->repr = 0;
+    }
 
-	SPItem *item = sp_selection_item (selection);
-	if (item) {
-		rc->knot_holder = sp_item_knot_holder (item, ec->desktop);
-		SPRepr *repr = SP_OBJECT_REPR (item);
-		if (repr) {
-			rc->repr = repr;
-			sp_repr_ref (repr);
-			sp_repr_add_listener (repr, &shape_repr_events, ec);
-			sp_repr_synthesize_events (repr, &shape_repr_events, ec);
-		}
-	}
+    SPItem *item = sp_selection_item(selection);
+    if (item) {
+        rc->knot_holder = sp_item_knot_holder(item, ec->desktop);
+        SPRepr *repr = SP_OBJECT_REPR(item);
+        if (repr) {
+            rc->repr = repr;
+            sp_repr_ref(repr);
+            sp_repr_add_listener(repr, &shape_repr_events, ec);
+            sp_repr_synthesize_events(repr, &shape_repr_events, ec);
+        }
+    }
 }
 
-static void
-sp_rect_context_setup (SPEventContext *ec)
+static void sp_rect_context_setup(SPEventContext *ec)
 {
-	SPRectContext * rc;
+    SPRectContext *rc = SP_RECT_CONTEXT(ec);
 
-	rc = SP_RECT_CONTEXT (ec);
+    if (((SPEventContextClass *) parent_class)->setup) {
+        ((SPEventContextClass *) parent_class)->setup(ec);
+    }
 
-	if (((SPEventContextClass *) parent_class)->setup)
-		((SPEventContextClass *) parent_class)->setup (ec);
+    SPItem *item = sp_selection_item(SP_DT_SELECTION(ec->desktop));
+    if (item) {
+        rc->knot_holder = sp_item_knot_holder(item, ec->desktop);
+        SPRepr *repr = SP_OBJECT_REPR(item);
+        if (repr) {
+            rc->repr = repr;
+            sp_repr_ref(repr);
+            sp_repr_add_listener(repr, &shape_repr_events, ec);
+            sp_repr_synthesize_events(repr, &shape_repr_events, ec);
+        }
+    }
 
-	SPItem *item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
-	if (item) {
-		rc->knot_holder = sp_item_knot_holder (item, ec->desktop);
-		SPRepr *repr = SP_OBJECT_REPR (item);
-		if (repr) {
-			rc->repr = repr;
-			sp_repr_ref (repr);
-			sp_repr_add_listener (repr, &shape_repr_events, ec);
-			sp_repr_synthesize_events (repr, &shape_repr_events, ec);
-		}
-	}
+    g_signal_connect(G_OBJECT(SP_DT_SELECTION(ec->desktop)),
+                     "changed", G_CALLBACK(sp_rect_context_selection_changed), rc);
 
-	g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)), 
-		"changed", G_CALLBACK (sp_rect_context_selection_changed), rc);
-
-	sp_event_context_read (ec, "rx_ratio");
-	sp_event_context_read (ec, "ry_ratio");
+    sp_event_context_read(ec, "rx_ratio");
+    sp_event_context_read(ec, "ry_ratio");
 }
 
-static void
-sp_rect_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
+static void sp_rect_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
 {
-	SPRectContext *rc;
+    SPRectContext *rc = SP_RECT_CONTEXT(ec);
 
-	rc = SP_RECT_CONTEXT (ec);
-
-	if (!strcmp (key, "rx_ratio")) {
-		rc->rx_ratio = (val) ? atof (val) : 0.0;
-		rc->rx_ratio = CLAMP (rc->rx_ratio, 0.0, 1.0);
-	} else if (!strcmp (key, "ry_ratio")) {
-		rc->ry_ratio = (val) ? atof (val) : 0.0;
-		rc->ry_ratio = CLAMP (rc->ry_ratio, 0.0, 1.0);
-	}
+    /* fixme: Proper error handling for non-numeric data.  Use a locale-independent function like
+     * g_ascii_strtod (or a thin wrapper that does the right thing for invalid values inf/nan). */
+    if ( strcmp(key, "rx_ratio") == 0 ) {
+        rc->rx_ratio = ( val
+                         ? atof(val)
+                         : 0.0 );
+        rc->rx_ratio = CLAMP(rc->rx_ratio, 0.0, 1.0);
+    } else if ( strcmp(key, "ry_ratio") == 0 ) {
+        rc->ry_ratio = ( val
+                         ? atof(val)
+                         : 0.0 );
+        rc->ry_ratio = CLAMP(rc->ry_ratio, 0.0, 1.0);
+    }
 }
 
-static gint
-sp_rect_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event)
+static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
-	SPDesktop *desktop = event_context->desktop;
+    SPDesktop *desktop = event_context->desktop;
 
-	gint ret = FALSE;
+    gint ret = FALSE;
 
-	switch (event->type) {
-	case GDK_BUTTON_PRESS:
-		if (event->button.button == 1) {
+    switch (event->type) {
+    case GDK_BUTTON_PRESS:
+        if ( event->button.button == 1 ) {
 
-			// save drag origin
-			event_context->xp = (gint) event->button.x;
-			event_context->yp = (gint) event->button.y;
-			event_context->within_tolerance = true;
+            // save drag origin
+            event_context->xp = (gint) event->button.x;
+            event_context->yp = (gint) event->button.y;
+            event_context->within_tolerance = true;
 
-			// remember clicked item, disregarding groups
-			event_context->item_to_select = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
+            // remember clicked item, disregarding groups
+            event_context->item_to_select = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
 
-			ret = TRUE;
-		}
-		break;
-		// motion and release are always on root (why?)
-	default:
-		break;
-	}
+            ret = TRUE;
+        }
+        break;
+        // motion and release are always on root (why?)
+    default:
+        break;
+    }
 
-	if (((SPEventContextClass *) parent_class)->item_handler)
-		ret = ((SPEventContextClass *) parent_class)->item_handler (event_context, item, event);
+    if (((SPEventContextClass *) parent_class)->item_handler) {
+        ret = ((SPEventContextClass *) parent_class)->item_handler(event_context, item, event);
+    }
 
-	return ret;
+    return ret;
 }
 
 static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
-	static bool dragging;
+    static bool dragging;
 
-	SPDesktop *desktop = event_context->desktop;
-	SPRectContext *rc = SP_RECT_CONTEXT(event_context);
+    SPDesktop *desktop = event_context->desktop;
+    SPRectContext *rc = SP_RECT_CONTEXT(event_context);
 
-	event_context->tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+    event_context->tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
 
-	gint ret = FALSE;
-	switch (event->type) {
-	case GDK_BUTTON_PRESS:
-		if (event->button.button == 1) {
-			NR::Point const button_w(event->button.x,
-						 event->button.y);
+    gint ret = FALSE;
+    switch (event->type) {
+    case GDK_BUTTON_PRESS:
+        if ( event->button.button == 1 ) {
+            NR::Point const button_w(event->button.x,
+                                     event->button.y);
 
-			// save drag origin
-			event_context->xp = (gint) button_w[NR::X];
-			event_context->yp = (gint) button_w[NR::Y];
-			event_context->within_tolerance = true;
+            // save drag origin
+            event_context->xp = (gint) button_w[NR::X];
+            event_context->yp = (gint) button_w[NR::Y];
+            event_context->within_tolerance = true;
 
-			// remember clicked item, disregarding groups
-			event_context->item_to_select = sp_desktop_item_at_point(desktop, button_w, TRUE);
+            // remember clicked item, disregarding groups
+            event_context->item_to_select = sp_desktop_item_at_point(desktop, button_w, TRUE);
 
-			dragging = true;
-			/* Position center */
-			NR::Point const button_dt(sp_desktop_w2d_xy_point(event_context->desktop, button_w));
-			/* Snap center to nearest magnetic point */
-			rc->center = button_dt;
-			sp_desktop_free_snap (event_context->desktop, rc->center);
-			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
-					     GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | 
-					     GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
-					     NULL, event->button.time);
-			ret = TRUE;
-		}
-		break;
-	case GDK_MOTION_NOTIFY:
-		if (dragging && (event->motion.state & GDK_BUTTON1_MASK)) {
+            dragging = true;
+            /* Position center */
+            NR::Point const button_dt(sp_desktop_w2d_xy_point(event_context->desktop, button_w));
+            /* Snap center to nearest magnetic point */
+            rc->center = button_dt;
+            sp_desktop_free_snap(event_context->desktop, rc->center);
+            sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                                ( GDK_BUTTON_RELEASE_MASK       |
+                                  GDK_POINTER_MOTION_MASK       |
+                                  GDK_POINTER_MOTION_HINT_MASK  |
+                                  GDK_BUTTON_PRESS_MASK ),
+                                NULL, event->button.time);
+            ret = TRUE;
+        }
+        break;
+    case GDK_MOTION_NOTIFY:
+        if ( dragging
+             && ( event->motion.state & GDK_BUTTON1_MASK ) )
+        {
+            if ( event_context->within_tolerance
+                 && ( abs( (gint) event->motion.x - event_context->xp ) < event_context->tolerance )
+                 && ( abs( (gint) event->motion.y - event_context->yp ) < event_context->tolerance ) ) {
+                break; // do not drag if we're within tolerance from origin
+            }
+            // Once the user has moved farther than tolerance from the original location
+            // (indicating they intend to draw, not click), then always process the
+            // motion notify coordinates as given (no snapping back to origin)
+            event_context->within_tolerance = false;
 
-			if ( event_context->within_tolerance
-			     && ( abs( (gint) event->motion.x - event_context->xp ) < event_context->tolerance )
-			     && ( abs( (gint) event->motion.y - event_context->yp ) < event_context->tolerance ) ) {
-				break; // do not drag if we're within tolerance from origin
-			}
-			// Once the user has moved farther than tolerance from the original location 
-			// (indicating they intend to draw, not click), then always process the 
-			// motion notify coordinates as given (no snapping back to origin)
-			event_context->within_tolerance = false;
+            NR::Point const motion_w(event->motion.x,
+                                     event->motion.y);
+            NR::Point const motion_dt(sp_desktop_w2d_xy_point(event_context->desktop, motion_w));
+            sp_rect_drag(*rc, motion_dt, event->motion.state);
+            ret = TRUE;
+        }
+        break;
+    case GDK_BUTTON_RELEASE:
+        event_context->xp = event_context->yp = 0;
+        if ( event->button.button == 1 ) {
+            dragging = false;
 
-			NR::Point const motion_w(event->motion.x,
-						 event->motion.y);
-			NR::Point const motion_dt(sp_desktop_w2d_xy_point(event_context->desktop, motion_w));
-			sp_rect_drag(*rc, motion_dt, event->motion.state);
-			ret = TRUE;
-		}
-		break;
-	case GDK_BUTTON_RELEASE:
-		event_context->xp = event_context->yp = 0;
-		if (event->button.button == 1) {
-			dragging = false;
+            if (!event_context->within_tolerance) {
+                // we've been dragging, finish the rect
+                sp_rect_finish(rc);
+            } else if (event_context->item_to_select) {
+                // no dragging, select clicked item if any
+                sp_selection_set_item(SP_DT_SELECTION(desktop),
+                                      event_context->item_to_select);
+            } else {
+                // click in an empty space
+                sp_selection_empty(SP_DT_SELECTION(desktop));
+            }
 
-			if (!event_context->within_tolerance) {
-				// we've been dragging, finish the rect
-				sp_rect_finish (rc);
-			} else if (event_context->item_to_select) {
-				// no dragging, select clicked item if any
-				sp_selection_set_item (SP_DT_SELECTION (desktop), event_context->item_to_select);
-			} else {
-				// click in an empty space
-				sp_selection_empty (SP_DT_SELECTION (desktop));
-			}
+            event_context->item_to_select = NULL;
+            ret = TRUE;
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
+                                  event->button.time);
+        }
+        break;
+    case GDK_KEY_PRESS:
+        switch (event->key.keyval) {
+        case GDK_Up:
+        case GDK_Down:
+        case GDK_KP_Up:
+        case GDK_KP_Down:
+            // prevent the zoom field from activation
+            if (!MOD__CTRL_ONLY)
+                ret = TRUE;
+            break;
+        case GDK_Escape:
+            sp_selection_empty(SP_DT_SELECTION(desktop)); // deselect
+            //TODO: make dragging escapable by Esc
+        default:
+            break;
+        }
+    default:
+        break;
+    }
 
-			event_context->item_to_select = NULL;
-			ret = TRUE;
-			sp_canvas_item_ungrab (SP_CANVAS_ITEM (desktop->acetate), event->button.time);
-		}
-		break;
-	case GDK_KEY_PRESS:
-		switch (event->key.keyval) {
-		case GDK_Up: 
-		case GDK_Down: 
-		case GDK_KP_Up: 
-		case GDK_KP_Down: 
-			// prevent the zoom field from activation
-			if (!MOD__CTRL_ONLY)
-				ret = TRUE;
-			break;
-		case GDK_Escape:
-			sp_selection_empty (SP_DT_SELECTION (desktop)); // deselect
-			//TODO: make dragging escapable by Esc
-		default:
-			break;
-		}
-	default:
-		break;
-	}
+    if (!ret) {
+        if (((SPEventContextClass *) parent_class)->root_handler) {
+            ret = ((SPEventContextClass *) parent_class)->root_handler(event_context, event);
+        }
+    }
 
-	if (!ret) {
-		if (((SPEventContextClass *) parent_class)->root_handler)
-			ret = ((SPEventContextClass *) parent_class)->root_handler (event_context, event);
-	}
-
-	return ret;
+    return ret;
 }
 
 static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
 {
-	SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
+    SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
 
-	if (!rc.item) {
-		SPRepr * repr, * style;
-		SPCSSAttr * css;
-		/* Create object */
-		repr = sp_repr_new ("rect");
-		/* Set style */
-		style = inkscape_get_repr (INKSCAPE, "tools.shapes.rect");
-		if (style) {
-			css = sp_repr_css_attr_inherited (style, "style");
-			sp_repr_css_set (repr, css, "style");
-			sp_repr_css_attr_unref (css);
-		}
-		rc.item = (SPItem *) sp_document_add_repr(SP_DT_DOCUMENT(desktop), repr);
-		sp_repr_unref (repr);
-	}
+    if (!rc.item) {
+        /* Create object */
+        SPRepr *repr = sp_repr_new("rect");
+        /* Set style */
+        SPRepr *style = inkscape_get_repr(INKSCAPE, "tools.shapes.rect");
+        if (style) {
+            SPCSSAttr *css = sp_repr_css_attr_inherited(style, "style");
+            sp_repr_css_set(repr, css, "style");
+            sp_repr_css_attr_unref(css);
+        }
+        rc.item = (SPItem *) sp_document_add_repr(SP_DT_DOCUMENT(desktop), repr);
+        sp_repr_unref(repr);
+    }
 
-	/* This is bit ugly, but so we are */
+    /* This is bit ugly, but so we are */
 
-	NR::Point p0, p1;
-	if (state & GDK_CONTROL_MASK) {
-		NR::Point delta = pt - rc.center;
-		/* fixme: Snapping */
-		if ((fabs (delta[0]) > fabs (delta[1])) && (delta[1] != 0.0)) {
-			delta[0] = floor (delta[0]/delta[1] + 0.5) * delta[1];
-		} else if (delta[0] != 0.0) {
-			delta[1] = floor (delta[1]/delta[0] + 0.5) * delta[0];
-		}
-		p1 = rc.center + delta;
-		if (state & GDK_SHIFT_MASK) {
-			p0 = rc.center - delta;
-			const NR::Coord l0 = sp_desktop_vector_snap (desktop, p0, p0 - p1);
-			const NR::Coord l1 = sp_desktop_vector_snap (desktop, p1, p1 - p0);
-			
-			if (l0 < l1) {
-				p1 = 2 * rc.center - p0;
-			} else {
-				p0 = 2 * rc.center - p1;
-			}
-		} else {
-			p0 = rc.center;
-			sp_desktop_vector_snap (desktop, p1, 
-									p1 - p0);
-		}
-	} else if (state & GDK_SHIFT_MASK) {
-		/* Corner point movements are bound */
-		p1 = pt;
-		p0 = 2 * rc.center - p1;
-		for (unsigned d = 0 ; d < 2 ; ++d) {
-			double snap_movement[2];
-			snap_movement[0] = sp_desktop_dim_snap(desktop, p0, d);
-			snap_movement[1] = sp_desktop_dim_snap(desktop, p1, d);
-			if ( snap_movement[0] <
-			     snap_movement[1] ) {
-				/* Use point 0 position. */
-				p1[d] = 2 * rc.center[d] - p0[d];
-			} else {
-				p0[d] = 2 * rc.center[d] - p1[d];
-			}
-		}
-	} else {
-		/* Free movement for corner point */
-		p0 = rc.center;
-		p1 = pt;
-		sp_desktop_free_snap (desktop, p1);
-	}
+    NR::Point p0, p1;
+    if ( state & GDK_CONTROL_MASK ) {
+        NR::Point delta = pt - rc.center;
+        /* fixme: Snapping */
+        if ( ( fabs(delta[0]) > fabs(delta[1]) )
+             && ( delta[1] != 0.0) )
+        {
+            delta[0] = floor( delta[0] / delta[1] + 0.5 ) * delta[1];
+        } else if ( delta[0] != 0.0 ) {
+            delta[1] = floor( delta[1] / delta[0] + 0.5 ) * delta[0];
+        }
+        p1 = rc.center + delta;
+        if ( state & GDK_SHIFT_MASK ) {
+            p0 = rc.center - delta;
+            NR::Coord const l0 = sp_desktop_vector_snap(desktop, p0, p0 - p1);
+            NR::Coord const l1 = sp_desktop_vector_snap(desktop, p1, p1 - p0);
 
-	p0 = sp_desktop_dt2root_xy_point (desktop, p0);
-	p1 = sp_desktop_dt2root_xy_point (desktop, p1);
-	
-	// FIXME: use NR::Rect
-	const NR::Coord x0 = MIN (p0[NR::X], p1[NR::X]);
-	const NR::Coord y0 = MIN (p0[NR::Y], p1[NR::Y]);
-	const NR::Coord x1 = MAX (p0[NR::X], p1[NR::X]);
-	const NR::Coord y1 = MAX (p0[NR::Y], p1[NR::Y]);
-	const NR::Coord w  = x1 - x0;
-	const NR::Coord h  = y1 - y0;
+            if (l0 < l1) {
+                p1 = 2 * rc.center - p0;
+            } else {
+                p0 = 2 * rc.center - p1;
+            }
+        } else {
+            p0 = rc.center;
+            sp_desktop_vector_snap(desktop, p1,
+                                   p1 - p0);
+        }
+    } else if ( state & GDK_SHIFT_MASK ) {
+        /* Corner point movements are bound */
+        p1 = pt;
+        p0 = 2 * rc.center - p1;
+        for (unsigned d = 0 ; d < 2 ; ++d) {
+            double snap_movement[2];
+            snap_movement[0] = sp_desktop_dim_snap(desktop, p0, d);
+            snap_movement[1] = sp_desktop_dim_snap(desktop, p1, d);
+            if ( snap_movement[0] <
+                 snap_movement[1] )
+            {
+                /* Use point 0 position. */
+                p1[d] = 2 * rc.center[d] - p0[d];
+            } else {
+                p0[d] = 2 * rc.center[d] - p1[d];
+            }
+        }
+    } else {
+        /* Free movement for corner point */
+        p0 = rc.center;
+        p1 = pt;
+        sp_desktop_free_snap(desktop, p1);
+    }
 
-	sp_rect_position_set(SP_RECT(rc.item), x0, y0, w, h);
-	if ( rc.rx_ratio != 0.0 ) {
-		sp_rect_set_rx(SP_RECT(rc.item), TRUE, 0.5 * rc.rx_ratio * w);
-	}
-	if ( rc.ry_ratio != 0.0 ) {
-		sp_rect_set_ry(SP_RECT(rc.item), TRUE, 0.5 * rc.ry_ratio * h);
-	}
+    p0 = sp_desktop_dt2root_xy_point(desktop, p0);
+    p1 = sp_desktop_dt2root_xy_point(desktop, p1);
 
-	// status text
-	gchar status[80];
-	GString *xs = SP_PT_TO_METRIC_STRING(fabs( x1 - x0 ), SP_DEFAULT_METRIC);
-	GString *ys = SP_PT_TO_METRIC_STRING(fabs( y1 - y0 ), SP_DEFAULT_METRIC);
-	g_snprintf (status, 80, "Draw rectangle  %s x %s", xs->str, ys->str);
-	sp_view_set_status (SP_VIEW (desktop), status, FALSE);
-	/* FIXME: I'd guess that arg2 should be TRUE below, that otherwise we'd have mem leak.
-	 * Check with valgrind. */
-	g_string_free (xs, FALSE);
-	g_string_free (ys, FALSE);
+    // TODO: use NR::Rect
+    using NR::X;
+    using NR::Y;
+    NR::Coord const x0 = MIN(p0[X],
+                             p1[X]);
+    NR::Coord const y0 = MIN(p0[Y],
+                             p1[Y]);
+    NR::Coord const x1 = MAX(p0[X],
+                             p1[X]);
+    NR::Coord const y1 = MAX(p0[Y],
+                             p1[Y]);
+    NR::Coord const w  = x1 - x0;
+    NR::Coord const h  = y1 - y0;
+
+    sp_rect_position_set(SP_RECT(rc.item), x0, y0, w, h);
+    if ( rc.rx_ratio != 0.0 ) {
+        sp_rect_set_rx(SP_RECT(rc.item), TRUE, 0.5 * rc.rx_ratio * w);
+    }
+    if ( rc.ry_ratio != 0.0 ) {
+        sp_rect_set_ry(SP_RECT(rc.item), TRUE, 0.5 * rc.ry_ratio * h);
+    }
+
+    // status text
+    gchar status[80];
+    GString *xs = SP_PT_TO_METRIC_STRING(fabs( x1 - x0 ), SP_DEFAULT_METRIC);
+    GString *ys = SP_PT_TO_METRIC_STRING(fabs( y1 - y0 ), SP_DEFAULT_METRIC);
+    g_snprintf(status, 80, "Draw rectangle  %s x %s", xs->str, ys->str);
+    sp_view_set_status(SP_VIEW(desktop), status, FALSE);
+    /* FIXME: I'd guess that arg2 should be TRUE below, that otherwise we'd have mem leak.
+     * Check with valgrind. */
+    g_string_free(xs, FALSE);
+    g_string_free(ys, FALSE);
 }
 
-static void
-sp_rect_finish (SPRectContext *rc)
+static void sp_rect_finish(SPRectContext *rc)
 {
-	if (rc->item != NULL) {
-		SPDesktop * dt;
+    if ( rc->item != NULL ) {
+        SPDesktop * dt;
 
-		dt = SP_EVENT_CONTEXT_DESKTOP (rc);
+        dt = SP_EVENT_CONTEXT_DESKTOP(rc);
 
-		sp_object_invoke_write (SP_OBJECT (rc->item), SP_OBJECT_REPR (rc->item), SP_OBJECT_WRITE_EXT);
+        sp_object_invoke_write(SP_OBJECT(rc->item), SP_OBJECT_REPR(rc->item), SP_OBJECT_WRITE_EXT);
 
-		sp_selection_set_item (SP_DT_SELECTION (dt), rc->item);
-		sp_document_done (SP_DT_DOCUMENT (dt));
+        sp_selection_set_item(SP_DT_SELECTION(dt), rc->item);
+        sp_document_done(SP_DT_DOCUMENT(dt));
 
-		rc->item = NULL;
-	}
+        rc->item = NULL;
+    }
 }
 
-static void
-sp_rc_rx_ratio_value_changed (GtkAdjustment *adj, SPRectContext *rc)
+static void sp_rc_rx_ratio_value_changed(GtkAdjustment *adj, SPRectContext *rc)
 {
-  	sp_repr_set_double (SP_EVENT_CONTEXT_REPR (rc), "rx_ratio", adj->value);
+    sp_repr_set_double(SP_EVENT_CONTEXT_REPR(rc), "rx_ratio", adj->value);
 }
 
-static void
-sp_rc_ry_ratio_value_changed (GtkAdjustment *adj, SPRectContext *rc)
+static void sp_rc_ry_ratio_value_changed(GtkAdjustment *adj, SPRectContext *rc)
 {
-	sp_repr_set_double (SP_EVENT_CONTEXT_REPR (rc), "ry_ratio", adj->value);
+    sp_repr_set_double(SP_EVENT_CONTEXT_REPR(rc), "ry_ratio", adj->value);
 }
 
 static void sp_rc_defaults(GtkWidget *, GtkObject *obj)
 {
-	char const * const keys[] = {"rx_ratio",
-				     "ry_ratio"};
-	for (unsigned i = 0; i < G_N_ELEMENTS(keys); ++i) {
-		GtkAdjustment &adj = *static_cast<GtkAdjustment *>(gtk_object_get_data(obj, keys[i]));
-		gtk_adjustment_set_value(&adj, 0.0);
-	}
+    char const * const keys[] = {"rx_ratio",
+                                 "ry_ratio"};
+    for (unsigned i = 0; i < G_N_ELEMENTS(keys); ++i) {
+        GtkAdjustment &adj = *static_cast<GtkAdjustment *>(gtk_object_get_data(obj, keys[i]));
+        gtk_adjustment_set_value(&adj, 0.0);
+    }
 }
 
-static GtkWidget *
-sp_rect_context_config_widget (SPEventContext *ec)
+static GtkWidget *sp_rect_context_config_widget(SPEventContext *ec)
 {
-	SPRectContext *rc;
-	GtkWidget *tbl, *l, *sb, *b;
-	GtkObject *a;
+    SPRectContext *rc = SP_RECT_CONTEXT(ec);
 
-	rc = SP_RECT_CONTEXT (ec);
+    GtkWidget *tbl = gtk_table_new(3, 2, FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(tbl), 4);
+    gtk_table_set_row_spacings(GTK_TABLE(tbl), 4);
 
-	tbl = gtk_table_new (3, 2, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (tbl), 4);
-	gtk_table_set_row_spacings (GTK_TABLE (tbl), 4);
+    /* rx_ratio */
+    {
+        GtkWidget *l = gtk_label_new(_("Roundness ratio for x:"));
+        gtk_widget_show(l);
+        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+        gtk_table_attach(GTK_TABLE(tbl), l, 0, 1, 0, 1,
+                         (GtkAttachOptions) 0,
+                         (GtkAttachOptions) 0,
+                         0, 0);
+        GtkObject *a = gtk_adjustment_new(rc->rx_ratio, 0.0, 1.0, 0.01, 0.1, 0.1);
+        gtk_object_set_data(GTK_OBJECT(tbl), "rx_ratio", a);
+        GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
+        gtk_widget_show(sb);
+        gtk_table_attach(GTK_TABLE(tbl), sb, 1, 2, 0, 1,
+                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
+                         (GtkAttachOptions) 0,
+                         0, 0);
+        gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_rc_rx_ratio_value_changed), rc);
+    }
 
-	/* rx_ratio */
-	l = gtk_label_new (_("Roundness ratio for x:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 0, 1, 
-			  (GtkAttachOptions)0, 
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	a = gtk_adjustment_new (rc->rx_ratio, 0.0, 1.0, 0.01, 0.1, 0.1);
-	gtk_object_set_data (GTK_OBJECT (tbl), "rx_ratio", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
-	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, 
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_rc_rx_ratio_value_changed), rc);
+    /* ry_ratio */
+    {
+        GtkWidget *l = gtk_label_new(_("Roundness ratio for y:"));
+        gtk_widget_show(l);
+        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+        gtk_table_attach(GTK_TABLE(tbl), l, 0, 1, 1, 2,
+                         (GtkAttachOptions) 0,
+                         (GtkAttachOptions) 0,
+                         0, 0);
+        GtkObject *a = gtk_adjustment_new(rc->ry_ratio, 0.0, 1.0, 0.01, 0.1, 0.1);
+        gtk_object_set_data(GTK_OBJECT(tbl), "ry_ratio", a);
+        GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
+        gtk_widget_show(sb);
+        gtk_table_attach(GTK_TABLE(tbl), sb, 1, 2, 1, 2,
+                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
+                         (GtkAttachOptions) 0,
+                         0, 0);
+        gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_rc_ry_ratio_value_changed), rc);
+    }
 
-	/* ry_ratio */
-	l = gtk_label_new (_("Roundness ratio for y:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, 
-			  (GtkAttachOptions)0, 
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	a = gtk_adjustment_new (rc->ry_ratio, 0.0, 1.0, 0.01, 0.1, 0.1);
-	gtk_object_set_data (GTK_OBJECT (tbl), "ry_ratio", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
-	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 1, 2, 
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_rc_ry_ratio_value_changed), rc);
+    /* Reset */
+    {
+        GtkWidget *b = gtk_button_new_with_label(_("Defaults"));
+        gtk_widget_show(b);
+        gtk_table_attach(GTK_TABLE(tbl), b, 0, 2, 2, 3,
+                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
+                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
+                         0, 0);
+        gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(sp_rc_defaults), tbl);
+    }
 
-	/* Reset */
-	b = gtk_button_new_with_label (_("Defaults"));
-	gtk_widget_show (b);
-	gtk_table_attach (GTK_TABLE (tbl), b, 0, 2, 2, 3, 
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-			  0, 0);
-	gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_rc_defaults), tbl);
-
-	return tbl;
+    return tbl;
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
