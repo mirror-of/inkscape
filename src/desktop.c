@@ -967,6 +967,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			gdk_window_get_pointer (NULL, &x, &y, NULL); // NULL means relative to the root window
 			gtk_window_get_size ((GtkWindow *) dlg, &x1, &y1);
 			gtk_window_move((GtkWindow *) dlg, MAX(x-x1, 0), MAX(y-y1, 0));
+			sp_transientize (dlg);
 
 			b = gtk_dialog_run (GTK_DIALOG(dlg));
 			gtk_widget_destroy(dlg);
