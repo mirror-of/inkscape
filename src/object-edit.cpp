@@ -659,6 +659,7 @@ sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder)
         && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
         {
             sp_knot_holder_add_full (knot_holder, sp_pattern_xy_set, sp_pattern_xy_get, NULL, SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR,
+            // TRANSLATORS: This refers to the pattern that's inside the object
 																		 _("<b>Move</b> the pattern fill inside the object"));
             sp_knot_holder_add_full (knot_holder, sp_pattern_scale_set, sp_pattern_scale_get, NULL, SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR,
 																		 _("<b>Scale</b> the pattern fill uniformly"));
