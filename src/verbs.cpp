@@ -257,6 +257,13 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
  			sp_edit_select_all (NULL, NULL);
  		}
 		break;
+	case SP_VERB_EDIT_DESELECT:
+ 		if (tools_isactive (dt, TOOLS_NODES)) {
+ 			sp_nodepath_deselect (SP_NODE_CONTEXT(ec)->nodepath);
+ 		} else {
+ 			sp_selection_empty (SP_DT_SELECTION(dt));
+ 		}
+		break;
 	default:
 		break;
 	}
@@ -573,7 +580,7 @@ static SPActionEventVector action_zoom_vector = {{NULL}, sp_verb_action_zoom_per
 static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog_perform, NULL, NULL, NULL};
 
 #define SP_VERB_IS_FILE(v) ((v >= SP_VERB_FILE_NEW) && (v <= SP_VERB_FILE_QUIT))
-#define SP_VERB_IS_EDIT(v) ((v >= SP_VERB_EDIT_UNDO) && (v <= SP_VERB_EDIT_SELECT_ALL))
+#define SP_VERB_IS_EDIT(v) ((v >= SP_VERB_EDIT_UNDO) && (v <= SP_VERB_EDIT_DESELECT))
 #define SP_VERB_IS_SELECTION(v) ((v >= SP_VERB_SELECTION_TO_FRONT) && (v <= SP_VERB_SELECTION_BREAK_APART))
 #define SP_VERB_IS_OBJECT(v) ((v >= SP_VERB_OBJECT_ROTATE_90) && (v <= SP_VERB_OBJECT_FLIP_VERTICAL))
 #define SP_VERB_IS_CONTEXT(v) ((v >= SP_VERB_CONTEXT_SELECT) && (v <= SP_VERB_CONTEXT_DROPPER))
@@ -621,7 +628,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_EDIT_DELETE, "EditDelete", N_("_Delete"), N_("Delete selected objects"), GTK_STOCK_DELETE},
 	{SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("D_uplicate"), N_("Duplicate selected objects"), "edit_duplicate"},
 	{SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"), N_("Delete all objects from document"), NULL},
-	{SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select _All"), N_("Select all objects in document"), NULL},
+	{SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select _All"), N_("Select all objects or all nodes"), NULL},
+	{SP_VERB_EDIT_DESELECT, "EditDeselect", N_("D_eselect"), N_("Deselect any selected objects or nodes"), NULL},
 	/* Selection */
 	{SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Bring to _Front"), N_("Raise selection to top"), "selection_top"},
 	{SP_VERB_SELECTION_TO_BACK, "SelectionToBack", N_("Send to _Back"), N_("Lower selection to bottom"), "selection_bot"},
