@@ -198,7 +198,6 @@ sp_desktop_apply_style_tool(SPDesktop *desktop, SPRepr *repr, char const *tool, 
     SPCSSAttr *css_current = sp_desktop_get_style(desktop, with_text);
     if ((prefs_get_int_attribute(tool, "usecurrent", 0) != 0) && css_current) {
         sp_repr_css_set(repr, css_current, "style");
-        sp_repr_css_attr_unref(css_current);
     } else {
         SPRepr *tool_repr = inkscape_get_repr(INKSCAPE, tool);
         if (tool_repr) {
@@ -206,6 +205,9 @@ sp_desktop_apply_style_tool(SPDesktop *desktop, SPRepr *repr, char const *tool, 
             sp_repr_css_set(repr, css, "style");
             sp_repr_css_attr_unref(css);
         }
+    }
+    if (css_current) {
+        sp_repr_css_attr_unref(css_current);
     }
 }
 
