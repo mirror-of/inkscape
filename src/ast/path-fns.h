@@ -18,22 +18,6 @@
 namespace Inkscape {
 namespace AST {
 
-inline Node const *resolve(Path const *path, Node const *node) {
-    if ( path && node ) {
-        return traverse(path, resolve(path->parent(), node));
-    } else {
-        return node;
-    }
-}
-
-inline Node const *traverse(Path const *path, Node const *node) {
-    if ( path && node ) {
-        return node->traverse(path->branch(), path->pos());
-    } else {
-        return node;
-    }
-}
-
 };
 };
 
