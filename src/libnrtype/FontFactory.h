@@ -36,8 +36,12 @@ struct font_descr_equal : public std::binary_function<PangoFontDescription*,Pang
 
 class font_factory {
 public:
-	static font_factory*  lUsine; // the default font_factory; i cannot think of why we would need more than one
-	
+	static font_factory*  lUsine; /**< The default font_factory; i cannot think of why we would
+				       *   need more than one.
+				       *
+				       *   ("l'usine" is french for "the factory".)
+				       */
+
 	// a little cache for fonts, so that you don't loose your time looking up fonts in the font list
 	// each font in the cache is refcounted once (and deref'd when removed from the cache)
 	typedef struct font_entry {
@@ -76,7 +80,7 @@ public:
 	// queries for the font-selector
 	NRNameList*           Families(NRNameList *flist);
 	NRStyleList*           Styles(const gchar *family, NRStyleList *slist);
-	
+
 	// internal
 	void                  AddInCache(font_instance* who);
 };
