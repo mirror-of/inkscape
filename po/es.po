@@ -4,12 +4,12 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-13 11:22+0100\n"
-"PO-Revision-Date: 2004-11-02 09:49+0100\n"
+"PO-Revision-Date: 2004-11-15 19:39+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape SVG Vector Illustrator"
@@ -1526,12 +1526,13 @@ msgstr "Seleccionar los objetos que coincidan con todos los campos rellenados"
 #. Create the label for the object id
 #: src/dialogs/item-properties.cpp:128
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: src/dialogs/item-properties.cpp:138
 msgid ""
 "The id= attribute (only letters, digits, and the characters .-_: allowed)"
 msgstr ""
+"El atributo id= (solamente se permiten letras, dígitos y los caracteres - y _)"
 
 #. Create the button for setting the object label
 #: src/dialogs/item-properties.cpp:147
@@ -1546,7 +1547,7 @@ msgstr "Etiqueta"
 
 #: src/dialogs/item-properties.cpp:168
 msgid "A freeform label for the object"
-msgstr ""
+msgstr "Una etiqueta libre para el objeto"
 
 #. Create the label for the object title
 #: src/dialogs/item-properties.cpp:178 src/dialogs/rdf.cpp:225
@@ -1560,23 +1561,22 @@ msgstr "Descripción"
 
 #. Hide
 #: src/dialogs/item-properties.cpp:230
-#, fuzzy
 msgid "Hide"
-msgstr "Caras:"
+msgstr "Ocultar"
 
 #: src/dialogs/item-properties.cpp:232
 msgid "Check to make the object invisible"
-msgstr ""
+msgstr "Marcar para hacer el objeto invisible"
 
 #. Lock
 #. TRANSLATORS: "Lock" is a verb here
 #: src/dialogs/item-properties.cpp:241
 msgid "Lock"
-msgstr ""
+msgstr "Bloquear"
 
 #: src/dialogs/item-properties.cpp:243
 msgid "Check to make the object insensitive (not selectable by mouse)"
-msgstr ""
+msgstr "Marcar para hacer el objeto insensible (no se puedo seleccionar con el ratón)"
 
 #. Transformation matrix
 #: src/dialogs/item-properties.cpp:254
@@ -1593,9 +1593,8 @@ msgid "ID"
 msgstr "ID"
 
 #: src/dialogs/item-properties.cpp:514
-#, fuzzy
 msgid "ID invalid"
-msgstr "Etiqueta no válida"
+msgstr "ID no válido"
 
 #: src/dialogs/item-properties.cpp:516
 msgid "ID exists"
@@ -1836,11 +1835,11 @@ msgid "Keywords"
 msgstr "Palabras clave"
 
 #: src/dialogs/rdf.cpp:261
-#, fuzzy
 msgid ""
 "The topic of this document as comma-separated key words, phrases, or "
 "classifications."
-msgstr "El asunto de este documento, palabras clave, frases o clasificación"
+msgstr ""
+"El tema de este documento en formato de palabras clave, frases o clasificaciones separados por coma."
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
@@ -2099,14 +2098,12 @@ msgid "deg"
 msgstr "grados"
 
 #: src/dialogs/xml-tree.cpp:171
-#, fuzzy
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
-msgstr ""
-"<b>Haga clic</b> para seleccionar o crear un objeto de texto, luego escriba."
+msgstr "<b>Haga clic</b> para seleccionar nodos, <b>arrastre</b> para reordenar."
 
 #: src/dialogs/xml-tree.cpp:183
 msgid "<b>Click</b> attribute to edit."
-msgstr ""
+msgstr "<b>Haga clic</b> en el atributo para editarlo."
 
 #: src/dialogs/xml-tree.cpp:187
 #, c-format
@@ -2114,6 +2111,7 @@ msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr ""
+"Ha seleccionado el atributo <b>%s</b>. Cuando termine, pulse <b>Ctrl+Enter</b> para guardar los cambios."
 
 #: src/dialogs/xml-tree.cpp:280
 msgid "Drag to reorder nodes"
@@ -2167,9 +2165,8 @@ msgstr "Definir atributo"
 
 #. TRANSLATORS: "Set" is a verb here
 #: src/dialogs/xml-tree.cpp:531
-#, fuzzy
 msgid "Set"
-msgstr "Ajustar ID"
+msgstr "Aceptar"
 
 #. TRANSLATORS: "Attribute" is a noun here
 #: src/dialogs/xml-tree.cpp:554
@@ -2193,6 +2190,7 @@ msgstr "Crear"
 msgid ""
 "Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
 msgstr ""
+"No se puede ajustar <b>%s</b>: Ya existe otro elemento con el valor <b>%s</b>."
 
 #: src/document.cpp:428
 #, c-format
@@ -3808,6 +3806,7 @@ msgid ""
 "You cannot put text on a rectangle in this version. Convert rectangle to "
 "path first."
 msgstr ""
+"No puede poner texto en un rectágulo en esta versión. Primero convierta el rectángulo en trazo."
 
 #: src/text-chemistry.cpp:153
 msgid "Select <b>a text on path</b> to remove it from path."
@@ -4006,20 +4005,19 @@ msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Radio de la revolución más interior (relativa al tamaño de la espiral)"
 
 #: src/toolbox.cpp:1824
-#, fuzzy
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
-msgstr "El ancho de la pluma caligráfica"
+msgstr "El ancho de la pluma caligráfica (relativo al tamaño visible del lienzo)"
 
 #: src/toolbox.cpp:1834
-#, fuzzy
 msgid "Thinning:"
-msgstr "serpenteante"
+msgstr "Adelgazar:"
 
 #: src/toolbox.cpp:1834
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
+"A qué velocidad se hace más fino el trazo (> 0 hace los trazos rápidos más finos, < 0 los hace más anchos, 0 hace el ancho independiente de la velocidad)"
 
 #: src/toolbox.cpp:1847
 msgid "Angle:"
@@ -4030,17 +4028,19 @@ msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
 msgstr ""
+"El ángulo de la plumilla (en grados; 0 = horizontal; no tiene efecto si la fijación = 0)"
 
 #: src/toolbox.cpp:1857
-#, fuzzy
 msgid "Fixation:"
-msgstr "Orientación:"
+msgstr "Fijación:"
 
 #: src/toolbox.cpp:1857
 msgid ""
 "How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
 "= fixed)"
 msgstr ""
+"Nivel de fijación de la pluma (0 = siempre perpendicular a la dirección del trazo, 1 "
+"= fijado)"
 
 #: src/toolbox.cpp:1870
 msgid "Mass:"
@@ -4156,6 +4156,7 @@ msgid ""
 "<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow "
 "keys adjust width, <b>up</b>/<b>down</b> adjust angle."
 msgstr ""
+"<b>Arrastre</b> para dibujar un trazo caligráfico. Las flechas <b>izquierda</b>/<b>derecha</b> ajustan el ancho, <b>arriba</b>/<b>abajo</b> ajustan el ángulo."
 
 #: src/tools-switch.cpp:177
 msgid "<b>Click</b> to select or create text object, then type."
@@ -4585,14 +4586,12 @@ msgid "Remove text from path"
 msgstr "Retirar texto de trayecto"
 
 #: src/verbs.cpp:1510
-#, fuzzy
 msgid "Remove Manual _Kerns"
-msgstr "Eliminar todos los _kerns"
+msgstr "Eliminar todos los _kerns manuales"
 
 #: src/verbs.cpp:1511
-#, fuzzy
 msgid "Remove all manual kerns from a text object"
-msgstr "Eliminar todos los kerns de un objeto de texto"
+msgstr "Eliminar todos los kerns manuales de un objeto de texto"
 
 #: src/verbs.cpp:1513
 msgid "_Union"
@@ -5019,11 +5018,11 @@ msgstr "Abrir las preferencias de Inkscape para la herramienta Espiral"
 
 #: src/verbs.cpp:1651
 msgid "Pencil Preferences"
-msgstr "Preferencias de pincel"
+msgstr "Preferencias del lápiz"
 
 #: src/verbs.cpp:1652
 msgid "Open Inkscape Preferences for the Pencil tool"
-msgstr "Abrir las preferencias de Inkscape para la herramienta Pincel"
+msgstr "Abrir las preferencias de Inkscape para la herramienta Lápiz"
 
 #: src/verbs.cpp:1653
 msgid "Pen Preferences"
@@ -5465,19 +5464,16 @@ msgid "Gradient editor"
 msgstr "Editor de gradiente"
 
 #: src/widgets/layer-selector.cpp:118
-#, fuzzy
 msgid "Toggle current layer visibility"
-msgstr "No hay capa actual."
+msgstr "Intercambiar la visibilidad de la capa actual"
 
 #: src/widgets/layer-selector.cpp:138
-#, fuzzy
 msgid "Lock or unlock current layer"
-msgstr "Enviar la capa actual hacia abajo"
+msgstr "Bloquear o desbloquear la capa actual"
 
 #: src/widgets/layer-selector.cpp:141
-#, fuzzy
 msgid "Current layer"
-msgstr "No hay capa actual."
+msgstr "Capa actual"
 
 #: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:687
 msgid "No paint"
@@ -5519,7 +5515,7 @@ msgstr "Sin patrones en el documento"
 
 #: src/widgets/paint-selector.cpp:997
 msgid "Use <b>Edit &gt; Tile</b> to create a new pattern from selection."
-msgstr ""
+msgstr "Utilice <b>Edición &gt; Mosaico</b> para crear un patrón de mosaico desde la selección."
 
 #: src/widgets/paint-selector.cpp:1010
 msgid "Pattern fill"
