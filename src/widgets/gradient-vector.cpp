@@ -440,7 +440,6 @@ static SPReprEventVector grad_edit_dia_repr_events =
 {
     NULL, /* child_added */
     grad_edit_dia_stopremoved, /* child_removed */
-    NULL, /* change_attr */
     NULL, /* attr_changed*/
     NULL, /* content_changed */
     NULL  /* order_changed */

@@ -22,7 +22,6 @@ struct SPReprEventVector {
 	/* Immediate signals */
 	void (* child_added) (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
 	void (* child_removed) (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
-	unsigned int (* change_attr) (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, void * data);
 	void (* attr_changed) (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, void * data);
 	void (* content_changed) (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data);
 	void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr *oldref, SPRepr *newref, void * data);

@@ -29,6 +29,8 @@ struct SPDocumentPrivate {
 	typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
 
 	GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
+	GHashTable *reprdef;   /**< Dictionary of SPRepr -> SPObject mappings */
+
 	/** Dictionary of signals for id changes */
 	IDChangedSignalMap id_changed_signals;
 

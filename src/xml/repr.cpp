@@ -247,38 +247,27 @@ sp_repr_del_attr(SPRepr *repr, gchar const *key, bool is_interactive)
         prev = attr;
     }
 
-    unsigned allowed = TRUE;
-
     if (attr) {
-        for (SPReprListener *rl = repr->listeners; rl && allowed; rl = rl->next)
-        {
-            if (rl->vector->change_attr) {
-                allowed = (* rl->vector->change_attr)(repr, key, attr->value, NULL, rl->data);
+        if (prev) {
+            prev->next = attr->next;
+        } else {
+            repr->attributes = attr->next;
+        }
+        if (repr->doc) {
+            if (repr->doc->is_logging) {
+                repr->doc->log = (new SPReprActionChgAttr(repr, q, attr->value, SharedCString(), repr->doc->log))->optimizeOne();
             }
+            repr->doc->_emitAttrChanged(repr, key, attr->value, NULL);
         }
 
-        if (allowed) {
-            if (prev) {
-                prev->next = attr->next;
-            } else {
-                repr->attributes = attr->next;
-            }
-            if (repr->doc) {
-                if (repr->doc->is_logging) {
-                    repr->doc->log = (new SPReprActionChgAttr(repr, q, attr->value, SharedCString(), repr->doc->log))->optimizeOne();
-                }
-                repr->doc->_emitAttrChanged(repr, key, attr->value, NULL);
-            }
-
-            for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-                if (rl->vector->attr_changed) {
-                    (* rl->vector->attr_changed)(repr, key, attr->value, NULL, is_interactive, rl->data);
-                }
+        for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
+            if (rl->vector->attr_changed) {
+                (* rl->vector->attr_changed)(repr, key, attr->value, NULL, is_interactive, rl->data);
             }
         }
     }
 
-    return allowed;
+    return true;
 }
 
 static unsigned
@@ -299,41 +288,32 @@ sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_int
         return TRUE;
     }
 
-    unsigned allowed = TRUE;
-    for (SPReprListener *rl = repr->listeners; rl && allowed; rl = rl->next) {
-        if (rl->vector->change_attr) {
-            allowed = (* rl->vector->change_attr)(repr, key, ( attr ? attr->value : SharedCString() ), value, rl->data);
-        }
-    }
+    SharedCString oldval = ( attr ? attr->value : SharedCString() );
 
-    if (allowed) {
-        SharedCString oldval = ( attr ? attr->value : SharedCString() );
-
-        if (attr) {
-            attr->value = SharedCString::copy(value);
+    if (attr) {
+        attr->value = SharedCString::copy(value);
+    } else {
+        attr = new SPReprAttr(q, SharedCString::copy(value));
+        if (prev) {
+            prev->next = attr;
         } else {
-            attr = new SPReprAttr(q, SharedCString::copy(value));
-            if (prev) {
-                prev->next = attr;
-            } else {
-                repr->attributes = attr;
-            }
+            repr->attributes = attr;
         }
-        if (repr->doc) {
-            if (repr->doc->is_logging) {
-                repr->doc->log = (new SPReprActionChgAttr(repr, q, oldval, attr->value, repr->doc->log))->optimizeOne();
-            }
-            repr->doc->_emitAttrChanged(repr, key, oldval, attr->value);
+    }
+    if (repr->doc) {
+        if (repr->doc->is_logging) {
+            repr->doc->log = (new SPReprActionChgAttr(repr, q, oldval, attr->value, repr->doc->log))->optimizeOne();
         }
+        repr->doc->_emitAttrChanged(repr, key, oldval, attr->value);
+    }
 
-        for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-            if (rl->vector->attr_changed) {
-                (* rl->vector->attr_changed)(repr, key, oldval, attr->value, is_interactive, rl->data);
-            }
+    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
+        if (rl->vector->attr_changed) {
+            (* rl->vector->attr_changed)(repr, key, oldval, attr->value, is_interactive, rl->data);
         }
     }
 
-    return allowed;
+    return true;
 }
 
 unsigned

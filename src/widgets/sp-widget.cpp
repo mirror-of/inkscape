@@ -65,7 +65,6 @@ spw_repr_content_changed (SPRepr *repr, const gchar *oldval, const gchar *newval
 SPReprEventVector spw_event_vector = {
 	NULL, /* Child added */
 	NULL, /* Child removed */
-	NULL, /* Change attr */
 	spw_repr_attr_changed,
 	spw_repr_content_changed,
 	NULL /* Order changed */

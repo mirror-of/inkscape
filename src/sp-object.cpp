@@ -61,7 +61,6 @@ static SPRepr *sp_object_private_write (SPObject *object, SPRepr *repr, guint fl
 
 /* Real handlers of repr signals */
 
-static unsigned int sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data);
 static void sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data);
 
 static void sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data);
@@ -80,7 +79,6 @@ enum {RELEASE, MODIFIED, LAST_SIGNAL};
 SPReprEventVector object_event_vector = {
 	sp_object_repr_child_added,
 	sp_object_repr_child_removed,
-	sp_object_repr_change_attr,
 	sp_object_repr_attr_changed,
 	sp_object_repr_content_changed,
 	sp_object_repr_order_changed
@@ -641,13 +639,15 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 	sp_repr_ref (repr);
 	object->cloned = cloned;
 
-	/* If we are not cloned, force unique id */
 	if (!SP_OBJECT_IS_CLONED (object)) {
+		object->document->bindObjectToRepr(object->repr, object);
+
+		/* If we are not cloned, force unique id */
 		const gchar *id = sp_repr_attr (object->repr, "id");
 		gchar *realid = sp_object_get_unique_id (object, id);
 		g_assert (realid != NULL);
 
-		sp_document_def_id (object->document, realid, object);
+		object->document->bindObjectToId(realid, object);
 		object->id = realid;
 
 		/* Redefine ID, if required */
@@ -695,12 +695,16 @@ sp_object_invoke_release (SPObject *object)
 	g_assert (object->hrefcount == 0);
 
 	if (!SP_OBJECT_IS_CLONED (object)) {
-		g_assert (object->id);
-		sp_document_def_id (object->document, object->id, NULL);
+		if (object->id) {
+			object->document->bindObjectToId(object->id, NULL);
+		}
 		g_free (object->id);
-		g_free (object->_default_label);
 		object->id = NULL;
+
+		g_free (object->_default_label);
 		object->_default_label = NULL;
+
+		object->document->bindObjectToRepr(object->repr, NULL);
 	} else {
 		g_assert (!object->id);
 	}
@@ -750,27 +754,38 @@ static void
 sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	g_assert (SP_IS_DOCUMENT (object->document));
-	/* fixme: rething that cloning issue */
-	g_assert (SP_OBJECT_IS_CLONED (object) || object->id != NULL);
 	g_assert (key != SP_ATTR_INVALID);
 
 	switch (key) {
 	case SP_ATTR_ID:
 		if (!SP_OBJECT_IS_CLONED (object)) {
-			g_assert (value != NULL);
-			g_assert (strcmp ((const char*)value, object->id));
-			g_assert (!object->document->getObjectById((const char*)value));
-			sp_document_def_id (object->document, object->id, NULL);
-			g_free (object->id);
-			object->id = g_strdup ((const char*)value);
-			sp_document_def_id (object->document, object->id, object);
+			SPObject *conflict = object->document->getObjectById((const char *)value);
+			if (conflict) {
+				sp_object_ref(conflict, NULL);
+				// give the conflicting object a new ID
+				gchar *new_conflict_id = sp_object_get_unique_id(conflict, NULL);
+				sp_repr_set_attr(SP_OBJECT_REPR(conflict), "id", new_conflict_id);
+				g_free(new_conflict_id);
+				sp_object_unref(conflict, NULL);
+			}
+
+			if (object->id) {
+				object->document->bindObjectToId(object->id, NULL);
+				g_free (object->id);
+			} else {
+				g_message("id binding restored on bound object %s", value);
+			}
+
+			if (value) {
+				object->id = g_strdup ((const char*)value);
+				object->document->bindObjectToId(object->id, object);
+			} else {
+				object->id = NULL;
+				g_warning("id binding cleared on bound object %s", object->id);
+			}
+
 			g_free(object->_default_label);
 			object->_default_label = NULL;
-		} else {
-			// This warning fires when the id is changed on the original of an SPUse, because the SPUse is updated from the same repr.
-			// The child of an SPUse has a cloned flag set - I have little idea of what it is used for.
-			// Anyway, the warning is useless, because the child has no repr of its own, and therefore no id conflict may ensue in XML.
-			//g_warning ("ID of cloned object changed, so document is out of sync");
 		}
 		break;
 	case SP_ATTR_INKSCAPE_LABEL:
@@ -829,8 +844,6 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 
 	g_assert (SP_IS_DOCUMENT (object->document));
 	g_assert (object->repr != NULL);
-	/* fixme: rething that cloning issue */
-	g_assert (SP_OBJECT_IS_CLONED (object) || object->id != NULL);
 
 	unsigned int keyid = sp_attribute_lookup (key);
 	if (keyid != SP_ATTR_INVALID) {
@@ -838,40 +851,6 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 		const gchar *value = sp_repr_attr (object->repr, key);
 
 		sp_object_set (object, keyid, value);
-	}
-}
-
-static unsigned int
-sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
-{
-	SPObject *object = SP_OBJECT (data);
-	g_assert(SP_OBJECT_REPR(object) == repr);
-
-	if (SP_OBJECT_IS_CLONED(object)) {
-		// in general clones should not concern themselves with
-		// validating repr changes; that should be left to the
-		// "original" SPObject
-		return TRUE;
-	}
-
-	if (strcmp ((const char*)key, "id") == 0) {
-		if (!newval) {
-			// this will get cleared up when we no longer force
-			// ids on reprs (and institute direct mapping between
-			// SPObjects and SPReprs)
-			// g_warning("Attempt to clear id of bound SPRepr (%p)", repr);
-			return FALSE;
-		}
-		SPObject *defid = object->document->getObjectById(newval);
-		// it's nominally ok if we don't collide with anyone
-		if ( defid && defid != object ) {
-			g_critical("The id '%s' is already claimed by SPObject %p", newval, defid);
-			return FALSE;
-		} else {
-			return TRUE;
-		}
-	} else {
-		return TRUE;
 	}
 }
 

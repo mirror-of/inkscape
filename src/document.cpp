@@ -147,6 +147,7 @@ sp_document_init (SPDocument *doc)
 	p = new SPDocumentPrivate();
 
 	p->iddef = g_hash_table_new (g_direct_hash, g_direct_equal);
+	p->reprdef = g_hash_table_new (g_direct_hash, g_direct_equal);
 
 	p->resources = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -211,6 +212,7 @@ sp_document_dispose (GObject *object)
 		}
 
 		if (priv->iddef) g_hash_table_destroy (priv->iddef);
+		if (priv->reprdef) g_hash_table_destroy (priv->reprdef);
 
 		if (doc->rdoc) sp_repr_document_unref (doc->rdoc);
 
@@ -547,49 +549,53 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 	g_signal_emit (G_OBJECT (doc), signals [RESIZED], 0, width, height);
 }
 
-void sp_document_def_id(SPDocument *document, gchar const *id, SPObject *object)
-{
+void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
 	GQuark idq = g_quark_from_string(id);
 
 	if (object) {
-		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) == NULL);
-		g_hash_table_insert(document->priv->iddef, GINT_TO_POINTER(idq), object);
+		g_assert(g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq)) == NULL);
+		g_hash_table_insert(priv->iddef, GINT_TO_POINTER(idq), object);
 	} else {
-		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) != NULL);
-		g_hash_table_remove(document->priv->iddef, GINT_TO_POINTER(idq));
+		g_assert(g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq)) != NULL);
+		g_hash_table_remove(priv->iddef, GINT_TO_POINTER(idq));
 	}
 
-	SPDocumentPrivate::IDChangedSignalMap &id_changed_signals = document->priv->id_changed_signals;
 	SPDocumentPrivate::IDChangedSignalMap::iterator pos;
 
-	pos = id_changed_signals.find(idq);
-	if ( pos != id_changed_signals.end() ) {
+	pos = priv->id_changed_signals.find(idq);
+	if ( pos != priv->id_changed_signals.end() ) {
 		if (!(*pos).second.empty()) {
 			(*pos).second.emit(object);
 		} else { // discard unused signal
-			id_changed_signals.erase(pos);
+			priv->id_changed_signals.erase(pos);
 		}
 	}
 }
 
-SigC::Connection
-sp_document_id_changed_connect(SPDocument *doc, const gchar *id,
-                               SPDocument::IDChangedSignal::slot_type slot)
-{
-	return doc->priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
-}
-
-SPObject *SPDocument::getObjectById(const gchar *id)
-{
+SPObject *SPDocument::getObjectById(const gchar *id) {
 	g_return_val_if_fail (id != NULL, NULL);
 
 	GQuark idq = g_quark_from_string(id);
-	return (SPObject*)g_hash_table_lookup (this->priv->iddef, GINT_TO_POINTER(idq));
+	return (SPObject*)g_hash_table_lookup (priv->iddef, GINT_TO_POINTER(idq));
 }
 
-SPObject *SPDocument::getObjectByRepr(SPRepr *repr)
-{
-	return getObjectById(sp_repr_attr(repr, "id"));
+sigc::connection SPDocument::connectIdChanged(const gchar *id, SPDocument::IDChangedSignal::slot_type slot) {
+	return priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
+}
+
+void SPDocument::bindObjectToRepr(SPRepr *repr, SPObject *object) {
+	if (object) {
+		g_assert(g_hash_table_lookup(priv->reprdef, repr) == NULL);
+		g_hash_table_insert(priv->reprdef, repr, object);
+	} else {
+		g_assert(g_hash_table_lookup(priv->reprdef, repr) != NULL);
+		g_hash_table_remove(priv->reprdef, repr);
+	}
+}
+
+SPObject *SPDocument::getObjectByRepr(SPRepr *repr) {
+	g_return_val_if_fail (repr != NULL, NULL);
+	return (SPObject*)g_hash_table_lookup(priv->reprdef, repr);
 }
 
 /* Object modification root handler */

@@ -76,7 +76,7 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
 
 	_connection.disconnect();
 	_setObject(document->getObjectById(id));
-	_connection = sp_document_id_changed_connect(document, id, sigc::mem_fun(*this, &URIReference::_setObject));
+	_connection = document->connectIdChanged(id, sigc::mem_fun(*this, &URIReference::_setObject));
 
 	g_free(id);
 }

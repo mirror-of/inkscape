@@ -63,7 +63,6 @@ static gint match_node_data_by_repr(gconstpointer data_p, gconstpointer repr);
 static const SPReprEventVector element_repr_events = {
         element_child_added,
         element_child_removed,
-        NULL, /* change_attr */
         element_attr_changed,
         NULL, /* content_changed */
         element_order_changed
@@ -72,7 +71,6 @@ static const SPReprEventVector element_repr_events = {
 static const SPReprEventVector text_repr_events = {
         NULL, /* child_added */
         NULL, /* child_removed */
-        NULL, /* change_attr */
         NULL, /* attr_changed */
         text_content_changed,
         NULL  /* order_changed */
@@ -81,7 +79,6 @@ static const SPReprEventVector text_repr_events = {
 static const SPReprEventVector comment_repr_events = {
         NULL, /* child_added */
         NULL, /* child_removed */
-        NULL, /* change_attr */
         NULL, /* attr_changed */
         comment_content_changed,
         NULL  /* order_changed */

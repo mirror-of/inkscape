@@ -434,7 +434,7 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
         SPReprEventVector events = {
             &node_added,
             &node_removed,
-            NULL, &attribute_changed,
+            &attribute_changed,
             NULL,
             &node_reordered
         };
@@ -444,7 +444,7 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
         SPReprEventVector events = {
             NULL,
             NULL,
-            NULL, &attribute_changed,
+            &attribute_changed,
             NULL,
             NULL
         };

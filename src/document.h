@@ -50,7 +50,11 @@ struct SPDocument {
 	/* Handler ID */
 	guint modified_id;
 
+	void bindObjectToId(gchar const *id, SPObject *object);
 	SPObject *getObjectById(gchar const *id);
+	sigc::connection connectIdChanged(const gchar *id, SPDocument::IDChangedSignal::slot_type slot);
+
+	void bindObjectToRepr(SPRepr *repr, SPObject *object);
 	SPObject *getObjectByRepr(SPRepr *repr);
 
 	void queueForOrphanCollection(SPObject *object);
@@ -95,12 +99,6 @@ gdouble sp_document_height (SPDocument * document);
 /*
  * Dictionary
  */
-
-void sp_document_def_id(SPDocument *document, const gchar *id, SPObject *object);
-sigc::connection sp_document_id_changed_connect(SPDocument *document, const gchar *id, SPDocument::IDChangedSignal::slot_type slot);
-
-
-
 
 /*
  * Undo & redo

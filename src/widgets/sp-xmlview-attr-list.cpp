@@ -38,7 +38,6 @@ static GtkCListClass * parent_class = NULL;
 static SPReprEventVector repr_events = {
 	NULL, /* child_added */
 	NULL, /* child_removed */
-	NULL, /* change_attr */
 	event_attr_changed,
 	NULL, /* content_changed */
 	NULL  /* order_changed */

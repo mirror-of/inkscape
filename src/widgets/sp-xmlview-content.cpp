@@ -39,7 +39,6 @@ static GtkTextViewClass * parent_class = NULL;
 static SPReprEventVector repr_events = {
 	NULL, /* child_added */
 	NULL, /* child_removed */
-	NULL, /* change_attr */
 	NULL, /* attr_changed */
 	event_content_changed,
 	NULL  /* order_changed */

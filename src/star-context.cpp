@@ -175,7 +175,6 @@ static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const g
 static SPReprEventVector shape_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
-    NULL, /* change_attr */
     shape_event_attr_changed,
     NULL, /* content_changed */
     NULL  /* order_changed */

@@ -1,5 +1,25 @@
 2004-01-15  MenTaLguY  <mental@rydia.net>
 
+	* src/arc-context.cpp, src/document-private.h, src/document.cpp,
+	  src/document.h, src/event-context.cpp, src/node-context.cpp,
+	  src/rect-context.cpp, src/sp-object.cpp, src/spiral-context.cpp,
+	  src/star-context.cpp, src/toolbox.cpp, src/uri-references.cpp,
+	  src/dialogs/desktop-properties.cpp, src/widgets/gradient-vector.cpp,
+	  src/widgets/layer-selector.cpp, src/widgets/sp-widget.cpp,
+	  src/widgets/sp-xmlview-attr-list.cpp, src/widgets/sp-xmlview-content.cpp,
+	  src/widgets/sp-xmlview-tree.cpp, src/xml/repr.cpp,
+	  src/xml/sp-repr-event-vector.h:
+
+	  Removed attribute setting callback, and decoupled ids and object/repr
+	  bindings (object <-> repr associations are now remembered directly,
+	  though ids are still tracked too).
+
+      This means it is now possible to set a null id on an object without
+	  anything breaking (hopefully).  For now we will still assign ids
+	  to everything by default...
+
+2004-01-15  MenTaLguY  <mental@rydia.net>
+
 	* src/arc-context.cpp, src/event-context.cpp, src/node-context.cpp,
 	  src/rect-context.cpp, src/sp-object.cpp, src/spiral-context.cpp,
 	  src/star-context.cpp, src/toolbox.cpp,
