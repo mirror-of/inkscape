@@ -1,3 +1,9 @@
+2004-08-08  MenTaLguY  <mental@rydia.net>
+
+	* libgc.supp: valgrind suppression profile for libgc, which necessarily
+	  reads and runs comparisons on a lot of uninitalized data; the present
+      form of this file is probably too broad however
+
 2004-08-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnr/nr-matrix-div.h, src/libnr/nr-matrix-div.cpp:
