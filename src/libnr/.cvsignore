@@ -1,0 +1,7 @@
+Makefile
+Makefile.in
+.deps
+.libs
+nr_config.h
+testnr
+gen_nr_config

@@ -1,0 +1,8 @@
+*.lo
+*.la
+.libs
+.deps
+Makefile
+Makefile.in
+inkscape
+spsvgview
