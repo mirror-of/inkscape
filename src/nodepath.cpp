@@ -2262,7 +2262,8 @@ static void
 node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 {
 	SPPathNode * n;
-	SPPathNodeSide *me, *other;
+	SPPathNodeSide *me    = NULL;
+    SPPathNodeSide *other = NULL;
 	radial rme, rother, rnew; 
 	NRPoint o;
 
