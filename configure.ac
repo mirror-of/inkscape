@@ -223,12 +223,18 @@ AC_ARG_WITH(perl,
             [with_perl=$withval], [with_perl=yes])
 
 if test "x$with_perl" = "xyes"; then
-    PERL_LIBS=`perl -MExtUtils::Embed -e ldopts 2>/dev/null`
+    PERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts 2>/dev/null`
     if test "$?" -gt "0"; then
         with_perl="no"
     else
-        LIBS="$LIBS $PERL_LIBS"
-        AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
+        PERL_LIBS=`perl -MExtUtils::Embed -e ldopts 2>/dev/null`
+        if test "$?" -gt "0"; then
+            with_perl="no"
+        else
+            AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
+            AC_SUBST(PERL_CFLAGS)
+            AC_SUBST(PERL_LIBS)
+        fi
     fi
 fi
 AC_MSG_RESULT([$with_perl])
@@ -244,16 +250,18 @@ AC_ARG_WITH(python,
             [with_python=$withval], [with_python=yes])
 
 if test "x$with_python" = "xyes"; then
-    PYTHON_LDPATH=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBPL')" 2>/dev/null`
+    PYTHON_CFLAGS=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('INCLUDEPY')" 2>/dev/null`
     if test "$?" -gt "0"; then
         with_python="no"
     else
-        PYTHON_LIB=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBRARY')" 2>/dev/null`
+        PYTHON_LIBS=`python -c "import distutils.sysconfig ; print '%s/%s' % (distutils.sysconfig.get_config_var('LIBPL'),distutils.sysconfig.get_config_var('LIBRARY'))" 2>/dev/null`
         if test "$?" -gt "0"; then
             with_python="no"
         else
-            LIBS="$LIBS $PYTHON_LDPATH/$PYTHON_LIB"
+            PYTHON_CFLAGS="-I$PYTHON_CFLAGS"
             AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
+            AC_SUBST(PYTHON_CFLAGS)
+            AC_SUBST(PYTHON_LIBS)
         fi
     fi
 fi

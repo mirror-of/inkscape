@@ -6,19 +6,8 @@ extension/script/clean:
 	rm -f extension/script/libscript.a
 	rm -f $(extension_script_libscript_a_OBJECTS)
         
-
-# Note: the link flags are in configure.ac
-PERL_CFLAGS  = `perl -MExtUtils::Embed -e ccopts`
-#PERL_LDFLAGS = `perl -MExtUtils::Embed -e ldopts`
-
-#INCLUDEPY, LIBPL, LIBRARY
-PYTHON_CFLAGS := -I`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('INCLUDEPY')"`
-#PYTHON_LDPATH := `python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBPL')"`
-#PYTHON_LIB    := `python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBRARY')"`
-#PYTHON_LDFLAGS = $(PYTHON_LDPATH)/$(PYTHON_LIB)
-
-
 extension_script_libscript_a_CXXFLAGS = $(PERL_CFLAGS) $(PYTHON_CFLAGS)
+extension_script_libscript_a_LIBADD = $(PERL_LIBS) $(PYTHON_LIBS)
 
 if WITH_PERL
 perl_sources = \
