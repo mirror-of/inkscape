@@ -75,7 +75,7 @@
 	  initial stab at layers menu; not everything works the way it should
 	  quite yet
 
-	* src/message-context.h, src/message-context.cpp: 
+	* src/message-context.h, src/message-context.cpp:
 
 	  added flash methods to Inkscape::MessageContext
 
@@ -113,6 +113,9 @@
 	  New function.
 
 2004-09-20  Peter Moulder  <pmoulder@bowman.csse.monash.edu.au>
+
+	* src/sp-gradient.h: Change gradientTransform from NRMatrix to
+	  NR::Matrix.  Users updated.
 
 	* src/Makefile.am (EXTRA_DIST), Makefile_insert
 	  dialogs/Makefile_insert extension/implementation/Makefile_insert
@@ -307,7 +310,7 @@
 
 	* src/xml/repr-util.cpp, src/xml/repr-private.h,
 	  src/xml/repr.h, src/xml/repr.cpp:
-	  
+
 	  new child-count-related routines, and added mutation signals
 	  to SPReprDoc
 
@@ -406,7 +409,7 @@
 
 	* src/gc-core.h, src/gc-finalized.h, src/gc-anchored.h,
 	  src/libnr/nr-object.cpp:
-	  
+
 	  remove USE_LIBGC macro again
 
 2004-08-30  MenTaLguY <mental@rydia.net>
@@ -436,7 +439,7 @@
 
 	* src/gc-core.h, src/gc-finalized.h, src/gc-anchored.h,
 	  src/libnr/nr-object.cpp:
-	  
+
 	  make the garbage collector easy to disable by undefining
 	  USE_LIBGC in src/gc-core.h
 
@@ -508,7 +511,7 @@
 
 	  rewrote interface to Boehm GC for increased flexibility; there are now
 	  three main classes:
-	  
+
 	   - Inkscape::GC::Managed: objects managed by the GC; replaces
 	                            Inkscape::GC::Object
 
@@ -921,12 +924,12 @@
 
 	* src/livarot/Shape.h, src/livarot/Shape.cpp,
 	  src/livarot/ShapeSweep.cpp, src/livarot/ShapeMisc.cpp:
-	  
+
 	  experiment to replace ad-hoc realloc() arrays with std::vector
 
 2004-08-02  David Turner <novalis@gnu.org>
 
-	* file.cpp, file.h, interface.cpp, toolbox.cpp, verbs.cpp, verbs.h: 
+	* file.cpp, file.h, interface.cpp, toolbox.cpp, verbs.cpp, verbs.h:
 
 	Added vacuum command to remove unused defs.
 
@@ -1048,7 +1051,7 @@
 	* configure.in, src/Makefile.am, src/algorithms/Makefile_insert,
 	  src/algorithms/makefile.in, src/traits/Makefile_insert,
 	  src/traits/makefile.in, src/util/Makefile_insert, src/util/makefile.in:
-	  
+
 	  added src/algorithms, src/traits, and src/util subdirs
 	
 	* src/algorithms/longest-common-suffix.h:
@@ -1347,7 +1350,7 @@
 
 2004-07-05  Carl Hetherington <inkscape@carlh.net>
 
-	* src/desktop.cpp: prevent crash by adding a check for 
+	* src/desktop.cpp: prevent crash by adding a check for
 	layer == NULL to SPDesktopWidget::_buildLayerStatusMenuItem.
 
 	* src/selection-chemistry.cpp: prevent crash on copying empty
@@ -1375,14 +1378,14 @@
 
 2004-07-03  Kees Cook  <kees@outflux.net>
 
-	* src/document.cpp, src/dialogs/desktop-properties.cpp, 
+	* src/document.cpp, src/dialogs/desktop-properties.cpp,
 	  src/dialogs/rdf.cpp, src/dialogs/rdf.h:
 	  Added several more RDF entities.  Created entry tooltips.  Set
 	  a few RDF defaults for the document.
 
 2004-07-03  MenTaLguY  <mental@rydia.net>
 
-	* src/desktop.cpp, src/document.cpp: 
+	* src/desktop.cpp, src/document.cpp:
 
 	  siblings of a layer now become layers too
 
@@ -1404,7 +1407,7 @@
 
 2004-07-02  Kees Cook  <kees@outflux.net>
 
-	* src/document.cpp, src/dialogs/desktop-properties.cpp, 
+	* src/document.cpp, src/dialogs/desktop-properties.cpp,
 	  src/dialogs/rdf.cpp, src/dialogs/rdf.h, src/xml/repr.h:
 	  Made RDF's writable now.  Handling modifications and defaults.
 	  Mental and others will most likely kill me when they finally
@@ -1583,7 +1586,7 @@
 	
 2004-06-24  rejon <kidproto@users.sf.net>
 
-	* src/verbs.cpp: I changed the reverse command to be more verbose and 
+	* src/verbs.cpp: I changed the reverse command to be more verbose and
 	  explanative.
 
 2004-06-24  MenTaLguY  <mental@rydia.net>
@@ -1663,7 +1666,7 @@
 2004-06-22  John Cliff <simarilius@yahoo.com>
 
 	* src/object-edit.cpp: 	Added knots for manipulation of pattern fills.
-	* src/sp-shape.cpp, src/sp-shape.h: 	Added sp_shape_set_pattern to 
+	* src/sp-shape.cpp, src/sp-shape.h: 	Added sp_shape_set_pattern to
 	explictly set the transform rather than multiplying like adjust.
 
 
@@ -1847,10 +1850,10 @@
 2004-08-17  Bryce Harrington  <bryce@bryceharrington.com>
 
 	*  nodepath.cpp path-chemistry.cpp selection-chemistry.cpp,
-	   seltrans.cpp sp-typeset.cpp splivarot.cpp text-context.cpp, 
+	   seltrans.cpp sp-typeset.cpp splivarot.cpp text-context.cpp,
 	   tools-switch.cpp dialogs/find.cpp:  Converting statusbar
 	   messages from old style to new, as per
-	   http://inkscape.org/cgi-bin/wiki.pl?StatusbarAPI 
+	   http://inkscape.org/cgi-bin/wiki.pl?StatusbarAPI
 
 2004-06-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
@@ -2180,7 +2183,7 @@
 
 	* src/document-undo.cpp, src/document.cpp, src/document.h: added an orphan
 	  collection pass as part of comitting an undo step
-	  
+
 	* src/sp-object.cpp, src/sp-object.h:
 	  add total hrefcount for all descendants, and basic orphan collection
 	  facilities
