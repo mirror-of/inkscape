@@ -241,9 +241,11 @@ src/svg/svg-affine.cpp
 src/svg/svg-color.cpp
 src/svg/svg-length.cpp
 src/svg/svg-path.cpp
+src/text-chemistry.cpp
 src/text-context.cpp
 src/toolbox.cpp
 src/tools-switch.cpp
+src/trace/trace.cpp
 src/uri-references.cpp
 src/uri.cpp
 src/verbs.cpp
