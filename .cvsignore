@@ -9,13 +9,13 @@ config.guess
 ltconfig
 ltmain.sh
 config.cache
-stamp-h
+stamp-h*
+build-stamp
 config.status
 libtool
 aclocal.m4
 intl
 config.h.in
-stamp-h.in
 ABOUT-NLS
 inkscape.spec
 *.1
@@ -25,5 +25,4 @@ inkscape.desktop
 GNOME_Sodipodi.oaf
 autom4te*cache
 toru
-stamp-h1
 inkscape-*.tar.gz
