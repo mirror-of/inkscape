@@ -935,13 +935,13 @@ sp_ui_context_menu (SPView *view, SPItem *item)
 	}
 
         /* layer menu */
-        SPGroup *group;
-        if (SP_IS_GROUP(item)) {
-            group = SP_GROUP(item);
-        } else if ( item != dt->currentRoot() && SP_IS_GROUP(SP_OBJECT_PARENT(item)) ) {
-            group = SP_GROUP(SP_OBJECT_PARENT(item));
-        } else {
-            group = NULL;
+        SPGroup *group=NULL;
+        if (item) {
+            if (SP_IS_GROUP(item)) {
+                group = SP_GROUP(item);
+            } else if ( item != dt->currentRoot() && SP_IS_GROUP(SP_OBJECT_PARENT(item)) ) {
+                group = SP_GROUP(SP_OBJECT_PARENT(item));
+            }
         }
 
         if ( group && group != dt->currentLayer() ) {

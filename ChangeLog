@@ -1,5 +1,7 @@
 2004-07-08  MenTaLguY  <mental@rydia.net>
 
+	* src/interface.cpp: fixed crash on desktop context menu
+
 	* src/desktop.h, src/desktop.cpp:
 
 	  added SPDesktop::isWithinViewport() to conveniently determine
