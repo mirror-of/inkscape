@@ -1,5 +1,9 @@
 2003-12-21  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile.am (inkscapelib_src):
+	src/livarot/Makefile.am (libvarot_a_SOURCES): 
+	Add some header files to SOURCES, so that `make distcheck' works.
+
 	* src/style.cpp (sp_style_read_ipaint): Skip leading whitespace.
 	Fixes #853804.  Improves rendering of Dia-exported SVG.
 
