@@ -17,11 +17,13 @@ namespace Inkscape {
 namespace Widgets {
 
 LayerSelector::LayerSelector(SPDesktop *desktop)
-: _desktop(NULL)
+: _layer_model(Gtk::ListStore::create(LayerModelColumns())), _desktop(NULL)
 {
     pack_start(_lock_button, Gtk::PACK_SHRINK);
     pack_start(_hide_button, Gtk::PACK_SHRINK);
     pack_start(_selector, Gtk::PACK_EXPAND_WIDGET);
+
+    _selector.set_model(_layer_model);
 
     setDesktop(desktop);
 }
@@ -40,14 +42,24 @@ gboolean detach(SPView *view, LayerSelector *selector) {
 }
 
 void LayerSelector::setDesktop(SPDesktop *desktop) {
+    if ( desktop == _desktop ) {
+        return;
+    }
+
     if (_desktop) {
+        _layer_changed_connection.disconnect();
         g_signal_handlers_disconnect_by_func(_desktop, (gpointer)&detach, this);
     }
     if (desktop) {
-        // TODO we need a different signal for this..
+        // TODO we need a different signal for this, really..
         g_signal_connect_after(desktop, "shutdown", GCallback(detach), this);
+        _layer_changed_connection = desktop->connectCurrentLayerChanged(sigc::mem_fun(*this, &LayerSelector::_updateLayer));
     }
     _desktop = desktop;
+}
+
+void LayerSelector::_updateLayer(SPObject *layer) {
+    
 }
 
 }

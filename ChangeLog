@@ -1,3 +1,11 @@
+2004-10-17  MenTaLguY  <mental@rydia.net>
+
+	* share/templates/Makefile.am, share/templates/layers.svg:
+	  added a layer template 
+
+	* src/widgets/layer-selector.h, src/widgets/layer-selector.cpp:
+	  more layer selector work
+
 2004-10-15  MenTaLguY  <mental@rydia.net>
 
 	* src/view.h: removed obsolete status message functions

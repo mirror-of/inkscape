@@ -16,9 +16,12 @@
 #include <gtkmm/combobox.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/cellrenderertext.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/liststore.h>
 
 class SPDesktop;
 class SPDocument;
+class SPObject;
 
 namespace Inkscape {
 namespace Widgets {
@@ -38,9 +41,24 @@ private:
     Gtk::ToggleButton _lock_button;
     Gtk::ToggleButton _hide_button;
 
+    class LayerModelColumns : public Gtk::TreeModel::ColumnRecord {
+    public:
+        Gtk::TreeModelColumn<bool> is_selected;
+        Gtk::TreeModelColumn<Glib::ustring> label;
+        Gtk::TreeModelColumn<SPObject *> object;
+
+        LayerModelColumns() { add(is_selected); add(label); add(object); }
+    };
+
+    Gtk::CellRendererToggle _selected_column_renderer;
     Gtk::CellRendererText _name_column_renderer;
+    Glib::RefPtr<Gtk::ListStore> _layer_model;
+
+    sigc::connection _layer_changed_connection;
 
     SPDesktop *_desktop;
+
+    void _updateLayer(SPObject *layer);
 };
 
 }
