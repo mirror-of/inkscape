@@ -160,23 +160,11 @@ void sp_item_bbox_desktop (SPItem *item, NRRect *bbox);
 NR::Rect sp_item_bbox_desktop(SPItem *item);
 
 NR::Matrix sp_item_i2doc_affine(SPItem const *item);
-
-inline NR::Matrix sp_item_i2root_affine(SPItem const *item)
-{
-	return sp_item_i2doc_affine(item);
-	/* Not sure if this function was intended to differ from sp_item_i2doc_affine.
-	   Previously the two versions just had identical code, possibly a copy&paste bug. */
-}
+NR::Matrix sp_item_i2root_affine(SPItem const *item);
 
 /* Old NRMatrix version (deprecated). */
 NRMatrix *sp_item_i2doc_affine (SPItem const *item, NRMatrix *transform);
-
-inline NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *transform)
-{
-	return sp_item_i2doc_affine(item, transform);
-	/* Used to have identical code to sp_item_i2doc_affine.
-	   Is this a copy&paste bug, should there be a difference?  -- pjrm */
-}
+NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *transform);
 
 /* Transformation to normalized (0,0-1,1) viewport */
 NRMatrix *sp_item_i2vp_affine (SPItem const *item, NRMatrix *transform);

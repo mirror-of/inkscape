@@ -652,6 +652,7 @@ static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform
 }
 
 /**
+ * Returns the accumulated transformation of the item and all its ancestors, including root's viewport.
  * Requires: item != NULL && SP_IS_ITEM(item).
  */
 NR::Matrix sp_item_i2doc_affine(SPItem const *item)
@@ -669,12 +670,35 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 	g_assert(SP_IS_ROOT(item));
 	SPRoot const *root = SP_ROOT(item);
 
-	/* fixme: (Lauris) */
 	ret *= root->c2p;
 	ret *= NR::Matrix(&item->transform);
 	/* fixme: The above line looks strange to me (pjrm).  I'd have thought
 	   it should either be removed or moved to before the c2p multiply.
 	   Can someone pls add a comment? */
+
+	return ret;
+}
+
+/**
+ * Returns the accumulated transformation of the item and all its ancestors, but excluding root's viewport.
+ * Used in path operations mostly.
+ * Requires: item != NULL && SP_IS_ITEM(item).
+ */
+NR::Matrix sp_item_i2root_affine(SPItem const *item)
+{
+	g_assert(item != NULL);
+	g_assert(SP_IS_ITEM(item));
+
+	NR::Matrix ret(NR::identity());
+	g_assert(ret.test_identity());
+	while ( NULL != SP_OBJECT_PARENT(item) )
+	{
+		ret *= NR::Matrix(&item->transform);
+		item = SP_ITEM(SP_OBJECT_PARENT(item));
+	}
+	g_assert(SP_IS_ROOT(item));
+	
+	ret *= NR::Matrix(&item->transform);
 
 	return ret;
 }
@@ -686,6 +710,16 @@ NRMatrix *sp_item_i2doc_affine(SPItem const *item, NRMatrix *affine)
 	g_return_val_if_fail (affine != NULL, NULL);
 
 	*affine = sp_item_i2doc_affine(item);
+	return affine;
+}
+
+NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *affine)
+{
+	g_return_val_if_fail (item != NULL, NULL);
+	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
+	g_return_val_if_fail (affine != NULL, NULL);
+
+	*affine = sp_item_i2root_affine(item);
 	return affine;
 }
 
