@@ -141,6 +141,7 @@ static struct {
     { "SPDynaDrawContext", "calligraphy_toolbox", sp_calligraphy_toolbox_new },
     { "SPTextContext", "text_toolbox", NULL },
     { "SPGradientContext", "gradient_toolbox", sp_gradient_toolbox_new },
+    { "SPDropperContext", "dropper_toolbox", NULL },
     { NULL, NULL, NULL }
 };
 
@@ -229,19 +230,6 @@ sp_tool_toolbox_new()
 }
 
 static void
-aux_toolbox_size_request(GtkWidget *widget,
-                         GtkRequisition *requisition,
-                         gpointer user_data)
-{
-    if ( requisition->height < AUX_BUTTON_SIZE + 10 + 2 * AUX_SPACING) {
-        requisition->height = AUX_BUTTON_SIZE + 10 + 2 * AUX_SPACING;
-    }
-    if (!g_object_get_data(G_OBJECT(widget), "is_detached")) {
-        requisition->width = 0; // allow aux toolbar to be cut
-    }
-}
-
-static void
 aux_toolbox_attached(GtkHandleBox *toolbox, GtkWidget *child)
 {
     g_object_set_data(G_OBJECT(child), "is_detached", GINT_TO_POINTER(FALSE));
@@ -270,8 +258,6 @@ sp_aux_toolbox_new()
     g_object_set_data(G_OBJECT(tb), "top_spacer", tb_s);
 
     gtk_widget_set_sensitive(tb, FALSE);
-
-    g_signal_connect_after(G_OBJECT(tb), "size_request", G_CALLBACK(aux_toolbox_size_request), NULL);
 
     GtkWidget *hb = gtk_handle_box_new();
     gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(hb), GTK_POS_LEFT);
@@ -304,7 +290,6 @@ sp_commands_toolbox_new()
 
     g_object_set_data(G_OBJECT(tb), "desktop", NULL);
     gtk_widget_set_sensitive(tb, FALSE);
-    g_signal_connect_after(G_OBJECT(tb), "size_request", G_CALLBACK(aux_toolbox_size_request), NULL);
 
     GtkWidget *hb = gtk_handle_box_new();
     gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(hb), GTK_POS_LEFT);
@@ -590,15 +575,21 @@ update_tool_toolbox( SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget
 static void
 setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
+    static GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_VERTICAL );
+
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         GtkWidget *sub_toolbox;
         if (aux_toolboxes[i].create_func == NULL)
             sub_toolbox = sp_empty_toolbox_new(desktop);
         else
             sub_toolbox = aux_toolboxes[i].create_func(desktop);
+
+        gtk_size_group_add_widget( grouper, sub_toolbox );
+
         gtk_container_add(GTK_CONTAINER(toolbox), sub_toolbox);
         g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
     }
+    g_object_unref( G_OBJECT(grouper) );
 }
 
 static void
