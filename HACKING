@@ -1,6 +1,15 @@
+Compiling the CVS version
+=========================
+grep Build-Depends debian/control to see a list of (Debian) packages needed for
+compilation.
+
+See http://www.inkscape.org/cgi-bin/wiki.pl?CompilingInkscape for more general
+remarks about compiling, including how to find some of the needed packages for
+your distribution, and suggestions for developers.
+
 
 Contributing to Inkscape
-------------------------
+========================
 Inkscape welcomes your contributions to help turn it into a fully
 SVG-compliant drawing program for the Open Source community. 
 
@@ -23,7 +32,10 @@ can help:
 
 CVS Access
 ==========
-We give CVS access out to people with proven interest in helping develop
+See http://sourceforge.net/cvs/?group_id=93438 for how to access CVS,
+including browsing CVS from a web client.
+
+We give CVS write access out to people with proven interest in helping develop
 the codebase.  Proving your interest is straightforward:  Make two
 contributions and request access.
 
@@ -40,10 +52,11 @@ way to see if an idea fits is to try it on for size.
 
 Coding Style
 ============
-Please refer to the Coding Style Guidelines if you have specific
-questions on the style to use for code.  If reading style guidelines
-doesn't interest you, just follow the general style of the surrounding
-code, so that it is at least consistent.
+Please refer to the Coding Style Guidelines
+(http://www.inkscape.org/doc/coding_style.php) if you have specific questions
+on the style to use for code.  If reading style guidelines doesn't interest
+you, just follow the general style of the surrounding code, so that it is at
+least consistent.
 
 
 Makefiles
