@@ -5,6 +5,12 @@
 #define WIN32
 #endif
 
+/**
+ * This is for require-config.h, whose
+ * purpose I cannot fathom.
+ */
+#define PACKAGE_TARNAME
+
 /*######################################
 #### RESOURCE DIRECTORIES
 ######################################*/
