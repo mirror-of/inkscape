@@ -562,9 +562,9 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 	}
 
 	// restore zoom and view
-	if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !isnan (nv->zoom)
-			&& nv->cx != HUGE_VAL && !isnan (nv->cx) 
-			&& nv->cy != HUGE_VAL && !isnan (nv->cy)) {
+	if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !std::isnan (nv->zoom)
+			&& nv->cx != HUGE_VAL && !std::isnan (nv->cx) 
+			&& nv->cy != HUGE_VAL && !std::isnan (nv->cy)) {
 		sp_desktop_zoom_absolute (desktop, nv->cx, nv->cy, nv->zoom);
 	} 
 
