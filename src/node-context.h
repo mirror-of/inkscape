@@ -31,7 +31,7 @@ struct SPNodeContext {
 
 	guint drag : 1;
 
-	Path::Path *nodepath;
+	Inkscape::NodePath::Path *nodepath;
 	SPKnotHolder *knot_holder;
 
 	gboolean leftalt;

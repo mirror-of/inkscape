@@ -388,7 +388,7 @@ private :
 	SPEventContext *event_context = (SP_ACTIVE_DESKTOP)->event_context;
 	if (!SP_IS_NODE_CONTEXT (event_context)) return ;
 
-        Path::Path *nodepath = SP_NODE_CONTEXT (event_context)->nodepath;
+        Inkscape::NodePath::Path *nodepath = SP_NODE_CONTEXT (event_context)->nodepath;
         if (!nodepath) return;
         if (_distribute)
             sp_nodepath_selected_distribute(nodepath, _orientation);

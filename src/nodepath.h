@@ -71,8 +71,9 @@ class SPNodeContext;
 
 
 
+namespace Inkscape {
 
-namespace Path {
+namespace NodePath {
 
 /**
  * In the following data model.   Nodepaths are made up of subpaths which
@@ -216,62 +217,63 @@ class Node {
 	NodeSide p;
 };
 
-}  // namespace Path
+}  // namespace NodePath
+}  // namespace Inkscape
 
 /**
  *
  */
-Path::Path * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
+Inkscape::NodePath::Path * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
 
 /**
  *
  */
-void sp_nodepath_destroy (Path::Path * nodepath);
+void sp_nodepath_destroy (Inkscape::NodePath::Path * nodepath);
 
 /**
  *
  */
-void sp_nodepath_deselect (Path::Path *nodepath);
+void sp_nodepath_deselect (Inkscape::NodePath::Path *nodepath);
 
 /**
  *
  */
-void sp_nodepath_select_all (Path::Path *nodepath);
+void sp_nodepath_select_all (Inkscape::NodePath::Path *nodepath);
 
 /**
  *
  */
-void sp_nodepath_select_next (Path::Path *nodepath);
+void sp_nodepath_select_next (Inkscape::NodePath::Path *nodepath);
 
 /**
  *
  */
-void sp_nodepath_select_prev (Path::Path *nodepath);
+void sp_nodepath_select_prev (Inkscape::NodePath::Path *nodepath);
 
 /**
  *
  */
-void sp_nodepath_select_rect (Path::Path * nodepath, NRRect * b, gboolean incremental);
+void sp_nodepath_select_rect (Inkscape::NodePath::Path * nodepath, NRRect * b, gboolean incremental);
 
 /**
  *
  */
-GList *save_nodepath_selection (Path::Path *nodepath);
+GList *save_nodepath_selection (Inkscape::NodePath::Path *nodepath);
 
 /**
  *
  */
-void restore_nodepath_selection (Path::Path *nodepath, GList *r);
+void restore_nodepath_selection (Inkscape::NodePath::Path *nodepath, GList *r);
 
 /**
  *
  */
-gboolean nodepath_repr_d_changed (Path::Path * np, const char *newd);
+gboolean nodepath_repr_d_changed (Inkscape::NodePath::Path * np, const char *newd);
 
 /**
  *
  */
-gboolean nodepath_repr_typestr_changed (Path::Path * np, const char *newtypestr);
+gboolean nodepath_repr_typestr_changed (Inkscape::NodePath::Path * np, const char *newtypestr);
 
 /**
  *
@@ -281,17 +283,17 @@ gboolean node_key (GdkEvent * event);
 /**
  *
  */
-void sp_nodepath_update_statusbar (Path::Path *nodepath);
+void sp_nodepath_update_statusbar (Inkscape::NodePath::Path *nodepath);
 
 /**
  * Align selected nodes on the specified axis
  */
-void sp_nodepath_selected_align(Path::Path *nodepath, NR::Dim2 axis);
+void sp_nodepath_selected_align(Inkscape::NodePath::Path *nodepath, NR::Dim2 axis);
 
 /**
  * Distribute selected nodes on the specified axis
  */
-void sp_nodepath_selected_distribute(Path::Path *nodepath, NR::Dim2 axis);
+void sp_nodepath_selected_distribute(Inkscape::NodePath::Path *nodepath, NR::Dim2 axis);
 
 /* possibly private functions */
 
@@ -334,7 +336,7 @@ void sp_node_selected_delete_segment (void);
 /**
  *
  */
-void sp_node_selected_set_type (Path::NodeType type);
+void sp_node_selected_set_type (Inkscape::NodePath::NodeType type);
 
 /**
  *
@@ -352,10 +354,10 @@ void sp_node_selected_move (gdouble dx, gdouble dy);
 void sp_node_selected_move_screen (gdouble dx, gdouble dy);
 
 
-void sp_nodepath_selected_nodes_rotate (Path::Path * nodepath, gdouble angle, int which);
-void sp_nodepath_selected_nodes_rotate_screen (Path::Path * nodepath, gdouble angle, int which);
-void sp_nodepath_selected_nodes_scale (Path::Path * nodepath, gdouble grow, int which);
-void sp_nodepath_selected_nodes_scale_screen (Path::Path * nodepath, gdouble grow, int which);
+void sp_nodepath_selected_nodes_rotate (Inkscape::NodePath::Path * nodepath, gdouble angle, int which);
+void sp_nodepath_selected_nodes_rotate_screen (Inkscape::NodePath::Path * nodepath, gdouble angle, int which);
+void sp_nodepath_selected_nodes_scale (Inkscape::NodePath::Path * nodepath, gdouble grow, int which);
+void sp_nodepath_selected_nodes_scale_screen (Inkscape::NodePath::Path * nodepath, gdouble grow, int which);
 
 
 

@@ -1,3 +1,11 @@
+2005-03-12  MenTaLguY  <mental@rydia.net>
+
+	* src/node-context.cpp, src/node-context.h, src/nodepath.cpp,
+	  src/nodepath.h, src/toolbox.cpp, src/dialogs/align.cpp:
+
+	  Renamed Path namespace to Inkscape::NodePath, to avoid conflict
+	  with livarot
+
 2005-03-12  Kees Cook  <kees@outflux.net>
 
     * inkscape.nsi: added German translation from Adib Taraben.

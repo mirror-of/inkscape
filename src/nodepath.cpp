@@ -72,25 +72,25 @@ static GMemChunk *nodechunk = NULL;
 
 /* Creation from object */
 
-static NArtBpath *subpath_from_bpath(Path::Path *np, NArtBpath *b, gchar const *t);
+static NArtBpath *subpath_from_bpath(Inkscape::NodePath::Path *np, NArtBpath *b, gchar const *t);
 static gchar *parse_nodetypes(gchar const *types, gint length);
 
 /* Object updating */
 
-static void stamp_repr(Path::Path *np);
-static SPCurve *create_curve(Path::Path *np);
-static gchar *create_typestr(Path::Path *np);
+static void stamp_repr(Inkscape::NodePath::Path *np);
+static SPCurve *create_curve(Inkscape::NodePath::Path *np);
+static gchar *create_typestr(Inkscape::NodePath::Path *np);
 
-static void sp_node_ensure_ctrls(Path::Node *node);
+static void sp_node_ensure_ctrls(Inkscape::NodePath::Node *node);
 
-static void sp_nodepath_node_select(Path::Node *node, gboolean incremental, gboolean override);
+static void sp_nodepath_node_select(Inkscape::NodePath::Node *node, gboolean incremental, gboolean override);
 
-static void sp_node_set_selected(Path::Node *node, gboolean selected);
+static void sp_node_set_selected(Inkscape::NodePath::Node *node, gboolean selected);
 
 /* Control knot placement, if node or other knot is moved */
 
-static void sp_node_adjust_knot(Path::Node *node, gint which_adjust);
-static void sp_node_adjust_knots(Path::Node *node);
+static void sp_node_adjust_knot(Inkscape::NodePath::Node *node, gint which_adjust);
+static void sp_node_adjust_knots(Inkscape::NodePath::Node *node);
 
 /* Knot event handlers */
 
@@ -106,27 +106,27 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
 
 /* Constructors and destructors */
 
-static Path::SubPath *sp_nodepath_subpath_new(Path::Path *nodepath);
-static void sp_nodepath_subpath_destroy(Path::SubPath *subpath);
-static void sp_nodepath_subpath_close(Path::SubPath *sp);
-static void sp_nodepath_subpath_open(Path::SubPath *sp, Path::Node *n);
-static Path::Node * sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, NRPathcode code,
+static Inkscape::NodePath::SubPath *sp_nodepath_subpath_new(Inkscape::NodePath::Path *nodepath);
+static void sp_nodepath_subpath_destroy(Inkscape::NodePath::SubPath *subpath);
+static void sp_nodepath_subpath_close(Inkscape::NodePath::SubPath *sp);
+static void sp_nodepath_subpath_open(Inkscape::NodePath::SubPath *sp,Inkscape::NodePath::Node *n);
+static Inkscape::NodePath::Node * sp_nodepath_node_new(Inkscape::NodePath::SubPath *sp,Inkscape::NodePath::Node *next,Inkscape::NodePath::NodeType type, NRPathcode code,
                                          NR::Point *ppos, NR::Point *pos, NR::Point *npos);
-static void sp_nodepath_node_destroy(Path::Node *node);
+static void sp_nodepath_node_destroy(Inkscape::NodePath::Node *node);
 
 /* Helpers */
 
-static Path::NodeSide *sp_node_get_side(Path::Node *node, gint which);
-static Path::NodeSide *sp_node_opposite_side(Path::Node *node, Path::NodeSide *me);
-static NRPathcode sp_node_path_code_from_side(Path::Node *node, Path::NodeSide *me);
+static Inkscape::NodePath::NodeSide *sp_node_get_side(Inkscape::NodePath::Node *node, gint which);
+static Inkscape::NodePath::NodeSide *sp_node_opposite_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me);
+static NRPathcode sp_node_path_code_from_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me);
 
 // active_node indicates mouseover node
-static Path::Node *active_node = NULL;
+static Inkscape::NodePath::Node *active_node = NULL;
 
 /**
 \brief Creates new nodepath from item 
 */
-Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
+Inkscape::NodePath::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 {
     Inkscape::XML::Node *repr = SP_OBJECT(item)->repr;
 
@@ -161,7 +161,7 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
     gchar *typestr = parse_nodetypes(nodetypes, length);
 
     //Create new nodepath
-    Path::Path *np = g_new(Path::Path, 1);
+    Inkscape::NodePath::Path *np = g_new(Inkscape::NodePath::Path, 1);
     if (!np)
         return NULL;
 
@@ -195,13 +195,13 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
     return np;
 }
 
-void sp_nodepath_destroy(Path::Path *np) {
+void sp_nodepath_destroy(Inkscape::NodePath::Path *np) {
 
     if (!np)  //soft fail, like delete
         return;
 
     while (np->subpaths) {
-        sp_nodepath_subpath_destroy((Path::SubPath *) np->subpaths->data);
+        sp_nodepath_subpath_destroy((Inkscape::NodePath::SubPath *) np->subpaths->data);
     }
 
     //Inform the context that made me, if any, that I am gone.
@@ -219,7 +219,7 @@ void sp_nodepath_destroy(Path::Path *np) {
 /**
  *  Return the node count of a given NodeSubPath
  */
-static gint sp_nodepath_subpath_get_node_count(Path::SubPath *subpath)
+static gint sp_nodepath_subpath_get_node_count(Inkscape::NodePath::SubPath *subpath)
 {
     if (!subpath)
         return 0;
@@ -230,13 +230,13 @@ static gint sp_nodepath_subpath_get_node_count(Path::SubPath *subpath)
 /**
  *  Return the node count of a given NodePath
  */
-static gint sp_nodepath_get_node_count(Path::Path *np)
+static gint sp_nodepath_get_node_count(Inkscape::NodePath::Path *np)
 {
     if (!np)
         return 0;
     gint nodeCount = 0;
     for (GList *item = np->subpaths ; item ; item=item->next) {
-        Path::SubPath *subpath = (Path::SubPath *)item->data;
+       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *)item->data;
         nodeCount += g_list_length(subpath->nodes);
     }
     return nodeCount;
@@ -247,13 +247,13 @@ static gint sp_nodepath_get_node_count(Path::Path *np)
  * Clean up a nodepath after editing.
  * Currently we are deleting trivial subpaths
  */
-static void sp_nodepath_cleanup(Path::Path *nodepath)
+static void sp_nodepath_cleanup(Inkscape::NodePath::Path *nodepath)
 {
     GList *badSubPaths = NULL;
 
     //Check all subpaths to be >=2 nodes
     for (GList *l = nodepath->subpaths; l ; l=l->next) {
-        Path::SubPath *sp = (Path::SubPath *)l->data;
+       Inkscape::NodePath::SubPath *sp = (Inkscape::NodePath::SubPath *)l->data;
         if (sp_nodepath_subpath_get_node_count(sp)<2)
             badSubPaths = g_list_append(badSubPaths, sp);
     }
@@ -261,7 +261,7 @@ static void sp_nodepath_cleanup(Path::Path *nodepath)
     //Delete them.  This second step is because sp_nodepath_subpath_destroy()
     //also removes the subpath from nodepath->subpaths
     for (GList *l = badSubPaths; l ; l=l->next) {
-        Path::SubPath *sp = (Path::SubPath *)l->data;
+       Inkscape::NodePath::SubPath *sp = (Inkscape::NodePath::SubPath *)l->data;
         sp_nodepath_subpath_destroy(sp);
     }
 
@@ -275,7 +275,7 @@ static void sp_nodepath_cleanup(Path::Path *nodepath)
  This may happen if repr was changed in e.g. XML editor or by undo. 
  UGLY HACK, think how we can eliminate it.
 */
-gboolean nodepath_repr_d_changed(Path::Path *np, char const *newd)
+gboolean nodepath_repr_d_changed(Inkscape::NodePath::Path *np, char const *newd)
 {
     g_assert(np);
 
@@ -303,7 +303,7 @@ gboolean nodepath_repr_d_changed(Path::Path *np, char const *newd)
 \brief Returns true if the argument nodepath and the sodipodi:nodetypes attribute in its repr do not match. 
  This may happen if repr was changed in e.g. XML editor or by undo.
 */
-gboolean nodepath_repr_typestr_changed(Path::Path *np, char const *newtypestr)
+gboolean nodepath_repr_typestr_changed(Inkscape::NodePath::Path *np, char const *newtypestr)
 {
     g_assert(np);
     gchar *typestr = create_typestr(np);
@@ -317,14 +317,14 @@ gboolean nodepath_repr_typestr_changed(Path::Path *np, char const *newtypestr)
     return ret;
 }
 
-static NArtBpath *subpath_from_bpath(Path::Path *np, NArtBpath *b, gchar const *t)
+static NArtBpath *subpath_from_bpath(Inkscape::NodePath::Path *np, NArtBpath *b, gchar const *t)
 // XXX: Fixme: t should be a proper type, rather than gchar
 {
     NR::Point ppos, pos, npos;
 
     g_assert((b->code == NR_MOVETO) || (b->code == NR_MOVETO_OPEN));
 
-    Path::SubPath *sp = sp_nodepath_subpath_new(np);
+   Inkscape::NodePath::SubPath *sp = sp_nodepath_subpath_new(np);
     bool const closed = (b->code == NR_MOVETO);
 
     pos = NR::Point(b->x3, b->y3) * np->i2d;
@@ -333,8 +333,8 @@ static NArtBpath *subpath_from_bpath(Path::Path *np, NArtBpath *b, gchar const *
     } else {
         npos = pos;
     }
-    Path::Node *n;
-    n = sp_nodepath_node_new(sp, NULL, (Path::NodeType) *t, NR_MOVETO, &pos, &pos, &npos);
+   Inkscape::NodePath::Node *n;
+    n = sp_nodepath_node_new(sp, NULL, (Inkscape::NodePath::NodeType) *t, NR_MOVETO, &pos, &pos, &npos);
     g_assert(sp->first == n);
     g_assert(sp->last  == n);
 
@@ -352,7 +352,7 @@ static NArtBpath *subpath_from_bpath(Path::Path *np, NArtBpath *b, gchar const *
         } else {
             npos = pos;
         }
-        n = sp_nodepath_node_new(sp, NULL, (Path::NodeType)*t, b->code, &ppos, &pos, &npos);
+        n = sp_nodepath_node_new(sp, NULL, (Inkscape::NodePath::NodeType)*t, b->code, &ppos, &pos, &npos);
         b++;
         t++;
     }
@@ -376,26 +376,26 @@ static gchar *parse_nodetypes(gchar const *types, gint length)
             if (types[i] != '\0') {
                 switch (types[i]) {
                     case 's':
-                        typestr[pos++] = Path::NODE_SMOOTH;
+                        typestr[pos++] =Inkscape::NodePath::NODE_SMOOTH;
                         break;
                     case 'z':
-                        typestr[pos++] = Path::NODE_SYMM;
+                        typestr[pos++] =Inkscape::NodePath::NODE_SYMM;
                         break;
                     case 'c':
                     default:
-                        typestr[pos++] = Path::NODE_CUSP;
+                        typestr[pos++] =Inkscape::NodePath::NODE_CUSP;
                         break;
                 }
             }
         }
     }
 
-    while (pos < length) typestr[pos++] = Path::NODE_CUSP;
+    while (pos < length) typestr[pos++] =Inkscape::NodePath::NODE_CUSP;
 
     return typestr;
 }
 
-static void update_object(Path::Path *np)
+static void update_object(Inkscape::NodePath::Path *np)
 {
     g_assert(np);
 
@@ -406,7 +406,7 @@ static void update_object(Path::Path *np)
     sp_curve_unref(curve);
 }
 
-static void update_repr_internal(Path::Path *np)
+static void update_repr_internal(Inkscape::NodePath::Path *np)
 {
     g_assert(np);
 
@@ -424,20 +424,20 @@ static void update_repr_internal(Path::Path *np)
     sp_curve_unref(curve);
 }
 
-static void update_repr(Path::Path *np)
+static void update_repr(Inkscape::NodePath::Path *np)
 {
     update_repr_internal(np);
     sp_document_done(SP_DT_DOCUMENT(np->desktop));
 }
 
-static void update_repr_keyed(Path::Path *np, gchar const *key)
+static void update_repr_keyed(Inkscape::NodePath::Path *np, gchar const *key)
 {
     update_repr_internal(np);
     sp_document_maybe_done(SP_DT_DOCUMENT(np->desktop), key);
 }
 
 
-static void stamp_repr(Path::Path *np)
+static void stamp_repr(Inkscape::NodePath::Path *np)
 {
     g_assert(np);
 
@@ -470,15 +470,15 @@ static void stamp_repr(Path::Path *np)
     sp_curve_unref(curve);
 }
 
-static SPCurve *create_curve(Path::Path *np)
+static SPCurve *create_curve(Inkscape::NodePath::Path *np)
 {
     SPCurve *curve = sp_curve_new();
 
     for (GList *spl = np->subpaths; spl != NULL; spl = spl->next) {
-        Path::SubPath *sp = (Path::SubPath *) spl->data;
+       Inkscape::NodePath::SubPath *sp = (Inkscape::NodePath::SubPath *) spl->data;
         sp_curve_moveto(curve,
                         sp->first->pos * np->d2i);
-        Path::Node *n = sp->first->n.other;
+       Inkscape::NodePath::Node *n = sp->first->n.other;
         while (n) {
             NR::Point const end_pt = n->pos * np->d2i;
             switch (n->code) {
@@ -509,14 +509,14 @@ static SPCurve *create_curve(Path::Path *np)
     return curve;
 }
 
-static gchar *create_typestr(Path::Path *np)
+static gchar *create_typestr(Inkscape::NodePath::Path *np)
 {
     gchar *typestr = g_new(gchar, 32);
     gint len = 32;
     gint pos = 0;
 
     for (GList *spl = np->subpaths; spl != NULL; spl = spl->next) {
-        Path::SubPath *sp = (Path::SubPath *) spl->data;
+       Inkscape::NodePath::SubPath *sp = (Inkscape::NodePath::SubPath *) spl->data;
 
         if (pos >= len) {
             typestr = g_renew(gchar, typestr, len + 32);
@@ -525,19 +525,19 @@ static gchar *create_typestr(Path::Path *np)
 
         typestr[pos++] = 'c';
 
-        Path::Node *n;
+       Inkscape::NodePath::Node *n;
         n = sp->first->n.other;
         while (n) {
             gchar code;
 
             switch (n->type) {
-                case Path::NODE_CUSP:
+                case Inkscape::NodePath::NODE_CUSP:
                     code = 'c';
                     break;
-                case Path::NODE_SMOOTH:
+                case Inkscape::NodePath::NODE_SMOOTH:
                     code = 's';
                     break;
-                case Path::NODE_SYMM:
+                case Inkscape::NodePath::NODE_SYMM:
                     code = 'z';
                     break;
                 default:
@@ -571,7 +571,7 @@ static gchar *create_typestr(Path::Path *np)
     return typestr;
 }
 
-static Path::Path *sp_nodepath_current()
+static Inkscape::NodePath::Path *sp_nodepath_current()
 {
     if (!SP_ACTIVE_DESKTOP) {
         return NULL;
@@ -592,21 +592,21 @@ static Path::Path *sp_nodepath_current()
  \brief Fills node and control positions for three nodes, splitting line
   marked by end at distance t
  */
-static void sp_nodepath_line_midpoint(Path::Node *new_path, Path::Node *end, gdouble t)
+static void sp_nodepath_line_midpoint(Inkscape::NodePath::Node *new_path,Inkscape::NodePath::Node *end, gdouble t)
 {
     g_assert(new_path != NULL);
     g_assert(end      != NULL);
 
     g_assert(end->p.other == new_path);
-    Path::Node *start = new_path->p.other;
+   Inkscape::NodePath::Node *start = new_path->p.other;
     g_assert(start);
 
     if (end->code == NR_LINETO) {
-        new_path->type = Path::NODE_CUSP;
+        new_path->type =Inkscape::NodePath::NODE_CUSP;
         new_path->code = NR_LINETO;
         new_path->pos  = (t * start->pos + (1 - t) * end->pos);
     } else {
-        new_path->type = Path::NODE_SMOOTH;
+        new_path->type =Inkscape::NodePath::NODE_SMOOTH;
         new_path->code = NR_CURVETO;
         gdouble s      = 1 - t;
         for (int dim = 0; dim < 2; dim++) {
@@ -629,17 +629,17 @@ static void sp_nodepath_line_midpoint(Path::Node *new_path, Path::Node *end, gdo
     }
 }
 
-static Path::Node *sp_nodepath_line_add_node(Path::Node *end, gdouble t)
+static Inkscape::NodePath::Node *sp_nodepath_line_add_node(Inkscape::NodePath::Node *end, gdouble t)
 {
     g_assert(end);
     g_assert(end->subpath);
     g_assert(g_list_find(end->subpath->nodes, end));
 
-    Path::Node *start = end->p.other;
+   Inkscape::NodePath::Node *start = end->p.other;
     g_assert( start->n.other == end );
-    Path::Node *newnode = sp_nodepath_node_new(end->subpath,
+   Inkscape::NodePath::Node *newnode = sp_nodepath_node_new(end->subpath,
                                                end,
-                                               Path::NODE_SMOOTH,
+                                              Inkscape::NodePath::NODE_SMOOTH,
                                                (NRPathcode)end->code,
                                                &start->pos, &start->pos, &start->n.pos);
     sp_nodepath_line_midpoint(newnode, end, t);
@@ -654,14 +654,14 @@ static Path::Node *sp_nodepath_line_add_node(Path::Node *end, gdouble t)
 /**
 \brief Break the path at the node: duplicate the argument node, start a new subpath with the duplicate, and copy all nodes after the argument node to it
 */
-static Path::Node *sp_nodepath_node_break(Path::Node *node)
+static Inkscape::NodePath::Node *sp_nodepath_node_break(Inkscape::NodePath::Node *node)
 {
     g_assert(node);
     g_assert(node->subpath);
     g_assert(g_list_find(node->subpath->nodes, node));
 
-    Path::SubPath *sp = node->subpath;
-    Path::Path *np    = sp->nodepath;
+   Inkscape::NodePath::SubPath *sp = node->subpath;
+    Inkscape::NodePath::Path *np    = sp->nodepath;
 
     if (sp->closed) {
         sp_nodepath_subpath_open(sp, node);
@@ -672,14 +672,14 @@ static Path::Node *sp_nodepath_node_break(Path::Node *node)
         if (node == sp->last ) return NULL;
 
         // create a new subpath
-        Path::SubPath *newsubpath = sp_nodepath_subpath_new(np);
+       Inkscape::NodePath::SubPath *newsubpath = sp_nodepath_subpath_new(np);
 
         // duplicate the break node as start of the new subpath
-        Path::Node *newnode = sp_nodepath_node_new(newsubpath, NULL, (Path::NodeType)node->type, NR_MOVETO, &node->pos, &node->pos, &node->n.pos);
+       Inkscape::NodePath::Node *newnode = sp_nodepath_node_new(newsubpath, NULL, (Inkscape::NodePath::NodeType)node->type, NR_MOVETO, &node->pos, &node->pos, &node->n.pos);
 
         while (node->n.other) { // copy the remaining nodes into the new subpath
-            Path::Node *n  = node->n.other;
-            Path::Node *nn = sp_nodepath_node_new(newsubpath, NULL, (Path::NodeType)n->type, (NRPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
+           Inkscape::NodePath::Node *n  = node->n.other;
+           Inkscape::NodePath::Node *nn = sp_nodepath_node_new(newsubpath, NULL, (Inkscape::NodePath::NodeType)n->type, (NRPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
             if (n->selected) {
                 sp_nodepath_node_select(nn, TRUE, TRUE); //preserve selection
             }
@@ -690,37 +690,36 @@ static Path::Node *sp_nodepath_node_break(Path::Node *node)
     }
 }
 
-static Path::Node *sp_nodepath_node_duplicate(Path::Node *node)
+static Inkscape::NodePath::Node *sp_nodepath_node_duplicate(Inkscape::NodePath::Node *node)
 {
     g_assert(node);
     g_assert(node->subpath);
     g_assert(g_list_find(node->subpath->nodes, node));
 
-    Path::SubPath *sp = node->subpath;
+   Inkscape::NodePath::SubPath *sp = node->subpath;
 
     NRPathcode code = (NRPathcode) node->code;
     if (code == NR_MOVETO) { // if node is the endnode,
         node->code = NR_LINETO; // new one is inserted before it, so change that to line
     }
 
-    Path::Node *newnode = sp_nodepath_node_new(sp, node, (Path::NodeType)node->type, code,
-                                               &node->p.pos, &node->pos, &node->n.pos);
+    Inkscape::NodePath::Node *newnode = sp_nodepath_node_new(sp, node, (Inkscape::NodePath::NodeType)node->type, code, &node->p.pos, &node->pos, &node->n.pos);
 
     return newnode;
 }
 
-static void sp_node_control_mirror_n_to_p(Path::Node *node)
+static void sp_node_control_mirror_n_to_p(Inkscape::NodePath::Node *node)
 {
     node->p.pos = (node->pos + (node->pos - node->n.pos));
 }
 
-static void sp_node_control_mirror_p_to_n(Path::Node *node)
+static void sp_node_control_mirror_p_to_n(Inkscape::NodePath::Node *node)
 {
     node->n.pos = (node->pos + (node->pos - node->p.pos));
 }
 
 
-static void sp_nodepath_set_line_type(Path::Node *end, NRPathcode code)
+static void sp_nodepath_set_line_type(Inkscape::NodePath::Node *end, NRPathcode code)
 {
     g_assert(end);
     g_assert(end->subpath);
@@ -729,14 +728,14 @@ static void sp_nodepath_set_line_type(Path::Node *end, NRPathcode code)
     if (end->code == static_cast< guint > ( code ) )
         return;
 
-    Path::Node *start = end->p.other;
+   Inkscape::NodePath::Node *start = end->p.other;
 
     end->code = code;
 
     if (code == NR_LINETO) {
-        if (start->code == NR_LINETO) start->type = Path::NODE_CUSP;
+        if (start->code == NR_LINETO) start->type =Inkscape::NodePath::NODE_CUSP;
         if (end->n.other) {
-            if (end->n.other->code == NR_LINETO) end->type = Path::NODE_CUSP;
+            if (end->n.other->code == NR_LINETO) end->type =Inkscape::NodePath::NODE_CUSP;
         }
         sp_node_adjust_knot(start, -1);
         sp_node_adjust_knot(end, 1);
@@ -753,23 +752,23 @@ static void sp_nodepath_set_line_type(Path::Node *end, NRPathcode code)
 }
 
 
-static Path::Node *sp_nodepath_set_node_type(Path::Node *node, Path::NodeType type)
+static Inkscape::NodePath::Node *sp_nodepath_set_node_type(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeType type)
 {
     g_assert(node);
     g_assert(node->subpath);
 
-    if (type == static_cast< Path::NodeType>(static_cast< guint >(node->type) ) )
+    if (type == static_cast<Inkscape::NodePath::NodeType>(static_cast< guint >(node->type) ) )
         return node;
 
     if ((node->p.other != NULL) && (node->n.other != NULL)) {
         if ((node->code == NR_LINETO) && (node->n.other->code == NR_LINETO)) {
-            type = Path::NODE_CUSP;
+            type =Inkscape::NodePath::NODE_CUSP;
         }
     }
 
     node->type = type;
 
-    if (node->type == Path::NODE_CUSP) {
+    if (node->type == Inkscape::NodePath::NODE_CUSP) {
         g_object_set(G_OBJECT(node->knot), "shape", SP_KNOT_SHAPE_DIAMOND, "size", 9, NULL);
     } else {
         g_object_set(G_OBJECT(node->knot), "shape", SP_KNOT_SHAPE_SQUARE, "size", 7, NULL);
@@ -785,9 +784,9 @@ static Path::Node *sp_nodepath_set_node_type(Path::Node *node, Path::NodeType ty
 /**
 Same as set_node_type, but also converts, if necessary, adjacent segments from lines to curves
 */
-void sp_nodepath_convert_node_type (Path::Node *node, Path::NodeType type)
+void sp_nodepath_convert_node_type(Inkscape::NodePath::Node *node, Inkscape::NodePath::NodeType type)
 {
-    if (type == Path::NODE_SYMM || type == Path::NODE_SMOOTH) {
+    if (type == Inkscape::NodePath::NODE_SYMM || type == Inkscape::NodePath::NODE_SMOOTH) {
         if ((node->p.other != NULL) && (node->code == NR_LINETO || node->pos == node->p.pos)) {
             // convert adjacent segment BEFORE to curve
             node->code = NR_CURVETO;
@@ -817,7 +816,7 @@ void sp_nodepath_convert_node_type (Path::Node *node, Path::NodeType type)
 }
 
 
-void sp_node_moveto(Path::Node *node, NR::Point p)
+void sp_node_moveto(Inkscape::NodePath::Node *node, NR::Point p)
 {
     NR::Point delta = p - node->pos;
     node->pos = p;
@@ -841,7 +840,7 @@ void sp_node_moveto(Path::Node *node, NR::Point p)
     sp_node_ensure_ctrls(node);
 }
 
-static void sp_nodepath_selected_nodes_move(Path::Path *nodepath, NR::Coord dx, NR::Coord dy,
+static void sp_nodepath_selected_nodes_move(Inkscape::NodePath::Path *nodepath, NR::Coord dx, NR::Coord dy,
                                             bool const snap = true)
 {
     NR::Coord best[2] = { NR_HUGE, NR_HUGE };
@@ -850,7 +849,7 @@ static void sp_nodepath_selected_nodes_move(Path::Path *nodepath, NR::Coord dx, 
 
     if (snap) {
         for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-            Path::Node *n = (Path::Node *) l->data;
+           Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
             NR::Point p = n->pos + delta;
             for (int dim = 0; dim < 2; dim++) {
                 NR::Coord dist = namedview_dim_snap(nodepath->desktop->namedview,
@@ -865,7 +864,7 @@ static void sp_nodepath_selected_nodes_move(Path::Path *nodepath, NR::Coord dx, 
     }
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *n = (Path::Node *) l->data;
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
         sp_node_moveto(n, n->pos + best_pt);
     }
 
@@ -875,7 +874,7 @@ static void sp_nodepath_selected_nodes_move(Path::Path *nodepath, NR::Coord dx, 
 void
 sp_node_selected_move(gdouble dx, gdouble dy)
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return;
 
     sp_nodepath_selected_nodes_move(nodepath, dx, dy, false);
@@ -901,7 +900,7 @@ sp_node_selected_move_screen(gdouble dx, gdouble dy)
     gdouble zdx = dx / zoom;
     gdouble zdy = dy / zoom;
 
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return;
 
     sp_nodepath_selected_nodes_move(nodepath, zdx, zdy, false);
@@ -915,11 +914,11 @@ sp_node_selected_move_screen(gdouble dx, gdouble dy)
     }
 }
 
-static void sp_node_ensure_knot(Path::Node *node, gint which, gboolean show_knot)
+static void sp_node_ensure_knot(Inkscape::NodePath::Node *node, gint which, gboolean show_knot)
 {
     g_assert(node != NULL);
 
-    Path::NodeSide *side = sp_node_get_side(node, which);
+   Inkscape::NodePath::NodeSide *side = sp_node_get_side(node, which);
     NRPathcode code = sp_node_path_code_from_side(node, side);
 
     show_knot = show_knot && (code == NR_CURVETO);
@@ -940,7 +939,7 @@ static void sp_node_ensure_knot(Path::Node *node, gint which, gboolean show_knot
     }
 }
 
-static void sp_node_ensure_ctrls(Path::Node *node)
+static void sp_node_ensure_ctrls(Inkscape::NodePath::Node *node)
 {
     g_assert(node != NULL);
 
@@ -962,31 +961,31 @@ static void sp_node_ensure_ctrls(Path::Node *node)
     sp_node_ensure_knot(node, 1, show_knots);
 }
 
-static void sp_nodepath_subpath_ensure_ctrls(Path::SubPath *subpath)
+static void sp_nodepath_subpath_ensure_ctrls(Inkscape::NodePath::SubPath *subpath)
 {
     g_assert(subpath != NULL);
 
     for (GList *l = subpath->nodes; l != NULL; l = l->next) {
-        sp_node_ensure_ctrls((Path::Node *) l->data);
+        sp_node_ensure_ctrls((Inkscape::NodePath::Node *) l->data);
     }
 }
 
-static void sp_nodepath_ensure_ctrls(Path::Path *nodepath)
+static void sp_nodepath_ensure_ctrls(Inkscape::NodePath::Path *nodepath)
 {
     g_assert(nodepath != NULL);
 
     for (GList *l = nodepath->subpaths; l != NULL; l = l->next) {
-        sp_nodepath_subpath_ensure_ctrls((Path::SubPath *) l->data);
+        sp_nodepath_subpath_ensure_ctrls((Inkscape::NodePath::SubPath *) l->data);
     }
 }
 
-void Path::Path::selection(std::list<Node *> &l)
+void Inkscape::NodePath::Path::selection(std::list<Node *> &l)
 {
     StlConv<Node *>::list(l, selected);
 //TODO : this adds a copying, rework when the selection becomes a stl list
 }
 
-void sp_nodepath_selected_align(Path::Path *nodepath, NR::Dim2 axis)
+void sp_nodepath_selected_align(Inkscape::NodePath::Path *nodepath, NR::Dim2 axis)
 {
     if ( !nodepath || !nodepath->selected ) { // no nodepath, or no nodes selected
         return;
@@ -995,10 +994,10 @@ void sp_nodepath_selected_align(Path::Path *nodepath, NR::Dim2 axis)
     if ( !nodepath->selected->next ) { // only one node selected
         return;
     }
-    Path::Node *pNode = reinterpret_cast<Path::Node *>(nodepath->selected->data);
+   Inkscape::NodePath::Node *pNode = reinterpret_cast<Inkscape::NodePath::Node *>(nodepath->selected->data);
     NR::Point dest(pNode->pos);
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        pNode = reinterpret_cast<Path::Node *>(l->data);
+        pNode = reinterpret_cast<Inkscape::NodePath::Node *>(l->data);
         if (pNode) {
             dest[axis] = pNode->pos[axis];
             sp_node_moveto(pNode, dest);
@@ -1013,10 +1012,10 @@ void sp_nodepath_selected_align(Path::Path *nodepath, NR::Dim2 axis)
 
 struct NodeSort
 {
-    Path::Node *_node;
+   Inkscape::NodePath::Node *_node;
     NR::Coord _coord;
     //TODO : use vectorof pointers instead of calling copy ctor
-    NodeSort(Path::Node *node, NR::Dim2 axis) :
+    NodeSort(Inkscape::NodePath::Node *node, NR::Dim2 axis) :
         _node(node), _coord(node->pos[axis])
     {}
 
@@ -1027,7 +1026,7 @@ static bool operator<(NodeSort const &a, NodeSort const &b)
     return (a._coord < b._coord);
 }
 
-void sp_nodepath_selected_distribute(Path::Path *nodepath, NR::Dim2 axis)
+void sp_nodepath_selected_distribute(Inkscape::NodePath::Path *nodepath, NR::Dim2 axis)
 {
     if ( !nodepath || !nodepath->selected ) { // no nodepath, or no nodes selected
         return;
@@ -1037,10 +1036,10 @@ void sp_nodepath_selected_distribute(Path::Path *nodepath, NR::Dim2 axis)
         return;
     }
 
-    Path::Node *pNode = reinterpret_cast<Path::Node *>(nodepath->selected->data);
+   Inkscape::NodePath::Node *pNode = reinterpret_cast<Inkscape::NodePath::Node *>(nodepath->selected->data);
     std::vector<NodeSort> sorted;
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        pNode = reinterpret_cast<Path::Node *>(l->data);
+        pNode = reinterpret_cast<Inkscape::NodePath::Node *>(l->data);
         if (pNode) {
             NodeSort n(pNode, axis);
             sorted.push_back(n);
@@ -1078,7 +1077,7 @@ void sp_nodepath_selected_distribute(Path::Path *nodepath, NR::Dim2 axis)
 void
 sp_node_selected_add_node(void)
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) {
         return;
     }
@@ -1086,7 +1085,7 @@ sp_node_selected_add_node(void)
     GList *nl = NULL;
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *t = (Path::Node *) l->data;
+       Inkscape::NodePath::Node *t = (Inkscape::NodePath::Node *) l->data;
         g_assert(t->selected);
         if (t->p.other && t->p.other->selected) {
             nl = g_list_prepend(nl, t);
@@ -1094,8 +1093,8 @@ sp_node_selected_add_node(void)
     }
 
     while (nl) {
-        Path::Node *t = (Path::Node *) nl->data;
-        Path::Node *n = sp_nodepath_line_add_node(t, 0.5);
+       Inkscape::NodePath::Node *t = (Inkscape::NodePath::Node *) nl->data;
+       Inkscape::NodePath::Node *n = sp_nodepath_line_add_node(t, 0.5);
         sp_nodepath_node_select(n, TRUE, FALSE);
         nl = g_list_remove(nl, t);
     }
@@ -1112,13 +1111,13 @@ sp_node_selected_add_node(void)
 
 void sp_node_selected_break()
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return;
 
     GList *temp = NULL;
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *n = (Path::Node *) l->data;
-        Path::Node *nn = sp_nodepath_node_break(n);
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+       Inkscape::NodePath::Node *nn = sp_nodepath_node_break(n);
         if (nn == NULL) continue; // no break, no new node
         temp = g_list_prepend(temp, nn);
     }
@@ -1127,7 +1126,7 @@ void sp_node_selected_break()
         sp_nodepath_deselect(nodepath);
     }
     for (GList *l = temp; l != NULL; l = l->next) {
-        sp_nodepath_node_select((Path::Node *) l->data, TRUE, TRUE);
+        sp_nodepath_node_select((Inkscape::NodePath::Node *) l->data, TRUE, TRUE);
     }
 
     sp_nodepath_ensure_ctrls(nodepath);
@@ -1142,15 +1141,15 @@ void sp_node_selected_break()
 */
 void sp_node_selected_duplicate()
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) {
         return;
     }
 
     GList *temp = NULL;
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *n = (Path::Node *) l->data;
-        Path::Node *nn = sp_nodepath_node_duplicate(n);
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+       Inkscape::NodePath::Node *nn = sp_nodepath_node_duplicate(n);
         if (nn == NULL) continue; // could not duplicate
         temp = g_list_prepend(temp, nn);
     }
@@ -1159,7 +1158,7 @@ void sp_node_selected_duplicate()
         sp_nodepath_deselect(nodepath);
     }
     for (GList *l = temp; l != NULL; l = l->next) {
-        sp_nodepath_node_select((Path::Node *) l->data, TRUE, TRUE);
+        sp_nodepath_node_select((Inkscape::NodePath::Node *) l->data, TRUE, TRUE);
     }
 
     sp_nodepath_ensure_ctrls(nodepath);
@@ -1171,7 +1170,7 @@ void sp_node_selected_duplicate()
 
 void sp_node_selected_join()
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
     if (g_list_length(nodepath->selected) != 2) {
@@ -1179,8 +1178,8 @@ void sp_node_selected_join()
         return;
     }
 
-    Path::Node *a = (Path::Node *) nodepath->selected->data;
-    Path::Node *b = (Path::Node *) nodepath->selected->next->data;
+   Inkscape::NodePath::Node *a = (Inkscape::NodePath::Node *) nodepath->selected->data;
+   Inkscape::NodePath::Node *b = (Inkscape::NodePath::Node *) nodepath->selected->next->data;
 
     g_assert(a != b);
     g_assert(a->p.other || a->n.other);
@@ -1196,7 +1195,7 @@ void sp_node_selected_join()
     NR::Point c = (a->pos + b->pos) / 2;
 
     if (a->subpath == b->subpath) {
-        Path::SubPath *sp = a->subpath;
+       Inkscape::NodePath::SubPath *sp = a->subpath;
         sp_nodepath_subpath_close(sp);
 
         sp_nodepath_ensure_ctrls(sp->nodepath);
@@ -1207,20 +1206,20 @@ void sp_node_selected_join()
     }
 
     /* a and b are separate subpaths */
-    Path::SubPath *sa = a->subpath;
-    Path::SubPath *sb = b->subpath;
+   Inkscape::NodePath::SubPath *sa = a->subpath;
+   Inkscape::NodePath::SubPath *sb = b->subpath;
     NR::Point p;
-    Path::Node *n;
+   Inkscape::NodePath::Node *n;
     NRPathcode code;
     if (a == sa->first) {
         p = sa->first->n.pos;
         code = (NRPathcode)sa->first->n.other->code;
-        Path::SubPath *t = sp_nodepath_subpath_new(sa->nodepath);
+       Inkscape::NodePath::SubPath *t = sp_nodepath_subpath_new(sa->nodepath);
         n = sa->last;
-        sp_nodepath_node_new(t, NULL, Path::NODE_CUSP, NR_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
+        sp_nodepath_node_new(t, NULL,Inkscape::NodePath::NODE_CUSP, NR_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
         n = n->p.other;
         while (n) {
-            sp_nodepath_node_new(t, NULL, (Path::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
+            sp_nodepath_node_new(t, NULL, (Inkscape::NodePath::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
             n = n->p.other;
             if (n == sa->first) n = NULL;
         }
@@ -1236,14 +1235,14 @@ void sp_node_selected_join()
     }
 
     if (b == sb->first) {
-        sp_nodepath_node_new(sa, NULL, Path::NODE_CUSP, code, &p, &c, &sb->first->n.pos);
+        sp_nodepath_node_new(sa, NULL,Inkscape::NodePath::NODE_CUSP, code, &p, &c, &sb->first->n.pos);
         for (n = sb->first->n.other; n != NULL; n = n->n.other) {
-            sp_nodepath_node_new(sa, NULL, (Path::NodeType)n->type, (NRPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
+            sp_nodepath_node_new(sa, NULL, (Inkscape::NodePath::NodeType)n->type, (NRPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
         }
     } else if (b == sb->last) {
-        sp_nodepath_node_new(sa, NULL, Path::NODE_CUSP, code, &p, &c, &sb->last->p.pos);
+        sp_nodepath_node_new(sa, NULL,Inkscape::NodePath::NODE_CUSP, code, &p, &c, &sb->last->p.pos);
         for (n = sb->last->p.other; n != NULL; n = n->p.other) {
-            sp_nodepath_node_new(sa, NULL, (Path::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
+            sp_nodepath_node_new(sa, NULL, (Inkscape::NodePath::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
         }
     } else {
         g_assert_not_reached();
@@ -1263,7 +1262,7 @@ void sp_node_selected_join()
 
 void sp_node_selected_join_segment()
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
     if (g_list_length(nodepath->selected) != 2) {
@@ -1271,8 +1270,8 @@ void sp_node_selected_join_segment()
         return;
     }
 
-    Path::Node *a = (Path::Node *) nodepath->selected->data;
-    Path::Node *b = (Path::Node *) nodepath->selected->next->data;
+   Inkscape::NodePath::Node *a = (Inkscape::NodePath::Node *) nodepath->selected->data;
+   Inkscape::NodePath::Node *b = (Inkscape::NodePath::Node *) nodepath->selected->next->data;
 
     g_assert(a != b);
     g_assert(a->p.other || a->n.other);
@@ -1284,7 +1283,7 @@ void sp_node_selected_join_segment()
     }
 
     if (a->subpath == b->subpath) {
-        Path::SubPath *sp = a->subpath;
+       Inkscape::NodePath::SubPath *sp = a->subpath;
 
         /*similar to sp_nodepath_subpath_close(sp), without the node destruction*/
         sp->closed = TRUE;
@@ -1306,19 +1305,19 @@ void sp_node_selected_join_segment()
     }
 
     /* a and b are separate subpaths */
-    Path::SubPath *sa = a->subpath;
-    Path::SubPath *sb = b->subpath;
+   Inkscape::NodePath::SubPath *sa = a->subpath;
+   Inkscape::NodePath::SubPath *sb = b->subpath;
 
-    Path::Node *n;
+   Inkscape::NodePath::Node *n;
     NR::Point p;
     NRPathcode code;
     if (a == sa->first) {
         code = (NRPathcode) sa->first->n.other->code;
-        Path::SubPath *t = sp_nodepath_subpath_new(sa->nodepath);
+       Inkscape::NodePath::SubPath *t = sp_nodepath_subpath_new(sa->nodepath);
         n = sa->last;
-        sp_nodepath_node_new(t, NULL, Path::NODE_CUSP, NR_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
+        sp_nodepath_node_new(t, NULL,Inkscape::NodePath::NODE_CUSP, NR_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
         for (n = n->p.other; n != NULL; n = n->p.other) {
-            sp_nodepath_node_new(t, NULL, (Path::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
+            sp_nodepath_node_new(t, NULL, (Inkscape::NodePath::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
         }
         sp_nodepath_subpath_destroy(sa);
         sa = t;
@@ -1332,18 +1331,18 @@ void sp_node_selected_join_segment()
     if (b == sb->first) {
         n = sb->first;
         sp_node_control_mirror_p_to_n(sa->last);
-        sp_nodepath_node_new(sa, NULL, Path::NODE_CUSP, code, &n->p.pos, &n->pos, &n->n.pos);
+        sp_nodepath_node_new(sa, NULL,Inkscape::NodePath::NODE_CUSP, code, &n->p.pos, &n->pos, &n->n.pos);
         sp_node_control_mirror_n_to_p(sa->last);
         for (n = n->n.other; n != NULL; n = n->n.other) {
-            sp_nodepath_node_new(sa, NULL, (Path::NodeType)n->type, (NRPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
+            sp_nodepath_node_new(sa, NULL, (Inkscape::NodePath::NodeType)n->type, (NRPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
         }
     } else if (b == sb->last) {
         n = sb->last;
         sp_node_control_mirror_p_to_n(sa->last);
-        sp_nodepath_node_new(sa, NULL, Path::NODE_CUSP, code, &p, &n->pos, &n->p.pos);
+        sp_nodepath_node_new(sa, NULL,Inkscape::NodePath::NODE_CUSP, code, &p, &n->pos, &n->p.pos);
         sp_node_control_mirror_n_to_p(sa->last);
         for (n = n->p.other; n != NULL; n = n->p.other) {
-            sp_nodepath_node_new(sa, NULL, (Path::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
+            sp_nodepath_node_new(sa, NULL, (Inkscape::NodePath::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
         }
     } else {
         g_assert_not_reached();
@@ -1359,13 +1358,13 @@ void sp_node_selected_join_segment()
 
 void sp_node_selected_delete()
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return;
     if (!nodepath->selected) return;
 
     /* fixme: do it the right way */
     while (nodepath->selected) {
-        Path::Node *node = (Path::Node *) nodepath->selected->data;
+       Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nodepath->selected->data;
         sp_nodepath_node_destroy(node);
     }
 
@@ -1396,10 +1395,10 @@ void sp_node_selected_delete()
 void
 sp_node_selected_delete_segment(void)
 {
-    Path::Node *start, *end;     //Start , end nodes.  not inclusive
-    Path::Node *curr, *next;     //Iterators
+   Inkscape::NodePath::Node *start, *end;     //Start , end nodes.  not inclusive
+   Inkscape::NodePath::Node *curr, *next;     //Iterators
 
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
     if (g_list_length(nodepath->selected) != 2) {
@@ -1409,8 +1408,8 @@ sp_node_selected_delete_segment(void)
     }
 
     //Selected nodes, not inclusive
-    Path::Node *a = (Path::Node *) nodepath->selected->data;
-    Path::Node *b = (Path::Node *) nodepath->selected->next->data;
+   Inkscape::NodePath::Node *a = (Inkscape::NodePath::Node *) nodepath->selected->data;
+   Inkscape::NodePath::Node *b = (Inkscape::NodePath::Node *) nodepath->selected->next->data;
 
     if ( ( a==b)                       ||  //same node
          (a->subpath  != b->subpath )  ||  //not the same path
@@ -1468,13 +1467,13 @@ sp_node_selected_delete_segment(void)
 
 
         //Copy everything from 'end' to 'start' to a new subpath
-        Path::SubPath *t = sp_nodepath_subpath_new(nodepath);
+       Inkscape::NodePath::SubPath *t = sp_nodepath_subpath_new(nodepath);
         for (curr=end ; curr ; curr=curr->n.other) {
             NRPathcode code = (NRPathcode) curr->code;
             if (curr == end)
                 code = NR_MOVETO;
             sp_nodepath_node_new(t, NULL,
-                                 (Path::NodeType)curr->type, code,
+                                 (Inkscape::NodePath::NodeType)curr->type, code,
                                  &curr->p.pos, &curr->pos, &curr->n.pos);
             if (curr == start)
                 break;
@@ -1521,9 +1520,9 @@ sp_node_selected_delete_segment(void)
 
 
         //Copy everything after 'end' to a new subpath
-        Path::SubPath *t = sp_nodepath_subpath_new(nodepath);
+       Inkscape::NodePath::SubPath *t = sp_nodepath_subpath_new(nodepath);
         for (curr=end ; curr ; curr=curr->n.other) {
-            sp_nodepath_node_new(t, NULL, (Path::NodeType)curr->type, (NRPathcode)curr->code,
+            sp_nodepath_node_new(t, NULL, (Inkscape::NodePath::NodeType)curr->type, (NRPathcode)curr->code,
                                  &curr->p.pos, &curr->pos, &curr->n.pos);
         }
 
@@ -1560,11 +1559,11 @@ sp_node_selected_delete_segment(void)
 void
 sp_node_selected_set_line_type(NRPathcode code)
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (nodepath == NULL) return;
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *n = (Path::Node *) l->data;
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
         g_assert(n->selected);
         if (n->p.other && n->p.other->selected) {
             sp_nodepath_set_line_type(n, code);
@@ -1575,19 +1574,19 @@ sp_node_selected_set_line_type(NRPathcode code)
 }
 
 void
-sp_node_selected_set_type(Path::NodeType type)
+sp_node_selected_set_type(Inkscape::NodePath::NodeType type)
 {
-    Path::Path *nodepath = sp_nodepath_current();
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (nodepath == NULL) return;
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        sp_nodepath_convert_node_type((Path::Node *) l->data, type);
+        sp_nodepath_convert_node_type((Inkscape::NodePath::Node *) l->data, type);
     }
 
     update_repr(nodepath);
 }
 
-static void sp_node_set_selected(Path::Node *node, gboolean selected)
+static void sp_node_set_selected(Inkscape::NodePath::Node *node, gboolean selected)
 {
     node->selected = selected;
 
@@ -1618,9 +1617,9 @@ static void sp_node_set_selected(Path::Node *node, gboolean selected)
 \param incremental   if true, add to selection, otherwise deselect others
 \param override   if true, always select this node, otherwise toggle selected status
 */
-static void sp_nodepath_node_select(Path::Node *node, gboolean incremental, gboolean override)
+static void sp_nodepath_node_select(Inkscape::NodePath::Node *node, gboolean incremental, gboolean override)
 {
-    Path::Path *nodepath = node->subpath->nodepath;
+    Inkscape::NodePath::Path *nodepath = node->subpath->nodepath;
 
     if (incremental) {
         if (override) {
@@ -1652,12 +1651,12 @@ static void sp_nodepath_node_select(Path::Node *node, gboolean incremental, gboo
 \brief deselect all nodes in the nodepath
 */
 void
-sp_nodepath_deselect(Path::Path *nodepath)
+sp_nodepath_deselect(Inkscape::NodePath::Path *nodepath)
 {
     if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
     while (nodepath->selected) {
-        sp_node_set_selected((Path::Node *) nodepath->selected->data, FALSE);
+        sp_node_set_selected((Inkscape::NodePath::Node *) nodepath->selected->data, FALSE);
         nodepath->selected = g_list_remove(nodepath->selected, nodepath->selected->data);
     }
     sp_nodepath_update_statusbar(nodepath);
@@ -1667,14 +1666,14 @@ sp_nodepath_deselect(Path::Path *nodepath)
 \brief select all nodes in the nodepath
 */
 void
-sp_nodepath_select_all(Path::Path *nodepath)
+sp_nodepath_select_all(Inkscape::NodePath::Path *nodepath)
 {
     if (!nodepath) return;
 
     for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-        Path::SubPath *subpath = (Path::SubPath *) spl->data;
+       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
         for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
-            Path::Node *node = (Path::Node *) nl->data;
+           Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
             sp_nodepath_node_select(node, TRUE, TRUE);
         }
     }
@@ -1683,22 +1682,22 @@ sp_nodepath_select_all(Path::Path *nodepath)
 /**
 \brief select the node after the last selected; if none is selected, select the first within path
 */
-void sp_nodepath_select_next(Path::Path *nodepath)
+void sp_nodepath_select_next(Inkscape::NodePath::Path *nodepath)
 {
     if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
-    Path::Node *last = NULL;
+   Inkscape::NodePath::Node *last = NULL;
     if (nodepath->selected) {
         for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-            Path::SubPath *subpath, *subpath_next;
-            subpath = (Path::SubPath *) spl->data;
+           Inkscape::NodePath::SubPath *subpath, *subpath_next;
+            subpath = (Inkscape::NodePath::SubPath *) spl->data;
             for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
-                Path::Node *node = (Path::Node *) nl->data;
+               Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
                 if (node->selected) {
-                    if (node->n.other == (Path::Node *) subpath->last) {
-                        if (node->n.other == (Path::Node *) subpath->first) { // closed subpath
+                    if (node->n.other == (Inkscape::NodePath::Node *) subpath->last) {
+                        if (node->n.other == (Inkscape::NodePath::Node *) subpath->first) { // closed subpath
                             if (spl->next) { // there's a next subpath
-                                subpath_next = (Path::SubPath *) spl->next->data;
+                                subpath_next = (Inkscape::NodePath::SubPath *) spl->next->data;
                                 last = subpath_next->first;
                             } else if (spl->prev) { // there's a previous subpath
                                 last = NULL; // to be set later to the first node of first subpath
@@ -1713,12 +1712,12 @@ void sp_nodepath_select_next(Path::Path *nodepath)
                             last = node->n.other;
                         } else {
                             if (spl->next) { // there's a next subpath
-                                subpath_next = (Path::SubPath *) spl->next->data;
+                                subpath_next = (Inkscape::NodePath::SubPath *) spl->next->data;
                                 last = subpath_next->first;
                             } else if (spl->prev) { // there's a previous subpath
                                 last = NULL; // to be set later to the first node of first subpath
                             } else {
-                                last = (Path::Node *) subpath->first;
+                                last = (Inkscape::NodePath::Node *) subpath->first;
                             }
                         }
                     }
@@ -1729,31 +1728,31 @@ void sp_nodepath_select_next(Path::Path *nodepath)
     }
 
     if (last) { // there's at least one more node after selected
-        sp_nodepath_node_select((Path::Node *) last, TRUE, TRUE);
+        sp_nodepath_node_select((Inkscape::NodePath::Node *) last, TRUE, TRUE);
     } else { // no more nodes, select the first one in first subpath
-        Path::SubPath *subpath = (Path::SubPath *) nodepath->subpaths->data;
-        sp_nodepath_node_select((Path::Node *) subpath->first, TRUE, TRUE);
+       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) nodepath->subpaths->data;
+        sp_nodepath_node_select((Inkscape::NodePath::Node *) subpath->first, TRUE, TRUE);
     }
 }
 
 /**
 \brief select the node before the first selected; if none is selected, select the last within path
 */
-void sp_nodepath_select_prev(Path::Path *nodepath)
+void sp_nodepath_select_prev(Inkscape::NodePath::Path *nodepath)
 {
     if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
-    Path::Node *last = NULL;
+   Inkscape::NodePath::Node *last = NULL;
     if (nodepath->selected) {
         for (GList *spl = g_list_last(nodepath->subpaths); spl != NULL; spl = spl->prev) {
-            Path::SubPath *subpath = (Path::SubPath *) spl->data;
+           Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
             for (GList *nl = g_list_last(subpath->nodes); nl != NULL; nl = nl->prev) {
-                Path::Node *node = (Path::Node *) nl->data;
+               Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
                 if (node->selected) {
-                    if (node->p.other == (Path::Node *) subpath->first) {
-                        if (node->p.other == (Path::Node *) subpath->last) { // closed subpath
+                    if (node->p.other == (Inkscape::NodePath::Node *) subpath->first) {
+                        if (node->p.other == (Inkscape::NodePath::Node *) subpath->last) { // closed subpath
                             if (spl->prev) { // there's a prev subpath
-                                Path::SubPath *subpath_prev = (Path::SubPath *) spl->prev->data;
+                               Inkscape::NodePath::SubPath *subpath_prev = (Inkscape::NodePath::SubPath *) spl->prev->data;
                                 last = subpath_prev->last;
                             } else if (spl->next) { // there's a next subpath
                                 last = NULL; // to be set later to the last node of last subpath
@@ -1768,12 +1767,12 @@ void sp_nodepath_select_prev(Path::Path *nodepath)
                             last = node->p.other;
                         } else {
                             if (spl->prev) { // there's a prev subpath
-                                Path::SubPath *subpath_prev = (Path::SubPath *) spl->prev->data;
+                               Inkscape::NodePath::SubPath *subpath_prev = (Inkscape::NodePath::SubPath *) spl->prev->data;
                                 last = subpath_prev->last;
                             } else if (spl->next) { // there's a next subpath
                                 last = NULL; // to be set later to the last node of last subpath
                             } else {
-                                last = (Path::Node *) subpath->last;
+                                last = (Inkscape::NodePath::Node *) subpath->last;
                             }
                         }
                     }
@@ -1784,27 +1783,27 @@ void sp_nodepath_select_prev(Path::Path *nodepath)
     }
 
     if (last) { // there's at least one more node before selected
-        sp_nodepath_node_select((Path::Node *) last, TRUE, TRUE);
+        sp_nodepath_node_select((Inkscape::NodePath::Node *) last, TRUE, TRUE);
     } else { // no more nodes, select the last one in last subpath
         GList *spl = g_list_last(nodepath->subpaths);
-        Path::SubPath *subpath = (Path::SubPath *) spl->data;
-        sp_nodepath_node_select((Path::Node *) subpath->last, TRUE, TRUE);
+       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
+        sp_nodepath_node_select((Inkscape::NodePath::Node *) subpath->last, TRUE, TRUE);
     }
 }
 
 /**
 \brief select all nodes that are within the rectangle
 */
-void sp_nodepath_select_rect(Path::Path *nodepath, NRRect *b, gboolean incremental)
+void sp_nodepath_select_rect(Inkscape::NodePath::Path *nodepath, NRRect *b, gboolean incremental)
 {
     if (!incremental) {
         sp_nodepath_deselect(nodepath);
     }
 
     for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-        Path::SubPath *subpath = (Path::SubPath *) spl->data;
+       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
         for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
-            Path::Node *node = (Path::Node *) nl->data;
+           Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
 
             NR::Point p = node->pos;
 
@@ -1818,7 +1817,7 @@ void sp_nodepath_select_rect(Path::Path *nodepath, NRRect *b, gboolean increment
 /**
 \brief  Saves selected nodes in a nodepath into a list containing integer positions of all selected nodes
 */
-GList *save_nodepath_selection(Path::Path *nodepath)
+GList *save_nodepath_selection(Inkscape::NodePath::Path *nodepath)
 {
     if (!nodepath->selected) {
         return NULL;
@@ -1827,9 +1826,9 @@ GList *save_nodepath_selection(Path::Path *nodepath)
     GList *r = NULL;
     guint i = 0;
     for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-        Path::SubPath *subpath = (Path::SubPath *) spl->data;
+       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
         for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
-            Path::Node *node = (Path::Node *) nl->data;
+           Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
             i++;
             if (node->selected) {
                 r = g_list_append(r, GINT_TO_POINTER(i));
@@ -1842,15 +1841,15 @@ GList *save_nodepath_selection(Path::Path *nodepath)
 /**
 \brief  Restores selection by selecting nodes whose positions are in the list
 */
-void restore_nodepath_selection(Path::Path *nodepath, GList *r)
+void restore_nodepath_selection(Inkscape::NodePath::Path *nodepath, GList *r)
 {
     sp_nodepath_deselect(nodepath);
 
     guint i = 0;
     for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-        Path::SubPath *subpath = (Path::SubPath *) spl->data;
+       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
         for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
-            Path::Node *node = (Path::Node *) nl->data;
+           Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
             i++;
             if (g_list_find(r, GINT_TO_POINTER(i))) {
                 sp_nodepath_node_select(node, TRUE, TRUE);
@@ -1863,14 +1862,14 @@ void restore_nodepath_selection(Path::Path *nodepath, GList *r)
 /**
 \brief adjusts control point according to node type and line code
 */
-static void sp_node_adjust_knot(Path::Node *node, gint which_adjust)
+static void sp_node_adjust_knot(Inkscape::NodePath::Node *node, gint which_adjust)
 {
     double len, otherlen, linelen;
 
     g_assert(node);
 
-    Path::NodeSide *me = sp_node_get_side(node, which_adjust);
-    Path::NodeSide *other = sp_node_opposite_side(node, me);
+   Inkscape::NodePath::NodeSide *me = sp_node_get_side(node, which_adjust);
+   Inkscape::NodePath::NodeSide *other = sp_node_opposite_side(node, me);
 
     /* fixme: */
     if (me->other == NULL) return;
@@ -1895,12 +1894,12 @@ static void sp_node_adjust_knot(Path::Node *node, gint which_adjust)
 
     /* Other has line */
 
-    if (node->type == Path::NODE_CUSP) return;
+    if (node->type == Inkscape::NodePath::NODE_CUSP) return;
 
     NR::Point delta;
     if (ocode == NR_LINETO) {
         /* other is lineto, we are either smooth or symm */
-        Path::Node *othernode = other->other;
+       Inkscape::NodePath::Node *othernode = other->other;
         len = NR::L2(me->pos - node->pos);
         delta = node->pos - othernode->pos;
         linelen = NR::L2(delta);
@@ -1913,7 +1912,7 @@ static void sp_node_adjust_knot(Path::Node *node, gint which_adjust)
         return;
     }
 
-    if (node->type == Path::NODE_SYMM) {
+    if (node->type == Inkscape::NodePath::NODE_SYMM) {
 
         me->pos = 2 * node->pos - other->pos;
         sp_knot_set_position(me->knot, &me->pos, 0);
@@ -1938,11 +1937,11 @@ static void sp_node_adjust_knot(Path::Node *node, gint which_adjust)
 /**
  \brief Adjusts control point according to node type and line code
  */
-static void sp_node_adjust_knots(Path::Node *node)
+static void sp_node_adjust_knots(Inkscape::NodePath::Node *node)
 {
     g_assert(node);
 
-    if (node->type == Path::NODE_CUSP) return;
+    if (node->type == Inkscape::NodePath::NODE_CUSP) return;
 
     /* we are either smooth or symm */
 
@@ -1968,7 +1967,7 @@ static void sp_node_adjust_knots(Path::Node *node)
 
     NR::Point const delta( node->n.pos - node->p.pos );
 
-    if (node->type == Path::NODE_SYMM) {
+    if (node->type == Inkscape::NodePath::NODE_SYMM) {
         node->p.pos = node->pos - delta / 2;
         node->n.pos = node->pos + delta / 2;
         sp_node_ensure_ctrls(node);
@@ -1989,7 +1988,7 @@ static void sp_node_adjust_knots(Path::Node *node)
 /*
  * Knot events
  */
-static gboolean node_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
+static gboolean node_event(SPKnot *knot, GdkEvent *event,Inkscape::NodePath::Node *n)
 {
     gboolean ret = FALSE;
     switch (event->type) {
@@ -2003,7 +2002,7 @@ static gboolean node_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
             switch (get_group0_keyval (&event->key)) {
                 case GDK_space:
                     if (event->key.state & GDK_BUTTON1_MASK) {
-                        Path::Path *nodepath = n->subpath->nodepath;
+                        Inkscape::NodePath::Path *nodepath = n->subpath->nodepath;
                         stamp_repr(nodepath);
                         ret = TRUE;
                     }
@@ -2021,7 +2020,7 @@ static gboolean node_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
 
 gboolean node_key(GdkEvent *event)
 {
-    Path::Path *np;
+    Inkscape::NodePath::Path *np;
 
     // there is no way to verify nodes so set active_node to nil when deleting!!
     if (active_node == NULL) return FALSE;
@@ -2038,15 +2037,15 @@ gboolean node_key(GdkEvent *event)
                 ret = TRUE;
                 break;
             case GDK_c:
-                sp_nodepath_set_node_type(active_node, Path::NODE_CUSP);
+                sp_nodepath_set_node_type(active_node,Inkscape::NodePath::NODE_CUSP);
                 ret = TRUE;
                 break;
             case GDK_s:
-                sp_nodepath_set_node_type(active_node, Path::NODE_SMOOTH);
+                sp_nodepath_set_node_type(active_node,Inkscape::NodePath::NODE_SMOOTH);
                 ret = TRUE;
                 break;
             case GDK_y:
-                sp_nodepath_set_node_type(active_node, Path::NODE_SYMM);
+                sp_nodepath_set_node_type(active_node,Inkscape::NodePath::NODE_SYMM);
                 ret = TRUE;
                 break;
             case GDK_b:
@@ -2061,18 +2060,18 @@ gboolean node_key(GdkEvent *event)
 
 static void node_clicked(SPKnot *knot, guint state, gpointer data)
 {
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
     if (state & GDK_CONTROL_MASK) {
-        Path::Path *nodepath = n->subpath->nodepath;
+        Inkscape::NodePath::Path *nodepath = n->subpath->nodepath;
 
         if (!(state & GDK_MOD1_MASK)) { // ctrl+click: toggle node type
-            if (n->type == Path::NODE_CUSP) {
-                sp_nodepath_convert_node_type (n, Path::NODE_SMOOTH);
-            } else if (n->type == Path::NODE_SMOOTH) {
-                sp_nodepath_convert_node_type (n, Path::NODE_SYMM);
+            if (n->type == Inkscape::NodePath::NODE_CUSP) {
+                sp_nodepath_convert_node_type (n,Inkscape::NodePath::NODE_SMOOTH);
+            } else if (n->type == Inkscape::NodePath::NODE_SMOOTH) {
+                sp_nodepath_convert_node_type (n,Inkscape::NodePath::NODE_SYMM);
             } else {
-                sp_nodepath_convert_node_type (n, Path::NODE_CUSP);
+                sp_nodepath_convert_node_type (n,Inkscape::NodePath::NODE_CUSP);
             }
             update_repr(nodepath);
             sp_nodepath_update_statusbar(nodepath);
@@ -2096,7 +2095,7 @@ static void node_clicked(SPKnot *knot, guint state, gpointer data)
 
 static void node_grabbed(SPKnot *knot, guint state, gpointer data)
 {
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
     n->origin = knot->pos;
 
@@ -2107,7 +2106,7 @@ static void node_grabbed(SPKnot *knot, guint state, gpointer data)
 
 static void node_ungrabbed(SPKnot *knot, guint state, gpointer data)
 {
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
     update_repr(n->subpath->nodepath);
 }
@@ -2153,7 +2152,7 @@ node_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
     NR::Point c;
     NR::Point pr;
 
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
     if (state & GDK_CONTROL_MASK) { // constrained motion
 
@@ -2261,7 +2260,7 @@ node_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
 
 static void node_ctrl_clicked(SPKnot *knot, guint state, gpointer data)
 {
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
     if (state & GDK_CONTROL_MASK) { // "delete" handle
         if (n->p.knot == knot) {
@@ -2270,7 +2269,7 @@ static void node_ctrl_clicked(SPKnot *knot, guint state, gpointer data)
             n->n.pos = n->pos;
         }
         sp_node_ensure_ctrls(n);
-        Path::Path *nodepath = n->subpath->nodepath;
+        Inkscape::NodePath::Path *nodepath = n->subpath->nodepath;
         update_repr(nodepath);
         sp_nodepath_update_statusbar(nodepath);
 
@@ -2281,7 +2280,7 @@ static void node_ctrl_clicked(SPKnot *knot, guint state, gpointer data)
 
 static void node_ctrl_grabbed(SPKnot *knot, guint state, gpointer data)
 {
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
     if (!n->selected) {
         sp_nodepath_node_select(n, (state & GDK_SHIFT_MASK), FALSE);
@@ -2300,7 +2299,7 @@ static void node_ctrl_grabbed(SPKnot *knot, guint state, gpointer data)
 
 static void node_ctrl_ungrabbed(SPKnot *knot, guint state, gpointer data)
 {
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
     // forget origin and set knot position once more (because it can be wrong now due to restrictions)
     if (n->p.knot == knot) {
@@ -2318,9 +2317,9 @@ static void node_ctrl_ungrabbed(SPKnot *knot, guint state, gpointer data)
 
 static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
 {
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
-    Path::NodeSide *me, *opposite;
+   Inkscape::NodePath::NodeSide *me, *opposite;
     gint which;
     if (n->p.knot == knot) {
         me = &n->p;
@@ -2338,12 +2337,12 @@ static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpoin
 
     NRPathcode othercode = sp_node_path_code_from_side(n, opposite);
 
-    if (opposite->other && (n->type != Path::NODE_CUSP) && (othercode == NR_LINETO)) {
+    if (opposite->other && (n->type !=Inkscape::NodePath::NODE_CUSP) && (othercode == NR_LINETO)) {
         gdouble len, linelen, scal;
         /* We are smooth node adjacent with line */
         NR::Point delta = *p - n->pos;
         len = NR::L2(delta);
-        Path::Node *othernode = opposite->other;
+       Inkscape::NodePath::Node *othernode = opposite->other;
         NR::Point ndelta = n->pos - othernode->pos;
         linelen = NR::L2(ndelta);
         if ((len > 1e-18) && (linelen > 1e-18)) {
@@ -2362,10 +2361,10 @@ static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpoin
 
 static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer data)
 {
-    Path::Node *n = (Path::Node *) data;
+   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
-    Path::NodeSide *me;
-    Path::NodeSide *other;
+   Inkscape::NodePath::NodeSide *me;
+   Inkscape::NodePath::NodeSide *other;
     if (n->p.knot == knot) {
         me = &n->p;
         other = &n->n;
@@ -2406,7 +2405,7 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
         rnew.r = me->origin.r;
     }
 
-    if (( n->type != Path::NODE_CUSP || (state & GDK_SHIFT_MASK))
+    if (( n->type !=Inkscape::NodePath::NODE_CUSP || (state & GDK_SHIFT_MASK))
         && rme.a != HUGE_VAL && rnew.a != HUGE_VAL && fabs(rme.a - rnew.a) > 0.001) {
         // rotate the other handle correspondingly, if both old and new angles exist and are not the same
         rother.a += rnew.a - rme.a;
@@ -2427,7 +2426,7 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
     update_object(n->subpath->nodepath);
 }
 
-static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
+static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event,Inkscape::NodePath::Node *n)
 {
     gboolean ret = FALSE;
     switch (event->type) {
@@ -2435,7 +2434,7 @@ static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
             switch (get_group0_keyval (&event->key)) {
                 case GDK_space:
                     if (event->key.state & GDK_BUTTON1_MASK) {
-                        Path::Path *nodepath = n->subpath->nodepath;
+                        Inkscape::NodePath::Path *nodepath = n->subpath->nodepath;
                         stamp_repr(nodepath);
                         ret = TRUE;
                     }
@@ -2451,27 +2450,27 @@ static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
     return ret;
 }
 
-static void node_rotate_internal(Path::Node const &n, gdouble const angle,
+static void node_rotate_internal(Inkscape::NodePath::Node const &n, gdouble const angle,
                                  Radial &rme, Radial &rother, gboolean const both)
 {
     rme.a += angle;
     if ( both
-         || ( n.type == Path::NODE_SMOOTH )
-         || ( n.type == Path::NODE_SYMM )  )
+         || ( n.type == Inkscape::NodePath::NODE_SMOOTH )
+         || ( n.type == Inkscape::NodePath::NODE_SYMM )  )
     {
         rother.a += angle;
     }
 }
 
-static void node_rotate_internal_screen(Path::Node const &n, gdouble const angle,
+static void node_rotate_internal_screen(Inkscape::NodePath::Node const &n, gdouble const angle,
                                         Radial &rme, Radial &rother, gboolean const both)
 {
     gdouble const norm_angle = angle / SP_DESKTOP_ZOOM(n.subpath->nodepath->desktop);
 
     gdouble r;
     if ( both
-         || ( n.type == Path::NODE_SMOOTH )
-         || ( n.type == Path::NODE_SYMM )  )
+         || ( n.type == Inkscape::NodePath::NODE_SMOOTH )
+         || ( n.type == Inkscape::NodePath::NODE_SYMM )  )
     {
         r = MAX(rme.r, rother.r);
     } else {
@@ -2485,16 +2484,16 @@ static void node_rotate_internal_screen(Path::Node const &n, gdouble const angle
 
     rme.a += weird_angle;
     if ( both
-         || ( n.type == Path::NODE_SMOOTH )
-         || ( n.type == Path::NODE_SYMM )  )
+         || ( n.type == Inkscape::NodePath::NODE_SMOOTH )
+         || ( n.type == Inkscape::NodePath::NODE_SYMM )  )
     {
         rother.a += weird_angle;
     }
 }
 
-static void node_rotate_common(Path::Node *n, gdouble angle, int which, gboolean screen)
+static void node_rotate_common(Inkscape::NodePath::Node *n, gdouble angle, int which, gboolean screen)
 {
-    Path::NodeSide *me, *other;
+   Inkscape::NodePath::NodeSide *me, *other;
     gboolean both = FALSE;
 
     if (which > 0) {
@@ -2520,19 +2519,19 @@ static void node_rotate_common(Path::Node *n, gdouble angle, int which, gboolean
 
     me->pos = n->pos + NR::Point(rme);
 
-    if (both || n->type == Path::NODE_SMOOTH || n->type == Path::NODE_SYMM) {
+    if (both || n->type == Inkscape::NodePath::NODE_SMOOTH || n->type == Inkscape::NodePath::NODE_SYMM) {
         other->pos =  n->pos + NR::Point(rother);
     }
 
     sp_node_ensure_ctrls(n);
 }
 
-void sp_nodepath_selected_nodes_rotate(Path::Path *nodepath, gdouble angle, int which)
+void sp_nodepath_selected_nodes_rotate(Inkscape::NodePath::Path *nodepath, gdouble angle, int which)
 {
     if (!nodepath) return;
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *n = (Path::Node *) l->data;
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
         node_rotate_common(n, angle, which, FALSE);
     }
 
@@ -2541,12 +2540,12 @@ void sp_nodepath_selected_nodes_rotate(Path::Path *nodepath, gdouble angle, int 
     update_repr(nodepath);
 }
 
-void sp_nodepath_selected_nodes_rotate_screen(Path::Path *nodepath, gdouble angle, int which)
+void sp_nodepath_selected_nodes_rotate_screen(Inkscape::NodePath::Path *nodepath, gdouble angle, int which)
 {
     if (!nodepath) return;
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *n = (Path::Node *) l->data;
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
         node_rotate_common(n, angle, which, TRUE);
     }
 
@@ -2555,10 +2554,10 @@ void sp_nodepath_selected_nodes_rotate_screen(Path::Path *nodepath, gdouble angl
     update_repr(nodepath);
 }
 
-static void node_scale(Path::Node *n, gdouble grow, int which)
+static void node_scale(Inkscape::NodePath::Node *n, gdouble grow, int which)
 {
     bool both = false;
-    Path::NodeSide *me, *other;
+   Inkscape::NodePath::NodeSide *me, *other;
     if (which > 0) {
         me = &(n->n);
         other = &(n->p);
@@ -2580,7 +2579,7 @@ static void node_scale(Path::Node *n, gdouble grow, int which)
         rme.a = 0; // if direction is unknown, initialize to 0
         sp_node_selected_set_line_type(NR_CURVETO);
     }
-    if (both || n->type == Path::NODE_SYMM) {
+    if (both || n->type == Inkscape::NodePath::NODE_SYMM) {
         rother.r += grow;
         if (rother.r < 0) rother.r = 1e-6;
         if (rother.r == HUGE_VAL) {
@@ -2591,24 +2590,24 @@ static void node_scale(Path::Node *n, gdouble grow, int which)
 
     me->pos = n->pos + NR::Point(rme);
 
-    if (both || n->type == Path::NODE_SYMM) {
+    if (both || n->type == Inkscape::NodePath::NODE_SYMM) {
         other->pos = n->pos + NR::Point(rother);
     }
 
     sp_node_ensure_ctrls(n);
 }
 
-static void node_scale_screen(Path::Node *n, gdouble const grow, int const which)
+static void node_scale_screen(Inkscape::NodePath::Node *n, gdouble const grow, int const which)
 {
     node_scale(n, grow / SP_DESKTOP_ZOOM(n->subpath->nodepath->desktop), which);
 }
 
-void sp_nodepath_selected_nodes_scale(Path::Path *nodepath, gdouble const grow, int const which)
+void sp_nodepath_selected_nodes_scale(Inkscape::NodePath::Path *nodepath, gdouble const grow, int const which)
 {
     if (!nodepath) return;
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *n = (Path::Node *) l->data;
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
         node_scale(n, grow, which);
     }
 
@@ -2617,12 +2616,12 @@ void sp_nodepath_selected_nodes_scale(Path::Path *nodepath, gdouble const grow, 
     update_repr(nodepath);
 }
 
-void sp_nodepath_selected_nodes_scale_screen(Path::Path *nodepath, gdouble const grow, int const which)
+void sp_nodepath_selected_nodes_scale_screen(Inkscape::NodePath::Path *nodepath, gdouble const grow, int const which)
 {
     if (!nodepath) return;
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        Path::Node *n = (Path::Node *) l->data;
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
         node_scale_screen(n, grow, which);
     }
 
@@ -2636,12 +2635,12 @@ void sp_nodepath_selected_nodes_scale_screen(Path::Path *nodepath, gdouble const
  * Constructors and destructors
  */
 
-static Path::SubPath *sp_nodepath_subpath_new(Path::Path *nodepath)
+static Inkscape::NodePath::SubPath *sp_nodepath_subpath_new(Inkscape::NodePath::Path *nodepath)
 {
     g_assert(nodepath);
     g_assert(nodepath->desktop);
 
-    Path::SubPath *s = g_new(Path::SubPath, 1);
+   Inkscape::NodePath::SubPath *s = g_new(Inkscape::NodePath::SubPath, 1);
 
     s->nodepath = nodepath;
     s->closed = FALSE;
@@ -2660,14 +2659,14 @@ static Path::SubPath *sp_nodepath_subpath_new(Path::Path *nodepath)
     return s;
 }
 
-static void sp_nodepath_subpath_destroy(Path::SubPath *subpath)
+static void sp_nodepath_subpath_destroy(Inkscape::NodePath::SubPath *subpath)
 {
     g_assert(subpath);
     g_assert(subpath->nodepath);
     g_assert(g_list_find(subpath->nodepath->subpaths, subpath));
 
     while (subpath->nodes) {
-        sp_nodepath_node_destroy((Path::Node *) subpath->nodes->data);
+        sp_nodepath_node_destroy((Inkscape::NodePath::Node *) subpath->nodes->data);
     }
 
     subpath->nodepath->subpaths = g_list_remove(subpath->nodepath->subpaths, subpath);
@@ -2675,7 +2674,7 @@ static void sp_nodepath_subpath_destroy(Path::SubPath *subpath)
     g_free(subpath);
 }
 
-static void sp_nodepath_subpath_close(Path::SubPath *sp)
+static void sp_nodepath_subpath_close(Inkscape::NodePath::SubPath *sp)
 {
     g_assert(!sp->closed);
     g_assert(sp->last != sp->first);
@@ -2693,7 +2692,7 @@ static void sp_nodepath_subpath_close(Path::SubPath *sp)
     sp_nodepath_node_destroy(sp->last->n.other);
 }
 
-static void sp_nodepath_subpath_open(Path::SubPath *sp, Path::Node *n)
+static void sp_nodepath_subpath_open(Inkscape::NodePath::SubPath *sp,Inkscape::NodePath::Node *n)
 {
     g_assert(sp->closed);
     g_assert(n->subpath == sp);
@@ -2701,7 +2700,7 @@ static void sp_nodepath_subpath_open(Path::SubPath *sp, Path::Node *n)
 
     /* We create new startpoint, current node will become last one */
 
-    Path::Node *new_path = sp_nodepath_node_new(sp, n->n.other, Path::NODE_CUSP, NR_MOVETO,
+   Inkscape::NodePath::Node *new_path = sp_nodepath_node_new(sp, n->n.other,Inkscape::NodePath::NODE_CUSP, NR_MOVETO,
                                                 &n->pos, &n->pos, &n->n.pos);
 
 
@@ -2714,8 +2713,8 @@ static void sp_nodepath_subpath_open(Path::SubPath *sp, Path::Node *n)
     new_path->p.other = NULL;
 }
 
-Path::Node *
-sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, NRPathcode code,
+Inkscape::NodePath::Node *
+sp_nodepath_node_new(Inkscape::NodePath::SubPath *sp,Inkscape::NodePath::Node *next,Inkscape::NodePath::NodeType type, NRPathcode code,
                      NR::Point *ppos, NR::Point *pos, NR::Point *npos)
 {
     g_assert(sp);
@@ -2723,9 +2722,9 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
     g_assert(sp->nodepath->desktop);
 
     if (nodechunk == NULL)
-        nodechunk = g_mem_chunk_create(Path::Node, 32, G_ALLOC_AND_FREE);
+        nodechunk = g_mem_chunk_create(Inkscape::NodePath::Node, 32, G_ALLOC_AND_FREE);
 
-    Path::Node *n = (Path::Node*)g_mem_chunk_alloc(nodechunk);
+    Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node*)g_mem_chunk_alloc(nodechunk);
 
     n->subpath  = sp;
     n->type     = type;
@@ -2735,7 +2734,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
     n->p.pos    = *ppos;
     n->n.pos    = *npos;
 
-    Path::Node *prev;
+    Inkscape::NodePath::Node *prev;
     if (next) {
         g_assert(g_list_find(sp->nodes, next));
         prev = next->p.other;
@@ -2766,7 +2765,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "stroke_mouseover", NODE_STROKE_HI,
                  "tip", _("<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"),
                  NULL);
-    if (n->type == Path::NODE_CUSP)
+    if (n->type == Inkscape::NodePath::NODE_CUSP)
         g_object_set(G_OBJECT(n->knot), "shape", SP_KNOT_SHAPE_DIAMOND, "size", 9, NULL);
     else
         g_object_set(G_OBJECT(n->knot), "shape", SP_KNOT_SHAPE_SQUARE, "size", 7, NULL);
@@ -2830,7 +2829,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
     return n;
 }
 
-static void sp_nodepath_node_destroy(Path::Node *node)
+static void sp_nodepath_node_destroy(Inkscape::NodePath::Node *node)
 {
     g_assert(node);
     g_assert(node->subpath);
@@ -2839,7 +2838,7 @@ static void sp_nodepath_node_destroy(Path::Node *node)
     g_assert(SP_IS_KNOT(node->n.knot));
     g_assert(g_list_find(node->subpath->nodes, node));
 
-    Path::SubPath *sp = node->subpath;
+   Inkscape::NodePath::SubPath *sp = node->subpath;
 
     if (node->selected) { // first, deselect
         g_assert(g_list_find(node->subpath->nodepath->selected, node));
@@ -2884,7 +2883,7 @@ static void sp_nodepath_node_destroy(Path::Node *node)
  * Helpers
  */
 
-static Path::NodeSide *sp_node_get_side(Path::Node *node, gint which)
+static Inkscape::NodePath::NodeSide *sp_node_get_side(Inkscape::NodePath::Node *node, gint which)
 {
     g_assert(node);
 
@@ -2902,7 +2901,7 @@ static Path::NodeSide *sp_node_get_side(Path::Node *node, gint which)
     return NULL;
 }
 
-static Path::NodeSide *sp_node_opposite_side(Path::Node *node, Path::NodeSide *me)
+static Inkscape::NodePath::NodeSide *sp_node_opposite_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me)
 {
     g_assert(node);
 
@@ -2914,7 +2913,7 @@ static Path::NodeSide *sp_node_opposite_side(Path::Node *node, Path::NodeSide *m
     return NULL;
 }
 
-static NRPathcode sp_node_path_code_from_side(Path::Node *node, Path::NodeSide *me)
+static NRPathcode sp_node_path_code_from_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me)
 {
     g_assert(node);
 
@@ -2933,23 +2932,23 @@ static NRPathcode sp_node_path_code_from_side(Path::Node *node, Path::NodeSide *
     return NR_END;
 }
 
-static gchar const *sp_node_type_description(Path::Node *n)
+static gchar const *sp_node_type_description(Inkscape::NodePath::Node *n)
 {
     switch (n->type) {
-        case Path::NODE_CUSP:
+        case Inkscape::NodePath::NODE_CUSP:
             // TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
             return _("cusp");
-        case Path::NODE_SMOOTH:
+        case Inkscape::NodePath::NODE_SMOOTH:
             // TRANSLATORS: "smooth" is an adjective here
             return _("smooth");
-        case Path::NODE_SYMM:
+        case Inkscape::NodePath::NODE_SYMM:
             return _("symmetric");
     }
     return NULL;
 }
 
 void
-sp_nodepath_update_statusbar(Path::Path *nodepath)
+sp_nodepath_update_statusbar(Inkscape::NodePath::Path *nodepath)
 {
     if (!nodepath) return;
 
@@ -2958,7 +2957,7 @@ sp_nodepath_update_statusbar(Path::Path *nodepath)
     gint total = 0;
 
     for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-        Path::SubPath *subpath = (Path::SubPath *) spl->data;
+       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
         total += g_list_length(subpath->nodes);
     }
 
@@ -2985,7 +2984,7 @@ sp_nodepath_update_statusbar(Path::Path *nodepath)
                  ngettext("<b>%i</b> of <b>%i</b> node selected; %s. %s.",
                           "<b>%i</b> of <b>%i</b> nodes selected; %s. %s.",
                           total),
-                 selected, total, sp_node_type_description((Path::Node *) nodepath->selected->data), when_selected);
+                 selected, total, sp_node_type_description((Inkscape::NodePath::Node *) nodepath->selected->data), when_selected);
     } else {
         mc->setF(Inkscape::NORMAL_MESSAGE,
                  ngettext("<b>%i</b> of <b>%i</b> node selected. %s.",

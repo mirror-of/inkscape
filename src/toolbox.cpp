@@ -361,19 +361,19 @@ sp_node_path_edit_tocurve(void)
 void
 sp_node_path_edit_cusp(void)
 {
-    sp_node_selected_set_type(Path::NODE_CUSP);
+    sp_node_selected_set_type(Inkscape::NodePath::NODE_CUSP);
 }
 
 void
 sp_node_path_edit_smooth(void)
 {
-    sp_node_selected_set_type(Path::NODE_SMOOTH);
+    sp_node_selected_set_type(Inkscape::NodePath::NODE_SMOOTH);
 }
 
 void
 sp_node_path_edit_symmetrical(void)
 {
-    sp_node_selected_set_type(Path::NODE_SYMM);
+    sp_node_selected_set_type(Inkscape::NodePath::NODE_SYMM);
 }
 
 

@@ -323,7 +323,7 @@ nodepath_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
     g_assert(data);
     SPNodeContext *nc = ((SPNodeContext *) data);
     g_assert(nc);
-    Path::Path *np = nc->nodepath;
+    Inkscape::NodePath::Path *np = nc->nodepath;
     SPKnotHolder *kh = nc->knot_holder;
 
     if (np) {
@@ -500,21 +500,21 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 case GDK_C:
                 case GDK_c:
                     if (MOD__SHIFT_ONLY) {
-                        sp_node_selected_set_type(Path::NODE_CUSP);
+                        sp_node_selected_set_type(Inkscape::NodePath::NODE_CUSP);
                         ret = TRUE;
                     }
                     break;
                 case GDK_S:
                 case GDK_s:
                     if (MOD__SHIFT_ONLY) {
-                        sp_node_selected_set_type(Path::NODE_SMOOTH);
+                        sp_node_selected_set_type(Inkscape::NodePath::NODE_SMOOTH);
                         ret = TRUE;
                     }
                     break;
                 case GDK_Y:
                 case GDK_y:
                     if (MOD__SHIFT_ONLY) {
-                        sp_node_selected_set_type(Path::NODE_SYMM);
+                        sp_node_selected_set_type(Inkscape::NodePath::NODE_SYMM);
                         ret = TRUE;
                     }
                     break;
