@@ -665,7 +665,10 @@ dialogs/find.o: \
 	desktop-handles.h \
 	desktop.h \
 	dialogs/dialog-events.h \
+	display/curve.h \
+	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	forward.h \
 	helper/action.h \
 	helper/helper-forward.h \
@@ -687,20 +690,53 @@ dialogs/find.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
+	libnr/nr-path.h \
+	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
+	libnr/nr-point-l.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
+	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale-ops.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	libnrtype/nr-font.h \
+	libnrtype/nr-rasterfont.h \
+	libnrtype/nr-typeface.h \
 	macros.h \
 	prefs-utils.h \
 	selection-chemistry.h \
+	selection-chemistry.h \
 	selection.h \
+	sp-chars.h \
+	sp-defs.h \
+	sp-ellipse.h \
+	sp-image.h \
+	sp-item-group.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-line.h \
+	sp-marker.h \
 	sp-object.h \
+	sp-object.h \
+	sp-offset.h \
+	sp-path.h \
+	sp-polygon.h \
+	sp-polygon.h \
+	sp-polyline.h \
+	sp-rect.h \
+	sp-shape.h \
+	sp-spiral.h \
+	sp-star.h \
+	sp-text.h \
+	sp-use.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	verbs.h \
 	version.h \
@@ -3586,9 +3622,7 @@ libnrtype/nr-type-directory.o: \
 	libnrtype/nr-font.h \
 	libnrtype/nr-rasterfont.h \
 	libnrtype/nr-type-directory.h \
-	libnrtype/nr-type-directory.h \
 	libnrtype/nr-type-ft2.h \
-	libnrtype/nr-type-gnome.h \
 	libnrtype/nr-type-pos-def.h \
 	libnrtype/nr-type-pos-def.h \
 	libnrtype/nr-type-primitives.h \
@@ -5381,9 +5415,7 @@ sp-item-group.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr-action.h \
-	xml/repr-private.h \
-	xml/repr.h \
+	xml/repr-get-children.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -8252,6 +8284,7 @@ widgets/sp-color-notebook.o: \
 	dialogs/dialog-events.h \
 	forward.h \
 	helper/sp-intl.h \
+	prefs-utils.h \
 	widgets/sp-color-gtkselector.h \
 	widgets/sp-color-notebook.h \
 	widgets/sp-color-preview.h \
@@ -8287,6 +8320,10 @@ widgets/sp-color-selector.o: \
 
 widgets/sp-color-slider.o: \
 	widgets/sp-color-slider.cpp \
+	color.h \
+	forward.h \
+	widgets/sp-color-scales.h \
+	widgets/sp-color-selector.h \
 	widgets/sp-color-slider.h
 
 widgets/sp-color-wheel-selector.o: \
@@ -8480,6 +8517,14 @@ xml/repr-action.o: \
 xml/repr-css.o: \
 	xml/repr-css.cpp \
 	xml/repr-action.h \
+	xml/repr-private.h \
+	xml/repr.h \
+	xml/xml-forward.h
+
+xml/repr-get-children.o: \
+	xml/repr-get-children.cpp \
+	xml/repr-action.h \
+	xml/repr-get-children.h \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/xml-forward.h

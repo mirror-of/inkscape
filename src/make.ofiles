@@ -276,6 +276,7 @@ OBJECTS = \
 	xml/repr-action-test.o \
 	xml/repr-action.o \
 	xml/repr-css.o \
+	xml/repr-get-children.o \
 	xml/repr-io.o \
 	xml/repr-util.o \
 	xml/repr.o \
@@ -557,6 +558,7 @@ LINTS = \
 	xml/repr-action-test.lint \
 	xml/repr-action.lint \
 	xml/repr-css.lint \
+	xml/repr-get-children.lint \
 	xml/repr-io.lint \
 	xml/repr-util.lint \
 	xml/repr.lint \

@@ -1,3 +1,4 @@
+ResourceManager.h
 application.cpp
 application.h
 approx-equal.h
@@ -166,6 +167,7 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
+ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h
@@ -277,7 +279,6 @@ libnrtype/nr-type-directory.cpp
 libnrtype/nr-type-directory.h
 libnrtype/nr-type-ft2.cpp
 libnrtype/nr-type-ft2.h
-libnrtype/nr-type-gnome.h
 libnrtype/nr-type-pos-def.cpp
 libnrtype/nr-type-pos-def.h
 libnrtype/nr-type-primitives.cpp
@@ -550,6 +551,8 @@ xml/repr-action-test.cpp
 xml/repr-action.cpp
 xml/repr-action.h
 xml/repr-css.cpp
+xml/repr-get-children.cpp
+xml/repr-get-children.h
 xml/repr-io.cpp
 xml/repr-private.h
 xml/repr-util.cpp
