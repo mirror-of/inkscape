@@ -1,3 +1,10 @@
+2004-09-07  Ted Gould  <ted@gould.cx>
+
+	* src/color-rgba.h:
+
+	Some comments and some little code clean up things.  Added a couple
+	of constructors to make life a little simpler.
+
 2004-09-06  Ted Gould  <ted@gould.cx>
 	* src/extension/plugin/gimgrad.cpp, src/extension/implementation/plugin*
 	  share/extension/gimpgrad.inkmod, src/extension/system.cpp,
