@@ -3319,7 +3319,7 @@ msgstr "Für diese Erweiterung existiert keine Implementierung."
 #. std::cout << "Failed: " << *(_deps[i]) << std::endl;
 #: src/extension/extension.cpp:253
 msgid "a dependency was not met."
-msgstr "die Abhängigkeiten konnten nicht aufgelöst werden."
+msgstr "die Abhängigkeiten nicht aufgelöst werden konnten."
 
 #: src/extension/extension.cpp:273
 msgid "Extension \""
@@ -3327,7 +3327,7 @@ msgstr "Erweiterung \""
 
 #: src/extension/extension.cpp:273
 msgid "\" failed to load because "
-msgstr "\" Laden fehlgeschlagen wegen "
+msgstr "\": Laden fehlgeschlagen, da "
 
 #: src/extension/extension.cpp:811
 #, c-format
