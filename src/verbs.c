@@ -231,10 +231,12 @@ sp_verb_action_object_perform (SPAction *action, void *data)
 		sp_selected_path_to_curves ();
 		break;
 	case SP_VERB_OBJECT_FLIP_HORIZONTAL:
+		// TODO: make tool-sensitive, in node edit flip selected node(s)
 		sp_selection_scale_relative (sel, &center, -1.0, 1.0);
 		sp_document_done (SP_DT_DOCUMENT (dt));
 		break;
 	case SP_VERB_OBJECT_FLIP_VERTICAL:
+		// TODO: make tool-sensitive, in node edit flip selected node(s)
 		sp_selection_scale_relative (sel, &center, 1.0, -1.0);
 		sp_document_done (SP_DT_DOCUMENT (dt));
 		break;
