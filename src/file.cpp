@@ -291,13 +291,22 @@ sp_file_save_document (SPDocument *doc)
 
 	repr = sp_document_repr_root (doc);
 
-	fn = sp_repr_attr (repr, "sodipodi:docname");
-	if (fn == NULL) {
-		sp_file_save_dialog (doc);
+	fn = sp_repr_attr (repr, "sodipodi:modified");
+	if (fn != NULL) {
+		fn = sp_repr_attr (repr, "sodipodi:docname");
+		if (fn == NULL) {
+			sp_file_save_dialog (doc);
+		} else {
+			/* TODO: This currently requires a recognizable extension to
+				 be on the file name - odd stuff won't work */
+			sp_file_do_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
+		}
+
+		//TODO: make this dependent on the success of the save operation
+		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document saved.");
+
 	} else {
-		/* TODO: This currently requires a recognizable extension to
-		         be on the file name - odd stuff won't work */
-		sp_file_do_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
+		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "No changes need to be saved.");
 	}
 }
 
@@ -315,6 +324,9 @@ sp_file_save_as (gpointer object, gpointer data)
 	if (!SP_ACTIVE_DOCUMENT) return;
 
 	sp_file_save_dialog (SP_ACTIVE_DOCUMENT);
+
+	//TODO: make this dependent on the success of the save operation
+	sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document saved.");
 }
 
 static void
