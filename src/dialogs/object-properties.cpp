@@ -91,7 +91,7 @@ sp_object_properties_page( GtkWidget *nb,
 
     px = sp_icon_new( GTK_ICON_SIZE_MENU, label_image );
     gtk_widget_show (px);
-    gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 2);
 
     l = gtk_label_new_with_mnemonic (label);
     gtk_widget_show (l);
