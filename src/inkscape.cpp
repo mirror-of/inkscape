@@ -96,6 +96,8 @@ enum {
 # FORWARD DECLARATIONS
 ################################*/
 
+gboolean inkscape_app_use_gui( Inkscape::Application const * app );
+
 static void inkscape_class_init (Inkscape::ApplicationClass *klass);
 static void inkscape_init (SPObject *object);
 static void inkscape_dispose (GObject *object);
@@ -503,9 +505,16 @@ inkscape_segv_handler (int signum)
         }
     }
     *(b + pos) = '\0';
-    GtkWidget *msgbox = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", b);
-    gtk_dialog_run (GTK_DIALOG (msgbox));
-    gtk_widget_destroy (msgbox);
+
+    if ( inkscape_get_instance() && inkscape_app_use_gui( inkscape_get_instance() ) ) {
+        GtkWidget *msgbox = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", b);
+        gtk_dialog_run (GTK_DIALOG (msgbox));
+        gtk_widget_destroy (msgbox);
+    }
+    else
+    {
+        g_message( "Error: %s", b );
+    }
     g_free (b);
 
     (* segv_handler) (signum);
