@@ -1,5 +1,7 @@
 2004-04-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile.am (EXTRA_DIST): Add */makefile.in.
+
 	* src/libnr/Makefile_insert (libnr_libnr_a_SOURCES):
 	  Add libnr/nr-convex-hull.h, needed by sp-canvas.cpp.
 

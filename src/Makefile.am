@@ -57,6 +57,21 @@ DISTCLEANFILES =	\
 	inkscape_version.h
 
 EXTRA_DIST =	\
+	dialogs/makefile.in	\
+	display/makefile.in	\
+	extension/implementation/makefile.in	\
+	extension/internal/makefile.in	\
+	extension/makefile.in	\
+	helper/makefile.in	\
+	inkjar/makefile.in	\
+	libarikkei/makefile.in	\
+	libnr/makefile.in	\
+	libnrtype/makefile.in	\
+	livarot/makefile.in	\
+	svg/makefile.in	\
+	utest/makefile.in	\
+	widgets/makefile.in	\
+	xml/makefile.in	\
 	extension/internal/gnome.cpp	\
 	extension/internal/gnome.h	\
 	extension/internal/win32.cpp	\
