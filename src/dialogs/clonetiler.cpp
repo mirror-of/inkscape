@@ -957,11 +957,11 @@ clonetiler_checkbox_toggled (GtkToggleButton *tb, gpointer *data)
 }
 
 GtkWidget *
-clonetiler_checkbox (const char *label, GtkTooltips *tt, const char *tip, const char *attr)
+clonetiler_checkbox (GtkTooltips *tt, const char *tip, const char *attr)
 {
     GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
 
-    GtkWidget *b = gtk_check_button_new_with_label (label);
+    GtkWidget *b = gtk_check_button_new ();
     gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, tip, NULL);
  
     int value = prefs_get_int_attribute (prefs_path, attr, 0);
@@ -1005,18 +1005,18 @@ clonetiler_spinbox (const char *label, GtkTooltips *tt, const char *tip, const c
     {
         GtkObject *a;
         if (exponent)
-            a = gtk_adjustment_new(1.0, lower, upper, 0.01, 0.1, 0.1);
+            a = gtk_adjustment_new(1.0, lower, upper, 0.01, 0.05, 0.1);
         else 
-            a = gtk_adjustment_new(0.0, lower, upper, 1, 10, 10);
+            a = gtk_adjustment_new(0.0, lower, upper, 0.1, 0.5, 2);
 
         GtkWidget *sb;
         if (exponent)
-            sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+            sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
         else 
-            sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
+            sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 1);
 
         gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tip, NULL);
-        gtk_entry_set_width_chars (GTK_ENTRY (sb), 3);
+        gtk_entry_set_width_chars (GTK_ENTRY (sb), 4);
         gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
             double value = prefs_get_double_attribute_limited (prefs_path, attr, 0, lower, upper);
@@ -1344,12 +1344,12 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the sign of shifts for each row"), "alternate_y");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the sign of shifts for each row"), "alternate_y");
                 clonetiler_table_attach (table, l, 0, 5, 2);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the sign of shifts for each column"), "alternate_x");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the sign of shifts for each column"), "alternate_x");
                 clonetiler_table_attach (table, l, 0, 5, 3);
             }
 
@@ -1431,12 +1431,12 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the sign of scales for each row"), "alternate_scaley");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the sign of scales for each row"), "alternate_scaley");
                 clonetiler_table_attach (table, l, 0, 4, 2);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the sign of scales for each column"), "alternate_scalex");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the sign of scales for each column"), "alternate_scalex");
                 clonetiler_table_attach (table, l, 0, 4, 3);
             }
 
@@ -1488,12 +1488,12 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the rotation direction for each row"), "alternate_roty");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the rotation direction for each row"), "alternate_roty");
                 clonetiler_table_attach (table, l, 0, 3, 2);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the rotation direction for each column"), "alternate_rotx");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the rotation direction for each column"), "alternate_rotx");
                 clonetiler_table_attach (table, l, 0, 3, 3);
             }
         }
@@ -1542,12 +1542,12 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the sign of opacity change for each row"), "alternate_opacityy");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the sign of opacity change for each row"), "alternate_opacityy");
                 clonetiler_table_attach (table, l, 0, 3, 2);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the sign of opacity change for each column"), "alternate_opacityx");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the sign of opacity change for each column"), "alternate_opacityx");
                 clonetiler_table_attach (table, l, 0, 3, 3);
             }
         }
@@ -1669,12 +1669,12 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the sign of color changes for each row"), "alternate_color_y");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the sign of color changes for each row"), "alternate_color_y");
                 clonetiler_table_attach (table, l, 0, 5, 2);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox ("", tt, _("Alternate the sign of color changes for each column"), "alternate_color_x");
+                GtkWidget *l = clonetiler_checkbox (tt, _("Alternate the sign of color changes for each column"), "alternate_color_x");
                 clonetiler_table_attach (table, l, 0, 5, 3);
             }
 
