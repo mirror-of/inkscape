@@ -5,7 +5,6 @@ attributes.cpp
 attributes.h
 color.cpp
 color.h
-dead-code/nr-translate-fns.h
 desktop-affine.cpp
 desktop-affine.h
 desktop-events.cpp
@@ -326,6 +325,8 @@ helper/helper-forward.h
 helper/png-write.cpp
 helper/png-write.h
 helper/sp-intl.h
+helper/sp-marshal.cpp
+helper/sp-marshal.h
 helper/stock-items.cpp
 helper/stock-items.h
 helper/unit-menu.cpp
@@ -342,6 +343,7 @@ inkscape-stock.cpp
 inkscape-stock.h
 inkscape.cpp
 inkscape.h
+inkscape_version.h
 interface.cpp
 interface.h
 knot.cpp
@@ -454,7 +456,6 @@ libnrtype/nr-type-primitives.h
 libnrtype/nrtype-forward.h
 libnrtype/raster-glyph.h
 libnrtype/raster-position.h
-libnrtype/test.cc
 livarot/AVL.cpp
 livarot/AVL.h
 livarot/AlphaLigne.cpp
@@ -597,7 +598,6 @@ sp-offset.cpp
 sp-offset.h
 sp-paint-server.cpp
 sp-paint-server.h
-sp-path-connection.h
 sp-path.cpp
 sp-path.h
 sp-pattern.cpp

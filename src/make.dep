@@ -281,6 +281,7 @@ desktop.o: \
 	helper/action.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
+	helper/sp-marshal.h \
 	helper/units.h \
 	inkscape-private.h \
 	inkscape.h \
@@ -763,7 +764,6 @@ dialogs/find.o: \
 	sp-object.h \
 	sp-object.h \
 	sp-offset.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-polygon.h \
 	sp-polygon.h \
@@ -1296,6 +1296,7 @@ display/canvas-arena.o: \
 	display/sp-canvas.h \
 	display/sp-canvas.h \
 	helper/helper-forward.h \
+	helper/sp-marshal.h \
 	libnr/nr-blit.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -1820,6 +1821,7 @@ display/sp-canvas.o: \
 	display/sp-canvas.cpp \
 	display/sp-canvas.h \
 	helper/helper-forward.h \
+	helper/sp-marshal.h \
 	libnr/nr-convex-hull.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -1938,8 +1940,10 @@ document.o: \
 	forward.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
+	helper/sp-marshal.h \
 	inkscape-private.h \
 	inkscape.h \
+	inkscape_version.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -2041,7 +2045,6 @@ draw-context.o: \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	style.h \
@@ -4218,6 +4221,7 @@ help.o: \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	inkscape.h \
+	inkscape_version.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -4276,6 +4280,10 @@ helper/png-write.o: \
 	helper/png-write.cpp \
 	helper/png-write.h
 
+helper/sp-marshal.o: \
+	helper/sp-marshal.cpp \
+	helper/sp-marshal.h
+
 helper/stock-items.o: \
 	helper/stock-items.cpp \
 	color.h \
@@ -4327,6 +4335,7 @@ helper/stock-items.o: \
 helper/unit-menu.o: \
 	helper/unit-menu.cpp \
 	helper/helper-forward.h \
+	helper/sp-marshal.h \
 	helper/unit-menu.h \
 	helper/units.h \
 	widgets/spw-utilities.h \
@@ -4389,8 +4398,10 @@ inkscape.o: \
 	helper/action.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
+	helper/sp-marshal.h \
 	inkscape-private.h \
 	inkscape.h \
+	inkscape_version.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -4516,6 +4527,7 @@ knot.o: \
 	forward.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
+	helper/sp-marshal.h \
 	inkscape.h \
 	knot.h \
 	libnr/nr-coord.h \
@@ -5248,9 +5260,6 @@ libnrtype/nr-type-primitives.o: \
 	libnr/nr-macros.h \
 	libnrtype/nr-type-primitives.h
 
-libnrtype/test.o: \
-	libnrtype/test.cc
-
 livarot/AVL.o: \
 	livarot/AVL.cpp \
 	livarot/AVL.h \
@@ -5587,7 +5596,6 @@ node-context.o: \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	svg/svg-types.h \
@@ -5663,7 +5671,6 @@ nodepath.o: \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	svg/svg-types.h \
@@ -5844,7 +5851,6 @@ path-chemistry.o: \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	sp-text.h \
@@ -6326,7 +6332,6 @@ selection-chemistry.o: \
 	sp-object-group.h \
 	sp-object.h \
 	sp-paint-server.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-pattern.h \
 	sp-root.h \
@@ -6387,6 +6392,7 @@ selection.o: \
 	forward.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
+	helper/sp-marshal.h \
 	inkscape-private.h \
 	inkscape.h \
 	libnr/nr-coord.h \
@@ -7493,7 +7499,6 @@ sp-object-repr.o: \
 	sp-object.h \
 	sp-offset.h \
 	sp-paint-server.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-pattern.h \
 	sp-polygon.h \
@@ -7525,6 +7530,7 @@ sp-object.o: \
 	document.h \
 	enums.h \
 	forward.h \
+	helper/sp-marshal.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -7677,7 +7683,6 @@ sp-path.o: \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	style.h \
@@ -8001,7 +8006,6 @@ sp-shape.o: \
 	sp-marker.h \
 	sp-object.h \
 	sp-paint-server.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-pattern.h \
 	sp-root.h \
@@ -8765,7 +8769,6 @@ splivarot.o: \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	sp-text.h \
@@ -9191,7 +9194,6 @@ toolbox.o: \
 	sp-marker.h \
 	sp-object.h \
 	sp-paint-server.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-pattern.h \
 	sp-polygon.h \
@@ -9288,7 +9290,6 @@ tools-switch.o: \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	spiral-context.h \
@@ -9404,7 +9405,6 @@ verbs.o: \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	spiral-context.h \
@@ -9433,6 +9433,7 @@ view.o: \
 	view.cpp \
 	document.h \
 	forward.h \
+	helper/sp-marshal.h \
 	inkscape.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -9450,6 +9451,7 @@ widgets/button.o: \
 	widgets/button.cpp \
 	forward.h \
 	helper/action.h \
+	helper/sp-marshal.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -9641,7 +9643,6 @@ widgets/gradient-position.o: \
 	sp-marker.h \
 	sp-object.h \
 	sp-paint-server.h \
-	sp-path-connection.h \
 	sp-path.h \
 	sp-shape.h \
 	svg/svg-types.h \
@@ -9825,6 +9826,7 @@ widgets/icon.o: \
 
 widgets/menu.o: \
 	widgets/menu.cpp \
+	helper/sp-marshal.h \
 	widgets/menu.h
 
 widgets/paint-selector.o: \
