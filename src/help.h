@@ -15,5 +15,6 @@
 
 void sp_help_about (void);
 void sp_help_tutorial (void);
+void sp_help_keys (void);
 
 #endif

@@ -535,6 +535,7 @@ static void
 sp_ui_help_menu(GtkWidget *m)
 {
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Tutorial"), G_CALLBACK(sp_help_tutorial), NULL);
+	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Keys and Mouse"), G_CALLBACK(sp_help_keys), NULL);
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 
 #ifdef WITH_MODULES

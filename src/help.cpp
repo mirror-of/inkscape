@@ -15,6 +15,7 @@
 #include <config.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtksignal.h>
+#include "inkscape.h"
 #include "document.h"
 #include "sp-text.h"
 #include "svg-view.h"
@@ -95,4 +96,12 @@ void
 sp_help_tutorial (void)
 {
 	sp_file_open (INKSCAPE_PIXMAPDIR "/tutorial.svg", NULL);
+	//	sp_view_set_statusf_error (SP_VIEW(SP_ACTIVE_DESKTOP), "Scroll down to read more.");
+}
+
+void
+sp_help_keys (void)
+{
+	sp_file_open (INKSCAPE_PIXMAPDIR "/keys.svg", NULL);
+	//	sp_view_set_statusf_error (SP_VIEW(SP_ACTIVE_DESKTOP), "Zoom in to read.");
 }
