@@ -378,15 +378,15 @@ spdc_endpoint_snap (SPDrawContext *dc, NRPoint *p, guint state)
 		double bn = 1e18; /* best normal */
 		double bdot = 0;
 		double vx = 0, vy = 1;
-		double r00 = cos (M_PI / NUMBER_OF_TURNS), r01 = sin (M_PI / NUMBER_OF_TURNS);
-		double r10 = -r01, r11 = r00;
-		double dx = p->x - dc->p[0].x;
-		double dy = p->y - dc->p[0].y;
-		int i;
-		for(i = 0; i < NUMBER_OF_TURNS; i++) {
-			double ndot = fabs(vy*dx-vx*dy);
-			double tx = r00*vx + r01*vy;
-			double ty = r10*vx + r11*vy;
+		double const r00 = cos (M_PI / NUMBER_OF_TURNS), r01 = sin (M_PI / NUMBER_OF_TURNS);
+		double const r10 = -r01, r11 = r00;
+		double const dx = p->x - dc->p[0].x;
+		double const dy = p->y - dc->p[0].y;
+
+		for(unsigned i = 0; i < NUMBER_OF_TURNS; i++) {
+			double const ndot = fabs(vy*dx - vx*dy);
+			double const tx = r00*vx + r01*vy;
+			double const ty = r10*vx + r11*vy;
 			if (ndot < bn) { 
 				/* I think it is better numerically to use the normal, rather than the */
 				/* dot product to assess solutions, but I haven't proven it */
@@ -654,6 +654,7 @@ fit_and_split (SPDrawContext * dc)
 
 		dc->green_bpaths = g_slist_prepend (dc->green_bpaths, cshape);
 
+		/* fixme: Shouldn't we be checking that npoints >= 2 ? */
 		dc->p[0] = dc->p[dc->npoints - 2];
 		dc->p[1] = dc->p[dc->npoints - 1];
 		dc->npoints = 2;
@@ -1145,7 +1146,8 @@ spdc_add_freehand_point (SPPencilContext *pc, NRPoint *p, guint state)
 
 	/* fixme: Cleanup following (Lauris) */
 	g_assert (dc->npoints > 0);
-	if ((p->x != dc->p[dc->npoints - 1].x) || (p->y != dc->p[dc->npoints - 1].y)) {
+	if ((p->x != dc->p[dc->npoints - 1].x) ||
+	    (p->y != dc->p[dc->npoints - 1].y)) {
 		dc->p[dc->npoints++] = *p;
 		fit_and_split (dc);
 	}
@@ -1162,8 +1164,9 @@ static void sp_pen_context_finish (SPEventContext *ec);
 static void sp_pen_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
 static gint sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event);
 
-static void spdc_pen_set_point (SPPenContext *pc, NRPoint *p, guint state);
-static void spdc_pen_set_ctrl (SPPenContext *pc, NRPoint *p, guint state);
+static void spdc_pen_set_initial_point (SPPenContext *pc, NRPoint const *p);
+static void spdc_pen_set_subsequent_point (SPPenContext *pc, NRPoint const *p);
+static void spdc_pen_set_ctrl (SPPenContext *pc, NRPoint const *p, guint state);
 static void spdc_pen_finish_segment (SPPenContext *pc, NRPoint *p, guint state);
 
 static void spdc_pen_finish (SPPenContext *pc, gboolean closed);
@@ -1364,11 +1367,11 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							/* Create green anchor */
 							dc->green_anchor = sp_draw_anchor_new (dc, dc->green_curve, TRUE, p.x, p.y);
 						}
-						spdc_pen_set_point (pc, &p, event->motion.state);
+						spdc_pen_set_initial_point (pc, &p);
 					} else {
 						/* Set end anchor */
 						dc->ea = anchor;
-						spdc_pen_set_point (pc, &p, event->motion.state);
+						spdc_pen_set_subsequent_point (pc, &p);
 						if (dc->green_anchor && dc->green_anchor->active) {
 							pc->state = SP_PEN_CONTEXT_CLOSE;
 							ret = TRUE;
@@ -1419,7 +1422,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				if (dc->npoints != 0) {
 					/* Only set point, if we are already appending */
 					/* fixme: Snapping */
-					spdc_pen_set_point (pc, &p, event->motion.state);
+					spdc_pen_set_subsequent_point (pc, &p);
 					ret = TRUE;
 				}
 				break;
@@ -1443,7 +1446,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				if (dc->npoints > 0) {
 					/* Only set point, if we are already appending */
 					/* fixme: Snapping */
-					spdc_pen_set_point (pc, &p, event->motion.state);
+					spdc_pen_set_subsequent_point (pc, &p);
 					ret = TRUE;
 				}
 				break;
@@ -1484,7 +1487,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							p = anchor->dp;
 						}
 						dc->sa = anchor;
-						spdc_pen_set_point (pc, &p, event->motion.state);
+						spdc_pen_set_initial_point (pc, &p);
 					} else {
 						/* Set end anchor here */
 						dc->ea = anchor;
@@ -1611,7 +1614,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				sp_canvas_item_hide (pc->cl0);
 				sp_canvas_item_hide (pc->cl1);
 				pc->state = SP_PEN_CONTEXT_POINT;
-				spdc_pen_set_point (pc, &pt, event->motion.state);
+				spdc_pen_set_subsequent_point (pc, &pt);
 				ret = TRUE;
 			}
 			break;
@@ -1632,38 +1635,42 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 }
 
 static void
-spdc_pen_set_point (SPPenContext *pc, NRPoint *p, guint state)
+spdc_pen_set_initial_point (SPPenContext *pc, NRPoint const *p)
 {
-	SPDrawContext *dc;
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
+	g_assert (dc->npoints == 0);
 
-	dc = SP_DRAW_CONTEXT (pc);
-
-	if (dc->npoints == 0) {
-		/* Just set initial point */
-		dc->p[0] = *p;
-		dc->p[1] = *p;
-		dc->npoints = 2;
-		sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), NULL);
-	} else {
-		dc->p[2] = *p;
-		dc->p[3] = *p;
-		dc->p[4] = *p;
-		dc->npoints = 5;
-		sp_curve_reset (dc->red_curve);
-		sp_curve_moveto (dc->red_curve, dc->p[0].x, dc->p[0].y);
-		if ((pc->onlycurves) ||
-		    (dc->p[1].x != dc->p[0].x) ||
-		    (dc->p[1].y != dc->p[0].y)) {
-			sp_curve_curveto (dc->red_curve, dc->p[1].x, dc->p[1].y, dc->p[2].x, dc->p[2].y, dc->p[3].x, dc->p[3].y);
-		} else {
-			sp_curve_lineto (dc->red_curve, dc->p[3].x, dc->p[3].y);
-		}
-		sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), dc->red_curve);
-	}
+	dc->p[0] = *p;
+	dc->p[1] = *p;
+	dc->npoints = 2;
+	sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), NULL);
 }
 
 static void
-spdc_pen_set_ctrl (SPPenContext *pc, NRPoint *p, guint state)
+spdc_pen_set_subsequent_point (SPPenContext *pc, NRPoint const *p)
+{
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
+	g_assert (dc->npoints != 0);
+
+	dc->p[2] = *p;
+	dc->p[3] = *p;
+	dc->p[4] = *p;
+	dc->npoints = 5;
+	sp_curve_reset (dc->red_curve);
+	sp_curve_moveto (dc->red_curve, dc->p[0].x, dc->p[0].y);
+	if ((pc->onlycurves)
+	    || (dc->p[1].x != dc->p[0].x)
+	    || (dc->p[1].y != dc->p[0].y))
+	{
+		sp_curve_curveto (dc->red_curve, dc->p[1].x, dc->p[1].y, dc->p[2].x, dc->p[2].y, dc->p[3].x, dc->p[3].y);
+	} else {
+		sp_curve_lineto (dc->red_curve, dc->p[3].x, dc->p[3].y);
+	}
+	sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), dc->red_curve);
+}
+
+static void
+spdc_pen_set_ctrl (SPPenContext *pc, NRPoint const *p, guint state)
 {
 	SPDrawContext *dc;
 
