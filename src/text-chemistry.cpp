@@ -57,6 +57,22 @@ shape_in_selection (SPSelection *selection)
 	return NULL;
 }
 
+void
+scale_text_recursive (SPItem *item, gdouble scale)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+    if (style) {
+        style->font_size.computed *= scale;
+    }
+    SP_OBJECT(item)->updateRepr();
+
+    for (SPObject *child = sp_object_first_child(SP_OBJECT(item)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+        if (SP_IS_ITEM(child))
+            scale_text_recursive ((SPItem *) child, scale);
+    }
+}
+
+
 void 
 text_put_on_path (void)
 {
@@ -79,7 +95,9 @@ text_put_on_path (void)
 		return;
 	}
 
-	// fixme: remove transform from text, but scale fontsize by expansion
+	// remove transform from text, but recursively scale text's fontsize by the expansion
+      scale_text_recursive (text, NR::expansion(SP_ITEM(text)->transform));
+      sp_repr_set_attr (SP_OBJECT_REPR (text), "transform", NULL);
 
 	// fixme in transform_selectiion: treat textpath and its path the same as clone and its original
 
