@@ -198,11 +198,12 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Clipboard</title>
 <keys><key><ctrl/>C</key>	 <action>copy selection</action></keys>
-<note>This places a copy of the selection to the Inkscape clipboard (not the system clipboard).</note>
+<note>This places a copy of the selection to the Inkscape clipboard. Text from text objects is also placed into the system clipboard.</note>
 <keys><key><ctrl/>X</key>	 <action>cut selection</action></keys>
-<note>This places a copy of the selection to the Inkscape clipboard and deletes the selection.</note>
+<note>This works the same as "copy selection" followed by deleting the selection.</note>
 <keys><key><ctrl/>V</key>	 <action>paste clipboard</action></keys>
 <note>This places the clipboard objects at the mouse cursor, or at the center of the window if mouse is outside the canvas.</note>
+<note>When editing text with the text tool, this pastes the text from the system clipboard into the current text object.</note>
 <keys><key><ctrl/><alt/>V</key>	 <action>paste in place</action></keys>
 <note>This places the clipboard objects to the original location from which they were copied.</note>
 <keys><key><shift/><ctrl/>V</key>  <action>paste style</action></keys> 

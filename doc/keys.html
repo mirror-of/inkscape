@@ -213,11 +213,12 @@ Ctrl+Y</span></td><td><span class="action">redo</span></td></tr>
 
 <tr bgcolor="f4ecf5"><td colspan="3"><h4>Clipboard</h4></td></tr>
 <tr bgcolor="f4ecf5"><td align="right"><span class="key">Ctrl+C</span></td><td><span class="action">copy selection</span></td></tr>
-<tr bgcolor="f4ecf5"><td colspan="3"><span class="note">This places a copy of the selection to the Inkscape clipboard (not the system clipboard).</span></td></tr>
+<tr bgcolor="f4ecf5"><td colspan="3"><span class="note">This places a copy of the selection to the Inkscape clipboard. Text from text objects is also placed into the system clipboard.</span></td></tr>
 <tr bgcolor="f4ecf5"><td align="right"><span class="key">Ctrl+X</span></td><td><span class="action">cut selection</span></td></tr>
-<tr bgcolor="f4ecf5"><td colspan="3"><span class="note">This places a copy of the selection to the Inkscape clipboard and deletes the selection.</span></td></tr>
+<tr bgcolor="f4ecf5"><td colspan="3"><span class="note">This works the same as "copy selection" followed by deleting the selection.</span></td></tr>
 <tr bgcolor="f4ecf5"><td align="right"><span class="key">Ctrl+V</span></td><td><span class="action">paste clipboard</span></td></tr>
 <tr bgcolor="f4ecf5"><td colspan="3"><span class="note">This places the clipboard objects at the mouse cursor, or at the center of the window if mouse is outside the canvas.</span></td></tr>
+<tr bgcolor="f4ecf5"><td colspan="3"><span class="note">When editing text with the text tool, this pastes the text from the system clipboard into the current text object.</span></td></tr>
 <tr bgcolor="f4ecf5"><td align="right"><span class="key">Ctrl+Alt+V</span></td><td><span class="action">paste in place</span></td></tr>
 <tr bgcolor="f4ecf5"><td colspan="3"><span class="note">This places the clipboard objects to the original location from which they were copied.</span></td></tr>
 <tr bgcolor="f4ecf5"><td align="right"><span class="key">Shift+Ctrl+V</span></td><td><span class="action">paste style</span></td></tr> 
@@ -620,7 +621,7 @@ Right Alt+&gt;</span></td><td><span class="action">scale right handle by 1 pixel
 <tr bgcolor="f9f1d9"><td align="right"><span class="key">Ctrl+Alt+mouse drag</span></td><td><span class="action">move along handles</span></td></tr>
 <tr bgcolor="f9f1d9"><td colspan="3"><span class="note">This restricts movement to the directions of the node's handles, their continuations and perpendiculars (total 8 snaps).</span></td></tr>
 <tr bgcolor="f9f1d9"><td align="right"><span class="key">Shift+mouse drag</span></td><td><span class="action">temporarily disable snapping</span></td></tr>
-<tr bgcolor="f9f1d9"><td colspan="3"><span class="note">Snapping nodes to grid can be enabled in Document Preferences (Ctrl+Shift+D). By default, only bounding box of objects snaps to grid/guides.</span></td></tr>
+<tr bgcolor="f9f1d9"><td colspan="3"><span class="note">Snapping nodes is enabled in Document Preferences. By default, only bounding box of objects snaps to grid/guides.</span></td></tr>
 <tr bgcolor="f9f1d9"><td align="right"><span class="key">mouse dragSpace</span></td><td><span class="action">drop a copy</span></td></tr>
 <tr bgcolor="f9f1d9"><td colspan="3"><span class="note">When dragging nodes with mouse, each Space leaves a copy of the selected object.</span></td></tr> 
 <tr bgcolor="f9f1d9"><td colspan="3"><span class="note">You can press and hold Space while dragging for a nice "trail."</span></td></tr>

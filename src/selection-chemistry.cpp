@@ -20,6 +20,8 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
+#include <gtkmm.h>
+
 #include "svg/svg.h"
 #include "xml/repr-private.h"
 #include "xml/repr-private.h"
@@ -684,6 +686,25 @@ void sp_selection_copy()
 
     const GSList *items = (GSList *) selection->itemList();
 
+    // 0. Copy text to system clipboard
+    // FIXME: for non-texts, put serialized XML as text to the clipboard; 
+    //for this sp_repr_write_stream needs to be rewritten with iostream instead of FILE
+    Glib::ustring text;
+    guint texts = 0;
+    for (GSList *i = (GSList *) items; i; i = i->next) {
+        SPItem *item = SP_ITEM (i->data);
+        if (SP_IS_TEXT (item)) {
+            if (texts > 0) // if more than one text object is copied, separate them by spaces
+                text += " ";
+            text += sp_text_get_string_multiline (SP_TEXT (item));
+            texts++;
+        }
+    }
+    if (!text.empty()) {
+        Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+        refClipboard->set_text(text);
+    }
+
     // 1.  Store referenced stuff:
     // clear old gradient clipboard
     while (gradient_clipboard) {
@@ -698,8 +719,9 @@ void sp_selection_copy()
     GSList *reprs = g_slist_copy ((GSList *) selection->reprList());
 
     // 2.  Store style:
-    if (style_clipboard)
+    if (style_clipboard) {
         sp_repr_css_attr_unref (style_clipboard);
+    }
     SPItem *item = SP_ITEM (items->data);
     // write the complete cascaded style, context-free
     style_clipboard = sp_css_attr_from_style (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
