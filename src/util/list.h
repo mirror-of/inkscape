@@ -41,7 +41,7 @@ template <typename T>
 class ListBase {
 public:
     typedef std::forward_iterator_tag iterator_category;
-    typedef T const value_type;
+    typedef T value_type;
     typedef std::ptrdiff_t difference_type;
     typedef typename Traits::Reference<value_type>::LValue reference;
     typedef typename Traits::Reference<value_type>::RValue const_reference;
@@ -92,19 +92,23 @@ public:
     explicit List(const_reference value, List const &next=List())
     : ListBase<T>(value, next) {}
 
-    reference operator*() const { return _first(); }
-    pointer operator->() const { return &_first(); }
+    reference operator*() const { return this->_first(); }
+    pointer operator->() const { return &this->_first(); }
 
-    bool operator==(List const &other) const { return _is_equivalent(other); }
-    bool operator!=(List const &other) const { return !_is_equivalent(other); }
+    bool operator==(List const &other) const {
+        return this->_is_equivalent(other);
+    }
+    bool operator!=(List const &other) const {
+        return !this->_is_equivalent(other);
+    }
 
     List &operator++() {
-        _advance();
+        this->_advance();
         return *this;
     }
     List operator++(int) {
         List old(*this);
-        _advance();
+        this->_advance();
         return old;
     }
 
@@ -124,16 +128,16 @@ public:
     explicit List(const_reference value, List const &next=List())
     : List<T const>(value, next) {}
 
-    reference operator*() const { return const_cast<reference>(_first()); }
-    pointer operator->() const { return const_cast<pointer>(&_first()); }
+    reference operator*() const { return this->_first(); }
+    pointer operator->() const { return &this->_first(); }
 
     List &operator++() {
-        _advance();
+        this->_advance();
         return *this;
     }
     List operator++(int) {
         List old(*this);
-        _advance();
+        this->_advance();
         return old;
     }
 
@@ -153,19 +157,23 @@ public:
     List(const_reference value, List const &next=List())
     : ListBase<T &>(value, next) {}
 
-    reference operator*() const { return _first(); }
-    pointer operator->() const { return &_first(); }
+    reference operator*() const { return this->_first(); }
+    pointer operator->() const { return &this->_first(); }
 
-    bool operator==(List const &other) const { return _is_equivalent(other); }
-    bool operator!=(List const &other) const { return !_is_equivalent(other); }
+    bool operator==(List const &other) const {
+        return this->_is_equivalent(other);
+    }
+    bool operator!=(List const &other) const {
+        return !this->_is_equivalent(other);
+    }
 
     List &operator++() {
-        _advance();
+        this->_advance();
         return *this;
     }
     List operator++(int) {
         List old(*this);
-        _advance();
+        this->_advance();
         return old;
     }
 
@@ -182,12 +190,12 @@ public:
     : List<T>(value, next) {}
 
     MutableList &operator++() {
-        _advance();
+        this->_advance();
         return *this;
     }
     MutableList operator++(int) {
         MutableList old(*this);
-        _advance();
+        this->_advance();
         return old;
     }
 
@@ -196,13 +204,65 @@ public:
                                          MutableList const &);
 };
 
+/** @brief Creates a (non-empty) linked list.
+ * 
+ * Creates a new linked list with a copy of the given value ('first');
+ * the remainder of the list will be the list provided as 'rest'.
+ *
+ * The remainder of the list -- the "tail" -- is incorporated by
+ * reference, not by value, so changes to that list will affect this one.
+ *
+ * The copied value is managed by the garbage collector as non-finalized
+ * memory; if it has a non-trivial destructor, that destructor will not
+ * be automatically called when the list is destroyed.
+ *
+ * cons() is synonymous with List<T>(first, rest), except that the
+ * compiler will usually be able to infer T from the type of 'rest'
+ *
+ * If you need to create an empty list, call the List<> constructor
+ * with no arguments, like so:
+ *
+ *  List<int>()
+ *
+ * @see List<>
+ * @see is_empty<>
+ *
+ * @param first the value for the first element of the list
+ * @param rest the rest of the list; may be an empty list
+ *
+ * @returns a new list
+ *
+ */
 template <typename T>
-inline List<T> cons(typename Traits::Reference<T>::RValue value,
-                    List<T> const &next)
+inline List<T> cons(typename Traits::Reference<T>::RValue first,
+                    List<T> const &rest)
 {
-    return List<T>(value, next);
+    return List<T>(first, rest);
 }
 
+/** @brief Creates a (non-empty) linked list whose tail can be exchanged
+ *         for another.
+ *
+ * Creates a new linked list, but one whose tail can be exchanged for
+ * another later by using set_rest() or assignment through rest()
+ * as an lvalue.
+ *
+ * This form of cons() is synonymous with MutableList<T>(first, rest),
+ * except that the compiler can usually infer the T from the type of
+ * 'rest'.
+ *
+ * As with List<>, you can create an empty list like so:
+ *
+ *  MutableList<int>()
+ *
+ * @see MutableList<>
+ * @see is_empty<>
+ *
+ * @param first the value for the first element of the list
+ * @param rest the rest of the list; may be an empty list
+ *
+ * @returns a new list
+ */
 template <typename T>
 inline MutableList<T> cons(typename Traits::Reference<T>::RValue first,
                            MutableList<T> const &rest)
@@ -210,28 +270,111 @@ inline MutableList<T> cons(typename Traits::Reference<T>::RValue first,
     return MutableList<T>(first, rest);
 }
 
+/** @brief Returns true if the given list is empty.
+ *
+ * Returns true if the given list is empty.  This is equivalent
+ * to !list.
+ *
+ * @param list the list
+ *
+ * @returns true if the list is empty, false otherwise.
+ */
+template <typename T>
+inline bool is_empty(List<T> const &list) { return !list; }
+
+/** @brief Returns the first value in a linked list.
+ *
+ * Returns a reference to the first value in the list.  This
+ * corresponds to the value of the first argument passed to cons().
+ *
+ * If the list holds mutable values (or references to them), first()
+ * can be used as an lvalue.
+ *
+ * For example:
+ * 
+ *  first(list) = value;
+ *
+ * The results of calling this on an empty list are undefined.
+ *
+ * @see cons<>
+ * @see is_empty<>
+ *
+ * @param list the list; cannot be empty
+ *
+ * @returns a reference to the first value in the list
+ */
 template <typename T>
 inline typename List<T>::reference first(List<T> const &list) {
     return list._first();
 }
 
+/** @brief Returns the remainder of a linked list after the first element.
+ *
+ * Returns the remainder of the list after the first element (its "tail").
+ *
+ * This will be the same as the second argument passed to cons().
+ *
+ * The results of calling this on an empty list are undefined.
+ *
+ * @see cons<>
+ * @see is_empty<>
+ *
+ * @param list the list; cannot be empty
+ *
+ * @returns the remainder of the list
+ */
 template <typename T>
 inline List<T> const &rest(List<T> const &list) {
     return static_cast<List<T> &>(list._rest());
 }
 
+/** @brief Returns a reference to the remainder of a linked list after
+ *         the first element.
+ *
+ * Returns a reference to the remainder of the list after the first
+ * element (its "tail").  For MutableList<>, rest() can be used as
+ * an lvalue, to set a new tail.
+ *
+ * For example:
+ *
+ *  rest(list) = other;
+ *
+ * Results of calling this on an empty list are undefined.
+ *
+ * @see cons<>
+ * @see is_empty<>
+ *
+ * @param list the list; cannot be empty
+ *
+ * @returns a reference to the remainder of the list
+ */
 template <typename T>
 inline MutableList<T> &rest(MutableList<T> const &list) {
     return static_cast<MutableList<T> &>(list._rest());
 }
 
+/** @brief Sets a new tail for an existing linked list.
+ * 
+ * Sets the tail of the given MutableList<>, corresponding to the
+ * second argument of cons().
+ *
+ * Results of calling this on an empty list are undefined.
+ *
+ * @see rest<>
+ * @see cons<>
+ * @see is_empty<>
+ *
+ * @param list the list; cannot be empty
+ * @param rest the new tail; corresponds to the second argument of cons()
+ *
+ * @returns the new tail
+ */
 template <typename T>
 inline MutableList<T> const &set_rest(MutableList<T> const &list,
                                       MutableList<T> const &rest)
 {
     return static_cast<MutableList<T> &>(list._rest()) = rest;
 }
-
 
 }
 
