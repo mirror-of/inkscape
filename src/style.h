@@ -229,10 +229,8 @@ void sp_style_merge_from_parent (SPStyle *style, SPStyle *parent);
 gchar *sp_style_write_string (SPStyle *style);
 gchar *sp_style_write_difference (SPStyle *from, SPStyle *to);
 
-void sp_style_set_fill_color_rgba (SPStyle *style, float r, float g, float b, float a, unsigned int fill_set, unsigned int opacity_set);
-void sp_style_set_fill_color_cmyka (SPStyle *style, float c, float m, float y, float k, float a, unsigned int fill_set, unsigned int opacity_set);
-void sp_style_set_stroke_color_rgba (SPStyle *style, float r, float g, float b, float a, unsigned int fill_set, unsigned int opacity_set);
-void sp_style_set_stroke_color_cmyka (SPStyle *style, float c, float m, float y, float k, float a, unsigned int fill_set, unsigned int opacity_set);
+void sp_style_set_fill_color_alpha (SPStyle *style, const SPColor* color, float a, unsigned int fill_set, unsigned int opacity_set);
+void sp_style_set_stroke_color_alpha (SPStyle *style, const SPColor* color, float a, unsigned int fill_set, unsigned int opacity_set);
 
 void sp_style_set_opacity (SPStyle *style, float opacity, unsigned int opacity_set);
 

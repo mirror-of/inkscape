@@ -29,6 +29,7 @@
 #include "helper/unit-menu.h"
 #include "svg/svg.h"
 #include "widgets/sp-color-selector.h"
+#include "widgets/sp-color-notebook.h"
 #include "widgets/sp-color-preview.h"
 #include "../inkscape.h"
 #include "../document.h"
@@ -498,12 +499,17 @@ sp_color_picker_set_rgba32 (GtkWidget *cp, guint32 rgba)
 {
 	SPColorPreview *cpv;
 	SPColorSelector *csel;
+	SPColor color;
 
 	cpv = (SPColorPreview *)g_object_get_data (G_OBJECT (cp), "preview");
 	sp_color_preview_set_rgba32 (cpv, rgba);
 
 	csel = (SPColorSelector *)g_object_get_data (G_OBJECT (cp), "selector");
-	if (csel) sp_color_selector_set_rgba32 (csel, rgba);
+	if (csel)
+	{
+		sp_color_set_rgb_rgba32 (&color, rgba);
+		sp_color_selector_set_color_alpha (csel, &color, SP_RGBA32_A_F(rgba));
+	}
 
 	g_object_set_data (G_OBJECT (cp), "color", GUINT_TO_POINTER (rgba));
 }
@@ -527,12 +533,16 @@ sp_color_picker_color_mod (SPColorSelector *csel, GObject *cp)
 	guint32 rgba;
 	SPColorPreview *cpv;
 	SPRepr *repr;
+	SPColor color;
+	float alpha;
 	gchar c[32];
 	gchar *colorkey, *alphakey;
 
 	if (g_object_get_data (G_OBJECT (cp), "update")) return;
 
-	rgba = sp_color_selector_get_rgba32 (csel);
+	sp_color_selector_get_color_alpha (csel, &color, &alpha);
+	rgba = sp_color_get_rgba32_falpha (&color, alpha);
+
 	g_object_set_data (G_OBJECT (cp), "color", GUINT_TO_POINTER (rgba));
 
 	cpv = (SPColorPreview *)g_object_get_data (G_OBJECT (cp), "preview");
@@ -560,6 +570,8 @@ static void
 sp_color_picker_clicked (GObject *cp, void *data)
 {
 	GtkWidget *w;
+	guint32 rgba;
+	SPColor color;
 
 	w = (GtkWidget *)g_object_get_data (cp, "window");
 	if (!w) {
@@ -573,9 +585,11 @@ sp_color_picker_clicked (GObject *cp, void *data)
 		vb = gtk_vbox_new (FALSE, 4);
 		gtk_container_add (GTK_CONTAINER (w), vb);
 
-		csel = sp_color_selector_new ();
+		csel = sp_color_selector_new (SP_TYPE_COLOR_NOTEBOOK, SP_COLORSPACE_TYPE_UNKNOWN);
 		gtk_box_pack_start (GTK_BOX (vb), csel, TRUE, TRUE, 0);
-		sp_color_selector_set_rgba32 (SP_COLOR_SELECTOR (csel), GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (cp), "color")));
+		rgba = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (cp), "color"));
+		sp_color_set_rgb_rgba32 (&color, rgba);
+		sp_color_selector_set_color_alpha (SP_COLOR_SELECTOR (csel), &color, SP_RGBA32_A_F(rgba));
 		g_signal_connect (G_OBJECT (csel), "dragged", G_CALLBACK (sp_color_picker_color_mod), cp);
 		g_signal_connect (G_OBJECT (csel), "changed", G_CALLBACK (sp_color_picker_color_mod), cp);
 		g_object_set_data (cp, "selector", csel);

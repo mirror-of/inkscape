@@ -1297,16 +1297,17 @@ sp_style_read_dash (ArtVpathDash *dash, const gchar *str)
 }
 
 void
-sp_style_set_fill_color_rgba (SPStyle *style, gfloat r, gfloat g, gfloat b, gfloat a, unsigned int fill_set, unsigned int opacity_set)
+sp_style_set_fill_color_alpha (SPStyle *style, const SPColor* color, gfloat a, unsigned int fill_set, unsigned int opacity_set)
 {
 	g_return_if_fail (style != NULL);
+	g_return_if_fail (color != NULL);
 
 	sp_style_paint_clear (style, &style->fill, TRUE, FALSE);
 
 	style->fill.set = fill_set;
 	style->fill.inherit = FALSE;
 	style->fill.type = SP_PAINT_TYPE_COLOR;
-	sp_color_set_rgb_float (&style->fill.value.color, r, g, b);
+	sp_color_copy (&style->fill.value.color, color);
 	style->fill_opacity.set = opacity_set;
 	style->fill_opacity.inherit = FALSE;
 	style->fill_opacity.value = SP_SCALE24_FROM_FLOAT (a);
@@ -1317,27 +1318,7 @@ sp_style_set_fill_color_rgba (SPStyle *style, gfloat r, gfloat g, gfloat b, gflo
 }
 
 void
-sp_style_set_fill_color_cmyka (SPStyle *style, gfloat c, gfloat m, gfloat y, gfloat k, gfloat a, unsigned int fill_set, unsigned int opacity_set)
-{
-	g_return_if_fail (style != NULL);
-
-	sp_style_paint_clear (style, &style->fill, TRUE, FALSE);
-
-	style->fill.set = fill_set;
-	style->fill.inherit = FALSE;
-	style->fill.type = SP_PAINT_TYPE_COLOR;
-	sp_color_set_cmyk_float (&style->fill.value.color, c, m, y, k);
-	style->fill_opacity.set = opacity_set;
-	style->fill_opacity.inherit = FALSE;
-	style->fill_opacity.value = SP_SCALE24_FROM_FLOAT (a);
-
-	if (style->object) {
-		sp_object_request_modified (style->object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-	}
-}
-
-void
-sp_style_set_stroke_color_rgba (SPStyle *style, gfloat r, gfloat g, gfloat b, gfloat a, unsigned int stroke_set, unsigned int opacity_set)
+sp_style_set_stroke_color_alpha (SPStyle *style, const SPColor* color, gfloat a, unsigned int stroke_set, unsigned int opacity_set)
 {
 	g_return_if_fail (style != NULL);
 
@@ -1346,27 +1327,7 @@ sp_style_set_stroke_color_rgba (SPStyle *style, gfloat r, gfloat g, gfloat b, gf
 	style->stroke.set = stroke_set;
 	style->stroke.inherit = FALSE;
 	style->stroke.type = SP_PAINT_TYPE_COLOR;
-	sp_color_set_rgb_float (&style->stroke.value.color, r, g, b);
-	style->stroke_opacity.set = opacity_set;
-	style->stroke_opacity.inherit = FALSE;
-	style->stroke_opacity.value = SP_SCALE24_FROM_FLOAT (a);
-
-	if (style->object) {
-		sp_object_request_modified (style->object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-	}
-}
-
-void
-sp_style_set_stroke_color_cmyka (SPStyle *style, gfloat c, gfloat m, gfloat y, gfloat k, gfloat a, unsigned int stroke_set, unsigned int opacity_set)
-{
-	g_return_if_fail (style != NULL);
-
-	sp_style_paint_clear (style, &style->stroke, TRUE, FALSE);
-
-	style->stroke.set = stroke_set;
-	style->stroke.inherit = FALSE;
-	style->stroke.type = SP_PAINT_TYPE_COLOR;
-	sp_color_set_cmyk_float (&style->stroke.value.color, c, m, y, k);
+	sp_color_copy (&style->stroke.value.color, color);
 	style->stroke_opacity.set = opacity_set;
 	style->stroke_opacity.inherit = FALSE;
 	style->stroke_opacity.value = SP_SCALE24_FROM_FLOAT (a);

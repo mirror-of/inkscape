@@ -50,7 +50,8 @@ struct _SPPaintSelector {
 	GtkWidget *none, *solid, *gradient, *radial, *pattern, *fractal;
 	GtkWidget *frame, *selector;
 
-	guint32 rgba;
+	SPColor color;
+	float alpha;
 };
 
 struct _SPPaintSelectorClass {
@@ -70,8 +71,7 @@ GtkWidget *sp_paint_selector_new (void);
 
 void sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode);
 
-void sp_paint_selector_set_color_rgba_floatv (SPPaintSelector *psel, gfloat *rgba);
-void sp_paint_selector_set_color_cmyka_floatv (SPPaintSelector *psel, gfloat *cmyka);
+void sp_paint_selector_set_color_alpha (SPPaintSelector *psel, const SPColor *color, float alpha);
 
 void sp_paint_selector_set_gradient_linear (SPPaintSelector *psel, SPGradient *vector);
 void sp_paint_selector_set_lgradient_position (SPPaintSelector *psel, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
@@ -87,8 +87,7 @@ void sp_paint_selector_get_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatr
 void sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, SPGradientUnits units, SPGradientSpread spread);
 void sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnits *units, SPGradientSpread *spread);
 
-void sp_paint_selector_get_rgba_floatv (SPPaintSelector *psel, gfloat *rgba);
-void sp_paint_selector_get_cmyka_floatv (SPPaintSelector *psel, gfloat *cmyka);
+void sp_paint_selector_get_color_alpha (SPPaintSelector *psel, SPColor *color, gfloat *alpha);
 
 SPGradient *sp_paint_selector_get_gradient_vector (SPPaintSelector *psel);
 

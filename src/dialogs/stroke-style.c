@@ -161,6 +161,7 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 	const GSList *objects, *l;
 	SPObject *object;
 	SPGradient *vector;
+	SPColor color;
 	gfloat c[5];
 	SPLinearGradient *lg;
 	SPRadialGradient *rg;
@@ -208,12 +209,14 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
 		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
 		sp_stroke_style_get_average_color_rgba (objects, c);
-		sp_paint_selector_set_color_rgba_floatv (psel, c);
+		sp_color_set_rgb_float (&color, c[0], c[1], c[2]);
+		sp_paint_selector_set_color_alpha (psel, &color, c[3]);
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
 		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
 		sp_stroke_style_get_average_color_cmyka (objects, c);
-		sp_paint_selector_set_color_cmyka_floatv (psel, c);
+		sp_color_set_cmyk_float (&color, c[0], c[1], c[2], c[3]);
+		sp_paint_selector_set_color_alpha (psel, &color, c[4]);
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 		object = SP_OBJECT (objects->data);
@@ -284,7 +287,6 @@ sp_stroke_style_paint_update_repr (SPWidget *spw, SPRepr *repr)
 	SPPaintSelector *psel;
 	SPPaintSelectorMode pselmode;
 	SPStyle *style;
-	gfloat c[5];
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 
@@ -305,16 +307,9 @@ sp_stroke_style_paint_update_repr (SPWidget *spw, SPRepr *repr)
 		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_NONE);
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
-		sp_color_get_rgb_floatv (&style->stroke.value.color, c);
-		c[3] = SP_SCALE24_TO_FLOAT (style->stroke_opacity.value);
-		sp_paint_selector_set_color_rgba_floatv (psel, c);
-		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
-		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
-		sp_color_get_cmyk_floatv (&style->stroke.value.color, c);
-		c[4] = SP_SCALE24_TO_FLOAT (style->stroke_opacity.value);
-		sp_paint_selector_set_color_cmyka_floatv (psel, c);
+		sp_paint_selector_set_mode (psel, pselmode);
+		sp_paint_selector_set_color_alpha (psel, &style->stroke.value.color, style->stroke_opacity.value);
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 		/* fixme: Think about it (Lauris) */
@@ -344,7 +339,8 @@ sp_stroke_style_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 {
 	const GSList *items, *i;
 	SPGradient *vector;
-	gfloat c[5];
+	SPColor color;
+	gfloat alpha;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 #ifdef SP_SS_VERBOSE
@@ -357,17 +353,11 @@ sp_stroke_style_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 		g_warning ("file %s: line %d: Paint %d should not emit 'dragged'", __FILE__, __LINE__, psel->mode);
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-		sp_paint_selector_get_rgba_floatv (psel, c);
-		items = sp_widget_get_item_list (spw);
-		for (i = items; i != NULL; i = i->next) {
-			sp_style_set_stroke_color_rgba (SP_OBJECT_STYLE (i->data), c[0], c[1], c[2], c[3], TRUE, TRUE);
-		}
-		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
-		sp_paint_selector_get_cmyka_floatv (psel, c);
+		sp_paint_selector_get_color_alpha (psel, &color, &alpha);
 		items = sp_widget_get_item_list (spw);
 		for (i = items; i != NULL; i = i->next) {
-			sp_style_set_stroke_color_cmyka (SP_OBJECT_STYLE (i->data), c[0], c[1], c[2], c[3], c[4], TRUE, TRUE);
+			sp_style_set_stroke_color_alpha (SP_OBJECT_STYLE (i->data), &color, alpha, TRUE, TRUE);
 		}
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
@@ -402,9 +392,11 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 	const GSList *items, *i, *r;
 	GSList *reprs;
 	SPCSSAttr *css;
-	gfloat rgba[4], cmyka[5];
+	SPColor color;
+	gfloat alpha;
 	SPGradient *vector;
 	gchar b[64];
+	gchar *p;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 #ifdef SP_SS_VERBOSE
@@ -439,30 +431,23 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-		css = sp_repr_css_attr_new ();
-		sp_paint_selector_get_rgba_floatv (psel, rgba);
-		sp_svg_write_color (b, 64, SP_RGBA32_F_COMPOSE (rgba[0], rgba[1], rgba[2], 0.0));
-		sp_repr_css_set_property (css, "stroke", b);
-		g_snprintf (b, 64, "%g", rgba[3]);
-		sp_repr_css_set_property (css, "stroke-opacity", b);
-		for (r = reprs; r != NULL; r = r->next) {
-			sp_repr_set_attr_recursive ((SPRepr *) r->data, "sodipodi:stroke-cmyk", NULL);
-			sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
-		}
-		sp_repr_css_attr_unref (css);
-		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
-		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
 		css = sp_repr_css_attr_new ();
-		sp_paint_selector_get_cmyka_floatv (psel, cmyka);
-		sp_color_cmyk_to_rgb_floatv (rgba, cmyka[0], cmyka[1], cmyka[2], cmyka[3]);
-		sp_svg_write_color (b, 64, SP_RGBA32_F_COMPOSE (rgba[0], rgba[1], rgba[2], 0.0));
+		sp_paint_selector_get_color_alpha (psel, &color, &alpha);
+		sp_svg_write_color (b, 64, sp_color_get_rgba32_falpha (&color, alpha));
 		sp_repr_css_set_property (css, "stroke", b);
-		g_snprintf (b, 64, "%g", cmyka[4]);
+		g_snprintf (b, 64, "%g", alpha);
 		sp_repr_css_set_property (css, "stroke-opacity", b);
-		g_snprintf (b, 64, "(%g %g %g %g)", cmyka[0], cmyka[1], cmyka[2], cmyka[3]);
+		if (sp_color_get_colorspace_type (&color) == SP_COLORSPACE_TYPE_CMYK) {
+			gfloat cmyk[4];
+			sp_color_get_cmyk_floatv (&color, cmyk);
+			g_snprintf (b, 64, "(%g %g %g %g)", cmyk[0], cmyk[1], cmyk[2], cmyk[3]);
+			p = b;
+		} else {
+			p = NULL;
+		}
 		for (r = reprs; r != NULL; r = r->next) {
-			sp_repr_set_attr_recursive ((SPRepr *) r->data, "sodipodi:stroke-cmyk", b);
+			sp_repr_set_attr_recursive ((SPRepr *) r->data, "sodipodi:stroke-cmyk", p);
 			sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 		}
 		sp_repr_css_attr_unref (css);
@@ -578,7 +563,7 @@ sp_stroke_radio_button(GtkWidget* tb, const char* n, const char* xpm,
 GtkWidget *
 sp_stroke_style_line_widget_new (void)
 {
-	GtkWidget *spw, *f, *t, *l, *hb, *sb, *us, *tb, *ds;
+	GtkWidget *spw, *f, *t, *hb, *sb, *us, *tb, *ds;
 	GtkObject *a;
 	gint i;
 

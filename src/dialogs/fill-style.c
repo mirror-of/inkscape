@@ -220,6 +220,7 @@ sp_fill_style_widget_update (SPWidget *spw, SPSelection *sel)
 	const GSList *objects, *l;
 	SPObject *object;
 	SPGradient *vector;
+	SPColor color;
 	gfloat c[5];
 	SPLinearGradient *lg;
 	SPRadialGradient *rg;
@@ -267,12 +268,14 @@ sp_fill_style_widget_update (SPWidget *spw, SPSelection *sel)
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
 		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
 		sp_fill_style_get_average_color_rgba (objects, c);
-		sp_paint_selector_set_color_rgba_floatv (psel, c);
+		sp_color_set_rgb_float (&color, c[0], c[1], c[2]);
+		sp_paint_selector_set_color_alpha (psel, &color, c[3]);
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
 		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
 		sp_fill_style_get_average_color_cmyka (objects, c);
-		sp_paint_selector_set_color_cmyka_floatv (psel, c);
+		sp_color_set_cmyk_float (&color, c[0], c[1], c[2], c[3]);
+		sp_paint_selector_set_color_alpha (psel, &color, c[4]);
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 		object = SP_OBJECT (objects->data);
@@ -347,6 +350,7 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
 	GtkWidget *fillrule;
 	SPPaintSelectorMode pselmode;
 	SPStyle *style;
+	SPColor color;
 	gfloat c[5];
 
 	if (g_object_get_data (G_OBJECT (spw), "update")) return;
@@ -374,13 +378,15 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
 		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
 		sp_color_get_rgb_floatv (&style->fill.value.color, c);
 		c[3] = SP_SCALE24_TO_FLOAT (style->fill_opacity.value);
-		sp_paint_selector_set_color_rgba_floatv (psel, c);
+		sp_color_set_rgb_float (&color, c[0], c[1], c[2]);
+		sp_paint_selector_set_color_alpha (psel, &color, c[3]);
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
 		sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
 		sp_color_get_cmyk_floatv (&style->fill.value.color, c);
 		c[4] = SP_SCALE24_TO_FLOAT (style->fill_opacity.value);
-		sp_paint_selector_set_color_cmyka_floatv (psel, c);
+		sp_color_set_cmyk_float (&color, c[0], c[1], c[2], c[3]);
+		sp_paint_selector_set_color_alpha (psel, &color, c[4]);
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 		break;
@@ -415,6 +421,8 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 {
 	const GSList *items, *i;
 	SPGradient *vector;
+	SPColor color;
+	gfloat alpha;
 	gfloat c[5];
 
 	if (!spw->inkscape) return;
@@ -430,17 +438,11 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 		g_warning ("file %s: line %d: Paint %d should not emit 'dragged'", __FILE__, __LINE__, psel->mode);
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-		sp_paint_selector_get_rgba_floatv (psel, c);
-		items = sp_widget_get_item_list (spw);
-		for (i = items; i != NULL; i = i->next) {
-			sp_style_set_fill_color_rgba (SP_OBJECT_STYLE (i->data), c[0], c[1], c[2], c[3], TRUE, TRUE);
-		}
-		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
-		sp_paint_selector_get_cmyka_floatv (psel, c);
+		sp_paint_selector_get_color_alpha (psel, &color, &alpha);
 		items = sp_widget_get_item_list (spw);
 		for (i = items; i != NULL; i = i->next) {
-			sp_style_set_fill_color_cmyka (SP_OBJECT_STYLE (i->data), c[0], c[1], c[2], c[3], c[4], TRUE, TRUE);
+			sp_style_set_fill_color_alpha (SP_OBJECT_STYLE (i->data), &color, alpha, TRUE, TRUE);
 		}
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
@@ -476,7 +478,10 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 	const GSList *items, *i, *r;
 	GSList *reprs;
 	SPCSSAttr *css;
-	gfloat rgba[4], cmyka[5];
+	SPColor color;
+	gfloat alpha;
+	guint32 rgba;
+	gfloat cmyk[4];
 	SPGradient *vector;
 	gchar b[64];
 
@@ -518,10 +523,11 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
 		css = sp_repr_css_attr_new ();
-		sp_paint_selector_get_rgba_floatv (psel, rgba);
-		sp_svg_write_color (b, 64, SP_RGBA32_F_COMPOSE (rgba[0], rgba[1], rgba[2], 0.0));
+		sp_paint_selector_get_color_alpha (psel, &color, &alpha);
+		rgba = sp_color_get_rgba32_falpha (&color, alpha);
+		sp_svg_write_color (b, 64, rgba);
 		sp_repr_css_set_property (css, "fill", b);
-		g_snprintf (b, 64, "%g", rgba[3]);
+		g_snprintf (b, 64, "%g", alpha);
 		sp_repr_css_set_property (css, "fill-opacity", b);
 		for (r = reprs; r != NULL; r = r->next) {
 			sp_repr_set_attr_recursive ((SPRepr *) r->data, "sodipodi:fill-cmyk", NULL);
@@ -532,13 +538,14 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
 		css = sp_repr_css_attr_new ();
-		sp_paint_selector_get_cmyka_floatv (psel, cmyka);
-		sp_color_cmyk_to_rgb_floatv (rgba, cmyka[0], cmyka[1], cmyka[2], cmyka[3]);
-		sp_svg_write_color (b, 64, SP_RGBA32_F_COMPOSE (rgba[0], rgba[1], rgba[2], 0.0));
+		sp_paint_selector_get_color_alpha (psel, &color, &alpha);
+		rgba = sp_color_get_rgba32_falpha (&color, alpha);
+		sp_svg_write_color (b, 64, rgba);
 		sp_repr_css_set_property (css, "fill", b);
-		g_snprintf (b, 64, "%g", cmyka[4]);
+		g_snprintf (b, 64, "%g", alpha);
 		sp_repr_css_set_property (css, "fill-opacity", b);
-		g_snprintf (b, 64, "(%g %g %g %g)", cmyka[0], cmyka[1], cmyka[2], cmyka[3]);
+		sp_color_get_cmyk_floatv (&color, cmyk);
+		g_snprintf (b, 64, "(%g %g %g %g)", cmyk[0], cmyk[1], cmyk[2], cmyk[3]);
 		for (r = reprs; r != NULL; r = r->next) {
 			sp_repr_set_attr_recursive ((SPRepr *) r->data, "sodipodi:fill-cmyk", b);
 			sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");

@@ -13,6 +13,9 @@
  */
 
 #include <config.h>
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
 #include <gtk/gtksignal.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtklabel.h>
@@ -388,6 +391,7 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 
 
 #include "../widgets/sp-color-selector.h"
+#include "../widgets/sp-color-notebook.h"
 
 #define PAD 4
 
@@ -424,7 +428,7 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 	f = gtk_frame_new (_("Start color"));
 	gtk_widget_show (f);
 	gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, PAD);
-	csel = (GtkWidget*)sp_color_selector_new ();
+	csel = (GtkWidget*)sp_color_selector_new (SP_TYPE_COLOR_NOTEBOOK, SP_COLORSPACE_TYPE_NONE);
 	g_object_set_data (G_OBJECT (vb), "start", csel);
 	gtk_widget_show (csel);
 	gtk_container_add (GTK_CONTAINER (f), csel);
@@ -434,7 +438,7 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 	f = gtk_frame_new (_("End color"));
 	gtk_widget_show (f);
 	gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, PAD);
-	csel = (GtkWidget*)sp_color_selector_new ();
+	csel = (GtkWidget*)sp_color_selector_new (SP_TYPE_COLOR_NOTEBOOK, SP_COLORSPACE_TYPE_NONE);
 	g_object_set_data (G_OBJECT (vb), "end", csel);
 	gtk_widget_show (csel);
 	gtk_container_add (GTK_CONTAINER (f), csel);
@@ -501,12 +505,11 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 {
 	SPGradient *old;
 	GtkWidget *w;
-	guint32 cs, ce;
 
 	old = (SPGradient*)g_object_get_data (G_OBJECT (widget), "gradient");
 	if (old != gradient) {
 		if (old) {
-  			sp_signal_disconnect_by_data (old, widget);
+			sp_signal_disconnect_by_data (old, widget);
 		}
 		if (gradient) {
 			g_signal_connect (G_OBJECT (gradient), "release", G_CALLBACK (sp_gradient_vector_gradient_release), widget);
@@ -518,14 +521,12 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 
 	if (gradient) {
 		sp_gradient_ensure_vector (gradient);
-		cs = sp_color_get_rgba32_falpha (&gradient->vector->stops[0].color, gradient->vector->stops[0].opacity);
-		ce = sp_color_get_rgba32_falpha (&gradient->vector->stops[1].color, gradient->vector->stops[1].opacity);
 
 		/* Set color selector values */
 		w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), "start");
-		sp_color_selector_set_any_rgba32 (SP_COLOR_SELECTOR (w), cs);
+		sp_color_selector_set_color_alpha (SP_COLOR_SELECTOR (w), &gradient->vector->stops[0].color, gradient->vector->stops[0].opacity);
 		w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), "end");
-		sp_color_selector_set_any_rgba32 (SP_COLOR_SELECTOR (w), ce);
+		sp_color_selector_set_color_alpha (SP_COLOR_SELECTOR (w), &gradient->vector->stops[1].color, gradient->vector->stops[1].opacity);
 
 		/* Fixme: Sensitivity */
 	}
@@ -602,7 +603,7 @@ sp_gradient_vector_color_dragged (SPColorSelector *csel, GtkObject *object)
 {
 	SPGradient *gradient, *ngr;
 	SPGradientVector *vector;
-	gfloat c[4];
+	size_t needed;
 
 	if (blocked) return;
 
@@ -619,21 +620,22 @@ sp_gradient_vector_color_dragged (SPColorSelector *csel, GtkObject *object)
 
 	sp_gradient_ensure_vector (ngr);
 
-	vector = (SPGradientVector*)alloca (sizeof (SPGradientVector) + sizeof (SPGradientStop));
+	needed = sizeof (SPGradientVector) + sizeof (SPGradientStop);
+	vector = (SPGradientVector*)alloca (needed);
+#ifdef HAVE_MEMSET
+	memset (vector, 0, needed);
+#endif
 	vector->nstops = 2;
 	vector->start = ngr->vector->start;
 	vector->end = ngr->vector->end;
 
 	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "start");
-	sp_color_selector_get_rgba_floatv (csel, c);
 	vector->stops[0].offset = 0.0;
-	sp_color_set_rgb_float (&vector->stops[0].color, c[0], c[1], c[2]);
-	vector->stops[0].opacity = c[3];
+	sp_color_selector_get_color_alpha (csel, &vector->stops[0].color, &vector->stops[0].opacity);
+
 	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "end");
-	sp_color_selector_get_rgba_floatv (csel, c);
 	vector->stops[1].offset = 1.0;
-	sp_color_set_rgb_float (&vector->stops[1].color, c[0], c[1], c[2]);
-	vector->stops[1].opacity = c[3];
+	sp_color_selector_get_color_alpha (csel, &vector->stops[1].color, &vector->stops[1].opacity);
 
 	sp_gradient_set_vector (ngr, vector);
 
@@ -646,7 +648,9 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	SPGradient *gradient, *ngr;
 	gdouble start, end;
 	SPObject *child;
-	guint32 color;
+	SPColor color;
+	float alpha;
+	guint32 rgb;
 	gchar c[256];
 
 	if (blocked) return;
@@ -675,10 +679,11 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	g_return_if_fail (child != NULL);
 
 	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "start");
-	color = sp_color_selector_get_rgba32 (csel);
+	sp_color_selector_get_color_alpha (csel, &color, &alpha);
+	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
 
 	sp_repr_set_double_attribute (SP_OBJECT_REPR (child), "offset", start);
-	g_snprintf (c, 256, "stop-color:#%06x;stop-opacity:%g;", color >> 8, (gdouble) (color & 0xff) / 255.0);
+	g_snprintf (c, 256, "stop-color:#%06x;stop-opacity:%g;", rgb >> 8, (gdouble) alpha);
 	sp_repr_set_attr (SP_OBJECT_REPR (child), "style", c);
 
 	for (child = child->next; child != NULL; child = child->next) {
@@ -687,10 +692,11 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	g_return_if_fail (child != NULL);
 
 	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "end");
-	color = sp_color_selector_get_rgba32 (csel);
+	sp_color_selector_get_color_alpha (csel, &color, &alpha);
+	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
 
 	sp_repr_set_double_attribute (SP_OBJECT_REPR (child), "offset", end);
-	g_snprintf (c, 256, "stop-color:#%06x;stop-opacity:%g;", color >> 8, (gdouble) (color & 0xff) / 255.0);
+	g_snprintf (c, 256, "stop-color:#%06x;stop-opacity:%g;", rgb >> 8, (gdouble) alpha);
 	sp_repr_set_attr (SP_OBJECT_REPR (child), "style", c);
 
 	/* Remove other stops */
