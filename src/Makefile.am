@@ -55,7 +55,7 @@ endif
 #
 # ################################################
 
-bin_PROGRAMS = inkscape 
+bin_PROGRAMS = inkscape inkview
 
 noinst_LIBRARIES = libinkscape.a
 
