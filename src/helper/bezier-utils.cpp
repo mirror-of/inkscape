@@ -326,7 +326,6 @@ GenerateBezier (NRPoint *bezier, NRPoint const *data, gdouble const *uPrime, gin
 	bezier[1].y = tHat1->y * alpha_l + bezier[0].y;
 	bezier[2].x = tHat2->x * alpha_r + bezier[3].x;
 	bezier[2].y = tHat2->y * alpha_r + bezier[3].y;
-	g_assert (!isnan (bezier[1].x));
 
 	return;
 }

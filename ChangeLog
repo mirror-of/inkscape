@@ -1,3 +1,11 @@
+2003-12-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/helper/bezier-utils.cpp (GenerateBezier): Back out accidental
+	commit of inserted g_assert(!isnan(bezier coordinate)).  (Having a NaN
+	bezier coordinate is usually a problem, perhaps worth warning about,
+	but it's hard to make it impossible, so it shouldn't be g_assert.)
+	Reported by bulia byak.
+
 2003-12-21  MenTaLguY <mental@rydia.net>
 
 	* Finally cleaned up the linker issues
