@@ -437,6 +437,9 @@ sp_use_modified (SPObject *object, guint flags)
 	}
 }
 
+//void print_m (gchar *say, NRMatrix *m)
+//{ g_print ("%s %g %g %g %g %g %g\n", say, m->c[0], m->c[1], m->c[2], m->c[3], m->c[4], m->c[5]); }
+
 SPItem *
 sp_use_unlink (SPUse *use)
 {
@@ -445,46 +448,54 @@ sp_use_unlink (SPUse *use)
       gint pos = sp_repr_position (repr);
 	SPDocument *document = SP_OBJECT(use)->document;
 
-	SPObject *orig = use->child;
-	NR::Matrix t;
-	t.set_identity();
 	//track the ultimate source of a chain of uses
+	SPObject *orig = use->child;
+	GSList *chain = NULL;
+	chain = g_slist_prepend (chain, use);
 	while (SP_IS_USE(orig)) {
-		t = t * NR::Matrix (&(SP_ITEM(orig)->transform));
+		chain = g_slist_prepend (chain, orig);
 		orig = SP_USE(orig)->child;
 	}
-	t = t * NR::Matrix (&(SP_ITEM(orig)->transform));
- 
-	SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(orig));
+	chain = g_slist_prepend (chain, orig);
 
-	sp_repr_append_child (parent, copy);
-      sp_repr_set_position_absolute (copy, pos > 0 ? pos : 0);
-	SPObject *unlinked = sp_document_lookup_id (document, sp_repr_attr (copy, "id"));
 
-	SPItem *item = SP_ITEM(unlinked);
+	//calculate the accummulated transform, starting from the original
+	NR::Matrix t;
+	t.set_identity();
+	for (GSList *i = chain; i != NULL; i = i->next) {
+		SPItem *i_tem = SP_ITEM(i->data);
 
-	{
-		NR::Matrix const trans( t * NR::Matrix (&(SP_ITEM(use)->transform)));
-		NRMatrix ctrans = trans;
-		gchar affinestr[80];
-		if (sp_svg_transform_write (affinestr, 79, &ctrans)) {
-			sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", affinestr);
-		} else {
-			sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", NULL);
+		t = t * NR::Matrix (&i_tem->transform);
+
+		// "An additional transformation translate(x,y) is appended to the end (i.e.,
+		// right-side) of the transform attribute on the generated 'g', where x and y
+		// represent the values of the x and y attributes on the 'use' element." - http://www.w3.org/TR/SVG11/struct.html#UseElement
+		if (SP_IS_USE(i_tem)) {
+			SPUse *i_use = SP_USE(i_tem);
+			if ((i_use->x.set && i_use->x.computed != 0) || (i_use->y.set && i_use->y.computed != 0)) {
+				t = NR::Matrix (NR::translate (i_use->x.set ? i_use->x.computed : 0, i_use->y.set ? i_use->y.computed : 0)) * t;
+			}
 		}
 	}
+ 
+	// create copy of the original
+	SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(orig));
 
-	// "An additional transformation translate(x,y) is appended to the end (i.e.,
-	// right-side) of the transform attribute on the generated 'g', where x and y
-	// represent the values of the x and y attributes on the 'use' element." - http://www.w3.org/TR/SVG11/struct.html#UseElement
+	// add it to the document, preserving parent and position
+	sp_repr_append_child (parent, copy);
+      sp_repr_set_position_absolute (copy, pos > 0 ? pos : 0);
 
- 	if (use->x.set || use->y.set) {
-		NR::Matrix const xy( NR::translate (use->x.set ? use->x.computed : 0, use->y.set ? use->y.computed : 0) );
-		NR::Matrix const i2dnew( xy * sp_item_i2d_affine(item) );
-		sp_item_set_i2d_affine(item, i2dnew);
-		sp_item_write_transform (item, SP_OBJECT_REPR (item), &(item->transform));
- 	}
+	// retrieve the SPItem of the resulting repr
+	SPObject *unlinked = sp_document_lookup_id (document, sp_repr_attr (copy, "id"));
+	SPItem *item = SP_ITEM(unlinked);
 
+	// set the accummulated transform
+	{
+		NRMatrix ctrans = t;
+		sp_item_write_transform (item, SP_OBJECT_REPR (item), &ctrans);
+	}
+
+	// remove the use
 	sp_repr_unparent (SP_OBJECT_REPR (use));
 
 	return SP_ITEM(unlinked);
