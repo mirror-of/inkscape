@@ -149,21 +149,15 @@ sp_icon_expose (GtkWidget *widget, GdkEventExpose *event)
 static GtkWidget *
 sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 {
-	static GHashTable *iconlib = NULL;
 	char c[256];
 	SPIcon *icon;
 
-	if (!iconlib) iconlib = g_hash_table_new (g_str_hash, g_str_equal);
 
 	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
 
 	icon->size = CLAMP (size, 1, 128);
 	g_snprintf (c, 256, "%d:%d:%s", icon->size, scale, name);
-	icon->px = (guchar *)g_hash_table_lookup (iconlib, c);
-	if (!icon->px) {
-		icon->px = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
-		g_hash_table_insert (iconlib, g_strdup (c), icon->px);
-	}
+	icon->px = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 
 	GTK_OBJECT_FLAGS (icon) &= ~SP_ICON_FLAG_STATIC_DATA;
 

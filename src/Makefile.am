@@ -3,11 +3,6 @@
 module_libs = modules/libspmodules.a
 module_src = module.c module.h
 
-if USE_KDE
-kdeldadd = $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KIO) $(LIB_KDEPRINT) $(LIB_QT)
-kdeldflags = $(KDE_RPATH)
-endif
-
 SUBDIRS = libarikkei libnr libnrtype xml svg helper widgets dialogs display modules
 
 AM_CPPFLAGS = \
