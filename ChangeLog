@@ -1,3 +1,16 @@
+2004-09-07  MenTaLguY <mental@rydia.net>
+
+	* src/livarot/AlphaLigne.cpp, src/livarot/BitLigne.cpp,
+	  src/livarot/Ligne.cpp, src/livarot/Path.cpp,
+	  src/livarot/PathCutting.cpp, src/livarot/PathSimplify.cpp,
+	  src/livarot/Shape.cpp, src/livarot/ShapeMisc.cpp,
+	  src/livarot/ShapeSweep.cpp, src/livarot/ShapeSweepUtils.cpp:
+
+	  switch to glib's allocator routines, which have the expected
+	  semantics
+
+	* src/livarot/evil-malloc.h: removed
+
 2004-09-07  Ted Gould  <ted@gould.cx>
 
 	* src/color-rgba.h:

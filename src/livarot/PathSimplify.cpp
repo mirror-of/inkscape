@@ -6,7 +6,7 @@
  *
  */
 
-#include "evil-malloc.h"
+#include <glib/gmem.h>
 #include "Path.h"
 //#include "MyMath.h"
 #include <math.h>
@@ -343,12 +343,12 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
   
   if (NR::LInfty (endToPt - moveToPt) < 0.00001) Close ();
   
-  if ( data.Xk ) free(data.Xk);
-  if ( data.Yk ) free(data.Yk);
-  if ( data.Qk ) free(data.Qk);
-  if ( data.tk ) free(data.tk);
-  if ( data.lk ) free(data.lk);
-  if ( data.fk ) free(data.fk);
+  if ( data.Xk ) g_free(data.Xk);
+  if ( data.Yk ) g_free(data.Yk);
+  if ( data.Qk ) g_free(data.Qk);
+  if ( data.tk ) g_free(data.tk);
+  if ( data.lk ) g_free(data.lk);
+  if ( data.fk ) g_free(data.fk);
   pts = savPts;
   nbPt = savNbPt;
 #endif
@@ -444,12 +444,12 @@ bool   Path::ExtendFit(fitting_tables &data,double treshhold, path_descr_cubicto
 {
   if ( nbPt >= data.maxPt ) {
     data.maxPt=2*nbPt+1;
-    data.Xk=(double*)realloc(data.Xk,data.maxPt*sizeof(double));
-    data.Yk=(double*)realloc(data.Yk,data.maxPt*sizeof(double));
-    data.Qk=(double*)realloc(data.Qk,data.maxPt*sizeof(double));
-    data.tk=(double*)realloc(data.tk,data.maxPt*sizeof(double));
-    data.lk=(double*)realloc(data.lk,data.maxPt*sizeof(double));
-    data.fk=(char*)realloc(data.fk,data.maxPt*sizeof(char));
+    data.Xk=(double*)g_realloc(data.Xk,data.maxPt*sizeof(double));
+    data.Yk=(double*)g_realloc(data.Yk,data.maxPt*sizeof(double));
+    data.Qk=(double*)g_realloc(data.Qk,data.maxPt*sizeof(double));
+    data.tk=(double*)g_realloc(data.tk,data.maxPt*sizeof(double));
+    data.lk=(double*)g_realloc(data.lk,data.maxPt*sizeof(double));
+    data.fk=(char*)g_realloc(data.fk,data.maxPt*sizeof(char));
   }
   if ( nbPt > data.inPt ) {
     if ( back ) {
@@ -867,12 +867,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   }
   
   // Totally inefficient, allocates & deallocates all the time.
-  tk = (double *) evil_malloc (nbPt * sizeof (double));
-  Qk = (double *) evil_malloc (nbPt * sizeof (double));
-  Xk = (double *) evil_malloc (nbPt * sizeof (double));
-  Yk = (double *) evil_malloc (nbPt * sizeof (double));
-  lk = (double *) evil_malloc (nbPt * sizeof (double));
-  fk = (char *) evil_malloc (nbPt * sizeof (char));
+  tk = (double *) g_malloc(nbPt * sizeof (double));
+  Qk = (double *) g_malloc(nbPt * sizeof (double));
+  Xk = (double *) g_malloc(nbPt * sizeof (double));
+  Yk = (double *) g_malloc(nbPt * sizeof (double));
+  lk = (double *) g_malloc(nbPt * sizeof (double));
+  fk = (char *) g_malloc(nbPt * sizeof (char));
   
   // chord length method
   tk[0] = 0.0;
@@ -939,12 +939,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
         }
       }
     }
-    free (tk);
-    free (Qk);
-    free (Xk);
-    free (Yk);
-    free (fk);
-    free (lk);
+    g_free(tk);
+    g_free(Qk);
+    g_free(Xk);
+    g_free(Yk);
+    g_free(fk);
+    g_free(lk);
     return false;
   }
   double   totLen=tk[nbPt - 1];
@@ -979,12 +979,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
         }
       }
     }
-    free (tk);
-    free (Qk);
-    free (Xk);
-    free (Yk);
-    free (fk);
-    free (lk);
+    g_free(tk);
+    g_free(Qk);
+    g_free(Xk);
+    g_free(Yk);
+    g_free(fk);
+    g_free(lk);
     return false;
   }
    
@@ -1100,12 +1100,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
       // ca devrait jamais arriver, mais bon
       res.stD = 3.0 * (cp1 - start);
       res.enD = -3.0 * (cp2 - end);
-      free (tk);
-      free (Qk);
-      free (Xk);
-      free (Yk);
-      free(fk);
-      free (lk);
+      g_free(tk);
+      g_free(Qk);
+      g_free(Xk);
+      g_free(Yk);
+      g_free(fk);
+      g_free(lk);
       return true;
     }
     double ndelta = 0;
@@ -1192,12 +1192,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
 #endif
     }
     
-    free (tk);
-    free (Qk);
-    free (Xk);
-    free (Yk);
-    free(fk);
-    free (lk);
+    g_free(tk);
+    g_free(Qk);
+    g_free(Xk);
+    g_free(Yk);
+    g_free(fk);
+    g_free(lk);
     
     if (ndelta < delta + 0.00001)
     {
@@ -1212,12 +1212,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
     // nothing better to do
   }
   
-  free (tk);
-  free (Qk);
-  free (Xk);
-  free (Yk);
-  free(fk);
-  free (lk);
+  g_free(tk);
+  g_free(Qk);
+  g_free(Xk);
+  g_free(Yk);
+  g_free(fk);
+  g_free(lk);
   return false;
 }
 

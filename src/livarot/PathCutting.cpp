@@ -7,7 +7,7 @@
  *
  */
 
-#include "evil-malloc.h"
+#include <glib/gmem.h>
 #include "Path.h"
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-point-fns.h"
@@ -99,7 +99,7 @@ void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,b
   } else {
     curP+=sizeof(path_lineto);
   }
-  free(origPts);
+  g_free(origPts);
   
 /*  for (int i=0;i<nbPt;i++) {
     NR::Point  np;
@@ -318,7 +318,7 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
 void* Path::MakeArtBPath(void)
 {
 	int				 nb_cmd=0,max_cmd=0;
-	NArtBpath* bpath=(NArtBpath*)evil_malloc((max_cmd+1)*sizeof(NArtBpath));
+	NArtBpath* bpath=(NArtBpath*)g_malloc((max_cmd+1)*sizeof(NArtBpath));
 	
 	NR::Point   lastP,bezSt,bezEn,lastMP;
 	int         lastM=-1,bezNb=0;
@@ -331,7 +331,7 @@ void* Path::MakeArtBPath(void)
 					bpath[lastM].code=NR_MOVETO;
 					if ( nb_cmd >= max_cmd ) {
 						max_cmd=2*nb_cmd+1;
-						bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+						bpath=(NArtBpath*)g_realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
 					}
 					bpath[nb_cmd].code=NR_LINETO;
 					bpath[nb_cmd].x3=lastMP[0];
@@ -346,7 +346,7 @@ void* Path::MakeArtBPath(void)
         path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
 				if ( nb_cmd >= max_cmd ) {
 					max_cmd=2*nb_cmd+1;
-					bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+					bpath=(NArtBpath*)g_realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
 				}
 				bpath[nb_cmd].code=NR_LINETO;
 				bpath[nb_cmd].x3=nData->p[0];
@@ -360,7 +360,7 @@ void* Path::MakeArtBPath(void)
         path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[i].dStart );
 				if ( nb_cmd >= max_cmd ) {
 					max_cmd=2*nb_cmd+1;
-					bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+					bpath=(NArtBpath*)g_realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
 				}
 				bpath[nb_cmd].code=NR_MOVETO_OPEN;
 				bpath[nb_cmd].x3=nData->p[0];
@@ -381,7 +381,7 @@ void* Path::MakeArtBPath(void)
         path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[i].dStart );
 				if ( nb_cmd >= max_cmd ) {
 					max_cmd=2*nb_cmd+1;
-					bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+					bpath=(NArtBpath*)g_realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
 				}
 				bpath[nb_cmd].code=NR_CURVETO;
 				bpath[nb_cmd].x1=lastP[0]+0.333333*nData->stD[0];
@@ -399,7 +399,7 @@ void* Path::MakeArtBPath(void)
         path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[i].dStart );
 				if ( nb_cmd >= max_cmd ) {
 					max_cmd=2*nb_cmd+1;
-					bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+					bpath=(NArtBpath*)g_realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
 				}
 				if ( nData->nb <= 0 ) {
 					bpath[nb_cmd].code=NR_LINETO;
@@ -440,7 +440,7 @@ void* Path::MakeArtBPath(void)
 					
 					if ( nb_cmd >= max_cmd ) {
 						max_cmd=2*nb_cmd+1;
-						bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+						bpath=(NArtBpath*)g_realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
 					}
 					bpath[nb_cmd].code=NR_CURVETO;
 					NR::Point  cp1=0.333333*(p_s+2*p_m),cp2=0.333333*(2*p_m+p_e);
@@ -607,7 +607,7 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
             curAdd->Convert(1.0);
             double addSurf=curAdd->Surface();
             if ( fabs(addSurf) > 0.0001 || killNoSurf == false ) {
-              res=(Path**)realloc(res,(nbRes+1)*sizeof(Path*));
+              res=(Path**)g_realloc(res,(nbRes+1)*sizeof(Path*));
               res[nbRes++]=curAdd;
             } else { 
               delete curAdd;
@@ -668,7 +668,7 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
       curAdd->Convert(1.0);
       double addSurf=curAdd->Surface();
       if ( fabs(addSurf) > 0.0001 || killNoSurf == false  ) {
-        res=(Path**)realloc(res,(nbRes+1)*sizeof(Path*));
+        res=(Path**)g_realloc(res,(nbRes+1)*sizeof(Path*));
         res[nbRes++]=curAdd;
       } else {
         delete curAdd;
@@ -702,7 +702,7 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
             curAdd->descr_cmd[0].associated=savA; // associated n'est pas utilise apres
             double addSurf=curAdd->Surface();
             if ( fabs(addSurf) > 0.0001 || killNoSurf == false ) {
-              res=(Path**)realloc(res,(nbRes+1)*sizeof(Path*));
+              res=(Path**)g_realloc(res,(nbRes+1)*sizeof(Path*));
               res[nbRes++]=curAdd;
             } else { 
               delete curAdd;
@@ -782,7 +782,7 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
       curAdd->Convert(1.0);
       double addSurf=curAdd->Surface();
       if ( fabs(addSurf) > 0.0001 || killNoSurf == false  ) {
-        res=(Path**)realloc(res,(nbRes+1)*sizeof(Path*));
+        res=(Path**)g_realloc(res,(nbRes+1)*sizeof(Path*));
         res[nbRes++]=curAdd;
       } else {
         delete curAdd;
@@ -971,7 +971,7 @@ Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut
       double curPos=len,curAdd=add;
       while ( curAdd > 0.0001 && curCv < nbCv && curPos+curAdd >= cvAbs[curCv] ) {
         double theta=(cvAbs[curCv]-len)/add;
-        res=(cut_position*)realloc(res,(nbCut+1)*sizeof(cut_position));
+        res=(cut_position*)g_realloc(res,(nbCut+1)*sizeof(cut_position));
         res[nbCut].piece=cur.piece;
         res[nbCut].t=theta*cur.t+(1-theta)*((lastPiece!=cur.piece)?0:lastT);
         nbCut++;

@@ -38,15 +38,15 @@ Path::Path (void)
 Path::~Path (void)
 {
 	if (descr_cmd) {
-		free (descr_cmd);
+		g_free(descr_cmd);
 		descr_cmd = NULL;
 	}
 	if (descr_data) {
-		free(descr_data);
+		g_free(descr_data);
 		descr_data = NULL;
 	}
 	if (pts) {
-		free (pts);
+		g_free(pts);
 		pts = NULL;
 	}
 	ddata_max = ddata_nb = 0;
@@ -122,12 +122,12 @@ Path::Copy (Path * who)
 	if (who->descr_nb > descr_max)
 	{
 		descr_max = who->descr_nb;
-		descr_cmd = (path_descr *) realloc (descr_cmd, descr_max * sizeof (path_descr));
+		descr_cmd = (path_descr *) g_realloc(descr_cmd, descr_max * sizeof (path_descr));
 	}
 	if (who->ddata_nb > ddata_max)
 	{
 		ddata_max = who->ddata_nb;
-		descr_data = (NR::Point *) realloc (descr_data, ddata_max * sizeof (NR::Point));
+		descr_data = (NR::Point *) g_realloc(descr_data, ddata_max * sizeof (NR::Point));
 	}
 	descr_nb = who->descr_nb;
 	ddata_nb = who->ddata_nb;
@@ -140,7 +140,7 @@ void       Path::AlloueDCmd (int addNb)
 	if (descr_nb + addNb > descr_max)
 	{
 		descr_max = 2 * descr_nb + addNb;
-		descr_cmd =(path_descr *) realloc (descr_cmd, descr_max * sizeof (path_descr));
+		descr_cmd =(path_descr *) g_realloc(descr_cmd, descr_max * sizeof (path_descr));
 	}
 }
 void       Path::AlloueDData (int addNb)
@@ -148,7 +148,7 @@ void       Path::AlloueDData (int addNb)
 	if (ddata_nb + addNb > ddata_max)
 	{
 		ddata_max = 2 * ddata_nb + addNb;
-		descr_data =(NR::Point *) realloc (descr_data, ddata_max * sizeof (NR::Point));
+		descr_data =(NR::Point *) g_realloc(descr_data, ddata_max * sizeof (NR::Point));
 	}
 }
 void       Path::ShiftDCmd(int at,int dec)
@@ -800,7 +800,7 @@ Path::ResetPoints (int expected)
 	}
 	if (sizePt > maxPt) {
 		maxPt = sizePt;
-		pts = (char *) realloc (pts, maxPt);
+		pts = (char *) g_realloc(pts, maxPt);
 	}
 }
 int
@@ -813,7 +813,7 @@ Path::AddPoint (NR::Point const &iPt, bool mvto)
 	int nextSize = sizePt + sizeof (path_lineto);
 	if (nextSize > maxPt) {
 		maxPt = 2 * sizePt + sizeof (path_lineto);
-		pts = (char *) realloc (pts, maxPt);
+		pts = (char *) g_realloc(pts, maxPt);
 	}
 	if ( !mvto
 	     && ( nbPt > 0 )
@@ -841,7 +841,7 @@ Path::AddPoint (NR::Point const &iPt, int ip, double it, bool mvto)
 	int nextSize = sizePt + sizeof (path_lineto_b);
 	if (nextSize > maxPt) {
 		maxPt = 2 * sizePt + sizeof (path_lineto_b);
-		pts = (char *) realloc (pts, maxPt);
+		pts = (char *) g_realloc(pts, maxPt);
 	}
 	if ( !mvto
 	     && ( nbPt > 0 )
@@ -869,7 +869,7 @@ Path::AddForcedPoint (NR::Point const &iPt)
 	int nextSize = sizePt + sizeof (path_lineto);
 	if (nextSize > maxPt) {
 		maxPt = 2 * sizePt + sizeof (path_lineto);
-		pts = (char *) realloc (pts, maxPt);
+		pts = (char *) g_realloc(pts, maxPt);
 	}
 	if ( ( nbPt <= 0 )
 	     || ( ((path_lineto *) pts)[nbPt - 1].isMoveTo != polyline_lineto ) )
@@ -892,7 +892,7 @@ Path::AddForcedPoint (NR::Point const &iPt, int /*ip*/, double /*it*/)
 	int nextSize = sizePt + sizeof (path_lineto_b);
 	if (nextSize > maxPt) {
 		maxPt = 2 * sizePt + sizeof (path_lineto_b);
-		pts = (char *) realloc (pts, maxPt);
+		pts = (char *) g_realloc(pts, maxPt);
 	}
 	if ( ( nbPt <= 0 )
 	     || ( ((path_lineto_b *) pts)[nbPt - 1].isMoveTo != polyline_lineto ) )

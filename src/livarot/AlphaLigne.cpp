@@ -11,6 +11,7 @@
 //#include "Buffer.h"
 
 #include <math.h>
+#include <glib/gmem.h>
 
 AlphaLigne::AlphaLigne(int iMin,int iMax)
 {
@@ -26,7 +27,7 @@ AlphaLigne::AlphaLigne(int iMin,int iMax)
 }
 AlphaLigne::~AlphaLigne(void)
 {
-	if ( steps ) free(steps);
+	if ( steps ) g_free(steps);
 	steps=NULL;
 	nbStep=maxStep=0;
 }
@@ -96,7 +97,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 		} else {
 			if ( nbStep+2 >= maxStep ) {
 				maxStep=2*nbStep+2;
-				steps=(alpha_step*)realloc(steps,maxStep*sizeof(alpha_step));
+				steps=(alpha_step*)g_realloc(steps,maxStep*sizeof(alpha_step));
 			}
 			float  stC=/*(int)ldexpf(*/(eval-sval)*(0.5*(epos-spos)+curStF+1-epos)/*,24)*/;
 			steps[nbStep].x=curSt;
@@ -112,7 +113,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 		} else {
 			if ( nbStep+3 >= maxStep ) {
 				maxStep=2*nbStep+3;
-				steps=(alpha_step*)realloc(steps,maxStep*sizeof(alpha_step));
+				steps=(alpha_step*)g_realloc(steps,maxStep*sizeof(alpha_step));
 			}
 			float  stC=/*(int)ldexpf(*/0.5*tPente*(curEnF-spos)*(curEnF-spos)/*,24)*/;
 			float  enC=/*(int)ldexpf(*/tPente-0.5*tPente*((spos-curStF)*(spos-curStF)+(curEnF+1.0-epos)*(curEnF+1.0-epos))/*,24)*/;
@@ -135,7 +136,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 			if ( curEn > max ) {
 				if ( nbStep+(max-min) >= maxStep ) {
 					maxStep=2*nbStep+(max-min);
-					steps=(alpha_step*)realloc(steps,maxStep*sizeof(alpha_step));
+					steps=(alpha_step*)g_realloc(steps,maxStep*sizeof(alpha_step));
 				}
 				float  bfd=min-curSt-1;
 				bfd*=miC;
@@ -148,7 +149,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 			} else {
 				if ( nbStep+(curEn-min)+2 >= maxStep ) {
 					maxStep=2*nbStep+(curEn-min)+2;
-					steps=(alpha_step*)realloc(steps,maxStep*sizeof(alpha_step));
+					steps=(alpha_step*)g_realloc(steps,maxStep*sizeof(alpha_step));
 				}
 				float  bfd=min-curSt-1;
 				bfd*=miC;
@@ -169,7 +170,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 			if ( curEn > max ) {
 				if ( nbStep+3+(max-curSt) >= maxStep ) {
 					maxStep=2*nbStep+3+(curEn-curSt);
-					steps=(alpha_step*)realloc(steps,maxStep*sizeof(alpha_step));
+					steps=(alpha_step*)g_realloc(steps,maxStep*sizeof(alpha_step));
 				}
 				steps[nbStep].x=curSt;
 				steps[nbStep].delta=stC;
@@ -185,7 +186,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 			} else {
 				if ( nbStep+3+(curEn-curSt) >= maxStep ) {
 					maxStep=2*nbStep+3+(curEn-curSt);
-					steps=(alpha_step*)realloc(steps,maxStep*sizeof(alpha_step));
+					steps=(alpha_step*)g_realloc(steps,maxStep*sizeof(alpha_step));
 				}
 				steps[nbStep].x=curSt;
 				steps[nbStep].delta=stC;
@@ -250,7 +251,7 @@ void             AlphaLigne::AddRun(int st,float pente)
 {
 	if ( nbStep >= maxStep ) {
 		maxStep=2*nbStep+1;
-		steps=(alpha_step*)realloc(steps,maxStep*sizeof(alpha_step));
+		steps=(alpha_step*)g_realloc(steps,maxStep*sizeof(alpha_step));
 	}
 	int nStep=nbStep++;
 	steps[nStep].x=st;

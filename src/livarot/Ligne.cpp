@@ -12,6 +12,7 @@
 #include "BitLigne.h"
 
 #include <math.h>
+#include <glib/gmem.h>
 
 
 
@@ -32,12 +33,12 @@ FloatLigne::FloatLigne(void)
 FloatLigne::~FloatLigne(void)
 {
 	if ( maxBord > 0 ) {
-		free(bords);
+		g_free(bords);
 		nbBord=maxBord=0;
 		bords=NULL;
 	}
 	if ( maxRun > 0 ) {
-		free(runs);
+		g_free(runs);
 		nbRun=maxRun=0;
 		runs=NULL;
 	}
@@ -57,7 +58,7 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
   // allocate the boundaries in the array
 	if ( nbBord+1 >= maxBord ) {
 		maxBord=2*nbBord+2;
-		bords=(float_ligne_bord*)realloc(bords,maxBord*sizeof(float_ligne_bord));
+		bords=(float_ligne_bord*)g_realloc(bords,maxBord*sizeof(float_ligne_bord));
 	}
   float pente=(eval-sval)/(epos-spos);
 #ifdef faster_flatten
@@ -106,7 +107,7 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
 	if ( spos >= epos ) return -1;
 	if ( nbBord+1 >= maxBord ) {
 		maxBord=2*nbBord+2;
-		bords=(float_ligne_bord*)realloc(bords,maxBord*sizeof(float_ligne_bord));
+		bords=(float_ligne_bord*)g_realloc(bords,maxBord*sizeof(float_ligne_bord));
 	}
 #ifdef faster_flatten
   if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
@@ -177,7 +178,7 @@ int              FloatLigne::AddBordR(float spos,float sval,float epos,float eva
 	if ( spos >= epos ) return -1;
 	if ( nbBord+1 >= maxBord ) {
 		maxBord=2*nbBord+2;
-		bords=(float_ligne_bord*)realloc(bords,maxBord*sizeof(float_ligne_bord));
+		bords=(float_ligne_bord*)g_realloc(bords,maxBord*sizeof(float_ligne_bord));
 	}
 
 #ifdef faster_flatten
@@ -249,7 +250,7 @@ int            FloatLigne::AppendBord(float spos,float sval,float epos,float eva
 	if ( spos >= epos ) return -1;
 	if ( nbBord+1 >= maxBord ) {
 		maxBord=2*nbBord+2;
-		bords=(float_ligne_bord*)realloc(bords,maxBord*sizeof(float_ligne_bord));
+		bords=(float_ligne_bord*)g_realloc(bords,maxBord*sizeof(float_ligne_bord));
 	}
 
 #ifdef faster_flatten
@@ -599,7 +600,7 @@ int              FloatLigne::AddRun(float st,float en,float vst,float ven)
 
 	if ( nbRun >= maxRun ) {
 		maxRun=2*nbRun+1;
-		runs=(float_ligne_run*)realloc(runs,maxRun*sizeof(float_ligne_run));
+		runs=(float_ligne_run*)g_realloc(runs,maxRun*sizeof(float_ligne_run));
 	}
 /*  if ( nbRun > 0 && st < runs[nbRun-1].en-0.1 ) {
     printf("o");
@@ -618,7 +619,7 @@ int              FloatLigne::AddRun(float st,float en,float vst,float ven,float 
 
 	if ( nbRun >= maxRun ) {
 		maxRun=2*nbRun+1;
-		runs=(float_ligne_run*)realloc(runs,maxRun*sizeof(float_ligne_run));
+		runs=(float_ligne_run*)g_realloc(runs,maxRun*sizeof(float_ligne_run));
 	}
 /*  if ( nbRun > 0 && st < runs[nbRun-1].en-0.1 ) {
     printf("o");
@@ -642,7 +643,7 @@ void             FloatLigne::Copy(FloatLigne* a)
 	nbRun=a->nbRun;
 	if ( nbRun > maxRun ) {
 		maxRun=nbRun;
-		runs=(float_ligne_run*)realloc(runs,maxRun*sizeof(float_ligne_run));
+		runs=(float_ligne_run*)g_realloc(runs,maxRun*sizeof(float_ligne_run));
 	}
 	memcpy(runs,a->runs,nbRun*sizeof(float_ligne_run));
 }
@@ -656,7 +657,7 @@ void             FloatLigne::Copy(IntLigne* a)
 	nbRun=a->nbRun;
 	if ( nbRun > maxRun ) {
 		maxRun=nbRun*2;
-		runs=(float_ligne_run*)realloc(runs,maxRun*sizeof(float_ligne_run));
+		runs=(float_ligne_run*)g_realloc(runs,maxRun*sizeof(float_ligne_run));
 	}
 	for (int i=0;i<nbRun;i++) {
 		runs[i].st=a->runs[i].st;
@@ -1124,12 +1125,12 @@ IntLigne::IntLigne(void)
 IntLigne::~IntLigne(void)
 {
 	if ( maxBord > 0 ) {
-		free(bords);
+		g_free(bords);
 		nbBord=maxBord=0;
 		bords=NULL;
 	}
 	if ( maxRun > 0 ) {
-		free(runs);
+		g_free(runs);
 		nbRun=maxRun=0;
 		runs=NULL;
 	}
@@ -1145,7 +1146,7 @@ int              IntLigne::AddBord(int spos,float sval,int epos,float eval)
 {
 	if ( nbBord+1 >= maxBord ) {
 		maxBord=2*nbBord+2;
-		bords=(int_ligne_bord*)realloc(bords,maxBord*sizeof(int_ligne_bord));
+		bords=(int_ligne_bord*)g_realloc(bords,maxBord*sizeof(int_ligne_bord));
 	}
 	int n=nbBord++;
 	bords[n].pos=spos;
@@ -1233,7 +1234,7 @@ int              IntLigne::AddRun(int st,int en,float vst,float ven)
 
 	if ( nbRun >= maxRun ) {
 		maxRun=2*nbRun+1;
-		runs=(int_ligne_run*)realloc(runs,maxRun*sizeof(int_ligne_run));
+		runs=(int_ligne_run*)g_realloc(runs,maxRun*sizeof(int_ligne_run));
 	}
 	int n=nbRun++;
 	runs[n].st=st;
@@ -1718,7 +1719,7 @@ void             IntLigne::Copy(IntLigne* a)
 	nbRun=a->nbRun;
 	if ( nbRun > maxRun ) {
 		maxRun=nbRun;
-		runs=(int_ligne_run*)realloc(runs,maxRun*sizeof(int_ligne_run));
+		runs=(int_ligne_run*)g_realloc(runs,maxRun*sizeof(int_ligne_run));
 	}
 	memcpy(runs,a->runs,nbRun*sizeof(int_ligne_run));
 }

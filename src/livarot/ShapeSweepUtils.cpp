@@ -6,7 +6,7 @@
  *
  */
 
-#include "evil-malloc.h"
+#include <glib/gmem.h>
 #include "Shape.h"
 #include "LivarotDefs.h"
 #include <libnr/nr-point.h>
@@ -83,17 +83,17 @@ SweepEvent::CreateQueue (SweepEventQueue & queue, int size)
 {
   queue.nbEvt = 0;
   queue.maxEvt = size;
-  queue.events = (SweepEvent *) evil_malloc (queue.maxEvt * sizeof (SweepEvent));
-  queue.inds = (int *) evil_malloc (queue.maxEvt * sizeof (int));
+  queue.events = (SweepEvent *) g_malloc(queue.maxEvt * sizeof (SweepEvent));
+  queue.inds = (int *) g_malloc(queue.maxEvt * sizeof (int));
 }
 
 void
 SweepEvent::DestroyQueue (SweepEventQueue & queue)
 {
   if (queue.events)
-    free (queue.events);
+    g_free(queue.events);
   if (queue.inds)
-    free (queue.inds);
+    g_free(queue.inds);
   queue.nbEvt = queue.maxEvt = 0;
   queue.inds = NULL;
   queue.events = NULL;
@@ -381,7 +381,7 @@ SweepTree::CreateList (SweepTreeList & list, int size)
 {
   list.nbTree = 0;
   list.maxTree = size;
-  list.trees = (SweepTree *) evil_malloc (list.maxTree * sizeof (SweepTree));
+  list.trees = (SweepTree *) g_malloc(list.maxTree * sizeof (SweepTree));
   list.racine = NULL;
 }
 
@@ -389,7 +389,7 @@ void
 SweepTree::DestroyList (SweepTreeList & list)
 {
   if (list.trees)
-    free (list.trees);
+    g_free(list.trees);
   list.trees = NULL;
   list.nbTree = list.maxTree = 0;
   list.racine = NULL;

@@ -452,8 +452,8 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
                 }
                 tb=swdData[tb].precParc;
               }
-              nesting=(int*)realloc(nesting,(nbNest+1)*sizeof(int));
-              contStart=(int*)realloc(contStart,(nbNest+1)*sizeof(int));
+              nesting=(int*)g_realloc(nesting,(nbNest+1)*sizeof(int));
+              contStart=(int*)g_realloc(contStart,(nbNest+1)*sizeof(int));
               contStart[nbNest]=dest->descr_nb;
               if ( escapePath ) {
                 nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
@@ -492,8 +492,8 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
                 }
                 tb=swdData[tb].precParc;
               }
-              nesting=(int*)realloc(nesting,(nbNest+1)*sizeof(int));
-              contStart=(int*)realloc(contStart,(nbNest+1)*sizeof(int));
+              nesting=(int*)g_realloc(nesting,(nbNest+1)*sizeof(int));
+              contStart=(int*)g_realloc(contStart,(nbNest+1)*sizeof(int));
               contStart[nbNest]=dest->descr_nb;
               if ( escapePath ) {
                 nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
@@ -541,10 +541,10 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     if (nbPt > maxPt)
     {
       maxPt = nbPt;
-      pts = (dg_point *) realloc (pts, maxPt * sizeof (dg_point));
+      pts = (dg_point *) g_realloc(pts, maxPt * sizeof (dg_point));
       if (HasPointsData ())
         pData =
-          (point_data *) realloc (pData, maxPt * sizeof (point_data));
+          (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
     memcpy (pts, a->pts, nbPt * sizeof (dg_point));
     
@@ -554,21 +554,21 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
       maxAr = nbAr;
       aretes.reserve(maxAr);
       if (HasEdgesData ())
-        eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
+        eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
       if (HasSweepSrcData ())
         swsData =
-          (sweep_src_data *) realloc (swsData,
+          (sweep_src_data *) g_realloc(swsData,
                                       maxAr * sizeof (sweep_src_data));
       if (HasSweepDestData ())
         swdData =
-          (sweep_dest_data *) realloc (swdData,
+          (sweep_dest_data *) g_realloc(swdData,
                                        maxAr * sizeof (sweep_dest_data));
       if (HasRasterData ())
         swrData =
-          (raster_data *) realloc (swrData, maxAr * sizeof (raster_data));
+          (raster_data *) g_realloc(swrData, maxAr * sizeof (raster_data));
       if (HasBackData ())
         ebData =
-          (back_data *) realloc (ebData, maxAr * sizeof (back_data));
+          (back_data *) g_realloc(ebData, maxAr * sizeof (back_data));
     }
     aretes = a->aretes;
     return 0;

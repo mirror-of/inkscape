@@ -6,6 +6,7 @@
  *
  */
 
+#include <glib/gmem.h>
 #include "Shape.h"
 #include "LivarotDefs.h"
 //#include "MyMath.h"
@@ -73,9 +74,9 @@ Shape::Reoriente (Shape * a)
   if (nbPt > maxPt)
     {
       maxPt = nbPt;
-      pts = (dg_point *) realloc (pts, maxPt * sizeof (dg_point));
+      pts = (dg_point *) g_realloc(pts, maxPt * sizeof (dg_point));
       if (HasPointsData ())
-	pData = (point_data *) realloc (pData, maxPt * sizeof (point_data));
+	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
   memcpy (pts, a->pts, nbPt * sizeof (dg_point));
 
@@ -85,18 +86,18 @@ Shape::Reoriente (Shape * a)
       maxAr = nbAr;
       aretes.reserve(maxAr);
       if (HasEdgesData ())
-	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
+	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
       if (HasSweepSrcData ())
 	swsData =
-	  (sweep_src_data *) realloc (swsData,
+	  (sweep_src_data *) g_realloc(swsData,
 				      maxAr * sizeof (sweep_src_data));
       if (HasSweepDestData ())
 	swdData =
-	  (sweep_dest_data *) realloc (swdData,
+	  (sweep_dest_data *) g_realloc(swdData,
 				       maxAr * sizeof (sweep_dest_data));
       if (HasRasterData ())
 	swrData =
-	  (raster_data *) realloc (swrData, maxAr * sizeof (raster_data));
+	  (raster_data *) g_realloc(swrData, maxAr * sizeof (raster_data));
     }
   aretes = a->aretes;
 
@@ -709,7 +710,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   }
 
   if (chgts)
-    free (chgts);
+    g_free(chgts);
   chgts = NULL;
   nbChgt = maxChgt = 0;
 
@@ -722,7 +723,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 //      MakeAretes(a);
   if (iData)
-    free (iData);
+    g_free(iData);
   iData = NULL;
   nbInc = maxInc = 0;
 
@@ -1616,7 +1617,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   }
 
   if (chgts)
-    free (chgts);
+    g_free(chgts);
   chgts = NULL;
   nbChgt = maxChgt = 0;
 
@@ -1629,7 +1630,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	}*/
 
   if (iData)
-    free (iData);
+    g_free(iData);
   iData = NULL;
   nbInc = maxInc = 0;
 
@@ -2173,7 +2174,7 @@ Shape::PushIncidence (Shape * a, int cb, int pt, double theta)
     {
       maxInc = 2 * nbInc + 1;
       iData =
-	(incidenceData *) realloc (iData, maxInc * sizeof (incidenceData));
+	(incidenceData *) g_realloc(iData, maxInc * sizeof (incidenceData));
     }
   int n = nbInc++;
   iData[n].nextInc = a->swsData[cb].firstLinkedPoint;
@@ -3109,7 +3110,7 @@ Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
   if (nbChgt >= maxChgt)
     {
       maxChgt = 2 * nbChgt + 1;
-      chgts = (sTreeChange *) realloc (chgts, maxChgt * sizeof (sTreeChange));
+      chgts = (sTreeChange *) g_realloc(chgts, maxChgt * sizeof (sTreeChange));
     }
   int nCh = nbChgt++;
   chgts[nCh].ptNo = lastPointNo;

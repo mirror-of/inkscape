@@ -8,9 +8,9 @@
  */
 
 #include "BitLigne.h"
-#include "evil-malloc.h"
 
 #include <math.h>
+#include <glib/gmem.h>
 
 BitLigne::BitLigne(int ist,int ien,float iScale)
 {
@@ -28,16 +28,16 @@ BitLigne::BitLigne(int ist,int ien,float iScale)
 		nbInt=nbBit/32;
 	}
   nbInt+=1;
-	fullB=(uint32_t*)evil_malloc(nbInt*sizeof(uint32_t));
-	partB=(uint32_t*)evil_malloc(nbInt*sizeof(uint32_t));
+	fullB=(uint32_t*)g_malloc(nbInt*sizeof(uint32_t));
+	partB=(uint32_t*)g_malloc(nbInt*sizeof(uint32_t));
 
 	curMin=en;
 	curMax=st;
 }
 BitLigne::~BitLigne(void)
 {
-	free(fullB);
-	free(partB);
+	g_free(fullB);
+	g_free(partB);
 }
 
 void             BitLigne::Reset(void)
