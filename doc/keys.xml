@@ -671,7 +671,9 @@ can leave your ideas and requests there.</p>
 <mouse><key><shift/><left-click/></key> <action>pick stroke color</action></mouse>
 <mouse><key><left-drag/></key> <action>average fill color</action></mouse>
 <mouse><key><shift/><left-drag/></key> <action>average stroke color</action></mouse>
-<note>Dropper applies the colors to the current selection. Dragging a radius calculates the average color of a circular area.</note>
+<note>Click applies the color under cursor to the current selection. Dragging a radius calculates the average color of a circular area.</note>
+<keys><key><ctrl/>C</key> <action>copy color</action></keys>
+<note>This copies the color under cursor to the system clipboard, as text in RRGGBBAA format (8 hex digits).</note>
 </group>
 </section>
 
