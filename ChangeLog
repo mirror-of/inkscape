@@ -7,11 +7,12 @@
 	  src/text-context.h, src/toolbox.h, src/tools-switch.h,
 	  src/dialogs/dialog-events.h, src/dialogs/sp-attribute-widget.h,
 	  src/display/sp-canvas.h, src/helper/gnome-utils.h,
-	  src/helper/png-write.h, src/inkjar/jar.h, src/libnr/nr-matrix.cpp,
-	  src/libnr/nr-point-l.h, src/svg/stringstream.h,
-	  src/svg/svg-affine.cpp, src/widgets/gradient-selector.h,
-	  src/widgets/paint-selector.h, src/widgets/spinbutton-events.h,
-	  src/widgets/spw-utilities.h, src/xml/repr-action.h:
+	  src/helper/png-write.h, src/helper/stock-items.h, src/inkjar/jar.h,
+	  src/libnr/nr-matrix.cpp, src/libnr/nr-point-l.h,
+	  src/svg/stringstream.h, src/svg/svg-affine.cpp,
+	  src/widgets/gradient-selector.h, src/widgets/paint-selector.h,
+	  src/widgets/spinbutton-events.h, src/widgets/spw-utilities.h,
+	  src/xml/repr-action.h:
 	  Add missing header files.
 
 	* src/libnr/nr-rotate-fns.h, src/libnr/nr-rotate-fns.cpp: New files.

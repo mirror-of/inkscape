@@ -12,8 +12,9 @@
  *
  */
 
-#include <glib.h>
+#include <glib/gtypes.h>
 
+#include <forward.h>
 
 SPObject *get_stock_item(gchar const *urn);
 

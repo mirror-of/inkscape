@@ -16,6 +16,7 @@
 #define __GNOME_UTILS_H__
 
 #include <glib/gtypes.h>
+#include <glib/glist.h>
 
 GList *gnome_uri_list_extract_uris(gchar const *uri_list);
 
