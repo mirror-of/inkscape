@@ -14,7 +14,7 @@ const unsigned int RDSZ  = 4096;
 
 #define DEBUG 1
 
-enum {CLOSED, OPEN};
+enum JarFileReaderState {CLOSED, OPEN};
 
 //fixme: The following will be removed
 typedef uint8_t ub1;
@@ -127,7 +127,7 @@ public:
     JarFileReader(JarFileReader const& rhs);
     JarFileReader& operator=(JarFileReader const& rhs);
 private:
-    int _state;    
+    JarFileReaderState _state;    
     JarFile _jarfile;
 
 }; // class JarFileReader
