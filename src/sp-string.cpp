@@ -26,10 +26,6 @@
 
 #include <string.h>
 
-#include <libnrtype/FlowSrc.h>
-#include <libnrtype/FlowStyle.h>
-#include <libnrtype/FlowSrcText.h>
-
 #include <glib.h>
 #include "svg/svg.h"
 #include "svg/stringstream.h"

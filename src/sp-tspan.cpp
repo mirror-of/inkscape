@@ -32,8 +32,6 @@
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-rotate.h>
 
-//#include <libnrtype/FlowDefs.h>
-
 #include <livarot/LivarotDefs.h>
 #include <livarot/Shape.h>
 #include <livarot/Path.h>

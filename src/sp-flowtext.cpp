@@ -31,7 +31,6 @@
 #include "libnr/nr-translate-ops.h"
 #include "libnr/nr-scale-ops.h"
 
-#include "libnrtype/FlowDest.h"
 #include "livarot/Shape.h"
 
 #include "display/nr-arena-item.h"
@@ -376,12 +375,13 @@ void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape,
         if (SP_IS_STRING(child)) {
             layout.appendText(SP_STRING(child)->string, root->style, child);
         } else if (SP_IS_FLOWREGION(child)) {
-            for (int i = 0 ; i < SP_FLOWREGION(child)->nbComp ; i++) {
+            std::vector<Shape*> const &computed = SP_FLOWREGION(child)->computed;
+            for (std::vector<Shape*>::const_iterator it = computed.begin() ; it != computed.end() ; it++) {
                 shapes->push_back(Shape());
                 if (exclusion_shape->hasEdges())
-                    shapes->back().Booleen(SP_FLOWREGION(child)->computed[i]->rgn_dest, const_cast<Shape*>(exclusion_shape), bool_op_diff);
+                    shapes->back().Booleen(*it, const_cast<Shape*>(exclusion_shape), bool_op_diff);
                 else
-                    shapes->back().Copy(SP_FLOWREGION(child)->computed[i]->rgn_dest);
+                    shapes->back().Copy(*it);
                 layout.appendWrapShape(&shapes->back());
             }
         }
@@ -405,11 +405,13 @@ Shape* SPFlowtext::_buildExclusionShape() const
         // RH: is it right that this shouldn't be recursive?
         if ( SP_IS_FLOWREGIONEXCLUDE(child) ) {
             SPFlowregionExclude *c_child = SP_FLOWREGIONEXCLUDE(child);
+            if (c_child->computed == NULL || !c_child->computed->hasEdges())
+                continue;
             if (shape->hasEdges()) {
-                shape_temp->Booleen(shape, c_child->computed->rgn_dest, bool_op_union);
+                shape_temp->Booleen(shape, c_child->computed, bool_op_union);
                 std::swap(shape, shape_temp);
             } else
-                shape->Copy(c_child->computed->rgn_dest);
+                shape->Copy(c_child->computed);
         }
     }
     delete shape_temp;

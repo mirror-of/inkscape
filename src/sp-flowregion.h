@@ -18,16 +18,13 @@
 #define SP_IS_FLOWREGIONEXCLUDE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWREGIONEXCLUDE))
 #define SP_IS_FLOWREGIONEXCLUDE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWREGIONEXCLUDE))
 
-#include "libnrtype/FlowDefs.h"
-
 class Path;
 class Shape;
 class flow_dest;
 class FloatLigne;
 
 struct SPFlowregion : public SPItem {
-	int              nbComp,maxComp;
-	flow_dest*       *computed;
+	std::vector<Shape*>     computed;
 	
 	void             UpdateComputed(void);
 };
@@ -39,7 +36,7 @@ struct SPFlowregionClass {
 GType sp_flowregion_get_type (void);
 
 struct SPFlowregionExclude : public SPItem {
-	flow_dest*       computed;
+	Shape            *computed;
 	
 	void             UpdateComputed(void);
 };

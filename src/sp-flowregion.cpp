@@ -17,8 +17,6 @@
 
 #include "sp-flowregion.h"
 
-#include "libnrtype/FlowDest.h"
-
 #include "display/curve.h"
 
 #include "libnr/nr-point.h"
@@ -60,7 +58,7 @@ static gchar * sp_flowregionexclude_description (SPItem * item);
 static SPItemClass * flowregionexclude_parent_class;
 
 
-static void         GetDest(SPObject* child,flow_dest* computed,NR::Matrix itr_mat);
+static void         GetDest(SPObject* child,Shape **computed,NR::Matrix itr_mat);
 
 GType
 sp_flowregion_get_type (void)
@@ -111,18 +109,16 @@ sp_flowregion_class_init (SPFlowregionClass *klass)
 static void
 sp_flowregion_init (SPFlowregion *group)
 {
-	group->nbComp=group->maxComp=0;
-	group->computed=NULL;
+	new (&group->computed) std::vector<Shape*>;
 }
 
 static void
 sp_flowregion_dispose(GObject *object)
 {
 	SPFlowregion *group=(SPFlowregion *)object;
-	for (int i=0;i<group->nbComp;i++) delete group->computed[i];
-	if ( group->computed ) free(group->computed);
-	group->nbComp=group->maxComp=0;
-	group->computed=NULL;
+    for (std::vector<Shape*>::iterator it = group->computed.begin() ; it != group->computed.end() ; it++)
+        delete *it;
+    group->computed.~vector<Shape*>();
 }
 
 static void
@@ -205,16 +201,14 @@ void             SPFlowregion::UpdateComputed(void)
 	NR::Matrix itr_mat=sp_item_i2root_affine (SP_ITEM(object));
 	itr_mat=itr_mat.inverse();
 	
-	for (int i=0;i<nbComp;i++) delete computed[i];
-	nbComp=0;
+    for (std::vector<Shape*>::iterator it = computed.begin() ; it != computed.end() ; it++)
+        delete *it;
+    computed.clear();
 	
 	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		if ( nbComp >= maxComp ) {
-			maxComp=2*nbComp+1;
-			computed=(flow_dest**)realloc(computed,maxComp*sizeof(flow_dest*));
-		}
-		computed[nbComp++]=new flow_dest,
-		GetDest(child,computed[nbComp-1],itr_mat);
+        Shape *shape = NULL;
+		GetDest(child,&shape,itr_mat);
+        computed.push_back(shape);
 	}
 }
 
@@ -327,14 +321,17 @@ sp_flowregionexclude_class_init (SPFlowregionExcludeClass *klass)
 static void
 sp_flowregionexclude_init (SPFlowregionExclude *group)
 {
-	group->computed=new flow_dest;
+	group->computed = NULL;
 }
 
 static void
 sp_flowregionexclude_dispose(GObject *object)
 {
 	SPFlowregionExclude *group=(SPFlowregionExclude *)object;
-	delete group->computed;
+    if (group->computed) {
+        delete group->computed;
+        group->computed = NULL;
+    }
 }
 
 static void
@@ -413,12 +410,15 @@ void             SPFlowregionExclude::UpdateComputed(void)
 {
 	SPObject* object=SP_OBJECT(this);
 	
-	computed->Reset();
+	if (computed) {
+        delete computed;
+        computed = NULL;
+    }
 	NR::Matrix itr_mat=sp_item_i2root_affine (SP_ITEM(object));
 	itr_mat=itr_mat.inverse();
 	
 	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		GetDest(child,computed,itr_mat);
+		GetDest(child,&computed,itr_mat);
 	}
 }
 
@@ -482,7 +482,21 @@ static gchar * sp_flowregionexclude_description (SPItem * item)
  *
  */
 
-static void         GetDest(SPObject* child,flow_dest* computed,NR::Matrix itr_mat)
+static void         UnionShape(Shape **base_shape, Shape const *add_shape)
+{
+    if (*base_shape == NULL)
+        *base_shape = new Shape;
+	if ( (*base_shape)->hasEdges() == false ) {
+		(*base_shape)->Copy(const_cast<Shape*>(add_shape));
+	} else if ( add_shape->hasEdges() ) {
+		Shape* temp=new Shape;
+		temp->Booleen(const_cast<Shape*>(add_shape), *base_shape, bool_op_union);
+		delete *base_shape;
+		*base_shape = temp;
+	}
+}
+
+static void         GetDest(SPObject* child,Shape **computed,NR::Matrix itr_mat)
 {	
 	if ( child == NULL ) return;
 	
@@ -513,7 +527,7 @@ static void         GetDest(SPObject* child,flow_dest* computed,NR::Matrix itr_m
 		} else {
 			uncross->ConvertToShape(n_shp,fill_nonZero);
 		}
-		computed->AddShape(uncross);
+		UnionShape(computed, uncross);
 		delete uncross;
 		delete n_shp;
 		delete temp;
