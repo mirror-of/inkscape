@@ -969,10 +969,10 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"),
         N_("Fit selection in window"), "zoom_select"},
     /* Dialogs */
-    {SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Options"),
-        N_("Global Inkscape options"), "inkscape_options"},
-    {SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Options"),
-        N_("Options saved with the document"), "document_options"},
+    {SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Preferences"),
+        N_("Global Inkscape preferences"), "inkscape_options"},
+    {SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Preferences"),
+        N_("Preferences saved with the document"), "document_options"},
     {SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke"),
         N_("Fill and stroke settings"), "fill_and_stroke"},
     {SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m"),
@@ -986,7 +986,7 @@ static const SPVerbActionDef props[] = {
         N_("XML Editor"), "xml_editor"},
     {SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("_Hide/View dialogs"),
         N_("Toggle visibility of all active dialogs"), "dialog_toggle"},
-    {SP_VERB_DIALOG_ITEM, "DialogItem", N_("Item _Properties"),
+    {SP_VERB_DIALOG_ITEM, "DialogItem", N_("_Item Properties"),
         N_("Item properties"), NULL},
 
     /* Help */
