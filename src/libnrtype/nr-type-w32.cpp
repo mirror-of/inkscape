@@ -103,11 +103,12 @@ static HDC hdc = NULL;
 
 static GHashTable *namedict = NULL;
 static GSList *namelist = NULL;
+static GSList *name_family_list = NULL;
 static GHashTable *familydict = NULL;
 static GSList *familylist = NULL;
 
-static NRNameList NRW32Typefaces = {0, NULL, NULL};
-static NRNameList NRW32Families = {0, NULL, NULL};
+static NRNameList NRW32Typefaces = {0, NULL, NULL, NULL};
+static NRNameList NRW32Families = {0, NULL, NULL, NULL};
 
 static void nr_type_w32_init (void);
 static NRTypeFaceGlyphW32 *nr_typeface_w32_ensure_slot (NRTypeFaceW32 *tfw32, unsigned int glyph, unsigned int metrics);
@@ -144,23 +145,27 @@ void
 nr_type_read_w32_list (void)
 {
 	NRNameList wnames, wfamilies;
-	int i, j;
+	int i;
 
 	nr_type_w32_typefaces_get (&wnames);
 	nr_type_w32_families_get (&wfamilies);
 
 	for (i = wnames.length - 1; i >= 0; i--) {
 		NRTypeFaceDef *tdef;
-		const unsigned char *family;
-		family = NULL;
-		for (j = wfamilies.length - 1; j >= 0; j--) {
-			int len;
-			len = strlen ((gchar *)wfamilies.names[j]);
-			if (!strncmp ((gchar *)wfamilies.names[j], (gchar *)wnames.names[i], len)) {
-				family = (const unsigned char *)wfamilies.names[j];
-				break;
-			}
-		}
+
+		const unsigned char *family = (const unsigned char *) (wnames.families[i]);
+
+// 		const unsigned char *family;
+// 		family = NULL;
+// 		for (j = wfamilies.length - 1; j >= 0; j--) {
+// 			int len;
+// 			len = strlen ((gchar *)wfamilies.names[j]);
+// 			if (!strncmp ((gchar *)wfamilies.names[j], (gchar *)wnames.names[i], len)) {
+// 				family = (const unsigned char *)wfamilies.names[j];
+// 				break;
+// 			}
+// 		}
+
 		if (family) {
 			tdef = nr_new (NRTypeFaceDef, 1);
 			tdef->next = NULL;
@@ -660,6 +665,7 @@ nr_type_w32_inner_enum_proc (ENUMLOGFONTEX *elfex, NEWTEXTMETRICEX *tmex, DWORD 
         plf = g_new (LOGFONT, 1);
         *plf = elfex->elfLogFont;
         namelist = g_slist_prepend (namelist, name);
+        name_family_list = g_slist_prepend (name_family_list, elfex->elfLogFont.lfFaceName);
         g_hash_table_insert (namedict, name, plf);
 
         /*This needs to be logged instead
@@ -690,7 +696,7 @@ static void
 nr_type_w32_init (void)
 {
     LOGFONT logfont;
-    GSList *l;
+    GSList *l, *lf;
     int pos;
 
     /*This needs to be logged instead
@@ -715,11 +721,13 @@ nr_type_w32_init (void)
         NRW32Families.names[pos] = (guchar *) l->data;
         pos += 1;
     }
-    NRW32Typefaces.length = g_slist_length (namelist);
+    NRW32Typefaces.length = g_slist_length (namelist) * 2;
     NRW32Typefaces.names = g_new (guchar *, NRW32Typefaces.length);
+    NRW32Typefaces.families = g_new (guchar *, NRW32Typefaces.length);
     pos = 0;
-    for (l = namelist; l != NULL; l = l->next) {
+    for (l = namelist, lf = name_family_list; l != NULL && lf != NULL; l = l->next, lf = lf->next) {
         NRW32Typefaces.names[pos] = (guchar *) l->data;
+        NRW32Typefaces.families[pos] = (guchar *) lf->data;
         pos += 1;
     }
 
