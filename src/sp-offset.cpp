@@ -1,7 +1,7 @@
 #define __SP_OFFSET_C__
 
 /*
- * <sodipodi:offset> implementation
+ * <inkscape:offset> implementation
  *
  * Authors (of the sp-spiral.c upon which this file was constructed):
  *   Mitsuru Oka <oka326@parkcity.ne.jp>
@@ -171,9 +171,33 @@ sp_offset_build (SPObject * object, SPDocument * document, SPRepr * repr)
   if (((SPObjectClass *) parent_class)->build)
     ((SPObjectClass *) parent_class)->build (object, document, repr);
   
-  sp_object_read_attr (object, "sodipodi:radius");
-  sp_object_read_attr (object, "sodipodi:original");
-  sp_object_read_attr (object, "xlink:href");
+  if ( sp_repr_attr (object->repr, "inkscape:radius") ) {
+    sp_object_read_attr (object, "inkscape:radius");
+  } else {
+    const gchar* oldA=sp_repr_attr(object->repr,"sodipodi:radius");
+    sp_repr_set_attr(object->repr,"inkscape:radius",oldA);
+    sp_repr_set_attr(object->repr,"sodipodi:radius",NULL);
+    
+    sp_object_read_attr (object, "inkscape:radius");
+  }
+  if ( sp_repr_attr (object->repr, "inkscape:original") ) {
+    sp_object_read_attr (object, "inkscape:original");
+  } else {    
+    const gchar* oldA=sp_repr_attr(object->repr,"sodipodi:original");
+    sp_repr_set_attr(object->repr,"inkscape:original",oldA);
+    sp_repr_set_attr(object->repr,"sodipodi:original",NULL);
+    
+    sp_object_read_attr (object, "inkscape:original");
+  }
+  if ( sp_repr_attr (object->repr, "inkscape:href") ) {
+    sp_object_read_attr (object, "inkscape:href");
+  } else {
+    const gchar* oldA=sp_repr_attr(object->repr,"xlink:href");
+    sp_repr_set_attr(object->repr,"inkscape:href",oldA);
+    sp_repr_set_attr(object->repr,"xlink:href",NULL);
+    
+    sp_object_read_attr (object, "inkscape:href");
+  }
 }
 
 static SPRepr *
@@ -192,12 +216,12 @@ sp_offset_write (SPObject * object, SPRepr * repr, guint flags)
   if (flags & SP_OBJECT_WRITE_EXT)
   {
     /* Fixme: we may replace these attributes by
-    * sodipodi:offset="cx cy exp revo rad arg t0"
+    * inkscape:offset="cx cy exp revo rad arg t0"
     */
     sp_repr_set_attr (repr, "sodipodi:type", "offset");
-    sp_repr_set_double_attribute (repr, "sodipodi:radius", offset->rad);
-    sp_repr_set_attr (repr, "sodipodi:original", offset->original);
-    sp_repr_set_attr (repr, "xlink:href", offset->sourceObject);
+    sp_repr_set_double_attribute (repr, "inkscape:radius", offset->rad);
+    sp_repr_set_attr (repr, "inkscape:original", offset->original);
+    sp_repr_set_attr (repr, "inkscape:href", offset->sourceObject);
   }
   
   d = sp_svg_write_path (((SPShape *) offset)->curve->bpath);
@@ -261,6 +285,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
   /* fixme: we should really collect updates */
   switch (key)
   {
+    case SP_ATTR_INKSCAPE_ORIGINAL:
     case SP_ATTR_SODIPODI_ORIGINAL:
       if (value == NULL)
       {
@@ -288,6 +313,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
         sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
       }
       break;
+    case SP_ATTR_INKSCAPE_RADIUS:
     case SP_ATTR_SODIPODI_RADIUS:
       if (!sp_svg_length_read_lff (value, &unit, NULL, &offset->rad) ||
           (unit != SP_SVG_UNIT_EM) ||
@@ -299,6 +325,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
       }
       sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
       break;
+    case SP_ATTR_INKSCAPE_HREF:
     case SP_ATTR_XLINK_HREF:
       if (value)
       {
@@ -537,11 +564,27 @@ sp_offset_set_shape (SPShape * shape)
   
   sp_object_request_modified (SP_OBJECT (offset), SP_OBJECT_MODIFIED_FLAG);
   
-  
+  if ( offset->originalPath == NULL ) {
+    // oops : no path?! (the offset object should do harakiri)
+    return;
+  }
 #ifdef OFFSET_VERBOSE
   g_print ("rad=%g\n", offset->rad);
 #endif
   // au boulot
+  
+  if ( fabs(offset->rad) < 0.01 ) {
+    // grosso modo: 0
+    
+    const char *res_d = sp_repr_attr(SP_OBJECT(shape)->repr,"inkscape:original");
+    if ( res_d ) {
+      ArtBpath *bpath = sp_svg_read_path (res_d);
+      c = sp_curve_new_from_bpath (bpath);
+      sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
+      sp_curve_unref (c);
+    }
+    return;
+  }
   
   if (fabs (offset->rad) < 0.25)
     offset->rad = (offset->rad < 0) ? -0.25 : 0.25;
@@ -649,27 +692,28 @@ sp_offset_set_shape (SPShape * shape)
     delete theShape;
     delete theRes;
   }     */
-  
-  char *res_d = NULL;
-  if (orig->descr_nb <= 1)
   {
-    // aie.... plus rien
-    res_d = strdup ("M 0 0 L 0 0 z");
-    printf("%s\n",res_d);
-  }
-  else
-  {
+    char *res_d = NULL;
+    if (orig->descr_nb <= 1)
+    {
+      // aie.... plus rien
+      res_d = strdup ("M 0 0 L 0 0 z");
+      printf("%s\n",res_d);
+    }
+    else
+    {
+      
+      res_d = liv_svg_dump_path2 (orig);
+    } 
+    delete orig;
     
-    res_d = liv_svg_dump_path2 (orig);
-  } 
-  delete orig;
-  
-  ArtBpath *bpath = sp_svg_read_path (res_d);
-  c = sp_curve_new_from_bpath (bpath);
-  sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
-  sp_curve_unref (c);
-  
-  free (res_d);
+    ArtBpath *bpath = sp_svg_read_path (res_d);
+    c = sp_curve_new_from_bpath (bpath);
+    sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
+    sp_curve_unref (c);
+    
+    free (res_d);
+  }
 }
 
 
@@ -907,7 +951,7 @@ sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
     return;
   if (strcmp ((const char *) key, "transform") == 0)
     return;
-  if (strcmp ((const char *) key, "sodipodi:original") == 0)
+  if (strcmp ((const char *) key, "inkscape:original") == 0)
     return;
   
   Path *orig = NULL;
@@ -916,7 +960,7 @@ sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
   {
     if (!newval)
       return;
-    //    sp_repr_set_attr (SP_OBJECT(offset)->repr, "sodipodi:original", newval);
+    //    sp_repr_set_attr (SP_OBJECT(offset)->repr, "inkscape:original", newval);
     
     
     ArtBpath *bpath;
@@ -992,7 +1036,7 @@ sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
     delete res;
     delete orig;
     
-    sp_repr_set_attr (SP_OBJECT (offset)->repr, "sodipodi:original", res_d);
+    sp_repr_set_attr (SP_OBJECT (offset)->repr, "inkscape:original", res_d);
     
     free (res_d);
   }
@@ -1123,7 +1167,7 @@ void   refresh_offset_source(SPOffset* offset)
     delete res;
     delete orig;
     
-    sp_repr_set_attr (SP_OBJECT (offset)->repr, "sodipodi:original", res_d);
+    sp_repr_set_attr (SP_OBJECT (offset)->repr, "inkscape:original", res_d);
     
     free (res_d);
   }

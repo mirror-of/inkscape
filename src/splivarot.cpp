@@ -801,25 +801,25 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     sp_repr_set_attr (repr, "sodipodi:type", "offset");
     if (expand > 0)
       {
-	sp_repr_set_double_attribute (repr, "sodipodi:radius", o_width);
+	sp_repr_set_double_attribute (repr, "inkscape:radius", o_width);
       }
     else if (expand < 0)
       {
-	sp_repr_set_double_attribute (repr, "sodipodi:radius", -o_width);
+	sp_repr_set_double_attribute (repr, "inkscape:radius", -o_width);
       }
     else 
       {
-	sp_repr_set_double_attribute (repr, "sodipodi:radius", 0);
+	sp_repr_set_double_attribute (repr, "inkscape:radius",  0);
       }
 
     str = liv_svg_dump_path (res);
-    sp_repr_set_attr (repr, "sodipodi:original", str);
+    sp_repr_set_attr (repr, "inkscape:original", str);
     g_free (str);
     
     if ( updating ) {
-      sp_repr_set_attr (repr, "xlink:href", sp_repr_attr(SP_OBJECT(item)->repr,"id"));
+      sp_repr_set_attr (repr, "inkscape:href", sp_repr_attr(SP_OBJECT(item)->repr,"id"));
     } else {
-      sp_repr_set_attr (repr, "xlink:href", NULL);
+      sp_repr_set_attr (repr, "inkscape:href", NULL);
     }
     
     if (sp_svg_transform_write (tstr, 80, &i2root))

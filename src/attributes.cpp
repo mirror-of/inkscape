@@ -112,6 +112,9 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_SODIPODI_T0, "sodipodi:t0"},
   /* SPOffset */
  	{SP_ATTR_SODIPODI_ORIGINAL, "sodipodi:original"},
+ 	{SP_ATTR_INKSCAPE_ORIGINAL, "inkscape:original"},
+ 	{SP_ATTR_INKSCAPE_HREF, "inkscape:href"},
+ 	{SP_ATTR_INKSCAPE_RADIUS, "inkscape:radius"},
 	/* SPLine */
 	{SP_ATTR_X1, "x1"},
 	{SP_ATTR_Y1, "y1"},
