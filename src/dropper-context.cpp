@@ -48,7 +48,7 @@
 #include "dropper-context.h"
 #include "message-context.h"
 #include <libnr/nr-point-fns.h>
-#include <libnr/nr-matrix-ops.h>
+#include "libnr/nr-scale-translate-ops.h"
 #include <algorithm>
 
 #define C1 0.552
