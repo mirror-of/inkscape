@@ -130,6 +130,15 @@ options_selector_cue_toggled (GtkToggleButton *button)
 }
 
 static void
+options_selector_scale_line_width_toggled (GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active (button)) {
+		const guint val = GPOINTER_TO_INT((const gchar*) gtk_object_get_data(GTK_OBJECT(button), "value"));
+		prefs_set_int_attribute ("tools.select", "scale_line_width", val);
+	}
+}
+
+static void
 options_dropper_pick_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
@@ -237,7 +246,35 @@ options_selector ()
         b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), "bbox", 0, false,
         cue && !strcmp (cue, "bbox"),
         options_selector_cue_toggled
-        );        
+        );
+
+    f = gtk_frame_new (_("When scaling:"));
+    gtk_widget_show (f);
+    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+    fb = gtk_vbox_new (FALSE, 0);
+    gtk_widget_show (fb);
+    gtk_container_add (GTK_CONTAINER (f), fb);
+
+    guint const scale_line_width = prefs_get_int_attribute ("tools.select", "scale_line_width", 1);
+
+    b = sp_select_context_add_radio (
+        NULL, fb, tt,
+        _("scale line widths"),
+        _("Scale line widths by the same proportion as the object"),
+        (const char*) GINT_TO_POINTER(1), 0, false,
+        scale_line_width == 1,
+        options_selector_scale_line_width_toggled
+        );
+
+    sp_select_context_add_radio (
+        b, fb, tt,
+        _("don't scale line widths"),
+        _("Keep line widths the same"),
+        (const char*) GINT_TO_POINTER(0), 0, false,
+        scale_line_width == 0,
+        options_selector_scale_line_width_toggled
+        );
 
     return vb;
 }
