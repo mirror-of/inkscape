@@ -867,6 +867,7 @@ void FloatLigne::Over(FloatLigne *a, float tresh)
     }
 }
 
+
 /*
   Local Variables:
   mode:c++
@@ -876,5 +877,4 @@ void FloatLigne::Over(FloatLigne *a, float tresh)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
-
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

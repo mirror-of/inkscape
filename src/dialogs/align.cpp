@@ -1391,16 +1391,16 @@ static void sp_align_distribute_v_clicked(GtkWidget *w, gchar const *layout)
 {
     sp_align_distribute_h_or_v_clicked(w, layout, NR::Y);
 }
+#endif
 
 
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
-#endif
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

@@ -120,5 +120,5 @@ int utest_end(void) {
   c-file-style:"linux"
   fill-column:99
   End:
-  vim: set filetype=c :
 */
+// vim: filetype=c:noexpandtab:shiftwidth=8:tabstop=8:encoding=utf-8:textwidth=99 :
