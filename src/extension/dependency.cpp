@@ -33,6 +33,7 @@ gchar const * Dependency::_type_str[] = {
 };
 
 gchar const * Dependency::_location_str[] = {
+    // TRANSLATORS: "path" refers to "filesystem path" here
     N_("path"),
     N_("extensions"),
     N_("absolute")
