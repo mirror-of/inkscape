@@ -175,6 +175,11 @@ sp_string_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	}
 }
 
+/**
+\brief Provides the extra letterspacing advance to be added for each char using the given
+style. Returns a NR::Point where one of the components is zero. Calculates em and ex
+values based on the font size stored in the style.
+*/
 NR::Point
 sp_letterspacing_advance (const SPStyle *style)
 {
@@ -207,6 +212,40 @@ sp_letterspacing_advance (const SPStyle *style)
 	return letterspacing_adv;
 }
 
+/**
+\brief   Returns the dx list that is effective for the object o, or NULL if
+none. According to the spec, the closest ancestor's value has precedence.
+*/
+GList *
+sp_effective_dx (SPObject *o)
+{
+	GList *l = NULL;
+
+	while (SP_IS_STRING(o) || SP_IS_TSPAN(o) || SP_IS_TEXT(o)) {
+		if (SP_IS_TSPAN(o) && SP_TSPAN (o)->ly.dx) {
+			l = SP_TSPAN (o)->ly.dx;
+			break;
+		}
+		if (SP_IS_TEXT(o) && SP_TEXT (o)->ly.dx) {
+			l = SP_TEXT (o)->ly.dx;
+			break;
+		}
+		o = SP_OBJECT_PARENT(o);
+	}
+
+	return l;
+}
+
+float
+sp_char_dx (GList *dx, guint pos)
+{
+	if (!dx)
+		return 0;
+	if (g_list_length(dx) < pos + 1) // pos starts from 0
+		return 0;
+	return ((SPSVGLength *) g_list_nth(dx, pos)->data)->computed;
+}
+
 static void
 sp_string_calculate_dimensions (SPString *string)
 {
@@ -215,6 +254,9 @@ sp_string_calculate_dimensions (SPString *string)
 	string->advance = NR::Point(0, 0);
 
 	const SPStyle *style = SP_OBJECT_STYLE (SP_OBJECT_PARENT (string));
+
+	GList *dx = sp_effective_dx (SP_OBJECT(string));
+
 	/* fixme: Adjusted value (Lauris) */
 	const gdouble size = style->font_size.computed;
 	NRTypeFace *face = nr_type_directory_lookup_fuzzy(style->text->font_family.value,
@@ -248,14 +290,16 @@ sp_string_calculate_dimensions (SPString *string)
 		inspace = FALSE;
 		intext = FALSE;
 
-		for (p = string->text; p && *p; p = g_utf8_next_char (p)) {
+		guint pos = 0;
+
+		for (p = string->text; p && *p; p = g_utf8_next_char (p), pos++) {
 			gunichar unival;
 			
 			unival = g_utf8_get_char (p);
 
 			if (g_unichar_isspace (unival) && (unival != g_utf8_get_char ("\302\240"))) { // space but not non-break space
 				if (preserve) {
-					string->advance += spadv;
+					string->advance += spadv + NR::Point(sp_char_dx (dx, pos), 0);
 				}
 				if (unival != '\n' && unival != '\r') inspace = TRUE;
 			} else {
@@ -276,6 +320,9 @@ sp_string_calculate_dimensions (SPString *string)
 					string->bbox.y1 = MAX (string->bbox.y1, string->advance[NR::Y] - bbox.y0);
 				}
 				adv = nr_font_glyph_advance_get (font, glyph ) + letterspacing_adv;
+
+				adv += NR::Point(sp_char_dx (dx, pos), 0);
+
 				string->advance += adv;
 				
 				inspace = FALSE;
@@ -302,6 +349,8 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 
 	SPChars *chars = SP_CHARS (string);
 	const SPStyle *style = SP_OBJECT_STYLE (SP_OBJECT_PARENT (string));
+
+	GList *dx = sp_effective_dx (SP_OBJECT(string));
 
 	sp_chars_clear (chars);
 
@@ -345,19 +394,19 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 	gboolean intext = FALSE;
 	gboolean preserve = (((SPObject*)string)->xml_space.value == SP_XML_SPACE_PRESERVE);
 	gboolean inspace = pinspace ? *pinspace : FALSE;
-	gint pos = 0;
-	for (gchar const* cur_char = string->text; cur_char && *cur_char; cur_char = g_utf8_next_char (cur_char)) {
+	guint pos = 0;
+	for (gchar const* cur_char = string->text; cur_char && *cur_char; cur_char = g_utf8_next_char (cur_char), pos++) {
 		gunichar unival;
-               if (!preserve && inspace && intext) {
+             if (!preserve && inspace && intext) {
                        /* SP_XML_SPACE_DEFAULT */
-			string->p[pos] = pt + NR::Point(spadv[NR::X], -spadv[NR::Y]);
+			string->p[pos] = pt + NR::Point(spadv[NR::X] + sp_char_dx (dx, pos), -spadv[NR::Y]);
 		} else {
-			string->p[pos] = pt;
+			string->p[pos] = pt + NR::Point(sp_char_dx (dx, pos), 0);
 		}
 		unival = g_utf8_get_char (cur_char);
              if (g_unichar_isspace(unival) && (unival != g_utf8_get_char ("\302\240"))) { // space but not non-break space
                        if (preserve) {
-                               pt += NR::Point(spadv[NR::X], -spadv[NR::Y]);
+                               pt += NR::Point(spadv[NR::X] + sp_char_dx (dx, pos), -spadv[NR::Y]);
                        }
                        if (unival != '\n' && unival != '\r') inspace = TRUE;
 		} else {
@@ -369,17 +418,20 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 			
 			// NR::translate?
 			a[4] = pt[NR::X];
+			if (dx) 
+				a[4] += sp_char_dx (dx, pos);
 			a[5] = pt[NR::Y];
 
 			sp_chars_add_element (chars, glyph, font, a);
 			NR::Point adv = nr_font_glyph_advance_get (font, glyph) + letterspacing_adv;
+
+			adv += NR::Point(sp_char_dx (dx, pos), 0);
 
 			pt = pt + NR::Point(adv[NR::X], -adv[NR::Y]);
 			
 			inspace = FALSE;
 			intext = TRUE;
 		}
-		pos += 1;
 	}
 
 	nr_font_unref (font);
@@ -466,8 +518,10 @@ sp_tspan_init (SPTSpan *tspan)
 	/* fixme: Initialize layout */
 	sp_svg_length_unset (&tspan->ly.x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&tspan->ly.y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&tspan->ly.dx, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&tspan->ly.dy, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	//sp_svg_length_unset (&tspan->ly.dx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	//sp_svg_length_unset (&tspan->ly.dy, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	tspan->ly.dx = NULL;
+	tspan->ly.dy = NULL;
 	tspan->ly.linespacing = 1.0;
 	tspan->string = NULL;
 }
@@ -541,14 +595,16 @@ sp_tspan_set (SPObject *object, unsigned int key, const gchar *value)
 		if (tspan->role != SP_TSPAN_ROLE_LINE) sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_DX:
-		if (!sp_svg_length_read (value, &tspan->ly.dx)) {
-			sp_svg_length_unset (&tspan->ly.dx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+		if (!(tspan->ly.dx = sp_svg_length_list_read (value))) {
+			//			sp_svg_length_unset (&tspan->ly.dx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+			tspan->ly.dx = NULL;
 		}
 		/* fixme: Re-layout it */
 		break;
 	case SP_ATTR_DY:
-		if (!sp_svg_length_read (value, &tspan->ly.dy)) {
-			sp_svg_length_unset (&tspan->ly.dy, SP_SVG_UNIT_NONE, 0.0, 0.0);
+		if (!(tspan->ly.dy = sp_svg_length_list_read (value))) {
+			//			sp_svg_length_unset (&tspan->ly.dy, SP_SVG_UNIT_NONE, 0.0, 0.0);
+			tspan->ly.dy = NULL;
 		}
 		/* fixme: Re-layout it */
 		break;
@@ -609,6 +665,7 @@ sp_tspan_update (SPObject *object, SPCtx *ctx, guint flags)
 	SPTSpan *tspan = SP_TSPAN (object);
 	SPStyle *style = SP_OBJECT_STYLE (object);
 	SPItemCtx *ictx = (SPItemCtx *) ctx;
+	GList *i;
 
 	if (((SPObjectClass *) tspan_parent_class)->update)
 		((SPObjectClass *) tspan_parent_class)->update (object, ctx, flags);
@@ -621,8 +678,13 @@ sp_tspan_update (SPObject *object, SPCtx *ctx, guint flags)
 	const double d = 1.0 / NR_MATRIX_DF_EXPANSION (&ictx->i2vp);
 	sp_text_update_length (&tspan->ly.x, style->font_size.computed, style->font_size.computed * 0.5, d);
 	sp_text_update_length (&tspan->ly.y, style->font_size.computed, style->font_size.computed * 0.5, d);
-	sp_text_update_length (&tspan->ly.dx, style->font_size.computed, style->font_size.computed * 0.5, d);
-	sp_text_update_length (&tspan->ly.dy, style->font_size.computed, style->font_size.computed * 0.5, d);
+
+	//sp_text_update_length (&tspan->ly.dx, style->font_size.computed, style->font_size.computed * 0.5, d);
+	//sp_text_update_length (&tspan->ly.dy, style->font_size.computed, style->font_size.computed * 0.5, d);
+	for (i = tspan->ly.dx; i != NULL; i = i->next)
+		sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
+	for (i = tspan->ly.dy; i != NULL; i = i->next)
+		sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
 
 	if (tspan->string) {
 		if (flags || (tspan->string->uflags & SP_OBJECT_MODIFIED_FLAG)) {
@@ -661,8 +723,9 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
 
 	if (tspan->ly.x.set) sp_repr_set_double (repr, "x", tspan->ly.x.computed);
 	if (tspan->ly.y.set) sp_repr_set_double (repr, "y", tspan->ly.y.computed);
-	if (tspan->ly.dx.set) sp_repr_set_double (repr, "dx", tspan->ly.dx.computed);
-	if (tspan->ly.dy.set) sp_repr_set_double (repr, "dy", tspan->ly.dy.computed);
+	//FIXME!!! write length list
+	//if (tspan->ly.dx.set) sp_repr_set_double (repr, "dx", tspan->ly.dx.computed);
+	//if (tspan->ly.dy.set) sp_repr_set_double (repr, "dy", tspan->ly.dy.computed);
 	if (tspan->ly.rotate_set) sp_repr_set_double (repr, "rotate", tspan->ly.rotate);
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		sp_repr_set_attr (repr, "sodipodi:role", (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED) ? "line" : NULL);
@@ -818,8 +881,10 @@ sp_text_init (SPText *text)
 	/* fixme: Initialize layout */
 	sp_svg_length_unset (&text->ly.x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&text->ly.y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&text->ly.dx, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&text->ly.dy, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	//sp_svg_length_unset (&text->ly.dx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	//sp_svg_length_unset (&text->ly.dy, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	text->ly.dx = NULL;
+	text->ly.dy = NULL;
 	text->ly.linespacing = 1.0;
 	text->children = NULL;
 }
@@ -917,14 +982,14 @@ sp_text_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_DX:
-		if (!sp_svg_length_read (value, &text->ly.dx)) {
-			sp_svg_length_unset (&text->ly.dx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+		if (!(text->ly.dx = sp_svg_length_list_read (value))) {
+			text->ly.dx = NULL;
 		}
 		/* fixme: Re-layout it */
 		break;
 	case SP_ATTR_DY:
-		if (!sp_svg_length_read (value, &text->ly.dy)) {
-			sp_svg_length_unset (&text->ly.dy, SP_SVG_UNIT_NONE, 0.0, 0.0);
+		if (!(text->ly.dy = sp_svg_length_list_read (value))) {
+			text->ly.dy = NULL;
 		}
 		/* fixme: Re-layout it */
 		break;
@@ -1041,7 +1106,8 @@ sp_text_update (SPObject *object, SPCtx *ctx, guint flags)
 {
 	SPItemCtx *ictx;
 	SPObject *child;
-	GSList *l;
+	GSList *l; 
+	GList *i;
 
 	SPText *text = SP_TEXT (object);
 	SPStyle *style = SP_OBJECT_STYLE (text);
@@ -1058,8 +1124,13 @@ sp_text_update (SPObject *object, SPCtx *ctx, guint flags)
 	double d = 1.0 / NR_MATRIX_DF_EXPANSION (&ictx->i2vp);
 	sp_text_update_length (&text->ly.x, style->font_size.computed, style->font_size.computed * 0.5, d);
 	sp_text_update_length (&text->ly.y, style->font_size.computed, style->font_size.computed * 0.5, d);
-	sp_text_update_length (&text->ly.dx, style->font_size.computed, style->font_size.computed * 0.5, d);
-	sp_text_update_length (&text->ly.dy, style->font_size.computed, style->font_size.computed * 0.5, d);
+
+	//sp_text_update_length (&text->ly.dx, style->font_size.computed, style->font_size.computed * 0.5, d);
+	//sp_text_update_length (&text->ly.dy, style->font_size.computed, style->font_size.computed * 0.5, d);
+	for (i = text->ly.dx; i != NULL; i = i->next)
+		sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
+	for (i = text->ly.dy; i != NULL; i = i->next)
+		sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
 
 	/* Create temporary list of children */
 	l = NULL;
@@ -1155,10 +1226,11 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 		sp_repr_set_double (repr, "x", text->ly.x.computed);
 	if (text->ly.y.set)
 		sp_repr_set_double (repr, "y", text->ly.y.computed);
-	if (text->ly.dx.set)
-		sp_repr_set_double (repr, "dx", text->ly.dx.computed);
-	if (text->ly.dy.set)
-		sp_repr_set_double (repr, "dy", text->ly.dy.computed);
+	//FIXME!!! write length list
+	//	if (text->ly.dx.set)
+	//		sp_repr_set_double (repr, "dx", text->ly.dx.computed);
+	//	if (text->ly.dy.set)
+	//		sp_repr_set_double (repr, "dy", text->ly.dy.computed);
 	if (text->ly.rotate_set)
 		sp_repr_set_double (repr, "rotate", text->ly.rotate);
 
@@ -1294,11 +1366,11 @@ sp_text_set_shape (SPText *text)
 				} else {
 					tspan->ly.y.computed = cp[NR::Y];
 				}
-				if (tspan->ly.dx.set) {
-					cp[NR::X] += tspan->ly.dx.computed;
+				if (tspan->ly.dx) {
+					cp[NR::X] += ((SPSVGLength *) tspan->ly.dx->data)->computed;
 				}
-				if (tspan->ly.dy.set) {
-					cp[NR::Y] += tspan->ly.dy.computed;
+				if (tspan->ly.dy) {
+					cp[NR::Y] += ((SPSVGLength *) tspan->ly.dy->data)->computed;
 				}
 				break;
 			default:
@@ -1309,8 +1381,9 @@ sp_text_set_shape (SPText *text)
 			string = SP_STRING (child);
 		}
 		/* Calculate block bbox */
-		NR::Point advance = NR::Point((string->ly->dx.set) ? string->ly->dx.computed : 0.0,
-					      (string->ly->dy.set) ? string->ly->dy.computed : 0.0);
+		NR::Point advance = NR::Point(string->ly->dx ? ((SPSVGLength *) string->ly->dx->data)->computed : 0.0,
+								     string->ly->dy ? ((SPSVGLength *) string->ly->dy->data)->computed : 0.0);
+																	//(string->ly->dy.set) ? string->ly->dy.computed : 0.0);
 		bbox.x0 = string->bbox.x0 + advance[NR::X];
 		bbox.y0 = string->bbox.y0 + advance[NR::Y];
 		bbox.x1 = string->bbox.x1 + advance[NR::X];
@@ -1325,10 +1398,18 @@ sp_text_set_shape (SPText *text)
 					break;
 				if ((tspan->ly.x.set) || (tspan->ly.y.set))
 					break;
-				if (tspan->ly.dx.set)
-					advance[NR::X] += tspan->ly.dx.computed;
-				if (tspan->ly.dy.set)
-					advance[NR::Y] += tspan->ly.dy.computed;
+
+				//				if (tspan->ly.dx.set)
+				//					advance[NR::X] += tspan->ly.dx.computed;
+				//				if (tspan->ly.dy.set)
+				//					advance[NR::Y] += tspan->ly.dy.computed;
+				if (tspan->ly.dx) {
+					advance[NR::X] += ((SPSVGLength *) tspan->ly.dx->data)->computed;
+				}
+				if (tspan->ly.dy) {
+					advance[NR::Y] += ((SPSVGLength *) tspan->ly.dy->data)->computed;
+				}
+
 				string = SP_TSPAN_STRING (tspan);
 			} else {
 				string = SP_STRING (next);
@@ -1370,10 +1451,18 @@ sp_text_set_shape (SPText *text)
 			} else {
 				SPTSpan *tspan;
 				tspan = SP_TSPAN (next);
-				if (tspan->ly.dx.set)
-					cp[NR::X] += tspan->ly.dx.computed;
-				if (tspan->ly.dy.set)
-					cp[NR::Y] += tspan->ly.dy.computed;
+
+				//				if (tspan->ly.dx.set)
+				//					cp[NR::X] += tspan->ly.dx.computed;
+				//				if (tspan->ly.dy.set)
+				//					cp[NR::Y] += tspan->ly.dy.computed;
+				if (tspan->ly.dx) {
+					cp[NR::X] += ((SPSVGLength *) tspan->ly.dx->data)->computed;
+				}
+				if (tspan->ly.dy) {
+					cp[NR::Y] += ((SPSVGLength *) tspan->ly.dy->data)->computed;
+				}
+
 				sp_tspan_set_shape (tspan, &text->ly, cp, isfirstline, &inspace);
 			}
 		}
@@ -2036,10 +2125,12 @@ sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop
 	gdouble val;
 
 	SPObject *child = sp_text_get_child_by_position (text, pos);
-	if (!child) return;
+	if (!child) return; //FIXME: we should be able to set lspacing on non-Inkscape text that has no tspans, too
 
 	SPStyle *style = SP_OBJECT_STYLE (child);
 	SPString *string = SP_TEXT_CHILD_STRING (child);
+
+	//FIXME: take transform expansion into account
 
 	// calculate real value
 	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex

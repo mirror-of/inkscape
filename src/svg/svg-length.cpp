@@ -230,7 +230,7 @@ sp_svg_length_list_read (const gchar *str)
 
 	if (!str) return NULL;
 
-	while (sp_svg_length_read_lff (next, &unit, &value, &computed, &next) && next) {
+	while (sp_svg_length_read_lff (next, &unit, &value, &computed, &next)) {
 
 		SPSVGLength *length = g_new (SPSVGLength, 1);
 
@@ -239,11 +239,12 @@ sp_svg_length_list_read (const gchar *str)
 		length->value = value;
 		length->computed = computed;
 
-		while (*next == ',' && next) next++;
-
 		list = g_list_append (list, length);
 
-		if (!*next) break;
+		while (next && *next && (*next == ',' || *next == ' ' || *next == '\n' || *next == '\r' || *next == '\t')) 
+			next++; // the list can be comma- or space-separated, but we will be generous and accept a mix, including newlines and tabs
+
+		if (!next || !*next) break;
 	}
 
 	return list;
@@ -260,7 +261,9 @@ sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float
 
 	if (!str) return 0;
 	v = strtod (str, (char **) &e);
-	if (e == str) return 0;
+	if (e == str) {
+		return 0;
+	}
 	if (!e[0]) {
 		/* Unitless */
 		if (unit) *unit = SP_SVG_UNIT_NONE;
