@@ -59,6 +59,9 @@ public:
 	PrintWin32 (void);
 	virtual ~PrintWin32 (void);
 
+	/* Tell modules about me */
+    static void init (void);
+
 	/* Print functions */
 	virtual unsigned int setup (Inkscape::Extension::Print * module);
 	//virtual unsigned int set_preview (Inkscape::Extension::Print * module);
@@ -77,7 +80,6 @@ public:
 	virtual unsigned int image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
 				const NRMatrix *transform, const SPStyle *style);
         */
-	static void init (void);
 
 };
 

@@ -252,12 +252,10 @@ sp_main_gui (int argc, const char **argv)
 #endif
 
 #ifdef WIN32
-	Inkscape::Extension::Internal::PrintWin32 *printWin32 = 
-	     new Inkscape::Extension::Internal::PrintWin32();
-	printWin32->init ();
+	Inkscape::Extension::Internal::PrintWin32::init(); 
 #endif
 
-       inkscape_gtk_stock_init();
+    inkscape_gtk_stock_init();
    
 	/* Set default icon */
 	if (g_file_test (INKSCAPE_DATADIR "/pixmaps/inkscape.png", (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
@@ -315,9 +313,8 @@ sp_main_gui (int argc, const char **argv)
 	gtk_main();
 
 #ifdef WIN32
-        //We might not need anything here
-	//sp_win32_finish ();
-	delete printWin32;
+    //We might not need anything here
+	//sp_win32_finish (); <-- this is a NOP func
 #endif
 
 	return 0;
