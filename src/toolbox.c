@@ -317,9 +317,18 @@ sp_toolbox_toggle_button_new (const gchar *pxname, GtkTooltips *tt, const gchar 
 static GtkWidget *
 sp_toolbox_file_create (void)
 {
+#ifdef WIN32
+#define PDIRECT
+#endif
+#ifdef WITH_GNOME_PRINT
+#define PDIRECT
+#endif
 	GtkWidget *t, *tb, *b;
 	GtkTooltips *tt;
 	SPRepr *repr;
+#ifdef PDIRECT
+	SPAction *action;
+#endif
 
 	t = gtk_table_new (2, 4, TRUE);
 	gtk_widget_show (t);
@@ -331,12 +340,7 @@ sp_toolbox_file_create (void)
 	sp_toolbox_button_new_from_verb (t, 4, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_OPEN, tt);
 	sp_toolbox_button_new_from_verb (t, 1, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_SAVE, tt);
 	sp_toolbox_button_new_from_verb (t, 5, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_SAVE_AS, tt);
-#ifdef WIN32
-#define PDIRECT
-#endif
-#ifdef WITH_GNOME_PRINT
-#define PDIRECT
-#endif
+
 #ifdef PDIRECT
 	b = sp_button_menu_new (24, SP_BUTTON_TYPE_NORMAL, 2, tt);
 	gtk_widget_show (b);
