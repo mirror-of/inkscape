@@ -2087,6 +2087,7 @@ sp_stroke_style_update_marker_menus( SPWidget *spw,
             }
             i++;
         }
+        g_free (markname);
 
         gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), markpos);
         gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(FALSE));
@@ -2114,6 +2115,7 @@ sp_stroke_style_update_marker_menus( SPWidget *spw,
             }
             i++;
         }
+        g_free (markname);
 
         gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), markpos);
         gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(FALSE));
@@ -2142,6 +2144,7 @@ sp_stroke_style_update_marker_menus( SPWidget *spw,
             }
             i++;
         }
+        g_free (markname);
 
         gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), markpos);
         gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(FALSE));
@@ -2154,25 +2157,35 @@ sp_stroke_style_update_marker_menus( SPWidget *spw,
 
 /** Extract the actual name of the link
  * e.g. get mTriangle from url(#mTriangle).
+ * \return Buffer containing the actual name, allocated from GLib;
+ * the caller should free the buffer when they no longer need it.
  */
 static gchar*
 ink_extract_marker_name(gchar const *n)
 {
-    gchar *buffer = g_strdup(n);
-    buffer[strlen(buffer) - 1] = '\0';
-
-    gchar *name = buffer;
-    while (*name != '\0' && *name != '#') {
-        name++;
+    gchar const *p = n;
+    while (*p != '\0' && *p != '\#') {
+        p++;
     }
 
-    name++;
-    if (*name != '\0') {
-        return name;
+    if (*p == '\0' || p[1] == '\0') {
+        return g_strdup(n);
     }
 
-    free(buffer);
-    return name;
+    p++;
+    int c = 0;
+    while (p[c] != '\0' && p[c] != ')') {
+        c++;
+    }
+
+    if (p[c] == '\0') {
+        return g_strdup(p);
+    }
+
+    gchar* b = g_strdup(p);
+    b[c] = '\0';
+
+    return b;
 }
 
 /*
