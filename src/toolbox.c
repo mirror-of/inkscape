@@ -170,7 +170,7 @@ sp_maintoolbox_new (void)
 	if (SP_ACTIVE_DESKTOP) {
 		const gchar * tname;
 		tname = gtk_type_name (GTK_OBJECT_TYPE (SP_DT_EVENTCONTEXT (SP_ACTIVE_DESKTOP)));
-		w = g_object_get_data (G_OBJECT (t), tname);
+		w = (GtkWidget*)g_object_get_data (G_OBJECT (t), tname);
 		if (w != NULL) {
 			sp_button_toggle_set_down (SP_BUTTON (w), TRUE, TRUE);
 			g_object_set_data (G_OBJECT (t), "active", w);
@@ -278,7 +278,7 @@ sp_toolbox_draw_set_freehand (SPButton *button, gpointer data)
 #endif
 
 static GtkWidget *
-sp_toolbox_button_new (GtkWidget *t, int pos, const unsigned char *pxname, GtkSignalFunc handler, GtkTooltips *tt, unsigned char *tip)
+sp_toolbox_button_new (GtkWidget *t, int pos, const gchar *pxname, GtkSignalFunc handler, GtkTooltips *tt, const gchar *tip)
 {
 	GtkWidget *b;
 	int xpos, ypos;
@@ -288,7 +288,10 @@ sp_toolbox_button_new (GtkWidget *t, int pos, const unsigned char *pxname, GtkSi
 	if (handler) gtk_signal_connect (GTK_OBJECT (b), "clicked", handler, NULL);
 	xpos = pos % 4;
 	ypos = pos / 4;
-	gtk_table_attach (GTK_TABLE (t), b, xpos, xpos + 1, ypos, ypos + 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), b, xpos, xpos + 1, ypos, ypos + 1, 
+			  (GtkAttachOptions)0, 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 
 	return b;
 }
@@ -316,13 +319,16 @@ sp_toolbox_button_new_from_verb (GtkWidget *t, int pos, unsigned int type, unsig
 	gtk_widget_show (b);
 	xpos = pos % 4;
 	ypos = pos / 4;
-	gtk_table_attach (GTK_TABLE (t), b, xpos, xpos + 1, ypos, ypos + 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), b, xpos, xpos + 1, ypos, ypos + 1, 
+			  (GtkAttachOptions)0, 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 	return b;
 }
 
 #if 0
 static GtkWidget *
-sp_toolbox_toggle_button_new (const unsigned char *pxname, GtkTooltips *tt, const unsigned char *tip)
+sp_toolbox_toggle_button_new (const gchar *pxname, GtkTooltips *tt, const gchar *tip)
 {
 	GtkWidget *b;
 
@@ -453,7 +459,10 @@ sp_toolbox_object_create (void)
 	sp_button_add_option (SP_BUTTON (b), 0, action);
 	action = sp_verb_get_action (SP_VERB_OBJECT_FLIP_VERTICAL);
 	sp_button_add_option (SP_BUTTON (b), 1, action);
-	gtk_table_attach (GTK_TABLE (t), b, 2, 3, 1, 2, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), b, 2, 3, 1, 2, 
+			  (GtkAttachOptions)0, 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 
 	sp_toolbox_button_new_from_verb (t, 7, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_ROTATE_90, tt);
 	sp_toolbox_button_new_from_verb (t, 8, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLATTEN, tt);
@@ -526,13 +535,19 @@ sp_toolbox_draw_create (void)
 	sp_button_add_option (SP_BUTTON (b), 1, sp_verb_get_action (SP_VERB_CONTEXT_ARC));
 	sp_button_add_option (SP_BUTTON (b), 2, sp_verb_get_action (SP_VERB_CONTEXT_STAR));
 	sp_button_add_option (SP_BUTTON (b), 3, sp_verb_get_action (SP_VERB_CONTEXT_SPIRAL));
-	gtk_table_attach (GTK_TABLE (t), b, 2, 3, 0, 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), b, 2, 3, 0, 1, 
+			  (GtkAttachOptions)0, 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 	b = sp_button_menu_new (24, SP_BUTTON_TYPE_TOGGLE, 3, tt);
 	gtk_widget_show (b);
 	sp_button_add_option (SP_BUTTON (b), 0, sp_verb_get_action (SP_VERB_CONTEXT_PENCIL));
 	sp_button_add_option (SP_BUTTON (b), 1, sp_verb_get_action (SP_VERB_CONTEXT_PEN));
 	sp_button_add_option (SP_BUTTON (b), 2, sp_verb_get_action (SP_VERB_CONTEXT_CALLIGRAPHIC));
-	gtk_table_attach (GTK_TABLE (t), b, 3, 4, 0, 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), b, 3, 4, 0, 1, 
+			  (GtkAttachOptions)0, 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 	sp_toolbox_button_new_from_verb (t, 4, SP_BUTTON_TYPE_TOGGLE, SP_VERB_CONTEXT_TEXT, tt);
 	sp_toolbox_button_new_from_verb (t, 5, SP_BUTTON_TYPE_TOGGLE, SP_VERB_CONTEXT_ZOOM, tt);
 	sp_toolbox_button_new_from_verb (t, 6, SP_BUTTON_TYPE_TOGGLE, SP_VERB_CONTEXT_DROPPER, tt);
@@ -722,15 +737,15 @@ sp_maintoolbox_open_one_file_with_check (gpointer filename, gpointer unused)
 
 	if (filename) {
 		int len;
-		len = strlen (filename);
+		len = strlen ((const gchar*)filename);
 		if (len > 4 && !strcmp ((char *) filename + len - 4, svg_suffix)) {
-			sp_file_open (filename, NULL);
+			sp_file_open ((const gchar*)filename, NULL);
 		}
 	}
 }
 
 static void
-sp_toolbox_verb_activate (unsigned int verb, const unsigned char *tname, const unsigned char *name)
+sp_toolbox_verb_activate (unsigned int verb, const gchar *tname, const gchar *name)
 {
 	SPAction *action;
 	action = sp_verb_get_action (verb);
@@ -740,7 +755,7 @@ sp_toolbox_verb_activate (unsigned int verb, const unsigned char *tname, const u
 static void 
 sp_update_draw_toolbox (Inkscape *inkscape, SPEventContext *eventcontext, GObject *toolbox)
 {
-	const unsigned char *tname;
+	const gchar *tname;
 
 	if (eventcontext != NULL) {
 		tname = gtk_type_name (GTK_OBJECT_TYPE (eventcontext));
