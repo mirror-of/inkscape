@@ -55,6 +55,7 @@ SPCurve *sp_curve_concat(GSList const *list);
 GSList *sp_curve_split(SPCurve *curve);
 void sp_curve_transform(SPCurve *curve, NR::Matrix const &);
 void sp_curve_transform(SPCurve *curve, NR::translate const &);
+void sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &, NR::Point const &);
 
 /* Methods */
 

@@ -22,6 +22,7 @@
 #include <libnr/nr-path.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-fns.h>
 #include <libnr/nr-translate-ops.h>
 
 #define SP_CURVE_LENSTEP 32
@@ -652,7 +653,7 @@ sp_curve_first_point(SPCurve const *const curve)
 {
     NArtBpath *const bpath = sp_curve_first_bpath(curve);
     g_return_val_if_fail(bpath != NULL, NR::Point(0, 0));
-    return bpath->c(1);
+    return bpath->c(3);
 }
 
 NR::Point
@@ -959,6 +960,153 @@ static bool sp_bpath_closed(NArtBpath const bpath[])
     return true;
 }
 
+static double
+bezier_len(NR::Point const &c0,
+           NR::Point const &c1,
+           NR::Point const &c2,
+           NR::Point const &c3,
+           double const threshold)
+{
+    /* The SVG spec claims that a closed form exists, but for the moment I'll use
+     * a stupid algorithm.
+     */
+    double const lbound = L2( c3 - c0 );
+    double const ubound = L2( c1 - c0 ) + L2( c2 - c1 ) + L2( c3 - c2 );
+    double ret;
+    if ( ubound - lbound <= threshold ) {
+        ret = .5 * ( lbound + ubound );
+    } else {
+        NR::Point const a1( .5 * ( c0 + c1 ) );
+        NR::Point const b2( .5 * ( c2 + c3 ) );
+        NR::Point const c12( .5 * ( c1 + c2 ) );
+        NR::Point const a2( .5 * ( a1 + c12 ) );
+        NR::Point const b1( .5 * ( c12 + b2 ) );
+        NR::Point const midpoint( .5 * ( a2 + b1 ) );
+        double const rec_threshold = .625 * threshold;
+        ret = bezier_len(c0, a1, a2, midpoint, rec_threshold) + bezier_len(midpoint, b1, b2, c3, rec_threshold);
+        if (!(lbound - 1e-2 <= ret && ret <= ubound + 1e-2)) {
+            using NR::X; using NR::Y;
+            g_warning("ret=%f outside of expected bounds [%f, %f] for {(%.0f %.0f) (%.0f %.0f) (%.0f %.0f) (%.0f %.0f)}",
+                      ret, lbound, ubound, c0[X], c0[Y], c1[X], c1[Y], c2[X], c2[Y], c3[X], c3[Y]);
+        } else {
+            /* Collect information about a good fraction between lbound and ubound to use. */
+            static unsigned n;
+            static double sum;
+            static double sum_squares;
+            double const this_frac = (ret - lbound) / (ubound - lbound);
+            sum += this_frac;
+            sum_squares += this_frac * this_frac;
+            ++n;
+            if ((n & (n - 1)) == 0 && 2 <= n) {
+                double const mean = sum / n;
+                double const var = (sum_squares - sum * mean) / (n - 1);
+                fprintf(stderr, "bez frac: n=%u, avg=%f, stdev=%f\n", n, mean, sqrt(var));
+            }
+        }
+    }
+    return ret;
+}
+
+/* Excludes length of closepath segments. */
+static double
+sp_curve_distance_including_space(SPCurve const *const curve, double seg2len[])
+{
+    g_return_val_if_fail(curve != NULL, 0.);
+
+    double ret = 0.0;
+
+    if ( curve->bpath->code == NR_END ) {
+        return ret;
+    }
+
+    NR::Point prev(curve->bpath->c(3));
+    for (gint i = 1; i < curve->end; ++i) {
+        NArtBpath &p = curve->bpath[i];
+        double seg_len;
+        switch (p.code) {
+            case NR_MOVETO_OPEN:
+            case NR_MOVETO:
+            case NR_LINETO:
+                seg_len = L2(p.c(3) - prev);
+                break;
+
+            case NR_CURVETO:
+                seg_len = bezier_len(prev, p.c(1), p.c(2), p.c(3), 1.);
+                break;
+
+            case NR_END:
+                return ret;
+        }
+        seg2len[i - 1] = seg_len;
+        ret += seg_len;
+        prev = p.c(3);
+    }
+    g_assert(!(ret < 0));
+    return ret;
+}
+
+/** Like sp_curve_distance_including_space, but ensures that the result >= 1e-18:
+ *  uses 1 per segment if necessary.
+ */
+static double
+sp_curve_nonzero_distance_including_space(SPCurve const *const curve, double seg2len[])
+{
+    double const real_dist(sp_curve_distance_including_space(curve, seg2len));
+    if (real_dist >= 1e-18) {
+        return real_dist;
+    } else {
+        unsigned const nSegs = SP_CURVE_LENGTH(curve) - 2;
+        for (unsigned i = 0; i < nSegs; ++i) {
+            seg2len[i] = 1.;
+        }
+        return (double) nSegs;
+    }
+}
+
+void
+sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &new_p0, NR::Point const &new_p1)
+{
+    if (sp_curve_empty(curve)) {
+        return;
+    }
+    g_assert(unsigned(SP_CURVE_LENGTH(curve)) == sp_bpath_length(curve->bpath));
+    unsigned const nCmds = SP_CURVE_LENGTH(curve);   // includes the initial moveto and NR_END.
+    g_assert(3 <= nCmds);
+    unsigned const nSegs = nCmds - 2;
+    double *const seg2len = new double[nSegs];
+    double const tot_len = sp_curve_nonzero_distance_including_space(curve, seg2len);
+    NR::Point const offset0( new_p0 - sp_curve_first_point(curve) );
+    NR::Point const offset1( new_p1 - sp_curve_last_point(curve) );
+    curve->bpath->setC(3, new_p0);
+    double begin_dist = 0.;
+    for (unsigned si = 0; si < nSegs; ++si) {
+        double const end_dist = begin_dist + seg2len[si];
+        NArtBpath &p = curve->bpath[1 + si];
+        switch (p.code) {
+            case NR_LINETO:
+            case NR_MOVETO:
+            case NR_MOVETO_OPEN:
+                p.setC(3, p.c(3) + NR::Lerp(end_dist / tot_len, offset0, offset1));
+                break;
+
+            case NR_CURVETO:
+                for (unsigned ci = 1; ci <= 3; ++ci) {
+                    p.setC(ci, p.c(ci) + Lerp((begin_dist + ci * seg2len[si] / 3.) / tot_len, offset0, offset1));
+                }
+                break;
+
+            default:
+                g_assert_not_reached();
+        }
+
+        begin_dist = end_dist;
+    }
+    g_assert(L1(curve->bpath[nSegs].c(3) - new_p1) < 1.);
+    /* Explicit set for better numerical properties. */
+    curve->bpath[nSegs].setC(3, new_p1);
+    delete seg2len;
+    g_assert(fabs(begin_dist - tot_len) < 1e-18);
+}
 
 /*
   Local Variables:
