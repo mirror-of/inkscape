@@ -706,7 +706,7 @@ sp_menu_append_recent_documents (GtkWidget *menu, SPView* /* view */)
 static void
 sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 {
-    sp_ui_menu_append_submenu (fm, view, sp_menu_append_new_templates, _("_New"), _("Create new document"), "file_templates" );
+    sp_ui_menu_append_submenu (fm, view, sp_menu_append_new_templates, _("_New"), _("Create new document"), NULL);
 
     static Inkscape::Verb * file_verbs_one[] = {
 	Inkscape::Verb::get(SP_VERB_FILE_OPEN),
