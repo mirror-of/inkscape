@@ -116,38 +116,28 @@ sp_zoom_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 	return ret;
 }
 
-static gint
-sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
+static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
-	SPDesktop * desktop;
-	NRPoint p;
-	NRRect b;
-	gint ret;
-
-	ret = FALSE;
-
-	desktop = event_context->desktop;
-
+	SPDesktop *desktop = event_context->desktop;
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
-	gdouble zoom_inc = prefs_get_double_attribute_limited ("options.zoomincrement", "value", 1.414213562, 1.01, 10);
+	double const zoom_inc = prefs_get_double_attribute_limited("options.zoomincrement", "value", M_SQRT2, 1.01, 10);
+
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
-		switch (event->button.button) {
-		case 1:
-
+		if (event->button.button == 1) {
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
 			within_tolerance = true;
 
-			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
-			sp_rubberband_start (desktop, p.x, p.y);
+			NR::Point const button_w(event->button.x,
+						 event->button.y);
+			NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+			sp_rubberband_start(desktop, button_dt);
 
 			ret = TRUE;
-			break;
-		default:
-			break;
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
@@ -164,27 +154,27 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			// motion notify coordinates as given (no snapping back to origin)
 			within_tolerance = false; 
 
-			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
-			sp_rubberband_move (p.x, p.y);
+			NR::Point const motion_w(event->motion.x,
+						 event->motion.y);
+			NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+			sp_rubberband_move(motion_dt);
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
-		switch (event->button.button) {
-		case 1:
+		if ( event->button.button == 1 ) {
+			NRRect b;
 			if (sp_rubberband_rect (&b) && !within_tolerance) {
 				sp_desktop_set_display_area (desktop, b.x0, b.y0, b.x1, b.y1, 10);
 			} else {
-				sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
-				if (event->button.state & GDK_SHIFT_MASK) {
-					sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, 1/zoom_inc);
-				} else {
-					sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, zoom_inc);
-				}
+				NR::Point const button_w(event->button.x,
+							 event->button.y);
+				NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+				double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
+						       ? 1 / zoom_inc
+						       : zoom_inc );
+				sp_desktop_zoom_relative_keep_point(desktop, button_dt, zoom_rel);
 			}
 			ret = TRUE;
-			break;
-		default:
-			break;
 		}
 		sp_rubberband_stop ();
 		xp = yp = 0; 
