@@ -103,24 +103,24 @@ static NR::Point const unconstrained_tangent(0, 0);
 gint
 sp_bezier_fit_cubic(NR::Point *bezier, NR::Point const *data, gint len, gdouble error)
 {
-    return sp_bezier_fit_cubic_r(bezier, data, len, error, 0);
+    return sp_bezier_fit_cubic_r(bezier, data, len, error, 1);
 }
 
 /**
  * Fit a multi-segment Bezier curve to a set of digitized points.
  *
- * Maximum number of generated segments is 2 ^ lg_max_beziers.
+ * Maximum number of generated segments is max_beziers.
  * \a bezier must be large enough for n. segments * 4 elements.
  *
  * return value: number of segments generated, or -1 on error.
  */
 gint
-sp_bezier_fit_cubic_r(NR::Point bezier[], NR::Point const data[], gint const len, gdouble const error, gint const lg_max_beziers)
+sp_bezier_fit_cubic_r(NR::Point bezier[], NR::Point const data[], gint const len, gdouble const error, unsigned const max_beziers)
 {
     g_return_val_if_fail(bezier != NULL, -1);
     g_return_val_if_fail(data != NULL, -1);
     g_return_val_if_fail(len > 0, -1);
-    g_return_val_if_fail(unsigned(lg_max_beziers) < 31 - 2 - 1 - 3, -1);
+    g_return_val_if_fail(max_beziers < (1ul << (31 - 2 - 1 - 3)), -1);
 
     NR::Point *uniqued_data = g_new(NR::Point, len);
     unsigned uniqued_len = copy_without_nans_or_adjacent_duplicates(data, len, uniqued_data);
@@ -133,7 +133,7 @@ sp_bezier_fit_cubic_r(NR::Point bezier[], NR::Point const data[], gint const len
     /* Call fit-cubic function with recursion. */
     gint const ret = sp_bezier_fit_cubic_full(bezier, NULL, uniqued_data, uniqued_len,
                                               unconstrained_tangent, unconstrained_tangent,
-                                              error, lg_max_beziers);
+                                              error, max_beziers);
     g_free(uniqued_data);
     return ret;
 }
@@ -171,14 +171,14 @@ gint
 sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[],
                          NR::Point const data[], gint const len,
                          NR::Point const &tHat1, NR::Point const &tHat2,
-                         double const error, gint const lg_max_beziers)
+                         double const error, unsigned const max_beziers)
 {
     int const maxIterations = 4;   /* Max times to try iterating */
 
     g_return_val_if_fail(bezier != NULL, -1);
     g_return_val_if_fail(data != NULL, -1);
     g_return_val_if_fail(len > 0, -1);
-    g_return_val_if_fail(lg_max_beziers >= 0, -1);
+    g_return_val_if_fail(max_beziers >= 1, -1);
     g_return_val_if_fail(error >= 0.0, -1);
 
     if ( len < 2 ) return 0;
@@ -260,7 +260,7 @@ sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[],
                 ++splitPoint;
             } else {
                 return sp_bezier_fit_cubic_full(bezier, split_points, data, len, unconstrained_tangent, tHat2,
-                                                error, lg_max_beziers);
+                                                error, max_beziers);
             }
         } else if (splitPoint == unsigned(len - 1)) {
             if (is_zero(tHat2)) {
@@ -268,16 +268,16 @@ sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[],
                 --splitPoint;
             } else {
                 return sp_bezier_fit_cubic_full(bezier, split_points, data, len, tHat1, unconstrained_tangent,
-                                                error, lg_max_beziers);
+                                                error, max_beziers);
             }
         }
     }
 
-    if ( 0 < lg_max_beziers ) {
+    if ( 1 < max_beziers ) {
         /*
          *  Fitting failed -- split at max error point and fit recursively
          */
-        gint const rec_lg_max_beziers = lg_max_beziers - 1;
+        unsigned const rec_max_beziers1 = max_beziers - 1;
 
         NR::Point recTHat2, recTHat1;
         if (is_corner) {
@@ -289,7 +289,7 @@ sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[],
             recTHat1 = -recTHat2;
         }
         gint const nsegs1 = sp_bezier_fit_cubic_full(bezier, split_points, data, splitPoint + 1,
-                                                     tHat1, recTHat2, error, rec_lg_max_beziers);
+                                                     tHat1, recTHat2, error, rec_max_beziers1);
         if ( nsegs1 < 0 ) {
 #ifdef BEZIER_DEBUG
             g_print("fit_cubic[1]: recursive call failed\n");
@@ -300,12 +300,13 @@ sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[],
         if (split_points != NULL) {
             split_points[nsegs1 - 1] = splitPoint;
         }
+        unsigned const rec_max_beziers2 = max_beziers - nsegs1;
         gint const nsegs2 = sp_bezier_fit_cubic_full(bezier + nsegs1*4,
                                                      ( split_points == NULL
                                                        ? NULL
                                                        : split_points + nsegs1 ),
                                                      data + splitPoint, len - splitPoint,
-                                                     recTHat1, tHat2, error, rec_lg_max_beziers);
+                                                     recTHat1, tHat2, error, rec_max_beziers2);
         if ( nsegs2 < 0 ) {
 #ifdef BEZIER_DEBUG
             g_print("fit_cubic[2]: recursive call failed\n");
@@ -314,8 +315,8 @@ sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[],
         }
 
 #ifdef BEZIER_DEBUG
-        g_print("fit_cubic: success[nsegs: %d+%d=%d] on lg_max_beziers:%d\n",
-                nsegs1, nsegs2, nsegs1 + nsegs2, lg_max_beziers);
+        g_print("fit_cubic: success[nsegs: %d+%d=%d] on max_beziers:%u\n",
+                nsegs1, nsegs2, nsegs1 + nsegs2, max_beziers);
 #endif
         return nsegs1 + nsegs2;
     } else {

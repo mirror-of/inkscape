@@ -24,11 +24,11 @@
 gint sp_bezier_fit_cubic(NR::Point bezier[], NR::Point const data[], gint len, gdouble error);
 
 gint sp_bezier_fit_cubic_r(NR::Point bezier[], NR::Point const data[], gint len, gdouble error,
-                           gint lg_max_beziers);
+                           unsigned max_beziers);
 
 gint sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[], NR::Point const data[], gint len,
                               NR::Point const &tHat1, NR::Point const &tHat2,
-                              gdouble error, gint lg_max_beziers);
+                              gdouble error, unsigned max_beziers);
 
 NR::Point sp_darray_left_tangent(NR::Point const d[], unsigned const len);
 NR::Point sp_darray_left_tangent(NR::Point const d[], unsigned const len, double const tolerance_sq);

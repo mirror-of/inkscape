@@ -141,11 +141,11 @@ The others are fairly simple.
 
 For error >= 0: error is const, and we pass it to all recursions.
 
-For inner lg_max_beziers >= 0: recursions are conditional on outer
-0 < lg_max_beziers before setting rec_lg_max_beziers to lg_max_beziers - 1,
-and passing rec_lg_max_beziers as inner lg_max_beziers value,
-so we have outer lg_max_beziers >= 1 so inner lg_max_beziers >= 0.
-lg_max_beziers and rec_lg_max_beziers are both const.
+For inner max_beziers >= 1: recursions are conditional on outer
+1 < max_beziers before setting rec_max_beziers1 to max_beziers - 1,
+and passing rec_max_beziers1 as inner max_beziers value,
+so we have outer max_beziers >= 2 so inner max_beziers >= 1.
+max_beziers and rec_max_beziers1 are both const.
 
 
 src/display/bezier-utils.cpp:sp_darray_right_tangent(Point const[], unsigned)

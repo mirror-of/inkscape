@@ -450,7 +450,7 @@ fit_and_split(SPPencilContext *pc)
              || is_unit_vector(pc->req_tangent));
     NR::Point const tHatEnd(0, 0);
     int const n_segs = sp_bezier_fit_cubic_full(b, NULL, pc->p, pc->npoints,
-                                                pc->req_tangent, tHatEnd, tolerance_sq, 0);
+                                                pc->req_tangent, tHatEnd, tolerance_sq, 1);
     if ( n_segs > 0
          && unsigned(pc->npoints) < G_N_ELEMENTS(pc->p) )
     {

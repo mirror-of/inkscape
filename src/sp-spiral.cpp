@@ -286,8 +286,8 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 			double *t)
 {
 #define BEZIER_SIZE   4
-#define FITTING_LG_MAX_BEZIERS 2
-#define BEZIER_LENGTH (BEZIER_SIZE << FITTING_LG_MAX_BEZIERS)
+#define FITTING_MAX_BEZIERS 4
+#define BEZIER_LENGTH (BEZIER_SIZE * FITTING_MAX_BEZIERS)
 	g_assert (dstep > 0);
 	g_assert (is_unit_vector (hat1));
 
@@ -328,7 +328,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 	depth = sp_bezier_fit_cubic_full (bezier, NULL, darray, SAMPLE_SIZE,
 					  hat1, hat2,
 					  SPIRAL_TOLERANCE*SPIRAL_TOLERANCE,
-					  FITTING_LG_MAX_BEZIERS);
+					  FITTING_MAX_BEZIERS);
 	g_assert(depth * BEZIER_SIZE <= gint(G_N_ELEMENTS(bezier)));
 #ifdef SPIRAL_DEBUG
 	if (*t == spiral->t0 || *t == 1.0)

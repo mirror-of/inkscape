@@ -3,6 +3,11 @@
 	* src/display/bezier-utils.cpp (sp_bezier_fit_cubic_full):
 	  Add splitpoints parameter.  Callers updated.
 
+	* src/display/bezier-utils.cpp
+	  (sp_bezier_fit_cubic_r, sp_bezier_fit_cubic_full):
+	  Change last parameter from lg_max_beziers to max_beziers.
+	  Callers updated.
+
 2004-11-19  Bryce <bryce@bryceharrington.org>
 
 	* src/dialogs/layer-properties.cpp,
@@ -11,7 +16,7 @@
 2004-11-18  Bryce <bryce@bryceharrington.org>
 
 	* src/dialogs/Makefile_insert, src/dialogs/makefile.msc,
-  	  src/dialogs/layer-properties.h, src/dialogs/layer-properties.h:
+	  src/dialogs/layer-properties.h, src/dialogs/layer-properties.h:
 	  Adding a layer properties dialog for renaming layers 
 
 	* src/desktop.cpp src/interface.cpp, src/verbs.cpp,
@@ -259,7 +264,7 @@
 2004-10-30  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/dialogs/item-properties.cpp, src/sp-object.h:  Cleaning up
-	stubs, disabling some more of the desc code to prevent crash.	  
+	stubs, disabling some more of the desc code to prevent crash.
 	The change to SPObject::label() broke the label editing code;
 	fixing it.
 
