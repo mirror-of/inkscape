@@ -1,4 +1,9 @@
-2004-12-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+2004-12-07  David Turner  <novalis@gnu.org>
+
+	* src/libnrtype/RasterFont.cpp, src/display/nr-arena-shape.cpp: 
+	Fixed dash rendering bug (#1077213)
+	
+2004-12-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/style.h, src/style.cpp: Support all `display' values
 	  required by SVG 1.1.  (No functional change, insofar as the new
@@ -1882,7 +1887,7 @@
 
 	  make NRObject GC-aware
 
-2004-08-06  David Turner <novalis@gnu.org
+2004-08-06  David Turner <novalis@gnu.org>
 	* src/sp-shape.cpp (sp_shape_marker_get_transform): Make marker handling match
 	SVG spec better.
 

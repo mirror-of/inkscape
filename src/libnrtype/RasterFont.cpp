@@ -36,9 +36,9 @@ void          font_style::Apply(Path* src,Shape* dest) {
 				float   sc_offset = dash_offset * scale;
 				float   *tdashs=(float*)malloc((nbDash+1)*sizeof(float));
 				while ( sc_offset >= dlen ) sc_offset-=dlen;
-				tdashs[0]=dashes[0] * scale;
-				for (int i=1;i<nbDash;i++) tdashs[i]=tdashs[i-1]+dashes[i] * scale;
-				src->DashPolyline(0.0,0.0,dlen,nbDash,tdashs,true,sc_offset);
+				tdashs[0]=0.0;
+				for (int i=1;i<nbDash;i++) tdashs[i+1]=tdashs[i]+dashes[i] * scale;
+				src->DashPolyline(0.0,0.0,dlen,nbDash+1,tdashs,true,sc_offset);
 				free(tdashs);
 			}
 		}
