@@ -165,7 +165,10 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 		}
 	}
 
-	sp_repr_save_file (sp_repr_document (repr), uri);
+	gboolean s = sp_repr_save_file (sp_repr_document (repr), uri);
+	if (s == FALSE) {
+	  throw Inkscape::Extension::Output::save_failed();
+	}
 
 	if (!spns) sp_repr_document_unref (rdoc);
 
