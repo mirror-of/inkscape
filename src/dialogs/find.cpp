@@ -14,16 +14,6 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtkhseparator.h>
-#include <gtk/gtkstock.h>
 
 #include "../inkscape-stock.h"
 #include "helper/sp-intl.h"
@@ -46,6 +36,19 @@
 #include "../sp-object.h"
 #include "../sp-text.h"
 #include "../selection-chemistry.h"
+#include "../sp-defs.h"
+#include "../sp-rect.h"
+#include "../sp-ellipse.h"
+#include "../sp-star.h"
+#include "../sp-spiral.h"
+#include "../sp-polygon.h"
+#include "../sp-path.h"
+#include "../sp-line.h"
+#include "../sp-polyline.h"
+#include "../sp-item-group.h"
+#include "../sp-use.h"
+#include "../sp-image.h"
+#include "../sp-offset.h"
 
 using NR::X;
 using NR::Y;
@@ -80,6 +83,14 @@ static gboolean sp_find_dialog_delete(GtkObject *, GdkEvent *, gpointer data)
     prefs_set_int_attribute (prefs_path, "h", h);
 
     return FALSE; // which means, go ahead and destroy it
+}
+
+void
+sp_find_squeeze_window()
+{
+    GtkRequisition r;
+    gtk_widget_size_request(dlg, &r);
+    gtk_window_resize ((GtkWindow *) dlg, r.width, r.height);
 }
 
 bool
@@ -158,6 +169,7 @@ filter_onefield (GSList *l, GObject *dlg, const gchar *field, bool (*match_funct
 {
     GtkWidget *widget = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), field));
     const gchar *text = gtk_entry_get_text (GTK_ENTRY(widget));
+
     if (strlen (text) != 0) {
         GSList *n = NULL;
         for (GSList *i = l; i != NULL; i = i->next) {
@@ -169,7 +181,71 @@ filter_onefield (GSList *l, GObject *dlg, const gchar *field, bool (*match_funct
     } else {
         return l;
     }
+
     return NULL;
+}
+
+
+bool 
+type_checkbox (GtkWidget *widget, const gchar *data)
+{
+    return  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (widget), data)));
+}
+
+bool 
+item_type_match (SPItem *item, GtkWidget *widget)
+{
+    if (SP_IS_RECT(item)) {
+        return (type_checkbox (widget, "shapes") || type_checkbox (widget, "rects"));
+
+    } else if (SP_IS_GENERICELLIPSE(item) || SP_IS_ELLIPSE(item) || SP_IS_ARC(item) || SP_IS_CIRCLE(item)) {
+        return (type_checkbox (widget, "shapes") || type_checkbox (widget, "ellipses"));
+
+    } else if (SP_IS_STAR(item) || SP_IS_POLYGON(item)) {
+        return (type_checkbox (widget, "shapes") || type_checkbox (widget, "stars"));
+
+    } else if (SP_IS_SPIRAL(item)) {
+        return (type_checkbox (widget, "shapes") || type_checkbox (widget, "spirals"));
+
+    } else if (SP_IS_PATH(item) || SP_IS_LINE(item) || SP_IS_POLYLINE(item)) {
+        return (type_checkbox (widget, "paths"));
+
+    } else if (SP_IS_TEXT(item) || SP_IS_TSPAN(item) || SP_IS_STRING(item)) {
+        return (type_checkbox (widget, "texts"));
+
+    } else if (SP_IS_GROUP(item)) {
+        return (type_checkbox (widget, "groups"));
+
+    } else if (SP_IS_USE(item)) {
+        return (type_checkbox (widget, "clones"));
+
+    } else if (SP_IS_IMAGE(item)) {
+        return (type_checkbox (widget, "images"));
+
+    } else if (SP_IS_OFFSET(item)) {
+        return (type_checkbox (widget, "offsets"));
+    }
+
+    return false;
+}
+
+GSList *
+filter_types (GSList *l, GObject *dlg, bool (*match_function)(SPItem *, GtkWidget *))
+{
+    GtkWidget *widget = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), "types"));
+
+    GtkWidget *alltypes = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (widget), "all"));
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (alltypes))) 
+        return l;
+    
+
+    GSList *n = NULL;
+    for (GSList *i = l; i != NULL; i = i->next) {
+        if (match_function (SP_ITEM(i->data), widget)) {
+            n = g_slist_prepend (n, i->data);
+        }
+    }
+    return n;
 }
 
 
@@ -181,12 +257,17 @@ filter_list (GSList *l, GObject *dlg, bool exact)
     l = filter_onefield (l, dlg, "style", item_style_match, exact);
     l = filter_onefield (l, dlg, "attr", item_attr_match, exact);
 
+    l = filter_types (l, dlg, item_type_match);
+
     return l;
 }
 
 GSList *
 all_items (SPObject *r, GSList *l)
 {
+    if (SP_IS_DEFS(r))
+        return l; // we're not interested in items in defs 
+
     for (SPObject *child = sp_object_first_child(r); child; child = SP_OBJECT_NEXT (child)) {
         if (SP_IS_ITEM (child) && !SP_OBJECT_IS_CLONED (child)) {
             l = g_slist_prepend (l, child);
@@ -212,7 +293,7 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
         n = filter_list (l, dlg, exact);
     }
 
-    if (n != NULL && g_slist_length (n) != all) {
+    if (n != NULL) {
         sp_view_set_statusf_flash(SP_VIEW(desktop), 
                                   _("%d object(s) found (out of %d), %s match."), 
                                   g_slist_length (n), all, exact? _("exact") : _("partial"));
@@ -228,8 +309,8 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
 void
 sp_find_reset_searchfield (GObject *dlg, const gchar *field)
 {
-   GtkWidget *widget = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), field));
-   gtk_entry_set_text (GTK_ENTRY(widget), "");
+    GtkWidget *widget = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), field));
+    gtk_entry_set_text (GTK_ENTRY(widget), "");
 }
 
 
@@ -240,6 +321,9 @@ sp_find_dialog_reset (GObject *, GObject *dlg)
     sp_find_reset_searchfield (dlg, "id");
     sp_find_reset_searchfield (dlg, "style");
     sp_find_reset_searchfield (dlg, "attr");
+
+    GtkWidget *types = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), "types"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (types), "all")), TRUE);
 }
 
 
@@ -268,10 +352,208 @@ sp_find_new_searchfield (GtkWidget *dlg, GtkWidget *vb, const gchar *label, cons
 void
 sp_find_new_button (GtkWidget *dlg, GtkWidget *hb, const gchar *label, GtkTooltips *tt, const gchar *tip, void (*function) (GObject *, GObject *))
 {
-           GtkWidget *b = gtk_button_new_with_mnemonic (label);
-            gtk_tooltips_set_tip (tt, b, tip, NULL);
-            gtk_box_pack_start (GTK_BOX (hb), b, TRUE, TRUE, 0);
-            g_signal_connect ( G_OBJECT (b), "clicked", G_CALLBACK (function), dlg );
+    GtkWidget *b = gtk_button_new_with_mnemonic (label);
+    gtk_tooltips_set_tip (tt, b, tip, NULL);
+    gtk_box_pack_start (GTK_BOX (hb), b, TRUE, TRUE, 0);
+    g_signal_connect ( G_OBJECT (b), "clicked", G_CALLBACK (function), dlg );
+    gtk_widget_show (b);
+}
+
+void
+toggle_alltypes (GtkToggleButton *tb, gpointer data)
+{
+    GtkWidget *alltypes_pane =  GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (data), "all-pane"));
+    if (gtk_toggle_button_get_active (tb)) {
+        gtk_widget_hide_all (alltypes_pane);
+    } else {
+        gtk_widget_show_all (alltypes_pane);
+        
+        // double setting to make sure its toggle gets called, no matter what is the original state
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "shapes")), FALSE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "shapes")), TRUE);
+
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "paths")), TRUE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "texts")), TRUE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "groups")), TRUE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "clones")), TRUE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "images")), TRUE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "offsets")), TRUE);
+    }
+    sp_find_squeeze_window();
+}
+
+void
+toggle_shapes (GtkToggleButton *tb, gpointer data)
+{
+    GtkWidget *shapes_pane =  GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (data), "shapes-pane"));
+    if (gtk_toggle_button_get_active (tb)) {
+        gtk_widget_hide_all (shapes_pane);
+    } else {
+        gtk_widget_show_all (shapes_pane);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "rects")), FALSE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "ellipses")), FALSE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "stars")), FALSE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "spirals")), FALSE);
+    }
+    sp_find_squeeze_window();
+}
+
+
+GtkWidget *
+sp_find_types_checkbox (GtkWidget *w, const gchar *data, gboolean active, 
+                        GtkTooltips *tt, const gchar *tip,
+                        const gchar *label,
+                        void (*toggled)(GtkToggleButton *, gpointer))
+{
+    GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+    gtk_widget_show (hb);
+
+    {
+        GtkWidget *b  = gtk_check_button_new_with_label (label);
+        gtk_widget_show (b);
+        gtk_toggle_button_set_active ((GtkToggleButton *) b, active);
+        gtk_object_set_data (GTK_OBJECT (w), data, b);
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, tip, NULL);
+        if (toggled)
+            gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (toggled), w);
+        gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
+    }
+
+    return hb;
+}
+
+GtkWidget *
+sp_find_types_checkbox_indented (GtkWidget *w, const gchar *data, gboolean active, 
+                                 GtkTooltips *tt, const gchar *tip,
+                                 const gchar *label,
+                                 void (*toggled)(GtkToggleButton *, gpointer), guint indent)
+{
+    GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+    gtk_widget_show (hb);
+
+    { // empty label for indent
+        GtkWidget *l = gtk_label_new ("");
+        gtk_widget_show (l);
+        gtk_widget_set_usize (l, FIND_LABELWIDTH + indent, -1);
+        gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    }
+
+    GtkWidget *c = sp_find_types_checkbox (w, data, active, tt, tip, label, toggled);
+    gtk_box_pack_start (GTK_BOX (hb), c, FALSE, FALSE, 0);
+
+    return hb;
+}
+
+
+GtkWidget *
+sp_find_types ()
+{
+    GtkTooltips *tt = gtk_tooltips_new ();
+
+    GtkWidget *vb = gtk_vbox_new (FALSE, 4);
+    gtk_widget_show (vb);
+
+    {
+        GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+        gtk_widget_show (hb);
+
+        {
+            GtkWidget *l = gtk_label_new_with_mnemonic (_("T_ype: "));
+            gtk_widget_show (l);
+            gtk_widget_set_usize (l, FIND_LABELWIDTH, -1);
+            gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+            gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+        }
+
+        GtkWidget *alltypes = sp_find_types_checkbox (vb, "all", TRUE, tt, _("Search in all object types"), _("All types"), toggle_alltypes);
+        gtk_box_pack_start (GTK_BOX (hb), alltypes, FALSE, FALSE, 0);
+   
+        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+    }
+
+    {
+        GtkWidget *vb_all = gtk_vbox_new (FALSE, 0);
+        gtk_widget_show (vb_all);
+
+        {
+            GtkWidget *c = sp_find_types_checkbox_indented (vb, "shapes", FALSE, tt, _("Search all shapes"), _("All shapes"), toggle_shapes, 10);
+            gtk_box_pack_start (GTK_BOX (vb_all), c, FALSE, FALSE, 0);
+        }
+
+
+        {
+            GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+            gtk_widget_show (hb);
+
+            { // empty label for alignment
+                GtkWidget *l = gtk_label_new ("");
+                gtk_widget_show (l);
+                gtk_widget_set_usize (l, FIND_LABELWIDTH + 20, -1);
+                gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+            }
+
+            {
+                GtkWidget *c = sp_find_types_checkbox (vb, "rects", FALSE, tt, _("Search rectangles"), _("Rects"), NULL);
+                gtk_box_pack_start (GTK_BOX (hb), c, FALSE, FALSE, 0);
+            }
+
+            {
+                GtkWidget *c = sp_find_types_checkbox (vb, "ellipses", FALSE, tt, _("Search ellipses, arcs, circles"), _("Ellipses"), NULL);
+                gtk_box_pack_start (GTK_BOX (hb), c, FALSE, FALSE, 0);
+            }
+
+            {
+                GtkWidget *c = sp_find_types_checkbox (vb, "stars", FALSE, tt, _("Search stars and polygons"), _("Stars"), NULL);
+                gtk_box_pack_start (GTK_BOX (hb), c, FALSE, FALSE, 0);
+            }
+
+            {
+                GtkWidget *c = sp_find_types_checkbox (vb, "spirals", FALSE, tt, _("Search spirals"), _("Spirals"), NULL);
+                gtk_box_pack_start (GTK_BOX (hb), c, FALSE, FALSE, 0);
+            }
+
+            gtk_object_set_data (GTK_OBJECT (vb), "shapes-pane", hb);
+
+            gtk_box_pack_start (GTK_BOX (vb_all), hb, FALSE, FALSE, 0);
+            gtk_widget_hide_all (hb);
+        }
+
+        {
+            GtkWidget *c = sp_find_types_checkbox_indented (vb, "paths", TRUE, tt, _("Search paths, lines, polylines"), _("Paths"), NULL, 10);
+            gtk_box_pack_start (GTK_BOX (vb_all), c, FALSE, FALSE, 0);
+        }
+
+        {
+            GtkWidget *c = sp_find_types_checkbox_indented (vb, "texts", TRUE, tt, _("Search text objects"), _("Texts"), NULL, 10);
+            gtk_box_pack_start (GTK_BOX (vb_all), c, FALSE, FALSE, 0);
+        }
+
+        {
+            GtkWidget *c = sp_find_types_checkbox_indented (vb, "groups", TRUE, tt, _("Search groups"), _("Groups"), NULL, 10);
+            gtk_box_pack_start (GTK_BOX (vb_all), c, FALSE, FALSE, 0);
+        }
+
+        {
+            GtkWidget *c = sp_find_types_checkbox_indented (vb, "clones", TRUE, tt, _("Search clones"), _("Clones"), NULL, 10);
+            gtk_box_pack_start (GTK_BOX (vb_all), c, FALSE, FALSE, 0);
+        }
+
+        {
+            GtkWidget *c = sp_find_types_checkbox_indented (vb, "images", TRUE, tt, _("Search images"), _("Images"), NULL, 10);
+            gtk_box_pack_start (GTK_BOX (vb_all), c, FALSE, FALSE, 0);
+        }
+
+        {
+            GtkWidget *c = sp_find_types_checkbox_indented (vb, "offsets", TRUE, tt, _("Search offset objects"), _("Offsets"), NULL, 10);
+            gtk_box_pack_start (GTK_BOX (vb_all), c, FALSE, FALSE, 0);
+        }
+
+        gtk_box_pack_start (GTK_BOX (vb), vb_all, FALSE, FALSE, 0);
+        gtk_object_set_data (GTK_OBJECT (vb), "all-pane", vb_all);
+        gtk_widget_hide_all (vb_all);
+    }
+
+    return vb;
 }
 
 
@@ -316,46 +598,37 @@ sp_find_dialog (void)
 
         GtkTooltips *tt = gtk_tooltips_new ();
 
+        gtk_container_set_border_width (GTK_CONTAINER (dlg), 4);
+
         /* Toplevel vbox */
         GtkWidget *vb = gtk_vbox_new (FALSE, 0);
         gtk_container_add (GTK_CONTAINER (dlg), vb);
 
-        sp_find_new_searchfield (dlg, vb, _("_Text"), "text", tt, _("Find objects by their text content (exact or partial match)"));
-
-        sp_find_new_searchfield (dlg, vb, _("_ID"), "id", tt, _("Find objects by the value of the id attribute (exact or partial match)"));
-
-        sp_find_new_searchfield (dlg, vb, _("_Style"), "style", tt, _("Find objects by the value of the style attribute (exact or partial match)"));
-
-        sp_find_new_searchfield (dlg, vb, _("_Attribute"), "attr", tt, _("Find objects by the name of an attribute (exact or partial match)"));
-
-
-        {
-
-        GtkWidget *hb = gtk_hbox_new (FALSE, 0);
-        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-
-        sp_find_new_button (dlg, hb, _("_Clear"), tt, _("Clear values"), sp_find_dialog_reset);
-        sp_find_new_button (dlg, hb, _("_Find"), tt, _("Select objects matching all of the fields you filled in"), sp_find_dialog_find);
-
-        }
+        sp_find_new_searchfield (dlg, vb, _("_Text: "), "text", tt, _("Find objects by their text content (exact or partial match)"));
+        sp_find_new_searchfield (dlg, vb, _("_ID: "), "id", tt, _("Find objects by the value of the id attribute (exact or partial match)"));
+        sp_find_new_searchfield (dlg, vb, _("_Style: "), "style", tt, _("Find objects by the value of the style attribute (exact or partial match)"));
+        sp_find_new_searchfield (dlg, vb, _("_Attribute: "), "attr", tt, _("Find objects by the name of an attribute (exact or partial match)"));
 
         gtk_widget_show_all (vb);
 
+        GtkWidget *types = sp_find_types ();
+        gtk_object_set_data (GTK_OBJECT (dlg), "types", types);
+        gtk_box_pack_start (GTK_BOX (vb), types, FALSE, FALSE, 0);
 
+        {
+            GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+            gtk_widget_show (hb);
+            gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+
+            sp_find_new_button (dlg, hb, _("_Clear"), tt, _("Clear values"), sp_find_dialog_reset);
+            sp_find_new_button (dlg, hb, _("_Find"), tt, _("Select objects matching all of the fields you filled in"), sp_find_dialog_find);
+        }
     }
 
+    sp_find_squeeze_window();
     gtk_window_present ((GtkWindow *) dlg);
-
     return dlg;
-    
 }
-
-
-
-
-
-
-
 
 
 
