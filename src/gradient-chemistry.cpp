@@ -19,10 +19,13 @@
 #include "style.h"
 #include "document-private.h"
 #include "desktop-style.h"
+
 #include "sp-gradient.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
+#include "sp-stop.h"
+
 #include "sp-root.h"
 #include "sp-tspan.h"
 #include "gradient-chemistry.h"
@@ -279,6 +282,22 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
     }
 }
 
+SPGradient *
+sp_gradient_fork_vector_if_necessary (SPGradient *gr)
+{
+    if (SP_OBJECT_HREFCOUNT(gr) > 1) {
+        SPDocument *document = SP_OBJECT_DOCUMENT(gr);
+
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR (gr)->duplicate();
+        sp_repr_add_child (SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document)), repr, NULL);
+        SPGradient *gr_new = (SPGradient *) document->getObjectByRepr(repr);
+        gr_new = sp_gradient_ensure_vector_normalized (gr_new);
+        sp_repr_unref (repr);
+        return gr_new;
+    }
+    return gr;
+}
+
 /**
  * Convert an item's gradient to userspace _without_ preserving coords, setting them to defaults
  * instead. No forking or reapplying is done because this is only called for newly created privates.  
@@ -488,6 +507,96 @@ sp_item_gradient (SPItem *item, bool fill_or_stroke)
  
    return gradient;
 }
+
+
+SPStop*
+sp_first_stop(SPGradient *gradient)
+{
+  for (SPObject *ochild = sp_object_first_child(gradient); ochild != NULL; ochild = SP_OBJECT_NEXT(ochild)) {
+	if (SP_IS_STOP (ochild))
+		return SP_STOP(ochild);
+  }
+  return NULL;
+}
+
+SPStop*
+sp_prev_stop(SPStop *stop, SPGradient *gradient)
+{
+	if (sp_object_first_child(SP_OBJECT(gradient)) == SP_OBJECT(stop)) 
+		return NULL;
+	SPObject *found = NULL;
+	for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
+		if (SP_IS_STOP (ochild)) {
+			found = ochild;
+		}
+		if (SP_OBJECT_NEXT(ochild) == SP_OBJECT(stop) || SP_OBJECT(ochild) == SP_OBJECT(stop)) {
+			break;
+		}
+	}
+	return SP_STOP(found);
+}
+
+SPStop*
+sp_next_stop(SPStop *stop)
+{
+  for (SPObject *ochild = SP_OBJECT_NEXT(stop); ochild != NULL; ochild = SP_OBJECT_NEXT(ochild)) {
+	if (SP_IS_STOP (ochild))
+		return SP_STOP(ochild);
+  }
+  return NULL;
+}
+
+SPStop*
+sp_last_stop(SPGradient *gradient)
+{
+    for (SPStop *stop = sp_first_stop (gradient); stop != NULL; stop = sp_next_stop (stop)) {
+        if (sp_next_stop (stop) == NULL)
+		return stop;
+  }
+  return NULL;
+}
+
+void
+sp_item_gradient_set_stop (SPItem *item, guint point_num, bool fill_or_stroke, SPCSSAttr *stop)
+{
+    SPGradient *gradient = sp_item_gradient (item, fill_or_stroke);
+
+    if (!gradient || !SP_IS_GRADIENT(gradient))
+        return;
+
+    SPGradient *vector = sp_gradient_get_vector (gradient, false);
+    vector = sp_gradient_fork_vector_if_necessary (vector);
+    if ( gradient != vector && gradient->ref->getObject() != vector ) {
+        sp_gradient_repr_set_link(SP_OBJECT_REPR(gradient), vector);
+    }
+
+    switch (point_num) {
+        case POINT_LG_P1:
+        case POINT_RG_CENTER:
+        case POINT_RG_FOCUS:
+        {
+            SPStop *first = sp_first_stop (vector);
+            if (first) {
+                sp_repr_css_set (SP_OBJECT_REPR (first), stop, "style");
+            }
+        }
+        break;
+
+        case POINT_LG_P2:
+        case POINT_RG_R1:
+        case POINT_RG_R2:
+        {
+            SPStop *last = sp_last_stop (vector);
+            if (last) {
+                sp_repr_css_set (SP_OBJECT_REPR (last), stop, "style");
+            }
+        }
+        break;
+        default:
+            break;
+    }
+}
+
 
 /**
 Set the position of point point_num of the gradient applied to item (either fill_or_stroke) to
