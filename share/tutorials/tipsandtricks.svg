@@ -267,10 +267,12 @@
     <linearGradient
        xlink:href="#linearGradient870"
        id="linearGradient878"
-       x1="1.0000000"
-       y1="0.012760486"
-       x2="1.0000000"
-       y2="0.98359996" />
+       x1="-1417.6329"
+       y1="-71.601782"
+       x2="-1417.6329"
+       y2="-5.6264140"
+       gradientTransform="scale(0.237277,4.214480)"
+       gradientUnits="userSpaceOnUse" />
     <linearGradient
        id="linearGradient880">
       <stop
@@ -393,10 +395,12 @@
     <linearGradient
        xlink:href="#linearGradient902"
        id="linearGradient910"
-       x1="1.0000000"
-       y1="0.012760486"
-       x2="1.0000000"
-       y2="0.98359996" />
+       x1="-1484.5962"
+       y1="-71.601782"
+       x2="-1484.5962"
+       y2="-5.6264140"
+       gradientTransform="scale(0.237277,4.214480)"
+       gradientUnits="userSpaceOnUse" />
     <linearGradient
        id="linearGradient666">
       <stop
@@ -549,19 +553,23 @@
     <radialGradient
        xlink:href="#linearGradient1077"
        id="radialGradient1061"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.87943262"
-       fy="0.52343750" />
+       cx="92.072087"
+       cy="494.12566"
+       r="40.514123"
+       fx="122.81685"
+       fy="496.02476"
+       gradientTransform="matrix(1.043839,0.000000,0.000000,0.958002,0.000000,3.543307)"
+       gradientUnits="userSpaceOnUse" />
     <radialGradient
        xlink:href="#linearGradient1056"
        id="radialGradient1069"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.49684006"
-       fx="0.25531915"
-       fy="0.51562500" />
+       cx="187.87232"
+       cy="494.12566"
+       r="40.258078"
+       fx="168.04625"
+       fy="495.39173"
+       gradientTransform="matrix(1.043839,0.000000,0.000000,0.958002,0.000000,3.543307)"
+       gradientUnits="userSpaceOnUse" />
     <linearGradient
        xlink:href="#linearGradient1070"
        id="linearGradient1074" />
@@ -1116,7 +1124,7 @@
      y="814.91772"
      id="text2444"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-200.0000)"><tspan
+     transform="translate(0.000000,-207.0866)"><tspan
        x="5.5156250"
        y="814.91772"
        sodipodi:role="line"
@@ -1128,20 +1136,11 @@
      y="831.01001"
      id="text2447"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-70.00000)"><tspan
+     transform="translate(0.000000,-98.34648)"><tspan
        x="6.1679688"
        y="831.01001"
        sodipodi:role="line"
        id="tspan1817"></tspan><tspan
-       id="tspan1819"></tspan><tspan
-       id="tspan1821"></tspan><tspan
-       id="tspan2367"></tspan><tspan
-       id="tspan1823"></tspan><tspan
-       id="tspan2369"></tspan><tspan
-       id="tspan2371"></tspan><tspan
-       id="tspan2373"></tspan><tspan
-       id="tspan1825"></tspan><tspan
-       id="tspan2375"></tspan><tspan
        id="tspan2378">The XML editor allows you to change </tspan><tspan
        id="tspan1827">almost all aspects of the </tspan><tspan
        sodipodi:role="line"
@@ -1178,7 +1177,7 @@
      y="981.45312"
      id="text2503"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-78.93704)"><tspan
        x="5.5156250"
        y="981.45312"
        sodipodi:role="line"
@@ -1190,7 +1189,7 @@
      y="997.54541"
      id="text2506"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-78.93704)"><tspan
        x="6.1679688"
        y="997.54541"
        sodipodi:role="line"
@@ -1210,7 +1209,7 @@
      y="1048.7758"
      id="text2537"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-89.56697)"><tspan
        x="5.5156250"
        y="1048.7758"
        sodipodi:role="line"
@@ -1222,7 +1221,7 @@
      y="1064.868"
      id="text2540"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-89.56697)"><tspan
        x="6.1679688"
        y="1064.8680"
        sodipodi:role="line"
@@ -1246,7 +1245,7 @@
      y="1126.7288"
      id="text2559"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-96.65359)"><tspan
        x="5.5156250"
        y="1126.7288"
        sodipodi:role="line"
@@ -1258,7 +1257,7 @@
      y="1142.8209"
      id="text2562"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-96.65359)"><tspan
        x="6.1679688"
        y="1142.8209"
        sodipodi:role="line"
@@ -1290,7 +1289,7 @@
      y="1225.941"
      id="text2589"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-100.1969)"><tspan
        x="5.5156250"
        y="1225.9410"
        sodipodi:role="line"
@@ -1302,7 +1301,7 @@
      y="1242.0333"
      id="text2592"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-100.1969)"><tspan
        x="6.1679688"
        y="1242.0333"
        sodipodi:role="line"
@@ -1342,7 +1341,7 @@
      y="1349.9568"
      id="text2627"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-107.2835)"><tspan
        x="5.5156250"
        y="1349.9568"
        sodipodi:role="line"
@@ -1354,7 +1353,7 @@
      y="1366.0496"
      id="text2630"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-107.2835)"><tspan
        x="6.1679688"
        y="1366.0496"
        sodipodi:role="line"
@@ -1382,7 +1381,7 @@
      y="1442.0831"
      id="text2659"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-114.3701)"><tspan
        x="5.5156250"
        y="1442.0831"
        sodipodi:role="line"
@@ -1394,7 +1393,7 @@
      y="1458.1749"
      id="text2662"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-114.3701)"><tspan
        x="6.1679688"
        y="1458.1749"
        sodipodi:role="line"
@@ -1422,7 +1421,7 @@
      y="1534.2087"
      id="text2808"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-121.4567)"><tspan
        x="5.5156250"
        y="1534.2087"
        sodipodi:role="line"
@@ -1434,7 +1433,7 @@
      y="1550.3015"
      id="text2686"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-125.0000)"><tspan
+     transform="translate(0.000000,-121.4567)"><tspan
        x="6.1679688"
        y="1550.3015"
        sodipodi:role="line"
@@ -1478,7 +1477,23 @@
        x="6.1679688"
        y="1662.0215"
        sodipodi:role="line"
-       id="tspan1932">around that point.</tspan></text>
+       id="tspan1932">around that point.</tspan><tspan
+       sodipodi:role="line"
+       id="tspan1510"
+       x="6.1679688"
+       y="1673.1935"></tspan><tspan
+       sodipodi:role="line"
+       id="tspan1512"
+       x="6.1679688"
+       y="1684.3655">Or you can rotate from keyboard by pressing [ and ] (by 15 degrees) or </tspan><tspan
+       sodipodi:role="line"
+       id="tspan1514"
+       x="6.1679688"
+       y="1695.5375">Ctrl+[ and Ctrl+] (by 90 degrees). The same keys with Alt perform </tspan><tspan
+       sodipodi:role="line"
+       id="tspan1516"
+       x="6.1679688"
+       y="1706.7095">pixel-size adjustment rotation  </tspan></text>
   <text
      xml:space="preserve"
      style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:8.0000000;text-anchor:start;writing-mode:lr;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;"
@@ -1582,19 +1597,11 @@
      y="-305.41895"
      transform="matrix(9.027671e-18,-1.000000,-1.000000,-5.333410e-18,0.000000,0.000000)" />
   <rect
-     style="fill:url(#linearGradient867);fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1pt;"
-     id="rect868"
-     width="16.124653"
-     height="286.40356"
-     x="-337.60089"
-     y="-305.41895"
-     transform="matrix(9.027671e-18,-1.000000,-1.000000,-5.333410e-18,0.000000,0.000000)" />
-  <rect
-     style="fill:url(#linearGradient878);fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1pt;"
+     style="fill:url(#linearGradient878);fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1.0000000pt;"
      id="rect869"
      width="16.124653"
      height="286.40356"
-     x="-352.49658"
+     x="-353.05212"
      y="-305.41895"
      transform="matrix(9.027671e-18,-1.000000,-1.000000,-5.333410e-18,0.000000,0.000000)" />
   <rect
@@ -1614,11 +1621,11 @@
      y="-305.41895"
      transform="matrix(9.027671e-18,-1.000000,-1.000000,-5.333410e-18,0.000000,0.000000)" />
   <rect
-     style="fill:url(#linearGradient910);fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1pt;"
+     style="fill:url(#linearGradient910);fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1.0000000pt;"
      id="rect901"
      width="16.124653"
      height="286.40356"
-     x="-368.38547"
+     x="-368.94101"
      y="-305.41895"
      transform="matrix(9.027671e-18,-1.000000,-1.000000,-5.333410e-18,0.000000,0.000000)" />
   <rect
@@ -1631,22 +1638,24 @@
      transform="matrix(9.027671e-18,-1.000000,-1.000000,-5.333410e-18,0.000000,0.000000)" />
   <text
      xml:space="preserve"
-     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:8;text-anchor:start;writing-mode:lr;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;"
-     x="5.5156250"
+     style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+     x="5.515625"
      y="383.95309"
      id="text1731"
-     sodipodi:linespacing="100%"><tspan
+     sodipodi:linespacing="100%"
+     transform="translate(0.000000,3.543307)"><tspan
        x="5.5156250"
        y="383.95309"
        sodipodi:role="line"
        id="tspan1526">Excentric radial gradients</tspan></text>
   <text
      xml:space="preserve"
-     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Serif;font-style:normal;font-weight:normal;font-size:8.3999996;text-anchor:start;writing-mode:lr;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;"
+     style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
      x="6.1679688"
      y="400.04535"
      id="text1734"
-     sodipodi:linespacing="133%"><tspan
+     sodipodi:linespacing="133%"
+     transform="translate(0.000000,2.777780)"><tspan
        x="6.1679688"
        y="400.04535"
        sodipodi:role="line"
@@ -1665,14 +1674,14 @@
      width="83.462616"
      height="76.507385"
      x="54.377140"
-     y="435.11969" />
+     y="438.66299" />
   <rect
      style="fill:url(#radialGradient1069);fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.89426994pt;"
      id="rect1570"
      width="83.462616"
      height="76.507385"
-     x="154.37716"
-     y="435.11969" />
+     x="154.37717"
+     y="438.66299" />
   <metadata
      id="metadata2361">
     <rdf:RDF
@@ -1695,7 +1704,7 @@
      y="831.01001"
      id="text2870"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,-197.5000)"><tspan
+     transform="translate(0.000000,-204.5866)"><tspan
        x="6.1679688"
        y="831.01001"
        sodipodi:role="line"
@@ -1738,7 +1747,7 @@
      y="814.91772"
      id="text2925"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,-75.00000)"><tspan
+     transform="translate(0.000000,-99.80317)"><tspan
        x="5.5156250"
        y="814.91772"
        sodipodi:role="line"
@@ -1750,11 +1759,11 @@
      y="1534.2087"
      id="text2928"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,30.00000)"><tspan
+     transform="translate(0.000000,76.06303)"><tspan
        x="5.5156250"
        y="1534.2087"
        sodipodi:role="line"
-       id="tspan2929">Open dialog as a palette</tspan></text>
+       id="tspan2929">Open dialog as an object palette</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
@@ -1762,7 +1771,7 @@
      y="1458.1749"
      id="text3112"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,127.5000)"><tspan
+     transform="translate(0.000000,173.5629)"><tspan
        x="6.1679688"
        y="1458.1749"
        sodipodi:role="line"
@@ -1806,7 +1815,7 @@
      y="1534.2087"
      id="text1527"
      sodipodi:linespacing="100%"
-     transform="translate(0.000000,142.5000)"><tspan
+     transform="translate(0.000000,188.5629)"><tspan
        x="5.5156250"
        y="1534.2087"
        sodipodi:role="line"
@@ -1818,7 +1827,7 @@
      y="1458.1749"
      id="text1530"
      sodipodi:linespacing="133%"
-     transform="translate(0.000000,240.0000)"><tspan
+     transform="translate(0.000000,282.5196)"><tspan
        x="6.1679688"
        y="1458.1749"
        sodipodi:role="line"
@@ -1847,4 +1856,58 @@
        id="tspan1553"
        x="6.1679688"
        y="1514.0349"></tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.0000000;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+     x="5.515625"
+     y="814.91772"
+     id="text1518"
+     sodipodi:linespacing="100%"
+     transform="translate(0.000000,-7.677187)"><tspan
+       x="5.5156250"
+       y="814.91772"
+       sodipodi:role="line"
+       id="tspan1519">Clipping or masking a bitmap</tspan><tspan
+       id="tspan1521"></tspan><tspan
+       sodipodi:role="line"
+       id="tspan1523"
+       x="5.5156250"
+       y="822.91772"></tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+     x="6.1679688"
+     y="831.01001"
+     id="text1525"
+     sodipodi:linespacing="133%"
+     transform="translate(0.000000,-6.220486)"><tspan
+       x="6.1679688"
+       y="831.01001"
+       sodipodi:role="line"
+       id="tspan1527"></tspan><tspan
+       id="tspan1574">By default, an imported bitmap (e.g. a photo) is an &lt;image&gt; element </tspan><tspan
+       sodipodi:role="line"
+       id="tspan1576"
+       x="6.1679688"
+       y="842.18201">which is not editable by a Node tool. To work around this, convert the</tspan><tspan
+       sodipodi:role="line"
+       id="tspan1578"
+       x="6.1679688"
+       y="853.35401">image into a rectangle with pattern fill by Alt+I (&quot;Tile&quot;). Now this </tspan><tspan
+       sodipodi:role="line"
+       id="tspan1580"
+       x="6.1679688"
+       y="864.52601">object can be converted to path, node-edited, intersected with other </tspan><tspan
+       sodipodi:role="line"
+       id="tspan1582"
+       x="6.1679688"
+       y="875.69801">shapes etc. In Preferences (Misc tab), you can set the option of always </tspan><tspan
+       sodipodi:role="line"
+       id="tspan1586"
+       x="6.1679688"
+       y="886.87001">importing bitmaps as tiles.</tspan><tspan
+       sodipodi:role="line"
+       id="tspan1584"
+       x="6.1679688"
+       y="898.04201"></tspan></text>
 </svg>
