@@ -771,7 +771,7 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
         for (unsigned int dim = 0 ; dim < 2 ; ++dim) {
             dxy[dim] = sp_desktop_dim_snap_list(desktop, seltrans->spp,
                                                 seltrans->spp_length, dxy[dim],
-                                                dim);
+                                                NR::Dim2(dim));
         }
     }
 
