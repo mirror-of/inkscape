@@ -78,7 +78,7 @@ static GtkTargetEntry ui_drop_target_entries [] = {
   {"image/svg",     0, SVG_DATA},
 };
 
-#define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0]) 
+#define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0])
 static guint nui_drop_target_entries = ENTRIES_SIZE(ui_drop_target_entries);
 static void sp_ui_import_files(gchar * buffer);
 static void sp_ui_import_one_file(char const *filename);
@@ -121,7 +121,7 @@ sp_create_window (SPViewWidget *vw, gboolean editable)
 	gtk_box_pack_end (GTK_BOX (hb), GTK_WIDGET (vw), TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (vw));
 
-	gtk_drag_dest_set(w, 
+	gtk_drag_dest_set(w,
 			  GTK_DEST_DEFAULT_ALL,
 			  ui_drop_target_entries,
 			  nui_drop_target_entries,
@@ -193,7 +193,7 @@ sp_ui_close_view (GtkWidget * widget)
  *  open document view windows, attempting to close each in turn.  If the
  *  view has unsaved information, the user will be prompted to save,
  *  discard, or cancel.
- * 
+ *
  *  Returns FALSE if the user cancels the close_all operation, TRUE
  *  otherwise.
  */
@@ -279,14 +279,14 @@ sp_ui_menuitem_add_icon ( GtkWidget *item, gchar * icon_name )
 
 /**
  * sp_ui_menu_append_item
- * 
+ *
  * Appends a UI item with specific info for Inkscape/Sodipodi.
  *
  */
 
 static GtkWidget *
-sp_ui_menu_append_item ( GtkMenu *menu, const gchar *stock, 
-                         const gchar *label, const gchar *tip, SPView *view, GCallback callback, 
+sp_ui_menu_append_item ( GtkMenu *menu, const gchar *stock,
+                         const gchar *label, const gchar *tip, SPView *view, GCallback callback,
                          gpointer data, gboolean with_mnemonic = TRUE )
 {
     GtkWidget *item;
@@ -294,8 +294,8 @@ sp_ui_menu_append_item ( GtkMenu *menu, const gchar *stock,
     if (stock) {
         item = gtk_image_menu_item_new_from_stock (stock, NULL);
     } else if (label) {
-        item = (with_mnemonic) 
-            ? gtk_image_menu_item_new_with_mnemonic (label) :      
+        item = (with_mnemonic)
+            ? gtk_image_menu_item_new_with_mnemonic (label) :
             gtk_image_menu_item_new_with_label (label);
     } else {
         item = gtk_separator_menu_item_new ();
@@ -411,13 +411,13 @@ sp_ui_dialog_title_string (Inkscape::Verb * verb, gchar* c)
 {
     SPAction     *action;
     unsigned int shortcut;
-    gchar        *s; 
+    gchar        *s;
     gchar        key[256];
     gchar        *atitle;
 
     action = verb->get_action(NULL);
     if (!action)
-        return; 
+        return;
 
     atitle = sp_action_get_title (action);
 
@@ -437,7 +437,7 @@ sp_ui_dialog_title_string (Inkscape::Verb * verb, gchar* c)
 
 /**
  * sp_ui_menu_append_item_from_verb
- * 
+ *
  * Appends a custom menu UI from a verb.
  *
  */
@@ -480,9 +480,9 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, Inkscape::Verb * verb, SPView *
             sp_ui_menuitem_add_icon (item, action->image);
         }
         gtk_widget_set_events (item, GDK_KEY_PRESS_MASK);
-        g_signal_connect ( G_OBJECT (item), "activate", 
+        g_signal_connect ( G_OBJECT (item), "activate",
                            G_CALLBACK (sp_ui_menu_activate), action );
-        g_signal_connect ( G_OBJECT (item), "key_press_event", 
+        g_signal_connect ( G_OBJECT (item), "key_press_event",
                            G_CALLBACK (sp_ui_menu_key_press), (void *) verb);
 
         g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select_action), action );
@@ -519,28 +519,28 @@ sp_ui_menu_append_submenu (GtkMenu *fm, SPView *view, void (*fill_function)(GtkW
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
 }
 
- static void 
-checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data) 	 
- { 	 
+ static void
+checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
+ {
      const gchar *pref = (const gchar *) user_data;
      SPView *view = (SPView *) g_object_get_data (G_OBJECT (menuitem), "view");
 
      const gchar *pref_path;
      if (SP_DESKTOP(view)->is_fullscreen)
          pref_path = g_strconcat ("fullscreen.", pref, NULL);
-     else 
+     else
          pref_path = g_strconcat ("window.", pref, NULL);
 
-     gboolean checked = gtk_check_menu_item_get_active(menuitem); 	 
+     gboolean checked = gtk_check_menu_item_get_active(menuitem);
      prefs_set_int_attribute(pref_path, "state", checked);
 
      sp_desktop_widget_layout (SP_DESKTOP(view)->owner);
- } 	 
-  	 
- static gboolean 
-checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data) 	 
- { 	 
-     GtkCheckMenuItem *menuitem=GTK_CHECK_MENU_ITEM(widget); 	 
+ }
+
+ static gboolean
+checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
+ {
+     GtkCheckMenuItem *menuitem=GTK_CHECK_MENU_ITEM(widget);
 
      const gchar *pref = (const gchar *) user_data;
      SPView *view = (SPView *) g_object_get_data (G_OBJECT(menuitem), "view");
@@ -548,16 +548,16 @@ checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
      const gchar *pref_path;
      if (SP_DESKTOP(view)->is_fullscreen)
          pref_path = g_strconcat ("fullscreen.", pref, NULL);
-     else 
+     else
          pref_path = g_strconcat ("window.", pref, NULL);
 
-     gint ison = prefs_get_int_attribute_limited (pref_path, "state", 1, 0, 1); 	 
+     gint ison = prefs_get_int_attribute_limited (pref_path, "state", 1, 0, 1);
 
-     g_signal_handlers_block_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)checkitem_toggled, user_data); 	 
-     gtk_check_menu_item_set_active(menuitem, ison); 	 
-     g_signal_handlers_unblock_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)checkitem_toggled, user_data); 	 
+     g_signal_handlers_block_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)checkitem_toggled, user_data);
+     gtk_check_menu_item_set_active(menuitem, ison);
+     g_signal_handlers_unblock_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)checkitem_toggled, user_data);
 
-     return FALSE; 	 
+     return FALSE;
  }
 
 
@@ -605,18 +605,18 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar
         item = gtk_check_menu_item_new ();
         gtk_container_add ((GtkContainer *) item, l);
     }
-  	 
-    gtk_widget_show(item);
-  	 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item); 	 
 
-    g_object_set_data (G_OBJECT (item), "view", (gpointer) view); 	 
-  	 
-    g_signal_connect( G_OBJECT(item), "toggled", (GCallback) callback_toggle, (void *) pref); 	 
+    gtk_widget_show(item);
+
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+    g_object_set_data (G_OBJECT (item), "view", (gpointer) view);
+
+    g_signal_connect( G_OBJECT(item), "toggled", (GCallback) callback_toggle, (void *) pref);
     g_signal_connect( G_OBJECT(item), "expose_event", (GCallback) callback_update, (void *) pref);
-	 
-    g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) (action ? action->tip : tip)); 	 
-    g_signal_connect ( G_OBJECT (item), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL); 	 
+
+    g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) (action ? action->tip : tip));
+    g_signal_connect ( G_OBJECT (item), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL);
 }
 
 static void
@@ -809,7 +809,7 @@ sp_ui_layer_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_LAYER_PREV),
 
         Inkscape::Verb::get(SP_VERB_NONE),
-        
+
         Inkscape::Verb::get(SP_VERB_LAYER_RAISE),
         Inkscape::Verb::get(SP_VERB_LAYER_LOWER),
         Inkscape::Verb::get(SP_VERB_LAYER_TO_TOP),
@@ -1037,7 +1037,7 @@ sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 	Inkscape::Verb::get(SP_VERB_TUTORIAL_CALLIGRAPHY),
 	Inkscape::Verb::get(SP_VERB_TUTORIAL_DESIGN),
 	Inkscape::Verb::get(SP_VERB_TUTORIAL_TIPS),
-	
+
 	Inkscape::Verb::get(SP_VERB_LAST)
     };
 
@@ -1100,7 +1100,7 @@ sp_ui_main_menubar (SPView *view)
 	sp_ui_layer_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
-	
+
 	mitem = gtk_menu_item_new_with_mnemonic (_("_Object"));
 	menu = gtk_menu_new ();
 	sp_ui_object_menu (GTK_MENU (menu), NULL, view);
@@ -1226,7 +1226,7 @@ sp_ui_context_menu (SPView *view, SPItem *item)
 }
 
 /* Drag and Drop */
-void 
+void
 sp_ui_drag_data_received (GtkWidget * widget,
 			  GdkDragContext * drag_context,
 			  gint x, gint y,
@@ -1237,7 +1237,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 {
 	switch(info) {
 	case SVG_DATA:
-	case SVG_XML_DATA: 
+	case SVG_XML_DATA:
             {
 		gchar *svgdata = (gchar *)data->data;
 
@@ -1249,7 +1249,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 			sp_ui_error_dialog (_("Could not parse SVG data"));
 			return;
 		}
-	
+
 		SPRepr *repr = sp_repr_document_root (rnewdoc);
 		const gchar *style = sp_repr_attr (repr, "style");
 
@@ -1269,7 +1269,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 
 		sp_repr_unref (newgroup);
 		sp_document_done (doc);
-            }		
+            }
 
 		break;
 	case URI_LIST:
@@ -1350,15 +1350,24 @@ is_bitmap_filename(char const *filename)
         char const *ext = filename + filename_len - 3;
         return (memeq(ext, "png", 3) ||
                 memeq(ext, "jpg", 3) ||
+                memeq(ext, "jpe", 3) ||
                 memeq(ext, "bmp", 3) ||
                 memeq(ext, "gif", 3) ||
-                memeq(ext, "xpm", 3)   );
+                memeq(ext, "xpm", 3) ||
+                memeq(ext, "PNG", 3) ||
+                memeq(ext, "JPG", 3) ||
+                memeq(ext, "JPE", 3) ||
+                memeq(ext, "BMP", 3) ||
+                memeq(ext, "GIF", 3) ||
+                memeq(ext, "XPM", 3));
     }
     if (filename_len >= 6
         && filename[filename_len - 5] == '.') {
         char const *ext = filename + filename_len - 4;
         return (memeq(ext, "jpeg", 4) ||
-                memeq(ext, "tiff", 4)   );
+                memeq(ext, "tiff", 4) ||
+                memeq(ext, "JPEG", 4) ||
+                memeq(ext, "TIFF", 4)   );
     }
     return false;
 }
@@ -1371,8 +1380,8 @@ sp_ui_import_one_file(char const *filename)
 	if (!SP_IS_DOCUMENT(doc)) return;
 
       SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	
-	if (filename == NULL) return;  
+
+	if (filename == NULL) return;
 
 	SPRepr *rdoc = sp_document_repr_root (doc);
 
@@ -1440,8 +1449,8 @@ void
 sp_ui_error_dialog (const gchar * message)
 {
 	GtkWidget *dlg;
-	
-	dlg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR, 
+
+	dlg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
 			GTK_BUTTONS_CLOSE, message);
 	sp_transientize (dlg);
 	gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
