@@ -106,6 +106,7 @@ void              Shape::EndQuickRaster(void)
 // 2 versions of the Scan() series to move the scanline to a given position withou actually computing coverages
 void              Shape::Scan(float &pos,int &curP,float to,float step)
 {
+  if ( nbAr <= 1 ) return;
 	if ( pos == to ) return;
 	if ( pos < to ) {
     // we're moving downwards
@@ -306,6 +307,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 
 void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,float step)
 {
+  if ( nbAr <= 1 ) return;
 	if ( pos == to ) return;
 	if ( pos < to ) {
 		int    curPt=curP;
@@ -482,6 +484,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 // it as a refinement of the coverage by rectangles
 void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,bool exact,float step)
 {
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
     // first step: the rectangles
@@ -636,6 +639,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 }
 void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool exact,float step)
 {
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		if ( sTree.racine ) {
@@ -814,6 +818,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 }
 void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,bool exact,float step)
 {
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		// pas de trapezes dans le cas de l'alphaline
@@ -959,6 +964,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 }
 void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* line,bool /*exact*/,float step)
 {
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		if ( nbQRas > 1 ) {
@@ -1108,6 +1114,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 }
 void              Shape::QuickScan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool /*exact*/,float step)
 {
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		if ( nbQRas > 1 ) {
@@ -1276,6 +1283,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 
 void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* line,bool /*exact*/,float step)
 {
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		// pas de trapezes dans le cas de l'alphaline

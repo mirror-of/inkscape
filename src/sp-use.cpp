@@ -383,6 +383,7 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	cctx.vp.x1 = use->width.computed;
 	cctx.vp.y1 = use->height.computed;
 	nr_matrix_set_identity (&cctx.i2vp);
+  flags&=~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
 	if (use->child) {
 		g_object_ref (G_OBJECT (use->child));
