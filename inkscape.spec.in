@@ -8,7 +8,8 @@
 Name:		inkscape
 Summary:	A Vector Drawing Application
 Version:	@VERSION@
-Release:	1
+# Use release "0" so that distro-released versions will override ours.
+Release:	0
 Copyright:	GPL
 Group:		Applications/Graphics
 Source:		%{name}-%{version}.tar.gz
