@@ -14,11 +14,9 @@
 
 /* fixme: */
 #include <glib.h>
-#include <libart_lgpl/art_misc.h>
-#include <libart_lgpl/art_affine.h>
-#include <libart_lgpl/art_bpath.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-path.h>
 
 #include "codepages.h"
 
@@ -214,7 +212,7 @@ nr_typeface_w32_finalize (NRObject *object)
         unsigned int i;
         for (i = 0; i < tfw32->slots_length; i++) {
             if (tfw32->slots[i].outline.path > 0) {
-                art_free (tfw32->slots[i].outline.path);
+                nr_free (tfw32->slots[i].outline.path);
             }
         }
         nr_free (tfw32->slots);
@@ -928,17 +926,16 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
     bp->code = ART_END;
 
     if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
-        double a[6];
         static MAT2 mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
         GLYPHMETRICS gmetrics;
         /* Have to select font */
         SelectFont (hdc, tfw32->hfont);
         GetGlyphOutline (hdc, glyph + tfw32->otm->otmTextMetrics.tmFirstChar, GGO_METRICS, &gmetrics, 0, NULL, &mat);
-        art_affine_translate (a, -0.5 * gmetrics.gmBlackBoxX - gmetrics.gmptGlyphOrigin.x,
-            gmetrics.gmptGlyphOrigin.y - 1000.0 - gmetrics.gmptGlyphOrigin.y);
-        slot->outline.path = art_bpath_affine_transform (bpath, a);
+        slot->outline.path = nr_artpath_affine (bpath, 
+             NR::Matrix(NR::translate(-0.5 * gmetrics.gmBlackBoxX - gmetrics.gmptGlyphOrigin.x,
+                                      gmetrics.gmptGlyphOrigin.y - 1000.0 - gmetrics.gmptGlyphOrigin.y)));
     } else {
-        slot->outline.path = art_new (NArtBpath, bp - bpath + 1);
+        slot->outline.path = nr_new (NArtBpath, bp - bpath + 1);
         memcpy (slot->outline.path, bpath, (bp - bpath + 1) * sizeof (NArtBpath));
     }
 
