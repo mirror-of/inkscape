@@ -73,7 +73,7 @@ sp_text_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_text_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPTextContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPTextContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -87,7 +87,7 @@ sp_text_context_class_init (SPTextContextClass * klass)
 	object_class = (GObjectClass *) klass;
 	event_context_class = (SPEventContextClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
 #if 0
 	/* If dispose is invoked before ::finish this is bug */
@@ -362,7 +362,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			if (tc->unimode && isxdigit (event->key.keyval)) {
 				tc->uni[tc->unipos] = event->key.keyval;
 				if (tc->unipos == 3) {
-					guchar u[7];
+					gchar u[7];
 					guint uv, len;
 					sscanf (tc->uni, "%x", &uv);
 					len = g_unichar_to_utf8 (uv, u);
@@ -493,8 +493,8 @@ sp_text_context_update_cursor (SPTextContext *tc)
 		/* fixme: ... need another transformation to get canvas widget coordinate space? */
 		im_cursor.x = (int) floor (d0.x);
 		im_cursor.y = (int) floor (d0.y);
-		im_cursor.width = floor (d1.x) - im_cursor.x;
-		im_cursor.height = floor (d1.y) - im_cursor.y;
+		im_cursor.width = (int) floor (d1.x) - im_cursor.x;
+		im_cursor.height = (int) floor (d1.y) - im_cursor.y;
 
 		tc->show = TRUE;
 		tc->phase = 1;

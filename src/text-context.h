@@ -38,9 +38,9 @@ struct _SPTextContext {
 	/* Insertion point position */
 	int ipos;
 
-	unsigned char uni[5];
-	unsigned char unimode;
-	unsigned char unipos;
+	gchar uni[5];
+	gchar unimode;
+	gchar unipos;
 
 	SPCanvasItem *cursor;
 	SPCanvasItem *indicator;
