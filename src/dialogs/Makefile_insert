@@ -18,6 +18,8 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/dockable.cpp	\
 	dialogs/align.cpp	\
 	dialogs/align.h	\
+	dialogs/debugdialog.cpp	\
+	dialogs/debugdialog.h	\
 	dialogs/desktop-properties.cpp	\
 	dialogs/desktop-properties.h	\
 	dialogs/dialog-events.cpp	\
