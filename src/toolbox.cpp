@@ -173,7 +173,23 @@ aux_toolbox_size_request (GtkWidget *widget,
 	if ( requisition->height < AUX_BUTTON_SIZE + 6 + 2 * AUX_BETWEEN_BUTTON_GROUPS) {
 		requisition->height = AUX_BUTTON_SIZE + 6 + 2 * AUX_BETWEEN_BUTTON_GROUPS;
 	}
-	requisition->width = 0; // allow aux toolbar to be cut
+	if (!g_object_get_data(G_OBJECT(widget), "is_detached")) {
+		requisition->width = 0; // allow aux toolbar to be cut
+	}
+}
+
+static void
+aux_toolbox_attached(GtkHandleBox *toolbox, GtkWidget *child)
+{
+	g_object_set_data(G_OBJECT(child), "is_detached", GINT_TO_POINTER(FALSE));
+	gtk_widget_queue_resize(child);
+}
+
+static void
+aux_toolbox_detached(GtkHandleBox *toolbox, GtkWidget *child)
+{
+	g_object_set_data(G_OBJECT(child), "is_detached", GINT_TO_POINTER(TRUE));
+	gtk_widget_queue_resize(child);
 }
 
 GtkWidget *
@@ -199,6 +215,9 @@ sp_aux_toolbox_new ()
 	gtk_handle_box_set_handle_position (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
 	gtk_handle_box_set_shadow_type (GTK_HANDLE_BOX (hb), GTK_SHADOW_OUT);
 	gtk_handle_box_set_snap_edge (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
+
+	g_signal_connect(G_OBJECT(hb), "child_attached", G_CALLBACK(aux_toolbox_attached), (gpointer)tb);
+	g_signal_connect(G_OBJECT(hb), "child_detached", G_CALLBACK(aux_toolbox_detached), (gpointer)tb);
 
 	gtk_container_add (GTK_CONTAINER (hb), tb);
 	gtk_widget_show (GTK_WIDGET (tb));

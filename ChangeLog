@@ -1,3 +1,8 @@
+2004-01-28  MenTaLguY  <mental@rydia.net>
+
+	* src/toolbox.cpp: aux toolbar now expands properly when torn off
+	(fix for bug #874923)
+
 2004-01-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/seltrans.cpp: Various cleanups, including addressing some
