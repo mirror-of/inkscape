@@ -349,8 +349,7 @@ private:
 		      NR::Point dir, int &leftNo, int &rightNo);
   static void DoJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 		      NR::Point prev, NR::Point next, double miter, double prevL,
-		      double nextL, int &leftStNo, int &leftEnNo,
-		      int &rightStNo, int &rightEnNo);
+		      double nextL, int *stNo, int *enNo);
   static void DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			  NR::Point prev, NR::Point next, double miter, double prevL,
 			  double nextL, int &leftStNo, int &leftEnNo,int pathID=-1,int pieceID=0,double tID=0.0);
