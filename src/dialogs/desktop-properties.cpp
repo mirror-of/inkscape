@@ -222,6 +222,8 @@ sp_desktop_dialog (void)
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_dtw_dialog_destroy), dlg);
 		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_dtw_dialog_delete), dlg);
 		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_dtw_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
 
 		nb = gtk_notebook_new ();
 		gtk_widget_show (nb);

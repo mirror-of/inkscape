@@ -179,6 +179,8 @@ sp_object_properties_dialog (void)
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_object_properties_dialog_destroy), dlg);
 		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_object_properties_dialog_delete), dlg);
 		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_object_properties_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
 
 		vb = gtk_vbox_new (FALSE, 0);
 		gtk_widget_show (vb);

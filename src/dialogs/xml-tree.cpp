@@ -174,6 +174,8 @@ sp_xml_tree_dialog (void)
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (on_destroy), dlg);
 		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (on_delete), dlg);
 		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (on_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
 
 		gtk_container_set_border_width (GTK_CONTAINER (dlg), 0);
 		gtk_window_set_default_size (GTK_WINDOW (dlg), 640, 384);
