@@ -245,7 +245,7 @@ sp_gradient_selector_set_units (SPGradientSelector *sel, guint units)
 	g_return_if_fail (sel != NULL);
 	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
 
-	sel->gradientUnits = units;
+	sel->gradientUnits = (SPGradientUnits)units;
 
 	gtk_option_menu_set_history (GTK_OPTION_MENU (sel->units), sel->gradientUnits);
 }
@@ -256,7 +256,7 @@ sp_gradient_selector_set_spread (SPGradientSelector *sel, guint spread)
 	g_return_if_fail (sel != NULL);
 	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
 
-	sel->gradientSpread = spread;
+	sel->gradientSpread = (SPGradientSpread)spread;
 
 	sp_gradient_position_set_spread (SP_GRADIENT_POSITION (sel->position), sel->gradientSpread);
 
@@ -440,7 +440,7 @@ sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel)
 static void
 sp_gradient_selector_units_activate (GtkWidget *widget, SPGradientSelector *sel)
 {
-	sel->gradientUnits = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "gradientUnits"));
+	sel->gradientUnits = (SPGradientUnits)GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "gradientUnits"));
 
 	g_signal_emit (G_OBJECT (sel), signals[CHANGED], 0);
 }
@@ -448,7 +448,7 @@ sp_gradient_selector_units_activate (GtkWidget *widget, SPGradientSelector *sel)
 static void
 sp_gradient_selector_spread_activate (GtkWidget *widget, SPGradientSelector *sel)
 {
-	sel->gradientSpread = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "gradientSpread"));
+	sel->gradientSpread = (SPGradientSpread)GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "gradientSpread"));
 	sp_gradient_position_set_spread (SP_GRADIENT_POSITION (sel->position), sel->gradientSpread);
 
 	g_signal_emit (G_OBJECT (sel), signals[CHANGED], 0);
