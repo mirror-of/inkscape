@@ -54,7 +54,7 @@ sp_zoom_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_zoom_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPZoomContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPZoomContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -68,7 +68,7 @@ sp_zoom_context_class_init (SPZoomContextClass * klass)
 	object_class = (GObjectClass *) klass;
 	event_context_class = (SPEventContextClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_zoom_context_dispose;
 

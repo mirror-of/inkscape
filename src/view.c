@@ -50,7 +50,7 @@ sp_view_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_view_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPView", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPView", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -62,7 +62,7 @@ sp_view_class_init (SPViewClass *klass)
 
 	object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
 	signals[SHUTDOWN] =     g_signal_new ("shutdown",
 					      G_TYPE_FROM_CLASS(klass),
@@ -252,7 +252,7 @@ sp_view_widget_class_init (SPViewWidgetClass *klass)
 
 	object_class = GTK_OBJECT_CLASS (klass);
 
-	widget_parent_class = gtk_type_class (GTK_TYPE_EVENT_BOX);
+	widget_parent_class = (GtkEventBoxClass*)gtk_type_class (GTK_TYPE_EVENT_BOX);
 
 	object_class->destroy = sp_view_widget_destroy;
 }
