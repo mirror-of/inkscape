@@ -36,7 +36,7 @@ builddir/config.status: configure
 
 build: builddir/config.status
 	dh_testdir
-	cd builddir && $(MAKE) $(PARALLEL)
+	cd builddir && $(MAKE)
 
 clean:
 	dh_testdir
