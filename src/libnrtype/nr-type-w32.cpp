@@ -27,6 +27,10 @@
 
 #define NR_SLOTS_BLOCK 32
 
+/*##############################
+# FORWARD DECLARATIONS
+##############################*/
+
 static void nr_typeface_w32_class_init (NRTypeFaceW32Class *klass);
 static void nr_typeface_w32_init (NRTypeFaceW32 *tfw32);
 static void nr_typeface_w32_finalize (NRObject *object);
@@ -568,14 +572,15 @@ nr_typeface_w32_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 
 
 static NRFont *
-nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
+nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics, 
+                        NR::Matrix const transform)
 {
 	NRTypeFaceW32 *tfw32;
 	NRFont *font;
 	float size;
 
 	tfw32 = (NRTypeFaceW32 *) tf;
-	size = (float) NR_MATRIX_DF_EXPANSION (transform);
+	size = (float) NR_MATRIX_DF_EXPANSION (&transform);
 
 	font = tfw32->fonts;
 	while (font != NULL) {
