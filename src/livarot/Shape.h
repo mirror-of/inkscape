@@ -48,6 +48,10 @@ enum
 };
 
 class Path;
+class FloatLigne;
+class IntLigne;
+class BitLigne;
+class AlphaLigne;
 
 class Shape
 {
@@ -381,6 +385,27 @@ public:
   // the offset is dec, with joins between edges of type "join" (see LivarotDefs.h)
   // the result is NOT a polygon; you need a subsequent call to ConvertToShape to get a real polygon
   int MakeOffset (Shape * of, double dec, JoinType join, double miter);
+  
+  double            Distance(NR::Point thePt);
+  int               PtWinding (const NR::Point px) const ; // plus rapide
+  int               Winding (const NR::Point px) const ;
+  
+  // rasterization
+  void              BeginRaster(float &pos,int &curPt,float step);
+  void              EndRaster(void);
+  void              BeginQuickRaster(float &pos,int &curPt,float step);
+  void              EndQuickRaster(void);
+  
+  void              Scan(float &pos,int &curP,float to,float step);
+  void              QuickScan(float &pos,int &curP,float to,bool doSort,float step);
+
+  void              Scan(float &pos,int &curP,float to,FloatLigne* line,bool exact,float step);
+  void              Scan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool exact,float step);
+  void              Scan(float &pos,int &curP,float to,AlphaLigne* line,bool exact,float step);
+
+  void              QuickScan(float &pos,int &curP,float to,FloatLigne* line,bool exact,float step);
+  void              QuickScan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool exact,float step);
+  void              QuickScan(float &pos,int &curP,float to,AlphaLigne* line,bool exact,float step);
 
 private:
   // coz' i'm lazy
@@ -473,7 +498,6 @@ private:
   void GetWindings (Shape * a, Shape * b = NULL, BooleanOp mod =
 		    bool_op_union, bool brutal = false);
   void Validate (void);
-  int Winding (const NR::Point px) const ;
   int Winding (int nPt) const ;
   void SortPointsRounded (void);
   void SortPointsRounded (int s, int e);
@@ -496,7 +520,17 @@ private:
     return 0;
   };
 
-  void AddContour (Path * dest, int nbP, Path * *orig, int startBord,
+  void              CreateEdge(int no,float to,float step);
+  void              DestroyEdge(int no,float to,float step);
+  void              AvanceEdge(int no,float to,bool exact,float step);
+  void              DestroyEdge(int no,float to,FloatLigne* line,float step);
+  void              AvanceEdge(int no,float to,FloatLigne* line,bool exact,float step);
+  void              DestroyEdge(int no,float to,BitLigne* line,float step);
+  void              AvanceEdge(int no,float to,BitLigne* line,bool exact,float step);
+  void              DestroyEdge(int no,float to,AlphaLigne* line,float step);
+  void              AvanceEdge(int no,float to,AlphaLigne* line,bool exact,float step);
+  
+    void AddContour (Path * dest, int nbP, Path * *orig, int startBord,
 		   int curBord);
   int ReFormeLineTo (int bord, int curBord, Path * dest, Path * orig);
   int ReFormeArcTo (int bord, int curBord, Path * dest, Path * orig);

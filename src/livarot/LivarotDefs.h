@@ -144,4 +144,13 @@ typedef struct gen_color
 }
 gen_color;
 
+// info for a run of pixel to fill
+typedef struct raster_info {
+		int       startPix,endPix;  // start and end pixel from the polygon POV
+		int       sth,stv;          // coordinates for the first pixel in the run, in (possibly another) POV
+		uint32_t* buffer;           // pointer to the first pixel in the run
+} raster_info;
+typedef void (*RasterInRunFunc) (raster_info &dest,void *data,int nst,float vst,int nen,float ven);	// init for position ph,pv; the last parameter is a pointer
+
+
 #endif

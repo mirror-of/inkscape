@@ -18,6 +18,7 @@ libvarot_a_SOURCES = \
 	MyMath.h	\
 	Path.cpp Path.h \
 	PathConversion.cpp Path.h \
+	PathCutting.cpp Path.h \
 	PathOutline.cpp Path.h \
 	PathStroke.cpp Path.h \
 	PathSimplify.cpp Path.h \
@@ -27,7 +28,11 @@ libvarot_a_SOURCES = \
 	ShapeDraw.cpp Shape.h \
 	ShapeSweep.cpp Shape.h \
 	ShapeSweepUtils.cpp Shape.h \
-	MySeg.cpp MySeg.h
+	MySeg.cpp MySeg.h \
+  Ligne.cpp Ligne.h \
+  AlphaLigne.cpp AlphaLigne.h \
+  BitLigne.cpp BitLigne.h \
+  ShapeRaster.cpp Shape.h
 
 Path_test_SOURCES = Path-test.cpp
 Path_test_LDADD = libvarot.a ../libnr/libnr.a -lglib-2.0

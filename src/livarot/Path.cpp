@@ -49,6 +49,7 @@ Path::~Path (void)
 void
 Path::Reset (void)
 {
+  ddata_nb = 0;
 	descr_nb = 0;
 	pending_bezier_cmd = -1;
 	pending_moveto_cmd = -1;

@@ -228,11 +228,20 @@ public:
 
   const NR::Point PrevPoint (const int i) const;
   
+  // tirets
+  void  DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain);
+  
+  //utilitaire pour inkscape
+  void  LoadArtBPath(void *iP,NR::Matrix &tr,bool doTransformation);
+  
 private:
   void AlloueDCmd (int addNb);
   void AlloueDData (int addNb);
   void CancelBezier (void);
   void CloseSubpath();
+  
+  // creation des tirets
+  void DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain);
 
   // Functions used by the conversion.
   void DoArc ( NR::Point const &iS,  NR::Point const &iE, double rx, double ry,

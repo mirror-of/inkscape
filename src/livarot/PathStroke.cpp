@@ -9,6 +9,7 @@
 #include "Path.h"
 #include "Shape.h"
 #include <libnr/nr-point-fns.h>
+#include <math.h>
 
 // until i find something better
 NR::Point StrokeNormalize(const NR::Point v) {
@@ -65,8 +66,18 @@ Path::Stroke (Shape * dest, bool doClose, double width, JoinType join,
 				nbPt = lastP - lastM;
 			}
 		}
-		DoStroke (dest, doClose, width, join, butt, miter, true);
-		lastM = lastP;
+    if ( lastP > lastM+1 ) {
+      NR::Point    sbStart,sbEnd;
+      if ( back ) sbStart=((path_lineto_b*)savPts)[lastM].p; else sbStart=((path_lineto*)savPts)[lastM].p;
+      if ( back ) sbEnd=((path_lineto_b*)savPts)[lastP-1].p; else sbEnd=((path_lineto*)savPts)[lastP-1].p;
+      if ( NR::LInfty(sbEnd-sbStart) < 0.00001 ) {
+        // debut==fin => ferme (on devrait garder un element pour les close(), mais tant pis)
+        DoStroke (dest, true, width, join, butt, miter, true);
+      } else {
+        DoStroke (dest, doClose, width, join, butt, miter, true);
+      }
+    }
+    lastM = lastP;
 	}
   
 	pts = savPts;
@@ -91,41 +102,27 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
 	{
 		path_lineto *curPt = (path_lineto *) pts;
 		prevI = nbPt - 1;
-		if (back)
-		{
-			curPt =
-				(path_lineto *) (((char *) curPt) +
-								 prevI * sizeof (path_lineto_b));
-		}
-		else
-		{
-			curPt =
-				(path_lineto *) (((char *) curPt) +
-								 prevI * sizeof (path_lineto));
+		if (back) {
+			curPt = (path_lineto *) (((char *) curPt) + prevI * sizeof (path_lineto_b));
+		} else {
+			curPt = (path_lineto *) (((char *) curPt) + prevI * sizeof (path_lineto));
 		}
 		while (prevI > 0)
 		{
 			prevP = curPt->p;
 			NR::Point diff=curP-prevP;
 			double dist =dot(diff,diff);
-			if (dist > 0.001)
-			{
+			if (dist > 0.001) {
 				break;
 			}
 			prevI--;
-			if (back)
-			{
-				curPt =
-					(path_lineto *) (((char *) curPt) - sizeof (path_lineto_b));
-			}
-			else
-			{
-				curPt =
-					(path_lineto *) (((char *) curPt) - sizeof (path_lineto));
+			if (back) {
+				curPt = (path_lineto *) (((char *) curPt) - sizeof (path_lineto_b));
+			} else {
+				curPt = (path_lineto *) (((char *) curPt) - sizeof (path_lineto));
 			}
 		}
-		if (prevI <= 0)
-			return;
+		if (prevI <= 0) return;
 		upTo = prevI;
 	}
 	else
@@ -137,36 +134,24 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
 	{
 		path_lineto *curPt = (path_lineto *) pts;
 		nextI = 1;
-		if (back)
-		{
-			curPt =
-				(path_lineto *) (((char *) curPt) +
-								 nextI * sizeof (path_lineto_b));
-		}
-		else
-		{
-			curPt =
-				(path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
+		if (back) {
+			curPt = (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto_b));
+		} else {
+			curPt = (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
 		}
 		while (nextI <= upTo)
 		{
 			nextP = curPt->p;
 			NR::Point diff=curP-nextP;
 			double dist =dot(diff,diff);
-			if (dist > 0.001)
-			{
+			if (dist > 0.001) {
 				break;
 			}
 			nextI++;
-			if (back)
-			{
-				curPt =
-					(path_lineto *) (((char *) curPt) + sizeof (path_lineto_b));
-			}
-			else
-			{
-				curPt =
-					(path_lineto *) (((char *) curPt) + sizeof (path_lineto));
+			if (back) {
+				curPt = (path_lineto *) (((char *) curPt) + sizeof (path_lineto_b));
+			} else {
+				curPt = (path_lineto *) (((char *) curPt) + sizeof (path_lineto));
 			}
 		}
 		if (nextI > upTo)
@@ -181,13 +166,10 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
 	double nextLe = NR::L2(nextD);
 	prevD = StrokeNormalize (prevD);
 	nextD = StrokeNormalize (nextD);
-	if (doClose)
-	{
+	if (doClose) {
 		DoJoin (dest,  width, join, curP, prevD, nextD, miter, prevLe,
 				nextLe, startLeft, lastLeft, startRight, lastRight);
-	}
-	else
-	{
+	} else {
 		nextD = -nextD;
 		DoButt (dest,  width, butt, curP, nextD, lastRight, lastLeft);
 		nextD = -nextD;
@@ -202,41 +184,27 @@ Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
 		prevLe = nextLe;
 		nextI++;
 		path_lineto *curPt = (path_lineto *) pts;
-		if (back)
-		{
-			curPt =
-				(path_lineto *) (((char *) curPt) +
-								 nextI * sizeof (path_lineto_b));
-		}
-		else
-		{
-			curPt =
-				(path_lineto *) (((char *) curPt) +
-								 nextI * sizeof (path_lineto));
+		if (back) {
+			curPt = (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto_b));
+		} else {
+			curPt = (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
 		}
 		while (nextI <= upTo)
 		{
 			nextP = curPt->p;
 			NR::Point diff=curP-nextP;
 			double dist =dot(diff,diff);
-			if (dist > 0.001)
-			{
+			if (dist > 0.001) {
 				break;
 			}
 			nextI++;
-			if (back)
-			{
-				curPt =
-					(path_lineto *) (((char *) curPt) + sizeof (path_lineto_b));
-			}
-			else
-			{
-				curPt =
-					(path_lineto *) (((char *) curPt) + sizeof (path_lineto));
+			if (back) {
+				curPt = (path_lineto *) (((char *) curPt) + sizeof (path_lineto_b));
+			} else {
+				curPt = (path_lineto *) (((char *) curPt) + sizeof (path_lineto));
 			}
 		}
-		if (nextI > upTo)
-			break;
+		if (nextI > upTo) break;
     
 		nextD = nextP - curP;
 		nextLe = NR::L2(nextD);
@@ -338,9 +306,9 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
               NR::Point next, double miter, double prevL, double nextL, int &leftStNo,
               int &leftEnNo, int &rightStNo, int &rightEnNo)
 {
-	//      DoLeftJoin(dest,width,join,pos,prev,next,miter,prevL,nextL,leftStNo,leftEnNo);
-	//      DoRightJoin(dest,width,join,pos,prev,next,miter,prevL,nextL,rightStNo,rightEnNo);
-	//      return;
+//	      DoLeftJoin(dest,width,join,pos,prev,next,miter,prevL,nextL,leftStNo,leftEnNo);
+//	      DoRightJoin(dest,width,join,pos,prev,next,miter,prevL,nextL,rightStNo,rightEnNo);
+//	      return;
   
 	NR::Point pnor=prev.ccw();
 	NR::Point nnor=next.ccw();
@@ -373,15 +341,17 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 			double l = width / c2;
 			double projn = l * (dot (biss, next));
 			double projp = -l * (dot (biss, prev));
-			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
+/*			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
 			{
 				leftEnNo = leftStNo = dest->AddPoint (pos + l * biss);
 			}
-			else
+			else*/
 			{
+				int midNo = dest->AddPoint (pos);
 				leftStNo = dest->AddPoint (pos + width * pnor);
 				leftEnNo = dest->AddPoint (pos + width * nnor);
-				dest->AddEdge (leftEnNo, leftStNo);
+				dest->AddEdge (leftEnNo, midNo);
+				dest->AddEdge (midNo, leftStNo);
 			}
 		}
 		if (join == join_pointy)
@@ -390,29 +360,29 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 			rightEnNo = dest->AddPoint (pos - width * nnor);
       
 			//                      dest->AddEdge(rightStNo,rightEnNo);
-			const NR::Point biss = StrokeNormalize (pnor + nnor);
+			const NR::Point biss = StrokeNormalize (prev - next /*pnor + nnor*/);
 			double c2 = dot (biss, nnor);
 			double l = width / c2;
 			double emiter = width * c2;
-			if (emiter < miter)
-				emiter = miter;
+			if (emiter < miter) emiter = miter;
 			int nrightStNo, nrightEnNo;
-			if (l <= emiter)
+			if (fabs(l) < miter /*l <= emiter*/)
 			{
 				nrightStNo = nrightEnNo = dest->AddPoint (pos - l * biss);
-			}
-			else
-			{
-				double s2 = cross (biss, nnor);
+        dest->AddEdge (rightStNo, nrightStNo);
+        dest->AddEdge (nrightEnNo, rightEnNo);
+			} else {
+/*				double s2 = cross (biss, nnor);
 				double dec = (l - emiter) * c2 / s2;
 				NR::Point tbiss=biss.ccw();
         
 				nrightStNo = dest->AddPoint (pos - emiter*biss - dec*tbiss);
 				nrightEnNo = dest->AddPoint (pos - emiter*biss + dec*tbiss);
+        dest->AddEdge (rightStNo, nrightStNo);
+        if ( nrightEnNo != nrightStNo ) dest->AddEdge (nrightStNo, nrightEnNo);
+        dest->AddEdge (nrightEnNo, rightEnNo);*/
+        dest->AddEdge (rightStNo, rightEnNo);
 			}
-			dest->AddEdge (rightStNo, nrightStNo);
-			dest->AddEdge (nrightStNo, nrightEnNo);
-			dest->AddEdge (nrightEnNo, rightEnNo);
 		}
 		else if (join == join_round)
 		{
@@ -434,7 +404,7 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 			{
 				double s2 = cross (biss, nnor);
 				double dec = (l - width) * c2 / s2;
-				NR::Point tbiss=biss.ccw();
+				NR::Point tbiss=biss.cw();
         
 				NR::Point nsx = pos - width * biss - dec * tbiss;
 				NR::Point nex = pos - width * biss + dec * tbiss;
@@ -462,15 +432,17 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 			double l = width / c2;
 			double projn = l * (dot (biss, next));
 			double projp = -l * (dot (biss, prev));
-			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
+/*			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
 			{
 				rightEnNo = rightStNo = dest->AddPoint (pos + l * biss);
 			}
-			else
+			else*/
 			{
+				int midNo = dest->AddPoint (pos);
 				rightStNo = dest->AddPoint (pos - width * pnor);
 				rightEnNo = dest->AddPoint (pos - width * nnor);
-				dest->AddEdge (rightStNo, rightEnNo);
+				dest->AddEdge (rightStNo, midNo);
+				dest->AddEdge (midNo, rightEnNo);
 			}
 		}
 		if (join == join_pointy)
@@ -479,29 +451,32 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 			leftEnNo = dest->AddPoint (pos + width * nnor);
 			//              dest->AddEdge(leftEnNo,leftStNo);
       
-			const NR::Point biss = StrokeNormalize (pnor + nnor);
+			const NR::Point biss = StrokeNormalize (next - prev/*pnor + nnor*/);
 			double c2 = dot (biss, nnor);
 			double l = width / c2;
 			double emiter = width * c2;
 			if (emiter < miter)
 				emiter = miter;
 			int nleftStNo, nleftEnNo;
-			if (l <= emiter)
+			if ( fabs(l) < miter /*l <= emiter*/)
 			{
 				nleftStNo = nleftEnNo = dest->AddPoint (pos + l * biss);
+        dest->AddEdge (leftEnNo, nleftEnNo);
+        dest->AddEdge (nleftStNo, leftStNo);
 			}
 			else
 			{
-				double s2 = cross (biss, nnor);
+/*				double s2 = cross (biss, nnor);
 				double dec = (l - emiter) * c2 / s2;
-				NR::Point tbiss=biss.ccw();
+				NR::Point tbiss=biss.cw();
         
 				nleftStNo = dest->AddPoint (pos + emiter*biss + dec*tbiss);
 				nleftEnNo = dest->AddPoint (pos + emiter*biss - dec*tbiss);
+        dest->AddEdge (leftEnNo, nleftEnNo);
+        if ( nleftEnNo != nleftStNo ) dest->AddEdge (nleftEnNo, nleftStNo);
+        dest->AddEdge (nleftStNo, leftStNo);*/
+        dest->AddEdge (leftEnNo, leftStNo);
 			}
-			dest->AddEdge (leftEnNo, nleftEnNo);
-			dest->AddEdge (nleftEnNo, nleftStNo);
-			dest->AddEdge (nleftStNo, leftStNo);
 		}
 		else if (join == join_round)
 		{
@@ -523,7 +498,7 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 			{
 				double s2 = cross (biss, nnor);
 				double dec = (l - width) * c2 / s2;
-				NR::Point tbiss=biss.ccw();
+				NR::Point tbiss=biss.cw();
         
 				NR::Point mx = pos + width * biss;
 				int midNo = dest->AddPoint (mx);

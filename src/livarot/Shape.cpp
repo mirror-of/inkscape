@@ -2167,14 +2167,10 @@ Shape::CalcBBox (void)
   topY = bottomY = pts[0].x[1];
   for (int i = 1; i < nbPt; i++)
     {
-      if (pts[i].x[0] < leftX)
-	leftX = pts[i].x[0];
-      if (pts[i].x[0] > rightX)
-	rightX = pts[i].x[0];
-      if (pts[i].x[1] < topY)
-	topY = pts[i].x[1];
-      if (pts[i].x[1] > bottomY)
-	bottomY = pts[i].x[1];
+      if (pts[i].x[0] < leftX) leftX = pts[i].x[0];
+      if (pts[i].x[0] > rightX) rightX = pts[i].x[0];
+      if (pts[i].x[1] < topY) topY = pts[i].x[1];
+      if (pts[i].x[1] > bottomY) bottomY = pts[i].x[1];
     }
 }
 
@@ -2214,6 +2210,93 @@ Shape::GetFlag (int nFlag)
   return (flags & nFlag);
 }
 
+// localisation
+double            Shape::Distance(NR::Point thePt)
+{
+  if ( nbPt <= 0 ) return 1000000;
+  NR::Point d=thePt-pts[0].x;
+  double    l=NR::L2(d);
+  for (int i=1;i<nbPt;i++) {
+    d=thePt-pts[i].x;
+    double nl=NR::L2(d);
+    if ( nl < l ) l=nl;
+  }
+  for (int i=0;i<nbAr;i++) {
+    NR::Point   s,e;
+    if ( aretes[i].st >= 0 && aretes[i].en >= 0 ) {
+      s=pts[aretes[i].st].x;
+      e=pts[aretes[i].en].x;
+      d=thePt-s;
+      e=e-s;
+      double el=NR::L2(e);
+      if ( el > 0.001 ) {
+        double nl=NR::cross(d,e);
+        double npr=NR::dot(d,e);
+        nl/=el;
+        if ( npr > 0 && npr < el*el ) {
+          if ( nl < 0 ) nl=-nl;
+          if ( nl < l ) {
+            l=nl;
+          }
+        }
+      }
+    }
+  }
+  return l;
+}
 
+int
+Shape::PtWinding (const NR::Point px) const 
+{
+  int lr = 0, ll = 0, rr = 0;
+  
+  for (int i = 0; i < nbAr; i++)
+  {
+    NR::Point adir, diff, ast, aen;
+    adir = aretes[i].dx;
+    
+    ast = pts[aretes[i].st].x;
+    aen = pts[aretes[i].en].x;
+    
+//    int nWeight = eData[i].weight;
+    int nWeight=1;
+    
+    if (ast[0] < aen[0]) {
+      if (ast[0] > px[0]) continue;
+      if (aen[0] < px[0]) continue;
+    } else {
+      if (ast[0] < px[0]) continue;
+      if (aen[0] > px[0]) continue;
+    }
+    if (ast[0] == px[0]) {
+      if (ast[1] >= px[1]) continue;
+      if (aen[0] == px[0]) continue;
+      if (aen[0] < px[0]) ll += nWeight;  else rr -= nWeight;
+      continue;
+    }
+    if (aen[0] == px[0]) {
+      if (aen[1] >= px[1]) continue;
+      if (ast[0] == px[0]) continue;
+      if (ast[0] < px[0]) ll -= nWeight; else rr += nWeight;
+      continue;
+    }
+    
+    if (ast[1] < aen[1]) {
+      if (ast[1] >= px[1])  continue;
+    } else {
+      if (aen[1] >= px[1]) continue;
+    }
+    
+    diff = px - ast;
+    double cote = cross (diff,adir);
+    if (cote == 0) continue;
+    if (cote < 0) {
+      if (ast[0] > px[0]) lr += nWeight;
+    } else {
+      if (ast[0] < px[0]) lr -= nWeight;
+    }
+  }
+  return lr + (ll + rr) / 2;
+}
 
 //};

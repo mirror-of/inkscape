@@ -25,6 +25,10 @@
 #include "sp-paint-server.h"
 #include "nr-arena-item.h"
 
+#include "../livarot/Shape.h"
+
+#define test_liv
+
 struct _NRArenaShape {
 	NRArenaItem item;
 	/* Shape data */
@@ -35,8 +39,13 @@ struct _NRArenaShape {
 	NRMatrix ctm;
 	SPPainter *fill_painter;
 	SPPainter *stroke_painter;
+#ifndef test_liv
 	NRSVP *fill_svp;
 	NRSVP *stroke_svp;
+#else
+  Shape *fill_shp;
+  Shape *stroke_shp;
+#endif
 	/* Markers */
 	NRArenaItem *markers;
 };
