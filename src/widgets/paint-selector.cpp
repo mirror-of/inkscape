@@ -155,7 +155,7 @@ sp_paint_selector_init (SPPaintSelector *psel)
 {
 	GtkTooltips *tt = gtk_tooltips_new();
 
-	psel->mode = (SPPaintSelectorMode)-1; // huh?  do you mean 0xff?
+	psel->mode = (SPPaintSelectorMode)-1; // huh?  do you mean 0xff?  --  I think this means "not in the enum"
 
 	/* Paint style button box */
 	psel->style = gtk_hbox_new (FALSE, 0);
@@ -189,9 +189,10 @@ sp_paint_selector_init (SPPaintSelector *psel)
 static void
 sp_paint_selector_destroy (GtkObject *object)
 {
-	SPPaintSelector *psel;
+	SPPaintSelector *psel = SP_PAINT_SELECTOR (object);
 
-	psel = SP_PAINT_SELECTOR (object);
+	// clean up our long-living pattern menu
+	g_object_set_data (G_OBJECT(psel),"patternmenu",NULL);
 
 	if (((GtkObjectClass *) (parent_class))->destroy)
 		(* ((GtkObjectClass *) (parent_class))->destroy) (object);
@@ -264,15 +265,15 @@ sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode)
 			sp_paint_selector_set_mode_color (psel, mode);
 			break;
 		case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
-            sp_paint_selector_set_mode_gradient (psel, mode);
-            break;
-        case SP_PAINT_SELECTOR_MODE_PATTERN:
-                    sp_paint_selector_set_mode_pattern (psel, mode);
-            break;
-        case SP_PAINT_SELECTOR_MODE_CLONE:
-            sp_paint_selector_set_mode_clone (psel);
-            break;
+		case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
+			sp_paint_selector_set_mode_gradient (psel, mode);
+			break;
+		case SP_PAINT_SELECTOR_MODE_PATTERN:
+			sp_paint_selector_set_mode_pattern (psel, mode);
+			break;
+		case SP_PAINT_SELECTOR_MODE_CLONE:
+			sp_paint_selector_set_mode_clone (psel);
+			break;
 		default:
 			g_warning ("file %s: line %d: Unknown paint mode %d", __FILE__, __LINE__, mode);
 			break;
@@ -587,15 +588,39 @@ sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient 
 }
 
 static void
+sp_paint_selector_clear_frame(SPPaintSelector *psel)
+{
+	g_return_if_fail ( psel != NULL);
+	
+	if (psel->selector) {
+
+		/* before we destroy the frame contents, we must detach
+		 * the patternmenu so that Gtk doesn't gtk_widget_destroy
+		 * all the children of the menu.  (We also have a g_object_ref
+		 * count set on it too so that the gtk_container_remove doesn't
+		 * end up destroying it.
+		 */
+		GtkWidget *patterns = (GtkWidget *)g_object_get_data (G_OBJECT(psel), "patternmenu");
+		if (patterns != NULL) {
+			GtkWidget * parent = gtk_widget_get_parent ( GTK_WIDGET (patterns));
+			if ( parent != NULL ) {
+				g_assert ( GTK_IS_CONTAINER (parent) );
+				gtk_container_remove ( GTK_CONTAINER (parent), patterns );
+			}
+		}
+
+		gtk_widget_destroy (psel->selector);
+		psel->selector = NULL;
+	}
+}
+
+static void
 sp_paint_selector_set_mode_empty (SPPaintSelector *psel)
 {
 	sp_paint_selector_set_style_buttons (psel, NULL);
 	gtk_widget_set_sensitive (psel->style, FALSE);
 
-	if (psel->selector) {
-		gtk_widget_destroy (psel->selector);
-		psel->selector = NULL;
-	}
+	sp_paint_selector_clear_frame(psel);
 
 	gtk_frame_set_label (GTK_FRAME (psel->frame), _("No objects"));
 }
@@ -606,10 +631,7 @@ sp_paint_selector_set_mode_multiple (SPPaintSelector *psel)
 	sp_paint_selector_set_style_buttons (psel, NULL);
 	gtk_widget_set_sensitive (psel->style, TRUE);
 
-	if (psel->selector) {
-		gtk_widget_destroy (psel->selector);
-		psel->selector = NULL;
-	}
+	sp_paint_selector_clear_frame(psel);
 
 	gtk_frame_set_label (GTK_FRAME (psel->frame), _("Multiple styles"));
 }
@@ -620,10 +642,7 @@ sp_paint_selector_set_mode_clone (SPPaintSelector *psel)
     sp_paint_selector_set_style_buttons (psel, NULL);
     gtk_widget_set_sensitive (psel->style, FALSE);
 
-    if (psel->selector) {
-        gtk_widget_destroy (psel->selector);
-        psel->selector = NULL;
-    }
+    sp_paint_selector_clear_frame(psel);
 
     // TRANSLATORS: "Clone" is a noun here. This message is to notify the user
     // that the currently selected object is a clone.
@@ -636,10 +655,7 @@ sp_paint_selector_set_mode_none (SPPaintSelector *psel)
 	sp_paint_selector_set_style_buttons (psel, psel->none);
 	gtk_widget_set_sensitive (psel->style, TRUE);
 
-	if (psel->selector) {
-		gtk_widget_destroy (psel->selector);
-		psel->selector = NULL;
-	}
+	sp_paint_selector_clear_frame(psel);
 
 	gtk_frame_set_label (GTK_FRAME (psel->frame), _("No paint"));
 }
@@ -685,10 +701,7 @@ sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mod
 		csel = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 	} else {
 
-		if (psel->selector) {
-			gtk_widget_destroy (psel->selector);
-			psel->selector = NULL;
-		}
+		sp_paint_selector_clear_frame(psel);
 		/* Create new color selector */
 		/* Create vbox */
 		GtkWidget *vb = gtk_vbox_new (FALSE, 4);
@@ -762,10 +775,7 @@ sp_paint_selector_set_mode_gradient (SPPaintSelector *psel, SPPaintSelectorMode 
 		/* Already have gradient selector */
 		gsel = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 	} else {
-		if (psel->selector) {
-			gtk_widget_destroy (psel->selector);
-			psel->selector = NULL;
-		}
+		sp_paint_selector_clear_frame(psel);
 		/* Create new gradient selector */
 		gsel = sp_gradient_selector_new ();
 		gtk_widget_show (gsel);
@@ -800,6 +810,13 @@ sp_paint_selector_set_style_buttons (SPPaintSelector *psel, GtkWidget *active)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->gradient), (active == psel->gradient));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->radial), (active == psel->radial));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->pattern), (active == psel->pattern));
+}
+
+static void
+sp_psel_pattern_destroy (GtkWidget *widget,  SPPaintSelector *psel)
+{
+	// drop our reference to the pattern menu widget
+	g_object_unref ( G_OBJECT (widget) );
 }
 
 static void
@@ -867,6 +884,7 @@ ink_pattern_menu (GtkWidget *mnu)
 	/* Set history */
 	//gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
 
+	g_slist_free (pl);
 	return mnu;
 }
 
@@ -877,6 +895,7 @@ sp_update_pattern_list ( SPPaintSelector *psel,  SPPattern *pattern)
 {
 	if (psel->update) return;
 	GtkWidget *mnu = (GtkWidget *)g_object_get_data (G_OBJECT(psel), "patternmenu");
+	g_assert ( mnu != NULL );
 
 	/* Clear existing menu if any */
 	gtk_option_menu_remove_menu (GTK_OPTION_MENU (mnu));
@@ -920,35 +939,47 @@ sp_paint_selector_set_mode_pattern (SPPaintSelector *psel, SPPaintSelectorMode m
 
 	gtk_widget_set_sensitive (psel->style, TRUE);
 
+	GtkWidget *tbl=NULL;
+
 	if (psel->mode == SP_PAINT_SELECTOR_MODE_PATTERN){
-		/* Already have gradient selector */
+		/* Already have pattern menu */
+		tbl = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (psel->selector), "pattern-selector");
 	} else {
-		if (psel->selector) {
-			gtk_widget_destroy (psel->selector);
-			psel->selector = NULL;
-		}
+		sp_paint_selector_clear_frame(psel);
 
 		/* Create vbox */
-		GtkWidget *tbl = gtk_vbox_new (FALSE, 4);
+		tbl = gtk_vbox_new (FALSE, 4);
 		gtk_widget_show (tbl);
 
 		GtkWidget *hb = gtk_hbox_new (FALSE, 1);
 
-		GtkWidget *mnu = gtk_option_menu_new ();
-		ink_pattern_menu (mnu);
-		gtk_signal_connect (GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_psel_pattern_change), psel);
+		/*
+		 * We want to keep this menu widget around since it takes
+		 * time to generate.  As a result, we must either locate the
+		 * existing one, or generate a new one and bump the ref
+		 * count up before adding it to the container.
+		 */
+		GtkWidget *mnu = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (psel), "patternmenu");
+		if ( mnu == NULL ) {
+			mnu = gtk_option_menu_new ();
+			ink_pattern_menu (mnu);
+			gtk_signal_connect (GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_psel_pattern_change), psel);
+			gtk_signal_connect (GTK_OBJECT (mnu), "destroy", GTK_SIGNAL_FUNC (sp_psel_pattern_destroy), psel);
+			gtk_object_set_data (GTK_OBJECT (psel), "patternmenu", mnu);
+			g_object_ref( G_OBJECT (mnu));
+		}
 		gtk_widget_show (mnu);
-		gtk_object_set_data (GTK_OBJECT (psel), "patternmenu", mnu);
 		gtk_container_add (GTK_CONTAINER (hb), mnu);
 
 		gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
 		gtk_widget_show (hb);
+		gtk_widget_show_all (tbl);
 
 		gtk_container_add (GTK_CONTAINER (psel->frame), tbl);
-
-		gtk_widget_show_all (tbl);
 		psel->selector = tbl;
+		gtk_object_set_data (GTK_OBJECT (psel->selector), "pattern-selector", tbl);
+
 		gtk_frame_set_label (GTK_FRAME (psel->frame), _("Pattern fill"));
 	}
 #ifdef SP_PS_VERBOSE
@@ -964,6 +995,8 @@ sp_paint_selector_get_pattern (SPPaintSelector *psel)
 	g_return_val_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_PATTERN) , NULL);
 
 	GtkWidget *patmnu = (GtkWidget *) g_object_get_data (G_OBJECT(psel), "patternmenu");
+	/* no pattern menu if we were just selected */
+	if ( patmnu == NULL ) return NULL;
 
 	GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu (GTK_OPTION_MENU(patmnu)));
 

@@ -1,3 +1,10 @@
+2004-07-09  Kees Cook  <kees@outflux.net>
+
+	* src/widgets/paint-selector.cpp: solves bug #984902: the pattern
+	  menu was being destroyed since it was remaining part of the frame
+	  that was being destroyed whenever the selector changed.  It gets
+	  ref-counted, disconnected, and destroyed correctly now.
+
 2004-07-09  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/draw-context.cpp: remove some debugging g_prints.
