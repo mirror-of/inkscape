@@ -222,7 +222,9 @@ URI URI::fromUtf8( gchar const* path ) throw (BadURIException) {
 /* TODO !!! proper error handling */
 URI URI::from_native_filename(gchar const *path) throw(BadURIException) {
     gchar *uri = g_filename_to_uri(path, NULL, NULL);
-    return URI(uri);
+    URI result(uri);
+    g_free( uri );
+    return result;
 }
 
 /** \fn gchar *URI::toString() const
