@@ -24,10 +24,11 @@ namespace Inkscape {
 /** \brief Represents an URI as per RFC 2396. */
 class URI {
 public:
-    URI(const URI &uri);
-    explicit URI(const gchar *uri_string) throw(BadURIException);
+    URI(URI const &uri);
+    explicit URI(gchar const *preformed) throw(BadURIException);
     ~URI();
 
+    bool isOpaque() const { return _impl->isOpaque(); }
     bool isRelative() const { return _impl->isRelative(); }
     bool isNetPath() const { return _impl->isNetPath(); }
     bool isRelativePath() const { return _impl->isRelativePath(); }
@@ -36,7 +37,9 @@ public:
     const gchar *getPath() const { return _impl->getPath(); }
     const gchar *getQuery() const { return _impl->getQuery(); }
     const gchar *getFragment() const { return _impl->getFragment(); }
+    const gchar *getOpaque() const { return _impl->getOpaque(); }
 
+    static URI fromUtf8( gchar const* path ) throw (BadURIException);
     static URI from_native_filename(gchar const *path) throw(BadURIException);
     static gchar *to_native_filename(gchar const* uri) throw(BadURIException);
 
@@ -52,6 +55,7 @@ private:
         void reference();
         void unreference();
 
+        bool isOpaque() const;
         bool isRelative() const;
         bool isNetPath() const;
         bool isRelativePath() const;
@@ -60,6 +64,7 @@ private:
         const gchar *getPath() const;
         const gchar *getQuery() const;
         const gchar *getFragment() const;
+        const gchar *getOpaque() const;
         gchar *toString() const;
     private:
         Impl(xmlURIPtr uri);

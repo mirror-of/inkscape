@@ -14,37 +14,45 @@
 #include <glib.h>
 #include <libxml/xmlmemory.h>
 #include "uri.h"
+#include <glibmm/ustring.h>
 
 namespace Inkscape {
 
+/** \brief Copy constructor. */
 URI::URI(const URI &uri) {
     uri._impl->reference();
     _impl = uri._impl;
 }
 
-/** \brief Constructor from a C-style UTF-8 string.
-    \param uri_string C-style UTF-8 string to be represented.
+/** \brief Constructor from a C-style ASCII string.
+    \param preformed Properly quoted C-style string to be represented.
  */
-URI::URI(const gchar *uri_string) throw(BadURIException) {
+URI::URI(gchar const *preformed) throw(BadURIException) {
     xmlURIPtr uri;
-    if (!uri_string) {
+    if (!preformed) {
         throw MalformedURIException();
     }
-    uri = xmlParseURI(uri_string);
+    uri = xmlParseURI(preformed);
     if (!uri) {
         throw MalformedURIException();
     }
     _impl = Impl::create(uri);
 }
 
+
+/** \brief Destructor. */
 URI::~URI() {
     _impl->unreference();
 }
 
+/** \brief Assignment operator. */
 URI &URI::operator=(URI const &uri) {
-    uri._impl->reference();
-    _impl->unreference();
-    _impl = uri._impl;
+    if ( &uri != this )
+    {
+        uri._impl->reference();
+        _impl->unreference();
+        _impl = uri._impl;
+    }
     return *this;
 }
 
@@ -72,9 +80,18 @@ void URI::Impl::unreference() {
     }
 }
 
+/** \fn bool URI::isOpaque() const
+    \brief Determines if the URI represented is an 'opaque' URI.
+    \return \c true if the URI is opaque, \c false if hierarchial.
+*/
+bool URI::Impl::isOpaque() const {
+    bool opq = !isRelative() && (getOpaque() != NULL);
+    return opq;
+}
+
 /** \fn bool URI::isRelative() const
     \brief Determines if the URI represented is 'relative' as per RFC 2396.
-    \return \c true if the URI is relative, \c false otherwise.
+    \return \c true if the URI is relative, \c false if it is absolute.
 
     Relative URI references are distinguished by not begining with a
     scheme name.
@@ -147,6 +164,10 @@ const gchar *URI::Impl::getFragment() const {
     return (gchar *)_uri->fragment;
 }
 
+const gchar *URI::Impl::getOpaque() const {
+    return (gchar *)_uri->opaque;
+}
+
 gchar *URI::to_native_filename(gchar const* uri) throw(BadURIException)
 {
     gchar *filename = NULL;
@@ -167,8 +188,41 @@ gchar *URI::toNativeFilename() const throw(BadURIException) {
     }
 }
 
+URI URI::fromUtf8( gchar const* path ) throw (BadURIException) {
+    if ( !path ) {
+        throw MalformedURIException();
+    }
+    Glib::ustring tmp;
+    for ( int i = 0; path[i]; i++ )
+    {
+        gint one = 0x0ff & path[i];
+        if ( ('a' <= one && one <= 'z')
+             || ('A' <= one && one <= 'Z')
+             || ('0' <= one && one <= '9')
+             || one == '_'
+             || one == '-'
+             || one == '!'
+             || one == '.'
+             || one == '~'
+             || one == '\''
+             || one == '('
+             || one == ')'
+             || one == '*'
+            ) {
+            tmp += (gunichar)one;
+        } else {
+            gchar scratch[4];
+            g_snprintf( scratch, 4, "%c%02X", '%', one );
+            tmp.append( scratch );
+        }
+    }
+    const gchar *uri = tmp.data();
+    URI result(uri);
+    return result;
+}
+
 /* TODO !!! proper error handling */
-URI from_native_filename(gchar const *path) throw(BadURIException) {
+URI URI::from_native_filename(gchar const *path) throw(BadURIException) {
     gchar *uri = g_filename_to_uri(path, NULL, NULL);
     return URI(uri);
 }
