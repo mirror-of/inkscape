@@ -287,7 +287,7 @@ sp_desktop_dispose (GObject *object)
 }
 
 SPObject *SPDesktop::currentRoot() {
-    return SP_DOCUMENT_ROOT(SP_DT_DOCUMENT(this));
+    return _layer_hierarchy ? _layer_hierarchy->top() : NULL;
 }
 
 SPObject *SPDesktop::currentLayer() {

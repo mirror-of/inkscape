@@ -1,5 +1,10 @@
 2004-10-21  MenTaLguY  <mental@rydia.net>
 
+	* src/desktop.cpp: SPDesktop::currentRoot() should pull from
+	  the current layer hierarchy just like SPDesktop::currentLayer();
+	  doubly so, since currently when switching documents the layer hierarchy
+	  is updated before the document is switched
+
 	* src/util/Makefile_insert, src/util/copy-list.h: add list copy thingy
 
 	* src/util/list.h: add rest()
