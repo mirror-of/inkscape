@@ -101,8 +101,8 @@ void SPSelection::_invalidateCachedLists() {
     g_slist_free(_reprs);
     _reprs = NULL;
 
-    g_slist_free(_item_reprs);
-    _item_reprs = NULL;
+//    g_slist_free(_item_reprs);
+//    _item_reprs = NULL;
 }
 
 void SPSelection::_clear()
