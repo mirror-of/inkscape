@@ -4,6 +4,26 @@
 	  behaviour to be closer to [opinion on www-svg as to the
 	  interpretation of] the SVG 1.1 specification.
 
+2004-08-14  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/sp-use-reference.cpp, src/sp-use-reference.h: use sigc 2.0
+	API rather than the old one.
+
+	* src/spiral-context.cpp: Use new message API.  Some
+	declaration-to-first-use and const fixes.
+
+	* src/spiral-context.h: Inherit SPSpiralContext from
+	SPEventContext to get access to the new message API.
+
+	* src/streams-zlib.cpp: fix a compiler warning.
+
+	* src/extension/internal/gdkpixbuf-input.cpp: Fix a compiler
+	warning and a memory leak.  Minor cleanups.
+
+	* src/libnrtype/FlowRes.cpp, src/libnrtype/FlowResOut.cpp,
+	src/libnrtype/FlowSrc.cpp: fix some compiler warnings.
+	
+	
 2004-08-13  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-action.h, src/xml/repr-action.cpp:
