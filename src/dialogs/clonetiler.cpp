@@ -1353,7 +1353,8 @@ clonetiler_dialog (void)
 
             {
                 GtkWidget *b = gtk_button_new_with_mnemonic (_(" R_eset "));
-                gtk_tooltips_set_tip (tt, b, _("Reset all shifts, scales, rotates, and opacities to zero"), NULL);
+                // TRANSLATORS: "change" is a noun here
+                gtk_tooltips_set_tip (tt, b, _("Reset all shifts, scales, rotates, and opacity changes to zero"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_reset), NULL);
                 gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
             }
