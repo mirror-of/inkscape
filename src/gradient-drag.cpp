@@ -15,6 +15,7 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "desktop.h"
+#include "document.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "display/sodipodi-ctrl.h"
@@ -33,6 +34,9 @@
 
 #define GR_KNOT_COLOR_NORMAL 0xffffff00
 #define GR_KNOT_COLOR_SELECTED 0x0000ff00
+
+#define SNAP_DIST 10
+#define MERGE_DIST 0.1
 
 static void 
 gr_drag_sel_changed(SPSelection *selection, gpointer data)
@@ -141,6 +145,8 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
 {
     GrDragger *dragger = (GrDragger *) data;
 
+    dragger->point = *p;
+
     for (GSList const* l = dragger->draggables; l != NULL; l = l->next) {
         GrDraggable *draggable = (GrDraggable *) l->data;
         dragger->parent->local_change = true;
@@ -160,6 +166,8 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
     }
 
     dragger->parent->setSelected (dragger);
+
+    sp_document_done (SP_DT_DOCUMENT (dragger->parent->desktop));
 }
 
 static void
@@ -170,12 +178,20 @@ gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
    dragger->parent->setSelected (dragger);
 }
 
+void
+GrDragger::addDraggable (GrDraggable *draggable)
+{
+    this->draggables = g_slist_prepend (this->draggables, draggable);
+}
+
 
 GrDragger::GrDragger (GrDrag *parent, NR::Point p, gchar const *tip, GrDraggable *draggable) 
 {
     this->draggables = NULL;
 
     this->parent = parent;
+
+    this->point = p;
 
     this->knot = sp_knot_new (parent->desktop, tip);
     g_object_set (G_OBJECT (this->knot->item), "shape", SP_KNOT_SHAPE_SQUARE, NULL);
@@ -190,13 +206,13 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, gchar const *tip, GrDraggable
     g_signal_connect (G_OBJECT (this->knot), "clicked", G_CALLBACK (gr_knot_clicked_handler), this);
     g_signal_connect (G_OBJECT (this->knot), "ungrabbed", G_CALLBACK (gr_knot_ungrabbed_handler), this);
 
-    this->draggables = g_slist_prepend (this->draggables, draggable);
+    this->addDraggable (draggable);
 }
 
 GrDragger::~GrDragger ()
 {
-			/* unref should call destroy */
-			g_object_unref (G_OBJECT (this->knot));
+	/* unref should call destroy */
+	g_object_unref (G_OBJECT (this->knot));
 
     for (GSList const* l = this->draggables; l != NULL; l = l->next) {
         delete ((GrDraggable *) l->data);
@@ -227,6 +243,20 @@ GrDrag::addLine (NR::Point p1, NR::Point p2)
     this->lines = g_slist_append (this->lines, line);
 }
 
+void 
+GrDrag::addDragger (NR::Point p, const gchar *tip, GrDraggable *draggable)
+{
+    for (GSList *l = this->draggers; l != NULL; l = l->next) {
+        GrDragger *dragger = (GrDragger *) l->data;
+        if (NR::L2 (dragger->point - p) < MERGE_DIST) {
+            dragger->addDraggable (draggable);
+            return;
+        }
+    }
+
+    this->draggers = g_slist_prepend (this->draggers, new GrDragger(this, p, tip, draggable));
+}
+
 void
 GrDrag::updateDraggers ()
 {
@@ -251,12 +281,8 @@ GrDrag::updateDraggers ()
             if (SP_IS_LINEARGRADIENT (server)) {
                 SPLinearGradient *lg = SP_LINEARGRADIENT (server);
 
-                this->draggers = g_slist_prepend (this->draggers, 
-                                                  new GrDragger(this, sp_lg_get_p1 (item, lg), "drag1", 
-                                                                new GrDraggable (item, POINT_LG_P1, true)));
-                this->draggers = g_slist_prepend (this->draggers, 
-                                                  new GrDragger(this, sp_lg_get_p2 (item, lg), "drag2", 
-                                                                new GrDraggable (item, POINT_LG_P2, true)));
+                addDragger (sp_lg_get_p1 (item, lg), "drag1", new GrDraggable (item, POINT_LG_P1, true));
+                addDragger (sp_lg_get_p2 (item, lg), "drag2", new GrDraggable (item, POINT_LG_P2, true));
             }
         }
     }

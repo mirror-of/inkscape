@@ -40,6 +40,8 @@ struct GrDragger {
 
     SPKnot *knot;
 
+	NR::Point point;
+
     /** Connection to \a knot's "moved" signal. */
     guint   handler_id;
 
@@ -74,6 +76,8 @@ struct GrDrag {
 
 	void updateDraggers ();
 	void updateLines ();
+
+	void addDragger (NR::Point p, const gchar *tip, GrDraggable *draggable);
 
 	GrDragger *selected;
 	void setSelected (GrDragger *dragger);
