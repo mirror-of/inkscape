@@ -72,7 +72,7 @@ enum {ITEM_EVENT, ITEM_LAST_SIGNAL};
 
 static void sp_canvas_request_update (SPCanvas *canvas);
 
-static void sp_canvas_item_class_init (SPCanvasItemClass *class);
+static void sp_canvas_item_class_init (SPCanvasItemClass *klass);
 static void sp_canvas_item_init (SPCanvasItem *item);
 static void sp_canvas_item_dispose (GObject *object);
 
@@ -97,7 +97,7 @@ sp_canvas_item_get_type (void)
 			(GInstanceInitFunc) sp_canvas_item_init,
 			NULL
 		};
-		type = g_type_register_static (GTK_TYPE_OBJECT, "SPCanvasItem", &info, 0);
+		type = g_type_register_static (GTK_TYPE_OBJECT, "SPCanvasItem", &info, (GTypeFlags)0);
 	}
 
 	return type;
@@ -112,7 +112,7 @@ sp_canvas_item_class_init (SPCanvasItemClass *klass)
 	object_class = (GObjectClass *) klass;
 
 	/* fixme: Derive from GObject */
-	item_parent_class = gtk_type_class (GTK_TYPE_OBJECT);
+	item_parent_class = (GtkObjectClass*)gtk_type_class (GTK_TYPE_OBJECT);
 
 	item_signals[ITEM_EVENT] = g_signal_new ("event",
 						 G_TYPE_FROM_CLASS (klass),
@@ -161,7 +161,7 @@ item_post_create_setup (SPCanvasItem *item)
 	group_add (SP_CANVAS_GROUP (item->parent), item);
 
 	sp_canvas_item_request_update (item);
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2 + 1, item->y2 + 1);
+	sp_canvas_request_redraw (item->canvas, (int)(item->x1), (int)(item->y1), (int)(item->x2 + 1), (int)(item->y2 + 1));
 	item->canvas->need_repick = TRUE;
 }
 
@@ -183,7 +183,7 @@ static void
 redraw_if_visible (SPCanvasItem *item)
 {
 	if (item->object.flags & SP_CANVAS_ITEM_VISIBLE) {
-		sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2 + 1, item->y2 + 1);
+		sp_canvas_request_redraw (item->canvas, (int)(item->x1), (int)(item->y1), (int)(item->x2 + 1), (int)(item->y2 + 1));
 	}
 }
 
@@ -451,7 +451,7 @@ sp_canvas_item_show (SPCanvasItem *item)
 
 	item->object.flags |= SP_CANVAS_ITEM_VISIBLE;
 
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2 + 1, item->y2 + 1);
+	sp_canvas_request_redraw (item->canvas, (int)(item->x1), (int)(item->y1), (int)(item->x2 + 1), (int)(item->y2 + 1));
 	item->canvas->need_repick = TRUE;
 }
 
@@ -465,7 +465,7 @@ sp_canvas_item_hide (SPCanvasItem *item)
 
 	item->object.flags &= ~SP_CANVAS_ITEM_VISIBLE;
 
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2 + 1, item->y2 + 1);
+	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)(item->x2 + 1), (int)(item->y2 + 1));
 	item->canvas->need_repick = TRUE;
 }
 
@@ -484,7 +484,7 @@ sp_canvas_item_grab (SPCanvasItem *item, guint event_mask, GdkCursor *cursor, gu
 	/* fixme: If we add key masks to event mask, Gdk will abort (Lauris) */
 	/* fixme: But Canvas actualle does get key events, so all we need is routing these here */
 	gdk_pointer_grab (SP_CANVAS_WINDOW (item->canvas), FALSE,
-			  event_mask & (~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)),
+			  (GdkEventMask)(event_mask & (~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK))),
 			  NULL, cursor, etime);
 
 	item->canvas->grabbed_item = item;
@@ -651,7 +651,7 @@ gint sp_canvas_item_order (SPCanvasItem * item)
 
 /* SPCanvasGroup */
 
-static void sp_canvas_group_class_init (SPCanvasGroupClass *class);
+static void sp_canvas_group_class_init (SPCanvasGroupClass *klass);
 static void sp_canvas_group_init (SPCanvasGroup *group);
 static void sp_canvas_group_destroy (GtkObject *object);
 
@@ -684,15 +684,15 @@ sp_canvas_group_get_type (void)
 
 /* Class initialization function for SPCanvasGroupClass */
 static void
-sp_canvas_group_class_init (SPCanvasGroupClass *class)
+sp_canvas_group_class_init (SPCanvasGroupClass *klass)
 {
 	GtkObjectClass *object_class;
 	SPCanvasItemClass *item_class;
 
-	object_class = (GtkObjectClass *) class;
-	item_class = (SPCanvasItemClass *) class;
+	object_class = (GtkObjectClass *) klass;
+	item_class = (SPCanvasItemClass *) klass;
 
-	group_parent_class = gtk_type_class (sp_canvas_item_get_type ());
+	group_parent_class = (SPCanvasItemClass*)gtk_type_class (sp_canvas_item_get_type ());
 
 	object_class->destroy = sp_canvas_group_destroy;
 
@@ -721,7 +721,7 @@ sp_canvas_group_destroy (GtkObject *object)
 
 	list = group->items;
 	while (list) {
-		child = list->data;
+		child = (SPCanvasItem *)list->data;
 		list = list->next;
 
 		gtk_object_destroy (GTK_OBJECT (child));
@@ -748,7 +748,7 @@ sp_canvas_group_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	bbox.y1 = 0;
 
 	for (list = group->items; list; list = list->next) {
-		i = list->data;
+		i = (SPCanvasItem *)list->data;
 
 		sp_canvas_item_invoke_update (i, affine, flags);
 
@@ -777,10 +777,10 @@ sp_canvas_group_point (SPCanvasItem *item, double x, double y, SPCanvasItem **ac
 
 	group = SP_CANVAS_GROUP (item);
 
-	x1 = x - item->canvas->close_enough;
-	y1 = y - item->canvas->close_enough;
-	x2 = x + item->canvas->close_enough;
-	y2 = y + item->canvas->close_enough;
+	x1 = (int)(x - item->canvas->close_enough);
+	y1 = (int)(y - item->canvas->close_enough);
+	x2 = (int)(x + item->canvas->close_enough);
+	y2 = (int)(y + item->canvas->close_enough);
 
 	best = 0.0;
 	*actual_item = NULL;
@@ -788,7 +788,7 @@ sp_canvas_group_point (SPCanvasItem *item, double x, double y, SPCanvasItem **ac
 	dist = 0.0; /* keep gcc happy */
 
 	for (list = group->items; list; list = list->next) {
-		child = list->data;
+		child = (SPCanvasItem *)list->data;
 
 		if ((child->x1 <= x2) && (child->y1 <= y2) && (child->x2 >= x1) && (child->y2 >= y1)) {
 			point_item = NULL; /* cater for incomplete item implementations */
@@ -819,7 +819,7 @@ sp_canvas_group_render (SPCanvasItem *item, SPCanvasBuf *buf)
 	group = SP_CANVAS_GROUP (item);
 
 	for (list = group->items; list; list = list->next) {
-		child = list->data;
+		child = (SPCanvasItem *)list->data;
 		if (child->object.flags & SP_CANVAS_ITEM_VISIBLE) {
 			if ((child->x1 < buf->rect.x1) &&
 			    (child->y1 < buf->rect.y1) &&
@@ -880,7 +880,7 @@ group_remove (SPCanvasGroup *group, SPCanvasItem *item)
 
 /* SPCanvas */
 
-static void sp_canvas_class_init (SPCanvasClass *class);
+static void sp_canvas_class_init (SPCanvasClass *klass);
 static void sp_canvas_init (SPCanvas *canvas);
 static void sp_canvas_destroy (GtkObject *object);
 
@@ -931,15 +931,15 @@ sp_canvas_get_type (void)
 
 /* Class initialization function for SPCanvasClass */
 static void
-sp_canvas_class_init (SPCanvasClass *class)
+sp_canvas_class_init (SPCanvasClass *klass)
 {
 	GtkObjectClass *object_class;
 	GtkWidgetClass *widget_class;
 
-	object_class = (GtkObjectClass *) class;
-	widget_class = (GtkWidgetClass *) class;
+	object_class = (GtkObjectClass *) klass;
+	widget_class = (GtkWidgetClass *) klass;
 
-	canvas_parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+	canvas_parent_class = (GtkWidgetClass *)gtk_type_class (GTK_TYPE_WIDGET);
 
 	object_class->destroy = sp_canvas_destroy;
 
@@ -1038,7 +1038,7 @@ sp_canvas_new_aa (void)
 {
 	SPCanvas *canvas;
 
-	canvas = gtk_type_new (sp_canvas_get_type ());
+	canvas = (SPCanvas *)gtk_type_new (sp_canvas_get_type ());
 
 	return (GtkWidget *) canvas;
 }

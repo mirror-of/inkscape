@@ -63,7 +63,7 @@ sp_ctrl_get_type (void)
 			0,	/* n_preallocs */
 			(GInstanceInitFunc) sp_ctrl_init,
 		};
-		ctrl_type = g_type_register_static (SP_TYPE_CANVAS_ITEM, "SPCtrl", &ctrl_info, 0);
+		ctrl_type = g_type_register_static (SP_TYPE_CANVAS_ITEM, "SPCtrl", &ctrl_info, (GTypeFlags)0);
 	}
 	return ctrl_type;
 }
@@ -77,7 +77,7 @@ sp_ctrl_class_init (SPCtrlClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	item_class = (SPCanvasItemClass *) klass;
 
-	parent_class = gtk_type_class (sp_canvas_item_get_type ());
+	parent_class = (SPCanvasItemClass *)gtk_type_class (sp_canvas_item_get_type ());
 
 	gtk_object_add_arg_type ("SPCtrl::shape", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_SHAPE);
 	gtk_object_add_arg_type ("SPCtrl::mode", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_MODE);
@@ -143,17 +143,17 @@ sp_ctrl_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
 	switch (arg_id) {
 	case ARG_SHAPE:
-		ctrl->shape = GTK_VALUE_INT (*arg);
+		ctrl->shape = (SPCtrlShapeType)(GTK_VALUE_INT (*arg));
 		ctrl->build = FALSE;
 		sp_canvas_item_request_update (item);
 		break;
 	case ARG_MODE:
-		ctrl->mode = GTK_VALUE_INT (*arg);
+		ctrl->mode = (SPCtrlModeType)(GTK_VALUE_INT (*arg));
 		ctrl->build = FALSE;
 		sp_canvas_item_request_update (item);
 		break;
 	case ARG_ANCHOR:
-		ctrl->anchor = GTK_VALUE_INT (*arg);
+		ctrl->anchor = (GtkAnchorType)(GTK_VALUE_INT (*arg));
 		ctrl->build = FALSE;
 		sp_canvas_item_request_update (item);
 		break;
@@ -184,7 +184,7 @@ sp_ctrl_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		sp_canvas_item_request_update (item);
 		break;
 	case ARG_PIXBUF:
-	        pixbuf  = GTK_VALUE_POINTER (*arg);
+	        pixbuf  = (GdkPixbuf*)(GTK_VALUE_POINTER (*arg));
 		if (gdk_pixbuf_get_has_alpha (pixbuf)) {
 			ctrl->pixbuf = pixbuf;
 		} else {
@@ -302,7 +302,7 @@ sp_ctrl_build_cache (SPCtrl *ctrl)
 	c = ctrl->span ;
 	if (ctrl->cache) g_free (ctrl->cache);
 	size = (side) * (side) * 4;
-	ctrl->cache = g_malloc (size);
+	ctrl->cache = (guchar*)g_malloc (size);
 	if (side < 2) return;
 	
 	switch (ctrl->shape) {

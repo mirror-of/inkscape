@@ -173,7 +173,7 @@ sp_bezier_fit_cubic_full (NRPointF *bezier, const NRPointF *data, gint len,
 	}
 	
 	/*  Parameterize points, and attempt to fit curve */
-	u = alloca (len * sizeof (gdouble));
+	u = (double*)alloca (len * sizeof (gdouble));
 	ChordLengthParameterize (data, u, len);
 	GenerateBezier (bezier, data, u, len, tHat1, tHat2);
 	

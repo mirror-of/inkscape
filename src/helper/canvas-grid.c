@@ -64,7 +64,7 @@ sp_cgrid_class_init (SPCGridClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	item_class = (SPCanvasItemClass *) klass;
 
-	parent_class = gtk_type_class (sp_canvas_item_get_type ());
+	parent_class = (SPCanvasItemClass*)gtk_type_class (sp_canvas_item_get_type ());
 
 	gtk_object_add_arg_type ("SPCGrid::originx", GTK_TYPE_DOUBLE, GTK_ARG_WRITABLE, ARG_ORIGINX);
 	gtk_object_add_arg_type ("SPCGrid::originy", GTK_TYPE_DOUBLE, GTK_ARG_WRITABLE, ARG_ORIGINY);

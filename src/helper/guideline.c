@@ -46,7 +46,7 @@ sp_guideline_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_guideline_init,
 		};
-		guideline_type = g_type_register_static (SP_TYPE_CANVAS_ITEM, "SPGuideLine", &guideline_info, 0);
+		guideline_type = g_type_register_static (SP_TYPE_CANVAS_ITEM, "SPGuideLine", &guideline_info, (GTypeFlags)0);
 	}
 	return guideline_type;
 }
@@ -62,7 +62,7 @@ sp_guideline_class_init (SPGuideLineClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	item_class = (SPCanvasItemClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPCanvasItemClass*)g_type_class_peek_parent (klass);
 
 	object_class->destroy = sp_guideline_destroy;
 

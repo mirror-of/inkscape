@@ -54,7 +54,7 @@ gnome_uri_list_extract_uris (const gchar* uri_list)
 				while (q > p && isspace(*q))
 					q--;
 
-				retval = g_malloc (q - p + 2);
+				retval = (gchar*)g_malloc (q - p + 2);
 				strncpy (retval, p, q - p + 1);
 				retval[q - p + 1] = '\0';
 
@@ -90,7 +90,7 @@ gnome_uri_list_extract_filenames (const gchar* uri_list)
 
 	tmp_list = result;
 	while (tmp_list) {
-		gchar *s = tmp_list->data;
+		gchar *s = (gchar*)tmp_list->data;
 
 		node = tmp_list;
 		tmp_list = tmp_list->next;

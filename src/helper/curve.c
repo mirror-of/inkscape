@@ -70,11 +70,11 @@ sp_curve_new_from_bpath (ArtBpath *bpath)
 	g_return_val_if_fail (bpath != NULL, NULL);
 
 	if (!sp_bpath_good (bpath)) {
-		ArtBpath *new;
-		new = sp_bpath_clean (bpath);
-		g_return_val_if_fail (new != NULL, NULL);
+		ArtBpath *new_bpath;
+		new_bpath = sp_bpath_clean (bpath);
+		g_return_val_if_fail (new_bpath != NULL, NULL);
 		art_free (bpath);
-		bpath = new;
+		bpath = new_bpath;
 	}
 
 	curve = g_new (SPCurve, 1);
@@ -104,11 +104,11 @@ sp_curve_new_from_static_bpath (ArtBpath * bpath)
 	g_return_val_if_fail (bpath != NULL, NULL);
 
 	if (!sp_bpath_good (bpath)) {
-		ArtBpath *new;
-		new = sp_bpath_clean (bpath);
-		g_return_val_if_fail (new != NULL, NULL);
+		ArtBpath *new_bpath;
+		new_bpath = sp_bpath_clean (bpath);
+		g_return_val_if_fail (new_bpath != NULL, NULL);
 		sbpath = FALSE;
-		bpath = new;
+		bpath = new_bpath;
 	} else {
 		sbpath = TRUE;
 	}
@@ -134,23 +134,23 @@ SPCurve *
 sp_curve_new_from_foreign_bpath (ArtBpath * bpath)
 {
 	SPCurve *curve;
-	ArtBpath *new;
+	ArtBpath *new_bpath;
 
 	g_return_val_if_fail (bpath != NULL, NULL);
 
 	if (!sp_bpath_good (bpath)) {
-		new = sp_bpath_clean (bpath);
-		g_return_val_if_fail (new != NULL, NULL);
+		new_bpath = sp_bpath_clean (bpath);
+		g_return_val_if_fail (new_bpath != NULL, NULL);
 	} else {
 		gint len;
 		len = sp_bpath_length (bpath);
-		new = art_new (ArtBpath, len);
-		memcpy (new, bpath, len * sizeof (ArtBpath));
+		new_bpath = art_new (ArtBpath, len);
+		memcpy (new_bpath, bpath, len * sizeof (ArtBpath));
 	}
 
-	curve = sp_curve_new_from_bpath (new);
+	curve = sp_curve_new_from_bpath (new_bpath);
 
-	if (!curve) art_free (new);
+	if (!curve) art_free (new_bpath);
 
 	return curve;
 }
@@ -224,19 +224,19 @@ sp_curve_ensure_space (SPCurve * curve, gint space)
 SPCurve *
 sp_curve_copy (SPCurve * curve)
 {
-	SPCurve * new;
+	SPCurve * new_curve;
 
 	g_return_val_if_fail (curve != NULL, NULL);
 
-	new = sp_curve_new_from_foreign_bpath (curve->bpath);
+	new_curve = sp_curve_new_from_foreign_bpath (curve->bpath);
 
-	return new;
+	return new_curve;
 }
 
 SPCurve *
 sp_curve_concat (const GSList * list)
 {
-	SPCurve * c, * new;
+	SPCurve * c, * new_curve;
 	ArtBpath * bp;
 	const GSList * l;
 	gint length;
@@ -251,9 +251,9 @@ sp_curve_concat (const GSList * list)
 		length += c->end;
 	}
 
-	new = sp_curve_new_sized (length + 1);
+	new_curve = sp_curve_new_sized (length + 1);
 
-	bp = new->bpath;
+	bp = new_curve->bpath;
 
 	for (l = list; l != NULL; l = l->next) {
 		c = (SPCurve *) l->data;
@@ -263,17 +263,17 @@ sp_curve_concat (const GSList * list)
 
 	bp->code = ART_END;
 
-	new->end = length;
-	for (i = new->end; i > 0; i--) if ((new->bpath[i].code == ART_MOVETO) || (new->bpath[i].code == ART_MOVETO_OPEN)) break;
-	new->substart = i;
+	new_curve->end = length;
+	for (i = new_curve->end; i > 0; i--) if ((new_curve->bpath[i].code == ART_MOVETO) || (new_curve->bpath[i].code == ART_MOVETO_OPEN)) break;
+	new_curve->substart = i;
 
-	return new;
+	return new_curve;
 }
 
 GSList *
 sp_curve_split (SPCurve * curve)
 {
-	SPCurve * new;
+	SPCurve * new_curve;
 	GSList * l;
 	gint p, i;
 
@@ -285,14 +285,14 @@ sp_curve_split (SPCurve * curve)
 	while (p < curve->end) {
 		i = 1;
 		while ((curve->bpath[p + i].code == ART_LINETO) || (curve->bpath[p + i].code == ART_CURVETO)) i++;
-		new = sp_curve_new_sized (i + 1);
-		memcpy (new->bpath, curve->bpath + p, i * sizeof (ArtBpath));
-		new->end = i;
-		new->bpath[i].code = ART_END;
-		new->substart = 0;
-		new->closed = (new->bpath->code == ART_MOVETO);
-		new->hascpt = (new->bpath->code == ART_MOVETO_OPEN);
-		l = g_slist_append (l, new);
+		new_curve = sp_curve_new_sized (i + 1);
+		memcpy (new_curve->bpath, curve->bpath + p, i * sizeof (ArtBpath));
+		new_curve->end = i;
+		new_curve->bpath[i].code = ART_END;
+		new_curve->substart = 0;
+		new_curve->closed = (new_curve->bpath->code == ART_MOVETO);
+		new_curve->hascpt = (new_curve->bpath->code == ART_MOVETO_OPEN);
+		l = g_slist_append (l, new_curve);
 		p += i;
 	}
 
@@ -831,16 +831,16 @@ sp_bpath_good (ArtBpath *bpath)
 static ArtBpath *
 sp_bpath_clean (ArtBpath *bpath)
 {
-	ArtBpath *new, *bp, *np;
+	ArtBpath *new_bpath, *bp, *np;
 	gint len;
 
 	len = 0;
 	while (bpath[len].code != ART_END) len += 1;
 
-	new = art_new (ArtBpath, len + 1);
+	new_bpath = art_new (ArtBpath, len + 1);
 
 	bp = bpath;
-	np = new;
+	np = new_bpath;
 
 	while (bp->code != ART_END) {
 		if (sp_bpath_check_subpath (bp)) {
@@ -852,17 +852,17 @@ sp_bpath_clean (ArtBpath *bpath)
 		}
 	}
 
-	if (np == new) {
-		art_free (new);
+	if (np == new_bpath) {
+		art_free (new_bpath);
 		return NULL;
 	}
 
 	np->code = ART_END;
 	np += 1;
 
-	new = art_renew (new, ArtBpath, np - new);
+	new_bpath = art_renew (new_bpath, ArtBpath, np - new_bpath);
 
-	return new;
+	return new_bpath;
 }
 
 ArtBpath *

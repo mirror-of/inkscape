@@ -73,10 +73,10 @@ sp_action_finalize (NRObject *object)
 
 SPAction *
 sp_action_setup (SPAction *action,
-		 const unsigned char *id,
-		 const unsigned char *name,
-		 const unsigned char *tip,
-		 const unsigned char *image)
+		 const gchar *id,
+		 const gchar *name,
+		 const gchar *tip,
+		 const gchar *image)
 {
 	nr_object_setup ((NRObject *) action, SP_TYPE_ACTION);
 

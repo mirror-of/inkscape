@@ -27,7 +27,7 @@ sp_window_key_press (GtkWidget *widgt, GdkEventKey *event)
 }
 
 GtkWidget *
-sp_window_new (const unsigned char *title, unsigned int resizeable)
+sp_window_new (const gchar *title, unsigned int resizeable)
 {
 	GtkWidget *window;
 

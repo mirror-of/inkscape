@@ -32,12 +32,12 @@
 
 #if 1
 struct SPPNGBD {
-	const unsigned char *px;
+	const guchar *px;
 	int rowstride;
 };
 
 static int
-sp_png_get_block_stripe (const unsigned char **rows, int row, int num_rows, void *data)
+sp_png_get_block_stripe (const guchar **rows, int row, int num_rows, void *data)
 {
 	struct SPPNGBD *bd;
 	int r;
@@ -52,7 +52,7 @@ sp_png_get_block_stripe (const unsigned char **rows, int row, int num_rows, void
 }
 
 int
-sp_png_write_rgba (const unsigned char *filename, const unsigned char *px, int width, int height, int rowstride)
+sp_png_write_rgba (const gchar *filename, const guchar *px, int width, int height, int rowstride)
 {
 	struct SPPNGBD bd;
 
@@ -64,7 +64,7 @@ sp_png_write_rgba (const unsigned char *filename, const unsigned char *px, int w
 
 #else
 int
-sp_png_write_rgba (const unsigned char *filename, const unsigned char *px, int width, int height, int rowstride)
+sp_png_write_rgba (const gchar *filename, const guchar *px, int width, int height, int rowstride)
 {
 	FILE *fp;
 	png_structp png_ptr;
@@ -217,8 +217,8 @@ sp_png_write_rgba (const unsigned char *filename, const unsigned char *px, int w
 #endif
 
 int
-sp_png_write_rgba_striped (const unsigned char *filename, int width, int height,
-			   int (* get_rows) (const unsigned char **rows, int row, int num_rows, void *data),
+sp_png_write_rgba_striped (const gchar *filename, int width, int height,
+			   int (* get_rows) (const guchar **rows, int row, int num_rows, void *data),
 			   void *data)
 {
 	FILE *fp;

@@ -35,10 +35,10 @@ struct _SPAction {
 	NRActiveObject object;
 	unsigned int sensitive : 1;
 	unsigned int active : 1;
-	unsigned char *id;
-	unsigned char *name;
-	unsigned char *tip;
-	unsigned char *image;
+	gchar *id;
+	gchar *name;
+	gchar *tip;
+	gchar *image;
 	unsigned int shortcut;
 };
 
@@ -49,10 +49,10 @@ struct _SPActionClass {
 NRType sp_action_get_type (void);
 
 SPAction *sp_action_setup (SPAction *action,
-			   const unsigned char *id,
-			   const unsigned char *name,
-			   const unsigned char *tip,
-			   const unsigned char *image);
+			   const gchar *id,
+			   const gchar *name,
+			   const gchar *tip,
+			   const gchar *image);
 
 void sp_action_perform (SPAction *action);
 void sp_action_set_active (SPAction *action, unsigned int active);

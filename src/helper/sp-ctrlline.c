@@ -80,7 +80,7 @@ sp_ctrlline_class_init (SPCtrlLineClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	item_class = (SPCanvasItemClass *) klass;
 
-	parent_class = gtk_type_class (SP_TYPE_CANVAS_ITEM);
+	parent_class = (SPCanvasItemClass*)gtk_type_class (SP_TYPE_CANVAS_ITEM);
 
 	object_class->destroy = sp_ctrlline_destroy;
 
@@ -141,7 +141,7 @@ sp_ctrlline_update (SPCanvasItem *item, double *affine, unsigned int flags)
 
 	cl = SP_CTRLLINE (item);
 
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
+	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 
 	if (parent_class->update)
 		(* parent_class->update) (item, affine, flags);
@@ -170,8 +170,10 @@ sp_ctrlline_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	vpath[1].y = p.y;
 
 	vpath[2].code = ART_END;
-
-	cl->svp = art_svp_vpath_stroke (vpath, ART_PATH_STROKE_CAP_BUTT, ART_PATH_STROKE_JOIN_MITER, 1, 4, 0.25);
+	// XXX: the ART_PATH_STROKE_JOIN_MITER,
+	// ART_PATH_STROKE_CAP_BUTT parameters appear to have been
+	// swapped
+	cl->svp = art_svp_vpath_stroke (vpath, ART_PATH_STROKE_JOIN_MITER, ART_PATH_STROKE_CAP_BUTT, 1, 4, 0.25);
 
 	art_drect_svp (&dbox, cl->svp);
 	art_drect_to_irect (&ibox, &dbox);
@@ -181,7 +183,7 @@ sp_ctrlline_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	item->x2 = ibox.x1;
 	item->y2 = ibox.y1;
 
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
+	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }
 
 void
@@ -194,7 +196,7 @@ sp_ctrlline_set_rgba32 (SPCtrlLine *cl, guint32 rgba)
 		SPCanvasItem *item;
 		cl->rgba = rgba;
 		item = SP_CANVAS_ITEM (cl);
-		sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
+		sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 	}
 }
 

@@ -51,12 +51,12 @@ sp_canvas_item_grab (GnomeCanvasItem *item, unsigned int event_mask, GdkCursor *
 void
 sp_canvas_update_bbox (SPCanvasItem *item, int x1, int y1, int x2, int y2)
 {
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
+	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 	item->x1 = x1;
 	item->y1 = y1;
 	item->x2 = x2;
 	item->y2 = y2;
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
+	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }
 
 void

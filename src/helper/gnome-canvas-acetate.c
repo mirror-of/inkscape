@@ -16,7 +16,7 @@
 
 #include "gnome-canvas-acetate.h"
 
-static void sp_canvas_acetate_class_init (SPCanvasAcetateClass *class);
+static void sp_canvas_acetate_class_init (SPCanvasAcetateClass *klass);
 static void sp_canvas_acetate_init (SPCanvasAcetate *acetate);
 static void sp_canvas_acetate_destroy (GtkObject *object);
 
@@ -44,15 +44,15 @@ sp_canvas_acetate_get_type (void)
 }
 
 static void
-sp_canvas_acetate_class_init (SPCanvasAcetateClass *class)
+sp_canvas_acetate_class_init (SPCanvasAcetateClass *klass)
 {
 	GtkObjectClass *object_class;
 	SPCanvasItemClass *item_class;
 
-	object_class = (GtkObjectClass *) class;
-	item_class = (SPCanvasItemClass *) class;
+	object_class = (GtkObjectClass *) klass;
+	item_class = (SPCanvasItemClass *) klass;
 
-	parent_class = gtk_type_class (sp_canvas_item_get_type ());
+	parent_class = (SPCanvasItemClass*)gtk_type_class (sp_canvas_item_get_type ());
 
 	object_class->destroy = sp_canvas_acetate_destroy;
 

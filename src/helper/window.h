@@ -12,7 +12,7 @@
 
 #include <gtk/gtkwidget.h>
 
-GtkWidget *sp_window_new (const unsigned char *title, unsigned int resizeable);
+GtkWidget *sp_window_new (const gchar *title, unsigned int resizeable);
 
 
 #endif

@@ -62,7 +62,7 @@ sp_canvas_bpath_class_init (SPCanvasBPathClass *klass)
 	object_class = GTK_OBJECT_CLASS (klass);
 	item_class = (SPCanvasItemClass *) klass;
 
-	parent_class = gtk_type_class (SP_TYPE_CANVAS_ITEM);
+	parent_class = (SPCanvasItemClass*)gtk_type_class (SP_TYPE_CANVAS_ITEM);
 
 	object_class->destroy = sp_canvas_bpath_destroy;
 
@@ -121,7 +121,7 @@ sp_canvas_bpath_update (SPCanvasItem *item, double *affine, unsigned int flags)
 
 	cbp = SP_CANVAS_BPATH (item);
 
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
+	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 
 	if (((SPCanvasItemClass *) parent_class)->update)
 		((SPCanvasItemClass *) parent_class)->update (item, affine, flags);
@@ -181,7 +181,7 @@ sp_canvas_bpath_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	item->x2 = ibox.x1;
 	item->y2 = ibox.y1;
 
-	sp_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
+	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }
 
 static void
