@@ -812,67 +812,70 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 
 gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
 {
-	using NR::X;
-	using NR::Y;
+    using NR::X;
+    using NR::Y;
 
-	SPDesktop *desktop = seltrans->desktop;
+    if (handle.cursor != GDK_SB_V_DOUBLE_ARROW && handle.cursor != GDK_SB_H_DOUBLE_ARROW) {
+        return FALSE;
+    }
+    
+    SPDesktop *desktop = seltrans->desktop;
+    
+    NR::Point const point(seltrans->point);
+    NR::Point const norm(seltrans->origin);
 
-	NR::Point const point(seltrans->point);
-	NR::Point const norm(seltrans->origin);
+    NR::Dim2 dim_a;
+    NR::Dim2 dim_b;
+    if (handle.cursor == GDK_SB_V_DOUBLE_ARROW) {
+        dim_a = X;
+        dim_b = Y;
+    } else {
+        dim_a = Y;
+        dim_b = X;
+    }
+    
+    double skew[2];
+    double s[2] = { 1.0, 1.0 };
 
-        double skew[6], sx = 1.0, sy = 1.0;
-	skew[4]=0;
-	skew[5]=0;
-	skew[0]=1;
-	skew[3]=1;
+    if (fabs (point[dim_a] - norm[dim_a]) < NR_EPSILON) {
+        return FALSE;
+    }
+    
+    skew[dim_a] = ( pt[dim_b] - point[dim_b] ) / ( point[dim_a] - norm[dim_a] );
+    skew[dim_a] = namedview_dim_snap_list_skew(desktop->namedview,
+                                               Snapper::SNAP_POINT, seltrans->snap_points,
+                                               norm, skew[dim_a], dim_b);
+    
+    pt[dim_b] = ( point[dim_a] - norm[dim_a] ) * skew[dim_a] + point[dim_b];
+    s[dim_a] = ( pt[dim_a] - norm[dim_a] ) / ( point[dim_a] - norm[dim_a] );
+    if (state & GDK_CONTROL_MASK) {
+        s[dim_a] = namedview_dim_snap_list_scale(desktop->namedview,
+                                                 Snapper::SNAP_POINT,
+                                                 seltrans->snap_points,
+                                                 norm, s[dim_a], dim_a);
+    } else {
+        if ( fabs(s[dim_a]) < NR_EPSILON ) {
+            s[dim_a] = NR_EPSILON;
+        }
+        if ( fabs(s[dim_a]) < 1 ) {
+            s[dim_a] = sign(s[dim_a]);
+        }
+        s[dim_a] = floor( s[dim_a] + 0.5 );
+    }
+    
+    if (fabs (s[dim_a]) < NR_EPSILON) {
+        s[dim_a] = NR_EPSILON;
+    }
+    
+    pt[dim_a] = ( point[dim_a] - norm[dim_a] ) * s[dim_a] + norm[dim_a];
+    
+    skew[dim_b] = 0;
 
-	switch(handle.cursor) {
-	case GDK_SB_V_DOUBLE_ARROW:
-	  if (fabs (point[X] - norm[X]) < 1e-15) return FALSE;
-	  skew[1] = ( pt[Y] - point[Y] ) / ( point[X] - norm[X] );
-	  skew[1] = namedview_dim_snap_list_skew(desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points, norm, skew[1], Y);
-	  pt[Y] = ( point[X] - norm[X] ) * skew[1] + point[Y];
-	  sx = ( pt[X] - norm[X] ) / ( point[X] - norm[X] );
-	  if (state & GDK_CONTROL_MASK) {
-	    sx = namedview_dim_snap_list_scale(desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points, norm, sx, X);
-	  } else {
-	    if ( fabs(sx) < 1e-15 ) sx = 1e-15;
-	    if ( fabs(sx) < 1 ) sx = sign(sx);
-	    sx = floor( sx + 0.5 );
-	  }
-	  if (fabs (sx) < 1e-15) sx = 1e-15;
-	  pt[X] = ( point[X] - norm[X] ) * sx + norm[X];
-	  
-	  skew[2] = 0;
-	  break;
-	case GDK_SB_H_DOUBLE_ARROW:
-	  if (fabs (point[Y] - norm[Y]) < 1e-15) return FALSE;
-	  skew[2] = ( pt[X] - point[X] ) / ( point[Y] - norm[Y] );
-	  skew[2] = namedview_dim_snap_list_skew(desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points, norm, skew[2], X);
-	  pt[X] = ( point[Y] - norm[Y] ) * skew[2] + point[X];
-	  sy = ( pt[Y] - norm[Y] ) / ( point[Y] - norm[Y] );
-	  
-	  if (state & GDK_CONTROL_MASK) {
-	    sy = namedview_dim_snap_list_scale(desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points, norm, sy, Y);
-	  } else {
-	    if ( fabs(sy) < 1e-15 ) sy = 1e-15;
-	    if ( fabs(sy) < 1 ) sy = sign(sy);
-	    sy = floor( sy + 0.5 );
-	  }
-	  if (fabs (sy) < 1e-15) sy = 1e-15;
-	  pt[Y] = ( point[Y] - norm[Y] ) * sy + norm[Y];
-
-	  skew[1] = 0;
-	  break;
-	default:
-		break;
-	}
-
-	// status text
-        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
-            _("Skew %0.2f%c %0.2f%c"), 100 * fabs(skew[2]), '%', 100 * fabs(skew[1]), '%');
-
-	return TRUE;
+    // status text
+    desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
+                                    _("Skew %0.2f%c %0.2f%c"), 100 * fabs(skew[1]), '%', 100 * fabs(skew[0]), '%');
+    
+    return TRUE;
 }
 
 gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
