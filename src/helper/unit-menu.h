@@ -29,7 +29,7 @@ GType sp_unit_selector_get_type(void);
 GtkWidget *sp_unit_selector_new(guint bases);
 void sp_unit_selector_setsize(GtkWidget *us, guint w, guint h);
 
-SPUnit const *sp_unit_selector_get_unit(SPUnitSelector *selector);
+SPUnit const *sp_unit_selector_get_unit(SPUnitSelector const *selector);
 
 void sp_unit_selector_set_bases(SPUnitSelector *selector, guint bases);
 void sp_unit_selector_add_unit(SPUnitSelector *selector, SPUnit const *unit, int position);
@@ -40,7 +40,7 @@ void sp_unit_selector_remove_adjustment(SPUnitSelector *selector, GtkAdjustment 
 
 gboolean sp_unit_selector_update_test(SPUnitSelector const *selector);
 
-double sp_unit_selector_get_value_in_pixels(SPUnitSelector *selector, GtkAdjustment *adj);
+double sp_unit_selector_get_value_in_pixels(SPUnitSelector const *selector, GtkAdjustment *adj);
 void sp_unit_selector_set_value_in_pixels(SPUnitSelector *selector, GtkAdjustment *adj, double value);
 
 
