@@ -556,7 +556,10 @@ void Layout::getSourceOfCharacter(iterator const &it, void **source_cookie, Glib
         _char_index--;                                                                   \
         unsigned original_item = item_getter;                                            \
         while (item_getter == original_item) {                                           \
-            if (_char_index == 0) return true;                                           \
+            if (_char_index == 0) {                                                      \
+                _glyph_index = _parent_layout->_characters[_char_index].in_glyph;        \
+                return true;                                                             \
+            }                                                                            \
             _char_index--;                                                               \
         }                                                                                \
         _char_index++;                                                                   \
