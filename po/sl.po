@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-26 12:07+0100\n"
+"POT-Creation-Date: 2004-11-28 22:25-0700\n"
 "PO-Revision-Date: 2004-11-09 22:46+0100\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: sl_SI <sl@li.org>\n"
@@ -3424,98 +3424,98 @@ msgstr "<b>Nič</b> nisem izbrisal."
 msgid "Select <b>object(s)</b> to duplicate."
 msgstr "Izberite nekaj <b>predmetov</b> za podvojevanje."
 
-#: src/selection-chemistry.cpp:314
+#: src/selection-chemistry.cpp:318
 msgid "Select <b>two or more objects</b> to group."
 msgstr "Za skupinjenje izberite <b>vsaj dva predmeta</b>."
 
-#: src/selection-chemistry.cpp:322
+#: src/selection-chemistry.cpp:326
 msgid "Select <b>at least two objects</b> to group."
 msgstr "Za skupinjenje izberite <b>vsaj dva predmeta</b>."
 
-#: src/selection-chemistry.cpp:331
+#: src/selection-chemistry.cpp:335
 msgid "You cannot group objects from <b>different groups</b> or <b>layers</b>."
 msgstr "Ne morete združevati predmetov iz <b>različnih skupin ali slojev</b>."
 
-#: src/selection-chemistry.cpp:379
+#: src/selection-chemistry.cpp:383
 msgid "Select a <b>group</b> to ungroup."
 msgstr "Izberite <b>skupino</b> za razdruženje"
 
-#: src/selection-chemistry.cpp:413
+#: src/selection-chemistry.cpp:417
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "Med izbranimi predmeti <b>ni skupin</b>, ki bi jih lahko razdružili."
 
-#: src/selection-chemistry.cpp:480
+#: src/selection-chemistry.cpp:484
 msgid "Select <b>objects</b> to raise."
 msgstr "Za dvig izberite kak <b>predmet</b>."
 
-#: src/selection-chemistry.cpp:486 src/selection-chemistry.cpp:538
-#: src/selection-chemistry.cpp:572 src/selection-chemistry.cpp:630
+#: src/selection-chemistry.cpp:490 src/selection-chemistry.cpp:542
+#: src/selection-chemistry.cpp:576 src/selection-chemistry.cpp:634
 msgid ""
 "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "Ne morete dvigati ali spuščati predmetov iz <b>različnih skupin ali slojev</"
 "b>."
 
-#: src/selection-chemistry.cpp:530
+#: src/selection-chemistry.cpp:534
 msgid "Select <b>object(s)</b> to raise to top."
 msgstr "Za dvig na vrh izberite kak <b>predmet</b>."
 
-#: src/selection-chemistry.cpp:566
+#: src/selection-chemistry.cpp:570
 msgid "Select <b>object(s)</b> to lower."
 msgstr "Za spust izberite kak <b>predmet</b>."
 
-#: src/selection-chemistry.cpp:622
+#: src/selection-chemistry.cpp:626
 msgid "Select <b>object(s)</b> to lower to bottom."
 msgstr "Za spust na dno izberite kak <b>predmet</b>."
 
-#: src/selection-chemistry.cpp:664
+#: src/selection-chemistry.cpp:668
 msgid "Nothing to undo."
 msgstr "Nič za popraviti"
 
-#: src/selection-chemistry.cpp:673
+#: src/selection-chemistry.cpp:677
 msgid "Nothing to redo."
 msgstr "Nič za ponoviti"
 
-#: src/selection-chemistry.cpp:823
+#: src/selection-chemistry.cpp:827
 msgid "Nothing was copied."
 msgstr "Nič nisem presnel"
 
-#: src/selection-chemistry.cpp:929
+#: src/selection-chemistry.cpp:933
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
 msgstr ""
 
-#: src/selection-chemistry.cpp:933
+#: src/selection-chemistry.cpp:937
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr ""
 
-#: src/selection-chemistry.cpp:946 src/selection-chemistry.cpp:997
+#: src/selection-chemistry.cpp:950 src/selection-chemistry.cpp:1001
 msgid "Nothing on the clipboard."
 msgstr "Ničesar ni na odložišču."
 
-#: src/selection-chemistry.cpp:1003
+#: src/selection-chemistry.cpp:1007
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Izberite <b>predmet</b>., za prenos sloga."
 
-#: src/selection-chemistry.cpp:1570
+#: src/selection-chemistry.cpp:1576
 msgid "Select an <b>object</b> to clone."
 msgstr "Izberite <b>predmet</b> za kloniranje."
 
-#: src/selection-chemistry.cpp:1576
+#: src/selection-chemistry.cpp:1582
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
 msgstr ""
 "Če želite klonirati več predmetov jih <b>skupinite in klonirajte skupino</b>."
 
-#: src/selection-chemistry.cpp:1607
+#: src/selection-chemistry.cpp:1613
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Izberite <b>klona</b> za razvez."
 
-#: src/selection-chemistry.cpp:1638
+#: src/selection-chemistry.cpp:1644
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "Med izbranimi predmeti <b>ni klonov</b>, ki bi jih lahko odvezali."
 
-#: src/selection-chemistry.cpp:1655
+#: src/selection-chemistry.cpp:1661
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path."
@@ -3524,7 +3524,7 @@ msgstr ""
 "odmik</b>, ki naj se vrne k izvirniku. Izberite <b>besedilo na poti</b>, ki "
 "naj gre po poti."
 
-#: src/selection-chemistry.cpp:1676
+#: src/selection-chemistry.cpp:1682
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, or "
 "textpath?)"
@@ -3532,28 +3532,28 @@ msgstr ""
 "<b>Ne najdem</b> predmeta, ki ga izbirate (zapuščen klon, zamik ali besedilo "
 "na poti?)"
 
-#: src/selection-chemistry.cpp:1682
+#: src/selection-chemistry.cpp:1688
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr "Predmet ki ga izbirate <b>ni viden</b> (je med &lt;defs&gt;)"
 
-#: src/selection-chemistry.cpp:1709
+#: src/selection-chemistry.cpp:1715
 #, fuzzy
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "Izberite nekaj <b>predmetov</b> za pretvorbo v črte."
 
-#: src/selection-chemistry.cpp:1795
+#: src/selection-chemistry.cpp:1801
 #, fuzzy
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr "Izberite <b>tlakovan predmet</b> za razstaviti."
 
-#: src/selection-chemistry.cpp:1848
+#: src/selection-chemistry.cpp:1854
 #, fuzzy
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "Med izbiro ni <b>polnjenj z vzorci</b>, ki bi jih lahko razstavil."
 
-#: src/selection-chemistry.cpp:1868
+#: src/selection-chemistry.cpp:1874
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "Izberite <b>predmet(e)</b> za rastersko kopiranje."
 

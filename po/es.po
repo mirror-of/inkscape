@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-26 12:07+0100\n"
+"POT-Creation-Date: 2004-11-28 22:25-0700\n"
 "PO-Revision-Date: 2004-11-26 09:50+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
@@ -3492,101 +3492,101 @@ msgstr "No se ha borrado <b>nada</b>."
 msgid "Select <b>object(s)</b> to duplicate."
 msgstr "Seleccione los <b>objetos</b> para duplicar."
 
-#: src/selection-chemistry.cpp:314
+#: src/selection-chemistry.cpp:318
 msgid "Select <b>two or more objects</b> to group."
 msgstr "Seleccione <b>dos o más objetos</b> para agrupar."
 
-#: src/selection-chemistry.cpp:322
+#: src/selection-chemistry.cpp:326
 msgid "Select <b>at least two objects</b> to group."
 msgstr "Seleccione <b>por lo menos dos objetos</b> para agrupar."
 
-#: src/selection-chemistry.cpp:331
+#: src/selection-chemistry.cpp:335
 msgid "You cannot group objects from <b>different groups</b> or <b>layers</b>."
 msgstr "No puede agrupar objetos de <b>diferentes grupos</b> o <b>capas</b>."
 
-#: src/selection-chemistry.cpp:379
+#: src/selection-chemistry.cpp:383
 msgid "Select a <b>group</b> to ungroup."
 msgstr "Seleccione un <b>grupo</b> para desagrupar."
 
-#: src/selection-chemistry.cpp:413
+#: src/selection-chemistry.cpp:417
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "<b>No hay grupos</b> desagrupables en la selección."
 
-#: src/selection-chemistry.cpp:480
+#: src/selection-chemistry.cpp:484
 msgid "Select <b>objects</b> to raise."
 msgstr "Seleccione los <b>objetos</b> para elevar."
 
-#: src/selection-chemistry.cpp:486 src/selection-chemistry.cpp:538
-#: src/selection-chemistry.cpp:572 src/selection-chemistry.cpp:630
+#: src/selection-chemistry.cpp:490 src/selection-chemistry.cpp:542
+#: src/selection-chemistry.cpp:576 src/selection-chemistry.cpp:634
 msgid ""
 "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "No puede elevar/bajar objetos de <b>diferentes grupos</b> o <b>capas</b>."
 
-#: src/selection-chemistry.cpp:530
+#: src/selection-chemistry.cpp:534
 msgid "Select <b>object(s)</b> to raise to top."
 msgstr "Seleccione los <b>objetos</b> que desea traer al frente."
 
-#: src/selection-chemistry.cpp:566
+#: src/selection-chemistry.cpp:570
 msgid "Select <b>object(s)</b> to lower."
 msgstr "Seleccione los <b>objetos</b> que desea enviar al fondo."
 
-#: src/selection-chemistry.cpp:622
+#: src/selection-chemistry.cpp:626
 msgid "Select <b>object(s)</b> to lower to bottom."
 msgstr "Seleccione los <b>objetos</b> para enviar al fondo."
 
-#: src/selection-chemistry.cpp:664
+#: src/selection-chemistry.cpp:668
 msgid "Nothing to undo."
 msgstr "Nada para deshacer."
 
-#: src/selection-chemistry.cpp:673
+#: src/selection-chemistry.cpp:677
 msgid "Nothing to redo."
 msgstr "Nada para rehacer."
 
-#: src/selection-chemistry.cpp:823
+#: src/selection-chemistry.cpp:827
 msgid "Nothing was copied."
 msgstr "No se ha copiado nada."
 
-#: src/selection-chemistry.cpp:929
+#: src/selection-chemistry.cpp:933
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
 msgstr ""
 "<b>La capa actual está oculta</b>. Debe hacerla visible para poder pegar en "
 "ella."
 
-#: src/selection-chemistry.cpp:933
+#: src/selection-chemistry.cpp:937
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr ""
 "<b>La capa actual está bloqueada</b>. Debe desbloquearla antes de poder "
 "pegar en ella."
 
-#: src/selection-chemistry.cpp:946 src/selection-chemistry.cpp:997
+#: src/selection-chemistry.cpp:950 src/selection-chemistry.cpp:1001
 msgid "Nothing on the clipboard."
 msgstr "No hay nada en el portapapeles."
 
-#: src/selection-chemistry.cpp:1003
+#: src/selection-chemistry.cpp:1007
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Seleccione los <b>objetos</b> a los que pegar el estilo."
 
-#: src/selection-chemistry.cpp:1570
+#: src/selection-chemistry.cpp:1576
 msgid "Select an <b>object</b> to clone."
 msgstr "Seleccione el <b>objeto</b> que desea clonar"
 
-#: src/selection-chemistry.cpp:1576
+#: src/selection-chemistry.cpp:1582
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
 msgstr ""
 "Si quiere clonar varios objetos, <b>agrúpelos</b> y <b>clone el grupo</b>."
 
-#: src/selection-chemistry.cpp:1607
+#: src/selection-chemistry.cpp:1613
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Seleccione el <b>clon</b> que desea desconectar."
 
-#: src/selection-chemistry.cpp:1638
+#: src/selection-chemistry.cpp:1644
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "<b>No hay clones desconectables</b> en la selección."
 
-#: src/selection-chemistry.cpp:1655
+#: src/selection-chemistry.cpp:1661
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path."
@@ -3595,7 +3595,7 @@ msgstr ""
 "<b>desplazamiento enlazado</b> para ir a su origen. Seleccione <b>texto en "
 "trayecto</b> para ir al trayecto."
 
-#: src/selection-chemistry.cpp:1676
+#: src/selection-chemistry.cpp:1682
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, or "
 "textpath?)"
@@ -3603,27 +3603,27 @@ msgstr ""
 "<b>No se pudo encontrar</b> el objeto (¿clon huérfano, desplazamiento, o "
 "trayecto de un texto?)"
 
-#: src/selection-chemistry.cpp:1682
+#: src/selection-chemistry.cpp:1688
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
 "El objeto que desea seleccionar <b>no es visible</b> (está en &lt;defs&gt;)"
 
-#: src/selection-chemistry.cpp:1709
+#: src/selection-chemistry.cpp:1715
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "Seleccione los <b>objetos</b> que desea convertir en patrón."
 
-#: src/selection-chemistry.cpp:1795
+#: src/selection-chemistry.cpp:1801
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr ""
 "Seleccione un <b>objeto con relleno de mosaico</b> del que extraer objetos."
 
-#: src/selection-chemistry.cpp:1848
+#: src/selection-chemistry.cpp:1854
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "No hay <b>rellenos de mosaico</b> en la selección."
 
-#: src/selection-chemistry.cpp:1868
+#: src/selection-chemistry.cpp:1874
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr ""
 "Seleccione los <b>objetos</b> de los que desea hacer una copia en mapa de "
