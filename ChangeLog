@@ -4,6 +4,15 @@
 	  listeners were added; this fix makes the behavior documented in
 	  bug #896706 a little worse, but fixes bug #915913
 
+	* src/sp-use.cpp: SPUse does not need to manually detach its child
+	  anymore, so now it doesn't
+
+	* src/sp-object.cpp: detach our SPRepr listener before we start
+	  releasing our children, which makes listener removal faster (since
+	  we are then always removing from the beginning of the listener
+	  list -- i.e. removing in roughly the order in which they were added)
+	  This should help bug #896706 a little more.
+
 2004-03-14  rejon <jon@protofunk.org>
 
     * src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 

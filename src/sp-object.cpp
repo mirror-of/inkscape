@@ -471,6 +471,8 @@ sp_object_invoke_release (SPObject *object)
 	g_assert (object->document);
 	g_assert (object->repr);
 
+	sp_repr_remove_listener_by_data (object->repr, object);
+
 	g_signal_emit (G_OBJECT (object), object_signals[RELEASE], 0);
 
 	/* all hrefs should be released by the "release" handler */
@@ -489,7 +491,6 @@ sp_object_invoke_release (SPObject *object)
 		object->style = sp_style_unref (object->style);
 	}
 
-	sp_repr_remove_listener_by_data (object->repr, object);
 	sp_repr_unref (object->repr);
 
 	object->document = NULL;

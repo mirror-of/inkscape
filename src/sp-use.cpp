@@ -141,19 +141,15 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 static void
 sp_use_release (SPObject *object)
 {
-	SPUse *use;
+	if (((SPObjectClass *) parent_class)->release)
+		((SPObjectClass *) parent_class)->release (object);
 
-	use = SP_USE (object);
+	SPUse *use=SP_USE (object);
 
-	if (use->child) {
-		sp_object_detach_unref (SP_OBJECT (object), use->child);
-		use->child = NULL;
-	}
+	use->child = NULL;
 
 	g_free (use->href);
 
-	if (((SPObjectClass *) parent_class)->release)
-		((SPObjectClass *) parent_class)->release (object);
 }
 
 static void
