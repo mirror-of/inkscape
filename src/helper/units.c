@@ -94,13 +94,8 @@ sp_unit_get_by_name (const gchar *name)
 	g_return_val_if_fail (name != NULL, NULL);
 
 	for (i = 0; i < INK_STATIC_CAST(gint, sp_num_units); i++) {
-#ifndef WIN32
-		if (!strcasecmp (name, sp_units[i].name)) return &sp_units[i];
-		if (!strcasecmp (name, sp_units[i].plural)) return &sp_units[i];
-#else
-		if (!stricmp (name, sp_units[i].name)) return &sp_units[i];
-		if (!stricmp (name, sp_units[i].plural)) return &sp_units[i];
-#endif
+		if (!g_strcasecmp (name, sp_units[i].name)) return &sp_units[i];
+		if (!g_strcasecmp (name, sp_units[i].plural)) return &sp_units[i];
 	}
 
 	return NULL;
@@ -114,13 +109,8 @@ sp_unit_get_by_abbreviation (const gchar *abbreviation)
 	g_return_val_if_fail (abbreviation != NULL, NULL);
 
 	for (i = 0; i < INK_STATIC_CAST(gint, sp_num_units); i++) {
-#ifndef WIN32
-		if (!strcasecmp (abbreviation, sp_units[i].abbr)) return &sp_units[i];
-		if (!strcasecmp (abbreviation, sp_units[i].abbr_plural)) return &sp_units[i];
-#else
-		if (!stricmp (abbreviation, sp_units[i].abbr)) return &sp_units[i];
-		if (!stricmp (abbreviation, sp_units[i].abbr_plural)) return &sp_units[i];
-#endif
+		if (!g_strcasecmp (abbreviation, sp_units[i].abbr)) return &sp_units[i];
+		if (!g_strcasecmp (abbreviation, sp_units[i].abbr_plural)) return &sp_units[i];
 	}
 
 	return NULL;

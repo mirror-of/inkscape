@@ -20,11 +20,7 @@
 
 #include "svg.h"
 
-#ifdef WIN32
 #include <glib.h>
-#define snprintf g_snprintf
-#define strcasecmp _stricmp
-#endif
 
 #ifndef MAX
 #define MAX(a,b) ((a < b) ? (b) : (a))
@@ -36,11 +32,11 @@ sp_svg_boolean_read (const gchar *str, unsigned int *val)
 	unsigned int v;
 	char *e;
 	if (!val) return 0;
-	if (!strcasecmp (str, "true") || !strcasecmp (str, "yes")) {
+	if (!g_strcasecmp (str, "true") || !g_strcasecmp (str, "yes")) {
 		*val = 1;
 		return 1;
 	}
-	if (!strcasecmp (str, "false") || !strcasecmp (str, "no")) {
+	if (!g_strcasecmp (str, "false") || !g_strcasecmp (str, "no")) {
 		*val = 0;
 		return 1;
 	}
@@ -308,6 +304,6 @@ sp_svg_read_percentage (const char * str, double def)
 int
 sp_svg_write_percentage (char * buf, int buflen, double val)
 {
-	return snprintf (buf, buflen, "%g%%", val * 100.0);
+	return g_snprintf (buf, buflen, "%g%%", val * 100.0);
 }
 

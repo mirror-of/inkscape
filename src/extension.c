@@ -14,6 +14,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <glib.h>
 #include "svg/svg.h"
 #include "xml/repr-private.h"
 #include "document.h"
@@ -99,9 +100,8 @@ void sp_extension(GtkWidget * widget)
 
         rl = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 
-#ifndef WIN32
 	/* Store SVG text to a temporary file */
-	if (mkstemp(tempfilename) == -1) {
+	if (g_mkstemp(tempfilename) == -1) {
 	  /* Error, couldn't create temporary filename */
 	  if (errno == EINVAL) {
 	    /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -116,24 +116,6 @@ void sp_extension(GtkWidget * widget)
 	    exit(-1);
 	  }
 	}
-#else
-	/* Store SVG text to a temporary file */
-	if (_mktemp(tempfilename) == -1) {
-	  /* Error, couldn't create temporary filename */
-	  if (errno == EINVAL) {
-	    /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
-	    perror("extension.c:  template for filenames is misconfigured.\n");
-	    exit(-1);	    
-	  } else if (errno == EEXIST) {
-	    /* Now the  contents of template are undefined. */
-	    perror("extension.c:  Could not create a unique temporary filename\n");
-	    return;
-	  } else {
-	    perror("extension.c:  Unknown error creating temporary filename\n");
-	    exit(-1);
-	  }
-	}
-#endif
 
 	sp_repr_save_file(sp_document_repr_doc (document), tempfilename);
 
@@ -165,9 +147,8 @@ void sp_extension(GtkWidget * widget)
 	  return;
 	}
 
-#ifndef WIN32
 	/* Store SVG text to a temporary file */
-	if (mkstemp(tempfilename2) == -1) {
+	if (g_mkstemp(tempfilename2) == -1) {
 	  /* Error, couldn't create temporary filename */
 	  if (errno == EINVAL) {
 	    /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -182,24 +163,6 @@ void sp_extension(GtkWidget * widget)
 	    exit(-1);
 	  }
 	}
-#else
-	/* Store SVG text to a temporary file */
-	if (_mktemp(tempfilename2) == -1) {
-	  /* Error, couldn't create temporary filename */
-	  if (errno == EINVAL) {
-	    /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
-	    perror("extension.c:  template for filenames is misconfigured.\n");
-	    exit(-1);	    
-	  } else if (errno == EEXIST) {
-	    /* Now the  contents of template are undefined. */
-	    perror("extension.c:  Could not create a unique temporary filename\n");
-	    return;
-	  } else {
-	    perror("extension.c:  Unknown error creating temporary filename\n");
-	    exit(-1);
-	  }
-	}
-#endif
 
 	pfile = fopen(tempfilename2, "w");
 
