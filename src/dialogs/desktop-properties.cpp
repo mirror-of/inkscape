@@ -55,6 +55,7 @@
 #include "../xml/repr-private.h"
 
 #include "desktop-properties.h"
+#include "svg/stringstream.h"
 
 
 static void sp_dtw_activate_desktop    ( Inkscape::Application *inkscape, 
@@ -233,7 +234,7 @@ sp_doc_dialog_whatever_changed ( GtkAdjustment *adjustment, GtkWidget *dialog )
     SPRepr *repr;
     SPUnitSelector *us;
     const gchar *key;
-    gchar c[32];
+    Inkscape::SVGOStringStream os;
 
     if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
@@ -251,13 +252,12 @@ sp_doc_dialog_whatever_changed ( GtkAdjustment *adjustment, GtkWidget *dialog )
      */
     const SPUnit *unit = sp_unit_selector_get_unit (us);
     if (!strcmp(unit->abbr, "m")) {
-        g_snprintf (c, 32, "%g%s", 100*adjustment->value, "cm");
+		os << 100*adjustment->value << "cm";
     } else {
-        g_snprintf ( c, 32, "%g%s", adjustment->value, unit->abbr);
+		os << adjustment->value << unit->abbr;
     }
 
-
-    sp_repr_set_attr (repr, key, c);
+    sp_repr_set_attr (repr, key, os.str().c_str());
 
     /* Save this for later 
     if (!strcmp(key, "width") || !strcmp(key, "height")) {
