@@ -419,13 +419,13 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc)
 	zm = gtk_menu_new ();
 	gtk_widget_show (zm);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (zi), zm);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_1_1);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_1_2);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_2_1);
+	sp_ui_menu_append_item (GTK_MENU (zm), NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_SELECTION);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_DRAWING);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_PAGE);
-	sp_ui_menu_append_item (GTK_MENU (zm), NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_1_2);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_1_1);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (zm), SP_VERB_ZOOM_2_1);
 	/* View:New View*/
 	sp_ui_menu_append_item (menu, NULL, _("New View"), G_CALLBACK(sp_ui_new_view), NULL);
 	/* View:New Preview*/
