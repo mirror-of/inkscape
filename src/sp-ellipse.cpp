@@ -242,6 +242,8 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 
 	bpath[i].code = NR_END;
 	SPCurve *c = sp_curve_new_from_bpath(nr_artpath_affine(bpath, aff));
+	g_assert(c != NULL);
+	
 	sp_shape_set_curve_insync ((SPShape *) ellipse, c, TRUE);
 	sp_curve_unref (c);
 }

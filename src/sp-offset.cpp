@@ -336,6 +336,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
         
         bpath = sp_svg_read_path (offset->original);
         curve = sp_curve_new_from_bpath (bpath);	// curve se chargera de detruire bpath
+	g_assert (curve != NULL);
         offset->originalPath = bpath_to_liv_path (curve->bpath);
         sp_curve_unref (curve);
         
@@ -604,6 +605,7 @@ sp_offset_set_shape (SPShape * shape)
     if ( res_d ) {
       NArtBpath *bpath = sp_svg_read_path (res_d);
       SPCurve *c = sp_curve_new_from_bpath (bpath);
+      g_assert(c != NULL);
       sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
       sp_curve_unref (c);
     }
@@ -852,6 +854,7 @@ sp_offset_set_shape (SPShape * shape)
     
     NArtBpath *bpath = sp_svg_read_path (res_d);
     SPCurve *c = sp_curve_new_from_bpath (bpath);
+    g_assert(c != NULL);
     sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
     sp_curve_unref (c);
     
@@ -1139,6 +1142,7 @@ sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
     
     bpath = sp_svg_read_path (newval);
     curve = sp_curve_new_from_bpath (bpath);	// curve se chargera de detruire bpath
+    g_assert(curve != NULL);
     orig = bpath_to_liv_path (curve->bpath);
     sp_curve_unref (curve);
   }
