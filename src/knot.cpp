@@ -34,15 +34,13 @@
 			 GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | \
 			 GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)
 
-#define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
-
-static int nograb = FALSE;
+static bool nograb = false;
 
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
-static gboolean within_tolerance = FALSE;
+static bool within_tolerance = false;
 
-gint transform_escaped = 0; // if non-zero, resize or rotate was canceled by esc
+static bool transform_escaped = false; // true iff resize or rotate was cancelled by esc.
 
 enum {
 	PROP_0,
@@ -472,7 +470,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
-			within_tolerance = TRUE;
+			within_tolerance = true;
 
 			sp_desktop_w2d_xy_point (knot->desktop, &p, event->button.x, event->button.y);
 			knot->hx = p.x - knot->x;
@@ -491,7 +489,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	case GDK_BUTTON_RELEASE:
 		if (event->button.button == 1) {
 			if (transform_escaped) {
-				transform_escaped = 0;
+				transform_escaped = false;
 				consumed = TRUE;
 			} else {
 				sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
@@ -518,12 +516,13 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (grabbed) {
-			NRPoint p;
-			NRPoint fp;
-
-			if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+			consumed = TRUE;
+			if ( within_tolerance
+			     && ( abs( (gint) event->motion.x - xp ) < tolerance )
+			     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
 				break; // do not drag if we're within tolerance from origin
-			within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+			}
+			within_tolerance = false; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
 
 			if (!moved) {
 				g_signal_emit (G_OBJECT (knot),
@@ -533,12 +532,13 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 					SP_KNOT_DRAGGING,
 					TRUE);
 			}
+			NRPoint fp;
 			sp_desktop_w2d_xy_point (knot->desktop, &fp, event->motion.x, event->motion.y);
+			NRPoint p;
 			p.x = fp.x - knot->hx;
 			p.y = fp.y - knot->hy;
 			sp_knot_request_position (knot, &p, event->motion.state);
 			moved = TRUE;
-			consumed = TRUE;
 		}
 		break;
 	case GDK_ENTER_NOTIFY:
@@ -565,7 +565,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 					       event->button.state);
 				sp_document_undo (SP_DT_DOCUMENT (knot->desktop));
 				sp_view_set_statusf_flash (SP_VIEW(knot->desktop), "Knot drag cancelled.");
-				transform_escaped = 1;
+				transform_escaped = true;
 				consumed = TRUE;
 			} 
 			grabbed = FALSE;

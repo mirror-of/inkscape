@@ -1,5 +1,9 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/knot.cpp (sp_knot_handler): Fix bug where event wasn't
+	getting consumed.
+	Get rid of hypot macro.
+
 	* src/svg/svg-affine.cpp (sp_svg_transform_write): Add assertions
 	that buffer overflow hasn't occurred.
 
