@@ -931,6 +931,7 @@ sp_ui_text_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
         Inkscape::Verb::get(SP_VERB_NONE),
         Inkscape::Verb::get(SP_VERB_SELECTION_TEXTTOPATH),
+        Inkscape::Verb::get(SP_VERB_SELECTION_TEXTFROMPATH),
 
         Inkscape::Verb::get(SP_VERB_LAST)
     };

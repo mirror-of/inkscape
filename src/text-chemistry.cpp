@@ -112,7 +112,7 @@ text_put_on_path (void)
 	sp_repr_add_child (SP_OBJECT_REPR(text), textpath, NULL);
 
 	for ( GSList *i = text_reprs ; i ; i = i->next ) {
-		// make a copy of each text children
+		// make a copy of each text child
 		SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
 		// We cannot have multiline in textpath, so remove line attrs from tspans
 		if (!strcmp (sp_repr_name (copy), "tspan")) {
@@ -128,6 +128,61 @@ text_put_on_path (void)
 
 	sp_document_done(SP_DT_DOCUMENT(desktop));
 	g_slist_free(text_reprs);
+}
+
+void 
+text_remove_from_path (void)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    if (selection->isEmpty()) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text on path</b> to remove it from path."));
+        return;
+    }
+
+    bool did = false;
+
+    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
+         items != NULL;
+         items = items->next) {
+
+        if (!SP_IS_TEXT_TEXTPATH (SP_OBJECT (items->data))) {
+            continue;
+        }
+
+        SPObject *text = SP_OBJECT (items->data);
+        SPObject *tp = sp_object_first_child(SP_OBJECT (items->data));
+
+        did = true;
+
+        // make a list of textpath children
+        GSList *tp_reprs = NULL;
+        for (SPObject *o = SP_OBJECT(tp)->children; o != NULL; o = o->next) {
+            tp_reprs = g_slist_prepend (tp_reprs, SP_OBJECT_REPR (o));
+        }
+
+        for ( GSList *i = tp_reprs ; i ; i = i->next ) {
+            // make a copy of each textpath child
+            SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
+            // remove the old repr from under textpath
+            sp_repr_remove_child(SP_OBJECT_REPR(tp), (SPRepr *) i->data); 
+            // put its copy into under textPath
+            sp_repr_add_child (SP_OBJECT_REPR(text), copy, NULL); // fixme: copy id
+        }
+
+        //remove textpath
+        tp->deleteObject();
+        g_slist_free(tp_reprs);
+    }
+
+    if (!did) {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
+    } else {
+        selection->setItemList (g_slist_copy((GSList *) selection->itemList())); // reselect to update statusbar description
+        sp_document_done(SP_DT_DOCUMENT(desktop));
+    }
 }
 
 

@@ -769,6 +769,9 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_SELECTION_TEXTTOPATH:
             text_put_on_path ();
             break;
+        case SP_VERB_SELECTION_TEXTFROMPATH:
+            text_remove_from_path ();
+            break;
 
         case SP_VERB_SELECTION_UNION:
             sp_selected_path_union ();
@@ -1474,8 +1477,10 @@ Verb * Verb::_base_verbs[] = {
         N_("Group selected objects"), "selection_group"),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"),
         N_("Ungroup selected group(s)"), "selection_ungroup"),
-    new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put text on path"),
+    new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put on path"),
         N_("Put text on path"), NULL),
+    new SelectionVerb(SP_VERB_SELECTION_TEXTFROMPATH, "SelectionTextFromPath", N_("_Remove from path"),
+        N_("Remove text from path"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"),
         N_("Union of selected objects"), "union"),
     new SelectionVerb(SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("_Intersection"),

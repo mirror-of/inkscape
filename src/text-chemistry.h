@@ -15,6 +15,7 @@
 #include "forward.h"
 
 void text_put_on_path (void);
+void text_remove_from_path (void);
 
 
 
