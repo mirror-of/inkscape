@@ -109,6 +109,21 @@ struct SPIXmlSpace {
 	guint value : 1;
 };
 
+class SPObject;
+
+/*
+ * Refcounting
+ *
+ * Owner is here for debug reasons, you can set it to NULL safely
+ * Ref should return object, NULL is error, unref return always NULL
+ */
+
+SPObject *sp_object_ref (SPObject *object, SPObject *owner);
+SPObject *sp_object_unref (SPObject *object, SPObject *owner);
+
+SPObject *sp_object_href (SPObject *object, gpointer owner);
+SPObject *sp_object_hunref (SPObject *object, gpointer owner);
+
 struct SPObject : public GObject {
 	unsigned int cloned : 1;
 	unsigned int uflags : 8;
@@ -129,7 +144,22 @@ struct SPObject : public GObject {
 		return _delete_signal.connect(slot);
 	}
 
+	/* successor is the SPObject which has replaced this one (if any);
+	 * it is mainly useful for ensuring we can correctly perform a
+	 * series of moves or deletes, even if the objects in question
+	 * have been replaced in the middle of the sequence of operations.
+	 */
+	SPObject *successor() { return _successor; }
+	void setSuccessor(SPObject *successor) {
+		g_assert(successor != NULL);
+		g_assert(_successor == NULL);
+		g_assert(successor->_successor == NULL);
+		sp_object_ref(successor, NULL);
+		_successor = successor;
+	}
+
 	SigC::Signal1<void, SPObject *> _delete_signal;
+	SPObject *_successor;
 };
 
 struct SPObjectClass {
@@ -159,19 +189,6 @@ struct SPObjectClass {
 
 	SPRepr * (* write) (SPObject *object, SPRepr *repr, unsigned int flags);
 };
-
-/*
- * Refcounting
- *
- * Owner is here for debug reasons, you can set it to NULL safely
- * Ref should return object, NULL is error, unref return always NULL
- */
-
-SPObject *sp_object_ref (SPObject *object, SPObject *owner);
-SPObject *sp_object_unref (SPObject *object, SPObject *owner);
-
-SPObject *sp_object_href (SPObject *object, gpointer owner);
-SPObject *sp_object_hunref (SPObject *object, gpointer owner);
 
 /*
  * Attaching/detaching

@@ -4,6 +4,14 @@
 	  attempting to do everything (wrongly) ourselves; among other
 	  things, <use> transform attributes weren't getting written
 
+	* src/sp-object.h, src/sp-object.cpp:
+	  designate a "successor" object so we still perform as
+	  expected if objects are replaced in the middle of e.g. a 
+	  bulk delete operation
+
+	* src/sp-use.cpp: cleanups and succession logic for <use>
+	  deletion
+
 2004-04-30 njh <njh@mail.csse.monash.edu.au>
 
 	* main.cpp: replaced gtk_init with g_type_init for console mode.

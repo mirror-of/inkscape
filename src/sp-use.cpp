@@ -728,38 +728,46 @@ sp_use_unlink (SPUse *use)
 	if (!repr) return NULL;
 
 	SPRepr *parent = sp_repr_parent (repr);
-	gchar *id = g_strdup (sp_repr_attr (repr, "id"));
-      gint pos = sp_repr_position (repr);
+	gint pos = sp_repr_position (repr);
 	SPDocument *document = SP_OBJECT(use)->document;
 
 	//track the ultimate source of a chain of uses
 	SPItem *orig = sp_use_root (use);
 
-	//calculate the accummulated transform, starting from the original
+	//calculate the accumulated transform, starting from the original
 	NR::Matrix t = sp_use_get_root_transform (use);
  
 	// create copy of the original
 	SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(orig));
 
-	// remove the use
-	SP_OBJECT(use)->deleteObject();
-	
-	// add unlinked object to the document, preserving id, parent, and position
-	sp_repr_append_child (parent, copy);
-      sp_repr_set_position_absolute (copy, pos > 0 ? pos : 0);
-	sp_repr_set_attr (copy, "id", id);
+	// add the duplicate repr just after the existing one
+	sp_repr_add_child(parent, copy, repr);
+
+	// hold onto our SPObject and repr for now
+	sp_object_ref(SP_OBJECT(use), NULL);
+	sp_repr_ref(repr);
+
+	// remove ourselves, not propagating delete events to avoid a
+	// chain-reaction with other elements that might reference us
+	SP_OBJECT(use)->deleteObject(false);
+
+	// give the copy our old id and let go of our old repr
+	sp_repr_set_attr (copy, "id", sp_repr_attr(repr, "id"));
+	sp_repr_unref(repr);
 
 	// retrieve the SPItem of the resulting repr
 	SPObject *unlinked = sp_document_lookup_id (document, sp_repr_attr (copy, "id"));
-	SPItem *item = SP_ITEM(unlinked);
+	// establish the succession and let go of our object
+	SP_OBJECT(use)->setSuccessor(unlinked);
+	sp_object_unref(SP_OBJECT(use), NULL);
 
+	SPItem *item = SP_ITEM(unlinked);
 	// set the accummulated transform
 	{
 		NRMatrix ctrans = t.operator const NRMatrix&();
 		sp_item_write_transform (item, SP_OBJECT_REPR (item), &ctrans);
 	}
-
-	return SP_ITEM (unlinked);
+	return item;
 }
 
 SPItem *

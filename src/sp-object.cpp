@@ -148,12 +148,18 @@ sp_object_init (SPObject * object)
 	object->style = NULL;
 
 	new (&object->_delete_signal) SigC::Signal1<void, SPObject *>();
+	object->_successor = NULL;
 }
 
 static void
 sp_object_finalize (GObject * object)
 {
 	SPObject *spobject=(SPObject *)object;
+
+	if (spobject->_successor) {
+		sp_object_unref(spobject->_successor, NULL);
+		spobject->_successor = NULL;
+	}
 
 	if (((GObjectClass *) (parent_class))->finalize) {
 		(* ((GObjectClass *) (parent_class))->finalize) (object);
@@ -223,6 +229,10 @@ void SPObject::deleteObject(bool propagate) {
 	SPRepr *repr=SP_OBJECT_REPR(this);
 	if (repr && sp_repr_parent(repr)) {
 		sp_repr_unparent(repr);
+	}
+
+	if (_successor) {
+		_successor->deleteObject(propagate);
 	}
 }
 
