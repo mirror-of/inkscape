@@ -172,7 +172,6 @@ void sp_edit_select_all()
             selection->addRepr(repr);
         items = g_slist_remove(items, items->data);
     }
-    sp_document_done(doc);
 }
 
 static void
