@@ -20,59 +20,18 @@
 Shape::Shape (void)
 {
   leftX = topY = rightX = bottomY = 0;
-  nbPt = maxPt = 0;
-  pts = NULL;
-  nbAr = maxAr = 0;
 
   flags = 0;
   type = shape_polygon;
-
-  pData = NULL;
-  eData = NULL;
-  ebData = NULL;
-  swsData = NULL;
-  swdData = NULL;
-  swrData = NULL;
-  qrsData = NULL;
-  vorpData = NULL;
-  voreData = NULL;
-}
-Shape::~Shape (void)
-{
-  if (maxPt > 0)
-    {
-      free (pts);
-    }
-  nbPt = maxPt = 0;
-  pts = NULL;
-  nbAr = maxAr = 0;
-  if (eData)
-    free (eData);
-  if (ebData)
-    free (ebData);
-  if (swsData)
-    free (swsData);
-  if (swdData)
-    free (swdData);
-  if (swrData)
-    free (swrData);
-  if (qrsData)
-    free (qrsData);
-  if (pData)
-    free (pData);
-  if (vorpData)
-    free (vorpData);
-  if (voreData)
-    free (voreData);
 }
 
 void Shape::Affiche(void)
 {
-  printf("sh=%p nbPt=%i nbAr=%i\n",this,nbPt,nbAr); // localizing ok
-  for (int i=0;i<nbPt;i++) {
+  printf("sh=%p pts.size()=%i aretes.size()=%i\n",this,pts.size(),aretes.size()); // localizing ok
+  for (unsigned i=0;i<pts.size();i++) {
     printf("pt %i : x=(%f %f) dI=%i dO=%i\n",i,pts[i].x[0],pts[i].x[1],pts[i].dI,pts[i].dO); // localizing ok
   }
-  for (int i=0;i<nbAr;i++) {
+  for (unsigned i=0;i<aretes.size();i++) {
     printf("ar %i : dx=(%f %f) st=%i en=%i\n",i,aretes[i].dx[0],aretes[i].dx[1],aretes[i].st,aretes[i].en); // localizing ok
   }
 }
@@ -82,15 +41,10 @@ Shape::MakePointData (bool nVal)
 {
   if (nVal)
     {
-      if (HasPointsData ())
-	{
-	}
-      else
+      if (!HasPointsData ())
 	{
 	  flags |= has_points_data;
-	  if (pData)
-	    free (pData);
-	  pData = (point_data *) malloc (maxPt * sizeof (point_data));
+	  pData.resize(pts.size());
 	}
     }
   else
@@ -98,14 +52,7 @@ Shape::MakePointData (bool nVal)
       if (HasPointsData ())
 	{
 	  flags &= ~(has_points_data);
-	  if (pData)
-	    {
-	      free (pData);
-	      pData = NULL;
-	    }
-	}
-      else
-	{
+	  std::vector<point_data>().swap(pData);
 	}
     }
 }
@@ -114,15 +61,10 @@ Shape::MakeEdgeData (bool nVal)
 {
   if (nVal)
     {
-      if (HasEdgesData ())
-	{
-	}
-      else
+      if (!HasEdgesData ())
 	{
 	  flags |= has_edges_data;
-	  if (eData)
-	    free (eData);
-	  eData = (edge_data *) malloc (maxAr * sizeof (edge_data));
+	  eData.resize(aretes.size());
 	}
     }
   else
@@ -130,14 +72,7 @@ Shape::MakeEdgeData (bool nVal)
       if (HasEdgesData ())
 	{
 	  flags &= ~(has_edges_data);
-	  if (eData)
-	    {
-	      free (eData);
-	      eData = NULL;
-	    }
-	}
-      else
-	{
+	  std::vector<edge_data>().swap(eData);
 	}
     }
 }
@@ -146,15 +81,10 @@ Shape::MakeRasterData (bool nVal)
 {
   if (nVal)
     {
-      if (HasRasterData ())
-	{
-	}
-      else
+      if (!HasRasterData ())
 	{
 	  flags |= has_raster_data;
-	  if (swrData)
-	    free (swrData);
-	  swrData = (raster_data *) malloc (maxAr * sizeof (raster_data));
+	  swrData.resize(aretes.size());
 	}
     }
   else
@@ -162,14 +92,7 @@ Shape::MakeRasterData (bool nVal)
       if (HasRasterData ())
 	{
 	  flags &= ~(has_raster_data);
-	  if (swrData)
-	    {
-	      free (swrData);
-	      swrData = NULL;
-	    }
-	}
-      else
-	{
+	  std::vector<raster_data>().swap(swrData);
 	}
     }
 }
@@ -178,16 +101,10 @@ Shape::MakeQuickRasterData (bool nVal)
 {
   if (nVal)
     {
-      if (HasQuickRasterData ())
-	{
-	}
-      else
+      if (!HasQuickRasterData ())
 	{
 	  flags |= has_quick_raster_data;
-	  if (qrsData)
-	    free (qrsData);
-	  qrsData =
-	    (quick_raster_data *) malloc (maxAr * sizeof (quick_raster_data));
+	  qrsData.resize(aretes.size());
 	}
     }
   else
@@ -195,14 +112,7 @@ Shape::MakeQuickRasterData (bool nVal)
       if (HasQuickRasterData ())
 	{
 	  flags &= ~(has_quick_raster_data);
-	  if (qrsData)
-	    {
-	      free (qrsData);
-	      qrsData = NULL;
-	    }
-	}
-      else
-	{
+	  std::vector<quick_raster_data>().swap(qrsData);
 	}
     }
 }
@@ -211,16 +121,10 @@ Shape::MakeSweepSrcData (bool nVal)
 {
   if (nVal)
     {
-      if (HasSweepSrcData ())
-	{
-	}
-      else
+      if (!HasSweepSrcData ())
 	{
 	  flags |= has_sweep_src_data;
-	  if (swsData)
-	    free (swsData);
-	  swsData =
-	    (sweep_src_data *) malloc (maxAr * sizeof (sweep_src_data));
+	  swsData.resize(aretes.size());
 	}
     }
   else
@@ -228,14 +132,7 @@ Shape::MakeSweepSrcData (bool nVal)
       if (HasSweepSrcData ())
 	{
 	  flags &= ~(has_sweep_src_data);
-	  if (swsData)
-	    {
-	      free (swsData);
-	      swsData = NULL;
-	    }
-	}
-      else
-	{
+	  std::vector<sweep_src_data>().swap(swsData);
 	}
     }
 }
@@ -244,16 +141,10 @@ Shape::MakeSweepDestData (bool nVal)
 {
   if (nVal)
     {
-      if (HasSweepDestData ())
-	{
-	}
-      else
+      if (!HasSweepDestData ())
 	{
 	  flags |= has_sweep_dest_data;
-	  if (swdData)
-	    free (swdData);
-	  swdData =
-	    (sweep_dest_data *) malloc (maxAr * sizeof (sweep_dest_data));
+	  swdData.resize(aretes.size());
 	}
     }
   else
@@ -261,14 +152,7 @@ Shape::MakeSweepDestData (bool nVal)
       if (HasSweepDestData ())
 	{
 	  flags &= ~(has_sweep_dest_data);
-	  if (swdData)
-	    {
-	      free (swdData);
-	      swdData = NULL;
-	    }
-	}
-      else
-	{
+	  std::vector<sweep_dest_data>().swap(swdData);
 	}
     }
 }
@@ -277,15 +161,10 @@ Shape::MakeBackData (bool nVal)
 {
   if (nVal)
     {
-      if (HasBackData ())
-	{
-	}
-      else
+      if (!HasBackData ())
 	{
 	  flags |= has_back_data;
-	  if (ebData)
-	    free (ebData);
-	  ebData = (back_data *) malloc (maxAr * sizeof (back_data));
+	  ebData.resize(aretes.size());
 	}
     }
   else
@@ -293,14 +172,7 @@ Shape::MakeBackData (bool nVal)
       if (HasBackData ())
 	{
 	  flags &= ~(has_back_data);
-	  if (ebData)
-	    {
-	      free (ebData);
-	      ebData = NULL;
-	    }
-	}
-      else
-	{
+	  std::vector<back_data>().swap(ebData);
 	}
     }
 }
@@ -309,19 +181,11 @@ Shape::MakeVoronoiData (bool nVal)
 {
   if (nVal)
     {
-      if (HasVoronoiData ())
-	{
-	}
-      else
+      if (!HasVoronoiData ())
 	{
 	  flags |= has_voronoi_data;
-	  if (vorpData)
-	    free (vorpData);
-	  if (voreData)
-	    free (voreData);
-	  vorpData =
-	    (voronoi_point *) malloc (maxPt * sizeof (voronoi_point));
-	  voreData = (voronoi_edge *) malloc (maxAr * sizeof (voronoi_edge));
+	  vorpData.resize(pts.size());
+	  voreData.resize(aretes.size());
 	}
     }
   else
@@ -329,19 +193,8 @@ Shape::MakeVoronoiData (bool nVal)
       if (HasVoronoiData ())
 	{
 	  flags &= ~(has_voronoi_data);
-	  if (vorpData)
-	    {
-	      free (vorpData);
-	      vorpData = NULL;
-	    }
-	  if (voreData)
-	    {
-	      free (voreData);
-	      voreData = NULL;
-	    }
-	}
-      else
-	{
+	  std::vector<voronoi_point>().swap(vorpData);
+	  std::vector<voronoi_edge>().swap(voreData);
 	}
     }
 }
@@ -371,102 +224,82 @@ Shape::Copy (Shape * who)
       SetFlag (has_sweep_data, false);
     }
 
-  Reset (who->nbPt, who->nbAr);
-  nbPt = who->nbPt;
-  nbAr = who->nbAr;
+  Reset (who->pts.size(), who->aretes.size());
   type = who->type;
-  flags = who->flags & (need_points_sorting + need_edges_sorting);
+  flags = who->flags & (need_points_sorting | need_edges_sorting);
 
-  memcpy (pts, who->pts, nbPt * sizeof (dg_point));
+  pts = who->pts;
   aretes = who->aretes;
 }
 
 void
 Shape::Reset (int n, int m)
 {
-  nbPt = 0;
-  nbAr = 0;
   type = shape_polygon;
-  if (n > maxPt)
-    {
-      maxPt = n;
-      pts = (dg_point *) realloc (pts, maxPt * sizeof (dg_point));
-      if (HasPointsData ())
-	pData = (point_data *) realloc (pData, maxPt * sizeof (point_data));
-      if (HasVoronoiData ())
-	vorpData =
-	  (voronoi_point *) realloc (vorpData,
-				     maxPt * sizeof (voronoi_point));
-    }
-  if (m > maxAr)
-    {
-      maxAr = m;
-      aretes.reserve(maxAr);
-      if (HasEdgesData ())
-	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
-      if (HasSweepDestData ())
-	swdData =
-	  (sweep_dest_data *) realloc (swdData,
-				       maxAr * sizeof (sweep_dest_data));
-      if (HasSweepSrcData ())
-	swsData =
-	  (sweep_src_data *) realloc (swsData,
-				      maxAr * sizeof (sweep_src_data));
-      if (HasBackData ())
-	ebData = (back_data *) realloc (ebData, maxAr * sizeof (back_data));
-      if (HasVoronoiData ())
-	voreData =
-	  (voronoi_edge *) realloc (voreData, maxAr * sizeof (voronoi_edge));
-    }
+
+  pts.resize(n);
   aretes.resize(m);
+
+  _resizeAuxVectors();
+
   SetFlag (need_points_sorting, false);
   SetFlag (need_edges_sorting, false);
+}
+
+void Shape::_resizeAuxVectors() {
+  
+  if (HasPointsData()) {
+    pData.resize(pts.size());
+  }
+  if (HasEdgesData()) {
+    eData.resize(aretes.size());
+  }
+  if (HasSweepSrcData()) {
+    swsData.resize(aretes.size());
+  }
+  if (HasSweepDestData()) {
+    swdData.resize(aretes.size());
+  }
+  if (HasBackData()) {
+    ebData.resize(aretes.size());
+  }
+  if (HasRasterData()) {
+    swrData.resize(aretes.size());
+  }
+  if (HasQuickRasterData()) {
+    qrsData.resize(aretes.size());
+  }
+  if (HasVoronoiData()) {
+    vorpData.resize(pts.size());
+    voreData.resize(aretes.size());
+  }
 }
 
 int
 Shape::AddPoint (const NR::Point x)
 {
-  if (nbPt >= maxPt)
-    {
-      maxPt = 2 * nbPt + 1;
-      pts = (dg_point *) realloc (pts, maxPt * sizeof (dg_point));
-      if (HasPointsData ())
-	pData = (point_data *) realloc (pData, maxPt * sizeof (point_data));
-      if (HasVoronoiData ())
-	vorpData =
-	  (voronoi_point *) realloc (vorpData,
-				     maxPt * sizeof (voronoi_point));
-    }
-  int n = nbPt++;
-  pts[n].x = x;
-  pts[n].dI = pts[n].dO = 0;
-  pts[n].firstA = pts[n].lastA = -1;
+  pts.push_back(dg_point(x));
   if (HasPointsData ())
     {
-      pData[n].pending = 0;
-      pData[n].edgeOnLeft = -1;
-      pData[n].nextLinkedPoint = -1;
-      pData[n].askForWindingS = NULL;
-      pData[n].askForWindingB = -1;
+      pData.resize(pData.size()+1);
     }
   if (HasVoronoiData ())
     {
-      vorpData[n].value = 0.0;
-      vorpData[n].winding = -2;
+      vorpData.resize(vorpData.size()+1);
     }
   SetFlag (need_points_sorting, true);
-  return n;
+  return pts.size()-1;
 }
 
 void
 Shape::SubPoint (int p)
 {
-  if (p < 0 || p >= nbPt)
+  if (p < 0 || p >= pts.size())
     return;
   SetFlag (need_points_sorting, true);
   int cb;
   cb = pts[p].firstA;
-  while (cb >= 0 && cb < nbAr)
+  while (cb >= 0 && cb < aretes.size())
     {
       if (aretes[cb].st == p)
 	{
@@ -488,9 +321,17 @@ Shape::SubPoint (int p)
 	}
     }
   pts[p].firstA = pts[p].lastA = -1;
-  if (p < nbPt - 1)
-    SwapPoints (p, nbPt - 1);
-  nbPt--;
+  if (p < pts.size() - 1)
+    SwapPoints (p, pts.size() - 1);
+  pts.pop_back();
+  if (HasPointsData ())
+    {
+      pData.pop_back();
+    }
+  if (HasVoronoiData ())
+    {
+      vorpData.pop_back();
+    }
 }
 
 void
@@ -503,20 +344,20 @@ Shape::SwapPoints (int a, int b)
       int cb = pts[a].firstA;
       if (aretes[cb].st == a)
 	{
-	  aretes[cb].st = nbPt;
+	  aretes[cb].st = pts.size();
 	}
       else if (aretes[cb].en == a)
 	{
-	  aretes[cb].en = nbPt;
+	  aretes[cb].en = pts.size();
 	}
       cb = pts[a].lastA;
       if (aretes[cb].st == a)
 	{
-	  aretes[cb].st = nbPt;
+	  aretes[cb].st = pts.size();
 	}
       else if (aretes[cb].en == a)
 	{
-	  aretes[cb].en = nbPt;
+	  aretes[cb].en = pts.size();
 	}
 
       cb = pts[b].firstA;
@@ -539,20 +380,20 @@ Shape::SwapPoints (int a, int b)
 	}
 
       cb = pts[a].firstA;
-      if (aretes[cb].st == nbPt)
+      if (aretes[cb].st == pts.size())
 	{
 	  aretes[cb].st = b;
 	}
-      else if (aretes[cb].en == nbPt)
+      else if (aretes[cb].en == pts.size())
 	{
 	  aretes[cb].en = b;
 	}
       cb = pts[a].lastA;
-      if (aretes[cb].st == nbPt)
+      if (aretes[cb].st == pts.size())
 	{
 	  aretes[cb].st = b;
 	}
-      else if (aretes[cb].en == nbPt)
+      else if (aretes[cb].en == pts.size())
 	{
 	  aretes[cb].en = b;
 	}
@@ -567,11 +408,11 @@ Shape::SwapPoints (int a, int b)
 	  int ncb = NextAt (a, cb);
 	  if (aretes[cb].st == a)
 	    {
-	      aretes[cb].st = nbPt;
+	      aretes[cb].st = pts.size();
 	    }
 	  else if (aretes[cb].en == a)
 	    {
-	      aretes[cb].en = nbPt;
+	      aretes[cb].en = pts.size();
 	    }
 	  cb = ncb;
 	}
@@ -592,12 +433,12 @@ Shape::SwapPoints (int a, int b)
       cb = pts[a].firstA;
       while (cb >= 0)
 	{
-	  int ncb = NextAt (nbPt, cb);
-	  if (aretes[cb].st == nbPt)
+	  unsigned ncb = NextAt (pts.size(), cb);
+	  if (aretes[cb].st == pts.size())
 	    {
 	      aretes[cb].st = b;
 	    }
-	  else if (aretes[cb].en == nbPt)
+	  else if (aretes[cb].en == pts.size())
 	    {
 	      aretes[cb].en = b;
 	    }
@@ -636,16 +477,16 @@ Shape::SwapPoints (int a, int b, int c)
 void
 Shape::SortPoints (void)
 {
-  if (GetFlag (need_points_sorting) && nbPt > 0)
-    SortPoints (0, nbPt - 1);
+  if (GetFlag (need_points_sorting) && pts.size() > 0)
+    SortPoints (0, pts.size() - 1);
   SetFlag (need_points_sorting, false);
 }
 
 void
 Shape::SortPointsRounded (void)
 {
-  if (nbPt > 0)
-    SortPointsRounded (0, nbPt - 1);
+  if (pts.size() > 0)
+    SortPointsRounded (0, pts.size() - 1);
 }
 
 void
@@ -1226,70 +1067,27 @@ Shape::AddEdge (int st, int en)
   if (st < 0 || en < 0)
     return -1;
   type = shape_graph;
-  if (nbAr >= maxAr)
-    {
-      maxAr = 2 * nbAr + 1;
-      aretes.reserve(maxAr);
-      if (HasEdgesData ())
-	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
-      if (HasSweepSrcData ())
-	swsData =
-	  (sweep_src_data *) realloc (swsData,
-				      maxAr * sizeof (sweep_src_data));
-      if (HasSweepDestData ())
-	swdData =
-	  (sweep_dest_data *) realloc (swdData,
-				       maxAr * sizeof (sweep_dest_data));
-      if (HasRasterData ())
-	swrData =
-	  (raster_data *) realloc (swrData, maxAr * sizeof (raster_data));
-      if (HasBackData ())
-	ebData = (back_data *) realloc (ebData, maxAr * sizeof (back_data));
-      if (HasVoronoiData ())
-	voreData =
-	  (voronoi_edge *) realloc (voreData, maxAr * sizeof (voronoi_edge));
-    }
-  int n = nbAr++;
-  aretes.resize(nbAr);
-  aretes[n].st = aretes[n].en = -1;
-  aretes[n].prevS = aretes[n].nextS = -1;
-  aretes[n].prevE = aretes[n].nextE = -1;
+
   if (st >= 0 && en >= 0)
     {
-      aretes[n].dx = pts[en].x - pts[st].x;
+      aretes.push_back(dg_arete(pts[en].x - pts[st].x));
     }
   else
     {
-      aretes[n].dx[0] = aretes[n].dx[1] = 0;
+      aretes.resize(aretes.size()+1);
     }
-  ConnectStart (st, n);
-  ConnectEnd (en, n);
+
+  ConnectStart (st, aretes.size()-1);
+  ConnectEnd (en, aretes.size()-1);
+
   if (HasEdgesData ())
     {
-      eData[n].weight = 1;
-      eData[n].rdx = aretes[n].dx;
+      eData.push_back(edge_data(aretes.back().dx));
     }
-  if (HasSweepSrcData ())
-    {
-      swsData[n].misc = NULL;
-      swsData[n].firstLinkedPoint = -1;
-    }
-  if (HasSweepDestData ())
-    {
-    }
-  if (HasBackData ())
-    {
-      ebData[n].pathID = -1;
-      ebData[n].pieceID = -1;
-      ebData[n].tSt = ebData[n].tEn = 0;
-    }
-  if (HasVoronoiData ())
-    {
-      voreData[n].leF = -1;
-      voreData[n].riF = -1;
-    }
+  _resizeAuxVectors();
+
   SetFlag (need_edges_sorting, true);
-  return n;
+  return aretes.size()-1;
 }
 
 int
@@ -1311,83 +1109,38 @@ Shape::AddEdge (int st, int en, int leF, int riF)
       }
   }
   type = shape_graph;
-  if (nbAr >= maxAr)
-    {
-      maxAr = 2 * nbAr + 1;
-      aretes.reserve(maxAr);
-      if (HasEdgesData ())
-	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
-      if (HasSweepSrcData ())
-	swsData =
-	  (sweep_src_data *) realloc (swsData,
-				      maxAr * sizeof (sweep_src_data));
-      if (HasSweepDestData ())
-	swdData =
-	  (sweep_dest_data *) realloc (swdData,
-				       maxAr * sizeof (sweep_dest_data));
-      if (HasRasterData ())
-	swrData =
-	  (raster_data *) realloc (swrData, maxAr * sizeof (raster_data));
-      if (HasBackData ())
-	ebData = (back_data *) realloc (ebData, maxAr * sizeof (back_data));
-      if (HasVoronoiData ())
-	voreData =
-	  (voronoi_edge *) realloc (voreData, maxAr * sizeof (voronoi_edge));
-    }
-  int n = nbAr++;
-  aretes.resize(nbAr);
-  aretes[n].st = aretes[n].en = -1;
-  aretes[n].prevS = aretes[n].nextS = -1;
-  aretes[n].prevE = aretes[n].nextE = -1;
+
   if (st >= 0 && en >= 0)
     {
-      aretes[n].dx = pts[en].x - pts[st].x;
+      aretes.push_back(dg_arete(pts[en].x - pts[st].x));
     }
   else
     {
-      aretes[n].dx[0] = aretes[n].dx[1] = 0;
+      aretes.resize(aretes.size()+1);
     }
-  ConnectStart (st, n);
-  ConnectEnd (en, n);
-  if (HasEdgesData ())
-    {
-      eData[n].weight = 1;
-      eData[n].rdx = aretes[n].dx;
-    }
-  if (HasSweepSrcData ())
-    {
-      swsData[n].misc = NULL;
-      swsData[n].firstLinkedPoint = -1;
-    }
-  if (HasSweepDestData ())
-    {
-    }
-  if (HasBackData ())
-    {
-      ebData[n].pathID = -1;
-      ebData[n].pieceID = -1;
-      ebData[n].tSt = ebData[n].tEn = 0;
-    }
+  ConnectStart (st, aretes.size()-1);
+  ConnectEnd (en, aretes.size()-1);
   if (HasVoronoiData ())
     {
-      voreData[n].leF = leF;
-      voreData[n].riF = riF;
+      voreData.push_back(voronoi_edge(leF, riF));
     }
+  _resizeAuxVectors();
   SetFlag (need_edges_sorting, true);
-  return n;
+  return aretes.size()-1;
 }
 
 void
 Shape::SubEdge (int e)
 {
-  if (e < 0 || e >= nbAr)
+  if (e < 0 || e >= aretes.size())
     return;
   type = shape_graph;
   DisconnectStart (e);
   DisconnectEnd (e);
-  if (e < nbAr - 1)
-    SwapEdges (e, nbAr - 1);
-  nbAr--;
+  if (e < aretes.size() - 1)
+    SwapEdges (e, aretes.size() - 1);
+  aretes.pop_back();
+  _resizeAuxVectors();
   SetFlag (need_edges_sorting, true);
 }
 
@@ -1443,16 +1196,16 @@ Shape::SwapEdges (int a, int b)
   if (aretes[a].st >= 0)
     {
       if (pts[aretes[a].st].firstA == a)
-	pts[aretes[a].st].firstA = nbAr;
+	pts[aretes[a].st].firstA = aretes.size();
       if (pts[aretes[a].st].lastA == a)
-	pts[aretes[a].st].lastA = nbAr;
+	pts[aretes[a].st].lastA = aretes.size();
     }
   if (aretes[a].en >= 0)
     {
       if (pts[aretes[a].en].firstA == a)
-	pts[aretes[a].en].firstA = nbAr;
+	pts[aretes[a].en].firstA = aretes.size();
       if (pts[aretes[a].en].lastA == a)
-	pts[aretes[a].en].lastA = nbAr;
+	pts[aretes[a].en].lastA = aretes.size();
     }
 
 
@@ -1517,16 +1270,16 @@ Shape::SwapEdges (int a, int b)
 
   if (aretes[a].st >= 0)
     {
-      if (pts[aretes[a].st].firstA == nbAr)
+      if (pts[aretes[a].st].firstA == aretes.size())
 	pts[aretes[a].st].firstA = b;
-      if (pts[aretes[a].st].lastA == nbAr)
+      if (pts[aretes[a].st].lastA == aretes.size())
 	pts[aretes[a].st].lastA = b;
     }
   if (aretes[a].en >= 0)
     {
-      if (pts[aretes[a].en].firstA == nbAr)
+      if (pts[aretes[a].en].firstA == aretes.size())
 	pts[aretes[a].en].firstA = b;
-      if (pts[aretes[a].en].lastA == nbAr)
+      if (pts[aretes[a].en].lastA == aretes.size())
 	pts[aretes[a].en].lastA = b;
     }
 
@@ -1608,8 +1361,8 @@ Shape::SortEdges (void)
     }
   SetFlag (need_edges_sorting, false);
 
-  edge_list *list = (edge_list *) malloc (nbAr * sizeof (edge_list));
-  for (int p = 0; p < nbPt; p++)
+  edge_list *list = (edge_list *) malloc (aretes.size() * sizeof (edge_list));
+  for (unsigned p = 0; p < pts.size(); p++)
     {
       int d = pts[p].dI + pts[p].dO;
       if (d > 1)
@@ -2104,7 +1857,7 @@ Shape::Eulerian (bool directed)
 {
   if (directed)
     {
-      for (int i = 0; i < nbPt; i++)
+      for (unsigned i = 0; i < pts.size(); i++)
 	{
 	  if (pts[i].dI != pts[i].dO)
 	    {
@@ -2114,7 +1867,7 @@ Shape::Eulerian (bool directed)
     }
   else
     {
-      for (int i = 0; i < nbPt; i++)
+      for (unsigned i = 0; i < pts.size(); i++)
 	{
 	  int d = pts[i].dI + pts[i].dO;
 	  if (d % 2 == 1)
@@ -2174,7 +1927,7 @@ Shape::Inverse (int b)
 void
 Shape::CalcBBox (bool strict_degree)
 {
-  if (nbPt <= 0)
+  if (pts.size() <= 0)
   {
     leftX = rightX = topY = bottomY = 0;
     return;
@@ -2182,7 +1935,7 @@ Shape::CalcBBox (bool strict_degree)
   leftX = rightX = pts[0].x[0];
   topY = bottomY = pts[0].x[1];
   bool not_set=true;
-  for (int i = 0; i < nbPt; i++)
+  for (unsigned i = 0; i < pts.size(); i++)
   {
     if ( strict_degree == false || pts[i].dI > 0 || pts[i].dO > 0 ) {
       if ( not_set ) {
@@ -2241,11 +1994,11 @@ Shape::GetFlag (int nFlag)
 */
 bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 {
-  if ( nbPt <= 0 ) {
+  if ( pts.size() <= 0 ) {
     return false;
   }
   
-  /* TODO: Consider using bbox to return early, perhaps conditional on nbPt or nbAr. */
+  /* TODO: Consider using bbox to return early, perhaps conditional on pts.size() or aretes.size(). */
   
   /* Test thePt against pts[i].x for all i. */
   {
@@ -2257,7 +2010,7 @@ bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 * instead.
 */
     double const max_l1 = max_l2 * M_SQRT2;
-    for (int i = 0; i < nbPt; i++) {
+    for (unsigned i = 0; i < pts.size(); i++) {
       NR::Point const offset( thePt - pts[i].x );
       double const l1 = NR::L1(offset);
       if ( ( l1 <= max_l2 )
@@ -2269,7 +2022,7 @@ bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
     }
   }
   
-  for (int i = 0; i < nbAr; i++) {
+  for (unsigned i = 0; i < aretes.size(); i++) {
     if ( aretes[i].st >= 0 &&
          aretes[i].en >= 0 ) {
       NR::Point const st(pts[aretes[i].st].x);
@@ -2297,13 +2050,13 @@ bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 */
 double Shape::Distance(NR::Point const thePt)
 {
-  if ( nbPt <= 0 ) {
+  if ( pts.size() <= 0 ) {
     return 0.0;
   }
   
   double bdot=NR::dot(thePt-pts[0].x,thePt-pts[0].x);
   {
-    for (int i = 0; i < nbPt; i++) {
+    for (unsigned i = 0; i < pts.size(); i++) {
       NR::Point const offset( thePt - pts[i].x );
       double ndot=NR::dot(offset,offset);
       if ( ndot < bdot ) {
@@ -2312,7 +2065,7 @@ double Shape::Distance(NR::Point const thePt)
     }
   }
   
-  for (int i = 0; i < nbAr; i++) {
+  for (unsigned i = 0; i < aretes.size(); i++) {
     if ( aretes[i].st >= 0 &&
          aretes[i].en >= 0 ) {
       NR::Point const st(pts[aretes[i].st].x);
@@ -2345,7 +2098,7 @@ Shape::PtWinding (const NR::Point px) const
 {
   int lr = 0, ll = 0, rr = 0;
   
-  for (int i = 0; i < nbAr; i++)
+  for (unsigned i = 0; i < aretes.size(); i++)
   {
     NR::Point const adir = aretes[i].dx;
 

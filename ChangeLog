@@ -1,5 +1,15 @@
 2004-08-08  MenTaLguY  <mental@rydia.net>
 
+	* src/sp-flowregion.cpp, src/sp-flowtext.cpp, src/sp-offset.cpp,
+	  src/splivarot.cpp, src/display/nr-arena-shape.cpp,
+	  src/livarot/PathConversion.cpp, src/livarot/Shape.cpp,
+	  src/livarot/Shape.h, src/livarot/ShapeDraw.cpp,
+	  src/livarot/ShapeMisc.cpp, src/livarot/ShapeRaster.cpp,
+	  src/livarot/ShapeSweep.cpp, src/livarot/ShapeSweepUtils.cpp:
+
+	  replace ad-hoc realloced arrays with std::vector and deal with
+	  uninitialized data problems that valgrind complained about
+
 	* libgc.supp: valgrind suppression profile for libgc, which necessarily
 	  reads and runs comparisons on a lot of uninitalized data; the present
       form of this file is probably too broad however

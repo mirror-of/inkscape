@@ -34,7 +34,7 @@
 void
 Shape::ConvertToForme (Path * dest)
 {
-  if (nbPt <= 1 || nbAr <= 1)
+  if (pts.size() <= 1 || aretes.size() <= 1)
     return;
   if (Eulerian (true) == false)
     return;
@@ -46,12 +46,12 @@ Shape::ConvertToForme (Path * dest)
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (int i = 0; i < nbPt; i++)
+  for (unsigned i = 0; i < pts.size(); i++)
   {
     pData[i].rx[0] = Round (pts[i].x[0]);
     pData[i].rx[1] = Round (pts[i].x[1]);
   }
-  for (int i = 0; i < nbAr; i++)
+  for (unsigned i = 0; i < aretes.size(); i++)
   {
     eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
   }
@@ -63,7 +63,7 @@ Shape::ConvertToForme (Path * dest)
   // depth-first search implies: we make a stack of edges traversed.
   // precParc: previous in the stack
   // suivParc: next in the stack
-  for (int i = 0; i < nbAr; i++)
+  for (unsigned i = 0; i < aretes.size(); i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -80,13 +80,13 @@ Shape::ConvertToForme (Path * dest)
     int startBord = -1;
     {
       int fi = 0;
-      for (fi = lastPtUsed; fi < nbPt; fi++)
+      for (fi = lastPtUsed; fi < pts.size(); fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
           break;
       }
       lastPtUsed = fi + 1;
-      if (fi < nbPt)
+      if (fi < pts.size())
       {
         int bestB = pts[fi].firstA;
         while (bestB >= 0 && aretes[bestB].st != fi)
@@ -166,7 +166,7 @@ Shape::ConvertToForme (Path * dest)
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < nbPt);
+  while (lastPtUsed < pts.size());
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -179,7 +179,7 @@ Shape::ConvertToForme (Path * dest)
 void
 Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
 {
-  if (nbPt <= 1 || nbAr <= 1)
+  if (pts.size() <= 1 || aretes.size() <= 1)
     return;
 //  if (Eulerian (true) == false)
 //    return;
@@ -196,19 +196,19 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (int i = 0; i < nbPt; i++)
+  for (unsigned i = 0; i < pts.size(); i++)
   {
     pData[i].rx[0] = Round (pts[i].x[0]);
     pData[i].rx[1] = Round (pts[i].x[1]);
   }
-  for (int i = 0; i < nbAr; i++)
+  for (unsigned i = 0; i < aretes.size(); i++)
   {
     eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
   }
   
   SortEdges ();
   
-  for (int i = 0; i < nbAr; i++)
+  for (unsigned i = 0; i < aretes.size(); i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -222,13 +222,13 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
     int startBord = -1;
     {
       int fi = 0;
-      for (fi = lastPtUsed; fi < nbPt; fi++)
+      for (fi = lastPtUsed; fi < pts.size(); fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
           break;
       }
       lastPtUsed = fi + 1;
-      if (fi < nbPt)
+      if (fi < pts.size())
       {
         int bestB = pts[fi].firstA;
         while (bestB >= 0 && aretes[bestB].st != fi)
@@ -319,7 +319,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < nbPt);
+  while (lastPtUsed < pts.size());
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -332,7 +332,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   contStart=NULL;
   nbNest=0;
 
-  if (nbPt <= 1 || nbAr <= 1)
+  if (pts.size() <= 1 || aretes.size() <= 1)
     return;
   //  if (Eulerian (true) == false)
   //    return;
@@ -349,19 +349,19 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (int i = 0; i < nbPt; i++)
+  for (unsigned i = 0; i < pts.size(); i++)
   {
     pData[i].rx[0] = Round (pts[i].x[0]);
     pData[i].rx[1] = Round (pts[i].x[1]);
   }
-  for (int i = 0; i < nbAr; i++)
+  for (unsigned i = 0; i < aretes.size(); i++)
   {
     eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
   }
   
   SortEdges ();
   
-  for (int i = 0; i < nbAr; i++)
+  for (unsigned i = 0; i < aretes.size(); i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -376,14 +376,14 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
     int startBord = -1;
     {
       int fi = 0;
-      for (fi = lastPtUsed; fi < nbPt; fi++)
+      for (fi = lastPtUsed; fi < pts.size(); fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
           break;
       }
       {
         int askTo = pData[fi].askForWindingB;
-        if (askTo < 0 || askTo >= nbAr ) {
+        if (askTo < 0 || askTo >= aretes.size() ) {
           dadContour=-1;
         } else {
           dadContour = (int) swdData[askTo].misc;
@@ -391,7 +391,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
         }
       }
       lastPtUsed = fi + 1;
-      if (fi < nbPt)
+      if (fi < pts.size())
       {
         int bestB = pts[fi].firstA;
         while (bestB >= 0 && aretes[bestB].st != fi)
@@ -445,7 +445,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
             {
               bool escapePath=false;
               int tb=curBord;
-              while ( tb >= 0 && tb < nbAr ) {
+              while ( tb >= 0 && tb < aretes.size() ) {
                 if ( ebData[tb].pathID == wildPath ) {
                   escapePath=true;
                   break;
@@ -485,7 +485,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
               
               bool escapePath=false;
               int tb=curBord;
-              while ( tb >= 0 && tb < nbAr ) {
+              while ( tb >= 0 && tb < aretes.size() ) {
                 if ( ebData[tb].pathID == wildPath ) {
                   escapePath=true;
                   break;
@@ -518,7 +518,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < nbPt);
+  while (lastPtUsed < pts.size());
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -534,46 +534,15 @@ int
 Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
 {
   Reset (0, 0);
-  if ( a->HasBackData() ) MakeBackData(true); else MakeBackData (false);
+  MakeBackData(a->HasBackData());
   if (dec == 0)
   {
-    nbPt = a->nbPt;
-    if (nbPt > maxPt)
-    {
-      maxPt = nbPt;
-      pts = (dg_point *) realloc (pts, maxPt * sizeof (dg_point));
-      if (HasPointsData ())
-        pData =
-          (point_data *) realloc (pData, maxPt * sizeof (point_data));
-    }
-    memcpy (pts, a->pts, nbPt * sizeof (dg_point));
-    
-    nbAr = a->nbAr;
-    if (nbAr > maxAr)
-    {
-      maxAr = nbAr;
-      aretes.reserve(maxAr);
-      if (HasEdgesData ())
-        eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
-      if (HasSweepSrcData ())
-        swsData =
-          (sweep_src_data *) realloc (swsData,
-                                      maxAr * sizeof (sweep_src_data));
-      if (HasSweepDestData ())
-        swdData =
-          (sweep_dest_data *) realloc (swdData,
-                                       maxAr * sizeof (sweep_dest_data));
-      if (HasRasterData ())
-        swrData =
-          (raster_data *) realloc (swrData, maxAr * sizeof (raster_data));
-      if (HasBackData ())
-        ebData =
-          (back_data *) realloc (ebData, maxAr * sizeof (back_data));
-    }
+    pts = a->pts;
     aretes = a->aretes;
+    _resizeAuxVectors();
     return 0;
   }
-  if (a->nbPt <= 1 || a->nbAr <= 1 || a->type != shape_polygon)
+  if (a->pts.size() <= 1 || a->aretes.size() <= 1 || a->type != shape_polygon)
     return shape_input_err;
   
   a->SortEdges ();
@@ -581,7 +550,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
   a->MakeSweepDestData (true);
   a->MakeSweepSrcData (true);
   
-  for (int i = 0; i < a->nbAr; i++)
+  for (unsigned i = 0; i < a->aretes.size(); i++)
   {
     //              int    stP=a->swsData[i].stPt/*,enP=a->swsData[i].enPt*/;
     int stB = -1, enB = -1;
@@ -644,17 +613,17 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
   }
   if (dec < 0)
   {
-    for (int i = 0; i < nbAr; i++)
+    for (unsigned i = 0; i < aretes.size(); i++)
       Inverse (i);
   }
   if ( HasBackData() ) {
-    for (int i = 0; i < a->nbAr; i++)
+    for (unsigned i = 0; i < a->aretes.size(); i++)
     {
       int nEd=AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
       ebData[nEd]=a->ebData[i];
     }
   } else {
-    for (int i = 0; i < a->nbAr; i++)
+    for (unsigned i = 0; i < a->aretes.size(); i++)
     {
       AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
     }
