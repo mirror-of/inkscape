@@ -416,6 +416,8 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 		msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
 				GTK_BUTTONS_CLOSE, 
 				_("You have to enter a filename"));
+		sp_transientize (msg);
+		gtk_window_set_resizable (GTK_WINDOW (msg), FALSE);
 		gtk_dialog_run (GTK_DIALOG (msg));
 		gtk_widget_destroy (msg);
 	} else {
@@ -427,6 +429,8 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 			dlg = gtk_dialog_new ();
 			gtk_window_set_title (GTK_WINDOW (dlg), _("Export in progress"));
 			prg = gtk_progress_bar_new ();
+			sp_transientize (dlg);
+			gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
 			g_object_set_data ((GObject *) base, "progress", prg);
 			fn = sp_filename_from_path (filename);
 			text = g_strdup_printf (_("Exporting [%d x %d] %s"), width, height, fn);
@@ -450,6 +454,8 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 			msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
 					GTK_BUTTONS_CLOSE, 
 					_("The chosen area to be exported is invalid"));
+			sp_transientize (msg);
+			gtk_window_set_resizable (GTK_WINDOW (msg), FALSE);
 			gtk_dialog_run (GTK_DIALOG (msg));
 			gtk_widget_destroy (msg);
 		}
@@ -466,6 +472,8 @@ sp_export_browse_clicked (GtkButton *button, gpointer userdata)
 	
 	fs = gtk_file_selection_new (_("Select a filename for exporting"));
 	fe = (GtkWidget *)g_object_get_data (G_OBJECT (dlg), "filename");
+
+	sp_transientize (fs);
 
 	gtk_window_set_modal(GTK_WINDOW (fs), true);
 	

@@ -53,6 +53,7 @@
 #include "interface.h"
 #include "print.h"
 #include "slideshow.h"
+#include "dialogs/dialog-events.h"
 
 #include "svg/svg.h"
 
@@ -271,6 +272,8 @@ sp_main_gui (int argc, const char **argv)
 				msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
 						GTK_BUTTONS_CLOSE, 
 						text);
+				sp_transientize (msg);
+				gtk_window_set_resizable (GTK_WINDOW (msg), FALSE);
 				gtk_dialog_run (GTK_DIALOG (msg));
 				gtk_widget_destroy (msg);
 				sp_file_new();

@@ -1,3 +1,9 @@
+2003-12-25  Alexander Clausen <alex@skip86.com>
+
+	* src/file.cpp src/main.cpp src/dialogs/export.cpp: Made error dialogs 
+	  and progressbar transient and non-resizable; made export file selector
+	  transient.
+
 2003-12-24  bulia byak <bulia@dr.com>
 
 	* src/select-context.cpp: Added statusbar update in a few places

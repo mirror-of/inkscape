@@ -100,6 +100,8 @@ sp_file_open (const gchar *uri, const gchar *key)
 		msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
 				GTK_BUTTONS_CLOSE, 
 				text);
+		sp_transientize (msg);
+		gtk_window_set_resizable (GTK_WINDOW (msg), FALSE);
 		gtk_dialog_run (GTK_DIALOG (msg));
 		gtk_widget_destroy (msg);
 		g_free (text);
