@@ -1639,8 +1639,8 @@ sp_nodepath_select_rect (SPNodePath *nodepath, NRRect *b, gboolean incremental)
 GList *save_nodepath_selection (SPNodePath *nodepath)
 {
 	GList *r = NULL;
-	SPPathNode *node, *last = NULL;
-	SPNodeSubPath * subpath, *subpath_next;
+	SPPathNode *node = NULL;
+	SPNodeSubPath * subpath;
 	GList * spl, * nl = NULL;
 	guint i = 0;
 
@@ -1664,8 +1664,8 @@ GList *save_nodepath_selection (SPNodePath *nodepath)
 */
 void restore_nodepath_selection (SPNodePath *nodepath, GList *r)
 {
-	SPPathNode *node, *last = NULL;
-	SPNodeSubPath * subpath, *subpath_next;
+	SPPathNode *node = NULL;
+	SPNodeSubPath * subpath;
 	GList * spl, * nl = NULL;
 	guint i = 0;
 
@@ -1994,31 +1994,41 @@ radial_to_xy (radial *r, NRPoint *origin, NRPoint *p)
 double
 closest_of_three (double x, double a, double b, double c)
 {
+	double result = 0.0;
+
 	if (fabs(x-a) <= fabs(x-b) && fabs(x-a) <= fabs(x-c))
-		return a; 
-	if (fabs(x-b) <= fabs(x-a) && fabs(x-b) <= fabs(x-c))
-		return b; 
-	if (fabs(x-c) <= fabs(x-a) && fabs(x-c) <= fabs(x-b))
-		return c; 
-	g_assert_not_reached ();
+		result = a;
+	else if (fabs(x-b) <= fabs(x-a) && fabs(x-b) <= fabs(x-c))
+		result = b;
+	else if (fabs(x-c) <= fabs(x-a) && fabs(x-c) <= fabs(x-b))
+		result = c;
+	else
+		g_assert_not_reached ();
+
+	return result;
 }
 
 double
 closest_of_six (double x, double a, double b, double c, double d, double e, double f)
 {
+	double result = 0.0;
+
 	if (fabs(x-a) <= fabs(x-b) && fabs(x-a) <= fabs(x-c) && fabs(x-a) <= fabs(x-d) && fabs(x-a) <= fabs(x-e) && fabs(x-a) <= fabs(x-f))
-		return a; 
-	if (fabs(x-b) <= fabs(x-a) && fabs(x-b) <= fabs(x-c) && fabs(x-b) <= fabs(x-d) && fabs(x-b) <= fabs(x-e) && fabs(x-b) <= fabs(x-f))
-		return b; 
-	if (fabs(x-c) <= fabs(x-a) && fabs(x-c) <= fabs(x-b) && fabs(x-c) <= fabs(x-d) && fabs(x-c) <= fabs(x-e) && fabs(x-c) <= fabs(x-f))
-		return c; 
-	if (fabs(x-d) <= fabs(x-a) && fabs(x-d) <= fabs(x-b) && fabs(x-d) <= fabs(x-c) && fabs(x-d) <= fabs(x-e) && fabs(x-d) <= fabs(x-f))
-		return d; 
-	if (fabs(x-e) <= fabs(x-a) && fabs(x-e) <= fabs(x-b) && fabs(x-e) <= fabs(x-c) && fabs(x-e) <= fabs(x-d) && fabs(x-e) <= fabs(x-f))
-		return e; 
-	if (fabs(x-f) <= fabs(x-a) && fabs(x-f) <= fabs(x-b) && fabs(x-f) <= fabs(x-c) && fabs(x-f) <= fabs(x-d) && fabs(x-f) <= fabs(x-e))
-		return f; 
-	g_assert_not_reached ();
+		result = a;
+	else if (fabs(x-b) <= fabs(x-a) && fabs(x-b) <= fabs(x-c) && fabs(x-b) <= fabs(x-d) && fabs(x-b) <= fabs(x-e) && fabs(x-b) <= fabs(x-f))
+		result = b;
+	else if (fabs(x-c) <= fabs(x-a) && fabs(x-c) <= fabs(x-b) && fabs(x-c) <= fabs(x-d) && fabs(x-c) <= fabs(x-e) && fabs(x-c) <= fabs(x-f))
+		result = c;
+	else if (fabs(x-d) <= fabs(x-a) && fabs(x-d) <= fabs(x-b) && fabs(x-d) <= fabs(x-c) && fabs(x-d) <= fabs(x-e) && fabs(x-d) <= fabs(x-f))
+		result = d;
+	else if (fabs(x-e) <= fabs(x-a) && fabs(x-e) <= fabs(x-b) && fabs(x-e) <= fabs(x-c) && fabs(x-e) <= fabs(x-d) && fabs(x-e) <= fabs(x-f))
+		result = e;
+	else if (fabs(x-f) <= fabs(x-a) && fabs(x-f) <= fabs(x-b) && fabs(x-f) <= fabs(x-c) && fabs(x-f) <= fabs(x-d) && fabs(x-f) <= fabs(x-e))
+		result = f;
+	else
+		g_assert_not_reached ();
+
+	return result;
 }
 
 double
@@ -2700,8 +2710,7 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 {
 	gint total, selected;
 	SPNodeSubPath * subpath;
-	SPPathNode * node;
-	GList * spl, * nl;
+	GList * spl;
 	SPSelection *sel;
 
 	if (!nodepath) return;
@@ -2719,7 +2728,7 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 
 	if (selected == 0) {
 		sel = nodepath->desktop->selection;
-		GSList *i = sel->items;
+// 		GSList *i = sel->items;
 		if (g_slist_length (sel->items) == 0)
 			sp_view_set_statusf (SP_VIEW(nodepath->desktop), "Select one path object with selector first, then switch back to node editor.");
 		else 
