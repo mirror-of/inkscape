@@ -822,13 +822,23 @@ take_style_from_item (SPItem *item)
 {
     // write the complete cascaded style, context-free
     SPCSSAttr *css = sp_css_attr_from_style (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
+    if (css == NULL)
+        return NULL;
+
     if ((SP_IS_GROUP(item) && SP_OBJECT(item)->children) ||
         (SP_IS_TEXT (item) && SP_OBJECT(item)->children && SP_OBJECT(item)->children->next == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
-        // If this is a group, merge the style of its first child
-        SPCSSAttr *temp = sp_css_attr_from_style (item->lastChild(), SP_STYLE_FLAG_IFSET);
-        sp_repr_css_merge (css, temp);
-        sp_repr_css_attr_unref (temp);
+        // If this is a group, merge the style of its topmost (last) child with style
+        for (SPObject *last_element = item->lastChild(); last_element != NULL; last_element = SP_OBJECT_PREV (last_element)) {
+            if (SP_OBJECT_STYLE (last_element) != NULL) {
+                SPCSSAttr *temp = sp_css_attr_from_style (last_element, SP_STYLE_FLAG_IFSET);
+                if (temp) {
+                    sp_repr_css_merge (css, temp);
+                    sp_repr_css_attr_unref (temp);
+                }
+                break;
+            }
+        }
     }
     if (!(SP_IS_TEXT (item) || SP_IS_TSPAN (item) || SP_IS_STRING (item))) {
         // do not copy text properties from non-text objects, it's confusing

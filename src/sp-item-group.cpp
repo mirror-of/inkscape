@@ -513,8 +513,10 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			// we do this by merging SPCSSAttrs, because there's no easy way to do this with SPStyle
 			// perhaps we need to program some sort of sp_style_combine_with_parent (SPStyle *, SPStyle *)
 			SPCSSAttr *cstyle = sp_repr_css_attr_new ();
-			sp_repr_css_merge (cstyle, gstyle);
-			sp_repr_css_merge (cstyle, sp_css_attr_from_style (SP_OBJECT (citem)));
+			if (gstyle)
+				sp_repr_css_merge (cstyle, gstyle);
+			if (SP_OBJECT_STYLE (SP_OBJECT (citem)))
+				sp_repr_css_merge (cstyle, sp_css_attr_from_style (SP_OBJECT (citem)));
 			sp_repr_css_change (nrepr, cstyle, "style");
 
 			items = g_slist_prepend (items, nrepr);

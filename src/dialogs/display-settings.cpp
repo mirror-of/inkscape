@@ -728,6 +728,8 @@ style_from_selection_to_tool(GtkWidget *widget, gchar const *prefs_path)
 
     SPCSSAttr *css = take_style_from_item (item);
 
+    if (!css) return;
+
     // only store text style for the text tool
     if (!g_strrstr ((const gchar *) prefs_path, "text")) {
         css = sp_css_attr_unset_text (css);

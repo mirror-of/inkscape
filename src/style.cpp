@@ -2651,6 +2651,8 @@ sp_css_attr_from_style (SPObject *object, guint flags)
     g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
                           (flags == SP_STYLE_FLAG_ALWAYS)  ),
                          NULL);
+    if (SP_OBJECT_STYLE (object) == NULL)
+        return NULL;
     gchar *style_str = sp_style_write_string (SP_OBJECT_STYLE (object), flags);
     SPCSSAttr *css = sp_repr_css_attr_new ();
     sp_repr_css_attr_add_from_string (css, style_str);
