@@ -8,11 +8,11 @@
    height="256pt"
    sodipodi:docname="icons.svg"
    inkscape:version="0.39cvs"
-   sodipodi:docbase="/home/d/ink/inkscape/share/icons"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase="/home/d/ink/inkscape/share/icons">
   <defs
      id="defs3">
     <marker
@@ -50,7 +50,7 @@
          offset="0.0000000"
          id="stop2486" />
       <stop
-         style="stop-color:#747099;stop-opacity:1.0000000;"
+         style="stop-color:#646464;stop-opacity:1.0000000;"
          offset="1.0000000"
          id="stop2487" />
     </linearGradient>
@@ -423,8 +423,8 @@
      snaptogrid="false"
      gridtolerance="1.02pt"
      inkscape:zoom="5.6568539"
-     inkscape:cx="179.55438"
-     inkscape:cy="44.612360"
+     inkscape:cx="699.63145"
+     inkscape:cy="224.21749"
      inkscape:window-width="1140"
      inkscape:window-height="660"
      inkscape:window-x="31"
@@ -5374,11 +5374,13 @@
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.8750000;stroke-linecap:round;"
      d="M 781.56447,19.186065 L 791.19569,28.817289"
-     id="path2473" />
+     id="path2473"
+     transform="matrix(0.823310,0.000000,0.000000,0.823310,138.9445,4.240825)" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.8750000;stroke-linecap:round;"
      d="M 791.19569,19.186068 L 781.56447,28.817286"
-     id="path2474" />
+     id="path2474"
+     transform="matrix(0.823310,0.000000,0.000000,0.823310,138.9445,4.240825)" />
   <g
      id="fill_solid"
      transform="translate(212.4382,-4.123354)"
@@ -5392,7 +5394,7 @@
        y="15.625036" />
   </g>
   <rect
-     style="fill:#9592b5;fill-rule:evenodd;stroke-width:1.0105331;fill-opacity:1.0000000;"
+     style="fill:#939393;fill-rule:evenodd;stroke-width:1.0105331;fill-opacity:1.0000000;"
      id="rect2480"
      width="24.816576"
      height="24.816576"
