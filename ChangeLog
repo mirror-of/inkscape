@@ -1,3 +1,26 @@
+2004-06-25  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/sp-namedview.cpp: cleanups in grid snap settings.  Fix a
+	typo.
+
+	* src/seltrans.cpp: optional default origin for scaling.  Fixes
+	to snap during scale.
+
+	* src/seltrans.h: s/opposit/opposite/.  Add some comments.
+
+	* src/dialogs/display-settings.cpp: add default scale origin
+	option.
+
+	* src/desktop-snap.h: changes to snap_list_scale prototype.
+
+	* src/desktop-snap.cpp: snap_list_scale now returns whether
+	it snapped or not.  The best scale snap is now the one that
+	changes the scale factor least, rather than the one that
+	results in the snap point being closest to where it used to be.
+
+	* src/display/sp-canvas.cpp: fix for win32 freeze-at-border bug,
+	copied from SP.
+	
 2004-06-24  rejon <kidproto@users.sf.net>
 
 	* src/verbs.cpp: I changed the reverse command to be more verbose and 
@@ -48,6 +71,17 @@
 	* src/inkscape.cpp: Don't connect to SIGBUS on Win32, as
 	it doesn't seem to exist.  Add Emacs mode line.
 	Declaration-to-first-use and coding style cleanups.
+
+	* src/desktop-snap.h: a few double -> NR::Coord fixes.
+
+	* src/nodepath.cpp: turn off snapping when Shift is held down.
+	Some minor cleanups.
+
+	* src/dialogs/display-settings.cpp: remove my rather dubious
+	move_with_grid option.
+
+	* src/select-context.cpp: rationalise grid modifiers; now Shift
+	disables snap and Alt snaps movement to the grid.
 
 2004-06-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
