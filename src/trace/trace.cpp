@@ -141,6 +141,8 @@ void Trace::convertImageToPathThread()
         return;
         }
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    sp_document_ensure_up_to_date(doc);
+
 
     SPImage *img = getSelectedSPImage();
     if (!img || !selectedItem)
@@ -169,32 +171,47 @@ void Trace::convertImageToPathThread()
         return;
         }
 
+
     SPRepr *pathRepr    = sp_repr_new("path");
     SPRepr *imgRepr     = SP_OBJECT(img)->repr;
-
     sp_repr_set_attr(pathRepr, "d", d);
 
-    //### Copy position info from <image> to <path>
-    NR::Matrix tf = sp_item_i2d_affine(selectedItem);
-    /*
-    double xpos = NR_MATRIX_DF_TRANSFORM_X(tf, ixval, iyval);
-    double ypos = NR_MATRIX_DF_TRANSFORM_Y(tf, ixval, iyval);
-    Inkscape::SVGOStringStream data;
-    data << "translate(" << xpos << ", " << ypos << ")" ;
-    sp_repr_set_attr(pathRepr, "transform", data.str().c_str());
-    */
-    /*
-    char *xvalstr = (char *)sp_repr_attr(imgRepr, "x");
-    char *yvalstr = (char *)sp_repr_attr(imgRepr, "y");
-    if (xval && yval)
-        {
-        Inkscape::SVGOStringStream data;
-        data << "translate(" << xval << ", " << yval << ")" ;
-        sp_repr_set_attr(pathRepr, "transform", data.str().c_str());
-        }
-    */
+    double x      = 0.0;
+    double y      = 0.0;
+    double width  = 0.0;
+    double height = 0.0;
+    double dval   = 0.0;
 
-    SPObject *reprobj   = doc->getObjectByRepr(pathRepr);
+    if (sp_repr_get_double(imgRepr, "x", &dval))
+        x = dval;
+    if (sp_repr_get_double(imgRepr, "y", &dval))
+        y = dval;
+
+    if (sp_repr_get_double(imgRepr, "width", &dval))
+        width = dval;
+    if (sp_repr_get_double(imgRepr, "height", &dval))
+        height = dval;
+
+    NR::Matrix trans(NR::translate(x, y));
+
+    double iwidth  = (double)gdk_pixbuf_get_width(pixbuf);
+    double iheight = (double)gdk_pixbuf_get_height(pixbuf);
+
+    double iwscale = width  / iwidth;
+    double ihscale = height / iheight;
+    
+    NR::Matrix scal(NR::scale(iwscale, ihscale));
+
+    NR::Matrix tf(scal);
+    tf *= trans;
+    tf *= selectedItem->transform;
+
+    /*
+    char *name = "transform";
+    const char *val  = sp_repr_attr(imgRepr, name);
+    if (val)
+        sp_repr_set_attr(pathRepr, name, val);
+    */
 
     //#Add to tree
     SPRepr *par = sp_repr_parent(imgRepr);
@@ -203,9 +220,14 @@ void Trace::convertImageToPathThread()
     free(d);
 
     //### Apply the transform from the image to the new shape
-    SPShape *newShape = SP_SHAPE(reprobj);
-    SPCurve *curve    = sp_shape_get_curve(newShape);
-    sp_curve_transform(curve, tf);
+    //NR::Matrix tf     = sp_item_i2doc_affine(selectedItem);
+    //NR::Matrix tf     = selectedItem->transform;
+    SPObject *reprobj = doc->getObjectByRepr(pathRepr);
+    if (reprobj)
+        {
+        SPItem *newItem = SP_ITEM(reprobj);
+        sp_item_write_transform(newItem, pathRepr, tf, NULL);
+        }
 
     //## inform the document, so we can undo
     sp_document_done(doc);
