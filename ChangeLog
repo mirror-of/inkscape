@@ -2,6 +2,8 @@
 
 	* src/widgets/button.c: put errors to rest for now
 
+	* src/document-undo.c: removed code to limit undo list length
+
 2003-12-07 MenTaLguY <mental@rydia.net>
 
 	* src/widgets/button.c: fixed unsignedness warning

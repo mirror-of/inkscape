@@ -31,10 +31,6 @@
 #include "document.h"
 #include "selection.h"
 
-/* fixme: Implement in preferences */
-
-#define MAX_UNDO 512
-
 /*
  * Undo & redo
  */
@@ -93,22 +89,6 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 	} else {
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
 		doc->priv->history_size++;
-
-		if (doc->priv->history_size > MAX_UNDO) {
-			GSList *bottom;
-	
-			g_message ("DEBUG: trimming undo list");
-
-			g_assert (doc->priv->undo != NULL);
-
-			bottom = g_slist_nth (doc->priv->undo, MAX_UNDO - 1);
-			g_slist_foreach (bottom->next,
-			                 (GFunc)sp_repr_free_log, NULL);
-			g_slist_free (bottom->next);
-			bottom->next = NULL;
-
-			doc->priv->history_size = MAX_UNDO;
-		}
 	}
 
 	doc->actionkey = NULL;
