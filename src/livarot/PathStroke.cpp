@@ -767,7 +767,7 @@ Path::DoJoin (Shape * dest, float width, JoinType join, vec2 pos, vec2 prev,
 void
 Path::DoLeftJoin (Shape * dest, float width, JoinType join, vec2 pos,
 		  vec2 prev, vec2 next, float miter, float prevL, float nextL,
-		  int &leftStNo, int &leftEnNo)
+		  int &leftStNo, int &leftEnNo,int pathID,int pieceID,float tID)
 {
   vec2 pnor, nnor;
   RotCCWTo (prev, pnor);
@@ -794,7 +794,12 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, vec2 pos,
 	  x = pos.x - width * pnor.x;
 	  y = pos.y - width * pnor.y;
 	  leftEnNo = dest->AddPoint (x, y);
-	  dest->AddEdge (leftEnNo, leftStNo);
+	  int nEdge=dest->AddEdge (leftEnNo, leftStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 	}
       return;
     }
@@ -823,8 +828,18 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, vec2 pos,
       x = pos.x;
       y = pos.y;
       int midNo = dest->AddPoint (x, y);
-      dest->AddEdge (leftEnNo, midNo);
-      dest->AddEdge (midNo, leftStNo);
+      int nEdge=dest->AddEdge (leftEnNo, midNo);
+     if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
+     nEdge=dest->AddEdge (midNo, leftStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 //              }
     }
   else
@@ -853,8 +868,18 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, vec2 pos,
 	      x = pos.x + l * biss.x;
 	      y = pos.y + l * biss.y;
 	      int nleftStNo = dest->AddPoint (x, y);
-	      dest->AddEdge (leftEnNo, nleftStNo);
-	      dest->AddEdge (nleftStNo, leftStNo);
+	      int nEdge=dest->AddEdge (leftEnNo, nleftStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
+	      nEdge=dest->AddEdge (nleftStNo, leftStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 	    }
 	  else
 	    {
@@ -869,9 +894,24 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, vec2 pos,
 	      x = pos.x + emiter * biss.x - dec * tbiss.x;
 	      y = pos.y + emiter * biss.y - dec * tbiss.y;
 	      int nleftEnNo = dest->AddPoint (x, y);
-	      dest->AddEdge (nleftEnNo, nleftStNo);
-	      dest->AddEdge (leftEnNo, nleftEnNo);
-	      dest->AddEdge (nleftStNo, leftStNo);
+	      int nEdge=dest->AddEdge (nleftEnNo, nleftStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
+	      nEdge=dest->AddEdge (leftEnNo, nleftEnNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
+	      nEdge=dest->AddEdge (nleftStNo, leftStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 	    }
 	}
       else if (join == join_round)
@@ -926,14 +966,19 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, vec2 pos,
 	  x = pos.x + width * nnor.x;
 	  y = pos.y + width * nnor.y;
 	  leftEnNo = dest->AddPoint (x, y);
-	  dest->AddEdge (leftEnNo, leftStNo);
+	  int nEdge=dest->AddEdge (leftEnNo, leftStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 	}
     }
 }
 void
 Path::DoRightJoin (Shape * dest, float width, JoinType join, vec2 pos,
 		   vec2 prev, vec2 next, float miter, float prevL,
-		   float nextL, int &rightStNo, int &rightEnNo)
+		   float nextL, int &rightStNo, int &rightEnNo,int pathID,int pieceID,float tID)
 {
   vec2 pnor, nnor;
   RotCCWTo (prev, pnor);
@@ -960,7 +1005,12 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, vec2 pos,
 	  x = pos.x - width * pnor.x;
 	  y = pos.y - width * pnor.y;
 	  rightStNo = dest->AddPoint (x, y);
-	  dest->AddEdge (rightStNo, rightEnNo);
+	  int nEdge=dest->AddEdge (rightStNo, rightEnNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 	}
       return;
     }
@@ -991,8 +1041,18 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, vec2 pos,
 	      x = pos.x - l * biss.x;
 	      y = pos.y - l * biss.y;
 	      int nrightStNo = dest->AddPoint (x, y);
-	      dest->AddEdge (rightStNo, nrightStNo);
-	      dest->AddEdge (nrightStNo, rightEnNo);
+	      int nEdge=dest->AddEdge (rightStNo, nrightStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
+	      nEdge=dest->AddEdge (nrightStNo, rightEnNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 	    }
 	  else
 	    {
@@ -1007,9 +1067,24 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, vec2 pos,
 	      x = pos.x - emiter * biss.x + dec * tbiss.x;
 	      y = pos.y - emiter * biss.y + dec * tbiss.y;
 	      int nrightEnNo = dest->AddPoint (x, y);
-	      dest->AddEdge (rightStNo, nrightStNo);
-	      dest->AddEdge (nrightStNo, nrightEnNo);
-	      dest->AddEdge (nrightEnNo, rightEnNo);
+	      int nEdge=dest->AddEdge (rightStNo, nrightStNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
+	      nEdge=dest->AddEdge (nrightStNo, nrightEnNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
+	      nEdge=dest->AddEdge (nrightEnNo, rightEnNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 	    }
 	}
       else if (join == join_round)
@@ -1062,7 +1137,12 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, vec2 pos,
 	  x = pos.x - width * nnor.x;
 	  y = pos.y - width * nnor.y;
 	  rightEnNo = dest->AddPoint (x, y);
-	  dest->AddEdge (rightStNo, rightEnNo);
+	  int nEdge=dest->AddEdge (rightStNo, rightEnNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 	}
     }
   else
@@ -1090,8 +1170,18 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, vec2 pos,
       x = pos.x;
       y = pos.y;
       int midNo = dest->AddPoint (x, y);
-      dest->AddEdge (rightStNo, midNo);
-      dest->AddEdge (midNo, rightEnNo);
+      int nEdge=dest->AddEdge (rightStNo, midNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
+      nEdge=dest->AddEdge (midNo, rightEnNo);
+    if ( dest->HasBackData() ) {
+          dest->ebData[nEdge].pathID=pathID;
+          dest->ebData[nEdge].pieceID=pieceID;
+          dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
+    }
 //              }
     }
 }

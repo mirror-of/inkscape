@@ -229,7 +229,6 @@ sp_offset_release (SPObject * object)
   offset->original = NULL;
   offset->originalPath = NULL;
 
-
   if (offset->sourceObject)
     free (offset->sourceObject);
   offset->sourceObject = NULL;
@@ -237,6 +236,7 @@ sp_offset_release (SPObject * object)
   if (offset->sourceRepr)
     {
       sp_repr_remove_listener_by_data (offset->sourceRepr, offset);
+      for (SPRepr *child=offset->sourceRepr->children;child;child=child->next) sp_repr_remove_listener_by_data (child, offset);
     }
   offset->sourceRepr = NULL;
 
@@ -534,7 +534,8 @@ sp_offset_set_shape (SPShape * shape)
   Path *orig = new Path;
   orig->Copy ((Path *) offset->originalPath);
 
-  {
+/*  {
+  // version par outline
     Shape *theShape = new Shape;
     Shape *theRes = new Shape;
     Path *originaux[1];
@@ -587,20 +588,66 @@ sp_offset_set_shape (SPShape * shape)
     delete theShape;
     delete theRes;
     delete res;
-  }
+  } */   
+  {
+  // version par makeoffset
+    Shape *theShape = new Shape;
+    Shape *theRes = new Shape;
 
+
+    // et maintenant: offset
+    float o_width;
+    if (offset->rad >= 0)
+      {
+	o_width = offset->rad;
+      }
+    else
+      {
+	o_width = -offset->rad;
+      }
+
+    if (o_width >= 1.0)
+      {
+	orig->ConvertWithBackData (0.1);
+      }
+    else
+      {
+	orig->ConvertWithBackData (0.1*o_width);
+      }
+    orig->Fill (theShape, 0);
+    theRes->ConvertToShape (theShape, fill_positive);
+    theShape->MakeOffset(theRes,offset->rad,join_round,20.0);
+    theRes->ConvertToShape (theShape, fill_positive);
+    theRes->ConvertToForme (orig);
+
+    if (o_width >= 1.0)
+      {
+	orig->ConvertEvenLines (0.1);
+	orig->Simplify (0.5);
+      }
+    else
+      {
+	orig->ConvertEvenLines (0.1*o_width);
+	orig->Simplify (0.5 * o_width);
+      }
+
+    delete theShape;
+    delete theRes;
+  }     
+  
   char *res_d = NULL;
   if (orig->descr_nb <= 1)
     {
       // aie.... plus rien
       res_d = strdup ("M 0 0 L 0 0 z");
+      printf("%s\n",res_d);
     }
   else
     {
 
       res_d = liv_svg_dump_path2 (orig);
-      delete orig;
-    }
+     } 
+       delete orig;
 
   ArtBpath *bpath = sp_svg_read_path (res_d);
   c = sp_curve_new_from_bpath (bpath);

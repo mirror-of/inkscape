@@ -173,23 +173,25 @@ Path::DoSimplify (float treshhold)
 	}
 
       path_descr_cubicto res;
-      bool kissGoodbye = false;
+      bool contains_forced = false;
+      int  forced_pt=-1;
       do
 	{
-	  kissGoodbye = false;
 	  if (back)
 	    {
 	      if (weighted)
 		{
 		  path_lineto_wb *tp = (path_lineto_wb *) savPts;
 		  if ((tp + lastP)->isMoveTo == polyline_forced)
-		    kissGoodbye = true;
+		    contains_forced = true;
+        forced_pt=lastP;
 		}
 	      else
 		{
 		  path_lineto_b *tp = (path_lineto_b *) savPts;
 		  if ((tp + lastP)->isMoveTo == polyline_forced)
-		    kissGoodbye = true;
+		    contains_forced = true;
+        forced_pt=lastP;
 		}
 	    }
 	  else
@@ -198,13 +200,15 @@ Path::DoSimplify (float treshhold)
 		{
 		  path_lineto_w *tp = (path_lineto_w *) savPts;
 		  if ((tp + lastP)->isMoveTo == polyline_forced)
-		    kissGoodbye = true;
+		    contains_forced = true;
+        forced_pt=lastP;
 		}
 	      else
 		{
 		  path_lineto *tp = (path_lineto *) savPts;
 		  if ((tp + lastP)->isMoveTo == polyline_forced)
-		    kissGoodbye = true;
+		    contains_forced = true;
+        forced_pt=lastP;
 		}
 	    }
 	  lastP++;
@@ -213,7 +217,7 @@ Path::DoSimplify (float treshhold)
 //          break;
 	}
       while (lastP < savNbPt
-	     && AttemptSimplify ((kissGoodbye) ? 0.1 * treshhold : treshhold,
+	     && AttemptSimplify ((contains_forced) ? 0.1 * treshhold : treshhold,
 				 res));
 
       if (lastP >= savNbPt)
@@ -227,6 +231,11 @@ Path::DoSimplify (float treshhold)
 	  // le dernier a echoué
 	  lastP--;
 	  nbPt--;
+    if ( contains_forced ) {
+          lastP=forced_pt;
+          nbPt=lastP-curP+1;
+          AttemptSimplify (treshhold,res);       // ca passe forcement
+    }
 	}
       if (back)
 	{

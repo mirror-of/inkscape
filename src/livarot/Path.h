@@ -464,10 +464,10 @@ private:
 		      int &rightStNo, int &rightEnNo);
   static void DoLeftJoin (Shape * dest, float width, JoinType join, vec2 pos,
 			  vec2 prev, vec2 next, float miter, float prevL,
-			  float nextL, int &leftStNo, int &leftEnNo);
+			  float nextL, int &leftStNo, int &leftEnNo,int pathID=-1,int pieceID=0,float tID=0.0);
   static void DoRightJoin (Shape * dest, float width, JoinType join, vec2 pos,
 			   vec2 prev, vec2 next, float miter, float prevL,
-			   float nextL, int &rightStNo, int &rightEnNo);
+			   float nextL, int &rightStNo, int &rightEnNo,int pathID=-1,int pieceID=0,float tID=0.0);
   static void RecRound (Shape * dest, int sNo, int eNo, float px, float py,
 			float sx, float sy, float ex, float ey, float tresh,
 			int lev);

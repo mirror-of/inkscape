@@ -288,7 +288,7 @@ int
 Shape::MakeOffset (Shape * a, float dec, JoinType join, float miter)
 {
   Reset (0, 0);
-  MakeBackData (false);
+  if ( a->HasBackData() ) MakeBackData(true); else MakeBackData (false);
   if (dec == 0)
     {
       nbPt = a->nbPt;
@@ -320,6 +320,9 @@ Shape::MakeOffset (Shape * a, float dec, JoinType join, float miter)
 	  if (HasRasterData ())
 	    swrData =
 	      (raster_data *) realloc (swrData, maxAr * sizeof (raster_data));
+	  if (HasBackData ())
+	    ebData =
+	      (back_data *) realloc (ebData, maxAr * sizeof (back_data));
 	}
       memcpy (aretes, a->aretes, nbAr * sizeof (dg_arete));
       return 0;
@@ -337,16 +340,16 @@ Shape::MakeOffset (Shape * a, float dec, JoinType join, float miter)
 //              int    stP=a->swsData[i].stPt/*,enP=a->swsData[i].enPt*/;
       int stB = -1, enB = -1;
       if (dec > 0)
-	{
-	  stB = a->CycleNextAt (a->aretes[i].st, i);
-	  enB = a->CyclePrevAt (a->aretes[i].en, i);
-	}
+      {
+        stB = a->CycleNextAt (a->aretes[i].st, i);
+        enB = a->CyclePrevAt (a->aretes[i].en, i);
+      }
       else
-	{
-	  stB = a->CyclePrevAt (a->aretes[i].st, i);
-	  enB = a->CycleNextAt (a->aretes[i].en, i);
-	}
-
+      {
+        stB = a->CyclePrevAt (a->aretes[i].st, i);
+        enB = a->CycleNextAt (a->aretes[i].en, i);
+      }
+  
       vec2 stD, seD, enD;
       float stL, seL, enL;
       stD.x = a->aretes[stB].dx;
@@ -367,31 +370,49 @@ Shape::MakeOffset (Shape * a, float dec, JoinType join, float miter)
       int stNo, enNo;
       ptP.x = a->pts[a->aretes[i].st].x;
       ptP.y = a->pts[a->aretes[i].st].y;
+      int   usePathID=-1;
+      int   usePieceID=0;
+      float useT=0.0;
+      if ( a->HasBackData() ) {
+        if ( a->ebData[i].pathID >= 0 && a->ebData[stB].pathID == a->ebData[i].pathID && a->ebData[stB].pieceID == a->ebData[i].pieceID
+        && a->ebData[stB].tEn == a->ebData[i].tSt ) {
+          usePathID=a->ebData[i].pathID;
+          usePieceID=a->ebData[i].pieceID;
+          useT=a->ebData[i].tSt;
+        }
+      }
       if (dec > 0)
-	{
-	  Path::DoRightJoin (this, dec, join, ptP, stD, seD, miter, stL, seL,
-			     stNo, enNo);
-	  a->swsData[i].stPt = enNo;
-	  a->swsData[stB].enPt = stNo;
-	}
+      {
+        Path::DoRightJoin (this, dec, join, ptP, stD, seD, miter, stL, seL,
+			     stNo, enNo,usePathID,usePieceID,useT);
+           a->swsData[i].stPt = enNo;
+           a->swsData[stB].enPt = stNo;
+       }
       else
-	{
-	  Path::DoLeftJoin (this, -dec, join, ptP, stD, seD, miter, stL, seL,
-			    stNo, enNo);
-	  a->swsData[i].stPt = enNo;
-	  a->swsData[stB].enPt = stNo;
-	}
+      {
+        Path::DoLeftJoin (this, -dec, join, ptP, stD, seD, miter, stL, seL,
+			    stNo, enNo,usePathID,usePieceID,useT);
+          a->swsData[i].stPt = enNo;
+          a->swsData[stB].enPt = stNo;
+       }
+     }
+     if (dec < 0)
+     {
+       for (int i = 0; i < nbAr; i++)
+         Inverse (i);
+     }
+     if ( HasBackData() ) {
+       for (int i = 0; i < a->nbAr; i++)
+       {
+        int nEd=AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
+        ebData[nEd]=a->ebData[i];
+      }
+    } else {
+      for (int i = 0; i < a->nbAr; i++)
+      {
+        AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
+      }
     }
-  if (dec < 0)
-    {
-      for (int i = 0; i < nbAr; i++)
-	Inverse (i);
-    }
-  for (int i = 0; i < a->nbAr; i++)
-    {
-      AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
-    }
-
   a->MakeSweepSrcData (false);
   a->MakeSweepDestData (false);
 
@@ -472,13 +493,30 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord,
 		  bord = swdData[bord].suivParc;
 		}
 	      if (bord >= 0
-		  && (  pts[aretes[bord].st].oldDegree > 2 || 
-		      pts[aretes[bord].st].dI + pts[aretes[bord].st].dO > 2))
+		  && pts[aretes[bord].st].dI + pts[aretes[bord].st].dO > 2 ) {
 		dest->ForcePoint ();
-	    }
-	}
+    } else if ( bord >= 0 && pts[aretes[bord].st].oldDegree > 2 && pts[aretes[bord].st].dI + pts[aretes[bord].st].dO == 2)  {
+      if ( HasBackData() ) {
+         int   prevEdge=pts[aretes[bord].st].firstA;
+         int   nextEdge=pts[aretes[bord].st].lastA;
+         if ( aretes[prevEdge].en != aretes[bord].st ) {
+           int  swai=prevEdge;prevEdge=nextEdge;nextEdge=swai;
+         }
+         if ( ebData[prevEdge].pieceID == ebData[nextEdge].pieceID  && ebData[prevEdge].pathID == ebData[nextEdge].pathID ) {
+           if ( fabsf(ebData[prevEdge].tEn-ebData[nextEdge].tSt) < 0.05 ) {
+           } else {
+           dest->ForcePoint ();
+           }
+         } else {
+           dest->ForcePoint ();
+         }
+      } else {
+        dest->ForcePoint ();
+      }    
+	   }
+	  }
     }
-
+    }
   dest->Close ();
 }
 

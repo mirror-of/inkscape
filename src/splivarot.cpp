@@ -721,13 +721,13 @@ sp_selected_path_outline ()
 void
 sp_selected_path_offset ()
 {
-  //  sp_selected_path_do_offset (true);
+//  sp_selected_path_do_offset (true);
   sp_selected_path_create_offset();
 }
 void
 sp_selected_path_inset ()
 {
-  //  sp_selected_path_do_offset (false);
+//  sp_selected_path_do_offset (false);
   sp_selected_path_create_inset();
 }
 void sp_selected_path_create_offset ()

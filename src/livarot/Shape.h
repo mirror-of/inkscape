@@ -418,10 +418,12 @@ private:
   {
     return (flags & has_quick_raster_data);
   };
+  public:
   bool HasBackData (void)
   {
     return (flags & has_back_data);
   };
+  private:
   bool HasVoronoiData (void)
   {
     return (flags & has_voronoi_data);
