@@ -158,7 +158,7 @@ void sp_color_scales_init (SPColorScales *cs)
 		/* Slider */
 		cs->s[i] = sp_color_slider_new (cs->a[i]);
 		gtk_widget_show (cs->s[i]);
-		gtk_table_attach (GTK_TABLE (t), cs->s[i], 1, 2, i, i + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), XPAD, YPAD);
+		gtk_table_attach (GTK_TABLE (t), cs->s[i], 1, 2, i, i + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)GTK_FILL, XPAD, YPAD);
 
 		/* Spinbutton */
 		cs->b[i] = gtk_spin_button_new (GTK_ADJUSTMENT (cs->a[i]), 0.01, 2);
