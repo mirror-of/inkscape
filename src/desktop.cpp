@@ -1093,6 +1093,9 @@ sp_desktop_widget_realize (GtkWidget *widget)
     if ((fabs (d.x1 - d.x0) < 1.0) || (fabs (d.y1 - d.y0) < 1.0)) return;
 
     sp_desktop_set_display_area (dtw->desktop, d.x0, d.y0, d.x1, d.y1, 10);
+
+    /* Listen on namedview modification */
+    g_signal_connect (G_OBJECT (dtw->desktop->namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
       
     sp_desktop_widget_set_title (dtw);
 }
@@ -1387,7 +1390,7 @@ sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktop
     using NR::X;
     using NR::Y;
 
-    NR::Point const origin = dtw->dt2r * ( NR::Point(x, y) - dtw->ruler_origin );
+    NR::Point const origin = ( NR::Point(x, y) - dtw->ruler_origin );
 
     /* fixme: */
     GTK_RULER(dtw->hruler)->position = origin[X];
