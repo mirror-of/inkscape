@@ -1,3 +1,24 @@
+2004-08-12  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/sp-chars.cpp src/sp-ellipse.cpp src/sp-flowtext.cpp
+	src/sp-image.cpp src/sp-item-group.cpp src/sp-item.cpp
+	src/sp-item.h src/sp-marker.cpp src/sp-offset.cpp src/sp-root.cpp
+	src/sp-shape.cpp src/sp-spiral.cpp src/sp-star.cpp
+	src/sp-symbol.cpp src/sp-text.cpp src/sp-use.cpp:
+	const fixes to snappoints and bbox methods
+
+	*  selection.cpp sp-ellipse.cpp sp-image.cpp sp-item-group.cpp
+	sp-item-notify-moveto.cpp sp-item-rm-unsatisfied-cns.cpp
+	sp-item-update-cns.cpp sp-item.cpp sp-item.h sp-offset.cpp
+	sp-shape.cpp sp-spiral.cpp sp-star.cpp sp-text.cpp:
+	use more efficient API for collecting snap points, suggested by Peter.
+
+	* src/dialogs/desktop-properties.cpp: fix a cast warning.
+
+	* src/dialogs/docker.cpp: fix an unused variable warning.
+
+	* src/dialogs/stroke-style.cpp: add a static qualifier to a function.
+	
 2004-08-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-flowregion.cpp, src/sp-flowtext.cpp, src/sp-offset.cpp,
