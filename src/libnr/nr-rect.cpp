@@ -219,8 +219,11 @@ nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix *m)
 
 namespace NR {
 
-/** returns the four corners of the rectangle in sequence for
- * the correct winding order. */
+Rect::Rect(const Point &p0, const Point &p1)
+: _min(MIN(p0[X], p1[X]), MIN(p0[Y], p1[Y])),
+  _max(MAX(p0[X], p1[X]), MAX(p0[Y], p1[Y])) {}
+
+/** returns the four corners of the rectangle in the correct winding order */
 Point Rect::corner(unsigned i) const {
 	switch(i % 4) {
 	case 0:
@@ -233,15 +236,15 @@ Point Rect::corner(unsigned i) const {
 		return bottomleft();
 	}
 }
-	
+
+/** returns the midpoint of this rectangle */
+Point Rect::midpoint() const {
+	return ( _min + _max ) / 2;
+}
+
 /** returns a vector from topleft to bottom right. */
 Point Rect::dimensions() const {
 	return _max - _min;
-}
-
-/** returns the midpoint of this rect. */
-Point Rect::centre() const {
-	return ( _min + _max ) / 2;
 }
 
 /** Translates the rectangle by p. */
@@ -251,7 +254,7 @@ void Rect::offset(Point p) {
 }
 
 /** Makes this rectangle large enough to include the point p. */
-void Rect::least_bound(Point p) {
+void Rect::expand_to(Point p) {
 	for ( int i=0 ; i < 2 ; i++ ) {
 		_min[i] = MIN(_min[i], p[i]);
 		_max[i] = MAX(_max[i], p[i]);
@@ -259,7 +262,7 @@ void Rect::least_bound(Point p) {
 }
 
 /** Returns the set of points shared by both rectangles. */
-Rect Rect::intersect(const Rect &a, const Rect &b) {
+Rect Rect::intersection(const Rect &a, const Rect &b) {
 	Rect r;
 	for(int i=0; i < 2; i++) {
 		r._min[i] = MAX(a._min[i], b._min[i]);
@@ -268,10 +271,10 @@ Rect Rect::intersect(const Rect &a, const Rect &b) {
 	return r;
 }
 
-/** Returns the smallest rectangle that encloses both rectangles. */
-Rect Rect::least_bound(const Rect &a, const Rect &b) {
+/** returns the smallest rectangle containing both rectangles */
+Rect Rect::union_bounds(const Rect &a, const Rect &b) {
 	Rect r;
-	for ( int i=0 ; i < 2 ; i++ ) {
+	for ( int i ; i < 2 ; i++ ) {
 		r._min[i] = MIN(a._min[i], b._min[i]);
 		r._max[i] = MAX(a._max[i], b._max[i]);
 	}

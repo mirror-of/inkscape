@@ -1,3 +1,9 @@
+2004-02-16  MenTaLguY <mental@rydia.net>
+
+    * src/libnr/nr-types.h, src/libnr/nr-rect.cpp, src/libnr/nr-maybe.h,
+      src/seltrans.cpp:
+      started on revising the NR::Rect stuff, and introduced NR::ConvexHull
+
 2004-02-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
     * src/xml/repr.cpp (sp_repr_document_root): Fix typo in most recent commit.

@@ -56,6 +56,7 @@ libnr_a_SOURCES = \
 	nr-stroke.cpp nr-stroke.h \
 	nr-uta.cpp nr-uta.h \
 	nr-object.cpp nr-object.h \
+	nr-maybe.h \
 	$(mmx_sources)
 
 testnr_SOURCES = \

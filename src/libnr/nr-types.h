@@ -17,6 +17,7 @@
 
 #include <glib.h>
 #include <stdexcept>
+#include <typeinfo>
 
 namespace NR {
 
@@ -66,6 +67,7 @@ namespace NR {
 class Matrix;
 
 enum Dim2 { X=0, Y };
+enum Wind { CW, CCW };
 
 class Point {
 public:
@@ -249,83 +251,118 @@ Point abs(Point const &b);
 /** A rectangle is always aligned to the X and Y axis.  This means it
  * can be defined using only 4 coordinates, and determining
  * intersection is very efficient.  The points inside a rectangle are
- * min[dim] <= _pt[dim] < max[dim].  This means that any rectangle
- * whose max is less than _or_ equal to its min is empty (contains no
- * points).  Infinities are allowed.*/
+ * min[dim] <= _pt[dim] <= max[dim].  Emptiness, however, is defined
+ * as having zero area, meaning an empty rectangle may still contain
+ * points.  Infinities are also permitted. */
+
 class Rect {
 public:
-	Rect() {}
 	Rect(const NRRect& r) : _min(r.x0, r.y0), _max(r.x1, r.y1) {}
 	Rect(const Rect& r) : _min(r._min), _max(r._max) {}
+	Rect(const Point &p0, const Point &p1);
 	
 	const Point &topleft() const { return _min; }
 	Point topright() const { return Point(_max[X], _min[Y]); }
 	Point bottomleft() const { return Point(_min[X], _max[Y]); }
 	const Point &bottomright() const { return _max; }
 
-	/** returns the four corners of the rectangle in sequence for the
-	 * correct winding order. */
+	const Point &min() const { return _min; }
+	const Point &max() const { return _max; }
+
+	/** returns the four corners of the rectangle in the correct
+	 *  winding order */
 	Point corner(unsigned i) const;
 	
 	/** returns a vector from topleft to bottom right. */
 	Point dimensions() const;
+
 	/** returns the midpoint of this rect. */
-	Point centre() const;
+	Point midpoint() const;
 	
-	/** Does this rectangle surround any points? */
-	bool empty() const {
-		return ( ( _min[0] > _max[0] ) || ( _min[1] > _max[1] ) );
+	/** does this rectangle have zero area? */
+	bool is_empty() const {
+		return is_empty<X>() && is_empty<Y>();
 	}
 
 	bool intersects(const Rect &r) const {
-		return intersects<NR::X>(r) && intersects<NR::Y>(r);
+		return intersects<X>(r) && intersects<Y>(r);
 	}
 	bool contains(const Rect &r) const {
-		return contains<NR::X>(r) && contains<NR::Y>(r);
+		return contains<X>(r) && contains<Y>(r);
 	}
 	bool contains(const Point &p) const {
-		return contains<NR::X>(p) && contains<NR::Y>(p);
+		return contains<X>(p) && contains<Y>(p);
 	}
 
 	/** Translates the rectangle by p. */
 	void offset(Point p);
 	
 	/** Makes this rectangle large enough to include the point p. */
-	void least_bound(Point p);
+	void expand_to(Point p);
+
+	/** Makes this rectangle large enough to include the rectangle r. */
+	void expand_to(const Rect &r);
 	
 	/** Returns the set of points shared by both rectangles. */
-	static Rect intersect(const Rect &a, const Rect &b);
+	static Rect intersection(const Rect &a, const Rect &b);
 
 	/** Returns the smallest rectangle that encloses both rectangles. */
-	static Rect least_bound(const Rect &a, const Rect &b);
+	static Rect union_bounds(const Rect &a, const Rect &b);
 
 private:
+	Rect() {}
+
+	template <Dim2 axis>
+	bool is_empty() const {
+		return !( _min[axis] < _max[axis] );
+	}
+
 	template <Dim2 axis>
 	bool intersects(const Rect &r) const {
-		return r._min[axis] < _max[axis] &&
-		       r._min[axis] < r._max[axis] &&
-		       _min[axis] < r._max[axis];
+		return r._min[axis] <= _max[axis] &&
+		       _min[axis] <= r._max[axis];
 	}
 
 	template <Dim2 axis>
 	bool contains(const Rect &r) const {
-		return _min[axis] <= r._min[axis] &&
-		       r._min[axis] < r._max[axis] &&
-		       r._max[axis] <= _max[axis];
+		return contains(r._min) && contains(r._max);
 	}
 
-	template <int axis>
+	template <Dim2 axis>
 	bool contains(const Point &p) const {
-		return p[axis] >= _min[axis] && p[axis] < _max[axis];
+		return p[axis] >= _min[axis] && p[axis] <= _max[axis];
 	}
 
 	Point _min, _max;
 };
 
-Rect least_bound(Rect r, Matrix m);
 /** Returns a rectangle that contains all the points p*m such that p
   is in r.  Warning: for rotation and shear transforms this rectangle
   is not the same as a rectangular path transformed. */
+Rect least_bound(Rect r, Matrix m);
+
+class ConvexHull {
+public:
+	ConvexHull(const Point &p) : _bounds(p, p) {}
+	ConvexHull(const ConvexHull &h) : _bounds(h._bounds) {}
+
+	void add(const Point &p) {
+		_bounds.expand_to(p);
+	}
+	void add(const Rect &r) {
+		_bounds.expand_to(r);
+	}
+	void add(const ConvexHull &h) {
+		_bounds.expand_to(h._bounds);
+	}
+
+	const Rect &bounds() const {
+		return _bounds;
+	}
+
+private:
+	Rect _bounds;
+};
 
 } /* namespace NR */
 

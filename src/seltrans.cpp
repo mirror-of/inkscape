@@ -98,7 +98,7 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 
 	sp_sel_trans_update_volatile_state(*seltrans);
 	
-	seltrans->center = seltrans->box.centre();
+	seltrans->center = seltrans->box.midpoint();
 
 	sp_sel_trans_update_handles(*seltrans);
 
@@ -487,7 +487,7 @@ static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans)
 	}
 
 	seltrans.box = sp_selection_bbox(selection);
-	if (seltrans.box.empty()) {
+	if (seltrans.box.is_empty()) {
 		seltrans.empty = TRUE;
 		return;
 	}
@@ -648,7 +648,7 @@ static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data)
 
 	if (!seltrans->grabbed) {
 		sp_sel_trans_update_volatile_state(*seltrans);
-		seltrans->center = seltrans->box.centre();
+		seltrans->center = seltrans->box.midpoint();
 		sp_sel_trans_update_handles(*seltrans);
 	}
 
@@ -663,7 +663,7 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
 
 	if (!seltrans->grabbed) {
 		sp_sel_trans_update_volatile_state(*seltrans);
-		seltrans->center = seltrans->box.centre();
+		seltrans->center = seltrans->box.midpoint();
 		sp_sel_trans_update_handles(*seltrans);
 	}
 
@@ -921,7 +921,7 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	}
 
 	if (state & GDK_SHIFT_MASK) {
-		pt = seltrans->box.centre();
+		pt = seltrans->box.midpoint();
 	}
 
 	// status text
