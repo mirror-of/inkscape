@@ -202,6 +202,7 @@ struct SPObject : public GObject {
 	 *  @return the updated repr
 	 */
 	SPRepr *updateRepr(unsigned int flags=SP_OBJECT_WRITE_EXT);
+
 	/** @brief Updates the given repr based on the object's
 	 *         state.
 	 *
@@ -248,7 +249,8 @@ struct SPObject : public GObject {
 	 *  @param flags flags indicating what to update
 	 */
 	void requestDisplayUpdate(unsigned int flags);
-	/** @breif Updates the object's display immediately
+
+	/** @brief Updates the object's display immediately
 	 *
 	 *  This method is called during the idle loop by SPDocument
 	 *  in order to update the object's display.
@@ -273,6 +275,7 @@ struct SPObject : public GObject {
 	 *  @param flags flags indicating what has been modified
 	 */
 	void requestModified(unsigned int flags);
+
 	/** @brief Emits a modification notification signal
 	 *
 	 *  @param flags indicating what has been modified
