@@ -259,14 +259,14 @@ options_selector ()
     gchar const *scale_orig = prefs_get_string_attribute ("tools.select", "scale_origin");
 
     b = sp_select_context_add_radio (
-        NULL, fb, tt, _("On bounding box"),
+        NULL, fb, tt, _("Opposite bounding box edge"),
         _("Default scale origin will be on the bounding box of the item"), "bbox", 0, false,
         (scale_orig == NULL) || !strcmp (scale_orig, "bbox"),
         options_scale_origin_toggled
         );
 
     sp_select_context_add_radio (
-        b, fb, tt, _("On outermost point"),
+        b, fb, tt, _("Farthest opposite node"),
         _("Default scale origin will be on the bounding box of the item's points"), "points", 0, false,
         scale_orig && !strcmp (scale_orig, "points"),
         options_scale_origin_toggled
