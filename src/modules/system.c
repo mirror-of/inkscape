@@ -58,13 +58,13 @@ SPDocument *
 sp_module_system_open (const gchar * key, const gchar * filename)
 {
 	gpointer parray[2];
-	SPModuleInput * imod;
+	SPModuleInput * imod = NULL;
 	GtkDialog * prefs = NULL;
 
 	if (!strcmp(key, SP_MODULE_KEY_AUTODETECT)) {
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&imod;
-		sp_module_db_foreach(open_internal, (gpointer)parray);
+		sp_module_db_foreach(open_internal, (gpointer)&parray);
 	} else {
 		imod = SP_MODULE_INPUT(sp_module_db_get(key));
 	}
