@@ -37,6 +37,11 @@ struct SPNamedView : public SPObjectGroup {
     unsigned int showborder : 1;
     unsigned int borderlayer : 2;
 
+    int snap_grid_bbox;
+    int snap_grid_point;
+    int snap_guide_bbox;
+    int snap_guide_point;
+
     double zoom;
     double cx;
     double cy;
