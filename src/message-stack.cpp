@@ -64,7 +64,7 @@ void MessageStack::cancel(MessageId id) {
 MessageId MessageStack::flash(MessageType type, gchar const *message) {
     switch (type) {
     case INFORMATION_MESSAGE: // stay rather long so as to seem permanent, but eventually disappear
-        return _push(type, 8000 + 100*strlen(message), message);
+        return _push(type, 6000 + 80*strlen(message), message);
         break;
     case ERROR_MESSAGE: // pretty important stuff, but temporary
         return _push(type, 4000 + 60*strlen(message), message);
