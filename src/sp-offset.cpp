@@ -387,19 +387,17 @@ sp_offset_update (SPObject * object, SPCtx * ctx, guint flags)
 static gchar *
 sp_offset_description (SPItem * item)
 {
-  SPOffset *offset = SP_OFFSET (item);
-  char tempSt[256];
-  if (offset->rad > 0)
-  {
-    sprintf (tempSt, "Path outset by %f pt", offset->rad); // localizing ok
-    return g_strdup (tempSt);
-  }
-  if (offset->rad < 0)
-  {
-    sprintf (tempSt, "Path inset by %f pt", -offset->rad); // localizing ok
-    return g_strdup (tempSt);
-  }
-  return g_strdup ("Offset by 0pt = original path");
+	SPOffset *offset = SP_OFFSET (item);
+
+	if ( offset->sourceHref ) {
+		// TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
+		return g_strdup_printf(_("Linked offset, %s by %f pt. Use Shift+D to look up original"),
+			 (offset->rad >= 0)? _("outset") : _("inset"), fabs (offset->rad));
+	} else {
+		// TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
+		return g_strdup_printf(_("Dynamic offset, %s by %f pt"),
+			 (offset->rad >= 0)? _("outset") : _("inset"), fabs (offset->rad));
+	}
 }
 
 // duplicate of splivarot
@@ -474,8 +472,6 @@ static void
 sp_offset_set_shape (SPShape * shape)
 {
   SPOffset *offset = SP_OFFSET (shape);
-  
-  SP_OBJECT (offset)->requestModified(SP_OBJECT_MODIFIED_FLAG);
   
   if ( offset->originalPath == NULL ) {
     // oops : no path?! (the offset object should do harakiri)
@@ -1066,8 +1062,7 @@ sp_offset_move_compensate(NR::Matrix const *mp, SPItem *original, SPOffset *self
 static void
 sp_offset_delete_self(SPObject */*deleted*/, SPOffset *offset)
 {
-	guint const mode = prefs_get_int_attribute("options.cloneorphans", "value",
-																						 SP_CLONE_ORPHANS_UNLINK);
+	guint const mode = prefs_get_int_attribute("options.cloneorphans", "value", SP_CLONE_ORPHANS_UNLINK);
 	
 	if (mode == SP_CLONE_ORPHANS_UNLINK) {
 		// leave it be. just forget about the source
@@ -1084,7 +1079,8 @@ sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *item)
 {
 	SPOffset *offset = SP_OFFSET(item);
 	offset->sourceDirty=true;
-	SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	refresh_offset_source(offset);
+	sp_shape_set_shape ((SPShape *) offset);
 }
 
 void   refresh_offset_source(SPOffset* offset)
