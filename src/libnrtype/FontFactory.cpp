@@ -413,19 +413,7 @@ NRNameList* font_factory::Families(NRNameList *flist)
 	flist->destructor = font_factory_name_list_destructor;
 
 	for (int i=0;i<nbFam;i++) {
-		bool skip_add=true;
-		font_instance* test_scal=Face(pango_font_family_get_name(fams[i]));
-		if ( test_scal ) {
-			if ( test_scal->IsOutlineFont() ) {
-				skip_add=false;
-			} else {
-				skip_add=true;
-			}
-			test_scal->Unref();
-		} 
-		if ( skip_add == false ) {
-			flist->names[i]=(guchar*)strdup(pango_font_family_get_name(fams[i]));
-		}
+		flist->names[i]=(guchar*)strdup(pango_font_family_get_name(fams[i]));
 	}
 
 	qsort (flist->names, nbFam, sizeof (guchar *), family_name_compare);
