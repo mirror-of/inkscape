@@ -2,12 +2,13 @@
 /**
  * \file verbs.cpp
  *
- * \brief This file implements routines necessary to deal with verbs.  A verb
+ * \brief Actions for inkscape
+ *
+ * This file implements routines necessary to deal with verbs.  A verb
  * is a numeric identifier used to retrieve standard SPActions for particular
  * views.
- *
- * Actions for inkscape
- *
+ */
+/*
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Ted Gould <ted@gould.cx>
@@ -15,7 +16,6 @@
  *   David Turner <novalis@gnu.org>
  *
  * This code is in public domain.
- *
  */
 
 #include <assert.h>

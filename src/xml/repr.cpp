@@ -1,8 +1,10 @@
 #define __SP_REPR_C__
 
-/*
+/** \file
  * Fuzzy DOM-like tree implementation
- *
+ */
+
+/*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   MenTaLguY <mental@rydia.net>
@@ -174,7 +176,7 @@ sp_repr_content(SPRepr const *repr)
 }
 
 /**
- * Retrieves the first attribute in the XML representation with
+ * \brief Retrieves the first attribute in the XML representation with
  * the given key 'key'
  */
 gchar const *
@@ -370,9 +372,9 @@ sp_repr_parent(SPRepr const *repr)
 /** Make \a child a child of \a repr, inserting after \a ref if non-null, or as the first
  *  child if \a ref is null.
  *
- *  Requires: See block of g_asserts.
- *            In addition: ( child->doc == repr->doc
- *                           || all of child's children (recursively) have null doc ).
+ *  \pre See block of g_asserts in the definition.
+ *  \pre ( ( child->doc == repr->doc )
+ *         || all of child's children (recursively) have null doc ).
  */
 unsigned
 sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
@@ -748,11 +750,10 @@ sp_repr_document_merge(SPReprDoc *doc, SPReprDoc const *src, gchar const *key)
     return sp_repr_merge(rdoc, rsrc, key);
 }
 
-/*
- * Duplicate all attributes and children from src into doc
- * Does NOT erase original attributes and children
+/**
+ * Duplicates all attributes and children from src into doc.
+ * Does NOT erase original attributes and children.
  */
-
 unsigned
 sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key)
 {

@@ -1,8 +1,11 @@
 #define __SP_DESKTOP_SNAP_C__
 
-/*
- * Various snapping methods
+/**
+ * \file snap.cpp
  *
+ * \brief Various snapping methods
+ */
+/*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
@@ -36,28 +39,26 @@ static bool namedview_will_snap_something(SPNamedView const *nv);
 static const double MIN_DIST_NORM = 1.0;
 
 /**
- *    Try to snap `req' in one dimension.
+ * Try to snap \a req in one dimension.
  *
- *    \param nv NamedView to use.
- *    \param req Point to snap; updated to the snapped point if a snap occurred.
- *    \param dim Dimension to snap in.
- *    \return Distance to the snap point along the `dim' axis, or NR_HUGE
+ * \param nv NamedView to use.
+ * \param req Point to snap; updated to the snapped point if a snap occurred.
+ * \param dim Dimension to snap in.
+ * \return Distance to the snap point along the \a dim axis, or \c NR_HUGE
  *    if no snap occurred.
  */
-
 NR::Coord namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Dim2 const dim)
 {
     return namedview_vector_snap (nv, t, req, component_vectors[dim]);
 }
 
 /**
- *    Try to snap `req' in both dimensions.
+ * Try to snap \a req in both dimensions.
  *
- *    \param nv NamedView to use.
- *    \param req Point to snap; updated to the snapped point if a snap occurred.
- *    \return Distance to the snap point, or NR_HUGE if no snap occurred.
+ * \param nv NamedView to use.
+ * \param req Point to snap; updated to the snapped point if a snap occurred.
+ * \return Distance to the snap point, or \c NR_HUGE if no snap occurred.
  */
-
 NR::Coord namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point& req)
 {
     /* fixme: If allowing arbitrary snap targets, free snap is not the sum of h and v */
@@ -90,11 +91,10 @@ NR::Coord namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::P
  * and the direction vector \a d.
  * Modifies req to the snap point, if one is found.
  * \return The distance from \a req to the snap point along the vector \a d,
- * or NR_HUGE if no snap point was found.
+ * or \c NR_HUGE if no snap point was found.
  *
- * Requires: d != (0, 0).
+ * \pre d ≠ (0, 0).
  */
-
 NR::Coord namedview_vector_snap (SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Point const &d)
 {
     g_assert(nv != NULL);
@@ -119,6 +119,9 @@ NR::Coord namedview_vector_snap (SPNamedView const *nv, Snapper::PointType t, NR
 
 
 /**
+ * \return x rounded to the nearest multiple of c1 plus c0.
+ *
+ * \note
  * If c1==0 (and c0 is finite), then returns +/-inf.  This makes grid spacing of zero
  * mean "ignore the grid in this dimention".  We're currently discussing "good" semantics
  * for guide/grid snapping.
@@ -195,10 +198,10 @@ std::pair<double, bool> namedview_vector_snap_list(SPNamedView const *nv,
 
 
 /**
- *    Try to snap points in `p' after they have been scaled by `sx' with respect to
- *    the origin `norm'.  The best snap is the one that changes the scale least.
+ * Try to snap points in \a p after they have been scaled by \a sx with respect to
+ * the origin \a norm.  The best snap is the one that changes the scale least.
  *
- *    \return Pair containing snapped scale and a flag which is true if a snap was made.
+ * \return Pair containing snapped scale and a flag which is true if a snap was made.
  */
 std::pair<double, bool> namedview_dim_snap_list_scale(SPNamedView const *nv,
                                                       Snapper::PointType t, const std::vector<NR::Point> &p,
@@ -327,13 +330,12 @@ bool Snapper::getSnapTo(PointType t) const
 
 /**
  *  Add some multiple of \a mv to \a req to make it line on the line {p : dot(n, p) == d} (within
- *  rounding error); unless that isn't possible (e.g. \a mv and \a n are orthogonal, or \a mv or \a
+ *  rounding error); unless that isn't possible (e.g.\ \a mv and \a n are orthogonal, or \a mv or \a
  *  n is zero-length), in which case \a req remains unchanged, and a big number is returned.
  *
- *  Returns a badness measure of snapping to the specified line: if snapping was possible then
- *  L2(req - req0) (i.e. the distance moved); otherwise returns NR_HUGE;
+ *  \return a badness measure of snapping to the specified line: if snapping was possible then
+ *  L2(req - req0) (i.e. the distance moved); otherwise returns NR_HUGE.
  */
-
 NR::Coord Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
                                              NR::Point const &n, NR::Coord const d) const
 {
@@ -353,7 +355,6 @@ NR::Coord Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv
 /**
  *  \return true if this Snapper will snap at least one kind of point.
  */
-
 bool Snapper::will_snap_something() const
 {
     std::map<PointType, bool>::const_iterator i = _snap_to.begin();

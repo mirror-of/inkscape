@@ -243,7 +243,7 @@ Extension::deactivate (void)
 
 /**
     \return  Whether the extension has been deactivated
-	\breif   Find out the status of the extension
+	\brief   Find out the status of the extension
 */
 bool
 Extension::deactivated (void)

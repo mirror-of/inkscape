@@ -1,8 +1,10 @@
 #define __SP_EXPORT_C__
 
-/**
+/** \file
  * \brief  PNG export dialog
- *
+ */
+
+/*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *

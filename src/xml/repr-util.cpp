@@ -1,8 +1,10 @@
 #define __SP_REPR_UTIL_C__
 
+/** \file
+ * Miscellaneous helpers for reprs.
+ */
+
 /*
- * Miscellaneous helpers for reprs
- *
  * Authors:
  *   Lauris Kaplinski <lauris@ximian.com>
  *
@@ -403,9 +405,9 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
 /** Returns the position of \a repr among its parent's children (starting with 0 for the first
  *  child).
  *
- *  Requires: repr != NULL
- *         && sp_repr_parent(repr) != NULL
- *         && sp_repr_parent(repr)'s list of children includes \a repr.
+ *  \pre repr != NULL.
+ *  \pre sp_repr_parent(repr) != NULL.
+ *  \pre sp_repr_parent(repr)'s list of children includes \a repr.
  */
 int
 sp_repr_position(SPRepr const *repr)
@@ -517,12 +519,7 @@ sp_repr_set_attr_recursive (SPRepr *repr, const gchar *key, const gchar *value)
 }
 
 /**
- * sp_repr_lookup_child:
- * @repr: 
- * @key: 
- * @value: 
- *
- * lookup child by (@key, @value)
+ * lookup child by \a key, \a value.
  */
 SPRepr *
 sp_repr_lookup_child (SPRepr       *repr,
@@ -575,7 +572,10 @@ sp_repr_lookup_name ( SPRepr *repr, gchar const *name )
 }
 
 /**
-Parses the boolean value of an attribute "key" in repr and sets val accordingly, or to FALSE if the attr is not set. Returns TRUE if the attr was set, FALSE otherwise.
+ * Parses the boolean value of an attribute "key" in repr and sets val accordingly, or to FALSE if
+ * the attr is not set.
+ *
+ * \return TRUE if the attr was set, FALSE otherwise.
  */
 unsigned int
 sp_repr_get_boolean (SPRepr *repr, const gchar *key, unsigned int *val)
