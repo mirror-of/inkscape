@@ -690,6 +690,8 @@ sp_selected_path_outline ()
         gint pos = sp_repr_position (SP_OBJECT_REPR (item));
         // remember parent
         SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+        // remember id
+        const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
         selection->removeItem (item);
         SP_OBJECT (item)->deleteObject(false);
@@ -715,6 +717,8 @@ sp_selected_path_outline ()
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+            sp_repr_set_attr (repr, "id", id);
 
             SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
             sp_item_write_transform (newitem, repr, transform);
@@ -1210,6 +1214,8 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         gint pos = sp_repr_position (SP_OBJECT_REPR (item));
         // remember parent
         SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+        // remember id
+        const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
         selection->removeItem (item);
         SP_OBJECT (item)->deleteObject(false);
@@ -1233,6 +1239,8 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+            sp_repr_set_attr (repr, "id", id);
 
             SPItem *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
             sp_item_write_transform (nitem, repr, transform);
