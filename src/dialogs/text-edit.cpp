@@ -398,11 +398,14 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
         tb = (GtkTextBuffer*)g_object_get_data (G_OBJECT (dlg), "text");
 
         /* Content */
-        gtk_text_buffer_get_bounds (tb, &start, &end);
-        str = gtk_text_buffer_get_text (tb, &start, &end, TRUE);
-        sp_text_set_repr_text_multiline (text, str);
-        g_free (str);    
-    } // end of if()
+        if (gtk_text_buffer_get_modified (tb)) {
+            gtk_text_buffer_get_bounds (tb, &start, &end);
+            str = gtk_text_buffer_get_text (tb, &start, &end, TRUE);
+            sp_text_set_repr_text_multiline (text, str);
+            g_free (str);    
+            gtk_text_buffer_set_modified (tb, FALSE);
+        }
+    } // end of if (text)
 
     
     if (repr)
@@ -570,7 +573,6 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
     SPStyle *style;
     unsigned items;
 
-    
     if (g_object_get_data (G_OBJECT (dlg), "blocked")) 
         return;
     
@@ -594,24 +596,25 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
         } else {
             gtk_widget_set_sensitive (textw, FALSE);
         }
-        
         gtk_widget_set_sensitive (apply, FALSE);
         gtk_widget_set_sensitive (def, TRUE);
         style = SP_OBJECT_STYLE (text);
-        
+
         if (docontent) {
             gchar *str;
             str = sp_text_get_string_multiline (text);
-            
+
             if (str) {
                 int pos;
                 pos = 0;
-                
+
                 if (items == 1) {
                     gtk_text_buffer_set_text (tb, str, strlen (str));
+                    gtk_text_buffer_set_modified (tb, FALSE);
                 }
                 sp_font_preview_set_phrase (SP_FONT_PREVIEW (preview), str);
                 g_free (str);
+
             } else {
                 gtk_text_buffer_set_text (tb, "", 0);
                 sp_font_preview_set_phrase (SP_FONT_PREVIEW (preview), NULL);
@@ -662,7 +665,7 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
             b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
                                                 "text_anchor_end" );
         }
-        
+
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
         
         if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR) {
@@ -681,7 +684,7 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
     }
 
     g_object_set_data (G_OBJECT (dlg), "blocked", NULL);
-    
+   
 } // end of sp_text_edit_dialog_read_selection()
 
 
@@ -706,7 +709,7 @@ sp_text_edit_dialog_text_changed (GtkTextBuffer *tb, GtkWidget *dlg)
 
     gtk_text_buffer_get_bounds (tb, &start, &end);
     str = gtk_text_buffer_get_text (tb, &start, &end, TRUE);
-    
+
     if (str && *str) {
         sp_font_preview_set_phrase (SP_FONT_PREVIEW (preview), str);
     } else {
@@ -718,7 +721,7 @@ sp_text_edit_dialog_text_changed (GtkTextBuffer *tb, GtkWidget *dlg)
         gtk_widget_set_sensitive (apply, TRUE);
     }
     gtk_widget_set_sensitive (def, TRUE);
-    
+
 } // end of sp_text_edit_dialog_text_changed()
 
 
@@ -746,7 +749,7 @@ sp_text_edit_dialog_font_changed ( SPFontSelector *fsel,
         gtk_widget_set_sensitive (apply, TRUE);
     }
     gtk_widget_set_sensitive (def, TRUE);
-    
+
 } // end of sp_text_edit_dialog_font_changed()
 
 
