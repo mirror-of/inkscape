@@ -50,7 +50,368 @@
 
 #include "sp-text.h"
 
-static void sp_text_update_length (SPSVGLength *length, gdouble em, gdouble ex, gdouble scale);
+//FIXME: find a better place for these
+
+static void
+sp_text_update_length (SPSVGLength *length, gdouble em, gdouble ex, gdouble scale)
+{
+	if (length->unit == SP_SVG_UNIT_EM) {
+		length->computed = length->value * em;
+	} else if (length->unit == SP_SVG_UNIT_EX) {
+		length->computed = length->value * ex;
+	} else if (length->unit == SP_SVG_UNIT_PERCENT) {
+		length->computed = length->value * scale;
+	}
+}
+
+/**
+\brief  Writes a space-separated list of lengths into the key attribute of repr
+\param repr   element node repr
+\param key    attribute name
+\param l        GList where each member has an SPSVGLength as data
+ */
+unsigned int
+sp_repr_set_length_list (SPRepr *repr, const gchar *key, GList *l)
+{
+    g_return_val_if_fail (repr != NULL, FALSE);
+    g_return_val_if_fail (key != NULL, FALSE);
+
+    gchar c[32];
+    gchar *s = NULL;
+
+    GList *i;
+    for (i = l; i != NULL; i = i->next) {
+	if (i->data) {
+		g_ascii_formatd (c, sizeof (c), "%.8g", ((SPSVGLength *) i->data)->computed);
+	if (i == l) {
+			s = g_strdup (c);
+	}		else {
+			s = g_strjoin (" ", s, c, NULL);
+	}
+	}
+    }
+    return sp_repr_set_attr (repr, key, s);
+}
+
+/* dx/dy manipulation */
+
+guint 
+sp_count_chars_recursive (SPObject *o, SPObject *target)
+{
+	guint n = 0;
+	guint i;
+
+	if (o == target) {
+		return INT_MAX; // INT_MAX is a signal to stop searching the tree
+	}
+
+	if (SP_IS_STRING(o)) {
+		return (SP_STRING(o)->length);
+	}
+
+	// FIXME!!! tspans may recurse, too! To support this, we need to move parent/children tree to SPObject, as is done in SP
+	if (SP_IS_TSPAN(o)) {
+		if (SP_TSPAN(o)->string == target) {
+			return  INT_MAX; // INT_MAX is a signal to stop searching the tree
+		}
+		else {
+			return (SP_STRING(SP_TSPAN(o)->string)->length);
+		}
+	}
+
+	if (!SP_IS_TEXT(o)) {
+		return 0;
+	}
+
+	SPObject *child;
+	for (child = SP_TEXT(o)->children; child != NULL; child = child->next) {
+		if (child == target) {
+			break;
+		}
+		i = sp_count_chars_recursive (child, target);
+		if (i == INT_MAX) { // somewhere under us, target was hit
+			break;
+		}
+		n += i;
+	}
+
+	return n;
+}
+
+/**
+\brief  Recursively counts chars in the object o, stops when runs into target
+*/
+guint 
+sp_count_chars (SPObject *o, SPObject *target)
+{
+	guint n = sp_count_chars_recursive (o, target);
+	if (n == INT_MAX)
+		return 0;
+	return n;
+}
+
+/**
+\brief   Returns the dx list that is effective for the object o, or NULL if
+none. According to the spec, the closest ancestor's value has precedence. 
+Writes the offset of o relative to its parent that holds the effective dx into
+offset. 
+*/
+GList *
+sp_effective_dx (SPObject *o, guint *offset)
+{
+	GList *l = NULL;
+	SPObject *orig = o;
+	*offset = 0;
+
+	while (SP_IS_STRING(o) || SP_IS_TSPAN(o) || SP_IS_TEXT(o)) {
+		if (SP_IS_TSPAN(o) && SP_TSPAN (o)->ly.dx != NULL) {
+			l = SP_TSPAN (o)->ly.dx;
+			*offset = sp_count_chars (o, orig);
+			break;
+		}
+		if (SP_IS_TEXT(o) && SP_TEXT (o)->ly.dx != NULL) {
+			l = SP_TEXT (o)->ly.dx;
+			*offset = sp_count_chars (o, orig);
+			break;
+		}
+		o = SP_OBJECT_PARENT(o);
+	}
+	return l;
+}
+
+/**
+\brief  Returns the dx shift from the list for character at pos
+*/
+float
+sp_char_dx (GList *dx, guint pos)
+{
+	if (!dx)
+		return 0;
+	if (g_list_length(dx) < pos + 1) // pos starts from 0
+		return 0;
+	return ((SPSVGLength *) g_list_nth(dx, pos)->data)->computed;
+}
+
+/**
+\brief   Returns the dy list that is effective for the object o, or NULL if
+none. According to the spec, the closest ancestor's value has precedence. 
+Writes the offset of o relative to its parent that holds the effective dy into
+offset. 
+*/
+GList *
+sp_effective_dy (SPObject *o, guint *offset)
+{
+	GList *l = NULL;
+	SPObject *orig = o;
+	*offset = 0;
+
+	while (SP_IS_STRING(o) || SP_IS_TSPAN(o) || SP_IS_TEXT(o)) {
+		if (SP_IS_TSPAN(o) && SP_TSPAN (o)->ly.dy != NULL) {
+			l = SP_TSPAN (o)->ly.dy;
+			*offset = sp_count_chars (o, orig);
+			break;
+		}
+		if (SP_IS_TEXT(o) && SP_TEXT (o)->ly.dy != NULL) {
+			l = SP_TEXT (o)->ly.dy;
+			*offset = sp_count_chars (o, orig);
+			break;
+		}
+		o = SP_OBJECT_PARENT(o);
+	}
+	return l;
+}
+
+/**
+\brief  Returns the dy shift from the list for character at pos
+*/
+float
+sp_char_dy (GList *dy, guint pos)
+{
+	if (!dy)
+		return 0;
+	if (g_list_length(dy) < pos + 1) // pos starts from 0
+		return 0;
+	return ((SPSVGLength *) g_list_nth(dy, pos)->data)->computed;
+}
+
+/**
+\brief  Sets the given dx and dy lists for the SPObject o and writes them to its repr
+*/
+void
+sp_set_dxdy (SPObject *o, GList *dx, GList *dy)
+{
+	if (SP_IS_STRING(o)) {
+		o = SP_OBJECT_PARENT (o);
+	}
+
+	if (SP_IS_TEXT(o)) {
+		SP_TEXT(o)->ly.dx = dx;
+		SP_TEXT(o)->ly.dy = dy;
+	}
+	if (SP_IS_TSPAN(o)) {
+		SP_TSPAN(o)->ly.dx = dx;
+		SP_TSPAN(o)->ly.dy = dy;
+	}
+
+	sp_repr_set_length_list (SP_OBJECT_REPR(o), "dx", dx);
+	sp_repr_set_length_list (SP_OBJECT_REPR(o), "dy", dy);
+}
+
+/**
+\brief   Ensures the dx and dy lists of child are exactly end positions long, either
+appending 0 values or cutting extra values from the lists
+*/
+void
+sp_fill_dxdy (SPObject *child, gint end)
+{
+	guint dx_offset, dy_offset;
+	GList *dxnew, *dx = sp_effective_dx (child, &dx_offset);
+	GList *dynew, *dy = sp_effective_dy (child, &dy_offset);
+	gint i;
+
+	dxnew = g_list_copy (g_list_nth (dx, dx_offset));
+	// fill in missing...
+	for (i = g_list_length(dxnew); i < end; i++) {
+		SPSVGLength *length = g_new (SPSVGLength, 1);
+		length->value = 0;
+		length->computed = 0;
+		dxnew = g_list_append (dxnew, length);
+	}
+	// or delete extra
+	while (g_list_length(dxnew) > end) {
+		if (g_list_length(dxnew) > 1) {
+			g_list_remove (dxnew, g_list_last(dxnew)->data);
+		} else {
+			dxnew = NULL;
+			break;
+		}
+	}
+
+	dynew = g_list_copy (g_list_nth (dy, dy_offset));
+	// fill in missing...
+	for (i = g_list_length(dynew); i < end; i++) {
+		SPSVGLength *length = g_new (SPSVGLength, 1);
+		length->value = 0;
+		length->computed = 0;
+		dynew = g_list_append (dynew, length);
+	}
+	// or delete extra
+	while (g_list_length(dynew) > end) {
+		if (g_list_length(dynew) > 1)
+			g_list_remove (dynew, g_list_last(dynew)->data);
+		else {
+			dynew = NULL;
+			break;
+		}
+	}
+
+	sp_set_dxdy (child, dxnew, dynew);
+}
+
+/**
+\brief   Concatenates dx and dy lists of the two objects, assigns the reulting lists to
+the first object
+*/
+void
+sp_append_dxdy (SPObject *child1, SPObject *child2)
+{
+	guint dx_offset1, dy_offset1;
+	guint dx_offset2, dy_offset2;
+	GList *dxnew1, *dx1 = sp_effective_dx (child1, &dx_offset1);
+	GList *dxnew2, *dx2 = sp_effective_dx (child2, &dx_offset2);
+	GList *dynew1, *dy1 = sp_effective_dy (child1, &dy_offset1);
+	GList *dynew2, *dy2 = sp_effective_dy (child2, &dy_offset2);
+
+	dxnew1 = g_list_copy (g_list_nth (dx1, dx_offset1));
+	dxnew2 = g_list_copy (g_list_nth (dx2, dx_offset2));
+	dxnew1 = g_list_concat (dxnew1, dxnew2);
+
+	dynew1 = g_list_copy (g_list_nth (dy1, dy_offset1));
+	dynew2 = g_list_copy (g_list_nth (dy2, dy_offset2));
+	dynew1 = g_list_concat (dynew1, dynew2);
+
+	sp_set_dxdy (child1, dxnew1, dynew1);
+}
+
+/**
+\brief   Deletes from start to end elements from the object's dx and dy lists
+*/
+void
+sp_delete_dxdy (SPObject *child, gint start, gint end)
+{
+	guint dx_offset, dy_offset;
+	GList *dxnew, *dx = sp_effective_dx (child, &dx_offset);
+	GList *dynew, *dy = sp_effective_dy (child, &dy_offset);
+	gpointer d;
+	gint i;
+
+	if (dx && g_list_length(dx) > dx_offset + start) {
+		dxnew = g_list_copy (g_list_nth (dx, dx_offset));
+		for (i = start; i < end; i ++) {
+			d = g_list_nth_data(dxnew, i);
+			if (d)
+				dxnew = g_list_remove (dxnew, d);
+		}
+	} else dxnew = dx;
+
+	if (dy && g_list_length(dy) > dy_offset + start) {
+		dynew = g_list_copy (g_list_nth (dy, dy_offset));
+		for (i = start; i < end; i ++) {
+			d = g_list_nth_data(dynew, i);
+			if (d)
+				dynew = g_list_remove (dynew, d);
+		}
+	} else dynew = dy;
+
+	sp_set_dxdy (child, dxnew, dynew);
+}
+
+/**
+\brief   Writes dx and dy lists from a text object to its tspan children, with appropriate
+offsets. Inkscape-created text always stores dx and dy in tspans, so this is only needed
+for foreign SVG. Text display works correctly no matter where dx and dy are stored, so
+this function is only called when you attempt to edit text, because editing functions
+assume for simplicity that each string has its dx and dy in its immediate parent (tspan
+or text). If a text object has only tspan children (no child text nodes) and therefore
+all of its dx/dy information is distributed into tspans, it is deleted from the text
+object.
+*/
+void
+sp_distribute_dxdy (SPText *text)
+{
+	if (text->ly.dx == NULL && text->ly.dy == NULL) return;
+
+	bool tspans_only = true;
+	SPObject *child;
+	GList *dxnew, *dynew, *dx, *dy;
+	guint dx_offset, dy_offset;
+
+	for (child = text->children; child; child = child->next) {
+
+		if (!SP_IS_TSPAN(child)) {
+			tspans_only = false;
+			continue;
+		}
+
+		if (SP_TSPAN(child)->ly.dx == NULL) {
+			dx = sp_effective_dx (child, &dx_offset);
+			dxnew = g_list_copy (g_list_nth (dx, dx_offset));
+		} else 
+			dxnew = SP_TSPAN(child)->ly.dx;
+
+		if (SP_TSPAN(child)->ly.dy == NULL) {
+			dy = sp_effective_dy (child, &dy_offset);
+			dynew = g_list_copy (g_list_nth (dy, dy_offset));
+		} else 
+			dynew = SP_TSPAN(child)->ly.dy;
+
+		sp_set_dxdy (child, dxnew, dynew);
+	}
+
+	if (tspans_only) {
+		sp_set_dxdy (SP_OBJECT(text), NULL, NULL);
+	}
+}
 
 /* SPString */
 
@@ -210,139 +571,6 @@ sp_letterspacing_advance (const SPStyle *style)
 		}
 	} 
 	return letterspacing_adv;
-}
-
-/**
-\brief  Recursively counts chars in the object o, stops when runs into target
-*/
-guint 
-sp_count_chars_recursive (SPObject *o, SPObject *target)
-{
-	guint n = 0;
-	guint i;
-
-	if (o == target) {
-		return INT_MAX; // INT_MAX is a signal to stop searching the tree
-	}
-
-	if (SP_IS_STRING(o)) {
-		return (SP_STRING(o)->length);
-	}
-
-	// FIXME!!! tspans may recurse, too! To support this, we need to move parent/children tree to SPObject, as is done in SP
-	if (SP_IS_TSPAN(o)) {
-		if (SP_TSPAN(o)->string == target) {
-			return  INT_MAX; // INT_MAX is a signal to stop searching the tree
-		}
-		else {
-			return (SP_STRING(SP_TSPAN(o)->string)->length);
-		}
-	}
-
-	if (!SP_IS_TEXT(o)) {
-		return 0;
-	}
-
-	SPObject *child;
-	for (child = SP_TEXT(o)->children; child != NULL; child = child->next) {
-		if (child == target) {
-			break;
-		}
-		i = sp_count_chars_recursive (child, target);
-		if (i == INT_MAX) { // somewhere under us, target was hit
-			break;
-		}
-		n += i;
-	}
-
-	return n;
-}
-
-guint 
-sp_count_chars (SPObject *o, SPObject *target)
-{
-	guint n = sp_count_chars_recursive (o, target);
-	if (n == INT_MAX)
-		return 0;
-	return n;
-}
-
-/**
-\brief   Returns the dx list that is effective for the object o, or NULL if
-none. According to the spec, the closest ancestor's value has precedence. 
-Writes the offset of o relative to its parent that holds the effective dx into
-offset. 
-*/
-GList *
-sp_effective_dx (SPObject *o, guint *offset)
-{
-	GList *l = NULL;
-	SPObject *orig = o;
-	*offset = 0;
-
-	while (SP_IS_STRING(o) || SP_IS_TSPAN(o) || SP_IS_TEXT(o)) {
-		if (SP_IS_TSPAN(o) && SP_TSPAN (o)->ly.dx != NULL) {
-			l = SP_TSPAN (o)->ly.dx;
-			*offset = sp_count_chars (o, orig);
-			break;
-		}
-		if (SP_IS_TEXT(o) && SP_TEXT (o)->ly.dx != NULL) {
-			l = SP_TEXT (o)->ly.dx;
-			*offset = sp_count_chars (o, orig);
-			break;
-		}
-		o = SP_OBJECT_PARENT(o);
-	}
-	return l;
-}
-
-float
-sp_char_dx (GList *dx, guint pos)
-{
-	if (!dx)
-		return 0;
-	if (g_list_length(dx) < pos + 1) // pos starts from 0
-		return 0;
-	return ((SPSVGLength *) g_list_nth(dx, pos)->data)->computed;
-}
-
-/**
-\brief   Returns the dy list that is effective for the object o, or NULL if
-none. According to the spec, the closest ancestor's value has precedence. 
-Writes the offset of o relative to its parent that holds the effective dx into
-offset. 
-*/
-GList *
-sp_effective_dy (SPObject *o, guint *offset)
-{
-	GList *l = NULL;
-	SPObject *orig = o;
-	*offset = 0;
-
-	while (SP_IS_STRING(o) || SP_IS_TSPAN(o) || SP_IS_TEXT(o)) {
-		if (SP_IS_TSPAN(o) && SP_TSPAN (o)->ly.dy != NULL) {
-			l = SP_TSPAN (o)->ly.dy;
-			*offset = sp_count_chars (o, orig);
-			break;
-		}
-		if (SP_IS_TEXT(o) && SP_TEXT (o)->ly.dy != NULL) {
-			l = SP_TEXT (o)->ly.dy;
-			*offset = sp_count_chars (o, orig);
-			break;
-		}
-		o = SP_OBJECT_PARENT(o);
-	}
-	return l;
-}
-
-float
-sp_char_dy (GList *dy, guint pos)
-{
-	if (!dy)
-		return 0;
-	if (g_list_length(dy) < pos + 1) // pos starts from 0
-		return 0;
-	return ((SPSVGLength *) g_list_nth(dy, pos)->data)->computed;
 }
 
 static void
@@ -816,9 +1044,10 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
 
 	if (tspan->ly.x.set) sp_repr_set_double (repr, "x", tspan->ly.x.computed);
 	if (tspan->ly.y.set) sp_repr_set_double (repr, "y", tspan->ly.y.computed);
-	//FIXME!!! write length list
-	//if (tspan->ly.dx.set) sp_repr_set_double (repr, "dx", tspan->ly.dx.computed);
-	//if (tspan->ly.dy.set) sp_repr_set_double (repr, "dy", tspan->ly.dy.computed);
+
+	if (tspan->ly.dx) sp_repr_set_length_list (repr, "dx", tspan->ly.dx);
+	if (tspan->ly.dy) sp_repr_set_length_list (repr, "dy", tspan->ly.dy);
+
 	if (tspan->ly.rotate_set) sp_repr_set_double (repr, "rotate", tspan->ly.rotate);
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		sp_repr_set_attr (repr, "sodipodi:role", (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED) ? "line" : NULL);
@@ -1315,11 +1544,10 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 		sp_repr_set_double (repr, "x", text->ly.x.computed);
 	if (text->ly.y.set)
 		sp_repr_set_double (repr, "y", text->ly.y.computed);
-	//FIXME!!! write length list
-	//	if (text->ly.dx.set)
-	//		sp_repr_set_double (repr, "dx", text->ly.dx.computed);
-	//	if (text->ly.dy.set)
-	//		sp_repr_set_double (repr, "dy", text->ly.dy.computed);
+
+	if (text->ly.dx) sp_repr_set_length_list (repr, "dx", text->ly.dx);
+	if (text->ly.dy) sp_repr_set_length_list (repr, "dy", text->ly.dy);
+
 	if (text->ly.rotate_set)
 		sp_repr_set_double (repr, "rotate", text->ly.rotate);
 
@@ -2018,6 +2246,8 @@ sp_text_delete (SPText *text, gint start, gint end)
 	if (!text->children) return 0;
 	if (start == end) return start;
 
+	sp_distribute_dxdy (text);
+
 	SPObject *schild = sp_text_get_child_by_position (text, start);
 	SPObject *echild = sp_text_get_child_by_position (text, end);
 
@@ -2029,6 +2259,7 @@ sp_text_delete (SPText *text, gint start, gint end)
 		/* Easy case */
 		sstring = SP_TEXT_CHILD_STRING (schild);
 		estring = SP_TEXT_CHILD_STRING (echild);
+
 		sp = g_utf8_offset_to_pointer (sstring->text, start - sstring->start);
 		ep = g_utf8_offset_to_pointer (estring->text, end - estring->start);
 		utf8 = g_new (gchar, (sp - sstring->text) + strlen (ep) + 1);
@@ -2036,6 +2267,11 @@ sp_text_delete (SPText *text, gint start, gint end)
 		memcpy (utf8 + (sp - sstring->text), ep, strlen (ep) + 1);
 		sp_repr_set_content (SP_OBJECT_REPR (sstring), utf8);
 		g_free (utf8);
+
+		sp_fill_dxdy (schild, start - sstring->start);
+		sp_delete_dxdy (echild, 0, end - estring->start);
+		sp_append_dxdy (schild, echild);
+
 		/* Delete nodes */
 		cl = NULL;
 		for (child = schild->next; child != echild; child = child->next) {
@@ -2055,6 +2291,8 @@ sp_text_delete (SPText *text, gint start, gint end)
 		ep = g_utf8_offset_to_pointer (string->text, end - string->start);
 		memmove (sp, ep, strlen (ep) + 1);
 		sp_repr_set_content (SP_OBJECT_REPR (string), string->text);
+
+		sp_delete_dxdy (schild, start - string->start, end - string->start);
 	}
 
 	return start;
@@ -2165,17 +2403,6 @@ sp_text_get_child_by_position (SPText *text, gint pos)
 	return child;
 }
 
-static void
-sp_text_update_length (SPSVGLength *length, gdouble em, gdouble ex, gdouble scale)
-{
-	if (length->unit == SP_SVG_UNIT_EM) {
-		length->computed = length->value * em;
-	} else if (length->unit == SP_SVG_UNIT_EX) {
-		length->computed = length->value * ex;
-	} else if (length->unit == SP_SVG_UNIT_PERCENT) {
-		length->computed = length->value * scale;
-	}
-}
 
 /**
 \brief   Adjusts letterspacing in pos'th line of text so that the length of the line is changed by by visible pixels at the current zoom
