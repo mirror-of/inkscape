@@ -15,7 +15,6 @@ ast
 bonobo
 
 dialogs/filedialog-win32.cpp
-display/nr-uta.cpp
 display/testnr.cpp
 display/bezier-utils-test.cpp
 ecma/ecmatest.cpp
@@ -24,31 +23,19 @@ ecma/SVGViewer.cpp
 extension/api.cpp
 extension/internal/gnome.cpp
 extension/script/js/js.c
-extension/menu.h
-extension/menu.cpp
+extension/plugin
 extract-uri-test.cpp
 helper/units-test.cpp
-ink-snprintf.cpp
 inkview.cpp
 libnr/nr-matrix-test.cpp
 libnr/nr-point-fns-test.cpp
 libnr/nr-rotate-test.cpp
 libnr/nr-types-test.cpp
-libnrtype/nr-type-gnome.cpp
-libnrtype/nr-type-xft.cpp
 livarot/Path-test.cpp
 main.cpp
 potrace/potest.cpp
 round-test.cpp
-svg/gill-svg-path.cpp
-svg/tst.cpp
-test.c
-test.cpp
 utest
-widgets/sp-hwrap-box.cpp
-widgets/sp-vwrap-box.cpp
-widgets/sp-toolbox.cpp
-widgets/sp-wrap-box.cpp
 widgets/test-widgets.cpp
 winmain.cpp
 
