@@ -7,13 +7,13 @@
    sodipodi:version="0.32"
    width="600pt"
    height="500pt"
-   sodipodi:docname="glade/about.svg"
+   sodipodi:docname="about.svg"
    inkscape:version="0.37cvs"
-   sodipodi:docbase="glade"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase=".">
   <defs
      id="defs561">
     <linearGradient
@@ -218,21 +218,25 @@
        x="628.290283"
        y="611.735809">Mitsuru Oka</tspan><tspan
        sodipodi:role="line"
+       id="tspan646"
+       x="628.290283"
+       y="631.735809">Jon Phillips</tspan><tspan
+       sodipodi:role="line"
        id="tspan639"
        x="628.290283"
-       y="631.735809">Christian Schaller</tspan><tspan
+       y="651.735809">Christian Schaller</tspan><tspan
        sodipodi:role="line"
        id="tspan641"
        x="628.290283"
-       y="651.735809">Tom von Schwerdtner</tspan><tspan
+       y="671.735809">Tom von Schwerdtner</tspan><tspan
        sodipodi:role="line"
        id="tspan643"
        x="628.290283"
-       y="671.735809">Daniel Yacob</tspan><tspan
+       y="691.735809">Daniel Yacob</tspan><tspan
        sodipodi:role="line"
        id="tspan645"
        x="628.290283"
-       y="691.735809">Masatake Yamato</tspan></text>
+       y="711.735809">Masatake Yamato</tspan></text>
   <text
      style="fill:#ffffff;stroke:none;font-family:Arial;font-style:normal;font-weight:bold;font-size:36;text-anchor:middle;writing-mode:lr;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
      x="246.201307"
