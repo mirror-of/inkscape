@@ -24,7 +24,8 @@ xml_libspxml_a_SOURCES =	\
 	xml/repr-util.cpp	\
 	xml/repr.cpp	\
 	xml/repr.h	\
-	xml/xml-forward.h
+	xml/xml-forward.h \
+	xml/sp-repr-attr.h
 
 xml_repr_action_test_SOURCES = xml/repr-action-test.cpp
 
