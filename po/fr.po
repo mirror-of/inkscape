@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-09 15:50+0200\n"
+"POT-Creation-Date: 2004-10-12 00:23+0200\n"
 "PO-Revision-Date: 2004-08-23 14:20+0200\n"
 "Last-Translator: Frederic Rodrigo <f.rodrigo free.fr>\n"
 "Language-Team: Français\n"
@@ -29,7 +29,16 @@ msgstr "Illustrateur vectoriel SVG"
 msgid "SVG Vector Illustrator"
 msgstr "Illustrateur vectoriel SVG"
 
-#: src/arc-context.cpp:471
+#: src/arc-context.cpp:364
+msgid ""
+"<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
+msgstr ""
+
+#: src/arc-context.cpp:365 src/rect-context.cpp:398
+msgid "<b>Shift</b>: draw around the starting point"
+msgstr ""
+
+#: src/arc-context.cpp:501
 #, c-format
 msgid ""
 "<b>Ellipse</b>: %s x %s; with <b>Ctrl</b> to make circle or integer-ratio "
@@ -149,20 +158,19 @@ msgstr "Plus de zoom avant."
 
 #. Page page
 #: src/desktop.cpp:2038 src/dialogs/align.cpp:1097
-#: src/dialogs/desktop-properties.cpp:922 src/dialogs/export.cpp:125
+#: src/dialogs/desktop-properties.cpp:924 src/dialogs/export.cpp:126
 msgid "Page"
 msgstr "Page"
 
-#: src/desktop.cpp:2042 src/dialogs/align.cpp:1100 src/dialogs/export.cpp:125
+#: src/desktop.cpp:2042 src/dialogs/align.cpp:1100 src/dialogs/export.cpp:126
 msgid "Drawing"
 msgstr "Dessin"
 
-#: src/desktop.cpp:2046 src/dialogs/align.cpp:1103 src/dialogs/export.cpp:125
+#: src/desktop.cpp:2046 src/dialogs/align.cpp:1103 src/dialogs/export.cpp:126
 msgid "Selection"
 msgstr "Sélection"
 
-#. Layout
-#: src/dialogs/align.cpp:457 src/dialogs/text-edit.cpp:250
+#: src/dialogs/align.cpp:457 src/dialogs/text-edit.cpp:210
 msgid "Layout"
 msgstr "Agencement"
 
@@ -228,9 +236,8 @@ msgstr "Aligner le haut de l'objet avec le bas de l'ancre"
 msgid "Distribute left sides of objects at even distances"
 msgstr "Distribue les cotés gauches de l'objet à distances égales"
 
-#: src/dialogs/align.cpp:506
-#, fuzzy
-msgid "Distribute centers of objects of objects at even distances horizontally"
+#: src/dialogs/align.cpp:506 src/dialogs/align.cpp:1001
+msgid "Distribute centers of objects at even distances horizontally"
 msgstr "Distribue les centres des objets horizontalement à distances égales"
 
 #: src/dialogs/align.cpp:510 src/dialogs/align.cpp:1008
@@ -276,10 +283,6 @@ msgstr "Retourner les objets sélectionnés horizontalement"
 #, fuzzy
 msgid "Distribute selected nodes vertically"
 msgstr "Distribue verticalement les centres des objets à distances égales"
-
-#: src/dialogs/align.cpp:1001
-msgid "Distribute centers of objects at even distances horizontally"
-msgstr "Distribue les centres des objets horizontalement à distances égales"
 
 #: src/dialogs/align.cpp:1085
 msgid "Last selected"
@@ -340,12 +343,12 @@ msgid "Spacing Y:"
 msgstr "Espacement Y :"
 
 #: src/dialogs/desktop-properties.cpp:848
-#: src/dialogs/desktop-properties.cpp:906
+#: src/dialogs/desktop-properties.cpp:908
 msgid "Snap units:"
 msgstr "Unités de collage :"
 
 #: src/dialogs/desktop-properties.cpp:851
-#: src/dialogs/desktop-properties.cpp:909
+#: src/dialogs/desktop-properties.cpp:911
 msgid "Snap distance:"
 msgstr "Distance de collage :"
 
@@ -373,109 +376,116 @@ msgstr "Couleur de la grille"
 msgid "Major grid line spacing:"
 msgstr "Espacement des lignes :"
 
-#: src/dialogs/desktop-properties.cpp:871
+#. TRANSLATORS: This belongs to the "Major grid line spacing:" string,
+#. see grid settings in the "Document Preferences" dialog
+#: src/dialogs/desktop-properties.cpp:873
 #, fuzzy
 msgid "lines"
 msgstr "Clones"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:885
+#: src/dialogs/desktop-properties.cpp:887
 msgid "Guides"
 msgstr "Guides"
 
-#: src/dialogs/desktop-properties.cpp:893
+#: src/dialogs/desktop-properties.cpp:895
 msgid "Show guides"
 msgstr "Afficher les guides"
 
-#: src/dialogs/desktop-properties.cpp:894
+#: src/dialogs/desktop-properties.cpp:896
 msgid "Snap bounding boxes to guides"
 msgstr "Faire coller les boites aux guides"
 
-#: src/dialogs/desktop-properties.cpp:895
+#: src/dialogs/desktop-properties.cpp:897
 msgid "Snap points to guides"
 msgstr "Faire coller les point aux guides"
 
-#: src/dialogs/desktop-properties.cpp:913
+#: src/dialogs/desktop-properties.cpp:915
 msgid "Guide color:"
 msgstr "Couleur des guides :"
 
-#: src/dialogs/desktop-properties.cpp:914
+#: src/dialogs/desktop-properties.cpp:916
 msgid "Guideline color"
 msgstr "Couleur des lignes de guide"
 
-#: src/dialogs/desktop-properties.cpp:916
+#: src/dialogs/desktop-properties.cpp:918
 msgid "Highlight color:"
 msgstr "Couleur de mise en évidence :"
 
-#: src/dialogs/desktop-properties.cpp:917
+#: src/dialogs/desktop-properties.cpp:919
 msgid "Highlighted guideline color"
 msgstr "Ligne de guide surbrillante"
 
-#: src/dialogs/desktop-properties.cpp:931
-msgid "Background (also for export):"
+#: src/dialogs/desktop-properties.cpp:934
+#, fuzzy
+msgid "Background (also for export)"
 msgstr "Fond (aussi pour l'exportation) :"
 
-#: src/dialogs/desktop-properties.cpp:932
+#: src/dialogs/desktop-properties.cpp:935
 msgid "Background color"
 msgstr "Couleur de fond"
 
-#: src/dialogs/desktop-properties.cpp:936
+#: src/dialogs/desktop-properties.cpp:939
 msgid "Show canvas border"
 msgstr "Afficher le canevas"
 
-#: src/dialogs/desktop-properties.cpp:939
+#: src/dialogs/desktop-properties.cpp:943
 msgid "Border on top of drawing"
 msgstr "Contour au-dessus du dessin"
 
-#: src/dialogs/desktop-properties.cpp:949
-msgid "Border color:"
+#: src/dialogs/desktop-properties.cpp:946
+#, fuzzy
+msgid "Border color"
 msgstr "Couleur de bord :"
 
-#: src/dialogs/desktop-properties.cpp:950
+#: src/dialogs/desktop-properties.cpp:947
 msgid "Canvas border color"
 msgstr "Couleur du bord du canevas"
 
-#: src/dialogs/desktop-properties.cpp:966
-msgid "Paper size:"
-msgstr "Taille du papier :"
+#: src/dialogs/desktop-properties.cpp:963
+#, fuzzy
+msgid "Canvas size:"
+msgstr "Taille de police :"
 
-#: src/dialogs/desktop-properties.cpp:990 src/dialogs/export.cpp:125
+#: src/dialogs/desktop-properties.cpp:987 src/dialogs/export.cpp:126
 msgid "Custom"
 msgstr "Sur mesure"
 
-#: src/dialogs/desktop-properties.cpp:1001
-msgid "Paper orientation:"
+#: src/dialogs/desktop-properties.cpp:998
+#, fuzzy
+msgid "Canvas orientation:"
 msgstr "Orientation du papier :"
 
-#: src/dialogs/desktop-properties.cpp:1013
+#: src/dialogs/desktop-properties.cpp:1010
 msgid "Landscape"
 msgstr "Paysage"
 
-#: src/dialogs/desktop-properties.cpp:1019
+#: src/dialogs/desktop-properties.cpp:1016
 msgid "Portrait"
 msgstr "Portrait"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:1028
-msgid "Custom paper"
+#: src/dialogs/desktop-properties.cpp:1025
+#, fuzzy
+msgid "Custom canvas"
 msgstr "Papier personnalisé"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:1040 src/dialogs/export.cpp:252
+#: src/dialogs/desktop-properties.cpp:1037 src/dialogs/export.cpp:253
 #: src/dialogs/transformation.cpp:519 src/dialogs/transformation.cpp:716
 msgid "Units:"
 msgstr "Unités :"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:1042 src/dialogs/export.cpp:292
-#: src/dialogs/export.cpp:399 src/dialogs/object-attributes.cpp:76
+#: src/dialogs/desktop-properties.cpp:1039 src/dialogs/export.cpp:293
+#: src/dialogs/export.cpp:400 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1365
 #: src/toolbox.cpp:1863
 msgid "Width:"
 msgstr "Largeur :"
 
-#: src/dialogs/desktop-properties.cpp:1064 src/dialogs/export.cpp:308
-#: src/dialogs/export.cpp:414 src/dialogs/object-attributes.cpp:77
+#: src/dialogs/desktop-properties.cpp:1061 src/dialogs/export.cpp:309
+#: src/dialogs/export.cpp:415 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Hauteur :"
@@ -484,20 +494,20 @@ msgstr "Hauteur :"
 #.
 #. * Ownership metadata tab
 #.
-#: src/dialogs/desktop-properties.cpp:1090
+#: src/dialogs/desktop-properties.cpp:1087
 msgid "Metadata"
 msgstr "Métadonnées"
 
 #. add license selector pull-down
-#: src/dialogs/desktop-properties.cpp:1109
+#: src/dialogs/desktop-properties.cpp:1106
 msgid "License"
 msgstr "Licence"
 
-#: src/dialogs/desktop-properties.cpp:1139
+#: src/dialogs/desktop-properties.cpp:1136
 msgid "Proprietary"
 msgstr "Propriétaire"
 
-#: src/dialogs/desktop-properties.cpp:1654
+#: src/dialogs/desktop-properties.cpp:1651
 msgid "Close"
 msgstr "Fermer"
 
@@ -730,7 +740,7 @@ msgstr ""
 "déplacement"
 
 #: src/dialogs/display-settings.cpp:898 src/dialogs/display-settings.cpp:913
-#: src/dialogs/export.cpp:399 src/dialogs/export.cpp:414
+#: src/dialogs/export.cpp:400 src/dialogs/export.cpp:415
 msgid "pixels"
 msgstr "pixels"
 
@@ -918,7 +928,8 @@ msgstr ""
 msgid "Pen"
 msgstr "Crayon"
 
-#: src/dialogs/display-settings.cpp:1127 src/verbs.cpp:1600
+#: src/dialogs/display-settings.cpp:1127 src/dialogs/text-edit.cpp:344
+#: src/verbs.cpp:1600
 msgid "Text"
 msgstr "Texte"
 
@@ -1112,8 +1123,8 @@ msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr "Résolution par défaut (point par pouce) dans la boite d'exportation"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1316 src/dialogs/export.cpp:409
-#: src/dialogs/export.cpp:425
+#: src/dialogs/display-settings.cpp:1316 src/dialogs/export.cpp:410
+#: src/dialogs/export.cpp:426
 msgid "dpi"
 msgstr "dpi"
 
@@ -1175,67 +1186,67 @@ msgstr "8x8"
 msgid "16x16"
 msgstr "16x16"
 
-#: src/dialogs/export.cpp:241
+#: src/dialogs/export.cpp:242
 msgid "Export area"
 msgstr "Zone exportée"
 
-#: src/dialogs/export.cpp:282
+#: src/dialogs/export.cpp:283
 msgid "x0:"
 msgstr "x0 :"
 
-#: src/dialogs/export.cpp:287
+#: src/dialogs/export.cpp:288
 msgid "x1:"
 msgstr "x1 :"
 
-#: src/dialogs/export.cpp:298
+#: src/dialogs/export.cpp:299
 msgid "y0:"
 msgstr "y0 :"
 
-#: src/dialogs/export.cpp:303
+#: src/dialogs/export.cpp:304
 msgid "y1:"
 msgstr "y1 :"
 
 #. Bitmap size frame
-#: src/dialogs/export.cpp:389
+#: src/dialogs/export.cpp:390
 msgid "Bitmap size"
 msgstr "Taille du bitmap"
 
 #. File entry
-#: src/dialogs/export.cpp:431
+#: src/dialogs/export.cpp:432
 msgid "Filename"
 msgstr "Nom du fichier"
 
-#: src/dialogs/export.cpp:493
+#: src/dialogs/export.cpp:494
 msgid "Browse..."
 msgstr "Parcourir..."
 
-#: src/dialogs/export.cpp:512
+#: src/dialogs/export.cpp:513
 msgid "Export"
 msgstr "Exporter"
 
-#: src/dialogs/export.cpp:955
+#: src/dialogs/export.cpp:956
 msgid "You have to enter a filename"
 msgstr "Vous devez enter un nom de fichier"
 
-#: src/dialogs/export.cpp:960
+#: src/dialogs/export.cpp:961
 msgid "The chosen area to be exported is invalid"
 msgstr "La zone d'exportation choisie est invalide"
 
-#: src/dialogs/export.cpp:967
+#: src/dialogs/export.cpp:968
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr ""
 
-#: src/dialogs/export.cpp:981
+#: src/dialogs/export.cpp:982
 msgid "Export in progress"
 msgstr "Exportation en cours"
 
-#: src/dialogs/export.cpp:987
+#: src/dialogs/export.cpp:988
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Exportation [%d x %d] %s"
 
-#: src/dialogs/export.cpp:1110
+#: src/dialogs/export.cpp:1111
 msgid "Select a filename for exporting"
 msgstr "Sélectionnez un fichier pour exporter"
 
@@ -1500,7 +1511,7 @@ msgstr ""
 
 #: src/dialogs/item-properties.cpp:121 src/dialogs/item-properties.cpp:392
 #: src/dialogs/item-properties.cpp:529 src/dialogs/item-properties.cpp:535
-#: src/main.cpp:196 src/main.cpp:201
+#: src/main.cpp:196 src/main.cpp:203
 msgid "ID"
 msgstr "ID"
 
@@ -1924,23 +1935,38 @@ msgstr "Marqueurs intermédiaires :"
 msgid "End Markers:"
 msgstr "Marqueurs de fin :"
 
-#: src/dialogs/text-edit.cpp:259
-msgid "Alignment:"
-msgstr "Alignement :"
+#: src/dialogs/text-edit.cpp:193
+#, fuzzy
+msgid "Font"
+msgstr "Point"
 
-#: src/dialogs/text-edit.cpp:294
-msgid "Orientation:"
-msgstr "Orientation :"
+#: src/dialogs/text-edit.cpp:223
+msgid "Align lines left"
+msgstr ""
 
-#: src/dialogs/text-edit.cpp:319
+#: src/dialogs/text-edit.cpp:236
+#, fuzzy
+msgid "Center lines"
+msgstr "Centre Y :"
+
+#: src/dialogs/text-edit.cpp:249
+msgid "Align lines right"
+msgstr ""
+
+#: src/dialogs/text-edit.cpp:270
+#, fuzzy
+msgid "Horizontal text"
+msgstr "Guide horizontal"
+
+#: src/dialogs/text-edit.cpp:283
+msgid "Vertical text"
+msgstr ""
+
+#: src/dialogs/text-edit.cpp:298
 msgid "Line spacing:"
 msgstr "Espacement des lignes :"
 
-#: src/dialogs/text-edit.cpp:350
-msgid "Text and font"
-msgstr "Texte et police"
-
-#: src/dialogs/text-edit.cpp:361
+#: src/dialogs/text-edit.cpp:385
 msgid "Set as default"
 msgstr "Régler comme défaut"
 
@@ -1988,48 +2014,51 @@ msgid "Edge Detection"
 msgstr "Sélection"
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:344
+#. TRANSLATORS: Color Quantization: the process of reducing the number of colors
+#. in an image by selecting an optimized set of representative colors and then
+#. re-applying this reduced set to the original image.
+#: src/dialogs/tracedialog.cpp:347
 msgid "Color Quantization"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:347
+#: src/dialogs/tracedialog.cpp:350
 #, fuzzy
 msgid "Colors"
 msgstr "Fermer"
 
-#: src/dialogs/tracedialog.cpp:354
+#: src/dialogs/tracedialog.cpp:357
 msgid "Quantization / Reduction"
 msgstr ""
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:359
+#: src/dialogs/tracedialog.cpp:362
 #, fuzzy
 msgid "Invert"
 msgstr "Réduire (_n)"
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:365
+#: src/dialogs/tracedialog.cpp:368
 #, fuzzy
 msgid "Preview"
 msgstr "Nouvel aperçu"
 
-#: src/dialogs/tracedialog.cpp:372
+#: src/dialogs/tracedialog.cpp:375
 msgid "Intermediate Bitmap"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:380
+#: src/dialogs/tracedialog.cpp:383
 #, fuzzy
 msgid "Credits"
 msgstr "Coordonnées :"
 
 #. done
-#: src/dialogs/tracedialog.cpp:385
+#: src/dialogs/tracedialog.cpp:388
 #, fuzzy
 msgid "Potrace"
 msgstr "Tracer"
 
 #. ##Set up the Other panel
-#: src/dialogs/tracedialog.cpp:388
+#: src/dialogs/tracedialog.cpp:391
 #, fuzzy
 msgid "Other"
 msgstr "Propriétaire"
@@ -2137,37 +2166,23 @@ msgstr "Document d'information %d"
 msgid "Unnamed document %d"
 msgstr "Document sans nom %d"
 
-#: src/draw-context.cpp:294
+#: src/draw-context.cpp:265
 msgid "Appending to selection"
 msgstr "Ajouter à la sélection"
 
-#: src/draw-context.cpp:298
+#: src/draw-context.cpp:269
 msgid "Creating new curve"
 msgstr "Créer une nouvelle courbe"
 
 #. We hit green anchor, closing Green-Blue-Red
-#: src/draw-context.cpp:482
+#: src/draw-context.cpp:429
 msgid "Path is closed."
 msgstr "Le chemin est fermé."
 
 #. We hit bot start and end of single curve, closing paths
-#: src/draw-context.cpp:503
+#: src/draw-context.cpp:450
 msgid "Closing path."
 msgstr "Fermeture de chemin."
-
-#: src/draw-context.cpp:797
-#, c-format
-msgid "Creating anchor at (%g,%g)"
-msgstr "Créer une ancre en (%g,%g)"
-
-#. Write curves to object
-#: src/draw-context.cpp:1047
-msgid "Finishing freehand"
-msgstr "Terminer main levée"
-
-#: src/draw-context.cpp:1813
-msgid "Finishing pen"
-msgstr "Terminer le crayon"
 
 #. alpha of color under cursor, to show in the statusbar
 #. locale-sensitive printf is OK, since this goes to the UI, not into SVG
@@ -2202,7 +2217,7 @@ msgstr ""
 "couleur pour le tracé. Cliquer-déplacer pour prendre une couleur moyenne sur "
 "une zone."
 
-#: src/extension/db.cpp:187 src/extension/db.cpp:200
+#: src/extension/db.cpp:189 src/extension/db.cpp:202
 msgid "Autodetect"
 msgstr "Autodétecter"
 
@@ -2215,40 +2230,40 @@ msgstr ""
 "Le répertoire (%s) des modules est indisponible. Les modules externes de ce "
 "répertoire ne seront pas chargé."
 
-#: src/extension/internal/eps-out.cpp:70
+#: src/extension/internal/eps-out.cpp:72
 msgid "EPS Output Settings"
 msgstr "Paramètres de la sortie EPS"
 
-#: src/extension/internal/eps-out.cpp:82
+#: src/extension/internal/eps-out.cpp:84
 msgid "Make bounding box around full page"
 msgstr "Faire une boite tout autour de la page"
 
-#: src/extension/internal/eps-out.cpp:89
+#: src/extension/internal/eps-out.cpp:91
 msgid "Convert text to path"
 msgstr "Convertir du texte en chemin"
 
-#: src/extension/internal/gnome.cpp:74
+#: src/extension/internal/gnome.cpp:75
 msgid "Select printer"
 msgstr "Sélectionner l'imprimante"
 
-#: src/extension/internal/gnome.cpp:125
+#: src/extension/internal/gnome.cpp:126
 msgid "Inkscape: Print Preview"
 msgstr "Inkscape : Aperçu avant impression"
 
-#: src/extension/internal/ps.cpp:113
+#: src/extension/internal/ps.cpp:115
 msgid "Print Destination"
 msgstr "Destination de l'impression"
 
 #. Print properties frame
-#: src/extension/internal/ps.cpp:127
+#: src/extension/internal/ps.cpp:129
 msgid "Print properties"
 msgstr "Propriétés d'impression"
 
-#: src/extension/internal/ps.cpp:134
+#: src/extension/internal/ps.cpp:136
 msgid "Print using PostScript operators"
 msgstr "Imprimer en utilisant les opérateurs PostScript"
 
-#: src/extension/internal/ps.cpp:136
+#: src/extension/internal/ps.cpp:138
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
 "file size and can be arbitrarily scaled, but alpha transparency, gradients "
@@ -2259,11 +2274,11 @@ msgstr ""
 "la transparence alpha, les dégradés et les motifs de remplissage seront "
 "perdus."
 
-#: src/extension/internal/ps.cpp:141
+#: src/extension/internal/ps.cpp:143
 msgid "Print as bitmap"
 msgstr "Imprimer en bitmap"
 
-#: src/extension/internal/ps.cpp:143
+#: src/extension/internal/ps.cpp:145
 msgid ""
 "Print everything as bitmap. The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
@@ -2273,20 +2288,20 @@ msgstr ""
 "général) plus gros et sa qualité dépendra du facteur de zoom; Mais tous les "
 "objets seront rendus comme il sont affichés."
 
-#: src/extension/internal/ps.cpp:157
+#: src/extension/internal/ps.cpp:159
 msgid "Preferred resolution (dots per inch) of bitmap"
 msgstr "Résolution préférée (point par pouce) du bitmap"
 
-#: src/extension/internal/ps.cpp:172
+#: src/extension/internal/ps.cpp:174
 msgid "Resolution:"
 msgstr "Résolution :"
 
 #. Print destination frame
-#: src/extension/internal/ps.cpp:176
+#: src/extension/internal/ps.cpp:178
 msgid "Print destination"
 msgstr "Destination de l'impression"
 
-#: src/extension/internal/ps.cpp:182
+#: src/extension/internal/ps.cpp:184
 msgid ""
 "Use '> filename' to print to file.\n"
 "Use '| prog arg...' to pipe to a program."
@@ -2295,48 +2310,48 @@ msgstr ""
 "Utilisez '| prog arg...' pour envoyer au travers d'un tuyau (pipe) à un "
 "programme."
 
-#: src/extension/internal/ps.cpp:934
+#: src/extension/internal/ps.cpp:936
 msgid "write error occurred"
 msgstr "une erreur d'écriture s'est produite"
 
-#: src/extension/system.cpp:101
+#: src/extension/system.cpp:105
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr ""
 "Échec de l'autodétection du format. Le fichier est ouvert en tant que SVG."
 
-#: src/file.cpp:165 src/file.cpp:644
+#: src/file.cpp:167 src/file.cpp:646
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Échec du chargement du fichier %s"
 
-#: src/file.cpp:189
+#: src/file.cpp:191
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Document non enregistré. Impossible de le recharger."
 
-#: src/file.cpp:196
+#: src/file.cpp:198
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 "Les changements vont être perdus ! Êtes-vous sûr de vouloir recharger le "
 "document %s ?"
 
-#: src/file.cpp:215
+#: src/file.cpp:217
 msgid "Document reverted."
 msgstr "Document rechargé."
 
-#: src/file.cpp:218
+#: src/file.cpp:220
 msgid "Document not reverted."
 msgstr "Document non rechargé."
 
-#: src/file.cpp:222
+#: src/file.cpp:224
 msgid "Document not modified.  No need to revert."
 msgstr "Document non modifié. Pas besoin de le recharger."
 
-#: src/file.cpp:256
+#: src/file.cpp:258
 msgid "Select file to open"
 msgstr "Sélectionnez un fichier à ouvrir"
 
-#: src/file.cpp:356
+#: src/file.cpp:358
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -2345,38 +2360,38 @@ msgstr ""
 "Pas d'extensions Inkscape trouvé pour enregistrer le document (%s). Cela "
 "peut venir du fait que l'extension est inconnue."
 
-#: src/file.cpp:357 src/file.cpp:363
+#: src/file.cpp:359 src/file.cpp:365
 msgid "Document not saved."
 msgstr "Document non enregistré."
 
-#: src/file.cpp:362
+#: src/file.cpp:364
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Le fichier %s ne peut pas être enregistré."
 
-#: src/file.cpp:371
+#: src/file.cpp:373
 msgid "Document saved."
 msgstr "Document enregistré."
 
-#: src/file.cpp:418
+#: src/file.cpp:420
 #, c-format
 msgid "drawing%s"
 msgstr "dessin%s"
 
-#: src/file.cpp:424
+#: src/file.cpp:426
 #, c-format
 msgid "drawing-%d%s"
 msgstr "dessin-%d%s"
 
-#: src/file.cpp:452
+#: src/file.cpp:454
 msgid "Select file to save to"
 msgstr "Sélectionner le fichier dans lequel enregistrer"
 
-#: src/file.cpp:530
+#: src/file.cpp:532
 msgid "No changes need to be saved."
 msgstr "Pas de changement à enregistrer."
 
-#: src/file.cpp:671
+#: src/file.cpp:673
 msgid "Select file to import"
 msgstr "Sélectionnez un fichier à importer"
 
@@ -2778,7 +2793,7 @@ msgid "Open specified document(s) (option string may be excluded)"
 msgstr ""
 "Ouvre le(s) fichier(s) spécifié(s) (la chaîne d'option peut être exclue)"
 
-#: src/main.cpp:161 src/main.cpp:166 src/main.cpp:171 src/main.cpp:221
+#: src/main.cpp:161 src/main.cpp:166 src/main.cpp:171 src/main.cpp:223
 msgid "FILENAME"
 msgstr "NOMFICHIER"
 
@@ -2837,54 +2852,56 @@ msgstr "HAUTEUR"
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "La largeur en pixels du bitmap généré (redéfinit le dpi d'exportation)"
 
-#: src/main.cpp:200
+#. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
+#. See "man inkscape" for details.
+#: src/main.cpp:202
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 
-#: src/main.cpp:205
+#: src/main.cpp:207
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 
-#: src/main.cpp:210
+#: src/main.cpp:212
 #, fuzzy
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Couleur de fond du bitmap exporté (n'importe quelle chaîne de caractère "
 "couleur compatible SVG)"
 
-#: src/main.cpp:211
+#: src/main.cpp:213
 msgid "COLOR"
 msgstr "COULEUR"
 
-#: src/main.cpp:215
+#: src/main.cpp:217
 #, fuzzy
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Couleur de fond du bitmap exporté (n'importe quelle chaîne de caractère "
 "couleur compatible SVG)"
 
-#: src/main.cpp:216
+#: src/main.cpp:218
 msgid "VALUE"
 msgstr ""
 
-#: src/main.cpp:220
+#: src/main.cpp:222
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Exporter le document en SVG basique (pas d'espace de nom sodipodi ou "
 "inkscape)"
 
-#: src/main.cpp:225
+#: src/main.cpp:227
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Affiche les fichiers donnés un par un, passe au suivant pour n'importe quel "
 "événement clavier/souris"
 
-#: src/main.cpp:230
+#: src/main.cpp:232
 msgid "Prefer bitmap (XPM) icons to SVG ones"
 msgstr "Préférer les icônes bitmaps (xpm) aux SVG"
 
-#: src/main.cpp:338 src/main.cpp:422
+#: src/main.cpp:340 src/main.cpp:424
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -2894,13 +2911,28 @@ msgstr ""
 "\n"
 "Options disponibles :"
 
-#: src/nodepath.cpp:1122 src/nodepath.cpp:1134 src/nodepath.cpp:1214
-#: src/nodepath.cpp:1226
+#: src/node-context.cpp:355
+msgid ""
+"<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
+"+Alt</b>: move along handles"
+msgstr ""
+
+#: src/node-context.cpp:356
+msgid ""
+"<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
+msgstr ""
+
+#: src/node-context.cpp:357
+msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
+msgstr ""
+
+#: src/nodepath.cpp:1125 src/nodepath.cpp:1137 src/nodepath.cpp:1217
+#: src/nodepath.cpp:1229
 #, fuzzy
 msgid "To join, you must have <b>two endnodes</b> selected."
 msgstr "Pour joindre, vous devez avoir sélectionné deux nœuds."
 
-#: src/nodepath.cpp:1351 src/nodepath.cpp:1365
+#: src/nodepath.cpp:1354 src/nodepath.cpp:1368
 #, fuzzy
 msgid ""
 "Select <b>two non-endpoint nodes</b> on a path between which to delete "
@@ -2909,48 +2941,48 @@ msgstr ""
 "Vous devez sélectionner deux nœuds non-terminaux d'un chemin pour supprimer "
 "un segment."
 
-#: src/nodepath.cpp:1461
+#: src/nodepath.cpp:1464
 msgid "Cannot find path between nodes."
 msgstr "Impossible de trouver un chemin entre les nœuds."
 
-#: src/nodepath.cpp:2677
+#: src/nodepath.cpp:2695
 msgid ""
-"<b>Node:</b> drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
+"<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
 msgstr ""
 
-#: src/nodepath.cpp:2701 src/nodepath.cpp:2725
+#: src/nodepath.cpp:2719 src/nodepath.cpp:2743
 msgid ""
 "<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; "
-"with <b>Alt</b> to lock length, with <b>Shift</b> to rotate the opposite "
+"with <b>Alt</b> to lock length; with <b>Shift</b> to rotate the opposite "
 "handle in sync"
 msgstr ""
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: src/nodepath.cpp:2851
+#: src/nodepath.cpp:2869
 msgid "cusp"
 msgstr "dur"
 
-#: src/nodepath.cpp:2853
+#: src/nodepath.cpp:2871
 msgid "smooth"
 msgstr "doux"
 
-#: src/nodepath.cpp:2855
+#: src/nodepath.cpp:2873
 msgid "symmetric"
 msgstr "Symétrique"
 
-#: src/nodepath.cpp:2865
+#: src/nodepath.cpp:2883
 #, fuzzy
 msgid "Drag nodes or node handles to edit the path"
 msgstr "Déplacer les nœuds ou les points de contrôles pour éditer le chemin"
 
-#: src/nodepath.cpp:2884
+#: src/nodepath.cpp:2902
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 "Sélectionner un chemin avec l'outil sélection, ensuite prendre l'outil nœud."
 
-#: src/nodepath.cpp:2887
+#: src/nodepath.cpp:2905
 #, fuzzy, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around "
@@ -2959,12 +2991,12 @@ msgstr ""
 "0 nœud sur %i sélectionné(s). Clic, Maj+Clic, cliquer-déplacer la souris "
 "pour sélectionner des nœuds."
 
-#: src/nodepath.cpp:2891
+#: src/nodepath.cpp:2909
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr "%i sur %i nœuds sélectionnés; %s. %s."
 
-#: src/nodepath.cpp:2894
+#: src/nodepath.cpp:2912
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> nodes selected. %s."
 msgstr "%i sur %i nœuds sélectionnés. %s."
@@ -3002,40 +3034,45 @@ msgid ""
 "segment"
 msgstr ""
 
-#: src/object-edit.cpp:474
-msgid "Adjust the <b>tip radius</b> of the star or polygon"
-msgstr ""
+#: src/object-edit.cpp:497
+#, fuzzy
+msgid ""
+"Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
+"round; with <b>Alt</b> to randomize"
+msgstr "Modifier en même temps la hauteur et la largeur par la même proportion"
 
-#: src/object-edit.cpp:477
+#: src/object-edit.cpp:500
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
-"rays radial (no skew)"
+"rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
+"randomize"
 msgstr ""
 
-#: src/object-edit.cpp:570
+#: src/object-edit.cpp:593
 msgid ""
 "Position the <b>inner end</b> of the spiral; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
-#: src/object-edit.cpp:572
+#: src/object-edit.cpp:595
 msgid ""
 "Position the <b>outer end</b> of the spiral; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
-#: src/object-edit.cpp:609
+#: src/object-edit.cpp:632
 msgid "Adjust the <b>offset distance</b>"
 msgstr ""
 
-#: src/object-edit.cpp:639
+#. TRANSLATORS: This refers to the pattern that's inside the object
+#: src/object-edit.cpp:663
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr ""
 
-#: src/object-edit.cpp:641
+#: src/object-edit.cpp:665
 #, fuzzy
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "Sélectionner un objet duquel extraire le motif de remplissage."
 
-#: src/object-edit.cpp:643
+#: src/object-edit.cpp:667
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
@@ -3164,37 +3201,43 @@ msgstr "Sélectionner au moins un chemin à inverser."
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "Pas de chemin à inverser dans la sélection."
 
-#: src/rect-context.cpp:521
+#: src/rect-context.cpp:397
+msgid ""
+"<b>Ctrl</b>: make square or integer-ratio rect, lock a rounded corner "
+"circular"
+msgstr ""
+
+#: src/rect-context.cpp:551
 #, c-format
 msgid ""
 "<b>Rectangle</b>: %s x %s; with <b>Ctrl</b> to make square or integer-ratio "
 "rectangle; with <b>Shift</b> to draw around the starting point"
 msgstr ""
 
-#: src/select-context.cpp:647
-msgid "<b>Ctrl:</b> select in groups, move hor/vert"
+#: src/select-context.cpp:641
+msgid "<b>Ctrl</b>: select in groups, move hor/vert"
 msgstr ""
 
-#: src/select-context.cpp:649
-msgid "<b>Shift:</b> toggle select, force rubberband"
+#: src/select-context.cpp:642
+msgid "<b>Shift</b>: toggle select, force rubberband, disable snapping"
 msgstr ""
 
-#: src/select-context.cpp:651
-msgid "<b>Alt:</b> select under, move selected"
+#: src/select-context.cpp:643
+msgid "<b>Alt</b>: select under, move selected"
 msgstr ""
 
-#: src/select-context.cpp:725
+#: src/select-context.cpp:714
 msgid "Move canceled."
 msgstr "Déplacement annulé."
 
-#: src/select-context.cpp:731
+#: src/select-context.cpp:720
 msgid "Selection canceled."
 msgstr "Sélection annulée."
 
-#: src/select-context.cpp:894
+#: src/select-context.cpp:883
 #, c-format
 msgid ""
-"<b>Move</b> by %s x %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
+"<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
 "with <b>Shift</b> to disable snapping"
 msgstr ""
 
@@ -3430,9 +3473,9 @@ msgid "<b>Rotate</b>: %0.2f degrees; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
 #: src/seltrans.cpp:1000
-#, c-format
-msgid "Move <b>center</b> to %s x %s"
-msgstr ""
+#, fuzzy, c-format
+msgid "Move <b>center</b> to %s, %s"
+msgstr "Lien vers %s"
 
 #: src/slideshow.cpp:88
 msgid "Inkscape slideshow"
@@ -3465,38 +3508,38 @@ msgstr "Guide vertical"
 msgid "horizontal guideline"
 msgstr "Guide horizontal"
 
-#: src/sp-image.cpp:324
+#: src/sp-image.cpp:325
 #, fuzzy, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "Image avec mauvaise référence : %s"
 
-#: src/sp-image.cpp:326
+#: src/sp-image.cpp:327
 #, fuzzy, c-format
 msgid "<b>Image</b> %d x %d: %s"
 msgstr "Couleur d'image %d x %d: %s"
 
-#: src/sp-image.cpp:729
+#: src/sp-image.cpp:730
 msgid "Trace"
 msgstr "Tracer"
 
-#: src/sp-image.cpp:875
+#: src/sp-image.cpp:876
 #, c-format
 msgid "Error writing %s: %s"
 msgstr "Erreur d'écriture %s : %s"
 
-#: src/sp-image.cpp:909
+#: src/sp-image.cpp:910
 msgid "Untitled"
 msgstr "Sans nom"
 
-#: src/sp-image.cpp:914
+#: src/sp-image.cpp:915
 msgid "Document Name:"
 msgstr "Nom du document :"
 
-#: src/sp-image.cpp:927
+#: src/sp-image.cpp:928
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: src/sp-image.cpp:933
+#: src/sp-image.cpp:934
 msgid "Image URI:"
 msgstr "Image URI :"
 
@@ -3505,7 +3548,7 @@ msgstr "Image URI :"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "Groupe d'objets %d"
 
-#: src/sp-item.cpp:592
+#: src/sp-item.cpp:595
 msgid "Object"
 msgstr "Objet"
 
@@ -3582,7 +3625,15 @@ msgstr "Clone de : %s. Utilisez Maj+D pour voir l'original"
 msgid "<b>Orphaned clone</b>"
 msgstr "Clone Orphelin"
 
-#: src/spiral-context.cpp:431
+#: src/spiral-context.cpp:357
+msgid "<b>Ctrl</b>: snap angle"
+msgstr ""
+
+#: src/spiral-context.cpp:359
+msgid "<b>Alt</b>: lock spiral radius"
+msgstr ""
+
+#: src/spiral-context.cpp:460
 #, c-format
 msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
@@ -3656,12 +3707,16 @@ msgstr "Sélectionner les chemin à simplifier."
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "Pas de chemin simplifier dans la sélection."
 
-#: src/star-context.cpp:440
+#: src/star-context.cpp:369
+msgid "<b>Ctrl</b>: snap angle; keep rays radial"
+msgstr ""
+
+#: src/star-context.cpp:469
 #, c-format
 msgid "<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
-#: src/star-context.cpp:441
+#: src/star-context.cpp:470
 #, c-format
 msgid "<b>Star</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
@@ -3926,7 +3981,7 @@ msgstr "Faire tout"
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Faire de la forme un ellipse totale, pas un arc ou un segment"
 
-#: src/tools-switch.cpp:125
+#: src/tools-switch.cpp:129
 #, fuzzy
 msgid ""
 "To edit a path, <b>click</b>, <b>Shift+click</b>, or <b>drag around</b> "
@@ -3936,7 +3991,7 @@ msgstr ""
 "Pour éditer un chemin, Clic, Maj+Clic, déplacer la souris pour sélectionner "
 "des nœeuds. Pour éditer une forme, déplacer ses points de contrôles."
 
-#: src/tools-switch.cpp:131
+#: src/tools-switch.cpp:135
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and "
@@ -3945,7 +4000,7 @@ msgstr ""
 "Cliquer-déplacer pour créer un rectangle. Utiliser l'outil \"nœud\" pour "
 "arrondir les coins."
 
-#: src/tools-switch.cpp:137
+#: src/tools-switch.cpp:141
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or "
@@ -3954,7 +4009,7 @@ msgstr ""
 "Cliquer-déplacer pour créer une ellipse. Utiliser l'outil \"nœud\" pour "
 "faire un arc ou un segment."
 
-#: src/tools-switch.cpp:143
+#: src/tools-switch.cpp:147
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. "
@@ -3963,7 +4018,7 @@ msgstr ""
 "Cliquer-déplacer pour créer une étoile. Utiliser l'outil \"nœud\" pour "
 "modifier la forme."
 
-#: src/tools-switch.cpp:149
+#: src/tools-switch.cpp:153
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral "
@@ -3972,7 +4027,7 @@ msgstr ""
 "Cliquer-déplacer pour créer un spirale. Utiliser l'outil \"nœud\" pour "
 "modifier la forme."
 
-#: src/tools-switch.cpp:155
+#: src/tools-switch.cpp:159
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create a freehand line. Press <b>a</b> to toggle Append/New."
@@ -3980,7 +4035,7 @@ msgstr ""
 "Cliquer-déplacer pour créer une ligne à main levée. Appuyer sur 'a' pour "
 "alterner Ajout/Nouveau."
 
-#: src/tools-switch.cpp:161
+#: src/tools-switch.cpp:165
 #, fuzzy
 msgid ""
 "<b>Click</b> to create a node, <b>click and drag</b> to create a smooth "
@@ -3989,18 +4044,18 @@ msgstr ""
 "Cliquer pour créer un nœud, cliquer-déplacer pour créer un nœud adouci. "
 "Appuyer sur 'a' pour alterner Ajout/Nouveau."
 
-#: src/tools-switch.cpp:167
+#: src/tools-switch.cpp:171
 #, fuzzy
 msgid "<b>Drag</b> to paint a calligraphic stroke."
 msgstr "Cliquer-déplacer pour tracer des lignes calligraphiques."
 
-#: src/tools-switch.cpp:173
+#: src/tools-switch.cpp:177
 #, fuzzy
 msgid "<b>Click</b> to select or create text object, then type."
 msgstr ""
 "Cliquer pour créer ou sélectionner un objet texte, en suite taper le texte."
 
-#: src/tools-switch.cpp:179
+#: src/tools-switch.cpp:183
 #, fuzzy
 msgid ""
 "<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to "
@@ -4009,12 +4064,12 @@ msgstr ""
 "Cliquer ou cliquer-déplacer sur une zone pour y zommer, Maj+Clic pour "
 "dézoummer."
 
-#: src/tools-switch.cpp:185
+#: src/tools-switch.cpp:189
 #, fuzzy
 msgid ""
 "<b>Click</b> to set fill color, <b>Shift+click</b> to set stroke color. "
-"<b>Click and drag</b> to pick the average color of an area. <b>Ctrl+C</b> "
-"top copy the color under mouse to clipboard."
+"<b>Click and drag</b> to pick the average color of an area. <b>Ctrl+C</b> to "
+"copy the color under mouse to clipboard."
 msgstr ""
 "Cliquer pour prendre une couleur de remplissage, Maj+clic pour prendre une "
 "couleur pour le tracé. Cliquer-déplacer pour capturer la couleur moyenne sur "
@@ -4032,11 +4087,11 @@ msgstr "Tous les objets sélectionnés affiche leur boite"
 
 #: src/trace/trace.cpp:137
 #, fuzzy
-msgid "Trace: no active document"
+msgid "Trace: No active document"
 msgstr "Créé un nouveau document"
 
 #: src/trace/trace.cpp:158
-msgid "Trace: mage has no bitmap data"
+msgid "Trace: Image has no bitmap data"
 msgstr ""
 
 #: src/verbs.cpp:877
@@ -5498,6 +5553,32 @@ msgstr "Attribut"
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Value"
 msgstr "Valeur"
+
+#, fuzzy
+#~ msgid ""
+#~ "Distribute centers of objects of objects at even distances horizontally"
+#~ msgstr "Distribue les centres des objets horizontalement à distances égales"
+
+#~ msgid "Paper size:"
+#~ msgstr "Taille du papier :"
+
+#~ msgid "Alignment:"
+#~ msgstr "Alignement :"
+
+#~ msgid "Orientation:"
+#~ msgstr "Orientation :"
+
+#~ msgid "Text and font"
+#~ msgstr "Texte et police"
+
+#~ msgid "Creating anchor at (%g,%g)"
+#~ msgstr "Créer une ancre en (%g,%g)"
+
+#~ msgid "Finishing freehand"
+#~ msgstr "Terminer main levée"
+
+#~ msgid "Finishing pen"
+#~ msgstr "Terminer le crayon"
 
 #~ msgid "Draw arc: %s x %s"
 #~ msgstr "Dessiner un arc : %s x %s"

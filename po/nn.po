@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-09 15:50+0200\n"
+"POT-Creation-Date: 2004-10-12 00:23+0200\n"
 "PO-Revision-Date: 2004-09-18 23:24+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -31,7 +31,16 @@ msgstr "Inkscape SVG-vektorteikneprogram"
 msgid "SVG Vector Illustrator"
 msgstr "SVG-vektorteikneprogram"
 
-#: src/arc-context.cpp:471
+#: src/arc-context.cpp:364
+msgid ""
+"<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
+msgstr ""
+
+#: src/arc-context.cpp:365 src/rect-context.cpp:398
+msgid "<b>Shift</b>: draw around the starting point"
+msgstr ""
+
+#: src/arc-context.cpp:501
 #, fuzzy, c-format
 msgid ""
 "<b>Ellipse</b>: %s x %s; with <b>Ctrl</b> to make circle or integer-ratio "
@@ -149,20 +158,19 @@ msgstr "Inga neste forstørring."
 
 #. Page page
 #: src/desktop.cpp:2038 src/dialogs/align.cpp:1097
-#: src/dialogs/desktop-properties.cpp:922 src/dialogs/export.cpp:125
+#: src/dialogs/desktop-properties.cpp:924 src/dialogs/export.cpp:126
 msgid "Page"
 msgstr "Side"
 
-#: src/desktop.cpp:2042 src/dialogs/align.cpp:1100 src/dialogs/export.cpp:125
+#: src/desktop.cpp:2042 src/dialogs/align.cpp:1100 src/dialogs/export.cpp:126
 msgid "Drawing"
 msgstr "Teikning"
 
-#: src/desktop.cpp:2046 src/dialogs/align.cpp:1103 src/dialogs/export.cpp:125
+#: src/desktop.cpp:2046 src/dialogs/align.cpp:1103 src/dialogs/export.cpp:126
 msgid "Selection"
 msgstr "Utval"
 
-#. Layout
-#: src/dialogs/align.cpp:457 src/dialogs/text-edit.cpp:250
+#: src/dialogs/align.cpp:457 src/dialogs/text-edit.cpp:210
 msgid "Layout"
 msgstr "Oppsett"
 
@@ -226,9 +234,9 @@ msgstr "Toppen av justerte objekt til botnen av anker"
 msgid "Distribute left sides of objects at even distances"
 msgstr "Fordel venstre side av objekt med jamne mellomrom"
 
-#: src/dialogs/align.cpp:506
-msgid "Distribute centers of objects of objects at even distances horizontally"
-msgstr "Fordel midten av objekt av objekt med jamne mellomrom vassrett"
+#: src/dialogs/align.cpp:506 src/dialogs/align.cpp:1001
+msgid "Distribute centers of objects at even distances horizontally"
+msgstr "Fordel midten av objekt med jamne mellomrom vassrett"
 
 #: src/dialogs/align.cpp:510 src/dialogs/align.cpp:1008
 msgid "Distribute right sides of objects at even distances"
@@ -269,10 +277,6 @@ msgstr "Fordel merkte nodar vassrett"
 #: src/dialogs/align.cpp:545
 msgid "Distribute selected nodes vertically"
 msgstr "Fordel merkte nodar loddrett"
-
-#: src/dialogs/align.cpp:1001
-msgid "Distribute centers of objects at even distances horizontally"
-msgstr "Fordel midten av objekt med jamne mellomrom vassrett"
 
 #: src/dialogs/align.cpp:1085
 msgid "Last selected"
@@ -333,12 +337,12 @@ msgid "Spacing Y:"
 msgstr "Y-mellomrom:"
 
 #: src/dialogs/desktop-properties.cpp:848
-#: src/dialogs/desktop-properties.cpp:906
+#: src/dialogs/desktop-properties.cpp:908
 msgid "Snap units:"
 msgstr "Festeeining:"
 
 #: src/dialogs/desktop-properties.cpp:851
-#: src/dialogs/desktop-properties.cpp:909
+#: src/dialogs/desktop-properties.cpp:911
 msgid "Snap distance:"
 msgstr "Festeavstand:"
 
@@ -362,108 +366,115 @@ msgstr "Farge på utheva rutenett"
 msgid "Major grid line spacing:"
 msgstr "Mellomrom for hovudlinjer:"
 
-#: src/dialogs/desktop-properties.cpp:871
+#. TRANSLATORS: This belongs to the "Major grid line spacing:" string,
+#. see grid settings in the "Document Preferences" dialog
+#: src/dialogs/desktop-properties.cpp:873
 msgid "lines"
 msgstr "linjer"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:885
+#: src/dialogs/desktop-properties.cpp:887
 msgid "Guides"
 msgstr "Hjelpelinjer"
 
-#: src/dialogs/desktop-properties.cpp:893
+#: src/dialogs/desktop-properties.cpp:895
 msgid "Show guides"
 msgstr "Vis hjelpelinjer"
 
-#: src/dialogs/desktop-properties.cpp:894
+#: src/dialogs/desktop-properties.cpp:896
 msgid "Snap bounding boxes to guides"
 msgstr "Fest avgrensingsboks til hjelpelinjer"
 
-#: src/dialogs/desktop-properties.cpp:895
+#: src/dialogs/desktop-properties.cpp:897
 msgid "Snap points to guides"
 msgstr "Fest punkt til hjelpelinjer"
 
-#: src/dialogs/desktop-properties.cpp:913
+#: src/dialogs/desktop-properties.cpp:915
 msgid "Guide color:"
 msgstr "Hjelpelinjefarge:"
 
-#: src/dialogs/desktop-properties.cpp:914
+#: src/dialogs/desktop-properties.cpp:916
 msgid "Guideline color"
 msgstr "Farge for hjelpelinjer."
 
-#: src/dialogs/desktop-properties.cpp:916
+#: src/dialogs/desktop-properties.cpp:918
 msgid "Highlight color:"
 msgstr "Framhevingsfarge:"
 
-#: src/dialogs/desktop-properties.cpp:917
+#: src/dialogs/desktop-properties.cpp:919
 msgid "Highlighted guideline color"
 msgstr "Farge for framheva hjelpelinjer."
 
-#: src/dialogs/desktop-properties.cpp:931
-msgid "Background (also for export):"
+#: src/dialogs/desktop-properties.cpp:934
+#, fuzzy
+msgid "Background (also for export)"
 msgstr "Bakgrunn (òg for eksportering):"
 
-#: src/dialogs/desktop-properties.cpp:932
+#: src/dialogs/desktop-properties.cpp:935
 msgid "Background color"
 msgstr "Bakgrunnsfarge"
 
-#: src/dialogs/desktop-properties.cpp:936
+#: src/dialogs/desktop-properties.cpp:939
 msgid "Show canvas border"
 msgstr "Vis kantlinje rundt lerretet"
 
-#: src/dialogs/desktop-properties.cpp:939
+#: src/dialogs/desktop-properties.cpp:943
 msgid "Border on top of drawing"
 msgstr "Kantlinje øvst på teikninga"
 
-#: src/dialogs/desktop-properties.cpp:949
-msgid "Border color:"
+#: src/dialogs/desktop-properties.cpp:946
+#, fuzzy
+msgid "Border color"
 msgstr "Kantlinjefarge:"
 
-#: src/dialogs/desktop-properties.cpp:950
+#: src/dialogs/desktop-properties.cpp:947
 msgid "Canvas border color"
 msgstr "Farge på kantlinje"
 
-#: src/dialogs/desktop-properties.cpp:966
-msgid "Paper size:"
-msgstr "Papirstorleik:"
+#: src/dialogs/desktop-properties.cpp:963
+#, fuzzy
+msgid "Canvas size:"
+msgstr "Skriftstorleik:"
 
-#: src/dialogs/desktop-properties.cpp:990 src/dialogs/export.cpp:125
+#: src/dialogs/desktop-properties.cpp:987 src/dialogs/export.cpp:126
 msgid "Custom"
 msgstr "Brukarvalt"
 
-#: src/dialogs/desktop-properties.cpp:1001
-msgid "Paper orientation:"
+#: src/dialogs/desktop-properties.cpp:998
+#, fuzzy
+msgid "Canvas orientation:"
 msgstr "Papirretning:"
 
-#: src/dialogs/desktop-properties.cpp:1013
+#: src/dialogs/desktop-properties.cpp:1010
 msgid "Landscape"
 msgstr "Liggjande"
 
-#: src/dialogs/desktop-properties.cpp:1019
+#: src/dialogs/desktop-properties.cpp:1016
 msgid "Portrait"
 msgstr "Ståande"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:1028
-msgid "Custom paper"
+#: src/dialogs/desktop-properties.cpp:1025
+#, fuzzy
+msgid "Custom canvas"
 msgstr "Eigedefinert papir"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:1040 src/dialogs/export.cpp:252
+#: src/dialogs/desktop-properties.cpp:1037 src/dialogs/export.cpp:253
 #: src/dialogs/transformation.cpp:519 src/dialogs/transformation.cpp:716
 msgid "Units:"
 msgstr "Eining:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:1042 src/dialogs/export.cpp:292
-#: src/dialogs/export.cpp:399 src/dialogs/object-attributes.cpp:76
+#: src/dialogs/desktop-properties.cpp:1039 src/dialogs/export.cpp:293
+#: src/dialogs/export.cpp:400 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1365
 #: src/toolbox.cpp:1863
 msgid "Width:"
 msgstr "Breidd:"
 
-#: src/dialogs/desktop-properties.cpp:1064 src/dialogs/export.cpp:308
-#: src/dialogs/export.cpp:414 src/dialogs/object-attributes.cpp:77
+#: src/dialogs/desktop-properties.cpp:1061 src/dialogs/export.cpp:309
+#: src/dialogs/export.cpp:415 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Høgd:"
@@ -472,20 +483,20 @@ msgstr "Høgd:"
 #.
 #. * Ownership metadata tab
 #.
-#: src/dialogs/desktop-properties.cpp:1090
+#: src/dialogs/desktop-properties.cpp:1087
 msgid "Metadata"
 msgstr "Metadata"
 
 #. add license selector pull-down
-#: src/dialogs/desktop-properties.cpp:1109
+#: src/dialogs/desktop-properties.cpp:1106
 msgid "License"
 msgstr "Lisensavtale"
 
-#: src/dialogs/desktop-properties.cpp:1139
+#: src/dialogs/desktop-properties.cpp:1136
 msgid "Proprietary"
 msgstr "Godseigd"
 
-#: src/dialogs/desktop-properties.cpp:1654
+#: src/dialogs/desktop-properties.cpp:1651
 msgid "Close"
 msgstr "Lukk"
 
@@ -708,7 +719,7 @@ msgstr ""
 "Lengste musedrag (i pikslar) som skal hanterast som klikk i staden for drag."
 
 #: src/dialogs/display-settings.cpp:898 src/dialogs/display-settings.cpp:913
-#: src/dialogs/export.cpp:399 src/dialogs/export.cpp:414
+#: src/dialogs/export.cpp:400 src/dialogs/export.cpp:415
 msgid "pixels"
 msgstr "pikslar"
 
@@ -895,7 +906,8 @@ msgstr ""
 msgid "Pen"
 msgstr "Penn"
 
-#: src/dialogs/display-settings.cpp:1127 src/verbs.cpp:1600
+#: src/dialogs/display-settings.cpp:1127 src/dialogs/text-edit.cpp:344
+#: src/verbs.cpp:1600
 msgid "Text"
 msgstr "Tekst"
 
@@ -1080,8 +1092,8 @@ msgstr ""
 "eksporteringsdialogen."
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1316 src/dialogs/export.cpp:409
-#: src/dialogs/export.cpp:425
+#: src/dialogs/display-settings.cpp:1316 src/dialogs/export.cpp:410
+#: src/dialogs/export.cpp:426
 msgid "dpi"
 msgstr "ppt."
 
@@ -1143,67 +1155,67 @@ msgstr "8 × 8"
 msgid "16x16"
 msgstr "16 × 16"
 
-#: src/dialogs/export.cpp:241
+#: src/dialogs/export.cpp:242
 msgid "Export area"
 msgstr "Eksporteringsområde"
 
-#: src/dialogs/export.cpp:282
+#: src/dialogs/export.cpp:283
 msgid "x0:"
 msgstr "x0:"
 
-#: src/dialogs/export.cpp:287
+#: src/dialogs/export.cpp:288
 msgid "x1:"
 msgstr "x1:"
 
-#: src/dialogs/export.cpp:298
+#: src/dialogs/export.cpp:299
 msgid "y0:"
 msgstr "y0:"
 
-#: src/dialogs/export.cpp:303
+#: src/dialogs/export.cpp:304
 msgid "y1:"
 msgstr "y1:"
 
 #. Bitmap size frame
-#: src/dialogs/export.cpp:389
+#: src/dialogs/export.cpp:390
 msgid "Bitmap size"
 msgstr "Storleik på punktbilete"
 
 #. File entry
-#: src/dialogs/export.cpp:431
+#: src/dialogs/export.cpp:432
 msgid "Filename"
 msgstr "Filnamn"
 
-#: src/dialogs/export.cpp:493
+#: src/dialogs/export.cpp:494
 msgid "Browse..."
 msgstr "Bla gjennom ..."
 
-#: src/dialogs/export.cpp:512
+#: src/dialogs/export.cpp:513
 msgid "Export"
 msgstr "Eksporter"
 
-#: src/dialogs/export.cpp:955
+#: src/dialogs/export.cpp:956
 msgid "You have to enter a filename"
 msgstr "Du må skriva inn eit filnamn."
 
-#: src/dialogs/export.cpp:960
+#: src/dialogs/export.cpp:961
 msgid "The chosen area to be exported is invalid"
 msgstr "Eksporteringsområdet er ugyldig."
 
-#: src/dialogs/export.cpp:967
+#: src/dialogs/export.cpp:968
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr "Mappa «%s» finst ikkje, eller er ikkje ei mappe.\n"
 
-#: src/dialogs/export.cpp:981
+#: src/dialogs/export.cpp:982
 msgid "Export in progress"
 msgstr "Eksporterer"
 
-#: src/dialogs/export.cpp:987
+#: src/dialogs/export.cpp:988
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Eksporterer (%d × %d) %s"
 
-#: src/dialogs/export.cpp:1110
+#: src/dialogs/export.cpp:1111
 msgid "Select a filename for exporting"
 msgstr "Vel filnamn for eksportering"
 
@@ -1468,7 +1480,7 @@ msgstr "Merk alle objekta som samsvarer med dei utfylte felta."
 
 #: src/dialogs/item-properties.cpp:121 src/dialogs/item-properties.cpp:392
 #: src/dialogs/item-properties.cpp:529 src/dialogs/item-properties.cpp:535
-#: src/main.cpp:196 src/main.cpp:201
+#: src/main.cpp:196 src/main.cpp:203
 msgid "ID"
 msgstr "ID"
 
@@ -1889,23 +1901,38 @@ msgstr "Midtmerke:"
 msgid "End Markers:"
 msgstr "Sluttmerke:"
 
-#: src/dialogs/text-edit.cpp:259
-msgid "Alignment:"
-msgstr "Justering:"
+#: src/dialogs/text-edit.cpp:193
+#, fuzzy
+msgid "Font"
+msgstr "Punkt"
 
-#: src/dialogs/text-edit.cpp:294
-msgid "Orientation:"
-msgstr "Retning:"
+#: src/dialogs/text-edit.cpp:223
+msgid "Align lines left"
+msgstr ""
 
-#: src/dialogs/text-edit.cpp:319
+#: src/dialogs/text-edit.cpp:236
+#, fuzzy
+msgid "Center lines"
+msgstr "Y-senter:"
+
+#: src/dialogs/text-edit.cpp:249
+msgid "Align lines right"
+msgstr ""
+
+#: src/dialogs/text-edit.cpp:270
+#, fuzzy
+msgid "Horizontal text"
+msgstr "vassrett hjelpelinje"
+
+#: src/dialogs/text-edit.cpp:283
+msgid "Vertical text"
+msgstr ""
+
+#: src/dialogs/text-edit.cpp:298
 msgid "Line spacing:"
 msgstr "Linjeavstand:"
 
-#: src/dialogs/text-edit.cpp:350
-msgid "Text and font"
-msgstr "Tekst og skrift"
-
-#: src/dialogs/text-edit.cpp:361
+#: src/dialogs/text-edit.cpp:385
 msgid "Set as default"
 msgstr "Set som standard"
 
@@ -1951,46 +1978,49 @@ msgid "Edge Detection"
 msgstr "Kantgjenkjenning"
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:344
+#. TRANSLATORS: Color Quantization: the process of reducing the number of colors
+#. in an image by selecting an optimized set of representative colors and then
+#. re-applying this reduced set to the original image.
+#: src/dialogs/tracedialog.cpp:347
 msgid "Color Quantization"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:347
+#: src/dialogs/tracedialog.cpp:350
 #, fuzzy
 msgid "Colors"
 msgstr "Lukk"
 
-#: src/dialogs/tracedialog.cpp:354
+#: src/dialogs/tracedialog.cpp:357
 msgid "Quantization / Reduction"
 msgstr ""
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:359
+#: src/dialogs/tracedialog.cpp:362
 #, fuzzy
 msgid "Invert"
 msgstr "Skubb _inn"
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:365
+#: src/dialogs/tracedialog.cpp:368
 #, fuzzy
 msgid "Preview"
 msgstr "Inga førehandsvising"
 
-#: src/dialogs/tracedialog.cpp:372
+#: src/dialogs/tracedialog.cpp:375
 msgid "Intermediate Bitmap"
 msgstr "Basisbilete"
 
-#: src/dialogs/tracedialog.cpp:380
+#: src/dialogs/tracedialog.cpp:383
 msgid "Credits"
 msgstr "Bidragsytarar"
 
 #. done
-#: src/dialogs/tracedialog.cpp:385
+#: src/dialogs/tracedialog.cpp:388
 msgid "Potrace"
 msgstr "Potrace"
 
 #. ##Set up the Other panel
-#: src/dialogs/tracedialog.cpp:388
+#: src/dialogs/tracedialog.cpp:391
 msgid "Other"
 msgstr "Anna"
 
@@ -2097,37 +2127,23 @@ msgstr "Dokument i minne %d"
 msgid "Unnamed document %d"
 msgstr "Namnlaust dokument %d"
 
-#: src/draw-context.cpp:294
+#: src/draw-context.cpp:265
 msgid "Appending to selection"
 msgstr "Legg til utval"
 
-#: src/draw-context.cpp:298
+#: src/draw-context.cpp:269
 msgid "Creating new curve"
 msgstr "Lagar nye kurve"
 
 #. We hit green anchor, closing Green-Blue-Red
-#: src/draw-context.cpp:482
+#: src/draw-context.cpp:429
 msgid "Path is closed."
 msgstr "Bana er lukka."
 
 #. We hit bot start and end of single curve, closing paths
-#: src/draw-context.cpp:503
+#: src/draw-context.cpp:450
 msgid "Closing path."
 msgstr "Lukkar bane."
-
-#: src/draw-context.cpp:797
-#, c-format
-msgid "Creating anchor at (%g,%g)"
-msgstr "Lagar anker i (%g, %g)"
-
-#. Write curves to object
-#: src/draw-context.cpp:1047
-msgid "Finishing freehand"
-msgstr "Fullført frihandsteikning"
-
-#: src/draw-context.cpp:1813
-msgid "Finishing pen"
-msgstr "Fullfører penn"
 
 #. alpha of color under cursor, to show in the statusbar
 #. locale-sensitive printf is OK, since this goes to the UI, not into SVG
@@ -2161,7 +2177,7 @@ msgstr ""
 "Klikk for å plukka fyllfarge. «Shift + klikk» for å plukka strekfarge. Dra "
 "og klikk for å velja snittfargen i eit område."
 
-#: src/extension/db.cpp:187 src/extension/db.cpp:200
+#: src/extension/db.cpp:189 src/extension/db.cpp:202
 msgid "Autodetect"
 msgstr "Oppdag automatisk"
 
@@ -2174,40 +2190,40 @@ msgstr ""
 "Modulmappa (%s) er ikkje tilgjengeleg. Eksterne modular i denne katalogen "
 "vert ikkje lasta."
 
-#: src/extension/internal/eps-out.cpp:70
+#: src/extension/internal/eps-out.cpp:72
 msgid "EPS Output Settings"
 msgstr "EPS-lagring"
 
-#: src/extension/internal/eps-out.cpp:82
+#: src/extension/internal/eps-out.cpp:84
 msgid "Make bounding box around full page"
 msgstr "Lag avgrensingsboks rundt heile sida"
 
-#: src/extension/internal/eps-out.cpp:89
+#: src/extension/internal/eps-out.cpp:91
 msgid "Convert text to path"
 msgstr "Gjer om tekst til bane"
 
-#: src/extension/internal/gnome.cpp:74
+#: src/extension/internal/gnome.cpp:75
 msgid "Select printer"
 msgstr "Vel skrivar"
 
-#: src/extension/internal/gnome.cpp:125
+#: src/extension/internal/gnome.cpp:126
 msgid "Inkscape: Print Preview"
 msgstr "Inkscape: Førehandsvising"
 
-#: src/extension/internal/ps.cpp:113
+#: src/extension/internal/ps.cpp:115
 msgid "Print Destination"
 msgstr "Utskriftsmål"
 
 #. Print properties frame
-#: src/extension/internal/ps.cpp:127
+#: src/extension/internal/ps.cpp:129
 msgid "Print properties"
 msgstr "Utskriftseigenskapar"
 
-#: src/extension/internal/ps.cpp:134
+#: src/extension/internal/ps.cpp:136
 msgid "Print using PostScript operators"
 msgstr "Skriv ut med PostScript-operatorar"
 
-#: src/extension/internal/ps.cpp:136
+#: src/extension/internal/ps.cpp:138
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
 "file size and can be arbitrarily scaled, but alpha transparency, gradients "
@@ -2216,11 +2232,11 @@ msgstr ""
 "Bruk PostScript-baserte vektoroperatorar. Fila vert vanlegvis mindre, og kan "
 "skalerast fritt, men gjennomsikt, fargeovergangar og mønster vil gå tapt."
 
-#: src/extension/internal/ps.cpp:141
+#: src/extension/internal/ps.cpp:143
 msgid "Print as bitmap"
 msgstr "Skriv ut som punktbilete"
 
-#: src/extension/internal/ps.cpp:143
+#: src/extension/internal/ps.cpp:145
 msgid ""
 "Print everything as bitmap. The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
@@ -2230,20 +2246,20 @@ msgstr ""
 "skalerast utan kvalitetstap, men alle objekta vert sjåande nøyaktig ut som "
 "på skjermen."
 
-#: src/extension/internal/ps.cpp:157
+#: src/extension/internal/ps.cpp:159
 msgid "Preferred resolution (dots per inch) of bitmap"
 msgstr "Føretrekt oppløysing (i punkt per tomme) for punktbiletet."
 
-#: src/extension/internal/ps.cpp:172
+#: src/extension/internal/ps.cpp:174
 msgid "Resolution:"
 msgstr "Oppløysing:"
 
 #. Print destination frame
-#: src/extension/internal/ps.cpp:176
+#: src/extension/internal/ps.cpp:178
 msgid "Print destination"
 msgstr "Utskriftsmål"
 
-#: src/extension/internal/ps.cpp:182
+#: src/extension/internal/ps.cpp:184
 msgid ""
 "Use '> filename' to print to file.\n"
 "Use '| prog arg...' to pipe to a program."
@@ -2251,47 +2267,47 @@ msgstr ""
 "Bruk «> filnamn» for å lagra utskrifta i ei fil.\n"
 "Bruk «| prog arg ...» for å senda ho vidare til eit program."
 
-#: src/extension/internal/ps.cpp:934
+#: src/extension/internal/ps.cpp:936
 msgid "write error occurred"
 msgstr "Det oppstod ein skrivefeil."
 
-#: src/extension/system.cpp:101
+#: src/extension/system.cpp:105
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr "Klarte ikkje finna rett format automatisk. Fila vert opna som SVG."
 
-#: src/file.cpp:165 src/file.cpp:644
+#: src/file.cpp:167 src/file.cpp:646
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Klarte ikkje opna fila «%s»."
 
-#: src/file.cpp:189
+#: src/file.cpp:191
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Kan ikkje opna dokumentet på nytt att, då det ikkje er lagra enno."
 
-#: src/file.cpp:196
+#: src/file.cpp:198
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 "Alle endringar går tapt. Er du sikker på at du vil lasta dokumentet «%s» om "
 "att?"
 
-#: src/file.cpp:215
+#: src/file.cpp:217
 msgid "Document reverted."
 msgstr "Dokumentet er lasta om att."
 
-#: src/file.cpp:218
+#: src/file.cpp:220
 msgid "Document not reverted."
 msgstr "Dokumentet er ikkje lasta om att."
 
-#: src/file.cpp:222
+#: src/file.cpp:224
 msgid "Document not modified.  No need to revert."
 msgstr "Dokumentet er ikkje endra. Treng ikkje lasta om att."
 
-#: src/file.cpp:256
+#: src/file.cpp:258
 msgid "Select file to open"
 msgstr "Vel fila du vil opna"
 
-#: src/file.cpp:356
+#: src/file.cpp:358
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -2300,38 +2316,38 @@ msgstr ""
 "Fann inga Inkscape-tillegg for å lagra dokumentet (%s). Dette kan skuldast "
 "eit ukjend filetternamn."
 
-#: src/file.cpp:357 src/file.cpp:363
+#: src/file.cpp:359 src/file.cpp:365
 msgid "Document not saved."
 msgstr "Dokumentet er ikkje lagra."
 
-#: src/file.cpp:362
+#: src/file.cpp:364
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Klarte ikkje lagra fila «%s»."
 
-#: src/file.cpp:371
+#: src/file.cpp:373
 msgid "Document saved."
 msgstr "Dokumentet er lagra."
 
-#: src/file.cpp:418
+#: src/file.cpp:420
 #, c-format
 msgid "drawing%s"
 msgstr "teikning%s"
 
-#: src/file.cpp:424
+#: src/file.cpp:426
 #, c-format
 msgid "drawing-%d%s"
 msgstr "teikning-%d%s"
 
-#: src/file.cpp:452
+#: src/file.cpp:454
 msgid "Select file to save to"
 msgstr "Vel fila du vil lagra til"
 
-#: src/file.cpp:530
+#: src/file.cpp:532
 msgid "No changes need to be saved."
 msgstr "Ingen endringar treng lagrast."
 
-#: src/file.cpp:671
+#: src/file.cpp:673
 msgid "Select file to import"
 msgstr "Vel fila du vil importera"
 
@@ -2728,7 +2744,7 @@ msgstr "Prøv å bruka X-tenar (sjølv om $DISPLAY er valt til noko anna)"
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Opna dokument(a)"
 
-#: src/main.cpp:161 src/main.cpp:166 src/main.cpp:171 src/main.cpp:221
+#: src/main.cpp:161 src/main.cpp:166 src/main.cpp:171 src/main.cpp:223
 msgid "FILENAME"
 msgstr "FILNAMN"
 
@@ -2780,50 +2796,52 @@ msgstr "HØGD"
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "Breidda på lagra punktbilete i pikslar (overstyrer PPT-innstillingen)"
 
-#: src/main.cpp:200
+#. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
+#. See "man inkscape" for details.
+#: src/main.cpp:202
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 
-#: src/main.cpp:205
+#: src/main.cpp:207
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr "Bruk lagra filnamn og PPT-hint ved eksport (berre med «export-id»)."
 
-#: src/main.cpp:210
+#: src/main.cpp:212
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Bakgrunnsfarge til lagra punktbilete (du kan bruka alle gyldige SVG-"
 "fargekodar)."
 
-#: src/main.cpp:211
+#: src/main.cpp:213
 msgid "COLOR"
 msgstr "FARGE"
 
-#: src/main.cpp:215
+#: src/main.cpp:217
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Bakgrunnsfarge til lagra punktbilete (du kan bruka alle gyldige SVG-"
 "fargekodar)."
 
-#: src/main.cpp:216
+#: src/main.cpp:218
 msgid "VALUE"
 msgstr "VERDI"
 
-#: src/main.cpp:220
+#: src/main.cpp:222
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Eksporter dokument til en vanlig SVG-fil (ingen «xmlns:sodipodi» navneområde)"
 
-#: src/main.cpp:225
+#: src/main.cpp:227
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Vis oppgitte filer en-etter-en, bytt til neste ved tastatur-/mus-hendelse"
 
-#: src/main.cpp:230
+#: src/main.cpp:232
 msgid "Prefer bitmap (XPM) icons to SVG ones"
 msgstr "Føretrekk punktbileteikon (XPM) framfor SVG-ikon"
 
-#: src/main.cpp:338 src/main.cpp:422
+#: src/main.cpp:340 src/main.cpp:424
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -2833,36 +2851,54 @@ msgstr ""
 "\n"
 "Tilgjengelege val:"
 
-#: src/nodepath.cpp:1122 src/nodepath.cpp:1134 src/nodepath.cpp:1214
-#: src/nodepath.cpp:1226
+#: src/node-context.cpp:355
+msgid ""
+"<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
+"+Alt</b>: move along handles"
+msgstr ""
+
+#: src/node-context.cpp:356
+#, fuzzy
+msgid ""
+"<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
+msgstr "<b>Shift</b>: Merk eller fjern merking. Bruk gummibandmerking."
+
+#: src/node-context.cpp:357
+msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
+msgstr ""
+
+#: src/nodepath.cpp:1125 src/nodepath.cpp:1137 src/nodepath.cpp:1217
+#: src/nodepath.cpp:1229
 #, fuzzy
 msgid "To join, you must have <b>two endnodes</b> selected."
 msgstr "Du må ha merkt to sluttnodar for å kunna slå dei saman."
 
-#: src/nodepath.cpp:1351 src/nodepath.cpp:1365
+#: src/nodepath.cpp:1354 src/nodepath.cpp:1368
 #, fuzzy
 msgid ""
 "Select <b>two non-endpoint nodes</b> on a path between which to delete "
 "segments."
 msgstr "Du må merkja dei to ikkje-sluttnodane du vil sletta kakestykke mellom."
 
-#: src/nodepath.cpp:1461
+#: src/nodepath.cpp:1464
 msgid "Cannot find path between nodes."
 msgstr "Klarte ikkje finna noko bane mllom nodane."
 
-#: src/nodepath.cpp:2677
+#: src/nodepath.cpp:2695
+#, fuzzy
 msgid ""
-"<b>Node:</b> drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
+"<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
 msgstr ""
 "<b>Node</b>: Dra noden for å redigera bana. Bruk <b>Ctrl</b> for å avgrensa "
 "til vassrett og loddrett, og <b>Ctrl + Alt</b> for å avgrensa til "
 "kontrollpunktretninga."
 
-#: src/nodepath.cpp:2701 src/nodepath.cpp:2725
+#: src/nodepath.cpp:2719 src/nodepath.cpp:2743
+#, fuzzy
 msgid ""
 "<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; "
-"with <b>Alt</b> to lock length, with <b>Shift</b> to rotate the opposite "
+"with <b>Alt</b> to lock length; with <b>Shift</b> to rotate the opposite "
 "handle in sync"
 msgstr ""
 "<b>Kontrollpunkt</b>: Dra for å endra forma. Bruk <b>Ctrl</b> for "
@@ -2870,28 +2906,28 @@ msgstr ""
 "rundt motståande kontrollpunkt samtidig."
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: src/nodepath.cpp:2851
+#: src/nodepath.cpp:2869
 msgid "cusp"
 msgstr "spiss"
 
-#: src/nodepath.cpp:2853
+#: src/nodepath.cpp:2871
 msgid "smooth"
 msgstr "jamn"
 
-#: src/nodepath.cpp:2855
+#: src/nodepath.cpp:2873
 msgid "symmetric"
 msgstr "symmetrisk"
 
-#: src/nodepath.cpp:2865
+#: src/nodepath.cpp:2883
 msgid "Drag nodes or node handles to edit the path"
 msgstr "Dra nodar eller kontrollpunkt for å endra bana."
 
-#: src/nodepath.cpp:2884
+#: src/nodepath.cpp:2902
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr "Merk eit baneobjekt først, og byt tilbake til nodeverktøyet etterpå."
 
-#: src/nodepath.cpp:2887
+#: src/nodepath.cpp:2905
 #, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around "
@@ -2900,12 +2936,12 @@ msgstr ""
 "<b>0</b> av <b>%i</b> nodar valde. Klikk, «Shift + klikk» eller dra rundt "
 "nodar for å velja."
 
-#: src/nodepath.cpp:2891
+#: src/nodepath.cpp:2909
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr "<b>%i</b> av <b>%i</b> nodar valde. %s. %s."
 
-#: src/nodepath.cpp:2894
+#: src/nodepath.cpp:2912
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> nodes selected. %s."
 msgstr "<b>%i</b> av <b>%i</b> nodar valde. %s."
@@ -2953,46 +2989,50 @@ msgstr ""
 "Plasser sluttpunktet til bogen eller kakestykket. Bruk «Ctrl» for "
 "stegflytting. Dra inni ellipsen for boge og utanfor for kakestykke."
 
-#: src/object-edit.cpp:474
+#: src/object-edit.cpp:497
 #, fuzzy
-msgid "Adjust the <b>tip radius</b> of the star or polygon"
-msgstr "Endra spissradius til stjerne eller mangekant."
+msgid ""
+"Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
+"round; with <b>Alt</b> to randomize"
+msgstr "Endra grunnradius til stjerna. Bruk «Ctrl» for å halda ho uvridd."
 
-#: src/object-edit.cpp:477
+#: src/object-edit.cpp:500
 #, fuzzy
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
-"rays radial (no skew)"
+"rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
+"randomize"
 msgstr "Endra grunnradius til stjerna. Bruk «Ctrl» for å halda ho uvridd."
 
-#: src/object-edit.cpp:570
+#: src/object-edit.cpp:593
 #, fuzzy
 msgid ""
 "Position the <b>inner end</b> of the spiral; with <b>Ctrl</b> to snap angle"
 msgstr "Plasser indre punkt til spiralen. Bruk «Ctrl» for stegflytting."
 
-#: src/object-edit.cpp:572
+#: src/object-edit.cpp:595
 #, fuzzy
 msgid ""
 "Position the <b>outer end</b> of the spiral; with <b>Ctrl</b> to snap angle"
 msgstr "Plasser ytre punkt til spiralen. Bruk «Ctrl» for stegflytting."
 
-#: src/object-edit.cpp:609
+#: src/object-edit.cpp:632
 #, fuzzy
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Endra forskyvingsavstanden."
 
-#: src/object-edit.cpp:639
+#. TRANSLATORS: This refers to the pattern that's inside the object
+#: src/object-edit.cpp:663
 #, fuzzy
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "Plasser mønsterfyllet i objektet."
 
-#: src/object-edit.cpp:641
+#: src/object-edit.cpp:665
 #, fuzzy
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "Skaler mønsterfyllet jamt."
 
-#: src/object-edit.cpp:643
+#: src/object-edit.cpp:667
 #, fuzzy
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "Roter mønterfyllet. Bruk «Ctrl» for stegrotering."
@@ -3121,7 +3161,13 @@ msgstr "Merk éi eller fleire baner du vil snu retninga på."
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "Det finst ingen baner du kan snu retninga på i utvalet."
 
-#: src/rect-context.cpp:521
+#: src/rect-context.cpp:397
+msgid ""
+"<b>Ctrl</b>: make square or integer-ratio rect, lock a rounded corner "
+"circular"
+msgstr ""
+
+#: src/rect-context.cpp:551
 #, fuzzy, c-format
 msgid ""
 "<b>Rectangle</b>: %s x %s; with <b>Ctrl</b> to make square or integer-ratio "
@@ -3130,30 +3176,33 @@ msgstr ""
 "<b>Roter</b> utvalet. Bruk <b>Ctrl</b> for stegrotering og <b>Shift</ for å "
 "rotera rundt motståande hjørne."
 
-#: src/select-context.cpp:647
-msgid "<b>Ctrl:</b> select in groups, move hor/vert"
+#: src/select-context.cpp:641
+#, fuzzy
+msgid "<b>Ctrl</b>: select in groups, move hor/vert"
 msgstr "<b>Ctrl</b>: Merk objekt inni grupper. Flytt vassrett/loddrett."
 
-#: src/select-context.cpp:649
-msgid "<b>Shift:</b> toggle select, force rubberband"
+#: src/select-context.cpp:642
+#, fuzzy
+msgid "<b>Shift</b>: toggle select, force rubberband, disable snapping"
 msgstr "<b>Shift</b>: Merk eller fjern merking. Bruk gummibandmerking."
 
-#: src/select-context.cpp:651
-msgid "<b>Alt:</b> select under, move selected"
+#: src/select-context.cpp:643
+#, fuzzy
+msgid "<b>Alt</b>: select under, move selected"
 msgstr "<b>Alt</b>: Merk objekt under. Flytt merkte objekt."
 
-#: src/select-context.cpp:725
+#: src/select-context.cpp:714
 msgid "Move canceled."
 msgstr "Avbrote flytting."
 
-#: src/select-context.cpp:731
+#: src/select-context.cpp:720
 msgid "Selection canceled."
 msgstr "Avbrote utval."
 
-#: src/select-context.cpp:894
+#: src/select-context.cpp:883
 #, fuzzy, c-format
 msgid ""
-"<b>Move</b> by %s x %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
+"<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
 "with <b>Shift</b> to disable snapping"
 msgstr ""
 "<b>Node</b>: Dra noden for å redigera bana. Bruk <b>Ctrl</b> for å avgrensa "
@@ -3398,9 +3447,9 @@ msgid "<b>Rotate</b>: %0.2f degrees; with <b>Ctrl</b> to snap angle"
 msgstr "Roter mønterfyllet. Bruk «Ctrl» for stegrotering."
 
 #: src/seltrans.cpp:1000
-#, c-format
-msgid "Move <b>center</b> to %s x %s"
-msgstr ""
+#, fuzzy, c-format
+msgid "Move <b>center</b> to %s, %s"
+msgstr "Lenkje til «%s»"
 
 #: src/slideshow.cpp:88
 msgid "Inkscape slideshow"
@@ -3434,38 +3483,38 @@ msgstr "loddrett hjelpelinje"
 msgid "horizontal guideline"
 msgstr "vassrett hjelpelinje"
 
-#: src/sp-image.cpp:324
+#: src/sp-image.cpp:325
 #, fuzzy, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "Bilete med ugyldig referanse: %s"
 
-#: src/sp-image.cpp:326
+#: src/sp-image.cpp:327
 #, fuzzy, c-format
 msgid "<b>Image</b> %d x %d: %s"
 msgstr "Fargebilete %d × %d: %s"
 
-#: src/sp-image.cpp:729
+#: src/sp-image.cpp:730
 msgid "Trace"
 msgstr "Spor"
 
-#: src/sp-image.cpp:875
+#: src/sp-image.cpp:876
 #, c-format
 msgid "Error writing %s: %s"
 msgstr "Klarte ikkje skriva «%s»: %s"
 
-#: src/sp-image.cpp:909
+#: src/sp-image.cpp:910
 msgid "Untitled"
 msgstr "Namnlaus"
 
-#: src/sp-image.cpp:914
+#: src/sp-image.cpp:915
 msgid "Document Name:"
 msgstr "Dokumentnamn:"
 
-#: src/sp-image.cpp:927
+#: src/sp-image.cpp:928
 msgid "Unknown"
 msgstr "Ukjend"
 
-#: src/sp-image.cpp:933
+#: src/sp-image.cpp:934
 msgid "Image URI:"
 msgstr "Biletadresse:"
 
@@ -3474,7 +3523,7 @@ msgstr "Biletadresse:"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "Gruppe på %d objekt"
 
-#: src/sp-item.cpp:592
+#: src/sp-item.cpp:595
 msgid "Object"
 msgstr "Objekt"
 
@@ -3551,7 +3600,15 @@ msgstr "Klon av: %s. Bruk «Shift + D» for å gå til opphavet."
 msgid "<b>Orphaned clone</b>"
 msgstr "Foreldrelaus klon"
 
-#: src/spiral-context.cpp:431
+#: src/spiral-context.cpp:357
+msgid "<b>Ctrl</b>: snap angle"
+msgstr ""
+
+#: src/spiral-context.cpp:359
+msgid "<b>Alt</b>: lock spiral radius"
+msgstr ""
+
+#: src/spiral-context.cpp:460
 #, c-format
 msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
@@ -3624,12 +3681,16 @@ msgstr "Merk banene du vil forenkla."
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "Det finst ingen baner å forenkla i utvalet."
 
-#: src/star-context.cpp:440
+#: src/star-context.cpp:369
+msgid "<b>Ctrl</b>: snap angle; keep rays radial"
+msgstr ""
+
+#: src/star-context.cpp:469
 #, c-format
 msgid "<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
-#: src/star-context.cpp:441
+#: src/star-context.cpp:470
 #, c-format
 msgid "<b>Star</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
@@ -3890,7 +3951,7 @@ msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr ""
 "Gjer om figuren til ein heil ellipse – ikkje ein boge eller eit kakestykke."
 
-#: src/tools-switch.cpp:125
+#: src/tools-switch.cpp:129
 #, fuzzy
 msgid ""
 "To edit a path, <b>click</b>, <b>Shift+click</b>, or <b>drag around</b> "
@@ -3900,7 +3961,7 @@ msgstr ""
 "Klikk for å endra bana, «Shift + klikk» eller dra nodane for å merkja. Dra "
 "kontrollane for å endra ein figur."
 
-#: src/tools-switch.cpp:131
+#: src/tools-switch.cpp:135
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and "
@@ -3908,7 +3969,7 @@ msgid ""
 msgstr ""
 "Dra for å laga eit rektangel. Bruk nodeverktøyet for å runda av hjørnene."
 
-#: src/tools-switch.cpp:137
+#: src/tools-switch.cpp:141
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or "
@@ -3917,7 +3978,7 @@ msgstr ""
 "Dra for å laga ein ellipse. Bruk nodeverktøyet for å laga ein boge eller eit "
 "kakestykke."
 
-#: src/tools-switch.cpp:143
+#: src/tools-switch.cpp:147
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. "
@@ -3925,7 +3986,7 @@ msgid ""
 msgstr ""
 "Dra for å laga ei stjerne. Bruk nodeverktøyet for å endra forma på stjerna."
 
-#: src/tools-switch.cpp:149
+#: src/tools-switch.cpp:153
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral "
@@ -3933,7 +3994,7 @@ msgid ""
 msgstr ""
 "Dra for å laga ein spiral. Bruk nodeverktøyet for å endra forma på spiralen."
 
-#: src/tools-switch.cpp:155
+#: src/tools-switch.cpp:159
 #, fuzzy
 msgid ""
 "<b>Drag</b> to create a freehand line. Press <b>a</b> to toggle Append/New."
@@ -3941,7 +4002,7 @@ msgstr ""
 "Dra for å teikna frihandslinjer. Trykk «A» for å byta mellom å leggja til "
 "punkt og starta på ny linje."
 
-#: src/tools-switch.cpp:161
+#: src/tools-switch.cpp:165
 #, fuzzy
 msgid ""
 "<b>Click</b> to create a node, <b>click and drag</b> to create a smooth "
@@ -3950,19 +4011,19 @@ msgstr ""
 "Trykk for å laga ny node. Trykk og dra for å laga ein jamn node. Trykk «A» "
 "for å byta mellom å leggja til punkt og starta på ny linje."
 
-#: src/tools-switch.cpp:167
+#: src/tools-switch.cpp:171
 #, fuzzy
 msgid "<b>Drag</b> to paint a calligraphic stroke."
 msgstr "Dra for å teikna ein kalligrafisk strek."
 
-#: src/tools-switch.cpp:173
+#: src/tools-switch.cpp:177
 #, fuzzy
 msgid "<b>Click</b> to select or create text object, then type."
 msgstr ""
 "Trykk for å merkja eit gammalt eller laga eit nytt tekstobjekt, og skriv så "
 "teksten."
 
-#: src/tools-switch.cpp:179
+#: src/tools-switch.cpp:183
 #, fuzzy
 msgid ""
 "<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to "
@@ -3971,12 +4032,12 @@ msgstr ""
 "Klikk og dra rundt eit område for å forstørra. «Shift + klikk» for å "
 "forstørra ut."
 
-#: src/tools-switch.cpp:185
+#: src/tools-switch.cpp:189
 #, fuzzy
 msgid ""
 "<b>Click</b> to set fill color, <b>Shift+click</b> to set stroke color. "
-"<b>Click and drag</b> to pick the average color of an area. <b>Ctrl+C</b> "
-"top copy the color under mouse to clipboard."
+"<b>Click and drag</b> to pick the average color of an area. <b>Ctrl+C</b> to "
+"copy the color under mouse to clipboard."
 msgstr ""
 "Klikk for å velja fyllfarge, og bruk «Shift + klikk» for å velja strekfarge. "
 "Klikk og dra for å henta gjennomsnittsfargen i eit område."
@@ -3993,11 +4054,11 @@ msgstr "Kvart merkte objekt har ein synleg avgrensingsboks"
 
 #: src/trace/trace.cpp:137
 #, fuzzy
-msgid "Trace: no active document"
+msgid "Trace: No active document"
 msgstr "Lag eit nytt dokument."
 
 #: src/trace/trace.cpp:158
-msgid "Trace: mage has no bitmap data"
+msgid "Trace: Image has no bitmap data"
 msgstr ""
 
 #: src/verbs.cpp:877
@@ -5443,6 +5504,35 @@ msgstr "Attributt"
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Value"
 msgstr "Verdi"
+
+#~ msgid ""
+#~ "Distribute centers of objects of objects at even distances horizontally"
+#~ msgstr "Fordel midten av objekt av objekt med jamne mellomrom vassrett"
+
+#~ msgid "Paper size:"
+#~ msgstr "Papirstorleik:"
+
+#~ msgid "Alignment:"
+#~ msgstr "Justering:"
+
+#~ msgid "Orientation:"
+#~ msgstr "Retning:"
+
+#~ msgid "Text and font"
+#~ msgstr "Tekst og skrift"
+
+#~ msgid "Creating anchor at (%g,%g)"
+#~ msgstr "Lagar anker i (%g, %g)"
+
+#~ msgid "Finishing freehand"
+#~ msgstr "Fullført frihandsteikning"
+
+#~ msgid "Finishing pen"
+#~ msgstr "Fullfører penn"
+
+#, fuzzy
+#~ msgid "Adjust the <b>tip radius</b> of the star or polygon"
+#~ msgstr "Endra spissradius til stjerne eller mangekant."
 
 #~ msgid "Draw arc: %s x %s"
 #~ msgstr "Teikn boge: %s × %s"
