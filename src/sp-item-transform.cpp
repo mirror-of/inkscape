@@ -162,17 +162,10 @@ sp_item_skew_rel (SPItem *item, double dx, double dy)
 
 }
 
-void
-sp_item_move_rel (SPItem * item, double dx, double dy)
+void sp_item_move_rel(SPItem *item, double dx, double dy)
 {
-	NRMatrix cur, new_transform;
-	double move[6];
-
-	// move item
-	art_affine_translate (move, dx, dy);
-	sp_item_i2d_affine (item, &cur);
-	nr_matrix_multiply (&new_transform, &cur, NR_MATRIX_D_FROM_DOUBLE (move));
-	sp_item_set_i2d_affine (item, &new_transform);
+	sp_item_set_i2d_affine(item,
+			       sp_item_i2d_affine(item) * NR::translate(dx, dy));
 
 #if 1
 	// this method is consistent with sp_selection_apply_affine()

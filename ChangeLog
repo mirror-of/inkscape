@@ -1,5 +1,7 @@
 2004-02-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item-transform.cpp (sp_item_move_rel): NR::Matrix'ification.
+
 	* src/desktop-events.cpp (sp_dt_guide_event): Get guide line dialog
 	working again: double-click on a guide to show the guide dialog.
 
