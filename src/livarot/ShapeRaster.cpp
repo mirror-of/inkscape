@@ -172,7 +172,6 @@ void Shape::Scan(float &pos, int &curP, float to, float step)
                         if ( node ) {
                             swrData[cb].misc = NULL;
                             node->Remove(*sTree, *sEvts, true);
-                            DestroyEdge(cb, to, step);
                         }
                     }
                 }
@@ -187,7 +186,6 @@ void Shape::Scan(float &pos, int &curP, float to, float step)
             if ( upNo >= 0 ) {
                 SweepTree* node = swrData[upNo].misc;
                 swrData[upNo].misc = NULL;
-                DestroyEdge(upNo, to, step);
 
                 int const P = (d == DOWNWARDS) ? nPt : Other(nPt, dnNo);
                 node->ConvertTo(this, dnNo, 1, P);
@@ -296,7 +294,6 @@ void Shape::QuickScan(float &pos,int &curP, float to, bool doSort, float step)
                 {
                     if ( cb != upNo ) {
                         QuickRasterSubEdge(cb);
-                        DestroyEdge(cb,to,step);
                     }
                 }
                 cb = NextAt(nPt,cb);
@@ -308,12 +305,10 @@ void Shape::QuickScan(float &pos,int &curP, float to, bool doSort, float step)
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 ins_guess = QuickRasterChgEdge(upNo, dnNo, getPoint(nPt).x[0]);
-                DestroyEdge(upNo, to, step);
-                CreateEdge(dnNo, to, step);
             } else {
                 ins_guess = QuickRasterAddEdge(dnNo, getPoint(nPt).x[0], ins_guess);
-                CreateEdge(dnNo, to, step);
             }
+            CreateEdge(dnNo, to, step);
         }
 
         if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
@@ -354,22 +349,21 @@ void Shape::QuickScan(float &pos,int &curP, float to, bool doSort, float step)
 
 
 
-int               Shape::QuickRasterChgEdge(int oBord,int nBord,double x)
+int Shape::QuickRasterChgEdge(int oBord, int nBord, double x)
 {
-  if ( oBord == nBord ) {
-//    printf("ob == nb \n");
-    return -1;
-  }
-  int no=qrsData[oBord].ind;
-  if ( no >= 0 ) {
-    qrsData[no].bord=nBord;
-    qrsData[no].x=x;
-    qrsData[oBord].ind=-1;
-    qrsData[nBord].ind=no;
-  } else {
-//    printf("chg: no < 0\n");
-  }
-  return no;
+    if ( oBord == nBord ) {
+        return -1;
+    }
+    
+    int no = qrsData[oBord].ind;
+    if ( no >= 0 ) {
+        qrsData[no].bord = nBord;
+        qrsData[no].x = x;
+        qrsData[oBord].ind = -1;
+        qrsData[nBord].ind = no;
+    }
+    
+    return no;
 }
 
 
@@ -531,53 +525,59 @@ void Shape::QuickRasterSubEdge(int bord)
 
 
 
-void              Shape::QuickRasterSwapEdge(int a,int b)
+void Shape::QuickRasterSwapEdge(int a, int b)
 {
-  if ( a == b ) {
-//    printf("swap: a==b\n");
-    return;
-  }
-  int na=qrsData[a].ind;
-  int nb=qrsData[b].ind;
-  if ( na < 0 || na >= nbQRas || nb < 0 || nb >= nbQRas ) return; // errrm
-  
-  qrsData[na].bord=b;
-  qrsData[nb].bord=a;
-  qrsData[a].ind=nb;
-  qrsData[b].ind=na;
-  double swd=qrsData[na].x;qrsData[na].x=qrsData[nb].x;qrsData[nb].x=swd;  
-}
-void              Shape::QuickRasterSort(void)
-{
-  if ( nbQRas <= 1 ) return;
-/*  qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
-  for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-  for (int i=1;i<nbQRas;i++) qrsData[i].prev=i-1;
-  for (int i=0;i<nbQRas-1;i++) qrsData[i].next=i+1;
-  qrsData[0].prev=-1;
-  qrsData[nbQRas-1].next=-1;
-  firstQRas=0;
-  lastQRas=nbQRas-1;*/
-  
-  int    cb=qrsData[firstQRas].bord;
-  while ( cb >= 0 ) {
-    int bI=qrsData[cb].ind;
-    int nI=qrsData[bI].next;
-    if ( nI < 0 ) break;
-    int ncb=qrsData[nI].bord;
-    if ( CmpQRs(qrsData[nI],qrsData[bI]) < 0 ) {
-      QuickRasterSwapEdge(cb,ncb);
-      int pI=qrsData[bI].prev; // ca reste bI, puisqu'on a juste echange les contenus
-      if ( pI < 0 ) {
-        cb=ncb; // en fait inutile; mais bon...
-      } else {
-        int pcb=qrsData[pI].bord;
-        cb=pcb;
-      }
-    } else {
-      cb=ncb;
+    if ( a == b ) {
+        return;
     }
-  }
+    
+    int na = qrsData[a].ind;
+    int nb = qrsData[b].ind;
+    if ( na < 0 || na >= nbQRas || nb < 0 || nb >= nbQRas ) {
+        return; // errrm
+    }
+  
+    qrsData[na].bord = b;
+    qrsData[nb].bord = a;
+    qrsData[a].ind = nb;
+    qrsData[b].ind = na;
+    
+    double swd = qrsData[na].x;
+    qrsData[na].x = qrsData[nb].x;
+    qrsData[nb].x = swd;
+}
+
+
+void Shape::QuickRasterSort()
+{
+    if ( nbQRas <= 1 ) {
+        return;
+    }
+    
+    int cb = qrsData[firstQRas].bord;
+    
+    while ( cb >= 0 ) {
+        int bI = qrsData[cb].ind;
+        int nI = qrsData[bI].next;
+        
+        if ( nI < 0 ) {
+            break;
+        }
+    
+        int ncb = qrsData[nI].bord;
+        if ( CmpQRs(qrsData[nI], qrsData[bI]) < 0 ) {
+            QuickRasterSwapEdge(cb, ncb);
+            int pI = qrsData[bI].prev; // ca reste bI, puisqu'on a juste echange les contenus
+            if ( pI < 0 ) {
+                cb = ncb; // en fait inutile; mais bon...
+            } else {
+                int pcb = qrsData[pI].bord;
+                cb = pcb;
+            }
+        } else {
+            cb = ncb;
+        }
+    }
 }
 
 
@@ -608,7 +608,6 @@ void Shape::DirectScan(float &pos, int &curP, float to, float step)
                 SweepTree* node = swrData[i].misc;
                 swrData[i].misc = NULL;
                 node->Remove(*sTree, *sEvts, true);
-                DestroyEdge(i,to,step);
             }
         }
 
@@ -644,7 +643,6 @@ void Shape::DirectScan(float &pos, int &curP, float to, float step)
                 SweepTree* node = swrData[i].misc;
                 swrData[i].misc = NULL;
                 node->Remove(*sTree, *sEvts, true);
-                DestroyEdge(i, to, step);
             }
         }
         
@@ -684,68 +682,90 @@ void Shape::DirectScan(float &pos, int &curP, float to, float step)
 
 
     
-void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSort,float step)
+void Shape::DirectQuickScan(float &pos, int &curP, float to, bool doSort, float step)
 {
-  if ( numberOfEdges() <= 1 ) return;
-	if ( pos == to ) return;
-	if ( pos < to ) {
-    // we're moving downwards
-    // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
-    // until we reach the wanted position to.
-    // don't forget to update curP and pos when we're done
-		int    curPt=curP;
-		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) curPt++;
-    for (int i=0;i<numberOfEdges();i++) {
-      if ( qrsData[i].ind < 0 ) {
-        QuickRasterSubEdge(i);
-        DestroyEdge(i,to,step);
-      }
+    if ( numberOfEdges() <= 1 ) {
+        return;
     }
-    for (int i=0;i<numberOfEdges();i++) {
-      if ( ( getEdge(i).st < curPt && getEdge(i).en >= curPt ) || ( getEdge(i).en < curPt && getEdge(i).st >= curPt )) {
-        // crosses sweepline
-        int nPt=(getEdge(i).st<getEdge(i).en)?getEdge(i).st:getEdge(i).en;
-        QuickRasterAddEdge(i,getPoint(nPt).x[0],-1);
-        CreateEdge(i,to,step);
-      }
+
+    if ( pos == to ) {
+        return;
     }
     
-		curP=curPt;
-		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
-	} else {
-    // same thing, but going up. so the sweepSens is inverted for the Find() function
-		int    curPt=curP;
-		while ( curPt > 0 && getPoint(curPt-1).x[1] >= to ) curPt--;
+    if ( pos < to ) {
+        // we're moving downwards
+        // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
+        // until we reach the wanted position to.
+        // don't forget to update curP and pos when we're done
+        int curPt=curP;
+        while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
+            curPt++;
+        }
+        
+        for (int i = 0; i < numberOfEdges(); i++) {
+            if ( qrsData[i].ind < 0 ) {
+                QuickRasterSubEdge(i);
+            }
+        }
+        
+        for (int i = 0; i < numberOfEdges(); i++) {
+            Shape::dg_arete const &e = getEdge(i);
+            if ( ( e.st < curPt && e.en >= curPt ) || ( e.en < curPt && e.st >= curPt )) {
+                // crosses sweepline
+                int nPt = (e.st < e.en) ? e.st : e.en;
+                QuickRasterAddEdge(i, getPoint(nPt).x[0], -1);
+                CreateEdge(i, to, step);
+            }
+        }
     
-    for (int i=0;i<numberOfEdges();i++) {
-      if ( qrsData[i].ind < 0 ) {
-        QuickRasterSubEdge(i);
-        DestroyEdge(i,to,step);
-      }
-    }
-    for (int i=0;i<numberOfEdges();i++) {
-      if ( ( getEdge(i).st < curPt-1 && getEdge(i).en >= curPt-1 ) || ( getEdge(i).en < curPt-1 && getEdge(i).st >= curPt-1 )) {
-        // crosses sweepline
-        int nPt=(getEdge(i).st>getEdge(i).en)?getEdge(i).st:getEdge(i).en;
-        QuickRasterAddEdge(i,getPoint(nPt).x[0],-1);
-        CreateEdge(i,to,step);
-      }
-    }
+        curP = curPt;
+        if ( curPt > 0 ) {
+            pos=getPoint(curPt-1).x[1];
+        } else {
+            pos = to;
+        }
+        
+    } else {
+
+        // same thing, but going up. so the sweepSens is inverted for the Find() function
+        int curPt=curP;
+        while ( curPt > 0 && getPoint(curPt-1).x[1] >= to ) {
+            curPt--;
+        }
+    
+        for (int i = 0; i < numberOfEdges(); i++) {
+            if ( qrsData[i].ind < 0 ) {
+                QuickRasterSubEdge(i);
+            }
+        }
+        
+        for (int i=0;i<numberOfEdges();i++) {
+            Shape::dg_arete const &e = getEdge(i);
+            if ( ( e.st < curPt-1 && e.en >= curPt-1 ) || ( e.en < curPt-1 && e.st >= curPt-1 )) {
+                // crosses sweepline
+                int nPt = (e.st > e.en) ? e.st : e.en;
+                QuickRasterAddEdge(i, getPoint(nPt).x[0], -1);
+                CreateEdge(i, to, step);
+            }
+        }
 		
-    curP=curPt;
-		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
-	}
-  pos=to;
-	for (int i=0;i<nbQRas;i++) {
-		int cb=qrsData[i].bord;
-		AvanceEdge(cb,to,true,step);
-		qrsData[i].x=swrData[cb].curX;
-	}
-  QuickRasterSort();
-  /*	if ( nbQRas > 1 && doSort) {
-		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
-		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-	}*/
+        curP = curPt;
+        if ( curPt > 0 ) {
+            pos = getPoint(curPt-1).x[1];
+        } else {
+            pos = to;
+        }
+        
+    }
+    
+    pos = to;
+    for (int i = 0; i < nbQRas; i++) {
+        int cb = qrsData[i].bord;
+        AvanceEdge(cb, to, true, step);
+        qrsData[i].x = swrData[cb].curX;
+    }
+    
+    QuickRasterSort();
 }
 
 
@@ -1213,375 +1233,413 @@ void Shape::Scan(float &pos, int &curP, float to, AlphaLigne *line, bool exact, 
 
 
 
-void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* line,bool /*exact*/,float step)
+void Shape::QuickScan(float &pos, int &curP, float to, FloatLigne* line, float step)
 {
-  if ( numberOfEdges() <= 1 ) return;
-	if ( pos >= to ) return;
-	if ( pos < to ) {
-		if ( nbQRas > 1 ) {
-			int curW=0;
-			float  lastX=0,lastY=0;
-			int    lastGuess=-1,lastB=-1;
-			for (int i=firstQRas;i>=0&&i<nbQRas;i=qrsData[i].next) {
-				int   cb=qrsData[i].bord;
-				int   oW=curW;
-				if ( swrData[cb].sens ) curW++; else curW--;
+    if ( numberOfEdges() <= 1 ) {
+        return;
+    }
+    
+    if ( pos >= to ) {
+        return;
+    }
+    
+    if ( nbQRas > 1 ) {
+        int curW = 0;
+        float lastX = 0;
+        float lastY = 0;
+        int lastGuess = -1;
+        int lastB = -1;
+        
+        for (int i = firstQRas; i >= 0 && i < nbQRas; i = qrsData[i].next) {
+            int cb = qrsData[i].bord;
+            int oW = curW;
+            if ( swrData[cb].sens ) {
+                curW++;
+            } else {
+                curW--;
+            }
 
-				if ( curW%2 == 0 && oW%2 != 0) {
-					lastGuess=line->AppendBord(swrData[lastB].curX,to-swrData[lastB].curY,swrData[cb].curX,to-swrData[cb].curY,0.0);
-					swrData[cb].guess=lastGuess;
-					if ( lastB >= 0 ) swrData[lastB].guess=lastGuess-1;
-				} else if ( curW%2 != 0 && oW%2 == 0 ) {
-					lastX=swrData[cb].curX;
-					lastY=swrData[cb].curY;
-					lastB=cb;
-					swrData[cb].guess=-1;
-				} else {
-					swrData[cb].guess=-1;
-				}
-			}
-		}
-		int    curPt=curP;
-		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
-			int           nPt=-1;
-			nPt=curPt++;
+            if ( curW % 2 == 0 && oW % 2 != 0) {
 
-			int nbUp;
-                        int nbDn;
-			int upNo;
-                        int dnNo;
-			if ( getPoint(nPt).totalDegree() == 2 ) {
-                            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
-			} else {
-                            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
-			}
+                lastGuess = line->AppendBord(swrData[lastB].curX,
+                                             to - swrData[lastB].curY,
+                                             swrData[cb].curX,
+                                             to - swrData[cb].curY,
+                                             0.0);
+                
+                swrData[cb].guess = lastGuess;
+                if ( lastB >= 0 ) {
+                    swrData[lastB].guess = lastGuess - 1;
+                }
+                
+            } else if ( curW%2 != 0 && oW%2 == 0 ) {
 
-			if ( nbDn <= 0 ) {
-				upNo=-1;
-			}
-			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
-				upNo=-1;
-			}
+                lastX = swrData[cb].curX;
+                lastY = swrData[cb].curY;
+                lastB = cb;
+                swrData[cb].guess = -1;
+                
+            } else {
+                swrData[cb].guess = -1;
+            }
+        }
+    }
 
-			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != upNo ) {
-              QuickRasterSubEdge(cb);
+    int curPt = curP;
+    while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
+        int nPt = curPt++;
 
-							swrData[cb].lastX=swrData[cb].curX;
-							swrData[cb].lastY=swrData[cb].curY;
-							swrData[cb].curX=getPoint(nPt).x[0];
-							swrData[cb].curY=getPoint(nPt).x[1];
-							swrData[cb].misc=NULL;
-							DestroyEdge(cb,to,line);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
+        int nbUp;
+        int nbDn;
+        int upNo;
+        int dnNo;
+        if ( getPoint(nPt).totalDegree() == 2 ) {
+            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+        } else {
+            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+        }
 
-			// traitement du "upNo devient dnNo"
-      int  ins_guess=-1;
-			if ( dnNo >= 0 ) {
-				if ( upNo >= 0 ) {
-          ins_guess=QuickRasterChgEdge(upNo,dnNo,getPoint(nPt).x[0]);
+        if ( nbDn <= 0 ) {
+            upNo = -1;
+        }
+        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+            upNo = -1;
+        }
 
-					swrData[upNo].lastX=swrData[upNo].curX;
-					swrData[upNo].lastY=swrData[upNo].curY;
-					swrData[upNo].curX=getPoint(nPt).x[0];
-					swrData[upNo].curY=getPoint(nPt).x[1];
-					swrData[upNo].misc=NULL;
-					DestroyEdge(upNo,to,line);
+        if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
+            int cb = getPoint(nPt).incidentEdge[FIRST];
+            while ( cb >= 0 && cb < numberOfEdges() ) {
+                Shape::dg_arete const &e = getEdge(cb);
+                if ( nPt == std::max(e.st, e.en) ) {
+                    if ( cb != upNo ) {
+                        QuickRasterSubEdge(cb);
+                        swrData[cb].lastX = swrData[cb].curX;
+                        swrData[cb].lastY = swrData[cb].curY;
+                        swrData[cb].curX = getPoint(nPt).x[0];
+                        swrData[cb].curY = getPoint(nPt).x[1];
+                        swrData[cb].misc = NULL;
+                        DestroyEdge(cb, to, line);
+                    }
+                }
+                cb = NextAt(nPt, cb);
+            }
+        }
 
-					CreateEdge(dnNo,to,step);
-					swrData[dnNo].guess=swrData[upNo].guess;
-				} else {
-          ins_guess=QuickRasterAddEdge(dnNo,getPoint(nPt).x[0],ins_guess);
-					CreateEdge(dnNo,to,step);
-				}
-			}
+        // traitement du "upNo devient dnNo"
+        int ins_guess=-1;
+        if ( dnNo >= 0 ) {
+            if ( upNo >= 0 ) {
+                ins_guess = QuickRasterChgEdge(upNo ,dnNo, getPoint(nPt).x[0]);
+                swrData[upNo].lastX = swrData[upNo].curX;
+                swrData[upNo].lastY = swrData[upNo].curY;
+                swrData[upNo].curX = getPoint(nPt).x[0];
+                swrData[upNo].curY = getPoint(nPt).x[1];
+                swrData[upNo].misc = NULL;
+                DestroyEdge(upNo, to, line);
 
-			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != dnNo ) {
-              ins_guess=QuickRasterAddEdge(cb,getPoint(nPt).x[0],ins_guess);
-							CreateEdge(cb,to,step);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
-		}
-		curP=curPt;
-		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
-	}
-  pos=to;
-	for (int i=0;i<nbQRas;i++) {
-		int cb=qrsData[i].bord;
-		AvanceEdge(cb,to,line,true,step);
-		qrsData[i].x=swrData[cb].curX;
-	}
-  QuickRasterSort();
-/*	if ( nbQRas > 1 ) {
-		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
-		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-	}*/
-}
-void              Shape::QuickScan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool /*exact*/,float step)
-{
-  if ( numberOfEdges() <= 1 ) return;
-	if ( pos >= to ) return;
-	if ( pos < to ) {
-		if ( nbQRas > 1 ) {
-			int curW=0;
-			float  lastX=0;
-			if ( directed == fill_oddEven ) {
-//				for (int i=0;i<nbQRas;i++) {
-        for (int i=firstQRas;i>= 0 && i<nbQRas;i=qrsData[i].next) {
-					int   cb=qrsData[i].bord;
-					//					int   oW=curW;
-					curW++;
-					curW&=1;
-					if ( curW == 0 ) {
-						line->AddBord(lastX,swrData[cb].curX,true);
-					} else {
-						lastX=swrData[cb].curX;
-					}
-				}
-			} else if ( directed == fill_positive ) {
-				// doesn't behave correctly; no way i know to do this without a ConvertToShape()
-//				for (int i=0;i<nbQRas;i++) {
-        for (int i=firstQRas;i>= 0 && i<nbQRas;i=qrsData[i].next) {
-					int   cb=qrsData[i].bord;
-					int   oW=curW;
-					if ( swrData[cb].sens ) curW++; else curW--;
-
-					if ( curW <= 0 && oW > 0) {
-						line->AddBord(lastX,swrData[cb].curX,true);
-					} else if ( curW > 0 && oW <= 0 ) {
-						lastX=swrData[cb].curX;
-					}
-				}
-			} else if ( directed == fill_nonZero ) {
-//				for (int i=0;i<nbQRas;i++) {
-        for (int i=firstQRas;i>= 0 && i<nbQRas;i=qrsData[i].next) {
-					int   cb=qrsData[i].bord;
-					int   oW=curW;
-					if ( swrData[cb].sens ) curW++; else curW--;
-
-					if ( curW == 0 && oW != 0) {
-						line->AddBord(lastX,swrData[cb].curX,true);
-					} else if ( curW != 0 && oW == 0 ) {
-						lastX=swrData[cb].curX;
-					}
-				}
-			}
-		}
-		int    curPt=curP;
-		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
-			int           nPt=-1;
-			nPt=curPt++;
-
-			int nbUp;
-                        int nbDn;
-			int upNo;
-                        int dnNo;
-			if ( getPoint(nPt).totalDegree() == 2 ) {
-                            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
-			} else {
-                            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
-			}
-
-			if ( nbDn <= 0 ) {
-				upNo=-1;
-			}
-			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
-				upNo=-1;
-			}
-
-			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != upNo ) {
-              QuickRasterSubEdge(cb);
-
-							swrData[cb].lastX=swrData[cb].curX;
-							swrData[cb].lastY=swrData[cb].curY;
-							swrData[cb].curX=getPoint(nPt).x[0];
-							swrData[cb].curY=getPoint(nPt).x[1];
-							swrData[cb].misc=NULL;
-							DestroyEdge(cb, line);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
-
-			// traitement du "upNo devient dnNo"
-      int  ins_guess=-1;
-			if ( dnNo >= 0 ) {
-				if ( upNo >= 0 ) {
-          ins_guess=QuickRasterChgEdge(upNo,dnNo,getPoint(nPt).x[0]);
-					swrData[upNo].lastX=swrData[upNo].curX;
-					swrData[upNo].lastY=swrData[upNo].curY;
-					swrData[upNo].curX=getPoint(nPt).x[0];
-					swrData[upNo].curY=getPoint(nPt).x[1];
-					swrData[upNo].misc=NULL;
-					DestroyEdge(upNo, line);
-
-					CreateEdge(dnNo,to,step);
-				} else {
-          ins_guess=QuickRasterAddEdge(dnNo,getPoint(nPt).x[0],ins_guess);
-					CreateEdge(dnNo,to,step);
-				}
-			}
-
-			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != dnNo ) {
-              ins_guess=QuickRasterAddEdge(cb,getPoint(nPt).x[0],ins_guess);
-							CreateEdge(cb,to,step);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
-		}
-		curP=curPt;
-		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
-	}
-  pos=to;
-	for (int i=0;i<nbQRas;i++) {
-		int cb=qrsData[i].bord;
-		AvanceEdge(cb,to,line,true,step);
-		qrsData[i].x=swrData[cb].curX;
-	}
-  QuickRasterSort();
-/*	if ( nbQRas > 1 ) {
-		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
-		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-	}*/
+                CreateEdge(dnNo, to, step);
+                swrData[dnNo].guess = swrData[upNo].guess;
+            } else {
+                ins_guess = QuickRasterAddEdge(dnNo, getPoint(nPt).x[0], ins_guess);
+                CreateEdge(dnNo, to, step);
+            }
+        }
+        
+        if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
+            int cb = getPoint(nPt).incidentEdge[FIRST];
+            while ( cb >= 0 && cb < numberOfEdges() ) {
+                Shape::dg_arete const &e = getEdge(cb);
+                if ( nPt == std::min(e.st, e.en) ) {
+                    if ( cb != dnNo ) {
+                        ins_guess = QuickRasterAddEdge(cb, getPoint(nPt).x[0], ins_guess);
+                        CreateEdge(cb, to, step);
+                    }
+                }
+                cb = NextAt(nPt, cb);
+            }
+        }
+    }
+    
+    curP = curPt;
+    if ( curPt > 0 ) {
+        pos = getPoint(curPt-1).x[1];
+    } else {
+        pos=to;
+    }
+    
+    pos = to;
+    for (int i=0; i < nbQRas; i++) {
+        int cb = qrsData[i].bord;
+        AvanceEdge(cb, to, line, true, step);
+        qrsData[i].x = swrData[cb].curX;
+    }
+    
+    QuickRasterSort();
 }
 
-void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* line,bool /*exact*/,float step)
+
+
+
+void Shape::QuickScan(float &pos, int &curP, float to, FillRule directed, BitLigne* line, float step)
 {
-  if ( numberOfEdges() <= 1 ) return;
-	if ( pos >= to ) return;
-	if ( pos < to ) {
-		// pas de trapezes dans le cas de l'alphaline
-/*		if ( nbQRas > 1 ) {
-			int curW=0;
-			float  lastX=0,lastY=0;
-			int    lastGuess=-1,lastB=-1;
-			for (int i=0;i<nbQRas;i++) {
-				int   cb=qrsData[i].bord;
-				int   oW=curW;
-				if ( swrData[cb].sens ) curW++; else curW--;
+    if ( numberOfEdges() <= 1 ) {
+        return;
+    }
 
-				if ( curW == 0 && oW != 0) {
-					line->AddBord(lastX,to-lastY,swrData[cb].curX,to-swrData[cb].curY,0.0);
-				} else if ( curW != 0 && oW == 0 ) {
-					lastX=swrData[cb].curX;
-					lastY=swrData[cb].curY;
-					lastB=cb;
-				}
-			}
-		}*/
-		int    curPt=curP;
-		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
-			int           nPt=-1;
-			nPt=curPt++;
+    if ( pos >= to ) {
+        return;
+    }
+    
+    if ( nbQRas > 1 ) {
+        int curW = 0;
+        float lastX = 0;
 
-			int nbUp;
-                        int nbDn;
-			int upNo;
-                        int dnNo;
-			if ( getPoint(nPt).totalDegree() == 2 ) {
-                            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
-			} else {
-                            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
-			}
+        if ( directed == fill_oddEven ) {
 
-			if ( nbDn <= 0 ) {
-				upNo=-1;
-			}
-			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
-				upNo=-1;
-			}
+            for (int i = firstQRas; i >= 0 && i < nbQRas; i = qrsData[i].next) {
+                int cb = qrsData[i].bord;
+                curW++;
+                curW &= 1;
+                if ( curW == 0 ) {
+                    line->AddBord(lastX, swrData[cb].curX, true);
+                } else {
+                    lastX = swrData[cb].curX;
+                }
+            }
 
-			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != upNo ) {
-              QuickRasterSubEdge(cb);
+        } else if ( directed == fill_positive ) {
+            // doesn't behave correctly; no way i know to do this without a ConvertToShape()
+            for (int i = firstQRas; i >= 0 && i < nbQRas; i = qrsData[i].next) {
+                int cb = qrsData[i].bord;
+                int oW = curW;
+                if ( swrData[cb].sens ) {
+                    curW++;
+                } else {
+                    curW--;
+                }
 
-							swrData[cb].lastX=swrData[cb].curX;
-							swrData[cb].lastY=swrData[cb].curY;
-							swrData[cb].curX=getPoint(nPt).x[0];
-							swrData[cb].curY=getPoint(nPt).x[1];
-							swrData[cb].misc=NULL;
-							DestroyEdge(cb, line);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
+                if ( curW <= 0 && oW > 0) {
+                    line->AddBord(lastX, swrData[cb].curX, true);
+                } else if ( curW > 0 && oW <= 0 ) {
+                    lastX = swrData[cb].curX;
+                }
+            }
 
-			// traitement du "upNo devient dnNo"
-      int  ins_guess=-1;
-			if ( dnNo >= 0 ) {
-				if ( upNo >= 0 ) {
-          ins_guess=QuickRasterChgEdge(upNo,dnNo,getPoint(nPt).x[0]);
-					swrData[upNo].lastX=swrData[upNo].curX;
-					swrData[upNo].lastY=swrData[upNo].curY;
-					swrData[upNo].curX=getPoint(nPt).x[0];
-					swrData[upNo].curY=getPoint(nPt).x[1];
-					swrData[upNo].misc=NULL;
-					DestroyEdge(upNo, line);
+        } else if ( directed == fill_nonZero ) {
+            for (int i = firstQRas; i >= 0 && i < nbQRas; i = qrsData[i].next) {
+                int cb = qrsData[i].bord;
+                int oW = curW;
+                if ( swrData[cb].sens ) {
+                    curW++;
+                } else {
+                    curW--;
+                }
 
-					CreateEdge(dnNo,to,step);
-					swrData[dnNo].guess=swrData[upNo].guess;
-				} else {
-          ins_guess=QuickRasterAddEdge(dnNo,getPoint(nPt).x[0],ins_guess);
-					CreateEdge(dnNo,to,step);
-				}
-			}
+                if ( curW == 0 && oW != 0) {
+                    line->AddBord(lastX, swrData[cb].curX, true);
+                } else if ( curW != 0 && oW == 0 ) {
+                    lastX = swrData[cb].curX;
+                }
+            }
+        }
+    }
 
-			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != dnNo ) {
-              ins_guess=QuickRasterAddEdge(cb,getPoint(nPt).x[0],ins_guess);
-							CreateEdge(cb,to,step);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
-		}
-		curP=curPt;
-		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
-	}
-  pos=to;
-	for (int i=0;i<nbQRas;i++) {
-		int cb=qrsData[i].bord;
-		AvanceEdge(cb,to,line,true,step);
-		qrsData[i].x=swrData[cb].curX;
-	}
-  QuickRasterSort();
-/*	if ( nbQRas > 1 ) {
-		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
-		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-	}*/
+    int curPt = curP;
+    while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
+        int nPt = -1;
+        nPt = curPt++;
+        
+        int nbUp;
+        int nbDn;
+        int upNo;
+        int dnNo;
+        if ( getPoint(nPt).totalDegree() == 2 ) {
+            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+        } else {
+            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+        }
+
+        if ( nbDn <= 0 ) {
+            upNo = -1;
+        }
+        
+        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+            upNo = -1;
+        }
+
+        if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
+            int cb = getPoint(nPt).incidentEdge[FIRST];
+            while ( cb >= 0 && cb < numberOfEdges() ) {
+                Shape::dg_arete const &e = getEdge(cb);
+                if ( nPt == std::max(e.st, e.en) ) {
+                    if ( cb != upNo ) {
+                        QuickRasterSubEdge(cb);
+
+                        swrData[cb].lastX = swrData[cb].curX;
+                        swrData[cb].lastY = swrData[cb].curY;
+                        swrData[cb].curX = getPoint(nPt).x[0];
+                        swrData[cb].curY = getPoint(nPt).x[1];
+                        swrData[cb].misc = NULL;
+                        DestroyEdge(cb, line);
+                    }
+                }
+                cb = NextAt(nPt, cb);
+            }
+        }
+        
+        // traitement du "upNo devient dnNo"
+        int ins_guess = -1;
+        if ( dnNo >= 0 ) {
+            if ( upNo >= 0 ) {
+                ins_guess = QuickRasterChgEdge(upNo, dnNo, getPoint(nPt).x[0]);
+                swrData[upNo].lastX = swrData[upNo].curX;
+                swrData[upNo].lastY = swrData[upNo].curY;
+                swrData[upNo].curX = getPoint(nPt).x[0];
+                swrData[upNo].curY = getPoint(nPt).x[1];
+                swrData[upNo].misc = NULL;
+                DestroyEdge(upNo, line);
+                
+                CreateEdge(dnNo, to, step);
+            } else {
+                ins_guess = QuickRasterAddEdge(dnNo, getPoint(nPt).x[0], ins_guess);
+                CreateEdge(dnNo, to, step);
+            }
+        }
+
+        if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
+            int cb = getPoint(nPt).incidentEdge[FIRST];
+            while ( cb >= 0 && cb < numberOfEdges() ) {
+                Shape::dg_arete const &e = getEdge(cb);
+                if ( nPt == std::min(e.st, e.en) ) {
+                    if ( cb != dnNo ) {
+                        ins_guess = QuickRasterAddEdge(cb, getPoint(nPt).x[0], ins_guess);
+                        CreateEdge(cb, to, step);
+                    }
+                }
+                cb = NextAt(nPt,cb);
+            }
+        }
+    }
+    
+    curP = curPt;
+    if ( curPt > 0 ) {
+        pos=getPoint(curPt - 1).x[1];
+    } else {
+        pos = to;
+    }
+    
+    pos = to;
+    for (int i = 0; i < nbQRas; i++) {
+        int cb = qrsData[i].bord;
+        AvanceEdge(cb, to, line, true, step);
+        qrsData[i].x = swrData[cb].curX;
+    }
+    
+    QuickRasterSort();
+}
+
+
+
+void Shape::QuickScan(float &pos, int &curP, float to, AlphaLigne* line, float step)
+{
+    if ( numberOfEdges() <= 1 ) {
+        return;
+    }
+    if ( pos >= to ) {
+        return;
+    }
+    
+    int curPt = curP;
+    while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
+        int nPt = curPt++;
+
+        int nbUp;
+        int nbDn;
+        int upNo;
+        int dnNo;
+        if ( getPoint(nPt).totalDegree() == 2 ) {
+            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+        } else {
+            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+        }
+        
+        if ( nbDn <= 0 ) {
+            upNo = -1;
+        }
+        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+            upNo = -1;
+        }
+
+        if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
+            int cb = getPoint(nPt).incidentEdge[FIRST];
+            while ( cb >= 0 && cb < numberOfEdges() ) {
+                Shape::dg_arete const &e = getEdge(cb);
+                if ( nPt == std::max(e.st, e.en) ) {
+                    if ( cb != upNo ) {
+                        QuickRasterSubEdge(cb);
+                        
+                        swrData[cb].lastX = swrData[cb].curX;
+                        swrData[cb].lastY = swrData[cb].curY;
+                        swrData[cb].curX = getPoint(nPt).x[0];
+                        swrData[cb].curY = getPoint(nPt).x[1];
+                        swrData[cb].misc = NULL;
+                        DestroyEdge(cb, line);
+                    }
+                }
+                cb = NextAt(nPt,cb);
+            }
+        }
+
+        // traitement du "upNo devient dnNo"
+        int ins_guess = -1;
+        if ( dnNo >= 0 ) {
+            if ( upNo >= 0 ) {
+                ins_guess = QuickRasterChgEdge(upNo, dnNo, getPoint(nPt).x[0]);
+                swrData[upNo].lastX = swrData[upNo].curX;
+                swrData[upNo].lastY = swrData[upNo].curY;
+                swrData[upNo].curX = getPoint(nPt).x[0];
+                swrData[upNo].curY = getPoint(nPt).x[1];
+                swrData[upNo].misc = NULL;
+                DestroyEdge(upNo, line);
+
+                CreateEdge(dnNo, to, step);
+                swrData[dnNo].guess = swrData[upNo].guess;
+            } else {
+                ins_guess = QuickRasterAddEdge(dnNo, getPoint(nPt).x[0], ins_guess);
+                CreateEdge(dnNo, to, step);
+            }
+        }
+
+        if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
+            int cb = getPoint(nPt).incidentEdge[FIRST];
+            while ( cb >= 0 && cb < numberOfEdges() ) {
+                Shape::dg_arete const &e = getEdge(cb);
+                if ( nPt == std::min(e.st, e.en) ) {
+                    if ( cb != dnNo ) {
+                        ins_guess = QuickRasterAddEdge(cb,getPoint(nPt).x[0], ins_guess);
+                        CreateEdge(cb, to, step);
+                    }
+                }
+                cb = NextAt(nPt,cb);
+            }
+        }
+    }
+
+    curP = curPt;
+    if ( curPt > 0 ) {
+        pos = getPoint(curPt-1).x[1];
+    } else {
+        pos = to;
+    }
+    
+    pos = to;
+    for (int i = 0; i < nbQRas; i++) {
+        int cb = qrsData[i].bord;
+        AvanceEdge(cb, to, line, true, step);
+        qrsData[i].x = swrData[cb].curX;
+    }
+    
+    QuickRasterSort();
 }
 
 
@@ -1589,61 +1647,66 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
  * operations de bases pour la rasterization
  *
  */
-void              Shape::CreateEdge(int no,float to,float step)
+void Shape::CreateEdge(int no, float to, float step)
 {
-	int    cPt;
-	NR::Point   dir;
-	if ( getEdge(no).st < getEdge(no).en ) {
-		cPt=getEdge(no).st;
-		swrData[no].sens=true;
-		dir=getEdge(no).dx;
-	} else {
-		cPt=getEdge(no).en;
-		swrData[no].sens=false;
-		dir=-getEdge(no).dx;
-	}
+    int cPt;
+    NR::Point dir;
+    if ( getEdge(no).st < getEdge(no).en ) {
+        cPt = getEdge(no).st;
+        swrData[no].sens = true;
+        dir = getEdge(no).dx;
+    } else {
+        cPt = getEdge(no).en;
+        swrData[no].sens = false;
+        dir = -getEdge(no).dx;
+    }
 
-	swrData[no].lastX=swrData[no].curX=getPoint(cPt).x[0];
-	swrData[no].lastY=swrData[no].curY=getPoint(cPt).x[1];
-	if ( fabs(dir[1]) < 0.000001 ) {
-		swrData[no].dxdy=0;
-	} else {
-		swrData[no].dxdy=dir[0]/dir[1];
-	}
-	if ( fabs(dir[0]) < 0.000001 ) {
-		swrData[no].dydx=0;
-	} else {
-		swrData[no].dydx=dir[1]/dir[0];
-	}
-	swrData[no].calcX=swrData[no].curX+(to-step-swrData[no].curY)*swrData[no].dxdy;
-	swrData[no].guess=-1;
+    swrData[no].lastX = swrData[no].curX = getPoint(cPt).x[0];
+    swrData[no].lastY = swrData[no].curY = getPoint(cPt).x[1];
+    
+    if ( fabs(dir[1]) < 0.000001 ) {
+        swrData[no].dxdy = 0;
+    } else {
+        swrData[no].dxdy = dir[0]/dir[1];
+    }
+    
+    if ( fabs(dir[0]) < 0.000001 ) {
+        swrData[no].dydx = 0;
+    } else {
+        swrData[no].dydx = dir[1]/dir[0];
+    }
+    
+    swrData[no].calcX = swrData[no].curX + (to - step - swrData[no].curY) * swrData[no].dxdy;
+    swrData[no].guess = -1;
 }
-void              Shape::DestroyEdge(int /*no*/,float /*to*/,float /*step*/)
+
+
+void Shape::AvanceEdge(int no, float to, bool exact, float step)
 {
-}
-void              Shape::AvanceEdge(int no,float to,bool exact,float step)
-{
-	if ( exact ) {
-		NR::Point  dir,stp;
-		if ( swrData[no].sens ) {
-			stp=getPoint(getEdge(no).st).x;
-			dir=getEdge(no).dx;
-		} else {
-			stp=getPoint(getEdge(no).en).x;
-			dir=-getEdge(no).dx;
-		}
-		if ( fabs(dir[1]) < 0.000001 ) {
-			swrData[no].calcX=stp[0]+dir[0];
-		} else {
-			swrData[no].calcX=stp[0]+((to-stp[1])*dir[0])/dir[1];
-		}
-	} else {
-		swrData[no].calcX+=step*swrData[no].dxdy;
-	}
-	swrData[no].lastX=swrData[no].curX;
-	swrData[no].lastY=swrData[no].curY;
-	swrData[no].curX=swrData[no].calcX;
-	swrData[no].curY=to;
+    if ( exact ) {
+        NR::Point dir;
+        NR::Point stp;
+        if ( swrData[no].sens ) {
+            stp = getPoint(getEdge(no).st).x;
+            dir = getEdge(no).dx;
+        } else {
+            stp = getPoint(getEdge(no).en).x;
+            dir = -getEdge(no).dx;
+        }
+        
+        if ( fabs(dir[1]) < 0.000001 ) {
+            swrData[no].calcX = stp[0] + dir[0];
+        } else {
+            swrData[no].calcX = stp[0] + ((to - stp[1]) * dir[0]) / dir[1];
+        }
+    } else {
+        swrData[no].calcX += step * swrData[no].dxdy;
+    }
+    
+    swrData[no].lastX = swrData[no].curX;
+    swrData[no].lastY = swrData[no].curY;
+    swrData[no].curX = swrData[no].calcX;
+    swrData[no].curY = to;
 }
 
 /*
