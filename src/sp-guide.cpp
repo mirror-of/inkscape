@@ -174,9 +174,7 @@ sp_guide_release (SPObject *object)
 static void
 sp_guide_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPGuide *guide;
-
-	guide = SP_GUIDE (object);
+	SPGuide *guide = SP_GUIDE (object);
 
 	switch (key) {
 	case SP_ATTR_ORIENTATION:
@@ -189,6 +187,9 @@ sp_guide_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_POSITION:
 		sp_svg_number_read_d (value, &guide->position);
+		// update position in non-committing way
+		// fixme: perhaps we need to add an update method instead, and request_update here
+		sp_guide_moveto(*guide, guide->position, false);
 		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)
