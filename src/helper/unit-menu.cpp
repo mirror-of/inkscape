@@ -358,21 +358,21 @@ sp_unit_selector_update_test (SPUnitSelector const *selector)
 }
 
 float
-sp_unit_selector_get_value_in_points (SPUnitSelector *selector, GtkAdjustment *adj)
+sp_unit_selector_get_value_in_pixels (SPUnitSelector *selector, GtkAdjustment *adj)
 {
     g_return_val_if_fail (selector != NULL, adj->value);
     g_return_val_if_fail (SP_IS_UNIT_SELECTOR (selector), adj->value);
 
-    return sp_units_get_points (adj->value, selector->unit);
+    return sp_units_get_pixels (adj->value, *(selector->unit));
 }
 
 void
-sp_unit_selector_set_value_in_points (SPUnitSelector *selector, GtkAdjustment *adj, float value)
+sp_unit_selector_set_value_in_pixels (SPUnitSelector *selector, GtkAdjustment *adj, float value)
 {
     g_return_if_fail (selector != NULL);
     g_return_if_fail (SP_IS_UNIT_SELECTOR (selector));
 
-    gtk_adjustment_set_value (adj, sp_points_get_units (value, selector->unit));
+    gtk_adjustment_set_value (adj, sp_pixels_get_units (value, *(selector->unit)));
 }
 
 // vim: expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -133,24 +133,7 @@ gboolean sp_convert_distance (gdouble *distance, const SPUnit *from, const SPUni
 gdouble sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit const &to);
 
 /* Some more convenience */
-/* Be careful to not mix bases */
-
-gdouble sp_points_get_units(gdouble const points, SPUnit const &unit);
-gdouble sp_units_get_points(gdouble const units, SPUnit const &unit);
-
-/* Deprecated.  Use SPUnit& version. */
-inline gdouble
-sp_points_get_units(gdouble const points, SPUnit const *unit)
-{
-	return sp_points_get_units(points, *unit);
-}
-
-/* Deprecated.  Use SPUnit& version. */
-inline gdouble
-sp_units_get_points(gdouble const units, SPUnit const *unit)
-{
-	return sp_units_get_points(units, *unit);
-}
-
+gdouble sp_units_get_pixels(gdouble const units, SPUnit const &unit);
+gdouble sp_pixels_get_units(gdouble const pixels, SPUnit const &unit);
 
 #endif 

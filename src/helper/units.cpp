@@ -185,27 +185,26 @@ sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit con
 }
 
 /* Some more convenience */
-/* Be careful to not mix bases */
 
 gdouble
-sp_units_get_points(gdouble const units, SPUnit const &unit)
+sp_units_get_pixels(gdouble const units, SPUnit const &unit)
 {
     if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
-        return units * unit.unittobase;
+        return units * PX_PER_PT * unit.unittobase;
     } else {
         g_warning("Different unit bases: No exact unit conversion available");
-        return units * unit.unittobase;
+        return units * PX_PER_PT * unit.unittobase;
     }
 }
 
 gdouble
-sp_points_get_units(gdouble const points, SPUnit const &unit)
+sp_pixels_get_units(gdouble const pixels, SPUnit const &unit)
 {
     if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
-        return points / unit.unittobase;
+        return pixels / (unit.unittobase * PX_PER_PT);
     } else {
         g_warning("Different unit bases: No exact unit conversion available");
-        return points / unit.unittobase;
+        return pixels / (unit.unittobase * PX_PER_PT);
     }
 }
 
