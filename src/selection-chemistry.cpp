@@ -863,6 +863,20 @@ sp_selection_rotate_90 (void)
 }
 
 void
+sp_selection_rotate (SPSelection *selection, gdouble angle)
+{
+	NRRect bbox;
+	NRPoint center;
+
+	sp_selection_bbox (selection, &bbox);
+
+	center.x = 0.5 * (bbox.x0 + bbox.x1);
+	center.y = 0.5 * (bbox.y0 + bbox.y1);
+
+	sp_selection_rotate_relative (selection, &center, angle);
+}
+
+void
 sp_selection_move (gdouble dx, gdouble dy)
 {
 	SPDesktop *desktop;
