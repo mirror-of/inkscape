@@ -94,8 +94,8 @@ GtkType sp_canvas_bpath_get_type (void);
 SPCanvasItem *sp_canvas_bpath_new (SPCanvasGroup *parent, SPCurve *curve);
 
 void sp_canvas_bpath_set_bpath (SPCanvasBPath *cbp, SPCurve *curve);
-void sp_canvas_bpath_set_fill (SPCanvasBPath *cbp, guint32 rgba, ArtWindRule rule);
-void sp_canvas_bpath_set_stroke (SPCanvasBPath *cbp, guint32 rgba, gdouble width, ArtPathStrokeJoinType join, ArtPathStrokeCapType cap);
+void sp_canvas_bpath_set_fill (SPCanvasBPath *cbp, guint32 rgba, SPWindRule rule);
+void sp_canvas_bpath_set_stroke (SPCanvasBPath *cbp, guint32 rgba, gdouble width, SPStrokeJoinType join, SPStrokeCapType cap);
 
 G_END_DECLS
 
