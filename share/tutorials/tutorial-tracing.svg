@@ -20,171 +20,6 @@
   <defs
      id="defs3">
     <linearGradient
-       id="linearGradient2321">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2322" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2323" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2317">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2318" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2319" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2313">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2314" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2315" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2309">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2310" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2311" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2305">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2306" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2307" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2301">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2302" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2303" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2297">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2298" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2299" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2293">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2294" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2295" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2289">
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:1;"
-         offset="0"
-         id="stop2290" />
-      <stop
-         style="stop-color:#e08f0d;stop-opacity:0;"
-         offset="1"
-         id="stop2291" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2363">
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:1;"
-         offset="0"
-         id="stop2364" />
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:0;"
-         offset="1"
-         id="stop2365" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2359">
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:1;"
-         offset="0"
-         id="stop2360" />
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:0;"
-         offset="1"
-         id="stop2361" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2355">
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:1;"
-         offset="0"
-         id="stop2356" />
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:0;"
-         offset="1"
-         id="stop2357" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2351">
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:1;"
-         offset="0"
-         id="stop2352" />
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:0;"
-         offset="1"
-         id="stop2353" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2347">
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:1;"
-         offset="0"
-         id="stop2348" />
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:0;"
-         offset="1"
-         id="stop2349" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2343">
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:1;"
-         offset="0"
-         id="stop2344" />
-      <stop
-         style="stop-color:#1c3e8b;stop-opacity:0;"
-         offset="1"
-         id="stop2345" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient666">
       <stop
          style="stop-color:#ffffff;stop-opacity:0.336;"
@@ -195,14 +30,6 @@
          offset="1.00000000"
          id="stop668" />
     </linearGradient>
-    <radialGradient
-       xlink:href="#linearGradient666"
-       id="radialGradient669"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
     <linearGradient
        id="linearGradient841">
       <stop
@@ -243,13 +70,6 @@
          x2="0.485597"
          y2="0.972727" />
     </defs>
-    <linearGradient
-       xlink:href="#linearGradient841"
-       id="linearGradient1657"
-       x1="0.51618570"
-       y1="0.16666391"
-       x2="0.51618570"
-       y2="0.91666669" />
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient666"
@@ -493,7 +313,7 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="2.6875000"
+     inkscape:zoom="2.5000000"
      inkscape:cx="128.74419"
      inkscape:cy="1263.5938"
      inkscape:window-width="780"
@@ -527,7 +347,8 @@ http://www.inkscape.org/</dc:description>
      inkscape:groupmode="layer"
      id="layer1"
      style="display:block"
-     sodipodi:insensitive="1">
+     sodipodi:insensitive="1"
+     inkscape:label="stationary">
     <rect
        style="font-size:12.000000;fill:url(#linearGradient2724);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:3.0611501"
        id="rect1494"
@@ -1054,7 +875,8 @@ http://www.inkscape.org/</dc:description>
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer2">
+     id="layer2"
+     inkscape:label="text">
     <text
        xml:space="preserve"
        style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:nonzero;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif;letter-spacing:0.00000000;text-anchor:start;writing-mode:lr"
@@ -1184,7 +1006,7 @@ http://www.inkscape.org/</dc:description>
          id="tspan1616"
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none">and select the <tspan
    style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
-   id="tspan5811">Path&gt;Trace Bitmap</tspan> item, or <tspan
+   id="tspan5811">Path &gt; Trace Bitmap</tspan> item, or <tspan
    style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan5814">Shift+Alt+B</tspan>.</tspan></text>
     <text
@@ -1494,7 +1316,7 @@ http://www.inkscape.org/</dc:description>
            sodipodi:role="line"
            id="tspan6600"><tspan
    style="font-weight:bold"
-   id="tspan5969">Path&gt;Simplify (Ctrl+L)</tspan> on the output path, to reduce the number </tspan><tspan
+   id="tspan5969">Path &gt; Simplify (Ctrl+L)</tspan> on the output path, to reduce the number </tspan><tspan
            x="9.0108232"
            y="1018.4694"
            sodipodi:role="line"
@@ -1675,7 +1497,8 @@ http://www.inkscape.org/</dc:description>
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer3">
+     id="layer3"
+     inkscape:label="graphics">
     <image
        xlink:href="tux.png"
        sodipodi:absref="/tux.png"

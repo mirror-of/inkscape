@@ -39,41 +39,6 @@
          id="stop2324" />
     </linearGradient>
     <linearGradient
-       id="linearGradient1512">
-      <stop
-         style="stop-color:#000000;stop-opacity:1.0000000;"
-         offset="0.0000000"
-         id="stop1513" />
-      <stop
-         style="stop-color:#3f3f3f;stop-opacity:1.0000000;"
-         offset="0.013341154"
-         id="stop1514" />
-      <stop
-         style="stop-color:#7f7f7f;stop-opacity:1.0000000;"
-         offset="0.070381060"
-         id="stop1515" />
-      <stop
-         style="stop-color:#bfbfbf;stop-opacity:1.0000000;"
-         offset="0.14703858"
-         id="stop1516" />
-      <stop
-         style="stop-color:#dfdfdf;stop-opacity:1.0000000;"
-         offset="0.20343107"
-         id="stop1517" />
-      <stop
-         style="stop-color:#efefef;stop-opacity:1.0000000;"
-         offset="0.27002886"
-         id="stop1518" />
-      <stop
-         style="stop-color:#f7f7f7;stop-opacity:1.0000000;"
-         offset="0.33919314"
-         id="stop1519" />
-      <stop
-         style="stop-color:#fff;stop-opacity:1;"
-         offset="1"
-         id="stop1520" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient3628">
       <stop
          style="stop-color:#000000;stop-opacity:1.0000000;"
@@ -421,28 +386,6 @@
        fx="0.50000000"
        fy="0.50000000" />
     <linearGradient
-       id="linearGradient1087">
-      <stop
-         style="stop-color:#f56f52;stop-opacity:0;"
-         offset="0.00000000"
-         id="stop1088" />
-      <stop
-         style="stop-color:#aba6a6;stop-opacity:0.243137;"
-         offset="1.00000000"
-         id="stop1089" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1080">
-      <stop
-         style="stop-color:#7d4ad2;stop-opacity:0.532296;"
-         offset="0.00000000"
-         id="stop1081" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
-         offset="1.00000000"
-         id="stop1082" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient1077">
       <stop
          style="stop-color:#ff2ee1;stop-opacity:0.529229;"
@@ -452,39 +395,6 @@
          style="stop-color:#000000;stop-opacity:0;"
          offset="1.00000000"
          id="stop1079" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1070">
-      <stop
-         style="stop-color:#000000;stop-opacity:0.532296;"
-         offset="0.00000000"
-         id="stop1071" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
-         offset="1.00000000"
-         id="stop1072" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1066">
-      <stop
-         style="stop-color:#65ab00;stop-opacity:0;"
-         offset="0.00000000"
-         id="stop1067" />
-      <stop
-         style="stop-color:#a79782;stop-opacity:1;"
-         offset="1.00000000"
-         id="stop1068" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1062">
-      <stop
-         style="stop-color:#65ab00;stop-opacity:0;"
-         offset="0.00000000"
-         id="stop1063" />
-      <stop
-         style="stop-color:#a79782;stop-opacity:1;"
-         offset="1.00000000"
-         id="stop1064" />
     </linearGradient>
     <linearGradient
        id="linearGradient1056">
@@ -543,13 +453,6 @@
        y1="0.16666391"
        x2="0.51618570"
        y2="0.91666669" />
-    <linearGradient
-       xlink:href="#linearGradient1056"
-       id="linearGradient1059"
-       x1="0.43887144"
-       y1="0.06806256"
-       x2="0.49843255"
-       y2="0.98953170" />
     <radialGradient
        xlink:href="#linearGradient1077"
        id="radialGradient1061"
@@ -571,170 +474,16 @@
        gradientTransform="matrix(1.043839,0.000000,0.000000,0.958002,0.000000,3.543307)"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       xlink:href="#linearGradient1070"
-       id="linearGradient1074" />
-    <radialGradient
-       xlink:href="#linearGradient1077"
-       id="radialGradient1076"
-       cx="0.65013772"
-       cy="0.22018375"
-       r="0.52504158"
-       fx="0.65013772"
-       fy="0.22018375" />
-    <radialGradient
-       xlink:href="#linearGradient1080"
-       id="radialGradient1083"
-       cx="0.84012544"
-       cy="0.17277412"
-       r="0.84033370"
-       fx="0.84012544"
-       fy="0.17277412" />
-    <radialGradient
-       xlink:href="#linearGradient1056"
-       id="radialGradient1085"
-       cx="0.65564734"
-       cy="0.21559657"
-       r="0.70438540"
-       fx="0.65564734"
-       fy="0.21559657" />
-    <radialGradient
-       xlink:href="#linearGradient1087"
-       id="radialGradient1086"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient1070"
-       id="radialGradient1090"
-       cx="0.33855787"
-       cy="0.62303829"
-       r="0.51272756"
-       fx="0.33855787"
-       fy="0.62303829" />
-    <linearGradient
-       xlink:href="#linearGradient841"
-       id="linearGradient1603"
-       x1="0.57446784"
-       y1="0.83246106"
-       x2="0.59574443"
-       y2="-0.32460716" />
-    <linearGradient
        xlink:href="#linearGradient2320"
        id="linearGradient1657"
        x1="0.51618570"
        y1="0.16666391"
        x2="0.51618570"
        y2="0.91666669" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1658"
-       x1="-0.92160934"
-       y1="-0.01247531"
-       x2="-0.22715668"
-       y2="-0.01247531"
-       gradientTransform="scale(0.986241,1.013951)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1659"
-       x1="-0.41402379"
-       y1="0.42326421"
-       x2="0.34901145"
-       y2="0.42326421"
-       gradientTransform="scale(0.970074,1.030849)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1660"
-       x1="0.95802730"
-       y1="0.32916057"
-       x2="1.41425300"
-       y2="0.32916057"
-       gradientTransform="scale(0.993467,1.006576)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1661"
-       x1="0.36794606"
-       y1="0.59608549"
-       x2="0.81258655"
-       y2="0.59608549"
-       gradientTransform="scale(0.988876,1.011249)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1662"
-       x1="0.33251682"
-       y1="1.52830386"
-       x2="0.63266820"
-       y2="1.52830386"
-       gradientTransform="scale(0.966197,1.034985)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1663"
-       x1="0.87731606"
-       y1="0.93922377"
-       x2="1.16099572"
-       y2="0.93922377"
-       gradientTransform="scale(0.966885,1.034250)" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1664"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1665"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1666"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1667"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1668"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1669"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1670"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="2.6875000"
+     inkscape:zoom="2.5000000"
      inkscape:cx="128.00000"
      inkscape:cy="1644.1535"
      inkscape:window-width="780"
@@ -743,7 +492,7 @@
      inkscape:window-y="0"
      showguides="true"
      snaptoguides="true"
-     inkscape:current-layer="layer2" />
+     inkscape:current-layer="layer3" />
   <metadata
      id="metadata2361">
     <rdf:RDF
@@ -762,7 +511,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer1"
-     sodipodi:insensitive="1">
+     sodipodi:insensitive="1"
+     inkscape:label="stationary">
     <rect
        style="font-size:12;fill:url(#linearGradient1054);fill-rule:evenodd;stroke:none;stroke-width:3.06115;fill-opacity:1;"
        id="rect582"
@@ -1085,7 +835,8 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer2">
+     id="layer2"
+     inkscape:label="text">
     <g
        id="g4510">
       <text
@@ -2070,7 +1821,8 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer3">
+     id="layer3"
+     inkscape:label="graphics">
     <rect
        style="fill:url(#linearGradient3631);fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1pt;"
        id="rect3632"
