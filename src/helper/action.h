@@ -25,7 +25,10 @@
 #include <libnr/nr-object.h>
 #include <forward.h>
 #include <view.h>
-#include <verbs.h>
+
+namespace Inkscape {
+class Verb;
+}
 
 
 /** This is a structure that is used to hold all the possible
