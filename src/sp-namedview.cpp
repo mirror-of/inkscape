@@ -114,6 +114,8 @@ sp_namedview_init (SPNamedView * nv)
 	nv->showguides = TRUE;
 	nv->snaptoguides = FALSE;
 	nv->showborder = TRUE;
+	nv->grid_snap_to = SNAP_TO_BBOX;
+	nv->guide_snap_to = SNAP_TO_BBOX;
 
 	nv->guides = NULL;
 	nv->viewcount = 0;
@@ -163,6 +165,10 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "inkscape:window-height");
 	sp_object_read_attr (object, "inkscape:window-x");
 	sp_object_read_attr (object, "inkscape:window-y");
+	sp_object_read_attr (object, "inkscake:grid-bbox");
+	sp_object_read_attr (object, "inkscape:guide-bbox");
+	sp_object_read_attr (object, "inkscape:grid-points");
+	sp_object_read_attr (object, "inkscape:guide-points");
 
 	/* Construct guideline list */
 
@@ -397,6 +403,46 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_INKSCAPE_WINDOW_Y:
 		nv->window_y = value? atoi (value) : -1; // -1 means not set
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_GRID_BBOX:
+		if (value) {
+			if (sp_str_to_bool (value)) {
+				nv->grid_snap_to |= SNAP_TO_BBOX;
+			} else {
+				nv->grid_snap_to &= ~SNAP_TO_BBOX;
+			}
+			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		}
+		break;
+	case SP_ATTR_INKSCAPE_GUIDE_BBOX:
+		if (value) {
+			if (sp_str_to_bool (value)) {
+				nv->guide_snap_to |= SNAP_TO_BBOX;
+			} else {
+				nv->guide_snap_to &= ~SNAP_TO_BBOX;
+			}
+			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		}
+		break;
+	case SP_ATTR_INKSCAPE_GRID_POINTS:
+		if (value) {
+			if (sp_str_to_bool (value)) {
+				nv->grid_snap_to |= SNAP_TO_POINTS;
+			} else {
+				nv->grid_snap_to &= ~SNAP_TO_POINTS;
+			}
+			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		}
+		break;
+	case SP_ATTR_INKSCAPE_GUIDE_POINTS:
+		if (value) {
+			if (sp_str_to_bool (value)) {
+				nv->guide_snap_to |= SNAP_TO_POINTS;
+			} else {
+				nv->guide_snap_to &= ~SNAP_TO_POINTS;
+			}
+			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		}
 		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)
