@@ -7,6 +7,7 @@
  *   Other dudes from The Inkscape Organization
  *
  * Copyright (C) 2004 Bob Jamison
+ * Copyright (C) 2004 John Cliff
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -488,7 +489,7 @@ static void unhideCallback(GtkObject *object, gpointer dlgPtr)
     dlg->showF12();
 }
 
-static void updateSelectionCallback(GtkObject *object,GtkWidget *dlg)
+static void updateSelectionCallback(Inkscape::Application *inkscape, Inkscape::Selection *selection, TileDialogImpl *dlg)
 {
     TileDialogImpl *tledlg = (TileDialogImpl *) dlg;
     tledlg->updateSelection();
@@ -523,8 +524,8 @@ TileDialogImpl::TileDialogImpl()
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
-     //  Dont have a clue why the below crashes IS every time you change the selection
-      //  g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), (void *)this);
+    //  Dont have a clue why the below crashes IS every time you change the selection
+        g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), this);
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (hideCallback), (void *)this );
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (unhideCallback), (void *)this );
     }

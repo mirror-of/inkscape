@@ -8,7 +8,8 @@
  *   John Cliff
  *   Other dudes from The Inkscape Organization
  *
- * Copyright (C) 2004 The Inkscape Organization
+ * Copyright (C) 2004 Bob Jamison
+ * Copyright (C) 2004 John Cliff
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
