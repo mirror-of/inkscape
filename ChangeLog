@@ -1,3 +1,38 @@
+2004-02-20  bulia byak <bulia@users.sourceforge.net>
+
+	* src/text-context.cpp: [shift+]alt+arrows to kern
+
+	* src/sp-text.cpp,h: Complete support for dx/dy vectors, including inheritance
+	as per SVG spec. Preserve dx/dy lists in editing. Function to adjust dx/dy by
+	screen pixels.
+
+	* src/svg/svg-length.cpp: Function to read length in absolute units
+	only. Function to read a length into a float instead of SPSVGLength. Function
+	to read a length vector into a list of SPSVGLength's.
+
+	* src/sp-root.cpp src/sp-image.cpp src/sp-offset.cpp src/sp-spiral.cpp:
+	Eliminated sp_svg_length_read_ldd calls and ugly repetitive unit checks, used
+	sp_svg_length_read_[computed_]absolute instead.
+
+	* doc/keys.xml doc/keys.html icons/keys.svg: Updated guide and grid
+	shortcuts. Added paste in place, more notes. Added kerning keys and notes.
+
+	* src/libnrtype/nr-type-ft2.cpp: Crash fix, patch 895344.
+ 
+	* src/sp-namedview.cpp src/sp-namedview.h: Proper showguides support, functions
+	for toggling guides and grid.
+
+	* src/desktop-events.cpp: Turn showguides on when creating a new guide.
+ 
+	* src/verbs.cpp: Used the new toggle functions for showguides and showgrid.
+
+	* src/interface.cpp: Added Guides to View.
+ 
+	* src/xml/repr-util.cpp: sp_repr_get_boolean fix.
+
+	* src/dialogs/desktop-properties.cpp: Reenabled showguides support, added
+	namedview listener to reflect outside changes to the namedview.
+
 2004-02-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* Lots of files: Refine #include's according to reorganization of
