@@ -69,6 +69,7 @@ src/ecma/svgview.cpp
 src/event-context.cpp
 src/extension/db.cpp
 src/extension/extension.cpp
+src/extension/error-file.cpp
 src/extension/implementation/implementation.cpp
 src/extension/implementation/script.cpp
 src/extension/init.cpp
@@ -80,6 +81,7 @@ src/extension/internal/ps.cpp
 src/extension/internal/svg.cpp
 src/extension/internal/win32.cpp
 src/extension/plugin/grid.cpp
+src/extension/prefdialog.cpp
 src/extension/system.cpp
 src/extract-uri-test.cpp
 src/extract-uri.cpp

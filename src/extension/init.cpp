@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <string.h>
 
+#include <inkscape.h>
 #include <xml/repr.h>
 #include <glibmm/i18n.h>
 
@@ -42,6 +43,7 @@
 #include "internal/eps-out.h"
 #include "internal/gdkpixbuf-input.h"
 #include "prefs-utils.h"
+#include "error-file.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -200,11 +202,23 @@ static void
 check_extensions (void)
 {
 	int count = 1;
+	bool anyfail = false;
 	// int pass = 0;
+
+	Inkscape::Extension::Extension::error_file_open();
 	while (count != 0) {
 		// printf("Check extensions pass %d\n", pass++);
 		count = 0;
 		db.foreach(check_extensions_internal, (gpointer)&count);
+		if (count != 0) anyfail = true;
+	}
+	Inkscape::Extension::Extension::error_file_close();
+
+	if (anyfail) {
+		/* show dialog here */
+		Inkscape::Extension::ErrorFileNotice dialog;
+		dialog.run();
+		// std::cout << "Check the error log" << std::endl;
 	}
 
 	return;

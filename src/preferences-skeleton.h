@@ -127,6 +127,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"open\" path=\"\"/>\n"
 "    <group id=\"debug\" redirect=\"0\"/>\n"
 "    <group id=\"clonetiler\" />\n"
+"    <group id=\"extension-error\" show-on-startup=\"1\"/>\n"
 "  </group>\n"
 "  <group id=\"printing\">\n"
 "    <settings id=\"ps\"/>\n"

@@ -13,6 +13,8 @@ extension_libextension_a_SOURCES =	\
 	extension/db.h	\
 	extension/dependency.cpp \
 	extension/dependency.h \
+	extension/error-file.cpp \
+	extension/error-file.h \
 	extension/init.cpp	\
 	extension/init.h	\
 	extension/prefdialog.cpp \

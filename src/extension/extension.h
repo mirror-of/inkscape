@@ -9,12 +9,15 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2004 Authors
+ * Copyright (C) 2002-2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <ostream>
+#include <fstream>
 #include <vector>
+#include <glibmm/ustring.h>
 #include "xml/repr.h"
 #include <extension/extension-forward.h>
 
@@ -53,6 +56,9 @@
 /** Mime type for SVG */
 #define MIME_SVG "image/svg+xml"
 
+/** Name of the extension error file */
+#define EXTENSION_ERROR_LOG_FILENAME  "extension-errors.log"
+
 namespace Inkscape {
 namespace Extension {
 
@@ -75,6 +81,7 @@ private:
     gchar     *name;                      /**< A user friendly name for the Extension */
     state_t    _state;                    /**< Which state the Extension is currently in */
     std::vector<Dependency *>  _deps;     /**< Dependencies for this extension */
+    static std::ofstream error_file;      /**< This is the place where errors get reported */
 
 protected:
     SPRepr *repr;                         /**< The XML description of the Extension */
@@ -95,6 +102,7 @@ public:
     gchar *       get_name     (void);
     void          deactivate   (void);
     bool          deactivated  (void);
+    void          printFailure (Glib::ustring reason);
 
 
 /* Parameter Stuff */
@@ -167,6 +175,11 @@ public:
     const gchar *    set_param_string (const gchar * name,
                                        const gchar * value,
                                        SPReprDoc *   doc = NULL);
+
+    /* Error file handling */
+public:
+    static void      error_file_open  (void);
+    static void      error_file_close (void);
 };
 
 

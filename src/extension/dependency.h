@@ -24,6 +24,8 @@ class Dependency {
     SPRepr * _repr;
     /** \brief  The string that is in the XML tags pulled out. */
     const gchar * _string;
+    /** \brief  The description of the dependency for the users. */
+    const gchar * _description;
 
     /** \brief  All the possible types of dependencies. */
     enum type_t {

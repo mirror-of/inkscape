@@ -11,13 +11,15 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2004 Authors
+ * Copyright (C) 2002-2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #include <config.h>
 
+#include <ostream>
+#include <fstream>
 #include <string.h>
 #include <stdlib.h>
 
@@ -40,6 +42,8 @@ namespace Inkscape {
 namespace Extension {
 
 /* Inkscape::Extension::Extension */
+
+std::ofstream Extension::error_file;
 
 /**
     \return  none
@@ -208,29 +212,68 @@ Extension::loaded (void)
 	repr and an implemenation for this extension.  Then it checks all
 	of the dependencies to see if they pass.  Finally, it asks the
 	implmentation to do a check of itself.
+
+	On each check, if there is a failure, it will print a message to the
+	error log for that failure.  It is important to note that the function
+	keeps executing if it finds an error, to try and get as many of them
+	into the error log as possible.  This should help people debug
+	installations, and figure out what they need to get for the full
+	functionality of Inkscape to be available.
 */
 bool
 Extension::check (void)
 {
+	bool retval = true;
+
 	// static int i = 0;
 	// std::cout << "Checking module[" << i++ << "]: " << name << std::endl;
-	if (id == NULL)
-		return FALSE;
-	if (name == NULL)
-		return FALSE;
-	if (repr == NULL)
-		return FALSE;
-	if (imp == NULL)
-		return FALSE;
+
+	const char * inx_failure = _("  This is caused by an improper .inx file for this extension."
+		                         "  An improper .inx file could have been caused by a faulty installation of Inkscape.");
+	if (id == NULL) {
+		printFailure(Glib::ustring(_("an ID was not defined for it.")) + inx_failure);
+		retval = false;
+	}
+	if (name == NULL) {
+		printFailure(Glib::ustring(_("there was no name defined for it.")) + inx_failure);
+		retval = false;
+	}
+	if (repr == NULL) {
+		printFailure(Glib::ustring(_("the XML description of it got lost.")) + inx_failure);
+		retval = false;
+	}
+	if (imp == NULL) {
+		printFailure(Glib::ustring(_("no implementation was defined for the extension.")) + inx_failure);
+		retval = false;
+	}
 
 	for (unsigned int i = 0 ; i < _deps.size(); i++) {
 		if (_deps[i]->check() == FALSE) {
 			// std::cout << "Failed: " << *(_deps[i]) << std::endl;
-			return FALSE;
+			printFailure(Glib::ustring(_("a dependency was not met.")));
+			error_file << *_deps[i] << std::endl;
+			retval = false;
 		}
 	}
 
-	return imp->check(this);
+	if (retval)
+		return imp->check(this);
+	return retval;
+}
+
+/** \brief A quick function to print out a standard start of extension
+           errors in the log.
+	\param reason  A string explaining why this failed
+
+	Real simple, just put everything into \c error_file.
+*/
+void
+Extension::printFailure (Glib::ustring reason)
+{
+	error_file << _("Extension \"") << name << _("\" failed to load beacuse ");
+	error_file << reason;
+	error_file << std::endl;
+	return;
 }
 
 /**
@@ -756,6 +799,22 @@ Extension::set_param_string (const gchar * name, const gchar * value, SPReprDoc 
 
     return value;
 }
+
+/** \brief A function to open the error log file. */
+void
+Extension::error_file_open (void)
+{
+	gchar * ext_error_file = profile_path(EXTENSION_ERROR_LOG_FILENAME);
+	error_file.open(ext_error_file);
+	g_free(ext_error_file);
+};
+
+/** \brief A function to close the error log file. */
+void
+Extension::error_file_close (void)
+{
+	error_file.close();
+};
 
 }  /* namespace Extension */
 }  /* namespace Inkscape */

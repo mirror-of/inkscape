@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stdio.h>
 
+#include <glibmm/i18n.h>
 #include <glibmm/module.h>
 #include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
@@ -25,16 +26,16 @@ namespace Inkscape {
 namespace Extension {
 
 gchar const * Dependency::_type_str[] = {
-    "executable",
-    "file",
-    "extension",
-    "plugin"
+    N_("executable"),
+    N_("file"),
+    N_("extension"),
+    N_("plugin")
 };
 
 gchar const * Dependency::_location_str[] = {
-    "path",
-    "extensions",
-    "absolute"
+    N_("path"),
+    N_("extensions"),
+    N_("absolute")
 };
 
 /**
@@ -52,6 +53,7 @@ Dependency::Dependency (SPRepr * in_repr)
     _location = LOCATION_PATH;
     _repr = in_repr;
     _string = NULL;
+    _description = NULL;
 
     sp_repr_ref(_repr);
 
@@ -72,6 +74,8 @@ Dependency::Dependency (SPRepr * in_repr)
     }
 
     _string = sp_repr_content(sp_repr_children(_repr));
+
+    _description = sp_repr_attr(_repr, "description");
 
     return;
 }
@@ -230,10 +234,14 @@ Dependency::check (void) const
 std::ostream &
 operator<< (std::ostream &out_file, const Dependency & in_dep)
 {
-    out_file << "Dependency::";
-    out_file << "  type: " << in_dep._type_str[in_dep._type];
-    out_file << "  location: " << in_dep._location_str[in_dep._location];
-    out_file << "  string: " << in_dep._string;
+    out_file << _("Dependency::") << std::endl;
+    out_file << _("  type: ") << _(in_dep._type_str[in_dep._type]) << std::endl;
+    out_file << _("  location: ") << _(in_dep._location_str[in_dep._location]) << std::endl;
+    out_file << _("  string: ") << in_dep._string << std::endl;
+
+    if (in_dep._description != NULL) {
+        out_file << _("  description: ") << in_dep._description << std::endl;
+    }
 
     return out_file;
 }

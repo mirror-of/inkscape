@@ -8,14 +8,16 @@
  */
 
 #include <gtkmm/stock.h>
+#include <glibmm/i18n.h>
 
 #include "prefdialog.h"
 
 namespace Inkscape {
 namespace Extension {
 
-PrefDialog::PrefDialog (Glib::ustring name, Gdk::NativeWindow win_id) {
-    Gtk::Dialog::Dialog(name + " Preferences", true, true);
+PrefDialog::PrefDialog (Glib::ustring name, Gdk::NativeWindow win_id) :
+    Gtk::Dialog::Dialog(name + _(" Preferences"), true, true)
+{
 
 #ifndef WIN32
     _socket = new Gtk::Socket();

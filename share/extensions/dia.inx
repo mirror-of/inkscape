@@ -1,8 +1,8 @@
 <inkscape-extension>
     <name>Dia Input</name>
     <id>org.inkscape.input.dia</id>
-	<dependency type="executable" location="extensions">dia2svg.sh</dependency>
-	<dependency type="executable">dia</dependency>
+	<dependency type="executable" location="extensions" description="The dia2svg.sh script should be installed with your Inkscape distribution.  If you do not have it, there is likely to be something wrong with your Inkscape installation.">dia2svg.sh</dependency>
+	<dependency type="executable" description="In order to import Dia files, Dia itself must be installed.  You can get Dia at http://somesite.com">dia</dependency>
     <input>
         <extension>.dia</extension>
         <mimetype>application/x-dia</mimetype>
