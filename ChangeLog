@@ -1,3 +1,8 @@
+2004-01-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/draw-context.cpp (spdc_endpoint_snap_internal): Fix for
+	negative options.rotationsnapsperpi.
+
 2004-01-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/selection-chemistry.cpp (sp_selection_item_next,

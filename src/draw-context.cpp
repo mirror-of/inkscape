@@ -379,7 +379,8 @@ spdc_endpoint_snap_internal (SPDrawContext *dc, NRPoint *p, NRPoint *o, guint st
 	if (state & GDK_CONTROL_MASK) {
 		/* Constrained motion */
 
-		int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+		unsigned snaps = abs(prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12));
+		/* 0 means no snapping. */
 
 		/* mirrored by fabs, so this corresponds to 15 degrees */
 		double bx = 0, by = 0; /* best solution */
