@@ -72,10 +72,13 @@ public:
 	static font_factory*  Default(void);
 	
 	// various functions to get a font_instance from different descriptions
-	font_instance*        FaceFromDescr(const char* descr);
-	font_instance*        Face(PangoFontDescription* descr,bool canFail=true);
-	font_instance*        Face(const char* family,int variant=PANGO_VARIANT_NORMAL,int style=PANGO_STYLE_NORMAL,int weight=PANGO_WEIGHT_NORMAL,int stretch=PANGO_STRETCH_NORMAL, int size=10, int spacing=0);
-	font_instance*        Face(const char* family, NRTypePosDef apos);
+	font_instance*        FaceFromDescr(char const *descr);
+	font_instance*        Face(PangoFontDescription *descr, bool canFail=true);
+	font_instance*        Face(char const *family,
+				   int variant=PANGO_VARIANT_NORMAL, int style=PANGO_STYLE_NORMAL,
+				   int weight=PANGO_WEIGHT_NORMAL, int stretch=PANGO_STRETCH_NORMAL,
+				   int size=10, int spacing=0);
+	font_instance*        Face(char const *family, NRTypePosDef apos);
 
 	// semi-private: tells the font_factory taht the font_instance 'who' has died and should be removed from loadedFaces
 	void                  UnrefFace(font_instance* who);
