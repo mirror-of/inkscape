@@ -455,7 +455,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		SPS_READ_IFONTSIZE_IF_UNSET (&style->font_size, val);
 		break;
 	case SP_PROP_FONT_SIZE_ADJUST:
-		g_warning ("Unimplemented style property id: %d value: %s", id, val);
+		g_warning ("Unimplemented style property id SP_PROP_FONT_SIZE_ADJUST: %d value: %s", id, val);
 		break;
 	case SP_PROP_FONT_STYLE:
 		SPS_READ_IENUM_IF_UNSET (&style->font_style, val, enum_font_style, TRUE);
@@ -480,15 +480,29 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		break;
 	/* Text */
 	case SP_PROP_DIRECTION:
+		g_warning ("Unimplemented style property SP_PROP_DIRECTION: value: %s", val);
+		break;
 	case SP_PROP_LETTER_SPACING:
+		g_warning ("Unimplemented style property SP_PROP_LETTER_SPACING: value: %s", val);
+		break;
 	case SP_PROP_TEXT_DECORATION:
+		g_warning ("Unimplemented style property SP_PROP_TEXT_DECORATION: value: %s", val);
+		break;
 	case SP_PROP_UNICODE_BIDI:
+		g_warning ("Unimplemented style property SP_PROP_UNICODE_BIDI: value: %s", val);
+		break;
 	case SP_PROP_WORD_SPACING:
+		g_warning ("Unimplemented style property SP_PROP_WORD_SPACING: value: %s", val);
+		break;
 	/* Misc */
 	case SP_PROP_CLIP:
+		g_warning ("Unimplemented style property SP_PROP_CLIP: value: %s", val);
+		break;
 	case SP_PROP_COLOR:
+		g_warning ("Unimplemented style property SP_PROP_COLOR: value: %s", val);
+		break;
 	case SP_PROP_CURSOR:
-		g_warning ("Unimplemented style property id: %d value: %s", id, val);
+		g_warning ("Unimplemented style property SP_PROP_CURSOR: value: %s", val);
 		break;
 	case SP_PROP_DISPLAY:
 		if (!style->display_set) {
@@ -498,7 +512,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		}
 		break;
 	case SP_PROP_OVERFLOW:
-		g_warning ("Unimplemented style property id: %d value: %s", id, val);
+		g_warning ("Unimplemented style property SP_PROP_OVERFLOW: %d value: %s", __LINE__, id, val);
 		break;
 	case SP_PROP_VISIBILITY:
 		if (!style->visibility_set) {
@@ -510,9 +524,13 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 	/* SVG */
 	/* Clip/Mask */
 	case SP_PROP_CLIP_PATH:
+		g_warning ("Unimplemented style property SP_PROP_CLIP_PATH: value: %s", val);
+		break;
 	case SP_PROP_CLIP_RULE:
+		g_warning ("Unimplemented style property SP_PROP_CLIP_RULE: value: %s", val);
+		break;
 	case SP_PROP_MASK:
-		g_warning ("Unimplemented style property id: %d value: %s", id, val);
+		g_warning ("Unimplemented style property SP_PROP_MASK: value: %s", val);
 		break;
 	case SP_PROP_OPACITY:
 		if (!style->opacity.set) {
@@ -521,21 +539,43 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		break;
 	/* Filter */
 	case SP_PROP_ENABLE_BACKGROUND:
+		g_warning ("Unimplemented style property SP_PROP_ENABLE_BACKGROUND: value: %s", val);
+		break;
 	case SP_PROP_FILTER:
+		g_warning ("Unimplemented style property SP_PROP_FILTER: value: %s", val);
+		break;
 	case SP_PROP_FLOOD_COLOR:
+		g_warning ("Unimplemented style property SP_PROP_FLOOD_COLOR: value: %s", val);
+		break;
 	case SP_PROP_FLOOD_OPACITY:
+		g_warning ("Unimplemented style property SP_PROP_FLOOD_OPACITY: value: %s", val);
+		break;
 	case SP_PROP_LIGHTING_COLOR:
+		g_warning ("Unimplemented style property SP_PROP_LIGHTING_COLOR: value: %s", val);
+		break;
 	/* Gradient */
 	case SP_PROP_STOP_COLOR:
+		g_warning ("Unimplemented style property SP_PROP_STOP_COLOR: value: %s", val);
+		break;
 	case SP_PROP_STOP_OPACITY:
+		g_warning ("Unimplemented style property SP_PROP_STOP_OPACITY: value: %s", val);
+		break;
 	/* Interactivity */
 	case SP_PROP_POINTER_EVENTS:
+		g_warning ("Unimplemented style property SP_PROP_POINTER_EVENTS: value: %s", val);
+		break;
 	/* Paint */
 	case SP_PROP_COLOR_INTERPOLATION:
+		g_warning ("Unimplemented style property SP_PROP_COLOR_INTERPOLATION: value: %s", val);
+		break;
 	case SP_PROP_COLOR_INTERPOLATION_FILTERS:
+		g_warning ("Unimplemented style property SP_PROP_INTERPOLATION_FILTERS: value: %s", val);
+		break;
 	case SP_PROP_COLOR_PROFILE:
+		g_warning ("Unimplemented style property SP_PROP_COLOR_PROFILE: value: %s", val);
+		break;
 	case SP_PROP_COLOR_RENDERING:
-		g_warning ("Unimplemented style property id: %d value: %s", id, val);
+		g_warning ("Unimplemented style property SP_PROP_COLOR_RENDERING: %d value at %d: %s", __LINE__, id, val);
 		break;
 	case SP_PROP_FILL:
 		if (!style->fill.set) {
@@ -553,12 +593,31 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		}
 		break;
 	case SP_PROP_IMAGE_RENDERING:
+		g_warning ("Unimplemented style property SP_PROP_IMAGE_RENDERING: value: %s", val);
+		break;
 	case SP_PROP_MARKER:
-	case SP_PROP_MARKER_END:
-	case SP_PROP_MARKER_MID:
-	case SP_PROP_MARKER_START:
+          g_message ("SP_PROP_MARKER found for '%'s", val);
+          /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+                SPS_READ_IENUM_IF_UNSET (&style->marker, val, enum_marker, TRUE);
+                break;
+ 	case SP_PROP_MARKER_START:
+	  /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+          g_message("SP_PROP_MARKER_START found for '%s'", val);
+                SPS_READ_IENUM_IF_UNSET (&style->marker_start, val, enum_marker, TRUE);
+                break;
+ 	case SP_PROP_MARKER_MID:
+          /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+          g_message("SP_PROP_MARKER_MID found for '%s'", val);
+                SPS_READ_IENUM_IF_UNSET (&style->marker_mid, val, enum_marker, TRUE);
+                break;
+ 	case SP_PROP_MARKER_END:
+          /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+          g_message("SP_PROP_MARKER_END found for '%s'", val);
+	  SPS_READ_IENUM_IF_UNSET (&style->marker_end, val, enum_marker, TRUE);
+	  break;
+ 	  
 	case SP_PROP_SHAPE_RENDERING:
-		g_warning ("Unimplemented style property id: %d value: %s", id, val);
+		g_warning ("Unimplemented style property SP_PROP_SHAPE_RENDERING: value: %s", val);
 		break;
 	case SP_PROP_STROKE:
 		if (!style->stroke.set) {
@@ -607,12 +666,22 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 	case SP_PROP_TEXT_RENDERING:
 	/* Text */
 	case SP_PROP_ALIGNMENT_BASELINE:
+		g_warning ("Unimplemented style property SP_PROP_ALIGNMENT_BASELINE: value: %s", val);
+		break;
 	case SP_PROP_BASELINE_SHIFT:
+		g_warning ("Unimplemented style property SP_PROP_BASELINE_SHIFT: value: %s", val);
+		break;
 	case SP_PROP_DOMINANT_BASELINE:
+		g_warning ("Unimplemented style property SP_PROP_DOMINANT_BASELINE: value: %s", val);
+		break;
 	case SP_PROP_GLYPH_ORIENTATION_HORIZONTAL:
+		g_warning ("Unimplemented style property SP_PROP_ORIENTATION_HORIZONTAL: value: %s", val);
+		break;
 	case SP_PROP_GLYPH_ORIENTATION_VERTICAL:
+		g_warning ("Unimplemented style property SP_PROP_ORIENTATION_VERTICAL: value: %s", val);
+		break;
 	case SP_PROP_KERNING:
-		g_warning ("Unimplemented style property id: %d value: %s", id, val);
+		g_warning ("Unimplemented style property SP_PROP_KERNING: value: %s", val);
 		break;
 	case SP_PROP_TEXT_ANCHOR:
 		SPS_READ_IENUM_IF_UNSET (&style->text_anchor, val, enum_text_anchor, TRUE);
