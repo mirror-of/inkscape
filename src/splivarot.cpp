@@ -1072,7 +1072,6 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
                 continue;
         }
 
-        NR::Matrix const transform = NR::Matrix (item->transform);
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         float o_width, o_miter;
@@ -1246,7 +1245,6 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
             sp_repr_set_attr (repr, "id", id);
 
             SPItem *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
-            sp_item_write_transform (nitem, repr, transform);
 
             selection->addRepr (repr);
 
