@@ -235,8 +235,8 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
     // if we are private and there are no other users,
     if (SP_OBJECT_HREFCOUNT(gr) <= count_gradient_hrefs(user, gr)) {
         // check vector
-        if ( gr->ref->getObject() != vector) {
-            /* our href is not the vector; relink */
+        if ( gr != vector && gr->ref->getObject() != vector ) {
+            /* our href is not the vector, and vector is different from gr; relink */
             sp_gradient_repr_set_link(SP_OBJECT_REPR(gr), vector);
         }
         return gr;
@@ -703,7 +703,7 @@ sp_item_set_gradient(SPItem *item, SPGradient *gr, SPGradientType type, bool is_
             // current is private and it's either used once, or all its uses are by children of item;
             // so just change its href to vector
 
-            if ( sp_gradient_get_vector(current, false) != gr ) {
+            if ( current != gr && sp_gradient_get_vector(current, false) != gr ) {
                 /* href is not the vector */
                 sp_gradient_repr_set_link(SP_OBJECT_REPR(current), gr);
             }
