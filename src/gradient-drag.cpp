@@ -458,7 +458,7 @@ GrDragger::addDraggable (GrDraggable *draggable)
 Moves this dragger to the point of the given draggable, acting upon all other draggables
  */
 void
-GrDragger::moveToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr)
+GrDragger::moveThisToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr)
 {
     this->point = sp_item_gradient_get_coords (item, point_num, fill_or_stroke);
     this->point_original = this->point;
@@ -486,23 +486,23 @@ GrDragger::updateDependencies (bool write_repr)
         GrDraggable *draggable = (GrDraggable *) i->data;
         switch (draggable->point_num) {
             case POINT_LG_P1:
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_LG_P2, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_LG_P2, draggable->fill_or_stroke, write_repr);
                 break;
             case POINT_LG_P2:
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_LG_P1, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_LG_P1, draggable->fill_or_stroke, write_repr);
                 break;
             case POINT_RG_R2:
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_R1, draggable->fill_or_stroke, write_repr);
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_RG_R1, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
                 break;
             case POINT_RG_R1:
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_R2, draggable->fill_or_stroke, write_repr);
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_RG_R2, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
                 break;
             case POINT_RG_CENTER:
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_R1, draggable->fill_or_stroke, write_repr);
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_R2, draggable->fill_or_stroke, write_repr);
-                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_RG_R1, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_RG_R2, draggable->fill_or_stroke, write_repr);
+                this->moveOtherToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
                 break;
             case POINT_RG_FOCUS:
                 // nothing can depend on that
@@ -585,14 +585,12 @@ GrDrag::getDraggerFor (SPItem *item, guint point_num, bool fill_or_stroke)
 
 
 void
-GrDrag::moveDraggerToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr)
+GrDragger::moveOtherToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr)
 {
-    GrDragger *d = getDraggerFor (item, point_num, fill_or_stroke);
-    if (d) {
-        d->moveToDraggable (item, point_num, fill_or_stroke, write_repr);
-    } else {
-        g_print ("cannot find dragger for %s %d %d\n", SP_OBJECT_ID(item), point_num, fill_or_stroke);
-    }
+    GrDragger *d = this->parent->getDraggerFor (item, point_num, fill_or_stroke);
+    if (d && d !=  this) {
+        d->moveThisToDraggable (item, point_num, fill_or_stroke, write_repr);
+    } 
 }
 
 

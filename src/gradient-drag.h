@@ -71,7 +71,8 @@ struct GrDragger {
 	void addDraggable(GrDraggable *draggable);
 	void updateKnotShape();
 
-	void moveToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr);
+	void moveThisToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr);
+	void moveOtherToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr);
 	void updateDependencies (bool write_repr);
 
 	bool isA (guint point_num);
@@ -99,7 +100,6 @@ struct GrDrag {
 	void setSelected (GrDragger *dragger);
 
 	GrDragger *getDraggerFor (SPItem *item, guint point_num, bool fill_or_stroke);
-	void moveDraggerToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr);
 
 	bool local_change;
 
