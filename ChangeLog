@@ -1,3 +1,32 @@
+2004-01-31  bulia byak <bulia@users.sourceforge.net>
+
+	* src/zoom-context.cpp src/rect-context.cpp src/arc-context.cpp src/star-context.cpp
+	src/spiral-context.cpp src/draw-context.cpp src/dyna-draw-context.cpp
+	src/text-context.cpp src/dropper-context.cpp: Fix to swallow up/down keys in
+	contexts so as to prevent zoom field from activation, but allow ctrl with up/down
+	keys to scroll canvas.
+
+	* src/interface.cpp: Removed New Preview, Remove Transform commands. Added Tutorial
+	command to Help.
+
+	* src/preferences-skeleton.h: Reduced default stroke width to 1 pt.
+
+	* src/help.cpp src/help.h: Tutorial command.
+
+	* icons/tutorial.svg: First try at the tutorial. 
+ 
+	* icons/Makefile.am: Adding tutorial.
+ 
+	* src/nodepath.cpp: No-nodepath crash fixes.
+
+	* doc/architecture.svg: Added namedview.
+
+	* doc/default.svg: Removed, now reworked into icons/tutorial.svg.
+
+	* src/event-context.cpp: Swapped scrollwheel modifiers.
+
+	* src/xml/repr.cpp src/xml/repr-io.cpp: Small comment fix.
+
 2004-01-31  Johan Ceuppens  <jceuppen@easynet.be>
 	* src/verbs.cpp src/verbs.h: removed sp_fullscreen and put it in
 	desktop.cpp and desktop.h as fullscreen
