@@ -168,9 +168,15 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>Grid and guides</title>
-<keys><key>#</key> <key><shift/>3</key> <action>(not keypad 3) toggle grid</action></keys>
-<keys><key>|</key> <key><shift/>\</key> <action>toggle guides</action></keys>
+<title>Guides and grid</title>
+<mouse><key><left-drag/></key> <action>drag off a ruler to create guide</action></mouse>
+<note>Drag off the horizontal or vertical ruler to create a new guideline. Drag a guideline onto the ruler to delete it.</note>
+<keys><key>|</key> <key><shift/>\</key> <action>toggle guides and snapping to guides</action></keys>
+<note>If you want to have different values for guides visibility and snapping, set them via the Document Options dialog.</note>
+<note>When you create a new guide by dragging off the ruler, guide visibility and snapping are turned on.</note>
+<keys><key>#</key> <key><shift/>3</key> <action>toggle grid and snapping to grid</action></keys>
+<note>If you want to have different values for grid visibility and snapping, set them via the Document Options dialog.</note>
+<note>Note that only the 3 key on the main keyboard works, not on the keypad.</note>
 </group>
 </section>
 
