@@ -670,21 +670,31 @@ char*             div_flow_src::WriteArray(int nb,SPSVGLength* array)
 	return s;
 }
 
-void              div_flow_src::TransformXY(NR::Matrix t)
+void              div_flow_src::TransformXY(NR::Matrix t, bool toplevel)
 {
+	// fill in both arrays to the maximum length of either one
 	int max = MAX (nb_x, nb_y);
+
+	// if this is toplevel text _and_ there's no x/y at all, we need to default at
+	// least one pair of values (0,0) for the start of text
+	if (toplevel && max < 1) 
+		max = 1;
+
 	x_s = (SPSVGLength*) realloc (x_s, (max) * sizeof(SPSVGLength));
 	y_s = (SPSVGLength*) realloc (y_s, (max)* sizeof(SPSVGLength));
-	nb_x = nb_y = max;
 
 	for (int i = 0; i < max; i++) {
-		NR::Point p (x_s[i].computed, y_s[i].computed);
+		// if i is bigger than the previous array end, initialize this coordinate to 0
+		NR::Point p (i >= nb_x? 0 : x_s[i].computed, i >= nb_y? 0 : y_s[i].computed);
 		p *= t;
 		x_s[i].computed = p[NR::X];
 		x_s[i].set = TRUE;
 		y_s[i].computed = p[NR::Y];
 		y_s[i].set = TRUE;
 	}
+
+	// update array sizes
+	nb_x = nb_y = max;
 }
 
 void              div_flow_src::ScaleDXDY(double ex)

@@ -147,7 +147,7 @@ public:
 	static void       UpdateArray(double size,double scale,int &nb,SPSVGLength* &array);
 
 	// transform (x_s[i], y_s[i]) points by the matrix t
-	void       TransformXY(NR::Matrix t);
+	void       TransformXY(NR::Matrix t, bool toplevel);
 	// scale dx/dy arrays by ex
 	void       ScaleDXDY(double ex);
 
