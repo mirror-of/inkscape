@@ -32,7 +32,10 @@
 #include "path-chemistry.h"
 #include "desktop-affine.h"
 #include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-ops.h"
 #include "style.h"
+using NR::X;
+using NR::Y;
 
 #include "selection-chemistry.h"
 
@@ -616,18 +619,13 @@ void sp_selection_paste_style(GtkWidget *widget)
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
-void sp_selection_apply_affine(SPSelection *selection, double affine[6])
+void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
 {
 	g_assert (SP_IS_SELECTION (selection));
 
 	for (GSList *l = selection->items; l != NULL; l = l-> next) {
-		NRMatrix curaff, newaff;
-
 		SPItem *item = SP_ITEM(l->data);
-		sp_item_i2d_affine(item, &curaff);
-		nr_matrix_multiply (&newaff, &curaff, NR_MATRIX_D_FROM_DOUBLE (affine));
-		/* fixme: This is far from elegant (Lauris) */
-		sp_item_set_i2d_affine(item, &newaff);
+		sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
 		/* update repr -  needed for undo */
 		sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
 		/* fixme: Check, whether anything changed */
@@ -675,23 +673,16 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 	nr_matrix_multiply (&s, &p2o, &scale);
 	nr_matrix_multiply (&final, &s, &o2n);
 
-	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
+	sp_selection_apply_affine(selection, final);
 }
 
 
-void
-sp_selection_scale_relative (SPSelection *selection, NR::Point const &align, double dx, double dy)
+void sp_selection_scale_relative(SPSelection *selection, NR::Point const &align, NR::scale const &scale)
 {
-	NRMatrix scale, n2d, d2n, final, s;
-
-	nr_matrix_set_translate (&n2d, -align[NR::X], -align[NR::Y]);
-	nr_matrix_set_translate (&d2n, align[NR::X], align[NR::Y]);
-	nr_matrix_set_scale (&scale, dx, dy);
-
-	nr_matrix_multiply (&s, &n2d, &scale);
-	nr_matrix_multiply (&final, &s, &d2n);
-
-	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
+	NR::translate const n2d(-align);
+	NR::translate const d2n(align);
+	NR::Matrix const final( n2d * scale * d2n );
+	sp_selection_apply_affine(selection, final);
 }
 
 void
@@ -706,7 +697,7 @@ sp_selection_rotate_relative (SPSelection *selection, NR::Point const &center, g
 	nr_matrix_multiply (&s, &n2d, &rotate);
 	nr_matrix_multiply (&final, &s, &d2n);
 
-	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
+	sp_selection_apply_affine(selection, final);
 }
 
 void
@@ -727,14 +718,12 @@ sp_selection_skew_relative (SPSelection *selection, NR::Point const &align, doub
 	nr_matrix_multiply (&s, &n2d, &skew);
 	nr_matrix_multiply (&final, &s, &d2n);
 
-	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
+	sp_selection_apply_affine(selection, final);
 }
 
 void sp_selection_move_relative(SPSelection *selection, double dx, double dy)
 {
-	NRMatrix move;
-	nr_matrix_set_translate (&move, dx, dy);
-	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&move));
+	sp_selection_apply_affine(selection, NR::Matrix(NR::translate(dx, dy)));
 }
 
 void sp_selection_rotate_90()
@@ -799,65 +788,36 @@ sp_selection_rotate_screen (SPSelection *selection, gdouble angle)
 void
 sp_selection_scale (SPSelection *selection, gdouble grow)
 {
-	NRRect bbox_compat;
-	gdouble times;
+	NR::Rect const bbox(sp_selection_bbox(selection));
+	NR::Point const center(bbox.midpoint());
+	double const max_len = bbox.maxExtent();
 
-	sp_selection_bbox (selection, &bbox_compat);
-	NR::Rect bbox(bbox_compat);
-	NR::Point center = bbox.midpoint();
+	if ( max_len + 2 * grow <= 0 ) {
+		return;
+	}
 
-	gdouble r = bbox.maxExtent();
+	double const times = 1.0 + grow / max_len;
+	sp_selection_scale_relative(selection, center, NR::scale(times, times));
 
-	if (r + 2 * grow <= 0) return;
-
-	times = 1.0 + grow / r;
-
-	sp_selection_scale_relative (selection, center, times, times);
-
-	if (grow > 0)
-		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:larger");
-	else
-		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:smaller");
-
+	sp_document_maybe_done(SP_DT_DOCUMENT(selection->desktop),
+			       ( (grow > 0)
+				 ? "selector:scale:larger"
+				 : "selector:scale:smaller" ));
 }
 
 void
 sp_selection_scale_screen (SPSelection *selection, gdouble grow_pixels)
 {
-	NRRect bbox_compat;
-	gdouble times;
-
-	sp_selection_bbox (selection, &bbox_compat);
-	NR::Rect bbox(bbox_compat);
-	NR::Point center = bbox.midpoint();
-
-	grow_pixels = grow_pixels / SP_DESKTOP_ZOOM (selection->desktop);
-
-	gdouble r = bbox.maxExtent();
-
-	if (r + 2 * grow_pixels <= 0) return;
-
-	times = 1.0 + grow_pixels / r;
-
-	sp_selection_scale_relative (selection, center, times, times);
-
-	if (grow_pixels > 0)
-		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:larger");
-	else
-		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:smaller");
+	sp_selection_scale(selection,
+			   grow_pixels / SP_DESKTOP_ZOOM(selection->desktop));
 }
 
 void
 sp_selection_scale_times (SPSelection *selection, gdouble times)
 {
-	NRRect bbox_compat;
-	sp_selection_bbox (selection, &bbox_compat);
-	NR::Rect bbox(bbox_compat);
-	NR::Point center = bbox.midpoint();
-
-	sp_selection_scale_relative (selection, center, times, times);
-
-	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+	NR::Point const center(sp_selection_bbox(selection).midpoint());
+	sp_selection_scale_relative(selection, center, NR::scale(times, times));
+	sp_document_done(SP_DT_DOCUMENT(selection->desktop));
 }
 
 void
@@ -1032,8 +992,6 @@ sp_selection_item_prev (void)
  */
 static void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 {
-	using NR::X;
-	using NR::Y;
 	NRRect dbox;
 	sp_desktop_get_display_area (desktop, &dbox);
 	NRRect sbox;

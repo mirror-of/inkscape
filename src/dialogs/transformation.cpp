@@ -30,6 +30,8 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "helper/unit-menu.h"
+#include "libnr/nr-scale.h"
+#include "libnr/nr-scale-ops.h"
 #include "macros.h"
 #include "inkscape.h"
 #include "document.h"
@@ -42,6 +44,8 @@
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
+using NR::X;
+using NR::Y;
 
 
 /* Notebook pages */
@@ -842,33 +846,29 @@ sp_transformation_scale_apply ( GObject *dlg,
                                 SPSelection *selection, 
                                 unsigned int copy )
 {
-    GtkAdjustment *a[2];
-    SPUnitSelector *us;
-    const SPUnit *unit;
+    SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data(dlg, "scale_units"));
+    GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data(dlg, "scale_dimension_x"));
+    GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data(dlg, "scale_dimension_y"));
 
-    us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
-    a[NR::X] = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
-    a[NR::Y] = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
+    NR::Rect const bbox(sp_selection_bbox(selection));
+    NR::Point const center(bbox.midpoint());
+    SPUnit const *unit = sp_unit_selector_get_unit(us);
 
-    NRRect bbox_compat;
-    sp_selection_bbox (selection, &bbox_compat);
-    NR::Rect bbox(bbox_compat);
-    NR::Point center = bbox.midpoint();
-
-    unit = sp_unit_selector_get_unit (us);
-    
     if (unit->base == SP_UNIT_ABSOLUTE) {
-        NR::Point s;
-	for ( unsigned i = 0 ; i < 2 ; i++ ) {
-		s[i] = sp_unit_selector_get_value_in_points(us, a[i]) / bbox.extent(i);
-	}
-        sp_selection_scale_relative (selection, center, s[NR::X], s[NR::Y]);
+        NR::scale const numerator(sp_unit_selector_get_value_in_points(us, ax),
+                                  sp_unit_selector_get_value_in_points(us, ay));
+        NR::scale const denominator(bbox.dimensions());
+        sp_selection_scale_relative(selection, center,
+                                    numerator / denominator);
     } else {
-        sp_selection_scale_relative ( selection, center, 0.01 * a[NR::X]->value,
-                                      0.01 * a[NR::Y]->value );
+        sp_selection_scale_relative(selection, center,
+                                    NR::scale(0.01 * ax->value,
+                                              0.01 * ay->value));
     }
 
-    if (selection) sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+    if (selection) {
+        sp_document_done(SP_DT_DOCUMENT(selection->desktop));
+    }
 }
 
 
@@ -973,3 +973,14 @@ sp_transformation_skew_apply ( GObject *dlg,
                                unsigned int copy )
 {
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

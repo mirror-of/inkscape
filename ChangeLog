@@ -1,5 +1,12 @@
 2004-02-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/selection-chemistry.cpp (sp_selection_apply_affine):
+	Change final argument from double[6] to NR::Matrix.
+	Update callers.
+	(sp_selection_scale_relative): Change from dx,dy to NR::scale argument.
+	Update callers.
+	(sp_selection_scale, sp_selection_scale_times): Cleanup.
+
 	* src/libnr/Makefile.am:
 	New files nr-rotate-test.cpp, nr-scale-test.cpp, nr-translate-test.cpp.
 	* src/libnr/nr-matrix-test.cpp: Move lots of things to the new files.

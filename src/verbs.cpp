@@ -348,20 +348,13 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
 	}
 }
 
-static void
-sp_verb_action_object_perform (SPAction *action, void * data, void * pdata)
+static void sp_verb_action_object_perform(SPAction *action, void *data, void *pdata)
 {
-	SPDesktop *dt;
-	SPSelection *sel;
-	NRRect bbox_compat;
-
-	dt = SP_DESKTOP (sp_action_get_view (action));
+	SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
 	if (!dt) return;
-	sel = SP_DT_SELECTION (dt);
+	SPSelection *sel = SP_DT_SELECTION(dt);
 	if (sp_selection_is_empty (sel)) return;
-	sp_selection_bbox (sel, &bbox_compat);
-	NR::Rect bbox(bbox_compat);
-	NR::Point center = bbox.midpoint();
+	NR::Point const center(sp_selection_bbox(sel).midpoint());
 
 	switch ((int) data) {
 	case SP_VERB_OBJECT_ROTATE_90:
@@ -375,12 +368,12 @@ sp_verb_action_object_perform (SPAction *action, void * data, void * pdata)
 		break;
 	case SP_VERB_OBJECT_FLIP_HORIZONTAL:
 		// TODO: make tool-sensitive, in node edit flip selected node(s)
-		sp_selection_scale_relative (sel, center, -1.0, 1.0);
+		sp_selection_scale_relative(sel, center, NR::scale(-1.0, 1.0));
 		sp_document_done (SP_DT_DOCUMENT (dt));
 		break;
 	case SP_VERB_OBJECT_FLIP_VERTICAL:
 		// TODO: make tool-sensitive, in node edit flip selected node(s)
-		sp_selection_scale_relative (sel, center, 1.0, -1.0);
+		sp_selection_scale_relative(sel, center, NR::scale(1.0, -1.0));
 		sp_document_done (SP_DT_DOCUMENT (dt));
 		break;
 	default:
