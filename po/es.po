@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-11 00:15+0100\n"
+"POT-Creation-Date: 2005-01-23 17:06+0100\n"
 "PO-Revision-Date: 2004-11-26 09:50+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
@@ -19,34 +19,34 @@ msgstr "Inkscape, ilustrador vectorial SVG"
 msgid "SVG Vector Illustrator"
 msgstr "Ilustrador vectorial SVG"
 
-#: src/arc-context.cpp:364
+#: src/arc-context.cpp:359
 msgid ""
 "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
 msgstr ""
 "<b>Ctrl</b>: crear un círculo o elipse de proporción entera, ajustar el "
 "ángulo del arco/segmento"
 
-#: src/arc-context.cpp:365 src/rect-context.cpp:399
+#: src/arc-context.cpp:360 src/rect-context.cpp:394
 msgid "<b>Shift</b>: draw around the starting point"
 msgstr "<b>Mayús</b>: dibujar alrededor del punto inicial"
 
-#: src/arc-context.cpp:429 src/dyna-draw-context.cpp:457
-#: src/pen-context.cpp:272 src/pencil-context.cpp:180 src/rect-context.cpp:466
-#: src/spiral-context.cpp:425 src/star-context.cpp:437
+#: src/arc-context.cpp:424 src/dyna-draw-context.cpp:457
+#: src/pen-context.cpp:272 src/pencil-context.cpp:180 src/rect-context.cpp:461
+#: src/spiral-context.cpp:420 src/star-context.cpp:432
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
 msgstr ""
 "<b>La capa actual está oculta</b>. Debe estar visible para poder dibujar en "
 "ella."
 
-#: src/arc-context.cpp:433 src/dyna-draw-context.cpp:461
-#: src/pen-context.cpp:276 src/pencil-context.cpp:184 src/rect-context.cpp:470
-#: src/spiral-context.cpp:429 src/star-context.cpp:441
+#: src/arc-context.cpp:428 src/dyna-draw-context.cpp:461
+#: src/pen-context.cpp:276 src/pencil-context.cpp:184 src/rect-context.cpp:465
+#: src/spiral-context.cpp:424 src/star-context.cpp:436
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
 msgstr ""
 "<b>La capa actual está bloqueada</b>. Debe desbloquearla para poder dibujar "
 "en ella."
 
-#: src/arc-context.cpp:512
+#: src/arc-context.cpp:507
 #, c-format
 msgid ""
 "<b>Ellipse</b>: %s x %s; with <b>Ctrl</b> to make circle or integer-ratio "
@@ -54,11 +54,6 @@ msgid ""
 msgstr ""
 "<b>Elipse</b>: %s x %s; con <b>Ctrl</b> para crear círculo o elipse de radio "
 "proporcional; con <b>Mayús</b> para dibujar alrededor del punto de inicio"
-
-#. TRANSLATORS: object factory is an object that produces other objects
-#: src/bonobo/svg-doc-factory.cpp:39
-msgid "Could not create sodipodi-svg-doc factory"
-msgstr "No se ha podido crear un documento de la fábrica sodipodi-svg-doc"
 
 #: src/desktop-events.cpp:253
 #, c-format
@@ -167,7 +162,7 @@ msgstr "No hay más zoom."
 
 #. Page page
 #: src/desktop.cpp:2065 src/dialogs/align.cpp:556 src/dialogs/align.cpp:1098
-#: src/dialogs/desktop-properties.cpp:968 src/dialogs/export.cpp:130
+#: src/dialogs/desktop-properties.cpp:963 src/dialogs/export.cpp:130
 msgid "Page"
 msgstr "Página"
 
@@ -181,7 +176,7 @@ msgstr "Dibujo"
 msgid "Selection"
 msgstr "Selección"
 
-#: src/dialogs/align.cpp:458 src/dialogs/text-edit.cpp:210
+#: src/dialogs/align.cpp:458 src/dialogs/text-edit.cpp:211
 msgid "Layout"
 msgstr "Formato"
 
@@ -326,7 +321,7 @@ msgstr ""
 
 #: src/dialogs/clonetiler.cpp:967
 #, fuzzy
-msgid "Symmetry"
+msgid "_Symmetry"
 msgstr "simétrico"
 
 #: src/dialogs/clonetiler.cpp:970
@@ -402,7 +397,7 @@ msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr ""
 
 #: src/dialogs/clonetiler.cpp:1021
-msgid "Shift"
+msgid "S_hift"
 msgstr ""
 
 #: src/dialogs/clonetiler.cpp:1028 src/dialogs/clonetiler.cpp:1091
@@ -467,10 +462,9 @@ msgstr "Aleatorio:"
 msgid "How much to randomize tile positions"
 msgstr ""
 
-#. Scale page
-#: src/dialogs/clonetiler.cpp:1084 src/dialogs/transformation.cpp:328
-#: src/dialogs/transformation.cpp:659
-msgid "Scale"
+#: src/dialogs/clonetiler.cpp:1084
+#, fuzzy
+msgid "Sc_ale"
 msgstr "Escalar"
 
 #: src/dialogs/clonetiler.cpp:1099
@@ -501,11 +495,11 @@ msgstr ""
 
 #: src/dialogs/clonetiler.cpp:1146
 #, fuzzy
-msgid "Rotation"
+msgid "_Rotation"
 msgstr "Relación"
 
 #: src/dialogs/clonetiler.cpp:1161 src/dialogs/clonetiler.cpp:1176
-#: src/toolbox.cpp:1848
+#: src/toolbox.cpp:1833
 msgid "Angle:"
 msgstr "Ángulo:"
 
@@ -527,7 +521,7 @@ msgstr ""
 
 #: src/dialogs/clonetiler.cpp:1197
 #, fuzzy
-msgid "Opacity"
+msgid "_Opacity"
 msgstr "Opacidad:"
 
 #: src/dialogs/clonetiler.cpp:1212 src/dialogs/clonetiler.cpp:1227
@@ -588,7 +582,7 @@ msgstr ""
 #  gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #: src/dialogs/clonetiler.cpp:1327
 #, fuzzy
-msgid " <b>Create</b> "
+msgid " <b>_Create</b> "
 msgstr "<b>Círculo</b>"
 
 #: src/dialogs/clonetiler.cpp:1329
@@ -597,7 +591,7 @@ msgstr ""
 
 #: src/dialogs/clonetiler.cpp:1335
 #, fuzzy
-msgid " Remove "
+msgid " Re_move "
 msgstr "_Eliminar enlace"
 
 #: src/dialogs/clonetiler.cpp:1336
@@ -608,8 +602,9 @@ msgstr ""
 "herramienta"
 
 #: src/dialogs/clonetiler.cpp:1342
-msgid " Reset "
-msgstr ""
+#, fuzzy
+msgid " R_eset "
+msgstr "_Eliminar enlace"
 
 #: src/dialogs/clonetiler.cpp:1343
 msgid "Reset all shifts, scales, rotates, and opacities to zero"
@@ -626,7 +621,7 @@ msgid "_File"
 msgstr "_Archivo"
 
 #. TRANSLATORS: "Clear" is a verb here
-#: src/dialogs/debugdialog.cpp:145 src/dialogs/find.cpp:803
+#: src/dialogs/debugdialog.cpp:145 src/dialogs/find.cpp:806
 #: src/dialogs/scriptdialog.cpp:195
 msgid "_Clear"
 msgstr "_Limpiar"
@@ -640,187 +635,187 @@ msgid "Release log messages"
 msgstr "Dejar de capturar los mensajes de registro"
 
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:849
+#: src/dialogs/desktop-properties.cpp:844
 msgid "Grid"
 msgstr "Rejilla"
 
 #. Checkbuttons
-#: src/dialogs/desktop-properties.cpp:857
+#: src/dialogs/desktop-properties.cpp:852
 msgid "Show grid"
 msgstr "Mostrar la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:858
+#: src/dialogs/desktop-properties.cpp:853
 msgid "Snap bounding boxes to grid"
 msgstr "Ajustar cajas de contorno a la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:859
+#: src/dialogs/desktop-properties.cpp:854
 msgid "Snap points to grid"
 msgstr "Ajustar los puntos a la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:877
+#: src/dialogs/desktop-properties.cpp:872
 msgid "Grid units:"
 msgstr "Unidades de la rejilla:"
 
-#: src/dialogs/desktop-properties.cpp:879
+#: src/dialogs/desktop-properties.cpp:874
 msgid "Origin X:"
 msgstr "Origen X:"
 
-#: src/dialogs/desktop-properties.cpp:882
+#: src/dialogs/desktop-properties.cpp:877
 msgid "Origin Y:"
 msgstr "Origen Y:"
 
-#: src/dialogs/desktop-properties.cpp:885
+#: src/dialogs/desktop-properties.cpp:880
 msgid "Spacing X:"
 msgstr "Espaciado X:"
 
-#: src/dialogs/desktop-properties.cpp:888
+#: src/dialogs/desktop-properties.cpp:883
 msgid "Spacing Y:"
 msgstr "Espaciado Y:"
 
-#: src/dialogs/desktop-properties.cpp:892
-#: src/dialogs/desktop-properties.cpp:952
+#: src/dialogs/desktop-properties.cpp:887
+#: src/dialogs/desktop-properties.cpp:947
 msgid "Snap units:"
 msgstr "Unidades para el autoajuste:"
 
-#: src/dialogs/desktop-properties.cpp:895
-#: src/dialogs/desktop-properties.cpp:955
+#: src/dialogs/desktop-properties.cpp:890
+#: src/dialogs/desktop-properties.cpp:950
 msgid "Snap distance:"
 msgstr "Distancia de autoajuste:"
 
-#: src/dialogs/desktop-properties.cpp:898
+#: src/dialogs/desktop-properties.cpp:893
 msgid "Minor grid line color:"
 msgstr "Color secundario de líneas guía:"
 
-#: src/dialogs/desktop-properties.cpp:899
+#: src/dialogs/desktop-properties.cpp:894
 msgid "Grid color"
 msgstr "Color de la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:901
+#: src/dialogs/desktop-properties.cpp:896
 msgid "Major grid line color:"
 msgstr "Color primario de líneas guía:"
 
-#: src/dialogs/desktop-properties.cpp:902
+#: src/dialogs/desktop-properties.cpp:897
 msgid "Grid emphasis color"
 msgstr "Color acentuado de la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:905
+#: src/dialogs/desktop-properties.cpp:900
 msgid "Major grid line spacing:"
 msgstr "Espaciado primario de la rejilla:"
 
 #. TRANSLATORS: This belongs to the "Major grid line spacing:" string,
 #. see grid settings in the "Document Preferences" dialog
-#: src/dialogs/desktop-properties.cpp:917
+#: src/dialogs/desktop-properties.cpp:912
 msgid "lines"
 msgstr "líneas"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:931
+#: src/dialogs/desktop-properties.cpp:926
 msgid "Guides"
 msgstr "Guías"
 
-#: src/dialogs/desktop-properties.cpp:939
+#: src/dialogs/desktop-properties.cpp:934
 msgid "Show guides"
 msgstr "Mostrar las guías"
 
-#: src/dialogs/desktop-properties.cpp:940
+#: src/dialogs/desktop-properties.cpp:935
 msgid "Snap bounding boxes to guides"
 msgstr "Ajustar las cajas de contorno a las guías"
 
-#: src/dialogs/desktop-properties.cpp:941
+#: src/dialogs/desktop-properties.cpp:936
 msgid "Snap points to guides"
 msgstr "Ajustar los puntos a las guías"
 
-#: src/dialogs/desktop-properties.cpp:959
+#: src/dialogs/desktop-properties.cpp:954
 msgid "Guide color:"
 msgstr "Color de la guía:"
 
-#: src/dialogs/desktop-properties.cpp:960
+#: src/dialogs/desktop-properties.cpp:955
 msgid "Guideline color"
 msgstr "Color de las líneas guía"
 
-#: src/dialogs/desktop-properties.cpp:962
+#: src/dialogs/desktop-properties.cpp:957
 msgid "Highlight color:"
 msgstr "Color del resaltado:"
 
-#: src/dialogs/desktop-properties.cpp:963
+#: src/dialogs/desktop-properties.cpp:958
 msgid "Highlighted guideline color"
 msgstr "Color de resaltado de las líneas guías"
 
-#: src/dialogs/desktop-properties.cpp:978
+#: src/dialogs/desktop-properties.cpp:973
 #, fuzzy
 msgid "Background (also for export):"
 msgstr "Fondo (también para exportación)"
 
-#: src/dialogs/desktop-properties.cpp:979
+#: src/dialogs/desktop-properties.cpp:974
 msgid "Background color"
 msgstr "Color de fondo"
 
-#: src/dialogs/desktop-properties.cpp:983
+#: src/dialogs/desktop-properties.cpp:978
 msgid "Show canvas border"
 msgstr "Mostrar borde del papel"
 
-#: src/dialogs/desktop-properties.cpp:987
+#: src/dialogs/desktop-properties.cpp:982
 msgid "Border on top of drawing"
 msgstr "Borde encima del dibujo"
 
-#: src/dialogs/desktop-properties.cpp:990
+#: src/dialogs/desktop-properties.cpp:985
 #, fuzzy
 msgid "Border color:"
 msgstr "Color del borde"
 
-#: src/dialogs/desktop-properties.cpp:991
+#: src/dialogs/desktop-properties.cpp:986
 msgid "Canvas border color"
 msgstr "Color de borde del papel"
 
-#: src/dialogs/desktop-properties.cpp:994
+#: src/dialogs/desktop-properties.cpp:989
 #, fuzzy
 msgid "Default units:"
 msgstr "Predeterminados"
 
-#: src/dialogs/desktop-properties.cpp:1000
+#: src/dialogs/desktop-properties.cpp:995
 msgid "Units for the tool controls, ruler, and the statusbar"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1019
+#: src/dialogs/desktop-properties.cpp:1014
 msgid "Canvas size:"
 msgstr "Tamaño del lienzo:"
 
-#: src/dialogs/desktop-properties.cpp:1043 src/dialogs/export.cpp:130
+#: src/dialogs/desktop-properties.cpp:1038 src/dialogs/export.cpp:130
 msgid "Custom"
 msgstr "Personalizar"
 
-#: src/dialogs/desktop-properties.cpp:1054
+#: src/dialogs/desktop-properties.cpp:1049
 msgid "Canvas orientation:"
 msgstr "Orientación del lienzo:"
 
-#: src/dialogs/desktop-properties.cpp:1066
+#: src/dialogs/desktop-properties.cpp:1061
 msgid "Landscape"
 msgstr "Horizontal"
 
-#: src/dialogs/desktop-properties.cpp:1072
+#: src/dialogs/desktop-properties.cpp:1067
 msgid "Portrait"
 msgstr "Vertical"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:1081
+#: src/dialogs/desktop-properties.cpp:1076
 msgid "Custom canvas"
 msgstr "Personalizar lienzo"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:1093 src/dialogs/export.cpp:265
-#: src/dialogs/transformation.cpp:514 src/dialogs/transformation.cpp:709
+#: src/dialogs/desktop-properties.cpp:1088 src/dialogs/export.cpp:265
+#: src/dialogs/transformation.cpp:515 src/dialogs/transformation.cpp:710
 msgid "Units:"
 msgstr "Unidades:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:1095 src/dialogs/export.cpp:305
+#: src/dialogs/desktop-properties.cpp:1090 src/dialogs/export.cpp:305
 #: src/dialogs/export.cpp:412 src/dialogs/object-attributes.cpp:87
 #: src/dialogs/object-attributes.cpp:95 src/dialogs/stroke-style.cpp:1361
-#: src/toolbox.cpp:1825
+#: src/toolbox.cpp:1810
 msgid "Width:"
 msgstr "Ancho:"
 
-#: src/dialogs/desktop-properties.cpp:1117 src/dialogs/export.cpp:321
+#: src/dialogs/desktop-properties.cpp:1112 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:427 src/dialogs/object-attributes.cpp:88
 #: src/dialogs/object-attributes.cpp:96
 msgid "Height:"
@@ -830,20 +825,20 @@ msgstr "Alto:"
 #.
 #. * Ownership metadata tab
 #.
-#: src/dialogs/desktop-properties.cpp:1143
+#: src/dialogs/desktop-properties.cpp:1138
 msgid "Metadata"
 msgstr "Metadatos"
 
 #. add license selector pull-down
-#: src/dialogs/desktop-properties.cpp:1162
+#: src/dialogs/desktop-properties.cpp:1157
 msgid "License"
 msgstr "Licencia"
 
-#: src/dialogs/desktop-properties.cpp:1192
+#: src/dialogs/desktop-properties.cpp:1187
 msgid "Proprietary"
 msgstr "Propietaria"
 
-#: src/dialogs/desktop-properties.cpp:1706
+#: src/dialogs/desktop-properties.cpp:1701
 msgid "Close"
 msgstr "Cerrar"
 
@@ -1073,7 +1068,9 @@ msgstr ""
 "el ratón (en píxeles)"
 
 #: src/dialogs/display-settings.cpp:915 src/dialogs/display-settings.cpp:960
-#: src/dialogs/display-settings.cpp:1000 src/helper/units.cpp:38
+#: src/dialogs/display-settings.cpp:1000 src/dialogs/display-settings.cpp:1014
+#: src/dialogs/display-settings.cpp:1025 src/dialogs/display-settings.cpp:1036
+#: src/helper/units.cpp:38
 msgid "px"
 msgstr "px"
 
@@ -1174,25 +1171,22 @@ msgid "Arrow keys move by:"
 msgstr "Las flechas mueven:"
 
 #: src/dialogs/display-settings.cpp:1013
+#, fuzzy
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance "
-"(in points)"
+"(in SVG pixels)"
 msgstr ""
 "Al pulsar una tecla de flecha el/los objeto/s o nodo/s se mueven esta "
 "distancia (en puntos)."
-
-#: src/dialogs/display-settings.cpp:1014 src/dialogs/display-settings.cpp:1025
-#: src/dialogs/display-settings.cpp:1036 src/helper/units.cpp:37
-msgid "pt"
-msgstr "pt"
 
 #: src/dialogs/display-settings.cpp:1023
 msgid "> and < scale by:"
 msgstr "> y < escalan:"
 
 #: src/dialogs/display-settings.cpp:1024
+#, fuzzy
 msgid ""
-"Pressing > or < scales selection up or down by this increment (in points)"
+"Pressing > or < scales selection up or down by this increment (in SVG pixels)"
 msgstr "Al pulsar > ó < la selección se escala esta cantidad de puntos."
 
 #: src/dialogs/display-settings.cpp:1034
@@ -1200,8 +1194,9 @@ msgid "Inset/Outset by:"
 msgstr "Reducir/ampliar:"
 
 #: src/dialogs/display-settings.cpp:1035
+#, fuzzy
 msgid ""
-"Inset and Outset commands displace the path by this distance (in points)"
+"Inset and Outset commands displace the path by this distance (in SVG pixels)"
 msgstr ""
 "Los comandos «Reducir» y «Ampliar» desplazan el trazo esta distancia (en "
 "puntos)."
@@ -1280,7 +1275,7 @@ msgstr "Pluma"
 msgid "Calligraphy"
 msgstr "Caligrafía"
 
-#: src/dialogs/display-settings.cpp:1163 src/dialogs/text-edit.cpp:345
+#: src/dialogs/display-settings.cpp:1163 src/dialogs/text-edit.cpp:348
 #: src/verbs.cpp:1751
 msgid "Text"
 msgstr "Texto"
@@ -1332,7 +1327,7 @@ msgstr ""
 "deplazamiento de la derecha)."
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1214 src/dialogs/find.cpp:674
+#: src/dialogs/display-settings.cpp:1214 src/dialogs/find.cpp:677
 msgid "Clones"
 msgstr "Clones"
 
@@ -1710,201 +1705,203 @@ msgstr "serpenteante"
 msgid "alternating"
 msgstr "alternado"
 
-#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:744
+#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:747
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 "Buscar objetos por su contenido de texto (coincidencia exacta o parcial)"
 
-#: src/dialogs/find.cpp:83 src/dialogs/find.cpp:745
+#: src/dialogs/find.cpp:83 src/dialogs/find.cpp:748
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 "Buscar objetos por el valor del atributo «id» (coincidencia exacta o parcial)"
 
-#: src/dialogs/find.cpp:84 src/dialogs/find.cpp:746
+#: src/dialogs/find.cpp:84 src/dialogs/find.cpp:749
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 "Buscar objetos por el valor del atributo «style» (coincidencia exacta o "
 "parcial)"
 
-#: src/dialogs/find.cpp:85 src/dialogs/find.cpp:747
+#: src/dialogs/find.cpp:85 src/dialogs/find.cpp:750
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 "Buscar objetos por el nombre de un atributo (coincidencia exacta o parcial)"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:430
-#, c-format
-msgid "<b>%d</b> object(s) found (out of <b>%d</b>), %s match."
-msgstr "<b>%d</b> objeto(s) encontrado (de <b>%d</b>), coinciden %s."
-
 #: src/dialogs/find.cpp:431
+#, fuzzy, c-format
+msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
+msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
+msgstr[0] "<b>%d</b> objeto(s) encontrado (de <b>%d</b>), coinciden %s."
+msgstr[1] "<b>%d</b> objeto(s) encontrado (de <b>%d</b>), coinciden %s."
+
+#: src/dialogs/find.cpp:434
 msgid "exact"
 msgstr "exacto"
 
-#: src/dialogs/find.cpp:431
+#: src/dialogs/find.cpp:434
 msgid "partial"
 msgstr "parcial"
 
-#: src/dialogs/find.cpp:438
+#: src/dialogs/find.cpp:441
 msgid "No objects found"
 msgstr "No se han encontrado objetos"
 
-#: src/dialogs/find.cpp:596
+#: src/dialogs/find.cpp:599
 msgid "T_ype: "
 msgstr "T_ipo: "
 
-#: src/dialogs/find.cpp:603
+#: src/dialogs/find.cpp:606
 msgid "Search in all object types"
 msgstr "Buscar en todos los tipos de objeto"
 
-#: src/dialogs/find.cpp:603
+#: src/dialogs/find.cpp:606
 msgid "All types"
 msgstr "Todos los tipos"
 
-#: src/dialogs/find.cpp:614
+#: src/dialogs/find.cpp:617
 msgid "Search all shapes"
 msgstr "Buscar en todas las formas"
 
-#: src/dialogs/find.cpp:614
+#: src/dialogs/find.cpp:617
 msgid "All shapes"
 msgstr "Todas las formas"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Search rectangles"
 msgstr "Buscar rectángulos"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Rectangles"
 msgstr "Rectángulos"
 
-#: src/dialogs/find.cpp:636
+#: src/dialogs/find.cpp:639
 msgid "Search ellipses, arcs, circles"
 msgstr "Buscar en elipses, arcos, círculos."
 
-#: src/dialogs/find.cpp:636
+#: src/dialogs/find.cpp:639
 msgid "Ellipses"
 msgstr "Elipses"
 
-#: src/dialogs/find.cpp:641
+#: src/dialogs/find.cpp:644
 msgid "Search stars and polygons"
 msgstr "Buscar estrellas y polígonos"
 
-#: src/dialogs/find.cpp:641
+#: src/dialogs/find.cpp:644
 msgid "Stars"
 msgstr "Estrellas"
 
-#: src/dialogs/find.cpp:646
+#: src/dialogs/find.cpp:649
 msgid "Search spirals"
 msgstr "Buscar espirales"
 
-#: src/dialogs/find.cpp:646
+#: src/dialogs/find.cpp:649
 msgid "Spirals"
 msgstr "Espirales"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:659
+#: src/dialogs/find.cpp:662
 msgid "Search paths, lines, polylines"
 msgstr "Buscar en trazos, líneas, polilíneas."
 
-#: src/dialogs/find.cpp:659
+#: src/dialogs/find.cpp:662
 msgid "Paths"
 msgstr "Trazos"
 
-#: src/dialogs/find.cpp:664
+#: src/dialogs/find.cpp:667
 msgid "Search text objects"
 msgstr "Buscar objetos de texto"
 
-#: src/dialogs/find.cpp:664
+#: src/dialogs/find.cpp:667
 msgid "Texts"
 msgstr "Textos"
 
-#: src/dialogs/find.cpp:669
+#: src/dialogs/find.cpp:672
 msgid "Search groups"
 msgstr "Buscar en grupos."
 
-#: src/dialogs/find.cpp:669
+#: src/dialogs/find.cpp:672
 msgid "Groups"
 msgstr "Grupos"
 
-#: src/dialogs/find.cpp:674
+#: src/dialogs/find.cpp:677
 msgid "Search clones"
 msgstr "Buscar en clones"
 
-#: src/dialogs/find.cpp:679
+#: src/dialogs/find.cpp:682
 msgid "Search images"
 msgstr "Buscar en imágenes"
 
-#: src/dialogs/find.cpp:679
+#: src/dialogs/find.cpp:682
 msgid "Images"
 msgstr "Imágenes"
 
-#: src/dialogs/find.cpp:684
+#: src/dialogs/find.cpp:687
 msgid "Search offset objects"
 msgstr "Buscar objetos desplazados"
 
-#: src/dialogs/find.cpp:684
+#: src/dialogs/find.cpp:687
 msgid "Offsets"
 msgstr "Desplazamientos"
 
-#: src/dialogs/find.cpp:744
+#: src/dialogs/find.cpp:747
 msgid "_Text: "
 msgstr "_Texto:"
 
-#: src/dialogs/find.cpp:745
+#: src/dialogs/find.cpp:748
 msgid "_ID: "
 msgstr "_ID: "
 
-#: src/dialogs/find.cpp:746
+#: src/dialogs/find.cpp:749
 msgid "_Style: "
 msgstr "E_stilo:"
 
-#: src/dialogs/find.cpp:747
+#: src/dialogs/find.cpp:750
 msgid "_Attribute: "
 msgstr "_Atributo:"
 
-#: src/dialogs/find.cpp:761
+#: src/dialogs/find.cpp:764
 msgid "Search in s_election"
 msgstr "Buscar en la s_elección"
 
-#: src/dialogs/find.cpp:765
+#: src/dialogs/find.cpp:768
 msgid "Limit search to the current selection"
 msgstr "Limitar la búsqueda a la selección actual"
 
-#: src/dialogs/find.cpp:770
+#: src/dialogs/find.cpp:773
 msgid "Search in current _layer"
 msgstr "Buscar en la capa actua_l"
 
-#: src/dialogs/find.cpp:774
+#: src/dialogs/find.cpp:777
 msgid "Limit search to the current layer"
 msgstr "Limitar la búsqueda a la capa actual"
 
-#: src/dialogs/find.cpp:779
+#: src/dialogs/find.cpp:782
 msgid "Include _hidden"
 msgstr "Incluir _ocultas"
 
-#: src/dialogs/find.cpp:783
+#: src/dialogs/find.cpp:786
 msgid "Include hidden objects in search"
 msgstr "Incluir objetos ocultos en la búsqueda"
 
-#: src/dialogs/find.cpp:788
+#: src/dialogs/find.cpp:791
 msgid "Include l_ocked"
 msgstr "Incluir b_loqueadas"
 
-#: src/dialogs/find.cpp:792
+#: src/dialogs/find.cpp:795
 msgid "Include locked objects in search"
 msgstr "Incluir objetos bloqueados en la búsqueda"
 
-#: src/dialogs/find.cpp:803
+#: src/dialogs/find.cpp:806
 msgid "Clear values"
 msgstr "Limpiar valores"
 
-#: src/dialogs/find.cpp:804
+#: src/dialogs/find.cpp:807
 msgid "_Find"
 msgstr "_Buscar"
 
-#: src/dialogs/find.cpp:804
+#: src/dialogs/find.cpp:807
 msgid "Select objects matching all of the fields you filled in"
 msgstr "Seleccionar los objetos que coincidan con todos los campos rellenados"
 
@@ -2364,21 +2361,21 @@ msgstr "Unión:"
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1405
+#: src/dialogs/stroke-style.cpp:1403
 msgid "Miter join"
 msgstr "Unión de tipo inglete"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1415
+#: src/dialogs/stroke-style.cpp:1411
 msgid "Round join"
 msgstr "Unión redonda"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1425
+#: src/dialogs/stroke-style.cpp:1419
 msgid "Bevel join"
 msgstr "Unión biselada"
 
@@ -2389,87 +2386,87 @@ msgstr "Unión biselada"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1436
+#: src/dialogs/stroke-style.cpp:1430
 msgid "Miter limit:"
 msgstr "Límite de inglete:"
 
-#: src/dialogs/stroke-style.cpp:1444
+#: src/dialogs/stroke-style.cpp:1438
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "Longitud maxima del inglete (en unidades de ancho de trazo)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1457
+#: src/dialogs/stroke-style.cpp:1451
 msgid "Cap:"
 msgstr "Punta:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1470
+#: src/dialogs/stroke-style.cpp:1462
 msgid "Butt cap"
 msgstr "Tope embutido"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1479
+#: src/dialogs/stroke-style.cpp:1469
 msgid "Round cap"
 msgstr "Tope redondo"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1488
+#: src/dialogs/stroke-style.cpp:1476
 msgid "Square cap"
 msgstr "Tope cuadrado"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1494
+#: src/dialogs/stroke-style.cpp:1482
 msgid "Dashes:"
 msgstr "Guiones:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1515
+#: src/dialogs/stroke-style.cpp:1503
 msgid "Start Markers:"
 msgstr "Marcas de inicio:"
 
-#: src/dialogs/stroke-style.cpp:1525
+#: src/dialogs/stroke-style.cpp:1513
 msgid "Mid Markers:"
 msgstr "Marcadores medios:"
 
-#: src/dialogs/stroke-style.cpp:1536
+#: src/dialogs/stroke-style.cpp:1524
 msgid "End Markers:"
 msgstr "Marcadores finales:"
 
-#: src/dialogs/text-edit.cpp:193
+#: src/dialogs/text-edit.cpp:194
 msgid "Font"
 msgstr "Tipografía"
 
-#: src/dialogs/text-edit.cpp:223
+#: src/dialogs/text-edit.cpp:224
 msgid "Align lines left"
 msgstr "Alinear líneas a la izquierda"
 
 #. TRANSLATORS: `Center' here is a verb.
-#: src/dialogs/text-edit.cpp:237
+#: src/dialogs/text-edit.cpp:238
 msgid "Center lines"
 msgstr "Centrar líneas"
 
-#: src/dialogs/text-edit.cpp:250
+#: src/dialogs/text-edit.cpp:251
 msgid "Align lines right"
 msgstr "Alinear líneas a la derecha"
 
-#: src/dialogs/text-edit.cpp:271
+#: src/dialogs/text-edit.cpp:273
 msgid "Horizontal text"
 msgstr "Texto horizontal"
 
-#: src/dialogs/text-edit.cpp:284
+#: src/dialogs/text-edit.cpp:287
 msgid "Vertical text"
 msgstr "Texto vertical"
 
-#: src/dialogs/text-edit.cpp:299
+#: src/dialogs/text-edit.cpp:302
 msgid "Line spacing:"
 msgstr "Espaciado de líneas:"
 
-#: src/dialogs/text-edit.cpp:391
+#: src/dialogs/text-edit.cpp:394
 msgid "Set as default"
 msgstr "Definir como predeterminado"
 
@@ -2634,34 +2631,39 @@ msgid "Execute the trace"
 msgstr ""
 
 #. Move page
-#: src/dialogs/transformation.cpp:320 src/dialogs/transformation.cpp:463
+#: src/dialogs/transformation.cpp:321 src/dialogs/transformation.cpp:464
 msgid "Move"
 msgstr "Mover"
 
+#. Scale page
+#: src/dialogs/transformation.cpp:329 src/dialogs/transformation.cpp:660
+msgid "Scale"
+msgstr "Escalar"
+
 #. Rotate page
-#: src/dialogs/transformation.cpp:336 src/dialogs/transformation.cpp:799
+#: src/dialogs/transformation.cpp:337 src/dialogs/transformation.cpp:800
 msgid "Rotate"
 msgstr "Rotar"
 
 #. Relative moves
-#: src/dialogs/transformation.cpp:523
+#: src/dialogs/transformation.cpp:524
 msgid "Relative move"
 msgstr "Movimiento relativo"
 
-#: src/dialogs/transformation.cpp:822
+#: src/dialogs/transformation.cpp:823
 msgid "deg"
 msgstr "grados"
 
-#: src/dialogs/xml-tree.cpp:171
+#: src/dialogs/xml-tree.cpp:172
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
 "<b>Haga clic</b> para seleccionar nodos, <b>arrastre</b> para reordenar."
 
-#: src/dialogs/xml-tree.cpp:183
+#: src/dialogs/xml-tree.cpp:184
 msgid "<b>Click</b> attribute to edit."
 msgstr "<b>Haga clic</b> en el atributo para editarlo."
 
-#: src/dialogs/xml-tree.cpp:187
+#: src/dialogs/xml-tree.cpp:188
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
@@ -2670,79 +2672,79 @@ msgstr ""
 "Ha seleccionado el atributo <b>%s</b>. Cuando termine, pulse <b>Ctrl+Enter</"
 "b> para guardar los cambios."
 
-#: src/dialogs/xml-tree.cpp:280
+#: src/dialogs/xml-tree.cpp:281
 msgid "Drag to reorder nodes"
 msgstr "Arrastrar para reordenar nodos"
 
-#: src/dialogs/xml-tree.cpp:300
+#: src/dialogs/xml-tree.cpp:301
 msgid "New element node"
 msgstr "Nuevo nodo elemento"
 
-#: src/dialogs/xml-tree.cpp:322
+#: src/dialogs/xml-tree.cpp:323
 msgid "New text node"
 msgstr "Siguiente nodo de texto"
 
-#: src/dialogs/xml-tree.cpp:343
+#: src/dialogs/xml-tree.cpp:344
 msgid "Duplicate node"
 msgstr "Duplicar nodo"
 
-#: src/dialogs/xml-tree.cpp:364
+#: src/dialogs/xml-tree.cpp:365
 msgid "Delete node"
 msgstr "Borrar nodo"
 
-#: src/dialogs/xml-tree.cpp:380
+#: src/dialogs/xml-tree.cpp:381
 msgid "Unindent node"
 msgstr "Desangrar nodo"
 
-#: src/dialogs/xml-tree.cpp:395
+#: src/dialogs/xml-tree.cpp:396
 msgid "Indent node"
 msgstr "Sangrar nodos"
 
-#: src/dialogs/xml-tree.cpp:407
+#: src/dialogs/xml-tree.cpp:408
 msgid "Raise node"
 msgstr "Elevar nodo"
 
-#: src/dialogs/xml-tree.cpp:419
+#: src/dialogs/xml-tree.cpp:420
 msgid "Lower node"
 msgstr "Bajar nodo"
 
-#: src/dialogs/xml-tree.cpp:464
+#: src/dialogs/xml-tree.cpp:465
 msgid "Delete attribute"
 msgstr "Borrar atributo"
 
 #. TRANSLATORS: "Attribute" is a noun here
-#: src/dialogs/xml-tree.cpp:509
+#: src/dialogs/xml-tree.cpp:510
 msgid "Attribute name"
 msgstr "Nombre de atributo"
 
 #. TRANSLATORS: "Set" is a verb here
-#: src/dialogs/xml-tree.cpp:529
+#: src/dialogs/xml-tree.cpp:530
 msgid "Set attribute"
 msgstr "Definir atributo"
 
 #. TRANSLATORS: "Set" is a verb here
-#: src/dialogs/xml-tree.cpp:531
+#: src/dialogs/xml-tree.cpp:532
 msgid "Set"
 msgstr "Aceptar"
 
 #. TRANSLATORS: "Attribute" is a noun here
-#: src/dialogs/xml-tree.cpp:554
+#: src/dialogs/xml-tree.cpp:555
 msgid "Attribute value"
 msgstr "Valor del atributo"
 
-#: src/dialogs/xml-tree.cpp:1354
+#: src/dialogs/xml-tree.cpp:1358
 msgid "New element node..."
 msgstr "Nuevo nodo elemento..."
 
-#: src/dialogs/xml-tree.cpp:1375
+#: src/dialogs/xml-tree.cpp:1379
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/dialogs/xml-tree.cpp:1381
+#: src/dialogs/xml-tree.cpp:1385
 msgid "Create"
 msgstr "Crear"
 
-#: src/dialogs/xml-tree.cpp:1501
+#: src/dialogs/xml-tree.cpp:1505
 #, c-format
 msgid ""
 "Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
@@ -2750,17 +2752,17 @@ msgstr ""
 "No se puede ajustar <b>%s</b>: Ya existe otro elemento con el valor <b>%s</"
 "b>."
 
-#: src/document.cpp:409
+#: src/document.cpp:411
 #, c-format
 msgid "New document %d"
 msgstr "Nuevo documento %d"
 
-#: src/document.cpp:441
+#: src/document.cpp:443
 #, c-format
 msgid "Memory document %d"
 msgstr "Documento memoria %d"
 
-#: src/document.cpp:522
+#: src/document.cpp:524
 #, c-format
 msgid "Unnamed document %d"
 msgstr "Documento sin nombre %d"
@@ -2855,20 +2857,20 @@ msgstr "Seleccionar impresora"
 msgid "Inkscape: Print Preview"
 msgstr "Inkscape: Presentación preliminar"
 
-#: src/extension/internal/ps.cpp:120
+#: src/extension/internal/ps.cpp:122
 msgid "Print Destination"
 msgstr "Destino de impresión"
 
 #. Print properties frame
-#: src/extension/internal/ps.cpp:134
+#: src/extension/internal/ps.cpp:136
 msgid "Print properties"
 msgstr "Propiedades de impresión"
 
-#: src/extension/internal/ps.cpp:141
+#: src/extension/internal/ps.cpp:143
 msgid "Print using PostScript operators"
 msgstr "Imprimir usando operadores PostScript"
 
-#: src/extension/internal/ps.cpp:143
+#: src/extension/internal/ps.cpp:145
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
 "file size and can be arbitrarily scaled, but alpha transparency, gradients "
@@ -2878,11 +2880,11 @@ msgstr ""
 "será menor y puede ser escalada arbitrariamente, pero la transparencia alfa, "
 "los gradientes, los marcadores y los patrones se perderán."
 
-#: src/extension/internal/ps.cpp:148
+#: src/extension/internal/ps.cpp:150
 msgid "Print as bitmap"
 msgstr "Imprimir como mapa de bits"
 
-#: src/extension/internal/ps.cpp:150
+#: src/extension/internal/ps.cpp:152
 msgid ""
 "Print everything as bitmap. The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
@@ -2892,20 +2894,20 @@ msgstr ""
 "y la calidad dependerá del factor de ampliación, pero todos los gráficos "
 "serán renderizados idénticos a la pantalla"
 
-#: src/extension/internal/ps.cpp:164
+#: src/extension/internal/ps.cpp:166
 msgid "Preferred resolution (dots per inch) of bitmap"
 msgstr "Resolución preferida (puntos por pulgada) de mapa de bits"
 
-#: src/extension/internal/ps.cpp:179
+#: src/extension/internal/ps.cpp:181
 msgid "Resolution:"
 msgstr "Resolución:"
 
 #. Print destination frame
-#: src/extension/internal/ps.cpp:183
+#: src/extension/internal/ps.cpp:185
 msgid "Print destination"
 msgstr "Destino de impresión"
 
-#: src/extension/internal/ps.cpp:189
+#: src/extension/internal/ps.cpp:191
 msgid ""
 "Use '> filename' to print to file.\n"
 "Use '| prog arg...' to pipe to a program."
@@ -2913,9 +2915,34 @@ msgstr ""
 "Utilice  «> archivo» para imprimir en un archivo.\n"
 "Utilice «| prog arg...» para enviar a un programa."
 
-#: src/extension/internal/ps.cpp:1033
+#: src/extension/internal/ps.cpp:1043
 msgid "write error occurred"
 msgstr "ha ocurrido un error de escritura"
+
+#: src/extension/plugin/grid.cpp:221
+#, fuzzy
+msgid "Line Width"
+msgstr "An_cho de página"
+
+#: src/extension/plugin/grid.cpp:222
+#, fuzzy
+msgid "Horizontal Spacing"
+msgstr "Texto horizontal"
+
+#: src/extension/plugin/grid.cpp:223
+#, fuzzy
+msgid "Vertical Spacing"
+msgstr "Texto vertical"
+
+#: src/extension/plugin/grid.cpp:224
+#, fuzzy
+msgid "Horizontal Offset"
+msgstr "Texto horizontal"
+
+#: src/extension/plugin/grid.cpp:225
+#, fuzzy
+msgid "Vertical Offset"
+msgstr "Texto vertical"
 
 #. We can't call sp_ui_error_dialog because we may be
 #. running from the console, in which case calling sp_ui
@@ -2926,7 +2953,7 @@ msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr ""
 "Ha fallado la detección automática de formato. Se abrirá el archivo como SVG."
 
-#: src/file.cpp:218 src/file.cpp:842
+#: src/file.cpp:218 src/file.cpp:849
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Error al cargar el archivo pedido %s"
@@ -2953,16 +2980,18 @@ msgstr "No se ha revertido el documento."
 msgid "Select file to open"
 msgstr "Seleccione el archivo a abrir"
 
-#: src/file.cpp:478
-#, c-format
-msgid "Removed <b>%i</b> unused item(s) in &lt;defs&gt;."
-msgstr "Se han eliminado <b>%i</b> elementos no usados en &lt;defs&gt;."
+#: src/file.cpp:481
+#, fuzzy, c-format
+msgid "Removed <b>%i</b> unused item in &lt;defs&gt;."
+msgid_plural "Removed <b>%i</b> unused items in &lt;defs&gt;."
+msgstr[0] "Se han eliminado <b>%i</b> elementos no usados en &lt;defs&gt;."
+msgstr[1] "Se han eliminado <b>%i</b> elementos no usados en &lt;defs&gt;."
 
-#: src/file.cpp:480
+#: src/file.cpp:486
 msgid "No unused items in &lt;defs&gt;."
 msgstr "No hay elementos sin usar en &lt;defs&gt;."
 
-#: src/file.cpp:504
+#: src/file.cpp:510
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -2971,38 +3000,38 @@ msgstr ""
 "No se ha encontrado una extensión de inkscape para guardar el documento (%"
 "s). Esto pudo ser causado por una extensión de archivo desconocida."
 
-#: src/file.cpp:505 src/file.cpp:511
+#: src/file.cpp:511 src/file.cpp:517
 msgid "Document not saved."
 msgstr "No se ha guardado el documento."
 
-#: src/file.cpp:510
+#: src/file.cpp:516
 #, c-format
 msgid "File %s could not be saved."
 msgstr "No se pudo guardar el archivo %s."
 
-#: src/file.cpp:519
+#: src/file.cpp:525
 msgid "Document saved."
 msgstr "Documento guardado."
 
-#: src/file.cpp:566
+#: src/file.cpp:573
 #, c-format
 msgid "drawing%s"
 msgstr "dibujo%s"
 
-#: src/file.cpp:572
+#: src/file.cpp:579
 #, c-format
 msgid "drawing-%d%s"
 msgstr "dibujo-%d%s"
 
-#: src/file.cpp:605
+#: src/file.cpp:612
 msgid "Select file to save to"
 msgstr "Seleccione el archivo en el que se guardará"
 
-#: src/file.cpp:689
+#: src/file.cpp:696
 msgid "No changes need to be saved."
 msgstr "No hay cambios que necesiten ser guardados."
 
-#: src/file.cpp:868
+#: src/file.cpp:875
 msgid "Select file to import"
 msgstr "Seleccionar el archivo a importar"
 
@@ -3033,6 +3062,10 @@ msgstr "Unidades"
 #: src/helper/units.cpp:37
 msgid "Point"
 msgstr "Punto"
+
+#: src/helper/units.cpp:37
+msgid "pt"
+msgstr "pt"
 
 #: src/helper/units.cpp:37
 msgid "Points"
@@ -3138,16 +3171,16 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Ex cuadrados"
 
-#: src/inkscape.cpp:462
+#: src/inkscape.cpp:460
 msgid "Untitled document"
 msgstr "Documento sin nombre"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:493
+#: src/inkscape.cpp:491
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Inkscape ha encontrado un error interno y se cerrará.\n"
 
-#: src/inkscape.cpp:494
+#: src/inkscape.cpp:492
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
@@ -3155,11 +3188,11 @@ msgstr ""
 "Las copias de seguridad automáticas se realizaron en los siguientes "
 "lugares:\n"
 
-#: src/inkscape.cpp:495
+#: src/inkscape.cpp:493
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "Ha fallado la copia de seguridad de los siguientes documentos:\n"
 
-#: src/inkscape.cpp:667
+#: src/inkscape.cpp:665
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
@@ -3168,7 +3201,7 @@ msgstr ""
 "%s no es un archivo normal.\n"
 "%s"
 
-#: src/inkscape.cpp:668
+#: src/inkscape.cpp:666
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -3179,7 +3212,7 @@ msgstr ""
 "no tiene permisos de lectura.\n"
 "%s"
 
-#: src/inkscape.cpp:670
+#: src/inkscape.cpp:668
 #, c-format
 msgid ""
 "%s is not a valid preferences file.\n"
@@ -3188,7 +3221,7 @@ msgstr ""
 "%s no es un archivo de preferencias válido.\n"
 "%s"
 
-#: src/inkscape.cpp:671
+#: src/inkscape.cpp:669
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
@@ -3196,7 +3229,7 @@ msgstr ""
 "Se ejecutará Inkscape con la configuración predeterminada.\n"
 "No se guardarán nuevos ajustes."
 
-#: src/inkscape.cpp:1188
+#: src/inkscape.cpp:1186
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -3206,7 +3239,7 @@ msgstr ""
 "%s"
 
 # dld: src/inkscape.cpp:1201
-#: src/inkscape.cpp:1189
+#: src/inkscape.cpp:1187
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -3215,7 +3248,7 @@ msgstr ""
 "%s no es un directorio válido.\n"
 "%s"
 
-#: src/inkscape.cpp:1190
+#: src/inkscape.cpp:1188
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -3224,7 +3257,7 @@ msgstr ""
 "No se puede crear el archivo %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1191
+#: src/inkscape.cpp:1189
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -3233,7 +3266,7 @@ msgstr ""
 "No se puede escribir el archivo %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1192
+#: src/inkscape.cpp:1190
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
@@ -3520,7 +3553,7 @@ msgstr ""
 "\n"
 "Opciones disponibles:"
 
-#: src/node-context.cpp:348
+#: src/node-context.cpp:343
 msgid ""
 "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
 "+Alt</b>: move along handles"
@@ -3528,25 +3561,25 @@ msgstr ""
 "<b>Ctrl</b>: conmutar el tipo de nodo, pinzar el ángulo del tirador, mover "
 "hor/vert; <b>Ctrl+Alt</b>: mover a lo largo de los tiradores"
 
-#: src/node-context.cpp:349
+#: src/node-context.cpp:344
 msgid ""
 "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
 msgstr ""
 "<b>Mayús:</b> para conmutar a selección de nodos, desactivar ajuste, rotar "
 "ambos tiradores."
 
-#: src/node-context.cpp:350
+#: src/node-context.cpp:345
 msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
 msgstr ""
 "<b>Alt</b>: bloquear longitud de tirador; <b>Ctrl+Alt</b>: mover a lo largo "
 "del tirador"
 
-#: src/nodepath.cpp:1125 src/nodepath.cpp:1137 src/nodepath.cpp:1217
-#: src/nodepath.cpp:1229
+#: src/nodepath.cpp:1134 src/nodepath.cpp:1146 src/nodepath.cpp:1226
+#: src/nodepath.cpp:1238
 msgid "To join, you must have <b>two endnodes</b> selected."
 msgstr "Debe seleccionar <b>dos nodos finales</b> para unir."
 
-#: src/nodepath.cpp:1354 src/nodepath.cpp:1368
+#: src/nodepath.cpp:1363 src/nodepath.cpp:1377
 msgid ""
 "Select <b>two non-endpoint nodes</b> on a path between which to delete "
 "segments."
@@ -3554,11 +3587,11 @@ msgstr ""
 "Debe seleccionar <b>dos nodos no finales</b> entre los que eliminar "
 "segmentos."
 
-#: src/nodepath.cpp:1464
+#: src/nodepath.cpp:1473
 msgid "Cannot find path between nodes."
 msgstr "No se pudo hallar un trazo entre los nodos."
 
-#: src/nodepath.cpp:2695
+#: src/nodepath.cpp:2705
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -3567,7 +3600,7 @@ msgstr ""
 "la horizontal/vertical; con <b>Ctrl+Alt</b> para ajustar a las direcciones "
 "de los tiradores"
 
-#: src/nodepath.cpp:2719 src/nodepath.cpp:2743
+#: src/nodepath.cpp:2729 src/nodepath.cpp:2753
 msgid ""
 "<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to lock length; with <b>Shift</b> to rotate the opposite "
@@ -3578,47 +3611,57 @@ msgstr ""
 "<b>Mayús</b> para sincronizar la rotación el tirador opuesto"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: src/nodepath.cpp:2869
+#: src/nodepath.cpp:2879
 msgid "cusp"
 msgstr "agudo"
 
-#: src/nodepath.cpp:2871
+#: src/nodepath.cpp:2881
 msgid "smooth"
 msgstr "suave"
 
-#: src/nodepath.cpp:2873
+#: src/nodepath.cpp:2883
 msgid "symmetric"
 msgstr "simétrico"
 
-#: src/nodepath.cpp:2883
+#: src/nodepath.cpp:2893
 msgid "Drag nodes or node handles to edit the path"
 msgstr "Arrastre los nodos o tiradores del nodo para editar el trazo"
 
-#: src/nodepath.cpp:2902
+#: src/nodepath.cpp:2912
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 "Primero seleccione un objeto de trazo con el selector, después vuelva a la "
 "herramienta de nodos."
 
-#: src/nodepath.cpp:2905
-#, c-format
+#: src/nodepath.cpp:2915
+#, fuzzy, c-format
 msgid ""
+"<b>0</b> out of <b>%i</b> node selected. Click, Shift+click, or drag around "
+"nodes to select."
+msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around "
 "nodes to select."
-msgstr ""
+msgstr[0] ""
+"Se han seleccionado <b>0</b> de <b>%i</b> nodos. Haga clic, Mayús+clic o "
+"arrastre el ratón alrededor de los nodos para seleccionarlos."
+msgstr[1] ""
 "Se han seleccionado <b>0</b> de <b>%i</b> nodos. Haga clic, Mayús+clic o "
 "arrastre el ratón alrededor de los nodos para seleccionarlos."
 
-#: src/nodepath.cpp:2909
-#, c-format
-msgid "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
-msgstr "<b>%i</b> de <b>%i</b> nodos seleccionados; %s. %s."
+#: src/nodepath.cpp:2922
+#, fuzzy, c-format
+msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
+msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
+msgstr[0] "<b>%i</b> de <b>%i</b> nodos seleccionados; %s. %s."
+msgstr[1] "<b>%i</b> de <b>%i</b> nodos seleccionados; %s. %s."
 
-#: src/nodepath.cpp:2912
-#, c-format
-msgid "<b>%i</b> of <b>%i</b> nodes selected. %s."
-msgstr "<b>%i</b> de <b>%i</b> nodos seleccionados. %s."
+#: src/nodepath.cpp:2928
+#, fuzzy, c-format
+msgid "<b>%i</b> of <b>%i</b> node selected. %s."
+msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
+msgstr[0] "<b>%i</b> de <b>%i</b> nodos seleccionados. %s."
+msgstr[1] "<b>%i</b> de <b>%i</b> nodos seleccionados. %s."
 
 #: src/object-edit.cpp:431
 msgid ""
@@ -3856,7 +3899,7 @@ msgstr "Terminando trazo"
 msgid "Finishing freehand"
 msgstr "Terminando mano alzada"
 
-#: src/rect-context.cpp:398
+#: src/rect-context.cpp:393
 msgid ""
 "<b>Ctrl</b>: make square or integer-ratio rect, lock a rounded corner "
 "circular"
@@ -3865,7 +3908,7 @@ msgstr ""
 "esquina redondeada a circular"
 
 #  fixme: CTRL SNAP!!! remove "skew and scale"
-#: src/rect-context.cpp:563
+#: src/rect-context.cpp:558
 #, c-format
 msgid ""
 "<b>Rectangle</b>: %s x %s; with <b>Ctrl</b> to make square or integer-ratio "
@@ -4086,15 +4129,24 @@ msgstr "Capa elevada <b>%s</b>."
 msgid "Use <b>Shift+D</b> to look up original"
 msgstr "<b>Clon</b> de: %s. Utilice <b>Mayús+D</b> para buscar el original."
 
-#: src/selection-describer.cpp:60
+#: src/selection-describer.cpp:62
 #, fuzzy, c-format
-msgid "<b>%i</b> objects selected%s. %s."
-msgstr "<b>%i</b> objetos seleccionados. %s."
+msgid "<b>%i</b> object selected"
+msgid_plural "<b>%i</b> objects selected"
+msgstr[0] "<b>%i</b> objetos seleccionados. %s."
+msgstr[1] "<b>%i</b> objetos seleccionados. %s."
 
-#: src/selection-describer.cpp:63
+#: src/selection-describer.cpp:68
+#, c-format
+msgid "%s%s. %s."
+msgstr ""
+
+#: src/selection-describer.cpp:72
 #, fuzzy, c-format
-msgid "<b>%i</b> objects selected in <b>%i</b> layers. %s."
-msgstr "<b>%i</b> objetos seleccionados. %s."
+msgid "%s in <b>%i</b> layer. %s."
+msgid_plural "%s in <b>%i</b> layers. %s."
+msgstr[0] "<b>%i</b> objetos seleccionados. %s."
+msgstr[1] "<b>%i</b> objetos seleccionados. %s."
 
 #: src/seltrans.cpp:462
 msgid ""
@@ -4149,8 +4201,8 @@ msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>Inclinar</b>: %0.2f%% x %0.2f%%"
 
 #: src/seltrans.cpp:977
-#, c-format
-msgid "<b>Rotate</b>: %0.2f degrees; with <b>Ctrl</b> to snap angle"
+#, fuzzy, c-format
+msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Rotar</b>: %0.2f grados; con Ctrl para ajustar el ángulo"
 
 #: src/seltrans.cpp:1006
@@ -4205,12 +4257,14 @@ msgstr "<b>Imagen con referencia incorrecta</b>: %s"
 msgid "<b>Image</b> %d x %d: %s"
 msgstr "<b>Imagen</b> %d x %d : %s"
 
-#: src/sp-item-group.cpp:365
-#, c-format
-msgid "<b>Group</b> of <b>%d</b> objects"
-msgstr "<b>Grupo</b> de <b>%d</b> objetos"
+#: src/sp-item-group.cpp:366
+#, fuzzy, c-format
+msgid "<b>Group</b> of <b>%d</b> object"
+msgid_plural "<b>Group</b> of <b>%d</b> objects"
+msgstr[0] "<b>Grupo</b> de <b>%d</b> objetos"
+msgstr[1] "<b>Grupo</b> de <b>%d</b> objetos"
 
-#: src/sp-item.cpp:645
+#: src/sp-item.cpp:650
 msgid "Object"
 msgstr "Objeto"
 
@@ -4234,10 +4288,12 @@ msgstr "reducir"
 msgid "<b>Dynamic offset</b>, %s by %f pt"
 msgstr "<b>Desplazamiento dinámico</b>, %s por %f pt"
 
-#: src/sp-path.cpp:125
-#, c-format
-msgid "<b>Path</b> (%i nodes)"
-msgstr "<b>Trazo</b> (%i nodos)"
+#: src/sp-path.cpp:126
+#, fuzzy, c-format
+msgid "<b>Path</b> (%i node)"
+msgid_plural "<b>Path</b> (%i nodes)"
+msgstr[0] "<b>Trazo</b> (%i nodos)"
+msgstr[1] "<b>Trazo</b> (%i nodos)"
 
 #  FIXME: implement averaging of all parameters for multiple selected stars
 #  gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
@@ -4247,20 +4303,26 @@ msgstr "<b>Trazo</b> (%i nodos)"
 msgid "<b>Rectangle</b>"
 msgstr "<b>Rectángulo</b>"
 
-#: src/sp-spiral.cpp:270
+#. TRANSLATORS: since turn count isn't an integer, please adjust the
+#. string as needed to deal with an localized plural forms.
+#: src/sp-spiral.cpp:272
 #, c-format
 msgid "<b>Spiral</b> with %3f turns"
 msgstr "<b>Espiral</b> con %3f vueltas"
 
-#: src/sp-star.cpp:286
-#, c-format
-msgid "<b>Star</b> with %d vertices"
-msgstr "<b>Estrella</b> de %d vértices"
+#: src/sp-star.cpp:289
+#, fuzzy, c-format
+msgid "<b>Star</b> with %d vertex"
+msgid_plural "<b>Star</b> with %d vertices"
+msgstr[0] "<b>Estrella</b> de %d vértices"
+msgstr[1] "<b>Estrella</b> de %d vértices"
 
-#: src/sp-star.cpp:287
-#, c-format
-msgid "<b>Polygon</b> with %d vertices"
-msgstr "<b>Polígono</b> de %d vértices"
+#: src/sp-star.cpp:293
+#, fuzzy, c-format
+msgid "<b>Polygon</b> with %d vertex"
+msgid_plural "<b>Polygon</b> with %d vertices"
+msgstr[0] "<b>Polígono</b> de %d vértices"
+msgstr[1] "<b>Polígono</b> de %d vértices"
 
 #: src/sp-text.cpp:484
 msgid "<no name found>"
@@ -4285,15 +4347,15 @@ msgstr "<b>Enlazar</b> a %s"
 msgid "<b>Orphaned clone</b>"
 msgstr "<b>Clon huérfano</b>"
 
-#: src/spiral-context.cpp:357
+#: src/spiral-context.cpp:352
 msgid "<b>Ctrl</b>: snap angle"
 msgstr "<b>Ctrl</b>: ajuste al ángulo"
 
-#: src/spiral-context.cpp:359
+#: src/spiral-context.cpp:354
 msgid "<b>Alt</b>: lock spiral radius"
 msgstr "<b>Alt</b>: bloquear radio de la espiral"
 
-#: src/spiral-context.cpp:471
+#: src/spiral-context.cpp:466
 #, c-format
 msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
@@ -4329,47 +4391,47 @@ msgstr ""
 "booleana."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:545
+#: src/splivarot.cpp:559
 msgid "Select <b>path(s)</b> to outline."
 msgstr "Seleccione uno o más <b>trazos</b> para contornear."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:746
+#: src/splivarot.cpp:760
 msgid "<b>No stroked paths</b> to outline in the selection."
 msgstr "<b>No hay trazos</b> para contornear en la selección."
 
-#: src/splivarot.cpp:832
+#: src/splivarot.cpp:846
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr ""
 "El objeto seleccionado <b>no es un trazo</b>, no se puede reducir/ampliar."
 
-#: src/splivarot.cpp:1054
+#: src/splivarot.cpp:1068
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr "Seleccione <b>trazos</b> para reducir/ampliar."
 
-#: src/splivarot.cpp:1271
+#: src/splivarot.cpp:1285
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "<b>No hay trazos</b> para reducir/ampliar en la selección."
 
-#: src/splivarot.cpp:1403
+#: src/splivarot.cpp:1417
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Seleccione <b>trazos</b> para simplificar."
 
-#: src/splivarot.cpp:1430
+#: src/splivarot.cpp:1444
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "No hay <b>trazos</b> simplificables en la selección."
 
-#: src/star-context.cpp:369
+#: src/star-context.cpp:364
 msgid "<b>Ctrl</b>: snap angle; keep rays radial"
 msgstr "<b>Ctrl</b>: ajustar al ángulo; mantiene los rayos radiales"
 
-#: src/star-context.cpp:480
+#: src/star-context.cpp:475
 #, c-format
 msgid "<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Polígono</b>: radio %s, ángulo %5g; con <b>Ctrl</b> para ajustar al ángulo"
 
-#: src/star-context.cpp:481
+#: src/star-context.cpp:476
 #, c-format
 msgid "<b>Star</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
@@ -4482,9 +4544,9 @@ msgstr "Convertir los segmentos seleccionados en líneas"
 msgid "Make selected segments curves"
 msgstr "Convertir los segmentos seleccionados a curvas"
 
-#: src/toolbox.cpp:1077 src/toolbox.cpp:1165 src/toolbox.cpp:1407
-#: src/toolbox.cpp:1442 src/toolbox.cpp:1649 src/toolbox.cpp:1685
-#: src/toolbox.cpp:2140 src/toolbox.cpp:2176
+#: src/toolbox.cpp:1072 src/toolbox.cpp:1160 src/toolbox.cpp:1397
+#: src/toolbox.cpp:1432 src/toolbox.cpp:1634 src/toolbox.cpp:1670
+#: src/toolbox.cpp:2120 src/toolbox.cpp:2156
 msgid "<b>New:</b>"
 msgstr "<b>Nuevo:</b>"
 
@@ -4496,59 +4558,59 @@ msgstr "<b>Nuevo:</b>"
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #. FIXME: implement averaging of all parameters for multiple selected
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
-#: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1409
-#: src/toolbox.cpp:1427 src/toolbox.cpp:1651 src/toolbox.cpp:1669
-#: src/toolbox.cpp:2142 src/toolbox.cpp:2161
+#: src/toolbox.cpp:1074 src/toolbox.cpp:1092 src/toolbox.cpp:1399
+#: src/toolbox.cpp:1417 src/toolbox.cpp:1636 src/toolbox.cpp:1654
+#: src/toolbox.cpp:2122 src/toolbox.cpp:2141
 msgid "<b>Change:</b>"
 msgstr "<b>Cambio:</b>"
 
-#: src/toolbox.cpp:1169
+#: src/toolbox.cpp:1164
 msgid "Corners:"
 msgstr "Esquinas:"
 
-#: src/toolbox.cpp:1169
+#: src/toolbox.cpp:1164
 msgid "Number of corners of a polygon or star"
 msgstr "Número de esquinas de un polígono o estrella"
 
-#: src/toolbox.cpp:1182
+#: src/toolbox.cpp:1177
 msgid "Polygon"
 msgstr "Polígono"
 
-#: src/toolbox.cpp:1189
+#: src/toolbox.cpp:1184
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Crear polígonos (con un tirador) en vez de estrellas"
 
-#: src/toolbox.cpp:1199
+#: src/toolbox.cpp:1194
 msgid "Spoke ratio:"
 msgstr "longitud del radio:"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:1202
+#: src/toolbox.cpp:1197
 msgid "Base radius to tip radius ratio"
 msgstr "Relación entre el radio base y el radio de la punta"
 
-#: src/toolbox.cpp:1217
+#: src/toolbox.cpp:1212
 msgid "Rounded:"
 msgstr "Redondez:"
 
-#: src/toolbox.cpp:1217
+#: src/toolbox.cpp:1212
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Lo redondos que son las esquinas (0 para agudo)"
 
-#: src/toolbox.cpp:1227
+#: src/toolbox.cpp:1222
 msgid "Randomized:"
 msgstr "Aleatorio:"
 
-#: src/toolbox.cpp:1227
+#: src/toolbox.cpp:1222
 msgid "Scatter randomly the corners and angles"
 msgstr "Esparcir las esquinas y ángulos aleatoriamente"
 
-#: src/toolbox.cpp:1238 src/toolbox.cpp:1720 src/toolbox.cpp:1896
+#: src/toolbox.cpp:1233 src/toolbox.cpp:1705 src/toolbox.cpp:1881
 msgid "Defaults"
 msgstr "Predeterminados"
 
-#: src/toolbox.cpp:1239 src/toolbox.cpp:1721 src/toolbox.cpp:1897
+#: src/toolbox.cpp:1234 src/toolbox.cpp:1706 src/toolbox.cpp:1882
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -4556,65 +4618,65 @@ msgstr ""
 "Reiniciar los parámetros de las formas a predeterminados (use «Preferencias "
 "> Herramientas» para cambiar los predeterminados)"
 
-#: src/toolbox.cpp:1452
+#: src/toolbox.cpp:1442
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1452
+#: src/toolbox.cpp:1442
 msgid "Horizontal radius of rounded corners"
 msgstr "Radio horizontal de las esquinas redondeadas"
 
-#: src/toolbox.cpp:1462
+#: src/toolbox.cpp:1452
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1462
+#: src/toolbox.cpp:1452
 msgid "Vertical radius of rounded corners"
 msgstr "Radio vertical de la esquinas redondeadas"
 
-#: src/toolbox.cpp:1478
+#: src/toolbox.cpp:1468
 msgid "Not rounded"
 msgstr "No redondeado"
 
-#: src/toolbox.cpp:1479
+#: src/toolbox.cpp:1469
 msgid "Make corners sharp"
 msgstr "Afilar las esquinas"
 
-#: src/toolbox.cpp:1689
+#: src/toolbox.cpp:1674
 msgid "Turns:"
 msgstr "Vueltas:"
 
-#: src/toolbox.cpp:1689
+#: src/toolbox.cpp:1674
 msgid "Number of revolutions"
 msgstr "Número de revoluciones"
 
-#: src/toolbox.cpp:1699
+#: src/toolbox.cpp:1684
 msgid "Divergence:"
 msgstr "Divergencia:"
 
-#: src/toolbox.cpp:1699
+#: src/toolbox.cpp:1684
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 "Cuánto más densas/difusas son las revoluciones exteriores; 1 = uniforme"
 
-#: src/toolbox.cpp:1709
+#: src/toolbox.cpp:1694
 msgid "Inner radius:"
 msgstr "Radio interior:"
 
-#: src/toolbox.cpp:1709
+#: src/toolbox.cpp:1694
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Radio de la revolución más interior (relativa al tamaño de la espiral)"
 
-#: src/toolbox.cpp:1825
+#: src/toolbox.cpp:1810
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr ""
 "El ancho de la pluma caligráfica (relativo al tamaño visible del lienzo)"
 
-#: src/toolbox.cpp:1835
+#: src/toolbox.cpp:1820
 msgid "Thinning:"
 msgstr "Adelgazar:"
 
-#: src/toolbox.cpp:1835
+#: src/toolbox.cpp:1820
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
@@ -4623,7 +4685,7 @@ msgstr ""
 "finos, < 0 los hace más anchos, 0 hace el ancho independiente de la "
 "velocidad)"
 
-#: src/toolbox.cpp:1848
+#: src/toolbox.cpp:1833
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
@@ -4631,11 +4693,11 @@ msgstr ""
 "El ángulo de la plumilla (en grados; 0 = horizontal; no tiene efecto si la "
 "fijación = 0)"
 
-#: src/toolbox.cpp:1858
+#: src/toolbox.cpp:1843
 msgid "Fixation:"
 msgstr "Fijación:"
 
-#: src/toolbox.cpp:1858
+#: src/toolbox.cpp:1843
 msgid ""
 "How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
 "= fixed)"
@@ -4643,55 +4705,55 @@ msgstr ""
 "Nivel de fijación de la pluma (0 = siempre perpendicular a la dirección del "
 "trazo, 1 = fijado)"
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1856
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1856
 msgid "How much inertia affects the movement of the pen"
 msgstr "Cuánta inercia afecta al movimiento de la pluma"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1867
 msgid "Drag:"
 msgstr "Resistencia:"
 
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1867
 msgid "How much resistance affects the movement of the pen"
 msgstr "Cuánta resistencia afecta al movimiento de la pluma"
 
-#: src/toolbox.cpp:2180
+#: src/toolbox.cpp:2160
 msgid "Start:"
 msgstr "Inicio:"
 
-#: src/toolbox.cpp:2180
+#: src/toolbox.cpp:2160
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "El ángulo (en grados) desde la horizontal al punto inicial del arco"
 
-#: src/toolbox.cpp:2190
+#: src/toolbox.cpp:2170
 msgid "End:"
 msgstr "Fin:"
 
-#: src/toolbox.cpp:2190
+#: src/toolbox.cpp:2170
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 "El ángulo (en grados) desde la horizontal hasta el punto final del arco"
 
-#: src/toolbox.cpp:2201
+#: src/toolbox.cpp:2181
 msgid "Open arc"
 msgstr "Arco abierto"
 
-#: src/toolbox.cpp:2202
+#: src/toolbox.cpp:2182
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Cambiar entre arco (forma abierta) y segmento (forma cerrada con dos radios)"
 
-#: src/toolbox.cpp:2229
+#: src/toolbox.cpp:2209
 msgid "Make whole"
 msgstr "Completar"
 
-#: src/toolbox.cpp:2230
+#: src/toolbox.cpp:2210
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Hacer una elipse completa, no un arco o segmento"
 
@@ -6126,38 +6188,38 @@ msgstr "Sin gradientes en el documento"
 msgid "No gradient selected"
 msgstr "Sin gradiente seleccionado"
 
-#: src/widgets/gradient-vector.cpp:542
+#: src/widgets/gradient-vector.cpp:537
 msgid "No stops in gradient"
 msgstr "Gradiente sin paradas"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: src/widgets/gradient-vector.cpp:778
+#: src/widgets/gradient-vector.cpp:773
 msgid "Add stop"
 msgstr "Añadir parada"
 
-#: src/widgets/gradient-vector.cpp:781
+#: src/widgets/gradient-vector.cpp:776
 msgid "Add another control stop to gradient"
 msgstr "Añadir otro control de parada al gradiente"
 
-#: src/widgets/gradient-vector.cpp:783
+#: src/widgets/gradient-vector.cpp:778
 msgid "Delete stop"
 msgstr "Borrar parada"
 
-#: src/widgets/gradient-vector.cpp:786
+#: src/widgets/gradient-vector.cpp:781
 msgid "Delete current control stop from gradient"
 msgstr "Eliminar el control de parada actual"
 
 #. Label
-#: src/widgets/gradient-vector.cpp:797
+#: src/widgets/gradient-vector.cpp:792
 msgid "Offset:"
 msgstr "Desplazamiento:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: src/widgets/gradient-vector.cpp:842
+#: src/widgets/gradient-vector.cpp:837
 msgid "Stop Color"
 msgstr "Color de parada"
 
-#: src/widgets/gradient-vector.cpp:868
+#: src/widgets/gradient-vector.cpp:863
 msgid "Gradient editor"
 msgstr "Editor de gradiente"
 
@@ -6342,13 +6404,16 @@ msgstr "Sin nombre"
 msgid "Wheel"
 msgstr "Rueda"
 
-#: src/widgets/sp-xmlview-attr-list.cpp:58
+#: src/widgets/sp-xmlview-attr-list.cpp:53
 msgid "Attribute"
 msgstr "Atributo"
 
-#: src/widgets/sp-xmlview-attr-list.cpp:59
+#: src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Valor"
+
+#~ msgid "Could not create sodipodi-svg-doc factory"
+#~ msgstr "No se ha podido crear un documento de la fábrica sodipodi-svg-doc"
 
 #~ msgid "SVG Files"
 #~ msgstr "Archivos SVG"
