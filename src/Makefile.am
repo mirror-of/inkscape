@@ -93,6 +93,7 @@ libinkscape_a_SOURCES = \
 	knotholder.cpp knotholder.h \
 	macros.h \
 	marker-status.cpp marker-status.h	\
+	mod360.cpp mod360.h	\
 	node-context.cpp node-context.h \
 	nodepath.cpp nodepath.h \
 	object-edit.cpp object-edit.h \
@@ -248,11 +249,18 @@ dist-hook:
 #
 # ################################################
 
-TESTS = extract-uri-test$(EXEEXT)
+TESTS = \
+	extract-uri-test$(EXEEXT)	\
+	mod360-test$(EXEEXT)
 # automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
 # TESTS items can be scripts etc.
 
-check_PROGRAMS = extract-uri-test
+check_PROGRAMS = \
+	extract-uri-test	\
+	mod360-test
+
+mod360_test_SOURCES = mod360-test.cpp
+mod360_test_LDADD = libinkscape.a -lglib-2.0
 
 extract_uri_test_SOURCES = extract-uri-test.cpp
 extract_uri_test_LDADD = libinkscape.a -lglib-2.0

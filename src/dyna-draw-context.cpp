@@ -49,6 +49,7 @@
 
 #include "macros.h"
 #include "enums.h"
+#include "mod360.h"
 #include "inkscape.h"
 #include "document.h"
 #include "selection.h"
@@ -223,22 +224,6 @@ sp_dyna_draw_context_setup(SPEventContext *ec)
     sp_event_context_read(ec, "drag");
     sp_event_context_read(ec, "angle");
     sp_event_context_read(ec, "width");
-}
-
-/** Returns \a x wrapped around to between 0 and less than 360,
-    or 0 if \a x isn't finite.
-**/
-static double mod360(double const x)
-{
-    double const m = fmod(x, 360.0);
-    double const ret = ( isnan(m)
-                         ? 0.0
-                         : ( m < 0
-                             ? m + 360
-                             : m ) );
-    g_return_val_if_fail(0.0 <= ret && ret < 360.0,
-                         0.0);
-    return ret;
 }
 
 static void
