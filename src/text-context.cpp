@@ -446,7 +446,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								tc->unipos += 1;
 								return TRUE;
 							}
-						} else { // non-hex-digit, canceling unimode
+						} else if (event->key.keyval != GDK_Shift_L && event->key.keyval != GDK_Shift_R) { // non-hex-digit, canceling unimode
 							tc->unimode = FALSE;
 							gtk_im_context_reset (tc->imc);
 							sp_view_clear_status (SP_VIEW(ec->desktop));
