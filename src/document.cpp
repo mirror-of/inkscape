@@ -603,11 +603,11 @@ gint
 sp_document_ensure_up_to_date (SPDocument *doc)
 {
 	int lc;
-	lc = 16;
+	lc = 32;
 	while (doc->root->uflags || doc->root->mflags) {
 		lc -= 1;
 		if (lc < 0) {
-			g_warning ("More than 16 iterations while updating document '%s'", doc->uri);
+			g_warning ("More than 32 iterations while updating document '%s'", doc->uri);
 			if (doc->modified_id) {
 				/* Remove handler */
 				gtk_idle_remove (doc->modified_id);

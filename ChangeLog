@@ -1,5 +1,8 @@
 2004-03-13  MenTaLguY <mental@rydia.net>
 
+    * src/document.cpp: bumped the update limit on documents a bit
+	  (bug #896076)
+
     * src/sp-text.cpp: SPString now copes with parents that don't have style
 	                   information (comment on bug #896706)
 
