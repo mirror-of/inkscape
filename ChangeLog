@@ -3,6 +3,11 @@
     * src/modules/db.cpp: cleaned up some very grotty code that gcc 3.4
       (rightly) refused to compile
 
+    * src/xml/repr-action.cpp: undo of content changes was pulling
+      from the wrong union member (note to self: unions = evil)
+      This fixes the problem with text editing undos yielding the wrong
+      apparent undo order (bug #861462).
+
 2004-02-05  bulia byak <bulia@users.sourceforge.net>
 
     * src/sp-text.cpp src/sp-text.h: Function to adjust letterspacing

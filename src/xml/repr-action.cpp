@@ -107,7 +107,7 @@ sp_repr_undo_log (SPReprAction *log)
 			break;
 		case SP_REPR_ACTION_CHGCONTENT:
 			sp_repr_set_content (action->repr,
-			                     action->chgattr.oldval);
+			                     action->chgcontent.oldval);
 			break;
 		case SP_REPR_ACTION_CHGORDER:
 			sp_repr_change_order (action->repr,
