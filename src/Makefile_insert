@@ -52,6 +52,8 @@ libinkpre_a_SOURCES =	\
 	dir-util.cpp dir-util.h	\
 	document.cpp document.h document-private.h	\
 	document-undo.cpp	\
+	draw-anchor.cpp	\
+	draw-anchor.h	\
 	draw-context.cpp draw-context.h	\
 	dropper-context.cpp dropper-context.h	\
 	dyna-draw-context.cpp dyna-draw-context.h	\
@@ -87,9 +89,16 @@ libinkpre_a_SOURCES =	\
 	object-hierarchy.cpp object-hierarchy.h \
 	object-ui.cpp object-ui.h	\
 	path-chemistry.cpp path-chemistry.h	\
+	path-prefix.h	\
+	pen-context.cpp	\
+	pen-context.h	\
+	pencil-context.cpp	\
+	pencil-context.h	\
 	preferences-skeleton.h	\
-	path-prefix.h prefix.cpp prefix.h	\
-	prefs-utils.cpp prefs-utils.h	\
+	prefix.cpp	\
+	prefix.h	\
+	prefs-utils.cpp	\
+	prefs-utils.h	\
 	print.cpp print.h	\
 	rect-context.cpp rect-context.h	\
 	require-config.h \
