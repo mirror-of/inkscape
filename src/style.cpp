@@ -666,7 +666,11 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         }
         break;
     case SP_PROP_OVERFLOW:
-        g_warning ("Unimplemented style property SP_PROP_OVERFLOW: %d value: %s", id, val);
+        // FIXME: temporaily disabled, for our markers.svg uses overflow: visible to show properly in batik.
+        // Inkscape acts as if "visible" is set, at least for markers.
+        // Replace this with a proper implementation of the property.
+
+        //g_warning ("Unimplemented style property SP_PROP_OVERFLOW: %d value: %s", id, val);
         break;
     case SP_PROP_VISIBILITY:
         if (!style->visibility_set) {
