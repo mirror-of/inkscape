@@ -1,3 +1,15 @@
+2004-03-09  rejon <jon@protofunk.org>
+
+    * samples: I moved the contents of samples into the proper share dirs.
+
+    * share/tutorials/tutorial.svg: I moved the default tutorial.svg to this 
+      location. It was in the wrong place.
+
+    * share/tutorials/elementsofdesign.svg src/help.cpp src/interface.cpp: 
+      Added the textual gloss of this new tutorial. I need to add some more 
+      graphics to it. But I just wanted to first of all flesh out the document 
+      so that others could chunk in graphics and so forth.
+
 2004-03-09  MenTaLguY  <mental@rydia.net>
 
     * src/sp-text.cpp: fixed uninitialized variable

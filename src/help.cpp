@@ -97,9 +97,6 @@ sp_help_about (void)
 
 } // close sp_help_about()
 
-/* REJON: I changed the following vars to INKSCAPE_SCREENSDIR to point to the 
- * new location of where screens will be kept.
- */
 
 void
 sp_help_tutorial (void)
@@ -108,6 +105,16 @@ sp_help_tutorial (void)
                                 NULL);
 	sp_file_open (c, NULL);
 	g_free (c);
+}
+
+void
+sp_help_elementsofdesign (void)
+{
+        gchar *c = g_strconcat (INKSCAPE_TUTORIALSDIR, 
+				_("/elementsofdesign.svg"),
+                                NULL);
+        sp_file_open (c, NULL);
+        g_free (c);
 }
 
 void
