@@ -96,9 +96,9 @@ public:
 
 
 /* Single point methods */
-double namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req);
-double namedview_vector_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Point const &d);
-gdouble namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point& req, NR::Dim2 const dim);
+NR::Coord namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req);
+NR::Coord namedview_vector_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Point const &d);
+NR::Coord namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point& req, NR::Dim2 const dim);
 
 /* List of points methods */
 
