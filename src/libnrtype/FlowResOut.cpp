@@ -337,6 +337,7 @@ void flow_res::Print(SPPrintContext *ctx,
 	if ( text_to_path ) {
 		for (int i=0;i<nbGroup;i++) {
 			text_style*     curS=groups[i].style;
+                   if (!curS) continue;
 			font_instance*  curF=curS->theFont;
 			const char*     curFam=pango_font_description_get_family(curF->descr);
 			char*           savFam=curS->with_style->text->font_family.value;
