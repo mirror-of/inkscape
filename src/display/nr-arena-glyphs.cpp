@@ -353,6 +353,7 @@ nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int li
 			nr_path_duplicate_transform(&abp, &s, transform);
 			//abp = art_bpath_affine_transform (curve->bpath, a);
 			curve = sp_curve_new_from_bpath (abp.path);
+			g_assert (curve != NULL);
 			glyphs->curve = curve;
 			glyphs->transform = *transform;
 		} else {
