@@ -59,7 +59,8 @@ static GdkCursor *CursorSelectMouseover = NULL;
 static GdkCursor *CursorSelectDragging = NULL;
 GdkPixbuf * handles[13];
 
-int rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
+gint rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
+gint drag_escaped = 0; // if non-zero, drag was canceled by esc
 
 GtkType
 sp_select_context_get_type (void)
@@ -417,7 +418,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					}
 				} else {
 					if (!sp_selection_is_empty (selection)) {
-						if (!(rb_escaped))
+						if (!(rb_escaped) && !(drag_escaped))
 							sp_selection_empty (selection);
 						rb_escaped = 0;
 						ret = TRUE;
@@ -495,11 +496,23 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						}
 						break;
 					case GDK_Escape:
-						if (sp_rubberband_rect (&b)) {
-							sp_rubberband_stop ();
-							rb_escaped = 1;
+						if (sc->dragging) {
+							if (sc->moved) { // cancel dragging an object
+								sp_sel_trans_ungrab (seltrans);
+								sc->moved = FALSE;
+								sc->dragging = FALSE;
+								sc->item = NULL;
+								sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
+								sp_document_undo (SP_DT_DOCUMENT (desktop));
+								drag_escaped = 1;
+							}
 						} else {
-							sp_selection_empty (selection);
+							if (sp_rubberband_rect (&b)) { // cancel rubberband
+								sp_rubberband_stop ();
+								rb_escaped = 1;
+							} else {
+								sp_selection_empty (selection); // deselect
+							}
 						}
 						ret = TRUE;
 						break;

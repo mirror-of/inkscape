@@ -15,6 +15,7 @@
 #include <math.h>
 #include <glib-object.h>
 #include <gtk/gtksignal.h>
+#include <gdk/gdkkeysyms.h>
 #include "helper/sp-marshal.h"
 #include "helper/sp-canvas-util.h"
 #include "helper/sodipodi-ctrl.h"
@@ -23,6 +24,7 @@
 #include "desktop-events.h"
 #include "desktop-affine.h"
 #include "knot.h"
+#include "inkscape.h"
 
 #include "sp-guide.h"
 
@@ -33,6 +35,8 @@
 #define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
 
 static int nograb = FALSE;
+
+gint transform_escaped = 0; // if non-zero, resize or rotate was canceled by esc
 
 enum {
 	PROP_0,
@@ -474,25 +478,30 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		break;
 	case GDK_BUTTON_RELEASE:
 		if (event->button.button == 1) {
-			sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
-			if (!nograb) {
-				sp_canvas_item_ungrab (knot->item, event->button.time);
-			}
-			if (moved) {
-				sp_knot_set_flag (knot,
-					SP_KNOT_DRAGGING,
-					FALSE);
-				g_signal_emit (G_OBJECT (knot),
-					       knot_signals[UNGRABBED], 0,
-					       event->button.state);
+			if (transform_escaped) {
+				transform_escaped = 0;
+				consumed = TRUE;
 			} else {
-				g_signal_emit (G_OBJECT (knot),
-					       knot_signals[CLICKED], 0,
-					       event->button.state);
+				sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
+				if (!nograb) {
+					sp_canvas_item_ungrab (knot->item, event->button.time);
+				}
+				if (moved) {
+					sp_knot_set_flag (knot,
+														SP_KNOT_DRAGGING,
+														FALSE);
+					g_signal_emit (G_OBJECT (knot),
+												 knot_signals[UNGRABBED], 0,
+												 event->button.state);
+				} else {
+					g_signal_emit (G_OBJECT (knot),
+												 knot_signals[CLICKED], 0,
+												 event->button.state);
+				}
+				grabbed = FALSE;
+				moved = FALSE;
+				consumed = TRUE;
 			}
-			grabbed = FALSE;
-			moved = FALSE;
-			consumed = TRUE;
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
@@ -522,6 +531,29 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	case GDK_LEAVE_NOTIFY:
 		sp_knot_set_flag (knot, SP_KNOT_MOUSEOVER, FALSE);
 		consumed = TRUE;
+		break;
+	case GDK_KEY_PRESS: // keybindings for knot
+		switch (event->key.keyval) {  
+		case GDK_Escape:
+			sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
+			if (!nograb) {
+				sp_canvas_item_ungrab (knot->item, event->button.time);
+			}
+			if (moved) {
+				sp_knot_set_flag (knot,
+					SP_KNOT_DRAGGING,
+					FALSE);
+				g_signal_emit (G_OBJECT (knot),
+					       knot_signals[UNGRABBED], 0,
+					       event->button.state);
+				sp_document_undo (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+			} 
+			grabbed = FALSE;
+			moved = FALSE;
+			transform_escaped = 1;
+			consumed = TRUE;
+			break;
+		}
 		break;
 	default:
 		break;
