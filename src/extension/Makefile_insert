@@ -19,6 +19,7 @@ extension_libextension_a_CPPFLAGS =	\
 extension_libextension_a_SOURCES =	\
 	extension/extension.cpp	\
 	extension/extension.h	\
+	extension/extension-forward.h	\
 	extension/db.cpp	\
 	extension/db.h	\
 	extension/init.cpp	\
