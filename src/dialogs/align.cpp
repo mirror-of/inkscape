@@ -562,7 +562,6 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
     g_slist_free (slist);
 
     if (changed) {
-        sp_selection_changed (selection);
         sp_document_done ( SP_DT_DOCUMENT (desktop) );
     }
     
@@ -748,7 +747,6 @@ static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
     g_free (bbs);
 
     if ( changed ) {
-        sp_selection_changed ( selection );
         sp_document_done ( SP_DT_DOCUMENT (desktop) );
     }
     
@@ -841,7 +839,6 @@ static void sp_align_distribute_v_clicked(GtkWidget *, gchar const *layout)
     g_free (bbs);
 
     if ( changed ) {
-        sp_selection_changed (selection);
         sp_document_done (SP_DT_DOCUMENT (desktop));
     }
     

@@ -1,3 +1,13 @@
+2004-04-21  MenTaLguY <mental@rydia.net>
+
+    * src/libnrtype/nr-type-w32.h: fixed unremoved underscores
+
+	* src/select-context.cpp, src/selection.cpp, src/selection.h,
+	  src/seltrans.cpp, src/tools-switch.cpp, src/dialogs/align.cpp:
+	  remove improper twiddling of desktop message line from SPSelection;
+	  some additional work is now required in SPSelectContext to update
+	  the message properly in all cases.
+
 2004-04-20  Kees Cook <kees@outflux.net>
 
 	* src/file.cpp, src/desktop.cpp: moved sp_file_open unselection code into

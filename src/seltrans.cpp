@@ -365,7 +365,6 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 		seltrans->center *= seltrans->current;
 
 		sp_document_done(SP_DT_DOCUMENT(seltrans->desktop));
-		sp_selection_changed(SP_DT_SELECTION(seltrans->desktop));
 
 		updh = false;
 	}
@@ -610,8 +609,6 @@ static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data)
 	SPSelTrans *seltrans = &SP_SELECT_CONTEXT(desktop->event_context)->seltrans;
 
 	sp_sel_trans_ungrab(seltrans);
-	//sp_selection_changed (SP_DT_SELECTION (seltrans->desktop));
-	
 }
 
 static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint state, gpointer data)

@@ -93,33 +93,6 @@ void SPSelection::_clear()
 	}
 }
 
-// TODO : obviously SPSelection has no business touching the
-// status bar at all, really -- the _selection context_ should attach
-// a listener to the SPSelection and update the status bar based on that...
-void SPSelection::updateStatusbar()
-{
-	char const *when_selected = _("Click selection to toggle scale/rotation handles");
-
-	if (!_items) { // no items
-		sp_view_set_statusf(SP_VIEW (_desktop), _("No objects selected. Click, Shift+click, drag around objects to select."));
-	} else if (!_items->next) { // one item
-		sp_view_set_statusf(SP_VIEW (_desktop), "%s. %s.", sp_item_description (SP_ITEM (_items->data)), when_selected);
-	} else { // multiple items
-		sp_view_set_statusf(SP_VIEW (_desktop), _("%i objects selected. %s."), g_slist_length(_items), when_selected);
-	}
-}
-
-void SPSelection::invokeChanged() {
-	inkscape_selection_changed(this);
-
-	_changed_signal.emit(this);
-
-	if ( _desktop && tools_isactive(_desktop, TOOLS_SELECT) ) {
-		// this function gets called not only when selector is active!
-		updateStatusbar();
-	}
-}
-
 bool SPSelection::includesItem(SPItem *item) const {
 	g_return_val_if_fail (item != NULL, FALSE);
 
@@ -158,7 +131,7 @@ void SPSelection::addItem(SPItem *item) {
 	// (to prevent double-selection)
 	_removeItemChildren(item);
 
-	invokeChanged();
+	_changed_signal.emit(this);
 }
 
 void SPSelection::addRepr(SPRepr *repr) {
@@ -185,7 +158,7 @@ void SPSelection::removeItem(SPItem *item) {
  	sp_signal_disconnect_by_data (item, this);
 	_items = g_slist_remove (_items, item);
 
-	invokeChanged();
+	_changed_signal.emit(this);
 }
 
 void SPSelection::removeRepr(SPRepr *repr) {
@@ -207,7 +180,7 @@ void SPSelection::setItemList(GSList const *list) {
 		}
 	}
 
-	invokeChanged();
+	_changed_signal.emit(this);
 }
 
 void SPSelection::setReprList(GSList const *list) {
@@ -229,7 +202,7 @@ void SPSelection::setReprList(GSList const *list) {
 
 void SPSelection::clear() {
 	_clear();
-	invokeChanged();
+	_changed_signal.emit(this);
 }
 
 GSList const *SPSelection::itemList() {

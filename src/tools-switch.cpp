@@ -109,7 +109,6 @@ tools_switch (SPDesktop *dt, int num)
 		/* fixme: This is really ugly hack. We should bind and unbind class methods */
 		sp_desktop_activate_guides (dt, TRUE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_selection_update_statusbar (SP_DT_SELECTION (dt));
 		break;
 	case TOOLS_NODES:
 		sp_desktop_set_event_context (dt, SP_TYPE_NODE_CONTEXT, tool_names[num]);

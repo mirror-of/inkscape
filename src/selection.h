@@ -67,11 +67,6 @@ public:
 	/* Returns number of points used */
 	int getSnapPoints(NR::Point points[], int max_points) const;
 
-	/* TODO: these two should not be part of the public interface */
-	/* (in fact, updateStatusbar does not belong here at all) */
-	void updateStatusbar();
-	void invokeChanged();
-
 	static SPSelection *create(SPDesktop *desktop);
 
 	SigC::Connection connectChanged(SigC::Slot1<void, SPSelection *> slot) {
@@ -117,17 +112,6 @@ inline __attribute__ ((deprecated))
 SPSelection *sp_selection_new(SPDesktop *desktop)
 {
 	return new SPSelection(desktop);
-}
-
-inline __attribute__ ((deprecated))
-void sp_selection_changed(SPSelection *selection)
-{
-	selection->invokeChanged();
-}
-inline __attribute__ ((deprecated))
-void sp_selection_update_statusbar(SPSelection *selection)
-{
-	selection->updateStatusbar();
 }
 
 inline __attribute__ ((deprecated))

@@ -51,6 +51,8 @@ static void sp_select_context_set (SPEventContext *ec, const gchar *key, const g
 static gint sp_select_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_select_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
 
+static void sp_select_context_update_statusbar(SPSelectContext *sc);
+
 static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state);
 
 static SPEventContextClass * parent_class;
@@ -166,6 +168,8 @@ sp_select_context_setup (SPEventContext *ec)
 	sp_event_context_read (ec, "cue");
 
 	sp_sel_trans_update_item_bboxes (&select_context->seltrans);
+
+	sp_select_context_update_statusbar(select_context);
 }
 
 static void
@@ -299,7 +303,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 				// item has been moved
 				sp_sel_trans_ungrab (seltrans);
 				sc->moved = FALSE;
-				sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
+				sp_select_context_update_statusbar(sc);
 			} else {
 				// item has not been moved -> do selecting
 				if (!sp_selection_is_empty (selection)) {
@@ -475,7 +479,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					// item has been moved
 					sp_sel_trans_ungrab (seltrans);
 					sc->moved = FALSE;
-					sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
+					sp_select_context_update_statusbar(sc);
 				} else {
 					// item has not been moved -> simply a click, do selecting
 					if (!sp_selection_is_empty (selection)) {
@@ -661,14 +665,14 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					sc->item = NULL;
 					sp_document_undo (SP_DT_DOCUMENT (desktop));
 					drag_escaped = 1;
-					sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
+					sp_select_context_update_statusbar(sc);
 					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), _("Move cancelled."));
 				}
 			} else {
 				if (sp_rubberband_rect (&b)) { // cancel rubberband
 					sp_rubberband_stop ();
 					rb_escaped = 1;
-					sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
+					sp_select_context_update_statusbar(sc);
 					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), _("Selection cancelled."));
 				} else {
 					sp_selection_empty (selection); // deselect
@@ -813,3 +817,15 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 	g_free(status);
 }
 
+static void sp_select_context_update_statusbar(SPSelectContext *sc) {
+	SPEventContext *ec=SP_EVENT_CONTEXT(sc);
+        char const *when_selected = _("Click selection to toggle scale/rotation handles");
+	GSList const *items=SP_DT_SELECTION(ec->desktop)->itemList();
+	if (!items) { // no items
+		sp_view_set_statusf(SP_VIEW (ec->desktop), _("No objects selected. Click, Shift+click, drag around objects to select."));
+	} else if (!items->next) { // one item
+		sp_view_set_statusf(SP_VIEW (ec->desktop), "%s. %s.", sp_item_description (SP_ITEM (items->data)), when_selected);
+	} else { // multiple items
+		sp_view_set_statusf(SP_VIEW (ec->desktop), _("%i objects selected. %s."), g_slist_length((GSList *)items), when_selected);
+	}
+}
