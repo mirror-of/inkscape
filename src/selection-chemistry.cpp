@@ -666,7 +666,7 @@ void sp_copy_stuff_used_by_item (SPItem *item)
 
     // recurse
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
-        if (SP_IS_ITEM(o) && !SP_IS_STRING(o) && !SP_IS_TSPAN(o))
+        if (SP_IS_ITEM(o))
             sp_copy_stuff_used_by_item (SP_ITEM (o));
     }
 }
