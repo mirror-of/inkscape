@@ -13,7 +13,7 @@ struct _SPCSSAttr {
 	SPRepr repr;
 };
 
-static void sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const char * attr);
+static void sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr);
 
 SPCSSAttr *
 sp_repr_css_attr_new (void)
@@ -31,7 +31,7 @@ sp_repr_css_attr_unref (SPCSSAttr * css)
 	sp_repr_unref ((SPRepr *) css);
 }
 
-SPCSSAttr * sp_repr_css_attr (SPRepr * repr, const char * attr)
+SPCSSAttr * sp_repr_css_attr (SPRepr * repr, const gchar * attr)
 {
 	SPCSSAttr * css;
 
@@ -45,7 +45,7 @@ SPCSSAttr * sp_repr_css_attr (SPRepr * repr, const char * attr)
 	return css;
 }
 
-SPCSSAttr * sp_repr_css_attr_inherited (SPRepr * repr, const char * attr)
+SPCSSAttr * sp_repr_css_attr_inherited (SPRepr * repr, const gchar * attr)
 {
 	SPCSSAttr * css;
 	SPRepr * current;
@@ -67,7 +67,7 @@ SPCSSAttr * sp_repr_css_attr_inherited (SPRepr * repr, const char * attr)
 }
 
 static void
-sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const char * attr)
+sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr)
 {
 	const char * data;
 	char * new_str;
@@ -106,7 +106,7 @@ sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const char * attr)
 }
 
 const char *
-sp_repr_css_property (SPCSSAttr * css, const char * name, const char * defval)
+sp_repr_css_property (SPCSSAttr * css, const gchar * name, const gchar * defval)
 {
 	const char * attr;
 
@@ -121,7 +121,7 @@ sp_repr_css_property (SPCSSAttr * css, const char * name, const char * defval)
 }
 
 void
-sp_repr_css_set_property (SPCSSAttr * css, const char * name, const char * value)
+sp_repr_css_set_property (SPCSSAttr * css, const gchar * name, const gchar * value)
 {
 	g_assert (css != NULL);
 	g_assert (name != NULL);
@@ -130,7 +130,7 @@ sp_repr_css_set_property (SPCSSAttr * css, const char * name, const char * value
 }
 
 double
-sp_repr_css_double_property (SPCSSAttr * css, const char * name, double defval)
+sp_repr_css_double_property (SPCSSAttr * css, const gchar * name, double defval)
 {
 	g_assert (css != NULL);
 	g_assert (name != NULL);
@@ -139,7 +139,7 @@ sp_repr_css_double_property (SPCSSAttr * css, const char * name, double defval)
 }
 
 void
-sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const char * attr)
+sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 {
 	SPReprAttr * a;
 	const char *key;
@@ -180,7 +180,7 @@ sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src)
 }
 
 void
-sp_repr_css_change (SPRepr * repr, SPCSSAttr * css, const char * attr)
+sp_repr_css_change (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 {
 	SPCSSAttr * current;
 
@@ -196,7 +196,7 @@ sp_repr_css_change (SPRepr * repr, SPCSSAttr * css, const char * attr)
 }
 
 void
-sp_repr_css_change_recursive (SPRepr * repr, SPCSSAttr * css, const char * attr)
+sp_repr_css_change_recursive (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 {
 	SPRepr * child;
 

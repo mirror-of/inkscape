@@ -54,10 +54,14 @@ void inkscape_load_extensions (Inkscape *inkscape);
 SPEventContext * inkscape_active_event_context (void);
 
 #define SP_ACTIVE_DOCUMENT inkscape_active_document ()
+extern "C" {
 SPDocument * inkscape_active_document (void);
+};
 
 #define SP_ACTIVE_DESKTOP inkscape_active_desktop ()
+extern "C" {
 SPDesktop * inkscape_active_desktop (void);
+};
 
 /*
  * fixme: This has to be rethought

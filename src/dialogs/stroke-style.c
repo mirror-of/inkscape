@@ -678,7 +678,9 @@ sp_stroke_style_line_widget_new (void)
 	gtk_signal_connect (GTK_OBJECT (spw), "change_selection", GTK_SIGNAL_FUNC (sp_stroke_style_line_change_selection), NULL);
 	gtk_signal_connect (GTK_OBJECT (spw), "attr_changed", GTK_SIGNAL_FUNC (sp_stroke_style_line_attr_changed), NULL);
 
-	sp_stroke_style_line_update (SP_WIDGET (spw), SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
+	SPDesktop *desktop = inkscape_active_desktop();
+	sp_stroke_style_line_update (SP_WIDGET (spw), desktop ? SP_DT_SELECTION (desktop) : NULL);
+	// sp_stroke_style_line_update (SP_WIDGET (spw), SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
 
 	return spw;
 }

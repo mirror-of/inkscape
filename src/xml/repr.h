@@ -134,6 +134,7 @@ void sp_repr_print (SPRepr * repr);
 
 typedef struct _SPCSSAttr SPCSSAttr;
 
+extern "C" {
 SPCSSAttr * sp_repr_css_attr_new (void);
 void sp_repr_css_attr_unref (SPCSSAttr * css);
 SPCSSAttr * sp_repr_css_attr (SPRepr * repr, const gchar * attr);
@@ -162,6 +163,8 @@ unsigned int sp_repr_set_int (SPRepr *repr, const  gchar *key, int val);
 unsigned int sp_repr_set_double (SPRepr *repr, const  gchar *key, double val);
 /* Defaults */
 unsigned int sp_repr_set_double_default (SPRepr *repr, const  gchar *key, double val, double def, double e);
+
+};
 
 /* Deprecated */
 double sp_repr_get_double_attribute (SPRepr * repr, const gchar * key, double def);
