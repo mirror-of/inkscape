@@ -44,10 +44,11 @@
 #include "../verbs.h"
 #include "../interface.h"
 #include "../sp-object.h"
+#include "../sp-text.h"
+#include "../selection-chemistry.h"
+
 using NR::X;
 using NR::Y;
-
-
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
@@ -84,7 +85,16 @@ static gboolean sp_find_dialog_delete(GtkObject *, GdkEvent *, gpointer data)
 bool
 item_id_match (SPItem *item, const gchar *id, bool exact)
 {
+    if (SP_OBJECT_REPR (item) == NULL)
+        return false;
+
+    if (SP_IS_STRING(item)) // SPStrings have "on demand" ids which are useless for searching
+        return false;
+
     const gchar *item_id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+    if (item_id == NULL)
+        return false;
+
     if (exact) {
         return ((bool) !strcmp(item_id, id));
     } else {
@@ -93,28 +103,85 @@ item_id_match (SPItem *item, const gchar *id, bool exact)
     }
 }
 
-GSList *
-filter_id (GSList *l, const gchar *id, bool exact)
+bool
+item_text_match (SPItem *item, const gchar *text, bool exact)
 {
-    GSList *n = NULL;
-    for (GSList *i = l; i != NULL; i = i->next) {
-        if (item_id_match (SP_ITEM(i->data), id, exact)) {
-            n = g_slist_prepend (n, i->data);
-        }
+    if (SP_OBJECT_REPR (item) == NULL)
+        return false;
+
+    const gchar *item_text = sp_repr_content (SP_OBJECT_REPR (item));
+    if (item_text == NULL)
+        return false;
+
+    if (exact) {
+        return ((bool) !strcasecmp(item_text, text));
+    } else {
+        //FIXME: strcasestr
+        return ((bool) (strstr(item_text, text) != NULL));
     }
-    return n;
 }
+
+bool
+item_style_match (SPItem *item, const gchar *text, bool exact)
+{
+    if (SP_OBJECT_REPR (item) == NULL)
+        return false;
+
+    const gchar *item_text = sp_repr_attr (SP_OBJECT_REPR (item), "style");
+    if (item_text == NULL)
+        return false;
+
+    if (exact) {
+        return ((bool) !strcmp(item_text, text));
+    } else {
+        return ((bool) (strstr(item_text, text) != NULL));
+    }
+}
+
+bool
+item_attr_match (SPItem *item, const gchar *name, bool exact)
+{
+    if (SP_OBJECT_REPR (item) == NULL)
+        return false;
+
+    if (exact) {
+        const gchar *attr_value = sp_repr_attr (SP_OBJECT_REPR (item), name);
+        return ((bool) (attr_value != NULL));
+    } else {
+        return sp_repr_has_attr (SP_OBJECT_REPR (item), name);
+    }
+}
+
+
+GSList *
+filter_onefield (GSList *l, GObject *dlg, const gchar *field, bool (*match_function)(SPItem *, const gchar *, bool), bool exact)
+{
+    GtkWidget *widget = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), field));
+    const gchar *text = gtk_entry_get_text (GTK_ENTRY(widget));
+    if (strlen (text) != 0) {
+        GSList *n = NULL;
+        for (GSList *i = l; i != NULL; i = i->next) {
+            if (match_function (SP_ITEM(i->data), text, exact)) {
+                n = g_slist_prepend (n, i->data);
+            }
+        }
+        return n;
+    } else {
+        return l;
+    }
+    return NULL;
+}
+
 
 GSList *
 filter_list (GSList *l, GObject *dlg, bool exact)
 {
-    GtkWidget *id_widget = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), "id"));
-    const gchar *id = gtk_entry_get_text (GTK_ENTRY(id_widget));
-    GSList *n = NULL;
-    if (strlen (id) != 0) {
-        n = filter_id (l, id, exact);
-    }
-    return n;
+    l = filter_onefield (l, dlg, "text", item_text_match, exact);
+    l = filter_onefield (l, dlg, "id", item_id_match, exact);
+    l = filter_onefield (l, dlg, "style", item_style_match, exact);
+    l = filter_onefield (l, dlg, "attr", item_attr_match, exact);
+
+    return l;
 }
 
 GSList *
@@ -129,13 +196,13 @@ all_items (SPObject *r, GSList *l)
     return l;
 }
 
-static void sp_find_dialog_find(GObject *, GObject *dlg)
+void sp_find_dialog_find(GObject *, GObject *dlg)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     GSList *l = NULL;
     l = all_items (SP_DOCUMENT_ROOT (SP_DT_DOCUMENT (desktop)), l);
-    gint all = g_slist_length (l);
+    guint all = g_slist_length (l);
 
     bool exact = true;
     GSList *n = NULL;
@@ -146,15 +213,66 @@ static void sp_find_dialog_find(GObject *, GObject *dlg)
     }
 
     if (n != NULL && g_slist_length (n) != all) {
-        sp_view_set_statusf_flash(SP_VIEW(desktop), _("%d object(s) found, %s match."), g_slist_length (n), exact? _("exact") : _("partial"));
+        sp_view_set_statusf_flash(SP_VIEW(desktop), 
+                                  _("%d object(s) found (out of %d), %s match."), 
+                                  g_slist_length (n), all, exact? _("exact") : _("partial"));
         SPSelection *selection = SP_DT_SELECTION (desktop);
         selection->clear();
         selection->setItemList(n);
+        scroll_to_show_item (desktop, SP_ITEM(n->data));
     } else {
         sp_view_set_statusf_flash(SP_VIEW(desktop), _("No objects found."));
     }
 }
 
+void
+sp_find_reset_searchfield (GObject *dlg, const gchar *field)
+{
+   GtkWidget *widget = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), field));
+   gtk_entry_set_text (GTK_ENTRY(widget), "");
+}
+
+
+void
+sp_find_dialog_reset (GObject *, GObject *dlg)
+{
+    sp_find_reset_searchfield (dlg, "text");
+    sp_find_reset_searchfield (dlg, "id");
+    sp_find_reset_searchfield (dlg, "style");
+    sp_find_reset_searchfield (dlg, "attr");
+}
+
+
+#define FIND_LABELWIDTH 80
+
+void
+sp_find_new_searchfield (GtkWidget *dlg, GtkWidget *vb, const gchar *label, const gchar *id, GtkTooltips *tt, const gchar *tip)
+{
+    GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+    GtkWidget *l = gtk_label_new_with_mnemonic (label);
+    gtk_widget_set_usize (l, FIND_LABELWIDTH, -1);
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+
+    GtkWidget *tf = gtk_entry_new ();
+    gtk_entry_set_max_length (GTK_ENTRY (tf), 64);
+    gtk_box_pack_start (GTK_BOX (hb), tf, TRUE, TRUE, 0);
+    gtk_object_set_data (GTK_OBJECT (dlg), id, tf);
+    gtk_tooltips_set_tip (tt, tf, tip, NULL);
+    g_signal_connect ( G_OBJECT (tf), "activate", G_CALLBACK (sp_find_dialog_find), dlg );
+    gtk_label_set_mnemonic_widget   (GTK_LABEL(l), tf);
+
+    gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+}
+
+void
+sp_find_new_button (GtkWidget *dlg, GtkWidget *hb, const gchar *label, GtkTooltips *tt, const gchar *tip, void (*function) (GObject *, GObject *))
+{
+           GtkWidget *b = gtk_button_new_with_mnemonic (label);
+            gtk_tooltips_set_tip (tt, b, tip, NULL);
+            gtk_box_pack_start (GTK_BOX (hb), b, TRUE, TRUE, 0);
+            g_signal_connect ( G_OBJECT (b), "clicked", G_CALLBACK (function), dlg );
+}
 
 
 GtkWidget *
@@ -202,30 +320,22 @@ sp_find_dialog (void)
         GtkWidget *vb = gtk_vbox_new (FALSE, 0);
         gtk_container_add (GTK_CONTAINER (dlg), vb);
 
+        sp_find_new_searchfield (dlg, vb, _("_Text"), "text", tt, _("Find objects by their text content (exact or partial match)"));
 
-        {
-            GtkWidget *hb = gtk_hbox_new (FALSE, 0);
-            GtkWidget *l = gtk_label_new_with_mnemonic (_("_ID"));
-            gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-            gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+        sp_find_new_searchfield (dlg, vb, _("_ID"), "id", tt, _("Find objects by the value of the id attribute (exact or partial match)"));
 
-            GtkWidget *tf = gtk_entry_new ();
-            gtk_entry_set_max_length (GTK_ENTRY (tf), 64);
-            gtk_box_pack_start (GTK_BOX (hb), tf, TRUE, TRUE, 0);
-            gtk_object_set_data (GTK_OBJECT (dlg), "id", tf);
-            g_signal_connect ( G_OBJECT (tf), "activate", G_CALLBACK (sp_find_dialog_find), dlg );
+        sp_find_new_searchfield (dlg, vb, _("_Style"), "style", tt, _("Find objects by the value of the style attribute (exact or partial match)"));
 
-            gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-        }
+        sp_find_new_searchfield (dlg, vb, _("_Attribute"), "attr", tt, _("Find objects by the name of an attribute (exact or partial match)"));
 
 
         {
-            GtkWidget *b = gtk_button_new_with_label (_("Find"));
-            gtk_tooltips_set_tip (tt, b, _("Find and select objects matching all of the filled fields"), NULL);
-            gtk_box_pack_start (GTK_BOX (vb), b, FALSE, FALSE, 0);
-    g_signal_connect ( G_OBJECT (b), "clicked", 
-                         G_CALLBACK (sp_find_dialog_find), 
-                         dlg );
+
+        GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+
+        sp_find_new_button (dlg, hb, _("_Clear"), tt, _("Clear values"), sp_find_dialog_reset);
+        sp_find_new_button (dlg, hb, _("_Find"), tt, _("Select objects matching all of the fields you filled in"), sp_find_dialog_find);
 
         }
 
