@@ -1,3 +1,8 @@
+2004-07-24  MenTaLguY  <mental@rydia.net>
+
+	* configure.in, src/Makefile.in, src/main.cpp, src/gc-core.h:
+	  added libgc dependency
+
 2004-07-23  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile.am, src/traits/reference.h, src/util/tuple.h:

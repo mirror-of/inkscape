@@ -47,6 +47,8 @@
 
 #include <gtk/gtkmain.h>
 
+#include "gc-core.h"
+
 #include "macros.h"
 #include "file.h"
 #include "document.h"
@@ -194,6 +196,8 @@ main(int argc, char const **argv)
 #endif
 
     LIBXML_TEST_VERSION
+
+    Inkscape::GC::init();
 
 #ifndef WIN32
     use_gui = (getenv("DISPLAY") != NULL);
