@@ -25,8 +25,6 @@ dialogs/dialog-events.cpp
 dialogs/dialog-events.h
 dialogs/display-settings.cpp
 dialogs/display-settings.h
-dialogs/document-properties.cpp
-dialogs/document-properties.h
 dialogs/export.cpp
 dialogs/export.h
 dialogs/fill-style.cpp
@@ -43,8 +41,6 @@ dialogs/stroke-style.cpp
 dialogs/stroke-style.h
 dialogs/text-edit.cpp
 dialogs/text-edit.h
-dialogs/tool-attributes.cpp
-dialogs/tool-attributes.h
 dialogs/tool-options.cpp
 dialogs/tool-options.h
 dialogs/transformation.cpp

@@ -337,34 +337,6 @@ dialogs/display-settings.o: \
 	view.h \
 	xml/repr.h
 
-dialogs/document-properties.o: \
-	dialogs/document-properties.cpp \
-	desktop-handles.h \
-	desktop.h \
-	dialogs/dialog-events.h \
-	dialogs/document-properties.h \
-	document.h \
-	forward.h \
-	helper/helper-forward.h \
-	helper/sp-intl.h \
-	helper/unit-menu.h \
-	helper/units.h \
-	helper/units.h \
-	helper/window.h \
-	inkscape.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-rect.h \
-	libnr/nr-types.h \
-	libnr/nr-values.h \
-	macros.h \
-	sp-namedview.h \
-	sp-object-group.h \
-	sp-object.h \
-	version.h \
-	view.h \
-	xml/repr.h
-
 dialogs/export.o: \
 	dialogs/export.cpp \
 	desktop-handles.h \
@@ -500,7 +472,6 @@ dialogs/object-properties.o: \
 	dialogs/fill-style.h \
 	dialogs/object-properties.h \
 	dialogs/stroke-style.h \
-	document.h \
 	forward.h \
 	forward.h \
 	helper/action.h \
@@ -510,8 +481,6 @@ dialogs/object-properties.o: \
 	helper/helper-forward.h \
 	helper/sp-canvas.h \
 	helper/sp-intl.h \
-	helper/unit-menu.h \
-	helper/units.h \
 	helper/window.h \
 	inkscape-stock.h \
 	inkscape.h \
@@ -524,13 +493,8 @@ dialogs/object-properties.o: \
 	libnr/nr-values.h \
 	macros.h \
 	prefs-utils.h \
-	selection-chemistry.h \
-	selection.h \
-	sp-object.h \
 	verbs.h \
-	version.h \
 	view.h \
-	widgets/sp-widget.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
 	xml/repr.h
@@ -649,20 +613,6 @@ dialogs/text-edit.o: \
 	version.h \
 	view.h \
 	widgets/font-selector.h \
-	xml/repr.h
-
-dialogs/tool-attributes.o: \
-	dialogs/tool-attributes.cpp \
-	desktop-handles.h \
-	dialogs/sp-attribute-widget.h \
-	dialogs/tool-attributes.h \
-	forward.h \
-	forward.h \
-	helper/helper-forward.h \
-	helper/sp-intl.h \
-	helper/window.h \
-	inkscape.h \
-	macros.h \
 	xml/repr.h
 
 dialogs/tool-options.o: \
@@ -2878,6 +2828,7 @@ seltrans.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -4350,12 +4301,10 @@ verbs.o: \
 	dialogs/align.h \
 	dialogs/desktop-properties.h \
 	dialogs/display-settings.h \
-	dialogs/document-properties.h \
 	dialogs/export.h \
 	dialogs/item-properties.h \
 	dialogs/object-properties.h \
 	dialogs/text-edit.h \
-	dialogs/tool-attributes.h \
 	dialogs/tool-options.h \
 	dialogs/transformation.h \
 	dialogs/xml-tree.h \

@@ -14,7 +14,6 @@ OBJECTS = \
 	dialogs/desktop-properties.o \
 	dialogs/dialog-events.o \
 	dialogs/display-settings.o \
-	dialogs/document-properties.o \
 	dialogs/export.o \
 	dialogs/fill-style.o \
 	dialogs/item-properties.o \
@@ -23,7 +22,6 @@ OBJECTS = \
 	dialogs/sp-attribute-widget.o \
 	dialogs/stroke-style.o \
 	dialogs/text-edit.o \
-	dialogs/tool-attributes.o \
 	dialogs/tool-options.o \
 	dialogs/transformation.o \
 	dialogs/xml-tree.o \
@@ -262,7 +260,6 @@ LINTS = \
 	dialogs/desktop-properties.lint \
 	dialogs/dialog-events.lint \
 	dialogs/display-settings.lint \
-	dialogs/document-properties.lint \
 	dialogs/export.lint \
 	dialogs/fill-style.lint \
 	dialogs/item-properties.lint \
@@ -271,7 +268,6 @@ LINTS = \
 	dialogs/sp-attribute-widget.lint \
 	dialogs/stroke-style.lint \
 	dialogs/text-edit.lint \
-	dialogs/tool-attributes.lint \
 	dialogs/tool-options.lint \
 	dialogs/transformation.lint \
 	dialogs/xml-tree.lint \
