@@ -1,3 +1,10 @@
+2004-06-27  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-object.h: remove sp_object_request_update,
+	  sp_object_invoke_update, sp_object_invoke_modified,
+	  sp_object_request_modified, and sp_object_invoke_write, which have been
+	  deprecated and are now completely unused
+
 2004-06-26  MenTaLguY  <mental@rydia.net>
 
 	* src/refcounted.h: allow reffing/unreffing const objects

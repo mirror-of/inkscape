@@ -335,43 +335,6 @@ void sp_object_set (SPObject *object, unsigned int key, const gchar *value);
 
 void sp_object_read_attr (SPObject *object, const gchar *key);
 
-/* Styling */
-
-/* Modification */
-
-inline __attribute__((deprecated)) void sp_object_request_update(SPObject *object, unsigned int flags)
-{
-	g_assert(object != NULL);
-	g_assert(SP_IS_OBJECT(object));
-	object->requestDisplayUpdate(flags);
-}
-inline __attribute__((deprecated)) void sp_object_invoke_update(SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-	g_assert(object != NULL);
-	g_assert(SP_IS_OBJECT(object));
-	object->updateDisplay(ctx, flags);
-}
-
-/* notify any interested listeners of modifications */
-inline __attribute__((deprecated)) void sp_object_request_modified (SPObject *object, unsigned int flags)
-{
-	g_assert(object != NULL);
-	g_assert(SP_IS_OBJECT(object));
-	object->requestModified(flags);
-}
-inline __attribute__((deprecated)) void sp_object_invoke_modified (SPObject *object, unsigned int flags)
-{
-	g_assert(object != NULL);
-	g_assert(SP_IS_OBJECT(object));
-	object->emitModified(flags);
-}
-
-/* Write object to repr */
-inline __attribute__((deprecated)) SPRepr *sp_object_invoke_write(SPObject *object, SPRepr *repr, unsigned int flags) {
-	g_assert(object != NULL);
-	return object->updateRepr(repr, flags);
-}
-
 /*
  * Get and set descriptive parameters
  *
