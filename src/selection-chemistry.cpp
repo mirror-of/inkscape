@@ -874,20 +874,52 @@ void sp_selection_move_relative(SPSelection *selection, double dx, double dy)
 	sp_selection_apply_affine(selection, NR::Matrix(NR::translate(dx, dy)));
 }
 
-void sp_selection_rotate_90()
-{
-	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (!SP_IS_DESKTOP(desktop)) return;
-	SPSelection *selection = SP_DT_SELECTION(desktop);
-	if sp_selection_is_empty(selection) return;
-	GSList *l = selection->items;
-	NR::rotate const rot_neg_90(NR::Point(0, -1));
-	for (GSList *l2 = l ; l2 != NULL ; l2 = l2->next) {
-		SPItem *item = SP_ITEM(l2->data);
-		sp_item_rotate_rel(item, rot_neg_90);
-	}
 
-	sp_document_done (SP_DT_DOCUMENT (desktop));
+/**
+ * \brief sp_selection_rotate_90
+ * 
+ * This function rotates selected objects 90 degrees clockwise.
+ *
+ */
+
+void sp_selection_rotate_90_cw ()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!SP_IS_DESKTOP(desktop)) return;
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+    if sp_selection_is_empty(selection) return;
+    GSList *l = selection->items;
+    NR::rotate const rot_neg_90(NR::Point(0, -1));
+    for (GSList *l2 = l ; l2 != NULL ; l2 = l2->next) {
+        SPItem *item = SP_ITEM(l2->data);
+        sp_item_rotate_rel(item, rot_neg_90);
+    }
+
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+
+/**
+ * \brief sp_selection_rotate_90_ccw
+ * 
+ * This function rotates selected objects 90 degrees counter-clockwise.
+ *
+ */
+
+void sp_selection_rotate_90_ccw ()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!SP_IS_DESKTOP(desktop)) return;
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+    if sp_selection_is_empty(selection) return;
+    GSList *l = selection->items;
+    NR::rotate const rot_neg_90(NR::Point(0, 1));
+    for (GSList *l2 = l ; l2 != NULL ; l2 = l2->next) {
+        SPItem *item = SP_ITEM(l2->data);
+        sp_item_rotate_rel(item, rot_neg_90);
+    }
+
+    sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
 void

@@ -462,6 +462,7 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         SP_VERB_NONE,
         //		SP_VERB_OBJECT_FLATTEN,
         SP_VERB_OBJECT_ROTATE_90_CW,
+        SP_VERB_OBJECT_ROTATE_90_CCW,
         SP_VERB_OBJECT_FLIP_HORIZONTAL,
         SP_VERB_OBJECT_FLIP_VERTICAL,
 

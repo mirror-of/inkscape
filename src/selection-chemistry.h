@@ -45,7 +45,8 @@ void sp_selection_rotate_relative (SPSelection *selection, NR::Point const &cent
 void sp_selection_skew_relative (SPSelection *selection, NR::Point const &align, double dx, double dy);
 void sp_selection_move_relative (SPSelection *selection, double dx, double dy);
 
-void sp_selection_rotate_90 (void);
+void sp_selection_rotate_90_cw (void);
+void sp_selection_rotate_90_ccw (void);
 void sp_selection_rotate (SPSelection *selection, gdouble angle);
 void sp_selection_rotate_screen (SPSelection *selection, gdouble angle);
 

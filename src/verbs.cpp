@@ -402,7 +402,10 @@ static void sp_verb_action_object_perform ( SPAction *action, void *data,
 
     switch ((int) data) {
         case SP_VERB_OBJECT_ROTATE_90_CW:
-            sp_selection_rotate_90 ();
+            sp_selection_rotate_90_cw ();
+            break;
+        case SP_VERB_OBJECT_ROTATE_90_CCW:
+            sp_selection_rotate_90_ccw ();
             break;
         case SP_VERB_OBJECT_FLATTEN:
             sp_selection_remove_transform ();
@@ -815,7 +818,9 @@ static const SPVerbActionDef props[] = {
 
     /* Object */
     {SP_VERB_OBJECT_ROTATE_90_CW, "ObjectRotate90", N_("Rotate _90 deg CW"),
-        N_("Rotate selection 90 degrees clockwise"), "object_rotate"},
+        N_("Rotate selection 90 degrees clockwise"), "object_rotate_90_CW"},
+    {SP_VERB_OBJECT_ROTATE_90_CCW, "ObjectRotate90CCW", N_("Rotate _90 deg CW"),
+        N_("Rotate selection 90 degrees counter-clockwise"), "object_rotate_90_CCW"},
     {SP_VERB_OBJECT_FLATTEN, "ObjectFlatten", N_("Remove _Transformations"),
         N_("Remove transformations from object"), "object_reset"},
     {SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("_Object to Path"),

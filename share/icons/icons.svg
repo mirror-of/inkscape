@@ -6,13 +6,13 @@
    sodipodi:version="0.32"
    width="512pt"
    height="256pt"
-   sodipodi:docname="/home/phillipsjd/temp/inkscape-project/inkscape/share/icons/icons.svg"
+   sodipodi:docname="/usr/src/inkscape-project/inkscape/share/icons/icons.svg"
    inkscape:version="0.38cvs"
+   sodipodi:docbase="/usr/src/inkscape-project/inkscape/share/icons"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   sodipodi:docbase="/home/phillipsjd/temp/inkscape-project/inkscape/share/icons">
+   xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs
      id="defs3">
     <linearGradient
@@ -211,13 +211,13 @@
      showgrid="true"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="1.23632813"
-     inkscape:cx="457.20759075"
-     inkscape:cy="17.86581745"
+     inkscape:zoom="2.4726563"
+     inkscape:cx="342.60277"
+     inkscape:cy="201.86777"
      inkscape:window-width="1022"
      inkscape:window-height="740"
-     inkscape:window-x="493"
-     inkscape:window-y="49"
+     inkscape:window-x="17"
+     inkscape:window-y="33"
      showguides="true"
      snaptoguides="true">
     <sodipodi:guide
@@ -4492,22 +4492,22 @@
        sodipodi:nodetypes="cccccccccc" />
   </g>
   <g
-     id="object_rotate"
+     id="object_rotate_90_CW"
      transform="translate(176.1800,-127.4801)">
     <rect
        style="fill:none;fill-rule:evenodd;stroke-width:0.0520834;"
        id="rect1419"
-       width="25.00000381"
-       height="24.99999046"
-       x="188.70065308"
-       y="164.94076538" />
+       width="25.000004"
+       height="24.999990"
+       x="188.70065"
+       y="164.94077" />
     <path
-       style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;fill-opacity:1;"
+       style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;"
        d="M 200.40087,186.81576 L 192.90087,186.81576 L 200.40087,168.06576 L 200.40087,186.81576 z "
        id="path1422"
        sodipodi:nodetypes="cccc" />
     <path
-       style="fill:#7dff40;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;fill-opacity:1;"
+       style="fill:#7dff40;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;"
        d="M 191.95660,182.20180 L 191.95660,174.70180 L 210.70660,182.20180 L 191.95660,182.20180 z "
        id="path1423"
        sodipodi:nodetypes="cccc" />
@@ -5080,5 +5080,44 @@
        id="path1500"
        sodipodi:nodetypes="ccc"
        transform="translate(75.00002,-124.9987)" />
+  </g>
+  <g
+     id="object_rotate_90_CCW"
+     transform="matrix(-1.000000,0.000000,0.000000,1.000000,543.1482,-127.4801)">
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke-width:0.0520834;"
+       id="rect1563"
+       width="25.000004"
+       height="24.999990"
+       x="188.70065"
+       y="164.94077" />
+    <path
+       style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;"
+       d="M 200.40087,186.81576 L 192.90087,186.81576 L 200.40087,168.06576 L 200.40087,186.81576 z "
+       id="path1564"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#7dff40;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;"
+       d="M 191.95660,182.20180 L 191.95660,174.70180 L 210.70660,182.20180 L 191.95660,182.20180 z "
+       id="path1565"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#ff0016;fill-rule:evenodd;stroke-width:0.883883;stroke-linecap:round;stroke-linejoin:round;"
+       d="M 212.11161,175.38299 L 209.00734,180.38299 L 205.90307,175.38299 L 212.11161,175.38299 z "
+       id="path1566"
+       sodipodi:nodetypes="cccc" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;fill-rule:evenodd;stroke:#ff000f;stroke-width:2.125;stroke-dasharray:2.125 2.125 ;stroke-dashoffset:0;"
+       id="path1567"
+       d="M 140.620821,203.192452 A 7.187500,7.187500 0 0 1 132.512473,210.565226"
+       sodipodi:cx="133.437500"
+       sodipodi:cy="203.437500"
+       sodipodi:rx="7.187500"
+       sodipodi:ry="7.187500"
+       transform="matrix(1.000000,0.000000,0.000000,-1.000000,68.39334,379.8162)"
+       sodipodi:start="6.249085"
+       sodipodi:end="7.983039"
+       sodipodi:open="true" />
   </g>
 </svg>
