@@ -40,10 +40,10 @@ PotraceTracingEngine::PotraceTracingEngine()
 
     //##### Our defaults
     useQuantization      = false;
-    quantizationNrColors = 16;
+    quantizationNrColors = 8;
 
     useBrightness        = true;
-    brightnessThreshold  = 0.5;
+    brightnessThreshold  = 0.45;
 
     useCanny             = false;
     cannyHighThreshold   = 0.65;
@@ -130,6 +130,8 @@ writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
         }
 }
 
+
+
 static GrayMap *
 filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 {
@@ -137,9 +139,10 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         return NULL;
 
     /*### Color quantization -- banding ###*/
-    if (engine.getUseQuantization())
+    if (engine.getUseQuantization()/*engine.getUseCanny()*/)
         {
         RgbMap *rgbmap = gdkPixbufToRgbMap(pixbuf);
+        //rgbMap->writePPM(rgbMap, "rgb.ppm");
         GrayMap *newGm = quantizeBand(rgbmap,
                             engine.getQuantizationNrColors());
         rgbmap->destroy(rgbmap);
@@ -212,6 +215,8 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
         return NULL;
 
     GrayMap *grayMap = filter(*this, thePixbuf);
+    if (!grayMap)
+        return NULL;
 
     bitmap_t *bm = bm_new(grayMap->width, grayMap->height);
     bm_clear(bm, 0);

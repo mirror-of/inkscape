@@ -68,7 +68,7 @@ GrayMap *grayMapGaussian(GrayMap *me)
                     sum += me->getPixel(me, j, i) * weight;
 		    }
 	        }
-            sum /= 115;
+            sum /= 159;
 	    newGm->setPixel(newGm, x, y, sum);
 	    }
 	}
@@ -105,9 +105,9 @@ RgbMap *rgbMapGaussian(RgbMap *me)
 
             /* all other pixels */
             int gaussIndex = 0;
-            int sumR = 0;
-            int sumG = 0;
-            int sumB = 0;
+            int sumR       = 0;
+            int sumG       = 0;
+            int sumB       = 0;
             for (int i= y-2 ; i<=y+2 ; i++)
                 {
                 for (int j= x-2; j<=x+2 ; j++)
@@ -120,9 +120,9 @@ RgbMap *rgbMapGaussian(RgbMap *me)
 		    }
 	        }
             RGB rout;
-            rout.r = ( sumR / 115 ) & 0xff;
-            rout.g = ( sumG / 115 ) & 0xff;
-            rout.b = ( sumB / 115 ) & 0xff;
+            rout.r = ( sumR / 159 ) & 0xff;
+            rout.g = ( sumG / 159 ) & 0xff;
+            rout.b = ( sumB / 159 ) & 0xff;
 	    newGm->setPixelRGB(newGm, x, y, rout);
 	    }
 	}
@@ -335,6 +335,7 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img, double lowThreshold, double highThreshold)
     if (!img)
         return NULL;
 
+
     GrayMap *grayMap = gdkPixbufToGrayMap(img);
     if (!grayMap)
         return NULL;
@@ -362,14 +363,437 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img, double lowThreshold, double highThreshold)
 /*#########################################################################
 ### Q U A N T I Z A T I O N
 #########################################################################*/
+typedef struct OctreeNode_def OctreeNode;
+
+struct OctreeNode_def
+{
+    unsigned long r;
+    unsigned long g;
+    unsigned long b;
+    unsigned int  index;
+    unsigned long nrPixels;
+    unsigned int  nrChildren;
+    OctreeNode *parent;
+    OctreeNode *children[8];
+};
+
+
+OctreeNode *octreeNodeCreate()
+{
+    OctreeNode *node = (OctreeNode *)malloc(sizeof(OctreeNode));
+    if (!node)
+        return NULL;
+    node->r             = 0;
+    node->g             = 0;
+    node->b             = 0;
+    node->index         = 0;
+    node->nrPixels      = 0;
+    node->nrChildren    = 0;
+    node->parent        = NULL;
+    for (int i=0 ; i<8 ; i++)
+        node->children[i] = NULL;
+    return node;
+}
+
+void octreeNodeDelete(OctreeNode *node)
+{
+    if (!node)
+        return;
+    for (int i=0 ; i<8 ; i++)
+        octreeNodeDelete(node->children[i]);
+    free(node);
+}
+
+
+void octreeNodeDeleteChildren(OctreeNode *node)
+{
+    if (!node)
+        return;
+    node->nrChildren = 0;
+    for (int i=0 ; i<8 ; i++)
+        {
+        octreeNodeDelete(node->children[i]);
+        node->children[i]=NULL;
+        }
+}
 
 
 
 
-GrayMap *quantizeBand(RgbMap *rgbmap, int nrColors)
+int octreeNodeInsert(OctreeNode *root, RGB rgb, int bitsPerSample)
+{
+    OctreeNode *node = root;
+    int newColor     = FALSE;
+    int r            = rgb.r;
+    int g            = rgb.g;
+    int b            = rgb.b;
+
+    int shift = 7;
+    for (int bit=0 ; bit<bitsPerSample ; bit++)
+        {
+        /* update values of all nodes from the root to the leaf */
+        node->r += r;
+        node->g += g;
+        node->b += b;
+        node->nrPixels++;
+        int index = (((r >> shift) & 1) << 2) |
+	            (((g >> shift) & 1) << 1) |
+                    (((b >> shift) & 1)     ) ;
+
+        OctreeNode *child = node->children[index];
+        if (!child)
+            {
+            child                 = octreeNodeCreate();
+            node->children[index] = child;
+            child->parent         = node;
+            node->nrChildren++;
+	    newColor              = TRUE;
+            }
+        node = child; /*next level*/
+        shift--;
+        }
+    return newColor;
+}
+
+
+
+
+
+int octreeNodeFind(OctreeNode *root, RGB rgb, int bitsPerSample)
+{
+    OctreeNode *node = root;
+    int r            = rgb.r;
+    int g            = rgb.g;
+    int b            = rgb.b;
+
+    int shift = 7;
+    for (int bit=0 ; bit<bitsPerSample ; bit++)
+        {
+        int index = (((r >> shift) & 1) << 2) |
+	            (((g >> shift) & 1) << 1) |
+                    (((b >> shift) & 1)     ) ;
+
+        OctreeNode *child = node->children[index];
+        if (!child)
+            return node->index;
+        node = child; /*next level*/
+        shift--;
+        }
+    printf("error.  this should not happen\n");
+    return 0;
+}
+
+static void spaces(int nr)
+{
+    for (int i=0; i<nr ; i++)
+        printf(" ");
+}
+
+void octreeNodePrint(OctreeNode *node, int indent)
+{
+    spaces(indent); printf("####Node###\n");
+    spaces(indent); printf("r :%lu\n", node->r);
+    spaces(indent); printf("g :%lu\n", node->g);
+    spaces(indent); printf("b :%lu\n", node->b);
+    spaces(indent); printf("i :%d\n", node->index);
+    for (unsigned int i=0; i<8; i++)
+        {
+        OctreeNode *child = node->children[i];
+        if (!child)
+            continue;
+        spaces(indent); printf("   child %d :", i);
+        octreeNodePrint(child, indent+4);
+        }
+}
+
+/* Count all of the leaf nodes in the octree */
+static void octreeLeafArray(OctreeNode *node, OctreeNode **array, int arraySize, int *len)
+{
+    if (!node)
+        return;
+    if (node->nrChildren == 0 && *len < arraySize)
+        {
+        array[*len] = node;
+        *len = *len + 1;
+        }
+    for (int i=0 ; i<8 ; i++)
+        octreeLeafArray(node->children[i], array, arraySize, len);
+}
+
+/* Count all of the leaf nodes in the octree */
+static int octreeLeafCount(OctreeNode *node)
+{
+    if (!node)
+        return 0;
+    if (node->nrChildren == 0)
+        return 1;
+    int leaves = 0;
+    for (int i=0 ; i<8 ; i++)
+        leaves += octreeLeafCount(node->children[i]);
+    return leaves;
+}
+
+/* Mark all of the leaf nodes in the octree with an index nr*/
+static void octreeLeafIndex(OctreeNode *node, int *index)
+{
+    if (!node)
+        return;
+    if (node->nrChildren == 0)
+        {
+        node->index = *index;
+        *index = *index + 1;
+        return;
+        }
+    for (int i=0 ; i<8 ; i++)
+        octreeLeafIndex(node->children[i], index);
+}
+
+/* Find a node that has children, and that also has the lowest pixel count */
+static void octreefindLowestLeaf(OctreeNode *node, OctreeNode **lowestLeaf)
+{
+    if (!node)
+        return;
+    if (node->nrChildren == 0)
+        {
+        if (node->nrPixels < (*lowestLeaf)->nrPixels)
+            *lowestLeaf = node;
+        return;
+        }
+   
+    for (int i=0 ; i<8 ; i++)
+        octreefindLowestLeaf(node->children[i], lowestLeaf);
+}
+
+
+/* return the actual nr of colors in palette */
+int octreePrune(OctreeNode *root, int nrColors)
+{
+    int leafCount = octreeLeafCount(root);
+
+    while (leafCount > nrColors)
+        {
+        OctreeNode *lowestLeaf = root;    
+        octreefindLowestLeaf(root, &lowestLeaf);
+
+        if (!lowestLeaf)
+            break; //should never happen
+
+       if (lowestLeaf==root)
+            {
+            printf("found no leaves\n");
+            continue;
+            }
+
+        OctreeNode *parent = lowestLeaf->parent;
+        if (!parent)
+            continue;
+
+        for (int i=0 ; i<8 ; i++)
+            {
+            OctreeNode *child = parent->children[i];
+            if (child == lowestLeaf)
+                {
+                parent->nrChildren--;
+                octreeNodeDelete(child);
+                parent->children[i] = NULL;
+                break;
+                }
+            }
+        /*printf("leafCount:%d lowPixels:%lu\n",
+               leafCount, lowestLeaf->nrPixels);*/
+        leafCount = octreeLeafCount(root);
+        }
+    int index = 0;
+    octreeLeafIndex(root, &index);
+    
+    //printf("leafCount:%d\n", leafCount);
+    //octreeNodePrint(root, 0);
+
+    return leafCount;
+}
+
+
+
+
+OctreeNode *octreeBuild(RgbMap *rgbMap, int bitsPerSample, int nrColors)
+{
+    OctreeNode *root = octreeNodeCreate();
+    if (!root)
+        return NULL;
+    for (int y=0 ; y<rgbMap->height ; y++)
+        {
+        for (int x=0 ; x<rgbMap->width ; x++)
+            {
+            RGB rgb = rgbMap->getPixel(rgbMap, x, y);
+            octreeNodeInsert(root, rgb, bitsPerSample);
+            }
+        }
+
+    if (octreePrune(root, nrColors)<0)
+        {
+        octreeNodeDelete(root);
+        return NULL;
+        }
+
+    /* octreeNodePrint(root, 0); */
+
+    return root;
+}
+
+
+
+
+RGB *makeRGBPalette(OctreeNode *root, int nrColors)
 {
 
-    GrayMap *gm = GrayMapCreate(rgbmap->width, rgbmap->height);
+    OctreeNode **palette = (OctreeNode **)malloc(nrColors * sizeof(OctreeNode *));
+    if (!palette)
+        {
+        return NULL;
+        }
+    int len = 0;
+    octreeLeafArray(root, palette, nrColors, &len);
+
+    RGB *rgbpal = (RGB *)malloc(len * sizeof(RGB));
+    if (!rgbpal)
+        {
+        free(palette);
+        return NULL;
+        }
+
+    for (int i=0; i<len ; i++)
+        {
+        OctreeNode *node = palette[i];
+        RGB rgb;
+        if (node->nrPixels == 0)
+            {
+            continue;
+            }
+        rgb.r = (unsigned char)( (node->r / node->nrPixels) & 0xff);
+        rgb.g = (unsigned char)( (node->g / node->nrPixels) & 0xff);
+        rgb.b = (unsigned char)( (node->b / node->nrPixels) & 0xff);
+        int index = node->index;
+        //printf("Pal: %d %d %d %d\n", rgb.r, rgb.g, rgb.b, index);
+        rgbpal[index]=rgb;
+        }
+
+    free(palette);
+
+    return rgbpal;
+}
+
+
+RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
+{
+    if (!rgbMap)
+        return NULL;
+
+    OctreeNode *otree = octreeBuild(rgbMap, bitsPerSample, nrColors);
+    if (!otree)
+        {
+        return NULL;
+        }
+
+    RGB *rgbpal = makeRGBPalette(otree, nrColors);
+    if (!rgbpal)
+        {
+        octreeNodeDelete(otree);
+        return NULL;
+        }
+
+    /*We have our original and palette. Make the new one*/
+    RgbMap *newMap = RgbMapCreate(rgbMap->width, rgbMap->height);
+    if (!newMap)
+        {
+        free(rgbpal);
+        octreeNodeDelete(otree);
+        return NULL;
+        }
+
+    for (int y=0 ; y<rgbMap->height ; y++)
+        {
+        for (int x=0 ; x<rgbMap->width ; x++)
+            {
+            RGB rgb = rgbMap->getPixel(rgbMap, x, y);
+            int indexNr = octreeNodeFind(otree, rgb, bitsPerSample);
+            //printf("i:%d\n", indexNr);
+            RGB quantRgb = rgbpal[indexNr];
+            newMap->setPixelRGB(newMap, x, y, quantRgb); 
+            }
+        }
+
+    free(rgbpal);
+    octreeNodeDelete(otree);
+
+    return newMap;
+}
+
+
+GrayMap *rgbToIndexMap(OctreeNode *root, RgbMap *rgbMap, int bitsPerSample)
+{  
+    GrayMap *gm = GrayMapCreate(rgbMap->width, rgbMap->height);
+
+    for (int y=0 ; y<rgbMap->height ; y++)
+        {
+        for (int x=0 ; x<rgbMap->width ; x++)
+            {
+            RGB rgb = rgbMap->getPixel(rgbMap, x, y);
+            int index = octreeNodeFind(root, rgb, bitsPerSample);
+            /*printf("%d %d %d : %d\n", rgb.r, rgb.g, rgb.b, index);*/
+            gm->setPixel(gm, x, y, index);
+            }
+        }
+
+    return gm;
+}
+
+
+GrayMap *quantizeBand(RgbMap *rgbMap, int nrColors)
+{
+    int bitsPerSample = 4;
+
+    nrColors = 24;
+
+    RgbMap *gaussMap = rgbMapGaussian(rgbMap);
+    //gaussMap->writePPM(gaussMap, "rgbgauss.ppm");
+
+    RgbMap *qMap = rgbMapQuantize(rgbMap, bitsPerSample, nrColors);
+    qMap->writePPM(qMap, "rgbquant.ppm");
+    qMap->destroy(qMap);
+
+    /* Build an octree of the rgb map.  Prune to nrColors */
+    OctreeNode *otree = octreeBuild(gaussMap, bitsPerSample, nrColors);
+
+    if (!otree)
+        {
+        gaussMap->destroy(gaussMap);
+        return NULL;
+        }
+
+
+    GrayMap *gim = rgbToIndexMap(otree, gaussMap, bitsPerSample);
+
+    gaussMap->destroy(gaussMap);
+
+    GrayMap *gm = grayMapGaussian(gim);
+    
+    if (!gm)
+        {
+        return NULL;
+        }
+
+    for (int y=0 ; y<gm->height ; y++)
+        {
+        for (int x=0 ; x<gm->width ; x++)
+            {
+            unsigned long val = gm->getPixel(gm, x, y);
+            if (val&1)
+              gm->setPixel(gm, x, y, 765);
+            else
+              gm->setPixel(gm, x, y, 0);
+            }
+        }
+
 
     return gm;
 }
