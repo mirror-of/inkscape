@@ -170,7 +170,7 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
 
     gdouble x0, y0, x1, y1, xrel, yrel;
 
-    if (unit.base == SP_UNIT_ABSOLUTE) {
+    if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
         GtkAdjustment *a;
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "X");
         x0 = sp_units_get_points(a->value, unit);
@@ -287,7 +287,7 @@ static gboolean aux_set_unit(SPUnitSelector *,
     if (selection->isEmpty())
         return FALSE;
 
-    if ((old->base == SP_UNIT_ABSOLUTE)
+    if ((old->base == SP_UNIT_ABSOLUTE || old->base == SP_UNIT_DEVICE)
         && (new_units->base == SP_UNIT_DIMENSIONLESS))
     {
 
@@ -314,7 +314,7 @@ static gboolean aux_set_unit(SPUnitSelector *,
         g_object_set_data(dlg, "update", GUINT_TO_POINTER(FALSE));
         return TRUE;
     } else if ((old->base == SP_UNIT_DIMENSIONLESS)
-               && (new_units->base == SP_UNIT_ABSOLUTE)) {
+               && (new_units->base == SP_UNIT_ABSOLUTE || new_units->base == SP_UNIT_DEVICE)) {
 
         /* Percentage to absolute */
         g_object_set_data(dlg, "update", GUINT_TO_POINTER(TRUE));
@@ -389,7 +389,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     gtk_object_set_data(GTK_OBJECT(spw), "frame", vb);
 
     // Create the units menu.
-    GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE);
+    GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     sp_unit_selector_setsize(us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
     sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
     g_signal_connect(G_OBJECT(us), "set_unit", G_CALLBACK(aux_set_unit), spw);
