@@ -9,11 +9,14 @@ include ../Makefile.mingw.common
 
 
 #Check for 'generated' files
-all: helper/sp-marshal.h inkscape.exe
+all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape.exe
 
-helper/sp-marshal.h:
-	make -C helper     -f Makefile.mingw
+helper/sp-marshal.h: helper/sp-marshal.h.mingw
+	$(CP) $< $@
 
+
+helper/sp-marshal.cpp: helper/sp-marshal.cpp.mingw
+	$(CP) $< $@
 
 include ./make.ofiles
 include ./make.dep
