@@ -100,6 +100,12 @@ pixmaps = \
 	line_full.xpm \
 	lock_aspect_no.xpm \
 	lock_aspect_yes.xpm \
+	marker_arrow_end.xpm \
+	marker_arrow_start.xpm \
+	marker_none_end.xpm \
+	marker_none_start.xpm \
+	marker_triangle_end.xpm \
+	marker_triangle_start.xpm \
 	move.xpm \
 	node.xpm \
 	node_break.xpm \
