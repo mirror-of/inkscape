@@ -121,6 +121,60 @@ Display brief usage message
 
 See keybindings.txt for a listing of keybindings.
 
+=head1 CONFIGURATION
+
+The preferences.xml configuration file located in ~/.inkscape/ is used
+to customize the application settings for the user.  
+
+=over 8
+
+=item B<interface> 
+
+The B<interface> element(s) of the config file is used to set parameters
+related to the GUI interface, such as the open/closed status of various
+GUI elements, etc. 
+
+=item B<group id="documents">
+
+The documents group is used for containing the recent files list.  Each
+document is listed with its uri (path) and name indicated.
+
+=item B<group id="template">
+
+The template group is used for storing parameters related to blank
+documents. 
+
+=item B<group id="tools">
+
+The tools group is used for storing the user style preferences for
+different event contexts (i.e., shapes, freehand or calligraphic stroke
+properties, etc.).
+
+=item B<group id="palette">
+
+The palette group allows setting of dash styles.  This allows you to
+define the stroke lengths for different kinds of dashes.
+
+=item B<group id="dialogs">
+
+The dialogs group allows persisting the position and width of each of
+the dialogs in the application, so that they'll start up in the last
+place the user had them at the next time the app is run.
+
+=item B<group id="printing">
+
+The printing group is for storing different printer settings.  Each
+setting is identified with an id.  Properties include I<bitmap>
+(true/false), I<resolution>, and I<destination>.
+
+=item B<group id="options">
+
+The options group allows persisting various user selected options
+including I<nudgeddistance>, I<rotationstep>, I<cursortolerance>, and
+I<dragtolerance>. 
+
+=back
+
 =head1 DIAGNOSTICS
 
 The program returns zero on success or non-zero on failure.
