@@ -140,7 +140,7 @@ event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, 
 {
 	gint row;
 	SPXMLViewAttrList * list;
-	gchar new_text[64 + 4];
+	gchar new_text[128 + 4];
 	gchar *gtktext;
 
 	list = SP_XMLVIEW_ATTR_LIST (data);
@@ -148,9 +148,9 @@ event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, 
 	gtk_clist_freeze (GTK_CLIST (list));
 
 	if (new_value) {
-		strncpy (new_text, new_value, 64);
-		if (strlen (new_value) >= 64) {
-			strcpy (new_text + 64, "...");
+		strncpy (new_text, new_value, 128);
+		if (strlen (new_value) >= 128) {
+			strcpy (new_text + 128, "...");
 		}
 		gtktext = new_text;
 	} else {
