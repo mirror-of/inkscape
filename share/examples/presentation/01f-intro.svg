@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg655"
+   sodipodi:version="0.32"
+   inkscape:version="0.37"
+   width="640pt"
+   height="480pt"
+   sodipodi:docname="01f-intro.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase="/usr/src/inkscape-project/inkscape/share/examples/presentation">
+  <defs
+     id="defs657" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.61399264"
+     inkscape:cx="306.951667"
+     inkscape:cy="262.001221"
+     inkscape:window-width="718"
+     inkscape:window-height="635"
+     inkscape:window-x="133"
+     inkscape:window-y="49"
+     showguides="true"
+     snaptoguides="true" />
+  <rect
+     style="font-size:12;fill:#0082ab;fill-rule:evenodd;stroke:none;stroke-width:2.05668pt;"
+     id="rect3983"
+     width="809.03656006"
+     height="607.49725342"
+     x="-1.41899175"
+     y="-0.45503718" />
+  <image
+     xlink:href="images/inkscape-0.38-linux-kerning.png"
+     sodipodi:absref="/usr/src/inkscape-project/inkscape/share/examples/presentation/images/inkscape-0.38-linux-kerning.png"
+     width="706.67675781"
+     height="565.34136963"
+     id="image1146"
+     x="47.27531546"
+     y="17.79429054" />
+</svg>

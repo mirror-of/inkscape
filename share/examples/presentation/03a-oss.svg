@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg655"
+   sodipodi:version="0.32"
+   inkscape:version="0.37"
+   width="640pt"
+   height="480pt"
+   sodipodi:docname="03a-oss.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase="/usr/src/inkscape-project/inkscape/share/examples/presentation">
+  <defs
+     id="defs657" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.61399264"
+     inkscape:cx="254.949910"
+     inkscape:cy="94.9693065"
+     inkscape:window-width="688"
+     inkscape:window-height="724"
+     inkscape:window-x="336"
+     inkscape:window-y="25"
+     showguides="true"
+     snaptoguides="true" />
+  <rect
+     style="font-size:12;fill:#0082ab;fill-rule:evenodd;stroke:none;stroke-width:2.05668pt;"
+     id="rect3983"
+     width="809.03656006"
+     height="607.49725342"
+     x="-3.17360997"
+     y="-0.66571766" />
+  <text
+     xml:space="preserve"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;font-family:Nimbus Sans L;font-style:normal;font-weight:bold;font-size:12;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="13.6218543"
+     y="70.2358322"
+     id="text4185"
+     transform="scale(1.601746,1.601741)"
+     sodipodi:linespacing="100%"><tspan
+       x="13.6218538"
+       y="70.2358322"
+       sodipodi:role="line"
+       id="tspan4186">Open Source Scalable Vector Graphics Editor . www.inkscape.org</tspan></text>
+  <path
+     style="font-size:40;font-weight:normal;fill:#000000;stroke-width:1pt;font-family:Century Schoolbook L;fill-opacity:0.5;"
+     d="M 625.66399 24.508859 L 575.59097 24.508859 L 575.59097 27.712694 L 577.0907 27.712694 C 583.83927 27.712694 584.58918 28.053561 584.58918 30.916536 L 584.58918 32.893371 L 584.58918 65.340709 L 584.58918 67.317595 C 584.58918 70.180583 583.83927 70.521401 577.0907 70.521401 L 575.59097 70.521401 L 575.59097 73.725227 L 626.74707 73.725227 L 628.41339 55.52476 L 624.74752 55.52476 C 623.66433 60.296411 621.74811 64.522737 619.74847 66.499573 C 617.16574 69.226284 612.41671 70.521401 605.41815 70.521401 L 599.91929 70.521401 C 597.41985 70.521401 595.33689 70.112424 594.58706 69.498915 C 594.00384 69.089905 593.92051 68.680937 593.92051 67.249384 L 593.92051 49.866876 L 595.58687 49.866876 C 600.66919 49.866876 602.75201 50.275922 604.41836 51.707426 C 606.58459 53.479765 607.41771 55.66108 607.5844 59.682902 L 611.50025 59.682902 L 611.50025 37.324171 L 607.5844 37.324171 C 607.16775 44.004529 603.83513 46.663016 595.92015 46.663016 L 593.92051 46.663016 L 593.92051 31.121016 C 593.92051 28.189864 594.67041 27.712694 599.16942 27.712694 L 603.50187 27.712694 C 610.83368 27.712694 614.41626 28.326185 617.24905 30.23486 C 619.99847 32.007164 621.99801 35.824524 623.2478 41.959535 L 626.83037 41.959535 L 625.66399 24.508859 z M 515.10354 51.843788 L 524.51826 51.843788 C 532.01671 51.843788 535.93253 51.3666 539.26514 50.071416 C 545.18067 47.753712 548.51331 43.391064 548.51331 38.005856 C 548.51331 32.825221 545.59723 28.871542 540.09836 26.622015 C 536.849 25.258687 531.68342 24.508859 525.93458 24.508859 L 496.774 24.508859 L 496.774 27.712694 L 498.2737 27.712694 C 505.02231 27.712694 505.77215 28.053561 505.77215 30.916536 L 505.77215 32.893371 L 505.77215 65.340709 L 505.77215 67.317595 C 505.77215 70.180583 505.02231 70.521401 498.2737 70.521401 L 496.774 70.521401 L 496.774 73.725227 L 524.76824 73.725227 L 524.76824 70.521401 L 522.60194 70.521401 C 515.85336 70.521401 515.10354 70.180583 515.10354 67.317595 L 515.10354 65.340709 L 515.10354 51.843788 z M 515.10354 48.639929 L 515.10354 31.189185 C 515.10354 28.053561 515.6034 27.712694 520.18584 27.712694 L 525.51804 27.712694 C 534.18291 27.712694 538.26538 31.052865 538.26538 38.278539 C 538.26538 45.299688 534.01628 48.639929 525.18477 48.639929 L 515.10354 48.639929 z M 442.61857 23.554544 L 439.11928 23.554544 L 419.95656 63.295705 C 418.29026 66.840364 417.95704 67.317595 416.70729 68.408246 C 415.37421 69.703396 413.04139 70.521401 410.79184 70.521401 L 410.45855 70.521401 L 410.45855 73.725227 L 432.53729 73.725227 L 432.53729 70.521401 L 430.87096 70.521401 C 426.37192 70.521401 424.12239 69.226284 424.12239 66.635936 C 424.12239 65.817896 424.37234 64.863572 424.87222 63.772894 L 427.62167 57.774236 L 449.70046 57.774236 L 454.1995 66.908576 C 454.69938 67.931109 454.86601 68.408246 454.86601 68.749037 C 454.86601 69.839741 452.78314 70.521401 449.70046 70.521401 L 446.20117 70.521401 L 446.20117 73.725227 L 472.02909 73.725227 L 472.02909 70.521401 L 470.86272 70.521401 C 466.69686 70.521401 465.7804 69.976103 463.86414 66.158748 L 442.61857 23.554544 z M 438.53606 34.733878 L 447.95078 54.093272 L 429.28796 54.093272 L 438.53606 34.733878 z M 381.04797 24.031731 L 377.88196 24.031731 L 374.54932 28.053561 C 368.63385 24.508859 365.38455 23.486375 359.80238 23.486375 C 351.72067 23.486375 345.05537 26.144887 339.3899 31.666356 C 334.05764 36.847043 331.55817 42.573034 331.55817 49.594245 C 331.55817 64.250081 343.30578 74.747703 359.71904 74.747703 C 373.04962 74.747703 381.54789 68.340059 383.46411 56.888088 L 379.54831 56.34274 C 378.71511 59.955551 377.71532 62.409574 376.21566 64.454569 C 372.79966 69.158065 367.46743 71.543911 360.71886 71.543911 C 348.38804 71.543911 342.5559 64.522737 342.5559 49.866876 C 342.5559 42.164066 343.80561 36.983346 346.63841 32.893371 C 349.22119 29.076021 354.38669 26.690227 359.71904 26.690227 C 365.55119 26.690227 370.71676 29.212341 373.88281 33.57504 C 375.46579 35.824524 376.71553 38.483044 378.63183 43.731864 L 382.29772 43.731864 L 381.04797 24.031731 z M 297.64852 24.099891 L 294.56584 24.099891 L 291.23317 28.189864 C 287.31736 25.122368 281.9851 23.486375 276.06975 23.486375 C 265.15538 23.486375 257.82352 29.212341 257.82352 37.733207 C 257.82352 45.163369 262.3226 48.844399 274.5701 51.43476 L 282.48503 53.070753 C 288.65044 54.365895 289.23362 54.50224 290.98329 55.59293 C 293.48277 57.160728 294.81579 59.410271 294.81579 62.068748 C 294.81579 64.795361 293.56605 67.044913 291.06661 68.885408 C 288.31717 70.862252 285.5677 71.612062 280.98532 71.612062 C 274.82001 71.612062 270.40424 70.044212 266.48842 66.499573 C 262.98909 63.295705 261.2395 60.091879 259.98973 54.843084 L 256.40714 54.843084 L 256.74041 74.270556 L 259.98973 74.270556 L 263.73891 69.635236 C 269.32116 73.384373 273.9868 74.747703 281.23527 74.747703 C 293.48277 74.747703 301.31446 68.885408 301.31446 59.751062 C 301.31446 55.52476 299.56482 51.911897 296.31549 49.321545 C 294.06597 47.549224 290.81663 46.390369 284.15132 45.027032 L 275.23655 43.186525 C 267.82146 41.618709 264.32215 38.960198 264.32215 34.802031 C 264.32215 30.030397 269.0712 26.758335 276.15306 26.758335 C 281.9851 26.758335 286.73412 28.803373 290.06682 32.688875 C 292.48299 35.483697 293.98266 38.346707 295.06575 41.823199 L 298.64833 41.823199 L 297.64852 24.099891 z M 185.00524 51.43476 L 185.00524 32.893371 L 185.00524 30.916536 C 185.00524 28.053561 185.7551 27.712694 192.5037 27.712694 L 194.08673 27.712694 L 194.08673 24.508859 L 166.67567 24.508859 L 166.67567 27.712694 L 168.17536 27.712694 C 174.92398 27.712694 175.67379 28.053561 175.67379 30.916536 L 175.67379 32.893371 L 175.67379 65.340709 L 175.67379 67.317595 C 175.67379 70.180583 174.92398 70.521401 168.17536 70.521401 L 166.67567 70.521401 L 166.67567 73.725227 L 194.08673 73.725227 L 194.08673 70.521401 L 192.5037 70.521401 C 185.7551 70.521401 185.00524 70.180583 185.00524 67.317595 L 185.00524 65.340709 L 185.00524 56.683608 L 194.66994 48.708029 L 209.16695 66.090536 C 210.49997 67.726569 210.83324 68.271917 210.83324 68.953577 C 210.83324 70.044212 209.25028 70.521401 205.16778 70.521401 L 202.58495 70.521401 L 202.58495 73.725227 L 231.07905 73.725227 L 231.07905 70.521401 L 229.49609 70.521401 C 224.91369 70.521401 223.74728 70.044212 221.33109 67.113064 L 201.16856 43.322862 L 213.58267 33.166021 C 217.58189 29.689529 222.66413 27.712694 227.66315 27.712694 L 227.66315 24.508859 L 202.00177 24.508859 L 202.00177 27.712694 L 204.08466 27.712694 C 207.91718 27.712694 209.5002 28.326185 209.5002 29.757672 C 209.5002 30.712006 207.8339 32.688875 205.41773 34.665668 L 185.00524 51.43476 z M 91.857649 24.508859 L 74.694515 24.508859 L 74.694515 27.712694 L 76.777429 27.712694 C 81.026547 27.712694 82.942826 28.258025 84.442473 29.96216 L 84.442473 58.933083 C 84.442473 68.271917 82.776197 70.248752 74.777846 70.521401 L 74.777846 73.725227 L 98.523123 73.725227 L 98.523123 70.521401 C 90.607899 70.248752 88.94154 68.271917 88.94154 58.933083 L 88.94154 33.6432 L 126.10075 74.67961 L 129.60003 74.67961 L 129.60003 39.301023 C 129.60003 29.96216 131.26638 27.985393 139.2647 27.712694 L 139.2647 24.508859 L 115.51958 24.508859 L 115.51958 27.712694 C 123.4346 27.985393 125.10091 29.96216 125.10091 39.301023 L 125.10091 60.705396 L 91.857649 24.508859 z M 37.702172 32.893371 L 37.702172 30.916536 C 37.702172 28.053561 38.452008 27.712694 45.11729 27.712694 L 46.783625 27.712694 L 46.783625 24.508859 L 19.20599 24.508859 L 19.20599 27.712694 L 20.872326 27.712694 C 27.620879 27.712694 28.370766 28.053561 28.370766 30.916536 L 28.370766 32.893371 L 28.370766 65.340709 L 28.370766 67.317595 C 28.370766 70.180583 27.620879 70.521401 20.872326 70.521401 L 19.20599 70.521401 L 19.20599 73.725227 L 46.783625 73.725227 L 46.783625 70.521401 L 45.11729 70.521401 C 38.452008 70.521401 37.702172 70.180583 37.702172 67.317595 L 37.702172 65.340709 L 37.702172 32.893371 z "
+     id="path642" />
+  <path
+     style="font-size:40;font-weight:normal;fill:#ffffff;stroke-width:1pt;font-family:Century Schoolbook L;fill-opacity:1;"
+     d="M 628.35864 25.925338 L 578.28561 25.925338 L 578.28561 29.12918 L 579.78533 29.12918 C 586.5339 29.12918 587.28381 29.470048 587.28381 32.333024 L 587.28381 34.309858 L 587.28381 66.757152 L 587.28381 68.734035 C 587.28381 71.597036 586.5339 71.937853 579.78533 71.937853 L 578.28561 71.937853 L 578.28561 75.141691 L 629.44172 75.141691 L 631.10803 56.941196 L 627.44216 56.941196 C 626.35898 61.712854 624.44276 65.939181 622.44311 67.916013 C 619.86037 70.642736 615.11134 71.937853 608.11278 71.937853 L 602.61392 71.937853 C 600.11449 71.937853 598.03154 71.528876 597.28169 70.915368 C 596.69847 70.506349 596.61515 70.09738 596.61515 68.665825 L 596.61515 51.283329 L 598.2815 51.283329 C 603.36382 51.283329 605.44664 51.692374 607.113 53.123863 C 609.27922 54.8962 610.11235 57.077516 610.27903 61.099346 L 614.19488 61.099346 L 614.19488 38.740658 L 610.27903 38.740658 C 609.86239 45.421 606.52977 48.079486 598.61479 48.079486 L 596.61515 48.079486 L 596.61515 32.537502 C 596.61515 29.606351 597.36504 29.12918 601.86406 29.12918 L 606.1965 29.12918 C 613.52832 29.12918 617.1109 29.742672 619.94368 31.651346 C 622.6931 33.423651 624.69266 37.241009 625.94244 43.376004 L 629.52502 43.376004 L 628.35864 25.925338 z M 517.79819 53.260224 L 527.21291 53.260224 C 534.71134 53.260224 538.62716 52.783036 541.95978 51.487868 C 547.87531 49.170182 551.20794 44.807535 551.20794 39.422325 C 551.20794 34.241707 548.29186 30.288028 542.793 28.038493 C 539.54363 26.675165 534.37806 25.925338 528.62923 25.925338 L 499.46863 25.925338 L 499.46863 29.12918 L 500.96833 29.12918 C 507.71696 29.12918 508.46678 29.470048 508.46678 32.333024 L 508.46678 34.309858 L 508.46678 66.757152 L 508.46678 68.734035 C 508.46678 71.597036 507.71696 71.937853 500.96833 71.937853 L 499.46863 71.937853 L 499.46863 75.141691 L 527.46289 75.141691 L 527.46289 71.937853 L 525.29659 71.937853 C 518.54801 71.937853 517.79819 71.597036 517.79819 68.734035 L 517.79819 66.757152 L 517.79819 53.260224 z M 517.79819 50.05638 L 517.79819 32.605671 C 517.79819 29.470048 518.29805 29.12918 522.88049 29.12918 L 528.21269 29.12918 C 536.87754 29.12918 540.96002 32.469352 540.96002 39.695008 C 540.96002 46.716159 536.71091 50.05638 527.87942 50.05638 L 517.79819 50.05638 z M 445.31319 24.971021 L 441.81391 24.971021 L 422.65118 64.712149 C 420.98489 68.256805 420.65166 68.734035 419.40191 69.824689 C 418.06884 71.119848 415.73601 71.937853 413.48647 71.937853 L 413.15317 71.937853 L 413.15317 75.141691 L 435.23191 75.141691 L 435.23191 71.937853 L 433.56559 71.937853 C 429.06654 71.937853 426.81701 70.642736 426.81701 68.052376 C 426.81701 67.234341 427.06696 66.280015 427.56684 65.189337 L 430.31629 59.190671 L 452.39508 59.190671 L 456.89414 68.325016 C 457.394 69.347553 457.56064 69.824689 457.56064 70.16548 C 457.56064 71.256193 455.47777 71.937853 452.39508 71.937853 L 448.8958 71.937853 L 448.8958 75.141691 L 474.72372 75.141691 L 474.72372 71.937853 L 473.55734 71.937853 C 469.39151 71.937853 468.47504 71.392555 466.55878 67.575191 L 445.31319 24.971021 z M 441.23069 36.150366 L 450.64541 55.509708 L 431.98259 55.509708 L 441.23069 36.150366 z M 383.7426 25.448209 L 380.57659 25.448209 L 377.24396 29.470048 C 371.32849 25.925338 368.07919 24.902853 362.49701 24.902853 C 354.41529 24.902853 347.75001 27.561364 342.08452 33.082842 C 336.75228 38.263529 334.2528 43.989504 334.2528 51.010697 C 334.2528 65.666525 346.0004 76.164171 362.41366 76.164171 C 375.74425 76.164171 384.24253 69.756503 386.15874 58.304522 L 382.24294 57.759175 C 381.40974 61.371995 380.40995 63.826019 378.9103 65.871013 C 375.49429 70.574508 370.16207 72.960369 363.41349 72.960369 C 351.08265 72.960369 345.25052 65.939181 345.25052 51.283329 C 345.25052 43.580535 346.50025 38.399832 349.33302 34.309858 C 351.91581 30.492508 357.08131 28.106704 362.41366 28.106704 C 368.24583 28.106704 373.4114 30.628828 376.57744 34.991526 C 378.16042 37.241009 379.41016 39.899514 381.32648 45.148335 L 384.99235 45.148335 L 383.7426 25.448209 z M 300.34313 25.516369 L 297.26046 25.516369 L 293.92779 29.606351 C 290.01197 26.538845 284.67972 24.902853 278.76436 24.902853 C 267.85 24.902853 260.51815 30.628828 260.51815 39.149677 C 260.51815 46.579839 265.01722 50.260852 277.26471 52.851196 L 285.17963 54.487189 C 291.34504 55.78233 291.92823 55.918676 293.67791 57.009364 C 296.17739 58.577163 297.51039 60.826714 297.51039 63.485192 C 297.51039 66.211804 296.26066 68.461353 293.76122 70.301851 C 291.01177 72.278695 288.26231 73.02852 283.67992 73.02852 C 277.51462 73.02852 273.09887 71.460664 269.18304 67.916013 C 265.68371 64.712149 263.93412 61.508323 262.68435 56.25952 L 259.10176 56.25952 L 259.43503 75.687021 L 262.68435 75.687021 L 266.43353 71.051688 C 272.01577 74.800837 276.68142 76.164171 283.92987 76.164171 C 296.17739 76.164171 304.00909 70.301851 304.00909 61.167505 C 304.00909 56.941196 302.25944 53.328333 299.0101 50.737998 C 296.76058 48.965693 293.51125 47.806837 286.84592 46.443501 L 277.93116 44.602995 C 270.51607 43.03518 267.01677 40.376667 267.01677 36.218516 C 267.01677 31.446883 271.76581 28.174813 278.84766 28.174813 C 284.67972 28.174813 289.42874 30.219859 292.76143 34.105361 C 295.17761 36.900185 296.67726 39.763176 297.76036 43.239667 L 301.34297 43.239667 L 300.34313 25.516369 z M 187.69985 52.851196 L 187.69985 34.309858 L 187.69985 32.333024 C 187.69985 29.470048 188.44972 29.12918 195.1983 29.12918 L 196.78133 29.12918 L 196.78133 25.925338 L 169.3703 25.925338 L 169.3703 29.12918 L 170.86999 29.12918 C 177.6186 29.12918 178.36842 29.470048 178.36842 32.333024 L 178.36842 34.309858 L 178.36842 66.757152 L 178.36842 68.734035 C 178.36842 71.597036 177.6186 71.937853 170.86999 71.937853 L 169.3703 71.937853 L 169.3703 75.141691 L 196.78133 75.141691 L 196.78133 71.937853 L 195.1983 71.937853 C 188.44972 71.937853 187.69985 71.597036 187.69985 68.734035 L 187.69985 66.757152 L 187.69985 58.100044 L 197.36453 50.124481 L 211.86156 67.50698 C 213.19458 69.143012 213.52785 69.688361 213.52785 70.370021 C 213.52785 71.460664 211.94488 71.937853 207.86237 71.937853 L 205.27955 71.937853 L 205.27955 75.141691 L 233.77364 75.141691 L 233.77364 71.937853 L 232.19069 71.937853 C 227.60829 71.937853 226.44188 71.460664 224.02569 68.529504 L 203.86315 44.739332 L 216.27726 34.582507 C 220.27648 31.106015 225.35873 29.12918 230.35775 29.12918 L 230.35775 25.925338 L 204.69637 25.925338 L 204.69637 29.12918 L 206.77926 29.12918 C 210.61179 29.12918 212.19479 29.742672 212.19479 31.174159 C 212.19479 32.128492 210.52849 34.105361 208.11232 36.082154 L 187.69985 52.851196 z M 94.552266 25.925338 L 77.389124 25.925338 L 77.389124 29.12918 L 79.472039 29.12918 C 83.721149 29.12918 85.637426 29.67451 87.137075 31.378647 L 87.137075 60.349527 C 87.137075 69.688361 85.470798 71.665204 77.472455 71.937853 L 77.472455 75.141691 L 101.21774 75.141691 L 101.21774 71.937853 C 93.302516 71.665204 91.636169 69.688361 91.636169 60.349527 L 91.636169 35.059685 L 128.79539 76.096071 L 132.29466 76.096071 L 132.29466 40.717492 C 132.29466 31.378647 133.961 29.40188 141.95935 29.12918 L 141.95935 25.925338 L 118.21421 25.925338 L 118.21421 29.12918 C 126.12923 29.40188 127.79553 31.378647 127.79553 40.717492 L 127.79553 62.12184 L 94.552266 25.925338 z M 40.39679 34.309858 L 40.39679 32.333024 C 40.39679 29.470048 41.146618 29.12918 47.811899 29.12918 L 49.478235 29.12918 L 49.478235 25.925338 L 21.900608 25.925338 L 21.900608 29.12918 L 23.566935 29.12918 C 30.315489 29.12918 31.065376 29.470048 31.065376 32.333024 L 31.065376 34.309858 L 31.065376 66.757152 L 31.065376 68.734035 C 31.065376 71.597036 30.315489 71.937853 23.566935 71.937853 L 21.900608 71.937853 L 21.900608 75.141691 L 49.478235 75.141691 L 49.478235 71.937853 L 47.811899 71.937853 C 41.146618 71.937853 40.39679 71.597036 40.39679 68.734035 L 40.39679 66.757152 L 40.39679 34.309858 z "
+     id="path4235" />
+  <g
+     id="g643"
+     transform="matrix(0.304460,0.000000,0.000000,0.304460,599.7054,-0.793632)">
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;"
+       d="M 434.63799,346.63623 L 309.39567,306.32835 L 277.72520,137.89903 L 378.49488,35.689778 L 430.31929,54.404148 L 526.77027,149.41556 L 434.63799,346.63623 z "
+       id="path727" />
+    <path
+       style="font-size:12;fill-rule:evenodd;stroke-width:1pt;fill:#000000;fill-opacity:1;"
+       d="M 519.35848,366.84429 C 539.46549,370.86525 543.48863,384.94090 539.46549,388.96187 C 535.44559,392.98388 525.39203,397.00485 517.34897,390.97226 C 509.30380,384.94090 509.30380,370.86525 519.35848,366.84429 z "
+       id="path580" />
+    <path
+       style="font-size:12;fill-rule:evenodd;stroke-width:1pt;fill:#000000;fill-opacity:1;"
+       d="M 315.87933,368.18746 C 313.92008,368.71001 297.55205,354.60505 284.59003,361.14261 C 271.63132,367.67925 262.93178,382.31649 275.03826,388.32290 C 287.14586,394.32931 295.80057,387.40306 306.41461,379.95003 C 317.02982,372.49813 316.64682,371.06236 315.87933,368.18746 z "
+       id="path582" />
+    <path
+       style="font-size:12;fill-rule:evenodd;stroke-width:1pt;fill:#000000;fill-opacity:1;"
+       d="M 555.03447,332.40366 C 565.96956,329.66943 591.22971,332.40366 587.20656,348.48770 C 583.18672,364.57594 549.00517,358.54109 526.88448,350.50140 C 524.87390,334.41422 549.88041,333.69151 555.03447,332.40366 z "
+       id="path583" />
+    <path
+       style="font-size:12;fill-rule:evenodd;stroke-width:1pt;fill:#000000;fill-opacity:1;"
+       d="M 390.07456,27.375000 C 377.99014,27.375000 365.92829,31.990024 356.66831,41.250000 L 192.07456,205.81250 C 182.99856,214.88833 178.44249,226.68795 178.26206,238.53125 L 178.19956,238.53125 C 178.19956,238.57342 178.26001,238.61399 178.26206,238.65625 C 178.25955,238.85502 178.19956,239.05122 178.19956,239.25000 L 178.48081,239.25000 C 181.63093,251.23525 263.02472,266.51285 272.10581,275.59375 C 285.81991,289.30797 219.51688,299.37947 233.23081,313.09375 C 246.94491,326.80785 316.10916,339.62944 329.82456,353.34375 C 343.53868,367.05785 301.79778,381.66090 315.51206,395.37500 C 329.22616,409.08929 375.29313,391.94687 366.94956,427.71875 C 385.46952,446.23871 424.10888,437.39497 449.98081,418.87500 C 463.69491,405.16090 423.67284,406.37038 437.38706,392.65625 C 451.10116,378.94197 485.71817,378.86801 514.88706,346.06250 C 503.14630,327.80270 464.70408,320.02673 478.41831,306.31250 C 492.13241,292.59840 518.79444,299.56396 576.32456,273.43750 C 604.40840,260.68288 602.08836,250.99536 601.98081,239.25000 C 601.97855,239.00285 601.98081,238.78030 601.98081,238.53125 L 601.91831,238.53125 C 601.73794,226.68794 597.15038,214.88832 588.07456,205.81250 L 423.51206,41.250000 C 414.25208,31.990024 402.15898,27.375000 390.07456,27.375000 z M 388.66831,48.781250 C 394.04059,48.921198 398.37958,53.016564 406.88706,58.531250 L 484.63706,116.18750 C 485.48818,116.73943 486.29878,117.31518 487.04331,117.90625 C 487.78786,118.49722 488.46794,119.12405 489.10581,119.75000 C 489.74372,120.37482 490.32355,121.00195 490.85581,121.65625 C 491.38697,122.31043 491.86891,122.97918 492.29331,123.65625 C 492.71890,124.33444 493.09950,125.02329 493.41831,125.71875 C 493.73733,126.41546 493.98743,127.13407 494.19956,127.84375 C 494.41293,128.55238 494.59298,129.25258 494.69956,129.96875 C 494.80626,130.68616 494.85581,131.40559 494.85581,132.12500 L 448.79331,109.87500 L 444.19956,144.65625 L 418.85581,132.78125 L 379.73081,158.90625 L 364.76206,107.28125 L 345.48081,152.43750 L 291.63706,157.81250 L 292.23081,133.84375 C 292.23081,128.08670 323.26848,87.782735 342.16831,78.187500 L 376.76206,53.343750 C 381.86648,50.034934 385.44494,48.697281 388.66831,48.781250 z M 317.10581,284.00000 C 341.61366,290.35584 368.88525,298.69465 390.76206,298.84375 L 391.69956,308.68750 C 372.96615,306.75651 333.32688,297.71167 323.98081,292.93750 L 317.10581,284.00000 z "
+       id="path706" />
+    <text
+       xml:space="preserve"
+       style="font-size:12;font-weight:normal;stroke-width:1pt;font-family:helvetica;fill:#000000;fill-opacity:0.5;"
+       x="585.99698294"
+       y="77.67562103"
+       id="text3984"
+       transform="scale(6.235699,6.235700)"><tspan
+         id="tspan3985"
+         style="fill:#000000;fill-opacity:0.5;"></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12;font-weight:normal;stroke-width:1pt;font-family:helvetica;fill:#000000;fill-opacity:0.5;"
+       x="-102.11594736"
+       y="-257.44400024"
+       id="text3990"
+       transform="scale(6.235699,6.235700)"><tspan
+         id="tspan3991"
+         style="fill:#000000;fill-opacity:0.5;"></tspan></text>
+  </g>
+  <path
+     style="font-size:12;fill:#ffffff;fill-opacity:0.563758;fill-rule:evenodd;stroke-width:2.05668pt;"
+     d="M -3.17361 142.84924 L -3.17361 606.83155 L 805.86295 606.83155 L 807.83975 142.84924 L -3.17361 142.84924 z "
+     id="path643"
+     sodipodi:nodetypes="ccccc" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="20.5429001"
+     y="222.762667"
+     id="text645"
+     sodipodi:linespacing="110%"><tspan
+       x="20.5429001"
+       y="222.762665"
+       sodipodi:role="line"
+       id="tspan1137">The source code is available for free to the whole world. </tspan><tspan
+       x="20.5429001"
+       y="249.162665"
+       sodipodi:role="line"
+       id="tspan1139">Open Source Culture has a development process that tries </tspan><tspan
+       x="20.5429001"
+       y="275.562666"
+       sodipodi:role="line"
+       id="tspan1141">to encourage as many people as possible to participate.</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="273.650862"
+     y="386.239813"
+     id="text712"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.999635,-2.703252e-2,2.703252e-2,0.999635,0.000000,0.000000)"><tspan
+       x="273.650848"
+       y="386.239807"
+       sodipodi:role="line"
+       id="tspan724">With Enough Eyes, All Bugs Are Shallow</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="21.2070732"
+     y="184.441025"
+     id="text667"
+     sodipodi:linespacing="110%"><tspan
+       x="21.2070732"
+       y="184.441025"
+       sodipodi:role="line"
+       id="tspan668">Open Source Software (OSS or FLOSS)</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="625.780188"
+     y="679.427274"
+     id="text670"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.731833,2.038168e-3,-2.038168e-3,0.731833,0.000000,0.000000)"><tspan
+       x="625.780212"
+       y="679.427246"
+       sodipodi:role="line"
+       id="tspan671">Release Early, Release Often</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="111.227755"
+     y="508.764246"
+     id="text673"
+     sodipodi:linespacing="110%"
+     transform="scale(0.955160,0.955160)"><tspan
+       x="111.227753"
+       y="508.764252"
+       sodipodi:role="line"
+       id="tspan674">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="462.710595"
+     y="549.023342"
+     id="text676"
+     sodipodi:linespacing="110%"
+     transform="scale(1.041250,1.041250)"><tspan
+       x="462.710602"
+       y="549.023315"
+       sodipodi:role="line"
+       id="tspan677">SPOT</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="430.687029"
+     y="515.751320"
+     id="text679"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.998714,5.070806e-2,-5.070806e-2,0.998714,0.000000,0.000000)"><tspan
+       x="430.687042"
+       y="515.751343"
+       sodipodi:role="line"
+       id="tspan680">Patch First, Discuss Later</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.586207;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="138.581056"
+     y="249.190756"
+     id="text682"
+     sodipodi:linespacing="110%"
+     transform="scale(1.786107,1.786107)"><tspan
+       x="138.581055"
+       y="249.190750"
+       sodipodi:role="line"
+       id="tspan683"
+       style="fill:#000000;fill-opacity:0.586207;">Rule of Orthogonality</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="121.030879"
+     y="364.324140"
+     id="text685"
+     sodipodi:linespacing="110%"
+     transform="scale(1.371251,1.371251)"><tspan
+       x="121.030876"
+       y="364.324127"
+       sodipodi:role="line"
+       id="tspan686">SPOT</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="462.710595"
+     y="549.023342"
+     id="text688"
+     sodipodi:linespacing="110%"
+     transform="scale(1.041250,1.041250)"><tspan
+       x="462.710602"
+       y="549.023315"
+       sodipodi:role="line"
+       id="tspan689">SPOT</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="462.710595"
+     y="549.023342"
+     id="text691"
+     sodipodi:linespacing="110%"
+     transform="scale(1.041250,1.041250)"><tspan
+       x="462.710602"
+       y="549.023315"
+       sodipodi:role="line"
+       id="tspan692">SPOT</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="209.310501"
+     y="203.007935"
+     id="text694"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.539958,0.412631,-0.412631,1.539958,0.000000,0.000000)"><tspan
+       x="209.310501"
+       y="203.007935"
+       sodipodi:role="line"
+       id="tspan695">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="-83.1629004"
+     y="439.725923"
+     id="text697"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.965926,-0.258819,0.258819,0.965926,0.000000,0.000000)"><tspan
+       x="-83.1629028"
+       y="439.725922"
+       sodipodi:role="line"
+       id="tspan698">Release Early, Release Often</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="478.556028"
+     y="453.481067"
+     id="text700"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.726382,8.918226e-2,-8.918226e-2,0.726382,0.000000,0.000000)"><tspan
+       x="478.556030"
+       y="453.481079"
+       sodipodi:role="line"
+       id="tspan701">Release Early, Release Often</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="485.132364"
+     y="458.619139"
+     id="text703"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.726382,8.918226e-2,-8.918226e-2,0.726382,-155.4732,74.85748)"><tspan
+       x="485.132355"
+       y="458.619141"
+       sodipodi:role="line"
+       id="tspan704">Release Early, Release Often</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="145.442318"
+     y="710.399089"
+     id="text706"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.726382,8.918226e-2,-8.918226e-2,0.726382,0.000000,0.000000)"><tspan
+       x="145.442322"
+       y="710.399109"
+       sodipodi:role="line"
+       id="tspan707">Release Early, Release Often</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="485.132364"
+     y="458.619139"
+     id="text709"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.726382,8.918226e-2,-8.918226e-2,0.726382,151.1545,132.4402)"><tspan
+       x="485.132355"
+       y="458.619141"
+       sodipodi:role="line"
+       id="tspan710">Release Early, Release Often</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.701149;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="129.560190"
+     y="295.497428"
+     id="text713"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.114304,8.402084e-2,-8.402084e-2,1.114304,0.000000,0.000000)"><tspan
+       x="129.560196"
+       y="295.497437"
+       sodipodi:role="line"
+       id="tspan714"
+       style="fill:#000000;fill-opacity:0.701149;">With Enough Eyes, All Bugs Are Shallow</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.252874;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="2.56181481"
+     y="44.2448134"
+     id="text793"
+     sodipodi:linespacing="110%"
+     transform="scale(12.77164,12.77164)"><tspan
+       x="2.56181479"
+       y="44.2448120"
+       sodipodi:role="line"
+       id="tspan794"
+       style="fill:#000000;fill-opacity:0.252874;">OSS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="64.3162818"
+     y="161.465151"
+     id="text796"
+     sodipodi:linespacing="110%"
+     transform="scale(3.441089,3.441089)"><tspan
+       x="64.3162842"
+       y="161.465149"
+       sodipodi:role="line"
+       id="tspan797">SPOT</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="365.395578"
+     y="11.0547291"
+     id="text1021"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.688862,0.975065,-0.975065,1.688862,0.000000,0.000000)"><tspan
+       x="365.395569"
+       y="11.0547295"
+       sodipodi:role="line"
+       id="tspan1022">SPOT</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.632184;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="38.6664582"
+     y="355.291553"
+     id="text1024"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.594282,0.000000,0.000000,1.594282,8.637401,1.439567)"><tspan
+       x="38.6664581"
+       y="355.291565"
+       sodipodi:role="line"
+       id="tspan1025"
+       style="fill:#000000;fill-opacity:0.632184;">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="158.054528"
+     y="232.670118"
+     id="text1027"
+     sodipodi:linespacing="110%"
+     transform="matrix(2.677473,-0.717428,0.717428,2.677473,0.000000,0.000000)"><tspan
+       x="158.054535"
+       y="232.670120"
+       sodipodi:role="line"
+       id="tspan1028">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.563218;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="-21.6539707"
+     y="361.680421"
+     id="text1030"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.539958,-0.412631,0.412631,1.539958,155.4732,-37.42874)"><tspan
+       x="-21.6539707"
+       y="361.680420"
+       sodipodi:role="line"
+       id="tspan1031"
+       style="fill:#000000;fill-opacity:0.563218;">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="-21.6539707"
+     y="361.680421"
+     id="text1033"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.539958,-0.412631,0.412631,1.539958,313.8256,17.27480)"><tspan
+       x="-21.6539707"
+       y="361.680420"
+       sodipodi:role="line"
+       id="tspan1034">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="209.310501"
+     y="203.007935"
+     id="text1036"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.539958,0.412631,-0.412631,1.539958,0.000000,0.000000)"><tspan
+       x="209.310501"
+       y="203.007935"
+       sodipodi:role="line"
+       id="tspan1037">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="467.818732"
+     y="250.078525"
+     id="text1039"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.539958,0.412631,-0.412631,1.539958,0.000000,0.000000)"><tspan
+       x="467.818726"
+       y="250.078522"
+       sodipodi:role="line"
+       id="tspan1040">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="17.8283010"
+     y="284.359660"
+     id="text1042"
+     sodipodi:linespacing="110%"
+     transform="scale(1.254883,1.254883)"><tspan
+       x="17.8283005"
+       y="284.359650"
+       sodipodi:role="line"
+       id="tspan1043">Rule of Orthogonality</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="-21.6539707"
+     y="361.680421"
+     id="text1045"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.539958,-0.412631,0.412631,1.539958,-14.25099,-97.72104)"><tspan
+       x="-21.6539707"
+       y="361.680420"
+       sodipodi:role="line"
+       id="tspan1046">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="-21.6539707"
+     y="361.680421"
+     id="text1048"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.539958,-0.412631,0.412631,1.539958,16.28684,-32.57368)"><tspan
+       x="-21.6539707"
+       y="361.680420"
+       sodipodi:role="line"
+       id="tspan1049">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.787356;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="-34.9295267"
+     y="142.413423"
+     id="text1051"
+     sodipodi:linespacing="110%"
+     transform="matrix(2.860495,-0.766468,0.766468,2.860495,0.000000,0.000000)"><tspan
+       x="-34.9295273"
+       y="142.413422"
+       sodipodi:role="line"
+       id="tspan1052"
+       style="fill:#000000;fill-opacity:0.787356;">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="467.818732"
+     y="250.078525"
+     id="text1054"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.539958,0.412631,-0.412631,1.539958,0.000000,0.000000)"><tspan
+       x="467.818726"
+       y="250.078522"
+       sodipodi:role="line"
+       id="tspan1055">KISS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="230.583074"
+     y="94.9160681"
+     id="text1057"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.688862,0.975065,-0.975065,1.688862,0.000000,0.000000)"><tspan
+       x="230.583069"
+       y="94.9160690"
+       sodipodi:role="line"
+       id="tspan1058">SPOT</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.701149;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="193.713275"
+     y="213.870989"
+     id="text1060"
+     sodipodi:linespacing="110%"
+     transform="matrix(2.667907,0.201166,-0.201166,2.667907,0.000000,0.000000)"><tspan
+       x="193.713272"
+       y="213.870987"
+       sodipodi:role="line"
+       id="tspan1061"
+       style="fill:#000000;fill-opacity:0.701149;">GNU/Linux</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.701149;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="-50.0259804"
+     y="236.521771"
+     id="text1066"
+     sodipodi:linespacing="110%"
+     transform="matrix(2.629066,-0.496194,0.496194,2.629066,0.000000,0.000000)"><tspan
+       x="-50.0259819"
+       y="236.521774"
+       sodipodi:role="line"
+       id="tspan1067"
+       style="fill:#000000;fill-opacity:0.701149;">GNU/Linux</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="485.132364"
+     y="458.619139"
+     id="text1069"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.726382,8.918226e-2,-8.918226e-2,0.726382,151.1545,132.4402)"><tspan
+       x="485.132355"
+       y="458.619141"
+       sodipodi:role="line"
+       id="tspan1070">Release Early, Release Often</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.701149;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="174.598094"
+     y="119.085615"
+     id="text1072"
+     sodipodi:linespacing="110%"
+     transform="matrix(2.667907,0.201166,-0.201166,2.667907,0.000000,0.000000)"><tspan
+       x="174.598099"
+       y="119.085617"
+       sodipodi:role="line"
+       id="tspan1073"
+       style="fill:#000000;fill-opacity:0.701149;">FSF</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.701149;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="193.789759"
+     y="168.600313"
+     id="text1075"
+     sodipodi:linespacing="110%"
+     transform="matrix(2.524935,0.884817,-0.884817,2.524935,0.000000,0.000000)"><tspan
+       x="193.789764"
+       y="168.600311"
+       sodipodi:role="line"
+       id="tspan1076"
+       style="fill:#000000;fill-opacity:0.701149;">BSD</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.701149;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="197.265360"
+     y="52.7342636"
+     id="text1078"
+     sodipodi:linespacing="110%"
+     transform="matrix(3.934735,1.378856,-1.378856,3.934735,-83.47006,28.50197)"><tspan
+       x="197.265366"
+       y="52.7342644"
+       sodipodi:role="line"
+       id="tspan1079"
+       style="fill:#000000;fill-opacity:0.701149;">FSF</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="43.4831097"
+     y="213.341415"
+     id="text1081"
+     sodipodi:linespacing="110%"
+     transform="scale(2.124384,2.124384)"><tspan
+       x="43.4831085"
+       y="213.341415"
+       sodipodi:role="line"
+       id="tspan1082">Rule of Orthogonality</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.701149;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="62.2520062"
+     y="175.186603"
+     id="text1084"
+     sodipodi:linespacing="110%"
+     transform="matrix(2.524935,0.884817,-0.884817,2.524935,0.000000,0.000000)"><tspan
+       x="62.2520065"
+       y="175.186600"
+       sodipodi:role="line"
+       id="tspan1085"
+       style="fill:#000000;fill-opacity:0.701149;">FSF</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="161.833953"
+     y="614.665431"
+     id="text1087"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.996598,-8.242364e-2,8.242364e-2,0.996598,-8.143420,0.000000)"><tspan
+       x="161.833954"
+       y="614.665405"
+       sodipodi:role="line"
+       id="tspan1088">With Enough Eyes, All Bugs Are Shallow</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="-144.717081"
+     y="566.841245"
+     id="text1090"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.996598,-8.242364e-2,8.242364e-2,0.996598,0.000000,0.000000)"><tspan
+       x="-144.717087"
+       y="566.841248"
+       sodipodi:role="line"
+       id="tspan1091">With Enough Eyes, All Bugs Are Shallow</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="161.833953"
+     y="614.665431"
+     id="text1093"
+     sodipodi:linespacing="110%"
+     transform="matrix(0.996598,-8.242364e-2,8.242364e-2,0.996598,-274.8404,-99.75690)"><tspan
+       x="161.833954"
+       y="614.665405"
+       sodipodi:role="line"
+       id="tspan1094">With Enough Eyes, All Bugs Are Shallow</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="284.978663"
+     y="97.2636242"
+     id="text1096"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.688862,0.975065,-0.975065,1.688862,0.000000,-10.17928)"><tspan
+       x="284.978668"
+       y="97.2636261"
+       sodipodi:role="line"
+       id="tspan1097">SPOT</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="151.089653"
+     y="271.847044"
+     id="text1099"
+     sodipodi:linespacing="110%"
+     transform="matrix(1.825763,0.000000,0.000000,1.825763,2.035855,-4.071710)"><tspan
+       x="151.089645"
+       y="271.847046"
+       sodipodi:role="line"
+       id="tspan1100">OSS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#000000;fill-opacity:0.701149;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:24;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="284.204284"
+     y="53.8673113"
+     id="text1143"
+     sodipodi:linespacing="110%"
+     transform="matrix(2.524935,0.884817,-0.884817,2.524935,0.000000,0.000000)"><tspan
+       x="284.204285"
+       y="53.8673096"
+       sodipodi:role="line"
+       id="tspan1144"
+       style="fill:#000000;fill-opacity:0.701149;">BSD</tspan></text>
+</svg>

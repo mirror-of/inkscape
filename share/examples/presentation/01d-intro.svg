@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg655"
+   sodipodi:version="0.32"
+   inkscape:version="0.37"
+   width="640pt"
+   height="480pt"
+   sodipodi:docname="01d-intro.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase="/usr/src/inkscape-project/inkscape/share/examples/presentation">
+  <defs
+     id="defs657" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.61399264"
+     inkscape:cx="355.82716085"
+     inkscape:cy="145.10631229"
+     inkscape:window-width="718"
+     inkscape:window-height="635"
+     inkscape:window-x="139"
+     inkscape:window-y="69"
+     showguides="true"
+     snaptoguides="true" />
+  <image
+     xlink:href="images/inkscape-0.37-linux-offset01.png"
+     sodipodi:absref="/usr/src/inkscape-project/inkscape/share/examples/presentation/images/inkscape-0.37-linux-offset01.png"
+     width="799.03804173"
+     height="599.27848558"
+     id="image1144"
+     x="-0.35989171"
+     y="0.23639645" />
+</svg>
