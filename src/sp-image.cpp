@@ -20,8 +20,8 @@
 #include <libnr/nr-matrix-fns.h>
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#define GDK_PIXBUF_ENABLE_BACKEND 1
-#include <gdk-pixbuf/gdk-pixbuf-io.h>
+//#define GDK_PIXBUF_ENABLE_BACKEND 1
+//#include <gdk-pixbuf/gdk-pixbuf-io.h>
 #include "display/nr-arena-image.h"
 #include "svg/svg.h"
 #include "attributes.h"
@@ -358,7 +358,7 @@ GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
                         gchar *tmp = g_strdup_printf( "%d", dpiX );
                         if ( tmp )
                         {
-                            gdk_pixbuf_set_option( buf, "Inkscape::DpiX", tmp );
+                            //gdk_pixbuf_set_option( buf, "Inkscape::DpiX", tmp );
                             g_free( tmp );
                         }
                     }
@@ -367,7 +367,7 @@ GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
                         gchar *tmp = g_strdup_printf( "%d", dpiY );
                         if ( tmp )
                         {
-                            gdk_pixbuf_set_option( buf, "Inkscape::DpiY", tmp );
+                            //gdk_pixbuf_set_option( buf, "Inkscape::DpiY", tmp );
                             g_free( tmp );
                         }
                     }
