@@ -132,20 +132,51 @@ Ops const &get_ops() throw (InvalidGCModeError) {
     }
 }
 
+void die_because_not_initialized() {
+    g_error("Attempt to use GC allocator before call to Inkscape::GC::init()");
 }
 
-// maybe replace these with stubs which abort() later;
-// the important thing is that execution shouldn't be allowed
-// to continue if an op function is called before GC::init()
+void *stub_malloc(std::size_t) {
+    die_because_not_initialized();
+    return NULL;
+}
+
+void *stub_base(void *) {
+    die_because_not_initialized();
+    return NULL;
+}
+
+void stub_register_finalizer_ignore_self(void *, CleanupFunc, void *,
+                                                 CleanupFunc *, void **)
+{
+    die_because_not_initialized();
+}
+
+int stub_general_register_disappearing_link(void **, void *) {
+    die_because_not_initialized();
+    return 0;
+}
+
+int stub_unregister_disappearing_link(void **) {
+    die_because_not_initialized();
+    return 0;
+}
+
+void stub_free(void *) {
+    die_because_not_initialized();
+}
+
+}
+
 Ops ops = {
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    stub_malloc,
+    stub_malloc,
+    stub_malloc,
+    stub_base,
+    stub_register_finalizer_ignore_self,
+    stub_general_register_disappearing_link,
+    stub_unregister_disappearing_link,
+    stub_free
 };
 
 void init() {

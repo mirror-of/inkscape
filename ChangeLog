@@ -1,3 +1,8 @@
+2004-11-15  MenTaLguY  <mental@rydia.net>
+
+	* src/gc.cpp: add initial stubs that print an informative error
+	  if the GC functions are used before Inkscape::GC::init() is called
+
 2004-11-14  MenTaLguY  <mental@rydia.net>
 
 	* configure.ac, src/gc-core.h, src/gc-managed.h, src/gc-anchored.h,
