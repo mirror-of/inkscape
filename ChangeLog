@@ -10,8 +10,8 @@
 	  share/palettes/.cvsignore, share/patterns/.cvsignore:
 	  Added Makefile build-cruft to .cvsignores.
 	* src/helper/unit-menu.cpp: applied patch 934358 from cth103 to fix
-	  grid unit changing bug.  Turns out this wasn't the correct fix, so
-	  I fixed that instead.
+	  grid unit changing bug.  Turns out this wasn't the entire fix, so
+	  I added it it a little.
 	* configure.in: fixed capitalization of "libpng" to avoid confusion.
 	* src/sp-namedview.cpp, src/document.cpp, src/document.h, src/file.cpp,
 	  src/file.h, src/document-undo.cpp, src/interface.cpp, src/verbs.cpp,
