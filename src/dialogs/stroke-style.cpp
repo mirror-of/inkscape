@@ -613,13 +613,13 @@ sp_stroke_style_line_widget_new (void)
 	tb = NULL;
 
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_MITER,
-			       INKSCAPE_GLADEDIR "/join_miter.xpm",
+			       INKSCAPE_ICONS_DIR "/join_miter.xpm",
 			       hb, spw, "join", "miter");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_ROUND,
-			       INKSCAPE_GLADEDIR "/join_round.xpm",
+			       INKSCAPE_ICONS_DIR "/join_round.xpm",
 			       hb, spw, "join", "round");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_BEVEL,
-			       INKSCAPE_GLADEDIR "/join_bevel.xpm",
+			       INKSCAPE_ICONS_DIR "/join_bevel.xpm",
 			       hb, spw, "join", "bevel");
 	i++;  
 
@@ -630,13 +630,13 @@ sp_stroke_style_line_widget_new (void)
 
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_BUTT,
-			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
+			       INKSCAPE_ICONS_DIR "/cap_butt.xpm",
 			       hb, spw, "cap", "butt");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_ROUND,
-			       INKSCAPE_GLADEDIR "/cap_round.xpm",
+			       INKSCAPE_ICONS_DIR "/cap_round.xpm",
 			       hb, spw, "cap", "round");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_SQUARE,
-			       INKSCAPE_GLADEDIR "/cap_square.xpm",
+			       INKSCAPE_ICONS_DIR "/cap_square.xpm",
 			       hb, spw, "cap", "square");
 	i++;
   
@@ -659,13 +659,13 @@ sp_stroke_style_line_widget_new (void)
 	
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_NONE,
-			       INKSCAPE_GLADEDIR "/marker_none_start.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_none_start.xpm",
 			       hb, spw, "start_marker", "none");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
-			       INKSCAPE_GLADEDIR "/marker_triangle_start.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_triangle_start.xpm",
 			       hb, spw, "start_marker", "url(#mTriangle)");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
-			       INKSCAPE_GLADEDIR "/marker_arrow_start.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_arrow_start.xpm",
 			       hb, spw, "start_marker", "url(#mArrow)");
 	i++;
 
@@ -676,13 +676,13 @@ sp_stroke_style_line_widget_new (void)
 	
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_NONE,
-			       INKSCAPE_GLADEDIR "/marker_none_end.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_none_end.xpm",
 			       hb, spw, "mid_marker", "none");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
-			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_triangle_end.xpm",
 			       hb, spw, "mid_marker", "url(#mTriangle)");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
-			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_triangle_end.xpm",
 			       hb, spw, "mid_marker", "url(#mArrow)");
 	i++;
 
@@ -693,13 +693,13 @@ sp_stroke_style_line_widget_new (void)
 	
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_NONE,
-			       INKSCAPE_GLADEDIR "/marker_none_end.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_none_end.xpm",
 			       hb, spw, "end_marker", "none");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
-			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_triangle_end.xpm",
 			       hb, spw, "end_marker", "url(#mTriangle)");
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
-			       INKSCAPE_GLADEDIR "/marker_arrow_end.xpm",
+			       INKSCAPE_ICONS_DIR "/marker_arrow_end.xpm",
 			       hb, spw, "end_marker", "url(#mArrow)");
 	i++;
 #endif

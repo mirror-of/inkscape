@@ -194,17 +194,17 @@ sp_object_properties_dialog (void)
 		/* Fill page */
 		page = sp_fill_style_widget_new ();
 		sp_object_properties_page(nb, page, "Fill", "fill",
-					  INKSCAPE_GLADEDIR "/properties_fill.xpm");
+					  INKSCAPE_ICONS_DIR "/properties_fill.xpm");
  
 		/* Stroke paint page */
 		page = sp_stroke_style_paint_widget_new ();
 		sp_object_properties_page(nb, page, "Stroke paint", "stroke-paint",
-					  INKSCAPE_GLADEDIR "/properties_stroke.xpm");
+					  INKSCAPE_ICONS_DIR "/properties_stroke.xpm");
  
 		/* Stroke line page */
 		page = sp_stroke_style_line_widget_new ();
 		sp_object_properties_page(nb, page, "Stroke style", "stroke-line",
-					  INKSCAPE_GLADEDIR "/properties_stroke.xpm");
+					  INKSCAPE_ICONS_DIR "/properties_stroke.xpm");
  
 		/* Modify style selector */
 		hs = gtk_hseparator_new ();

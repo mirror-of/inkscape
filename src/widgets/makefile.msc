@@ -20,8 +20,8 @@ PKG_LINK = \
 # $(PNG_LIBS) 
 # $(PNG_CFLAGS) 
 	
-gladedir = \
-	$(datadir)/sodipodi
+icons_dir = \
+	$(icons_dir)/sodipodi
 
 OBJECTS = \
 	icon.obj \

@@ -7,13 +7,13 @@
 # replaced by selection 'changed' signal handlers
 #
 
-gladedir = $(datadir)/inkscape
+icons_dir = $(datadir)/inkscape
 
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
-	-DINKSCAPE_GLADEDIR=\""$(gladedir)"\" \
-	-DINKSCAPE_PIXMAPDIR=\""$(gladedir)"\" \
+	-DINKSCAPE_ICONS_DIR=\""$(icons_dir)"\" \
+	-DINKSCAPE_PIXMAPDIR=\""$(icons_dir)"\" \
 	$(INKSCAPE_CFLAGS)
 
 noinst_LIBRARIES = libspdialogs.a

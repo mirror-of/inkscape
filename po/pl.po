@@ -779,8 +779,8 @@ msgid "Move"
 msgstr "Przesunięcie"
 
 # [cyba] - niejednoznaczność
-# w glade/sodipodi.glade powinno być "Skala"
-# w glade/transformation.glade.h powinno być "Skalowanie"
+# w icons/sodipodi.glade powinno być "Skala"
+# w icons/transformation.glade.h powinno być "Skalowanie"
 #. Scale page
 #: src/dialogs/transformation.cpp:281 src/dialogs/transformation.cpp:585
 msgid "Scale"

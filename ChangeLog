@@ -1,3 +1,40 @@
+2004-01-27  jon phillips <jon@users.sourceforge.net>
+
+        * Makefile.am: changed 'glade' globally to 'icons'
+
+        * Makefile.mingw: changed 'glade' globally to 'icons'
+
+        * config.h.mingw: changed 'INKSCAPE_GLADEDIR' to 'INKSCAPE_ICONS_DIR'
+
+        * configure.in: changed 'glade' globally to 'icons'
+        
+        * Makefile.am: changed 'gladedir' to 'icons_dir', and fixed spacing, 
+          changed 'glad_DATA' to 'icons_DATA'
+
+        * glade/about_svg.tmpl: changed 'glade' globally to 'icons'
+
+        * po/pl.po: changed 'glade' globally to 'icons'
+
+        * src/config.h.win32: changed 'SODIPODI_GLADEDIR' to 'SODIPODI_ICONS_DIR'
+        * src/dialogs/Makefile.am: changed 'gladedir' to 'icons_dir', changed 
+	  '-DINKSCAPE_GLADEDIR=\""$(gladedir)"\" \' to 
+          '-DINKSCAPE_ICONS_DIR=\""$(icons_dir)"\" \'
+
+        * src/dialogs/makefile.msc: changed 'gladedir' to 'icons_dir'
+
+        * src/dialogs/object-properties.cpp: changed 'INKSCAPE_GLADEDIR' to 
+          'INKSCAPE_ICONS_DIR'
+
+        * src/dialogs/stroke-style.cpp: changed 'INKSCAPE_GLADEDIR' to 
+          'INKSCAPE_ICONS_DIR'
+
+        * src/widgets/Makefile.am: changed 'gladedir' to 'icons_dir'
+
+        * src/widgets/icon.cpp: changed 'glade' globally to 'icons'
+
+        * src/widgets/makefile.msc: changed 'gladedir' to 'icons_dir'
+
+
 2004-01-26  bulia byak <bulia@users.sourceforge.net>
 
 	* src/inkscape.cpp: failed assertion fix 

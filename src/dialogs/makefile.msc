@@ -10,7 +10,7 @@ PKG_CFLAGS = \
 	-I..\
 	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK2_CFLAGS)
 
-gladedir = \
+icons_dir = \
 	$(datadir)/sodipodi
 
 OBJECTS = \

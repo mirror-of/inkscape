@@ -3,13 +3,13 @@
 # Author: Lauris Kaplinski <lauris@ximian.com>
 #
 
-gladedir = $(datadir)/inkscape
+icons_dir = $(datadir)/inkscape
 
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
 	$(INKSCAPE_CFLAGS) \
-	-DINKSCAPE_PIXMAPDIR=\""$(gladedir)"\"
+	-DINKSCAPE_PIXMAPDIR=\""$(icons_dir)"\"
 
 noinst_LIBRARIES = libspwidgets.a
 

@@ -42,9 +42,9 @@ dist:
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)locale inkscape$(S)lib$(S)locale
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)pango inkscape$(S)lib$(S)pango
 	$(MKDIR) inkscape$(S)pixmaps
-	$(CP) glade$(S)*.xpm inkscape$(S)pixmaps
-	$(CP) glade$(S)*.png inkscape$(S)pixmaps
-	$(CP) glade$(S)*.svg inkscape$(S)pixmaps
+	$(CP) icons$(S)*.xpm inkscape$(S)pixmaps
+	$(CP) icons$(S)*.png inkscape$(S)pixmaps
+	$(CP) icons$(S)*.svg inkscape$(S)pixmaps
 	$(MKDIR) inkscape$(S)data
 	$(MKDIR) inkscape$(S)extensions
 	$(MKDIR) inkscape$(S)locale

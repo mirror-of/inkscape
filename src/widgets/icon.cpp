@@ -384,8 +384,8 @@ sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale
 
 	/* Try to load from document */
 	if (!edoc && !doc) {
-		if (g_file_test("glade/icons.svg", G_FILE_TEST_IS_REGULAR)) {
-			doc = sp_document_new ("glade/icons.svg", FALSE, FALSE);
+		if (g_file_test("icons/icons.svg", G_FILE_TEST_IS_REGULAR)) {
+			doc = sp_document_new ("icons/icons.svg", FALSE, FALSE);
 		}
 		if ( !doc && g_file_test(INKSCAPE_PIXMAPDIR "/icons.svg", G_FILE_TEST_IS_REGULAR) ) {
 			doc = sp_document_new (INKSCAPE_PIXMAPDIR "/icons.svg", FALSE, FALSE);

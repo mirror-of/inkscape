@@ -374,7 +374,7 @@ src/modules/Makefile
 extensions/Makefile
 doc/Makefile
 po/Makefile.in
-glade/Makefile
+icons/Makefile
 inkscape.spec
 inkscape.1
 ])

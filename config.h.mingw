@@ -16,7 +16,7 @@
 #define INKSCAPE_PIXMAPDIR    "pixmaps"
 #define INKSCAPE_EXTENSIONDIR "extensions"
 #define INKSCAPE_MODULESDIR   "modules"
-#define INKSCAPE_GLADEDIR     "pixmaps"
+#define INKSCAPE_ICONS_DIR     "pixmaps"
 
 #define GETTEXT_PACKAGE "inkscape"
 
