@@ -444,12 +444,6 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 	}
     }
 }
-static int CmpFloat(const void * p1, const void * p2) {
-    float* d1 = (float*)p1;
-    float* d2 = (float*)p2;
-    if ( fabsf(*d2 - *d1) < 0.0001) return 0;
-    return (( *d1 < *d2 )?-1:1);
-};
 
 void
 nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
@@ -465,7 +459,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 	    NR::Matrix cached_to_new;
 	    int isometry = 0;
 	    if ( shape->cached_stroke ) {
-		cached_to_new = shape->cached_fctm.inverse()*gc->transform;
+		cached_to_new = shape->cached_sctm.inverse()*gc->transform;
 		isometry = matrix_is_isometry(cached_to_new);
 	    }
 	    if ( isometry == 0 ) {
