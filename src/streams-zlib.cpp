@@ -165,7 +165,7 @@ GByteArray *ZlibBuffer::do_inflate(guint8 *data, int nbytes)
     guint8 out_buffer[BUFSIZE_STREAM];
         
     _zs.avail_in = 0;
-    guint32 crc = crc32(crc, Z_NULL, 0);
+    guint32 crc = crc32(0, Z_NULL, 0);
     
     if (!_zs.avail_in) {
 	_zs.avail_in = nbytes;
