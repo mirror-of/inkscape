@@ -30,8 +30,6 @@
 
 #include <math.h>
 
-#include <cmath> //needed for portable std::isnan calls
-
 #ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>
 #endif
@@ -146,8 +144,8 @@ copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len
         if ( si == src_len ) {
             return 0;
         }
-        if (!std::isnan(src[si][NR::X]) &&
-            !std::isnan(src[si][NR::Y])) {
+        if (!isnan(src[si][NR::X]) &&
+            !isnan(src[si][NR::Y])) {
             dest[0] = NR::Point(src[si]);
             ++si;
             break;
@@ -157,8 +155,8 @@ copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len
     for (; si < src_len; ++si) {
         NR::Point const src_pt = NR::Point(src[si]);
         if ( src_pt != dest[di]
-             && !std::isnan(src_pt[NR::X])
-             && !std::isnan(src_pt[NR::Y])) {
+             && !isnan(src_pt[NR::X])
+             && !isnan(src_pt[NR::Y])) {
             dest[++di] = src_pt;
         }
     }
@@ -189,7 +187,7 @@ sp_bezier_fit_cubic_full(NR::Point *bezier, NR::Point const data[], gint len,
         double const dist = ( L2( data[len - 1]
                                   - data[0] )
                               / 3.0 );
-        if (std::isnan(dist)) {
+        if (isnan(dist)) {
             /* Numerical problem, fall back to straight line segment. */
             bezier[1] = bezier[0];
             bezier[2] = bezier[3];
