@@ -34,8 +34,10 @@ livarot_libvarot_a_SOURCES =	\
 	livarot/ShapeMisc.cpp	\
 	livarot/ShapeRaster.cpp	\
 	livarot/ShapeSweep.cpp	\
-	livarot/ShapeSweepUtils.cpp	\
-	livarot/ShapeUtils.h	\
+	livarot/sweep-tree.cpp \
+	livarot/sweep-tree.h \
+	livarot/sweep-event.cpp \
+	livarot/sweep-event.h
 	livarot/livarot-forward.h
 
 livarot_Path_test_SOURCES = livarot/Path-test.cpp
