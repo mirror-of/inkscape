@@ -39,6 +39,8 @@ PotraceTracingEngine::PotraceTracingEngine()
 {
 
     //##### Our defaults
+    invert = false;
+
     useQuantization      = false;
     quantizationNrColors = 8;
 
@@ -138,15 +140,17 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
     if (!pixbuf)
         return NULL;
 
+    GrayMap *newGm = NULL;
+
     /*### Color quantization -- banding ###*/
-    if (engine.getUseQuantization()/*engine.getUseCanny()*/)
+    if (engine.getUseQuantization())
         {
         RgbMap *rgbmap = gdkPixbufToRgbMap(pixbuf);
         //rgbMap->writePPM(rgbMap, "rgb.ppm");
-        GrayMap *newGm = quantizeBand(rgbmap,
+        newGm = quantizeBand(rgbmap,
                             engine.getQuantizationNrColors());
         rgbmap->destroy(rgbmap);
-        return newGm;
+        //return newGm;
         }
 
     /*### Brightness threshold ###*/
@@ -154,7 +158,7 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
 
-        GrayMap *newGm = GrayMapCreate(gm->width, gm->height);
+        newGm = GrayMapCreate(gm->width, gm->height);
         double cutoff =  3.0 *
                ( engine.getBrightnessThreshold() * 256.0 );
         for (int y=0 ; y<gm->height ; y++)
@@ -171,22 +175,35 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 
         gm->destroy(gm);
         //newGm->writePPM(newGm, "brightness.ppm");
-        return newGm;
+        //return newGm;
         }
 
     /*### Canny edge detection ###*/
     else if (engine.getUseCanny())
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
-        GrayMap *newGm = grayMapCanny(gm, 
+        newGm = grayMapCanny(gm, 
                engine.getCannyLowThreshold(), engine.getCannyHighThreshold());
         gm->destroy(gm);
         //newGm->writePPM(newGm, "canny.ppm");
-        return newGm;
+        //return newGm;
         }
 
+    /*### Do I invert the image? ###*/
+    if (newGm && engine.getInvert())
+        {
+        for (int y=0 ; y<newGm->height ; y++)
+            {
+            for (int x=0 ; x<newGm->width ; x++)
+                {
+                unsigned long brightness = newGm->getPixel(newGm, x, y);
+                brightness = 765 - brightness;
+                newGm->setPixel(newGm, x, y, brightness);
+                }
+            }
+        }
 
-    return NULL;//none of the above
+    return newGm;//none of the above
 }
 
 

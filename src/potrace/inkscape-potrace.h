@@ -39,6 +39,17 @@ class PotraceTracingEngine : public TracingEngine
         {}
 
     /**
+     * Sets whether I invert the product of the other filter(s)
+     */
+    void setInvert(bool val)
+        {
+        invert = val;
+        }
+    int getInvert()
+        {
+        return invert;
+        }
+    /**
      * Do I use the brightness threshold to make line art?
      */
     void setUseQuantization(bool val)
@@ -139,6 +150,9 @@ class PotraceTracingEngine : public TracingEngine
 
 
     private:
+
+    //## do i invert at the end?
+    bool invert;
 
     //## quantization items
     bool useQuantization;

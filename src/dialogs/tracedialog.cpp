@@ -79,40 +79,67 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 
     private:
 
+    /**
+     * This is the big almighty McGuffin
+     */
+    Inkscape::Trace tracer;
+
+    /**
+     * This does potrace processing
+     * Only preview if do_i_trace is false
+     */
+    void potraceProcess(bool do_i_trace);
+
+    /**
+     * Abort processing
+     */
+    void abort();
+
+    void potracePreviewCallback();
 
     Gtk::Notebook   notebook;
 
     //########## Potrace items
-    Gtk::VBox        potraceBox;
+    Gtk::VBox             potraceBox;
     Gtk::RadioButtonGroup potraceGroup;
+    Gtk::ToggleButton     potraceInvertButton;
 
     //brightness
-    Gtk::Frame       potraceBrightnessFrame;
-    Gtk::HBox        potraceBrightnessBox;
-    Gtk::RadioButton potraceBrightnessRadioButton;
-    Gtk::SpinButton  potraceBrightnessSpinner;
+    Gtk::Frame            potraceBrightnessFrame;
+    Gtk::HBox             potraceBrightnessBox;
+    Gtk::RadioButton      potraceBrightnessRadioButton;
+    Gtk::Label            potraceBrightnessSpinnerLabel;
+    Gtk::SpinButton       potraceBrightnessSpinner;
 
     //edge detection
-    Gtk::Frame       potraceCannyFrame;
-    Gtk::HBox        potraceCannyBox;
-    Gtk::RadioButton potraceCannyRadioButton;
-    Gtk::HSeparator  potraceCannySeparator;
-    Gtk::Label       potraceCannyLoSpinnerLabel;
-    Gtk::SpinButton  potraceCannyLoSpinner;
-    Gtk::Label       potraceCannyHiSpinnerLabel;
-    Gtk::SpinButton  potraceCannyHiSpinner;
+    Gtk::Frame            potraceCannyFrame;
+    Gtk::HBox             potraceCannyBox;
+    Gtk::RadioButton      potraceCannyRadioButton;
+    //Gtk::HSeparator     potraceCannySeparator;
+    //Gtk::Label          potraceCannyLoSpinnerLabel;
+    //Gtk::SpinButton     potraceCannyLoSpinner;
+    Gtk::Label            potraceCannyHiSpinnerLabel;
+    Gtk::SpinButton       potraceCannyHiSpinner;
+
+    //quantization
+    Gtk::Frame            potraceQuantFrame;
+    Gtk::HBox             potraceQuantBox;
+    Gtk::RadioButton      potraceQuantRadioButton;
+    Gtk::Label            potraceQuantNrColorLabel;
+    Gtk::SpinButton       potraceQuantNrColorSpinner;
 
     //preview
-    Gtk::Frame       potracePreviewFrame;
-    Gtk::HBox        potracePreviewBox;
-    Gtk::Image       potracePreviewImage;
+    Gtk::Frame            potracePreviewFrame;
+    Gtk::HBox             potracePreviewBox;
+    Gtk::Button           potracePreviewButton;
+    Gtk::Image            potracePreviewImage;
 
     //credits
-    Gtk::Frame       potraceCreditsFrame;
-    Gtk::Label       potraceCreditsLabel;
+    Gtk::Frame            potraceCreditsFrame;
+    Gtk::Label            potraceCreditsLabel;
 
     //########## Other items
-    Gtk::VBox       otherBox;
+    Gtk::VBox             otherBox;
 
 
 
@@ -126,59 +153,116 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 //#########################################################################
 
 /**
+ * This does potrace processing
+ * Only preview if do_i_trace is false
+ */
+void TraceDialogImpl::potraceProcess(bool do_i_trace)
+{
+    //##### Get the tracer and engine
+    Inkscape::Potrace::PotraceTracingEngine pte;
+
+    //##### Get the settings
+    /* which one? */
+    pte.setUseBrightness(potraceBrightnessRadioButton.get_active());
+    pte.setUseCanny(potraceCannyRadioButton.get_active());
+    pte.setUseQuantization(potraceQuantRadioButton.get_active());
+
+    /* brightness */
+    double brightnessThreshold = potraceBrightnessSpinner.get_value();
+    pte.setBrightnessThreshold(brightnessThreshold);
+
+    /* canny */
+    //double cannyLowThreshold = potraceCannyLoSpinner.get_value();
+    //pte.setCannyLowThreshold(cannyLowThreshold);
+    double cannyHighThreshold = potraceCannyHiSpinner.get_value();
+    pte.setCannyHighThreshold(cannyHighThreshold);
+
+    /* quantization */
+    int quantNrColors = potraceQuantNrColorSpinner.get_value_as_int();
+    pte.setQuantizationNrColors(quantNrColors);
+
+    /* inversion */
+    bool invert = potraceInvertButton.get_active();
+    pte.setInvert(invert);
+
+    //##### Get intermediate bitmap image
+    GdkPixbuf *pixbuf = tracer.getSelectedImage();
+    if (pixbuf)
+         {
+         GdkPixbuf *preview = pte.preview(pixbuf);
+         if (preview)
+             {
+             Glib::RefPtr<Gdk::Pixbuf> thePreview = Glib::wrap(preview);
+             int width  = thePreview->get_width();
+             int height = thePreview->get_height();
+             double scaleFactor = 100.0 / (double)height;
+             int newWidth  = (int) (((double)width)  * scaleFactor);
+             int newHeight = (int) (((double)height) * scaleFactor);
+             Glib::RefPtr<Gdk::Pixbuf> scaledPreview =
+                    thePreview->scale_simple(newWidth, newHeight,
+                       Gdk::INTERP_NEAREST);
+             //g_object_unref(preview);
+             potracePreviewImage.set(scaledPreview);
+             }
+         }
+
+    //##### Convert
+    if (do_i_trace)
+        {
+        tracer.convertImageToPath(&pte);
+        }
+
+}
+
+
+/**
+ * Abort processing
+ */
+void TraceDialogImpl::abort()
+{
+    //TBD, when we implement threads
+}
+
+
+
+//#########################################################################
+//## E V E N T S
+//#########################################################################
+
+/**
+ * Callback from the Preview button.  Can be called from elsewhere.
+ */
+void TraceDialogImpl::potracePreviewCallback()
+{
+    potraceProcess(false);
+}
+
+/**
  * Default response from the dialog.  Let's intercept it
  */
 void TraceDialogImpl::responseCallback(int response_id)
 {
-    if (response_id != GTK_RESPONSE_OK)
+    
+    if (response_id == GTK_RESPONSE_OK)
+        {
+        int panelNr = notebook.get_current_page();
+        //g_message("selected panel:%d\n", panelNr);
+
+        if (panelNr == 0)
+            {
+            potraceProcess(true);
+            }
+        }
+    else if (response_id == GTK_RESPONSE_CANCEL)
+        {
+        abort();
+        }
+    else
         {
         hide();
         return;
         }
 
-    int panelNr = notebook.get_current_page();
-    //g_message("selected panel:%d\n", panelNr);
-
-    if (panelNr == 0)
-        {
-        //##### Get the tracer and engine
-        Inkscape::Trace tracer;
-        Inkscape::Potrace::PotraceTracingEngine pte;
-
-        //##### Get the settings
-        pte.setUseBrightness(potraceBrightnessRadioButton.get_active());
-        pte.setUseCanny(potraceCannyRadioButton.get_active());
-        double brightnessThreshold = potraceBrightnessSpinner.get_value();
-        pte.setBrightnessThreshold(brightnessThreshold);
-        double cannyLowThreshold = potraceCannyLoSpinner.get_value();
-        pte.setCannyLowThreshold(cannyLowThreshold);
-        double cannyHighThreshold = potraceCannyHiSpinner.get_value();
-        pte.setCannyHighThreshold(cannyHighThreshold);
-
-        //##### Get intermediate bitmap image
-        GdkPixbuf *pixbuf = tracer.getSelectedImage();
-        if (pixbuf)
-             {
-             GdkPixbuf *preview = pte.preview(pixbuf);
-             if (preview)
-                 {
-                 Glib::RefPtr<Gdk::Pixbuf> thePreview = Glib::wrap(preview);
-                 int width  = thePreview->get_width();
-                 int height = thePreview->get_height();
-                 double scaleFactor = 100.0 / (double)height;
-                 int newWidth  = (int) (((double)width)  * scaleFactor);
-                 int newHeight = (int) (((double)height) * scaleFactor);
-                 Glib::RefPtr<Gdk::Pixbuf> scaledPreview =
-                        thePreview->scale_simple(newWidth, newHeight,
-                           Gdk::INTERP_NEAREST);
-                 //g_object_unref(preview);
-                 potracePreviewImage.set(scaledPreview);
-                 }
-             }
-
-        //##### Convert
-        tracer.convertImageToPath(&pte);
-        }
 
 
 }
@@ -194,30 +278,33 @@ TraceDialogImpl::TraceDialogImpl()
 {
 
     set_title(_("Bitmap Tracing"));
-    set_size_request(380, 360);
+    set_size_request(380, 400);
 
     Gtk::VBox *mainVBox = get_vbox();
 
 
     //##Set up the Potrace panel
 
-    /* brightness */
-    potraceBrightnessRadioButton.set_label(_("Brightness Threshold"));
+    /*#### brightness ####*/
+    potraceBrightnessRadioButton.set_label(_("Brightness"));
     potraceGroup = potraceBrightnessRadioButton.get_group();
     potraceBrightnessBox.pack_start(potraceBrightnessRadioButton);
+    potraceBrightnessSpinnerLabel.set_label(_("Threshold"));
+    potraceBrightnessBox.pack_start(potraceBrightnessSpinnerLabel);
     potraceBrightnessSpinner.set_digits(5);
     potraceBrightnessSpinner.set_increments(0.01, 0.1);
     potraceBrightnessSpinner.set_range(0.0, 1.0);
     potraceBrightnessSpinner.set_value(0.5);
     potraceBrightnessBox.pack_start(potraceBrightnessSpinner);
-    potraceBrightnessFrame.set_label(_("Brightness"));
+    potraceBrightnessFrame.set_label(_("Image Brightness"));
     potraceBrightnessFrame.add(potraceBrightnessBox);
     potraceBox.pack_start(potraceBrightnessFrame);
 
-    /* canny edge detection */
+    /*#### canny edge detection ####*/
     potraceCannyRadioButton.set_label(_("Canny Edge Detection"));
     potraceCannyRadioButton.set_group(potraceGroup);
     potraceCannyBox.pack_start(potraceCannyRadioButton);
+    /*
     potraceCannyBox.pack_start(potraceCannySeparator);
     potraceCannyLoSpinnerLabel.set_label(_("Low"));
     potraceCannyBox.pack_start(potraceCannyLoSpinnerLabel);
@@ -226,7 +313,8 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyLoSpinner.set_range(0.0, 1.0);
     potraceCannyLoSpinner.set_value(0.1);
     potraceCannyBox.pack_start(potraceCannyLoSpinner);
-    potraceCannyHiSpinnerLabel.set_label(_("High"));
+    */
+    potraceCannyHiSpinnerLabel.set_label(_("Threshold"));
     potraceCannyBox.pack_start(potraceCannyHiSpinnerLabel);
     potraceCannyHiSpinner.set_digits(5);
     potraceCannyHiSpinner.set_increments(0.01, 0.1);
@@ -237,7 +325,32 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyFrame.add(potraceCannyBox);
     potraceBox.pack_start(potraceCannyFrame);
 
-    /* Preview */
+    /*#### quantization ####*/
+    potraceQuantRadioButton.set_label(_("Color Quantization"));
+    potraceQuantRadioButton.set_group(potraceGroup);
+    potraceQuantBox.pack_start(potraceQuantRadioButton);
+    potraceQuantNrColorLabel.set_label(_("Colors"));
+    potraceQuantBox.pack_start(potraceQuantNrColorLabel);
+    potraceQuantNrColorSpinner.set_digits(2);
+    potraceQuantNrColorSpinner.set_increments(1.0, 4.0);
+    potraceQuantNrColorSpinner.set_range(4.0, 64.0);
+    potraceQuantNrColorSpinner.set_value(8.0);
+    potraceQuantBox.pack_start(potraceQuantNrColorSpinner);
+    potraceQuantFrame.set_label(_("Quantization / Reduction"));
+    potraceQuantFrame.add(potraceQuantBox);
+    potraceBox.pack_start(potraceQuantFrame);
+
+    /*#### quantization ####*/
+    potraceInvertButton.set_label(_("Invert"));
+    potraceInvertButton.set_active(false);
+    potraceBox.pack_start(potraceInvertButton);
+
+    
+    /*#### Preview ####*/
+    potracePreviewButton.set_label(_("Preview"));
+    potracePreviewButton.signal_clicked().connect( 
+         sigc::mem_fun(*this, &TraceDialogImpl::potracePreviewCallback) );
+    potracePreviewBox.pack_start(potracePreviewButton, false, true, 0);//do not expand
     potracePreviewImage.set_size_request(100,100);
     //potracePreviewImage.set_alignment (Gtk::ALIGN_CENTER, Gtk::ALIGN_CENTER);
     potracePreviewBox.pack_start(potracePreviewImage);
@@ -245,7 +358,7 @@ TraceDialogImpl::TraceDialogImpl()
     potracePreviewFrame.add(potracePreviewBox);
     potraceBox.pack_start(potracePreviewFrame);
 
-    /* Credits */
+    /*#### Credits ####*/
     potraceCreditsLabel.set_text(
          "Thanks to Peter Selinger, http://potrace.sourceforge.net"
                          );
@@ -263,7 +376,8 @@ TraceDialogImpl::TraceDialogImpl()
     mainVBox->pack_start(notebook);
 
     //## The OK button
-    add_button(Gtk::Stock::OK,     GTK_RESPONSE_OK);
+    //add_button(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
+    add_button(Gtk::Stock::OK,   GTK_RESPONSE_OK);
 
     show_all_children();
 

@@ -24,6 +24,9 @@
 ### G A U S S I A N  (smoothing)
 #########################################################################*/
 
+/**
+ *
+ */
 static int gaussMatrix[] =
 {
      2,  4,  5,  4, 2,
@@ -33,6 +36,10 @@ static int gaussMatrix[] =
      2,  4,  5,  4, 2
 };
 
+
+/**
+ *
+ */
 GrayMap *grayMapGaussian(GrayMap *me)
 {
     int width  = me->width;
@@ -79,6 +86,10 @@ GrayMap *grayMapGaussian(GrayMap *me)
 
 
 
+
+/**
+ *
+ */
 RgbMap *rgbMapGaussian(RgbMap *me)
 {
     int width  = me->width;
@@ -132,6 +143,8 @@ RgbMap *rgbMapGaussian(RgbMap *me)
 }
 
 
+
+
 /*#########################################################################
 ### C A N N Y    E D G E    D E T E C T I O N
 #########################################################################*/
@@ -152,7 +165,12 @@ static int sobelY[] =
 };
 
 
-static GrayMap *canny(GrayMap *gm, double dLowThreshold, double dHighThreshold)
+
+/**
+ * Perform Sobel convolution on a GrayMap
+ */
+static GrayMap *grayMapSobel(GrayMap *gm, 
+               double dLowThreshold, double dHighThreshold)
 {
     int width  = gm->width;
     int height = gm->height;
@@ -309,6 +327,10 @@ static GrayMap *canny(GrayMap *gm, double dLowThreshold, double dHighThreshold)
 
 
 
+
+/**
+ *
+ */
 GrayMap *
 grayMapCanny(GrayMap *gm, double lowThreshold, double highThreshold)
 {
@@ -319,7 +341,7 @@ grayMapCanny(GrayMap *gm, double lowThreshold, double highThreshold)
         return NULL;
     /*gaussGm->writePPM(gaussGm, "gauss.ppm");*/
 
-    GrayMap *cannyGm = canny(gaussGm, lowThreshold, highThreshold);
+    GrayMap *cannyGm = grayMapSobel(gaussGm, lowThreshold, highThreshold);
     if (!cannyGm)
         return NULL;
     /*cannyGm->writePPM(cannyGm, "canny.ppm");*/
@@ -330,7 +352,16 @@ grayMapCanny(GrayMap *gm, double lowThreshold, double highThreshold)
 }
 
 
-GdkPixbuf *gdkCanny(GdkPixbuf *img, double lowThreshold, double highThreshold)
+
+
+
+
+
+/**
+ *
+ */
+GdkPixbuf *
+gdkCanny(GdkPixbuf *img, double lowThreshold, double highThreshold)
 {
     if (!img)
         return NULL;
@@ -758,7 +789,8 @@ RGB lookupQuantizedRGB(RGB *rgbpalette, int paletteSize, RGB candidate)
 
 
 /**
- *
+ * Quantize an RGB image to a reduced number of colors.  bitsPerSample
+ * is usually 3 - 5 out of 8 to conserve cpu and memory
  */
 RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
 {
@@ -809,79 +841,44 @@ RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
 
 
 /**
- *  Experimental
- */
-GrayMap *rgbToIndexMap(OctreeNode *root, RgbMap *rgbMap, int bitsPerSample)
-{  
-    GrayMap *gm = GrayMapCreate(rgbMap->width, rgbMap->height);
-
-    for (int y=0 ; y<rgbMap->height ; y++)
-        {
-        for (int x=0 ; x<rgbMap->width ; x++)
-            {
-            RGB rgb = rgbMap->getPixel(rgbMap, x, y);
-            int index = octreeNodeFind(root, rgb, bitsPerSample);
-            /*printf("%d %d %d : %d\n", rgb.r, rgb.g, rgb.b, index);*/
-            gm->setPixel(gm, x, y, index);
-            }
-        }
-
-    return gm;
-}
-
-
-/**
- *
+ *  Experimental.  Work on this later
  */
 GrayMap *quantizeBand(RgbMap *rgbMap, int nrColors)
 {
-    int bitsPerSample = 4;
 
-    nrColors = 24;
+    int bitsPerSample = 4;
 
     RgbMap *gaussMap = rgbMapGaussian(rgbMap);
     //gaussMap->writePPM(gaussMap, "rgbgauss.ppm");
 
-    RgbMap *qMap = rgbMapQuantize(rgbMap, bitsPerSample, nrColors);
-    qMap->writePPM(qMap, "rgbquant.ppm");
-    qMap->destroy(qMap);
-
-    /* Build an octree of the rgb map.  Prune to nrColors */
-    OctreeNode *otree = octreeBuild(gaussMap, bitsPerSample, nrColors);
-
-    if (!otree)
-        {
-        gaussMap->destroy(gaussMap);
-        return NULL;
-        }
-
-
-    GrayMap *gim = rgbToIndexMap(otree, gaussMap, bitsPerSample);
-
+    RgbMap *qMap = rgbMapQuantize(gaussMap, bitsPerSample, nrColors);
+    //qMap->writePPM(qMap, "rgbquant.ppm");
     gaussMap->destroy(gaussMap);
 
-    GrayMap *gm = grayMapGaussian(gim);
-    
-    if (!gm)
-        {
-        return NULL;
-        }
+    RgbMap  *rm = qMap;
+    GrayMap *gm = GrayMapCreate(rgbMap->width, rgbMap->height);
 
-    for (int y=0 ; y<gm->height ; y++)
+    /* RGB is quantized.  There should now be a small set of (R+G+B) */
+    for (int y=0 ; y<rm->height ; y++)
         {
-        for (int x=0 ; x<gm->width ; x++)
+        for (int x=0 ; x<rm->width ; x++)
             {
-            unsigned long val = gm->getPixel(gm, x, y);
-            if (val&1)
-              gm->setPixel(gm, x, y, 765);
+            RGB rgb = rm->getPixel(rm, x, y);
+            int sum = rgb.r + rgb.g + rgb.b;
+            if (sum & 1)
+                sum = 765;
             else
-              gm->setPixel(gm, x, y, 0);
+                sum = 0;
+            /*printf("%d %d %d : %d\n", rgb.r, rgb.g, rgb.b, index);*/
+            gm->setPixel(gm, x, y, sum);
             }
         }
 
+    qMap->destroy(qMap);
 
     return gm;
 }
+
 
 
 
