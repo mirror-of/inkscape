@@ -40,6 +40,7 @@
 #include "../sp-item.h"
 #include "../sp-text.h"
 #include "../sp-root.h"
+#include "in-dt-coordsys.h"
 
 #include "../xml/repr-private.h"
 
@@ -718,8 +719,7 @@ set_dt_select (SPRepr *repr)
     }
 
     blocked++;
-    if (object && SP_IS_ITEM (object)) {
-    
+    if ( object && in_dt_coordsys(*object) ) {
         if (!(SP_IS_TSPAN (object) || 
              SP_IS_STRING (object) || 
              SP_IS_ROOT (object))) 

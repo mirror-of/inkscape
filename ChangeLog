@@ -1,3 +1,11 @@
+2004-02-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dialogs/Makefile.am: in-dt-coordsys.cpp, in-dt-coordsys.h:
+	New files.
+	* src/dialogs/xml-tree.cpp (set_dt_select): Fix bug when clicked on a
+	shape that's a descendent of a <defs> node: don't try to select it
+	in the canvas.
+
 2004-02-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/stroke-style.cpp:

@@ -23,6 +23,7 @@ libspdialogs_a_SOURCES = \
 	sp-attribute-widget.cpp sp-attribute-widget.h \
 	text-edit.cpp text-edit.h \
 	export.cpp export.h \
+	in-dt-coordsys.cpp in-dt-coordsys.h	\
 	xml-tree.cpp xml-tree.h \
 	align.cpp align.h	\
 	display-settings.cpp display-settings.h \
