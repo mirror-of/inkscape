@@ -24,6 +24,7 @@
 #define INKSCAPE_ICONS_DIR     "share\\icons"
 #define INKSCAPE_SCREENSDIR    "share\\screens"
 #define INKSCAPE_TUTORIALSDIR  "share\\tutorials"
+#define INKSCAPE_MARKERSDIR    "share\\markers"
 
 #define GETTEXT_PACKAGE "inkscape"
 
