@@ -13,29 +13,13 @@
 #define SEEN_INKSCAPE_AST_XML_ELEMENT_NODE_H
 
 #include <cstring>
-#include "ast/node.h"
+#include "ast/xml-node.h"
 
 namespace Inkscape {
 namespace AST {
 
-class XMLElementNode : public Node {
+class XMLElementNode : public XMLNode {
 public:
-    Node const *traverse(BranchName const &branch, unsigned pos) const;
-
-    Node const &insertBefore(BranchName const &branch, unsigned pos,
-                             Node const *node) const
-    throw(InvalidTransformation);
-
-    Node const &replaceWith(BranchName const &branch, unsigned pos,
-                            Node const *node) const
-    throw(InvalidTransformation);
-
-    Node const &removeAt(BranchName const &branch, unsigned pos) const
-    throw(InvalidTransformation);
-
-    void write(std::ostream &os) const;
-    String const &toString() const;
-
 private:
 };
 

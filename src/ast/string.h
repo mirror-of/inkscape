@@ -25,10 +25,10 @@ public:
     explicit String(CString const &string)
     : _string(string), _bytes(0), _chars(0) {}
 
-    size_t byteLength() const {
+    size_t byteLength() const throw() {
         return _bytes ? _bytes : ( _bytes = std::strlen(_string) );
     }
-    size_t charLength() const {
+    size_t charLength() const throw() {
         return _chars ? _chars : ( _chars = g_utf8_strlen(_string) );
     }
 

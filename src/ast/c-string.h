@@ -104,13 +104,6 @@ public:
 private:
     void operator=(CString const &);
 
-    static CString const &_create_unsafe(char const *string) const
-    throw()
-    {
-        CArray<char> const &array=CArray<char>::create_unsafe(string);
-        return reinterpret_cast<CString const &>(array);
-    }
-
     static CString const &_create(char const *string, size_t bytes) const
     throw(std::bad_alloc)
     {
@@ -118,6 +111,13 @@ private:
         std::memcpy(copy, string, bytes);
         copy[bytes] = '\000';
         return _create_unsafe(copy);
+    }
+
+    static CString const &_create_unsafe(char const *string) const
+    throw()
+    {
+        CArray<char> const &array=CArray<char>::create_unsafe(string);
+        return reinterpret_cast<CString const &>(array);
     }
 };
 
