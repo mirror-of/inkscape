@@ -119,7 +119,7 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
     SPStop *stop = SP_STOP(object);
 
     switch (key) {
-	case SP_ATTR_STYLE: {
+        case SP_ATTR_STYLE: {
             /* fixme: We are reading simple values 3 times during
              *        build (Lauris) */
             /* fixme: We need presentation attributes etc. */
@@ -137,7 +137,7 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
             object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
-	case SP_PROP_STOP_COLOR: {
+        case SP_PROP_STOP_COLOR: {
             {
                 gchar const *p = sp_object_get_style_property(object, "stop-color", "black");
                 guint32 color = sp_svg_read_color(p, sp_color_get_rgba32_ualpha(&stop->color, 0x00));
@@ -146,7 +146,7 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
             object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
-	case SP_PROP_STOP_OPACITY: {
+        case SP_PROP_STOP_OPACITY: {
             {
                 gchar const *p = sp_object_get_style_property(object, "stop-opacity", "1");
                 gdouble opacity = sp_svg_read_percentage(p, stop->opacity);
@@ -155,12 +155,12 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
             object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
-	case SP_ATTR_OFFSET: {
+        case SP_ATTR_OFFSET: {
             stop->offset = sp_svg_read_percentage(value, 0.0);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
-	default: {
+        default: {
             if (((SPObjectClass *) stop_parent_class)->set)
                 (* ((SPObjectClass *) stop_parent_class)->set)(object, key, value);
             break;
@@ -180,7 +180,7 @@ sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     gchar c[64];
     sp_svg_write_color(c, 64, sp_color_get_rgba32_ualpha(&stop->color, 255));
 
-    Inkscape::SVGOStringStream os;	
+    Inkscape::SVGOStringStream os;
     os << "stop-color:" << c << ";stop-opacity:" << stop->opacity << ";";
     sp_repr_set_attr(repr, "style", os.str().c_str());
     sp_repr_set_attr(repr, "stop-color", NULL);
@@ -233,7 +233,7 @@ sp_gradient_get_type()
             sizeof(SPGradient),
             16,
             (GInstanceInitFunc) sp_gradient_init,
-            NULL,	/* value_table */
+            NULL,   /* value_table */
         };
         gradient_type = g_type_register_static(SP_TYPE_PAINT_SERVER, "SPGradient",
                                                &gradient_info, (GTypeFlags)0);
@@ -347,7 +347,7 @@ sp_gradient_set(SPObject *object, unsigned key, gchar const *value)
     SPGradient *gr = SP_GRADIENT(object);
 
     switch (key) {
-	case SP_ATTR_GRADIENTUNITS:
+        case SP_ATTR_GRADIENTUNITS:
             if (value) {
                 if (!strcmp(value, "userSpaceOnUse")) {
                     gr->units = SP_GRADIENT_UNITS_USERSPACEONUSE;
@@ -361,7 +361,7 @@ sp_gradient_set(SPObject *object, unsigned key, gchar const *value)
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_GRADIENTTRANSFORM: {
+        case SP_ATTR_GRADIENTTRANSFORM: {
             NR::Matrix t;
             if (value && sp_svg_transform_read(value, &t)) {
                 gr->gradientTransform = t;
@@ -372,8 +372,8 @@ sp_gradient_set(SPObject *object, unsigned key, gchar const *value)
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	}
-	case SP_ATTR_SPREADMETHOD:
+        }
+        case SP_ATTR_SPREADMETHOD:
             if (value) {
                 if (!strcmp(value, "reflect")) {
                     gr->spread = SP_GRADIENT_SPREAD_REFLECT;
@@ -388,7 +388,7 @@ sp_gradient_set(SPObject *object, unsigned key, gchar const *value)
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_XLINK_HREF: 
+        case SP_ATTR_XLINK_HREF:
             if (value) {
                 try {
                     gr->ref->attach(Inkscape::URI(value));
@@ -400,7 +400,7 @@ sp_gradient_set(SPObject *object, unsigned key, gchar const *value)
                 gr->ref->detach();
             }
             break;
-	default:
+        default:
             if (((SPObjectClass *) gradient_parent_class)->set)
                 ((SPObjectClass *) gradient_parent_class)->set(object, key, value);
             break;
@@ -621,8 +621,8 @@ sp_gradient_get_spread(SPGradient *gradient)
     /* follow the chain of references to find the first gradient
      * with spread_set */
     SPGradient *ref;
-    for (ref = gradient; 
-         ref && !ref->spread_set; 
+    for (ref = gradient;
+         ref && !ref->spread_set;
          ref = ref->ref->getObject()) {
     }
 
@@ -717,7 +717,9 @@ static void
 sp_gradient_rebuild_vector(SPGradient *gr)
 {
     gint len = 0;
-    for ( SPObject *child = sp_object_first_child(SP_OBJECT(gr)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+    for ( SPObject *child = sp_object_first_child(SP_OBJECT(gr)) ;
+          child != NULL ;
+          child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_STOP(child)) {
             len ++;
         }
@@ -736,7 +738,9 @@ sp_gradient_rebuild_vector(SPGradient *gr)
         return;
     }
 
-    for (SPObject *child = sp_object_first_child(SP_OBJECT(gr)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+    for (SPObject *child = sp_object_first_child(SP_OBJECT(gr)) ;
+         child != NULL;
+         child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_STOP(child)) {
             SPStop *stop = SP_STOP(child);
 
@@ -764,9 +768,11 @@ sp_gradient_rebuild_vector(SPGradient *gr)
         }
     }
 
-    // normalize per section 13.2.4 of SVG 1.1
+    // Normalize per section 13.2.4 of SVG 1.1.
     if (gr->vector.stops.size() == 0) {
-        // "If no stops are defined, then painting shall occur as if 'none' were specified as the paint style."
+        /* "If no stops are defined, then painting shall occur as if 'none' were specified as the
+         * paint style."
+         */
         {
             SPGradientStop gstop;
             gstop.offset = 0.0;
@@ -917,16 +923,16 @@ sp_gradient_render_vector_line_rgb(SPGradient *gradient, guchar *buf,
         gint g = gradient->color[4 * (idx >> 8) + 1];
         gint b = gradient->color[4 * (idx >> 8) + 2];
         gint a = gradient->color[4 * (idx >> 8) + 3];
-		
+
         gint fc = (r - *buf) * a;
         buf[0] = *buf + ((fc + (fc >> 8) + 0x80) >> 8);
-		
+
         fc = (g - *buf) * a;
         buf[1] = *buf + ((fc + (fc >> 8) + 0x80) >> 8);
-		
+
         fc = (b - *buf) * a;
         buf[2] = *buf + ((fc + (fc >> 8) + 0x80) >> 8);
-		
+
         buf += 3;
         idx += didx;
     }
@@ -1125,7 +1131,7 @@ sp_lineargradient_get_type()
             sizeof(SPLinearGradient),
             16,
             (GInstanceInitFunc) sp_lineargradient_init,
-            NULL,	/* value_table */
+            NULL,   /* value_table */
         };
         type = g_type_register_static(SP_TYPE_GRADIENT, "SPLinearGradient", &info, (GTypeFlags)0);
     }
@@ -1174,31 +1180,31 @@ sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value)
     SPLinearGradient *lg = SP_LINEARGRADIENT(object);
 
     switch (key) {
-	case SP_ATTR_X1:
+        case SP_ATTR_X1:
             if (!sp_svg_length_read(value, &lg->x1)) {
                 sp_svg_length_unset(&lg->x1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_Y1:
+        case SP_ATTR_Y1:
             if (!sp_svg_length_read(value, &lg->y1)) {
                 sp_svg_length_unset(&lg->y1, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_X2:
+        case SP_ATTR_X2:
             if (!sp_svg_length_read(value, &lg->x2)) {
                 sp_svg_length_unset(&lg->x2, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_Y2:
+        case SP_ATTR_Y2:
             if (!sp_svg_length_read(value, &lg->y2)) {
                 sp_svg_length_unset(&lg->y2, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	default:
+        default:
             if (((SPObjectClass *) lg_parent_class)->set)
                 (* ((SPObjectClass *) lg_parent_class)->set)(object, key, value);
             break;
@@ -1269,9 +1275,7 @@ sp_lineargradient_painter_new(SPPaintServer *ps,
     /* fixme: Originally I had 1023.9999 here - not sure whether
      *        we have really to cut out ceil int (Lauris) */
     NR::Matrix color2norm(NR::identity());
-
     NR::Matrix color2px;
-	
     if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
         NR::Matrix norm2pos(NR::identity());
 
@@ -1380,7 +1384,7 @@ sp_radialgradient_get_type()
             sizeof(SPRadialGradient),
             16,
             (GInstanceInitFunc) sp_radialgradient_init,
-            NULL,	/* value_table */
+            NULL,   /* value_table */
         };
         type = g_type_register_static(SP_TYPE_GRADIENT, "SPRadialGradient", &info, (GTypeFlags)0);
     }
@@ -1431,7 +1435,7 @@ sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value)
     SPRadialGradient *rg = SP_RADIALGRADIENT(object);
 
     switch (key) {
-	case SP_ATTR_CX:
+        case SP_ATTR_CX:
             if (!sp_svg_length_read(value, &rg->cx)) {
                 sp_svg_length_unset(&rg->cx, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
             }
@@ -1441,7 +1445,7 @@ sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value)
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_CY:
+        case SP_ATTR_CY:
             if (!sp_svg_length_read(value, &rg->cy)) {
                 sp_svg_length_unset(&rg->cy, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
             }
@@ -1451,25 +1455,25 @@ sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value)
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_R:
+        case SP_ATTR_R:
             if (!sp_svg_length_read(value, &rg->r)) {
                 sp_svg_length_unset(&rg->r, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_FX:
+        case SP_ATTR_FX:
             if (!sp_svg_length_read(value, &rg->fx)) {
                 sp_svg_length_unset(&rg->fx, rg->cx.unit, rg->cx.value, rg->cx.computed);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_FY:
+        case SP_ATTR_FY:
             if (!sp_svg_length_read(value, &rg->fy)) {
                 sp_svg_length_unset(&rg->fy, rg->cy.unit, rg->cy.value, rg->cy.computed);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	default:
+        default:
             if (((SPObjectClass *) rg_parent_class)->set)
                 ((SPObjectClass *) rg_parent_class)->set(object, key, value);
             break;
