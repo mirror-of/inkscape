@@ -14,7 +14,7 @@
  */
 
 #include <gtk/gtkruler.h>
-#include "sp-metrics.h"
+#include "sp-metric.h"
 
 #include <glib.h>
 
