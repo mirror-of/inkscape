@@ -288,7 +288,7 @@ sp_toolbox_new (GtkWidget * contents, const gchar * name, const gchar * internal
 	gtk_box_pack_start (GTK_BOX (hbb), w, FALSE, FALSE, 2);
 	gtk_widget_show (w);
 	t->arrow = w;
-	w = sp_icon_new (SP_ICON_SIZE_TITLEBAR, pixmapname);
+	w = gtk_image_new_from_stock (pixmapname, GTK_ICON_SIZE_MENU);
 	gtk_box_pack_start (GTK_BOX (hbb), w, FALSE, FALSE, 0);
 	gtk_widget_show (w);
 	w = gtk_label_new (t->name);
@@ -311,7 +311,7 @@ sp_toolbox_new (GtkWidget * contents, const gchar * name, const gchar * internal
 	gtk_widget_show (b);
         t->standalonetoggle = b;
 #if 0
-	w = sp_icon_new (SP_ICON_SIZE_TITLEBAR, "separate_tool");
+	w = gtk_image_new_from_stock (INKSCAPE_STOCK_SEPARATE_TOOL, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_container_add (GTK_CONTAINER (b), w);
 	gtk_widget_show (w);
 #endif
