@@ -179,53 +179,29 @@ sp_image_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_X:
-		if (sp_svg_length_read_lff (value, &unit, &image->x.value, &image->x.computed) &&
-		    /* fixme: These are probably valid, but require special treatment (Lauris) */
-		    (unit != SP_SVG_UNIT_EM) &&
-		    (unit != SP_SVG_UNIT_EX) &&
-		    (unit != SP_SVG_UNIT_PERCENT)) {
-			image->x.set = TRUE;
-			image->x.unit = unit;
-		} else {
+		if (!sp_svg_length_read_absolute (value, &image->x)) {
+		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&image->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y:
-		if (sp_svg_length_read_lff (value, &unit, &image->y.value, &image->y.computed) &&
-		    /* fixme: These are probably valid, but require special treatment (Lauris) */
-		    (unit != SP_SVG_UNIT_EM) &&
-		    (unit != SP_SVG_UNIT_EX) &&
-		    (unit != SP_SVG_UNIT_PERCENT)) {
-			image->y.set = TRUE;
-			image->y.unit = unit;
-		} else {
+		if (!sp_svg_length_read_absolute (value, &image->y)) {
+		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&image->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_WIDTH:
-		if (sp_svg_length_read_lff (value, &unit, &image->width.value, &image->width.computed) &&
-		    /* fixme: These are probably valid, but require special treatment (Lauris) */
-		    (unit != SP_SVG_UNIT_EM) &&
-		    (unit != SP_SVG_UNIT_EX) &&
-		    (unit != SP_SVG_UNIT_PERCENT)) {
-			image->width.set = TRUE;
-			image->width.unit = unit;
-		} else {
+		if (!sp_svg_length_read_absolute (value, &image->width)) {
+		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&image->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
-		if (sp_svg_length_read_lff (value, &unit, &image->height.value, &image->height.computed) &&
-		    /* fixme: These are probably valid, but require special treatment (Lauris) */
-		    (unit != SP_SVG_UNIT_EM) &&
-		    (unit != SP_SVG_UNIT_EX) &&
-		    (unit != SP_SVG_UNIT_PERCENT)) {
-			image->height.set = TRUE;
-			image->height.unit = unit;
-		} else {
+		if (!sp_svg_length_read_absolute (value, &image->height)) {
+		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&image->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);

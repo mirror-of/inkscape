@@ -261,8 +261,6 @@ sp_offset_release (SPObject * object)
 static void
 sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 {
-  gulong unit;
-  
   SPOffset *offset = SP_OFFSET (object);
   
   if ( offset->sourceDirty ) refresh_offset_source(offset);
@@ -300,10 +298,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
       break;
     case SP_ATTR_INKSCAPE_RADIUS:
     case SP_ATTR_SODIPODI_RADIUS:
-      if (!sp_svg_length_read_lff (value, &unit, NULL, &offset->rad) ||
-          (unit != SP_SVG_UNIT_EM) ||
-          (unit != SP_SVG_UNIT_EX) || (unit != SP_SVG_UNIT_PERCENT))
-      {
+	if (!sp_svg_length_read_computed_absolute (value, &offset->rad)) {
         if (fabs (offset->rad) < 0.25)
           offset->rad = (offset->rad < 0) ? -0.25 : 0.25;
         offset->knotSet = false;

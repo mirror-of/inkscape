@@ -195,8 +195,6 @@ sp_root_release (SPObject *object)
 static void
 sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	gulong unit;
-
 	SPRoot *root = SP_ROOT(object);
 
 	switch (key) {
@@ -215,53 +213,31 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		break;
 	case SP_ATTR_X:
-		if (sp_svg_length_read_lff (value, &unit, &root->x.value, &root->x.computed) &&
-		    /* fixme: These are probably valid, but require special treatment (Lauris) */
-		    (unit != SP_SVG_UNIT_EM) &&
-		    (unit != SP_SVG_UNIT_EX)) {
-			root->x.set = TRUE;
-			root->x.unit = unit;
-		} else {
+		if (!sp_svg_length_read_absolute (value, &root->x)) {
+		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&root->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		/* fixme: I am almost sure these do not require viewport flag (Lauris) */
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y:
-		if (sp_svg_length_read_lff (value, &unit, &root->y.value, &root->y.computed) &&
-		    /* fixme: These are probably valid, but require special treatment (Lauris) */
-		    (unit != SP_SVG_UNIT_EM) &&
-		    (unit != SP_SVG_UNIT_EX)) {
-			root->y.set = TRUE;
-			root->y.unit = unit;
-		} else {
+		if (!sp_svg_length_read_absolute (value, &root->y)) {
+		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&root->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		/* fixme: I am almost sure these do not require viewport flag (Lauris) */
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_WIDTH:
-		if (sp_svg_length_read_lff (value, &unit, &root->width.value, &root->width.computed) &&
-		    /* fixme: These are probably valid, but require special treatment (Lauris) */
-		    (unit != SP_SVG_UNIT_EM) &&
-		    (unit != SP_SVG_UNIT_EX) &&
-		    (root->width.computed > 0.0)) {
-			root->width.set = TRUE;
-			root->width.unit = unit;
-		} else {
+		if (!sp_svg_length_read_absolute (value, &root->width) || !(root->width.computed > 0.0)) {
+		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&root->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
-		if (sp_svg_length_read_lff (value, &unit, &root->height.value, &root->height.computed) &&
-		    /* fixme: These are probably valid, but require special treatment (Lauris) */
-		    (unit != SP_SVG_UNIT_EM) &&
-		    (unit != SP_SVG_UNIT_EX) &&
-		    (root->height.computed >= 0.0)) {
-			root->height.set = TRUE;
-			root->height.unit = unit;
-		} else {
+		if (!sp_svg_length_read_absolute (value, &root->height) || !(root->height.computed > 0.0)) {
+		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&root->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);

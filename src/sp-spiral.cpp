@@ -162,7 +162,6 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPSpiral *spiral;
 	SPShape  *shape;
-	gulong unit;
 
 	spiral = SP_SPIRAL (object);
 	shape  = SP_SHAPE (object);
@@ -170,19 +169,13 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 	/* fixme: we should really collect updates */
 	switch (key) {
 	case SP_ATTR_SODIPODI_CX:
-		if (!sp_svg_length_read_lff (value, &unit, NULL, &spiral->cx) ||
-		    (unit == SP_SVG_UNIT_EM) ||
-		    (unit == SP_SVG_UNIT_EX) ||
-		    (unit == SP_SVG_UNIT_PERCENT)) {
+		if (!sp_svg_length_read_computed_absolute (value, &spiral->cx)) {
 			spiral->cx = 0.0;
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_CY:
-		if (!sp_svg_length_read_lff (value, &unit, NULL, &spiral->cy) ||
-		    (unit == SP_SVG_UNIT_EM) ||
-		    (unit == SP_SVG_UNIT_EX) ||
-		    (unit == SP_SVG_UNIT_PERCENT)) {
+		if (!sp_svg_length_read_computed_absolute (value, &spiral->cy)) {
 			spiral->cy = 0.0;
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
@@ -210,10 +203,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_RADIUS:
-		if (!sp_svg_length_read_lff (value, &unit, NULL, &spiral->rad) ||
-		    (unit != SP_SVG_UNIT_EM) ||
-		    (unit != SP_SVG_UNIT_EX) ||
-		    (unit != SP_SVG_UNIT_PERCENT)) {
+		if (!sp_svg_length_read_computed_absolute (value, &spiral->rad)) {
 			spiral->rad = MAX (spiral->rad, 0.001);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
