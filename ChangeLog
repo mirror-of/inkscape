@@ -1,3 +1,33 @@
+2004-01-09  bulia byak <bulia@users.sourceforge.net>
+
+	* src/zoom-context.cpp: Added drag tolerance 
+
+	* src/widgets/widget-sizes.h: Spinbutton steps defined here
+
+	* src/widgets/spw-utilities.cpp,h: New function for recursively searching widgets for data
+
+	* src/select-context.cpp: Alt-x activates aux toolbar 
+
+	* src/select-toolbar.cpp: Implement esc, ctrl-z, up/down, pgup/pgdn, tab in the aux
+	toolbar, identified default spinbutton for activating by alt-x
+
+	* src/nodepath.cpp: Fix for uninitialized variable, reported by Bob Jamison 
+
+	* src/draw-context.cpp: Fix for 873092; Never snap if hitting anchor
+ 
+2004-01-08  bulia byak <bulia@users.sourceforge.net>
+
+	* src/select-context.cpp: Fixed ctrl-drag (without breaking ctrl-click) 
+
+	* src/desktop.cpp: Changed initial statusbar message
+
+	* src/verbs.cpp: Tooltip edits
+
+	* src/desktop.cpp: Changed initial statusbar message (suggested by Daniel Diaz)
+ 
+	* src/tools-switch.cpp src/nodepath.cpp src/selection.cpp: Edited statusbar messages,
+	made them translatable
+
 2004-01-08  Nathan Hurst  <njh@mail.csse.monash.edu.au>
 
 	* src/helper, src/libnr and various: removed senescent code inside
