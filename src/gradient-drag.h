@@ -118,6 +118,7 @@ struct GrDrag {
 	sigc::connection sel_modified_connection;
 
 	sigc::connection style_set_connection;
+	sigc::connection style_query_connection;
 
 	// lists of edges of selection bboxes, to snap draggers to
 	std::vector<double> hor_levels;

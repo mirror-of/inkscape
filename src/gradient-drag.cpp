@@ -17,6 +17,7 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "document.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
@@ -91,6 +92,66 @@ gr_drag_sel_modified (Inkscape::Selection *selection, guint flags, gpointer data
     drag->updateLevels ();
 }
 
+/**
+When a _query_style_signal is received, check that \a property requests fillstroke (otherwise
+skip), and fill the \a style with the averaged color of all draggables of the selected dragger, if
+any.
+*/
+int
+gr_drag_style_query (SPStyle *style, int property, gpointer data)
+{
+    GrDrag *drag = (GrDrag *) data;
+
+    if (property != QUERY_STYLE_PROPERTY_FILLSTROKE) {
+        return QUERY_STYLE_NOTHING;
+    }
+
+    if (!drag->selected) {
+        return QUERY_STYLE_NOTHING;
+    } else {
+        int ret = QUERY_STYLE_NOTHING;
+
+        float cf[4];
+        cf[0] = cf[1] = cf[2] = cf[3] = 0;
+
+        int count = 0;
+
+        for (GSList const* i = drag->selected->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+            GrDraggable *draggable = (GrDraggable *) i->data;
+
+            if (ret == QUERY_STYLE_NOTHING) {
+                ret = QUERY_STYLE_SINGLE;
+            } else if (ret == QUERY_STYLE_SINGLE) {
+                ret = QUERY_STYLE_MULTIPLE_AVERAGED;
+            }
+
+            guint32 c = sp_item_gradient_stop_query_style (draggable->item, draggable->point_num, draggable->fill_or_stroke);
+            cf[0] += SP_RGBA32_R_F (c);
+            cf[1] += SP_RGBA32_G_F (c);
+            cf[2] += SP_RGBA32_B_F (c);
+            cf[3] += SP_RGBA32_A_F (c);
+
+            count ++;
+        }
+
+        if (count) {
+            cf[0] /= count;
+            cf[1] /= count;
+            cf[2] /= count;
+            cf[3] /= count;
+
+            // set both fill and stroke with our stop-color and stop-opacity
+            sp_color_set_rgb_float((SPColor *) &style->fill.value.color, cf[0], cf[1], cf[2]);
+            sp_color_set_rgb_float((SPColor *) &style->stroke.value.color, cf[0], cf[1], cf[2]);
+
+            style->fill_opacity.value = SP_SCALE24_FROM_FLOAT (cf[3]);
+            style->stroke_opacity.value = SP_SCALE24_FROM_FLOAT (cf[3]);
+        }
+
+        return ret;
+    }
+}
+
 bool
 gr_drag_style_set (const SPCSSAttr *css, gpointer data)
 {
@@ -148,7 +209,7 @@ gr_drag_style_set (const SPCSSAttr *css, gpointer data)
            GrDraggable *draggable = (GrDraggable *) i->data;
 
            drag->local_change = true;
-           sp_item_gradient_set_stop (draggable->item, draggable->point_num, draggable->fill_or_stroke, stop);
+           sp_item_gradient_stop_set_style (draggable->item, draggable->point_num, draggable->fill_or_stroke, stop);
     }
 
     //sp_repr_css_print(stop);
@@ -189,6 +250,12 @@ GrDrag::GrDrag(SPDesktop *desktop) {
             (gpointer)this )
         );
 
+    this->style_query_connection = this->desktop->connectQueryStyle(
+        sigc::bind(
+            sigc::ptr_fun(&gr_drag_style_query),
+            (gpointer)this )
+        );
+
     this->updateDraggers ();
     this->updateLines ();
     this->updateLevels ();
@@ -203,6 +270,7 @@ GrDrag::~GrDrag()
     this->sel_changed_connection.disconnect();
     this->sel_modified_connection.disconnect();
     this->style_set_connection.disconnect();
+    this->style_query_connection.disconnect();
 
     if (this->selected) {
         GrDraggable *draggable = (GrDraggable *) this->selected->draggables->data;
