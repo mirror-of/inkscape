@@ -160,6 +160,14 @@ Extension::loaded (void)
     return state == STATE_LOADED;
 }
 
+/**
+    \return  A boolean saying whether the extension passed the checks
+	\brief   A function to check the validity of the extension
+
+	This function chekcs to make sure that there is an id, a name, a
+	repr and an implemenation for this extension.  Then it asks the
+	implmentation to do a check of itself.
+*/
 bool
 Extension::check (void)
 {
@@ -185,7 +193,7 @@ Extension::get_repr (void)
     return repr;
 }
 
-/*
+/**
     \return  The textual id of this extension
     \brief   Get the ID of this extension - not a copy don't delete!
 */
@@ -195,7 +203,7 @@ Extension::get_id (void)
     return id;
 }
 
-/*
+/**
     \return  The textual name of this extension
     \brief   Get the name of this extension - not a copy don't delete!
 */
@@ -205,6 +213,21 @@ Extension::get_name (void)
     return name;
 }
 
+/**
+    \return  None
+	\brief   This function diactivates the extension (which makes it
+	         unusable, but not deleted)
+	
+    This function is used to removed an extension from functioning, but
+	not delete it completely.  It sets the \c _deactivated variable to
+	mark to the world that it has been deactivated.  It also removes
+	the current implementation and replaces it with a standard one.  This
+	makes it so that we don't have to continually check if there is an
+	implementation, but we are gauranteed to have a benign one.
+
+	It is important to note that there is no 'activate' function.
+	Running this function is irreversable.
+*/
 void
 Extension::deactivate (void)
 {
@@ -218,6 +241,10 @@ Extension::deactivate (void)
 	return;
 }
 
+/**
+    \return  Whether the extension has been deactivated
+	\breif   Find out the status of the extension
+*/
 bool
 Extension::deactivated (void)
 {
@@ -250,7 +277,7 @@ Extension::deactivated (void)
     Finally the allocated parameter is put into the GSList that is called
     parameteres.
 
-    TODO: This function should pull up parameters that are stored
+    \todo This function should pull up parameters that are stored
     in the preferences somewhere.  This needs to be figured out.
 */
 void
@@ -670,6 +697,10 @@ Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Exten
     return;
 }
 
+/**
+	\return  None
+	\brief   Destroys an Input extension
+*/
 Input::~Input (void)
 {
     g_free(mimetype);
@@ -680,6 +711,14 @@ Input::~Input (void)
     return;
 }
 
+/**
+    \return  Whether this extension checks out
+	\brief   Validate this extension
+
+	This function checks to make sure that the input extension has
+	a filename extension and a MIME type.  Then it calls the parent
+	class' check function which also checks out the implmentation.
+*/
 bool
 Input::check (void)
 {
@@ -691,6 +730,22 @@ Input::check (void)
 	return Extension::check();
 }
 
+/**
+    \return  A new document
+	\brief   This function creates a document from a file
+	\param   uri  The filename to create the document from
+
+	This function acts as the first step in creating a new document
+	from a file.  The first thing that this does is make sure that the
+	file actually exists.  If it doesn't, a NULL is returned.  If the
+	file exits, then it is opened using the implmentation of this extension.
+
+	After opening the document the output_extension is set.  What this
+	accomplishes is that save can try to use an extension that supports
+	the same fileformat.  So something like opening and saveing an 
+	Adobe Illustrator file can be transparent (not recommended, but
+	transparent).  This is all done with undo being turned off.
+*/
 SPDocument *
 Input::open (const gchar *uri)
 {
@@ -721,24 +776,42 @@ Input::open (const gchar *uri)
 	return doc;
 }
 
+/**
+    \return  Filename extension for the extension
+	\brief   Get the filename extension for this extension
+*/
 gchar *
 Input::get_extension(void)
 {
     return extension;
 }
 
+/**
+    \return  The name of the filetype supported
+	\brief   Get the name of the filetype supported
+*/
 gchar *
 Input::get_filetypename(void)
 {
     return filetypename;
 }
 
+/**
+    \return  Tooltip giving more information on the filetype
+	\brief   Get the tooltip for more information on the filetype
+*/
 gchar *
 Input::get_filetypetooltip(void)
 {
     return filetypetooltip;
 }
 
+/**
+    \return  A dialog to get settings for this extension
+	\brief   Create a dialog for preference for this extension
+
+	Calls the implementation to get the preferences.
+*/
 GtkDialog *
 Input::prefs (const gchar *uri)
 {
@@ -815,6 +888,9 @@ Output::Output (SPRepr * in_repr, Implementation::Implementation * in_imp) : Ext
     }
 }
 
+/**
+    \brief  Destroy an output extension
+*/
 Output::~Output (void)
 {
     g_free(mimetype);
@@ -824,6 +900,14 @@ Output::~Output (void)
     return;
 }
 
+/**
+    \return  Whether this extension checks out
+	\brief   Validate this extension
+
+	This function checks to make sure that the output extension has
+	a filename extension and a MIME type.  Then it calls the parent
+	class' check function which also checks out the implmentation.
+*/
 bool
 Output::check (void)
 {
@@ -835,30 +919,69 @@ Output::check (void)
 	return Extension::check();
 }
 
+/**
+    \return  Filename extension for the extension
+	\brief   Get the filename extension for this extension
+*/
 gchar *
 Output::get_extension(void)
 {
     return extension;
 }
 
+/**
+    \return  The name of the filetype supported
+	\brief   Get the name of the filetype supported
+*/
 gchar *
 Output::get_filetypename(void)
 {
     return filetypename;
 }
 
+/**
+    \return  Tooltip giving more information on the filetype
+	\brief   Get the tooltip for more information on the filetype
+*/
 gchar *
 Output::get_filetypetooltip(void)
 {
     return filetypetooltip;
 }
 
+/**
+    \return  A dialog to get settings for this extension
+	\brief   Create a dialog for preference for this extension
+
+	Calls the implementation to get the preferences.
+*/
 GtkDialog *
 Output::prefs (void)
 {
     return imp->prefs(this);
 }
 
+/**
+    \return  None
+	\brief   Save a document as a file
+	\param   doc  Document to save
+	\param   uri  File to save the document as
+
+	This function does a little of the dirty work involved in saving
+	a document so that the implementation only has to worry about geting
+	bits on the disk.
+
+	The big thing that it does is remove and readd the fields that are
+	only used at runtime and shouldn't be saved.  One that may surprise
+	people is the output extension.  This is not saved so that the IDs
+	could be changed, and old files will still work properly.
+
+	After the file is saved by the implmentation the output_extension
+	and dataloss variables are recreated.  The output_extension is set
+	to this extension so that future saves use this extension.  Dataloss
+	is set so that a warning will occur on closing the document that
+	there may be some dataloss from this extension.
+*/
 void
 Output::save (SPDocument * doc, const gchar * uri)
 {
