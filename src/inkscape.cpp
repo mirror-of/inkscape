@@ -969,7 +969,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 	GtkWidget * w;
 
 	dn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, NULL);
-	if (stat (dn, &s)) {
+	if (!g_file_test(dn, G_FILE_TEST_EXISTS)) {
 		if (mkdir (dn, S_IRWXU | S_IRGRP | S_IXGRP))
 		{
 			/* Cannot create directory */
@@ -979,7 +979,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 			g_free (dn);
 			return;
 		}
-	} else if (!S_ISDIR (s.st_mode)) {
+	} else if (!g_file_test(dn, G_FILE_TEST_IS_DIR)) {
 		/* Not a directory */
 		w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn);
 		gtk_dialog_run (GTK_DIALOG (w));
