@@ -1,6 +1,17 @@
 /*#########################################################################
 ##
-##  This file is provided to demonstrate POV output from Inkscape.
+## File:  itest.pov
+## 
+## Authors:
+##   Bob Jamison
+##
+## Copyright (C) 2004 The Inkscape Organization
+##
+## Released under GNU GPL, read the file 'COPYING' for more information
+##
+###########################################################################
+##
+##  This simple file is provided to demonstrate POV output from Inkscape.
 ##  PovRay output is intended for people who have had moderate experience
 ##  with authoring POV files.  This is NOT for beginners.
 ##
@@ -9,16 +20,18 @@
 ##      in your PATH.  PovRay is found at http://www.povray.org .  For
 ##      PovRay-specific questions, please look there.  They are the experts.
 ##
-##  2)  Make or load a document in Inkscape with some shapes in it.
+##  2)  Copy this file to a working area.
 ##
-##  3)  Save as a .pov file using the SaveAs dialog.  For this example, save
+##  3)  Make or load a document in Inkscape with some shapes in it.
+##
+##  4)  Save as a .pov file using the SaveAs dialog.  For this example, save
 ##      it in the same directory as this file, with the name 'isshapes.pov'
 ##
-##  4)  Execute povray with this file.  An example command would be:
+##  5)  Execute povray with this file.  An example command would be:
 ##
 ##  povray +X +V +A +W320 +H320 +Iistest.pov +FN
 ##
-##  5)  Adjust the values to suit your needs and desires.  Have fun.
+##  6)  Adjust the values to suit your needs and desires.  Have fun.
 ##
 #########################################################################*/
 
@@ -56,8 +69,8 @@ camera {
 # the viewer.
 #########################################################################*/
 
-light_source { <-200, 1, -8000> color White}
-light_source { < 200, 100, -600> color White}
+light_source { <-200,   1, -8000> color White}
+light_source { < 200, 100,  -600> color White}
 
 
 /*#########################################################################
@@ -87,33 +100,38 @@ sky_sphere {
 
 object {
     /*
-    //##Individually
+    //## Individually
     union{
-    object { droplet01 }
-    object { droplet02 }
-    object { droplet03 }
+    object { droplet01       }
+    object { droplet02       }
+    object { droplet03       }
     object { mountainDroplet }
     }
     */
+
     //## As a group
     object { AllShapesZ }
 
     texture {
         pigment { P_Silver1 }
-        finish { F_MetalD }
-        scale .5
+        finish  { F_MetalD  }
+        scale   .5
         }
 
     translate<-AllShapes_CENTER_X, 0, -AllShapes_CENTER_Y>
-    scale <1,60,1>
-    rotate <90,0,0>  //x first
-    rotate <0,0,0>   //z second
-    rotate <20,0,0>   //whatever else
-    rotate <0,20,0>   //whatever else
+    scale  <  1,  60,   1>
+    rotate < 90,   0,   0>   //x first
+    rotate <  0,   0,   0>   //z second
+    rotate < 20,   0,   0>   //whatever else
+    rotate <  0,  20,   0>   //whatever else
+
 }//object
 
 
 
+/*#########################################################################
+# End of File
+#########################################################################*/
 
 
 
