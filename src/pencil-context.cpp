@@ -93,6 +93,7 @@ sp_pencil_context_init(SPPencilContext *pc)
 {
     pc->npoints = 0;
     pc->state = SP_PENCIL_CONTEXT_IDLE;
+    pc->req_tangent = NR::Point(0, 0);
 }
 
 static void
@@ -445,7 +446,11 @@ fit_and_split(SPPencilContext *pc)
                                                                              "tolerance", 10.0, 1.0, 100.0) );
 
     NR::Point b[4];
-    NR::Point const tHatStart(sp_darray_left_tangent(pc->p, pc->npoints));
+    g_assert(is_zero(pc->req_tangent)
+             || is_unit_vector(pc->req_tangent));
+    NR::Point const tHatStart( is_zero(pc->req_tangent)
+                               ? sp_darray_left_tangent(pc->p, pc->npoints, tolerance_sq)
+                               : pc->req_tangent );
     NR::Point const tHatEnd(sp_darray_right_tangent(pc->p, pc->npoints, tolerance_sq));
     int const n_segs = sp_bezier_fit_cubic_full(b, pc->p, pc->npoints,
                                                 tHatStart, tHatEnd, tolerance_sq, 0);
@@ -461,24 +466,19 @@ fit_and_split(SPPencilContext *pc)
     } else {
         /* Fit and draw and copy last point */
 
-        /* todo: This isn't what we want.  We really want to do the curve fit with say a 50%
-         * overlap with the previous points, but such that the curve matches the tangent at the
-         * exact meeting point.  Probably we want 2nd order continuity. */
-
         g_assert(!sp_curve_empty(pc->red_curve));
 
         /* Set up direction of next curve. */
         {
-            /* Here we're relying on sp_darray_left_tangent looking only at the first two points. */
             NArtBpath const &last_seg = *sp_curve_last_bpath(pc->red_curve);
-            g_assert(last_seg.code == NR_CURVETO);
-
-            /* Small but hopefully large enough for p[1] to differ from p[0]. */
-            double const iota = ( 1. / ( 1ul << 10 ) );
-
             pc->p[0] = last_seg.c(3);
-            pc->p[1] = pc->p[0] + iota * (pc->p[0] - last_seg.c(2));
-            pc->npoints = 2;
+            pc->npoints = 1;
+            g_assert( last_seg.code == NR_CURVETO );
+            /* Relevance: validity of last_seg.c(2). */
+            NR::Point const req_vec( pc->p[0] - last_seg.c(2) );
+            pc->req_tangent = ( ( NR::is_zero(req_vec) || !in_svg_plane(req_vec) )
+                                ? NR::Point(0, 0)
+                                : NR::unit_vector(req_vec) );
         }
 
         sp_curve_append_continuous(pc->green_curve, pc->red_curve, 0.0625);

@@ -22,6 +22,7 @@ struct SPPencilContext : public SPDrawContext {
     NR::Point p[16];
     gint npoints;
     PencilState state;
+    NR::Point req_tangent;
 };
 
 struct SPPencilContextClass : public SPEventContextClass { };
