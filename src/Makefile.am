@@ -107,6 +107,7 @@ inkscape_SOURCES = \
 	text-context.c text-context.h \
 	zoom-context.c zoom-context.h \
 	dropper-context.c dropper-context.h \
+	tools-switch.c tools-switch.h\
 	\
 	knot.c knot.h \
 	\
@@ -115,7 +116,6 @@ inkscape_SOURCES = \
 	sp-cursor.c sp-cursor.h \
 	dir-util.c dir-util.h \
 	rubberband.c rubberband.h \
-	event-broker.c event-broker.h \
 	path-chemistry.c path-chemistry.h \
 	selection-chemistry.c selection-chemistry.h \
 	gradient-chemistry.c gradient-chemistry.h \
