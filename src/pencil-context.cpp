@@ -329,7 +329,7 @@ pencil_handle_key_press(SPPencilContext *const pc, guint const keyval, guint con
 
 /** Snaps new node relative to the previous node. */
 static void
-spdc_endpoint_snap(SPPencilContext *pc, NR::Point &p, guint const state)
+spdc_endpoint_snap(SPPencilContext const *pc, NR::Point &p, guint const state)
 {
     spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
 }

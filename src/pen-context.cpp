@@ -197,14 +197,14 @@ sp_pen_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
 
 /** Snaps new node relative to the previous node. */
 static void
-spdc_endpoint_snap(SPPenContext *pc, NR::Point &p, guint const state)
+spdc_endpoint_snap(SPPenContext const *const pc, NR::Point &p, guint const state)
 {
     spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
 }
 
 /** Snaps new node's handle relative to the new node. */
 static void
-spdc_endpoint_snap_handle(SPPenContext *pc, NR::Point &p, guint const state)
+spdc_endpoint_snap_handle(SPPenContext const *const pc, NR::Point &p, guint const state)
 {
     g_return_if_fail(( pc->npoints == 2 ||
                        pc->npoints == 5   ));
