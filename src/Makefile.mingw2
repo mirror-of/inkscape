@@ -1,0 +1,41 @@
+###########################################################################
+#  $Id$
+###########################################################################
+# Makefile for building with MinGW
+###########################################################################
+
+include ../Makefile.mingw.common
+
+include ./make.ofiles
+include ./make.dep
+
+OBJ = $(OBJECTS)
+
+#Check for 'generated' files
+all: helper/sp-marshal.h inkscape.exe
+
+helper/sp-marshal.h:
+	make -C helper     -f Makefile.mingw
+
+
+
+#RES=inkres.o
+RES=
+
+inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
+	$(CXX) -o inkscape.exe main.o winmain.o inkscape.o $(RES) libinkscape.a $(LIBS)
+	strip inkscape.exe
+
+inkres.o: inkscape.rc
+	$(WINDRES) inkscape.rc $(RES)
+
+libinkscape.a: $(OBJ)
+	ar crv libinkscape.a $(OBJ)
+	ranlib libinkscape.a
+
+
+clean:
+	$(RM) *.o
+	$(RM) *.a
+
+
