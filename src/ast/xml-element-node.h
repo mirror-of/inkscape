@@ -34,7 +34,7 @@ public:
     throw(InvalidTransformation);
 
     void write(std::ostream &os) const;
-    CString const &toString() const;
+    String const &toString() const;
 
 private:
 };

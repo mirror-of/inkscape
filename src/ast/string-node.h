@@ -14,19 +14,22 @@
 
 #include <cstring>
 #include "ast/node.h"
+#include "ast/string.h"
 
 namespace Inkscape {
 namespace AST {
 
 class StringNode : public Node {
 public:
-    StringNode(CString const &value) : _value(value) {}
+    explicit StringNode(CString const &value) : _value(value) {}
     StringNode(StringNode const &node) : _value(node._value) {}
 
-    CString const &toString() const { return _value; }
+    String const &toString() const { return _value; }
 
 private:
-    CString const &_value;
+    void operator=(StringNode const &);
+
+    String const _value;
 };
 
 };

@@ -22,6 +22,8 @@
 namespace Inkscape {
 namespace AST {
 
+class String;
+
 class Node : public gc {
 public:
     class InvalidTransformation : public std::runtime_error {
@@ -43,7 +45,7 @@ public:
     throw(InvalidTransformation);
 
     virtual void write(std::ostream &stream) const;
-    virtual CString const &toString() const=0;
+    virtual String const &toString() const=0;
 
 private:
     void operator=(Node const &);
