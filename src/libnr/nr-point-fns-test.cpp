@@ -75,6 +75,21 @@ int main(int argc, char *argv[])
         UTEST_ASSERT( NR::unit_vector(small_n3_4) == Point(-.6, 0.8) );
     }
 
+    UTEST_TEST("is_unit_vector") {
+        UTEST_ASSERT(!NR::is_unit_vector(p3n4));
+        UTEST_ASSERT(!NR::is_unit_vector(small_left));
+        UTEST_ASSERT(!NR::is_unit_vector(small_n3_4));
+        UTEST_ASSERT(!NR::is_unit_vector(part_nan));
+        UTEST_ASSERT(!NR::is_unit_vector(inf_left));
+        UTEST_ASSERT(!NR::is_unit_vector(Point(.5, 0.5)));
+        UTEST_ASSERT(NR::is_unit_vector(Point(.6, -0.8)));
+        UTEST_ASSERT(NR::is_unit_vector(Point(-.6, 0.8)));
+        UTEST_ASSERT(NR::is_unit_vector(Point(-1.0, 0.0)));
+        UTEST_ASSERT(NR::is_unit_vector(Point(1.0, 0.0)));
+        UTEST_ASSERT(NR::is_unit_vector(Point(0.0, -1.0)));
+        UTEST_ASSERT(NR::is_unit_vector(Point(0.0, 1.0)));
+    }
+
     return ( utest_end()
              ? EXIT_SUCCESS
              : EXIT_FAILURE );
