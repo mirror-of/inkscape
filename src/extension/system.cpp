@@ -372,7 +372,7 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
     /* sp_repr_print(repr); */
 
     if (strcmp(sp_repr_name(repr), "inkscape-extension")) {
-        printf("How come I don't have a spmodule?\n");
+        g_warning("Extension definition started with <%s> instead of <inkscape-extension>.  Extension will not be created.\n", sp_repr_name(repr));
         return NULL;
     }
 
@@ -456,6 +456,8 @@ build_from_file(gchar const *filename)
     SPReprDoc *doc = sp_repr_read_file(filename, NULL);
     Extension *ext = build_from_reprdoc(doc, NULL);
     sp_repr_document_unref(doc);
+    if (ext == NULL)
+        g_warning("Unable to create extension from definition file %s.\n", filename);
     return ext;
 }
 

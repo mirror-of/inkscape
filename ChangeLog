@@ -1,3 +1,12 @@
+2004-06-23  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/dropshadow.inkmod, share/extensions/roundhole.inkmod,
+	src/extension/system.cpp:
+
+	Setting it up so that poorly formed inkmod files generate actual GTK
+	warnings so that they can be easily hidden.  Also, fixing these two inkmod
+	files so that they don't generate the above mentioned warnings.
+
 2004-06-22  Kees Cook  <kees@outflux.net>
 
 	* src/inkscape.cpp: added SIGBUS and SIGABRT handling.

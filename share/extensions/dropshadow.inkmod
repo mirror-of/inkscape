@@ -1,8 +1,8 @@
 <inkscape-extension>
     <name>Dropshadow</name>
     <id>org.inkscape.filter.dropshadow</id>
-    <filter>
-    </filter>
+    <effect>
+    </effect>
     <script>
         <command reldir="extensions">svg_dropshadow --opacity=0.9 --color=black</command>
         <check reldir="extensions">svg_dropshadow</check>
