@@ -80,7 +80,7 @@ public:
             // finalized; instead we use an offset-from-base-address
 
             GC_register_finalizer_ignore_self(base, _invoke_dtor,
-                                                    _offset(base, this)
+                                                    _offset(base, this),
                                                     &old_cleanup, &old_data);
 
             if (old_cleanup) {
