@@ -42,7 +42,6 @@ libinkpre_a_SOURCES =	\
 	brokenimage.xpm	\
 	color-rgba.h	\
 	color.cpp color.h	\
-	common-style.cpp common-style.h	\
 	desktop-affine.cpp desktop-affine.h	\
 	desktop-events.cpp desktop-events.h	\
 	desktop-handles.cpp desktop-handles.h	\
@@ -61,7 +60,6 @@ libinkpre_a_SOURCES =	\
 	event-context.cpp event-context.h	\
 	extract-uri.cpp extract-uri.h	\
 	file.cpp file.h	\
-	fill-or-stroke.h	\
 	forward.h	\
 	gc-alloc.h \
 	gc-anchored.h \
@@ -205,7 +203,9 @@ libinkpre_a_SOURCES =	\
 # libinkpost.a: Any object file that needs to be near the end of the link line.
 # gradient-chemistry.o is called by some things in display/.
 libinkpost_a_SOURCES =	\
+	common-style.cpp common-style.h	\
 	decimal-round.h	\
+	fill-or-stroke.h	\
 	fixes.cpp \
 	gradient-chemistry.cpp gradient-chemistry.h	\
 	round.h
