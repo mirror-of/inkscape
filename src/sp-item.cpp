@@ -501,7 +501,7 @@ sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
 }
 
 static Inkscape::XML::Node *
-sp_item_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
+sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
 {
     SPItem *item = SP_ITEM(object);
 
@@ -512,27 +512,42 @@ sp_item_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         sp_repr_set_attr(repr, "transform", NULL);
     }
 
-    if (SP_OBJECT_PARENT(object)) {
-        gchar *s = NULL;
-        if (SP_IS_ITEM(SP_OBJECT_PARENT(object))) { // items have style, figure out the difference
-            s = sp_style_write_difference (SP_OBJECT_STYLE(object), SP_OBJECT_STYLE(SP_OBJECT_PARENT(object)));
-        } else { // e.g. the parent may be styleless defs
-            s = sp_style_write_string (SP_OBJECT_STYLE(object), SP_STYLE_FLAG_IFSET);
-        }
-        if (s) {
-            sp_repr_set_attr(repr, "style", (*s) ? s : NULL);
+    SPObject const *const parent = SP_OBJECT_PARENT(object);
+    /* todo: Can someone please document why this is conditional on having a parent?
+       The only parentless thing I can think of is the top-level <svg> element (SPRoot).
+       SPRoot is derived from SPGroup, and can have style.  I haven't looked at callers. */
+    if (parent) {
+        SPStyle const *const obj_style = SP_OBJECT_STYLE(object);
+        if (obj_style) {
+            gchar *s = sp_style_write_string(obj_style, SP_STYLE_FLAG_IFSET);
+            sp_repr_set_attr(repr, "style", ( *s ? s : NULL ));
             g_free(s);
+        } else {
+            /* I'm not sure what to do in this case.  Bug #1165868 suggests that it can arise, but
+             * the submitter doesn't know how to do so reliably.  The main two options are either
+             * leave repr's style attribute unchanged, or explicitly clear it.  Must also consider
+             * what to do with property attributes for the element; see below.
+             */
+            char const *style_str = repr->attribute("style");
+            if (!style_str) {
+                style_str = "NULL";
+            }
+            g_warning("Item's style is NULL; repr style attribute is %s", style_str);
         }
-        // Since differencing with parent may remove some of the properties in style=, this may
-        // unexpectedly reveal (and enable) the css attrs of the same names if they are present
-        // (they are lower priority than style= but are read if there's no corresponding inline
-        // property). So here we unset any style attrs that correspond to our object's
-        // SPStyle. This means all properties will end up in style= and the attrs will be gone.
+
+        /* We treat object->style as authoritative.  Its effects have been written to the style
+         * attribute above; any properties that are unset we take to be deliberately unset (e.g. so
+         * that clones can override the property).
+         *
+         * Note that the below has an undesirable consequence of changing the appearance on
+         * renderers that lack CSS support (e.g. SVG tiny); possibly we should write property
+         * attributes instead of a style attribute.
+         */
         sp_style_unset_property_attrs (object);
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        sp_repr_set_attr(repr, "sodipodi:insensitive", item->sensitive ? NULL : "true");
+        sp_repr_set_attr(repr, "sodipodi:insensitive", ( item->sensitive ? NULL : "true" ));
     }
 
     if (((SPObjectClass *) (parent_class))->write) {
