@@ -65,7 +65,6 @@ OBJECTS = \
 	helper/unit-menu.o \
 	helper/units.o \
 	helper/window.o \
-	ink-snprintf.o \
 	inkjar/jar.o \
 	inkscape-stock.o \
 	inkscape.o \
@@ -319,7 +318,6 @@ LINTS = \
 	helper/unit-menu.lint \
 	helper/units.lint \
 	helper/window.lint \
-	ink-snprintf.lint \
 	inkjar/jar.lint \
 	inkscape-stock.lint \
 	inkscape.lint \

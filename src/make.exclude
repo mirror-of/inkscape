@@ -15,6 +15,7 @@ dialogs/fxiledialog-win32.cpp
 display/nr-uta.cpp
 display/testnr.cpp
 helper/bezier-utils-test.cpp
+ink-snprintf.cpp
 inkview.cpp
 libnr/nr-matrix-test.cpp
 libnr/nr-point-fns-test.cpp

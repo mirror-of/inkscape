@@ -1,5 +1,5 @@
 
-#include "FileDialog.h"
+#include "filedialog.h"
 #include "module.h"
 
 #include <windows.h>
