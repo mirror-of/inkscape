@@ -13,7 +13,7 @@
 #define __INKSCAPE_POTRACE_H__
 
 #include <glib.h>
-#include <trace.h>
+#include <trace/trace.h>
 
 
 namespace Inkscape
