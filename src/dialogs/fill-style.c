@@ -43,6 +43,7 @@
 #include "../helper/window.h"
 #include "../svg/svg.h"
 #include "../widgets/sp-widget.h"
+#include "../sp-gradient.h"
 #include "../widgets/paint-selector.h"
 #include "../style.h"
 #include "../gradient-chemistry.h"
@@ -50,7 +51,6 @@
 #include "../desktop-handles.h"
 #include "../selection.h"
 #include "../sp-item.h"
-#include "../sp-gradient.h"
 #include "../inkscape.h"
 
 #include "fill-style.h"

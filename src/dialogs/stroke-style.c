@@ -40,6 +40,7 @@
 #include "helper/unit-menu.h"
 #include "../svg/svg.h"
 #include "../widgets/sp-widget.h"
+#include "../sp-gradient.h"
 #include <widgets/paint-selector.h>
 #include <widgets/dash-selector.h>
 #include "enums.h"
@@ -49,7 +50,6 @@
 #include "../desktop-handles.h"
 #include "../selection.h"
 #include "../sp-item.h"
-#include "../sp-gradient.h"
 #include "../inkscape.h"
 
 #include "stroke-style.h"

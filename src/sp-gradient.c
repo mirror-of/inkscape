@@ -687,7 +687,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 	/* Remove all stops */
 	while (sl) {
 		/* fixme: This should work, unless we make gradient into generic group */
-		sp_repr_unparent (sl->data);
+		sp_repr_unparent ((SPRepr *)sl->data);
 		sl = g_slist_remove (sl, sl->data);
 	}
 
@@ -769,7 +769,7 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 		sp_gradient_ensure_vector (gr->href);
 		if (!gr->vector || (gr->vector->nstops != gr->href->vector->nstops)) {
 			if (gr->vector) g_free (gr->vector);
-			gr->vector = g_malloc (sizeof (SPGradientVector) + (gr->href->vector->nstops - 1) * sizeof (SPGradientStop));
+			gr->vector = (SPGradientVector *)g_malloc (sizeof (SPGradientVector) + (gr->href->vector->nstops - 1) * sizeof (SPGradientStop));
 			gr->vector->nstops = gr->href->vector->nstops;
 		}
 		memcpy (gr->vector, gr->href->vector, sizeof (SPGradientVector) + (gr->vector->nstops - 1) * sizeof (SPGradientStop));
@@ -780,7 +780,7 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 
 	if (!gr->vector || gr->vector->nstops != vlen) {
 		if (gr->vector) g_free (gr->vector);
-		gr->vector = g_malloc (sizeof (SPGradientVector) + (vlen - 1) * sizeof (SPGradientStop));
+		gr->vector = (SPGradientVector *)g_malloc (sizeof (SPGradientVector) + (vlen - 1) * sizeof (SPGradientStop));
 		gr->vector->nstops = vlen;
 	}
 
@@ -828,7 +828,7 @@ sp_gradient_ensure_colors (SPGradient *gr)
 	}
 
 	if (!gr->color) {
-		gr->color = g_new (gchar, 4 * NCOLORS);
+		gr->color = g_new (guchar, 4 * NCOLORS);
 	}
 
 	for (i = 0; i < gr->vector->nstops - 1; i++) {
@@ -980,7 +980,7 @@ sp_gradient_render_vector_block_rgba (SPGradient *gradient, guchar *buf, gint wi
 	} else {
 		gchar *tmp;
 		gint x, y;
-		tmp = alloca (4 * height);
+		tmp = (gchar *)alloca (4 * height);
 		sp_gradient_render_vector_line_rgba (gradient, tmp, height, pos, span);
 		for (y = 0; y < height; y++) {
 			gchar *b;

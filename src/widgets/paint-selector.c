@@ -406,7 +406,7 @@ sp_paint_selector_get_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrixF *
 }
 
 void
-sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, unsigned int units, unsigned int spread)
+sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, SPGradientUnits units, SPGradientSpread spread)
 {
 	SPGradientSelector *gsel;
 	g_return_if_fail (SP_IS_PAINT_SELECTOR (psel));
@@ -425,8 +425,8 @@ sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnit
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
 	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
-	if (units) *units = gsel->gradientUnits;
-	if (spread) *spread = gsel->gradientSpread;
+	if (units) *units = (SPGradientUnits)gsel->gradientUnits;
+	if (spread) *spread = (SPGradientSpread)gsel->gradientSpread;
 }
 
 void

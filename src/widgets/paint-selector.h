@@ -84,8 +84,8 @@ void sp_paint_selector_set_gradient_bbox (SPPaintSelector *psel, gdouble x0, gdo
 void sp_paint_selector_set_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrixF *gs2d);
 void sp_paint_selector_get_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrixF *gs2d);
 
-void sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, unsigned int units, unsigned int spread);
-void sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, unsigned int *units, unsigned int *spread);
+void sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, SPGradientUnits units, SPGradientSpread spread);
+void sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnits *units, SPGradientSpread *spread);
 
 void sp_paint_selector_get_rgba_floatv (SPPaintSelector *psel, gfloat *rgba);
 void sp_paint_selector_get_cmyka_floatv (SPPaintSelector *psel, gfloat *cmyka);
