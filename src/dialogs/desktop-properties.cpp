@@ -887,9 +887,9 @@ sp_desktop_dialog(void)
 
         /* Checkbuttons */
         // FIXME: gray out snapping when grid is off
-        spw_vbox_checkbutton(dlg, v, _("Show grid"), "showgrid", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to grid"), "inkscape:grid-bbox", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap points to grid"), "inkscape:grid-points", cb);
+        spw_vbox_checkbutton(dlg, v, _("Show grid"), _("Show or hide grid"), "showgrid", cb);
+        spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to grid"), _("Snap the edges of the object bounding boxes"), "inkscape:grid-bbox", cb);
+        spw_vbox_checkbutton(dlg, v, _("Snap points to grid"), _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:grid-points", cb);
 
         /*   Commenting out until Nathan implements the grids -- bryce
          *   spw_checkbutton(dlg, t, _("Iso grid"), "isogrid", 0, row, 0, cb);
@@ -970,9 +970,9 @@ sp_desktop_dialog(void)
         /* Checkbuttons */
         // FIXME: gray out snapping when guides are off
         cb = G_CALLBACK(sp_dtw_whatever_toggled);
-        spw_vbox_checkbutton(dlg, v, _("Show guides"), "showguides", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to guides"), "inkscape:guide-bbox", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap points to guides"), "inkscape:guide-points", cb);
+        spw_vbox_checkbutton(dlg, v, _("Show guides"), _("Show or hide guides"), "showguides", cb);
+        spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to guides"),  _("Snap the edges of the object bounding boxes"), "inkscape:guide-bbox", cb);
+        spw_vbox_checkbutton(dlg, v, _("Snap points to guides"), _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:guide-points", cb);
 
         t = gtk_table_new(4, 2, FALSE);
         gtk_widget_show(t);

@@ -18,20 +18,8 @@
 #include <stdlib.h>
 #include <libnr/nr-macros.h>
 
-#include <gtk/gtksignal.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtklabel.h>
-
+#include <gtk/gtk.h>
 #include <glib.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkhscale.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtkframe.h>
  
 #include <glibmm/i18n.h>
 #include "helper/window.h"
@@ -84,12 +72,15 @@ spw_hbox(GtkWidget * table, int width, int col, int row)
  * This is a compound widget that includes a label.
  */
 GtkWidget *spw_vbox_checkbutton(GtkWidget *dialog, GtkWidget *vbox,
-				const gchar *label, gchar *key, GCallback cb)
+					const gchar *label, const gchar *tip, gchar *key, GCallback cb)
 {
   g_assert (dialog != NULL);
   g_assert (vbox != NULL);
 
+  GtkTooltips *tt = gtk_tooltips_new ();
+
   GtkWidget *b = gtk_check_button_new_with_label (label);
+  gtk_tooltips_set_tip(tt, b, tip, NULL);
   g_assert (b != NULL);
   gtk_widget_show (b);
   gtk_box_pack_start (GTK_BOX (vbox), b, FALSE, FALSE, 0);
