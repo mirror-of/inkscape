@@ -778,14 +778,23 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->hadj = (GtkAdjustment *) gtk_adjustment_new (0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
     dtw->hscrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (dtw->hadj));
     gtk_table_attach (GTK_TABLE (tbl), dtw->hscrollbar, 1, 2, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
-    /* Vertical scrollbar */
+    /* Vertical scrollbar and the sticky zoom button */
+    dtw->vscrollbar_box = gtk_vbox_new (FALSE, 0);
+    dtw->sticky_zoom = sp_button_new_from_data (10, 	 
+                                                 SP_BUTTON_TYPE_TOGGLE, 	 
+                                                 NULL, 	 
+                                                 "sticky_zoom", 	 
+                                                 _("Zoom drawing if window size changes"), 	 
+                                                 tt); 	 
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dtw->sticky_zoom), prefs_get_int_attribute ("options.stickyzoom", "value", 0));
+    gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->sticky_zoom, FALSE, FALSE, 0);
     dtw->vadj = (GtkAdjustment *) gtk_adjustment_new (0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
     dtw->vscrollbar = gtk_vscrollbar_new (GTK_ADJUSTMENT (dtw->vadj));
-    gtk_table_attach (GTK_TABLE (tbl), dtw->vscrollbar, 2, 3, 1, 2, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->vscrollbar, TRUE, TRUE, 0);
+    gtk_table_attach (GTK_TABLE (tbl), dtw->vscrollbar_box, 2, 3, 0, 2, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
 
     /* Canvas */
     w = gtk_frame_new (NULL);
-    //        gtk_frame_set_shadow_type (GTK_FRAME (w), GTK_SHADOW_IN);
     gtk_table_attach (GTK_TABLE (tbl), w, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     dtw->canvas = SP_CANVAS (sp_canvas_new_aa ());
     GTK_WIDGET_SET_FLAGS (GTK_WIDGET (dtw->canvas), GTK_CAN_FOCUS);
@@ -901,8 +910,7 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
             GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
 
-        guint sticky = prefs_get_int_attribute ("options.stickyzoom", "value", 0);
-        if (sticky) {
+        if (SP_BUTTON_IS_DOWN (dtw->sticky_zoom)) {
             NRRect newarea;
             double zpsp;
             /* Calculate zoom per pixel */
@@ -1159,10 +1167,10 @@ sp_desktop_widget_layout (SPDesktopWidget *dtw)
 
     if (prefs_get_int_attribute (fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 1) == 0) {
         gtk_widget_hide_all (dtw->hscrollbar);
-        gtk_widget_hide_all (dtw->vscrollbar);
+        gtk_widget_hide_all (dtw->vscrollbar_box);
     } else {
         gtk_widget_show_all (dtw->hscrollbar);
-        gtk_widget_show_all (dtw->vscrollbar);
+        gtk_widget_show_all (dtw->vscrollbar_box);
     }
 
     if (prefs_get_int_attribute (fullscreen ? "fullscreen.rulers" : "window.rulers", "state", 1) == 0) {
@@ -1338,11 +1346,11 @@ sp_desktop_toggle_scrollbars (SPDesktop *dt)
 {
     if (GTK_WIDGET_VISIBLE (dt->owner->hscrollbar)) {
         gtk_widget_hide_all (dt->owner->hscrollbar);
-        gtk_widget_hide_all (dt->owner->vscrollbar);
+        gtk_widget_hide_all (dt->owner->vscrollbar_box);
         prefs_set_int_attribute (dt->is_fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 0);
     } else {
         gtk_widget_show_all (dt->owner->hscrollbar);
-        gtk_widget_show_all (dt->owner->vscrollbar);
+        gtk_widget_show_all (dt->owner->vscrollbar_box);
         prefs_set_int_attribute (dt->is_fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 1);
     }
 }

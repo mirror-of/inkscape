@@ -422,9 +422,9 @@
      showgrid="false"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="5.6568539"
-     inkscape:cx="699.63145"
-     inkscape:cy="224.21749"
+     inkscape:zoom="22.627416"
+     inkscape:cx="3.9868642"
+     inkscape:cy="136.97436"
      inkscape:window-width="1140"
      inkscape:window-height="660"
      inkscape:window-x="31"
@@ -456,43 +456,20 @@
        ry="0" />
     <path
        style="font-size:12;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linecap:round;"
-       d="M 8.82812 156.172 L 6.95312 154.297 "
+       d="M 8.8281200,156.17200 L 6.5111782,153.85506"
        id="path237"
        transform="translate(3.04688,-1.79703)"
        sodipodi:nodetypes="cc" />
     <path
        sodipodi:type="arc"
-       style="font-size:12;fill:url(#radialGradient501);fill-opacity:1.0;fill-rule:evenodd;stroke:#000000;stroke-width:1.26358;stroke-dasharray:none;"
+       style="fill:#ffffff;fill-opacity:2.0861628e-06;fill-rule:evenodd;stroke:#000000;stroke-width:1.4443790;"
        id="path236"
-       d="M 8.831767 152.500000 A 3.831767 3.750000 0 1 0 1.168233,152.500000 A 3.83177 3.75 0 1 0 8.83177 152.5 L 5.000000 152.500000 z"
-       sodipodi:cx="5.000000"
-       sodipodi:cy="152.500000"
-       sodipodi:rx="3.831767"
-       sodipodi:ry="3.750000"
-       transform="matrix(0.978659,0,0,0.999958,1.9817,-3.11874)" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;"
-       d="M 0.625 147.5 L 0.625 143.125 L -3.75 143.125 "
-       id="path281"
-       sodipodi:nodetypes="ccc"
-       transform="translate(13.75,0)" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;"
-       d="M 0.625 147.5 L 0.625 143.125 L 5 143.125 "
-       id="path282"
-       sodipodi:nodetypes="ccc" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;"
-       d="M 0.625 138.75 L 0.625 143.125 L 5 143.125 "
-       id="path283"
-       sodipodi:nodetypes="ccc"
-       transform="translate(0,13.75)" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;"
-       d="M -3.75 143.125 L 0.625 143.125 L 0.625 138.75 "
-       id="path284"
-       sodipodi:nodetypes="ccc"
-       transform="translate(13.75,13.75)" />
+       d="M 8.8317671 152.50000 A 3.8317671 3.7500000 0 1 0 1.1682329,152.50000 A 3.8317671 3.7500000 0 1 0 8.8317671 152.50000 z"
+       sodipodi:cx="5.0000000"
+       sodipodi:cy="152.50000"
+       sodipodi:rx="3.8317671"
+       sodipodi:ry="3.7500000"
+       transform="matrix(0.856156,0.000000,0.000000,0.874791,2.594214,15.96955)" />
   </g>
   <g
      id="distribute_left">
