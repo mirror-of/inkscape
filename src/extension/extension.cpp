@@ -62,7 +62,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 		imp = in_imp;
 	}
 
-	printf("Extension Constructor: ");
+//	printf("Extension Constructor: ");
 	if (repr != NULL) {
 		const gchar *val;
 		gchar c[256];
@@ -84,7 +84,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 
 		sp_module_db_register (this);
 	}
-	printf("%s\n", name);
+//	printf("%s\n", name);
 
 	return;
 }
