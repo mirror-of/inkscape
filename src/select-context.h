@@ -29,6 +29,7 @@ struct _SPSelectContext {
 	guint dragging : 1;
 	guint moved : 1;
 	guint button_press_shift : 1;
+	guint button_press_ctrl : 1;
 	SPItem *item;
 	SPCanvasItem *grabbed;
 	SPSelTrans seltrans;

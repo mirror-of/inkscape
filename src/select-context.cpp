@@ -221,9 +221,9 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 			yp = (gint) event->button.y;
 			within_tolerance = TRUE;
 	
-			if (!(event->button.state & GDK_SHIFT_MASK)) {
-				// if shift was pressed, do not move objects; 
-				// pass the event to root handler which will create a rubberband
+			if (!(event->button.state & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK)) {
+				// if shift or ctrl was pressed, do not move objects; 
+				// pass the event to root handler which will perform rubberband, shift-click, ctrl-click
 
 				sc->dragging = TRUE;
 				sc->moved = FALSE;
@@ -339,7 +339,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	SPSelectContext *sc;
 	SPSelTrans *seltrans;
 	SPSelection *selection;
-	SPItem *item;
+	SPItem *item = NULL, *group = NULL;
 	gint ret = FALSE;
 	NRPoint p;
 	NRRect b;
@@ -369,9 +369,10 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					     NULL, event->button.time);
 			sc->grabbed = SP_CANVAS_ITEM (desktop->acetate);
 			
-			// remember that shift was on before button press
+			// remember that shift or ctrl was on before button press
 			// (originally intended by lauris for partial selects and then abandoned)
 			sc->button_press_shift = (event->button.state & GDK_SHIFT_MASK) ? TRUE : FALSE;
+			sc->button_press_ctrl = (event->button.state & GDK_CONTROL_MASK) ? TRUE : FALSE;
 
 			ret = TRUE;
 		}
@@ -466,13 +467,43 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					if (sc->button_press_shift) {
 						// this was a shift-click, select what was clicked upon
 
-						item = sp_desktop_item_at_point (desktop, event->button.x, event->button.y);
+						sc->button_press_shift = FALSE;
+
+						if (sc->button_press_ctrl) {
+							item = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, TRUE);
+							group = sp_desktop_group_at_point (desktop, event->button.x, event->button.y);
+							sc->button_press_ctrl = FALSE;
+						} else {
+							item = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, FALSE);
+						}
+						// if there's both a group and an item at point, deselect group to prevent double selection
+						if (group) {
+							if (sp_selection_item_selected (selection, group)) {
+								sp_selection_remove_item (selection, group);
+							}
+						}
 						if (item) {
 							// toggle selected status
 							if (sp_selection_item_selected (selection, item)) {
 								sp_selection_remove_item (selection, item);
 							} else {
 								sp_selection_add_item (selection, item);
+							}
+							item = NULL;
+						}
+
+					} else if (sc->button_press_ctrl) { // ctrl-click 
+
+						sc->button_press_ctrl = FALSE;
+
+						item = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, TRUE);
+
+						if (item) {
+							if (sp_selection_item_selected (selection, item)) {
+								sp_sel_trans_increase_state (seltrans);
+							} else {
+								sp_sel_trans_reset_state (seltrans);
+								sp_selection_set_item (selection, item);
 							}
 							item = NULL;
 						}
