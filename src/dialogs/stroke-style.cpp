@@ -790,16 +790,6 @@ sp_stroke_radio_button ( GtkWidget* tb, const char* n, const char* xpm,
 
 } // end of sp_stroke_radio_button()
 
-static bool
-marker_not_in_doc (SPRepr *repr, GSList *ml)
-{
-    for (; ml != NULL; ml = ml->next){
-        SPRepr *item_repr = SP_OBJECT_REPR((SPItem *) ml->data);
-        if (sp_repr_attr(repr,"id")==sp_repr_attr(item_repr,"id")) return FALSE;
-    }
-    return TRUE;
-}
-
 static guchar *
 sp_marker_preview_from_svg( const gchar *name,
                          unsigned int size,
@@ -2168,82 +2158,6 @@ sp_stroke_style_update_marker_menus ( SPWidget *spw,
          GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(spw), "end_mark_menu");
          gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
     }
-}
-
-/**
-* Ensure that the a given marker type is present in the <def> section.
-* \param n Marker type (e.g. url(#mTriangle))
-*/
-static void
-sp_stroke_style_ensure_marker (const gchar* n)
-{
-    /* Extract the actual name of the link
-    ** e.g. get mTriangle from url(#mTriangle).
-    */
-    gchar* buffer = g_strdup (n);
-    buffer[strlen(buffer) - 1] = '\0';
-
-    gchar* name = buffer;
-    while (*name != '\0' && *name != '#')
-        name++;
-
-    if (*name == '\0')
-        return;
-
-    name++;
-
-    if (*name == '\0')
-        return;
-
-    /* Read the defs to see if one of these markers is already there */
-    SPRepr* defs = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (SP_WIDGET_DOCUMENT (spw)));
-    SPRepr* r = defs->children;
-    while (r && strcmp( sp_repr_attr(r, "id"), name)) {
-        r = r->next;
-    }
-
-    if (r == NULL) {
-        if (!sp_marker_load_from_svg (name, SP_WIDGET_DOCUMENT (spw) ) ){
-
-            SPRepr* repr = sp_repr_new ("marker");
-            sp_repr_add_child (defs, repr, NULL);
-            sp_repr_unref (repr);
-
-            sp_repr_set_attr(repr, "id", name);
-            sp_repr_set_attr(repr, "markerWidth", "12.5");
-            sp_repr_set_attr(repr, "markerHeight", "12.5");
-            sp_repr_set_attr(repr, "refX", "6.25");
-            sp_repr_set_attr(repr, "refY", "6.25");
-            sp_repr_set_attr(repr, "orient", "auto");
-
-            SPRepr* path_repr = sp_repr_new ("path");
-            sp_repr_add_child (repr, path_repr, NULL);
-            sp_repr_unref (path_repr);
-
-            if (strcmp (name, "mArrow") == 0) {
-                sp_repr_set_attr (
-                    path_repr,
-                    "d",
-                    "M 0.0068092 6.28628 "
-                    "L 12.4563 12.5487 "
-                    "C 8.66061 8.58881 8.89012 4.05564 12.2688 0.0725591 "
-                    "L 0.0068092 6.28628 z"
-                    );
-            } else {
-                sp_repr_set_attr (
-                    path_repr,
-                    "d",
-                    "M 0.0068092 6.28628 "
-                    "L 12.4563 12.5487 "
-                    "L 12.2688 0.0725591 "
-                    "L 0.0068092 6.28628 z"
-                    );
-            }
-        }
-        sp_document_done (SP_WIDGET_DOCUMENT (spw));
-    }
-
-    free (buffer);
 }
 
 
