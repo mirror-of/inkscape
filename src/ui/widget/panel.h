@@ -39,13 +39,14 @@ public:
 
 protected:
     void _setTargetFillable( PreviewFillable *target );
-    void _handleAction( int setId, int itemId );
+    void _regItem( Gtk::MenuItem* item, int group, int id );
+
+    virtual void _handleAction( int setId, int itemId );
 
 
 private:
     void init();
     void bounceCall(int i, int j);
-
 
     Glib::ustring   label;
 

@@ -111,6 +111,11 @@ void Panel::setLabel(Glib::ustring const &label)
     tabTitle.set_label(this->label);
 }
 
+void Panel::_regItem( Gtk::MenuItem* item, int group, int id )
+{
+    menu.append( *item );
+    item->signal_activate().connect( sigc::bind<int, int>( sigc::mem_fun(*this, &Panel::bounceCall), group + 2, id) );
+}
 
 void Panel::bounceCall(int i, int j)
 {
