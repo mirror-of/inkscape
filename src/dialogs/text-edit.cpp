@@ -547,7 +547,7 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
 
     text = NULL;
     items = 0;
-    item = sp_selection_item_list(SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
+    item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
 
     for (; item != NULL; item = item->next) { 
         // apply style to the reprs of all text objects in the selection
@@ -829,16 +829,14 @@ sp_text_edit_dialog_line_spacing_changed (GtkEditable *editable, GtkWidget *dlg)
 static SPText *
 sp_ted_get_selected_text_item (void)
 {
-    const GSList *item;
-
     if (!SP_ACTIVE_DESKTOP)
         return NULL;
 
-    item = sp_selection_item_list(SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
-    
-    for (; item != NULL; item = item->next) {
-    
-        if (SP_IS_TEXT(item->data)) 
+    for (const GSList *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
+         item != NULL;
+         item = item->next)
+    {
+        if (SP_IS_TEXT(item->data))
             return SP_TEXT (item->data);
     }
 
@@ -850,17 +848,17 @@ sp_ted_get_selected_text_item (void)
 static unsigned
 sp_ted_get_selected_text_count (void)
 {
-    const GSList *item;
-    unsigned items;
-
     if (!SP_ACTIVE_DESKTOP) 
         return 0;
 
-    items = 0;
-    item = sp_selection_item_list(SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
-    
-    for (; item != NULL; item = item->next) {
-        if (SP_IS_TEXT(item->data)) ++items;
+    unsigned int items = 0;
+
+    for (const GSList *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
+         item != NULL;
+         item = item->next)
+    {
+        if (SP_IS_TEXT(item->data))
+            ++items;
     }
 
     return items;
