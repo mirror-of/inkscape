@@ -466,71 +466,66 @@ DialogAlign::DialogAlign():
 {
     //Instanciate the align buttons
     addAlignButton("al_left_out",
-                   _("Right side of aligned objects to left side of anchor"),
+                   _("Align right sides of objects to left side of anchor"),
                    0, 0);
     addAlignButton("al_left_in",
-                   _("Left side of aligned objects to left side of anchor"),
+                   _("Align left sides"),
                    0, 1);
     addAlignButton("al_center_hor",
                    _("Center horizontally"),
                    0, 2);
     addAlignButton("al_right_in",
-                   _("Right side of aligned objects to right side of anchor"),
+                   _("Align right sides"),
                    0, 3);
     addAlignButton("al_right_out",
-                   _("Left side of aligned objects to right side of anchor"),
+                   _("Align left sides of objects to right side of anchor"),
                    0, 4);
     addAlignButton("al_top_out",
-                   _("Bottom of aligned objects to top of anchor"),
+                   _("Align bottoms of objects to top of anchor"),
                    1, 0);
     addAlignButton("al_top_in",
-                   _("Top of aligned objects to top of anchor"),
+                   _("Align tops"),
                    1, 1);
     addAlignButton("al_center_ver",
                    _("Center vertically"),
                    1, 2);
     addAlignButton("al_bottom_in",
-                   _("Bottom of aligned objects to bottom of anchor"),
+                   _("Align bottoms"),
                    1, 3);
     addAlignButton("al_bottom_out",
-                   _("Top of aligned objects to bottom of anchor"),
+                   _("Align tops of objects to bottom of anchor"),
                    1, 4);
 
 
 
     //The distribute buttons
-    addDistributeButton("distribute_left",
-                        _("Distribute left sides of objects "
-                          "at even distances"),
-                        0, 0, false, NR::X, 1., 0.);
-    addDistributeButton("distribute_hcentre",
-                        _("Distribute centers of objects at even "
-                          "distances horizontally"),
-                        0, 1, false, NR::X, .5, .5);
-    addDistributeButton("distribute_right",
-                        _("Distribute right sides of objects at even "
-                          "distances"),
-                        0, 2, false, NR::X, 0., 1.);
     addDistributeButton("distribute_hdist",
-                        _("Distribute horizontal distance between "
-                          "objects equally"),
-                        0, 3, true, NR::X, .5, .5);
-    addDistributeButton("distribute_bottom",
-                        _("Distribute bottom sides of objects at even "
-                          "distances"),
-                        1, 0, false, NR::Y, 1., 0.);
-    addDistributeButton("distribute_vcentre",
-                        _("Distribute centers of objects at even "
-                          "distances vertically"),
-                        1, 1, false, NR::Y, .5, .5);
-    addDistributeButton("distribute_top",
-                        _("Distribute top sides of objects at even "
-                          "distances"),
-                        1, 2, false, NR::Y, 0, 1);
+                        _("Make horizontal gaps between objects equal"),
+                        0, 0, true, NR::X, .5, .5);
+
+    addDistributeButton("distribute_left",
+                        _("Distribute left sides equidistantly"),
+                        0, 1, false, NR::X, 1., 0.);
+    addDistributeButton("distribute_hcentre",
+                        _("Distribute centers equidistantly horizontally"),
+                        0, 2, false, NR::X, .5, .5);
+    addDistributeButton("distribute_right",
+                        _("Distribute right sides equidistantly"),
+                        0, 3, false, NR::X, 0., 1.);
+
     addDistributeButton("distribute_vdist",
-                        _("Distribute vertical distance between objects "
-                          "equally"),
-                        1, 3, true, NR::Y, .5, .5);
+                        _("Make vertical gaps between objects equal"),
+                        1, 0, true, NR::Y, .5, .5);
+
+    addDistributeButton("distribute_bottom",
+                        _("Distribute bottoms equidistantly"),
+                        1, 1, false, NR::Y, 1., 0.);
+    addDistributeButton("distribute_vcentre",
+                        _("Distribute centers equidistantly vertically"),
+                        1, 2, false, NR::Y, .5, .5);
+    addDistributeButton("distribute_top",
+                        _("Distribute tops equidistantly"),
+                        1, 3, false, NR::Y, 0, 1);
 
     //Node Mode buttons
     addNodeButton("node_halign",

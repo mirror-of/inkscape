@@ -83,15 +83,6 @@ static struct StockIcon
 
   //{INKSCAPE_STOCK_GUIDE_DIALOG,                  "guide_dialog.xpm"        },
 
-  //{INKSCAPE_STOCK_TOOLBOX_FILE,                  "toolbox_file.xpm"        },
-  //{INKSCAPE_STOCK_TOOLBOX_EDIT,                  "toolbox_edit.xpm"        },
-  //{INKSCAPE_STOCK_TOOLBOX_OBJECT,                "toolbox_object.xpm"      },
-  //{INKSCAPE_STOCK_TOOLBOX_SELECT,                "toolbox_select.xpm"      },
-  //{INKSCAPE_STOCK_TOOLBOX_DRAW,                  "toolbox_draw.xpm"        },
-  //{INKSCAPE_STOCK_TOOLBOX_ZOOM,                  "toolbox_zoom.xpm"        },
-  //{INKSCAPE_STOCK_TOOLBOX_NODE,                  "toolbox_node.xpm"        },
-  //{INKSCAPE_STOCK_SEPARATE_TOOL,                 "separate_tool.xpm"       },
-
   //{INKSCAPE_STOCK_EDIT_DUPLICATE,                "edit_duplicate.xpm"      },
 
   //{INKSCAPE_STOCK_SELECTION_TOP,                 "selection_top.xpm"       },

@@ -159,7 +159,7 @@ sp_object_properties_dialog (void)
         /* Stroke paint page */
         {
         GtkWidget *page = sp_stroke_style_paint_widget_new ();
-        sp_object_properties_page(nb, page, _("_Stroke paint"), "stroke-paint",
+        sp_object_properties_page(nb, page, _("Stroke _paint"), "stroke-paint",
                     INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE);
         }
 
@@ -177,7 +177,7 @@ sp_object_properties_dialog (void)
     gtk_object_set_data (GTK_OBJECT (dlg), "master_opacity", o_vb);
 
     GtkWidget *l_hb = gtk_hbox_new (FALSE, 4);
-    GtkWidget *l = gtk_label_new (_("Master opacity"));
+    GtkWidget *l = gtk_label_new_with_mnemonic (_("Master _opacity"));
     gtk_misc_set_alignment (GTK_MISC (l), 0.0, 1.0);
     gtk_box_pack_start (GTK_BOX (l_hb), l, FALSE, FALSE, 4);
     gtk_box_pack_start (GTK_BOX (o_vb), l_hb, FALSE, FALSE, 0);
@@ -191,6 +191,7 @@ sp_object_properties_dialog (void)
     GtkWidget *s = gtk_hscale_new (GTK_ADJUSTMENT (a));
     gtk_scale_set_draw_value (GTK_SCALE (s), FALSE);
     gtk_box_pack_start (GTK_BOX (hb), s, TRUE, TRUE, 4);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(l), s);
 
     GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
     gtk_box_pack_start (GTK_BOX (hb), sb, FALSE, FALSE, 0);

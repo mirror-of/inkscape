@@ -77,15 +77,6 @@
 
 //#define INKSCAPE_STOCK_GUIDE_DIALOG          "guide_dialog"
 
-//#define INKSCAPE_STOCK_TOOLBOX_FILE          "toolbox_file"
-//#define INKSCAPE_STOCK_TOOLBOX_EDIT          "toolbox_edit"
-//#define INKSCAPE_STOCK_TOOLBOX_OBJECT        "toolbox_object"
-//#define INKSCAPE_STOCK_TOOLBOX_SELECT        "toolbox_select"
-//#define INKSCAPE_STOCK_TOOLBOX_DRAW          "toolbox_draw"
-//#define INKSCAPE_STOCK_TOOLBOX_ZOOM          "toolbox_zoom"
-//#define INKSCAPE_STOCK_TOOLBOX_NODE          "toolbox_node"
-//#define INKSCAPE_STOCK_SEPARATE_TOOL         "separate_tool"
-
 //#define INKSCAPE_STOCK_EDIT_DUPLICATE        "edit_duplicate"
 
 //#define INKSCAPE_STOCK_SELECTION_TOP         "selection_top"
