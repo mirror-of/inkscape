@@ -6,18 +6,15 @@
 
 include ../Makefile.mingw.common
 
+all: generated outputs plugins
 
 ###################################
 # G E N E R A T E D    F I L E S
 ###################################
 
-#Check for 'generated' files
-#all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h \
-#inkscape.exe inkview.exe
+generated: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h
 
-#Static version.  leave out inkview.  too large
-all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h \
-inkscape.exe plugins
+
 
 helper/sp-marshal.h: helper/sp-marshal.h.mingw
 	$(CP) $(subst /,$(S), $<) $(subst /,$(S), $@)
@@ -45,6 +42,9 @@ OBJ = $(OBJECTS)
 ###################################
 # O U T P U T S
 ###################################
+
+outputs: inkscape.exe
+
 
 RES=inkres.o
 
