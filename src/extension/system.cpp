@@ -24,7 +24,7 @@
 #include <inkscape.h>
 #include <desktop-handles.h>
 
-#include "extenstion/extension.h"
+#include "extension/extension.h"
 #include "system.h"
 #include "db.h"
 #include "input.h"
