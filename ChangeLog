@@ -1,3 +1,7 @@
+2004-01-01  MenTaLguY <mental@rydia.net>
+
+	* src/libnr/nr-types.h: documented NR::Coord and NR::ICoord
+
 2003-12-31  MenTaLguY <mental@rydia.net>
 
 	* removed *S variants of NR structs
