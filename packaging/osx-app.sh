@@ -38,8 +38,10 @@ fi
 # Fix a given executable or library to be relocatable
 fixlib () {
 if [ ! -d $1 ]; then
+  echo $1
   libs="`otool -L $1 | fgrep compatibility | cut -d\( -f1`"
   for lib in $libs; do
+    echo "  $lib"
     base=`echo $lib | awk -F/ '{print $NF}'`
     first=`echo $lib | cut -d/ -f1-3`
     to=@executable_path/../lib/$base
@@ -87,6 +89,16 @@ while $endl; do
     nfiles=$nnfiles
   fi
 done
+
+# Fix package deps
+(cd $package/Contents/MacOS/bin
+ for file in *; do
+    fixlib $file
+ done
+ cd ../lib
+ for file in *; do
+    fixlib $file
+ done)
 
 # Pull down all the share files
 rsync -av `dirname $binary`/../share/$binname/* $package/Contents/Resources/
