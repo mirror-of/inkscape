@@ -197,6 +197,8 @@ struct poptOption options[] = {
 
     {"export-id-only", 'j', 
      POPT_ARG_NONE, &sp_export_id_only, SP_ARG_EXPORT_ID_ONLY,
+     // TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
+     //  See "man inkscape" for details.
      N_("Export just the object with export-id, hide all others (only with export-id)"), 
      N_("ID")},
 
