@@ -1,13 +1,14 @@
 #ifndef __SP_COLOR_WHEEL_SELECTOR_H__
 #define __SP_COLOR_WHEEL_SELECTOR_H__
 
+#include <glib/gtypes.h>
+#include <gtk/gtktooltips.h>
 #include <gtk/gtkvbox.h>
+
 #include "../color.h"
 #include "sp-color-wheel.h"
 #include "sp-color-slider.h"
 #include "sp-color-selector.h"
-
-#include <glib.h>
 
 
 

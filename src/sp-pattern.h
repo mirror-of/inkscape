@@ -12,6 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtk/gtktypeutils.h>
+
 #include "forward.h"
 
 #define SP_TYPE_PATTERN (sp_pattern_get_type ())

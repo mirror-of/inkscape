@@ -12,6 +12,7 @@
 
 #include <sigc++/sigc++.h>
 #include "event-context.h"
+#include "forward.h"
 #include "nodepath.h"
 #include "knotholder.h"
 

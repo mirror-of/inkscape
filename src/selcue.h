@@ -12,6 +12,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib/gslist.h>
+#include <sigc++/sigc++.h>
+
+#include <forward.h>
+
 enum {
         SP_SELCUE_NONE,
         SP_SELCUE_MARK,
