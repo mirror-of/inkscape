@@ -3146,7 +3146,7 @@ msgstr "Wählen Sie die zu importierende Datei"
 #. string here should be changed.)
 #: src/help.cpp:65
 msgid "about.svg"
-msgstr "about.de.svg"
+msgstr "about.svg"
 
 #: src/help.cpp:81 src/verbs.cpp:1851
 msgid "About Inkscape"
