@@ -49,6 +49,7 @@ static void sp_item_widget_change_selection (SPWidget *spw, SPSelection *selecti
 static void sp_item_widget_setup (SPWidget *spw, SPSelection *selection);
 static void sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw);
+static void sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw);
 static void sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw);
@@ -130,6 +131,8 @@ sp_item_widget_new (void)
     gtk_table_attach ( GTK_TABLE (t), cb, 1, 2, 0, 1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
+
+    g_signal_connect (G_OBJECT(cb), "toggled", G_CALLBACK(sp_item_widget_visibility_toggled), spw);
                        
     gtk_object_set_data (GTK_OBJECT (spw), "visible", cb);
     cb = gtk_check_button_new_with_label (_("Active"));
@@ -408,9 +411,45 @@ sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw)
     gtk_object_set_data ( GTK_OBJECT (spw), "blocked", 
                           GUINT_TO_POINTER (FALSE) );
 
-} // end of sp_item_widget_sensitivity_toggled()
+}
 
+void
+sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw)
+{
 
+    SPItem *item;
+    SPException ex;
+
+    if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
+        return;
+
+    item = sp_selection_item (SP_WIDGET_SELECTION (spw));
+    g_return_if_fail (item != NULL);
+
+    gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
+
+    SP_EXCEPTION_INIT (&ex);
+    
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+    
+        sp_object_removeAttribute ( SP_OBJECT (item), 
+                                    "visibility", 
+                                    &ex );
+    
+    } else {
+        
+        sp_object_setAttribute ( SP_OBJECT (item), 
+                                 "visibility", 
+                                 "hidden", 
+                                 &ex );
+    }
+
+    sp_document_maybe_done ( SP_WIDGET_DOCUMENT (spw), 
+                             "ItemDialog:visiblity" );
+
+    gtk_object_set_data ( GTK_OBJECT (spw), "blocked", 
+                          GUINT_TO_POINTER (FALSE) );
+}
 
 static void
 sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw)

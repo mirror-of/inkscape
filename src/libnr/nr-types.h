@@ -118,6 +118,7 @@ public:
 	
 	operator NRPoint() const {
 		NRPoint nrp;
+		g_warning("Cast from NR::Point to depreciated NRPoint");
 		nrp.x = _pt[X];
 		nrp.y = _pt[Y];
 		return nrp;
