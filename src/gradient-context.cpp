@@ -434,8 +434,8 @@ static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint st
         }
         for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
             sp_item_set_gradient(SP_ITEM(i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
-            sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, true, true);
-            sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, true, true);
+            sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, true, true, false);
+            sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, true, true, false);
             SP_OBJECT (i->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         if (ec->_grdrag) {

@@ -416,7 +416,7 @@ Set the position of point point_num of the gradient applied to item (either fill
 p_w (in desktop coordinates). Write_repr if you want the change to become permanent.
 */
 void
-sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool fill_or_stroke, bool write_repr)
+sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool fill_or_stroke, bool write_repr, bool scale)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
     NR::Matrix i2d = sp_item_i2d_affine (item);
@@ -448,26 +448,43 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(gradient);
 
     if (SP_IS_LINEARGRADIENT(gradient)) {
-		switch (point_num) {
-		case POINT_LG_P1:
-			if (write_repr) {
-				sp_repr_set_double (repr, "x1", p[NR::X]);
-				sp_repr_set_double (repr, "y1", p[NR::Y]);
-			} else {
-				SP_LINEARGRADIENT(gradient)->x1.computed = p[NR::X];
-				SP_LINEARGRADIENT(gradient)->y1.computed = p[NR::Y];
-				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
-			}
-			break;
-		case POINT_LG_P2:
-			if (write_repr) {
-				sp_repr_set_double (repr, "x2", p[NR::X]);
-				sp_repr_set_double (repr, "y2", p[NR::Y]);
-			} else {
-				SP_LINEARGRADIENT(gradient)->x2.computed = p[NR::X];
-				SP_LINEARGRADIENT(gradient)->y2.computed = p[NR::Y];
-				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
-			}
+        SPLinearGradient *lg = SP_LINEARGRADIENT(gradient);
+        switch (point_num) {
+            case POINT_LG_P1:
+                if (scale) {
+                    lg->x2.computed += (lg->x1.computed - p[NR::X]);
+                    lg->y2.computed += (lg->y1.computed - p[NR::Y]);
+                } 
+                lg->x1.computed = p[NR::X];
+                lg->y1.computed = p[NR::Y];
+                if (write_repr) {
+                    if (scale) {
+                        sp_repr_set_double (repr, "x2", lg->x2.computed);
+                        sp_repr_set_double (repr, "y2", lg->y2.computed);
+                    }
+                    sp_repr_set_double (repr, "x1", lg->x1.computed);
+                    sp_repr_set_double (repr, "y1", lg->y1.computed);
+                } else {
+                    SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+                }
+                break;
+            case POINT_LG_P2:
+                if (scale) {
+                    lg->x1.computed += (lg->x2.computed - p[NR::X]);
+                    lg->y1.computed += (lg->y2.computed - p[NR::Y]);
+                } 
+                lg->x2.computed = p[NR::X];
+                lg->y2.computed = p[NR::Y];
+                if (write_repr) {
+                    if (scale) {
+                        sp_repr_set_double (repr, "x1", lg->x1.computed);
+                        sp_repr_set_double (repr, "y1", lg->y1.computed);
+                    }
+                    sp_repr_set_double (repr, "x2", lg->x2.computed);
+                    sp_repr_set_double (repr, "y2", lg->y2.computed);
+                } else {
+                    SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+                }
 			break;
 		default:
 			break;
@@ -518,7 +535,7 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 
 				NR::Matrix move = NR::Matrix (NR::translate (-c_w)) *
 												 NR::Matrix (NR::rotate(-r1_angle)) * 
-												 NR::Matrix (NR::scale(move_stretch, 1)) *
+												 NR::Matrix (NR::scale(move_stretch, scale? move_stretch : 1)) *
 												 NR::Matrix (NR::rotate(r1_angle)) * 
 												 NR::Matrix (NR::rotate(move_angle)) * 
 												 NR::Matrix (NR::translate (c_w));
@@ -537,7 +554,7 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 
 				NR::Matrix move = NR::Matrix (NR::translate (-c_w)) *
 												 NR::Matrix (NR::rotate(-r2_angle)) * 
-												 NR::Matrix (NR::scale(move_stretch, 1)) *
+												 NR::Matrix (NR::scale(move_stretch, scale? move_stretch : 1)) *
 												 NR::Matrix (NR::rotate(r2_angle)) * 
 												 NR::Matrix (NR::rotate(move_angle)) * 
 												 NR::Matrix (NR::translate (c_w));

@@ -211,7 +211,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                 delete dragger;
 
                 // update the new merged dragger
-                d_new->fireDraggables(true, true);
+                d_new->fireDraggables(true, false, true);
                 d_new->parent->updateLines();
                 d_new->parent->setSelected (d_new);
                 d_new->updateKnotShape ();
@@ -244,7 +244,13 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                                     draggable->point_num == POINT_LG_P1? POINT_LG_P2 : POINT_LG_P1,
                                     draggable->fill_or_stroke)) {
                         // found the other end of the linear gradient;
-                        dr_snap = &(d_new->point);
+                        if (state & GDK_SHIFT_MASK) {
+                            // moving linear around center
+                            dr_snap = &(NR::Point (0.5*(d_new->point + dragger->point)));
+                        } else {
+                            // moving linear around the other end
+                            dr_snap = &d_new->point;
+                        }
                     }
                 }
             } else if (draggable->point_num == POINT_RG_R1 || draggable->point_num == POINT_RG_R2 || draggable->point_num == POINT_RG_FOCUS) {
@@ -309,7 +315,11 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
 
     dragger->point = p;
 
-    dragger->fireDraggables (false);
+    if ((state & GDK_CONTROL_MASK) && (state & GDK_SHIFT_MASK)) {
+        dragger->fireDraggables (false, true);
+    } else {
+        dragger->fireDraggables (false);
+    }
 
     dragger->updateDependencies(false);
 }
@@ -324,7 +334,11 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
 
     dragger->point_original = dragger->point = knot->pos;
 
-    dragger->fireDraggables (true);
+    if ((state & GDK_CONTROL_MASK) && (state & GDK_SHIFT_MASK)) {
+        dragger->fireDraggables (false, true);
+    } else {
+        dragger->fireDraggables (false);
+    }
 
     // make this dragger selected
     dragger->parent->setSelected (dragger);
@@ -352,7 +366,7 @@ gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
 Act upon all draggables of the dragger, setting them to the dragger's point
 */
 void
-GrDragger::fireDraggables (bool write_repr, bool merging_focus)
+GrDragger::fireDraggables (bool write_repr, bool scale_radial, bool merging_focus)
 {
     for (GSList const* i = this->draggables; i != NULL; i = i->next) {
         GrDraggable *draggable = (GrDraggable *) i->data;
@@ -364,7 +378,7 @@ GrDragger::fireDraggables (bool write_repr, bool merging_focus)
         // to the center, unless it's the first update upon merge when we must snap it to the point
         if (merging_focus || 
             !(draggable->point_num == POINT_RG_FOCUS && this->isA(draggable->item, POINT_RG_CENTER, draggable->fill_or_stroke)))
-            sp_item_gradient_set_coords (draggable->item, draggable->point_num, this->point, draggable->fill_or_stroke, write_repr);
+            sp_item_gradient_set_coords (draggable->item, draggable->point_num, this->point, draggable->fill_or_stroke, write_repr, scale_radial);
     }
 }
 
@@ -503,7 +517,7 @@ GrDragger::moveThisToDraggable (SPItem *item, guint point_num, bool fill_or_stro
         if (da->item == item && da->point_num == point_num && da->fill_or_stroke == fill_or_stroke) {
             continue;
         }
-        sp_item_gradient_set_coords (da->item, da->point_num, this->point, da->fill_or_stroke, write_repr);
+        sp_item_gradient_set_coords (da->item, da->point_num, this->point, da->fill_or_stroke, write_repr, false);
     }
     // FIXME: here we should also call this->updateDependencies(write_repr); to propagate updating, but how to prevent loops?
 }
@@ -519,6 +533,7 @@ GrDragger::updateDependencies (bool write_repr)
         GrDraggable *draggable = (GrDraggable *) i->data;
         switch (draggable->point_num) {
             case POINT_LG_P1:
+                // the other point is dependent only when dragging with ctrl+shift
                 this->moveOtherToDraggable (draggable->item, POINT_LG_P2, draggable->fill_or_stroke, write_repr);
                 break;
             case POINT_LG_P2:

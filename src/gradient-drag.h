@@ -85,7 +85,7 @@ struct GrDragger {
 	bool isA (guint point_num);
 	bool isA (SPItem *item, guint point_num, bool fill_or_stroke);
 
-	void fireDraggables (bool write_repr, bool merging_focus = false);
+	void fireDraggables (bool write_repr, bool scale_radial = false, bool merging_focus = false);
 };
 
 /**

@@ -54,7 +54,7 @@ SPGradient *sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, cons
 
 void sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool set);
 
-void sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_desk, bool fill_or_stroke, bool write_repr);
+void sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_desk, bool fill_or_stroke, bool write_repr, bool scale_radial);
 NR::Point sp_item_gradient_get_coords (SPItem *item, guint point_num, bool fill_or_stroke);
 
 #endif
