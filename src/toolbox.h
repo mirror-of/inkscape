@@ -29,4 +29,6 @@ void sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
 
 GtkWidget *sp_toolbox_button_normal_new_from_verb (GtkWidget *t, unsigned int size, sp_verb_t verb, SPView *view, GtkTooltips *tt);
 
+void aux_toolbox_space (GtkWidget *tb, gint space);
+
 #endif

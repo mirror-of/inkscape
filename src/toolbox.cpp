@@ -383,3 +383,8 @@ update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget 
 	}
 }
 
+void
+aux_toolbox_space (GtkWidget *tb, gint space)
+{
+	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, space);
+}
