@@ -1,5 +1,7 @@
 2004-08-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-matrix.h: NR::Matrix *= NR::translate: new operator.
+
 	* src/nodepath.cpp: Mark NodeSort operator< as static.
 	  Indentation as per CodingStyle.
 

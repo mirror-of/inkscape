@@ -135,6 +135,12 @@ public:
 
 	Matrix &operator*=(Matrix const &o);
 
+	Matrix &operator*=(translate const &o) {
+		_c[4] += o[X];
+		_c[5] += o[Y];
+		return *this;
+	}
+
 	inline Coord &operator[](int const i) {
 		return _c[i];
 	}
