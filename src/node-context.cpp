@@ -568,12 +568,16 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			}
 			break;
 		case GDK_Tab: // Tab - cycle selection forward
-			sp_nodepath_select_next (nc->nodepath);
-			ret = TRUE;
+			if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
+				sp_nodepath_select_next (nc->nodepath);
+				ret = TRUE;
+			} 
 			break;
 		case GDK_ISO_Left_Tab:  // Shift Tab - cycle selection backward
-			sp_nodepath_select_prev (nc->nodepath);
-			ret = TRUE;
+			if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
+				sp_nodepath_select_prev (nc->nodepath);
+				ret = TRUE;
+			}
 			break;
 		case GDK_Escape:
 			if (sp_rubberband_rect (&b)) { // cancel rubberband

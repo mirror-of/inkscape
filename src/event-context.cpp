@@ -38,6 +38,7 @@
 #include "helper/sp-intl.h"
 #include "selection-chemistry.h"
 #include "dialogs/desktop-properties.h"
+#include "macros.h"
 #include "tools-switch.h"
 
 static void sp_event_context_class_init (SPEventContextClass *klass);
@@ -246,7 +247,16 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			ret = sp_shortcut_invoke (shortcut, SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (event_context)));
 		case GDK_Tab: // disable tab/shift-tab which cycle widget focus
 		case GDK_ISO_Left_Tab: // they will get different functions
-			ret = TRUE;
+			if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
+				ret = TRUE;
+			} else {
+				/* Grab it away from Gtk */
+				shortcut = event->key.keyval;
+				if (event->key.state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
+				if (event->key.state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
+				if (event->key.state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
+				ret = sp_shortcut_invoke (shortcut, SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (event_context)));
+			}
 			break;
 		case GDK_W:
 		case GDK_w:
