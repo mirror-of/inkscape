@@ -76,9 +76,9 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
     else {
         doc = xmlParseFile (localFilename);
     }
-#else /* HAVE_LIBWMF */
+#else /* !HAVE_LIBWMF */
     doc = xmlParseFile (localFilename);
-#endif /* HAVE_LIBWMF */
+#endif /* !HAVE_LIBWMF */
 
     rdoc = sp_repr_do_read (doc, default_ns);
     if (doc)
