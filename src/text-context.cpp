@@ -395,7 +395,10 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_KP_Left:
 					case GDK_KP_4:
 						if (MOD__ALT) { 
-							sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-1, 0));
+							if (MOD__SHIFT)
+								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-10, 0));
+							else
+								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-1, 0));
 							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						} else {
 							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
@@ -410,7 +413,10 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_KP_Right:
 					case GDK_KP_6:
 						if (MOD__ALT) { 
-							sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(1, 0));
+							if (MOD__SHIFT)
+								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(10, 0));
+							else
+								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(1, 0));
 							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						} else {
 							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
@@ -425,7 +431,10 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_KP_Up:
 					case GDK_KP_8:
 						if (MOD__ALT) { 
-							sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -1));
+							if (MOD__SHIFT)
+								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -10));
+							else 
+								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -1));
 							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						} else {
 							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
@@ -440,7 +449,10 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_KP_Down:
 					case GDK_KP_2:
 						if (MOD__ALT) { 
-							sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 1));
+							if (MOD__SHIFT)
+								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 10));
+							else 
+								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 1));
 							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						} else {
 							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
