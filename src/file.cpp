@@ -213,6 +213,7 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
 		sp_ui_error_dialog (text);
 		return FALSE;
 	}
+
 	sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
 	return TRUE;
 }
@@ -297,7 +298,6 @@ sp_file_save_dialog (SPDocument *doc)
 gboolean
 sp_file_save_document (SPDocument *doc)
 {
-
     gboolean success = TRUE;
 
     SPRepr *repr = sp_document_repr_root (doc);
@@ -308,7 +308,13 @@ sp_file_save_document (SPDocument *doc)
 			return sp_file_save_dialog (doc);
 		} else {
 			fn = g_strdup (doc->uri);
-			success = file_save (doc, fn, Inkscape::Extension::db.get(sp_repr_attr(repr, "inkscape:output_extension")));
+			
+			const gchar *ext = sp_repr_attr(repr, "inkscape:output_extension");
+			if (ext == NULL) // naturally, plain svg files do not know no inkscape:extensions
+				ext = SP_MODULE_KEY_OUTPUT_SVG;
+
+			success = file_save (doc, fn, Inkscape::Extension::db.get(ext));
+
 			g_free ((void *) fn);
 		}
 
@@ -327,7 +333,6 @@ sp_file_save_document (SPDocument *doc)
 bool
 sp_file_save (gpointer object, gpointer data)
 {
-
     if (!SP_ACTIVE_DOCUMENT)
         return FALSE;
     sp_namedview_document_from_window (SP_ACTIVE_DESKTOP);
