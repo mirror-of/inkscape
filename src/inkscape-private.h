@@ -23,8 +23,6 @@
 
 GType inkscape_get_type (void);
 
-Inkscape *inkscape_new ();
-
 void inkscape_ref (void);
 void inkscape_unref (void);
 
