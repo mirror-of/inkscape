@@ -28,13 +28,13 @@ options:
 =head1 DESCRIPTION
 
 B<Inkscape> is a GUI editor for B<Scalable Vector Graphics (SVG)> format
-drawing files, with capabilities similar to B<Illustrator>, B<CorelDraw>,
-B<Visio>, etc. Supported SVG features include basic shapes, paths, text,
-alpha blending, transforms, gradients, node editing, svg-to-png export,
-grouping, and more.  .  The interface is designed to be comfortable and
-efficient for skilled users, while remaining conformant to B<GNOME>
-standards so that users familiar with other GNOME applications can learn
-it's interface rapidly.
+drawing files, with capabilities similar to B<Adobe Illustrator>,
+B<CorelDraw>, B<Visio>, etc. Supported SVG features include basic
+shapes, paths, text, alpha blending, transforms, gradients, node
+editing, svg-to-png export, grouping, and more.  .  The interface is
+designed to be comfortable and efficient for skilled users, while
+remaining conformant to B<GNOME> standards so that users familiar with
+other GNOME applications can learn it's interface rapidly.
 
 B<SVG> is a W3C standard XML format for 2D vector drawing, that allows
 defining objects in the drawing using points, paths, and primitive
@@ -171,7 +171,8 @@ the latest released version of the program, and more.
 
 =head1 SEE ALSO
 
-gimp(1)
+gimp(1), autotrace, frontline, ill2svg, rsvg, xfig(1), sodipodi,
+karbon14, dia(1X).
 
 =head1 NOTES
 
