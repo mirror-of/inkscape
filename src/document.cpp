@@ -747,20 +747,56 @@ find_items_in_area (GSList *s, SPGroup *group, unsigned int dkey, NRRect const *
 
 extern gdouble nr_arena_global_delta;
 
+bool item_is_in_group (SPItem *item, SPGroup *group)
+{
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+		if (!SP_IS_ITEM (o)) continue;
+		if (SP_ITEM (o) == item)
+			return true;
+		if (SP_IS_GROUP (o))
+			if (item_is_in_group (item, SP_GROUP(o)))
+				return true;
+	}
+	return false;
+}
+
 SPItem*
-find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboolean into_groups, bool take_insensitive = false)
+sp_document_item_from_list_at_point_bottom (unsigned int dkey, const GSList *list, NR::Point const p, bool take_insensitive)
+{
+	for (const GSList *i = list; i; i = i->next) {
+		SPItem *item = SP_ITEM (i->data);
+		NRArenaItem *arenaitem = sp_item_get_arenaitem(item, dkey);
+		if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL 
+                      && (take_insensitive || item->sensitive)) {
+			return item;
+		}
+	}
+	return NULL;
+}
+
+
+SPItem*
+find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboolean into_groups, bool take_insensitive = false, SPItem *upto = NULL)
 {
 	SPItem *seen = NULL, *newseen = NULL;
 
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
+
+		if (upto && SP_ITEM (o) == upto)
+			break;
+
 		if (SP_IS_GROUP (o) && (SP_GROUP (o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups))	{
 			// if nothing found yet, recurse into the group
-			newseen = find_item_at_point (dkey, SP_GROUP (o), p, into_groups);
+			newseen = find_item_at_point (dkey, SP_GROUP (o), p, into_groups, take_insensitive, upto);
 			if (newseen) {
 				seen = newseen;
 				newseen = NULL;
 			}
+
+			if (item_is_in_group (upto, SP_GROUP (o)))
+				break;
+
 		} else {
 			SPItem *child = SP_ITEM(o);
 			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
@@ -834,13 +870,13 @@ sp_document_partial_items_in_box (SPDocument *document, unsigned int dkey, NRRec
 }
 
 SPItem*
-sp_document_item_at_point (SPDocument *document, unsigned int key, NR::Point p, gboolean into_groups)
+sp_document_item_at_point (SPDocument *document, unsigned int key, NR::Point p, gboolean into_groups, SPItem *upto)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 
- 	return find_item_at_point (key, SP_GROUP (document->root), p, into_groups);
+ 	return find_item_at_point (key, SP_GROUP (document->root), p, into_groups, false, upto);
 }
 
 SPItem*

@@ -184,7 +184,8 @@ void sp_desktop_pop_event_context (SPDesktop *desktop, unsigned int key);
 
 void sp_desktop_set_coordinate_status (SPDesktop *desktop, NR::Point p, guint underline);
 
-SPItem *sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, gboolean into_groups);
+SPItem *sp_desktop_item_from_list_at_point_bottom (SPDesktop const *desktop, const GSList *list, NR::Point const p);
+SPItem *sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, gboolean into_groups, SPItem *upto = NULL);
 SPItem *sp_desktop_group_at_point (SPDesktop const *desktop, NR::Point const p);
 NR::Point sp_desktop_point (SPDesktop const *desktop);
 
