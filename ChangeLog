@@ -1,5 +1,8 @@
 2004-01-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-types-test.cpp (main): Update for NR::Point .pt
+	privateness change.
+
 	* src/libnr/nr-svp-uncross.cpp (nr_segment_intersection): Mark some
 	pointer arguments as not being written through.
 	Add doc comment.

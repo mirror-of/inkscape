@@ -16,14 +16,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	NR::Point const a(1.5, 2.0);
-	UTEST_TEST("x,y constructor") {
-		UTEST_ASSERT(a.pt[X] == 1.5);
-		UTEST_ASSERT(a.pt[Y] == 2.0);
-	}
-
-	UTEST_TEST("operator[] const") {
-		UTEST_ASSERT(a[X] == a.pt[X]);
-		UTEST_ASSERT(a[Y] == a.pt[Y]);
+	UTEST_TEST("x,y constructor and operator[] const") {
+		UTEST_ASSERT(a[X] == 1.5);
+		UTEST_ASSERT(a[Y] == 2.0);
 	}
 
 	NR::Point const b(-2.0, 3.0);
