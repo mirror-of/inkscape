@@ -65,7 +65,7 @@ sp_event_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_event_context_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPEventContext", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPEventContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -77,7 +77,7 @@ sp_event_context_class_init (SPEventContextClass *klass)
 
 	object_class = (GObjectClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_event_context_dispose;
 
@@ -369,7 +369,7 @@ sp_ec_repr_destroy (SPRepr *repr, gpointer data)
 }
 
 static unsigned int
-sp_ec_repr_change_attr (SPRepr *repr, const guchar *key, const guchar *oldval, const guchar *newval, gpointer data)
+sp_ec_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
 {
 	SPEventContext *ec;
 
@@ -381,7 +381,7 @@ sp_ec_repr_change_attr (SPRepr *repr, const guchar *key, const guchar *oldval, c
 }
 
 static void
-sp_ec_repr_attr_changed (SPRepr *repr, const guchar *key, const guchar *oldval, const guchar *newval, gpointer data)
+sp_ec_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
 {
 	SPEventContext *ec;
 
@@ -414,7 +414,7 @@ sp_event_context_new (GType type, SPDesktop *desktop, SPRepr *repr, unsigned int
 	g_return_val_if_fail (desktop != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 
-	ec = g_object_new (type, NULL);
+	ec = (SPEventContext*)g_object_new (type, NULL);
 
 	ec->desktop = desktop;
 	ec->key = key;
@@ -445,14 +445,14 @@ sp_event_context_finish (SPEventContext *ec)
 }
 
 void
-sp_event_context_read (SPEventContext *ec, const guchar *key)
+sp_event_context_read (SPEventContext *ec, const gchar *key)
 {
 	g_return_if_fail (ec != NULL);
 	g_return_if_fail (SP_IS_EVENT_CONTEXT (ec));
 	g_return_if_fail (key != NULL);
 
 	if (ec->repr) {
-		const guchar *val;
+		const gchar *val;
 		val = sp_repr_attr (ec->repr, key);
 		if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->set)
 			((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->set (ec, key, val);
