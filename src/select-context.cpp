@@ -361,13 +361,15 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	NRPoint p;
 	NRRect b;
 	GSList *l;
-	double nudge;
+	gdouble nudge;
+	gdouble offset;
 
 	desktop = event_context->desktop;
 	sc = SP_SELECT_CONTEXT (event_context);
 	seltrans = &sc->seltrans;
 	selection = SP_DT_SELECTION (desktop);
 	nudge = prefs_get_double_attribute_limited ("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
+	offset = prefs_get_double_attribute_limited ("options.defaultoffsetwidth", "value", 2, 0, 1000); 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -696,6 +698,8 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
  		case GDK_bracketleft:
 			if (MOD__ALT) { 
 				sp_selection_rotate_screen (selection, 1);
+			} else if (MOD__CTRL) {
+				sp_selection_rotate (selection, 90);
 			} else {
 				sp_selection_rotate (selection, 180/snaps);
 			}
@@ -704,8 +708,32 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
  		case GDK_bracketright:
 			if (MOD__ALT) { 
 				sp_selection_rotate_screen (selection, -1);
+			} else if (MOD__CTRL) {
+				sp_selection_rotate (selection, -90);
 			} else {
 				sp_selection_rotate (selection, -180/snaps);
+			}
+			ret = TRUE;
+			break;
+ 		case GDK_less:
+ 		case GDK_comma:
+			if (MOD__ALT) { 
+				sp_selection_scale_screen (selection, -2);
+			} else if (MOD__CTRL) {
+				sp_selection_scale_times (selection, 0.5);
+			} else {
+				sp_selection_scale (selection, -offset);
+			}
+			ret = TRUE;
+			break;
+ 		case GDK_greater:
+ 		case GDK_period:
+			if (MOD__ALT) { 
+				sp_selection_scale_screen (selection, 2);
+			} else if (MOD__CTRL) {
+				sp_selection_scale_times (selection, 2);
+			} else {
+				sp_selection_scale (selection, offset);
 			}
 			ret = TRUE;
 			break;
