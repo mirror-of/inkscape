@@ -41,6 +41,7 @@
 #include "interface.h"
 #include "print.h"
 #include "file.h"
+#include "dialogs/dialog-events.h"
 
 #include "sp-namedview.h"
 
@@ -423,7 +424,7 @@ sp_file_import (GtkWidget * widget)
 	gtk_file_selection_hide_fileop_buttons (GTK_FILE_SELECTION (w));
 	if (import_path) gtk_file_selection_set_filename (GTK_FILE_SELECTION (w), import_path);
 	gtk_window_set_modal (GTK_WINDOW (w), TRUE);
-
+	sp_transientize (w);
 	b = gtk_dialog_run (GTK_DIALOG (w));
 
 	if (b == GTK_RESPONSE_OK) {
