@@ -174,91 +174,112 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
 // if necessary it will import the object. Copes with name clashes through use of the inkscape:stockid property
 // This should be set to be the same as the id in the libary file.
 
-SPObject*
-get_stock_item(gchar const *urn)
+SPObject *get_stock_item(gchar const *urn)
 {
-    g_assert(urn!=NULL);
+    g_assert(urn != NULL);
+    
     /* check its an inkscape URN */
     if (!strncmp (urn, "urn:inkscape:", 13)) {
-    const gchar *e = urn + 13;
-    int a =0;
-    gchar *name = g_strdup(e);
-    while (*name != ':' && *name != '\0'){
-        name++;
-        a++;
+
+        gchar const *e = urn + 13;
+        int a = 0;
+        gchar * const name = g_strdup(e);
+        gchar *name_p = name;
+        while (*name_p != ':' && *name_p != '\0'){
+            name_p++;
+            a++;
+        }
+        
+        if (*name_p ==':') {
+            name_p++;
+        }
+        
+        gchar * const base = g_strndup(e, a);
+
+        SPDesktop *desktop = inkscape_active_desktop();
+        SPDocument *doc = SP_DT_DOCUMENT(desktop);
+        SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
+
+        SPObject *object = NULL;
+        if (!strcmp(base, "marker")) {
+            for (SPObject *child = sp_object_first_child(SP_OBJECT(defs));
+                 child != NULL;
+                 child = SP_OBJECT_NEXT(child))
+            {
+                if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") &&
+                    !strcmp(name_p, sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
+                    SP_IS_MARKER(child))
+                {
+                    object = child;
+                }
+            }
+            
+        }
+        else if (!strcmp(base,"pattern"))  {
+            for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ;
+                 child != NULL;
+                 child = SP_OBJECT_NEXT(child) )
+            {
+                if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") &&
+                    !strcmp(name_p, sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
+                    SP_IS_PATTERN(child))
+                {
+                    object = child;
+                }
+            }
+            
+        }
+        else if (!strcmp(base,"gradient"))  {
+            for (SPObject *child = sp_object_first_child(SP_OBJECT(defs));
+                 child != NULL;
+                 child = SP_OBJECT_NEXT(child))
+            {
+                if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") &&
+                    !strcmp(name_p, sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
+                    SP_IS_GRADIENT(child))
+                {
+                    object = child;
+                }
+            }
+            
+        }
+        
+        if (object == NULL) {
+            
+            if (!strcmp(base, "marker"))  {
+                object = sp_marker_load_from_svg(name_p, doc);
+            }
+            else if (!strcmp(base, "pattern"))  {
+                object = sp_pattern_load_from_svg(name_p, doc);
+            }
+            else if (!strcmp(base, "gradient"))  {
+                object = sp_gradient_load_from_svg(name_p, doc);
+            }
+        }
+        
+        g_free(base);
+        g_free(name);
+        
+        return object;
     }
-    if (*name ==':') name++;
-    gchar *base = g_strndup(e,a);
-
-
-    SPDesktop *desktop = inkscape_active_desktop();
-    SPDocument *doc = SP_DT_DOCUMENT(desktop);
-    SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
-
-    SPObject *object = NULL;
-    if (!strcmp(base,"marker"))  {
-                                   for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ;
-                                        child != NULL;
-                                        child = SP_OBJECT_NEXT(child) )
-                                           {
-
-                                               if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") && !strcmp(name, sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
-                                                    SP_IS_MARKER(child))
-                                                    {
-                                                        object = child;
-                                                    }
-                                           }
-
-      }
-    else if (!strcmp(base,"pattern"))  {
-                                   for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ;
-                                        child != NULL;
-                                        child = SP_OBJECT_NEXT(child) )
-                                           {
-                                               if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") && !strcmp(name, sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
-                                                    SP_IS_PATTERN(child))
-                                                    {
-                                                        object = child;
-                                                    }
-                                           }
-
-     }
-     else   if (!strcmp(base,"gradient"))  {
-                                   for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ;
-                                        child != NULL;
-                                        child = SP_OBJECT_NEXT(child) )
-                                           {
-                                               if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") && !strcmp(name, sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
-                                                    SP_IS_GRADIENT(child))
-                                                    {
-                                                        object = child;
-                                                    }
-                                           }
-
-                    }
-
-    if (object == NULL) {
-
-                   if (!strcmp(base,"marker"))  {
-                           object = sp_marker_load_from_svg( name, doc);
-                        }
-                   else if (!strcmp(base,"pattern"))  {
-                           object = sp_pattern_load_from_svg( name, doc);
-                        }
-                   else if (!strcmp(base,"gradient"))  {
-                           object = sp_gradient_load_from_svg( name, doc);
-                        }
-                  }
-    free(base);
-    free(name);
-    return object;
-    }
+    
     else {
-         SPDesktop *desktop = inkscape_active_desktop();
-         SPDocument *doc = SP_DT_DOCUMENT(desktop);
-         SPObject *object =  doc->getObjectById(urn);
+        
+        SPDesktop *desktop = inkscape_active_desktop();
+        SPDocument *doc = SP_DT_DOCUMENT(desktop);
+        SPObject *object = doc->getObjectById(urn);
 
-         return object;
+        return object;
     }
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
