@@ -11,8 +11,8 @@ KIllustrator, Gill and sketch. Inkscape eagerly borrows code from
 every other free program under the Sun (hey - isn't it the main point
 about free software?)
 
-You can always find the freshest sodipodi at GNOME CVS.  The official
-homepage is http://sodipodi.sourceforge.net/ You can also find links
+You can always find the freshest Inkscape at GNOME CVS.  The official
+homepage is http://inkscape.org/ You can also find links
 to the binary & source code packages there.
 
 Inkscape uses the standard procedure for compilation and installation: 
@@ -31,7 +31,7 @@ libraries. Helix Gnome + gnome-print 0.21 (or higher) + bonobo 0.17
 (or higher) should do it.  You can also add --without-bonobo to
 configure command line to disable HIGHLY EXPERIMENTAL bonobo support
 
-If you modify sodipodi in any usable way, please let me know also.
+If you modify Inkscape in any usable way, please let me know also.
 
 Some demo pictures could have absolute paths for imported images. So if they
 do not display correctly, tune them with a good text editor.
@@ -84,4 +84,3 @@ Dependencies for installation on Mandrake 9.0:
     libglade-bonobo0-0.17-6mdk.i586.rpm
     libglade-gnome-db0-0.17-6mdk.i586.rpm
     libgtk+-x11-2.0_0-devel-2.0.6-8mdk.i586.rpm
-
