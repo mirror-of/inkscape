@@ -5,6 +5,7 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * This code is in public domain
  */
@@ -1374,15 +1375,17 @@ void sp_node_selected_delete()
 
     sp_nodepath_ensure_ctrls(nodepath);
 
-    update_repr(nodepath);
-
     // if the entire nodepath is removed, delete the selected object.
     if (nodepath->subpaths == NULL ||
         sp_nodepath_get_node_count(nodepath) < 2) {
+        SPDocument *document = SP_DT_DOCUMENT (nodepath->desktop);
         sp_nodepath_destroy(nodepath);
         sp_selection_delete();
+        sp_document_done (document);
         return;
     }
+
+    update_repr(nodepath);
 
     sp_nodepath_update_statusbar(nodepath);
 }
@@ -2078,9 +2081,17 @@ static void node_clicked(SPKnot *knot, guint state, gpointer data)
 
         } else { //ctrl+alt+click: delete node
             sp_nodepath_node_destroy(n);
-            if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
+            //clean up the nodepath (such as for trivial subpaths)
+            sp_nodepath_cleanup(nodepath);
+
+            // if the entire nodepath is removed, delete the selected object.
+            if (nodepath->subpaths == NULL ||
+                sp_nodepath_get_node_count(nodepath) < 2) {
+                SPDocument *document = SP_DT_DOCUMENT (nodepath->desktop);
                 sp_nodepath_destroy(nodepath);
                 sp_selection_delete();
+                sp_document_done (document);
+
             } else {
                 sp_nodepath_ensure_ctrls(nodepath);
                 update_repr(nodepath);
