@@ -787,8 +787,8 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
 	dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
 	gtk_tooltips_set_tip (tt, dtw->zoom_status, _("Zoom"), _("Zoom"));
-	gtk_widget_set_usize (dtw->zoom_status, 64, -1);
-	gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 5);
+	gtk_widget_set_usize (dtw->zoom_status, 75, -1);
+	gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 6);
 
 	gtk_editable_set_editable (GTK_EDITABLE (dtw->zoom_status), FALSE);
 	g_object_set (G_OBJECT (dtw->zoom_status), "can-focus", (gboolean) FALSE, NULL);
@@ -1332,8 +1332,10 @@ sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom)
 
 	zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
 
-	// maximum or minimum zoom reached, but there's no exact equality because of rounding errors:
-	if ((fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01)) 
+	// maximum or minimum zoom reached, but there's no exact equality because of rounding errors;
+	// this check prevents "sliding" when trying to zoom in at maximum zoom;
+	// someone please fix calculations properly and remove this hack
+	if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.025 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01)) 
 		return;
 
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
