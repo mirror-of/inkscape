@@ -12,7 +12,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <display/display-forward.h>
 
 struct SPUnit;
 struct SPUnitSelector;
