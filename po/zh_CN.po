@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-28 23:25-0700\n"
+"POT-Creation-Date: 2004-02-08 22:47-0700\n"
 "PO-Revision-Date: 2002-03-17 15:51+0800\n"
 "Last-Translator: wang li <charlesw1234@163.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -15,15 +15,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: inkscape.desktop.in.h:1
+#, fuzzy
 msgid "Inkscape"
-msgstr ""
+msgstr "Sodipodi：%s：%s：%d"
 
 #: inkscape.desktop.in.h:2
 #, fuzzy
 msgid "SVG Vector Illustrator"
 msgstr "向量图解器"
 
-#: src/bonobo/svg-doc-factory.cpp:35
+#: src/bonobo/svg-doc-factory.cpp:38
 msgid "Could not create sodipodi-svg-doc factory"
 msgstr "无法创建 sodipodi-svg-doc 车间"
 
@@ -37,37 +38,37 @@ msgstr ""
 msgid "Move %s"
 msgstr "移动"
 
-#: src/desktop.cpp:803
+#: src/desktop.cpp:791
 msgid "Zoom drawing if window size changes"
 msgstr ""
 
-#: src/desktop.cpp:809 src/verbs.cpp:644
+#: src/desktop.cpp:797 src/verbs.cpp:664
 msgid "Zoom"
 msgstr "缩放"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:832
+#: src/desktop.cpp:820
 msgid "Cursor coordinates"
 msgstr ""
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:842
+#: src/desktop.cpp:830
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:896
+#: src/desktop.cpp:879
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:898
+#: src/desktop.cpp:881
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1030
+#: src/desktop.cpp:1009
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -76,480 +77,480 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1039
+#: src/desktop.cpp:1018
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1336
+#: src/desktop.cpp:1307
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1365
+#: src/desktop.cpp:1336
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1728 src/dialogs/align.cpp:334
-#: src/dialogs/desktop-properties.cpp:365 src/dialogs/export.cpp:195
+#: src/desktop.cpp:1681 src/dialogs/align.cpp:450
+#: src/dialogs/desktop-properties.cpp:477 src/dialogs/export.cpp:273
 msgid "Page"
 msgstr "页"
 
-#: src/desktop.cpp:1732 src/dialogs/align.cpp:335 src/dialogs/export.cpp:200
+#: src/desktop.cpp:1685 src/dialogs/align.cpp:453 src/dialogs/export.cpp:280
 msgid "Drawing"
 msgstr "图画"
 
-#: src/desktop.cpp:1736 src/dialogs/align.cpp:336 src/dialogs/export.cpp:205
+#: src/desktop.cpp:1689 src/dialogs/align.cpp:456 src/dialogs/export.cpp:287
 msgid "Selection"
 msgstr "选择"
 
-#: src/dialogs/align.cpp:236
+#: src/dialogs/align.cpp:287
 #, fuzzy
 msgid "Right side of aligned objects to left side of anchor"
 msgstr "将内部对象对齐到左边"
 
-#: src/dialogs/align.cpp:237
+#: src/dialogs/align.cpp:289
 msgid "Left side of aligned objects to left side of anchor"
 msgstr ""
 
-#: src/dialogs/align.cpp:238
+#: src/dialogs/align.cpp:291
 #, fuzzy
 msgid "Center horizontally"
 msgstr "水平翻转"
 
-#: src/dialogs/align.cpp:239
+#: src/dialogs/align.cpp:293
 #, fuzzy
 msgid "Right side of aligned objects to right side of anchor"
 msgstr "将内部对象对齐到右边"
 
-#: src/dialogs/align.cpp:240
+#: src/dialogs/align.cpp:295
 msgid "Left side of aligned objects to right side of anchor"
 msgstr ""
 
-#: src/dialogs/align.cpp:242
+#: src/dialogs/align.cpp:298
 msgid "Bottom of aligned objects to top of anchor"
 msgstr ""
 
-#: src/dialogs/align.cpp:243
+#: src/dialogs/align.cpp:300
 #, fuzzy
 msgid "Top of aligned objects to top of anchor"
 msgstr "将内部对象对齐到顶边"
 
-#: src/dialogs/align.cpp:244
+#: src/dialogs/align.cpp:302
 #, fuzzy
 msgid "Center vertically"
 msgstr "垂直翻转"
 
-#: src/dialogs/align.cpp:245
+#: src/dialogs/align.cpp:304
 #, fuzzy
 msgid "Bottom of aligned objects to bottom of anchor"
 msgstr "将内部对象对齐到底边"
 
-#: src/dialogs/align.cpp:246
+#: src/dialogs/align.cpp:306
 #, fuzzy
 msgid "Top of aligned objects to bottom of anchor"
 msgstr "将内部对象对齐到顶边"
 
-#: src/dialogs/align.cpp:259
+#: src/dialogs/align.cpp:321
 msgid "Align"
 msgstr "对齐"
 
-#: src/dialogs/align.cpp:277
+#: src/dialogs/align.cpp:342
 msgid "Distribute left sides of objects at even distances"
 msgstr ""
 
-#: src/dialogs/align.cpp:280
+#: src/dialogs/align.cpp:350
 msgid "Distribute centres of objects at even distances horizontally"
 msgstr ""
 
-#: src/dialogs/align.cpp:283
+#: src/dialogs/align.cpp:357
 msgid "Distribute right sides of objects at even distances"
 msgstr ""
 
-#: src/dialogs/align.cpp:286
+#: src/dialogs/align.cpp:364
 msgid "Distribute horizontal distance between objects equally"
 msgstr ""
 
-#: src/dialogs/align.cpp:290
+#: src/dialogs/align.cpp:371
 msgid "Distribute top sides of objects at even distances"
 msgstr ""
 
-#: src/dialogs/align.cpp:293
+#: src/dialogs/align.cpp:379
 msgid "Distribute centres of objects at even distances vertically"
 msgstr ""
 
-#: src/dialogs/align.cpp:296
+#: src/dialogs/align.cpp:386
 msgid "Distribute bottom sides of objects at even distances"
 msgstr ""
 
-#: src/dialogs/align.cpp:299
+#: src/dialogs/align.cpp:393
 msgid "Distribute vertical distance between objects equally"
 msgstr ""
 
-#: src/dialogs/align.cpp:302
+#: src/dialogs/align.cpp:397
 #, fuzzy
 msgid "Distribute"
 msgstr "属性"
 
-#: src/dialogs/align.cpp:330
+#: src/dialogs/align.cpp:438
 msgid "Last selected"
 msgstr "最后的选择"
 
-#: src/dialogs/align.cpp:331
+#: src/dialogs/align.cpp:441
 msgid "First selected"
 msgstr "第一个选择"
 
-#: src/dialogs/align.cpp:332
+#: src/dialogs/align.cpp:444
 msgid "Biggest item"
 msgstr "最大项目"
 
-#: src/dialogs/align.cpp:333
+#: src/dialogs/align.cpp:447
 msgid "Smallest item"
 msgstr "最小项目"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:292 src/verbs.cpp:651
+#: src/dialogs/desktop-properties.cpp:385 src/verbs.cpp:671
 msgid "Grid"
 msgstr "栅格"
 
-#: src/dialogs/desktop-properties.cpp:304
+#: src/dialogs/desktop-properties.cpp:398
 msgid "Show grid"
 msgstr "显示栅格"
 
-#: src/dialogs/desktop-properties.cpp:305
+#: src/dialogs/desktop-properties.cpp:399
 msgid "Snap to grid"
 msgstr "定位到栅格"
 
-#: src/dialogs/desktop-properties.cpp:307
+#: src/dialogs/desktop-properties.cpp:402
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "水平移动"
 
-#: src/dialogs/desktop-properties.cpp:308
+#: src/dialogs/desktop-properties.cpp:404
 #, fuzzy
 msgid "Vertical lines"
 msgstr "垂直中心值"
 
-#: src/dialogs/desktop-properties.cpp:318
+#: src/dialogs/desktop-properties.cpp:415
 msgid "Grid units:"
 msgstr "栅格单元："
 
-#: src/dialogs/desktop-properties.cpp:320
+#: src/dialogs/desktop-properties.cpp:417
 msgid "Origin X:"
 msgstr "X 原点："
 
-#: src/dialogs/desktop-properties.cpp:321
+#: src/dialogs/desktop-properties.cpp:420
 msgid "Origin Y:"
 msgstr "Y 原点："
 
-#: src/dialogs/desktop-properties.cpp:323
+#: src/dialogs/desktop-properties.cpp:423
 msgid "Spacing X:"
 msgstr "X 间据："
 
-#: src/dialogs/desktop-properties.cpp:324
+#: src/dialogs/desktop-properties.cpp:426
 msgid "Spacing Y:"
 msgstr "Y 间据："
 
-#: src/dialogs/desktop-properties.cpp:327
-#: src/dialogs/desktop-properties.cpp:352
+#: src/dialogs/desktop-properties.cpp:430
+#: src/dialogs/desktop-properties.cpp:461
 msgid "Snap units:"
 msgstr "定位单位："
 
-#: src/dialogs/desktop-properties.cpp:329
-#: src/dialogs/desktop-properties.cpp:354
+#: src/dialogs/desktop-properties.cpp:433
+#: src/dialogs/desktop-properties.cpp:464
 msgid "Snap distance:"
 msgstr "定位距离："
 
-#: src/dialogs/desktop-properties.cpp:332
+#: src/dialogs/desktop-properties.cpp:436
 msgid "Grid color:"
 msgstr "栅格颜色："
 
-#: src/dialogs/desktop-properties.cpp:333
+#: src/dialogs/desktop-properties.cpp:437
 msgid "Grid color"
 msgstr "栅格颜色"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:337 src/verbs.cpp:652
+#: src/dialogs/desktop-properties.cpp:443 src/verbs.cpp:672
 msgid "Guides"
 msgstr "指示"
 
-#: src/dialogs/desktop-properties.cpp:347
+#: src/dialogs/desktop-properties.cpp:454
 msgid "Show guides"
 msgstr "显示指示线"
 
-#: src/dialogs/desktop-properties.cpp:348
+#: src/dialogs/desktop-properties.cpp:456
 msgid "Snap to guides"
 msgstr "定位到指示线"
 
-#: src/dialogs/desktop-properties.cpp:357
+#: src/dialogs/desktop-properties.cpp:468
 msgid "Guides color:"
 msgstr "指示颜色："
 
-#: src/dialogs/desktop-properties.cpp:358
+#: src/dialogs/desktop-properties.cpp:469
 msgid "Guideline color"
 msgstr "指示线颜色"
 
-#: src/dialogs/desktop-properties.cpp:360
+#: src/dialogs/desktop-properties.cpp:471
 msgid "Highlight color:"
 msgstr "高亮颜色："
 
-#: src/dialogs/desktop-properties.cpp:361
+#: src/dialogs/desktop-properties.cpp:472
 #, fuzzy
 msgid "Highlighted guideline color"
 msgstr "高亮指示线颜色"
 
-#: src/dialogs/desktop-properties.cpp:374
+#: src/dialogs/desktop-properties.cpp:486
 msgid "Background (also for export):"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:374
+#: src/dialogs/desktop-properties.cpp:487
 #, fuzzy
 msgid "Background color"
 msgstr "终点颜色"
 
-#: src/dialogs/desktop-properties.cpp:377
+#: src/dialogs/desktop-properties.cpp:491
 #, fuzzy
 msgid "Show canvas border"
 msgstr "显示栅格"
 
-#: src/dialogs/desktop-properties.cpp:379
+#: src/dialogs/desktop-properties.cpp:494
 #, fuzzy
 msgid "Border on top of drawing"
 msgstr "缩放到图画"
 
-#: src/dialogs/desktop-properties.cpp:385
+#: src/dialogs/desktop-properties.cpp:504
 #, fuzzy
 msgid "Border color:"
 msgstr "栅格颜色："
 
-#: src/dialogs/desktop-properties.cpp:385
+#: src/dialogs/desktop-properties.cpp:505
 msgid "Canvas border color"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:400
+#: src/dialogs/desktop-properties.cpp:525
 msgid "Paper size:"
 msgstr "页面大小："
 
-#: src/dialogs/desktop-properties.cpp:424
+#: src/dialogs/desktop-properties.cpp:537
 msgid "Custom"
 msgstr "定制"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:431
+#: src/dialogs/desktop-properties.cpp:547
 msgid "Custom paper"
 msgstr "定制页面"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:442 src/dialogs/export.cpp:216
-#: src/dialogs/transformation.cpp:449 src/dialogs/transformation.cpp:624
+#: src/dialogs/desktop-properties.cpp:560 src/dialogs/export.cpp:301
+#: src/dialogs/transformation.cpp:560 src/dialogs/transformation.cpp:790
 msgid "Units:"
 msgstr "单位："
 
 #. Stroke width
 #. Width
-#: src/dialogs/desktop-properties.cpp:451 src/dialogs/export.cpp:226
-#: src/dialogs/export.cpp:250 src/dialogs/object-attributes.cpp:68
-#: src/dialogs/object-attributes.cpp:76 src/dialogs/stroke-style.cpp:587
-#: src/dyna-draw-context.cpp:1100
+#: src/dialogs/desktop-properties.cpp:575 src/dialogs/export.cpp:317
+#: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:68
+#: src/dialogs/object-attributes.cpp:76 src/dialogs/stroke-style.cpp:825
+#: src/dyna-draw-context.cpp:940
 msgid "Width:"
 msgstr "宽度："
 
-#: src/dialogs/desktop-properties.cpp:466 src/dialogs/export.cpp:235
-#: src/dialogs/export.cpp:260 src/dialogs/object-attributes.cpp:69
+#: src/dialogs/desktop-properties.cpp:598 src/dialogs/export.cpp:333
+#: src/dialogs/export.cpp:367 src/dialogs/object-attributes.cpp:69
 #: src/dialogs/object-attributes.cpp:77
 msgid "Height:"
 msgstr "高度："
 
-#: src/dialogs/desktop-properties.cpp:827
+#: src/dialogs/desktop-properties.cpp:1025
 #, fuzzy
 msgid "Close"
 msgstr "关闭视图"
 
 #. Rendering settings
 #. Notebook tab
-#: src/dialogs/display-settings.cpp:135
+#: src/dialogs/display-settings.cpp:183
 msgid "Rendering"
 msgstr "正在渲染"
 
-#: src/dialogs/display-settings.cpp:147
+#: src/dialogs/display-settings.cpp:196
 msgid "Oversample bitmaps:"
 msgstr "超取样位图："
 
-#: src/dialogs/display-settings.cpp:158 src/verbs.cpp:580
+#: src/dialogs/display-settings.cpp:207 src/verbs.cpp:600
 msgid "None"
 msgstr "无"
 
-#: src/dialogs/display-settings.cpp:162
+#: src/dialogs/display-settings.cpp:213
 msgid "2x2"
 msgstr "2x2"
 
-#: src/dialogs/display-settings.cpp:166
+#: src/dialogs/display-settings.cpp:219
 msgid "4x4"
 msgstr "4x4"
 
-#: src/dialogs/display-settings.cpp:170
+#: src/dialogs/display-settings.cpp:225
 msgid "8x8"
 msgstr "8x8"
 
-#: src/dialogs/display-settings.cpp:174
+#: src/dialogs/display-settings.cpp:231
 msgid "16x16"
 msgstr "16x16"
 
 #. Input settings
 #. Notebook tab
-#: src/dialogs/display-settings.cpp:185
+#: src/dialogs/display-settings.cpp:246
 msgid "Input"
 msgstr "输入"
 
-#: src/dialogs/display-settings.cpp:196
+#: src/dialogs/display-settings.cpp:257
 msgid "Default cursor tolerance:"
 msgstr "默认光标公差："
 
 #. Export area frame
-#: src/dialogs/export.cpp:184
+#: src/dialogs/export.cpp:260
 #, fuzzy
 msgid "Export area"
 msgstr "导出为"
 
-#: src/dialogs/export.cpp:220
+#: src/dialogs/export.cpp:307
 #, fuzzy
 msgid "x0:"
 msgstr "T0："
 
-#: src/dialogs/export.cpp:223
+#: src/dialogs/export.cpp:312
 #, fuzzy
 msgid "x1:"
 msgstr "R1："
 
-#: src/dialogs/export.cpp:229
+#: src/dialogs/export.cpp:323
 #, fuzzy
 msgid "y0:"
 msgstr "T0："
 
-#: src/dialogs/export.cpp:232
+#: src/dialogs/export.cpp:328
 #, fuzzy
 msgid "y1:"
 msgstr "R1："
 
 #. Bitmap size frame
-#: src/dialogs/export.cpp:241
+#: src/dialogs/export.cpp:342
 #, fuzzy
 msgid "Bitmap size"
 msgstr "图像大小"
 
-#: src/dialogs/export.cpp:250 src/dialogs/export.cpp:260
+#: src/dialogs/export.cpp:352 src/dialogs/export.cpp:367
 msgid "pixels"
 msgstr "像素"
 
-#: src/dialogs/export.cpp:256 src/dialogs/export.cpp:267
+#: src/dialogs/export.cpp:362 src/dialogs/export.cpp:378
 msgid "dpi"
 msgstr "dpi"
 
 #. File entry
-#: src/dialogs/export.cpp:273
+#: src/dialogs/export.cpp:384
 #, fuzzy
 msgid "Filename"
 msgstr "文件名："
 
-#: src/dialogs/export.cpp:302
+#: src/dialogs/export.cpp:419
 msgid "Browse..."
 msgstr ""
 
-#: src/dialogs/export.cpp:317
+#: src/dialogs/export.cpp:436
 msgid "Export"
 msgstr "导出"
 
-#: src/dialogs/export.cpp:481
+#: src/dialogs/export.cpp:703
 #, fuzzy
 msgid "You have to enter a filename"
 msgstr "以新文件名保存图画"
 
-#: src/dialogs/export.cpp:490
+#: src/dialogs/export.cpp:716
 #, fuzzy
 msgid "Export in progress"
 msgstr "导出为"
 
-#: src/dialogs/export.cpp:496
+#: src/dialogs/export.cpp:722
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr ""
 
-#: src/dialogs/export.cpp:515
+#: src/dialogs/export.cpp:753
 msgid "The chosen area to be exported is invalid"
 msgstr ""
 
-#: src/dialogs/export.cpp:526
+#: src/dialogs/export.cpp:770
 #, fuzzy
 msgid "Select a filename for exporting"
 msgstr "选择需导入的文件"
 
-#: src/dialogs/fill-style.cpp:89
+#: src/dialogs/fill-style.cpp:127
 msgid "Fill style"
 msgstr "填充模式"
 
-#: src/dialogs/fill-style.cpp:124
+#: src/dialogs/fill-style.cpp:176
 #, fuzzy
 msgid "Fill Rule"
 msgstr "填充模式"
 
-#: src/dialogs/fill-style.cpp:138
+#: src/dialogs/fill-style.cpp:190
 #, fuzzy
 msgid "nonzero"
 msgstr "无"
 
-#: src/dialogs/fill-style.cpp:143
+#: src/dialogs/fill-style.cpp:198
 msgid "evenodd"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:77 src/dialogs/item-properties.cpp:274
-#: src/dialogs/item-properties.cpp:348 src/dialogs/item-properties.cpp:355
+#: src/dialogs/item-properties.cpp:88 src/dialogs/item-properties.cpp:364
+#: src/dialogs/item-properties.cpp:477 src/dialogs/item-properties.cpp:484
 #, fuzzy
 msgid "ID"
 msgstr "标识："
 
-#: src/dialogs/item-properties.cpp:91
+#: src/dialogs/item-properties.cpp:102
 msgid "Set ID"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:102
+#: src/dialogs/item-properties.cpp:116
 msgid "Sensitive"
 msgstr "敏感的"
 
-#: src/dialogs/item-properties.cpp:107
+#: src/dialogs/item-properties.cpp:127
 msgid "Visible"
 msgstr "可见"
 
-#: src/dialogs/item-properties.cpp:112
+#: src/dialogs/item-properties.cpp:135
 msgid "Active"
 msgstr "活跃"
 
-#: src/dialogs/item-properties.cpp:117
+#: src/dialogs/item-properties.cpp:143
 msgid "Printable"
 msgstr "可打印的"
 
-#: src/dialogs/item-properties.cpp:128
+#: src/dialogs/item-properties.cpp:161
 msgid "Opacity:"
 msgstr "不透明度："
 
-#: src/dialogs/item-properties.cpp:147
+#: src/dialogs/item-properties.cpp:182
 #, fuzzy
 msgid "Transformation matrix"
 msgstr "转化"
 
-#: src/dialogs/item-properties.cpp:268
+#: src/dialogs/item-properties.cpp:356
 msgid "Ref"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:350
+#: src/dialogs/item-properties.cpp:479
 #, fuzzy
 msgid "ID invalid"
 msgstr "标识合法"
 
-#: src/dialogs/item-properties.cpp:352
+#: src/dialogs/item-properties.cpp:481
 msgid "ID exists"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:427 src/verbs.cpp:672
+#: src/dialogs/item-properties.cpp:569 src/verbs.cpp:695
 msgid "Item properties"
 msgstr "项目属性"
 
@@ -614,12 +615,12 @@ msgid "ARG2:"
 msgstr "参数2："
 
 #. Expansion
-#: src/dialogs/object-attributes.cpp:56 src/spiral-context.cpp:370
+#: src/dialogs/object-attributes.cpp:56 src/spiral-context.cpp:353
 msgid "Expansion:"
 msgstr "扩充："
 
 #. Revolution
-#: src/dialogs/object-attributes.cpp:57 src/spiral-context.cpp:351
+#: src/dialogs/object-attributes.cpp:57 src/spiral-context.cpp:334
 msgid "Revolution:"
 msgstr "旋转："
 
@@ -655,307 +656,307 @@ msgstr "RX："
 msgid "RY:"
 msgstr "RY："
 
-#: src/dialogs/object-attributes.cpp:114
+#: src/dialogs/object-attributes.cpp:122
 #, c-format
 msgid "%s attributes"
 msgstr "%s 属性"
 
-#: src/dialogs/object-properties.cpp:218
+#: src/dialogs/object-properties.cpp:270
 msgid "Apply to:"
 msgstr ""
 
-#: src/dialogs/object-properties.cpp:228
+#: src/dialogs/object-properties.cpp:280
 #, fuzzy
 msgid "Selected objects"
 msgstr "翻转选中对象"
 
-#: src/dialogs/object-properties.cpp:231
+#: src/dialogs/object-properties.cpp:286
 msgid "All shape tools"
 msgstr ""
 
-#: src/dialogs/object-properties.cpp:234
+#: src/dialogs/object-properties.cpp:292
 #, fuzzy
 msgid "Rectangle tool"
 msgstr "长方形"
 
-#: src/dialogs/object-properties.cpp:237
+#: src/dialogs/object-properties.cpp:298
 #, fuzzy
 msgid "Arc tool"
 msgstr "弓形作用："
 
-#: src/dialogs/object-properties.cpp:240
+#: src/dialogs/object-properties.cpp:304
 #, fuzzy
 msgid "Star tool"
 msgstr "起点颜色"
 
-#: src/dialogs/object-properties.cpp:243
+#: src/dialogs/object-properties.cpp:310
 #, fuzzy
 msgid "Spiral tool"
 msgstr "螺旋形"
 
-#: src/dialogs/object-properties.cpp:246
+#: src/dialogs/object-properties.cpp:316
 #, fuzzy
 msgid "Freehand and pen"
 msgstr "手绘"
 
-#: src/dialogs/object-properties.cpp:249
+#: src/dialogs/object-properties.cpp:322
 msgid "Calligraphic line"
 msgstr ""
 
-#: src/dialogs/object-properties.cpp:252 src/verbs.cpp:643
+#: src/dialogs/object-properties.cpp:328 src/verbs.cpp:663
 msgid "Text"
 msgstr "文本"
 
-#: src/dialogs/stroke-style.cpp:572
+#: src/dialogs/stroke-style.cpp:810
 msgid "Stroke settings"
 msgstr "勾描设置"
 
 #. Join type
-#: src/dialogs/stroke-style.cpp:609
+#: src/dialogs/stroke-style.cpp:849
 msgid "Join:"
 msgstr "连接："
 
 #. Cap type
-#: src/dialogs/stroke-style.cpp:627
+#: src/dialogs/stroke-style.cpp:867
 #, fuzzy
 msgid "Cap:"
 msgstr "青蓝："
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:645
+#: src/dialogs/stroke-style.cpp:885
 #, fuzzy
 msgid "Pattern:"
 msgstr "模式填充"
 
 #. Start Marker
-#: src/dialogs/stroke-style.cpp:656
+#: src/dialogs/stroke-style.cpp:901
 #, fuzzy
 msgid "Start Markers:"
 msgstr "星形属性"
 
 #. Mid Marker
-#: src/dialogs/stroke-style.cpp:673
+#: src/dialogs/stroke-style.cpp:921
 msgid "Mid Markers:"
 msgstr ""
 
 #. End Marker
-#: src/dialogs/stroke-style.cpp:690
+#: src/dialogs/stroke-style.cpp:941
 msgid "End Markers:"
 msgstr ""
 
 #. Layout
-#: src/dialogs/text-edit.cpp:177
+#: src/dialogs/text-edit.cpp:210
 msgid "Layout"
 msgstr "布局"
 
-#: src/dialogs/text-edit.cpp:185
+#: src/dialogs/text-edit.cpp:219
 #, fuzzy
 msgid "Alignment:"
 msgstr "对齐基础"
 
-#: src/dialogs/text-edit.cpp:210
+#: src/dialogs/text-edit.cpp:254
 #, fuzzy
 msgid "Orientation:"
 msgstr "渐变颜料"
 
-#: src/dialogs/text-edit.cpp:228
+#: src/dialogs/text-edit.cpp:279
 #, fuzzy
 msgid "Line spacing:"
 msgstr "X 间据："
 
-#: src/dialogs/text-edit.cpp:253
+#: src/dialogs/text-edit.cpp:310
 msgid "Text and font"
 msgstr ""
 
-#: src/dialogs/text-edit.cpp:264
+#: src/dialogs/text-edit.cpp:321
 msgid "Set as default"
 msgstr ""
 
-#: src/dialogs/tool-options.cpp:44 src/verbs.cpp:665
+#: src/dialogs/tool-options.cpp:49 src/verbs.cpp:688
 #, fuzzy
 msgid "Tool options"
 msgstr "Oaf 选项"
 
-#: src/dialogs/tool-options.cpp:85
+#: src/dialogs/tool-options.cpp:102
 #, fuzzy
 msgid "Tool has no options"
 msgstr "Oaf 选项"
 
-#: src/dialogs/tool-options.cpp:88
+#: src/dialogs/tool-options.cpp:105
 msgid "No active tool"
 msgstr ""
 
 #. Move page
-#: src/dialogs/transformation.cpp:275 src/dialogs/transformation.cpp:413
+#: src/dialogs/transformation.cpp:343 src/dialogs/transformation.cpp:508
 msgid "Move"
 msgstr "移动"
 
 #. Scale page
-#: src/dialogs/transformation.cpp:283 src/dialogs/transformation.cpp:587
+#: src/dialogs/transformation.cpp:351 src/dialogs/transformation.cpp:740
 msgid "Scale"
 msgstr "缩放"
 
 #. Rotate page
-#: src/dialogs/transformation.cpp:291 src/dialogs/transformation.cpp:714
+#: src/dialogs/transformation.cpp:359 src/dialogs/transformation.cpp:900
 msgid "Rotate"
 msgstr "旋转"
 
 #. Relative moves
-#: src/dialogs/transformation.cpp:455
+#: src/dialogs/transformation.cpp:569
 #, fuzzy
 msgid "Relative move"
 msgstr "垂直移动"
 
-#: src/dialogs/transformation.cpp:732
+#: src/dialogs/transformation.cpp:923
 msgid "deg"
 msgstr "度"
 
-#: src/dialogs/xml-tree.cpp:193
+#: src/dialogs/xml-tree.cpp:220
 msgid "Drag to reorder nodes"
-msgstr ""
-
-#: src/dialogs/xml-tree.cpp:206
-#, fuzzy
-msgid "New element node"
-msgstr "内存文档 %d"
-
-#: src/dialogs/xml-tree.cpp:224
-msgid "New text node"
 msgstr ""
 
 #: src/dialogs/xml-tree.cpp:241
 #, fuzzy
+msgid "New element node"
+msgstr "内存文档 %d"
+
+#: src/dialogs/xml-tree.cpp:263
+msgid "New text node"
+msgstr ""
+
+#: src/dialogs/xml-tree.cpp:284
+#, fuzzy
 msgid "Duplicate node"
 msgstr "复制"
 
-#: src/dialogs/xml-tree.cpp:257
+#: src/dialogs/xml-tree.cpp:305
 #, fuzzy
 msgid "Delete node"
 msgstr "删除"
 
-#: src/dialogs/xml-tree.cpp:270
+#: src/dialogs/xml-tree.cpp:321
 #, fuzzy
 msgid "Unindent node"
 msgstr "编辑节点"
 
-#: src/dialogs/xml-tree.cpp:281
+#: src/dialogs/xml-tree.cpp:336
 #, fuzzy
 msgid "Indent node"
 msgstr "编辑节点"
 
-#: src/dialogs/xml-tree.cpp:291
+#: src/dialogs/xml-tree.cpp:348
 #, fuzzy
 msgid "Raise node"
 msgstr "提升"
 
-#: src/dialogs/xml-tree.cpp:302
+#: src/dialogs/xml-tree.cpp:360
 #, fuzzy
 msgid "Lower node"
 msgstr "降低"
 
-#: src/dialogs/xml-tree.cpp:339
+#: src/dialogs/xml-tree.cpp:403
 msgid "Delete attribute"
 msgstr "删除属性"
 
-#: src/dialogs/xml-tree.cpp:369
+#: src/dialogs/xml-tree.cpp:447
 #, fuzzy
 msgid "Attribute name"
 msgstr "属性："
 
-#: src/dialogs/xml-tree.cpp:376
+#: src/dialogs/xml-tree.cpp:466
 #, fuzzy
 msgid "Set attribute"
 msgstr "删除属性"
 
-#: src/dialogs/xml-tree.cpp:389
+#: src/dialogs/xml-tree.cpp:487
 #, fuzzy
 msgid "Attribute value"
 msgstr "属性"
 
-#: src/dialogs/xml-tree.cpp:904
+#: src/dialogs/xml-tree.cpp:1191
 msgid "New element node..."
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:924
+#: src/dialogs/xml-tree.cpp:1211
 #, fuzzy
 msgid "Cancel"
 msgstr "改变"
 
-#: src/dialogs/xml-tree.cpp:928
+#: src/dialogs/xml-tree.cpp:1217
 #, fuzzy
 msgid "Create"
 msgstr "创建连接"
 
-#: src/document.cpp:385
+#: src/document.cpp:388
 #, fuzzy, c-format
 msgid "New document %d"
 msgstr "内存文档 %d"
 
-#: src/document.cpp:414
+#: src/document.cpp:417
 #, c-format
 msgid "Memory document %d"
 msgstr "内存文档 %d"
 
-#: src/document.cpp:506
+#: src/document.cpp:509
 #, c-format
 msgid "Unnamed document %d"
 msgstr "未命名文档 %d"
 
-#: src/draw-context.cpp:280
+#: src/draw-context.cpp:277
 #, fuzzy
 msgid "Appending to selection"
 msgstr "缩放到选中内容"
 
-#: src/draw-context.cpp:285
+#: src/draw-context.cpp:282
 msgid "Creating new curve"
 msgstr ""
 
 #. Mass
-#: src/dyna-draw-context.cpp:1046
+#: src/dyna-draw-context.cpp:886
 msgid "Mass:"
 msgstr ""
 
 #. Drag
-#: src/dyna-draw-context.cpp:1064
+#: src/dyna-draw-context.cpp:904
 #, fuzzy
 msgid "Drag:"
 msgstr "绘制"
 
 #. Angle
-#: src/dyna-draw-context.cpp:1082
+#: src/dyna-draw-context.cpp:922
 #, fuzzy
 msgid "Angle:"
 msgstr "角度"
 
 #. Reset
-#: src/dyna-draw-context.cpp:1118 src/rect-context.cpp:434
-#: src/spiral-context.cpp:406 src/star-context.cpp:393
+#: src/dyna-draw-context.cpp:958 src/rect-context.cpp:433
+#: src/spiral-context.cpp:389 src/star-context.cpp:370
 msgid "Defaults"
 msgstr ""
 
-#: src/file.cpp:98 src/main.cpp:272
+#: src/file.cpp:133 src/main.cpp:283
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr ""
 
-#: src/file.cpp:155 src/file.cpp:167
+#: src/file.cpp:199 src/file.cpp:211
 msgid "Select file to open"
 msgstr "选择打开的文件"
 
-#: src/file.cpp:185 src/file.cpp:244
+#: src/file.cpp:229 src/file.cpp:296
 #, fuzzy
 msgid "File type:"
 msgstr "填充模式"
 
-#: src/file.cpp:231
+#: src/file.cpp:283
 msgid "Save file"
 msgstr "保存文件"
 
-#: src/file.cpp:460 src/file.cpp:466
+#: src/file.cpp:520 src/file.cpp:526
 msgid "Select file to import"
 msgstr "选择需导入的文件"
 
-#: src/help.cpp:60
+#: src/help.cpp:62
 msgid "About Inkscape"
 msgstr ""
 
@@ -1098,26 +1099,26 @@ msgstr ""
 msgid "Ex squares"
 msgstr ""
 
-#: src/inkscape.cpp:435
+#: src/inkscape.cpp:452
 #, fuzzy
 msgid "Untitled document"
 msgstr "未命名文档 %d"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:466
+#: src/inkscape.cpp:483
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr ""
 
-#: src/inkscape.cpp:467
+#: src/inkscape.cpp:484
 msgid ""
 "Automatic backups of unsaved documents were done to following locations:\n"
 msgstr ""
 
-#: src/inkscape.cpp:468
+#: src/inkscape.cpp:485
 msgid "Automatic backup of following documents failed:\n"
 msgstr ""
 
-#: src/inkscape.cpp:599
+#: src/inkscape.cpp:622
 #, fuzzy, c-format
 msgid ""
 "%s is not regular file.\n"
@@ -1128,7 +1129,7 @@ msgstr ""
 "虽然 sodipodi 能够运行，您即\n"
 "不能读取也不能保存设置\n"
 
-#: src/inkscape.cpp:602
+#: src/inkscape.cpp:625
 #, fuzzy, c-format
 msgid ""
 "%s either is not valid xml file or\n"
@@ -1143,7 +1144,7 @@ msgstr ""
 "但您即不能读取也不能保存\n"
 "设置。"
 
-#: src/inkscape.cpp:607
+#: src/inkscape.cpp:630
 #, fuzzy, c-format
 msgid ""
 "%s is not valid inkscape preferences file.\n"
@@ -1156,7 +1157,7 @@ msgstr ""
 "但您即不能读取也不能保存\n"
 "设置。"
 
-#: src/inkscape.cpp:1080
+#: src/inkscape.cpp:1158
 #, fuzzy, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -1169,7 +1170,7 @@ msgstr ""
 "但您即不能读取也不能保存\n"
 "设置。"
 
-#: src/inkscape.cpp:1084
+#: src/inkscape.cpp:1162
 #, fuzzy, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -1182,7 +1183,7 @@ msgstr ""
 "但您即不能读取也不能保存\n"
 "设置。"
 
-#: src/inkscape.cpp:1088
+#: src/inkscape.cpp:1166
 #, fuzzy, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -1195,7 +1196,7 @@ msgstr ""
 "但您即不能读取也不能保存\n"
 "设置。"
 
-#: src/inkscape.cpp:1092
+#: src/inkscape.cpp:1170
 #, fuzzy, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -1208,72 +1209,70 @@ msgstr ""
 "但您即不能读取也不能保存\n"
 "设置。"
 
-#: src/interface.cpp:367
+#: src/interface.cpp:372
 msgid "Open _Recent"
 msgstr ""
 
-#: src/interface.cpp:385
+#: src/interface.cpp:390
 #, fuzzy
 msgid "Close View"
 msgstr "关闭视图"
 
-#: src/interface.cpp:463
+#: src/interface.cpp:468
 msgid "Cl_eanup"
 msgstr ""
 
-#: src/interface.cpp:488
+#: src/interface.cpp:502
 #, fuzzy
 msgid "_New View"
 msgstr "新建视图"
 
-#: src/interface.cpp:489
-#, fuzzy
-msgid "New P_review"
-msgstr "新建预览"
+#: src/interface.cpp:537
+msgid "_Tutorial"
+msgstr ""
 
-#: src/interface.cpp:528
+#: src/interface.cpp:538
+msgid "_Keys and Mouse"
+msgstr ""
+
+#: src/interface.cpp:539
 msgid "_About Inkscape"
 msgstr ""
 
-#. TODO: Modules need abouts too
-#: src/interface.cpp:532
-msgid "About Modules"
-msgstr ""
-
-#: src/interface.cpp:546
+#: src/interface.cpp:557
 msgid "_File"
 msgstr "文件(_F)"
 
-#: src/interface.cpp:552
+#: src/interface.cpp:563
 #, fuzzy
 msgid "_Edit"
 msgstr " 编辑"
 
-#: src/interface.cpp:558
+#: src/interface.cpp:569
 #, fuzzy
 msgid "_View"
 msgstr "视图"
 
-#: src/interface.cpp:564
+#: src/interface.cpp:575
 #, fuzzy
 msgid "_Object"
 msgstr "对象"
 
-#: src/interface.cpp:570
+#: src/interface.cpp:581
 msgid "_Path"
 msgstr ""
 
-#: src/interface.cpp:576
+#: src/interface.cpp:587
 #, fuzzy
 msgid "_Dialogs"
 msgstr "对话框"
 
-#: src/interface.cpp:582
+#: src/interface.cpp:593
 #, fuzzy
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: src/interface.cpp:682
+#: src/interface.cpp:693
 msgid "Could not parse SVG data"
 msgstr ""
 
@@ -1358,12 +1357,12 @@ msgstr "逐个显示给定文件，在出现任何键盘/鼠标事件时切换"
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr ""
 
-#: src/modules/gnome.cpp:133
+#: src/modules/gnome.cpp:138
 #, fuzzy
 msgid "Select printer"
 msgstr "选择"
 
-#: src/modules/gnome.cpp:187
+#: src/modules/gnome.cpp:191
 #, fuzzy, c-format
 msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Sodipodi (文档名 %s..)：打印预览"
@@ -1443,46 +1442,46 @@ msgstr ""
 msgid "write error occured"
 msgstr ""
 
-#: src/nodepath.cpp:3048
+#: src/nodepath.cpp:2843
 msgid "cusp"
 msgstr ""
 
-#: src/nodepath.cpp:3050
+#: src/nodepath.cpp:2845
 msgid "smooth"
 msgstr ""
 
-#: src/nodepath.cpp:3052
+#: src/nodepath.cpp:2847
 #, fuzzy
 msgid "symmetric"
 msgstr "不对称"
 
-#: src/nodepath.cpp:3064
+#: src/nodepath.cpp:2857
 msgid "Drag nodes or control points to edit the path"
 msgstr ""
 
-#: src/nodepath.cpp:3078
+#: src/nodepath.cpp:2871
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 
-#: src/nodepath.cpp:3080
+#: src/nodepath.cpp:2873
 #, c-format
 msgid ""
 "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
 msgstr ""
 
-#: src/nodepath.cpp:3082
+#: src/nodepath.cpp:2875
 #, c-format
 msgid "%i of %i nodes selected; %s. %s."
 msgstr ""
 
-#: src/nodepath.cpp:3084
+#: src/nodepath.cpp:2877
 #, fuzzy, c-format
 msgid "%i of %i nodes selected. %s."
 msgstr "使选定节点处成为光滑线段"
 
 #. Item dialog
-#: src/object-ui.cpp:106 src/verbs.cpp:672
+#: src/object-ui.cpp:106 src/verbs.cpp:695
 #, fuzzy
 msgid "Item _Properties"
 msgstr "项目属性"
@@ -1516,7 +1515,7 @@ msgid "_Create Link"
 msgstr "创建连接"
 
 #. "Ungroup"
-#: src/object-ui.cpp:243 src/verbs.cpp:611
+#: src/object-ui.cpp:243 src/verbs.cpp:631
 msgid "_Ungroup"
 msgstr "分解组(_U)"
 
@@ -1550,7 +1549,7 @@ msgid "_Trace"
 msgstr ""
 
 #. Item dialog
-#: src/object-ui.cpp:398 src/verbs.cpp:666
+#: src/object-ui.cpp:398 src/verbs.cpp:689
 #, fuzzy
 msgid "_Fill and Stroke"
 msgstr "填充并勾描"
@@ -1574,40 +1573,40 @@ msgid "Spiral _Properties"
 msgstr "螺旋属性"
 
 #. rx_ratio
-#: src/rect-context.cpp:398
+#: src/rect-context.cpp:397
 msgid "Roundness ratio for x:"
 msgstr ""
 
 #. ry_ratio
-#: src/rect-context.cpp:416
+#: src/rect-context.cpp:415
 msgid "Roundness ratio for y:"
 msgstr ""
 
-#: src/select-context.cpp:835
+#: src/select-context.cpp:829
 #, fuzzy
 msgid "Visual transformation"
 msgstr "重置变换"
 
-#: src/select-context.cpp:843
+#: src/select-context.cpp:837
 #, fuzzy
 msgid "Show content"
 msgstr "内容"
 
-#: src/select-context.cpp:850
+#: src/select-context.cpp:844
 #, fuzzy
 msgid "Show outline"
 msgstr "显示指示线"
 
-#: src/select-context.cpp:857
+#: src/select-context.cpp:851
 #, fuzzy
 msgid "Object transformation"
 msgstr "重置变换"
 
-#: src/select-context.cpp:865
+#: src/select-context.cpp:859
 msgid "Optimize"
 msgstr ""
 
-#: src/select-context.cpp:872
+#: src/select-context.cpp:866
 msgid "Preserve"
 msgstr ""
 
@@ -1683,15 +1682,15 @@ msgstr "将选中内容复制到剪贴板"
 msgid "Select objects to paste style to."
 msgstr "将选定对象转换为曲线"
 
-#: src/selection.cpp:209
+#: src/selection.cpp:197
 msgid "Click selection to toggle scale/rotation handles"
 msgstr ""
 
-#: src/selection.cpp:214
+#: src/selection.cpp:202
 msgid "No objects selected. Click, Shift+click, drag around objects to select."
 msgstr ""
 
-#: src/selection.cpp:218
+#: src/selection.cpp:206
 #, c-format
 msgid "%i objects selected. %s."
 msgstr ""
@@ -1726,31 +1725,31 @@ msgstr "项目是引用"
 msgid "Color image %d x %d: %s"
 msgstr ""
 
-#: src/sp-image.cpp:782
+#: src/sp-image.cpp:768
 msgid "Trace"
 msgstr ""
 
-#: src/sp-image.cpp:928
+#: src/sp-image.cpp:914
 #, c-format
 msgid "Error to write %s: %s"
 msgstr ""
 
-#: src/sp-image.cpp:962
+#: src/sp-image.cpp:948
 #, fuzzy
 msgid "Untitled"
 msgstr "单位"
 
-#: src/sp-image.cpp:967
+#: src/sp-image.cpp:953
 #, fuzzy
 msgid "Document Name:"
 msgstr "文档"
 
-#: src/sp-image.cpp:980
+#: src/sp-image.cpp:966
 #, fuzzy
 msgid "Unknown"
 msgstr "未知项目 :-("
 
-#: src/sp-image.cpp:986
+#: src/sp-image.cpp:972
 #, fuzzy
 msgid "Image URI:"
 msgstr "图像"
@@ -1760,21 +1759,21 @@ msgstr "图像"
 msgid "Group of %d objects"
 msgstr "含有 %d 个对象的组"
 
-#: src/sp-item.cpp:474
+#: src/sp-item.cpp:450
 msgid "Object"
 msgstr "对象"
 
-#: src/sp-rect.cpp:256 src/verbs.cpp:636
+#: src/sp-rect.cpp:256 src/verbs.cpp:656
 msgid "Rectangle"
 msgstr "长方形"
 
-#: src/sp-text.cpp:1308
+#: src/sp-text.cpp:1238
 #, c-format
 msgid "Text (%s, %.5gpt)"
 msgstr ""
 
 #. T0
-#: src/spiral-context.cpp:388
+#: src/spiral-context.cpp:371
 #, fuzzy
 msgid "Inner radius:"
 msgstr "半径："
@@ -1799,23 +1798,37 @@ msgstr ""
 msgid "Selected object is not a path, cannot outline."
 msgstr ""
 
-#: src/splivarot.cpp:659 src/splivarot.cpp:873
+#: src/splivarot.cpp:403
+#, fuzzy
+msgid "Selected object is not stroked, cannot outline."
+msgstr "将选定对象转换为曲线"
+
+#: src/splivarot.cpp:457
+#, fuzzy
+msgid "Selected object has no curve, cannot outline."
+msgstr "将选定对象转换为曲线"
+
+#: src/splivarot.cpp:528
+msgid "Outline of object could not be computed."
+msgstr ""
+
+#: src/splivarot.cpp:670 src/splivarot.cpp:884
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr ""
 
 #. Magnitude
-#: src/star-context.cpp:347
+#: src/star-context.cpp:324
 msgid "Corners:"
 msgstr ""
 
 #. Proportion
-#: src/star-context.cpp:365
+#: src/star-context.cpp:342
 #, fuzzy
 msgid "Proportion:"
 msgstr "位置"
 
 #. Making sides flat
-#: src/star-context.cpp:384
+#: src/star-context.cpp:361
 #, fuzzy
 msgid "Make sides flat"
 msgstr "使其敏感"
@@ -1918,736 +1931,744 @@ msgid ""
 "Click to pick a color, click and drag to pick the average color of an area."
 msgstr ""
 
-#: src/verbs.cpp:580
+#: src/verbs.cpp:600
 msgid "Does nothing"
 msgstr ""
 
 #. File
-#: src/verbs.cpp:582
+#: src/verbs.cpp:602
 msgid "_New"
 msgstr "新建(_N)"
 
-#: src/verbs.cpp:582
+#: src/verbs.cpp:602
 #, fuzzy
 msgid "Create new document"
 msgstr "内存文档 %d"
 
-#: src/verbs.cpp:583
+#: src/verbs.cpp:603
 #, fuzzy
 msgid "_Open..."
 msgstr "打开"
 
-#: src/verbs.cpp:583
+#: src/verbs.cpp:603
 #, fuzzy
 msgid "Open existing document"
 msgstr "未命名文档 %d"
 
-#: src/verbs.cpp:584
+#: src/verbs.cpp:604
 #, fuzzy
 msgid "_Save"
 msgstr "保存"
 
-#: src/verbs.cpp:584
+#: src/verbs.cpp:604
 #, fuzzy
 msgid "Save document"
 msgstr "内存文档 %d"
 
-#: src/verbs.cpp:585
+#: src/verbs.cpp:605
 #, fuzzy
 msgid "Save _As..."
 msgstr "保存为"
 
-#: src/verbs.cpp:585
+#: src/verbs.cpp:605
 #, fuzzy
 msgid "Save document under new name"
 msgstr "以新文件名保存图画"
 
-#: src/verbs.cpp:586
+#: src/verbs.cpp:606
 #, fuzzy
 msgid "_Print..."
 msgstr "打印"
 
-#: src/verbs.cpp:586
+#: src/verbs.cpp:606
 #, fuzzy
 msgid "Print document"
 msgstr "未命名文档 %d"
 
-#: src/verbs.cpp:587
+#: src/verbs.cpp:607
 #, fuzzy
 msgid "Print _Direct"
 msgstr "连接属性"
 
-#: src/verbs.cpp:587
+#: src/verbs.cpp:607
 msgid "Print directly to file or pipe"
 msgstr ""
 
-#: src/verbs.cpp:588
+#: src/verbs.cpp:608
 #, fuzzy
 msgid "Print Previe_w"
 msgstr "打印预览"
 
-#: src/verbs.cpp:588
+#: src/verbs.cpp:608
 #, fuzzy
 msgid "Preview document printout"
 msgstr "预览打印图画"
 
-#: src/verbs.cpp:589
+#: src/verbs.cpp:609
 #, fuzzy
 msgid "_Import..."
 msgstr "导入"
 
-#: src/verbs.cpp:589
+#: src/verbs.cpp:609
 msgid "Import bitmap or SVG image into document"
 msgstr ""
 
-#: src/verbs.cpp:590
+#: src/verbs.cpp:610
 #, fuzzy
 msgid "_Export Bitmap..."
 msgstr "彩色位图"
 
-#: src/verbs.cpp:590
+#: src/verbs.cpp:610
 #, fuzzy
 msgid "Export document as PNG bitmap"
 msgstr "将图形导出为 png"
 
-#: src/verbs.cpp:591
+#: src/verbs.cpp:611
 #, fuzzy
 msgid "N_ext window"
 msgstr "关闭窗口"
 
-#: src/verbs.cpp:591
+#: src/verbs.cpp:611
 msgid "Switch to the next document window"
 msgstr ""
 
-#: src/verbs.cpp:592
+#: src/verbs.cpp:612
 #, fuzzy
 msgid "P_rev window"
 msgstr "关闭窗口"
 
-#: src/verbs.cpp:592
+#: src/verbs.cpp:612
 msgid "Switch to the previous document window"
 msgstr ""
 
-#: src/verbs.cpp:593
+#: src/verbs.cpp:613
 #, fuzzy
 msgid "_Quit"
 msgstr "退出(_Q)"
 
-#: src/verbs.cpp:593
+#: src/verbs.cpp:613
 #, fuzzy
 msgid "Quit"
 msgstr "退出(_Q)"
 
 #. Edit
-#: src/verbs.cpp:595
+#: src/verbs.cpp:615
 #, fuzzy
 msgid "_Undo"
 msgstr "撤消"
 
-#: src/verbs.cpp:595
+#: src/verbs.cpp:615
 #, fuzzy
 msgid "Undo last action"
 msgstr "重置变换"
 
-#: src/verbs.cpp:596
+#: src/verbs.cpp:616
 #, fuzzy
 msgid "_Redo"
 msgstr "恢复"
 
-#: src/verbs.cpp:596
+#: src/verbs.cpp:616
 msgid "Do again last undone action"
 msgstr ""
 
-#: src/verbs.cpp:597
+#: src/verbs.cpp:617
 #, fuzzy
 msgid "Cu_t"
 msgstr "剪切"
 
-#: src/verbs.cpp:597
+#: src/verbs.cpp:617
 #, fuzzy
 msgid "Cut selected objects to clipboard"
 msgstr "将选定对象转换为曲线"
 
-#: src/verbs.cpp:598
+#: src/verbs.cpp:618
 #, fuzzy
 msgid "_Copy"
 msgstr "复制"
 
-#: src/verbs.cpp:598
+#: src/verbs.cpp:618
 #, fuzzy
 msgid "Copy selected objects to clipboard"
 msgstr "将选中内容复制到剪贴板"
 
-#: src/verbs.cpp:599
+#: src/verbs.cpp:619
 #, fuzzy
 msgid "_Paste"
 msgstr "粘贴"
 
-#: src/verbs.cpp:599
+#: src/verbs.cpp:619
 #, fuzzy
 msgid "Paste objects from clipboard"
 msgstr "从剪贴板中粘贴"
 
-#: src/verbs.cpp:600
+#: src/verbs.cpp:620
 #, fuzzy
 msgid "Paste _Style"
 msgstr "勾描风格"
 
-#: src/verbs.cpp:600
+#: src/verbs.cpp:620
 #, fuzzy
 msgid "Apply style of copied object to selection"
 msgstr "将选中内容复制到剪贴板"
 
-#: src/verbs.cpp:601
+#: src/verbs.cpp:621
 #, fuzzy
 msgid "_Delete"
 msgstr "删除"
 
-#: src/verbs.cpp:601
+#: src/verbs.cpp:621
 #, fuzzy
 msgid "Delete selected objects"
 msgstr "删除选定节点"
 
-#: src/verbs.cpp:602
+#: src/verbs.cpp:622
 #, fuzzy
 msgid "D_uplicate"
 msgstr "复制"
 
-#: src/verbs.cpp:602
+#: src/verbs.cpp:622
 #, fuzzy
 msgid "Duplicate selected objects"
 msgstr "翻转选中对象"
 
-#: src/verbs.cpp:603
+#: src/verbs.cpp:623
 #, fuzzy
 msgid "Clea_r All"
 msgstr "色彩填充"
 
-#: src/verbs.cpp:603
+#: src/verbs.cpp:623
 msgid "Delete all objects from document"
 msgstr ""
 
-#: src/verbs.cpp:604
+#: src/verbs.cpp:624
 #, fuzzy
 msgid "Select _All"
 msgstr "选择"
 
-#: src/verbs.cpp:604
+#: src/verbs.cpp:624
 #, fuzzy
 msgid "Select all objects in document"
 msgstr "文档中无渐变"
 
 #. Selection
-#: src/verbs.cpp:606
+#: src/verbs.cpp:626
 msgid "Bring to _Front"
 msgstr "放置在前面(_F)"
 
-#: src/verbs.cpp:606
+#: src/verbs.cpp:626
 #, fuzzy
 msgid "Raise selection to top"
 msgstr "将选中内容提升到顶层"
 
-#: src/verbs.cpp:607
+#: src/verbs.cpp:627
 msgid "Send to _Back"
 msgstr "放置在后面(_B)"
 
-#: src/verbs.cpp:607
+#: src/verbs.cpp:627
 #, fuzzy
 msgid "Lower selection to bottom"
 msgstr "将选中内容降低到底层"
 
-#: src/verbs.cpp:608
+#: src/verbs.cpp:628
 #, fuzzy
 msgid "_Raise"
 msgstr "提升"
 
-#: src/verbs.cpp:608
+#: src/verbs.cpp:628
 #, fuzzy
 msgid "Raise selection one step"
 msgstr "将选中内容提升一个图层"
 
-#: src/verbs.cpp:609
+#: src/verbs.cpp:629
 #, fuzzy
 msgid "_Lower"
 msgstr "降低"
 
-#: src/verbs.cpp:609
+#: src/verbs.cpp:629
 #, fuzzy
 msgid "Lower selection one step"
 msgstr "将选中内容降低一个图层"
 
-#: src/verbs.cpp:610
+#: src/verbs.cpp:630
 msgid "_Group"
 msgstr "编组(_G)"
 
-#: src/verbs.cpp:610
+#: src/verbs.cpp:630
 msgid "Group selected objects"
 msgstr "编组选中对象"
 
-#: src/verbs.cpp:611
+#: src/verbs.cpp:631
 #, fuzzy
 msgid "Ungroup selected group(s)"
 msgstr "分解选中对象构成的组"
 
-#: src/verbs.cpp:612
+#: src/verbs.cpp:632
 #, fuzzy
 msgid "_Union"
 msgstr "无"
 
-#: src/verbs.cpp:612
+#: src/verbs.cpp:632
 #, fuzzy
 msgid "Union of selected objects"
 msgstr "分解选中对象构成的组"
 
-#: src/verbs.cpp:613
+#: src/verbs.cpp:633
 #, fuzzy
 msgid "_Intersection"
 msgstr "交互(_I)"
 
-#: src/verbs.cpp:613
+#: src/verbs.cpp:633
 #, fuzzy
 msgid "Intersection of selected objects"
 msgstr "删除选定节点"
 
-#: src/verbs.cpp:614
+#: src/verbs.cpp:634
 #, fuzzy
 msgid "_Difference"
 msgstr "度"
 
-#: src/verbs.cpp:614
+#: src/verbs.cpp:634
 #, fuzzy
 msgid "Difference of selected objects"
 msgstr "删除选定节点"
 
-#: src/verbs.cpp:615
+#: src/verbs.cpp:635
 #, fuzzy
 msgid "E_xclusion"
 msgstr "扩充："
 
-#: src/verbs.cpp:615
+#: src/verbs.cpp:635
 #, fuzzy
 msgid "Exclusive OR of selected objects"
 msgstr "编辑选中对象的布局"
 
-#: src/verbs.cpp:616
+#: src/verbs.cpp:636
 #, fuzzy
 msgid "O_utset Path"
 msgstr "组合选定路径"
 
-#: src/verbs.cpp:616
+#: src/verbs.cpp:636
 #, fuzzy
 msgid "Outset selected paths"
 msgstr "组合选定路径"
 
-#: src/verbs.cpp:617
+#: src/verbs.cpp:637
 msgid "I_nset Path"
 msgstr ""
 
-#: src/verbs.cpp:617
+#: src/verbs.cpp:637
 #, fuzzy
 msgid "Inset selected paths"
 msgstr "组合选定路径"
 
-#: src/verbs.cpp:618
+#: src/verbs.cpp:638
 #, fuzzy
 msgid "D_ynamic Offset"
 msgstr "动态填充"
 
-#: src/verbs.cpp:618
+#: src/verbs.cpp:638
 msgid "Create a dynamic offset object"
 msgstr ""
 
-#: src/verbs.cpp:619
+#: src/verbs.cpp:639
 msgid "_Linked Offset"
 msgstr ""
 
-#: src/verbs.cpp:619
+#: src/verbs.cpp:639
 msgid "Create a dynamic offset object linked to the original path"
 msgstr ""
 
-#: src/verbs.cpp:620
+#: src/verbs.cpp:640
 #, fuzzy
 msgid "_Stroke to Path"
 msgstr "勾描宽度"
 
-#: src/verbs.cpp:620
+#: src/verbs.cpp:640
 #, fuzzy
 msgid "Convert selected stroke to path"
 msgstr "将选定对象转换为曲线"
 
-#: src/verbs.cpp:621
+#: src/verbs.cpp:641
 #, fuzzy
 msgid "Simp_lify Path"
 msgstr "组合选定路径"
 
-#: src/verbs.cpp:621
+#: src/verbs.cpp:641
 #, fuzzy
 msgid "Simplify selected path"
 msgstr "组合选定路径"
 
-#: src/verbs.cpp:622
+#: src/verbs.cpp:642
 msgid "_Combine"
 msgstr "组合(_C)"
 
-#: src/verbs.cpp:622
+#: src/verbs.cpp:642
 #, fuzzy
 msgid "Combine multiple paths"
 msgstr "组合选定路径"
 
-#: src/verbs.cpp:623
+#: src/verbs.cpp:643
 #, fuzzy
 msgid "Break _Apart"
 msgstr "拆分(_B)"
 
-#: src/verbs.cpp:623
+#: src/verbs.cpp:643
 #, fuzzy
 msgid "Break selected path to subpaths"
 msgstr "拆分选定路径"
 
 #. Object
-#: src/verbs.cpp:625
+#: src/verbs.cpp:645
 #, fuzzy
 msgid "Rotate 90 _Degrees"
 msgstr "将角度设置为 90 度"
 
-#: src/verbs.cpp:625
+#: src/verbs.cpp:645
 #, fuzzy
 msgid "Rotate selection 90 degrees clockwise"
 msgstr "将选定对象顺时针旋转 90 度"
 
-#: src/verbs.cpp:626
+#: src/verbs.cpp:646
 #, fuzzy
 msgid "Remove _Transformations"
 msgstr "删除变换"
 
-#: src/verbs.cpp:626
+#: src/verbs.cpp:646
 #, fuzzy
 msgid "Remove transformations from object"
 msgstr "删除变换"
 
-#: src/verbs.cpp:627
+#: src/verbs.cpp:647
 #, fuzzy
 msgid "_Object to Path"
 msgstr "重置变换"
 
-#: src/verbs.cpp:627
+#: src/verbs.cpp:647
 #, fuzzy
 msgid "Convert selected objects to paths"
 msgstr "将选定对象转换为曲线"
 
-#: src/verbs.cpp:628
+#: src/verbs.cpp:648
 #, fuzzy
 msgid "Flip _Horizontally"
 msgstr "水平翻转"
 
-#: src/verbs.cpp:629
+#: src/verbs.cpp:649
 #, fuzzy
 msgid "Flip selection horizontally"
 msgstr "翻转选中对象"
 
-#: src/verbs.cpp:630
+#: src/verbs.cpp:650
 #, fuzzy
 msgid "Flip _Vertically"
 msgstr "垂直翻转"
 
-#: src/verbs.cpp:631
+#: src/verbs.cpp:651
 #, fuzzy
 msgid "Flip selection vertically"
 msgstr "翻转选中对象"
 
 #. Event contexts
 #. FIXME: add shortcuts to tooltips automatically!
-#: src/verbs.cpp:634
+#: src/verbs.cpp:654
 msgid "Select"
 msgstr "选择"
 
-#: src/verbs.cpp:634
+#: src/verbs.cpp:654
 #, fuzzy
 msgid "Select and transform objects (F1)"
 msgstr "选择并变换"
 
-#: src/verbs.cpp:635
+#: src/verbs.cpp:655
 #, fuzzy
 msgid "Node Edit"
 msgstr "节点编辑"
 
-#: src/verbs.cpp:635
+#: src/verbs.cpp:655
 msgid "Edit path nodes or control handles (F2)"
 msgstr ""
 
-#: src/verbs.cpp:636
+#: src/verbs.cpp:656
 msgid "Create rectangles and squares (F4)"
 msgstr ""
 
-#: src/verbs.cpp:637
+#: src/verbs.cpp:657
 msgid "Ellipse"
 msgstr "椭圆"
 
-#: src/verbs.cpp:637
+#: src/verbs.cpp:657
 msgid "Create circles, ellipses, and arcs (F5)"
 msgstr ""
 
-#: src/verbs.cpp:638
+#: src/verbs.cpp:658
 msgid "Star"
 msgstr "星形"
 
-#: src/verbs.cpp:638
+#: src/verbs.cpp:658
 msgid "Create stars and polygons (*)"
 msgstr ""
 
-#: src/verbs.cpp:639
+#: src/verbs.cpp:659
 msgid "Spiral"
 msgstr "螺旋形"
 
-#: src/verbs.cpp:639
+#: src/verbs.cpp:659
 #, fuzzy
 msgid "Create spirals (F9)"
 msgstr "绘制螺旋"
 
-#: src/verbs.cpp:640
+#: src/verbs.cpp:660
 msgid "Pencil"
 msgstr ""
 
-#: src/verbs.cpp:640
+#: src/verbs.cpp:660
 #, fuzzy
 msgid "Draw freehand lines (F6)"
 msgstr "绘制弹力手绘线"
 
-#: src/verbs.cpp:641
+#: src/verbs.cpp:661
 #, fuzzy
 msgid "Pen"
 msgstr "百分比"
 
-#: src/verbs.cpp:641
+#: src/verbs.cpp:661
 #, fuzzy
 msgid "Draw Bezier curves and straight lines (Shift+F6)"
 msgstr "绘制手绘线"
 
-#: src/verbs.cpp:642
+#: src/verbs.cpp:662
 msgid "Calligraphy"
 msgstr ""
 
-#: src/verbs.cpp:642
+#: src/verbs.cpp:662
 msgid "Draw calligraphic lines (Ctrl+F6)"
 msgstr ""
 
-#: src/verbs.cpp:643
+#: src/verbs.cpp:663
 msgid "Create and edit text objects (F8)"
 msgstr ""
 
-#: src/verbs.cpp:644
+#: src/verbs.cpp:664
 msgid "Zoom in or out (F3)"
 msgstr ""
 
-#: src/verbs.cpp:645
+#: src/verbs.cpp:665
 msgid "Dropper"
 msgstr ""
 
-#: src/verbs.cpp:645
+#: src/verbs.cpp:665
 msgid "Pick averaged colors from image (F7)"
 msgstr ""
 
 #. Zooming
-#: src/verbs.cpp:647
+#: src/verbs.cpp:667
 #, fuzzy
 msgid "Zoom In"
 msgstr "放大"
 
-#: src/verbs.cpp:647
+#: src/verbs.cpp:667
 msgid "Zoom in"
 msgstr "放大"
 
-#: src/verbs.cpp:648
+#: src/verbs.cpp:668
 #, fuzzy
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: src/verbs.cpp:648
+#: src/verbs.cpp:668
 msgid "Zoom out"
 msgstr "缩小"
 
-#: src/verbs.cpp:649
+#: src/verbs.cpp:669
 #, fuzzy
 msgid "Rulers"
 msgstr "文件"
 
-#: src/verbs.cpp:649
+#: src/verbs.cpp:669
 msgid "Show/hide rulers"
 msgstr ""
 
-#: src/verbs.cpp:650
+#: src/verbs.cpp:670
 msgid "Scrollbars"
 msgstr ""
 
-#: src/verbs.cpp:650
+#: src/verbs.cpp:670
 msgid "Show/hide scrollbars"
 msgstr ""
 
-#: src/verbs.cpp:651
+#: src/verbs.cpp:671
 #, fuzzy
 msgid "Show/hide grid"
 msgstr "显示栅格"
 
-#: src/verbs.cpp:652
+#: src/verbs.cpp:672
 #, fuzzy
 msgid "Show/hide guides"
 msgstr "显示指示线"
 
-#: src/verbs.cpp:653
+#: src/verbs.cpp:673
 msgid "Nex_t zoom"
 msgstr ""
 
-#: src/verbs.cpp:653
+#: src/verbs.cpp:673
 msgid "Next zoom"
 msgstr ""
 
-#: src/verbs.cpp:654
+#: src/verbs.cpp:674
 msgid "Pre_v zoom"
 msgstr ""
 
-#: src/verbs.cpp:654
+#: src/verbs.cpp:674
 msgid "Previous zoom"
 msgstr ""
 
-#: src/verbs.cpp:655
+#: src/verbs.cpp:675
 #, fuzzy
 msgid "Zoom 1:_1"
 msgstr "缩放到 1:1"
 
-#: src/verbs.cpp:655
+#: src/verbs.cpp:675
 msgid "Zoom to 1:1"
 msgstr "缩放到 1:1"
 
-#: src/verbs.cpp:656
+#: src/verbs.cpp:676
 #, fuzzy
 msgid "Zoom 1:_2"
 msgstr "缩放到 1:2"
 
-#: src/verbs.cpp:656
+#: src/verbs.cpp:676
 msgid "Zoom to 1:2"
 msgstr "缩放到 1:2"
 
-#: src/verbs.cpp:657
+#: src/verbs.cpp:677
 #, fuzzy
 msgid "_Zoom 2:1"
 msgstr "缩放到 2:1"
 
-#: src/verbs.cpp:657
+#: src/verbs.cpp:677
 msgid "Zoom to 2:1"
 msgstr "缩放到 2:1"
 
-#: src/verbs.cpp:658
+#: src/verbs.cpp:678
 msgid "_Page"
 msgstr "页(_P)"
 
-#: src/verbs.cpp:658
+#: src/verbs.cpp:678
 #, fuzzy
 msgid "Fit page in window"
 msgstr "编辑窗口"
 
-#: src/verbs.cpp:659
+#: src/verbs.cpp:679
 #, fuzzy
 msgid "Page _Width"
 msgstr "设定页面宽度"
 
-#: src/verbs.cpp:659
+#: src/verbs.cpp:679
 #, fuzzy
 msgid "Fit page width in window"
 msgstr "设定页面宽度"
 
-#: src/verbs.cpp:660
+#: src/verbs.cpp:680
 msgid "_Drawing"
 msgstr "绘图(_D)"
 
-#: src/verbs.cpp:660
+#: src/verbs.cpp:680
 #, fuzzy
 msgid "Fit drawing in window"
 msgstr "编辑窗口"
 
-#: src/verbs.cpp:661
+#: src/verbs.cpp:681
 msgid "_Selection"
 msgstr "选择(_S)"
 
-#: src/verbs.cpp:661
+#: src/verbs.cpp:681
 #, fuzzy
 msgid "Fit selection in window"
 msgstr "将选中内容提升到顶层"
 
+#: src/verbs.cpp:683
+msgid "_Fullscreen"
+msgstr ""
+
+#: src/verbs.cpp:683
+msgid "Fullscreen"
+msgstr ""
+
 #. Dialogs
-#: src/verbs.cpp:663
+#: src/verbs.cpp:686
 #, fuzzy
 msgid "Inkscape _Options"
 msgstr "Sodipodi：%s：%s：%d"
 
-#: src/verbs.cpp:663
+#: src/verbs.cpp:686
 #, fuzzy
 msgid "Global Inkscape options"
 msgstr "显示设置"
 
-#: src/verbs.cpp:664
+#: src/verbs.cpp:687
 #, fuzzy
 msgid "_Document Options"
 msgstr "文档设置"
 
-#: src/verbs.cpp:664
+#: src/verbs.cpp:687
 #, fuzzy
 msgid "Options saved with the document"
 msgstr "未命名文档 %d"
 
-#: src/verbs.cpp:665
+#: src/verbs.cpp:688
 #, fuzzy
 msgid "Tool Optio_ns"
 msgstr "Oaf 选项"
 
-#: src/verbs.cpp:666
+#: src/verbs.cpp:689
 #, fuzzy
 msgid "Fill and stroke settings"
 msgstr "勾描设置"
 
-#: src/verbs.cpp:667
+#: src/verbs.cpp:690
 #, fuzzy
 msgid "Transfor_m"
 msgstr "转化"
 
-#: src/verbs.cpp:667
+#: src/verbs.cpp:690
 #, fuzzy
 msgid "Object transformations"
 msgstr "重置变换"
 
-#: src/verbs.cpp:668
+#: src/verbs.cpp:691
 #, fuzzy
 msgid "_Align and Distribute"
 msgstr "属性"
 
-#: src/verbs.cpp:668
+#: src/verbs.cpp:691
 #, fuzzy
 msgid "Align and distribute objects"
 msgstr "添加属性"
 
-#: src/verbs.cpp:669
+#: src/verbs.cpp:692
 #, fuzzy
 msgid "_Text and Font"
 msgstr "桌面设置"
 
-#: src/verbs.cpp:669
+#: src/verbs.cpp:692
 #, fuzzy
 msgid "Text editing and font settings"
 msgstr "桌面设置"
 
-#: src/verbs.cpp:670
+#: src/verbs.cpp:693
 #, fuzzy
 msgid "_XML Editor"
 msgstr "XML 编辑器"
 
-#: src/verbs.cpp:670
+#: src/verbs.cpp:693
 msgid "XML Editor"
 msgstr "XML 编辑器"
 
-#: src/verbs.cpp:671
+#: src/verbs.cpp:694
 msgid "_Hide/View dialogs"
 msgstr ""
 
-#: src/verbs.cpp:671
+#: src/verbs.cpp:694
 msgid "Toggle visibility of all active dialogs"
 msgstr ""
 
@@ -2820,10 +2841,6 @@ msgstr "黑："
 msgid "Unnamed"
 msgstr "名称"
 
-#: src/widgets/sp-toolbox.cpp:307
-msgid "Toggle separate window and main toolbox placement"
-msgstr ""
-
 #: src/widgets/sp-xmlview-attr-list.cpp:55
 #, fuzzy
 msgid "Attribute"
@@ -2832,6 +2849,10 @@ msgstr "属性"
 #: src/widgets/sp-xmlview-attr-list.cpp:56
 msgid "Value"
 msgstr "值"
+
+#, fuzzy
+#~ msgid "New P_review"
+#~ msgstr "新建预览"
 
 #, fuzzy
 #~ msgid "Inkscape: %s: %s: %d"

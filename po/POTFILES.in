@@ -210,7 +210,6 @@ src/splivarot.cpp
 src/star-context.cpp
 src/style.cpp
 src/svg-view.cpp
-src/svg/gill-svg-path.cpp
 src/svg/gnome-canvas-bpath-util.cpp
 src/svg/svg-affine.cpp
 src/svg/svg-color.cpp
@@ -242,7 +241,6 @@ src/widgets/sp-color-scales.cpp
 src/widgets/sp-color-selector.cpp
 src/widgets/sp-color-slider.cpp
 src/widgets/sp-hwrap-box.cpp
-src/widgets/sp-toolbox.cpp
 src/widgets/sp-vwrap-box.cpp
 src/widgets/sp-widget.cpp
 src/widgets/sp-wrap-box.cpp
