@@ -49,10 +49,10 @@ public:
      *
      * @return the reference to the object
      */
-    template <typename M>
-    static M &claim(M &m) {
-        static_cast<Refcounted &>(m)._claim();
-        return m;
+    template <typename R>
+    static R &claim(R &r) {
+        static_cast<Refcounted const &>(const_cast<R const &>(r))._claim();
+        return r;
     }
 
     /**
@@ -69,7 +69,7 @@ public:
      */
     template <typename R>
     static R *claim(R *r) {
-        static_cast<Refcounted *>(r)->_claim();
+        static_cast<Refcounted const *>(const_cast<R const *>(r))->_claim();
         return r;
     }
 
@@ -91,7 +91,7 @@ public:
      */
     template <typename R>
     static R &release(R &r) {
-        static_cast<Refcounted &>(r)._release();
+        static_cast<Refcounted const &>(const_cast<R const &>(r))._release();
         return r;
     }
 
@@ -113,7 +113,7 @@ public:
      */
     template <typename R>
     static R *release(R *r) {
-        static_cast<Refcounted *>(r)->_release();
+        static_cast<Refcounted const *>(const_cast<R const *>(r))->_release();
         return r;
     }
 
@@ -129,17 +129,16 @@ private:
     Refcounted(Refcounted const &); // no copy
     void operator=(Refcounted const &); // no assign
 
-    Refcounted &_claim() {
+    void _claim() const {
         _refcount++;
-        return *this;
     }
-    void _release() {
+    void _release() const {
         if (!--_refcount) {
-            delete this;
+            delete const_cast<Refcounted *>(this);
         }
     }
 
-    int _refcount;
+    mutable int _refcount;
 };
 
 }
