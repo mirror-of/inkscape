@@ -360,7 +360,6 @@ sp_main_gui(int argc, char const **argv)
         if (create_new) {
             sp_file_new_default();
         }
-        inkscape_unref();
     } else {
         if (fl) {
             GtkWidget *ss;
@@ -368,7 +367,6 @@ sp_main_gui(int argc, char const **argv)
             inkscape_application_init(argv[0], true);
             ss = sp_slideshow_new(fl);
             if (ss) gtk_widget_show(ss);
-            inkscape_unref();
         } else {
             g_warning ("No slides to display");
             exit(0);
