@@ -6,7 +6,6 @@ livarot/clean:
 	rm -f livarot/libvarot.a $(livarot_libvarot_a_OBJECTS)
 
 livarot_libvarot_a_SOURCES =	\
-	livarot/evil-malloc.h \
 	livarot/AVL.cpp	\
 	livarot/AVL.h	\
 	livarot/AlphaLigne.cpp	\
