@@ -28,6 +28,12 @@ public:
 	void add(Point const &p) {
 		_bounds.expandTo(p);
 	}
+	void add(Rect const &p) {
+		// Note that this is a hack.  when convexhull actually works
+		// you will need to add all four points.
+		_bounds.expandTo(p.min);
+		_bounds.expandTo(p.max);
+	}
 	void add(ConvexHull const &h) {
 		_bounds.expandTo(h._bounds);
 	}
