@@ -168,7 +168,6 @@ static void
 sp_image_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPImage *image;
-	gulong unit;
 
 	image = SP_IMAGE (object);
 
