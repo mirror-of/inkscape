@@ -179,11 +179,13 @@ void XsltOutputStream::flush() throw (StreamException)
     xmlDocPtr srcDoc = xmlParseMemory(outbuf.raw().c_str(), outbuf.size());
     xmlDocPtr resDoc = xsltApplyStylesheet(stylesheet.stylesheet, srcDoc, params);
     xmlDocDumpFormatMemory(resDoc, &resbuf, &resSize, 1);
-    xmlError *err = xmlGetLastError();
+    /*
+    xmlErrorPtr err = xmlGetLastError();
     if (err)
         {
         throw StreamException(err->message);
         }
+    */
 
     for (int i=0 ; i<resSize ; i++)
         {
