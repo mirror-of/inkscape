@@ -44,16 +44,16 @@ sp_hruler_get_type (void)
     {
       static const GtkTypeInfo hruler_info =
       {
-	"SPHRuler",
-	sizeof (SPHRuler),
-	sizeof (SPHRulerClass),
-	(GtkClassInitFunc) sp_hruler_class_init,
-	(GtkObjectInitFunc) sp_hruler_init,
-	/* reserved_1 */ NULL,
+        "SPHRuler",
+        sizeof (SPHRuler),
+        sizeof (SPHRulerClass),
+        (GtkClassInitFunc) sp_hruler_class_init,
+        (GtkObjectInitFunc) sp_hruler_init,
+        /* reserved_1 */ NULL,
         /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
-
+  
       hruler_type = gtk_type_unique (gtk_ruler_get_type (), &hruler_info);
     }
 
@@ -124,7 +124,6 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget;
   GdkGC *gc, *bg_gc;
-  PangoFont *pangofont;
   PangoFontDescription *pango_desc;
   PangoContext *pango_context;
   PangoLayout *pango_layout;
@@ -246,8 +245,8 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 	
 	      pango_layout_set_text (pango_layout, unit_str, -1);
 	      
-             gdk_draw_layout (ruler->backing_store, gc,
-	                       pos + 2, ythickness,
+              gdk_draw_layout (ruler->backing_store, gc,
+	                       pos + 2, 0,
 			       pango_layout);
 	    }
 	}
@@ -415,7 +414,6 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget;
   GdkGC *gc, *bg_gc;
-  PangoFont *pangofont;
   PangoFontDescription *pango_desc;
   PangoContext *pango_context;
   PangoLayout *pango_layout;
