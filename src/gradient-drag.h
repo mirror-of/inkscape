@@ -108,6 +108,8 @@ struct GrDrag {
 
 	GrDragger *getDraggerFor (SPItem *item, guint point_num, bool fill_or_stroke);
 
+	void grabKnot (SPItem *item, guint point_num, bool fill_or_stroke, guint32 etime);
+
 	bool local_change;
 
 	SPDesktop *desktop;

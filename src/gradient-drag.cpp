@@ -4,7 +4,7 @@
  * On-canvas gradient dragging
  *
  * Authors:
- *   bulia byak <bulia@users.sf.net>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 2005 Authors
  *
@@ -699,6 +699,19 @@ GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stro
 {
     addDragger (new GrDraggable (item, POINT_LG_P1, fill_or_stroke));
     addDragger (new GrDraggable (item, POINT_LG_P2, fill_or_stroke));
+}
+
+/**
+Artificially grab the knot of the dragger with this draggable; used by the gradient context
+*/
+void
+GrDrag::grabKnot (SPItem *item, guint point_num, bool fill_or_stroke, guint32 etime)
+{
+    GrDragger *dragger = getDraggerFor (item, point_num, fill_or_stroke);
+    if (dragger) {
+        g_print ("will start dra\n");
+        sp_knot_start_dragging (dragger->knot, dragger->point, etime);
+    }
 }
 
 /**
