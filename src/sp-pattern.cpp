@@ -765,7 +765,7 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		int       tr_width=(int)ceil(1.3*(tr_tile.x1-tr_tile.x0));
 		int       tr_height=(int)ceil(1.3*(tr_tile.y1-tr_tile.y0));
 //		if ( tr_width < 10000 && tr_height < 10000 && tr_width*tr_height < 1000000 ) {
-			pp->use_cached_tile=true;
+		pp->use_cached_tile=false;//true;
 			if ( tr_width > 1000 ) tr_width=1000;
 			if ( tr_height > 1000 ) tr_height=1000;
 			pp->cached_bbox.x0=0;
