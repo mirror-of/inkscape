@@ -179,12 +179,30 @@ sp_string_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	}
 }
 
+NR::Point
+sp_letterspacing_advance (const SPStyle *style)
+{
+	NR::Point letterspacing_adv;
+	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
+		if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
+			letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value, 0.0);
+		} else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
+			// I did not invent this 0.5 multiplier; it's what lauris uses in style.cpp
+			// Someone knowledgeable must find out how to extract the real em and ex values from the font!
+			letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value * 0.5, 0.0);
+		} 
+	} else { // there's a real value in .computed, or it's zero
+		letterspacing_adv = NR::Point(style->text->letterspacing.computed, 0.0);
+	} 
+	return letterspacing_adv;
+}
+
 /* Vertical metric simulator */
 
 static void
 sp_string_calculate_dimensions (SPString *string)
 {
-	SPStyle *style;
+	const SPStyle *style;
 	NRTypeFace *face;
 	NRFont *font;
 	gdouble size;
@@ -208,13 +226,16 @@ sp_string_calculate_dimensions (SPString *string)
 	}
 	font = nr_font_new_default (face, metrics, size);
 
+	// calculating letterspacing advance
+	NR::Point letterspacing_adv = sp_letterspacing_advance (style);
+
 	if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 		spadv = NR::Point(0.0, size);
 	} else {
 		spadv = NR::Point(size, 0.0);
 	}
 	spglyph = nr_typeface_lookup_default (face, ' ');
-	spadv = nr_font_glyph_advance_get (font, spglyph);
+	spadv = nr_font_glyph_advance_get (font, spglyph) + letterspacing_adv;
 
 	if (string->text) {
 		const gchar *p;
@@ -251,7 +272,7 @@ sp_string_calculate_dimensions (SPString *string)
 					string->bbox.x1 = MAX (string->bbox.x1, string->advance[NR::X] + bbox.x1);
 					string->bbox.y1 = MAX (string->bbox.y1, string->advance[NR::Y] - bbox.y0);
 				}
-				adv = nr_font_glyph_advance_get (font, glyph);
+				adv = nr_font_glyph_advance_get (font, glyph ) + letterspacing_adv;
 				string->advance += adv;
 				
 				inspace = FALSE;
@@ -300,6 +321,9 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 	}
 	NRFont *font = nr_font_new_default (face, metrics, size);
 
+	// calculating letterspacing advance
+	NR::Point letterspacing_adv = sp_letterspacing_advance (style);
+
 	NR::Point spadv;
 	if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 		spadv = NR::Point(0.0, size);
@@ -307,7 +331,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 		spadv = NR::Point(size, 0);
 	}
 	gint spglyph = nr_typeface_lookup_default (face, ' ');
-	spadv = nr_font_glyph_advance_get (font, spglyph);
+	spadv = nr_font_glyph_advance_get (font, spglyph) + letterspacing_adv;
 
 	/* fixme: Find a way how to manipulate these */
 	NR::Point pt = cp;
@@ -345,8 +369,8 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 			a.c[5] = pt[NR::Y];
 
 			sp_chars_add_element (chars, glyph, font, a);
-			NR::Point adv = nr_font_glyph_advance_get (font, glyph);
-			
+			NR::Point adv = nr_font_glyph_advance_get (font, glyph) + letterspacing_adv;
+
 			pt = pt + NR::Point(adv[NR::X], -adv[NR::Y]);
 			
 			inspace = FALSE;

@@ -480,6 +480,7 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 			sp_style_read_istring (&style->text->font_family, val);
 		}
 	}
+
 	/* SVG */
 	SPS_READ_PENUM_IF_UNSET (&style->text_anchor, repr, "text-anchor", enum_text_anchor, TRUE);
 	SPS_READ_PENUM_IF_UNSET (&style->writing_mode, repr, "writing-mode", enum_writing_mode, TRUE);
@@ -575,7 +576,10 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		g_warning ("Unimplemented style property SP_PROP_DIRECTION: value: %s", val);
 		break;
 	case SP_PROP_LETTER_SPACING:
-		g_warning ("Unimplemented style property SP_PROP_LETTER_SPACING: value: %s", val);
+		if (!style->text_private) sp_style_privatize_text (style);
+		sp_style_read_ilength (&style->text->letterspacing, val);
+		style->text->letterspacing_set = TRUE;
+		break;
 		break;
 	case SP_PROP_TEXT_DECORATION:
 		g_warning ("Unimplemented style property SP_PROP_TEXT_DECORATION: value: %s", val);
@@ -1067,6 +1071,11 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 			g_free (style->text->font_family.value);
 			style->text->font_family.value = g_strdup (parent->text->font_family.value);
 		}
+		if (!style->text->letterspacing_set || style->text->letterspacing.inherit) {
+			style->text->letterspacing.value = parent->text->letterspacing.value;
+			style->text->letterspacing.computed = parent->text->letterspacing.computed;
+			style->text->letterspacing.unit = parent->text->letterspacing.unit;
+		}
 	}
 
 	/* Markers - Free the old value and make copy of the new */
@@ -1327,6 +1336,10 @@ sp_style_clear (SPStyle *style)
 	/* fixme: */
 	style->text->font.set = FALSE;
 	style->text->font_family.set = FALSE;
+
+	style->text->letterspacing.value = 0.0;
+	style->text->letterspacing.computed = 0.0;
+	style->text->letterspacing_set = FALSE;
 
 	style->font_size.set = FALSE;
 	style->font_size.type = SP_FONT_SIZE_LITERAL;
