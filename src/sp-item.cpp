@@ -509,7 +509,12 @@ sp_item_write(SPObject *object, SPRepr *repr, guint flags)
     }
 
     if (SP_OBJECT_PARENT(object)) {
-        gchar *s = sp_style_write_difference(SP_OBJECT_STYLE(object), SP_OBJECT_STYLE(SP_OBJECT_PARENT(object)));
+        gchar *s = NULL;
+        if (SP_IS_ITEM(SP_OBJECT_PARENT(object))) { // items have style, figure out the difference
+            s = sp_style_write_difference (SP_OBJECT_STYLE(object), SP_OBJECT_STYLE(SP_OBJECT_PARENT(object)));
+        } else { // e.g. the parent may be styleless defs
+            s = sp_style_write_string (SP_OBJECT_STYLE(object), SP_STYLE_FLAG_IFSET);
+        }
         if (s) {
             sp_repr_set_attr(repr, "style", (*s) ? s : NULL);
             g_free(s);
