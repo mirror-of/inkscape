@@ -479,9 +479,19 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
 
     /* Step B - both start and end anchored to same curve */
     if ( dc->sa && dc->ea && ( dc->sa->curve == dc->ea->curve ) ) {
+      bool doItLad=true;
+      if ( dc->sa == dc->ea ) {
+        doItLad=false;
+        // ouch: anchored to same point
+        if ( dc->sa->curve->closed ) {
+          doItLad=true;
+        } else {
+        }
+      }
+      if ( doItLad ) {
         // We hit bot start and end of single curve, closing paths
-        sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT_DESKTOP(dc)), "Closing path.");
-        if (dc->sa->start) {
+          sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT_DESKTOP(dc)), "Closing path.");
+        if (dc->sa->start && !(dc->sa->curve->closed) ) {
             SPCurve *r;
             // Reversing curve
             r = sp_curve_reverse(c);
@@ -493,7 +503,8 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
         sp_curve_closepath_current(dc->sa->curve);
         spdc_flush_white(dc, NULL);
         return;
-    }
+       }
+     }
 
     /* Step C - test start */
     if (dc->sa) {
@@ -511,10 +522,7 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
         sp_curve_append_continuous(s, c, 0.0625);
         sp_curve_unref(c);
         c = s;
-    }
-
-    /* Step D - test end */
-    if (dc->ea) {
+    } else /* Step D - test end */ if (dc->ea) {
         SPCurve *e;
         g_print("Curve end hit anchor\n");
         e = dc->ea->curve;
@@ -529,6 +537,7 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
         sp_curve_append_continuous(c, e, 0.0625);
         sp_curve_unref(e);
     }
+
 
     spdc_flush_white(dc, c);
 
@@ -1399,6 +1408,8 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                         dc->ea = anchor;
                         if (!anchor) {   /* Snap node only if not hitting anchor */
                             spdc_endpoint_snap(dc, p, event->motion.state);
+                        } else {
+                            p = anchor->dp;
                         }
                         spdc_pen_set_subsequent_point(pc, p);
                         if ( dc->green_anchor && dc->green_anchor->active ) {
@@ -1534,6 +1545,9 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                     } else {
                         /* Set end anchor here */
                         dc->ea = anchor;
+                         if (anchor) {
+                            p = anchor->dp;
+                        }
                     }
                     pc->state = SP_PEN_CONTEXT_CONTROL;
                     ret = TRUE;
