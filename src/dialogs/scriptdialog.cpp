@@ -154,6 +154,8 @@ lang)
     Glib::ustring error;
     Inkscape::Extension::Script::InkscapeScript engine;
     engine.interpretScript(script, output, error, lang);
+    outputText.get_buffer()->set_text(output);
+    errorText.get_buffer()->set_text(error);
 }
 
 /**

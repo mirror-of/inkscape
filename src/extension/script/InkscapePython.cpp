@@ -67,6 +67,33 @@ bool InkscapePython::interpretScript(Glib::ustring &script,
     PyRun_SimpleString(inkscape_module_script);
     PyRun_SimpleString("inkscape = _inkscape_py.getInkscape()\n");
     PyRun_SimpleString(codeStr);
+    
+    //## Check for errors
+    if (PyErr_Occurred())
+        {
+        PyObject *errobj       = NULL;
+        PyObject *errdata      = NULL;
+        PyObject *errtraceback = NULL;
+
+	PyErr_Fetch(&errobj, &errdata, &errtraceback);
+	//PyErr_Clear();
+        
+        if (errobj && PyString_Check(errobj))
+            {
+            PyObject *pystring = PyObject_Str(errobj);
+            char *errStr =  PyString_AsString(pystring);
+            error = errStr;
+            Py_XDECREF(pystring);
+            }
+        else
+            {
+            error = "Error occurred";
+            }
+        Py_XDECREF(errobj);
+        Py_XDECREF(errdata);
+        Py_XDECREF(errtraceback);
+        return false;
+        }
     //Py_Finalize();
     return true;
 }
