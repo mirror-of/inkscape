@@ -1,5 +1,7 @@
 2003-12-31  MenTaLguY <mental@rydia.net>
 
+	* src/libnr/gen_nr_config.c: removed!
+
 	* src/xml/repr.h, src/xml/repr-private.h, src/xml/repr-io.cpp,
 	  src/xml/repr.cpp: very preliminary comment support
 
