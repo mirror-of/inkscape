@@ -189,14 +189,15 @@ sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
 }
 
 static GtkWidget *
-sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, GCallback callback, gpointer data)
+//sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, GCallback callback, gpointer data)
+sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, GCallback callback, gpointer data, gboolean with_mnemonic = TRUE)
 {
 	GtkWidget *item;
 
 	if (stock) {
 		item = gtk_image_menu_item_new_from_stock (stock, NULL);
 	} else if (label) {
-		item = gtk_image_menu_item_new_with_mnemonic (label);
+		item = (with_mnemonic) ? gtk_image_menu_item_new_with_mnemonic (label) : gtk_image_menu_item_new_with_label (label);
 	} else {
 		item = gtk_separator_menu_item_new ();
 	}
@@ -683,8 +684,7 @@ sp_menu_append_recent_documents (GtkWidget *menu)
 			const gchar *uri, *name;
 			uri = sp_repr_attr (child, "uri");
 			name = sp_repr_attr (child, "name");
-			/* fixme: I am pretty sure this is safe, but double check (Lauris) */
-			sp_ui_menu_append_item (GTK_MENU (menu), NULL, name, G_CALLBACK(sp_recent_open), (gpointer) uri);
+			sp_ui_menu_append_item (GTK_MENU (menu), NULL, name, G_CALLBACK(sp_recent_open), (gpointer) uri, FALSE);
 		}
 	} else {
 		GtkWidget *item = sp_ui_menu_append_item (GTK_MENU (menu), NULL, "None", NULL, NULL);
