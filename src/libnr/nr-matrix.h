@@ -151,6 +151,9 @@ public:
 	Coord det() const;
 	Coord descrim2() const;
 	Coord descrim() const;
+	double expansion() const;
+	double expansionX() const;
+	double expansionY() const;
 	
 	// legacy
 	Matrix &assign(const Coord *array);

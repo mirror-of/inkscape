@@ -232,6 +232,18 @@ NR::Coord *Matrix::copyto(NR::Coord *array) const {
 double expansion(Matrix const &m) {
         return sqrt(fabs(m.det()));
 }
+
+double Matrix::expansion() const {
+        return sqrt(fabs(det()));
+}
+
+double Matrix::expansionX() const {
+        return sqrt(_c[0] * _c[0] + _c[1] * _c[1]);
+}
+
+double Matrix::expansionY() const {
+        return sqrt(_c[2] * _c[2] + _c[3] * _c[3]);
+}
                                                                                 
 bool Matrix::is_translation(const Coord eps) const {
     return ( fabs(_c[0]-1.0) < eps && 
