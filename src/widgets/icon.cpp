@@ -495,7 +495,7 @@ sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
 
                 {
                     int block = std::max(width, height);
-                    if (block != psize ) {
+                    if (block != static_cast<int>(psize) ) {
                         if ( dump ) {
                             g_message("      resizing" );
                         }
@@ -598,7 +598,13 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
     icon_index += psize;
 
     // did we already load this icon at this scale/size?
-    guchar *px = px_cache[icon_index];
+    guchar *px = 0;
+    {
+        std::map<Glib::ustring, guchar *>::iterator i = px_cache.find(icon_index);
+        if ( i != px_cache.end() ) {
+            px = i->second;
+        }
+    }
     if (px) {
         if ( dump ) {
             g_message( "svg icon cached (%s).", icon_index.c_str() );
@@ -621,7 +627,13 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
         //g_warning("trying to load '%s' from '%s'", name, doc_filename);
 
         // did we already load this doc?
-        info = doc_cache[Glib::ustring(doc_filename)];
+        info = 0;
+        {
+            std::map<Glib::ustring, svg_doc_cache_t *>::iterator i = doc_cache.find(Glib::ustring(doc_filename));
+            if ( i != doc_cache.end() ) {
+                info = i->second;
+            }
+        }
 
         /* Try to load from document */
         if (!info &&
@@ -705,26 +717,26 @@ const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const Glib::ustring &oid,
 
 const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const ID &id)
 {
-  Glib::RefPtr<Gdk::Pixbuf> inMap = _map[id];
-  //cached, return
-  if (inMap) return inMap;
+    Glib::RefPtr<Gdk::Pixbuf> inMap = _map[id];
+    //cached, return
+    if (inMap) return inMap;
 
-  //not cached, loading
-  int size(id.size());
-  int psize = sp_icon_get_phys_size(size);
-  gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpCache", 0, 0, 1 );
-  if ( dump ) {
-      g_message( "not cached, loading  '%s':%d:%d", id.id().c_str(), size, psize );
-  }
-  guchar *data = sp_icon_image_load_svg(id.id().c_str(), size, psize);
-  Glib::RefPtr<Gdk::Pixbuf> pixbuf =
-    Gdk::Pixbuf::create_from_data (
-				   data,
-				   Gdk::COLORSPACE_RGB,
-				   true,
-				   8, size, size, size*4);
-  _map[id]=pixbuf;
-  return pixbuf;
+    //not cached, loading
+    int size(id.size());
+    int psize = sp_icon_get_phys_size(size);
+    gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpCache", 0, 0, 1 );
+    if ( dump ) {
+        g_message( "not cached, loading  '%s':%d:%d", id.id().c_str(), size, psize );
+    }
+    guchar *data = sp_icon_image_load_svg(id.id().c_str(), size, psize);
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf =
+        Gdk::Pixbuf::create_from_data (
+            data,
+            Gdk::COLORSPACE_RGB,
+            true,
+            8, psize, psize, psize * 4);
+    _map[id]=pixbuf;
+    return pixbuf;
 }
 
 void sp_icon_overlay_pixels( guchar *px, int width, int height, int stride, unsigned int r, unsigned int g, unsigned int b )
