@@ -861,14 +861,13 @@ sp_repr_document (const SPRepr *repr)
 	return repr->doc;
 }
 
-SPRepr *
-sp_repr_document_root (const SPReprDoc *doc)
+SPRepr *sp_repr_document_root(SPReprDoc const *doc)
 {
-	SPRepr *repr;
-	g_assert (doc != NULL);
-	/* we can have comments before the root node */
-	for ( repr = doc->repr.children ; repr ; repr = repr->next ) {
-		if ( repr->type = SP_XML_ELEMENT_NODE ) {
+	g_assert( doc != NULL );
+
+	/* We can have comments before the root node. */
+	for (SPRepr *repr = doc->repr.children ; repr ; repr = repr->next ) {
+		if ( repr->type == SP_XML_ELEMENT_NODE ) {
 			return repr;
 		}
 	}

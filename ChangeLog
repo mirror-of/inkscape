@@ -1,3 +1,7 @@
+2004-02-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+    * src/xml/repr.cpp (sp_repr_document_root): Fix typo in most recent commit.
+
 2004-02-14  MenTaLguY <mental@rydia.net>
 
     * src/svg/svg-path.cpp: switched to locale-safe iostreams-based path
