@@ -653,6 +653,22 @@ sp_item_adjust_stroke_width_recursive(SPItem *item, double expansion)
 }
 
 /**
+ Recursively adjust rx and ry of rects
+*/
+void
+sp_item_adjust_rects_recursive(SPItem *item, NR::Matrix advertized_transform)
+{
+    if (SP_IS_RECT (item)) {
+        sp_rect_compensate_rxry (SP_RECT(item), advertized_transform);
+    }
+
+    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+        if (SP_IS_ITEM(o))
+            sp_item_adjust_rects_recursive(SP_ITEM(o), advertized_transform);
+    }
+}
+
+/**
 Set a new transform on an object. Compensate for stroke scaling and gradient/pattern
 fill transform, if necessary. Call the object's set_transform method if transforms are
 stored optimized. Send _transformed_signal. Invoke _write method so that the repr is
@@ -681,10 +697,8 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
         sp_item_adjust_stroke_width_recursive(item, expansion);
     }
 
-    // reset rx/ry of a rect if possible
-    if (SP_IS_RECT (item)) {
-        sp_rect_compensate_rxry (SP_RECT(item), advertized_transform);
-    }
+    // compensate rx/ry of a rect if possible
+    sp_item_adjust_rects_recursive(item, advertized_transform);
 
     // run the object's set_transform if transforms are stored optimized
     gint preserve = prefs_get_int_attribute("options.preservetransform", "value", 0);
