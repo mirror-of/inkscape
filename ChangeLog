@@ -1,5 +1,7 @@
 2004-05-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/xml/repr.cpp: Cleanup: greater conformance to CodingStyle.
+
 	* src/Makefile_insert: Add missing dependencies on inkscape_version.h.
 	* src/display/Makefile_insert: Adapt dependency object names for
 	  `subdir-objects' automake option.
