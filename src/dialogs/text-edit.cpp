@@ -233,6 +233,7 @@ sp_text_edit_dialog (void)
                     {
                         GtkWidget *px = gtk_image_new_from_stock ( GTK_STOCK_JUSTIFY_CENTER, GTK_ICON_SIZE_LARGE_TOOLBAR );
                         GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
+                        /* TRANSLATORS: `Center' here is a verb. */
                         gtk_tooltips_set_tip (tt, b, _("Center lines"), NULL);
                         gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
                         g_signal_connect ( G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
