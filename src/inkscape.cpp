@@ -573,7 +573,7 @@ inkscape_get_instance()
  */
 static void
 inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *skeleton, unsigned int skel_size,
-              const gchar *e_notreg, const gchar *e_notxml, const gchar *e_notsp)
+              const gchar *e_notreg, const gchar *e_notxml, const gchar *e_notsp, const gchar *warn)
 {
     gchar *fn;
     GtkWidget * w;
@@ -590,7 +590,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 
     if (!g_file_test(fn, G_FILE_TEST_IS_REGULAR)) {
         /* Not a regular file */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, fn);
+        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
@@ -600,7 +600,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
     doc = sp_repr_read_file (fn, NULL);
     if (doc == NULL) {
         /* Not an valid xml file */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notxml, fn);
+        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notxml, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
@@ -609,7 +609,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 
     root = sp_repr_document_root (doc);
     if (strcmp (sp_repr_name (root), "inkscape")) {
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, fn);
+        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         sp_repr_document_unref (doc);
@@ -629,18 +629,11 @@ void
 inkscape_load_preferences (Inkscape::Application *inkscape)
 {
     inkscape_load_config (PREFERENCES_FILE, inkscape->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
-                  _("%s is not regular file.\n"
-                "Although inkscape will run, you can\n"
-                "neither load nor save preferences\n"),
-                  _("%s either is not valid xml file or\n"
-                "you do not have read permissions on it.\n"
-                "Although inkscape will run, you\n"
-                "are neither able to load nor save\n"
-                "preferences."),
-                  _("%s is not valid inkscape preferences file.\n"
-                "Although inkscape will run, you\n"
-                "are neither able to load nor save\n"
-                "preferences."));
+                  _("%s is not a regular file.\n%s"),
+                  _("%s not a valid XML file, or\n"
+                "you don't have read permissions on it.\n%s"),
+			_("%s is not valid preferences file.\n%s"),
+			_("Inkscape will run with default settings."));
 }
 
 
@@ -1103,7 +1096,7 @@ inkscape_active_event_context (void)
 
 static void
 inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, unsigned int skel_size,
-              const gchar *e_mkdir, const gchar *e_notdir, const gchar *e_ccf, const gchar *e_cwf)
+              const gchar *e_mkdir, const gchar *e_notdir, const gchar *e_ccf, const gchar *e_cwf, const gchar *warn)
 {
     gchar * dn, *fn;
     FILE *fh;
@@ -1114,7 +1107,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
         if (mkdir (dn, S_IRWXU | S_IRGRP | S_IXGRP))
         {
             /* Cannot create directory */
-            w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, dn);
+            w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, dn, warn);
             gtk_dialog_run (GTK_DIALOG (w));
             gtk_widget_destroy (w);
             g_free (dn);
@@ -1122,7 +1115,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
         }
     } else if (!g_file_test(dn, G_FILE_TEST_IS_DIR)) {
         /* Not a directory */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn);
+        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (dn);
@@ -1135,7 +1128,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     fh = fopen(fn, "w");
     if (!fh) {
         /* Cannot create file */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn);
+        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
@@ -1143,7 +1136,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     }
     if ( fwrite(skeleton, 1, skel_size, fh) != skel_size ) {
         /* Cannot create file */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, fn);
+        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
@@ -1165,22 +1158,12 @@ static void
 inkscape_init_preferences (Inkscape::Application *inkscape)
 {
     inkscape_init_config (inkscape->preferences, PREFERENCES_FILE, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
-                  _("Cannot create directory %s.\n"
-                "Although inkscape will run, you\n"
-                "are neither able to load nor save\n"
-                "%s."),
-                  _("%s is not a valid directory.\n"
-                "Although inkscape will run, you\n"
-                "are neither able to load nor save\n"
-                "preferences."),
-                  _("Cannot create file %s.\n"
-                "Although inkscape will run, you\n"
-                "are neither able to load nor save\n"
-                "preferences."),
-                  _("Cannot write file %s.\n"
-                "Although inkscape will run, you\n"
-                "are neither able to load nor save\n"
-                "preferences."));
+                  _("Cannot create directory %s.\n%s"),
+                  _("%s is not a valid directory.\n%s"),
+                  _("Cannot create file %s.\n%s"),
+                  _("Cannot write file %s.\n%s"), 
+		    _("Although Inkscape will run, it will use default settings,\n"
+                "and any changes made in preferences will not be saved."));
 }
 
 
