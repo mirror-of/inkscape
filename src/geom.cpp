@@ -40,7 +40,6 @@ sp_intersector_line_intersection(const NR::Point n0, const double d0, const NR::
 {
 	double denominator;
 	double X, Y;
-	NR::Point d(d0,d1);
 
 	denominator = cross(n0,n1);
 	if(denominator == 0) {

@@ -775,7 +775,6 @@ static void sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref);
 static void sp_text_remove_child (SPObject *object, SPRepr *rch);
 static void sp_text_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_text_modified (SPObject *object, guint flags);
-static unsigned int sp_text_sequence (SPObject *object, SPObject *target, unsigned int *seq);
 static SPRepr *sp_text_write (SPObject *object, SPRepr *repr, guint flags);
 
 static void sp_text_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);

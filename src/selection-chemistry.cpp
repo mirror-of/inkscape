@@ -209,7 +209,6 @@ sp_selection_group (gpointer object, gpointer data)
 	SPSelection * selection;
 	SPRepr * current;
 	SPRepr * group;
-	SPItem * spnew;
 	const GSList * l;
 	GSList *p, *i, *reprs;
 	SPRepr *parent;
@@ -642,7 +641,6 @@ sp_selection_paste_style (GtkWidget * widget)
 	SPDesktop * desktop;
 	SPSelection * selection;
 	GSList *l, *selected;
-	SPRepr *repr, *copy;
 	SPCSSAttr *css;
 
 	desktop = SP_ACTIVE_DESKTOP;

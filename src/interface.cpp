@@ -266,7 +266,6 @@ sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
 	SPAction *action;
 	unsigned int shortcut;
 	gchar *s; 
-	gint i, j;
 	gchar key[256];
 	gchar *atitle;
 

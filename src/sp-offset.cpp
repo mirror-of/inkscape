@@ -53,9 +53,6 @@ static gchar *sp_offset_description (SPItem * item);
 static int sp_offset_snappoints (SPItem * item, NRPoint * p, int size);
 static void sp_offset_set_shape (SPShape * shape);
 
-static void sp_offset_get_tangent (SPOffset const *offset, gdouble t,
-				   NRPoint * p);
-
 Path *bpath_to_liv_path (ArtBpath * bpath);
 
 void   refresh_offset_source(SPOffset* offset);
@@ -216,7 +213,6 @@ sp_offset_release (SPObject * object)
 {
   SPItem *item;
   SPOffset *offset;
-  int i;
 
   item = (SPItem *) object;
   offset = (SPOffset *) object;

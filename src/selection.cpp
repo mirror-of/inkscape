@@ -202,7 +202,6 @@ sp_selection_frozen_empty (SPSelection * selection)
 void
 sp_selection_update_statusbar (SPSelection * selection)
 {
-	gchar * message;
 	gint len;
 
 	const char* when_selected = "Click selection to toggle scale/rotation handles";

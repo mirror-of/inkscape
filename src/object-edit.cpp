@@ -459,7 +459,6 @@ static void
 sp_offset_offset_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPOffset *offset;
-	gdouble   dx, dy;
 
 	offset = SP_OFFSET (item);
 

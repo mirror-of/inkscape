@@ -266,7 +266,6 @@ sp_export_dialog (void)
 		// set the default filename to be that of the current path + document with .png extension
 		if (SP_ACTIVE_DOCUMENT && SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT)) {
 			gchar *name, *dot;
-			gchar *path;
 			gchar c[1024];
 			int len;
 			const gchar *uri = SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT);
@@ -454,8 +453,6 @@ static void
 sp_export_browse_clicked (GtkButton *button, gpointer userdata)
 {
 	GtkWidget *fs, *fe;
-	SPDocument *doc = SP_ACTIVE_DOCUMENT;
-	gchar *path, *suffix;
 	const gchar *filename;
 	
 	fs = gtk_file_selection_new (_("Select a filename for exporting"));

@@ -127,7 +127,6 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
 	SPPath *path;
 	SPVersion version;
-	const gchar* marker_value;
 
 	path = SP_PATH (object);
 
@@ -203,7 +202,6 @@ static void
 sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPPath *path;
-	int marker_type;
 
 	path = (SPPath *) object;
 
