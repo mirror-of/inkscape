@@ -262,8 +262,8 @@ family_name_compare (const void *a, const void *b)
 }
 
 void noop (...) {}
-#define PANGO_DEBUG g_print
-//#define PANGO_DEBUG noop
+//#define PANGO_DEBUG g_print
+#define PANGO_DEBUG noop
 
 
 
