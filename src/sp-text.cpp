@@ -477,88 +477,71 @@ sp_text_description(SPItem *item)
     }
 }
 
-static void AccumulateAttributeLists(GList **output_list, GList const *parent_list, SPSVGLength *overlay_list, int overlay_list_length)
+static void AccumulateAttributeLists(std::vector<SPSVGLength> *output_list, std::vector<SPSVGLength> const &parent_list, unsigned parent_offset, SPSVGLength *overlay_list, int overlay_list_length)
 {
-    *output_list = NULL;
-    while (parent_list || overlay_list_length) {
+    output_list->clear();
+    output_list->reserve(std::max((int)parent_list.size() - (int)parent_offset, overlay_list_length));
+    while (parent_offset < parent_list.size() || overlay_list_length) {
         SPSVGLength const *this_item;
         if (overlay_list_length) {
             this_item = overlay_list;
             overlay_list_length--;
             overlay_list++;
-            if (parent_list)
-                parent_list = parent_list->next;
+            parent_offset++;
         } else {
-            this_item = (SPSVGLength const *)parent_list->data;
-            parent_list = parent_list->next;
+            this_item = &parent_list[parent_offset];
+            parent_offset++;
         }
-        *output_list = g_list_append(*output_list, (void*)this_item);
+        output_list->push_back(*this_item);
     }
 }
 
-static void IncrementOptionalAttrsFields(Inkscape::Text::Layout::OptionalTextTagAttrs *optional_attrs, int dist)
-{
-    while (dist) {
-        if (optional_attrs->x) optional_attrs->x = optional_attrs->x->next;
-        if (optional_attrs->y) optional_attrs->y = optional_attrs->y->next;
-        if (optional_attrs->dx) optional_attrs->dx = optional_attrs->dx->next;
-        if (optional_attrs->dy) optional_attrs->dy = optional_attrs->dy->next;
-        if (optional_attrs->rotate) optional_attrs->rotate = optional_attrs->rotate->next;
-        dist--;
-    }
-}
-
-static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs)
+static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset)
 {
     int length = 0;
 
-    Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs_base, optional_attrs;
-    optional_attrs_base.x = NULL;
-    optional_attrs_base.y = NULL;
-    optional_attrs_base.dx = NULL;
-    optional_attrs_base.dy = NULL;
-    optional_attrs_base.rotate = NULL;
+    Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
 
     div_flow_src const *div_src = NULL;
     bool use_xy = false;
+    bool use_dxdyrot = false;
     if (SP_IS_TEXT(root)) {
-        AccumulateAttributeLists(&optional_attrs_base.x, parent_optional_attrs.x, &SP_TEXT(root)->x, 1);
-        AccumulateAttributeLists(&optional_attrs_base.y, parent_optional_attrs.y, &SP_TEXT(root)->y, 1);
-        optional_attrs = optional_attrs_base;
-        //div_src = &SP_TEXT(root)->contents;
-        // text elements don't read vectors properly. See lauris' fixme above.
+        div_src = &SP_TEXT(root)->contents;
+        use_xy = use_dxdyrot = true;
     }
     else if (SP_IS_TSPAN(root)) {
         SPTSpan *tspan = SP_TSPAN(root);
         div_src = &tspan->contents;
+        use_dxdyrot = true;
         if (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || div_src->nb_x > 1 || div_src->nb_y > 1)
             use_xy = true;
     }
-    else if (SP_IS_TEXTPATH(root)) div_src = &SP_TEXTPATH(root)->contents;
-
-    if (div_src) {
-        if (use_xy) {
-            AccumulateAttributeLists(&optional_attrs_base.x, parent_optional_attrs.x, div_src->x_s, div_src->nb_x);
-            AccumulateAttributeLists(&optional_attrs_base.y, parent_optional_attrs.y, div_src->y_s, div_src->nb_y);
-        }
-        AccumulateAttributeLists(&optional_attrs_base.dx, parent_optional_attrs.dx, div_src->dx_s, div_src->nb_dx);
-        AccumulateAttributeLists(&optional_attrs_base.dy, parent_optional_attrs.dy, div_src->dy_s, div_src->nb_dy);
-        AccumulateAttributeLists(&optional_attrs_base.rotate, parent_optional_attrs.rotate, div_src->rot_s, div_src->nb_rot);
-        optional_attrs = optional_attrs_base;
-        if (!use_xy) {
-            optional_attrs.x = parent_optional_attrs.x;
-            optional_attrs.y = parent_optional_attrs.y;
-        }
-    } else if (!SP_IS_TEXT(root)) {
-        optional_attrs = parent_optional_attrs;
+    else if (SP_IS_TEXTPATH(root)) {
+        div_src = &SP_TEXTPATH(root)->contents;
+        use_dxdyrot = true;
     }
 
+    if (use_xy && div_src) {
+        AccumulateAttributeLists(&optional_attrs.x, parent_optional_attrs.x, parent_attrs_offset, div_src->x_s, div_src->nb_x);
+        AccumulateAttributeLists(&optional_attrs.y, parent_optional_attrs.y, parent_attrs_offset, div_src->y_s, div_src->nb_y);
+    } else {
+        AccumulateAttributeLists(&optional_attrs.x, parent_optional_attrs.x, parent_attrs_offset, NULL, 0);
+        AccumulateAttributeLists(&optional_attrs.y, parent_optional_attrs.y, parent_attrs_offset, NULL, 0);
+    }
+    if (use_dxdyrot && div_src) {
+        AccumulateAttributeLists(&optional_attrs.dx, parent_optional_attrs.dx, parent_attrs_offset, div_src->dx_s, div_src->nb_dx);
+        AccumulateAttributeLists(&optional_attrs.dy, parent_optional_attrs.dy, parent_attrs_offset, div_src->dy_s, div_src->nb_dy);
+        AccumulateAttributeLists(&optional_attrs.rotate, parent_optional_attrs.rotate, parent_attrs_offset, div_src->rot_s, div_src->nb_rot);
+    } else {
+        AccumulateAttributeLists(&optional_attrs.dx, parent_optional_attrs.dx, parent_attrs_offset, NULL, 0);
+        AccumulateAttributeLists(&optional_attrs.dy, parent_optional_attrs.dy, parent_attrs_offset, NULL, 0);
+        AccumulateAttributeLists(&optional_attrs.rotate, parent_optional_attrs.rotate, parent_attrs_offset, NULL, 0);
+    }
+
+    bool is_line_break = false;
     if (SP_IS_TSPAN(root))
         if (SP_TSPAN(root)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
-            length++;     // interpreting line breaks as a character for the purposes of x/y/etc attributes
-                          // is a liberal interpretation of the svg spec, but a strict reading would mean
-                          // that if the first line is empty the second line would take its place at the
-                          // start position. Very confusing.
+            is_line_break = true;
             if (layout->inputExists())
                 layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, root);
             if (!root->hasChildren())
@@ -567,22 +550,18 @@ static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inks
 
     for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TSPAN (child) || SP_IS_TEXTPATH (child)) {
-            int child_lengths = BuildLayoutInput(child, layout, optional_attrs);
-            IncrementOptionalAttrsFields(&optional_attrs, child_lengths);
-            length += child_lengths;
+            length += BuildLayoutInput(child, layout, optional_attrs, length);
         } else if (SP_IS_STRING (child)) {
             Glib::ustring const &string = SP_STRING(child)->string;
-            layout->appendText(string, root->style, child, &optional_attrs);
-            int string_length = string.length();
-            IncrementOptionalAttrsFields(&optional_attrs, string_length);
-            length += string_length;
+            layout->appendText(string, root->style, child, &optional_attrs, length);
+            length += string.length();
         }
     }
-    g_list_free(optional_attrs_base.x);
-    g_list_free(optional_attrs_base.y);
-    g_list_free(optional_attrs_base.dx);
-    g_list_free(optional_attrs_base.dy);
-    g_list_free(optional_attrs_base.rotate);
+    if (is_line_break)
+        length++;     // interpreting line breaks as a character for the purposes of x/y/etc attributes
+                      // is a liberal interpretation of the svg spec, but a strict reading would mean
+                      // that if the first line is empty the second line would take its place at the
+                      // start position. Very confusing.
     return length;
 }
 
@@ -594,14 +573,9 @@ sp_text_set_shape (SPText *text)
         text->ClearFlow(NR_ARENA_GROUP(v->arenaitem));
     }
 
-    Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
-    optional_attrs.x = NULL;
-    optional_attrs.y = NULL;
-    optional_attrs.dx = NULL;
-    optional_attrs.dy = NULL;
-    optional_attrs.rotate = NULL;
     text->layout.clear();
-    BuildLayoutInput(text, &text->layout, optional_attrs);
+    Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
+    BuildLayoutInput(text, &text->layout, optional_attrs, 0);
     text->layout.calculateFlow();
     for (SPObject *child = text->firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TEXTPATH(child) && SP_TEXTPATH(child)->originalPath != NULL) {

@@ -143,21 +143,18 @@ public:
     /** Display alignment for shapes. See appendWrapShape(). */
     enum DisplayAlign {DISPLAY_ALIGN_BEFORE, DISPLAY_ALIGN_CENTER, DISPLAY_ALIGN_AFTER};
 
-    /** For use in OptionalTextTagAttrs. */
-    enum LengthAdjust {SPACING, SPACING_AND_GLYPHS};
     /** The optional attributes which can be applied to a SVG text or
     related tag. See appendText(). See SVG1.1 section 10.4 for the
-    definitions of all these members. The GList's are all of type
-    SPSVGLength. See sp_svg_length_list_read() for an easy way to make
-    these vectors. It is the responsibility of the caller to deal with
-    the inheritance of these values using its knowledge of the parse
-    tree. */
+    definitions of all these members. See sp_svg_length_list_read() for
+    the standard way to make these vectors. It is the responsibility of
+    the caller to deal with the inheritance of these values using its
+    knowledge of the parse tree. */
     struct OptionalTextTagAttrs {
-        GList * x;
-        GList * y;
-        GList * dx;
-        GList * dy;
-        GList * rotate;
+        std::vector<SPSVGLength> x;
+        std::vector<SPSVGLength> y;
+        std::vector<SPSVGLength> dx;
+        std::vector<SPSVGLength> dy;
+        std::vector<SPSVGLength> rotate;
     };
 
     /** Control codes which can be embedded in the text to be flowed. See
@@ -195,7 +192,7 @@ public:
                   calculateFlow().
      \param style The font style. Layout will hold a reference to this
                   object for the duration of its ownership, ie until you
-                  call clear() or the class is destroyed. May not be NULL.
+                  call clear() or the class is destroyed. Must not be NULL.
      \param source_cookie  This pointer is treated as opaque by Layout
                   but will be passed through the flowing process intact so
                   that callers can use it to refer to the original object
@@ -205,14 +202,20 @@ public:
      \param optional_attributes  A structure containing additional options
                   for this text. See OptionalTextTagAttrs. The values are
                   copied to internal storage before this method returns.
+     \param optional_attributes_offset  It is convenient for callers to be
+                  able to use the same \a optional_attributes structure for
+                  several sequential text fields, in which case the vectors
+                  will need to be offset. This parameter causes the <i>n</i>th
+                  element of all the vectors to be read as if it were the
+                  first.
      \param text_begin  Used for selecting only a substring of \a text
                   to process.
      \param text_end    Used for selecting only a substring of \a text
                   to process.
     */
-    void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes, Glib::ustring::const_iterator text_begin, Glib::ustring::const_iterator text_end);
-    inline void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes = NULL)
-        {appendText(text, style, source_cookie, optional_attributes, text.begin(), text.end());}
+    void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes, unsigned optional_attributes_offset, Glib::ustring::const_iterator text_begin, Glib::ustring::const_iterator text_end);
+    inline void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes = NULL, unsigned optional_attributes_offset = 0)
+        {appendText(text, style, source_cookie, optional_attributes, optional_attributes_offset, text.begin(), text.end());}
 
     /** Control codes are metadata in the text stream to signify items
     that occupy real space (unlike style changes) but don't belong in the
@@ -535,15 +538,16 @@ private:
     appendText() and appendControlCode() functions. */
     std::vector<InputStreamItem*> _input_stream;
 
-    /** The parameters to appendText() are GLists, we want std::vectors. We
-    also don't want to write five bits of identical code just with different
-    variable names. */
-    void _glistToVector(GList const *input_list, std::vector<SPSVGLength> *output_vector, int max_length);
+    /** The parameters to appendText() are allowed to be a little bit
+    complex. This copies them to be the right length and starting at zero.
+    We also don't want to write five bits of identical code just with
+    different variable names. */
+    static void _copyInputVector(std::vector<SPSVGLength> const &input_vector, unsigned input_offset, std::vector<SPSVGLength> *output_vector, unsigned max_length);
 
     /** There are a few cases where we have different sets of enums meaning
     the same thing, eg Pango font styles vs. SPStyle font styles. These need
     converting. */
-    static int _enum_converter(int input, EnumConversionItem const *conversion_table, int conversion_table_size);
+    static int _enum_converter(int input, EnumConversionItem const *conversion_table, unsigned conversion_table_size);
 
     /** The overall block-progression of the whole flow. */
     inline Direction _blockProgression() const

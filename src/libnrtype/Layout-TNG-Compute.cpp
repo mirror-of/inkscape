@@ -241,7 +241,7 @@ class Layout::Calculator
                                 sub_flow->appendControlCode(control_code->code, control_code->source_cookie, control_code->width, control_code->ascent, control_code->descent);
                             } else if (_flow._input_stream[sub_input_index]->Type() == TEXT_SOURCE) {
                                 Layout::InputStreamTextSource *text_source = static_cast<Layout::InputStreamTextSource *>(_flow._input_stream[sub_input_index]);
-                                sub_flow->appendText(*text_source->text, text_source->style, text_source->source_cookie, NULL, text_source->text_begin, text_source->text_end);
+                                sub_flow->appendText(*text_source->text, text_source->style, text_source->source_cookie, NULL, 0, text_source->text_begin, text_source->text_end);
                                 Layout::InputStreamTextSource *sub_flow_text_source = static_cast<Layout::InputStreamTextSource *>(sub_flow->_input_stream.back());
                                 sub_flow_text_source->x = text_source->x;    // this is easier than going back to GLists for the appendText() call
                                 sub_flow_text_source->y = text_source->y;    // should these actually be allowed anyway? You'll almost never get the results you expect

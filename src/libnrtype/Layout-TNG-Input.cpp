@@ -27,7 +27,7 @@ void Layout::_clearInputObjects()
 }
 
 // this function does nothing more than store all its parameters for future reference
-void Layout::appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes, Glib::ustring::const_iterator text_begin, Glib::ustring::const_iterator text_end)
+void Layout::appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes, unsigned optional_attributes_offset, Glib::ustring::const_iterator text_begin, Glib::ustring::const_iterator text_end)
 {
     if (style == NULL) return;
 
@@ -46,25 +46,26 @@ void Layout::appendText(Glib::ustring const &text, SPStyle *style, void *source_
 
     if (optional_attributes) {
         // we need to fill in x and y even if the text is empty so that empty paragraphs can be positioned correctly
-        _glistToVector(optional_attributes->x, &new_source->x, std::max(1, new_source->text_length));
-        _glistToVector(optional_attributes->y, &new_source->y, std::max(1, new_source->text_length));
-        _glistToVector(optional_attributes->dx, &new_source->dx, new_source->text_length);
-        _glistToVector(optional_attributes->dy, &new_source->dy, new_source->text_length);
-        _glistToVector(optional_attributes->rotate, &new_source->rotate, new_source->text_length);
+        _copyInputVector(optional_attributes->x, optional_attributes_offset, &new_source->x, std::max(1, new_source->text_length));
+        _copyInputVector(optional_attributes->y, optional_attributes_offset, &new_source->y, std::max(1, new_source->text_length));
+        _copyInputVector(optional_attributes->dx, optional_attributes_offset, &new_source->dx, new_source->text_length);
+        _copyInputVector(optional_attributes->dy, optional_attributes_offset, &new_source->dy, new_source->text_length);
+        _copyInputVector(optional_attributes->rotate, optional_attributes_offset, &new_source->rotate, new_source->text_length);
     }
     
     _input_stream.push_back(new_source);
 }
 
-void Layout::_glistToVector(GList const *input_list, std::vector<SPSVGLength> *output_vector, int max_length)
+void Layout::_copyInputVector(std::vector<SPSVGLength> const &input_vector, unsigned input_offset, std::vector<SPSVGLength> *output_vector, unsigned max_length)
 {
     output_vector->clear();
-    while (input_list && max_length) {
-        SPSVGLength *svg_length = reinterpret_cast<SPSVGLength*>(input_list->data);
-        if (!svg_length->set)
+    if (input_offset >= input_vector.size()) return;
+    output_vector->reserve(std::min(max_length, input_vector.size() - input_offset));
+    while (input_offset < input_vector.size() && max_length != 0) {
+        if (!input_vector[input_offset].set)
             break;
-        output_vector->push_back(*svg_length);
-        input_list = input_list->next;
+        output_vector->push_back(input_vector[input_offset]);
+        input_offset++;
         max_length--;
     }
 }
@@ -91,10 +92,10 @@ void Layout::appendWrapShape(Shape const *shape, DisplayAlign display_align)
     _input_wrap_shapes.back().display_align = display_align;
 }
 
-int Layout::_enum_converter(int input, EnumConversionItem const *conversion_table, int conversion_table_size)
+int Layout::_enum_converter(int input, EnumConversionItem const *conversion_table, unsigned conversion_table_size)
 {
-    for (int i = 0 ; i < conversion_table_size ; i++)
-        if (conversion_table[i].input == (int)input)
+    for (unsigned i = 0 ; i < conversion_table_size ; i++)
+        if (conversion_table[i].input == input)
             return conversion_table[i].output;
     return conversion_table[0].output;
 }
