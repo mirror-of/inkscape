@@ -36,6 +36,12 @@ sp_rubberband_start (SPDesktop * desktop, double x, double y)
 	sp_rb_dragging = TRUE;
 }
 
+void sp_rubberband_move(NR::Point const &p)
+{
+	using NR::X; using NR::Y;
+	sp_rubberband_move(p[X], p[Y]);
+}
+
 void
 sp_rubberband_move (double x, double y)
 {

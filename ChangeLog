@@ -1,5 +1,8 @@
 2004-01-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/rubberband.h, src/rubberband.cpp (sp_rubberband_move):
+	Add NR::Point version.
+
 	* src/seltrans.h (sp_sel_trans_point_desktop): Add NR::Point version.
 
 	* src/seltrans.h, src/seltrans.cpp (sp_sel_trans_point_desktop,
