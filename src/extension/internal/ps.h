@@ -18,6 +18,8 @@
 
 #include <libnr/nr-path.h>
 
+#include "svg/stringstream.h"
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -29,7 +31,7 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
     float  _height;
     FILE * _stream;
 
-	void print_bpath (FILE *stream, const NArtBpath *bp);
+	void print_bpath (SVGOStringStream &os, const NArtBpath *bp);
 	unsigned int print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
 				       const NRMatrix *transform);
 	void compress_packbits (int nin, guchar *src, int *nout, guchar *dst);
@@ -40,10 +42,10 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
 	int ascii85_linewidth;
 	/* ASCII 85 Functions */
 	void ascii85_init (void);
-	void ascii85_flush (FILE *ofp);
-	inline void ascii85_out (guchar byte, FILE *ofp);
-	void ascii85_nout (int n, guchar *uptr, FILE *ofp);
-	void ascii85_done (FILE *ofp);
+	void ascii85_flush (SVGOStringStream &os);
+	inline void ascii85_out (guchar byte, SVGOStringStream &os);
+	void ascii85_nout (int n, guchar *uptr, SVGOStringStream &os);
+	void ascii85_done (SVGOStringStream &os);
 
 
 public:

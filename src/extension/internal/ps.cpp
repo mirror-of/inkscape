@@ -223,6 +223,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 unsigned int
 PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 {
+	Inkscape::SVGOStringStream os;
 	int res;
 	FILE *osf, *osp;
 	gchar * fn;
@@ -313,17 +314,23 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 		sp_item_bbox_desktop (doc_item, &d);
 	}
 
-	if (res >= 0)
-		res = fprintf (_stream, "%%%%BoundingBox: %i %i %i %i\n",
-						(int) d.x0, (int) d.y0, (int) ceil (d.x1), (int) ceil (d.y1));
-	if (res >= 0)
-		res = fprintf (_stream, "%%%%HiResBoundingBox: %g %g %g %g\n",
-						d.x0, d.y0, d.x1, d.y1);
+	if (res >= 0) {
+		os << "%%BoundingBox: " << (int) d.x0 << " "
+					<< (int) d.y0 << " "
+					<< (int) ceil (d.x1) << " "
+					<< (int) ceil (d.y1) << "\n";
+	}
+	if (res >= 0) {
+		os << "%%HiResBoundingBox: " << d.x0 << " "
+					<< d.y0 << " "
+					<< d.x1 << " "
+					<< d.y1 << "\n";
+	}
 
-	if (res >= 0) res = fprintf (_stream, "%g %g translate\n", 0.0, sp_document_height (doc));
-	if (res >= 0) res = fprintf (_stream, "0.8 -0.8 scale\n");
+	os << "0.0 " << sp_document_height (doc) << " translate\n";
+	os << "0.8 -0.8 scale\n";
 
-	return res;
+	return fprintf (_stream, "%s", os.str().c_str());
 }
 
 unsigned int
@@ -414,10 +421,15 @@ PrintPS::bind (Inkscape::Extension::Print *mod, const NRMatrix *transform, float
 	if (!_stream) return 0;  // XXX: fixme, returning -1 as unsigned.
 	if (_bitmap) return 0;
 
-	return fprintf (_stream, "gsave [%g %g %g %g %g %g] concat\n",
-			transform->c[0], transform->c[1],
-			transform->c[2], transform->c[3],
-			transform->c[4], transform->c[5]);
+        Inkscape::SVGOStringStream os;
+	os << "gsave [" << transform->c[0] << " "
+			<< transform->c[1] << " "
+			<< transform->c[2] << " "
+			<< transform->c[3] << " "
+			<< transform->c[4] << " "
+			<< transform->c[5] << "] concat\n";
+
+	return fprintf (_stream, "%s", os.str().c_str());
 }
 
 unsigned int
@@ -438,18 +450,20 @@ PrintPS::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMa
 
 	if (style->fill.type == SP_PAINT_TYPE_COLOR) {
 		float rgb[3];
+        	Inkscape::SVGOStringStream os;
 
 		sp_color_get_rgb_floatv (&style->fill.value.color, rgb);
 
-		fprintf (_stream, "%g %g %g setrgbcolor\n", rgb[0], rgb[1], rgb[2]);
+		os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
 
-		print_bpath (_stream, bpath->path);
+		print_bpath (os, bpath->path);
 
 		if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
-			fprintf (_stream, "eofill\n");
+			os << "eofill\n";
 		} else {
-			fprintf (_stream, "fill\n");
+			os << "fill\n";
 		}
+		fprintf (_stream, "%s", os.str().c_str());
 	}
 
 	return 0;
@@ -464,29 +478,34 @@ PrintPS::stroke (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NR
 
 	if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
 		float rgb[3];
+        	Inkscape::SVGOStringStream os;
 
 		sp_color_get_rgb_floatv (&style->stroke.value.color, rgb);
 
-		fprintf (_stream, "%g %g %g setrgbcolor\n", rgb[0], rgb[1], rgb[2]);
+		os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
 
-		print_bpath (_stream, bpath->path);
+		print_bpath (os, bpath->path);
 
 		if (style->stroke_dash.n_dash > 0) {
 			int i;
-			fprintf (_stream, "[");
+			os << "[";
 			for (i = 0; i < style->stroke_dash.n_dash; i++) {
-				fprintf (_stream, (i) ? " %g" : "%g", style->stroke_dash.dash[i]);
+				if ((i)) {
+					os << " ";
+				}
+				os << style->stroke_dash.dash[i];
 			}
-			fprintf (_stream, "] %g setdash\n", style->stroke_dash.offset);
+			os << "] " << style->stroke_dash.offset << " setdash\n";
 		} else {
-			fprintf (_stream, "[] 0 setdash\n");
+			os << "[] 0 setdash\n";
 		}
 
-		fprintf (_stream, "%g setlinewidth\n", style->stroke_width.computed);
-		fprintf (_stream, "%d setlinejoin\n", style->stroke_linejoin.computed);
-		fprintf (_stream, "%d setlinecap\n", style->stroke_linecap.computed);
+		os << style->stroke_width.computed << " setlinewidth\n";
+		os << style->stroke_linejoin.computed << " setlinejoin\n";
+		os << style->stroke_linecap.computed << " setlinecap\n";
+		os << "stroke\n";
 
-		fprintf (_stream, "stroke\n");
+		fprintf (_stream, "%s", os.str().c_str());
 	}
 
 	return 0;
@@ -552,11 +571,16 @@ PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
   m.c[5] = 2 * p[NR::Y];
   bind(mod, &m, 0);
   
-  fprintf(_stream, "/Times-Roman findfont\n");
-  fprintf(_stream, "%f scalefont\n", style->font_size.computed);
-  fprintf(_stream, "setfont newpath\n");
-  fprintf(_stream, "%g %g moveto\n", p[NR::X], p[NR::Y]);
-  fprintf(_stream, "(%s) show\n", text);
+  Inkscape::SVGOStringStream os;
+
+  os << "/Times-Roman findfont\n";
+  os << style->font_size.computed << " scalefont\n";
+  os << "setfont newpath\n";
+  os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
+  os << "(" << text << ") show\n";
+
+  fprintf (_stream, "%s", os.str().c_str());
+
   release(mod);
 
   return 0;
@@ -567,33 +591,35 @@ PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
 /* PostScript helpers */
 
 void
-PrintPS::print_bpath (FILE *stream, const NArtBpath *bp)
+PrintPS::print_bpath (SVGOStringStream &os, const NArtBpath *bp)
 {
 	unsigned int closed;
 
-	fprintf (stream, "newpath\n");
+	os << "newpath\n";
 	closed = FALSE;
 	while (bp->code != NR_END) {
 		switch (bp->code) {
 		case NR_MOVETO:
 			if (closed) {
-				fprintf (stream, "closepath\n");
+				os << "closepath\n";
 			}
 			closed = TRUE;
-			fprintf (stream, "%g %g moveto\n", bp->x3, bp->y3);
+			os << bp->x3 << " " << bp->y3 << " moveto\n";
 			break;
 		case NR_MOVETO_OPEN:
 			if (closed) {
-				fprintf (stream, "closepath\n");
+				os << "closepath\n";
 			}
 			closed = FALSE;
-			fprintf (stream, "%g %g moveto\n", bp->x3, bp->y3);
+			os << bp->x3 << " " << bp->y3 << " moveto\n";
 			break;
 		case NR_LINETO:
-			fprintf (stream, "%g %g lineto\n", bp->x3, bp->y3);
+			os << bp->x3 << " " << bp->y3 << " lineto\n";
 			break;
 		case NR_CURVETO:
-			fprintf (stream, "%g %g %g %g %g %g curveto\n", bp->x1, bp->y1, bp->x2, bp->y2, bp->x3, bp->y3);
+			os << bp->x1 << " " << bp->y1 << " "
+			   << bp->x2 << " " << bp->y2 << " "
+			   << bp->x3 << " " << bp->y3 << " curveto\n";
 			break;
 		default:
 			break;
@@ -601,7 +627,7 @@ PrintPS::print_bpath (FILE *stream, const NArtBpath *bp)
 		bp += 1;
 	}
 	if (closed) {
-		fprintf (stream, "closepath\n");
+		os << "closepath\n";
 	}
 }
 
@@ -707,7 +733,7 @@ PrintPS::ascii85_init (void)
 }
 
 void
-PrintPS::ascii85_flush (FILE *ofp)
+PrintPS::ascii85_flush (SVGOStringStream &os)
 {
   char c[5];
   int i;
@@ -725,10 +751,10 @@ PrintPS::ascii85_flush (FILE *ofp)
     {
       if (ascii85_linewidth >= max_linewidth)
       {
-        putc ('\n', ofp);
+	os << '\n';
         ascii85_linewidth = 0;
       }
-      putc ('z', ofp);
+      os << 'z';
       ascii85_linewidth++;
     }
   else
@@ -737,10 +763,10 @@ PrintPS::ascii85_flush (FILE *ofp)
       {
         if ((ascii85_linewidth >= max_linewidth) && (c[i] != '%'))
         {
-          putc ('\n', ofp);
+	  os << '\n';
           ascii85_linewidth = 0;
         }
-	putc (c[i], ofp);
+	os << c[i];
         ascii85_linewidth++;
       }
     }
@@ -750,10 +776,10 @@ PrintPS::ascii85_flush (FILE *ofp)
 }
 
 inline void
-PrintPS::ascii85_out (guchar byte, FILE *ofp)
+PrintPS::ascii85_out (guchar byte, SVGOStringStream &os)
 {
   if (ascii85_len == 4)
-    ascii85_flush (ofp);
+    ascii85_flush (os);
 
   ascii85_buf <<= 8;
   ascii85_buf |= byte;
@@ -761,28 +787,26 @@ PrintPS::ascii85_out (guchar byte, FILE *ofp)
 }
 
 void
-PrintPS::ascii85_nout (int n, guchar *uptr, FILE *ofp)
+PrintPS::ascii85_nout (int n, guchar *uptr, SVGOStringStream &os)
 {
  while (n-- > 0)
  {
-   ascii85_out (*uptr, ofp);
+   ascii85_out (*uptr, os);
    uptr++;
  }
 }
 
 void
-PrintPS::ascii85_done (FILE *ofp)
+PrintPS::ascii85_done (SVGOStringStream &os)
 {
   if (ascii85_len)
     {
       /* zero any unfilled buffer portion, then flush */
       ascii85_buf <<= (8 * (4-ascii85_len));
-      ascii85_flush (ofp);
+      ascii85_flush (os);
     }
 
-  putc ('~', ofp);
-  putc ('>', ofp);
-  putc ('\n', ofp);
+  os << "~>\n";
 }
 
 unsigned int
@@ -792,33 +816,35 @@ PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int he
 	unsigned int i, j;
 	/* gchar *data, *src; */
 	guchar *packb = NULL, *plane = NULL;
+        Inkscape::SVGOStringStream os;
 
-	fprintf (ofp, "gsave\n");
-	fprintf (ofp, "[%g %g %g %g %g %g] concat\n",
-		 transform->c[0],
-		 transform->c[1],
-		 transform->c[2],
-		 transform->c[3],
-		 transform->c[4],
-		 transform->c[5]);
-	fprintf (ofp, "%d %d 8 [%d 0 0 -%d 0 %d]\n", width, height, width, height, height);
+	os << "gsave\n";
+	os << "[" << transform->c[0] << " "
+		<< transform->c[1] << " "
+		<< transform->c[2] << " "
+		<< transform->c[3] << " "
+		<< transform->c[4] << " "
+		<< transform->c[5] << "] concat\n";
+	os << width << " " << height << " 8 ["
+		<< width << " 0 0 -" << height << " 0 " << height << "]\n";
+
 
 	/* Write read image procedure */
-	fprintf (ofp, "%% Strings to hold RGB-samples per scanline\n");
-	fprintf (ofp, "/rstr %d string def\n", width);
-	fprintf (ofp, "/gstr %d string def\n", width);
-	fprintf (ofp, "/bstr %d string def\n", width);
-	fprintf (ofp, "{currentfile /ASCII85Decode filter /RunLengthDecode filter rstr readstring pop}\n");
-	fprintf (ofp, "{currentfile /ASCII85Decode filter /RunLengthDecode filter gstr readstring pop}\n");
-	fprintf (ofp, "{currentfile /ASCII85Decode filter /RunLengthDecode filter bstr readstring pop}\n");
-	fprintf (ofp, "true 3\n");
+	os << "% Strings to hold RGB-samples per scanline\n";
+	os << "/rstr " << width << " string def\n";
+	os << "/gstr " << width << " string def\n";
+	os << "/bstr " << width << " string def\n";
+	os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter rstr readstring pop}\n";
+	os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter gstr readstring pop}\n";
+	os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter bstr readstring pop}\n";
+	os << "true 3\n";
 
 	/* Allocate buffer for packbits data. Worst case: Less than 1% increase */
 	packb = (guchar *)g_malloc ((width * 105)/100+2);
 	plane = (guchar *)g_malloc (width);
 
 	/* ps_begin_data (ofp); */
-	fprintf (ofp, "colorimage\n");
+	os << "colorimage\n";
 
 #define GET_RGB_TILE(begin) \
   {int scan_lines; \
@@ -845,9 +871,9 @@ PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int he
 			compress_packbits (width, plane, &nout, packb);
 
 			ascii85_init ();
-			ascii85_nout (nout, packb, ofp);
-			ascii85_out (128, ofp); /* Write EOD of RunLengthDecode filter */
-			ascii85_done (ofp);
+			ascii85_nout (nout, packb, os);
+			ascii85_out (128, os); /* Write EOD of RunLengthDecode filter */
+			ascii85_done (os);
 		}
 	}
 	/* ps_end_data (ofp); */
@@ -868,7 +894,9 @@ PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int he
 	}
 #endif
 
-	fprintf (ofp, "grestore\n");
+	os << "grestore\n";
+
+	fprintf (ofp, "%s", os.str().c_str());
 
 	return 0;
 #undef GET_RGB_TILE

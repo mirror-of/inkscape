@@ -1,3 +1,8 @@
+2004-05-27  Kees Cook  <kees@outflux.net>
+
+	* src/extension/internal/ps.h, src/extension/internal/ps.cpp:
+	  Hopefully fixed the locale problems in the PS output generator.
+
 2004-05-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/extension/system.h, src/extension/system.cpp (build_from_file):
@@ -305,7 +310,7 @@
 	* configure.in, src/Makefile_insert, src/fixes.cpp: added replacement
 	  for g_ascii_strtod, since it has locale-related bugs in gnome 2.0.
 	  The upstream version is fixed, so some day, we won't need this any
-	  more.  (fixes "ugly icons" bug)
+	  more.  (fixes "ugly icons" bug, and possibly the spinbutton locale bug)
 	* src/dyna-draw-context.cpp, src/rect-context.cpp, src/sp-namedview.cpp,
 	  src/sp-object.cpp, src/sp-object.h, src/sp-pattern.cpp,
 	  src/sp-polygon.cpp, src/sp-polyline.cpp, src/sp-root.cpp,
