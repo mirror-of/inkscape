@@ -29,7 +29,7 @@
 #define SP_IS_DRAW_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_DRAW_CONTEXT))
 #define SP_IS_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_DRAW_CONTEXT))
 
-class SPDrawAnchor;
+struct SPDrawAnchor;
 
 #define SP_DRAW_POINTS_MAX 16
 
@@ -76,61 +76,12 @@ struct SPDrawContext : public SPEventContext{
 
 struct SPDrawContextClass : public SPEventContextClass{};
 
-GtkType sp_draw_context_get_type(void);
+GType sp_draw_context_get_type(void);
+SPDrawAnchor *spdc_test_inside(SPDrawContext *dc, NR::Point p);
+void spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed);
+void spdc_endpoint_snap(SPDrawContext *dc, NR::Point &p, guint const state);
+void spdc_endpoint_snap_internal(SPDrawContext *dc, NR::Point &p, NR::Point const o, guint state);
 
-/* Pencil context */
-
-#define SP_TYPE_PENCIL_CONTEXT (sp_pencil_context_get_type())
-#define SP_PENCIL_CONTEXT(o) (GTK_CHECK_CAST((o), SP_TYPE_PENCIL_CONTEXT, SPPencilContext))
-#define SP_PENCIL_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_CAST((k), SP_TYPE_PENCIL_CONTEXT, SPPencilContextClass))
-#define SP_IS_PENCIL_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_PENCIL_CONTEXT))
-#define SP_IS_PENCIL_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_PENCIL_CONTEXT))
-
-enum {
-    SP_PENCIL_CONTEXT_IDLE,
-    SP_PENCIL_CONTEXT_ADDLINE,
-    SP_PENCIL_CONTEXT_FREEHAND
-};
-
-struct SPPencilContext : public SPDrawContext{
-    guint state : 2;
-};
-
-struct SPPencilContextClass : public SPEventContextClass{};
-
-GtkType sp_pencil_context_get_type(void);
-
-/* Pen context */
-
-#define SP_TYPE_PEN_CONTEXT (sp_pen_context_get_type())
-#define SP_PEN_CONTEXT(o) (GTK_CHECK_CAST((o), SP_TYPE_PEN_CONTEXT, SPPenContext))
-#define SP_PEN_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_CAST((k), SP_TYPE_PEN_CONTEXT, SPPenContextClass))
-#define SP_IS_PEN_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_PEN_CONTEXT))
-#define SP_IS_PEN_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_PEN_CONTEXT))
-
-enum {
-    SP_PEN_CONTEXT_POINT,
-    SP_PEN_CONTEXT_CONTROL,
-    SP_PEN_CONTEXT_CLOSE,
-    SP_PEN_CONTEXT_STOP
-};
-
-enum {
-    SP_PEN_CONTEXT_MODE_CLICK,
-    SP_PEN_CONTEXT_MODE_DRAG
-};
-
-struct SPPenContext : public SPDrawContext{
-    unsigned int mode : 1;
-    unsigned int state : 2;
-    unsigned int onlycurves : 1;
-
-    SPCanvasItem *c0, *c1, *cl0, *cl1;
-};
-
-struct SPPenContextClass : public SPEventContextClass{};
-
-GtkType sp_pen_context_get_type(void);
 
 #endif
 
@@ -138,9 +89,9 @@ GtkType sp_pen_context_get_type(void);
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

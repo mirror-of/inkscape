@@ -34,6 +34,8 @@
 #include "spiral-context.h"
 #include "draw-context.h"
 #include "dyna-draw-context.h"
+#include "pen-context.h"
+#include "pencil-context.h"
 #include "text-context.h"
 #include "zoom-context.h"
 #include "dropper-context.h"

@@ -1,3 +1,10 @@
+2004-10-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/draw-context.cpp, src/draw-context.h: Split off new files
+	  pen-context.h, pen-context.cpp, pencil-context.h, pencil-context.cpp,
+	  draw-anchor.h, draw-anchor.cpp.
+	* src/Makefile_insert: Add the new files.
+
 2004-10-10  Ted Gould  <ted@gould.cx>
 
 	* src/event-context.cpp, src/file.cpp, src/file.h, src/print.cpp,
