@@ -5,493 +5,285 @@ or the ChangeLog for further details about releases. This file contains
 the release notes for the current release.
 
 
-                                 Inkscape 0.40
+
+                                 Inkscape 0.41
 
 In brief
 
-   This release has been slow in coming, but it was worth the wait: Inkscape
-   0.40 brings a huge amount of new features, usability enhancements,
-   documentation, and bugfixes. The three most important new features are:
+   Inkscape 0.41 is intended to provide a super-stable release prior to some
+   major interface redesign work we will be undertaking for 0.42. It is thus
+   at essense a bugfix release, yet there are several important new features
+   and improvements:
 
-     * Layers are almost complete in this version; this fills a major gap in
-       functionality, making Inkscape usable for complex artwork.
+     * Color tracing, as well as multi-level grayscale tracing, is now
+       possible with the built-in tracer.
 
-     * The Potrace bitmap tracer is incorporated into Inkscape - now
-       vectorizing bitmaps is easy and interactive. A matching command,
-       "Create bitmap copy", converts from any object to bitmap.
+     * Clone tiler is an exciting new way to create patterns, tesselations,
+       scatterings, or just about any regular or chaotic arrangements with
+       clones of an original tile.
 
-     * The text-on-path implementation is complete and very flexible. Both
-       the text and the path remain fully editable and transformable.
+     * Managing length units is cleaned up, extended, and centralized in the
+       document units preference stored with a document. The user unit (px)
+       of SVG is fully supported and made the default.
 
-   Many other improvements deserve a brief mention:
-
-     * Features: new document templates, improved freehand and calligraphy
-       tools, randomized stars, POV export, some clipboard integration,
-       experimental flowText implementation, new command-line options, better
-       PNG and EPS export, and more.
-
-     * Usability: new file dialogs, current style for new objects, select
-       under & drag selected with Alt, loads of new statusbar tips, new shape
-       controls, better default gradients, and more.
-
-     * Documentation: 3 new tutorials (Shapes, Tracing, Calligraphy), many
-       translations added and updated.
-
-     * Bugfixes: too many to mention (in total, 228 bugs closed in the
-       tracker since 0.39), including several important SVG compatibility
-       fixes.
+   Apart from that, this version brings improved extensions usability, the
+   Invert Selection command, more convenient layers selector, icon theming,
+   progress with scripting, and more. Among the bugs fixed are some serious
+   crashes, memory leaks, and mis-features; certain areas saw noticeable
+   speedups.
 
 New functionality
 
-     * Support for layers is the most important new feature which is almost
-       complete in this version:
+     * The new Multiple scanning mode is added to the Bitmap Tracing dialog
+       (Path > Trace Bitmap). This mode traces a bitmap image repeatedly,
+       assigning a distinct style to each resulting path and combining the
+       paths into a group. What does this mean to the user? For one thing,
+       Inkscape can now perform color tracing! There are three new options:
 
-          * The active group selector in the statusbar has revealed its true
-            identity as the quick layer selector, complete with toggle
-            buttons for locking and hiding the current layer. Unfortunately a
-            proper layer dialog didn't make it into the release (we've taken
-            long enough already), but we're going to rectify this in 0.41 by
-            implementing a complete traditional layers dialog.
-          * The new Layer menu has commands for creating, renaming, and
-            deleting layers, as well as for moving the current layer up or
-            down in the z-order of sibling layers (changing the z-order of an
-            object moves it only within its parent group or layer, as
-            before). Again, more commands will be added in 0.41.
-          * Hiding and locking of objects and layers is fully implemented.
-            Hiding is done via the display CSS property, so objects hidden in
-            Inkscape will be hidden in any compliant SVG renderer. Locking
-            prevents an object from being selected using any of the tools. If
-            you select an object through other means (for example, with the
-            Find dialog or the XML editor), you can change it as usual.
-            Hiding or locking groups or layers applies to all objects within
-            them.
-          * Layers are implemented as SVG groups (the <g> element) with
-            inkscape:groupmode="layer". Selection and other commands will
-            treat them as layers rather than groups. The possibility
-            (introduced in 0.39) to temporarily enter any group as if it were
-            a layer remains; such a temporary layer is then shown in the
-            layer selector and behaves the same as a normal layer with
-            respect to selection commands. Normal (non-temporary) layers can
-            also be nested within one another.
-          * All the drawing tools as well as Paste refuse to create new
-            objects if the current layer is locked or hidden, with an
-            appropriate statusbar message.
-          * The Ctrl+A (Select All), Tab, and Shift+Tab selection shortcuts
-            by default work only in the current layer (not going into either
-            parent or children layers) and ignore locked and hidden objects.
-            This can be changed in Preferences (the Selecting tab).
-          * The Find dialog can optionally limit the search to the current
-            layer and include locked and hidden objects in the search (they
-            are excluded by default).
-          * Selecting an object makes that object's layer current. This
-            behavior is somewhat experimental (most other vector editors do
-            not do this), but in our testing so far, it is very convenient.
-            Just by selecting an object you immediately get into its "local
-            context" (i.e. its layer or sublayer) where you can add objects,
-            select all within the layer, lock or hide the layer (e.g. to
-            reach another layer beneath it), etc.
+        * Brightness: This separates the image into a given set of brightness
+          levels, and scans the image for each one. This results is a fairly
+          good grayscale vector representation of the original.
 
-     * Text on path: Inkscape now provides a complete implementation of SVG
-       <textPath> element. Select a text object and a path, shape, or offset
-       and do the Text > Put on Path command to make the text follow the
-       path. Both text and path remain fully editable (including kerns and
-       letterspacing in text). Several texts can be put to one path. When you
-       move the path, its attached texts move with it; however, you can move
-       the text away from its path or transform it without losing the link.
-       The Text > Put on Path command converts a text-on-path into regular
-       text.
-     * Inkscape can do bitmap tracing (Shift+Alt+B) from the GUI. The only
-       tracer included with the program so far is Potrace
-       (http://potrace.sf.net) but we may add other tracers in the future.
-       Potrace works very well for black-and-white images; in its dialog,
-       several tracing options (brightness threshold, edge detection,
-       quantization) are available, as well as an interactive preview. See
-       the new Tracing tutorial in Help > Tutorials for details.
-     * The new command, Make a Bitmap Copy (Alt+B), exports a bitmap of the
-       selected objects (with all other objects hidden), saves it as a PNG
-       file in the same directory as the document, and imports it back into
-       the document.
+        * Color: This is what everyone wants. This quantizes the original
+          color bitmap into a reduced number of colors, scans each subset of
+          pixels, and assembles the paths into a color vector rendition of
+          the original bitmap. This has been tested extensively and produces
+          very good results.
 
-          * The resolution or size of the created bitmaps can be set in
-            preferences.xml (no GUI yet). In <group id="createbitmap">,
-            specifying minsize= gives the minimum size of the generated
-            bitmap in pixels (regardless of the object size), while
-            resolution= sets the constant resolution (different pixel size
-            for different object sizes).
-          * Optionally, the exported bitmap can be processed by an external
-            filter before it is imported. One such filter included with
-            Inkscape is inkscape-shadow.sh in share/extensions/ which makes a
-            grayscale blurred shadow for an object (requires Imagemagick).
-            See inkscape-shadow.README for details.
+        * Monochrome: This is the same as Color, but converts the resulting
+          paths to grayscale. This is a convenience command, and is the same
+          as if the user had used the Fill/Stroke dialog to do the same
+          thing. The results are somewhat similar to Brightness; however,
+          Brightness merely adds R, G, and B to get a brightness level, and
+          throws color information away. That works well for areas of
+          differing brightness, but fails for areas of similar brightness and
+          different hue. Monochrome is grayscale, but its curves follow the
+          edges of differing color.
 
-     * An SVG document can be exported in POV format for the POV-Ray
-       raytracer (http://www.povray.org). Each shape or text is exported
-       as a prism; color and transparency are preserved, stroke is ignored.
-       An example file, share/examples/istest.pov, demonstrates how to import
-       an Inkscape-exported POV and set up camera, lights, textures, etc. for
-       rendering.
-     * The new Randomization control for the Star tool lets you set the
-       amount of random displacement of the star's tips and (for rounded
-       stars) curve handles. (Alternatively accessible via Alt+dragging a
-       star handle on canvas.) A little randomization makes a star less
-       regular, more humane, often funny; strong randomization is an exciting
-       way to obtain a variety of crazily unpredictable shapes. Unleash your
-       imagination!
-     * The old limits for the number of star tips (was 32) and spiral turns
-       (was 20) have been increased to 1024.
-     * The new command, Vacuum Defs in File menu, removes unused stuff from
-       the document's <defs>.
-     * The new command, Remove Manual Kerns in Text menu lets you quickly
-       clear a text object (including text on path) of any horizontal or
-       vertical kerns you've set by hand.
-     * The pencil tool now draws more smoothly.
-     * The calligraphic pen tool received a number of improvements that make
-       it capable of some real calligraphy (see the new Calligraphy tutorial
-       for details):
+     * The new powerful Tile clones dialog (Edit > Tile Clones...) implements
+       all 17 plane symmetry groups, allowing you to easily create all sorts
+       of symmetric patterns, Escher-like tesselations, ornaments, etc. Since
+       the pattern is made out of clones, you can always edit the original
+       tile and the entire pattern is updated live. This feature puts
+       Inkscape into competition with software such as the free [Arabeske] or
+       commercial [SymmetryWorks].
 
-          * The new Thinning control tells how the width of the stroke
-            depends on velocity. It can take values from -1 to 1; the value
-            of 0 gives a constant width pen, values greater than 0 make fast
-            strokes thinner, values less than 0 make fast strokes broader.
-          * The new Fixation control defines how much the pen angle depends
-            on the stroke direction. At 0, the pen is always perpendicular to
-            the stroke (this gives uniform stroke width); at 1, the pen is
-            fixed at the angle set in the Angle control (this gives maximum
-            width contrast depending on stroke direction, just as with a real
-            flat calligraphic pen). (Previously, this parameter was set to 0
-            and not changeable, so Angle had no effect whatsoever.)
-          * You can adjust width and angle of the pen from the keyboard
-            (left/right arrow keys for width, up/down for angle). These
-            shortcuts work even while you draw a stroke.
+        * Apart from selecting the symmetry, you can also vary the shift,
+          scale, rotation, and opacity of the clones in the pattern, by
+          setting the change rate per row and/or per column. With any of
+          these parameters, you can alternate the sign of the increment for
+          even/odd rows or columns, or randomize it to arbitrary degree. This
+          produces "object fields" that can be distorted, skewed, slanted,
+          "faded out," or "magnetized" (like iron particles in a magnetic
+          field) in a multitude of ways. From a simple row of copies to
+          complex effects reminding of fur, water ripples, starfields, or
+          explosions, with various degrees of chaoticity - all this is now
+          easy and automatic.
 
-     * Inkscape finally makes some use of the system clipboard (more
-       clipboard integration to follow):
+        * To create a clone pattern, simply select something, set the number
+          of rows and columns, and click Create. You can then change some
+          parameters in the dialog and click Create again; this will remove
+          any existing tiled clones of the selected object and recreate the
+          pattern anew. Or, you can just remove the old pattern by clicking
+          Remove. To protect a pattern from deletion by this dialog, group it
+          or move it to another layer.
 
-          * Copying text objects into the system clipboard (Ctrl+C), as well
-            as pasting into the text object being edited (Ctrl+V in Text
-            tool), now work.
-          * In dropper tool, you can copy the color under cursor to the
-            system clipboard by Ctrl+C.
+        * Initially, a pattern is created based on the bounding box of the
+          selected object. After the pattern is created, resizing the
+          original tile does not move the clones away, so you can make the
+          tiles overlap. Also, when the pattern is created, the current bbox
+          of the original tile is remembered; later, if the "Use saved size
+          and position of the tile" checkbox is on, the same bbox will be
+          used when you click Create again, which means you can vary the
+          pattern parameters without losing the overlapping of the tiles.
 
-     * New documents created when you start Inkscape or use File > New are
-       now based on templates. If you want your new documents to have
-       different initial zoom, window size, page background or border,
-       metadata, etc., just save a document with the desired settings (it may
-       contain some objects, too) in your share/templates directory
-       (typically /usr/local/inkscape/share/templates on Linux,
-       $INKSCAPE_DIR\share\templates on Windows). The file named default.svg
-       in that directory will be the default new document on program start;
-       other documents will be listed in the New submenu of the File menu.
-       Inkscape comes with several example templates with different page
-       sizes and other settings.
-     * The Align dialog (renamed Layout) can now align and distribute nodes
-       both horizontally and vertically when Inkscape has the Node tool
-       active and some path nodes are selected.
-     * The Object Properties dialog has facilities for editing per-object
-       metadata: freeform Label (inkscape:label) as well as Title and
-       Description (not enabled yet). The generally evil and not properly
-       working anyway "Printable" checkbox is removed, as well as the
-       disfunctional "Active". The "Hide" and "Lock" checkboxes are fully
-       functional, allowing you to set sensitivity and visibility on a
-       per-object basis.
-     * There's a preliminary implementation of flowing text from SVG 1.2 (the
-       <flowRoot> and friends, see http://www.w3.org/TR/SVG12/flow.html).
-       This allows you to put text into a shape so that the lines are wrapped
-       automatically when you change the text or the shape. Chained shapes
-       (text which did not fit into one shape is continued in the next one)
-       and exclusion shapes (text flows around an exclusion shape) are
-       possible. There's a very basic UI allowing you to add flowed text to
-       the selection available in the right click menu; editing the text and
-       exclusion shapes still require manual editing of your SVG with the XML
-       editor (see share/examples/flowtext.svg for an example). The next
-       version will have complete flowing text support with a more convenient
-       UI. Note that flowing text is not compatible with SVG 1.1 renderers;
-       you'll have to convert it to path if you want to view your SVG outside
-       of Inkscape.
-     * There is preliminary support for plug-ins (loadable libraries)
-       currently used by the new GIMP gradient plug-in that loads GIMP
-       gradients into Inkscape. Currently plug-ins can be used for import and
-       export into Inkscape, and integrate fully into the dialogs and menus
-       along with other extensions.
-     * Improvements in command-line PNG export allow you to easily script
-       exporting parts from complex documents and to better integrate GUI
-       editing with command-line use:
+        * It's best to use a group as the original object for tiling, because
+          you can then enter this group (right-click, "Enter group") and draw
+          inside it. Any changes or new objects added to the group will show
+          in the pattern immediately.
 
-          * You can now specify the background opacity
-            (--export-background-opacity or -y).
-          * If no background color (-b) or background opacity (-y) specified,
-            the values from the document (sodipodi:namedview) are used.
-          * You can now export an area corresponding to a single object by
-            specifying the ID of the object with the --export-id or -i
-            switch, for example:
+     * The new Invert Selection command (the `!' key) inverts selection
+       (deselecting what was selected and selecting everything else) within
+       the current layer. Both Invert Selection and Select All now have the
+       "in all layers" variants that act across all visible and unlocked
+       layers (Ctrl+Alt+A for Select All in All Layers, Alt+! for Invert
+       Selection in All Layers).
 
-        inkscape -e mypath.png -i path966 mydoc.svg
-
-        * When exporting with -i, you can add --export-use-hints or -t to
-          tell Inkscape to use the filename and DPI export hints stored for
-          that object when it was last exported from the GUI. For example,
-
-        inkscape -i path966 -t mydoc.svg
-
-          will export path966 to the PNG file with the same filename
-          and resolution as you used for exporting it from within
-          Inkscape, so you don't need to specify them on the command
-          line.
-
-        * With -i, you can also specify -j (--export-id-only) which tells
-          Inkscape to show only the specified object in the export and hide
-          all others (even if they overlay the specified object).
+     * Ben Crowell contributed the embed_raster_to_svg.pl Perl script (in
+       share/extensions) which embeds all external raster images referenced
+       from an SVG document into that document. Even though there's no
+       Inkscape UI for it, this script is very useful for creating
+       self-contained SVG documents for distribution.
 
 Interface and usability
 
-     * New open/save/import dialogs (based on GTK 2.4 but better) have a
-       preview pane, displaying SVG and bitmap files, and a bookmarks pane
-       allowing you to remember your project directories and visit them with
-       a single click. The dialogs are now the same across all platforms.
-     * All object-creating tools can use the current style for new objects.
-       The current style is the style that you last applied to an object
-       (when changing its fill, stroke, transparency, etc). For example,
-       after you paint some object black, new shapes you create will be black
-       too.
+     * Upon launch, Inkscape checks the availability of various external
+       programs that are used by installed Inkscape extensions. If some are
+       missing, you get a warning box, and the complete list of unavailable
+       extensions is in ~/.inkscape/extension-errors.log. Check that file and
+       install additional software if you find that e.g. some import/export
+       formats do not work (most commonly PS/EPS import which currently
+       requires Skencil and pstoedit to be installed).
 
-          * Alternatively, a tool can use its own style for new objects,
-            which is not affected by document editing. The Preferences dialog
-            lets you choose between using the current style (shape tools by
-            default) and the tool's own style (text, pen, pencil, and
-            calligraphy by default) for any tool, as well as to set the style
-            of a tool from current selection.
-          * The "Apply to" list in the Fill & Stroke dialog is removed; this
-            dialog now always sets the style of the selection.
+     * The quick layer selector in the statusbar now displays hidden layers
+       grayed out and locked layers enclosed in []. This makes it much easier
+       to see at a glance what is visible and unlocked in the document. The
+       current layer is now marked by a bullet.
 
-     * Statusbar improvements:
+     * Document units: now you can set the default units for each document in
+       the Document Preferences dialog. The units are saved with the
+       document, so you can make yourself a template with your preferred
+       units. The default template now uses the px unit; two new templates,
+       default_mm and default_pt, are added. The document units:
 
-          * Each knot (control handle, node, node handle, etc.) displays a
-            tip in the statusbar when hovered over by the mouse, explaining
-            the function of the knot and its applicable keyboard modifiers.
-          * Pressing Alt, Ctrl, or Shift explains the tool-specific functions
-            of these modifiers in the statusbar.
-          * Most statusbar messages use bold face to highlight key words and
-            phrases for faster perception and better understanding.
-          * Additional details and tips are added to many messages, and
-            terminology is made consistent.
+          * apply to the rulers and the statusbar coordinates (previously
+            unchangeable);
+          * are preselected in all unit menus (such as in the Selector
+            controls bar);
+          * apply to the grid; now the grid lines are 1 document unit apart,
+            unless you change that in the Document Preferences.
 
-     * XML editor improvements:
+     * The pixels (px) unit is added to unit menus. This is what is called
+       "user unit" in the SVG specification, and in SVG code it is written
+       either with the px suffix or (more often) without any suffix. Inkscape
+       converts most dimensions to user units when writing them to SVG, and
+       now you can use this unit via the GUI as well. Note however that the
+       conversion ration from px to absolute length units may vary in
+       different SVG renderers and different output media (e.g. Inkscape uses
+       px/pt = 0.8), so you should not mix px and absolute units in the same
+       document. Normally, you will only need absolute units if your design
+       is to be printed on paper.
 
-          * There is now a statusbar at the bottom of the XML editor which
-            provides tips and warning messages as you edit the tree.
-          * Selecting an attribute moves keyboard focus to the attribute
-            entry pane; pressing Ctrl+Enter in that pane sets the new value.
-          * The editing areas for attribute values and text nodes now
-            autowrap their contents, making it much easier to review and edit
-            long values.
+          * The base zoom of the display is changed by a factor of 1.25 so
+            that now at 100% zoom, one px unit corresponds to one screen
+            pixel (previously one pt corresponded to one screen pixel). This
+            is a better match for other SVG renderers which also display px
+            1:1 at the default zoom. Unfortunately, this means that all old
+            Inkscape SVG files with saved zoom will now open at 25% closer
+            zoom (this is a one-time annoyance: once you resave the file by
+            version 0.41, the zoom will be preserved again).
+          * On export, if you want one px to correspond to one bitmap pixel,
+            use the export resolution of 90 dpi. This resolution is now the
+            default.
+          * Finally, the document units in the default template are now px as
+            well. We believe this is more convenient as the majority of our
+            users work with screen graphics, not for print.
 
-     * More convenient shapes (now documented in painstaking detail in the
-       new Shapes tutorial):
+     * Icon theming is now possible using the inkscape preferences directory.
+       By putting "icons.svg" (or individual SVG files with the icon's name)
+       in ~/.inkscape/icons/, local icon themes will be used. Any icons not
+       found in the user "icons" directory will fall back to be loaded from
+       the installed default icon set.
 
-          * The Rounded and Randomized fields in the star controls panel are
-            precise, but not very convenient. Now you can round a star
-            interactively by Shift+dragging a star handle on the canvas, or
-            adjust a star's randomization level by Alt+dragging a handle.
-            Correspondingly, Shift+click on a handle zeroes roundedness,
-            Alt+click removes randomization; additionally, Ctrl+click removes
-            any skew straightening the star's tips.
-          * With spirals, dragging the outer handle now rolls/unrolls the
-            spiral from the outside, similar to the inner handle. To
-            roll/unroll with fixed radius, drag the outer handle with Alt; to
-            scale or rotate the spiral, drag it with Shift. Alt+dragging the
-            inner handle adjusts the spiral divergence; Alt+click zeroes
-            divergence; Shift+click on the inner handle zeroes inner radius
-            (moves the handle to the center).
-          * Rectangles now have two resize handles in the opposite corners
-            (in addition to the rounding handles in the third corner).
-            Dragging the resize handles with Ctrl snaps the rect so that
-            either its width, height, or proportion is preserved.
-            Shift+clicking a rounding handle removes rounding; Ctrl+clicking
-            makes rounding radii equal.
-          * Ellipses have two additional handles at the top and left
-            extremities for resizing the ellipse around its center. Drag them
-            with Ctrl or Ctrl+click them to make a circle. Shift+click the
-            arc/segment handles to make the ellipse whole.
-          * The controls panels for the shape tools (Rectangle, Arc, Star,
-            Spiral) display either New: or Change: labels depending on
-            whether their controls will apply to a newly created object or to
-            the currently selected object(s) of the corresponding type.
+     * In Selector, the statusbar now reports not only the number of selected
+       objects but also the number of layers in which they are selected and,
+       if there's only one, the name of the selection layer.
 
-     * Double-clicking a tool button calls up the Preferences dialog open on
-       the page of that tool.
-     * The Preferences dialog remembers and reopens the page that was active
-       the last time you used it.
-     * The box selection cue is now the default on new installations.
-     * For easier navigation with the grid, every fifth grid line is shown
-       darker by default (changeable in Document Preferences).
-     * Debugging output can now be redirected from console to the new
-       Messages window (open via a command in the View menu). This
-       redirection is on by default on Windows.
-     * Select Under: in Selector, clicking with Alt selects the object at
-       cursor which is below (in z-order) the currently selected object at
-       cursor; if the bottom object is reached, Alt+click again selects the
-       top object. Thus, several Alt+clicks will cycle selection through the
-       z-order stack at the click point. Combining Alt with Ctrl ("select in
-       groups") and Shift ("add to selection") works, too. Note that on
-       Linux, many window managers steal Alt+click by default; reconfigure
-       your WM so you can use Alt+click in Inkscape.
-     * Drag Selected: in Selector, dragging with Alt moves the currently
-       selected object(s) no matter where you start the drag, unlike regular
-       drag that first selects the object under cursor. This is convenient
-       for dragging objects that are behind other objects in z-order. On
-       Linux, you may need to disable dragging the window with Alt in your WM
-       if you want to use "drag selected".
-     * When you switch an object to gradient fill or stroke, the new gradient
-       is created with that object's previous fill or stroke color going from
-       1 to 0 opacity (instead of the hardcoded black-to-white fully opaque
-       gradient as before). New objects do not share gradients now, except
-       when you switch to gradient multiple selected objects with the same
-       fill color (you can also explicitly set two or more objects to use the
-       same gradient by selecting it in the list in the Fill and Stroke
-       dialog, or by pasting style from one object to another). Newly created
-       gradients are automatically garbage-collected when no longer used;
-       however, when you edit a gradient in the Gradient Editor, it becomes
-       sticky and can only be removed, when not in use, by the Vacuum Defs
-       command.
-     * The master opacity slider is moved from Object Properties to Fill and
-       Stroke and can now work on multiple selected objects. It is now more
-       convenient to adjust the transparency of objects with gradients or
-       patterns, as well as groups (the equivalent of "group transparency" in
-       Illustrator) and clones.
-     * The four preferences that control whether or not to scale stroke
-       widths, scale rectangle corners, transform gradient fills, and
-       transform pattern fills with the object, are now represented by four
-       toggle buttons in the Selector controls panel for easy access.
-     * If a node has straight line path segments on one or both sides,
-       Ctrl+Alt+dragging that node in the node tool moves it along the
-       direction(s) of these straight line(s) and their perpendiculars. This
-       is an easy way to change the length of a straight line without
-       changing its angle.
-     * The Text & Font dialog takes less space and is a bit more convenient
-       to use.
+     * Backspace now works as well as Del for deleting objects or nodes.
+
+     * The page background color is now shown across the entire canvas, not
+       in the framed page only as before.
+
+     * Pattern editing handles are easier to remember and to tell apart from
+       shape handles: pattern move handle is a cross, rotate handle a circle,
+       and scale handle a square.
 
 Documentation, translations, examples
 
-     * Three new tutorials added:
-
-          * The Shapes tutorial has detailed descriptions of shape tools and
-            shape types, as well as many examples and creative tips.
-          * The Calligraphy tutorial describes in detail the capabilities of
-            the improved Calligraphy pen tool. A brief history of the art,
-            parameters of the tool, useful tips, and many examples from
-            simple strokes to complete lettering projects.
-          * The Tracing tutorial explains all the options and parameters of
-            the Potrace interface for bitmap tracing, with tips and examples.
-
-     * Updated the "Elements and Principles of Design" tutorial with new
-       graphics and used latest features of Inkscape.
-     * Updated the "Tips and Tricks" and "Basic" tutorials with several new
-       sections.
-     * Added Norwegian Nynorsk and Slovak interface translations.
-     * Updated Brazilian Portuguese, French, German, Hungarian, Japanese,
-       Russian, Slovenian and Spanish interface translations.
-     * Added Norwegian Nynorsk translation of "Basic Tutorial".
-     * Several new example files added to share/examples.
+     * Translation code was set up to properly include localized plural
+       support, letting languages that have more than one plural from to
+       operate correctly.
+     * Added French translation of "Keys and Mouse" chart.
+     * Added Slovenian translation of "Calligraphy Tutorial".
+     * Added Slovenian translation of "Shapes Tutorial".
+     * Added several new tips to the "Tips and tricks" tutorial.
+     * Three new example files are added, demonstrating various patterns
+       created with the Tile Clones feature.
+     * The following translations were updated since 0.40: Catalan, French,
+       German, Hungarian, Italian, Norwegian Nynorsk, Serbian, Slovenian,
+       Spanish, Ukrainian.
 
 Important bugfixes
 
-     * SVG compatibility:
-
-          * fill-opacity and stroke-opacity CSS properties are no longer
-            ignored when used with a pattern or gradient fill.
-          * Gradients with sharp color boundaries now work properly.
-          * Several fixes to marker orientation.
-          * rotate(angle,cx,cy) syntax now works in transform attributes.
-          * The display CSS property is supported (used for objects and
-            layers visibility). Note that this way of controlling visibility
-            is compatible with any conformant SVG renderers but not with
-            Sodipodi which (in CVS version) uses its own extension attribute
-            for visibility.
-
-     * Gradients no longer behave weird when a path with gradient fill is
-       transformed. Now gradients either transform with the object or remain
-       unmoved, depending on the user setting (toggle button in selector
-       controls). This setting affects grouped objects too.
-     * Fixed several crashes and attempts to open error dialogs (which also
-       result in crashes when Inkscape is run without X) in command-line
-       operations.
-     * RDF metadata is no longer written in Plain SVG format.
-     * RDF keyword lists are stored more properly.
-     * Though we don't yet properly support <switch>, it is now treated as a
-       simple group instead of being silently ignored. This allows Inkscape
-       to open SVG files exported from Adobe Illustrator.
-     * Zoom with ctrl+mousewheel now works correctly.
-     * The Select All command works much faster when there are many objects.
-     * Several crashes that happened on copying objects with gradients or
-       patterns are fixed.
-     * Exporting text to PS/EPS without converting to curves now works
-       reliably (including text-on-path and flowing text).
+     * Long freezes that happened on Windows and less frequently on Linux
+       during opening files, typing text, ungrouping, etc. were tracked down
+       to a bug in the boehm garbage collector library. You'll now need
+       version 6.4 of boehm gc which has this bug fixed. Static RPMs and
+       Windows builds at our site use the version 6.4.
+     * Numerous bugfixes were done to handling non-ASCII file paths, both on
+       Windows and on Linux.
+     * The crash upon releasing a shape handle, which happened on FreeBSD
+       and some versions of Windows, is fixed.
+     * Using GTK Input Methods for typing text, such as Chinese or Korean,
+       used to crash or misbehave; now fixed.
+     * Hidden objects are now properly hidden on export and in print.
+     * A bad memory leak is stopped in the pattern fill code.
+     * The counterintuitive 90 degrees rotation of PS/EPS output is
+       eliminated; now the page is rotated into landscape orientation only if
+       the width of the drawing exceeds printable page width. Later a GUI
+       facility for controlling page orientation will be added.
+     * The size of the imported bitmaps was wrong by a factor of 0.8, now
+       fixed.
+     * Copying from or pasting into transformed groups now preserves the
+       visible transform of the objects, and pasting style preserves the
+       visible font size and stroke width regardless of source and target
+       transforms.
+     * Pasting objects copied from different layers now correctly preserves
+       their z-order.
+     * Switching units in the Stroke style tab was broken when more than one
+       object is selected.
+     * Markers were lost on export to plain SVG due to missing overflow
+       property.
+     * Most paper sizes in Document Properties were slightly off; now the
+       list is cross-checked and expanded.
+     * Inkscape SVG documents no longer include DOCTYPE declaration with an
+       URI of an SVG DTD; this DTD would not be able to validate our
+       documents anyway (due to extension elements), and was just useless.
+     * In node tool, pattern editing handles are now displayed for paths too
+       (previously only for shapes).
+     * Many small CSS conformance issues are addressed.
+     * Significant speedups achieved in some operations, notably document
+       loading (the difference may be more than 2x for large documents).
 
 Internal progress
 
-     * Text code has undergone a major rewrite. Each text object now holds
-       instances of two classes: flow_src is homologic to the source XML
-       tree, while flow_res represents the visible text flow separated into
-       paragraphs and lines. The complex algorithm converting from flow_src
-       to flow_res lets us use the same API for all kinds of text objects -
-       regular text, text on path, flowed text. The monstrous SPText is now
-       much smaller and simpler. The SPChars layer is eliminated. As one of
-       the results, text rendering is accelerated by at least 10%.
-     * Adopting the Boehm garbage collector (libgc) allowed us to simplify
-       code in many places, and permitted more data to be shared without
-       copying.
-     * Gradient code is much simplified: gradients don't have to be in a
-       special order in <defs> to work (thanks to the order-independent
-       URIReference), no attempts are made to reuse orphan gradients (they
-       are garbage-collected anyway), several old bugs are fixed.
-     * Gradients that use objectBoundingBox units are converted to
-       userSpaceOnUse when the object is transformed. This makes it possible
-       to transform the gradient by the same matrix and thus ensure that the
-       gradient remains in sync with its object. New gradients are created
-       with userSpaceOnUse units.
+     * Transforming a text object now embeds the scaling component of the
+       transform into the text's font size(s). This means that after a
+       uniform 2x scale of a text with font-size: 10pt, you get a 20pt text,
+       not 10pt text with a transform= attribute as before. However, so far
+       this works only for uniform scaling; after scaling a text
+       non-uniformly, its visible letter height may not correspond to its
+       font-size.
+     * The last remaining pixmap icons were eliminated. Now all icons used by
+       Inkscape are SVG.
+     * All the manual xmlns declarations are removed from the code; instead,
+       they are now generated automatically and inserted into the output
+       document on save.
+     * All of SPRepr's data fields are made private, direct accesses are
+       replaced with calls to the appropriate accessor functions.
 
 Known issues
 
-     * If an object has a gradient fill and a fill-opacity property less than
-       1.0 in its style, previously Inkscape ignored the fill-opacity. This
-       was wrong. Now it correctly combines them, i.e. makes the gradient
-       (more) transparent if the object using it has a fill-opacity less than
-       1.0. If you find out that 0.40 renders your gradients more transparent
-       than before, simply remove fill-opacity from the style= of the objects
-       that use semi-transparent gradients to fix them. In new files,
-       fill-opacity is removed automatically when you apply a gradient.
-     * There are two pretty serious bugs on Windows (bugs 1073459 and 1070816
-       in the tracker) that were reported late and could not be fixed for the
-       release. It has been conjectured that the source of at least one of
-       the problems is not in Inkscape but in a library we use. We're working
-       to resolve these problems; an updated Windows build will be available
-       as soon as they are fixed.
-     * The layer selector at the bottom of the window is very limited. A
-       "proper" layers dialog is slated for our next release.
-     * You cannot put text on a rectangle or use markers with a rectangle
-       without converting it to path first. This will be fixed in a future
-       version.
-     * Extensions that rely on external programs do not work on Windows.
-     * Inkscape users running Suse 9.x may find installing either from
-       source or the supplied RPM difficult. First, start by installing the
-       updated GNOME 2.6 from the Suse supplementary GNOME download location.
-       Then you will need third party gtkmm2 2.4 RPMs to support Inkscape
-       0.40+. The gtkmm2 packages shipped with Suse 9.1 and 9.2 are only
-       gtkmm2 2.2.x versions, but Inkscape requires gtkmm2 2.4+. Resolving
-       the dependencies can be a bit difficult, however using the updated
-       gtkmm2 2.4.x RPMs from
-       http://ftp.gwdg.de/pub/linux/suse/apt/SuSE/9.1-i386/RPMS.usr-local-bin/
-       will work fine. In addition, Inkscape uses libsigc++2. You are
-       recommended to install the libsigc++2-2.0.6 RPM from the same repo.
-       Optionally, you can install apt and the let it resolve your
-       dependencies automatically. You can also try one of our semi-static
-       builds that only require gtk 2.4 but not gtkmm, sigc++, or libgc.
+     * Markers do not take the color of the stroke they are attached to.
+     * Neither markers nor dash patterns survive the Stroke to Path command.
+     * Windows version still cannot use external binaries for extensions
+       (such as AI import).
+     * In Hebrew text, placement is wrong for any final (leftmost) character
+       in the string (this was also broken in 0.40).
+     * Inkscape does not read external DTD subsets referenced from SVG files.
+       Normally this is not a problem, but if a file relies on an external
+       subset for namespace declarations (e.g. for the XLink namespace), this
+       will fail.
+     * To save in SVGZ format on windows, gzip executable must be locatable
+       in the path. Download it e.g. from www.gzip.org. The extension
+       dependancy is gzip, not gzip.exe, so the file will need renaming.
 
 Previous releases
 
-     * http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes039
-     * http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes038
-     * http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes037
-     * http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes036
-     * http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes035
+     * ReleaseNotes040 (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes040)
+     * ReleaseNotes039 (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes039)
+     * ReleaseNotes038 (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes038)
+     * ReleaseNotes037 (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes037)
+     * ReleaseNotes036 (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes036)
+     * ReleaseNotes035 (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes035)
 
