@@ -222,14 +222,16 @@ AC_ARG_WITH(perl,
             AC_HELP_STRING([--with-perl], [use Perl for embedded scripting]),
             [with_perl=$withval], [with_perl=yes])
 
-if test "x$with_perl" = "xno"; then
-       AC_MSG_RESULT(no)
-else
-       AC_MSG_RESULT(yes)
-       LIBS="$LIBS `perl -MExtUtils::Embed -e ldopts`"
-       AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
+if test "x$with_perl" = "xyes"; then
+    PERL_LIBS=`perl -MExtUtils::Embed -e ldopts 2>/dev/null`
+    if test "$?" -gt "0"; then
+        with_perl="no"
+    else
+        LIBS="$LIBS $PERL_LIBS"
+        AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
+    fi
 fi
-
+AC_MSG_RESULT([$with_perl])
 AM_CONDITIONAL(WITH_PERL, test "x$with_perl" = "xyes")
 
 dnl ******************************
@@ -241,17 +243,21 @@ AC_ARG_WITH(python,
             AC_HELP_STRING([--with-python], [use Python for embedded scripting]),
             [with_python=$withval], [with_python=yes])
 
-if test "x$with_python" = "xno"; then
-       AC_MSG_RESULT(no)
-else
-
-       AC_MSG_RESULT(yes)
-       PYTHON_LDPATH=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBPL')"`
-       PYTHON_LIB=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBRARY')"`
-       LIBS="$LIBS $PYTHON_LDPATH/$PYTHON_LIB"
-       AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
+if test "x$with_python" = "xyes"; then
+    PYTHON_LDPATH=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBPL')" 2>/dev/null`
+    if test "$?" -gt "0"; then
+        with_python="no"
+    else
+        PYTHON_LIB=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBRARY')" 2>/dev/null`
+        if test "$?" -gt "0"; then
+            with_python="no"
+        else
+            LIBS="$LIBS $PYTHON_LDPATH/$PYTHON_LIB"
+            AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
+        fi
+    fi
 fi
-
+AC_MSG_RESULT([$with_python])
 AM_CONDITIONAL(WITH_PYTHON, test "x$with_python" = "xyes")
 
 dnl ******************************
@@ -577,4 +583,6 @@ Configuration:
         Use openoffice files:     ${ij}
         Use MMX optimizations:    ${use_mmx_asm}
         Use relocation support:   ${enable_binreloc}
+        Use Python extensions:    ${with_python}
+        Use Perl extensions:      ${with_perl}
 "
