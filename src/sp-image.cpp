@@ -499,25 +499,15 @@ sp_image_update_canvas_image (SPImage *image)
 	}
 }
 
-static std::vector<NR::Point> sp_image_snappoints (SPItem *item)
+static std::vector<NR::Point> sp_image_snappoints(SPItem *item)
 {
-	SPImage *image = SP_IMAGE(item);
+     std::vector<NR::Point> p;
+    
+     if (((SPItemClass *) parent_class)->snappoints) {
+         p = ((SPItemClass *) parent_class)->snappoints (item);
+     }
 
-	NR::Matrix const i2d(sp_item_i2d_affine(item));
-
-	/* we use corners of image only */
-	/* Just a pair of opposite corners of the bounding box suffices given that we don't yet
-	   support angled guide lines. */
-	NR::Coord x0 = image->x.computed;
-	NR::Coord y0 = image->y.computed;
-	NR::Coord x1 = x0 + image->width.computed;
-	NR::Coord y1 = y0 + image->height.computed;
-
-	std::vector<NR::Point> p;
-	p.push_back(NR::Point(x0, y0) * i2d);
-	p.push_back(NR::Point(x1, y1) * i2d);
-
-	return p;
+     return p;
 }
 
 /*
