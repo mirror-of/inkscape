@@ -19,20 +19,7 @@
 #include <libnrtype/font-instance.h>
 
 #include <glib.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktextview.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkhseparator.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkcombo.h>
+#include <gtk/gtk.h>
 
 #ifdef WITH_GTKSPELL
 extern "C" {
@@ -65,6 +52,7 @@ extern "C" {
 
 #include "text-edit.h"
 
+#define VB_MARGIN 4
 
 static void sp_text_edit_dialog_modify_selection (Inkscape::Application *inkscape, SPSelection *sel, guint flags, GtkWidget *dlg);
 static void sp_text_edit_dialog_change_selection (Inkscape::Application *inkscape, SPSelection *sel, GtkWidget *dlg);
@@ -84,7 +72,7 @@ static SPText *sp_ted_get_selected_text_item (void);
 static unsigned sp_ted_get_selected_text_count (void);
 
 
-static const gchar *spacings[] = {"90%", "100%", "110%", "120%", "133%", "150%", "200%", NULL};
+static const gchar *spacings[] = {"50%", "80%", "90%", "100%", "110%", "120%", "130%", "140%", "150%", "200%", "300%", NULL};
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
@@ -148,12 +136,6 @@ sp_text_edit_dialog (void)
 
     if (!dlg) {
     
-        GtkWidget *mainvb, *nb, *vb, *hb, *txt, *fontsel, *preview, 
-                  *f, *tbl, *l, *px, *c, *b, *hs;
-        GtkTextBuffer *tb;
-        GList *sl;
-        int i;
-
         gchar title[500];
         sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_DIALOG_TEXT), title);
 
@@ -180,8 +162,7 @@ sp_text_edit_dialog (void)
         sp_transientize (dlg);
         wd.win = dlg;
         wd.stop = 0;
-        g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", 
-                           G_CALLBACK (sp_transientize_callback), &wd );
+        g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd );
                            
         gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
                              
@@ -194,187 +175,235 @@ sp_text_edit_dialog (void)
 
         gtk_window_set_policy (GTK_WINDOW (dlg), TRUE, TRUE, FALSE);
 
-        mainvb = gtk_vbox_new (FALSE, 0);
+        GtkTooltips *tt = gtk_tooltips_new();
+
+        // box containing the notebook and the bottom buttons
+        GtkWidget *mainvb = gtk_vbox_new (FALSE, 0);
         gtk_container_add (GTK_CONTAINER (dlg), mainvb);
 
-        nb = gtk_notebook_new ();
-        gtk_container_set_border_width (GTK_CONTAINER (nb), 4);
+        // notebook
+        GtkWidget *nb = gtk_notebook_new ();
         gtk_box_pack_start (GTK_BOX (mainvb), nb, TRUE, TRUE, 0);
         g_object_set_data (G_OBJECT (dlg), "notebook", nb);
 
-        /* Vbox inside notebook */
-        vb = gtk_vbox_new (FALSE, 0);
 
-        /* Textview */
-        f = gtk_frame_new (NULL);
-        gtk_frame_set_shadow_type (GTK_FRAME (f), GTK_SHADOW_IN);
-        tb = gtk_text_buffer_new (NULL);
-        txt = gtk_text_view_new_with_buffer (tb);
+
+        // Font tab
+        {
+            GtkWidget *l = gtk_label_new (_("Font"));
+            GtkWidget *vb = gtk_vbox_new (FALSE, VB_MARGIN);
+            gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+            /* HBox containing font selection and layout */
+            GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+            gtk_box_pack_start (GTK_BOX (vb), hb, TRUE, TRUE, 0);
+
+            // font and style selector
+            GtkWidget *fontsel = sp_font_selector_new ();
+            g_signal_connect ( G_OBJECT (fontsel), "font_set", G_CALLBACK (sp_text_edit_dialog_font_changed), dlg );
+            gtk_box_pack_start (GTK_BOX (hb), fontsel, TRUE, TRUE, 0);
+            g_object_set_data (G_OBJECT (dlg), "fontsel", fontsel);
+
+            // Layout
+            {
+                GtkWidget *f = gtk_frame_new (_("Layout"));
+                gtk_box_pack_start (GTK_BOX (hb), f, FALSE, FALSE, 4);
+                GtkWidget *l_vb = gtk_vbox_new (FALSE, VB_MARGIN);
+                gtk_container_add (GTK_CONTAINER (f), l_vb);
+
+                {
+                    GtkWidget *row = gtk_hbox_new (FALSE, VB_MARGIN);
+                    GtkWidget *group;
+
+                    // align left
+                    {
+                        GtkWidget *px = gtk_image_new_from_stock ( GTK_STOCK_JUSTIFY_LEFT, GTK_ICON_SIZE_LARGE_TOOLBAR );
+                        GtkWidget *b = group = gtk_radio_button_new (NULL);
+                        gtk_tooltips_set_tip (tt, b, _("Align lines left"), NULL);
+                        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+                        g_signal_connect ( G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
+                        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE );
+                        gtk_container_add (GTK_CONTAINER (b), px);
+                        gtk_box_pack_start (GTK_BOX (row), b, FALSE, FALSE, 0);
+                        g_object_set_data (G_OBJECT (dlg), "text_anchor_start", b);
+                    }
+
+                    // align center
+                    {
+                        GtkWidget *px = gtk_image_new_from_stock ( GTK_STOCK_JUSTIFY_CENTER, GTK_ICON_SIZE_LARGE_TOOLBAR );
+                        GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
+                        gtk_tooltips_set_tip (tt, b, _("Center lines"), NULL);
+                        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+                        g_signal_connect ( G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
+                        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
+                        gtk_container_add (GTK_CONTAINER (b), px);
+                        gtk_box_pack_start (GTK_BOX (row), b, FALSE, FALSE, 0);
+                        g_object_set_data (G_OBJECT (dlg), "text_anchor_middle", b);
+                    }
+
+                    // align right
+                    {
+                        GtkWidget *px = gtk_image_new_from_stock ( GTK_STOCK_JUSTIFY_RIGHT, GTK_ICON_SIZE_LARGE_TOOLBAR );
+                        GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
+                        gtk_tooltips_set_tip (tt, b, _("Align lines right"), NULL);
+                        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+                        g_signal_connect ( G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
+                        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
+                        gtk_container_add (GTK_CONTAINER (b), px);
+                        gtk_box_pack_start (GTK_BOX (row), b, FALSE, FALSE, 0);
+                        g_object_set_data (G_OBJECT (dlg), "text_anchor_end", b);
+                    }
+
+                    gtk_box_pack_start (GTK_BOX (l_vb), row, FALSE, FALSE, 0);
+                }
+
+
+                {
+                    GtkWidget *row = gtk_hbox_new (FALSE, VB_MARGIN);
+                    GtkWidget *group;
+
+                    // horizontal
+                    {
+                        GtkWidget *px = gtk_image_new_from_stock ( INKSCAPE_STOCK_WRITING_MODE_LR, GTK_ICON_SIZE_LARGE_TOOLBAR );
+                        GtkWidget *b = group = gtk_radio_button_new (NULL);
+                        gtk_tooltips_set_tip (tt, b, _("Horizontal text"), NULL);
+                        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+                        g_signal_connect ( G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
+                        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
+                        gtk_container_add (GTK_CONTAINER (b), px);
+                        gtk_box_pack_start (GTK_BOX (row), b, FALSE, FALSE, 0);
+                        g_object_set_data (G_OBJECT (dlg), "writing_mode_lr", b);
+                    }
+
+                    // vertical
+                    {
+                        GtkWidget *px = gtk_image_new_from_stock ( INKSCAPE_STOCK_WRITING_MODE_TB, GTK_ICON_SIZE_LARGE_TOOLBAR );
+                        GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
+                        gtk_tooltips_set_tip (tt, b, _("Vertical text"), NULL);
+                        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+                        g_signal_connect ( G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
+                        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
+                        gtk_container_add (GTK_CONTAINER (b), px);
+                        gtk_box_pack_start (GTK_BOX (row), b, FALSE, FALSE, 0);
+                        g_object_set_data (G_OBJECT (dlg), "writing_mode_tb", b);
+                    }
+
+                    gtk_box_pack_start (GTK_BOX (l_vb), row, FALSE, FALSE, 0);
+                }
+
+                {
+                    GtkWidget *row = gtk_hbox_new (FALSE, VB_MARGIN);
+
+                    l = gtk_label_new (_("Line spacing:"));
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                    gtk_box_pack_start (GTK_BOX (row), l, FALSE, FALSE, VB_MARGIN);
+
+                    gtk_box_pack_start (GTK_BOX (l_vb), row, FALSE, FALSE, 0);
+                }
+
+                {
+                    GtkWidget *row = gtk_hbox_new (FALSE, VB_MARGIN);
+
+                    GtkWidget *c = gtk_combo_new ();
+                    gtk_combo_set_value_in_list ((GtkCombo *) c, FALSE, FALSE);
+                    gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
+                    gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
+                    gtk_widget_set_size_request (c, 64, -1);
+
+                    { /* Setup strings */
+                        GList *sl = NULL;
+                        for (int i = 0; spacings[i]; i++) {
+                            sl = g_list_prepend (sl, (void *) spacings[i]);
+                        }
+                        sl = g_list_reverse (sl);
+                        gtk_combo_set_popdown_strings ((GtkCombo *) c, sl);
+                        g_list_free (sl);
+                    }
+
+                    g_signal_connect ( (GObject *) ((GtkCombo *) c)->entry, 
+                                       "changed", 
+                                       (GCallback) sp_text_edit_dialog_line_spacing_changed,
+                                       dlg );
+                    gtk_box_pack_start (GTK_BOX (row), c, FALSE, FALSE, VB_MARGIN);
+                    g_object_set_data (G_OBJECT (dlg), "line_spacing", c);
+
+                    gtk_box_pack_start (GTK_BOX (l_vb), row, FALSE, FALSE, VB_MARGIN);
+                }
+            }
+
+            /* Font preview */
+            GtkWidget *preview = sp_font_preview_new ();
+            gtk_box_pack_start (GTK_BOX (vb), preview, TRUE, TRUE, 4);
+            g_object_set_data (G_OBJECT (dlg), "preview", preview);
+        }
+
+
+        // Text tab
+        {
+            GtkWidget *l = gtk_label_new (_("Text"));
+            GtkWidget *vb = gtk_vbox_new (FALSE, VB_MARGIN);
+            gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+            GtkWidget *f = gtk_frame_new (NULL);
+            gtk_frame_set_shadow_type (GTK_FRAME (f), GTK_SHADOW_IN);
+            GtkTextBuffer *tb = gtk_text_buffer_new (NULL);
+            GtkWidget *txt = gtk_text_view_new_with_buffer (tb);
 #ifdef WITH_GTKSPELL
-        GError *error = NULL;
-        char *errortext = NULL;
-        /* todo: Use computed xml:lang attribute of relevant element, if present, to specify the
-           language (either as 2nd arg of gtkspell_new_attach, or with explicit
-           gtkspell_set_language call in; see advanced.c example in gtkspell docs).
-           sp_text_edit_dialog_read_selection looks like a suitable place. */
-        if (gtkspell_new_attach(GTK_TEXT_VIEW(txt), NULL, &error) == NULL) {
-            g_print("gtkspell error: %s\n", error->message);
-            errortext = g_strdup_printf("GtkSpell was unable to initialize.\n"
-                                        "%s", error->message);
-            g_error_free(error);
-        }
+            GError *error = NULL;
+            char *errortext = NULL;
+            /* todo: Use computed xml:lang attribute of relevant element, if present, to specify the
+               language (either as 2nd arg of gtkspell_new_attach, or with explicit
+               gtkspell_set_language call in; see advanced.c example in gtkspell docs).
+               sp_text_edit_dialog_read_selection looks like a suitable place. */
+            if (gtkspell_new_attach(GTK_TEXT_VIEW(txt), NULL, &error) == NULL) {
+                g_print("gtkspell error: %s\n", error->message);
+                errortext = g_strdup_printf("GtkSpell was unable to initialize.\n"
+                                            "%s", error->message);
+                g_error_free(error);
+            }
 #endif
-
-        gtk_widget_set_size_request (txt, -1, 64);
-        gtk_text_view_set_editable (GTK_TEXT_VIEW (txt), TRUE);
-        gtk_container_add (GTK_CONTAINER (f), txt);
-        gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, 0);
-        g_signal_connect ( G_OBJECT (tb), "changed", 
-                           G_CALLBACK (sp_text_edit_dialog_text_changed), dlg );
-        g_signal_connect (G_OBJECT (txt), "focus-in-event", G_CALLBACK (text_view_focus_in), dlg);
-        g_signal_connect (G_OBJECT (txt), "focus-out-event", G_CALLBACK (text_view_focus_out), dlg);
-        g_object_set_data (G_OBJECT (dlg), "text", tb);
-        g_object_set_data (G_OBJECT (dlg), "textw", txt);
-
-        /* HBox containing font selection and layout */
-        hb = gtk_hbox_new (FALSE, 0);
-        gtk_box_pack_start (GTK_BOX (vb), hb, TRUE, TRUE, 0);
-
-        fontsel = sp_font_selector_new ();
-        g_signal_connect ( G_OBJECT (fontsel), "font_set", 
-                           G_CALLBACK (sp_text_edit_dialog_font_changed), dlg );
-        gtk_box_pack_start (GTK_BOX (hb), fontsel, TRUE, TRUE, 0);
-        g_object_set_data (G_OBJECT (dlg), "fontsel", fontsel);
-
-        /* Layout */
-        f = gtk_frame_new (_("Layout"));
-        gtk_box_pack_start (GTK_BOX (hb), f, FALSE, FALSE, 4);
-
-        tbl = gtk_table_new (3, 4, FALSE);
-        gtk_table_set_row_spacings (GTK_TABLE (tbl), 4);
-        gtk_table_set_col_spacings (GTK_TABLE (tbl), 4);
-        gtk_container_add (GTK_CONTAINER (f), tbl);
-
-        
-        l = gtk_label_new (_("Alignment:"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_table_attach ( GTK_TABLE (tbl), l, 0, 1, 0, 1, 
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 4, 0 );
-        px = gtk_image_new_from_stock ( GTK_STOCK_JUSTIFY_LEFT, 
-                                        GTK_ICON_SIZE_LARGE_TOOLBAR );
-        b = gtk_radio_button_new (NULL);
-        g_signal_connect ( G_OBJECT (b), "toggled", 
-                           G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
-        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE );
-        gtk_container_add (GTK_CONTAINER (b), px);
-        gtk_table_attach ( GTK_TABLE (tbl), b, 1, 2, 0, 1, 
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-        g_object_set_data (G_OBJECT (dlg), "text_anchor_start", b);
-        px = gtk_image_new_from_stock ( GTK_STOCK_JUSTIFY_CENTER, 
-                                        GTK_ICON_SIZE_LARGE_TOOLBAR );
-        b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (b)));
-        g_signal_connect ( G_OBJECT (b), "toggled", 
-                           G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
-        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
-        gtk_container_add (GTK_CONTAINER (b), px);
-        gtk_table_attach ( GTK_TABLE (tbl), b, 2, 3, 0, 1, 
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-        g_object_set_data (G_OBJECT (dlg), "text_anchor_middle", b);
-        px = gtk_image_new_from_stock ( GTK_STOCK_JUSTIFY_RIGHT, 
-                                        GTK_ICON_SIZE_LARGE_TOOLBAR );
-        b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (b)));
-        g_signal_connect ( G_OBJECT (b), "toggled", 
-                           G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
-        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
-        gtk_container_add (GTK_CONTAINER (b), px);
-        gtk_table_attach ( GTK_TABLE (tbl), b, 3, 4, 0, 1, 
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-        g_object_set_data (G_OBJECT (dlg), "text_anchor_end", b);
-
-        l = gtk_label_new (_("Orientation:"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_table_attach ( GTK_TABLE (tbl), l, 0, 1, 1, 2, (GtkAttachOptions)0, 
-                           (GtkAttachOptions)0, 4, 0);
-        px = gtk_image_new_from_stock ( INKSCAPE_STOCK_WRITING_MODE_LR, 
-                                        GTK_ICON_SIZE_LARGE_TOOLBAR );
-        b = gtk_radio_button_new (NULL);
-        g_signal_connect ( G_OBJECT (b), "toggled", 
-                           G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
-        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
-        gtk_container_add (GTK_CONTAINER (b), px);
-        gtk_table_attach ( GTK_TABLE (tbl), b, 1, 2, 1, 2, 
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-        g_object_set_data (G_OBJECT (dlg), "writing_mode_lr", b);
-        px = gtk_image_new_from_stock ( INKSCAPE_STOCK_WRITING_MODE_TB, 
-                                        GTK_ICON_SIZE_LARGE_TOOLBAR );
-        b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (b)));
-        g_signal_connect ( G_OBJECT (b), "toggled", 
-                           G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg );
-        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
-        gtk_container_add (GTK_CONTAINER (b), px);
-        gtk_table_attach ( GTK_TABLE (tbl), b, 2, 3, 1, 2, 
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-        g_object_set_data (G_OBJECT (dlg), "writing_mode_tb", b);
-
-        l = gtk_label_new (_("Line spacing:"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_table_attach ( GTK_TABLE (tbl), l, 0, 1, 2, 3, 
-                           (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-                           (GtkAttachOptions)0, 4, 0 );
-        c = gtk_combo_new ();
-        gtk_combo_set_value_in_list ((GtkCombo *) c, FALSE, FALSE);
-        gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
-        gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
-        gtk_widget_set_size_request (c, 64, -1);
-        /* Setup strings */
-        sl = NULL;
-        for (i = 0; spacings[i]; i++) {
-            sl = g_list_prepend (sl, (void *) spacings[i]);
+            gtk_widget_set_size_request (txt, -1, 64);
+            gtk_text_view_set_editable (GTK_TEXT_VIEW (txt), TRUE);
+            gtk_container_add (GTK_CONTAINER (f), txt);
+            gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, 0);
+            g_signal_connect ( G_OBJECT (tb), "changed", 
+                               G_CALLBACK (sp_text_edit_dialog_text_changed), dlg );
+            g_signal_connect (G_OBJECT (txt), "focus-in-event", G_CALLBACK (text_view_focus_in), dlg);
+            g_signal_connect (G_OBJECT (txt), "focus-out-event", G_CALLBACK (text_view_focus_out), dlg);
+            g_object_set_data (G_OBJECT (dlg), "text", tb);
+            g_object_set_data (G_OBJECT (dlg), "textw", txt);
         }
-        sl = g_list_reverse (sl);
-        gtk_combo_set_popdown_strings ((GtkCombo *) c, sl);
-        g_list_free (sl);
-        g_signal_connect ( (GObject *) ((GtkCombo *) c)->entry, 
-                           "changed", 
-                           (GCallback) sp_text_edit_dialog_line_spacing_changed,
-                           dlg );
-        gtk_table_attach ( GTK_TABLE (tbl), c, 1, 4, 2, 3, 
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 4, 0 );
-        g_object_set_data (G_OBJECT (dlg), "line_spacing", c);
-
-        /* Font preview */
-        preview = sp_font_preview_new ();
-        gtk_box_pack_start (GTK_BOX (vb), preview, TRUE, TRUE, 4);
-        g_object_set_data (G_OBJECT (dlg), "preview", preview);
-
-        l = gtk_label_new (_("Text and font"));
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
         /* Buttons */
-        hs = gtk_hseparator_new ();
-        gtk_box_pack_start (GTK_BOX (mainvb), hs, FALSE, FALSE, 0);
-
-        hb = gtk_hbox_new (FALSE, 4);
+        GtkWidget *hb = gtk_hbox_new (FALSE, VB_MARGIN);
         gtk_container_set_border_width (GTK_CONTAINER (hb), 4);
         gtk_box_pack_start (GTK_BOX (mainvb), hb, FALSE, FALSE, 0);
 
-        b = gtk_button_new_with_label (_("Set as default"));
-        g_signal_connect ( G_OBJECT (b), "clicked", 
-                           G_CALLBACK (sp_text_edit_dialog_set_default), 
-                           dlg );
-        gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
-        g_object_set_data (G_OBJECT (dlg), "default", b);
+        {
+            GtkWidget *b = gtk_button_new_with_label (_("Set as default"));
+            g_signal_connect ( G_OBJECT (b), "clicked", 
+                               G_CALLBACK (sp_text_edit_dialog_set_default), 
+                               dlg );
+            gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
+            g_object_set_data (G_OBJECT (dlg), "default", b);
+        }
 
-        b = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
-        g_signal_connect ( G_OBJECT (b), "clicked", 
-                           G_CALLBACK (sp_text_edit_dialog_close), dlg );
-        gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
+        {
+            GtkWidget *b = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+            g_signal_connect ( G_OBJECT (b), "clicked", 
+                               G_CALLBACK (sp_text_edit_dialog_close), dlg );
+            gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
+        }
 
-        b = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-        g_signal_connect ( G_OBJECT (b), "clicked", 
-                           G_CALLBACK (sp_text_edit_dialog_apply), dlg );
-        gtk_box_pack_end ( GTK_BOX (hb), b, FALSE, FALSE, 0 );
-        g_object_set_data (G_OBJECT (dlg), "apply", b);
+        {
+            GtkWidget *b = gtk_button_new_from_stock (GTK_STOCK_APPLY);
+            g_signal_connect ( G_OBJECT (b), "clicked", 
+                               G_CALLBACK (sp_text_edit_dialog_apply), dlg );
+            gtk_box_pack_end ( GTK_BOX (hb), b, FALSE, FALSE, 0 );
+            g_object_set_data (G_OBJECT (dlg), "apply", b);
+        }
 
         g_signal_connect ( G_OBJECT (INKSCAPE), "modify_selection", 
                            G_CALLBACK (sp_text_edit_dialog_modify_selection), dlg);
