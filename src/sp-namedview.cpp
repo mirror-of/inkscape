@@ -519,9 +519,12 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 	gint w, h, x, y;
 	GtkWindow *win = GTK_WINDOW(gtk_object_get_data (GTK_OBJECT(desktop->owner), "window"));
 	gint save_geometry = prefs_get_int_attribute ("options.savewindowgeometry", "value", 0);
-
 	view = SP_OBJECT_REPR (desktop->namedview);
 	sp_desktop_get_display_area (desktop, &r);
+
+	// saving window geometry is not undoable
+	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), FALSE);
+
 	sp_repr_set_double (view, "inkscape:zoom", SP_DESKTOP_ZOOM (desktop));
 	sp_repr_set_double (view, "inkscape:cx", (r.x0+r.x1)*0.5);
 	sp_repr_set_double (view, "inkscape:cy", (r.y0+r.y1)*0.5);
@@ -534,6 +537,9 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 		sp_repr_set_int_attribute (view, "inkscape:window-x", x);
 		sp_repr_set_int_attribute (view, "inkscape:window-y", y);
 	}
+
+	// restore undoability
+	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), TRUE);
 }
 
 void
