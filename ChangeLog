@@ -1,5 +1,13 @@
 2003-12-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/bezier-utils.cpp (sp_bezier_fit_cubic): Implement as a call
+	to sp_bezier_fit_cubic_r.
+	(sp_bezier_fit_cubic_full): Mark *tHat1 and *tHat2 as const.
+	(sp_bezier_fit_cubic_full, ChordLengthParameterize): Add minimal
+	handling for the case where the input data is a zero-length path.
+	(NewtonRaphsonRootFind): If "improved" value is NaN or +/-inf then
+	return the original.
+
 	* src/libnr/nr-macros.h (CLAMP): Change the behaviour if the first
 	  argument is NaN: previously it would return NaN, now it returns the
 	  requested lower bound.  Document the behaviour.  Add an assertion that

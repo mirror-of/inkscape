@@ -29,9 +29,9 @@
 typedef NRPoint * BezierCurve;
 
 /* Forward declarations */
-static void GenerateBezier (NRPoint *b, const NRPoint *d, gdouble *uPrime, gint len, const NRPoint *tHat1, const NRPoint *tHat2);
-static gdouble * Reparameterize(const NRPoint * d, gint first, gint last, gdouble * u, BezierCurve bezCurve);
-static gdouble NewtonRaphsonRootFind(BezierCurve Q, NRPoint P, gdouble u);
+static void GenerateBezier (NRPoint *b, NRPoint const *d, gdouble const *uPrime, gint len, NRPoint const *tHat1, NRPoint const *tHat2);
+static gdouble * Reparameterize(NRPoint const *d, unsigned len, gdouble const *u, BezierCurve bezCurve);
+static gdouble NewtonRaphsonRootFind(BezierCurve Q, NRPoint const &P, gdouble u);
 static void BezierII (gint degree, NRPoint * V, gdouble t, NRPoint *result);
 
 /*
@@ -82,23 +82,7 @@ static void sp_vector_negate (NRPoint *v);
 gint
 sp_bezier_fit_cubic (NRPoint *bezier, const NRPoint *data, gint len, gdouble error)
 {
-	NRPoint    tHat1;
-	NRPoint    tHat2;
-	gint        fill;
-	
-	g_return_val_if_fail (bezier != NULL, -1);
-	g_return_val_if_fail (data != NULL, -1);
-	g_return_val_if_fail (len > 0, -1);
-
-	if (len < 2) return 0;
-
-	sp_darray_left_tangent (data, 0, len, &tHat1);
-	sp_darray_right_tangent (data, len - 1, len, &tHat2);
-	
-	/* call fit-cubic function without recursion */
-	fill = sp_bezier_fit_cubic_full (bezier, data, len, &tHat1, &tHat2,error, 1);
-	
-	return fill;
+	return sp_bezier_fit_cubic_r (bezier, data, len, error, 1);
 }
 
 /*
@@ -135,7 +119,7 @@ sp_bezier_fit_cubic_r (NRPoint *bezier, const NRPoint *data, gint len, gdouble e
 
 gint
 sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
-			  NRPoint *tHat1, NRPoint *tHat2, gdouble error, gint max_depth)
+			  NRPoint const *tHat1, NRPoint const *tHat2, gdouble error, gint max_depth)
 {
 	double *u;		/* Parameter values for point */
 	double *u_alloca;	/* Just for memory management */
@@ -175,6 +159,10 @@ sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
 	/*  Parameterize points, and attempt to fit curve */
 	u = (double*)alloca (len * sizeof (gdouble));
 	ChordLengthParameterize (data, u, len);
+	if (u[len - 1] == 0.0) {
+		/* Zero-length path: every point in data[] is the same. */
+		return 0;
+	}
 	GenerateBezier (bezier, data, u, len, tHat1, tHat2);
 	
 	/*  Find max deviation of points to fitted curve */
@@ -190,7 +178,7 @@ sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
 	u_alloca = u;
 	if (maxError < iterationError) {
 		for (i = 0; i < maxIterations; i++) {
-			uPrime = Reparameterize(data, 0, len - 1, u, bezier);
+			uPrime = Reparameterize(data, len, u, bezier);
 			GenerateBezier (bezier, data, uPrime, len, tHat1, tHat2);
 			maxError = ComputeMaxError(data, uPrime, len, bezier, &splitPoint);
 			if (u != u_alloca)
@@ -251,7 +239,7 @@ sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
  *
  */
 static void
-GenerateBezier (NRPoint *bezier, const NRPoint *data, gdouble *uPrime, gint len, const NRPoint *tHat1, const NRPoint *tHat2)
+GenerateBezier (NRPoint *bezier, NRPoint const *data, gdouble const *uPrime, gint len, NRPoint const *tHat1, NRPoint const *tHat2)
 {
 	int 	i;
 	NRPoint 	A[MAXPOINTS][2]; /* Precomputed rhs for eqn	*/
@@ -338,37 +326,32 @@ GenerateBezier (NRPoint *bezier, const NRPoint *data, gdouble *uPrime, gint len,
 	bezier[1].y = tHat1->y * alpha_l + bezier[0].y;
 	bezier[2].x = tHat2->x * alpha_r + bezier[3].x;
 	bezier[2].y = tHat2->y * alpha_r + bezier[3].y;
+	g_assert (!isnan (bezier[1].x));
 
 	return;
 }
 
-/*
+/**
  *  Reparameterize:
  *	Given set of points and their parameterization, try to find
  *   a better parameterization.
  *
+ *  \param d	Array of digitized points.
+ *  \param first,last	Indices defining region.  Inclusive.
+ *  \param u	Current parameter values.
+ *  \param bezCurve	Current fitted curve.
  */
 static gdouble *
-Reparameterize(const NRPoint *d,
-	       gint            first,
-	       gint            last,
-	       gdouble        *u,
+Reparameterize(NRPoint const  *d,
+	       unsigned        len,
+	       gdouble const  *u,
 	       BezierCurve     bezCurve)
 {
-#if 0
-	Point2	*d;		/*  Array of digitized points	*/
-	int	 first, last; /*  Indices defining region	*/
-	double	*u;		/*  Current parameter values	*/
-	BezierCurve	bezCurve; /*  Current fitted curve	*/
-#endif
-	int 	nPts = last-first+1;	
-	int 	i;
-	gdouble	*uPrime;	/*  New parameter values	*/
-	
-	uPrime = g_new (gdouble, nPts);
-	
-	for (i = first; i <= last; i++) {
-		uPrime[i-first] = NewtonRaphsonRootFind(bezCurve, d[i], u[i- first]);
+	/*  New parameter values. */
+	gdouble	*uPrime = g_new (gdouble, len);
+
+	for (unsigned i = 0; i < len; i++) {
+		uPrime[i] = NewtonRaphsonRootFind(bezCurve, d[i], u[i]);
 	}
 	return (uPrime);
 }
@@ -384,7 +367,7 @@ Reparameterize(const NRPoint *d,
  *      Improved u
  */
 static gdouble
-NewtonRaphsonRootFind(BezierCurve Q, NRPoint P, gdouble u)
+NewtonRaphsonRootFind(BezierCurve Q, NRPoint const &P, gdouble u)
 {
 	double 		numerator, denominator;
 	NRPoint 		Q1[3], Q2[2];	/*  Q' and Q''			*/
@@ -420,6 +403,10 @@ NewtonRaphsonRootFind(BezierCurve Q, NRPoint P, gdouble u)
 	
 	/* u = u - f(u)/f'(u) */
 	uPrime = u - (numerator/denominator);
+	if (!isfinite (uPrime)) {
+		uPrime = u;
+	}
+	/* TODO: Check that uPrime is actually better. */
 	DOUBLE_ASSERT (uPrime);
 	return (uPrime);
 }
@@ -459,6 +446,11 @@ BezierII (gint degree, NRPoint * V, gdouble t, NRPoint *Q)
  * ComputeLeftTangent, ComputeRightTangent, ComputeCenterTangent :
  *Approximate unit tangents at endpoints and "center" of digitized curve
  */
+/** Estimate the (forward) tangent at point d[first + 0.5].
+
+    Unlike the center and right versions, this calculates the tangent in the way one might expect,
+    i.e. wrt increasing index into d.
+**/
 void
 sp_darray_left_tangent (const NRPoint *d, int first, int len, NRPoint *tHat)
 {
@@ -474,10 +466,19 @@ sp_darray_left_tangent (const NRPoint *d, int first, int len, NRPoint *tHat)
 	sp_vector_normalize (tHat);
 }
 
+/** Estimates the (backward) tangent at d[last - 0.5].
+
+    N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
+    increasing index.
+
+    Requires: point_ne (d[last],
+			d[last - 1]).
+*/
 void
 sp_darray_right_tangent (const NRPoint *d, int last, int len, NRPoint *tHat)
 {
 	int prev, l2, i;
+
 	prev = last - 1;
 	l2 = len / 2;
 	tHat->x = (d[prev].x - d[last].x) * l2;
@@ -489,13 +490,23 @@ sp_darray_right_tangent (const NRPoint *d, int last, int len, NRPoint *tHat)
 	sp_vector_normalize (tHat);
 }
 
+/** Estimates the (backward) tangent at d[center], by averaging the two segments connected to
+    d[center] (and then normalizing the result).
+
+    N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
+    increasing index.
+
+    Requires: point_ne (d[center - 1],
+			d[center + 1]).
+*/
 void
 sp_darray_center_tangent (const NRPoint *d,
 			  gint            center,
 			  NRPoint       *tHatCenter)
 {
 	NRPoint	V1, V2;
-	
+	g_return_if_fail (center >= 1);
+
 	sp_vector_sub (&d[center-1], &d[center], &V1);
 	sp_vector_sub(&d[center], &d[center+1], &V2);
 	tHatCenter->x = (V1.x + V2.x)/2.0;
@@ -513,16 +524,19 @@ sp_darray_center_tangent (const NRPoint *d,
 static void
 ChordLengthParameterize(const NRPoint *d, gdouble *u, gint len)
 {
+	g_return_if_fail (2 <= len);
 	gint i;	
-	
-	u[0] = 0.0;
 
+	/* First let u[i] equal the distance travelled along the path from d[0] to d[i]. */
+	u[0] = 0.0;
 	for (i = 1; i < len; i++) {
 		u[i] = u[i-1] + hypot (d[i].x - d[i-1].x, d[i].y - d[i-1].y);
 	}
 
+	gdouble tot_len = u[len - 1];
+	g_return_if_fail (tot_len != 0);
 	for (i = 1; i < len; i++) {
-		u[i] = u[i] / u[len - 1];
+		u[i] = u[i] / tot_len;
 	}
 
 #ifdef BEZIER_DEBUG
@@ -593,6 +607,7 @@ sp_vector_normalize (NRPoint *v)
 	gdouble len;
 
 	len = hypot (v->x, v->y);
+	g_return_if_fail (len != 0);
 	v->x /= len;
 	v->y /= len;
 }
