@@ -4,7 +4,7 @@
 	  minor refcounting tweaks
 
 	* src/sp-image.cpp: fixed failure to release GdkPixbufLoader when
-	  done with it (fixes bug #1055034)
+	  done with it (fixes bug #1063054)
 
 2004-11-10  Kees Cook  <kees@outflux.net>
 
