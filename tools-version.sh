@@ -23,7 +23,7 @@ echo )
 for x in $TOOLS; do 
     echo "which $x: `which $x`"
     y=`echo $x | cut -f1 -d-`
-    $x --version | grep $y
+    $x --version </dev/null | grep $y
 done 
 echo )
 

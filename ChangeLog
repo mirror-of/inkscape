@@ -1,3 +1,15 @@
+2004-04-13  Kees Cook <kees@outflux.net>
+
+	* tools-version.sh: added a possible fix for BSDish tools.
+	* configure.in, share/patterns/Makefile.am: inkscape janitor strikes
+	  again!  This is a quick cleanup to Ted's new directories.  Looks
+	  like "patterns" got left out.
+	* share/clipart/.cvsignore, share/templates/.cvsignore,
+	  share/examples/.cvsignore, share/fonts/.cvsignore,
+	  share/gradients/.cvsignore, share/keyboards/.cvsignore,
+	  share/palettes/.cvsignore, share/patterns/.cvsignore:
+	  Added Makefile build-cruft to .cvsignores.
+
 2004-04-13  Ted Gould <ted@gould.cx>
 
 	* configure.in, share/Makefile.am, share/clipart/Makefile.am,
