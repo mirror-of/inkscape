@@ -198,18 +198,20 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
             GrDragger *d_new = (GrDragger *) di->data;
             if (dragger->mayMerge(d_new) && NR::L2 (d_new->point - p) < snap_dist) {
 
-                // Now actually snap:
+                // Merge draggers:
                 for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
                     GrDraggable *draggable = (GrDraggable *) i->data;
                     // copy draggable to d_new:
                     GrDraggable *da_new = new GrDraggable (draggable->item, draggable->point_num, draggable->fill_or_stroke);
                     d_new->addDraggable (da_new); 
-                    // move to the exact position of d_new, writing to repr:
-                    sp_item_gradient_set_coords (da_new->item, da_new->point_num, d_new->point, da_new->fill_or_stroke, true);
                 }
+
                 // unlink and delete this dragger
                 dragger->parent->draggers = g_slist_remove (dragger->parent->draggers, dragger);
                 delete dragger;
+
+                // update the new merged dragger
+                d_new->fireDraggables(true);
                 d_new->parent->updateLines();
                 d_new->parent->setSelected (d_new);
                 d_new->updateKnotShape ();
