@@ -1,3 +1,10 @@
+2004-07-05  MenTaLguY <mental@rydia.net>
+
+	* src/desktop.cpp: comitted further work which gives us a
+	  partially-functional layers menu (not actually hooked up to
+	  change layers yet), and it is not always updated when it needs
+	  to be (yet).  It does also fix the crash though.
+
 2004-07-05  Carl Hetherington <inkscape@carlh.net>
 
 	* src/desktop.cpp: prevent crash by adding a check for 
