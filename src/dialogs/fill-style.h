@@ -37,5 +37,5 @@ void sp_fill_style_widget_system_color_set ( GtkWidget *widget,
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

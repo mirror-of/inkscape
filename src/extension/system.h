@@ -40,5 +40,5 @@ SPModule *   sp_module_system_build_from_mem      (const gchar *  buffer);
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

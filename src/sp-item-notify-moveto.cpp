@@ -74,5 +74,5 @@ void sp_item_notify_moveto(SPItem &item, SPGuide const &mv_g, int const snappoin
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -24,5 +24,5 @@ void nr_pixblock_draw_line_rgba32 (NRPixBlock *d, long x0, long y0, long x1, lon
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

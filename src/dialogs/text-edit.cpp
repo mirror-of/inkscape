@@ -834,5 +834,5 @@ sp_ted_get_selected_text_count (void)
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

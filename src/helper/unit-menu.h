@@ -57,5 +57,5 @@ void sp_unit_selector_set_value_in_points (SPUnitSelector *selector, GtkAdjustme
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

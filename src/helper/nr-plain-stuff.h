@@ -29,5 +29,5 @@ void nr_render_rgba32_rgb (guchar *px, gint w, gint h, gint rs, gint xoff, gint 
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -59,5 +59,5 @@ NR::Point sp_desktop_dt2root_xy_point (SPDesktop const *dt, const NR::Point p);
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

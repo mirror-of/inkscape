@@ -24,5 +24,5 @@ void nr_pixblock_render_gray_noise (NRPixBlock *pb, NRPixBlock *mask);
   indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
