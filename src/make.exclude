@@ -1,32 +1,19 @@
-ast/branch-name.h
-ast/c-array.h
-ast/c-string.h
-ast/copy.h
-ast/node.cpp
-ast/node.h
-ast/null-pointer.h
-ast/path-fns.h
-ast/path.cpp
-ast/path.h
-ast/string-node.h
-ast/string.h
-ast/symbol-node.h
-ast/symbol.cpp
-ast/symbol.h
-ast/xml/element.h
-ast/xml/node.h
-bonobo/canvas-translator.cpp
-bonobo/embeddable-desktop.cpp
-bonobo/embeddable-document.cpp
-bonobo/embeddable-drawing.cpp
-bonobo/sodipodi-bonobo.cpp
-bonobo/svg-doc-factory.cpp
-bonobo/canvas-translator.h
-bonobo/embeddable-desktop.h
-bonobo/embeddable-document.h
-bonobo/embeddable-drawing.h
-bonobo/sodipodi-bonobo.h
-bonobo/svg-doc-factory.h
+######################################################################
+# File: make.exclude
+#
+# This is a list of files to exclude from
+# building using the Makedep scheme.
+# To use, run:
+# perl mkfiles.pl
+# then
+# perl mkdep.pl
+#
+######################################################################
+
+
+ast
+bonobo
+
 dialogs/filedialog.cpp
 display/nr-uta.cpp
 display/testnr.cpp
@@ -34,6 +21,7 @@ display/bezier-utils-test.cpp
 ecma/ecmatest.cpp
 ecma/svgview.cpp
 ecma/SVGViewer.cpp
+extension/script/js/js.c
 extension/menu.h
 extension/menu.cpp
 extension/script/js/js.c
