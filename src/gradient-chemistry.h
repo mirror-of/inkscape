@@ -25,13 +25,6 @@
 
 SPGradient *sp_gradient_ensure_vector_normalized (SPGradient *gradient);
 
-/*
- * Either normalizes given gradient to private, or returns fresh normalized
- * private - gradient is flattened in any case, and vector set
- * Vector has to be normalized beforehand
- */
-
-SPGradient *sp_gradient_ensure_private_normalized (SPGradient *gradient, SPGradient *vector, SPGradientType type);
 
 /*
  * Sets item fill/stroke to lineargradient with given vector, creating

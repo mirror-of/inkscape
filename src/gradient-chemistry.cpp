@@ -24,6 +24,7 @@
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-root.h"
+#include "sp-tspan.h"
 #include "gradient-chemistry.h"
 #include "libnr/nr-point-ops.h"
 #include <libnr/nr-rect.h>
@@ -167,19 +168,61 @@ sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector, SP
 }
 
 /**
- * If gr has users already, create a new private; also checks if gr links to vector, relinks if not
- */
+Count how many times gr is used by the styles of o and its descendants
+*/
+guint
+count_gradient_hrefs (SPObject *o, SPGradient *gr)
+{
+	if (!o)
+		return 1;
 
+	guint i = 0;
+
+	SPStyle *style = SP_OBJECT_STYLE (o);
+	if (style && 
+			style->fill.type == SP_PAINT_TYPE_PAINTSERVER &&
+			SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style)) &&
+			SP_GRADIENT (SP_STYLE_FILL_SERVER (style)) == gr) {
+		i ++;
+	}
+	if (style && 
+			style->stroke.type == SP_PAINT_TYPE_PAINTSERVER &&
+			SP_IS_GRADIENT (SP_STYLE_STROKE_SERVER (style)) &&
+			SP_GRADIENT (SP_STYLE_STROKE_SERVER (style)) == gr) {
+		i ++;
+	}
+
+	for ( SPObject *child = sp_object_first_child(o) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+		i += count_gradient_hrefs (child, gr);
+	}
+
+	return i;
+}
+
+
+/**
+ * If gr has other users, create a new private; also check if gr links to vector, relinks if not
+ */
 SPGradient *
-sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGradientType type)
+sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGradientType type, SPObject *o)
 {
 	g_return_val_if_fail (gr != NULL, NULL);
 	g_return_val_if_fail (vector != NULL, NULL);
 	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
 	g_return_val_if_fail (SP_GRADIENT_HAS_STOPS(vector), NULL);
 
-	/* If we are already normalized private, change href and return */
-	if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT (gr) == 1)) {
+	// user is the object that uses this gradient; normally it's item but for tspans, we
+	// check its ancestor text so that tspans don't get different gradients from their
+	// texts.
+	SPObject *user = o;
+	while (SP_IS_TSPAN(user)) {
+		user = SP_OBJECT_PARENT (user);
+	}
+
+	// Check the number of uses of the gradient within this object;
+	// if we are private and there are no other users,
+	if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT (gr) <= count_gradient_hrefs(user, gr))) {
+		// check vector
 		if ( gr->ref->getObject() != vector) {
 			/* our href is not the vector; relink */
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), vector);
@@ -226,22 +269,6 @@ sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGr
 	}
 }
 
-/*
- * Either normalizes given gradient to private, or returns fresh normalized
- * private - gradient is flattened in any case, and vector set.
- * Vector has to be normalized beforehand.
- */
-
-SPGradient *
-sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector, SPGradientType type)
-{
-	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
-
-	gr = sp_gradient_clone_private_if_necessary (gr, vector, type);
-
-	return gr;
-}
-
 SPGradient *
 sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *property)
 {
@@ -249,7 +276,7 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *pro
 
 	// First, clone it if it is shared
 	gr = sp_gradient_clone_private_if_necessary (gr, sp_gradient_get_vector (gr, FALSE), 
-					 SP_IS_RADIALGRADIENT (gr) ? SP_GRADIENT_TYPE_RADIAL : SP_GRADIENT_TYPE_LINEAR);
+					 SP_IS_RADIALGRADIENT (gr) ? SP_GRADIENT_TYPE_RADIAL : SP_GRADIENT_TYPE_LINEAR, SP_OBJECT (item));
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
 
@@ -337,7 +364,14 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *pro
 	}
 
 	// apply the gradient to the item (may be necessary if we cloned it); not recursive
-	sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), property, gr, false);
+	// generally because grouped items will be taken care of later (we're being called
+	// from sp_item_adjust_paint_recursive); however text and all its children should all
+	// refer to one gradient, hence the recursive call for text (because we can't/don't
+	// want to access tspans and set gradients on them separately)
+	if (SP_IS_TEXT(item))
+		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), property, gr, true);
+	else
+		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), property, gr, false);
 
 	return gr;
 }
@@ -360,35 +394,6 @@ sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool s
 	}
 }
 
-
-/**
-Count how many times gr is used by the styles of o and its descendants
-*/
-guint
-count_gradient_hrefs (SPObject *o, SPGradient *gr)
-{
-	guint i = 0;
-
-	SPStyle *style = SP_OBJECT_STYLE (o);
-	if (style && 
-			style->fill.type == SP_PAINT_TYPE_PAINTSERVER &&
-			SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style)) &&
-			SP_GRADIENT (SP_STYLE_FILL_SERVER (style)) == gr) {
-		i ++;
-	}
-	if (style && 
-			style->stroke.type == SP_PAINT_TYPE_PAINTSERVER &&
-			SP_IS_GRADIENT (SP_STYLE_STROKE_SERVER (style)) &&
-			SP_GRADIENT (SP_STYLE_STROKE_SERVER (style)) == gr) {
-		i ++;
-	}
-
-	for ( SPObject *child = sp_object_first_child(o) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		i += count_gradient_hrefs (child, gr);
-	}
-
-	return i;
-}
 
 
 /*
@@ -442,7 +447,7 @@ sp_item_set_gradient (SPItem *item, SPGradient *gr, SPGradientType type, bool is
 		} else {
 			// the gradient is not private, or it is shared with someone else;
 			// normalize it (this includes creating new private if necessary)
-			SPGradient *normalized = sp_gradient_ensure_private_normalized (current, gr, type);
+			SPGradient *normalized = sp_gradient_clone_private_if_necessary (current, gr, type, item);
 
 			g_return_val_if_fail (normalized != NULL, NULL);
 
@@ -490,15 +495,13 @@ sp_gradient_repr_set_link (SPRepr *repr, SPGradient *link)
 static void
 sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr, bool recursive)
 {
-	SPCSSAttr *css;
-	gchar *val;
-
 	g_return_if_fail (repr != NULL);
 	g_return_if_fail (gr != NULL);
 	g_return_if_fail (SP_IS_GRADIENT (gr));
 
-	val = g_strdup_printf ("url(#%s)", SP_OBJECT_ID (gr));
-	css = sp_repr_css_attr_new ();
+	gchar *val = g_strdup_printf ("url(#%s)", SP_OBJECT_ID (gr));
+
+	SPCSSAttr *css = sp_repr_css_attr_new ();
 	sp_repr_css_set_property (css, property, val);
 	g_free (val);
 	if (recursive) {
