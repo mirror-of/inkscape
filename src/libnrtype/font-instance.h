@@ -92,6 +92,7 @@ public:
 
 		// attribute queries
     unsigned             Name(gchar *str, unsigned size);
+    unsigned             PSName(gchar *str, unsigned size);
     unsigned             Family(gchar *str, unsigned size);
     unsigned             Attribute(gchar const *key, gchar *str, unsigned size);
 };

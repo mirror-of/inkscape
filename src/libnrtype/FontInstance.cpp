@@ -217,6 +217,11 @@ unsigned int font_instance::Family(gchar *str, unsigned int size)
 	return Attribute("family", str, size);
 }
 
+unsigned int font_instance::PSName(gchar *str, unsigned int size)
+{
+	return Attribute("psname", str, size);
+}
+
 unsigned int font_instance::Attribute(const gchar *key, gchar *str, unsigned int size)
 {
 	if ( descr == NULL ) {
@@ -232,6 +237,23 @@ unsigned int font_instance::Attribute(const gchar *key, gchar *str, unsigned int
 		res=pango_font_description_to_string (td);
 		pango_font_description_free(td);
 		free_res=true;
+	} else if ( strcmp(key,"psname") == 0 ) {
+         res = (char *) FT_Get_Postscript_Name (theFace); // that's the main method, seems to always work
+         free_res=false;
+         if (res == NULL) { // a very limited workaround, only bold, italic, and oblique will work
+             PangoStyle style=pango_font_description_get_style(descr);
+             bool i = (style == PANGO_STYLE_ITALIC);
+             bool o = (style == PANGO_STYLE_OBLIQUE);
+             PangoWeight weight=pango_font_description_get_weight(descr);
+             bool b = (weight >= PANGO_WEIGHT_BOLD);
+   
+             res = g_strdup_printf ("%s%s%s%s", 
+                                    pango_font_description_get_family(descr), 
+                                    (b || i || o) ? "-" : "", 
+                                    (b) ? "Bold" : "", 
+                                    (i) ? "Italic" : ((o) ? "Oblique" : "")  );
+             free_res = true;
+         }
 	} else if ( strcmp(key,"family") == 0 ) {
 		res=(char*)pango_font_description_get_family(descr);
 		free_res=false;

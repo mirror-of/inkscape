@@ -56,6 +56,10 @@
 #include "style.h"
 #include "inkscape_version.h"
 
+#include <libnrtype/FontFactory.h>
+#include <libnrtype/font-instance.h>
+#include <libnrtype/font-style-to-pos.h>
+
 #include "ps.h"
 #include <extension/system.h>
 #include <extension/extension.h>
@@ -650,6 +654,36 @@ PrintPS::image (Inkscape::Extension::Print *mod, guchar *px, unsigned int w, uns
 #endif
 }
 
+const char *
+PrintPS::PSFontName (const SPStyle *style)
+{
+	font_instance *tf = (font_factory::Default())->Face(style->text->font_family.value, font_style_to_pos(*style));
+
+	char const *n;
+	char name_buf[256];
+
+	if (tf) {
+		tf->PSName(name_buf, sizeof(name_buf));
+		n = name_buf;
+		tf->Unref();
+	} else { 
+		// this system does not have this font, so just use the name from SVG in the hope that PS interpreter will make sense of it
+		bool i = (style->font_style.value == SP_CSS_FONT_STYLE_ITALIC);
+		bool o = (style->font_style.value == SP_CSS_FONT_STYLE_OBLIQUE);
+		bool b = (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLD) || 
+			(style->font_weight.value >= SP_CSS_FONT_WEIGHT_500 && style->font_weight.value <= SP_CSS_FONT_WEIGHT_900);
+
+		n = g_strdup_printf ("%s%s%s%s", 
+								 g_strdelimit (style->text->font_family.value, " ", '-'),
+								 (b || i || o) ? "-" : "", 
+								 (b) ? "Bold" : "", 
+								 (i) ? "Italic" : ((o) ? "Oblique" : "") ); 
+	}
+
+	return g_strdup (n);
+}
+
+
 unsigned int
 PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
 	       const SPStyle* style)
@@ -670,9 +704,11 @@ PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
   }
 
   // set font
-  os << "/" << g_strdelimit (style->text->font_family.value, " ", '-') << " findfont\n";
+  const char *fn = PSFontName (style);
+  os << "/" << fn << " findfont\n";
   os << style->font_size.computed << " scalefont\n";
   os << "setfont\n";
+  g_free ((void *) fn);
 
   if (style->fill.type == SP_PAINT_TYPE_COLOR) {
 	// set fill style
