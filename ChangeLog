@@ -2,6 +2,9 @@
 
 	* src/desktop-events.cpp: fix my last fix *sigh*
 
+	* src/inkview.cpp: fix inkview crash when none of the files 
+	on commandline exist, add very basic error reporting
+
 2004-02-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/stroke-style.cpp (sp_stroke_style_set_marker_buttons):
