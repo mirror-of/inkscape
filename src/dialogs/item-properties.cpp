@@ -28,6 +28,7 @@
 #include <gtk/gtkframe.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtktextbuffer.h>
+#include <gtk/gtktooltips.h>
 
 #include "helper/sp-intl.h"
 #include "helper/window.h"
@@ -61,7 +62,6 @@ static void sp_item_widget_modify_selection (SPWidget *spw, SPSelection *selecti
 static void sp_item_widget_change_selection (SPWidget *spw, SPSelection *selection, GtkWidget *itemw);
 static void sp_item_widget_setup (SPWidget *spw, SPSelection *selection);
 static void sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw);
-static void sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_hidden_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw);
@@ -103,6 +103,8 @@ sp_item_widget_new (void)
     GtkObject *a;
     GtkTextBuffer *desc_buffer;
 
+    GtkTooltips *tt = gtk_tooltips_new();
+
     /* Create container widget */
     spw = sp_widget_new_global (INKSCAPE);
     gtk_signal_connect ( GTK_OBJECT (spw), "modify_selection", 
@@ -133,6 +135,7 @@ sp_item_widget_new (void)
 
     /* Create the entry box for the object id */
     tf = gtk_entry_new ();
+    gtk_tooltips_set_tip (tt, tf, _("The id= attribute (only letters, digits, and the characters .-_: allowed)"), NULL);
     gtk_entry_set_max_length (GTK_ENTRY (tf), 64);
     gtk_widget_show (tf);
     gtk_table_attach ( GTK_TABLE (t), tf, 1, 2, 0, 1, 
@@ -162,6 +165,7 @@ sp_item_widget_new (void)
 
     /* Create the entry box for the object label */
     tf = gtk_entry_new ();
+    gtk_tooltips_set_tip (tt, tf, _("A freeform label for the object"), NULL);
     gtk_entry_set_max_length (GTK_ENTRY (tf), 64);
     gtk_widget_show (tf);
     gtk_table_attach ( GTK_TABLE (t), tf, 1, 2, 1, 2, 
@@ -214,47 +218,35 @@ sp_item_widget_new (void)
 
 
     /* Check boxes */
-    t = gtk_table_new (2, 2, TRUE);
-    gtk_container_set_border_width(GTK_CONTAINER(t), 10);
+    GtkWidget *hb_cb = gtk_hbox_new (FALSE, 0);
+    gtk_widget_show (hb_cb);
+    gtk_box_pack_start (GTK_BOX (vb), hb_cb, FALSE, FALSE, 0);
+    t = gtk_table_new (1, 2, TRUE);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 0);
     gtk_widget_show (t);
-    gtk_box_pack_start (GTK_BOX (vb), t, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hb_cb), t, TRUE, TRUE, 10);
 
-    cb = gtk_check_button_new_with_label (_("Sensitive"));
+    /* Hide */
+    cb = gtk_check_button_new_with_label(_("Hide"));
     gtk_widget_show (cb);
+    gtk_tooltips_set_tip (tt, cb, _("Check to make the object invisible"), NULL);
     gtk_table_attach ( GTK_TABLE (t), cb, 0, 1, 0, 1, 
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
+                       (GtkAttachOptions)0, 0, 0 );
+    g_signal_connect (G_OBJECT(cb), "toggled", G_CALLBACK(sp_item_widget_hidden_toggled), spw);
+    gtk_object_set_data(GTK_OBJECT(spw), "hidden", cb);
+
+    /* Lock */
+    cb = gtk_check_button_new_with_label (_("Lock"));
+    gtk_widget_show (cb);
+    gtk_tooltips_set_tip (tt, cb, _("Check to make the object insensitive (not selectable by mouse)"), NULL);
+    gtk_table_attach ( GTK_TABLE (t), cb, 1, 2, 0, 1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
     gtk_signal_connect ( GTK_OBJECT (cb), "toggled", 
                          GTK_SIGNAL_FUNC (sp_item_widget_sensitivity_toggled), 
                          spw );
     gtk_object_set_data (GTK_OBJECT (spw), "sensitive", cb);
-
-    /* Whether to explicitly mark this object with visibility:hidden. */
-    cb = gtk_check_button_new_with_label(_("Hide"));
-    gtk_widget_show (cb);
-    gtk_table_attach ( GTK_TABLE (t), cb, 1, 2, 0, 1, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-    g_signal_connect (G_OBJECT(cb), "toggled", G_CALLBACK(sp_item_widget_hidden_toggled), spw);
-    gtk_object_set_data(GTK_OBJECT(spw), "hidden", cb);
-
-    cb = gtk_check_button_new_with_label (_("Active"));
-    gtk_widget_set_sensitive (GTK_WIDGET (cb), FALSE);
-    gtk_widget_show (cb);
-    gtk_table_attach ( GTK_TABLE (t), cb, 0, 1, 1, 2, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-    gtk_object_set_data (GTK_OBJECT (spw), "active", cb);
-
-    cb = gtk_check_button_new_with_label (_("Printable"));
-    gtk_widget_show (cb);
-    gtk_table_attach ( GTK_TABLE (t), cb, 1, 2, 1, 2, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-    gtk_signal_connect ( GTK_OBJECT (cb), "toggled", 
-                         GTK_SIGNAL_FUNC (sp_item_widget_printability_toggled),
-                         spw );
-    gtk_object_set_data (GTK_OBJECT (spw), "printable", cb);
 
 
     /* Transformation matrix */
@@ -398,15 +390,11 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
 
     /* Sensitive */
     GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "sensitive"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->sensitive);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->isLocked());
 
     /* Hidden */
     w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "hidden"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), item->isExplicitlyHidden());
-
-    /* Printable */
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "printable"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->printable);
 
     /* Transform */
     {
@@ -473,22 +461,7 @@ sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw)
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    SPException ex;
-    SP_EXCEPTION_INIT (&ex);
-    
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-    
-        sp_object_removeAttribute ( SP_OBJECT (item), 
-                                    "sodipodi:insensitive", 
-                                    &ex );
-    
-    } else {
-        
-        sp_object_setAttribute ( SP_OBJECT (item), 
-                                 "sodipodi:insensitive", 
-                                 "true", 
-                                 &ex );
-    }
+    item->setLocked(gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
 
     sp_document_maybe_done ( SP_WIDGET_DOCUMENT (spw), 
                              "ItemDialog:insensitive" );
@@ -517,45 +490,6 @@ sp_item_widget_hidden_toggled(GtkWidget *widget, SPWidget *spw)
     gtk_object_set_data ( GTK_OBJECT (spw), "blocked", 
                           GUINT_TO_POINTER (FALSE) );
 }
-
-static void
-sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw)
-{
-    if (gtk_object_get_data (GTK_OBJECT (spw), "blocked")) 
-        return;
-
-    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
-    g_return_if_fail (item != NULL);
-
-    gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
-
-
-    SPException ex;
-    SP_EXCEPTION_INIT (&ex);
-    
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-    
-        sp_object_removeAttribute ( SP_OBJECT (item), 
-                                    "sodipodi:nonprintable", 
-                                    &ex );
-    
-    } else {
-        
-        sp_object_setAttribute ( SP_OBJECT (item), 
-                                 "sodipodi:nonprintable", 
-                                 "true", 
-                                 &ex );
-    }
-
-    sp_document_maybe_done ( SP_WIDGET_DOCUMENT (spw), 
-                             "ItemDialog:nonprintable" );
-
-    gtk_object_set_data ( GTK_OBJECT (spw), 
-                          "blocked", 
-                          GUINT_TO_POINTER (FALSE) );
-
-} // end of sp_item_widget_printability_toggled()
-
 
 
 static void
