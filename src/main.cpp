@@ -290,7 +290,7 @@ main(int argc, char const **argv)
             /* main_console handles any exports -- not the gui */
             use_gui = FALSE;
             break;
-        } else if (!strcmp(argv[i], "-x") || !strcmp(argv[i], "--with-gui")) {
+        } else if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "--with-gui")) {
             use_gui = TRUE;
             break;
         }
@@ -371,7 +371,7 @@ sp_main_gui(int argc, char const **argv)
             if (ss) gtk_widget_show(ss);
             inkscape_unref();
         } else {
-            fprintf(stderr, "No slides to display\n");
+            g_warning ("No slides to display");
             exit(0);
         }
     }
