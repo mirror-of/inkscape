@@ -22,6 +22,7 @@
 #include "sp-item.h"
 #include "selection.h"
 #include "tools-switch.h"
+#include "sp-item-group.h"
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
@@ -285,6 +286,23 @@ sp_selection_repr_selected (SPSelection * selection, SPRepr * repr)
 }
 
 void
+sp_selection_deselect_under_group (SPSelection * selection, SPGroup * group)
+{
+	SPObject * o;
+
+	if (!SP_IS_GROUP (group)) return;
+
+	for (o = group->children ; o != NULL ; o = o->next ) {
+		if (sp_selection_item_selected (selection, SP_ITEM(o))) {
+			sp_selection_remove_item (selection, SP_ITEM(o));
+		}
+		if (SP_IS_GROUP (o)) // recurse
+			sp_selection_deselect_under_group (selection, SP_GROUP(o));
+	}
+
+}
+
+void
 sp_selection_add_item (SPSelection * selection, SPItem * item)
 {
 	g_return_if_fail (selection != NULL);
@@ -301,6 +319,11 @@ sp_selection_add_item (SPSelection * selection, SPItem * item)
 			  G_CALLBACK (sp_selection_selected_item_release), selection);
 	g_signal_connect (G_OBJECT (item), "modified",
 			  G_CALLBACK (sp_selection_selected_item_modified), selection);
+
+	// when selecting a group, we need to deselect all its descendants to prevent double selection
+	if (SP_IS_GROUP (item)) {
+		sp_selection_deselect_under_group (selection, SP_GROUP(item));
+	}
 
 	sp_selection_changed (selection);
 }
