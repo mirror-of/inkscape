@@ -449,11 +449,11 @@ is_jar(char const *filename)
 
 static void usage()
 {
-    fprintf(stdout, 
+    fprintf(stderr, 
 	    "Usage: inkview [FILES ...]\n"
-	    "\twhere FILES are SVG (.svg)"
+	    "\twhere FILES are SVG (.svg or .svgz)"
 #ifdef WITH_INKJAR
-	    "or archives of svgs (.sxw, .jar)"
+	    "or archives of SVGs (.sxw, .jar)"
 #endif
 	    "\n");
     exit(1);
