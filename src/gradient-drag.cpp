@@ -134,7 +134,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
     for (GSList const* l = dragger->draggables; l != NULL; l = l->next) {
         GrDraggable *draggable = (GrDraggable *) l->data;
         dragger->parent->local_change = true;
-        sp_item_gradient_set_coords (draggable->item, draggable->point_num, *p, false);
+        sp_item_gradient_set_coords (draggable->item, draggable->point_num, *p, draggable->fill_or_stroke, false);
     }
 
     // See if we need to snap to another dragger
@@ -167,7 +167,7 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
     for (GSList const* l = dragger->draggables; l != NULL; l = l->next) {
         GrDraggable *draggable = (GrDraggable *) l->data;
         dragger->parent->local_change = true;
-        sp_item_gradient_set_coords (draggable->item, draggable->point_num, knot->pos, true);
+        sp_item_gradient_set_coords (draggable->item, draggable->point_num, knot->pos, draggable->fill_or_stroke, true);
     }
 
     dragger->parent->setSelected (dragger);
@@ -295,6 +295,18 @@ GrDrag::updateDraggers ()
                 addDragger (sp_lg_get_p2 (item, lg), "drag2", new GrDraggable (item, POINT_LG_P2, true));
             }
         }
+
+        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
+            if (SP_IS_LINEARGRADIENT (server)) {
+                SPLinearGradient *lg = SP_LINEARGRADIENT (server);
+
+                addDragger (sp_lg_get_p1 (item, lg), "drag1", new GrDraggable (item, POINT_LG_P1, false));
+                addDragger (sp_lg_get_p2 (item, lg), "drag2", new GrDraggable (item, POINT_LG_P2, false));
+            }
+        }
+
+
     }
 }
 
@@ -317,6 +329,15 @@ GrDrag::updateLines ()
 
         if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
+            if (SP_IS_LINEARGRADIENT (server)) {
+                SPLinearGradient *lg = SP_LINEARGRADIENT (server);
+
+                this->addLine (sp_lg_get_p1 (item, lg), sp_lg_get_p2 (item, lg));
+            }
+        }
+
+        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
                 SPLinearGradient *lg = SP_LINEARGRADIENT (server);
 
