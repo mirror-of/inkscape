@@ -86,7 +86,7 @@ sp_genericellipse_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_genericellipse_init,
 		};
-		type = g_type_register_static (SP_TYPE_SHAPE, "SPGenericEllipse", &info, 0);
+		type = g_type_register_static (SP_TYPE_SHAPE, "SPGenericEllipse", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -104,7 +104,7 @@ sp_genericellipse_class_init (SPGenericEllipseClass *klass)
 	item_class = (SPItemClass *) klass;
 	shape_class = (SPShapeClass *) klass;
 
-	ge_parent_class = g_type_class_ref (SP_TYPE_SHAPE);
+	ge_parent_class = (SPShapeClass*)g_type_class_ref (SP_TYPE_SHAPE);
 
 	sp_object_class->update = sp_genericellipse_update;
 
@@ -293,12 +293,12 @@ sp_genericellipse_normalize (SPGenericEllipse *ellipse)
 
 /* SVG <ellipse> element */
 
-static void sp_ellipse_class_init (SPEllipseClass *class);
+static void sp_ellipse_class_init (SPEllipseClass *klass);
 static void sp_ellipse_init (SPEllipse *ellipse);
 
 static void sp_ellipse_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static SPRepr *sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags);
-static void sp_ellipse_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_ellipse_set (SPObject *object, unsigned int key, const gchar *value);
 static gchar * sp_ellipse_description (SPItem * item);
 
 static SPGenericEllipseClass *ellipse_parent_class;
@@ -319,23 +319,23 @@ sp_ellipse_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_ellipse_init,
 		};
-		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPEllipse", &info, 0);
+		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPEllipse", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-sp_ellipse_class_init (SPEllipseClass *class)
+sp_ellipse_class_init (SPEllipseClass *klass)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass *item_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	gobject_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
 
-	ellipse_parent_class = g_type_class_ref (SP_TYPE_GENERICELLIPSE);
+	ellipse_parent_class = (SPGenericEllipseClass*)g_type_class_ref (SP_TYPE_GENERICELLIPSE);
 
 	sp_object_class->build = sp_ellipse_build;
 	sp_object_class->write = sp_ellipse_write;
@@ -385,7 +385,7 @@ sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_ellipse_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_ellipse_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGenericEllipse *ellipse;
 
@@ -450,12 +450,12 @@ sp_ellipse_position_set (SPEllipse *ellipse, gdouble x, gdouble y, gdouble rx, g
 
 /* SVG <circle> element */
 
-static void sp_circle_class_init (SPCircleClass *class);
+static void sp_circle_class_init (SPCircleClass *klass);
 static void sp_circle_init (SPCircle *circle);
 
 static void sp_circle_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static SPRepr *sp_circle_write (SPObject *object, SPRepr *repr, guint flags);
-static void sp_circle_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_circle_set (SPObject *object, unsigned int key, const gchar *value);
 static gchar * sp_circle_description (SPItem * item);
 
 static SPGenericEllipseClass *circle_parent_class;
@@ -476,23 +476,23 @@ sp_circle_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_circle_init,
 		};
-		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPCircle", &info, 0);
+		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPCircle", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-sp_circle_class_init (SPCircleClass *class)
+sp_circle_class_init (SPCircleClass *klass)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass *item_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	gobject_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
 
-	circle_parent_class = g_type_class_ref (SP_TYPE_GENERICELLIPSE);
+	circle_parent_class = (SPGenericEllipseClass*)g_type_class_ref (SP_TYPE_GENERICELLIPSE);
 
 	sp_object_class->build = sp_circle_build;
 	sp_object_class->write = sp_circle_write;
@@ -540,7 +540,7 @@ sp_circle_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_circle_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_circle_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGenericEllipse *ge;
 
@@ -581,12 +581,12 @@ sp_circle_description (SPItem * item)
 
 /* <path sodipodi:type="arc"> element */
 
-static void sp_arc_class_init (SPArcClass *class);
+static void sp_arc_class_init (SPArcClass *klass);
 static void sp_arc_init (SPArc *arc);
 
 static void sp_arc_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static SPRepr *sp_arc_write (SPObject *object, SPRepr *repr, guint flags);
-static void sp_arc_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_arc_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_arc_modified (SPObject *object, guint flags);
 
 static gchar * sp_arc_description (SPItem * item);
@@ -609,23 +609,23 @@ sp_arc_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_arc_init,
 		};
-		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPArc", &info, 0);
+		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPArc", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-sp_arc_class_init (SPArcClass *class)
+sp_arc_class_init (SPArcClass *klass)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass *item_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	gobject_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
 
-	arc_parent_class = g_type_class_ref (SP_TYPE_GENERICELLIPSE);
+	arc_parent_class = (SPGenericEllipseClass*)g_type_class_ref (SP_TYPE_GENERICELLIPSE);
 
 	sp_object_class->build = sp_arc_build;
 	sp_object_class->write = sp_arc_write;
@@ -805,7 +805,7 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_arc_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGenericEllipse *ge;
 	guint version;
