@@ -490,7 +490,7 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
  * Member functions
  */
 
-unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset)
+unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath)
 {
     unsigned length = 0;
     int child_attrs_offset = 0;
@@ -501,11 +501,14 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
     }
     else if (SP_IS_TSPAN(root)) {
         SPTSpan *tspan = SP_TSPAN(root);
-        bool use_xy = tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || !tspan->attributes.singleXYCoordinates();
+        bool use_xy = !in_textpath && (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || !tspan->attributes.singleXYCoordinates());
         tspan->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, use_xy, true);
     }
     else if (SP_IS_TEXTPATH(root)) {
+        in_textpath = true;
         SP_TEXTPATH(root)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, false, true);
+        optional_attrs.x.clear();
+        optional_attrs.y.clear();
     }
     else {
         optional_attrs = parent_optional_attrs;
@@ -532,7 +535,7 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
 
     for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TSPAN (child) || SP_IS_TEXTPATH (child)) {
-            length += _buildLayoutInput(child, optional_attrs, child_attrs_offset + length);
+            length += _buildLayoutInput(child, optional_attrs, child_attrs_offset + length, in_textpath);
         } else if (SP_IS_STRING (child)) {
             Glib::ustring const &string = SP_STRING(child)->string;
             layout.appendText(string, root->style, child, &optional_attrs, child_attrs_offset + length);
@@ -547,7 +550,7 @@ void SPText::rebuildLayout()
 {
     layout.clear();
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
-    _buildLayoutInput(this, optional_attrs, 0);
+    _buildLayoutInput(this, optional_attrs, 0, false);
     layout.calculateFlow();
     for (SPObject *child = firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TEXTPATH(child)) {
