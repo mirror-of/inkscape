@@ -35,6 +35,7 @@
 #include "../sp-item.h"
 #include "../sp-gradient.h"
 #include "../helper/sp-intl.h"
+#include "../widgets/icon.h"
 #include "../inkscape-stock.h"
 
 #include "sp-color-selector.h"
@@ -190,11 +191,16 @@ sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *pixmap, 
 	b = gtk_radio_button_new ((last) ? gtk_radio_button_group (last) : NULL);
 	gtk_tooltips_set_tip (tt, b, tip, NULL);
 	gtk_widget_show (b);
+
+	gtk_container_set_border_width (GTK_CONTAINER (b), 0);
+
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 	gtk_object_set_data (GTK_OBJECT (b), "mode", GUINT_TO_POINTER (mode));
-	w = gtk_image_new_from_stock (pixmap, GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+	w = sp_icon_new (16, pixmap);
 	gtk_widget_show (w);
 	gtk_container_add (GTK_CONTAINER (b), w);
+
 	gtk_box_pack_start (GTK_BOX (psel->style), b, FALSE, FALSE, 0);
 	gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (sp_paint_selector_style_button_toggled), psel);
 

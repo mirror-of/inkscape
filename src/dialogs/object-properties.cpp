@@ -32,6 +32,7 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "widgets/sp-widget.h"
+#include "widgets/icon.h"
 #include "macros.h"
 #include "inkscape.h"
 #include "fill-style.h"
@@ -79,7 +80,7 @@ sp_object_properties_dialog_delete ( GtkObject *object,
 
     return FALSE; // which means, go ahead and destroy it
 
-} // end of sp_object_properties_dialog_delete()
+}
 
 
 
@@ -119,7 +120,7 @@ sp_object_properties_style_activate ( GtkMenuItem *menuitem, const gchar *key )
     
     } // end of if()
 
-} // end of sp_object_properties_style_activate()
+}
 
 
 
@@ -135,20 +136,22 @@ sp_object_properties_page( GtkWidget *nb,
 
     hb = gtk_hbox_new (FALSE, 0);
     gtk_widget_show (hb);
+
+    px = sp_icon_new_scaled (16, label_image);
+    gtk_widget_show (px);
+    gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
+
     l = gtk_label_new (_(label));
     gtk_widget_show (l);
     gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-   // px = gtk_image_new_from_file (label_image);
-    px = gtk_image_new_from_stock ( label_image, GTK_ICON_SIZE_LARGE_TOOLBAR );
-    gtk_widget_show (px);
-    gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
+
     gtk_widget_show (page);
     gtk_notebook_append_page (GTK_NOTEBOOK (nb), page, hb);
     gtk_object_set_data (GTK_OBJECT (dlg), dlg_name, page);
     
     return 0;
     
-} // end of sp_object_properties_page()
+}
 
 
 
@@ -178,7 +181,7 @@ sp_object_properties_color_set ( Inkscape::Application *inkscape,
         sp_stroke_style_paint_system_color_set (ss, color, opacity);
     }
     
-} // end of sp_object_properties_color_set()
+}
 
 
 
