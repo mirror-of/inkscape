@@ -928,8 +928,8 @@ ink_marker_menu( GtkWidget *tbl, gchar *menu_id, SPDocument *sandbox)
 
         // find and load  markers.svg
         static SPDocument *markers_doc = NULL;
-        char *markers_source = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
-        if (Inkscape::IO::file_test (markers_source, G_FILE_TEST_IS_REGULAR)) {
+        char *markers_source = g_build_filename(INKSCAPE_MARKERSDIR, "markers.svg", NULL);
+        if (Inkscape::IO::file_test(markers_source, G_FILE_TEST_IS_REGULAR)) {
             markers_doc = sp_document_new(markers_source, FALSE);
         }
         g_free(markers_source);
