@@ -7,12 +7,12 @@ sub doMakeDef()
 {
     print "####### Generating 'inkscape.def' #######\n";
 
-    my $nmlines = ();
-    my @lines;
-    my $line;
-    my $datestr;
-    local(*PIPE);
-    local(*OUTFILE);
+    my $nmlines = ();  #store lines read in hash, to remove dupes
+    my @lines;         #output lines	
+    my $line;          #single line of input
+    my $datestr;       #current date
+    local(*PIPE);      #output of the 'nm' command
+    local(*OUTFILE);   #output file - inkscape.def
 
     open (PIPE, "nm libinkscape.a |");
     while(<PIPE>)

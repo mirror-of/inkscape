@@ -81,7 +81,7 @@ sub doMakeFiles
     @files = &find_files(".", $patterns, $excludes, \@excluded);
     
     # Print the list of files excluded
-    print "###EXCLUDED: ", scalar(@excluded), " files/directories rejected\n";
+    print "###EXCLUDED: ", scalar(@excluded), " files/directories rejected by request\n";
     @excluded = sort(@excluded);
     foreach (@excluded)
         {
