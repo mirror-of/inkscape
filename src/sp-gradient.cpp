@@ -38,6 +38,7 @@
 #include "document-private.h"
 #include "sp-object-repr.h"
 #include "sp-gradient.h"
+#include "gradient-chemistry.h"
 #include "sp-gradient-fns.h"
 #include "sp-gradient-reference.h"
 #include "sp-gradient-vector.h"
@@ -550,8 +551,7 @@ sp_gradient_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	return repr;
 }
 
-/* Forces vector to be built, if not present (i.e. changed) */
-
+/** Forces the vector to be built, if not present (i.e. changed) */
 void
 sp_gradient_ensure_vector (SPGradient *gradient)
 {
@@ -583,6 +583,47 @@ sp_gradient_set_spread (SPGradient *gr, SPGradientSpread spread)
 	}
 }
 
+/**
+ * Returns private vector of given gradient (the gradient at the end of the href chain which has
+ * stops), optionally normalizing it
+ */
+SPGradient *
+sp_gradient_get_vector (SPGradient *gradient, gboolean force_private)
+{
+    g_return_val_if_fail(gradient != NULL, NULL);
+    g_return_val_if_fail(SP_IS_GRADIENT(gradient), NULL);
+
+    /* follow the chain of references to find the first gradient
+     * with gradient stops */
+    SPGradient *ref = gradient;
+    while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
+        gradient = ref;
+        ref = gradient->ref->getObject();
+    }
+
+    return (force_private) ? sp_gradient_ensure_vector_normalized(gradient) : gradient;
+}
+
+/**
+ * Returns the effective spread of given gradient (climbing up the refs chain if needed)
+ */
+SPGradientSpread
+sp_gradient_get_spread (SPGradient *gradient)
+{
+    /* follow the chain of references to find the first gradient
+     * with spread_set */
+    SPGradient *ref;
+    for (ref = gradient; 
+         ref && !ref->spread_set; 
+         ref = ref->ref->getObject()) {
+    }
+
+    return (ref) ? ref->spread : SP_GRADIENT_SPREAD_PAD; // pad is the default
+}
+
+/**
+Clears the gradient's svg:stop children from its repr
+ */
 void
 sp_gradient_repr_clear_vector (SPGradient *gr)
 {
@@ -604,6 +645,10 @@ sp_gradient_repr_clear_vector (SPGradient *gr)
 	}
 }
 
+/**
+Writes the gradient's internal vector (whether from its own stops, or inherited from
+refs) into the gradient repr as svg:stop elements
+ */
 void
 sp_gradient_repr_write_vector (SPGradient *gr)
 {
@@ -1225,7 +1270,7 @@ sp_lineargradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transfo
 	NRMatrix v2px;
 	color2px.copyto (&v2px);
 
-	nr_lgradient_renderer_setup (&lgp->lgr, gr->color, gr->spread, &v2px,
+	nr_lgradient_renderer_setup (&lgp->lgr, gr->color, sp_gradient_get_spread(gr), &v2px,
 				     lg->x1.computed, lg->y1.computed, lg->x2.computed, lg->y2.computed);
 
 	return (SPPainter *) lgp;
@@ -1454,7 +1499,7 @@ sp_radialgradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transfo
 	NRMatrix gs2px_nr;
 	gs2px.copyto (&gs2px_nr);
 
-	nr_rgradient_renderer_setup (&rgp->rgr, gr->color, gr->spread,
+	nr_rgradient_renderer_setup (&rgp->rgr, gr->color, sp_gradient_get_spread(gr),
 				     &gs2px_nr,
 				     rg->cx.computed, rg->cy.computed,
 				     rg->fx.computed, rg->fy.computed,

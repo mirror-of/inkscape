@@ -41,13 +41,6 @@ SPGradient *sp_item_set_gradient (SPItem *item, SPGradient *gr, SPGradientType t
 SPGradient *sp_document_default_gradient_vector (SPDocument *document, guint32 color = 0);
 SPGradient *sp_gradient_vector_for_object (SPDocument *doc, SPDesktop *desktop, SPObject *o, bool is_fill);
 
-/*
- * Get vector gradient of given gradient
- */
-SPGradient *sp_gradient_get_vector (SPGradient *gradient, gboolean force_private);
-
-SPGradientSpread sp_gradient_get_spread(SPGradient *gradient);
-
 void sp_object_ensure_fill_gradient_normalized (SPObject *object);
 void sp_object_ensure_stroke_gradient_normalized (SPObject *object);
 
@@ -55,7 +48,7 @@ SPGradient *sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, cons
 
 void sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool set);
 
-void sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_desk, bool fill_or_stroke, bool write_repr, bool scale_radial);
+void sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_desk, bool fill_or_stroke, bool write_repr, bool scale);
 NR::Point sp_item_gradient_get_coords (SPItem *item, guint point_num, bool fill_or_stroke);
 
 #endif

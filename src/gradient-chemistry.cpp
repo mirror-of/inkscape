@@ -871,47 +871,6 @@ sp_gradient_vector_for_object(SPDocument *const doc, SPDesktop *const desktop,
     return sp_document_default_gradient_vector(doc, rgba);
 }
 
-
-/*
- * Get private vector of given gradient
- */
-
-SPGradient *
-sp_gradient_get_vector(SPGradient *gradient, gboolean force_private)
-{
-    g_return_val_if_fail(gradient != NULL, NULL);
-    g_return_val_if_fail(SP_IS_GRADIENT(gradient), NULL);
-
-    /* follow the chain of references to find the first gradient
-     * with gradient stops */
-    SPGradient *ref = gradient;
-    while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
-        gradient = ref;
-        ref = gradient->ref->getObject();
-    }
-
-    return (force_private) ? sp_gradient_ensure_vector_normalized(gradient) : gradient;
-}
-
-/*
- * Get effective spread of given gradient (climbing up refs if needed)
- */
-
-SPGradientSpread
-sp_gradient_get_spread(SPGradient *gradient)
-{
-    /* follow the chain of references to find the first gradient
-     * with spread_set */
-    SPGradient *ref;
-    for (ref = gradient; 
-         ref && !ref->spread_set; 
-         ref = ref->ref->getObject()) {
-    }
-
-    return (ref) ? ref->spread : SP_GRADIENT_SPREAD_PAD; // pad is the default
-}
-
-
 /*
   Local Variables:
   mode:c++
