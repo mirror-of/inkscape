@@ -20,9 +20,9 @@
 #define SP_IS_TEXTPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_TEXTPATH))
 
 #include <libnr/nr-point.h>
-#include "libnrtype/FlowSrc.h"
 #include "svg/svg-types.h"
 #include "sp-item.h"
+#include "sp-text.h"
 
 class SPUsePath;
 class Path;
@@ -36,11 +36,7 @@ enum {
 
 struct SPTSpan : public SPItem {
 	guint        role : 2;
-	bool         last_tspan;
-	
-	div_flow_src     contents;    // RH: deprecated, but still used to store the x/y/dx/dy/rotate attributes currently
-
-	SPSVGLength		 x,y;
+    TextTagAttributes attributes;
 };
 
 struct SPTSpanClass {
@@ -52,8 +48,7 @@ GType sp_tspan_get_type ();
 /* SPTextPath */
 
 struct SPTextPath : public SPItem {
-	div_flow_src	contents;    // RH: deprecated, but still used to store the x/y/dx/dy/rotate attributes currently
-	SPSVGLength		 x,y;
+    TextTagAttributes attributes;
 	
   Path           *originalPath;
 	bool           isUpdating;	

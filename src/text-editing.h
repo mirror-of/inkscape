@@ -25,6 +25,9 @@ gint sp_te_down (SPItem *item, gint i_position);
 gint sp_te_start_of_line (SPItem *item, gint i_position);
 gint sp_te_end_of_line (SPItem *item, gint i_position);
 
+// confusing with sp_te_get_length(), I'll change the name of the other later
+unsigned sp_text_get_length(SPObject *item);
+
 guint sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p);
 void sp_te_get_cursor_coords (SPItem *item, gint i_position, NR::Point &p0, NR::Point &p1);
 

@@ -33,7 +33,6 @@
 #include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-style-to-pos.h>
-#include <libnrtype/FlowDefs.h>
 
 #include <livarot/LivarotDefs.h>
 #include <livarot/Shape.h>
@@ -152,8 +151,8 @@ sp_text_class_init (SPTextClass *classname)
 static void
 sp_text_init (SPText *text)
 {
-    new (&text->contents) div_flow_src(SP_OBJECT(text),txt_text);
     new (&text->layout) Inkscape::Text::Layout;
+    new (&text->attributes) TextTagAttributes;
     text->linespacing.set = 0;
     text->linespacing.value = text->linespacing.computed = 1.0;
 }
@@ -162,8 +161,8 @@ static void
 sp_text_release (SPObject *object)
 {
     SPText *text = SP_TEXT(object);
+    text->attributes.~TextTagAttributes();
     text->layout.~Layout();
-    text->contents.~div_flow_src();
 
     if (((SPObjectClass *) text_parent_class)->release)
         ((SPObjectClass *) text_parent_class)->release(object);
@@ -192,59 +191,31 @@ sp_text_set(SPObject *object, unsigned key, gchar const *value)
 {
     SPText *text = SP_TEXT (object);
 
-    /* fixme: Vectors (Lauris) */
-    switch (key) {
-        case SP_ATTR_X:
-            text->contents.SetX(value);
-            if ( text->contents.nb_x > 0 ) {
-                text->x=text->contents.x_s[0];
-            } else {
-                text->x.set=0;
-            }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_Y:
-            text->contents.SetY(value);
-            if ( text->contents.nb_y > 0 ) {
-                text->y=text->contents.y_s[0];
-            } else {
-                text->y.set=0;
-            }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_DX:
-            text->contents.SetDX(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_DY:
-            text->contents.SetDY(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_ROTATE:
-            text->contents.SetRot(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_SODIPODI_LINESPACING:
-            if (value) {
-                text->linespacing.set=1;
-                text->linespacing.unit=SP_SVG_UNIT_PERCENT;
-                text->linespacing.value=text->linespacing.computed=sp_svg_read_percentage (value, 1.0);
-            } else {
-                text->linespacing.set=0;
-            }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
-            break;
-        default:
-            if (((SPObjectClass *) text_parent_class)->set)
-                ((SPObjectClass *) text_parent_class)->set (object, key, value);
-            break;
+    if (text->attributes.readSingleAttribute(key, value)) {
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    } else {
+        switch (key) {
+            case SP_ATTR_SODIPODI_LINESPACING:
+                if (value) {
+                    text->linespacing.set=1;
+                    text->linespacing.unit=SP_SVG_UNIT_PERCENT;
+                    text->linespacing.value=text->linespacing.computed=sp_svg_read_percentage (value, 1.0);
+                } else {
+                    text->linespacing.set=0;
+                }
+                object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+                break;
+            default:
+                if (((SPObjectClass *) text_parent_class)->set)
+                    ((SPObjectClass *) text_parent_class)->set (object, key, value);
+                break;
+        }
     }
 }
 
 static void
 sp_text_child_added (SPObject *object, Inkscape::XML::Node *rch, Inkscape::XML::Node *ref)
 {
-    //SPItem *item = SP_ITEM (object);
     SPText *text = SP_TEXT (object);
 
     if (((SPObjectClass *) text_parent_class)->child_added)
@@ -373,43 +344,7 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
         }
     }
 
-    char *nlist=NULL;
-    if ( (nlist=text->contents.GetX()) ) {
-        if (text->x.set)
-            sp_repr_set_attr (repr, "x", nlist); 
-        else 
-            sp_repr_set_attr (repr, "x", NULL);
-        g_free(nlist);
-    } else {
-        if ( text->x.set ) sp_repr_set_double (repr, "x", text->x.computed); else sp_repr_set_attr (repr, "x", NULL);
-    }
-    if ( text->y.set && (nlist=text->contents.GetY()) ) {
-        if (text->y.set)
-            sp_repr_set_attr (repr, "y", nlist);
-        else 
-            sp_repr_set_attr (repr, "y", NULL);
-        g_free(nlist);
-    } else {
-        if ( text->y.set ) sp_repr_set_double (repr, "y", text->y.computed); else sp_repr_set_attr (repr, "y", NULL);
-    }
-    if ( (nlist=text->contents.GetDX()) ) {
-        sp_repr_set_attr(repr,"dx",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr (repr, "dx", NULL);
-    }
-    if ( (nlist=text->contents.GetDY()) ) {
-        sp_repr_set_attr(repr,"dy",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr (repr, "dy", NULL);
-    }
-    if ( (nlist=text->contents.GetRot()) ) {
-        sp_repr_set_attr(repr,"rotate",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr (repr, "rotate", NULL);
-    }
+    text->attributes.writeTo(repr);
 
     if (((SPObjectClass *) (text_parent_class))->write)
         ((SPObjectClass *) (text_parent_class))->write (object, repr, flags);
@@ -420,11 +355,8 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 static void
 sp_text_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const /*flags*/)
 {
-    SPText *group = SP_TEXT(item);
-    //RH if ( group->f_res ) group->f_res->BBox(bbox,transform);
-    group->layout.getBoundingBox(bbox, transform);
+    SP_TEXT(item)->layout.getBoundingBox(bbox, transform);
 }
-
 
 
 static NRArenaItem *
@@ -438,7 +370,7 @@ sp_text_show(SPItem *item, NRArena *arena, unsigned /* key*/, unsigned /*flags*/
     // pass the bbox of the text object as paintbox (used for paintserver fills)
     NRRect paintbox;
     sp_item_invoke_bbox(item, &paintbox, NR::identity(), TRUE);
-    group->BuildFlow(flowed, &paintbox);
+    group->layout.show(flowed, &paintbox);
 
     return flowed;
 }
@@ -477,65 +409,26 @@ sp_text_description(SPItem *item)
     }
 }
 
-static void AccumulateAttributeLists(std::vector<SPSVGLength> *output_list, std::vector<SPSVGLength> const &parent_list, unsigned parent_offset, SPSVGLength *overlay_list, int overlay_list_length)
+static unsigned BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset)
 {
-    output_list->clear();
-    output_list->reserve(std::max((int)parent_list.size() - (int)parent_offset, overlay_list_length));
-    while (parent_offset < parent_list.size() || overlay_list_length) {
-        SPSVGLength const *this_item;
-        if (overlay_list_length) {
-            this_item = overlay_list;
-            overlay_list_length--;
-            overlay_list++;
-            parent_offset++;
-        } else {
-            this_item = &parent_list[parent_offset];
-            parent_offset++;
-        }
-        output_list->push_back(*this_item);
-    }
-}
-
-static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset)
-{
-    int length = 0;
-
+    unsigned length = 0;
+    unsigned child_attrs_offset = 0;
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
 
-    div_flow_src const *div_src = NULL;
-    bool use_xy = false;
-    bool use_dxdyrot = false;
     if (SP_IS_TEXT(root)) {
-        div_src = &SP_TEXT(root)->contents;
-        use_xy = use_dxdyrot = true;
+        SP_TEXT(root)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
     }
     else if (SP_IS_TSPAN(root)) {
         SPTSpan *tspan = SP_TSPAN(root);
-        div_src = &tspan->contents;
-        use_dxdyrot = true;
-        if (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || div_src->nb_x > 1 || div_src->nb_y > 1)
-            use_xy = true;
+        bool use_xy = tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || !tspan->attributes.singleXYCoordinates();
+        tspan->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, use_xy, true);
     }
     else if (SP_IS_TEXTPATH(root)) {
-        div_src = &SP_TEXTPATH(root)->contents;
-        use_dxdyrot = true;
+        SP_TEXTPATH(root)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, false, true);
     }
-
-    if (use_xy && div_src) {
-        AccumulateAttributeLists(&optional_attrs.x, parent_optional_attrs.x, parent_attrs_offset, div_src->x_s, div_src->nb_x);
-        AccumulateAttributeLists(&optional_attrs.y, parent_optional_attrs.y, parent_attrs_offset, div_src->y_s, div_src->nb_y);
-    } else {
-        AccumulateAttributeLists(&optional_attrs.x, parent_optional_attrs.x, parent_attrs_offset, NULL, 0);
-        AccumulateAttributeLists(&optional_attrs.y, parent_optional_attrs.y, parent_attrs_offset, NULL, 0);
-    }
-    if (use_dxdyrot && div_src) {
-        AccumulateAttributeLists(&optional_attrs.dx, parent_optional_attrs.dx, parent_attrs_offset, div_src->dx_s, div_src->nb_dx);
-        AccumulateAttributeLists(&optional_attrs.dy, parent_optional_attrs.dy, parent_attrs_offset, div_src->dy_s, div_src->nb_dy);
-        AccumulateAttributeLists(&optional_attrs.rotate, parent_optional_attrs.rotate, parent_attrs_offset, div_src->rot_s, div_src->nb_rot);
-    } else {
-        AccumulateAttributeLists(&optional_attrs.dx, parent_optional_attrs.dx, parent_attrs_offset, NULL, 0);
-        AccumulateAttributeLists(&optional_attrs.dy, parent_optional_attrs.dy, parent_attrs_offset, NULL, 0);
-        AccumulateAttributeLists(&optional_attrs.rotate, parent_optional_attrs.rotate, parent_attrs_offset, NULL, 0);
+    else {
+        optional_attrs = parent_optional_attrs;
+        child_attrs_offset = parent_attrs_offset;
     }
 
     bool is_line_break = false;
@@ -550,10 +443,10 @@ static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inks
 
     for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TSPAN (child) || SP_IS_TEXTPATH (child)) {
-            length += BuildLayoutInput(child, layout, optional_attrs, length);
+            length += BuildLayoutInput(child, layout, optional_attrs, child_attrs_offset + length);
         } else if (SP_IS_STRING (child)) {
             Glib::ustring const &string = SP_STRING(child)->string;
-            layout->appendText(string, root->style, child, &optional_attrs, length);
+            layout->appendText(string, root->style, child, &optional_attrs, child_attrs_offset + length);
             length += string.length();
         }
     }
@@ -568,7 +461,7 @@ static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inks
 static void
 sp_text_set_shape (SPText *text)
 {
-    // because the text_styles are held by f_src, we need to delete this before, to avoid dangling pointers
+    // because the text_styles are held by layout, we need to delete this before, to avoid dangling pointers
     for (SPItemView* v = text->display; v != NULL; v = v->next) {
         text->ClearFlow(NR_ARENA_GROUP(v->arenaitem));
     }
@@ -580,7 +473,7 @@ sp_text_set_shape (SPText *text)
     for (SPObject *child = text->firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TEXTPATH(child) && SP_TEXTPATH(child)->originalPath != NULL) {
             SPSVGLength offset;
-            offset = 0.0;
+            offset = 0.0;     // FIXME (value is not read by SPTextPath yet)
             //g_print(text->layout.dumpAsText().c_str());
             text->layout.fitToPathAlign(offset, *SP_TEXTPATH(child)->originalPath);
         }
@@ -592,7 +485,7 @@ sp_text_set_shape (SPText *text)
         if (!SP_IS_TSPAN(child)) continue;
         SPTSpan *tspan = SP_TSPAN(child);
         if (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED) continue;
-        if (tspan->contents.nb_x > 1 || tspan->contents.nb_y > 1) continue;
+        if (!tspan->attributes.singleXYCoordinates()) continue;
         Inkscape::Text::Layout::iterator iter = text->layout.sourceToIterator(tspan);
         if (iter == text->layout.end()) continue;
         if (iter.nextCharacter()) {   // line breaks live at the end of their preceding line
@@ -606,7 +499,7 @@ sp_text_set_shape (SPText *text)
     sp_item_invoke_bbox(SP_ITEM(text), &paintbox, NR::identity(), TRUE);
     for (SPItemView* v = SP_ITEM(text)->display; v != NULL; v = v->next) {
         // pass the bbox of the text object as paintbox (used for paintserver fills)
-        text->BuildFlow(NR_ARENA_GROUP(v->arenaitem), &paintbox);
+        text->layout.show(NR_ARENA_GROUP(v->arenaitem), &paintbox);
     }
 
 }
@@ -642,46 +535,13 @@ sp_text_adjust_fontsize_recursive (SPItem *item, double ex)
 void
 sp_text_adjust_coords_recursive (SPItem *item, NR::Matrix const &m, double ex)
 {
-    div_flow_src *contents = NULL; 
-    SPSVGLength *x = NULL, *y = NULL;
-    // if someone knows how to make this less ugly, you're welcome:
-    if (SP_IS_TSPAN(item)) {
-        contents = &(SP_TSPAN(item)->contents);
-        x = &(SP_TSPAN(item)->x);
-        y = &(SP_TSPAN(item)->y);
-    } else if (SP_IS_TEXT(item)) {
-        contents = &(SP_TEXT(item)->contents);
-        x = &(SP_TEXT(item)->x);
-        y = &(SP_TEXT(item)->y);
-    }
-
-    if (contents) {
-        if (!(SP_IS_TSPAN(item) && SP_TSPAN(item)->role == SP_TSPAN_ROLE_LINE)) {
-            // Do not touch x/y for line tspans, because they will get updated automatically from parent
-
-            /* Recalculate x/y lists */
-            contents->TransformXY (m, SP_IS_TEXT(item));
-            if ( contents->nb_x > 0 ) {
-                *x = contents->x_s[0];
-                x->set = 1;
-            } else {
-                x->set = 0;
-            }
-            if ( contents->nb_y > 0 ) {
-                *y = contents->y_s[0];
-                y->set = 1;
-            } else {
-                y->set = 0;
-            }
-        }
-
-        /* Recalculate dx/dy lists */
-        if (SP_IS_TEXT(item)) {
-            // ScaleDXDY will update the kerns in the entire chain of linked flow_src's of the text
-            // object, therefore we call it only once for the root <text> but not for tspans
-            contents->ScaleDXDY (ex);
-        }
-    }
+    if (SP_IS_TSPAN(item))
+        SP_TSPAN(item)->attributes.transform(m, ex, ex);
+              // it doesn't matter if we change the x,y for role=line spans because we'll just overwrite them anyway
+    else if (SP_IS_TEXT(item))
+        SP_TEXT(item)->attributes.transform(m, ex, ex);
+    else if (SP_IS_TEXTPATH(item))
+        SP_TEXTPATH(item)->attributes.transform(m, ex, ex);
 
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o))
@@ -794,7 +654,6 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
     } else {
         repr = SP_OBJECT_REPR (text);
     }
-    SPStyle *style = SP_OBJECT_STYLE (text);
 
     if (!str) str = "";
     gchar *content = g_strdup (str);
@@ -804,8 +663,6 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
         repr->removeChild(repr->firstChild());
     }
 
-    NR::Point cp(text->x.computed, text->y.computed);
-
     gchar *p = content;
     while (p) {
         gchar *e = strchr (p, '\n');
@@ -814,13 +671,6 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
         } else {
             if (e) *e = '\0'; // create a tspan for each line
             Inkscape::XML::Node *rtspan = sp_repr_new ("svg:tspan");
-            sp_repr_set_double (rtspan, "x", cp[NR::X]);
-            sp_repr_set_double (rtspan, "y", cp[NR::Y]);
-            if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-                cp[NR::X] -= style->font_size.computed;
-            } else {
-                cp[NR::Y] += style->font_size.computed;
-            }
             sp_repr_set_attr (rtspan, "sodipodi:role", "line");
             Inkscape::XML::Node *rstr = sp_repr_new_text(p);
             sp_repr_add_child (rtspan, rstr, NULL);
@@ -867,26 +717,39 @@ sp_text_request_relayout (SPText *text, guint flags)
 void
 sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR::Point by)
 {
-    one_flow_src* cur=&text->contents;
+    SPObject *source_item;
+    Glib::ustring::iterator source_text_iter;
+    Inkscape::Text::Layout::iterator iter_layout = text->layout.charIndexToIterator(i_position);
+    text->layout.getSourceOfCharacter(iter_layout, (void**)&source_item, &source_text_iter);
+
+    if (!SP_IS_STRING(source_item)) return;
+    Glib::ustring *string = &SP_STRING(source_item)->string;
+    unsigned char_index = 0;
+    for (Glib::ustring::iterator it = string->begin() ; it != source_text_iter ; it++)
+        char_index++;
 
     // divide increment by zoom
     // divide increment by matrix expansion
-    gdouble factor = 1 / SP_DESKTOP_ZOOM (desktop);
-    NR::Matrix t = sp_item_i2doc_affine (SP_ITEM(text));
+    gdouble factor = 1 / SP_DESKTOP_ZOOM(desktop);
+    NR::Matrix t = sp_item_i2doc_affine(text);
     factor = factor / NR::expansion(t);
     by = factor * by;
+    // need to change the dx/dy in all the ancestors too, so that if the topmost span ever gets deleted the
+    // following text will keep the new kern
+    for ( ; ; ) {
+        source_item = SP_OBJECT_PARENT(source_item);
+        TextTagAttributes *attributes;
+        if (SP_IS_TEXT(source_item)) attributes = &SP_TEXT(source_item)->attributes;
+        else if(SP_IS_TSPAN(source_item)) attributes = &SP_TSPAN(source_item)->attributes;
+        else if(SP_IS_TEXTPATH(source_item)) attributes = &SP_TEXTPATH(source_item)->attributes;
+        else break;
 
-    SPSVGLength  by_x,by_y;
-    by_x.set=by_y.set=1;
-    by_x.value=by_x.computed=by[0];
-    by_y.value=by_y.computed=by[1];
-    while ( cur ) {
-        cur->AddValue(i_position, by_x, 2, true, false);
-        cur->AddValue(i_position, by_y, 3, true, false);
-        cur=cur->next;
+        attributes->addToDxDy(char_index, by);
+        for (SPObject *sibling = SP_OBJECT_PARENT(source_item)->firstChild() ; sibling && sibling != source_item ; sibling = SP_OBJECT_NEXT(sibling))
+            char_index += sp_text_get_length(sibling);
     }
-    SP_OBJECT(text)->updateRepr();
-    SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    text->updateRepr();
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void
@@ -997,9 +860,205 @@ void SPText::ClearFlow(NRArenaGroup *in_arena)
     }
 }
 
-void SPText::BuildFlow(NRArenaGroup* in_arena, NRRect *paintbox)
-{  //RH: probably doesn't need to be its own function any more
-    layout.show(in_arena, paintbox);
+
+/*
+ * TextTagAttributes implementation
+ */
+
+void TextTagAttributes::readFrom(Inkscape::XML::Node const *node)
+{
+    readSingleAttribute(SP_ATTR_X, node->attribute("x"));
+    readSingleAttribute(SP_ATTR_Y, node->attribute("y"));
+    readSingleAttribute(SP_ATTR_DX, node->attribute("dx"));
+    readSingleAttribute(SP_ATTR_DY, node->attribute("dy"));
+    readSingleAttribute(SP_ATTR_ROTATE, node->attribute("rotate"));
+}
+
+bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value)
+{
+    std::vector<SPSVGLength> *attr_vector;
+    switch (key) {
+        case SP_ATTR_X:      attr_vector = &attributes.x; break;
+        case SP_ATTR_Y:      attr_vector = &attributes.y; break;
+        case SP_ATTR_DX:     attr_vector = &attributes.dx; break;
+        case SP_ATTR_DY:     attr_vector = &attributes.dy; break;
+        case SP_ATTR_ROTATE: attr_vector = &attributes.rotate; break;
+        default: return false;
+    }
+
+    GList *list_base = sp_svg_length_list_read(value);     // FIXME: sp_svg_length_list_read() amalgamates repeated separators. This prevents unset values.
+    // simple GList to std::vector<> converter:
+    attr_vector->clear();
+	attr_vector->reserve(g_list_length(list_base));
+    for (GList *list = list_base ; list ; list = list->next) {
+        attr_vector->push_back(*reinterpret_cast<SPSVGLength*>(list->data));
+        g_free(list->data);
+    }
+	g_list_free(list_base);
+    return true;
+}
+
+void TextTagAttributes::writeTo(Inkscape::XML::Node *node) const
+{
+    writeSingleAttribute(node, "x", attributes.x);
+    writeSingleAttribute(node, "y", attributes.y);
+    writeSingleAttribute(node, "dx", attributes.dx);
+    writeSingleAttribute(node, "dy", attributes.dy);
+    writeSingleAttribute(node, "rotate", attributes.rotate);
+}
+
+void TextTagAttributes::writeSingleAttribute(Inkscape::XML::Node *node, gchar const *key, std::vector<SPSVGLength> const &attr_vector)
+{
+	if (attr_vector.empty())
+        node->setAttribute(key, NULL);
+    else {
+        Glib::ustring string;
+	    gchar single_value_string[32];
+	    
+        // FIXME: this has no concept of unset values because sp_svg_length_list_read() can't read them back in
+	    for (std::vector<SPSVGLength>::const_iterator it = attr_vector.begin() ; it != attr_vector.end() ; it++) {
+		    g_ascii_formatd(single_value_string, sizeof (single_value_string), "%.8g", it->computed);
+            if (!string.empty()) string += ' ';
+            string += single_value_string;
+	    }
+        node->setAttribute(key, string.c_str());
+    }
+}
+
+bool TextTagAttributes::singleXYCoordinates() const
+{
+    return attributes.x.size() <= 1 && attributes.y.size() <= 1;
+}
+
+bool TextTagAttributes::anyAttributesSet() const
+{
+    return !attributes.x.empty() || !attributes.y.empty() || !attributes.dx.empty() || !attributes.dy.empty() || !attributes.rotate.empty();
+}
+
+NR::Point TextTagAttributes::firstXY() const
+{
+    NR::Point point;
+    if (attributes.x.empty()) point[NR::X] = 0.0;
+    else point[NR::X] = attributes.x[0].computed;
+    if (attributes.y.empty()) point[NR::Y] = 0.0;
+    else point[NR::Y] = attributes.y[0].computed;
+    return point;
+}
+
+void TextTagAttributes::mergeInto(Inkscape::Text::Layout::OptionalTextTagAttrs *output, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_attrs, unsigned parent_attrs_offset, bool copy_xy, bool copy_dxdyrotate) const
+{
+    mergeSingleAttribute(&output->x,      parent_attrs.x,      parent_attrs_offset, copy_xy ? &attributes.x : NULL);
+    mergeSingleAttribute(&output->y,      parent_attrs.y,      parent_attrs_offset, copy_xy ? &attributes.y : NULL);
+    mergeSingleAttribute(&output->dx,     parent_attrs.dx,     parent_attrs_offset, copy_dxdyrotate ? &attributes.dx : NULL);
+    mergeSingleAttribute(&output->dy,     parent_attrs.dy,     parent_attrs_offset, copy_dxdyrotate ? &attributes.dy : NULL);
+    mergeSingleAttribute(&output->rotate, parent_attrs.rotate, parent_attrs_offset, copy_dxdyrotate ? &attributes.rotate : NULL);
+}
+
+void TextTagAttributes::mergeSingleAttribute(std::vector<SPSVGLength> *output_list, std::vector<SPSVGLength> const &parent_list, unsigned parent_offset, std::vector<SPSVGLength> const *overlay_list)
+{
+    if (overlay_list == NULL) {
+        output_list->resize(std::max(0, (int)parent_list.size() - (int)parent_offset));
+        std::copy(parent_list.begin() + parent_offset, parent_list.end(), output_list->begin());
+    } else {
+        output_list->clear();
+        output_list->reserve(std::max((int)parent_list.size() - (int)parent_offset, (int)overlay_list->size()));
+        unsigned overlay_offset = 0;
+        while (parent_offset < parent_list.size() || overlay_offset < overlay_list->size()) {
+            SPSVGLength const *this_item;
+            if (overlay_offset < overlay_list->size()) {
+                this_item = &(*overlay_list)[overlay_offset];
+                overlay_offset++;
+                parent_offset++;
+            } else {
+                this_item = &parent_list[parent_offset];
+                parent_offset++;
+            }
+            output_list->push_back(*this_item);
+        }
+    }
+}
+
+void TextTagAttributes::erase(unsigned start_index, unsigned n)
+{
+    if (n == 0) return;
+    eraseSingleAttribute(&attributes.x, start_index, n);
+    eraseSingleAttribute(&attributes.y, start_index, n);
+    eraseSingleAttribute(&attributes.dx, start_index, n);
+    eraseSingleAttribute(&attributes.dy, start_index, n);
+    eraseSingleAttribute(&attributes.rotate, start_index, n);
+}
+
+void TextTagAttributes::eraseSingleAttribute(std::vector<SPSVGLength> *attr_vector, unsigned start_index, unsigned n)
+{
+    if (attr_vector->size() <= start_index) return;
+    if (attr_vector->size() <= start_index + n)
+        attr_vector->erase(attr_vector->begin() + start_index, attr_vector->end());
+    else
+        attr_vector->erase(attr_vector->begin() + start_index, attr_vector->begin() + start_index + n);
+}
+
+void TextTagAttributes::insert(unsigned start_index, unsigned n)
+{
+    if (n == 0) return;
+    insertSingleAttribute(&attributes.x, start_index, n, true);
+    insertSingleAttribute(&attributes.y, start_index, n, true);
+    insertSingleAttribute(&attributes.dx, start_index, n, false);
+    insertSingleAttribute(&attributes.dy, start_index, n, false);
+    insertSingleAttribute(&attributes.rotate, start_index, n, false);
+}
+
+void TextTagAttributes::insertSingleAttribute(std::vector<SPSVGLength> *attr_vector, unsigned start_index, unsigned n, bool is_xy)
+{
+    if (attr_vector->size() <= start_index) return;
+    SPSVGLength zero_length;
+    zero_length = 0.0;
+    attr_vector->insert(attr_vector->begin() + start_index, n, zero_length);
+    if (is_xy) {
+        double begin = start_index == 0 ? (*attr_vector)[start_index + n].computed : (*attr_vector)[start_index - 1].computed;
+        double diff = ((*attr_vector)[start_index + n].computed - begin) / n;   // n tested for nonzero in insert()
+        for (unsigned i = 0 ; i < n ; i++)
+            (*attr_vector)[start_index + i] = begin + diff * i;
+    }
+}
+
+void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, double scale_y)
+{
+    SPSVGLength zero_length;
+    zero_length = 0.0;
+
+    // we can't apply a matrix to only one coordinate, so extend the shorter of x or y if necessary
+    if (attributes.x.size() < attributes.y.size()) {
+        if (attributes.x.empty()) attributes.x.resize(attributes.y.size(), zero_length);
+        else attributes.x.resize(attributes.y.size(), attributes.x.back());
+    } else if (attributes.y.size() < attributes.x.size()) {
+        if (attributes.y.empty()) attributes.y.resize(attributes.x.size(), zero_length);
+        else attributes.y.resize(attributes.x.size(), attributes.y.back());
+    }
+    for (unsigned i = 0 ; i < attributes.x.size() ; i++) {
+        NR::Point point(attributes.x[i].computed, attributes.y[i].computed);
+        point *= matrix;
+        attributes.x[i] = point[NR::X];
+        attributes.y[i] = point[NR::Y];
+    }
+    for (std::vector<SPSVGLength>::iterator it = attributes.dx.begin() ; it != attributes.dx.end() ; it++)
+        *it = it->computed * scale_x;
+    for (std::vector<SPSVGLength>::iterator it = attributes.dy.begin() ; it != attributes.dy.end() ; it++)
+        *it = it->computed * scale_y;
+}
+
+void TextTagAttributes::addToDxDy(unsigned index, NR::Point const &adjust)
+{
+    SPSVGLength zero_length;
+    zero_length = 0.0;
+
+    if (adjust[NR::X] != 0.0) {
+        if (attributes.dx.size() < index + 1) attributes.dx.resize(index + 1, zero_length);
+        attributes.dx[index] = attributes.dx[index].computed + adjust[NR::X];
+    }
+    if (adjust[NR::Y] != 0.0) {
+        if (attributes.dy.size() < index + 1) attributes.dy.resize(index + 1, zero_length);
+        attributes.dy[index] = attributes.dy[index].computed + adjust[NR::Y];
+    }
 }
 
 /*

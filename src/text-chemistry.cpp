@@ -135,9 +135,8 @@ text_put_on_path()
     }
 
     // x/y are useless with textpath, and confuse Batik 1.5
-    SP_TEXT(text)->x.set = FALSE;
-    SP_TEXT(text)->y.set = FALSE;
-    SP_OBJECT(text)->updateRepr();
+    sp_repr_set_attr(SP_OBJECT_REPR(text), "x", NULL);
+    sp_repr_set_attr(SP_OBJECT_REPR(text), "y", NULL);
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
     g_slist_free(text_reprs);

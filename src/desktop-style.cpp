@@ -17,6 +17,7 @@
 #include "color.h"
 #include "color-rgba.h"
 #include "svg/stringstream.h"
+#include "svg/svg.h"
 #include "selection.h"
 #include "sp-tspan.h"
 #include "fontsize-expansion.h"

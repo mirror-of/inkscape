@@ -31,13 +31,8 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-rotate.h>
-//#include <libnrtype/nr-typeface.h>
-//#include <libnrtype/FontFactory.h>
-//#include <libnrtype/font-instance.h>
-//#include <libnrtype/font-style-to-pos.h>
 
-#include <libnrtype/FlowDefs.h>
-//#include <libnrtype/TextWrapper.h>
+//#include <libnrtype/FlowDefs.h>
 
 #include <livarot/LivarotDefs.h>
 #include <livarot/Shape.h>
@@ -67,50 +62,6 @@
 #include "xml/repr.h"
 
 #include "prefs-utils.h"
-
-/*
- *
- */
-void read_length_array(int &nb, SPSVGLength *&array, char const *value)
-{
-    if (array) free(array);
-    array=NULL;
-    nb=0;
-    if (value) {
-        GList *list = sp_svg_length_list_read(value);
-        nb = g_list_length(list);
-        array = (SPSVGLength*)malloc(nb*sizeof(SPSVGLength));
-        for (int i = 0; i < nb; i++) {
-            sp_svg_length_unset(array + i, SP_SVG_UNIT_NONE, 0.0, 0.0);
-        }
-        int cur = 0;
-        for (GList *l = list; l; l = l->next) {
-            SPSVGLength *nl=(SPSVGLength*)l->data;
-            if ( cur < nb ) {
-                array[cur++]=*nl; // overcautious
-            }
-            g_free(l->data);
-        }
-        g_list_free(list);
-    }
-}
-
-char *write_length_array(int nb, SPSVGLength *array)
-{
-    if ( nb <= 0 ) return NULL;
-    gchar c[32];
-    gchar *s = NULL;
-	
-    for (int i=0;i<nb;i++) {
-        g_ascii_formatd(c, sizeof(c), "%.8g", array[i].computed);
-        if (i == 0) {
-            s = g_strdup(c);
-        }  else {
-            s = g_strjoin(" ", s, c, NULL);
-        }
-    }
-    return s;
-}
 
 /*#####################################################
 #  SPTSPAN
@@ -176,8 +127,7 @@ static void
 sp_tspan_init(SPTSpan *tspan)
 {
     tspan->role = SP_TSPAN_ROLE_UNSPECIFIED;
-    tspan->last_tspan = false;
-    new (&tspan->contents) div_flow_src(SP_OBJECT(tspan), txt_tline);
+    new (&tspan->attributes) TextTagAttributes;
 }
 
 static void
@@ -185,7 +135,7 @@ sp_tspan_release(SPObject *object)
 {
     SPTSpan *tspan = SP_TSPAN(object);
 
-    tspan->contents.~div_flow_src();
+    tspan->attributes.~TextTagAttributes();
 	
     if (((SPObjectClass *) tspan_parent_class)->release)
         ((SPObjectClass *) tspan_parent_class)->release(object);
@@ -212,60 +162,29 @@ sp_tspan_set(SPObject *object, unsigned key, gchar const *value)
 {
     SPTSpan *tspan = SP_TSPAN(object);
 	
-    /* fixme: Vectors */
-    switch (key) {
-        case SP_ATTR_X:
-            tspan->contents.SetX(value);
-            if ( tspan->contents.nb_x > 0 ) {
-                tspan->x=tspan->contents.x_s[0];
-            } else {
-                tspan->x.set=0;
-            }
-            if ( tspan->role != SP_TSPAN_ROLE_LINE ) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_Y:
-            tspan->contents.SetY(value);
-            if ( tspan->contents.nb_y > 0 ) {
-                tspan->y=tspan->contents.y_s[0];
-            } else {
-                tspan->y.set=0;
-            }
-            if ( tspan->role != SP_TSPAN_ROLE_LINE ) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_DX:
-            tspan->contents.SetDX(value);
-            if ( tspan->role != SP_TSPAN_ROLE_LINE ) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_DY:
-            tspan->contents.SetDY(value);
-            if ( tspan->role != SP_TSPAN_ROLE_LINE ) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_ROTATE:
-            tspan->contents.SetRot(value);
-            if ( tspan->role != SP_TSPAN_ROLE_LINE ) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_SODIPODI_ROLE:
-            if (value && (!strcmp(value, "line") || !strcmp(value, "paragraph"))) {
-                tspan->role = SP_TSPAN_ROLE_LINE;
-            } else {
-                tspan->role = SP_TSPAN_ROLE_UNSPECIFIED;
-            }
-            break;
-        default:
-            if (((SPObjectClass *) tspan_parent_class)->set)
-                (((SPObjectClass *) tspan_parent_class)->set)(object, key, value);
-            break;
+    if (tspan->attributes.readSingleAttribute(key, value)) {
+        if (tspan->role != SP_TSPAN_ROLE_LINE)
+            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    } else {
+        switch (key) {
+            case SP_ATTR_SODIPODI_ROLE:
+                if (value && (!strcmp(value, "line") || !strcmp(value, "paragraph"))) {
+                    tspan->role = SP_TSPAN_ROLE_LINE;
+                } else {
+                    tspan->role = SP_TSPAN_ROLE_UNSPECIFIED;
+                }
+                break;
+            default:
+                if (((SPObjectClass *) tspan_parent_class)->set)
+                    (((SPObjectClass *) tspan_parent_class)->set)(object, key, value);
+                break;
+        }
     }
 }
 
 static void
 sp_tspan_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    //SPTSpan *tspan = SP_TSPAN(object);
-    //SPStyle *style = SP_OBJECT_STYLE(object);
-    //SPItemCtx *ictx = (SPItemCtx *) ctx;
-    //GList *i;
-	
     if (((SPObjectClass *) tspan_parent_class)->update)
         ((SPObjectClass *) tspan_parent_class)->update(object, ctx, flags);
 	
@@ -307,37 +226,7 @@ sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         repr = sp_repr_new("svg:tspan");
     }
 	
-    char* nlist=NULL;
-    if ( (nlist=tspan->contents.GetX()) ) {
-        sp_repr_set_attr(repr,"x",nlist);
-        g_free(nlist);
-    } else {
-        if ( tspan->x.set ) sp_repr_set_double(repr, "x", tspan->x.computed); else sp_repr_set_attr(repr, "x", NULL);
-    }
-    if ( (nlist=tspan->contents.GetY()) ) {
-        sp_repr_set_attr(repr,"y",nlist);
-        g_free(nlist);
-    } else {
-        if ( tspan->y.set ) sp_repr_set_double(repr, "y", tspan->y.computed); sp_repr_set_attr(repr, "y", NULL);
-    }
-    if ( (nlist=tspan->contents.GetDX()) ) {
-        sp_repr_set_attr(repr,"dx",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr(repr, "dx", NULL);
-    }
-    if ( (nlist=tspan->contents.GetDY()) ) {
-        sp_repr_set_attr(repr,"dy",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr(repr, "dy", NULL);
-    }
-    if ( (nlist=tspan->contents.GetRot()) ) {
-        sp_repr_set_attr(repr,"rotate",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr(repr, "rotate", NULL);
-    }
+    tspan->attributes.writeTo(repr);
 	
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         GSList *l = NULL;
@@ -445,7 +334,7 @@ sp_textpath_class_init(SPTextPathClass *classname)
 static void
 sp_textpath_init(SPTextPath *textpath)
 {
-    new (&textpath->contents) div_flow_src(SP_OBJECT(textpath),txt_textpath);
+    new (&textpath->attributes) TextTagAttributes;
 	
     textpath->originalPath = NULL;
     textpath->isUpdating=false;
@@ -467,7 +356,7 @@ sp_textpath_release(SPObject *object)
 {
     SPTextPath *textpath = SP_TEXTPATH(object);
 	
-    textpath->contents.~div_flow_src();
+    textpath->attributes.~TextTagAttributes();
 	
     if (textpath->originalPath) delete textpath->originalPath;
     textpath->originalPath = NULL;
@@ -507,45 +396,18 @@ sp_textpath_set(SPObject *object, unsigned key, gchar const *value)
 {
     SPTextPath *textpath = SP_TEXTPATH(object);
 	
-    /* fixme: Vectors */
-    switch (key) {
-        case SP_ATTR_X:
-            textpath->contents.SetX(value);
-            if ( textpath->contents.nb_x > 0 ) {
-                textpath->x=textpath->contents.x_s[0];
-            } else {
-                textpath->x.set=0;
-            }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_Y:
-            textpath->contents.SetY(value);
-            if ( textpath->contents.nb_y > 0 ) {
-                textpath->y=textpath->contents.y_s[0];
-            } else {
-                textpath->y.set=0;
-            }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_DX:
-            textpath->contents.SetDX(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_DY:
-            textpath->contents.SetDY(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_ROTATE:
-            textpath->contents.SetRot(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_XLINK_HREF:
-            textpath->sourcePath->link((char*)value);
-            break;
-        default:
-            if (((SPObjectClass *) textpath_parent_class)->set)
-                (((SPObjectClass *) textpath_parent_class)->set)(object, key, value);
-            break;
+    if (textpath->attributes.readSingleAttribute(key, value)) {
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    } else {
+        switch (key) {
+            case SP_ATTR_XLINK_HREF:
+                textpath->sourcePath->link((char*)value);
+                break;
+            default:
+                if (((SPObjectClass *) textpath_parent_class)->set)
+                    (((SPObjectClass *) textpath_parent_class)->set)(object, key, value);
+                break;
+        }
     }
 }
 
@@ -553,9 +415,6 @@ static void
 sp_textpath_update(SPObject *object, SPCtx *ctx, guint flags)
 {
     SPTextPath *textpath = SP_TEXTPATH(object);
-    //SPStyle *style = SP_OBJECT_STYLE(object);
-    //SPItemCtx *ictx = (SPItemCtx *) ctx;
-    //GList *i;
 	
     textpath->isUpdating=true;
     if ( textpath->sourcePath->sourceDirty ) refresh_textpath_source(textpath);
@@ -622,37 +481,8 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         repr = sp_repr_new("svg:textpath");
     }
 	
-    char* nlist=NULL;
-    if ( (nlist=textpath->contents.GetX()) ) {
-        sp_repr_set_attr(repr,"x",nlist);
-        g_free(nlist);
-    } else {
-        if ( textpath->x.set ) sp_repr_set_double(repr, "x", textpath->x.computed); else sp_repr_set_attr(repr, "x", NULL);
-    }
-    if ( (nlist=textpath->contents.GetY()) ) {
-        sp_repr_set_attr(repr,"y",nlist);
-        g_free(nlist);
-    } else {
-        if ( textpath->y.set ) sp_repr_set_double(repr, "y", textpath->y.computed); else sp_repr_set_attr(repr, "y", NULL);
-    }
-    if ( (nlist=textpath->contents.GetDX()) ) {
-        sp_repr_set_attr(repr,"dx",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr(repr, "dx", NULL);
-    }
-    if ( (nlist=textpath->contents.GetDY())) {
-        sp_repr_set_attr(repr,"dy",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr(repr, "dy", NULL);
-    }
-    if ( (nlist=textpath->contents.GetRot()) ) {
-        sp_repr_set_attr(repr,"rotate",nlist);
-        g_free(nlist);
-    } else {
-        sp_repr_set_attr(repr, "rotate", NULL);
-    }
+    textpath->attributes.writeTo(repr);
+
     if ( textpath->sourcePath->sourceHref ) sp_repr_set_attr(repr, "xlink:href", textpath->sourcePath->sourceHref);
 	
     if ( flags&SP_OBJECT_WRITE_BUILD ) {

@@ -160,47 +160,17 @@ static bool is_line_break_object(SPObject *object)
            || SP_IS_FLOWREGIONBREAK(object);
 }    
 
-static SPTSpan* sp_te_append_line(SPText *text)
+unsigned sp_text_get_length(SPObject *item)
 {
-    g_return_val_if_fail (text != NULL, NULL);
-    g_return_val_if_fail (SP_IS_TEXT (text), NULL);
+    unsigned length = 0;
 
-    SPStyle *style = SP_OBJECT_STYLE (text);
-
-    NR::Point cp(text->x.computed, text->y.computed);
-
-    for (SPObject *child = sp_object_first_child(SP_OBJECT(text)) ; child != NULL; child = SP_OBJECT_NEXT(child)) {
-        if (SP_IS_TSPAN (child)) {
-            SPTSpan *tspan = SP_TSPAN (child);
-            if (tspan->role == SP_TSPAN_ROLE_LINE) {
-                cp[NR::X] = tspan->x.computed;
-                cp[NR::Y] = tspan->y.computed;
-            }
-        }
+    if (SP_IS_STRING(item)) return SP_STRING(item)->string.length();
+    if (is_line_break_object(item)) length++;
+    for (SPObject *child = item->firstChild() ; child ; child = SP_OBJECT_NEXT(child)) {
+        if (SP_IS_STRING(child)) length += SP_STRING(child)->string.length();
+        else length += sp_text_get_length(SP_ITEM(child));
     }
-
-    /* Create <tspan> */
-    Inkscape::XML::Node *rtspan = sp_repr_new ("svg:tspan");
-    if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-        /* fixme: real line height */
-        /* fixme: What to do with mixed direction tspans? */
-        sp_repr_set_double (rtspan, "x", cp[NR::X] - style->font_size.computed);
-        sp_repr_set_double (rtspan, "y", cp[NR::Y]);
-    } else {
-        sp_repr_set_double (rtspan, "x", cp[NR::X]);
-        sp_repr_set_double (rtspan, "y", cp[NR::Y] + style->font_size.computed);
-    }
-    sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-
-    /* Create TEXT */
-    Inkscape::XML::Node *rstring = sp_repr_new_text("");
-    sp_repr_add_child (rtspan, rstring, NULL);
-    sp_repr_unref (rstring);
-    /* Append to text */
-    SP_OBJECT_REPR (text)->appendChild(rtspan);
-    sp_repr_unref (rtspan);
-
-    return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
+    return length;
 }
 
 static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Node const *old_node)
@@ -277,16 +247,23 @@ bool sp_te_insert_line (SPText *text, gint i_ucs4_pos)
     if (SP_IS_TEXT_TEXTPATH (text)) 
         return 0;
 
-    Inkscape::Text::Layout::iterator it_split = text->layout.charIndexToIterator(i_ucs4_pos);
-    if (it_split == text->layout.end()) {
-        sp_te_append_line(text);
-        return 1;
-    }
     SPObject *split_obj;
     Glib::ustring::iterator split_text_iter;
-    text->layout.getSourceOfCharacter(it_split, (void**)&split_obj, &split_text_iter);
+    Inkscape::Text::Layout::iterator it_split = text->layout.charIndexToIterator(i_ucs4_pos);
+    if (it_split == text->layout.end())
+        split_obj = NULL;
+    else
+        text->layout.getSourceOfCharacter(it_split, (void**)&split_obj, &split_text_iter);
 
-    if (SP_IS_STRING(split_obj)) {
+    if (split_obj == NULL || is_line_break_object(split_obj)) {
+        if (split_obj == NULL) split_obj = text->lastChild();
+        else split_obj = SP_OBJECT_PREV(split_obj);
+        if (split_obj) {
+            Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
+            SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
+            sp_repr_unref(new_node);
+        }
+    } else if (SP_IS_STRING(split_obj)) {
         Glib::ustring *string = &SP_STRING(split_obj)->string;
         // we need to split the entire text tree into two
         SPString *new_string = SP_STRING(split_text_object_tree_at(split_obj));
@@ -294,13 +271,6 @@ bool sp_te_insert_line (SPText *text, gint i_ucs4_pos)
         string->erase(split_text_iter, string->end());
         SP_OBJECT_REPR(split_obj)->setContent(string->c_str());
         // TODO: if the split point was at the beginning of a span we have a whole load of empty elements to clean up
-    } else if (is_line_break_object(split_obj)) {
-        if (SP_OBJECT_PREV(split_obj)) {   // always true
-            split_obj = SP_OBJECT_PREV(split_obj);
-            Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
-            SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
-            sp_repr_unref(new_node);
-        }
     } else {
         // TODO
         // I think the only case to put here is arbitrary gaps, which nobody uses yet
@@ -403,11 +373,15 @@ static bool merge_nodes_if_possible(SPObject *object, SPObject *other)
     if (!((object_style == NULL && other_style == NULL)
           || (object_style != NULL && other_style != NULL && !strcmp(object_style, other_style))))
         return false;
-    if (SP_IS_TSPAN(other)) {
-        div_flow_src const *contents = &SP_TSPAN(other)->contents;
-        if (contents->nb_dx || contents->nb_dy || contents->nb_rot || contents->nb_x || contents->nb_y)
+    if (SP_IS_TSPAN(other))    // actually in these cases it would be possible to move the attributes over to the preceding element
+        if (SP_TSPAN(other)->attributes.anyAttributesSet())
             return false;
-    }
+    if (SP_IS_TEXT(other))
+        if (SP_TEXT(other)->attributes.anyAttributesSet())
+            return false;
+    if (SP_IS_TEXTPATH(other))
+        if (SP_TEXTPATH(other)->attributes.anyAttributesSet())
+            return false;
     // all our tests passed: do the merge
     while (other_repr->childCount()) {
         Inkscape::XML::Node *child = other_repr->firstChild();
@@ -518,19 +492,18 @@ sp_te_get_cursor_coords (SPItem *item, gint i_position, NR::Point &p0, NR::Point
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     if (!layout->outputExists()) {
         if (SP_IS_TEXT(item)) {
-            p0[0] = SP_TEXT(item)->x.computed;
-            p0[1] = SP_TEXT(item)->y.computed;
+            p0 = SP_TEXT(item)->attributes.firstXY();
         } else if (SP_IS_FLOWTEXT(item)) {
-            p0[0] = 0.0;  // fixme
-            p0[1] = 0.0;
+            p0[NR::X] = 0.0;  // fixme
+            p0[NR::Y] = 0.0;
         }
         p1 = p0;
-        p1[1] -= item->style->font_size.computed;
+        p1[NR::Y] -= item->style->font_size.computed;
         return;
     }
     double height, rotation;
     layout->queryCursorShape(layout->charIndexToIterator(i_position), &p0, &height, &rotation);
-    p1 = NR::Point(p0[0] + height * sin(rotation), p0[1] - height * cos(rotation));
+    p1 = NR::Point(p0[NR::X] + height * sin(rotation), p0[NR::Y] - height * cos(rotation));
 }
 
 
