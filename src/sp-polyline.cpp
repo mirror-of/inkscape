@@ -176,6 +176,6 @@ sp_polyline_write (SPObject *object, SPRepr *repr, guint flags)
 static gchar *
 sp_polyline_description (SPItem * item)
 {
-	return g_strdup ("PolyLine");
+	return g_strdup ("<b>Polyline</b>");
 }
 

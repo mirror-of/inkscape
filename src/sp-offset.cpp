@@ -391,11 +391,11 @@ sp_offset_description (SPItem * item)
 
 	if ( offset->sourceHref ) {
 		// TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
-		return g_strdup_printf(_("Linked offset, %s by %f pt. Use Shift+D to look up original"),
+		return g_strdup_printf(_("<b>Linked offset</b>, %s by %f pt. Use <b>Shift+D</b> to look up original"),
 			 (offset->rad >= 0)? _("outset") : _("inset"), fabs (offset->rad));
 	} else {
 		// TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
-		return g_strdup_printf(_("Dynamic offset, %s by %f pt"),
+		return g_strdup_printf(_("<b>Dynamic offset</b>, %s by %f pt"),
 			 (offset->rad >= 0)? _("outset") : _("inset"), fabs (offset->rad));
 	}
 }
@@ -1153,5 +1153,14 @@ void   refresh_offset_source(SPOffset* offset)
   }
 }
 
-
+SPItem *
+sp_offset_get_source (SPOffset *offset)
+{
+	if (offset && offset->sourceRef) {
+		SPItem *refobj = offset->sourceRef->getObject();
+		if (SP_IS_ITEM (refobj))
+			return (SPItem *) refobj;
+	}
+	return NULL;
+}
 

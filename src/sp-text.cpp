@@ -472,7 +472,11 @@ sp_text_description(SPItem *item)
         n = _("<no name found>");
     }
 
-    return g_strdup_printf (_("Text (%s, %.5gpt)"), n, style->font_size.computed );
+    if (SP_IS_TEXT_TEXTPATH(item)) {
+        return g_strdup_printf (_("<b>Text on path</b> (%s, %.5gpt). Use <b>Shift+D</b> to look up the path"), n, style->font_size.computed );
+    } else {
+        return g_strdup_printf (_("<b>Text</b> (%s, %.5gpt)"), n, style->font_size.computed );
+    }
 }
 
 

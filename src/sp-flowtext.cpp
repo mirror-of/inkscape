@@ -348,7 +348,7 @@ static gchar *sp_flowtext_description(SPItem * /*item*/)
     //g_return_val_if_fail(SP_IS_FLOWTEXT(item), NULL);
 
     //return g_strdup_printf(_("Text flow"));
-    return g_strdup_printf("Flow text");
+    return g_strdup_printf("<b>Flowed text</b>");
 }
 
 static NRArenaItem *

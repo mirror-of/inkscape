@@ -122,7 +122,7 @@ sp_nodes_in_path(SPPath *path)
 static gchar *
 sp_path_description(SPItem * item)
 {
-    return g_strdup_printf(_("Path (%i nodes)"), sp_nodes_in_path(SP_PATH(item)));
+    return g_strdup_printf(_("<b>Path</b> (%i nodes)"), sp_nodes_in_path(SP_PATH(item)));
 }
 
 /**

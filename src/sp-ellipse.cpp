@@ -434,7 +434,7 @@ sp_ellipse_set (SPObject *object, unsigned int key, const gchar *value)
 
 static gchar *sp_ellipse_description(SPItem *item)
 {
-	return g_strdup(_("Ellipse"));
+	return g_strdup(_("<b>Ellipse</b>"));
 }
 
 
@@ -579,7 +579,7 @@ sp_circle_set (SPObject *object, unsigned int key, const gchar *value)
 
 static gchar *sp_circle_description (SPItem *item)
 {
-	return g_strdup(_("Circle"));
+	return g_strdup(_("<b>Circle</b>"));
 }
 
 /* <path sodipodi:type="arc"> element */
@@ -854,7 +854,7 @@ sp_arc_modified (SPObject *object, guint flags)
 
 static gchar *sp_arc_description(SPItem *item)
 {
-	return g_strdup(_("Arc"));
+	return g_strdup(_("<b>Arc</b>"));
 }
 
 void

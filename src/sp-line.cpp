@@ -161,7 +161,7 @@ sp_line_write (SPObject *object, SPRepr *repr, guint flags)
 static gchar *
 sp_line_description (SPItem * item)
 {
-	return g_strdup ("Line");
+	return g_strdup ("<b>Line</b>");
 }
 
 static NR::Matrix

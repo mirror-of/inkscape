@@ -361,7 +361,7 @@ static gchar * sp_group_description (SPItem * item)
 		}
 	}
 
-	return g_strdup_printf(_("Group of %d objects"), len);
+	return g_strdup_printf(_("<b>Group</b> of <b>%d</b> objects"), len);
 }
 
 static void sp_group_set(SPObject *object, unsigned key, char const *value) {

@@ -24,6 +24,7 @@
 #include "sp-object.h"
 #include "sp-path.h"
 #include "sp-text.h"
+#include "sp-tspan.h"
 #include "style.h"
 #include "inkscape.h"
 #include "document.h"
@@ -73,7 +74,10 @@ text_put_on_path (void)
 		return;
 	}
 
-	// fixme: check that the text is not textpath already
+	if (SP_IS_TEXT_TEXTPATH(text)) {
+		desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("This text object is <b>already put to a path</b>. Remove it from the path first. Use <b>Shift+D</b> to look up its path."));
+		return;
+	}
 
 	// fixme: remove transform from text, but scale fontsize by expansion
 

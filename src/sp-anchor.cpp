@@ -177,7 +177,7 @@ static gchar *sp_anchor_description(SPItem *item)
 {
     SPAnchor *anchor = SP_ANCHOR(item);
     char c[128];
-    g_snprintf(c, 128, _("Link to %s"), anchor->href);
+    g_snprintf(c, 128, _("<b>Link</b> to %s"), anchor->href);
 
     return g_strdup(c);
 }

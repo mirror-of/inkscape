@@ -283,8 +283,8 @@ sp_star_description (SPItem *item)
 	SPStar *star = SP_STAR (item);
 
 	if (star->flatsided == false )
-	return g_strdup_printf (_("Star of %d sides"), star->sides);
-	else return g_strdup_printf (_("Polygon of %d sides"), star->sides);
+	return g_strdup_printf (_("<b>Star</b> of %d sides"), star->sides);
+	else return g_strdup_printf (_("<b>Polygon</b> of %d sides"), star->sides);
 }
 
 /**

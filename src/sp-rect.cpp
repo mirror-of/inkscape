@@ -239,7 +239,7 @@ sp_rect_description(SPItem *item)
 {
     g_return_val_if_fail(SP_IS_RECT(item), NULL);
 
-    return g_strdup(_("Rectangle"));
+    return g_strdup(_("<b>Rectangle</b>"));
 }
 
 #define C1 0.554

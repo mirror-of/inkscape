@@ -321,9 +321,9 @@ sp_image_description (SPItem * item)
 	image = SP_IMAGE (item);
 
 	if (image->pixbuf == NULL) {
-		return g_strdup_printf (_("Image with bad reference: %s"), image->href);
+		return g_strdup_printf (_("<b>Image with bad reference</b>: %s"), image->href);
 	} else {
-		return g_strdup_printf (_("Color image %d x %d: %s"),
+		return g_strdup_printf (_("<b>Image</b> %d x %d: %s"),
 					  gdk_pixbuf_get_width (image->pixbuf),
 					  gdk_pixbuf_get_height (image->pixbuf),
 					  image->href);

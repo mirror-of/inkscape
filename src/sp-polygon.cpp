@@ -213,7 +213,7 @@ static void sp_polygon_set(SPObject *object, unsigned int key, const gchar *valu
 
 static gchar *sp_polygon_description(SPItem *item)
 {
-    return g_strdup("Polygon");
+    return g_strdup("<b>Polygon</b>");
 }
 
 /*

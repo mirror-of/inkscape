@@ -33,7 +33,7 @@ void SelectionDescriber::_updateMessageFromSelection(SPSelection *selection) {
     } else if (!items->next) { // one item
         _context.setF(Inkscape::NORMAL_MESSAGE, "%s. %s.", sp_item_description(SP_ITEM(items->data)), when_selected);
     } else { // multiple items
-        _context.setF(Inkscape::NORMAL_MESSAGE, _("%i objects selected. %s."), g_slist_length((GSList *)items), when_selected);
+        _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected. %s."), g_slist_length((GSList *)items), when_selected);
     }
 }
 

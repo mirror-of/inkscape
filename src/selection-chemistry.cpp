@@ -59,6 +59,7 @@
 #include "sp-use-reference.h"
 #include "sp-namedview.h"
 #include "prefs-utils.h"
+#include "sp-offset.h"
 using NR::X;
 using NR::Y;
 
@@ -80,7 +81,7 @@ void sp_selection_delete()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing was deleted."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
         return;
     }
 
@@ -120,7 +121,7 @@ void sp_selection_duplicate()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select some objects to duplicate."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to duplicate."));
         return;
     }
 
@@ -255,7 +256,7 @@ void sp_selection_group()
 
     // Check if something is selected.
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select two or more objects to group."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>two or more objects</b> to group."));
         return;
     }
 
@@ -263,7 +264,7 @@ void sp_selection_group()
 
     // Check if at least two objects are selected.
     if (l->next == NULL) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select at least two objects to group."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>at least two objects</b> to group."));
         return;
     }
 
@@ -272,7 +273,7 @@ void sp_selection_group()
     SPRepr *parent = ((SPRepr *) reprs->data)->parent;
     for (GSList *i = reprs->next; i; i = i->next) {
         if ((((SPRepr *) i->data)->parent) != parent) {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot group objects from different groups or layers."));
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot group objects from <b>different groups</b> or <b>layers</b>."));
             return;
         }
     }
@@ -320,7 +321,7 @@ void sp_selection_ungroup()
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a group to ungroup."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a <b>group</b> to ungroup."));
         return;
     }
 
@@ -354,7 +355,7 @@ void sp_selection_ungroup()
         g_slist_free(new_select);
     }
     if (!ungrouped) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No groups to ungroup in the selection."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
     }
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
@@ -421,13 +422,13 @@ sp_selection_raise()
 
     GSList const *items = (GSList *) selection->itemList();
     if (!items) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select some objects to raise."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> to raise."));
         return;
     }
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("You cannot raise/lower objects from different groups or layers."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -471,7 +472,7 @@ void sp_selection_raise_to_top()
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select some objects to raise to top."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise to top."));
         return;
     }
 
@@ -499,13 +500,13 @@ sp_selection_lower()
 
     GSList const *items = (GSList *) selection->itemList();
     if (!items) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select some objects to lower."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower."));
         return;
     }
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("You cannot raise/lower objects from different groups or layers."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -555,7 +556,7 @@ void sp_selection_lower_to_bottom()
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select some objects to lower to bottom."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower to bottom."));
         return;
     }
 
@@ -701,7 +702,7 @@ void sp_selection_copy()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing was copied."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was copied."));
         return;
     }
 
@@ -828,7 +829,7 @@ void sp_selection_paste(bool in_place)
 
     // check if something is in the clipboard
     if (clipboard == NULL) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing on the clipboard."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> on the clipboard."));
         return;
     }
 
@@ -879,13 +880,13 @@ void sp_selection_paste_style()
 
     // check if something is in the clipboard
     if (clipboard == NULL) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing on the clipboard."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> on the clipboard."));
         return;
     }
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select objects to paste style to."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to paste style to."));
         return;
     }
 
@@ -1424,13 +1425,13 @@ sp_selection_clone()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an object to clone."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an <b>object</b> to clone."));
         return;
     }
 
     // Check if more than one object is selected.
     if (g_slist_length((GSList *) selection->itemList()) > 1) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("If you want to clone several objects, group them and clone the group."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("If you want to clone several objects, <b>group</b> them and <b>clone the group</b>."));
         return;
     }
 
@@ -1461,7 +1462,7 @@ sp_selection_unlink()
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a clone to unlink."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a <b>clone</b> to unlink."));
         return;
     }
 
@@ -1492,7 +1493,7 @@ sp_selection_unlink()
         g_slist_free(new_select);
     }
     if (!unlinked) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No clones to unlink in the selection."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No clones to unlink</b> in the selection."));
     }
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
@@ -1507,17 +1508,36 @@ sp_select_clone_original()
 
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
-    // Check if more than two objects are selected, or not an SPUse is selected.
-    if (g_slist_length((GSList *) selection->itemList()) != 1 || !SP_IS_USE(selection->singleItem())) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a single clone to go to its original."));
+    SPItem *item = selection->singleItem();
+
+    const gchar *error = _("Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> to go to its source. Select a <b>text on path</b> to go to the path.");
+
+    // Check if other than two objects are selected
+    if (g_slist_length((GSList *) selection->itemList()) != 1 || !item) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, error);
         return;
     }
 
-    SPItem *original = sp_use_get_original(SP_USE(selection->singleItem()));
+    SPItem *original = NULL;
+    if (SP_IS_USE(item)) {
+        original = sp_use_get_original (SP_USE(item));
+    } else if (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) {
+        original = sp_offset_get_source (SP_OFFSET(item));
+    } else if (SP_IS_TEXT_TEXTPATH(item)) {
+        original = sp_textpath_get_path_item (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item))));
+    } else { // it's an object that we don't know what to do with
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, error);
+        return;
+    }
+
+    if (!original) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Cannot find</b> the object to select (orphaned clone, offset, or textpath?)"));
+        return;
+    }
 
     for (SPObject *o = original; o && !SP_IS_ROOT(o); o = SP_OBJECT_PARENT (o)) {
         if (SP_IS_DEFS (o)) {
-            desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("This clone's original is not a visible object (it is in <defs>)"));
+            desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("The object you're trying to select is <b>not visible</b> (it is in &lt;defs&gt;)"));
             return;
         }
     }
@@ -1544,7 +1564,7 @@ sp_selection_tile()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an object to tile."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to tile."));
         return;
     }
 
@@ -1618,7 +1638,7 @@ sp_selection_untile()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an object with pattern fill to untile."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an <b>object with pattern fill</b> to untile."));
         return;
     }
 
@@ -1671,7 +1691,7 @@ sp_selection_untile()
     }
 
     if (!did) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No pattern fills to untile in the selection."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No pattern fills</b> to untile in the selection."));
     } else {
         sp_document_done(SP_DT_DOCUMENT(desktop));
         selection->setItemList (new_select);

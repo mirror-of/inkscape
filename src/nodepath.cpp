@@ -1119,7 +1119,7 @@ void sp_node_selected_join()
     if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
     if (g_list_length(nodepath->selected) != 2) {
-        nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have two endnodes selected."));
+        nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have <b>two endnodes</b> selected."));
         return;
     }
 
@@ -1131,7 +1131,7 @@ void sp_node_selected_join()
     g_assert(b->p.other || b->n.other);
 
     if (((a->subpath->closed) || (b->subpath->closed)) || (a->p.other && a->n.other) || (b->p.other && b->n.other)) {
-        nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have two endnodes selected."));
+        nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have <b>two endnodes</b> selected."));
         return;
     }
 
@@ -1211,7 +1211,7 @@ void sp_node_selected_join_segment()
     if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
     if (g_list_length(nodepath->selected) != 2) {
-        nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have two endnodes selected."));
+        nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have <b>two endnodes</b> selected."));
         return;
     }
 
@@ -1223,7 +1223,7 @@ void sp_node_selected_join_segment()
     g_assert(b->p.other || b->n.other);
 
     if (((a->subpath->closed) || (b->subpath->closed)) || (a->p.other && a->n.other) || (b->p.other && b->n.other)) {
-        nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have two endnodes selected."));
+        nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have <b>two endnodes</b> selected."));
         return;
     }
 
@@ -1348,7 +1348,7 @@ sp_node_selected_delete_segment(void)
 
     if (g_list_length(nodepath->selected) != 2) {
         nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
-                                                 _("You must select two non-endpoint nodes on a path between which to delete segments."));
+                                                 _("Select <b>two non-endpoint nodes</b> on a path between which to delete segments."));
         return;
     }
 
@@ -1362,7 +1362,7 @@ sp_node_selected_delete_segment(void)
          (!b->p.other || !b->n.other) )    //one of b's sides does not have a segment
     {
         nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
-                                                 _("You must select two non-endpoint nodes on a path between which to delete segments."));
+                                                 _("Select <b>two non-endpoint nodes</b> on a path between which to delete segments."));
         return;
     }
 

@@ -596,22 +596,22 @@ sp_textpath_update (SPObject *object, SPCtx *ctx, guint flags)
 }
 
 
-void   refresh_textpath_source(SPTextPath* offset)
+void   refresh_textpath_source(SPTextPath* tp)
 {
-  if ( offset == NULL ) return;
-	offset->sourcePath->refresh_source();
-  offset->sourcePath->sourceDirty=false;
+  if ( tp == NULL ) return;
+	tp->sourcePath->refresh_source();
+  tp->sourcePath->sourceDirty=false;
 	
   // finalisons
-  if ( offset->sourcePath->originalPath ) { 
- 		if (offset->originalPath) {
-			delete offset->originalPath;
+  if ( tp->sourcePath->originalPath ) { 
+ 		if (tp->originalPath) {
+			delete tp->originalPath;
 		}
-		offset->originalPath = NULL;
+		tp->originalPath = NULL;
 		
-		offset->originalPath = new Path;
-		offset->originalPath->Copy(offset->sourcePath->originalPath);
-		offset->originalPath->ConvertWithBackData(0.5);
+		tp->originalPath = new Path;
+		tp->originalPath->Copy(tp->sourcePath->originalPath);
+		tp->originalPath->ConvertWithBackData(0.5);
 		
   }
 }
@@ -711,3 +711,13 @@ sp_textpath_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 
+SPItem *
+sp_textpath_get_path_item (SPTextPath *tp)
+{
+	if (tp && tp->sourcePath) {
+		SPItem *refobj = tp->sourcePath->getObject();
+		if (SP_IS_ITEM (refobj))
+			return (SPItem *) refobj;
+	}
+	return NULL;
+}
