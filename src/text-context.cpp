@@ -23,9 +23,7 @@
 #include <gtk/gtkmain.h>
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
-#include <display/canvas-arena.h>
-#include <display/nr-arena-shape.h>
-#include <display/nr-arena-group.h>
+#include <display/sp-ctrlquadr.h>
 #include <libnr/nr-matrix-ops.h>
 #include <gtk/gtkimmulticontext.h>
 
@@ -129,6 +127,7 @@ sp_text_context_init (SPTextContext *tc)
 	tc->pdoc = NR::Point(0, 0);
     new (&tc->text_sel_start) Inkscape::Text::Layout::iterator();
     new (&tc->text_sel_end) Inkscape::Text::Layout::iterator();
+    new (&tc->text_selection_quads) std::vector<SPCanvasItem*>();
 
 	tc->unimode = FALSE;
 
@@ -152,6 +151,7 @@ sp_text_context_dispose(GObject *obj)
 	tc->sel_modified_connection.~connection();
     tc->text_sel_end.~iterator();
     tc->text_sel_start.~iterator();
+    tc->text_selection_quads.~vector();
 	if (G_OBJECT_CLASS(parent_class)->dispose) {
 		G_OBJECT_CLASS(parent_class)->dispose(obj);
 	}
@@ -172,9 +172,6 @@ sp_text_context_setup (SPEventContext *ec)
 	sp_ctrlrect_set_area (SP_CTRLRECT (tc->indicator), 0, 0, 100, 100);
 	sp_ctrlrect_set_color(SP_CTRLRECT (tc->indicator), 0x0000ff7f, FALSE, 0);
 	sp_canvas_item_hide (tc->indicator);
-
-    tc->text_selection = SP_CANVAS_ARENA(sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CANVAS_ARENA, NULL));
-	sp_canvas_item_hide (SP_CANVAS_ITEM(tc->text_selection));
 
 	tc->timeout = gtk_timeout_add (250, (GtkFunction) sp_text_context_timeout, ec);
 
@@ -252,10 +249,11 @@ sp_text_context_finish (SPEventContext *ec)
 		tc->indicator = NULL;
 	}
 
-	if (tc->text_selection) {
-		gtk_object_destroy (GTK_OBJECT (tc->text_selection));
-		tc->text_selection = NULL;
-	}
+	for (std::vector<SPCanvasItem*>::iterator it = tc->text_selection_quads.begin() ; it != tc->text_selection_quads.end() ; it++) {
+		sp_canvas_item_hide (*it);
+		gtk_object_destroy (*it);
+    }
+    tc->text_selection_quads.clear();
 
 	if (ec->desktop) {
   		sp_signal_disconnect_by_data (SP_DT_CANVAS (ec->desktop), tc);
@@ -859,20 +857,22 @@ sp_text_context_update_cursor (SPTextContext *tc,  bool scroll_to_see)
 
 static void sp_text_context_update_text_selection (SPTextContext *tc)
 {
-    nr_arena_item_request_render (tc->text_selection->root);
-    NRArenaGroup *group = NR_ARENA_GROUP(tc->text_selection->root);
-    while (group->children)
-        nr_arena_item_remove_child (group, group->children);
+	for (std::vector<SPCanvasItem*>::iterator it = tc->text_selection_quads.begin() ; it != tc->text_selection_quads.end() ; it++) {
+		sp_canvas_item_hide (*it);
+		gtk_object_destroy (*it);
+    }
+    tc->text_selection_quads.clear();
 
-    NRArenaShape *arena_shape = NULL;
+    std::vector<NR::Point> quads;
     if (tc->text != NULL)
-        arena_shape = sp_te_create_selection_arena_item(tc->text, tc->text_selection->arena, tc->text_sel_start, tc->text_sel_end, sp_item_i2d_affine(tc->text));
-    if (arena_shape) {
-        nr_arena_item_add_child(tc->text_selection->root, arena_shape, NULL);
-        nr_arena_item_unref(arena_shape);
-		sp_canvas_item_show (SP_CANVAS_ITEM(tc->text_selection));
-    } else {
-		sp_canvas_item_hide (SP_CANVAS_ITEM(tc->text_selection));
+        quads = sp_te_create_selection_quads(tc->text, tc->text_sel_start, tc->text_sel_end, sp_item_i2d_affine(tc->text));
+    for (unsigned i = 0 ; i < quads.size() ; i += 4) {
+        SPCanvasItem *quad_canvasitem;
+        quad_canvasitem = sp_canvas_item_new(SP_DT_CONTROLS(tc->event_context.desktop), SP_TYPE_CTRLQUADR, NULL);
+        sp_ctrlquadr_set_rgba32(SP_CTRLQUADR(quad_canvasitem), 0x000000ff);
+        sp_ctrlquadr_set_coords(SP_CTRLQUADR(quad_canvasitem), quads[i], quads[i+1], quads[i+2], quads[i+3]);
+		sp_canvas_item_show (quad_canvasitem);
+        tc->text_selection_quads.push_back(quad_canvasitem);
     }
 }
 

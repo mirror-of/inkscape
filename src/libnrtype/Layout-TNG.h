@@ -439,9 +439,10 @@ public:
     NR::Rect characterBoundingBox(iterator const &it, double *rotation = NULL) const;
 
     /** Basically uses characterBoundingBox() on all the characters from
-    \a start to \a end and returns the union of these boxes. Free the result
-    with sp_curve_unref(). */
-    SPCurve* createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const;
+    \a start to \a end and returns the union of these boxes. The return value
+    is a list of zero or more quadrilaterals specified by a group of four
+    points for each, thus size() is always a multiple of four. */
+    std::vector<NR::Point> createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const;
 
     inline bool isCursorPosition(iterator const &it) const;
 

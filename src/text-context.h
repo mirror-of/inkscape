@@ -54,7 +54,7 @@ struct SPTextContext {
 
 	SPCanvasItem *cursor;
 	SPCanvasItem *indicator;
-	SPCanvasArena *text_selection;
+	std::vector<SPCanvasItem*> text_selection_quads;
 	gint timeout;
 	guint show : 1;
 	guint phase : 1;

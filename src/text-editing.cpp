@@ -92,37 +92,15 @@ sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p)
     return layout->getNearestCursorPositionTo(p);
 }
 
-NRArenaShape* sp_te_create_selection_arena_item(SPItem *item, NRArena *arena, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, NR::Matrix const &transform)
+std::vector<NR::Point> sp_te_create_selection_quads(SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, NR::Matrix const &transform)
 {
     if (start == end)
-        return NULL;
+        return std::vector<NR::Point>();
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     if (layout == NULL)
-        return NULL;
+        return std::vector<NR::Point>();
 
-    SPCurve *sel_curve = layout->createSelectionShape(start, end, transform);
-
-    NRRect  paintbox;
-    NRBPath bp;
-    bp.path = SP_CURVE_BPATH(sel_curve);
-    paintbox.x0 = paintbox.y0 = NR_HUGE;
-    paintbox.x1 = paintbox.y1 = -NR_HUGE;
-    nr_path_matrix_bbox_union(&bp, NR::identity(), &paintbox);
-
-    SPStyle *style = sp_style_new();
-    sp_style_merge_from_style_string(style, "fill:blue;fill-opacity:0.5");
-
-    NRArenaShape *arena_shape = NRArenaShape::create(arena);
-    nr_arena_shape_set_style (arena_shape, style);
-    sp_style_unref(style);   // arena takes a reference
-    nr_arena_shape_set_path(arena_shape, sel_curve, false);
-    nr_arena_shape_set_paintbox (arena_shape, &paintbox);
-
-    sp_curve_unref(sel_curve);  // arena takes a reference
-    return arena_shape;
-    // with the return value do:
-    //   nr_arena_item_add_child(flowed, arena_shape, NULL);
-    //   nr_arena_item_unref(arena_shape);
+    return layout->createSelectionShape(start, end, transform);
 }
 
 /*

@@ -396,9 +396,9 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
     return NR::Rect(top_left, bottom_right);
 }
 
-SPCurve* Layout::createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const
+std::vector<NR::Point> Layout::createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const
 {
-    SPCurve *selection_curve = sp_curve_new();
+    std::vector<NR::Point> quads;
     unsigned char_index;
     unsigned end_char_index;
     
@@ -445,12 +445,10 @@ SPCurve* Layout::createSelectionShape(iterator const &it_start, iterator const &
         NR::Point center_of_rotation((top_left[NR::X] + bottom_right[NR::X]) * 0.5,
                                      top_left[NR::Y] + _spans[span_index].line_height.ascent);
         NR::Matrix total_transform = NR::translate(-center_of_rotation) * NR::rotate(char_rotation) * NR::translate(center_of_rotation) * transform;
-        sp_curve_moveto(selection_curve, char_box.corner(0) * total_transform);
-        for(int i = 1; i < 4; i ++)
-            sp_curve_lineto(selection_curve, char_box.corner(i) * total_transform);
-        sp_curve_closepath(selection_curve);
+        for(int i = 0; i < 4; i ++)
+            quads.push_back(char_box.corner(i) * total_transform);
     }
-    return selection_curve;
+    return quads;
 }
 
 void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *height, double *rotation) const
