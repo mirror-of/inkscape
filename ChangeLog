@@ -1,5 +1,10 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dialogs/item-properties.cpp: Address `-Wshadow' warnings.
+
+	* src/nodepath.h, src/nodepath.cpp: Make some functions static.
+	(sp_nodepath_node_deselect) Remove unused function.
+
 	* src/dialogs/align.cpp (sp_quick_align_dialog): Switch to data-driven approach.
 	Mark some things as static.
 	(sp_quick_align_dialog_close) Remove unused function.

@@ -71,8 +71,6 @@ struct _SPPathNode {
 SPNodePath * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
 void sp_nodepath_destroy (SPNodePath * nodepath);
 
-void update_object (SPNodePath * np);
-
 void sp_nodepath_deselect (SPNodePath *nodepath);
 void sp_nodepath_select_all (SPNodePath *nodepath);
 void sp_nodepath_select_next (SPNodePath *nodepath);
@@ -82,7 +80,6 @@ GList *save_nodepath_selection (SPNodePath *nodepath);
 void restore_nodepath_selection (SPNodePath *nodepath, GList *r);
 gboolean nodepath_repr_d_changed (SPNodePath * np, const char *newd);
 gboolean nodepath_repr_typestr_changed (SPNodePath * np, const char *newtypestr);
-void update_repr (SPNodePath * np);
 gboolean node_key (GdkEvent * event);
 void sp_nodepath_update_statusbar (SPNodePath *nodepath);
 

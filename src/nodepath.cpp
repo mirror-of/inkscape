@@ -65,9 +65,7 @@ static gchar * create_typestr (SPNodePath * np);
 
 static void sp_node_ensure_ctrls (SPPathNode * node);
 
-void sp_nodepath_node_select (SPPathNode * node, gboolean incremental, gboolean override);
-void sp_nodepath_node_deselect (SPPathNode * node);
-void sp_nodepath_select_rect (SPNodePath * nodepath, NRRect *b, gboolean incremental);
+static void sp_nodepath_node_select (SPPathNode * node, gboolean incremental, gboolean override);
 
 static void sp_node_set_selected (SPPathNode * node, gboolean selected);
 
@@ -330,7 +328,7 @@ parse_nodetypes (const gchar * types, gint length)
 	return typestr;
 }
 
-void
+static void
 update_object (SPNodePath * np)
 {
 	SPCurve * curve;
@@ -344,7 +342,7 @@ update_object (SPNodePath * np)
 	sp_curve_unref (curve);
 }
 
-void
+static void
 update_repr_internal (SPNodePath * np)
 {
 	SPCurve * curve;
@@ -367,15 +365,15 @@ update_repr_internal (SPNodePath * np)
 	sp_curve_unref (curve);
 }
 
-void
+static void
 update_repr (SPNodePath * np)
 {
 	update_repr_internal (np);
 	sp_document_done (SP_DT_DOCUMENT (np->desktop));
 }
 
-void
-update_repr_keyed (SPNodePath * np, gchar *key)
+static void
+update_repr_keyed (SPNodePath * np, gchar const *key)
 {
 	update_repr_internal (np);
 	sp_document_maybe_done (SP_DT_DOCUMENT (np->desktop), key);
@@ -1396,7 +1394,7 @@ sp_node_set_selected (SPPathNode * node, gboolean selected)
 \param incremental   if true, add to selection, otherwise deselect others
 \param override   if true, always select this node, otherwise toggle selected status
 */
-void
+static void
 sp_nodepath_node_select (SPPathNode * node, gboolean incremental, gboolean override)
 {
 	SPNodePath * nodepath;
@@ -1423,25 +1421,6 @@ sp_nodepath_node_select (SPPathNode * node, gboolean incremental, gboolean overr
 		sp_nodepath_deselect (nodepath);
 		nodepath->selected = g_list_append (nodepath->selected, node);
 		sp_node_set_selected (node, TRUE);
-	}
-
-	sp_nodepath_update_statusbar (nodepath);
-}
-
-/**
-\brief deselect a node
-\param node     the node to deselect
-*/
-void
-sp_nodepath_node_deselect (SPPathNode * node)
-{
-	SPNodePath * nodepath;
-
-	nodepath = node->subpath->nodepath;
-
-	if (nodepath->selected) {
-		sp_node_set_selected (node, FALSE);
-		nodepath->selected = g_list_remove (nodepath->selected, node);
 	}
 
 	sp_nodepath_update_statusbar (nodepath);
