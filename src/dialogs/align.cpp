@@ -458,7 +458,7 @@ DialogAlign::DialogAlign():
     Dockable(_("Layout"), "dialogs.align"),
     _alignFrame(_("Align")),
     _distributeFrame(_("Distribute")),
-    _nodesFrame(_("Align Nodes")),
+    _nodesFrame(_("Nodes")),
     _alignTable(2,5, true),
     _distributeTable(2,4, true),
     _nodesTable(1, 4, true),
