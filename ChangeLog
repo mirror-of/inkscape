@@ -1,3 +1,12 @@
+2004-04-04  Ted Gould <ted@gould.cx>
+
+	* a bunch of files
+	Sorry, I seem to be in some delay getting e-mail.  Anyway, a few
+	files were changed to add in a new parameter 'dataloss'  Basically
+	this signifies that a format was used to save that may not save
+	the whole document and thus, a pop-up is elevated on close to signal
+	that you might want to 'really save' this document.
+
 2004-04-03  Ted Gould <ted@gould.cx>
 
 	* share/extensions/svgz_input.inkmod, src/file.cpp,
