@@ -247,6 +247,7 @@ sp_key_name (guint keyval)
 	else if (!strcmp (n, "Page_Up")) return "PgUp";
 	else if (!strcmp (n, "Page_Down")) return "PgDn";
 	else if (!strcmp (n, "grave")) return "`";
+	else if (!strcmp (n, "numbersign")) return "#";
 	else return n;
 }
 
@@ -476,6 +477,11 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_NEXT, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PREV, view);
+
+	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_GRID, view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_RULERS, view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_SCROLLBARS, view);
 
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item (menu, NULL, _("_New View"), G_CALLBACK(sp_ui_new_view), NULL);
