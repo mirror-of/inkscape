@@ -1238,9 +1238,10 @@ profile_path(const char *filename)
             if ( PrintWin32::is_os_wide() )
             {
                 wchar_t pathBuf[MAX_PATH+1];
+                g_assert(sizeof(wchar_t) == sizeof(gunichar2));
                 if (SHGetSpecialFolderPathW(NULL, pathBuf, CSIDL_APPDATA, 1))
                 {
-                    gchar* utf8Path = g_utf16_to_utf8( pathBuf, -1, NULL, NULL, NULL );
+                    gchar* utf8Path = g_utf16_to_utf8( (gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL );
                     if ( utf8Path )
                     {
                         homedir = utf8Path;
