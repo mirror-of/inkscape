@@ -125,7 +125,7 @@ void                flow_src::Affiche(void)
 	for (int i=0;i<nbElem;i++) {
 		printf("%i: ",i);
 		if ( elems[i].type == flw_text ) {
-			printf("texte %i boites (st=%x en=%x)\n",elems[i].text->nbBox,elems[i].text->source_start,elems[i].text->source_end);
+			printf("texte %i boites (st=%p en=%p)\n",elems[i].text->nbBox,elems[i].text->source_start,elems[i].text->source_end);
 			elems[i].text->AfficheBoxes();
 		} else if ( elems[i].type == flw_line_brk ) {
 			printf("line break\n");
@@ -140,13 +140,13 @@ void                flow_src::Affiche(void)
 		} else if ( elems[i].type == flw_para ) {
 			printf("flow para\n");
 		} else if ( elems[i].type == txt_text ) {
-			printf("text %x\n",elems[i].obj);
+			printf("text %p\n",elems[i].obj);
 		} else if ( elems[i].type == txt_firstline ) {
-			printf("tspan firstline %x\n",elems[i].obj);
+			printf("tspan firstline %p\n",elems[i].obj);
 		} else if ( elems[i].type == txt_tline ) {
-			printf("tspan line %x\n",elems[i].obj);
+			printf("tspan line %p\n",elems[i].obj);
 		} else if ( elems[i].type == txt_textpath ) {
-			printf("textpath %x\n",elems[i].obj);
+			printf("textpath %p\n",elems[i].obj);
 		} else {
 			printf("\n");
 		}

@@ -59,8 +59,8 @@ SPObject*          flow_res::ChunkSourceEnd(int no)
 }
 int                flow_res::ChunkType(int no)
 {
-	if ( no < 0 || no >= nbChunk ) return NULL;
-	if ( chunks[no].mommy == NULL ) return NULL;
+	if ( no < 0 || no >= nbChunk ) return flw_none;
+	if ( chunks[no].mommy == NULL ) return flw_none;
 	if ( chunks[no].mommy->source_start ) {
 		return chunks[no].mommy->source_start->Type();
 	}

@@ -90,7 +90,7 @@ void               flow_res::AfficheOutput(void)
 	for (int i=0;i<nbChunk;i++) {
 		printf(" chunk %i : span=(%i -> %i) rtl=%i y=%f\n",i,chunks[i].s_st,chunks[i].s_en,(chunks[i].rtl)?1:0,chunks[i].y);
 		for (int j=chunks[i].s_st;j<chunks[i].s_en;j++) {
-			printf("  span %i : letter=(%i -> %i) rtl=%i style=%x\n",j,spans[j].l_st,spans[j].l_en,(spans[j].rtl)?1:0,spans[j].c_style);
+			printf("  span %i : letter=(%i -> %i) rtl=%i style=%p\n",j,spans[j].l_st,spans[j].l_en,(spans[j].rtl)?1:0,spans[j].c_style);
 			for (int k=spans[j].l_st;k<spans[j].l_en;k++) {
 				char  savC=chars[letters[k].t_en];
 				chars[letters[k].t_en]=0;
