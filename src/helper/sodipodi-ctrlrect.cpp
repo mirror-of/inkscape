@@ -104,7 +104,7 @@ sp_ctrlrect_destroy (GtkObject *object)
 #define RGBA_G(v) (((v) >> 16) & 0xff)
 #define RGBA_B(v) (((v) >> 8) & 0xff)
 #define RGBA_A(v) ((v) & 0xff)
-#define COMPOSE(b,f,a) (((255 - (a)) * b + (f * a) + 127) / 255)
+#define COMPOSE(b,f,a) ((((guchar) (0xff - a)) * ((guchar) b) + ((guchar) (b ^ ~f)) * ((guchar) a)) / 0xff)
 
 static void
 sp_ctrlrect_hline (SPCanvasBuf *buf, gint y, gint xs, gint xe, guint32 rgba)
