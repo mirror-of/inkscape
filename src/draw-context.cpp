@@ -328,7 +328,7 @@ spdc_attach_selection(SPDrawContext *dc, SPSelection *sel)
     dc->sa = NULL;
     dc->ea = NULL;
 
-    SPItem *item = sp_selection_item(dc->selection);
+    SPItem *item = dc->selection ? dc->selection->singleItem() : NULL;
 
     if ( item && SP_IS_PATH(item) ) {
         NRMatrix i2dt;
@@ -628,7 +628,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
         if (!dc->white_item) {
             /* Attach repr */
             sp_document_add_repr(SP_DT_DOCUMENT(dt), repr);
-            sp_selection_set_repr(dc->selection, repr);
+            dc->selection->setRepr(repr);
             sp_repr_unref(repr);
         }
 
