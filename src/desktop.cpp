@@ -1533,6 +1533,42 @@ void sp_desktop_scroll_world(SPDesktop *dt, double dx, double dy)
     sp_desktop_update_scrollbars (dt);
 }
 
+bool
+sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p)
+{
+	NRRect dbox;
+	sp_desktop_get_display_area (desktop, &dbox);
+	if (!((*p)[NR::X] > dbox.x0 && (*p)[NR::X] < dbox.x1) || !((*p)[NR::Y] > dbox.y0 && (*p)[NR::Y] < dbox.y1)) {
+
+		NR::Point const s_w( (*p) * desktop->d2w );
+
+		gdouble x_to;
+		if ((*p)[NR::X] < dbox.x0)
+			x_to = dbox.x0;
+		else if ((*p)[NR::X] > dbox.x1)
+			x_to = dbox.x1;
+		else 
+			x_to = (*p)[NR::X];
+
+		gdouble y_to;
+		if ((*p)[NR::Y] < dbox.y0)
+			y_to = dbox.y0;
+		else if ((*p)[NR::Y] > dbox.y1)
+			y_to = dbox.y1;
+		else 
+			y_to = (*p)[NR::Y];
+
+		NR::Point const d_dt(x_to, y_to);
+		NR::Point const d_w( d_dt * desktop->d2w );
+		NR::Point const moved_w( d_w - s_w );
+
+		sp_desktop_scroll_world(desktop, moved_w);
+
+		return true;
+	}
+	return false;
+}
+
 static void
 sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 {
