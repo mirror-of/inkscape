@@ -20,17 +20,18 @@
 
 class SPUseReference : public Inkscape::URIReference {
 public:
-	SPUseReference(SPObject *obj) : URIReference(obj) {}
+	SPUseReference(SPObject *owner) : URIReference(owner) {}
+
 	SPItem *getObject() const {
 		return (SPItem *)URIReference::getObject();
 	}
 protected:
-	bool _acceptObject(SPObject *obj) const {
+	virtual bool _acceptObject(SPObject * const obj) const {
 		if (SP_IS_ITEM(obj)) {
-			SPObject *owner=getOwner();
-			/* refuse references to us or to an ancestor */
-			for ( SPObject *iter=obj ; obj ; obj = SP_OBJECT_PARENT(obj) ) {
-				if ( iter == owner ) {
+			SPObject * const owner = getOwner();
+			/* Refuse references to us or to an ancestor. */
+			for ( SPObject *iter = owner ; iter ; iter = SP_OBJECT_PARENT(iter) ) {
+				if ( iter == obj ) {
 					return false;
 				}
 			}

@@ -1,5 +1,7 @@
 2004-06-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-use.h (_acceptObject): Fix can't-use-ancestor check.
+
 	* src/uri-references.h (getOwner): Fix copy&paste bug.
 
 2004-06-11  MenTaLguY  <mental@rydia.net>
