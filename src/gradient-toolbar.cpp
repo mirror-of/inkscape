@@ -103,16 +103,9 @@ static void gr_toggle_fillstroke (GtkWidget *button, gpointer data) {
     }
 }
 
-
 void
-gr_item_activate (GtkMenuItem *menuitem, gpointer data)
+gr_apply_gradient (SPSelection *selection, SPGradient *gr)
 {
-    SPGradient *gr = (SPGradient *) g_object_get_data (G_OBJECT (menuitem), "gradient");
-    gr = sp_gradient_ensure_vector_normalized(gr);
-
-    SPDesktop *desktop = (SPDesktop *) data;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
-
     SPGradientType new_type = (SPGradientType) prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
     guint new_fill = prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1);
 
@@ -144,8 +137,20 @@ gr_item_activate (GtkMenuItem *menuitem, gpointer data)
                 sp_item_set_gradient(item, gr, new_type, false);
         }
    }
+}
 
-   sp_document_done (SP_DT_DOCUMENT (desktop));
+void
+gr_item_activate (GtkMenuItem *menuitem, gpointer data)
+{
+    SPGradient *gr = (SPGradient *) g_object_get_data (G_OBJECT (menuitem), "gradient");
+    gr = sp_gradient_ensure_vector_normalized(gr);
+
+    SPDesktop *desktop = (SPDesktop *) data;
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+
+    gr_apply_gradient (selection, gr);
+
+    sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
 gchar *
@@ -357,6 +362,45 @@ gr_defs_modified (SPObject *defs, guint flags, GtkWidget *widget)
     gr_tb_selection_changed (NULL, (gpointer) widget);
 }
 
+static void
+gr_fork (GtkWidget *button, GtkWidget *widget)
+{
+    SPDesktop *desktop = (SPDesktop *) g_object_get_data (G_OBJECT(widget), "desktop");
+    SPDocument *document = SP_DT_DOCUMENT (desktop);
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+    GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT(widget), "menu");
+
+    if (om && document) {
+        GtkWidget *i = gtk_menu_get_active (GTK_MENU (gtk_option_menu_get_menu (GTK_OPTION_MENU (om))));
+        SPGradient *gr = (SPGradient *) g_object_get_data (G_OBJECT(i), "gradient");
+
+        if (gr) {
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR (gr)->duplicate();
+            sp_repr_add_child (SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document)), repr, NULL);
+            SPGradient *gr_new = (SPGradient *) document->getObjectByRepr(repr);
+            gr_new = sp_gradient_ensure_vector_normalized (gr_new);
+            sp_repr_unref (repr);
+            gr_apply_gradient (selection, gr_new);
+            sp_document_done (document);
+        }
+    }
+}
+
+static void
+gr_edit (GtkWidget *button, GtkWidget *widget)
+{
+    GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT(widget), "menu");
+
+    if (om) {
+        GtkWidget *i = gtk_menu_get_active (GTK_MENU (gtk_option_menu_get_menu (GTK_OPTION_MENU (om))));
+        SPGradient *gr = (SPGradient *) g_object_get_data (G_OBJECT(i), "gradient");
+
+        if (gr) {
+            GtkWidget *dialog = sp_gradient_vector_editor_new (gr);
+            gtk_widget_show (dialog);
+        }
+    }
+}
 
 GtkWidget *
 gr_change_widget (SPDesktop *desktop)
@@ -370,6 +414,8 @@ gr_change_widget (SPDesktop *desktop)
     SPGradientSpread spr_selected = (SPGradientSpread) INT_MAX; // meaning undefined
     bool spr_multi = false;
 
+    GtkTooltips *tt = gtk_tooltips_new();
+
     gr_read_selection (selection, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
  
     GtkWidget *widget = gtk_hbox_new(FALSE, FALSE);
@@ -379,6 +425,29 @@ gr_change_widget (SPDesktop *desktop)
     g_object_set_data (G_OBJECT (widget), "menu", om);
   
     gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
+
+
+    /* Edit... */
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        GtkWidget *b = gtk_button_new_with_label(_("Edit..."));
+        gtk_tooltips_set_tip(tt, b, _("Edit the stops of the gradient"), NULL);
+        gtk_widget_show(b);
+        gtk_container_add(GTK_CONTAINER(hb), b);
+        gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(gr_edit), widget);
+        gtk_box_pack_end(GTK_BOX(widget), hb, FALSE, FALSE, 0);
+    }
+
+    /* Fork */
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        GtkWidget *b = gtk_button_new_with_label(_("Fork"));
+        gtk_tooltips_set_tip(tt, b, _("If the gradient is used by more than one object, create a copy of it for the selected object(s)"), NULL);
+        gtk_widget_show(b);
+        gtk_container_add(GTK_CONTAINER(hb), b);
+        gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(gr_fork), widget);
+        gtk_box_pack_end(GTK_BOX(widget), hb, FALSE, FALSE, 0);
+    }
 
     sigc::connection conn1 = selection->connectChanged(
         sigc::bind (
