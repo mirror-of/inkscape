@@ -33,11 +33,13 @@
 #include "event-broker.h"
 #include "sp-item.h"
 #include "zoom-context.h"
+#include "select-context.h"
 #include "file.h"
 #include "interface.h"
 #include "helper/sp-intl.h"
 #include "selection-chemistry.h"
 #include "dialogs/desktop-properties.h"
+#include "tools-switch.h"
 
 static void sp_event_context_class_init (SPEventContextClass *klass);
 static void sp_event_context_init (SPEventContext *event_context);
@@ -50,6 +52,9 @@ static gint sp_event_context_private_item_handler (SPEventContext * event_contex
 static void set_event_location (SPDesktop * desktop, GdkEvent * event);
 
 static GObjectClass *parent_class;
+
+static selector_toggled = 0;
+static switch_selector_to = 0;
 
 GType
 sp_event_context_get_type (void)
@@ -138,6 +143,23 @@ sp_event_context_private_setup (SPEventContext *ec)
 			}
 		}
 		gdk_window_set_cursor (w->window, ec->cursor);
+	}
+}
+
+static void 
+sp_toggle_selector (SPDesktop *dt)
+{
+	if (!dt->event_context) return;
+
+	if (tools_isactive (dt, TOOLS_SELECT)) {
+		if (selector_toggled) {
+			if (switch_selector_to) tools_switch (dt, switch_selector_to);
+			selector_toggled = 0;
+		} else return;
+	} else {
+		selector_toggled = 1;
+		switch_selector_to = tools_active (dt);
+		tools_switch (dt, TOOLS_SELECT);
 	}
 }
 
@@ -271,6 +293,10 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				sp_event_root_menu_popup (desktop, NULL, event);
 				ret= TRUE;
 			} 
+			break;
+		case GDK_space:
+			sp_toggle_selector (desktop);
+			ret= TRUE;
 			break;
 		}
 #if 0
