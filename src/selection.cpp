@@ -5,8 +5,10 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   MenTaLguY <mental@rydia.net>
  *
- * Copyright (C) 1999-2002 authors
+ * Copyright (C) 2004 MenTaLguY
+ * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -98,6 +100,9 @@ void SPSelection::_invalidateCachedLists() {
 
     g_slist_free(_reprs);
     _reprs = NULL;
+
+    g_slist_free(_item_reprs);
+    _item_reprs = NULL;
 }
 
 void SPSelection::_clear()
@@ -199,8 +204,8 @@ GSList const *SPSelection::itemList() {
         return _items;
     }
 
-    for ( GSList *iter=_objs ; iter != NULL ; iter = iter->next ) {
-        SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+    for ( GSList const *iter=_objs ; iter != NULL ; iter = iter->next ) {
+        SPObject *obj=reinterpret_cast<SPObject *>(iter->data);
         if (SP_IS_ITEM(obj)) {
             _items = g_slist_prepend(_items, SP_ITEM(obj));
         }
@@ -213,8 +218,8 @@ GSList const *SPSelection::itemList() {
 GSList const *SPSelection::reprList() {
     if (_reprs) { return _reprs; }
 
-    for ( GSList *iter = _items ; iter != NULL ; iter = iter->next ) {
-        SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+    for ( GSList const *iter=itemList() ; iter != NULL ; iter = iter->next ) {
+        SPObject *obj=reinterpret_cast<SPObject *>(iter->data);
         _reprs = g_slist_prepend(_reprs, SP_OBJECT_REPR(obj));
     }
     _reprs = g_slist_reverse(_reprs);

@@ -178,6 +178,8 @@ public:
 	/** @brief Returns the list of selected SPItems */
 	GSList const *itemList();
 	/** @brief Returns a list of the xml nodes of all selected objects */
+	// TODO only returns reprs of SPItems currently; need a separate
+	//      method for that
 	GSList const *reprList();
 
 	/** @brief Returns the bounding rectangle of the selection */
@@ -274,6 +276,7 @@ private:
 	GSList *_objs;
 	mutable GSList *_reprs;
 	mutable GSList *_items;
+	mutable GSList *_item_reprs;
 	SPDesktop *_desktop;
 	guint _flags;
 	guint _idle;
