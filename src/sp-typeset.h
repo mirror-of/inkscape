@@ -134,7 +134,7 @@ public:
   virtual void            SetText(char*  /*n_txt*/,int /*n_len*/) {};
   virtual void            SetLetterSpacing(double /*n_spc*/) {};
   
-  virtual void            AddGlyph(int /*f_c*/,int /*l_c*/,const NR::Point &/*at*/,double /*advance*/) {};
+  virtual void            AddGlyph(int /*a_g*/,int /*f_c*/,int /*l_c*/,const NR::Point &/*at*/,double /*advance*/) {};
 };
 
 // abstract class that handles the source text

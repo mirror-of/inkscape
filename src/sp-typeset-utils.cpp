@@ -563,6 +563,8 @@ pango_text_chunker::pango_text_chunker(char* inText,char* font_family,double fon
   nbWord=maxWord=0;
   charas=NULL;
   
+//  printf("dest chunker gets: %s\n");
+  
   if ( isMarked ) {
     SetTextWithMarkup(inText,flags);
   } else {
@@ -758,7 +760,7 @@ void                 pango_text_chunker::GlyphsInfo(int start_ind,int end_ind,in
   if ( end_ind < start_ind ) return;
   
   int      char_st=words[start_ind].t_first,char_en=words[end_ind].t_last;
-  nbG=char_en-char_st+1;
+  nbG=charas[char_en].code_point-charas[char_st].code_point+1;
   totLength=charas[char_en].x_pos+charas[char_en].x_adv-charas[char_st].x_pos;
 }
 void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int end_ind,to_SVG_context *hungry)
@@ -808,7 +810,8 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
 {
   if ( en < st ) return;
   PangoRectangle ink_rect,logical_rect;
-  pango_glyph_string_extents_range(from,st-offset,en+1-offset,theFont,&ink_rect,&logical_rect);
+  int   cd_offset=charas[offset].code_point;
+  pango_glyph_string_extents_range(from,charas[st].code_point-cd_offset,charas[en].code_point-cd_offset+1,theFont,&ink_rect,&logical_rect);
   
   if ( retu ) whit=false; // so that returns don't get aggregated
   
@@ -833,16 +836,21 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
   
   double   cur_pos=words[nbWord].x_pos;
   int      cur_g=0;
-  for (int i=st;i<=en;i++) {
+  for (int i=st;i<=en;) {
+    int cd_p=charas[i].code_point;
+    int n_en=i;
+    while ( n_en <= en && charas[n_en].code_point == cd_p ) n_en++;
     while ( cur_g < from->num_glyphs-1 && from->log_clusters[cur_g+1] <= i-offset ) cur_g++;
-    pango_glyph_string_extents_range(from,i-offset,i+1-offset,theFont,&ink_rect,&logical_rect);
-    charas[i].x_pos=cur_pos;
-    charas[i].x_adv=(1/((double)PANGO_SCALE))*((double)(logical_rect.width));
-    charas[i].y_pos=cumul[1];
-    charas[i].x_dpos=(1/((double)PANGO_SCALE))*((double)(from->glyphs[cur_g].geometry.x_offset));
-    charas[i].y_dpos=(1/((double)PANGO_SCALE))*((double)(from->glyphs[cur_g].geometry.y_offset));
-    
+    pango_glyph_string_extents_range(from,charas[i].code_point-cd_offset,charas[i].code_point-cd_offset+1,theFont,&ink_rect,&logical_rect);
+    for (int j=i;j<n_en;j++) {
+      charas[j].x_pos=cur_pos;
+      charas[j].x_adv=(1/((double)PANGO_SCALE))*((double)(logical_rect.width));
+      charas[j].y_pos=cumul[1];
+      charas[j].x_dpos=(1/((double)PANGO_SCALE))*((double)(from->glyphs[cur_g].geometry.x_offset));
+      charas[j].y_dpos=(1/((double)PANGO_SCALE))*((double)(from->glyphs[cur_g].geometry.y_offset));
+    }
     cur_pos+=charas[i].x_adv;
+    i=n_en;
   }
   cumul[0]+=words[nbWord].x_length;
   charas[en+1].x_pos=cumul[0];
@@ -905,7 +913,7 @@ void                         pango_text_chunker::SetTextWithAttrs(char* inText,P
         for (int i=c_st;i<c_en;i++) charas[i].code_point=cur_c;
         cur_c++;
         charas[c_en].code_point=cur_c;
-        return;
+        break;
       }
       c_en=np-theText;
       for (int i=c_st;i<c_en;i++) charas[i].code_point=cur_c;
@@ -969,14 +977,14 @@ void                         pango_text_chunker::SetTextWithAttrs(char* inText,P
       int h_pos=g_pos+1;
       while ( h_pos < t_pos+theItem->length && pAttrs[h_pos].is_word_end == false && pAttrs[h_pos].is_word_start == false ) h_pos++;
       bool  is_retu=(h_pos>=next_par_end);
-      AddBox(g_pos,h_pos-1,pAttrs[g_pos].is_white,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
+      AddBox(g_pos,(pAttrs[h_pos].is_word_end)?h_pos:h_pos-1,pAttrs[g_pos].is_white,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
       if ( h_pos >= next_par_start ) {
         int old_dec=next_par_start;
         pango_find_paragraph_boundary(inText+old_dec,-1,&next_par_end,&next_par_start);
         next_par_end+=old_dec;
         next_par_start+=old_dec;
       }      
-      g_pos=h_pos;
+      g_pos=(pAttrs[h_pos].is_word_end)?h_pos+1:h_pos;
     }
     t_pos+=theItem->length;
     if ( nbWord > 0 && pAttrs[t_pos].is_word_end == false && pAttrs[t_pos].is_word_start == false ) {
@@ -1018,9 +1026,13 @@ void                         pango_text_chunker::AddDullGlyphs(to_SVG_context *h
   hungry->AddFontFamily(theFace);
   hungry->AddFontSize(theSize);
   double startX=cumul;
-  for (int i=c_st;i<=c_en;i++) {
+  for (int i=c_st;i<=c_en;) {
+    int  ne=i;
+    int  cd_p=charas[i].code_point;
+    while ( ne <= c_en && charas[ne].code_point == cd_p ) ne++;
     NR::Point at(charas[i].x_pos-startX,charas[i].y_pos);
-    hungry->AddGlyph(i,i,at,charas[i].x_adv);
+    hungry->AddGlyph(cd_p,i,ne-1,at,charas[i].x_adv);
+    i=ne;
   }
 }
 void                         pango_text_chunker::AddAttributedGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en,PangoAttrIterator *theIt) 
@@ -1061,9 +1073,13 @@ void                         pango_text_chunker::AddAttributedGlyphs(to_SVG_cont
   }
   
   double startX=cumul;
-  for (int i=c_st;i<=c_en;i++) {
+  for (int i=c_st;i<=c_en;) {
+    int  ne=i;
+    int  cd_p=charas[i].code_point;
+    while ( ne <= c_en && charas[ne].code_point == cd_p ) ne++;
     NR::Point at(charas[i].x_pos-startX,charas[i].y_pos);
-    hungry->AddGlyph(i,i,at,charas[i].x_adv);
+    hungry->AddGlyph(cd_p,i,ne-1,at,charas[i].x_adv);
+    i=ne;
   }
 }
 
@@ -1077,7 +1093,9 @@ box_to_SVG_context::box_to_SVG_context(SPRepr* in_repr,double y,double x_start,d
   text=NULL;
   orig_st=st=-1;
   en=-2;
-  ng=0;
+  n_g=0;
+  orig_st_g=st_g=-1;
+  en_g=-2;
   
   text_repr=in_repr;
   if ( text_repr ) sp_repr_ref(text_repr);
@@ -1189,7 +1207,9 @@ void            box_to_SVG_context::SetText(char*  n_txt,int /*n_len*/)
   text=n_txt;
   orig_st=st=-1;
   en=-2;
-  ng=0;
+  n_g=0;
+  orig_st_g=st_g=-1;
+  en_g=-2;
 }
 void            box_to_SVG_context::SetLetterSpacing(double n_spc)
 {
@@ -1197,24 +1217,23 @@ void            box_to_SVG_context::SetLetterSpacing(double n_spc)
   cur_spacing=0;
 }
 
-void            box_to_SVG_context::SetY(int f_c,int l_c,double to)
+void            box_to_SVG_context::SetY(int a_g,int /*f_c*/,int /*l_c*/,double to)
 {
   if ( fabs(to-cur_y) < 0.01 ) {
     if ( dys ) {
-      dys=(double*)realloc(dys,(en-st+1+l_c-f_c+1)*sizeof(double));
-      for (int i=f_c;i<=l_c;i++) dys[en-st+1+i]=0;
+      dys=(double*)realloc(dys,(a_g-st_g+1)*sizeof(double));
+      dys[a_g-st_g]=0;
     }
   } else {
-    if ( ng > 0 ) {
+    if ( n_g > 0 ) {
       if ( dys == NULL ) {
         cur_by=box_y;
-        dys=(double*)malloc((en-st+1)*sizeof(double));
+        dys=(double*)malloc((en_g-st_g+1)*sizeof(double));
         dys[0]=cur_y-cur_by;
-        for (int i=st+1;i<=en;i++) dys[i-st]=0;
+        for (int i=st_g+1;i<=en_g;i++) dys[i-st_g]=0;
       }
-      dys=(double*)realloc(dys,(en-st+1+l_c-f_c+1)*sizeof(double));
-      dys[en-st+1]=to-cur_y;
-      for (int i=f_c+1;i<=l_c;i++) dys[en-st+1+i]=0;
+      dys=(double*)realloc(dys,(a_g-st_g+1)*sizeof(double));
+      dys[a_g-st_g]=to-cur_y;
       cur_y=to;
     } else {
       cur_y=cur_by=to;
@@ -1223,13 +1242,13 @@ void            box_to_SVG_context::SetY(int f_c,int l_c,double to)
 }
 void            box_to_SVG_context::Flush(void)
 {
-  if ( ng > 0 && text_repr ) {
+  if ( n_g > 0 && text_repr ) {
     SPRepr* parent=sp_repr_parent(text_repr);
     span_repr = sp_repr_new ("tspan");
 
-    if ( dxs == NULL && fabs(cur_spacing) > 0 ) {
+//    if ( dxs == NULL && fabs(cur_spacing) > 0 ) {
       AddLetterSpacing(cur_spacing);
-    }
+//    }
     if ( style_repr ) {
       sp_repr_css_set (span_repr,style_repr, "style");
       sp_repr_css_attr_unref(style_repr);
@@ -1240,10 +1259,11 @@ void            box_to_SVG_context::Flush(void)
     sp_repr_set_double (span_repr, "y", cur_by);
       
     if ( dxs ) {
-      gchar c[32];
+/*      gchar c[64];
       gchar *s = NULL;
-      for (int j = st; j <= en ; j ++) {
-        g_ascii_formatd (c, sizeof (c), "%.8g", dxs[j-st]);
+      for (int j = st_g; j <= en_g ; j ++) {
+        c[0]=0;
+        g_ascii_formatd (c, sizeof (c), "%.8g", dxs[j-st_g]);
         if (s == NULL) {
           s = g_strdup (c);
         }  else {
@@ -1251,15 +1271,16 @@ void            box_to_SVG_context::Flush(void)
         }
       }
       sp_repr_set_attr (span_repr, "dx", s);
-      g_free(s);
+      g_free(s);*/
       free(dxs);
       dxs=NULL;
     }
     if ( dys ) {
-      gchar c[32];
+/*      gchar c[64];
       gchar *s = NULL;
-      for (int j = st; j <= en ; j ++) {
-        g_ascii_formatd (c, sizeof (c), "%.8g", dys[j-st]);
+      for (int j = st_g; j <= en_g ; j ++) {
+        c[0]=0;
+        g_ascii_formatd (c, sizeof (c), "%.8g", dys[j-st_g]);
         if (s == NULL) {
           s = g_strdup (c);
         }  else {
@@ -1267,7 +1288,7 @@ void            box_to_SVG_context::Flush(void)
         }
       }
       sp_repr_set_attr (span_repr, "dy", s);
-      g_free(s);
+      g_free(s);*/
       free(dys);
       dys=NULL;
     }
@@ -1291,56 +1312,69 @@ void            box_to_SVG_context::Flush(void)
   dxs=dys=xs=ys=NULL;
   st=-1;
   en=-2;
-  ng=0;
+  n_g=0;
+  st_g=-1;
+  en_g=-2;
   
   if ( style_repr ) sp_repr_css_attr_unref(style_repr);
   style_repr=NULL;
   if ( span_repr ) sp_repr_unref(span_repr);
   span_repr=NULL;
 }
-void            box_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &oat,double advance)
+void            box_to_SVG_context::AddGlyph(int a_g,int f_c,int l_c,const NR::Point &oat,double advance)
 {
+  if ( l_c < f_c ) return;
   NR::Point at=oat;
   at[0]+=box_start;
   at[1]+=box_y;
-  if ( orig_st >= 0 ) at[0]+=((double)(f_c-orig_st))*letter_spacing;
+  if ( orig_st_g >= 0 ) at[0]+=((double)(a_g-orig_st_g))*letter_spacing;
 //  printf("add g  %i -> %i   at %f %f -> pos %f %f\n",f_c,l_c,oat[0],oat[1],at[0],at[1]);
 
-  if ( ng > 0 && fabs(at[0]-cur_next-cur_spacing) < 0.01 ) {
+  if ( n_g > 0 && fabs(at[0]-cur_next-cur_spacing) < 0.01 ) {
+    if ( dxs ) {
+      dxs=(double*)realloc(dxs,(a_g-st_g+1)*sizeof(double));
+      for (int i=en_g+1;i<a_g;i++) dxs[i-st_g]=0;
+      dxs[a_g-st_g]=cur_spacing;
+    }
     cur_x=at[0];
     cur_next=cur_x+advance;
-    SetY(f_c,l_c,at[1]);
+    SetY(a_g,f_c,l_c,at[1]);
   } else {
-    if ( ng > 0  ) {
-      if ( ng == 1 ) {
+    if ( n_g > 0  ) {
+      if ( n_g == 1 ) {
         cur_x=at[0];
         cur_spacing=cur_x-cur_next;
         cur_next=cur_x+advance;
-        SetY(f_c,l_c,at[1]);
+        SetY(a_g,f_c,l_c,at[1]);
       } else {
         if ( dxs == NULL ) {
-          dxs=(double*)malloc((en-st+1)*sizeof(double));
+          dxs=(double*)malloc((en_g-st_g+1)*sizeof(double));
           dxs[0]=0;
-          for (int i=st+1;i<=en;i++) dxs[i-st]=cur_spacing; // warning= multi-character glyphs invalidate this approcah
+          for (int i=st_g+1;i<=en_g;i++) dxs[i-st_g]=letter_spacing; // warning= multi-character glyphs invalidate this approcah
         }
-        dxs=(double*)realloc(dxs,(en-st+1+l_c-f_c+1)*sizeof(double));
-        dxs[en-st+1]=at[0]-cur_next-cur_spacing;
-        for (int i=f_c+1;i<=l_c;i++) dxs[en-st+1+i]=0;
+        dxs=(double*)realloc(dxs,(a_g-st_g+1)*sizeof(double));
+        for (int i=en_g+1;i<a_g;i++) dxs[i-st_g]=0;
+        dxs[a_g-st_g]=at[0]-cur_next-cur_spacing;
         cur_x=at[0];
+        cur_spacing=cur_x-cur_next;
         cur_next=cur_x+advance;
+        SetY(a_g,f_c,l_c,at[1]);
       }
     } else {
       cur_x=at[0];
       cur_start=at[0];
       cur_next=cur_x+advance;
       cur_spacing=letter_spacing;
-      SetY(f_c,l_c,at[1]);
+      SetY(a_g,f_c,l_c,at[1]);
     }
   }
   if ( st < 0 || f_c < st ) st=f_c;
   if ( orig_st < 0 || f_c < orig_st ) orig_st=f_c;
   if ( en < 0 || l_c > en ) en=l_c;
-  ng++;
+  if ( st_g < 0 || a_g < st_g ) st_g=a_g;
+  if ( orig_st_g < 0 || a_g < orig_st ) orig_st_g=a_g;
+  if ( en_g < 0 || a_g > en_g ) en_g=a_g;
+  n_g++;
 }
 
   
@@ -1357,7 +1391,10 @@ path_to_SVG_context::path_to_SVG_context(SPRepr* in_repr,Path *iPath,double iLen
   text=NULL;
   st=-1;
   en=-2;
-  ng=0;
+  st_g=-1;
+  en_g=-2;
+  orig_st_g=-1;
+  n_g=0;
   
   text_repr=in_repr;
   if ( text_repr ) sp_repr_ref(text_repr);
@@ -1454,19 +1491,22 @@ void            path_to_SVG_context::SetText(char*  n_txt,int /*n_len*/)
   text=n_txt;
   st=-1;
   en=-2;
-  ng=0;
+  n_g=0;
+  st_g=-1;
+  en_g=-2;
+  orig_st_g=-1;
 }
 void            path_to_SVG_context::SetLetterSpacing(double n_spc)
 {
   letter_spacing=n_spc;
 }
 
-void            path_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &oat,double advance)
+void            path_to_SVG_context::AddGlyph(int a_g,int f_c,int l_c,const NR::Point &oat,double advance)
 {
   if ( l_c < f_c ) return;
   
   NR::Point at=oat;
-  if ( st >= 0 ) at[0]+=((double)(f_c-st))*letter_spacing;
+  if ( orig_st_g >= 0 ) at[0]+=((double)(a_g-orig_st_g))*letter_spacing;
   int              nbp=0;
   double           mid_glyph=at[0]+0.5*advance;
   mid_glyph+=path_delta;
@@ -1515,8 +1555,12 @@ void            path_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &o
   
   cur_x=at[0];
   if ( st < 0 || f_c < st ) st=f_c;
+  if ( orig_st < 0 || f_c < orig_st ) orig_st=f_c;
   if ( en < 0 || l_c > en ) en=l_c;
-  ng++;
+  if ( st_g < 0 || a_g < st_g ) st_g=a_g;
+  if ( orig_st_g < 0 || a_g < orig_st ) orig_st_g=a_g;
+  if ( en_g < 0 || a_g > en_g ) en_g=a_g;
+  n_g++;
   
 }
 

@@ -419,7 +419,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
         } else {
         }
         typeset->srcText=strdup(value);
-        printf("typeset %x: n src= %s\n",(int)object,value);
+//        printf("typeset %x: n src= %s\n",(int)object,value);
         typeset->layoutDirty=true;
         typeset->srcType=has_std_txt;
       } else {
@@ -441,7 +441,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
         } else {
         }
         typeset->srcText=strdup(value);
-        printf("typeset %x: n src= %s\n",(int)object,value);
+//        printf("typeset %x: n src= %s\n",(int)object,value);
         typeset->layoutDirty=true;
        typeset->srcType=has_pango_txt;
       } else {
@@ -459,7 +459,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
     case SP_ATTR_TEXT_INSHAPE:
       if ( value ) {
         sp_typeset_ditch_dest(typeset);
-        printf("typeset %x: n shape dst= %s\n",(int)object,value);
+//        printf("typeset %x: n shape dst= %s\n",(int)object,value);
         char*  dup_value=strdup(value);
         int pos=0,max=strlen(dup_value);
         while ( pos < max ) {
@@ -501,7 +501,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
     case SP_ATTR_TEXT_ONPATH:
       if ( value ) {
         sp_typeset_ditch_dest(typeset);
-        printf("typeset %x: n path dst= %s\n",(int)object,value);
+//        printf("typeset %x: n path dst= %s\n",(int)object,value);
         char *dup_value=strdup(value);
         int  pos=0,max=strlen(dup_value);
         while ( pos < max ) {
@@ -543,7 +543,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
     case SP_ATTR_TEXT_INBOX:
       if ( value ) {
         sp_typeset_ditch_dest(typeset);
-        printf("typeset %x: n box dst= %s\n",(int)object,value);
+//        printf("typeset %x: n box dst= %s\n",(int)object,value);
         int pos=0,max=strlen(value);
         while ( pos < max ) {
           while ( pos < max && value[pos] != '[' ) pos++;
@@ -569,7 +569,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
     case SP_ATTR_TEXT_INCOLUMN:
       if ( value ) {
         sp_typeset_ditch_dest(typeset);
-        printf("typeset %x: n col dst= %s\n",(int)object,value);
+//        printf("typeset %x: n col dst= %s\n",(int)object,value);
         column_dest* nDst=(column_dest*)malloc(sizeof(column_dest));
         nDst->width=0;
         sscanf(value,"%lf",&nDst->width);
@@ -585,7 +585,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
     case SP_ATTR_TEXT_EXCLUDE:
       if ( value ) {
         sp_typeset_ditch_excl(typeset);
-        printf("typeset %x: n excl dst= %s\n",(int)object,value);
+//        printf("typeset %x: n excl dst= %s\n",(int)object,value);
         char*  dup_value=strdup(value);
         int pos=0,max=strlen(dup_value);
         while ( pos < max ) {

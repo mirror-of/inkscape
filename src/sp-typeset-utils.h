@@ -186,7 +186,8 @@ public:
   double           *ys;
   double           letter_spacing;
   char             *text;
-  int              st,en,ng,orig_st;
+  int              st,en,orig_st;
+  int              st_g,en_g,orig_st_g,n_g;
   
   SPRepr           *text_repr;
   
@@ -210,8 +211,8 @@ public:
   virtual void            SetLetterSpacing(double n_spc);
   
   void            Flush(void);
-  virtual void            AddGlyph(int f_c,int l_c,const NR::Point &at,double advance);
-  void            SetY(int f_c,int l_c,double to);
+  virtual void            AddGlyph(int a_g,int f_c,int l_c,const NR::Point &at,double advance);
+  void            SetY(int a_g,int f_c,int l_c,double to);
 };
 
 class path_to_SVG_context : public to_SVG_context{
@@ -224,7 +225,8 @@ public:
   
   double           letter_spacing;
   char             *text;
-  int              st,en,ng;
+  int              st,en,orig_st;
+  int              st_g,en_g,orig_st_g,n_g;
   
   SPRepr           *text_repr;
   
@@ -247,7 +249,7 @@ public:
   virtual void            SetText(char*  n_txt,int n_len);
   virtual void            SetLetterSpacing(double n_spc);
   
-  virtual void            AddGlyph(int f_c,int l_c,const NR::Point &at,double advance);
+  virtual void            AddGlyph(int a_g,int f_c,int l_c,const NR::Point &at,double advance);
 };
 
 #endif

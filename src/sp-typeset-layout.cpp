@@ -107,38 +107,42 @@ void   sp_typeset_relayout(SPTypeset *typeset)
   int     combined_type=has_no_src;
   {
     // gather source text
-    if ( typeset->srcType == has_std_txt ) {
-      combined_src=strdup(typeset->srcText);
-      if ( combined_type == has_no_src ) combined_type=has_std_txt;
-    } else if ( typeset->srcType == has_pango_txt ) {
-      combined_src=strdup(typeset->srcText);
-      combined_type=has_pango_txt;
+    if ( typeset->srcText ) {
+      if ( typeset->srcType == has_std_txt ) {
+        combined_src=strdup(typeset->srcText);
+        combined_type=has_std_txt;
+      } else if ( typeset->srcType == has_pango_txt ) {
+        combined_src=strdup(typeset->srcText);
+        combined_type=has_pango_txt;
+      }
     }
     // kill children
     {
       for (	SPObject * child = sp_object_first_child(SP_OBJECT(typeset)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if ( SP_IS_TYPESET(child) ) {
           SPTypeset*  child_t=SP_TYPESET(child);
-          if ( child_t->srcType == has_std_txt ) {
-            if ( combined_src ) {
-              int old_len=strlen(combined_src);
-              combined_src=(char*)realloc(combined_src,(strlen(combined_src)+strlen(child_t->srcText)+1+1)*sizeof(char));
-              combined_src[old_len]='\n';
-              memcpy(combined_src+(strlen(combined_src)+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
-            } else {
-              combined_src=strdup(child_t->srcText);
+          if ( child_t->srcText ) {
+            if ( child_t->srcType == has_std_txt ) {
+              if ( combined_src ) {
+                int old_len=strlen(combined_src);
+                combined_src=(char*)realloc(combined_src,(strlen(combined_src)+strlen(child_t->srcText)+2)*sizeof(char));
+                combined_src[old_len]='\n';
+                memcpy(combined_src+(old_len+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
+              } else {
+                combined_src=strdup(child_t->srcText);
+              }
+              if ( combined_type == has_no_src ) combined_type=has_std_txt;
+            } else if ( child_t->srcType == has_pango_txt ) {
+              if ( combined_src ) {
+                int old_len=strlen(combined_src);
+                combined_src=(char*)realloc(combined_src,(old_len+strlen(child_t->srcText)+2)*sizeof(char));
+                combined_src[old_len]='\n';
+                memcpy(combined_src+(old_len+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
+              } else {
+                combined_src=strdup(child_t->srcText);
+              }
+              combined_type=has_pango_txt;
             }
-            if ( combined_type == has_no_src ) combined_type=has_std_txt;
-          } else if ( child_t->srcType == has_pango_txt ) {
-            if ( combined_src ) {
-              int old_len=strlen(combined_src);
-              combined_src=(char*)realloc(combined_src,(old_len+strlen(child_t->srcText)+1+1)*sizeof(char));
-              combined_src[old_len]='\n';
-              memcpy(combined_src+(old_len+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
-            } else {
-              combined_src=strdup(child_t->srcText);
-            }
-            combined_type=has_pango_txt;
           }
         }
       }
@@ -241,6 +245,9 @@ void   sp_typeset_relayout(SPTypeset *typeset)
           free(sol);
           break;
         }
+        for (int i=0;sol[i].end_of_array==false;i++) {
+          printf("sol %i : s=%i e=%i l=%f ep=%i\n",i,sol[i].start_ind,sol[i].end_ind,sol[i].length,(sol[i].endOfParagraph)?1:0);
+        }
         
         int     best=0;
         if ( sol[best].endOfParagraph ) {
@@ -322,6 +329,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
           continue;
         }
         
+        printf("best=%i\n",best);
         steps=(typeset_step*)realloc(steps,(nb_step+1)*sizeof(typeset_step));
         steps[nb_step].box=cur_box;
         steps[nb_step].start_ind=sol[best].start_ind;

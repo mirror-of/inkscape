@@ -145,7 +145,7 @@ int              break_holder::AddBrk(int st,int en,const box_solution &pos,int 
         brks[cur].end_ind=en;
         brks[cur].score_to_prev=delta;
         brks[cur].no_justification=noJust;
-//        printf(" replaced %i\n",cur);
+ //       printf(" replaced %i\n",cur);
         return -1;
       } else {
 //        printf("%i -> %i  dumped\n",st,en);
@@ -282,38 +282,42 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
   int     combined_type=has_no_src;
   {
     // gather source text
-    if ( typeset->srcType == has_std_txt ) {
-      combined_src=strdup(typeset->srcText);
-      if ( combined_type == has_no_src ) combined_type=has_std_txt;
-    } else if ( typeset->srcType == has_pango_txt ) {
-      combined_src=strdup(typeset->srcText);
-      combined_type=has_pango_txt;
+    if ( typeset->srcText ) {
+      if ( typeset->srcType == has_std_txt ) {
+        combined_src=strdup(typeset->srcText);
+        combined_type=has_std_txt;
+      } else if ( typeset->srcType == has_pango_txt ) {
+        combined_src=strdup(typeset->srcText);
+        combined_type=has_pango_txt;
+      }
     }
     // kill children
     {
       for (	SPObject * child = sp_object_first_child(SP_OBJECT(typeset)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if ( SP_IS_TYPESET(child) ) {
           SPTypeset*  child_t=SP_TYPESET(child);
-          if ( child_t->srcType == has_std_txt ) {
-            if ( combined_src ) {
-              int old_len=strlen(combined_src);
-              combined_src=(char*)realloc(combined_src,(strlen(combined_src)+strlen(child_t->srcText)+1+1)*sizeof(char));
-              combined_src[old_len]='\n';
-              memcpy(combined_src+(strlen(combined_src)+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
-            } else {
-              combined_src=strdup(child_t->srcText);
+          if ( child_t->srcText ) {
+            if ( child_t->srcType == has_std_txt ) {
+              if ( combined_src ) {
+                int old_len=strlen(combined_src);
+                combined_src=(char*)realloc(combined_src,(strlen(combined_src)+strlen(child_t->srcText)+2)*sizeof(char));
+                combined_src[old_len]='\n';
+                memcpy(combined_src+(old_len+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
+              } else {
+                combined_src=strdup(child_t->srcText);
+              }
+              if ( combined_type == has_no_src ) combined_type=has_std_txt;
+            } else if ( child_t->srcType == has_pango_txt ) {
+              if ( combined_src ) {
+                int old_len=strlen(combined_src);
+                combined_src=(char*)realloc(combined_src,(old_len+strlen(child_t->srcText)+2)*sizeof(char));
+                combined_src[old_len]='\n';
+                memcpy(combined_src+(old_len+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
+              } else {
+                combined_src=strdup(child_t->srcText);
+              }
+              combined_type=has_pango_txt;
             }
-            if ( combined_type == has_no_src ) combined_type=has_std_txt;
-          } else if ( child_t->srcType == has_pango_txt ) {
-            if ( combined_src ) {
-              int old_len=strlen(combined_src);
-              combined_src=(char*)realloc(combined_src,(old_len+strlen(child_t->srcText)+1+1)*sizeof(char));
-              combined_src[old_len]='\n';
-              memcpy(combined_src+(old_len+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
-            } else {
-              combined_src=strdup(child_t->srcText);
-            }
-            combined_type=has_pango_txt;
           }
         }
       }
@@ -454,6 +458,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
 
         for (int i=0;sol[i].end_of_array==false;i++) {
           if ( sol[i].end_ind >= sol[i].start_ind ) {
+//            printf("void %i %i\n",sol[i].start_ind,sol[i].end_ind);
             if ( sol[i].ascent > nAscent || sol[i].descent > nDescent ) {
               int p_line=(sameLine)?brk_list->PrevLine(cur_brk):cur_brk;
               if ( p_line >= 0 ) {
@@ -461,7 +466,8 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
               }
             } else {
               if ( sol[i].length < 0.001 ) {
-                if ( sol[i].endOfParagraph ) {
+//                printf("oversmall %i %i\n",sol[i].start_ind,sol[i].end_ind);
+               if ( sol[i].endOfParagraph ) {
                   int n_brk=brk_list->AddBrk(sol[i].start_ind,sol[i].end_ind,cur_box,cur_brk,0,true);
                   if ( n_brk >= 0 ) {
                     double    a,d;
@@ -472,11 +478,12 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
 //                  printf("qu'est ce que c'est que cette longueur nulle: %i %i \n",sol[i].start_ind,sol[i].end_ind);
                 }
               } else if ( sol[i].length > 1.5*1.2*nLen ) {
+//                printf("overlarge %i %i\n",sol[i].start_ind,sol[i].end_ind);
                 int n_brk=brk_list->AddBrk(brk_list->brks[cur_brk].end_ind+1,brk_list->brks[cur_brk].end_ind,cur_box,cur_brk,0,true);
                 if ( n_brk >= 0 ) {
                   double    a,d;
                   typeset->theSrc->InitialMetricsAt(brk_list->brks[cur_brk].end_ind+1,a,d);
-                  pen_list->AddPending(n_brk,a,d,false);
+                  pen_list->AddPending(n_brk,a,d,sol[i].endOfParagraph);
                 }
               } else {
                 double   delta=0;
@@ -490,11 +497,19 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
                 } else {
 //                  printf("%i %i  eo\n",sol[i].start_ind,sol[i].end_ind);
                 }
-                int n_brk=brk_list->AddBrk(sol[i].start_ind,sol[i].end_ind,cur_box,cur_brk,delta,false);
+                int n_brk=brk_list->AddBrk(sol[i].start_ind,sol[i].end_ind,cur_box,cur_brk,delta,sol[i].endOfParagraph);
                 if ( n_brk >= 0 ) {
-                  double    a,d;
-                  typeset->theSrc->InitialMetricsAt(sol[i].end_ind+1,a,d);
-                  pen_list->AddPending(n_brk,a,d,false);
+                  if ( sol[i].end_ind >= maxIndex-1 ) {
+                    double  ns=brk_list->Score(n_brk)/(1+brk_list->brks[n_brk].end_ind);
+                    if ( best_brk < 0 || ns < best_score ) {
+                      best_brk=n_brk;
+                      best_score=ns;
+                    }
+                  } else {
+                    double    a,d;
+                    typeset->theSrc->InitialMetricsAt(sol[i].end_ind+1,a,d);
+                    pen_list->AddPending(n_brk,a,d,sol[i].endOfParagraph);
+                  }
                 }
               }
             }
