@@ -1897,7 +1897,7 @@ node_clicked (SPKnot * knot, guint state, gpointer data)
 	n = (SPPathNode *) data;
 
 	if (state & GDK_CONTROL_MASK) {
-		if (state & GDK_MOD1_MASK) { // ctrl+alt+click: toggle node type
+		if (!(state & GDK_MOD1_MASK)) { // ctrl+click: toggle node type
 			if (n->type == SP_PATHNODE_CUSP) {
 				sp_nodepath_set_node_type (n, SP_PATHNODE_SMOOTH);
 			} else if (n->type == SP_PATHNODE_SMOOTH) {
@@ -1905,7 +1905,7 @@ node_clicked (SPKnot * knot, guint state, gpointer data)
 			} else {
 				sp_nodepath_set_node_type (n, SP_PATHNODE_CUSP);
 			}
-		} else { //ctrl+click: delete node
+		} else { //ctrl+alt+click: delete node
 			SPNodePath *nodepath = n->subpath->nodepath;
 			sp_nodepath_node_destroy (n);
 			if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
