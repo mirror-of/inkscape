@@ -52,7 +52,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 {
 
     public:
-    
+
 
     /**
      * Constructor
@@ -285,10 +285,10 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
 void TraceDialogImpl::abort()
 {
     //### Do some GUI thing
- 
+
     //### Make the abort() call to the tracer
     tracer.abort();
-    
+
 }
 
 
@@ -310,7 +310,7 @@ void TraceDialogImpl::potracePreviewCallback()
  */
 void TraceDialogImpl::responseCallback(int response_id)
 {
-    
+
     if (response_id == GTK_RESPONSE_OK)
         {
         int panelNr = notebook.get_current_page();
@@ -361,7 +361,7 @@ static void unhideCallback(GtkObject *object, gpointer dlgPtr)
  */
 TraceDialogImpl::TraceDialogImpl()
 {
-    { 
+    {
     // This block is a much simplified version of the code used in all other dialogs for
     // saving/restoring geometry, transientising, passing events to the aplication, and
     // hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
@@ -376,9 +376,9 @@ TraceDialogImpl::TraceDialogImpl()
         gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
 
         sp_transientize (dlg);
-                           
+
         gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
-                        
+
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
@@ -473,7 +473,7 @@ TraceDialogImpl::TraceDialogImpl()
     //potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceQuantFrame.add(potraceQuantVBox);
     potraceBox.pack_start(potraceQuantFrame, false, false, 0);
-  
+
     /*#### Multiple scanning####*/
     //----Hbox1
     potraceMultiScanBrightnessRadioButton.set_label(_("Brightness"));
@@ -483,7 +483,7 @@ TraceDialogImpl::TraceDialogImpl()
 
     potraceMultiScanNrColorSpinner.set_digits(2);
     potraceMultiScanNrColorSpinner.set_increments(1.0, 4.0);
-    potraceMultiScanNrColorSpinner.set_range(2.0, 64.0);
+    potraceMultiScanNrColorSpinner.set_range(2.0, 256.0);
     potraceMultiScanNrColorSpinner.set_value(8.0);
     potraceMultiScanHBox1.pack_end(potraceMultiScanNrColorSpinner, false, false, MARGIN);
     potraceMultiScanNrColorLabel.set_label(_("Scans:"));
@@ -525,10 +525,10 @@ TraceDialogImpl::TraceDialogImpl()
     //potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceMultiScanFrame.add(potraceMultiScanVBox);
     potraceBox.pack_start(potraceMultiScanFrame, false, false, 0);
-  
+
     /*#### Preview ####*/
     potracePreviewButton.set_label(_("Preview"));
-    potracePreviewButton.signal_clicked().connect( 
+    potracePreviewButton.signal_clicked().connect(
          sigc::mem_fun(*this, &TraceDialogImpl::potracePreviewCallback) );
     potracePreviewBox.pack_end(potracePreviewButton, false, false, 0);//do not expand
     tips.set_tip(potracePreviewButton, _("Preview the result without actual tracing"));
@@ -584,7 +584,7 @@ TraceDialogImpl::TraceDialogImpl()
     show_all_children();
 
     //## Connect the signal
-    signal_response().connect( 
+    signal_response().connect(
          sigc::mem_fun(*this, &TraceDialogImpl::responseCallback) );
 }
 
