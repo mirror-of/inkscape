@@ -133,6 +133,9 @@ struct SPDesktop : public SPView {
 	sigc::signal<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
 
 	sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
+	sigc::connection connectSetStyle(const sigc::slot<bool, const SPCSSAttr *> & slot) {
+		return _set_style_signal.connect(slot);
+	}
 
 	sigc::signal<void, SPObject *> _layer_changed_signal;
 
