@@ -478,6 +478,10 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable)
     this->knot = sp_knot_new (parent->desktop, NULL);
     g_object_set (G_OBJECT (this->knot->item), "mode", SP_KNOT_MODE_XOR, NULL);
     this->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_NORMAL;
+    this->knot->stroke [SP_KNOT_STATE_NORMAL] = 0x000000ff;
+    this->knot->stroke [SP_KNOT_STATE_DRAGGING] = 0x000000ff;
+    this->knot->stroke [SP_KNOT_STATE_MOUSEOVER] = 0x000000ff;
+    g_object_set (G_OBJECT (this->knot->item), "stroke_color", 0x000000ff, NULL);
 
     // move knot to the given point
     sp_knot_set_position (this->knot, &p, SP_KNOT_STATE_NORMAL);
