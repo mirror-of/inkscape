@@ -620,7 +620,6 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 			NRMatrix lt;
 			lt = *transform;
 			((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform (item, repr, &lt);
-			g_print ("via class!\n");
 		} else {
 			gchar t[80];
 			if (sp_svg_transform_write (t, 79, transform)) {
