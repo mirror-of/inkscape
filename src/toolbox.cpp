@@ -75,6 +75,7 @@ static const struct {
 	{ "SPRectContext", "rect_tool", SP_VERB_CONTEXT_RECT },
 	{ "SPArcContext", "arc_tool", SP_VERB_CONTEXT_ARC },
 	{ "SPStarContext", "star_tool", SP_VERB_CONTEXT_STAR },
+	{ "SPSpiralContext", "spiral_tool", SP_VERB_CONTEXT_SPIRAL },
 	{ "SPPencilContext", "pencil_tool", SP_VERB_CONTEXT_PENCIL },
 	{ "SPPenContext", "pen_tool", SP_VERB_CONTEXT_PEN },
 	{ "SPDynaDrawContext", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC },

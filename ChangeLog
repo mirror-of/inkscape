@@ -1,3 +1,7 @@
+2003-12-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/toolbox.cpp: re-added spiral button (reverting MenTaLguY's change).
+
 2003-12-17  bulia byak <bulia@dr.com>
 
 	* src/xml/repr-io.cpp src/xml/repr.h: fix to suppress formatting whitespace when
