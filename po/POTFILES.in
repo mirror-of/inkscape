@@ -3,12 +3,6 @@
 inkscape.desktop.in
 src/arc-context.cpp
 src/attributes.cpp
-src/bonobo/canvas-translator.cpp
-src/bonobo/embeddable-desktop.cpp
-src/bonobo/embeddable-document.cpp
-src/bonobo/embeddable-drawing.cpp
-src/bonobo/sodipodi-bonobo.cpp
-src/bonobo/svg-doc-factory.cpp
 src/color.cpp
 src/desktop-affine.cpp
 src/desktop-events.cpp
@@ -85,6 +79,7 @@ src/extension/internal/ps-out.cpp
 src/extension/internal/ps.cpp
 src/extension/internal/svg.cpp
 src/extension/internal/win32.cpp
+src/extension/plugin/grid.cpp
 src/extension/system.cpp
 src/extract-uri-test.cpp
 src/extract-uri.cpp
