@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-21 10:57+1100\n"
+"POT-Creation-Date: 2004-01-28 23:25-0700\n"
 "PO-Revision-Date: 2003-02-03 02:18+0200\n"
 "Last-Translator: Arman Aksoy (Armish) <armish@linux-sevenler.de>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -29,241 +29,333 @@ msgstr "Vektöt Çizimcisi"
 msgid "Could not create sodipodi-svg-doc factory"
 msgstr "sodipodi-svg-doc üreticisi yaratılamadı"
 
-#: src/desktop.cpp:764
+#: src/desktop-events.cpp:231
+#, c-format
+msgid "%s at %s"
+msgstr ""
+
+#: src/desktop-events.cpp:434
+#, fuzzy, c-format
+msgid "Move %s"
+msgstr " Taşı "
+
+#: src/desktop.cpp:803
 msgid "Zoom drawing if window size changes"
 msgstr ""
 
-#: src/desktop.cpp:769 src/verbs.cpp:593
+#: src/desktop.cpp:809 src/verbs.cpp:644
 msgid "Zoom"
 msgstr "Büyüt"
 
-#: src/desktop.cpp:836
-#, fuzzy, c-format
-msgid "Inkscape: %s: %s: %d"
-msgstr "Sodipodi: %s: %s: %d"
+#. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
+#: src/desktop.cpp:832
+msgid "Cursor coordinates"
+msgstr ""
 
-#: src/desktop.cpp:961
+#. display the initial welcome message in the statusbar
+#: src/desktop.cpp:842
+msgid ""
+"Welcome to Inkscape! Use shape or freehand tools to create objects; use "
+"selector (arrow) to move or transform them."
+msgstr ""
+
+#: src/desktop.cpp:896
 #, c-format
-msgid "Document %s has unsaved changes, save them?"
-msgstr "%s dökümanı kaydedilmemiş değişiklikler içeriyor, kaydedilsin mi?"
+msgid "%s: %d - Inkscape"
+msgstr ""
+
+#: src/desktop.cpp:898
+#, c-format
+msgid "%s - Inkscape"
+msgstr ""
+
+#: src/desktop.cpp:1030
+#, c-format
+msgid ""
+"<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
+"closing?</span>\n"
+"\n"
+"If you close without saving, your changes will be discarded."
+msgstr ""
+
+#: src/desktop.cpp:1039
+msgid "Close _without saving"
+msgstr ""
+
+#: src/desktop.cpp:1336
+msgid "No previous zoom."
+msgstr ""
+
+#: src/desktop.cpp:1365
+msgid "No next zoom."
+msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1539 src/dialogs/align.cpp:335
-#: src/dialogs/desktop-properties.cpp:306
-#: src/dialogs/document-properties.cpp:177 src/dialogs/export.cpp:188
-#: src/verbs.cpp:603
+#: src/desktop.cpp:1728 src/dialogs/align.cpp:334
+#: src/dialogs/desktop-properties.cpp:365 src/dialogs/export.cpp:195
 msgid "Page"
 msgstr "Sayfa"
 
-#: src/desktop.cpp:1543 src/dialogs/align.cpp:336 src/dialogs/export.cpp:193
-#: src/verbs.cpp:605
+#: src/desktop.cpp:1732 src/dialogs/align.cpp:335 src/dialogs/export.cpp:200
 msgid "Drawing"
 msgstr "Çizim"
 
-#: src/desktop.cpp:1547 src/dialogs/align.cpp:337 src/dialogs/export.cpp:198
-#: src/verbs.cpp:606
+#: src/desktop.cpp:1736 src/dialogs/align.cpp:336 src/dialogs/export.cpp:205
 msgid "Selection"
 msgstr "Seçim"
 
-#: src/dialogs/align.cpp:221
+#: src/dialogs/align.cpp:236
 msgid "Right side of aligned objects to left side of anchor"
 msgstr "Çapanın soluna hizalanmış nesnelerin sağ tarafı"
 
-#: src/dialogs/align.cpp:224
+#: src/dialogs/align.cpp:237
 msgid "Left side of aligned objects to left side of anchor"
 msgstr "Çapanın soluna hizalanmış nesnelerin sol tarafı"
 
-#: src/dialogs/align.cpp:227
+#: src/dialogs/align.cpp:238
 msgid "Center horizontally"
 msgstr "Yatay hizala"
 
-#: src/dialogs/align.cpp:230
+#: src/dialogs/align.cpp:239
 msgid "Right side of aligned objects to right side of anchor"
 msgstr "Çapanın sağına hizalanmış nesnelerin sağ tarafı"
 
-#: src/dialogs/align.cpp:233
+#: src/dialogs/align.cpp:240
 msgid "Left side of aligned objects to right side of anchor"
 msgstr "Çapanın sağına hizalanmış nesnelerin sol tarafı"
 
-#: src/dialogs/align.cpp:237
+#: src/dialogs/align.cpp:242
 msgid "Bottom of aligned objects to top of anchor"
 msgstr "Çapanın üstüne hizalanmış nesnelerin altı"
 
-#: src/dialogs/align.cpp:240
+#: src/dialogs/align.cpp:243
 msgid "Top of aligned objects to top of anchor"
 msgstr "Çapanın üstüne hizalanmış nesnelerin üstü"
 
-#: src/dialogs/align.cpp:243
+#: src/dialogs/align.cpp:244
 msgid "Center vertically"
 msgstr "Dikey hizala"
 
-#: src/dialogs/align.cpp:246
+#: src/dialogs/align.cpp:245
 msgid "Bottom of aligned objects to bottom of anchor"
 msgstr "Çapanın altına hizalanmış nesnelerin altı"
 
-#: src/dialogs/align.cpp:249
+#: src/dialogs/align.cpp:246
 #, fuzzy
 msgid "Top of aligned objects to bottom of anchor"
 msgstr "Çapanın üstüne hizalanmış nesnelerin üstü"
 
-#: src/dialogs/align.cpp:252
+#: src/dialogs/align.cpp:259
 msgid "Align"
 msgstr "Hizala"
 
-#: src/dialogs/align.cpp:270
+#: src/dialogs/align.cpp:277
 msgid "Distribute left sides of objects at even distances"
 msgstr ""
 
-#: src/dialogs/align.cpp:273
+#: src/dialogs/align.cpp:280
 msgid "Distribute centres of objects at even distances horizontally"
 msgstr ""
 
-#: src/dialogs/align.cpp:276
+#: src/dialogs/align.cpp:283
 msgid "Distribute right sides of objects at even distances"
 msgstr ""
 
-#: src/dialogs/align.cpp:279
+#: src/dialogs/align.cpp:286
 msgid "Distribute horizontal distance between objects equally"
 msgstr ""
 
-#: src/dialogs/align.cpp:283
+#: src/dialogs/align.cpp:290
 msgid "Distribute top sides of objects at even distances"
 msgstr ""
 
-#: src/dialogs/align.cpp:286
+#: src/dialogs/align.cpp:293
 msgid "Distribute centres of objects at even distances vertically"
 msgstr ""
 
-#: src/dialogs/align.cpp:289
+#: src/dialogs/align.cpp:296
 msgid "Distribute bottom sides of objects at even distances"
 msgstr ""
 
-#: src/dialogs/align.cpp:292
+#: src/dialogs/align.cpp:299
 msgid "Distribute vertical distance between objects equally"
 msgstr ""
 
-#: src/dialogs/align.cpp:295
+#: src/dialogs/align.cpp:302
 #, fuzzy
 msgid "Distribute"
 msgstr "Özellik"
 
-#: src/dialogs/align.cpp:331
+#: src/dialogs/align.cpp:330
 msgid "Last selected"
 msgstr "Son seçilen"
 
-#: src/dialogs/align.cpp:332
+#: src/dialogs/align.cpp:331
 msgid "First selected"
 msgstr "İlk seçilen"
 
-#: src/dialogs/align.cpp:333
+#: src/dialogs/align.cpp:332
 msgid "Biggest item"
 msgstr "En büyük birim"
 
-#: src/dialogs/align.cpp:334
+#: src/dialogs/align.cpp:333
 msgid "Smallest item"
 msgstr "En küçük birim"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:233 src/verbs.cpp:598
+#: src/dialogs/desktop-properties.cpp:292 src/verbs.cpp:651
 msgid "Grid"
 msgstr "Izgara"
 
-#: src/dialogs/desktop-properties.cpp:245
+#: src/dialogs/desktop-properties.cpp:304
 msgid "Show grid"
 msgstr "Izgarayı göster"
 
-#: src/dialogs/desktop-properties.cpp:246
+#: src/dialogs/desktop-properties.cpp:305
 msgid "Snap to grid"
 msgstr "Izgaraya yakala"
 
-#: src/dialogs/desktop-properties.cpp:248
+#: src/dialogs/desktop-properties.cpp:307
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "yatay"
 
-#: src/dialogs/desktop-properties.cpp:249
+#: src/dialogs/desktop-properties.cpp:308
 #, fuzzy
 msgid "Vertical lines"
 msgstr "dikey"
 
-#: src/dialogs/desktop-properties.cpp:259
+#: src/dialogs/desktop-properties.cpp:318
 msgid "Grid units:"
 msgstr "Izgara birimleri:"
 
-#: src/dialogs/desktop-properties.cpp:261
+#: src/dialogs/desktop-properties.cpp:320
 msgid "Origin X:"
 msgstr "Orijin X:"
 
-#: src/dialogs/desktop-properties.cpp:262
+#: src/dialogs/desktop-properties.cpp:321
 msgid "Origin Y:"
 msgstr "Orijin Y:"
 
-#: src/dialogs/desktop-properties.cpp:264
+#: src/dialogs/desktop-properties.cpp:323
 msgid "Spacing X:"
 msgstr "X aralığı:"
 
-#: src/dialogs/desktop-properties.cpp:265
+#: src/dialogs/desktop-properties.cpp:324
 msgid "Spacing Y:"
 msgstr "Y aralığı:"
 
-#: src/dialogs/desktop-properties.cpp:268
-#: src/dialogs/desktop-properties.cpp:293
+#: src/dialogs/desktop-properties.cpp:327
+#: src/dialogs/desktop-properties.cpp:352
 msgid "Snap units:"
 msgstr "Yakalama birimleri:"
 
-#: src/dialogs/desktop-properties.cpp:270
-#: src/dialogs/desktop-properties.cpp:295
+#: src/dialogs/desktop-properties.cpp:329
+#: src/dialogs/desktop-properties.cpp:354
 msgid "Snap distance:"
 msgstr "Yakalama uzaklığı:"
 
-#: src/dialogs/desktop-properties.cpp:273
+#: src/dialogs/desktop-properties.cpp:332
 msgid "Grid color:"
 msgstr "Izgara rengi"
 
-#: src/dialogs/desktop-properties.cpp:274
+#: src/dialogs/desktop-properties.cpp:333
 msgid "Grid color"
 msgstr "Izgara rengi"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:278 src/verbs.cpp:599
+#: src/dialogs/desktop-properties.cpp:337 src/verbs.cpp:652
 msgid "Guides"
 msgstr "Rehberler"
 
-#: src/dialogs/desktop-properties.cpp:288
+#: src/dialogs/desktop-properties.cpp:347
 msgid "Show guides"
 msgstr "Rehberleri göster"
 
-#: src/dialogs/desktop-properties.cpp:289
+#: src/dialogs/desktop-properties.cpp:348
 msgid "Snap to guides"
 msgstr "Rehberlere yakala"
 
-#: src/dialogs/desktop-properties.cpp:298
+#: src/dialogs/desktop-properties.cpp:357
 msgid "Guides color:"
 msgstr "Rehber rengi:"
 
-#: src/dialogs/desktop-properties.cpp:299
+#: src/dialogs/desktop-properties.cpp:358
 msgid "Guideline color"
 msgstr "Rehber satırı rengi"
 
-#: src/dialogs/desktop-properties.cpp:301
+#: src/dialogs/desktop-properties.cpp:360
 msgid "Highlight color:"
 msgstr "İşaret rengi:"
 
-#: src/dialogs/desktop-properties.cpp:302
+#: src/dialogs/desktop-properties.cpp:361
 msgid "Highlighted guideline color"
 msgstr "İşaretli rehber satırlarının rengi"
 
-#: src/dialogs/desktop-properties.cpp:316
-msgid "Show border"
+#: src/dialogs/desktop-properties.cpp:374
+msgid "Background (also for export):"
+msgstr ""
+
+#: src/dialogs/desktop-properties.cpp:374
+#, fuzzy
+msgid "Background color"
+msgstr "Bitiş rengi"
+
+#: src/dialogs/desktop-properties.cpp:377
+#, fuzzy
+msgid "Show canvas border"
 msgstr "Ayrıracı göster"
 
-#: src/dialogs/desktop-properties.cpp:318
+#: src/dialogs/desktop-properties.cpp:379
 #, fuzzy
 msgid "Border on top of drawing"
 msgstr "Çizimi göster"
 
-#: src/dialogs/desktop-properties.cpp:601
+#: src/dialogs/desktop-properties.cpp:385
+#, fuzzy
+msgid "Border color:"
+msgstr "Izgara rengi"
+
+#: src/dialogs/desktop-properties.cpp:385
+msgid "Canvas border color"
+msgstr ""
+
+#: src/dialogs/desktop-properties.cpp:400
+msgid "Paper size:"
+msgstr "Kağıt boyutu:"
+
+#: src/dialogs/desktop-properties.cpp:424
+msgid "Custom"
+msgstr "Özel"
+
+#. Custom paper frame
+#: src/dialogs/desktop-properties.cpp:431
+msgid "Custom paper"
+msgstr "Özel kağıt"
+
+#. Unit selector
+#: src/dialogs/desktop-properties.cpp:442 src/dialogs/export.cpp:216
+#: src/dialogs/transformation.cpp:449 src/dialogs/transformation.cpp:624
+msgid "Units:"
+msgstr "Birimler:"
+
+#. Stroke width
+#. Width
+#: src/dialogs/desktop-properties.cpp:451 src/dialogs/export.cpp:226
+#: src/dialogs/export.cpp:250 src/dialogs/object-attributes.cpp:68
+#: src/dialogs/object-attributes.cpp:76 src/dialogs/stroke-style.cpp:587
+#: src/dyna-draw-context.cpp:1100
+msgid "Width:"
+msgstr "Genişlik:"
+
+#: src/dialogs/desktop-properties.cpp:466 src/dialogs/export.cpp:235
+#: src/dialogs/export.cpp:260 src/dialogs/object-attributes.cpp:69
+#: src/dialogs/object-attributes.cpp:77
+msgid "Height:"
+msgstr "Yükseklik:"
+
+#: src/dialogs/desktop-properties.cpp:827
 msgid "Close"
 msgstr "Kapat"
 
@@ -277,7 +369,7 @@ msgstr "Sunum"
 msgid "Oversample bitmaps:"
 msgstr "Örnek bitmapler:"
 
-#: src/dialogs/display-settings.cpp:158 src/verbs.cpp:534
+#: src/dialogs/display-settings.cpp:158 src/verbs.cpp:580
 msgid "None"
 msgstr "Yok"
 
@@ -307,116 +399,74 @@ msgstr "Girdi"
 msgid "Default cursor tolerance:"
 msgstr "Öntanımlı kursor töleransı"
 
-#: src/dialogs/document-properties.cpp:168
-msgid "Document settings"
-msgstr "Döküman ayarları"
-
-#: src/dialogs/document-properties.cpp:189
-msgid "Paper size:"
-msgstr "Kağıt boyutu:"
-
-#: src/dialogs/document-properties.cpp:210
-msgid "Custom"
-msgstr "Özel"
-
-#. Custom paper frame
-#: src/dialogs/document-properties.cpp:217
-msgid "Custom paper"
-msgstr "Özel kağıt"
-
-#. Unit selector
-#: src/dialogs/document-properties.cpp:228 src/dialogs/export.cpp:206
-#: src/dialogs/object-properties.cpp:361 src/dialogs/transformation.cpp:447
-#: src/dialogs/transformation.cpp:622
-msgid "Units:"
-msgstr "Birimler:"
-
-#. Stroke width
-#: src/dialogs/document-properties.cpp:237 src/dialogs/export.cpp:216
-#: src/dialogs/export.cpp:244 src/dialogs/object-attributes.cpp:68
-#: src/dialogs/object-attributes.cpp:76 src/dialogs/object-properties.cpp:403
-#: src/dialogs/stroke-style.cpp:587 src/dialogs/tool-attributes.cpp:121
-#: src/dyna-draw-context.cpp:1097
-msgid "Width:"
-msgstr "Genişlik:"
-
-#: src/dialogs/document-properties.cpp:252 src/dialogs/export.cpp:225
-#: src/dialogs/export.cpp:252 src/dialogs/object-attributes.cpp:69
-#: src/dialogs/object-attributes.cpp:77 src/dialogs/object-properties.cpp:418
-msgid "Height:"
-msgstr "Yükseklik:"
-
 #. Export area frame
-#: src/dialogs/export.cpp:177
+#: src/dialogs/export.cpp:184
 msgid "Export area"
 msgstr "Bölümü dışarı aktar"
 
-#: src/dialogs/export.cpp:210
+#: src/dialogs/export.cpp:220
 msgid "x0:"
 msgstr "x0:"
 
-#: src/dialogs/export.cpp:213
+#: src/dialogs/export.cpp:223
 msgid "x1:"
 msgstr "x1:"
 
-#: src/dialogs/export.cpp:219
+#: src/dialogs/export.cpp:229
 msgid "y0:"
 msgstr "y0:"
 
-#: src/dialogs/export.cpp:222
+#: src/dialogs/export.cpp:232
 msgid "y1:"
 msgstr "y1:"
 
-#. for now, make sekection toggled by default
-#. fixme: make it remember user choice between invoications
-#. sp_export_area_toggled ((GtkToggleButton *) b, (GtkObject *) dlg);
 #. Bitmap size frame
-#: src/dialogs/export.cpp:235
+#: src/dialogs/export.cpp:241
 msgid "Bitmap size"
 msgstr "Bitmap boyutu"
 
-#: src/dialogs/export.cpp:244 src/dialogs/export.cpp:252
+#: src/dialogs/export.cpp:250 src/dialogs/export.cpp:260
 msgid "pixels"
 msgstr "piksel"
 
-#: src/dialogs/export.cpp:248 src/dialogs/export.cpp:256
+#: src/dialogs/export.cpp:256 src/dialogs/export.cpp:267
 msgid "dpi"
 msgstr "dpi"
 
 #. File entry
-#: src/dialogs/export.cpp:262
+#: src/dialogs/export.cpp:273
 #, fuzzy
 msgid "Filename"
 msgstr "Dosya adı:"
 
-#: src/dialogs/export.cpp:292
+#: src/dialogs/export.cpp:302
 msgid "Browse..."
 msgstr ""
 
-#: src/dialogs/export.cpp:307
+#: src/dialogs/export.cpp:317
 msgid "Export"
 msgstr "Dışarı aktar"
 
-#: src/dialogs/export.cpp:418
+#: src/dialogs/export.cpp:481
 #, fuzzy
 msgid "You have to enter a filename"
 msgstr "Çizimi yeni dosya adıyla kaydet"
 
-#: src/dialogs/export.cpp:428
+#: src/dialogs/export.cpp:490
 #, fuzzy
 msgid "Export in progress"
 msgstr "Bölümü dışarı aktar"
 
-#: src/dialogs/export.cpp:432
+#: src/dialogs/export.cpp:496
 #, fuzzy, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Resmi renklendir %d x %d: %s"
 
-#: src/dialogs/export.cpp:452
+#: src/dialogs/export.cpp:515
 msgid "The chosen area to be exported is invalid"
 msgstr ""
 
-#: src/dialogs/export.cpp:467
+#: src/dialogs/export.cpp:526
 #, fuzzy
 msgid "Select a filename for exporting"
 msgstr "İçeri aktarılacak dosyayı seçin"
@@ -483,7 +533,7 @@ msgstr "Numara geçerli"
 msgid "ID exists"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:428 src/verbs.cpp:619
+#: src/dialogs/item-properties.cpp:427 src/verbs.cpp:672
 msgid "Item properties"
 msgstr "Nesne özellikleri"
 
@@ -511,7 +561,7 @@ msgstr "Arcrole:"
 msgid "Title:"
 msgstr "Başlık:"
 
-#: src/dialogs/object-attributes.cpp:37 src/dialogs/tool-attributes.cpp:111
+#: src/dialogs/object-attributes.cpp:37
 msgid "Show:"
 msgstr "Göster:"
 
@@ -548,13 +598,12 @@ msgid "ARG2:"
 msgstr "ARG2:"
 
 #. Expansion
-#: src/dialogs/object-attributes.cpp:56 src/spiral-context.cpp:369
+#: src/dialogs/object-attributes.cpp:56 src/spiral-context.cpp:370
 msgid "Expansion:"
 msgstr "Genişletme:"
 
 #. Revolution
-#: src/dialogs/object-attributes.cpp:57 src/dialogs/tool-attributes.cpp:91
-#: src/spiral-context.cpp:350
+#: src/dialogs/object-attributes.cpp:57 src/spiral-context.cpp:351
 msgid "Revolution:"
 msgstr "Devir:"
 
@@ -575,12 +624,10 @@ msgid "URL:"
 msgstr "Adres:"
 
 #: src/dialogs/object-attributes.cpp:66 src/dialogs/object-attributes.cpp:74
-#: src/dialogs/object-properties.cpp:373
 msgid "X:"
 msgstr "X:"
 
 #: src/dialogs/object-attributes.cpp:67 src/dialogs/object-attributes.cpp:75
-#: src/dialogs/object-properties.cpp:388
 msgid "Y:"
 msgstr "Y:"
 
@@ -597,54 +644,45 @@ msgstr "RY:"
 msgid "%s attributes"
 msgstr "%s özellikleri"
 
-#: src/dialogs/object-properties.cpp:216
+#: src/dialogs/object-properties.cpp:218
 msgid "Apply to:"
 msgstr "Uygula:"
 
-#: src/dialogs/object-properties.cpp:226
+#: src/dialogs/object-properties.cpp:228
 msgid "Selected objects"
 msgstr "Seçilen nesneler"
 
-#: src/dialogs/object-properties.cpp:229
+#: src/dialogs/object-properties.cpp:231
 msgid "All shape tools"
 msgstr "Tüm şekillendirme  araçları"
 
-#: src/dialogs/object-properties.cpp:232
+#: src/dialogs/object-properties.cpp:234
 msgid "Rectangle tool"
 msgstr "Dörtgen aracı"
 
-#: src/dialogs/object-properties.cpp:235
+#: src/dialogs/object-properties.cpp:237
 msgid "Arc tool"
 msgstr "Eğik çizim aracı"
 
-#: src/dialogs/object-properties.cpp:238
+#: src/dialogs/object-properties.cpp:240
 msgid "Star tool"
 msgstr "Yıldız aracı"
 
-#: src/dialogs/object-properties.cpp:241
+#: src/dialogs/object-properties.cpp:243
 msgid "Spiral tool"
 msgstr "Spiral aracı"
 
-#: src/dialogs/object-properties.cpp:244
+#: src/dialogs/object-properties.cpp:246
 msgid "Freehand and pen"
 msgstr "Serbest ve kalem çizimi"
 
-#: src/dialogs/object-properties.cpp:247
+#: src/dialogs/object-properties.cpp:249
 msgid "Calligraphic line"
 msgstr "Karalama çizgisi"
 
-#: src/dialogs/object-properties.cpp:250 src/verbs.cpp:592
+#: src/dialogs/object-properties.cpp:252 src/verbs.cpp:643
 msgid "Text"
 msgstr "Metin"
-
-#: src/dialogs/object-properties.cpp:326
-#, fuzzy
-msgid "Object Size and Position"
-msgstr "Nesne boyutu ve konumu"
-
-#: src/dialogs/object-properties.cpp:348 src/verbs.cpp:614
-msgid "Size and Position"
-msgstr "Boyut ve Konum"
 
 #: src/dialogs/stroke-style.cpp:572
 msgid "Stroke settings"
@@ -682,84 +720,32 @@ msgid "End Markers:"
 msgstr ""
 
 #. Layout
-#: src/dialogs/text-edit.cpp:174
+#: src/dialogs/text-edit.cpp:177
 msgid "Layout"
 msgstr "Konumlama"
 
-#: src/dialogs/text-edit.cpp:182
+#: src/dialogs/text-edit.cpp:185
 msgid "Alignment:"
 msgstr "Hiza:"
 
-#: src/dialogs/text-edit.cpp:207
+#: src/dialogs/text-edit.cpp:210
 msgid "Orientation:"
 msgstr "Oran:"
 
-#: src/dialogs/text-edit.cpp:225
+#: src/dialogs/text-edit.cpp:228
 #, fuzzy
 msgid "Line spacing:"
 msgstr "X aralığı:"
 
-#: src/dialogs/text-edit.cpp:250
+#: src/dialogs/text-edit.cpp:253
 msgid "Text and font"
 msgstr "Metin ve yazı tipi"
 
-#: src/dialogs/text-edit.cpp:261
+#: src/dialogs/text-edit.cpp:264
 msgid "Set as default"
 msgstr "Öntanımlı olarak ata"
 
-#: src/dialogs/tool-attributes.cpp:46 src/verbs.cpp:612
-msgid "Tool attributes"
-msgstr "Araç özellikleri"
-
-#: src/dialogs/tool-attributes.cpp:91
-msgid "Expansion"
-msgstr "Genişletme"
-
-#: src/dialogs/tool-attributes.cpp:91
-msgid "Inner radius"
-msgstr "İç çevre"
-
-#: src/dialogs/tool-attributes.cpp:95 src/dialogs/tool-attributes.cpp:105
-#: src/dialogs/tool-attributes.cpp:115 src/dialogs/tool-attributes.cpp:125
-msgid "Missing tool preferences"
-msgstr "Eksik araç ayarları"
-
-#. Magnitude
-#: src/dialogs/tool-attributes.cpp:101 src/star-context.cpp:355
-msgid "Corners:"
-msgstr "Köşeler:"
-
-#: src/dialogs/tool-attributes.cpp:101
-msgid "Proportion"
-msgstr "Orantı"
-
-#: src/dialogs/tool-attributes.cpp:111
-msgid "Transform:"
-msgstr "Dönüşüm:"
-
-#. Mass
-#: src/dialogs/tool-attributes.cpp:121 src/dyna-draw-context.cpp:1043
-msgid "Mass:"
-msgstr "Büyük:"
-
-#. Drag
-#: src/dialogs/tool-attributes.cpp:121 src/dyna-draw-context.cpp:1061
-msgid "Drag:"
-msgstr "Sürükle:"
-
-#: src/dialogs/tool-attributes.cpp:121
-msgid "Angle"
-msgstr "Açı"
-
-#: src/dialogs/tool-attributes.cpp:128
-msgid "Tool has no attributes"
-msgstr "Aracın özellikleri yok"
-
-#: src/dialogs/tool-attributes.cpp:131 src/dialogs/tool-options.cpp:88
-msgid "No active tool"
-msgstr "Aktif araç yok"
-
-#: src/dialogs/tool-options.cpp:44 src/verbs.cpp:611
+#: src/dialogs/tool-options.cpp:44 src/verbs.cpp:665
 msgid "Tool options"
 msgstr "Araç ayarları"
 
@@ -767,105 +753,109 @@ msgstr "Araç ayarları"
 msgid "Tool has no options"
 msgstr "Aracın özelliği yok"
 
+#: src/dialogs/tool-options.cpp:88
+msgid "No active tool"
+msgstr "Aktif araç yok"
+
 #. Move page
-#: src/dialogs/transformation.cpp:273 src/dialogs/transformation.cpp:411
+#: src/dialogs/transformation.cpp:275 src/dialogs/transformation.cpp:413
 msgid "Move"
 msgstr "Taşı"
 
 #. Scale page
-#: src/dialogs/transformation.cpp:281 src/dialogs/transformation.cpp:585
+#: src/dialogs/transformation.cpp:283 src/dialogs/transformation.cpp:587
 msgid "Scale"
 msgstr "Cetvel"
 
 #. Rotate page
-#: src/dialogs/transformation.cpp:289 src/dialogs/transformation.cpp:712
+#: src/dialogs/transformation.cpp:291 src/dialogs/transformation.cpp:714
 msgid "Rotate"
 msgstr "Dönder"
 
 #. Relative moves
-#: src/dialogs/transformation.cpp:453
+#: src/dialogs/transformation.cpp:455
 msgid "Relative move"
 msgstr "Bağlantılı taşı"
 
-#: src/dialogs/transformation.cpp:730
+#: src/dialogs/transformation.cpp:732
 msgid "deg"
 msgstr "derece"
 
-#: src/dialogs/xml-tree.cpp:191
+#: src/dialogs/xml-tree.cpp:193
 msgid "Drag to reorder nodes"
 msgstr "Yeni düzenlenen düğümlere taşı"
 
-#: src/dialogs/xml-tree.cpp:204
+#: src/dialogs/xml-tree.cpp:206
 msgid "New element node"
 msgstr "Yeni öğe düğümü"
 
-#: src/dialogs/xml-tree.cpp:222
+#: src/dialogs/xml-tree.cpp:224
 msgid "New text node"
 msgstr "Yeni metin düğümü"
 
-#: src/dialogs/xml-tree.cpp:239
+#: src/dialogs/xml-tree.cpp:241
 msgid "Duplicate node"
 msgstr "Düğümü çiftle"
 
-#: src/dialogs/xml-tree.cpp:255
+#: src/dialogs/xml-tree.cpp:257
 msgid "Delete node"
 msgstr "Düğümü sil"
 
-#: src/dialogs/xml-tree.cpp:268
+#: src/dialogs/xml-tree.cpp:270
 msgid "Unindent node"
 msgstr "Düğümü düzelt"
 
-#: src/dialogs/xml-tree.cpp:279
+#: src/dialogs/xml-tree.cpp:281
 msgid "Indent node"
 msgstr "Düğüme girinti ekle"
 
-#: src/dialogs/xml-tree.cpp:289
+#: src/dialogs/xml-tree.cpp:291
 msgid "Raise node"
 msgstr "Düğümü büyüt"
 
-#: src/dialogs/xml-tree.cpp:300
+#: src/dialogs/xml-tree.cpp:302
 msgid "Lower node"
 msgstr "Düğümü küçült"
 
-#: src/dialogs/xml-tree.cpp:337
+#: src/dialogs/xml-tree.cpp:339
 msgid "Delete attribute"
 msgstr "Özelliği sil"
 
-#: src/dialogs/xml-tree.cpp:367
+#: src/dialogs/xml-tree.cpp:369
 msgid "Attribute name"
 msgstr "Özellik adı"
 
-#: src/dialogs/xml-tree.cpp:374
+#: src/dialogs/xml-tree.cpp:376
 msgid "Set attribute"
 msgstr "Özellik ata"
 
-#: src/dialogs/xml-tree.cpp:387
+#: src/dialogs/xml-tree.cpp:389
 msgid "Attribute value"
 msgstr "Özellik değeri"
 
-#: src/dialogs/xml-tree.cpp:900
+#: src/dialogs/xml-tree.cpp:904
 msgid "New element node..."
 msgstr "Yeni öğe düğümü..."
 
-#: src/dialogs/xml-tree.cpp:920
+#: src/dialogs/xml-tree.cpp:924
 msgid "Cancel"
 msgstr "İptal"
 
-#: src/dialogs/xml-tree.cpp:924
+#: src/dialogs/xml-tree.cpp:928
 msgid "Create"
 msgstr "Yarat"
 
-#: src/document.cpp:339
+#: src/document.cpp:385
 #, c-format
 msgid "New document %d"
 msgstr "Yeni döküman %d"
 
-#: src/document.cpp:368
+#: src/document.cpp:414
 #, c-format
 msgid "Memory document %d"
 msgstr "Hafıza dökümanı %d"
 
-#: src/document.cpp:454
+#: src/document.cpp:506
 #, c-format
 msgid "Unnamed document %d"
 msgstr "Adlandırılmamış döküman %d"
@@ -880,35 +870,50 @@ msgstr "Seçileni göster"
 msgid "Creating new curve"
 msgstr "Yeni bir SVG dökümanı oluştur"
 
+#. Mass
+#: src/dyna-draw-context.cpp:1046
+msgid "Mass:"
+msgstr "Büyük:"
+
+#. Drag
+#: src/dyna-draw-context.cpp:1064
+msgid "Drag:"
+msgstr "Sürükle:"
+
 #. Angle
-#: src/dyna-draw-context.cpp:1079
+#: src/dyna-draw-context.cpp:1082
 msgid "Angle:"
 msgstr "açı:"
 
 #. Reset
-#: src/dyna-draw-context.cpp:1115 src/rect-context.cpp:433
-#: src/spiral-context.cpp:405 src/star-context.cpp:401
+#: src/dyna-draw-context.cpp:1118 src/rect-context.cpp:434
+#: src/spiral-context.cpp:406 src/star-context.cpp:393
 msgid "Defaults"
 msgstr "Öntanımlı"
 
-#: src/file.cpp:146 src/file.cpp:158
+#: src/file.cpp:98 src/main.cpp:272
+#, c-format
+msgid "Failed to load the requested file %s"
+msgstr ""
+
+#: src/file.cpp:155 src/file.cpp:167
 msgid "Select file to open"
 msgstr "Açılacak dosyayı seçin"
 
-#: src/file.cpp:176 src/file.cpp:232
+#: src/file.cpp:185 src/file.cpp:244
 #, fuzzy
 msgid "File type:"
 msgstr "Doldurma stili"
 
-#: src/file.cpp:218
+#: src/file.cpp:231
 msgid "Save file"
 msgstr "Dosyayı kaydet"
 
-#: src/file.cpp:432 src/file.cpp:438
+#: src/file.cpp:460 src/file.cpp:466
 msgid "Select file to import"
 msgstr "İçeri aktarılacak dosyayı seçin"
 
-#: src/help.cpp:63 src/interface.cpp:486
+#: src/help.cpp:60
 msgid "About Inkscape"
 msgstr ""
 
@@ -1051,390 +1056,27 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Ex squares"
 
-#: src/interface.cpp:353
-msgid "Open Recent"
-msgstr ""
-
-#: src/interface.cpp:371
-msgid "Close View"
-msgstr "Görünümü Kapat"
-
-#: src/interface.cpp:439
-msgid "Cleanup"
-msgstr "Temizle"
-
-#: src/interface.cpp:471
-msgid "New View"
-msgstr "Yeni Görünüm"
-
-#. View:New Preview
-#: src/interface.cpp:473
-msgid "New Preview"
-msgstr "Yeni Önizleme"
-
-#. TODO: Modules need abouts too
-#: src/interface.cpp:490
-msgid "About Modules"
-msgstr ""
-
-#: src/interface.cpp:504
-msgid "File"
-msgstr "Dosya"
-
-#: src/interface.cpp:510 src/widgets/gradient-selector.cpp:135
-msgid "Edit"
-msgstr "Düzenle"
-
-#: src/interface.cpp:516 src/sp-item.cpp:498
-msgid "Object"
-msgstr "Nesne"
-
-#: src/interface.cpp:522
-msgid "View"
-msgstr "Görünüm"
-
-#: src/interface.cpp:529
-#, fuzzy
-msgid "Filters"
-msgstr "Dosya"
-
-#: src/interface.cpp:535
-#, fuzzy
-msgid "Help"
-msgstr "_Yardım"
-
-#: src/main.cpp:121
-msgid "Do not use X server (only process files from console)"
-msgstr "X sunucusunu kullanma (dosyaları sadece konsoldan sürdür)"
-
-#: src/main.cpp:124
-msgid "Try to use X server even if $DISPLAY is not set)"
-msgstr "$DISPLAY atanmamışsa bile X sunucusunu kullanmaya çalış)"
-
-#: src/main.cpp:127
-msgid "Open specified document(s) (option string may be excluded)"
-msgstr "Belirtilen döküman(lar)ı aç (seçenekler dahil olmayacaktır)"
-
-#: src/main.cpp:128 src/main.cpp:131 src/main.cpp:134 src/main.cpp:148
-msgid "FILENAME"
-msgstr "DOSYA ADI"
-
-#: src/main.cpp:130
-msgid "Print document(s) to specified output file (use '| program' for pipe)"
-msgstr ""
-"Dökümanları belirtilen dosyaya yazdur (başka programa yönlendirmek için '|' "
-"kullanın)"
-
-#: src/main.cpp:133
-msgid "Export document to png file"
-msgstr "Resmi png olarak aktar"
-
-#: src/main.cpp:136
-msgid "The resolution used for converting SVG into bitmap (default 72.0)"
-msgstr "SVG'den bitmap'e çevirim için kullanılacak çözünürlük (öntanımlı 72.0)"
-
-#: src/main.cpp:137
-msgid "DPI"
-msgstr "DPI"
-
-#: src/main.cpp:139
-msgid ""
-"Exported area in millimeters (default is full document, 0,0 is lower-left "
-"corner)"
-msgstr ""
-"Milimetre değerinde aktarılan bölüm (öntanımlı olarak tüm döküman, 0,0 "
-"resmin en alt sol köşesi)"
-
-#: src/main.cpp:140
-msgid "x0:y0:x1:y1"
-msgstr "x0:y0:x1:y1"
-
-#: src/main.cpp:142
-msgid "The width of generated bitmap in pixels (overwrites dpi)"
-msgstr "Yaratılan bitmap'in piksel değerinde genişliği (dpi üzerine yazar)"
-
-#: src/main.cpp:142
-msgid "WIDTH"
-msgstr "GENİŞLİK"
-
-#: src/main.cpp:144
-msgid "The height of generated bitmap in pixels (overwrites dpi)"
-msgstr "Yaratılan bitmap'in piksel değerinde yüksekliği (dpi üzerine yazar)"
-
-#: src/main.cpp:144
-msgid "HEIGHT"
-msgstr "YÜKSEKLİK"
-
-#: src/main.cpp:146
-msgid "Background color of exported bitmap (any SVG supported color string)"
-msgstr "Dışarı aktarılan birmap'in arkaplanı (SVG destekli herhangi bir renk)"
-
-#: src/main.cpp:146
-msgid "COLOR"
-msgstr "RENK"
-
-#: src/main.cpp:148
-msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
-msgstr "Dökümanı düz SVG dosyasına aktar (\"xmlns:sodipodi\" alan boşluğu yok)"
-
-#: src/main.cpp:150
-msgid "Show given files one-by-one, switch to next on any key/mouse event"
-msgstr ""
-"Verilen dosyaları teker teker göster, herhangi bir tuşa basıldığında "
-"sonrakine geç"
-
-#: src/main.cpp:152
-msgid "Prefer bitmap (xpm) icons to SVG ones"
-msgstr ""
-
-#: src/modules/gnome.cpp:134
-msgid "Select printer"
-msgstr "Yazıcıyı seçin"
-
-#: src/modules/gnome.cpp:188
-#, fuzzy, c-format
-msgid "Inkscape (doc name %s..): Print Preview"
-msgstr "Sodipodi (döküman %s..): Yazdırma Önizlemesi"
-
-#. Print destination frame
-#: src/modules/ps.cpp:165 src/modules/ps.cpp:226
-msgid "Print destination"
-msgstr "Hedefi yazdır"
-
-#. Print properties frame
-#: src/modules/ps.cpp:176
-#, fuzzy
-msgid "Print properties"
-msgstr "Bağlantı Özellikleri"
-
-#: src/modules/ps.cpp:184
-msgid "Print using PostScript operators"
-msgstr ""
-
-#: src/modules/ps.cpp:186
-msgid ""
-"Use PostScript vector operators, resulting image will be (usually) smaller "
-"and can be arbitrarily scaled, but alpha transparency, markers and patterns "
-"will be lost"
-msgstr ""
-
-#: src/modules/ps.cpp:191
-#, fuzzy
-msgid "Print as bitmap"
-msgstr "Bitmap'i dışarı aktar"
-
-#: src/modules/ps.cpp:193
-msgid ""
-"Print everything as bitmap, resulting image will be (usualy) larger and it "
-"quality depends on zoom factor, but all graphics will be rendered identical "
-"to display"
-msgstr ""
-
-#: src/modules/ps.cpp:207
-msgid "Preferred resolution (dots per inch) of bitmap"
-msgstr ""
-
-#: src/modules/ps.cpp:222
-#, fuzzy
-msgid "Resolution:"
-msgstr "Devir:"
-
-#: src/modules/ps.cpp:232
-msgid ""
-"Enter destination lpr queue.\n"
-"Use '> filename' to print to file.\n"
-"Use '| prog arg...' to pipe to program"
-msgstr ""
-"Hedef lpr kuyruğunu girin.\n"
-"Dosyaya yazmak için '>dosyaadi' \n"
-"Programa yönlendirmek için '|' kullanın"
-
-#: src/modules/ps.cpp:865
-msgid "write error occured"
-msgstr ""
-
-#. Create toplevel menuitem
-#: src/object-ui.cpp:105
-msgid "Item"
-msgstr "Birim"
-
-#. Item dialog
-#: src/object-ui.cpp:108 src/verbs.cpp:619
-msgid "Item Properties"
-msgstr "Birim Özellikleri"
-
-#. Select item
-#: src/object-ui.cpp:118
-msgid "Select this"
-msgstr "Bunu Seç"
-
-#. Reset transformations
-#: src/object-ui.cpp:128
-msgid "Reset transformation"
-msgstr "Dönüşümü sıfırla"
-
-#: src/object-ui.cpp:134
-msgid "Make sensitive"
-msgstr "Duyarlı hale getir"
-
-#: src/object-ui.cpp:134
-msgid "Make insensitive"
-msgstr "Duyarsız hale getir"
-
-#. Create link
-#: src/object-ui.cpp:139
-msgid "Create link"
-msgstr "Bağlantı yarat"
-
-#: src/object-ui.cpp:251 src/verbs.cpp:562
-msgid "Group"
-msgstr "Grupla"
-
-#. Group dialog
-#: src/object-ui.cpp:255
-msgid "Group Properties"
-msgstr "Grup Özellikleri"
-
-#. "Ungroup"
-#: src/object-ui.cpp:268 src/verbs.cpp:563
-msgid "Ungroup"
-msgstr "Grupları Kaldır"
-
-#. Create toplevel menuitem
-#: src/object-ui.cpp:316
-msgid "Link"
-msgstr "Bağlantı"
-
-#. Link dialog
-#: src/object-ui.cpp:319
-msgid "Link Properties"
-msgstr "Bağlantı Özellikleri"
-
-#. Select item
-#: src/object-ui.cpp:329
-msgid "Follow link"
-msgstr "Bağlantıyı takip et"
-
-#. Reset transformations
-#: src/object-ui.cpp:334
-msgid "Remove link"
-msgstr "Bağlantıyı kaldır"
-
-#. Create toplevel menuitem
-#: src/object-ui.cpp:397
-msgid "Image"
-msgstr "Resim"
-
-#. Link dialog
-#: src/object-ui.cpp:400
-msgid "Image Properties"
-msgstr "Resim Özellikleri"
-
-#. Autotrace dialog
-#: src/object-ui.cpp:408 src/sp-image.cpp:781
-msgid "Trace"
-msgstr "İpucu"
-
-#. Create toplevel menuitem
-#: src/object-ui.cpp:457
-msgid "Shape"
-msgstr "Şekillendir"
-
-#. Item dialog
-#: src/object-ui.cpp:460
-msgid "Fill settings"
-msgstr "Doldurma ayarları"
-
-#. Create toplevel menuitem
-#: src/object-ui.cpp:487
-msgid "Rect"
-msgstr "Dörtgen"
-
-#. Link dialog
-#: src/object-ui.cpp:490
-msgid "Rect Properties"
-msgstr "Dörtgen Özellikleri"
-
-#. Create toplevel menuitem
-#: src/object-ui.cpp:523 src/verbs.cpp:587
-msgid "Star"
-msgstr "Yıldız"
-
-#. Link dialog
-#: src/object-ui.cpp:526
-msgid "Star Properties"
-msgstr "Yıldız Ayarları"
-
-#. Create toplevel menuitem
-#: src/object-ui.cpp:559 src/verbs.cpp:588
-msgid "Spiral"
-msgstr "Spiral"
-
-#. Link dialog
-#: src/object-ui.cpp:562
-msgid "Spiral Properties"
-msgstr "Spiral Özellikleri"
-
-#. rx_ratio
-#: src/rect-context.cpp:397
-msgid "Roundness ratio for x:"
-msgstr "X için yuvarlaklık değeri:"
-
-#. ry_ratio
-#: src/rect-context.cpp:415
-msgid "Roundness ratio for y:"
-msgstr "Y için yuvarlaklık değeri:"
-
-#: src/select-context.cpp:692
-msgid "Visual transformation"
-msgstr "Görüntülü dönüşüm"
-
-#: src/select-context.cpp:700
-msgid "Show content"
-msgstr "İçeriği göster"
-
-#: src/select-context.cpp:707
-msgid "Show outline"
-msgstr "Taslağı göster"
-
-#: src/select-context.cpp:714
-msgid "Object transformation"
-msgstr "Nesne dönüşümü"
-
-#: src/select-context.cpp:722
-msgid "Optimize"
-msgstr "Optimize"
-
-#: src/select-context.cpp:729
-msgid "Preserve"
-msgstr "Koru"
-
-#: src/slideshow.cpp:88
-#, fuzzy
-msgid "Inkscape slideshow"
-msgstr "Sodipodi: %s : XML Görünümü"
-
-#: src/inkscape.cpp:397
+#: src/inkscape.cpp:435
 msgid "Untitled document"
 msgstr "Başlıksız döküman"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:426
+#: src/inkscape.cpp:466
 #, fuzzy
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Sodipodi, dahili bir hata karşılaştı ve şimdi kapatılacak.\n"
 
-#: src/inkscape.cpp:427
+#: src/inkscape.cpp:467
 msgid ""
 "Automatic backups of unsaved documents were done to following locations:\n"
 msgstr ""
 "Kaydedilmeyen dökümanların otomatik yedekleri aşağıdaki konuma alınacak.\n"
 
-#: src/inkscape.cpp:428
+#: src/inkscape.cpp:468
 msgid "Automatic backup of following documents failed:\n"
 msgstr "Aşağıdaki dökümanların otomatik yedekleri alınırken hata oluştu.\n"
 
-#: src/inkscape.cpp:562
+#: src/inkscape.cpp:599
 #, fuzzy, c-format
 msgid ""
 "%s is not regular file.\n"
@@ -1445,7 +1087,7 @@ msgstr ""
 "Sodipodi çalışacak fakat ayarları kaydemeyecek\n"
 "veya yükleyemeyeceksiniz.\n"
 
-#: src/inkscape.cpp:565
+#: src/inkscape.cpp:602
 #, fuzzy, c-format
 msgid ""
 "%s either is not valid xml file or\n"
@@ -1459,7 +1101,7 @@ msgstr ""
 "Sodipodi çalışacak fakat ayarları kaydemeyecek\n"
 "veya yükleyemeyeceksiniz."
 
-#: src/inkscape.cpp:570
+#: src/inkscape.cpp:607
 #, fuzzy, c-format
 msgid ""
 "%s is not valid inkscape preferences file.\n"
@@ -1471,7 +1113,7 @@ msgstr ""
 "Sodipodi çalışacak fakat ayarları kaydemeyecek\n"
 "veya yükleyemeyeceksiniz."
 
-#: src/inkscape.cpp:937
+#: src/inkscape.cpp:1080
 #, fuzzy, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -1483,7 +1125,7 @@ msgstr ""
 "Sodipodi çalışacak fakat ayarları kaydemeyecek\n"
 "veya yükleyemeyeceksiniz."
 
-#: src/inkscape.cpp:941
+#: src/inkscape.cpp:1084
 #, fuzzy, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -1495,7 +1137,7 @@ msgstr ""
 "Sodipodi çalışacak fakat ayarları kaydemeyecek\n"
 "veya yükleyemeyeceksiniz."
 
-#: src/inkscape.cpp:945
+#: src/inkscape.cpp:1088
 #, fuzzy, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -1507,7 +1149,7 @@ msgstr ""
 "Sodipodi çalışacak fakat ayarları kaydemeyecek\n"
 "veya yükleyemeyeceksiniz."
 
-#: src/inkscape.cpp:949
+#: src/inkscape.cpp:1092
 #, fuzzy, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -1519,722 +1161,1438 @@ msgstr ""
 "Sodipodi çalışacak fakat ayarları kaydemeyecek\n"
 "veya yükleyemeyeceksiniz."
 
-#: src/sp-anchor.cpp:195
+#: src/interface.cpp:367
+msgid "Open _Recent"
+msgstr ""
+
+#: src/interface.cpp:385
+msgid "Close View"
+msgstr "Görünümü Kapat"
+
+#: src/interface.cpp:463
+#, fuzzy
+msgid "Cl_eanup"
+msgstr "Temizle"
+
+#: src/interface.cpp:488
+#, fuzzy
+msgid "_New View"
+msgstr "Yeni Görünüm"
+
+#: src/interface.cpp:489
+#, fuzzy
+msgid "New P_review"
+msgstr "Yeni Önizleme"
+
+#: src/interface.cpp:528
+msgid "_About Inkscape"
+msgstr ""
+
+#. TODO: Modules need abouts too
+#: src/interface.cpp:532
+msgid "About Modules"
+msgstr ""
+
+#: src/interface.cpp:546
+msgid "_File"
+msgstr "_Dosya"
+
+#: src/interface.cpp:552
+#, fuzzy
+msgid "_Edit"
+msgstr "Düzenle"
+
+#: src/interface.cpp:558
+#, fuzzy
+msgid "_View"
+msgstr "Görünüm"
+
+#: src/interface.cpp:564
+#, fuzzy
+msgid "_Object"
+msgstr "Nesne"
+
+#: src/interface.cpp:570
+msgid "_Path"
+msgstr ""
+
+#: src/interface.cpp:576
+#, fuzzy
+msgid "_Dialogs"
+msgstr "Pencereler"
+
+#: src/interface.cpp:582
+#, fuzzy
+msgid "_Help"
+msgstr "_Yardım"
+
+#: src/interface.cpp:682
+msgid "Could not parse SVG data"
+msgstr ""
+
+#: src/main.cpp:122
+msgid "Do not use X server (only process files from console)"
+msgstr "X sunucusunu kullanma (dosyaları sadece konsoldan sürdür)"
+
+#: src/main.cpp:125
+msgid "Try to use X server even if $DISPLAY is not set)"
+msgstr "$DISPLAY atanmamışsa bile X sunucusunu kullanmaya çalış)"
+
+#: src/main.cpp:128
+msgid "Open specified document(s) (option string may be excluded)"
+msgstr "Belirtilen döküman(lar)ı aç (seçenekler dahil olmayacaktır)"
+
+#: src/main.cpp:129 src/main.cpp:132 src/main.cpp:135 src/main.cpp:149
+msgid "FILENAME"
+msgstr "DOSYA ADI"
+
+#: src/main.cpp:131
+msgid "Print document(s) to specified output file (use '| program' for pipe)"
+msgstr ""
+"Dökümanları belirtilen dosyaya yazdur (başka programa yönlendirmek için '|' "
+"kullanın)"
+
+#: src/main.cpp:134
+msgid "Export document to png file"
+msgstr "Resmi png olarak aktar"
+
+#: src/main.cpp:137
+msgid "The resolution used for converting SVG into bitmap (default 72.0)"
+msgstr "SVG'den bitmap'e çevirim için kullanılacak çözünürlük (öntanımlı 72.0)"
+
+#: src/main.cpp:138
+msgid "DPI"
+msgstr "DPI"
+
+#: src/main.cpp:140
+msgid ""
+"Exported area in millimeters (default is full document, 0,0 is lower-left "
+"corner)"
+msgstr ""
+"Milimetre değerinde aktarılan bölüm (öntanımlı olarak tüm döküman, 0,0 "
+"resmin en alt sol köşesi)"
+
+#: src/main.cpp:141
+msgid "x0:y0:x1:y1"
+msgstr "x0:y0:x1:y1"
+
+#: src/main.cpp:143
+msgid "The width of generated bitmap in pixels (overwrites dpi)"
+msgstr "Yaratılan bitmap'in piksel değerinde genişliği (dpi üzerine yazar)"
+
+#: src/main.cpp:143
+msgid "WIDTH"
+msgstr "GENİŞLİK"
+
+#: src/main.cpp:145
+msgid "The height of generated bitmap in pixels (overwrites dpi)"
+msgstr "Yaratılan bitmap'in piksel değerinde yüksekliği (dpi üzerine yazar)"
+
+#: src/main.cpp:145
+msgid "HEIGHT"
+msgstr "YÜKSEKLİK"
+
+#: src/main.cpp:147
+msgid "Background color of exported bitmap (any SVG supported color string)"
+msgstr "Dışarı aktarılan birmap'in arkaplanı (SVG destekli herhangi bir renk)"
+
+#: src/main.cpp:147
+msgid "COLOR"
+msgstr "RENK"
+
+#: src/main.cpp:149
+msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
+msgstr "Dökümanı düz SVG dosyasına aktar (\"xmlns:sodipodi\" alan boşluğu yok)"
+
+#: src/main.cpp:151
+msgid "Show given files one-by-one, switch to next on any key/mouse event"
+msgstr ""
+"Verilen dosyaları teker teker göster, herhangi bir tuşa basıldığında "
+"sonrakine geç"
+
+#: src/main.cpp:153
+msgid "Prefer bitmap (xpm) icons to SVG ones"
+msgstr ""
+
+#: src/modules/gnome.cpp:133
+msgid "Select printer"
+msgstr "Yazıcıyı seçin"
+
+#: src/modules/gnome.cpp:187
+#, fuzzy, c-format
+msgid "Inkscape (doc name %s..): Print Preview"
+msgstr "Sodipodi (döküman %s..): Yazdırma Önizlemesi"
+
+#: src/modules/init.cpp:72
+#, c-format
+msgid ""
+"Modules directory (%s) is unavailable.  External modules in that directory "
+"will not be loaded."
+msgstr ""
+
+#: src/modules/menu.cpp:50 src/modules/menu.cpp:114
+msgid "Autodetect"
+msgstr ""
+
+#: src/modules/menu.cpp:50 src/modules/menu.cpp:114
+msgid "Use the extension of the file to choose a filetype"
+msgstr ""
+
+#: src/modules/ps.cpp:167
+#, fuzzy
+msgid "Print Destination"
+msgstr "Hedefi yazdır"
+
+#. Print properties frame
+#: src/modules/ps.cpp:179
+#, fuzzy
+msgid "Print properties"
+msgstr "Bağlantı Özellikleri"
+
+#: src/modules/ps.cpp:187
+msgid "Print using PostScript operators"
+msgstr ""
+
+#: src/modules/ps.cpp:189
+msgid ""
+"Use PostScript vector operators, resulting image will be (usually) smaller "
+"and can be arbitrarily scaled, but alpha transparency, markers and patterns "
+"will be lost"
+msgstr ""
+
+#: src/modules/ps.cpp:194
+#, fuzzy
+msgid "Print as bitmap"
+msgstr "Bitmap'i dışarı aktar"
+
+#: src/modules/ps.cpp:196
+msgid ""
+"Print everything as bitmap, resulting image will be (usualy) larger and it "
+"quality depends on zoom factor, but all graphics will be rendered identical "
+"to display"
+msgstr ""
+
+#: src/modules/ps.cpp:210
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr ""
+
+#: src/modules/ps.cpp:225
+#, fuzzy
+msgid "Resolution:"
+msgstr "Devir:"
+
+#. Print destination frame
+#: src/modules/ps.cpp:229
+msgid "Print destination"
+msgstr "Hedefi yazdır"
+
+#: src/modules/ps.cpp:235
+msgid ""
+"Enter destination lpr queue.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to program"
+msgstr ""
+"Hedef lpr kuyruğunu girin.\n"
+"Dosyaya yazmak için '>dosyaadi' \n"
+"Programa yönlendirmek için '|' kullanın"
+
+#: src/modules/ps.cpp:870
+msgid "write error occured"
+msgstr ""
+
+#: src/nodepath.cpp:3048
+#, fuzzy
+msgid "cusp"
+msgstr "_Biz"
+
+#: src/nodepath.cpp:3050
+msgid "smooth"
+msgstr ""
+
+#: src/nodepath.cpp:3052
+#, fuzzy
+msgid "symmetric"
+msgstr "Asimetrik"
+
+#: src/nodepath.cpp:3064
+msgid "Drag nodes or control points to edit the path"
+msgstr ""
+
+#: src/nodepath.cpp:3078
+msgid ""
+"Select one path object with selector first, then switch back to node tool."
+msgstr ""
+
+#: src/nodepath.cpp:3080
+#, c-format
+msgid ""
+"0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
+msgstr ""
+
+#: src/nodepath.cpp:3082
+#, c-format
+msgid "%i of %i nodes selected; %s. %s."
+msgstr ""
+
+#: src/nodepath.cpp:3084
+#, fuzzy, c-format
+msgid "%i of %i nodes selected. %s."
+msgstr "Seçilen düğümleri çizgilere ekle"
+
+#. Item dialog
+#: src/object-ui.cpp:106 src/verbs.cpp:672
+#, fuzzy
+msgid "Item _Properties"
+msgstr "Birim Özellikleri"
+
+#. Select item
+#: src/object-ui.cpp:116
+#, fuzzy
+msgid "_Select This"
+msgstr "Bunu Seç"
+
+#. Reset transformations
+#: src/object-ui.cpp:126
+#, fuzzy
+msgid "Reset _Transformation"
+msgstr "Dönüşümü sıfırla"
+
+#: src/object-ui.cpp:132
+#, fuzzy
+msgid "Make s_ensitive"
+msgstr "Duyarlı hale getir"
+
+#: src/object-ui.cpp:132
+#, fuzzy
+msgid "Make i_nsensitive"
+msgstr "Duyarsız hale getir"
+
+#. Create link
+#: src/object-ui.cpp:137
+#, fuzzy
+msgid "_Create Link"
+msgstr "Bağlantı yarat"
+
+#. "Ungroup"
+#: src/object-ui.cpp:243 src/verbs.cpp:611
+#, fuzzy
+msgid "_Ungroup"
+msgstr "Gr_ubu çöz"
+
+#. Link dialog
+#: src/object-ui.cpp:285
+#, fuzzy
+msgid "Link _Properties"
+msgstr "Bağlantı Özellikleri"
+
+#. Select item
+#: src/object-ui.cpp:295
+#, fuzzy
+msgid "_Follow Link"
+msgstr "Bağlantıyı takip et"
+
+#. Reset transformations
+#: src/object-ui.cpp:300
+#, fuzzy
+msgid "_Remove Link"
+msgstr "Bağlantıyı kaldır"
+
+#. Link dialog
+#: src/object-ui.cpp:349
+#, fuzzy
+msgid "Image _Properties"
+msgstr "Resim Özellikleri"
+
+#. Autotrace dialog
+#: src/object-ui.cpp:357
+#, fuzzy
+msgid "_Trace"
+msgstr "İpucu"
+
+#. Item dialog
+#: src/object-ui.cpp:398 src/verbs.cpp:666
+#, fuzzy
+msgid "_Fill and Stroke"
+msgstr "Doldur ve Vur"
+
+#. Link dialog
+#: src/object-ui.cpp:418
+#, fuzzy
+msgid "Rect _Properties"
+msgstr "Dörtgen Özellikleri"
+
+#. Link dialog
+#: src/object-ui.cpp:444
+#, fuzzy
+msgid "Star _Properties"
+msgstr "Yıldız Ayarları"
+
+#. Link dialog
+#: src/object-ui.cpp:470
+#, fuzzy
+msgid "Spiral _Properties"
+msgstr "Spiral Özellikleri"
+
+#. rx_ratio
+#: src/rect-context.cpp:398
+msgid "Roundness ratio for x:"
+msgstr "X için yuvarlaklık değeri:"
+
+#. ry_ratio
+#: src/rect-context.cpp:416
+msgid "Roundness ratio for y:"
+msgstr "Y için yuvarlaklık değeri:"
+
+#: src/select-context.cpp:835
+msgid "Visual transformation"
+msgstr "Görüntülü dönüşüm"
+
+#: src/select-context.cpp:843
+msgid "Show content"
+msgstr "İçeriği göster"
+
+#: src/select-context.cpp:850
+msgid "Show outline"
+msgstr "Taslağı göster"
+
+#: src/select-context.cpp:857
+msgid "Object transformation"
+msgstr "Nesne dönüşümü"
+
+#: src/select-context.cpp:865
+msgid "Optimize"
+msgstr "Optimize"
+
+#: src/select-context.cpp:872
+msgid "Preserve"
+msgstr "Koru"
+
+#: src/select-toolbar.cpp:297
+msgid "Horizontal coordinate of selection"
+msgstr ""
+
+#: src/select-toolbar.cpp:300
+msgid "Vertical coordinate of selection"
+msgstr ""
+
+#: src/select-toolbar.cpp:303
+#, fuzzy
+msgid "Width of selection"
+msgstr "Seçileni kes"
+
+#: src/select-toolbar.cpp:306
+#, fuzzy
+msgid "Height of selection"
+msgstr "Seçileni göster"
+
+#: src/selection-chemistry.cpp:53
+msgid "Nothing was cut."
+msgstr ""
+
+#: src/selection-chemistry.cpp:86
+#, fuzzy
+msgid "Select some objects to duplicate."
+msgstr "Seçili nesneleri panoya kes"
+
+#: src/selection-chemistry.cpp:249
+#, fuzzy
+msgid "Select two or more objects to group."
+msgstr "Seçili nesneleri üste taşı"
+
+#: src/selection-chemistry.cpp:257
+#, fuzzy
+msgid "Select at least two objects to group."
+msgstr "Dökümanda geçiş yok"
+
+#: src/selection-chemistry.cpp:266
+msgid "You cannot group objects from different groups or layers."
+msgstr ""
+
+#: src/selection-chemistry.cpp:310
+msgid "Select a group to ungroup."
+msgstr ""
+
+#: src/selection-chemistry.cpp:341
+msgid "No groups to ungroup in the selection."
+msgstr ""
+
+#: src/selection-chemistry.cpp:569
+msgid "Nothing to undo."
+msgstr ""
+
+#: src/selection-chemistry.cpp:578
+msgid "Nothing to redo."
+msgstr ""
+
+#: src/selection-chemistry.cpp:605
+msgid "Nothing was copied."
+msgstr ""
+
+#: src/selection-chemistry.cpp:650 src/selection-chemistry.cpp:685
+#, fuzzy
+msgid "Nothing in the clipboard."
+msgstr "Seçileni panoya kopyala"
+
+#: src/selection-chemistry.cpp:691
+#, fuzzy
+msgid "Select objects to paste style to."
+msgstr "Seçili nesneleri eğrilere dönder"
+
+#: src/selection.cpp:209
+msgid "Click selection to toggle scale/rotation handles"
+msgstr ""
+
+#: src/selection.cpp:214
+msgid "No objects selected. Click, Shift+click, drag around objects to select."
+msgstr ""
+
+#: src/selection.cpp:218
+#, c-format
+msgid "%i objects selected. %s."
+msgstr ""
+
+#: src/slideshow.cpp:88
+#, fuzzy
+msgid "Inkscape slideshow"
+msgstr "Sodipodi: %s : XML Görünümü"
+
+#: src/sp-anchor.cpp:196
 #, c-format
 msgid "Link to %s"
 msgstr "%s'e bağlantı"
 
-#: src/sp-image.cpp:371
+#: src/sp-guide.cpp:293
+#, fuzzy
+msgid "vertical guideline"
+msgstr "dikey"
+
+#: src/sp-guide.cpp:295
+#, fuzzy
+msgid "horizontal guideline"
+msgstr "yatay"
+
+#: src/sp-image.cpp:372
 #, c-format
 msgid "Image with bad reference: %s"
 msgstr "Kötü referanslı resim: %s"
 
-#: src/sp-image.cpp:373
+#: src/sp-image.cpp:374
 #, c-format
 msgid "Color image %d x %d: %s"
 msgstr "Resmi renklendir %d x %d: %s"
 
-#: src/sp-image.cpp:927
+#: src/sp-image.cpp:782
+msgid "Trace"
+msgstr "İpucu"
+
+#: src/sp-image.cpp:928
 #, c-format
 msgid "Error to write %s: %s"
 msgstr "%s dosyasına yazılırken hata oluştu: %s"
 
-#: src/sp-image.cpp:961
+#: src/sp-image.cpp:962
 msgid "Untitled"
 msgstr "Başlıksız"
 
-#: src/sp-image.cpp:966
+#: src/sp-image.cpp:967
 msgid "Document Name:"
 msgstr "Döküman Adı:"
 
-#: src/sp-image.cpp:979
+#: src/sp-image.cpp:980
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: src/sp-image.cpp:985
+#: src/sp-image.cpp:986
 msgid "Image URI:"
 msgstr "Resim Adresi:"
 
-#: src/sp-item-group.cpp:477
+#: src/sp-item-group.cpp:478
 #, c-format
 msgid "Group of %d objects"
 msgstr "%d birimden oluşan grup"
 
-#. fixme:
-#: src/sp-text.cpp:1296
-msgid "Text object"
-msgstr "Metin nesnesi"
+#: src/sp-item.cpp:474
+msgid "Object"
+msgstr "Nesne"
+
+#: src/sp-rect.cpp:256 src/verbs.cpp:636
+msgid "Rectangle"
+msgstr "Dörtgen"
+
+#: src/sp-text.cpp:1308
+#, c-format
+msgid "Text (%s, %.5gpt)"
+msgstr ""
 
 #. T0
-#: src/spiral-context.cpp:387
+#: src/spiral-context.cpp:388
 msgid "Inner radius:"
 msgstr "İç çevre:"
 
+#: src/splivarot.cpp:95
+msgid "Select at least 2 paths to perform a boolean operation."
+msgstr ""
+
+#: src/splivarot.cpp:103
+msgid "Select exactly 2 paths to perform difference or XOR."
+msgstr ""
+
+#: src/splivarot.cpp:117 src/splivarot.cpp:133
+msgid "Unable to determine the z-order of the objects selected for difference."
+msgstr ""
+
+#: src/splivarot.cpp:159
+msgid "One of the objects is not a path, cannot perform boolean operation."
+msgstr ""
+
+#: src/splivarot.cpp:376
+msgid "Selected object is not a path, cannot outline."
+msgstr ""
+
+#: src/splivarot.cpp:659 src/splivarot.cpp:873
+msgid "Selected object is not a path, cannot inset/outset."
+msgstr ""
+
+#. Magnitude
+#: src/star-context.cpp:347
+msgid "Corners:"
+msgstr "Köşeler:"
+
 #. Proportion
-#: src/star-context.cpp:373
+#: src/star-context.cpp:365
 msgid "Proportion:"
 msgstr "Orantı:"
 
 #. Making sides flat
-#: src/star-context.cpp:392
+#: src/star-context.cpp:384
 msgid "Make sides flat"
 msgstr "Kenarları düzleştir"
 
-#: src/toolbox.cpp:248
+#: src/toolbox.cpp:318
 msgid "Insert new nodes into selected segments"
 msgstr "Seçili bölümlere düğüm ekle"
 
-#: src/toolbox.cpp:249
+#: src/toolbox.cpp:320
 msgid "Delete selected nodes"
 msgstr "Seçili düğümleri sil"
 
-#: src/toolbox.cpp:253
-msgid "Join lines at selected nodes"
-msgstr "Seçilen düğümleri çizgilere ekle"
-
-#: src/toolbox.cpp:254
+#: src/toolbox.cpp:325
 #, fuzzy
-msgid "Join lines at selected nodes with new segment"
+msgid "Join paths at selected nodes"
 msgstr "Seçilen düğümleri çizgilere ekle"
 
-#: src/toolbox.cpp:255
-msgid "Break line at selected nodes"
-msgstr "Çizgileri seçilen düğümlerden kes"
+#: src/toolbox.cpp:327
+#, fuzzy
+msgid "Join paths at selected nodes with new segment"
+msgstr "Seçilen düğümleri çizgilere ekle"
 
-#: src/toolbox.cpp:259
+#: src/toolbox.cpp:329
+msgid "Split path between two or more nodes"
+msgstr ""
+
+#: src/toolbox.cpp:331
+#, fuzzy
+msgid "Break path at selected nodes"
+msgstr "Seçili noktadan kopart"
+
+#: src/toolbox.cpp:336
 msgid "Make selected nodes corner"
 msgstr "Seçilen düğümleri köşeye çevir"
 
-#: src/toolbox.cpp:260
+#: src/toolbox.cpp:338
 msgid "Make selected nodes smooth"
 msgstr "Seçilen düğümleri güzelleştir"
 
-#: src/toolbox.cpp:264
+#: src/toolbox.cpp:343
 msgid "Make selected segments lines"
 msgstr "Seçilen bölümleri çizgiye çevir"
 
-#: src/toolbox.cpp:265
+#: src/toolbox.cpp:345
 msgid "Make selected segments curves"
 msgstr "Seçilen bölümleri eğrilere dönüştür"
 
-#: src/verbs.cpp:534
+#: src/tools-switch.cpp:116
+msgid ""
+"To edit a path, click, Shift+click, drag around nodes to select. To edit a "
+"shape, drag its controls."
+msgstr ""
+
+#: src/tools-switch.cpp:122
+#, fuzzy
+msgid "Drag to create a rectangle. Use node tool to round corners."
+msgstr ""
+"Dörtgen aracı - Köşeleri belirtilen yuvarlıkta dörtgenler ve kareler yaratır"
+
+#: src/tools-switch.cpp:128
+msgid "Drag to create an ellipse. Use node tool to make an arc or segment."
+msgstr ""
+
+#: src/tools-switch.cpp:134
+msgid "Drag to create a star. Use node tool to edit the star shape."
+msgstr ""
+
+#: src/tools-switch.cpp:140
+msgid "Drag to create a spiral. Use node tool to edit the spiral shape."
+msgstr ""
+
+#: src/tools-switch.cpp:146
+#, fuzzy
+msgid "Drag to create a freehand line. Press 'a' to toggle Append/New."
+msgstr "Yeni bir eğri yaratılıyor. '+'a basarak Yeni/Ekleye ulaşabilirsiniz"
+
+#: src/tools-switch.cpp:152
+#, fuzzy
+msgid ""
+"Click to create a node, click and drag to create a smooth node. Press 'a' to "
+"toggle Append/New."
+msgstr "Yeni bir eğri yaratılıyor. '+'a basarak Yeni/Ekleye ulaşabilirsiniz"
+
+#: src/tools-switch.cpp:158
+#, fuzzy
+msgid "Drag to paint a calligraphic stroke."
+msgstr "Karalama çizgisi"
+
+#: src/tools-switch.cpp:164
+msgid "Click to select or create text object, then type."
+msgstr ""
+
+#: src/tools-switch.cpp:170
+msgid ""
+"Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."
+msgstr ""
+
+#: src/tools-switch.cpp:176
+msgid ""
+"Click to pick a color, click and drag to pick the average color of an area."
+msgstr ""
+
+#: src/verbs.cpp:580
 msgid "Does nothing"
 msgstr ""
 
 #. File
-#: src/verbs.cpp:536
-msgid "New"
-msgstr "Yeni"
+#: src/verbs.cpp:582
+msgid "_New"
+msgstr "_Yeni"
 
-#: src/verbs.cpp:536
+#: src/verbs.cpp:582
 #, fuzzy
 msgid "Create new document"
 msgstr "Yeni bir SVG dökümanı oluştur"
 
-#: src/verbs.cpp:537
+#: src/verbs.cpp:583
 #, fuzzy
-msgid "Open..."
+msgid "_Open..."
 msgstr "Aç"
 
-#: src/verbs.cpp:537
+#: src/verbs.cpp:583
 #, fuzzy
 msgid "Open existing document"
 msgstr "SVG dökümanı aç"
 
-#: src/verbs.cpp:538
-msgid "Save"
+#: src/verbs.cpp:584
+#, fuzzy
+msgid "_Save"
 msgstr "Kayde"
 
-#: src/verbs.cpp:538
+#: src/verbs.cpp:584
 msgid "Save document"
 msgstr "Dökümanı kaydet"
 
-#: src/verbs.cpp:539
+#: src/verbs.cpp:585
 #, fuzzy
-msgid "Save As..."
+msgid "Save _As..."
 msgstr "Farklı kaydet"
 
-#: src/verbs.cpp:539
+#: src/verbs.cpp:585
 msgid "Save document under new name"
 msgstr "Dökümanı yeni bir adla kaydet"
 
-#: src/verbs.cpp:540
+#: src/verbs.cpp:586
 #, fuzzy
-msgid "Print..."
+msgid "_Print..."
 msgstr "Yazdır"
 
-#: src/verbs.cpp:540
+#: src/verbs.cpp:586
 msgid "Print document"
 msgstr "Dökümanı yazdır"
 
-#: src/verbs.cpp:541
-msgid "Print Direct..."
-msgstr ""
+#: src/verbs.cpp:587
+#, fuzzy
+msgid "Print _Direct"
+msgstr "Bağlantı Özellikleri"
 
-#: src/verbs.cpp:541
+#: src/verbs.cpp:587
 msgid "Print directly to file or pipe"
 msgstr ""
 
-#: src/verbs.cpp:542
-msgid "Print Preview"
+#: src/verbs.cpp:588
+#, fuzzy
+msgid "Print Previe_w"
 msgstr "Önizleme"
 
-#: src/verbs.cpp:542
+#: src/verbs.cpp:588
 msgid "Preview document printout"
 msgstr "Döküman Öngörünümü"
 
-#: src/verbs.cpp:543
-msgid "Import"
-msgstr "İçeri Aktar"
+#: src/verbs.cpp:589
+#, fuzzy
+msgid "_Import..."
+msgstr "_İthal et"
 
-#: src/verbs.cpp:543
+#: src/verbs.cpp:589
 msgid "Import bitmap or SVG image into document"
 msgstr "Bitmap veya SVG dosyasını döküman içine aktar"
 
-#: src/verbs.cpp:544
+#: src/verbs.cpp:590
 #, fuzzy
-msgid "Export Bitmap"
+msgid "_Export Bitmap..."
 msgstr "Bitmap'i dışarı aktar"
 
-#: src/verbs.cpp:544
+#: src/verbs.cpp:590
 msgid "Export document as PNG bitmap"
 msgstr "Dökümanı png olarak aktar"
 
-#: src/verbs.cpp:545
+#: src/verbs.cpp:591
+#, fuzzy
+msgid "N_ext window"
+msgstr "Diyalogu kapat"
+
+#: src/verbs.cpp:591
+msgid "Switch to the next document window"
+msgstr ""
+
+#: src/verbs.cpp:592
+#, fuzzy
+msgid "P_rev window"
+msgstr "Diyalogu kapat"
+
+#: src/verbs.cpp:592
+msgid "Switch to the previous document window"
+msgstr ""
+
+#: src/verbs.cpp:593
+#, fuzzy
+msgid "_Quit"
+msgstr "Çı_k"
+
+#: src/verbs.cpp:593
 #, fuzzy
 msgid "Quit"
 msgstr "Çı_k"
 
 #. Edit
-#: src/verbs.cpp:547
-msgid "Undo"
+#: src/verbs.cpp:595
+#, fuzzy
+msgid "_Undo"
 msgstr "Geri Al"
 
-#: src/verbs.cpp:547
+#: src/verbs.cpp:595
 #, fuzzy
 msgid "Undo last action"
 msgstr "Son eyleme dön"
 
-#: src/verbs.cpp:548
-msgid "Redo"
+#: src/verbs.cpp:596
+#, fuzzy
+msgid "_Redo"
 msgstr "Yeniden yap"
 
-#: src/verbs.cpp:548
+#: src/verbs.cpp:596
 #, fuzzy
 msgid "Do again last undone action"
 msgstr "Geri alınan eylemi yeniden yap"
 
-#: src/verbs.cpp:549
-msgid "Cut"
+#: src/verbs.cpp:597
+#, fuzzy
+msgid "Cu_t"
 msgstr "Kes"
 
-#: src/verbs.cpp:549
+#: src/verbs.cpp:597
 msgid "Cut selected objects to clipboard"
 msgstr "Seçili nesneleri panoya kes"
 
-#: src/verbs.cpp:550
-msgid "Copy"
+#: src/verbs.cpp:598
+#, fuzzy
+msgid "_Copy"
 msgstr "Kopya"
 
-#: src/verbs.cpp:550
+#: src/verbs.cpp:598
 msgid "Copy selected objects to clipboard"
 msgstr "Seçili nesneleri panoya kopyala"
 
-#: src/verbs.cpp:551
-msgid "Paste"
+#: src/verbs.cpp:599
+#, fuzzy
+msgid "_Paste"
 msgstr "Yapıştır"
 
-#: src/verbs.cpp:551
+#: src/verbs.cpp:599
 msgid "Paste objects from clipboard"
 msgstr "Panodan nesne yapıştır"
 
-#: src/verbs.cpp:552
+#: src/verbs.cpp:600
 #, fuzzy
-msgid "Paste style"
+msgid "Paste _Style"
 msgstr "Vuruş stili"
 
-#: src/verbs.cpp:552
+#: src/verbs.cpp:600
 #, fuzzy
 msgid "Apply style of copied object to selection"
 msgstr "Seçili nesneleri panoya kopyala"
 
-#: src/verbs.cpp:553
-msgid "Delete"
-msgstr "Sil"
+#: src/verbs.cpp:601
+msgid "_Delete"
+msgstr "S_il"
 
-#: src/verbs.cpp:553
+#: src/verbs.cpp:601
 msgid "Delete selected objects"
 msgstr "Seçili nesneleri sil"
 
-#: src/verbs.cpp:554
-msgid "Duplicate"
-msgstr "Çiftle"
+#: src/verbs.cpp:602
+msgid "D_uplicate"
+msgstr "Kl_onla"
 
-#: src/verbs.cpp:554
+#: src/verbs.cpp:602
 msgid "Duplicate selected objects"
 msgstr "Seçili nesneleri çiftle"
 
-#: src/verbs.cpp:555
+#: src/verbs.cpp:603
 #, fuzzy
-msgid "Clear All"
+msgid "Clea_r All"
 msgstr "Hepsini temizle"
 
-#: src/verbs.cpp:555
+#: src/verbs.cpp:603
 msgid "Delete all objects from document"
 msgstr ""
 
-#: src/verbs.cpp:556
+#: src/verbs.cpp:604
 #, fuzzy
-msgid "Select All"
+msgid "Select _All"
 msgstr "Seç"
 
-#: src/verbs.cpp:556
+#: src/verbs.cpp:604
 #, fuzzy
 msgid "Select all objects in document"
 msgstr "Dökümanda geçiş yok"
 
 #. Selection
-#: src/verbs.cpp:558
-msgid "Bring to Front"
-msgstr "Öne Getir"
+#: src/verbs.cpp:606
+msgid "Bring to _Front"
+msgstr "Ö_ne Getir"
 
-#: src/verbs.cpp:558
-msgid "Raise selected objects to top"
-msgstr "Seçili nesneleri üste taşı"
+#: src/verbs.cpp:606
+msgid "Raise selection to top"
+msgstr "Seçileni öne getir"
 
-#: src/verbs.cpp:559
-msgid "Send to Back"
-msgstr "Arkaya it"
+#: src/verbs.cpp:607
+msgid "Send to _Back"
+msgstr "Arka_ya it"
 
-#: src/verbs.cpp:559
-msgid "Lower selected objects to bottom"
-msgstr "Seçili nesneleri arkaya it"
+#: src/verbs.cpp:607
+#, fuzzy
+msgid "Lower selection to bottom"
+msgstr "seçili nesneleri arkaya it"
 
-#: src/verbs.cpp:560
-msgid "Raise"
+#: src/verbs.cpp:608
+#, fuzzy
+msgid "_Raise"
 msgstr "Büyüt"
 
-#: src/verbs.cpp:560
+#: src/verbs.cpp:608
 #, fuzzy
-msgid "Raise selected objects one position"
-msgstr "Seçili nesneleri üste taşı"
+msgid "Raise selection one step"
+msgstr "Seçileni öne getir"
 
-#: src/verbs.cpp:561
-msgid "Lower"
+#: src/verbs.cpp:609
+#, fuzzy
+msgid "_Lower"
 msgstr "Küçült"
 
-#: src/verbs.cpp:561
+#: src/verbs.cpp:609
 #, fuzzy
-msgid "Lower selected objects one position"
-msgstr "Seçili nesneleri arkaya it"
+msgid "Lower selection one step"
+msgstr "Seçileni bir katman alçalt"
 
-#: src/verbs.cpp:562
+#: src/verbs.cpp:610
+#, fuzzy
+msgid "_Group"
+msgstr "_Grup"
+
+#: src/verbs.cpp:610
 msgid "Group selected objects"
 msgstr "Seçili nesneleri grupla"
 
-#: src/verbs.cpp:563
-msgid "Ungroup selected group"
+#: src/verbs.cpp:611
+#, fuzzy
+msgid "Ungroup selected group(s)"
 msgstr "Seçili grupların gruplandırmasını kaldır"
 
-#: src/verbs.cpp:564
+#: src/verbs.cpp:612
 #, fuzzy
-msgid "Union"
+msgid "_Union"
 msgstr "yok"
 
-#: src/verbs.cpp:564
+#: src/verbs.cpp:612
 #, fuzzy
 msgid "Union of selected objects"
 msgstr "Seçili nesneleri çöz"
 
-#: src/verbs.cpp:565
+#: src/verbs.cpp:613
 #, fuzzy
-msgid "Intersection"
+msgid "_Intersection"
 msgstr "_Interaktif"
 
-#: src/verbs.cpp:565
+#: src/verbs.cpp:613
 #, fuzzy
 msgid "Intersection of selected objects"
 msgstr "Seçili nesneleri sil"
 
-#: src/verbs.cpp:566
+#: src/verbs.cpp:614
 #, fuzzy
-msgid "Difference"
+msgid "_Difference"
 msgstr "derece"
 
-#: src/verbs.cpp:566
+#: src/verbs.cpp:614
 #, fuzzy
 msgid "Difference of selected objects"
 msgstr "Seçili nesneleri sil"
 
-#: src/verbs.cpp:567
-msgid "XOR"
-msgstr ""
+#: src/verbs.cpp:615
+#, fuzzy
+msgid "E_xclusion"
+msgstr "Genişletme"
 
-#: src/verbs.cpp:567
+#: src/verbs.cpp:615
 #, fuzzy
 msgid "Exclusive OR of selected objects"
 msgstr "Seçili nesnelerin yerleşimini değiştir"
 
-#: src/verbs.cpp:568
-msgid "Outset path"
-msgstr ""
+#: src/verbs.cpp:616
+#, fuzzy
+msgid "O_utset Path"
+msgstr "Seçili yolları birleştir"
 
-#: src/verbs.cpp:568
+#: src/verbs.cpp:616
 #, fuzzy
 msgid "Outset selected paths"
 msgstr "Seçili yolları birleştir"
 
-#: src/verbs.cpp:569
-msgid "Inset path"
+#: src/verbs.cpp:617
+msgid "I_nset Path"
 msgstr ""
 
-#: src/verbs.cpp:569
+#: src/verbs.cpp:617
 #, fuzzy
 msgid "Inset selected paths"
 msgstr "Seçili yolları birleştir"
 
-#: src/verbs.cpp:570
+#: src/verbs.cpp:618
+msgid "D_ynamic Offset"
+msgstr ""
+
+#: src/verbs.cpp:618
 #, fuzzy
-msgid "Stroke to path"
+msgid "Create a dynamic offset object"
+msgstr "MEtin aracı - düzenlenebilir metin nesneleri yaratır"
+
+#: src/verbs.cpp:619
+msgid "_Linked Offset"
+msgstr ""
+
+#: src/verbs.cpp:619
+msgid "Create a dynamic offset object linked to the original path"
+msgstr ""
+
+#: src/verbs.cpp:620
+#, fuzzy
+msgid "_Stroke to Path"
 msgstr "Resme vuruş"
 
-#: src/verbs.cpp:570
+#: src/verbs.cpp:620
 #, fuzzy
 msgid "Convert selected stroke to path"
 msgstr "Seçili nesneleri eğrilere dönder"
 
-#: src/verbs.cpp:571
-msgid "Simplify path"
-msgstr ""
+#: src/verbs.cpp:621
+#, fuzzy
+msgid "Simp_lify Path"
+msgstr "Seçili yolları birleştir"
 
-#: src/verbs.cpp:571
+#: src/verbs.cpp:621
 #, fuzzy
 msgid "Simplify selected path"
 msgstr "Seçili yolları birleştir"
 
-#: src/verbs.cpp:572
-msgid "Combine"
-msgstr "Birleştir"
+#: src/verbs.cpp:622
+msgid "_Combine"
+msgstr "_Birleştir"
 
-#: src/verbs.cpp:572
+#: src/verbs.cpp:622
 msgid "Combine multiple paths"
 msgstr "Çoklu konumları birleştir"
 
-#: src/verbs.cpp:573
+#: src/verbs.cpp:623
 #, fuzzy
-msgid "Break Apart"
+msgid "Break _Apart"
 msgstr "_Kopar"
 
-#: src/verbs.cpp:573
+#: src/verbs.cpp:623
 msgid "Break selected path to subpaths"
 msgstr "Seçilen konumu alt konumlara böl"
 
 #. Object
-#: src/verbs.cpp:575
+#: src/verbs.cpp:625
 #, fuzzy
-msgid "Rotate 90 degrees"
+msgid "Rotate 90 _Degrees"
 msgstr "Sayfa genişliğini ayarla"
 
-#: src/verbs.cpp:575
+#: src/verbs.cpp:625
 #, fuzzy
-msgid "Rotate object 90 degrees clockwise"
+msgid "Rotate selection 90 degrees clockwise"
 msgstr "Seçili nesneleri saat yönünde 90 derece dönder"
 
-#: src/verbs.cpp:576
+#: src/verbs.cpp:626
 #, fuzzy
-msgid "Remove transformations"
+msgid "Remove _Transformations"
 msgstr "Dönüştürmeyi kaldır"
 
-#: src/verbs.cpp:576
+#: src/verbs.cpp:626
 #, fuzzy
 msgid "Remove transformations from object"
 msgstr "Dönüşümleri kaldır"
 
-#: src/verbs.cpp:577
+#: src/verbs.cpp:627
 #, fuzzy
-msgid "Object to path"
+msgid "_Object to Path"
 msgstr "Nesne dönüşümü"
 
-#: src/verbs.cpp:577
+#: src/verbs.cpp:627
 #, fuzzy
 msgid "Convert selected objects to paths"
 msgstr "Seçili nesneleri eğrilere dönder"
 
-#: src/verbs.cpp:578
+#: src/verbs.cpp:628
 #, fuzzy
-msgid "Flip Horizontally"
+msgid "Flip _Horizontally"
 msgstr "yatay"
 
-#: src/verbs.cpp:579
-msgid "Flip selected objects horizontally"
+#: src/verbs.cpp:629
+#, fuzzy
+msgid "Flip selection horizontally"
 msgstr "Seçili nesneleri yatay çevir"
 
-#: src/verbs.cpp:580
+#: src/verbs.cpp:630
 #, fuzzy
-msgid "Flip Vertically"
+msgid "Flip _Vertically"
 msgstr "dikey"
 
-#: src/verbs.cpp:581
-msgid "Flip selected objects vertically"
+#: src/verbs.cpp:631
+#, fuzzy
+msgid "Flip selection vertically"
 msgstr "Seçili nesneleri dikey çevir"
 
 #. Event contexts
-#: src/verbs.cpp:583
+#. FIXME: add shortcuts to tooltips automatically!
+#: src/verbs.cpp:634
 msgid "Select"
 msgstr "Seç"
 
-#: src/verbs.cpp:583
+#: src/verbs.cpp:634
 #, fuzzy
-msgid "Select and transform objects"
+msgid "Select and transform objects (F1)"
 msgstr "Nesne ve grupları seç ve değiştir"
 
-#: src/verbs.cpp:584
+#: src/verbs.cpp:635
 #, fuzzy
-msgid "Node edit"
+msgid "Node Edit"
 msgstr "Noktayı Değiştir"
 
-#: src/verbs.cpp:584
-#, fuzzy
-msgid "Edit path nodes in selected object"
-msgstr "Seçili nesnelerin yerleşimini değiştir"
+#: src/verbs.cpp:635
+msgid "Edit path nodes or control handles (F2)"
+msgstr ""
 
-#: src/verbs.cpp:585
-msgid "Rectangle"
-msgstr "Dörtgen"
-
-#: src/verbs.cpp:585
+#: src/verbs.cpp:636
 #, fuzzy
-msgid "Create rectangles and squares with optional rounded corners"
+msgid "Create rectangles and squares (F4)"
 msgstr ""
 "Dörtgen aracı - Köşeleri belirtilen yuvarlıkta dörtgenler ve kareler yaratır"
 
-#: src/verbs.cpp:586
+#: src/verbs.cpp:637
 msgid "Ellipse"
 msgstr "Elips"
 
-#: src/verbs.cpp:586
+#: src/verbs.cpp:637
 #, fuzzy
-msgid "Create circles, ellipses, and arcs"
+msgid "Create circles, ellipses, and arcs (F5)"
 msgstr "Eğri aracı - daireler, elipsler ve eğriler yaratır"
 
-#: src/verbs.cpp:587
+#: src/verbs.cpp:638
+msgid "Star"
+msgstr "Yıldız"
+
+#: src/verbs.cpp:638
 #, fuzzy
-msgid "Create stars and polygons"
+msgid "Create stars and polygons (*)"
 msgstr "Yıldız aracı - yıldızlar ve poligonlar yaratır"
 
-#: src/verbs.cpp:588
+#: src/verbs.cpp:639
+msgid "Spiral"
+msgstr "Spiral"
+
+#: src/verbs.cpp:639
 #, fuzzy
-msgid "Create spirals"
+msgid "Create spirals (F9)"
 msgstr "Dörtgen çiz"
 
-#: src/verbs.cpp:589
+#: src/verbs.cpp:640
 msgid "Pencil"
 msgstr ""
 
-#: src/verbs.cpp:589
+#: src/verbs.cpp:640
 #, fuzzy
-msgid "Draw freehand curves and straight lines"
-msgstr "Kalem aracı - düz ve serbest çizgiler çizer"
+msgid "Draw freehand lines (F6)"
+msgstr "Serbest şekiller çiz"
 
-#: src/verbs.cpp:590
+#: src/verbs.cpp:641
 #, fuzzy
 msgid "Pen"
 msgstr "Yüzde"
 
-#: src/verbs.cpp:590
+#: src/verbs.cpp:641
 #, fuzzy
-msgid "Draw Bezier curves and straight lines"
+msgid "Draw Bezier curves and straight lines (Shift+F6)"
 msgstr "Kalem aracı - düz ve serbest çizgiler çizer"
 
-#: src/verbs.cpp:591
+#: src/verbs.cpp:642
 #, fuzzy
 msgid "Calligraphy"
 msgstr "Karalama çizgisi"
 
-#: src/verbs.cpp:591
+#: src/verbs.cpp:642
 #, fuzzy
-msgid "Draw calligraphic lines"
+msgid "Draw calligraphic lines (Ctrl+F6)"
 msgstr "Karalama çizgisi"
 
-#: src/verbs.cpp:592
+#: src/verbs.cpp:643
 #, fuzzy
-msgid "Create and edit text objects"
+msgid "Create and edit text objects (F8)"
 msgstr "MEtin aracı - düzenlenebilir metin nesneleri yaratır"
 
-#: src/verbs.cpp:593
-msgid "Zoom into precisely selected area"
+#: src/verbs.cpp:644
+msgid "Zoom in or out (F3)"
 msgstr ""
 
-#: src/verbs.cpp:594
+#: src/verbs.cpp:645
 msgid "Dropper"
 msgstr ""
 
-#: src/verbs.cpp:594
-msgid "Pick averaged colors from image"
+#: src/verbs.cpp:645
+msgid "Pick averaged colors from image (F7)"
 msgstr ""
 
 #. Zooming
-#: src/verbs.cpp:596
+#: src/verbs.cpp:647
 #, fuzzy
-msgid "In"
-msgstr "İnç"
+msgid "Zoom In"
+msgstr "Büyült"
 
-#: src/verbs.cpp:596
+#: src/verbs.cpp:647
 msgid "Zoom in"
 msgstr "Büyült"
 
-#: src/verbs.cpp:597
+#: src/verbs.cpp:648
 #, fuzzy
-msgid "Out"
-msgstr "Kes"
+msgid "Zoom Out"
+msgstr "Küçült"
 
-#: src/verbs.cpp:597
+#: src/verbs.cpp:648
 msgid "Zoom out"
 msgstr "Küçült"
 
-#: src/verbs.cpp:598
+#: src/verbs.cpp:649
 #, fuzzy
-msgid "Toggle grid"
-msgstr "Kenarları aç/kapat"
+msgid "Rulers"
+msgstr "Dosya"
 
-#: src/verbs.cpp:599
+#: src/verbs.cpp:649
+msgid "Show/hide rulers"
+msgstr ""
+
+#: src/verbs.cpp:650
+msgid "Scrollbars"
+msgstr ""
+
+#: src/verbs.cpp:650
+msgid "Show/hide scrollbars"
+msgstr ""
+
+#: src/verbs.cpp:651
 #, fuzzy
-msgid "Toggle guides"
-msgstr "Kenarları aç/kapat"
+msgid "Show/hide grid"
+msgstr "Izgarayı göster"
 
-#: src/verbs.cpp:600
-msgid "1:1"
-msgstr "1:1"
+#: src/verbs.cpp:652
+#, fuzzy
+msgid "Show/hide guides"
+msgstr "Rehberleri göster"
 
-#: src/verbs.cpp:600
+#: src/verbs.cpp:653
+msgid "Nex_t zoom"
+msgstr ""
+
+#: src/verbs.cpp:653
+msgid "Next zoom"
+msgstr ""
+
+#: src/verbs.cpp:654
+msgid "Pre_v zoom"
+msgstr ""
+
+#: src/verbs.cpp:654
+msgid "Previous zoom"
+msgstr ""
+
+#: src/verbs.cpp:655
+#, fuzzy
+msgid "Zoom 1:_1"
+msgstr "1:1 göster"
+
+#: src/verbs.cpp:655
 msgid "Zoom to 1:1"
 msgstr "1:1 göster"
 
-#: src/verbs.cpp:601
-msgid "1:2"
-msgstr "1:2"
+#: src/verbs.cpp:656
+#, fuzzy
+msgid "Zoom 1:_2"
+msgstr "1:1 göster"
 
-#: src/verbs.cpp:601
+#: src/verbs.cpp:656
 #, fuzzy
 msgid "Zoom to 1:2"
 msgstr "1:1 göster"
 
-#: src/verbs.cpp:602
-msgid "2:1"
-msgstr "2:1"
+#: src/verbs.cpp:657
+#, fuzzy
+msgid "_Zoom 2:1"
+msgstr "1:1 göster"
 
-#: src/verbs.cpp:602
+#: src/verbs.cpp:657
 #, fuzzy
 msgid "Zoom to 2:1"
 msgstr "1:1 göster"
 
-#: src/verbs.cpp:603
+#: src/verbs.cpp:658
+msgid "_Page"
+msgstr "S_ayfa"
+
+#: src/verbs.cpp:658
 #, fuzzy
 msgid "Fit page in window"
 msgstr "Tüm sayfayı pencereye uydur"
 
-#: src/verbs.cpp:604
+#: src/verbs.cpp:659
 #, fuzzy
-msgid "Page width"
+msgid "Page _Width"
 msgstr "Sayfa genişliğini ayarla"
 
-#: src/verbs.cpp:604
+#: src/verbs.cpp:659
 #, fuzzy
 msgid "Fit page width in window"
 msgstr "Tüm sayfayı pencereye uydur"
 
-#: src/verbs.cpp:605
+#: src/verbs.cpp:660
+msgid "_Drawing"
+msgstr "_Çizim"
+
+#: src/verbs.cpp:660
 #, fuzzy
 msgid "Fit drawing in window"
 msgstr "Çizimi pencereye uydur"
 
-#: src/verbs.cpp:606
+#: src/verbs.cpp:661
+msgid "_Selection"
+msgstr "_Seçim"
+
+#: src/verbs.cpp:661
 #, fuzzy
 msgid "Fit selection in window"
 msgstr "Seçimi pencereye uydur"
 
 #. Dialogs
-#: src/verbs.cpp:608
+#: src/verbs.cpp:663
 #, fuzzy
-msgid "Inkscape Options"
+msgid "Inkscape _Options"
 msgstr "Sodipodi: %s : XML Görünümü"
 
-#: src/verbs.cpp:608
+#: src/verbs.cpp:663
 #, fuzzy
 msgid "Global Inkscape options"
 msgstr "Görüntü ayarları"
 
-#: src/verbs.cpp:609
+#: src/verbs.cpp:664
 #, fuzzy
-msgid "Document Settings"
+msgid "_Document Options"
 msgstr "Döküman ayarları"
 
-#: src/verbs.cpp:609
-msgid "Settings for the current document"
-msgstr ""
-
-#: src/verbs.cpp:610
-msgid "Editing Window"
-msgstr "Düzenleme Penceresi"
-
-#: src/verbs.cpp:610
+#: src/verbs.cpp:664
 #, fuzzy
-msgid "Editing window properties"
-msgstr "Düzenleme Penceresi"
+msgid "Options saved with the document"
+msgstr "SVG dökümanı aç"
 
-#: src/verbs.cpp:611
-msgid "Tool Options"
+#: src/verbs.cpp:665
+#, fuzzy
+msgid "Tool Optio_ns"
 msgstr "Araç Özellikleri"
 
-#: src/verbs.cpp:612
-msgid "Tool Attributes"
-msgstr "Araç Özellikleri"
-
-#: src/verbs.cpp:613
-msgid "Fill and Stroke"
-msgstr "Doldur ve Vur"
-
-#: src/verbs.cpp:613
+#: src/verbs.cpp:666
 #, fuzzy
 msgid "Fill and stroke settings"
 msgstr "Vuruş ayarları"
 
-#: src/verbs.cpp:614
-msgid "Object size and position"
-msgstr "Nesne boyutu ve konumu"
-
-#: src/verbs.cpp:615
+#: src/verbs.cpp:667
 #, fuzzy
-msgid "Transform"
+msgid "Transfor_m"
 msgstr "Dönüşüm:"
 
-#: src/verbs.cpp:615
+#: src/verbs.cpp:667
 msgid "Object transformations"
 msgstr "Nesne dönüşümleri"
 
-#: src/verbs.cpp:616
+#: src/verbs.cpp:668
 #, fuzzy
-msgid "Align and Distribute"
+msgid "_Align and Distribute"
 msgstr "Özellik"
 
-#: src/verbs.cpp:616
+#: src/verbs.cpp:668
 #, fuzzy
 msgid "Align and distribute objects"
 msgstr "Özellik ekle"
 
-#: src/verbs.cpp:617
+#: src/verbs.cpp:669
 #, fuzzy
-msgid "Text and Font"
+msgid "_Text and Font"
 msgstr "Metin ve yazı tipi"
 
-#: src/verbs.cpp:617
+#: src/verbs.cpp:669
 #, fuzzy
 msgid "Text editing and font settings"
 msgstr "Metin ve yazı tipi ayarları"
 
-#: src/verbs.cpp:618
+#: src/verbs.cpp:670
+#, fuzzy
+msgid "_XML Editor"
+msgstr "XML Düzenleyicisi"
+
+#: src/verbs.cpp:670
 msgid "XML Editor"
 msgstr "XML Düzenleyicisi"
+
+#: src/verbs.cpp:671
+msgid "_Hide/View dialogs"
+msgstr ""
+
+#: src/verbs.cpp:671
+msgid "Toggle visibility of all active dialogs"
+msgstr ""
 
 #. Family frame
 #: src/widgets/font-selector.cpp:150
@@ -2250,9 +2608,13 @@ msgstr "Stil"
 msgid "Font size:"
 msgstr "Yazı tipi boyutu:"
 
-#: src/widgets/font-selector.cpp:523
+#: src/widgets/font-selector.cpp:510
 msgid "AaBbCcIiPpQq12368.;/()"
 msgstr "AaBbCcIiPpQq12368.;/()"
+
+#: src/widgets/gradient-selector.cpp:135
+msgid "Edit"
+msgstr "Düzenle"
 
 #: src/widgets/gradient-selector.cpp:140
 msgid "Add"
@@ -2278,66 +2640,119 @@ msgstr "Dökümanda geçiş yok"
 msgid "No gradient selected"
 msgstr "Geçiş seçilmedi"
 
-#: src/widgets/gradient-vector.cpp:428
+#: src/widgets/gradient-vector.cpp:427
 msgid "Start color"
 msgstr "Başlangıç rengi"
 
-#: src/widgets/gradient-vector.cpp:438
+#: src/widgets/gradient-vector.cpp:437
 msgid "End color"
 msgstr "Bitiş rengi"
 
-#: src/widgets/paint-selector.cpp:604
+#: src/widgets/paint-selector.cpp:613
 msgid "No objects"
 msgstr "Nesne yok"
 
-#: src/widgets/paint-selector.cpp:618
+#: src/widgets/paint-selector.cpp:627
 msgid "Multiple styles"
 msgstr "Çoklu stiller"
 
-#: src/widgets/paint-selector.cpp:632
+#: src/widgets/paint-selector.cpp:641
 msgid "No paint"
 msgstr "Çizim yok"
 
 #. Label
-#: src/widgets/paint-selector.cpp:695
+#: src/widgets/paint-selector.cpp:704
 msgid "Mode:"
 msgstr "Mod:"
 
-#: src/widgets/paint-selector.cpp:705
+#: src/widgets/paint-selector.cpp:714 src/widgets/sp-color-scales.cpp:81
 msgid "RGB"
 msgstr "RGB"
 
-#: src/widgets/paint-selector.cpp:705
+#: src/widgets/paint-selector.cpp:714
 msgid "RGB Colorspace"
 msgstr ""
 
 #. sp_menu_append (SP_MENU (m), _("HSV"), _("RGB Colorspace"), GUINT_TO_POINTER (SP_PAINT_SELECTOR_MODE_HSV));
-#: src/widgets/paint-selector.cpp:707
+#: src/widgets/paint-selector.cpp:716 src/widgets/sp-color-scales.cpp:81
 msgid "CMYK"
 msgstr "CMYK"
 
-#: src/widgets/paint-selector.cpp:707
+#: src/widgets/paint-selector.cpp:716
 msgid "CMYK Colorspace"
 msgstr ""
 
 #. Use dropper
-#: src/widgets/paint-selector.cpp:714
+#: src/widgets/paint-selector.cpp:723
 msgid "Get from dropper"
 msgstr ""
 
-#: src/widgets/paint-selector.cpp:747
+#: src/widgets/paint-selector.cpp:756
 msgid "Color paint"
 msgstr "Renkli resim"
 
-#: src/widgets/paint-selector.cpp:817
+#: src/widgets/paint-selector.cpp:826
 msgid "Linear gradient"
 msgstr "Çizgisel geçiş"
 
-#: src/widgets/paint-selector.cpp:820
+#: src/widgets/paint-selector.cpp:829
 msgid "Radial gradient"
 msgstr "Radyal geçiş"
 
-#: src/widgets/sp-color-selector.cpp:65
+#: src/widgets/sp-color-gtkselector.cpp:60
+msgid "Wheel"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:81
+msgid "HSV"
+msgstr "HSV"
+
+#: src/widgets/sp-color-scales.cpp:373
+msgid "Red:"
+msgstr "Kırmızı:"
+
+#: src/widgets/sp-color-scales.cpp:374
+msgid "Green:"
+msgstr "Yeşil:"
+
+#: src/widgets/sp-color-scales.cpp:375
+msgid "Blue:"
+msgstr "Mavi:"
+
+#: src/widgets/sp-color-scales.cpp:376 src/widgets/sp-color-scales.cpp:393
+#: src/widgets/sp-color-scales.cpp:413
+msgid "Alpha:"
+msgstr "Alfa:"
+
+#: src/widgets/sp-color-scales.cpp:390
+msgid "Hue:"
+msgstr "Renk:"
+
+#: src/widgets/sp-color-scales.cpp:391
+msgid "Saturation:"
+msgstr "Canlılık"
+
+#: src/widgets/sp-color-scales.cpp:392
+msgid "Value:"
+msgstr "Değer:"
+
+#: src/widgets/sp-color-scales.cpp:409
+msgid "Cyan:"
+msgstr "Cyan:"
+
+#: src/widgets/sp-color-scales.cpp:410
+msgid "Magenta:"
+msgstr "Macenta"
+
+#: src/widgets/sp-color-scales.cpp:411
+msgid "Yellow:"
+msgstr "Sarı:"
+
+#: src/widgets/sp-color-scales.cpp:412
+msgid "Black:"
+msgstr "Siyah:"
+
+#: src/widgets/sp-color-selector.cpp:66
 #, fuzzy
 msgid "Unnamed"
 msgstr "isim"
@@ -2353,6 +2768,159 @@ msgstr "Özellik"
 #: src/widgets/sp-xmlview-attr-list.cpp:56
 msgid "Value"
 msgstr "Değer"
+
+#, fuzzy
+#~ msgid "Inkscape: %s: %s: %d"
+#~ msgstr "Sodipodi: %s: %s: %d"
+
+#~ msgid "Document %s has unsaved changes, save them?"
+#~ msgstr "%s dökümanı kaydedilmemiş değişiklikler içeriyor, kaydedilsin mi?"
+
+#, fuzzy
+#~ msgid "Object Size and Position"
+#~ msgstr "Nesne boyutu ve konumu"
+
+#~ msgid "Size and Position"
+#~ msgstr "Boyut ve Konum"
+
+#~ msgid "Tool attributes"
+#~ msgstr "Araç özellikleri"
+
+#~ msgid "Inner radius"
+#~ msgstr "İç çevre"
+
+#~ msgid "Missing tool preferences"
+#~ msgstr "Eksik araç ayarları"
+
+#~ msgid "Proportion"
+#~ msgstr "Orantı"
+
+#~ msgid "Transform:"
+#~ msgstr "Dönüşüm:"
+
+#~ msgid "Angle"
+#~ msgstr "Açı"
+
+#~ msgid "Tool has no attributes"
+#~ msgstr "Aracın özellikleri yok"
+
+#~ msgid "File"
+#~ msgstr "Dosya"
+
+#~ msgid "Item"
+#~ msgstr "Birim"
+
+#~ msgid "Group"
+#~ msgstr "Grupla"
+
+#~ msgid "Group Properties"
+#~ msgstr "Grup Özellikleri"
+
+#~ msgid "Ungroup"
+#~ msgstr "Grupları Kaldır"
+
+#~ msgid "Link"
+#~ msgstr "Bağlantı"
+
+#~ msgid "Image"
+#~ msgstr "Resim"
+
+#~ msgid "Shape"
+#~ msgstr "Şekillendir"
+
+#~ msgid "Fill settings"
+#~ msgstr "Doldurma ayarları"
+
+#~ msgid "Rect"
+#~ msgstr "Dörtgen"
+
+#~ msgid "Text object"
+#~ msgstr "Metin nesnesi"
+
+#~ msgid "Break line at selected nodes"
+#~ msgstr "Çizgileri seçilen düğümlerden kes"
+
+#~ msgid "New"
+#~ msgstr "Yeni"
+
+#~ msgid "Import"
+#~ msgstr "İçeri Aktar"
+
+#~ msgid "Delete"
+#~ msgstr "Sil"
+
+#~ msgid "Duplicate"
+#~ msgstr "Çiftle"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Öne Getir"
+
+#~ msgid "Send to Back"
+#~ msgstr "Arkaya it"
+
+#~ msgid "Lower selected objects to bottom"
+#~ msgstr "Seçili nesneleri arkaya it"
+
+#, fuzzy
+#~ msgid "Raise selected objects one position"
+#~ msgstr "Seçili nesneleri üste taşı"
+
+#, fuzzy
+#~ msgid "Lower selected objects one position"
+#~ msgstr "Seçili nesneleri arkaya it"
+
+#~ msgid "Combine"
+#~ msgstr "Birleştir"
+
+#, fuzzy
+#~ msgid "Edit path nodes in selected object"
+#~ msgstr "Seçili nesnelerin yerleşimini değiştir"
+
+#, fuzzy
+#~ msgid "Draw freehand curves and straight lines"
+#~ msgstr "Kalem aracı - düz ve serbest çizgiler çizer"
+
+#, fuzzy
+#~ msgid "In"
+#~ msgstr "İnç"
+
+#, fuzzy
+#~ msgid "Out"
+#~ msgstr "Kes"
+
+#, fuzzy
+#~ msgid "Toggle grid"
+#~ msgstr "Kenarları aç/kapat"
+
+#, fuzzy
+#~ msgid "Toggle guides"
+#~ msgstr "Kenarları aç/kapat"
+
+#~ msgid "1:1"
+#~ msgstr "1:1"
+
+#~ msgid "1:2"
+#~ msgstr "1:2"
+
+#~ msgid "2:1"
+#~ msgstr "2:1"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "Döküman ayarları"
+
+#~ msgid "Editing Window"
+#~ msgstr "Düzenleme Penceresi"
+
+#, fuzzy
+#~ msgid "Editing window properties"
+#~ msgstr "Düzenleme Penceresi"
+
+#~ msgid "Tool Attributes"
+#~ msgstr "Araç Özellikleri"
+
+#~ msgid "Object size and position"
+#~ msgstr "Nesne boyutu ve konumu"
 
 #~ msgid "Sodipodi"
 #~ msgstr "Sodipodi"
@@ -2393,10 +2961,6 @@ msgstr "Değer"
 #~ msgid "Appending to selection. Press 'a' to toggle Append/New."
 #~ msgstr "Seçime ekleme yapılıyor. '+'a basarak Yeni/Ekleye ulaşabilirsiniz"
 
-#, fuzzy
-#~ msgid "Creating new curve. Press 'a' to toggle Append/New."
-#~ msgstr "Yeni bir eğri yaratılıyor. '+'a basarak Yeni/Ekleye ulaşabilirsiniz"
-
 #~ msgid "Exit Program"
 #~ msgstr "Programdan Çık"
 
@@ -2414,9 +2978,6 @@ msgstr "Değer"
 
 #~ msgid "Drawing Mode"
 #~ msgstr "Çizim Modu"
-
-#~ msgid "Dialogs"
-#~ msgstr "Pencereler"
 
 #~ msgid "SVG with \"xmlns:sodipodi\" namespace"
 #~ msgstr "\"xmlns:sodipodi\" ad boşluğu ile SVG"
@@ -2556,42 +3117,6 @@ msgstr "Değer"
 #~ msgid "Gradient vector"
 #~ msgstr "Geçiş vektörü"
 
-#~ msgid "HSV"
-#~ msgstr "HSV"
-
-#~ msgid "Red:"
-#~ msgstr "Kırmızı:"
-
-#~ msgid "Green:"
-#~ msgstr "Yeşil:"
-
-#~ msgid "Blue:"
-#~ msgstr "Mavi:"
-
-#~ msgid "Alpha:"
-#~ msgstr "Alfa:"
-
-#~ msgid "Hue:"
-#~ msgstr "Renk:"
-
-#~ msgid "Saturation:"
-#~ msgstr "Canlılık"
-
-#~ msgid "Value:"
-#~ msgstr "Değer:"
-
-#~ msgid "Cyan:"
-#~ msgstr "Cyan:"
-
-#~ msgid "Magenta:"
-#~ msgstr "Macenta"
-
-#~ msgid "Yellow:"
-#~ msgstr "Sarı:"
-
-#~ msgid "Black:"
-#~ msgstr "Siyah:"
-
 #, fuzzy
 #~ msgid "Document variant:"
 #~ msgstr "Döküman Adı:"
@@ -2709,10 +3234,6 @@ msgstr "Değer"
 #, fuzzy
 #~ msgid "Choose align type"
 #~ msgstr "Birim sistemini seçiniz"
-
-#, fuzzy
-#~ msgid "Close window"
-#~ msgstr "Diyalogu kapat"
 
 #, fuzzy
 #~ msgid "Transformation"
@@ -2849,12 +3370,6 @@ msgstr "Değer"
 #~ msgid "Back One"
 #~ msgstr "Bir geri"
 
-#~ msgid "Break apart selected node"
-#~ msgstr "Seçili noktadan kopart"
-
-#~ msgid "Bring to _Front"
-#~ msgstr "Ö_ne Getir"
-
 #~ msgid "Close dialog"
 #~ msgstr "Diyalogu kapat"
 
@@ -2900,9 +3415,6 @@ msgstr "Değer"
 #~ msgid "Png file name"
 #~ msgstr "Png dosya adı"
 
-#~ msgid "Send to _Back"
-#~ msgstr "Arka_ya it"
-
 #~ msgid "Set dimensions"
 #~ msgstr "Boyutları belirle"
 
@@ -2939,40 +3451,11 @@ msgstr "Değer"
 #~ msgid "_Align"
 #~ msgstr "_Hizala"
 
-#~ msgid "_Combine"
-#~ msgstr "_Birleştir"
-
-#~ msgid "_Drawing"
-#~ msgstr "_Çizim"
-
-#, fuzzy
-#~ msgid "_Group"
-#~ msgstr "_Grup"
-
-#~ msgid "_New"
-#~ msgstr "_Yeni"
-
-#~ msgid "_Page"
-#~ msgstr "S_ayfa"
-
-#~ msgid "_Selection"
-#~ msgstr "_Seçim"
-
-#, fuzzy
-#~ msgid "_Ungroup"
-#~ msgstr "Gr_ubu çöz"
-
 #~ msgid "Align dialog"
 #~ msgstr "Diyalogu hizala"
 
 #~ msgid "Break apart selected paths"
 #~ msgstr "Seçilen yolları kopar"
-
-#~ msgid "Copy selection to clipboard"
-#~ msgstr "Seçileni panoya kopyala"
-
-#~ msgid "Cut selection"
-#~ msgstr "Seçileni kes"
 
 #~ msgid "Delete selection"
 #~ msgstr "Seçileni sil"
@@ -2983,9 +3466,6 @@ msgstr "Değer"
 
 #, fuzzy
 #~ msgid "Draw dynahand line"
-#~ msgstr "Serbest şekiller çiz"
-
-#~ msgid "Draw freehand line"
 #~ msgstr "Serbest şekiller çiz"
 
 #~ msgid "Draw rectangle"
@@ -3019,9 +3499,6 @@ msgstr "Değer"
 #~ msgid "Import "
 #~ msgstr "İthal et"
 
-#~ msgid "Lower selection one layer"
-#~ msgstr "Seçileni bir katman alçalt"
-
 #~ msgid "New drawing"
 #~ msgstr "Yeni çizim"
 
@@ -3043,9 +3520,6 @@ msgstr "Değer"
 #~ msgid "Quit or not quit ?"
 #~ msgstr "Çıkıyormusun ?"
 
-#~ msgid "Raise selection to top"
-#~ msgstr "Seçileni öne getir"
-
 #~ msgid "Really wanna quit sodipodi ?"
 #~ msgstr "Gerçekten Sodipodi'den çıkacakmısınız ?"
 
@@ -3065,9 +3539,6 @@ msgstr "Değer"
 #~ msgid "Undo "
 #~ msgstr "Geri al"
 
-#~ msgid "Unsymmetric"
-#~ msgstr "Asimetrik"
-
 #~ msgid "Yep !"
 #~ msgstr "Evet !"
 
@@ -3079,9 +3550,6 @@ msgstr "Değer"
 
 #~ msgid "_Open"
 #~ msgstr "_Aç"
-
-#~ msgid "lower selection to bottom"
-#~ msgstr "seçili nesneleri arkaya it"
 
 #, fuzzy
 #~ msgid "Align to bottom left"
@@ -3227,10 +3695,6 @@ msgstr "Değer"
 #~ msgid "Do you want to delete element %s?"
 #~ msgstr "Bu özelliği silmek istiyormusun?"
 
-#, fuzzy
-#~ msgid "us"
-#~ msgstr "_Biz"
-
 #~ msgid "Choose base unit system for grid"
 #~ msgstr "Izgara için temel birim sistemini seçiniz"
 
@@ -3288,9 +3752,6 @@ msgstr "Değer"
 #~ msgstr ""
 #~ "Bir Vektör Çizim Programı.\n"
 #~ "GPL'e göre yayınlanmıştır"
-
-#~ msgid "_File"
-#~ msgstr "_Dosya"
 
 #~ msgid "_About ..."
 #~ msgstr "Hakkında ..."
@@ -3413,17 +3874,8 @@ msgstr "Değer"
 #~ msgid "_New File"
 #~ msgstr "_Yeni Dosya"
 
-#~ msgid "_Import"
-#~ msgstr "_İthal et"
-
 #~ msgid "_Export"
 #~ msgstr "_İhraç et"
-
-#~ msgid "D_uplicate"
-#~ msgstr "Kl_onla"
-
-#~ msgid "_Delete"
-#~ msgstr "S_il"
 
 #~ msgid "Toggles desktop borders (rulers and scrollbars on and off)"
 #~ msgstr "Masaüstü kenarları aç/kapat (cetvel ve çubukları aç/kapat )"
@@ -3493,9 +3945,6 @@ msgstr "Değer"
 
 #~ msgid "100%"
 #~ msgstr "%100"
-
-#~ msgid " Move "
-#~ msgstr " Taşı "
 
 #~ msgid "move relative in"
 #~ msgstr "göreceli içeri taşı"

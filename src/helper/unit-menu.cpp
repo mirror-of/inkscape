@@ -22,8 +22,8 @@
 #include <gtk/gtkmenuitem.h>
 #include "helper/sp-marshal.h"
 #include "unit-menu.h"
-#include "../widgets/spw-utilities.h"
-#include "../widgets/widget-sizes.h"
+#include "widgets/spw-utilities.h"
+#include "widgets/widget-sizes.h"
 
 struct _SPUnitSelector {
 	GtkHBox box;
