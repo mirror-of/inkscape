@@ -208,7 +208,7 @@ sp_selection_group (gpointer object, gpointer data)
 	SPSelection * selection;
 	SPRepr * current;
 	SPRepr * group;
-	SPItem * new;
+	SPItem * spnew;
 	const GSList * l;
 	GSList * p;
 
@@ -233,16 +233,16 @@ sp_selection_group (gpointer object, gpointer data)
 	group = sp_repr_new ("g");
 
 	while (p) {
-		SPRepr *new;
+		SPRepr *spnew;
 		current = (SPRepr *) p->data;
-		new = sp_repr_duplicate (current);
+		spnew = sp_repr_duplicate (current);
 		sp_repr_unparent (current);
-		sp_repr_append_child (group, new);
-		sp_repr_unref (new);
+		sp_repr_append_child (group, spnew);
+		sp_repr_unref (spnew);
 		p = g_slist_remove (p, current);
 	}
 
-	new = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), group);
+	spnew = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), group);
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
 	sp_selection_set_repr (selection, group);
@@ -629,7 +629,7 @@ sp_selection_remove_transform (void)
 	l = sp_selection_repr_list (selection);
 
 	while (l != NULL) {
-		sp_repr_set_attr (l->data,"transform", NULL);
+		sp_repr_set_attr ((SPRepr*)l->data,"transform", NULL);
 		l = l->next;
 	}
 
@@ -812,7 +812,7 @@ sp_selection_item_next (void)
 	// compute next item
 	if (children == NULL) return;
 	if sp_selection_is_empty(selection) {
-		item = children->data;
+		item = (SPItem*)children->data;
 	} else {
 		l = g_slist_find(children,selection->items->data);
 		if ((l == NULL) || (l->next == NULL)) {

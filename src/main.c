@@ -109,15 +109,15 @@ static void sp_do_export_png (SPDocument *doc);
 /* fixme: We need this non-static, but better arrange it another way (Lauris) */
 gboolean sp_bitmap_icons = FALSE;
 
-static guchar *sp_global_printer = NULL;
+static gchar *sp_global_printer = NULL;
 static gboolean sp_global_slideshow = FALSE;
-static guchar *sp_export_png = NULL;
-static guchar *sp_export_dpi = NULL;
-static guchar *sp_export_area = NULL;
-static guchar *sp_export_width = NULL;
-static guchar *sp_export_height = NULL;
-static guchar *sp_export_background = NULL;
-static guchar *sp_export_svg = NULL;
+static gchar *sp_export_png = NULL;
+static gchar *sp_export_dpi = NULL;
+static gchar *sp_export_area = NULL;
+static gchar *sp_export_width = NULL;
+static gchar *sp_export_height = NULL;
+static gchar *sp_export_background = NULL;
+static gchar *sp_export_svg = NULL;
 
 #ifdef WITH_POPT
 static GSList *sp_process_args (poptContext ctx);
@@ -248,7 +248,7 @@ sp_main_gui (int argc, const char **argv)
 #endif
 
 	/* Set default icon */
-	if (g_file_test (DATADIR "/pixmaps/inkscape.png", G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK)) {
+	if (g_file_test (DATADIR "/pixmaps/inkscape.png", (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
 		gtk_window_set_default_icon_from_file (DATADIR "/pixmaps/inkscape.png", NULL);
 	}
 
@@ -308,7 +308,7 @@ sp_main_console (int argc, const char **argv)
 	poptContext ctx = NULL;
 #endif
 	GSList * fl = NULL;
-	guchar *printer;
+	gchar *printer;
 
 	/* We are started in text mode */
 
