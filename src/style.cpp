@@ -1068,15 +1068,6 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
     if (style->opacity.inherit) {
         style->opacity.value = parent->opacity.value;
     }
-    if (!style->display_set && parent->display_set) {
-        style->display = parent->display;
-        style->display_set = TRUE;
-    }
-    if (!style->visibility_set && parent->visibility_set) {
-        style->visibility = parent->visibility;
-        style->visibility_set = TRUE;
-    }
-    //    if (!style->fill.set || style->fill.inherit) {
 
     /* Color */
     if (!style->color.set || style->color.inherit) {
@@ -1425,7 +1416,7 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
     p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &from->text_anchor, &to->text_anchor, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &from->writing_mode, &to->writing_mode, SP_STYLE_FLAG_IFDIFF);
 
-    if (!from->visibility) {
+    if (!from->visibility && from->visibility_set) {
         p += g_snprintf(p, c + BMAX - p, "visibility:hidden;");
     }
 
