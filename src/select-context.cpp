@@ -650,7 +650,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                                                   (ctrl || shift) && alt? "; " : "",
                                                   alt? _("<b>Alt:</b> select under, move selected") : ""
                         );
-			event_context->defaultMessageContext()->set(Inkscape::INFORMATION_MESSAGE, tip);
+			event_context->defaultMessageContext()->flash(Inkscape::INFORMATION_MESSAGE, tip);
                 }
                 break;
                 case GDK_Left: // move selection left
@@ -891,7 +891,7 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     // status text
     GString *xs = SP_PT_TO_METRIC_STRING(dxy[X], SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING(dxy[Y], SP_DEFAULT_METRIC);
-    seltrans->messageContext().setF(Inkscape::NORMAL_MESSAGE, _("Move by %s, %s"), xs->str, ys->str);
+    seltrans->messageContext().setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s x %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
     g_string_free(xs, TRUE);
     g_string_free(ys, TRUE);
 }
