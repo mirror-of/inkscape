@@ -79,6 +79,8 @@ DB::get (const gchar *key)
 {
 	Extension *mod;
 
+	if (key == NULL) return NULL;
+
 	mod = (Inkscape::Extension::Extension *)g_hash_table_lookup (moduledict, key);
 
 	return mod;

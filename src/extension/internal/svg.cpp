@@ -97,7 +97,14 @@ Svg::init(void)
 SPDocument *
 Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
-	return sp_document_new (uri, TRUE, TRUE);
+	SPDocument * doc;
+	SPRepr * repr;
+
+	doc = sp_document_new (uri, TRUE, TRUE);
+	repr = sp_document_repr_root(doc);
+	sp_repr_set_attr(repr, "inkscape:output_extension", SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
+
+	return doc;
 }
 
 /**

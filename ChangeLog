@@ -1,9 +1,16 @@
+2004-04-02  Ted Gould <ted@gould.cx>
+
+	* src/file.cpp, src/extension/db.cpp, src/extension/internal/svg.cpp:
+	Changing it so that SVG documents open and default to with
+	extension namespace.  Also, autodetect is reenabled.
+
 2004-04-03  Peter  <pmoulder@river>
 
 	* src/helper/bezier-utils.cpp (NewtonRaphsonRootFind): Fix my
 	previous commit.
 
 2004-04-02  Ted Gould <ted@gould.cx>
+
 	* share/extensions/svgz_output.inkmod, src/main.cpp, src/print.cpp,
 	  src/extension/init.cpp, src/extension/implementation/script.cpp,
 	  src/extension/implementation/script.h,
