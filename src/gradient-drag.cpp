@@ -39,7 +39,7 @@
 #define GR_KNOT_COLOR_SELECTED 0x0000ff00
 
 // screen pixels between knots when they snap:
-#define SNAP_DIST 4 
+#define SNAP_DIST 5
 
 // absolute distance between gradient points for them to become a single dragger when the drag is created:
 #define MERGE_DIST 0.1
@@ -69,6 +69,7 @@ gr_drag_sel_changed(SPSelection *selection, gpointer data)
 	GrDrag *drag = (GrDrag *) data;
 	drag->updateDraggers ();
 	drag->updateLines ();
+	drag->updateLevels ();
 }
 
 static void
@@ -81,6 +82,7 @@ gr_drag_sel_modified (SPSelection *selection, guint flags, gpointer data)
         drag->updateDraggers ();
     }
     drag->updateLines ();
+    drag->updateLevels ();
 }
 
 
@@ -93,6 +95,9 @@ GrDrag::GrDrag(SPDesktop *desktop) {
     this->draggers = NULL;
     this->lines = NULL;
     this->selected = NULL;
+
+    this->hor_levels.clear();
+    this->vert_levels.clear();
 
     this->local_change = false;
 
@@ -110,6 +115,7 @@ GrDrag::GrDrag(SPDesktop *desktop) {
 
     this->updateDraggers ();
     this->updateLines ();
+    this->updateLevels ();
 }
 
 GrDrag::~GrDrag() 
@@ -165,6 +171,9 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
     GrDragger *dragger = (GrDragger *) data;
 
     NR::Point p = *ppointer;
+
+    // FIXME: take from prefs
+    double snap_dist = SNAP_DIST / SP_DESKTOP_ZOOM (dragger->parent->desktop);
 
     if (state & GDK_CONTROL_MASK) {
         unsigned snaps = abs(prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12));
@@ -235,6 +244,21 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         }
     }
 
+    { // See if we need to snap to any of the levels
+        for (int i = 0; i < dragger->parent->hor_levels.size(); i++) {
+            if (fabs(p[NR::Y] - dragger->parent->hor_levels[i]) < snap_dist) {
+                p[NR::Y] = dragger->parent->hor_levels[i];
+                sp_knot_moveto (knot, &p);
+            }
+        }
+        for (int i = 0; i < dragger->parent->vert_levels.size(); i++) {
+            if (fabs(p[NR::X] - dragger->parent->vert_levels[i]) < snap_dist) {
+                p[NR::X] = dragger->parent->vert_levels[i];
+                sp_knot_moveto (knot, &p);
+            }
+        }
+    }
+
     dragger->point = p;
 
     for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
@@ -262,7 +286,6 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
     // without Shift
     // TODO: snap to bboxes, centers of all selected objects; lower priority than dragger snap
     // see if we need to snap to another dragger
-    double snap_dist = SNAP_DIST / SP_DESKTOP_ZOOM (dragger->parent->desktop);
     for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
         GrDragger *d_new = (GrDragger *) di->data;
         if (d_new == dragger)
@@ -668,6 +691,30 @@ GrDrag::updateLines ()
                 this->addLine (center, sp_rg_get_r2 (item, rg));
             }
         }
+    }
+}
+
+/**
+Regenerates the levels list from the current selection
+*/
+void
+GrDrag::updateLevels ()
+{
+    hor_levels.clear();
+    vert_levels.clear();
+
+    g_return_if_fail (this->selection != NULL);
+
+    for (GSList const* i = this->selection->itemList(); i != NULL; i = i->next) {
+        SPItem *item = SP_ITEM(i->data);
+        NR::Rect rect = sp_item_bbox_desktop (item);
+        // Remember the edges of the bbox and the center axis
+        hor_levels.push_back(rect.min()[NR::Y]);
+        hor_levels.push_back(rect.max()[NR::Y]);
+        hor_levels.push_back(0.5 * (rect.min()[NR::Y] + rect.max()[NR::Y]));
+        vert_levels.push_back(rect.min()[NR::X]);
+        vert_levels.push_back(rect.max()[NR::X]);
+        vert_levels.push_back(0.5 * (rect.min()[NR::X] + rect.max()[NR::X]));
     }
 }
 

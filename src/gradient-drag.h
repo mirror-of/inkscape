@@ -14,6 +14,7 @@
 
 #include <glib/gslist.h>
 #include <sigc++/sigc++.h>
+#include <vector>
 
 #include <forward.h>
 #include <knot-enums.h>
@@ -63,7 +64,6 @@ struct GrDragger {
 
 	GSList *draggables;
 
-
 	void addDraggable(GrDraggable *draggable);
 
 	bool isA (guint point_num);
@@ -82,9 +82,6 @@ struct GrDrag {
 
 	void addLine (NR::Point p1, NR::Point p2);
 
-	void updateDraggers ();
-	void updateLines ();
-
 	void addDragger (NR::Point p, GrDraggable *draggable, SPKnotShapeType shape);
 
 	void addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke);
@@ -101,8 +98,17 @@ struct GrDrag {
 	SPSelection *selection;
 	sigc::connection sel_changed_connection;
 	sigc::connection sel_modified_connection;
+
+	// lists of edges of selection bboxes, to snap draggers to
+	std::vector<double> hor_levels;
+	std::vector<double> vert_levels;
+
 	GSList *draggers;
 	GSList *lines;
+
+	void updateDraggers ();
+	void updateLines ();
+	void updateLevels ();
 };
 
 #endif
