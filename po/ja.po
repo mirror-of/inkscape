@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-29 21:16-0700\n"
+"POT-Creation-Date: 2004-11-01 23:23+0100\n"
 "PO-Revision-Date: 2004-10-26 23:26+0900\n"
 "Last-Translator: shivaken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -79,12 +79,12 @@ msgstr "ガイドライン"
 msgid "Move %s"
 msgstr "%sを移動"
 
-#: src/desktop.cpp:911
+#: src/desktop.cpp:915
 msgid "Zoom drawing if window size changes"
 msgstr "ウインドウサイズの変更に合わせてズームする"
 
-#: src/desktop.cpp:933 src/dialogs/display-settings.cpp:1081
-#: src/verbs.cpp:1606
+#: src/desktop.cpp:937 src/dialogs/display-settings.cpp:1081
+#: src/verbs.cpp:1625
 msgid "Zoom"
 msgstr "ズーム"
 
@@ -92,29 +92,29 @@ msgstr "ズーム"
 #. that's because labels are "lightweight" widgets that don't have
 #. their own gdk window (and so can't receive events to detect hover);
 #. you need to put them in an eventbox at minimum
-#: src/desktop.cpp:959
+#: src/desktop.cpp:963
 msgid "Cursor coordinates"
 msgstr "カーソル位置"
 
 #. sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);  // setting absolute size is bad, in some themes it ends up being larger!
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:974
+#: src/desktop.cpp:978
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
 msgstr "Inkscapeへようこそ!"
 
-#: src/desktop.cpp:1016
+#: src/desktop.cpp:1020
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr "%s: %d - Inkscape"
 
-#: src/desktop.cpp:1018
+#: src/desktop.cpp:1022
 #, c-format
 msgid "%s - Inkscape"
 msgstr "%s - Inkscape"
 
-#: src/desktop.cpp:1160
+#: src/desktop.cpp:1164
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -127,11 +127,11 @@ msgstr ""
 "\n"
 "もし保存せずに終了すると変更が反映されません。"
 
-#: src/desktop.cpp:1174 src/desktop.cpp:1233
+#: src/desktop.cpp:1178 src/desktop.cpp:1237
 msgid "Close _without saving"
 msgstr "変更を破棄"
 
-#: src/desktop.cpp:1218
+#: src/desktop.cpp:1222
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -144,25 +144,27 @@ msgstr ""
 "\n"
 "別のフォーマットで保存しますか？"
 
-#: src/desktop.cpp:1613
+#: src/desktop.cpp:1621
 msgid "No previous zoom."
 msgstr "前のズームはありません"
 
-#: src/desktop.cpp:1636
+#: src/desktop.cpp:1644
 msgid "No next zoom."
 msgstr "次のズームはありません"
 
 #. Page page
-#: src/desktop.cpp:2034 src/dialogs/align.cpp:1098
+#: src/desktop.cpp:2042 src/dialogs/align.cpp:556 src/dialogs/align.cpp:1098
 #: src/dialogs/desktop-properties.cpp:929 src/dialogs/export.cpp:129
 msgid "Page"
 msgstr "ページ"
 
-#: src/desktop.cpp:2038 src/dialogs/align.cpp:1101 src/dialogs/export.cpp:129
+#: src/desktop.cpp:2046 src/dialogs/align.cpp:557 src/dialogs/align.cpp:1101
+#: src/dialogs/export.cpp:129
 msgid "Drawing"
 msgstr "描画"
 
-#: src/desktop.cpp:2042 src/dialogs/align.cpp:1104 src/dialogs/export.cpp:129
+#: src/desktop.cpp:2050 src/dialogs/align.cpp:558 src/dialogs/align.cpp:1104
+#: src/dialogs/export.cpp:129
 msgid "Selection"
 msgstr "選択"
 
@@ -274,25 +276,46 @@ msgstr "選択ノードを水平に整列"
 msgid "Distribute selected nodes vertically"
 msgstr "選択ノードを垂直に整列"
 
-#: src/dialogs/align.cpp:1086
+#. Rest of the widgetry
+#: src/dialogs/align.cpp:552 src/dialogs/align.cpp:1086
 msgid "Last selected"
 msgstr "最後の選択部分"
 
-#: src/dialogs/align.cpp:1089
+#: src/dialogs/align.cpp:553 src/dialogs/align.cpp:1089
 msgid "First selected"
 msgstr "最初の選択部分"
 
-#: src/dialogs/align.cpp:1092
+#: src/dialogs/align.cpp:554 src/dialogs/align.cpp:1092
 msgid "Biggest item"
 msgstr "最大オブジェクト"
 
-#: src/dialogs/align.cpp:1095
+#: src/dialogs/align.cpp:555 src/dialogs/align.cpp:1095
 msgid "Smallest item"
 msgstr "最小オブジェクト"
 
 #: src/dialogs/debugdialog.cpp:146
 msgid "Messages"
 msgstr "メッセージ"
+
+#. ## Add a menu for clear()
+#: src/dialogs/debugdialog.cpp:152 src/interface.cpp:1001
+msgid "_File"
+msgstr "ファイル(_F)"
+
+#. TRANSLATORS: "Clear" is a verb here
+#: src/dialogs/debugdialog.cpp:153 src/dialogs/find.cpp:749
+msgid "_Clear"
+msgstr "クリア"
+
+#: src/dialogs/debugdialog.cpp:155
+#, fuzzy
+msgid "Capture log messages"
+msgstr "デバッグメッセージを表示"
+
+#: src/dialogs/debugdialog.cpp:157
+#, fuzzy
+msgid "Release log messages"
+msgstr "デバッグメッセージを表示"
 
 #. Notebook tab
 #: src/dialogs/desktop-properties.cpp:810
@@ -459,7 +482,7 @@ msgstr "単位:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1359
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1351
 #: src/toolbox.cpp:1815
 msgid "Width:"
 msgstr "幅:"
@@ -518,7 +541,7 @@ msgstr "選択オブジェクトの明示方法:"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:257 src/dialogs/display-settings.cpp:393
 #: src/dialogs/display-settings.cpp:448 src/dialogs/display-settings.cpp:1412
-#: src/dialogs/stroke-style.cpp:1073 src/interface.cpp:660 src/verbs.cpp:1401
+#: src/dialogs/stroke-style.cpp:1065 src/interface.cpp:660 src/verbs.cpp:1418
 msgid "None"
 msgstr "なし"
 
@@ -762,7 +785,8 @@ msgid ""
 "autoscroll off)"
 msgstr "自動スクロールの速さ (0で自動スクロールをオフ)"
 
-#: src/dialogs/display-settings.cpp:997
+#: src/dialogs/display-settings.cpp:997 src/dialogs/tracedialog.cpp:344
+#: src/dialogs/tracedialog.cpp:374
 msgid "Threshold:"
 msgstr "閾値:"
 
@@ -844,23 +868,23 @@ msgstr "ノード"
 msgid "Shapes"
 msgstr "シェープ"
 
-#: src/dialogs/display-settings.cpp:1095 src/verbs.cpp:1590
+#: src/dialogs/display-settings.cpp:1095 src/verbs.cpp:1609
 msgid "Rectangle"
 msgstr "矩形"
 
-#: src/dialogs/display-settings.cpp:1101 src/verbs.cpp:1592
+#: src/dialogs/display-settings.cpp:1101 src/verbs.cpp:1611
 msgid "Ellipse"
 msgstr "円／弧"
 
-#: src/dialogs/display-settings.cpp:1107 src/verbs.cpp:1594
+#: src/dialogs/display-settings.cpp:1107 src/verbs.cpp:1613
 msgid "Star"
 msgstr "星"
 
-#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1596
+#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1615
 msgid "Spiral"
 msgstr "螺旋"
 
-#: src/dialogs/display-settings.cpp:1126 src/verbs.cpp:1598
+#: src/dialogs/display-settings.cpp:1126 src/verbs.cpp:1617
 msgid "Pencil"
 msgstr "鉛筆"
 
@@ -874,16 +898,16 @@ msgid ""
 "values produce more uneven paths with more nodes"
 msgstr "鉛筆ツールでできるパスの滑らかさ、少ないとパスを多く作成する"
 
-#: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1600
+#: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1619
 msgid "Pen"
 msgstr "ペン"
 
-#: src/dialogs/display-settings.cpp:1155 src/dialogs/text-edit.cpp:344
-#: src/verbs.cpp:1604
+#: src/dialogs/display-settings.cpp:1155 src/dialogs/text-edit.cpp:345
+#: src/verbs.cpp:1623
 msgid "Text"
 msgstr "テキスト"
 
-#: src/dialogs/display-settings.cpp:1164 src/verbs.cpp:1608
+#: src/dialogs/display-settings.cpp:1164 src/verbs.cpp:1627
 msgid "Dropper"
 msgstr "スポイト"
 
@@ -1231,16 +1255,16 @@ msgstr "拡張子で判断"
 msgid "Append filename extension automatically"
 msgstr "自動的に拡張子を追加"
 
-#: src/dialogs/fill-style.cpp:127
+#: src/dialogs/fill-style.cpp:128
 msgid "Fill style"
 msgstr "フィルスタイル"
 
-#: src/dialogs/fill-style.cpp:175
+#: src/dialogs/fill-style.cpp:176
 msgid "Fill:"
 msgstr "塗りつぶし:"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
-#: src/dialogs/fill-style.cpp:186
+#: src/dialogs/fill-style.cpp:187
 msgid ""
 "Specifies the method of filling overlapping areas when an object intersects "
 "itself. With the \"winding fill\" method (fill-rule:nonzero), all "
@@ -1252,12 +1276,12 @@ msgstr ""
 " 交互: パスで区切られた領域を交互に塗りつぶし"
 
 #. TRANSLATORS: Use the "winding fill" method (fill-rule:nonzero): all overlapping areas are filled.
-#: src/dialogs/fill-style.cpp:195
+#: src/dialogs/fill-style.cpp:196
 msgid "winding"
 msgstr "全て"
 
 #. TRANSLATORS: Use the "alternating fill" method (fill-rule:evenodd): areas with odd number of overlaps are filled.
-#: src/dialogs/fill-style.cpp:204
+#: src/dialogs/fill-style.cpp:205
 msgid "alternating"
 msgstr "交互"
 
@@ -1418,11 +1442,6 @@ msgstr "選択オブジェクトから検索"
 msgid "Limit search to the current selection"
 msgstr "選択したなかから検索"
 
-#. TRANSLATORS: "Clear" is a verb here
-#: src/dialogs/find.cpp:749
-msgid "_Clear"
-msgstr "クリア"
-
 #: src/dialogs/find.cpp:749
 msgid "Clear values"
 msgstr "値をクリア"
@@ -1436,8 +1455,8 @@ msgid "Select objects matching all of the fields you filled in"
 msgstr "入力した項目を対象に検索"
 
 #. Create the label for the object label
-#: src/dialogs/item-properties.cpp:125 src/dialogs/item-properties.cpp:416
-#: src/dialogs/item-properties.cpp:545 src/dialogs/item-properties.cpp:549
+#: src/dialogs/item-properties.cpp:125 src/dialogs/item-properties.cpp:420
+#: src/dialogs/item-properties.cpp:549 src/dialogs/item-properties.cpp:553
 msgid "Label"
 msgstr ""
 
@@ -1482,7 +1501,7 @@ msgstr "プロパティ"
 msgid "Ref"
 msgstr "リファレンス"
 
-#: src/dialogs/item-properties.cpp:547
+#: src/dialogs/item-properties.cpp:551
 #, fuzzy
 msgid "Label invalid"
 msgstr "このIDは無効です"
@@ -1759,40 +1778,40 @@ msgstr "フラグメント"
 msgid "XML fragment for the RDF 'License' section."
 msgstr "RDFのライセンスの断片"
 
-#: src/dialogs/stroke-style.cpp:1056 src/widgets/gradient-vector.cpp:265
+#: src/dialogs/stroke-style.cpp:1048 src/widgets/gradient-vector.cpp:261
 #: src/widgets/paint-selector.cpp:876
 msgid "No document selected"
 msgstr "ドキュメントが選択されていません"
 
-#: src/dialogs/stroke-style.cpp:1366
+#: src/dialogs/stroke-style.cpp:1358
 msgid "Stroke width"
 msgstr "線の幅"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1386
+#: src/dialogs/stroke-style.cpp:1378
 msgid "Join:"
 msgstr "結合:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1400
+#: src/dialogs/stroke-style.cpp:1392
 msgid "Miter join"
 msgstr "角"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1410
+#: src/dialogs/stroke-style.cpp:1402
 msgid "Round join"
 msgstr "丸"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1420
+#: src/dialogs/stroke-style.cpp:1412
 msgid "Bevel join"
 msgstr "斜"
 
@@ -1803,54 +1822,54 @@ msgstr "斜"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1431
+#: src/dialogs/stroke-style.cpp:1423
 msgid "Miter limit:"
 msgstr "連結リミット"
 
-#: src/dialogs/stroke-style.cpp:1439
+#: src/dialogs/stroke-style.cpp:1431
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "線をつなぐ限界の長さ(線幅を基準として)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1452
+#: src/dialogs/stroke-style.cpp:1444
 msgid "Cap:"
 msgstr "端:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1465
+#: src/dialogs/stroke-style.cpp:1457
 msgid "Butt cap"
 msgstr "角"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1474
+#: src/dialogs/stroke-style.cpp:1466
 msgid "Round cap"
 msgstr "丸"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1483
+#: src/dialogs/stroke-style.cpp:1475
 msgid "Square cap"
 msgstr "四角"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1489
+#: src/dialogs/stroke-style.cpp:1481
 msgid "Dashes:"
 msgstr "点線:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1510
+#: src/dialogs/stroke-style.cpp:1502
 msgid "Start Markers:"
 msgstr "先端"
 
-#: src/dialogs/stroke-style.cpp:1520
+#: src/dialogs/stroke-style.cpp:1512
 msgid "Mid Markers:"
 msgstr "中心"
 
-#: src/dialogs/stroke-style.cpp:1531
+#: src/dialogs/stroke-style.cpp:1523
 msgid "End Markers:"
 msgstr "終端"
 
@@ -1862,61 +1881,48 @@ msgstr "フォント"
 msgid "Align lines left"
 msgstr "左に整列"
 
-#: src/dialogs/text-edit.cpp:236
+#. TRANSLATORS: `Center' here is a verb.
+#: src/dialogs/text-edit.cpp:237
 msgid "Center lines"
 msgstr "中心線"
 
-#: src/dialogs/text-edit.cpp:249
+#: src/dialogs/text-edit.cpp:250
 msgid "Align lines right"
 msgstr "右に整列"
 
-#: src/dialogs/text-edit.cpp:270
+#: src/dialogs/text-edit.cpp:271
 msgid "Horizontal text"
 msgstr "横書"
 
-#: src/dialogs/text-edit.cpp:283
+#: src/dialogs/text-edit.cpp:284
 msgid "Vertical text"
 msgstr "縦書"
 
-#: src/dialogs/text-edit.cpp:298
+#: src/dialogs/text-edit.cpp:299
 msgid "Line spacing:"
 msgstr "線の間隔:"
 
-#: src/dialogs/text-edit.cpp:385
+#: src/dialogs/text-edit.cpp:386
 msgid "Set as default"
 msgstr "デフォルトに設定"
 
 #. ##Set up the Potrace panel
 #. #### brightness ####
-#: src/dialogs/tracedialog.cpp:327
+#: src/dialogs/tracedialog.cpp:334
 msgid "Brightness"
 msgstr "明るさ"
 
-#.
-#. potraceCannyBox.pack_start(potraceCannySeparator);
-#. potraceCannyLoSpinnerLabel.set_label(_("Low"));
-#. potraceCannyBox.pack_start(potraceCannyLoSpinnerLabel);
-#. potraceCannyLoSpinner.set_digits(5);
-#. potraceCannyLoSpinner.set_increments(0.01, 0.1);
-#. potraceCannyLoSpinner.set_range(0.0, 1.0);
-#. potraceCannyLoSpinner.set_value(0.1);
-#. potraceCannyBox.pack_start(potraceCannyLoSpinner);
-#.
-#: src/dialogs/tracedialog.cpp:330 src/dialogs/tracedialog.cpp:356
-msgid "Threshold"
-msgstr "閾値"
-
-#: src/dialogs/tracedialog.cpp:337
+#: src/dialogs/tracedialog.cpp:349
 msgid "Image Brightness"
 msgstr "画像の明るさ"
 
 #. #### canny edge detection ####
 #. TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
-#: src/dialogs/tracedialog.cpp:343
+#: src/dialogs/tracedialog.cpp:355
 msgid "Optimal Edge Detection (Canny)"
 msgstr "Cannyエッジ検出法"
 
-#: src/dialogs/tracedialog.cpp:363
+#: src/dialogs/tracedialog.cpp:379
 msgid "Edge Detection"
 msgstr "エッジ検出"
 
@@ -1924,40 +1930,37 @@ msgstr "エッジ検出"
 #. TRANSLATORS: Color Quantization: the process of reducing the number of colors
 #. in an image by selecting an optimized set of representative colors and then
 #. re-applying this reduced set to the original image.
-#: src/dialogs/tracedialog.cpp:371
+#: src/dialogs/tracedialog.cpp:387
 msgid "Color Quantization"
 msgstr "色定量化"
 
-#: src/dialogs/tracedialog.cpp:374
-msgid "Colors"
+#: src/dialogs/tracedialog.cpp:397
+#, fuzzy
+msgid "Colors:"
 msgstr "色の数"
 
-#: src/dialogs/tracedialog.cpp:381
+#: src/dialogs/tracedialog.cpp:402
 msgid "Quantization / Reduction"
 msgstr "色定量化／減色"
 
-#. #### quantization ####
-#: src/dialogs/tracedialog.cpp:386
-msgid "Invert"
-msgstr "ファイルに復帰"
-
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:392
+#: src/dialogs/tracedialog.cpp:407 src/dialogs/tracedialog.cpp:414
 msgid "Preview"
 msgstr "プレビュー"
 
-#: src/dialogs/tracedialog.cpp:399
-msgid "Intermediate Bitmap"
-msgstr "中間生成イメージ"
+#. #### quantization ####
+#: src/dialogs/tracedialog.cpp:419
+msgid "Invert"
+msgstr "ファイルに復帰"
 
-#: src/dialogs/tracedialog.cpp:407
+#: src/dialogs/tracedialog.cpp:429
 msgid "Credits"
 msgstr "クレジット"
 
 #. done
 #. TRANSLATORS: Potrace is an application for transforming bitmaps into
 #. vector graphics (http://potrace.sourceforge.net/)
-#: src/dialogs/tracedialog.cpp:414
+#: src/dialogs/tracedialog.cpp:436
 msgid "Potrace"
 msgstr "Potrace"
 
@@ -2049,17 +2052,17 @@ msgstr "キャンセル"
 msgid "Create"
 msgstr "作成"
 
-#: src/document.cpp:418
+#: src/document.cpp:428
 #, c-format
 msgid "New document %d"
 msgstr "新規ドキュメント %d"
 
-#: src/document.cpp:450
+#: src/document.cpp:460
 #, c-format
 msgid "Memory document %d"
 msgstr "メモリドキュメント"
 
-#: src/document.cpp:531
+#: src/document.cpp:541
 #, c-format
 msgid "Unnamed document %d"
 msgstr "無題ドキュメント %d"
@@ -2214,11 +2217,11 @@ msgstr "書き込みエラーが起こりました。"
 #. running from the console, in which case calling sp_ui
 #. routines will cause a segfault.  See bug 1000350 - bryce
 #. sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
-#: src/extension/system.cpp:109
+#: src/extension/system.cpp:108
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr "フォーマットの自動検出が失敗。SVGとして開きます。"
 
-#: src/file.cpp:186 src/file.cpp:783
+#: src/file.cpp:186 src/file.cpp:799
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "%sを開くのに失敗しました"
@@ -2248,45 +2251,54 @@ msgstr "ドキュメントが変更されていないので復帰の必要があ
 msgid "Select file to open"
 msgstr "開くファイルを選択"
 
-#: src/file.cpp:483
+#: src/file.cpp:473
+#, c-format
+msgid "Removed <b>%i</b> unused item(s) in &lt;defs&gt;."
+msgstr ""
+
+#: src/file.cpp:475
+msgid "No unused items in &lt;defs&gt;."
+msgstr ""
+
+#: src/file.cpp:499
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr "%sの拡張子では保存に適切なフォーマットが見つかりません。"
 
-#: src/file.cpp:484 src/file.cpp:490
+#: src/file.cpp:500 src/file.cpp:506
 msgid "Document not saved."
 msgstr "ドキュメントを保存できませんでした。"
 
-#: src/file.cpp:489
+#: src/file.cpp:505
 #, c-format
 msgid "File %s could not be saved."
 msgstr "%sを保存できませんでした。"
 
-#: src/file.cpp:498
+#: src/file.cpp:514
 msgid "Document saved."
 msgstr "ドキュメントを保存しました。"
 
-#: src/file.cpp:545
+#: src/file.cpp:561
 #, c-format
 msgid "drawing%s"
 msgstr "描画%s"
 
-#: src/file.cpp:551
+#: src/file.cpp:567
 #, c-format
 msgid "drawing-%d%s"
 msgstr "描画-%d%s"
 
-#: src/file.cpp:585
+#: src/file.cpp:601
 msgid "Select file to save to"
 msgstr "保存するファイルを選択"
 
-#: src/file.cpp:669
+#: src/file.cpp:685
 msgid "No changes need to be saved."
 msgstr "保存の必要がありませんでした。"
 
-#: src/file.cpp:810
+#: src/file.cpp:826
 msgid "Select file to import"
 msgstr "インポートするファイルを選択"
 
@@ -2302,7 +2314,7 @@ msgstr "インポートするファイルを選択"
 msgid "about.svg"
 msgstr "about.svg"
 
-#: src/help.cpp:81 src/verbs.cpp:1699
+#: src/help.cpp:81 src/verbs.cpp:1718
 msgid "About Inkscape"
 msgstr "Inkscapeについて"
 
@@ -2590,10 +2602,6 @@ msgstr "チュートリアル"
 #: src/interface.cpp:975
 msgid "Interactive Inkscape tutorials"
 msgstr "Inkscapeの対話的なチュートリアル"
-
-#: src/interface.cpp:1001
-msgid "_File"
-msgstr "ファイル(_F)"
 
 #: src/interface.cpp:1007
 msgid "_Edit"
@@ -2990,7 +2998,7 @@ msgid "_Create Link"
 msgstr "リンクの作成"
 
 #. "Ungroup"
-#: src/object-ui.cpp:241 src/verbs.cpp:1482
+#: src/object-ui.cpp:241 src/verbs.cpp:1499
 msgid "_Ungroup"
 msgstr "グループ解除"
 
@@ -3077,7 +3085,7 @@ msgstr "逆転させるパスを1つ以上選択してください。"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "逆転させるパスが選択されていません。"
 
-#: src/pen-context.cpp:739
+#: src/pen-context.cpp:741
 msgid "Finishing pen"
 msgstr "ペンを終了"
 
@@ -3907,1165 +3915,1187 @@ msgstr ""
 "ドラッグでドラッグした領域の色の平均を、<b>Ctrl+C</b>でマウスポインタの位置の"
 "色をクリップボードへコピー"
 
-#: src/trace/trace.cpp:69 src/trace/trace.cpp:78 src/trace/trace.cpp:86
+#: src/trace/trace.cpp:68 src/trace/trace.cpp:77 src/trace/trace.cpp:85
 msgid "Select an <b>image</b> to trace"
 msgstr "トレースするイメージを選択してください。"
 
-#: src/trace/trace.cpp:140
+#: src/trace/trace.cpp:139
 msgid "Trace: No active document"
 msgstr "トレース: アクティブなドキュメントがありません"
 
-#: src/trace/trace.cpp:161
+#: src/trace/trace.cpp:160
 msgid "Trace: Image has no bitmap data"
 msgstr "トレース: イメージはビットマップではありません"
 
-#: src/verbs.cpp:872
+#: src/verbs.cpp:873
 msgid "New layer created."
 msgstr "新しいレイヤーを作成しました。"
 
-#: src/verbs.cpp:879
-msgid "Switched to next layer."
-msgstr "次のレイヤーに切替えました"
+#: src/verbs.cpp:886
+#, fuzzy
+msgid "Moved to next layer."
+msgstr "次のレイヤーに移動"
 
-#: src/verbs.cpp:887
-msgid "Switched to previous layer."
-msgstr "前のレイヤーに切替えました"
+#: src/verbs.cpp:888
+#, fuzzy
+msgid "Can't move past last layer."
+msgstr "レイヤーを移動できません。"
 
-#: src/verbs.cpp:896 src/verbs.cpp:956
+#: src/verbs.cpp:898
+#, fuzzy
+msgid "Moved to previous layer."
+msgstr "前のレイヤーに切替え"
+
+#: src/verbs.cpp:900
+#, fuzzy
+msgid "Can't move past first layer."
+msgstr "レイヤーを移動できません。"
+
+#: src/verbs.cpp:909 src/verbs.cpp:973
 msgid "No current layer."
 msgstr "レイヤーはありません。"
 
-#: src/verbs.cpp:925
+#: src/verbs.cpp:938
 msgid "Raised layer."
 msgstr "レイヤーを前面に移動しました。"
 
-#: src/verbs.cpp:929
+#: src/verbs.cpp:942
 msgid "Lowered layer."
 msgstr "レイヤーを背面に移動しました。"
 
-#: src/verbs.cpp:934
+#: src/verbs.cpp:948
 msgid "Can't move layer any further."
 msgstr "レイヤーを移動できません。"
 
-#: src/verbs.cpp:954
+#: src/verbs.cpp:971
 msgid "Deleted layer."
 msgstr "レイヤーを削除しました。"
 
-#: src/verbs.cpp:1292
+#: src/verbs.cpp:1309
 msgid "keys.svg"
 msgstr "keys.svg"
 
-#: src/verbs.cpp:1308
+#: src/verbs.cpp:1325
 msgid "tutorial-basic.svg"
 msgstr "tutorial-basic.svg"
 
-#: src/verbs.cpp:1311
+#: src/verbs.cpp:1328
 msgid "tutorial-shapes.svg"
 msgstr "tutorial-shapes.svg"
 
-#: src/verbs.cpp:1314
+#: src/verbs.cpp:1331
 msgid "tutorial-advanced.svg"
 msgstr "tutorial-advanced.svg"
 
-#: src/verbs.cpp:1317
+#: src/verbs.cpp:1334
 msgid "elementsofdesign.svg"
 msgstr "elementsofdesign.svg"
 
-#: src/verbs.cpp:1320
+#: src/verbs.cpp:1337
 msgid "tipsandtricks.svg"
 msgstr "tipsandtricks.svg"
 
-#: src/verbs.cpp:1401
+#: src/verbs.cpp:1418
 msgid "Does nothing"
 msgstr "何もしない"
 
 #. File
-#: src/verbs.cpp:1404
+#: src/verbs.cpp:1421
 msgid "Default"
 msgstr "デフォルト"
 
-#: src/verbs.cpp:1404
+#: src/verbs.cpp:1421
 msgid "Create new document from default template"
 msgstr "デフォルトテンプレートで新規ドキュメントを作成"
 
-#: src/verbs.cpp:1406
+#: src/verbs.cpp:1423
 msgid "_Open..."
 msgstr "開く..."
 
-#: src/verbs.cpp:1407
+#: src/verbs.cpp:1424
 msgid "Open existing document"
 msgstr "既存のドキュメントを開く"
 
-#: src/verbs.cpp:1408
+#: src/verbs.cpp:1425
 msgid "Re_vert"
 msgstr "ファイルに復帰"
 
-#: src/verbs.cpp:1409
+#: src/verbs.cpp:1426
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr "最後に保存された状態に復帰。(変更は失われます)"
 
-#: src/verbs.cpp:1410
+#: src/verbs.cpp:1427
 msgid "_Save"
 msgstr "保存"
 
-#: src/verbs.cpp:1410
+#: src/verbs.cpp:1427
 msgid "Save document"
 msgstr "ドキュメントの保存"
 
-#: src/verbs.cpp:1412
+#: src/verbs.cpp:1429
 msgid "Save _As..."
 msgstr "名前をつけて保存..."
 
-#: src/verbs.cpp:1413
+#: src/verbs.cpp:1430
 msgid "Save document under new name"
 msgstr "新規ファイル名でドキュメントを保存"
 
-#: src/verbs.cpp:1414
+#: src/verbs.cpp:1431
 msgid "_Print..."
 msgstr "印刷..."
 
-#: src/verbs.cpp:1414
+#: src/verbs.cpp:1431
 msgid "Print document"
 msgstr "ドキュメントを印刷"
 
 #. TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
-#: src/verbs.cpp:1417
+#: src/verbs.cpp:1434
 msgid "Vac_uum Defs"
 msgstr "バキューム"
 
-#: src/verbs.cpp:1417
+#: src/verbs.cpp:1434
 msgid "Remove unused stuff from the &lt;defs&gt; of the document"
 msgstr "未使用の&lt;defs&gt;を削除する"
 
-#: src/verbs.cpp:1419
+#: src/verbs.cpp:1436
 msgid "Print _Direct"
 msgstr "直接印刷..."
 
-#: src/verbs.cpp:1420
+#: src/verbs.cpp:1437
 msgid "Print directly to file or pipe"
 msgstr "ファイルまたはパイプに印刷"
 
-#: src/verbs.cpp:1421
+#: src/verbs.cpp:1438
 msgid "Print Previe_w"
 msgstr "印刷プレビュー"
 
-#: src/verbs.cpp:1422
+#: src/verbs.cpp:1439
 msgid "Preview document printout"
 msgstr "印刷ドキュメントのプレビュー"
 
-#: src/verbs.cpp:1423
+#: src/verbs.cpp:1440
 msgid "_Import..."
 msgstr "インポート"
 
-#: src/verbs.cpp:1424
+#: src/verbs.cpp:1441
 msgid "Import bitmap or SVG image into document"
 msgstr "ビットマップまたはSVGイメージをインポート"
 
-#: src/verbs.cpp:1425
+#: src/verbs.cpp:1442
 msgid "_Export Bitmap..."
 msgstr "エクスポート"
 
-#: src/verbs.cpp:1426
+#: src/verbs.cpp:1443
 msgid "Export document or selection as PNG bitmap"
 msgstr "ドキュメントを PNG ビットマップとして出力"
 
-#: src/verbs.cpp:1427
+#: src/verbs.cpp:1444
 msgid "N_ext Window"
 msgstr "次のウィンドウ"
 
-#: src/verbs.cpp:1428
+#: src/verbs.cpp:1445
 msgid "Switch to the next document window"
 msgstr "次のウィンドウに切替え"
 
-#: src/verbs.cpp:1429
+#: src/verbs.cpp:1446
 msgid "P_revious Window"
 msgstr "前のウィンドウ"
 
-#: src/verbs.cpp:1430
+#: src/verbs.cpp:1447
 msgid "Switch to the previous document window"
 msgstr "前のウィンドウに切替え"
 
-#: src/verbs.cpp:1431
+#: src/verbs.cpp:1448
 msgid "_Close"
 msgstr "閉じる"
 
-#: src/verbs.cpp:1432
+#: src/verbs.cpp:1449
 msgid "Close window"
 msgstr "ウインドウを閉じる"
 
-#: src/verbs.cpp:1433
+#: src/verbs.cpp:1450
 msgid "_Quit"
 msgstr "終了"
 
-#: src/verbs.cpp:1433
+#: src/verbs.cpp:1450
 msgid "Quit Inkscape"
 msgstr "Inkscapeを終了"
 
 #. Edit
-#: src/verbs.cpp:1436
+#: src/verbs.cpp:1453
 msgid "_Undo"
 msgstr "元に戻す"
 
-#: src/verbs.cpp:1436
+#: src/verbs.cpp:1453
 msgid "Undo last action"
 msgstr "最後の操作をキャンセル"
 
-#: src/verbs.cpp:1438
+#: src/verbs.cpp:1455
 msgid "_Redo"
 msgstr "やり直し"
 
-#: src/verbs.cpp:1439
+#: src/verbs.cpp:1456
 msgid "Do again last undone action"
 msgstr "戻した操作を再実行"
 
-#: src/verbs.cpp:1440
+#: src/verbs.cpp:1457
 msgid "Cu_t"
 msgstr "カット"
 
-#: src/verbs.cpp:1441
+#: src/verbs.cpp:1458
 msgid "Cut selection to clipboard"
 msgstr "選択オブジェクトをクリップボードへ切り取る"
 
-#: src/verbs.cpp:1442
+#: src/verbs.cpp:1459
 msgid "_Copy"
 msgstr "コピー"
 
-#: src/verbs.cpp:1443
+#: src/verbs.cpp:1460
 msgid "Copy selection to clipboard"
 msgstr "選択オブジェクトをクリップボードへ複製"
 
-#: src/verbs.cpp:1444
+#: src/verbs.cpp:1461
 msgid "_Paste"
 msgstr "ペースト"
 
-#: src/verbs.cpp:1445
+#: src/verbs.cpp:1462
 msgid "Paste object(s) from clipboard to mouse point"
 msgstr "オブジェクトをクリップボードからペースト"
 
-#: src/verbs.cpp:1446
+#: src/verbs.cpp:1463
 msgid "Paste _Style"
 msgstr "スタイルをペースト"
 
-#: src/verbs.cpp:1447
+#: src/verbs.cpp:1464
 msgid "Apply style of the copied object to selection"
 msgstr "選択オブジェクトにスタイルをペースト"
 
-#: src/verbs.cpp:1448
+#: src/verbs.cpp:1465
 msgid "Paste _In Place"
 msgstr "同じ場所にペースト"
 
-#: src/verbs.cpp:1449
+#: src/verbs.cpp:1466
 msgid "Paste object(s) from clipboard to the original location"
 msgstr "コピー元と同じ場所にペースト"
 
-#: src/verbs.cpp:1450
+#: src/verbs.cpp:1467
 msgid "_Delete"
 msgstr "削除"
 
-#: src/verbs.cpp:1451
+#: src/verbs.cpp:1468
 msgid "Delete selection"
 msgstr "選択したオブジェクトを削除"
 
-#: src/verbs.cpp:1452
+#: src/verbs.cpp:1469
 msgid "Duplic_ate"
 msgstr "複製"
 
-#: src/verbs.cpp:1453
+#: src/verbs.cpp:1470
 msgid "Duplicate selected object(s)"
 msgstr "選択オブジェクトを複製"
 
-#: src/verbs.cpp:1454
+#: src/verbs.cpp:1471
 msgid "Clo_ne"
 msgstr "クローン"
 
-#: src/verbs.cpp:1455
+#: src/verbs.cpp:1472
 msgid "Create a clone of selected object (a copy linked to the original)"
 msgstr "選択オブジェクトのクローンを作成"
 
-#: src/verbs.cpp:1456
+#: src/verbs.cpp:1473
 msgid "Unlin_k Clone"
 msgstr "クローンの解除"
 
-#: src/verbs.cpp:1457
+#: src/verbs.cpp:1474
 msgid "Cut the clone's link to its original"
 msgstr "オリジナルとのリンクを解除する"
 
-#: src/verbs.cpp:1458
+#: src/verbs.cpp:1475
 msgid "Select _Original"
 msgstr "オリジナルを選択"
 
-#: src/verbs.cpp:1459
+#: src/verbs.cpp:1476
 msgid "Select the object to which the clone is linked"
 msgstr "クローンするオブジェクトを選択してください"
 
-#: src/verbs.cpp:1460
+#: src/verbs.cpp:1477
 msgid "_Tile"
 msgstr "タイル化"
 
-#: src/verbs.cpp:1461
+#: src/verbs.cpp:1478
 msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr "選択オブジェクトをパターンタイルにする"
 
-#: src/verbs.cpp:1462
+#: src/verbs.cpp:1479
 msgid "_Untile"
 msgstr "タイル化解除"
 
-#: src/verbs.cpp:1463
+#: src/verbs.cpp:1480
 msgid "Extract objects from a tiled pattern fill"
 msgstr "パターンタイル化を解除"
 
-#: src/verbs.cpp:1464
+#: src/verbs.cpp:1481
 msgid "Clea_r All"
 msgstr "全て消去"
 
-#: src/verbs.cpp:1465
+#: src/verbs.cpp:1482
 msgid "Delete all objects from document"
 msgstr "ドキュメントからすべてのオブジェクトを削除します"
 
-#: src/verbs.cpp:1466
+#: src/verbs.cpp:1483
 msgid "Select Al_l"
 msgstr "全て選択"
 
-#: src/verbs.cpp:1467
+#: src/verbs.cpp:1484
 msgid "Select all objects or all nodes"
 msgstr "全てのオブジェクト、パスを選択"
 
-#: src/verbs.cpp:1468
+#: src/verbs.cpp:1485
 msgid "D_eselect"
 msgstr "選択解除"
 
-#: src/verbs.cpp:1469
+#: src/verbs.cpp:1486
 msgid "Deselect any selected objects or nodes"
 msgstr "選択オブジェクトの選択解除"
 
 #. Selection
-#: src/verbs.cpp:1472
+#: src/verbs.cpp:1489
 msgid "Raise to _Top"
 msgstr "最前面へ"
 
-#: src/verbs.cpp:1473
+#: src/verbs.cpp:1490
 msgid "Raise selection to top"
 msgstr "最前面に移動"
 
-#: src/verbs.cpp:1474
+#: src/verbs.cpp:1491
 msgid "Lower to _Bottom"
 msgstr "最背面へ"
 
-#: src/verbs.cpp:1475
+#: src/verbs.cpp:1492
 msgid "Lower selection to bottom"
 msgstr "最背面に移動"
 
-#: src/verbs.cpp:1476
+#: src/verbs.cpp:1493
 msgid "_Raise"
 msgstr "前面へ"
 
-#: src/verbs.cpp:1477
+#: src/verbs.cpp:1494
 msgid "Raise selection one step"
 msgstr "前面に移動"
 
-#: src/verbs.cpp:1478
+#: src/verbs.cpp:1495
 msgid "_Lower"
 msgstr "背面へ"
 
-#: src/verbs.cpp:1479
+#: src/verbs.cpp:1496
 msgid "Lower selection one step"
 msgstr "背面に移動"
 
-#: src/verbs.cpp:1480
+#: src/verbs.cpp:1497
 msgid "_Group"
 msgstr "グループ化"
 
-#: src/verbs.cpp:1481
+#: src/verbs.cpp:1498
 msgid "Group selected objects"
 msgstr "選択したオブジェクトをグループ化"
 
-#: src/verbs.cpp:1483
+#: src/verbs.cpp:1500
 msgid "Ungroup selected group(s)"
 msgstr "選択したグループのグループ解除"
 
-#: src/verbs.cpp:1485
+#: src/verbs.cpp:1502
 #, fuzzy
 msgid "_Put on Path"
 msgstr "パス上にテキストを追加"
 
-#: src/verbs.cpp:1486
+#: src/verbs.cpp:1503
 msgid "Put text on path"
 msgstr "パスの上にテキストを置く"
 
-#: src/verbs.cpp:1487
+#: src/verbs.cpp:1504
 #, fuzzy
 msgid "_Remove from Path"
 msgstr "パスからテキストを分離"
 
-#: src/verbs.cpp:1488
+#: src/verbs.cpp:1505
 msgid "Remove text from path"
 msgstr "パスに乗せたテキストを分離"
 
-#: src/verbs.cpp:1489
+#: src/verbs.cpp:1506
 msgid "Remove All _Kerns"
 msgstr ""
 
-#: src/verbs.cpp:1490
+#: src/verbs.cpp:1507
 #, fuzzy
 msgid "Remove all kerns from a text object"
 msgstr "オブジェクトの変形を解除"
 
-#: src/verbs.cpp:1492
+#: src/verbs.cpp:1509
 msgid "_Union"
 msgstr "統合"
 
-#: src/verbs.cpp:1493
+#: src/verbs.cpp:1510
 msgid "Union of selected objects"
 msgstr "選択したオブジェクトを統合"
 
-#: src/verbs.cpp:1494
+#: src/verbs.cpp:1511
 msgid "_Intersection"
 msgstr "切り出し"
 
-#: src/verbs.cpp:1495
+#: src/verbs.cpp:1512
 msgid "Intersection of selected objects"
 msgstr "オブジェクトの重なる部分を切り出す"
 
-#: src/verbs.cpp:1496
+#: src/verbs.cpp:1513
 msgid "_Difference"
 msgstr "差分"
 
-#: src/verbs.cpp:1497
+#: src/verbs.cpp:1514
 msgid "Difference of selected objects (bottom minus top)"
 msgstr "後で選択したオブジェクトで切り取る"
 
-#: src/verbs.cpp:1498
+#: src/verbs.cpp:1515
 msgid "E_xclusion"
 msgstr "切りぬき"
 
-#: src/verbs.cpp:1499
+#: src/verbs.cpp:1516
 msgid "Exclusive OR of selected objects"
 msgstr "オブジェクトの重なる部分を切りぬく"
 
-#: src/verbs.cpp:1500
+#: src/verbs.cpp:1517
 msgid "Di_vision"
 msgstr "分離"
 
-#: src/verbs.cpp:1501
+#: src/verbs.cpp:1518
 msgid "Cut the bottom object into pieces"
 msgstr "後で選択したオブジェクトの重なる部分のみ残す"
 
-#: src/verbs.cpp:1502
+#: src/verbs.cpp:1519
 msgid "Cut _Path"
 msgstr "パスをカット"
 
-#: src/verbs.cpp:1503
+#: src/verbs.cpp:1520
 msgid "Cut the bottom object's stroke into pieces, removing fill"
 msgstr "重なった部分のパスのみを残す"
 
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:1507
+#: src/verbs.cpp:1524
 msgid "Ou_tset"
 msgstr "拡大"
 
-#: src/verbs.cpp:1508
+#: src/verbs.cpp:1525
 msgid "Outset selected path(s)"
 msgstr "オブジェクトを拡大する"
 
-#: src/verbs.cpp:1510
+#: src/verbs.cpp:1527
 msgid "O_utset Path by 1px"
 msgstr "1pxずつオブジェクトを拡大する"
 
-#: src/verbs.cpp:1511
+#: src/verbs.cpp:1528
 msgid "Outset selected path(s) by 1px"
 msgstr "1pxずつオブジェクトを拡大する"
 
-#: src/verbs.cpp:1513
+#: src/verbs.cpp:1530
 msgid "O_utset Path by 10px"
 msgstr "10pxずつオブジェクトを拡大する"
 
-#: src/verbs.cpp:1514
+#: src/verbs.cpp:1531
 msgid "Outset selected path(s) by 10px"
 msgstr "10pxずつオブジェクトを拡大する"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:1518
+#: src/verbs.cpp:1535
 msgid "I_nset"
 msgstr "縮小"
 
-#: src/verbs.cpp:1519
+#: src/verbs.cpp:1536
 msgid "Inset selected path(s)"
 msgstr "オブジェクトを縮小する"
 
-#: src/verbs.cpp:1521
+#: src/verbs.cpp:1538
 msgid "I_nset Path by 1px"
 msgstr "1pxずつオブジェクトを縮小する"
 
-#: src/verbs.cpp:1522
+#: src/verbs.cpp:1539
 msgid "Inset selected path(s) by 1px"
 msgstr "1pxずつオブジェクトを縮小する"
 
-#: src/verbs.cpp:1524
+#: src/verbs.cpp:1541
 msgid "I_nset Path by 10px"
 msgstr "10pxずつオブジェクトを縮小する"
 
-#: src/verbs.cpp:1525
+#: src/verbs.cpp:1542
 msgid "Inset selected path(s) by 10px"
 msgstr "10pxずつオブジェクトを縮小する"
 
-#: src/verbs.cpp:1527
+#: src/verbs.cpp:1544
 msgid "D_ynamic Offset"
 msgstr "ダイナミックオフセット"
 
-#: src/verbs.cpp:1527
+#: src/verbs.cpp:1544
 msgid "Create a dynamic offset object"
 msgstr "ダイナミックオフセットを作成"
 
-#: src/verbs.cpp:1529
+#: src/verbs.cpp:1546
 msgid "_Linked Offset"
 msgstr "リンクオフセット"
 
-#: src/verbs.cpp:1530
+#: src/verbs.cpp:1547
 msgid "Create a dynamic offset object linked to the original path"
 msgstr "オリジナルにリンクするオフセットを作成"
 
-#: src/verbs.cpp:1532
+#: src/verbs.cpp:1549
 msgid "_Stroke to Path"
 msgstr "ストロークをパスに変換"
 
-#: src/verbs.cpp:1533
+#: src/verbs.cpp:1550
 msgid "Convert selected stroke(s) to path(s)"
 msgstr "選択ストロークをパスに変換"
 
-#: src/verbs.cpp:1534
+#: src/verbs.cpp:1551
 msgid "Si_mplify"
 msgstr "パスの簡略化"
 
-#: src/verbs.cpp:1535
+#: src/verbs.cpp:1552
 msgid "Simplify selected path(s) by removing extra nodes"
 msgstr "選択パスからノードを削除し簡略化"
 
-#: src/verbs.cpp:1536
+#: src/verbs.cpp:1553
 msgid "Cl_eanup"
 msgstr "掃除"
 
-#: src/verbs.cpp:1537
+#: src/verbs.cpp:1554
 msgid "Clean up selected path(s)"
 msgstr "選択パスの簡略化"
 
-#: src/verbs.cpp:1538
+#: src/verbs.cpp:1555
 msgid "_Reverse"
 msgstr "逆転"
 
-#: src/verbs.cpp:1539
+#: src/verbs.cpp:1556
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
 msgstr "パスの方向を逆転させる"
 
-#: src/verbs.cpp:1540
+#: src/verbs.cpp:1557
 #, fuzzy
 msgid "_Trace Bitmap"
 msgstr "ビットマップをトレース"
 
-#: src/verbs.cpp:1541
+#: src/verbs.cpp:1558
 msgid "Convert bitmap object to paths"
 msgstr "オブジェクトをパスに変換"
 
-#: src/verbs.cpp:1542
+#: src/verbs.cpp:1559
 #, fuzzy
 msgid "_Make a Bitmap Copy"
 msgstr "ビットマップコピー"
 
-#: src/verbs.cpp:1543
+#: src/verbs.cpp:1560
 msgid "Export selection to a bitmap and insert it into document"
 msgstr "ビットマップイメージをエクスポート"
 
-#: src/verbs.cpp:1544
+#: src/verbs.cpp:1561
 msgid "_Combine"
 msgstr "連結"
 
-#: src/verbs.cpp:1545
+#: src/verbs.cpp:1562
 msgid "Combine several paths into one"
 msgstr "パスをひとつに結合"
 
-#: src/verbs.cpp:1546
+#: src/verbs.cpp:1563
 msgid "Break _Apart"
 msgstr "分割"
 
-#: src/verbs.cpp:1547
+#: src/verbs.cpp:1564
 msgid "Break selected path(s) into subpaths"
 msgstr "選択したパスをサブパスに分割"
 
 #. Layer
-#: src/verbs.cpp:1550
+#: src/verbs.cpp:1567
 msgid "New Layer"
 msgstr "新規レイヤー"
 
-#: src/verbs.cpp:1551
+#: src/verbs.cpp:1568
 msgid "Create a new layer"
 msgstr "新規レイヤーを作成"
 
-#: src/verbs.cpp:1552
+#: src/verbs.cpp:1569
+#, fuzzy
+msgid "Rename Layer"
+msgstr "レイヤーを前へ"
+
+#: src/verbs.cpp:1570
+#, fuzzy
+msgid "Rename the current layer"
+msgstr "現在のレイヤーを前へ移動"
+
+#: src/verbs.cpp:1571
 msgid "Move to Next Layer"
 msgstr "次のレイヤーに移動"
 
-#: src/verbs.cpp:1553
+#: src/verbs.cpp:1572
 msgid "Switch to the next layer in the document"
 msgstr "次のレイヤーに切替え"
 
-#: src/verbs.cpp:1554
+#: src/verbs.cpp:1573
 msgid "Move to Previous Layer"
 msgstr "前のレイヤーに切替え"
 
-#: src/verbs.cpp:1555
+#: src/verbs.cpp:1574
 msgid "Switch to the previous layer in the document"
 msgstr "前のレイヤーに切替え"
 
-#: src/verbs.cpp:1556
+#: src/verbs.cpp:1575
 msgid "Layer to Top"
 msgstr "レイヤーを最前面へ"
 
-#: src/verbs.cpp:1557
+#: src/verbs.cpp:1576
 msgid "Raise the current layer to the top"
 msgstr "現在のレイヤーを最前面へ移動"
 
-#: src/verbs.cpp:1558
+#: src/verbs.cpp:1577
 msgid "Layer to Bottom"
 msgstr "レイヤーを最背面へ"
 
-#: src/verbs.cpp:1559
+#: src/verbs.cpp:1578
 msgid "Lower the current layer to the bottom"
 msgstr "現在のレイヤーを最背面へ移動"
 
-#: src/verbs.cpp:1560
+#: src/verbs.cpp:1579
 msgid "Raise Layer"
 msgstr "レイヤーを前へ"
 
-#: src/verbs.cpp:1561
+#: src/verbs.cpp:1580
 msgid "Raise the current layer"
 msgstr "現在のレイヤーを前へ移動"
 
-#: src/verbs.cpp:1562
+#: src/verbs.cpp:1581
 msgid "Lower Layer"
 msgstr "レイヤーを後へ"
 
-#: src/verbs.cpp:1563
+#: src/verbs.cpp:1582
 msgid "Lower the current layer"
 msgstr "現在のレイヤーを後へ移動"
 
-#: src/verbs.cpp:1564
+#: src/verbs.cpp:1583
 msgid "Delete Current Layer"
 msgstr "レイヤーを削除"
 
-#: src/verbs.cpp:1565
+#: src/verbs.cpp:1584
 msgid "Delete the current layer"
 msgstr "現在のレイヤーを削除"
 
 #. Object
-#: src/verbs.cpp:1568
+#: src/verbs.cpp:1587
 msgid "Rotate _90 deg CW"
 msgstr "90度回転"
 
-#: src/verbs.cpp:1569
+#: src/verbs.cpp:1588
 msgid "Rotate selection 90 degrees clockwise"
 msgstr "オブジェクトを90度時計まわりに回転"
 
-#: src/verbs.cpp:1570
+#: src/verbs.cpp:1589
 msgid "Rotate 9_0 deg CCW"
 msgstr "90度反時計回転"
 
-#: src/verbs.cpp:1571
+#: src/verbs.cpp:1590
 msgid "Rotate selection 90 degrees counter-clockwise"
 msgstr "オブジェクトを90度反時計まわりに回転"
 
-#: src/verbs.cpp:1572
+#: src/verbs.cpp:1591
 msgid "Remove _Transformations"
 msgstr "変形を解除"
 
-#: src/verbs.cpp:1573
+#: src/verbs.cpp:1592
 msgid "Remove transformations from object"
 msgstr "オブジェクトの変形を解除"
 
-#: src/verbs.cpp:1574
+#: src/verbs.cpp:1593
 msgid "_Object to Path"
 msgstr "オブジェクトをパスに変換"
 
-#: src/verbs.cpp:1575
+#: src/verbs.cpp:1594
 msgid "Convert selected object(s) to path(s)"
 msgstr "選択オブジェクトをパスに変換"
 
-#: src/verbs.cpp:1576
+#: src/verbs.cpp:1595
 #, fuzzy
 msgid "_Unflow Text"
 msgstr "フローティング解除"
 
-#: src/verbs.cpp:1577
+#: src/verbs.cpp:1596
 msgid "Convert selected flowtext to text"
 msgstr "フローティングテキストをパスに変換"
 
-#: src/verbs.cpp:1579
+#: src/verbs.cpp:1598
 msgid "Flip _Horizontally"
 msgstr "水平方向に反転"
 
-#: src/verbs.cpp:1579
+#: src/verbs.cpp:1598
 msgid "Flip selection horizontally"
 msgstr "選択オブジェクトを水平方向に反転"
 
-#: src/verbs.cpp:1582
+#: src/verbs.cpp:1601
 msgid "Flip _Vertically"
 msgstr "垂直方向に反転"
 
-#: src/verbs.cpp:1582
+#: src/verbs.cpp:1601
 msgid "Flip selection vertically"
 msgstr "選択オブジェクトを垂直方向に反転"
 
 #. Tools
-#: src/verbs.cpp:1586
+#: src/verbs.cpp:1605
 msgid "Select"
 msgstr "選択"
 
-#: src/verbs.cpp:1587
+#: src/verbs.cpp:1606
 msgid "Select and transform objects"
 msgstr "変形"
 
-#: src/verbs.cpp:1588
+#: src/verbs.cpp:1607
 msgid "Node Edit"
 msgstr "ノードの編集"
 
-#: src/verbs.cpp:1589
+#: src/verbs.cpp:1608
 msgid "Edit path nodes or control handles"
 msgstr "パスノードを編集"
 
-#: src/verbs.cpp:1591
+#: src/verbs.cpp:1610
 msgid "Create rectangles and squares"
 msgstr "長方形や正方形を作成"
 
-#: src/verbs.cpp:1593
+#: src/verbs.cpp:1612
 msgid "Create circles, ellipses, and arcs"
 msgstr "円、弧を作成"
 
-#: src/verbs.cpp:1595
+#: src/verbs.cpp:1614
 msgid "Create stars and polygons"
 msgstr "星型やポリゴンを作成"
 
-#: src/verbs.cpp:1597
+#: src/verbs.cpp:1616
 msgid "Create spirals"
 msgstr "螺旋の作成"
 
-#: src/verbs.cpp:1599
+#: src/verbs.cpp:1618
 msgid "Draw freehand lines"
 msgstr "フリーハンド線を描画"
 
-#: src/verbs.cpp:1601
+#: src/verbs.cpp:1620
 msgid "Draw Bezier curves and straight lines"
 msgstr "ベジエ線や直線を描画"
 
-#: src/verbs.cpp:1602
+#: src/verbs.cpp:1621
 msgid "Calligraphy"
 msgstr "カリグラフィ"
 
-#: src/verbs.cpp:1603
+#: src/verbs.cpp:1622
 msgid "Draw calligraphic lines"
 msgstr "カリグラフィック線を描画"
 
-#: src/verbs.cpp:1605
+#: src/verbs.cpp:1624
 msgid "Create and edit text objects"
 msgstr "テキストの作成／編集"
 
-#: src/verbs.cpp:1607
+#: src/verbs.cpp:1626
 msgid "Zoom in or out"
 msgstr "ズームイン／アウト"
 
-#: src/verbs.cpp:1609
+#: src/verbs.cpp:1628
 msgid "Pick averaged colors from image"
 msgstr "画像から色を取得"
 
 #. Tool prefs
-#: src/verbs.cpp:1612
+#: src/verbs.cpp:1631
 msgid "Selector Preferences"
 msgstr "セレクタの設定"
 
-#: src/verbs.cpp:1613
+#: src/verbs.cpp:1632
 msgid "Open Inkscape Preferences for the Selector tool"
 msgstr "セレクタの設定を開く"
 
-#: src/verbs.cpp:1614
+#: src/verbs.cpp:1633
 msgid "Node Tool Preferences"
 msgstr "ノードツールの設定"
 
-#: src/verbs.cpp:1615
+#: src/verbs.cpp:1634
 msgid "Open Inkscape Preferences for the Node tool"
 msgstr "ノードツールの設定を開く"
 
-#: src/verbs.cpp:1616
+#: src/verbs.cpp:1635
 msgid "Rectangle Preferences"
 msgstr "矩形の設定"
 
-#: src/verbs.cpp:1617
+#: src/verbs.cpp:1636
 msgid "Open Inkscape Preferences for the Rectangle tool"
 msgstr "矩形の設定を開く"
 
-#: src/verbs.cpp:1618
+#: src/verbs.cpp:1637
 msgid "Ellipse Preferences"
 msgstr "円／弧の設定"
 
-#: src/verbs.cpp:1619
+#: src/verbs.cpp:1638
 msgid "Open Inkscape Preferences for the Ellipse tool"
 msgstr "円／弧の設定を開く"
 
-#: src/verbs.cpp:1620
+#: src/verbs.cpp:1639
 msgid "Star Preferences"
 msgstr "星の設定"
 
-#: src/verbs.cpp:1621
+#: src/verbs.cpp:1640
 msgid "Open Inkscape Preferences for the Star tool"
 msgstr "星の設定を開く"
 
-#: src/verbs.cpp:1622
+#: src/verbs.cpp:1641
 msgid "Spiral Preferences"
 msgstr "螺旋のプロパティ"
 
-#: src/verbs.cpp:1623
+#: src/verbs.cpp:1642
 msgid "Open Inkscape Preferences for the Spiral tool"
 msgstr "螺旋のプロパティを開く"
 
-#: src/verbs.cpp:1624
+#: src/verbs.cpp:1643
 msgid "Pencil Preferences"
 msgstr "鉛筆の設定"
 
-#: src/verbs.cpp:1625
+#: src/verbs.cpp:1644
 msgid "Open Inkscape Preferences for the Pencil tool"
 msgstr "鉛筆の設定を開く"
 
-#: src/verbs.cpp:1626
+#: src/verbs.cpp:1645
 msgid "Pen Preferences"
 msgstr "ペンの設定"
 
-#: src/verbs.cpp:1627
+#: src/verbs.cpp:1646
 msgid "Open Inkscape Preferences for the Pen tool"
 msgstr "ペンの設定を開く"
 
-#: src/verbs.cpp:1628
+#: src/verbs.cpp:1647
 msgid "Calligraphic Preferences"
 msgstr "カリグラフィック線の設定"
 
-#: src/verbs.cpp:1629
+#: src/verbs.cpp:1648
 msgid "Open Inkscape Preferences for the Calligraphy tool"
 msgstr "カリグラフィック線の設定を開く"
 
-#: src/verbs.cpp:1630
+#: src/verbs.cpp:1649
 msgid "Text Preferences"
 msgstr "テキストの設定"
 
-#: src/verbs.cpp:1631
+#: src/verbs.cpp:1650
 msgid "Open Inkscape Preferences for the Text tool"
 msgstr "テキストの設定を開く"
 
-#: src/verbs.cpp:1632
+#: src/verbs.cpp:1651
 msgid "Zoom Preferences"
 msgstr "ズームの設定"
 
-#: src/verbs.cpp:1633
+#: src/verbs.cpp:1652
 msgid "Open Inkscape Preferences for the Zoom tool"
 msgstr "ズームの設定を開く"
 
-#: src/verbs.cpp:1634
+#: src/verbs.cpp:1653
 msgid "Dropper Preferences"
 msgstr "スポイトの設定"
 
-#: src/verbs.cpp:1635
+#: src/verbs.cpp:1654
 msgid "Open Inkscape Preferences for the Dropper tool"
 msgstr "スポイトの設定を開く"
 
 #. Zooming
-#: src/verbs.cpp:1638
+#: src/verbs.cpp:1657
 msgid "Zoom In"
 msgstr "ズーム"
 
-#: src/verbs.cpp:1638
+#: src/verbs.cpp:1657
 msgid "Zoom in"
 msgstr "ズーム"
 
-#: src/verbs.cpp:1639
+#: src/verbs.cpp:1658
 msgid "Zoom Out"
 msgstr "ズームアウト"
 
-#: src/verbs.cpp:1639
+#: src/verbs.cpp:1658
 msgid "Zoom out"
 msgstr "ズームアウト"
 
-#: src/verbs.cpp:1640
+#: src/verbs.cpp:1659
 msgid "_Rulers"
 msgstr "定規"
 
-#: src/verbs.cpp:1640
+#: src/verbs.cpp:1659
 msgid "Show or hide the canvas rulers"
 msgstr "定規を表示／非表示"
 
-#: src/verbs.cpp:1641
+#: src/verbs.cpp:1660
 msgid "Scroll_bars"
 msgstr "スクロールバー"
 
-#: src/verbs.cpp:1641
+#: src/verbs.cpp:1660
 msgid "Show or hide the canvas scrollbars"
 msgstr "スクロールバーを表示／非表示"
 
-#: src/verbs.cpp:1642
+#: src/verbs.cpp:1661
 msgid "_Grid"
 msgstr "グリッド"
 
-#: src/verbs.cpp:1642
+#: src/verbs.cpp:1661
 msgid "Show or hide grid"
 msgstr "グリッドの表示／非表示"
 
-#: src/verbs.cpp:1643
+#: src/verbs.cpp:1662
 msgid "G_uides"
 msgstr "ガイド"
 
-#: src/verbs.cpp:1643
+#: src/verbs.cpp:1662
 msgid "Show or hide guides"
 msgstr "ガイドの表示"
 
-#: src/verbs.cpp:1644
+#: src/verbs.cpp:1663
 msgid "Nex_t Zoom"
 msgstr "次のズーム"
 
-#: src/verbs.cpp:1644
+#: src/verbs.cpp:1663
 msgid "Next zoom (from the history of zooms)"
 msgstr "次のズーム (ズーム履歴を使用)"
 
-#: src/verbs.cpp:1646
+#: src/verbs.cpp:1665
 msgid "Pre_vious Zoom"
 msgstr "前のズーム"
 
-#: src/verbs.cpp:1646
+#: src/verbs.cpp:1665
 msgid "Previous zoom (from the history of zooms)"
 msgstr "前のズーム (ズーム履歴を使用)"
 
-#: src/verbs.cpp:1648
+#: src/verbs.cpp:1667
 msgid "Zoom 1:_1"
 msgstr "ズーム 1:1"
 
-#: src/verbs.cpp:1648
+#: src/verbs.cpp:1667
 msgid "Zoom to 1:1"
 msgstr "1:1 にズーム"
 
-#: src/verbs.cpp:1650
+#: src/verbs.cpp:1669
 msgid "Zoom 1:_2"
 msgstr "ズーム 1:2"
 
-#: src/verbs.cpp:1650
+#: src/verbs.cpp:1669
 msgid "Zoom to 1:2"
 msgstr "ズーム 1:2"
 
-#: src/verbs.cpp:1652
+#: src/verbs.cpp:1671
 msgid "_Zoom 2:1"
 msgstr "ズーム 2:1"
 
-#: src/verbs.cpp:1652
+#: src/verbs.cpp:1671
 msgid "Zoom to 2:1"
 msgstr "2:1 にズーム"
 
-#: src/verbs.cpp:1655
+#: src/verbs.cpp:1674
 msgid "_Fullscreen"
 msgstr "フルスクリーン"
 
-#: src/verbs.cpp:1655
+#: src/verbs.cpp:1674
 msgid "Stretch this document window to full screen"
 msgstr "フルスクリーンに切替え"
 
-#: src/verbs.cpp:1658
+#: src/verbs.cpp:1677
 msgid "D_uplicate Window"
 msgstr "ウインドウを複製"
 
-#: src/verbs.cpp:1658
+#: src/verbs.cpp:1677
 msgid "Open a new window with the same document"
 msgstr "現在のドキュメントを新しいウィンドウで開く"
 
-#: src/verbs.cpp:1660
+#: src/verbs.cpp:1679
 msgid "_New View Preview"
 msgstr "新規のビュー／プレビュー"
 
-#: src/verbs.cpp:1661
+#: src/verbs.cpp:1680
 msgid "New View Preview"
 msgstr "新規のビュー／プレビュー"
 
 #. "view_new_preview"
-#: src/verbs.cpp:1662
+#: src/verbs.cpp:1681
 msgid "_Page"
 msgstr "ページ"
 
-#: src/verbs.cpp:1663
+#: src/verbs.cpp:1682
 msgid "Zoom to fit page in window"
 msgstr "ページに合わせてズーム"
 
-#: src/verbs.cpp:1664
+#: src/verbs.cpp:1683
 msgid "Page _Width"
 msgstr "ページ幅"
 
-#: src/verbs.cpp:1665
+#: src/verbs.cpp:1684
 msgid "Zoom to fit page width in window"
 msgstr "ページ幅に合わせてズーム"
 
-#: src/verbs.cpp:1666
+#: src/verbs.cpp:1685
 msgid "_Drawing"
 msgstr "描画"
 
-#: src/verbs.cpp:1667
+#: src/verbs.cpp:1686
 msgid "Zoom to fit drawing in window"
 msgstr "描画をウィンドウに合わせる"
 
-#: src/verbs.cpp:1668
+#: src/verbs.cpp:1687
 msgid "_Selection"
 msgstr "選択"
 
-#: src/verbs.cpp:1669
+#: src/verbs.cpp:1688
 msgid "Zoom to fit selection in window"
 msgstr "選択オブジェクトに合わせてズーム"
 
 #. Dialogs
-#: src/verbs.cpp:1672
+#: src/verbs.cpp:1691
 msgid "In_kscape Preferences..."
 msgstr "Inkscapeの設定..."
 
-#: src/verbs.cpp:1673
+#: src/verbs.cpp:1692
 msgid "Global Inkscape preferences"
 msgstr "Inkscapeの設定を開く"
 
-#: src/verbs.cpp:1674
+#: src/verbs.cpp:1693
 msgid "_Document Preferences..."
 msgstr "ドキュメントの設定..."
 
-#: src/verbs.cpp:1675
+#: src/verbs.cpp:1694
 msgid "Preferences saved with the document"
 msgstr "ドキュメントの設定を開く"
 
-#: src/verbs.cpp:1676
+#: src/verbs.cpp:1695
 msgid "_Fill and Stroke..."
 msgstr "フィル／ストローク..."
 
-#: src/verbs.cpp:1677
+#: src/verbs.cpp:1696
 msgid "Fill and Stroke dialog"
 msgstr "フィル／ストローク ダイアログ"
 
-#: src/verbs.cpp:1678
+#: src/verbs.cpp:1697
 msgid "Transfor_m..."
 msgstr "変形..."
 
-#: src/verbs.cpp:1679
+#: src/verbs.cpp:1698
 msgid "Transform dialog"
 msgstr "変形 ダイアログ"
 
-#: src/verbs.cpp:1680
+#: src/verbs.cpp:1699
 msgid "_Align and Distribute..."
 msgstr "整列／配置..."
 
-#: src/verbs.cpp:1681
+#: src/verbs.cpp:1700
 msgid "Align and Distribute dialog"
 msgstr "整列／配置 ダイアログ"
 
-#: src/verbs.cpp:1682
+#: src/verbs.cpp:1701
 #, fuzzy
 msgid "_Text and Font..."
 msgstr "テキスト／フォント..."
 
-#: src/verbs.cpp:1683
+#: src/verbs.cpp:1702
 msgid "Text and Font dialog"
 msgstr "テキスト／フォント ダイアログ"
 
-#: src/verbs.cpp:1684
+#: src/verbs.cpp:1703
 msgid "_XML Editor..."
 msgstr "XMLエディタ..."
 
-#: src/verbs.cpp:1685
+#: src/verbs.cpp:1704
 msgid "XML Editor"
 msgstr "XMLエディタ"
 
-#: src/verbs.cpp:1686
+#: src/verbs.cpp:1705
 msgid "_Find..."
 msgstr "検索..."
 
-#: src/verbs.cpp:1687
+#: src/verbs.cpp:1706
 msgid "Find objects in document"
 msgstr "ドキュメントから検索"
 
-#: src/verbs.cpp:1688
+#: src/verbs.cpp:1707
 msgid "_Messages..."
 msgstr "メッセージ..."
 
-#: src/verbs.cpp:1689
+#: src/verbs.cpp:1708
 msgid "View debug messages"
 msgstr "デバッグメッセージを表示"
 
-#: src/verbs.cpp:1690
+#: src/verbs.cpp:1709
 msgid "Show/_Hide Dialogs"
 msgstr "ダイアログの表示／非表示"
 
-#: src/verbs.cpp:1691
+#: src/verbs.cpp:1710
 msgid "Show or hide all active dialogs"
 msgstr "アクティブな全ダイアログの表示／非表示"
 
-#: src/verbs.cpp:1692
+#: src/verbs.cpp:1711
 msgid "_Object Properties..."
 msgstr "プロパティ..."
 
-#: src/verbs.cpp:1693
+#: src/verbs.cpp:1712
 msgid "Object Properties dialog"
 msgstr "オブジェクトのプロパティ"
 
 #. Help
-#: src/verbs.cpp:1696
+#: src/verbs.cpp:1715
 msgid "_Keys and Mouse"
 msgstr "キー／マウス(_K)"
 
-#: src/verbs.cpp:1697
+#: src/verbs.cpp:1716
 msgid "Key and mouse shortcuts reference"
 msgstr "キー／マウスのショートカット設定"
 
-#: src/verbs.cpp:1698
+#: src/verbs.cpp:1717
 msgid "_About Inkscape"
 msgstr "Inkscapeについて(_A)"
 
 #. "help_about"
 #. Tutorials
-#: src/verbs.cpp:1702
+#: src/verbs.cpp:1721
 msgid "Inkscape: _Basic"
 msgstr "Inkscape: 基本"
 
-#: src/verbs.cpp:1703
+#: src/verbs.cpp:1722
 msgid "Getting started with Inkscape"
 msgstr "Inkscapeではじめよう"
 
 #. "tutorial_basic"
-#: src/verbs.cpp:1704
+#: src/verbs.cpp:1723
 msgid "Inkscape: _Shapes"
 msgstr "Inkscape: シェイプ"
 
-#: src/verbs.cpp:1705
+#: src/verbs.cpp:1724
 msgid "Using shape tools to create and edit shapes"
 msgstr "シェイプツールを使った創作と整形"
 
-#: src/verbs.cpp:1706
+#: src/verbs.cpp:1725
 msgid "Inkscape: _Advanced"
 msgstr "Inkscape: 上級"
 
-#: src/verbs.cpp:1707
+#: src/verbs.cpp:1726
 msgid "Advanced Inkscape topics"
 msgstr "Inkscape上級テクニック"
 
 #. "tutorial_advanced"
-#: src/verbs.cpp:1708
+#: src/verbs.cpp:1727
 msgid "_Elements of Design"
 msgstr "デザイン"
 
-#: src/verbs.cpp:1709
+#: src/verbs.cpp:1728
 msgid "Elements of Design tutorial"
 msgstr "デザインについてのチュートリアル"
 
 #. "tutorial_design"
-#: src/verbs.cpp:1710
+#: src/verbs.cpp:1729
 msgid "_Tips and Tricks"
 msgstr "Tips"
 
-#: src/verbs.cpp:1711
+#: src/verbs.cpp:1730
 msgid "Miscellaneous Tips and Tricks"
 msgstr "その他のテクニック"
 
@@ -5132,44 +5162,44 @@ msgstr "ダイレクト"
 msgid "Repeat:"
 msgstr "繰り返し:"
 
-#: src/widgets/gradient-vector.cpp:271
+#: src/widgets/gradient-vector.cpp:267
 msgid "No gradients in document"
 msgstr "ドキュメントにグラデーションがありません"
 
-#: src/widgets/gradient-vector.cpp:277
+#: src/widgets/gradient-vector.cpp:273
 msgid "No gradient selected"
 msgstr "グラデーションが選択されていません"
 
-#: src/widgets/gradient-vector.cpp:541
+#: src/widgets/gradient-vector.cpp:542
 msgid "No stops in gradient"
 msgstr "グラデーション色がありません"
 
-#: src/widgets/gradient-vector.cpp:762
+#: src/widgets/gradient-vector.cpp:763
 msgid "Add stop"
 msgstr "色を追加"
 
-#: src/widgets/gradient-vector.cpp:765
+#: src/widgets/gradient-vector.cpp:766
 msgid "Add another control stop to gradient"
 msgstr "グラデーションに制御色を追加"
 
-#: src/widgets/gradient-vector.cpp:767
+#: src/widgets/gradient-vector.cpp:768
 msgid "Delete stop"
 msgstr "色を削除"
 
-#: src/widgets/gradient-vector.cpp:770
+#: src/widgets/gradient-vector.cpp:771
 msgid "Delete current control stop from gradient"
 msgstr "グラデーションから制御色を削除"
 
 #. Label
-#: src/widgets/gradient-vector.cpp:781
+#: src/widgets/gradient-vector.cpp:782
 msgid "Offset:"
 msgstr "オフセット:"
 
-#: src/widgets/gradient-vector.cpp:825
+#: src/widgets/gradient-vector.cpp:826
 msgid "Stop Color"
 msgstr "色"
 
-#: src/widgets/gradient-vector.cpp:851
+#: src/widgets/gradient-vector.cpp:852
 msgid "Gradient editor"
 msgstr "グラデーションエディタ"
 
@@ -5341,6 +5371,18 @@ msgstr "属性"
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Value"
 msgstr "値"
+
+#~ msgid "Threshold"
+#~ msgstr "閾値"
+
+#~ msgid "Intermediate Bitmap"
+#~ msgstr "中間生成イメージ"
+
+#~ msgid "Switched to next layer."
+#~ msgstr "次のレイヤーに切替えました"
+
+#~ msgid "Switched to previous layer."
+#~ msgstr "前のレイヤーに切替えました"
 
 #, fuzzy
 #~ msgid "Set Label"
