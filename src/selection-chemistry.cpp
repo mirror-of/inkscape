@@ -1742,7 +1742,7 @@ sp_selection_create_bitmap_copy ()
 
     GTimeVal cu;
     g_get_current_time (&cu);
-    uint current = (int) (cu.tv_sec * 1000000 + cu.tv_usec) % 1024; 
+    guint current = (int) (cu.tv_sec * 1000000 + cu.tv_usec) % 1024; 
 
     gchar const *filename = g_strdup_printf ("%s-%s-%u.png", document->name, sp_repr_attr (SP_OBJECT_REPR(items->data), "id"), current);
     gchar const *filepath = g_build_filename (document->base?document->base:"", filename, NULL);
