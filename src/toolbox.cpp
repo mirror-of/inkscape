@@ -236,6 +236,7 @@ sp_aux_toolbox_new ()
     gtk_box_pack_end (GTK_BOX (tb), GTK_WIDGET (tb_e), FALSE, FALSE, 0);
 
     g_object_set_data (G_OBJECT (tb), "desktop", NULL);
+    g_object_set_data (G_OBJECT (tb), "top_spacer", tb_s);
 
     gtk_widget_set_sensitive (tb, FALSE);
 
@@ -587,7 +588,7 @@ update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget 
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         GtkWidget *sub_toolbox = GTK_WIDGET (g_object_get_data (G_OBJECT (toolbox), aux_toolboxes[i].data_name));
         if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
-            gtk_widget_show (sub_toolbox);
+            gtk_widget_show_all (sub_toolbox);
             g_object_set_data (G_OBJECT(toolbox), "shows", sub_toolbox);
         } else {
             gtk_widget_hide (sub_toolbox);
@@ -686,8 +687,12 @@ void show_aux_toolbox (GtkWidget *toolbox_toplevel)
     if (!shown_toolbox) {
         return;
     }
-
     gtk_widget_show (toolbox);
+
+     // need to show the spacer, or the padding will be off
+    GtkWidget *spacer = GTK_WIDGET (g_object_get_data(G_OBJECT(toolbox), "top_spacer"));
+    gtk_widget_show (spacer);
+
     gtk_widget_show_all (shown_toolbox);
 }
 
