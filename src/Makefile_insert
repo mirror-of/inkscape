@@ -154,6 +154,7 @@ libinkpre_a_SOURCES =	\
 	sp-mask.cpp sp-mask.h	\
 	sp-metadata.cpp sp-metadata.h	\
 	sp-skeleton.cpp sp-skeleton.h	\
+	sp-metric.h	\
 	sp-metrics.cpp sp-metrics.h	\
 	sp-namedview.cpp sp-namedview.h	\
 	sp-object-group.cpp sp-object-group.h	\
@@ -213,7 +214,8 @@ libinkpost_a_SOURCES =	\
 	memeq.h	\
 	round.h	\
 	streq.h	\
-	strneq.h
+	strneq.h	\
+	unit-constants.h
 
 inkscape_private_libs =	\
 	libinkpre.a	\
