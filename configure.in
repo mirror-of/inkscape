@@ -206,7 +206,9 @@ dnl ******************************
 dnl   Use sigc-2.0 and gtkmm-2.4 only if both present
 dnl ******************************
 ink_sigc_pkg=sigc++-1.2
-ink_gtkmm_pkg=gtkmm-2.0
+dnl Leave gtkmm out for now
+dnl ink_gtkmm_pkg=gtkmm-2.0
+ink_gtkmm_pkg=
     # Save this for later.  Too much sigc-1.2-dependent code out there
     # if pkg-config --exists gtkmm-2.4; then
     #      if pkg-config --exists sigc++-2.0; then
