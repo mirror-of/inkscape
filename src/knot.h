@@ -18,36 +18,7 @@
 #include "display/display-forward.h"
 #include "forward.h"
 #include <libnr/nr-point.h>
-
-typedef enum {
-	SP_KNOT_SHAPE_SQUARE,
-	SP_KNOT_SHAPE_DIAMOND,
-	SP_KNOT_SHAPE_CIRCLE,
-	SP_KNOT_SHAPE_CROSS,
-	SP_KNOT_SHAPE_BITMAP,
-	SP_KNOT_SHAPE_IMAGE
-} SPKnotShapeType;
-
-typedef enum {
-	SP_KNOT_MODE_COLOR,
-	SP_KNOT_MODE_XOR
-} SPKnotModeType;
-
-typedef enum {
-	SP_KNOT_STATE_NORMAL,
-	SP_KNOT_STATE_MOUSEOVER,
-	SP_KNOT_STATE_DRAGGING,
-	SP_KNOT_STATE_HIDDEN
-} SPKnotStateType;
-
-#define SP_KNOT_VISIBLE_STATES 3
-
-enum {
-	SP_KNOT_VISIBLE = 1 << 0,
-	SP_KNOT_MOUSEOVER = 1 << 1,
-	SP_KNOT_DRAGGING = 1 << 2,
-	SP_KNOT_GRABBED = 1 << 3
-};
+#include "knot-enums.h"
 
 class SPKnot;
 class SPKnotClass;
