@@ -23,8 +23,6 @@ libextension_a_SOURCES = \
 		db.h \
 		init.cpp \
 		init.h \
-		menu.cpp \
-		menu.h \
 		system.cpp \
 		system.h
 

@@ -50,11 +50,11 @@ public:
     virtual void          save        (Inkscape::Extension::Output * module, SPDocument * doc, const gchar * filename);
                                        /**< Hey, there needs to be some function to do the work! */
 
-    /* Filter functions */
-    virtual GtkDialog *   prefs       (Inkscape::Extension::Filter * module);
+    /* Effect functions */
+    virtual GtkDialog *   prefs       (Inkscape::Extension::Effect * module);
                                        /**< The function to find out information about the file */
     /* TODO: need to figure out what we need here */
-    virtual void          filter      (Inkscape::Extension::Filter * module,
+    virtual void          effect      (Inkscape::Extension::Effect * module,
                                        SPDocument * document);
                                        /**< Hey, there needs to be some function to do the work! */
 

@@ -70,9 +70,15 @@ sp_module_system_open (const gchar * key, const gchar * filename)
 		imod = dynamic_cast<Inkscape::Extension::Input *>(sp_module_db_get(key));
 	}
 
-	g_return_val_if_fail(imod != NULL, NULL);
+	if (imod == NULL) {
+		throw Inkscape::Extension::Input::no_extension_found();
+	}
+
 	imod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
-	g_return_val_if_fail(imod->loaded(), NULL);
+
+	if (!imod->loaded()) {
+		throw Inkscape::Extension::Input::open_failed();
+	}
 
 	prefs = imod->prefs(filename);
 	if (prefs != NULL) {
@@ -195,11 +201,14 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 
 	if (!dynamic_cast<Inkscape::Extension::Output *>(omod)) {
 		printf("Unable to find output module to handle file: %s\n", filename);
+		throw Inkscape::Extension::Output::no_extension_found();
 		return;
 	}
 
 	omod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
-	g_return_if_fail(omod->loaded());
+	if (!omod->loaded()) {
+		throw Inkscape::Extension::Output::save_failed();
+	}
 
 	prefs = omod->prefs();
 	if (prefs != NULL) {
@@ -271,24 +280,24 @@ save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 /**
 	\return   None
 	\brief    A function that can be attached to a menu item to
-	          execute a filter.
+	          execute a effect.
 	\param    object   unused (for prototype matching)
-	\param    key      Key of filter to be used
+	\param    key      Key of effect to be used
 
-	This function just looks up the filter from the module database
-	and then makes sure it is loaded.  After that, it calls the filter
+	This function just looks up the effect from the module database
+	and then makes sure it is loaded.  After that, it calls the effect
 	function for the module.  Really, it is more of a generic wrapper
 	function.
 */
 void
 sp_module_system_filter (GtkObject * object, const gchar * key)
 {
-	Inkscape::Extension::Filter * fmod;
+	Inkscape::Extension::Effect * fmod;
 	SPDocument * doc;
 
 	g_return_if_fail(key != NULL);
 
-	fmod = dynamic_cast<Inkscape::Extension::Filter *>(sp_module_db_get(key));
+	fmod = dynamic_cast<Inkscape::Extension::Effect *>(sp_module_db_get(key));
 	g_return_if_fail(fmod != NULL);
 
 	fmod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
@@ -297,7 +306,7 @@ sp_module_system_filter (GtkObject * object, const gchar * key)
 	doc = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
 	g_return_if_fail(doc != NULL);
 
-	return fmod->filter(doc);
+	return fmod->effect(doc);
 }
 
 Inkscape::Extension::Print *
@@ -364,7 +373,7 @@ build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implem
 		if (!strcmp(sp_repr_name(child_repr), "output")) {
 			module_functional_type = MODULE_OUTPUT;
 		}
-		if (!strcmp(sp_repr_name(child_repr), "filter")) {
+		if (!strcmp(sp_repr_name(child_repr), "effect")) {
 			module_functional_type = MODULE_FILTER;
 		}
 		if (!strcmp(sp_repr_name(child_repr), "print")) {
@@ -388,6 +397,7 @@ build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implem
 				imp = dynamic_cast<Inkscape::Extension::Implementation::Implementation *>(script);
 				break;
 			default:
+				imp = NULL;
 				break;
 		}
 	} else {
@@ -408,7 +418,7 @@ build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implem
 			}
 		case MODULE_FILTER:
 			{
-				module = new Inkscape::Extension::Filter(repr, imp);
+				module = new Inkscape::Extension::Effect(repr, imp);
 				break;
 			}
 		case MODULE_PRINT:

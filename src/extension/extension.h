@@ -63,7 +63,7 @@ namespace Extension {
 /* Some early prototypes just for fun. */
 class Input;
 class Output;
-class Filter;
+class Effect;
 
 /** The object that is the basis for the Extension system.  This object
     contains all of the information that all Extension have.  The
@@ -166,6 +166,9 @@ class Input : public Extension {
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
 public:
+	class open_failed {};        /**< Generic failure for an undescribed reason */
+	class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
+
                   Input                (SPRepr * in_repr,
                                         Implementation::Implementation * in_imp);
     virtual      ~Input                (void);
@@ -183,6 +186,9 @@ class Output : public Extension {
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
 public:
+	class save_failed {};        /**< Generic failure for an undescribed reason */
+	class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
+
                  Output (SPRepr * in_repr,
                          Implementation::Implementation * in_imp);
     virtual     ~Output (void);
@@ -195,15 +201,15 @@ public:
     gchar *      get_filetypetooltip(void);
 };
 
-class Filter : public Extension {
+class Effect : public Extension {
 
 public:
-                 Filter  (SPRepr * in_repr,
+                 Effect  (SPRepr * in_repr,
                           Implementation::Implementation * in_imp);
-    virtual     ~Filter  (void);
+    virtual     ~Effect  (void);
 
     GtkDialog *  prefs   (void);
-    void         filter  (SPDocument * doc);
+    void         effect  (SPDocument * doc);
 };
 
 class Print : public Extension {

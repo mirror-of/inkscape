@@ -199,7 +199,7 @@ Script::prefs (Inkscape::Extension::Output * module)
 	This function should really do something, right now it doesn't.
 */
 GtkDialog *
-Script::prefs (Inkscape::Extension::Filter * module)
+Script::prefs (Inkscape::Extension::Effect * module)
 {
 	/* Sad, this should really do something... */
 	return NULL;
@@ -325,9 +325,9 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 
 /**
 	\return    none
-	\brief     This function uses an extention as a filter on a document.
-	\param     module   Extention to filter with.
-	\param     doc      Document to run through the filter.
+	\brief     This function uses an extention as a effect on a document.
+	\param     module   Extention to effect with.
+	\param     doc      Document to run through the effect.
 
 	This function is a little bit trickier than the previous two.  It
 	needs two temporary files to get it's work done.  Both of these
@@ -340,7 +340,7 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 	the module system function by passing their keys into the functions.
 
 	The command itself is built a little bit differently than in other
-	functions because the filters support selections.  So on the command
+	functions because the effect support selections.  So on the command
 	line a list of all the ids that are selected is included.  Currently,
 	this only works for a single selected object, but there will be more.
 	The command string is filled with the data, and then after the execution
@@ -352,7 +352,7 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 	point both should be full, and the second one is loaded.
 */
 void
-Script::filter (Inkscape::Extension::Filter * module, SPDocument * doc)
+Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 {
 	char tempfilename_in_x[] = "/tmp/ink_ext_XXXXXX";
 	gchar * tempfilename_in;

@@ -771,28 +771,28 @@ Output::save (SPDocument * doc, const gchar * uri)
     return imp->save(this, doc, uri);
 }
 
-/* Inkscape::Extension::Filter */
+/* Inkscape::Extension::Effect */
 
-Filter::Filter (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
+Effect::Effect (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
     return;
 }
 
-Filter::~Filter (void)
+Effect::~Effect (void)
 {
     return;
 }
 
 GtkDialog *
-Filter::prefs (void)
+Effect::prefs (void)
 {
     return imp->prefs(this);
 }
 
 void
-Filter::filter (SPDocument * doc)
+Effect::effect (SPDocument * doc)
 {
-    return imp->filter(this, doc);
+    return imp->effect(this, doc);
 }
 
 /* Inkscape::Extension::Print */

@@ -1,3 +1,24 @@
+2004-03-16  Ted Gould <ted@gould.cx>
+
+    * src/file.cpp,
+      src/file.h,
+      src/extension/Makefile.am,
+      src/extension/extension.cpp,
+      src/extension/extension.h,
+      src/extension/menu.cpp,
+      src/extension/system.cpp,
+      src/extension/implementation/implementation.cpp,
+      src/extension/implementation/implementation.h,
+      src/extension/implementation/script.cpp,
+      src/extension/implementation/script.h:
+     A few of changes.
+     1) removed the extensions menu stuff from the build as it seems
+        no one is using it.
+     2) Changing Filter to Effect internally to the extensions
+     3) Adding an exception to the save and open extensions to
+        signal a failure.  There is no way to test this currently,
+        but it doesn't break anything.
+
 2004-03-16  jon phillips <kidproto@users.sf.net>
 
     * share/icons/icons.svg: Added a couple of icons but haven't linked them 

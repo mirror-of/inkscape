@@ -58,13 +58,13 @@ Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, co
 } /* Implementation::save */
 
 GtkDialog *
-Implementation::prefs (Inkscape::Extension::Filter * module) {
+Implementation::prefs (Inkscape::Extension::Effect * module) {
 
 	return NULL;
 } /* Implementation::prefs */
 
 void
-Implementation::filter (Inkscape::Extension::Filter * module, SPDocument * document) {
+Implementation::effect (Inkscape::Extension::Effect * module, SPDocument * document) {
 	/* throw filter_fail */
 	return;
 } /* Implementation::filter */

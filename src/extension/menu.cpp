@@ -197,7 +197,7 @@ sp_module_menu_about_internal (Inkscape::Extension::Extension * in_plug, gpointe
 }
 
 /**
-	\return   Filter menu
+	\return   Effect menu
 	\brief    This function creates the menu for all of the filter
 	          modules.
 
@@ -216,13 +216,13 @@ sp_module_menu_filter (void)
 	menu = gtk_menu_new();
 
 	/* TODO: Implement this */
-	item = gtk_menu_item_new_with_mnemonic("_Filter");
+	item = gtk_menu_item_new_with_mnemonic("_Effect");
 	gtk_widget_show(GTK_WIDGET(item));
 	gtk_menu_append(menu, GTK_WIDGET(item));
 	gtk_widget_set_sensitive(GTK_WIDGET(item), FALSE);
 
 	/* TODO: Implement this */
-	item = gtk_menu_item_new_with_mnemonic("_Last Filter...");
+	item = gtk_menu_item_new_with_mnemonic("_Last Effect...");
 	gtk_widget_show(GTK_WIDGET(item));
 	gtk_menu_append(menu, GTK_WIDGET(item));
 	gtk_widget_set_sensitive(GTK_WIDGET(item), FALSE);
@@ -239,20 +239,20 @@ sp_module_menu_filter (void)
 /**
 	\return    none
 	\brief     The function to look at each module and see if it is
-	           an filter module, then add it to the filter menu.
+	           an effect module, then add it to the effect menu.
 	\param     in_plug  Module to be examined
 	\param     data     The menu to be attached to
 
-	The first thing that is checked is if this module is an filter
+	The first thing that is checked is if this module is an effect
 	module.  If it is, then it is turned into a menu item.  The label
-	is the name of the filter.  Then a signal to call the function
+	is the name of the effect.  Then a signal to call the function
 	sp_module_system_filter upon activiation is attached.  As a parameter
 	it is passed the key of the module.
 */
 static void
 sp_module_menu_filter_internal (Inkscape::Extension::Extension * in_plug, gpointer data)
 {
-	if (dynamic_cast<Inkscape::Extension::Filter *>(in_plug)) {
+	if (dynamic_cast<Inkscape::Extension::Effect *>(in_plug)) {
 		GtkWidget * item;
 
 		item = gtk_menu_item_new_with_label(in_plug->get_name());

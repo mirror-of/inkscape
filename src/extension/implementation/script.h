@@ -45,8 +45,8 @@ public:
     virtual void          save         (Inkscape::Extension::Output * module,
                                         SPDocument * doc,
                                         const gchar * filename);
-    virtual GtkDialog *   prefs        (Inkscape::Extension::Filter * module);
-    virtual void          filter       (Inkscape::Extension::Filter * module,
+    virtual GtkDialog *   prefs        (Inkscape::Extension::Effect * module);
+    virtual void          effect       (Inkscape::Extension::Effect * module,
                                         SPDocument * doc);
 
 };

@@ -47,7 +47,7 @@
 #include "sp-namedview.h"
 
 #include "extension/extension.h"
-#include "extension/menu.h"
+/* #include "extension/menu.h"  */
 #include "extension/system.h"
 
 
@@ -192,14 +192,21 @@ sp_file_open_dialog (gpointer object, gpointer data)
 /**
  * This 'save' function called by the others below
  */
-static void
+static bool
 file_save (SPDocument *doc, const gchar *uri, const gchar *key)
 {
     if (!doc || !uri) //Safety check
-        return;
+        return FALSE;
     if (!key)
         key = SP_MODULE_KEY_OUTPUT_DEFAULT;
-    return sp_module_system_save (key, doc, uri);
+	try {
+		sp_module_system_save (key, doc, uri);
+	} catch (Inkscape::Extension::Output::no_extension_found &e) {
+		return FALSE;
+	} catch (Inkscape::Extension::Output::save_failed &e) {
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /**
@@ -208,6 +215,7 @@ file_save (SPDocument *doc, const gchar *uri, const gchar *key)
 static gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
+	bool sucess = FALSE;
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
                  (const char *)save_path,
@@ -255,14 +263,14 @@ sp_file_save_dialog (SPDocument *doc)
         }
 
 
-        file_save (doc, fileName, oldSelectionType);
+        sucess = file_save (doc, fileName, oldSelectionType);
         g_free (save_path);
         save_path = g_dirname (fileName);
         save_path = g_strdup (save_path);
         g_free (fileName);
-        return TRUE;
+        return sucess;
     } else {
-        return FALSE;
+        return sucess;
     }
 }
 
@@ -280,24 +288,23 @@ sp_file_save_document (SPDocument *doc)
 
     gchar const *fn = sp_repr_attr(repr, "sodipodi:modified");
     if (fn != NULL) {
-        if (doc->uri == NULL) {
-            success = sp_file_save_dialog (doc);
-        } else {
-            /* TODO: This currently requires a recognizable extension to
-                 be on the file name - odd stuff won't work */
-            fn = g_strdup (doc->uri);
-            file_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
-            success = TRUE;
-            g_free ((void *) fn);
-        }
+		if (doc->uri == NULL) {
+			success = sp_file_save_dialog (doc);
+		} else {
+			/* TODO: This currently requires a recognizable extension to
+				 be on the file name - odd stuff won't work */
+			fn = g_strdup (doc->uri);
+			success = file_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
+			g_free ((void *) fn);
+		}
 
         if (success)
-            sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document saved.");
+            sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
         else
-            sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document not saved.");
+            sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
 
     } else {
-        sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "No changes need to be saved.");
+        sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("No changes need to be saved."));
         success = TRUE;
     }
     
@@ -308,32 +315,37 @@ sp_file_save_document (SPDocument *doc)
 /**
  * Save a document.
  */
-void
+bool
 sp_file_save (gpointer object, gpointer data)
 {
 
     if (!SP_ACTIVE_DOCUMENT)
-        return;
+        return FALSE;
     sp_namedview_document_from_window (SP_ACTIVE_DESKTOP);
-    sp_file_save_document (SP_ACTIVE_DOCUMENT);
-
+    return sp_file_save_document (SP_ACTIVE_DOCUMENT);
 }
 
 
 /**
  *  Save a document, always displaying the SaveAs dialog.
  */
-void
+bool
 sp_file_save_as (gpointer object, gpointer data)
 {
+	bool sucess = FALSE;
 
     if (!SP_ACTIVE_DOCUMENT)
-        return;
+        return FALSE;
     sp_namedview_document_from_window (SP_ACTIVE_DESKTOP);
-    sp_file_save_dialog (SP_ACTIVE_DOCUMENT);
+    sucess = sp_file_save_dialog (SP_ACTIVE_DOCUMENT);
     //TODO: make this dependent on the success of the save operation
-    sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document saved.");
+	if (sucess == TRUE) {
+		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
+	} else {
+		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+	}
 
+	return sucess;
 }
 
 

@@ -57,13 +57,13 @@ void sp_file_open_dialog (gpointer object, gpointer data);
 /**
  *
  */
-void sp_file_save (gpointer object, gpointer data);
+bool sp_file_save (gpointer object, gpointer data);
 
 /**
  *  Saves the given document.  Displays a file select dialog
  *  to choose the new name.
  */
-void sp_file_save_as (gpointer object, gpointer data);
+bool sp_file_save_as (gpointer object, gpointer data);
 
 /**
  *  Saves the given document.  Displays a file select dialog
