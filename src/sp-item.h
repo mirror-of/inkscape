@@ -148,8 +148,6 @@ void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 
 gint sp_item_event (SPItem *item, SPEvent *event);
 
-void sp_item_set_item_transform (SPItem *item, const NRMatrix *transform);
-
 /* Utility */
 
 NRArenaItem *sp_item_get_arenaitem (SPItem *item, unsigned int key);
@@ -191,7 +189,6 @@ NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *transform);
 NR::Matrix sp_item_i2d_affine(SPItem const *item);
 
 void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &transform);
-void sp_item_set_i2d_affine(SPItem *item, NRMatrix const *transform);
 
 NRMatrix *sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt, NRMatrix *transform);
 

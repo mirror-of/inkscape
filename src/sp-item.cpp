@@ -45,6 +45,7 @@ static void sp_item_release (SPObject *object);
 static void sp_item_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_item_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_item_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform);
 
 static gchar * sp_item_private_description (SPItem * item);
 static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size);
@@ -164,9 +165,9 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_TRANSFORM: {
 		NRMatrix t;
 		if (value && sp_svg_transform_read (value, &t)) {
-			sp_item_set_item_transform (item, &t);
+			sp_item_set_item_transform(item, t);
 		} else {
-			sp_item_set_item_transform (item, NULL);
+			sp_item_set_item_transform(item, NR::identity());
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
@@ -593,17 +594,14 @@ sp_item_event (SPItem *item, SPEvent *event)
 
 /* Sets item private transform (not propagated to repr) */
 
-void
-sp_item_set_item_transform (SPItem *item, const NRMatrix *transform)
+static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform)
 {
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_ITEM (item));
 
-	if (!transform) transform = &NR_MATRIX_IDENTITY;
-
-	if (!NR_MATRIX_DF_TEST_CLOSE (transform, &item->transform, NR_EPSILON)) {
-		item->transform = *transform;
-		sp_object_request_update (SP_OBJECT (item), SP_OBJECT_MODIFIED_FLAG);
+	if (!matrix_equalp(transform, item->transform, NR_EPSILON)) {
+		item->transform = transform;
+		sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG);
 	}
 }
 
@@ -712,34 +710,21 @@ NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *affine)
 	return affine;
 }
 
-void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &affine)
+void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &i2dt)
 {
-	NRMatrix const naffine(affine);
-	sp_item_set_i2d_affine(item, &naffine);
-}
+	g_return_if_fail( item != NULL );
+	g_return_if_fail( SP_IS_ITEM(item) );
 
-void sp_item_set_i2d_affine(SPItem *item, NRMatrix const *affine)
-{
-	NRMatrix p2dt; /* item parent to desktop transform */
-	NRMatrix dt2p; /* desktop to item parent transform */
-	NRMatrix i2p; /* item to parent transform */
-
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (SP_IS_ITEM (item));
-	g_return_if_fail (affine != NULL);
-
+	NR::Matrix dt2p; /* desktop to item parent transform */
 	if (SP_OBJECT_PARENT (item)) {
-		sp_item_i2d_affine((SPItem *) SP_OBJECT_PARENT(item), &p2dt);
+		dt2p = sp_item_i2d_affine((SPItem *) SP_OBJECT_PARENT(item)).inverse();
 	} else {
-		nr_matrix_set_scale (&p2dt, 0.8, -0.8);
-		p2dt.c[5] = sp_document_height (SP_OBJECT_DOCUMENT (item));
+		dt2p = ( NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item)))
+			 * NR::scale(1.25, -1.25) );
 	}
 
-	nr_matrix_invert (&dt2p, &p2dt);
-
-	nr_matrix_multiply(&i2p, affine, &dt2p);
-
-	sp_item_set_item_transform (item, &i2p);
+	NR::Matrix const i2p( i2dt * dt2p );
+	sp_item_set_item_transform(item, i2p);
 }
 
 

@@ -1,5 +1,13 @@
 2004-02-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item.h, src/sp-item.cpp (sp_item_set_item_transform):
+	Make static.  Use NR::Matrix, and avoid NULL special case.
+	Update callers.
+
+	* src/sp-item.h, src/sp-item.cpp (sp_item_set_i2d_affine):
+	Get rid of NRMatrix version.
+	Calculate 1.25 directly rather than less accurate reciprocal of 0.8.
+
 	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp (matrix_equalp):
 	New function.
 	(assert_close): Use matrix_equalp.
