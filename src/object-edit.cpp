@@ -137,11 +137,17 @@ static NR::Point sp_pattern_angle_get (SPItem *item)
 static void
 sp_pattern_angle_set (SPItem *item, const NR::Point &p, guint state)
 {
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
     // get the angle from pattern 0,0 to the cursor pos
-    NR::Point delta = p - NR::Point( pat->patternTransform[4],pat->patternTransform[5]);
+    NR::Point delta = p - NR::Point( pat->patternTransform[4], pat->patternTransform[5]);
     gdouble theta = atan2 (delta );
+
+	if ( state & GDK_CONTROL_MASK ) {
+		theta = sp_round(theta, M_PI/snaps);
+	}
 
     // get the scale from the current transform so we can keep it.
     gdouble scl = sp_pattern_extract_scale(pat);
