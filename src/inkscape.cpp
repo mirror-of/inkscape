@@ -898,14 +898,12 @@ unsigned int
 inkscape_maximum_dkey()
 {
     GSList *r;
-    unsigned int dkey = 0;
+    gint dkey = 0;
 
     for (r = inkscape->desktops; r; r = r->next) {
         if (((SPDesktop *) r->data)->dkey > dkey)
             dkey = ((SPDesktop *) r->data)->dkey;
     }
-
-    g_assert (dkey > 0);
 
     return dkey;
 }
@@ -927,7 +925,7 @@ inkscape_next_desktop ()
         }
     } else {
         // find first existing
-        for (i = 1; i <= inkscape_maximum_dkey(); i++) {
+        for (i = 0; i <= inkscape_maximum_dkey(); i++) {
             d = inkscape_find_desktop_by_dkey (i);
             if (d) break;
         }
@@ -945,11 +943,11 @@ inkscape_prev_desktop ()
 {
     SPDesktop *d = NULL;
     unsigned int dkey_current = ((SPDesktop *) inkscape->desktops->data)->dkey;
-    unsigned int i;
+    signed int i;
 
-    if (dkey_current > 1) {
+    if (dkey_current > 0) {
         // find prev existing
-        for (i = dkey_current - 1; i >= 1; i--) {
+        for (i = dkey_current - 1; i >= 0; i--) {
             d = inkscape_find_desktop_by_dkey (i);
             if (d) break;
         }
