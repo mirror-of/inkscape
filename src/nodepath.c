@@ -735,6 +735,28 @@ sp_node_selected_move (gdouble dx, gdouble dy)
 	sp_nodepath_selected_nodes_move (nodepath, dx, dy);
 }
 
+void
+sp_node_selected_move_screen (gdouble dx, gdouble dy)
+{
+	SPDesktop * desktop;
+	gdouble zdx, zdy, zoom;
+	SPNodePath * nodepath;
+
+	// borrowed from sp_selection_move_screen in selection-chemistry.c
+	// we find out the current zoom factor and divide deltas by it
+	desktop = SP_ACTIVE_DESKTOP;
+	g_return_if_fail(SP_IS_DESKTOP (desktop));
+
+	zoom = SP_DESKTOP_ZOOM (desktop);
+	zdx = dx / zoom;
+	zdy = dy / zoom;
+
+	nodepath = sp_nodepath_current ();
+	if (!nodepath) return;
+
+	sp_nodepath_selected_nodes_move (nodepath, zdx, zdy);
+}
+
 static void
 sp_node_ensure_knot (SPPathNode * node, gint which, gboolean show_knot)
 {
