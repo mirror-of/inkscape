@@ -45,6 +45,7 @@ sp_polyline_get_type (void)
 			sizeof (SPPolyLine),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_polyline_init,
+			NULL,	/* value_table */
 		};
 		polyline_type = g_type_register_static (SP_TYPE_SHAPE, "SPPolyLine", &polyline_info, (GTypeFlags)0);
 	}

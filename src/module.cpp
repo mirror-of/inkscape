@@ -70,6 +70,7 @@ sp_module_get_type (void)
 			sizeof (SPModule),
 			16,
 			(GInstanceInitFunc) sp_module_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPModule", &info, (GTypeFlags)0);
 	}
@@ -343,6 +344,7 @@ sp_module_input_get_type (void)
 			sizeof (SPModuleInput),
 			16,
 			(GInstanceInitFunc) sp_module_input_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleInput", &info, (GTypeFlags)0);
 	}
@@ -542,6 +544,7 @@ GType sp_module_output_get_type (void) {
 			sizeof (SPModuleOutput),
 			16,
 			(GInstanceInitFunc) sp_module_output_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleOutput", &info, (GTypeFlags)0);
 	}
@@ -737,6 +740,7 @@ sp_module_filter_get_type (void)
 			sizeof (SPModuleFilter),
 			16,
 			(GInstanceInitFunc) sp_module_filter_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleFilter", &info, (GTypeFlags)0);
 	}
@@ -843,6 +847,7 @@ sp_module_print_get_type (void)
 			sizeof (SPModulePrint),
 			16,
 			(GInstanceInitFunc) sp_module_print_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_MODULE, "SPModulePrint", &info, (GTypeFlags)0);
 	}

@@ -51,6 +51,7 @@ sp_defs_get_type (void)
 			sizeof (SPDefs),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_defs_init,
+			NULL,	/* value_table */
 		};
 		defs_type = g_type_register_static (SP_TYPE_OBJECT, "SPDefs", &defs_info, (GTypeFlags)0);
 	}

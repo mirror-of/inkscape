@@ -54,6 +54,7 @@ sp_anchor_get_type (void)
 			sizeof (SPAnchor),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_anchor_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_GROUP, "SPAnchor", &info, (GTypeFlags)0);
 	}

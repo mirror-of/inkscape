@@ -108,6 +108,7 @@ sp_draw_context_get_type (void)
 			sizeof (SPDrawContext),
 			4,
 			(GInstanceInitFunc) sp_draw_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPDrawContext", &info, (GTypeFlags)0);
 	}
@@ -839,6 +840,7 @@ sp_pencil_context_get_type (void)
 			sizeof (SPPencilContext),
 			4,
 			(GInstanceInitFunc) sp_pencil_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_DRAW_CONTEXT, "SPPencilContext", &info, (GTypeFlags)0);
 	}
@@ -1191,6 +1193,7 @@ sp_pen_context_get_type (void)
 			sizeof (SPPenContext),
 			4,
 			(GInstanceInitFunc) sp_pen_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_DRAW_CONTEXT, "SPPenContext", &info, (GTypeFlags)0);
 	}

@@ -51,6 +51,7 @@ sp_chars_get_type (void)
 			sizeof (SPChars),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_chars_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_ITEM, "SPChars", &info, (GTypeFlags)0);
 	}

@@ -45,6 +45,7 @@ sp_guideline_get_type (void)
 			sizeof (SPGuideLine),
 			16,
 			(GInstanceInitFunc) sp_guideline_init,
+			NULL,
 		};
 		guideline_type = g_type_register_static (SP_TYPE_CANVAS_ITEM, "SPGuideLine", &guideline_info, (GTypeFlags)0);
 	}

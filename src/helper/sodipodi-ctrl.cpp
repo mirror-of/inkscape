@@ -62,6 +62,7 @@ sp_ctrl_get_type (void)
 			sizeof (SPCtrl),
 			0,	/* n_preallocs */
 			(GInstanceInitFunc) sp_ctrl_init,
+			NULL
 		};
 		ctrl_type = g_type_register_static (SP_TYPE_CANVAS_ITEM, "SPCtrl", &ctrl_info, (GTypeFlags)0);
 	}

@@ -63,6 +63,7 @@ sp_clippath_get_type (void)
 			sizeof (SPClipPath),
 			16,
 			(GInstanceInitFunc) sp_clippath_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPClipPath", &info, (GTypeFlags)0);
 	}

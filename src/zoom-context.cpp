@@ -53,6 +53,7 @@ sp_zoom_context_get_type (void)
 			sizeof (SPZoomContext),
 			4,
 			(GInstanceInitFunc) sp_zoom_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPZoomContext", &info, (GTypeFlags)0);
 	}

@@ -63,6 +63,7 @@ sp_spiral_context_get_type (void)
 			sizeof (SPSpiralContext),
 			4,
 			(GInstanceInitFunc) sp_spiral_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPSpiralContext", &info, (GTypeFlags)0);
 	}

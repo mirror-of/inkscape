@@ -52,6 +52,7 @@ sp_view_get_type (void)
 			sizeof (SPView),
 			4,
 			(GInstanceInitFunc) sp_view_init,
+			NULL
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPView", &info, (GTypeFlags)0);
 	}

@@ -115,6 +115,7 @@ sp_offset_get_type (void)
 	sizeof (SPOffset),
 	16,			/* n_preallocs */
 	(GInstanceInitFunc) sp_offset_init,
+	NULL,			/* value_table */
       };
       offset_type =
 	g_type_register_static (SP_TYPE_SHAPE, "SPOffset", &offset_info,

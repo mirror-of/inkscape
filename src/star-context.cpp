@@ -64,6 +64,7 @@ sp_star_context_get_type (void)
 			sizeof (SPStarContext),
 			4,
 			(GInstanceInitFunc) sp_star_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPStarContext", &info, (GTypeFlags)0);
 	}

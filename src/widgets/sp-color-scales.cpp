@@ -64,6 +64,7 @@ sp_color_scales_get_type (void)
 			sizeof (SPColorScales),
 			0,	  /* n_preallocs */
 			(GInstanceInitFunc) sp_color_scales_init,
+			NULL
 		};
 
 		type = g_type_register_static (SP_TYPE_COLOR_SELECTOR,

@@ -49,6 +49,7 @@ sp_color_selector_get_type (void)
 			sizeof (SPColorSelector),
 			0,	  /* n_preallocs */
 			(GInstanceInitFunc) sp_color_selector_init,
+			NULL
 		};
 
 		type = g_type_register_static (GTK_TYPE_VBOX,

@@ -56,6 +56,7 @@ sp_arc_context_get_type (void)
 			sizeof (SPArcContext),
 			4,
 			(GInstanceInitFunc) sp_arc_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPArcContext", &info, (GTypeFlags)0);
 	}

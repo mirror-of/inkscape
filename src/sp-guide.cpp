@@ -52,6 +52,7 @@ sp_guide_get_type (void)
 			sizeof (SPGuide),
 			16,
 			(GInstanceInitFunc) sp_guide_init,
+			NULL,	/* value_table */
 		};
 		guide_type = g_type_register_static (SP_TYPE_OBJECT, "SPGuide", &guide_info, (GTypeFlags)0);
 	}

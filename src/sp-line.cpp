@@ -51,6 +51,7 @@ sp_line_get_type (void)
 			sizeof (SPLine),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_line_init,
+			NULL,	/* value_table */
 		};
 		line_type = g_type_register_static (SP_TYPE_SHAPE, "SPLine", &line_info, (GTypeFlags)0);
 	}

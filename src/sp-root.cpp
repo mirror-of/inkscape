@@ -59,6 +59,7 @@ sp_root_get_type (void)
 			sizeof (SPRoot),
 			16,
 			(GInstanceInitFunc) sp_root_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_GROUP, "SPRoot", &info, (GTypeFlags)0);
 	}

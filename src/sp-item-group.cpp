@@ -64,6 +64,7 @@ sp_group_get_type (void)
 			sizeof (SPGroup),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_group_init,
+			NULL,	/* value_table */
 		};
 		group_type = g_type_register_static (SP_TYPE_ITEM, "SPGroup", &group_info, (GTypeFlags)0);
 	}

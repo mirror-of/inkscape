@@ -44,6 +44,7 @@ sp_svg_view_get_type (void)
 			sizeof (SPSVGView),
 			4,
 			(GInstanceInitFunc) sp_svg_view_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_VIEW, "SPSVGView", &info, (GTypeFlags)0);
 	}

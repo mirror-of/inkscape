@@ -100,6 +100,7 @@ sp_knot_get_type (void)
 			sizeof (SPKnot),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_knot_init,
+			NULL
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPKnot", &info, (GTypeFlags)0);
 	}

@@ -69,6 +69,7 @@ sp_event_context_get_type (void)
 			sizeof (SPEventContext),
 			4,
 			(GInstanceInitFunc) sp_event_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPEventContext", &info, (GTypeFlags)0);
 	}

@@ -58,6 +58,7 @@ sp_stop_get_type (void)
 			sizeof (SPStop),
 			16,
 			(GInstanceInitFunc) sp_stop_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_OBJECT, "SPStop", &info, (GTypeFlags)0);
 	}
@@ -205,6 +206,7 @@ sp_gradient_get_type (void)
 			sizeof (SPGradient),
 			16,
 			(GInstanceInitFunc) sp_gradient_init,
+			NULL,	/* value_table */
 		};
 		gradient_type = g_type_register_static (SP_TYPE_PAINT_SERVER, "SPGradient", &gradient_info, (GTypeFlags)0);
 	}
@@ -1246,6 +1248,7 @@ sp_lineargradient_get_type (void)
 			sizeof (SPLinearGradient),
 			16,
 			(GInstanceInitFunc) sp_lineargradient_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_GRADIENT, "SPLinearGradient", &info, (GTypeFlags)0);
 	}
@@ -1588,6 +1591,7 @@ sp_radialgradient_get_type (void)
 			sizeof (SPRadialGradient),
 			16,
 			(GInstanceInitFunc) sp_radialgradient_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_GRADIENT, "SPRadialGradient", &info, (GTypeFlags)0);
 	}

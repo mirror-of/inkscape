@@ -71,6 +71,7 @@ sp_namedview_get_type (void)
 			sizeof (SPNamedView),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_namedview_init,
+			NULL,	/* value_table */
 		};
 		namedview_type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPNamedView", &namedview_info, (GTypeFlags)0);
 	}

@@ -74,6 +74,7 @@ sp_document_get_type (void)
 			sizeof (SPDocument),
 			4,
 			(GInstanceInitFunc) sp_document_init,
+			NULL
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPDocument", &info, (GTypeFlags)0);
 	}

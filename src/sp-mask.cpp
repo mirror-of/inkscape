@@ -62,6 +62,7 @@ sp_mask_get_type (void)
 			sizeof (SPMask),
 			16,
 			(GInstanceInitFunc) sp_mask_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPMask", &info, (GTypeFlags)0);
 	}

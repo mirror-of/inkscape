@@ -70,6 +70,7 @@ sp_item_get_type (void)
 			sizeof (SPItem),
 			16,
 			(GInstanceInitFunc) sp_item_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_OBJECT, "SPItem", &info, (GTypeFlags)0);
 	}

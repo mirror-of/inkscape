@@ -79,6 +79,7 @@ sp_pattern_get_type (void)
 			sizeof (SPPattern),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_pattern_init,
+			NULL,	/* value_table */
 		};
 		pattern_type = g_type_register_static (SP_TYPE_PAINT_SERVER, "SPPattern", &pattern_info, (GTypeFlags)0);
 	}

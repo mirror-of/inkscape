@@ -120,6 +120,7 @@ sp_desktop_get_type (void)
 			sizeof (SPDesktop),
 			4,
 			(GInstanceInitFunc) sp_desktop_init,
+			NULL
 		};
 		type = g_type_register_static (SP_TYPE_VIEW, "SPDesktop", &info, (GTypeFlags)0);
 	}

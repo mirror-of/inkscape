@@ -82,6 +82,7 @@ sp_object_get_type (void)
 			sizeof (SPObject),
 			16,
 			(GInstanceInitFunc) sp_object_init,
+			NULL
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPObject", &info, (GTypeFlags)0);
 	}

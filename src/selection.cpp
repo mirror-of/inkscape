@@ -59,6 +59,7 @@ sp_selection_get_type (void)
 			sizeof (SPSelection),
 			4,
 			(GInstanceInitFunc) sp_selection_init,
+			NULL
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPSelection", &info, (GTypeFlags)0);
 	}

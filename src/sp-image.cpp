@@ -79,6 +79,7 @@ sp_image_get_type (void)
 			sizeof (SPImage),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_image_init,
+			NULL,	/* value_table */
 		};
 		image_type = g_type_register_static (sp_item_get_type (), "SPImage", &image_info, (GTypeFlags)0);
 	}

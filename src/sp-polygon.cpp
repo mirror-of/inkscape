@@ -44,6 +44,7 @@ sp_polygon_get_type (void)
 			sizeof (SPPolygon),
 			16,
 			(GInstanceInitFunc) sp_polygon_init,
+			NULL,	/* value_table */
 		};
 		polygon_type = g_type_register_static (SP_TYPE_SHAPE, "SPPolygon", &polygon_info, (GTypeFlags)0);
 	}

@@ -62,6 +62,7 @@ sp_rect_get_type (void)
 			sizeof (SPRect),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_rect_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_SHAPE, "SPRect", &info, (GTypeFlags)0);
 	}

@@ -85,6 +85,7 @@ sp_genericellipse_get_type (void)
 			sizeof (SPGenericEllipse),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_genericellipse_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_SHAPE, "SPGenericEllipse", &info, (GTypeFlags)0);
 	}
@@ -318,6 +319,7 @@ sp_ellipse_get_type (void)
 			sizeof (SPEllipse),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_ellipse_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPEllipse", &info, (GTypeFlags)0);
 	}
@@ -475,6 +477,7 @@ sp_circle_get_type (void)
 			sizeof (SPCircle),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_circle_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPCircle", &info, (GTypeFlags)0);
 	}
@@ -608,6 +611,7 @@ sp_arc_get_type (void)
 			sizeof (SPArc),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_arc_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_GENERICELLIPSE, "SPArc", &info, (GTypeFlags)0);
 	}

@@ -131,6 +131,7 @@ sp_dyna_draw_context_get_type (void)
 			sizeof (SPDynaDrawContext),
 			4,
 			(GInstanceInitFunc) sp_dyna_draw_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPDynaDrawContext", &info, (GTypeFlags)0);
 	}

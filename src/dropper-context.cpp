@@ -58,6 +58,7 @@ sp_dropper_context_get_type (void)
 			sizeof (SPDropperContext),
 			4,
 			(GInstanceInitFunc) sp_dropper_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPDropperContext", &info, (GTypeFlags)0);
 	}

@@ -39,6 +39,7 @@ sp_animation_get_type (void)
 			sizeof (SPAnimation),
 			16,
 			(GInstanceInitFunc) sp_animation_init,
+			NULL,	/* value_table */
 		};
 		animation_type = g_type_register_static (SP_TYPE_OBJECT, "SPAnimation", &animation_info, (GTypeFlags)0);
 	}
@@ -130,6 +131,7 @@ sp_ianimation_get_type (void)
 			sizeof (SPIAnimation),
 			16,
 			(GInstanceInitFunc) sp_ianimation_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_OBJECT, "SPIAnimation", &info, (GTypeFlags)0);
 	}
@@ -218,6 +220,7 @@ sp_animate_get_type (void)
 			sizeof (SPAnimate),
 			16,
 			(GInstanceInitFunc) sp_animate_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_IANIMATION, "SPAnimate", &info, (GTypeFlags)0);
 	}

@@ -72,6 +72,7 @@ sp_spiral_get_type (void)
 			sizeof (SPSpiral),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_spiral_init,
+			NULL,	/* value_table */
 		};
 		spiral_type = g_type_register_static (SP_TYPE_SHAPE, "SPSPiral", &spiral_info, (GTypeFlags)0);
 	}

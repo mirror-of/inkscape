@@ -151,6 +151,7 @@ inkscape_get_type (void)
 			sizeof (Inkscape::Application),
 			4,
 			(GInstanceInitFunc) inkscape_init,
+			NULL
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "Inkscape_Application", &info, (GTypeFlags)0);
 	}

@@ -40,6 +40,7 @@ sp_paint_server_get_type (void)
 			sizeof (SPPaintServer),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_paint_server_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_OBJECT, "SPPaintServer", &info, (GTypeFlags)0);
 	}

@@ -60,6 +60,7 @@ sp_use_get_type (void)
 			sizeof (SPUse),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_use_init,
+			NULL,	/* value_table */
 		};
 		use_type = g_type_register_static (SP_TYPE_ITEM, "SPUse", &use_info, (GTypeFlags)0);
 	}

@@ -80,6 +80,7 @@ sp_select_context_get_type (void)
 			sizeof (SPSelectContext),
 			4,
 			(GInstanceInitFunc) sp_select_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPSelectContext", &info, (GTypeFlags)0);
 	}

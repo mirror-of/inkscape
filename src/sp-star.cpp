@@ -61,6 +61,7 @@ sp_star_get_type (void)
 			sizeof (SPStar),
 			16,
 			(GInstanceInitFunc) sp_star_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_POLYGON, "SPStar", &info, (GTypeFlags)0);
 	}

@@ -82,6 +82,7 @@ sp_string_get_type ()
 			sizeof (SPString),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_string_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_CHARS, "SPString", &info, (GTypeFlags)0);
 	}
@@ -429,6 +430,7 @@ sp_tspan_get_type ()
 			sizeof (SPTSpan),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_tspan_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_ITEM, "SPTSpan", &info, (GTypeFlags)0);
 	}
@@ -808,6 +810,7 @@ sp_text_get_type ()
 			sizeof (SPText),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_text_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_ITEM, "SPText", &info, (GTypeFlags)0);
 	}

@@ -60,6 +60,7 @@ sp_rect_context_get_type (void)
 			sizeof (SPRectContext),
 			4,
 			(GInstanceInitFunc) sp_rect_context_init,
+			NULL,	/* value_table */
 		};
 		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPRectContext", &info, (GTypeFlags)0);
 	}

@@ -88,6 +88,7 @@ sp_module_print_plain_get_type (void)
 			sizeof (SPModulePrintPlain),
 			16,
 			(GInstanceInitFunc) sp_module_print_plain_init,
+			NULL,
 		};
 		type = (GType) g_type_register_static (SP_TYPE_MODULE_PRINT, "SPModulePrintPlain", &info, (GTypeFlags)0);
 	}
