@@ -18,6 +18,8 @@
 #define SP_IS_DESKTOP_WIDGET(o) (GTK_CHECK_TYPE ((o), SP_TYPE_DESKTOP_WIDGET))
 #define SP_IS_DESKTOP_WIDGET_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_DESKTOP_WIDGET))
 
+namespace Inkscape { namespace Widgets { class LayerSelector; } }
+
 struct SPDesktopWidget {
     SPViewWidget viewwidget;
 
@@ -52,6 +54,8 @@ struct SPDesktopWidget {
     SPCanvas *canvas;
 
     GtkAdjustment *hadj, *vadj;
+
+    Inkscape::Widgets::LayerSelector *layer_selector_gtkmm;
 
     void setMessage(Inkscape::MessageType type, gchar const *message);
     static void _update_layer_display(SPObject *layer, SPDesktopWidget *widget);

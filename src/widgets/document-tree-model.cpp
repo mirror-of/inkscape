@@ -17,6 +17,8 @@
 namespace Inkscape {
 namespace Widgets {
 
+DocumentTreeModel_Class DocumentTreeModel::_document_tree_model_class;
+
 Glib::RefPtr<DocumentTreeModel> DocumentTreeModel::create(SPDocument *document)
 {
     return Glib::RefPtr<DocumentTreeModel>(new DocumentTreeModel(document));
@@ -151,7 +153,7 @@ Gtk::TreePath DocumentTreeModel::get_path_vfunc(Gtk::TreeIter const &iter)
 {
     Gtk::TreePath path;
 
-    // TODO: this process is intensive and needs a cache in front of it
+    // TODO: this process is intensive and needs to be memoized somehow
 
     SPRepr *repr=reinterpret_cast<SPRepr *>(iter.gobj()->user_data);
     for ( ; repr && SP_REPR_TYPE(repr) != SP_XML_DOCUMENT_NODE

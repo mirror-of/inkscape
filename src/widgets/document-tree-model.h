@@ -43,7 +43,7 @@ protected:
     DocumentTreeModel(SPDocument *document);
 
     void set_value_impl(Gtk::TreeIter const &row, int column, Glib::ValueBase const &value);
-    void get_value_impl(Gtk::TreeIter const &row, int column, Glib::ValueBase &value) const;
+    //void get_value_impl(Gtk::TreeIter const &row, int column, Glib::ValueBase &value) const;
 
     Gtk::TreeModelFlags get_flags_vfunc() const;
 

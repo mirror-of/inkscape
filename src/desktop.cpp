@@ -45,6 +45,7 @@
 #include "widgets/widget-sizes.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/spinbutton-events.h"
+#include "widgets/layer-selector.h"
 #include "display/canvas-arena.h"
 #include "forward.h"
 #include "inkscape-private.h"
@@ -956,6 +957,11 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, STATUS_COORD_SKIP);
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), coord_box, FALSE, FALSE, 1);
 
+    dtw->layer_selector_gtkmm = new Inkscape::Widgets::LayerSelector(NULL);
+    dtw->layer_selector_gtkmm->reference();
+    dtw->layer_selector_gtkmm->set_size_request(-1, SP_ICON_SIZE_BUTTON);
+    gtk_box_pack_start(GTK_BOX(dtw->statusbar), GTK_WIDGET(dtw->layer_selector_gtkmm->gobj()), FALSE, FALSE, 1);
+
     dtw->layer_selector = gtk_option_menu_new();
     gtk_tooltips_set_tip(tt, dtw->layer_selector, _("Select layer"), NULL);
     gtk_widget_set_usize(dtw->layer_selector, -1, SP_ICON_SIZE_BUTTON);
@@ -978,6 +984,8 @@ static void
 sp_desktop_widget_destroy (GtkObject *object)
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (object);
+
+    dtw->layer_selector_gtkmm->unreference();
 
     if (dtw->desktop) {
         g_object_unref (G_OBJECT (dtw->desktop));
@@ -1349,6 +1357,8 @@ sp_desktop_widget_new (SPNamedView *namedview)
 
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
+
+    dtw->layer_selector_gtkmm->setDesktop(dtw->desktop);
 
     dtw->desktop->connectCurrentLayerChanged(sigc::bind(sigc::ptr_fun(&SPDesktopWidget::_update_layer_display), dtw));
     SPDesktopWidget::_update_layer_display(dtw->desktop->currentLayer(), dtw);

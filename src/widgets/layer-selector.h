@@ -12,7 +12,9 @@
 #ifndef SEEN_INKSCAPE_WIDGETS_LAYER_SELECTOR
 #define SEEN_INKSCAPE_WIDGETS_LAYER_SELECTOR
 
-#include <gtkmm/optionmenu.h>
+#include <gtkmm/box.h>
+#include <gtkmm/combobox.h>
+#include <gtkmm/togglebutton.h>
 
 class SPDesktop;
 class SPDocument;
@@ -20,12 +22,18 @@ class SPDocument;
 namespace Inkscape {
 namespace Widgets {
 
-class LayerSelector : public Gtk::OptionMenu {
+class LayerSelector : public Gtk::HBox {
 public:
     LayerSelector(SPDesktop *desktop);
     ~LayerSelector();
 
+    SPDesktop *desktop() { return _desktop; }
+    void setDesktop(SPDesktop *desktop);
+
 private:
+    Gtk::ComboBox _selector;
+    Gtk::ToggleButton _lock_button;
+    Gtk::ToggleButton _hide_button;
     SPDesktop *_desktop;
 };
 

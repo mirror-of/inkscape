@@ -2,6 +2,12 @@
 
 	* src/render/stroke.cpp: a little more work on the stroking code
 
+	* src/widgets/document-tree-model.cpp, src/widgets/document-tree-model.h,
+	  src/widgets/layer-selector.cpp, src/widgets/layer-selector.h,
+	  src/desktop.cpp, src/sp-desktop-widget.h:
+
+	  work on new gtkmm-ified layer selector
+
 2004-09-15  Carl Hetherington <inkscape@carlh.net>
 
 	* src/display/canvas-bpath.cpp, src/display/nr-arena-shape.cpp
