@@ -67,11 +67,15 @@ LayerPropertiesDialog::~LayerPropertiesDialog()
 void
 LayerPropertiesDialog::apply()
 {
-    SPSelection * const selection = getSelection();
-    g_return_if_fail (!selection->isEmpty());
+    // Retrieve text from the dialog
+    Glib::ustring name = _layer_name_entry.get_text();
 
-    // TODO: Get the text from the widget
-    // TODO: Update the selection with the text from widget
+    SPSelection * const selection = getSelection();
+    if (selection && selection->isEmpty()) {
+        g_warning("Selection empty");
+    } else {
+        g_warning("Selection not empty");
+    }
 
     _button_apply.set_sensitive(false);
 }
