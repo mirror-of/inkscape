@@ -64,7 +64,6 @@
 #include "selection-chemistry.h"
 #include "sp-desktop-widget.h"
 #include "sp-item-transform.h"
-#include "sp-namedview.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-translate-scale-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
@@ -393,9 +392,8 @@ sp_select_toolbox_new(SPDesktop *desktop)
     GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     sp_unit_selector_setsize(us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
     sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
-    SPNamedView *nv = desktop->namedview;
-    if (nv->doc_units)
-        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), nv->doc_units);
+    if (sp_desktop_get_default_unit (desktop))
+        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit (desktop));
     g_signal_connect(G_OBJECT(us), "set_unit", G_CALLBACK(aux_set_unit), spw);
 
     // four spinbuttons
