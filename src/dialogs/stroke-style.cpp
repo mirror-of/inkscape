@@ -817,7 +817,7 @@ void mm_print (gchar *say, NR::Matrix m)
 
 
 GtkWidget *
-sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, SPDocument *sandbox, gchar *menu_id)
+sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, SPDocument *sandbox, gchar *menu_id, const NRArena *arena, unsigned int visionkey, NRArenaItem *root)
 {
     // the object of the marker
     const SPObject *marker = source->getObjectById(mname);
@@ -836,22 +836,15 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     sp_repr_append_child (defsrepr, mrepr);
     sp_repr_unref (mrepr);
 
-    sp_document_ensure_up_to_date(sandbox);
-
 // Uncomment this to get the sandbox documents saved (useful for debugging)
     //FILE *fp = fopen (g_strconcat(mname, ".svg", NULL), "w");
     //sp_repr_save_stream (sp_document_repr_doc (sandbox), fp);
     //fclose (fp);
 
-    /* Create new arena */
-    static NRArena *arena = NRArena::create();
-    /* Create ArenaItem and set transform */
-    unsigned int visionkey = sp_item_display_key_new(1);
-    NRArenaItem *root = sp_item_invoke_show( SP_ITEM(SP_DOCUMENT_ROOT (sandbox)), arena, visionkey, SP_ITEM_SHOW_PRINT );
-
     // object to render; note that the id is the same as that of the menu we're building
     SPObject *object = sandbox->getObjectById(menu_id);
     sp_document_root (sandbox)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    sp_document_ensure_up_to_date(sandbox);
 
     if (object == NULL || !SP_IS_ITEM(object))
         return NULL; // sandbox broken?
@@ -859,52 +852,46 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     // Find object's bbox in document
     NR::Matrix const i2doc(sp_item_i2doc_affine(SP_ITEM(object)));
 
-//    mm_print("i2doc", i2doc);
-
     NRRect dbox;
     sp_item_invoke_bbox(SP_ITEM(object), &dbox, i2doc, TRUE);
 
     if (nr_rect_d_test_empty(&dbox))
         return NULL;
 
-//    g_print ("dbox %g %g %g %g\n", dbox.x0, dbox.x1, dbox.y0, dbox.y1);
-
-    NRRectL ibox, area, ua;
-    NRMatrix t;
-    NRPixBlock B;
-    NRGC gc(NULL);
-    double sf;
-    int width, height, dx, dy;
-
     /* Update to renderable state */
-    sf = 0.8;
+    NRMatrix t;
+    double sf = 0.8;
     nr_matrix_set_scale(&t, sf, sf);
     nr_arena_item_set_transform(root, &t);
+    NRGC gc(NULL);
     nr_matrix_set_identity(&gc.transform);
     nr_arena_item_invoke_update( root, NULL, &gc,
                                  NR_ARENA_ITEM_STATE_ALL,
                                  NR_ARENA_ITEM_STATE_NONE );
 
     /* Item integer bbox in points */
+    NRRectL ibox;
     ibox.x0 = (int) floor(sf * dbox.x0 + 0.5);
     ibox.y0 = (int) floor(sf * dbox.y0 + 0.5);
     ibox.x1 = (int) floor(sf * dbox.x1 + 0.5);
     ibox.y1 = (int) floor(sf * dbox.y1 + 0.5);
 
     /* Find visible area */
-    width = ibox.x1 - ibox.x0;
-    height = ibox.y1 - ibox.y0;
-    //dx = (size - width) / 2;
-    //dy = (size - height) / 2;
-    dx=dy=size;
-    dx=(dx-width)/2; // watch out for size, since 'unsigned'-'signed' can cause problems if the result is negative
-    dy=(dy-height)/2;
+    int width = ibox.x1 - ibox.x0;
+    int height = ibox.y1 - ibox.y0;
+    int dx = size;
+    int dy = size;
+    dx=(dx - width)/2; // watch out for size, since 'unsigned'-'signed' can cause problems if the result is negative
+    dy=(dy - height)/2;
+
+    NRRectL area;
     area.x0 = ibox.x0 - dx;
     area.y0 = ibox.y0 - dy;
     area.x1 = area.x0 + size;
     area.y1 = area.y0 + size;
 
     /* Actual renderable area */
+    NRRectL ua;
     ua.x0 = MAX(ibox.x0, area.x0);
     ua.y0 = MAX(ibox.y0, area.y0);
     ua.x1 = MIN(ibox.x1, area.x1);
@@ -915,6 +902,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     memset(px, 0x00, 4 * size * size);
 
     /* Render */
+    NRPixBlock B;
     nr_pixblock_setup_extern( &B, NR_PIXBLOCK_MODE_R8G8B8A8N,
                               ua.x0, ua.y0, ua.x1, ua.y1,
                               px + 4 * size * (ua.y0 - area.y0) +
@@ -931,16 +919,11 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
                               8, size, size, size * 4,
                               (GdkPixbufDestroyNotify)nr_free,
                               NULL));
-
     return pb;
 }
 
 
-
-
 #define MARKER_ITEM_MARGIN 0
-
-
 
 
 /**
@@ -962,6 +945,13 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
             ml = g_slist_prepend (ml, ochild);
         }
     }
+
+    // Do this here, outside of loop, to speed up preview generation:
+    /* Create new arena */
+    const NRArena *arena = NRArena::create();
+    /* Create ArenaItem and set transform */
+    const unsigned int visionkey = sp_item_display_key_new(1);
+    NRArenaItem *root =  sp_item_invoke_show( SP_ITEM(SP_DOCUMENT_ROOT (sandbox)), (NRArena *) arena, visionkey, SP_ITEM_SHOW_PRINT );
 
     for (; ml != NULL; ml = ml->next) {
 
@@ -999,7 +989,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
         gtk_widget_show(hb);
 
         // generate preview
-        GtkWidget *prv = sp_marker_prev_new (22, markid, source, sandbox, menu_id);
+        GtkWidget *prv = sp_marker_prev_new (22, markid, source, sandbox, menu_id, arena, visionkey, root);
         gtk_widget_show(prv);
         gtk_box_pack_start(GTK_BOX(hb), prv, FALSE, FALSE, 6);
 
