@@ -444,13 +444,11 @@ gr_fork (GtkWidget *button, GtkWidget *widget)
         SPGradient *gr = (SPGradient *) g_object_get_data (G_OBJECT(i), "gradient");
 
         if (gr) {
-            Inkscape::XML::Node *repr = SP_OBJECT_REPR (gr)->duplicate();
-            sp_repr_add_child (SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document)), repr, NULL);
-            SPGradient *gr_new = (SPGradient *) document->getObjectByRepr(repr);
-            gr_new = sp_gradient_ensure_vector_normalized (gr_new);
-            sp_repr_unref (repr);
-            gr_apply_gradient (selection, ev? ev->get_drag() : NULL, gr_new);
-            sp_document_done (document);
+            SPGradient *gr_new = sp_gradient_fork_vector_if_necessary (gr);
+            if (gr_new != gr) {
+                gr_apply_gradient (selection, ev? ev->get_drag() : NULL, gr_new);
+                sp_document_done (document);
+            }
         }
     }
 }
