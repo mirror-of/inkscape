@@ -47,12 +47,10 @@ URI::~URI() {
 
 /** \brief Assignment operator. */
 URI &URI::operator=(URI const &uri) {
-    if ( &uri != this )
-    {
-        uri._impl->reference();
-        _impl->unreference();
-        _impl = uri._impl;
-    }
+// No check for self-assignment needed, as _impl refcounting increments first.
+    uri._impl->reference();
+    _impl->unreference();
+    _impl = uri._impl;
     return *this;
 }
 
