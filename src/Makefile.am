@@ -106,6 +106,7 @@ EXTRA_PROGRAMS =	\
 	libnr/testnr
 
 TESTS =	\
+	attributes-test$(EXEEXT)	\
 	extract-uri-test$(EXEEXT)	\
 	mod360-test$(EXEEXT)	\
 	round-test$(EXEEXT)	\
@@ -127,6 +128,7 @@ TESTS =	\
 # TESTS items can be scripts etc.
 
 check_PROGRAMS =	\
+	attributes-test	\
 	extract-uri-test	\
 	mod360-test	\
 	round-test	\

@@ -266,6 +266,9 @@ inkscape_LDFLAGS = --export-dynamic $(kdeldflags)
 inkview_SOURCES = inkview.cpp $(win32_sources)
 inkview_LDADD = $(all_libs)
 
+attributes_test_SOURCES = attributes-test.cpp
+attributes_test_LDADD = attributes.$(OBJEXT) -lglib-2.0
+
 mod360_test_SOURCES = mod360-test.cpp
 mod360_test_LDADD = libinkpre.a -lglib-2.0
 
