@@ -463,10 +463,10 @@ sp_symbol_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned 
 	if (SP_OBJECT_IS_CLONED (symbol)) {
 		/* Cloned <symbol> is actually renderable */
 
-		nr_matrix_multiply (a, &symbol->c2p, transform);
+		nr_matrix_multiply (&a, &symbol->c2p, transform);
 
 		if (((SPItemClass *) (parent_class))->bbox) {
-			((SPItemClass *) (parent_class))->bbox (item, bbox, a, flags);
+			((SPItemClass *) (parent_class))->bbox (item, bbox, &a, flags);
 		}
 	}
 }

@@ -712,10 +712,10 @@ sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned in
 
 	root = SP_ROOT (item);
 
-	nr_matrix_multiply (a, &root->c2p, transform);
+	nr_matrix_multiply (&a, &root->c2p, transform);
 
 	if (((SPItemClass *) (parent_class))->bbox) {
-		((SPItemClass *) (parent_class))->bbox (item, bbox, a, flags);
+		((SPItemClass *) (parent_class))->bbox (item, bbox, &a, flags);
 	}
 }
 
