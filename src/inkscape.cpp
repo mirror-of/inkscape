@@ -68,6 +68,8 @@ enum {
 	DESTROY_DOCUMENT,
 	COLOR_SET,
 	SHUTDOWN_SIGNAL,
+	DIALOGS_HIDE,
+	DIALOGS_UNHIDE,
 	LAST_SIGNAL
 };
 
@@ -98,6 +100,7 @@ struct Inkscape::Application {
 	GSList *documents;
 	GSList *desktops;
 	gchar *argv0;
+	gboolean dialogs_toggle;
 };
 
 struct Inkscape::ApplicationClass {
@@ -116,6 +119,8 @@ struct Inkscape::ApplicationClass {
 	void (* destroy_document) (Inkscape::Application *inkscape, SPDocument *doc);
 	void (* color_set) (Inkscape::Application *inkscape, SPColor *color, double opacity);
 	void (* shut_down) (Inkscape::Application *inkscape);
+	void (* dialogs_hide) (Inkscape::Application *inkscape);
+	void (* dialogs_unhide) (Inkscape::Application *inkscape);
 };
 
 static GObjectClass * parent_class;
@@ -253,6 +258,20 @@ inkscape_class_init (Inkscape::ApplicationClass * klass)
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
 							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, shut_down),
+							   NULL, NULL,
+							   g_cclosure_marshal_VOID__VOID,
+							   G_TYPE_NONE, 0);
+	inkscape_signals[DIALOGS_HIDE] =        g_signal_new ("dialogs_hide",
+							   G_TYPE_FROM_CLASS (klass),
+							   G_SIGNAL_RUN_FIRST,
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, dialogs_hide),
+							   NULL, NULL,
+							   g_cclosure_marshal_VOID__VOID,
+							   G_TYPE_NONE, 0);
+	inkscape_signals[DIALOGS_UNHIDE] =        g_signal_new ("dialogs_unhide",
+							   G_TYPE_FROM_CLASS (klass),
+							   G_SIGNAL_RUN_FIRST,
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, dialogs_unhide),
 							   NULL, NULL,
 							   g_cclosure_marshal_VOID__VOID,
 							   G_TYPE_NONE, 0);
@@ -877,6 +896,33 @@ inkscape_switch_desktops_prev ()
 
 	w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_prev_desktop ()), "window");
 	gtk_window_present (w);
+}
+
+void
+inkscape_dialogs_hide ()
+{
+	g_return_if_fail (inkscape != NULL);
+
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_HIDE], 0);
+	inkscape->dialogs_toggle = FALSE;
+}
+
+void
+inkscape_dialogs_unhide ()
+{
+	g_return_if_fail (inkscape != NULL);
+
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_UNHIDE], 0);
+	inkscape->dialogs_toggle = TRUE;
+}
+
+void
+inkscape_dialogs_toggle ()
+{
+	if (inkscape->dialogs_toggle)
+		inkscape_dialogs_hide ();
+	else 
+		inkscape_dialogs_unhide ();
 }
 
 /* fixme: These need probably signals too */

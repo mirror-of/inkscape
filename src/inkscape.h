@@ -59,6 +59,10 @@ SPDesktop * inkscape_active_desktop (void);
 void inkscape_switch_desktops_next ();
 void inkscape_switch_desktops_prev ();
 
+void inkscape_dialogs_hide ();
+void inkscape_dialogs_unhide ();
+void inkscape_dialogs_toggle ();
+
 /*
  * fixme: This has to be rethought
  */
