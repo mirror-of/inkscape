@@ -35,6 +35,7 @@
 #include "style.h"
 #include "selection.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "pixmaps/cursor-text.xpm"
@@ -304,13 +305,8 @@ sp_text_context_setup_text (SPTextContext *tc)
 	sp_repr_set_attr (rtext, "xml:space", "preserve"); // we preserve spaces in the text objects we create
 
 	/* Set style */
-	SPRepr *style = inkscape_get_repr (INKSCAPE, "tools.text");
-	if (style) {
-		SPCSSAttr *css;
-		css = sp_repr_css_attr_inherited (style, "style");
-		sp_repr_css_set (rtext, css, "style");
-		sp_repr_css_attr_unref (css);
-	}
+	sp_desktop_apply_style_tool (SP_EVENT_CONTEXT_DESKTOP(ec), rtext, "tools.text", true);
+
 	sp_repr_set_double (rtext, "x", tc->pdoc[NR::X]);
 	sp_repr_set_double (rtext, "y", tc->pdoc[NR::Y]);
 
