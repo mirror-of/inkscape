@@ -14,6 +14,11 @@
 #include <math.h>
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-fns.h>
+#include <libnr/nr-rotate-ops.h>
+#include <libnr/nr-scale-ops.h>
+#include <libnr/nr-translate-ops.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtksignal.h>
 #include "macros.h"
@@ -34,7 +39,6 @@
 #include "sp-metrics.h"
 #include "helper/sp-ctrlline.h"
 #include "prefs-utils.h"
-#include <libnr/nr-point-fns.h>
 
 static void sp_sel_trans_update_handles(SPSelTrans &seltrans);
 static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans);
@@ -982,7 +986,7 @@ void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle const &handle, 
 	for(int i = 0; i < 2; i++)
 		if (fabs (s[i]) < 1e-15)
 			s[i] = 1e-15;
-	NR::Matrix stretch = NR::scale(s);
+	NR::Matrix const stretch((NR::scale(s)));
 	sp_sel_trans_transform (seltrans, stretch, norm);
 }
 
@@ -999,7 +1003,7 @@ void sp_sel_trans_scale(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Poin
 		if (fabs (s[i]) < 1e-9)
 			s[i] = 1e-9; 
 	}
-	NR::Matrix scale = NR::scale(s);
+	NR::Matrix const scale((NR::scale(s)));
 	sp_sel_trans_transform (seltrans, scale, norm);
 }
 
