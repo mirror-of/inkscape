@@ -18,7 +18,6 @@
 #include <exception>
 #include "uri.h"
 #include "forward.h"
-#include "document.h"
 
 namespace Inkscape {
 
