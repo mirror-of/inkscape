@@ -738,7 +738,14 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
     g_return_if_fail (text != NULL);
     g_return_if_fail (SP_IS_TEXT (text));
 
-    SPRepr *repr = SP_OBJECT_REPR (text);
+    SPRepr *repr;
+    bool is_textpath = false;
+    if (SP_IS_TEXT_TEXTPATH (text)) {
+        repr = SP_OBJECT_REPR (sp_object_first_child(SP_OBJECT (text)));
+        is_textpath = true;
+    } else {
+        repr = SP_OBJECT_REPR (text);
+    }
     SPStyle *style = SP_OBJECT_STYLE (text);
 
     if (!str) str = "";
@@ -753,24 +760,32 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
 
     gchar *p = content;
     while (p) {
-        SPRepr *rtspan, *rstr;
         gchar *e = strchr (p, '\n');
-        if (e) *e = '\0';
-        rtspan = sp_repr_new ("tspan");
-        sp_repr_set_double (rtspan, "x", cp[NR::X]);
-        sp_repr_set_double (rtspan, "y", cp[NR::Y]);
-        if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-            cp[NR::X] -= style->font_size.computed;
+        if (is_textpath) {
+            if (e) *e = ' '; // no lines for textpath, replace newlines with spaces
         } else {
-            cp[NR::Y] += style->font_size.computed;
+            if (e) *e = '\0'; // create a tspan for each line
+            SPRepr *rtspan = sp_repr_new ("tspan");
+            sp_repr_set_double (rtspan, "x", cp[NR::X]);
+            sp_repr_set_double (rtspan, "y", cp[NR::Y]);
+            if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+                cp[NR::X] -= style->font_size.computed;
+            } else {
+                cp[NR::Y] += style->font_size.computed;
+            }
+            sp_repr_set_attr (rtspan, "sodipodi:role", "line");
+            SPRepr *rstr = sp_xml_document_createTextNode (sp_repr_document (repr), p);
+            sp_repr_add_child (rtspan, rstr, NULL);
+            sp_repr_unref(rstr);
+            sp_repr_append_child (repr, rtspan);
+            sp_repr_unref(rtspan);
         }
-        sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-        rstr = sp_xml_document_createTextNode (sp_repr_document (repr), p);
-        sp_repr_add_child (rtspan, rstr, NULL);
-        sp_repr_unref(rstr);
-        sp_repr_append_child (repr, rtspan);
-        sp_repr_unref(rtspan);
         p = (e) ? e + 1 : NULL;
+    }
+    if (is_textpath) { 
+        SPRepr *rstr = sp_xml_document_createTextNode (sp_repr_document (repr), content);
+        sp_repr_add_child (repr, rstr, NULL);
+        sp_repr_unref(rstr);
     }
 
     g_free (content);
