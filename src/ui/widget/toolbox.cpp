@@ -149,6 +149,8 @@ Toolbox::init_style(Gtk::ToolbarStyle const &style)
 bool
 Toolbox::on_popup_context_menu(int x, int y, int button)
 {
+    (void)x;
+    (void)y;
     _context_menu->popup(button, gtk_get_current_event_time());
     return true;
 }
@@ -156,6 +158,7 @@ Toolbox::on_popup_context_menu(int x, int y, int button)
 void
 Toolbox::on_child_attached(Gtk::Widget *widget)
 {
+    (void)widget;
     Gtk::Toolbar *toolbar = static_cast<Gtk::Toolbar*>(_widget);
 
     if (!(toolbar->get_show_arrow())) {
@@ -179,6 +182,7 @@ Toolbox::on_child_attached(Gtk::Widget *widget)
 void
 Toolbox::on_child_detached(Gtk::Widget *widget)
 {
+    (void)widget;
     _detach_grp->set_sensitive(true);
 
     Glib::RefPtr<Gtk::RadioAction>::cast_static(_detach_grp->get_action("ShowArrow"))
