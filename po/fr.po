@@ -6,14 +6,15 @@
 # Didier Conchaudron <conchaudron@free.fr>, 2003.
 # Frederic Rodrigo <f.rodrigo@tuxfamily.org>, 2004.
 # Frederic Rodrigo <f.rodrigo free.fr>, 2004.
+# Matiphas <matiphas _a_ free _point_ fr>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-13 11:22+0100\n"
-"PO-Revision-Date: 2004-11-10 21:27+0100\n"
-"Last-Translator: Frederic Rodrigo <f.rodrigo free.fr>\n"
+"PO-Revision-Date: 2004-11-14 10:31+0100\n"
+"Last-Translator: Matiphas <matiphas _a_ free _point_ fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -82,7 +83,7 @@ msgstr "Déplacer %s"
 
 #: src/desktop.cpp:915
 msgid "Zoom drawing if window size changes"
-msgstr "Ajuster le dessin à la fenêtre"
+msgstr "Zoomer le dessin si la taille de la fenêtre change"
 
 #: src/desktop.cpp:937 src/dialogs/display-settings.cpp:1081
 #: src/verbs.cpp:1633
@@ -150,7 +151,7 @@ msgstr ""
 
 #: src/desktop.cpp:1621
 msgid "No previous zoom."
-msgstr "Pas de zoom arrière."
+msgstr "Plus de zoom arrière."
 
 #: src/desktop.cpp:1644
 msgid "No next zoom."
@@ -174,7 +175,7 @@ msgstr "Sélection"
 
 #: src/dialogs/align.cpp:458 src/dialogs/text-edit.cpp:210
 msgid "Layout"
-msgstr "Agencement"
+msgstr "Agencer"
 
 #: src/dialogs/align.cpp:459 src/dialogs/align.cpp:973
 msgid "Align"
@@ -194,11 +195,11 @@ msgstr "Relativement à : "
 
 #: src/dialogs/align.cpp:469 src/dialogs/align.cpp:939
 msgid "Right side of aligned objects to left side of anchor"
-msgstr "Aligner les cotés droits des objets au coté gauche de l'ancre"
+msgstr "Aligner les côtés droits des objets au coté gauche de l'ancre"
 
 #: src/dialogs/align.cpp:472 src/dialogs/align.cpp:941
 msgid "Left side of aligned objects to left side of anchor"
-msgstr "Aligner les cotés gauches des objets au coté gauche de l'ancre"
+msgstr "Aligner les côtés gauches des objets au coté gauche de l'ancre"
 
 #: src/dialogs/align.cpp:475 src/dialogs/align.cpp:943
 msgid "Center horizontally"
@@ -206,11 +207,11 @@ msgstr "Centrer horizontalement"
 
 #: src/dialogs/align.cpp:478 src/dialogs/align.cpp:945
 msgid "Right side of aligned objects to right side of anchor"
-msgstr "Aligner les cotés droits des objets au coté droit de l'ancre"
+msgstr "Aligner les côtés droits des objets au coté droit de l'ancre"
 
 #: src/dialogs/align.cpp:481 src/dialogs/align.cpp:947
 msgid "Left side of aligned objects to right side of anchor"
-msgstr "Aligner les cotés gauches des objets au coté droit de l'ancre"
+msgstr "Aligner les côtés gauches des objets au coté droit de l'ancre"
 
 #: src/dialogs/align.cpp:484 src/dialogs/align.cpp:950
 msgid "Bottom of aligned objects to top of anchor"
@@ -226,7 +227,7 @@ msgstr "Centrer verticalement"
 
 #: src/dialogs/align.cpp:493 src/dialogs/align.cpp:956
 msgid "Bottom of aligned objects to bottom of anchor"
-msgstr "Aligner les bas de objets avec le bas de l'ancre"
+msgstr "Aligner les bas des objets avec le bas de l'ancre"
 
 #: src/dialogs/align.cpp:496 src/dialogs/align.cpp:958
 msgid "Top of aligned objects to bottom of anchor"
@@ -234,7 +235,7 @@ msgstr "Aligner les hauts de objets avec le bas de l'ancre"
 
 #: src/dialogs/align.cpp:503 src/dialogs/align.cpp:994
 msgid "Distribute left sides of objects at even distances"
-msgstr "Distribuer les cotés gauches des objets à distances égales"
+msgstr "Distribuer les côtés gauches des objets à distances égales"
 
 #: src/dialogs/align.cpp:507 src/dialogs/align.cpp:1002
 msgid "Distribute centers of objects at even distances horizontally"
@@ -242,7 +243,7 @@ msgstr "Distribuer les centres des objets à distances égales horizontalement"
 
 #: src/dialogs/align.cpp:511 src/dialogs/align.cpp:1009
 msgid "Distribute right sides of objects at even distances"
-msgstr "Distribuer les cotés droits des objets à distances égales"
+msgstr "Distribuer les côtés droits des objets à distances égales"
 
 #: src/dialogs/align.cpp:515 src/dialogs/align.cpp:1016
 msgid "Distribute horizontal distance between objects equally"
@@ -250,7 +251,7 @@ msgstr "Distribuer des distances égales horizontalement entre les objets"
 
 #: src/dialogs/align.cpp:519 src/dialogs/align.cpp:1038
 msgid "Distribute bottom sides of objects at even distances"
-msgstr "Distribuer les cotés bas des objets à distances égales"
+msgstr "Distribuer les côtés bas des objets à distances égales"
 
 #: src/dialogs/align.cpp:523 src/dialogs/align.cpp:1031
 msgid "Distribute centers of objects at even distances vertically"
@@ -258,7 +259,7 @@ msgstr "Distribuer les centres des objets à distances égales verticalement"
 
 #: src/dialogs/align.cpp:527 src/dialogs/align.cpp:1023
 msgid "Distribute top sides of objects at even distances"
-msgstr "Distribuer les cotés hauts des objets à distances égales"
+msgstr "Distribuer les côtés hauts des objets à distances égales"
 
 #: src/dialogs/align.cpp:531 src/dialogs/align.cpp:1045
 msgid "Distribute vertical distance between objects equally"
@@ -313,7 +314,7 @@ msgstr "Nettoyer (_C)"
 
 #: src/dialogs/debugdialog.cpp:155
 msgid "Capture log messages"
-msgstr "Capture les messages de log"
+msgstr "Capturer les messages de log"
 
 #: src/dialogs/debugdialog.cpp:157
 msgid "Release log messages"
@@ -391,7 +392,7 @@ msgstr "Espacement des lignes de la grille majeure :"
 #. see grid settings in the "Document Preferences" dialog
 #: src/dialogs/desktop-properties.cpp:881
 msgid "lines"
-msgstr "Lignes"
+msgstr "lignes"
 
 #. Guidelines page
 #: src/dialogs/desktop-properties.cpp:895
@@ -404,7 +405,7 @@ msgstr "Afficher les guides"
 
 #: src/dialogs/desktop-properties.cpp:904
 msgid "Snap bounding boxes to guides"
-msgstr "Faire coller les boites aux guides"
+msgstr "Faire coller les boites de contour aux guides"
 
 #: src/dialogs/desktop-properties.cpp:905
 msgid "Snap points to guides"
@@ -424,7 +425,7 @@ msgstr "Couleur de mise en évidence :"
 
 #: src/dialogs/desktop-properties.cpp:927
 msgid "Highlighted guideline color"
-msgstr "Couleur de surbrillance de ligne de guide"
+msgstr "Couleur de mise en évidence des lignes de guide"
 
 #: src/dialogs/desktop-properties.cpp:942
 msgid "Background (also for export)"
@@ -440,15 +441,15 @@ msgstr "Afficher le canevas"
 
 #: src/dialogs/desktop-properties.cpp:951
 msgid "Border on top of drawing"
-msgstr "Contour au-dessus du dessin"
+msgstr "Bordure au-dessus du dessin"
 
 #: src/dialogs/desktop-properties.cpp:954
 msgid "Border color"
-msgstr "Couleur de bord"
+msgstr "Couleur de la bordure"
 
 #: src/dialogs/desktop-properties.cpp:955
 msgid "Canvas border color"
-msgstr "Couleur du bord du canevas"
+msgstr "Couleur de la bordure du canevas"
 
 #: src/dialogs/desktop-properties.cpp:971
 msgid "Canvas size:"
@@ -456,7 +457,7 @@ msgstr "Taille du canevas :"
 
 #: src/dialogs/desktop-properties.cpp:995 src/dialogs/export.cpp:129
 msgid "Custom"
-msgstr "Sur mesure"
+msgstr "Personnalisé"
 
 #: src/dialogs/desktop-properties.cpp:1006
 msgid "Canvas orientation:"
@@ -535,8 +536,8 @@ msgstr "Boite de contour"
 #: src/dialogs/display-settings.cpp:240
 msgid "Show only a box outline of the objects when moving or transforming"
 msgstr ""
-"Afficher seulement un boite de contours lors des déplacements ou des "
-"transformations"
+"N'afficher que les boites de contours des objets lors de leurs déplacements "
+"ou transformations"
 
 #: src/dialogs/display-settings.cpp:246
 msgid "Per-object selection cue:"
@@ -569,19 +570,19 @@ msgstr "Boite"
 
 #: src/dialogs/display-settings.cpp:273
 msgid "Each selected object displays its bounding box"
-msgstr "Tous les objets sélectionnés affichent leur boite"
+msgstr "Tous les objets sélectionnés affichent leurs boites de contour"
 
 #: src/dialogs/display-settings.cpp:278
 msgid "Default scale origin:"
-msgstr "Origine de mise à l'échelle par défaut :"
+msgstr "Origine par défaut de mise à l'échelle :"
 
 #: src/dialogs/display-settings.cpp:289
 msgid "Opposite bounding box edge"
-msgstr "Arrête opposé de la boite de l'objet"
+msgstr "Arrête opposée de la boite de contour"
 
 #: src/dialogs/display-settings.cpp:290
 msgid "Default scale origin will be on the bounding box of the item"
-msgstr "L'origine par défaut de mise à l'échelle sera sur la boite de l'item"
+msgstr "L'origine par défaut de mise à l'échelle sera sur la boite de contour de l'item"
 
 #: src/dialogs/display-settings.cpp:296
 msgid "Farthest opposite node"
@@ -590,8 +591,8 @@ msgstr "Le nœud opposé le plus éloigné"
 #: src/dialogs/display-settings.cpp:297
 msgid "Default scale origin will be on the bounding box of the item's points"
 msgstr ""
-"L'origine par défaut de mise à l'échelle sera sur la boite des points de "
-"l'item"
+"L'origine par défaut de mise à l'échelle sera sur la boite de contour des "
+"points de l'item"
 
 #: src/dialogs/display-settings.cpp:349
 msgid "degrees"
@@ -602,8 +603,8 @@ msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
 msgstr ""
-"Les rotations avec Ctrl appuyé seront de tant de degrés; puis en appuyant "
-"sur [ ou ], les rotations se feront selon cet incrément"
+"Ctrl appuyé forcera des rotations de seront de tant de degrés; de même en "
+"appuyant sur [ ou ], les rotations se feront selon cet incrément"
 
 #: src/dialogs/display-settings.cpp:414
 msgid "Rotation snaps every:"
@@ -616,8 +617,8 @@ msgid ""
 "window managers."
 msgstr ""
 "Aucun : les dialogues sont traités comme des fenêtres standard; Normal : les "
-"dialogues restent sur la fenêtre du document; Agressif : comme Normal, mais "
-"marche mieux avec certain gestionaires de fenêtre."
+"dialogues restent au-dessus dela fenêtre du document; Agressif : comme "
+"Normal, mais marche mieux avec certains gestionnaires de fenêtre."
 
 #: src/dialogs/display-settings.cpp:458
 msgid "Normal"
@@ -629,7 +630,7 @@ msgstr "Agressif"
 
 #: src/dialogs/display-settings.cpp:482
 msgid "Dialogs on top:"
-msgstr "Dialogues dessus :"
+msgstr "Dialogues au-dessus :"
 
 #: src/dialogs/display-settings.cpp:653
 msgid "Show selection cue"
@@ -639,19 +640,19 @@ msgstr "Afficher les poignées de sélection"
 msgid ""
 "Whether selected objects display a selection cue (the same as in selector)"
 msgstr ""
-"L'objet sélectionné affiche les poignées de sélection (les mêmes que dans le "
+"L'objet sélectionné affiche ses poignées de sélection (les mêmes que dans le "
 "sélecteur)"
 
 #: src/dialogs/display-settings.cpp:715
 msgid "<b>No objects selected</b> to take the style from."
-msgstr "<b>Pas d'objets sélectionnés</b> pour pouvoir en extraire le style."
+msgstr "<b>Pas d'objet sélectionné</b> pour en capturer le style."
 
 #: src/dialogs/display-settings.cpp:724
 msgid ""
 "<b>More than one object selected.</b>  Cannot take style from multiple "
 "objects."
 msgstr ""
-"<b>Plus d'un objet est sélectionné.</b> Impossible d'extraire le style de "
+"<b>Plus d'un objet est sélectionné.</b> Impossible de capturer le style de "
 "plusieurs objets."
 
 #: src/dialogs/display-settings.cpp:760
@@ -688,7 +689,7 @@ msgid ""
 "the button below to set it."
 msgstr ""
 "Chaque outil retient son propre style à appliquer aux nouveaux objets créés. "
-"Utiliser le bouton au-dessous pour définir ceci."
+"Utiliser le bouton ci-dessous pour définir ceci."
 
 #: src/dialogs/display-settings.cpp:806
 msgid "Picking colors:"
@@ -696,19 +697,19 @@ msgstr "Capture de couleurs :"
 
 #: src/dialogs/display-settings.cpp:817
 msgid "Pick visible color (no alpha)"
-msgstr "Capture de la couleur visible (sans alpha)"
+msgstr "Capturer la couleur visible (sans alpha)"
 
 #: src/dialogs/display-settings.cpp:817
 msgid ""
 "Pick the visible color under cursor, taking into account the page background "
 "and disregarding the transparency of objects"
 msgstr ""
-"Capture la couleur visible sous le curseur, en tenant compte de la couleur "
+"Capturer la couleur visible sous le curseur, en tenant compte de la couleur "
 "du fond mais pas de la transparence des objets"
 
 #: src/dialogs/display-settings.cpp:824
 msgid "Pick objects' color (including alpha)"
-msgstr "Capture la couleur des objets (avec l'alpha)"
+msgstr "Capturer la couleur des objets (avec l'alpha)"
 
 #: src/dialogs/display-settings.cpp:824
 msgid ""
@@ -728,7 +729,7 @@ msgstr "Souris"
 #. * pixels).
 #: src/dialogs/display-settings.cpp:912
 msgid "Grab sensitivity:"
-msgstr "Saisir la sensibilité :"
+msgstr "Sensibilité :"
 
 #: src/dialogs/display-settings.cpp:913
 msgid ""
@@ -773,7 +774,7 @@ msgid ""
 "One mouse wheel notch scrolls by this distance in screen pixels "
 "(horizontally with Shift)"
 msgstr ""
-"Un cran de la molette de la souris fait défiler de tan de pixels "
+"Un cran de la molette de la souris fait défiler de tant de pixels "
 "(horizontalement avec Maj)"
 
 #: src/dialogs/display-settings.cpp:949
@@ -786,7 +787,7 @@ msgstr "Défiler de :"
 
 #: src/dialogs/display-settings.cpp:958
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in pixels)"
-msgstr "Ctrl+flèches défile de cette distance (en pixel)"
+msgstr "Appuyer sur Ctrl+flèches fait défiler de cette distance (en pixel)"
 
 #: src/dialogs/display-settings.cpp:968
 msgid "Acceleration:"
@@ -797,7 +798,7 @@ msgid ""
 "Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no "
 "acceleration)"
 msgstr ""
-"Gardé appuyé Ctrl+flèches augmente graduellement la vitesse du défilement (0 "
+"Garder appuyé Ctrl+flèches accélère graduellement la vitesse du défilement (0 "
 "pour aucune accélération)"
 
 #: src/dialogs/display-settings.cpp:978
@@ -828,7 +829,7 @@ msgid ""
 msgstr ""
 "Distance (en pixels de laquelle il faut être du bord du canevas pour activer "
 "le défilement automatique; les valeurs positives sont en dehors du canevas, "
-"les négative à l'intérieur"
+"les négatives à l'intérieur"
 
 #. Steps
 #: src/dialogs/display-settings.cpp:1008
@@ -859,7 +860,7 @@ msgstr "> et < mettent à l'échelle de :"
 #: src/dialogs/display-settings.cpp:1023
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in points)"
-msgstr "> ou < mettent à l'échelle de (en points)"
+msgstr "Appuyer sur > ou < met à l'échelle de cet incrément (en points)"
 
 #: src/dialogs/display-settings.cpp:1033
 msgid "Inset/Outset by:"
@@ -936,7 +937,7 @@ msgid ""
 "values produce more uneven paths with more nodes"
 msgstr ""
 "Cette valeur affecte le lissage appliqué aux lignes à main levés; les "
-"valeurs faibles produisent des chemins irréguliers avec beaucoups de nœuds"
+"valeurs faibles produisent des chemins irréguliers avec plus de nœuds"
 
 #: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1627
 msgid "Pen"
@@ -962,7 +963,7 @@ msgstr "Fenêtres"
 
 #: src/dialogs/display-settings.cpp:1188
 msgid "Save window geometry"
-msgstr "Enregistre la taille et la position de la fenêtre"
+msgstr "Enregistrer la taille et la position de la fenêtre"
 
 #: src/dialogs/display-settings.cpp:1189
 msgid ""
@@ -984,7 +985,7 @@ msgstr ""
 
 #: src/dialogs/display-settings.cpp:1204
 msgid "Zoom when window is resized"
-msgstr "Zoommer quand la fenêtre est redimentioné"
+msgstr "Zoommer quand la fenêtre est redimensionnée"
 
 #: src/dialogs/display-settings.cpp:1205
 msgid ""
@@ -992,9 +993,9 @@ msgid ""
 "(this is the default which can be changed in any window using the button "
 "above the right scrollbar)"
 msgstr ""
-"Le dessin est rezoommé lors que la fenêtre est redimentioné, pour garder la "
-"même aire visible (c'est l'option par défaut qui peut être changé dans "
-"n'importe quelle fenêtre en utilisant le boutton au dessus de la barre de "
+"Le dessin est rezoommé quand la fenêtre est redimensionnée, pour garder la "
+"même aire visible (c'est l'option par défaut qui peut être changée dans "
+"toute fenêtre en utilisant le boutton au dessus de la barre de "
 "défilement de droite)"
 
 #. Clones
@@ -1004,7 +1005,7 @@ msgstr "Clones"
 
 #: src/dialogs/display-settings.cpp:1217
 msgid "When the original moves, its clones:"
-msgstr "Lors que l'orginal est déplacé, ses clones :"
+msgstr "Lorsque l'original est déplacé, ses clones :"
 
 #: src/dialogs/display-settings.cpp:1229
 msgid "Move in parallel"
@@ -1012,19 +1013,19 @@ msgstr "Sont déplacés en parallèle"
 
 #: src/dialogs/display-settings.cpp:1230
 msgid "Clones are translated by the same vector as their original."
-msgstr "Les clones sont déplacés du même vecteur que l'original."
+msgstr "Les clones sont déplacés du même vecteur que leur original."
 
 #: src/dialogs/display-settings.cpp:1237
 msgid "Stay unmoved"
-msgstr "Ne bouge pas"
+msgstr "Ne bougent pas"
 
 #: src/dialogs/display-settings.cpp:1238
 msgid "Clones preserve their positions when their original is moved."
-msgstr "Les clones restent sur place quand l'original est déplacé."
+msgstr "Les clones restent sur place quand leur original est déplacé."
 
 #: src/dialogs/display-settings.cpp:1245
 msgid "Move according to transform"
-msgstr "Déplacé en fonction de la transformation"
+msgstr "Déplacés en fonction leurs transformations"
 
 #: src/dialogs/display-settings.cpp:1246
 msgid ""
@@ -1033,8 +1034,8 @@ msgid ""
 "original."
 msgstr ""
 "Chaque clone est déplacé en fonction de son attribut \"transformation\". Par "
-"exemple, un clone tourné va être déplacé dans une direction différente de "
-"l'original."
+"exemple, un clone tourné sera déplacé dans une direction différente de "
+"celle de son original."
 
 #: src/dialogs/display-settings.cpp:1255
 msgid "When the original is deleted, its clones:"
@@ -1054,7 +1055,7 @@ msgstr "Sont supprimés"
 
 #: src/dialogs/display-settings.cpp:1273
 msgid "Orphaned clones are deleted along with their original."
-msgstr "Les clones orphelins sont supprimés comme l'original."
+msgstr "Les clones orphelins sont supprimés en même temps que leur original."
 
 #. Transforms
 #. TRANSLATORS: Noun, i.e. transformations.
@@ -1064,7 +1065,7 @@ msgstr "Transformations"
 
 #: src/dialogs/display-settings.cpp:1292
 msgid "Scale stroke width"
-msgstr "Mise à l'échelle de la largeur du contour"
+msgstr "Mettre à l'échelle la largeur du contour"
 
 #: src/dialogs/display-settings.cpp:1293 src/select-toolbar.cpp:456
 msgid "When scaling objects, scale the stroke width by the same proportion"
@@ -1074,7 +1075,7 @@ msgstr ""
 
 #: src/dialogs/display-settings.cpp:1300
 msgid "Scale rounded corners in rectangles"
-msgstr "Mise à l'échelle des coins arrondis des rectangles"
+msgstr "Mettre à l'échelle les coins arrondis des rectangles"
 
 #: src/dialogs/display-settings.cpp:1301 src/select-toolbar.cpp:468
 msgid "When scaling rectangles, scale the radii of rounded corners"
@@ -1124,7 +1125,7 @@ msgstr "Préservé"
 #: src/dialogs/display-settings.cpp:1347
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
-"Toujours enregistrer les transformations comme un attribut \"transformation"
+"Toujours enregistrer les transformations dans l'attribut \"transformation"
 "\" des objets"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
@@ -1150,7 +1151,7 @@ msgstr "dpi"
 #. * rectangle with bitmap fill.
 #: src/dialogs/display-settings.cpp:1372
 msgid "Import bitmap as <image>"
-msgstr "Importer le bitmap comme une <image>"
+msgstr "Importer le bitmap en tant qu'<image>"
 
 #: src/dialogs/display-settings.cpp:1373
 msgid ""
@@ -1180,8 +1181,8 @@ msgid ""
 "several times in quick succession, it will act more and more aggressively; "
 "invoking it again after a pause restores the default threshold."
 msgstr ""
-"Force de la commande Simplifier par défaut. Si vous fait appel à cette "
-"commande plusieurs fois de façon rapide, elle agira de façon de plus en plus "
+"Force par défaut de la commande Simplifier. Si vous faites appel à cette "
+"commande plusieurs fois de suite, elle agira de façon de plus en plus "
 "agressive; un appel après une pause restaurera la valeur par défaut."
 
 #: src/dialogs/display-settings.cpp:1408
@@ -1206,7 +1207,7 @@ msgstr "16x16"
 
 #: src/dialogs/export.cpp:250
 msgid "Export area"
-msgstr "Zone exportée"
+msgstr "Exporter la zone"
 
 #: src/dialogs/export.cpp:291
 msgid "x0:"
@@ -1244,7 +1245,7 @@ msgstr "Exporter"
 
 #: src/dialogs/export.cpp:955
 msgid "You have to enter a filename"
-msgstr "Vous devez enter un nom de fichier"
+msgstr "Vous devez entrer un nom de fichier"
 
 #: src/dialogs/export.cpp:960
 msgid "The chosen area to be exported is invalid"
@@ -1271,7 +1272,7 @@ msgstr "Impossible d'exporter dans le fichier %s.\n"
 
 #: src/dialogs/export.cpp:1118
 msgid "Select a filename for exporting"
-msgstr "Sélectionnez un nom de fichier pour exporter"
+msgstr "Sélectionner un nom de fichier pour exporter"
 
 #: src/dialogs/filedialog.cpp:362
 msgid "No preview"
@@ -1279,7 +1280,7 @@ msgstr "Pas d'aperçu"
 
 #: src/dialogs/filedialog.cpp:463
 msgid "too large for preview"
-msgstr "trop large pour un aperçu"
+msgstr "trop grand pour un aperçu"
 
 #: src/dialogs/filedialog.cpp:748 src/dialogs/filedialog.cpp:749
 msgid "All Images"
@@ -1307,11 +1308,11 @@ msgstr "SVG d'Inkscape"
 
 #: src/dialogs/filedialog.cpp:1155
 msgid "Plain SVG"
-msgstr "SVG brut"
+msgstr "SVG simple"
 
 #: src/dialogs/filedialog.cpp:1195
 msgid "Guess from extension"
-msgstr "Depuis l'extension"
+msgstr "Selon l'extension"
 
 #. ###### Add the file types menu
 #. createFilterMenu();
@@ -1462,7 +1463,7 @@ msgstr "Textes"
 
 #: src/dialogs/find.cpp:644
 msgid "Search groups"
-msgstr "Rechercher des groupes"
+msgstr "Rechercher les groupes"
 
 #: src/dialogs/find.cpp:644
 msgid "Groups"
@@ -1470,11 +1471,11 @@ msgstr "Groupes"
 
 #: src/dialogs/find.cpp:649
 msgid "Search clones"
-msgstr "Rechercher des clones"
+msgstr "Rechercher les clones"
 
 #: src/dialogs/find.cpp:654
 msgid "Search images"
-msgstr "Rechercher des images"
+msgstr "Rechercher les images"
 
 #: src/dialogs/find.cpp:654
 msgid "Images"
@@ -1482,7 +1483,7 @@ msgstr "Images"
 
 #: src/dialogs/find.cpp:659
 msgid "Search offset objects"
-msgstr "Rechercher des offsets d'objets"
+msgstr "Rechercher les objets offset"
 
 #: src/dialogs/find.cpp:659
 msgid "Offsets"
@@ -1510,7 +1511,7 @@ msgstr "R_echercher dans la sélection"
 
 #: src/dialogs/find.cpp:739
 msgid "Limit search to the current selection"
-msgstr "Limiter la recherche à la sélection courrente"
+msgstr "Limiter la recherche à la sélection courante"
 
 #: src/dialogs/find.cpp:749
 msgid "Clear values"
@@ -1529,12 +1530,12 @@ msgstr ""
 #. Create the label for the object id
 #: src/dialogs/item-properties.cpp:128
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: src/dialogs/item-properties.cpp:138
 msgid ""
 "The id= attribute (only letters, digits, and the characters .-_: allowed)"
-msgstr ""
+msgstr "L'attribut id (ne doit contenir que des lettres, chiffres ou – et _"
 
 #. Create the button for setting the object label
 #: src/dialogs/item-properties.cpp:147
@@ -1549,7 +1550,7 @@ msgstr "Label"
 
 #: src/dialogs/item-properties.cpp:168
 msgid "A freeform label for the object"
-msgstr ""
+msgstr "Un label librement attribuable aux objets"
 
 #. Create the label for the object title
 #: src/dialogs/item-properties.cpp:178 src/dialogs/rdf.cpp:225
@@ -1565,21 +1566,22 @@ msgstr "Description"
 #: src/dialogs/item-properties.cpp:230
 #, fuzzy
 msgid "Hide"
-msgstr "Côtés :"
+msgstr "Masquer :"
 
 #: src/dialogs/item-properties.cpp:232
 msgid "Check to make the object invisible"
-msgstr ""
+msgstr "A valider pour rendre l'objet invisible"
 
 #. Lock
 #. TRANSLATORS: "Lock" is a verb here
 #: src/dialogs/item-properties.cpp:241
 msgid "Lock"
-msgstr ""
+msgstr "Verrouiller"
 
 #: src/dialogs/item-properties.cpp:243
 msgid "Check to make the object insensitive (not selectable by mouse)"
-msgstr ""
+msgstr "A valider pour rendre l'objet insensible (non sélectionnable à la "
+"souris)"
 
 #. Transformation matrix
 #: src/dialogs/item-properties.cpp:254
@@ -1596,9 +1598,8 @@ msgid "ID"
 msgstr "ID"
 
 #: src/dialogs/item-properties.cpp:514
-#, fuzzy
 msgid "ID invalid"
-msgstr "Label invalide"
+msgstr "ID invalide"
 
 #: src/dialogs/item-properties.cpp:516
 msgid "ID exists"
@@ -1629,6 +1630,7 @@ msgstr "Rôle :"
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkArcRoleAttribute
 #. For situations where the nature/role alone isn't enough, this offers an additional URI defining the purpose of the link.
 #: src/dialogs/object-attributes.cpp:39
+#, fuzzy
 msgid "Arcrole:"
 msgstr "Arcrole :"
 
@@ -1639,12 +1641,13 @@ msgstr "Titre :"
 
 #: src/dialogs/object-attributes.cpp:42
 msgid "Show:"
-msgstr "Affiche :"
+msgstr "Afficher :"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkActuateAttribute
 #: src/dialogs/object-attributes.cpp:44
+#, fuzzy
 msgid "Actuate:"
-msgstr "Activé :"
+msgstr "Actuate :"
 
 #: src/dialogs/object-attributes.cpp:49
 msgid "Sides:"
@@ -1679,12 +1682,14 @@ msgid "Flatsides:"
 msgstr "Côtés-plat :"
 
 #: src/dialogs/object-attributes.cpp:63
+#, fuzzy
 msgid "Expansion:"
 msgstr "Expansion :"
 
 #: src/dialogs/object-attributes.cpp:64
+#, fuzzy
 msgid "Revolutions:"
-msgstr "Révolutions :"
+msgstr "Tours :"
 
 #: src/dialogs/object-attributes.cpp:65
 msgid "Radius:"
@@ -1697,7 +1702,7 @@ msgstr "Argument :"
 #. TRANSLATORS: this is "T-zero", not "to"
 #: src/dialogs/object-attributes.cpp:68
 msgid "T0:"
-msgstr "VERS :"
+msgstr "T0 :"
 
 #: src/dialogs/object-attributes.cpp:73
 msgid "URL:"
@@ -1730,7 +1735,7 @@ msgstr "Remplissage"
 
 #: src/dialogs/object-properties.cpp:172
 msgid "Stroke paint"
-msgstr "Couleurs du contour"
+msgstr "Remplissage du contour"
 
 #: src/dialogs/object-properties.cpp:179
 msgid "Stroke style"
@@ -1742,7 +1747,7 @@ msgstr "Opacité globale"
 
 #: src/dialogs/rdf.cpp:226
 msgid "Name by which this document is formally known."
-msgstr "Nom suivant lequel le document est formellement connu."
+msgstr "Nom sous lequel le document est formellement connu."
 
 #: src/dialogs/rdf.cpp:228
 msgid "Date"
@@ -1758,7 +1763,7 @@ msgstr "Format"
 
 #: src/dialogs/rdf.cpp:232
 msgid "The physical or digital manifestation of this document (MIME type)."
-msgstr "La manifestation physique ou digitale de ce document (type MIME)."
+msgstr "La manifestation physique ou numérique de ce document (type MIME)."
 
 #: src/dialogs/rdf.cpp:234
 msgid "Type"
@@ -1775,7 +1780,7 @@ msgstr "Créateur"
 #: src/dialogs/rdf.cpp:239
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
-msgstr "Nom de l'entité à l'origine du contenu de ce document."
+msgstr "Nom de l'entité à l'origine de la création de ce document."
 
 #: src/dialogs/rdf.cpp:241
 msgid "Rights"
@@ -1853,11 +1858,11 @@ msgstr "Couverture"
 
 #: src/dialogs/rdf.cpp:266
 msgid "Extent or scope of this document."
-msgstr "Étendre la porté (scope) de ce document."
+msgstr "Portée ou objectif de ce document."
 
 #: src/dialogs/rdf.cpp:270
 msgid "A short account of the content of this document."
-msgstr "Un court résumé du contenu de ce document."
+msgstr "Une courte explication du contenu de ce document."
 
 #. FIXME: need to handle 1 agent per line of input
 #: src/dialogs/rdf.cpp:274
@@ -1869,8 +1874,7 @@ msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
 msgstr ""
-"Nom de l'entité responsable de la collaboration pour le contenu de ce "
-"document."
+"Nom des entités ayant contribué au contenu de ce document."
 
 #. TRANSLATORS: URL to a page that defines the license for the document
 #: src/dialogs/rdf.cpp:279
@@ -1988,7 +1992,7 @@ msgstr "Marqueurs de fin :"
 
 #: src/dialogs/text-edit.cpp:193
 msgid "Font"
-msgstr "Fonte"
+msgstr "Police"
 
 #: src/dialogs/text-edit.cpp:223
 msgid "Align lines left"
@@ -2037,7 +2041,7 @@ msgstr "Détection optimale des arêtes (Canny)"
 
 #: src/dialogs/tracedialog.cpp:403
 msgid "Edge Detection"
-msgstr "Détection des arêtes"
+msgstr "Détection de contour"
 
 #. #### quantization ####
 #. TRANSLATORS: Color Quantization: the process of reducing the number of colors
@@ -2101,27 +2105,27 @@ msgid "deg"
 msgstr "deg"
 
 #: src/dialogs/xml-tree.cpp:171
-#, fuzzy
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
-"<b>Clic</b> pour créer ou sélectionner un objet texte et pouvoir ensuite "
-"taper/modifier le texte."
+"<b>Cliquer</b> pour sélectionner un nœud, <b>Cliquer-déplacer</b> pour le "
+"déplacer."
 
 #: src/dialogs/xml-tree.cpp:183
 #, fuzzy
 msgid "<b>Click</b> attribute to edit."
-msgstr "<b>Éditeur XML</b>. Sélectionnez les attributs puis éditez les."
+msgstr "<b>Cliquer</b> sur les attributs pour pouvoir les éditer."
 
 #: src/dialogs/xml-tree.cpp:187
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
-msgstr ""
+msgstr "Attribut <b>%s</b> sélectionné. Appuyer sur <b>Ctrl+Enter</b> après "
+"édition pour valider."
 
 #: src/dialogs/xml-tree.cpp:280
 msgid "Drag to reorder nodes"
-msgstr "Glisser pour réorganiser les nœuds"
+msgstr "Cliquer-déplacer réorganiser les nœuds"
 
 #: src/dialogs/xml-tree.cpp:300
 msgid "New element node"
@@ -2173,7 +2177,7 @@ msgstr "Définir l'attribut"
 #: src/dialogs/xml-tree.cpp:531
 #, fuzzy
 msgid "Set"
-msgstr "Attribuer l'ID"
+msgstr "Définir"
 
 #. TRANSLATORS: "Attribute" is a noun here
 #: src/dialogs/xml-tree.cpp:554
@@ -2182,7 +2186,7 @@ msgstr "Valeur de l'attribut"
 
 #: src/dialogs/xml-tree.cpp:1321
 msgid "New element node..."
-msgstr "Nouveau élément dans le nœud..."
+msgstr "Nouveau nœud élément..."
 
 #: src/dialogs/xml-tree.cpp:1342
 msgid "Cancel"
@@ -2196,7 +2200,8 @@ msgstr "Créer"
 #, c-format
 msgid ""
 "Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
-msgstr ""
+msgstr "Impossible de définir <b>%s</b>: un autre élément avec la valeur "
+"<b>%s</b> existe déjà!"
 
 #: src/document.cpp:428
 #, c-format
@@ -2247,7 +2252,7 @@ msgstr " alpha %.3g"
 #: src/dropper-context.cpp:300
 #, c-format
 msgid ", averaged with radius %d"
-msgstr ", rayon moyen de %d"
+msgstr ", moyenné avec un rayon de %d"
 
 #: src/dropper-context.cpp:300
 msgid " under cursor"
@@ -2320,7 +2325,7 @@ msgid ""
 "and patterns will be lost."
 msgstr ""
 "Utiliser les opérateurs vectoriels PostScript. Le fichier image résultant "
-"sera (en général) plus petite tout en restant redimentionable; par contre, "
+"sera en général moins volumineux et reste redimensionnable, cependant, "
 "la transparence alpha, les dégradés et les motifs de remplissage seront "
 "perdus."
 
@@ -2334,9 +2339,9 @@ msgid ""
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
 msgstr ""
-"Tout imprimer en tant que bitmap. Le fichier image résultant sera (en "
-"général) plus gros et sa qualité dépendra du facteur de zoom; Mais tous les "
-"objets seront rendus tels qu'affichés."
+"Tout imprimer en tant que bitmap. Le fichier image résultant sera en "
+"général plus volumineux et n'est plus redimensionnable sans perte de "
+"qualité, cependant tous les objets seront rendus tels qu'affichés."
 
 #: src/extension/internal/ps.cpp:160
 msgid "Preferred resolution (dots per inch) of bitmap"
@@ -2356,8 +2361,8 @@ msgid ""
 "Use '> filename' to print to file.\n"
 "Use '| prog arg...' to pipe to a program."
 msgstr ""
-"Utilisez '> fichier' pour imprimer vers un fichier.\n"
-"Utilisez '| prog arg...' pour envoyer au travers d'un tuyau (pipe) à un "
+"Utiliser '> fichier' pour imprimer vers un fichier.\n"
+"Utiliser '| prog arg...' pour envoyer au travers d'un tuyau (pipe) à un "
 "programme."
 
 #: src/extension/internal/ps.cpp:1003
@@ -2511,11 +2516,11 @@ msgstr "Px"
 #. You can add new elements from this point forward
 #: src/helper/units.cpp:39
 msgid "Percent"
-msgstr "Pourcentage"
+msgstr "Pourcent"
 
 #: src/helper/units.cpp:39
 msgid "Percents"
-msgstr "Pourcentages"
+msgstr "Pourcents"
 
 #: src/helper/units.cpp:40
 msgid "Millimeter"
@@ -2754,7 +2759,7 @@ msgstr "Barre d'état_s"
 
 #: src/interface.cpp:918
 msgid "Show or hide the statusbar (at the bottom of the window)"
-msgstr "Afficher ou masquer la barre d'états (en bas de la fenêtre)"
+msgstr "Afficher ou masquer la barre d'état (en bas de la fenêtre)"
 
 #. There isn't a way to handle "sub menus" (which could really be seen as a
 #. * list of verb arguments) in the verb system right now, so we have to build
