@@ -164,7 +164,7 @@ sp_polyline_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	}
 
 	if (repr != SP_OBJECT_REPR (object)) {
-		sp_repr_merge (repr, SP_OBJECT_REPR (object), "id");
+		repr->mergeFrom(SP_OBJECT_REPR (object), "id");
 	}
 
 	if (((SPObjectClass *) (parent_class))->write)
@@ -178,4 +178,3 @@ sp_polyline_description (SPItem * item)
 {
 	return g_strdup ("<b>Polyline</b>");
 }
-

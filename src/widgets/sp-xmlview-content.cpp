@@ -165,7 +165,7 @@ sp_xmlview_content_changed (GtkTextBuffer *tb, SPXMLViewContent *text)
 		text->blocked = TRUE;
 		gtk_text_buffer_get_bounds (tb, &start, &end);
 		data = gtk_text_buffer_get_text (tb, &start, &end, TRUE);
-		sp_repr_set_content (text->repr, data);
+		text->repr->setContent(data);
 		g_free (data);
 		text->blocked = FALSE;
 		sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));

@@ -1,3 +1,12 @@
+2005-02-20 SwinginCelt  <swinginceltgmail.com>
+
+	* Replaced all sp_repr_set_content calls with direct call to
+	  repr->setContent.
+	* Replaced all sp_repr_merge calls with direct call to
+	  repr->mergeFrom.
+	* Removed inline sp_repr_document_merge because it wasn't used anywhere.
+	* Removed inline sp_repr_set_content because it wasn't used anywhere.
+
 2005-02-26  MenTaLguY  <mental@rydia.net>
 
 	* cxxtest: imported cxxtest tree

@@ -946,7 +946,7 @@ Inkscape::XML::Node *SPObject::updateRepr(Inkscape::XML::Node *repr, unsigned in
 			}
 			/* fixme: else probably error (Lauris) */
 		} else {
-			sp_repr_merge (repr, SP_OBJECT_REPR (this), "id");
+			repr->mergeFrom(SP_OBJECT_REPR (this), "id");
 		}
 		return repr;
 	}

@@ -92,7 +92,7 @@ void Inkscape::XML::EventChgAttr::_undoOne() const {
 }
 
 void Inkscape::XML::EventChgContent::_undoOne() const {
-	sp_repr_set_content(this->repr, this->oldval);
+	this->repr->setContent(this->oldval);
 }
 
 void Inkscape::XML::EventChgOrder::_undoOne() const {
@@ -127,7 +127,7 @@ void Inkscape::XML::EventChgAttr::_replayOne() const {
 }
 
 void Inkscape::XML::EventChgContent::_replayOne() const {
-	sp_repr_set_content(this->repr, this->newval);
+	this->repr->setContent(this->newval);
 }
 
 void Inkscape::XML::EventChgOrder::_replayOne() const {
@@ -279,4 +279,3 @@ Inkscape::XML::Event *Inkscape::XML::EventChgOrder::_optimizeOne() {
 		return this;
 	}
 }
-

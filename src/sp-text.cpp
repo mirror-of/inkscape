@@ -385,7 +385,7 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
             } else if (SP_IS_TEXTPATH (child)) {
                 child->updateRepr(flags);
             } else {
-                sp_repr_set_content (SP_OBJECT_REPR (child), (SP_STRING_TEXT (child))?SP_STRING_TEXT (child):"");
+                SP_OBJECT_REPR (child)->setContent((SP_STRING_TEXT (child))?SP_STRING_TEXT (child):"");
             }
         }
     }
@@ -865,7 +865,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
     if (!str) str = "";
     gchar *content = g_strdup (str);
 
-    sp_repr_set_content (SP_OBJECT_REPR (text), "");
+    SP_OBJECT_REPR (text)->setContent("");
     while (repr->firstChild()) {
         repr->removeChild(repr->firstChild());
     }
@@ -1053,7 +1053,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                     if ( into_obj->utf8_st < into_obj->utf8_en ) {
                         //char savC=into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st];
                         into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=0;
-                        sp_repr_set_content(SP_OBJECT_REPR(into->me),(into_obj->cleaned_up.utf8_text)?into_obj->cleaned_up.utf8_text:"");
+                        SP_OBJECT_REPR(into->me)->setContent((into_obj->cleaned_up.utf8_text)?into_obj->cleaned_up.utf8_text:"");
                         //into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=savC; // has been invalidated by the previous call, through the sp-string stuff
                     }
                     nval=into_dad->GetX(0,ucs4_pos-into_dad->ucs4_en);

@@ -181,7 +181,7 @@ sp_line_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	}
 
 	if (repr != SP_OBJECT_REPR (object)) {
-		sp_repr_merge (repr, SP_OBJECT_REPR (object), "id");
+		repr->mergeFrom(SP_OBJECT_REPR (object), "id");
 	}
 
 	sp_repr_set_double (repr, "x1", line->x1.computed);
@@ -239,4 +239,3 @@ sp_line_set_shape (SPShape *shape)
 
 	sp_curve_unref (c);
 }
-

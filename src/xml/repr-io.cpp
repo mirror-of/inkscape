@@ -462,7 +462,7 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
     }
 
     if (node->content)
-        sp_repr_set_content (repr, (gchar*)node->content);
+        repr->setContent((gchar*)node->content);
 
     child = node->xmlChildrenNode;
     for (child = node->xmlChildrenNode; child != NULL; child = child->next) {

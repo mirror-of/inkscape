@@ -152,12 +152,6 @@ inline Inkscape::XML::Node *sp_repr_unref(Inkscape::XML::Node *repr) {
 
 Inkscape::XML::Document *sp_repr_document_new(gchar const *rootname);
 
-/*inline void sp_repr_document_ref(Inkscape::XML::Document *doc) {
-    Inkscape::GC::anchor(doc);
-}
-inline void sp_repr_document_unref(Inkscape::XML::Document *doc) {
-    Inkscape::GC::release(doc);
-}*/
 
 inline Inkscape::XML::Node *sp_repr_document_root(Inkscape::XML::Document const *doc) {
     return const_cast<Inkscape::XML::Node *>(doc->root());
@@ -167,26 +161,7 @@ inline Inkscape::XML::Document *sp_repr_document(Inkscape::XML::Node const *repr
     return const_cast<Inkscape::XML::Document *>(repr->document());
 }
 
-
-inline unsigned sp_repr_document_merge(Inkscape::XML::Document *doc,
-                                       Inkscape::XML::Document const *src,
-                                       char const *key)
-{
-    doc->root()->mergeFrom(src->root(), key);
-    return true;
-}
-
-inline unsigned sp_repr_merge(Inkscape::XML::Node *repr, Inkscape::XML::Node const *src, gchar const *key) {
-    repr->mergeFrom(src, key);
-    return true;
-}
-
 /* Contents */
-inline unsigned sp_repr_set_content(Inkscape::XML::Node *repr, gchar const *content) {
-    repr->setContent(content);
-    return true;
-}
-
 inline unsigned sp_repr_set_attr(Inkscape::XML::Node *repr, gchar const *key, gchar const *value,
                                  bool is_interactive = false) {
     repr->setAttribute(key, value, is_interactive);

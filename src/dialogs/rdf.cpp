@@ -536,7 +536,8 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
                 return TRUE;
             }
             else {
-                return sp_repr_set_content( temp, text );
+                temp->setContent(text);
+				return TRUE;
             }
 
         case RDF_AGENT:
@@ -571,7 +572,8 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
                 return TRUE;
             }
             else {
-                return sp_repr_set_content( temp, text );
+                temp->setContent(text);
+				return TRUE;
             }
 
         case RDF_RESOURCE:

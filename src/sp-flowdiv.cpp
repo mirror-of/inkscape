@@ -274,7 +274,7 @@ sp_flowdiv_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA(child) ) {
 				child->updateRepr(flags);
 			} else if ( SP_IS_STRING(child) ) {
-				sp_repr_set_content (SP_OBJECT_REPR (child), SP_STRING_TEXT (child));
+				SP_OBJECT_REPR (child)->setContent(SP_STRING_TEXT (child));
 			}
 		}
 	}
@@ -492,7 +492,7 @@ sp_flowtspan_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA (child) ) {
 					child->updateRepr(flags);
 			} else if ( SP_IS_STRING(child) ) {
-				sp_repr_set_content (SP_OBJECT_REPR (child), SP_STRING_TEXT (child));
+				SP_OBJECT_REPR (child)->setContent(SP_STRING_TEXT (child));
 			}
 		}
 	}
@@ -713,7 +713,7 @@ sp_flowpara_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA (child) ) {
 				child->updateRepr(flags);
 			} else if ( SP_IS_STRING(child) ) {
-				sp_repr_set_content (SP_OBJECT_REPR (child), SP_STRING_TEXT (child));
+				SP_OBJECT_REPR (child)->setContent(SP_STRING_TEXT (child));
 			}
 		}
 	}
@@ -895,4 +895,3 @@ sp_flowregionbreak_write (SPObject *object, Inkscape::XML::Node *repr, guint fla
 	
 	return repr;
 }
-

@@ -629,7 +629,7 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
         return FALSE;
     }
 
-    sp_repr_document_merge (config, doc, "id");
+    config->root()->mergeFrom(doc, "id");
     Inkscape::GC::release(doc);
     g_free (fn);
     return TRUE;
