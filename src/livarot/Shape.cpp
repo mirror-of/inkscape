@@ -312,7 +312,7 @@ Shape::AddPoint (const NR::Point x)
   dg_point p;
   p.x = x;
   p.dI = p.dO = 0;
-  p.firstA = p.lastA = -1;
+  p.incidentEdge[FIRST] = p.incidentEdge[LAST] = -1;
   p.oldDegree = -1;
   _pts.push_back(p);
   int const n = _pts.size() - 1;
@@ -342,7 +342,7 @@ Shape::SubPoint (int p)
     return;
   _need_points_sorting = true;
   int cb;
-  cb = getPoint(p).firstA;
+  cb = getPoint(p).incidentEdge[FIRST];
   while (cb >= 0 && cb < numberOfEdges())
     {
       if (getEdge(cb).st == p)
@@ -364,7 +364,7 @@ Shape::SubPoint (int p)
 	  break;
 	}
     }
-  _pts[p].firstA = _pts[p].lastA = -1;
+  _pts[p].incidentEdge[FIRST] = _pts[p].incidentEdge[LAST] = -1;
   if (p < numberOfPoints() - 1)
     SwapPoints (p, numberOfPoints() - 1);
   _pts.pop_back();
@@ -377,7 +377,7 @@ Shape::SwapPoints (int a, int b)
     return;
   if (getPoint(a).totalDegree() == 2 && getPoint(b).totalDegree() == 2)
     {
-      int cb = getPoint(a).firstA;
+      int cb = getPoint(a).incidentEdge[FIRST];
       if (getEdge(cb).st == a)
 	{
 	  _aretes[cb].st = numberOfPoints();
@@ -386,7 +386,7 @@ Shape::SwapPoints (int a, int b)
 	{
 	  _aretes[cb].en = numberOfPoints();
 	}
-      cb = getPoint(a).lastA;
+      cb = getPoint(a).incidentEdge[LAST];
       if (getEdge(cb).st == a)
 	{
 	  _aretes[cb].st = numberOfPoints();
@@ -396,7 +396,7 @@ Shape::SwapPoints (int a, int b)
 	  _aretes[cb].en = numberOfPoints();
 	}
 
-      cb = getPoint(b).firstA;
+      cb = getPoint(b).incidentEdge[FIRST];
       if (getEdge(cb).st == b)
 	{
 	  _aretes[cb].st = a;
@@ -405,7 +405,7 @@ Shape::SwapPoints (int a, int b)
 	{
 	  _aretes[cb].en = a;
 	}
-      cb = getPoint(b).lastA;
+      cb = getPoint(b).incidentEdge[LAST];
       if (getEdge(cb).st == b)
 	{
 	  _aretes[cb].st = a;
@@ -415,7 +415,7 @@ Shape::SwapPoints (int a, int b)
 	  _aretes[cb].en = a;
 	}
 
-      cb = getPoint(a).firstA;
+      cb = getPoint(a).incidentEdge[FIRST];
       if (getEdge(cb).st == numberOfPoints())
 	{
 	  _aretes[cb].st = b;
@@ -424,7 +424,7 @@ Shape::SwapPoints (int a, int b)
 	{
 	  _aretes[cb].en = b;
 	}
-      cb = getPoint(a).lastA;
+      cb = getPoint(a).incidentEdge[LAST];
       if (getEdge(cb).st == numberOfPoints())
 	{
 	  _aretes[cb].st = b;
@@ -438,7 +438,7 @@ Shape::SwapPoints (int a, int b)
   else
     {
       int cb;
-      cb = getPoint(a).firstA;
+      cb = getPoint(a).incidentEdge[FIRST];
       while (cb >= 0)
 	{
 	  int ncb = NextAt (a, cb);
@@ -452,7 +452,7 @@ Shape::SwapPoints (int a, int b)
 	    }
 	  cb = ncb;
 	}
-      cb = getPoint(b).firstA;
+      cb = getPoint(b).incidentEdge[FIRST];
       while (cb >= 0)
 	{
 	  int ncb = NextAt (b, cb);
@@ -466,7 +466,7 @@ Shape::SwapPoints (int a, int b)
 	    }
 	  cb = ncb;
 	}
-      cb = getPoint(a).firstA;
+      cb = getPoint(a).incidentEdge[FIRST];
       while (cb >= 0)
 	{
 	  int ncb = NextAt (numberOfPoints(), cb);
@@ -1167,7 +1167,7 @@ Shape::AddEdge (int st, int en, int leF, int riF)
   if (st < 0 || en < 0)
     return -1;
   {
-    int cb = getPoint(st).firstA;
+    int cb = getPoint(st).incidentEdge[FIRST];
     while (cb >= 0)
       {
 	if (getEdge(cb).st == st && getEdge(cb).en == en)
@@ -1299,17 +1299,17 @@ Shape::SwapEdges (int a, int b)
     }
   if (getEdge(a).st >= 0)
     {
-      if (getPoint(getEdge(a).st).firstA == a)
-	_pts[getEdge(a).st].firstA = numberOfEdges();
-      if (getPoint(getEdge(a).st).lastA == a)
-	_pts[getEdge(a).st].lastA = numberOfEdges();
+      if (getPoint(getEdge(a).st).incidentEdge[FIRST] == a)
+	_pts[getEdge(a).st].incidentEdge[FIRST] = numberOfEdges();
+      if (getPoint(getEdge(a).st).incidentEdge[LAST] == a)
+	_pts[getEdge(a).st].incidentEdge[LAST] = numberOfEdges();
     }
   if (getEdge(a).en >= 0)
     {
-      if (getPoint(getEdge(a).en).firstA == a)
-	_pts[getEdge(a).en].firstA = numberOfEdges();
-      if (getPoint(getEdge(a).en).lastA == a)
-	_pts[getEdge(a).en].lastA = numberOfEdges();
+      if (getPoint(getEdge(a).en).incidentEdge[FIRST] == a)
+	_pts[getEdge(a).en].incidentEdge[FIRST] = numberOfEdges();
+      if (getPoint(getEdge(a).en).incidentEdge[LAST] == a)
+	_pts[getEdge(a).en].incidentEdge[LAST] = numberOfEdges();
     }
 
 
@@ -1357,36 +1357,39 @@ Shape::SwapEdges (int a, int b)
 	  _aretes[getEdge(b).nextE].prevE = a;
 	}
     }
-  if (getEdge(b).st >= 0)
-    {
-      if (getPoint(getEdge(b).st).firstA == b)
-	_pts[getEdge(b).st].firstA = a;
-      if (getPoint(getEdge(b).st).lastA == b)
-	_pts[getEdge(b).st].lastA = a;
-    }
-  if (getEdge(b).en >= 0)
-    {
-      if (getPoint(getEdge(b).en).firstA == b)
-	_pts[getEdge(b).en].firstA = a;
-      if (getPoint(getEdge(b).en).lastA == b)
-	_pts[getEdge(b).en].lastA = a;
+
+  
+  for (int i = 0; i < 2; i++) {
+    int p = getEdge(b).st;
+    if (p >= 0) {
+      if (getPoint(p).incidentEdge[i] == b) {
+	_pts[p].incidentEdge[i] = a;
+      }
     }
 
-  if (getEdge(a).st >= 0)
-    {
-      if (getPoint(getEdge(a).st).firstA == numberOfEdges())
-	_pts[getEdge(a).st].firstA = b;
-      if (getPoint(getEdge(a).st).lastA == numberOfEdges())
-	_pts[getEdge(a).st].lastA = b;
-    }
-  if (getEdge(a).en >= 0)
-    {
-      if (getPoint(getEdge(a).en).firstA == numberOfEdges())
-	_pts[getEdge(a).en].firstA = b;
-      if (getPoint(getEdge(a).en).lastA == numberOfEdges())
-	_pts[getEdge(a).en].lastA = b;
+    p = getEdge(b).en;
+    if (p >= 0) {
+      if (getPoint(p).incidentEdge[i] == b) {
+	_pts[p].incidentEdge[i] = a;
+      }
     }
 
+    p = getEdge(a).st;
+    if (p >= 0) {
+      if (getPoint(p).incidentEdge[i] == numberOfEdges()) {
+	_pts[p].incidentEdge[i] = b;
+      }
+    }
+
+    p = getEdge(a).en;
+    if (p >= 0) {
+      if (getPoint(p).incidentEdge[i] == numberOfEdges()) {
+	_pts[p].incidentEdge[i] = b;
+      }
+    }
+
+  }
+    
   if (getEdge(a).prevS == b)
     _aretes[a].prevS = a;
   if (getEdge(a).prevE == b)
@@ -1468,7 +1471,7 @@ Shape::SortEdges (void)
       if (d > 1)
 	{
 	  int cb;
-	  cb = getPoint(p).firstA;
+	  cb = getPoint(p).incidentEdge[FIRST];
 	  int nb = 0;
 	  while (cb >= 0)
 	    {
@@ -1487,8 +1490,8 @@ Shape::SortEdges (void)
 	      cb = NextAt (p, cb);
 	    }
 	  SortEdgesList (list, 0, nb - 1);
-	  _pts[p].firstA = list[0].no;
-	  _pts[p].lastA = list[nb - 1].no;
+	  _pts[p].incidentEdge[FIRST] = list[0].no;
+	  _pts[p].incidentEdge[LAST] = list[nb - 1].no;
 	  for (int i = 0; i < nb; i++)
 	    {
 	      if (list[i].starting)
@@ -1841,21 +1844,21 @@ Shape::ConnectStart (int p, int b)
   _aretes[b].st = p;
   _pts[p].dO++;
   _aretes[b].nextS = -1;
-  _aretes[b].prevS = getPoint(p).lastA;
-  if (getPoint(p).lastA >= 0)
+  _aretes[b].prevS = getPoint(p).incidentEdge[LAST];
+  if (getPoint(p).incidentEdge[LAST] >= 0)
     {
-      if (getEdge(getPoint(p).lastA).st == p)
+      if (getEdge(getPoint(p).incidentEdge[LAST]).st == p)
 	{
-	  _aretes[getPoint(p).lastA].nextS = b;
+	  _aretes[getPoint(p).incidentEdge[LAST]].nextS = b;
 	}
-      else if (getEdge(getPoint(p).lastA).en == p)
+      else if (getEdge(getPoint(p).incidentEdge[LAST]).en == p)
 	{
-	  _aretes[getPoint(p).lastA].nextE = b;
+	  _aretes[getPoint(p).incidentEdge[LAST]].nextE = b;
 	}
     }
-  _pts[p].lastA = b;
-  if (getPoint(p).firstA < 0)
-    _pts[p].firstA = b;
+  _pts[p].incidentEdge[LAST] = b;
+  if (getPoint(p).incidentEdge[FIRST] < 0)
+    _pts[p].incidentEdge[FIRST] = b;
 }
 
 void
@@ -1866,21 +1869,21 @@ Shape::ConnectEnd (int p, int b)
   _aretes[b].en = p;
   _pts[p].dI++;
   _aretes[b].nextE = -1;
-  _aretes[b].prevE = getPoint(p).lastA;
-  if (getPoint(p).lastA >= 0)
+  _aretes[b].prevE = getPoint(p).incidentEdge[LAST];
+  if (getPoint(p).incidentEdge[LAST] >= 0)
     {
-      if (getEdge(getPoint(p).lastA).st == p)
+      if (getEdge(getPoint(p).incidentEdge[LAST]).st == p)
 	{
-	  _aretes[getPoint(p).lastA].nextS = b;
+	  _aretes[getPoint(p).incidentEdge[LAST]].nextS = b;
 	}
-      else if (getEdge(getPoint(p).lastA).en == p)
+      else if (getEdge(getPoint(p).incidentEdge[LAST]).en == p)
 	{
-	  _aretes[getPoint(p).lastA].nextE = b;
+	  _aretes[getPoint(p).incidentEdge[LAST]].nextE = b;
 	}
     }
-  _pts[p].lastA = b;
-  if (getPoint(p).firstA < 0)
-    _pts[p].firstA = b;
+  _pts[p].incidentEdge[LAST] = b;
+  if (getPoint(p).incidentEdge[FIRST] < 0)
+    _pts[p].incidentEdge[FIRST] = b;
 }
 
 void
@@ -1911,10 +1914,10 @@ Shape::DisconnectStart (int b)
 	  _aretes[getEdge(b).nextS].prevE = getEdge(b).prevS;
 	}
     }
-  if (getPoint(getEdge(b).st).firstA == b)
-    _pts[getEdge(b).st].firstA = getEdge(b).nextS;
-  if (getPoint(getEdge(b).st).lastA == b)
-    _pts[getEdge(b).st].lastA = getEdge(b).prevS;
+  if (getPoint(getEdge(b).st).incidentEdge[FIRST] == b)
+    _pts[getEdge(b).st].incidentEdge[FIRST] = getEdge(b).nextS;
+  if (getPoint(getEdge(b).st).incidentEdge[LAST] == b)
+    _pts[getEdge(b).st].incidentEdge[LAST] = getEdge(b).prevS;
   _aretes[b].st = -1;
 }
 
@@ -1946,10 +1949,10 @@ Shape::DisconnectEnd (int b)
 	  _aretes[getEdge(b).nextE].prevE = getEdge(b).prevE;
 	}
     }
-  if (getPoint(getEdge(b).en).firstA == b)
-    _pts[getEdge(b).en].firstA = getEdge(b).nextE;
-  if (getPoint(getEdge(b).en).lastA == b)
-    _pts[getEdge(b).en].lastA = getEdge(b).prevE;
+  if (getPoint(getEdge(b).en).incidentEdge[FIRST] == b)
+    _pts[getEdge(b).en].incidentEdge[FIRST] = getEdge(b).nextE;
+  if (getPoint(getEdge(b).en).incidentEdge[LAST] == b)
+    _pts[getEdge(b).en].incidentEdge[LAST] = getEdge(b).prevE;
   _aretes[b].en = -1;
 }
 
