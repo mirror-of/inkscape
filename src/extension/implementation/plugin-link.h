@@ -15,6 +15,8 @@
 #ifndef __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_LINK_H__
 #define __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_LINK_H__
 
+#include <gtk/gtkdialog.h>
+
 /** \todo  This needs to go away eventually. */
 #include <document.h>
 
