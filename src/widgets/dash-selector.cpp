@@ -304,7 +304,7 @@ sp_dash_selector_menu_item_new (SPDashSelector *dsel, double *pattern)
 	gdouble longest_dash = 0.0;
 	
 	// after summation, convert double dash lengths to ints
-	for (i_p = 0; i_p <= n_pixel_dashes; i_p ++) {
+	for (i_p = 0; i_p < n_pixel_dashes; i_p ++) {
 		pixels_i [i_p] = (gint8) (pixels_d [i_p] + 0.5);
 		// zero-length dashes are already eliminated, so the <1 dash is short but not zero;
 		// we approximate it with a one-pixel mark
