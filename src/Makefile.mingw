@@ -43,12 +43,12 @@ libnr/nr_config.h:
 #svg/libinksvg.a widgets/libinkwidgets.a xml/libinkxml.a
 
 
-inkscape.exe: libinkscape.a main.o inkres.o 
-	$(CXX) -o inkscape.exe main.o inkscape.o libinkscape.a $(LIBS)
+inkscape.exe: libinkscape.a main.o winmain.o inkres.o 
+	$(CXX) -o inkscape.exe main.o winmain.o inkscape.o inkres.o libinkscape.a $(LIBS)
 	strip inkscape.exe
 
-inkres.o: sodipodi.rc
-	windres sodipodi.rc inkres.o
+inkres.o: inkscape.rc
+	windres inkscape.rc inkres.o
 
 libinkscape.a: $(OBJ)
 	make -C dialogs    -f Makefile.mingw
