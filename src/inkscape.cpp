@@ -17,14 +17,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/stat.h>
-#include <time.h>
-#include <fcntl.h>
 #ifndef WIN32
 #include <unistd.h>
 #else
-#include "monostd.h"
+#include <direct.h>
 #endif
+#include <time.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <ctype.h>
 
@@ -48,6 +47,10 @@
 #include "event-context.h"
 #include "inkscape.h"
 #include "inkscape-private.h"
+
+#ifdef WIN32
+#define mkdir(d,m) _mkdir((d))
+#endif
 
 /* Backbones of configuration xml data */
 #include "preferences-skeleton.h"
@@ -77,7 +80,7 @@ static void inkscape_dispose (GObject *object);
 static void inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 static void inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 
-static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
+static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, unsigned int skel_size,
 				  const gchar *e_mkdir,
 				  const gchar *e_notdir,
 				  const gchar *e_ccf,
@@ -511,20 +514,19 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 		      const gchar *e_notreg, const gchar *e_notxml, const gchar *e_notsp)
 {
 	gchar *fn;
-	struct stat s;
 	GtkWidget * w;
 	SPReprDoc * doc;
 	SPRepr * root;
 
 	fn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, filename, NULL);
-	if (stat (fn, &s)) {
+	if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
 		/* No such file */
 		inkscape_init_preferences (INKSCAPE);
 		g_free (fn);
 		return;
 	}
 
-	if (!S_ISREG (s.st_mode)) {
+	if (g_file_test(fn, G_FILE_TEST_IS_REGULAR)) {
 		/* Not a regular file */
 		w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, fn);
 		gtk_dialog_run (GTK_DIALOG (w));
@@ -960,11 +962,10 @@ inkscape_active_event_context (void)
 /* Helpers */
 
 static void
-inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
+inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, unsigned int skel_size,
 		      const gchar *e_mkdir, const gchar *e_notdir, const gchar *e_ccf, const gchar *e_cwf)
 {
 	gchar * dn, *fn;
-	struct stat s;
 	FILE *fh;
 	GtkWidget * w;
 

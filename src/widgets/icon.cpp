@@ -13,18 +13,8 @@
 
 #include <config.h>
 
-#if HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#if HAVE_STRING_H
 #include <string.h>
-#endif
-
-#if HAVE_SYS_STAT_H
-#include <sys/stat.h>
-#endif
-
 #include <libnr/nr-macros.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
@@ -43,10 +33,6 @@
 #include "display/nr-arena-item.h"
 
 #include "icon.h"
-
-#ifdef WIN32
-#include "../monostd.h"
-#endif
 
 /* fixme: (Lauris) */
 extern gboolean sp_bitmap_icons;
@@ -398,11 +384,10 @@ sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale
 
 	/* Try to load from document */
 	if (!edoc && !doc) {
-		struct stat st;
-		if (!stat ("glade/icons.svg", &st) && S_ISREG (st.st_mode)) {
+		if (g_file_test("glade/icons.svg", G_FILE_TEST_IS_REGULAR)) {
 			doc = sp_document_new ("glade/icons.svg", FALSE, FALSE);
 		}
-		if (!doc && !stat (INKSCAPE_PIXMAPDIR "/icons.svg", &st) && S_ISREG (st.st_mode)) {
+		if ( !doc && g_file_test(INKSCAPE_PIXMAPDIR "/icons.svg", G_FILE_TEST_IS_REGULAR) ) {
 			doc = sp_document_new (INKSCAPE_PIXMAPDIR "/icons.svg", FALSE, FALSE);
 		}
 		if (doc) {

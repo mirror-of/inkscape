@@ -11,6 +11,9 @@
 
 	* src/inkscape.cpp: fix some portability issues
 
+	* src/inkscape.cpp, src/widgets/icon.cpp, src/monostd.h: cleaning up
+	  more platform stuff
+
 2004-01-02  Alexander Clausen <alex@skip86.com>
 	
 	* src/spsvgview.cpp src/inkview.cpp src/Makefile.am: re-enabled svg viewer,
