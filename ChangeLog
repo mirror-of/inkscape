@@ -1,3 +1,14 @@
+2004-03-16  jon phillips <kidproto@users.sf.net>
+
+    * share/icons/icons.svg: Added a couple of icons but haven't linked them 
+      to the code yet.
+
+    * share/tutorials/elementsofdesign.svg: Added the first part of the basic 
+      graphics for this tutorial. I added boxes for the rest, which I need to 
+      finish. I need to use Bulia's tutorial top part to keep the 
+      tutorials consistent.
+
+
 2004-03-16  bulia byak <bulia@users.sourceforge.net>
 
 	* nr-type-directory.cpp: Cache NRTypeFaceDef *, not NRTypeFace *, fixes 916155 
