@@ -13,16 +13,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
+#include <glib/gtypes.h>
 
 #include <sigc++/sigc++.h>
 
+#include "forward.h"
 #include "sp-item.h"
 #include "sp-string.h"
-
-#include "desktop.h"
-
-#include "display/curve.h"
+#include "display/display-forward.h"
 #include "libnr/nr-point.h"
 #include "libnrtype/FlowSrc.h"
 #include "svg/svg-types.h"
