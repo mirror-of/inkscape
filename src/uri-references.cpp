@@ -48,17 +48,20 @@ URIReference::~URIReference() {
 }
 
 void URIReference::_onIDChanged(SPObject *obj) {
+
 	if (obj == _obj) return;
 
-	if (_obj) {
-		sp_object_hunref(_obj, NULL);
-	}
+	SPObject *old_obj=_obj;
 	_obj = obj;
-	if (obj) {
-		sp_object_href(obj, NULL);
-	}
 
+	if (_obj) {
+		sp_object_href(_obj, NULL);
+	}
 	_changed_signal.emit(_obj);
+	if (old_obj) {
+		/* unref the old object _after_ the signal emission */
+		sp_object_hunref(old_obj, NULL);
+	}
 }
 
 }; /* namespace Inkscape */

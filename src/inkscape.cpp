@@ -16,6 +16,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <time.h>
 #include <fcntl.h>
@@ -117,7 +118,13 @@ Inkscape::Application *inkscape = NULL;
 
 static void (* segv_handler) (int) = NULL;
 
-const gchar* preferences_file = "preferences.xml";
+#ifdef WIN32
+#define INKSCAPE_PROFILE_DIR "Inkscape"
+#else
+#define INKSCAPE_PROFILE_DIR ".inkscape"
+#endif
+
+#define PREFERENCES_FILE "preferences.xml"
 
 GType
 inkscape_get_type (void)
@@ -509,12 +516,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 	SPReprDoc * doc;
 	SPRepr * root;
 
-#ifdef WIN32
-	//	fn = g_strdup_printf ("inkscape/%s", filename);
-	fn = g_build_filename (g_get_home_dir (), ".inkscape", filename, NULL);
-#else
-	fn = g_build_filename (g_get_home_dir (), ".inkscape", filename, NULL);
-#endif
+	fn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, filename, NULL);
 	if (stat (fn, &s)) {
 		/* No such file */
 		inkscape_init_preferences (INKSCAPE);
@@ -561,7 +563,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 void
 inkscape_load_preferences (Inkscape::Application *inkscape)
 {
-	inkscape_load_config (preferences_file, inkscape->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
+	inkscape_load_config (PREFERENCES_FILE, inkscape->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
 			      _("%s is not regular file.\n"
 				"Although inkscape will run, you can\n"
 				"neither load nor save preferences\n"),
@@ -581,16 +583,7 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
 {
 	gchar * fn;
 
-#ifdef WIN32
-	//TODO:WIN32: find out if this works on windows:
-	//fn = g_build_filename (g_get_home_dir (), ".inkscape/", preferences_file, NULL);
-	//this is the old code that stores prefs in current dir:
-	//	fn = g_strdup ("inkscape/preferences.xml");
-	fn = g_build_filename (g_get_home_dir (), ".inkscape", preferences_file, NULL);
-#else
-	fn = g_build_filename (g_get_home_dir (), ".inkscape", preferences_file, NULL);
-#endif
-
+	fn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, PREFERENCES_FILE, NULL);
 	sp_repr_save_file (inkscape->preferences, fn);
 
 	g_free (fn);
@@ -972,14 +965,10 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 {
 	gchar * dn, *fn;
 	struct stat s;
-	int fh;
+	FILE *fh;
 	GtkWidget * w;
 
-#ifdef WIN32
-	dn = g_strdup ("inkscape");
-#else
-	dn = g_build_filename (g_get_home_dir (), ".inkscape", NULL);
-#endif
+	dn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, NULL);
 	if (stat (dn, &s)) {
 		if (mkdir (dn, S_IRWXU | S_IRGRP | S_IXGRP))
 		{
@@ -1000,15 +989,10 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 	}
 	g_free (dn);
 
-#ifdef WIN32
-	//	fn = g_strdup_printf ("inkscape/%s", config_name);
-	fn = g_build_filename (g_get_home_dir (), ".inkscape", config_name, NULL);
-	fh = creat (fn, S_IREAD | S_IWRITE);
-#else
-	fn = g_build_filename (g_get_home_dir (), ".inkscape", config_name, NULL);
-	fh = creat (fn, S_IRUSR | S_IWUSR | S_IRGRP);
-#endif
-	if (fh < 0) {
+	fn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, config_name, NULL);
+
+	fh = fopen(fn, "r+t");
+	if (!fh) {
 		/* Cannot create file */
 		w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn);
 		gtk_dialog_run (GTK_DIALOG (w));
@@ -1016,18 +1000,18 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 		g_free (fn);
 		return;
 	}
-	if (write (fh, skeleton, skel_size) != skel_size) {
+	if ( fwrite(skeleton, 1, skel_size, fh) != skel_size ) {
 		/* Cannot create file */
 		w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, fn);
 		gtk_dialog_run (GTK_DIALOG (w));
 		gtk_widget_destroy (w);
 		g_free (fn);
-		close (fh);
+		fclose(fh);
 		return;
 	}
 
 	g_free (fn);
-	close (fh);
+	fclose(fh);
 }
 
 /* This routine should be obsoleted in favor of the generic version */
@@ -1035,7 +1019,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 static void
 inkscape_init_preferences (Inkscape::Application *inkscape)
 {
-	inkscape_init_config (inkscape->preferences, preferences_file, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
+	inkscape_init_config (inkscape->preferences, PREFERENCES_FILE, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
 			      _("Cannot create directory %s.\n"
 				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"

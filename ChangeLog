@@ -9,6 +9,8 @@
 	  src/sp-item.h, src/sp-item.cpp, src/uri-reference.h,
 	  src/uri-reference.cpp: rewrote URI monitoring code using SigC++
 
+	* src/inkscape.cpp: fix some portability issues
+
 2004-01-02  Alexander Clausen <alex@skip86.com>
 	
 	* src/spsvgview.cpp src/inkview.cpp src/Makefile.am: re-enabled svg viewer,
