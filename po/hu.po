@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-06 12:45+0100\n"
-"PO-Revision-Date: 2004-11-06 13:39+0100\n"
+"PO-Revision-Date: 2004-11-06 14:00+0100\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -1693,7 +1693,7 @@ msgstr "RY:"
 #: src/dialogs/object-attributes.cpp:130
 #, c-format
 msgid "%s attributes"
-msgstr "%s attribútumai"
+msgstr "%s tulajdonságai"
 
 #: src/dialogs/object-properties.cpp:165
 msgid "Fill"
@@ -2106,19 +2106,19 @@ msgstr "Csomópontot eggyel lejjebb"
 
 #: src/dialogs/xml-tree.cpp:434
 msgid "Delete attribute"
-msgstr "Attribútum törlése"
+msgstr "Tulajdonság törlése"
 
 #: src/dialogs/xml-tree.cpp:478
 msgid "Attribute name"
-msgstr "Attribútumnév"
+msgstr "Tulajdonságnév"
 
 #: src/dialogs/xml-tree.cpp:497
 msgid "Set attribute"
-msgstr "Attribútum beállítása"
+msgstr "Tulajdonság beállítása"
 
 #: src/dialogs/xml-tree.cpp:518
 msgid "Attribute value"
-msgstr "Az attribútum értéke"
+msgstr "A tulajdonság értéke"
 
 #: src/dialogs/xml-tree.cpp:581
 msgid "<b>XML Editor</b> Select attributes and edit them."
@@ -5607,7 +5607,7 @@ msgstr "Kerék"
 
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Attribute"
-msgstr "Attribútum"
+msgstr "Tulajdonság"
 
 #: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
