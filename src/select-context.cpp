@@ -637,22 +637,11 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 case GDK_Shift_R:
                 case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
                 case GDK_Meta_R:
-                {
-                    bool shift = MOD__SHIFT || (event->key.keyval == GDK_Shift_L) || (event->key.keyval == GDK_Shift_R);
-                    bool ctrl = MOD__CTRL || (event->key.keyval == GDK_Control_L) || (event->key.keyval == GDK_Control_R);
-                    bool alt = MOD__ALT || (event->key.keyval == GDK_Alt_L) || (event->key.keyval == GDK_Alt_R) 
-                        || (event->key.keyval == GDK_Meta_L) || (event->key.keyval == GDK_Meta_R);
-
-                    gchar *tip = g_strdup_printf ("%s%s%s%s%s", 
-                                                  ctrl? _("<b>Ctrl:</b> select in groups, move hor/vert") : "",
-                                                  ctrl && shift? "; " : "",
-                                                  shift? _("<b>Shift:</b> toggle select, force rubberband") : "",
-                                                  (ctrl || shift) && alt? "; " : "",
-                                                  alt? _("<b>Alt:</b> select under, move selected") : ""
-                        );
-			event_context->defaultMessageContext()->flash(Inkscape::INFORMATION_MESSAGE, tip);
-                }
-                break;
+                    sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
+                                                _("<b>Ctrl:</b> select in groups, move hor/vert"),
+                                                _("<b>Shift:</b> toggle select, force rubberband, disable snapping"),
+                                                _("<b>Alt:</b> select under, move selected"));
+                    break;
                 case GDK_Left: // move selection left
                 case GDK_KP_Left:
                 case GDK_KP_4:

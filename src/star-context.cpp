@@ -358,6 +358,18 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
         break;
     case GDK_KEY_PRESS:
         switch (event->key.keyval) {
+        case GDK_Alt_R:
+        case GDK_Control_L:
+        case GDK_Control_R:
+        case GDK_Shift_L:
+        case GDK_Shift_R:
+        case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
+        case GDK_Meta_R:
+            sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
+                                        _("<b>Ctrl:</b> snap angle; keep rays radial"),
+                                        NULL,
+                                        NULL);
+            break;
         case GDK_Up:
         case GDK_Down:
         case GDK_KP_Up:
@@ -382,6 +394,23 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
         default:
             break;
         }
+        break;
+    case GDK_KEY_RELEASE:
+        switch (event->key.keyval) {
+        case GDK_Alt_L:
+        case GDK_Alt_R:
+        case GDK_Control_L:
+        case GDK_Control_R:
+        case GDK_Shift_L:
+        case GDK_Shift_R:
+        case GDK_Meta_L:  // Meta is when you press Shift+Alt
+        case GDK_Meta_R:
+            event_context->defaultMessageContext()->clear();
+            break;
+        default:
+            break;
+        }
+        break;
     default:
         break;
     }

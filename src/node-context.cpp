@@ -10,12 +10,14 @@
  * which is Copyright (C) Masatake Yamato 2002
  */
 
+#include <config.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtksignal.h>
 #include <string.h>
 #include "macros.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
+#include "helper/sp-intl.h"
 #include "display/sp-canvas-util.h"
 #include "object-edit.h"
 #include "sp-path.h"
@@ -344,6 +346,15 @@ nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * ol
 	}
 
 	sp_nodepath_update_statusbar (nc->nodepath);
+}
+
+void
+sp_node_context_show_modifier_tip (SPEventContext *event_context, GdkEvent *event)
+{
+       sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
+                 _("<b>Ctrl:</b> toggle node type, snap handle angle, move hor/vert; <b>Ctrl+Alt</b>: move along handles"),
+                 _("<b>Shift:</b> toggle node selection, disable snapping, rotate both handles"),
+                 _("<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"));
 }
 
 static gint
@@ -706,15 +717,25 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 
 		case GDK_Alt_L:
 			nc->leftalt = TRUE;
+			sp_node_context_show_modifier_tip (event_context, event);
 			break;
 		case GDK_Alt_R:
 			nc->rightalt = TRUE;
+			sp_node_context_show_modifier_tip (event_context, event);
 			break;
 		case GDK_Control_L:
 			nc->leftctrl = TRUE;
+			sp_node_context_show_modifier_tip (event_context, event);
 			break;
 		case GDK_Control_R:
 			nc->rightctrl = TRUE;
+			sp_node_context_show_modifier_tip (event_context, event);
+			break;
+		case GDK_Shift_L:
+		case GDK_Shift_R:
+		case GDK_Meta_L:
+		case GDK_Meta_R:
+			sp_node_context_show_modifier_tip (event_context, event);
 			break;
 		default:
 			ret = node_key (event);
@@ -725,15 +746,25 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		switch (event->key.keyval) {
 		case GDK_Alt_L:
 			nc->leftalt = FALSE;
+			event_context->defaultMessageContext()->clear();
 			break;
 		case GDK_Alt_R:
 			nc->rightalt = FALSE;
+			event_context->defaultMessageContext()->clear();
 			break;
 		case GDK_Control_L:
 			nc->leftctrl = FALSE;
+			event_context->defaultMessageContext()->clear();
 			break;
 		case GDK_Control_R:
 			nc->rightctrl = FALSE;
+			event_context->defaultMessageContext()->clear();
+			break;
+		case GDK_Shift_L:
+		case GDK_Shift_R:
+		case GDK_Meta_L:
+		case GDK_Meta_R:
+			event_context->defaultMessageContext()->clear();
 			break;
 		}
 		break;

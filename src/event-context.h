@@ -84,4 +84,6 @@ gint gobble_motion_events (gint mask);
 
 void sp_event_context_update_cursor (SPEventContext *ec);
 
+void sp_event_show_modifier_tip (Inkscape::MessageContext *message_context, GdkEvent *event, const gchar *ctrl_tip, const gchar *shift_tip, const gchar *alt_tip);
+
 #endif

@@ -759,3 +759,26 @@ sp_event_root_menu_popup (SPDesktop *desktop, SPItem *item, GdkEvent *event)
 	}
 }
 
+void
+sp_event_show_modifier_tip (Inkscape::MessageContext *message_context, GdkEvent *event, const gchar *ctrl_tip, const gchar *shift_tip, const gchar *alt_tip)
+{
+	bool ctrl = ctrl_tip && (MOD__CTRL || (event->key.keyval == GDK_Control_L) || (event->key.keyval == GDK_Control_R));
+	bool shift = shift_tip && (MOD__SHIFT || (event->key.keyval == GDK_Shift_L) || (event->key.keyval == GDK_Shift_R));
+	bool alt = alt_tip && (MOD__ALT || (event->key.keyval == GDK_Alt_L) || (event->key.keyval == GDK_Alt_R) 
+		|| (event->key.keyval == GDK_Meta_L) || (event->key.keyval == GDK_Meta_R));
+
+	gchar *tip = g_strdup_printf ("%s%s%s%s%s", 
+						ctrl? ctrl_tip : "",
+						ctrl && (shift || alt)? "; " : "",
+						shift? shift_tip : "",
+						(ctrl || shift) && alt? "; " : "",
+						alt? alt_tip : ""
+						);
+
+
+	if (strlen (tip) > 0) {
+		message_context->flash(Inkscape::INFORMATION_MESSAGE, tip);
+	}
+
+	g_free (tip);
+}
