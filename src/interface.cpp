@@ -163,23 +163,41 @@ sp_ui_close_view (GtkWidget * widget)
 {
 	GtkWidget *w;
 
-	if (SP_ACTIVE_DESKTOP == NULL) return;
+	if (SP_ACTIVE_DESKTOP == NULL) {
+	    return;
+	}
 	w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
-	if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) return;
+	if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) {
+	    return;
+	}
 	gtk_widget_destroy (w);
 }
 
+/**
+ *  This function is called to exit the program, and iterates through all
+ *  open document view windows, attempting to close each in turn.  If the
+ *  view has unsaved information, the user will be prompted to save,
+ *  discard, or cancel.
+ * 
+ *  Returns FALSE if the user cancels the close_all operation, TRUE
+ *  otherwise.
+ */
 unsigned int
 sp_ui_close_all (void)
 {
-	while (SP_ACTIVE_DESKTOP) {
-		GtkWidget *w;
-		w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
-		if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) return FALSE;
-		gtk_widget_destroy (w);
+    /* Iterate through all the windows, destroying each in the order they
+       become active */
+    while (SP_ACTIVE_DESKTOP) {
+	GtkWidget *w;
+	w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
+	if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP)) == 0) {
+	    /* The user cancelled the operation, so end doing the close */
+	    return FALSE;
 	}
+	gtk_widget_destroy (w);
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 static gint

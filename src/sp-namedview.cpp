@@ -191,8 +191,8 @@ sp_namedview_release (SPObject * object)
 	  at all.  So this should be reviewed in more depth to see if commenting out
 	  the assert introduces any new undesired behavior.
 
-	  g_assert (!namedview->views); 
 	 */
+	g_assert (!namedview->views); 
 
 	while (namedview->gridviews) {
 		gtk_object_destroy (GTK_OBJECT (namedview->gridviews->data));

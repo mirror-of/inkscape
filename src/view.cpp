@@ -132,6 +132,11 @@ sp_view_dispose (GObject *object)
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
+/**
+ *  Closes the given 'view' by issuing the 'SHUTDOWN' signal to it.
+ *  Returns the result that is returned by the signal handler, which
+ *  is 0 (FALSE) if the user cancels the close, or non-zero otherwise.
+ */
 gboolean
 sp_view_shutdown (SPView *view)
 {

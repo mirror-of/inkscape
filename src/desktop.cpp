@@ -881,8 +881,9 @@ sp_desktop_widget_destroy (GtkObject *object)
         dtw->desktop = NULL;
     }
 
-    if (GTK_OBJECT_CLASS (dtw_parent_class)->destroy)
+    if (GTK_OBJECT_CLASS (dtw_parent_class)->destroy) {
         (* GTK_OBJECT_CLASS (dtw_parent_class)->destroy) (object);
+    }
 }
 
 /*
@@ -1013,6 +1014,12 @@ sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
     /* update inactive desktop indicator */
 }
 
+/**
+ *  Shuts down the desktop object for the view being closed.  It checks
+ *  to see if the document has been edited, and if so prompts the user
+ *  to save, discard, or cancel.  Returns TRUE if the shutdown operation
+ *  is cancelled or if the save is cancelled or fails, FALSE otherwise.
+ */
 static gboolean
 sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 {
@@ -1036,7 +1043,12 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                   "If you close without saving, your changes will be discarded."),
                 SP_DOCUMENT_NAME(doc));
 
-            /* FIXME !!! Gtk 2.3+ gives us gtk_message_dialog_set_markup() (and actually even gtk_message_dialog_new_with_markup(..., format, ...)!) -- until then, we will have to be a little bit evil here and poke at GtkMessageDialog::label, which is private... */
+            /* FIXME !!! Gtk 2.3+ gives us
+	       gtk_message_dialog_set_markup() (and actually even
+	       gtk_message_dialog_new_with_markup(..., format, ...)!) --
+	       until then, we will have to be a little bit evil here and
+	       poke at GtkMessageDialog::label, which is private... */
+
             gtk_label_set_markup(GTK_LABEL(GTK_MESSAGE_DIALOG(dialog)->label), markup);
             g_free(markup);
 
@@ -1058,11 +1070,11 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                 sp_document_ref(doc);
                 if (sp_file_save_document(doc)) {
                     sp_document_unref(doc);
-                    break;
-                } else { // save dialog canceled or save failed
+                } else { // save dialog cancelled or save failed
                     sp_document_unref(doc);
                     return TRUE;
                 }
+		break;
             case GTK_RESPONSE_NO:
                 break;
             default: // cancel pressed, or dialog was closed

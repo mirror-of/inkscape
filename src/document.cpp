@@ -162,6 +162,11 @@ sp_document_init (SPDocument *doc)
 	doc->priv = p;
 }
 
+/**
+ *  This routine removes the given document object from the application,
+ *  clearing the undo/redo information, releasing its root object, releasing
+ *  other resources, and destructing its data members.
+ */
 static void
 sp_document_dispose (GObject *object)
 {
