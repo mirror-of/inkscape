@@ -103,6 +103,9 @@ sp_verb_action_file_perform (SPAction *action, void *data)
 	case SP_VERB_FILE_EXPORT:
 		sp_file_export_dialog (NULL);
 		break;
+	case SP_VERB_FILE_QUIT:
+		sp_file_exit ();
+		break;
 	default:
 		break;
 	}
@@ -313,9 +316,12 @@ sp_verb_action_zoom_perform (SPAction *action, void *data)
 {
 	SPDesktop *dt;
 	NRRectF d;
+	SPRepr *repr;
+	unsigned int v = 0;
 
 	dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
+	repr = SP_OBJECT_REPR (dt->namedview);
 
 	switch ((int) data) {
 	case SP_VERB_ZOOM_IN:
@@ -346,6 +352,14 @@ sp_verb_action_zoom_perform (SPAction *action, void *data)
 		break;
 	case SP_VERB_ZOOM_SELECTION:
 		sp_desktop_zoom_selection (dt);
+		break;
+	case SP_VERB_TOGGLE_GUIDES:
+		sp_repr_get_boolean (repr, "showguides", &v);
+		sp_repr_set_boolean (repr, "showguides", !(v));
+		break;
+	case SP_VERB_TOGGLE_GRID:
+		sp_repr_get_boolean (repr, "showgrid", &v);
+		sp_repr_set_boolean (repr, "showgrid", !(v));
 		break;
 	default:
 		break;
@@ -405,7 +419,7 @@ static SPActionEventVector action_ctx_vector = {{NULL}, sp_verb_action_ctx_perfo
 static SPActionEventVector action_zoom_vector = {{NULL}, sp_verb_action_zoom_perform, NULL, NULL, sp_verb_action_set_shortcut};
 static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog_perform, NULL, NULL, sp_verb_action_set_shortcut};
 
-#define SP_VERB_IS_FILE(v) ((v >= SP_VERB_FILE_NEW) && (v <= SP_VERB_FILE_EXPORT))
+#define SP_VERB_IS_FILE(v) ((v >= SP_VERB_FILE_NEW) && (v <= SP_VERB_FILE_QUIT))
 #define SP_VERB_IS_EDIT(v) ((v >= SP_VERB_EDIT_UNDO) && (v <= SP_VERB_EDIT_SELECT_ALL))
 #define SP_VERB_IS_SELECTION(v) ((v >= SP_VERB_SELECTION_TO_FRONT) && (v <= SP_VERB_SELECTION_BREAK_APART))
 #define SP_VERB_IS_OBJECT(v) ((v >= SP_VERB_OBJECT_ROTATE_90) && (v <= SP_VERB_OBJECT_FLIP_VERTICAL))
@@ -435,6 +449,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Preview"), N_("Preview document printout"), GTK_STOCK_PRINT_PREVIEW },
 	{SP_VERB_FILE_IMPORT, "FileImport", N_("Import"), N_("Import bitmap or SVG image into document"), "file_import"},
 	{SP_VERB_FILE_EXPORT, "FileExport", N_("Export"), N_("Export document as PNG bitmap"), "file_export"},
+	{SP_VERB_FILE_QUIT, "FileQuit", N_("Quit"), N_("Quit"), "file_quit"},
 	/* Edit */
 	{SP_VERB_EDIT_UNDO, "EditUndo", N_("Undo"), N_("Revert last action"), GTK_STOCK_UNDO},
 	{SP_VERB_EDIT_REDO, "EditRedo", N_("Redo"), N_("Do again undone action"), GTK_STOCK_REDO},
@@ -478,6 +493,8 @@ static const SPVerbActionDef props[] = {
 	/* Zooming */
 	{SP_VERB_ZOOM_IN, "ZoomIn", N_("In"), N_("Zoom in drawing"), "zoom_in"},
 	{SP_VERB_ZOOM_OUT, "ZoomOut", N_("Out"), N_("Zoom out drawing"), "zoom_out"},
+	{SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Grid"), N_("Toggle grid"), "toggle_grid"},
+	{SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("Guides"), N_("Toggle guides"), "toggle_guides"},
 	{SP_VERB_ZOOM_1_1, "Zoom1:0", N_("1:1"), N_("Set zoom factor to 1:1"), "zoom_1_to_1"},
 	{SP_VERB_ZOOM_1_2, "Zoom1:2", N_("1:2"), N_("Set zoom factor to 1:2"), "zoom_1_to_2"},
 	{SP_VERB_ZOOM_2_1, "Zoom2:1", N_("2:1"), N_("Set zoom factor to 2:1"), "zoom_2_to_1"},
