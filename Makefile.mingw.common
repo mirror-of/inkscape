@@ -90,7 +90,7 @@ GTKDOS=c:\gtk
 
 endif
 
-
+MSGFMT = $(GTK)$(S)bin$(S)msgfmt
 
 #VERSION = \"0.37\"
 VERSION = \"0.39cvs-${DTG}\"

@@ -4,6 +4,7 @@ include ./Makefile.mingw.common
 
 
 all:	config.h
+	$(MAKE) -C po  -f Makefile.mingw
 	$(MAKE) -C src -f Makefile.mingw
 
 config.h: config.h.mingw
