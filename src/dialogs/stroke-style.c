@@ -533,11 +533,37 @@ static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed (SPDashSelector *dsel, SPWidget *spw);
 
+void
+sp_stroke_radio_button(GtkWidget* tb, const char* n, const char* xpm,
+		       GtkWidget* hb, GtkWidget* spw,
+		       const gchar* key, const gchar* data) {
+  GtkWidget *px;
+  
+  if (tb == NULL) {
+    tb = gtk_radio_button_new (NULL);
+  } else {
+    tb = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (tb)));
+  }
+  gtk_widget_show (tb);
+  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
+  gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
+  gtk_object_set_data (GTK_OBJECT (spw), n, tb);
+  gtk_object_set_data (GTK_OBJECT (tb), key, (gpointer*)data);
+  gtk_signal_connect (GTK_OBJECT (tb), "toggled",
+		      GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled),
+		      spw);
+  px = gtk_image_new_from_file (xpm);
+  gtk_widget_show (px);
+  gtk_container_add (GTK_CONTAINER (tb), px);
+}
+
+
 GtkWidget *
 sp_stroke_style_line_widget_new (void)
 {
-	GtkWidget *spw, *f, *t, *l, *hb, *sb, *us, *tb, *px, *ds;
+	GtkWidget *spw, *f, *t, *l, *hb, *sb, *us, *tb, *px, *ds, *ms;
 	GtkObject *a;
+	gint i;
 
 	spw = sp_widget_new_global (INKSCAPE);
 
@@ -546,22 +572,24 @@ sp_stroke_style_line_widget_new (void)
 	gtk_container_set_border_width (GTK_CONTAINER (f), 4);
 	gtk_container_add (GTK_CONTAINER (spw), f);
 	
-	t = gtk_table_new (3, 5, FALSE);
+	t = gtk_table_new (3, 6, FALSE);
 	gtk_widget_show (t);
 	gtk_container_set_border_width (GTK_CONTAINER (t), 4);
 	gtk_table_set_row_spacings (GTK_TABLE (t), 4);
 	gtk_container_add (GTK_CONTAINER (f), t);
 	gtk_object_set_data (GTK_OBJECT (spw), "stroke", t);
 
+	i=0;
+
 	/* Stroke width */
 	l = gtk_label_new (_("Width:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 0, 1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
 
 	hb = gtk_hbox_new (FALSE, 4);
 	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, i, i+1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
 	a = gtk_adjustment_new (1.0, 0.0, 100.0, 0.1, 10.0, 10.0);
 	gtk_object_set_data (GTK_OBJECT (spw), "width", a);
@@ -578,105 +606,92 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "units", us);
 
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_stroke_style_width_changed), spw);
+	i++;
 
 	/* Join type */
 	l = gtk_label_new (_("Join:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 1, 2, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
 
 	hb = gtk_hbox_new (FALSE, 4);
 	gtk_widget_show (hb);
 	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
-	tb = gtk_radio_button_new (NULL);
-	gtk_widget_show (tb);
-	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
-	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_MITER, tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"miter");
-	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_stock (INKSCAPE_STOCK_JOIN_MITER, GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_widget_show (px);
-	gtk_container_add (GTK_CONTAINER (tb), px);
+	tb = NULL;
 
-	tb = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON (tb)));
-	gtk_widget_show (tb);
-	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
-	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_ROUND, tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"round");
-	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_stock (INKSCAPE_STOCK_JOIN_ROUND, GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_widget_show (px);
-	gtk_container_add (GTK_CONTAINER (tb), px);
-
-	tb = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON (tb)));
-	gtk_widget_show (tb);
-	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
-	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_BEVEL, tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"bevel");
-	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_stock (INKSCAPE_STOCK_JOIN_BEVEL, GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_widget_show (px);
-	gtk_container_add (GTK_CONTAINER (tb), px);
+	sp_stroke_radio_button(tb, "join-miter",
+			       INKSCAPE_GLADEDIR "/join_miter.xpm",
+			       hb, spw, "join", "miter");
+	sp_stroke_radio_button(tb, "join-round",
+			       INKSCAPE_GLADEDIR "/join_round.xpm",
+			       hb, spw, "join", "round");
+	sp_stroke_radio_button(tb, "join-bevel",
+			       INKSCAPE_GLADEDIR "/join_bevel.xpm",
+			       hb, spw, "join", "bevel");
+	i++;  
 
 	/* Cap type */
 	l = gtk_label_new (_("Cap:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 2, 3, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
 
 	hb = gtk_hbox_new (FALSE, 4);
 	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, i, i+1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
-	tb = gtk_radio_button_new (NULL);
-	gtk_widget_show (tb);
-	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
-	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_BUTT, tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"butt");
-	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_stock (INKSCAPE_STOCK_CAP_BUTT, GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_widget_show (px);
-	gtk_container_add (GTK_CONTAINER (tb), px);
-
-	tb = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON (tb)));
-	gtk_widget_show (tb);
-	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
-	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_ROUND, tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"round");
-	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_stock (INKSCAPE_STOCK_CAP_ROUND, GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_widget_show (px);
-	gtk_container_add (GTK_CONTAINER (tb), px);
-
-	tb = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON (tb)));
-	gtk_widget_show (tb);
-	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
-	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_SQUARE, tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"square");
-	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_stock (INKSCAPE_STOCK_CAP_SQUARE, GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_widget_show (px);
-	gtk_container_add (GTK_CONTAINER (tb), px);
+	tb = NULL;
+	sp_stroke_radio_button(tb, "cap-butt",
+			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
+			       hb, spw, "cap", "butt");
+	sp_stroke_radio_button(tb, "cap-round",
+			       INKSCAPE_GLADEDIR "/cap_round.xpm",
+			       hb, spw, "cap", "round");
+	sp_stroke_radio_button(tb, "cap-square",
+			       INKSCAPE_GLADEDIR "/cap_square.xpm",
+			       hb, spw, "cap", "square");
+	i++;
+  
 
 	/* Dash */
 	l = gtk_label_new (_("Pattern:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 3, 4, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
 
 	ds = sp_dash_selector_new (inkscape_get_repr (INKSCAPE, "palette.dashes"));
 	gtk_widget_show (ds);
-	gtk_table_attach (GTK_TABLE (t), ds, 1, 4, 3, 4, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), ds, 1, 4, i, i+1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "dash", ds);
 	gtk_signal_connect (GTK_OBJECT (ds), "changed", GTK_SIGNAL_FUNC (sp_stroke_style_line_dash_changed), spw);
+	i++;
 
+
+	/* Start Marker */
+	l = gtk_label_new (_("Start Markers:"));
+	gtk_widget_show (l);
+	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+
+	hb = gtk_hbox_new (FALSE, 4);
+	gtk_widget_show (hb);
+	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, i, i+1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+			  (GtkAttachOptions)0, 0, 0);
+	
+	tb = NULL;
+	sp_stroke_radio_button(tb, "start_marker-none",
+			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
+			       hb, spw, "start_marker", "none");
+	sp_stroke_radio_button(tb, "start_marker-filled_arrow",
+			       INKSCAPE_GLADEDIR "/cap_round.xpm",
+			       hb, spw, "start_marker", "mTriangle");
+	sp_stroke_radio_button(tb, "start_marker-hollow_arrow",
+			       INKSCAPE_GLADEDIR "/cap_square.xpm",
+			       hb, spw, "start_marker", "mArrow");
+	i++;
+	
+	/* General (I think) style dialog signals */
 	gtk_signal_connect (GTK_OBJECT (spw), "construct", GTK_SIGNAL_FUNC (sp_stroke_style_line_construct), NULL);
 	gtk_signal_connect (GTK_OBJECT (spw), "modify_selection", GTK_SIGNAL_FUNC (sp_stroke_style_line_modify_selection), NULL);
 	gtk_signal_connect (GTK_OBJECT (spw), "change_selection", GTK_SIGNAL_FUNC (sp_stroke_style_line_change_selection), NULL);
@@ -863,6 +878,30 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 }
 
+/** 
+ *  This essentially does a lookup of the string representation of
+ *  a given marker's id.  This is intended to be temporary until
+ *  a solution with a proper hashmap or lookup table or something
+ *  can be written.
+ */
+const gchar*
+marker_id_to_string(unsigned int id) 
+{
+  switch (id) {          /* A hashmap would be more flexible */
+    /*
+  case SP_MARKER_NONE:
+    return "marker-none";
+  case SP_MARKER_TRIANGLE:
+    return "marker-triangle";
+  case SP_MARKER_ARROW:
+    return "marker-arrow";
+    */
+  default:
+    return "error";
+  };
+}
+
+
 static void
 sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 {
@@ -872,6 +911,7 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 	const SPUnit *unit;
 	gdouble swidth;
 	GtkWidget *tb;
+	const gchar *marker_type;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 
@@ -929,6 +969,20 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 		break;
 	}
 	sp_stroke_style_set_cap_buttons (spw, tb);
+
+       /* TODO
+       marker_type = marker_string_to_int(style->marker_start.value);
+       tb = gtk_object_get_data (GTK_OBJECT (spw), marker_type);
+       sp_stroke_style_set_marker_start (spw, tb);
+
+       marker_type = marker_string_to_int(style->marker_mid.value);
+       tb = gtk_object_get_data (GTK_OBJECT (spw), marker_type);
+       sp_stroke_style_set_marker_mid (spw, tb);
+
+       marker_type = marker_string_to_int(style->marker_end.value);
+       tb = gtk_object_get_data (GTK_OBJECT (spw), marker_type);
+       sp_stroke_style_set_marker_end (spw, tb);
+*/
 
 	/* Dash */
 	if (style->stroke_dash.n_dash > 0) {
@@ -1071,12 +1125,13 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
 	if (gtk_toggle_button_get_active (tb)) {
 		const GSList *items, *i, *r;
 		GSList *reprs;
-		const gchar *join, *cap;
+		const gchar *join, *cap, *start_marker;
 		SPCSSAttr *css;
 
 		items = sp_widget_get_item_list (spw);
 		join = (const gchar *)gtk_object_get_data (GTK_OBJECT (tb), "join");
 		cap = (const gchar *)gtk_object_get_data (GTK_OBJECT (tb), "cap");
+		start_marker = (const gchar*)gtk_object_get_data (GTK_OBJECT (tb), "start_marker");
 
 		if (spw->inkscape) {
 			reprs = NULL;
@@ -1098,10 +1153,16 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
 				sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 			}
 			sp_stroke_style_set_join_buttons (spw, GTK_WIDGET (tb));
-		} else {
+		} else if (cap) {
 			sp_repr_css_set_property (css, "stroke-linecap", cap);
 			for (r = reprs; r != NULL; r = r->next) {
 				sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
+			}
+			sp_stroke_style_set_cap_buttons (spw, GTK_WIDGET (tb));
+		} else {
+		        sp_repr_css_set_property (css, "stroke-start-marker", start_marker);
+			for (r = reprs; r != NULL; r = r->next) {
+			        sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 			}
 			sp_stroke_style_set_cap_buttons (spw, GTK_WIDGET (tb));
 		}
@@ -1242,4 +1303,17 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
 
+static void
+sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active)
+{
+  GtkWidget *tb;
+  
+  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "marker-none"));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "marker-triangle"));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "marker-arrow"));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+}
+                                                                                                                                        
 
