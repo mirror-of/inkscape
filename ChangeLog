@@ -1,3 +1,10 @@
+2004-06-01  Ted Gould  <ted@gould.cx>
+
+	* src/extension/internal/gdkpixbuf-input.cpp:
+	Making it so that the lists of extensions and mimetypes are
+	used in the creation of the plugins.  Also, free'ing everything
+	properly so that we don't have a memory leak.
+
 2004-05-30  MenTaLguY  <mental@rydia.net>
 
 	* src/selection.h, src/selection.cpp:

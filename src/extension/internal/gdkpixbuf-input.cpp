@@ -96,6 +96,12 @@ GdkpixbufInput::init (void)
         GdkPixbufFormat * pixformat;
         gchar * xmlString;
 
+        gchar * name;
+        gchar ** extensions;
+        gchar ** mimetypes;
+        gchar * description;
+        int i, j;
+
         pixformat = (GdkPixbufFormat *)formatlist->data;
 
         /* thanks but no thanks, we'll handle SVG extensions... */        
@@ -103,29 +109,45 @@ GdkpixbufInput::init (void)
             continue;
         }
 
-        xmlString = g_strdup_printf(
-            "<spmodule>\n"
-                "<name>%s GDK pixbuf Input</name>\n"
-                "<id>modules.input.gdkpixbuf.%s</id>\n"
-                "<input>\n"
-                    "<extension>.%s</extension>\n"
-                    "<mimetype>%s</mimetype>\n"
-                    "<filetypename>%s (*.%s)</filetypename>\n"
-                    "<filetypetooltip>%s</filetypetooltip>\n"
-                "</input>\n"
-            "</spmodule>",
-            gdk_pixbuf_format_get_name(pixformat),
-            gdk_pixbuf_format_get_extensions(pixformat)[0],
-            gdk_pixbuf_format_get_extensions(pixformat)[0],
-            gdk_pixbuf_format_get_mime_types(pixformat)[0],
-            gdk_pixbuf_format_get_name(pixformat),
-            gdk_pixbuf_format_get_extensions(pixformat)[0],
-            gdk_pixbuf_format_get_description(pixformat)
-            );
+        name =        gdk_pixbuf_format_get_name(pixformat);
+        description = gdk_pixbuf_format_get_description(pixformat);
+        extensions =  gdk_pixbuf_format_get_extensions(pixformat);
+        mimetypes =   gdk_pixbuf_format_get_mime_types(pixformat);
 
-        Inkscape::Extension::build_from_mem(xmlString, new GdkpixbufInput());
+        for (i = 0; extensions[i] != NULL; i++) {
+        for (j = 0; mimetypes[j] != NULL; j++) {
+            xmlString = g_strdup_printf(
+                "<spmodule>\n"
+                    "<name>%s GDK pixbuf Input</name>\n"
+                    "<id>modules.input.gdkpixbuf.%s</id>\n"
+                    "<input>\n"
+                        "<extension>.%s</extension>\n"
+                        "<mimetype>%s</mimetype>\n"
+                        "<filetypename>%s (*.%s)</filetypename>\n"
+                        "<filetypetooltip>%s</filetypetooltip>\n"
+                    "</input>\n"
+                "</spmodule>",
+                name,
+                extensions[i],
+                extensions[i],
+                mimetypes[j],
+                name,
+                extensions[i],
+                description
+                );
+
+            Inkscape::Extension::build_from_mem(xmlString, new GdkpixbufInput());
+        }}
+
+
         g_free(xmlString);
+        g_free(name);
+        g_free(description);
+        g_strfreev(mimetypes);
+        g_strfreev(extensions);
      }
+
+     g_slist_free (formatlist);
 
 
     return;
