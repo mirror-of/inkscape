@@ -540,13 +540,15 @@ nr_arena_glyphs_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint 
 	item->render_opacity = TRUE;
 	if (group->style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
 		group->fill_painter = sp_paint_server_painter_new (SP_STYLE_FILL_SERVER (group->style),
-								   NR_MATRIX_D_TO_DOUBLE (&gc->transform), &group->paintbox);
+							 NR::Matrix (&gc->transform), NR::Matrix (&gc->parent->transform),
+							 &group->paintbox);
 	item->render_opacity = FALSE;
 	}
 
 	if (group->style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {
 		group->stroke_painter = sp_paint_server_painter_new (SP_STYLE_STROKE_SERVER (group->style),
-								     NR_MATRIX_D_TO_DOUBLE (&gc->transform), &group->paintbox);
+							 NR::Matrix (&gc->transform), NR::Matrix (&gc->parent->transform),
+							 &group->paintbox);
 	item->render_opacity = FALSE;
 	}
   if ( item->render_opacity == TRUE && group->style->stroke.type != SP_PAINT_TYPE_NONE && group->style->fill.type != SP_PAINT_TYPE_NONE ) {

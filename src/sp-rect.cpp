@@ -451,7 +451,7 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	sp_shape_adjust_stroke (item, sqrt (fabs (sw * sh)));
 
 	// Adjust pattern fill
-	sp_shape_adjust_pattern (item, xform * remaining.inverse());
+	sp_shape_adjust_pattern (item, NR::identity(), xform * remaining.inverse());
 
 	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 

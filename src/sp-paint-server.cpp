@@ -87,20 +87,19 @@ sp_paint_server_release (SPObject *object)
 }
 
 SPPainter *
-sp_paint_server_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRect *bbox)
+sp_paint_server_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, const NRRect *bbox)
 {
 	SPPainter *painter;
 	SPPaintServerClass *psc;
 
 	g_return_val_if_fail (ps != NULL, NULL);
 	g_return_val_if_fail (SP_IS_PAINT_SERVER (ps), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
 	g_return_val_if_fail (bbox != NULL, NULL);
 
 	painter = NULL;
 	psc = (SPPaintServerClass *) G_OBJECT_GET_CLASS (ps);
 	if (((SPPaintServerClass *) G_OBJECT_GET_CLASS(ps))->painter_new)
-		painter = (* ((SPPaintServerClass *) G_OBJECT_GET_CLASS(ps))->painter_new) (ps, affine, bbox);
+		painter = (* ((SPPaintServerClass *) G_OBJECT_GET_CLASS(ps))->painter_new) (ps, full_transform, parent_transform, bbox);
 
 	if (painter) {
 		painter->next = ps->painters;

@@ -19,6 +19,8 @@
 #include <stdlib.h>
 
 #include <libnr/nr-gradient.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 
 #include <gtk/gtksignal.h>
 
@@ -1070,7 +1072,7 @@ static void sp_lineargradient_build(SPObject *object, SPDocument *document, SPRe
 static void sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value);
 static SPRepr *sp_lineargradient_write(SPObject *object, SPRepr *repr, guint flags);
 
-static SPPainter *sp_lineargradient_painter_new (SPPaintServer *ps, double const *affine, NRRect const *bbox);
+static SPPainter *sp_lineargradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, NRRect const *bbox);
 static void sp_lineargradient_painter_free (SPPaintServer *ps, SPPainter *painter);
 
 static void sp_lg_fill (SPPainter *painter, NRPixBlock *pb);
@@ -1201,15 +1203,15 @@ sp_lineargradient_write (SPObject *object, SPRepr *repr, guint flags)
  * 2) gradientTransform
  * 3) bbox2user
  * 4) ctm == userspace to pixel grid
+
+   See also (*) in sp-pattern about why we may need parent_transform.
  */
 
 static SPPainter *
-sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbox)
+sp_lineargradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, const NRRect *bbox)
 {
 	SPGradient *gr;
 	SPLGPainter *lgp;
-	gdouble color2norm[6], color2px[6];
-	NRMatrix v2px;
 
 	SPLinearGradient *lg = SP_LINEARGRADIENT (ps);
 	gr = SP_GRADIENT (ps);
@@ -1231,67 +1233,34 @@ sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 	 *        garbage or something similar (Lauris) */
 	/* fixme: Originally I had 1023.9999 here - not sure whether
 	 *        we have really to cut out ceil int (Lauris) */
-	nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (color2norm));
+	NR::Matrix color2norm (NR::identity());
 
+	NR::Matrix color2px;
+	
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		gdouble norm2pos[6], bbox2user[6];
-		gdouble color2pos[6], color2tpos[6], color2user[6];
-
-		nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (norm2pos));
-
-		/* gradientTransform goes here (Lauris) */
-		SP_PRINT_TRANSFORM ("gradientTransform", gr->transform);
+		NR::Matrix norm2pos (NR::identity());
 
 		/* BBox to user coordinate system */
-		bbox2user[0] = bbox->x1 - bbox->x0;
-		bbox2user[1] = 0.0;
-		bbox2user[2] = 0.0;
-		bbox2user[3] = bbox->y1 - bbox->y0;
-		bbox2user[4] = bbox->x0;
-		bbox2user[5] = bbox->y0;
-		SP_PRINT_TRANSFORM ("bbox2user", bbox2user);
+		NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0, 0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
-		/* CTM goes here */
-		SP_PRINT_TRANSFORM ("ctm", ctm);
+		NR::Matrix color2pos = color2norm * norm2pos;
+		NR::Matrix color2tpos = color2pos * NR::Matrix ((NRMatrix *) &gr->transform);
+		NR::Matrix color2user = color2tpos * bbox2user;
+		color2px = color2user * full_transform;
 
-		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (color2norm), NR_MATRIX_D_FROM_DOUBLE (norm2pos));
-		SP_PRINT_TRANSFORM ("color2pos", color2pos);
-		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (gr->transform));
-		SP_PRINT_TRANSFORM ("color2tpos", color2tpos);
-		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2user), NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (bbox2user));
-		SP_PRINT_TRANSFORM ("color2user", color2user);
-		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2px), NR_MATRIX_D_FROM_DOUBLE (color2user), NR_MATRIX_D_FROM_DOUBLE (ctm));
-		SP_PRINT_TRANSFORM ("color2px", color2px);
 	} else {
-		gdouble norm2pos[6];
-		gdouble color2pos[6], color2tpos[6];
-		/* Problem: What to do, if we have mixed lengths and
-		 * percentages? */
-		/* Currently we do ignore percentages at all, but that
-		 * is not good (lauris) */
+		/* Problem: What to do, if we have mixed lengths and percentages? */
+		/* Currently we do ignore percentages at all, but that is not good (lauris) */
 
-		nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (norm2pos));
+		NR::Matrix norm2pos (NR::identity());
+		NR::Matrix color2pos = color2norm * norm2pos;
+		NR::Matrix color2tpos = color2pos * NR::Matrix ((NRMatrix *) &gr->transform);
+		color2px = color2tpos * full_transform;
 
-		/* gradientTransform goes here (Lauris) */
-		SP_PRINT_TRANSFORM ("gradientTransform", gr->transform);
-
-		/* CTM goes here */
-		SP_PRINT_TRANSFORM ("ctm", ctm);
-
-		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (color2norm), NR_MATRIX_D_FROM_DOUBLE (norm2pos));
-		SP_PRINT_TRANSFORM ("color2pos", color2pos);
-		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (gr->transform));
-		SP_PRINT_TRANSFORM ("color2tpos", color2tpos);
-		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2px), NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (ctm));
-		SP_PRINT_TRANSFORM ("color2px", color2px);
 	}
 
-	v2px.c[0] = color2px[0];
-	v2px.c[1] = color2px[1];
-	v2px.c[2] = color2px[2];
-	v2px.c[3] = color2px[3];
-	v2px.c[4] = color2px[4];
-	v2px.c[5] = color2px[5];
+	NRMatrix v2px;
+	color2px.copyto (&v2px);
 
 	nr_lgradient_renderer_setup (&lgp->lgr, gr->color, gr->spread, &v2px,
 				     lg->x1.computed, lg->y1.computed, lg->x2.computed, lg->y2.computed);
@@ -1367,7 +1336,7 @@ static void sp_radialgradient_build (SPObject *object, SPDocument *document, SPR
 static void sp_radialgradient_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags);
 
-static SPPainter *sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRect *bbox);
+static SPPainter *sp_radialgradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, const NRRect *bbox);
 static void sp_radialgradient_painter_free (SPPaintServer *ps, SPPainter *painter);
 
 static void sp_rg_fill (SPPainter *painter, NRPixBlock *pb);
@@ -1505,10 +1474,9 @@ sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static SPPainter *
-sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbox)
+sp_radialgradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, const NRRect *bbox)
 {
 	SPRGPainter *rgp;
-	NRMatrix gs2px;
 
 	SPRadialGradient *rg = SP_RADIALGRADIENT (ps);
 	SPGradient *gr = SP_GRADIENT (ps);
@@ -1522,45 +1490,29 @@ sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 
 	rgp->rg = rg;
 
-	/* fixme: We may try to normalize here too, look at
-	 *        linearGradient (Lauris) */
+	NR::Matrix gs2px;
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrix bbox2user;
-		NRMatrix gs2user;
-
-		/* fixme: We may try to normalize here too, look at
-		 *        linearGradient (Lauris) */
-
-		/* gradientTransform goes here (Lauris) */
+		/* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
 
 		/* BBox to user coordinate system */
-		// translate(bbox.min()) * scale(bbox.dimension())
-		bbox2user.c[0] = bbox->x1 - bbox->x0;
-		bbox2user.c[1] = 0.0;
-		bbox2user.c[2] = 0.0;
-		bbox2user.c[3] = bbox->y1 - bbox->y0;
-		bbox2user.c[4] = bbox->x0;
-		bbox2user.c[5] = bbox->y0;
+		NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0, 0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
-		/* fixme: (Lauris) */
-		nr_matrix_multiply (&gs2user, (NRMatrix *) gr->transform, &bbox2user);
-		nr_matrix_multiply (&gs2px, &gs2user, (NRMatrix *) ctm);
+		NR::Matrix gs2user = NR::Matrix ((NRMatrix *) &gr->transform) * bbox2user;
+
+		NR::Matrix gs2px = gs2user * full_transform;
 	} else {
-		/* Problem: What to do, if we have mixed lengths and
-		 * percentages? */
-		/* Currently we do ignore percentages at all, but that
-		 * is not good (lauris) */
+		/* Problem: What to do, if we have mixed lengths and percentages? */
+		/* Currently we do ignore percentages at all, but that is not good (lauris) */
 
-		/* fixme: We may try to normalize here too, look at
-		 *        linearGradient (Lauris) */
-
-		/* fixme: (Lauris) */
-		nr_matrix_multiply (&gs2px, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
+		NR::Matrix gs2px = NR::Matrix ((NRMatrix *) &gr->transform) * full_transform;
 	}
 
+	NRMatrix gs2px_nr;
+	gs2px.copyto (&gs2px_nr);
+
 	nr_rgradient_renderer_setup (&rgp->rgr, gr->color, gr->spread,
-				     &gs2px,
+				     &gs2px_nr,
 				     rg->cx.computed, rg->cy.computed,
 				     rg->fx.computed, rg->fy.computed,
 				     rg->r.computed);

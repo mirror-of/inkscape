@@ -16,6 +16,7 @@
 #include <string.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include <gtk/gtksignal.h>
 #include "macros.h"
 #include "xml/repr-private.h"
@@ -60,7 +61,7 @@ static void sp_pattern_modified (SPObject *object, unsigned int flags);
 static void sp_pattern_href_destroy (SPObject *href, SPPattern *pattern);
 static void sp_pattern_href_modified (SPObject *href, guint flags, SPPattern *pattern);
 
-static SPPainter *sp_pattern_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRect *bbox);
+static SPPainter *sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, const NRRect *bbox);
 static void sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter);
 
 static SPPaintServerClass * pattern_parent_class;
@@ -399,107 +400,96 @@ sp_pattern_href_modified (SPObject *href, guint flags, SPPattern *pattern)
 
 static void sp_pat_fill (SPPainter *painter, NRPixBlock *pb);
 
+/**
+Creates a painter (i.e. the thing that does actual filling at the given zoom).
+See (*) below for why the parent_transform may be necessary.
+*/
 static SPPainter *
-sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbox)
+sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, const NRRect *bbox)
 {
-	SPPattern *pat;
-	SPPatPainter *pp;
+	SPPattern *pat = SP_PATTERN (ps);
+	SPPatPainter *pp = g_new (SPPatPainter, 1);
+
 	SPObject *child;
-	NRGC gc(NULL);
-
-	pat = SP_PATTERN (ps);
-
-	pp = g_new (SPPatPainter, 1);
 
 	pp->painter.type = SP_PAINTER_IND;
 	pp->painter.fill = sp_pat_fill;
 
 	pp->pat = pat;
 
-	/*
-	 * The order should be:
-	 * CTM x [BBOX] x PTRANS
-	 */
-
 	if (pat->patternUnits == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrix bbox2user;
-		NRMatrix ps2user;
-
-		/* patternTransform goes here (Lauris) */
-
 		/* BBox to user coordinate system */
-		bbox2user.c[0] = bbox->x1 - bbox->x0;
-		bbox2user.c[1] = 0.0;
-		bbox2user.c[2] = 0.0;
-		bbox2user.c[3] = bbox->y1 - bbox->y0;
-		bbox2user.c[4] = bbox->x0;
-		bbox2user.c[5] = bbox->y0;
+		NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0.0, 0.0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
-		/* fixme: (Lauris) */
-		nr_matrix_multiply (&ps2user, &pat->patternTransform, &bbox2user);
-		nr_matrix_multiply (&pp->ps2px, &ps2user, (NRMatrix *) ctm);
+		// the final patternTransform, taking into account bbox
+		NR::Matrix ps2user = NR::Matrix (&pat->patternTransform) * bbox2user;
+
+		// see (*) comment below
+		NR::Matrix ps2px = ps2user * full_transform;
+
+		ps2px.copyto (&pp->ps2px);
+
 	} else {
 		/* Problem: What to do, if we have mixed lengths and percentages? */
 		/* Currently we do ignore percentages at all, but that is not good (lauris) */
 
 		/* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
 
-		/* fixme: (Lauris) */
-		nr_matrix_multiply (&pp->ps2px, &pat->patternTransform, (NRMatrix *) ctm);
+		// (*) The spec says, "This additional transformation matrix [patternTransform] is
+		// post-multiplied to (i.e., inserted to the right of) any previously defined
+		// transformations, including the implicit transformation necessary to convert from
+		// object bounding box units to user space." To me, this means that the order should be:
+		// item_transform * patternTransform * parent_transform
+		// However both Batik and Adobe plugin use:
+		// patternTransform * item_transform * parent_transform
+		// So here I comply with the majority opinion, but leave my interpretation commented out below.
+		// (To get item_transform, I subtract parent from full.)
+
+		//NR::Matrix ps2px = (full_transform * parent_transform.inverse()) * NR::Matrix (&pat->patternTransform) * parent_transform;
+		NR::Matrix ps2px = NR::Matrix (&pat->patternTransform) * full_transform;
+
+		ps2px.copyto (&pp->ps2px);
 	}
 
 	nr_matrix_invert (&pp->px2ps, &pp->ps2px);
 
-	/*
-	 * The order should be:
-	 * CTM x [BBOX] x PTRANS x VIEWBOX | UNITS
-	 */
-
 	if (pat->viewBox_set) {
-		NRMatrix vb2ps, vb2us;
-		/* Forget content units at all */
-		vb2ps.c[0] = pat->width.computed / (pat->viewBox.x1 - pat->viewBox.x0);
-		vb2ps.c[1] = 0.0;
-		vb2ps.c[2] = 0.0;
-		vb2ps.c[3] = pat->width.computed / (pat->viewBox.y1 - pat->viewBox.y0);
-		vb2ps.c[4] = -pat->viewBox.x0 * vb2ps.c[0];
-		vb2ps.c[5] = -pat->viewBox.y0 * vb2ps.c[3];
+		/* Forget content units at all (lauris) */
+		gdouble tmp_x = pat->width.computed / (pat->viewBox.x1 - pat->viewBox.x0);
+		gdouble tmp_y = pat->height.computed / (pat->viewBox.y1 - pat->viewBox.y0);
+
+		NR::Matrix vb2ps (tmp_x, 0.0, 0.0, tmp_y, -pat->viewBox.x0 * tmp_x, -pat->viewBox.y0 * tmp_y);
+
 		/* Problem: What to do, if we have mixed lengths and percentages? (Lauris) */
 		/* Currently we do ignore percentages at all, but that is not good (Lauris) */
-		/* fixme: (Lauris) */
-		nr_matrix_multiply (&vb2us, &vb2ps, &pat->patternTransform);
-		nr_matrix_multiply (&pp->pcs2px, &vb2us, (NRMatrix *) ctm);
+
+		NR::Matrix vb2us = vb2ps * NR::Matrix (&pat->patternTransform);
+
+		// see (*)
+		NR::Matrix pcs2px = vb2us * full_transform;
+
+		pcs2px.copyto (&pp->pcs2px);
 	} else {
-		NRMatrix t;
+		NR::Matrix pcs2px;
 
 		/* No viewbox, have to parse units */
 		if (pat->patternContentUnits == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
-			NRMatrix bbox2user;
-			NRMatrix pcs2user;
-
-			/* patternTransform goes here (Lauris) */
-
 			/* BBox to user coordinate system */
-			bbox2user.c[0] = bbox->x1 - bbox->x0;
-			bbox2user.c[1] = 0.0;
-			bbox2user.c[2] = 0.0;
-			bbox2user.c[3] = bbox->y1 - bbox->y0;
-			bbox2user.c[4] = bbox->x0;
-			bbox2user.c[5] = bbox->y0;
+			NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0.0, 0.0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
-			/* fixme: (Lauris) */
-			nr_matrix_multiply (&pcs2user, &pat->patternTransform, &bbox2user);
-			nr_matrix_multiply (&pp->pcs2px, &pcs2user, (NRMatrix *) ctm);
+			NR::Matrix pcs2user = NR::Matrix (&pat->patternTransform) * bbox2user;
+
+			// see (*)
+			pcs2px = pcs2user * full_transform;
 		} else {
-			/* Problem: What to do, if we have mixed lengths and percentages? */
-			/* Currently we do ignore percentages at all, but that is not good (lauris) */
-			/* fixme: (Lauris) */
-			nr_matrix_multiply (&pp->pcs2px, &pat->patternTransform, (NRMatrix *) ctm);
+			// see (*)
+			//pcs2px = (full_transform * parent_transform.inverse()) * NR::Matrix (&pat->patternTransform) * parent_transform;
+			pcs2px = NR::Matrix (&pat->patternTransform) * full_transform;
 		}
 
-		nr_matrix_set_translate (&t, pat->x.computed, pat->y.computed);
-		/* fixme: Think about it (Lauris) */
-		nr_matrix_multiply (&pp->pcs2px, &t, &pp->pcs2px);
+		pcs2px = NR::translate (pat->x.computed, pat->y.computed) * pcs2px; 
+
+		pcs2px.copyto (&pp->pcs2px);
 	}
 
 	/* fixme: Create arena */
@@ -523,6 +513,7 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbo
 		}
 	}
 
+	NRGC gc(NULL);
 	gc.transform = pp->pcs2px;
 	nr_arena_item_invoke_update (pp->root, NULL, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_ALL);
 

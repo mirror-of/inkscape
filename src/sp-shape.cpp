@@ -811,14 +811,21 @@ sp_shape_set_curve_insync (SPShape *shape, SPCurve *curve, unsigned int owner)
 // Adjusters
 
 void
-sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &xform)
+sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &premul, NR::Matrix const &postmul)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
     if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         if (SP_IS_PATTERN (server)) {
-            SP_PATTERN (server)->patternTransform = NR::Matrix(SP_PATTERN (server)->patternTransform) * xform;
+
+            // this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
+            // for it to work, we also need    sp_object_read_attr (SP_OBJECT (item), "transform");
+            //SP_PATTERN (server)->patternTransform = premul * NR::Matrix(item->transform) * NR::Matrix(SP_PATTERN (server)->patternTransform) * NR::Matrix(item->transform).inverse() * postmul;
+
+            // otherwise the formula is much simpler
+            SP_PATTERN (server)->patternTransform = NR::Matrix(SP_PATTERN (server)->patternTransform) * postmul;
+
             gchar c[256];
             if (sp_svg_transform_write(c, 256, &(SP_PATTERN (server)->patternTransform))) {
                 sp_repr_set_attr(SP_OBJECT_REPR(server), "patternTransform", c);

@@ -224,7 +224,9 @@ PrintGNOME::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const N
 	dpbox.x1 = pbox->x1;
 	dpbox.y1 = pbox->y1;
 	painter = sp_paint_server_painter_new(SP_STYLE_FILL_SERVER(style), 
-					      ctm->c,
+						// FIXME: the second matrix below must be the parent (context) transform.
+						// I don't know what it must be for gnome-print. --bb
+						ctm, NR::identity(),
 					      &dpbox);
 	if (painter) {
 	    NRRect cbox;
