@@ -159,6 +159,8 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 	g_snprintf (c, 256, "%d:%d:%s", icon->size, scale, name);
 	pixels = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 
+	/* TODO: If pixels == NULL then write to stderr that we couldn't find NAME.xpm,
+	   and suggest doing `make install'. */
 	icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, (GdkPixbufDestroyNotify)nr_free, NULL);
 
 	return (GtkWidget *) icon;
