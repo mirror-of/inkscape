@@ -1,3 +1,8 @@
+2003-12-26  Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+	* libnr: moving towards a fully class based Point and Matrix.
+	This change adds an initial sketch of matrix.
+
 2003-12-26  MenTaLguY <mental@rydia.net>
 
 	* configure.in: added Gtkmm dependency
