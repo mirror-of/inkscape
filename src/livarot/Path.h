@@ -13,29 +13,48 @@
 
 #include "libnr/nr-point.h"
 
+/*
+ * the Path class: a structure to hold path description and their polyline approximation (not kept in sync)
+ * the path description is built with regular commands like MoveTo() LineTo(), etc
+ * the polyline approximation is built by a call to Convert() or its variants
+ * another possibility would be to call directly the AddPoint() functions, but that is not encouraged
+ * the conversion to polyline can salvage data as to where on the path each polyline's point lies; use
+ * ConvertWithBackData() for this. after this call, it's easy to rewind the polyline: sequences of points
+ * of the same path command can be reassembled in a command
+ */
+
+// path description commands
 enum
 {
-  descr_moveto = 0,
-  descr_lineto = 1,
+  descr_moveto = 0,         // a moveto
+  descr_lineto = 1,         // a (guess what) lineto
   descr_cubicto = 2,
-  descr_bezierto = 3,
+  descr_bezierto = 3,       // "beginning" of a quadratic bezier spline, will contain its endpoint (i know, it's bad...)
   descr_arcto = 4,
   descr_close = 5,
-  descr_interm_bezier = 6,
+  descr_interm_bezier = 6,  // control point of the bezier spline
   descr_forced = 7,
 
-  descr_type_mask = 15
+  descr_type_mask = 15      // the command no will be stored in a "flags" field, potentially with other info, so we need 
+                            // a mask to AND the field and extract the command
 };
 
+// polyline description commands
 enum
 {
-  polyline_lineto = 0,
-  polyline_moveto = 1,
-  polyline_forced = 2
+  polyline_lineto = 0,  // a lineto 
+  polyline_moveto = 1,  // a moveto
+  polyline_forced = 2   // a forced point, ie a point that was an angle or an intersection in a previous life
+                        // or more realistically a control point in the path description that created the polyline
+                        // forced points are used as "breakable" points for the polyline -> cubic bezier patch operations
+                        // each time the bezier fitter encounters such a point in the polyline, it decreases its treshhold,
+                        // so that it is more likely to cut the polyline at that position and produce a bezier patch
 };
 
 class Shape;
 
+// a little structure you shouldnt pay attention to
+// created because the function invocation was starting to be 2 lines long
 typedef struct dashTo_info
 {
   double     nDashAbs;
@@ -56,14 +75,14 @@ public:
 
   // command list structures
 
-  // lineto: a point, maybe with a weight
+  // lineto: a point
   typedef struct path_descr_moveto
   {
     NR::Point  p;
   }
   path_descr_moveto;
 
-  // lineto: a point, maybe with a weight
+  // lineto: a point
   // MoveTos fit in this category
   typedef struct path_descr_lineto
   {
@@ -75,7 +94,7 @@ public:
   typedef struct path_descr_bezierto
   {
     NR::Point    p;			// the endpoint's coordinates
-    int nb;
+    int nb;             // number of control points, stored in the next path description commands
   }
   path_descr_bezierto;
   typedef struct path_descr_intermbezierto
@@ -106,31 +125,36 @@ public:
   
   typedef struct path_descr
   {
-    int    flags;
-    int    associated;		// le no du moveto/lineto dans la polyligne. ou alors no de la piece dans l'original
+    int    flags;         // most notably contains the path command no
+    int    associated;		// index in the polyline of the point that ends the path portion of this command
     double tSt, tEn;
-    int    dStart;        // indice du  premier element du tableau qui contient la description
+    int    dStart;        // commands' data is stored in a separate array; dStart is the index of the 
+                          // start of the storage for this command
   }
   path_descr;
 
+  // flags for the path construction
   enum
   {
-    descr_ready = 0,
-    descr_adding_bezier = 1,
-    descr_doing_subpath = 2,
-    descr_delayed_bezier = 4,
-    descr_dirty = 16
+    descr_ready = 0,        
+    descr_adding_bezier = 1, // we're making a bezier spline, so you can expect  pending_bezier_* to have a value
+    descr_doing_subpath = 2, // we're doing a path, so there is a moveto somewhere
+    descr_delayed_bezier = 4,// the bezier spline we're doing was initiated by a TempBezierTo(), so we'll need an endpoint
+    descr_dirty = 16         // the path description was modified
   };
   
-  // pour la construction
+  // some data for the construction: what's pending, and some flags
   int         descr_flags;
   int         pending_bezier_cmd;
   int         pending_bezier_data;
   int         pending_moveto_cmd;
   int         pending_moveto_data;
-  // les tables
+  // the path description:
+  // first the commands: an array of size descr_max containing descr_nb commands
   int         descr_max, descr_nb;
   path_descr  *descr_cmd;
+  // and an array of NR::Points, of size ddata_max, of which ddata_nb are used
+  // the choice of NR::Point is arbitrary, it could be anything, in fact
   int         ddata_max,ddata_nb;
   NR::Point   *descr_data;
 
@@ -141,6 +165,10 @@ public:
     NR::Point  p;
   }
   path_lineto;
+  
+  // back data: info on where this polyline's segment comes from, ie wich command in the path description: "piece"
+  // and what abcissis on the chunk of path for this command: "t"
+  // t=0 means it's at the start of the command's chunk, t=1 it's at the end
   typedef struct path_lineto_b:public path_lineto
   {
     int piece;
@@ -179,7 +207,7 @@ public:
   void ConvertEvenLines (double treshhold);	// decomposes line segments too, for later recomposition
   // same function for use when you want to later recompose the curves from the polyline
   void ConvertWithBackData (double treshhold);
-  // same function for use when you want to later recompose the curves from the polyline
+  // bad naughty evil useless function
   void ConvertForOffset (double treshhold, Path * orig, double off_dec);
 
   // creation of the polyline (you can tinker with these function if you want)
@@ -217,33 +245,43 @@ public:
   void InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		      double miter);
 
-  // polyline to cubic bezier
+  // polyline to cubic bezier patches
   void Simplify (double treshhold);
   // description simplification
   void Coalesce (double tresh);
 
   // utilities
+  // piece is a command no in the command list
+  // "at" is an abcissis on the path portion associated with this command
+  // 0=beginning of portion, 1=end of portion.
   void PointAt (int piece, double at, NR::Point & pos);
   void PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt);
 
+  // last control point before the command i (i included)
+  // used when dealing with quadratic bezier spline, cause these can contain arbitrarily many commands
   const NR::Point PrevPoint (const int i) const;
   
-  // tirets
+  // dash the polyline
+  // the result is stored in the polyline, so you lose the original. make a copy before if needed
   void  DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain);
   
   //utilitaire pour inkscape
   void  LoadArtBPath(void *iP,NR::Matrix &tr,bool doTransformation);
   
 private:
+    // path storage primitives
   void AlloueDCmd (int addNb);
   void AlloueDData (int addNb);
+  // utilitary functions for the path contruction
   void CancelBezier (void);
   void CloseSubpath();
   
-  // creation des tirets
+  // creation of dashes: take the polyline given by spP (length spL) and dash it according to head, body, etc. put the result in
+  // the polyline of this instance
   void DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain);
 
   // Functions used by the conversion.
+  // they append points to the polyline
   void DoArc ( NR::Point const &iS,  NR::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh);
   void RecCubicTo ( NR::Point const &iS,  NR::Point const &iSd,  NR::Point const &iE,  NR::Point const &iEd, double tresh, int lev,
@@ -257,6 +295,7 @@ private:
   void RecBezierTo ( NR::Point const &iPt,  NR::Point const &iS, const  NR::Point &iE, double treshhold, int lev, double st, double et,
 		    int piece);
 
+  // don't pay attention
   typedef struct offset_orig
   {
     Path *orig;

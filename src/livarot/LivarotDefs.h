@@ -10,7 +10,7 @@
 #define my_defs
 #include <stdint.h>
 
-// error codes
+// error codes (mostly obsolete)
 enum
 {
   avl_no_err = 0,		// 0 is the error code for "everything OK"
@@ -57,7 +57,7 @@ enum join_typ
 {
   join_straight,		// a straight line
   join_round,			// arc of circle (in fact, one or two quadratic bezier curve chunks)
-  join_pointy			// a point (uses the miter parameter)
+  join_pointy			// a miter join (uses the miter parameter)
 };
 typedef enum butt_typ ButtType;
 typedef enum join_typ JoinType;
@@ -70,6 +70,7 @@ enum fill_typ
 };
 typedef enum fill_typ FillRule;
 
+// stupid version of dashes: in dash x is plain, dash x+1 must be empty, so the gap field is extremely redundant
 typedef struct one_dash
 {
   bool gap;
@@ -77,7 +78,7 @@ typedef struct one_dash
 }
 one_dash;
 
-
+// color definition structures for the rasterizations primitives (not present here)
 typedef struct std_color
 {
   uint32_t uCol;

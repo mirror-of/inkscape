@@ -11,6 +11,18 @@
 #include <math.h>
 #include <libnr/nr-point-fns.h>
 
+/*
+ * the "outliner"
+ * takes a sequence of path commands and produces a set of commands that approximates the offset
+ * result is stored in dest (that paremeter is handed to all the subfunctions)
+ * not that the result is in general not mathematically correct; you can end up with unwanted holes in your
+ * beautiful offset. a better way is to do path->polyline->polygon->offset of polygon->polyline(=contours of the polygon)->path
+ * but computing offsets of the path is faster...
+ */
+
+// outline of a path.
+// computed by making 2 offsets, one of the "left" side of the path, one of the right side, and then glueing the two
+// the left side has to be reversed to make a contour
 void
 Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
                double miter)
@@ -37,6 +49,7 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
   
 	Path *rev = new Path;
   
+  // we repeat the offset contour creation for each subpath
 	int curP = 0;
 	do {
 		int lastM = curP;
@@ -48,7 +61,9 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
 		} while (curP < sav_descr_nb);
 		if (curP >= sav_descr_nb) curP = sav_descr_nb;
 		if (curP > lastM + 1) {
-			// sinon il n'y a qu'un point
+			// we have isolated a subpath, now we make a reversed version of it
+      // we do so by taking the subpath in the reverse and constructing a path as appropriate
+      // the construct is stored in "rev"
 			int curD = curP - 1;
 			NR::Point curX;
 			NR::Point nextX;
@@ -119,6 +134,8 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
 						curD--;
 					}
 				}
+        // offset the paths and glue everything
+        // actual offseting is done in SubContractOutline()
 				if (needClose) {
 					rev->Close ();
 					rev->SubContractOutline (dest, calls, 0.0025 * width * width, width,
@@ -171,6 +188,7 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
 	descr_nb = sav_descr_nb;
 }
 
+// versions for outlining closed path: they only make one side of the offset contour
 void
 Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
                       double miter)
@@ -311,6 +329,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	descr_nb = sav_descr_nb;
 }
 
+// decoys
 void
 Path::DoOutsideOutline (Path * dest, double width, JoinType join, ButtType butt, double miter, int &stNo, int &enNo)
 {
@@ -319,6 +338,11 @@ void
 Path::DoInsideOutline (Path * dest, double width, JoinType join, ButtType butt, double miter, int &stNo, int &enNo)
 {
 }
+// the offset
+// take each command and offset it.
+// the bezier spline is split in a sequence of bezier curves, and these are transformed in cubic bezier (which is
+// not hard since they are quadratic bezier)
+// joins are put where needed
 void
 Path::SubContractOutline (Path * dest, outline_callbacks & calls,
                           double tolerance, double width, JoinType join,
@@ -808,6 +832,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
  *
  */
 
+// like the name says: check whether the path command is actually more than a dumb point.
 bool
 Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddata)
 {
@@ -881,6 +906,9 @@ Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddat
 	}
 }
 
+// tangents and cuvarture computing, for the different path command types.
+// the need for tangent is obvious: it gives the normal, along which we offset points
+// curvature is used to do strength correction on the length of the tangents to the offset (see cubic offset)
 void
 Path::TangentOnSegAt (double at, NR::Point const &iS, path_descr_lineto & fin,
                       NR::Point & pos, NR::Point & tgt, double &len)
@@ -899,6 +927,7 @@ Path::TangentOnSegAt (double at, NR::Point const &iS, path_descr_lineto & fin,
 	}
 }
 
+// barf
 void
 Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
                       NR::Point & pos, NR::Point & tgt, double &len, double &rad)
@@ -1066,6 +1095,7 @@ Path::TangentOnCubAt (double at, NR::Point const &iS, path_descr_cubicto & fin,
 	const NR::Point ddder = 6 * A;
 	
 	double l = NR::L2 (der);
+  // lots of nasty cases. inversion points are sadly too common...
 	if (l <= 0.0001) {
 		len = 0;
 		l = L2(dder);
@@ -1224,6 +1254,8 @@ Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
 
 // les callbacks
 
+// see http://www.home.unix-ag.org/simon/sketch/pathstroke.py to understand what's happening here
+
 void
 Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
                      int lev)
@@ -1251,6 +1283,8 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
 	}
   
 	double stGue = 1, miGue = 1, enGue = 1;
+  // correction of the lengths of the tangent to the offset
+  // if you don't see why i wrote that, draw a little figure and everything will be clear
 	if (fabsf (stRad) > 0.01)
 		stGue += width / stRad;
 	if (fabsf (miRad) > 0.01)

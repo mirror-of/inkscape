@@ -1,3 +1,12 @@
+/*
+ *  PathCutting.cpp
+ *  nlivarot
+ *
+ *  Created by fred on someday in 2004.
+ *  public domain
+ *
+ */
+
 #include "Path.h"
 #include "../libnr/nr-point-fns.h"
 #include "../libnr/nr-point-ops.h"

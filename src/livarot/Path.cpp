@@ -11,6 +11,12 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-ops.h>
 
+/*
+ * manipulation of the path data: path description and polyline
+ * grunt work...
+ * at the end of this file, 2 utilitary functions to get the point and tangent to path associated with a (command no;abcissis)
+ */
+
 
 Path::Path (void)
 {

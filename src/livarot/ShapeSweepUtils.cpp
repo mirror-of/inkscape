@@ -11,6 +11,13 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
 
+/*
+ * a simple binary heap
+ * it only contains intersection events
+ * the regular benley-ottman stuffs the segment ends in it too, but that not needed here since theses points
+ * are already sorted. and the binary heap is much faster with only intersections...
+ * the code sample on which this code is based comes from purists.org
+ */
 SweepEvent::SweepEvent ()
 {
   NR::Point dummy(0,0);
@@ -301,7 +308,11 @@ SweepEvent::Relocate (SweepEventQueue & queue, int to)
 }
 
 /*
- *
+ * the AVL tree holding the edges intersecting the sweepline
+ * that structure is very sensitive to anything
+ * you have edges stored in nodes, the nodes are sorted in increasing x-order of intersection
+ * with the sweepline, you have the 2 potential intersections of the edge in the node with its
+ * neighbours, plus the fact that it's stored in an array that's realloc'd
  */
 
 SweepTree::SweepTree (void)
@@ -395,10 +406,16 @@ SweepTree::AddInList (Shape * iSrc, int iBord, int iWeight, int iStartPoint,
   return list.trees + n;
 }
 
+// find the position at which node "newOne" should be inserted in the subtree rooted here
+// we want to order with respect to the order of intersections with the sweepline, currently 
+// lying at y=px[1].
+// px is the upper endpoint of newOne
 int
 SweepTree::Find (NR::Point &px, SweepTree * newOne, SweepTree * &insertL,
 		 SweepTree * &insertR, bool sweepSens)
 {
+  // get the edge associated with this node: one point+one direction
+  // since we're dealing with line, the direction (bNorm) is taken downwards
   NR::Point bOrig, bNorm;
   bOrig = src->pData[src->aretes[bord].st].rx;
   bNorm = src->eData[bord].rdx;
@@ -406,11 +423,13 @@ SweepTree::Find (NR::Point &px, SweepTree * newOne, SweepTree * &insertL,
     {
       bNorm = -bNorm;
     }
+  // rotate to get the normal to the edge
   bNorm=bNorm.ccw();
 
   NR::Point diff;
   diff = px - bOrig;
 
+  // compute (px-orig)^dir to know on which side of this edge the point px lies
   double y = 0;
   //      if ( startPoint == newOne->startPoint ) {
   //             y=0;
@@ -420,6 +439,10 @@ SweepTree::Find (NR::Point &px, SweepTree * newOne, SweepTree * &insertL,
   //      y*=invDirLength;
   if (y == 0)
     {
+    // that damn point px lies on me, so i need to consider to direction of the edge in
+    // newOne to know if it goes toward my left side or my right side
+    // sweepSens is needed (actually only used by the Scan() functions) because if the sweepline goes upward,
+    // signs change
       // prendre en compte les directions
       NR::Point nNorm;
       nNorm = newOne->src->eData[newOne->bord].rdx;
@@ -496,6 +519,7 @@ SweepTree::Find (NR::Point &px, SweepTree * newOne, SweepTree * &insertL,
   return not_found;
 }
 
+// only find a point's position
 int
 SweepTree::Find (NR::Point &px, SweepTree * &insertL,
 		 SweepTree * &insertR)
@@ -664,6 +688,11 @@ SweepTree::Insert (SweepTreeList & list, SweepEventQueue & queue,
   list.racine = static_cast < SweepTree * >(tempR);
   return err;
 }
+
+// insertAt() is a speedup on the regular sweepline: if the polygon contains a point of high degree, you
+// get a set of edge that are to be added in the same position. thus you insert one edge with a regular insert(),
+// and then insert all the other in a doubly-linked list fashion. this avoids the Find() call, but is O(d^2) worst-case
+// where d is the number of edge to add in this fashion. hopefully d remains small
 
 int
 SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,

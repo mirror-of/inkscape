@@ -11,6 +11,15 @@
 #include <libnr/nr-point-fns.h>
 #include <math.h>
 
+/*
+ * stroking polylines into a Shape instance
+ * grunt work.
+ * if the goal is to raster the stroke, polyline stroke->polygon->uncrossed polygon->raster is grossly
+ * inefficient (but reuse the intersector, so that's what a lazy programmer like me does). the correct way would be
+ * to set up a supersampled buffer, raster each polyline stroke's part (one part per segment in the polyline, plus 
+ * each join) because these are all convex polygons, then transform in alpha values
+ */
+
 // until i find something better
 NR::Point StrokeNormalize(const NR::Point v) {
 	double l = L2(v); 
@@ -851,6 +860,8 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 }
 
 
+// a very ugly way to produce round joins: doing one (or two, depend on the angle of the join) quadratic bezier curves
+// but since most joins are going to be small, nobody will notice
 void
 Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point const &iP, NR::Point const &iS,NR::Point const &iE, double tresh, int lev)
 {
@@ -874,9 +885,9 @@ Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point const &iP, NR::Point c
 }
 
 /*
- *
  * dashed version
- *
+ * nota: dashes produced this way are a bot different from the usual ones, because cap styles are not
+ * applied to the dashes
  */
 
 void

@@ -12,6 +12,30 @@
 
 #include "../libnr/nr-matrix.h"
 
+/*
+ * El Intersector.
+ * algorithm: 1) benley ottman to get intersections of all the polygon's edges
+ *            2) rounding of the points of the polygon, Hooby's algorithm
+ *            3) DFS with clockwise choice of the edge to compute the windings
+ *            4) choose edges according to winding numbers and fill rule
+ * some additional nastyness: step 2 needs a seed winding number for the upper-left point of each 
+ * connex subgraph of the graph. computing these brutally is O(n^3): baaaad. so during the sweeping in 1)
+ * we keep for each point the edge of the resulting graph (not the original) that lies just on its left; 
+ * when the time comes for the point to get its winding number computed, that edge must have been treated,
+ * because its upper end lies above the aforementioned point, meaning we know the winding number of the point.
+ * only, there is a catch: since we're sweeping the polygon, the edge we want to link the point to has not yet been
+ * added (that would be too easy...). so the points are put on a linked list on the original shape's edge, and the list
+ * is flushed when the edge is added.
+ * rounding: to do the rounding, we need to find which edges cross the surrounding of the rounded points (at 
+ * each sweepline position). grunt method tries all combination of "rounded points in the sweepline"x"edges crossing 
+ * the sweepline". That's bad (and that's what polyboolean does, if i am not mistaken). so for each point 
+ * rounded in a given sweepline, keep immediate left and right edges at the time the point is treated.
+ * when edges/points crossing are searched, walk the edge list (in the  sweepline at the end of the batch) starting 
+ * from the rounded points' left and right from that time. may sound strange, but it works because edges that
+ * end or start in the batch have at least one end in the batch.
+ * all these are the cause of the numerous linked lists of points and edges maintained in the sweeping
+ */
+
 void
 Shape::ResetSweep (void)
 {
@@ -877,6 +901,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   return 0;
 }
 
+// technically it's just a ConvertToShape() on 2 polygons at the same time, and different rules
+// for choosing the edges according to their winding numbers.
+// probably one of the biggest function i ever wrote.
 int
 Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 {
@@ -1705,6 +1732,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
   return 0;
 }
 
+// frontend to the TesteIntersection() below
 void
 Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
 {
@@ -1735,6 +1763,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
 	}
     }
 }
+// a crucial piece of code: computing intersections between segments
 bool
 Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff)
 {
@@ -1743,6 +1772,8 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double
   NR::Point ldir, rdir;
   ldir = iL->src->eData[iL->bord].rdx;
   rdir = iR->src->eData[iR->bord].rdx;
+  // first, a round of checks to quickly dismiss edge which obviously dont intersect,
+  // such as having disjoint bounding boxes
   if (lSt < lEn)
     {
     }
@@ -1802,8 +1833,8 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double
   double ang = cross (rdir, ldir);
 //      ang*=iL->src->eData[iL->bord].isqlength;
 //      ang*=iR->src->eData[iR->bord].isqlength;
-  if (ang <= 0)
-    return false;		// ca elimine les cas de colinearite
+  if (ang <= 0) return false;		// edges in opposite directions:  <-left  ... right ->
+                                // they can't intersect
 
   // d'abord tester les bords qui partent d'un meme point
   if (iL->src == iR->src && lSt == rSt)
@@ -1828,7 +1859,9 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double
   rSt = iR->src->aretes[iR->bord].st;
   rEn = iR->src->aretes[iR->bord].en;
 
-  // pre-test
+  // compute intersection (if there is one)
+  // Boissonat anr Preparata said in one paper that double precision floats were sufficient for get single precision
+  // coordinates for the intersection, if the endpoints are single precision. i hope they're right...
   {
     NR::Point sDiff, eDiff;
     double slDot, elDot;
@@ -2165,6 +2198,7 @@ Shape::Winding (const NR::Point px) const
   return lr + (ll + rr) / 2;
 }
 
+// merging duplicate points and edges
 int
 Shape::AssemblePoints (int st, int en)
 {
@@ -2173,7 +2207,10 @@ Shape::AssemblePoints (int st, int en)
       for (int i = st; i < en; i++)
 	pData[i].oldInd = i;
 //              SortPoints(st,en-1);
-      SortPointsByOldInd (st, en - 1);
+      SortPointsByOldInd (st, en - 1); // SortPointsByOldInd() is required here, because of the edges we have
+                                       // associated with the point for later computation of winding numbers.
+                                       // specifically, we need the first point we treated, it's the only one with a valid
+                                       // associated edge (man, that was a nice bug).
       for (int i = st; i < en; i++)
 	pData[pData[i].oldInd].newInd = i;
 

@@ -13,6 +13,18 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 
+/*
+ * Reassembling polyline segments into cubic bezier patches
+ * thes functions do not need the back data. but they are slower than recomposing
+ * path descriptions when you have said back data (it's always easier with a model)
+ * there's a bezier fitter in bezier-utils.cpp too. the main difference is the way bezier patch are split
+ * here: walk on the polyline, trying to extend the portion you can fit by respecting the treshhold, split when 
+ * treshhold is exceeded. when encountering a "forced" point, lower the treshhold to favor splitting at that point
+ * in bezier-utils: fit the whole polyline, get the position with the higher deviation to the fitted curve, split
+ * there and recurse
+ */
+
+
 // algo d'origine: http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/CURVE-APP-global.html
 
 // need the b-spline basis for cubic splines
@@ -78,7 +90,7 @@ Path::Simplify (double treshhold)
   pts = savPts;
   nbPt = savNbPt;
 }
-
+// simplification on a subpath
 void
 Path::DoSimplify (double treshhold)
 {
@@ -207,6 +219,7 @@ Path::DoSimplify (double treshhold)
   nbPt = savNbPt;
 }
 
+// fit a polyline to a bezier patch, return true is treshhold not exceeded (ie: you can continue)
 bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
 {
   NR::Point start,end;
@@ -550,6 +563,9 @@ Path::RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Poi
   return it;
 }
 
+// variation on the fitting theme: try to merge path commands into cubic bezier patches
+// the goal was to reduce the number of path commands, especially when ooperations on path produce lots of small path elements
+// ideally you could get rid of very small segments at reduced visual cost
 void
 Path::Coalesce (double tresh)
 {

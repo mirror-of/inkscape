@@ -15,23 +15,36 @@
 #include <string.h>
 //#include <iostream.h>
 
+/*
+ * doubly-linked list class created in a "every atomic piece is a class" frenzy
+ * it's only used in the AVL class, and doesn't provide any interesting functionality
+ */
+
 class DblLinked
 {
 public:
+  // previous (left) and next (right) elements of the list
   DblLinked * leftElem;
   DblLinked *rightElem;
 
     DblLinked (void);
    ~DblLinked (void);
 
+   // constructor/destructor called when initializing an array created by a malloc()
+   // this is because we'll use dynamically sized arrays, so new DblLinked[n] is not possible
   void MakeNew (void);
   void MakeDelete (void);
 
+  // insertion in the list
   void InsertOnLeft (DblLinked * of);
   void InsertOnRight (DblLinked * of);
   void InsertBetween (DblLinked * l, DblLinked * r);
+  // removal from the list
   void Extract (void);
 
+  // changing the item position in the memory
+  // called when a realloc is done on an array of elements derived from dbllinked
+  // each element is relocated to a new pos, so this function updates the field that point to this class instance
   void Relocate (DblLinked * to);
 };
 

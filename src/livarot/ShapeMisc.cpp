@@ -12,6 +12,10 @@
 //#include "MyMath.h"
 #include "Path.h"
 
+/*
+ * polygon offset and polyline to path reassembling (when using back data)
+ */
+
 // until i find something better
 #define MiscNormalize(v) {\
   double _l=sqrt(dot(v,v)); \
@@ -22,6 +26,10 @@
     }\
 }
 
+// extracting the contour of an uncrossed polygon: a mere depth first search
+// more precisely that's extracting an eulerian path from a graph, but here we want to split
+// the polygon into contours and avoid holes. so we take a "next counter-clockwise edge first" approach
+// (make a checkboard and extract its contours to see the difference)
 void
 Shape::ConvertToForme (Path * dest)
 {
@@ -30,6 +38,7 @@ Shape::ConvertToForme (Path * dest)
   if (Eulerian (true) == false)
     return;
   
+  // prepare
   dest->Reset ();
   
   MakePointData (true);
@@ -46,8 +55,13 @@ Shape::ConvertToForme (Path * dest)
     eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
   }
   
+  // sort edge clockwise, with the closest after midnight being first in the doubly-linked list
+  // that's vital to the algorithm...
   SortEdges ();
   
+  // depth-first search implies: we make a stack of edges traversed.
+  // precParc: previous in the stack
+  // suivParc: next in the stack
   for (int i = 0; i < nbAr; i++)
   {
     swdData[i].misc = 0;
@@ -59,6 +73,9 @@ Shape::ConvertToForme (Path * dest)
   int lastPtUsed = 0;
   do
   {
+    // first get a starting point, and a starting edge
+    // -> take the upper left point, and take its first edge
+    // points traversed have swdData[].misc != 0, so it's easy
     int startBord = -1;
     {
       int fi = 0;
@@ -80,6 +97,7 @@ Shape::ConvertToForme (Path * dest)
 	      }
       }
     }
+    // and walk the graph, doing contours when needed
     if (startBord >= 0)
     {
       // parcours en profondeur pour mettre les leF et riF a leurs valeurs
@@ -94,6 +112,7 @@ Shape::ConvertToForme (Path * dest)
 	      int cPt = aretes[curBord].en;
 	      int nb = curBord;
         //                              printf("de curBord= %d au point %i  -> ",curBord,cPt);
+        // get next edge
 	      do
         {
           int nnb = CycleNextAt (cPt, nb);
@@ -111,6 +130,7 @@ Shape::ConvertToForme (Path * dest)
         
 	      if (nb < 0 || nb == curBord)
         {
+          // no next edge: end of this contour, we get back
           if (back == false)
             dest->Close ();
           back = true;
@@ -122,8 +142,10 @@ Shape::ConvertToForme (Path * dest)
         }
 	      else
         {
+          // new edge, maybe for a new contour
           if (back)
           {
+            // we were backtracking, so if we have a new edge, that means we're creating a new contour
             dest->MoveTo (pts[cPt].x);
             back = false;
           }
@@ -134,6 +156,7 @@ Shape::ConvertToForme (Path * dest)
           curBord = nb;
           //                                      printf("suite %d\n",curBord);
           {
+            // add that edge
             dest->LineTo (pts[aretes[nb].en].x);
           }
         }
@@ -149,6 +172,9 @@ Shape::ConvertToForme (Path * dest)
   MakeSweepDestData (false);
 }
 
+// same as before, but each time we have a contour, try to reassemble the segments on it to make chunks of
+// the original(s) path(s)
+// originals are in the orig array, whose size is nbP
 void
 Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
 {
@@ -294,6 +320,10 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
 }
 
 // offsets
+// take each edge, offset it, and make joins with previous at edge start and next at edge end (previous and
+// next being with respect to the clockwise order)
+// you gotta be very careful with the join, has anything but the right one will fuck everything up
+// see PathStroke.cpp for the "right" joins
 int
 Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
 {
@@ -425,6 +455,9 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
   return 0;
 }
 
+// we found a contour, now reassemble the edges on it, instead of dumping them in the Path "dest" as a
+// polyline. since it was a DFS, the precParc and suivParc make a nice doubly-linked list of the edges in
+// the contour. the first and last edges of the contour are startBord and curBord
 void
 Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord,
                    int curBord)

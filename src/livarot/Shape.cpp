@@ -11,6 +11,12 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
 
+/*
+ * Shape instances handling.
+ * never (i repeat: never) modify edges and points links; use Connect() and Disconnect() instead
+ * the graph is stored as a set of points and edges, with edges in a doubly-linked list for each point.
+ */
+
 Shape::Shape (void)
 {
   leftX = topY = rightX = bottomY = 0;
@@ -2210,7 +2216,8 @@ Shape::GetFlag (int nFlag)
   return (flags & nFlag);
 }
 
-// localisation
+// distance to the shape, ie min of distance to its points and distnce to its edges
+// points without edges are considered, which is maybe unwanted...
 double            Shape::Distance(NR::Point thePt)
 {
   if ( nbPt <= 0 ) return 1000000;
@@ -2245,6 +2252,11 @@ double            Shape::Distance(NR::Point thePt)
   return l;
 }
 
+// winding of a point with respect to the Shape
+// 0= outside
+// 1= inside (or -1, that usually the same)
+// other=depends on your fill rule
+// if the polygon is uncrossed, it's all the same, usually
 int
 Shape::PtWinding (const NR::Point px) const 
 {

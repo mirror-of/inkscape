@@ -13,6 +13,8 @@
 
 #include <math.h>
 
+
+
 //int   showCopy=0;
 //#define faster_flatten 1
 
@@ -52,6 +54,7 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
 {
 //  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
 	if ( spos >= epos ) return -1;
+  // allocate the boundaries in the array
 	if ( nbBord+1 >= maxBord ) {
 		maxBord=2*nbBord+2;
 		bords=(float_ligne_bord*)realloc(bords,maxBord*sizeof(float_ligne_bord));
@@ -65,6 +68,7 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
   }
 #endif
   
+  // add the left boundary
 	int n=nbBord++;
 	bords[n].pos=spos;
 	bords[n].val=sval;
@@ -75,8 +79,10 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
 	bords[n].s_prev=bords[n].s_next=-1;
 //	bords[n].delta=sval-eval;
 
+  // insert it in the doubly-linked list
 	InsertBord(n,spos,guess);
 
+  // add the right boundary
 	n=nbBord++;
 	bords[n].pos=epos;
 	bords[n].val=eval;
@@ -87,6 +93,7 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
 	bords[n].s_prev=bords[n].s_next=-1;
 //	bords[n].delta=eval-sval;
 
+  // insert it in the doubly-linked list, knowing that boundary at index n-1 is not too far before me
 	InsertBord(n,epos,n-1);
   	
 	return n;
@@ -227,7 +234,8 @@ int              FloatLigne::AddBordR(float spos,float sval,float epos,float eva
 	}*/
 	return n-1;
 }
-int              FloatLigne::AppendBord(float spos,float sval,float epos,float eval,float pente)
+// variant where insertion is known to be trivial: just append to the list
+int            FloatLigne::AppendBord(float spos,float sval,float epos,float eval,float pente)
 {
 //  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
 //	return AddBord(spos,sval,epos,eval,pente,s_last);
@@ -271,6 +279,7 @@ int              FloatLigne::AppendBord(float spos,float sval,float epos,float e
 
 	return n;
 }
+// insertion in a boubly-linked list. nothing interesting here
 void             FloatLigne::InsertBord(int no,float p,int guess)
 {
   if ( no < 0 || no >= nbBord ) return;
@@ -355,13 +364,17 @@ float            FloatLigne::RemainingValAt(float at,int pending)
 //		sum+=ValAt(at,bords[nn].pos,bords[no].pos,bords[nn].val,bords[no].val);
 		no=bords[no].next;
 	}*/
+  // for each portion being scanned, compute coverage at position "at" and sum.
+  // we could simply compute the sum of portion coverages as a "f(x)=ux+y" and evaluate it at "x=at",
+  // but there are numerical problems with this approach, and it produces ugly lines of incorrectly 
+  // computed alpha values, so i reverted to this "safe but slow" version
   for (int i=0;i<pending;i++) {
 		int   nn=bords[i].pend_ind;
 		sum+=bords[nn].val+(at-bords[nn].pos)*bords[nn].pente;
   }
 	return sum;
 }
-
+// sorting
 void             FloatLigne::SwapBords(int a,int b)
 {
   int   oa=bords[a].other;
@@ -473,6 +486,7 @@ void             FloatLigne::SortBords(int s,int e)
   SortBords (s, ppos - 1);
   SortBords (plast + 1, e);
 }
+// computation of non-overlapping runs of coverage
 void             FloatLigne::Flatten(void)
 {
 	if ( nbBord <= 1 ) {
@@ -490,27 +504,37 @@ void             FloatLigne::Flatten(void)
 	float     lastStart=0,lastVal=0;
 	int       pending=0;
 //	for (int i=0;i<nbBord;) {
+  // read the list from left to right, adding a run for each boundary crossed, minus runs with alpha=0
 	for (int i=/*0*/s_first;i>=0 && i < nbBord ;) {
-		float  cur=bords[i].pos;
-		float  leftV=0,rightV=0;
-		float  leftP=0,rightP=0;
+		float  cur=bords[i].pos;  // position of the current boundary (there may be several boundaries at this position)
+		float  leftV=0,rightV=0;  // deltas in coverage value at this position
+		float  leftP=0,rightP=0;  // deltas in coverage increase per unit length at this position
+    // more precisely, leftV is the sum of decreases of coverage value, while rightV is the sum of increases, so that
+    // leftV+rightV is the delta. idem for leftP and rightP
     
+    // start by scanning all boundaries that end a portion at this position
 		while ( i >= 0 && i < nbBord && bords[i].pos == cur && bords[i].start == false ) {
 			leftV+=bords[i].val;
 			leftP+=bords[i].pente;
 #ifndef faster_flatten
+      // we need to remove the boundary that started this coverage portion for the pending list
       if ( bords[i].other >= 0 && bords[i].other < nbBord ) {
+        // so we use the pend_inv "array"
         int  k=bords[bords[i].other].pend_inv;
         if ( k >= 0 && k < pending ) {
+          // and update the pend_ind array and its inverse pend_inv
           bords[k].pend_ind=bords[pending-1].pend_ind;
           bords[bords[k].pend_ind].pend_inv=k;
         }
       }
 #endif
+      // one less portion pending
 			pending--;
+      // and we move to the next boundary in the doubly linked list
       i=bords[i].s_next;
 			//i++;
 		}
+    // then scan all boundaries that start a portion at this position
 		while ( i >= 0 && i < nbBord && bords[i].pos == cur && bords[i].start == true ) {
 			rightV+=bords[i].val;
 			rightP+=bords[i].pente;
@@ -523,17 +547,23 @@ void             FloatLigne::Flatten(void)
 			//i++;
 		}
 
+    // coverage value at end of the run will be "start coverage"+"delta per unit length"*"length"
 		totStart=totStart+totPente*(cur-totX);
     
 		if ( startExists ) {
+      // add that run
 			AddRun(lastStart,cur,lastVal,totStart,totPente);
 		}
+    // update "delta coverage per unit length"
 		totPente+=rightP-leftP;
+    // not really needed here
 		totStart+=rightV-leftV;
+    // update position
 		totX=cur;
 		if ( pending > 0 ) {
 			startExists=true;
 #ifndef faster_flatten
+      // to avoid accumulation of numerical errors, we compute an accurate coverage for this position "cur"
       totStart=RemainingValAt(cur,pending);
 #endif
 			lastVal=totStart;
@@ -621,6 +651,9 @@ void             FloatLigne::Copy(IntLigne* a)
 		runs[i].ven=a->runs[i].ven;
 	}
 }
+// all operation on the FloatLigne instances are done by scanning the runs left to right in the source(s) instances, and adding the 
+// necessary runs to the solution. thus it reduces to computing the operation between float_ligne_run elements
+// but details are not pretty (et c'est une litote)
 void             FloatLigne::Booleen(FloatLigne* a,FloatLigne* b,BooleanOp mod)
 {
 	Reset();
@@ -1563,6 +1596,7 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 	}
 }
 
+// supersampled to alpha value. see the other Copy(int nbSub,BitLigne* *a)
 void             IntLigne::Copy(BitLigne* a)
 {
 	if ( a->curMax <= a->curMin ) {
@@ -1618,10 +1652,14 @@ void             IntLigne::Copy(BitLigne* a)
 		AddRun(lastStart,a->curMax+1,((float)lastVal)/4,((float)lastVal)/4);
 	}
 }
+// alpha values are computed from supersampled data, so we have to scan the BitLigne left to right, 
+// summing the bits in each pixel. the alpha value is then "number of bits"/(nbSub*nbSub)"
+// full bits and partial bits are treated as equals because the method produces ugly results otherwise
 void             IntLigne::Copy(int nbSub,BitLigne* *as)
 {
 	if ( nbSub <= 0 ) {Reset();return;}
 	if ( nbSub == 1 ) {Copy(as[0]);return;}
+  // compute the min-max of the pixels to be rasterized from the min-max of the  inpur bitlignes
 	int  curMin=as[0]->curMin,curMax=as[0]->curMax;
 	for (int i=1;i<nbSub;i++) {
 		if ( as[i]->curMin < curMin ) curMin=as[i]->curMin;
@@ -1642,6 +1680,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 
 	int    theSt=as[0]->st;
 	if ( nbSub == 4 ) {
+    // special case for 4*4 supersampling, to avoid a few loops
 		uint32_t  c_full[4];
 		c_full[0]=as[0]->fullB[(curMin-theSt)>>3] | as[0]->partB[(curMin-theSt)>>3];
 		c_full[0]<<=4*((curMin-theSt)&0x00000007);
@@ -1716,24 +1755,30 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 			}
 		}
 	} else {
-		uint32_t  c_full[16];
+		uint32_t  c_full[16]; // we take nbSub < 16, since 16*16 supersampling makes a 1/256 precision in alpha values
+                          // and that's the max of what 32bit argb can represent
+                          // in fact, we'll treat it as 4*nbSub supersampling, so that's a half truth and a full lazyness from me
 		//	uint32_t  c_part[16];
+    // start by putting the bits of the nbSub BitLignes in as[] in their respective c_full
 		for (int i=0;i<nbSub;i++) {
-			c_full[i]=as[i]->fullB[(curMin-theSt)>>3] | as[i]->partB[(curMin-theSt)>>3];
+			c_full[i]=as[i]->fullB[(curMin-theSt)>>3] | as[i]->partB[(curMin-theSt)>>3]; // fullB and partB treated equally
 			c_full[i]<<=4*((curMin-theSt)&0x00000007);
 			/*		c_part[i]=as[i]->partB[(curMin-theSt)>>3];
 			c_part[i]<<=4*((curMin-theSt)&0x00000007);*/
 		}
 
-		spA=1.0/(4*nbSub);
+		spA=1.0/(4*nbSub); // contribution to the alpha value of a single bit of the supersampled data
 		for (int i=curMin;i<=curMax;i++) {
 			int   nbBit=0;
-//			int nbPartBit=0;
+      //			int nbPartBit=0;
+      // a little acceleration: if the lines only contain full or empty bits, we can flush what's remaining in the c_full
+      // at best we flush an entire c_full, ie 32 bits, or 32/4=8 pixels
 			bool  allEmpty=true;
 			bool  allFull=true;
 			for (int j=0;j<nbSub;j++) if ( c_full[j] != 0 /*|| c_part[j] != 0*/ ) {allEmpty=false;break;}
-			if ( allEmpty ) {
-				if ( startExists ) {
+        if ( allEmpty ) {
+          // the remaining bits in c_full[] are empty: flush
+          if ( startExists ) {
 					AddRun(lastStart,i,((float)lastVal)*spA,((float)lastVal)*spA);
 				}
 				startExists=false;
@@ -1741,6 +1786,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 			} else {
 				for (int j=0;j<nbSub;j++) if ( c_full[j] != 0xFFFFFFFF ) {allFull=false;break;}
 				if ( allFull ) {
+          // the remaining bits in c_full[] are empty: flush
 					if ( startExists ) {
 						if ( lastVal == 4*nbSub) {
 						} else {
@@ -1754,20 +1800,26 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 					startExists=true;
 					i=theSt+(((i-theSt)&0xFFFFFFF8)+7);
 				} else {
+          // alpha values will be between 0 and 1, so we have more work to do
+          // compute how many bit this pixel holds
 					for (int j=0;j<nbSub;j++) {
 						nbBit+=masks[c_full[j]>>28];
 //						nbPartBit+=masks[c_part[j]>>28];
 					}
+          // and add a single-pixel run if needed, or extend the current run if the alpha value hasn't changed
 					if ( nbBit > 0 ) {
 						if ( startExists ) {
 							if ( lastVal == nbBit ) {
-								// on continue le run
+								// alpha value hasn't changed: we continue
 							} else {
+                // alpha value did change: put the run that was being done,...
 								AddRun(lastStart,i,((float)lastVal)*spA,((float)lastVal)*spA);
+                // ... and start a new one
 								lastStart=i;
 								lastVal=nbBit;
 							}
 						} else {
+              // alpha value was 0, so we "create" a new run with alpha nbBit
 							lastStart=i;
 							lastVal=nbBit;
 							startExists=true;
@@ -1780,6 +1832,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 					}
 				}
 			}
+        // move to the right: shift bits in the c_full[], and if we shifted everything, load the next c_full[]
 			int chg=(i+1-theSt)&0x00000007;
 			if ( chg == 0 ) {
 				for (int j=0;j<nbSub;j++) {
@@ -1794,9 +1847,9 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 			}
 		}
 	}
-	if ( startExists ) {
-		AddRun(lastStart,curMax+1,((float)lastVal)*spA,((float)lastVal)*spA);
-	}
+      if ( startExists ) {
+        AddRun(lastStart,curMax+1,((float)lastVal)*spA,((float)lastVal)*spA);
+      }
 }
 void             IntLigne::Copy(IntLigne* a)
 {
@@ -1812,6 +1865,9 @@ void             IntLigne::Copy(IntLigne* a)
 	}
 	memcpy(runs,a->runs,nbRun*sizeof(int_ligne_run));
 }
+// go from runs with floating-point boundaries to integer boundaries:
+// that involves replacing floating-point boundaries that are not integer by single-pixel runs
+// so this function contains plenty of rounding and float->integer conversion (read: time-consuming)
 void             IntLigne::Copy(FloatLigne* a)
 {
 	if ( a->nbRun <= 0 ) {
@@ -1829,6 +1885,10 @@ void             IntLigne::Copy(FloatLigne* a)
 	int   curPos=(int)floorf(a->runs[0].st)-1;
 	float lastSurf=0;
 	
+  // we take each run of the FloatLigne in sequence and make single-pixel runs of its boundaries as needed
+  // since the float_ligne_runs are non-overlapping, when a single-pixel run intersects with another runs, 
+  // it must intersect with the single-pixel run created for the end of that run. so instead of creating a new
+  // int_ligne_run, we just add the coverage to that run.
 	for (int i=0;i<a->nbRun;i++) {
 		float_ligne_run   runA=a->runs[i];
 		float curStF=floorf(runA.st);
@@ -1836,6 +1896,9 @@ void             IntLigne::Copy(FloatLigne* a)
 		int  curSt=(int)curStF;
 		int  curEn=(int)curEnF;
 
+    // stEx: start boundary is not integer -> create single-pixel run for it
+    // enEx: end boundary is not integer -> create single-pixel run for it
+    // miEx: the runs minus the eventual single-pixel runs is not empty
 		bool  stEx=true,miEx=true,enEx=true;
 		if ( runA.st-curStF < 0.00001 ) stEx=false;
 		if ( runA.en-curEnF < 0.00001 ) enEx=false;
@@ -1850,6 +1913,8 @@ void             IntLigne::Copy(FloatLigne* a)
 		}
 		if ( miSt >= curEn ) miEx=false;
 
+    // msv and mev are the start and end value of the middle section of the run, that is the run minus the
+    // single-pixel runs creaed for its boundaries
 		float   msv;
 		if ( stEx == false /*miSt == runA.st*/ ) {
 			msv=runA.vst;
@@ -1869,6 +1934,7 @@ void             IntLigne::Copy(FloatLigne* a)
 			mev=runA.vst+(curEnF-runA.st)*runA.pente;
 		}
 		
+    // check the different cases
 		if ( stEx ) {
 			if ( enEx ) {
 				// stEx && enEx

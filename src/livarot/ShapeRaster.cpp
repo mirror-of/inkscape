@@ -16,6 +16,12 @@
 #include "../libnr/nr-types.h"
 #include "../libnr/nr-point-fns.h"
 
+/*
+ * polygon rasterization: the sweepline algorithm in all its glory
+ * nothing unusual in this implementation, so nothing special to say
+ * the *Quick*() functions are not useful. forget about them
+ */
+
 void              Shape::BeginRaster(float &pos,int &curPt,float /*step*/)
 {
 	if ( nbPt <= 1 || nbAr <= 1 ) {
@@ -97,19 +103,27 @@ void              Shape::EndQuickRaster(void)
 	MakeQuickRasterData(false);
 }
 
+// 2 versions of the Scan() series to move the scanline to a given position withou actually computing coverages
 void              Shape::Scan(float &pos,int &curP,float to,float step)
 {
 	if ( pos == to ) return;
 	if ( pos < to ) {
+    // we're moving downwards
+    // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
+    // until we reach the wanted position to.
+    // don't forget to update curP and pos when we're done
 		int    curPt=curP;
 		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
+      // treat a new point: remove and add edges incident to it
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			cb=pts[nPt].firstA;
+      // count the number of edge coming in nPt from above if nbUp, and the number of edge exiting nPt to go below in nbDn
+      // upNo and dnNo are one of these edges, if any exist
 			while ( cb >= 0 && cb < nbAr ) {
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
@@ -130,10 +144,12 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			}
 
 			if ( nbUp > 0 ) {
+        // first remove edges coming from above
 				cb=pts[nPt].firstA;
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != upNo ) {
+						if ( cb != upNo ) { // we salvage the edge upNo to plug the edges we'll be addingat its place
+                                // but the other edge don't have this chance
 							SweepTree* node=swrData[cb].misc;
 							if ( node ) {
 								swrData[cb].misc=NULL;
@@ -146,7 +162,8 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 				}
 			}
 
-			// traitement du "upNo devient dnNo"
+			// if there is one edge going down and one edge coming from above, we don't Insert() the new edge,
+      // but replace the upNo edge by the new one (faster)
 			SweepTree* insertionNode=NULL;
 			if ( dnNo >= 0 ) {
 				if ( upNo >= 0 ) {
@@ -168,6 +185,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 				}
 			}
 
+      // add the remaining edges
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
 				while ( cb >= 0 && cb < nbAr ) {
@@ -186,6 +204,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	} else {
+    // same thing, but going up. so the sweepSens is inverted for the Find() function
 		int    curPt=curP;
 		while ( curPt > 0 && pts[curPt-1].x[1] >= to ) {
 			int           nPt=-1;
@@ -273,6 +292,8 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  // the final touch: edges intersecting the sweepline must be update so that their intersection with
+  // said sweepline is correct.
 	if ( sTree.racine ) {
 		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
 		while ( curS ) {
@@ -454,11 +475,19 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
 	}
 }
+// scan and compute coverage, FloatLigne version
+// coverage of the line is bult in 2 parts: first a set of rectangles of height the height of the line (here: "step")
+// one rectangle for each portion of the sweepline that is in the polygon at the beginning of the scan. then a set ot trapezoids
+// are added or removed to these rectangles, one trapezoid for each edge destroyed or edge crossing the entire line. think of
+// it as a refinement of the coverage by rectangles
 void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,bool exact,float step)
 {
 	if ( pos >= to ) return;
 	if ( pos < to ) {
-		if ( sTree.racine ) {
+    // first step: the rectangles
+    // since we read the sweepline left to right, we know the boundaries of the rectangles are appended in a list, hence
+    // the AppendBord(). we salvage the guess value for the trapezoids the edges will induce
+ 		if ( sTree.racine ) {
 			SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
 			while ( curS ) {
 				int    lastGuess=-1;
@@ -479,6 +508,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 			int           nPt=-1;
 			nPt=curPt++;
 
+      // same thing as the usual Scan(), just with a hardcoded "indegree+outdegree=2" case, since it's the most common one
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
@@ -536,7 +566,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 								swrData[cb].curX=pts[nPt].x[0];
 								swrData[cb].curY=pts[nPt].x[1];
 								swrData[cb].misc=NULL;
-								DestroyEdge(cb,to,line,step);
+								DestroyEdge(cb,to,line,step); // create trapezoid for the chunk of edge intersecting with the line
 
 								node->Remove(sTree,sEvts,true);
 							}
@@ -591,6 +621,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  // update intersections with the sweepline, and add trapezoids for edges crossing the line
 	if ( sTree.racine ) {
 		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
 		while ( curS ) {

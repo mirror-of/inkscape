@@ -66,6 +66,9 @@ DblLinked::Extract (void)
   leftElem = rightElem = NULL;
 }
 
+// the only possible links to this element are in leftElem or rightElem
+// the object retaining pointers to the list (like, say, first or last element) has to take care of the
+// relocation himself. in practice, only the sweep code has to deal with DblLinked lists
 void
 DblLinked::Relocate (DblLinked * to)
 {

@@ -12,10 +12,6 @@
 
 #include <math.h>
 
-/*int       min,max;
-int       length;
-uin16_t   *alpha;*/
-
 AlphaLigne::AlphaLigne(int iMin,int iMax)
 {
 	min=iMin;
@@ -46,6 +42,8 @@ void						 AlphaLigne::Affiche(void)
 
 void             AlphaLigne::Reset(void)
 {
+  // reset to empty line
+  // doesn't deallocate the steps array, to minimize memory operations
 	curMin=max;
 	curMax=min;
 	nbStep=0;
@@ -58,28 +56,40 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 {
 //	printf("%f %f -> %f %f / %f\n",spos,sval,epos,eval,tPente);
 	if ( sval == eval ) return 0;
+  // compute the footprint of [spos,epos] on the line of pixels
 	float  curStF=floorf(spos);
 	float  curEnF=floorf(epos);
 	int   curSt=(int)curStF;
 	int   curEn=(int)curEnF;
 	
+  // update curMin and curMax
 	if ( curSt > max ) {
+    // we're on the right of the visible portion of the line: bail out!
     if ( eval < sval ) curMax=max;
-    return 0; // en dehors des limites (attention a ne pas faire ca avec curEn)
+    return 0;
   }
 	if ( curSt < curMin ) curMin=curSt;
 	if ( ceilf(epos) > curMax ) curMax=(int)ceilf(epos);
 	
+  // clamp the changed portion to [min,max], no need for bigger
 	if ( curMax > max ) curMax=max;
 	if ( curMin < min ) curMin=min;
 	
-	float  needed=eval-sval;
+  // total amount of change in pixel coverage from before the right to after the run
+	float    needed=eval-sval;
 	float    needC=/*(int)ldexpf(*/needed/*,24)*/;
 	
 	if ( curEn < min ) {
+    // the added portion is entirely on the left, so we only have to change the initial coverage for the line
     before.delta+=needC;
-    return 0; // en dehors des limites (attention a ne pas faire ca avec curEn)
+    return 0;
 	}
+  
+  // add the steps
+  // the pixels from [curSt..curEn] (included) intersect with [spos;epos]
+  // since we're dealing with delta in the coverage, there is also a curEn+1 delta, since the curEn pixel intersect
+  // with [spos;epos] and thus has some delta with respect to its next pixel
+  // lots of different cases... ugly
 	if ( curSt == curEn ) {
 		if ( curSt+1 < min ) {
 			before.delta+=needC;
@@ -233,6 +243,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 
 void             AlphaLigne::Flatten(void)
 {
+  // just sort
 	if ( nbStep > 0 ) qsort(steps,nbStep,sizeof(alpha_step),CmpStep);
 }
 void             AlphaLigne::AddRun(int st,float pente)
@@ -248,34 +259,42 @@ void             AlphaLigne::AddRun(int st,float pente)
 
 void             AlphaLigne::Raster(raster_info &dest,void* color,RasterInRunFunc worker)
 {
+  // start by checking if there are actually pixels in need of rasterization
 	if ( curMax <= curMin ) return;
 	if ( dest.endPix <= curMin || dest.startPix >= curMax ) return;
 
 	int    nMin=curMin,nMax=curMax;
-	float  alpSum=before.delta;
+	float  alpSum=before.delta; // alpSum will be the pixel coverage value, so we start at before.delta
 	int    curStep=0;
   
-  while ( curStep < nbStep && steps[curStep].x < nMin ) {
+  // first add all the deltas up to the first pixel in need of rasterization
+  while ( curStep < nbStep && steps[curStep].x < nMin ) { 
     alpSum+=steps[curStep].delta;
     curStep++;
   }
+  // just in case, if the line bounds are greater than the buffer bounds.
 	if ( nMin < dest.startPix ) {
 		for (;( curStep < nbStep && steps[curStep].x < dest.startPix) ;curStep++) alpSum+=steps[curStep].delta;
 		nMin=dest.startPix;
 	}
 	if ( nMax > dest.endPix ) nMax=dest.endPix;
 
+  // raster!
 	int       curPos=dest.startPix;
 	for (;curStep<nbStep;curStep++) {
 		if ( alpSum > 0 && steps[curStep].x > curPos ) {
+      // we're going to change the pixel position curPos, and alpSum is > 0: rasterization needed from
+      // the last position (curPos) up to the pixel we're moving to (steps[curStep].x)
 			int  nst=curPos,nen=steps[curStep].x;
 //Buffer::RasterRun(dest,color,nst,alpSum,nen,alpSum);
       (worker)(dest,color,nst,alpSum,nen,alpSum);
 		}
+    // add coverage deltas
 		alpSum+=steps[curStep].delta;
 		curPos=steps[curStep].x;
 		if ( curPos >= nMax ) break;
 	}
+  // if we ended the line with alpSum > 0, we need to raster from curPos to the right edge
 	if ( alpSum > 0 && curPos < nMax ) {
 		int  nst=curPos,nen=max;
     (worker)(dest,color,nst,alpSum,nen,alpSum);

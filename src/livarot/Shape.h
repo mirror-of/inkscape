@@ -19,6 +19,14 @@
 #include "ShapeUtils.h"
 #include "libnr/nr-point.h"
 
+/*
+ * the Shape class (was the Digraph class, as the header says) stores digraphs (no kidding!) of which 
+ * a very interesting kind are polygons.
+ * the main use of this class is the ConvertToShape() (or Booleen(), quite the same) function, which
+ * removes all problems a polygon can present: duplicate points or edges, self-intersection. you end up with a
+ * full-fledged polygon
+ */
+
 // possible values for the "type" field in the Shape class:
 enum
 {
@@ -29,6 +37,7 @@ enum
 
 // possible flags for the "flags" field in the Shape class
 // they record which structure is currently allocated, or if the graph is "dirty"
+// notice how much junk is needed to run that intersector...
 enum
 {
   need_points_sorting = 1,	// points have been added or removed: we need to sort the points again

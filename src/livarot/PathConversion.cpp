@@ -15,6 +15,12 @@
 #include <libnr/nr-rotate-ops.h>
 #include <libnr/nr-scale-ops.h>
 
+/*
+ * path description -> polyline
+ * and Path -> Shape (the Fill() function at the bottom)
+ * nathing fancy here: take each command and append an approximation of it to the polyline
+ */
+
 void            Path::ConvertWithBackData(double treshhold)
 {
 	if ( descr_flags & descr_adding_bezier ) {
@@ -760,6 +766,9 @@ const NR::Point Path::PrevPoint(int i) const
 	}
 }
 
+// utilitaries: given a quadratic bezier curve (start point, control point, end point, ie that's a clamped curve),
+// and an abcissis on it, get the point with that abcissis.
+// warning: it's NOT a curvilign abcissis (or whatever you call that in english), so "t" is NOT the length of "start point"->"result point"
 void Path::QuadraticPoint(double t, NR::Point &oPt, 
                           const NR::Point &iS, const NR::Point &iM, const NR::Point &iE)
 {
@@ -769,6 +778,7 @@ void Path::QuadraticPoint(double t, NR::Point &oPt,
 	
 	oPt = t*t*ax+t*bx+cx;
 }
+// idem for cubic bezier patch
 void Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS, const NR::Point &isD, const NR::Point &iE, const NR::Point &ieD)
 {
 	NR::Point ax = ieD-2*iE+2*iS+isD;
@@ -779,6 +789,7 @@ void Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS, const NR:
 	oPt = 3*t*t*ax+2*t*bx+cx;
 }
 
+// extract interesting info of a SVG arc description
 static void ArcAnglesAndCenter(NR::Point const &iS, NR::Point const &iE,
 			       double rx, double ry, double angle,
 			       bool large, bool wise,
@@ -1224,7 +1235,9 @@ void Path::RecBezierTo(NR::Point const &iP, NR::Point const &iS,NR::Point const 
 
 
 /*
- * conversions
+ * put a polyline in a Shape instance, for further fun
+ * pathID is the ID you want this Path instance to be associated with, for when you're going to recompose the polyline
+ * in a path description ( you need to have prepared the back data for that, of course)
  */
 
 void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool invert)
