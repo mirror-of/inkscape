@@ -17,6 +17,7 @@ INCLUDES = \
 	$(XFT_CFLAGS)
 
 libnrtype_a_SOURCES = \
+	font-style-to-pos.cpp font-style-to-pos.h	\
 	nr-type-primitives.cpp nr-type-primitives.h \
 	nr-typeface.cpp nr-typeface.h \
 	nr-font.cpp nr-font.h \

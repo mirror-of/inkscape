@@ -45,6 +45,7 @@
 #include "../style.h"
 #include "../sp-text.h"
 #include "../inkscape-stock.h"
+#include <libnrtype/font-style-to-pos.h>
 
 #include "dialog-events.h"
 #include "../prefs-utils.h"
@@ -440,72 +441,6 @@ sp_text_edit_dialog_close (GtkButton *button, GtkWidget *dlg)
 	gtk_widget_destroy (GTK_WIDGET (dlg));
 }
 
-static gchar *
-sp_text_edit_dialog_font_style_to_lookup (SPStyle const *style)
-{
-	char const *wstr;
-	switch (style->font_weight.computed) {
-	case SP_CSS_FONT_WEIGHT_100:
-		wstr = "extra light";
-		break;
-	case SP_CSS_FONT_WEIGHT_200:
-		wstr = "thin";
-		break;
-	case SP_CSS_FONT_WEIGHT_300:
-		wstr = "light";
-		break;
-	case SP_CSS_FONT_WEIGHT_400:
-	case SP_CSS_FONT_WEIGHT_NORMAL:
-		wstr = "";
-		break;
-	case SP_CSS_FONT_WEIGHT_500:
-		wstr = "medium";
-		break;
-	case SP_CSS_FONT_WEIGHT_600:
-		wstr = "semi";
-		break;
-	case SP_CSS_FONT_WEIGHT_700:
-	case SP_CSS_FONT_WEIGHT_BOLD:
-		wstr = "bold";
-		break;
-	case SP_CSS_FONT_WEIGHT_800:
-		wstr = "heavy";
-		break;
-	case SP_CSS_FONT_WEIGHT_900:
-		wstr = "black";
-		break;
-	default:
-		wstr = "";
-		break;
-	}
-
-	char const *sstr;
-	switch (style->font_style.computed) {
-	case SP_CSS_FONT_STYLE_NORMAL:
-		sstr = "";
-		break;
-	case SP_CSS_FONT_STYLE_ITALIC:
-		sstr = "italic";
-		break;
-	case SP_CSS_FONT_STYLE_OBLIQUE:
-		sstr = "oblique";
-		break;
-	default:
-		sstr = "";
-		break;
-	}
-
-	char const *maybe_space = ( *wstr && *sstr
-				    ? " "
-				    : "" );
-	static gchar c[256];
-	g_snprintf(c, sizeof(c), "%s%s%s",
-		   wstr,
-		   maybe_space,
-		   sstr);
-	return c;
-}
-
 static void
 sp_text_edit_dialog_read_selection (GtkWidget *dlg, gboolean dostyle, gboolean docontent)
 {
@@ -575,11 +510,10 @@ sp_text_edit_dialog_read_selection (GtkWidget *dlg, gboolean dostyle, gboolean d
 		NRTypeFace *tf;
 		NRFont *font;
 		GtkWidget *b, *combo;
-		gchar *c;
 		const gchar *sstr;
 
-		c = sp_text_edit_dialog_font_style_to_lookup (style);
-		tf = nr_type_directory_lookup_fuzzy ((gchar*)style->text->font_family.value, c);
+		tf = nr_type_directory_lookup_fuzzy(style->text->font_family.value,
+						    font_style_to_pos(*style));
 		font = nr_font_new_default (tf, NR_TYPEFACE_METRICS_HORIZONTAL, style->font_size.computed);
 		nr_typeface_unref (tf);
 

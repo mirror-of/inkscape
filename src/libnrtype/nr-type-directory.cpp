@@ -93,6 +93,8 @@ nr_type_directory_lookup (const gchar *name)
 NRTypeFace *
 nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 {
+	/* At the time of writing, all callers form their apos from a call to font_style_to_pos, so
+	   we could take a SPStyle as argument instead. */
 	NRFamilyDef *fdef, *bestfdef;
 	NRTypeFaceDef *tdef, *besttdef;
 

@@ -30,6 +30,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnrtype/nr-type-directory.h>
 #include <libnrtype/nr-font.h>
+#include <libnrtype/font-style-to-pos.h>
 
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -47,8 +48,6 @@
 #include "view.h"
 
 #include "sp-text.h"
-
-static gchar *sp_text_font_style_to_lookup (SPStyle const *style);
 
 static void sp_text_update_length (SPSVGLength *length, gdouble em, gdouble ex, gdouble scale);
 
@@ -201,7 +200,8 @@ sp_string_calculate_dimensions (SPString *string)
 	style = SP_OBJECT_STYLE (SP_OBJECT_PARENT (string));
 	/* fixme: Adjusted value (Lauris) */
 	size = style->font_size.computed;
-	face = nr_type_directory_lookup_fuzzy (style->text->font_family.value, sp_text_font_style_to_lookup (style));
+	face = nr_type_directory_lookup_fuzzy(style->text->font_family.value,
+					      font_style_to_pos(*style));
 	if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 		metrics = NR_TYPEFACE_METRICS_VERTICAL;
 	} else {
@@ -310,7 +310,8 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 
 	/* fixme: Adjusted value (Lauris) */
 	size = style->font_size.computed;
-	face = nr_type_directory_lookup_fuzzy (style->text->font_family.value, sp_text_font_style_to_lookup (style));
+	face = nr_type_directory_lookup_fuzzy(style->text->font_family.value,
+					      font_style_to_pos(*style));
 	if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 		metrics = NR_TYPEFACE_METRICS_VERTICAL;
 	} else {
@@ -1298,79 +1299,6 @@ sp_text_description (SPItem * item)
 	return g_strdup (_("Text object"));
 }
 
-/* 'lighter' and 'darker' have to be resolved earlier */
-
-static gchar *
-sp_text_font_style_to_lookup (SPStyle const *style)
-{
-	char const *wstr;
-	switch (style->font_weight.computed) {
-	case SP_CSS_FONT_WEIGHT_100:
-		wstr = "extra light";
-		break;
-	case SP_CSS_FONT_WEIGHT_200:
-		wstr = "thin";
-		break;
-	case SP_CSS_FONT_WEIGHT_300:
-		wstr = "light";
-		break;
-	case SP_CSS_FONT_WEIGHT_400:
-	case SP_CSS_FONT_WEIGHT_NORMAL:
-		wstr = "";
-		break;
-	case SP_CSS_FONT_WEIGHT_500:
-		wstr = "medium";
-		break;
-	case SP_CSS_FONT_WEIGHT_600:
-		wstr = "semi";
-		/* FIXME: `semi' is ignored by nr_type_calculate_position (as called by
-		 * nr_type_directory_lookup_fuzzy).  Should probably be `semibold' instead.
-		 *
-		 * [For that matter, we should probably be passing constants directly rather than
-		 * formatting a string and then having nr_type_calculate_position parsing it.]
-		 */
-		break;
-	case SP_CSS_FONT_WEIGHT_700:
-	case SP_CSS_FONT_WEIGHT_BOLD:
-		wstr = "bold";
-		break;
-	case SP_CSS_FONT_WEIGHT_800:
-		wstr = "heavy";
-		break;
-	case SP_CSS_FONT_WEIGHT_900:
-		wstr = "black";
-		break;
-	default:
-		wstr = "";
-		break;
-	}
-
-	char const *sstr;
-	switch (style->font_style.computed) {
-	case SP_CSS_FONT_STYLE_NORMAL:
-		sstr = "";
-		break;
-	case SP_CSS_FONT_STYLE_ITALIC:
-		sstr = "italic";
-		break;
-	case SP_CSS_FONT_STYLE_OBLIQUE:
-		sstr = "oblique";
-		break;
-	default:
-		sstr = "";
-		break;
-	}
-
-	char const *maybe_space = ( *wstr && *sstr
-				    ? " "
-				    : "" );
-	static gchar c[256];
-	g_snprintf(c, sizeof(c), "%s%s%s",
-		   wstr,
-		   maybe_space,
-		   sstr);
-	return c;
-}
 
 /* fixme: Do text chunks here (Lauris) */
 /* fixme: We'll remove string bbox adjustment and bring it here for the whole chunk (Lauris) */
