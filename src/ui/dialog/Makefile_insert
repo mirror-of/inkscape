@@ -5,4 +5,8 @@ ui/dialog/all: ui/dialog/libuidialog.a
 ui/dialog/clean:
 	rm -f ui/dialog/libuidialog.a $(ui_libuidialog_a_OBJECTS)
 
-ui_dialog_libuidialog_a_SOURCES =	
+ui_dialog_libuidialog_a_SOURCES =	\
+	ui/dialog/dialog-manager.cpp	\
+	ui/dialog/dialog-manager.h	\
+	ui/dialog/dialog.cpp		\
+	ui/dialog/dialog.h
