@@ -14,7 +14,8 @@ typedef enum {
 	SP_PT
 } SPMetric;
 
-#define PT_PER_IN 72.0
+#define PT_PER_IN 90.0
+// all callers of the mentrics stuff assume "points" to be SVG pixels, hence the 90 instead of 72
 #define CM_PER_IN 2.54
 #define MM_PER_IN 25.4
 #define IN_PER_PT (1 / PT_PER_IN)

@@ -967,7 +967,7 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	if (angle > 180) angle -= 360;
 	if (angle < -180) angle += 360;
 
-        seltrans->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
+       seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, 
             _("Rotate by %0.2f deg"), angle);
 
 	return TRUE;
@@ -997,7 +997,7 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	// status text
 	GString *xs = SP_PT_TO_METRIC_STRING(pt[X], SP_DEFAULT_METRIC);
 	GString *ys = SP_PT_TO_METRIC_STRING(pt[Y], SP_DEFAULT_METRIC);
-        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Center at (%s,%s)"), xs->str, ys->str);
+      seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, _("Center at (%s,%s)"), xs->str, ys->str);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);
 

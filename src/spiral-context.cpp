@@ -143,6 +143,10 @@ sp_spiral_context_dispose (GObject *object)
         sc->repr = 0;
     }
 
+    if (sc->_message_context) {
+        delete sc->_message_context;
+    }
+
     G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -245,6 +249,8 @@ sp_spiral_context_setup (SPEventContext *ec)
 	if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
 		ec->enableSelectionCue();
 	}
+
+	sc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
 }
 
 static void
@@ -426,17 +432,17 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 		       /*t0*/ sc->t0);
 	
 	/* status text */
-	GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
-	GString *ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
-	sc->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
-					 _("Draw spiral at (%s,%s)"), xs->str, ys->str);
-	g_string_free (xs, FALSE);
-	g_string_free (ys, FALSE);
+	GString *rads = SP_PT_TO_METRIC_STRING (rad, SP_DEFAULT_METRIC);
+	sc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"), 
+														 rads->str, sp_round ((arg + 2.0*M_PI*spiral->revo)*180/M_PI, 0.0001));
+	g_string_free (rads, FALSE);
 }
 
 static void
 sp_spiral_finish (SPSpiralContext * sc)
 {
+	sc->_message_context->clear();
+
 	if (sc->item != NULL) {
 		SPDesktop *desktop = SP_EVENT_CONTEXT (sc)->desktop;
 		SPSpiral  *spiral = SP_SPIRAL (sc->item);

@@ -145,6 +145,10 @@ sp_star_context_dispose (GObject *object)
     /* fixme: This is necessary because we do not grab */
     if (sc->item) sp_star_finish (sc);
 
+    if (sc->_message_context) {
+        delete sc->_message_context;
+    }
+
     G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -214,8 +218,6 @@ sp_star_context_selection_changed (SPSelection * selection, gpointer data)
             sp_repr_add_listener (repr, &shape_repr_events, ec);
             sp_repr_synthesize_events (repr, &shape_repr_events, ec);
         }
-
-
     }
 }
 
@@ -253,6 +255,8 @@ sp_star_context_setup (SPEventContext *ec)
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
         ec->enableSelectionCue();
     }
+
+    sc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
 }
 
 static void
@@ -432,21 +436,20 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
                          arg1, arg1 + M_PI / sides, sc->isflatsided, sc->rounded, sc->randomized);
 
     /* status text */
-    GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
-    GString *ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
-
-    sc->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
-                                      ( sc->isflatsided
-                                      ? _("Draw polygon at (%s,%s)")
-                                      : _("Draw star at (%s,%s)") ),
-                                      xs->str, ys->str);
-    g_string_free(xs, FALSE);
-    g_string_free(ys, FALSE);
+    GString *rads = SP_PT_TO_METRIC_STRING (r1, SP_DEFAULT_METRIC);
+    sc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
+                                      ( sc->isflatsided?
+                                      _("<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle")
+                                          : _("<b>Star</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle") ),
+                                      rads->str, sp_round ((arg1)*180/M_PI, 0.0001));
+    g_string_free(rads, FALSE);
 }
 
 static void
 sp_star_finish (SPStarContext * sc)
 {
+    sc->_message_context->clear();
+
     if (sc->item != NULL) {
         SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
         SPObject *object = SP_OBJECT(sc->item);

@@ -38,6 +38,8 @@ struct SPRectContext : public SPEventContext {
   	gdouble ry;	/* roundness radius (y direction) */
 
 	sigc::connection sel_changed_connection;
+
+	Inkscape::MessageContext *_message_context;
 };
 
 struct SPRectContextClass {

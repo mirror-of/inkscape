@@ -355,7 +355,7 @@ void sp_selection_ungroup()
         g_slist_free(new_select);
     }
     if (!ungrouped) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
     }
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
@@ -428,7 +428,7 @@ sp_selection_raise()
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -506,7 +506,7 @@ sp_selection_lower()
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -702,7 +702,7 @@ void sp_selection_copy()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was copied."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing was copied."));
         return;
     }
 
@@ -829,7 +829,7 @@ void sp_selection_paste(bool in_place)
 
     // check if something is in the clipboard
     if (clipboard == NULL) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> on the clipboard."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing on the clipboard."));
         return;
     }
 
@@ -880,7 +880,7 @@ void sp_selection_paste_style()
 
     // check if something is in the clipboard
     if (clipboard == NULL) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> on the clipboard."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing on the clipboard."));
         return;
     }
 
@@ -1498,7 +1498,7 @@ sp_selection_unlink()
         g_slist_free(new_select);
     }
     if (!unlinked) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No clones to unlink</b> in the selection."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No clones to unlink</b> in the selection."));
     }
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
@@ -1536,13 +1536,13 @@ sp_select_clone_original()
     }
 
     if (!original) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Cannot find</b> the object to select (orphaned clone, offset, or textpath?)"));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>Cannot find</b> the object to select (orphaned clone, offset, or textpath?)"));
         return;
     }
 
     for (SPObject *o = original; o && !SP_IS_ROOT(o); o = SP_OBJECT_PARENT (o)) {
         if (SP_IS_DEFS (o)) {
-            desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("The object you're trying to select is <b>not visible</b> (it is in &lt;defs&gt;)"));
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The object you're trying to select is <b>not visible</b> (it is in &lt;defs&gt;)"));
             return;
         }
     }
@@ -1696,7 +1696,7 @@ sp_selection_untile()
     }
 
     if (!did) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No pattern fills</b> to untile in the selection."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No pattern fills</b> to untile in the selection."));
     } else {
         sp_document_done(SP_DT_DOCUMENT(desktop));
         selection->setItemList (new_select);

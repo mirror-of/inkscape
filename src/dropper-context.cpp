@@ -298,11 +298,11 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			// where the color is picked, to show in the statusbar
 			gchar *where = dc->dragging ? g_strdup_printf (_(", averaged with radius %d"), (int) rw) : g_strdup_printf (_(" under cursor"));
 			// message, to show in the statusbar
-			const gchar *message = dc->dragging ? _("Release mouse to set color.") : _("Click to pick fill color, Shift+click to pick stroke color. Drag to pick the average color of an area.");
+			const gchar *message = dc->dragging ? _("<b>Release mouse</b> to set color.") : _("<b>Click</b> to pick fill color, <b>Shift+click</b> to pick stroke color. <b>Drag</b> to pick the average color of an area.");
 
 			ec->defaultMessageContext()->setF(
 				Inkscape::NORMAL_MESSAGE,
-				"%s%s%s. %s", c,
+				"<b>%s%s</b>%s. %s", c,
 				(pick == SP_DROPPER_PICK_VISIBLE)? "" : alpha,
 				where, message
 			);

@@ -38,6 +38,8 @@ struct SPArcContext : public SPEventContext {
 
     SPKnotHolder *knot_holder;
     SPRepr *repr;
+
+    Inkscape::MessageContext *_message_context;
 };
 
 struct SPArcContextClass {

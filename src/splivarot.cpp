@@ -108,13 +108,13 @@ sp_selected_path_boolop (bool_op bop)
     GSList *il = (GSList *) selection->itemList();
   
     if (g_slist_length (il) < 2) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select at least 2 paths to perform a boolean operation."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>at least 2 paths</b> to perform a boolean operation."));
         return;
     }
   
     if (g_slist_length (il) > 2) {
         if (bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice ) {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select exactly 2 paths to perform difference, XOR, division, or path cut."));
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path cut."));
             return;
         }
     }
@@ -131,7 +131,7 @@ sp_selected_path_boolop (bool_op bop)
         SPRepr *b = SP_OBJECT_REPR (il->next->data);
 
         if (a == NULL || b == NULL) {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Unable to determine the z-order of the objects selected for difference, XOR, division, or path cut."));
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
             return;
         }
 
@@ -146,7 +146,7 @@ sp_selected_path_boolop (bool_op bop)
             // find their lowest common ancestor
             SPRepr *dad = LCA (a, b);
             if (dad == NULL) {
-                desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Unable to determine the z-order of the objects selected for difference, XOR, division, or path cut."));
+                desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
                 return;
             }
 
@@ -176,7 +176,7 @@ sp_selected_path_boolop (bool_op bop)
         SPItem *item = SP_ITEM (l->data);
         if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
         {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("One of the objects is not a path, cannot perform boolean operation."));
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
             g_slist_free (il);
             return;
         }
@@ -541,7 +541,7 @@ sp_selected_path_outline ()
 
     if (selection->isEmpty()) {
         // TRANSLATORS: "to outline" means "to convert stroke to path"
-        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Select some paths to outline."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to outline."));
         return;
     }
 
@@ -742,7 +742,7 @@ sp_selected_path_outline ()
         sp_document_done (SP_DT_DOCUMENT (desktop));
     } else {
         // TRANSLATORS: "to outline" means "to convert stroke to path"
-        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No stroked paths to outline in the selection."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No stroked paths</b> to outline in the selection."));
         return;
     } 
 }
@@ -828,7 +828,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     item = selection->singleItem();
   
     if (item == NULL || ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) ) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Selected object is not a path, cannot inset/outset."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Selected object is <b>not a path</b>, cannot inset/outset."));
         return;
     }
     if (SP_IS_SHAPE (item))
@@ -1046,7 +1046,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
     SPSelection *selection = SP_DT_SELECTION (desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Select some paths to inset/outset."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to inset/outset."));
         return;
     }
 
@@ -1254,7 +1254,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
     if (did) {
         sp_document_done (SP_DT_DOCUMENT (desktop));
     } else {
-        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No paths to inset/outset in the selection."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to inset/outset in the selection."));
         return;
     } 
 }
@@ -1298,7 +1298,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
     SPSelection *selection = SP_DT_SELECTION (desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Select some paths to simplify."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to simplify."));
         return;
     }
 
@@ -1390,7 +1390,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
     if (did) {
         sp_document_done (SP_DT_DOCUMENT (desktop));
     } else {
-        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No paths to simplify in the selection."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to simplify in the selection."));
         return;
     }
 }

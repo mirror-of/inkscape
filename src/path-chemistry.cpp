@@ -230,7 +230,7 @@ sp_selected_path_break_apart (void)
  	if (did) {
 		sp_document_done (SP_DT_DOCUMENT (desktop));
 	} else {
-	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No path(s)</b> to break apart in the selection."));
+	    desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to break apart in the selection."));
 	    return;
 	} 
 }
@@ -298,7 +298,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		if (did) {
 			sp_document_done (SP_DT_DOCUMENT (desktop));
 		} else {
-		    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No objects</b> to convert to path in the selection."));
+		    desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No objects</b> to convert to path in the selection."));
 		    return;
 		}
 	}
@@ -424,6 +424,6 @@ sp_selected_path_reverse ()
  	if (did) {
 		sp_document_done (SP_DT_DOCUMENT (desktop));
 	} else {
-	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>No paths</b> to reverse in the selection."));
+	    desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to reverse in the selection."));
 	} 
 }

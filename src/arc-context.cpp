@@ -136,6 +136,10 @@ static void sp_arc_context_dispose(GObject *object)
 	/* fixme: This is necessary because we do not grab */
 	if (ac->item) sp_arc_finish (ac);
 
+	if (ac->_message_context) {
+		delete ac->_message_context;
+	}
+
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -234,6 +238,8 @@ sp_arc_context_setup (SPEventContext *ec)
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
 	    ec->enableSelectionCue();
     }
+
+    ac->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
 }
 
 static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
@@ -464,13 +470,15 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 
 	GString *xs = SP_PT_TO_METRIC_STRING (fabs(x1-x0), SP_DEFAULT_METRIC);
 	GString *ys = SP_PT_TO_METRIC_STRING (fabs(y1-y0), SP_DEFAULT_METRIC);
-	ac->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("Draw arc: %s x %s"), xs->str, ys->str);
+	ac->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Ellipse</b>: %s x %s; with <b>Ctrl</b> to make circle or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);
 }
 
 static void sp_arc_finish(SPArcContext *ac)
 {
+	ac->_message_context->clear();
+
 	if (ac->item != NULL) {
 		SPDesktop *desktop = SP_EVENT_CONTEXT (ac)->desktop;
 

@@ -91,15 +91,13 @@ text_put_on_path (void)
 	}
 
 	if (SP_IS_TEXT_TEXTPATH(text)) {
-		desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("This text object is <b>already put to a path</b>. Remove it from the path first. Use <b>Shift+D</b> to look up its path."));
+		desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("This text object is <b>already put to a path</b>. Remove it from the path first. Use <b>Shift+D</b> to look up its path."));
 		return;
 	}
 
 	// remove transform from text, but recursively scale text's fontsize by the expansion
       scale_text_recursive (text, NR::expansion(SP_ITEM(text)->transform));
       sp_repr_set_attr (SP_OBJECT_REPR (text), "transform", NULL);
-
-	// fixme in transform_selectiion: treat textpath and its path the same as clone and its original
 
 	// make a list of text children
 	GSList *text_reprs = NULL;

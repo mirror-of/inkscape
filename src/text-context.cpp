@@ -401,11 +401,11 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_u:
 						if (tc->unimode) {
 							tc->unimode = FALSE;
-							sp_view_clear_status (SP_VIEW(ec->desktop));
+							ec->defaultMessageContext()->clear();
 						} else {
 							tc->unimode = TRUE;
 							tc->unipos = 0;
-							ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
+							ec->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
 						}
 						if (tc->imc) {
 							gtk_im_context_reset (tc->imc);
@@ -418,7 +418,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					if (tc->unimode) {
 						if (isxdigit ((guchar) event->key.keyval)) {
 							tc->uni[tc->unipos] = event->key.keyval;
-							ec->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
+							ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
                                                         _("Unicode: %c%c%c%c"), 
                                                         tc->uni[0], 
                                                         tc->unipos > 0 ? tc->uni[1] : ' ', 
@@ -449,7 +449,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						} else if (event->key.keyval != GDK_Shift_L && event->key.keyval != GDK_Shift_R) { // non-hex-digit, canceling unimode
 							tc->unimode = FALSE;
 							gtk_im_context_reset (tc->imc);
-							sp_view_clear_status (SP_VIEW(ec->desktop));
+							ec->defaultMessageContext()->clear();
 							return TRUE;
 						}
 					}

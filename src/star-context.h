@@ -46,6 +46,8 @@ struct SPStarContext : public SPEventContext {
     SPRepr *repr;
 
     sigc::connection sel_changed_connection;
+
+	Inkscape::MessageContext *_message_context;
 };
 
 struct SPStarContextClass {

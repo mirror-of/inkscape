@@ -296,11 +296,11 @@ sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
 {
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
  	sp_knot_holder_add (knot_holder, sp_rect_rx_set, sp_rect_rx_get, 
-				_("Adjust the horizontal rounding radius; with Ctrl to make the vertical radius the same"));
+				_("Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the vertical radius the same"));
 	sp_knot_holder_add (knot_holder, sp_rect_ry_set, sp_rect_ry_get,
-				_("Adjust the vertical rounding radius; with Ctrl to make the horizontal radius the same"));
+				_("Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the horizontal radius the same"));
 	sp_knot_holder_add (knot_holder, sp_rect_wh_set, sp_rect_wh_get,
-				_("Adjust the width and height of the rectangle")); // FIXME: with ctrl!
+				_("Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to lock ratio")); // FIXME: hor/vert with ctrl!
 	sp_pat_knot_holder (item, knot_holder);
 	return knot_holder;
 }
@@ -391,9 +391,9 @@ sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
 	sp_knot_holder_add (knot_holder, sp_arc_start_set, sp_arc_start_get,
-					_("Position the start point of the arc or segment; with Ctrl to snap angle; drag inside the ellipse for arc, outside for segment"));
+					_("Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for segment"));
 	sp_knot_holder_add (knot_holder, sp_arc_end_set, sp_arc_end_get,
-					_("Position the end point of the arc or segment; with Ctrl to snap angle; drag inside the ellipse for arc, outside for segment"));
+					_("Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for segment"));
 	sp_pat_knot_holder (item, knot_holder);
 
 	return knot_holder;
@@ -471,10 +471,10 @@ sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
 	SPStar *star = SP_STAR(item);
 
 	sp_knot_holder_add (knot_holder, sp_star_knot1_set, sp_star_knot1_get,
-						_("Adjust the tip radius of the star or polygon"));
+						_("Adjust the <b>tip radius</b> of the star or polygon"));
 	if (star->flatsided == false)
 		sp_knot_holder_add (knot_holder, sp_star_knot2_set, sp_star_knot2_get,
-						_("Adjust the base radius of the star; with Ctrl to keep star rays radial (no skew)"));
+						_("Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star rays radial (no skew)"));
 
 	sp_pat_knot_holder (item, knot_holder);
 
@@ -567,9 +567,9 @@ sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
 	sp_knot_holder_add (knot_holder, sp_spiral_inner_set, sp_spiral_inner_get,
-					_("Position the inner end of the spiral; with Ctrl to snap angle"));
+					_("Position the <b>inner end</b> of the spiral; with <b>Ctrl</b> to snap angle"));
 	sp_knot_holder_add (knot_holder, sp_spiral_outer_set, sp_spiral_outer_get,
-					_("Position the outer end of the spiral; with Ctrl to snap angle"));
+					_("Position the <b>outer end</b> of the spiral; with <b>Ctrl</b> to snap angle"));
 
 	sp_pat_knot_holder (item, knot_holder);
 
@@ -606,7 +606,7 @@ sp_offset_knot_holder (SPItem * item, SPDesktop *desktop)
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
 	sp_knot_holder_add (knot_holder, sp_offset_offset_set, sp_offset_offset_get,
-					_("Adjust the offset distance"));
+					_("Adjust the <b>offset distance</b>"));
 
 	sp_pat_knot_holder (item, knot_holder);
 
@@ -636,11 +636,11 @@ sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder)
         && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
         {
             sp_knot_holder_add_full (knot_holder, sp_pattern_xy_set, sp_pattern_xy_get, SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR,
-																		 _("Position the pattern fill inside the object"));
+																		 _("<b>Move</b> the pattern fill inside the object"));
             sp_knot_holder_add_full (knot_holder, sp_pattern_scale_set, sp_pattern_scale_get, SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR,
-																		 _("Scale the pattern fill uniformly"));
+																		 _("<b>Scale</b> the pattern fill uniformly"));
             sp_knot_holder_add_full (knot_holder, sp_pattern_angle_set, sp_pattern_angle_get, SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR,
-																		 _("Rotate the pattern fill; with Ctrl to snap angle"));
+																		 _("<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"));
         }
 }
 

@@ -650,7 +650,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                                                   (ctrl || shift) && alt? "; " : "",
                                                   alt? _("<b>Alt:</b> select under, move selected") : ""
                         );
-			event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, tip);
+			event_context->defaultMessageContext()->set(Inkscape::INFORMATION_MESSAGE, tip);
                 }
                 break;
                 case GDK_Left: // move selection left

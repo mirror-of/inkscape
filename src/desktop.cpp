@@ -1614,7 +1614,7 @@ void
 sp_desktop_prev_zoom (SPDesktop *dt)
 {
     if (dt->zooms_past == NULL) {
-        dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No previous zoom."));
+        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No previous zoom."));
         return;
     }
 
@@ -1637,7 +1637,7 @@ void
 sp_desktop_next_zoom (SPDesktop *dt)
 {
     if (dt->zooms_future == NULL) {
-        dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No next zoom."));
+        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No next zoom."));
         return;
     }
 
