@@ -67,6 +67,7 @@ nr_arena_item_class_init (NRArenaItemClass *klass)
 	parent_class = ((NRObjectClass *) klass)->parent;
 
 	object_class->finalize = nr_arena_item_private_finalize;
+	object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaItem>;
 }
 
 static void

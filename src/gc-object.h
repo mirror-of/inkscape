@@ -12,31 +12,12 @@
 #ifndef SEEN_INKSCAPE_GC_BASE_H
 #define SEEN_INKSCAPE_GC_BASE_H
 
-#include <new>
 #include <glib/gmessages.h>
-#include <gc/gc_cpp.h>
 #include "gc-core.h"
 
 namespace Inkscape {
 
 namespace GC {
-
-inline ::GCPlacement to_placement(ScanPolicy scan, CollectionPolicy collect) {
-    if ( scan == SCANNED ) {
-        if ( collect == AUTO ) {
-            return ::UseGC;
-        } else {
-            return ::NoGC;
-        }
-    } else {
-        if ( collect == AUTO ) {
-            return ::PointerFreeGC;
-        } else {
-            g_assert_not_reached();
-            return ::NoGC;
-        }
-    }
-}
 
 template <typename B, ScanPolicy default_scan, CollectionPolicy default_collect>
 class Base : public B {

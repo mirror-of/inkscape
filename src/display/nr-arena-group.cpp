@@ -62,6 +62,7 @@ nr_arena_group_class_init (NRArenaGroupClass *klass)
 	parent_class = (NRArenaItemClass *) ((NRObjectClass *) klass)->parent;
 
 	object_class->finalize = nr_arena_group_finalize;
+	object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaGroup>;
 
 	item_class->children = nr_arena_group_children;
 	item_class->add_child = nr_arena_group_add_child;

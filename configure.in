@@ -67,11 +67,11 @@ if test "x$png_ok" != "xyes"; then
 	AC_MSG_ERROR([libpng >= 1.2 is needed to compile inkscape])
 fi
 
-AC_CHECK_LIB(gc, GC_malloc, [AC_CHECK_HEADER(gc/gc_cpp.h, gc_ok=yes, gc_ok=no)], gc_ok=no, -ldl)
+AC_CHECK_LIB(gc, GC_malloc, [AC_CHECK_HEADER(gc/gc_cpp.h, gc_ok=yes, gc_ok=no)], gc_ok=no, -ldl -lgccpp)
 if test "x$gc_ok" != "xyes"; then
 	AC_MSG_ERROR([libgc (the Boehm Conservative Collector), built with C++ support, is needed to compile inkscape])
 fi
-LIBS="$LIBS -lgc"
+LIBS="$LIBS -lgc -lgccpp"
 
 AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
 if test "x$FREETYPE_CONFIG" = "xno"; then

@@ -50,6 +50,7 @@ sp_action_class_init (SPActionClass *klass)
 	parent_class = (NRActiveObjectClass *) (((NRObjectClass *) klass)->parent);
 
 	object_class->finalize = sp_action_finalize;
+	object_class->cpp_ctor = NRObject::invoke_ctor<SPAction>;
 }
 
 static void

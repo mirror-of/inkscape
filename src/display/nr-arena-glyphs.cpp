@@ -79,6 +79,7 @@ nr_arena_glyphs_class_init (NRArenaGlyphsClass *klass)
 	glyphs_parent_class = (NRArenaItemClass *) ((NRObjectClass *) klass)->parent;
 
 	object_class->finalize = nr_arena_glyphs_finalize;
+	object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaGlyphs>;
 
 	item_class->update = nr_arena_glyphs_update;
 	item_class->clip = nr_arena_glyphs_clip;
@@ -411,6 +412,7 @@ nr_arena_glyphs_group_class_init (NRArenaGlyphsGroupClass *klass)
 	group_parent_class = (NRArenaGroupClass *) ((NRObjectClass *) klass)->parent;
 
 	object_class->finalize = nr_arena_glyphs_group_finalize;
+	object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaGlyphsGroup>;
 
 	item_class->update = nr_arena_glyphs_group_update;
 	item_class->render = nr_arena_glyphs_group_render;

@@ -4,8 +4,9 @@
 /*
  * RGBA display list system for inkscape
  *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   MenTaLguY <mental@rydia.net>
  *
  * This code is in public domain
  */
@@ -15,6 +16,7 @@
 #endif
 
 #include <glib.h>
+#include "refcounted.h"
 
 typedef guint32 NRType;
 
@@ -49,39 +51,41 @@ void *nr_object_check_instance_cast (void *ip, NRType tc);
 unsigned int nr_object_check_instance_type (void *ip, NRType tc);
 
 NRType nr_object_register_type (NRType parent,
-				      gchar const *name,
-				      unsigned int csize,
-				      unsigned int isize,
-				      void (* cinit) (NRObjectClass *),
-				      void (* iinit) (NRObject *));
+				gchar const *name,
+				unsigned int csize,
+				unsigned int isize,
+				void (* cinit) (NRObjectClass *),
+				void (* iinit) (NRObject *));
 
 /* NRObject */
 
-class NRObject {
+class NRObject : public Inkscape::Refcounted {
 public:
-	NRObject() : klass(NULL), _refcount(0) {}
-	virtual ~NRObject() {}
+	NRObject() : klass(NULL) {}
 
 	NRObjectClass *klass;
 
 	static NRObject *alloc(NRType type);
-	static NRObject *free(NRObject *object);
 
+	template <typename T>
+	static void invoke_ctor(NRObject *object) {
+		new (object) T();
+	}
+
+	/* these can go away eventually */
 	NRObject *reference() {
-		_refcount++;
-		return this;
+		return claim(this);
 	}
 	NRObject *unreference() {
-		if (!--_refcount) {
-			NRObject::free(this);
-		}
+		release(this);
 		return NULL;
 	}
 
 private:
 	NRObject(NRObject const &);
 	void operator=(NRObject const &);
-	unsigned int _refcount;
+
+	void *operator new(size_t size, void *placement) { return placement; }
 };
 
 struct NRObjectClass {
@@ -103,9 +107,6 @@ NRType nr_object_get_type (void);
 
 inline NRObject *nr_object_new (NRType type) {
 	return NRObject::alloc(type);
-}
-inline NRObject *nr_object_delete (NRObject *object) {
-	return NRObject::free(object);
 }
 
 inline NRObject *nr_object_ref (NRObject *object) {

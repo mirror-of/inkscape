@@ -3,8 +3,9 @@
 /*
  * RGBA display list system for inkscape
  *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   MenTaLguY <mental@rydia.net>
  *
  * This code is in public domain
  */
@@ -111,7 +112,6 @@ nr_object_register_type (NRType parent,
 static void nr_object_class_init (NRObjectClass *klass);
 static void nr_object_init (NRObject *object);
 static void nr_object_finalize (NRObject *object);
-static void nr_object_cpp_ctor (NRObject *object);
 
 NRType
 nr_object_get_type (void)
@@ -132,7 +132,7 @@ static void
 nr_object_class_init (NRObjectClass *klass)
 {
 	klass->finalize = nr_object_finalize;
-	klass->cpp_ctor = nr_object_cpp_ctor;
+	klass->cpp_ctor = NRObject::invoke_ctor<NRObject>;
 }
 
 static void nr_object_init (NRObject *object)
@@ -141,11 +141,6 @@ static void nr_object_init (NRObject *object)
 
 static void nr_object_finalize (NRObject *object)
 {
-}
-
-static void nr_object_cpp_ctor (NRObject *object)
-{
-	object = new (object) NRObject();
 }
 
 /* Dynamic lifecycle */
@@ -159,35 +154,34 @@ nr_class_tree_object_invoke_init (NRObjectClass *klass, NRObject *object)
 	klass->iinit (object);
 }
 
-NRObject *
-NRObject::alloc(NRType type)
-{
-	NRObjectClass *klass;
-	NRObject *object;
+namespace {
 
+void perform_finalization(void *base, void *obj) {
+	NRObject *object=reinterpret_cast<NRObject *>(obj);
+	object->klass->finalize(object);
+	object->~NRObject();
+}
+
+}
+
+NRObject *NRObject::alloc(NRType type) {
 	nr_return_val_if_fail (type < classes_len, NULL);
 
-	klass = classes[type];
+	NRObjectClass *klass=classes[type];
 
-	object = (NRObject *)new char[klass->isize];
-	memset(object, 0xfe, klass->isize);
+	if ( klass->parent && klass->cpp_ctor == klass->parent->cpp_ctor ) {
+		g_error("Cannot instantiate NRObject class %s which has not registered a C++ constructor\n", klass->name);
+	}
+
+	NRObject *object = reinterpret_cast<NRObject *>(new (Inkscape::GC::SCANNED) char[klass->isize]);
+	GC_register_finalizer_ignore_self(GC_base(object), perform_finalization, object, NULL, NULL);
+	memset(object, 0xf0, klass->isize);
+
 	klass->cpp_ctor(object);
-
-	object->klass = klass;
-	object->_refcount = 1;
-
+	object->klass = klass; // one of our parent constructors resets this :/
 	nr_class_tree_object_invoke_init (klass, object);
 
 	return object;
-}
-
-NRObject *
-NRObject::free(NRObject *object)
-{
-	object->klass->finalize (object);
-	object->~NRObject();
-	delete [] (char *)object;
-	return NULL;
 }
 
 /* NRActiveObject */
@@ -195,7 +189,6 @@ NRObject::free(NRObject *object)
 static void nr_active_object_class_init (NRActiveObjectClass *klass);
 static void nr_active_object_init (NRActiveObject *object);
 static void nr_active_object_finalize (NRObject *object);
-static void nr_active_object_cpp_ctor(NRObject *object);
 
 static NRObjectClass *parent_class;
 
@@ -224,7 +217,7 @@ nr_active_object_class_init (NRActiveObjectClass *klass)
 	parent_class = ((NRObjectClass *) klass)->parent;
 
 	object_class->finalize = nr_active_object_finalize;
-	object_class->cpp_ctor = nr_active_object_cpp_ctor;
+	object_class->cpp_ctor = NRObject::invoke_ctor<NRActiveObject>;
 }
 
 static void
@@ -250,10 +243,6 @@ nr_active_object_finalize (NRObject *object)
 	}
 
 	((NRObjectClass *) (parent_class))->finalize (object);
-}
-
-void nr_active_object_cpp_ctor(NRObject *object) {
-	new (object) NRActiveObject();
 }
 
 void

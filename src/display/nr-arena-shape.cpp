@@ -79,6 +79,7 @@ nr_arena_shape_class_init (NRArenaShapeClass *klass)
     shape_parent_class = (NRArenaItemClass *)  ((NRObjectClass *) klass)->parent;
 
     object_class->finalize = nr_arena_shape_finalize;
+    object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaShape>;
 
     item_class->children = nr_arena_shape_children;
     item_class->add_child = nr_arena_shape_add_child;

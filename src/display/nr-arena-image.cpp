@@ -65,6 +65,7 @@ nr_arena_image_class_init (NRArenaImageClass *klass)
 	parent_class = (NRArenaItemClass *) ((NRObjectClass *) klass)->parent;
 
 	object_class->finalize = nr_arena_image_finalize;
+	object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaImage>;
 
 	item_class->update = nr_arena_image_update;
 	item_class->render = nr_arena_image_render;

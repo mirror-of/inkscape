@@ -1,3 +1,13 @@
+2004-08-06  MenTaLguY <mental@rydia.net>
+
+	* configure.in, src/gc-core.h, src/gc-object.h,
+	  src/display/nr-arena-glyphs.cpp, src/display/nr-arena-group.cpp,
+	  src/display/nr-arena-image.cpp, src/display/nr-arena-item.cpp,
+	  src/display/nr-arena-shape.cpp, src/display/nr-arena.cpp,
+	  src/helper/action.cpp, src/libnr/nr-object.cpp, src/libnr/nr-object.h:
+
+	  make NRObject GC-aware
+
 2004-08-06  David Turner <novalis@gnu.org
 	* src/sp-shape.cpp (sp_shape_marker_get_transform): Make marker handling match
 	SVG spec better.
