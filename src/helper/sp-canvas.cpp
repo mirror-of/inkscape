@@ -151,8 +151,6 @@ sp_canvas_item_new (SPCanvasGroup *parent, GtkType type, const gchar *first_arg_
 static void
 item_post_create_setup (SPCanvasItem *item)
 {
-	//GtkObject *obj = GTK_OBJECT (item);
-
 	group_add (SP_CANVAS_GROUP (item->parent), item);
 
 	sp_canvas_item_request_update (item);
@@ -1054,7 +1052,7 @@ sp_canvas_unrealize (GtkWidget *widget)
 static void
 sp_canvas_size_request (GtkWidget *widget, GtkRequisition *req)
 {
-	//SPCanvas *canvas = SP_CANVAS (widget);
+	static_cast<void>(SP_CANVAS (widget));
 
 	req->width = 256;
 	req->height = 256;
@@ -1693,8 +1691,6 @@ paint (SPCanvas *canvas)
 	ArtIRect *rects;
 	gint n_rects;
 
-	//GtkWidget *widget = GTK_WIDGET (canvas);
-
 	if (canvas->need_update) {
 		double affine[6];
 		art_affine_identity (affine);
@@ -1711,11 +1707,14 @@ paint (SPCanvas *canvas)
 	canvas->redraw_area = NULL;
 	canvas->need_redraw = FALSE;
 
+	GtkWidget const *widget = GTK_WIDGET(canvas);
+	int const canvas_x1 = canvas->x0 + widget->allocation.width;
+	int const canvas_y1 = canvas->y0 + widget->allocation.height;
 	for (int i = 0; i < n_rects; i++) {
 		int x0 = MAX (rects[i].x0, canvas->x0);
 		int y0 = MAX (rects[i].y0, canvas->y0);
-		int x1 = MIN (rects[i].x1, canvas->x0 + GTK_WIDGET (canvas)->allocation.width);
-		int y1 = MIN (rects[i].y1, canvas->y0 + GTK_WIDGET (canvas)->allocation.height);
+		int x1 = MIN (rects[i].x1, canvas_x1);
+		int y1 = MIN (rects[i].y1, canvas_y1);
 
 		if ((x0 < x1) && (y0 < y1)) {
 			sp_canvas_paint_rect (canvas, x0, y0, x1, y1);

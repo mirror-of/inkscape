@@ -1,5 +1,9 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/sp-canvas.cpp (paint): Cache canvas->{x0,y0} +
+	GTK_WIDGET(canvas)->allocation.{width,height}.
+	Remove some commented-out variables.
+
 	* src/tools-switch.cpp, src/tools-switch.h: Make some functions static.
 	(tools_num2name): Remove unused function.
 	(tools_isactive): Add assertion of not accessing past the end of the
