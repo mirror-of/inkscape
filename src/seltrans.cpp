@@ -21,6 +21,7 @@
 #include <libnr/nr-translate-ops.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtksignal.h>
+#include <gtk/gtktogglebutton.h>
 #include "macros.h"
 #include "svg/svg.h"
 #include "inkscape-private.h"
@@ -41,6 +42,7 @@
 #include "seltrans.h"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
+#include "widgets/spw-utilities.h"
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrlrect.h"
 #include "prefs-utils.h"
@@ -707,7 +709,9 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 		}
 	}
 
-	if (state & GDK_CONTROL_MASK) {
+	GtkToggleButton *lock = (GtkToggleButton *) sp_search_by_data_recursive (seltrans->desktop->owner->aux_toolbox, (gpointer) "lock");
+
+	if ((state & GDK_CONTROL_MASK) || gtk_toggle_button_get_active (lock)) {
 	        double r;
 
 		if ( !d[NR::X] || !d[NR::Y] ) {
