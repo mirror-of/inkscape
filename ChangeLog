@@ -1,3 +1,9 @@
+2004-01-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/path-chemistry.cpp (sp_selected_path_combine): Fix what appears
+	  to be a memory leak.  Change string concatenation from Omega(n^2) to
+	  Omega(n).
+
 2004-01-09  bulia byak <bulia@users.sourceforge.net>
 
 	* src/zoom-context.cpp: Added drag tolerance 

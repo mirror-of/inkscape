@@ -49,7 +49,6 @@ sp_selected_path_combine (void)
 	SPPath * path;
 	SPCurve * c;
 	ArtBpath * abp;
-	gchar * d, * str, * style;
 
 	sp_selected_path_to_curves0 (FALSE, 0);
 
@@ -68,9 +67,9 @@ sp_selected_path_combine (void)
 
 	il = g_slist_copy (il);
 
-	d = "";
-	style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
+	gchar *style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
 
+	GString *dstring = g_string_new("");
 	for (l = il; l != NULL; l = l->next) {
 		NRMatrix i2root;
 		NRMatrix i2rootd;
@@ -80,9 +79,9 @@ sp_selected_path_combine (void)
 		nr_matrix_d_from_f (&i2rootd, &i2root);
 		abp = art_bpath_affine_transform (c->bpath, NR_MATRIX_D_TO_DOUBLE (&i2rootd));
 		sp_curve_unref (c);
-		str = sp_svg_write_path (abp);
+		gchar *str = sp_svg_write_path (abp);
 		art_free (abp);
-		d = g_strconcat (d, str, NULL);
+		dstring = g_string_append(dstring, str);
 		g_free (str);
 		sp_repr_unparent (SP_OBJECT_REPR (path));
 	}
@@ -92,8 +91,8 @@ sp_selected_path_combine (void)
 	repr = sp_repr_new ("path");
 	sp_repr_set_attr (repr, "style", style);
 	g_free (style);
-	sp_repr_set_attr (repr, "d", d);
-	g_free (d);
+	sp_repr_set_attr (repr, "d", dstring->str);
+	g_string_free (dstring, TRUE);
 	item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 	sp_repr_unref (repr);
