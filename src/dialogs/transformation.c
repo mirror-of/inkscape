@@ -25,10 +25,10 @@
 #include <gtk/gtkhseparator.h>
 #include <gtk/gtkstock.h>
 
+#include "../inkscape-stock.h"
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "helper/unit-menu.h"
-#include "widgets/icon.h"
 #include "macros.h"
 #include "inkscape.h"
 #include "document.h"
@@ -380,7 +380,7 @@ sp_transformation_page_move_new (GObject *obj)
 		sp_unit_selector_set_unit (SP_UNIT_SELECTOR (us), sp_desktop_get_default_unit (SP_ACTIVE_DESKTOP));
 	}
 	/* Horizontal */
-	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "arrows_hor");
+	img = gtk_image_new_from_stock (INKSCAPE_STOCK_ARROWS_HOR, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "move_position_x", adj);
@@ -389,7 +389,7 @@ sp_transformation_page_move_new (GObject *obj)
 	sb = gtk_spin_button_new (adj, 0.1, 2);
 	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, (GtkAttachOptions)( (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ) ), (GtkAttachOptions)( (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ) ), 0, 0);
 	/* Vertical */
-	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "arrows_ver");
+	img = gtk_image_new_from_stock (INKSCAPE_STOCK_ARROWS_VER, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "move_position_y", adj);
@@ -555,7 +555,7 @@ sp_transformation_page_scale_new (GObject *obj)
 	sp_unit_selector_set_unit (SP_UNIT_SELECTOR (us), sp_unit_get_by_abbreviation ("%"));
 	g_signal_connect (G_OBJECT (us), "set_unit", G_CALLBACK (sp_transformation_scale_set_unit), obj);
 	/* Horizontal */
-	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "scale_hor");
+	img = gtk_image_new_from_stock (INKSCAPE_STOCK_SCALE_HOR, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "scale_dimension_x", adj);
@@ -564,7 +564,7 @@ sp_transformation_page_scale_new (GObject *obj)
 	sb = gtk_spin_button_new (adj, 0.1, 2);
 	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0);
 	/* Vertical */
-	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "scale_ver");
+	img = gtk_image_new_from_stock (INKSCAPE_STOCK_SCALE_VER, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "scale_dimension_y", adj);
@@ -674,7 +674,7 @@ sp_transformation_page_rotate_new (GObject *obj)
 	gtk_table_set_col_spacings (GTK_TABLE (tbl), 4);
 	gtk_box_pack_start (GTK_BOX (vb), tbl, FALSE, FALSE, 0);
 
-	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "rotate_left");
+	img = gtk_image_new_from_stock (INKSCAPE_STOCK_ROTATE_LEFT, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "rotate_angle", adj);
