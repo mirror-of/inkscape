@@ -24,6 +24,10 @@
 #define SP_HUGE 1e5
 #define noBEZIER_DEBUG
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include <math.h>
 #ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>

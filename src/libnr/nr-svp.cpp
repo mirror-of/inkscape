@@ -13,6 +13,10 @@
 
 #define NR_SVP_LENGTH_MAX 128
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>
 #endif
