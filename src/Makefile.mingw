@@ -31,7 +31,7 @@ RES=inkres.o
 
 inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
 	$(CXX) -o inkscape.exe main.o winmain.o $(RES) libinkscape.a $(LIBS)
-	strip inkscape.exe
+#	strip inkscape.exe
 
 inkview.exe: libinkscape.a inkview.o $(RES) 
 	$(CXX) -o inkview.exe inkview.o $(RES) libinkscape.a $(LIBS)
