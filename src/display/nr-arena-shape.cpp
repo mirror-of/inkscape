@@ -893,9 +893,8 @@ shape_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
       vst+=0.5*dv; // correction trapezoidale
       sv*=16777216;
       dv*=16777216;
-      int c0_24=sv;
-      c0_24 = CLAMP (c0_24, 0, 16777216);
-      int s0_24=dv;
+      int c0_24 = static_cast<int>(CLAMP(sv, 0, 16777216));
+      int s0_24 = static_cast<int>(dv);
       while (len > 0) {
         unsigned int ca, da;
         /* Draw */

@@ -11,6 +11,7 @@
 #include <libnr/nr-point-fns.h>
 //#include "MyMath.h"
 #include "Path.h"
+#include <glib.h>
 
 /*
  * polygon offset and polyline to path reassembling (when using back data)
@@ -730,7 +731,7 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
   int inBezier = -1, nbInterm = -1;
   int typ;
   typ = from->descr_cmd[nPiece].flags & descr_type_mask;
-  Path::path_descr_bezierto* nBData;
+  Path::path_descr_bezierto *nBData = NULL;
   if (typ == descr_bezierto)
   {
     nBData=(Path::path_descr_bezierto*)(from->descr_data+from->descr_cmd[nPiece].dStart);
@@ -790,7 +791,8 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
     }
     bord = swdData[bord].suivParc;
   }
-  
+
+  g_return_val_if_fail(nBData != NULL, 0);
   NR::Point bstx = from->PrevPoint (inBezier - 1);
   NR::Point benx = nBData->p;
   

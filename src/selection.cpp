@@ -235,10 +235,11 @@ gboolean sp_selection_item_selected(SPSelection *selection, SPItem *item)
 	g_return_val_if_fail (SP_IS_SELECTION (selection), FALSE);
 	g_return_val_if_fail (item != NULL, FALSE);
 
-	if (!SP_IS_ITEM (item))
-		return NULL; // this may be legitimate
-
-	return (g_slist_find (selection->items, item) != NULL);
+	if (!SP_IS_ITEM(item)) {
+		return FALSE;
+	} else {
+		return ( g_slist_find(selection->items, item) != NULL );
+	}
 }
 
 gboolean sp_selection_repr_selected(SPSelection *selection, SPRepr *repr)

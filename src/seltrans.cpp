@@ -759,6 +759,7 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 		break;
 	default:
 		g_assert_not_reached();
+		return TRUE;
 	};
 
 	s = ( pt - norm ) * NR::scale( point - norm ).inverse();

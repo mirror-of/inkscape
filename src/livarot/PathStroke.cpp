@@ -346,15 +346,17 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 		NR::Point x;
 		{
 			NR::Point biss = next - prev;
+#if 0
 			double c2 = cross (biss, next);
 			double l = width / c2;
 			double projn = l * (dot (biss, next));
 			double projp = -l * (dot (biss, prev));
-/*			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
+			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
 			{
 				leftEnNo = leftStNo = dest->AddPoint (pos + l * biss);
 			}
-			else*/
+			else
+#endif
 			{
 				int midNo = dest->AddPoint (pos);
 				leftStNo = dest->AddPoint (pos + width * pnor);
@@ -435,17 +437,18 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 	else
 	{
 		{
-			NR::Point biss;
-			biss = next - prev;
+			NR::Point biss = next - prev;
+#if 0
 			double c2 = cross (next, biss);
 			double l = width / c2;
 			double projn = l * (dot (biss, next));
 			double projp = -l * (dot (biss, prev));
-/*			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
+			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
 			{
 				rightEnNo = rightStNo = dest->AddPoint (pos + l * biss);
 			}
-			else*/
+			else
+#endif
 			{
 				int midNo = dest->AddPoint (pos);
 				rightStNo = dest->AddPoint (pos - width * pnor);
