@@ -187,6 +187,9 @@ sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 	return ret;
 }
 
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
+
 static gint
 sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 {
@@ -202,11 +205,17 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	desktop = event_context->desktop;
 	nc = SP_NODE_CONTEXT (event_context);
 	nudge = prefs_get_double_attribute_limited ("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
+	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		switch (event->button.button) {
 		case 1:
+
+			// save drag origin
+			xp = (gint) event->button.x; 
+			yp = (gint) event->button.y;
+
 			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
 			sp_rubberband_start (desktop, p.x, p.y);
 			ret = TRUE;
@@ -227,11 +236,16 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		if (event->button.button == 1) {
 			if (sp_rubberband_rect (&b)) {
 				sp_rubberband_stop ();
-				if (nc->nodepath) {
+				if (abs((gint) event->button.x - xp) < tolerance && abs((gint) event->button.y - yp) < tolerance) {
+					// consider it a click, we're within tolerance from origin
+					if (!(nodeedit_rb_escaped) && !(nodeedit_drag_escaped)) // unless something was cancelled
+						sp_nodepath_deselect (nc->nodepath); 
+				} else if (nc->nodepath) {
 					sp_nodepath_select_rect (nc->nodepath, &b, event->button.state & GDK_SHIFT_MASK);
 				}
 				ret = TRUE;
 			}
+			xp = yp = 0;
 			nodeedit_rb_escaped = 0;
 			nc->drag = FALSE;
 			break;
