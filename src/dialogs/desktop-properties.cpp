@@ -648,7 +648,7 @@ sp_doc_dialog_update_work_entity( struct rdf_work_entity_t * entity )
  *
  */
 static void
-sp_doc_dialog_license_update ( struct rdf_work_entity_t * entity,
+sp_doc_dialog_update_license ( struct rdf_work_entity_t * entity,
                                gchar const * text,
                                bool editable )
 {
@@ -699,11 +699,11 @@ sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
     }
     */
 
-    sp_doc_dialog_license_update ( rdf_find_entity( "license_uri" ),
+    sp_doc_dialog_update_license ( rdf_find_entity( "license_uri" ),
                                    license ? license->uri : NULL,
                                    license ? FALSE : TRUE ); 
     /*
-    sp_doc_dialog_license_update ( rdf_find_entity( "license_fragment" ),
+    sp_doc_dialog_update_license ( rdf_find_entity( "license_fragment" ),
                                    license ? license->fragment : NULL,
                                    license ? FALSE : TRUE ); 
                                    */
@@ -1357,17 +1357,25 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
 
         GtkWidget *lm = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dialog),
                                                          "licenses");
-        for (int i=0; rdf_licenses[i].name; i++) {
-            if (license == &rdf_licenses[i]) {
-                gtk_option_menu_set_history(GTK_OPTION_MENU(lm), i+1);
-                break;
+        if (license) {
+            for (int i=0; rdf_licenses[i].name; i++) {
+                if (license == &rdf_licenses[i]) {
+                    gtk_option_menu_set_history(GTK_OPTION_MENU(lm), i+1);
+                    break;
+                }
             }
         }
+        else {
+            gtk_option_menu_set_history(GTK_OPTION_MENU(lm), 0);
+        }
+        /* update the URI */
+        struct rdf_work_entity_t * entity = rdf_find_entity( "license_uri" );
+        sp_doc_dialog_update_license ( entity,
+                                       license ? license->uri : NULL,
+                                       license ? FALSE : TRUE ); 
+        sp_doc_dialog_update_work_entity( entity );
 
         gtk_object_set_data(GTK_OBJECT(dialog), "update", GINT_TO_POINTER(FALSE));
-
-        /* update the license info outside of the "update"=1 area */
-        sp_doc_dialog_license_selected ( NULL, license );
     }
 }
 
