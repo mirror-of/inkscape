@@ -5,6 +5,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtktooltips.h>
 
 #include <display/display-forward.h>
 #include <libnr/nr-point.h>
@@ -25,6 +26,8 @@ struct SPDesktopWidget {
 
     unsigned int update : 1;
 
+    GtkTooltips *tt;
+
     SPDesktop *desktop;
 
     // The root vbox of the window layout.
@@ -38,6 +41,7 @@ struct SPDesktopWidget {
 
     /* Rulers */
     GtkWidget *hruler, *vruler;
+    GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
     double dt2r;
     NR::Point ruler_origin;
 

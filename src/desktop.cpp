@@ -857,14 +857,13 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     GtkWidget *hbox;
     GtkWidget *eventbox;
-    GtkTooltips *tt;
     GtkStyle *style;
 
     widget = GTK_WIDGET (dtw);
 
     dtw->desktop = NULL;
 
-    tt = gtk_tooltips_new ();
+    dtw->tt = gtk_tooltips_new ();
 
     /* Main table */
     dtw->vbox = gtk_vbox_new (FALSE, 0);
@@ -893,7 +892,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     /* Horizontal ruler */
     eventbox = gtk_event_box_new ();
     dtw->hruler = sp_hruler_new ();
+    dtw->hruler_box = eventbox;
     sp_ruler_set_metric (GTK_RULER (dtw->hruler), SP_PT);
+    gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT)), NULL);
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
     gtk_table_attach (GTK_TABLE (tbl), eventbox, 1, 2, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), widget->style->xthickness, 0);
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
@@ -903,7 +904,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     /* Vertical ruler */
     eventbox = gtk_event_box_new ();
     dtw->vruler = sp_vruler_new ();
+    dtw->vruler_box = eventbox;
     sp_ruler_set_metric (GTK_RULER (dtw->vruler), SP_PT);
+    gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT)), NULL);
     gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
     gtk_table_attach (GTK_TABLE (tbl), eventbox, 0, 1, 1, 2, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, widget->style->ythickness);
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
@@ -921,7 +924,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
                                                  NULL, 	 
                                                  "sticky_zoom", 	 
                                                  _("Zoom drawing if window size changes"), 	 
-                                                 tt); 	 
+                                                 dtw->tt); 	 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dtw->sticky_zoom), prefs_get_int_attribute ("options.stickyzoom", "value", 0));
     gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->sticky_zoom, FALSE, FALSE, 0);
     dtw->vadj = (GtkAdjustment *) gtk_adjustment_new (0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
@@ -942,7 +945,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     // zoom status spinbutton
     dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
-    gtk_tooltips_set_tip (tt, dtw->zoom_status, _("Zoom"), NULL);
+    gtk_tooltips_set_tip (dtw->tt, dtw->zoom_status, _("Zoom"), NULL);
     gtk_widget_set_usize (dtw->zoom_status, STATUS_ZOOM_WIDTH, -1);
     gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 6);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->zoom_status), FALSE);
@@ -966,7 +969,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->coord_status = gtk_label_new ("");
     eventbox = gtk_event_box_new ();
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->coord_status);
-    gtk_tooltips_set_tip (tt, eventbox, _("Cursor coordinates"), NULL);
+    gtk_tooltips_set_tip (dtw->tt, eventbox, _("Cursor coordinates"), NULL);
     gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, -1);
     sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), eventbox, FALSE, FALSE, 1);
@@ -1475,6 +1478,9 @@ sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWid
 
         sp_ruler_set_metric (GTK_RULER (dtw->vruler), sp_desktop_get_default_metric(dtw->desktop));
         sp_ruler_set_metric (GTK_RULER (dtw->hruler), sp_desktop_get_default_metric(dtw->desktop));
+
+        gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, sp_unit_get_plural (sp_desktop_get_default_unit(dtw->desktop)), NULL);
+        gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, sp_unit_get_plural (sp_desktop_get_default_unit(dtw->desktop)), NULL);
 
         sp_desktop_widget_update_rulers (dtw);
     }
