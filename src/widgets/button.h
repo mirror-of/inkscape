@@ -59,6 +59,7 @@ GtkWidget *sp_button_new (unsigned int size, SPButtonType type, SPAction *action
 void sp_button_toggle_set_down (SPButton *button, gboolean down);
 
 GtkWidget *sp_button_new_from_data (unsigned int size, SPButtonType type,
+                                    SPView *view,
 				    const gchar *name,
 				    const gchar *tip,
 				    GtkTooltips *tooltips);

@@ -163,7 +163,7 @@ sp_align_add_button (GtkWidget *t, int col, int row, GCallback handler, gconstpo
 		     GtkTooltips * tt)
 {
 	GtkWidget *b;
-	b = sp_button_new_from_data (24, SP_BUTTON_TYPE_NORMAL, px, tip, tt);
+	b = sp_button_new_from_data (24, SP_BUTTON_TYPE_NORMAL, NULL, px, tip, tt);
 	gtk_widget_show (b);
 	if (handler) g_signal_connect (G_OBJECT (b), "clicked", handler, (gpointer) data);
 	gtk_table_attach (GTK_TABLE (t), b, col, col + 1, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);

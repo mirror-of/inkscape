@@ -73,6 +73,7 @@ sp_action_finalize (NRObject *object)
 
 SPAction *
 sp_action_setup (SPAction *action,
+                 SPView *view,
 		 const gchar *id,
 		 const gchar *name,
 		 const gchar *tip,
@@ -80,6 +81,7 @@ sp_action_setup (SPAction *action,
 {
 	nr_object_setup ((NRObject *) action, SP_TYPE_ACTION);
 
+	action->view = view;
 	action->sensitive = TRUE;
 	if (id) action->id = strdup (id);
 	if (name) action->name = strdup (name);
@@ -203,3 +205,9 @@ sp_action_set_shortcut (SPAction *action, unsigned int shortcut)
 	}
 }
 
+SPView *
+sp_action_get_view (SPAction *action)
+{
+	g_return_val_if_fail (SP_IS_VIEW (action), NULL);
+	return action->view;
+}

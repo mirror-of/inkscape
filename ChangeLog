@@ -1,3 +1,7 @@
+2003-12-19  MenTaLguY <mental@rydia.net>
+
+	* SPActions now know their desktop, and toolbar buttons get it assigned correctly -- still need to see about the menus, however
+
 2003-12-18  Jon A. Cruz <jon@joncruz.org>
 
 	* fix for 859133; Reduced number of generated events.

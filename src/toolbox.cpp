@@ -4,9 +4,11 @@
  * Main toolbox
  *
  * Authors:
+ *   MenTaLguY <mental@rydia.net>
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
  *
+ * Copyright (C) 2003 MenTaLguY
  * Copyright (C) 1999-2002 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
@@ -60,9 +62,12 @@
 #define AUX_BUTTON_SIZE 20
 #define AUX_BETWEEN_BUTTON_GROUPS 5
 
-static GtkWidget * sp_select_toolbox_new (void);
-static GtkWidget * sp_node_toolbox_new (void);
-static GtkWidget * sp_zoom_toolbox_new (void);
+typedef void (*SetupFunction)(GtkWidget *toolbox, SPDesktop *desktop);
+typedef void (*UpdateFunction)(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
+
+static GtkWidget * sp_select_toolbox_new (SPDesktop *desktop);
+static GtkWidget * sp_node_toolbox_new (SPDesktop *desktop);
+static GtkWidget * sp_zoom_toolbox_new (SPDesktop *desktop);
 
 static const struct {
 	const gchar *type_name;
@@ -87,7 +92,7 @@ static const struct {
 static const struct {
 	const gchar *type_name;
 	const gchar *data_name;
-	GtkWidget *(*create_func)(void);
+	GtkWidget *(*create_func)(SPDesktop *desktop);
 } aux_toolboxes[] = {
 	{ "SPSelectContext", "select_toolbox", sp_select_toolbox_new },
 	{ "SPNodeContext", "node_toolbox", sp_node_toolbox_new },
@@ -95,8 +100,11 @@ static const struct {
 	{ NULL, NULL, NULL }
 };
 
-static void toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, void (*update_func)(SPDesktop * desktop, SPEventContext * eventcontext, GtkWidget *toolbox));
+static void toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func);
+
+static void setup_tool_toolbox (GtkWidget *toolbox, SPDesktop *desktop);
 static void update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
+static void setup_aux_toolbox (GtkWidget *toolbox, SPDesktop *desktop);
 static void update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 
 static GtkWidget *
@@ -104,7 +112,7 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
 {
 	GtkWidget *b;
 
-	b = sp_button_new_from_data (size, SP_BUTTON_TYPE_NORMAL, pxname, tip, tt);
+	b = sp_button_new_from_data (size, SP_BUTTON_TYPE_NORMAL, NULL, pxname, tip, tt);
 	gtk_widget_show (b);
 	if (handler) gtk_signal_connect (GTK_OBJECT (b), "clicked", handler, NULL);
 	gtk_box_pack_start (GTK_BOX (t), b, FALSE, FALSE, 0);
@@ -113,12 +121,12 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
 }
 
 static GtkWidget *
-sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, sp_verb_t verb, GtkTooltips *tt)
+sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, sp_verb_t verb, SPView *view, GtkTooltips *tt)
 {
 	SPAction *action;
 	GtkWidget *b;
 
-	action = sp_verb_get_action (verb, NULL);
+	action = sp_verb_get_action (verb, view);
 	if (!action) return NULL;
 	/* fixme: Handle sensitive/unsensitive */
 	/* fixme: Implement sp_button_new_from_action */
@@ -133,20 +141,13 @@ sp_tool_toolbox_new ()
 {
 	GtkWidget *tb, *hb;
 	GtkTooltips *tt;
-	int i;
 	
 	tt = gtk_tooltips_new ();
 	tb = gtk_vbox_new (FALSE, 0);
 
-	for ( i = 0 ; tools[i].type_name ; i++ ) {
-		GtkWidget *button;
-		button = sp_toolbox_button_new_from_verb (tb, TOOL_BUTTON_SIZE, SP_BUTTON_TYPE_TOGGLE, tools[i].verb, tt);
-		g_object_set_data (G_OBJECT (tb), tools[i].data_name, (gpointer)button);
-	}
-
 	g_object_set_data (G_OBJECT (tb), "desktop", NULL);
+	g_object_set_data (G_OBJECT (tt), "tooltips", tt);
 
-	update_tool_toolbox (NULL, NULL, tb);
 	gtk_widget_set_sensitive (tb, FALSE);
 
 	hb = gtk_handle_box_new ();
@@ -174,7 +175,6 @@ GtkWidget *
 sp_aux_toolbox_new ()
 {
 	GtkWidget *tb, *tb_s, *tb_e, *hb;
-	int i;
 
 	tb = gtk_vbox_new (FALSE, 0);
 	tb_s = gtk_vbox_new (FALSE, 0);
@@ -183,16 +183,8 @@ sp_aux_toolbox_new ()
 	gtk_box_pack_start (GTK_BOX (tb), GTK_WIDGET (tb_s), FALSE, FALSE, 0);
 	gtk_box_pack_end (GTK_BOX (tb), GTK_WIDGET (tb_e), FALSE, FALSE, 0);
 
-	for ( i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-		GtkWidget *sub_toolbox;
-		sub_toolbox = aux_toolboxes[i].create_func();
-		gtk_container_add (GTK_CONTAINER (tb), sub_toolbox);
-		g_object_set_data (G_OBJECT (tb), aux_toolboxes[i].data_name, sub_toolbox);
-	}
-
 	g_object_set_data (G_OBJECT (tb), "desktop", NULL);
 
-	update_aux_toolbox (NULL, NULL, tb);
 	gtk_widget_set_sensitive (tb, FALSE);
 
 	g_signal_connect_after(G_OBJECT(tb), "size_request", G_CALLBACK(aux_toolbox_size_request), NULL);
@@ -209,40 +201,44 @@ sp_aux_toolbox_new ()
 }
 
 static GtkWidget *
-sp_select_toolbox_new ()
+sp_select_toolbox_new (SPDesktop *desktop)
 {
 	GtkWidget *tb;
 	GtkTooltips *tt;
+	SPView *view=SP_VIEW (desktop);
 
 	tt = gtk_tooltips_new ();
 	tb = gtk_hbox_new (FALSE, 0);
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_GROUP, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_UNGROUP, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_GROUP, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_UNGROUP, view, tt);
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_FRONT, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_BACK, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_RAISE, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_LOWER, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_FRONT, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_BACK, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_RAISE, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_LOWER, view, tt);
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_ROTATE_90, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_HORIZONTAL, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_VERTICAL, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_ROTATE_90, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_HORIZONTAL, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_VERTICAL, view, tt);
+
+	gtk_widget_show_all (tb);
 
 	return tb;
 }
 
 static GtkWidget *
-sp_node_toolbox_new ()
+sp_node_toolbox_new (SPDesktop *desktop)
 {
 	GtkWidget *tb;
 	GtkTooltips *tt;
+	SPView *view=SP_VIEW (desktop);
 
 	tt = gtk_tooltips_new ();
 	tb = gtk_hbox_new (FALSE, 0);
@@ -269,36 +265,41 @@ sp_node_toolbox_new ()
 	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_curve", GTK_SIGNAL_FUNC (sp_node_path_edit_tocurve), tt, _("Make selected segments curves"));
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_TO_CURVE, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_TO_CURVE, view, tt);
+
+	gtk_widget_show_all (tb);
 
 	return tb;
 }
 
 static GtkWidget *
-sp_zoom_toolbox_new ()
+sp_zoom_toolbox_new (SPDesktop *desktop)
 {
 	GtkWidget *tb;
 	GtkTooltips *tt;
+	SPView *view=SP_VIEW (desktop);
 
 	tt = gtk_tooltips_new ();
 	tb = gtk_hbox_new (FALSE, 0);
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_IN, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_OUT, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_IN, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_OUT, view, tt);
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, view, tt);
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_1, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_2, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_2_1, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_1, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_2, view, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_2_1, view, tt);
+
+	gtk_widget_show_all (tb);
 
 	return tb;
 }
@@ -306,39 +307,59 @@ sp_zoom_toolbox_new ()
 void
 sp_tool_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
 {
-	toolbox_set_desktop (gtk_bin_get_child (GTK_BIN (toolbox)), desktop, update_tool_toolbox);
+	toolbox_set_desktop (gtk_bin_get_child (GTK_BIN (toolbox)), desktop, setup_tool_toolbox, update_tool_toolbox);
 }
 
 void
 sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
 {
-	toolbox_set_desktop (gtk_bin_get_child (GTK_BIN (toolbox)), desktop, update_aux_toolbox);
+	toolbox_set_desktop (gtk_bin_get_child (GTK_BIN (toolbox)), desktop, setup_aux_toolbox, update_aux_toolbox);
 }
 
 static void
-toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, void (*update_func)(SPDesktop * desktop, SPEventContext * eventcontext, GtkWidget *toolbox))
+toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func)
 {
 	SPDesktop *old_desktop;
 
 	old_desktop = SP_DESKTOP (g_object_get_data (G_OBJECT (toolbox), "desktop"));
 
 	if (old_desktop) {
+		GList *children, *iter;
 		g_signal_handlers_disconnect_by_func (G_OBJECT (old_desktop), (void*)G_CALLBACK (update_func), (gpointer)toolbox);
+		children = gtk_container_get_children (GTK_CONTAINER (toolbox));
+		for ( iter = children ; iter ; iter = iter->next ) {
+			gtk_container_remove (GTK_CONTAINER (toolbox), GTK_WIDGET (iter->data));
+		}
+		g_list_free (children);
 	}
 
 	g_object_set_data (G_OBJECT (toolbox), "desktop", (gpointer)desktop);
 
 	if (desktop) {
 		gtk_widget_set_sensitive (toolbox, TRUE);
+		setup_func (toolbox, desktop);
 		update_func (desktop, SP_DESKTOP_EVENT_CONTEXT(desktop), toolbox);
 		g_signal_connect (G_OBJECT (desktop), "event_context_changed", G_CALLBACK (update_func), (gpointer)toolbox);
 	} else {
-		update_func (NULL, NULL, toolbox);
 		gtk_widget_set_sensitive (toolbox, FALSE);
 	}
 }
 
 static void 
+setup_tool_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
+{
+	int i;
+	GtkTooltips *tooltips=GTK_TOOLTIPS (g_object_get_data (G_OBJECT (toolbox), "tooltips"));
+
+	for ( i = 0 ; tools[i].type_name ; i++ ) {
+		GtkWidget *button;
+		button = sp_toolbox_button_new_from_verb (toolbox, TOOL_BUTTON_SIZE, SP_BUTTON_TYPE_TOGGLE, tools[i].verb, SP_VIEW (desktop), tooltips);
+		g_object_set_data (G_OBJECT (toolbox), tools[i].data_name, (gpointer)button);
+	}
+
+}
+
+static void
 update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox)
 {
 	const gchar *tname;
@@ -351,15 +372,25 @@ update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget
 	}
 
 	for ( i = 0 ; tools[i].type_name ; i++ ) {
-		SPButton *button=SP_BUTTON (g_object_get_data (G_OBJECT (toolbox),
-		                                               tools[i].data_name));
-		sp_button_toggle_set_down (button,
-		                           tname && !strcmp(tname, tools[i].type_name));
+		SPButton *button=SP_BUTTON (g_object_get_data (G_OBJECT (toolbox), tools[i].data_name));
+		sp_button_toggle_set_down (button, tname && !strcmp(tname, tools[i].type_name));
 	}
 }
 
 static void
-update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox) {
+setup_aux_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
+{
+	int i;
+	for ( i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
+		GtkWidget *sub_toolbox=aux_toolboxes[i].create_func (desktop);
+		gtk_container_add (GTK_CONTAINER (toolbox), sub_toolbox);
+		g_object_set_data (G_OBJECT (toolbox), aux_toolboxes[i].data_name, sub_toolbox);
+	}
+}
+
+static void
+update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox)
+{
 	const gchar *tname;
 	int i;
 

@@ -745,6 +745,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
 	dtw->sticky_zoom = sp_button_new_from_data (SP_ICON_SIZE_BUTTON,
 						    SP_BUTTON_TYPE_TOGGLE,
+	                                            NULL,
 						    "sticky_zoom",
 						    _("Zoom drawing if window size changes"),
 						    tt);

@@ -272,6 +272,7 @@ sp_button_set_composed_tooltip (GtkTooltips *tooltips, GtkWidget *widget, SPActi
 GtkWidget *
 sp_button_new_from_data (unsigned int size,
 			 SPButtonType type,
+                         SPView *view,
 			 const gchar *name,
 			 const gchar *tip,
 			 GtkTooltips *tooltips)
@@ -279,7 +280,7 @@ sp_button_new_from_data (unsigned int size,
 	GtkWidget *button;
 	SPAction *action;
 	action = (SPAction *) nr_object_new (SP_TYPE_ACTION);
-	sp_action_setup (action, name, name, tip, name);
+	sp_action_setup (action, view, name, name, tip, name);
 	button = sp_button_new (size, type, action, tooltips);
 	nr_object_unref ((NRObject *) action);
 	return button;

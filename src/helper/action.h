@@ -23,6 +23,7 @@ typedef struct _SPAction SPAction;
 typedef struct _SPActionClass SPActionClass;
 
 #include <libnr/nr-object.h>
+#include <../view.h>
 
 typedef struct _SPActionEventVector SPActionEventVector;
 
@@ -44,6 +45,7 @@ struct _SPAction {
 	NRActiveObject object;       /**< Parent Object */
 	unsigned int sensitive : 1;  /**< Value to track whether the action is sensitive */
 	unsigned int active : 1;     /**< Value to track whether the action is active */
+	SPView *view;                /**< The SPView to which this action is attached */
 	gchar *id;                   /**< The identifier for the action */
 	gchar *name;                 /**< Full text name of the action */
 	gchar *tip;                  /**< A tooltip to describe the action */
@@ -59,6 +61,7 @@ struct _SPActionClass {
 NRType sp_action_get_type (void);
 
 SPAction *sp_action_setup (SPAction *action,
+                           SPView *view,
 			   const gchar *id,
 			   const gchar *name,
 			   const gchar *tip,
@@ -68,5 +71,6 @@ void sp_action_perform (SPAction *action, void * data);
 void sp_action_set_active (SPAction *action, unsigned int active);
 void sp_action_set_sensitive (SPAction *action, unsigned int sensitive);
 void sp_action_set_shortcut (SPAction *action, unsigned int shortcut);
+SPView *sp_action_get_view (SPAction *action);
 
 #endif
