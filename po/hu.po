@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-09 15:50+0200\n"
-"PO-Revision-Date: 2004-10-10 18:30+0200\n"
+"PO-Revision-Date: 2004-10-10 23:10+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -1968,9 +1968,8 @@ msgstr "Élkeresés"
 
 #. #### quantization ####
 #: src/dialogs/tracedialog.cpp:344
-#, fuzzy
 msgid "Color Quantization"
-msgstr "Egyenletes színnel való megrajzolás"
+msgstr "Színek számának csökkentése"
 
 #: src/dialogs/tracedialog.cpp:347
 msgid "Colors"
@@ -1978,7 +1977,7 @@ msgstr "Színek"
 
 #: src/dialogs/tracedialog.cpp:354
 msgid "Quantization / Reduction"
-msgstr ""
+msgstr "Szín-csökkentés"
 
 #. #### quantization ####
 #: src/dialogs/tracedialog.cpp:359
@@ -2000,9 +1999,8 @@ msgstr "Közreműködők"
 
 #. done
 #: src/dialogs/tracedialog.cpp:385
-#, fuzzy
 msgid "Potrace"
-msgstr "Nyomkövetés"
+msgstr "Potrace"
 
 #. ##Set up the Other panel
 #: src/dialogs/tracedialog.cpp:388
@@ -3974,60 +3972,52 @@ msgstr ""
 "<b>Ctrl+C</b>."
 
 #: src/trace/trace.cpp:68 src/trace/trace.cpp:77
-#, fuzzy
 msgid "Trace: Nothing selected"
-msgstr "Legutóbb kijelölt"
+msgstr "Vektorizálás: nincs kijelölés"
 
 #: src/trace/trace.cpp:85
-#, fuzzy
 msgid "Trace: Selected object is not an image"
-msgstr "A kijelölt objektum nem lánc; a körvonal nem határozható meg."
+msgstr "Vektorizálás: a kijelölt objektum nem kép"
 
 #: src/trace/trace.cpp:137
-#, fuzzy
 msgid "Trace: no active document"
-msgstr "Új dokumentum létrehozása"
+msgstr "Vektorizálás: nincs aktív dokumentum"
 
 #: src/trace/trace.cpp:158
 msgid "Trace: mage has no bitmap data"
-msgstr ""
+msgstr "Vektorizálás: a képben nincs bitkép-adat"
 
 #: src/verbs.cpp:877
 msgid "New layer created."
-msgstr ""
+msgstr "Új réteg létrehozva."
 
 #: src/verbs.cpp:884
 msgid "Switched to next layer."
-msgstr ""
+msgstr "A következő rétegre való váltás megtörtént."
 
 #: src/verbs.cpp:892
-#, fuzzy
 msgid "Switched to previous layer."
-msgstr "Váltás az előző dokumentum ablakára"
+msgstr "Az előző rétegre való váltás megtörtént."
 
 #: src/verbs.cpp:901 src/verbs.cpp:960
-#, fuzzy
 msgid "No current layer."
-msgstr "Aktuális réteg"
+msgstr "Nincs aktuális réteg."
 
 #: src/verbs.cpp:930
-#, fuzzy
 msgid "Raised layer."
-msgstr "Csomópontot eggyel feljebb"
+msgstr "A réteg előrébb lett helyezve."
 
 #: src/verbs.cpp:934
-#, fuzzy
 msgid "Lowered layer."
-msgstr "Réteg kijelölése"
+msgstr "A réteg hátrébb lett helyezve."
 
 #: src/verbs.cpp:939
 msgid "Can't move layer any further."
-msgstr ""
+msgstr "A réteg nem mozdítható tovább."
 
 #: src/verbs.cpp:958
-#, fuzzy
 msgid "Deleted layer."
-msgstr "Réteg kijelölése"
+msgstr "A réteg törölve."
 
 #: src/verbs.cpp:1297
 msgid "keys.svg"
@@ -4654,12 +4644,11 @@ msgstr "A kijelölt objektum(ok) lánccá/láncokká alakítása"
 
 #: src/verbs.cpp:1572
 msgid "_Unflow text"
-msgstr ""
+msgstr "Szövegtördelés me_gszüntetése"
 
 #: src/verbs.cpp:1573
-#, fuzzy
 msgid "Convert selected flowtext to text"
-msgstr "A kijelölt objektum(ok) lánccá/láncokká alakítása"
+msgstr "A kijelölt tördelt szöveg normál szöveggé alakítása"
 
 #: src/verbs.cpp:1575
 msgid "Flip _Horizontally"
@@ -4740,113 +4729,100 @@ msgstr "Átlagszín kiválasztása a képről - színpipetta"
 
 #. Tool prefs
 #: src/verbs.cpp:1608
-#, fuzzy
 msgid "Selector Preferences"
-msgstr "_Dokumentum-beállítások..."
+msgstr "Kijelölőeszköz-beállítások"
 
 #: src/verbs.cpp:1609
 msgid "Open Inkscape Preferences for the Selector tool"
-msgstr ""
+msgstr "A kijelölőeszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1610
-#, fuzzy
 msgid "Node Tool Preferences"
-msgstr "_Dokumentum-beállítások..."
+msgstr "Csomóponteszköz-beállítások"
 
 #: src/verbs.cpp:1611
 msgid "Open Inkscape Preferences for the Node tool"
-msgstr ""
+msgstr "A csomóponteszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1612
-#, fuzzy
 msgid "Rectangle Preferences"
-msgstr "Té_glalap tulajdonságai"
+msgstr "Téglalap-beállítások"
 
 #: src/verbs.cpp:1613
 msgid "Open Inkscape Preferences for the Rectangle tool"
-msgstr ""
+msgstr "A téglalapeszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1614
-#, fuzzy
 msgid "Ellipse Preferences"
-msgstr "Az Inkscape globális beállításai"
+msgstr "Ellipszis-beállítások"
 
 #: src/verbs.cpp:1615
 msgid "Open Inkscape Preferences for the Ellipse tool"
-msgstr ""
+msgstr "Az ellipsziseszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1616
-#, fuzzy
 msgid "Star Preferences"
-msgstr "_Csillag tulajdonságai"
+msgstr "Csillag-beállítások"
 
 #: src/verbs.cpp:1617
 msgid "Open Inkscape Preferences for the Star tool"
-msgstr ""
+msgstr "A csillageszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1618
-#, fuzzy
 msgid "Spiral Preferences"
-msgstr "Sp_irál tulajdonságai"
+msgstr "Spirál-beállítások"
 
 #: src/verbs.cpp:1619
 msgid "Open Inkscape Preferences for the Spiral tool"
-msgstr ""
+msgstr "A spiráleszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1620
-#, fuzzy
 msgid "Pencil Preferences"
-msgstr "_Dokumentum-beállítások..."
+msgstr "Ceruza-beállítások"
 
 #: src/verbs.cpp:1621
 msgid "Open Inkscape Preferences for the Pencil tool"
-msgstr ""
+msgstr "A \"ceruza\" eszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1622
-#, fuzzy
 msgid "Pen Preferences"
-msgstr "_Dokumentum-beállítások..."
+msgstr "Toll-beállítások"
 
 #: src/verbs.cpp:1623
-#, fuzzy
 msgid "Open Inkscape Preferences for the Pen tool"
-msgstr "Inksc_ape-beállítások..."
+msgstr "A \"toll\" eszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1624
-#, fuzzy
 msgid "Calligraphic Preferences"
-msgstr "Művészi rajz"
+msgstr "Művészitoll-beállítások"
 
 #: src/verbs.cpp:1625
 msgid "Open Inkscape Preferences for the Calligraphy tool"
-msgstr ""
+msgstr "A \"művészi toll\" eszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1626
-#, fuzzy
 msgid "Text Preferences"
-msgstr "_Dokumentum-beállítások..."
+msgstr "Szövegeszköz-beállítások"
 
 #: src/verbs.cpp:1627
 msgid "Open Inkscape Preferences for the Text tool"
-msgstr ""
+msgstr "A szövegeszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1628
-#, fuzzy
 msgid "Zoom Preferences"
-msgstr "_Dokumentum-beállítások..."
+msgstr "Nagyítóeszköz-beállítások"
 
 #: src/verbs.cpp:1629
 msgid "Open Inkscape Preferences for the Zoom tool"
-msgstr ""
+msgstr "A nagyítóeszköz beállításainak megnyitása"
 
 #: src/verbs.cpp:1630
-#, fuzzy
 msgid "Dropper Preferences"
-msgstr "_Dokumentum-beállítások..."
+msgstr "Színpipetta-beállítások"
 
 #: src/verbs.cpp:1631
 msgid "Open Inkscape Preferences for the Dropper tool"
-msgstr ""
+msgstr "A \"színpipetta\" eszköz beállításainak megnyitása"
 
 #. Zooming
 #: src/verbs.cpp:1634
