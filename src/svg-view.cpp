@@ -12,7 +12,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-//#include <libart_lgpl/art_affine.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkscrolledwindow.h>
 #include "display/canvas-arena.h"

@@ -17,8 +17,6 @@
 #endif
 #include <string.h>
 
-//#include <libart_lgpl/art_misc.h>
-
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>

@@ -21,7 +21,6 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-pixblock.h>
-//#include <libart_lgpl/art_affine.h>
 #include <gtk/gtksignal.h>
 #include "../helper/sp-intl.h"
 #include "../display/nr-plain-stuff.h"

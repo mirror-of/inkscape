@@ -16,7 +16,6 @@
 # include <config.h>
 #endif
 #include <string.h>
-//#include <libart_lgpl/art_misc.h>
 #include "libnr/nr-macros.h"
 #include "xml/repr.h"
 #include "xml/repr-private.h"
