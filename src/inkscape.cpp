@@ -400,7 +400,6 @@ inkscape_segv_handler (int signum)
 
     fprintf(stderr, "\nEmergency save activated!\n");
 
-    const gchar *home = g_get_home_dir ();
     time_t sptime = time (NULL);
     struct tm *sptm = localtime (&sptime);
     gchar sptstr[256];
@@ -440,17 +439,22 @@ inkscape_segv_handler (int signum)
             }
 
             if (!docname || !*docname) docname = "emergency";
-            g_snprintf (c, 1024, "%s/.inkscape/%.256s.%s.%d", home, docname, sptstr, count);
-            Inkscape::IO::dump_fopen_call(c, "E");
-            file = Inkscape::IO::fopen_utf8name(c, "w");
+            // try saving to the profile location
+            g_snprintf (c, 1024, "%.256s.%s.%d", docname, sptstr, count);
+            gchar * location = profile_path(c);
+            Inkscape::IO::dump_fopen_call(location, "E");
+            file = Inkscape::IO::fopen_utf8name(location, "w");
+            g_free(location);
             if (!file) {
-                g_snprintf (c, 1024, "%s/inkscape-%.256s.%s.%d", home, docname, sptstr, count);
-                Inkscape::IO::dump_fopen_call(c, "F");
+                // try saving to /tmp
+                g_snprintf (c, 1024, "/tmp/inkscape-%.256s.%s.%d", docname, sptstr, count);
+                Inkscape::IO::dump_fopen_call(c, "G");
                 file = Inkscape::IO::fopen_utf8name(c, "w");
             }
             if (!file) {
-                g_snprintf (c, 1024, "/tmp/inkscape-%.256s.%s.%d", docname, sptstr, count);
-                Inkscape::IO::dump_fopen_call(c, "G");
+                // try saving to the current directory
+                g_snprintf (c, 1024, "inkscape-%.256s.%s.%d", docname, sptstr, count);
+                Inkscape::IO::dump_fopen_call(c, "F");
                 file = Inkscape::IO::fopen_utf8name(c, "w");
             }
             if (file) {
