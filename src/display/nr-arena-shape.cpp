@@ -42,6 +42,7 @@
 #include "../livarot/Path.h"
 #include "../livarot/AlphaLigne.h"
 #include "../livarot/Ligne.h"
+#include "../livarot/BitLigne.h"
 #include "../libnr/nr-matrix-ops.h"
 
 //int  showRuns=0;
@@ -929,7 +930,7 @@ nr_arena_shape_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 }
 
 static NRArenaItem *
-nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsigned int sticky)
+nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsigned int /*sticky*/)
 {
 	NRArenaShape *shape;
 
@@ -1167,7 +1168,7 @@ shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float 
       d[0] = (da + 127) / 255;
     } else {
       dv/=len;
-      vst+=0.5*dv; // correction trapezoidale
+      sv+=0.5*dv; // correction trapezoidale
       sv*=16777216;
       dv*=16777216;
       int c0_24 = static_cast<int>(CLAMP(sv, 0, 16777216));
@@ -1205,13 +1206,13 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
   if ( ir > m.area.x1 ) ir=m.area.x1;
   if ( ib > m.area.y1 ) ib=m.area.y1;
   
+  // version par FloatLigne
   int    curPt;
   float  curY;
   theS->BeginRaster(curY,curPt,1.0);
-
+  
   FloatLigne* theI=new FloatLigne();
   IntLigne*   theIL=new IntLigne();
-//  AlphaLigne*   theI=new AlphaLigne(il,ir);
   
   theS->Scan(curY,curPt,(float)(it),1.0);
   
@@ -1220,7 +1221,6 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
   uint32_t* ligStart=((uint32_t*)(mdata+((il-m.area.x0)+m.rs*(it-m.area.y0))));
   for (int y=it;y<ib;y++) {
     theI->Reset();
-//    theIL->Reset();
     if ( y&0x00000003 ) {
       theS->Scan(curY,curPt,((float)(y+1)),theI,false,1.0);
     } else {
@@ -1228,16 +1228,6 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     }
     theI->Flatten();
     theIL->Copy(theI);
-/*    {
-      bool   bug=false;
-      for (int i=1;i<theI->nbRun;i++) {
-        if ( theI->runs[i].st < theI->runs[i-1].en-0.1 ) bug=true;
-      }
-      if ( bug ) {
-//        theI->Affiche();
-      }
-    }
-    if ( showRuns ) theIL->Affiche();*/
     
     raster_info  dest;
     dest.startPix=il;
@@ -1245,13 +1235,54 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     dest.sth=il;
     dest.stv=y;
     dest.buffer=ligStart;
-//    theI->Raster(dest,NULL,shape_run_A8_OR);
     theIL->Raster(dest,NULL,shape_run_A8_OR);
     ligStart=((uint32_t*)(((char*)ligStart)+m.rs));
   }
   theS->EndRaster();
   delete theI;
   delete theIL;
+  
+/*  // version par BitLigne
+  int    curPt;
+  float  curY;
+  theS->BeginRaster(curY,curPt,1.0);
+  
+  BitLigne*   theI[4];
+  for (int i=0;i<4;i++) theI[i]=new BitLigne(il,ir);
+  IntLigne*   theIL=new IntLigne();
+  
+  theS->Scan(curY,curPt,(float)(it),0.25);
+  
+  char* mdata=(char*)m.data.px;
+  if ( m.size == NR_PIXBLOCK_SIZE_TINY ) mdata=(char*)m.data.p;
+  uint32_t* ligStart=((uint32_t*)(mdata+((il-m.area.x0)+m.rs*(it-m.area.y0))));
+  for (int y=it;y<ib;y++) {
+    for (int i=0;i<4;i++) theI[i]->Reset();
+    if ( y&0x00000003 ) {
+      theS->Scan(curY,curPt,((float)(y+0.25)),fill_oddEven,theI[0],false,0.25);
+      theS->Scan(curY,curPt,((float)(y+0.5)),fill_oddEven,theI[1],false,0.25);
+      theS->Scan(curY,curPt,((float)(y+0.75)),fill_oddEven,theI[2],false,0.25);
+      theS->Scan(curY,curPt,((float)(y+1.0)),fill_oddEven,theI[3],false,0.25);
+    } else {
+      theS->Scan(curY,curPt,((float)(y+0.25)),fill_oddEven,theI[0],true,0.25);
+      theS->Scan(curY,curPt,((float)(y+0.5)),fill_oddEven,theI[1],true,0.25);
+      theS->Scan(curY,curPt,((float)(y+0.75)),fill_oddEven,theI[2],true,0.25);
+      theS->Scan(curY,curPt,((float)(y+1.0)),fill_oddEven,theI[3],true,0.25);
+    }
+    theIL->Copy(4,theI);
+    
+    raster_info  dest;
+    dest.startPix=il;
+    dest.endPix=ir;
+    dest.sth=il;
+    dest.stv=y;
+    dest.buffer=ligStart;
+    theIL->Raster(dest,NULL,shape_run_A8_OR);
+    ligStart=((uint32_t*)(((char*)ligStart)+m.rs));
+  }
+  theS->EndRaster();
+  for (int i=0;i<4;i++) delete theI[i];
+  delete theIL;*/
 }
 
 #endif

@@ -578,6 +578,7 @@ void             FloatLigne::Flatten(void)
 		} else {
 			startExists=false;
 			totStart=0;
+      totPente=0;
 		}
 	}
 
@@ -588,7 +589,7 @@ void             FloatLigne::Affiche(void)
 	for (int i=0;i<nbBord;i++) printf("(%f %f %f %i) ",bords[i].pos,bords[i].val,bords[i].pente,(bords[i].start?1:0));
 	printf("\n");
 	printf("%i : \n",nbRun);
-	for (int i=0;i<nbRun;i++) printf("(%f %f -> %f %f) ",runs[i].st,runs[i].vst,runs[i].en,runs[i].ven);
+	for (int i=0;i<nbRun;i++) printf("(%f %f -> %f %f / %f) ",runs[i].st,runs[i].vst,runs[i].en,runs[i].ven,runs[i].pente);
 	printf("\n");
 }
 
@@ -1754,7 +1755,7 @@ void             IntLigne::Copy(FloatLigne* a)
 		float   msv;
 		if ( stEx == false /*miSt == runA.st*/ ) {
 			msv=runA.vst;
-		} else if ( 0 /*miSt == runA.en*/ ) {
+		} else if ( enEx == false && miSt == curEn ) {
 			msv=runA.ven;
 		} else {
 //			msv=a->ValAt(miSt,runA.st,runA.en,runA.vst,runA.ven);
@@ -1778,15 +1779,15 @@ void             IntLigne::Copy(FloatLigne* a)
 					if ( pixExists ) {
 						if ( curPos < curSt ) {
 							AddRun(curPos,curPos+1,lastSurf,lastSurf);
-							lastSurf=0.5*(msv+a->runs[i].vst)*(curStF+1.0-a->runs[i].st);
+							lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
 							AddRun(curSt,curSt+1,lastSurf,lastSurf);
 						} else {
-							lastSurf+=0.5*(msv+a->runs[i].vst)*(curStF+1.0-a->runs[i].st);
+							lastSurf+=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
 							AddRun(curSt,curSt+1,lastSurf,lastSurf);
 						}
 						pixExists=false;
 					} else {
-						lastSurf=0.5*(msv+a->runs[i].vst)*(curStF+1.0-a->runs[i].st);
+						lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
 						AddRun(curSt,curSt+1,lastSurf,lastSurf);						
 					}
 				} else {
@@ -1809,15 +1810,15 @@ void             IntLigne::Copy(FloatLigne* a)
 				if ( pixExists ) {
 					if ( curPos < curSt ) {
 						AddRun(curPos,curPos+1,lastSurf,lastSurf);
-						lastSurf=0.5*(msv+a->runs[i].vst)*(curStF+1.0-a->runs[i].st);
+						lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
 						AddRun(curSt,curSt+1,lastSurf,lastSurf);
 					} else {
-						lastSurf+=0.5*(msv+a->runs[i].vst)*(curStF+1.0-a->runs[i].st);
+						lastSurf+=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
 						AddRun(curSt,curSt+1,lastSurf,lastSurf);
 					}
 					pixExists=false;
 				} else {
-					lastSurf=0.5*(msv+a->runs[i].vst)*(curStF+1.0-a->runs[i].st);
+					lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
 					AddRun(curSt,curSt+1,lastSurf,lastSurf);
 				}				
 			}
@@ -1842,7 +1843,7 @@ void             IntLigne::Copy(FloatLigne* a)
 					if ( pixExists ) {
 						AddRun(curPos,curPos+1,lastSurf,lastSurf);
 					}
-					lastSurf=0.5*(msv+a->runs[i].ven)*(a->runs[i].en-curEnF);
+					lastSurf=0.5*(mev+a->runs[i].ven)*(a->runs[i].en-curEnF);
 					pixExists=true;
 					curPos=curEn;					
 				}

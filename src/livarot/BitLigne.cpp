@@ -104,13 +104,15 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
     fullB[fpPos]&=~(add); // partial is exclusive from full, so partial bits are removed from fullB
     partB[fpPos]|=add;    // and added to partB
     if ( full ) { // if the coverage is full, add the vector of full bits
-      add=0xFFFFFFFF;
-      add>>=32-lfRem;
-      add<<=32-lfRem;
-      add<<=ffRem;
-      add>>=ffRem;
-			fullB[ffPos]|=add;
-			partB[ffPos]&=~(add);
+      if ( ffBit <= lfBit ) {
+        add=0xFFFFFFFF;
+        add>>=32-lfRem;
+        add<<=32-lfRem;
+        add<<=ffRem;
+        add>>=ffRem;
+        fullB[ffPos]|=add;
+        partB[ffPos]&=~(add);
+      }
     }
 	} else {
     // first and last elements are differents, so add what appropriate to each
@@ -131,21 +133,33 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
     memset(partB+(fpPos+1),0xFF,(lpPos-fpPos-1)*sizeof(uint32_t));
 
 		if ( full ) { // is the coverage is full, do your magic
-      add=0xFFFFFFFF;
-      add<<=ffRem;
-      add>>=ffRem;
-      fullB[ffPos]|=add;
-      partB[ffPos]&=~add;
-      
-      add=0xFFFFFFFF;
-      add>>=32-lfRem;
-      add<<=32-lfRem;
-      fullB[lfPos]|=add;
-      partB[lfPos]&=~add;
-
-			memset(fullB+(ffPos+1),0xFF,(lfPos-ffPos-1)*sizeof(uint32_t));
-			memset(partB+(ffPos+1),0x00,(lfPos-ffPos-1)*sizeof(uint32_t));
-		}
+      if ( ffBit <= lfBit ) {
+        if ( ffPos == lfPos ) {
+          add=0xFFFFFFFF;
+          add>>=32-lfRem;
+          add<<=32-lfRem;
+          add<<=ffRem;
+          add>>=ffRem;
+          fullB[ffPos]|=add;
+          partB[ffPos]&=~(add);
+        } else {
+          add=0xFFFFFFFF;
+          add<<=ffRem;
+          add>>=ffRem;
+          fullB[ffPos]|=add;
+          partB[ffPos]&=~add;
+          
+          add=0xFFFFFFFF;
+          add>>=32-lfRem;
+          add<<=32-lfRem;
+          fullB[lfPos]|=add;
+          partB[lfPos]&=~add;
+          
+          memset(fullB+(ffPos+1),0xFF,(lfPos-ffPos-1)*sizeof(uint32_t));
+          memset(partB+(ffPos+1),0x00,(lfPos-ffPos-1)*sizeof(uint32_t));
+        }
+      }
+    }
 	}
 	return 0;
 }
