@@ -43,10 +43,20 @@ class TracingEngine
         {}
 
     /**
-     *
+     *  This is the working method of this interface, and all
+     *  implementing classes.  Take a GdkPixbuf, trace it, and
+     *  return the path data that is compatible with the d="" attribute
+     *  of an SVG <path> element.
      */
     virtual char *getPathDataFromPixbuf(GdkPixbuf *pixbuf)
         { return NULL; }
+
+    /**
+     *  Abort the thread that is executing getPathDataFromPixbuf()
+     */
+    virtual void abort()
+        {}
+
 
 
 };//class TracingEngine
@@ -83,26 +93,43 @@ class Trace
 
 
     /**
-     *
+     *  A convenience method to allow other software to 'see' the
+     *  same image that this class sees.
      */
     GdkPixbuf *getSelectedImage();
 
     /**
-     *
+     * This is the main working method.  Trace the selected image, if
+     * any, and create a <path> element from it, inserting it into
+     * the current document.
      */
     gboolean convertImageToPath(TracingEngine *engine);
 
+
     /**
-     *
+     *  Abort the thread that is executing convertImageToPath()
+     */
+    void abort();
+
+    /**
+     *  Get a singleton instance of this class and execute
+     *  convertImageToPath()
      */
     static gboolean staticConvertImageToPath();
 
     /**
-     *
+     *  Get a singleton instance of this class and execute
+     *  showTraceDialog()
      */
     static gboolean staticShowTraceDialog();
 
+    private:
 
+    /**
+     *  During tracing, this is Non-null, and refers to the
+     *  engine that is currently doing the tracing.
+     */
+    TracingEngine *engine;
 
 };//class Trace
 

@@ -138,9 +138,17 @@ class PotraceTracingEngine : public TracingEngine
         }
 
     /**
-     *
+     *  This is the working method of this implementing class, and all
+     *  implementing classes.  Take a GdkPixbuf, trace it, and
+     *  return the path data that is compatible with the d="" attribute
+     *  of an SVG <path> element.
      */
     virtual char *getPathDataFromPixbuf(GdkPixbuf *pixbuf);
+
+    /**
+     *  Abort the thread that is executing getPathDataFromPixbuf()
+     */
+    virtual void abort();
 
     /**
      *

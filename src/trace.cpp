@@ -36,7 +36,7 @@ namespace Inkscape
  */
 Trace::Trace()
 {
-
+    engine = NULL;
 }
 
 
@@ -101,29 +101,40 @@ Trace::getSelectedImage()
 }
 
 
+
+
+
 /**
  *  Static no-knowledge version
  */
-gboolean Trace::convertImageToPath(TracingEngine *engine)
+gboolean Trace::convertImageToPath(TracingEngine *theEngine)
 {
-
+    //## Set our internal engine
+    //## Remember. NEVER leave this method without setting
+    //## back to NULL
+    engine = theEngine;
 
     if (!SP_ACTIVE_DOCUMENT)
         {
         g_warning("Trace::convertImageToPath: no active document\n");
+        engine = NULL;
         return false;
         }
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
 
     SPImage *img = getSelectedSPImage();
     if (!img)
+        {
+        engine = NULL;
         return false;
+        }
 
     GdkPixbuf *pixbuf = img->pixbuf;
 
     if (!pixbuf)
         {
         g_warning("Trace::convertImageToPath: image has no bitmap data\n");
+        engine = NULL;
         return false;
         }
 
@@ -156,9 +167,33 @@ gboolean Trace::convertImageToPath(TracingEngine *engine)
     //## inform the document, so we can undo
     sp_document_done(doc);
 
+    engine = NULL;
+
     return true;
 
 }
+
+
+
+/**
+ *  Abort the thread that is executing convertImageToPath()
+ */
+void Trace::abort()
+{
+
+    g_message("Trace::abort() soon to be implemented\n");
+
+    if (engine)
+        {
+        engine->abort();
+        }
+
+}
+
+
+
+
+
 
 /**
  *  Static no-knowledge version
@@ -170,6 +205,10 @@ gboolean Trace::staticConvertImageToPath()
     trace.convertImageToPath(&engine);
     return true;
 }
+
+
+
+
 
 
 /**

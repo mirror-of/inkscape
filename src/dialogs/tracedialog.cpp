@@ -220,7 +220,11 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
  */
 void TraceDialogImpl::abort()
 {
-    //TBD, when we implement threads
+    //### Do some GUI thing
+ 
+    //### Make the abort() call to the tracer
+    tracer.abort();
+    
 }
 
 
@@ -376,7 +380,7 @@ TraceDialogImpl::TraceDialogImpl()
     mainVBox->pack_start(notebook);
 
     //## The OK button
-    //add_button(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
+    add_button(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
     add_button(Gtk::Stock::OK,   GTK_RESPONSE_OK);
 
     show_all_children();

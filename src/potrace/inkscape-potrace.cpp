@@ -225,6 +225,12 @@ PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
 }
 
 
+/**
+ *  This is the working method of this interface, and all
+ *  implementing classes.  Take a GdkPixbuf, trace it, and
+ *  return the path data that is compatible with the d="" attribute
+ *  of an SVG <path> element.
+ */
 char *
 PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
 {
@@ -294,6 +300,14 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
     return d;
 }
 
+/**
+ *  Abort the thread that is executing getPathDataFromPixbuf()
+ */
+void
+PotraceTracingEngine::abort()
+{
+    g_message("PotraceTracingEngine::abort() soon to be implemented\n");
+}
 
 
 
