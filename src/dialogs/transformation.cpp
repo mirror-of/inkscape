@@ -459,7 +459,7 @@ sp_transformation_move_relative_toggled (GtkToggleButton *tb, GObject *dlg)
     x = sp_unit_selector_get_value_in_points (us, ax);
     y = sp_unit_selector_get_value_in_points (us, ay);
 
-    sp_selection_bbox (selection, &bbox);
+    selection->bounds(&bbox);
 
     g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
 
@@ -581,7 +581,7 @@ sp_transformation_move_update (GObject *dlg, SPSelection *selection)
             ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
             ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
             us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
-            sp_selection_bbox (selection, &bbox);
+            selection->bounds(&bbox);
             sp_unit_selector_set_value_in_points (us, ax, bbox.x0);
             sp_unit_selector_set_value_in_points (us, ay, bbox.y0);
         }
@@ -614,7 +614,7 @@ static void sp_transformation_move_apply(GObject *dlg, SPSelection *selection)
     
     } else {
         NRRect bbox;
-        sp_selection_bbox (selection, &bbox);
+        selection->bounds(&bbox);
         sp_selection_move_relative (selection, x - bbox.x0, y - bbox.y0);
     }
 
@@ -660,7 +660,7 @@ static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
         ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
         x = sp_units_get_points (ax->value, old);
         y = sp_units_get_points (ay->value, old);
-        sp_selection_bbox (selection, &bbox);
+        selection->bounds(&bbox);
         gtk_adjustment_set_value (ax, 100.0 * x / (bbox.x1 - bbox.x0));
         gtk_adjustment_set_value (ay, 100.0 * y / (bbox.y1 - bbox.y0));
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
@@ -677,7 +677,7 @@ static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
         us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
         ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
         ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
-        sp_selection_bbox (selection, &bbox);
+        selection->bounds(&bbox);
         gtk_adjustment_set_value (ax, 
             sp_points_get_units (0.01 * ax->value * (bbox.x1 - bbox.x0), 
                                  new_units));
@@ -792,7 +792,7 @@ sp_transformation_scale_update (GObject *dlg, SPSelection *selection)
         ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
         ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
         us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
-        sp_selection_bbox (selection, &bbox);
+        selection->bounds(&bbox);
         unit = sp_unit_selector_get_unit (us);
         
         if (unit->base == SP_UNIT_ABSOLUTE) {
@@ -816,7 +816,7 @@ static void sp_transformation_scale_apply(GObject *dlg, SPSelection *selection)
     GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data(dlg, "scale_dimension_x"));
     GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data(dlg, "scale_dimension_y"));
 
-    NR::Rect const bbox(sp_selection_bbox(selection));
+    NR::Rect const bbox(selection->bounds());
     NR::Point const center(bbox.midpoint());
     SPUnit const *unit = sp_unit_selector_get_unit(us);
 
@@ -915,7 +915,7 @@ static void sp_transformation_rotate_apply(GObject *dlg, SPSelection *selection)
     GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(dlg, "rotate_angle"));
 
     NRRect bbox_compat;
-    sp_selection_bbox (selection, &bbox_compat);
+    selection->bounds(&bbox_compat);
     NR::Rect bbox(bbox_compat);
     NR::Point center = bbox.midpoint();
     sp_selection_rotate_relative (selection, center, a->value);

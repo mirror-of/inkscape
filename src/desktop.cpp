@@ -1584,7 +1584,7 @@ sp_desktop_zoom_selection (SPDesktop *dt)
     g_return_if_fail (selection != NULL);
 
     NRRect d;
-    sp_selection_bbox (selection, &d);
+    selection->bounds(&d);
     if ((fabs (d.x1 - d.x0) < 0.1) || (fabs (d.y1 - d.y0) < 0.1)) return;
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }

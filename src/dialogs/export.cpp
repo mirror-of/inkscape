@@ -601,8 +601,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                 if (!sp_selection_is_empty 
                         (SP_DT_SELECTION (SP_ACTIVE_DESKTOP) ) )
                 {
-                    sp_selection_bbox ( SP_DT_SELECTION (SP_ACTIVE_DESKTOP), 
-                                        &bbox);
+                    (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
                 
                 // there's no selection, set area to page
                 } else { 

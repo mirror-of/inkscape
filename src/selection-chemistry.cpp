@@ -696,7 +696,7 @@ void sp_selection_paste(bool in_place)
 		sp_document_ensure_up_to_date (SP_DT_DOCUMENT (desktop));
 
 		NRRect bbox;
-		sp_selection_bbox (selection, &bbox);
+		selection->bounds(&bbox);
 
 		NR::Point m = sp_desktop_point (desktop);
 
@@ -804,7 +804,7 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 	NRMatrix p2o, o2n, scale, final, s;
 	double dx, dy, nx, ny;
 
-	sp_selection_bbox (selection, &bbox);
+	selection->bounds(&bbox);
 
 	nr_matrix_set_translate (&p2o, -bbox.x0, -bbox.y0);
 
@@ -826,7 +826,7 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 void sp_selection_scale_relative(SPSelection *selection, NR::Point const &align, NR::scale const &scale)
 {
 	// don't try to scale above 1 Mpt, it won't display properly and will crash sooner or later anyway
-	NR::Rect const bbox(sp_selection_bbox(selection));
+	NR::Rect const bbox(selection->bounds());
 	if (
 		bbox.extent(NR::X) * scale[NR::X] > 1e6 ||
 		bbox.extent(NR::Y) * scale[NR::Y] > 1e6
@@ -931,7 +931,7 @@ void
 sp_selection_rotate (SPSelection *selection, gdouble angle_degrees)
 {
 	NRRect bbox;
-	sp_selection_bbox (selection, &bbox);
+	selection->bounds(&bbox);
 	NR::Point center = NR::Rect(bbox).midpoint();
 
 	sp_selection_rotate_relative (selection, center, angle_degrees);
@@ -951,7 +951,7 @@ sp_selection_rotate_screen (SPSelection *selection, gdouble angle)
 	gdouble zoom, zmove, zangle, r;
 
 	NRRect bbox_compat;
-	sp_selection_bbox (selection, &bbox_compat);
+	selection->bounds(&bbox_compat);
 	NR::Rect bbox(bbox_compat);
 	NR::Point center = bbox.midpoint();
 
@@ -973,7 +973,7 @@ sp_selection_rotate_screen (SPSelection *selection, gdouble angle)
 void
 sp_selection_scale (SPSelection *selection, gdouble grow)
 {
-	NR::Rect const bbox(sp_selection_bbox(selection));
+	NR::Rect const bbox(selection->bounds());
 	NR::Point const center(bbox.midpoint());
 	double const max_len = bbox.maxExtent();
 
@@ -1001,7 +1001,7 @@ sp_selection_scale_screen (SPSelection *selection, gdouble grow_pixels)
 void
 sp_selection_scale_times (SPSelection *selection, gdouble times)
 {
-	NR::Point const center(sp_selection_bbox(selection).midpoint());
+	NR::Point const center(selection->bounds().midpoint());
 	sp_selection_scale_relative(selection, center, NR::scale(times, times));
 	sp_document_done(SP_DT_DOCUMENT(selection->desktop()));
 }

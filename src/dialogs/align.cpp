@@ -534,7 +534,7 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
         {
             slist = g_slist_copy (slist);
             NRRect b;
-            sp_selection_bbox (selection, &b);
+            selection->bounds(&b);
             mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
                            a.my0 * b.y0 + a.my1 * b.y1);
             break;

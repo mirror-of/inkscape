@@ -84,7 +84,7 @@ sp_selection_layout_widget_update (SPWidget *spw, SPSelection *sel)
 	if (sel && !sp_selection_is_empty (sel)) {
 		NRRect bbox;
 
-		sp_selection_bbox (sel, &bbox);
+		sel->bounds(&bbox);
 
 		if ((bbox.x1 - bbox.x0 > 1e-6) || (bbox.y1 - bbox.y0 > 1e-6)) {
 			GtkWidget *us;
@@ -159,7 +159,7 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	}
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-	sp_selection_bbox (sel, &bbox);
+	sel->bounds(&bbox);
 	g_return_if_fail ((bbox.x1 - bbox.x0 > 1e-6) || (bbox.y1 - bbox.y0 > 1e-6));
 
 	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");

@@ -416,7 +416,7 @@ static void sp_verb_action_object_perform ( SPAction *action, void *data,
     if (sp_selection_is_empty (sel))
         return;
 
-    NR::Point const center(sp_selection_bbox(sel).midpoint());
+    NR::Point const center(sel->bounds().midpoint());
 
     switch ((int) data) {
         case SP_VERB_OBJECT_ROTATE_90_CW:
