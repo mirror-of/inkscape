@@ -719,7 +719,7 @@ sp_desktop_set_coordinate_status (SPDesktop *desktop, NR::Point p, guint underli
 {
     gchar cstr[64];
     
-    g_snprintf (cstr, 64, "%6.1f, %6.1f", p[0], p[1]);
+    g_snprintf (cstr, 64, "%6.2f, %6.2f", desktop->owner->dt2r * p[NR::X], desktop->owner->dt2r * p[NR::Y]);
 
     gtk_label_set_text (GTK_LABEL (desktop->owner->coord_status), cstr);
 }
@@ -727,7 +727,16 @@ sp_desktop_set_coordinate_status (SPDesktop *desktop, NR::Point p, guint underli
 const SPUnit *
 sp_desktop_get_default_unit (SPDesktop *dt)
 {
-    return dt->namedview->gridunit;
+    return dt->namedview->doc_units;
+}
+
+guint
+sp_desktop_get_default_metric (SPDesktop *dt)
+{
+    if (sp_desktop_get_default_unit (dt))
+        return sp_unit_get_metric (sp_desktop_get_default_unit (dt));
+    else
+        return SP_DEFAULT_METRIC;
 }
 
 SPItem *
@@ -951,14 +960,12 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     // cursor coordinates
     dtw->coord_status = gtk_label_new ("");
-    // FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-    // that's because labels are "lightweight" widgets that don't have
-    // their own gdk window (and so can't receive events to detect hover);
-    // you need to put them in an eventbox at minimum
-    gtk_tooltips_set_tip (tt, dtw->coord_status, _("Cursor coordinates"), NULL);
+    eventbox = gtk_event_box_new ();
+    gtk_container_add (GTK_CONTAINER (eventbox), dtw->coord_status);
+    gtk_tooltips_set_tip (tt, eventbox, _("Cursor coordinates"), NULL);
     gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, -1);
     sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
-    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->coord_status, FALSE, FALSE, 1);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), eventbox, FALSE, FALSE, 1);
 
     dtw->layer_selector = new Inkscape::Widgets::LayerSelector(NULL);
     dtw->layer_selector->reference();
@@ -1086,7 +1093,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
     if ((fabs (d.x1 - d.x0) < 1.0) || (fabs (d.y1 - d.y0) < 1.0)) return;
 
     sp_desktop_set_display_area (dtw->desktop, d.x0, d.y0, d.x1, d.y1, 10);
-        
+      
     sp_desktop_widget_set_title (dtw);
 }
 
@@ -1335,7 +1342,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
 {
     SPDesktopWidget *dtw = (SPDesktopWidget*)gtk_type_new (SP_TYPE_DESKTOP_WIDGET);
 
-    dtw->dt2r = 1.0 / namedview->gridunit->unittobase;
+    dtw->dt2r = 1.0 / namedview->doc_units->unittobase;
     dtw->ruler_origin = namedview->gridorigin;
 
     dtw->desktop = (SPDesktop *) sp_desktop_new (namedview, dtw->canvas);
@@ -1381,13 +1388,12 @@ sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktop
     using NR::Y;
 
     NR::Point const origin = dtw->dt2r * ( NR::Point(x, y) - dtw->ruler_origin );
+
     /* fixme: */
     GTK_RULER(dtw->hruler)->position = origin[X];
     gtk_ruler_draw_pos (GTK_RULER (dtw->hruler));
     GTK_RULER(dtw->vruler)->position = origin[Y];
     gtk_ruler_draw_pos (GTK_RULER (dtw->vruler));
-
-    sp_desktop_set_coordinate_status(SP_DESKTOP(view), origin, 0);
 }
 
 /*
@@ -1455,8 +1461,13 @@ static void
 sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWidget *dtw)
 {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        dtw->dt2r = 1.0 / nv->gridunit->unittobase;
+        dtw->dt2r = 1.0 / nv->doc_units->unittobase;
+
         dtw->ruler_origin = nv->gridorigin;
+
+        sp_ruler_set_metric (GTK_RULER (dtw->vruler), (SPMetric) sp_desktop_get_default_metric (dtw->desktop));
+        sp_ruler_set_metric (GTK_RULER (dtw->hruler), (SPMetric) sp_desktop_get_default_metric (dtw->desktop));
+
         sp_desktop_widget_update_rulers (dtw);
     }
 }
@@ -1870,10 +1881,10 @@ sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
     double scale = SP_DESKTOP_ZOOM (dtw->desktop);
     double s = viewbox.x0 / scale - dtw->ruler_origin[NR::X];
     double e = viewbox.x1 / scale - dtw->ruler_origin[NR::X];
-    gtk_ruler_set_range (GTK_RULER (dtw->hruler), dtw->dt2r * s, dtw->dt2r * e, GTK_RULER (dtw->hruler)->position, dtw->dt2r * (e - s));
+    gtk_ruler_set_range (GTK_RULER (dtw->hruler), s,  e, GTK_RULER (dtw->hruler)->position, (e - s));
     s = viewbox.y0 / -scale - dtw->ruler_origin[NR::Y];
     e = viewbox.y1 / -scale - dtw->ruler_origin[NR::Y];
-    gtk_ruler_set_range (GTK_RULER (dtw->vruler), dtw->dt2r * s, dtw->dt2r * e, GTK_RULER (dtw->vruler)->position, dtw->dt2r * (e - s));
+    gtk_ruler_set_range (GTK_RULER (dtw->vruler), s, e, GTK_RULER (dtw->vruler)->position, (e - s));
 }
 
 static void

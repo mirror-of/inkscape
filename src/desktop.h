@@ -219,6 +219,7 @@ void sp_desktop_prev_zoom (SPDesktop *dt);
 void sp_desktop_next_zoom (SPDesktop *dt);
 
 const SPUnit *sp_desktop_get_default_unit (SPDesktop *dt);
+guint sp_desktop_get_default_metric (SPDesktop *dt);
 
 
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
