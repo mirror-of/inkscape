@@ -484,6 +484,14 @@ void sp_selection_raise_to_top()
         return;
     }
 
+    GSList const *items = (GSList *) selection->itemList();
+
+    SPGroup const *group = sp_item_list_common_parent_group(items);
+    if (!group) {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        return;
+    }
+
     GSList *rl = g_slist_copy((GSList *) selection->reprList());
     rl = g_slist_sort(rl, (GCompareFunc) sp_repr_compare_position);
 
@@ -565,6 +573,14 @@ void sp_selection_lower_to_bottom()
 
     if (selection->isEmpty()) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower to bottom."));
+        return;
+    }
+
+    GSList const *items = (GSList *) selection->itemList();
+
+    SPGroup const *group = sp_item_list_common_parent_group(items);
+    if (!group) {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
