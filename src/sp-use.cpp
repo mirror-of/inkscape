@@ -397,7 +397,7 @@ sp_use_get_root_transform(SPUse *use)
             }
         }
 
-        t = t * NR::Matrix(&i_tem->transform);
+        t *= i_tem->transform;
     }
 
     g_slist_free(chain);
@@ -413,10 +413,11 @@ sp_use_get_parent_transform(SPUse *use)
 {
     NR::Matrix t(NR::identity());
     if ((use->x.set && use->x.computed != 0) || (use->y.set && use->y.computed != 0)) {
-        t = t * NR::translate (use->x.set ? use->x.computed : 0, use->y.set ? use->y.computed : 0);
+        t *= NR::translate(use->x.set ? use->x.computed : 0,
+                           use->y.set ? use->y.computed : 0);
     }
 
-    t = t * NR::Matrix(&(SP_ITEM(use)->transform));
+    t *= SP_ITEM(use)->transform;
     return t;
 }
 
@@ -462,9 +463,8 @@ sp_use_move_compensate(NR::Matrix const *mp, SPItem *original, SPUse *self)
 
     // commit the compensation
     SPItem *item = SP_ITEM(self);
-    NRMatrix clone_move_nr = clone_move.operator const NRMatrix&();
-    nr_matrix_multiply(&item->transform, &item->transform, &clone_move_nr);
-    sp_item_write_transform(item, SP_OBJECT_REPR(item), &item->transform, &advertized_move);
+    item->transform *= clone_move;
+    sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform, &advertized_move);
     SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -559,10 +559,9 @@ sp_use_update(SPObject *object, SPCtx *ctx, unsigned flags)
         g_object_ref(G_OBJECT(use->child));
         if (flags || (use->child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             if (SP_IS_ITEM(use->child)) {
-                SPItem *chi;
-                chi = SP_ITEM(use->child);
-                nr_matrix_multiply(&cctx.i2doc, &chi->transform, &ictx->i2doc);
-                nr_matrix_multiply(&cctx.i2vp, &chi->transform, &ictx->i2vp);
+                SPItem const &chi = *SP_ITEM(use->child);
+                cctx.i2doc = chi.transform * ictx->i2doc;
+                cctx.i2vp = chi.transform * ictx->i2vp;
                 use->child->updateDisplay((SPCtx *)&cctx, flags);
             } else {
                 use->child->updateDisplay(ctx, flags);

@@ -88,7 +88,7 @@ struct SPItem : public SPObject {
 	unsigned int printable : 1;
 	unsigned int stop_paint: 1;
 
-	NRMatrix transform;
+	NR::Matrix transform;
 
 	SPClipPathReference *clip_ref;
 	SPMaskReference *mask_ref;
@@ -178,9 +178,6 @@ NR::Matrix sp_item_i2root_affine(SPItem const *item);
 /* Old NRMatrix version (deprecated). */
 NRMatrix *sp_item_i2doc_affine (SPItem const *item, NRMatrix *transform);
 NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *transform);
-
-/* Transformation to normalized (0,0-1,1) viewport */
-NRMatrix *sp_item_i2vp_affine (SPItem const *item, NRMatrix *transform);
 
 /* fixme: - these are evil, but OK */
 

@@ -558,18 +558,15 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
                     SPMarker* marker = SP_MARKER (shape->marker[m]);
                     SPItem* marker_path = SP_ITEM (shape->marker[m]->children);
 
-                    NRMatrix tr = sp_shape_marker_get_transform (shape, m, bp);
+                    NR::Matrix tr(sp_shape_marker_get_transform(shape, m, bp));
 
                     if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
-                        for (int i = 0; i < 4; i++) {
-                            tr.c[i] *= style->stroke_width.computed;
-                        }
+                        tr = NR::scale(style->stroke_width.computed) * tr;
                     }
 
-                    nr_matrix_multiply (&tr, &marker->c2p, &tr);
-                    nr_matrix_multiply (&tr, &marker_path->transform, &tr);
+                    tr = marker_path->transform * marker->c2p * tr;
 
-                    NRMatrix old_tr = marker_path->transform;
+                    NR::Matrix old_tr = marker_path->transform;
                     marker_path->transform = tr;
                     sp_item_invoke_print (marker_path, ctx);
                     marker_path->transform = old_tr;
@@ -838,7 +835,7 @@ sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &premul, NR::Matrix cons
 
             // this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
             // for it to work, we also need    sp_object_read_attr (SP_OBJECT (item), "transform");
-            //pattern->patternTransform = premul * NR::Matrix(item->transform) * NR::Matrix(pattern->patternTransform) * NR::Matrix(item->transform).inverse() * postmul;
+            //pattern->patternTransform = premul * item->transform * NR::Matrix(pattern->patternTransform) * item->transform.inverse() * postmul;
 
             // otherwise the formula is much simpler
             pattern->patternTransform = NR::Matrix(pattern_patternTransform(pattern)) * postmul;
@@ -878,7 +875,7 @@ sp_shape_set_pattern (SPItem *item, NR::Matrix const &premul, NR::Matrix const &
 
             // this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
             // for it to work, we also need    sp_object_read_attr (SP_OBJECT (item), "transform");
-            //pattern->patternTransform = premul * NR::Matrix(item->transform) * NR::Matrix(pattern->patternTransform) * NR::Matrix(item->transform).inverse() * postmul;
+            //pattern->patternTransform = premul * item->transform * NR::Matrix(pattern->patternTransform) * item->transform.inverse() * postmul;
 
             // otherwise the formula is much simpler
             pattern->patternTransform =  postmul;

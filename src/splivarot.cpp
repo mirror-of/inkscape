@@ -602,7 +602,7 @@ sp_selected_path_outline ()
             }
         }
 
-        NR::Matrix const transform = NR::Matrix (item->transform);
+        NR::Matrix const transform(item->transform);
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         float o_width, o_miter;
@@ -842,7 +842,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
             return;
     }
   
-    NR::Matrix const transform = NR::Matrix (item->transform);
+    NR::Matrix const transform(item->transform);
     style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
 
     // remember the position of the item
@@ -1327,7 +1327,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
                 continue;
         }
 
-        NR::Matrix const transform = NR::Matrix (item->transform);
+        NR::Matrix const transform(item->transform);
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         Path *orig = Path_for_item (item, false);
@@ -1458,7 +1458,7 @@ Path_for_item (SPItem * item, bool doTransformation, bool transformFull)
         if (transformFull)
             bpath = nr_artpath_affine (curve->bpath, sp_item_i2root_affine (item));
         else 
-            bpath = nr_artpath_affine (curve->bpath, NR::Matrix (item->transform));
+            bpath = nr_artpath_affine (curve->bpath, item->transform);
         sp_curve_unref (curve);
         curve=NULL;
     } else {

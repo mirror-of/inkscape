@@ -360,22 +360,19 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->printable);
 
     /* Opacity */
-    GtkAdjustment *a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "opacity"));
-    gtk_adjustment_set_value (a, SP_SCALE24_TO_FLOAT (style->opacity.value));
+    {
+        GtkAdjustment *a = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(spw), "opacity"));
+        gtk_adjustment_set_value(a, SP_SCALE24_TO_FLOAT(style->opacity.value));
+    }
 
     /* Transform */
-    a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t0"));
-    gtk_adjustment_set_value (a, item->transform.c[0]);
-    a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t1"));
-    gtk_adjustment_set_value (a, item->transform.c[1]);
-    a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t2"));
-    gtk_adjustment_set_value (a, item->transform.c[2]);
-    a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t3"));
-    gtk_adjustment_set_value (a, item->transform.c[3]);
-    a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t4"));
-    gtk_adjustment_set_value (a, item->transform.c[4]);
-    a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t5"));
-    gtk_adjustment_set_value (a, item->transform.c[5]);
+    {
+        char const *const names[] = {"t0", "t1", "t2", "t3", "t4", "t5"};
+        for (unsigned i = 0; i < 6; ++i) {
+            GtkAdjustment *adj = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(spw), names[i]));
+            gtk_adjustment_set_value(adj, item->transform[i]);
+        }
+    }
 
     /* Id */
     if (SP_OBJECT_IS_CLONED (item)) {

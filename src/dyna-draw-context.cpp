@@ -583,7 +583,7 @@ set_to_accumulated(SPDynaDrawContext *dc)
 
             SPItem *item=SP_ITEM(desktop->currentLayer()->appendChildRepr(dc->repr));
             sp_repr_unref(dc->repr);
-            item->transform = NRMatrix(SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer()));
+            item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());
             item->updateRepr();
             SP_DT_SELECTION(desktop)->setRepr(dc->repr);
         }

@@ -113,7 +113,7 @@ sp_item_init(SPItem *item)
     item->sensitive = TRUE;
     item->printable = TRUE;
 
-    nr_matrix_set_identity(&item->transform);
+    item->transform = NR::identity();
 
     item->display = NULL;
 
@@ -134,7 +134,7 @@ NR::Matrix partial_xform(SPObject *object, SPObject *ancestor) {
     NR::Matrix xform=NR::identity();
     while ( object != ancestor ) {
         if (SP_IS_ITEM(object)) {
-            xform = xform * NR::Matrix(SP_ITEM(object)->transform);
+            xform *= SP_ITEM(object)->transform;
         }
         object = SP_OBJECT_PARENT(object);
     }
@@ -338,7 +338,7 @@ sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
     if (flags & (SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) {
         if (flags & SP_OBJECT_MODIFIED_FLAG) {
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                nr_arena_item_set_transform(v->arenaitem, &item->transform);
+                nr_arena_item_set_transform(v->arenaitem, item->transform);
             }
         }
 
@@ -374,7 +374,7 @@ sp_item_write(SPObject *object, SPRepr *repr, guint flags)
     SPItem *item = SP_ITEM(object);
 
     gchar c[256];
-    if (sp_svg_transform_write(c, 256, &item->transform)) {
+    if (sp_svg_transform_write(c, 256, item->transform)) {
         sp_repr_set_attr(repr, "transform", c);
     } else {
         sp_repr_set_attr(repr, "transform", NULL);
@@ -497,9 +497,10 @@ sp_item_invoke_print(SPItem *item, SPPrintContext *ctx)
 {
     if (item->printable) {
         if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->print) {
-            if (!nr_matrix_test_identity(&item->transform, NR_EPSILON) ||
-                SP_OBJECT_STYLE(item)->opacity.value != SP_SCALE24_MAX) {
-                sp_print_bind(ctx, &item->transform, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
+            if (!item->transform.test_identity()
+                || SP_OBJECT_STYLE(item)->opacity.value != SP_SCALE24_MAX)
+            {
+                sp_print_bind(ctx, item->transform, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
                 ((SPItemClass *) G_OBJECT_GET_CLASS(item))->print(item, ctx);
                 sp_print_release(ctx);
             } else {
@@ -560,7 +561,7 @@ sp_item_invoke_show(SPItem *item, NRArena *arena, unsigned key, unsigned flags)
 
     if (ai != NULL) {
         item->display = sp_item_view_new_prepend(item->display, item, flags, key, ai);
-        nr_arena_item_set_transform(ai, &item->transform);
+        nr_arena_item_set_transform(ai, item->transform);
         nr_arena_item_set_opacity(ai, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
         nr_arena_item_set_sensitive(ai, item->sensitive);
         if (flags & SP_ITEM_SHOW_PRINT) {
@@ -801,7 +802,7 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
     ** non-item object is reached.
     */
     while ( NULL != SP_OBJECT_PARENT(item) && SP_IS_ITEM(SP_OBJECT_PARENT(item)) ) {
-        ret *= NR::Matrix(&item->transform);
+        ret *= item->transform;
         item = SP_ITEM(SP_OBJECT_PARENT(item));
     }
 
@@ -812,7 +813,7 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
         // Viewbox is relative to root's transform:
         // http://www.w3.org/TR/SVG11/coords.html#ViewBoxAttributeEffectOnSiblingAttributes
         ret *= root->c2p;
-        ret *= NR::Matrix(&item->transform);
+        ret *= item->transform;
     }
 
     return ret;
@@ -831,12 +832,12 @@ NR::Matrix sp_item_i2root_affine(SPItem const *item)
     NR::Matrix ret(NR::identity());
     g_assert(ret.test_identity());
     while ( NULL != SP_OBJECT_PARENT(item) ) {
-        ret *= NR::Matrix(&item->transform);
+        ret *= item->transform;
         item = SP_ITEM(SP_OBJECT_PARENT(item));
     }
     g_assert(SP_IS_ROOT(item));
 
-    ret *= NR::Matrix(&item->transform);
+    ret *= item->transform;
 
     return ret;
 }
@@ -858,37 +859,6 @@ NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *affine)
     g_return_val_if_fail(affine != NULL, NULL);
 
     *affine = sp_item_i2root_affine(item);
-    return affine;
-}
-
-/* Transformation to normalized (0,0-1,1) viewport */
-
-NRMatrix *
-sp_item_i2vp_affine(SPItem const *item, NRMatrix *affine)
-{
-    g_return_val_if_fail(item != NULL, NULL);
-    g_return_val_if_fail(SP_IS_ITEM(item), NULL);
-    g_return_val_if_fail(affine != NULL, NULL);
-
-    nr_matrix_set_identity(affine);
-
-    while (SP_OBJECT_PARENT(item)) {
-        nr_matrix_multiply(affine, affine, &item->transform);
-        item = (SPItem *) SP_OBJECT_PARENT(item);
-    }
-
-    g_return_val_if_fail(SP_IS_ROOT(item), NULL);
-
-    SPRoot *root = SP_ROOT(item);
-
-    /* fixme: (Lauris) */
-    *affine = NR::Matrix(affine) * root->c2p;
-
-    affine->c[0] /= root->width.computed;
-    affine->c[1] /= root->height.computed;
-    affine->c[2] /= root->width.computed;
-    affine->c[3] /= root->height.computed;
-
     return affine;
 }
 

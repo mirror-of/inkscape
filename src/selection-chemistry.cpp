@@ -895,7 +895,7 @@ void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
         } else {
             sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
             /* update repr -  needed for undo */
-            sp_item_write_transform(item, SP_OBJECT_REPR(item), &item->transform);
+            sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform);
         }
     }
 }
@@ -1598,7 +1598,7 @@ sp_selection_untile()
         SPPattern *pattern = pattern_getroot (SP_PATTERN (server));
 
         NR::Matrix pat_transform = pattern_patternTransform (SP_PATTERN (server));
-        pat_transform = pat_transform * NR::Matrix (item->transform);
+        pat_transform *= item->transform;
 
         for (SPObject *child = sp_object_first_child(SP_OBJECT(pattern)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
             SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(child));
@@ -1610,10 +1610,8 @@ sp_selection_untile()
             // this is needed to make sure the new item has curve (simply requestDisplayUpdate does not work)
             sp_document_ensure_up_to_date (document);
 
-            NR::Matrix transform = NR::Matrix (i->transform) * pat_transform;
-            NRMatrix transform_;
-            transform.copyto (&transform_);
-            sp_item_write_transform(i, SP_OBJECT_REPR(i), &transform_);
+            NR::Matrix transform( i->transform * pat_transform );
+            sp_item_write_transform(i, SP_OBJECT_REPR(i), transform);
 
             new_select = g_slist_prepend(new_select, i);
         }

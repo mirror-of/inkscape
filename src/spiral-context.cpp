@@ -405,7 +405,7 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 
 		sc->item = (SPItem *) desktop->currentLayer()->appendChildRepr(repr);
 		sp_repr_unref (repr);
-		sc->item->transform = NRMatrix(SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer()));
+		sc->item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());
 		sc->item->updateRepr();
 	}
 

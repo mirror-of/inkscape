@@ -35,13 +35,13 @@ void sp_item_rotate_rel(SPItem *item, NR::rotate const &rotation)
 	// this method is consistent with sp_selection_apply_affine()
 	// it uses each item's own transform writer 
 	// (so e.g. no transform= is ever added to a path, but its nodes always have final coordinates)
-	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+	sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform);
 }
 
 void sp_item_move_rel(SPItem *item, NR::translate const &tr)
 {
 	sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * tr);
 
-	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+	sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform);
 }
 

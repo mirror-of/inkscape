@@ -207,10 +207,9 @@ sp_group_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			if (SP_IS_ITEM (child)) {
-				SPItem *chi;
-				chi = SP_ITEM (child);
-				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
-				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
+				SPItem const &chi = *SP_ITEM(child);
+				cctx.i2doc = chi.transform * ictx->i2doc;
+				cctx.i2vp = chi.transform * ictx->i2vp;
 				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
 				child->updateDisplay(ctx, flags);
@@ -427,23 +426,21 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 		SPRepr *nrepr = sp_repr_duplicate (SP_OBJECT_REPR (child));
 
 		if (SP_IS_ITEM (child)) {
-			NRMatrix ctrans;
 			gchar affinestr[80];
 
 			SPItem *citem = SP_ITEM (child);
 
+			NR::Matrix ctrans;
 			if (SP_IS_USE(citem) && (SP_OBJECT_PARENT (sp_use_get_original (SP_USE(citem))) == SP_OBJECT(group))) {
 				// make sure a clone's effective transform is the same as was under group
-				NR::Matrix g (&(gitem->transform));
-				NR::Matrix i (&(citem->transform));
-				NR::Matrix muse = g.inverse() * i * g;
-				ctrans = muse.operator const NRMatrix&();
+				NR::Matrix const g(gitem->transform);
+				ctrans = g.inverse() * citem->transform * g;
 			} else {
-				nr_matrix_multiply (&ctrans, &citem->transform, &gitem->transform);
+				ctrans = citem->transform * gitem->transform;
 			}
 
 			// FIXME: cannot call sp_item_write_transform here - the repr is unattached at this point, has no item. rethink!
-			if (sp_svg_transform_write (affinestr, 79, &ctrans)) {
+			if (sp_svg_transform_write(affinestr, 79, ctrans)) {
 				sp_repr_set_attr (nrepr, "transform", affinestr);
 			} else {
 				sp_repr_set_attr (nrepr, "transform", NULL);

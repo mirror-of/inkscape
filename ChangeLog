@@ -1,5 +1,16 @@
 2004-08-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/arc-context.cpp, src/draw-context.cpp, src/dyna-draw-context.cpp,
+	  src/path-chemistry.cpp, src/rect-context.cpp,
+	  src/selection-chemistry.cpp, src/seltrans.cpp, src/sp-flowdiv.cpp,
+	  src/sp-flowregion.cpp, src/sp-flowtext.cpp, src/sp-item-group.cpp,
+	  src/sp-item-notify-moveto.cpp, src/sp-item-transform.cpp,
+	  src/sp-item.cpp, src/sp-item.h, src/sp-offset.cpp, src/sp-rect.cpp,
+	  src/sp-shape.cpp, src/sp-use.cpp, src/spiral-context.cpp,
+	  src/splivarot.cpp, src/star-context.cpp, src/text-context.cpp,
+	  src/dialogs/item-properties.cpp:
+	  Change SPItem->transform from NRMatrix to NR::Matrix.
+
 	* src/libnr/nr-matrix-ops.h (operator*(NR::Matrix, NRMatrix)): new.
 
 	* src/libnr/nr-matrix.h: NR::Matrix *= NR::translate: new operator.

@@ -547,7 +547,7 @@ sp_offset_set_shape (SPShape * shape)
 		NR::Rect bbox = sp_item_bbox_desktop (item);
 		if (!bbox.isEmpty()) {
 			gdouble size = L2(bbox.dimensions());
-			gdouble exp = NR::expansion(NR::Matrix(item->transform));
+			gdouble const exp = NR::expansion(item->transform);
 			if (exp != 0) 
 				size /= exp;
 			orig->Coalesce (size * 0.001);
@@ -1041,31 +1041,28 @@ sp_offset_move_compensate(NR::Matrix const *mp, SPItem *original, SPOffset *self
 {	
 	guint mode = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
 	if (mode == SP_CLONE_COMPENSATION_NONE) return;
-	
+
 	NR::Matrix m(*mp);
 	if (!(m.is_translation())) return;
-	NR::Matrix t = NR::Matrix(&(SP_ITEM(self)->transform));
-	NR::Matrix clone_move = t.inverse() * m * t;
-	
+
 	// calculate the compensation matrix and the advertized movement matrix
+	SPItem *item = SP_ITEM(self);
 	NR::Matrix advertized_move;
 	if (mode == SP_CLONE_COMPENSATION_PARALLEL) {
-//		clone_move = clone_move.inverse();
+		item->transform = m * item->transform;
 		advertized_move.set_identity();
 	} else if (mode == SP_CLONE_COMPENSATION_UNMOVED) {
-		clone_move = clone_move.inverse() * m;
+		item->transform = m.inverse() * item->transform * m;
 		advertized_move = m;
 	} else {
 		g_assert_not_reached();
 	}
 	
 	// commit the compensation
-	SPItem *item = SP_ITEM(self);
-	NRMatrix clone_move_nr = clone_move.operator const NRMatrix&();
-	nr_matrix_multiply(&item->transform, &item->transform, &clone_move_nr);
-	sp_item_write_transform(item, SP_OBJECT_REPR(item), &item->transform, &advertized_move);
+	sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform, &advertized_move);
 	SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
+
 static void
 sp_offset_delete_self(SPObject */*deleted*/, SPOffset *offset)
 {

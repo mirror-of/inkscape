@@ -198,10 +198,9 @@ sp_flowtext_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			if (SP_IS_ITEM (child)) {
-				SPItem *chi;
-				chi = SP_ITEM (child);
-				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
-				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
+				SPItem const &chi = *SP_ITEM(child);
+				cctx.i2doc = chi.transform * ictx->i2doc;
+				cctx.i2vp = chi.transform * ictx->i2vp;
 				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
 				child->updateDisplay(ctx, flags);
@@ -922,8 +921,7 @@ void convert_to_text(void)
 		}
 	}
 	SPItem  *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
-	NR::Matrix const transform = NR::Matrix (item->transform);
-	sp_item_write_transform (nitem, repr, transform);
+	sp_item_write_transform(nitem, repr, item->transform);
 	SP_OBJECT (nitem)->updateRepr();
 		
 	sp_repr_unref (repr);

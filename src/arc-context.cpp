@@ -399,7 +399,7 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 		}
 		ac->item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
 		sp_repr_unref (repr);
-		ac->item->transform = NRMatrix(SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer()));
+		ac->item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());
 		ac->item->updateRepr();
 	}
 

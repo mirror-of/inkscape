@@ -430,7 +430,7 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 /**
 Returns the ratio in which the vector from p0 to p1 is stretched by transform
  */
-gdouble
+static gdouble
 vector_stretch (NR::Point p0, NR::Point p1, NR::Matrix xform)
 {
 	if (p0 == p1)

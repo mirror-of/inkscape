@@ -361,7 +361,7 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 					sp_item_set_i2d_affine(item, i2dnew);
 				}
 
-				sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+				sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform);
 			} 
 		}
 		seltrans->center *= seltrans->current;
@@ -441,7 +441,7 @@ void sp_sel_trans_stamp (SPSelTrans *seltrans)
 
 			SPItem *copy_item = (SPItem *) SP_DT_DOCUMENT(seltrans->desktop)->getObjectByRepr(copy_repr);
 
-			NRMatrix *new_affine;
+                        NR::Matrix const *new_affine;
 			if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
 				NR::Matrix const i2d(sp_item_i2d_affine(original_item));
 				NR::Matrix const i2dnew( i2d * seltrans->current );
@@ -451,7 +451,7 @@ void sp_sel_trans_stamp (SPSelTrans *seltrans)
 				new_affine = &original_item->transform;
 			}
 
-			sp_item_write_transform (copy_item, copy_repr, new_affine);
+			sp_item_write_transform(copy_item, copy_repr, *new_affine);
 
 			sp_repr_unref (copy_repr);
 			l = l->next;
