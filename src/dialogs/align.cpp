@@ -48,6 +48,7 @@
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop.h"
+#include "macros.h"
 #include "sp-item-transform.h"
 
 #include "sp-text.h"
@@ -64,7 +65,6 @@
  *
  * todo: dialog with more aligns
  * - more aligns (30 % left from center ...)
- * - aligns for nodes
  *
  */
 
@@ -74,7 +74,9 @@ public :
            const Glib::ustring &tiptext,
            guint row, guint column,
            Gtk::Table &parent,
-           Gtk::Tooltips &tooltips):
+           Gtk::Tooltips &tooltips,
+           DialogAlign &dialog):
+        _dialog(dialog),
         _id(id),
         _parent(parent)
     {
@@ -91,8 +93,10 @@ public :
         parent.attach(*pButton, column, column+1, row, row+1, Gtk::FILL, Gtk::FILL);
     }
     virtual ~Action(){}
-private :
 
+    DialogAlign &_dialog;
+
+private :
     virtual void on_button_click(){}
 
     Glib::ustring _id;
@@ -112,7 +116,7 @@ public :
                 DialogAlign &dialog,
                 guint coeffIndex):
         Action(id, tiptext, row, column,
-               dialog.align_table(), dialog.tooltips()),
+               dialog.align_table(), dialog.tooltips(), dialog),
         _index(coeffIndex),
         _dialog(dialog)
     {}
@@ -266,7 +270,7 @@ public :
                      double kBegin, double kEnd
         ):
         Action(id, tiptext, row, column,
-               dialog.distribute_table(), dialog.tooltips()),
+               dialog.distribute_table(), dialog.tooltips(), dialog),
         _dialog(dialog),
         _onInterSpace(onInterSpace),
         _orientation(orientation),
@@ -381,7 +385,7 @@ public :
                DialogAlign &dialog,
                NR::Dim2 orientation, bool distribute):
         Action(id, tiptext, 0, column,
-               dialog.nodes_table(), dialog.tooltips()),
+               dialog.nodes_table(), dialog.tooltips(), dialog),
         _orientation(orientation),
         _distribute(distribute)
     {}
@@ -414,7 +418,7 @@ public :
                guint column,
                DialogAlign &dialog):
         Action(id, tiptext, row, column,
-               dialog.distribute_table(), dialog.tooltips())
+               dialog.distribute_table(), dialog.tooltips(), dialog)
     {}
 
 private :
@@ -436,7 +440,7 @@ public :
                guint column,
                DialogAlign &dialog):
         Action(id, tiptext, row, column,
-               dialog.distribute_table(), dialog.tooltips())
+               dialog.distribute_table(), dialog.tooltips(), dialog)
     {}
 
 private :
@@ -455,21 +459,24 @@ private :
         //Check 2 or more selected objects
         if (selected.size() < 2) return;
 
-        // Fixme: cache this bbox between calls to randomize, so that there's no growth nor shrink
+        // This bbox is cached between calls to randomize, so that there's no growth nor shrink
         // nor drift on sequential randomizations. Discard cache on global (or better active
         // desktop's) selection_change signal.
-        NR::Rect sel_box = selection->bounds();
+        if (!_dialog.randomize_bbox_set) {
+            _dialog.randomize_bbox = selection->bounds();
+            _dialog.randomize_bbox_set = true;
+        }
 
         for (std::list<SPItem *>::iterator it(selected.begin());
             it != selected.end();
             ++it)
         {
             NR::Rect item_box = sp_item_bbox_desktop (*it);
-            // find new center 
-            double x = sel_box.min()[NR::X] + 
-                g_random_double_range (0, sel_box.extent(NR::X));
-            double y = sel_box.min()[NR::Y] + 
-                g_random_double_range (0, sel_box.extent(NR::Y));
+            // find new center, staying within bbox 
+            double x = _dialog.randomize_bbox.min()[NR::X] + item_box.extent(NR::X)/2 +
+                g_random_double_range (0, _dialog.randomize_bbox.extent(NR::X) - item_box.extent(NR::X));
+            double y = _dialog.randomize_bbox.min()[NR::Y] + item_box.extent(NR::Y)/2 +
+                g_random_double_range (0, _dialog.randomize_bbox.extent(NR::Y) - item_box.extent(NR::Y));
             // displacement is the new center minus old:
             NR::Point t = NR::Point (x, y) - 0.5*(item_box.max() + item_box.min());
             sp_item_move_rel(*it, NR::translate(t));
@@ -506,7 +513,7 @@ public :
                Gtk::Table &table,
                NR::Dim2 orientation, bool distribute):
         Action(id, tiptext, row, column,
-               table, dialog.tooltips()),
+               table, dialog.tooltips(), dialog),
         _orientation(orientation),
         _distribute(distribute)
     {}
@@ -595,10 +602,16 @@ void DialogAlign::on_ref_change(){
 //Make blink the master
 }
 
-/* verb here is not really a verb (not a Inkscape::Verb) */
-void DialogAlign::on_tool_changed(unsigned int verb)
+void on_tool_changed(Inkscape::Application *inkscape, SPEventContext *context, DialogAlign *da)
 {
-    setMode(verb == TOOLS_NODES) ;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop && desktop->event_context)
+        da->setMode(tools_active(desktop) == TOOLS_NODES);
+}
+
+void on_selection_changed(Inkscape::Application *inkscape, Inkscape::Selection *selection, DialogAlign *da)
+{
+    da->randomize_bbox_set = false;
 }
 
 void DialogAlign::setMode(bool nodeEdit)
@@ -677,6 +690,7 @@ void DialogAlign::addBaselineButton(const Glib::ustring &id, const Glib::ustring
 
 DialogAlign::DialogAlign():
     Dockable(_("Layout"), "dialogs.align"),
+    randomize_bbox (NR::Point (0, 0), NR::Point (0, 0)),
     _alignFrame(_("Align")),
     _distributeFrame(_("Distribute")),
     _nodesFrame(_("Nodes")),
@@ -786,7 +800,6 @@ DialogAlign::DialogAlign():
 
     //Rest of the widgetry
 
-
     _combo.append_text(_("Last selected"));
     _combo.append_text(_("First selected"));
     _combo.append_text(_("Biggest item"));
@@ -815,18 +828,20 @@ DialogAlign::DialogAlign():
 
     _widget.show();
 
-    bool in_node_mode = false;
-    //Connect to desktop signals
-    SPDesktop *pD = SP_ACTIVE_DESKTOP;
-    if ( pD )
-    {
-        pD->_tool_changed.connect(sigc::mem_fun(*this, &DialogAlign::on_tool_changed));
-        in_node_mode = tools_isactive (pD, TOOLS_NODES);
-    }
-    setMode(in_node_mode);
+    //Connect to the global tool change signal
+    g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (on_tool_changed), this);
+    on_tool_changed (NULL, NULL, this);
+
+    // Connect to the global selection change, to invalidate cached randomize_bbox
+    g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
+    randomize_bbox = NR::Rect (NR::Point (0, 0), NR::Point (0, 0));
+    randomize_bbox_set = false;
 }
 
 DialogAlign::~DialogAlign(){
+
+    sp_signal_disconnect_by_data (G_OBJECT (INKSCAPE), this);
+
     for (std::list<Action *>::iterator it = _actionList.begin();
          it != _actionList.end();
          it ++)

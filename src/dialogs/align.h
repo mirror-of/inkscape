@@ -23,18 +23,15 @@
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/label.h>
 #include "libnr/nr-dim2.h"
+#include "libnr/nr-rect.h"
 
 #include "dialogs/dockable.h"
 #include "forward.h"
 
 void sp_quick_align_dialog (void);
 
-
 class Action;
 class SPItem;
-
-
-
 
 class DialogAlign : public Dockable{
 public :
@@ -50,12 +47,14 @@ public :
     };
     AlignTarget getAlignTarget();
     std::list<SPItem *>::iterator find_master(std::list <SPItem *> &list, bool horizontal);
+    void setMode(bool nodeEdit);
+
+    NR::Rect randomize_bbox;
+    bool randomize_bbox_set;
 
 private :
     DialogAlign();    
     void on_ref_change();
-    void setMode(bool nodeEdit);
-    void on_tool_changed(unsigned int verb);
     void addDistributeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
                                       guint row, guint col, bool onInterSpace, 
                                       NR::Dim2 orientation, float kBegin, float kEnd);
