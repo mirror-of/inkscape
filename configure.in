@@ -24,6 +24,29 @@ dnl AC_PROG_RANLIB
 
 AM_PROG_LIBTOOL
 
+dnl Verify our GCC version
+if test "x$GXX" = "xyes"; then
+	AC_MSG_CHECKING([GNU compiler version])
+
+	cc_version=["`$CXX $CXXFLAGS -v 2>&1 </dev/null |grep 'gcc version' |\
+		sed 's/.*gcc version \([-a-z0-9\.]*\).*/\1/'`"]
+
+	AC_MSG_RESULT([$cc_version])
+
+	# Some version numbers
+	cc_vers_major=`echo $cc_version | cut -f1 -d.`
+	cc_vers_minor=`echo $cc_version | cut -f2 -d.`
+	cc_vers_patch=`echo $cc_version | cut -f3 -d.`
+	test -n "$cc_vers_major" || cc_vers_major=0
+	test -n "$cc_vers_minor" || cc_vers_minor=0
+	test -n "$cc_vers_patch" || cc_vers_patch=0
+	cc_vers_all=`expr $cc_vers_major '*' 1000000 + $cc_vers_minor '*' 1000 + $cc_vers_patch`
+
+	if test $cc_vers_major -lt 3; then
+		AC_MSG_ERROR([gcc >= 3.0 is needed to compile inkscape])
+	fi
+fi
+
 dnl ******************************
 dnl Gettext stuff
 dnl ******************************

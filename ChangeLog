@@ -5,6 +5,7 @@
 	  us the entire fix.
 	* src/draw-context.cpp: Investigated patch 934351 from cth103.  Applied a
 	  slight variation to conform to the function calling styles of that code.
+	* configure.in: Implemented gcc version test for >= 3.0.0
 
 2004-04-13  Kees Cook <kees@outflux.net>
 
