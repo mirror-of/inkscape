@@ -199,7 +199,12 @@ void ColorNotebook::init()
 
 	/* tempory hardcoding to get types loaded */
 	SP_TYPE_COLOR_SCALES;
-	SP_TYPE_COLOR_GTKSELECTOR;
+
+	/* REJON: I'm commenting this fucker out because its too big
+           on the screen when editing. It is especially bad on screens <= to 
+           1024by768 */
+
+        // SP_TYPE_COLOR_GTKSELECTOR;
 
 	_updating = FALSE;
 	_btn = 0;
