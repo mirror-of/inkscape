@@ -77,6 +77,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"rotationstep\" value=\"15\"/>"
 "    <group id=\"cursortolerance\" value=\"8.0\"/>"
 "    <group id=\"dragtolerance\" value=\"4.0\"/>"
+"    <group id=\"savewindowgeometry\" value=\"1\"/>"
 "  </group>"
 
 "</inkscape>";
