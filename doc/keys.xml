@@ -162,6 +162,7 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Scrolling (panning)</title>
 <mouse><key><ctrl/><arrows/></key>  <action>scroll canvas</action></mouse>
+<note>Scrolling by keys is accelerated, i.e. it speeds up when you press Ctrl+arrows in quick succession.</note>
 <mouse><key><mid-drag/></key>  <action>scroll canvas</action></mouse>
 <mouse><key><shift/><right-drag/></key> <key><ctrl/><right-drag/></key> <action>scroll canvas</action></mouse>
 <mouse><key><wheel/></key> <action>scroll canvas vertically</action></mouse>
@@ -239,13 +240,17 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Booleans</title>
 <keys><key><ctrl/>+</key>  <action>union</action></keys>
+<note>Union combines any number of objects into a single path, removing overlaps.</note>
 <keys><key><ctrl/>-</key>  <action>difference</action></keys>
+<note>Difference works on 2 objects, extracting the top from the bottom.</note>
 <keys><key><ctrl/>*</key>  <action>intersection</action></keys>
+<note>Intersection creates a path representing the common (overlapping) area of all selected objects.</note>
 <keys><key><ctrl/>^</key>  <action>exclusive OR (XOR)</action></keys>
+<note>XOR is similar to Union, except that it works on 2 objects and removes areas where the objects overlap.</note>
 <keys><key><ctrl/>/</key>  <action>division (cut)</action></keys>
-<note>The Division command cuts the bottom shape into pieces by the top path, preserving the fill and stroke of the bottom shape.</note>
+<note>Division cuts the bottom object into pieces by the top object, preserving the fill and stroke of the bottom.</note>
 <keys><key><ctrl/><alt/>/</key>  <action>cut path</action></keys>
-<note>The Cut Path command cuts the bottom path (outline) where it is intersected by the top path, removing any fill from the result.</note>
+<note>Cut Path cuts the bottom object's stroke only where it is intersected by the top path, removing any fill from the result.</note>
 </group>
 
 <group>
@@ -262,12 +267,16 @@ can leave your ideas and requests there.</p>
 <title>Combining</title>
 <keys><key><ctrl/>K</key>  <action>combine paths</action></keys>
 <note>This is different from grouping in that combined paths create one object.</note>
+<note>This is different from Union in that overlapping areas are not affected.</note>
 <keys><key><shift/><ctrl/>K</key>  <action>break paths apart</action></keys>
 <note>This attempts to break an object into constituent paths; it will fail if the object is one solid path.</note>
 </group>
 
 <group>
-<keys><key><ctrl/>L</key>  <action>simplify path</action></keys>
+<keys><key><ctrl/>L</key>  <action>simplify</action></keys>
+<note>This command attempts to simplify selected path(s) by removing extra nodes. It converts all objects to paths first.</note>
+<note>If you invoke this command several times in quick succession, it will act more and more aggressively.</note>
+<note>Invoking Simplify again after a pause restores the default threshold.</note>
 </group>
 
 </section>
