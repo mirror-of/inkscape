@@ -82,7 +82,7 @@ sp_object_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_object_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPObject", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPObject", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -94,7 +94,7 @@ sp_object_class_init (SPObjectClass * klass)
 
 	object_class = (GObjectClass *) klass;
 
-	parent_class = g_type_class_ref (G_TYPE_OBJECT);
+	parent_class = (GObjectClass *) g_type_class_ref (G_TYPE_OBJECT);
 
 	object_signals[RELEASE] =  g_signal_new ("release",
 						 G_TYPE_FROM_CLASS (klass),
@@ -102,7 +102,7 @@ sp_object_class_init (SPObjectClass * klass)
 						 G_STRUCT_OFFSET (SPObjectClass, release),
 						 NULL, NULL,
 						 sp_marshal_VOID__VOID,
-						 G_TYPE_NONE, 0);
+						 G_TYPE_NONE, (GTypeFlags)0);
 	object_signals[MODIFIED] = g_signal_new ("modified",
                                                  G_TYPE_FROM_CLASS (klass),
                                                  G_SIGNAL_RUN_FIRST,
@@ -418,11 +418,11 @@ sp_object_private_set (SPObject *object, unsigned int key, const unsigned char *
 	if (key == SP_ATTR_ID) {
 		if (!SP_OBJECT_IS_CLONED (object)) {
 			g_assert (value != NULL);
-			g_assert (strcmp (value, object->id));
-			g_assert (!sp_document_lookup_id (object->document, value));
+			g_assert (strcmp ((const char*)value, object->id));
+			g_assert (!sp_document_lookup_id (object->document, (const char*)value));
 			sp_document_undef_id (object->document, object->id);
 			g_free (object->id);
-			object->id = g_strdup (value);
+			object->id = g_strdup ((const char*)value);
 			sp_document_def_id (object->document, object->id, object);
 		} else {
 			g_warning ("ID of cloned object changed, so document is out of sync");

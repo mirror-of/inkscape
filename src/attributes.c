@@ -236,7 +236,7 @@ static const SPStyleProp props[] = {
 #define n_attrs (sizeof (props) / sizeof (props[0]))
 
 unsigned int
-sp_attribute_lookup (const unsigned char *key)
+sp_attribute_lookup (const gchar *key)
 {
 	static GHashTable *propdict = NULL;
 

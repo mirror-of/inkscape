@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-unsigned int sp_attribute_lookup (const unsigned char *key);
+unsigned int sp_attribute_lookup (const gchar *key);
 const unsigned char *sp_attribute_name (unsigned char id);
 
 #define SP_ATTRIBUTE_IS_CSS(k) (((k) >= SP_PROP_FONT) && ((k) <= SP_PROP_WRITING_MODE))
