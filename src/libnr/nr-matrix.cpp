@@ -77,12 +77,14 @@ nr_matrix_invert (NRMatrix *d, const NRMatrix *m)
 NRMatrix *
 nr_matrix_set_translate (NRMatrix *m, const NR::Coord x, const NR::Coord y)
 {
-	m->c[0] = 1.0;
-	m->c[1] = 0.0;
-	m->c[2] = 0.0;
-	m->c[3] = 1.0;
-	m->c[4] = x;
-	m->c[5] = y;
+        NR::Coord *dest = m->c;
+
+	*dest++ = 1.0;   //0
+	*dest++ = 0.0;   //1
+	*dest++ = 0.0;   //2
+	*dest++ = 1.0;   //3
+	*dest++ =   x;   //4
+	*dest   =   y;   //5
 
 	return m;
 }
@@ -90,12 +92,14 @@ nr_matrix_set_translate (NRMatrix *m, const NR::Coord x, const NR::Coord y)
 NRMatrix *
 nr_matrix_set_scale (NRMatrix *m, const NR::Coord sx, const NR::Coord sy)
 {
-	m->c[0] = sx;
-	m->c[1] = 0.0;
-	m->c[2] = 0.0;
-	m->c[3] = sy;
-	m->c[4] = 0.0;
-	m->c[5] = 0.0;
+        NR::Coord *dest = m->c;
+
+	*dest++ =  sx;   //0
+	*dest++ = 0.0;   //1
+	*dest++ = 0.0;   //2
+	*dest++ =  sy;   //3
+	*dest++ = 0.0;   //4
+	*dest   = 0.0;   //5
 
 	return m;
 }
@@ -103,15 +107,19 @@ nr_matrix_set_scale (NRMatrix *m, const NR::Coord sx, const NR::Coord sy)
 NRMatrix *
 nr_matrix_set_rotate (NRMatrix *m, const NR::Coord theta)
 {
-	NR::Coord s, c;
-	s = sin (theta);
-	c = cos (theta);
-	m->c[0] = c;
-	m->c[1] = s;
-	m->c[2] = -s;
-	m->c[3] = c;
-	m->c[4] = 0.0;
-	m->c[5] = 0.0;
+
+	NR::Coord s = sin (theta);
+	NR::Coord c = cos (theta);
+
+        NR::Coord *dest = m->c;
+
+	*dest++ =   c;   //0
+	*dest++ =   s;   //1
+	*dest++ =  -s;   //2
+	*dest++ =   c;   //3
+	*dest++ = 0.0;   //4
+	*dest   = 0.0;   //5
+
 	return m;
 }
 
@@ -152,15 +160,16 @@ Matrix &Matrix::operator*=(scale const &o)
 
 Matrix Matrix::inverse() const
 {
-	Matrix d(0,0,0,0,0,0);
+	Matrix d(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	
 	NR::Coord det = _c[0] * _c[3] - _c[1] * _c[2];
 	if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
-		d._c[3] = _c[0] / det;
-		d._c[0] = _c[3] / det;
+                NR::Coord idet = 1.0 / det;
+		d._c[3] = _c[0]  * idet;
+		d._c[0] = _c[3]  * idet;
 
-		d._c[1] = -_c[1] / det;
-		d._c[2] = -_c[2] / det;
+		d._c[1] = -_c[1] * idet;
+		d._c[2] = -_c[2] * idet;
 
 		d._c[4] = -_c[4] * d._c[0] - _c[5] * d._c[2];
 		d._c[5] = -_c[4] * d._c[1] - _c[5] * d._c[3];
@@ -173,10 +182,13 @@ Matrix Matrix::inverse() const
 
 void Matrix::set_identity ()
 {
-	_c[0] = 1.0; _c[1] = 0.0;
-	_c[2] = 0.0; _c[3] = 1.0;
+	_c[0] = 1.0;
+        _c[1] = 0.0;
+	_c[2] = 0.0;
+        _c[3] = 1.0;
 	// translation
-	_c[4] = 0.0; _c[5] = 0.0;
+	_c[4] = 0.0;
+        _c[5] = 0.0;
 }
 
 Matrix identity ()
@@ -222,31 +234,54 @@ NR::Coord Matrix::descrim() const{
 }
 
 Matrix &Matrix::assign(const Coord *array) {
+
 	assert(array != NULL);
 
-	for ( int i = 0 ; i < 6 ; i++ ) {
-		_c[i] = array[i];
-	}
+        const Coord *src  = array;
+        Coord *dest = _c;
+
+        *dest++ = *src++;  //0
+        *dest++ = *src++;  //1
+        *dest++ = *src++;  //2
+        *dest++ = *src++;  //3
+        *dest++ = *src++;  //4
+        *dest   = *src  ;  //5
 
 	return *this;
 }
 
 NRMatrix *Matrix::copyto(NRMatrix *nrm) const {
+
 	assert(nrm != NULL);
 	
-	for ( int i = 0 ; i < 6 ; i++ ) {
-		nrm->c[i] = _c[i];
-	}
+        const Coord *src  = _c;
+        Coord *dest = nrm->c;
+
+        *dest++ = *src++;  //0
+        *dest++ = *src++;  //1
+        *dest++ = *src++;  //2
+        *dest++ = *src++;  //3
+        *dest++ = *src++;  //4
+        *dest   = *src  ;  //5
 
 	return nrm;
 }
 
+
+
 NR::Coord *Matrix::copyto(NR::Coord *array) const {
+
 	assert(array != NULL);
 
-	for ( int i = 0 ; i < 6 ; i++ ) {
-		array[i] = _c[i];
-	}
+        const Coord *src  = _c;
+        Coord *dest = array;
+
+        *dest++ = *src++;  //0
+        *dest++ = *src++;  //1
+        *dest++ = *src++;  //2
+        *dest++ = *src++;  //3
+        *dest++ = *src++;  //4
+        *dest   = *src  ;  //5
 
 	return array;
 }
