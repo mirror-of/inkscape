@@ -1082,6 +1082,65 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                 break;
             }
         }
+		/* Code to check data loss */
+		bool allow_data_loss = FALSE;
+        while (sp_repr_attr (sp_document_repr_root (doc), "inkscape:dataloss") != NULL && allow_data_loss == FALSE) {
+            GtkWidget *dialog;
+                        
+            dialog = gtk_message_dialog_new(
+                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dtw))),
+                GTK_DIALOG_DESTROY_WITH_PARENT,
+                GTK_MESSAGE_WARNING,
+                GTK_BUTTONS_NONE,
+                "Document modified");
+
+            gchar *markup;
+            /* FIXME !!! obviously this will have problems if the document name contains markup characters */
+            markup = g_strdup_printf(
+                _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format that may cause data loss!</span>\n\n"
+                  "Do you want to save this file in another format?"),
+                SP_DOCUMENT_NAME(doc));
+
+            /* FIXME !!! Gtk 2.3+ gives us
+	       gtk_message_dialog_set_markup() (and actually even
+	       gtk_message_dialog_new_with_markup(..., format, ...)!) --
+	       until then, we will have to be a little bit evil here and
+	       poke at GtkMessageDialog::label, which is private... */
+
+            gtk_label_set_markup(GTK_LABEL(GTK_MESSAGE_DIALOG(dialog)->label), markup);
+            g_free(markup);
+
+            GtkWidget *close_button;
+            close_button = gtk_button_new_with_mnemonic(_("Close _without saving"));
+            gtk_widget_show(close_button);
+            gtk_dialog_add_action_widget(GTK_DIALOG(dialog), close_button, GTK_RESPONSE_NO);
+                        
+            gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+            gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
+            gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+                        
+            gint response;
+            response = gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+
+            switch (response) {
+            case GTK_RESPONSE_YES:
+                sp_document_ref(doc);
+                if (sp_file_save_dialog(doc)) {
+                    sp_document_unref(doc);
+                } else { // save dialog cancelled or save failed
+                    sp_document_unref(doc);
+                    return TRUE;
+                }
+		break;
+            case GTK_RESPONSE_NO:
+				allow_data_loss = TRUE;
+                break;
+            default: // cancel pressed, or dialog was closed
+                return TRUE;
+                break;
+            }
+        }
     }
 
     sp_desktop_prepare_shutdown (SP_DESKTOP (view));

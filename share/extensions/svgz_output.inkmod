@@ -6,6 +6,7 @@
         <mimetype>image/x-svgz</mimetype>
         <filetypename>Compressed Inkscape SVG (*.svgz)</filetypename>
         <filetypetooltip>Inkscape's native file format compressed with GZip</filetypetooltip>
+		<dataloss>FALSE</dataloss>
     </output>
     <extension>
         <command reldir="path">gzip -c</command>

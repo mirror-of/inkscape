@@ -187,6 +187,7 @@ class Output : public Extension {
     gchar *extension;            /**< The extension of the input files */
     gchar *filetypename;         /**< A userfriendly name for the file type */
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
+	bool   dataloss;             /**< The extension causes data loss on save */
 
 public:
 	class save_failed {};        /**< Generic failure for an undescribed reason */

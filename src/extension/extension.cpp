@@ -714,6 +714,7 @@ Output::Output (SPRepr * in_repr, Implementation::Implementation * in_imp) : Ext
     extension = NULL;
     filetypename = NULL;
     filetypetooltip = NULL;
+	dataloss = TRUE;
 
     if (repr != NULL) {
         SPRepr * child_repr;
@@ -740,6 +741,11 @@ Output::Output (SPRepr * in_repr, Implementation::Implementation * in_imp) : Ext
                         g_free (filetypetooltip);
                         filetypetooltip = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
                     }
+                    if (!strcmp(sp_repr_name(child_repr), "dataloss")) {
+                        if (!strcmp(sp_repr_content(sp_repr_children(child_repr)), "FALSE")) {
+							dataloss = FALSE;
+						}
+					}
 
                     child_repr = sp_repr_next(child_repr);
                 }
@@ -794,12 +800,16 @@ Output::save (SPDocument * doc, const gchar * uri)
 
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", NULL);
+	sp_repr_set_attr(repr, "inkscape:dataloss", NULL);
 	sp_document_set_undo_sensitive (doc, TRUE);
 
     imp->save(this, doc, uri);
 
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", get_id());
+	if (dataloss) {
+		sp_repr_set_attr(repr, "inkscape:dataloss", "TRUE");
+	}
 	sp_document_set_undo_sensitive (doc, TRUE);
 }
 

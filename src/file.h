@@ -71,6 +71,9 @@ bool sp_file_save_as (gpointer object, gpointer data);
  */
 gboolean sp_file_save_document (SPDocument *document);
 
+/* Do the saveas dialog with a document as the parameter */
+gboolean sp_file_save_dialog (SPDocument *doc);
+
 
 /*######################
 ## I M P O R T

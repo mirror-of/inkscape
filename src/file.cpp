@@ -232,7 +232,7 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
 /**
  *  Display a SaveAs dialog.  Save the document if OK pressed.
  */
-static gboolean
+gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
     SPRepr *repr = sp_document_repr_root (doc);

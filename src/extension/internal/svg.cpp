@@ -57,7 +57,7 @@ Svg::init(void)
 			"</input>\n"
 		"</spmodule>", new Svg());
 
-	/* SVG out Inkscape*/
+	/* SVG out Inkscape */
     ext = sp_module_system_build_from_mem(
 		"<spmodule>\n"
 			"<name>SVG Output Inkscape</name>\n"
@@ -67,6 +67,7 @@ Svg::init(void)
 				"<mimetype>image/x-svg</mimetype>\n"
 				"<filetypename>Inkscape SVG (*.svg)</filetypename>\n"
 				"<filetypetooltip>SVG format with Inkscape extensions</filetypetooltip>\n"
+				"<dataloss>FALSE</dataloss>\n"
 			"</output>\n"
 		"</spmodule>", new Svg());
 
