@@ -77,7 +77,18 @@ int main(int argc, char *argv[]) {
 		UTEST_ASSERT(c_a < c_c);
 		UTEST_ASSERT(!( c_a < c_d ));
 		UTEST_ASSERT(c_a >= c_d);
+		UTEST_ASSERT(c_d < c_a);
 	}
+	UTEST_TEST("assignment operator") {
+		int const a[] = { 1, 2, 3, 4 };
+		ListContainer<int> c_a(ARRAY_RANGE(a));
+		ListContainer<int> c_c;
+		UTEST_ASSERT(c_a != c_c);
+		c_c = c_a;
+		UTEST_ASSERT(c_a == c_c);
+		c_c = c_a;
+		UTEST_ASSERT(c_a == c_c);
+	}		
 	UTEST_TEST("fill constructor") {
 		ListContainer<int> filled((std::size_t)3, 2);
 		UTEST_ASSERT(check_values(filled, 3, 2, 2, 2));
