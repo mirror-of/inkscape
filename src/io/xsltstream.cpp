@@ -12,7 +12,7 @@
 
 #include "xsltstream.h"
 #include "stringstream.h"
-
+#include <libxml/xmlerror.h>
 #include <libxslt/xslt.h>
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
