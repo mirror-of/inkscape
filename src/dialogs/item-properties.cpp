@@ -38,11 +38,21 @@
 #include "../selection.h"
 #include "../sp-item.h"
 #include "../style.h"
+#include "../macros.h"
+#include "../verbs.h"
+#include "../interface.h"
+
+#include "dialog-events.h"
+#include "../prefs-utils.h"
+
 #include "item-properties.h"
 
-
-
 static GtkWidget *dlg = NULL;
+static win_data wd;
+
+// impossible original values to make sure they are read from prefs
+static gint x = -1000, y = -1000, w = 0, h = 0; 
+static gchar *prefs_path = "dialogs.object";
 
 static void sp_item_widget_modify_selection (SPWidget *spw, SPSelection *selection, guint flags, GtkWidget *itemw);
 static void sp_item_widget_modify_selection (SPWidget *spw, SPSelection *selection, guint flags, GtkWidget *itemw);
@@ -55,7 +65,28 @@ static void sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw);
 static void sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw);
 
-static void sp_item_dialog_destroy (GtkObject *object, gpointer data);
+static void
+sp_item_dialog_destroy (GtkObject *object, gpointer data)
+{
+    sp_signal_disconnect_by_data (INKSCAPE, dlg);
+    wd.win = dlg = NULL;
+    wd.stop = 0;
+}
+
+static gboolean
+sp_item_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
+{
+    gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+    gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
+
+    prefs_set_int_attribute (prefs_path, "x", x);
+    prefs_set_int_attribute (prefs_path, "y", y);
+    prefs_set_int_attribute (prefs_path, "w", w);
+    prefs_set_int_attribute (prefs_path, "h", h);
+
+    return FALSE; // which means, go ahead and destroy it
+
+} 
 
 
 
@@ -583,34 +614,53 @@ sp_item_widget_transform_value_changed ( GtkWidget *widget, SPWidget *spw )
 void
 sp_item_dialog (void)
 {
-    if (dlg == NULL)
-    {
-        GtkWidget *itemw;
-        dlg = sp_window_new (_("Item properties"), TRUE);
+    if (dlg == NULL) {
+
+        gchar title[500];
+        sp_ui_dialog_title_string (SP_VERB_DIALOG_ITEM, title);
+
+        dlg = sp_window_new (title, TRUE);
+        if (x == -1000 || y == -1000) {
+            x = prefs_get_int_attribute (prefs_path, "x", 0);
+            y = prefs_get_int_attribute (prefs_path, "y", 0);
+        }
         
-        gtk_signal_connect ( GTK_OBJECT (dlg), 
-                             "destroy", 
-                             GTK_SIGNAL_FUNC (sp_item_dialog_destroy), 
-                             NULL );
-                             
-        itemw = sp_item_widget_new ();
+        if (w ==0 || h == 0) {
+            w = prefs_get_int_attribute (prefs_path, "w", 0);
+            h = prefs_get_int_attribute (prefs_path, "h", 0);
+        }
+        
+        if (x != 0 || y != 0) {
+            gtk_window_move ((GtkWindow *) dlg, x, y);
+        } else {
+            gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+        }
+        
+        if (w && h) {
+            gtk_window_resize ((GtkWindow *) dlg, w, h);
+        }
+        
+        sp_transientize (dlg);
+        wd.win = dlg;
+        wd.stop = 0;
+        
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
+        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_item_dialog_destroy), dlg);
+        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_item_dialog_delete), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_item_dialog_delete), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
+
+        // Dialog-specific stuff
+        GtkWidget *itemw = sp_item_widget_new ();
         gtk_widget_show (itemw);
         gtk_container_add (GTK_CONTAINER (dlg), itemw);
-        
-    } // end of if()
+      
+    }
 
-    if (!GTK_WIDGET_VISIBLE (dlg))
-        gtk_widget_show (dlg);
-
-} // end of sp_item_dialog()
-
-
-
-static void
-sp_item_dialog_destroy (GtkObject *object, gpointer data)
-{
-    dlg = NULL;
-}
+    gtk_window_present ((GtkWindow *) dlg);
+} 
 
 
 /*
