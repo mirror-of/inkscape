@@ -20,6 +20,7 @@
 
 #ifndef WIN32
 #include <unistd.h>
+#define HAS_PROC_SELF_EXE  //to get path of executable
 #else
 #include <direct.h>
 #define _WIN32_IE 0x0400
@@ -1124,7 +1125,7 @@ profile_path(const char *filename)
 		homedir = g_get_home_dir();
 #ifdef USE_SHGetSpecialFolderPath
 		if (!homedir) { //only try this is previous attempt fails
-			char pathBuf[MAX_PATH];
+			char pathBuf[MAX_PATH+1];
 			if (SHGetSpecialFolderPath(NULL, pathBuf, CSIDL_APPDATA, 1))
 				homedir = g_strdup(pathBuf);
 		}
@@ -1135,4 +1136,26 @@ profile_path(const char *filename)
 	}
 	return g_build_filename(homedir, INKSCAPE_PROFILE_DIR, filename, NULL);
 }
+
+gchar *
+executable_path(void)
+{
+  gchar *path="";
+  int   strLen;
+#ifdef HAS_PROC_SELF_EXE
+  char  pathBuf[PATH_MAX+1];
+  strLen = readlink("/proc/self/exe", pathBuf, PATH_MAX);
+#else
+  char  pathBuf[MAX_PATH+1];
+  strLen = (int)GetModuleFileName(NULL, pathBuf, MAX_PATH);
+#endif
+  if (strLen <= 0)
+    {
+    g_print("Unable to read /proc/self/exe\n");
+    return NULL;
+    }
+  path = g_strdup(pathBuf);
+  return path;
+}
+
 
