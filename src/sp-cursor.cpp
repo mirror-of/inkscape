@@ -93,9 +93,12 @@ GdkCursor *sp_cursor_new_from_xpm (gchar **xpm, gint hot_x, gint hot_y)
 
     sp_cursor_bitmap_and_mask_from_xpm (&bitmap, &mask, xpm);
     if ( bitmap != NULL && mask != NULL ) {
-        return gdk_cursor_new_from_pixmap (bitmap, mask,
+        GdkCursor *new_cursor = gdk_cursor_new_from_pixmap (bitmap, mask,
                                            &fg, &bg,
                                            hot_x, hot_y);
+        g_object_unref (bitmap);
+        g_object_unref (mask);
+        return new_cursor;
     }
 
     return NULL;

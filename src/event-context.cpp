@@ -162,6 +162,8 @@ sp_event_context_update_cursor(SPEventContext *ec)
                 ec->cursor = gdk_cursor_new_from_pixmap(bitmap, mask,
                                                         &w->style->black, &w->style->white,
                                                         ec->hot_x, ec->hot_y);
+                g_object_unref (bitmap);
+                g_object_unref (mask);
             }
         }
         gdk_window_set_cursor(w->window, ec->cursor);
