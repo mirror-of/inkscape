@@ -184,6 +184,22 @@ if test "x$gp" = "xyes"; then
 	AC_DEFINE(WITH_GNOME_PRINT, 1, [Use gnome print font database and spooler frontend])
 fi
 
+dnl ******************************
+dnl libinkjar checking
+dnl ******************************
+
+AC_ARG_WITH(inkjar,
+	AC_HELP_STRING([--with-inkjar], [enable openoffice files (SVG jars)]),[with_ij=$withval], [with_ij=auto])
+
+if test "x$with_ij" = "xyes"; then
+	AC_DEFINE(WITH_INKJAR, 1, [enable openoffice files (SVG jars)])
+	AC_C_BIGENDIAN
+	AC_CHECK_HEADERS(zlib.h)
+	ij=yes
+else
+	ij=no
+fi
+AM_CONDITIONAL(INKJAR, test "$with_ij" = "yes")
 
 dnl ******************************
 dnl   Unconditional dependencies
@@ -373,6 +389,7 @@ src/helper/Makefile
 src/dialogs/Makefile
 src/display/Makefile
 src/modules/Makefile
+src/inkjar/Makefile
 extensions/Makefile
 doc/Makefile
 po/Makefile.in
@@ -398,6 +415,7 @@ Configuration:
         Use POPT argument parser: ${popt_ok}
         Use Xft font database:    ${xft_ok}
         Use gnome-print:          ${gp}
+        Use openoffice files:     ${ij}
         Use MMX optimizations:    ${use_mmx_asm}
 "
 
