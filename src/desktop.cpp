@@ -641,6 +641,32 @@ sp_desktop_group_at_point (SPDesktop const *desktop, NR::Point const p)
     return sp_document_group_at_point (document, desktop->dkey, p);
 }
 
+/**
+\brief  Returns the mouse point in document coordinates; if mouse is outside the canvas, returns the center of canvas viewpoint
+*/
+NR::Point 
+sp_desktop_point (SPDesktop const *desktop)
+{
+	gint x, y;
+	gdk_window_get_pointer (GTK_WIDGET (desktop->owner->canvas)->window, &x, &y, NULL);
+	NR::Point pw = sp_canvas_window_to_world (desktop->owner->canvas, NR::Point(x, y));
+	NR::Point p = sp_desktop_w2d_xy_point (desktop, pw);
+
+	NRRect r;
+	sp_canvas_get_viewbox (desktop->owner->canvas, &r);
+
+	NR::Point r0 = sp_desktop_w2d_xy_point (desktop, NR::Point(r.x0, r.y0));
+	NR::Point r1 = sp_desktop_w2d_xy_point (desktop, NR::Point(r.x1, r.y1));
+
+	if (p[NR::X] >= r0[NR::X] && p[NR::X] <= r1[NR::X] && p[NR::Y] >= r1[NR::Y] && p[NR::Y] <= r0[NR::Y]) {
+		return p;
+	} else {
+		return (r0 + r1) / 2;
+	}
+}
+
+
+
 /* SPDesktopWidget */
 
 static void sp_desktop_widget_class_init (SPDesktopWidgetClass *klass);

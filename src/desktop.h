@@ -120,6 +120,7 @@ inline void sp_desktop_set_coordinate_status(SPDesktop *desktop, NR::Point const
 
 SPItem *sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, gboolean into_groups);
 SPItem *sp_desktop_group_at_point (SPDesktop const *desktop, NR::Point const p);
+NR::Point sp_desktop_point (SPDesktop const *desktop);
 
 NRRect *sp_desktop_get_display_area (SPDesktop *dt, NRRect *area);
 
