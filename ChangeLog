@@ -1,3 +1,68 @@
+2004-04-28  bulia byak <bulia@users.sourceforge.net>
+
+	* inkscape.cpp: Fixed prev/next desktop; numbered from 0 
+
+	* Lots of files: Replaced all strtod() and atof() by g_ascii_strtod() 
+
+	* interface.cpp verbs.cpp: Tooltip edits 
+
+	* view.cpp view.h desktop.cpp: Signal and function to pop statusbar message
+
+	* dialogs/dialog-events.cpp: Only set the UTILITY hint for non-modal windows,
+	fixes "disappearing save as"
+ 
+	* toolbox.cpp widgets/widget-sizes.h widgets/button.cpp: Got rid of button
+	relief, top panel made less tall
+
+	* desktop.cpp preferences-skeleton.h dialogs/display-settings.cpp: Done away
+	with the sticky zoom button, now in prefs
+ 
+	* path-chemistry.cpp: Preserve id= in combine/break, convert to paths; preserve
+	z-order in combine/break; cleanups
+
+	* splivarot.cpp: New selection API, Simplify preserves id= 
+
+	* select-context.cpp preferences-skeleton.h sp-item.cpp display-settings.cpp
+	splivarot.cpp sp-item-group.cpp sp-item-transform.cpp
+	sp-item-notify-moveto.cpp nodepath.cpp node-context.cpp seltrans.cpp
+	seltrans.h: Switched to global preservetransform, transform writing
+	unification (no more manual transform= setting all over the place), stamp
+	preserves parent, mental's new SPSelection API, pruning dead code
+
+	* verbs.cpp interface.cpp: Eliminated Dialogs menu, added ... to dialog
+	commands, rearrangements, menu items display tooltips in statusbar when
+	selected
+
+	* sp-item-group.cpp sp-item-group.h: Made document_done optional in ungroup (not
+	done when the function is called from another function)
+
+	* dialogs/display-settings.cpp enums.h preferences-skeleton.h sp-use.cpp
+	sp-use.h: Clone move compensation (3 modes), settable in prefs
+
+	* seltrans.cpp selection-chemistry.cpp: Do not translate a clone if its original
+	is in the selection
+
+	* verbs.cpp verbs.h interface.cpp shortcuts.cpp sp-use.cpp sp-use.h
+	selection-chemistry.cpp selection-chemistry.h: Unlink Clone verb and menu
+	command (preserves id=)
+
+	* selection-chemistry.cpp selection-chemistry.h verbs.h verbs.cpp shortcuts.cpp
+	interface.cpp: Select Original verb and command, scrolls to the original
+
+	* selection-chemistry.cpp selection-chemistry.h verbs.cpp verbs.h interface.cpp:
+	Clone command
+
+	* sp-use.h sp-use.cpp: Use URIReference; Propagate update to parent class
+	(SPItem) (fixes redraw on dragging a clone)
+
+	* dropper-context.cpp dropper-context.h dialogs/display-settings.cpp:
+	Implemented pick modes (pick either actual color with transparency or visible
+	color without transparency); added statusbar indication; color is only set on
+	mouse release
+
+	* seltrans.cpp display/sodipodi-ctrlrect.cpp: Finally the correct selection cue
+	rect (fixed displacement)
+
 2004-04-27  Carl Hetherington <inkscape@carlh.net>
 
 	* src/desktop.cpp: Check for there being no items when zooming to
