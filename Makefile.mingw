@@ -27,7 +27,10 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)libiconv-2.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpango-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpangowin32-1.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)jpeg-62.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpng12.dll inkscape
+# Fixme.. this dependency comes from gdk-pixbuf PNG loader
+	$(CP) $(GTKDOS)$(S)bin$(S)libpng12.dll inkscape$(S)libpng.dll
 	$(CP) $(GTKDOS)$(S)bin$(S)msvcr70.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)zlib-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)zlib.dll inkscape
