@@ -17,6 +17,9 @@
 	  implemented.  I chose to do it in POD for convenience, but hand
 	  edited the 1.in file to remove bits about "Perl Documentation",
 	  etc.
+
+	* General:  Some fixes to recently added code that broke the g++
+	  compile.
 	
 2003-11-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
