@@ -269,6 +269,9 @@ all_items (SPObject *r, GSList *l)
     if (SP_IS_DEFS(r))
         return l; // we're not interested in items in defs 
 
+    if (!strcmp (sp_repr_name (SP_OBJECT_REPR (r)), "metadata"))
+        return l; // we're not interested in metadata
+
     for (SPObject *child = sp_object_first_child(r); child; child = SP_OBJECT_NEXT (child)) {
         if (SP_IS_ITEM (child) && !SP_OBJECT_IS_CLONED (child)) {
             l = g_slist_prepend (l, child);
