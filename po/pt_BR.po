@@ -3075,7 +3075,7 @@ msgid ""
 "Select <b>two non-endpoint nodes</b> on a path between which to delete "
 "segments."
 msgstr ""
-"Você precisa selecionar <b>dois pontos não finais<b> num caminho para apagar "
+"Você precisa selecionar <b>dois pontos não finais</b> num caminho para apagar "
 "os segmentos"
 
 #: src/nodepath.cpp:1464
@@ -3170,12 +3170,12 @@ msgstr ""
 #: src/object-edit.cpp:606
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajustar a <b>largura</b> da elipse, com <b>Ctrl<b> para formar um círculo"
+"Ajustar a <b>largura</b> da elipse, com <b>Ctrl</b> para formar um círculo"
 
 #: src/object-edit.cpp:608
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajustar a <b>altura</b> da elipse, com <b>Ctrl<b> para formar um círculo"
+"Ajustar a <b>altura</b> da elipse, com <b>Ctrl</b> para formar um círculo"
 
 #: src/object-edit.cpp:610
 msgid ""
@@ -3815,14 +3815,14 @@ msgstr ""
 #: src/splivarot.cpp:111
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr ""
-"Selecione <b>pelo menos dois caminhos<b> para fazer uma operação booleana."
+"Selecione <b>pelo menos dois caminhos</b> para fazer uma operação booleana."
 
 #: src/splivarot.cpp:117
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
 msgstr ""
-"Selecione <b>exatamente dois caminhos<b> para fazer diferença, ou-exclusivo, "
+"Selecione <b>exatamente dois caminhos</b> para fazer diferença, ou-exclusivo, "
 "divisão ou corte de caminho."
 
 #: src/splivarot.cpp:134 src/splivarot.cpp:149
@@ -3830,7 +3830,7 @@ msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
 msgstr ""
-"Incapaz de determinar a <b>ordem-z<b> dos objetos selecionados para "
+"Incapaz de determinar a <b>ordem-z</b> dos objetos selecionados para "
 "diferença,ou-exclusivo, divisão ou corte de caminho."
 
 #: src/splivarot.cpp:179
@@ -3848,24 +3848,24 @@ msgstr "Selecione <b>algum caminho</b> para contornar."
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:745
 msgid "<b>No stroked paths</b> to outline in the selection."
-msgstr "<b>Nenhum caminho com traço<b> para contornar na seleção."
+msgstr "<b>Nenhum caminho com traço</b> para contornar na seleção."
 
 #: src/splivarot.cpp:831
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr ""
-"O objeto selecionado <b>não é um caminho<b>. Não é possível avançar/recuar"
+"O objeto selecionado <b>não é um caminho</b>. Não é possível avançar/recuar"
 
 #: src/splivarot.cpp:1053
 msgid "Select <b>path(s)</b> to inset/outset."
-msgstr "Selecione <b>algum caminho<b> para avançar/recuar"
+msgstr "Selecione <b>algum caminho</b> para avançar/recuar"
 
 #: src/splivarot.cpp:1270
 msgid "<b>No paths</b> to inset/outset in the selection."
-msgstr "<b>Nenhum camimho<b> para avançar/recuar na seleção"
+msgstr "<b>Nenhum camimho</b> para avançar/recuar na seleção"
 
 #: src/splivarot.cpp:1314
 msgid "Select <b>path(s)</b> to simplify."
-msgstr "Selecione <b>algum caminho<b> para simplificar."
+msgstr "Selecione <b>algum caminho</b> para simplificar."
 
 #: src/splivarot.cpp:1415
 msgid "<b>No paths</b> to simplify in the selection."
@@ -4243,7 +4243,7 @@ msgstr ""
 msgid ""
 "<b>Drag</b> to create a freehand line. Press <b>a</b> to toggle Append/New."
 msgstr ""
-"<b>Arraste</b> para criar uma linha à mão-livre. Pressione <b>a<b> para "
+"<b>Arraste</b> para criar uma linha à mão-livre. Pressione <b>a</b> para "
 "trocar entre Acrescentar/Novo."
 
 #: src/tools-switch.cpp:165
