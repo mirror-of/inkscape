@@ -48,7 +48,7 @@ Svg::init(void)
 	
 	/* SVG in */
     ext = Inkscape::Extension::build_from_mem(
-		"<spmodule>\n"
+		"<inkscape-extension>\n"
 			"<name>SVG Input</name>\n"
 			"<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
 			"<input>\n"
@@ -58,11 +58,11 @@ Svg::init(void)
 				"<filetypetooltip>Inkscape native file format and W3C standard</filetypetooltip>\n"
 				"<output_extension>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</output_extension>\n"
 			"</input>\n"
-		"</spmodule>", new Svg());
+		"</inkscape-extension>", new Svg());
 
 	/* SVG out Inkscape */
     ext = Inkscape::Extension::build_from_mem(
-		"<spmodule>\n"
+		"<inkscape-extension>\n"
 			"<name>SVG Output Inkscape</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</id>\n"
 			"<output>\n"
@@ -72,11 +72,11 @@ Svg::init(void)
 				"<filetypetooltip>SVG format with Inkscape extensions</filetypetooltip>\n"
 				"<dataloss>FALSE</dataloss>\n"
 			"</output>\n"
-		"</spmodule>", new Svg());
+		"</inkscape-extension>", new Svg());
 
 	/* SVG out */
     ext = Inkscape::Extension::build_from_mem(
-		"<spmodule>\n"
+		"<inkscape-extension>\n"
 			"<name>SVG Output</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG "</id>\n"
 			"<output>\n"
@@ -85,7 +85,7 @@ Svg::init(void)
 				"<filetypename>Plain SVG (*.svg)</filetypename>\n"
 				"<filetypetooltip>Scalable Vector Graphics format as defined by the W3C</filetypetooltip>\n"
 			"</output>\n"
-		"</spmodule>", new Svg());
+		"</inkscape-extension>", new Svg());
 
 	return;
 }

@@ -480,12 +480,12 @@ PrintWin32::init (void)
 	
 	/* SVG in */
     ext = Inkscape::Extension::build_from_mem(
-		"<spmodule>\n"
+		"<inkscape-extension>\n"
 			"<name>Windows 32-bit Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_WIN32 "</id>\n"
 			"<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
 			"<print/>\n"
-		"</spmodule>", new PrintWin32());
+		"</inkscape-extension>", new PrintWin32());
 
 	return;
 }

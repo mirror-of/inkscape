@@ -938,7 +938,7 @@ PrintPS::init (void)
 	
 	/* SVG in */
     ext = Inkscape::Extension::build_from_mem(
-		"<spmodule>\n"
+		"<inkscape-extension>\n"
 			"<name>Postscript Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"
 			"<param name=\"bitmap\" type=\"boolean\">FALSE</param>\n"
@@ -947,7 +947,7 @@ PrintPS::init (void)
 			"<param name=\"pageBoundingBox\" type=\"boolean\">TRUE</param>\n"
 			"<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
 			"<print/>\n"
-		"</spmodule>", new PrintPS());
+		"</inkscape-extension>", new PrintPS());
 
 	return;
 }

@@ -123,16 +123,16 @@ GdkpixbufInput::init (void)
             }
 
             xmlString = g_strdup_printf(
-                "<spmodule>\n"
+                "<inkscape-extension>\n"
                     "<name>%s GDK pixbuf Input</name>\n"
-                    "<id>modules.input.gdkpixbuf.%s</id>\n"
+                    "<id>org.inkscape.input.gdkpixbuf.%s</id>\n"
                     "<input>\n"
                         "<extension>.%s</extension>\n"
                         "<mimetype>%s</mimetype>\n"
                         "<filetypename>%s (*.%s)</filetypename>\n"
                         "<filetypetooltip>%s</filetypetooltip>\n"
                     "</input>\n"
-                "</spmodule>",
+                "</inkscape-extension>",
                 name,
                 extensions[i],
                 extensions[i],

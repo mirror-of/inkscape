@@ -380,11 +380,11 @@ PrintGNOME::init (void)
 	
 	/* SVG in */
     ext = Inkscape::Extension::build_from_mem(
-		"<spmodule>\n"
+		"<inkscape-extension>\n"
 			"<name>GNOME Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_GNOME "</id>\n"
 			"<print/>\n"
-		"</spmodule>", new PrintGNOME());
+		"</inkscape-extension>", new PrintGNOME());
 
 	return;
 }

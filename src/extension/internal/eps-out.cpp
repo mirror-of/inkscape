@@ -154,9 +154,9 @@ void
 EpsOutput::init (void)
 {
 	Inkscape::Extension::build_from_mem(
-		"<spmodule>\n"
+		"<inkscape-extension>\n"
 			"<name>Encapsulated Postscript Output</name>\n"
-			"<id>module.output.eps</id>\n"
+			"<id>org.inkscape.output.eps</id>\n"
 			"<param name=\"pageBoundingBox\" type=\"boolean\">FALSE</param>\n"
 			"<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
 			"<output>\n"
@@ -165,7 +165,7 @@ EpsOutput::init (void)
 				"<filetypename>Encapsulated Postscript (*.eps)</filetypename>\n"
 				"<filetypetooltip>Encapsulated Postscript File</filetypetooltip>\n"
 			"</output>\n"
-		"</spmodule>", new EpsOutput());
+		"</inkscape-extension>", new EpsOutput());
 
 	return;
 }

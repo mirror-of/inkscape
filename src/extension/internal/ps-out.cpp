@@ -62,16 +62,16 @@ void
 PsOutput::init (void)
 {
 	Inkscape::Extension::build_from_mem(
-		"<spmodule>\n"
+		"<inkscape-extension>\n"
 			"<name>Postscript Output</name>\n"
-			"<id>module.output.ps</id>\n"
+			"<id>org.inkscape.output.ps</id>\n"
 			"<output>\n"
 				"<extension>.ps</extension>\n"
 				"<mimetype>image/x-postscript</mimetype>\n"
 				"<filetypename>Postscript (*.ps)</filetypename>\n"
 				"<filetypetooltip>Postscript File</filetypetooltip>\n"
 			"</output>\n"
-		"</spmodule>", new PsOutput());
+		"</inkscape-extension>", new PsOutput());
 
 	return;
 }

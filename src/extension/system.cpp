@@ -371,7 +371,7 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
 
     /* sp_repr_print(repr); */
 
-    if (strcmp(sp_repr_name(repr), "spmodule")) {
+    if (strcmp(sp_repr_name(repr), "inkscape-extension")) {
         printf("How come I don't have a spmodule?\n");
         return NULL;
     }
@@ -388,7 +388,7 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
             module_functional_type = MODULE_FILTER;
         } else if (!strcmp(element_name, "print")) {
             module_functional_type = MODULE_PRINT;
-        } else if (!strcmp(element_name, "extension")) {
+        } else if (!strcmp(element_name, "script")) {
             module_implementation_type = MODULE_EXTENSION;
         }
 

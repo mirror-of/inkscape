@@ -1,15 +1,15 @@
-<spmodule>
+<inkscape-extension>
     <name>AI Output</name>
-    <id>modules.output.ai</id>
+    <id>org.inkscape.output.ai</id>
     <output>
         <extension>.ai</extension>
         <mimetype>image/x-adobe-illustrator</mimetype>
         <filetypename>Adobe Illustrator (*.ai)</filetypename>
         <filetypetooltip>Write Adobe Illustrator</filetypetooltip>
     </output>
-    <extension>
+    <script>
         <command reldir="path">pstoedit -f ps2ai</command>
-		<helper_extension>module.output.ps</helper_extension>
+		<helper_extension>org.inkscape.output.ps</helper_extension>
 		<check reldir="path">pstoedit</check>
-    </extension>
-</spmodule>
+    </script>
+</inkscape-extension>

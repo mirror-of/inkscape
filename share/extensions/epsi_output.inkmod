@@ -1,16 +1,16 @@
-<spmodule>
+<inkscape-extension>
     <name>EPSI Output</name>
-    <id>modules.output.epsi</id>
+    <id>org.inkscape.output.epsi</id>
     <output>
         <extension>.epsi</extension>
         <mimetype>image/x-encapsulated-postscript</mimetype>
         <filetypename>Encapsulated Postscript Interchange (*.epsi)</filetypename>
         <filetypetooltip>Encapsulated Postscript with a thumbnail</filetypetooltip>
     </output>
-    <extension>
+    <script>
         <command reldir="extensions">ps2epsi.sh</command>
-		<helper_extension>module.output.ps</helper_extension>
+		<helper_extension>org.inkscape.output.ps</helper_extension>
         <check reldir="extensions">ps2epsi.sh</check>
 		<check reldir="path">ps2epsi</check>
-    </extension>
-</spmodule>
+    </script>
+</inkscape-extension>

@@ -213,7 +213,7 @@ Script::load (Inkscape::Extension::Extension * module)
 	/* This should probably check to find the executable... */
 	child_repr = sp_repr_children(module->get_repr());
 	while (child_repr != NULL) {
-		if (!strcmp(sp_repr_name(child_repr), "extension")) {
+		if (!strcmp(sp_repr_name(child_repr), "script")) {
 			child_repr = sp_repr_children(child_repr);
 			while (child_repr != NULL) {
 				if (!strcmp(sp_repr_name(child_repr), "command")) {

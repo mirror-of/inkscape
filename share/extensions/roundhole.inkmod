@@ -1,10 +1,10 @@
-<spmodule>
+<inkscape-extension>
     <name>Roundhole</name>
-    <id>modules.filter.roundhole</id>
+    <id>org.inkscape.filter.roundhole</id>
     <filter>
     </filter>
-    <extension>
+    <script>
         <command reldir="extensions">roundhole</command>
         <check reldir="extensions">roundhole</check>
-    </extension>
-</spmodule>
+    </script>
+</inkscape-extension>

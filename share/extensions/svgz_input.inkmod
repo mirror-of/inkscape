@@ -1,15 +1,15 @@
-<spmodule>
+<inkscape-extension>
     <name>SVGZ Input</name>
-    <id>modules.input.SVGZ</id>
+    <id>org.inkscape.input.svgz</id>
     <input>
         <extension>.svgz</extension>
         <mimetype>image/x-svgz</mimetype>
         <filetypename>Compressed Inkscape SVG (*.svgz)</filetypename>
         <filetypetooltip>Inkscape's native file format compressed with GZip</filetypetooltip>
-		<output_extension>modules.output.SVGZ</output_extension>
+		<output_extension>org.inkscape.output.svgz</output_extension>
     </input>
-    <extension>
+    <script>
         <command reldir="path">gzip -cd</command>
         <check reldir="path">gzip</check>
-    </extension>
-</spmodule>
+    </script>
+</inkscape-extension>

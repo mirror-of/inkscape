@@ -1,15 +1,15 @@
-<spmodule>
+<inkscape-extension>
     <name>Dia Input</name>
-    <id>modules.input.dia</id>
+    <id>org.inkscape.input.dia</id>
     <input>
         <extension>.dia</extension>
         <mimetype>application/x-dia</mimetype>
         <filetypename>Dia Diagram (*.dia)</filetypename>
         <filetypetooltip>A diagram created with the program Dia</filetypetooltip>
     </input>
-    <extension>
+    <script>
         <command reldir="extensions">dia2svg.sh</command>
         <check reldir="extensions">dia2svg.sh</check>
 		<check reldir="path">dia</check>
-    </extension>
-</spmodule>
+    </script>
+</inkscape-extension>

@@ -24,22 +24,22 @@
 /** The key that is used to identify that the I/O should be autodetected */
 #define SP_MODULE_KEY_AUTODETECT "autodetect"
 /** This is the key for the SVG input module */
-#define SP_MODULE_KEY_INPUT_SVG "modules.input.SVG"
+#define SP_MODULE_KEY_INPUT_SVG "org.inkscape.input.svg"
 /** Specifies the input module that should be used if none are selected */
 #define SP_MODULE_KEY_INPUT_DEFAULT SP_MODULE_KEY_AUTODETECT
 /** The key for outputing standard W3C SVG */
-#define SP_MODULE_KEY_OUTPUT_SVG "modules.output.SVG.plain"
+#define SP_MODULE_KEY_OUTPUT_SVG "org.inkscape.output.svg.plain"
 /** This is an output file that has SVG data with the Sodipodi namespace extensions */
-#define SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "modules.output.SVG.sodipodi"
+#define SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "org.inkscape.output.svg.inkscape"
 /** Which output module should be used? */
 #define SP_MODULE_KEY_OUTPUT_DEFAULT SP_MODULE_KEY_AUTODETECT
 
 /** Defines the key for Postscript printing */
-#define SP_MODULE_KEY_PRINT_PS    "modules.print.ps"
+#define SP_MODULE_KEY_PRINT_PS    "org.inkscape.print.ps"
 /** Defines the key for printing with GNOME Print */
-#define SP_MODULE_KEY_PRINT_GNOME "modules.print.gnome"
+#define SP_MODULE_KEY_PRINT_GNOME "org.inkscape.print.gnome"
 /** Defines the key for printing under Win32 */
-#define SP_MODULE_KEY_PRINT_WIN32 "modules.print.win32"
+#define SP_MODULE_KEY_PRINT_WIN32 "org.inkscape.print.win32"
 #ifdef WIN32
 /** Defines the default printing to use */
 #define SP_MODULE_KEY_PRINT_DEFAULT  SP_MODULE_KEY_PRINT_WIN32

@@ -1,10 +1,10 @@
-<spmodule>
+<inkscape-extension>
     <name>Dropshadow</name>
-    <id>modules.filter.dropshadow</id>
+    <id>org.inkscape.filter.dropshadow</id>
     <filter>
     </filter>
-    <extension>
+    <script>
         <command reldir="extensions">svg_dropshadow --opacity=0.9 --color=black</command>
         <check reldir="extensions">svg_dropshadow</check>
-    </extension>
-</spmodule>
+    </script>
+</inkscape-extension>
