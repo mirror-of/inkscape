@@ -566,8 +566,8 @@ sp_document_ensure_up_to_date (SPDocument *doc)
 			/* Set up viewport in case svg has it defined as percentages */
 			ctx.vp.x0 = 0.0;
 			ctx.vp.y0 = 0.0;
-			ctx.vp.x1 = 21.0 * PX_PER_CM; 
-			ctx.vp.y1 = 29.7 * PX_PER_CM;
+			ctx.vp.x1 = 210 * PX_PER_MM;
+			ctx.vp.y1 = 297 * PX_PER_MM;
 			nr_matrix_set_identity (&ctx.i2vp);
 			doc->root->updateDisplay((SPCtx *)&ctx, 0);
 		}
