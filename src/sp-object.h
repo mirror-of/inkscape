@@ -151,8 +151,8 @@ struct SPObject : public GObject {
 	void setCollectionPolicy(CollectionPolicy policy) {
 		_collection_policy = policy;
 	}
-	void queueForCollection();
-	void collectObject() {
+	void queueForOrphanCollection();
+	void collectOrphan() {
 		if ( _total_hrefcount == 0 ) {
 			deleteObject(false);
 		}

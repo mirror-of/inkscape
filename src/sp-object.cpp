@@ -241,13 +241,13 @@ void SPObject::_updateTotalHRefCount(int increment) {
 		}
 	}
 	if (topmost_collectable) {
-		topmost_collectable->queueForCollection();
+		topmost_collectable->queueForOrphanCollection();
 	}
 }
 
-void SPObject::queueForCollection() {
+void SPObject::queueForOrphanCollection() {
 	g_return_if_fail(document != NULL);
-	document->queueForCollection(this);
+	document->queueForOrphanCollection(this);
 }
 
 void SPObject::setId(gchar const *id) {

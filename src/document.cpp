@@ -166,7 +166,7 @@ sp_document_init (SPDocument *doc)
 	doc->priv = p;
 }
 
-void SPDocument::queueForCollection(SPObject *object) {
+void SPDocument::queueForOrphanCollection(SPObject *object) {
 	g_return_if_fail(object != NULL);
 	g_return_if_fail(SP_OBJECT_DOCUMENT(object) == this);
 
@@ -174,13 +174,13 @@ void SPDocument::queueForCollection(SPObject *object) {
 	_collection_queue = g_slist_prepend(_collection_queue, object);
 }
 
-void SPDocument::collectObjects() {
+void SPDocument::collectOrphans() {
 	while (_collection_queue) {
 		GSList *objects=_collection_queue;
 		_collection_queue = NULL;
 		for ( GSList *iter=objects ; iter ; iter = iter->next ) {
 			SPObject *object=reinterpret_cast<SPObject *>(iter->data);
-			object->collectObject();
+			object->collectOrphan();
 			sp_object_unref(object, NULL);
 		}
 		g_slist_free(objects);
@@ -198,7 +198,7 @@ sp_document_dispose (GObject *object)
 	SPDocument *doc = (SPDocument *) object;
 	SPDocumentPrivate *priv = doc->priv;
 
-	doc->collectObjects();
+	doc->collectOrphans();
 
 	if (priv) {
 		inkscape_remove_document (doc);

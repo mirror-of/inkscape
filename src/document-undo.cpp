@@ -79,7 +79,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 	g_assert (doc->priv != NULL);
 	g_assert (doc->priv->sensitive);
 
-	doc->collectObjects();
+	doc->collectOrphans();
 
 	sp_document_ensure_up_to_date (doc);
 

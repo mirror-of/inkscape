@@ -48,8 +48,8 @@ struct SPDocument {
 
 	GSList *_collection_queue;
 
-	void queueForCollection(SPObject *object);
-	void collectObjects();
+	void queueForOrphanCollection(SPObject *object);
+	void collectOrphans();
 };
 
 struct SPDocumentClass {
