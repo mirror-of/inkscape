@@ -445,10 +445,29 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		nv->default_layer_id = value ? g_quark_from_string(value) : 0;
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_INKSCAPE_DOCUMENT_UNITS:
-		nv->doc_units = value? sp_unit_get_by_abbreviation (value) : pt;
+	case SP_ATTR_INKSCAPE_DOCUMENT_UNITS: {
+		SPUnit const *new_unit = pt;
+		if (value) {
+			SPUnit const *const req_unit = sp_unit_get_by_abbreviation(value);
+			if ( req_unit == NULL ) {
+				g_warning("Unrecognized unit `%s'", value);
+				/* fixme: Document errors should be reported in the status bar or
+				 * the like (e.g. as per
+				 * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing); g_log
+				 * should be only for programmer errors. */
+			} else if ( req_unit->base == SP_UNIT_ABSOLUTE ||
+				    req_unit->base == SP_UNIT_DEVICE     ) {
+				new_unit = req_unit;
+			} else {
+				g_warning("Document units must be absolute like `mm', `pt' or `px', but found `%s'",
+					  value);
+				/* fixme: Don't use g_log (see above). */
+			}
+		}
+		nv->doc_units = new_unit;
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+	}
 	default:
 		if (((SPObjectClass *) (parent_class))->set)
 			((SPObjectClass *) (parent_class))->set (object, key, value);
