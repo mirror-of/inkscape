@@ -209,7 +209,7 @@ sp_button_set_action (SPButton *button, SPAction *action)
 		button->action = (SPAction *) nr_object_ref ((NRObject *) action);
 		nr_active_object_add_listener ((NRActiveObject *) action, (NRObjectEventVector *) &button_event_vector, sizeof (SPActionEventVector), button);
 		if (action->image) {
-			child = sp_icon_new_scaled (button->size, action->image);
+			child = sp_icon_new (button->size, action->image);
 			gtk_widget_show (child);
 			gtk_container_add (GTK_CONTAINER (button), child);
 		}
