@@ -28,6 +28,9 @@
 
 	* src/desktop.cpp: shortened rulers to canvas dimensions for now
 
+	* src/main.cpp, src/Makefile.am: renamed DATADIR to INKSCAPE_DATADIR
+	  for the remaining platforms
+
 2003-12-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop-snap.h, src/desktop-snap.cpp (all functions):
