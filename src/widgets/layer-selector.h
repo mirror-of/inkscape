@@ -15,12 +15,15 @@
 #include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/togglebutton.h>
+#include <gtkmm/cellrenderertext.h>
 
 class SPDesktop;
 class SPDocument;
 
 namespace Inkscape {
 namespace Widgets {
+
+class DocumentTreeModel;
 
 class LayerSelector : public Gtk::HBox {
 public:
@@ -34,6 +37,9 @@ private:
     Gtk::ComboBox _selector;
     Gtk::ToggleButton _lock_button;
     Gtk::ToggleButton _hide_button;
+
+    Gtk::CellRendererText _name_column_renderer;
+
     SPDesktop *_desktop;
 };
 

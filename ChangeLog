@@ -1,3 +1,11 @@
+2004-09-30  MenTaLguY  <mental@rydia.net>
+
+	* src/widgets/document-tree-model.cpp:
+	  more bug fixes
+	
+	* src/widgets/layer-selector.cpp, src/widgets/layer-selector.h:
+	  get the layer selector sort of in more order
+
 2004-09-28  Ted Gould  <ted@gould.cx>
 
 	* src/verbs.cpp, src/verbs.h, src/view.cpp:

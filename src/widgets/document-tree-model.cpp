@@ -202,9 +202,9 @@ void DocumentTreeModel::get_value_vfunc(Gtk::TreeIter const &iter,
     SPRepr *repr=reinterpret_cast<SPRepr *>(iter.gobj()->user_data);
     switch (column) {
         case 0: {
-            Glib::Value<Glib::ustring> new_value;
+            Glib::Value<Glib::ustring> &new_value=static_cast<Glib::Value<Glib::ustring> &>(value);
+            new_value.init(Glib::Value<Glib::ustring>::value_type());
             new_value.set(sp_repr_attr(repr, "id"));
-            value = new_value;
         } break;
         default: {
             g_assert_not_reached();
