@@ -94,12 +94,17 @@ prefs_switch_page (GtkNotebook *notebook,
      prefs_set_int_attribute ("dialogs.preferences", attr, page_num);
 }
 
+static gint
+get_int_value_data(GtkToggleButton *button)
+{
+    return GPOINTER_TO_INT((gchar const*)gtk_object_get_data(GTK_OBJECT(button), "value"));
+}
+
 static void
 options_selector_show_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const gchar *val;
-		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
+		gchar const *val = (gchar const*)gtk_object_get_data(GTK_OBJECT(button), "value");
 		prefs_set_string_attribute ("tools.select", "show", val);
 	}
 }
@@ -108,7 +113,7 @@ static void
 options_store_transform_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		guint const val = get_int_value_data(button);
 		prefs_set_int_attribute ("options.preservetransform", "value", val);
 	}
 }
@@ -117,7 +122,7 @@ static void
 options_clone_compensation_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		guint const val = get_int_value_data(button);
 		prefs_set_int_attribute ("options.clonecompensation", "value", val);
 	}
 }
@@ -126,7 +131,7 @@ static void
 options_clone_orphans_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		guint const val = get_int_value_data(button);
 		prefs_set_int_attribute ("options.cloneorphans", "value", val);
 	}
 }
@@ -135,7 +140,7 @@ static void
 options_selcue_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		guint const val = get_int_value_data(button);
 		prefs_set_int_attribute ("options.selcue", "value", val);
 	}
 }
@@ -144,7 +149,7 @@ static void
 options_scale_origin_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-                const gchar *val = (const gchar *) gtk_object_get_data (GTK_OBJECT (button), "value");
+                gchar const *val = (gchar const *) gtk_object_get_data(GTK_OBJECT(button), "value");
 		prefs_set_string_attribute ("tools.select", "scale_origin", val);
 	}
 }
@@ -153,7 +158,7 @@ static void
 options_dropper_pick_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		guint const val = get_int_value_data(button);
 		prefs_set_int_attribute ("tools.dropper", "pick", val);
 	}
 }
@@ -173,12 +178,12 @@ options_dropper_pick_toggled (GtkToggleButton *button)
 * \param h Toggled handler function.
 */
 static GtkWidget* sp_select_context_add_radio (
-    GtkWidget* b,
-    GtkWidget* fb,
-    GtkTooltips* tt,
-    const gchar* n,
-    const gchar* tip,
-    const char* v_string,
+    GtkWidget *b,
+    GtkWidget *fb,
+    GtkTooltips *tt,
+    gchar const *n,
+    gchar const *tip,
+    char const *v_string,
     guint v_uint,
     bool isint,
     gboolean s,
@@ -223,13 +228,17 @@ options_selector ()
     gchar const *show = prefs_get_string_attribute ("tools.select", "show");
 
     b = sp_select_context_add_radio (
-        NULL, fb, tt, _("Objects"), _("Show the actual objects when moving or transforming"), "content", 0, false,
+        NULL, fb, tt, _("Objects"),
+        _("Show the actual objects when moving or transforming"),
+        "content", 0, false,
         (show == NULL) || !strcmp (show, "content"),
         options_selector_show_toggled
         );
 
     sp_select_context_add_radio(
-        b, fb, tt, _("Box outline"), _("Show only a box outline of the objects when moving or transforming"), "outline",  0, false,
+        b, fb, tt, _("Box outline"),
+        _("Show only a box outline of the objects when moving or transforming"),
+        "outline",  0, false,
         show && !strcmp (show, "outline"),
         options_selector_show_toggled
         );
@@ -245,19 +254,23 @@ options_selector ()
     gint cue = prefs_get_int_attribute ("options.selcue", "value", SP_SELCUE_MARK);
 
     b = sp_select_context_add_radio (
-        NULL, fb, tt, _("None"), _("No per-object selection indication"), NULL, SP_SELCUE_NONE, true,
+        NULL, fb, tt, _("None"),
+        _("No per-object selection indication"), NULL, SP_SELCUE_NONE, true,
         cue == SP_SELCUE_NONE,
         options_selcue_toggled
         );
 
     b = sp_select_context_add_radio (
-        b, fb, tt, _("Mark"), _("Each selected object has a diamond mark in the top left corner"), NULL, SP_SELCUE_MARK, true,
+        b, fb, tt, _("Mark"),
+        _("Each selected object has a diamond mark in the top left corner"),
+        NULL, SP_SELCUE_MARK, true,
         cue == SP_SELCUE_MARK,
         options_selcue_toggled
         );
 
     sp_select_context_add_radio (
-        b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), NULL, SP_SELCUE_BBOX, true,
+        b, fb, tt, _("Box"),
+        _("Each selected object displays its bounding box"), NULL, SP_SELCUE_BBOX, true,
         cue == SP_SELCUE_BBOX,
         options_selcue_toggled
         );
@@ -281,7 +294,8 @@ options_selector ()
 
     sp_select_context_add_radio (
         b, fb, tt, _("Farthest opposite node"),
-        _("Default scale origin will be on the bounding box of the item's points"), "points", 0, false,
+        _("Default scale origin will be on the bounding box of the item's points"),
+        "points", 0, false,
         scale_orig && !strcmp (scale_orig, "points"),
         options_scale_origin_toggled
         );
@@ -373,7 +387,7 @@ options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
         for (unsigned j = 0; j < G_N_ELEMENTS(rot_snaps); ++j) {
             RotSteps const &rs = rot_snaps[j];
 
-            const gchar *label = NULL;
+            gchar const *label = NULL;
             if (rs.snaps == 0) {
                 // sorationsnapsperpi == 0 means no snapping
                 label = _("None");
@@ -541,7 +555,7 @@ options_sb (
     }
 
     {
-        GtkObject *a = gtk_adjustment_new (0.0, lower, upper, step_increment, page_increment, page_size);
+        GtkObject *a = gtk_adjustment_new(0.0, lower, upper, step_increment, page_increment, page_size);
 
         gdouble value; 
         if (isint)
@@ -570,7 +584,8 @@ options_sb (
         gtk_widget_show (sb);
         gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
-        gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (changed), (gpointer) prefs_path);
+        gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+                           GTK_SIGNAL_FUNC(changed), (gpointer) prefs_path);
     }
 
     {
@@ -619,7 +634,8 @@ options_checkbox (
 
         g_object_set_data (G_OBJECT(b), "attr", (void *) attr);
 
-        gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (changed), (gpointer) prefs_path);
+        gtk_signal_connect(GTK_OBJECT(b), "toggled",
+                           GTK_SIGNAL_FUNC(changed), (gpointer) prefs_path);
     }
 
     {
@@ -686,7 +702,7 @@ static GtkWidget* new_objects_style_add_radio (
 }
 
 static void
-style_from_selection_to_tool (GtkWidget *widget,  const gchar* prefs_path)
+style_from_selection_to_tool(GtkWidget *widget, gchar const *prefs_path)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop == NULL)
@@ -727,7 +743,7 @@ options_changed_radio (GtkToggleButton *tb, gpointer data)
 {
     const gchar *prefs_path = (const gchar *) data;
     const gchar *prefs_attr = (const gchar *) g_object_get_data (G_OBJECT(tb), "attr");
-    const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (tb), "value"));
+    const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data(GTK_OBJECT(tb), "value"));
 
     if (prefs_path && prefs_attr && gtk_toggle_button_get_active (tb)) {
         prefs_set_int_attribute (prefs_path, prefs_attr, val);
@@ -1203,19 +1219,25 @@ options_checkbox (
 
             GtkWidget *b = 
             sp_select_context_add_radio (
-                NULL, fb, tt, _("Move in parallel"), _("Clones are translated by the same vector as their original."), NULL, SP_CLONE_COMPENSATION_PARALLEL, true,
+                NULL, fb, tt, _("Move in parallel"),
+                _("Clones are translated by the same vector as their original."),
+                NULL, SP_CLONE_COMPENSATION_PARALLEL, true,
                 compense == SP_CLONE_COMPENSATION_PARALLEL,
                 options_clone_compensation_toggled
                 );
 
             sp_select_context_add_radio (
-                b, fb, tt, _("Stay unmoved"), _("Clones preserve their positions when their original is moved."), NULL, SP_CLONE_COMPENSATION_UNMOVED, true,
+                b, fb, tt, _("Stay unmoved"),
+                _("Clones preserve their positions when their original is moved."),
+                NULL, SP_CLONE_COMPENSATION_UNMOVED, true,
                 compense == SP_CLONE_COMPENSATION_UNMOVED,
                 options_clone_compensation_toggled
                 );
 
             sp_select_context_add_radio (
-                b, fb, tt, _("Move according to transform"), _("Each clone moves according to the value of its transform= attribute. For example, a rotated clone will move in a different direction than its original."), NULL, SP_CLONE_COMPENSATION_NONE, true,
+                b, fb, tt, _("Move according to transform"),
+                _("Each clone moves according to the value of its transform= attribute. For example, a rotated clone will move in a different direction than its original."),
+                NULL, SP_CLONE_COMPENSATION_NONE, true,
                 compense == SP_CLONE_COMPENSATION_NONE,
                 options_clone_compensation_toggled
                 );
@@ -1306,13 +1328,17 @@ options_checkbox (
             gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
 
             GtkWidget *b = sp_select_context_add_radio (
-                NULL, fb, tt, _("Optimized"), _("If possible, apply transformation to objects without adding a transform= attribute"), NULL, 0, true,
+                NULL, fb, tt, _("Optimized"),
+                _("If possible, apply transformation to objects without adding a transform= attribute"),
+                NULL, 0, true,
                 preserve == 0,
                 options_store_transform_toggled
                 );
 
             sp_select_context_add_radio (
-                b, fb, tt, _("Preserved"), _("Always store transformation as a transform= attribute on objects"), NULL, 1, true,
+                b, fb, tt, _("Preserved"),
+                _("Always store transformation as a transform= attribute on objects"),
+                NULL, 1, true,
                 preserve != 0,
                 options_store_transform_toggled
                 );
