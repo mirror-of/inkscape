@@ -43,6 +43,9 @@
 
 static bool nograb = false;
 
+static gboolean grabbed = FALSE;
+static gboolean moved = FALSE;
+
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
 static bool within_tolerance = false;
@@ -456,12 +459,23 @@ static void sp_knot_get_property(GObject *, guint, GValue *, GParamSpec *)
 	g_assert_not_reached ();
 }
 
+void sp_knot_start_dragging (SPKnot *knot, NR::Point p, guint32 etime)
+{
+	knot->grabbed_rel_pos = p - knot->pos;
+	knot->drag_origin = knot->pos;
+	if (!nograb) {
+		sp_canvas_item_grab (knot->item,
+				     KNOT_EVENT_MASK,
+				     knot->cursor[SP_KNOT_STATE_DRAGGING],
+				     etime);
+	}
+	sp_knot_set_flag (knot, SP_KNOT_GRABBED, TRUE);
+	grabbed = TRUE;
+}
+
 static int
 sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 {
-	static gboolean grabbed = FALSE;
-	static gboolean moved = FALSE;
-
 	g_assert (knot != NULL);
 	g_assert (SP_IS_KNOT (knot));
 
@@ -486,16 +500,8 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 			within_tolerance = true;
 
 			p = sp_desktop_w2d_xy_point (knot->desktop, NR::Point(event->button.x, event->button.y));
-			knot->grabbed_rel_pos = p - knot->pos;
-			knot->drag_origin = knot->pos;
-			if (!nograb) {
-				sp_canvas_item_grab (knot->item,
-						     KNOT_EVENT_MASK,
-						     knot->cursor[SP_KNOT_STATE_DRAGGING],
-						     event->button.time);
-			}
-			sp_knot_set_flag (knot, SP_KNOT_GRABBED, TRUE);
-			grabbed = TRUE;
+
+			sp_knot_start_dragging (knot, p, event->button.time);
 			consumed = TRUE;
 		}
 		break;
