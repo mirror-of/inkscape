@@ -158,6 +158,7 @@ test_gradient()
 int main()
 {
     g_type_init();
+    Inkscape::GC::init();
     return ( test_gradient()
              ? EXIT_SUCCESS
              : EXIT_FAILURE );

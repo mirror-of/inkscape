@@ -10,6 +10,8 @@ int main(int argc, char *argv[]) {
 	SPReprDoc *document;
 	SPRepr *a, *b, *c, *root;
 
+	Inkscape::GC::init();
+
 	document = sp_repr_document_new("test");
 	root = sp_repr_document_root(document);
 
