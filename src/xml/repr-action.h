@@ -60,8 +60,8 @@ void sp_repr_rollback (SPReprDoc *doc);
 void sp_repr_commit (SPReprDoc *doc);
 SPReprAction *sp_repr_commit_undoable (SPReprDoc *doc);
 
-void sp_repr_undo_log (SPReprDoc *doc, SPReprAction *log);
-void sp_repr_replay_log (SPReprDoc *doc, SPReprAction *log);
+void sp_repr_undo_log (SPReprAction *log);
+void sp_repr_replay_log (SPReprAction *log);
 SPReprAction *sp_repr_coalesce_log (SPReprAction *a, SPReprAction *b);
 void sp_repr_free_log (SPReprAction *log);
 

@@ -1,3 +1,12 @@
+2003-11-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/xml/repr-action.c (reverse_log): Add doc comment.  Rename some vars.
+
+	* src/xml/repr-action.c (sp_repr_replay_log, sp_repr_undo_log),
+	  src/xml/repr-action.h, src/document-undo.c (sp_document_cancel,
+	  sp_document_redo, sp_document_undo): Remove the unused doc
+	  argument to sp_repr_replay_log, sp_repr_undo_log.  Update callers.
+
 2003-11-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* extensions/ai_input.inkmod, extensions/dia.inkmod,

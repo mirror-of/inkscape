@@ -129,7 +129,7 @@ sp_document_cancel (SPDocument *doc)
 	sp_repr_rollback (doc->rdoc);
 
 	if (doc->priv->partial) {
-		sp_repr_undo_log (doc->rdoc, doc->priv->partial);
+		sp_repr_undo_log (doc->priv->partial);
 		sp_repr_free_log (doc->priv->partial);
 		doc->priv->partial = NULL;
 	}
@@ -161,7 +161,7 @@ sp_document_undo (SPDocument *doc)
 
 	log = (SPReprAction *) doc->priv->undo->data;
 	doc->priv->undo = g_slist_remove (doc->priv->undo, log);
-	sp_repr_undo_log (doc->rdoc, log);
+	sp_repr_undo_log (log);
 	doc->priv->redo = g_slist_prepend (doc->priv->redo, log);
 
 	sp_repr_begin_transaction (doc->rdoc);
@@ -191,7 +191,7 @@ sp_document_redo (SPDocument *doc)
 
 	log = (SPReprAction *) doc->priv->redo->data;
 	doc->priv->redo = g_slist_remove (doc->priv->redo, log);
-	sp_repr_replay_log (doc->rdoc, log);
+	sp_repr_replay_log (log);
 	doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
 
 	sp_repr_begin_transaction (doc->rdoc);

@@ -42,7 +42,7 @@ void
 sp_repr_rollback (SPReprDoc *doc)
 {
 	if (doc->is_logging) {
-		sp_repr_undo_log (doc, doc->log);
+		sp_repr_undo_log (doc->log);
 		sp_repr_free_log (doc->log);
 		doc->log = NULL;
 		doc->is_logging = 0;
@@ -74,7 +74,7 @@ sp_repr_commit_undoable (SPReprDoc *doc)
 }
 
 void
-sp_repr_undo_log (SPReprDoc *doc, SPReprAction *log)
+sp_repr_undo_log (SPReprAction *log)
 {
 	SPReprAction *action;
 
@@ -111,7 +111,7 @@ sp_repr_undo_log (SPReprDoc *doc, SPReprAction *log)
 }
 
 void
-sp_repr_replay_log (SPReprDoc *doc, SPReprAction *log)
+sp_repr_replay_log (SPReprAction *log)
 {
 	SPReprAction *action;
 
@@ -151,20 +151,28 @@ sp_repr_replay_log (SPReprDoc *doc, SPReprAction *log)
 	reverse_log (log);
 }
 
+/** \brief Reverse the action linked list LOG in-place, i.e. rewrite its `next' pointers.
+    \return The head of the resulting reversed list.
+
+    Changes only `next' fields; e.g. does not change the "direction" of each action
+    (add <-> delete).
+*/
 static SPReprAction *
 reverse_log (SPReprAction *log)
 {
-	SPReprAction *temp, *action;
+	SPReprAction *prev;
 
-	temp = NULL;
+	prev = NULL;
 	while ( log != NULL ) {
-		action = log;
+		SPReprAction *curr;
+
+		curr = log;
 		log = log->next;
-		action->next = temp;
-		temp = action;
+		curr->next = prev;
+		prev = curr;
 	}
 
-	return temp;
+	return prev;
 }
 
 SPReprAction *
