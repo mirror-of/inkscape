@@ -1,6 +1,6 @@
 .TH inkview 1 "December 28, 2004" INKSCAPE "Inkscape\-0.40"
 .SH NAME
-inkview \- slideshow program which uses SVG files
+inkview - slideshow program which uses SVG files
 
 .SH SYNOPSIS
 .B inkview
@@ -37,6 +37,8 @@ There are no options yet.
 
 .SH "SEE ALSO"
 .BR inkscape(1)
+and the inkview related part of the inkscape wiki:
+.I http://www.inkscape.org/cgi\-bin/wiki.pl?Inkview
 
 .I http://www.inkscape.org/
 

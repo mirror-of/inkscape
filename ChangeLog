@@ -3,6 +3,9 @@
     * Makefile.am, configure.ac, Makefile.mingw.common, inkscape.nsi: undoing
 	  my "configure" changes.  Was dumb and forgot about native compiles on
 	  win32.
+	* inkview.1.in, share/extensions/inkscape-shadow-white.sh, 
+	  share/extensions/inkscape-shadow.sh: corrections found by Wolfram
+	  Quester during Debian packaging.
 
 2004-02-11  Kees Cook  <kees@outflux.net>
 
