@@ -1763,7 +1763,7 @@ msgid ""
 "document.  (e.g. 'en-GB')"
 msgstr ""
 "Etiqueta d'idioma de dues lletres amb subetiquetes opcionals per a l'idioma "
-"d'aquest document. (p.e. ca_ES)" 
+"d'aquest document. (p.e. ca_ES)"
 
 #: src/dialogs/rdf.cpp:243
 msgid "Keywords"
@@ -3034,7 +3034,7 @@ msgstr "<b>Mou</b> el patró d'emplenat de l'interior de l'objecte"
 
 #: src/object-edit.cpp:954
 msgid "<b>Scale</b> the pattern fill uniformly"
-msgstr "<b>Escala<b> el patró d'emplenat uniformememnt"
+msgstr "<b>Escala</b> el patró d'emplenat uniformememnt"
 
 #: src/object-edit.cpp:956
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
