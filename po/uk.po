@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 23:47+0100\n"
+"POT-Creation-Date: 2005-02-05 18:46-0800\n"
 "PO-Revision-Date: 2005-02-01 13:33+0300\n"
 "Last-Translator: Maxim V. Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -4177,7 +4177,7 @@ msgstr[0] "%s у <b>%i</b> шарі. %s."
 msgstr[1] "%s у <b>%i</b> шарах. %s."
 msgstr[2] "%s у <b>%i</b> шарах. %s."
 
-#: src/seltrans.cpp:462
+#: src/seltrans.cpp:456
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
@@ -4185,7 +4185,7 @@ msgstr ""
 "<b>Центр</b> обертання та перекосу: його можна перетягнути; зміна розміру з "
 "Shift також відбувається навколо нього"
 
-#: src/seltrans.cpp:478
+#: src/seltrans.cpp:472
 msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
@@ -4193,7 +4193,7 @@ msgstr ""
 "<b>Стиснути чи розтягнути</b> виділене; з <b>Ctrl</b> - зберігати пропорцію; "
 "з <b>Shift</b> - навколо центру обертання"
 
-#: src/seltrans.cpp:479
+#: src/seltrans.cpp:473
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
@@ -4201,14 +4201,14 @@ msgstr ""
 "<b>Змінювати розмір</b> виділеного; з <b>Ctrl</b> - зберігати пропорцію; з "
 "<b>Shift</b> - навколо центру обертання"
 
-#: src/seltrans.cpp:483
+#: src/seltrans.cpp:477
 msgid ""
 "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
 msgstr ""
 "<b>Перекосити</b> виділене; з <b>Shift</b> - навколо протилежної сторони"
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
-#: src/seltrans.cpp:484
+#: src/seltrans.cpp:478
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
@@ -4216,24 +4216,24 @@ msgstr ""
 "<b>Обертати</b> виділене; з <b>Ctrl</b> - обмежувати кут; з <b>Shift</b> - "
 "навколо протилежного кута"
 
-#: src/seltrans.cpp:779 src/seltrans.cpp:859
+#: src/seltrans.cpp:772 src/seltrans.cpp:852
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr ""
 "<b>Зміна розміру</b>: %0.2f%% x %0.2f%%; з <b>Ctrl</b> - зберігаючи пропорцію"
 
-#: src/seltrans.cpp:928
+#: src/seltrans.cpp:921
 #, c-format
 msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>Схил</b>: %0.2f%% x %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:984
+#: src/seltrans.cpp:973
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Обертання</b>: %0.2f&#176;; з <b>Ctrl</b> - обмежити кут"
 
-#: src/seltrans.cpp:1013
+#: src/seltrans.cpp:1002
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Перемістити <b>центр</b> у %s, %s"
@@ -4384,11 +4384,11 @@ msgstr "<b>Alt</b>: зафіксувати радіус спіралі"
 msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Спіраль</b>: радіус %s, кут %5g; з <b>Ctrl</b> - обмежує кут"
 
-#: src/splivarot.cpp:111
+#: src/splivarot.cpp:107
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr "Для логічної операції треба обмежити <b>не менше двох</b> контурів."
 
-#: src/splivarot.cpp:117
+#: src/splivarot.cpp:113
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
@@ -4396,7 +4396,7 @@ msgstr ""
 "Для операції виключного АБО, ділення та розрізання контуру виберіть <b>точно "
 "2 контури</b>."
 
-#: src/splivarot.cpp:134 src/splivarot.cpp:149
+#: src/splivarot.cpp:130 src/splivarot.cpp:145
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
@@ -4405,39 +4405,39 @@ msgstr ""
 "об'єктів, виділених для операції різниці, виключного АБО, ділення розрізання "
 "контуру."
 
-#: src/splivarot.cpp:179
+#: src/splivarot.cpp:175
 msgid ""
 "One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr "Один з об'єктів <b>не є контуром</b>, логічна операція неможлива."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:558
+#: src/splivarot.cpp:554
 msgid "Select <b>path(s)</b> to outline."
 msgstr "Виділіть <b>контур(и)</b> для створення контуру штриха."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:759
+#: src/splivarot.cpp:755
 msgid "<b>No stroked paths</b> to outline in the selection."
 msgstr "У виділеному <b>немає контурів зі штрихом</b> для створення контуру."
 
-#: src/splivarot.cpp:845
+#: src/splivarot.cpp:841
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr ""
 "Виділений об'єкт <b>не є контуром</b>, втягування/розтягування неможливі."
 
-#: src/splivarot.cpp:1067
+#: src/splivarot.cpp:1063
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr "Виділіть <b>контур(и)</b> для втягування/розтягування."
 
-#: src/splivarot.cpp:1284
+#: src/splivarot.cpp:1280
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "У виділеному <b>немає контурів</b> для втягування/розтягування."
 
-#: src/splivarot.cpp:1419
+#: src/splivarot.cpp:1415
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Виділіть <b>контур(и)</b> для спрощення."
 
-#: src/splivarot.cpp:1446
+#: src/splivarot.cpp:1442
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "У виділеному <b>немає контурів</b> для спрощення."
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 23:47+0100\n"
+"POT-Creation-Date: 2005-02-05 18:46-0800\n"
 "PO-Revision-Date: 2005-02-01 15:04+0100\n"
 "Last-Translator: Luca Bruno <luca.br@uno.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -4220,7 +4220,7 @@ msgid_plural "%s in <b>%i</b> layers. %s."
 msgstr[0] "%s in <b>%i</b> livello. %s."
 msgstr[1] "%s in <b>%i</b> livelli. %s."
 
-#: src/seltrans.cpp:462
+#: src/seltrans.cpp:456
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
@@ -4228,7 +4228,7 @@ msgstr ""
 "<b>Centro</b> di rotazione e distorsione: trascinare per riposizionarlo; "
 "anche il ridimensionamento con Shift usa questo centro"
 
-#: src/seltrans.cpp:478
+#: src/seltrans.cpp:472
 msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
@@ -4237,7 +4237,7 @@ msgstr ""
 "uniformemente; con <b>Shift</b> per ridimensionare attorno al centro di "
 "rotazione"
 
-#: src/seltrans.cpp:479
+#: src/seltrans.cpp:473
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
@@ -4246,7 +4246,7 @@ msgstr ""
 "uniformemente; con <b>Shift</b> per ridimensionare attorno al centro di "
 "rotazione"
 
-#: src/seltrans.cpp:483
+#: src/seltrans.cpp:477
 msgid ""
 "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
 msgstr ""
@@ -4254,7 +4254,7 @@ msgstr ""
 "lato opposto"
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
-#: src/seltrans.cpp:484
+#: src/seltrans.cpp:478
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
@@ -4262,26 +4262,26 @@ msgstr ""
 "<b>Ruota</b> la selezione; con <b>Ctrl</b> per far scattare l'angolo; con "
 "<b>Shift</b> per ruotare attorno all'angolo opposto"
 
-#: src/seltrans.cpp:779 src/seltrans.cpp:859
+#: src/seltrans.cpp:772 src/seltrans.cpp:852
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr ""
 "<b>Ridimensiona</b>: %0.2f%% x %0.2f%%; con <b>Ctrl</b> per mantenere la "
 "proporzione"
 
-#: src/seltrans.cpp:928
+#: src/seltrans.cpp:921
 #, c-format
 msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>Distorsione</b>: %0.2f%% x %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:984
+#: src/seltrans.cpp:973
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Rotazione</b>: %0.2f gradi; con <b>Ctrl</b> per far scattare l'angolo"
 
-#: src/seltrans.cpp:1013
+#: src/seltrans.cpp:1002
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Muove il <b>centro</b> in %s, %s"
@@ -4430,12 +4430,12 @@ msgstr ""
 "<b>Spirale</b>: radale %s, angolo %5g; con <b>Ctrl</b> per far scattare "
 "l'angolo"
 
-#: src/splivarot.cpp:111
+#: src/splivarot.cpp:107
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr ""
 "Selezionare <b>almeno 2 tracciati</b> per effettuare un'operazione booleana."
 
-#: src/splivarot.cpp:117
+#: src/splivarot.cpp:113
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
@@ -4443,7 +4443,7 @@ msgstr ""
 "Selezionare <b>esattamente 2 tracciati</b> per effettuare differenza, XOR, "
 "divisione o taglio del tracciato."
 
-#: src/splivarot.cpp:134 src/splivarot.cpp:149
+#: src/splivarot.cpp:130 src/splivarot.cpp:145
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
@@ -4451,7 +4451,7 @@ msgstr ""
 "Impossibile determinare l'<b>ordinamento-z</b> degli oggetti selezionati per "
 "la differenza, XOR, divisione o taglio del tracciato."
 
-#: src/splivarot.cpp:179
+#: src/splivarot.cpp:175
 msgid ""
 "One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr ""
@@ -4459,34 +4459,34 @@ msgstr ""
 "l'operazione booleana."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:558
+#: src/splivarot.cpp:554
 msgid "Select <b>path(s)</b> to outline."
 msgstr "Selezionare il <b>tracciato</b> da convertire."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:759
+#: src/splivarot.cpp:755
 msgid "<b>No stroked paths</b> to outline in the selection."
 msgstr "<b>Nessun tracciato contornato</b> da convertire nella selezione."
 
-#: src/splivarot.cpp:845
+#: src/splivarot.cpp:841
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr ""
 "L'oggetto selezionato <b>non è un tracciato</b>, impossibile intrudere/"
 "estrudere."
 
-#: src/splivarot.cpp:1067
+#: src/splivarot.cpp:1063
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr "Selezionare il <b>tracciato</b> da intrudere/estrudere."
 
-#: src/splivarot.cpp:1284
+#: src/splivarot.cpp:1280
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "<b>Nessun tracciato</b>da intrudere/estrudere nella selezione."
 
-#: src/splivarot.cpp:1419
+#: src/splivarot.cpp:1415
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Selezionare il <b>tracciato</b> da semplificare."
 
-#: src/splivarot.cpp:1446
+#: src/splivarot.cpp:1442
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "<b>Nessun tracciato</b>da semplificare nella selezione."
 

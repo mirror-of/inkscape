@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 23:47+0100\n"
+"POT-Creation-Date: 2005-02-05 18:46-0800\n"
 "PO-Revision-Date: 2005-01-09 20:32+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -4184,7 +4184,7 @@ msgid_plural "%s in <b>%i</b> layers. %s."
 msgstr[0] "<b>%i</b> merkte objekt i <b>%i</b> lag. %s."
 msgstr[1] "<b>%i</b> merkte objekt i <b>%i</b> lag. %s."
 
-#: src/seltrans.cpp:462
+#: src/seltrans.cpp:456
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
@@ -4192,7 +4192,7 @@ msgstr ""
 "<b>Midtpunkt</b> for rotering og forskyving. Dra for å flytta. Skalering med "
 "<b>Shift</b> brukar òg dette punktet."
 
-#: src/seltrans.cpp:478
+#: src/seltrans.cpp:472
 msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
@@ -4200,7 +4200,7 @@ msgstr ""
 "<b>Trykk saman eller utvid</b> utvalet. Bruk <b>Ctrl</b> for å halda på høgd/"
 "breidd-forholdet og <b>Shift</b> for å skalera rundt roteringsmidtpunktet."
 
-#: src/seltrans.cpp:479
+#: src/seltrans.cpp:473
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
@@ -4208,7 +4208,7 @@ msgstr ""
 "<b>Skaler</b> utvalet. Bruk <b>Ctrl</b> for å halda på høgd/breidd-forholdet "
 "og <b>Shift</b> for å skalera rundt roteringsmidtpunktet."
 
-#: src/seltrans.cpp:483
+#: src/seltrans.cpp:477
 msgid ""
 "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
 msgstr ""
@@ -4216,7 +4216,7 @@ msgstr ""
 "side."
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
-#: src/seltrans.cpp:484
+#: src/seltrans.cpp:478
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
@@ -4224,25 +4224,25 @@ msgstr ""
 "<b>Roter</b> utvalet. Bruk <b>Ctrl</b> for stegrotering og <b>Shift</b> for "
 "å rotera rundt motståande hjørne."
 
-#: src/seltrans.cpp:779 src/seltrans.cpp:859
+#: src/seltrans.cpp:772 src/seltrans.cpp:852
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr ""
 "<b>Skaler</b>: %0.2f%% × %0.2f%%. Bruk <b>Ctrl</b> for å lesa breidd/høgd-"
 "forhold."
 
-#: src/seltrans.cpp:928
+#: src/seltrans.cpp:921
 #, c-format
 msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>Forskyv</b>: %0.2f%% × %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:984
+#: src/seltrans.cpp:973
 #, fuzzy, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Roter</b>: %0.2f gradar. Bruk <b>Ctrl</b> for stegrotering."
 
-#: src/seltrans.cpp:1013
+#: src/seltrans.cpp:1002
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Flytt <b>midten</b> til %s, %s"
@@ -4389,12 +4389,12 @@ msgstr "<b>Alt</b>: Lås spiralradius."
 msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Spiral</b>: Radius %s, vinkel %5g. Bruk <b>Ctrl</b> for stegvinkel."
 
-#: src/splivarot.cpp:111
+#: src/splivarot.cpp:107
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr ""
 "Du må merkja <b>minst to baner</b> for å kunna utføra ein boolsk operasjon."
 
-#: src/splivarot.cpp:117
+#: src/splivarot.cpp:113
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
@@ -4402,7 +4402,7 @@ msgstr ""
 "Du må merkja <b>nøyaktig to baner</b> for å kunna utføra ein differanse, ein "
 "eksklusjon, ei oppdeling eller ei baneoppdeling."
 
-#: src/splivarot.cpp:134 src/splivarot.cpp:149
+#: src/splivarot.cpp:130 src/splivarot.cpp:145
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
@@ -4410,7 +4410,7 @@ msgstr ""
 "Klarte ikkje fastsetja <b>z-ordninga</b> av objekta for differanse, "
 "eksklusjon, oppdeling eller baneoppdeling."
 
-#: src/splivarot.cpp:179
+#: src/splivarot.cpp:175
 msgid ""
 "One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr ""
@@ -4418,34 +4418,34 @@ msgstr ""
 "b>."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:558
+#: src/splivarot.cpp:554
 msgid "Select <b>path(s)</b> to outline."
 msgstr "Merk <b>objekta</b> der du vil gjera strekane om til baner."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:759
+#: src/splivarot.cpp:755
 msgid "<b>No stroked paths</b> to outline in the selection."
 msgstr "Det finst <b>ingen objekt med strekar</b> i utvalet."
 
-#: src/splivarot.cpp:845
+#: src/splivarot.cpp:841
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr ""
 "Kan ikkje skubba inn eller ut, då det merkte objektet <b>ikkje er ei bane</"
 "b>."
 
-#: src/splivarot.cpp:1067
+#: src/splivarot.cpp:1063
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr "Merk <b>banene</b> du vil skubba inn eller ut."
 
-#: src/splivarot.cpp:1284
+#: src/splivarot.cpp:1280
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "Det finst <b>ingen baner</b> å skubba inn eller ut i utvalet."
 
-#: src/splivarot.cpp:1419
+#: src/splivarot.cpp:1415
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Merk <b>banene</b> du vil forenkla."
 
-#: src/splivarot.cpp:1446
+#: src/splivarot.cpp:1442
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "Det finst <b>ingen baner</b> å forenkla i utvalet."
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 23:47+0100\n"
+"POT-Creation-Date: 2005-02-05 18:46-0800\n"
 "PO-Revision-Date: 2005-01-29 12:40+0100\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: sl_SI <sl@li.org>\n"
@@ -4140,7 +4140,7 @@ msgid_plural "%s in <b>%i</b> layers. %s."
 msgstr[0] "%s v <b>%i</b> sloju. %s."
 msgstr[1] "%s v <b>%i</b> sloju. %s."
 
-#: src/seltrans.cpp:462
+#: src/seltrans.cpp:456
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
@@ -4148,7 +4148,7 @@ msgstr ""
 "<b>Središče</b> vrtenja ali vlečenja: povlecite za premik središča; tudi "
 "raztegovanje s držanjem Shifta uporablja to središče"
 
-#: src/seltrans.cpp:478
+#: src/seltrans.cpp:472
 msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
@@ -4156,7 +4156,7 @@ msgstr ""
 "<b>Stisni ali raztegni</b> izbrano; s <b>Ctrl</b> razteguj enakomerno; s "
 "<b>Shift</b> razteguj okrog središča vrtenja"
 
-#: src/seltrans.cpp:479
+#: src/seltrans.cpp:473
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
@@ -4164,13 +4164,13 @@ msgstr ""
 "<b>Razteguj</b> izbrano; s <b>Ctrl</b> razteguj enakomerno; s <b>Shift</b> "
 "razteguj okrog središča vrtenja"
 
-#: src/seltrans.cpp:483
+#: src/seltrans.cpp:477
 msgid ""
 "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
 msgstr "<b>Zamakni</b> izbrano; s <b>Shift</b> zamikaj po nasprotni strani"
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
-#: src/seltrans.cpp:484
+#: src/seltrans.cpp:478
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
@@ -4178,23 +4178,23 @@ msgstr ""
 "<b>Zavrti</b> izbrano; s <b>Ctrl</b> preskakuj po kotih; s <b>Shift</b> vrti "
 "okrog nasprotnega kota"
 
-#: src/seltrans.cpp:779 src/seltrans.cpp:859
+#: src/seltrans.cpp:772 src/seltrans.cpp:852
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr "<b>Razteguj</b>: %0.2f%% x %0.2f%%; s <b>Ctrl</b> zakleni razmerje"
 
-#: src/seltrans.cpp:928
+#: src/seltrans.cpp:921
 #, c-format
 msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>Ukrivi</b>: %0.2f%% x %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:984
+#: src/seltrans.cpp:973
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Zavrti</b>: %0.2f stopinj;s <b>Ctrl</b> preskakuj po kotih "
 
-#: src/seltrans.cpp:1013
+#: src/seltrans.cpp:1002
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Premakni <b>središče</b> na %s, %s"
@@ -4342,11 +4342,11 @@ msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Spirala</b>: polmer %s, kot %5g; s <b>Ctrl</b> preskakujete po kotih"
 
-#: src/splivarot.cpp:111
+#: src/splivarot.cpp:107
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr "Za logične operacije izberite <b>vsaj dve črti</b>."
 
-#: src/splivarot.cpp:117
+#: src/splivarot.cpp:113
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
@@ -4354,7 +4354,7 @@ msgstr ""
 "Za dejanje razlike, ALI, radelitve ali razreza izberite <b>natanko dve črti</"
 "b>."
 
-#: src/splivarot.cpp:134 src/splivarot.cpp:149
+#: src/splivarot.cpp:130 src/splivarot.cpp:145
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
@@ -4362,38 +4362,38 @@ msgstr ""
 "Ne morem prepoznati <b>prekrivanja</b> predmetov izbranih za razliko, ALI, "
 "delitev ali razrez."
 
-#: src/splivarot.cpp:179
+#: src/splivarot.cpp:175
 msgid ""
 "One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr "Ne morem napraviti logične operacije, ker en predmet <b>ni črta</b>."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:558
+#: src/splivarot.cpp:554
 msgid "Select <b>path(s)</b> to outline."
 msgstr "Izberite <b>nekaj črt</b> za obrisanje."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:759
+#: src/splivarot.cpp:755
 msgid "<b>No stroked paths</b> to outline in the selection."
 msgstr "Med izbiro <b>ni potez</b>, ki bi jih lahko obrisal."
 
-#: src/splivarot.cpp:845
+#: src/splivarot.cpp:841
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr "Ne morem razširiti ali zožati, ker izbran predmet <b>ni črta</b>."
 
-#: src/splivarot.cpp:1067
+#: src/splivarot.cpp:1063
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr "Izberite <b>nekaj črt</b> za zamikanje."
 
-#: src/splivarot.cpp:1284
+#: src/splivarot.cpp:1280
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "Med izbiro <b>ni črt</b>, ki bi jih lahko razširil ali zožal."
 
-#: src/splivarot.cpp:1419
+#: src/splivarot.cpp:1415
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Izberite <b>nekaj črt</b> za poenostavljanje."
 
-#: src/splivarot.cpp:1446
+#: src/splivarot.cpp:1442
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "Med izbiro <b>ni črt</b>, ki bi jih lahko poenostavil."
 

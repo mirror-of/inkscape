@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 23:47+0100\n"
+"POT-Creation-Date: 2005-02-05 18:46-0800\n"
 "PO-Revision-Date: 2000-08-24 20:00-0000\n"
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -4137,53 +4137,53 @@ msgid_plural "%s in <b>%i</b> layers. %s."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/seltrans.cpp:462
+#: src/seltrans.cpp:456
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
 msgstr ""
 
-#: src/seltrans.cpp:478
+#: src/seltrans.cpp:472
 msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
 msgstr ""
 
-#: src/seltrans.cpp:479
+#: src/seltrans.cpp:473
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
 msgstr ""
 
-#: src/seltrans.cpp:483
+#: src/seltrans.cpp:477
 msgid ""
 "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
 msgstr ""
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
-#: src/seltrans.cpp:484
+#: src/seltrans.cpp:478
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
 msgstr ""
 
-#: src/seltrans.cpp:779 src/seltrans.cpp:859
+#: src/seltrans.cpp:772 src/seltrans.cpp:852
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr ""
 
-#: src/seltrans.cpp:928
+#: src/seltrans.cpp:921
 #, c-format
 msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr ""
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:984
+#: src/seltrans.cpp:973
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
-#: src/seltrans.cpp:1013
+#: src/seltrans.cpp:1002
 #, fuzzy, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Nód"
@@ -4335,60 +4335,60 @@ msgstr ""
 msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
-#: src/splivarot.cpp:111
+#: src/splivarot.cpp:107
 #, fuzzy
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr "Tóg"
 
-#: src/splivarot.cpp:117
+#: src/splivarot.cpp:113
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
 msgstr ""
 
-#: src/splivarot.cpp:134 src/splivarot.cpp:149
+#: src/splivarot.cpp:130 src/splivarot.cpp:145
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
 msgstr ""
 
-#: src/splivarot.cpp:179
+#: src/splivarot.cpp:175
 #, fuzzy
 msgid ""
 "One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr "Tóg"
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:558
+#: src/splivarot.cpp:554
 #, fuzzy
 msgid "Select <b>path(s)</b> to outline."
 msgstr "Tóg"
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:759
+#: src/splivarot.cpp:755
 msgid "<b>No stroked paths</b> to outline in the selection."
 msgstr ""
 
-#: src/splivarot.cpp:845
+#: src/splivarot.cpp:841
 #, fuzzy
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr "Tóg"
 
-#: src/splivarot.cpp:1067
+#: src/splivarot.cpp:1063
 #, fuzzy
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr "Tóg"
 
-#: src/splivarot.cpp:1284
+#: src/splivarot.cpp:1280
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr ""
 
-#: src/splivarot.cpp:1419
+#: src/splivarot.cpp:1415
 #, fuzzy
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Tóg"
 
-#: src/splivarot.cpp:1446
+#: src/splivarot.cpp:1442
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr ""
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 23:47+0100\n"
+"POT-Creation-Date: 2005-02-05 18:46-0800\n"
 "PO-Revision-Date: 2005-01-28 22:56+0100\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -4163,7 +4163,7 @@ msgid_plural "%s in <b>%i</b> layers. %s."
 msgstr[0] "<b>%i</b> у <b>%i</b> слоју. %s."
 msgstr[1] "<b>%i</b> у <b>%i</b> слојева. %s."
 
-#: src/seltrans.cpp:462
+#: src/seltrans.cpp:456
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
@@ -4171,7 +4171,7 @@ msgstr ""
 "<b>Центар</b> ротације и закривљавања: <b>повлачењем</b> се премешта; "
 "<b>Shift</b> мења величину третирајући ову тачку као центар"
 
-#: src/seltrans.cpp:478
+#: src/seltrans.cpp:472
 msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
@@ -4179,7 +4179,7 @@ msgstr ""
 "<b>Сабијање и издуживање</b> избора; <b>Ctrl</b> за уједначену "
 "трансформацију; <b>Shift</b> за трансформацију са центром у тачки ротације"
 
-#: src/seltrans.cpp:479
+#: src/seltrans.cpp:473
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
@@ -4187,14 +4187,14 @@ msgstr ""
 "<b>Промена величине</b> избора; <b>Ctrl</b> за уједначену промену величине; "
 "<b>Shift</b> а промену величине са центром у тачки ротације"
 
-#: src/seltrans.cpp:483
+#: src/seltrans.cpp:477
 msgid ""
 "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
 msgstr ""
 "<b>Искривљавање</b> избора; <b>Shift</b> за искривљавање супротних страна"
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
-#: src/seltrans.cpp:484
+#: src/seltrans.cpp:478
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
@@ -4202,24 +4202,24 @@ msgstr ""
 "<b>Ротирање</b> избора; <b>Ctrl</b> за пријањање на углове; <b>Shift</b> за "
 "ротирање око супротног ћошка"
 
-#: src/seltrans.cpp:779 src/seltrans.cpp:859
+#: src/seltrans.cpp:772 src/seltrans.cpp:852
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr ""
 "<b>Промена величине</b>: %0.2f%% x %0.2f%%; <b>Ctrl</b> закључава пропорцију"
 
-#: src/seltrans.cpp:928
+#: src/seltrans.cpp:921
 #, c-format
 msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
 msgstr "<b>Искривљавање</b>: %0.2f%% x %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-#: src/seltrans.cpp:984
+#: src/seltrans.cpp:973
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Ротација</b>: %0.2f&#176;; са <b>Ctrl</b> за пријањање угла"
 
-#: src/seltrans.cpp:1013
+#: src/seltrans.cpp:1002
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Промери <b>центар</b> на %s, %s"
@@ -4369,11 +4369,11 @@ msgstr ""
 "<b>Спирала</b>: пречник %s, угао %5g; притисните <b>Ctrl</b> за пријањање "
 "углова"
 
-#: src/splivarot.cpp:111
+#: src/splivarot.cpp:107
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr "Изаберите <b>најмање две криве</b> за примењивање Булове операције."
 
-#: src/splivarot.cpp:117
+#: src/splivarot.cpp:113
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
@@ -4381,7 +4381,7 @@ msgstr ""
 "Изаберите <b>тачно две криве</b> за примењивање операције различитости, XOR, "
 "поделе или исецања криве."
 
-#: src/splivarot.cpp:134 src/splivarot.cpp:149
+#: src/splivarot.cpp:130 src/splivarot.cpp:145
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
@@ -4389,39 +4389,39 @@ msgstr ""
 "Не могу да распознам <b>поредак слоја</b> објеката изабраних за различитост, "
 "XOR, поделу или исецање криве."
 
-#: src/splivarot.cpp:179
+#: src/splivarot.cpp:175
 msgid ""
 "One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr ""
 "Један од објеката <b>није крива</b>, није могуће применити Булову операцију."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:558
+#: src/splivarot.cpp:554
 msgid "Select <b>path(s)</b> to outline."
 msgstr "Изаберите <b>објекте</b> за претварање у криве."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:759
+#: src/splivarot.cpp:755
 msgid "<b>No stroked paths</b> to outline in the selection."
 msgstr "У избору <b>нема исцртаних потеза</b> за претварање у криве."
 
-#: src/splivarot.cpp:845
+#: src/splivarot.cpp:841
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr "Изабрани објекат <b>није крива</b>, не може да се скупља или шири."
 
-#: src/splivarot.cpp:1067
+#: src/splivarot.cpp:1063
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr "Изаберите неку <b>криву</b> за скупљање или ширење."
 
-#: src/splivarot.cpp:1284
+#: src/splivarot.cpp:1280
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "У избору <b>нема крива</b> за скупљање или ширење."
 
-#: src/splivarot.cpp:1419
+#: src/splivarot.cpp:1415
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Изаберите <b>криве</b> за поједностављивање."
 
-#: src/splivarot.cpp:1446
+#: src/splivarot.cpp:1442
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "У избору нема <b>крива</b> за поједностављивање."
 
