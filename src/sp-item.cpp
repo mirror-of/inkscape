@@ -667,7 +667,7 @@ sp_item_adjust_pattern_recursive(SPItem *item, NR::Matrix advertized_transform)
 A temporary wrapper for the next function accepting the NRMatrix instead of NR::Matrix
 */
 void
-sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv)
+sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix const *transform, NR::Matrix const *adv)
 {
     if (transform == NULL)
         sp_item_write_transform(item, repr, NR::identity(), adv);
@@ -682,7 +682,7 @@ stored optimized. Send _transformed_signal. Invoke _write method so that the rep
 updated with the new transform.
  */
 void
-sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix *adv)
+sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix const *adv)
 {
     g_return_if_fail(item != NULL);
     g_return_if_fail(SP_IS_ITEM(item));

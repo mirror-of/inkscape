@@ -1,4 +1,7 @@
-2004-08-16  Peter Moulder  <pmoulder@river>
+2004-08-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-item.h, src/sp-item.cpp (sp_item_write_transform):
+	  Indicate that adv won't get written to.
 
 	* src/sp-rect.cpp (sp_rect_set_transform): Call sp_rect_set_shape,
 	  so that bbox is up-to-date.
