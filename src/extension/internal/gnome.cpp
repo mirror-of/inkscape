@@ -19,6 +19,7 @@
 
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-pixblock.h>
 #include <display/canvas-bpath.h>
 
