@@ -431,8 +431,10 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc)
 	/* View:New Preview*/
 	sp_ui_menu_append_item (menu, NULL, _("New Preview"), G_CALLBACK(sp_ui_new_view_preview), NULL);
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item (menu, NULL, _("New Toplevel Toolbox"), G_CALLBACK (sp_ui_view_show_toolbox), NULL);
-	sp_ui_menu_append_item (menu, NULL, _("New Docked Toolbox"), G_CALLBACK (sp_ui_view_dock_toolbox), NULL);
+	//	sp_ui_menu_append_item (menu, NULL, _("New Toplevel Toolbox"), G_CALLBACK (sp_ui_view_show_toolbox), NULL);
+
+	//move these to dialogs too?
+	sp_ui_menu_append_item (menu, NULL, _("Add Docked Toolbox"), G_CALLBACK (sp_ui_view_dock_toolbox), NULL);
 	sp_ui_menu_append_item (menu, NULL, _("Remove Docked Toolbox"), G_CALLBACK (sp_ui_view_remove_toolbox), NULL);
 }
 
@@ -467,6 +469,8 @@ sp_ui_dialog_menu (GtkMenu *menu, SPDocument *doc)
 		SP_VERB_DIALOG_DISPLAY,
 		SP_VERB_LAST
 	};
+	// fixme: redo toolbox as a verb too
+	sp_ui_menu_append_item (menu, NULL, _("Toolbox"), G_CALLBACK (sp_ui_view_show_toolbox), NULL);
 	sp_ui_menu_append (menu, verbs);
 }
 
