@@ -936,15 +936,18 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
                 switch (verb) {
                     case SP_VERB_LAYER_TO_TOP:
                     case SP_VERB_LAYER_RAISE:
-                        message = _("Raised layer.");
+                        message = g_strdup_printf (_("Raised layer <b>%s</b>."), layer->label());
                         break;
                     case SP_VERB_LAYER_TO_BOTTOM:
                     case SP_VERB_LAYER_LOWER:
-                        message = _("Lowered layer.");
+                        message = g_strdup_printf (_("Lowered layer <b>%s</b>."), layer->label());
                         break;
                 };
                 sp_document_done(SP_DT_DOCUMENT(dt));
-                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
+                if (message) {
+                    dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
+                    g_free ((void *) message);
+                }
             } else {
                 dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move layer any further."));
             }
