@@ -1,5 +1,9 @@
 2004-10-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/modifier-fns.h: New file of inline functions based on macros.h
+	  MOD__CTRL etc. macros.
+	* src/Makefile_insert: Add the new file.
+
 	* src/pen-context.h: Change size of p array from SP_DRAW_MAX_POINTS to
 	  5 now that we aren't sharing with SPPencilContext.
 

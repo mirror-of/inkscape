@@ -83,6 +83,7 @@ libinkpre_a_SOURCES =	\
 	message-context.cpp message-context.h \
 	message-stack.cpp message-stack.h \
 	mod360.cpp mod360.h	\
+	modifier-fns.h	\
 	node-context.cpp node-context.h	\
 	nodepath.cpp nodepath.h	\
 	object-edit.cpp object-edit.h	\
