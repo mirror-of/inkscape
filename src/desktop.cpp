@@ -35,6 +35,7 @@
 #include "helper/sodipodi-ctrlrect.h"
 #include "helper/units.h"
 #include "helper/sp-intl.h"
+#include "libnr/nr-matrix-ops.h"
 #include "widgets/button.h"
 #include "widgets/ruler.h"
 #include "widgets/icon.h"
