@@ -1212,3 +1212,46 @@ sp_matrix_d_set_rotate (NRMatrix *m, double theta_degrees)
 	m->c[5] = 0.0;
 }
 
+void
+sp_selection_clone ()
+{
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+	if (desktop == NULL) return;
+
+	SPSelection *selection = SP_DT_SELECTION(desktop);
+
+	// check if something is selected
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select an object to clone."));
+		return;
+	}
+
+	// check if more than two objects are selected
+	if (g_slist_length ((GSList *) sp_selection_item_list (selection)) > 1) {
+		// FIXME: extra undo step!
+		sp_selection_group ();
+	}
+
+	if (g_slist_length ((GSList *) sp_selection_item_list (selection)) > 1) {
+			sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot clone several objects from different groups or layers."));
+			return;
+	}
+
+	SPItem *i = sp_selection_item (selection);
+	SPRepr *repr = SP_OBJECT_REPR(i);
+	SPRepr *parent = sp_repr_parent (repr);
+
+	SPRepr *clone = sp_repr_new("use");
+	sp_repr_set_attr (clone, "x", "0");
+	sp_repr_set_attr (clone, "y", "0");
+	sp_repr_set_attr (clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr (repr, "id")));
+
+	// add the new clone to the top of original's parent
+	sp_repr_append_child (parent, clone);
+
+	sp_document_done (SP_DT_DOCUMENT (desktop));
+
+	sp_selection_set_repr (selection, clone);
+	sp_repr_unref (clone);
+}

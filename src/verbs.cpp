@@ -268,7 +268,10 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
             sp_selection_delete();
             break;
         case SP_VERB_EDIT_DUPLICATE:
-            sp_selection_duplicate();
+		sp_selection_duplicate();
+            break;
+        case SP_VERB_EDIT_CLONE:
+            sp_selection_clone();
             break;
         case SP_VERB_EDIT_CLEAR_ALL:
             sp_edit_clear_all();
@@ -822,6 +825,8 @@ static const SPVerbActionDef props[] = {
         N_("Delete selected objects"), GTK_STOCK_DELETE},
     {SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("D_uplicate"),
         N_("Duplicate selected objects"), "edit_duplicate"},
+    {SP_VERB_EDIT_CLONE, "EditClone", N_("C_lone"),
+        N_("Clone selected objects"), NULL},
     {SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"),
         N_("Delete all objects from document"), NULL},
     {SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select _All"),
