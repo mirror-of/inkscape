@@ -406,6 +406,7 @@ sp_gradient_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	}
 
 	/* Fixme: should we schedule "modified" here? */
+	sp_object_request_modified(object, SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void
@@ -429,6 +430,7 @@ sp_gradient_remove_child (SPObject *object, SPRepr *child)
 	}
 
 	/* Fixme: should we schedule "modified" here? */
+	sp_object_request_modified(object, SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void
