@@ -1,3 +1,7 @@
+2004-04-17  Kees Cook <kees@outflux.net>
+
+	* share/icons/icons.svg, src/verbs.cpp: made last three ugly menu icons.
+
 2004-04-17  Nathan Hurst <njh@mail.csse.monash.edu.au>
 
 	* configure.in src/draw-context.cpp src/dropper-context.cpp
