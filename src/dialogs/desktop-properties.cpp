@@ -379,11 +379,11 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
 		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "grid_units");
 		sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->gridunit);
 
-		val = nv->gridoriginx;
+		val = nv->gridorigin.pt[NR::X];
 		sp_convert_distance (&val, pt, nv->gridunit);
 		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridoriginx");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);
-		val = nv->gridoriginy;
+		val = nv->gridorigin.pt[NR::Y];
 		sp_convert_distance (&val, pt, nv->gridunit);
 		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridoriginy");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);

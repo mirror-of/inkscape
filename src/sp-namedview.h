@@ -20,6 +20,7 @@
 
 #include "helper/units.h"
 #include "sp-object-group.h"
+#include "libnr/nr-types.h"
 
 
 
@@ -40,8 +41,7 @@ struct _SPNamedView {
 
 	const SPUnit *gridunit;
 	/* Grid data is in points regardless of unit */
-	gdouble gridoriginx;
-	gdouble gridoriginy;
+	NR::Point gridorigin;
 	gdouble gridspacingx;
 	gdouble gridspacingy;
 

@@ -141,7 +141,7 @@ struct _SPDesktopWidget {
 	/* Rulers */
 	GtkWidget *hruler, *vruler;
 	double dt2r;
-	double rx0, ry0;
+	NR::Point ruler_origin;
 
 	GtkWidget *sticky_zoom;
 	GtkWidget *coord_status;

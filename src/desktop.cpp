@@ -1013,8 +1013,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
 	dtw = (SPDesktopWidget*)gtk_type_new (SP_TYPE_DESKTOP_WIDGET);
 
 	dtw->dt2r = 1.0 / namedview->gridunit->unittobase;
-	dtw->rx0 = namedview->gridoriginx;
-	dtw->ry0 = namedview->gridoriginy;
+	dtw->ruler_origin = namedview->gridorigin;
 
 	dtw->desktop = (SPDesktop *) sp_desktop_new (namedview, dtw->canvas);
 	dtw->desktop->owner = dtw;
@@ -1051,17 +1050,17 @@ sp_desktop_widget_new (SPNamedView *namedview)
 }
 
 static void
-sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDesktopWidget *dtw)
+sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktopWidget *dtw)
 {
 	gchar cstr[64];
-
+	NR::Point origin = dtw->dt2r * (NR::Point(x, y) - dtw->ruler_origin);
 	/* fixme: */
-	GTK_RULER (dtw->hruler)->position = dtw->dt2r * (x - dtw->rx0);
+	GTK_RULER (dtw->hruler)->position = origin.pt[0];
 	gtk_ruler_draw_pos (GTK_RULER (dtw->hruler));
-	GTK_RULER (dtw->vruler)->position = dtw->dt2r * (y - dtw->ry0);
+	GTK_RULER (dtw->vruler)->position = origin.pt[1];
 	gtk_ruler_draw_pos (GTK_RULER (dtw->vruler));
 
-	g_snprintf (cstr, 64, "%6.1f, %6.1f", dtw->dt2r * (x - dtw->rx0), dtw->dt2r * (y - dtw->ry0));
+	g_snprintf (cstr, 64, "%6.1f, %6.1f", origin.pt[0], origin.pt[1]);
 
 	gtk_statusbar_pop (GTK_STATUSBAR (dtw->coord_status), 0);
 	gtk_statusbar_push (GTK_STATUSBAR (dtw->coord_status), 0, cstr);
@@ -1115,8 +1114,7 @@ sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWid
 {
 	if (flags & SP_OBJECT_MODIFIED_FLAG) {
 		dtw->dt2r = 1.0 / nv->gridunit->unittobase;
-		dtw->rx0 = nv->gridoriginx;
-		dtw->ry0 = nv->gridoriginy;
+		dtw->ruler_origin = nv->gridorigin;
 		sp_desktop_widget_update_rulers (dtw);
 	}
 }
@@ -1388,11 +1386,11 @@ sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 	double scale, s, e;
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 	scale = SP_DESKTOP_ZOOM (dtw->desktop);
-	s = viewbox.x0 / scale - dtw->rx0;
-	e = viewbox.x1 / scale - dtw->rx0;
+	s = viewbox.x0 / scale - dtw->ruler_origin.pt[0];
+	e = viewbox.x1 / scale - dtw->ruler_origin.pt[0];
 	gtk_ruler_set_range (GTK_RULER (dtw->hruler), dtw->dt2r * s, dtw->dt2r * e, GTK_RULER (dtw->hruler)->position, dtw->dt2r * (e - s));
-	s = viewbox.y0 / -scale - dtw->ry0;
-	e = viewbox.y1 / -scale - dtw->ry0;
+	s = viewbox.y0 / -scale - dtw->ruler_origin.pt[1];
+	e = viewbox.y1 / -scale - dtw->ruler_origin.pt[1];
 	gtk_ruler_set_range (GTK_RULER (dtw->vruler), dtw->dt2r * s, dtw->dt2r * e, GTK_RULER (dtw->vruler)->position, dtw->dt2r * (e - s));
 }
 

@@ -248,24 +248,24 @@ sp_desktop_vector_snap (SPDesktop * desktop, NRPoint *req, double dx, double dy)
 /*  find nearest grid line (either H or V whatever is closer) along
  *  the vector to the requested point.  If the distance along the
  *  vector is less than the snap distance then snap. */
-		iv = floor(((req->y - nv->gridoriginy) / nv->gridspacingy)+0.5);
+		iv = floor(((req->y - nv->gridorigin.pt[NR::Y]) / nv->gridspacingy)+0.5);
 		dist = sp_intersector_a_vector_snap (&trial,
 							 &v,
 							 &vertical,
-							 iv*nv->gridspacingy + nv->gridoriginy);
+							 iv*nv->gridspacingy + nv->gridorigin.pt[NR::Y]);
 		upper = MIN(best, desktop->gridsnap);
 		if (dist < upper) {
 			upper = best = dist;
 			actual = trial;
 		}
-		ih = floor(((req->x - nv->gridoriginx) / 
+		ih = floor(((req->x - nv->gridorigin.pt[NR::X]) / 
 			nv->gridspacingx)+0.5);
 		
 		trial = *req;
 		dist = sp_intersector_a_vector_snap (&trial,
 						 &v,
 						 &horizontal,
-						 ih*nv->gridspacingx + nv->gridoriginx);
+						 ih*nv->gridspacingx + nv->gridorigin.pt[NR::X]);
 		if (dist < upper) {
 			upper = best = dist;
 			actual = trial;
@@ -364,7 +364,7 @@ sp_desktop_circular_snap (SPDesktop * desktop, NRPoint * req, double cx, double 
 			best *= best; // best is square of best distance 
 		}
 		// horizontal gridlines
-       		p1 = nv->gridoriginx + floor ((req->x - nv->gridoriginx) / nv->gridspacingx) * nv->gridspacingx;
+       		p1 = nv->gridorigin.pt[NR::X] + floor ((req->x - nv->gridorigin.pt[NR::X]) / nv->gridspacingx) * nv->gridspacingx;
 		p2 = p1 + nv->gridspacingx;
 		// lower gridline
 		dx = fabs(p1 - cx);
@@ -410,7 +410,7 @@ sp_desktop_circular_snap (SPDesktop * desktop, NRPoint * req, double cx, double 
 		}
 		
 		// vertical gridline
-		p1 = nv->gridoriginy + floor ((req->y - nv->gridoriginy) / nv->gridspacingy) * nv->gridspacingy;
+		p1 = nv->gridorigin.pt[NR::Y] + floor ((req->y - nv->gridorigin.pt[NR::Y]) / nv->gridspacingy) * nv->gridspacingy;
 		p2 = p1 + nv->gridspacingy;
 		//lower gridline
 		dy = fabs(p1 - cy);
