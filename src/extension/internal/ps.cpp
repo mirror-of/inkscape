@@ -337,7 +337,7 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 	else
 	{
 		SPItem* doc_item = SP_ITEM (sp_document_root (doc));
-		sp_item_bbox_desktop (doc_item, &d);
+		sp_item_invoke_bbox(doc_item, &d, sp_item_i2r_affine(doc_item), TRUE);
 	}
 
 	if (res >= 0) {
@@ -349,7 +349,7 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 		// renamed to %%PageOrientation: and moved to the
 		// respective pages.
 		os << "%%Pages: 1\n";
-		
+
 		pageLandscape = (d.x1 - d.x0 > d.y1 - d.y0) ? true : false;
 
 		if (pageLandscape) {
