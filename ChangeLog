@@ -1,3 +1,9 @@
+2004-02-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/desktop-snap.h, src/desktop-snap.cpp: Indicate that the snap_list
+	functions don't modify the passed snap points.  For the wrapper versions,
+	don't bother "copying back the new [actually unchanged] versions".
+
 2004-01-31  bulia byak <bulia@users.sourceforge.net>
 
 	* src/zoom-context.cpp src/rect-context.cpp src/arc-context.cpp src/star-context.cpp
@@ -45,7 +51,7 @@
 	SPDesktop.
 	
 2004-01-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-	
+
 	* src/libnr/nr-path.h, src/libnr/nr-path.cpp: Mark some functions
 	as not modifying the matrix passed to them.
 
