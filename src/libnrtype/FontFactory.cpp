@@ -267,7 +267,7 @@ void noop (...) {}
 
 ///////////////////// FontFactory
 // the substitute function to tell fontconfig to enforce outline fonts
-void FactorySubstituteFunc(FcPattern *pattern,gpointer data)
+void FactorySubstituteFunc(FcPattern *pattern,gpointer /*data*/)
 {
 	FcPatternAddBool (pattern, "FC_OUTLINE",FcTrue);
 //	char* fam=NULL;

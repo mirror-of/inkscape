@@ -234,7 +234,7 @@ flow_res*          flow_maker::TextWork(void)
 		cur_box.before_rgn=false;
 		cur_box.after_rgn=false;
 		
-		double   typ_length=cur_box.x_end-cur_box.x_start;
+		//double   typ_length=cur_box.x_end-cur_box.x_start;
 		sols->StartLine(cur_elem_no,cur_elem_pos);
 		sols->SetLineSizes(cur_box.ascent,cur_box.descent,cur_box.leading);
 		sols->NewLine(0.0,1000000.0,1000000.0,false,false);
@@ -307,7 +307,7 @@ flow_res*          flow_maker::TextWork(void)
 		}*/
 		if ( best_sol >= 0 ) {
 			line_solutions::one_sol  the_sol=sols->sols[best_sol];
-			double sol_length=the_sol.meas.width;
+			//double sol_length=the_sol.meas.width;
 #ifdef text_maker_verbose
 			printf("best= %i %i -> %i %i\n",sols->min_line_no,sols->min_line_pos,the_sol.elem_no,the_sol.pos);
 #endif

@@ -233,8 +233,8 @@ void               flow_res::AddText(char* iText,int iLen)
 		chars=(char*)realloc(chars,maxChar*sizeof(char));
 	}
 	
-	bool      line_rtl=chunks[nbChunk-1].rtl;
-	bool      word_rtl=spans[nbSpan-1].rtl;
+	//bool      line_rtl=chunks[nbChunk-1].rtl;
+	//bool      word_rtl=spans[nbSpan-1].rtl;
 	memcpy(chars+nbChar,iText,iLen*sizeof(char));
 	if ( nbLetter > 0 ) letters[nbLetter-1].t_en=nbChar+iLen;
 	nbChar+=iLen;

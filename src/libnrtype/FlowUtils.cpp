@@ -81,6 +81,7 @@ void            flow_brk::SetContent(int i_st_no,int i_st_pos,int i_en_no,int i_
 
 flow_tasks::flow_tasks(flow_maker* i_dad)
 {
+	dad=i_dad;
 	nbTask=maxTask=0;
 	tasks=NULL;
 	last_id=0;

@@ -201,7 +201,7 @@ void             text_style::Feed(char* iText,int iLen,int hyphen,void *i_pan,fl
 						kx_st=g_en;
 					}
 					if ( kern_y ) {
-						int gLen=pGlyphs->log_clusters[i];
+						//int gLen=pGlyphs->log_clusters[i];
 						int k_pos=0;
 						for (char* p=iText;*p;p=g_utf8_next_char(p)) {
 							int d=((int)p)-((int)iText);
@@ -256,7 +256,7 @@ void             text_style::Feed(char* iText,int iLen,int hyphen,void *i_pan,fl
 			}
 		}
 	} else {
-		double n_let_w=0;
+		//double n_let_w=0;
 		double n_let_a=0,n_let_d=0,n_let_l=0;
 		theFont->FontMetrics(n_let_a,n_let_d,n_let_l);
 		n_let_a*=theSize;
@@ -291,7 +291,7 @@ void             text_style::Feed(char* iText,int iLen,int hyphen,void *i_pan,fl
 						kx_st=g_en;
 					}
 					if ( kern_y ) {
-						int gLen=pGlyphs->log_clusters[i];
+						//int gLen=pGlyphs->log_clusters[i];
 						int k_pos=0;
 						for (char* p=iText;*p;p=g_utf8_next_char(p)) {
 							int d=((int)p)-((int)iText);
