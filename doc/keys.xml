@@ -296,6 +296,8 @@ can leave your ideas and requests there.</p>
 <keys><key><ctrl/>J</key>  <action>create dynamic offset</action></keys>
 <keys><key><ctrl/><alt/>J</key>  <action>create linked offset</action></keys>
 <note>These commands produce an offset object, editable by the node tool, standalone or linked to the original.</note>
+<keys><key><shift/>D</key>	 <action>select source</action></keys> 
+<note>Selecting a linked offset and giving this command will select the source path of the linked offset.</note>
 </group>
 
 <group>
@@ -824,6 +826,12 @@ can leave your ideas and requests there.</p>
 <note>They shift (horizontally or vertically) the character after the cursor and the rest of characters until the end of line.</note>
 <note>E.g., to shift down one character, place the cursor before it, press Alt+Down, then move cursor after it and press Alt+Up.</note>
 <note>The actual adjustment for pixel movements depends on zoom level. Zoom in for finer adjustment.</note>
+</group>
+
+<group>
+<title>Text on path</title>
+<keys><key><shift/>D</key>	 <action>select path</action></keys> 
+<note>Selecting a text-on-path object and giving this command will select the source path of the text.</note>
 </group>
 </section>
 
