@@ -305,7 +305,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBox.pack_start(potraceBrightnessFrame);
 
     /*#### canny edge detection ####*/
-    potraceCannyRadioButton.set_label(_("Canny Edge Detection"));
+    potraceCannyRadioButton.set_label(_("Optimal Edge Detection (Canny)"));
     potraceCannyRadioButton.set_group(potraceGroup);
     potraceCannyBox.pack_start(potraceCannyRadioButton);
     /*
