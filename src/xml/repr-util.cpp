@@ -279,7 +279,7 @@ sp_repr_set_double_attribute (SPRepr * repr, const char * key, double value)
 	g_return_val_if_fail (repr != NULL, FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 
-	g_snprintf (c, 32, "%f", value);
+	g_snprintf (c, 32, "%.8f", value);
 
 	return sp_repr_set_attr (repr, key, c);
 }
