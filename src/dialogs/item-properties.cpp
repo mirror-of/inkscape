@@ -237,6 +237,7 @@ sp_item_widget_new (void)
     gtk_object_set_data(GTK_OBJECT(spw), "hidden", cb);
 
     /* Lock */
+    // TRANSLATORS: "Lock" is a verb here
     cb = gtk_check_button_new_with_label (_("Lock"));
     gtk_widget_show (cb);
     gtk_tooltips_set_tip (tt, cb, _("Check to make the object insensitive (not selectable by mouse)"), NULL);
