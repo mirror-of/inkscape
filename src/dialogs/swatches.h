@@ -37,11 +37,12 @@ public:
 
     static SwatchesPanel& getInstance();
 
+protected:
+    void _handleAction( int setId, int itemId );
+
 private:
     SwatchesPanel(SwatchesPanel const &); // no copy
     SwatchesPanel &operator=(SwatchesPanel const &); // no assign
-
-    void changeItTo(int val);
 
     static SwatchesPanel* instance;
 

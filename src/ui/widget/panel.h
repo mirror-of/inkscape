@@ -38,7 +38,8 @@ public:
     Glib::ustring const &getLabel() const;
 
 protected:
-    void setTargetFillable( PreviewFillable *target );
+    void _setTargetFillable( PreviewFillable *target );
+    void _handleAction( int setId, int itemId );
 
 
 private:

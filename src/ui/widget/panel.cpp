@@ -155,7 +155,7 @@ void Panel::bounceCall(int i, int j)
         }
         break;
     default:
-        ;
+        _handleAction( i - 2, j );
     }
 }
 
@@ -168,11 +168,15 @@ Glib::ustring const &Panel::getLabel() const
     return label;
 }
 
-void Panel::setTargetFillable( PreviewFillable *target )
+void Panel::_setTargetFillable( PreviewFillable *target )
 {
     _fillable = target;
 }
 
+void Panel::_handleAction( int setId, int itemId )
+{
+// for subclasses to override
+}
 
 } // namespace Widget
 } // namespace UI
