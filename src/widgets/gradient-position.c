@@ -361,7 +361,7 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 					if (GTK_WIDGET_DRAWABLE (pos)) gtk_widget_queue_draw (GTK_WIDGET (pos));
 				}
 				gdk_pointer_grab (widget->window, FALSE,
-						  GdkEventMask(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
+						  (GdkEventMask)(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
 						  NULL, NULL, event->time);
 			}
 		}

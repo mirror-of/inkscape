@@ -431,7 +431,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const unsigned char *
 }
 
 void
-sp_object_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_object_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	g_assert (object != NULL);
 	g_assert (SP_IS_OBJECT (object));
@@ -695,31 +695,31 @@ sp_object_sequence (SPObject *object, gint seq)
  * These are inefficent, so they are not intended to be used interactively
  */
 
-const unsigned char *
+const gchar *
 sp_object_title_get (SPObject *object)
 {
 	return NULL;
 }
 
-const unsigned char *
+const gchar *
 sp_object_description_get (SPObject *object)
 {
 	return NULL;
 }
 
 unsigned int
-sp_object_title_set (SPObject *object, const unsigned char *title)
+sp_object_title_set (SPObject *object, const gchar *title)
 {
 	return FALSE;
 }
 
 unsigned int
-sp_object_description_set (SPObject *object, const unsigned char *desc)
+sp_object_description_set (SPObject *object, const gchar *desc)
 {
 	return FALSE;
 }
 
-const unsigned char *
+const gchar *
 sp_object_tagName_get (const SPObject *object, SPException *ex)
 {
 	/* If exception is not clear, return */
@@ -729,8 +729,8 @@ sp_object_tagName_get (const SPObject *object, SPException *ex)
 	return sp_repr_name (object->repr);
 }
 
-const unsigned char *
-sp_object_getAttribute (const SPObject *object, const unsigned char *key, SPException *ex)
+const gchar *
+sp_object_getAttribute (const SPObject *object, const gchar *key, SPException *ex)
 {
 	/* If exception is not clear, return */
 	if (!SP_EXCEPTION_IS_OK (ex)) return NULL;
@@ -740,7 +740,7 @@ sp_object_getAttribute (const SPObject *object, const unsigned char *key, SPExce
 }
 
 void
-sp_object_setAttribute (SPObject *object, const unsigned char *key, const unsigned char *value, SPException *ex)
+sp_object_setAttribute (SPObject *object, const gchar *key, const gchar *value, SPException *ex)
 {
 	/* If exception is not clear, return */
 	g_return_if_fail (SP_EXCEPTION_IS_OK (ex));
@@ -752,7 +752,7 @@ sp_object_setAttribute (SPObject *object, const unsigned char *key, const unsign
 }
 
 void
-sp_object_removeAttribute (SPObject *object, const unsigned char *key, SPException *ex)
+sp_object_removeAttribute (SPObject *object, const gchar *key, SPException *ex)
 {
 	/* If exception is not clear, return */
 	g_return_if_fail (SP_EXCEPTION_IS_OK (ex));

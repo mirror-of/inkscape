@@ -25,6 +25,7 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
@@ -248,7 +249,7 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 		FILE *osf, *osp;
 		pmod->bitmap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
 		sstr = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (combo)->entry));
-		pmod->dpi = (unsigned int) MAX (int(atof (sstr)), 1);
+		pmod->dpi = (unsigned int) MAX ((int)(atof (sstr)), 1);
 		/* Arrgh, have to do something */
 		fn = gtk_entry_get_text (GTK_ENTRY (e));
 		/* g_print ("Printing to %s\n", fn); */

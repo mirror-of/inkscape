@@ -247,4 +247,4 @@ void inkscape_add_document (SPDocument *document) {}
 void inkscape_remove_document (SPDocument *document) {}
 SPRepr *inkscape_get_repr (Inkscape *inkscape, const unsigned char *key) {return NULL;}
 #include "widgets/menu.h"
-void sp_menu_append (SPMenu *menu, const unsigned char *name, const unsigned char *tip, const void *data) {}
+void sp_menu_append (SPMenu *menu, const gchar *name, const gchar *tip, const void *data) {}
