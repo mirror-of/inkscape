@@ -154,12 +154,14 @@ sp_line_update (SPObject *object, SPCtx *ctx, guint flags)
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 		SPLine *line = SP_LINE (object);
 
- 		SPStyle *style = object->style;
- 		double const d = 1.0 / NR_MATRIX_DF_EXPANSION (&((SPItemCtx *) ctx)->i2vp);
- 		sp_svg_length_update (&line->x1, style->font_size.computed, style->font_size.computed * 0.5, d);
- 		sp_svg_length_update (&line->x2, style->font_size.computed, style->font_size.computed * 0.5, d);
- 		sp_svg_length_update (&line->y1, style->font_size.computed, style->font_size.computed * 0.5, d);
- 		sp_svg_length_update (&line->y2, style->font_size.computed, style->font_size.computed * 0.5, d);
+ 		SPStyle const *style = object->style;
+ 		double const d = 1.0 / NR_MATRIX_DF_EXPANSION(&((SPItemCtx const *) ctx)->i2vp);
+		double const em = style->font_size.computed;
+		double const ex = em * 0.5;  // fixme: get from pango or libnrtype.
+ 		sp_svg_length_update(&line->x1, em, ex, d);
+ 		sp_svg_length_update(&line->x2, em, ex, d);
+ 		sp_svg_length_update(&line->y1, em, ex, d);
+ 		sp_svg_length_update(&line->y2, em, ex, d);
 
 		sp_shape_set_shape ((SPShape *) object);
 	}

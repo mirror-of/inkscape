@@ -137,12 +137,14 @@ sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags)
 {
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 		SPGenericEllipse *ellipse = (SPGenericEllipse *) object;
-		SPStyle *style = object->style;
-		double const d = 1.0 / NR_MATRIX_DF_EXPANSION (&((SPItemCtx *) ctx)->i2vp);
-		sp_svg_length_update (&ellipse->cx, style->font_size.computed, style->font_size.computed * 0.5, d);
-		sp_svg_length_update (&ellipse->cy, style->font_size.computed, style->font_size.computed * 0.5, d);
-		sp_svg_length_update (&ellipse->rx, style->font_size.computed, style->font_size.computed * 0.5, d);
-		sp_svg_length_update (&ellipse->ry, style->font_size.computed, style->font_size.computed * 0.5, d);
+		SPStyle const *style = object->style;
+		double const d = 1.0 / NR_MATRIX_DF_EXPANSION(&((SPItemCtx const *) ctx)->i2vp);
+		double const em = style->font_size.computed;
+		double const ex = em * 0.5; // fixme: get from pango or libnrtype
+		sp_svg_length_update(&ellipse->cx, em, ex, d);
+		sp_svg_length_update(&ellipse->cy, em, ex, d);
+		sp_svg_length_update(&ellipse->rx, em, ex, d);
+		sp_svg_length_update(&ellipse->ry, em, ex, d);
 		sp_shape_set_shape ((SPShape *) object);
 	}
 
