@@ -36,6 +36,7 @@
 #include "dialogs/display-settings.h"
 #include "dialogs/item-properties.h"
 #include "dialogs/find.h"
+#include "dialogs/debugdialog.h"
 
 #include "tools-switch.h"
 #include "inkscape-private.h"
@@ -286,7 +287,7 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
             sp_select_clone_original();
             break;
         case SP_VERB_EDIT_TILE:
-            sp_selection_tile();
+		sp_selection_tile();
             break;
         case SP_VERB_EDIT_UNTILE:
 		sp_selection_untile();
@@ -663,6 +664,9 @@ sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_DIALOG_FIND:
             sp_find_dialog ();
             break;
+        case SP_VERB_DIALOG_DEBUG:
+            Inkscape::UI::Dialogs::DebugDialog::showInstance();
+            break;
         case SP_VERB_DIALOG_TOGGLE:
             inkscape_dialogs_toggle ();
             break;
@@ -1033,6 +1037,8 @@ static const SPVerbActionDef props[] = {
         N_("XML Editor"), "xml_editor"},
     {SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find..."),
         N_("Find objects in document"), NULL},
+    {SP_VERB_DIALOG_DEBUG, "DialogDebug", N_("_Messages..."),
+        N_("View debug messages"), NULL},
     {SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/_Hide Dialogs"),
         N_("Show or hide all active dialogs"), "dialog_toggle"},
     {SP_VERB_DIALOG_ITEM, "DialogItem", N_("_Object Properties..."),
