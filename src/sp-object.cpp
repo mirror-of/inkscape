@@ -882,7 +882,7 @@ void
 SPObject::requestDisplayUpdate(unsigned int flags)
 {
 	if (update_in_progress) {
-		//g_print ("WARNING: Requested update while update in progress, counter = %d\n", update_in_progress);
+		g_print ("WARNING: Requested update while update in progress, counter = %d\n", update_in_progress);
 	}
 
 	g_return_if_fail (!(flags & SP_OBJECT_PARENT_MODIFIED_FLAG));
