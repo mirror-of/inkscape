@@ -276,6 +276,8 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 #ifdef SP_OBJECT_DEBUG
 	g_print("sp_object_build: id=%x, typename=%s\n", object, g_type_name_from_instance((GTypeInstance*)object));
 #endif
+
+	sp_object_read_attr (object, "xml:space");
 }
 
 void
@@ -416,7 +418,8 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 	g_assert (SP_OBJECT_IS_CLONED (object) || object->id != NULL);
 	g_assert (key != SP_ATTR_INVALID);
 
-	if (key == SP_ATTR_ID) {
+	switch (key) {
+	case SP_ATTR_ID:
 		if (!SP_OBJECT_IS_CLONED (object)) {
 			g_assert (value != NULL);
 			g_assert (strcmp ((const char*)value, object->id));
@@ -428,6 +431,23 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			g_warning ("ID of cloned object changed, so document is out of sync");
 		}
+		break;
+	case SP_ATTR_XML_SPACE:
+		if (value && !strcmp (value, "preserve")) {
+			object->xml_space.value = SP_XML_SPACE_PRESERVE;
+			object->xml_space.set = TRUE;
+		} else if (value && !strcmp (value, "default")) {
+			object->xml_space.value = SP_XML_SPACE_DEFAULT;
+			object->xml_space.set = TRUE;
+		} else if (object->parent) {
+			SPObject *parent;
+			parent = object->parent;
+			object->xml_space.value = parent->xml_space.value;
+		}
+		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -523,6 +543,20 @@ sp_object_invoke_forall (SPObject *object, SPObjectMethod func, gpointer data)
 	}
 }
 
+static const gchar*
+sp_xml_get_space_string(unsigned int space)
+{
+	switch(space)
+	{
+	case SP_XML_SPACE_DEFAULT:
+		return "default";
+	case SP_XML_SPACE_PRESERVE:
+		return "preserve";
+	default:
+		return NULL;
+	}
+}
+
 static SPRepr *
 sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 {
@@ -530,8 +564,14 @@ sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_duplicate (SP_OBJECT_REPR (object));
 	} else {
 		sp_repr_set_attr (repr, "id", object->id);
-	}
 
+		if (object->xml_space.set) {
+			const char *xml_space;
+			xml_space = sp_xml_get_space_string(object->xml_space.value);
+			sp_repr_set_attr (repr, "xml:space", xml_space);
+		}
+	}
+	
 	return repr;
 }
 
@@ -615,6 +655,8 @@ sp_object_invoke_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		if (object->style && object->parent) {
 			sp_style_merge_from_parent (object->style, object->parent->style);
 		}
+		/* attribute */
+		sp_object_read_attr (object, "xml:space");
 	}
 
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS (object))->update)

@@ -1,5 +1,9 @@
 2003-11-30 MenTaLguY <mental@rydia.net>
 
+	* src/xml/repr-io.c, src/attributes.c, src/attributes.h,
+	  src/sp-object.h, src/sp-object.c: merged basis for Oka's
+	  xml:space support
+
 	* src/toolbox.c: made tool buttons larger, aux buttons smaller
 
 	* src/document-undo.c: fixed bug with undo/redo past the

@@ -164,6 +164,9 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_ADDITIVE, "additive"},
 	{SP_ATTR_ACCUMULATE, "accumulate"},
 
+	/* XML */
+	{SP_ATTR_XML_SPACE, "xml:space"},
+
 	/* CSS2 */
 	/* Font */
 	{SP_PROP_FONT, "font"},

@@ -101,11 +101,23 @@ struct _SPCtx {
 	unsigned int flags;
 };
 
+enum {
+	SP_XML_SPACE_DEFAULT,
+	SP_XML_SPACE_PRESERVE
+};
+
+typedef struct _SPIXmlSpace SPIXmlSpace;
+struct _SPIXmlSpace {
+	guint set : 1;
+	guint value : 1;
+};
+
 struct _SPObject {
 	GObject object;
 	unsigned int cloned : 1;
 	unsigned int uflags : 8;
 	unsigned int mflags : 8;
+	SPIXmlSpace xml_space;
 	unsigned int hrefcount; /* number os xlink:href references */
 	SPDocument *document; /* Document we are part of */
 	SPObject *parent; /* Our parent (only one allowed) */
