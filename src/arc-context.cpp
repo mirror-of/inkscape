@@ -297,17 +297,10 @@ sp_arc_finish (SPArcContext * ac)
 {
 	if (ac->item != NULL) {
 		SPDesktop * desktop;
-		SPGenericEllipse * ellipse;
-		SPRepr * repr;
 
 		desktop = SP_EVENT_CONTEXT (ac)->desktop;
-		ellipse = SP_GENERICELLIPSE (ac->item);
-		repr = SP_OBJECT (ac->item)->repr;
 
-		sp_repr_set_double_attribute (repr, "sodipodi:cx", ellipse->cx.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:cy", ellipse->cy.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:rx", ellipse->rx.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:ry", ellipse->ry.computed);
+		sp_object_invoke_write (SP_OBJECT (ac->item), SP_OBJECT_REPR (ac->item), SP_OBJECT_WRITE_EXT);
 
 		sp_selection_set_item (SP_DT_SELECTION (desktop), ac->item);
 		sp_document_done (SP_DT_DOCUMENT (desktop));
