@@ -102,6 +102,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"keyscroll\" value=\"20\"/>"
 "    <group id=\"wheelscroll\" value=\"40\"/>"
 "    <group id=\"transientpolicy\" value=\"1\"/>"
+"    <group id=\"scrollingacceleration\" value=\"2\"/>"
 "  </group>"
 
 "</inkscape>";
