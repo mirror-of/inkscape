@@ -22,20 +22,21 @@
 #include "sp-namedview.h"
 #include "desktop-snap.h"
 #include "geom.h"
+#include <libnr/nr-point-fns.h>
 
 /* minimal distance to norm before point is considered for snap */
 #define MIN_DIST_NORM 1.0
 
 #define SNAP_ON(d) (((d)->gridsnap > 0.0) || ((d)->guidesnap > 0.0))
 
-const NR::Point horizontal(1, 0);
-const NR::Point vertical(0, 1);
+static NR::Point const horizontal(1, 0);
+static NR::Point const vertical(0, 1);
+static NR::Point const component_vectors[] = {NR::Point(1., 0.),
+					      NR::Point(0., 1.)};
 
-gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point& req, const int dim) {
-	if(dim == NR::Y)
-		return sp_desktop_vector_snap (dt, req, vertical);
-	else if(dim == NR::X)
-		return sp_desktop_vector_snap (dt, req, horizontal);
+static gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point &req, unsigned const dim) {
+	g_assert(dim < 2);
+	return sp_desktop_vector_snap (dt, req, component_vectors[dim]);
 }
 
 /* Snap a point in horizontal and vertical direction */
@@ -59,7 +60,7 @@ sp_desktop_free_snap (SPDesktop const *desktop, NR::Point& req)
 }
 
 /* Snap a point along a line n.X = d to another line X(t) = t*v + . */
-double
+static double
 sp_intersector_a_vector_snap (NR::Point& req, const NR::Point v, 
 			const NR::Point n, double d)
 /* This function returns the snap position and the distance from the
@@ -165,10 +166,12 @@ sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Poi
 /* look for snappoint on a circle given by center (cx,cy) and distance center-req) */
 // fixme: replace with line+circle intersector.
 
+#if 0
 double
 sp_desktop_circular_snap (SPDesktop const * desktop, NR::Point& req, const NR::Point center)
 {
 }
+#endif
 
 
 /* 
@@ -178,7 +181,7 @@ sp_desktop_circular_snap (SPDesktop const * desktop, NR::Point& req, const NR::P
  * They return the updated transformation parameter. 
  */
 
-double
+static double
 sp_desktop_dim_snap_list (SPDesktop const *desktop, NR::Point *p, const int length, const double dx, const int dim)
 {
 	gdouble dist = NR_HUGE;
@@ -357,7 +360,7 @@ gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NRPoint* req) {
 	return d;
 }
 
-double sp_desktop_dim_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx, int dim) {
+static double sp_desktop_dim_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx, int dim) {
 	NR::Point* l = new NR::Point[length];
 	for(int i = 0; i < length; i++)
 		l[i] = (NR::Point)p[i];

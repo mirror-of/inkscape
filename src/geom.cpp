@@ -1,27 +1,23 @@
 #include "geom.h"
 #include <math.h>
+#include <libnr/nr-point-fns.h>
 
-NR::Coord L1(const NR::Point p) {
-	NR::Coord d = 0;
-	for(int i = 0; i < 2; i++)
-		d += fabs(p.pt[i]);
-	return d;
-}
 
-NR::Coord L2(const NR::Point p) {
-	return hypot(p.pt[0], p.pt[1]);
-}
-
-NR::Coord Linfty(const NR::Point p) {
-	NR::Coord d = 0;
-	for(int i = 0; i < 2; i++)
-		d = MAX(d, fabs(p.pt[i]));
-	return d;
+static inline double
+cross(NR::Point const &a, NR::Point const &b) {
+	return dot(b, rot90(a));
 }
 
 
 /* Intersect two lines */
 
+/**
+ * Finds the intersection of the two (infinite) lines
+ * defined by the points p such that dot(n0, p) == d0 and dot(n1, p) == d1.
+ *
+ * If the two lines intersect, then \a result becomes their point of
+ * intersection; otherwise, \a result remains unchanged.
+ */
 sp_intersector_kind
 sp_intersector_line_intersection(const NR::Point n0, const double d0, const NR::Point n1, const double d1, NR::Point& result)
 /* This function finds the intersection of the two lines (infinite)
@@ -59,17 +55,24 @@ sp_intersector_line_intersection(const NR::Point n0, const double d0, const NR::
  * numerators are then 0 then the lines coincide. */
 {
 	double denominator = cross(n0,n1);
-	double X = (d0*n1.pt[NR::Y] - d1*n0.pt[NR::Y]);
+	double X = (n1[NR::Y] * d0  -
+		    n0[NR::Y] * d1);
+	/* X = (-d1, d0) dot (n0[Y], n1[Y]) */
 	if(denominator == 0) {
-		if(X == 0)
+		if ( X == 0 ) {
 			return coincident;
-		return parallel;
+		} else {
+			return parallel;
+		}
 	}
-	double Y = -(d0*n1.pt[NR::X] - d1*n0.pt[NR::X]);
+	double Y = (n0[NR::X] * d1  -
+		    n1[NR::X] * d0);
 	result = NR::Point(X, Y)/denominator;
 	return intersects;
 }
 
+
+#if 0 /* not yet used */
 /* ccw exists as a building block */
 static int
 sp_intersector_ccw(const NR::Point p0, const NR::Point p1, const NR::Point p2)
@@ -83,19 +86,33 @@ sp_intersector_ccw(const NR::Point p0, const NR::Point p1, const NR::Point p2)
 		return +1; // ccw - do these match def'n in header?
 	if(c < 0)
 		return -1; // cw
-	if(d1.pt[0]*d2.pt[0] < 0 || d1.pt[1]*d2.pt[1] < 0)
-		return -1; // p2 p0 p1 colinear
-	if(dot(d1,d1) < dot(d2,d2))
-		return +1;// p0 p1 p2 colinear
-	return 0; // p0 p2 p1 collinear
+
+	/* Colinear [or NaN].  Decide the order. */
+	if ( ( d1[0] * d2[0] < 0 )  ||
+	     ( d1[1] * d2[1] < 0 ) ) {
+		return -1; // p2  <  p0 < p1
+	} else if ( dot(d1,d1) < dot(d2,d2) ) {
+		return +1; // p0 <= p1  <  p2
+	} else {
+		return 0; // p0 <= p2 <= p1
+	}
 }
 
+/** Determine whether two line segments intersect.  This doesn't find
+    the point of intersection, use the line_intersect function above,
+    or the segment_intersection interface below.
 
-int
-sp_intersector_segment_intersectp(const NR::Point p00, const NR::Point p01, const NR::Point p10, const NR::Point p11)
-/* Determine whether two line segments intersect.  This doesn't find
-   the intersection, use the line_intersect funcction above */
+    Requires: neither segment is zero-length; i.e. p00!=p01 && p10!=p11.
+ */
+static bool
+sp_intersector_segment_intersectp(NR::Point const &p00, NR::Point const &p01,
+				  NR::Point const &p10, NR::Point const &p11)
 {
+	g_return_val_if_fail(p00 != p01, false);
+	g_return_val_if_fail(p10 != p11, false);
+
+	/* true iff (    (the p1 segment straddles the p0 infinite line)
+	 *           and (the p0 segment straddles the p1 infinite line) ). */
 	return ((sp_intersector_ccw(p00,p01, p10)
 		 *sp_intersector_ccw(p00, p01, p11)) <=0 )
 		&&
@@ -103,10 +120,17 @@ sp_intersector_segment_intersectp(const NR::Point p00, const NR::Point p01, cons
 		  *sp_intersector_ccw(p10, p11, p01)) <=0 );
 }
 
-sp_intersector_kind
-sp_intersector_segment_intersect(const NR::Point p00, const NR::Point p01, const NR::Point p10, const NR::Point p11, NR::Point& result)
-/* Determine whether two line segments intersect.  This doesn't find
-   the intersection, use the line_intersect funcction above */
+
+/** Determine whether & where two line segments intersect.
+
+    If the two segments don't intersect, then \a result remains unchanged.
+
+    Requires: neither segment is zero-length; i.e. p00!=p01 && p10!=p11.
+**/
+static sp_intersector_kind
+sp_intersector_segment_intersect(NR::Point const &p00, NR::Point const &p01,
+				 NR::Point const &p10, NR::Point const &p11,
+				 NR::Point &result)
 {
 	if(sp_intersector_segment_intersectp(p00, p01, p10, p11)) {
 		NR::Point n0 = (p00 - p01).ccw();
@@ -120,3 +144,4 @@ sp_intersector_segment_intersect(const NR::Point p00, const NR::Point p01, const
 	}
 }
 
+#endif /* end yet-unused code */
