@@ -9,6 +9,8 @@
 #include <libnr/nr-coord.h>
 #include <libnr/nr-dim2.h>
 
+#include "round.h"
+
 struct NRPoint {
     NR::Coord x, y;
 };
@@ -89,8 +91,8 @@ public:
         by 10^places back again.
     */
     inline void round (int places = 0) {
-        _pt[X] = (Coord)(::round((double)_pt[X] * pow(10, places)) / pow(10, places));
-        _pt[Y] = (Coord)(::round((double)_pt[Y] * pow(10, places)) / pow(10, places));
+        _pt[X] = (Coord)(Inkscape::round((double)_pt[X] * pow(10, places)) / pow(10, places));
+        _pt[Y] = (Coord)(Inkscape::round((double)_pt[Y] * pow(10, places)) / pow(10, places));
         return;
     }
 
