@@ -6,6 +6,18 @@
 	* src/dialogs/desktop-properties.cpp: Fix a gtk_table size.
 	Make use of spw_dropdown in one place.
 
+	* src/select-context.cpp: Remove alt-drag "slow move" mode.
+	Make alt-drag move without any grid snap, even if the grid
+	is enabled.  Add a new mode, shift-drag, which preserves
+	objects' grid offsets rather than snapping their snappoints.
+
+	* src/selection-chemistry.cpp: Pasted objects have the same
+	offset from the grid as the original, if the grid is enabled.
+	Also a NRRect -> NR::Rect fix thrown in for no extra charge.
+
+	* src/dialogs/display-settings.cpp: Added option to reverse
+	the actions of drag and shift-drag when moving objects.
+
 2004-05-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/main.cpp (main): Test ENABLE_NLS instead of HAVE_NLS (which
