@@ -217,8 +217,10 @@ sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 			SPCurve *curve;
 			bpath = sp_svg_read_path (value);
 			curve = sp_curve_new_from_bpath (bpath);
-			sp_shape_set_curve ((SPShape *) path, curve, TRUE);
-			sp_curve_unref (curve);
+			if (curve) {
+			  sp_shape_set_curve ((SPShape *) path, curve, TRUE);
+			  sp_curve_unref (curve);
+			}
 		} else {
 			sp_shape_set_curve ((SPShape *) path, NULL, TRUE);
 		}
