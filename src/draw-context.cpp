@@ -519,12 +519,10 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
     /* Step C - test start */
     if (dc->sa) {
         SPCurve *s;
-        g_print("Curve start hit anchor\n");
         s = dc->sa->curve;
         dc->white_curves = g_slist_remove(dc->white_curves, s);
         if (dc->sa->start) {
             SPCurve *r;
-            g_print("Reversing curve\n");
             r = sp_curve_reverse(s);
             sp_curve_unref(s);
             s = r;
@@ -534,12 +532,10 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
         c = s;
     } else /* Step D - test end */ if (dc->ea) {
         SPCurve *e;
-        g_print("Curve end hit anchor\n");
         e = dc->ea->curve;
         dc->white_curves = g_slist_remove(dc->white_curves, e);
         if (!dc->ea->start) {
             SPCurve *r;
-            g_print("Reversing curve\n");
             r = sp_curve_reverse(e);
             sp_curve_unref(e);
             e = r;
@@ -1171,11 +1167,9 @@ spdc_finish_endpoint(SPPencilContext *pc, NR::Point p, gboolean snap, guint stat
 
     if ( SP_CURVE_LENGTH(dc->red_curve) < 2 ) {
         /* Just a click, reset red curve and continue */
-        g_print("Finishing empty red curve\n");
         sp_curve_reset(dc->red_curve);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
     } else if ( SP_CURVE_LENGTH(dc->red_curve) > 2 ) {
-        g_warning("Red curve length is %d", SP_CURVE_LENGTH(dc->red_curve));
         sp_curve_reset(dc->red_curve);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
     } else {
@@ -1190,12 +1184,10 @@ spdc_finish_endpoint(SPPencilContext *pc, NR::Point p, gboolean snap, guint stat
         e = SP_CURVE_SEGMENT(dc->red_curve, 1);
         if ( ( e->x3 == s->x3 ) && ( e->y3 == s->y3 ) ) {
             /* Empty line, reset red curve and continue */
-            g_print("Finishing zero length red curve\n");
             sp_curve_reset(dc->red_curve);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
         } else {
             /* Write curves to object */
-            g_print("Finishing real red curve\n");
             spdc_concat_colors_and_flush(dc, FALSE);
             dc->sa = NULL;
             dc->ea = NULL;
