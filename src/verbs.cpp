@@ -33,7 +33,6 @@
 #include "dialogs/object-properties.h"
 #include "dialogs/desktop-properties.h"
 #include "dialogs/display-settings.h"
-#include "dialogs/tool-options.h"
 #include "dialogs/item-properties.h"
 
 #include "select-context.h"

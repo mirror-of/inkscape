@@ -83,8 +83,6 @@ static void sp_dyna_draw_context_setup(SPEventContext *ec);
 static void sp_dyna_draw_context_set(SPEventContext *ec, gchar const *key, gchar const *val);
 static gint sp_dyna_draw_context_root_handler(SPEventContext *ec, GdkEvent *event);
 
-static GtkWidget *sp_dyna_draw_context_config_widget(SPEventContext *ec);
-
 static void clear_current(SPDynaDrawContext *dc);
 static void set_to_accumulated(SPDynaDrawContext *dc);
 static void concat_current_line(SPDynaDrawContext *dc);
@@ -136,7 +134,6 @@ sp_dyna_draw_context_class_init(SPDynaDrawContextClass *klass)
     event_context_class->setup = sp_dyna_draw_context_setup;
     event_context_class->set = sp_dyna_draw_context_set;
     event_context_class->root_handler = sp_dyna_draw_context_root_handler;
-    event_context_class->config_widget = sp_dyna_draw_context_config_widget;
 }
 
 static void
@@ -822,154 +819,6 @@ draw_temporary_box(SPDynaDrawContext *dc)
     }
     sp_curve_closepath(dc->currentcurve);
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->currentshape), dc->currentcurve);
-}
-
-/* Gtk stuff */
-
-static void
-sp_ddc_mass_value_changed(GtkAdjustment *adj, SPDynaDrawContext *ddc)
-{
-    sp_repr_set_double(SP_EVENT_CONTEXT_REPR(ddc), "mass", adj->value);
-}
-
-static void
-sp_ddc_drag_value_changed(GtkAdjustment *adj, SPDynaDrawContext *ddc)
-{
-    sp_repr_set_double(SP_EVENT_CONTEXT_REPR(ddc), "drag", adj->value);
-}
-
-static void
-sp_ddc_angle_value_changed(GtkAdjustment *adj, SPDynaDrawContext *ddc)
-{
-    sp_repr_set_double(SP_EVENT_CONTEXT_REPR(ddc), "angle", adj->value);
-}
-
-static void
-sp_ddc_width_value_changed(GtkAdjustment *adj, SPDynaDrawContext *ddc)
-{
-    sp_repr_set_double(SP_EVENT_CONTEXT_REPR(ddc), "width", adj->value);
-}
-
-static void sp_ddc_defaults(GtkWidget *, GtkObject *obj)
-{
-    struct KeyValue {
-        char const *key;
-        double value;
-    } const key_values[] = {
-        {"mass", 0.3},
-        {"drag", DRAG_DEFAULT},
-        {"angle", 30.0},
-        {"width", 0.2}
-    };
-
-    for (unsigned i = 0; i < G_N_ELEMENTS(key_values); ++i) {
-        KeyValue const &kv = key_values[i];
-        GtkAdjustment &adj = *static_cast<GtkAdjustment *>(gtk_object_get_data(obj, kv.key));
-        gtk_adjustment_set_value(&adj, kv.value);
-    }
-}
-
-static GtkWidget *
-sp_dyna_draw_context_config_widget(SPEventContext *ec)
-{
-    SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(ec);
-
-    GtkWidget *tbl = gtk_table_new(5, 2, FALSE);
-    gtk_container_set_border_width(GTK_CONTAINER(tbl), 4);
-    gtk_table_set_row_spacings(GTK_TABLE(tbl), 4);
-
-    /* Mass */
-    {
-        GtkWidget *l = gtk_label_new(_("Mass:"));
-        gtk_widget_show(l);
-        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
-        gtk_table_attach(GTK_TABLE(tbl), l, 0, 1, 0, 1,
-                         (GtkAttachOptions) 0,
-                         (GtkAttachOptions) 0,
-                         0, 0);
-        GtkObject *a = gtk_adjustment_new(ddc->mass, 0.0, 1.0, 0.01, 0.1, 0.1);
-        gtk_object_set_data(GTK_OBJECT(tbl), "mass", a);
-        GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
-        gtk_widget_show(sb);
-        gtk_table_attach(GTK_TABLE(tbl), sb, 1, 2, 0, 1,
-                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-                         (GtkAttachOptions) 0,
-                         0, 0);
-        gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_ddc_mass_value_changed), ddc);
-    }
-
-    /* Drag */
-    {
-        GtkWidget *l = gtk_label_new(_("Drag:"));
-        gtk_widget_show(l);
-        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
-        gtk_table_attach(GTK_TABLE(tbl), l, 0, 1, 1, 2,
-                         (GtkAttachOptions) 0,
-                         (GtkAttachOptions) 0,
-                         0, 0);
-        GtkObject *a = gtk_adjustment_new(ddc->drag, DRAG_MIN, DRAG_MAX, 0.01, 0.1, 0.1);
-        gtk_object_set_data(GTK_OBJECT(tbl), "drag", a);
-        GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
-        gtk_widget_show(sb);
-        gtk_table_attach(GTK_TABLE(tbl), sb, 1, 2, 1, 2,
-                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-                         (GtkAttachOptions) 0,
-                         0, 0);
-        gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_ddc_drag_value_changed), ddc);
-    }
-
-    /* Angle */
-    {
-        GtkWidget *l = gtk_label_new(_("Angle:"));
-        gtk_widget_show(l);
-        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
-        gtk_table_attach(GTK_TABLE(tbl), l, 0, 1, 2, 3,
-                         (GtkAttachOptions) 0,
-                         (GtkAttachOptions) 0,
-                         0, 0);
-        GtkObject *a = gtk_adjustment_new(ddc->angle, 0.0, 360.0, 1.0, 10.0, 10.0);
-        gtk_object_set_data(GTK_OBJECT(tbl), "angle", a);
-        GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
-        gtk_widget_show(sb);
-        gtk_table_attach(GTK_TABLE(tbl), sb, 1, 2, 2, 3,
-                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-                         (GtkAttachOptions) 0,
-                         0, 0);
-        gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_ddc_angle_value_changed), ddc);
-    }
-
-    /* Width */
-    {
-        GtkWidget *l = gtk_label_new(_("Width:"));
-        gtk_widget_show(l);
-        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
-        gtk_table_attach(GTK_TABLE(tbl), l, 0, 1, 3, 4,
-                         (GtkAttachOptions) 0,
-                         (GtkAttachOptions) 0,
-                         0, 0);
-        GtkObject *a = gtk_adjustment_new(ddc->width, 0.01, 1.0, 0.01, 0.1, 0.1);
-        gtk_object_set_data(GTK_OBJECT(tbl), "width", a);
-        GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
-        gtk_widget_show(sb);
-        gtk_table_attach(GTK_TABLE(tbl), sb, 1, 2, 3, 4,
-                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-                         (GtkAttachOptions) 0,
-                         0, 0);
-        gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_ddc_width_value_changed), ddc);
-    }
-
-    /* Reset */
-    {
-        GtkWidget *b = gtk_button_new_with_label(_("Defaults"));
-        gtk_widget_show(b);
-        gtk_table_attach(GTK_TABLE(tbl), b, 0, 2, 4, 5,
-                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-                         (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-                         0, 0);
-        gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(sp_ddc_defaults), tbl);
-    }
-
-    return tbl;
 }
 
 /*
