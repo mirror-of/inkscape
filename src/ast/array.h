@@ -53,6 +53,8 @@ public:
     }
 
 private:
+    void operator=(CArray<T> const &);
+
     CArray<T> const &_array;
     size_t _length;
 };

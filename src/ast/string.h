@@ -46,6 +46,8 @@ public:
     }
 
 private:
+    void operator=(CString const &);
+
     CString const &_string;
     mutable size_t _bytes;
     mutable size_t _chars;
