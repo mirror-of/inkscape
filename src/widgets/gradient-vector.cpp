@@ -876,9 +876,28 @@ sp_gradient_vector_editor_new (SPGradient *gradient)
 		gtk_widget_show (wid);
 		gtk_container_add (GTK_CONTAINER (dlg), wid);
 	} else {
-		gtk_window_present ((GtkWindow *) dlg);
-		wid = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "gradient-vector-widget");
-		sp_gradient_vector_widget_load_gradient (wid, gradient);
+		// FIXME: temp fix for 0.38
+		// Simply load_gradient into the editor does not work for multi-stop gradients, 
+		// as the stop list and other widgets are in a wrong state and crash readily. 
+		// Instead we just delete the window (by sending the delete signal)
+		// and call sp_gradient_vector_editor_new again, so it creates the window anew.
+
+		GdkEventAny event;
+		GtkWidget *widget = (GtkWidget *) dlg;
+		event.type = GDK_DELETE;
+		event.window = widget->window;
+		event.send_event = TRUE;
+		g_object_ref (G_OBJECT (event.window));
+		gtk_main_do_event ((GdkEvent*)&event);
+		g_object_unref (G_OBJECT (event.window));
+
+		g_assert (dlg == NULL);
+		sp_gradient_vector_editor_new (gradient);
+
+		// The old code which crashes when you "add" (i.e. copy) a three-stop gradient, "edit" it, and add a stop
+		//		gtk_window_present ((GtkWindow *) dlg);
+		//		wid = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "gradient-vector-widget");
+		//		sp_gradient_vector_widget_load_gradient (wid, gradient);
 	}
 
 	return dlg;
@@ -929,6 +948,9 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 	/* Fill preview */
 	GtkWidget *w = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(widget), "preview"));
 	sp_gradient_image_set_gradient (SP_GRADIENT_IMAGE (w), gradient);
+
+	GtkWidget *mnu = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(widget), "stopmenu"));
+	update_stop_list (GTK_WIDGET(mnu), gradient, NULL);
 }
 
 static void
