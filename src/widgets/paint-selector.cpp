@@ -177,7 +177,7 @@ sp_paint_selector_init (SPPaintSelector *psel)
 	psel->pattern = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_PATTERN,
                                SP_PAINT_SELECTOR_MODE_PATTERN, GTK_RADIO_BUTTON (psel->radial), tt, _("Pattern"));
 	psel->unset = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_UNSET,
-                               SP_PAINT_SELECTOR_MODE_UNSET, GTK_RADIO_BUTTON (psel->pattern), tt, _("Make paint undefined (so it may be inherited)"));
+                               SP_PAINT_SELECTOR_MODE_UNSET, GTK_RADIO_BUTTON (psel->pattern), tt, _("Unset paint (make it undefined so it can be inherited)"));
 
 	/* Frame */
 	psel->frame = gtk_frame_new ("");
