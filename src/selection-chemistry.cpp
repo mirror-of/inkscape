@@ -1550,9 +1550,13 @@ sp_selection_untile()
         if (!style || style->fill.type != SP_PAINT_TYPE_PAINTSERVER) 
             continue;
 
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+
+        if (!SP_IS_PATTERN(server))
+            continue;
+
         did = true;
 
-        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         SPPattern *pattern = pattern_getroot (SP_PATTERN (server));
 
         NR::Matrix pat_transform = pattern_patternTransform (SP_PATTERN (server));
