@@ -91,11 +91,12 @@ libinkscape.a: $(OBJ)
 
 PLUGS = extension/plugin/gimpgrad.dll
 
-plugins: $(PLUGS)
+plugins:
 
-extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o libinkscape.a
+extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o
+	$(CXX) -shared -o tmp.so $< $(LIBS) -lgc
 	$(DLLWRAP) --def=plugin.def --driver-name=g++ \
-	-o $@ $< libinkscape.a $(LIBS)
+	-dllname $@ tmp.so
 
 
 
@@ -108,7 +109,7 @@ extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o libinkscape.a
 clean:
 	$(foreach a, $(OBJ), $(shell $(RM) $(subst /,$(S), $(a))))
 	$(RM) *.a
-	$(RM) *.def
+	$(RM) inkscape.def
 	$(RM) *.dll
 	$(RM) extension$(S)plugin$(S)*.o
 	$(RM) extension$(S)plugin$(S)*.dll

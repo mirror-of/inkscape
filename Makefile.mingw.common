@@ -42,6 +42,7 @@ RANLIB  = i686-pc-mingw32-ranlib
 WINDRES = i686-pc-mingw32-windres
 LD      = i686-pc-mingw32-ld
 DLLWRAP = i686-pc-mingw32-dllwrap
+DLLTOOL = i686-pc-mingw32-dlltool
 
 # file separator
 S = $(FSLASH)
@@ -75,6 +76,7 @@ AR      = mingw32-ar
 RANLIB  = ranlib
 WINDRES = windres
 DLLWRAP = dllwrap
+DLLTOOL = dlltool
 
 # file separator
 S = $(BSLASH)
@@ -125,11 +127,11 @@ CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
 #########################################
 
 GTKINC = \
--I$(GTK)/include/gtkmm-2.4 -I$(GTK)/lib/gtkmm-2.4/include \
--I$(GTK)/include/gdkmm-2.4 -I$(GTK)/lib/gdkmm-2.4/include \
--I$(GTK)/include/pangomm-1.4 -I$(GTK)/lib/pangomm-1.4/include \
--I$(GTK)/include/atkmm-1.6 -I$(GTK)/lib/atkmm-1.6/include \
 -I$(GTK)/include/glibmm-2.4 -I$(GTK)/lib/glibmm-2.4/include \
+-I$(GTK)/include/gtkmm-2.4  -I$(GTK)/lib/gtkmm-2.4/include \
+-I$(GTK)/include/gdkmm-2.4  -I$(GTK)/lib/gdkmm-2.4/include \
+-I$(GTK)/include/pangomm-1.4 \
+-I$(GTK)/include/atkmm-1.6  \
 -I$(GTK)/include/sigc++-2.0 -I$(GTK)/lib/sigc++-2.0/include \
 -I$(GTK)/include/gtk-2.0 -I$(GTK)/lib/gtk-2.0/include \
 -I$(GTK)/include/atk-1.0 -I$(GTK)/include/pango-1.0 \
@@ -151,7 +153,7 @@ INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
 
 LIBS = $(GTKLIB) -lxml2 \
 $(GTK)/lib/iconv.lib	\
--lfreetype -lpng -lpopt $(GTK)/lib/zdll.lib \
+-lfreetype -lfontconfig -lpng -lpopt $(GTK)/lib/zdll.lib \
 -lgc -lgccpp -mwindows -lws2_32 -lintl
 
 
