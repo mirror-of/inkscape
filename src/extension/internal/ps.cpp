@@ -538,6 +538,15 @@ PrintPS::release(Inkscape::Extension::Print *mod)
     return fprintf(_stream, "grestore\n");
 }
 
+unsigned int
+PrintPS::comment(Inkscape::Extension::Print *mod, const char * comment)
+{
+    if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+    if (_bitmap) return 0;
+
+    return fprintf(_stream, "%%! %s\n",comment);
+}
+
 void
 PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style)
 {

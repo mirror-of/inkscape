@@ -73,6 +73,12 @@ Print::release (void)
 }
 
 unsigned int
+Print::comment (const char * comment)
+{
+    return imp->comment(this,comment);
+}
+
+unsigned int
 Print::fill (const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
                    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {

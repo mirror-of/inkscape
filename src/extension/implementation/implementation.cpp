@@ -115,6 +115,12 @@ Implementation::release (Inkscape::Extension::Print * module)
 }
 
 unsigned int
+Implementation::comment (Inkscape::Extension::Print * module, const char * comment)
+{
+	return 0;
+}
+
+unsigned int
 Implementation::fill (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			   const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {

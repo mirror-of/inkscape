@@ -625,6 +625,8 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
 
 	if (!shape->curve) return;
 
+        //sp_print_comment(ctx, "Start");
+
 	/* fixme: Think (Lauris) */
 	sp_item_invoke_bbox(item, &pbox, NR::identity(), TRUE);
 	dbox.x0 = 0.0;
@@ -670,6 +672,8 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
                 }
             }
         }
+
+        //sp_print_comment(ctx,"End");
 }
 
 static NRArenaItem *

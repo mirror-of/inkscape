@@ -78,6 +78,7 @@ public:
                           NRMatrix const *transform,
                           float opacity);
     virtual unsigned release(Inkscape::Extension::Print *module);
+    virtual unsigned comment(Inkscape::Extension::Print *module, const char * comment);
     virtual unsigned fill(Inkscape::Extension::Print *module,
                           NRBPath const *bpath,
                           NRMatrix const *ctm,

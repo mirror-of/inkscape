@@ -61,6 +61,12 @@ sp_print_release (SPPrintContext *ctx)
 }
 
 unsigned int
+sp_print_comment(SPPrintContext *ctx, const char * comment)
+{
+	return ctx->module->comment(comment);
+}
+
+unsigned int
 sp_print_fill (SPPrintContext *ctx, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 	       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {

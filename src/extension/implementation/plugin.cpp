@@ -283,6 +283,12 @@ Plugin::release(Inkscape::Extension::Print *module)
 }
 
 unsigned
+Plugin::comment(Inkscape::Extension::Print *module, const char * comment)
+{
+    return Inkscape::Extension::Implementation::Implementation::comment(module,comment);
+}
+
+unsigned
 Plugin::fill(Inkscape::Extension::Print *module, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style, NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
 {
     return Inkscape::Extension::Implementation::Implementation::fill(module, bpath, ctm, style, pbox, dbox, bbox);

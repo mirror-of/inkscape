@@ -44,6 +44,7 @@ public:
     unsigned int  bind        (NRMatrix const *transform,
                                float opacity);
     unsigned int  release     (void);
+    unsigned int  comment     (const char * comment);
     unsigned int  fill        (NRBPath const *bpath,
                                NRMatrix const *ctm,
                                SPStyle const *style,
