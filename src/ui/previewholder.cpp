@@ -30,6 +30,7 @@ PreviewHolder::PreviewHolder() :
 {
     _scroller = manage(new Gtk::ScrolledWindow());
     Gtk::Table* stuff = manage(new Gtk::Table( 1, 2 ));
+    stuff->set_col_spacings( 8 );
     _insides = stuff;
     _scroller->add(*stuff);
 
@@ -52,8 +53,8 @@ void PreviewHolder::addPreview( Previewable* preview )
     items.push_back(preview);
 
 
-    Gtk::Widget* thing = manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
     Gtk::Widget* label = manage(preview->getPreview(PREVIEW_STYLE_BLURB, _baseSize));
+    Gtk::Widget* thing = manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
 
 
     int i = items.size() - 1;
