@@ -58,9 +58,6 @@ struct SPUse {
 
 	// the bbox of the original, for sensing its movements and adjusting
 	NR::Rect original;
-
-	// the original's repr that we listen to
-	SPRepr *repr;
 };
 
 struct SPUseClass {

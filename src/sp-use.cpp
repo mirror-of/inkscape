@@ -26,6 +26,9 @@
 #include "macros.h"
 #include "xml/repr.h"
 #include "xml/repr-private.h"
+#include "desktop-handles.h"
+#include "inkscape.h"
+#include "sp-item.h"
 
 #include "sp-use.h"
 
@@ -53,8 +56,8 @@ static void sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use);
 
 static SPItemClass * parent_class;
 
-//void mm_print (gchar *say, NR::Matrix m)
-//{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
+void mm_print (gchar *say, NR::Matrix m)
+{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
 
 GType
 sp_use_get_type (void)
@@ -116,7 +119,6 @@ sp_use_init (SPUse * use)
 	sp_svg_length_unset (&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	sp_svg_length_unset (&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	use->href = NULL;
-	use->repr = NULL;
 }
 
 static void
@@ -413,12 +415,11 @@ inline bool point_equalp(NR::Point const &a, NR::Point const &b)
 }
 
 /**
-Sensing a movement of the original, this listener function attempts to compensate for it in such a way
+Sensing a movement of the original, this function attempts to compensate for it in such a way
 that the clone stays unmoved or moves in parallel (depending on user setting) regardless of the clone's transform.
 */
-static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
+static void sp_use_move_compensation (SPUse *use)
 {
-	SPUse *use = SP_USE (data);
 	SPItem *ref = use->ref->getObject();
 
 	// this is not a real use, but a clone of another use; 
@@ -426,8 +427,8 @@ static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, con
 	if (SP_OBJECT_IS_CLONED (use))
 		return;
 
- 	//g_print ("=====%s, %p\n", sp_repr_attr(SP_OBJECT_REPR (use), "id"), use);
- 	//g_print ("%s: %s/%s\n", name, old_value, new_value);
+	// 	g_print ("=====%s, %p\n", sp_repr_attr(SP_OBJECT_REPR (use), "id"), use);
+	// 	g_print ("%s: %s/%s\n", name, old_value, new_value);
 
 	// find out the current bbox of the original
 	NRRect bbox;
@@ -440,8 +441,11 @@ static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, con
 	NR::Rect o = use->original;
 	use->original = n;
 
- 	//mm_print ("old", NR::Matrix (NR::translate (o.midpoint())));
- 	//mm_print ("new", NR::Matrix (NR::translate (n.midpoint())));
+	// 	mm_print ("old", NR::Matrix (NR::translate (o.midpoint())));
+	// 	mm_print ("new", NR::Matrix (NR::translate (n.midpoint())));
+
+	// 	mm_print ("dim diff", NR::Matrix (NR::translate (n.dimensions() - o.dimensions())));
+	// 	mm_print ("mid diff", NR::Matrix (NR::translate (n.midpoint() - o.midpoint())));
 
 	// if dimensions changed, this is not pure move, so quit
 	if (!point_equalp (n.dimensions(), o.dimensions())) 
@@ -455,6 +459,8 @@ static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, con
 	if (point_equalp (op, np))
 		return;
 
+	// 	mm_print ("par", NR::Matrix (NR::translate (op - np)));
+
 	// transform both old and new midpoints
 	NR::Matrix t = sp_use_get_parent_transform (use);
 	np *= t;
@@ -462,28 +468,17 @@ static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, con
 	// this is how the clone would move, if we allow it to
 	NR::Matrix affine (NR::translate ((op - np)));
 
+	//	mm_print ("  t", t);
+	//	mm_print ("aff", affine);
+
 	SPItem *item = SP_ITEM(use);
 
 	// compensation: clones stay unmoved
 	NRMatrix affine_n = affine;
-	nr_matrix_multiply (&item->transform, &item->transform, &affine_n);
-	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+	NRMatrix affine_nn;
+	nr_matrix_multiply (&affine_nn, &item->transform, &affine_n);
+	sp_item_write_transform (item, SP_OBJECT_REPR (item), &affine_nn);
 }
-
-static SPReprEventVector use_repr_events = {
-	NULL, /* destroy */
-	NULL, /* add_child */
-	NULL, /* child_added */
-	NULL, /* remove_child */
-	NULL, /* child_removed */
-	NULL, /* change_attr */
-	sp_use_original_attr_changed,
-	NULL, /* change_list */
-	NULL, /* content_changed */
-	NULL, /* change_order */
-	NULL  /* order_changed */
-};
-
 
 static void
 sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
@@ -518,22 +513,6 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 			}
 		}
 	}
-
-	// connect signal callbacks for adjusting use's transform when the original is moved,
-	// to implement "stays unmoved" and "moves in parallel" modes (user-selectable)
- 	if (old_ref && use->repr) {
-		sp_repr_remove_listener_by_data (use->repr, use);
-		sp_repr_unref (use->repr);
-		use->repr = NULL;
- 	}
-
-	SPItem *refobj = use->ref->getObject();
- 	if (SP_IS_ITEM (refobj) && SP_OBJECT_REPR (refobj)) {
-		use->repr = SP_OBJECT_REPR (refobj);
-		sp_repr_ref (use->repr);
-		sp_repr_add_listener (use->repr, &use_repr_events, use);
-		sp_repr_synthesize_events (use->repr, &use_repr_events, use);
- 	}
 }
 
 
@@ -550,9 +529,9 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	ictx = (SPItemCtx *) ctx;
 	cctx = *ictx;
 
-	// remember the original's bbox
+	// remember the original's bbox, if it's not yet set
 	SPItem *refobj = use->ref->getObject();
- 	if (SP_IS_ITEM (refobj)) {
+ 	if (SP_IS_ITEM (refobj) && use->original.isEmpty()) {
 		NRRect bbox;
 		NRMatrix i2doc;
 		sp_item_i2doc_affine(SP_ITEM(refobj), &i2doc);
@@ -608,6 +587,8 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		nr_matrix_set_translate (&t, use->x.computed, use->y.computed);
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &t);
 	}
+
+	sp_use_move_compensation (use);
 }
 
 static void
