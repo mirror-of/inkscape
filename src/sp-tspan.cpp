@@ -488,8 +488,14 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 	
     textpath->attributes.writeTo(repr);
-    if (textpath->startOffset.set)
-        sp_repr_set_double(repr, "startOffset", textpath->startOffset.computed);
+    if (textpath->startOffset.set) {
+        if (textpath->startOffset.unit == SP_SVG_UNIT_PERCENT) {
+	        Inkscape::SVGOStringStream os;
+            os << (textpath->startOffset.computed * 100.0) << "%";
+            SP_OBJECT_REPR(textpath)->setAttribute("startOffset", os.str().c_str());
+        } else
+            sp_repr_set_double(repr, "startOffset", textpath->startOffset.computed);
+    }
 
     if ( textpath->sourcePath->sourceHref ) sp_repr_set_attr(repr, "xlink:href", textpath->sourcePath->sourceHref);
 	
