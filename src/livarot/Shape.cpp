@@ -18,8 +18,9 @@
  * the graph is stored as a set of points and edges, with edges in a doubly-linked list for each point.
  */
 
-Shape::Shape (void)
-  : sTree(NULL),
+Shape::Shape()
+  : iData(NULL),
+    sTree(NULL),
     sEvts(NULL),
     _need_points_sorting(false),
     _need_edges_sorting(false),
@@ -2128,6 +2129,13 @@ void Shape::initialiseEdgeData()
 }
 
 
+void Shape::clearIncidenceData()
+{
+    g_free(iData);
+    iData = NULL;
+    nbInc = maxInc = 0;
+}
+
 
 
 /**
@@ -2268,3 +2276,4 @@ bool distanceLessThanOrEqual(Shape const *s, NR::Point const &p, double const ma
 }
 
 //};
+
