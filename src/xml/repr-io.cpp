@@ -266,7 +266,7 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
 
 	repr = sp_repr_document_root (doc);
 
-	sp_repr_write_stream (repr, fp, 0);
+	sp_repr_write_stream (repr, fp, 0, TRUE);
 }
 
 void
@@ -287,7 +287,7 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
 void
 sp_repr_print (SPRepr * repr)
 {
-	sp_repr_write_stream (repr, stdout, 0);
+	sp_repr_write_stream (repr, stdout, 0, TRUE);
 
 	return;
 }
@@ -308,7 +308,7 @@ repr_quote_write (FILE * file, const gchar * val)
 }
 
 void
-sp_repr_write_stream (SPRepr * repr, FILE * file, gint level)
+sp_repr_write_stream (SPRepr * repr, FILE * file, gint level, gboolean whitespace)
 {
 	SPReprAttr *attr;
 	SPRepr *child;
@@ -320,8 +320,11 @@ sp_repr_write_stream (SPRepr * repr, FILE * file, gint level)
 	g_return_if_fail (file != NULL);
 
 	if (level > 16) level = 16;
-	for (i = 0; i < level; i++) fputs ("  ", file);
+	if (whitespace) for (i = 0; i < level; i++) fputs ("  ", file);
 	fprintf (file, "<%s", sp_repr_name (repr));
+
+	// if this is text element, suppress formatting whitespace for its content and children:
+	if (!strcmp (sp_repr_name (repr), "text")) whitespace = FALSE; 
 
 	for (attr = repr->attributes; attr != NULL; attr = attr->next) {
 		key = SP_REPR_ATTRIBUTE_KEY (attr);
@@ -341,22 +344,25 @@ sp_repr_write_stream (SPRepr * repr, FILE * file, gint level)
 	}
 	if (repr->children /* || sp_repr_content (repr) */ ) {
 		fputs (">", file);
-		if (loose) fputs ("\n", file);
+		if (loose && whitespace) fputs ("\n", file);
 		for (child = repr->children; child != NULL; child = child->next) {
 			if (child->type == SP_XML_TEXT_NODE) {
 				repr_quote_write (file, sp_repr_content (child));
 			} else {
-				sp_repr_write_stream (child, file, (loose) ? (level + 1) : 0);
+				// output children, incrementing level and passing the whitespace flag to them
+				sp_repr_write_stream (child, file, (loose) ? (level + 1) : 0, whitespace); 
 			}
 		}
 		
-		if (loose) {
+		if (loose && whitespace) {
 			for (i = 0; i < level; i++) fputs ("  ", file);
 		}
-		fprintf (file, "</%s>\n", sp_repr_name (repr));
+		fprintf (file, "</%s>", sp_repr_name (repr));
 	} else {
-		fputs (" />\n", file);
+		fputs (" />", file);
 	}
+	// text elements cannot nest, so we can output newline after closing text
+	if (whitespace || !strcmp (sp_repr_name (repr), "text")) fputs ("\n", file); 
 }
 
 #ifdef HAVE_LIBWMF
