@@ -30,6 +30,7 @@ struct _SPShape {
 
 	SPCurve *curve;
 
+        SPObject *marker;
 	SPObject *marker_start;
 	SPObject *marker_mid;
 	SPObject *marker_end;

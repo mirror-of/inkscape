@@ -59,6 +59,11 @@ sp_path_get_type (void)
 	return type;
 }
 
+/** 
+ *  Does the object-oriented work of initializing the class structure
+ *  including parent class, and registers function pointers for
+ *  the functions build, set, write, and write_transform.
+ */
 static void
 sp_path_class_init (SPPathClass * klass)
 {
@@ -83,6 +88,10 @@ sp_path_init (SPPath *path)
 	/* Nothing here */
 }
 
+/**
+ *  Given a repr, this sets the data items in the path object such as
+ *  fill & style attributes, markers, and CSS properties.
+ */
 static void
 sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
@@ -149,6 +158,10 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 		((SPObjectClass *) parent_class)->build (object, document, repr);
 }
 
+/**
+ *  Sets a value in the path object given by 'key', to 'value'.  This is used
+ *  for setting attributes and markers on a path object.
+ */
 static void
 sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 {
@@ -173,6 +186,7 @@ sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_PROP_MARKER_START:
 	case SP_PROP_MARKER_MID:
 	case SP_PROP_MARKER_END:
+	  /* TODO:  value is NULL at this point - need to find why & fix */
 		sp_shape_set_marker (object, key, value);
 		break;
 	default:
@@ -182,6 +196,10 @@ sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 }
 
+/**
+ *
+ * Writes the path object into a SPRepr
+ */
 static SPRepr *
 sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 {

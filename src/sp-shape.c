@@ -450,20 +450,28 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 		}
 		/* Dimension marker views */
 		if (!arenaitem->key) NR_ARENA_ITEM_SET_KEY (arenaitem, sp_item_display_key_new (3));
-		if (shape->marker_start) sp_marker_show_dimension ((SPMarker *) shape->marker_start,
-								   NR_ARENA_ITEM_GET_KEY (arenaitem) + SP_MARKER_START,
-								   nstart);
-		if (shape->marker_mid) sp_marker_show_dimension ((SPMarker *) shape->marker_mid,
-								 NR_ARENA_ITEM_GET_KEY (arenaitem) + SP_MARKER_MID,
-								 nmid);
-		if (shape->marker_end) sp_marker_show_dimension ((SPMarker *) shape->marker_end,
-								 NR_ARENA_ITEM_GET_KEY (arenaitem) + SP_MARKER_END,
-								 nend);
+		if (shape->marker_start) {
+		  sp_marker_show_dimension ((SPMarker *) shape->marker_start,
+					    NR_ARENA_ITEM_GET_KEY (arenaitem) + SP_MARKER_START,
+					    nstart);
+		}
+		if (shape->marker_mid) {
+		  sp_marker_show_dimension ((SPMarker *) shape->marker_mid,
+					    NR_ARENA_ITEM_GET_KEY (arenaitem) + SP_MARKER_MID,
+					    nmid);
+		}
+		if (shape->marker_end) {
+		  sp_marker_show_dimension ((SPMarker *) shape->marker_end,
+					    NR_ARENA_ITEM_GET_KEY (arenaitem) + SP_MARKER_END,
+					    nend);
+		}
 		/* Update marker views */
 		sp_shape_update_marker_view (shape, arenaitem);
 	}
 
 	/* fixme: (Lauris) */
+	/* since this routine hasn't changed anything in item (afaik), do we actually
+	   need to request an update?  Verify we don't and remove this if so -- bryce */
 	/* sp_object_request_update ((SPObject *) item, SP_OBJECT_MODIFIED_FLAG); */
 
 	return arenaitem;

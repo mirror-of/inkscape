@@ -563,10 +563,13 @@ sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 
 	for (v = marker->views; v != NULL; v = v->next) {
 		if (v->key == key) {
-			if (pos >= v->size) return NULL;
+			if (pos >= v->size) {
+			  return NULL;
+			}
 			if (!v->items[pos]) {
 				/* Parent class ::show method */
-				v->items[pos] = ((SPItemClass *) parent_class)->show ((SPItem *) marker, parent->arena, key,
+				v->items[pos] = ((SPItemClass *) parent_class)->show ((SPItem *) marker, 
+										      parent->arena, key,
 										      SP_ITEM_REFERENCE_FLAGS);
 				if (v->items[pos]) {
 					NRMatrixF vbf;

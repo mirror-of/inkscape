@@ -322,8 +322,9 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 			sp_style_read_from_object (object->style, object);
 			sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 		} else {
-			if (((SPObjectClass *) (parent_class))->set)
-				(* ((SPObjectClass *) (parent_class))->set) (object, key, value);
+		  if (((SPObjectClass *) (parent_class))->set) {
+		    (* ((SPObjectClass *) (parent_class))->set) (object, key, value);
+		  }
 		}
 		break;
 	}
