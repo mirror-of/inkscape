@@ -1976,6 +1976,7 @@ gboolean node_key(GdkEvent *event)
     if ((event->type == GDK_KEY_PRESS) && !(event->key.state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
         gint ret = FALSE;
         switch (event->key.keyval) {
+            // FIXME: this does not seem to work, the keys are stolen by tool contexts!
             case GDK_BackSpace:
                 np = active_node->subpath->nodepath;
                 sp_nodepath_node_destroy(active_node);
