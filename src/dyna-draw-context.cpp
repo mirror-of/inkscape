@@ -854,19 +854,23 @@ sp_ddc_width_value_changed (GtkAdjustment *adj, SPDynaDrawContext *ddc)
 	sp_repr_set_double (SP_EVENT_CONTEXT_REPR (ddc), "width", adj->value);
 }
 
-static void
-sp_ddc_defaults (GtkWidget *widget, GtkObject *obj)
+static void sp_ddc_defaults(GtkWidget *, GtkObject *obj)
 {
-	GtkAdjustment *adj;
+	struct KeyValue {
+		char const *key;
+		double value;
+	} const key_values[] = {
+		{"mass", 0.3},
+		{"drag", DRAG_DEFAULT},
+		{"angle", 30.0},
+		{"width", 0.2}
+	};
 
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "mass");
-	gtk_adjustment_set_value (adj, 0.3);
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "drag");
-	gtk_adjustment_set_value (adj, DRAG_DEFAULT);
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "angle");
-	gtk_adjustment_set_value (adj, 30.0);
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "width");
-	gtk_adjustment_set_value (adj, 0.2);
+	for (unsigned i = 0; i < G_N_ELEMENTS(key_values); ++i) {
+		KeyValue const &kv = key_values[i];
+		GtkAdjustment &adj = *static_cast<GtkAdjustment *>(gtk_object_get_data(obj, kv.key));
+		gtk_adjustment_set_value(&adj, kv.value);
+	}
 }
 
 static GtkWidget *
