@@ -2,6 +2,9 @@
 
 	* src/view.h, src/view.c: added new utility things for setting status
 
+	* src/draw-context.c, src/text-context.c, src/view.c, src/view.h:
+	  retired sp_status_display() and sp_status_clear()
+
 2003-12-14  bulia byak <bulia@dr.com>
 
 	* src/verbs.h src/verbs.c: changed 'offset' to 'outset' (more logical), added simplify

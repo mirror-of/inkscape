@@ -239,19 +239,6 @@ sp_view_clear_status (SPView *view)
 	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, NULL, TRUE);
 }
 
-void
-sp_status_display (gchar *message)
-{
-	sp_view_set_status (SP_VIEW (SP_ACTIVE_DESKTOP), message, TRUE);
-	g_free (message);
-}
-
-void
-sp_status_clear ()
-{
-	sp_view_set_status (SP_VIEW (SP_ACTIVE_DESKTOP), NULL, TRUE);
-}
-
 static void
 sp_view_document_uri_set (SPDocument *doc, const guchar *uri, SPView *view)
 {

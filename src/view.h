@@ -64,8 +64,6 @@ void sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault);
 void sp_view_set_statusf (SPView *view, const gchar *format, ...);
 void sp_view_set_statusf_va (SPView *view, const gchar *format, va_list args);
 void sp_view_clear_status (SPView *view);
-void sp_status_display (gchar *message);
-void sp_status_clear ();
 
 gboolean sp_view_shutdown (SPView *view);
 void sp_view_request_redraw (SPView *view);

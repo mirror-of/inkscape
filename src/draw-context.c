@@ -751,8 +751,9 @@ static SPDrawAnchor *
 sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, gdouble dx, gdouble dy)
 {
 	SPDrawAnchor *a;
+	SPDesktop *dt=SP_EVENT_CONTEXT_DESKTOP (SP_EVENT_CONTEXT (dc));
 
-	sp_status_display(g_strdup_printf ("Creating anchor at %g %g", dx, dy));
+	sp_view_set_statusf(SP_VIEW (dt), "Creating anchor at %g %g", dx, dy);
 
 	a = g_new (SPDrawAnchor, 1);
 
@@ -762,8 +763,8 @@ sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, gdouble d
 	a->active = FALSE;
 	a->dp.x = dx;
 	a->dp.y = dy;
-	sp_desktop_d2w_xy_point (SP_EVENT_CONTEXT_DESKTOP (dc), &a->wp, dx, dy);
-	a->ctrl = sp_canvas_item_new (SP_DT_CONTROLS (SP_EVENT_CONTEXT_DESKTOP (dc)), SP_TYPE_CTRL,
+	sp_desktop_d2w_xy_point (dt, &a->wp, dx, dy);
+	a->ctrl = sp_canvas_item_new (SP_DT_CONTROLS (dt), SP_TYPE_CTRL,
 					 "size", 4.0,
 					 "filled", 0,
 					 "fill_color", 0xff00007f,
@@ -1002,7 +1003,7 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				dc->ea = anchor;
 				/* Write curves to object */
 
-				sp_status_display(g_strdup_printf ("Finishing freehand"));
+				sp_view_set_statusf(SP_VIEW (dt), "Finishing freehand");
 
 				spdc_concat_colors_and_flush (dc, FALSE);
 				dc->sa = NULL;
