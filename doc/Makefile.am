@@ -1,5 +1,4 @@
 EXTRA_DIST = API \
-             DEVELOPERS \
              README.document \
              WISHLIST \
              architecture.svg \
