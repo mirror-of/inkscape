@@ -64,6 +64,7 @@
 #include "sp-use-reference.h"
 
 
+#include "sp-object.h"
 #include "sp-shape.h"
 #include "sp-tspan.h"
 #include "sp-text.h"
@@ -754,9 +755,7 @@ sp_textpath_to_text (SPObject *tp)
 
 	// set x/y on text 
 	if (xy[NR::X] != 1e18 && xy[NR::Y] != 1e18) {
-		SP_TEXT(text)->x.computed = xy[NR::X];
-		SP_TEXT(text)->x.set = TRUE;
-		SP_TEXT(text)->y.computed = xy[NR::Y];
-		SP_TEXT(text)->y.set = TRUE;
+		sp_repr_set_double (SP_OBJECT_REPR(text), "x", xy[NR::X]);
+		sp_repr_set_double (SP_OBJECT_REPR(text), "y", xy[NR::Y]);
 	}
 }
