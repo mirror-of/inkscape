@@ -476,26 +476,20 @@ static void
 sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
 {
     AlignCoeffs const &a = *static_cast<AlignCoeffs const *>(data);
-    SPDesktop * desktop;
-    SPSelection * selection;
-    GSList * slist;
-    SPItem * master, * item;
-    NRRect b;
-    NRPoint mp, sp;
-    GSList * l;
-    gboolean changed;
 
-    desktop = SP_ACTIVE_DESKTOP;
-    
-    if (!desktop)
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop) {
         return;
+    }
 
-    selection = SP_DT_SELECTION (desktop);
-    slist = (GSList *) sp_selection_item_list (selection);
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+    GSList *slist = (GSList *) sp_selection_item_list(selection);
     
-    if (!slist)
+    if (!slist) {
         return;
+    }
 
+    NRPoint mp;
     switch (base) {
     
         case SP_ALIGN_LAST:
@@ -503,19 +497,21 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
         case SP_ALIGN_BIGGEST:
         
         case SP_ALIGN_SMALLEST:
-        
+	{
             if (!slist->next)
                 return;
 
             slist = g_slist_copy (slist);
-            master = 
+            SPItem *master =
                 sp_quick_align_find_master ( slist, 
                                              (a.mx0 != 0.0) || (a.mx1 != 0.0) );
             slist = g_slist_remove (slist, master);
+	    NRRect b;
             sp_item_bbox_desktop (master, &b);
             mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
             mp.y = a.my0 * b.y0 + a.my1 * b.y1;
             break;
+	}
             
         case SP_ALIGN_PAGE:
             slist = g_slist_copy (slist);
@@ -524,30 +520,37 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
             break;
         
         case SP_ALIGN_DRAWING:
+	{
             slist = g_slist_copy (slist);
+	    NRRect b;
             sp_item_bbox_desktop 
                 ( (SPItem *) sp_document_root (SP_DT_DOCUMENT (desktop)), &b );
             mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
             mp.y = a.my0 * b.y0 + a.my1 * b.y1;
             break;
+	}
         
         case SP_ALIGN_SELECTION:
+	{
             slist = g_slist_copy (slist);
+	    NRRect b;
             sp_selection_bbox (selection, &b);
             mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
             mp.y = a.my0 * b.y0 + a.my1 * b.y1;
             break;
+	}
         
         default:
             g_assert_not_reached ();
             break;
     };  // end of switch
 
-    changed = FALSE;
-
-    for (l = slist; l != NULL; l = l->next) {
-        item = (SPItem *) l->data;
+    bool changed = false;
+    for (GSList *l = slist; l != NULL; l = l->next) {
+        SPItem *item = (SPItem *) l->data;
+	NRRect b;
         sp_item_bbox_desktop (item, &b);
+	NRPoint sp;
         sp.x = a.sx0 * b.x0 + a.sx1 * b.x1;
         sp.y = a.sy0 * b.y0 + a.sy1 * b.y1;
 
@@ -555,13 +558,13 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
              (fabs (mp.y - sp.y) > 1e-9)) {
         
             sp_item_move_rel (item, mp.x - sp.x, mp.y - sp.y);
-            changed = TRUE;
+            changed = true;
         }
     }
 
     g_slist_free (slist);
 
-    if ( changed ) {
+    if (changed) {
         sp_selection_changed (selection);
         sp_document_done ( SP_DT_DOCUMENT (desktop) );
     }
@@ -848,6 +851,13 @@ sp_align_distribute_v_clicked ( GtkWidget *widget, const gchar *layout )
 } // end of sp_align_distribute_v_clicked()
 
 
-
-
-
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/
