@@ -108,7 +108,7 @@ sp_draw_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_draw_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPDrawContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPDrawContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -122,7 +122,7 @@ sp_draw_context_class_init (SPDrawContextClass *klass)
 	object_class = (GObjectClass *)klass;
 	ec_class = (SPEventContextClass *) klass;
 
-	draw_parent_class = g_type_class_peek_parent (klass);
+	draw_parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_draw_context_dispose;
 
@@ -342,7 +342,7 @@ spdc_attach_selection (SPDrawContext *dc, SPSelection *sel)
 		/* Anchor list */
 		for (l = dc->white_curves; l != NULL; l = l->next) {
 			SPCurve *c;
-			c = l->data;
+			c = (SPCurve*)l->data;
 			g_return_if_fail (c->end > 1);
 			if (c->bpath->code == ART_MOVETO_OPEN) {
 				ArtBpath *s, *e;
@@ -839,7 +839,7 @@ sp_pencil_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_pencil_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_DRAW_CONTEXT, "SPPencilContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_DRAW_CONTEXT, "SPPencilContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -853,7 +853,7 @@ sp_pencil_context_class_init (SPPencilContextClass *klass)
 	object_class = (GObjectClass *) klass;
 	event_context_class = (SPEventContextClass *) klass;
 
-	pencil_parent_class = g_type_class_peek_parent (klass);
+	pencil_parent_class = (SPDrawContextClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_pencil_context_dispose;
 
@@ -1183,7 +1183,7 @@ sp_pen_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_pen_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_DRAW_CONTEXT, "SPPenContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_DRAW_CONTEXT, "SPPenContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -1197,7 +1197,7 @@ sp_pen_context_class_init (SPPenContextClass *klass)
 	object_class = (GObjectClass *) klass;
 	event_context_class = (SPEventContextClass *) klass;
 
-	pen_parent_class = g_type_class_peek_parent (klass);
+	pen_parent_class = (SPDrawContextClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_pen_context_dispose;
 

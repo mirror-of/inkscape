@@ -72,7 +72,7 @@ sp_select_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_select_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPSelectContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPSelectContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -86,7 +86,7 @@ sp_select_context_class_init (SPSelectContextClass * klass)
 	object_class = (GObjectClass *) klass;
 	event_context_class = (SPEventContextClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_select_context_dispose;
 
@@ -534,8 +534,8 @@ static void
 sp_select_context_show_toggled (GtkToggleButton *button, SPSelectContext *sc)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const gchar *val;
-		val = gtk_object_get_data (GTK_OBJECT (button), "value");
+		gchar *val;
+		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
 		sp_repr_set_attr (SP_EVENT_CONTEXT_REPR (sc), "show", val);
 	}
 }
