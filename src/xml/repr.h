@@ -115,6 +115,49 @@ things...
 
  */
 
+
+/*
+
+   SPRepr mini-FAQ
+
+Since I'm not very familiar with this section of code but I need to use
+it heavily for the RDF work, I'm going to answer various questions I run
+into with my best-guess answers so others can follow along too.
+
+Q: How do I find the root SPRepr?
+A: If you have an SPDocument, use doc->rroot.  For example:
+     SP_ACTIVE_DOCUMENT->rroot
+
+Q: How do I find an SPRepr by unique key/value?
+A: Use sp_repr_lookup_child
+
+Q: How do I find an SPRepr by unique namespace name?
+A: Use sp_repr_lookup_name
+
+Q: How do I make an SPRepr namespace prefix constant in the application?
+A: Add the XML namespace URL as a #define to repr.h at the top with the
+   other SP_<NAMESPACE>_NS_URI #define's, and then in repr-util.cpp,
+   in sp_xml_ns_register_defaults, bump "defaults" up in size one, and
+   add another section.  Don't forget to increment the array offset and
+   keep ".next" pointed to the next (if any) array entry.
+
+Q: How do I create a new SPRepr?
+A: Use "sp_repr_new*".  Then attach it to a parent somewhere with
+   "sp_repr_append_child" and finally called "sp_repr_unref".
+
+Q: How do I destroy an SPRepr?
+A: If it is a leaf repr, just called "sp_repr_unparent".  If you want
+   to take out everything under the repr with it, then call 
+   "sp_repr_recursive_drop" which will take care of the unparenting for
+   you.
+
+Q: What about listeners?
+A: I have no idea yet...
+
+ Kees Cook  2004-07-01
+
+ */
+
 /* SPXMLNs */
 
 const  char *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested);
@@ -233,6 +276,9 @@ unsigned int sp_repr_set_double_default(SPRepr *repr, gchar const *key, double v
 /* Deprecated */
 double sp_repr_get_double_attribute(SPRepr *repr, gchar const *key, double def);
 int sp_repr_get_int_attribute(SPRepr *repr, gchar const *key, int def);
+/* End Deprecated? */
+
+void sp_repr_recursive_drop(SPRepr *repr);
 
 int sp_repr_compare_position(SPRepr *first, SPRepr *second);
 
@@ -248,9 +294,13 @@ SPRepr *sp_repr_duplicate_and_parent(SPRepr *repr);
 gchar const *sp_repr_attr_inherited(SPRepr *repr, gchar const *key);
 unsigned int sp_repr_set_attr_recursive(SPRepr *repr, gchar const *key, gchar const *value);
 
+/* Searching */
+SPRepr       *sp_repr_lookup_name   (SPRepr             *repr,
+		                     gchar const        *name);
 SPRepr       *sp_repr_lookup_child  (SPRepr    	        *repr,
 				     gchar const        *key,
 				     gchar const        *value);
+
 unsigned int   p_repr_overwrite     (SPRepr             *repr,
 				     SPRepr const       *src,
 				     gchar const        *key);

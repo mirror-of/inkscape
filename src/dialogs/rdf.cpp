@@ -18,7 +18,7 @@
 
 #include "inkscape.h"
 #include "document.h"
-#include "xml/repr-private.h"
+#include "xml/repr.h"
 #include "rdf.h"
 
 /*
@@ -307,32 +307,6 @@ rdf_string(struct rdf_t * rdf)
 
 
 /**
- *  \brief   Recursively find the SPRepr matching the given XML name.
- *  \return  A pointer to the matching SPRepr
- *  \param   repr    The SPRepr to start from
- *  \param   name    The desired XML name
- *  
- */
-SPRepr *
-repr_lookup_name ( SPRepr *repr, const gchar *name )
-{
-    g_return_val_if_fail (repr != NULL, NULL);
-    g_return_val_if_fail (name != NULL, NULL);
-
-    GQuark const quark = g_quark_from_string (name);
-
-    //printf("saw: '%s'\n",SP_REPR_NAME(repr));
-    if ( (unsigned)repr->name == quark ) return repr;
-
-    for (SPRepr *child = repr->children; child != NULL; child = child->next) {
-        SPRepr * found = repr_lookup_name ( child, name );
-        if (found != NULL) return found;
-    }
-
-    return NULL;
-}
-
-/**
  *  \brief   Pull the text out of an RDF entity, depends on how it's stored
  *  \return  A pointer to the entity's static contents as a string
  *  \param   repr    The XML element to extract from
@@ -350,17 +324,19 @@ rdf_text_from_repr ( SPRepr * repr, struct rdf_work_entity_t * entity )
     SPRepr * temp=NULL;
     switch (entity->datatype) {
         case RDF_CONTENT:
-            g_return_val_if_fail (repr->children != NULL, NULL);
-            return (const gchar *)repr->children->content;
+            temp = sp_repr_children(repr);
+            g_return_val_if_fail (temp != NULL, NULL);
+            return sp_repr_content(temp);
         case RDF_AGENT:
-            temp = repr_lookup_name ( repr, "cc:Agent" );
+            temp = sp_repr_lookup_name ( repr, "cc:Agent" );
             g_return_val_if_fail (temp != NULL, NULL);
 
-            temp = repr_lookup_name ( temp, "dc:title" );
+            temp = sp_repr_lookup_name ( temp, "dc:title" );
             g_return_val_if_fail (temp != NULL, NULL);
 
-            g_return_val_if_fail (temp->children != NULL, NULL);
-            return (const gchar *)temp->children->content;
+            temp = sp_repr_children(temp);
+            g_return_val_if_fail (temp != NULL, NULL);
+            return sp_repr_content(temp);
         case RDF_RESOURCE:
             return sp_repr_attr(repr, "rdf:resource");
     }
@@ -380,14 +356,14 @@ rdf_get_work_entity(struct rdf_work_entity_t * entity)
 
     //printf("want '%s'\n",entity->title);
 
-    SPRepr * rdf = repr_lookup_name ( SP_ACTIVE_DOCUMENT->rroot, "rdf:RDF" );
+    SPRepr * rdf = sp_repr_lookup_name ( SP_ACTIVE_DOCUMENT->rroot, "rdf:RDF" );
 
     if (rdf == NULL) return NULL;
     
-    SPRepr * work = repr_lookup_name ( rdf, "cc:Work" );
+    SPRepr * work = sp_repr_lookup_name ( rdf, "cc:Work" );
     if (work == NULL) return NULL;
 
-    SPRepr * item = repr_lookup_name ( rdf, entity->tag );
+    SPRepr * item = sp_repr_lookup_name ( rdf, entity->tag );
     if (item == NULL) return NULL;
 
     const gchar * result = rdf_text_from_repr ( item, entity );

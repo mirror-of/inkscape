@@ -550,6 +550,47 @@ sp_repr_lookup_child (SPRepr       *repr,
 }
 
 /**
+ *  \brief   Recursively find the SPRepr matching the given XML name.
+ *  \return  A pointer to the matching SPRepr
+ *  \param   repr    The SPRepr to start from
+ *  \param   name    The desired XML name
+ *  
+ */
+SPRepr *
+sp_repr_lookup_name ( SPRepr *repr, gchar const *name )
+{
+    g_return_val_if_fail (repr != NULL, NULL);
+    g_return_val_if_fail (name != NULL, NULL);
+
+    GQuark const quark = g_quark_from_string (name);
+
+    if ( (unsigned)repr->name == quark ) return repr;
+
+    SPRepr * found = NULL;
+    for (SPRepr *child = repr->children; child && !found; child = child->next) {
+        found = sp_repr_lookup_name ( child, name );
+    }
+
+    return found;
+}
+
+/**
+ *  \brief   Recursively remove a tree of SPRepr
+ *  \param   repr    The SPRepr to start from
+ *  
+ */
+void
+sp_repr_recursive_drop( SPRepr * repr )
+{
+    g_assert (repr != NULL);
+
+    while (repr->children) {
+        sp_repr_recursive_drop (repr->children);
+    }
+    sp_repr_unparent (repr);
+}
+
+/**
 Parses the boolean value of an attribute "key" in repr and sets val accordingly, or to FALSE if the attr is not set. Returns TRUE if the attr was set, FALSE otherwise.
  */
 unsigned int

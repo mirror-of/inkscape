@@ -1,3 +1,13 @@
+2004-07-01  Kees Cook  <kees@outflux.net>
+
+	* src/xml/repr.h, src/xml/repr-util.h, src/dialogs/rdf.cpp:
+	  moved "repr_lookup_name" into the repr-util collection so
+	  that the RDF stuff doesn't need to know about SPRepr internals.
+	  Now that I've started to grok the SPRepr stuff, this seems best.
+	  Added "sp_repr_recursive_drop" for use in the future when I may
+	  want to throw away an entire tree of SPRepr items (like ditching
+	  a blank "dc:rights" section).
+
 2004-07-01  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-item.cpp: fix clip path loading bug
