@@ -318,10 +318,9 @@ nr_typeface_ft2_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigne
 
 static NR::Point nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
-	NRTypeFaceFT2 *tff;
 	NRTypeFaceGlyphFT2 *slot;
 
-	tff = (NRTypeFaceFT2 *) tf;
+	NRTypeFaceFT2 *tff = (NRTypeFaceFT2 *) tf;
 
 	if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
 		slot = nr_typeface_ft2_ensure_slot_v (tff, glyph);
@@ -332,7 +331,8 @@ static NR::Point nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int
 	if (slot) {
 		return slot->advance;
 	}
-
+	
+	// I don't understand what it means to get a null advance?
 	return NR::Point(0,0);
 }
 
