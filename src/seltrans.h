@@ -18,11 +18,11 @@
 #include <libnr/nr-rect.h>
 #include "desktop-handles.h"
 #include "forward.h"
-#include "knot.h"
 #include "selcue.h"
 #include "message-context.h"
 #include <vector>
 
+struct SPKnot;
 class SPSelTrans;
 
 enum {
