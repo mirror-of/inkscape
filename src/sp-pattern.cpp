@@ -23,7 +23,6 @@
 #include <libnr/nr-translate-matrix-ops.h>
 #include <gtk/gtksignal.h>
 #include "macros.h"
-#include "xml/repr-private.h"
 #include "svg/svg.h"
 #include "display/nr-arena.h"
 #include "display/nr-arena-group.h"
@@ -35,6 +34,7 @@
 #include "document-private.h"
 #include "uri.h"
 #include "sp-pattern.h"
+#include "xml/repr.h"
 
 /*
  * Pattern

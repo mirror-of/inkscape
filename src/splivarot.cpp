@@ -42,7 +42,6 @@
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-point.h"
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 #include "xml/sp-repr-iterators.h"
 
 #include "algorithms/longest-common-suffix.h"

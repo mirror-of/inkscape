@@ -46,7 +46,6 @@
 #include "../sp-defs.h"
 #include "in-dt-coordsys.h"
 
-#include "../xml/repr-private.h"
 
 #include "../widgets/sp-xmlview-tree.h"
 #include "../widgets/sp-xmlview-content.h"

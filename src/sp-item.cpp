@@ -57,7 +57,6 @@
 #include "util/reverse-list.h"
 
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 
 #define noSP_ITEM_DEBUG_IDLE
 

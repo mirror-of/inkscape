@@ -17,7 +17,9 @@
 #include <glib/gtypes.h>
 #include "gc-anchored.h"
 
-#include <xml/xml-forward.h>
+#include "xml/xml-forward.h"
+#include "xml/sp-repr.h"
+#include "xml/sp-repr-doc.h"
 
 #define SP_SODIPODI_NS_URI "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
 #define SP_INKSCAPE_NS_URI "http://www.inkscape.org/namespaces/inkscape"
@@ -51,21 +53,10 @@ Here are the current callbacks in an event vector (they may be NULL):
 
 Called when the repr is destroyed.
 
-        unsigned int (* add_child) (SPRepr *repr, SPRepr *child, SPRepr *ref, void *data);
-
-Called before a child is added; the handler can return FALSE to veto the
-addition.  ref is the child after which the new child is to be added.
-
         void (* child_added) (SPRepr *repr, SPRepr *child, SPRepr *ref,
 void *data);
 
 Called once a child has been added.
-
-        unsigned int (* remove_child) (SPRepr *repr, SPRepr *child,
-SPRepr *ref, void *data);
-
-Called before a child is to be removed; it may veto the removal by
-returning FALSE.  ref is the child before the child to be removed.
 
         void (* child_removed) (SPRepr *repr, SPRepr *child, SPRepr
 	*ref, void *data);
@@ -73,33 +64,14 @@ returning FALSE.  ref is the child before the child to be removed.
 Called after a child is removed; ref is the child that used to precede
 the removed child.
 
-        unsigned int (* change_attr) (SPRepr *repr, gchar const *key,
-gchar const *oldval, gchar const *newval, void *data);
-
-For Element nodes.  Called before an attribute is changed; can veto by
-returning FALSE.
-
         void (* attr_changed) (SPRepr *repr, gchar const *key, gchar const *oldval, gchar const *newval, void *data);
 
 Called after an attribute has been changed.
-
-        unsigned int (* change_content) (SPRepr *repr, gchar const
-	*oldcontent, gchar const *newcontent, void *data);
-
-For Text nodes.  Called before an element's content is changed; can veto
-by returning FALSE.
 
         void (* content_changed) (SPRepr *repr, gchar const *oldcontent,
 gchar const *newcontent, void *data);
 
 Called after an element's content has been changed.
-
-        unsigned int (* change_order) (SPRepr *repr, SPRepr *child,
-SPRepr *oldref, SPRepr *newref, void *data);
-
-Called before a child of repr is rearranged in its list of children.
-oldref is the child currently preceding the child; the child will be
-moved to the position after newref.  Can veto by returning FALSE.
 
         void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr
 	*oldref, SPRepr *newref, void *data);
@@ -158,10 +130,6 @@ A: The current hack is in document.cpp:sp_document_create
 
 const  char *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested);
 const  char *sp_xml_ns_prefix_uri(gchar const *prefix);
-
-/* SPXMLDocument */
-
-SPXMLText *sp_xml_document_createTextNode(SPXMLDocument *doc, gchar const *content);
 
 /* SPXMLNode */
 
@@ -284,5 +252,10 @@ SPRepr       *sp_repr_lookup_name   (SPRepr             *repr,
 SPRepr       *sp_repr_lookup_child  (SPRepr    	        *repr,
 				     gchar const        *key,
 				     gchar const        *value);
+
+unsigned int sp_repr_change_order (SPRepr *repr, SPRepr *child, SPRepr *ref);
+                                                                                
+SPReprDoc *sp_repr_document_new_list (GSList *reprs);
+SPRepr *sp_repr_document_first_child(SPReprDoc const *doc);
 
 #endif

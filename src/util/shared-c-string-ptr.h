@@ -35,6 +35,9 @@ public:
 
     operator bool() const { return _str; }
 
+    bool operator==(SharedCStringPtr const &other) { return _str == other._str; }
+    bool operator!=(SharedCStringPtr const &other) { return _str != other._str; }
+
 private:
     SharedCStringPtr(char const *s) : _str(s) {}
 

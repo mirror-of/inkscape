@@ -47,7 +47,6 @@
 
 #include <glibmm/i18n.h>
 #include "helper/sp-marshal.h"
-#include "xml/repr-private.h"
 #include "dialogs/debugdialog.h"
 
 #include "shortcuts.h"
@@ -61,6 +60,7 @@
 #include "inkscape.h"
 #include "inkscape-private.h"
 #include "prefs-utils.h"
+#include "xml/repr.h"
 
 #include "extension/init.h"
 

@@ -22,7 +22,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <svg/svg.h>
-#include <xml/repr-private.h>
 #include <interface.h>
 #include <document.h>
 #include <inkscape.h>

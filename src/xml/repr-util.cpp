@@ -31,9 +31,15 @@
 
 #include <glib.h>
 
-#include <svg/stringstream.h>
-#include <xml/repr-private.h>
-#include <xml/sp-repr-attr.h>
+#include "svg/stringstream.h"
+
+#include "xml/repr.h"
+#include "xml/sp-repr-attr.h"
+
+struct SPXMLNs {
+    SPXMLNs *next;
+    unsigned int uri, prefix;
+};
 
 /*#####################
 # DEFINITIONS
@@ -275,14 +281,6 @@ sp_xml_ns_prefix_uri (const gchar *prefix)
     return uri;
 }
 
-/* SPXMLDocument */
-
-SPXMLText *
-sp_xml_document_createTextNode (SPXMLDocument *doc, const gchar *data)
-{
-    return new SPReprText(Inkscape::Util::SharedCStringPtr::copy(data));
-}
-
 /** Returns the first child of \a repr, or NULL if \a repr has no children (or if repr is itself
  *  NULL).
  *
@@ -413,25 +411,6 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
        pjrm */
 }
 
-unsigned SPRepr::position() const {
-    g_return_val_if_fail(_parent != NULL, 0);
-    return _parent->_childPosition(*this);
-}
-
-unsigned SPRepr::_childPosition(SPRepr const &child) const {
-    if (!_cached_positions_valid) {
-        unsigned position=0;
-        for ( SPRepr *sibling = _children->next() ;
-              sibling ; sibling = sibling->next() )
-        {
-            sibling->_setCachedPosition(position);
-            position++;
-        }
-        _cached_positions_valid = true;
-    }
-    return child._cachedPosition();
-}
-
 /** Returns the position of \a repr among its parent's children (starting with 0 for the first
  *  child).
  *
@@ -453,28 +432,10 @@ sp_repr_n_children(SPRepr *repr)
     return (int)repr->childCount();
 }
 
-SPRepr *SPRepr::nthChild(unsigned index) {
-    SPRepr *child = _children;
-    for ( ; index > 0 && child ; child = child->next() ) {
-        index--;
-    }
-    return child;
-}
-
 SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
     g_assert(repr != NULL);
     g_return_val_if_fail(n < 0, NULL);
     return repr->nthChild((unsigned)n);
-}
-
-SPRepr *SPRepr::lastChild() {
-    SPRepr *child = _children;
-    if (child) {
-        while ( child->next() ) {
-            child = child->next();
-        }
-    }
-    return child;
 }
 
 void

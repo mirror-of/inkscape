@@ -51,7 +51,6 @@
 //#include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
-#include "xml/repr-private.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "display/curve.h"
@@ -67,6 +66,7 @@
 #include "view.h"
 #include "print.h"
 #include "sp-metrics.h"
+#include "xml/repr.h"
 
 #include "sp-shape.h"
 #include "sp-text.h"
@@ -369,7 +369,7 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
             } else if (SP_IS_TEXTPATH (child)) {
                 crepr = child->updateRepr(NULL, flags);
             } else {
-                crepr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (child));
+                crepr = sp_repr_new_text(SP_STRING_TEXT (child));
             }
             if (crepr) l = g_slist_prepend (l, crepr);
         }
@@ -888,7 +888,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
                 cp[NR::Y] += style->font_size.computed;
             }
             sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-            SPRepr *rstr = sp_xml_document_createTextNode (sp_repr_document (repr), p);
+            SPRepr *rstr = sp_repr_new_text(p);
             sp_repr_add_child (rtspan, rstr, NULL);
             sp_repr_unref(rstr);
             sp_repr_append_child (repr, rtspan);
@@ -897,7 +897,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
         p = (e) ? e + 1 : NULL;
     }
     if (is_textpath) { 
-        SPRepr *rstr = sp_xml_document_createTextNode (sp_repr_document (repr), content);
+        SPRepr *rstr = sp_repr_new_text(content);
         sp_repr_add_child (repr, rstr, NULL);
         sp_repr_unref(rstr);
     }
@@ -965,7 +965,7 @@ sp_text_append_line(SPText *text)
     sp_repr_set_attr (rtspan, "sodipodi:role", "line");
 
     /* Create TEXT */
-    SPRepr *rstring = sp_xml_document_createTextNode (sp_repr_document (rtspan), "");
+    SPRepr *rstring = sp_repr_new_text("");
     sp_repr_add_child (rtspan, rstring, NULL);
     sp_repr_unref (rstring);
     /* Append to text */
@@ -996,7 +996,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
         // it's a 'append line' in fact
         SPRepr*   rtspan = sp_repr_new ("svg:tspan");
         sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-        SPRepr*   rstring = sp_xml_document_createTextNode (sp_repr_document (rtspan), "");
+        SPRepr*   rstring = sp_repr_new_text("");
         sp_repr_add_child (rtspan, rstring, NULL);
         sp_repr_unref (rstring);
         sp_repr_append_child (SP_OBJECT_REPR (text), rtspan);
@@ -1021,9 +1021,9 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                     sp_repr_set_attr (rtspan, "sodipodi:role", "line");
                     SPRepr*   rstring = NULL;
                     if ( into_obj->utf8_st < into_obj->utf8_en ) {
-                        rstring=sp_xml_document_createTextNode (sp_repr_document (rtspan), into_obj->cleaned_up.utf8_text+(utf8_pos-into_obj->utf8_st));
+                        rstring=sp_repr_new_text(into_obj->cleaned_up.utf8_text+(utf8_pos-into_obj->utf8_st));
                     } else {
-                        rstring=sp_xml_document_createTextNode (sp_repr_document (rtspan), NULL);
+                        rstring=sp_repr_new_text("");
                     }
                     sp_repr_add_child (rtspan, rstring, NULL);
                     sp_repr_unref (rstring);
@@ -1109,12 +1109,12 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                 if ( into_obj->utf8_st < into_obj->utf8_en ) {
                     char savC=into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st];
                     into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=0;
-                    firststring = sp_xml_document_createTextNode (sp_repr_document (firstspan), into_obj->cleaned_up.utf8_text);
+                    firststring = sp_repr_new_text(into_obj->cleaned_up.utf8_text);
                     into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=savC;
-                    rstring = sp_xml_document_createTextNode (sp_repr_document (rtspan), into_obj->cleaned_up.utf8_text+(utf8_pos-into_obj->utf8_st));
+                    rstring = sp_repr_new_text(into_obj->cleaned_up.utf8_text+(utf8_pos-into_obj->utf8_st));
                 } else {
-                    firststring = sp_xml_document_createTextNode (sp_repr_document (firstspan), NULL);
-                    rstring = sp_xml_document_createTextNode (sp_repr_document (rtspan), NULL);
+                    firststring = sp_repr_new_text("");
+                    rstring = sp_repr_new_text("");
                 }
                 sp_repr_add_child (rtspan, rstring, NULL);
                 sp_repr_unref (rstring);
@@ -1141,7 +1141,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
             if ( into->dad ) {
                 SPRepr*   rtspan = sp_repr_new ("svg:tspan");
                 sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-                SPRepr*   rstring = sp_xml_document_createTextNode (sp_repr_document (rtspan), "");
+                SPRepr*   rstring = sp_repr_new_text("");
                 SPObject* prec=NULL;
                 for (SPObject* child = sp_object_first_child(into->dad->me) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
                     if ( child == into->me ) break;

@@ -45,7 +45,7 @@
 #include "sp-flowregion.h"
 #include "sp-flowtext.h"
 #include "sp-object-repr.h"
-#include "xml/repr-private.h"
+#include "xml/repr.h"
 
 enum NameType { REPR_NAME, SODIPODI_TYPE };
 static unsigned const N_NAME_TYPES = SODIPODI_TYPE + 1;

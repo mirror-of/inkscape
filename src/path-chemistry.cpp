@@ -18,7 +18,6 @@
 #include <string.h>
 #include "libnr/nr-macros.h"
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 #include "svg/svg.h"
 #include "display/curve.h"
 #include <glibmm/i18n.h>

@@ -16,7 +16,6 @@
 
 #include <vector>
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 #include <extension/extension-forward.h>
 
 /** The key that is used to identify that the I/O should be autodetected */

@@ -29,7 +29,8 @@
 #include "../desktop.h"
 #include "../document.h"
 #include "../sp-use.h"
-#include "xml/repr-private.h"
+
+#include "xml/repr.h"
 
 #include "svg/svg.h"
 

@@ -18,7 +18,6 @@
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-point.h"
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 
 #include "sp-flowdiv.h"
 #include "sp-flowregion.h"
@@ -728,7 +727,7 @@ void convert_to_text(void)
                 int t_en = comp->letters[comp->spans[j].l_en-1].t_en;
                 char savC = comp->chars[t_en];
                 comp->chars[t_en] = 0;
-                SPRepr *rstr = sp_xml_document_createTextNode(sp_repr_document(repr), &comp->chars[t_st]);
+                SPRepr *rstr = sp_repr_new_text(&comp->chars[t_st]);
                 comp->chars[t_en] = savC;
                 sp_repr_append_child(srepr, rstr);
                 sp_repr_unref(rstr);

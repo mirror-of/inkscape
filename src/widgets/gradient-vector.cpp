@@ -38,6 +38,8 @@
 #include "gradient-vector.h"
 #include "../helper/window.h"
 
+#include "xml/repr.h"
+
 #include "../dialogs/dialog-events.h"
 #include "../prefs-utils.h"
 #include "../verbs.h"
@@ -406,7 +408,6 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 #include "../widgets/widget-sizes.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
-#include "../xml/repr-private.h"
 #include "../xml/sp-repr-event-vector.h"
 #include "../svg/svg.h"
 

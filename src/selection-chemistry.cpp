@@ -23,8 +23,6 @@
 #include <gtkmm.h>
 
 #include "svg/svg.h"
-#include "xml/repr-private.h"
-#include "xml/repr-private.h"
 #include "document.h"
 #include "inkscape.h"
 #include "desktop.h"
@@ -55,6 +53,7 @@
 #include "libnr/nr-scale-translate-ops.h"
 #include "libnr/nr-translate-matrix-ops.h"
 #include "libnr/nr-translate-scale-ops.h"
+#include "xml/repr.h"
 #include "style.h"
 #include "document-private.h"
 #include "sp-gradient.h"

@@ -15,7 +15,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "xml/repr-private.h"
 #include "style.h"
 #include "document-private.h"
 #include "desktop-style.h"
@@ -31,6 +30,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
+#include "xml/repr.h"
 #include "svg/svg.h"
 
 

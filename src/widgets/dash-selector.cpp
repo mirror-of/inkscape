@@ -23,7 +23,6 @@
 #include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
-#include "../xml/repr-private.h"
 #include "../style.h"
 #include "../dialogs/dialog-events.h"
 

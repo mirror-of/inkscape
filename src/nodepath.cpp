@@ -34,7 +34,6 @@
 #include "selection.h"
 #include "selection.h"
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 #include "object-edit.h"
 #include "prefs-utils.h"
 #include "sp-flowtext.h"

@@ -320,7 +320,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 	sp_repr_unref (rtspan);
 
 	/* Create TEXT */
-	SPRepr *rstring = sp_xml_document_createTextNode (sp_repr_document (rtext), "");
+	SPRepr *rstring = sp_repr_new_text("");
 	sp_repr_add_child (rtspan, rstring, NULL);
 	sp_repr_unref (rstring);
 	SPItem *text_item = SP_ITEM(ec->desktop->currentLayer()->appendChildRepr(rtext));

@@ -64,7 +64,6 @@
 #include "sp-shape.h"
 #include "sp-rect.h"
 #include "document-private.h"
-#include "xml/repr-private.h"
 #include "display/nr-arena.h"
 #include "display/nr-arena-item.h"
 #include "path-prefix.h"

@@ -15,13 +15,13 @@
 #include <list>
 
 #include "helper/sp-marshal.h"
-#include "xml/repr-private.h"
 #include "xml/sp-repr-event-vector.h"
 #include "attributes.h"
 #include "document.h"
 #include "style.h"
 #include "sp-object-repr.h"
 #include "sp-root.h"
+#include "xml/repr.h"
 
 #include "sp-object.h"
 #include "algorithms/longest-common-suffix.h"

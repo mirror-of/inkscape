@@ -17,7 +17,6 @@
 #include "color.h"
 #include "color-rgba.h"
 #include "svg/stringstream.h"
-#include "xml/repr-private.h"
 #include "selection.h"
 #include "sp-tspan.h"
 #include "fontsize-expansion.h"
@@ -27,6 +26,7 @@
 #include "sp-use.h"
 #include "sp-flowtext.h"
 #include "sp-flowregion.h"
+#include "xml/repr.h"
 
 #include "desktop-style.h"
 

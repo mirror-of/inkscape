@@ -34,7 +34,6 @@
 #include "display/nr-gradient-gpl.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
-#include "xml/repr-private.h"
 #include "attributes.h"
 #include "document-private.h"
 #include "sp-object-repr.h"
@@ -47,6 +46,7 @@
 #include "sp-stop.h"
 #include "uri.h"
 #include "uri-references.h"
+#include "xml/repr.h"
 
 #define SP_MACROS_SILENT
 #include "macros.h"

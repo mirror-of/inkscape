@@ -6,16 +6,18 @@
 
 #include <glib.h>
 
-#include "repr.h"
-#include "repr-private.h"
-#include <xml/sp-repr-attr.h>
+#include "xml/repr.h"
+#include "xml/sp-repr-attr.h"
+#include "xml/simple-node.h"
 
-struct SPCSSAttr : public SPRepr {
+struct SPCSSAttr : public Inkscape::XML::SimpleNode {
 public:
-	SPCSSAttr() : SPRepr(SP_XML_ELEMENT_NODE, g_quark_from_static_string("css")) {}
+	SPCSSAttr() : SimpleNode(g_quark_from_static_string("css")) {}
+
+	SPReprType type() const { return SP_XML_ELEMENT_NODE; }
 
 protected:
-	SPRepr *_duplicate() const { return new SPCSSAttr(*this); }
+	SimpleNode *_duplicate() const { return new SPCSSAttr(*this); }
 };
 
 static void sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr);

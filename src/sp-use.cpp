@@ -30,7 +30,6 @@
 #include "uri-references.h"
 #include "macros.h"
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 #include "sp-item.h"
 #include "enums.h"
 #include "prefs-utils.h"

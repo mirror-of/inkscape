@@ -40,7 +40,6 @@
 //#include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
-#include "xml/repr-private.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "display/curve.h"
@@ -54,6 +53,8 @@
 #include "inkscape.h"
 #include "view.h"
 #include "print.h"
+
+#include "xml/repr.h"
 
 #include "sp-shape.h"
 #include "sp-text.h"

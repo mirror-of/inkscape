@@ -50,7 +50,6 @@
 
 #include "dir-util.h"
 #include "memeq.h"
-#include "xml/repr-private.h"
 #include "helper/action.h"
 #include "helper/gnome-utils.h"
 #include <glibmm/i18n.h>

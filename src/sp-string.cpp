@@ -31,7 +31,6 @@
 #include <libnrtype/FlowSrcText.h>
 
 #include <glib.h>
-#include "xml/repr-private.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "attributes.h"
@@ -40,6 +39,8 @@
 #include "sp-string.h"
 #include "sp-text.h"
 #include "sp-tspan.h"
+
+#include "xml/repr.h"
 
 
 /*#####################################################

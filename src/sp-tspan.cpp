@@ -47,7 +47,6 @@
 //#include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
-#include "xml/repr-private.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "display/nr-arena-group.h"
@@ -64,6 +63,8 @@
 #include "sp-shape.h"
 #include "sp-tspan.h"
 #include "sp-text.h"
+
+#include "xml/repr.h"
 
 #include "prefs-utils.h"
 
@@ -211,7 +212,7 @@ sp_tspan_build(SPObject *object, SPDocument *doc, SPRepr *repr)
     }
 
     if ( no_content ) {
-        SPRepr* rch = sp_xml_document_createTextNode(sp_repr_document(repr), "");
+        SPRepr* rch = sp_repr_new_text("");
         sp_repr_add_child(repr, rch, NULL);
     }
 	
@@ -383,7 +384,7 @@ sp_tspan_write(SPObject *object, SPRepr *repr, guint flags)
             } else if ( SP_IS_TEXTPATH(child) ) {
                 //c_repr = child->updateRepr(NULL, flags); // shouldn't happen
             } else if ( SP_IS_STRING(child) ) {
-                c_repr = sp_xml_document_createTextNode(sp_repr_document(repr), SP_STRING_TEXT(child));
+                c_repr = sp_repr_new_text(SP_STRING_TEXT(child));
             }
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
@@ -529,7 +530,7 @@ sp_textpath_build(SPObject *object, SPDocument *doc, SPRepr *repr)
     }
 	
     if ( no_content ) {
-        SPRepr* rch = sp_xml_document_createTextNode(sp_repr_document(repr), "");
+        SPRepr* rch = sp_repr_new_text("");
         sp_repr_add_child(repr, rch, NULL);
     }
 	
@@ -699,7 +700,7 @@ sp_textpath_write(SPObject *object, SPRepr *repr, guint flags)
             } else if ( SP_IS_TEXTPATH(child) ) {
                 //c_repr = child->updateRepr(NULL, flags); // shouldn't happen
             } else if ( SP_IS_STRING(child) ) {
-                c_repr = sp_xml_document_createTextNode(sp_repr_document(repr), SP_STRING_TEXT(child));
+                c_repr = sp_repr_new_text(SP_STRING_TEXT(child));
             }
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }

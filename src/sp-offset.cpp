@@ -28,7 +28,6 @@
 #include "display/curve.h"
 #include "dialogs/object-attributes.h"
 #include <glibmm/i18n.h>
-#include "xml/repr-private.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -48,6 +47,8 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
+
+#include "xml/repr.h"
 
 #define noOFFSET_VERBOSE
 

@@ -14,6 +14,8 @@ xml/clean:
 	rm -f xml/libspxml.a $(xml_libspxml_a_OBJECTS)
 
 xml_libspxml_a_SOURCES =	\
+	xml/comment-node.h \
+	xml/element-node.h \
 	xml/node-observer.h \
 	xml/quote.cpp	\
 	xml/quote.h	\
@@ -26,15 +28,22 @@ xml_libspxml_a_SOURCES =	\
 	xml/repr.cpp	\
 	xml/repr.h	\
 	xml/session.h \
+	xml/simple-document.h \
+	xml/simple-document.cpp \
+	xml/simple-node.h \
+	xml/simple-node.cpp \
 	xml/simple-session.cpp \
 	xml/simple-session.h \
+	xml/sp-repr.h \
 	xml/sp-repr-attr.h \
 	xml/sp-repr-action.cpp	\
 	xml/sp-repr-action.h	\
 	xml/sp-repr-action-fns.h	\
+	xml/sp-repr-doc.h \
 	xml/sp-repr-event-vector.h \
 	xml/sp-repr-iterators.h	\
 	xml/sp-repr-listener.h \
+	xml/text-node.h \
 	xml/transaction-logger.h \
 	xml/xml-forward.h
 

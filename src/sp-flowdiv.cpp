@@ -258,7 +258,7 @@ sp_flowdiv_write (SPObject *object, SPRepr *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA(child) ) {
 				c_repr = child->updateRepr(NULL, flags);
 			} else if ( SP_IS_STRING(child) ) {
-				c_repr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (child));
+				c_repr = sp_repr_new_text(SP_STRING_TEXT (child));
 			}
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}
@@ -476,7 +476,7 @@ sp_flowtspan_write (SPObject *object, SPRepr *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA (child) ) {
 					c_repr = child->updateRepr(NULL, flags);
 			} else if ( SP_IS_STRING(child) ) {
-				c_repr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (child));
+				c_repr = sp_repr_new_text(SP_STRING_TEXT (child));
 			}
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}
@@ -697,7 +697,7 @@ sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA (child) ) {
 				c_repr = child->updateRepr(NULL, flags);
 			} else if ( SP_IS_STRING(child) ) {
-				c_repr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (child));
+				c_repr = sp_repr_new_text(SP_STRING_TEXT (child));
 			}
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}

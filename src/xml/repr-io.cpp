@@ -25,8 +25,8 @@
 
 #include <glib.h>
 
-#include "repr-private.h"
-#include <xml/sp-repr-attr.h>
+#include "xml/repr.h"
+#include "xml/sp-repr-attr.h"
 
 #include "file.h"
 

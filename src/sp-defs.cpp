@@ -16,9 +16,9 @@
  * flips in
  */
 
-#include "xml/repr-private.h"
 #include "sp-object-repr.h"
 #include "sp-defs.h"
+#include "xml/repr.h"
 
 static void sp_defs_class_init(SPDefsClass *dc);
 static void sp_defs_init(SPDefs *defs);

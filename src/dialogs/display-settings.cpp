@@ -34,7 +34,7 @@
 #include "../style.h"
 #include "../desktop.h"
 #include "../unit-constants.h"
-#include "xml/repr-private.h"
+#include "xml/repr.h"
 
 #include "display-settings.h"
 

@@ -15,7 +15,6 @@
 
 #include "inkscape.h"
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 
 #include "prefs-utils.h"
 

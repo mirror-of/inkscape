@@ -46,7 +46,6 @@
 #include "desktop-handles.h"
 #include "interface.h"
 #include "toolbox.h"
-#include "xml/repr-private.h"
 #include "helper/gnome-utils.h"
 #include <glibmm/i18n.h>
 #include "widgets/sp-widget.h"

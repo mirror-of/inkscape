@@ -30,7 +30,6 @@
 #include <gtkmm.h>
 
 #include "macros.h"
-#include "xml/repr-private.h"
 #include "xml/repr-get-children.h"
 #include "document.h"
 #include "document-private.h"

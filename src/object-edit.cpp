@@ -41,7 +41,6 @@
 #include <libnr/nr-matrix-ops.h>
 
 #include "xml/repr.h"
-#include "xml/repr-private.h"
 
 #define sp_round(v,m) (((v) < 0.0) ? ((ceil ((v) / (m) - 0.5)) * (m)) : ((floor ((v) / (m) + 0.5)) * (m)))
 

@@ -1,8 +1,7 @@
 #include <glib/gmessages.h>
 
-#include <xml/repr-get-children.h>
-#include <xml/repr-private.h>
-
+#include "xml/repr.h"
+#include "xml/repr-get-children.h"
 
 /** Returns the last child of \a parent, or NULL if parent has no children.
  *

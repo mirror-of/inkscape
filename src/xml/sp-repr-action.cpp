@@ -14,11 +14,13 @@
  */
 
 #include "repr.h"
-#include "repr-private.h"
 #include "sp-repr-action.h"
 #include "sp-repr-action-fns.h"
 #include "util/list.h"
 #include "util/reverse-list.h"
+#include "xml/sp-repr.h"
+#include "xml/sp-repr-doc.h"
+#include "xml/session.h"
 
 using Inkscape::Util::List;
 using Inkscape::Util::reverse_list;

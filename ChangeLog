@@ -1,3 +1,37 @@
+2004-01-23  MenTaLguY  <mental@rydia.net>
+
+	* src/desktop-style.cpp, src/desktop.cpp, src/document-undo.cpp,
+	  src/file.cpp, src/gradient-chemistry.cpp, src/inkscape.cpp,
+	  src/interface.cpp, src/nodepath.cpp, src/object-edit.cpp,
+	  src/path-chemistry.cpp, src/prefs-utils.cpp, src/select-toolbar.cpp,
+	  src/selection-chemistry.cpp, src/sp-defs.cpp, src/sp-flowdiv.cpp,
+	  src/sp-flowtext.cpp, src/sp-gradient.cpp, src/sp-item.cpp,
+	  src/sp-object-group.cpp, src/sp-object-repr.cpp, src/sp-object.cpp,
+	  src/sp-offset.cpp, src/sp-pattern.cpp, src/sp-string.cpp,
+	  src/sp-text.cpp, src/sp-tspan.cpp, src/sp-use.cpp, src/splivarot.cpp,
+	  src/text-chemistry.cpp, src/text-context.cpp, src/text-editing.cpp,
+	  src/dialogs/clonetiler.cpp, src/dialogs/display-settings.cpp,
+	  src/dialogs/stroke-style.cpp, src/dialogs/xml-tree.cpp,
+	  src/extension/extension.h, src/extension/implementation/script.cpp,
+	  src/widgets/dash-selector.cpp, src/widgets/gradient-vector.cpp,
+	  src/widgets/sp-xmlview-tree.cpp, src/xml/Makefile_insert,
+	  src/xml/comment-node.h, src/xml/element-node.h,
+	  src/xml/repr-action-test.cpp, src/xml/repr-css.cpp,
+	  src/xml/repr-get-children.cpp, src/xml/repr-io.cpp,
+	  src/xml/repr-private.h, src/xml/repr-util.cpp, src/xml/repr.cpp,
+	  src/xml/repr.h, src/xml/simple-document.cpp, src/xml/simple-document.h,
+	  src/xml/simple-node.cpp, src/xml/simple-node.h,
+	  src/xml/sp-repr-action.cpp, src/xml/sp-repr-doc.h, src/xml/sp-repr.h,
+	  src/xml/text-node.h:
+
+	  got rid of xml/repr-private.h, removed
+	  sp_repr_document_createTextNode(), made SPRepr and SPReprDoc abstract
+	  interfaces, and moved the SPRepr implementations into separate files
+	  in the Inkscape::XML namespace
+
+	* src/util/shared-c-string-ptr.h: added equality operators to avoid
+	  certain ambiguities
+
 2004-01-22  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/Makefile_insert, src/xml/repr-private.h, src/xml/repr.cpp,

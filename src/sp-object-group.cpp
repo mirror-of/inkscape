@@ -12,9 +12,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "xml/repr-private.h"
 #include "sp-object-group.h"
 #include "sp-object-repr.h"
+#include "xml/repr.h"
 
 static void sp_objectgroup_class_init (SPObjectGroupClass *klass);
 static void sp_objectgroup_init (SPObjectGroup *objectgroup);
