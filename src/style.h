@@ -142,6 +142,10 @@ enum {
 #define SP_F8_16_TO_FLOAT(v) ((gdouble) (v) / (1 << 16))
 #define SP_F8_16_FROM_FLOAT(v) ((int) ((v) * ((1 << 16) + 0.9999)))
 
+#define SP_STYLE_FLAG_IFSET (1 << 0)
+#define SP_STYLE_FLAG_IFDIFF (1 << 1)
+#define SP_STYLE_FLAG_ALWAYS (1 << 2)
+
 struct SPIFontSize {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
@@ -281,7 +285,7 @@ void sp_style_merge_from_parent (SPStyle *style, SPStyle *parent);
 /**
  *
  */
-gchar *sp_style_write_string (SPStyle *style);
+gchar *sp_style_write_string (SPStyle *style, guint flags = SP_STYLE_FLAG_IFSET);
 
 /**
  *
@@ -396,6 +400,6 @@ struct SPTextStyle {
 	SPILength letterspacing;
 };
 
-SPCSSAttr * sp_css_attr_from_style (SPObject *object);
+SPCSSAttr * sp_css_attr_from_style (SPObject *object, guint flags = SP_STYLE_FLAG_IFSET);
 
 #endif

@@ -105,9 +105,6 @@ gchar *parse_css_url(const gchar *string) {
 
 #define BMAX 8192
 
-#define SP_STYLE_FLAG_IFSET (1 << 0)
-#define SP_STYLE_FLAG_IFDIFF (1 << 1)
-
 class SPStyleEnum;
 
 /*#########################
@@ -124,7 +121,7 @@ static SPTextStyle *sp_text_style_new (void);
 static void sp_text_style_clear (SPTextStyle *ts);
 static SPTextStyle *sp_text_style_unref (SPTextStyle *st);
 static SPTextStyle *sp_text_style_duplicate_unset (SPTextStyle *st);
-static guint sp_text_style_write (gchar *p, guint len, SPTextStyle *st);
+static guint sp_text_style_write (gchar *p, guint len, SPTextStyle *st, guint flags = SP_STYLE_FLAG_IFSET);
 static void sp_style_privatize_text (SPStyle *style);
 
 static void sp_style_read_ifloat (SPIFloat *val, const gchar *str);
@@ -1231,13 +1228,14 @@ sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent)
 
 
 /**
- * fixme: Write real thing
- */
-// FIXME: this function is not used anywhere and seems to be severely broken. Perhaps we
-// should kill it. When you need a css string from an SPStyle, you normally call
-// sp_style_write_difference to take into account the object's parent.
+Dumps the style to a CSS string, with either SP_STYLE_FLAG_IFSET or SP_STYLE_FLAG_ALWAYS
+flags. Used with Always for copying an object's complete cascaded style to style_clipboard. When
+you need a CSS string for an object in the document tree, you normally call
+sp_style_write_difference instead to take into account the object's parent.
+FIXME: merge with write_difference, much duplicate code!
+*/
 gchar *
-sp_style_write_string (SPStyle *style)
+sp_style_write_string (SPStyle *style, guint flags)
 {
     gchar c[BMAX], *p;
 
@@ -1246,40 +1244,49 @@ sp_style_write_string (SPStyle *style)
     p = c;
     *p = '\0';
 
-    p += sp_style_write_ifontsize (p, c + BMAX - p, "font-size", &style->font_size, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ienum (p, c + BMAX - p, "font-style", enum_font_style, &style->font_style, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ienum (p, c + BMAX - p, "font-variant", enum_font_variant, &style->font_variant, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ienum (p, c + BMAX - p, "font-weight", enum_font_weight, &style->font_weight, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ienum (p, c + BMAX - p, "font-stretch", enum_font_stretch, &style->font_stretch, NULL, SP_STYLE_FLAG_IFSET);
+    p += sp_style_write_ifontsize (p, c + BMAX - p, "font-size", &style->font_size, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "font-style", enum_font_style, &style->font_style, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "font-variant", enum_font_variant, &style->font_variant, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "font-weight", enum_font_weight, &style->font_weight, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "font-stretch", enum_font_stretch, &style->font_stretch, NULL, flags);
 
     /* fixme: Per type methods need default flag too */
     if (style->opacity.set && style->opacity.value != SP_SCALE24_MAX) {
-        p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &style->opacity, NULL, SP_STYLE_FLAG_IFSET);
+        p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &style->opacity, NULL, flags);
     }
-    p += sp_style_write_ipaint (p, c + BMAX - p, "color", &style->color, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ipaint (p, c + BMAX - p, "fill", &style->fill, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_iscale24 (p, c + BMAX - p, "fill-opacity", &style->fill_opacity, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ienum (p, c + BMAX - p, "fill-rule", enum_fill_rule, &style->fill_rule, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ipaint (p, c + BMAX - p, "stroke", &style->stroke, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ilength (p, c + BMAX - p, "stroke-width", &style->stroke_width, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ienum (p, c + BMAX - p, "stroke-linecap", enum_stroke_linecap, &style->stroke_linecap, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ienum (p, c + BMAX - p, "stroke-linejoin", enum_stroke_linejoin, &style->stroke_linejoin, NULL, SP_STYLE_FLAG_IFSET);
+    p += sp_style_write_ipaint (p, c + BMAX - p, "color", &style->color, NULL, flags);
+    p += sp_style_write_ipaint (p, c + BMAX - p, "fill", &style->fill, NULL, flags);
+    p += sp_style_write_iscale24 (p, c + BMAX - p, "fill-opacity", &style->fill_opacity, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "fill-rule", enum_fill_rule, &style->fill_rule, NULL, flags);
+    p += sp_style_write_ipaint (p, c + BMAX - p, "stroke", &style->stroke, NULL, flags);
+    p += sp_style_write_ilength (p, c + BMAX - p, "stroke-width", &style->stroke_width, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "stroke-linecap", enum_stroke_linecap, &style->stroke_linecap, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "stroke-linejoin", enum_stroke_linejoin, &style->stroke_linejoin, NULL, flags);
 
     marker_status("sp_style_write_string:  Writing markers");
     if (style->marker[SP_MARKER_LOC].set) {
         p += g_snprintf (p, c + BMAX - p, "marker:%s;", style->marker[SP_MARKER_LOC].value);
+    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+        p += g_snprintf (p, c + BMAX - p, "marker:none;");
     }
     if (style->marker[SP_MARKER_LOC_START].set) {
         p += g_snprintf (p, c + BMAX - p, "marker-start:%s;", style->marker[SP_MARKER_LOC_START].value);
+    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+        p += g_snprintf (p, c + BMAX - p, "marker-start:none;");
     }
     if (style->marker[SP_MARKER_LOC_MID].set) {
         p += g_snprintf (p, c + BMAX - p, "marker-mid:%s;", style->marker[SP_MARKER_LOC_MID].value);
+    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+        p += g_snprintf (p, c + BMAX - p, "marker-mid:none;");
     }
     if (style->marker[SP_MARKER_LOC_END].set) {
         p += g_snprintf (p, c + BMAX - p, "marker-end:%s;", style->marker[SP_MARKER_LOC_END].value);
+    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+        p += g_snprintf (p, c + BMAX - p, "marker-end:none;");
     }
 
-    p += sp_style_write_ifloat (p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, SP_STYLE_FLAG_IFSET);
+    p += sp_style_write_ifloat (p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, flags);
+
     /* fixme: */
     if (style->stroke_dasharray_set) {
         if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
@@ -1292,20 +1299,26 @@ sp_style_write_string (SPStyle *style)
             }
             p += g_snprintf (p, c + BMAX - p, ";");
         }
+    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+        p += g_snprintf (p, c + BMAX - p, "stroke-dasharray:none;");
     }
+
     /* fixme: */
     if (style->stroke_dashoffset_set) {
 		Inkscape::SVGOStringStream os;
         os << "stroke-dashoffset:" << style->stroke_dash.offset << ";";
 		p += g_strlcpy (p, os.str().c_str(), c + BMAX - p);
+    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+        p += g_snprintf (p, c + BMAX - p, "stroke-dashoffset:0;");
     }
-    p += sp_style_write_iscale24 (p, c + BMAX - p, "stroke-opacity", &style->stroke_opacity, NULL, SP_STYLE_FLAG_IFSET);
+
+    p += sp_style_write_iscale24 (p, c + BMAX - p, "stroke-opacity", &style->stroke_opacity, NULL, flags);
 
     /* fixme: */
-    sp_text_style_write (p, c + BMAX - p, style->text);
+    p += sp_text_style_write (p, c + BMAX - p, style->text, flags);
 
-    p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &style->text_anchor, NULL, SP_STYLE_FLAG_IFSET);
-    p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &style->writing_mode, NULL, SP_STYLE_FLAG_IFSET);
+    p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &style->text_anchor, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &style->writing_mode, NULL, flags);
 
     return g_strdup (c);
 }
@@ -1387,7 +1400,7 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
     }
 
     /* fixme: */
-    p += sp_text_style_write (p, c + BMAX - p, from->text);
+    p += sp_text_style_write (p, c + BMAX - p, from->text, SP_STYLE_FLAG_IFDIFF);
 
     p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &from->text_anchor, &to->text_anchor, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &from->writing_mode, &to->writing_mode, SP_STYLE_FLAG_IFDIFF);
@@ -1675,18 +1688,16 @@ sp_text_style_duplicate_unset (SPTextStyle *st)
  *
  */
 static guint
-sp_text_style_write (gchar *p, guint len, SPTextStyle *st)
+sp_text_style_write (gchar *p, guint len, SPTextStyle *st, guint flags)
 {
-    gint d;
+    gint d = 0;
 
-    d = 0;
+    // We do not do diffing for text style
+    if (flags == SP_STYLE_FLAG_IFDIFF)
+        flags = SP_STYLE_FLAG_IFSET;
 
-    if (st->font_family.set) {
-        d += sp_style_write_istring (p + d, len - d, "font-family", &st->font_family, NULL, SP_STYLE_FLAG_IFSET);
-    }
-    if (st->letterspacing.set) {
-        d += sp_style_write_ilength (p + d, len - d, "letter-spacing", &st->letterspacing, NULL, SP_STYLE_FLAG_IFSET);
-    }
+    d += sp_style_write_istring (p + d, len - d, "font-family", &st->font_family, NULL, flags);
+    d += sp_style_write_ilength (p + d, len - d, "letter-spacing", &st->letterspacing, NULL, flags);
 
     return d;
 }
@@ -2061,7 +2072,8 @@ sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIF
 {
 	Inkscape::SVGOStringStream os;
 
-    if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
+  if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || (val->value != base->value)))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
@@ -2082,7 +2094,8 @@ sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, 
 {
 	Inkscape::SVGOStringStream os;
 
-    if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
+    if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || (val->value != base->value)))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
@@ -2101,7 +2114,8 @@ sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, 
 static gint
 sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *dict, SPIEnum *val, SPIEnum *base, guint flags)
 {
-    if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
+    if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || (val->computed != base->computed)))) {
         unsigned int i;
         for (i = 0; dict[i].key; i++) {
@@ -2121,7 +2135,8 @@ sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *d
 static gint
 sp_style_write_istring (gchar *p, gint len, const gchar *key, SPIString *val, SPIString *base, guint flags)
 {
-    if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
+    if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || strcmp (val->value, base->value)))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
@@ -2161,7 +2176,8 @@ sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SP
 {
 	Inkscape::SVGOStringStream os;
 
-    if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
+    if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || sp_length_differ (val, base)))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
@@ -2241,7 +2257,8 @@ sp_paint_differ (SPIPaint *a, SPIPaint *b)
 static gint
 sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SPIPaint *base, guint flags)
 {
-    if (((flags & SP_STYLE_FLAG_IFSET) && paint->set) ||
+    if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && paint->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && paint->set && (!base->set || sp_paint_differ (paint, base)))) {
         if (paint->inherit) {
             return g_snprintf (b, len, "%s:inherit;", key);
@@ -2290,7 +2307,8 @@ sp_fontsize_differ (SPIFontSize *a, SPIFontSize *b)
 static gint
 sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val, SPIFontSize *base, guint flags)
 {
-    if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
+    if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || sp_fontsize_differ (val, base)))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
@@ -2377,9 +2395,9 @@ sp_style_paint_clear (SPStyle *style, SPIPaint *paint,
 }
 
 SPCSSAttr *
-sp_css_attr_from_style (SPObject *object)
+sp_css_attr_from_style (SPObject *object, guint flags)
 {
-    gchar *style_str = sp_style_write_string (SP_OBJECT_STYLE (object));
+    gchar *style_str = sp_style_write_string (SP_OBJECT_STYLE (object), flags);
     SPCSSAttr *css = sp_repr_css_attr_new ();
     sp_repr_css_attr_add_from_string (css, style_str);
     g_free (style_str);
