@@ -21,6 +21,7 @@
 #include "document.h"
 #include "sp-item.h"
 #include "selection.h"
+#include "tools-switch.h"
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
@@ -219,12 +220,17 @@ sp_selection_update_statusbar (SPSelection * selection)
 void
 sp_selection_changed (SPSelection * selection)
 {
+	SPDesktop *dt;
+	dt = SP_ACTIVE_DESKTOP;
+
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 
 	g_signal_emit (G_OBJECT (selection), selection_signals [CHANGED], 0);
 
-	sp_selection_update_statusbar (selection);
+	if (dt && tools_isactive (dt, TOOLS_SELECT)) { // this function gets called not only when selector is active!
+		sp_selection_update_statusbar (selection);
+	}
 }
 
 void
