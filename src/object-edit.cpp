@@ -520,6 +520,18 @@ static NR::Point sp_arc_end_get (SPItem *item)
 }
 
 static void
+sp_arc_startend_click (SPItem *item, guint state)
+{
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+
+	if (state & GDK_SHIFT_MASK) {
+		ge->end = ge->start = 0;
+		((SPObject *)ge)->updateRepr();
+	}
+}
+
+
+static void
 sp_arc_rx_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
@@ -594,9 +606,9 @@ sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 					_("Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"));
 	sp_knot_holder_add (knot_holder, sp_arc_ry_set, sp_arc_ry_get, sp_arc_ry_click,
 					_("Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"));
-	sp_knot_holder_add (knot_holder, sp_arc_start_set, sp_arc_start_get, NULL,
+	sp_knot_holder_add (knot_holder, sp_arc_start_set, sp_arc_start_get, sp_arc_startend_click,
 					_("Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for segment"));
-	sp_knot_holder_add (knot_holder, sp_arc_end_set, sp_arc_end_get, NULL,
+	sp_knot_holder_add (knot_holder, sp_arc_end_set, sp_arc_end_get, sp_arc_startend_click,
 					_("Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for segment"));
 
 	sp_pat_knot_holder (item, knot_holder);
