@@ -29,6 +29,17 @@
 	Cleanups: greater conformance to Coding_Style, combine declaration
 	and first assignment of some vars.
 
+2004-02-08 Bryce Harrington <brycehar@bryceharrington.com>
+
+	* src/sp-namedview.cpp: This assert appears to serve no purpose
+	  except to cause Inkscape to crash when the user chooses to
+	  exit the app when the XML editor is open.  Commenting out the
+	  assert doesn't seem to cause any particular untoward behavior.
+
+	* src/xml/: repr.cpp, repr.h: Hacking in a check to prevent
+	  deletion of the namedview entity, in order to close bug
+	  Inkscape Bug #850971.
+
 2004-02-07 Johan Ceuppens <jceuppen@easynet.be> 
     * src/libnrtype/nr-type-gnome.cpp src/libnrtype/nr-type-directory
       src/libnrtype/nr-type-xft.cpp src/widgets/font-selector.cpp 
