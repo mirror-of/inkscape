@@ -396,6 +396,9 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     desktop->selection = new SPSelection (desktop);
 
     /* Push select tool to the bottom of stack */
+    // FIXME: this is the only call to this.  Everything else seems to just
+    // call "set" instead of "push".  Can we assume that there is only one
+    // context ever?
     sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
 
     // display rect and zoom are now handled in sp_desktop_widget_realize(), 

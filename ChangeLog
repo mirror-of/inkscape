@@ -12,7 +12,10 @@
 	  sp_document_done from the update handler (fixes bug #986411).
 	* src/dialogs/dialog-events.cpp, src/helper/action.cpp:
 	  whitespace changes, typo fixes, added a few g_asserts.
-
+	* src/selection-chemistry.cpp, src/desktop.cpp: when deleting items
+	  from the desktop, the selection context may need to be cleared since
+	  it may have pointers to the deleted items.  To do this, I just
+	  reselect the current tool (fixes bug #983243).
 
 2004-07-06  MenTaLguY  <mental@rydia.net>
 
