@@ -1,5 +1,5 @@
 /*
- * Inkscape::Util::SharedCString - shared and immutable strings
+ * Inkscape::Util::SharedCStringPtr - shared and immutable strings
  *
  * Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -13,26 +13,26 @@
 #include <glib/gmessages.h>
 #include <sys/types.h>
 #include "gc-core.h"
-#include "util/shared-c-string.h"
+#include "util/shared-c-string-ptr.h"
 
 namespace Inkscape {
 
 namespace Util {
 
-SharedCString SharedCString::copy(char const *string) {
-    g_return_val_if_fail(string != NULL, SharedCString::coerce(NULL));
+SharedCStringPtr SharedCStringPtr::copy(char const *string) {
+    g_return_val_if_fail(string != NULL, SharedCStringPtr::coerce(NULL));
 
-    return SharedCString::copy(string, std::strlen(string));
+    return SharedCStringPtr::copy(string, std::strlen(string));
 }
 
-SharedCString SharedCString::copy(char const *string, size_t len) {
-    g_return_val_if_fail(string != NULL, SharedCString::coerce(NULL));
+SharedCStringPtr SharedCStringPtr::copy(char const *string, size_t len) {
+    g_return_val_if_fail(string != NULL, SharedCStringPtr::coerce(NULL));
 
     char *dup=new (GC::ATOMIC) gchar[len+1];
     std::memcpy(dup, string, len);
     dup[len] = '\000';
 
-    return SharedCString::coerce(dup);
+    return SharedCStringPtr::coerce(dup);
 }
 
 }

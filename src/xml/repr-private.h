@@ -25,7 +25,7 @@
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include "xml/xml-forward.h"
-#include "util/shared-c-string.h"
+#include "util/shared-c-string-ptr.h"
 
 struct SPReprClass;
 struct SPReprAttr;
@@ -136,7 +136,7 @@ private:
 
 	SPReprType _type;
 	SPReprAttr *_attributes;
-	Inkscape::Util::SharedCString _content;
+	Inkscape::Util::SharedCStringPtr _content;
 	SPRepr *_parent;
 	SPRepr *_children;
 	SPRepr *_next;
@@ -159,7 +159,7 @@ protected:
 };
 
 struct SPReprText : public SPRepr {
-	SPReprText(Inkscape::Util::SharedCString content)
+	SPReprText(Inkscape::Util::SharedCStringPtr content)
 	: SPRepr(SP_XML_TEXT_NODE, g_quark_from_static_string("string"))
 	{
 		setContent(content);
@@ -170,7 +170,7 @@ protected:
 };
 
 struct SPReprComment : public SPRepr {
-	explicit SPReprComment(Inkscape::Util::SharedCString content)
+	explicit SPReprComment(Inkscape::Util::SharedCStringPtr content)
 	: SPRepr(SP_XML_COMMENT_NODE, g_quark_from_static_string("comment"))
 	{
 		setContent(content);

@@ -33,7 +33,7 @@
 #include <map>
 #include <glibmm/ustring.h>
 #include <glibmm/quark.h>
-#include "util/shared-c-string.h"
+#include "util/shared-c-string-ptr.h"
 
 static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
 static SPRepr *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
@@ -381,7 +381,7 @@ repr_quote_write (FILE * file, const gchar * val)
 namespace {
 
 typedef std::map<Glib::QueryQuark, gchar const *, Inkscape::compare_quark_ids> LocalNameMap;
-typedef std::map<Glib::QueryQuark, Inkscape::Util::SharedCString, Inkscape::compare_quark_ids> NSMap;
+typedef std::map<Glib::QueryQuark, Inkscape::Util::SharedCStringPtr, Inkscape::compare_quark_ids> NSMap;
 
 gchar const *qname_local_name(Glib::QueryQuark qname) {
     static LocalNameMap local_name_map;
@@ -400,18 +400,18 @@ gchar const *qname_local_name(Glib::QueryQuark qname) {
 }
 
 void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
-    using Inkscape::Util::SharedCString;
+    using Inkscape::Util::SharedCStringPtr;
     NSMap::iterator iter=ns_map.find(prefix);
     if ( iter == ns_map.end() ) {
         if (prefix.id()) {
             gchar const *uri=sp_xml_ns_prefix_uri(g_quark_to_string(prefix));
             if (uri) {
-                ns_map.insert(NSMap::value_type(prefix, SharedCString::coerce(uri)));
+                ns_map.insert(NSMap::value_type(prefix, SharedCStringPtr::coerce(uri)));
             } else {
                 g_warning("No namespace known for normalized prefix %s", g_quark_to_string(prefix));
             }
         } else {
-            ns_map.insert(NSMap::value_type(prefix, SharedCString()));
+            ns_map.insert(NSMap::value_type(prefix, SharedCStringPtr()));
         }
     }
 }
@@ -440,7 +440,7 @@ void populate_ns_map(NSMap &ns_map, SPRepr &repr) {
 void
 sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns)
 {
-    using Inkscape::Util::SharedCString;
+    using Inkscape::Util::SharedCStringPtr;
     g_assert(repr != NULL);
 
     NSMap ns_map;
@@ -455,7 +455,7 @@ sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whites
     for ( NSMap::iterator iter=ns_map.begin() ; iter != ns_map.end() ; ++iter ) 
     {
         Glib::QueryQuark prefix=(*iter).first;
-        SharedCString ns_uri=(*iter).second;
+        SharedCStringPtr ns_uri=(*iter).second;
 
         if (prefix.id()) {
             if ( elide_prefix == prefix ) {

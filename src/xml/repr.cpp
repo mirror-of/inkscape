@@ -36,7 +36,7 @@
 #include "xml/sp-repr-action.h"
 #include "xml/sp-repr-action-fns.h"
 
-using Inkscape::Util::SharedCString;
+using Inkscape::Util::SharedCStringPtr;
 
 SPRepr *
 sp_repr_new(gchar const *name)
@@ -51,14 +51,14 @@ SPRepr *
 sp_repr_new_text(gchar const *content)
 {
     g_return_val_if_fail(content != NULL, NULL);
-    return new SPReprText(SharedCString::copy(content));
+    return new SPReprText(SharedCStringPtr::copy(content));
 }
 
 SPRepr *
 sp_repr_new_comment(gchar const *comment)
 {
     g_return_val_if_fail(comment != NULL, NULL);
-    return new SPReprComment(SharedCString::copy(comment));
+    return new SPReprComment(SharedCStringPtr::copy(comment));
 }
 
 SPRepr::SPRepr(SPReprType t, int code)
@@ -222,12 +222,12 @@ sp_repr_has_attr(SPRepr const *repr, gchar const *partial_name)
 void
 SPRepr::setContent(gchar const *newcontent)
 {
-    SharedCString oldcontent = this->_content;
+    SharedCStringPtr oldcontent = this->_content;
 
     if (newcontent) {
-        this->_content = SharedCString::copy(newcontent);
+        this->_content = SharedCStringPtr::copy(newcontent);
     } else {
-        this->_content = SharedCString();
+        this->_content = SharedCStringPtr();
     }
     if (_document) {
         if (_document->_log->is_logging) {
@@ -270,7 +270,7 @@ SPRepr::_deleteAttribute(gchar const *key, bool is_interactive)
         }
         if (_document) {
             if (_document->_log->is_logging) {
-                _document->_log->actions = (new SPReprActionChgAttr(this, q, attr->value, SharedCString(), _document->_log->actions))->optimizeOne();
+                _document->_log->actions = (new SPReprActionChgAttr(this, q, attr->value, SharedCStringPtr(), _document->_log->actions))->optimizeOne();
             }
         }
 
@@ -299,12 +299,12 @@ SPRepr::_changeAttribute(gchar const *key, gchar const *value, bool is_interacti
         return;
     }
 
-    SharedCString oldval = ( attr ? attr->value : SharedCString() );
+    SharedCStringPtr oldval = ( attr ? attr->value : SharedCStringPtr() );
 
     if (attr) {
-        attr->value = SharedCString::copy(value);
+        attr->value = SharedCStringPtr::copy(value);
     } else {
-        attr = new SPReprAttr(q, SharedCString::copy(value));
+        attr = new SPReprAttr(q, SharedCStringPtr::copy(value));
         if (prev) {
             prev->next = attr;
         } else {

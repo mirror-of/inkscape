@@ -5,7 +5,7 @@
 #include <glib/gtypes.h>
 #include "gc-managed.h"
 #include "xml/xml-forward.h"
-#include "util/shared-c-string.h"
+#include "util/shared-c-string-ptr.h"
 
 
 #define SP_REPR_ATTRIBUTE_KEY(a) g_quark_to_string((a)->key)
@@ -14,7 +14,7 @@
 
 struct SPReprAttr : public Inkscape::GC::Managed<> {
     SPReprAttr(GQuark k,
-               Inkscape::Util::SharedCString v,
+               Inkscape::Util::SharedCStringPtr v,
                SPReprAttr *n=NULL)
     : next(n), key(k), value(v) {}
 
@@ -23,7 +23,7 @@ struct SPReprAttr : public Inkscape::GC::Managed<> {
 
     SPReprAttr *next;
     GQuark key;
-    Inkscape::Util::SharedCString value;
+    Inkscape::Util::SharedCStringPtr value;
 };
 
 

@@ -1,5 +1,16 @@
 2004-01-21  MenTaLguY  <mental@rydia.net>
 
+	* src/util/Makefile_insert, src/util/shared-c-string-ptr.cpp,
+	  src/util/shared-c-string-ptr.h, src/util/shared-c-string.cpp,
+	  src/util/shared-c-string.h, src/xml/repr-io.cpp,
+	  src/xml/repr-private.h, src/xml/repr-util.cpp, src/xml/repr.cpp,
+	  src/xml/sp-repr-action.h, src/xml/sp-repr-attr.h:
+
+	  renamed Util::SharedCString to Util::SharedCStringPtr, which is
+	  more descriptive of what it actually is
+
+2004-01-21  MenTaLguY  <mental@rydia.net>
+
 	* src/xml/repr-private.h, src/xml/repr-util.cpp, src/xml/repr.cpp:
 
 	  simplify the cacheing of repr position indices, and make it something

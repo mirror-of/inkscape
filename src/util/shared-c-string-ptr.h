@@ -1,5 +1,5 @@
 /*
- * Inkscape::Util::SharedCString - shared and immutable strings
+ * Inkscape::Util::SharedCStringPtr - shared and immutable strings
  *
  * Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -9,8 +9,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef SEEN_INKSCAPE_UTIL_SHARED_C_STRING_H
-#define SEEN_INKSCAPE_UTIL_SHARED_C_STRING_H
+#ifndef SEEN_INKSCAPE_UTIL_SHARED_C_STRING_PTR_H
+#define SEEN_INKSCAPE_UTIL_SHARED_C_STRING_PTR_H
 
 #include <sys/types.h>
 #include <glib/gtypes.h>
@@ -19,9 +19,9 @@ namespace Inkscape {
 
 namespace Util {
 
-class SharedCString {
+class SharedCStringPtr {
 public:
-    SharedCString() : _str(NULL) {}
+    SharedCStringPtr() : _str(NULL) {}
 
     operator char const *() const { return cString(); }
 
@@ -29,31 +29,31 @@ public:
 
     char const *cString() const { return _str; }
 
-    static SharedCString coerce(char const *s) { return SharedCString(s); }
-    static SharedCString copy(char const *s);
-    static SharedCString copy(char const *s, size_t len);
+    static SharedCStringPtr coerce(char const *s) { return SharedCStringPtr(s); }
+    static SharedCStringPtr copy(char const *s);
+    static SharedCStringPtr copy(char const *s, size_t len);
 
     operator bool() const { return _str; }
 
 private:
-    SharedCString(char const *s) : _str(s) {}
+    SharedCStringPtr(char const *s) : _str(s) {}
 
     char const *_str;
 };
 
-inline bool operator==(SharedCString const &ss, char const *s) {
+inline bool operator==(SharedCStringPtr const &ss, char const *s) {
     return ss.cString() == s;
 }
 
-inline bool operator==(char const *s, SharedCString const &ss) {
+inline bool operator==(char const *s, SharedCStringPtr const &ss) {
     return operator==(ss, s);
 }
 
-inline bool operator!=(SharedCString const &ss, char const *s) {
+inline bool operator!=(SharedCStringPtr const &ss, char const *s) {
     return !operator==(ss, s);
 }
 
-inline bool operator!=(char const *s, SharedCString const &ss) {
+inline bool operator!=(char const *s, SharedCStringPtr const &ss) {
     return !operator==(s, ss);
 }
 

@@ -280,7 +280,7 @@ sp_xml_ns_prefix_uri (const gchar *prefix)
 SPXMLText *
 sp_xml_document_createTextNode (SPXMLDocument *doc, const gchar *data)
 {
-    return new SPReprText(Inkscape::Util::SharedCString::copy(data));
+    return new SPReprText(Inkscape::Util::SharedCStringPtr::copy(data));
 }
 
 /** Returns the first child of \a repr, or NULL if \a repr has no children (or if repr is itself

@@ -6,7 +6,7 @@
 
 #include <iterator>
 #include "xml/xml-forward.h"
-#include "util/shared-c-string.h"
+#include "util/shared-c-string-ptr.h"
 #include "util/forward-pointer-iterator.h"
 #include "gc-managed.h"
 
@@ -79,15 +79,15 @@ private:
 class SPReprActionChgAttr : public SPReprAction {
 public:
 	SPReprActionChgAttr(SPRepr *repr, GQuark k,
-			    Inkscape::Util::SharedCString ov,
-                            Inkscape::Util::SharedCString nv,
+			    Inkscape::Util::SharedCStringPtr ov,
+                            Inkscape::Util::SharedCStringPtr nv,
                             SPReprAction *next)
 	: SPReprAction(repr, next), key(k),
 	  oldval(ov), newval(nv) {}
 
 	GQuark key;
-	Inkscape::Util::SharedCString oldval;
-	Inkscape::Util::SharedCString newval;
+	Inkscape::Util::SharedCStringPtr oldval;
+	Inkscape::Util::SharedCStringPtr newval;
 
 private:
 	SPReprAction *_optimizeOne();
@@ -98,13 +98,13 @@ private:
 class SPReprActionChgContent : public SPReprAction {
 public:
 	SPReprActionChgContent(SPRepr *repr,
-                               Inkscape::Util::SharedCString ov,
-                               Inkscape::Util::SharedCString nv,
+                               Inkscape::Util::SharedCStringPtr ov,
+                               Inkscape::Util::SharedCStringPtr nv,
                                SPReprAction *next)
 	: SPReprAction(repr, next), oldval(ov), newval(nv) {}
 
-	Inkscape::Util::SharedCString oldval;
-	Inkscape::Util::SharedCString newval;
+	Inkscape::Util::SharedCStringPtr oldval;
+	Inkscape::Util::SharedCStringPtr newval;
 
 private:
 	SPReprAction *_optimizeOne();
