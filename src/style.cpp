@@ -748,38 +748,38 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
     case SP_PROP_MARKER:
         /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
         /* style->marker[SP_MARKER_LOC] = g_quark_from_string(val); */
-	marker_status("Setting SP_PROP_MARKER");
+        marker_status("Setting SP_PROP_MARKER");
         if (!style->marker[SP_MARKER_LOC].set) {
             g_free (style->marker[SP_MARKER_LOC].value);
             style->marker[SP_MARKER_LOC].value = g_strdup (val);
             style->marker[SP_MARKER_LOC].set = TRUE;
             style->marker[SP_MARKER_LOC].inherit = (val && !strcmp (val, "inherit"));
         }
-	break;
+        break;
 
     case SP_PROP_MARKER_START:
         /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-	marker_status("Setting SP_PROP_MARKER_START");
+        marker_status("Setting SP_PROP_MARKER_START");
         if (!style->marker[SP_MARKER_LOC_START].set) {
             g_free (style->marker[SP_MARKER_LOC_START].value);
             style->marker[SP_MARKER_LOC_START].value = g_strdup (val);
             style->marker[SP_MARKER_LOC_START].set = TRUE;
             style->marker[SP_MARKER_LOC_START].inherit = (val && !strcmp (val, "inherit"));
         }
-	break;
+        break;
     case SP_PROP_MARKER_MID:
         /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-	marker_status("Setting SP_PROP_MARKER_MID");
+        marker_status("Setting SP_PROP_MARKER_MID");
         if (!style->marker[SP_MARKER_LOC_MID].set) {
             g_free (style->marker[SP_MARKER_LOC_MID].value);
             style->marker[SP_MARKER_LOC_MID].value = g_strdup (val);
             style->marker[SP_MARKER_LOC_MID].set = TRUE;
             style->marker[SP_MARKER_LOC_MID].inherit = (val && !strcmp (val, "inherit"));
         }
-	break;
+        break;
     case SP_PROP_MARKER_END:
         /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-	marker_status("Setting SP_PROP_MARKER_END");
+        marker_status("Setting SP_PROP_MARKER_END");
         if (!style->marker[SP_MARKER_LOC_END].set) {
             g_free (style->marker[SP_MARKER_LOC_END].value);
             style->marker[SP_MARKER_LOC_END].value = g_strdup (val);
@@ -1856,7 +1856,7 @@ sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
         paint->set = TRUE;
         paint->inherit = FALSE;
         paint->currentcolor = FALSE;
-       }
+    }
 }
 
 
@@ -1867,59 +1867,59 @@ sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
 static void
 sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document)
 {
-	while (isspace (*str)) {
-		++str;
-	}
+    while (isspace(*str)) {
+        ++str;
+    }
  
-	if (!strcmp (str, "inherit")) {
-		paint->set = TRUE;
-		paint->inherit = TRUE;
-		paint->currentcolor = FALSE;
-	} else if (!strcmp (str, "currentColor")) {
-		paint->set = TRUE;
-		paint->inherit = FALSE;
-		paint->currentcolor = TRUE;
-	} else {
-		guint32 color;
-		if (!strncmp (str, "url", 3)) {
-			paint->value.paint.uri = extract_uri(str);
-			if (paint->value.paint.uri == NULL || *(paint->value.paint.uri) == '\0') {
-				paint->type = SP_PAINT_TYPE_NONE;
-				return;
-			}
-			paint->type = SP_PAINT_TYPE_PAINTSERVER;
-			paint->set = TRUE;
-			paint->inherit = FALSE;
-			paint->currentcolor = FALSE;
-			if (document) {
-				SPObject *ps;
-				ps = sp_uri_reference_resolve (document, str);
-				if (ps && SP_IS_PAINT_SERVER (ps)) {
-					paint->value.paint.server = SP_PAINT_SERVER (ps);
-					sp_object_href (SP_OBJECT (paint->value.paint.server), style);
-					g_signal_connect (G_OBJECT (paint->value.paint.server), "release",
-														G_CALLBACK (sp_style_paint_server_release), style);
-					g_signal_connect (G_OBJECT (paint->value.paint.server), "modified",
-														G_CALLBACK (sp_style_paint_server_modified), style);
-				}
-			} 
-			return;
-		} else if (!strncmp (str, "none", 4)) {
-			paint->type = SP_PAINT_TYPE_NONE;
-			paint->set = TRUE;
-			paint->inherit = FALSE;
-			paint->currentcolor = FALSE;
-			return;
-		}
+    if (!strcmp(str, "inherit")) {
+        paint->set = TRUE;
+        paint->inherit = TRUE;
+        paint->currentcolor = FALSE;
+    } else if (!strcmp(str, "currentColor")) {
+        paint->set = TRUE;
+        paint->inherit = FALSE;
+        paint->currentcolor = TRUE;
+    } else {
+        guint32 color;
+        if (!strncmp(str, "url", 3)) {
+            paint->value.paint.uri = extract_uri(str);
+            if (paint->value.paint.uri == NULL || *(paint->value.paint.uri) == '\0') {
+                paint->type = SP_PAINT_TYPE_NONE;
+                return;
+            }
+            paint->type = SP_PAINT_TYPE_PAINTSERVER;
+            paint->set = TRUE;
+            paint->inherit = FALSE;
+            paint->currentcolor = FALSE;
+            if (document) {
+                SPObject *ps;
+                ps = sp_uri_reference_resolve(document, str);
+                if (ps && SP_IS_PAINT_SERVER(ps)) {
+                    paint->value.paint.server = SP_PAINT_SERVER(ps);
+                    sp_object_href(SP_OBJECT(paint->value.paint.server), style);
+                    g_signal_connect(G_OBJECT(paint->value.paint.server), "release",
+                                     G_CALLBACK(sp_style_paint_server_release), style);
+                    g_signal_connect(G_OBJECT(paint->value.paint.server), "modified",
+                                     G_CALLBACK(sp_style_paint_server_modified), style);
+                }
+            } 
+            return;
+        } else if (!strncmp(str, "none", 4)) {
+            paint->type = SP_PAINT_TYPE_NONE;
+            paint->set = TRUE;
+            paint->inherit = FALSE;
+            paint->currentcolor = FALSE;
+            return;
+        }
 
-		paint->type = SP_PAINT_TYPE_COLOR;
-		color = sp_color_get_rgba32_ualpha (&paint->value.color, 0);
-		color = sp_svg_read_color (str, color);
-		sp_color_set_rgb_rgba32 (&paint->value.color, color);
-		paint->set = TRUE;
-		paint->inherit = FALSE;
-		paint->currentcolor = FALSE;
-	}
+        paint->type = SP_PAINT_TYPE_COLOR;
+        color = sp_color_get_rgba32_ualpha(&paint->value.color, 0);
+        color = sp_svg_read_color(str, color);
+        sp_color_set_rgb_rgba32(&paint->value.color, color);
+        paint->set = TRUE;
+        paint->inherit = FALSE;
+        paint->currentcolor = FALSE;
+    }
 }
 
 

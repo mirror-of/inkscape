@@ -326,7 +326,7 @@ file_import (SPDocument *doc, const gchar *filename)
               for failing to load an SVG document
             */
             return;
-	}
+        }
         SPRepr *repr = sp_repr_document_root (rnewdoc);
         const gchar *style = sp_repr_attr (repr, "style");
 
