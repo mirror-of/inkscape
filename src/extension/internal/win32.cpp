@@ -484,8 +484,7 @@ PrintWin32::init (void)
 			"<name>Windows 32-bit Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_WIN32 "</id>\n"
 			"<print/>\n"
-		"</spmodule>");
-	ext->set_implementation(new PrintWin32());
+		"</spmodule>", new PrintWin32());
 
 	return;
 }

@@ -811,8 +811,7 @@ PrintPS::init (void)
 			"<name>Postscript Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"
 			"<print/>\n"
-		"</spmodule>");
-	ext->set_implementation(new PrintPS());
+		"</spmodule>", new PrintPS());
 
 	return;
 }

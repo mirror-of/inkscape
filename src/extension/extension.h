@@ -80,7 +80,7 @@ protected:
 	Implementation::Implementation * imp;         /**< An object that holds all the functions for making this work */
 
 public:
-	Extension(SPRepr * in_repr);
+	Extension(SPRepr * in_repr, Implementation::Implementation * in_imp);
 	virtual ~Extension(void);
 
 	void set_state (state_t in_state);
@@ -89,7 +89,6 @@ public:
 	SPRepr * get_repr (void);
 	gchar * get_id (void);
 	gchar * get_name (void);
-	Implementation::Implementation * set_implementation (Implementation::Implementation * in_imp);
 };
 
 class Input : public Extension {
@@ -99,7 +98,7 @@ class Input : public Extension {
 	gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
 public:
-    Input (SPRepr * in_repr);
+    Input (SPRepr * in_repr, Implementation::Implementation * in_imp);
 	virtual ~Input (void);
 	SPDocument * open (const gchar *uri);
 	gchar * get_extension(void);
@@ -115,7 +114,7 @@ class Output : public Extension {
 	gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
 public:
-	Output (SPRepr * in_repr);
+	Output (SPRepr * in_repr, Implementation::Implementation * in_imp);
 	virtual ~Output (void);
 
 	void save (SPDocument *doc, const gchar *uri);
@@ -128,7 +127,7 @@ public:
 class Filter : public Extension {
 
 public:
-	Filter (SPRepr * in_repr);
+	Filter (SPRepr * in_repr, Implementation::Implementation * in_imp);
 	virtual ~Filter (void);
 
 	GtkDialog * prefs (void);
@@ -144,7 +143,7 @@ public: /* TODO: These are public for the short term, but this should be fixed *
 	unsigned int dkey;
 
 public:
-	Print (SPRepr * in_repr);
+	Print (SPRepr * in_repr, Implementation::Implementation * in_imp);
 	~Print (void);
 
 	/* FALSE means user hit cancel */

@@ -374,8 +374,7 @@ PrintGNOME::init (void)
 			"<name>GNOME Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_GNOME "</id>\n"
 			"<print/>\n"
-		"</spmodule>");
-	ext->set_implementation(new PrintGNOME());
+		"</spmodule>", new PrintGNOME());
 
 	return;
 }

@@ -2,7 +2,9 @@
 /**
 	\file extension.cpp
  
-	Frontend to certain, possibly pluggable, actions
+	The ability to have features that are more modular so that they
+	can be added and removed easily.  This is the basis for defining
+	those actions.
 */
 
 /*
@@ -36,24 +38,29 @@ namespace Extension {
 
 /**
 	\return  none
-	\brief   Builds a SPModule object from a SPRepr
-	\param   module  The module to be built.
-	\param   repr    The repr that should be used to build it
+	\brief   Constructs an Extension from a SPRepr
+	\param   in_repr    The repr that should be used to build it
 
-	This function is the basis of building a module for Sodipodi.  It
+	This function is the basis of building an extension for Inkscape.  It
 	currently extracts the fields from the Repr that are used in the
-	module.  The Repr will likely include other children that are
+	extension.  The Repr will likely include other children that are
 	not related to the module directly.  If the Repr does not include
 	a name and an ID the module will be left in an errored state.
 */
-Extension::Extension (SPRepr * in_repr)
+Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 {
 	repr = in_repr;
 	sp_repr_ref(in_repr);
+
 	id = NULL;
 	name = NULL;
 	state = STATE_UNLOADED;
-	imp = NULL;
+
+	if (in_imp == NULL) {
+		imp = new Implementation::Implementation();
+	} else {
+		imp = in_imp;
+	}
 
 	printf("Extension Constructor: ");
 	if (repr != NULL) {
@@ -82,6 +89,15 @@ Extension::Extension (SPRepr * in_repr)
 	return;
 }
 
+/**
+	\return   none
+	\brief    Destroys the Extension
+
+	This function frees all of the strings that could be attached
+	to the extension and also unreferences the repr.  This is better
+	than freeing it because it may (I wouldn't know why) be referenced
+	in another place.
+*/
 Extension::~Extension (void)
 {
 	sp_repr_unref(repr);
@@ -96,16 +112,14 @@ Extension::~Extension (void)
 	          or unloaded
 	\param    in_state  Which state should the extension be in?
 
-	This function first checks to see if there is an implementation
-	that should be used.  Now it checks to see if this is a state
-	change or not.  If we're changing states it will call the appropriate
-	function in the implementation, load or unload.  Currently, there
-	is no error checking in this function.  There should be.
+	It checks to see if this is a state change or not.  If we're changing
+	states it will call the appropriate function in the implementation,
+	load or unload.  Currently, there is no error checking in this
+	function.  There should be.
 */
 void
 Extension::set_state (state_t in_state)
 {
-	if (imp == NULL) return;
 	if (in_state != state) {
 		/* TODO: Need some error checking here! */
 		if (in_state == STATE_LOADED) {
@@ -139,32 +153,34 @@ Extension::loaded (void)
 	return state == STATE_LOADED;
 }
 
+/**
+	\return  The XML tree that is used to define the extension
+	\brief   A getter for the internal Repr, does not add a reference.
+*/
 SPRepr *
 Extension::get_repr (void)
 {
 	return repr;
 }
 
+/*
+	\return  The textual id of this extension
+	\brief   Get the ID of this extension - not a copy don't delete!
+*/
 gchar *
 Extension::get_id (void)
 {
 	return id;
 }
 
+/*
+	\return  The textual name of this extension
+	\brief   Get the name of this extension - not a copy don't delete!
+*/
 gchar *
 Extension::get_name (void)
 {
 	return name;
-}
-
-Implementation::Implementation *
-Extension::set_implementation (Implementation::Implementation * in_imp)
-{
-	if (in_imp != NULL) {
-		imp = in_imp;
-		return imp;
-	}
-	return imp;
 }
 
 /* Inkscape::Extension::Input */
@@ -185,7 +201,7 @@ Extension::set_implementation (Implementation::Implementation * in_imp)
 	Overall, there are many levels of indentation, just to handle the
 	levels of indentation in the XML file.
 */
-Input::Input (SPRepr * in_repr) : Extension(in_repr)
+Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
 	mimetype = NULL;
 	extension = NULL;
@@ -244,7 +260,6 @@ Input::~Input (void)
 SPDocument *
 Input::open (const gchar *uri)
 {
-	g_return_val_if_fail(imp != NULL, NULL);
 	return imp->open(this, uri);
 }
 
@@ -269,7 +284,6 @@ Input::get_filetypetooltip(void)
 GtkDialog *
 Input::prefs (const gchar *uri)
 {
-	g_return_val_if_fail(imp != NULL, NULL);
 	return imp->prefs(this, uri);
 }
 
@@ -292,7 +306,7 @@ Input::prefs (const gchar *uri)
 	Overall, there are many levels of indentation, just to handle the
 	levels of indentation in the XML file.
 */
-Output::Output (SPRepr * in_repr) : Extension(in_repr)
+Output::Output (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
 	mimetype = NULL;
 	extension = NULL;
@@ -367,20 +381,18 @@ Output::get_filetypetooltip(void)
 GtkDialog *
 Output::prefs (void)
 {
-	g_return_val_if_fail(imp != NULL, NULL);
 	return imp->prefs(this);
 }
 
 void
 Output::save (SPDocument * doc, const gchar * uri)
 {
-	g_return_if_fail(imp != NULL);
 	return imp->save(this, doc, uri);
 }
 
 /* Inkscape::Extension::Filter */
 
-Filter::Filter (SPRepr * in_repr) : Extension(in_repr)
+Filter::Filter (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
 	return;
 }
@@ -393,20 +405,18 @@ Filter::~Filter (void)
 GtkDialog *
 Filter::prefs (void)
 {
-	g_return_val_if_fail(imp != NULL, NULL);
 	return imp->prefs(this);
 }
 
 void
 Filter::filter (SPDocument * doc)
 {
-	g_return_if_fail(imp != NULL);
 	return imp->filter(this, doc);
 }
 
 /* Inkscape::Extension::Print */
 
-Print::Print (SPRepr * in_repr) : Extension(in_repr)
+Print::Print (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
 	base = NULL;
 	arena = NULL;
@@ -424,42 +434,36 @@ Print::~Print (void)
 unsigned int
 Print::setup (void)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->setup(this);
 }
 
 unsigned int
 Print::set_preview (void)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->set_preview(this);
 }
 
 unsigned int
 Print::begin (SPDocument *doc)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->begin(this, doc);
 }
 
 unsigned int
 Print::finish (void)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->finish(this);
 }
 
 unsigned int
 Print::bind (const NRMatrix *transform, float opacity)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->bind (this, transform, opacity);
 }
 
 unsigned int
 Print::release (void)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->release(this);
 }
 
@@ -467,7 +471,6 @@ unsigned int
 Print::fill (const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->fill (this, bpath, ctm, style, pbox, dbox, bbox);
 }
 
@@ -475,7 +478,6 @@ unsigned int
 Print::stroke (const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
 				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->stroke (this, bpath, transform, style, pbox, dbox, bbox);
 }
 
@@ -483,7 +485,6 @@ unsigned int
 Print::image (unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
 				const NRMatrix *transform, const SPStyle *style)
 {
-	g_return_val_if_fail(imp != NULL, 0);
 	return imp->image (this, px, w, h, rs, transform, style);
 }
 

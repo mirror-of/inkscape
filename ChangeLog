@@ -1,3 +1,14 @@
+2004-03-04  Ted Gould  <ted@gould.cx>
+
+	* src/extension/system.cpp, src/extension/system.h,
+	  src/extension/extension.cpp, src/extension/extension.h,
+	  src/extension/init.cpp, src/extension/internal/gnome.cpp,
+	  src/extension/internal/ps.cpp, src/extension/internal/svg.cpp,
+	  src/extension/internal/win32.cpp:
+	Making it so that an implementation is a require element to
+	build an extension.  This means that checking for one in every
+	other function is not required.  Makes a touch more sense.
+
 2004-03-04  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/file.cpp, src/interface.cpp, src/inkscape-stock.cpp,

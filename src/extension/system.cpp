@@ -27,7 +27,7 @@
 
 static void open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data);
 static void save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data);
-static Inkscape::Extension::Extension * build_from_reprdoc (SPReprDoc * doc);
+static Inkscape::Extension::Extension * build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implementation * in_imp);
 
 /**
 	\return   A new document created from the filename passed in
@@ -325,10 +325,11 @@ sp_module_system_get_print (const gchar * key)
 	built in (like the SVG load/save functions).
 */
 static Inkscape::Extension::Extension *
-build_from_reprdoc (SPReprDoc * doc)
+build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implementation * in_imp)
 {
 	SPRepr * repr;
 	Inkscape::Extension::Extension * module = NULL;
+	Inkscape::Extension::Implementation::Implementation * imp;
 	enum {
 		MODULE_EXTENSION,
 		MODULE_UNKNOWN_IMP
@@ -351,7 +352,7 @@ build_from_reprdoc (SPReprDoc * doc)
 
 	if (strcmp(sp_repr_name(repr), "spmodule")) {
 		printf("How come I don't have a spmodule?\n");
-		goto while_end;
+		return NULL;
 	}
 
 	child_repr = sp_repr_children(repr);
@@ -377,50 +378,48 @@ build_from_reprdoc (SPReprDoc * doc)
 		child_repr = sp_repr_next(child_repr);
 		/* sp_repr_unref(old_repr); */
 	}
+
+	if (in_imp == NULL) {
+		switch (module_implementation_type) {
+			case MODULE_EXTENSION:
+				Inkscape::Extension::Implementation::Script * script;
+
+				script = new Inkscape::Extension::Implementation::Script();
+				imp = dynamic_cast<Inkscape::Extension::Implementation::Implementation *>(script);
+				break;
+			default:
+				break;
+		}
+	} else {
+		imp = in_imp;
+	}
 	
 	switch (module_functional_type)
 	{
 		case MODULE_INPUT:
 			{
-				module = new Inkscape::Extension::Input(repr);
+				module = new Inkscape::Extension::Input(repr, imp);
 				break;
 			}
 		case MODULE_OUTPUT:
 			{
-				module = new Inkscape::Extension::Output(repr);
+				module = new Inkscape::Extension::Output(repr, imp);
 				break;
 			}
 		case MODULE_FILTER:
 			{
-				module = new Inkscape::Extension::Filter(repr);
+				module = new Inkscape::Extension::Filter(repr, imp);
 				break;
 			}
 		case MODULE_PRINT:
 			{
-				module = new Inkscape::Extension::Print(repr);
+				module = new Inkscape::Extension::Print(repr, imp);
 				break;
 			}
 		default:
-			goto while_end;
 			break;
 	}
 
-	switch (module_implementation_type) {
-		case MODULE_EXTENSION:
-			Inkscape::Extension::Implementation::Implementation * imp;
-			Inkscape::Extension::Implementation::Script * script;
-
-			script = new Inkscape::Extension::Implementation::Script();
-			imp = dynamic_cast<Inkscape::Extension::Implementation::Implementation *>(script);
-
-			module->set_implementation(imp);
-			break;
-	default:
-		;
-	}
-
-while_end:
-	sp_repr_document_unref(doc);
 
 	return module;
 }
@@ -435,11 +434,17 @@ while_end:
 	to create the reprdoc.
 */
 Inkscape::Extension::Extension *
-sp_module_system_build_from_file (const gchar * filename)
+sp_module_system_build_from_file (const gchar * filename, Inkscape::Extension::Implementation::Implementation * in_imp)
 {
+	SPReprDoc * doc;
+	Inkscape::Extension::Extension * ext;
+
 	/* TODO: Need to define namespace here, need to write the
 	         DTD in general for this stuff */
-	return build_from_reprdoc (sp_repr_read_file(filename, NULL));
+	doc = sp_repr_read_file(filename, NULL);
+	ext = build_from_reprdoc (doc, in_imp);
+	sp_repr_document_unref(doc);
+	return ext;
 }
 
 /**
@@ -452,7 +457,13 @@ sp_module_system_build_from_file (const gchar * filename)
 	to create the reprdoc.  It finds the length of the buffer using strlen.
 */
 Inkscape::Extension::Extension *
-sp_module_system_build_from_mem (const gchar * buffer)
+sp_module_system_build_from_mem (const gchar * buffer, Inkscape::Extension::Implementation::Implementation * in_imp)
 {
-	return build_from_reprdoc (sp_repr_read_mem(buffer, strlen(buffer), NULL));
+	SPReprDoc * doc;
+	Inkscape::Extension::Extension * ext;
+
+	doc = sp_repr_read_mem(buffer, strlen(buffer), NULL);
+	ext = build_from_reprdoc (doc, in_imp);
+	sp_repr_document_unref(doc);
+	return ext;
 }

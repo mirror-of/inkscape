@@ -54,8 +54,7 @@ Svg::init(void)
 				"<filetypename>Scalable Vector Graphic (SVG)</filetypename>\n"
 				"<filetypetooltip>Inkscape native file format and W3C standard</filetypetooltip>\n"
 			"</input>\n"
-		"</spmodule>");
-	ext->set_implementation(new Svg());
+		"</spmodule>", new Svg());
 
 	/* SVG out Inkscape*/
     ext = sp_module_system_build_from_mem(
@@ -68,8 +67,7 @@ Svg::init(void)
 				"<filetypename>SVG with extension namespaces</filetypename>\n"
 				"<filetypetooltip>Scalable Vector Graphics format with Inkscape extensions</filetypetooltip>\n"
 			"</output>\n"
-		"</spmodule>");
-	ext->set_implementation(new Svg());
+		"</spmodule>", new Svg());
 
 	/* SVG out */
     ext = sp_module_system_build_from_mem(
@@ -82,8 +80,7 @@ Svg::init(void)
 				"<filetypename>Plain SVG</filetypename>\n"
 				"<filetypetooltip>Scalable Vector Graphics format</filetypetooltip>\n"
 			"</output>\n"
-		"</spmodule>");
-	ext->set_implementation(new Svg());
+		"</spmodule>", new Svg());
 
 	return;
 }
