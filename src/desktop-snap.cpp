@@ -30,7 +30,7 @@
 #include <libnr/nr-scale-ops.h>
 #include <libnr/nr-values.h>
 
-static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *desktop);
+static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *dt);
 
 
 /* Minimal distance to norm before point is considered for snap. */
@@ -61,14 +61,14 @@ NR::Coord sp_desktop_dim_snap(SPDesktop const *dt, Snapper::PointType t, NR::Poi
  *    \return Distance to the snap point, or NR_HUGE if no snap occurred.
  */
 
-NR::Coord sp_desktop_free_snap (SPDesktop const *desktop, Snapper::PointType t, NR::Point& req)
+NR::Coord sp_desktop_free_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point& req)
 {
     /* fixme: If allowing arbitrary snap targets, free snap is not the sum of h and v */
     NR::Point result = req;
 	
-    NR::Coord dh = sp_desktop_dim_snap (desktop, t, result, NR::X);
+    NR::Coord dh = sp_desktop_dim_snap(dt, t, result, NR::X);
     result[NR::Y] = req[NR::Y];
-    NR::Coord dv = sp_desktop_dim_snap (desktop, t, result, NR::Y);
+    NR::Coord dv = sp_desktop_dim_snap(dt, t, result, NR::Y);
     req = result;
 	
     if (dh < NR_HUGE && dv < NR_HUGE) {
@@ -86,28 +86,7 @@ NR::Coord sp_desktop_free_snap (SPDesktop const *desktop, Snapper::PointType t, 
     return NR_HUGE;
 }
 
-/** Add some multiple of \a mv to \a req to make it line on the line {p : dot(n, p) == d} (within
-    rounding error); unless that isn't possible (e.g. \a mv and \a n are orthogonal, or \a mv or \a
-    n is zero-length), in which case \a req remains unchanged, and a big number is returned.
 
-    Returns a badness measure of snapping to the specified line: if snapping was possible then
-    L2(req - req0) (i.e. the distance moved); otherwise returns a large number.
-**/
-static double sp_intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
-					   NR::Point const &n, NR::Coord const d) {
-    NR::Point const req0(req);
-    /* Implement "move from req0 by some multiple of mv" as "dot product with something
-       orthogonal to mv remains unchanged". */
-    NR::Point const n2(rot90(mv));
-    NR::Coord const d2 = dot(n2, req);
-    if (sp_intersector_line_intersection(n2, d2, n, d, req) == intersects) {
-        return L2(req - req0);
-    } else {
-        return 1e300;
-    }
-}
-
-static double round_to_nearest_multiple_plus(double x, double const c1, double const c0);
 
 /**
  * Look for snap point along the line described by the point \a req
@@ -116,21 +95,20 @@ static double round_to_nearest_multiple_plus(double x, double const c1, double c
  * \return The distance from \a req to the snap point along the vector \a d,
  * or NR_HUGE if no snap point was found.
  *
- *
  * Requires: d != (0, 0).
  */
 
-NR::Coord sp_desktop_vector_snap (SPDesktop const *desktop, Snapper::PointType t, NR::Point &req, NR::Point const &d)
+NR::Coord sp_desktop_vector_snap (SPDesktop const *dt, Snapper::PointType t, NR::Point &req, NR::Point const &d)
 {
-    g_assert (desktop != NULL);
-    g_assert (SP_IS_DESKTOP (desktop));
+    g_assert(dt != NULL);
+    g_assert(SP_IS_DESKTOP(dt));
 
-    std::list<const Snapper*> snappers = sp_desktop_get_snappers(desktop);
+    std::list<const Snapper*> snappers = sp_desktop_get_snappers(dt);
 
     NR::Coord best = NR_HUGE;
     for (std::list<const Snapper*>::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
         NR::Point trial_req = req;
-        NR::Coord dist = (*i)->vector_snap(desktop, t, trial_req, d);
+        NR::Coord dist = (*i)->vector_snap(dt, t, trial_req, d);
 
         if (dist < best) {
             req = trial_req;
@@ -162,18 +140,18 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
  * They return the updated transformation parameter. 
  */
 
-double sp_desktop_dim_snap_list(SPDesktop const *desktop, Snapper::PointType t, const std::vector<NR::Point> &p,
+double sp_desktop_dim_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
 				double const dx, NR::Dim2 const dim)
 {
     gdouble dist = NR_HUGE;
     gdouble xdist = dx;
     
-    if (SNAP_ON (desktop)) {
+    if (SNAP_ON (dt)) {
         for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
             NR::Point q = *i;
             NR::Coord const pre = q[dim];
             q[dim] += dx;
-            NR::Coord const d = sp_desktop_dim_snap (desktop, t, q, dim);
+            NR::Coord const d = sp_desktop_dim_snap(dt, t, q, dim);
             if (d < dist) {
                 xdist = q[dim] - pre;
                 dist = d;
@@ -184,13 +162,13 @@ double sp_desktop_dim_snap_list(SPDesktop const *desktop, Snapper::PointType t, 
     return xdist;
 }
 
-double sp_desktop_vector_snap_list(SPDesktop const *desktop, Snapper::PointType t, const std::vector<NR::Point> &p,
+double sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
 				   NR::Point const &norm, NR::scale const &s)
 {
     using NR::X;
     using NR::Y;
 
-    if (!SNAP_ON(desktop)) {
+    if (!SNAP_ON(dt)) {
         return s[X];
     }
     
@@ -200,7 +178,7 @@ double sp_desktop_vector_snap_list(SPDesktop const *desktop, Snapper::PointType 
         NR::Point const &q = *i;
         NR::Point check = ( q - norm ) * s + norm;
         if (NR::LInfty( q - norm ) > MIN_DIST_NORM) {
-            NR::Coord d = sp_desktop_vector_snap(desktop, t, check, check - norm);
+            NR::Coord d = sp_desktop_vector_snap(dt, t, check, check - norm);
             if ((d < NR_HUGE) && (d < dist)) {
                 dist = d;
                 NR::Dim2 const dominant = ( ( fabs( q[X] - norm[X] )  >
@@ -216,11 +194,11 @@ double sp_desktop_vector_snap_list(SPDesktop const *desktop, Snapper::PointType 
     return ratio;
 }
 
-double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, Snapper::PointType t, const std::vector<NR::Point> &p,
+double sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
 				      NR::Point const &norm, double const sx, NR::Dim2 dim)
 {
     g_assert( dim < 2 );
-    if (!SNAP_ON (desktop)) {
+    if (!SNAP_ON (dt)) {
         return sx;
     }
 
@@ -232,7 +210,7 @@ double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, Snapper::PointTy
         NR::Point check = q;
         check[dim] = (sx * (q - norm) + norm)[dim];
         if (fabs (q[dim] - norm[dim]) > MIN_DIST_NORM) {
-            const gdouble d = sp_desktop_dim_snap (desktop, t, check, dim);
+            const gdouble d = sp_desktop_dim_snap (dt, t, check, dim);
             if (d < NR_HUGE && d < dist) {
                 dist = d;
                 scale = (check[dim] - norm[dim]) / (q[dim] - norm[dim]);
@@ -243,11 +221,11 @@ double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, Snapper::PointTy
     return scale;
 }
 
-double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, Snapper::PointType t, const std::vector<NR::Point> &p,
+double sp_desktop_dim_snap_list_skew(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
 				     NR::Point const &norm, double const sx, NR::Dim2 const dim)
 {
     g_assert( dim < 2 );
-    if (!SNAP_ON (desktop)) {
+    if (!SNAP_ON (dt)) {
         return sx;
     }
 
@@ -260,7 +238,7 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, Snapper::PointTyp
         // apply shear
         check[dim] += sx * (q[!dim] - norm[!dim]);
         if (fabs (q[!dim] - norm[!dim]) > MIN_DIST_NORM) {
-            const gdouble d = sp_desktop_dim_snap (desktop, t, check, dim);
+            const gdouble d = sp_desktop_dim_snap (dt, t, check, dim);
             if (d < NR_HUGE && d < fabs (dist)) {
                 dist = d;
                 skew = (check[dim] - q[dim]) / (q[!dim] - norm[!dim]);
@@ -273,11 +251,12 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, Snapper::PointTyp
 
 
 /* FIXME: this should probably be in SPNamedView */
-static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *desktop)
+static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *dt)
 {
     std::list<const Snapper*> s;
-    s.push_back(&desktop->namedview->grid_snapper);
-    s.push_back(&desktop->namedview->guide_snapper);
+    SPNamedView const &nv = *dt->namedview;
+    s.push_back(&nv.grid_snapper);
+    s.push_back(&nv.guide_snapper);
     return s;
 }
 
@@ -322,28 +301,55 @@ bool Snapper::getSnapTo(PointType t) const
     return i->second;
 }
 
+
+
+/**
+ *  Add some multiple of \a mv to \a req to make it line on the line {p : dot(n, p) == d} (within
+ *  rounding error); unless that isn't possible (e.g. \a mv and \a n are orthogonal, or \a mv or \a
+ *  n is zero-length), in which case \a req remains unchanged, and a big number is returned.
+ *
+ *  Returns a badness measure of snapping to the specified line: if snapping was possible then
+ *  L2(req - req0) (i.e. the distance moved); otherwise returns NR_HUGE;
+ */
+
+NR::Coord Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
+                                             NR::Point const &n, NR::Coord const d) const
+{
+    NR::Point const req0(req);
+    /* Implement "move from req0 by some multiple of mv" as "dot product with something
+       orthogonal to mv remains unchanged". */
+    NR::Point const n2(rot90(mv));
+    NR::Coord const d2 = dot(n2, req);
+    if (sp_intersector_line_intersection(n2, d2, n, d, req) == intersects) {
+        return L2(req - req0);
+    } else {
+        return NR_HUGE;
+    }
+}
+
+
 GridSnapper::GridSnapper(NR::Coord const d) : Snapper(d)
 {
 
 }
 
-NR::Coord GridSnapper::vector_snap(SPDesktop const *desktop, PointType t, NR::Point &req, NR::Point const &d) const
+NR::Coord GridSnapper::vector_snap(SPDesktop const *dt, PointType t, NR::Point &req, NR::Point const &d) const
 {
     if (getEnabled() == false || getSnapTo(t) == false) {
         return NR_HUGE;
     }
     
-    g_assert(desktop != NULL);
-    g_assert(SP_IS_DESKTOP(desktop));
+    g_assert(dt != NULL);
+    g_assert(SP_IS_DESKTOP(dt));
 
     NR::Coord len = L2(d);
     if (len < NR_EPSILON) {
-        return sp_desktop_free_snap (desktop, t, req);
+        return sp_desktop_free_snap(dt, t, req);
     }
 
     NR::Point const v = NR::unit_vector(d);
 
-    SPNamedView const &nv = *desktop->namedview;
+    SPNamedView const &nv = *dt->namedview;
     NR::Point snapped = req;
     NR::Coord best = NR_HUGE;
     NR::Coord upper = NR_HUGE;
@@ -360,10 +366,10 @@ NR::Coord GridSnapper::vector_snap(SPDesktop const *desktop, PointType t, NR::Po
                                                                  nv.gridspacing[i],
                                                                  nv.gridorigin[i]);
             
-        NR::Coord const dist = sp_intersector_a_vector_snap (trial,
-                                                             v,
-                                                             component_vectors[i],
-                                                             rounded);
+        NR::Coord const dist = intersector_a_vector_snap (trial,
+                                                          v,
+                                                          component_vectors[i],
+                                                          rounded);
         
         if (dist < upper) {
             upper = best = dist;
@@ -380,23 +386,23 @@ GuideSnapper::GuideSnapper(NR::Coord const d) : Snapper(d)
 
 }
 
-NR::Coord GuideSnapper::vector_snap(SPDesktop const *desktop, PointType t, NR::Point &req, NR::Point const &d) const
+NR::Coord GuideSnapper::vector_snap(SPDesktop const *dt, PointType t, NR::Point &req, NR::Point const &d) const
 {
     if (getEnabled() == false || getSnapTo(t) == false) {
         return NR_HUGE;
     }
     
-    g_assert(desktop != NULL);
-    g_assert(SP_IS_DESKTOP(desktop));
+    g_assert(dt != NULL);
+    g_assert(SP_IS_DESKTOP(dt));
 
     NR::Coord len = L2(d);
     if (len < NR_EPSILON) {
-        return sp_desktop_free_snap (desktop, t, req);
+        return sp_desktop_free_snap (dt, t, req);
     }
 
     NR::Point const v = NR::unit_vector(d);
 
-    SPNamedView const &nv = *desktop->namedview;
+    SPNamedView const &nv = *dt->namedview;
     NR::Point snapped = req;
     NR::Coord best = NR_HUGE;
     NR::Coord upper = NR_HUGE;
@@ -405,10 +411,10 @@ NR::Coord GuideSnapper::vector_snap(SPDesktop const *desktop, PointType t, NR::P
     for (GSList const *l = nv.guides; l != NULL; l = l->next) {
         SPGuide const &g = *SP_GUIDE(l->data);
         NR::Point trial(req);
-        NR::Coord const dist = sp_intersector_a_vector_snap(trial,
-                                                            v,
-                                                            g.normal,
-                                                            g.position);
+        NR::Coord const dist = intersector_a_vector_snap(trial,
+                                                         v,
+                                                         g.normal,
+                                                         g.position);
         
         if (dist < upper) {
             upper = best = dist;

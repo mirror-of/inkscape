@@ -51,15 +51,22 @@ public:
     bool getEnabled() const;
     NR::Coord getDistance() const;
 
-    virtual NR::Coord vector_snap(SPDesktop const *desktop,
+    virtual NR::Coord vector_snap(SPDesktop const *dt,
                                   PointType t,
                                   NR::Point &req,
                                   NR::Point const &d) const = 0;
+protected:
+
+    NR::Coord intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
+                                        NR::Point const &n, NR::Coord const d) const;
+
+    
 private:
     NR::Coord _distance;
     bool _enabled;
     std::map<PointType, bool> _snap_to;
 };
+
 
 ///< Snap to grid
 class GridSnapper : public Snapper
@@ -67,12 +74,13 @@ class GridSnapper : public Snapper
 public:
     GridSnapper(NR::Coord const d);
 
-    NR::Coord vector_snap(SPDesktop const *desktop,
+    NR::Coord vector_snap(SPDesktop const *dt,
                           PointType t,
                           NR::Point &req,
                           NR::Point const &d) const;
     
 };
+
 
 ///< Snap to guides
 class GuideSnapper : public Snapper
@@ -80,7 +88,7 @@ class GuideSnapper : public Snapper
 public:
     GuideSnapper(NR::Coord const d);
 
-    NR::Coord vector_snap(SPDesktop const *desktop,
+    NR::Coord vector_snap(SPDesktop const *dt,
                           PointType t,
                           NR::Point &req,
                           NR::Point const &d) const;
@@ -88,29 +96,24 @@ public:
 
 
 /* Single point methods */
-double sp_desktop_free_snap(SPDesktop const *desktop, Snapper::PointType t, NR::Point &req);
-double sp_desktop_vector_snap(SPDesktop const *desktop, Snapper::PointType t, NR::Point &req, NR::Point const &d);
-
+double sp_desktop_free_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point &req);
+double sp_desktop_vector_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point &req, NR::Point const &d);
 gdouble sp_desktop_dim_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point& req, NR::Dim2 const dim);
 
 /* List of points methods */
 
-NR::Coord sp_desktop_vector_snap_list(SPDesktop const *desktop, Snapper::PointType t, const std::vector<NR::Point> &p,
+NR::Coord sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
                                       NR::Point const &norm, NR::scale const &s);
 
-NR::Coord sp_desktop_dim_snap_list(SPDesktop const *desktop, Snapper::PointType t, const std::vector<NR::Point> &p,
+NR::Coord sp_desktop_dim_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
                                    double const dx, NR::Dim2 const dim);
 
-NR::Coord sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, Snapper::PointType t, const std::vector<NR::Point> &p,
+NR::Coord sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
                                          NR::Point const &norm, double const sx, NR::Dim2 const dim);
 
-NR::Coord sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, Snapper::PointType t, const std::vector<NR::Point> &p,
+NR::Coord sp_desktop_dim_snap_list_skew(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
                                         NR::Point const &norm, double const sx, NR::Dim2 const dim);
 
-
-/* Single point methods */
-double sp_desktop_free_snap(SPDesktop const *desktop, NR::Point *req);
-double sp_desktop_vector_snap(SPDesktop const *desktop, NR::Point *req, NR::Coord dx, NR::Coord dy);
 
 #endif /* !SEEN_DESKTOP_SNAP_H */
 
