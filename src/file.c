@@ -177,6 +177,9 @@ sp_file_open_dialog (gpointer object, gpointer data)
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
 	gtk_widget_show_all (hb);
 
+	gtk_window_set_modal (GTK_WINDOW (fsel), TRUE);
+	sp_transientize ((GtkWidget *) fsel);
+
 	gtk_widget_show ((GtkWidget *) fsel);
 #endif
 }
@@ -230,6 +233,8 @@ sp_file_save_dialog (SPDocument *doc)
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
 	gtk_widget_show_all (hb);
 
+	gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
+	sp_transientize (dlg);
 	b = gtk_dialog_run (GTK_DIALOG (dlg));
 
 	if (b == GTK_RESPONSE_OK) {
