@@ -1,5 +1,8 @@
 2004-10-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/pen-context.h: Change size of p array from SP_DRAW_MAX_POINTS to
+	  5 now that we aren't sharing with SPPencilContext.
+
 	* src/draw-context.cpp, src/draw-context.h, src/pen-context.cpp,
 	  src/pen-context.h, src/pencil-context.cpp, src/pencil-context.h:
 	  Move npoints,p from SPDrawContext to both SPPenContext and

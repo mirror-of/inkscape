@@ -25,8 +25,11 @@ enum {
 };
 
 struct SPPenContext : public SPDrawContext {
-    NR::Point p[SP_DRAW_POINTS_MAX];
+    NR::Point p[5];
+
+    /** \invar npoints in {0, 2, 5}. */
     gint npoints;
+
     unsigned int mode : 1;
     unsigned int state : 2;
     unsigned int onlycurves : 1;
