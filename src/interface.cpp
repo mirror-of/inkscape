@@ -1203,50 +1203,45 @@ sp_ui_drag_data_received (GtkWidget * widget,
 			  guint event_time,
 			  gpointer user_data)
 {
-	gchar * uri, * svgdata;
-	SPRepr * rdoc, * repr, * newgroup, * child;
-	SPReprDoc * rnewdoc;
-	SPDocument * doc;
-	const gchar *style;
-	
 	switch(info) {
 	case SVG_DATA:
 	case SVG_XML_DATA: 
-		svgdata = (gchar *)data->data;
+            {
+		gchar *svgdata = (gchar *)data->data;
 
-		doc = SP_ACTIVE_DOCUMENT;
+		SPDocument *doc = SP_ACTIVE_DOCUMENT;
 
-		/* fixme: put into a function (sp_mem_import?) */
-		rdoc = sp_document_repr_root (doc);
-		
-		rnewdoc = sp_repr_read_mem (svgdata, data->length, SP_SVG_NS_URI);
+		SPReprDoc *rnewdoc = sp_repr_read_mem (svgdata, data->length, SP_SVG_NS_URI);
 
 		if (rnewdoc == NULL) {
 			sp_ui_error_dialog (_("Could not parse SVG data"));
 			return;
 		}
 	
-		repr = sp_repr_document_root (rnewdoc);
-		style = sp_repr_attr (repr, "style");
+		SPRepr *repr = sp_repr_document_root (rnewdoc);
+		const gchar *style = sp_repr_attr (repr, "style");
 
-		newgroup = sp_repr_new ("svg:g");
+		SPRepr *newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);
 
-		for (child = repr->children; child != NULL; child = child->next) {
-			SPRepr * newchild;
-			newchild = sp_repr_duplicate (child);
+		for (SPRepr *child = repr->children; child != NULL; child = child->next) {
+			SPRepr * newchild = sp_repr_duplicate (child);
 			sp_repr_append_child (newgroup, newchild);
 		}
 
 		sp_repr_document_unref (rnewdoc);
 
-                SP_DOCUMENT_ROOT(doc)->appendChildRepr(newgroup);
+            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+            // Add it to the current layer
+            desktop->currentLayer()->appendChildRepr(newgroup);
+
 		sp_repr_unref (newgroup);
 		sp_document_done (doc);
-		
+            }		
+
 		break;
 	case URI_LIST:
-		uri = (gchar *)data->data;
+		gchar *uri = (gchar *)data->data;
 		sp_ui_import_files(uri);
 		break;
 	}
@@ -1340,35 +1335,29 @@ is_bitmap_filename(char const *filename)
 static void
 sp_ui_import_one_file(char const *filename)
 {
-	SPDocument * doc;
-	SPRepr * rdoc;
-	SPRepr * repr;
-	SPReprDoc * rnewdoc;
-
-	doc = SP_ACTIVE_DOCUMENT;
+	SPDocument *doc = SP_ACTIVE_DOCUMENT;
 	if (!SP_IS_DOCUMENT(doc)) return;
+
+      SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	
 	if (filename == NULL) return;  
 
-	rdoc = sp_document_repr_root (doc);
+	SPRepr *rdoc = sp_document_repr_root (doc);
 
 	gchar const *docbase = sp_repr_attr(rdoc, "sodipodi:docbase");
 	char const *relname = sp_relative_path_from_path(filename, docbase);
 
 	if (is_svg_filename(filename)) {
-		SPRepr * newgroup;
-		const gchar * style;
-		SPRepr * child;
-
-		rnewdoc = sp_repr_read_file (filename, SP_SVG_NS_URI);
+             // importing SVG
+		SPReprDoc *rnewdoc = sp_repr_read_file (filename, SP_SVG_NS_URI);
 		if (rnewdoc == NULL) return;
-		repr = sp_repr_document_root (rnewdoc);
-		style = sp_repr_attr (repr, "style");
+		SPRepr *repr = sp_repr_document_root (rnewdoc);
+		const gchar *style = sp_repr_attr (repr, "style");
 
-		newgroup = sp_repr_new ("svg:g");
+		SPRepr *newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);
 
-		for (child = repr->children; child != NULL; child = child->next) {
+		for (SPRepr *child = repr->children; child != NULL; child = child->next) {
 			SPRepr * newchild;
 			newchild = sp_repr_duplicate (child);
 			sp_repr_append_child (newgroup, newchild);
@@ -1376,16 +1365,14 @@ sp_ui_import_one_file(char const *filename)
 
 		sp_repr_document_unref (rnewdoc);
 
-                SP_DOCUMENT_ROOT(doc)->appendChildRepr(newgroup);
+            // Add it to the current layer
+            desktop->currentLayer()->appendChildRepr(newgroup);
+
 		sp_repr_unref (newgroup);
 		sp_document_done (doc);
-		return;
-	}
 
-	if (is_bitmap_filename(filename)) {
-		/* Try pixbuf */
-		GdkPixbuf *pb;
-		// TODO: bulia, please look over
+	} else if (is_bitmap_filename(filename)) {
+            // importing bitmap
 		gsize bytesRead = 0;
 		gsize bytesWritten = 0;
 		GError* error = NULL;
@@ -1394,15 +1381,18 @@ sp_ui_import_one_file(char const *filename)
 													  &bytesRead,
 													  &bytesWritten,
 													  &error);
-		pb = gdk_pixbuf_new_from_file (localFilename, NULL);
+		GdkPixbuf *pb = gdk_pixbuf_new_from_file (localFilename, NULL);
 		if (pb) {
 			/* We are readable */
-			repr = sp_repr_new ("svg:image");
+			SPRepr *repr = sp_repr_new ("svg:image");
 			sp_repr_set_attr (repr, "xlink:href", relname);
 			sp_repr_set_attr (repr, "sodipodi:absref", filename);
 			sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
 			sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
-                        SP_DOCUMENT_ROOT(doc)->appendChildRepr(repr);
+
+                   // Add it to the current layer
+                   desktop->currentLayer()->appendChildRepr(repr);
+
 			sp_repr_unref (repr);
 			sp_document_done (doc);
 			gdk_pixbuf_unref (pb);
