@@ -622,7 +622,11 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                                 item = sp_select_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
                             }
 
-                            // if there's both a group and an item at point, deselect group to prevent double selection
+                            // if there's both a group and an item at point, deselect group to
+                            // prevent double selection. FIXME: this only prevents double select for
+                            // top-level groups and bottom-level objects, but fails if a mid-level
+                            // group is selected without entering the top-level as a layer (though
+                            // this currently only possible by XML editor)
                             if (group) {
                                 if (selection->includesItem(group)) {
                                     selection->removeItem(group);
