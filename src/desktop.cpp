@@ -494,6 +494,8 @@ sp_desktop_set_document (SPView *view, SPDocument *doc)
         sp_namedview_show (desktop->namedview, desktop);
         /* Ugly hack */
         sp_desktop_activate_guides (desktop, TRUE);
+	/* Ugly hack */
+	sp_dt_namedview_modified (desktop->namedview, SP_OBJECT_MODIFIED_FLAG, desktop);
     }
 }
 
