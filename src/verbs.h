@@ -92,6 +92,7 @@ enum {
     SP_VERB_SELECTION_CREATE_BITMAP,
     SP_VERB_SELECTION_COMBINE,
     SP_VERB_SELECTION_BREAK_APART,
+    SP_VERB_SELECTION_GRIDTILE,
     /* Layer */
     SP_VERB_LAYER_NEW,
     SP_VERB_LAYER_RENAME,
@@ -276,7 +277,7 @@ public:
         This function also sets \c _actions to NULL.
 
         \warning NO DATA IS COPIED BY CALLING THIS FUNCTION.
-        
+
         In many respects this is very bad object oriented design, but it
         is done for a reason.  All verbs today are of two types: 1) static
         or 2) created for extension.  In the static case all of the

@@ -44,6 +44,7 @@
 #include "dialogs/debugdialog.h"
 #include "dialogs/scriptdialog.h"
 #include "dialogs/tracedialog.h"
+#include "dialogs/tiledialog.h"
 #include "dialogs/layer-properties.h"
 #include "dialogs/clonetiler.h"
 
@@ -481,7 +482,7 @@ SPAction *
 Verb::make_action_helper (SPView * view, SPActionEventVector * vector, void * in_pntr)
 {
     SPAction *action;
-    
+
     //std::cout << "Adding action: " << _code << std::endl;
     action = sp_action_new(view, _id, _(_name),
                            _(_tip), _image, this);
@@ -881,6 +882,9 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
             break;
         case SP_VERB_SELECTION_BREAK_APART:
             sp_selected_path_break_apart ();
+            break;
+        case SP_VERB_SELECTION_GRIDTILE:
+            Inkscape::UI::Dialogs::TileDialog::showInstance();
             break;
         default:
             break;
@@ -1654,10 +1658,10 @@ Verb * Verb::_base_verbs[] = {
     // See also the Advanced Tutorial for explanation.
     new SelectionVerb(SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Ou_tset"),
         N_("Outset selected path(s)"), "outset_path"),
-    new SelectionVerb(SP_VERB_SELECTION_OFFSET_SCREEN, "SelectionOffsetScreen", 
+    new SelectionVerb(SP_VERB_SELECTION_OFFSET_SCREEN, "SelectionOffsetScreen",
         N_("O_utset Path by 1px"),
         N_("Outset selected path(s) by 1px"), NULL),
-    new SelectionVerb(SP_VERB_SELECTION_OFFSET_SCREEN_10, "SelectionOffsetScreen10", 
+    new SelectionVerb(SP_VERB_SELECTION_OFFSET_SCREEN_10, "SelectionOffsetScreen10",
         N_("O_utset Path by 10px"),
         N_("Outset selected path(s) by 10px"), NULL),
     // TRANSLATORS: "inset": contract a shape by offsetting the object's path,
@@ -1665,10 +1669,10 @@ Verb * Verb::_base_verbs[] = {
     // See also the Advanced Tutorial for explanation.
     new SelectionVerb(SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset"),
         N_("Inset selected path(s)"), "inset_path"),
-    new SelectionVerb(SP_VERB_SELECTION_INSET_SCREEN, "SelectionInsetScreen", 
+    new SelectionVerb(SP_VERB_SELECTION_INSET_SCREEN, "SelectionInsetScreen",
         N_("I_nset Path by 1px"),
         N_("Inset selected path(s) by 1px"), NULL),
-    new SelectionVerb(SP_VERB_SELECTION_INSET_SCREEN_10, "SelectionInsetScreen", 
+    new SelectionVerb(SP_VERB_SELECTION_INSET_SCREEN_10, "SelectionInsetScreen",
         N_("I_nset Path by 10px"),
         N_("Inset selected path(s) by 10px"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_DYNAMIC_OFFSET, "SelectionDynOffset",
@@ -1696,7 +1700,8 @@ Verb * Verb::_base_verbs[] = {
     // Advanced tutorial for more info
     new SelectionVerb(SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
         N_("Break selected path(s) into subpaths"), "selection_break"),
-
+    new SelectionVerb(SP_VERB_SELECTION_GRIDTILE, "SelectionGridTile", N_("_Grid Tile"),
+        N_("Arrange selection in grid pattern"), "grid_arrange"),
     /* Layer */
     new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("_New Layer..."),
         N_("Create a new layer"), NULL),
@@ -1816,7 +1821,7 @@ Verb * Verb::_base_verbs[] = {
         "view_new"),
     new ZoomVerb(SP_VERB_VIEW_NEW_PREVIEW, "ViewNewPreview", N_("_New View Preview"),
          N_("New View Preview"), NULL/*"view_new_preview"*/),
-    new ZoomVerb(SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"), 
+    new ZoomVerb(SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"),
        N_("Zoom to fit page in window"), "zoom_page"),
     new ZoomVerb(SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"),
         N_("Zoom to fit page width in window"), "zoom_pagewidth"),
@@ -1834,7 +1839,7 @@ Verb * Verb::_base_verbs[] = {
         N_("Fill and Stroke dialog"), "fill_and_stroke"),
     new DialogVerb(SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m..."),
         N_("Transform dialog"), "object_trans"),
-    new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."), 
+    new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."),
         N_("Align and Distribute dialog"), "object_align"),
     new DialogVerb(SP_VERB_DIALOG_TEXT, "Dialogtext", N_("_Text and Font..."),
         N_("Text and Font dialog"), "object_font"),
