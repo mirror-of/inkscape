@@ -23,7 +23,7 @@ static const char preferences_skeleton[] =
 "  <group id=\"tools\""
 "         style=\"fill:none;fill-opacity:0.75;"
 "                 stroke:black;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;\">"
-"    <group id=\"shapes\" style=\"fill-rule:evenodd;stroke:none;\">"
+"    <group id=\"shapes\" style=\"fill-rule:evenodd;\">"
 "      <eventcontext id=\"rect\" style=\"fill:blue;\"/>"
 "      <eventcontext id=\"arc\" style=\"fill:red;\"/>"
 "      <eventcontext id=\"star\" magnitude=\"5\" style=\"fill:yellow;\"/>"
