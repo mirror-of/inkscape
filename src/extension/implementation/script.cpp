@@ -262,7 +262,13 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 		}
 	}
 
-	execute(command, (gchar *)filename, (gchar *)tempfilename_out);
+	gsize bytesRead = 0;
+	gsize bytesWritten = 0;
+	GError* error = NULL;
+	gchar* local_filename = g_filename_from_utf8 ( filename,
+                                 -1,  &bytesRead,  &bytesWritten, &error);
+
+	execute(command, local_filename, (gchar *)tempfilename_out);
 
 	if (helper_extension == NULL) {
 		mydoc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
@@ -331,7 +337,13 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 		sp_module_system_save(Inkscape::Extension::db.get(helper_extension), doc, tempfilename_in, FALSE, FALSE, FALSE);
 	}
 
-	execute(command, (gchar *)tempfilename_in, (gchar *)filename);
+	gsize bytesRead = 0;
+	gsize bytesWritten = 0;
+	GError* error = NULL;
+	gchar* local_filename = g_filename_from_utf8 ( filename,
+                                 -1,  &bytesRead,  &bytesWritten, &error);
+
+	execute(command, (gchar *)tempfilename_in, local_filename);
 
 	unlink(tempfilename_in);
 

@@ -653,11 +653,17 @@ Input::open (const gchar *uri)
 	SPDocument * doc;
 	SPRepr * repr;
 
-	if (!g_file_test(uri, G_FILE_TEST_EXISTS)) {
+	gsize bytesRead = 0;
+	gsize bytesWritten = 0;
+	GError* error = NULL;
+	gchar* local_uri = g_filename_from_utf8 ( uri,
+                                 -1,  &bytesRead,  &bytesWritten, &error);
+
+	if (!g_file_test(local_uri, G_FILE_TEST_EXISTS)) {
 		return NULL;
 	}
 
-    doc = imp->open(this, uri);
+	doc = imp->open(this, uri);
 
 	if (doc != NULL) {
 		repr = sp_document_repr_root(doc);

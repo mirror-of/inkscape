@@ -152,8 +152,8 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 
 		ext = dynamic_cast<Inkscape::Extension::Input *>(in_plug)->get_extension();
 
-		filenamelower = g_utf8_strdown(filename, g_utf8_strlen(filename, -1));
-		extensionlower = g_utf8_strdown(ext, g_utf8_strlen(ext, -1));
+		filenamelower = g_utf8_strdown (filename, -1);
+		extensionlower = g_utf8_strdown (ext, -1);
 
 		if (g_str_has_suffix(filenamelower, extensionlower)) {
 			*pimod = dynamic_cast<Inkscape::Extension::Input *>(in_plug);
@@ -222,7 +222,7 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 	}
 
 	if (!dynamic_cast<Inkscape::Extension::Output *>(omod)) {
-		printf("Unable to find output module to handle file: %s\n", filename);
+		g_warning ("Unable to find output module to handle file: %s\n", filename);
 		throw Inkscape::Extension::Output::no_extension_found();
 		return;
 	}
@@ -238,8 +238,8 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 	}
 
 	if (setextension) {
-		gchar * lowerfile = g_utf8_strdown(filename, g_utf8_strlen(filename, -1));
-		gchar * lowerext = g_utf8_strdown(omod->get_extension(), g_utf8_strlen(omod->get_extension(), -1));
+		gchar * lowerfile = g_utf8_strdown (filename, -1);
+		gchar * lowerext = g_utf8_strdown (omod->get_extension(), -1);
 
 		if (!g_str_has_suffix(lowerfile, lowerext)) {
 			fileName = g_strdup_printf("%s%s", filename, omod->get_extension());
@@ -305,8 +305,8 @@ save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 
 		ext = dynamic_cast<Inkscape::Extension::Output *>(in_plug)->get_extension();
 
-		filenamelower = g_utf8_strdown(filename, g_utf8_strlen(filename, -1));
-		extensionlower = g_utf8_strdown(ext, g_utf8_strlen(ext, -1));
+		filenamelower = g_utf8_strdown (filename, -1);
+		extensionlower = g_utf8_strdown (ext, -1);
 
 		if (g_str_has_suffix(filenamelower, extensionlower)) {
 			*pomod = dynamic_cast<Inkscape::Extension::Output *>(in_plug);
