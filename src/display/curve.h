@@ -18,20 +18,21 @@
 #include <glib/gslist.h>
 
 #include "libnr/nr-forward.h"
+#include "libnr/nr-point.h"
 
-
+/* See end of curve.cpp for doxygen documentation. */
 struct SPCurve {
     gint refcount;
     NArtBpath *bpath;
-    gint end;		/* ART_END position */
-    gint length;	/* Num allocated Bpaths */
-    gint substart;	/* subpath start */
-    gdouble x, y;	/* previous moveto position */
-    bool sbpath : 1;	/* Bpath is static */
-    bool hascpt : 1;	/* Currentpoint is defined */
-    bool posset : 1;	/* Previous was moveto */
-    bool moving : 1;	/* Bpath end is moving */
-    bool closed : 1;	/* All subpaths are closed */
+    gint end;
+    gint length;
+    gint substart;
+    NR::Point movePos;
+    bool sbpath : 1;
+    bool hascpt : 1;
+    bool posset : 1;
+    bool moving : 1;
+    bool closed : 1;
 };
 
 #define SP_CURVE_LENGTH(c) (((SPCurve const *)(c))->end)
@@ -43,7 +44,7 @@ struct SPCurve {
 SPCurve *sp_curve_new();
 SPCurve *sp_curve_new_sized(gint length);
 SPCurve *sp_curve_new_from_bpath(NArtBpath *bpath);
-SPCurve *sp_curve_new_from_static_bpath(NArtBpath *bpath);
+SPCurve *sp_curve_new_from_static_bpath(NArtBpath const *bpath);
 SPCurve *sp_curve_new_from_foreign_bpath(NArtBpath const bpath[]);
 
 SPCurve *sp_curve_ref(SPCurve *curve);
@@ -82,7 +83,7 @@ NR::Point sp_curve_first_point(SPCurve const *curve);
 NR::Point sp_curve_last_point(SPCurve const *curve);
 
 void sp_curve_append(SPCurve *curve, SPCurve const *curve2, gboolean use_lineto);
-SPCurve *sp_curve_reverse(SPCurve *curve);
+SPCurve *sp_curve_reverse(SPCurve const *curve);
 void sp_curve_backspace(SPCurve *curve);
 
 

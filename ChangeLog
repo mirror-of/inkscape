@@ -1,5 +1,19 @@
 2004-09-05  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/curve.h, src/display/curve.cpp:
+	  Change x,y members to NR::Point.
+
+	* src/display/curve.cpp (sp_curve_reverse): Previously this
+	  routine returned only the last subpath, and made it an open
+	  path.  Now it preserves all aspects of the curve other than
+	  reversing it.  I believe this change makes no difference to the
+	  draw-context and dyna-draw-context callers (though I haven't
+	  managed to test all of these callers), whereas for the `reverse
+	  path' command, users presumably expect the new behaviour.
+
+	* src/display/curve.cpp (sp_curve_closepath_current):
+	  Fix bad assertion.
+
 	* src/libnr/nr-matrix-fns.h, src/libnr/nr-matrix-fns.cpp
 	  (get_translation): New function.
 
