@@ -2254,7 +2254,20 @@ static void node_ctrl_clicked(SPKnot *knot, guint state, gpointer data)
 {
     Path::Node *n = (Path::Node *) data;
 
-    sp_nodepath_node_select(n, (state & GDK_SHIFT_MASK), FALSE);
+    if (state & GDK_CONTROL_MASK) { // "delete" handle
+        if (n->p.knot == knot) {
+            n->p.pos = n->pos;
+        } else if (n->n.knot == knot) {
+            n->n.pos = n->pos;
+        }
+        sp_node_ensure_ctrls(n);
+        Path::Path *nodepath = n->subpath->nodepath;
+        update_repr(nodepath);
+        sp_nodepath_update_statusbar(nodepath);
+
+    } else { // just select or add to selection, depending in Shift
+        sp_nodepath_node_select(n, (state & GDK_SHIFT_MASK), FALSE);
+    }
 }
 
 static void node_ctrl_grabbed(SPKnot *knot, guint state, gpointer data)
