@@ -688,7 +688,22 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 			SPStop *stop = SP_STOP (child);
 
 			SPGradientStop gstop;
-			gstop.offset = stop->offset;
+			if (gr->vector.stops.size() > 0) {
+				// "Each gradient offset value is required to be equal to or greater than the
+				// previous gradient stop's offset value. If a given gradient stop's offset
+				// value is not equal to or greater than all previous offset values, then the
+				// offset value is adjusted to be equal to the largest of all previous offset
+				// values."
+				gstop.offset = MAX (stop->offset, gr->vector.stops.back().offset);
+			} else {
+				gstop.offset = stop->offset;
+			}
+
+			// "Gradient offset values less than 0 (or less than 0%) are rounded up to
+			// 0%. Gradient offset values greater than 1 (or greater than 100%) are rounded
+			// down to 100%."
+			gstop.offset = CLAMP (gstop.offset, 0, 1);
+
 			sp_color_copy (&gstop.color, &stop->color);
 			gstop.opacity = stop->opacity;
 
@@ -698,7 +713,7 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 
 	// normalize per section 13.2.4 of SVG 1.1
 	if (gr->vector.stops.size() == 0) {
-		// If no stops are defined, then painting shall occur as if 'none' were specified as the paint style.
+		// "If no stops are defined, then painting shall occur as if 'none' were specified as the paint style."
 		{
 			SPGradientStop gstop;
 			gstop.offset = 0.0;
@@ -714,6 +729,7 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 			gr->vector.stops.push_back(gstop);
 		}
 	} else {
+		// "If one stop is defined, then paint with the solid color fill using the color defined for that gradient stop."
 		if (gr->vector.stops.front().offset > 0.0) {
 			// if the first one is not at 0, insert a copy of the first at 0
 			SPGradientStop gstop;
