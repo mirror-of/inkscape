@@ -364,12 +364,10 @@ void      raster_glyph::LoadSubPixelPosition(int no)
 void      raster_glyph::Blit(const NR::Point &at,NRPixBlock &over)
 {
   if ( nb_sub_pixel <= 0 ) return;
-	NR::Point   nat=at;
-  nat[1]*=nb_sub_pixel;
-  int pv=(int)rint(nat[1]);
-  int no=pv%nb_sub_pixel;
-  if ( no < 0 ) no=-no;
-  sub_pixel[no].Blit(nat[0],pv/nb_sub_pixel,over);
+  int pv=(int)ceil(at[1]);
+	double dec=4*(ceil(at[1])-at[1]);
+  int no=(int)floor(dec);
+  sub_pixel[no].Blit(at[0],pv,over);
 }
 
 
