@@ -182,7 +182,7 @@ unsigned int sp_repr_set_content(SPRepr *repr, gchar const *content);
 unsigned int sp_repr_set_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_interactive=false);
 
 /* Tree */
-SPRepr *sp_repr_parent(SPRepr *repr);
+SPRepr *sp_repr_parent(SPRepr const *repr);
 SPRepr *sp_repr_children(SPRepr *repr);
 SPRepr *sp_repr_next(SPRepr *repr);
 
