@@ -52,6 +52,7 @@ sp_object_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 #include "dialogs/item-properties.h"
 #include "dialogs/object-attributes.h"
 #include "dialogs/fill-style.h"
+#include "dialogs/object-properties.h"
 
 static void sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 static void sp_group_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
@@ -382,7 +383,7 @@ sp_shape_fill_settings (GtkMenuItem *menuitem, SPItem *item)
 
 	sp_selection_set_item (SP_DT_SELECTION (desktop), item);
 
-	sp_fill_style_dialog ();
+	sp_object_properties_dialog ();
 }
 
 static void
@@ -394,7 +395,7 @@ sp_shape_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 	item = (SPItem *) object;
 
 	/* Item dialog */
-	w = gtk_menu_item_new_with_mnemonic (_("_Fill Settings"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Fill and Stroke"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_shape_fill_settings), item);
 	gtk_widget_show (w);

@@ -1,3 +1,7 @@
+2004-01-13 MenTaLguY  <mental@rydia.net>
+
+	* src/object-ui.cpp: 'Fill Settings' -> 'Fill and Stroke'
+
 2004-01-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnrtype/nr-type-directory.h,
