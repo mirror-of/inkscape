@@ -1,3 +1,17 @@
+2004-04-29  Carl Hetherington <inkscape@carlh.net>
+
+	* src/extension/internal/win32.cpp: add textToPath parameter to
+	description in order to fix #944131.
+
+2004-04-28  Carl Hetherington <inkscape@carlh.net>
+
+	* src/desktop.cpp, src/inkscape.cpp, src/sp-namedview.cpp
+	Part of the fix for #942149.  Also fixed some compiler warnings.
+
+	* src/display/nr-arena.cpp: Fixed an unused variable warning.
+
+	* src/main.cpp: Fix a warning that is raised on Windows.
+
 2004-04-28  bulia byak <bulia@users.sourceforge.net>
 
 	* inkscape.cpp: Fixed prev/next desktop; numbered from 0 
