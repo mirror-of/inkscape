@@ -122,6 +122,7 @@ static gchar *profile_path(const char *filename);
 struct Inkscape::Application {
     GObject object;
     SPReprDoc *preferences;
+    gboolean save_preferences;
     GSList *documents;
     GSList *desktops;
     gchar *argv0;
@@ -162,6 +163,9 @@ static void (* segv_handler) (int) = NULL;
 #define PREFERENCES_FILE "preferences.xml"
 
 
+/**
+ *  Retrieves the GType for the Inkscape Application object.
+ */ 
 GType
 inkscape_get_type (void)
 {
@@ -183,6 +187,10 @@ inkscape_get_type (void)
 }
 
 
+/**
+ *  Initializes the inkscape class, registering all of its signal handlers
+ *  and virtual functions
+ */
 static void
 inkscape_class_init (Inkscape::ApplicationClass * klass)
 {
@@ -338,11 +346,12 @@ inkscape_dispose (GObject *object)
 
     g_assert (!inkscape->desktops);
 
-    if (inkscape->preferences) {
+    if (inkscape->preferences && inkscape->save_preferences) {
         /* fixme: This is not the best place */
         inkscape_save_preferences (inkscape);
         sp_repr_document_unref (inkscape->preferences);
         inkscape->preferences = NULL;
+        inkscape->save_preferences = FALSE;
     }
 
     G_OBJECT_CLASS (parent_class)->dispose (object);
@@ -478,7 +487,7 @@ inkscape_segv_handler (int signum)
         }
     }
 
-    if (inkscape->preferences) {
+    if (inkscape->preferences && inkscape->save_preferences) {
         inkscape_save_preferences (inkscape);
     }
 
@@ -558,22 +567,30 @@ inkscape_application_init (const gchar *argv0)
 
     inkscape->argv0 = g_strdup(argv0);
 
-    inkscape_load_preferences(inkscape);
+    /* Attempt to load the preferences, and set the save_preferences flag to TRUE
+       if we could, or FALSE if we couldn't */
+    inkscape->save_preferences = inkscape_load_preferences(inkscape);
 }
 
+/**
+ *  Returns the current Inkscape::Application global object
+ */
 Inkscape::Application *
 inkscape_get_instance()
 {
-	return inkscape;
+        return inkscape;
 }
 
 /**
  * Preference management
  * We use '.' as separator
+ * 
+ * Returns TRUE if the config file was successfully loaded, FALSE if not.
  */
-static void
-inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *skeleton, unsigned int skel_size,
-              const gchar *e_notreg, const gchar *e_notxml, const gchar *e_notsp, const gchar *warn)
+static gboolean
+inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *skeleton, 
+		      unsigned int skel_size, const gchar *e_notreg, const gchar *e_notxml, 
+		      const gchar *e_notsp, const gchar *warn)
 {
     gchar *fn;
     GtkWidget * w;
@@ -585,7 +602,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
         /* No such file */
         inkscape_init_preferences (INKSCAPE);
         g_free (fn);
-        return;
+        return FALSE;
     }
 
     if (!g_file_test(fn, G_FILE_TEST_IS_REGULAR)) {
@@ -594,7 +611,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
-        return;
+        return FALSE;
     }
 
     doc = sp_repr_read_file (fn, NULL);
@@ -604,7 +621,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
-        return;
+        return FALSE;
     }
 
     root = sp_repr_document_root (doc);
@@ -614,39 +631,52 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
         gtk_widget_destroy (w);
         sp_repr_document_unref (doc);
         g_free (fn);
-        return;
+        return FALSE;
     }
 
     sp_repr_document_merge (config, doc, "id");
     sp_repr_document_unref (doc);
     g_free (fn);
+    return TRUE;
 }
 
 /**
  *  Preferences management
+ * 
+ *  Attempts to load the preferences file indicated by the global PREFERENCES_FILE
+ *  parameter.  If it cannot load it, the defailt preferences_skeleton will be used
+ *  instead, and the inkscape->save_preferences flag will be set to FALSE so that
+ *  Inkscape won't accidentally overwrite the preferences file with the default
+ *  skeleton.
  */
-void
+gboolean
 inkscape_load_preferences (Inkscape::Application *inkscape)
 {
-    inkscape_load_config (PREFERENCES_FILE, inkscape->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
-                  _("%s is not a regular file.\n%s"),
-                  _("%s not a valid XML file, or\n"
-                "you don't have read permissions on it.\n%s"),
-			_("%s is not valid preferences file.\n%s"),
-			_("Inkscape will run with default settings."));
+    return inkscape_load_config (PREFERENCES_FILE, 
+				 inkscape->preferences, 
+				 preferences_skeleton, 
+				 PREFERENCES_SKELETON_SIZE,
+				 _("%s is not a regular file.\n%s"),
+				 _("%s not a valid XML file, or\n"
+				   "you don't have read permissions on it.\n%s"),
+				 _("%s is not valid preferences file.\n%s"),
+				 _("Inkscape will run with default settings."));
 }
 
 
-
-void
+/*
+ *  Returns TRUE if file was successfully saved, FALSE if not
+ */
+gboolean
 inkscape_save_preferences (Inkscape::Application * inkscape)
 {
     gchar * fn;
 
     fn = profile_path(PREFERENCES_FILE);
-    sp_repr_save_file (inkscape->preferences, fn);
+    gboolean retval = sp_repr_save_file (inkscape->preferences, fn);
 
     g_free (fn);
+    return retval;
 }
 
 /**
@@ -1162,7 +1192,7 @@ inkscape_init_preferences (Inkscape::Application *inkscape)
                   _("%s is not a valid directory.\n%s"),
                   _("Cannot create file %s.\n%s"),
                   _("Cannot write file %s.\n%s"), 
-		    _("Although Inkscape will run, it will use default settings,\n"
+                    _("Although Inkscape will run, it will use default settings,\n"
                 "and any changes made in preferences will not be saved."));
 }
 
@@ -1179,14 +1209,17 @@ inkscape_refresh_display (Inkscape::Application *inkscape)
 }
 
 
-
+/**
+ *  Handler for Inkscape's Exit verb.  This emits the shutdown signal,
+ *  saves the preferences if appropriate, and quits.
+ */
 void
 inkscape_exit (Inkscape::Application *inkscape)
 {
     //emit shutdown signal so that dialogs could remember layout
     g_signal_emit (G_OBJECT (INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);
 
-    if (inkscape->preferences) {
+    if (inkscape->preferences && inkscape->save_preferences) {
         inkscape_save_preferences (INKSCAPE);
     }
     gtk_main_quit ();
@@ -1218,3 +1251,4 @@ profile_path(const char *filename)
 }
 
 
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

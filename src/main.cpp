@@ -13,9 +13,10 @@
  *   Michael Meeks <michael@helixcode.com>
  *   Chema Celorio <chema@celorio.com>
  *   Pawel Palucha
+ *   Bryce Harrington <bryce@bryceharrington.com>
  * ... and various people who have worked with various projects
  *
- * Copyright (C) 1999-2002 authors
+ * Copyright (C) 1999-2004 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -190,7 +191,7 @@ main (int argc, const char **argv)
     SetCurrentDirectory( homedir );
     g_free( homedir );
 
-	use_gui = TRUE;
+    use_gui = TRUE;
 #endif
 	/* Test whether with/without GUI is forced */
 	for (i = 1; i < argc; i++) {

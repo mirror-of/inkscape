@@ -1,3 +1,11 @@
+2004-03-28  Bryce Harrington <bryce@bryceharrington.com>
+
+	* inkscape.cpp, inkscape.h, xml/repr-io.cpp, xml/repr.h:  Adding
+	  better error handling for the situation where the
+	  preferences.xml file is not successfully loaded.  In this case,
+	  we want to suppress saving it, lest we overwrite the file with
+	  the default skeleton preferences.	
+
 2004-03-28  Jon Phillips <jon@users.sourceforge.net>
 
     * src/interface.cpp src/select-toolbar.cpp src/verbs.cpp src/verbs.h: 

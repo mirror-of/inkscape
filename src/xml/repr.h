@@ -198,7 +198,7 @@ int sp_repr_n_children (SPRepr * repr);
 SPReprDoc * sp_repr_read_file (const gchar * filename, const gchar *default_ns);
 SPReprDoc * sp_repr_read_mem (const gchar * buffer, int length, const gchar *default_ns);
 void sp_repr_save_stream (SPReprDoc * doc, FILE * to_file);
-void sp_repr_save_file (SPReprDoc * doc, const gchar * filename);
+gboolean sp_repr_save_file (SPReprDoc * doc, const gchar * filename);
 
 void sp_repr_print (SPRepr * repr);
 

@@ -39,8 +39,8 @@
 void inkscape_application_init (const gchar *argv0);
 
 /* Preference management */
-void inkscape_load_preferences (Inkscape::Application * inkscape);
-void inkscape_save_preferences (Inkscape::Application * inkscape);
+gboolean inkscape_load_preferences (Inkscape::Application * inkscape);
+gboolean inkscape_save_preferences (Inkscape::Application * inkscape);
 SPRepr *inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key);
 
 Inkscape::Application *inkscape_get_instance();

@@ -269,12 +269,16 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
     sp_repr_write_stream (repr, fp, 0, TRUE);
 }
 
-void
+/* Returns TRUE if file successfully saved; FALSE if not
+ */
+gboolean
 sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
 {
     FILE * file;
 
-    g_return_if_fail (filename != NULL);
+    if (filename == NULL) {
+	return FALSE;
+    }
 
     // TODO: bulia, please look over
     gsize bytesRead = 0;
@@ -284,16 +288,21 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
                 -1,&bytesRead,&bytesWritten,&error);
 
     file = fopen (localFilename, "w");
-    g_return_if_fail (file != NULL);
+    if (file == NULL) {
+	return FALSE;
+    }
 
     sp_repr_save_stream (doc, file);
 
-    fclose (file);
+    if (fclose (file) != 0) {
+	return FALSE;
+    }
 
-    if ( localFilename != NULL )
+    if ( localFilename != NULL ) {
         g_free (localFilename);
+    }
 
-    return;
+    return TRUE;
 }
 
 void
