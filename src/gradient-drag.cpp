@@ -336,9 +336,9 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
     dragger->point_original = dragger->point = knot->pos;
 
     if ((state & GDK_CONTROL_MASK) && (state & GDK_SHIFT_MASK)) {
-        dragger->fireDraggables (false, true);
+        dragger->fireDraggables (true, true);
     } else {
-        dragger->fireDraggables (false);
+        dragger->fireDraggables (true);
     }
 
     // make this dragger selected

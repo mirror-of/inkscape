@@ -432,10 +432,16 @@ static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint st
         } else {
             vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(selection->itemList()->data), true);
         }
+        int type = prefs_get_int_attribute ("tools.gradient", "newgradient", 1);
         for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
-            sp_item_set_gradient(SP_ITEM(i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
-            sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, true, true, false);
-            sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, true, true, false);
+            sp_item_set_gradient(SP_ITEM(i->data), vector, (SPGradientType) type, true);
+            if (type == SP_GRADIENT_TYPE_LINEAR) {
+                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, true, true, false);
+                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, true, true, false);
+            } else if (type == SP_GRADIENT_TYPE_RADIAL) {
+                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_RG_CENTER, rc.origin, true, true, false);
+                sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_RG_R1, pt, true, true, false);
+            }
             SP_OBJECT (i->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         if (ec->_grdrag) {
@@ -445,9 +451,11 @@ static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint st
             ec->_grdrag->local_change = true;
             // give the grab out-of-bounds values of xp/yp because we're already dragging
             // and therefore are already out of tolerance
-            ec->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data), POINT_LG_P2, true, 99999, 99999, etime);
+            ec->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data), 
+                                   type == SP_GRADIENT_TYPE_LINEAR? POINT_LG_P2 : POINT_RG_R1, 
+                                   true, 99999, 99999, etime);
         }
-        sp_document_done (document);
+        // We did an undoable action, but sp_document_done will be called by the knot when released
 
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag
