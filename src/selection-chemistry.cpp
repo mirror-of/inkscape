@@ -1160,7 +1160,7 @@ void sp_selection_scale_relative(SPSelection *selection, NR::Point const &align,
     if (selection->isEmpty())
         return;
 
-    // don't try to scale above 1 Mpt, it won't display properly and will crash sooner or later anyway
+    // don't try to scale above 1 Mpx, it won't display properly and will crash sooner or later anyway
     NR::Rect const bbox(selection->bounds());
     if ( bbox.extent(NR::X) * scale[NR::X] > 1e6  ||
          bbox.extent(NR::Y) * scale[NR::Y] > 1e6 )
