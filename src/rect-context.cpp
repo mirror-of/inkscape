@@ -511,13 +511,9 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
     }
 
     // status text
-    gchar status[80];
     GString *xs = SP_PT_TO_METRIC_STRING(fabs( x1 - x0 ), SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING(fabs( y1 - y0 ), SP_DEFAULT_METRIC);
-    g_snprintf(status, 80, _("Draw rectangle: %s x %s"), xs->str, ys->str);
-    sp_view_set_status(SP_VIEW(desktop), status, FALSE);
-    /* FIXME: I'd guess that arg2 should be TRUE below, that otherwise we'd have mem leak.
-     * Check with valgrind. */
+    rc.defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("Draw rectangle: %s x %s"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);
 }

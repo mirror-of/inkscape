@@ -19,6 +19,7 @@
 #include "forward.h"
 #include "sp-item.h"
 #include "libnr/nr-rect.h"
+#include "managed.h"
 #include "xml/xml-forward.h"
 
 /**
@@ -32,7 +33,7 @@
  * its children which might have been selected.
  *
  */
-struct SPSelection {
+class SPSelection : public Inkscape::Managed {
 public:
 	/**
 	 * Constructs an selection object, bound to a particular
@@ -49,33 +50,6 @@ public:
 	 * @return the desktop the selection is bound to
 	 */
 	SPDesktop *desktop() { return _desktop; }
-
-	/**
-	 * Increment the selection's reference count
-	 *
-	 * @return the selection's own self
-	 */
-	SPSelection *reference() {
-		++_refcount;
-		return this;
-	}
-	/**
-	 * Increment the selection's reference count
-	 *
-	 * @return the selection's own self
-	 */
-	SPSelection const *reference() const {
-		++_refcount;
-		return this;
-	}
-	/**
-	 * Decrement the selection's reference count
-	 */
-	void unreference() const {
-		if (!--_refcount) {
-			delete const_cast<SPSelection *>(this);
-		}
-	}
 
 	/**
 	 * @brief Add an SPObject to the set of selected objects

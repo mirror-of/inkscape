@@ -27,8 +27,7 @@
 class SPRectContext;
 class SPRectContextClass;
 
-struct SPRectContext {
-	SPEventContext event_context;
+struct SPRectContext : public SPEventContext {
 	SPItem *item;
 	NR::Point center;
 

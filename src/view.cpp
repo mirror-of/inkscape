@@ -147,7 +147,7 @@ void SPView::init(SPView *view) {
 
 	new (&view->_message_changed_connection) SigC::Connection();
 
-	view->_message_stack = new Inkscape::MessageStack();
+	view->_message_stack = Inkscape::Managed::claim(new Inkscape::MessageStack());
 
 	view->_tips_message_context = new Inkscape::MessageContext(view->_message_stack);
 	view->_legacy_message_context = new Inkscape::MessageContext(view->_message_stack);
