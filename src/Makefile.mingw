@@ -49,12 +49,12 @@ outputs: inkscape.exe
 RES=inkres.o
 
 inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
-	$(CXX) -o inkscape.exe main.o winmain.o $(RES) libinkscape.a $(LIBS)
+	$(CXX) --export-dynamic -o inkscape.exe main.o winmain.o $(RES) libinkscape.a $(LIBS)
 #	strip inkscape.exe
 
 # DLL version.  we need to make this work
 #inkscape.exe: inkscape.dll main.o winmain.o $(RES) 
-#	$(CXX) -o inkscape.exe main.o winmain.o $(RES) libinkscapedll.a $(LIBS)
+#	$(CXX) -o inkscape.exe main.o winmain.o $(RES) inkscape.la $(LIBS)
 #	strip inkscape.exe
 
 inkview.exe: inkscape.dll inkview.o $(RES) 
@@ -65,7 +65,7 @@ inkres.o: inkscape.rc
 	$(WINDRES) inkscape.rc $(RES)
 
 inkscape.dll: libinkscape.a inkscape.def
-	$(DLLWRAP) --output-lib=libinkscapedll.a \
+	$(DLLWRAP) --output-lib=inkscape.la \
 	--def=inkscape.def --driver-name=g++ \
 	-o inkscape.dll libinkscape.a $(LIBS)
 
@@ -77,7 +77,7 @@ libinkscape.a: $(OBJ)
 	ar crv libinkscape.a $(OBJ)
 	$(RANLIB) libinkscape.a
 
-
+inkscape.la: inkscape.dll
 
 
 
@@ -91,13 +91,12 @@ libinkscape.a: $(OBJ)
 
 PLUGS = extension/plugin/gimpgrad.dll
 
-plugins:
+plugins: $(PLUGS)
 
-extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o
-	$(CXX) -shared -o tmp.so $< $(LIBS) -lgc
+extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o inkscape.la
 	$(DLLWRAP) --def=plugin.def --driver-name=g++ \
-	-dllname $@ tmp.so
-
+	-dllname $@ $< inkscape.la $(LIBS) -lgc
+	strip $@
 
 
 
@@ -109,6 +108,7 @@ extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o
 clean:
 	$(foreach a, $(OBJ), $(shell $(RM) $(subst /,$(S), $(a))))
 	$(RM) *.a
+	$(RM) *.la
 	$(RM) inkscape.def
 	$(RM) *.dll
 	$(RM) extension$(S)plugin$(S)*.o
