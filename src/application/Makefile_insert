@@ -6,5 +6,9 @@ application/clean:
 	rm -f application/libinkapp.a $(application_libinkapp_a_OBJECTS)
 
 application_libinkapp_a_SOURCES = \
-	application/editor.cpp	\
-	application/editor.h
+	application/editor.cpp		\
+	application/editor.h		\
+	application/application.cpp	\
+	application/application.h	\
+	application/editor-impl.h	\
+	application/app-prototype.h

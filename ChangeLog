@@ -1,5 +1,13 @@
 2005-02-13  Bryce  <bryce@bryceharrington.org>
 
+	* src/main.cpp, src/application/application.cpp, src/inkscape.h,
+	  src/application/editor-impl.h, src/application/editor.cpp
+	  src/application/editor.h, src/ui/dialog/dialog-manager.cpp,
+	  src/ui/dialog/dialog-manager.h, src/application/app-prototype.h
+	  src/application/application.h:  Integrating I::A::Application
+	  into the execution path.  Now its run() routine is called from
+	  main().  
+	
 	* src/application/Makefile_insert, src/application/makefile.in,
 	  src/application/editor-impl.h, src/application/editor.cpp, 
 	  src/application/editor.h:  Initial import of inkscape_gtkmm

@@ -51,9 +51,9 @@ using namespace Inkscape::UI;
 using namespace Inkscape::UI::Widget;
 
 namespace Inkscape {
-namespace Application {
+namespace NSApplication {
 
-Editor::Editor(const gchar *argv0, gboolean use_gui)
+Editor::Editor(gint argc, char **argv, gboolean use_gui)
     : _preferences(NULL),
       _documents(NULL),
       _desktops(NULL),
@@ -62,17 +62,12 @@ Editor::Editor(const gchar *argv0, gboolean use_gui)
       _save_preferences(true),
       _use_gui(use_gui)
 {
-    if (_use_gui) {
-        rep = new EditorImpl();
-    } else {
-        // TODO:  Add a cmdline Impl option here
-        rep = new EditorImpl();
-    }
+    rep = new EditorImpl();
 
     // Store the arguments
-    if (_argv0 != NULL) {
-        _argv0 = g_strdup(argv0);
-    }
+//    if (_argv != NULL) {
+//        _argv = g_strdup(argv);
+//    }
 
     // TODO:  Initialize _preferences with the preferences skeleton
 /*    _save_preferences = loadPreferences(); */
@@ -357,11 +352,13 @@ Editor::EditorImpl::onDialogInkscapePreferences()
 void
 Editor::EditorImpl::onDialogAbout()
 {
+/*
     UI::Dialog::Dialog *dlg = _dlg_mgr.getAboutDialog();
     g_assert(dlg);
 
     dlg->show();
     dlg->raise();
+*/
 }
 
 void
@@ -377,7 +374,7 @@ Editor::EditorImpl::onDialogAlignAndDistribute()
 void
 Editor::EditorImpl::onDialogDocumentProperties()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getDocumentPropertiesDialog();
+    UI::Dialog::Dialog *dlg = _dlg_mgr.getDocumentPreferencesDialog();
     g_assert(dlg);
     
     dlg->show();
@@ -467,31 +464,25 @@ Editor::EditorImpl::onDialogTextProperties()
 void
 Editor::EditorImpl::onDialogTrace()
 {
+/*
     UI::Dialog::Dialog *dlg = _dlg_mgr.getTraceDialog();
     g_assert(dlg);
     
     dlg->show();
     dlg->raise();
-}
-
-void 
-Editor::EditorImpl::onDialogTransform()
-{
-    Gtk::Dialog *dlg = _dlg_mgr.getTransformDialog();
-    g_assert(dlg);
-
-    dlg->show();
-    dlg->raise();
+*/
 }
 
 void 
 Editor::EditorImpl::onDialogTransformation()
 {
+/*
     Gtk::Dialog *dlg = _dlg_mgr.getTransformationDialog();
     g_assert(dlg);
 
     dlg->show();
     dlg->raise();
+*/
 }
 
 void
@@ -871,11 +862,6 @@ Editor::EditorImpl::initMenuActions()
                                       Stock::FLIP_VERT, Glib::ustring(),
                                       _("Flip selection vertically (V)")));
 
-    _act_grp->add(Gtk::Action::create("Transform",
-                                      Stock::TRANSFORM, Glib::ustring(),
-                                      _("Transform")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogTransform));
-
     _act_grp->add(Gtk::Action::create("Transformation",
                                       Stock::TRANSFORMATION, Glib::ustring(),
                                       _("Transform")),
@@ -1176,7 +1162,7 @@ Editor::EditorImpl::initStatusbar()
     _main_window_table.attach(_statusbar, 0, 1, 3, 4, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
 }
 
-} // namespace Application
+} // namespace NSApplication
 } // namespace Inkscape
 
 /*

@@ -84,6 +84,7 @@
 #include "extension/init.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm/main.h>
 
 #ifndef HAVE_BIND_TEXTDOMAIN_CODESET
 #define bind_textdomain_codeset(p,c)
@@ -92,8 +93,8 @@
 #define gtk_window_set_default_icon_from_file(f,v)
 #endif
 
+#include "application/application.h"
 
-#include <gtkmm/main.h>
 enum {
     SP_ARG_NONE,
     SP_ARG_NOGUI,
@@ -229,7 +230,7 @@ struct poptOption options[] = {
 };
 
 int
-main(int argc, char const **argv)
+main(int argc, char **argv)
 {
     gboolean use_gui;
     gint result, i;
@@ -301,13 +302,12 @@ main(int argc, char const **argv)
         }
     }
 
-    if (use_gui) {
-        result = sp_main_gui(argc, argv);
-    } else {
-        result = sp_main_console(argc, argv);
-    }
+    gboolean new_gui = false;
 
-    return result;
+    // TODO:  Should this be a static object (see inkscape.cpp)?
+    Inkscape::NSApplication::Application app(argc, argv, use_gui, new_gui);
+
+    return app.run();
 }
 
 int

@@ -30,7 +30,7 @@
 #include "ui/widget/toolbox.h"
 
 namespace Inkscape {
-namespace Application {
+namespace NSApplication {
 
 class Editor;
 
@@ -110,7 +110,7 @@ protected:
     void initStatusbar();
 };
 
-} // namespace Application
+} // namespace NSApplication
 } // namespace Inkscape
 
 #endif // INKSCAPE_APPLICATION_EDITOR_IMPL_H

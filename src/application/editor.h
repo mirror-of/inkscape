@@ -16,7 +16,7 @@
 #include <gtkmm/window.h>
 
 namespace Inkscape {
-namespace Application {
+namespace NSApplication {
 
 class SPDesktop;
 class SPDocument;
@@ -27,7 +27,7 @@ class GSList;
 class Editor
 {
 public:
-    Editor(const gchar *argv0=NULL, gboolean use_gui=true);
+    Editor(int argc, char **argv, gboolean use_gui=true);
     virtual ~Editor();
 
     Gtk::Window*    getImpl();
@@ -66,7 +66,7 @@ protected:
     gboolean       _use_gui;
 };
 
-} // namespace Application
+} // namespace NSApplication
 } // namespace Inkscape
 
 #endif // INKSCAPE_APPLICATION_EDITOR_H

@@ -43,7 +43,7 @@ public:
     Dialog* getAboutDialog();
     Dialog* getAlignAndDistributeDialog();
     Dialog* getInkscapePreferencesDialog();
-    Dialog* getDocumentPropertiesDialog();
+    Dialog* getDocumentPreferencesDialog();
     Dialog* getExportDialog();
     Dialog* getExtensionEditorDialog();
     Dialog* getFillAndStrokeDialog();

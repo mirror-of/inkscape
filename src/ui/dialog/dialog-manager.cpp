@@ -92,8 +92,7 @@ DialogManager::~DialogManager()
     //        Appears to cause a segfault if we do
 }
 
-#if 1 ==2
-
+#if 1==2
 Dialog* DialogManager::getAboutDialog() {
     if (_about_dialog == NULL) {
         _about_dialog = About::create();
@@ -108,6 +107,7 @@ Dialog* DialogManager::getAboutDialog() {
     }
     return _about_dialog;
 }
+#endif
 
 Dialog* DialogManager::getAlignAndDistributeDialog() {
     if (_align_and_distribute_dialog == NULL) {
@@ -119,7 +119,7 @@ Dialog* DialogManager::getAlignAndDistributeDialog() {
         show_dialogs.connect(sigc::mem_fun(*_align_and_distribute_dialog, 
                                            &AlignAndDistribute::onShowDialogs));
         show_f12.connect(sigc::mem_fun(*_align_and_distribute_dialog, 
-                                       &About::onShowF12));
+                                       &AlignAndDistribute::onShowF12));
     }
     return _align_and_distribute_dialog;
 }
@@ -142,15 +142,15 @@ Dialog* DialogManager::getInkscapePreferencesDialog() {
 
 Dialog* DialogManager::getDocumentPreferencesDialog() {
     if (_document_preferences_dialog == NULL) {
-        _document_preferences_dialog = new DocumentProperties;
+        _document_preferences_dialog = new DocumentPreferences;
         hide_dialogs.connect(sigc::mem_fun(*_document_preferences_dialog, 
-                                           &DocumentProperties::onHideDialogs));
+                                           &DocumentPreferences::onHideDialogs));
         hide_f12.connect(sigc::mem_fun(*_document_preferences_dialog, 
-                                       &DocumentProperties::onHideF12));
+                                       &DocumentPreferences::onHideF12));
         show_dialogs.connect(sigc::mem_fun(*_document_preferences_dialog, 
-                                           &DocumentProperties::onShowDialogs));
+                                           &DocumentPreferences::onShowDialogs));
         show_f12.connect(sigc::mem_fun(*_document_preferences_dialog, 
-                                       &DocumentProperties::onShowF12));
+                                       &DocumentPreferences::onShowF12));
     }
     return _document_preferences_dialog;
 }
@@ -247,6 +247,7 @@ Dialog* DialogManager::getMessagesDialog() {
 
 Dialog* DialogManager::getObjectPropertiesDialog() {
     if (_object_properties_dialog == NULL) {
+/*
         _object_properties_dialog = ObjectProperties::create();
         hide_dialogs.connect(sigc::mem_fun(*_object_properties_dialog, 
                                            &ObjectProperties::onHideDialogs));
@@ -256,6 +257,7 @@ Dialog* DialogManager::getObjectPropertiesDialog() {
                                            &ObjectProperties::onShowDialogs));
         show_f12.connect(sigc::mem_fun(*_object_properties_dialog, 
                                        &ObjectProperties::onShowF12));
+*/
     }
     return _object_properties_dialog;
 }
@@ -276,6 +278,7 @@ Dialog* DialogManager::getTextPropertiesDialog() {
 
 }
 
+/*
 Dialog* DialogManager::getTraceDialog() {
     if (_trace_dialog == NULL) {
         _trace_dialog = Trace::create();
@@ -290,22 +293,9 @@ Dialog* DialogManager::getTraceDialog() {
     }
     return _trace_dialog;
 }
+*/
 
-Dialog* DialogManager::getTransformDialog() {
-    if (_transform_dialog == NULL) {
-        _transform_dialog = Transform::create();
-        hide_dialogs.connect(sigc::mem_fun(*_transform_dialog, 
-                                           &Transform::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_transform_dialog, 
-                                       &Transform::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_transform_dialog, 
-                                           &Transform::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_transform_dialog, 
-                                       &Transform::onShowF12));
-    }
-    return _transform_dialog;
-}
-
+/*
 Dialog* DialogManager::getTransformationDialog() {
     if (_transformation_dialog == NULL) {
         _transformation_dialog = new Transformation;
@@ -320,6 +310,7 @@ Dialog* DialogManager::getTransformationDialog() {
     }
     return _transformation_dialog;
 }
+*/
 
 Dialog* DialogManager::getXmlEditorDialog() {
     if (_xml_editor_dialog == NULL) {
@@ -335,8 +326,6 @@ Dialog* DialogManager::getXmlEditorDialog() {
     }
     return _xml_editor_dialog;
 }
-
-#endif // 1 == 2
 
 } // namespace Dialog
 } // namespace UI
