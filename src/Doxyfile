@@ -49,6 +49,8 @@ INPUT = \
 	style.cpp	\
 	style.h	\
 	sp-gradient-fns.h	\
+	sp-gradient.cpp	\
+	sp-gradient.h	\
 	sp-item-notify-moveto.cpp	\
 	sp-item.cpp	\
 	sp-item.h	\
