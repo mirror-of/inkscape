@@ -24,14 +24,14 @@
 #include "selcue.h"
 
 static void 
-sp_sel_cue_sel_changed(SPSelection *selection, gpointer data)
+sp_sel_cue_sel_changed(Inkscape::Selection *selection, gpointer data)
 {
 	SPSelCue *selcue = (SPSelCue *) data;
 	sp_sel_cue_update_item_bboxes (selcue);
 }
 
 static void
-sp_sel_cue_sel_modified (SPSelection *selection, guint flags, gpointer data)
+sp_sel_cue_sel_modified (Inkscape::Selection *selection, guint flags, gpointer data)
 {
 	SPSelCue *selcue = (SPSelCue *) data;
 	sp_sel_cue_update_item_bboxes (selcue);

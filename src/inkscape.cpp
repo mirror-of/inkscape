@@ -135,9 +135,9 @@ struct Inkscape::ApplicationClass {
     GObjectClass object_class;
 
     /* Signals */
-    void (* change_selection) (Inkscape::Application * inkscape, SPSelection * selection);
-    void (* modify_selection) (Inkscape::Application * inkscape, SPSelection * selection, guint flags);
-    void (* set_selection) (Inkscape::Application * inkscape, SPSelection * selection);
+    void (* change_selection) (Inkscape::Application * inkscape, Inkscape::Selection * selection);
+    void (* modify_selection) (Inkscape::Application * inkscape, Inkscape::Selection * selection, guint flags);
+    void (* set_selection) (Inkscape::Application * inkscape, Inkscape::Selection * selection);
     void (* set_eventcontext) (Inkscape::Application * inkscape, SPEventContext * eventcontext);
     void (* activate_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
     void (* deactivate_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
@@ -729,7 +729,7 @@ inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
 
 
 void
-inkscape_selection_modified (SPSelection *selection, guint flags)
+inkscape_selection_modified (Inkscape::Selection *selection, guint flags)
 {
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (selection != NULL);
@@ -741,7 +741,7 @@ inkscape_selection_modified (SPSelection *selection, guint flags)
 
 
 void
-inkscape_selection_changed (SPSelection * selection)
+inkscape_selection_changed (Inkscape::Selection * selection)
 {
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (selection != NULL);
@@ -753,7 +753,7 @@ inkscape_selection_changed (SPSelection * selection)
 
 
 void
-inkscape_selection_set (SPSelection * selection)
+inkscape_selection_set (Inkscape::Selection * selection)
 {
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (selection != NULL);

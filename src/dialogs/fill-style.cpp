@@ -68,12 +68,12 @@ static void sp_fill_style_widget_construct          ( SPWidget *spw,
                                                       SPPaintSelector *psel );
 
 static void sp_fill_style_widget_modify_selection   ( SPWidget *spw,
-                                                      SPSelection *selection,
+                                                      Inkscape::Selection *selection,
                                                       guint flags,
                                                       SPPaintSelector *psel );
 
 static void sp_fill_style_widget_change_selection   ( SPWidget *spw,
-                                                      SPSelection *selection,
+                                                      Inkscape::Selection *selection,
                                                       SPPaintSelector *psel );
 
 static void sp_fill_style_widget_attr_changed       ( SPWidget *spw,
@@ -82,7 +82,7 @@ static void sp_fill_style_widget_attr_changed       ( SPWidget *spw,
                                                       gchar const *newval );
 
 static void sp_fill_style_widget_update             ( SPWidget *spw,
-                                                      SPSelection *sel );
+                                                      Inkscape::Selection *sel );
 
 static void sp_fill_style_widget_update_repr        ( SPWidget *spw,
                                                       Inkscape::XML::Node *repr );
@@ -246,7 +246,7 @@ sp_fill_style_widget_construct ( SPWidget *spw, SPPaintSelector *psel )
 
 static void
 sp_fill_style_widget_modify_selection ( SPWidget *spw,
-                                        SPSelection *selection,
+                                        Inkscape::Selection *selection,
                                         guint flags,
                                         SPPaintSelector *psel )
 {
@@ -264,7 +264,7 @@ sp_fill_style_widget_modify_selection ( SPWidget *spw,
 
 static void
 sp_fill_style_widget_change_selection ( SPWidget *spw,
-                                        SPSelection *selection,
+                                        Inkscape::Selection *selection,
                                         SPPaintSelector *psel )
 {
 
@@ -292,7 +292,7 @@ sp_fill_style_widget_attr_changed ( SPWidget *spw, gchar const *key,
 * \param sel Selection to use, or NULL.
 */
 static void
-sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
+sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 {
     if (g_object_get_data (G_OBJECT (spw), "update"))
         return;

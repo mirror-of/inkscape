@@ -274,7 +274,7 @@ sp_fillstroke_selection_changed ( Inkscape::Application *inkscape,
         return;
     gtk_object_set_data (GTK_OBJECT (dlg), "blocked", GUINT_TO_POINTER (TRUE));
 
-    SPSelection *sel = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
+    Inkscape::Selection *sel = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
 
     GtkWidget *opa = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), "master_opacity"));
     GtkAdjustment *a = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(dlg), "master_opacity_adjustment"));

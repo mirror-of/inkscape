@@ -32,7 +32,7 @@
 struct SPDrawAnchor;
 
 struct SPDrawContext : public SPEventContext{
-    SPSelection *selection;
+    Inkscape::Selection *selection;
     SPCanvasItem *grab;
 
     guint attach : 1;

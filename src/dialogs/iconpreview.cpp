@@ -171,7 +171,7 @@ void IconPreviewPanel::refreshPreview()
     if ( desktop ) {
         g_assert( SP_IS_DESKTOP( desktop) );
 
-        SPSelection * sel = SP_DT_SELECTION(desktop);
+        Inkscape::Selection * sel = SP_DT_SELECTION(desktop);
         if ( sel ) {
             //g_message("found a selection to play with");
 

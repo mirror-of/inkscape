@@ -145,7 +145,7 @@ fill/stroke setting from preferences to create new default (linear: left/right; 
 gradient.
 */
 void
-gr_apply_gradient (SPSelection *selection, GrDrag *drag, SPGradient *gr)
+gr_apply_gradient (Inkscape::Selection *selection, GrDrag *drag, SPGradient *gr)
 {
     SPGradientType new_type = (SPGradientType) prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
     guint new_fill = prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1);
@@ -173,7 +173,7 @@ gr_item_activate (GtkMenuItem *menuitem, gpointer data)
     gr = sp_gradient_ensure_vector_normalized(gr);
 
     SPDesktop *desktop = (SPDesktop *) data;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
     SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
 
     gr_apply_gradient (selection, ev? ev->get_drag() : NULL, gr);
@@ -295,7 +295,7 @@ gr_vector_list (SPDesktop *desktop, bool selection_empty, SPGradient *gr_selecte
 
 
 void
-gr_read_selection (SPSelection *selection, GrDrag *drag, SPGradient **gr_selected, bool *gr_multi, SPGradientSpread *spr_selected, bool *spr_multi) 
+gr_read_selection (Inkscape::Selection *selection, GrDrag *drag, SPGradient **gr_selected, bool *gr_multi, SPGradientSpread *spr_selected, bool *spr_multi) 
 {
     if (drag && drag->selected) {
         GrDragger *dragger = drag->selected;
@@ -373,7 +373,7 @@ gr_read_selection (SPSelection *selection, GrDrag *drag, SPGradient **gr_selecte
  }
 
 static void 
-gr_tb_selection_changed (SPSelection *, gpointer data)
+gr_tb_selection_changed (Inkscape::Selection *, gpointer data)
 {
     GtkWidget *widget = (GtkWidget *) data;
 
@@ -381,7 +381,7 @@ gr_tb_selection_changed (SPSelection *, gpointer data)
     if (!desktop || !SP_IS_DESKTOP(desktop))
         return;
 
-    SPSelection *selection = SP_DT_SELECTION (desktop); // take from desktop, not from args
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop); // take from desktop, not from args
     SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
 
     GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT (widget), "menu");
@@ -407,7 +407,7 @@ gr_tb_selection_changed (SPSelection *, gpointer data)
 }
 
 static void
-gr_tb_selection_modified (SPSelection *selection, guint flags, gpointer data)
+gr_tb_selection_modified (Inkscape::Selection *selection, guint flags, gpointer data)
 {
     gr_tb_selection_changed (selection, data);
 }
@@ -435,7 +435,7 @@ gr_fork (GtkWidget *button, GtkWidget *widget)
 {
     SPDesktop *desktop = (SPDesktop *) g_object_get_data (G_OBJECT(widget), "desktop");
     SPDocument *document = SP_DT_DOCUMENT (desktop);
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
     SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
     GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT(widget), "menu");
 
@@ -483,7 +483,7 @@ gr_edit (GtkWidget *button, GtkWidget *widget)
 GtkWidget *
 gr_change_widget (SPDesktop *desktop)
 {
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
     SPDocument *document = SP_DT_DOCUMENT (desktop);
     SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
 

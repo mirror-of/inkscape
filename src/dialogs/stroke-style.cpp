@@ -77,10 +77,10 @@
 /* Paint */
 
 static void sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel);
-static void sp_stroke_style_paint_selection_modified (SPWidget *spw, SPSelection *selection, guint flags, SPPaintSelector *psel);
-static void sp_stroke_style_paint_selection_changed (SPWidget *spw, SPSelection *selection, SPPaintSelector *psel);
+static void sp_stroke_style_paint_selection_modified (SPWidget *spw, Inkscape::Selection *selection, guint flags, SPPaintSelector *psel);
+static void sp_stroke_style_paint_selection_changed (SPWidget *spw, Inkscape::Selection *selection, SPPaintSelector *psel);
 static void sp_stroke_style_paint_attr_changed(SPWidget *spw, gchar const *key, gchar const *oldval, gchar const *newval);
-static void sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel);
+static void sp_stroke_style_paint_update(SPWidget *spw, Inkscape::Selection *sel);
 static void sp_stroke_style_paint_update_repr(SPWidget *spw, Inkscape::XML::Node *repr);
 
 static void sp_stroke_style_paint_mode_changed(SPPaintSelector *psel, SPPaintSelectorMode mode, SPWidget *spw);
@@ -159,7 +159,7 @@ sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel)
 
 static void
 sp_stroke_style_paint_selection_modified ( SPWidget *spw,
-                                        SPSelection *selection,
+                                        Inkscape::Selection *selection,
                                         guint flags,
                                         SPPaintSelector *psel)
 {
@@ -172,7 +172,7 @@ sp_stroke_style_paint_selection_modified ( SPWidget *spw,
 
 static void
 sp_stroke_style_paint_selection_changed ( SPWidget *spw,
-                                        SPSelection *selection,
+                                        Inkscape::Selection *selection,
                                         SPPaintSelector *psel )
 {
     sp_stroke_style_paint_update (spw, selection);
@@ -193,7 +193,7 @@ sp_stroke_style_paint_attr_changed( SPWidget *spw,
 
 
 static void
-sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
+sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
 {
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;
@@ -681,12 +681,12 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 
 static void sp_stroke_style_line_construct(SPWidget *spw, gpointer data);
 static void sp_stroke_style_line_selection_modified (SPWidget *spw,
-                                                  SPSelection *selection,
+                                                  Inkscape::Selection *selection,
                                                   guint flags,
                                                   gpointer data);
 
 static void sp_stroke_style_line_selection_changed (SPWidget *spw,
-                                                   SPSelection *selection,
+                                                   Inkscape::Selection *selection,
                                                    gpointer data );
 
 static void sp_stroke_style_line_attr_changed (SPWidget *spw,
@@ -694,7 +694,7 @@ static void sp_stroke_style_line_attr_changed (SPWidget *spw,
                                               gchar const *oldval,
                                               gchar const *newval);
 
-static void sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel);
+static void sp_stroke_style_line_update(SPWidget *spw, Inkscape::Selection *sel);
 static void sp_stroke_style_line_update_repr(SPWidget *spw, Inkscape::XML::Node *repr);
 
 static void sp_stroke_style_set_join_buttons(SPWidget *spw,
@@ -1101,7 +1101,7 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
     gchar *menu_id = (gchar *) g_object_get_data(G_OBJECT(mnu), "menu_id");
     sp_repr_css_set_property(css, menu_id, marker);
 
-     SPSelection *selection = SP_DT_SELECTION(desktop);
+     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
      GSList const *items = selection->itemList();
      for (; items != NULL; items = items->next) {
          SPItem *item = (SPItem *) items->data;
@@ -1226,7 +1226,7 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
         return FALSE;
     }
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     if (selection->isEmpty())
         return FALSE;
@@ -1521,7 +1521,7 @@ sp_stroke_style_line_construct(SPWidget *spw, gpointer data)
 
 static void
 sp_stroke_style_line_selection_modified ( SPWidget *spw,
-                                       SPSelection *selection,
+                                       Inkscape::Selection *selection,
                                        guint flags,
                                        gpointer data )
 {
@@ -1535,7 +1535,7 @@ sp_stroke_style_line_selection_modified ( SPWidget *spw,
 
 static void
 sp_stroke_style_line_selection_changed ( SPWidget *spw,
-                                       SPSelection *selection,
+                                       Inkscape::Selection *selection,
                                        gpointer data )
 {
     sp_stroke_style_line_update (spw, selection);
@@ -1617,7 +1617,7 @@ sp_captype_set (SPWidget *spw, unsigned const captype)
 }
 
 static void
-sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
+sp_stroke_style_line_update(SPWidget *spw, Inkscape::Selection *sel)
 {
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;

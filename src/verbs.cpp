@@ -1069,7 +1069,7 @@ ObjectVerb::perform ( SPAction *action, void *data, void *pdata )
     if (!dt)
         return;
 
-    SPSelection *sel = SP_DT_SELECTION(dt);
+    Inkscape::Selection *sel = SP_DT_SELECTION(dt);
 
     if (sel->isEmpty())
         return;

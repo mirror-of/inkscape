@@ -455,7 +455,7 @@ void SPFlowtext::convert_to_text()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!SP_IS_DESKTOP(desktop)) return;
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     SPItem *item = selection->singleItem();
     if (!SP_IS_FLOWTEXT(item)) return;
 

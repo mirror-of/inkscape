@@ -67,7 +67,7 @@ struct StopOnTrue {
 
 
 
-class SPSelection;
+namespace Inkscape { class Selection; }
 
 struct SPDesktop : public SPView {
 	Inkscape::MessageContext *guidesMessageContext() {
@@ -78,7 +78,7 @@ struct SPDesktop : public SPView {
 	Inkscape::Application *inkscape;
 
 	SPNamedView *namedview;
-	SPSelection *selection; ///< current selection; will never generally be NULL
+	Inkscape::Selection *selection; ///< current selection; will never generally be NULL
 	sigc::connection sel_modified_connection;
 
 	sigc::connection sel_changed_connection;
@@ -135,7 +135,7 @@ struct SPDesktop : public SPView {
 	static void _layer_activated(SPObject *layer, SPDesktop *desktop);
 	static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
 	static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
-	static void _selection_changed(SPSelection *selection, SPDesktop *desktop);
+	static void _selection_changed(Inkscape::Selection *selection, SPDesktop *desktop);
 
 	sigc::signal<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
 

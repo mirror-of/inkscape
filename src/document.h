@@ -40,6 +40,7 @@ class Document;
 }
 }
 
+namespace Inkscape { class Selection; }
 
 class SPDocumentPrivate;
 

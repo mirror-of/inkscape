@@ -67,20 +67,20 @@ static void sp_transformation_dialog_apply(GObject *object, GObject *dlg);
 static void sp_transformation_dialog_close(GObject *object, GtkWidget *dlg);
 
 static GtkWidget *sp_transformation_page_move_new(GObject *obj);
-static void sp_transformation_move_update(GObject *dlg, SPSelection *selection);
-static void sp_transformation_move_apply(GObject *dlg, SPSelection *selection);
+static void sp_transformation_move_update(GObject *dlg, Inkscape::Selection *selection);
+static void sp_transformation_move_apply(GObject *dlg, Inkscape::Selection *selection);
 
 static GtkWidget *sp_transformation_page_scale_new(GObject *obj);
 static void sp_transformation_scale_update( GObject *dlg,
-                                            SPSelection *selection );
-static void sp_transformation_scale_apply(GObject *dlg, SPSelection *selection);
+                                            Inkscape::Selection *selection );
+static void sp_transformation_scale_apply(GObject *dlg, Inkscape::Selection *selection);
 
 static GtkWidget *sp_transformation_page_rotate_new(GObject *obj);
 static void sp_transformation_rotate_update( GObject *dlg,
-                                             SPSelection *selection );
-static void sp_transformation_rotate_apply(GObject *dlg, SPSelection *selection);
+                                             Inkscape::Selection *selection );
+static void sp_transformation_rotate_apply(GObject *dlg, Inkscape::Selection *selection);
 
-static void sp_transformation_skew_apply(GObject *dlg, SPSelection *selection);
+static void sp_transformation_skew_apply(GObject *dlg, Inkscape::Selection *selection);
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
@@ -164,7 +164,7 @@ sp_transformation_dialog_present(unsigned page)
 
 static void
 sp_transformation_dialog_update_selection( GObject *dlg, unsigned page,
-                                           SPSelection *selection )
+                                           Inkscape::Selection *selection )
 {
     switch (page) {
         case SP_TRANSFORMATION_MOVE:
@@ -194,7 +194,7 @@ sp_transformation_dialog_update_selection( GObject *dlg, unsigned page,
 
 static void
 sp_transformation_dialog_selection_changed( Inkscape::Application *inkscape,
-                                            SPSelection *selection,
+                                            Inkscape::Selection *selection,
                                             GObject *obj )
 {
     GObject &notebook = *G_OBJECT(g_object_get_data(obj, "notebook"));
@@ -207,7 +207,7 @@ sp_transformation_dialog_selection_changed( Inkscape::Application *inkscape,
 
 static void
 sp_transformation_dialog_selection_modified( Inkscape::Application *inkscape,
-                                             SPSelection *selection,
+                                             Inkscape::Selection *selection,
                                              unsigned flags,
                                              GObject *obj )
 {
@@ -226,7 +226,7 @@ sp_transformation_dialog_switch_page( GtkNotebook *notebook,
                                       guint pagenum,
                                       GObject *dlg )
 {
-    SPSelection *sel = (SP_ACTIVE_DESKTOP) ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP) : NULL;
+    Inkscape::Selection *sel = (SP_ACTIVE_DESKTOP) ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP) : NULL;
 
     sp_transformation_dialog_update_selection(dlg, pagenum, sel);
 }
@@ -352,7 +352,7 @@ sp_transformation_dialog_new(void)
                           G_CALLBACK(sp_transformation_dialog_switch_page),
                           dlg);
 
-        SPSelection *sel = (SP_ACTIVE_DESKTOP) ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP) : NULL;
+        Inkscape::Selection *sel = (SP_ACTIVE_DESKTOP) ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP) : NULL;
         sp_transformation_dialog_update_selection(G_OBJECT(dlg), 0, sel);
     }
 
@@ -368,7 +368,7 @@ static void sp_transformation_dialog_apply(GObject *, GObject *dlg)
 {
     SPDesktop * const desktop = SP_ACTIVE_DESKTOP;
     g_return_if_fail(desktop != NULL);
-    SPSelection * const selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection * const selection = SP_DT_SELECTION(desktop);
     g_return_if_fail(!selection->isEmpty());
 
     GtkWidget * const nbookw = GTK_WIDGET(g_object_get_data(dlg, "notebook"));
@@ -426,7 +426,7 @@ sp_transformation_move_relative_toggled(GtkToggleButton *tb, GObject *dlg)
     if (!desktop)
         return;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty())
         return;
@@ -538,7 +538,7 @@ sp_transformation_page_move_new(GObject *obj)
 
 
 static void
-sp_transformation_move_update(GObject *dlg, SPSelection *selection)
+sp_transformation_move_update(GObject *dlg, Inkscape::Selection *selection)
 {
     GtkWidget *page = GTK_WIDGET(g_object_get_data(dlg, "move"));
 
@@ -561,7 +561,7 @@ sp_transformation_move_update(GObject *dlg, SPSelection *selection)
 
 
 
-static void sp_transformation_move_apply(GObject *dlg, SPSelection *selection)
+static void sp_transformation_move_apply(GObject *dlg, Inkscape::Selection *selection)
 {
     SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data(dlg, "move_units"));
     GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data(dlg, "move_position_x"));
@@ -600,7 +600,7 @@ static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
         return FALSE;
     }
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty())
         return FALSE;
@@ -724,7 +724,7 @@ sp_transformation_page_scale_new(GObject *obj)
 
 
 static void
-sp_transformation_scale_update(GObject *dlg, SPSelection *selection)
+sp_transformation_scale_update(GObject *dlg, Inkscape::Selection *selection)
 {
     GtkWidget *page = GTK_WIDGET(g_object_get_data(dlg, "scale"));
 
@@ -750,7 +750,7 @@ sp_transformation_scale_update(GObject *dlg, SPSelection *selection)
 
 
 
-static void sp_transformation_scale_apply(GObject *dlg, SPSelection *selection)
+static void sp_transformation_scale_apply(GObject *dlg, Inkscape::Selection *selection)
 {
     SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data(dlg, "scale_units"));
     GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data(dlg, "scale_dimension_x"));
@@ -833,7 +833,7 @@ sp_transformation_page_rotate_new(GObject *obj)
 
 
 static void
-sp_transformation_rotate_update(GObject *dlg, SPSelection *selection)
+sp_transformation_rotate_update(GObject *dlg, Inkscape::Selection *selection)
 {
     GtkWidget *page = GTK_WIDGET(g_object_get_data(dlg, "rotate"));
 
@@ -846,7 +846,7 @@ sp_transformation_rotate_update(GObject *dlg, SPSelection *selection)
 
 
 
-static void sp_transformation_rotate_apply(GObject *dlg, SPSelection *selection)
+static void sp_transformation_rotate_apply(GObject *dlg, Inkscape::Selection *selection)
 {
     GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(dlg, "rotate_angle"));
 
@@ -859,7 +859,7 @@ static void sp_transformation_rotate_apply(GObject *dlg, SPSelection *selection)
     }
 }
 
-static void sp_transformation_skew_apply(GObject *dlg, SPSelection *selection)
+static void sp_transformation_skew_apply(GObject *dlg, Inkscape::Selection *selection)
 {
 }
 

@@ -61,8 +61,8 @@ static void sp_text_context_finish (SPEventContext *ec);
 static gint sp_text_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_text_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
 
-static void sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc);
-static void sp_text_context_selection_modified (SPSelection *selection, guint flags, SPTextContext *tc);
+static void sp_text_context_selection_changed (Inkscape::Selection *selection, SPTextContext *tc);
+static void sp_text_context_selection_modified (Inkscape::Selection *selection, guint flags, SPTextContext *tc);
 
 static void sp_text_context_validate_cursor_iterators(SPTextContext *tc);
 static void sp_text_context_update_cursor (SPTextContext *tc, bool scroll_to_see = true);
@@ -771,7 +771,7 @@ sp_text_paste_inline(SPEventContext *ec)
  * \param selection Should not be NULL.
  */
 static void
-sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc)
+sp_text_context_selection_changed (Inkscape::Selection *selection, SPTextContext *tc)
 {
 	g_assert (selection != NULL);
 	
@@ -798,7 +798,7 @@ sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc)
 }
 
 static void
-sp_text_context_selection_modified (SPSelection *selection, guint flags, SPTextContext *tc)
+sp_text_context_selection_modified (Inkscape::Selection *selection, guint flags, SPTextContext *tc)
 {
 	sp_text_context_update_cursor (tc);
     sp_text_context_update_text_selection (tc);

@@ -50,7 +50,7 @@ sp_selected_path_combine (void)
 	if (!SP_IS_DESKTOP(desktop))
 	  return;
 	
-	SPSelection *selection = SP_DT_SELECTION (desktop);
+	Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 	GSList *items = (GSList *) selection->itemList();
 
 	if (g_slist_length (items) < 2) {
@@ -150,7 +150,7 @@ sp_selected_path_break_apart (void)
 	if (!SP_IS_DESKTOP(desktop))
 	  return;
 	
-	SPSelection *selection = SP_DT_SELECTION (desktop);
+	Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
 	if (selection->isEmpty()) {
 	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to break apart."));
@@ -248,7 +248,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 	if (!SP_IS_DESKTOP(desktop))
 	  return;
 
-	SPSelection *selection = SP_DT_SELECTION (desktop);
+	Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
 	if (selection->isEmpty()) {
 		if (interactive)
@@ -394,7 +394,7 @@ sp_selected_path_reverse ()
 	if (!SP_IS_DESKTOP(desktop))
 	  return;
 	
-	SPSelection *selection = SP_DT_SELECTION (desktop);
+	Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 	GSList *items = (GSList *) selection->itemList();
 
 	if (g_slist_length (items) == 0) {

@@ -136,7 +136,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
     static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
  
     SPGradientContext *rc = SP_GRADIENT_CONTEXT(event_context);
 
@@ -392,7 +392,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
 static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint state, guint32 etime)
 {
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     SPDocument *document = SP_DT_DOCUMENT(desktop);
     SPEventContext *ec = SP_EVENT_CONTEXT(&rc);
 

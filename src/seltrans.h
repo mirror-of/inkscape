@@ -41,7 +41,7 @@ struct SPSelTrans {
 
 	SPDesktop *desktop;
 
-	SPSelection *selection;
+	Inkscape::Selection *selection;
 	guint state : 1;
 	guint show : 1;
 

@@ -99,7 +99,7 @@ sp_selected_path_boolop (bool_op bop)
     if (!SP_IS_DESKTOP (desktop))
         return;
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
   
     GSList *il = (GSList *) selection->itemList();
   
@@ -547,7 +547,7 @@ sp_selected_path_outline ()
     if (!SP_IS_DESKTOP (desktop))
         return;
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     if (selection->isEmpty()) {
         // TRANSLATORS: "to outline" means "to convert stroke to path"
@@ -817,7 +817,7 @@ void sp_selected_path_create_updating_inset ()
 void
 sp_selected_path_create_offset_object (int expand, bool updating)
 {
-    SPSelection *selection;
+    Inkscape::Selection *selection;
     Inkscape::XML::Node *repr;
     SPItem *item;
     SPCurve *curve;
@@ -1057,7 +1057,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
     if (!SP_IS_DESKTOP (desktop))
         return;
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     if (selection->isEmpty()) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to inset/outset."));
@@ -1286,7 +1286,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
 //return true if we changed something, else false
 bool
-sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPItem *item,
+sp_selected_path_simplify_item(SPDesktop *desktop, Inkscape::Selection *selection, SPItem *item,
                  float threshold,  bool justCoalesce,
                  float angleLimit, bool breakableAngles,
                  gdouble size,     bool modifySelection)
@@ -1408,7 +1408,7 @@ sp_selected_path_simplify_selection (float threshold, bool justCoalesce,
     if (!SP_IS_DESKTOP (desktop))
         return;
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     if (selection->isEmpty()) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE,

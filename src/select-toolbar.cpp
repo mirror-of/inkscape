@@ -70,7 +70,7 @@
 #include "select-toolbar.h"
 
 static void
-sp_selection_layout_widget_update(SPWidget *spw, SPSelection *sel)
+sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)
 {
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;
@@ -122,7 +122,7 @@ sp_selection_layout_widget_update(SPWidget *spw, SPSelection *sel)
 
 
 static void
-sp_selection_layout_widget_modify_selection(SPWidget *spw, SPSelection *selection, guint flags, gpointer data)
+sp_selection_layout_widget_modify_selection(SPWidget *spw, Inkscape::Selection *selection, guint flags, gpointer data)
 {
     SPDesktop *desktop = (SPDesktop *) data;
     if ((desktop->selection == selection) // only respond to changes in our desktop
@@ -135,7 +135,7 @@ sp_selection_layout_widget_modify_selection(SPWidget *spw, SPSelection *selectio
 }
 
 static void
-sp_selection_layout_widget_change_selection(SPWidget *spw, SPSelection *selection, gpointer data)
+sp_selection_layout_widget_change_selection(SPWidget *spw, Inkscape::Selection *selection, gpointer data)
 {
     SPDesktop *desktop = (SPDesktop *) data;
     if (desktop->selection == selection) // only respond to changes in our desktop
@@ -160,7 +160,7 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     }
     gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(TRUE));
 
-    SPSelection *selection = SP_WIDGET_SELECTION(spw);
+    Inkscape::Selection *selection = SP_WIDGET_SELECTION(spw);
     NR::Rect bbox = selection->bounds();
 
     if (!((bbox.max()[NR::X] - bbox.min()[NR::X] > 1e-6) || (bbox.max()[NR::Y] - bbox.min()[NR::Y] > 1e-6))) {
@@ -281,7 +281,7 @@ static gboolean aux_set_unit(SPUnitSelector *,
         return FALSE;
     }
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty())
         return FALSE;

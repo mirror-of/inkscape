@@ -67,7 +67,7 @@ Grid::load (Inkscape::Extension::Extension *module)
 void
 Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
 {
-    SPSelection * selection     = ((SPDesktop *)document)->selection;
+    Inkscape::Selection * selection     = ((SPDesktop *)document)->selection;
 
     NR::Rect bounding_area = NR::Rect(NR::Point(0,0), NR::Point(100,100));
     if (selection->isEmpty()) {

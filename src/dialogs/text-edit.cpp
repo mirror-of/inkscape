@@ -56,8 +56,8 @@ extern "C" {
 
 #define VB_MARGIN 4
 
-static void sp_text_edit_dialog_modify_selection (Inkscape::Application *inkscape, SPSelection *sel, guint flags, GtkWidget *dlg);
-static void sp_text_edit_dialog_change_selection (Inkscape::Application *inkscape, SPSelection *sel, GtkWidget *dlg);
+static void sp_text_edit_dialog_modify_selection (Inkscape::Application *inkscape, Inkscape::Selection *sel, guint flags, GtkWidget *dlg);
+static void sp_text_edit_dialog_change_selection (Inkscape::Application *inkscape, Inkscape::Selection *sel, GtkWidget *dlg);
 
 static void sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg);
 static void sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg);
@@ -433,7 +433,7 @@ sp_text_edit_dialog (void)
 
 static void
 sp_text_edit_dialog_modify_selection ( Inkscape::Application *inkscape, 
-                                       SPSelection *sel, 
+                                       Inkscape::Selection *sel, 
                                        guint flags, 
                                        GtkWidget *dlg )
 {
@@ -455,7 +455,7 @@ sp_text_edit_dialog_modify_selection ( Inkscape::Application *inkscape,
 
 static void
 sp_text_edit_dialog_change_selection ( Inkscape::Application *inkscape, 
-                                       SPSelection *sel, 
+                                       Inkscape::Selection *sel, 
                                        GtkWidget *dlg )
 {
     sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);

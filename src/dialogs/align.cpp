@@ -119,7 +119,7 @@ private :
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (!desktop) return;
 
-        SPSelection *selection = SP_DT_SELECTION(desktop);
+        Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
         if (!selection) return;
 
         std::list<SPItem *> selected;
@@ -279,7 +279,7 @@ private :
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (!desktop) return;
 
-        SPSelection *selection = SP_DT_SELECTION(desktop);
+        Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
         if (!selection) return;
 
         std::list<SPItem *> selected;
@@ -1128,7 +1128,7 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
         return;
     }
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     GSList *slist = (GSList *) selection->itemList();
 
     if (!slist) {

@@ -216,7 +216,7 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
     g_return_if_fail (SP_IS_FLOWREGION (object));
 
     /* Add clones */
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     Inkscape::XML::Node *clone;
 
     GSList *reprs = g_slist_copy((GSList *) selection->reprList());

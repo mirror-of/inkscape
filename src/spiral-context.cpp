@@ -185,7 +185,7 @@ static Inkscape::XML::NodeEventVector shape_repr_events = {
 destroys old and creates new knotholder
 */
 void
-sp_spiral_context_selection_changed(SPSelection *selection, gpointer data)
+sp_spiral_context_selection_changed(Inkscape::Selection *selection, gpointer data)
 {
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(sc);
@@ -226,7 +226,7 @@ sp_spiral_context_setup(SPEventContext *ec)
     sp_event_context_read(ec, "revolution");
     sp_event_context_read(ec, "t0");
 
-    SPSelection *selection = SP_DT_SELECTION(ec->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(ec->desktop);
 
     SPItem *item = selection->singleItem();
     if (item) {
@@ -277,7 +277,7 @@ sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     static gboolean dragging;
 
     SPDesktop *desktop = event_context->desktop;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(event_context);
 

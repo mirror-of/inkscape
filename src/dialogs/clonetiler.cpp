@@ -111,7 +111,7 @@ clonetiler_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 static guint clonetiler_number_of_clones (SPObject *obj);
 
 static void
-clonetiler_change_selection (Inkscape::Application * /*inkscape*/, SPSelection *selection, GtkWidget *dlg)
+clonetiler_change_selection (Inkscape::Application * /*inkscape*/, Inkscape::Selection *selection, GtkWidget *dlg)
 {
     GtkWidget *buttons = (GtkWidget *) g_object_get_data (G_OBJECT(dlg), "buttons_on_tiles");
     GtkWidget *status = (GtkWidget *) g_object_get_data (G_OBJECT(dlg), "status");
@@ -675,7 +675,7 @@ clonetiler_unclump (GtkWidget *widget, void *)
     if (desktop == NULL)
         return;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     // check if something is selected
     if (selection->isEmpty() || g_slist_length((GSList *) selection->itemList()) > 1) {
@@ -726,7 +726,7 @@ clonetiler_remove (GtkWidget *widget, void *, bool do_undo = true)
     if (desktop == NULL)
         return;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     // check if something is selected
     if (selection->isEmpty() || g_slist_length((GSList *) selection->itemList()) > 1) {
@@ -764,7 +764,7 @@ clonetiler_apply (GtkWidget *widget, void *)
     if (desktop == NULL)
         return;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     // check if something is selected
     if (selection->isEmpty()) {

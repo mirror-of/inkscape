@@ -70,7 +70,7 @@ const gchar *gr_knot_descr [] = {
 };
 
 static void 
-gr_drag_sel_changed(SPSelection *selection, gpointer data)
+gr_drag_sel_changed(Inkscape::Selection *selection, gpointer data)
 {
 	GrDrag *drag = (GrDrag *) data;
 	drag->updateDraggers ();
@@ -79,7 +79,7 @@ gr_drag_sel_changed(SPSelection *selection, gpointer data)
 }
 
 static void
-gr_drag_sel_modified (SPSelection *selection, guint flags, gpointer data)
+gr_drag_sel_modified (Inkscape::Selection *selection, guint flags, gpointer data)
 {
     GrDrag *drag = (GrDrag *) data;
     if (drag->local_change) {

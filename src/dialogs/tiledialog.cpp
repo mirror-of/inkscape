@@ -198,7 +198,7 @@ void TileDialogImpl::Grid_Arrange ()
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         NRRect b;
@@ -309,7 +309,7 @@ void TileDialogImpl::on_row_spinbutton_changed()
     updating = true;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     GSList const *items = selection->itemList();
     int selcount = g_slist_length((GSList *)items);
@@ -333,7 +333,7 @@ void TileDialogImpl::on_col_spinbutton_changed()
     // in turn, prevent listener from responding
     updating = true;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     GSList const *items = selection->itemList();
     int selcount = g_slist_length((GSList *)items);
@@ -445,7 +445,7 @@ void TileDialogImpl::updateSelection()
     // in turn, prevent listener from responding
     updating = true;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
     const GSList *items = selection->itemList();
     int selcount = g_slist_length((GSList *)items);
     for (; items != NULL; items = items->next) {
@@ -540,7 +540,7 @@ TileDialogImpl::TileDialogImpl()
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     //SelectionContentsLabel(_("objects selected:"));
     GSList const *items = selection->itemList();

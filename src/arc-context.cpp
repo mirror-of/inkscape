@@ -178,7 +178,7 @@ static Inkscape::XML::NodeEventVector shape_repr_events = {
 destroys old and creates new knotholder.
 */
 void
-sp_arc_context_selection_changed(SPSelection * selection, gpointer data)
+sp_arc_context_selection_changed(Inkscape::Selection * selection, gpointer data)
 {
     SPArcContext *ac = SP_ARC_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(ac);
@@ -282,7 +282,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
     static gboolean dragging;
 
     SPDesktop *desktop = event_context->desktop;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     SPArcContext *ac = SP_ARC_CONTEXT(event_context);
 

@@ -185,7 +185,7 @@ Transformation::initPageSkew()
 void
 Transformation::_apply()
 {
-    SPSelection * const selection = _getSelection();
+    Inkscape::Selection * const selection = _getSelection();
     g_return_if_fail (!selection->isEmpty());
 
     int const page = _notebook.get_current_page();
@@ -221,7 +221,7 @@ Transformation::present(Transformation::PageType page)
 }
 
 void 
-Transformation::updateSelection(PageType page, SPSelection *selection)
+Transformation::updateSelection(PageType page, Inkscape::Selection *selection)
 {
     switch (page) {
         case PAGE_MOVE: {
@@ -251,7 +251,7 @@ Transformation::updateSelection(PageType page, SPSelection *selection)
 
 void
 Transformation::onSelectionChanged(Inkscape::NSApplication::Application *inkscape,
-                                   SPSelection *selection)
+                                   Inkscape::Selection *selection)
 {
     //TODO: replace with a Tranformation::getCurrentPage() function
     int page = _notebook.get_current_page();
@@ -261,7 +261,7 @@ Transformation::onSelectionChanged(Inkscape::NSApplication::Application *inkscap
 
 void
 Transformation::onSelectionModified(Inkscape::NSApplication::Application *inkscape,
-                                    SPSelection *selection,
+                                    Inkscape::Selection *selection,
                                     int unsigned flags)
 {
     //TODO: replace with a Tranformation::getCurrentPage() function
@@ -281,7 +281,7 @@ Transformation::onSwitchPage(Gtk::Notebook *notebook,
 */
 
 void 
-Transformation::updatePageMove(SPSelection *selection)
+Transformation::updatePageMove(Inkscape::Selection *selection)
 {
     if (selection && !selection->isEmpty()) {
         if (_check_move_relative.get_active()) {
@@ -299,7 +299,7 @@ Transformation::updatePageMove(SPSelection *selection)
 }
 
 void 
-Transformation::updatePageScale(SPSelection *selection)
+Transformation::updatePageScale(Inkscape::Selection *selection)
 {
     if (selection && !selection->isEmpty()) {
           NR::Rect bbox = selection->bounds();
@@ -321,7 +321,7 @@ Transformation::updatePageScale(SPSelection *selection)
 }
 
 void 
-Transformation::updatePageRotate(SPSelection *selection)
+Transformation::updatePageRotate(Inkscape::Selection *selection)
 {
     if (selection && !selection->isEmpty()) {
         _page_rotate.set_sensitive(true);
@@ -331,7 +331,7 @@ Transformation::updatePageRotate(SPSelection *selection)
 }
 
 void 
-Transformation::updatePageSkew(SPSelection *selection)
+Transformation::updatePageSkew(Inkscape::Selection *selection)
 {
     if (selection && !selection->isEmpty()) {
         _page_skew.set_sensitive(true);
@@ -341,7 +341,7 @@ Transformation::updatePageSkew(SPSelection *selection)
 }
 
 void 
-Transformation::applyPageMove(SPSelection *selection)
+Transformation::applyPageMove(Inkscape::Selection *selection)
 {
     //double x = _scalar_move_horizontal.getValue("px");
     //double y = _scalar_move_vertical.getValue("px");
@@ -359,7 +359,7 @@ Transformation::applyPageMove(SPSelection *selection)
 }
 
 void 
-Transformation::applyPageScale(SPSelection *selection)
+Transformation::applyPageScale(Inkscape::Selection *selection)
 {
     NR::Rect const bbox(selection->bounds());
     NR::Point const center(bbox.midpoint());
@@ -387,7 +387,7 @@ Transformation::applyPageScale(SPSelection *selection)
 }
 
 void 
-Transformation::applyPageRotate(SPSelection *selection)
+Transformation::applyPageRotate(Inkscape::Selection *selection)
 {
     NR::Rect bbox = selection->bounds();
     NR::Point center = bbox.midpoint();
@@ -402,7 +402,7 @@ Transformation::applyPageRotate(SPSelection *selection)
 }
 
 void 
-Transformation::applyPageSkew(SPSelection *selection)
+Transformation::applyPageSkew(Inkscape::Selection *selection)
 {
 }
 
@@ -415,7 +415,7 @@ Transformation::scaleSetUnit(Unit const *old_unit,
                              Unit const *new_unit,
                              GObject *dlg)
 {
-    SPSelection *selection = _getSelection();
+    Inkscape::Selection *selection = _getSelection();
 
     if (!selection || selection->isEmpty()) {
         return false;
@@ -473,7 +473,7 @@ Transformation::onMoveRelativeToggled()
     if (get_data("update")) {
         return;
     }
-    SPSelection *selection = _getSelection();
+    Inkscape::Selection *selection = _getSelection();
 
     if (!selection || selection->isEmpty()) {
         return;

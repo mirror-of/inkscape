@@ -713,7 +713,7 @@ style_from_selection_to_tool(GtkWidget *widget, gchar const *prefs_path)
     if (desktop == NULL)
         return;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,

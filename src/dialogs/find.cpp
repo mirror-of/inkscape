@@ -370,7 +370,7 @@ all_items (SPObject *r, GSList *l, bool hidden, bool locked)
 }
 
 GSList *
-all_selection_items (SPSelection *s, GSList *l, SPObject *ancestor, bool hidden, bool locked)
+all_selection_items (Inkscape::Selection *s, GSList *l, SPObject *ancestor, bool hidden, bool locked)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
@@ -430,7 +430,7 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
                                                  count),
                                         count, all, exact? _("exact") : _("partial"));
 
-        SPSelection *selection = SP_DT_SELECTION (desktop);
+        Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
         selection->clear();
         selection->setList(n);
         scroll_to_show_item (desktop, SP_ITEM(n->data));

@@ -21,14 +21,14 @@
 
 namespace Inkscape {
 
-SelectionDescriber::SelectionDescriber(SPSelection *selection, MessageStack *stack)
+SelectionDescriber::SelectionDescriber(Inkscape::Selection *selection, MessageStack *stack)
 : _context(stack)
 {
     selection->connectChanged(sigc::mem_fun(*this, &SelectionDescriber::_updateMessageFromSelection));
     _updateMessageFromSelection(selection);
 }
 
-void SelectionDescriber::_updateMessageFromSelection(SPSelection *selection) {
+void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *selection) {
     GSList const *items = selection->itemList();
 
     char const *when_selected = _("Click selection to toggle scale/rotation handles");

@@ -15,7 +15,9 @@
 #include <glib/gslist.h>
 #include <sigc++/sigc++.h>
 
-#include <forward.h>
+#include "forward.h"
+
+namespace Inkscape { class Selection; }
 
 enum {
         SP_SELCUE_NONE,
@@ -28,7 +30,7 @@ struct SPSelCue {
 	~SPSelCue();
 
 	SPDesktop *desktop;
-	SPSelection *selection;
+	Inkscape::Selection *selection;
 	sigc::connection sel_changed_connection;
 	sigc::connection sel_modified_connection;
 	GSList *item_bboxes;

@@ -140,7 +140,7 @@ static void on_attr_unselect_row_clear_text (GtkCList *list, gint row, gint colu
 
 static void on_editable_changed_enable_if_valid_xml_name (GtkEditable * editable, gpointer data);
 
-static void on_desktop_selection_changed (SPSelection * selection);
+static void on_desktop_selection_changed (Inkscape::Selection * selection);
 static void on_document_uri_set (gchar const *uri, SPDocument * document);
 
 static void on_clicked_get_editable_text (GtkWidget * widget, gpointer data);
@@ -796,7 +796,7 @@ set_dt_select (Inkscape::XML::Node *repr)
     if (!current_desktop)
         return;
 
-    SPSelection *selection = SP_DT_SELECTION(current_desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(current_desktop);
 
     SPObject *object;
     if (repr) {
@@ -1311,7 +1311,7 @@ on_editable_changed_enable_if_valid_xml_name ( GtkEditable * editable,
 
 
 void
-on_desktop_selection_changed (SPSelection * selection)
+on_desktop_selection_changed (Inkscape::Selection * selection)
 {
     if (!blocked++) {
         set_tree_select (get_dt_select ());

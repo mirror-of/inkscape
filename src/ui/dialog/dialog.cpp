@@ -207,7 +207,7 @@ Dialog::onShowF12()
 #define SP_ACTIVE_DESKTOP (false)
 #endif
 
-SPSelection*
+Inkscape::Selection*
 Dialog::_getSelection()
 {
     if (!_desktop) {

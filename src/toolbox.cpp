@@ -802,7 +802,7 @@ sp_stb_magnitude_value_changed(GtkAdjustment *adj, SPWidget *tbl)
 
     bool modmade = FALSE;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     GSList const *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR((SPItem *) items->data)) {
@@ -838,7 +838,7 @@ sp_stb_proportion_value_changed(GtkAdjustment *adj, SPWidget *tbl)
     g_object_set_data(G_OBJECT(tbl), "freeze", GINT_TO_POINTER(TRUE));
 
     bool modmade = FALSE;
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     GSList const *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR((SPItem *) items->data)) {
@@ -885,7 +885,7 @@ sp_stb_sides_flat_state_changed(GtkWidget *widget, GtkObject *tbl)
     // in turn, prevent listener from responding
     g_object_set_data(G_OBJECT(tbl), "freeze", GINT_TO_POINTER(TRUE));
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     GSList const *items = selection->itemList();
     GtkWidget *prop_widget = (GtkWidget*) g_object_get_data(G_OBJECT(tbl), "prop_widget");
     bool modmade = FALSE;
@@ -936,7 +936,7 @@ sp_stb_rounded_value_changed(GtkAdjustment *adj, SPWidget *tbl)
 
     bool modmade = FALSE;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     GSList const *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR((SPItem *) items->data)) {
@@ -973,7 +973,7 @@ sp_stb_randomized_value_changed(GtkAdjustment *adj, SPWidget *tbl)
 
     bool modmade = FALSE;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     GSList const *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR((SPItem *) items->data)) {
@@ -1056,7 +1056,7 @@ static Inkscape::XML::NodeEventVector star_tb_repr_events =
  *  \param selection Should not be NULL.
  */
 static void
-sp_star_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
+sp_star_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl)
 {
     int n_selected = 0;
     Inkscape::XML::Node *repr = NULL;
@@ -1282,7 +1282,7 @@ sp_rtb_rxry_value_changed(GtkAdjustment *adj, SPWidget *tbl, gchar const *value_
     g_object_set_data(G_OBJECT(tbl), "freeze", GINT_TO_POINTER(TRUE));
 
     bool modmade = false;
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     for (GSList const *items = selection->itemList(); items != NULL; items = items->next) {
         if (SP_IS_RECT(items->data)) {
             if (adj->value != 0) {
@@ -1385,7 +1385,7 @@ static Inkscape::XML::NodeEventVector rect_tb_repr_events = {
  *  \param selection should not be NULL.
  */
 static void
-sp_rect_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
+sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl)
 {
     int n_selected = 0;
     Inkscape::XML::Node *repr = NULL;
@@ -1625,7 +1625,7 @@ static Inkscape::XML::NodeEventVector spiral_tb_repr_events = {
 };
 
 static void
-sp_spiral_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
+sp_spiral_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl)
 {
     int n_selected = 0;
     Inkscape::XML::Node *repr = NULL;
@@ -2110,7 +2110,7 @@ static Inkscape::XML::NodeEventVector arc_tb_repr_events = {
 
 
 static void
-sp_arc_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
+sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl)
 {
     int n_selected = 0;
     Inkscape::XML::Node *repr = NULL;

@@ -1,3 +1,34 @@
+2005-03-22  MenTaLguY  <mental@rydia.net>
+
+	* src/arc-context.cpp, src/desktop-handles.cpp,
+	  src/desktop-handles.h, src/desktop.cpp, src/desktop.h,
+	  src/document.h, src/draw-context.cpp, src/draw-context.h,
+	  src/file.cpp, src/forward.h, src/gradient-context.cpp,
+	  src/gradient-drag.cpp, src/gradient-drag.h, src/gradient-toolbar.cpp,
+	  src/inkscape-private.h, src/inkscape.cpp, src/node-context.cpp,
+	  src/node-context.h, src/nodepath.cpp, src/object-ui.cpp,
+	  src/path-chemistry.cpp, src/rect-context.cpp, src/selcue.cpp,
+	  src/selcue.h, src/select-context.cpp, src/select-toolbar.cpp,
+	  src/selection-chemistry.cpp, src/selection-chemistry.h,
+	  src/selection-describer.cpp, src/selection-describer.h,
+	  src/selection.cpp, src/selection.h, src/seltrans.cpp,
+	  src/seltrans.h, src/sp-flowtext.cpp, src/spiral-context.cpp,
+	  src/splivarot.cpp, src/star-context.cpp, src/text-chemistry.cpp,
+	  src/text-context.cpp, src/toolbox.cpp, src/verbs.cpp,
+	  src/dialogs/align.cpp, src/dialogs/clonetiler.cpp,
+	  src/dialogs/display-settings.cpp, src/dialogs/fill-style.cpp,
+	  src/dialogs/find.cpp, src/dialogs/iconpreview.cpp,
+	  src/dialogs/item-properties.cpp, src/dialogs/object-properties.cpp,
+	  src/dialogs/stroke-style.cpp, src/dialogs/text-edit.cpp,
+	  src/dialogs/tiledialog.cpp, src/dialogs/transformation.cpp,
+	  src/dialogs/xml-tree.cpp, src/extension/plugin/bluredge.cpp,
+	  src/extension/plugin/grid.cpp, src/trace/trace.cpp,
+	  src/ui/dialog/dialog.cpp, src/ui/dialog/dialog.h,
+	  src/ui/dialog/transformation.cpp, src/ui/dialog/transformation.h,
+	  src/widgets/sp-widget.cpp, src/widgets/sp-widget.h:
+
+      SPSelection -> Inkscape::Selection
+
 2005-03-21  Jon Phillips <jon@rejon.org>
 
 	* share/icons/icons.svg src/dropper-context.cpp

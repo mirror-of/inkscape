@@ -34,7 +34,7 @@
 
 
 SPItem *
-text_in_selection(SPSelection *selection)
+text_in_selection(Inkscape::Selection *selection)
 {
     for (GSList *items = (GSList *) selection->itemList();
          items != NULL;
@@ -46,7 +46,7 @@ text_in_selection(SPSelection *selection)
 }
 
 SPItem *
-shape_in_selection(SPSelection *selection)
+shape_in_selection(Inkscape::Selection *selection)
 {
     for (GSList *items = (GSList *) selection->itemList();
          items != NULL;
@@ -82,7 +82,7 @@ text_put_on_path()
     if (!desktop)
         return;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     SPItem *text = text_in_selection(selection);
     SPItem *shape = shape_in_selection(selection);
@@ -147,7 +147,7 @@ text_remove_from_path()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text on path</b> to remove it from path."));
@@ -197,7 +197,7 @@ text_remove_all_kerns()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));

@@ -57,11 +57,11 @@ static gint sp_draw_context_root_handler(SPEventContext *event_context, GdkEvent
 
 static void spdc_set_attach(SPDrawContext *dc, gboolean attach);
 
-static void spdc_selection_changed(SPSelection *sel, SPDrawContext *dc);
-static void spdc_selection_modified(SPSelection *sel, guint flags, SPDrawContext *dc);
+static void spdc_selection_changed(Inkscape::Selection *sel, SPDrawContext *dc);
+static void spdc_selection_modified(Inkscape::Selection *sel, guint flags, SPDrawContext *dc);
 
-static void spdc_attach_selection(SPDrawContext *dc, SPSelection *sel);
-static void spdc_detach_selection(SPDrawContext *dc, SPSelection *sel);
+static void spdc_attach_selection(SPDrawContext *dc, Inkscape::Selection *sel);
+static void spdc_detach_selection(SPDrawContext *dc, Inkscape::Selection *sel);
 
 static void spdc_flush_white(SPDrawContext *dc, SPCurve *gc);
 
@@ -294,7 +294,7 @@ spdc_set_attach(SPDrawContext *dc, gboolean attach)
  */
 
 static void
-spdc_selection_changed(SPSelection *sel, SPDrawContext *dc)
+spdc_selection_changed(Inkscape::Selection *sel, SPDrawContext *dc)
 {
     if (dc->attach) {
         spdc_attach_selection(dc, sel);
@@ -304,7 +304,7 @@ spdc_selection_changed(SPSelection *sel, SPDrawContext *dc)
 /* fixme: We have to ensure this is not delayed (Lauris) */
 
 static void
-spdc_selection_modified(SPSelection *sel, guint flags, SPDrawContext *dc)
+spdc_selection_modified(Inkscape::Selection *sel, guint flags, SPDrawContext *dc)
 {
     if (dc->attach) {
         spdc_attach_selection(dc, sel);
@@ -312,7 +312,7 @@ spdc_selection_modified(SPSelection *sel, guint flags, SPDrawContext *dc)
 }
 
 static void
-spdc_attach_selection(SPDrawContext *dc, SPSelection *sel)
+spdc_attach_selection(SPDrawContext *dc, Inkscape::Selection *sel)
 {
     /* We reset white and forget white/start/end anchors */
     spdc_reset_white(dc);
@@ -353,7 +353,7 @@ spdc_attach_selection(SPDrawContext *dc, SPSelection *sel)
 }
 
 static void
-spdc_detach_selection(SPDrawContext *dc, SPSelection *sel)
+spdc_detach_selection(SPDrawContext *dc, Inkscape::Selection *sel)
 {
     /* We reset white and forget white/start/end anchors */
     spdc_reset_white(dc);

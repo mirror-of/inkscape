@@ -113,7 +113,7 @@ struct GrDrag {
 	bool local_change;
 
 	SPDesktop *desktop;
-	SPSelection *selection;
+	Inkscape::Selection *selection;
 	sigc::connection sel_changed_connection;
 	sigc::connection sel_modified_connection;
 

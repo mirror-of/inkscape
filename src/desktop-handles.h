@@ -16,6 +16,8 @@
 #include "display/display-forward.h"
 #include "forward.h"
 
+namespace Inkscape { class Selection; }
+
 #define SP_DT_IS_EDITABLE(d) (TRUE)
 
 #define SP_DT_EVENTCONTEXT(d) sp_desktop_event_context (d)
@@ -31,7 +33,7 @@
 #define SP_DT_CONTROLS(d) sp_desktop_controls (d)
 
 SPEventContext * sp_desktop_event_context (SPDesktop * desktop);
-SPSelection * sp_desktop_selection (SPDesktop * desktop);
+Inkscape::Selection * sp_desktop_selection (SPDesktop * desktop);
 SPDocument * sp_desktop_document (SPDesktop * desktop);
 SPCanvas * sp_desktop_canvas (SPDesktop * desktop);
 SPCanvasItem * sp_desktop_acetate (SPDesktop * desktop);

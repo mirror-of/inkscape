@@ -187,7 +187,7 @@ destroys old and creates new knotholder
 \param  selection Should not be NULL.
 */
 void
-sp_star_context_selection_changed (SPSelection * selection, gpointer data)
+sp_star_context_selection_changed (Inkscape::Selection * selection, gpointer data)
 {
     g_assert (selection != NULL);
 
@@ -232,7 +232,7 @@ sp_star_context_setup (SPEventContext *ec)
     sp_event_context_read (ec, "rounded");
     sp_event_context_read (ec, "randomized");
 
-    SPSelection *selection = SP_DT_SELECTION(ec->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(ec->desktop);
 
     SPItem *item = selection->singleItem();
         if (item) {
@@ -288,7 +288,7 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
     static gboolean dragging;
 
     SPDesktop *desktop = event_context->desktop;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     SPStarContext *sc = SP_STAR_CONTEXT (event_context);
 

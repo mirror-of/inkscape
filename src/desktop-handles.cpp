@@ -25,7 +25,7 @@ sp_desktop_event_context (SPDesktop * desktop)
 	return desktop->event_context;
 }
 
-SPSelection *
+Inkscape::Selection *
 sp_desktop_selection (SPDesktop * desktop)
 {
 	g_assert(desktop != NULL);

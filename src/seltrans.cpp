@@ -70,8 +70,8 @@ static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data)
 static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint32 state, gpointer data);
 static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *p, guint state, gboolean *data);
 
-static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data);
-static void sp_sel_trans_sel_modified(SPSelection *selection, guint flags, gpointer data);
+static void sp_sel_trans_sel_changed(Inkscape::Selection *selection, gpointer data);
+static void sp_sel_trans_sel_modified(Inkscape::Selection *selection, guint flags, gpointer data);
 
 extern GdkPixbuf *handles[];
 
@@ -241,7 +241,7 @@ void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
 
 void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdouble y, gboolean show_handles)
 {
-    SPSelection *selection = SP_DT_SELECTION(seltrans->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(seltrans->desktop);
 
     g_return_if_fail(!seltrans->grabbed);
 
@@ -332,7 +332,7 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 {
     g_return_if_fail(seltrans->grabbed);
 
-    SPSelection *selection = SP_DT_SELECTION(seltrans->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(seltrans->desktop);
 
     bool updh = true;
     if (!seltrans->empty && seltrans->changed) {
@@ -378,7 +378,7 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 
 void sp_sel_trans_stamp(SPSelTrans *seltrans)
 {
-    SPSelection *selection = SP_DT_SELECTION(seltrans->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(seltrans->desktop);
 
     /* stamping mode */
     if (!seltrans->empty) {
@@ -487,7 +487,7 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
 
 static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans)
 {
-    SPSelection *selection = SP_DT_SELECTION(seltrans.desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(seltrans.desktop);
     seltrans.empty = selection->isEmpty();
 
     if (seltrans.empty) {
@@ -648,7 +648,7 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, g
     return TRUE;
 }
 
-static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data)
+static void sp_sel_trans_sel_changed(Inkscape::Selection *selection, gpointer data)
 {
     SPSelTrans *seltrans = (SPSelTrans *) data;
 
@@ -660,7 +660,7 @@ static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data)
 }
 
 static void
-sp_sel_trans_sel_modified(SPSelection *selection, guint flags, gpointer data)
+sp_sel_trans_sel_modified(Inkscape::Selection *selection, guint flags, gpointer data)
 {
     SPSelTrans *seltrans;
 

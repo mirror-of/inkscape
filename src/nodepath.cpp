@@ -3008,7 +3008,7 @@ sp_nodepath_update_statusbar(Inkscape::NodePath::Path *nodepath)
     if (!mc) return;
 
     if (selected == 0) {
-        SPSelection *sel = nodepath->desktop->selection;
+        Inkscape::Selection *sel = nodepath->desktop->selection;
         if (!sel || sel->isEmpty()) {
             mc->setF(Inkscape::NORMAL_MESSAGE,
                      _("Select one path object with selector first, then switch back to node tool."));

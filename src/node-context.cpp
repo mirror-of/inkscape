@@ -186,7 +186,7 @@ sp_node_context_setup(SPEventContext *ec)
     nc->sel_changed_connection.disconnect();
     nc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(sigc::bind(sigc::ptr_fun(&sp_node_context_selection_changed), (gpointer)nc));
 
-    SPSelection *selection = SP_DT_SELECTION(ec->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(ec->desktop);
     SPItem *item = selection->singleItem();
 
     nc->nodepath = NULL;
@@ -228,7 +228,7 @@ sp_node_context_setup(SPEventContext *ec)
 destroys old and creates new nodepath and reassigns listeners to the new selected item's repr
 */
 void
-sp_node_context_selection_changed(SPSelection *selection, gpointer data)
+sp_node_context_selection_changed(Inkscape::Selection *selection, gpointer data)
 {
     SPNodeContext *nc = SP_NODE_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(nc);
@@ -296,7 +296,7 @@ sp_nodepath_update_from_item(SPNodeContext *nc, SPItem *item)
         sp_knot_holder_destroy(nc->knot_holder);
     }
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     item = selection->singleItem();
 
     nc->nodepath = NULL;
@@ -347,7 +347,7 @@ nodepath_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
         GList *saved = NULL;
         SPDesktop *desktop = np->desktop;
         g_assert(desktop);
-        SPSelection *selection = desktop->selection;
+        Inkscape::Selection *selection = desktop->selection;
         g_assert(selection);
 
         saved = save_nodepath_selection(nc->nodepath);
@@ -377,7 +377,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
     gint ret = FALSE;
 
     SPDesktop *desktop = event_context->desktop;
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     SPNodeContext *nc = SP_NODE_CONTEXT(event_context);
 

@@ -58,7 +58,7 @@ BlurEdge::load (Inkscape::Extension::Extension *module)
 void
 BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
 {
-    SPSelection * selection     = ((SPDesktop *)document)->selection;
+    Inkscape::Selection * selection     = ((SPDesktop *)document)->selection;
 
     float width = module->get_param_float("blur-width");
     int   steps = module->get_param_int("num-steps");

@@ -68,7 +68,7 @@ Tracer::getSelectedSPImage()
         return NULL;
         }
 
-    SPSelection *sel = desktop->selection;
+    Inkscape::Selection *sel = desktop->selection;
     if (!sel)
         {
         char *msg = _("Select an <b>image</b> to trace");
@@ -147,7 +147,7 @@ void Tracer::traceThread()
         return;
         }
 
-    SPSelection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
     if (!SP_ACTIVE_DOCUMENT)
         {

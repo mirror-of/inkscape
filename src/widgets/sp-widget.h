@@ -44,9 +44,9 @@ struct SPWidgetClass {
 	GtkBinClass bin_class;
 	void (* construct) (SPWidget *spw);
 	/* Selection change handlers */
-	void (* modify_selection) (SPWidget *spw, SPSelection *selection, guint flags);
-	void (* change_selection) (SPWidget *spw, SPSelection *selection);
-	void (* set_selection) (SPWidget *spw, SPSelection *selection);
+	void (* modify_selection) (SPWidget *spw, Inkscape::Selection *selection, guint flags);
+	void (* change_selection) (SPWidget *spw, Inkscape::Selection *selection);
+	void (* set_selection) (SPWidget *spw, Inkscape::Selection *selection);
 	void (* attr_changed) (SPWidget *spw, const guchar *key, const guchar *oldval, const guchar *newval);
 	/* Signal */
 	void (* set_dirty) (SPWidget *spw, gboolean dirty);

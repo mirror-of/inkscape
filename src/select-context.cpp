@@ -211,7 +211,7 @@ sp_select_context_abort(SPEventContext *event_context)
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
     SPSelTrans *seltrans = sc->_seltrans;
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (sc->dragging) {
         if (sc->moved) { // cancel dragging an object
@@ -258,7 +258,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
     SPSelTrans *seltrans = sc->_seltrans;
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
 
@@ -360,7 +360,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
     SPSelTrans *seltrans = sc->_seltrans;
-    SPSelection *selection = SP_DT_SELECTION(desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     gdouble const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2, 0, 1000); // in px
     gdouble const offset = prefs_get_double_attribute_limited("options.defaultscale", "value", 2, 0, 1000);
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);

@@ -98,7 +98,7 @@ static void sp_desktop_document_resized (SPView *view, SPDocument *doc, gdouble 
 static SPView *sp_desktop_new (SPNamedView *nv, SPCanvas *canvas);
 
 static void sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop);
-static void sp_desktop_selection_modified (SPSelection *selection, guint flags, SPDesktop *desktop);
+static void sp_desktop_selection_modified (Inkscape::Selection *selection, guint flags, SPDesktop *desktop);
 
 static void sp_dt_update_snap_distances (SPDesktop *desktop);
 
@@ -437,7 +437,7 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     desktop->sketch = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL);
     desktop->controls = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL);
 
-    desktop->selection = new SPSelection (desktop);
+    desktop->selection = new Inkscape::Selection (desktop);
 
     /* Push select tool to the bottom of stack */
     // FIXME: this is the only call to this.  Everything else seems to just
@@ -642,7 +642,7 @@ sp_desktop_change_document (SPDesktop *desktop, SPDocument *document)
 /* Private methods */
 
 static void
-sp_desktop_selection_modified (SPSelection *selection, guint flags, SPDesktop *desktop)
+sp_desktop_selection_modified (Inkscape::Selection *selection, guint flags, SPDesktop *desktop)
 {
     sp_desktop_update_scrollbars (desktop);
 }
@@ -1477,7 +1477,7 @@ void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
     desktop->_layer_changed_signal.emit(bottom);
 }
 
-void SPDesktop::_selection_changed(SPSelection *selection, SPDesktop *desktop)
+void SPDesktop::_selection_changed(Inkscape::Selection *selection, SPDesktop *desktop)
 {
     // TODO - only change the layer for single selections, or what?
     // This seems reasonable -- for multiple selections there can be many

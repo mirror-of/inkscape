@@ -15,7 +15,7 @@
 #include <sigc++/sigc++.h>
 #include "message-context.h"
 
-class SPSelection;
+namespace Inkscape { class Selection; }
 
 namespace Inkscape {
 
@@ -23,10 +23,10 @@ class MessageStack;
 
 class SelectionDescriber : public sigc::trackable {
 public:
-    SelectionDescriber(SPSelection *selection, MessageStack *stack);
+    SelectionDescriber(Inkscape::Selection *selection, MessageStack *stack);
 
 private:
-    void _updateMessageFromSelection(SPSelection *selection);
+    void _updateMessageFromSelection(Inkscape::Selection *selection);
 
     MessageContext _context;
 };

@@ -70,12 +70,12 @@ protected:
 
     virtual void _apply();
     void present(PageType page);
-    void updateSelection(PageType page, SPSelection *selection);
+    void updateSelection(PageType page, Inkscape::Selection *selection);
 
     void onSelectionChanged(Inkscape::NSApplication::Application *inkscape,
-                            SPSelection *selection);
+                            Inkscape::Selection *selection);
     void onSelectionModified(Inkscape::NSApplication::Application *inkscape,
-                             SPSelection *selection,
+                             Inkscape::Selection *selection,
                              int unsigned flags);
 /* TODO
     void onSwitchPage(Gtk::Notebook *notebook,
@@ -89,15 +89,15 @@ protected:
     void onRotateValueChanged();
     void onSkewValueChanged();
 
-    void updatePageMove(SPSelection *);
-    void updatePageScale(SPSelection *);
-    void updatePageRotate(SPSelection *);
-    void updatePageSkew(SPSelection *);
+    void updatePageMove(Inkscape::Selection *);
+    void updatePageScale(Inkscape::Selection *);
+    void updatePageRotate(Inkscape::Selection *);
+    void updatePageSkew(Inkscape::Selection *);
 
-    void applyPageMove(SPSelection *);
-    void applyPageScale(SPSelection *);
-    void applyPageRotate(SPSelection *);
-    void applyPageSkew(SPSelection *);
+    void applyPageMove(Inkscape::Selection *);
+    void applyPageScale(Inkscape::Selection *);
+    void applyPageRotate(Inkscape::Selection *);
+    void applyPageSkew(Inkscape::Selection *);
 
     int scaleSetUnit(Unit const *,
                      Unit const *,

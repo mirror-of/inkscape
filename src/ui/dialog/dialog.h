@@ -15,7 +15,7 @@
 
 #include <gtkmm/dialog.h>
 
-class SPSelection;
+namespace Inkscape { class Selection; }
 class SPDesktop;
 
 namespace Inkscape {
@@ -55,7 +55,7 @@ protected:
     static void Dialog::hideCallback(GtkObject *object, gpointer dlgPtr);
     static void Dialog::unhideCallback(GtkObject *object, gpointer dlgPtr);
 
-    SPSelection*   _getSelection();
+    Inkscape::Selection*   _getSelection();
     void           _setDesktop(SPDesktop *desktop);
 
 private:
