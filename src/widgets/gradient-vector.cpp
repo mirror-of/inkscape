@@ -411,7 +411,7 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 
 #define PAD 4
 
-static GtkWidget *sp_gradient_vector_widget_new (SPGradient *gradient);
+static GtkWidget *sp_gradient_vector_widget_new (SPGradient *gradient, SPStop *stop);
 
 static void sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient);
 static gint sp_gradient_vector_dialog_delete (GtkWidget *widget, GdkEvent *event, GtkWidget *dialog);
@@ -487,6 +487,21 @@ verify_grad(SPGradient *gradient)
 }
 
 static void
+select_stop_in_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
+{
+	int i = 0;
+	for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
+		if (SP_IS_STOP (ochild)) {
+			if (SP_OBJECT (ochild) == SP_OBJECT(new_stop)) {
+				gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), i);
+				break;
+			} 
+			i++;
+		}
+	}
+}
+
+static void
 update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
 {
 
@@ -545,20 +560,14 @@ update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
 		gtk_widget_set_sensitive (mnu, TRUE);
 	}
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (mnu), m);
+
 	/* Set history */
-	if (new_stop == NULL) gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
-	else {
-		int i = 0;
-		for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
-			if (SP_IS_STOP (ochild)) {
-				if (SP_OBJECT (ochild) == SP_OBJECT(new_stop)) {
-					gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), i);
-					break;
-				} 
-				i++;
-			}
-		}
+	if (new_stop == NULL) {
+		gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
+	} else {
+		select_stop_in_list (mnu, gradient, new_stop);
 	}
+
 	blocked = FALSE;
 }
 
@@ -734,7 +743,7 @@ sp_grd_ed_del_stop (GtkWidget *widget,  GtkWidget *vb)
 }
 
 static GtkWidget *
-sp_gradient_vector_widget_new (SPGradient *gradient)
+sp_gradient_vector_widget_new (SPGradient *gradient, SPStop *select_stop)
 {
 	GtkWidget *vb, *w, *f, *csel;
 
@@ -842,13 +851,16 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 
 	sp_gradient_vector_widget_load_gradient (vb, gradient);
 
+	if (select_stop)
+		select_stop_in_list (GTK_WIDGET(mnu), gradient, select_stop);
+
 	return vb;
 }
 
 
 
 GtkWidget *
-sp_gradient_vector_editor_new (SPGradient *gradient)
+sp_gradient_vector_editor_new (SPGradient *gradient, SPStop *stop)
 {
 	GtkWidget *wid;
 
@@ -881,7 +893,7 @@ sp_gradient_vector_editor_new (SPGradient *gradient)
 
 		gtk_container_set_border_width (GTK_CONTAINER (dlg), PAD);
 
-		wid = (GtkWidget*)sp_gradient_vector_widget_new (gradient);
+		wid = (GtkWidget*)sp_gradient_vector_widget_new (gradient, stop);
 		g_object_set_data (G_OBJECT (dlg), "gradient-vector-widget", wid);
 		/* Connect signals */
 		gtk_widget_show (wid);
@@ -903,12 +915,7 @@ sp_gradient_vector_editor_new (SPGradient *gradient)
 		g_object_unref (G_OBJECT (event.window));
 
 		g_assert (dlg == NULL);
-		sp_gradient_vector_editor_new (gradient);
-
-		// The old code which crashes when you "add" (i.e. copy) a three-stop gradient, "edit" it, and add a stop
-		//		gtk_window_present ((GtkWindow *) dlg);
-		//		wid = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "gradient-vector-widget");
-		//		sp_gradient_vector_widget_load_gradient (wid, gradient);
+		sp_gradient_vector_editor_new (gradient, stop);
 	}
 
 	return dlg;
