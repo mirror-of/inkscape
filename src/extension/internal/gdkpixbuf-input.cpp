@@ -1,7 +1,10 @@
 #include <string.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <document.h>
+#include <document-private.h>
+#include <sp-object.h>
 #include <dir-util.h>
+#include <prefs-utils.h>
 #include <extension/system.h>
 #include "gdkpixbuf-input.h"
 
@@ -31,14 +34,40 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
     relname = sp_relative_path_from_path (uri, docbase);
 
     if (pb) {
-        SPRepr * repr;
+        SPRepr *repr = NULL;
 
         /* We are readable */
-        repr = sp_repr_new ("image");
-        sp_repr_set_attr (repr, "xlink:href", relname);
-        sp_repr_set_attr (repr, "sodipodi:absref", uri);
-        sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
-        sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
+
+        if (prefs_get_int_attribute("options.importbitmapsasimages", "value", 1) == 1) {
+            // import as <image>
+            repr = sp_repr_new ("image");
+            sp_repr_set_attr (repr, "xlink:href", relname);
+            sp_repr_set_attr (repr, "sodipodi:absref", uri);
+            sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
+            sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
+
+        } else {
+            // import as pattern-filled rect
+            SPRepr *pat = sp_repr_new ("pattern");
+            sp_repr_set_double (pat, "width", gdk_pixbuf_get_width (pb));
+            sp_repr_set_double (pat, "height", gdk_pixbuf_get_height (pb));
+            sp_repr_add_child (SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc)), pat, NULL);
+            const gchar *pat_id = sp_repr_attr(pat, "id");
+            SPObject *pat_object = sp_document_lookup_id (doc, pat_id);
+
+            SPRepr *im = sp_repr_new ("image");
+            sp_repr_set_attr (im, "xlink:href", relname);
+            sp_repr_set_attr (im, "sodipodi:absref", uri);
+            sp_repr_set_double (im, "width", gdk_pixbuf_get_width (pb));
+            sp_repr_set_double (im, "height", gdk_pixbuf_get_height (pb));
+            sp_repr_add_child (SP_OBJECT_REPR(pat_object), im, NULL);
+
+            repr = sp_repr_new ("rect");
+            sp_repr_set_attr (repr, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
+            sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
+            sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
+        }
+
         sp_document_add_repr (doc, repr);
         sp_repr_unref (repr);
         sp_document_done (doc);
