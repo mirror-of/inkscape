@@ -45,6 +45,14 @@ struct _NRArenaShape {
 #else
   Shape *fill_shp;
   Shape *stroke_shp;
+  
+  bool    delayed_shp;
+  NRRectL approx_bbox;
+  
+  NRMatrix cached_fctm;
+  NRMatrix cached_sctm;
+  Shape    *cached_fill;
+  Shape    *cached_stroke;
 #endif
 	/* Markers */
 	NRArenaItem *markers;
@@ -56,7 +64,7 @@ struct _NRArenaShapeClass {
 
 NRType nr_arena_shape_get_type (void);
 
-void nr_arena_shape_set_path(NRArenaShape *shape, SPCurve *curve);
+void nr_arena_shape_set_path(NRArenaShape *shape, SPCurve *curve,bool justTrans);
 void nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style);
 void nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRect *pbox);
 

@@ -42,6 +42,7 @@
 #include "../livarot/Path.h"
 #include "../livarot/AlphaLigne.h"
 #include "../livarot/Ligne.h"
+#include "../libnr/nr-matrix-ops.h"
 
 //int  showRuns=0;
 void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);
@@ -116,6 +117,8 @@ nr_arena_shape_init (NRArenaShape *shape)
 	shape->fill_svp = NULL;
 	shape->stroke_svp = NULL;
 #else
+	shape->cached_fill = NULL;
+	shape->cached_stroke = NULL;
 	shape->fill_shp = NULL;
 	shape->stroke_shp = NULL;
 #endif
@@ -140,6 +143,8 @@ nr_arena_shape_finalize (NRObject *object)
 #else
 	if (shape->fill_shp) delete shape->fill_shp;
 	if (shape->stroke_shp) delete shape->stroke_shp;
+	if (shape->cached_fill) delete shape->cached_fill;
+	if (shape->cached_stroke) delete shape->cached_stroke;
 #endif
 	if (shape->fill_painter) sp_painter_free (shape->fill_painter);
 	if (shape->stroke_painter) sp_painter_free (shape->stroke_painter);
@@ -218,6 +223,9 @@ nr_arena_shape_set_child_position (NRArenaItem *item, NRArenaItem *child, NRAren
 }
 
 #include "enums.h"
+void nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc);
+void nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc);
+void nr_arena_shape_add_bboxes(NRArenaShape* shape,NRRect &bbox);
 
 static guint
 nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, guint reset)
@@ -270,6 +278,38 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 		nr_arena_request_render_rect (item->arena, &item->bbox);
 		nr_rect_l_set_empty (&item->bbox);
 	}
+  
+#ifdef test_liv
+  shape->delayed_shp=true;
+  shape->ctm = gc->transform;
+  bbox.x0 = bbox.y0 = NR_HUGE;
+  bbox.x1 = bbox.y1 = -NR_HUGE;
+  
+  if (shape->curve) {
+    NRBPath bp;
+    /* fixme: */
+    bbox.x0 = bbox.y0 = NR_HUGE;
+    bbox.x1 = bbox.y1 = -NR_HUGE;
+    bp.path = shape->curve->bpath;
+    nr_path_matrix_f_bbox_f_union(&bp, &gc->transform, &bbox, 1.0);
+    if (style->stroke.type != SP_PAINT_TYPE_NONE) {
+      float width, scale;
+      scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
+      if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+        width = MAX (0.125, style->stroke_width.computed * scale);
+        bbox.x0-=width;
+        bbox.x1+=width;
+        bbox.y0-=width;
+        bbox.y1+=width;
+      }      
+    }
+  }
+  shape->approx_bbox.x0 = (gint32)(bbox.x0 - 1.0F);
+  shape->approx_bbox.y0 = (gint32)(bbox.y0 - 1.0F);
+  shape->approx_bbox.x1 = (gint32)(bbox.x1 + 1.9999F);
+  shape->approx_bbox.y1 = (gint32)(bbox.y1 + 1.9999F);
+  if ( area && nr_rect_l_test_intersect (area, &shape->approx_bbox) ) shape->delayed_shp=false;
+#endif
 
 	/* Release state data */
 	if (TRUE || !nr_matrix_test_transform_equal (&gc->transform, &shape->ctm, NR_EPSILON)) {
@@ -311,47 +351,165 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	if ((shape->style->fill.type == SP_PAINT_TYPE_NONE) && (shape->style->stroke.type == SP_PAINT_TYPE_NONE)) return NR_ARENA_ITEM_STATE_ALL;
 
 	/* Build state data */
-	if (shape->style->fill.type != SP_PAINT_TYPE_NONE) {
+#ifdef test_liv
+  if ( shape->delayed_shp ) {
+    item->bbox=shape->approx_bbox;
+  } else {
+    nr_arena_shape_update_stroke(shape,gc);
+    nr_arena_shape_update_fill(shape,gc);
+
+  	bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
+    nr_arena_shape_add_bboxes(shape,bbox);
+  } 
+#else 
+	bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
+ 	if (shape->stroke_svp && shape->stroke_svp->length > 0) {
+		nr_svp_bbox (shape->stroke_svp, &bbox, FALSE);
+	}
+	if (shape->fill_svp && shape->fill_svp->length > 0) {
+		nr_svp_bbox (shape->fill_svp, &bbox, FALSE);
+	}
+#endif
+  
+	if (nr_rect_f_test_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
+
+	item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
+	item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
+	item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
+	item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
+	nr_arena_request_render_rect (item->arena, &item->bbox);
+
+	item->render_opacity = TRUE;
+	if (shape->style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
+		shape->fill_painter = sp_paint_server_painter_new (SP_STYLE_FILL_SERVER (shape->style),
+								   NR_MATRIX_D_TO_DOUBLE (&gc->transform), &shape->paintbox);
+		item->render_opacity = FALSE;
+	}
+	if (shape->style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {
+		shape->stroke_painter = sp_paint_server_painter_new (SP_STYLE_STROKE_SERVER (shape->style),
+								     NR_MATRIX_D_TO_DOUBLE (&gc->transform), &shape->paintbox);
+		item->render_opacity = FALSE;
+	}
+
+	if (beststate & NR_ARENA_ITEM_STATE_BBOX) {
+		for (child = shape->markers; child != NULL; child = child->next) {
+			nr_rect_l_union (&item->bbox, &item->bbox, &child->bbox);
+		}
+	}
+
+	return NR_ARENA_ITEM_STATE_ALL;
+}
+
+void
+nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
+{
+#ifdef test_liv
+  shape->delayed_shp=false;
+#endif
+  if (shape->style->fill.type != SP_PAINT_TYPE_NONE) {
 		if ((shape->curve->end > 2) || (shape->curve->bpath[1].code == ART_CURVETO)) {
 #ifndef test_liv
 			if (TRUE || !shape->fill_svp) {
 #else
-      if (TRUE || !shape->fill_shp) {
+        if (TRUE || !shape->fill_shp) {
 #endif
-				unsigned int windrule;
-				windrule = (shape->style->fill_rule.value == SP_WIND_RULE_EVENODD) ? NR_WIND_RULE_EVENODD : NR_WIND_RULE_NONZERO;
+          unsigned int windrule;
+          windrule = (shape->style->fill_rule.value == SP_WIND_RULE_EVENODD) ? NR_WIND_RULE_EVENODD : NR_WIND_RULE_NONZERO;
 #ifndef test_liv
-				NRSVL *svl = nr_svl_from_art_bpath(shape->curve->bpath, &gc->transform, windrule, TRUE, 0.25);
-				shape->fill_svp = nr_svp_from_svl (svl, NULL);
-				nr_svl_free_list (svl);
+          NRSVL *svl = nr_svl_from_art_bpath(shape->curve->bpath, &gc->transform, windrule, TRUE, 0.25);
+          shape->fill_svp = nr_svp_from_svl (svl, NULL);
+          nr_svl_free_list (svl);
 #else
-        Path*  thePath=new Path;
-        Shape* theShape=new Shape;
-        {
-          NR::Matrix   tempMat(gc->transform);
-          thePath->LoadArtBPath(shape->curve->bpath,tempMat,true);
-        }
-        thePath->Convert(1.0);
-        thePath->Fill(theShape,0);
-        if ( shape->fill_shp == NULL ) shape->fill_shp=new Shape;
-        if ( shape->style->fill_rule.value == SP_WIND_RULE_EVENODD ) {
-          if ( shape->fill_shp->ConvertToShape(theShape,fill_oddEven) ) {
+          NRMatrix  cached_to_new;
+          int       isometry=0;
+          if ( shape->cached_fill ) {
+            NR::Matrix   oMat(shape->cached_fctm);
+            NR::Matrix   nMat(gc->transform);
+            oMat=oMat.inverse();
+            NR::Matrix   p=oMat*nMat;
+            cached_to_new=p;
+//            printf("%f %f %f %f %f %f\n",cached_to_new[0],cached_to_new[1],cached_to_new[2],cached_to_new[3],cached_to_new[4],cached_to_new[5]);
+            NR::Matrix   tp;
+            // trasnposition
+            tp[0]=p[0];
+            tp[1]=p[2];
+            tp[2]=p[1];
+            tp[3]=p[3];
+            NR::Matrix   isom=tp*p;
+            if ( fabs(isom[0]-1.0) < 0.01 && fabs(isom[3]-1.0) < 0.01 &&
+                 fabs(isom[1]) < 0.01 && fabs(isom[2]) < 0.01 ) {
+              // the changed wrt the cached version is an isometry-> no need to recompute
+              // the uncrossed polygon
+              if ( p.det() < 0 ) isometry=-1; else isometry=1;
+            } else {
+              isom=0;
+            }
           }
-        } else {
-          if ( shape->fill_shp->ConvertToShape(theShape,fill_nonZero) ) {
+          if ( isometry == 0 ) {
+//            printf("rf\n");
+            if ( shape->cached_fill == NULL ) shape->cached_fill=new Shape;
+            shape->cached_fill->Reset();
+            
+            Path*  thePath=new Path;
+            Shape* theShape=new Shape;
+            {
+              NR::Matrix   tempMat(gc->transform);
+              thePath->LoadArtBPath(shape->curve->bpath,tempMat,true);
+            }
+            thePath->Convert(1.0);
+            thePath->Fill(theShape,0);
+            if ( shape->style->fill_rule.value == SP_WIND_RULE_EVENODD ) {
+              if ( shape->cached_fill->ConvertToShape(theShape,fill_oddEven) ) {
+              }
+            } else {
+              if ( shape->cached_fill->ConvertToShape(theShape,fill_nonZero) ) {
+              }
+            }
+            shape->cached_fctm=gc->transform;
+            delete theShape;
+            delete thePath;
+            if ( shape->fill_shp == NULL ) shape->fill_shp=new Shape;
+            shape->fill_shp->Copy(shape->cached_fill);
+          } else if ( isometry == 1 ) {
+            if ( shape->fill_shp == NULL ) shape->fill_shp=new Shape;
+            shape->fill_shp->Reset(shape->cached_fill->nbPt,shape->cached_fill->nbAr);
+            for (int i=0;i<shape->cached_fill->nbPt;i++) shape->fill_shp->AddPoint(shape->cached_fill->pts[i].x*cached_to_new);
+            for (int i=0;i<shape->cached_fill->nbAr;i++) shape->fill_shp->AddEdge(shape->cached_fill->aretes[i].st,shape->cached_fill->aretes[i].en);
+            shape->fill_shp->ForceToPolygon();
+            shape->fill_shp->flags|=need_points_sorting;
+            shape->fill_shp->flags|=need_edges_sorting;
+          } else if ( isometry == -1 ) {
+            if ( shape->fill_shp == NULL ) shape->fill_shp=new Shape;
+            shape->fill_shp->Reset(shape->cached_fill->nbPt,shape->cached_fill->nbAr);
+            for (int i=0;i<shape->cached_fill->nbPt;i++) shape->fill_shp->AddPoint(shape->cached_fill->pts[i].x*cached_to_new);
+            for (int i=0;i<shape->cached_fill->nbAr;i++) shape->fill_shp->AddEdge(shape->cached_fill->aretes[i].en,shape->cached_fill->aretes[i].st);
+            shape->fill_shp->ForceToPolygon();
+            shape->fill_shp->flags|=need_points_sorting;
+            shape->fill_shp->flags|=need_edges_sorting;
           }
-        }
-        delete theShape;
-        delete thePath;
 #endif
-			}
+#ifndef test_liv
+        }
+#else
+      }
+#endif
 			shape->ctm = gc->transform;
 		}
-	}
+  }
+}
+void
+nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
+{
+  SPStyle* style;
+  
+	style = shape->style;
+  
+#ifdef test_liv
+  shape->delayed_shp=false;
+#endif
 
-	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
+  if (style->stroke.type != SP_PAINT_TYPE_NONE) {
 		float width, scale;
-
 		scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
     if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
       width = MAX (0.125, style->stroke_width.computed * scale);
@@ -359,44 +517,19 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
       NRBPath bp;
       NRSVL *svl;
       bp.path = art_bpath_affine_transform (shape->curve->bpath, NR_MATRIX_D_TO_DOUBLE (&gc->transform));
-#else
-      Path*  thePath=new Path;
-      Shape* theShape=new Shape;    
-      if ( shape->stroke_shp == NULL ) shape->stroke_shp=new Shape;
-      {
-        NR::Matrix   tempMat(gc->transform);
-        thePath->LoadArtBPath(shape->curve->bpath,tempMat,true);
-      }
-      thePath->Convert(1.0);
-#endif
-      
       if (!style->stroke_dash.n_dash) {      
-#ifndef test_liv
         svl = nr_bpath_stroke (&bp, NULL, width,
                                shape->style->stroke_linecap.value,
                                shape->style->stroke_linejoin.value,
                                shape->style->stroke_miterlimit.value * M_PI / 180.0,
                                0.25);
-#else
-        JoinType join=join_straight;
-        ButtType butt=butt_straight;
-        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
-        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
-        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
-        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
-        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
-        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
-        thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value );
-#endif
       } else {
         double dlen;
-#ifndef test_liv
         ArtVpath *vp, *pvp;
         ArtSVP *asvp;
         vp = art_bez_path_to_vec (bp.path, 0.25);
         pvp = art_vpath_perturb (vp);
         art_free (vp);
-#endif
         dlen = 0.0;
         for (int i = 0; i < style->stroke_dash.n_dash; i++) {
           dlen += style->stroke_dash.dash[i] * scale;
@@ -409,23 +542,11 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
           for (int i = 0; i < dash.n_dash; i++) {
             dash.dash[i] = style->stroke_dash.dash[i] * scale;
           }
-#ifndef test_liv       
           vp = art_vpath_dash (pvp, &dash);
           art_free (pvp);
           pvp = vp;
-#else
-          int    nbD=dash.n_dash;
-          float  *dashs=(float*)malloc(nbD*sizeof(float));
-          dashs[0]=dash.dash[0]-dash.offset;
-          for (int i=1;i<nbD;i++) {
-            dashs[i]=dashs[i-1]+dash.dash[i];
-          }
-          thePath->DashPolyline(0.0,0.0,dlen,nbD-1,dashs,true);
-          free(dashs);
-#endif
           g_free (dash.dash);
         }
-#ifndef test_liv
         asvp = art_svp_vpath_stroke (pvp,
                                      (ArtPathStrokeJoinType)shape->style->stroke_linejoin.value,
                                      (ArtPathStrokeCapType)shape->style->stroke_linecap.value,
@@ -434,40 +555,122 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
         art_free (pvp);
         svl = nr_svl_from_art_svp (asvp);
         art_svp_free (asvp);
-#else
-        JoinType join=join_straight;
-        ButtType butt=butt_straight;
-        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
-        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
-        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
-        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
-        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
-        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
-        thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value);
-#endif
       }
-#ifndef test_liv
       shape->stroke_svp = nr_svp_from_svl (svl, NULL);
       nr_svl_free_list (svl);
       art_free (bp.path);
 #else
-      if ( shape->stroke_shp->ConvertToShape(theShape,fill_nonZero) ) {
+      NRMatrix  cached_to_new;
+      int       isometry=0;
+      if ( shape->cached_stroke ) {
+        NR::Matrix   oMat(shape->cached_sctm);
+        NR::Matrix   nMat(gc->transform);
+        oMat=oMat.inverse();
+        NR::Matrix   p=oMat*nMat;
+        cached_to_new=p;
+//        printf("%f %f %f %f %f %f\n",cached_to_new[0],cached_to_new[1],cached_to_new[2],cached_to_new[3],cached_to_new[4],cached_to_new[5]);
+        NR::Matrix   tp;
+        // trasnposition
+        tp[0]=p[0];
+        tp[1]=p[2];
+        tp[2]=p[1];
+        tp[3]=p[3];
+        NR::Matrix   isom=tp*p;
+        if ( fabs(isom[0]-1.0) < 0.01 && fabs(isom[3]-1.0) < 0.01 &&
+             fabs(isom[1]) < 0.01 && fabs(isom[2]) < 0.01 ) {
+          // the changed wrt the cached version is an isometry-> no need to recompute
+          // the uncrossed polygon
+          if ( p.det() < 0 ) isometry=-1; else isometry=1;
+        } else {
+          isom=0;
+        }
       }
-      delete thePath;
-      delete theShape;
+      if ( isometry == 0 ) {
+        //printf("rs\n");
+        if ( shape->cached_stroke == NULL ) shape->cached_stroke=new Shape;
+        shape->cached_stroke->Reset();
+        Path*  thePath=new Path;
+        Shape* theShape=new Shape;    
+        {
+          NR::Matrix   tempMat(gc->transform);
+          thePath->LoadArtBPath(shape->curve->bpath,tempMat,true);
+        }
+        thePath->Convert(1.0);
+        if (!style->stroke_dash.n_dash) {      
+          JoinType join=join_straight;
+          ButtType butt=butt_straight;
+          if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
+          if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
+          if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
+          if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
+          if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
+          if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
+          thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value );
+        } else {
+          double dlen;
+          dlen = 0.0;
+          for (int i = 0; i < style->stroke_dash.n_dash; i++) {
+            dlen += style->stroke_dash.dash[i] * scale;
+          }
+          if (dlen >= 1.0) {
+            ArtVpathDash dash;
+            dash.offset = style->stroke_dash.offset * scale;
+            dash.n_dash = style->stroke_dash.n_dash;
+            dash.dash = g_new (double, dash.n_dash);
+            for (int i = 0; i < dash.n_dash; i++) {
+              dash.dash[i] = style->stroke_dash.dash[i] * scale;
+            }
+            int    nbD=dash.n_dash;
+            float  *dashs=(float*)malloc(nbD*sizeof(float));
+            dashs[0]=dash.dash[0]-dash.offset;
+            for (int i=1;i<nbD;i++) {
+              dashs[i]=dashs[i-1]+dash.dash[i];
+            }
+            thePath->DashPolyline(0.0,0.0,dlen,nbD-1,dashs,true);
+            free(dashs);
+            g_free (dash.dash);
+          }
+          JoinType join=join_straight;
+          ButtType butt=butt_straight;
+          if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
+          if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
+          if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
+          if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
+          if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
+          if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
+          thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value);
+        }
+        if ( shape->cached_stroke->ConvertToShape(theShape,fill_nonZero) ) {
+        }
+        shape->cached_sctm=gc->transform;
+        delete thePath;
+        delete theShape;
+        if ( shape->stroke_shp == NULL ) shape->stroke_shp=new Shape;
+        shape->stroke_shp->Copy(shape->cached_stroke);
+     } else if ( isometry == 1 ) {
+        if ( shape->stroke_shp == NULL ) shape->stroke_shp=new Shape;
+        shape->stroke_shp->Reset(shape->cached_stroke->nbPt,shape->cached_stroke->nbAr);
+        for (int i=0;i<shape->cached_stroke->nbPt;i++) shape->stroke_shp->AddPoint(shape->cached_stroke->pts[i].x*cached_to_new);
+        for (int i=0;i<shape->cached_stroke->nbAr;i++) shape->stroke_shp->AddEdge(shape->cached_stroke->aretes[i].st,shape->cached_stroke->aretes[i].en);
+        shape->stroke_shp->ForceToPolygon();
+        shape->stroke_shp->flags|=need_points_sorting;
+        shape->stroke_shp->flags|=need_edges_sorting;
+     } else if ( isometry == -1 ) {
+        if ( shape->stroke_shp == NULL ) shape->stroke_shp=new Shape;
+        shape->stroke_shp->Reset(shape->cached_stroke->nbPt,shape->cached_stroke->nbAr);
+        for (int i=0;i<shape->cached_stroke->nbPt;i++) shape->stroke_shp->AddPoint(shape->cached_stroke->pts[i].x*cached_to_new);
+        for (int i=0;i<shape->cached_stroke->nbAr;i++) shape->stroke_shp->AddEdge(shape->cached_stroke->aretes[i].en,shape->cached_stroke->aretes[i].st);
+        shape->stroke_shp->ForceToPolygon();
+        shape->stroke_shp->flags|=need_points_sorting;
+        shape->stroke_shp->flags|=need_edges_sorting;
+     }
 #endif
     }
   }
-
-	bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
-#ifndef test_liv
-	if (shape->stroke_svp && shape->stroke_svp->length > 0) {
-		nr_svp_bbox (shape->stroke_svp, &bbox, FALSE);
-	}
-	if (shape->fill_svp && shape->fill_svp->length > 0) {
-		nr_svp_bbox (shape->fill_svp, &bbox, FALSE);
-	}
-#else 
+}
+void
+nr_arena_shape_add_bboxes(NRArenaShape* shape,NRRect &bbox)
+{
   if ( shape->stroke_shp ) {
     shape->stroke_shp->CalcBBox();
     shape->stroke_shp->leftX=floorf(shape->stroke_shp->leftX);
@@ -518,36 +721,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
       if ( shape->fill_shp->bottomY > bbox.y1 ) bbox.y1=shape->fill_shp->bottomY;
     }
   }
-#endif
-	if (nr_rect_f_test_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
-
-	item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
-	item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
-	item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
-	item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
-	nr_arena_request_render_rect (item->arena, &item->bbox);
-
-	item->render_opacity = TRUE;
-	if (shape->style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
-		shape->fill_painter = sp_paint_server_painter_new (SP_STYLE_FILL_SERVER (shape->style),
-								   NR_MATRIX_D_TO_DOUBLE (&gc->transform), &shape->paintbox);
-		item->render_opacity = FALSE;
-	}
-	if (shape->style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {
-		shape->stroke_painter = sp_paint_server_painter_new (SP_STYLE_STROKE_SERVER (shape->style),
-								     NR_MATRIX_D_TO_DOUBLE (&gc->transform), &shape->paintbox);
-		item->render_opacity = FALSE;
-	}
-
-	if (beststate & NR_ARENA_ITEM_STATE_BBOX) {
-		for (child = shape->markers; child != NULL; child = child->next) {
-			nr_rect_l_union (&item->bbox, &item->bbox, &child->bbox);
-		}
-	}
-
-	return NR_ARENA_ITEM_STATE_ALL;
 }
-
 static unsigned int
 nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags)
 {
@@ -559,6 +733,25 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 
 	if (!shape->curve) return item->state;
 	if (!shape->style) return item->state;
+  
+#ifdef test_liv
+  if ( shape->delayed_shp ) {
+    if ( nr_rect_l_test_intersect (area, &shape->approx_bbox) ) {
+      shape->delayed_shp=false;
+      NRGC   tempGC;
+      tempGC.transform=shape->ctm;
+      nr_arena_shape_update_stroke(shape,&tempGC);
+      nr_arena_shape_update_fill(shape,&tempGC);
+      NRRect bbox;
+      bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
+      nr_arena_shape_add_bboxes(shape,bbox);
+      item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
+      item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
+      item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
+      item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
+    }
+  }
+#endif
 
 	style = shape->style;
 #ifndef test_liv
@@ -603,8 +796,12 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 			break;
 		}
 		nr_pixblock_release (&m);
+#ifndef test_liv
 	}
-
+#else
+  }
+#endif
+  
 #ifndef test_liv
 	if (shape->stroke_svp) {
 #else
@@ -646,8 +843,12 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 			break;
 		}
 		nr_pixblock_release (&m);
+#ifndef test_liv
 	}
-
+#else
+  }
+#endif
+  
 	/* Just compose children into parent buffer */
 	for (child = shape->markers; child != NULL; child = child->next) {
 		unsigned int ret;
@@ -666,6 +867,25 @@ nr_arena_shape_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 	shape = NR_ARENA_SHAPE (item);
 
 	if (!shape->curve) return item->state;
+
+#ifdef test_liv
+  if ( shape->delayed_shp ) {
+    if ( nr_rect_l_test_intersect (area, &shape->approx_bbox) ) {
+      shape->delayed_shp=false;
+      NRGC   tempGC;
+      tempGC.transform=shape->ctm;
+      nr_arena_shape_update_stroke(shape,&tempGC);
+      nr_arena_shape_update_fill(shape,&tempGC);
+      NRRect bbox;
+      bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
+      nr_arena_shape_add_bboxes(shape,bbox);
+      item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
+      item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
+      item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
+      item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
+    }
+  }
+#endif
 
 #ifndef test_liv
 	if (shape->fill_svp) {
@@ -695,8 +915,12 @@ nr_arena_shape_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 		}
 		nr_pixblock_release (&m);
 		pb->empty = FALSE;
+#ifndef test_liv
 	}
-
+#else
+  }
+#endif
+  
 	return item->state;
 }
 
@@ -709,6 +933,38 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
 
 	if (!shape->curve) return NULL;
 	if (!shape->style) return NULL;
+
+#ifdef test_liv
+  if ( shape->delayed_shp ) {
+    NRRectL  area;
+    area.x0=floor(x);
+    area.x1=ceil(x);
+    area.y0=floor(y);
+    area.y1=ceil(y);
+    area.x0-=ceil(delta);
+    area.x1+=ceil(delta);
+    area.y0-=ceil(delta);
+    area.y1+=ceil(delta);
+    area.x0-=1;
+    area.x1+=1;
+    area.y0-=1;
+    area.y1+=1;
+    if ( nr_rect_l_test_intersect (&area, &shape->approx_bbox) ) {
+      shape->delayed_shp=false;
+      NRGC   tempGC;
+      tempGC.transform=shape->ctm;
+      nr_arena_shape_update_stroke(shape,&tempGC);
+      nr_arena_shape_update_fill(shape,&tempGC);
+      NRRect bbox;
+      bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
+      nr_arena_shape_add_bboxes(shape,bbox);
+      item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
+      item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
+      item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
+      item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
+    }
+  }
+#endif
 
 	if (item->state & NR_ARENA_ITEM_STATE_RENDER) {
 #ifndef test_liv
@@ -778,10 +1034,24 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
  *  curve and adds it to the shape.  Finally, it requests an update of the
  *  arena for the shape.
  */
-void nr_arena_shape_set_path(NRArenaShape *shape, SPCurve *curve)
+void nr_arena_shape_set_path(NRArenaShape *shape, SPCurve *curve,bool justTrans)
 {
 	g_return_if_fail (shape != NULL);
 	g_return_if_fail (NR_IS_ARENA_SHAPE (shape));
+
+#ifdef test_liv
+  if ( justTrans == false ) {
+    // dirty cached versions
+    if ( shape->cached_fill ) {
+      delete shape->cached_fill;
+      shape->cached_fill=NULL;
+    }
+    if ( shape->cached_stroke ) {
+      delete shape->cached_stroke;
+      shape->cached_stroke=NULL;
+    }
+  }
+#endif
 
 	nr_arena_item_request_render (NR_ARENA_ITEM (shape));
 
@@ -811,6 +1081,18 @@ nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style)
 	if (style) sp_style_ref (style);
 	if (shape->style) sp_style_unref (shape->style);
 	shape->style = style;
+  
+#ifdef test_liv
+  // dirty cached versions
+  if ( shape->cached_fill ) {
+    delete shape->cached_fill;
+    shape->cached_fill=NULL;
+  }
+  if ( shape->cached_stroke ) {
+    delete shape->cached_stroke;
+    shape->cached_stroke=NULL;
+  }
+#endif
 
 	nr_arena_item_request_update (NR_ARENA_ITEM (shape), NR_ARENA_ITEM_STATE_ALL, FALSE);
 }
@@ -836,7 +1118,7 @@ nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRect *pbox)
 #ifdef test_liv
 
 static void
-shape_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
+shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float ven)
 {
   //	printf("%i %f -> %i %f\n",st,vst,en,ven);
   if ( st >= en ) return;

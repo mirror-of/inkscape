@@ -232,7 +232,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		sp_item_invoke_bbox (SP_ITEM (object), &paintbox, NULL, TRUE);
 		for (v = SP_ITEM (shape)->display; v != NULL; v = v->next) {
 			if (flags & SP_OBJECT_MODIFIED_FLAG) {
-				nr_arena_shape_set_path(NR_ARENA_SHAPE(v->arenaitem), shape->curve);
+				nr_arena_shape_set_path(NR_ARENA_SHAPE(v->arenaitem), shape->curve,(flags & SP_OBJECT_USER_MODIFIED_FLAG_B));
 			}
 			nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (v->arenaitem), &paintbox);
 		}
@@ -440,7 +440,7 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 
 	arenaitem = nr_arena_item_new (arena, NR_TYPE_ARENA_SHAPE);
 	nr_arena_shape_set_style (NR_ARENA_SHAPE (arenaitem), object->style);
-	nr_arena_shape_set_path(NR_ARENA_SHAPE(arenaitem), shape->curve);
+	nr_arena_shape_set_path(NR_ARENA_SHAPE(arenaitem), shape->curve,false);
 	sp_item_invoke_bbox (item, &paintbox, NULL, TRUE);
 	nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (arenaitem), &paintbox);
 

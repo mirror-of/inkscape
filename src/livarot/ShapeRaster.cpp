@@ -48,8 +48,8 @@ SweepEvent::CreateQueue(sEvts,nbAr);
 		pData[i].pending=0;
 		pData[i].edgeOnLeft=-1;
 		pData[i].nextLinkedPoint=-1;
-		pData[i].rx[0]=Round(pts[i].x[0]);
-		pData[i].rx[1]=Round(pts[i].x[1]);
+		pData[i].rx[0]=/*Round(*/pts[i].x[0]/*)*/;
+		pData[i].rx[1]=/*Round(*/pts[i].x[1]/*)*/;
 	}
 	for (int i=0;i<nbAr;i++) {
 		eData[i].rdx=pData[aretes[i].en].rx-pData[aretes[i].st].rx;

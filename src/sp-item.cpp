@@ -647,7 +647,9 @@ static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform
 
 	if (!matrix_equalp(transform, item->transform, NR_EPSILON)) {
 		item->transform = transform;
-		sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG);
+    // the SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a transformation
+    // it's apparently not used anywhere else
+		sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG|SP_OBJECT_USER_MODIFIED_FLAG_B); 
 	}
 }
 
