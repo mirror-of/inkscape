@@ -283,9 +283,13 @@ static void
 guide_dialog_mode_changed (GtkWidget * widget)
 {
   if (mode) {
+    // TRANSLATORS: This string appears when double-clicking on a guide.
+    // This is the distance by which the guide is to be moved.
     gtk_label_set_text (GTK_LABEL (m), _(" relative by "));
     mode = FALSE;
   } else {
+    // TRANSLATORS: This string appears when double-clicking on a guide.
+    // This is the target location where the guide is to be moved.
     gtk_label_set_text (GTK_LABEL (m), _(" absolute to "));
     mode = TRUE;
   }
