@@ -2,12 +2,6 @@
 #include <math.h>
 #include <libnr/nr-point-fns.h>
 
-// moved to nr-types.h
-//static inline double
-//cross(NR::Point const &a, NR::Point const &b) {
-//	return dot(b, rot90(a));
-//}
-
 
 /* Intersect two lines */
 
@@ -18,10 +12,9 @@
  * If the two lines intersect, then \a result becomes their point of
  * intersection; otherwise, \a result remains unchanged.
  */
-sp_intersector_kind
-sp_intersector_line_intersection(NR::Point const &n0, double const d0,
-				 NR::Point const &n1, double const d1,
-				 NR::Point &result)
+sp_intersector_kind sp_intersector_line_intersection(NR::Point const &n0, double const d0,
+						     NR::Point const &n1, double const d1,
+						     NR::Point &result) {
 /* This function finds the intersection of the two lines (infinite)
  * defined by n0.X = d0 and x1.X = d1.  The algorithm is as follows:
  * To compute the intersection point use kramer's rule:
@@ -55,8 +48,7 @@ sp_intersector_line_intersection(NR::Point const &n0, double const d0,
  * 
  * if the denominator (bd-ae) is 0 then the lines are parallel, if the
  * numerators are then 0 then the lines coincide. */
-{
-	double denominator = cross(n0,n1);
+	double denominator = dot(rot90(n0), n1);
 	double X = (n1[NR::Y] * d0  -
 		    n0[NR::Y] * d1);
 	/* X = (-d1, d0) dot (n0[Y], n1[Y]) */
@@ -83,7 +75,7 @@ sp_intersector_ccw(const NR::Point p0, const NR::Point p1, const NR::Point p2)
 	NR::Point d1 = p1 - p0;
 	NR::Point d2 = p2 - p0;
 /* compare slopes but avoid division operation */
-	double c = cross(d1, d2);
+	double c = dot(rot90(d1), d2);
 	if(c > 0)
 		return +1; // ccw - do these match def'n in header?
 	if(c < 0)

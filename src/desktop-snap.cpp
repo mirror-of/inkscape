@@ -55,21 +55,25 @@ sp_desktop_free_snap (SPDesktop const *desktop, NR::Point& req)
 	return 1e18;
 }
 
-/** Add some multiple of v to req to make it satisfy dot(n, req) == d (within rounding error);
-    unless that isn't possible (i.e. v and n are orthogonal), in which case req remains unchanged.
-*/
-static double
-sp_intersector_a_vector_snap (NR::Point &req, NR::Point const &v,
-			      NR::Point const &n, double d)
-/* This function returns the snap position and the distance from the
-   starting point for doing a snap to arbitrary line. */
-{
-	NR::Point const starting(req);
-	NR::Point vperp = v.ccw();
-	double d0 = dot(vperp, req);
-	if(sp_intersector_line_intersection(vperp, -d0, n, -d, req) != intersects)
-		return 1e18;
-	return L2(req - starting);
+/** Add some multiple of \a mv to \a req to make it line on the line {p : dot(n, p) == d} (within
+    rounding error); unless that isn't possible (e.g. \a mv and \a n are orthogonal, or \a mv or \a
+    n is zero-length), in which case \a req remains unchanged, and a big number is returned.
+
+    Returns a badness measure of snapping to the specified line: if snapping was possible then
+    L2(req - req0) (i.e. the distance moved); otherwise returns a large number.
+**/
+static double sp_intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
+					   NR::Point const &n, double const d) {
+	NR::Point const req0(req);
+	/* Implement "move from req0 by some multiple of mv" as "dot product with something
+	   orthogonal to mv remains unchanged". */
+	NR::Point const n2(rot90(mv));
+	double const d2 = dot(n2, req);
+	if(sp_intersector_line_intersection(n2, d2, n, d, req) == intersects) {
+		return L2(req - req0);
+	} else {
+		return 1e300;
+	}
 }
 
 static double round_to_nearest_multiple_plus(double x, double const c1, double const c0);

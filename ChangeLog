@@ -1,5 +1,13 @@
 2004-01-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/geom.cpp (sp_intersector_line_intersection): Restore
+	  definition of previous local `cross' function, but "inline" the
+	  dot(rot90(a), b) definition.  This makes the definition conform to
+	  the documentation.
+	* src/desktop-snap.cpp (sp_intersector_a_vector_snap): Undo a recent
+	  change that adapted to the previously-introduced bug in
+	  sp_intersector_line_intersection.
+
 	* icons/Makefile.am: s/icons_dir/iconsdir/g for automake.
 	* src/dialogs/Makefile.am, src/widgets/Makefile.am:
 	  s/icons_dir/iconsdir/g for consistency with icons/Makefile.am.
