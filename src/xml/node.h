@@ -42,6 +42,8 @@ enum NodeType {
 class Node : public Inkscape::GC::Anchored {
 public:
     Node() {}
+    
+    virtual ~Node() {}
 
     virtual NodeType type() const=0;
 
