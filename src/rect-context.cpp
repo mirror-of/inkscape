@@ -363,15 +363,14 @@ sp_rc_ry_ratio_value_changed (GtkAdjustment *adj, SPRectContext *rc)
 	sp_repr_set_double (SP_EVENT_CONTEXT_REPR (rc), "ry_ratio", adj->value);
 }
 
-static void
-sp_rc_defaults (GtkWidget *widget, GtkObject *obj)
+static void sp_rc_defaults(GtkWidget *, GtkObject *obj)
 {
-	GtkAdjustment *adj;
-
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "rx_ratio");
-	gtk_adjustment_set_value (adj, 0.0);
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "ry_ratio");
-	gtk_adjustment_set_value (adj, 0.0);
+	char const * const keys[] = {"rx_ratio",
+				     "ry_ratio"};
+	for (unsigned i = 0; i < G_N_ELEMENTS(keys); ++i) {
+		GtkAdjustment &adj = *static_cast<GtkAdjustment *>(gtk_object_get_data(obj, keys[i]));
+		gtk_adjustment_set_value(&adj, 0.0);
+	}
 }
 
 static GtkWidget *

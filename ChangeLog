@@ -9,6 +9,7 @@
 	(sp_ui_new_view, sp_ui_new_view_preview): Make static.
 
 	* src/dyna-draw-context.cpp (sp_ddc_defaults):
+	* src/rect-context.cpp (sp_rc_defaults): 
 	Cleanup: Use table and loop instead of copy&paste.
 
 	* configure.in: If -Wno-unused-parameter isn't recognized (g++ 3.2 and
