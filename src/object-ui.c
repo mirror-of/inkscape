@@ -26,7 +26,7 @@ sp_object_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 		GType type;
 		type = G_TYPE_FROM_CLASS (klass);
 		sp_object_type_menu (type, object, desktop, menu);
-		klass = g_type_class_peek_parent (klass);
+		klass = (GObjectClass*)g_type_class_peek_parent (klass);
 	}
 }
 
@@ -69,16 +69,16 @@ sp_object_type_menu (GType type, SPObject *object, SPDesktop *desktop, GtkMenu *
 	void (* handler) (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 	if (!t2m) {
 		t2m = g_hash_table_new (NULL, NULL);
-		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_ITEM), sp_item_menu);
-		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_GROUP), sp_group_menu);
-		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_ANCHOR), sp_anchor_menu);
-		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_IMAGE), sp_image_menu);
-		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_SHAPE), sp_shape_menu);
-		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_RECT), sp_rect_menu);
-		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_STAR), sp_star_menu);
-		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_SPIRAL), sp_spiral_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_ITEM), (void*)sp_item_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_GROUP), (void*)sp_group_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_ANCHOR), (void*)sp_anchor_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_IMAGE), (void*)sp_image_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_SHAPE), (void*)sp_shape_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_RECT), (void*)sp_rect_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_STAR), (void*)sp_star_menu);
+		g_hash_table_insert (t2m, GUINT_TO_POINTER (SP_TYPE_SPIRAL), (void*)sp_spiral_menu);
 	}
-	handler = g_hash_table_lookup (t2m, GUINT_TO_POINTER (type));
+	handler = (void (*)(SPObject*, SPDesktop*, GtkMenu*))g_hash_table_lookup (t2m, GUINT_TO_POINTER (type));
 	if (handler) handler (object, desktop, menu);
 }
 
@@ -158,7 +158,7 @@ sp_item_properties (GtkMenuItem *menuitem, SPItem *item)
 
 	g_assert (SP_IS_ITEM (item));
 
-	desktop = gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
+	desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
@@ -174,7 +174,7 @@ sp_item_select_this (GtkMenuItem *menuitem, SPItem *item)
 
 	g_assert (SP_IS_ITEM (item));
 
-	desktop = gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
+	desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
@@ -218,7 +218,7 @@ sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 	g_assert (SP_IS_ITEM (item));
 	g_assert (!SP_IS_ANCHOR (item));
 
-	desktop = gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
+	desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
@@ -287,7 +287,7 @@ sp_item_group_ungroup_activate (GtkMenuItem *menuitem, SPGroup *group)
 
 	g_assert (SP_IS_GROUP (group));
 
-	desktop = gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
+	desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
@@ -436,7 +436,7 @@ sp_shape_fill_settings (GtkMenuItem *menuitem, SPItem *item)
 
 	g_assert (SP_IS_ITEM (item));
 
-	desktop = gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
+	desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
