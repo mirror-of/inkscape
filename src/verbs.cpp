@@ -963,29 +963,29 @@ static const SPVerbActionDef props[] = {
     /* Event contexts */
     // TODO: add shortcuts to tooltips automatically!
     {SP_VERB_CONTEXT_SELECT, "DrawSelect", N_("Select"),
-        N_("Select and transform objects (F1)"), "draw_select"},
+        N_("Select and transform objects"), "draw_select"},
     {SP_VERB_CONTEXT_NODE, "DrawNode", N_("Node Edit"),
-        N_("Edit path nodes or control handles (F2)"), "draw_node"},
+        N_("Edit path nodes or control handles"), "draw_node"},
     {SP_VERB_CONTEXT_RECT, "DrawRect", N_("Rectangle"),
-        N_("Create rectangles and squares (F4)"), "draw_rect"},
+        N_("Create rectangles and squares"), "draw_rect"},
     {SP_VERB_CONTEXT_ARC, "DrawArc", N_("Ellipse"),
-        N_("Create circles, ellipses, and arcs (F5)"), "draw_arc"},
+        N_("Create circles, ellipses, and arcs"), "draw_arc"},
     {SP_VERB_CONTEXT_STAR, "DrawStar", N_("Star"),
-        N_("Create stars and polygons (*)"), "draw_star"},
+        N_("Create stars and polygons"), "draw_star"},
     {SP_VERB_CONTEXT_SPIRAL, "DrawSpiral", N_("Spiral"),
-        N_("Create spirals (F9)"), "draw_spiral"},
+        N_("Create spirals"), "draw_spiral"},
     {SP_VERB_CONTEXT_PENCIL, "DrawPencil", N_("Pencil"),
-        N_("Draw freehand lines (F6)"), "draw_freehand"},
+        N_("Draw freehand lines"), "draw_freehand"},
     {SP_VERB_CONTEXT_PEN, "DrawPen", N_("Pen"),
-        N_("Draw Bezier curves and straight lines (Shift+F6)"), "draw_pen"},
+        N_("Draw Bezier curves and straight lines"), "draw_pen"},
     {SP_VERB_CONTEXT_CALLIGRAPHIC, "DrawCalligrphic", N_("Calligraphy"),
-        N_("Draw calligraphic lines (Ctrl+F6)"), "draw_dynahand"},
+        N_("Draw calligraphic lines"), "draw_dynahand"},
     {SP_VERB_CONTEXT_TEXT, "DrawText", N_("Text"),
-        N_("Create and edit text objects (F8)"), "draw_text"},
+        N_("Create and edit text objects"), "draw_text"},
     {SP_VERB_CONTEXT_ZOOM, "DrawZoom", N_("Zoom"),
-        N_("Zoom in or out (F3)"), "draw_zoom"},
+        N_("Zoom in or out"), "draw_zoom"},
     {SP_VERB_CONTEXT_DROPPER, "DrawDropper", N_("Dropper"),
-        N_("Pick averaged colors from image (F7)"), "draw_dropper"},
+        N_("Pick averaged colors from image"), "draw_dropper"},
 
     /* Zooming */
     {SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), "zoom_in"},
@@ -1088,7 +1088,7 @@ make_action (sp_verb_t verb, SPView *view)
 {
     assert (props[verb].code == verb);
     SPAction *action=sp_action_new(view, props[verb].id, _(props[verb].name),
-                                   _(props[verb].tip), props[verb].image);
+                                   _(props[verb].tip), props[verb].image, verb);
 
     /* TODO: Make more elegant (Lauris) */
     if (SP_VERB_IS_FILE (verb)) {

@@ -84,46 +84,46 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_Q, SP_VERB_FILE_QUIT, true);
 
 	/* Tools (event contexts) */
-	sp_shortcut_set (GDK_F1, SP_VERB_CONTEXT_SELECT, false);
-	sp_shortcut_set (GDK_s, SP_VERB_CONTEXT_SELECT, true);
+	sp_shortcut_set (GDK_F1, SP_VERB_CONTEXT_SELECT, true);
+	sp_shortcut_set (GDK_s, SP_VERB_CONTEXT_SELECT, false);
 	sp_shortcut_set (GDK_S, SP_VERB_CONTEXT_SELECT, false);
 
-	sp_shortcut_set (GDK_F2, SP_VERB_CONTEXT_NODE, false);
-	sp_shortcut_set (GDK_n, SP_VERB_CONTEXT_NODE, true);
+	sp_shortcut_set (GDK_F2, SP_VERB_CONTEXT_NODE, true);
+	sp_shortcut_set (GDK_n, SP_VERB_CONTEXT_NODE, false);
 	sp_shortcut_set (GDK_N, SP_VERB_CONTEXT_NODE, false);
 
-	sp_shortcut_set (GDK_F3, SP_VERB_CONTEXT_ZOOM, false);
-	sp_shortcut_set (GDK_z, SP_VERB_CONTEXT_ZOOM, true);
+	sp_shortcut_set (GDK_F3, SP_VERB_CONTEXT_ZOOM, true);
+	sp_shortcut_set (GDK_z, SP_VERB_CONTEXT_ZOOM, false);
 	sp_shortcut_set (GDK_Z, SP_VERB_CONTEXT_ZOOM, false);
 
-	sp_shortcut_set (GDK_F4, SP_VERB_CONTEXT_RECT, false);
-	sp_shortcut_set (GDK_r, SP_VERB_CONTEXT_RECT, true);
+	sp_shortcut_set (GDK_F4, SP_VERB_CONTEXT_RECT, true);
+	sp_shortcut_set (GDK_r, SP_VERB_CONTEXT_RECT, false);
 	sp_shortcut_set (GDK_R, SP_VERB_CONTEXT_RECT, false);
 
-	sp_shortcut_set (GDK_F5, SP_VERB_CONTEXT_ARC, false);
-	sp_shortcut_set (GDK_e, SP_VERB_CONTEXT_ARC, true);
+	sp_shortcut_set (GDK_F5, SP_VERB_CONTEXT_ARC, true);
+	sp_shortcut_set (GDK_e, SP_VERB_CONTEXT_ARC, false);
 	sp_shortcut_set (GDK_E, SP_VERB_CONTEXT_ARC, false);
 
-	sp_shortcut_set (GDK_F6, SP_VERB_CONTEXT_PENCIL, false);
-	sp_shortcut_set (GDK_p, SP_VERB_CONTEXT_PENCIL, true);
+	sp_shortcut_set (GDK_F6, SP_VERB_CONTEXT_PENCIL, true);
+	sp_shortcut_set (GDK_p, SP_VERB_CONTEXT_PENCIL, false);
 	sp_shortcut_set (GDK_P, SP_VERB_CONTEXT_PENCIL, false);
 
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_F6, SP_VERB_CONTEXT_PEN, false);
-	sp_shortcut_set (GDK_b, SP_VERB_CONTEXT_PEN, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_F6, SP_VERB_CONTEXT_PEN, true);
+	sp_shortcut_set (GDK_b, SP_VERB_CONTEXT_PEN, false);
 	sp_shortcut_set (GDK_B, SP_VERB_CONTEXT_PEN, false);
 
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_F6, SP_VERB_CONTEXT_CALLIGRAPHIC, true);
 
-	sp_shortcut_set (GDK_F7, SP_VERB_CONTEXT_DROPPER, false);
-	sp_shortcut_set (GDK_d, SP_VERB_CONTEXT_DROPPER, true);
+	sp_shortcut_set (GDK_F7, SP_VERB_CONTEXT_DROPPER, true);
+	sp_shortcut_set (GDK_d, SP_VERB_CONTEXT_DROPPER, false);
 	sp_shortcut_set (GDK_D, SP_VERB_CONTEXT_DROPPER, false);
 
-	sp_shortcut_set (GDK_F8, SP_VERB_CONTEXT_TEXT, false);
-	sp_shortcut_set (GDK_t, SP_VERB_CONTEXT_TEXT, true);
+	sp_shortcut_set (GDK_F8, SP_VERB_CONTEXT_TEXT, true);
+	sp_shortcut_set (GDK_t, SP_VERB_CONTEXT_TEXT, false);
 	sp_shortcut_set (GDK_T, SP_VERB_CONTEXT_TEXT, false);
 
-	sp_shortcut_set (GDK_F9, SP_VERB_CONTEXT_SPIRAL, false);
-	sp_shortcut_set (GDK_i, SP_VERB_CONTEXT_SPIRAL, true);
+	sp_shortcut_set (GDK_F9, SP_VERB_CONTEXT_SPIRAL, true);
+	sp_shortcut_set (GDK_i, SP_VERB_CONTEXT_SPIRAL, false);
 	sp_shortcut_set (GDK_I, SP_VERB_CONTEXT_SPIRAL, false);
 
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_F9, SP_VERB_CONTEXT_STAR, false);

@@ -33,10 +33,11 @@
 
 #include "helper/sp-marshal.h"
 
+#include "shortcuts.h"
+#include "interface.h"
+
 #include "icon.h"
 #include "button.h"
-
-#include "shortcuts.h"
 
 static void sp_button_class_init (SPButtonClass *klass);
 static void sp_button_init (SPButton *button);
@@ -252,20 +253,24 @@ sp_button_action_set_shortcut (SPAction *action, unsigned int shortcut, void *da
 static void
 sp_button_set_composed_tooltip (GtkTooltips *tooltips, GtkWidget *widget, SPAction *action)
 {
-	unsigned int shortcut=0;
-	/* FIXME !!! determine appropriate shortcut, if any, here */
-	if (action && shortcut) {
-		gchar *tip;
-		gchar *as, *cs, *ss;
-		as = (gchar*)((shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "");
-		cs = (gchar*)((shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "");
-		ss = (gchar*)((shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "");
-		tip = g_strdup_printf ("%s [%s%s%s%s]", action->tip, as, cs, ss, gdk_keyval_name (shortcut & 0xffffff));
-		gtk_tooltips_set_tip (tooltips, widget, tip, NULL);
-		g_free (tip);
-	} else if (action) {
-		gtk_tooltips_set_tip (tooltips, widget, action->tip, NULL);
+	if (action) {
+		unsigned int shortcut = sp_shortcut_get_primary (action->verb);
+		if (shortcut) {
+			// there's both action and shortcut
+
+			gchar        key[256];
+			sp_ui_shortcut_string (shortcut, key);
+
+			gchar *tip = g_strdup_printf ("%s (%s)", action->tip, key);
+			gtk_tooltips_set_tip (tooltips, widget, tip, NULL);
+			g_free (tip);
+
+		} else {
+			// action has no shortcut
+			gtk_tooltips_set_tip (tooltips, widget, action->tip, NULL);
+		}
 	} else {
+		// no action
 		gtk_tooltips_set_tip (tooltips, widget, NULL, NULL);
 	}
 }
@@ -279,7 +284,7 @@ sp_button_new_from_data (unsigned int size,
 			 GtkTooltips *tooltips)
 {
 	GtkWidget *button;
-	SPAction *action=sp_action_new(view, name, name, tip, name);
+	SPAction *action=sp_action_new(view, name, name, tip, name, 0); // no parent verb (and thus no shortcuts?)
 	button = sp_button_new (size, type, action, tooltips);
 	nr_object_unref ((NRObject *) action);
 	return button;

@@ -83,7 +83,8 @@ sp_action_new(SPView *view,
               const gchar *id,
               const gchar *name,
               const gchar *tip,
-              const gchar *image)
+              const gchar *image,
+		sp_verb_t verb)
 {
 	SPAction *action = (SPAction *)nr_object_new(SP_TYPE_ACTION);
 
@@ -93,6 +94,7 @@ sp_action_new(SPView *view,
 	if (name) action->name = strdup (name);
 	if (tip) action->tip = strdup (tip);
 	if (image) action->image = strdup (image);
+	action->verb = verb;
 
 	return action;
 }

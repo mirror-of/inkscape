@@ -38,6 +38,8 @@ struct SPActionEventVector {
 	void (* set_shortcut) (SPAction *action, unsigned int shortcut, void *data);   /**< Callback for setting the shortcut for this function */
 };
 
+typedef int sp_verb_t;
+
 /** All the data that is required to be an action.  This
     structure identifies the action and has the data to
 	create menus and toolbars for the action */
@@ -49,6 +51,7 @@ struct SPAction : public NRActiveObject {
 	gchar *name;                 /**< Full text name of the action */
 	gchar *tip;                  /**< A tooltip to describe the action */
 	gchar *image;                /**< An image to visually identify the action */
+	sp_verb_t verb;             /** The verb that produced this action */
 };
 
 /** The action class is the same as its parent */
@@ -62,7 +65,8 @@ SPAction *sp_action_new(SPView *view,
 			const gchar *id,
 			const gchar *name,
 			const gchar *tip,
-			const gchar *image);
+			const gchar *image,
+                   sp_verb_t verb);
 
 void sp_action_perform (SPAction *action, void * data);
 void sp_action_set_active (SPAction *action, unsigned int active);
