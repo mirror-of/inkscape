@@ -79,6 +79,7 @@ static Inkscape::Application *inkscape = NULL;
 enum {
     MODIFY_SELECTION, // global: one of selections modified
     CHANGE_SELECTION, // global: one of selections changed
+    CHANGE_SUBSELECTION, // global: one of subselections (text selection, gradient handle, etc) changed
     SET_SELECTION, // global: one of selections set
     SET_EVENTCONTEXT, // tool switched
     ACTIVATE_DESKTOP, // some desktop got focus
@@ -136,6 +137,7 @@ struct Inkscape::ApplicationClass {
 
     /* Signals */
     void (* change_selection) (Inkscape::Application * inkscape, Inkscape::Selection * selection);
+    void (* change_subselection) (Inkscape::Application * inkscape, SPDesktop *desktop);
     void (* modify_selection) (Inkscape::Application * inkscape, Inkscape::Selection * selection, guint flags);
     void (* set_selection) (Inkscape::Application * inkscape, Inkscape::Selection * selection);
     void (* set_eventcontext) (Inkscape::Application * inkscape, SPEventContext * eventcontext);
@@ -212,6 +214,14 @@ inkscape_class_init (Inkscape::ApplicationClass * klass)
                                G_TYPE_FROM_CLASS (klass),
                                G_SIGNAL_RUN_FIRST,
                                G_STRUCT_OFFSET (Inkscape::ApplicationClass, change_selection),
+                               NULL, NULL,
+                               sp_marshal_NONE__POINTER,
+                               G_TYPE_NONE, 1,
+                               G_TYPE_POINTER);
+    inkscape_signals[CHANGE_SUBSELECTION] = g_signal_new ("change_subselection",
+                               G_TYPE_FROM_CLASS (klass),
+                               G_SIGNAL_RUN_FIRST,
+                               G_STRUCT_OFFSET (Inkscape::ApplicationClass, change_subselection),
                                NULL, NULL,
                                sp_marshal_NONE__POINTER,
                                G_TYPE_NONE, 1,
@@ -748,6 +758,16 @@ inkscape_selection_changed (Inkscape::Selection * selection)
 
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
+    }
+}
+
+void
+inkscape_subselection_changed (SPDesktop *desktop)
+{
+    g_return_if_fail (inkscape != NULL);
+
+    if (DESKTOP_IS_ACTIVE (desktop)) {
+        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SUBSELECTION], 0, desktop);
     }
 }
 
