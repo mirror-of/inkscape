@@ -6,6 +6,8 @@
 	  src/inkview.cpp: nuked global 'inkscape' variable and replaced
 	  it with a module-local variable and an accessor function.
 
+    * src/uri.h, src/uri.c: added native filename to/from thingy
+
 2004-02-20  bulia byak <bulia@users.sourceforge.net>
 
 	* src/text-context.cpp: [shift+]alt+arrows to kern

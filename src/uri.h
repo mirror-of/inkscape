@@ -41,6 +41,24 @@ public:
 	const gchar *getQuery() const { return _impl->getQuery(); }
 	const gchar *getFragment() const { return _impl->getFragment(); }
 
+	/* TODO !!! proper error handling */
+	static gchar *to_native_filename(const URI &uri) throw(BadURIException) {
+		gchar *string = uri.toString();
+		gchar *filename = g_filename_from_uri(string, NULL, NULL);
+		g_free(string);
+		if (filename) {
+			return filename;
+		} else {
+			throw MalformedURIException();
+		}
+	}
+
+	/* TODO !!! proper error handling */
+	static URI from_native_filename(const gchar *path) throw(BadURIException) {
+		gchar *uri = g_filename_to_uri(path, NULL, NULL);
+		return URI(uri);
+	}
+
 	gchar *toString() const { return _impl->toString(); }
 private:
 	class Impl {

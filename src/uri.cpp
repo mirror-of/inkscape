@@ -22,6 +22,9 @@ URI::URI(const URI &uri) {
 
 URI::URI(const gchar *uri_string) throw(BadURIException) {
 	xmlURIPtr uri;
+	if (!uri_string) {
+		throw MalformedURIException();
+	}
 	uri = xmlParseURI(uri_string);
 	if (!uri) {
 		throw MalformedURIException();
