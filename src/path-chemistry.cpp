@@ -13,7 +13,8 @@
  */
 
 #include <string.h>
-#include <libart_lgpl/art_misc.h>
+//#include <libart_lgpl/art_misc.h>
+#include "libnr/nr-macros.h"
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 #include "svg/svg.h"
@@ -93,7 +94,7 @@ sp_selected_path_combine (void)
 		NArtBpath *abp = nr_artpath_affine (c->bpath, sp_item_i2root_affine (SP_ITEM (path)));
 		sp_curve_unref (c);
 		gchar *str = sp_svg_write_path (abp);
-		art_free (abp);
+		nr_free (abp);
 
 		dstring = g_string_append(dstring, str);
 		g_free (str);

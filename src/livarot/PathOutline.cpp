@@ -1229,18 +1229,12 @@ Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
 							 false);
 			}
 		} else if (join == join_pointy) {
-			NR::Point biss = stNor + enNor;
+			const NR::Point biss = NR::rot90( stNor - enNor );
 			const double lb = NR::L2(biss);
 			biss /= lb;
-			const double angCo = dot (biss, enNor);
-			const double l = width / angCo;
-			miter = std::max(miter, 0.5 * lb);
-			if (l > miter) {
-				const double angSi = cross (biss, stNor);
-				const double r = (l - miter) * angCo / angSi;
-				NR::Point corner = miter*biss + pos;
-				dest->LineTo (corner + r*biss.ccw());
-				dest->LineTo (corner - r*biss.ccw());
+			double c2 = NR::dot (biss, enNor);
+			double l = width / c2;
+			if ( fabs(l) > miter) {
 				dest->LineTo (pos + width*enNor);
 			} else {
 				dest->LineTo (pos+l*biss);

@@ -66,7 +66,7 @@
 #include "sp-item-transform.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
-#include <libart_lgpl/art_affine.h>
+//#include <libart_lgpl/art_affine.h>
 
 #include "select-toolbar.h"
 

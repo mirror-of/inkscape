@@ -629,7 +629,7 @@ sp_selected_path_outline ()
 
 
         {
-            orig->Outline (res, 0.5 * o_width, o_join, o_butt, o_miter);
+            orig->Outline (res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
     
             orig->Coalesce (0.5 * o_width);
         

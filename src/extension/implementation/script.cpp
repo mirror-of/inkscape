@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
-#include <libart_lgpl/art_affine.h>
+//#include <libart_lgpl/art_affine.h>
 #include <svg/svg.h>
 #include <xml/repr-private.h>
 #include <interface.h>

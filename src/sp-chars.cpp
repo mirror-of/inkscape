@@ -14,8 +14,9 @@
 
 #include <string.h>
 
-#include <libart_lgpl/art_misc.h>
+//#include <libart_lgpl/art_misc.h>
 
+#include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 
@@ -281,7 +282,7 @@ sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrix *ctm, con
 			NRBPath abp;
 			abp.path = nr_artpath_affine (bpath.path, el->transform);
 			sp_chars_print_bpath (ctx, &abp, SP_OBJECT_STYLE (chars), ctm, pbox, dbox, bbox);
-			art_free (abp.path);
+			nr_free (abp.path);
 		}
 	}
 }

@@ -15,7 +15,7 @@
 #include <math.h>
 
 #include <ctype.h>
-#include <libart_lgpl/art_affine.h>
+//#include <libart_lgpl/art_affine.h>
 #include <glib-object.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkmain.h>
