@@ -213,7 +213,7 @@ GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
     gint dpiY = 0;
 
     //buf = gdk_pixbuf_new_from_file( filename, error );
-    dump_fopen_call( filename, "bloopie" );
+    dump_fopen_call( filename, "pixbuf_new_from_file" );
     FILE* fp = fopen_utf8name( filename, "r" );
     if ( fp )
     {
@@ -330,7 +330,7 @@ GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
                             }
                             else
                             {
-                                //g_message("d'oh on png");
+                                g_message("Error when creating PNG read struct");
                             }
                         }
                     }
@@ -376,15 +376,19 @@ GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
             else
             {
                 // do something
-                //g_message("error loading pixbuf");
+                g_message("error loading pixbuf at close");
             }
+        }
+        else
+        {
+            g_message("error when creating pixbuf loader");
         }
         fclose( fp );
         fp = NULL;
     }
     else
     {
-        //g_message("unable to open file");
+        g_message("unable to open file");
     }
 
 /*
