@@ -182,12 +182,11 @@ sp_widget_destroy (GtkObject *object)
 	spw = (SPWidget *) object;
 
 	if (spw->inkscape) {
-#if 1
-		/* This happens in ::hide (Lauris) */
-		/* It seems it does not (Lauris) */
 		/* Disconnect signals */
-		sp_signal_disconnect_by_data (inkscape, spw);
-#endif
+		// the checks are necessary because when destroy is caused by the the program shutting down, 
+		// the inkscape object may already be (partly?) invalid --bb
+		if (G_IS_OBJECT(inkscape) && G_OBJECT_GET_CLASS(G_OBJECT(inkscape)))
+  			sp_signal_disconnect_by_data (inkscape, spw);
 		spw->inkscape = NULL;
 	}
 
