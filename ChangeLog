@@ -1,3 +1,8 @@
+2004-0405 njh <njh@mail.csse.monash.edu.au>
+
+	* debian/rules,debian/control: applied patch from Kees Cook to remove
+	obsolete libraries, and to tidy things up a tad.
+
 2004-04-04  Ted Gould <ted@gould.cx>
 
 	* src/main.cpp, src/extension/extension.cpp, src/extension/system.cpp:

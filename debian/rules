@@ -11,12 +11,19 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 INSTALL_PROGRAM += -s
 endif
 
+CPUS := $(shell getconf _NPROCESSORS_ONLN)
+ifeq ($(CPUS),)
+ PARALLEL :=
+else
+ PARALLEL := -j$(CPUS)
+endif
+
 build: build-stamp
 build-stamp:
 	dh_testdir
-	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --sysconfdir=/etc --with-gtk-prefix=/usr --mandir=$(tmp)/usr/share/man --without-bonobo --without-arena --without-new-render \
-	--with-xft --with-popt --without-gnome-print --disable-mmx
-	$(MAKE)
+	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --sysconfdir=/etc --with-gtk-prefix=/usr --mandir=$(tmp)/usr/share/man \
+	--with-xft --with-popt --without-gnome-print --with-inkjar
+	$(MAKE) $(PARALLEL)
 	touch build-stamp
 
 clean:
@@ -42,7 +49,6 @@ binary-arch: build
 	find $(tmp)/usr -name "Makefile*" | xargs -r rm -f
 	dh_installdocs README
 	dh_installmenu
-	dh_installexamples samples/*.svg
 	dh_installchangelogs ChangeLog
 ifeq "$(findstring nostrip,$(DEB_BUILD_OPTIONS))" ""
 	dh_strip
