@@ -5,11 +5,6 @@ using NR::X;
 using NR::Y;
 
 
-inline bool matrix_equalp(Matrix const &a, Matrix const &b)
-{
-	return transform_equalp(a, b, 1e-5) && translate_equalp(a, b, 1e-5);
-}
-
 inline bool point_equalp(NR::Point const &a, NR::Point const &b)
 {
 	return ( NR_DF_TEST_CLOSE(a[X], b[X], 1e-5) &&
@@ -111,16 +106,16 @@ int main(int argc, char *argv[]) {
 		UTEST_ASSERT( rot180 * rot180 == r_id );
 		UTEST_ASSERT( rot234 * r_id == rot234 );
 		UTEST_ASSERT( r_id * rot234 == rot234 );
-		UTEST_ASSERT(matrix_equalp(rot234 * rot234.inverse(), r_id));
-		UTEST_ASSERT(matrix_equalp(rot234.inverse() * rot234, r_id));
+		UTEST_ASSERT(matrix_equalp(rot234 * rot234.inverse(), r_id, 1e-14));
+		UTEST_ASSERT(matrix_equalp(rot234.inverse() * rot234, r_id, 1e-14));
 		UTEST_ASSERT(point_equalp(( NR::rotate(0.25) * NR::rotate(.5) ).vec, NR::rotate(.75).vec));
 	}
 
 	UTEST_TEST("operator/(rotate, rotate)") {
 		UTEST_ASSERT( rot234 / r_id == rot234 );
 		UTEST_ASSERT( rot234 / rot180 == rot234 * rot180 );
-		UTEST_ASSERT(matrix_equalp(rot234 / rot234, r_id));
-		UTEST_ASSERT(matrix_equalp(r_id / rot234, rot234.inverse()));
+		UTEST_ASSERT(matrix_equalp(rot234 / rot234, r_id, 1e-14));
+		UTEST_ASSERT(matrix_equalp(r_id / rot234, rot234.inverse(), 1e-14));
 	}
 
 	if (!utest_end()) {
@@ -202,7 +197,8 @@ int main(int argc, char *argv[]) {
 		UTEST_ASSERT( p90 * r86 == NR::Point(-.6, .8) );
 		UTEST_ASSERT( p90 * mr86 == NR::Point(-.6, .8) );
 		UTEST_ASSERT(matrix_equalp(Matrix( r86 * r86 ),
-					   mr86 * mr86));
+					   mr86 * mr86,
+					   1e-14));
 	}
 
 	NR::translate const t23(2.0, 3.0);
