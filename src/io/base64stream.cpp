@@ -175,9 +175,10 @@ static char *base64encode =
 Base64OutputStream::Base64OutputStream(OutputStream &destinationStream)
                      : BasicOutputStream(destinationStream)
 {
-    column   = 0;
-    outBuf   = 0L;
-    bitCount = 0;
+    column      = 0;
+    columnWidth = 72;
+    outBuf      = 0L;
+    bitCount    = 0;
 }
 
 /**
@@ -232,7 +233,8 @@ void Base64OutputStream::close()
         putc('=');
         }
 
-    destination.put('\n');
+    if (columnWidth > 0) //if <=0, no newlines
+        destination.put('\n');
 
     destination.close();
     closed = true;
@@ -257,7 +259,7 @@ void Base64OutputStream::putc(int ch)
 {
     destination.put(ch);
     column++;
-    if (column >= 72)
+    if (columnWidth > 0 && column >= columnWidth)
         {
         destination.put('\r');
         destination.put('\n');

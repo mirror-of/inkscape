@@ -88,11 +88,20 @@ public:
     
     virtual void put(int ch);
 
+    /**
+     * Sets the maximum line length for base64 output.  If
+     * set to <=0, then there will be no line breaks;
+     */
+    virtual void setColumnWidth(int val)
+        { columnWidth = val; }
+
 private:
 
     void putc(int ch);
 
     int column;
+
+    int columnWidth;
 
     unsigned long outBuf;
 

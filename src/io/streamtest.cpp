@@ -147,7 +147,6 @@ bool testGzip()
 
 bool doTest()
 {
-    /*
     if (!testUriStream())
         {
         return false;
@@ -156,16 +155,14 @@ bool doTest()
         {
         return false;
         }
-    if (!testStdWriter2())
+    if (!testStdWriter())
         {
         return false;
         }
-    */
     if (!testBase64())
         {
         return false;
         }
-    /*
     if (!testXslt())
         {
         return false;
@@ -174,7 +171,6 @@ bool doTest()
         {
         return false;
         }
-    */
     return true;
 }
 
