@@ -399,7 +399,17 @@ sp_image_repr_read_image (SPRepr * repr)
 		if (strncmp (filename,"file:",5) == 0) {
 			fullname = g_filename_from_uri(filename, NULL, NULL);
 			if (fullname) {
-				pixbuf = gdk_pixbuf_new_from_file (fullname, NULL);
+				// TODO: bulia, please look over
+				gsize bytesRead = 0;
+				gsize bytesWritten = 0;
+				GError* error = NULL;
+				gchar* localFilename = g_filename_from_utf8 ( fullname,
+															  -1,
+															  &bytesRead,
+															  &bytesWritten,
+															  &error);
+				pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
+				g_free (localFilename);
 				g_free (fullname);
 				if (pixbuf != NULL) return pixbuf;
 			}
@@ -413,19 +423,49 @@ sp_image_repr_read_image (SPRepr * repr)
 			docbase = sp_repr_attr (sp_repr_document_root (sp_repr_document (repr)), "sodipodi:docbase");
 			if (!docbase) docbase = "./";
 			fullname = g_strconcat (docbase, filename, NULL);
-			pixbuf = gdk_pixbuf_new_from_file (fullname, NULL);
+			// TODO: bulia, please look over
+			gsize bytesRead = 0;
+			gsize bytesWritten = 0;
+			GError* error = NULL;
+			gchar* localFilename = g_filename_from_utf8 ( fullname,
+														  -1,
+														  &bytesRead,
+														  &bytesWritten,
+														  &error);
+			pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
+			g_free (localFilename);
 			g_free (fullname);
 			if (pixbuf != NULL) return pixbuf;
 		} else {
 			/* try absolute filename */
-			pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+			// TODO: bulia, please look over
+			gsize bytesRead = 0;
+			gsize bytesWritten = 0;
+			GError* error = NULL;
+			gchar* localFilename = g_filename_from_utf8 ( filename,
+														  -1,
+														  &bytesRead,
+														  &bytesWritten,
+														  &error);
+			pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
+			g_free (localFilename);
 			if (pixbuf != NULL) return pixbuf;
 		}
 	}
 	/* at last try to load from sp absolute path name */
 	filename = sp_repr_attr (repr, "sodipodi:absref");
 	if (filename != NULL) {
-		pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+		// TODO: bulia, please look over
+		gsize bytesRead = 0;
+		gsize bytesWritten = 0;
+		GError* error = NULL;
+		gchar* localFilename = g_filename_from_utf8 ( filename,
+													  -1,
+													  &bytesRead,
+													  &bytesWritten,
+													  &error);
+		pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
+		g_free (localFilename);
 		if (pixbuf != NULL) return pixbuf;
 	}
 	/* Nope: We do not find any valid pixmap file :-( */

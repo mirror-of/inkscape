@@ -139,19 +139,38 @@ inkscape_gtk_stock_init (void) {
 
         gchar *filename = (gchar *) g_build_filename (INKSCAPE_PIXMAPDIR,
                       stock_icons[i].filename, NULL);
-        if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
+
+        // TODO: bulia, please look over
+        gsize bytesRead = 0;
+        gsize bytesWritten = 0;
+        GError* error = NULL;
+        gchar* localFilename = g_filename_from_utf8 ( filename,
+                                                      -1,
+                                                      &bytesRead,
+                                                      &bytesWritten,
+                                                      &error);
+
+        if (!g_file_test (localFilename, G_FILE_TEST_EXISTS)) {
             // testing
             g_critical ("Unable to load stock pixmap %s\n", filename);
             // g_critical ("Unable to load stock pixmap %s\n", 
             //             INKSCAPE_PIXMAPDIR);
             // g_critical ("Unable to load stock pixmap %s\n", 
             //             stock_icons[i].filename);
+            if ( localFilename != NULL )
+            {
+                g_free (localFilename);
+            }
             g_free (filename);
             continue;
         }
 
-        GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+        GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
 
+        if ( localFilename != NULL )
+        {
+            g_free (localFilename);
+        }
         g_free (filename);
 
         GtkIconSet *icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);

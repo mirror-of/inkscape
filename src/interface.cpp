@@ -841,7 +841,16 @@ sp_ui_import_one_file(gchar * filename)
 	    (strcmp (e, "xpm") == 0)) {
 		/* Try pixbuf */
 		GdkPixbuf *pb;
-		pb = gdk_pixbuf_new_from_file (filename, NULL);
+		// TODO: bulia, please look over
+		gsize bytesRead = 0;
+		gsize bytesWritten = 0;
+		GError* error = NULL;
+		gchar* localFilename = g_filename_from_utf8 ( filename,
+													  -1,
+													  &bytesRead,
+													  &bytesWritten,
+													  &error);
+		pb = gdk_pixbuf_new_from_file (localFilename, NULL);
 		if (pb) {
 			/* We are readable */
 			repr = sp_repr_new ("image");
@@ -853,6 +862,10 @@ sp_ui_import_one_file(gchar * filename)
 			sp_repr_unref (repr);
 			sp_document_done (doc);
 			gdk_pixbuf_unref (pb);
+		}
+		if ( localFilename != NULL )
+		{
+			g_free (localFilename);
 		}
 	}
 }

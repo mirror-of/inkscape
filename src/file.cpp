@@ -412,7 +412,16 @@ file_import (SPDocument *doc, const gchar *filename)
 
         /* Try pixbuf */
         GError *err = NULL;
-        GdkPixbuf *pb = gdk_pixbuf_new_from_file (filename, &err);
+        // TODO: bulia, please look over
+        gsize bytesRead = 0;
+        gsize bytesWritten = 0;
+        GError* error = NULL;
+        gchar* localFilename = g_filename_from_utf8 ( filename,
+                                                      -1,
+                                                      &bytesRead,
+                                                      &bytesWritten,
+                                                      &error);
+        GdkPixbuf *pb = gdk_pixbuf_new_from_file (localFilename, &err);
         if (pb) {
             /* We are readable */
             SPRepr *repr = sp_repr_new ("image");
@@ -435,6 +444,10 @@ file_import (SPDocument *doc, const gchar *filename)
                 g_free (text);
                 g_error_free (err);
             }
+        }
+        if ( localFilename != NULL )
+        {
+            g_free (localFilename);
         }
     }
 }
@@ -459,6 +472,33 @@ sp_file_import (GtkWidget * widget)
     char *fileName = dlg->show();
     delete dlg;
     if (fileName) {
+        gsize bytesRead = 0;
+        gsize bytesWritten = 0;
+        GError *error;
+        gchar *newFileName = g_filename_to_utf8( fileName,
+                                                 -1,
+                                                 &bytesRead,
+                                                 &bytesWritten,
+                                                 &error);
+        if ( newFileName != NULL )
+        {
+            g_free (fileName);
+            fileName = newFileName;
+        }
+        else
+        {
+            // TODO: bulia, please look over
+            g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+        }
+
+
+        if ( !g_utf8_validate(fileName, -1, NULL) )
+        {
+            // TODO: bulia, please look over
+            g_warning( "INPUT FILENAME IS NOT UTF-8" );
+        }
+
+
         file_import (doc, fileName);
         g_free (fileName);
     }
