@@ -48,6 +48,7 @@ inkscapelib_src = \
 	sp-object-repr.cpp sp-object-repr.h \
 	sp-object-group.cpp sp-object-group.h \
 	sp-defs.cpp sp-defs.h \
+	sp-item-rm-unsatisfied-cns.cpp sp-item-rm-unsatisfied-cns.h	\
 	sp-item.cpp sp-item.h \
 	sp-item-group.cpp sp-item-group.h \
 	sp-symbol.cpp sp-symbol.h \
@@ -104,6 +105,11 @@ inkscape_SOURCES = \
 	svg-view.cpp svg-view.h \
 	selection.cpp selection.h \
 	desktop.cpp desktop.h \
+	sp-guide-attachment.h	\
+	sp-item-notify-moveto.cpp sp-item-notify-moveto.h	\
+	sp-guide-constraint.h	\
+	satisfied-guide-cns.cpp satisfied-guide-cns.h	\
+	sp-item-update-cns.cpp sp-item-update-cns.h	\
 	desktop-units.h \
 	desktop-events.cpp desktop-events.h \
 	desktop-handles.cpp desktop-handles.h \

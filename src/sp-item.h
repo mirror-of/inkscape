@@ -19,12 +19,12 @@
 
 #include "helper/units.h"
 #include "display/nr-arena-forward.h"
-
 #include "forward.h"
-
 #include "sp-object.h"
+#include <vector>
 
 namespace Inkscape { class URIReference; }
+class SPGuideConstraint;
 
 /* fixme: This is just placeholder */
 /*
@@ -97,6 +97,8 @@ struct _SPItem {
 	SPMaskReference *mask_ref;
 
 	SPItemView *display;
+
+	std::vector<SPGuideConstraint> constraints;
 };
 
 struct _SPItemClass {
@@ -115,7 +117,7 @@ struct _SPItemClass {
 	NRArenaItem * (* show) (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 	void (* hide) (SPItem *item, unsigned int key);
 
-	/* Returns a number of points used */ 
+	/* Returns the number of points used. */
 	int (* snappoints) (SPItem *item, NR::Point points[], int size);
 
 	/* Write item transform to repr optimally */

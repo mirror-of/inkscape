@@ -28,6 +28,7 @@
 #include "selection.h"
 #include "select-context.h"
 #include "sp-item.h"
+#include <sp-item-update-cns.h>
 #include "seltrans-handles.h"
 #include "seltrans.h"
 #include "sp-metrics.h"
@@ -263,8 +264,9 @@ void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, 
 	if (seltrans->show == SP_SELTRANS_SHOW_CONTENT) {
 	        // update the content
 		for (unsigned i = 0; i < seltrans->items.size(); i++) {
-			sp_item_set_i2d_affine(seltrans->items[i].first,
-					       seltrans->items[i].second * affine);
+			SPItem &item = *seltrans->items[i].first;
+			NR::Matrix const &prev_transform = seltrans->items[i].second;
+			sp_item_set_i2d_affine(&item, prev_transform * affine);
 		}
 	} else {
 		NR::Point p[4];
@@ -302,6 +304,7 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 				NR::Matrix const i2dnew( sp_item_i2d_affine(item) * seltrans->current );
 				sp_item_set_i2d_affine(item, i2dnew);
 			}
+			sp_item_update_cns(*item, *seltrans->desktop);
 			if (seltrans->transform == SP_SELTRANS_TRANSFORM_OPTIMIZE) {
 				sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
 				/* because item/repr affines may be out of sync, invoke reread */

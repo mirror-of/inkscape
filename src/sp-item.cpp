@@ -34,6 +34,7 @@
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "sp-item.h"
+#include "sp-item-rm-unsatisfied-cns.h"
 #include "libnr/nr-rect.h"
 
 #define noSP_ITEM_DEBUG_IDLE
@@ -170,6 +171,7 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			sp_item_set_item_transform(item, NR::identity());
 		}
+		sp_item_rm_unsatisfied_cns(*item);
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	}
@@ -424,8 +426,10 @@ int sp_item_snappoints(SPItem *item, NR::Point p[], int size)
 	g_return_val_if_fail (item != NULL, 0);
 	g_return_val_if_fail (SP_IS_ITEM (item), 0);
 
-	if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->snappoints)
-	        return ((SPItemClass *) G_OBJECT_GET_CLASS(item))->snappoints (item, p, size);
+	SPItemClass const &item_class = *(SPItemClass const *) G_OBJECT_GET_CLASS(item);
+	if (item_class.snappoints) {
+	        return item_class.snappoints(item, p, size);
+	}
 
 	return 0;
 }

@@ -13,6 +13,8 @@
 #include "helper/helper-forward.h"
 #include "sp-object.h"
 #include "libnr/nr-types.h"
+#include <vector>
+class SPGuideAttachment;
 
 #define SP_TYPE_GUIDE            (sp_guide_get_type ())
 #define SP_GUIDE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_GUIDE, SPGuide))
@@ -27,7 +29,8 @@ struct _SPGuide {
 	gdouble position;
 	guint32 color;
 	guint32 hicolor;
-	GSList * views;
+	GSList *views;
+	std::vector<SPGuideAttachment> attached_items;
 };
 
 struct _SPGuideClass {
@@ -48,3 +51,15 @@ char *sp_guide_description(SPGuide const *guide);
 
 #endif
 
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"bsd"
+  c-file-offsets:((innamespace . 0) (inline-open . 0))
+  indent-tabs-mode:t
+  fill-column:99
+  End:
+  vim: filetype=c++:noexpandtab :
+*/

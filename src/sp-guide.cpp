@@ -18,8 +18,14 @@
 #include "svg/svg.h"
 #include "attributes.h"
 #include "sp-guide.h"
+#include <sp-guide-attachment.h>
+#include <sp-item-notify-moveto.h>
+#include <sp-item.h>
+#include <sp-guide-constraint.h>
 #include <libnr/nr-values.h>
 #include "helper/sp-intl.h"
+#include <remove-last.h>
+using std::vector;
 
 enum {
 	PROP_0,
@@ -269,9 +275,20 @@ void sp_guide_moveto(SPGuide const &guide, gdouble const position, bool const co
 		sp_guideline_set_position(SP_GUIDELINE(l->data),
 					  position);
 	}
+
+	/* Calling sp_repr_set_double must precede calling sp_item_notify_moveto in the commit
+	   case, so that the guide's new position is available for sp_item_rm_unsatisfied_cns. */
 	if (commit) {
 		sp_repr_set_double(SP_OBJECT(&guide)->repr,
 				   "position", position);
+	}
+
+	for (vector<SPGuideAttachment>::const_iterator i(guide.attached_items.begin()),
+	       iEnd(guide.attached_items.end());
+	     i != iEnd; ++i)
+	{
+		SPGuideAttachment const &att = *i;
+		sp_item_notify_moveto(*att.item, guide, att.snappoint_ix, position, commit);
 	}
 }
 
@@ -301,10 +318,18 @@ sp_guide_description(SPGuide const *guide)
 	}
 }
 
-void
-sp_guide_remove (SPGuide * guide)
+void sp_guide_remove(SPGuide *guide)
 {
-	g_assert (SP_IS_GUIDE (guide));
+	g_assert(SP_IS_GUIDE(guide));
+
+	for (vector<SPGuideAttachment>::const_iterator i(guide->attached_items.begin()),
+	       iEnd(guide->attached_items.end());
+	     i != iEnd; ++i)
+	{
+		SPGuideAttachment const &att = *i;
+		remove_last(att.item->constraints, SPGuideConstraint(guide, att.snappoint_ix));
+	}
+	guide->attached_items.clear();
 
 	sp_repr_unparent (SP_OBJECT (guide)->repr);
 }

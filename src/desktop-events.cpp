@@ -205,15 +205,12 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 			if (moved) {
 				NR::Point const event_w(event->button.x,
 							event->button.y);
-				NR::Point const event_dt = event_w * desktop->w2d;
-				double winx, winy;
-				sp_canvas_world_to_window (item->canvas, event->button.x, event->button.y, &winx, &winy);
-				GtkWidget *w = GTK_WIDGET(item->canvas);
-				if ((winx >= 0) && (winy >= 0) &&
-				    (winx < w->allocation.width) &&
-				    (winy < w->allocation.height)) {
+				NR::Point const event_dt( event_w * desktop->w2d );
+				if (sp_canvas_world_pt_inside_window(item->canvas, event_w)) {
 					sp_guide_moveto(*guide, sp_guide_position_from_pt(guide, event_dt), true);
 				} else {
+					/* Undo movement of any attached shapes. */
+					sp_guide_moveto(*guide, guide->position, false);
 					sp_guide_remove(guide);
 				}
 				moved = FALSE;

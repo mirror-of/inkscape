@@ -1,5 +1,19 @@
 2004-02-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile.am: sp-item-rm-unsatisfied-cns.cpp,
+	sp-item-rm-unsatisfied-cns.h, sp-guide-attachment.h,
+	sp-item-notify-moveto.cpp, sp-item-notify-moveto.h,
+	sp-guide-constraint.h, satisfied-guide-cns.cpp,
+	satisfied-guide-cns.h, sp-item-update-cns.cpp,
+	sp-item-update-cns.h: New files.
+	* src/desktop-events.cpp (sp_dt_guide_event):
+	* src/seltrans.cpp (sp_sel_trans_ungrab):
+	* src/sp-guide.cpp (sp_guide_moveto, sp_guide_remove):
+	* src/sp-guide.h:
+	* src/sp-item.cpp (sp_item_set):
+	* src/sp-item.h:
+	Make snap-to-guide more persistent.  (Still not saved to XML though.)
+
 	* src/sp-spiral.cpp (sp_spiral_fit_and_draw, sp_spiral_set_shape):
 	Address NRPoint warning.
 
