@@ -8,12 +8,12 @@
    height="500pt"
    sodipodi:docname="/home/d/ink/inkscape/share/screens/about.svg"
    inkscape:version="0.38cvs"
-   sodipodi:docbase="/home/d/ink/inkscape/share/screens"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xml="http://www.w3.org/XML/1998/namespace"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase="/home/d/ink/inkscape/share/screens">
   <defs
      id="defs561">
     <linearGradient
@@ -97,9 +97,9 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="1.07999999"
-     inkscape:cx="401.99483440"
-     inkscape:cy="185.30233972"
+     inkscape:zoom="1.52735063"
+     inkscape:cx="329.32004789"
+     inkscape:cy="240.29954895"
      inkscape:window-width="1268"
      inkscape:window-height="1002"
      inkscape:window-x="0"
@@ -300,37 +300,25 @@
        x="349.88879395"
        y="491.78567505"
        sodipodi:role="line"
-       id="tspan985"
-       dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
-       dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0">Contributors: Alexander Clausen  John Bintz  Daniel Borgmann  Hans Breuer  Bulia Byak  Chema Celorio  </tspan><tspan
+       id="tspan985">Contributors:  Alexander Clausen  John Bintz  Daniel Borgmann  Hans Breuer  Bulia Byak  Chema Celorio  </tspan><tspan
        sodipodi:role="line"
        id="tspan1757"
-       dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
-       dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
        x="349.88879395"
-       y="507.14567471">John Cliff  Johan Ceuppens  Zbigniew Chyla  Kees Cook  Robert Crosbie  Jon Cruz  Danilo Egan  Frank Felfe  </tspan><tspan
+       y="507.14567471">Johan Ceuppens  Zbigniew Chyla  John Cliff  Kees Cook  Robert Crosbie  Jon Cruz  Danilo Egan  Frank Felfe  </tspan><tspan
        sodipodi:role="line"
        id="tspan1759"
-       dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
-       dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
        x="349.88879395"
        y="522.50567436">Fred  Ted Gould  Bryce Harrington  Nathan Hurst  Thomas Ingham  Bob Jamison  Lauris Kaplinski  Lynn Kerby  </tspan><tspan
        sodipodi:role="line"
        id="tspan1746"
-       dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
-       dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
        x="349.88879395"
        y="537.86567402">Petr Kovar  Raph Levien  Vitaly Lipatov  Dmitry G. Mastrukov  Michael Meeks  Federico Mena  MenTaLguY  </tspan><tspan
        sodipodi:role="line"
        id="tspan1748"
-       dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
-       dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
        x="349.88879395"
        y="553.22567368">Peter Moulder  Yukihiro Nakai  Christian Neumair  Mitsuru Oka  Jon Phillips  Christian Schaller  </tspan><tspan
        sodipodi:role="line"
        id="tspan1752"
-       dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
-       dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
        x="349.88879395"
        y="568.58567333">Tom von Schwerdtner  Daniel Yacob  Masatake Yamato</tspan></text>
   <text
