@@ -5,11 +5,6 @@
 #define WIN32
 #endif
 
-/*  A default Version number if one is not supplied by Make */
-#ifndef VERSION 
-#define VERSION "0.38cvs"
-#endif
-
 /*######################################
 #### RESOURCE DIRECTORIES
 ######################################*/
