@@ -62,6 +62,7 @@ struct SPEventContext : public GObject {
     SPSelCue *_selcue;
 
     GrDrag *_grdrag;
+    GrDrag *get_drag () {return _grdrag;}
 };
 
 struct SPEventContextClass : public GObjectClass {
