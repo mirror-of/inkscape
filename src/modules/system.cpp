@@ -84,6 +84,9 @@ sp_module_system_open (const gchar * key, const gchar * filename)
 
 	doc = imod->open(SP_MODULE(imod), filename);
 
+	if(!doc)
+		return NULL;
+	
 	/* This kinda overkill as most of these are already set, but I want
 	   to make sure for this release -- TJG */
 	repr = sp_document_repr_root (doc);

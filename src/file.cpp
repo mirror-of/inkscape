@@ -93,6 +93,16 @@ sp_file_open (const gchar *uri, const gchar *key)
 		sp_document_unref (doc);
 		sp_create_window (dtw, TRUE);
 		sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
+	} else {
+		GtkWidget *msg;
+		gchar *text;
+		text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
+		msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
+				GTK_BUTTONS_CLOSE, 
+				text);
+		gtk_dialog_run (GTK_DIALOG (msg));
+		gtk_widget_destroy (msg);
+		g_free (text);
 	}
 }
 
