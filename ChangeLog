@@ -1,3 +1,9 @@
+2004-09-21  Peter Moulder  <pmoulder@river>
+
+	* src/libnr/nr-matrix-scale-ops.cpp: New file.
+	* src/libnr/nr-matrix-scale-ops.h (operator/(Matrix,scale)):
+	  New function.
+
 2004-09-20  Peter Moulder  <pmoulder@bowman.csse.monash.edu.au>
 
 	* src/Makefile.am (EXTRA_DIST), Makefile_insert
