@@ -1096,6 +1096,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
 
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (dtw->desktop->namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
+    sp_desktop_widget_namedview_modified (dtw->desktop->namedview, SP_OBJECT_MODIFIED_FLAG, dtw);
       
     sp_desktop_widget_set_title (dtw);
 }
