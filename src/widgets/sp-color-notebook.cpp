@@ -447,7 +447,7 @@ void ColorNotebook::_rgbaEntryChanged(GtkEntry* entry)
 			}
 			_updatingrgba = TRUE;
 			sp_color_set_rgb_rgba32 (&color, rgba);
-			setColorAlpha( color, SP_RGBA32_A_F(rgba) );
+			setColorAlpha( color, SP_RGBA32_A_F(rgba), true);
 			_updatingrgba = FALSE;
 		}
 	}

@@ -25,7 +25,7 @@ public:
     void setAlpha( gfloat alpha );
     gfloat getAlpha() const;
 
-    void setColorAlpha( const SPColor& color, gfloat alpha );
+    void setColorAlpha( const SPColor& color, gfloat alpha, bool emit = false );
     void getColorAlpha( SPColor& color, gfloat* alpha ) const;
 
     virtual void setSubmode( guint submode );
@@ -54,6 +54,8 @@ private:
     ColorSelector& operator=( const ColorSelector& obj );
 
     gboolean _held;
+
+    bool virgin; // if true, no color is set yet
 };
 
 

@@ -185,6 +185,8 @@ ColorSelector::ColorSelector( SPColorSelector* csel )
       _held(FALSE)
 {
     sp_color_set_rgb_rgba32( &_color, 0 );
+
+    virgin = true;
 }
 
 ColorSelector::~ColorSelector()
@@ -218,21 +220,24 @@ gfloat ColorSelector::getAlpha() const
 }
 
 /**
-Called from the outside to set the color; emits no signal
+Called from the outside to set the color; optionally emits signal (only when called from
+downstream, e.g. the RGBA value field, but not from the rest of the program)
 */
-void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha )
+void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha, bool emit )
 {
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
 
-    if ( !sp_color_is_close( &color, &_color, _epsilon )
-         || (fabs ((_alpha) - (alpha)) >= _epsilon )
-	 // if the stored color is the initial black, change it no matter what, to update widgets (fixes the "empty rgba value" bug)
-       // FIXME: add a "virgin" flag to ColorSelector instead?
-         || (_color.v.c[0] == 0 && _color.v.c[1] == 0 && _color.v.c[2] == 0 && _color.v.c[3] == 0))
-    {
+    if ( virgin || !sp_color_is_close( &color, &_color, _epsilon ) ||
+         (fabs ((_alpha) - (alpha)) >= _epsilon )) {
+
+        virgin = false;
+
         sp_color_copy (&_color, &color);
         _alpha = alpha;
         _colorChanged( color, alpha );
+
+        if (emit)
+		gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[CHANGED]);
     }
 }
 
