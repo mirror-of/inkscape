@@ -1,5 +1,7 @@
 2004-08-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-use-reference.cpp: CodingStyle changes.
+
 	* src/sp-item.h, src/sp-item.cpp (sp_item_write_transform):
 	  Indicate that adv won't get written to.
 
