@@ -123,7 +123,7 @@ sp_root_init (SPRoot *root)
 	  root->version.sodipodi = root->original.sodipodi = zero_version;
 
 	sp_svg_length_unset (&root->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&root->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	sp_svg_length_unset (&root->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&root->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	sp_svg_length_unset (&root->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 
