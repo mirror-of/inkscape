@@ -3,7 +3,7 @@
  * Written by: Mike Hearn <mike@theoretic.com>
  *             Hongli Lai <h.lai@chello.nl>
  * http://autopackage.org/
- * 
+ *
  * This source code is public domain. You can relicense this code
  * under whatever license you want.
  */
@@ -21,7 +21,7 @@
  */
 
 #ifndef BR_PTHREADS
-	/* Change 1 to 0 if you don't want pthread support */
+	/* Change 1 to 0 if you don't want thread support */
 	#define BR_PTHREADS 1
 #endif /* BR_PTHREADS */
 
@@ -30,7 +30,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <pthread.h>
 #include <limits.h>
 #include <string.h>
 #include "prefix.h"
@@ -209,56 +208,27 @@ br_prepend_prefix (void *symbol, char *path)
 #endif /* ENABLE_BINRELOC */
 
 
-/* Pthread stuff for thread safetiness */
+
+
+
+/* Thread stuff for thread safetiness */
 #if BR_PTHREADS
 
-static pthread_key_t br_thread_key;
-static pthread_once_t br_thread_key_once = PTHREAD_ONCE_INIT;
+#include <glib.h>
 
-
-static void
-br_thread_local_store_fini ()
-{
-	char *specific;
-
-	specific = (char *)pthread_getspecific (br_thread_key);
-	if (specific)
-	{
-		free (specific);
-		pthread_setspecific (br_thread_key, NULL);
-	}
-	pthread_key_delete (br_thread_key);
-	br_thread_key = 0;
-}
-
-
-static void
-br_str_free (void *str)
-{
-	if (str)
-		free (str);
-}
-
+static GStaticPrivate br_thread_key;
+/* Mimic the functionality of g_once() until glib2.4 */
+GPrivate *br_once_key = NULL;
 
 static void
 br_thread_local_store_init ()
 {
-	if (pthread_key_create (&br_thread_key, br_str_free) == 0)
-		atexit (br_thread_local_store_fini);
+    if (!br_once_key) {
+		br_once_key = g_private_new(g_free);
+        g_static_private_init(&br_thread_key);
+    }
+
 }
-
-#else /* BR_PTHREADS */
-
-static char *br_last_value = NULL;
-
-static void
-br_free_last_value ()
-{
-	if (br_last_value)
-		free (br_last_value);
-}
-
-#endif /* BR_PTHREADS */
 
 
 /**
@@ -279,31 +249,75 @@ br_free_last_value ()
 const char *
 br_thread_local_store (char *str)
 {
-	#if BR_PTHREADS
-		char *specific;
+    if (!g_thread_supported ())
+        g_thread_init (NULL);
 
-		pthread_once (&br_thread_key_once, br_thread_local_store_init);
+    /*
+    This needs to be changed in the future (GLib2.4)
+    to use GOnce
+    */
+	br_thread_local_store_init();
 
-		specific = (char*)pthread_getspecific (br_thread_key);
-		br_str_free (specific);
-		pthread_setspecific (br_thread_key, str);
+	/*
+	g_free() will be called for each set() and
+	when the threads ends.  Thus we do not need a fini()
+	*/
+	g_static_private_set (&br_thread_key, str, g_free);
 
-	#else /* BR_PTHREADS */
-		static int initialized = 0;
+    return str;
+}
 
-		if (!initialized)
-		{
+
+#else /* !BR_PTHREADS */
+
+
+static char *br_last_value = NULL;
+
+static void
+br_free_last_value ()
+{
+	if (br_last_value)
+		free (br_last_value);
+}
+
+/**
+ * br_thread_local_store:
+ * str: A dynamically allocated string.
+ * Returns: str. This return value must not be freed.
+ *
+ * Store str in a thread-local variable and return str. The next
+ * you run this function, that variable is freed too.
+ * This function is created so you don't have to worry about freeing
+ * strings.
+ *
+ * Example:
+ * char *foo;
+ * foo = thread_local_store (strdup ("hello")); --> foo == "hello"
+ * foo = thread_local_store (strdup ("world")); --> foo == "world"; "hello" is now freed.
+ */
+const char *
+br_thread_local_store (char *str)
+{
+	static int initialized = 0;
+
+	if (!initialized)
+	    {
 			atexit (br_free_last_value);
 			initialized = 1;
 		}
 
-		if (br_last_value)
-			free (br_last_value);
-		br_last_value = str;
-	#endif /* BR_PTHREADS */
+	if (br_last_value)
+		free (br_last_value);
+	br_last_value = str;
 
-	return str;
+    return str;
 }
+
+
+#endif /* !BR_PTHREADS */
+
+
+
 
 
 /**
