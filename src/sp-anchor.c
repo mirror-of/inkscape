@@ -31,7 +31,7 @@ static void sp_anchor_init (SPAnchor *anchor);
 
 static void sp_anchor_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_anchor_release (SPObject *object);
-static void sp_anchor_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_anchor_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_anchor_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar *sp_anchor_description (SPItem *item);
@@ -55,7 +55,7 @@ sp_anchor_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_anchor_init,
 		};
-		type = g_type_register_static (SP_TYPE_GROUP, "SPAnchor", &info, 0);
+		type = g_type_register_static (SP_TYPE_GROUP, "SPAnchor", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -71,7 +71,7 @@ sp_anchor_class_init (SPAnchorClass *klass)
 	sp_object_class = (SPObjectClass *) klass;
 	item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_GROUP);
+	parent_class = (SPGroupClass *)g_type_class_ref (SP_TYPE_GROUP);
 
 	sp_object_class->build = sp_anchor_build;
 	sp_object_class->release = sp_anchor_release;
@@ -124,7 +124,7 @@ sp_anchor_release (SPObject *object)
 }
 
 static void
-sp_anchor_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_anchor_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPAnchor *anchor;
 
@@ -222,7 +222,7 @@ sp_anchor_event (SPItem *item, SPEvent *event)
 	case SP_EVENT_MOUSEOVER:
 		/* fixme: */
 		if (SP_IS_SVG_VIEW (event->data)) {
-			svgview = event->data;
+			svgview = (SPSVGView *)event->data;
 			cursor = gdk_cursor_new (GDK_HAND2);
 			gdk_window_set_cursor (GTK_WIDGET (SP_CANVAS_ITEM (svgview->drawing)->canvas)->window, cursor);
 			gdk_cursor_destroy (cursor);
@@ -231,7 +231,7 @@ sp_anchor_event (SPItem *item, SPEvent *event)
 	case SP_EVENT_MOUSEOUT:
 		/* fixme: */
 		if (SP_IS_SVG_VIEW (event->data)) {
-			svgview = event->data;
+			svgview = (SPSVGView *)event->data;
 			gdk_window_set_cursor (GTK_WIDGET (SP_CANVAS_ITEM (svgview->drawing)->canvas)->window, NULL);
 		}
 		break;

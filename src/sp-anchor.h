@@ -24,7 +24,7 @@
 struct _SPAnchor {
 	SPGroup group;
 
-	guchar *href;
+	gchar *href;
 };
 
 struct _SPAnchorClass {
