@@ -39,6 +39,14 @@ struct _SPNamedView {
 	unsigned int showborder : 1;
 	unsigned int borderlayer : 2;
 
+	double zoom;
+	double cx;
+	double cy;
+	gint window_width;
+	gint window_height;
+	gint window_x;
+	gint window_y;
+
 	const SPUnit *gridunit;
 	/* Grid data is in points regardless of unit */
 	NR::Point gridorigin;
@@ -77,7 +85,8 @@ const GSList * sp_namedview_view_list (SPNamedView * nv);
 
 SPNamedView *sp_document_namedview (SPDocument * document, const gchar * name);
 
-
+void sp_namedview_window_from_document (SPDesktop *desktop);
+void sp_namedview_document_from_window (SPDesktop *desktop);
 
 #endif
 

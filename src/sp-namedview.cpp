@@ -15,6 +15,9 @@
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
+
+#include <gtk/gtk.h>
+
 #include "helper/canvas-grid.h"
 #include "svg/svg.h"
 #include "attributes.h"
@@ -25,6 +28,7 @@
 #include "sp-guide.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
+#include "prefs-utils.h"
 
 #define PTPERMM (72.0 / 25.4)
 
@@ -139,6 +143,13 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "guidehiopacity");
 	sp_object_read_attr (object, "showborder");
 	sp_object_read_attr (object, "borderlayer");
+	sp_object_read_attr (object, "inkscape:zoom");
+	sp_object_read_attr (object, "inkscape:cx");
+	sp_object_read_attr (object, "inkscape:cy");
+	sp_object_read_attr (object, "inkscape:window-width");
+	sp_object_read_attr (object, "inkscape:window-height");
+	sp_object_read_attr (object, "inkscape:window-x");
+	sp_object_read_attr (object, "inkscape:window-y");
 
 	/* Construct guideline list */
 
@@ -348,6 +359,34 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value && !strcasecmp (value, "top")) nv->borderlayer = SP_BORDER_LAYER_TOP;
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
+	case SP_ATTR_INKSCAPE_ZOOM:
+		nv->zoom = value? atof (value) : 0; // zero means not set
+		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_CX:
+		nv->cx = value? atof (value) : HUGE_VAL; // HUGE_VAL means not set
+		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_CY:
+		nv->cy = value? atof (value) : HUGE_VAL; // HUGE_VAL means not set
+		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_WINDOW_WIDTH:
+		nv->window_width = value? atoi (value) : -1; // -1 means not set
+		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_WINDOW_HEIGHT:
+		nv->window_height = value? atoi (value) : -1; // -1 means not set
+		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_WINDOW_X:
+		nv->window_x = value? atoi (value) : -1; // -1 means not set
+		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_WINDOW_Y:
+		nv->window_y = value? atoi (value) : -1; // -1 means not set
+		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)
 			((SPObjectClass *) (parent_class))->set (object, key, value);
@@ -462,6 +501,51 @@ sp_namedview_show (SPNamedView * nv, gpointer desktop)
 	item = sp_canvas_item_new (SP_DT_GRID (dt), SP_TYPE_CGRID, NULL);
 	nv->gridviews = g_slist_prepend (nv->gridviews, item);
 	sp_namedview_setup_grid_item (nv, item);
+}
+
+void 
+sp_namedview_window_from_document (SPDesktop *desktop)
+{
+	SPNamedView *nv = desktop->namedview;
+	GtkWindow *win = GTK_WINDOW(gtk_object_get_data (GTK_OBJECT(desktop->owner), "window"));
+	gint save_geometry = prefs_get_int_attribute ("options.savewindowgeometry", "value", 0);
+
+	if (nv->zoom != 0 && nv->cx != HUGE_VAL && nv->cy != HUGE_VAL) {
+		sp_desktop_zoom_absolute (desktop, nv->cx, nv->cy, nv->zoom);
+	} 
+	if (save_geometry && win) {
+		if (nv->window_width != -1 && nv->window_height != -1) {
+			gtk_window_resize (win, nv->window_width, nv->window_height);
+		}
+		if (nv->window_x != -1 && nv->window_y != -1) {
+			gtk_window_move (win, nv->window_x, nv->window_y);
+		}
+	}
+}
+
+void 
+sp_namedview_document_from_window (SPDesktop *desktop)
+{
+	SPRepr *view;
+	NRRect r;
+	gint w, h, x, y;
+	GtkWindow *win = GTK_WINDOW(gtk_object_get_data (GTK_OBJECT(desktop->owner), "window"));
+	gint save_geometry = prefs_get_int_attribute ("options.savewindowgeometry", "value", 0);
+
+	view = SP_OBJECT_REPR (desktop->namedview);
+	sp_desktop_get_display_area (desktop, &r);
+	sp_repr_set_double (view, "inkscape:zoom", SP_DESKTOP_ZOOM (desktop));
+	sp_repr_set_double (view, "inkscape:cx", (r.x0+r.x1)*0.5);
+	sp_repr_set_double (view, "inkscape:cy", (r.y0+r.y1)*0.5);
+
+	if (save_geometry && win) {
+		gtk_window_get_size (win, &w, &h);
+		gtk_window_get_position (win, &x, &y);
+		sp_repr_set_int_attribute (view, "inkscape:window-width", w);
+		sp_repr_set_int_attribute (view, "inkscape:window-height", h);
+		sp_repr_set_int_attribute (view, "inkscape:window-x", x);
+		sp_repr_set_int_attribute (view, "inkscape:window-y", y);
+	}
 }
 
 void
