@@ -1,5 +1,5 @@
-#ifndef __SP_ICON_H__
-#define __SP_ICON_H__
+#ifndef SEEN_SP_ICON_H
+#define SEEN_SP_ICON_H
 
 /*
  * Generic icon widget
@@ -23,17 +23,18 @@
 #include <gtk/gtkwidget.h>
 
 struct SPIcon {
-	GtkWidget widget;
+    GtkWidget widget;
 
-	GtkIconSize lsize;
-	int psize;
+    GtkIconSize lsize;
+    int psize;
+    gchar *name;
 
-	GdkPixbuf *pb;
-	GdkPixbuf *pb_faded;
+    GdkPixbuf *pb;
+    GdkPixbuf *pb_faded;
 };
 
 struct SPIconClass {
-	GtkWidgetClass parent_class;
+    GtkWidgetClass parent_class;
 };
 
 GType sp_icon_get_type (void);
@@ -75,14 +76,14 @@ private :
     {
       int cmp = i1.id().compare(i2.id());
       if (cmp == 0)
-	{
-	  if (i1.size() == i2.size()) return i1.psize() < i2.psize() ;
-	  return i1.size() < i2.size();
-	}
+      {
+          if (i1.size() == i2.size()) return i1.psize() < i2.psize() ;
+          return i1.size() < i2.size();
+      }
       return cmp < 0;
     }
   };
   std::map<ID, Glib::RefPtr<Gdk::Pixbuf>, cmpID> _map;
 };
 
-#endif
+#endif // SEEN_SP_ICON_H

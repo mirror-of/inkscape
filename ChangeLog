@@ -1,3 +1,7 @@
+2005-03-05  Jon A. Cruz  <jon@joncruz.org>
+	* src/widgets/icon.cpp, src/widgets/icon.cpp: Switched icon loading
+	  to be deferred and react to theme changes on-the-fly.
+
 2005-03-05  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/application/Makefile_insert,

@@ -1,4 +1,3 @@
-#define __SP_ICON_C__
 
 /*
  * Generic icon widget
@@ -48,11 +47,18 @@ static void sp_icon_class_init (SPIconClass *klass);
 static void sp_icon_init (SPIcon *icon);
 static void sp_icon_destroy (GtkObject *object);
 
+static void sp_icon_reset(SPIcon* icon);
+static void sp_icon_clear(SPIcon* icon);
+
 static void sp_icon_size_request (GtkWidget *widget, GtkRequisition *requisition);
 static void sp_icon_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 static int sp_icon_expose (GtkWidget *widget, GdkEventExpose *event);
 
 static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area);
+
+static void sp_icon_screen_changed( GtkWidget *widget, GdkScreen *previous_screen );
+static void sp_icon_style_set( GtkWidget *widget, GtkStyle *previous_style );
+static void sp_icon_theme_changed( SPIcon *icon );
 
 static guchar *sp_icon_image_load_pixmap (const gchar *name, unsigned int lsize, unsigned int psize);
 static guchar *sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psize );
@@ -64,6 +70,8 @@ static int sp_icon_get_phys_size( int size );
 static void sp_icon_overlay_pixels( guchar *px, int width, int height, int stride, unsigned int r, unsigned int g, unsigned int b );
 
 static GtkWidgetClass *parent_class;
+
+static bool sizeDirty = true;
 
 GtkType
 sp_icon_get_type (void)
@@ -99,42 +107,67 @@ sp_icon_class_init (SPIconClass *klass)
 	widget_class->size_request = sp_icon_size_request;
 	widget_class->size_allocate = sp_icon_size_allocate;
 	widget_class->expose_event = sp_icon_expose;
+	widget_class->screen_changed = sp_icon_screen_changed;
+	widget_class->style_set = sp_icon_style_set;
 }
+
 
 static void
 sp_icon_init (SPIcon *icon)
 {
-	GTK_WIDGET_FLAGS (icon) |= GTK_NO_WINDOW;
+    GTK_WIDGET_FLAGS (icon) |= GTK_NO_WINDOW;
+    icon->lsize = GTK_ICON_SIZE_BUTTON;
+    icon->psize = 0;
+    icon->name = 0;
+    icon->pb = 0;
+    icon->pb_faded = 0;
 }
 
 static void
 sp_icon_destroy (GtkObject *object)
 {
-	SPIcon *icon;
+    SPIcon *icon;
 
-	icon = SP_ICON (object);
+    icon = SP_ICON (object);
 
-	if (icon->pb) {
-		g_object_unref(G_OBJECT(icon->pb));
-		icon->pb = NULL;
-	}
-	if (icon->pb_faded) {
-		g_object_unref(G_OBJECT(icon->pb_faded));
-		icon->pb_faded = NULL;
-	}
+    sp_icon_clear(icon);
+    if ( icon->name ) {
+    }
 
-	((GtkObjectClass *) (parent_class))->destroy (object);
+    ((GtkObjectClass *) (parent_class))->destroy (object);
+}
+
+static void sp_icon_reset( SPIcon * icon ) {
+    icon->psize = 0;
+    sp_icon_clear(icon);
+}
+
+static void sp_icon_clear( SPIcon * icon ) {
+    if (icon->pb) {
+        g_object_unref(G_OBJECT(icon->pb));
+        icon->pb = NULL;
+    }
+    if (icon->pb_faded) {
+        g_object_unref(G_OBJECT(icon->pb_faded));
+        icon->pb_faded = NULL;
+    }
 }
 
 static void
 sp_icon_size_request (GtkWidget *widget, GtkRequisition *requisition)
 {
-	SPIcon *icon;
+    SPIcon *icon;
 
-	icon = SP_ICON (widget);
+    icon = SP_ICON (widget);
 
-	requisition->width = icon->psize;
-	requisition->height = icon->psize;
+    if ( icon->psize == 0 ) {
+        int size = sp_icon_get_phys_size(icon->lsize);
+        requisition->width = size;
+        requisition->height = size;
+    } else {
+        requisition->width = icon->psize;
+        requisition->height = icon->psize;
+    }
 }
 
 static void
@@ -149,21 +182,93 @@ sp_icon_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
 static int sp_icon_expose(GtkWidget *widget, GdkEventExpose *event)
 {
-	if (GTK_WIDGET_DRAWABLE (widget)) {
-		sp_icon_paint (SP_ICON (widget), &event->area);
-	}
+    if ( GTK_WIDGET_DRAWABLE(widget) ) {
+        SPIcon* icon = SP_ICON(widget);
+        if ( !icon->pb ) {
+            guchar *pixels = 0;
 
-	return TRUE;
+            icon->psize = sp_icon_get_phys_size(icon->lsize);
+
+            //g_warning ("loading '%s' (%d:%d)", name, icon->psize, scale);
+            pixels = sp_icon_image_load( icon, icon->name );
+
+            if (pixels) {
+                // don't pass the nr_free because we're caching the pixel
+                // space loaded through ...
+                // I just changed this. make sure sp_icon_image_load still does the right thing.
+                icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->psize, icon->psize, icon->psize * 4, /*(GdkPixbufDestroyNotify)nr_free*/NULL, NULL);
+                icon->pb_faded = gdk_pixbuf_copy(icon->pb);
+
+                pixels = gdk_pixbuf_get_pixels(icon->pb_faded);
+                size_t stride = gdk_pixbuf_get_rowstride(icon->pb_faded);
+                pixels += 3; // alpha
+                for ( int row = 0 ; row < icon->psize ; row++ ) {
+                    guchar *row_pixels=pixels;
+                    for ( int column = 0 ; column < icon->psize ; column++ )
+                    {
+                        *row_pixels = *row_pixels >> 1;
+                        row_pixels += 4;
+                    }
+                    pixels += stride;
+                }
+            }
+            else {
+                /* we should do something more useful if we can't load the image */
+                g_warning ("failed to load icon '%s'", icon->name);
+            }
+        }
+
+        sp_icon_paint (SP_ICON (widget), &event->area);
+    }
+
+    return TRUE;
 }
+
+
+static void sp_icon_screen_changed( GtkWidget *widget, GdkScreen *previous_screen )
+{
+    if ( GTK_WIDGET_CLASS( parent_class )->screen_changed ) {
+        GTK_WIDGET_CLASS( parent_class )->screen_changed( widget, previous_screen );
+    }
+    SPIcon* icon = SP_ICON(widget);
+    sp_icon_theme_changed(icon);
+}
+
+static void sp_icon_style_set( GtkWidget *widget, GtkStyle *previous_style )
+{
+    if ( GTK_WIDGET_CLASS( parent_class )->style_set ) {
+        GTK_WIDGET_CLASS( parent_class )->style_set( widget, previous_style );
+    }
+    SPIcon* icon = SP_ICON(widget);
+    sp_icon_theme_changed(icon);
+}
+
+static void sp_icon_theme_changed( SPIcon *icon )
+{
+//     g_message("Got a change bump for this icon");
+    sizeDirty = true;
+    sp_icon_reset(icon);
+    gtk_widget_queue_draw( GTK_WIDGET(icon) );
+}
+
 
 static GtkWidget *
 sp_icon_new_full( GtkIconSize lsize, const gchar *name )
 {
     static gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpGtk", 0, 0, 1 );
+    static gint fallback = prefs_get_int_attribute_limited( "debug.icons", "checkNames", 0, 0, 1 );
     GtkWidget* widget = 0;
 
     GtkStockItem stock;
-    if ( gtk_stock_lookup( name, &stock ) ) {
+    gboolean tryLoad = gtk_stock_lookup( name, &stock );
+    if ( !tryLoad && fallback ) {
+        tryLoad |= strncmp("gtk-", name, 4 ) == 0;
+    }
+    if ( !tryLoad && fallback ) {
+        tryLoad |= strncmp("gnome-", name, 6 ) == 0;
+    }
+
+    if ( tryLoad ) {
         GtkWidget* img = gtk_image_new_from_stock( name, lsize );
         if ( img ) {
             GtkImageType type = gtk_image_get_storage_type( GTK_IMAGE(img) );
@@ -186,38 +291,10 @@ sp_icon_new_full( GtkIconSize lsize, const gchar *name )
 
     if ( !widget ) {
         SPIcon *icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
-        guchar *pixels = 0;
-
         icon->lsize = lsize;
+        icon->name = g_strdup(name);
         icon->psize = sp_icon_get_phys_size(lsize);
 
-        //g_warning ("loading '%s' (%d:%d)", name, icon->psize, scale);
-        pixels = sp_icon_image_load( icon, name );
-
-        if (pixels) {
-            // don't pass the nr_free because we're caching the pixel
-            // space loaded through ...
-            // I just changed this. make sire sp_icon_image_load still does the right thing.
-            icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->psize, icon->psize, icon->psize * 4, /*(GdkPixbufDestroyNotify)nr_free*/NULL, NULL);
-            icon->pb_faded = gdk_pixbuf_copy(icon->pb);
-
-            pixels = gdk_pixbuf_get_pixels(icon->pb_faded);
-            size_t stride = gdk_pixbuf_get_rowstride(icon->pb_faded);
-            pixels += 3; // alpha
-            for ( int row = 0 ; row < icon->psize ; row++ ) {
-                guchar *row_pixels=pixels;
-                for ( int column = 0 ; column < icon->psize ; column++ )
-                {
-                    *row_pixels = *row_pixels >> 1;
-                    row_pixels += 4;
-                }
-                pixels += stride;
-            }
-        }
-        else {
-            /* we should do something more useful if we can't load the image */
-            g_warning ("failed to load icon '%s'", name);
-        }
         widget = GTK_WIDGET(icon);
     }
 
@@ -265,16 +342,40 @@ sp_icon_get_gtk_size (int size)
 static int sp_icon_get_phys_size(int size)
 {
     static bool init = false;
+    static int lastSys[GTK_ICON_SIZE_DIALOG + 1];
     static int vals[GTK_ICON_SIZE_DIALOG + 1];
 
     size = CLAMP( size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG );
 
+    if ( sizeDirty && init ) {
+        GtkIconSize const gtkSizes[] = {
+            GTK_ICON_SIZE_MENU,
+            GTK_ICON_SIZE_SMALL_TOOLBAR,
+            GTK_ICON_SIZE_LARGE_TOOLBAR,
+            GTK_ICON_SIZE_BUTTON,
+            GTK_ICON_SIZE_DND,
+            GTK_ICON_SIZE_DIALOG
+        };
+        for (unsigned i = 0; i < G_N_ELEMENTS(gtkSizes) && init; ++i) {
+            unsigned const val_ix(gtkSizes[i]);
+            g_assert( val_ix < G_N_ELEMENTS(vals) );
+
+            gint width = 0;
+            gint height = 0;
+            if ( gtk_icon_size_lookup(gtkSizes[i], &width, &height ) ) {
+                init &= (lastSys[val_ix] == std::max(width, height));
+            }
+        }
+    }
+
     if ( !init ) {
+        sizeDirty = false;
         gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpDefault", 0, 0, 1 );
         if ( dump ) {
             g_message( "Default icon sizes:" );
         }
         memset( vals, 0, sizeof(vals) );
+        memset( lastSys, 0, sizeof(lastSys) );
         GtkIconSize const gtkSizes[] = {
             GTK_ICON_SIZE_MENU,
             GTK_ICON_SIZE_SMALL_TOOLBAR,
@@ -303,6 +404,7 @@ static int sp_icon_get_phys_size(int size)
             bool used = false;
             if ( gtk_icon_size_lookup(gtkSizes[i], &width, &height ) ) {
                 vals[val_ix] = std::max(width, height);
+                lastSys[val_ix] = vals[val_ix];
                 used = true;
             }
             if (dump) {
