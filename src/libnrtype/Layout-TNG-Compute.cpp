@@ -701,12 +701,6 @@ class Layout::Calculator
         chunk_info->push_back(new_chunk);
 
         if (!chunk_info->back().broken_spans.empty() && last_span_at_break.end != chunk_info->back().broken_spans.back().end) {
-            if (!_flow._input_wrap_shapes.empty()
-                && _flow._input_stream[last_span_at_break.end.iter_span->input_index]->Type() == TEXT_SOURCE
-                && _charAttributes(para,last_span_at_break.end).is_white) {
-                last_span_at_break.end.increment();     // if we have one extra whitespace on the end of the line we can swallow it
-            }
-
             // need to back out spans until we come to the one with the last break in it
             while (!chunk_info->empty() && last_span_at_break.start.iter_span != chunk_info->back().broken_spans.back().start.iter_span) {
                 chunk_info->back().text_width -= chunk_info->back().broken_spans.back().width;
@@ -856,7 +850,7 @@ class Layout::Calculator
 
             span->end.increment();
 
-            if (span->width > maximum_width) {
+            if (span->width > maximum_width && !char_attributes.is_white) {       // whitespaces don't matter, we can put as many as we want at eol
                 TRACE("span %d exceeded scanrun; width = %f chars = %d", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count);
                 return false;
             }
