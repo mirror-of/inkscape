@@ -24,7 +24,9 @@ unsigned sp_text_get_length(SPObject *item);
 std::vector<NR::Point> sp_te_create_selection_quads(SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, NR::Matrix const &transform);
 
 Inkscape::Text::Layout::iterator sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p);
-void sp_te_get_cursor_coords (SPItem *item, Inkscape::Text::Layout::iterator const &i_position, NR::Point &p0, NR::Point &p1);
+void sp_te_get_cursor_coords (SPItem *item, Inkscape::Text::Layout::iterator const &position, NR::Point &p0, NR::Point &p1);
+
+SPStyle const * sp_te_style_at_position(SPItem *text, Inkscape::Text::Layout::iterator const &position);
 
 Inkscape::Text::Layout::iterator sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gchar const *utf8);
 Inkscape::Text::Layout::iterator sp_te_replace(SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, gchar const *utf8);
@@ -36,5 +38,6 @@ void sp_te_set_repr_text_multiline(SPItem *text, gchar const *str);
 void sp_te_adjust_kerning_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, NR::Point by);
 void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, gdouble by);
 void sp_te_adjust_linespacing_screen(SPItem *text, SPDesktop *desktop, gdouble by);
+void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, gchar const *style);
 
 #endif

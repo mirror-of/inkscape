@@ -474,6 +474,42 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							gtk_im_context_reset (tc->imc);
 						}
 						return TRUE;
+                    case GDK_B:
+                    case GDK_b:
+                        if (tc->text) {
+                            SPStyle const *style = sp_te_style_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end));
+                            gchar const *apply_style;
+                            if (style->font_weight.computed == SP_CSS_FONT_WEIGHT_NORMAL
+                                || style->font_weight.computed == SP_CSS_FONT_WEIGHT_100
+                                || style->font_weight.computed == SP_CSS_FONT_WEIGHT_200
+                                || style->font_weight.computed == SP_CSS_FONT_WEIGHT_300
+                                || style->font_weight.computed == SP_CSS_FONT_WEIGHT_400)
+                                apply_style = "font-weight:bold";
+                            else
+                                apply_style = "font-weight:normal";
+                            sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, apply_style);
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+							sp_text_context_update_cursor (tc);
+                            sp_text_context_update_text_selection (tc);
+							return TRUE;
+                        }
+                        break;
+                    case GDK_I:
+                    case GDK_i:
+                        if (tc->text) {
+                            SPStyle const *style = sp_te_style_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end));
+                            gchar const *apply_style;
+                            if (style->font_style.computed == SP_CSS_FONT_STYLE_NORMAL)
+                                apply_style = "font-style:italic";
+                            else
+                                apply_style = "font-style:normal";
+                            sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, apply_style);
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+							sp_text_context_update_cursor (tc);
+                            sp_text_context_update_text_selection (tc);
+							return TRUE;
+                        }
+                        break;
 					default:
 						break;
 					}
