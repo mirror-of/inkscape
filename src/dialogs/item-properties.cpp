@@ -295,21 +295,18 @@ sp_item_widget_change_selection ( SPWidget *spw,
 }
 
 
-
+/**
+*  \param selection Selection to use; should not be NULL.
+*/
 static void
 sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
 {
-
-    SPItem *item;
-    SPStyle *style;
-    GtkWidget *w;
-    GtkAdjustment *a;
+    g_assert (selection != NULL);
 
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    if (!selection || !sp_selection_item (selection)) {
-    
+    if (!selection->singleItem()) {
         gtk_widget_set_sensitive (GTK_WIDGET (spw), FALSE);
         return;
         
@@ -317,15 +314,14 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
         gtk_widget_set_sensitive (GTK_WIDGET (spw), TRUE);
     
     }
-
     
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    item = sp_selection_item (SP_WIDGET_SELECTION (spw));
-    style = SP_OBJECT_STYLE (item);
+    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
+    SPStyle *style = SP_OBJECT_STYLE (item);
 
     /* Sensitive */
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "sensitive"));
+    GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "sensitive"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->sensitive);
 
     /* Printable */
@@ -333,7 +329,7 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->printable);
 
     /* Opacity */
-    a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "opacity"));
+    GtkAdjustment *a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "opacity"));
     gtk_adjustment_set_value (a, SP_SCALE24_TO_FLOAT (style->opacity.value));
 
     /* Transform */
@@ -378,18 +374,15 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
 static void
 sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw)
 {
-
-    SPItem *item;
-    SPException ex;
-
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    item = sp_selection_item (SP_WIDGET_SELECTION (spw));
+    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
+    SPException ex;
     SP_EXCEPTION_INIT (&ex);
     
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
@@ -417,18 +410,15 @@ sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw)
 void
 sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw)
 {
-
-    SPItem *item;
-    SPException ex;
-
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    item = sp_selection_item (SP_WIDGET_SELECTION (spw));
+    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
+    SPException ex;
     SP_EXCEPTION_INIT (&ex);
     
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
@@ -455,18 +445,16 @@ sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw)
 static void
 sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw)
 {
-    SPItem *item;
-    SPException ex;
-
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked")) 
         return;
 
-    item = sp_selection_item (SP_WIDGET_SELECTION (spw));
+    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    
+
+    SPException ex;
     SP_EXCEPTION_INIT (&ex);
     
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
@@ -497,20 +485,16 @@ sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw)
 static void
 sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw)
 {
-    SPItem *item;
-    GtkWidget *w;
-    gchar *id;
-
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked")) 
         return;
 
-    item = sp_selection_item (SP_WIDGET_SELECTION (spw));
+    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
-    id = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
+    GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
+    gchar *id = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
     w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
     
     if (!strcmp (id, ((SPObject *) item)->id)) {
@@ -520,8 +504,8 @@ sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw)
     } else if (sp_document_lookup_id (SP_WIDGET_DOCUMENT (spw), id)) {
         gtk_label_set_text (GTK_LABEL (w), _("ID exists"));
     } else {
-        SPException ex;
         gtk_label_set_text (GTK_LABEL (w), _("ID"));
+        SPException ex;
         SP_EXCEPTION_INIT (&ex);
         sp_object_setAttribute (SP_OBJECT (item), "id", id, &ex);
         sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "ItemDialog:id");
@@ -536,19 +520,17 @@ sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw)
 static void
 sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw)
 {
-    SPItem *item;
-    SPCSSAttr *css;
-	Inkscape::SVGOStringStream os;	
-
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    item = sp_selection_item (SP_WIDGET_SELECTION (spw));
+    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    css = sp_repr_css_attr_new ();
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    
+    Inkscape::SVGOStringStream os;	
     os << CLAMP (a->value, 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
     sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
@@ -565,13 +547,10 @@ sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw)
 static void
 sp_item_widget_transform_value_changed ( GtkWidget *widget, SPWidget *spw )
 {
-    SPException ex;
-    SPItem *item;
-
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    item = sp_selection_item (SP_WIDGET_SELECTION (spw));
+    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
@@ -586,6 +565,7 @@ sp_item_widget_transform_value_changed ( GtkWidget *widget, SPWidget *spw )
 
     gchar c[64];
     sp_svg_transform_write (c, 64, &t);
+    SPException ex;
     SP_EXCEPTION_INIT (&ex);
     sp_object_setAttribute (SP_OBJECT (item), "transform", c, &ex);
 
