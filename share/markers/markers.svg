@@ -12,7 +12,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   sodipodi:docbase="C:\tmp\svg\src_inkscape\markers\inkscape\inkscape\share\markers">
+   sodipodi:docbase="C:\tmp\svg\src_inkscape\0.39\Current\inkscape\share\markers">
   <defs
      id="defs3">
     <marker
@@ -330,14 +330,52 @@
          d="M -1.5971367,-7.0977635 C -3.4863874,-7.0977635 -5.0235187,-5.5606321 -5.0235187,-3.6713813 C -5.0235187,-3.0147015 -4.7851656,-2.4444556 -4.4641095,-1.9232271 C -4.5028609,-1.8911157 -4.5437814,-1.8647646 -4.5806531,-1.8299921 C -5.2030765,-2.6849849 -6.1700514,-3.2751330 -7.3077730,-3.2751330 C -9.1970245,-3.2751331 -10.734155,-1.7380016 -10.734155,0.15124914 C -10.734155,2.0404999 -9.1970245,3.5776313 -7.3077730,3.5776313 C -6.3143268,3.5776313 -5.4391540,3.1355702 -4.8137404,2.4588126 C -4.9384274,2.8137041 -5.0235187,3.1803000 -5.0235187,3.5776313 C -5.0235187,5.4668819 -3.4863874,7.0040135 -1.5971367,7.0040135 C 0.29211394,7.0040135 1.8292454,5.4668819 1.8292454,3.5776313 C 1.8292454,2.7842354 1.5136868,2.0838028 1.0600576,1.5031550 C 2.4152718,1.7663868 3.7718375,2.2973711 4.7661444,3.8340272 C 4.0279463,3.0958289 3.5540908,1.7534117 3.5540908,-0.058529361 L 2.9247554,-0.10514681 L 3.5074733,-0.12845553 C 3.5074733,-1.9403966 3.9580199,-3.2828138 4.6962183,-4.0210121 C 3.7371277,-2.5387813 2.4390549,-1.9946496 1.1299838,-1.7134486 C 1.5341802,-2.2753578 1.8292454,-2.9268556 1.8292454,-3.6713813 C 1.8292454,-5.5606319 0.29211394,-7.0977635 -1.5971367,-7.0977635 z "
          id="path1015" />
     </marker>
+    <marker
+       id="INK_mTorso"
+       refX="0.00000000"
+       refY="0.00000000"
+       orient="auto">
+      <g
+         id="g1077"
+         style="fill:none;">
+        <path
+           style="fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+           d="M -10.688239,-14.680315 L 0.00000000,-0.17484805 L -12.469612,18.911292"
+           id="path1073" />
+        <path
+           style="fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+           d="M -0.50896375,-0.17484805 L -7.3799743,0.079633825"
+           id="path1074" />
+        <path
+           sodipodi:type="arc"
+           style="fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+           id="path1076"
+           sodipodi:cx="-15.268912"
+           sodipodi:cy="0.46135664"
+           sodipodi:rx="7.3799744"
+           sodipodi:ry="6.9982514"
+           d="M -7.8889380 0.46135664 A 7.3799744 6.9982514 0 1 0 -22.648887,0.46135664 A 7.3799744 6.9982514 0 1 0 -7.8889380 0.46135664 z" />
+      </g>
+    </marker>
+    <marker
+       id="INK_mLegs"
+       refX="0.00000000"
+       refY="0.00000000"
+       orient="auto">
+      <path
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
+         d="M -15.523394,-20.278916 L -19.722345,-14.807556 L -0.25448187,-0.17484805 L -19.849586,13.567173 L -17.050286,18.656811"
+         id="path1173"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
   </defs>
   <sodipodi:namedview
      id="base"
      inkscape:zoom="0.89797979"
-     inkscape:cx="127.23936"
+     inkscape:cx="127.23938"
      inkscape:cy="431.38342"
-     inkscape:window-width="744"
-     inkscape:window-height="501"
+     inkscape:window-width="799"
+     inkscape:window-height="633"
      inkscape:window-x="175"
      inkscape:window-y="1" />
   <path
@@ -446,4 +484,12 @@
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#Template);"
      d="M 77.352171,497.73439 L 33.058571,497.73439"
      id="Template_prev" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mTorso);marker-end:none;"
+     d="M 74.568134,730.20065 L 30.274536,730.20065"
+     id="INK_mTorso_prev" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mLegs);"
+     d="M 198.45735,730.20064 L 154.16375,730.20064"
+     id="INK_mLegs_prev" />
 </svg>
