@@ -314,12 +314,10 @@ void Path::DoJoin (Shape *dest, double width, JoinType join, NR::Point pos, NR::
                 emiter = miter;
             }
             
-            int nrightStNo;
-            int nrightEnNo;
             if (fabs(l) < miter) {
-                nrightStNo = nrightEnNo = dest->AddPoint(pos - l * biss);
-                dest->AddEdge(stNo[RIGHT], nrightStNo);
-                dest->AddEdge(nrightEnNo, enNo[RIGHT]);
+                int const n = dest->AddPoint(pos - l * biss);
+                dest->AddEdge(stNo[RIGHT], n);
+                dest->AddEdge(n, enNo[RIGHT]);
             } else {
                 dest->AddEdge(stNo[RIGHT], enNo[RIGHT]);
             }
@@ -378,12 +376,10 @@ void Path::DoJoin (Shape *dest, double width, JoinType join, NR::Point pos, NR::
             if (emiter < miter) {
                 emiter = miter;
             }
-            int nleftStNo;
-            int nleftEnNo;
             if ( fabs(l) < miter) {
-                nleftStNo = nleftEnNo = dest->AddPoint (pos + l * biss);
-                dest->AddEdge (enNo[LEFT], nleftEnNo);
-                dest->AddEdge (nleftStNo, stNo[LEFT]);
+                int const n = dest->AddPoint (pos + l * biss);
+                dest->AddEdge (enNo[LEFT], n);
+                dest->AddEdge (n, stNo[LEFT]);
             }
             else
             {
