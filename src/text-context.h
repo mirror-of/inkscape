@@ -38,7 +38,7 @@ struct SPTextContext {
 
 	GtkIMContext *imc;
 
-	SPItem *text;
+	SPItem *text; // the text we're editing, or NULL if none selected
 
 	/* Text item position in root coordinates */
 	NR::Point pdoc;
@@ -54,7 +54,7 @@ struct SPTextContext {
 	gint timeout;
 	guint show : 1;
 	guint phase : 1;
-	guint nascent_object : 1;
+	guint nascent_object : 1; // true if we're clicked on canvas to put cursor, but no text typed yet so ->text is still NULL
 
 	/* Preedit String */
 	gchar* preedit_string;
@@ -65,7 +65,8 @@ struct SPTextContextClass {
 };
 
 /* Standard Gtk function */
-
 GtkType sp_text_context_get_type (void);
+
+bool sp_text_paste_inline(SPEventContext *ec);
 
 #endif

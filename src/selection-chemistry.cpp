@@ -34,6 +34,7 @@
 #include "sp-path.h"
 #include "sp-use.h"
 #include "sp-text.h"
+#include "text-context.h"
 #include "helper/sp-intl.h"
 #include "display/sp-canvas.h"
 #include "path-chemistry.h"
@@ -776,6 +777,11 @@ void sp_selection_paste(bool in_place)
     g_assert(SP_IS_DESKTOP(desktop));
 
     SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    if (tools_isactive (desktop, TOOLS_TEXT)) {
+        if (sp_text_paste_inline(desktop->event_context))
+            return; // pasted from system clipboard into text, nothing else to do
+    }
 
     // check if something is in the clipboard
     if (clipboard == NULL) {

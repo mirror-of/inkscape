@@ -26,6 +26,9 @@
 #include <display/sodipodi-ctrlrect.h>
 #include <libnr/nr-matrix-ops.h>
 #include <gtk/gtkimmulticontext.h>
+
+#include <gtkmm.h>
+
 #include "macros.h"
 #include "sp-text.h"
 #include "inkscape.h"
@@ -648,6 +651,40 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	} else {
 		return FALSE; // return "I did nothing" value so that global shortcuts can be activated
 	}
+}
+
+/**
+ Attempts to paste system clipboard into the currently edited text, returns true on success
+ */
+bool
+sp_text_paste_inline(SPEventContext *ec)
+{
+	if (!SP_IS_TEXT_CONTEXT (ec))
+		return false;
+
+	SPTextContext *tc = SP_TEXT_CONTEXT (ec);
+
+	if ((tc->text) || (tc->nascent_object)) {
+		// there is an active text object in this context, or a new object was just created
+
+		Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+		Glib::ustring const text = refClipboard->wait_for_text();
+
+		if (!text.empty()) {
+
+			if (!tc->text) { // create text if none (i.e. if nascent_object)
+				sp_text_context_setup_text (tc);
+				tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+			}
+
+			tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, text.c_str());
+			sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+
+			return true;
+		}
+	} // FIXME: else create and select a new object under cursor!
+
+	return false;
 }
 
 /**
