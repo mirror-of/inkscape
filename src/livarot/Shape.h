@@ -16,9 +16,11 @@
 #include <cstring>
 #include <vector>
 
-#include "ShapeUtils.h"
 #include "libnr/nr-point.h"
 #include "livarot/livarot-forward.h"
+#include "livarot/sweep-event.h"
+#include "livarot/sweep-tree.h"
+#include "livarot/LivarotDefs.h"
 
 /*
  * the Shape class (was the Digraph class, as the header says) stores digraphs (no kidding!) of which 
