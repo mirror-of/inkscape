@@ -627,7 +627,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     aux_toolbox_space(tbl, AUX_SPACING);
 
     {
-    GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
+        GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
     GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
 
     {
@@ -658,7 +658,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
 
-    gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(tbl), cvbox, FALSE, FALSE, 0);
     }
 
