@@ -97,7 +97,10 @@ sp_rect_ry_set (SPItem *item, const NR::Point &p, guint state)
 		rect->rx.computed = rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, temp);
 		rect->ry.set = rect->rx.set = TRUE;
 	} else {
-		rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, rect->height.computed / 2.0);
+		if (!rect->rx.set || rect->rx.computed == 0) 
+			rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, MIN(rect->height.computed / 2.0, rect->width.computed / 2.0));
+		else 
+			rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, rect->height.computed / 2.0);
 		rect->ry.set = TRUE;
 	}
 	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);

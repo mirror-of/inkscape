@@ -437,8 +437,6 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
         sp_repr_unref(repr);
     }
 
-    /* This is bit ugly, but so we are */
-
     NR::Point p0, p1;
     if ( state & GDK_CONTROL_MASK ) {
         NR::Point delta = pt - rc.center;
@@ -512,7 +510,10 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
         sp_rect_set_rx(SP_RECT(rc.item), TRUE, 0.5 * rc.rx_ratio * w);
     }
     if ( rc.ry_ratio != 0.0 ) {
-        sp_rect_set_ry(SP_RECT(rc.item), TRUE, 0.5 * rc.ry_ratio * h);
+        if (rc.rx_ratio == 0.0)
+            sp_rect_set_ry(SP_RECT(rc.item), TRUE, CLAMP(0.5 * rc.ry_ratio * MAX(w, h), 0, MIN(w, h)/2));
+        else 
+            sp_rect_set_ry(SP_RECT(rc.item), TRUE, 0.5 * rc.ry_ratio * h);
     }
 
     // status text
