@@ -148,11 +148,8 @@ sp_star_context_dispose (GObject *object)
 
 static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
-    SPStarContext *sc;
-    SPEventContext *ec;
-
-    sc = SP_STAR_CONTEXT (data);
-    ec = SP_EVENT_CONTEXT (sc);
+    SPStarContext *sc = SP_STAR_CONTEXT(data);
+    SPEventContext *ec = SP_EVENT_CONTEXT(sc);
 
     if (sc->knot_holder) {
         sp_knot_holder_destroy (sc->knot_holder);
@@ -191,7 +188,7 @@ void
 sp_star_context_selection_changed (SPSelection * selection, gpointer data)
 {
     g_assert (selection != NULL);
-    
+
     SPStarContext *sc = SP_STAR_CONTEXT (data);
     SPEventContext *ec = SP_EVENT_CONTEXT (sc);
 
@@ -262,9 +259,10 @@ sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
         sc->proportion = (val) ? g_ascii_strtod (val, NULL) : 0.5;
         sc->proportion = CLAMP (sc->proportion, 0.01, 2.0);
     } else if (!strcmp (key, "isflatsided")) {
-       if (val && !strcmp (val, "true"))
+        if (val && !strcmp(val, "true"))
             sc->isflatsided = true;
-       else sc->isflatsided = false;
+        else
+            sc->isflatsided = false;
     }
 }
 
@@ -378,10 +376,10 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
         break;
     case GDK_KEY_PRESS:
         switch (event->key.keyval) {
-        case GDK_Up: 
-        case GDK_Down: 
-        case GDK_KP_Up: 
-        case GDK_KP_Down: 
+        case GDK_Up:
+        case GDK_Down:
+        case GDK_KP_Up:
+        case GDK_KP_Down:
             // prevent the zoom field from activation
             if (!MOD__CTRL_ONLY)
                 ret = TRUE;
@@ -415,9 +413,9 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 }
 
 static void
-sp_star_drag (SPStarContext * sc, NR::Point p, guint state)
+sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
 {
-    SPDesktop *desktop = SP_EVENT_CONTEXT (sc)->desktop;
+    SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
 
     int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -447,40 +445,40 @@ sp_star_drag (SPStarContext * sc, NR::Point p, guint state)
     NR::Point d = p1 - p0;
     gdouble r1 = NR::L2 (d);
     gdouble arg1 = atan2 (d);
-    if (state & GDK_CONTROL_MASK) { 
-        arg1 = round (arg1/(M_PI/snaps))*(M_PI/snaps);
-    } 
-	bool isflat = sc->isflatsided;
-	sp_star_position_set (star, sc->magnitude, p0, r1, r1 * sc->proportion, arg1, arg1 + M_PI / sides, isflat);
+    if (state & GDK_CONTROL_MASK) {
+        arg1 = ( round( arg1 / (M_PI/snaps) )
+                 * (M_PI/snaps) );
+    }
+    bool isflat = sc->isflatsided;
+    sp_star_position_set(star, sc->magnitude, p0, r1, r1 * sc->proportion,
+                         arg1, arg1 + M_PI / sides, isflat);
 
     /* status text */
-    gchar status[80];
     GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
-    if (isflat)
-         sprintf (status, _("Draw polygon at (%s,%s)"), xs->str, ys->str);
-    else sprintf (status, _("Draw star at (%s,%s)"), xs->str, ys->str);
-    sp_view_set_status (SP_VIEW (desktop), status, FALSE);
-    g_string_free (xs, FALSE);
-    g_string_free (ys, FALSE);
+    gchar *status = g_strdup_printf(( isflat
+                                      ? _("Draw polygon at (%s,%s)")
+                                      : _("Draw star at (%s,%s)") ),
+                                    xs->str, ys->str);
+    sp_view_set_status(SP_VIEW(desktop), status, FALSE);
+    g_free(status);
+    g_string_free(xs, FALSE);
+    g_string_free(ys, FALSE);
 }
 
 static void
 sp_star_finish (SPStarContext * sc)
 {
     if (sc->item != NULL) {
-        SPDesktop *desktop;
-        SPObject  *object;
+        SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
+        SPObject *object = SP_OBJECT(sc->item);
 
-        desktop = SP_EVENT_CONTEXT (sc)->desktop;
-        object  = SP_OBJECT(sc->item);
-        
-        sp_shape_set_shape (SP_SHAPE (sc->item));
+        sp_shape_set_shape(SP_SHAPE(sc->item));
 
-        sp_object_invoke_write (object, NULL, SP_OBJECT_WRITE_EXT);
+        sp_object_invoke_write(object, NULL, SP_OBJECT_WRITE_EXT);
 
         SP_DT_SELECTION(desktop)->setItem(sc->item);
-        sp_document_done (SP_DT_DOCUMENT (desktop));
+        sp_document_done(SP_DT_DOCUMENT(desktop));
 
         sc->item = NULL;
     }

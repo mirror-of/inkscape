@@ -1,6 +1,10 @@
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/selection-chemistry.cpp: Use NR::Rect bounds() method instead of old bounds(NRRect*).
+	* src/star-context.cpp: Minor cleanups, and use g_strdup_printf instead
+	  of fixed-size buffer for translated string.
+
+	* src/selection-chemistry.cpp: Use NR::Rect bounds() method instead of
+	  old bounds(NRRect*).
 
 	* src/document.cpp (sp_document_create): 
 	* src/preferences-skeleton.h:
