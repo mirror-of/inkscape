@@ -217,12 +217,14 @@ sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			sp_shape_set_curve((SPShape *) path, NULL, TRUE);
 		}
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_PROP_MARKER:
 	case SP_PROP_MARKER_START:
 	case SP_PROP_MARKER_MID:
 	case SP_PROP_MARKER_END:
 		sp_shape_set_marker(object, key, value);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
  	default:
 		if (((SPObjectClass *) parent_class)->set) {
