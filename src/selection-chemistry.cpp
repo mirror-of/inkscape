@@ -31,6 +31,7 @@
 #include "helper/sp-canvas.h"
 #include "path-chemistry.h"
 #include "desktop-affine.h"
+#include "libnr/nr-matrix.h"
 
 #include "selection-chemistry.h"
 
@@ -732,9 +733,10 @@ void sp_selection_rotate_90()
 	SPSelection *selection = SP_DT_SELECTION(desktop);
 	if sp_selection_is_empty(selection) return;
 	GSList *l = selection->items;
+	NR::rotate const rot_neg_90(NR::Point(0, -1));
 	for (GSList *l2 = l ; l2 != NULL ; l2 = l2->next) {
 		SPItem *item = SP_ITEM(l2->data);
-		sp_item_rotate_rel (item,-90);
+		sp_item_rotate_rel(item, rot_neg_90);
 	}
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));

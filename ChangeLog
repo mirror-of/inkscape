@@ -1,13 +1,23 @@
 2004-02-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item-transform.cpp (sp_item_rotate_rel): NR::Matrix'ification.
+
+	* src/sp-item-transform.h, src/sp-item-transform.cpp
+	(sp_item_scale_rel, sp_item_skew_rel): Remove these unused functions.
+
+	* src/sp-item-transform.h, src/sp-item-transform.cpp
+	(sp_item_rotate_rel, sp_item_move_rel): Change from pair of points to
+	NR::rotate and NR::translate respectively.  Update callers.
 
 	* src/node-context.cpp (sp_node_context_root_handler):
 	* src/rect-context.cpp (sp_rect_context_root_handler):
 	* src/zoom-context.cpp (sp_zoom_context_root_handler):
 	NR::Point'ification and var cleanup.
 
-	* src/event-context.cpp (sp_event_context_private_root_handler,
-	set_event_location): NR::Point'ification.
+	* src/event-context.cpp
+	(sp_event_context_private_root_handler, set_event_location):
+	* src/dialogs/align.cpp (sp_align_arrange_clicked): 
+	NR::Point'ification.
 
 	* src/desktop.h (sp_desktop_zoom_relative_keep_point,
 	sp_desktop_scroll_world): Add NR::Point version.
