@@ -949,40 +949,37 @@ sp_export_progress_callback (float value, void *data)
 static void
 sp_export_export_clicked (GtkButton *button, GtkObject *base)
 {
-    GtkWidget *fe;
-    const gchar *filename;
-    float x0, y0, x1, y1, xdpi, ydpi;
-    int width, height;
-
     if (!SP_ACTIVE_DESKTOP) return;
 
-    fe = (GtkWidget *)gtk_object_get_data (base, "filename");
-    filename = gtk_entry_get_text (GTK_ENTRY (fe));
+    GtkWidget *fe = (GtkWidget *)gtk_object_get_data(base, "filename");
+    gchar const *filename = gtk_entry_get_text(GTK_ENTRY(fe));
 
-    x0 = sp_export_value_get_px (base, "x0");
-    y0 = sp_export_value_get_px (base, "y0");
-    x1 = sp_export_value_get_px (base, "x1");
-    y1 = sp_export_value_get_px (base, "y1");
-    xdpi = sp_export_value_get (base, "xdpi");
-    ydpi = sp_export_value_get (base, "ydpi");
-    width = (int) (sp_export_value_get (base, "bmwidth") + 0.5);
-    height = (int) (sp_export_value_get (base, "bmheight") + 0.5);
+    float const x0 = sp_export_value_get_px(base, "x0");
+    float const y0 = sp_export_value_get_px(base, "y0");
+    float const x1 = sp_export_value_get_px(base, "x1");
+    float const y1 = sp_export_value_get_px(base, "y1");
+    float const xdpi = sp_export_value_get(base, "xdpi");
+    float const ydpi = sp_export_value_get(base, "ydpi");
+    int const width = int(sp_export_value_get(base, "bmwidth") + 0.5);
+    int const height = int(sp_export_value_get(base, "bmheight") + 0.5);
 
-    if (filename == NULL || strlen (filename) == 0) {
-        sp_ui_error_dialog (_("You have to enter a filename"));
+    if (filename == NULL || *filename == '\0') {
+        sp_ui_error_dialog(_("You have to enter a filename"));
         return;
     }
-    
+
     if (!((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0))) {
         sp_ui_error_dialog (_("The chosen area to be exported is invalid"));
         return;
     }
 
-    gchar * dirname = g_dirname(filename);
-    if (dirname == NULL || !Inkscape::IO::file_test(dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
-        gchar * error;
-        gchar * safeDir = Inkscape::IO::sanitizeString(dirname);
-        error = g_strdup_printf(_("Directory %s does not exist or is not a directory.\n"), safeDir);
+    gchar *dirname = g_dirname(filename);
+    if ( dirname == NULL
+         || !Inkscape::IO::file_test(dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) )
+    {
+        gchar *safeDir = Inkscape::IO::sanitizeString(dirname);
+        gchar *error = g_strdup_printf(_("Directory %s does not exist or is not a directory.\n"),
+                                       safeDir);
         sp_ui_error_dialog(error);
         g_free(safeDir);
         g_free(error);
@@ -1145,7 +1142,7 @@ sp_export_browse_clicked (GtkButton *button, gpointer userdata)
 
     filename = gtk_entry_get_text (GTK_ENTRY (fe));
 
-    if(strlen(filename) == 0) {
+    if (*filename == '\0') {
         filename = homedir_path(NULL);
     }
 
