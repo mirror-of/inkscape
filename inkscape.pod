@@ -271,7 +271,7 @@ regular pointing devices.
 
 It works "out of the box" with Apple's X server, but with XFree86 you
 will need to have the "SendCoreEvents" option turned on if you do not
-already. 
+already.  It does not seem to work as well under Windows.
 
 Note that we do not support pressure/tilt sensitivity or any
 tablet-specific features yet.
