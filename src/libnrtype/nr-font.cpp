@@ -21,15 +21,24 @@
 #include <libnr/nr-matrix-fns.h>
 #include "nr-font.h"
 
+#include "FontInstance.h"
+#include "RasterFont.h"
+#include "../livarot/Path.h"
+
 /**
  * Increments the reference count for the font.
  */
 NRFont *
 nr_font_ref (NRFont *font)
 {
+	if ( font == NULL ) return NULL;
+	((font_instance*)font)->Ref();
+	return font;
+#if 0
 	font->refcount += 1;
 
 	return font;
+#endif
 }
 
 /**
@@ -38,6 +47,10 @@ nr_font_ref (NRFont *font)
 NRFont *
 nr_font_unref (NRFont *font)
 {
+	if ( font == NULL ) return NULL;
+	((font_instance*)font)->Unref();
+	return NULL;
+#if 0
 	font->refcount -= 1;
 
 	if (font->refcount < 1) {
@@ -45,6 +58,7 @@ nr_font_unref (NRFont *font)
 	}
 
 	return NULL;
+#endif
 }
 
 /**
@@ -53,7 +67,13 @@ nr_font_unref (NRFont *font)
 NRBPath *
 nr_font_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *path, unsigned int ref)
 {
+	if ( font == NULL ) return NULL;
+	font_instance* f=(font_instance*)font;
+	path->path=(NArtBpath*)f->ArtBPath(glyph);
+	return path;
+#if 0
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_outline_get (font, glyph, path, ref);
+#endif
 }
 
 /**
@@ -62,16 +82,21 @@ nr_font_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *path, unsi
 void
 nr_font_glyph_outline_unref (NRFont *font, unsigned int glyph)
 {
+#if 0
 	((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_outline_unref (font, glyph);
+#endif
 }
 
 /**
  * Retrieves the horizontal positional advancement for the glyph in the
  * given font.
  */
-NR::Point nr_font_glyph_advance_get (NRFont *font, unsigned int glyph)
+NR::Point nr_font_glyph_advance_get (NRFont *font, unsigned int glyph,unsigned int metrics)
 {
+	return nr_typeface_glyph_advance_get((NRTypeFace*)font,glyph,metrics);
+#if 0
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_advance_get (font, glyph);
+#endif
 }
 
 /**
@@ -80,7 +105,18 @@ NR::Point nr_font_glyph_advance_get (NRFont *font, unsigned int glyph)
 NRRect *
 nr_font_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 {
+	area->x0=area->y0=area->x1=area->y1=0;
+	if ( font == NULL ) return area;
+	font_instance* f=(font_instance*)font;
+	NR::Rect res=f->BBox(glyph);
+	area->x0=(res.min())[0];
+	area->y0=(res.min())[1];
+	area->x1=(res.max())[0];
+	area->y1=(res.max())[1];
+	return area;
+#if 0
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_area_get (font, glyph, area);
+#endif
 }
 
 /**
@@ -89,7 +125,20 @@ nr_font_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 NRRasterFont *
 nr_rasterfont_new (NRFont *font, NR::Matrix transform)
 {
+	if ( font == NULL ) return NULL;
+	return (NRRasterFont*) ((font_instance*)font)->RasterFont(transform,0.0);
+#if 0
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->rasterfont_new (font, transform);
+#endif
+}
+NRRasterFont *
+nr_rasterfont_new (NRFont *font, font_style const &styl)
+{
+	if ( font == NULL ) return NULL;
+	return (NRRasterFont*) ((font_instance*)font)->RasterFont(styl);
+#if 0
+	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->rasterfont_new (font, transform);
+#endif
 }
 
 /* Generic implementation */

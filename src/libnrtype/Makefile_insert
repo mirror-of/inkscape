@@ -6,9 +6,8 @@ libnrtype/clean:
 	rm -f libnrtype/libnrtype.a $(libnrtype_libnrtype_a_OBJECTS)
 
 if USE_XFT
-libnrtype_xft_sources =	\
-	libnrtype/nr-type-xft.cpp	\
-	libnrtype/nr-type-xft.h
+libnrtype_xft_sources =	
+
 endif
 
 if PLATFORM_WIN32
@@ -27,9 +26,7 @@ libnrtype_win32_sources =	\
 	libnrtype/cp932.cpp	\
 	libnrtype/cp936.cpp	\
 	libnrtype/cp949.cpp	\
-	libnrtype/cp950.cpp	\
-	libnrtype/nr-type-w32.cpp	\
-	libnrtype/nr-type-w32.h
+	libnrtype/cp950.cpp	
 endif 
 
 libnrtype_libnrtype_a_CPPFLAGS =	\
@@ -40,19 +37,17 @@ libnrtype_libnrtype_a_CPPFLAGS =	\
 libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/font-style-to-pos.cpp	\
 	libnrtype/font-style-to-pos.h	\
-	libnrtype/nr-font.cpp	\
-	libnrtype/nr-font.h	\
-	libnrtype/nr-rasterfont.cpp	\
-	libnrtype/nr-rasterfont.h	\
-	libnrtype/nr-type-directory.cpp	\
-	libnrtype/nr-type-directory.h	\
-	libnrtype/nr-type-ft2.cpp	\
-	libnrtype/nr-type-ft2.h	\
 	libnrtype/nr-type-pos-def.cpp	\
 	libnrtype/nr-type-pos-def.h	\
 	libnrtype/nr-type-primitives.cpp	\
 	libnrtype/nr-type-primitives.h	\
-	libnrtype/nr-typeface.cpp	\
-	libnrtype/nr-typeface.h	\
+	libnrtype/FontFactory.cpp \
+	libnrtype/FontFactory.h \
+	libnrtype/FontInstance.cpp \
+	libnrtype/FontInstance.h \
+	libnrtype/RasterFont.cpp \
+	libnrtype/RasterFont.h \
+	libnrtype/TextWrapper.cpp \
+	libnrtype/TextWrapper.h \
 	$(libnrtype_win32_sources)	\
 	$(libnrtype_xft_sources)

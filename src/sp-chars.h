@@ -13,7 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnrtype/nr-font.h>
+#include <libnrtype/FontInstance.h>
 #include "display/curve.h"
 #include "sp-item.h"
 
@@ -28,7 +28,7 @@ class SPCharElement;
 struct SPCharElement {
 	SPCharElement *next;
 	guint glyph;
-	NRFont *font;
+	font_instance *font;
 	NRMatrix transform;
 };
 
@@ -46,8 +46,8 @@ GType sp_chars_get_type ();
 
 void sp_chars_clear (SPChars *chars);
 
-void sp_chars_add_element(SPChars *chars, guint glyph, NRFont *font, NR::Matrix const &transform);
-void sp_chars_add_element(SPChars *chars, guint glyph, NRFont *font, NRMatrix const *transform);
+void sp_chars_add_element(SPChars *chars, guint glyph, font_instance *font, NR::Matrix const &transform);
+void sp_chars_add_element(SPChars *chars, guint glyph, font_instance *font, NRMatrix const *transform);
 
 SPCurve *sp_chars_normalized_bpath (SPChars *chars);
 

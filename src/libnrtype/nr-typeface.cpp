@@ -16,6 +16,8 @@
 #include "nr-typeface.h"
 #include "nr-type-directory.h"
 
+#include "FontInstance.h"
+
 static void nr_typeface_class_init (NRTypeFaceClass *klass);
 static void nr_typeface_init (NRTypeFace *tface);
 static void nr_typeface_finalize (NRObject *object);
@@ -121,6 +123,18 @@ nr_typeface_new (NRTypeFaceDef *def)
 
 	return tface;
 }
+NRTypeFace* nr_typeface_ref(NRTypeFace* t)
+{
+  if ( t == NULL ) return NULL;
+  ((font_instance*)t)->Ref();
+  return t;
+}
+NRTypeFace* nr_typeface_unref(NRTypeFace* t)
+{
+  if ( t == NULL ) return NULL;
+  ((font_instance*)t)->Unref();
+  return NULL;
+}
 
 /**
  * Gets the name matching str of the given typeface
@@ -128,7 +142,11 @@ nr_typeface_new (NRTypeFaceDef *def)
 unsigned int
 nr_typeface_name_get (NRTypeFace *tf, gchar *str, unsigned int size)
 {
+  if ( tf == NULL ) return 0;
+	return ((font_instance*)tf)->Name(str,size);
+#if 0
 	return nr_typeface_attribute_get (tf, "name", str, size);
+#endif
 }
 
 /**
@@ -137,7 +155,11 @@ nr_typeface_name_get (NRTypeFace *tf, gchar *str, unsigned int size)
 unsigned int
 nr_typeface_family_name_get (NRTypeFace *tf, gchar *str, unsigned int size)
 {
+  if ( tf == NULL ) return 0;
+	return ((font_instance*)tf)->Family(str,size);
+#if 0
 	return nr_typeface_attribute_get (tf, "family", str, size);
+#endif
 }
 
 /**
@@ -146,7 +168,11 @@ nr_typeface_family_name_get (NRTypeFace *tf, gchar *str, unsigned int size)
 unsigned int
 nr_typeface_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
+  if ( tf == NULL ) return 0;
+	return ((font_instance*)tf)->Attribute(key,str,size);
+#if 0
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->attribute_get (tf, key, str, size);
+#endif
 }
 
 /**
@@ -155,7 +181,10 @@ nr_typeface_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigne
 NRBPath *
 nr_typeface_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref)
 {
+	return NULL;
+#if 0
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_outline_get (tf, glyph, metrics, d, ref);
+#endif
 }
 
 /**
@@ -164,7 +193,10 @@ nr_typeface_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int 
 void
 nr_typeface_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
+	return;
+#if 0
 	((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_outline_unref (tf, glyph, metrics);
+#endif
 }
 
 /**
@@ -173,7 +205,15 @@ nr_typeface_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned in
  */
 NR::Point nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
+  if ( tf == NULL ) return NR::Point(0,0);
+	if ( metrics == NR_TYPEFACE_METRICS_VERTICAL ) {
+		return NR::Point(0,-(((font_instance*)tf)->Advance(glyph,true)));  // inverse of the advance because origin is in bottomleft corner
+	} else {
+		return NR::Point(((font_instance*)tf)->Advance(glyph,false),0);
+	}
+#if 0
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_advance_get (tf, glyph, metrics);
+#endif
 }
 
 /**
@@ -185,7 +225,11 @@ NR::Point nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, uns
 unsigned int
 nr_typeface_lookup_default (NRTypeFace *tf, unsigned int unival)
 {
+  if ( tf == NULL ) return 0;
+	return ((font_instance*)tf)->MapUnicodeChar(unival);
+#if 0
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->lookup (tf, NR_TYPEFACE_LOOKUP_RULE_DEFAULT, unival);
+#endif
 }
 
 /**
@@ -194,9 +238,14 @@ nr_typeface_lookup_default (NRTypeFace *tf, unsigned int unival)
 NRFont *
 nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size)
 {
+  if ( tf == NULL ) return NULL;
+	((font_instance*)tf)->Ref();
+	return ((NRFont*)tf);
+#if 0
 	NR::Matrix const scale(NR::scale(size, size));
 
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->font_new (tf, metrics, scale);
+#endif
 }
 
 /* NRTypeFaceEmpty */

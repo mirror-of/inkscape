@@ -26,6 +26,8 @@ class NRTypePosDef;
 #include <libnrtype/nr-font.h>
 #include <libnrtype/nr-rasterfont.h>
 
+#include "FontInstance.h"
+
 enum {
 	NR_TYPEFACE_METRICS_DEFAULT,
 	NR_TYPEFACE_METRICS_HORIZONTAL,
@@ -80,10 +82,15 @@ NRType nr_typeface_get_type (void);
 
 NRTypeFace *nr_typeface_new (NRTypeFaceDef *def);
 
+#if 0
 /* NRTypeFace *nr_typeface_ref (NRTypeFace *tf); */
 #define nr_typeface_ref(t) (NRTypeFace *) nr_object_ref ((NRObject *) (t))
 /* NRTypeFace *nr_typeface_unref (NRTypeFace *tf); */
 #define nr_typeface_unref(t) (NRTypeFace *) nr_object_unref ((NRObject *) (t))
+#else
+NRTypeFace* nr_typeface_ref(NRTypeFace* t);
+NRTypeFace* nr_typeface_unref(NRTypeFace* t);
+#endif
 
 unsigned int nr_typeface_name_get (NRTypeFace *tf, gchar *str, unsigned int size);
 unsigned int nr_typeface_family_name_get (NRTypeFace *tf, gchar *str, unsigned int size);

@@ -14,9 +14,11 @@
 #include <glib.h>
 
 struct NRNameList;
+struct NRStyleList;
 struct NRTypeDict;
 
 typedef void (* NRNameListDestructor) (NRNameList *list);
+typedef void (* NRStyleListDestructor) (NRStyleList *list);
 
 struct NRNameList {
 	unsigned long length;
@@ -25,7 +27,15 @@ struct NRNameList {
 	NRNameListDestructor destructor;
 };
 
+struct NRStyleList {
+	unsigned long length;
+      guchar **names;
+      guchar **pango_descrs;
+	NRStyleListDestructor destructor;
+};
+
 void nr_name_list_release (NRNameList *list);
+void nr_style_list_release (NRStyleList *list);
 
 NRTypeDict *nr_type_dict_new (void);
 

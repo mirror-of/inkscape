@@ -47,6 +47,14 @@ nr_name_list_release (NRNameList *list)
 	}
 }
 
+void
+nr_style_list_release (NRStyleList *list)
+{
+	if (list->destructor) {
+		list->destructor (list);
+	}
+}
+
 /**
  * Creates a new typeface dictionary of size NR_DICTSIZE
  * and initalizes all the entries to NULL

@@ -27,7 +27,7 @@ struct SPFontPreview;
 #define SP_FONT_PREVIEW(o) (GTK_CHECK_CAST ((o), SP_TYPE_FONT_PREVIEW, SPFontPreview))
 #define SP_IS_FONT_PREVIEW(o) (GTK_CHECK_TYPE ((o), SP_TYPE_FONT_PREVIEW))
 
-#include <libnrtype/nr-font.h>
+#include <libnrtype/FontInstance.h>
 #include <gtk/gtkwidget.h>
 
 /* SPFontSelector */
@@ -36,9 +36,10 @@ GtkType sp_font_selector_get_type (void);
 
 GtkWidget *sp_font_selector_new (void);
 
-void sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font);
+void sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font);
 
-NRFont *sp_font_selector_get_font (SPFontSelector *fsel);
+font_instance *sp_font_selector_get_font (SPFontSelector *fsel);
+double  sp_font_selector_get_size (SPFontSelector *fsel);
 
 /* SPFontPreview */
 
@@ -46,7 +47,7 @@ GtkType sp_font_preview_get_type (void);
 
 GtkWidget *sp_font_preview_new (void);
 
-void sp_font_preview_set_font (SPFontPreview *fprev, NRFont *font);
+void sp_font_preview_set_font (SPFontPreview *fprev, font_instance *font, SPFontSelector *fsel);
 void sp_font_preview_set_rgba32 (SPFontPreview *fprev, guint32 rgba);
 void sp_font_preview_set_phrase (SPFontPreview *fprev, const gchar *phrase);
 

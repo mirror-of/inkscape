@@ -14,6 +14,8 @@
 #include <string.h>
 
 #include <libnr/nr-macros.h>
+#include <libnr/nr-point.h>
+#include <libnr/nr-point-ops.h>
 #include <libnr/nr-point-l.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-rect-l.h>
@@ -34,15 +36,21 @@ void nrrf_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);
 
 #include "nr-rasterfont.h"
 
+#include "RasterFont.h"
+
 /**
  * Increments the reference count for the given raster font and returns it
  */
 NRRasterFont *
 nr_rasterfont_ref (NRRasterFont *rf)
 {
+	((raster_font*)rf)->Ref();
+	return rf;
+#if 0
     rf->refcount += 1;
 
     return rf;
+#endif
 }
 
 /**
@@ -53,6 +61,10 @@ nr_rasterfont_ref (NRRasterFont *rf)
 NRRasterFont *
 nr_rasterfont_unref (NRRasterFont *rf)
 {
+	((raster_font*)rf)->Unref();
+	return NULL;
+
+#if 0
     rf->refcount -= 1;
 
     if (rf->refcount < 1) {
@@ -60,6 +72,7 @@ nr_rasterfont_unref (NRRasterFont *rf)
     }
 
     return NULL;
+#endif
 }
 
 /**
@@ -68,7 +81,12 @@ nr_rasterfont_unref (NRRasterFont *rf)
  */
 NR::Point nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph)
 {
+	raster_font* f=(raster_font*)rf;
+	NR::Point f_a=nr_font_glyph_advance_get((NRFont*)f->daddy,glyph);
+	return f_a*f->style.transform;
+#if 0
     return ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_advance_get (rf, glyph);
+#endif
 }
 
 /**
@@ -77,7 +95,25 @@ NR::Point nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph)
 NRRect *
 nr_rasterfont_glyph_area_get (NRRasterFont *rf, int glyph, NRRect *area)
 {
+	raster_font* f=(raster_font*)rf;
+	NR::Rect  res=f->daddy->BBox(glyph);
+	NR::Point bmi=res.min(),bma=res.max();
+	NR::Point tlp(bmi[0],bmi[1]),trp(bma[0],bmi[1]),blp(bmi[0],bma[1]),brp(bma[0],bma[1]);
+	tlp=tlp*f->style.transform;
+	trp=trp*f->style.transform;
+	blp=blp*f->style.transform;
+	brp=brp*f->style.transform;
+	res=NR::Rect(tlp,trp);
+	res.expandTo(blp);
+	res.expandTo(brp);
+	area->x0=(res.min())[0];
+	area->y0=(res.min())[1];
+	area->x1=(res.max())[0];
+	area->y1=(res.max())[1];
+	return area;
+#if 0
     return ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_area_get (rf, glyph, area);
+#endif
 }
 
 /**
@@ -86,7 +122,13 @@ nr_rasterfont_glyph_area_get (NRRasterFont *rf, int glyph, NRRect *area)
 void
 nr_rasterfont_glyph_mask_render (NRRasterFont *rf, int glyph, NRPixBlock *mask, float x, float y)
 {
+	NR::Point at(x,y);
+	raster_font*  f=(raster_font*)rf;
+	raster_glyph* g=f->GetGlyph(glyph);
+	if ( g ) g->Blit(at,*mask);
+#if 0
     ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_mask_render (rf, glyph, mask, x, y);
+#endif
 }
 
 /* Generic implementation */

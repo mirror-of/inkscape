@@ -43,6 +43,8 @@
 #include "nr-type-directory.h"
 #include "nr-type-pos-def.h"
 
+#include "FontFactory.h"
+
 /**
  * 
  */
@@ -82,6 +84,9 @@ GSList *style_warnings = NULL;
 NRTypeFace *
 nr_type_directory_lookup (const gchar *name)
 {
+	font_factory* font_src=font_factory::Default();
+	return (NRTypeFace*)font_src->FaceFromDescr(name);
+	
 	NRTypeFaceDef *tdef;
 
 	if (!typedict) nr_type_directory_build ();
@@ -183,6 +188,8 @@ add_to_cache (gchar *fam, NRTypePosDef a, NRTypeFaceDef *face)
 NRTypeFace *
 nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 {
+	font_factory* font_src=font_factory::Default();
+	return (NRTypeFace*)font_src->Face(family,apos);
 	/* At the time of writing, all callers form their apos from a call to font_style_to_pos, so
 	   we could take a SPStyle as argument instead. */
 	NRFamilyDef *fdef, *bestfdef;
@@ -281,6 +288,9 @@ nr_type_directory_forget_face (NRTypeFace *tf)
 NRNameList *
 nr_type_directory_family_list_get (NRNameList *flist)
 {
+	font_factory* font_src=font_factory::Default();
+	return font_src->Families(flist);
+
 	static int flen = 0;
 	static gchar **fnames = NULL;
 
@@ -520,16 +530,19 @@ style_name_compare (const void *aa, const void *bb)
  *
  * Returns the styles object.
  */
-NRNameList *
-nr_type_directory_style_list_get (const gchar *family, NRNameList *styles)
+NRStyleList *
+nr_type_directory_style_list_get (const gchar *family, NRStyleList *styles)
 {
+	font_factory* font_src=font_factory::Default();
+	return font_src->Styles(family, styles);
+
 	NRFamilyDef *fdef;
 
 	if (!typedict) nr_type_directory_build ();
 
 	fdef = (NRFamilyDef*)nr_type_dict_lookup (familydict, family);
 
-	styles->destructor = nr_type_directory_style_list_destructor;
+	//styles->destructor = nr_type_directory_style_list_destructor;
 
 	if (fdef) {
 		NRTypeFaceDef *tdef;

@@ -1134,8 +1134,8 @@ void  Path::Transform(const NR::Matrix &trans)
       case descr_cubicto:
       {
         path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[i].dStart );
-				nData->stD=nData->p*trTrans;
-				nData->enD=nData->p*trTrans;
+				nData->stD=nData->stD*trTrans;
+				nData->enD=nData->enD*trTrans;
 				nData->p=nData->p*trans;
       }
         break;
@@ -1154,3 +1154,120 @@ void  Path::Transform(const NR::Matrix &trans)
     }
   }
 }
+void        Path::FastBBox(double &l,double &t,double &r,double &b)
+{
+	l=t=r=b=0;
+	bool empty=true;
+	NR::Point   lastP(0,0);
+  for (int i=0;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    switch ( typ ) {
+      case descr_lineto:
+      {
+        path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
+				if ( empty ) {
+					l=r=nData->p[0];
+					t=b=nData->p[1];
+          empty=false;
+				} else {
+					if ( nData->p[0] < l ) l=nData->p[0];
+					if ( nData->p[0] > r ) r=nData->p[0];
+					if ( nData->p[1] < t ) t=nData->p[1];
+					if ( nData->p[1] > b ) b=nData->p[1];
+				}
+				lastP=nData->p;
+      }
+        break;
+      case descr_moveto:
+      {
+        path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[i].dStart );
+				if ( empty ) {
+					l=r=nData->p[0];
+					t=b=nData->p[1];
+         empty=false;
+				} else {
+					if ( nData->p[0] < l ) l=nData->p[0];
+					if ( nData->p[0] > r ) r=nData->p[0];
+					if ( nData->p[1] < t ) t=nData->p[1];
+					if ( nData->p[1] > b ) b=nData->p[1];
+				}
+				lastP=nData->p;
+      }
+        break;
+      case descr_arcto:
+      {
+        path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[i].dStart );
+				if ( empty ) {
+					l=r=nData->p[0];
+					t=b=nData->p[1];
+         empty=false;
+				} else {
+					if ( nData->p[0] < l ) l=nData->p[0];
+					if ( nData->p[0] > r ) r=nData->p[0];
+					if ( nData->p[1] < t ) t=nData->p[1];
+					if ( nData->p[1] > b ) b=nData->p[1];
+				}
+				lastP=nData->p;
+      }
+        break;
+      case descr_cubicto:
+      {
+        path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[i].dStart );
+				if ( empty ) {
+					l=r=nData->p[0];
+					t=b=nData->p[1];
+         empty=false;
+				} else {
+					if ( nData->p[0] < l ) l=nData->p[0];
+					if ( nData->p[0] > r ) r=nData->p[0];
+					if ( nData->p[1] < t ) t=nData->p[1];
+					if ( nData->p[1] > b ) b=nData->p[1];
+				}
+				NR::Point np=nData->p-nData->enD;
+				if ( np[0] < l ) l=np[0];
+				if ( np[0] > r ) r=np[0];
+				if ( np[1] < t ) t=np[1];
+				if ( np[1] > b ) b=np[1];
+				np=lastP+nData->stD;
+				if ( np[0] < l ) l=np[0];
+				if ( np[0] > r ) r=np[0];
+				if ( np[1] < t ) t=np[1];
+				if ( np[1] > b ) b=np[1];
+				lastP=nData->p;
+      }
+        break;
+      case descr_bezierto:
+      {
+        path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[i].dStart );
+				if ( empty ) {
+					l=r=nData->p[0];
+					t=b=nData->p[1];
+         empty=false;
+				} else {
+					if ( nData->p[0] < l ) l=nData->p[0];
+					if ( nData->p[0] > r ) r=nData->p[0];
+					if ( nData->p[1] < t ) t=nData->p[1];
+					if ( nData->p[1] > b ) b=nData->p[1];
+				}
+				lastP=nData->p;
+      }
+        break;
+      case descr_interm_bezier:
+      {
+        path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[i].dStart );
+				if ( empty ) {
+					l=r=nData->p[0];
+					t=b=nData->p[1];
+         empty=false;
+				} else {
+					if ( nData->p[0] < l ) l=nData->p[0];
+					if ( nData->p[0] > r ) r=nData->p[0];
+					if ( nData->p[1] < t ) t=nData->p[1];
+					if ( nData->p[1] > b ) b=nData->p[1];
+				}
+      }
+        break;
+    }
+  }
+}
+

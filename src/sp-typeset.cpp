@@ -1092,3 +1092,162 @@ void        sp_typeset_chain_shape(SPObject* object,char* shapeID)
 }
 
 
+/*
+ *
+ */
+
+#include "sp-text.h"
+
+void        sp_typeset_build_one(bool on_path)
+{
+	
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!SP_IS_DESKTOP(desktop)) return;
+	SPSelection *selection = SP_DT_SELECTION (desktop);
+	GSList *items = (GSList *) selection->itemList();
+	
+	bool     has_src=false;
+	bool     has_dest=false;
+	
+	for (GSList *i = items; i != NULL; i = i->next) {
+		SPItem *item = (SPItem *) i->data;
+		if ( SP_IS_TEXT(item) ) {
+			has_src=true;
+		} else if ( SP_IS_SHAPE (item) ) {
+			has_dest=true;
+		}
+	}
+	if ( has_src == false || has_dest == false ) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select at least 1 text and 1 shape to build a typeset object."));
+		return;
+	}
+	
+	SPRepr *parent = SP_OBJECT_REPR ((SPItem *) items->data)->parent;
+	for (GSList *i = items; i != NULL; i = i->next) {
+		if ( SP_OBJECT_REPR ((SPItem *) i->data)->parent != parent ) {
+			sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot build a typeset from objects of different groups or layers."));
+			return;
+		}
+	}
+
+	GSList*    text_elems=NULL;
+	GSList*		 dest_elems=NULL;
+	
+	for (GSList *i = items; i != NULL; i = i->next) {
+		SPItem *item = (SPItem *) i->data;
+		if ( SP_IS_TEXT(item) ) {
+			text_elems=g_slist_append(text_elems,item);
+		} else if ( SP_IS_SHAPE (item) ) {
+			dest_elems=g_slist_append(dest_elems,item);
+		} else {
+			// should we eat them?
+		}
+	}
+	int        tot_len=0;
+	gchar*     tot_src=(gchar*)malloc(sizeof(gchar));
+	SPCSSAttr* style_css=NULL;
+	tot_src[0]=0;
+	for (GSList* i=text_elems;i!=NULL;i=i->next) {
+		SPText* n_text=SP_TEXT(((SPItem*)(i->data)));
+		gchar*  add=sp_text_get_string_multiline (n_text);
+		if ( add ) {
+			int len=strlen(add);
+			tot_src=(gchar*)realloc(tot_src,(tot_len+len+1)*sizeof(gchar));
+			memcpy(tot_src+tot_len,add,len*sizeof(gchar));
+			tot_len+=len;
+			tot_src[tot_len]=0;
+		}
+		if ( style_css == NULL ) {
+			style_css=sp_repr_css_attr(SP_OBJECT_REPR ((SPItem *) i->data),"style");
+		}
+	}
+	if ( tot_len <= 0 ) {
+		free(tot_src);
+		if ( style_css ) sp_repr_css_attr_unref(style_css);
+		g_slist_free (text_elems);
+		g_slist_free (dest_elems);
+		sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot build a typeset without some actual text."));
+		return;
+	}
+	for (GSList* i=text_elems;i!=NULL;i=i->next) {
+		// kill the text elems
+		if ( i->data ) SP_OBJECT (((SPItem*)(i->data)))->deleteObject();
+	}
+	g_slist_free (text_elems);
+	
+	int     uri_len=0;
+	gchar*  uri_txt=(gchar*)malloc(sizeof(gchar));
+	for (GSList* i=dest_elems;i!=NULL;i=i->next) {
+		SPItem *item = (SPItem *) i->data;
+		const char*   n_id=sp_repr_attr (SP_OBJECT_REPR (item), "id");
+		if ( n_id ) {
+			int len=strlen(n_id);
+			uri_txt=(gchar*)realloc(uri_txt,(uri_len+len+3)*sizeof(gchar));
+			uri_txt[uri_len]='#';
+			memcpy(uri_txt+uri_len+1,n_id,len*sizeof(gchar));
+			uri_txt[uri_len+len+1]=' ';
+			uri_len+=len+2;
+			uri_txt[uri_len]=0;
+		}
+	}
+	g_slist_free (dest_elems);
+	
+	SPRepr *repr = sp_repr_new ("g");
+	sp_repr_set_attr (repr, "sodipodi:type", "typeset");	
+	if ( on_path ) {
+		sp_repr_set_attr (repr, "inkscape:dstPath", uri_txt);
+	} else {
+		sp_repr_set_attr (repr, "inkscape:dstShape", uri_txt);
+	}
+	free (uri_txt);
+	
+	SPCSSAttr* opt_css=sp_repr_css_attr_new();
+	sp_repr_css_set_property(opt_css, "layoutAlgo","better");
+	if ( style_css ) {
+		gchar const *val=NULL;
+		val=sp_repr_css_property(style_css,"font-size",NULL);
+		if ( val ) sp_repr_css_set_property(opt_css,"font-size",val);
+		val=sp_repr_css_property(style_css,"font-family",NULL);
+		if ( val ) sp_repr_css_set_property(opt_css,"font-family",val);
+	}
+	if ( style_css ) sp_repr_css_attr_unref(style_css);
+	sp_repr_css_set(repr, opt_css, "inkscape:layoutOptions");
+	sp_repr_css_attr_unref(opt_css);
+	
+	int pos=0;
+	while ( pos < tot_len && tot_src[pos] && tot_src[pos] != '\n' && tot_src[pos] != '\r' ) pos++;
+	{
+		gchar savC=tot_src[pos];
+		tot_src[pos]=0;
+		sp_repr_set_attr (repr, "inkscape:srcPango", tot_src);		
+		tot_src[pos]=savC;
+	}
+	while ( pos < tot_len ) {
+		pos++;
+		if ( pos >= tot_len ) break;
+		int  st=pos;
+		while ( st < tot_len && ( tot_src[pos] == '\n' || tot_src[pos] == '\r' ) ) st++;
+		if ( st >= tot_len ) break;
+		pos=st;
+		while ( pos < tot_len && tot_src[pos] && tot_src[pos] != '\n' && tot_src[pos] != '\r' ) pos++;
+		{
+			gchar savC=tot_src[pos];
+			tot_src[pos]=0;
+			SPRepr *son_repr = sp_repr_new ("g");
+			sp_repr_set_attr (son_repr, "sodipodi:type", "typeset");
+			sp_repr_set_attr (son_repr, "inkscape:srcPango", tot_src+st);		
+			sp_repr_append_child (repr, son_repr);
+			sp_repr_unref (son_repr);
+			tot_src[pos]=savC;
+		}
+	}
+	free(tot_src);
+	
+	sp_repr_append_child (parent, repr);
+		
+	sp_document_done (SP_DT_DOCUMENT (desktop));
+	selection->setRepr(repr);
+	sp_repr_unref (repr);
+}
+
+

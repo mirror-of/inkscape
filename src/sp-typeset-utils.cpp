@@ -22,9 +22,8 @@
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
-#include "libnrtype/nr-type-directory.h"
-#include "libnrtype/nr-typeface.h"
-#include "libnrtype/nr-font.h"
+#include "libnrtype/FontFactory.h"
+#include "libnrtype/FontInstance.h"
 #include "libnrtype/nr-type-pos-def.h"
 
 #include "xml/repr.h"
@@ -1059,7 +1058,7 @@ void                 pango_text_chunker::GlyphsInfo(int start_ind,int end_ind,in
   int      char_st=words[start_ind].t_first,char_en=words[end_ind].t_last;
   nbG=charas[char_en].code_point-charas[char_st].code_point+1;
   totLength=charas[char_en].x_pos+charas[char_en].x_adv-charas[char_st].x_pos;
-//  printf("%i -> %i  = %f\n",start_ind,end_ind,totLength);
+//  printf("ginfo %i -> %i  = %f\n",start_ind,end_ind,totLength);
 }
 void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int end_ind,to_SVG_context *hungry)
 {
@@ -1067,6 +1066,8 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
   while ( start_ind <= end_ind && words[end_ind].is_white ) end_ind--;
   if ( end_ind < start_ind ) return;
   
+//  printf("gpos %i -> %i \n",start_ind,end_ind);
+
   int      real_st=words[start_ind].t_first;
   int      real_en=words[end_ind].t_last;
   hungry->SetText(theText->UTF8Text(),theText->UTF8Length());
@@ -1086,6 +1087,7 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
   double     cumul=words[start_ind].x_pos;
   int        cur_ind=start_ind;
   int        char_st=words[cur_ind].t_first,char_en=words[cur_ind].t_last;
+	hungry->ResetStyle();
   while ( char_st <= real_en) {
     if ( attr_st > char_st ) {
       AddDullGlyphs(hungry,cumul,char_st,(char_en < attr_st-1)?char_en:attr_st-1);        
@@ -1097,6 +1099,7 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
         if ( theIt ) {
           if ( pango_attr_iterator_next(theIt) == false ) break;
           pango_attr_iterator_range(theIt,&attr_st,&attr_en);
+					hungry->ResetStyle();
         } else {
         }
       } else {
@@ -1105,9 +1108,9 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
       }
     }
     if ( char_st > char_en ) {
-      do {
+//      do {
         cur_ind++;
-      } while ( cur_ind <= end_ind && words[cur_ind].is_white );
+//      } while ( cur_ind <= end_ind && words[cur_ind].is_white );
       if ( cur_ind > end_ind ) break;
       char_st=words[cur_ind].t_first;
       char_en=words[cur_ind].t_last;
@@ -1115,7 +1118,7 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
   }
   if ( theIt ) pango_attr_iterator_destroy(theIt);
 }
-void                         pango_text_chunker::AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,NRFont* inkFont,NR::Point &cumul)
+void                         pango_text_chunker::AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,font_instance* inkFont,NR::Point &cumul)
 {
   if ( en < st ) return;
 //  PangoRectangle ink_rect,logical_rect;
@@ -1130,11 +1133,14 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
   }
   words[nbWord].t_first=st;
   words[nbWord].t_last=en;
-  words[nbWord].is_white=whit;
+  words[nbWord].is_white=retu|whit;
   words[nbWord].is_return=retu;
   words[nbWord].end_of_word=true;
   words[nbWord].x_pos=cumul[0];
   
+	PangoFontDescription* td=pango_font_describe(theFont);
+	double   t_size=pango_to_ink*((double)pango_font_description_get_size(td));
+	pango_font_description_free(td);
   PangoFontMetrics *metrics = pango_font_get_metrics (theFont, NULL);
   
   words[nbWord].y_ascent = pango_to_ink*((double)(pango_font_metrics_get_ascent (metrics)));  
@@ -1171,7 +1177,7 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
     }
     NR::Point t_adv;
     if ( cur_g < from->num_glyphs ) {
-      t_adv=nr_font_glyph_advance_get (inkFont, from->glyphs[cur_g].glyph);
+      t_adv=t_size* NR::Point(inkFont->Advance(from->glyphs[cur_g].glyph,false),0);
     } else {
       t_adv=NR::Point(0,0);
     }
@@ -1243,6 +1249,7 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
   GList*  pItems=NULL;
   GList*  pGlyphs=NULL;
   do {
+//		printf("paragraph %i %i\n",cur_par_start,next_par_end);
     GList* nItems=pango_itemize(pContext,theText->UTF8Text(),cur_par_start,next_par_end-cur_par_start,tAttr,NULL);
     if ( nItems ) pItems=g_list_concat(pItems,nItems);
     cur_par_start=next_par_start;
@@ -1321,21 +1328,24 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
       while ( h_pos < t_pos+theItem->length && pAttrs[h_pos].is_white == false && pAttrs[h_pos].is_word_end == false && pAttrs[h_pos].is_word_start == false ) h_pos++;
       if ( pAttrs[h_pos].is_white || pAttrs[h_pos].is_word_start ) h_pos--;
       bool  is_retu=(h_pos>=next_par_end);
-      NRFont*  nrt_font=NULL;
-      NRTypeFace *nrt_face =NULL;
+      font_instance*  nrt_font=NULL;
+      font_instance *nrt_face =NULL;
       
       if ( theItem->analysis.font ) {
         PangoFontDescription*  cur_descr=pango_font_describe (theItem->analysis.font);
         char*                  pf_descr=pango_font_description_to_string(cur_descr);
-        double                 theS=pango_to_ink*((double)pango_font_description_get_size(cur_descr));
-        nrt_face= nr_type_directory_lookup_fuzzy(pango_font_description_get_family(cur_descr), NRTypePosDef(pf_descr));
-        nrt_font = nr_font_new_default (nrt_face, NR_TYPEFACE_METRICS_HORIZONTAL, theS);
+        nrt_face= (font_factory::Default())->Face(pango_font_description_get_family(cur_descr), NRTypePosDef(pf_descr));
+        nrt_font = NULL;
+				if ( nrt_face ) {
+					nrt_face->Ref();
+					nrt_font=nrt_face;
+				}
         if ( pf_descr ) g_free(pf_descr);
         if ( cur_descr ) pango_font_description_free(cur_descr);
       }
       AddBox(g_pos,h_pos,pAttrs[g_pos].is_white,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,nrt_font,cumul);
-      if ( nrt_font ) nr_font_unref (nrt_font);
-      if ( nrt_face ) nr_typeface_unref (nrt_face);
+      if ( nrt_font ) nrt_font->Unref();
+      if ( nrt_face )  nrt_face->Unref();
       if ( h_pos >= next_par_end ) {
         int old_dec=next_par_start;
         pango_find_paragraph_boundary((theText->UTF8Text())+old_dec,-1,&next_par_end,&next_par_start);
@@ -1383,7 +1393,7 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
 }
 void                         pango_text_chunker::AddDullGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en)
 {
-  hungry->ResetStyle();
+//  hungry->ResetStyle();
   hungry->AddFontFamily(theFace);
   hungry->AddFontSize(theSize);
   double startX=cumul;
@@ -1398,7 +1408,7 @@ void                         pango_text_chunker::AddDullGlyphs(to_SVG_context *h
 }
 void                         pango_text_chunker::AddAttributedGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en,PangoAttrIterator *theIt) 
 {
-  hungry->ResetStyle();
+//  hungry->ResetStyle();
   PangoAttribute* one_attr=NULL;
   one_attr=pango_attr_iterator_get(theIt,PANGO_ATTR_FAMILY);
   if ( one_attr ) {

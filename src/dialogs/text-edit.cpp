@@ -15,7 +15,8 @@
 #include <config.h>
 
 #include <string.h>
-#include <libnrtype/nr-type-directory.h>
+#include <libnrtype/FontFactory.h>
+#include <libnrtype/FontInstance.h>
 
 #include <glib.h>
 #include <gtk/gtksignal.h>
@@ -72,7 +73,7 @@ static void sp_text_edit_dialog_close (GtkButton *button, GtkWidget *dlg);
 static void sp_text_edit_dialog_read_selection (GtkWidget *dlg, gboolean style, gboolean content);
 
 static void sp_text_edit_dialog_text_changed (GtkTextBuffer *tb, GtkWidget *dlg);
-static void sp_text_edit_dialog_font_changed (SPFontSelector *fontsel, NRFont *font, GtkWidget *dlg);
+static void sp_text_edit_dialog_font_changed (SPFontSelector *fontsel, font_instance *font, GtkWidget *dlg);
 static void sp_text_edit_dialog_any_toggled (GtkToggleButton *tb, GtkWidget *dlg);
 static void sp_text_edit_dialog_line_spacing_changed (GtkEditable *editable, GtkWidget *dlg);
 
@@ -452,7 +453,7 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
     {
         GtkWidget *fontsel, *preview, *b, *combo;
         SPCSSAttr *css;
-        NRFont *font;
+        font_instance *font;
         gchar c[256];
 	 Inkscape::SVGOStringStream os;	
         const char *sstr;
@@ -465,30 +466,31 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
         /* font */
         font = sp_font_selector_get_font (SP_FONT_SELECTOR (fontsel));
 
-        nr_typeface_family_name_get (NR_FONT_TYPEFACE (font), c, 256);
+        font->Family( c, 256);
         sp_repr_css_set_property (css, "font-family", c);
 
-        nr_typeface_attribute_get (NR_FONT_TYPEFACE (font), "weight", c, 256);
+        font->Attribute( "weight", c, 256);
         g_strdown (c);
         sp_repr_css_set_property (css, "font-weight", c);
 
-        nr_typeface_attribute_get (NR_FONT_TYPEFACE (font), "style", c, 256);
+        font->Attribute("style", c, 256);
         g_strdown (c);
         sp_repr_css_set_property (css, "font-style", c);
 
-        nr_typeface_attribute_get (NR_FONT_TYPEFACE (font), "stretch", c, 256);
+        font->Attribute("stretch", c, 256);
         g_strdown (c);
         sp_repr_css_set_property (css, "font-stretch", c);
 
-        nr_typeface_attribute_get (NR_FONT_TYPEFACE (font), "variant", c, 256);
+        font->Attribute("variant", c, 256);
         g_strdown (c);
         sp_repr_css_set_property (css, "font-variant", c);
 
-        os << NR_FONT_SIZE (font);
+        os << sp_font_selector_get_size (SP_FONT_SELECTOR (fontsel));
         sp_repr_css_set_property (css, "font-size", os.str().c_str());
 
-        nr_font_unref (font);
-        
+				font->Unref();
+        font=NULL;
+				
         /* Layout */
         b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_start");
         
@@ -683,21 +685,23 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
     }
 
     if (dostyle) {
-        NRTypeFace *tf;
-        NRFont *font;
+        font_instance *tf;
+        font_instance *font=NULL;
         GtkWidget *b, *combo;
         const gchar *sstr;
 
-        tf = nr_type_directory_lookup_fuzzy ( style->text->font_family.value,
-                                              font_style_to_pos(*style) );
-        font = nr_font_new_default ( tf, NR_TYPEFACE_METRICS_HORIZONTAL, 
-                                     style->font_size.computed );
-        nr_typeface_unref (tf);
-
+        tf = (font_factory::Default())->Face ( style->text->font_family.value, font_style_to_pos(*style) );
+        if ( tf ) {
+					font = tf;
+					font->Ref();
+					tf->Unref();
+					tf=NULL;
+				}
         if (font) {
             sp_font_selector_set_font (SP_FONT_SELECTOR (fontsel), font);
-            sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font);
-            nr_font_unref (font);
+            sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font, SP_FONT_SELECTOR(fontsel));
+						font->Unref();
+						font=NULL;
         }
 
         if (style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
@@ -773,7 +777,7 @@ sp_text_edit_dialog_text_changed (GtkTextBuffer *tb, GtkWidget *dlg)
 
 static void
 sp_text_edit_dialog_font_changed ( SPFontSelector *fsel, 
-                                   NRFont *font, 
+                                   font_instance *font, 
                                    GtkWidget *dlg )
 {
     GtkWidget *preview, *apply, *def;
@@ -788,7 +792,7 @@ sp_text_edit_dialog_font_changed ( SPFontSelector *fsel,
     apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
     def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
-    sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font);
+    sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font, SP_FONT_SELECTOR(fsel));
 
     if (text) {
         gtk_widget_set_sensitive (apply, TRUE);

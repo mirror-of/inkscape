@@ -267,6 +267,7 @@ public:
   
   //utilitaire pour inkscape
   void  LoadArtBPath(void *iP,NR::Matrix const &tr,bool doTransformation);
+	void* MakeArtBPath(void);
 	
 	void  Transform(const NR::Matrix &trans);
   
@@ -281,6 +282,7 @@ public:
   // surface du chemin (considéré comme fermé)
   double      Surface(void);
   void        PolylineBoundingBox(double &l,double &t,double &r,double &b);
+  void        FastBBox(double &l,double &t,double &r,double &b);
   // longueur (totale des sous-chemins)
   double      Length(void);
   

@@ -195,11 +195,11 @@ OBJECTS = \
 	helper/action.o \
 	helper/gnome-utils.o \
 	helper/png-write.o \
-	helper/sp-marshal.o \
 	helper/stock-items.o \
 	helper/unit-menu.o \
 	helper/units.o \
 	helper/window.o \
+	helper/sp-marshal.o\
 	inkjar/jar.o \
 	inkscape-stock.o \
 	inkscape.o \
@@ -236,6 +236,10 @@ OBJECTS = \
 	libnr/nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM.o \
 	libnr/nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P.o \
 	libnr/testnr.o \
+	libnrtype/FontFactory.o \
+	libnrtype/FontInstance.o \
+	libnrtype/RasterFont.o \
+	libnrtype/TextWrapper.o \
 	libnrtype/cp1250.o \
 	libnrtype/cp1251.o \
 	libnrtype/cp1252.o \
@@ -341,6 +345,7 @@ OBJECTS = \
 	sp-typeset-layout.o \
 	sp-typeset-utils.o \
 	sp-typeset.o \
+	sp-use-reference.o \
 	sp-use.o \
 	spiral-context.o \
 	splivarot.o \
@@ -596,7 +601,6 @@ LINTS = \
 	helper/action.lint \
 	helper/gnome-utils.lint \
 	helper/png-write.lint \
-	helper/sp-marshal.lint \
 	helper/stock-items.lint \
 	helper/unit-menu.lint \
 	helper/units.lint \
@@ -637,6 +641,10 @@ LINTS = \
 	libnr/nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM.lint \
 	libnr/nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P.lint \
 	libnr/testnr.lint \
+	libnrtype/FontFactory.lint \
+	libnrtype/FontInstance.lint \
+	libnrtype/RasterFont.lint \
+	libnrtype/TextWrapper.lint \
 	libnrtype/cp1250.lint \
 	libnrtype/cp1251.lint \
 	libnrtype/cp1252.lint \
@@ -742,6 +750,7 @@ LINTS = \
 	sp-typeset-layout.lint \
 	sp-typeset-utils.lint \
 	sp-typeset.lint \
+	sp-use-reference.lint \
 	sp-use.lint \
 	spiral-context.lint \
 	splivarot.lint \

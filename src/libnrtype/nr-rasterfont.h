@@ -17,6 +17,8 @@ struct NRRFGlyphSlot;
 #include <libnr/nr-pixblock.h>
 #include <libnrtype/nr-font.h>
 
+#include "RasterFont.h"
+
 struct NRRasterFont {
 	unsigned int refcount;
 	NRRasterFont *next;

@@ -40,6 +40,7 @@ creates a child text object with the text properly 'typeset'
 
 
 #include "sp-item-group.h"
+#include "xml/repr.h"
 
 #define SP_TYPE_TYPESET          (sp_typeset_get_type ())
 #define SP_TYPESET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TYPESET, SPTypeset))
@@ -218,5 +219,7 @@ GType sp_typeset_get_type (void);
 
 void        sp_typeset_set_text(SPObject* object,char* in_text,int text_type);
 void        sp_typeset_chain_shape(SPObject* object,char* shapeID);
+
+void        sp_typeset_build_one(void);
 
 #endif

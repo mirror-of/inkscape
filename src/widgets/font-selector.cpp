@@ -30,8 +30,10 @@
 
 #include <glib.h>
 
-#include <libnrtype/nr-type-directory.h>
-#include <libnrtype/nr-rasterfont.h>
+#include <libnrtype/FontFactory.h>
+#include <libnrtype/FontInstance.h>
+#include <libnrtype/RasterFont.h>
+#include <libnrtype/TextWrapper.h>
 
 #include <gtk/gtksignal.h>
 #include <gtk/gtkhbox.h>
@@ -61,11 +63,12 @@ struct SPFontSelector
 	GtkWidget *size;
 
 	NRNameList families;
-	NRNameList styles;
+	NRStyleList styles;
 	int familyidx;
 	int styleidx;
 	gfloat fontsize;
-	NRFont *font;
+	bool   fontsize_dirty;
+	font_instance *font;
 };
 
 
@@ -73,7 +76,7 @@ struct SPFontSelectorClass
 {
 	GtkHBoxClass parent_class;
 
-	void (* font_set) (SPFontSelector *fsel, NRFont *font);
+	void (* font_set) (SPFontSelector *fsel, font_instance *font);
 };
 
 enum {FONT_SET, LAST_SIGNAL};
@@ -164,7 +167,7 @@ sp_font_selector_init (SPFontSelector *fsel)
 	gtk_signal_connect (GTK_OBJECT (fsel->family), "select_row", GTK_SIGNAL_FUNC (sp_font_selector_family_select_row), fsel);
 	gtk_container_add (GTK_CONTAINER (sw), fsel->family);
 
-	if (nr_type_directory_family_list_get (&fsel->families)) {
+	if ((font_factory::Default())->Families(&fsel->families)) {
 		guint i;
 		gtk_clist_freeze (GTK_CLIST (fsel->family));
 		for (i = 0; i < fsel->families.length; i++) {
@@ -226,6 +229,7 @@ sp_font_selector_init (SPFontSelector *fsel)
 	fsel->familyidx = 0;
 	fsel->styleidx = 0;
 	fsel->fontsize = 10.0;
+	fsel->fontsize_dirty=false;
 	fsel->font = NULL;
 }
 
@@ -237,7 +241,8 @@ sp_font_selector_destroy (GtkObject *object)
 	fsel = SP_FONT_SELECTOR (object);
 
 	if (fsel->font) {
-		fsel->font = nr_font_unref (fsel->font);
+		fsel->font->Unref();
+		fsel->font = NULL;
 	}
 
 	if (fsel->families.length > 0) {
@@ -246,7 +251,7 @@ sp_font_selector_destroy (GtkObject *object)
 	}
 
 	if (fsel->styles.length > 0) {
-		nr_name_list_release (&fsel->styles);
+		nr_style_list_release (&fsel->styles);
 		fsel->styles.length = 0;
 	}
 
@@ -260,7 +265,7 @@ sp_font_selector_family_select_row (GtkCList *clist, gint row, gint column, GdkE
 	fsel->familyidx = GPOINTER_TO_UINT (gtk_clist_get_row_data (clist, row));
 
 	if (fsel->styles.length > 0) {
-		nr_name_list_release (&fsel->styles);
+		nr_style_list_release (&fsel->styles);
 		fsel->styles.length = 0;
 		fsel->styleidx = 0;
 	}
@@ -269,15 +274,12 @@ sp_font_selector_family_select_row (GtkCList *clist, gint row, gint column, GdkE
 	if ( static_cast< unsigned int > (fsel->familyidx) < fsel->families.length ) {
 		const gchar *family;
 		family = (const gchar *)fsel->families.names[fsel->familyidx];
-		if (nr_type_directory_style_list_get (family, &fsel->styles)) {
+		if ((font_factory::Default())->Styles (family, &fsel->styles)) {
 			unsigned int i;
 			gtk_clist_freeze (GTK_CLIST (fsel->style));
 			for (i = 0; i < fsel->styles.length; i++) {
-				const gchar *p;
 
-				p = (const gchar *)fsel->styles.names[i] + strlen (family);
-				while (*p && isspace (*p)) p += 1;
-				if (!*p) p = "Normal";
+				const gchar *p = (const gchar *)fsel->styles.names[i];
 
 				gtk_clist_append (GTK_CLIST (fsel->style), (gchar **) &p);
 				gtk_clist_set_row_data (GTK_CLIST (fsel->style), static_cast< gint > (i), GUINT_TO_POINTER (i));
@@ -304,32 +306,38 @@ sp_font_selector_size_changed (GtkEditable *editable, SPFontSelector *fsel)
 	const gchar *sstr;
 
 	sstr = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry));
+	gfloat  old_size=fsel->fontsize;
 	fsel->fontsize = MAX (atof (sstr), 0.1);
-
+	if ( fabsf(fsel->fontsize-old_size) > 0.001) fsel->fontsize_dirty=true;
+	
 	sp_font_selector_emit_set (fsel);
 }
 
 static void
 sp_font_selector_emit_set (SPFontSelector *fsel)
 {
-	NRTypeFace *tf;
-	NRFont *font;
+	font_instance *tf;
+	font_instance *font;
 
 	if (static_cast< unsigned int > (fsel->styleidx) < fsel->styles.length) {
-		tf = nr_type_directory_lookup ((gchar *)fsel->styles.names[fsel->styleidx]);
-		font = nr_font_new_default (tf, NR_TYPEFACE_METRICS_DEFAULT, fsel->fontsize);
-		nr_typeface_unref (tf);
+		tf = (font_factory::Default())->FaceFromDescr ((gchar *)fsel->styles.pango_descrs[fsel->styleidx]);
+		font = tf;
+		font->Ref();
+		tf->Unref ();
+		tf=NULL;
 	} else {
 		font = NULL;
 	}
 
-	if (font != fsel->font) {
-		if (fsel->font) fsel->font = nr_font_unref (fsel->font);
-		if (font) fsel->font = nr_font_ref (font);
+	if (font != fsel->font || ( font && fsel->fontsize_dirty ) ) {
+		if ( font ) font->Ref();
+		if ( fsel->font ) fsel->font->Unref();
+		fsel->font = font;
 		gtk_signal_emit (GTK_OBJECT (fsel), fs_signals[FONT_SET], fsel->font);
 	}
-
-	if (font) nr_font_unref (font);
+	fsel->fontsize_dirty=false;
+	if ( font ) font->Unref();
+	font=NULL;
 }
 
 GtkWidget *
@@ -343,7 +351,7 @@ sp_font_selector_new (void)
 }
 
 void
-sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
+sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font)
 {
 	GtkCList *fcl, *scl;
 
@@ -353,7 +361,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 	if (font) {
 		gchar n[256], s[8];
 		unsigned int i;
-		nr_typeface_family_name_get (NR_FONT_TYPEFACE (font), n, 256);
+		font->Name(n,256);
 		for (i = 0; i < fsel->families.length; i++) {
 			if (!strcmp (n, (gchar *)fsel->families.names[i])) break;
 		}
@@ -363,7 +371,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 		gtk_clist_moveto (fcl, i, 0, 0.66, 0.0);
 		fsel->block_emit = FALSE;
 
-		nr_typeface_name_get (NR_FONT_TYPEFACE (font), n, 256);
+		font->Name(n,256);
 		for (i = 0; i < fsel->styles.length; i++) {
 			if (!strcmp (n, (gchar *)fsel->styles.names[i])) break;
 		}
@@ -371,17 +379,21 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 		gtk_clist_select_row (scl, i, 0);
 		gtk_clist_moveto (scl, i, 0, 0.66, 0.0);
 
-		g_snprintf (s, 8, "%.5g", NR_FONT_SIZE (font));
+		g_snprintf (s, 8, "%.5g", fsel->fontsize);
 		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry), s);
 	}
 }
 
-NRFont*
+font_instance*
 sp_font_selector_get_font (SPFontSelector *fsel)
 {
-	if (fsel->font) nr_font_ref (fsel->font);
+	if (fsel->font) fsel->font->Ref();
 
 	return fsel->font;
+}
+double  sp_font_selector_get_size (SPFontSelector *fsel)
+{
+  return fsel->fontsize;
 }
 
 /* SPFontPreview */
@@ -390,8 +402,8 @@ struct SPFontPreview
 {
 	GtkDrawingArea darea;
 
-	NRFont *font;
-	NRRasterFont *rfont;
+	font_instance *font;
+	raster_font *rfont;
 	gchar *phrase;
 	unsigned long rgba;
 };
@@ -460,11 +472,13 @@ sp_font_preview_destroy (GtkObject *object)
 	fprev = SP_FONT_PREVIEW (object);
 
 	if (fprev->rfont) {
-		fprev->rfont = nr_rasterfont_unref (fprev->rfont);
+		fprev->rfont ->Unref();
+		fprev->rfont=NULL;
 	}
 
 	if (fprev->font) {
-		fprev->font = nr_font_unref (fprev->font);
+		fprev->font->Unref();
+		fprev->font=NULL;
 	}
 
 	if (fprev->phrase) {
@@ -494,16 +508,17 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 
 	if (GTK_WIDGET_DRAWABLE (widget)) {
 		if (fprev->rfont) {
-			NRTypeFace *tface;
+			font_instance *tface;
 			gchar *p;
-			int glyphs[SPFP_MAX_LEN];
-			int hpos[SPFP_MAX_LEN];
+			int		 glyphs[SPFP_MAX_LEN];
+			double hpos[SPFP_MAX_LEN];
 			float px, py;
 			int len;
 			NRRect bbox;
 			float startx, starty;
 			int x, y;
-			tface = NR_RASTERFONT_TYPEFACE (fprev->rfont);
+			tface=fprev->rfont->daddy;
+			double theSize=NR_MATRIX_DF_EXPANSION(&fprev->rfont->style.transform);
 			if (fprev->phrase) {
 				p = fprev->phrase;
 			} else {
@@ -513,15 +528,53 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			py = 0.0;
 			len = 0;
 			bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
+			
+			text_wrapper* str_text=new text_wrapper;
+			str_text->SetDefaultFont(tface);
+			str_text->AppendUTF8(p,-1);
+			if ( str_text->uni32_length > 0 ) {
+				str_text->DoLayout();
+				if ( str_text->glyph_length > 0 ) {
+					PangoFont*       curPF=NULL;
+					font_instance*	 curF=NULL;
+					for (int i=0;i<str_text->glyph_length&&i<SPFP_MAX_LEN;i++) {
+						if ( str_text->glyph_text[i].font != curPF ) {
+							curPF=str_text->glyph_text[i].font;
+							if ( curF ) curF->Unref();
+							curF=NULL;
+							if ( curPF ) {
+								PangoFontDescription* pfd=pango_font_describe(curPF);
+								curF=(font_factory::Default())->Face(pfd);
+								pango_font_description_free(pfd);
+							}
+						}
+						NR::Point     base_pt(str_text->glyph_text[i].x,str_text->glyph_text[i].y);
+						base_pt*=theSize;
+						
+						glyphs[len] =  str_text->glyph_text[i].gl;
+						hpos[len] = base_pt[0];
+						len++;
+						if (curF ) {
+							NR::Rect nbbox=curF->BBox(str_text->glyph_text[i].gl);
+							bbox.x0 = MIN (bbox.x0, base_pt[NR::X] + theSize * (nbbox.min())[0]);
+							bbox.y0 = MIN (bbox.y0, base_pt[NR::Y] - theSize * (nbbox.max())[1]);
+							bbox.x1 = MAX (bbox.x1, base_pt[NR::X] + theSize * (nbbox.max())[0]);
+							bbox.y1 = MAX (bbox.y1, base_pt[NR::Y] - theSize * (nbbox.min())[1]);
+						}
+					}
+					if ( curF ) curF->Unref();
+				}
+			}
+			delete str_text;
 // XXX: FIXME: why does this code ignore adv.y
-			while (p && *p && (len < SPFP_MAX_LEN)) {
+/*			while (p && *p && (len < SPFP_MAX_LEN)) {
 				unsigned int unival;
 				NRRect gbox;
 				unival = g_utf8_get_char (p);
-				glyphs[len] = nr_typeface_lookup_default (tface, unival);
+				glyphs[len] =  tface->MapUnicodeChar( unival);
 				hpos[len] = (int)px;
-				NR::Point adv = nr_rasterfont_glyph_advance_get (fprev->rfont, glyphs[len]);
-				nr_rasterfont_glyph_area_get (fprev->rfont, glyphs[len], &gbox);
+				NR::Point adv = fprev->rfont->Advance(glyphs[len]);
+				fprev->rfont->BBox( glyphs[len], &gbox);
 				bbox.x0 = MIN (px + gbox.x0, bbox.x0);
 				bbox.y0 = MIN (py + gbox.y0, bbox.y0);
 				bbox.x1 = MAX (px + gbox.x1, bbox.x1);
@@ -529,7 +582,7 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 				px += adv[NR::X];
 				len += 1;
 				p = g_utf8_next_char (p);
-			}
+			}*/
 			startx = (widget->allocation.width - (bbox.x1 - bbox.x0)) / 2;
 			starty = widget->allocation.height - (widget->allocation.height - (bbox.y1 - bbox.y0)) / 2 - bbox.y1;
 			for (y = event->area.y; y < event->area.y + event->area.height; y += 64) {
@@ -547,7 +600,8 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 					nr_pixblock_setup_fast (&m, NR_PIXBLOCK_MODE_A8, x0, y0, x1, y1, TRUE);
 					pb.empty = FALSE;
 					for (i = 0; i < len; i++) {
-						nr_rasterfont_glyph_mask_render (fprev->rfont, glyphs[i], &m, hpos[i] + startx, starty);
+						raster_glyph* g=fprev->rfont->GetGlyph(glyphs[i]);
+						if ( g ) g->Blit(NR::Point(hpos[i] + startx, starty),m);
 					}
 					nr_blit_pixblock_mask_rgba32 (&pb, &m, fprev->rgba);
 					gdk_draw_rgb_image (widget->window, widget->style->black_gc,
@@ -563,7 +617,7 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 						  event->area.x, event->area.y,
 						  event->area.width, event->area.height);
 		}
-	}
+  }
 
 	return TRUE;
 }
@@ -579,19 +633,20 @@ sp_font_preview_new (void)
 }
 
 void
-sp_font_preview_set_font (SPFontPreview *fprev, NRFont *font)
+sp_font_preview_set_font (SPFontPreview *fprev, font_instance *font, SPFontSelector *fsel)
 {
-	if (font) nr_font_ref (font);
-	if (fprev->font) nr_font_unref (fprev->font);
+	if (font)  font->Ref();
+	if (fprev->font) fprev->font->Unref();
 	fprev->font = font;
 
 	if (fprev->rfont) {
-		fprev->rfont = nr_rasterfont_unref (fprev->rfont);
+		fprev->rfont->Unref();
+		fprev->rfont=NULL;
 	}
 	if (fprev->font) {
 		NRMatrix flip;
-		nr_matrix_set_scale (&flip, 1.0, -1.0);
-		fprev->rfont = nr_rasterfont_new (fprev->font, &flip);
+		nr_matrix_set_scale (&flip, fsel->fontsize, -fsel->fontsize);
+		fprev->rfont = fprev->font->RasterFont(flip,0);
 	}
 	if (GTK_WIDGET_DRAWABLE (fprev)) gtk_widget_queue_draw (GTK_WIDGET (fprev));
 }

@@ -100,7 +100,8 @@ sp_chars_release (SPObject *object)
 		SPCharElement *el;
 		el = chars->elements;
 		chars->elements = el->next;
-		nr_font_unref (el->font);
+//    printf("sp_char_release ");
+		if ( el->font ) el->font->Unref();
 		g_free (el);
 	}
 
@@ -133,7 +134,8 @@ sp_chars_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned 
 
 	for (SPCharElement *el = chars->elements; el != NULL; el = el->next) {
 		NRBPath bpath;
-		if (nr_font_glyph_outline_get (el->font, el->glyph, &bpath, FALSE)) {
+		if ( el->font ) bpath.path=(NArtBpath*)el->font->ArtBPath(el->glyph); else bpath.path=NULL;
+		if ( bpath.path ) {
 			NR::Matrix const a( el->transform * transform );
 			nr_path_matrix_bbox_union(&bpath, a, bbox);
 		}
@@ -174,7 +176,8 @@ sp_chars_clear (SPChars *chars)
 		SPCharElement *el;
 		el = chars->elements;
 		chars->elements = el->next;
-		nr_font_unref (el->font);
+//    printf("sp_char_clear ");
+		if ( el->font ) el->font->Unref();
 		g_free (el);
 	}
 
@@ -183,14 +186,14 @@ sp_chars_clear (SPChars *chars)
 	}
 }
 
-void sp_chars_add_element(SPChars *chars, guint glyph, NRFont *font, NR::Matrix const &transform)
+void sp_chars_add_element(SPChars *chars, guint glyph, font_instance *font, NR::Matrix const &transform)
 {
 	NRMatrix const ntransform(transform);
 	sp_chars_add_element(chars, glyph, font, &ntransform);
 }
 
 void
-sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrix *transform)
+sp_chars_add_element (SPChars *chars, guint glyph, font_instance *font, const NRMatrix *transform)
 {
 	SPItem *item;
 	SPItemView *v;
@@ -202,7 +205,8 @@ sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrix 
 
 	el->glyph = glyph;
 	el->font = font;
-	nr_font_ref (font);
+//    printf("sp_char_add_elem ");
+	if ( font ) font->Ref();
 
 	el->transform = *transform;
 
@@ -220,7 +224,8 @@ sp_chars_normalized_bpath (SPChars *chars)
 	GSList *cc = NULL;
 	for (SPCharElement *el = chars->elements; el != NULL; el = el->next) {
 		NRBPath bp;
-		if (nr_font_glyph_outline_get (el->font, el->glyph, &bp, FALSE)) {
+		if ( el->font ) bp.path=(NArtBpath*)el->font->ArtBPath(el->glyph); else bp.path=NULL;
+		if ( bp.path ) {
 			NArtBpath *abp = nr_artpath_affine (bp.path, el->transform);
 			SPCurve *c = sp_curve_new_from_bpath (abp);
 			if (c)
@@ -274,8 +279,8 @@ sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrix *ctm, con
 
 	for (el = chars->elements; el != NULL; el = el->next) {
 		NRBPath bpath;
-
-		if (nr_font_glyph_outline_get (el->font, el->glyph, &bpath, FALSE)) {
+		if ( el->font ) bpath.path=(NArtBpath*)el->font->ArtBPath(el->glyph); else bpath.path=NULL;
+		if ( bpath.path ) {
 			NRBPath abp;
 			abp.path = nr_artpath_affine (bpath.path, el->transform);
 			sp_chars_print_bpath (ctx, &abp, SP_OBJECT_STYLE (chars), ctm, pbox, dbox, bbox);

@@ -313,6 +313,153 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
 }
 #include "../display/canvas-bpath.h"
 
+void* Path::MakeArtBPath(void)
+{
+	int				 nb_cmd=0,max_cmd=0;
+	NArtBpath* bpath=(NArtBpath*)malloc((max_cmd+1)*sizeof(NArtBpath));
+	
+	NR::Point   lastP,bezSt,bezEn,lastMP;
+	int         lastM=-1,bezNb=0;
+  for (int i=0;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    switch ( typ ) {
+      case descr_close:
+      {
+				if ( lastM >= 0 ) {
+					bpath[lastM].code=NR_MOVETO;
+					if ( nb_cmd >= max_cmd ) {
+						max_cmd=2*nb_cmd+1;
+						bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+					}
+					bpath[nb_cmd].code=NR_LINETO;
+					bpath[nb_cmd].x3=lastMP[0];
+					bpath[nb_cmd].y3=lastMP[1];
+					nb_cmd++;
+				}
+				lastM=-1;
+			} 
+				break;
+			case descr_lineto:
+				{
+        path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
+				if ( nb_cmd >= max_cmd ) {
+					max_cmd=2*nb_cmd+1;
+					bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+				}
+				bpath[nb_cmd].code=NR_LINETO;
+				bpath[nb_cmd].x3=nData->p[0];
+				bpath[nb_cmd].y3=nData->p[1];
+				nb_cmd++;
+				lastP=nData->p;
+      }
+        break;
+      case descr_moveto:
+      {
+        path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[i].dStart );
+				if ( nb_cmd >= max_cmd ) {
+					max_cmd=2*nb_cmd+1;
+					bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+				}
+				bpath[nb_cmd].code=NR_MOVETO_OPEN;
+				bpath[nb_cmd].x3=nData->p[0];
+				bpath[nb_cmd].y3=nData->p[1];
+				lastM=nb_cmd;
+				nb_cmd++;
+				lastP=lastMP=nData->p;
+      }
+        break;
+      case descr_arcto:
+      {
+        path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[i].dStart );
+				lastP=nData->p;
+      }
+        break;
+      case descr_cubicto:
+      {
+        path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[i].dStart );
+				if ( nb_cmd >= max_cmd ) {
+					max_cmd=2*nb_cmd+1;
+					bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+				}
+				bpath[nb_cmd].code=NR_CURVETO;
+				bpath[nb_cmd].x1=lastP[0]+0.333333*nData->stD[0];
+				bpath[nb_cmd].y1=lastP[1]+0.333333*nData->stD[1];
+				bpath[nb_cmd].x2=nData->p[0]-0.333333*nData->enD[0];
+				bpath[nb_cmd].y2=nData->p[1]-0.333333*nData->enD[1];
+				bpath[nb_cmd].x3=nData->p[0];
+				bpath[nb_cmd].y3=nData->p[1];
+				nb_cmd++;
+				lastP=nData->p;
+      }
+        break;
+      case descr_bezierto:
+      {
+        path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[i].dStart );
+				if ( nb_cmd >= max_cmd ) {
+					max_cmd=2*nb_cmd+1;
+					bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+				}
+				if ( nData->nb <= 0 ) {
+					bpath[nb_cmd].code=NR_LINETO;
+					bpath[nb_cmd].x3=nData->p[0];
+					bpath[nb_cmd].y3=nData->p[1];
+					nb_cmd++;
+					bezNb=0;
+				} else if ( nData->nb == 1 ){
+					path_descr_intermbezierto *iData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[i+1].dStart );
+					bpath[nb_cmd].code=NR_CURVETO;
+					bpath[nb_cmd].x1=0.333333*(lastP[0]+2*iData->p[0]);
+					bpath[nb_cmd].y1=0.333333*(lastP[1]+2*iData->p[1]);
+					bpath[nb_cmd].x2=0.333333*(nData->p[0]+2*iData->p[0]);
+					bpath[nb_cmd].y2=0.333333*(nData->p[1]+2*iData->p[1]);
+					bpath[nb_cmd].x3=nData->p[0];
+					bpath[nb_cmd].y3=nData->p[1];
+					nb_cmd++;
+					bezNb=0;
+				} else {
+					bezSt=2*lastP-nData->p;
+					bezEn=nData->p;
+					bezNb=nData->nb;
+				}
+				lastP=nData->p;
+      }
+        break;
+      case descr_interm_bezier:
+      {
+				if ( bezNb > 0 ) {
+					path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[i].dStart );
+					NR::Point p_m=nData->p,p_s=0.5*(bezSt+p_m),p_e;
+					if ( bezNb > 1 ) {
+						path_descr_intermbezierto *iData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[i+1].dStart );
+						p_e=0.5*(p_m+iData->p);
+					} else {
+						p_e=bezEn;
+					}
+					
+					if ( nb_cmd >= max_cmd ) {
+						max_cmd=2*nb_cmd+1;
+						bpath=(NArtBpath*)realloc(bpath,(max_cmd+1)*sizeof(NArtBpath));
+					}
+					bpath[nb_cmd].code=NR_CURVETO;
+					NR::Point  cp1=0.333333*(p_s+2*p_m),cp2=0.333333*(2*p_m+p_e);
+					bpath[nb_cmd].x1=cp1[0];
+					bpath[nb_cmd].y1=cp1[1];
+					bpath[nb_cmd].x2=cp2[0];
+					bpath[nb_cmd].y2=cp2[1];
+					bpath[nb_cmd].x3=p_e[0];
+					bpath[nb_cmd].y3=p_e[1];
+					nb_cmd++;
+					
+					bezNb--;
+				}
+			}
+        break;
+    }
+  }
+	bpath[nb_cmd].code=NR_END;
+	return bpath;
+}
+
 void  Path::LoadArtBPath(void *iV,NR::Matrix const &trans,bool doTransformation)
 {
   if ( iV == NULL ) return;
