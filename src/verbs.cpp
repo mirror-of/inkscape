@@ -217,10 +217,10 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
 
 	switch ((int) data) {
 	case SP_VERB_EDIT_UNDO:
-		sp_document_undo (SP_DT_DOCUMENT (dt));
+		sp_undo (dt, SP_DT_DOCUMENT (dt));
 		break;
 	case SP_VERB_EDIT_REDO:
-		sp_document_redo (SP_DT_DOCUMENT (dt));
+		sp_redo (dt, SP_DT_DOCUMENT (dt));
 		break;
 	case SP_VERB_EDIT_CUT:
 		sp_selection_cut (NULL);
