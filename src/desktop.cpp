@@ -990,6 +990,9 @@ sp_desktop_widget_destroy (GtkObject *object)
     dtw->layer_selector->unreference();
 
     if (dtw->desktop) {
+        if (SP_DT_SELECTION (dtw->desktop)) {
+            SP_DT_SELECTION (dtw->desktop)->clear();
+        }
         g_object_unref (G_OBJECT (dtw->desktop));
         dtw->desktop = NULL;
     }
