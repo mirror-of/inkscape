@@ -62,7 +62,9 @@ Editor::Editor(gint argc, char **argv, gboolean use_gui)
       _save_preferences(true),
       _use_gui(use_gui)
 {
-    rep = new EditorImpl();
+//    g_warning("In Editor::Editor");
+//    rep = new EditorImpl();
+//    g_warning("Created a new EditorImpl object");
 
     // Store the arguments
 //    if (_argv != NULL) {
@@ -99,7 +101,7 @@ Editor::~Editor()
 
 /// Returns the Gtk::Window representation of this application object
 Gtk::Window*
-Editor::getImpl()
+Editor::getWindow()
 {
     return rep;
 }
@@ -223,12 +225,14 @@ Editor::EditorImpl::EditorImpl()
       _act_grp(Gtk::ActionGroup::create()),
       _ui_mgr(Gtk::UIManager::create())
 {
+    g_warning("Starting Editor::EditorImpl");
     Icons::init();
     Stock::init();
     initActions();
     initAccelMap();
     initUIManager();
     initLayout();
+    g_warning("Done in Editor::EditorImpl");
 }
 
 Editor::EditorImpl::~EditorImpl()

@@ -1,3 +1,15 @@
+2005-03-05  Bryce Harrington <bryce@bryceharrington.org>
+
+	* src/application/Makefile_insert,
+	  src/application/app-prototype.cpp, 
+	  src/application/editor.h,
+	  src/application/app-prototype.h, 
+	  src/application/application.cpp:
+	  Adding Application::AppPrototype class
+	* src/application/editor.cpp, 
+	  src/application/editor.h:
+	  Changing member function getImpl() to getWindow()
+	
 2005-03-03  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/icon.cpp: more idiomatic iteration
@@ -86,6 +98,11 @@
 2005-02-22  Jon A. Cruz  <jon@joncruz.org>
 	* src/main.cpp:
 	  Refactoring sp_main_*. Adding cleanup phase on extracted filename list.
+
+2005-02-22  Bryce Harrington <bryce@bryceharringotn.org>
+
+	* src/main.cpp, src/application/application.cpp:  Adding --new-gui
+	option. 
 
 2005-02-22  Ted Gould  <ted@gould.cx>
 

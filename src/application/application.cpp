@@ -46,15 +46,16 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
       _save_preferences(false),
       _use_gui(use_gui)
 {
+
     if (argv != NULL) {
         _argv = argv;   // TODO:  Is this correct?
     }
 
+    // TODO:  Determine class by arguments
+    _app_impl = (AppPrototype*)new Editor(_argc, _argv);
+
     // TODO:  Initialize _preferences with the preferences skeleton
     _save_preferences = loadPreferences();
-
-    // TODO:  Determine class by arguments
-//    _app_impl = (AppPrototype*)new Editor(_argc, _argv);
 
     // TODO:  Set up paths
 /*
@@ -64,7 +65,6 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
 */
 
     if (new_gui) {
-        g_warning("Creating Gtk::Main object\n");
         _gtk_main = new Gtk::Main(argc, argv, true);
     }
 
@@ -72,10 +72,6 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
 
 Application::~Application()
 {
-/*
-    delete _app_impl;
-    delete _preferences;
-*/
 }
 
 gboolean
@@ -115,23 +111,21 @@ Application::run()
 {
     gint result = 0;
 
-//    g_assert(_app_impl != NULL);
+    g_assert(_app_impl != NULL);
 
     /* Note:  This if loop should be replaced by calls to the
      * various subclasses of I::A::AppPrototype.
      */
     if (_gtk_main != NULL) {
-        g_warning("Running new gtkmm interface\n");
-//        result = _gtk_main->run(_app_impl->getWindow());
-        _gtk_main->run();
+        Gtk::Window *win = _app_impl->getWindow();
+        g_assert(win != NULL);
+        _gtk_main->run(*win);
         result = 0;
 
     } else if (_use_gui) {
-//        g_warning("Running old gtk interface\n");
         result = sp_main_gui(_argc, (const char**)_argv);
 
     } else {
-        g_warning("Running commandline\n");
         result = sp_main_console(_argc, (const char**)_argv);
     }
 
@@ -149,7 +143,7 @@ Application::exit()
         inkscape_save_preferences(INKSCAPE);
     }
 */
-    if (_gtk_main) {
+    if (_gtk_main != NULL) {
         _gtk_main->quit();
     }
 

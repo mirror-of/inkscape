@@ -14,6 +14,7 @@
 #define INKSCAPE_APPLICATION_EDITOR_H
 
 #include <gtkmm/window.h>
+#include "app-prototype.h"
 
 class SPDesktop;
 class SPDocument;
@@ -26,13 +27,13 @@ class Document;
 
 namespace NSApplication {
 
-class Editor
+class Editor : public AppPrototype
 {
 public:
     Editor(int argc, char **argv, gboolean use_gui=true);
     virtual ~Editor();
 
-    Gtk::Window*    getImpl();
+    Gtk::Window*    getWindow();
     SPDocument*     getActiveDocument();
     SPDesktop*      getActiveDesktop();
     SPEventContext* getEventContext();

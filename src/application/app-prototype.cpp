@@ -9,36 +9,26 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#ifndef INKSCAPE_APPLICATION_APP_PROTOTYPE_H
-#define INKSCAPE_APPLICATION_APP_PROTOTYPE_H
-
-namespace Gtk {
-    class Window;
-}
-
+#include "app-prototype.h"
 
 namespace Inkscape {
 namespace NSApplication {
 
-class AppPrototype
+AppPrototype::AppPrototype() 
 {
-public:
-    AppPrototype();
-    AppPrototype(int argc, const char **argv);
-    virtual ~AppPrototype();
+}
 
-    virtual Gtk::Window* getWindow() = 0;
+AppPrototype::AppPrototype(int argc, const char **argv) 
+{
+}
 
-protected:
-    AppPrototype(AppPrototype const &);
-    AppPrototype& operator=(AppPrototype const &);
+AppPrototype::~AppPrototype()
+{
+}
 
-};
 
 } // namespace NSApplication
 } // namespace Inkscape
-
-#endif // INKSCAPE_APPLICATION_EDITOR_H
 
 /*
   Local Variables:
