@@ -180,7 +180,6 @@ libinkpre_a_SOURCES =	\
 	text-context.cpp text-context.h	\
 	toolbox.cpp toolbox.h	\
 	tools-switch.cpp tools-switch.h\
-	trace.cpp trace.h	\
 	uri.cpp uri.h	\
 	uri-references.cpp uri-references.h	\
 	svg-profile.h \

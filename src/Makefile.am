@@ -33,7 +33,7 @@ include xml/Makefile_insert
 include traits/Makefile_insert
 include algorithms/Makefile_insert
 include util/Makefile_insert
-include potrace/Makefile_insert
+include trace/Makefile_insert
 
 bin_PROGRAMS = inkscape inkview
 
