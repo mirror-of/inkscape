@@ -163,7 +163,8 @@ sp_node_context_setup (SPEventContext *ec)
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
 
-	g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)), "changed", G_CALLBACK (sp_node_context_selection_changed), nc);
+	g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)),
+		"changed", G_CALLBACK (sp_node_context_selection_changed), nc);
 
 	item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
 
@@ -175,6 +176,10 @@ sp_node_context_setup (SPEventContext *ec)
 		if (! nc->nodepath) {
 			nc->knot_holder = sp_item_knot_holder (item, ec->desktop);
 		}
+
+		//point pack to parent in case nodepath is deleted
+		nc->nodepath->nodeContext = nc;
+
 		// setting listener
 		repr = SP_OBJECT (item)->repr;
 		if (repr) {

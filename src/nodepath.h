@@ -73,7 +73,8 @@ typedef enum {
 
 
 
-
+/** defined in node-context.h */
+typedef struct _SPNodeContext SPNodeContext;
 
 
 /**
@@ -84,6 +85,8 @@ struct _SPNodePath {
 	SPDesktop * desktop;
 /**  The parent path of this nodepath */
 	SPPath * path;
+/**  The context which created this nodepath.  Important if this nodepath is deleted */
+	SPNodeContext * nodeContext;
 /**  The subpaths which comprise this NodePath */
 	GList * subpaths;
 /**  A list of nodes which are currently selected */

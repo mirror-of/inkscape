@@ -134,12 +134,17 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 	nodetypes = sp_repr_attr (repr, "sodipodi:nodetypes");
 	typestr = parse_nodetypes (nodetypes, length);
 
+	//Create new nodepath
 	np = g_new (SPNodePath, 1);
+	if (!np)
+		return NULL;
 
-	np->desktop = desktop;
-	np->path = path;
-	np->subpaths = NULL;
-	np->selected = NULL;
+	// Set defaults
+	np->desktop     = desktop;
+	np->path        = path;
+	np->subpaths    = NULL;
+	np->selected    = NULL;
+	np->nodeContext = NULL; //Let the context that makes this set it
 
 	// we need to update item's transform from the repr here,
 	// because they may be out of sinc when we respond 
@@ -168,11 +173,16 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 void
 sp_nodepath_destroy (SPNodePath * np)
 {
-	g_assert (np);
+	if (!np)  //soft fail, like delete
+		return;
 
 	while (np->subpaths) {
 		sp_nodepath_subpath_destroy ((SPNodeSubPath *) np->subpaths->data);
 	}
+
+	//Inform the context that made me, if any, that I am gone.
+	if (np->nodeContext)
+		np->nodeContext->nodepath = NULL;
 
 	g_assert (!np->selected);
 
@@ -1318,10 +1328,9 @@ sp_node_selected_delete (void)
 	update_repr (nodepath);
 
 	if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
-		//The nodepath does not need to be deleted here
-		//It is done later when the context is changed
-		//sp_nodepath_destroy (nodepath);
-		//sp_selection_delete (NULL, NULL);
+		sp_nodepath_destroy (nodepath);
+		sp_selection_delete (NULL, NULL);
+		return;
 	}
 
 	sp_nodepath_update_statusbar (nodepath);
@@ -1471,10 +1480,9 @@ sp_node_selected_delete_segment (void)
 	update_repr (nodepath);
 
 	if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
-		//The nodepath does not need to be deleted here
-		//It is done later when the context is changed
-		//sp_nodepath_destroy (nodepath);
-		//sp_selection_delete (NULL, NULL);
+		sp_nodepath_destroy (nodepath);
+		sp_selection_delete (NULL, NULL);
+		return;
 	}
 
 	sp_nodepath_update_statusbar (nodepath);
