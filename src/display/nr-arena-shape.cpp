@@ -366,6 +366,8 @@ int matrix_is_isometry(NR::Matrix const &p) {
     tp[1]=p[2];
     tp[2]=p[1];
     tp[3]=p[3];
+    for(int i = 4; i < 6; i++) // shut valgrind up :)
+        tp[i] = p[i] = 0;
     NR::Matrix   isom = tp*p; // A^T * A = adjunct?
     // Is the adjunct nearly an identity function?
     if ( fabs(isom[0]-1.0) < 0.01 && 
@@ -1145,3 +1147,14 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     delete theIL;*/
 }
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
