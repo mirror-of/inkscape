@@ -2054,10 +2054,10 @@ sp_style_read_ilength (SPILength *val, const gchar *str)
 static void
 sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document)
 {
+    paint->currentcolor = FALSE;  /* currentColor not a valid <color>. */
     if (!strcmp (str, "inherit")) {
         paint->set = TRUE;
         paint->inherit = TRUE;
-        paint->currentcolor = FALSE;
     } else {
         guint32 color;
 
@@ -2067,7 +2067,6 @@ sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
         sp_color_set_rgb_rgba32 (&paint->value.color, color);
         paint->set = TRUE;
         paint->inherit = FALSE;
-        paint->currentcolor = FALSE;
     }
 }
 
@@ -2091,44 +2090,39 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
         paint->set = TRUE;
         paint->inherit = FALSE;
         paint->currentcolor = TRUE;
-    } else {
-        guint32 color;
-        if (!strncmp(str, "url", 3)) {
-            paint->value.paint.uri = extract_uri(str);
-            if (paint->value.paint.uri == NULL || *(paint->value.paint.uri) == '\0') {
-                paint->type = SP_PAINT_TYPE_NONE;
-                return;
-            }
-            paint->type = SP_PAINT_TYPE_PAINTSERVER;
-            paint->set = TRUE;
-            paint->inherit = FALSE;
-            paint->currentcolor = FALSE;
-            if (document) {
-                SPObject *ps;
-                ps = sp_uri_reference_resolve(document, str);
-                if (ps && SP_IS_PAINT_SERVER(ps)) {
-                    paint->value.paint.server = SP_PAINT_SERVER(ps);
-                    if (!style->cloned) {
-                        sp_object_href(SP_OBJECT(paint->value.paint.server), style);
-                    } 
-                    g_signal_connect(G_OBJECT(paint->value.paint.server), "release",
-                                     G_CALLBACK(sp_style_paint_server_release), style);
-                    g_signal_connect(G_OBJECT(paint->value.paint.server), "modified",
-                                     G_CALLBACK(sp_style_paint_server_modified), style);
-                } else {
-		    paint->value.paint.server = NULL;
-		}
-            } 
-            return;
-        } else if (!strncmp(str, "none", 4)) {
+    } else if (!strncmp(str, "none", 4)) {
+        paint->type = SP_PAINT_TYPE_NONE;
+        paint->set = TRUE;
+        paint->inherit = FALSE;
+        paint->currentcolor = FALSE;
+    } else if (!strncmp(str, "url", 3)) {
+        paint->value.paint.uri = extract_uri(str);
+        if (paint->value.paint.uri == NULL || *(paint->value.paint.uri) == '\0') {
             paint->type = SP_PAINT_TYPE_NONE;
-            paint->set = TRUE;
-            paint->inherit = FALSE;
-            paint->currentcolor = FALSE;
             return;
         }
-
+        paint->type = SP_PAINT_TYPE_PAINTSERVER;
+        paint->set = TRUE;
+        paint->inherit = FALSE;
+        paint->currentcolor = FALSE;
+        if (document) {
+            SPObject *ps = sp_uri_reference_resolve(document, str);
+            if (ps && SP_IS_PAINT_SERVER(ps)) {
+                paint->value.paint.server = SP_PAINT_SERVER(ps);
+                if (!style->cloned) {
+                    sp_object_href(SP_OBJECT(paint->value.paint.server), style);
+                } 
+                g_signal_connect(G_OBJECT(paint->value.paint.server), "release",
+                                 G_CALLBACK(sp_style_paint_server_release), style);
+                g_signal_connect(G_OBJECT(paint->value.paint.server), "modified",
+                                 G_CALLBACK(sp_style_paint_server_modified), style);
+            } else {
+                paint->value.paint.server = NULL;
+            }
+        }
+    } else {
         paint->type = SP_PAINT_TYPE_COLOR;
+        guint32 color;
         color = sp_color_get_rgba32_ualpha(&paint->value.color, 0);
         color = sp_svg_read_color(str, color);
         sp_color_set_rgb_rgba32(&paint->value.color, color);
