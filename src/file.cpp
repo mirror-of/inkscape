@@ -202,13 +202,13 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
 		sp_module_system_save (key, doc, uri);
 	} catch (Inkscape::Extension::Output::no_extension_found &e) {
 		gchar * text;
-		text = g_strdup_printf(_("Extension to save document (%s) was not found.  This may have been caused by an unknown file extension."), uri);
+		text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);
 		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
 		sp_ui_error_dialog (text);
 		return FALSE;
 	} catch (Inkscape::Extension::Output::save_failed &e) {
 		gchar * text;
-		text = g_strdup_printf(_("File %s unable to be saved."), uri);
+		text = g_strdup_printf(_("File %s could not be saved."), uri);
 		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
 		sp_ui_error_dialog (text);
 		return FALSE;
