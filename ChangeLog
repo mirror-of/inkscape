@@ -1,3 +1,10 @@
+2003-11-27 bulia byak <bulia@dr.com>
+
+	* all dialogs remember size and position across sessions
+	* all dialogs are unsinkable (re-transientizing to the current document)
+	* all dialogs are closeable by ctrl-f4 and ctrl-w, defocusable by esc
+	* dialogs titles unified, added shortcut display in the titles
+
 2003-11-27 MenTaLguY <mental@rydia.net>
 
 	* src/desktop.c: reshuffled the widgets, switched to an embedded
