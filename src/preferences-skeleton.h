@@ -83,7 +83,7 @@ static const char preferences_skeleton[] =
 "      <group id=\"exportarea\"/>"
 "      <group id=\"defaultxdpi\"/>"
 "    </group>"
-"    <group id=\"save_as\" default=\"modules.output.SVG.sodipodi\"/>"
+"    <group id=\"save_as\" default=\"modules.output.SVG.sodipodi\" append_extension=\"1\"/>"
 "  </group>"
 "  <group id=\"printing\">"
 "    <settings id=\"ps\"/>"

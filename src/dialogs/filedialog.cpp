@@ -13,6 +13,7 @@
 
 #include "filedialog.h"
 #include "helper/sp-intl.h"
+#include "prefs-utils.h"
 
 #include <extension/db.h>
 
@@ -29,7 +30,6 @@ namespace Dialogs
 # U T I L I T Y
 #################################*/
 
-static bool append_extension = TRUE;
 
 static void
 menu_switch (GtkWidget * widget, const Inkscape::Extension::Extension ** extension)
@@ -43,10 +43,10 @@ menu_switch (GtkWidget * widget, const Inkscape::Extension::Extension ** extensi
 }
 
 static void
-checkbox_toggle (GtkWidget * widget, gpointer data)
+checkbox_toggle (GtkWidget * widget, bool * append_extension)
 {
-	append_extension = !append_extension;
-	// printf("Toggled Checkbox\n");
+	*append_extension = !*append_extension;
+	printf("Toggled Checkbox\n");
 	return;
 }
 
@@ -182,6 +182,7 @@ FileOpenDialog::show()
 
 struct FileSaveNativeData_def {
     GtkWidget *dlg;
+	bool append_extension;
 };
 
 FileSaveDialog::FileSaveDialog(
@@ -201,6 +202,7 @@ FileSaveDialog::FileSaveDialog(
         //do we want an exception?
         return;
     }
+	nativeData->append_extension = (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1);
 
 	/* Initalize to Autodetect */
 	extension = NULL;
@@ -279,8 +281,8 @@ FileSaveDialog::FileSaveDialog(
     gtk_widget_show_all (hb);
 
 	checkbox = gtk_check_button_new_with_label(_("Automatically append filename extension"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), append_extension);
-	g_signal_connect(G_OBJECT(checkbox), "toggled", G_CALLBACK(checkbox_toggle), NULL);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), nativeData->append_extension);
+	g_signal_connect(G_OBJECT(checkbox), "toggled", G_CALLBACK(checkbox_toggle), (gpointer)&nativeData->append_extension);
 	gtk_widget_show(checkbox);
     gtk_box_pack_end (GTK_BOX (GTK_FILE_SELECTION(dlg)->main_vbox),
         checkbox, FALSE, FALSE, 0);
@@ -322,7 +324,7 @@ FileSaveDialog::show() {
 		g_free(filename);
 	    filename = g_strdup(dialog_filename);
 
-		if (append_extension == TRUE && extension != NULL) {
+		if (nativeData->append_extension == TRUE && extension != NULL) {
 			Inkscape::Extension::Output * omod = dynamic_cast<Inkscape::Extension::Output *>(extension);
 			if (!g_str_has_suffix(filename, omod->get_extension())) {
 				gchar * newfilename;
@@ -331,6 +333,12 @@ FileSaveDialog::show() {
 				filename = newfilename;
 			}
 		}
+
+		prefs_set_int_attribute("dialogs.save_as", "append_extension", (gint)nativeData->append_extension);
+		if (extension != NULL)
+			prefs_set_string_attribute("dialogs.save_as", "default", extension->get_id());
+		else
+			prefs_set_string_attribute("dialogs.save_as", "default", NULL);
 
 		return TRUE;
 	} else {
