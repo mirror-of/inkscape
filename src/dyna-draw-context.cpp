@@ -229,18 +229,18 @@ sp_dyna_draw_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
     SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(ec);
 
     if (!strcmp(key, "mass")) {
-        double const dval = ( val ? atof(val) : 0.2 );
+        double const dval = ( val ? g_ascii_strtod (val, NULL) : 0.2 );
         ddc->mass = CLAMP(dval, -1000.0, 1000.0);
     } else if (!strcmp(key, "drag")) {
-        double const dval = ( val ? atof(val) : DRAG_DEFAULT );
+        double const dval = ( val ? g_ascii_strtod (val, NULL) : DRAG_DEFAULT );
         ddc->drag = CLAMP(dval, DRAG_MIN, DRAG_MAX);
     } else if (!strcmp(key, "angle")) {
         double const dval = ( val
-                              ? mod360(atof(val))
+                              ? mod360( g_ascii_strtod (val, NULL))
                               : 0.0 );
         ddc->angle = dval;
     } else if (!strcmp(key, "width")) {
-        double const dval = ( val ? atof(val) : 0.1 );
+        double const dval = ( val ? g_ascii_strtod (val, NULL) : 0.1 );
         ddc->width = CLAMP(dval, -1000.0, 1000.0);
     }
 

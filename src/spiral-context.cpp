@@ -253,13 +253,13 @@ sp_spiral_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 	SPSpiralContext *sc = SP_SPIRAL_CONTEXT (ec);
 
 	if (!strcmp (key, "expansion")) {
-		sc->exp = (val) ? atof (val) : 1.0;
+		sc->exp = (val) ? g_ascii_strtod (val, NULL) : 1.0;
 		sc->exp = CLAMP (sc->exp, 0.0, 1000.0);
 	} else if (!strcmp (key, "revolution")) {
-		sc->revo = (val) ? atof (val) : 3.0;
+		sc->revo = (val) ? g_ascii_strtod (val, NULL) : 3.0;
 		sc->revo = CLAMP (sc->revo, 0.05, 40.0);
 	} else if (!strcmp (key, "t0")) {
-		sc->t0 = (val) ? atof (val) : 0.0;
+		sc->t0 = (val) ? g_ascii_strtod (val, NULL) : 0.0;
 		sc->t0 = CLAMP (sc->t0, 0.0, 0.999);
 	}
 }

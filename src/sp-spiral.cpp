@@ -186,7 +186,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 			   routine that uses strtod, and accepts a default value (if strtod finds
 			   an error).  N.B. atof/sscanf/strtod consider "nan" and "inf" to be valid
 			   numbers. */
-			spiral->exp = atof (value);
+			spiral->exp = g_ascii_strtod (value, NULL);
 			spiral->exp = CLAMP (spiral->exp, 0.0, 1000.0);
 		} else {
 			spiral->exp = 1.0;
@@ -195,7 +195,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_SODIPODI_REVOLUTION:
 		if (value) {
-			spiral->revo = atof (value);
+			spiral->revo = g_ascii_strtod (value, NULL);
 			spiral->revo = CLAMP (spiral->revo, 0.05, 20.0);
 		} else {
 			spiral->revo = 3.0;
@@ -210,7 +210,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_SODIPODI_ARGUMENT:
 		if (value) {
-			spiral->arg = atof (value);
+			spiral->arg = g_ascii_strtod (value, NULL);
 			/* FIXME: We still need some bounds on arg, for numerical reasons.
 			   E.g. we don't want inf or NaN, nor near-infinite numbers.
 			   I'm inclined to take modulo 2*pi.  If so, then change the knot
@@ -224,7 +224,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_SODIPODI_T0:
 		if (value) {
-			spiral->t0 = atof (value);
+			spiral->t0 = g_ascii_strtod (value, NULL);
 			spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
 			/* TODO: Have shared constants for the allowable bounds for attributes.
 			   There was a bug here where we used -1.0 as the minimum (which leads to

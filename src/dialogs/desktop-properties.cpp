@@ -263,8 +263,8 @@ sp_doc_dialog_whatever_changed ( GtkAdjustment *adjustment, GtkWidget *dialog )
 
         //A short-term hack to set the viewBox to be 1.25 x the size
         // of the page.
-        gdouble vbWidth  = (gdouble)atof(sp_repr_attr (repr, "width"))  * 1.25;
-        gdouble vbHeight = (gdouble)atof(sp_repr_attr (repr, "height")) * 1.25;
+        gdouble vbWidth  = (gdouble)g_ascii_strtod(sp_repr_attr (repr, "width"), NULL)  * 1.25;
+        gdouble vbHeight = (gdouble)g_ascii_strtod(sp_repr_attr (repr, "height"), NULL) * 1.25;
         std::ostringstream os;
         os.imbue(std::locale::classic());
         os.setf(std::ios::showpoint);

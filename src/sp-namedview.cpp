@@ -377,15 +377,15 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_ZOOM:
-		nv->zoom = value? atof (value) : 0; // zero means not set
+		nv->zoom = value? g_ascii_strtod (value, NULL) : 0; // zero means not set
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_CX:
-		nv->cx = value? atof (value) : HUGE_VAL; // HUGE_VAL means not set
+		nv->cx = value? g_ascii_strtod (value, NULL) : HUGE_VAL; // HUGE_VAL means not set
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_CY:
-		nv->cy = value? atof (value) : HUGE_VAL; // HUGE_VAL means not set
+		nv->cy = value? g_ascii_strtod (value, NULL) : HUGE_VAL; // HUGE_VAL means not set
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_WINDOW_WIDTH:

@@ -245,12 +245,12 @@ static void sp_rect_context_set(SPEventContext *ec, gchar const *key, gchar cons
      * g_ascii_strtod (or a thin wrapper that does the right thing for invalid values inf/nan). */
     if ( strcmp(key, "rx_ratio") == 0 ) {
         rc->rx_ratio = ( val
-                         ? atof(val)
+                         ? g_ascii_strtod (val, NULL)
                          : 0.0 );
         rc->rx_ratio = CLAMP(rc->rx_ratio, 0.0, 1.0);
     } else if ( strcmp(key, "ry_ratio") == 0 ) {
         rc->ry_ratio = ( val
-                         ? atof(val)
+                         ? g_ascii_strtod (val, NULL)
                          : 0.0 );
         rc->ry_ratio = CLAMP(rc->ry_ratio, 0.0, 1.0);
     }

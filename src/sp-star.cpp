@@ -203,7 +203,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		return;
 	case SP_ATTR_SODIPODI_ARG1:
 		if (value) {
-			star->arg[0] = atof (value);
+			star->arg[0] = g_ascii_strtod (value, NULL);
 		} else {
 			star->arg[0] = 0.0;
 		}
@@ -211,7 +211,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_SODIPODI_ARG2:
 		if (value) {
-			star->arg[1] = atof (value);
+			star->arg[1] = g_ascii_strtod (value, NULL);
 		} else {
 			star->arg[1] = 0.0;
 		}
