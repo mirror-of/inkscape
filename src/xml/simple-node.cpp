@@ -241,7 +241,7 @@ void SimpleNode::addChild(SPRepr *child, SPRepr *ref) {
         _children = child;
     }
     if (!next) {
-        // update cached positions if appending
+        // set cached position if possible when appending
         if (!ref) {
             // if !next && !ref, child is sole child
             child->_setCachedPosition(0);
