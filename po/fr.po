@@ -1,26 +1,24 @@
-# translation of fr.po to 
-# translation of fr.po to
 # translation of fr.po to Français
 # French translation of Inkscape.
-# Copyright (C) 2000-2003, 2004 Free Software Foundation, Inc.
-# Frederic Rodrigo <f.rodrigo free.fr>, 2004.
+# Copyright (C) 2000-2003 Free Software Foundation, Inc.
 # Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2002.
 # Raymond Ostertag <raymond@linuxgraphic.org>, 2002-2003.
 # Didier Conchaudron <conchaudron@free.fr>, 2003.
 # Frederic Rodrigo <f.rodrigo@tuxfamily.org>, 2004.
+# Frederic Rodrigo <f.rodrigo free.fr>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-03 00:24+0200\n"
-"PO-Revision-Date: 2004-07-27 13:28+0200\n"
-"Last-Translator: \n"
-"Language-Team:  <fr@li.org>\n"
+"PO-Revision-Date: 2004-08-23 14:20+0200\n"
+"Last-Translator: Frederic Rodrigo <f.rodrigo free.fr>\n"
+"Language-Team: Français\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3.1\n"
+"X-Generator: KBabel 1.3\n"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -90,14 +88,14 @@ msgid ""
 "\n"
 "If you close without saving, your changes will be discarded."
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">Enregister les changements du "
+"<span weight=\"bold\" size=\"larger\">Enregistrer les changements du "
 "document \"%s\" avant de fermer ?</span>\n"
 "\n"
-"Si vous fermez sans enregistre vos changements seront perdus."
+"Si vous fermez sans enregistrer vos changements seront perdus."
 
 #: src/desktop.cpp:1078 src/desktop.cpp:1137
 msgid "Close _without saving"
-msgstr "Fermer _sans enregister"
+msgstr "Fermer sans enregistrer (_w)"
 
 #: src/desktop.cpp:1122
 #, c-format
@@ -109,7 +107,7 @@ msgid ""
 msgstr ""
 "<span weight=\"bold\" size=\"larger\">Le fichier \"%s\" a été enregistré dans un format (%s) qui peut causer des pertes de données !</span>\n"
 "\n"
-"Voulez vous enregistrer ce fichier dans un autre format ?"
+"Voulez-vous enregistrer ce fichier dans un autre format ?"
 
 #: src/desktop.cpp:1486
 msgid "No previous zoom."
@@ -171,7 +169,7 @@ msgstr "Aligner le bas de l'objet avec le bas de l'ancre"
 
 #: src/dialogs/align.cpp:305
 msgid "Top of aligned objects to bottom of anchor"
-msgstr "Aligner le haut de l'objet avec le haut de l'ancre"
+msgstr "Aligner le haut de l'objet avec le bas de l'ancre"
 
 #: src/dialogs/align.cpp:320
 msgid "Align"
@@ -401,7 +399,7 @@ msgstr "Hauteur :"
 #.
 #: src/dialogs/desktop-properties.cpp:858
 msgid "Metadata"
-msgstr "Métadata"
+msgstr "Métadonnées"
 
 #. this uses an element
 #: src/dialogs/desktop-properties.cpp:884 src/dialogs/rdf.cpp:168
@@ -418,7 +416,7 @@ msgstr "Fermer"
 
 #: src/dialogs/display-settings.cpp:201
 msgid "When transforming, show:"
-msgstr "Lors des transformations afficher :"
+msgstr "Lors des transformations, afficher :"
 
 #: src/dialogs/display-settings.cpp:212
 msgid "Objects"
@@ -434,11 +432,11 @@ msgstr "Boite de contour"
 
 #: src/dialogs/display-settings.cpp:218
 msgid "Show only a box outline of the objects when moving or transforming"
-msgstr "Afficher seulement un boite de contours lors des déplacement ou des transformations"
+msgstr "Afficher seulement un boite de contours lors des déplacements ou des transformations"
 
 #: src/dialogs/display-settings.cpp:223
 msgid "Per-object selection cue:"
-msgstr "Poignée de sélection par objet:"
+msgstr "Poignée de sélection par objet :"
 
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
@@ -449,7 +447,7 @@ msgstr "Aucun"
 
 #: src/dialogs/display-settings.cpp:234
 msgid "No per-object selection indication"
-msgstr "Pas sélection d'indication d'objet pers"
+msgstr "Pas d'indication de sélection par d'objet"
 
 #: src/dialogs/display-settings.cpp:240
 msgid "Mark"
@@ -506,7 +504,7 @@ msgid ""
 "None: dialogs are treated as regular windows; Normal: dialogs stay on top of "
 "document windows; Aggressive: same as Normal but may work better with some "
 "window managers."
-msgstr "Aucun : les dialogues sont traités comme des fenêtres; Normal :les dialogues restent sur la fenêtre du document; Agressif : comme Normal, mais marche mieux avec certain gestionaire de fenêtre."
+msgstr "Aucun : les dialogues sont traités comme des fenêtres standard; Normal : les dialogues restent sur la fenêtre du document; Agressif : comme Normal, mais marche mieux avec certain gestionaires de fenêtre."
 
 #: src/dialogs/display-settings.cpp:430
 msgid "Normal"
@@ -526,36 +524,36 @@ msgstr "Afficher les poignées de sélection"
 
 #: src/dialogs/display-settings.cpp:625
 msgid "Whether selected objects display a selection cue (the same as in selector)"
-msgstr "l'objet sélectionné affiche les poignées de sélection"
+msgstr "L'objet sélectionné affiche les poignées de sélection (les mêmes que dans le sélecteur)"
 
 #: src/dialogs/display-settings.cpp:642
 msgid "Picking colors:"
-msgstr "couleurs capturé:"
+msgstr "Couleur capturé :"
 
 #: src/dialogs/display-settings.cpp:653
 msgid "Pick visible color (no alpha)"
-msgstr "Capture de couleurs visibles (pas d'alpha)"
+msgstr "Capture de la couleur visible (pas d'alpha)"
 
 #: src/dialogs/display-settings.cpp:653
 msgid ""
 "Pick the visible color under cursor, taking into account the page background "
 "and disregarding the transparency of objects"
-msgstr "Pipette la couleur visible sous le curseur, tient compte de la couleur du fond et ne tient pas compte de la transparence des objets"
+msgstr "Capture la couleur visible sous le curseur, tient compte de la couleur du fond et ne tient pas compte de la transparence des objets"
 
 #: src/dialogs/display-settings.cpp:660
 msgid "Pick objects' color (including alpha)"
-msgstr "Pipette les couleurs des objets (avec l'alpha)"
+msgstr "Capture la couleur des objets (avec l'alpha)"
 
 #: src/dialogs/display-settings.cpp:660
 msgid ""
 "Pick the actual color of object(s) under cursor, including their accumulated "
 "transparency"
-msgstr "Pipette la couleur des objet(s) sous le curseur, tient compte de l'accumulation de la transparence"
+msgstr "Capture la couleur des objet(s) sous le curseur, tient compte de l'accumulation de la transparence"
 
 #. Mouse
 #: src/dialogs/display-settings.cpp:752
 msgid "Mouse"
-msgstr "Sourie"
+msgstr "Souris"
 
 #: src/dialogs/display-settings.cpp:755
 msgid "Grab sensitivity:"
@@ -565,7 +563,7 @@ msgstr "Saisir la sensibilité :"
 msgid ""
 "How close you need to be to an object to be able to grab it with mouse (in "
 "pixels)"
-msgstr "Distance à partir de la quelle peut saisir un objet avec la sourie (en pixels)"
+msgstr "Distance à partir de la quelle peut saisir un objet avec la souris (en pixels)"
 
 #: src/dialogs/display-settings.cpp:757 src/dialogs/display-settings.cpp:768
 #: src/dialogs/display-settings.cpp:783 src/dialogs/display-settings.cpp:801
@@ -579,7 +577,7 @@ msgstr "Seuil de cliquer/déplacer :"
 
 #: src/dialogs/display-settings.cpp:767
 msgid "Maximum mouse drag (in pixels) which is considered a click, not a drag"
-msgstr "Déplacement de sourie maximal (en pixel) considéré comme un clic et non un déplacement"
+msgstr "Déplacement maximal de souris (en pixel) considéré comme un clic et non un déplacement"
 
 #. Scrolling
 #: src/dialogs/display-settings.cpp:778
@@ -588,13 +586,13 @@ msgstr "Défilement"
 
 #: src/dialogs/display-settings.cpp:781
 msgid "Mouse wheel scrolls by:"
-msgstr "La molette de la sourie défile de :"
+msgstr "La molette de la souris défile de :"
 
 #: src/dialogs/display-settings.cpp:782
 msgid ""
 "One mouse wheel notch scrolls by this distance in pixels (horizontally with "
 "Shift)"
-msgstr "Un cran de la molette de la sourie fait défiler de tan de pixels (horizontalement avec Maj)"
+msgstr "Un cran de la molette de la souris fait défiler de tan de pixels (horizontalement avec Maj)"
 
 #: src/dialogs/display-settings.cpp:791
 msgid "Ctrl+arrows"
@@ -630,7 +628,7 @@ msgstr "Vitesse :"
 msgid ""
 "How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn "
 "autoscroll off)"
-msgstr "Vitesse du défilement automatique du canevas lors que l'on tire un objet au dehors (0 pour aucun autodéfilement)"
+msgstr "Vitesse du défilement automatique du canevas lors que l'on tire un objet au dehors du canevas (0 pour aucun autodéfilement)"
 
 #: src/dialogs/display-settings.cpp:839
 msgid "Threshold:"
@@ -766,13 +764,13 @@ msgstr "Fenêtres"
 
 #: src/dialogs/display-settings.cpp:999
 msgid "Save window geometry"
-msgstr "Enregistre la taille de la fenêtre"
+msgstr "Enregistre la taille et la position de la fenêtre"
 
 #: src/dialogs/display-settings.cpp:1000
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
-msgstr "Enregistrment la taille de la fenêtre et ça position pour chaque document (seulement pour le format SVG d'Inkscape)"
+msgstr "Enregistrer la taille de la fenêtre et sa position pour chaque document (seulement pour le format SVG d'Inkscape)"
 
 #: src/dialogs/display-settings.cpp:1007
 msgid "Dialogs are hidden in taskbar"
@@ -784,14 +782,14 @@ msgstr "Les boites de dialogues sont cachées dans la barre des taches du gestio
 
 #: src/dialogs/display-settings.cpp:1015
 msgid "Zoom when window is resized"
-msgstr "Zoommer quand la fenêtre est redimentionné"
+msgstr "Zoommer quand la fenêtre est redimentioné"
 
 #: src/dialogs/display-settings.cpp:1016
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
 "above the right scrollbar)"
-msgstr "Le dessin est rezoommé lors que le fenêtre est redimentionné, pour garder la même aire visible (c'est l'option par défaut qui peut être changé dans n'importe quelle fenêtre en utilisant le boutton au dessus de la barre de défilement de droite)"
+msgstr "Le dessin est rezoommé lors que la fenêtre est redimentioné, pour garder la même aire visible (c'est l'option par défaut qui peut être changé dans n'importe quelle fenêtre en utilisant le boutton au dessus de la barre de défilement de droite)"
 
 #. Clones
 #: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:561
@@ -808,7 +806,7 @@ msgstr "Sont déplacés en parallèle"
 
 #: src/dialogs/display-settings.cpp:1040
 msgid "Clones are translated by the same vector as their original."
-msgstr "Les clones sont déplacés du même vecteur comme l'original."
+msgstr "Les clones sont déplacés du même vecteur que l'original."
 
 #: src/dialogs/display-settings.cpp:1046
 msgid "Stay unmoved"
@@ -827,7 +825,7 @@ msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
 "original."
-msgstr "Chaque clones est déplacé en fonction de ça transformation = attribut. Par exemple, un clone tourné va être déplacé dans une direction différente de l'original."
+msgstr "Chaque clone est déplacé en fonction de son attribut \"transformation\". Par exemple, un clone tourné va être déplacé dans une direction différente de l'original."
 
 #: src/dialogs/display-settings.cpp:1060
 msgid "When the original is deleted, its clones:"
@@ -835,7 +833,7 @@ msgstr "Lors que l'original est supprimé, ses clones :"
 
 #: src/dialogs/display-settings.cpp:1072
 msgid "Are unlinked"
-msgstr "Deviennent indépendant"
+msgstr "Deviennent indépendants"
 
 #: src/dialogs/display-settings.cpp:1072
 msgid "Orphaned clones are converted to regular objects."
@@ -890,7 +888,7 @@ msgstr "Optimisé"
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
-msgstr "Si possible, appliquer la transformation aux objets sans ajouter de transformation = attribut"
+msgstr "Si possible, appliquer la transformation aux objets sans ajouter l'attribut \"transformation\""
 
 #: src/dialogs/display-settings.cpp:1138
 msgid "Preserved"
@@ -898,7 +896,7 @@ msgstr "Préservé"
 
 #: src/dialogs/display-settings.cpp:1138
 msgid "Always store transformation as a transform= attribute on objects"
-msgstr "Toujours enregistrer la transformation comme une transformation = attribut de l'objet"
+msgstr "Toujours enregistrer la transformation comme un attribut \"transformation\" de l'objet"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
 #: src/dialogs/display-settings.cpp:1146
@@ -927,15 +925,15 @@ msgstr "Importer le bitmap comme une <image>"
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
 "rectangle with bitmap fill"
-msgstr "Lors que c'est actif, l'importation d'un bitmap crée un élément <image> ; sinon c'est un rectangle rempli avec la bitmap"
+msgstr "Lors que c'est actif, l'importation d'un bitmap crée un élément <image>; sinon c'est un rectangle rempli avec le bitmap"
 
 #: src/dialogs/display-settings.cpp:1168
 msgid "Max recent documents:"
-msgstr "Nombre maximal de documents récents :"
+msgstr "Nombre maximum de documents récents :"
 
 #: src/dialogs/display-settings.cpp:1169
 msgid "The maximum length of the Open Recent list in the File menu"
-msgstr "La taille maximum de la liste \"Récemment ouvert\" dans la menu fichier"
+msgstr "La taille maximum de la liste \"Récemment ouvert\" dans le menu \"Fichier\""
 
 #: src/dialogs/display-settings.cpp:1179
 msgid "Simplification threshold:"
@@ -946,7 +944,7 @@ msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
 "invoking it again after a pause restores the default threshold."
-msgstr "Force de la commande Simplifier par défaut. Si vous fait appel à cette commande plusieurs fois de façon rapide, elle agira de façon de plus en plus agressive; une appel après une pose restaurera la valeur pas défaut."
+msgstr "Force de la commande Simplifier par défaut. Si vous fait appel à cette commande plusieurs fois de façon rapide, elle agira de façon de plus en plus agressive; un appel après une pose restaurera la valeur pas défaut."
 
 #: src/dialogs/display-settings.cpp:1195
 msgid "Oversample bitmaps:"
@@ -1047,7 +1045,7 @@ msgstr "Ajouter l'extension automatiquement aux mon de fichiers"
 
 #: src/dialogs/filedialog.cpp:424
 msgid "No filename specified.  Unable to save."
-msgstr "Pas de fichier spécifié. Impossible de suaver."
+msgstr "Pas de fichier spécifié. Impossible d'enregistrer."
 
 #: src/dialogs/fill-style.cpp:124
 msgid "Fill style"
@@ -1078,15 +1076,15 @@ msgstr "alternant"
 #: src/dialogs/find.cpp:317
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
-msgstr "%d objet(s) trouvés (sur %d), correspondant à %s."
+msgstr "%d objet(s) trouvés (sur %d), correspondance %s."
 
 #: src/dialogs/find.cpp:318
 msgid "exact"
-msgstr "exact"
+msgstr "exacte"
 
 #: src/dialogs/find.cpp:318
 msgid "partial"
-msgstr "partiel"
+msgstr "partielle"
 
 #: src/dialogs/find.cpp:325
 msgid "No objects found"
@@ -1098,7 +1096,7 @@ msgstr "T_ype : "
 
 #: src/dialogs/find.cpp:490
 msgid "Search in all object types"
-msgstr "Recherché dans tous les types d'objets"
+msgstr "Rechercher dans tous les types d'objets"
 
 #: src/dialogs/find.cpp:490
 msgid "All types"
@@ -1196,7 +1194,7 @@ msgstr "_Texte : "
 
 #: src/dialogs/find.cpp:631
 msgid "Find objects by their text content (exact or partial match)"
-msgstr "Rechercher des objets par le texte qu'il contiennent (exact ou partiel)"
+msgstr "Rechercher des objets par le texte qu'ils contiennent (exact ou partiel)"
 
 #: src/dialogs/find.cpp:632
 msgid "_ID: "
@@ -1204,7 +1202,7 @@ msgstr "_ID : "
 
 #: src/dialogs/find.cpp:632
 msgid "Find objects by the value of the id attribute (exact or partial match)"
-msgstr "Rechercher des objets par leurs valeurs ou leurs id (exact ou partiel)"
+msgstr "Rechercher des objets par la valeur de l'attribut \"id\" (exact ou partiel)"
 
 #: src/dialogs/find.cpp:633
 msgid "_Style: "
@@ -1236,11 +1234,11 @@ msgstr "Nettoyer (_c)"
 
 #: src/dialogs/find.cpp:660
 msgid "Clear values"
-msgstr "Valeurs de nettoyage"
+msgstr "Effacer les valeurs"
 
 #: src/dialogs/find.cpp:661
 msgid "_Find"
-msgstr "Trouver (_f)"
+msgstr "Rechercher (_f)"
 
 #: src/dialogs/find.cpp:661
 msgid "Select objects matching all of the fields you filled in"
@@ -1413,7 +1411,7 @@ msgstr "Remplir"
 
 #: src/dialogs/object-properties.cpp:212
 msgid "Stroke paint"
-msgstr "Couleur du tracé"
+msgstr "Couleurs du tracé"
 
 #: src/dialogs/object-properties.cpp:217
 msgid "Stroke style"
@@ -1539,7 +1537,7 @@ msgstr "Limite de la coiffe :"
 
 #: src/dialogs/stroke-style.cpp:1458
 msgid "Maximum length of the miter (in units of stroke width)"
-msgstr "Longeur maximun de la coiffe (en unité de la largeur du tracé)"
+msgstr "Longueur maximum de la coiffe (en unité de la largeur du tracé)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
@@ -1742,14 +1740,14 @@ msgstr "Terminer main levée"
 
 #: src/draw-context.cpp:1834
 msgid "Finishing pen"
-msgstr "Terminier le crayon"
+msgstr "Terminer le crayon"
 
 #. alpha of color under cursor, to show in the statusbar
 #. locale-sensitive printf is OK, since this goes to the UI, not into SVG
 #: src/dropper-context.cpp:271
 #, c-format
 msgid " alpha %.3g"
-msgstr " alpha % 3g"
+msgstr " alpha %.3g"
 
 #. where the color is picked, to show in the statusbar
 #: src/dropper-context.cpp:273
@@ -1764,13 +1762,13 @@ msgstr " sous le curseur"
 #. message, to show in the statusbar
 #: src/dropper-context.cpp:275
 msgid "Release mouse to set color."
-msgstr "Relâcher la sourie pour affecter une couleur."
+msgstr "Relâcher la souris pour affecter une couleur."
 
 #: src/dropper-context.cpp:275
 msgid ""
 "Click to pick fill color, Shift+click to pick stroke color. Drag to pick the "
 "average color of an area."
-msgstr "Cliquer pour prendre une couleur de remplissage, Maj+clic pour prendre une couleur pour le tracé. Cliquer-déplacer pour prendre une couleur moyenne sur une zone."
+msgstr "Cliquer pour capturer une couleur de remplissage, Maj+clic pour prendre une couleur pour le tracé. Cliquer-déplacer pour prendre une couleur moyenne sur une zone."
 
 #: src/extension/init.cpp:105
 #, c-format
@@ -1787,7 +1785,7 @@ msgstr "Paramètres de la sortie EPS"
 
 #: src/extension/internal/eps-out.cpp:82
 msgid "Make bounding box around full page"
-msgstr "Faire une boite tout au tour de la page"
+msgstr "Faire une boite tout autour de la page"
 
 #: src/extension/internal/eps-out.cpp:90
 msgid "Convert text to path"
@@ -1820,9 +1818,9 @@ msgid ""
 "file size and can be arbitrarily scaled, but alpha transparency, gradients "
 "and patterns will be lost."
 msgstr ""
-"Utiliser les opérateurs vectoriels PostScript, l'image résultante sera (en "
-"général) plus petite tout en restant redimentionnable; par contre, la "
-"transparence alpha, les dégradés, les marqueurs et les motifs de remplissage seront perdus."
+"Utiliser les opérateurs vectoriels PostScript. Le fichier image résultant sera (en "
+"général) plus petite tout en restant redimentionable; par contre, la "
+"transparence alpha, les dégradés et les motifs de remplissage seront perdus."
 
 #: src/extension/internal/ps.cpp:139
 msgid "Print as bitmap"
@@ -1833,9 +1831,7 @@ msgid ""
 "Print everything as bitmap. The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
-msgstr ""
-"Tout imprimer en tant que bitmap, l'image résultante sera (habituellement) plus grande et sa qualité dépend du facteur de zoom; Mais tous les graphismes "
-"seront rendus identiques à l'affichage."
+msgstr "Tout imprimer en tant que bitmap. Le fichier image résultant sera (en général) plus gros et sa qualité dépendra du facteur de zoom; Mais tous les objets seront rendus comme il sont affichés."
 
 #: src/extension/internal/ps.cpp:155
 msgid "Preferred resolution (dots per inch) of bitmap"
@@ -1873,12 +1869,12 @@ msgstr "Échec du chargement du fichier %s"
 
 #: src/file.cpp:177
 msgid "Document not saved yet.  Cannot revert."
-msgstr "Document non enregistré. Impossible de le rechargé."
+msgstr "Document non enregistré. Impossible de le recharger."
 
 #: src/file.cpp:184
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
-msgstr "Les changements vont être perdu ! Êtes-vous sûr de vouloir recharger le document %s ?"
+msgstr "Les changements vont être perdus ! Êtes-vous sûr de vouloir recharger le document %s ?"
 
 #: src/file.cpp:203
 msgid "Document reverted."
@@ -1890,7 +1886,7 @@ msgstr "Document non rechargé."
 
 #: src/file.cpp:210
 msgid "Document not modified.  No need to revert."
-msgstr "Document non modifier. Pas besoin de le recharger."
+msgstr "Document non modifié. Pas besoin de le recharger."
 
 #: src/file.cpp:240
 msgid "Select file to open"
@@ -1901,7 +1897,7 @@ msgstr "Sélectionnez un fichier à ouvrir"
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
-msgstr "Pas d'extensions  Inkscape trouvé pour enregistrer le document (%s). Cela peut venir du fait que l'extension est inconnue."
+msgstr "Pas d'extensions Inkscape trouvé pour enregistrer le document (%s). Cela peut venir du fait que l'extension est inconnue."
 
 #: src/file.cpp:313 src/file.cpp:319
 msgid "Document not saved."
@@ -1940,7 +1936,7 @@ msgstr "Sélectionnez un fichier à importer"
 
 #: src/help.cpp:55
 msgid "about.svg"
-msgstr "à propos de svg"
+msgstr ""
 
 #: src/help.cpp:71 src/verbs.cpp:1033
 msgid "About Inkscape"
@@ -2075,11 +2071,11 @@ msgstr "Inkscape à rencontré une erreur fatale et va se fermer maintenant\n"
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
-msgstr "Les enregistrments automatiques des documents non enregistrés sont effectuées à cet emplacement : \n"
+msgstr "Les enregistrements automatiques des documents non enregistrés sont effectuées à cet emplacement :\n"
 
 #: src/inkscape.cpp:494
 msgid "Automatic backup of the following documents failed:\n"
-msgstr "Enregistrments automatiques des documents suivants ont échouées :\n"
+msgstr "Enregistrements automatiques des documents suivants ont échouées :\n"
 
 #: src/inkscape.cpp:653
 #, c-format
@@ -2159,8 +2155,8 @@ msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
 msgstr ""
-"Toutes fois Inkscape va démarrer, il va utiliser les paramètre par défaut,\n"
-"et toutes les modifications de préférences ne seront pas enregistré."
+"Bien qu'Inkscape va démarrer, il va utiliser les paramètres par défaut,\n"
+"et toutes les modifications des préférences ne seront pas enregistrés."
 
 #: src/interface.cpp:605
 msgid "Open _Recent"
@@ -2172,13 +2168,13 @@ msgstr "Ouvrir un des documents récemment ouverts"
 
 #: src/interface.cpp:773
 msgid "_Show/Hide"
-msgstr "Afficher/Cacher (_s)"
+msgstr "Afficher/Ma_squer"
 
 #: src/interface.cpp:773
 msgid ""
 "Show or hide parts of the document window (differently for normal and "
 "fullscreen modes)"
-msgstr "Afficher ou cacher des parties de la fenêtre du document (différent pour les modes normal et plein écran)"
+msgstr "Afficher ou masquer des parties de la fenêtre du document (différent pour les modes normal et plein écran)"
 
 #. sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
 #. checkitem_toggled, checkitem_update, 0);
@@ -2188,7 +2184,7 @@ msgstr "Panel de commandes"
 
 #: src/interface.cpp:778
 msgid "Show or hide the Commands bar (under the menu)"
-msgstr "Afficher ou cacher les pannels de commandes (sous le menu)"
+msgstr "Afficher ou masquer les panels de commandes (sous le menu)"
 
 #: src/interface.cpp:780
 msgid "Tool Controls"
@@ -2196,7 +2192,7 @@ msgstr "Outil de contrôles"
 
 #: src/interface.cpp:780
 msgid "Show or hide the Tool Controls panel"
-msgstr "Afficher ou cacher les pannels d'outil de contrôles"
+msgstr "Afficher ou masquer les panels d'outil de contrôles"
 
 #: src/interface.cpp:782
 msgid "_Toolbox"
@@ -2204,7 +2200,7 @@ msgstr "Boi_te à outils"
 
 #: src/interface.cpp:782
 msgid "Show or hide the main toolbox (on the left)"
-msgstr "Afficher ou cacher la boite à outils principale (à droite)"
+msgstr "Afficher ou masquer la boite à outils principale (à gauche)"
 
 #: src/interface.cpp:788
 msgid "_Statusbar"
@@ -2212,7 +2208,7 @@ msgstr "Barre d'état_s"
 
 #: src/interface.cpp:788
 msgid "Show or hide the statusbar (at the bottom of the window)"
-msgstr "Afficher ou cacher la barre d'états (en bas de la fenêtre)"
+msgstr "Afficher ou masquer la barre d'états (en bas de la fenêtre)"
 
 #. There isn't a way to handle "sub menus" (which could really be seen as a
 #. * list of verb arguments) in the verb system right now, so we have to build
@@ -2224,7 +2220,7 @@ msgstr "_Tutoriaux"
 
 #: src/interface.cpp:827
 msgid "Interactive Inkscape tutorials"
-msgstr "Tutoriel interactifs d'Inkscape"
+msgstr "Tutoriaux interactifs d'Inkscape"
 
 #: src/interface.cpp:853
 msgid "_File"
@@ -2252,7 +2248,7 @@ msgstr "_Aide"
 
 #: src/interface.cpp:925
 msgid "Leave Group"
-msgstr "Laisser le groupe"
+msgstr "Sortir du groupe"
 
 #: src/interface.cpp:1007
 msgid "Could not parse SVG data"
@@ -2268,7 +2264,7 @@ msgstr "Écraser %s"
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
 "current document?"
-msgstr "Le fichier %s existe déjà. Voulez vous que le document courant écraser ce fichier ?"
+msgstr "Le fichier %s existe déjà. Voulez vous que le document courant écrase ce fichier ?"
 
 #: src/knot.cpp:567
 msgid "Node or handle drag canceled."
@@ -2379,7 +2375,7 @@ msgstr ""
 #: src/nodepath.cpp:1003 src/nodepath.cpp:1015 src/nodepath.cpp:1095
 #: src/nodepath.cpp:1107
 msgid "To join, you must have two endnodes selected."
-msgstr "Pour joindre, vous devez avoir sélectionnés deux nœuds."
+msgstr "Pour joindre, vous devez avoir sélectionné deux nœuds."
 
 #: src/nodepath.cpp:1232 src/nodepath.cpp:1246
 msgid ""
@@ -2410,7 +2406,7 @@ msgstr "Déplacer les nœuds ou les points de contrôles pour éditer le chemin"
 
 #: src/nodepath.cpp:2748
 msgid "Select one path object with selector first, then switch back to node tool."
-msgstr "Sélectionner un chemin avec l'outil sélectio, ensuite prendre l'outil nœud."
+msgstr "Sélectionner un chemin avec l'outil sélection, ensuite prendre l'outil nœud."
 
 #: src/nodepath.cpp:2751
 #, c-format
@@ -2521,7 +2517,7 @@ msgstr "Un des objets n'est pas un chemin, impossible de les combiner."
 
 #: src/path-chemistry.cpp:73
 msgid "You cannot combine objects from different groups or layers."
-msgstr "Vous ne pouvais pas combiner des objets de différents groupes ou calques."
+msgstr "Vous ne pouvez pas combiner des objets de différents groupes ou calques."
 
 #: src/path-chemistry.cpp:157
 msgid "Select some path(s) to break apart."
@@ -2603,7 +2599,7 @@ msgstr "Sélectionner au moins deux objets pour les grouper."
 
 #: src/selection-chemistry.cpp:253
 msgid "You cannot group objects from different groups or layers."
-msgstr "Vous ne pouvais pas grouper des objets de différents groupes ou calques."
+msgstr "Vous ne pouvez pas grouper des objets de différents groupes ou calques."
 
 #: src/selection-chemistry.cpp:301
 msgid "Select a group to ungroup."
@@ -2620,7 +2616,7 @@ msgstr "Sélectionner des objets pour les faire remonter."
 #: src/selection-chemistry.cpp:408 src/selection-chemistry.cpp:486
 msgid "You cannot raise/lower objects from different groups or layers."
 msgstr ""
-"Vous ne pouvais pas faire remonter/descendre des objets de différents "
+"Vous ne pouvez pas faire remonter/descendre des objets de différents "
 "groupes ou calques."
 
 #: src/selection-chemistry.cpp:452
@@ -2681,15 +2677,15 @@ msgstr "L'original du clone n'est pas un objet visible (il est dans <defs>)"
 
 #: src/selection-chemistry.cpp:1392
 msgid "Select an object to tile."
-msgstr "Sélectionner un objet à paver."
+msgstr "Sélectionner un objet à convertir en motif de remplissage."
 
 #: src/selection-chemistry.cpp:1456
 msgid "Select an object with pattern fill to untile."
-msgstr "Sélectionner un objet rempli avec un motif pour le dépaver."
+msgstr "Sélectionner un objet duquel extraire le motif de remplissage."
 
 #: src/selection-chemistry.cpp:1507
 msgid "No pattern fills to untile in the selection."
-msgstr "motif de remplissage dans la sélection à dépaver."
+msgstr "Pas de motif de remplissage à extraire dans la sélection."
 
 #: src/selection-describer.cpp:30
 msgid "Click selection to toggle scale/rotation handles"
@@ -2880,8 +2876,9 @@ msgstr "Sélectionner les chemins pour tracer le contour."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:738
+#, fuzzy
 msgid "No stroked paths to outline in the selection."
-msgstr "Pas de chemin à agrandir dans la sélection."
+msgstr "Pas de chemin tracé à agrandir dans la sélection."
 
 #: src/splivarot.cpp:825
 msgid "Selected object is not a path, cannot inset/outset."
@@ -2999,7 +2996,7 @@ msgstr "Rayon :"
 #. Base radius is the same for the closest handle.
 #: src/toolbox.cpp:1126
 msgid "Base radius to tip radius ratio"
-msgstr "Ration de rayon principal au rayon éloigné "
+msgstr "Rapport du rayon principal au rayon éloigné"
 
 #: src/toolbox.cpp:1141
 msgid "Roundedness:"
@@ -3188,7 +3185,7 @@ msgstr "Cliquer ou cliquer-déplacer sur une zone pour y zommer, Maj+Clic pour d
 msgid ""
 "Click to set fill color, Shift+click to set stroke color. Click and drag to "
 "pick the average color of an area."
-msgstr "Cliquer pour prendre une couleur de remplissage, Maj+clic pour prendre une couleur pour le tracé. Cliquer-déplacer pour prendre la couleur moyenne sur une zone."
+msgstr "Cliquer pour prendre une couleur de remplissage, Maj+clic pour prendre une couleur pour le tracé. Cliquer-déplacer pour capturer la couleur moyenne sur une zone."
 
 #: src/verbs.cpp:676
 msgid "keys.svg"
@@ -3237,7 +3234,7 @@ msgstr "Recharger (_v)"
 
 #: src/verbs.cpp:805
 msgid "Revert to the last saved version of document (changes will be lost)"
-msgstr "Recharger le dernier enregistrement du document (les changement serons perdu)"
+msgstr "Recharger le dernier enregistrement du document (les changements seront perdus)"
 
 #: src/verbs.cpp:806
 msgid "_Save"
@@ -3305,7 +3302,7 @@ msgstr "Aller au document suivant"
 
 #: src/verbs.cpp:822
 msgid "P_revious Window"
-msgstr "F_enêtre d'aperçus"
+msgstr "Fenêtre p_récédante"
 
 #: src/verbs.cpp:823
 msgid "Switch to the previous document window"
@@ -3427,19 +3424,19 @@ msgstr "Sélectionner l'objet auquel le clone est lié"
 
 #: src/verbs.cpp:853
 msgid "_Tile"
-msgstr "_Transformer en motif"
+msgstr "_Transformer en motif de remplissage"
 
 #: src/verbs.cpp:854
 msgid "Convert selection to a rectangle with tiled pattern fill"
-msgstr "Convertir la sélection en rectangle pavé avec le motif de remplissage"
+msgstr "Convertir la sélection en rectangle de motif de remplissage"
 
 #: src/verbs.cpp:855
 msgid "_Untile"
-msgstr "Ann_uler le motif"
+msgstr "Ann_uler le motif de remplissage"
 
 #: src/verbs.cpp:856
 msgid "Extract objects from a tiled pattern fill"
-msgstr "Extraire les objets depuis un motif de remplissage pavé"
+msgstr "Extraire les objets depuis un motif de remplissage"
 
 #: src/verbs.cpp:857
 msgid "Clea_r All"
@@ -3532,7 +3529,7 @@ msgstr "_Différence"
 
 #: src/verbs.cpp:883
 msgid "Difference of selected objects (bottom minus top)"
-msgstr "Différence entre les objets sélectionnes (dessus moins dessous)"
+msgstr "Différence entre les objets sélectionnes (dessous moins dessus)"
 
 #: src/verbs.cpp:884
 msgid "E_xclusion"
@@ -3548,15 +3545,16 @@ msgstr "Di_vision"
 
 #: src/verbs.cpp:887
 msgid "Cut the bottom object into pieces"
-msgstr "Découper l'objet de dessus en morceau"
+msgstr "Découper l'objet de dessous en morceau"
 
 #: src/verbs.cpp:888
 msgid "Cut _Path"
 msgstr "Décou_per en chemin"
 
 #: src/verbs.cpp:889
+#, fuzzy
 msgid "Cut the bottom object's stroke into pieces, removing fill"
-msgstr "Découper le tracé de l'objet, enlève le remplissage"
+msgstr "Découper le tracé du dessous l'objet, enlève le remplissage"
 
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
@@ -3811,7 +3809,7 @@ msgstr "_Règles"
 
 #: src/verbs.cpp:977
 msgid "Show or hide the canvas rulers"
-msgstr "Afficher/Cacher les règles du canevas"
+msgstr "Afficher/Masquer les règles du canevas"
 
 #: src/verbs.cpp:978
 msgid "Scroll_bars"
@@ -3819,7 +3817,7 @@ msgstr "_Barre de défilement"
 
 #: src/verbs.cpp:978
 msgid "Show or hide the canvas scrollbars"
-msgstr "Afficher/Cacher les barres de défillement du canevas"
+msgstr "Afficher/Masquer les barres de défillement du canevas"
 
 #: src/verbs.cpp:979
 msgid "_Grid"
@@ -3835,7 +3833,7 @@ msgstr "G_uides"
 
 #: src/verbs.cpp:980
 msgid "Show or hide guides"
-msgstr "Afficher/Masque les guides"
+msgstr "Afficher/Masquer les guides"
 
 #: src/verbs.cpp:981
 msgid "Nex_t Zoom"
@@ -3887,7 +3885,7 @@ msgstr "Mettre la fenêtre de ce document en plein écran"
 
 #: src/verbs.cpp:995
 msgid "D_uplicate Window"
-msgstr "D_upliquer le fenêtre"
+msgstr "D_upliquer la fenêtre"
 
 #: src/verbs.cpp:995
 msgid "Open a new window with the same document"
@@ -3993,11 +3991,11 @@ msgstr "Éditeur XML"
 
 #: src/verbs.cpp:1022
 msgid "_Find..."
-msgstr "Trouver... (_f)"
+msgstr "Rechercher... (_f)"
 
 #: src/verbs.cpp:1023
 msgid "Find objects in document"
-msgstr "Trouver des objets dans le document"
+msgstr "Rechercher des objets dans le document"
 
 #: src/verbs.cpp:1024
 msgid "Show/_Hide Dialogs"
@@ -4005,7 +4003,7 @@ msgstr "Afficher/Cac_her les boites dialogues"
 
 #: src/verbs.cpp:1025
 msgid "Show or hide all active dialogs"
-msgstr "Afficher/Cacher l'ensemble des boites de dialogue activent"
+msgstr "Afficher/Masquer l'ensemble des boites de dialogue activent"
 
 #: src/verbs.cpp:1026
 msgid "_Object Properties..."
@@ -4045,7 +4043,7 @@ msgstr "Inkscape: _Avancé"
 
 #: src/verbs.cpp:1039
 msgid "Advanced Inkscape tutorial"
-msgstr "Tutorial avancés d'Inkscape"
+msgstr "Tutorial avancé d'Inkscape"
 
 #. "tutorial_advanced"
 #: src/verbs.cpp:1040
@@ -4063,7 +4061,7 @@ msgstr "_Trucs et astuces"
 
 #: src/verbs.cpp:1043
 msgid "Miscellaneous Tips and Tricks"
-msgstr "Divers truc et astuces"
+msgstr "Divers trucs et astuces"
 
 #: src/widgets/dash-selector.cpp:104
 msgid "Dash pattern"
