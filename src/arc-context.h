@@ -29,7 +29,7 @@ typedef struct _SPArcContextClass SPArcContextClass;
 struct _SPArcContext {
 	SPEventContext event_context;
 	SPItem * item;
-	NRPoint center;
+	NR::Point center;
 };
 
 struct _SPArcContextClass {

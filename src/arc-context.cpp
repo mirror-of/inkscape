@@ -141,9 +141,7 @@ sp_arc_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			sp_desktop_w2d_xy_point (event_context->desktop, &fp,
 									 (float) event->button.x, (float) event->button.y);
 			/* Snap center to nearest magnetic point */
-			NR::Point cent = fp;
-			sp_desktop_free_snap (event_context->desktop, cent);
-			ac->center = cent;
+			sp_desktop_free_snap (event_context->desktop, ac->center);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 						GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
 						NULL, event->button.time);
@@ -232,9 +230,9 @@ sp_arc_drag (SPArcContext * ac, double xx, double yy, guint state)
 			const NR::Coord l1 = sp_desktop_vector_snap (desktop, p1, p1 - p0);
 			
 			if (l0 < l1) {
-				p1 = 2 * NR::Point(ac->center) - p0;
+				p1 = 2 * ac->center - p0;
 			} else {
-				p0 = 2 * NR::Point(ac->center) - p1;
+				p0 = 2 * ac->center - p1;
 			}
 		} else {
 			p0 = ac->center;
@@ -244,22 +242,22 @@ sp_arc_drag (SPArcContext * ac, double xx, double yy, guint state)
 	} else if (state & GDK_SHIFT_MASK) {
 		/* Corner point movements are bound */
 		p1 = pt;
-		p0 = 2 * NR::Point(ac->center) - p1;
+		p0 = 2 * ac->center - p1;
 		const NR::Coord p0h = sp_desktop_horizontal_snap (desktop, &p0);
 		const NR::Coord p0v = sp_desktop_vertical_snap (desktop, &p0);
 		const NR::Coord p1h = sp_desktop_horizontal_snap (desktop, &p1);
 		const NR::Coord p1v = sp_desktop_vertical_snap (desktop, &p1);
 		if (p0h < p1h) {
 			/* Use Point 0 horizontal position */
-			p1[NR::X] = 2 * ac->center.x - p0[NR::X];
+			p1[NR::X] = 2 * ac->center[NR::X] - p0[NR::X];
 		} else {
-			p0[NR::X] = 2 * ac->center.x - p1[NR::X];
+			p0[NR::X] = 2 * ac->center[NR::X] - p1[NR::X];
 		}
 		if (p0v < p1v) {
 			/* Use Point 0 vertical position */
-			p1[NR::Y] = 2 * ac->center.y - p0[NR::Y];
+			p1[NR::Y] = 2 * ac->center[NR::Y] - p0[NR::Y];
 		} else {
-			p0[NR::Y] = 2 * ac->center.y - p1[NR::Y];
+			p0[NR::Y] = 2 * ac->center[NR::Y] - p1[NR::Y];
 		}
 	} else {
 		/* Free movement for corner point */

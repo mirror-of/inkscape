@@ -178,9 +178,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 			/* Position center */
 			sp_desktop_w2d_xy_point (event_context->desktop, &fp, event->button.x, event->button.y);
 			/* Snap center to nearest magnetic point */
-			NR::Point cent(fp);
-			sp_desktop_free_snap (event_context->desktop, cent);
-			sc->center = cent;
+			sp_desktop_free_snap (event_context->desktop, sc->center);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 						GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
 						NULL, event->button.time);
@@ -262,7 +260,7 @@ sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state)
 	}
 
 	/* Free movement for corner point */
-	sp_desktop_dt2root_xy_point (desktop, &fp, sc->center.x, sc->center.y);
+	sp_desktop_dt2root_xy_point (desktop, &fp, sc->center[NR::X], sc->center[NR::Y]);
 	p0.x = fp.x;
 	p0.y = fp.y;
 	sp_desktop_dt2root_xy_point (desktop, &fp, x, y);

@@ -856,9 +856,7 @@ sp_nodepath_selected_nodes_move (SPNodePath * nodepath, gdouble dx, gdouble dy)
 void
 sp_node_selected_move (gdouble dx, gdouble dy)
 {
-	SPNodePath * nodepath;
-
-	nodepath = sp_nodepath_current ();
+	SPNodePath *nodepath = sp_nodepath_current ();
 	if (!nodepath) return;
 
 	sp_nodepath_selected_nodes_move (nodepath, dx, dy);
@@ -874,20 +872,16 @@ sp_node_selected_move (gdouble dx, gdouble dy)
 void
 sp_node_selected_move_screen (gdouble dx, gdouble dy)
 {
-	SPDesktop * desktop;
-	gdouble zdx, zdy, zoom;
-	SPNodePath * nodepath;
-
 	// borrowed from sp_selection_move_screen in selection-chemistry.c
 	// we find out the current zoom factor and divide deltas by it
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	g_return_if_fail(SP_IS_DESKTOP (desktop));
 
-	zoom = SP_DESKTOP_ZOOM (desktop);
-	zdx = dx / zoom;
-	zdy = dy / zoom;
+	gdouble zoom = SP_DESKTOP_ZOOM (desktop);
+	gdouble zdx = dx / zoom;
+	gdouble zdy = dy / zoom;
 
-	nodepath = sp_nodepath_current ();
+	SPNodePath *nodepath = sp_nodepath_current ();
 	if (!nodepath) return;
 
 	sp_nodepath_selected_nodes_move (nodepath, zdx, zdy);
@@ -915,9 +909,7 @@ sp_node_ensure_knot (SPPathNode * node, gint which, gboolean show_knot)
 			sp_knot_show (side->knot);
 		}
 
-		NR::Point p = side->pos;
-
-		sp_knot_set_position (side->knot, p, 0);
+		sp_knot_set_position (side->knot, side->pos, 0);
 		sp_canvas_item_show (side->line);
 
 	} else {
@@ -1061,7 +1053,6 @@ sp_node_selected_join (void)
 {
 	SPNodeSubPath * sa, * sb;
 	SPPathNode * n;
-	NR::Point p;
 	ArtPathcode code;
 
 	SPNodePath * nodepath = sp_nodepath_current ();
@@ -1089,9 +1080,7 @@ sp_node_selected_join (void)
 	NR::Point c = (a->pos + b->pos) / 2;
 
 	if (a->subpath == b->subpath) {
-		SPNodeSubPath * sp;
-
-		sp = a->subpath;
+		SPNodeSubPath *sp = a->subpath;
 		sp_nodepath_subpath_close (sp);
 
 		sp_nodepath_ensure_ctrls (sp->nodepath);
@@ -1104,12 +1093,11 @@ sp_node_selected_join (void)
 	/* a and b are separate subpaths */
 	sa = a->subpath;
 	sb = b->subpath;
-
+	NR::Point p;
 	if (a == sa->first) {
-		SPNodeSubPath *t;
 		p = sa->first->n.pos;
 		code = (ArtPathcode)sa->first->n.other->code;
-		t = sp_nodepath_subpath_new (sa->nodepath);
+		SPNodeSubPath *t = sp_nodepath_subpath_new (sa->nodepath);
 		n = sa->last;
 		sp_nodepath_node_new (t, NULL, SP_PATHNODE_CUSP, ART_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
 		n = n->p.other;
@@ -2314,12 +2302,12 @@ node_ctrl_moved (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 		// rotate the other handle correspondingly, if both old and new angles exist
 		rother.a += rnew.a - rme.a;
 		other->pos = radial_to_xy (&rother, &(n->pos));
-		sp_ctrlline_set_coords (SP_CTRLLINE (other->line), n->pos[NR::X], n->pos[NR::Y], other->pos[NR::X], other->pos[NR::Y]);
+		sp_ctrlline_set_coords (SP_CTRLLINE (other->line), n->pos, other->pos);
 		sp_knot_set_position (other->knot, other->pos, 0);
 	} 
 
 	me->pos = radial_to_xy (&rnew, &(n->pos));
-	sp_ctrlline_set_coords (SP_CTRLLINE (me->line), n->pos[NR::X], n->pos[NR::Y], me->pos[NR::X], me->pos[NR::Y]);
+	sp_ctrlline_set_coords (SP_CTRLLINE (me->line), n->pos, me->pos);
 
 	// this is what sp_knot_set_position does, but without emitting the signal:
 	// we cannot emit a "moved" signal because we're now processing it

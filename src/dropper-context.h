@@ -30,7 +30,7 @@ struct _SPDropperContext {
 	unsigned int dragging : 1;
 
 	SPCanvasItem *area;
-	NRPoint centre;
+	NR::Point centre;
 };
 
 struct _SPDropperContextClass {

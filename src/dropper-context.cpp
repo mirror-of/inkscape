@@ -26,6 +26,8 @@
 #include "desktop-handles.h"
 
 #include "dropper-context.h"
+#include <libnr/nr-point-fns.h>
+#include <algorithm>
 
 #define C1 0.552
 static const ArtBpath spdc_circle[] = {
@@ -71,11 +73,7 @@ sp_dropper_context_get_type (void)
 static void
 sp_dropper_context_class_init (SPDropperContextClass * klass)
 {
-	GObjectClass *object_class;
-	SPEventContextClass * ec_class;
-
-	object_class = (GObjectClass *) klass;
-	ec_class = (SPEventContextClass *) klass;
+	SPEventContextClass *ec_class = (SPEventContextClass *) klass;
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
@@ -87,23 +85,17 @@ sp_dropper_context_class_init (SPDropperContextClass * klass)
 static void
 sp_dropper_context_init (SPDropperContext *dc)
 {
-	SPEventContext *ec;
-	
-	ec = SP_EVENT_CONTEXT (dc);
 }
 
 static void
 sp_dropper_context_setup (SPEventContext *ec)
 {
-	SPDropperContext *dc;
-	SPCurve *c;
-
-	dc = SP_DROPPER_CONTEXT (ec);
+	SPDropperContext *dc = SP_DROPPER_CONTEXT (ec);
 
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
 
-	c = sp_curve_new_from_static_bpath ((ArtBpath *) spdc_circle);
+	SPCurve *c = sp_curve_new_from_static_bpath ((ArtBpath *) spdc_circle);
 	dc->area = sp_canvas_bpath_new (SP_DT_CONTROLS (ec->desktop), c);
 	sp_curve_unref (c);
 	sp_canvas_bpath_set_fill (SP_CANVAS_BPATH (dc->area), 0x00000000, (SPWindRule)0);
@@ -114,9 +106,7 @@ sp_dropper_context_setup (SPEventContext *ec)
 static void
 sp_dropper_context_finish (SPEventContext *ec)
 {
-	SPDropperContext *dc;
-
-	dc = SP_DROPPER_CONTEXT (ec);
+	SPDropperContext *dc = SP_DROPPER_CONTEXT (ec);
 
 	if (dc->area) {
 		gtk_object_destroy (GTK_OBJECT (dc->area));
@@ -127,59 +117,46 @@ sp_dropper_context_finish (SPEventContext *ec)
 static gint
 sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 {
-	SPDropperContext *dc;
-	int ret;
-
-	dc = (SPDropperContext *) ec;
-
-	ret = FALSE;
+	SPDropperContext *dc = (SPDropperContext *) ec;
+	int ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			dc->centre.x = event->button.x;
-			dc->centre.y = event->button.y;
+			dc->centre = NR::Point(event->button.x, event->button.y);
 			dc->dragging = TRUE;
 			ret = TRUE;
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (dc->dragging) {
-			NRMatrix w2dt, sm;
-			NRPoint cd;
-			float rw, scale;
-			int x0, y0, x1, y1;
-			rw = hypot (event->button.x - dc->centre.x, event->button.y - dc->centre.y);
-			rw = MIN (rw, 32);
-			sp_desktop_w2d_xy_point (ec->desktop, &cd, dc->centre.x, dc->centre.y);
-			sp_desktop_w2dt_affine (ec->desktop, &w2dt);
-			scale = rw * NR_MATRIX_DF_EXPANSION (&w2dt);
-			nr_matrix_set_scale (&sm, scale, scale);
-			sm.c[4] = cd.x;
-			sm.c[5] = cd.y;
+			const double rw = std::min(NR::L2(NR::Point(event->button.x, event->button.y) - dc->centre), 32.0);
+			NR::Point cd = sp_desktop_w2d_xy_point (ec->desktop, dc->centre);
+			NR::Matrix w2dt = sp_desktop_w2dt_affine (ec->desktop);
+			const double scale = rw * NR_MATRIX_DF_EXPANSION (&w2dt);
+			NR::Matrix sm = NR::scale(NR::Point(scale, scale));
+			sm.c[4] = cd[0];
+			sm.c[5] = cd[1];
 			sp_canvas_item_affine_absolute (dc->area, NR_MATRIX_D_TO_DOUBLE (&sm));
 			sp_canvas_item_show (dc->area);
 			/* Get buffer */
-			x0 = (int) floor (dc->centre.x - rw);
-			y0 = (int) floor (dc->centre.y - rw);
-			x1 = (int) ceil (dc->centre.x + rw);
-			y1 = (int) ceil (dc->centre.y + rw);
+			const int x0 = (int) floor (dc->centre[NR::X] - rw);
+			const int y0 = (int) floor (dc->centre[NR::Y] - rw);
+			const int x1 = (int) ceil (dc->centre[NR::X] + rw);
+			const int y1 = (int) ceil (dc->centre[NR::Y] + rw);
 			if ((x1 > x0) && (y1 > y0)) {
-				double W, R, G, B, A;
 				NRPixBlock pb;
 				SPColor color;
-				int x, y;
 				nr_pixblock_setup_fast (&pb, NR_PIXBLOCK_MODE_R8G8B8A8P, x0, y0, x1, y1, TRUE);
 				/* fixme: (Lauris) */
 				sp_canvas_arena_render_pixblock (SP_CANVAS_ARENA (SP_DT_DRAWING (ec->desktop)), &pb);
-				W = R = G = B = A = 0.0;
-				for (y = y0; y < y1; y++) {
+				double W(0), R(0), G(0), B(0), A(0);
+				for (int y = y0; y < y1; y++) {
 					const unsigned char *s = NR_PIXBLOCK_PX (&pb) + (y - y0) * pb.rs;
-					for (x = x0; x < x1; x++) {
-						double dx, dy, w;
-						dx = x - dc->centre.x;
-						dy = y - dc->centre.y;
-						w = exp (-((dx * dx) + (dy * dy)) / (rw * rw));
+					for (int x = x0; x < x1; x++) {
+						const double dx = x - dc->centre[NR::X];
+						const double dy = y - dc->centre[NR::Y];
+						const double w = exp (-((dx * dx) + (dy * dy)) / (rw * rw));
 						W += w;
 						R += w * s[0];
 						G += w * s[1];

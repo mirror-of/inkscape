@@ -81,11 +81,8 @@ sp_text_context_get_type (void)
 static void
 sp_text_context_class_init (SPTextContextClass * klass)
 {
-	GObjectClass * object_class;
-	SPEventContextClass * event_context_class;
-
-	object_class = (GObjectClass *) klass;
-	event_context_class = (SPEventContextClass *) klass;
+	GObjectClass *object_class = (GObjectClass *) klass;
+	SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
@@ -98,9 +95,7 @@ sp_text_context_class_init (SPTextContextClass * klass)
 static void
 sp_text_context_init (SPTextContext *tc)
 {
-	SPEventContext * event_context;
-	
-	event_context = SP_EVENT_CONTEXT (tc);
+	SPEventContext *event_context = SP_EVENT_CONTEXT (tc);
 
 	event_context->cursor_shape = cursor_text_xpm;
 	event_context->hot_x = 0;
@@ -109,8 +104,7 @@ sp_text_context_init (SPTextContext *tc)
 	tc->imc = NULL;
 
 	tc->text = NULL;
-	tc->pdoc.x = 0.0;
-	tc->pdoc.y = 0.0;
+	tc->pdoc = NR::Point(0, 0);
 	tc->ipos = 0;
 
 	tc->unimode = FALSE;
@@ -128,11 +122,8 @@ sp_text_context_init (SPTextContext *tc)
 static void
 sp_text_context_setup (SPEventContext *ec)
 {
-	SPTextContext *tc;
-	SPDesktop *desktop;
-
-	tc = SP_TEXT_CONTEXT (ec);
-	desktop = ec->desktop;
+	SPTextContext *tc = SP_TEXT_CONTEXT (ec);
+	SPDesktop *desktop = ec->desktop;
 
 	tc->cursor = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
 	sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), 100, 0, 100, 100);
@@ -147,9 +138,7 @@ sp_text_context_setup (SPEventContext *ec)
 
 	tc->imc = gtk_im_multicontext_new();
 	if (tc->imc) {
-		GtkWidget *canvas;
-
-		canvas = GTK_WIDGET (SP_DT_CANVAS (desktop));
+		GtkWidget *canvas = GTK_WIDGET (SP_DT_CANVAS (desktop));
 
 		gtk_im_context_set_use_preedit (tc->imc, TRUE);
 		gtk_im_context_set_client_window (tc->imc, canvas->window);
@@ -177,8 +166,7 @@ sp_text_context_setup (SPEventContext *ec)
 static void
 sp_text_context_finish (SPEventContext *ec)
 {
-	SPTextContext *tc;
-	tc = SP_TEXT_CONTEXT (ec);
+	SPTextContext *tc = SP_TEXT_CONTEXT (ec);
 
 	sp_text_context_forget_text (SP_TEXT_CONTEXT (ec));
 
@@ -211,12 +199,9 @@ sp_text_context_finish (SPEventContext *ec)
 static gint
 sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 {
-	SPTextContext *tc;
-	gint ret;
+	SPTextContext *tc = SP_TEXT_CONTEXT (ec);
 
-	tc = SP_TEXT_CONTEXT (ec);
-
-	ret = FALSE;
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -253,30 +238,30 @@ sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 static void
 sp_text_context_setup_text (SPTextContext *tc)
 {
-	SPRepr *rtext, *rtspan, *rstring, *style;
-	SPEventContext *ec;
-
-	ec = SP_EVENT_CONTEXT (tc);
+	SPEventContext *ec = SP_EVENT_CONTEXT (tc);
 
 	/* Create <text> */
-	rtext = sp_repr_new ("text");
+	SPRepr *rtext = sp_repr_new ("text");
 	sp_repr_set_attr (rtext, "xml:space", "preserve"); // we preserve spaces in the text objects we create
+
 	/* Set style */
-	style = inkscape_get_repr (INKSCAPE, "tools.text");
+	SPRepr *style = inkscape_get_repr (INKSCAPE, "tools.text");
 	if (style) {
 		SPCSSAttr *css;
 		css = sp_repr_css_attr_inherited (style, "style");
 		sp_repr_css_set (rtext, css, "style");
 		sp_repr_css_attr_unref (css);
 	}
-	sp_repr_set_double_attribute (rtext, "x", tc->pdoc.x);
-	sp_repr_set_double_attribute (rtext, "y", tc->pdoc.y);
+	sp_repr_set_double_attribute (rtext, "x", tc->pdoc[NR::X]);
+	sp_repr_set_double_attribute (rtext, "y", tc->pdoc[NR::Y]);
+
 	/* Create <tspan> */
-	rtspan = sp_repr_new ("tspan");
+	SPRepr *rtspan = sp_repr_new ("tspan");
 	sp_repr_add_child (rtext, rtspan, NULL);
 	sp_repr_unref (rtspan);
+
 	/* Create TEXT */
-	rstring = sp_xml_document_createTextNode (sp_repr_document (rtext), "");
+	SPRepr *rstring = sp_xml_document_createTextNode (sp_repr_document (rtext), "");
 	sp_repr_add_child (rtspan, rstring, NULL);
 	sp_repr_unref (rstring);
 	sp_document_add_repr (SP_DT_DOCUMENT (ec->desktop), rtext);
@@ -289,28 +274,24 @@ sp_text_context_setup_text (SPTextContext *tc)
 static gint
 sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 {
-	SPTextContext *tc;
-	SPStyle *style;
-
-	tc = SP_TEXT_CONTEXT (ec);
+	SPTextContext *tc = SP_TEXT_CONTEXT (ec);
 
 	sp_canvas_item_hide (tc->indicator);
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NRPoint dtp;
 			/* Button 1, set X & Y & new item */
 			sp_selection_empty (SP_DT_SELECTION (ec->desktop));
-			sp_desktop_w2d_xy_point (ec->desktop, &dtp, (float) event->button.x, (float) event->button.y);
-			sp_desktop_dt2root_xy_point (ec->desktop, &tc->pdoc, dtp.x, dtp.y);
+			NR::Point dtp = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
+			tc->pdoc = sp_desktop_dt2root_xy_point (ec->desktop, dtp);
 			/* Cursor */
 			tc->show = TRUE;
 			tc->phase = 1;
 			tc->nascent_object = 1; // new object was just created
 			sp_canvas_item_show (tc->cursor);
-			sp_desktop_w2d_xy_point (ec->desktop, &dtp, (float) event->button.x, (float) event->button.y);
-			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp.x, dtp.y, dtp.x + 32, dtp.y);
+			//NR::Point dtp = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
+			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp, dtp + NR::Point(32, 0));
 			/* Processed */
 			return TRUE;
 		}
@@ -327,7 +308,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				if (!tc->text) sp_text_context_setup_text (tc);
 				else sp_text_context_preedit_reset (tc);
 				g_assert (tc->text != NULL);
-				style = SP_OBJECT_STYLE (tc->text);
+				SPStyle *style = SP_OBJECT_STYLE (tc->text);
 
 				if (MOD__CTRL_ONLY) {
 					switch (event->key.keyval) {
@@ -479,9 +460,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 static void
 sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc)
 {
-	SPItem *item;
-
-	item = sp_selection_item (selection);
+	SPItem *item = sp_selection_item (selection);
 
 	if (tc->text && (item != tc->text)) {
 		sp_text_context_forget_text (tc);
@@ -515,7 +494,7 @@ sp_text_context_update_cursor (SPTextContext *tc)
 		NR::Point d0 = sp_item_i2d_affine (SP_ITEM (tc->text)) * p0;
 		NR::Point d1 = sp_item_i2d_affine (SP_ITEM (tc->text)) * p1;
 		sp_canvas_item_show (tc->cursor);
-		sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), d0[0], d0[1], d1[0], d1[1]);
+		sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), d0, d1);
 		/* fixme: ... need another transformation to get canvas widget coordinate space? */
 		im_cursor.x = (int) floor (d0[NR::X]);
 		im_cursor.y = (int) floor (d0[NR::Y]);
@@ -554,10 +533,9 @@ sp_text_context_timeout (SPTextContext *tc)
 static void
 sp_text_context_forget_text (SPTextContext *tc)
 {
-	SPItem *ti;
 	if (! tc->text) return;
 	if( tc->preedit_string ) sp_text_context_preedit_reset (tc);
-	ti = tc->text;
+	SPItem *ti = tc->text;
 	/* We have to set it to zero,
 	 * or selection changed signal messes everything up */
 	tc->text = NULL;
