@@ -72,13 +72,13 @@ if test "x$png_ok" != "xyes"; then
 	AC_MSG_ERROR([libpng >= 1.2 is needed to compile inkscape])
 fi
 
-gc_lib="" # used to have -lpthread and -ldl in it... doesn't need it now?
+gc_libs="" # used to have -lpthread and -ldl in it... doesn't need it now?
 AC_CHECK_LIB(gc, GC_malloc,
              [AC_CHECK_HEADERS([gc.h gc/gc.h],
                                [gc_ok=yes; break],
                                [gc_ok=no])],
              [gc_ok=no],
-             [$gc_lib])
+             [$gc_libs])
 if test "x$gc_ok" != "xyes"; then
 	AC_MSG_ERROR([libgc (the Boehm Conservative Collector), is needed to compile inkscape])
 fi
