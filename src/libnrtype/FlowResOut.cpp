@@ -162,11 +162,14 @@ void flow_res::ApplyPath(int no,Path* i_path)
 					// glyph origin: baseline of glyph must be on midpoint, so we step back half of charwidth from midpoint
 					// in the direction of the tangent
 					NR::Point origin = midpoint - 0.5 * charwidth * tangent;
+					// from there, we apply the y displacement perpendicular to tangent (for vertical kerning)
+					origin -= letters[j].y * tangent.ccw();
 					letters[j].x_st = origin[NR::X];
 					letters[j].y = origin[NR::Y];
 
 					// glyph end: same as origin but to the other side of the midpoint
 					NR::Point end = midpoint + 0.5 * charwidth * tangent;
+					end -= letters[j].y * tangent.ccw();
 					letters[j].x_en = end[NR::X];
 
 					// rotation of the glyph
