@@ -801,7 +801,7 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 
 	// status text
 	gchar *status;
-	status = g_strdup_printf("Scale  %0.2f%%, %0.2f%%", 100 * s[NR::X], 100 * s[NR::Y]);
+	status = g_strdup_printf(_("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
 	g_free(status);
 

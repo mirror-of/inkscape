@@ -187,7 +187,7 @@ sp_fill_style_widget_new (void)
     m = gtk_menu_new ();
     gtk_widget_show (m);
 
-    mi = gtk_menu_item_new_with_label (_("nonzero"));
+    mi = gtk_menu_item_new_with_label ("nonzero");
     gtk_widget_show (mi);
     gtk_menu_append (GTK_MENU (m), mi);
     g_object_set_data ( G_OBJECT (mi), "fill-rule", 
@@ -195,7 +195,7 @@ sp_fill_style_widget_new (void)
     g_signal_connect ( G_OBJECT (mi), "activate", 
                        G_CALLBACK (sp_fill_style_widget_fill_rule_activate), 
                        spw );
-    mi = gtk_menu_item_new_with_label (_("evenodd"));
+    mi = gtk_menu_item_new_with_label ("evenodd");
     gtk_widget_show (mi);
     gtk_menu_append (GTK_MENU (m), mi);
     g_object_set_data (G_OBJECT (mi), "fill-rule", (void *)"evenodd");
