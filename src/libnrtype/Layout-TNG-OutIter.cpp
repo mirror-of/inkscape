@@ -196,7 +196,7 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
         LineHeight line_height = {0.0, 0.0, 0.0};
         double chunk_width = 0.0;
         for ( ; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++) {
-            line_height.max(_spans[span_index].line_height, 1.0);
+            line_height.max(_spans[span_index].line_height);
             chunk_width = std::max(chunk_width, (double)std::max(_spans[span_index].x_start, _spans[span_index].x_end));
         }
         double this_y_range;

@@ -675,10 +675,12 @@ class Layout::Calculator
             }
 
             // see if this span is too tall to fit on the current line
-            if (   new_span.start.iter_span->line_height.ascent * new_span.start.iter_span->line_height_multiplier  > line_height->ascent
-                || new_span.start.iter_span->line_height.descent * new_span.start.iter_span->line_height_multiplier > line_height->descent
-                || new_span.start.iter_span->line_height.leading * new_span.start.iter_span->line_height_multiplier > line_height->leading) {
-                line_height->max(new_span.start.iter_span->line_height, new_span.start.iter_span->line_height_multiplier);
+            LineHeight total_height = new_span.start.iter_span->line_height;
+            total_height *= new_span.start.iter_span->line_height_multiplier;
+            if (   total_height.ascent  > line_height->ascent
+                || total_height.descent > line_height->descent
+                || total_height.leading > line_height->leading) {
+                line_height->max(total_height);
                 if (!_scanline_maker->canExtendCurrentScanline(*line_height))
                     return false;
             }

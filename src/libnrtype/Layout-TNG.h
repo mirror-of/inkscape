@@ -468,7 +468,7 @@ public:
         inline double total() const {return ascent + descent + leading;}
         inline void setZero() {ascent = descent = leading = 0.0;}
         inline LineHeight& operator*=(double x) {ascent *= x; descent *= x; leading *= x; return *this;}
-        void max(LineHeight const &other, double multiplier);   /// makes this object contain the largest of all three members between this object and other * multiplier
+        void max(LineHeight const &other);   /// makes this object contain the largest of all three members between this object and other
     };
 
     /// see _enum_converter()
