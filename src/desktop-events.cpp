@@ -359,7 +359,7 @@ guide_dialog_response (GtkDialog *dialog, gint response, gpointer data)
 static void
 sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 {
-	GtkWidget * pix, * b1, * b2, * b3, * b4,* but;
+	GtkWidget * b1, * b2, * b3, * b4,* but;
 
 	if (!GTK_IS_WIDGET (d)) {
 		GtkObject *a;
@@ -386,10 +386,6 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 		gtk_box_pack_end (GTK_BOX (b1), b2, TRUE, TRUE, 0);
 		gtk_widget_show (b2);
     
-		//pixmap
-		pix = sp_icon_new (GTK_ICON_SIZE_LARGE_TOOLBAR, "guide_dialog");
-		gtk_box_pack_start (GTK_BOX (b1), pix, TRUE, TRUE, 0);
-		gtk_widget_show (pix);
 		//labels
 		b3 = gtk_hbox_new (FALSE,4);
 		gtk_box_pack_start (GTK_BOX (b2), b3, TRUE, TRUE, 0);
