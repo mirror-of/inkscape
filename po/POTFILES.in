@@ -144,7 +144,6 @@ src/livarot/AVL.cpp
 src/livarot/AlphaLigne.cpp
 src/livarot/BitLigne.cpp
 src/livarot/MySeg.cpp
-src/livarot/Path-test.cpp
 src/livarot/Path.cpp
 src/livarot/PathConversion.cpp
 src/livarot/PathCutting.cpp
