@@ -312,16 +312,24 @@ sp_xml_node_get_Document (SPXMLNode *node)
 SPRepr *
 sp_repr_children (SPRepr *repr)
 {
-    g_return_val_if_fail (repr != NULL, NULL);
+    //This is not worth a warning
+    // child of null is null
+    //g_return_val_if_fail (repr != NULL, NULL);
 
+    if (!repr)
+        return NULL;
     return repr->children;
 }
 
 SPRepr *
 sp_repr_next (SPRepr *repr)
 {
-    g_return_val_if_fail (repr != NULL, NULL);
+    //This is not worth a warning
+    // next of null is null
+    //g_return_val_if_fail (repr != NULL, NULL);
 
+    if (!repr)
+        return NULL;
     return repr->next;
 }
 
