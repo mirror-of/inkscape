@@ -51,6 +51,7 @@ dist:
 	$(MKDIR) inkscape$(S)samples
 	$(CP) samples$(S)*.svg inkscape$(S)samples
 	$(CP) samples$(S)*.png inkscape$(S)samples
+	@echo "##################### D O N E ####################"
 
 clean:
 	$(RM) -rf inkscape
