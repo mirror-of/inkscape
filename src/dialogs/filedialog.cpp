@@ -456,6 +456,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
         return false;
 
     gchar *fName = (gchar *)fileName.c_str();
+    //g_message("fname:%s\n", fName);
 
 
     if (Glib::file_test(fileName, Glib::FILE_TEST_IS_REGULAR)) {
@@ -470,7 +471,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
             return FALSE;
         }
     }
-    if (dialogType == SVG_TYPES || dialogType == IMPORT_TYPES &&
+    if ((dialogType == SVG_TYPES || dialogType == IMPORT_TYPES) &&
            (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz"))
          )
     {
@@ -486,7 +487,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
                   g_str_has_suffix(fName, ".png" )  ||
                   g_str_has_suffix(fName, ".tif" )  ||
                   g_str_has_suffix(fName, ".tiff")  ||
-                  g_str_has_suffix(fName, ".xpm")
+                  g_str_has_suffix(fName, ".xpm" )
                  )
              )
     {
@@ -612,6 +613,7 @@ private:
 void FileOpenDialogImpl::updatePreviewCallback()
 {
     Glib::ustring fileName = get_preview_filename();
+    fileName = Glib::locale_to_utf8(fileName);
     if (fileName.length() < 1)
         return;
 
