@@ -1341,11 +1341,11 @@ namespace {
 
 template <typename D>
 SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
-                  bool only_in_viewport, bool onlyvisible, bool onlysensitive);
+                  bool only_in_viewport, bool inlayer, bool onlyvisible, bool onlysensitive);
 
 template <typename D>
-SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
-                            SPObject *root, bool only_in_viewport, bool onlyvisible, bool onlysensitive);
+SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items, SPObject *root, 
+                  bool only_in_viewport, bool inlayer, bool onlyvisible, bool onlysensitive);
 
 struct Forward {
     typedef SPObject *Iterator;
@@ -1410,7 +1410,7 @@ sp_selection_item_next(void)
         root = desktop->currentRoot();
     }
 
-    SPItem *item=next_item_from_list<Forward>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE, onlyvisible, onlysensitive);
+    SPItem *item=next_item_from_list<Forward>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
 
     if (item) {
         selection->setItem(item);
@@ -1443,7 +1443,7 @@ sp_selection_item_prev(void)
         root = desktop->currentRoot();
     }
 
-    SPItem *item=next_item_from_list<Reverse>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE, onlyvisible, onlysensitive);
+    SPItem *item=next_item_from_list<Reverse>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
 
     if (item) {
         selection->setItem(item);
@@ -1457,7 +1457,7 @@ namespace {
 
 template <typename D>
 SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
-                            SPObject *root, bool only_in_viewport, bool onlyvisible, bool onlysensitive)
+                            SPObject *root, bool only_in_viewport, bool inlayer, bool onlyvisible, bool onlysensitive)
 {
     SPObject *current=root;
     while (items) {
@@ -1479,11 +1479,11 @@ SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
 
     SPItem *next;
     // first, try from the current object
-    next = next_item<D>(desktop, path, root, only_in_viewport, onlyvisible, onlysensitive);
+    next = next_item<D>(desktop, path, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
     g_slist_free(path);
 
     if (!next) { // if we ran out of objects, start over at the root
-        next = next_item<D>(desktop, NULL, root, only_in_viewport, onlyvisible, onlysensitive);
+        next = next_item<D>(desktop, NULL, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
     }
 
     return next;
@@ -1491,7 +1491,7 @@ SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
 
 template <typename D>
 SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
-                  bool only_in_viewport, bool onlyvisible, bool onlysensitive)
+                  bool only_in_viewport, bool inlayer, bool onlyvisible, bool onlysensitive)
 {
     typename D::Iterator children;
     typename D::Iterator iter;
@@ -1502,7 +1502,7 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
         SPObject *object=reinterpret_cast<SPObject *>(path->data);
         g_assert(SP_OBJECT_PARENT(object) == root);
         if (desktop->isLayer(object)) {
-            found = next_item<D>(desktop, path->next, object, only_in_viewport, onlyvisible, onlysensitive);
+            found = next_item<D>(desktop, path->next, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
         }
         iter = children = D::siblings_after(object);
     } else {
@@ -1512,7 +1512,9 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
     while ( iter && !found ) {
         SPObject *object=D::object(iter);
         if (desktop->isLayer(object)) {
-            found = next_item<D>(desktop, NULL, object, only_in_viewport, onlyvisible, onlysensitive);
+            if (!inlayer) { // recurse into sublayers
+                found = next_item<D>(desktop, NULL, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+            }
         } else if ( SP_IS_ITEM(object) &&
                     ( !only_in_viewport || desktop->isWithinViewport(SP_ITEM(object)) ) &&
                     ( !onlyvisible || !desktop->itemIsHidden(SP_ITEM(object))) &&
