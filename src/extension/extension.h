@@ -1,6 +1,3 @@
-/* Co-dependent headerfiles.  This works out, trust me --Ted */
-#include "implementation/implementation.h"
-
 #ifndef __INK_EXTENSION_H__
 #define __INK_EXTENSION_H__
 
@@ -15,12 +12,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtk.h>
+#include <gtk/gtkdialog.h>
+
 #include "widgets/menu.h"
 #include "xml/repr.h"
 #include "forward.h"
 #include <libnr/nr-path.h>
 #include <display/nr-arena-forward.h>
+#include <extension/extension-forward.h>
 
 /** The key that is used to identify that the I/O should be autodetected */
 #define SP_MODULE_KEY_AUTODETECT "autodetect"
@@ -59,11 +58,6 @@
 
 namespace Inkscape {
 namespace Extension {
-
-/* Some early prototypes just for fun. */
-class Input;
-class Output;
-class Effect;
 
 /** The object that is the basis for the Extension system.  This object
     contains all of the information that all Extension have.  The
@@ -183,11 +177,11 @@ public:
                                         Implementation::Implementation * in_imp);
     virtual      ~Input                (void);
     virtual bool  check                (void);
-    SPDocument *  open                 (const gchar *uri);
+    SPDocument *  open                 (gchar const *uri);
     gchar *       get_extension        (void);
     gchar *       get_filetypename     (void);
     gchar *       get_filetypetooltip  (void);
-    GtkDialog *   prefs                (const gchar *uri);
+    GtkDialog *   prefs                (gchar const *uri);
 };
 
 class Output : public Extension {
@@ -206,7 +200,7 @@ public:
     virtual     ~Output (void);
     virtual bool check                (void);
     void         save (SPDocument *doc,
-                       const gchar *uri);
+                       gchar const *uri);
     GtkDialog *  prefs (void);
     gchar *      get_extension(void);
     gchar *      get_filetypename(void);
@@ -246,30 +240,30 @@ public:
     unsigned int  finish      (void);
 
     /* Rendering methods */
-    unsigned int  bind        (const NRMatrix *transform,
+    unsigned int  bind        (NRMatrix const *transform,
                                float opacity);
     unsigned int  release     (void);
-    unsigned int  fill        (const NRBPath *bpath,
-                               const NRMatrix *ctm,
-                               const SPStyle *style,
-                               const NRRect *pbox,
-                               const NRRect *dbox,
-                               const NRRect *bbox);
-    unsigned int  stroke      (const NRBPath *bpath,
-                               const NRMatrix *transform,
-                               const SPStyle *style,
-                               const NRRect *pbox,
-                               const NRRect *dbox,
-                               const NRRect *bbox);
+    unsigned int  fill        (NRBPath const *bpath,
+                               NRMatrix const *ctm,
+                               SPStyle const *style,
+                               NRRect const *pbox,
+                               NRRect const *dbox,
+                               NRRect const *bbox);
+    unsigned int  stroke      (NRBPath const *bpath,
+                               NRMatrix const *transform,
+                               SPStyle const *style,
+                               NRRect const *pbox,
+                               NRRect const *dbox,
+                               NRRect const *bbox);
     unsigned int  image       (unsigned char *px,
                                unsigned int w,
                                unsigned int h,
                                unsigned int rs,
-                               const NRMatrix *transform,
-                               const SPStyle *style);
-    unsigned int  text        (const char* text,
+                               NRMatrix const *transform,
+                               SPStyle const *style);
+    unsigned int  text        (char const *text,
                                NR::Point p,
-                               const SPStyle* style);
+                               SPStyle const *style);
 };
 
 }; /* namespace Extension */

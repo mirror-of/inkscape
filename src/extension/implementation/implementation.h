@@ -14,89 +14,89 @@
 
 #include <gtk/gtkdialog.h>
 
-namespace Inkscape {
-namespace Extension {
-namespace Implementation {
-class Implementation;
-};};};
-
-#include <extension/extension.h>
+#include <forward.h>
+#include <extension/extension-forward.h>
+#include <libnr/nr-forward.h>
 
 namespace Inkscape {
 namespace Extension {
 namespace Implementation {
 
+/**
+ * Base class for all implementations of modules.  This is whether they are done systematically by
+ * having something like the scripting system, or they are implemented internally they all derive
+ * from this class.
+ */
 class Implementation {
-    /** The implementation class is the base class for all implementations
-        of modules.  This is whether they are done systematically by having
-        something like the scripting system, or they are implemented internally
-        they all derive from this class */
 public:
-    /* Basic functions for all Extension */
-    virtual bool          load        (Inkscape::Extension::Extension * module);    /**< The function that should be called to load the module */
-    virtual void          unload      (Inkscape::Extension::Extension * module);    /**< The function that should be called to unload the module */
-	virtual bool          check       (Inkscape::Extension::Extension * module);    /**< A function to verify any dependencies */
+    /* ----- Basic functions for all Extension ----- */
+    virtual bool load(Inkscape::Extension::Extension *module);
 
-    /* Input functions */
-    virtual GtkDialog *   prefs       (Inkscape::Extension::Input * module,
-                                       const gchar * filename);
-                                       /**< The function to find out information about the file */
-    virtual SPDocument *  open        (Inkscape::Extension::Input * module,
-                                       const gchar * filename);
-                                       /**< Hey, there needs to be some function to do the work! */
+    virtual void unload(Inkscape::Extension::Extension *module);
 
-    /* Output functions */
-    virtual GtkDialog *   prefs       (Inkscape::Extension::Output * module);
-                                       /**< The function to find out information about the file */
-    virtual void          save        (Inkscape::Extension::Output * module, SPDocument * doc, const gchar * filename);
-                                       /**< Hey, there needs to be some function to do the work! */
+    /** Verify any dependencies. */
+    virtual bool check(Inkscape::Extension::Extension *module);
 
-    /* Effect functions */
-    virtual GtkDialog *   prefs       (Inkscape::Extension::Effect * module);
-                                       /**< The function to find out information about the file */
+
+    /* ----- Input functions ----- */
+    /** Find out information about the file. */
+    virtual GtkDialog *prefs(Inkscape::Extension::Input *module,
+                             gchar const *filename);
+
+    virtual SPDocument *open(Inkscape::Extension::Input *module,
+                             gchar const *filename);
+
+    /* ----- Output functions ----- */
+    /** Find out information about the file. */
+    virtual GtkDialog *prefs(Inkscape::Extension::Output *module);
+    virtual void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename);
+
+    /* ----- Effect functions ----- */
+    /** Find out information about the file. */
+    virtual GtkDialog *prefs(Inkscape::Extension::Effect *module);
     /* TODO: need to figure out what we need here */
-    virtual void          effect      (Inkscape::Extension::Effect * module,
-                                       SPDocument * document);
-                                       /**< Hey, there needs to be some function to do the work! */
 
-    /* Print functions */
-    virtual unsigned int  setup       (Inkscape::Extension::Print * module);
-    virtual unsigned int  set_preview (Inkscape::Extension::Print * module);
+    virtual void effect(Inkscape::Extension::Effect *module,
+                        SPDocument *document);
 
-    virtual unsigned int  begin       (Inkscape::Extension::Print * module,
-                                       SPDocument *doc);
-    virtual unsigned int  finish      (Inkscape::Extension::Print * module);
+    /* ----- Print functions ----- */
+    virtual unsigned setup(Inkscape::Extension::Print *module);
+    virtual unsigned set_preview(Inkscape::Extension::Print *module);
 
-    /* Rendering methods */
-    virtual unsigned int  bind        (Inkscape::Extension::Print * module,
-                                       const NRMatrix *transform,
-                                       float opacity);
-    virtual unsigned int  release     (Inkscape::Extension::Print * module);
-    virtual unsigned int  fill        (Inkscape::Extension::Print * module,
-                                       const NRBPath *bpath,
-                                       const NRMatrix *ctm,
-                                       const SPStyle *style,
-                                       const NRRect *pbox,
-                                       const NRRect *dbox,
-                                       const NRRect *bbox);
-    virtual unsigned int  stroke      (Inkscape::Extension::Print * module,
-                                       const NRBPath *bpath,
-                                       const NRMatrix *transform,
-                                       const SPStyle *style,
-                                       const NRRect *pbox,
-                                       const NRRect *dbox,
-                                       const NRRect *bbox);
-    virtual unsigned int  image       (Inkscape::Extension::Print * module,
-                                       unsigned char *px,
-                                       unsigned int w,
-                                       unsigned int h,
-                                       unsigned int rs,
-                                       const NRMatrix *transform,
-                                       const SPStyle *style);
-    virtual unsigned int  text        (Inkscape::Extension::Print * module,
-                                       const char *text,
-                                       NR::Point p,
-                                       const SPStyle *style);
+    virtual unsigned begin(Inkscape::Extension::Print *module,
+                           SPDocument *doc);
+    virtual unsigned finish(Inkscape::Extension::Print *module);
+
+    /* ----- Rendering methods ----- */
+    virtual unsigned bind(Inkscape::Extension::Print *module,
+                          NRMatrix const *transform,
+                          float opacity);
+    virtual unsigned release(Inkscape::Extension::Print *module);
+    virtual unsigned fill(Inkscape::Extension::Print *module,
+                          NRBPath const *bpath,
+                          NRMatrix const *ctm,
+                          SPStyle const *style,
+                          NRRect const *pbox,
+                          NRRect const *dbox,
+                          NRRect const *bbox);
+    virtual unsigned stroke(Inkscape::Extension::Print *module,
+                            NRBPath const *bpath,
+                            NRMatrix const *transform,
+                            SPStyle const *style,
+                            NRRect const *pbox,
+                            NRRect const *dbox,
+                            NRRect const *bbox);
+    virtual unsigned image(Inkscape::Extension::Print *module,
+                           unsigned char *px,
+                           unsigned int w,
+                           unsigned int h,
+                           unsigned int rs,
+                           NRMatrix const *transform,
+                           SPStyle const *style);
+    virtual unsigned text(Inkscape::Extension::Print *module,
+                          char const *text,
+                          NR::Point p,
+                          SPStyle const *style);
 };
 
 }; /* namespace Implementation */
@@ -109,9 +109,9 @@ public:
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
