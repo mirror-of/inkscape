@@ -1,5 +1,7 @@
 2004-03-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/bezier-utils-test.cpp: Finish the sp_bezier_fit_cubic test.
+
 	* src/dyna-draw-context.cpp, src/mod360.cpp, src/mod360.h,
 	src/Makefile.am: Move mod360 to new files mod360.cpp, mod360.h.
 	Add unit test for it.

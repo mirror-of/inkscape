@@ -25,6 +25,43 @@ static inline double square(double x) {
 	return x * x;
 }
 
+/** Determine whether the found control points are the same as previously found on some developer's
+    machine.  Doesn't call utest__fail, just writes a message to stdout for diagnostic purposes:
+    the most important test is that the root-mean-square of errors in the estimation are low rather
+    than that the control points found are the same.
+**/
+static void compare_ctlpts(Point const est_b[])
+{
+	Point const exp_est_b[4] = {
+		Point(5.000000, -3.000000),
+		Point(-0.478115, 5.072078),
+		Point(2.292190, 4.860450),
+		Point(3.000000, -2.000000)
+	};
+	unsigned diff_mask = 0;
+	for (unsigned i = 0; i < 4; ++i) {
+		for (unsigned d = 0; d < 2; ++d) {
+			if ( fabs( est_b[i][d] - exp_est_b[i][d] ) > 2e-6 ) {
+				diff_mask |= 1 << ( i * 2 + d );
+			}
+		}
+	}
+	if ( diff_mask != 0 ) {
+		printf("Warning: got different control points from previously-coded (diffs=0x%x).\n",
+		       diff_mask);
+		printf(" Previous:");
+		for (unsigned i = 0; i < 4; ++i) {
+			printf(" (%g, %g)", exp_est_b[i][0], exp_est_b[i][1]);
+		}
+		putchar('\n');
+		printf(" Found:   ");
+		for (unsigned i = 0; i < 4; ++i) {
+			printf(" (%g, %g)", est_b[i][0], est_b[i][1]);
+		}
+		putchar('\n');
+	}
+}
+
 int main(int argc, char *argv[]) {
 	utest_start("bezier-utils.cpp");
 
@@ -196,30 +233,34 @@ int main(int argc, char *argv[]) {
 				    .51, .69, .81, .91, .93, .97, .98, .99, 1.0};
 		unsigned const n = G_N_ELEMENTS(t);
 		Point d[n];
-		NR::Point cd[n];
 		for(unsigned i = 0; i < n; ++i) {
 			d[i] = bezier_pt(3, src_b, t[i]);
-			cd[i] = d[i];
 		}
 
-		NR::Point cest_b[4];
-		gint const succ = sp_bezier_fit_cubic(cest_b, cd, n, square(1.2));
-		UTEST_ASSERT(succ >= 0);
-		printf("succ=%d:", succ);
 		Point est_b[4];
-		for(unsigned i = 0; i < 4; ++i) {
-			est_b[i] = Point(cest_b[i]);
-			printf(" (%f, %f)", est_b[i][0], est_b[i][1]);
-		}
+		gint const succ = sp_bezier_fit_cubic(est_b, d, n, square(1.2));
+		UTEST_ASSERT(succ == 1);
+
+		compare_ctlpts(est_b);
+
 		double sum_errsq = 0.0;
 		for(unsigned i = 0; i < n; ++i) {
 			/* We're being unfair here in using our t[] rather than
-			   best t[] for cest_b. */
+			   best t[] for est_b: we over-estimate RMS of errors. */
 			Point const fit_pt = bezier_pt(3, est_b, t[i]);
 			Point const diff = fit_pt - d[i];
 			sum_errsq += dot(diff, diff);
 		}
-		printf(" gives RMS error %g\n", sqrt(sum_errsq / n));
+		double const rms_error = sqrt( sum_errsq / n );
+		double const exp_rms_error = .610788;
+		UTEST_ASSERT( rms_error <= exp_rms_error + 1.1e-6 );
+		if ( rms_error < exp_rms_error - 1.1e-6 ) {
+			/* The fitter code appears to have improved [or the floating point
+			   calculations differ on this machine from the machine where exp_rms_error
+			   was calculated]. */
+			printf("N.B. rms_error regression requirement can be decreased: have rms_error=%g.\n",
+			       rms_error);
+		}
 	}
 
 	return !utest_end();
