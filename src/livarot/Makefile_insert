@@ -12,8 +12,6 @@ livarot_libvarot_a_SOURCES =	\
 	livarot/AlphaLigne.h	\
 	livarot/BitLigne.cpp	\
 	livarot/BitLigne.h	\
-	livarot/DblLinked.cpp	\
-	livarot/DblLinked.h	\
 	livarot/Ligne.cpp	\
 	livarot/Ligne.h	\
 	livarot/LivarotDefs.h	\
