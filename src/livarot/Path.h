@@ -454,8 +454,8 @@ private:
 
   void DoCoalesce (Path * dest, double tresh);
 
-  void DoSimplify (double treshhold);
-  bool AttemptSimplify (double treshhold, path_descr_cubicto & res);
+  void DoSimplify (double treshhold,int recLevel=0);
+  bool AttemptSimplify (double treshhold, path_descr_cubicto & res,int &worstP);
   double RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, double it);
   void   FlushPendingAddition(Path* dest,path_descr &lastAddition,path_descr_cubicto &lastCubic,int lastAD);
 };

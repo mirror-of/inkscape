@@ -42,6 +42,8 @@
 #define N01(t) ((1.0-t))
 #define N11(t) (t)
 
+//#define pseudo_douglas_pecker 1
+
 
 void
 Path::Simplify (double treshhold)
@@ -82,18 +84,159 @@ Path::Simplify (double treshhold)
     }
     }
     
+#ifdef pseudo_douglas_pecker
+    {
+      NR::Point moveToPt,endToPt;
+      if (back) {
+        path_lineto_b *tp = (path_lineto_b *) pts;
+        moveToPt = tp[0].p;
+      } else {
+        path_lineto *tp = (path_lineto *) pts;
+        moveToPt = tp[0].p;
+      }
+      if (back) {
+        path_lineto_b *tp = (path_lineto_b *) pts;
+        endToPt = tp[nbPt-1].p;
+      } else {
+        path_lineto *tp = (path_lineto *) pts;
+        endToPt = tp[nbPt-1].p;
+      }
+      MoveTo (moveToPt);
+      
+      if ( nbPt <= 1 ) {
+      } else if ( nbPt == 2 ) {
+        LineTo(endToPt);
+      } else {
+        DoSimplify (treshhold,16);
+        if (NR::LInfty (endToPt - moveToPt) < 0.0001) Close ();
+      }
+    }
+#else
     DoSimplify (treshhold);
-    
+#endif
+
     lastM = lastP;
   }
   
   pts = savPts;
   nbPt = savNbPt;
 }
+// dichomtomic method to get distance to curve approximation
+// a real polynomial solver would get the minimum more efficiently, but since the polynom
+// would likely be of degree >= 5, that would imply using some generic solver, liek using the sturm metod
+double RecDistanceToCubic(NR::Point const &iS, NR::Point const &isD, 
+                        NR::Point const &iE, NR::Point const &ieD,
+                        NR::Point &pt,double current,int lev,double st,double et)
+{	
+	if ( lev <= 0 ) return current;
+	
+	NR::Point  m = 0.5*(iS+iE) + 0.125*(isD-ieD);
+	NR::Point  md = 0.75*(iE-iS) - 0.125*(isD+ieD);
+	double     mt=(st+et)/2;
+	
+	NR::Point  hisD=0.5*isD;
+	NR::Point  hieD=0.5*ieD;
+	
+  NR::Point  mp=pt-m;
+  double     nle=NR::dot(mp,mp);
+  if ( nle < current ) {
+    current=nle;
+    nle=RecDistanceToCubic(iS,hisD,m,md,pt,current,lev-1,st,mt);
+    if ( nle < current ) current=nle;
+    nle=RecDistanceToCubic(m,md,iE,hieD,pt,current,lev-1,mt,et);
+    if ( nle < current ) current=nle;
+  } else if ( nle < 2*current ) {
+    nle=RecDistanceToCubic(iS,hisD,m,md,pt,current,lev-1,st,mt);
+    if ( nle < current ) current=nle;
+    nle=RecDistanceToCubic(m,md,iE,hieD,pt,current,lev-1,mt,et);
+    if ( nle < current ) current=nle;
+  }
+  return current;
+}
+double    DistanceToCubic(NR::Point &start,Path::path_descr_cubicto res,NR::Point &pt)
+{
+  NR::Point  sp=pt-start;
+  NR::Point  ep=pt-res.p;
+  double     nle=NR::dot(sp,sp);
+  double     nnle=NR::dot(ep,ep);
+  if ( nnle < nle ) nle=nnle;
+  NR::Point seg=res.p-start;
+  nnle=NR::cross(seg,sp);
+  nnle*=nnle;
+  nnle/=NR::dot(seg,seg);
+  if ( nnle < nle ) {
+    if ( NR::dot(sp,seg) >= 0 ) {
+      seg=start-res.p;
+      if ( NR::dot(ep,seg) >= 0 ) {
+        nle=nnle;
+      }
+    }
+  }
+  return nle;
+  
+//  return RecDistanceToCubic(start,res.stD,res.p,res.enD,pt,nle,8,0.0,1.0);
+}
 // simplification on a subpath
 void
-Path::DoSimplify (double treshhold)
+Path::DoSimplify (double treshhold,int recLevel)
 {
+#ifdef pseudo_douglas_pecker
+  if ( nbPt <= 2 ) {
+    if (back) {
+      path_lineto_b *tp = (path_lineto_b *) pts;
+      LineTo(tp[nbPt-1].p);
+    } else {
+      path_lineto *tp = (path_lineto *) pts;
+      LineTo(tp[nbPt-1].p);
+    }
+    return;
+  }
+  // dichotomic method: split at worse approximation point, and more precisely, at the closest forced point, if one exists
+  path_descr_cubicto  res;
+  NR::Point moveToPt;
+  if (back) {
+	  path_lineto_b *tp = (path_lineto_b *) pts;
+	  moveToPt = tp[0].p;
+	} else {
+	  path_lineto *tp = (path_lineto *) pts;
+	  moveToPt = tp[0].p;
+  }
+
+  int    worstP=-1;
+  if ( AttemptSimplify (treshhold,res,worstP) ) {
+    CubicTo(res.p,res.stD,res.enD);
+  } else {
+    if ( recLevel <= 0 ) {
+      CubicTo(res.p,res.stD,res.enD);
+      return;
+    }
+    if ( worstP > 0 && worstP < nbPt-1) { // pas les 2 extremites
+      char *savPts = pts;
+      int savNbPt = nbPt;
+      
+      nbPt=worstP;
+      DoSimplify (treshhold,recLevel-1);      
+      
+      if (back) {
+        path_lineto_b *tp = (path_lineto_b *) savPts;
+        pts = (char *) (tp + worstP);
+      } else {
+        path_lineto *tp = (path_lineto *) savPts;
+        pts = (char *) (tp + worstP);
+      }
+      nbPt=savNbPt-worstP;
+      DoSimplify (treshhold,recLevel-1);      
+      
+      pts = savPts;
+      nbPt = savNbPt;
+    } else {
+      // pas trouve de point pour casser: pas bon
+      CubicTo(res.p,res.stD,res.enD);
+    }
+  }
+
+#else
+  // non-dichotomic method: grow an interval of points approximated by a curve, until you reach the treshhold, and repeat
   if (nbPt <= 1)
     return;
   int curP = 0;
@@ -142,6 +285,7 @@ Path::DoSimplify (double treshhold)
     int step=64;
     while ( step > 0 ) {   
       int  forced_pt=-1;
+      int  worstP=-1;
       do
       {
         if (back)
@@ -169,23 +313,22 @@ Path::DoSimplify (double treshhold)
       }
       while (lastP < savNbPt
              && AttemptSimplify ((contains_forced) ? 0.1 * treshhold : treshhold,
-                                 res));
+                                 res,worstP));
       
       if (lastP >= savNbPt)
       {
-        //                      printf("o");
         lastP-=step;
         nbPt-=step;
       }
       else
       {
-        // le dernier a echoué
+        // le dernier a echoue
         lastP-=step;
         nbPt-=step;
         if ( contains_forced ) {
           lastP=forced_pt;
           nbPt=lastP-curP+1;
-          AttemptSimplify (treshhold,res);       // ca passe forcement
+          AttemptSimplify (treshhold,res,worstP);       // ca passe forcement
         }
       }
       step/=2;
@@ -222,10 +365,11 @@ Path::DoSimplify (double treshhold)
   
   pts = savPts;
   nbPt = savNbPt;
+#endif
 }
 
 // fit a polyline to a bezier patch, return true is treshhold not exceeded (ie: you can continue)
-bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
+bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &worstP)
 {
   NR::Point start,end;
   // pour une coordonnee
@@ -233,13 +377,16 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
   double * Yk;				// la coordonnee traitee (x puis y)
   double * tk;				// les tk
   double *  Qk;				// les Qk
+  char *    fk;       // si point force
   NR::Point P;
   NR::Point Q;
   
   NR::Point cp1, cp2;
   
-  if (nbPt == 2)
+  if (nbPt == 2) {
+    worstP=1;
     return true;
+  }
   
   if (back)
   {
@@ -264,12 +411,15 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
 	}
   }
   
+  res.p = end;
+  res.stD[0]=res.stD[1]=0;
+  res.enD[0]=res.enD[1]=0;
   if (nbPt == 3)
   {
     // start -> cp1 -> end
-    res.p = end;
     res.stD = cp1 - start;
     res.enD = end - cp1;
+    worstP=1;
     return true;
   }
   
@@ -278,6 +428,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
   Qk = (double *) malloc (nbPt * sizeof (double));
   Xk = (double *) malloc (nbPt * sizeof (double));
   Yk = (double *) malloc (nbPt * sizeof (double));
+  fk = (char *) malloc (nbPt * sizeof (char));
   
   // chord length method
   tk[0] = 0.0;
@@ -293,6 +444,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
         pts;
         Xk[i] = tp[i].p[0];
         Yk[i] = tp[i].p[1];
+        if ( tp[i].isMoveTo == polyline_forced ) fk[i]=0x01; else fk[i]=0;
       }
       }
       else
@@ -303,6 +455,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
         pts;
         Xk[i] = tp[i].p[0];
         Yk[i] = tp[i].p[1];
+        if ( tp[i].isMoveTo == polyline_forced ) fk[i]=0x01; else fk[i]=0;
       }
       }
       NR::Point diff;
@@ -321,6 +474,31 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     free (Qk);
     free (Xk);
     free (Yk);
+    free (fk);
+    res.stD[0]=res.stD[1]=0;
+    res.enD[0]=res.enD[1]=0;
+    double worstD=0;
+    worstP=-1;
+    for (int i=1;i<nbPt;i++) {
+      NR::Point nPt;
+      bool      isForced=fk[i];
+      nPt[0]=Xk[i];
+      nPt[1]=Yk[i];
+ 
+      double nle=DistanceToCubic(start,res,nPt);
+      if ( isForced ) {
+        // forced points are favored for splitting the recursion; we do this by increasing their distance
+        if ( worstP < 0 || 2*nle > worstD ) {
+          worstP=i;
+          worstD=2*nle;
+        }
+      } else {
+        if ( worstP < 0 || nle > worstD ) {
+          worstP=i;
+          worstD=nle;
+        }
+      }
+    }
     return false;
   }
   for (int i = 1; i < nbPt - 1; i++)
@@ -345,6 +523,30 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     free (Qk);
     free (Xk);
     free (Yk);
+    free (fk);
+    res.stD[0]=res.stD[1]=0;
+    res.enD[0]=res.enD[1]=0;
+    double worstD=0;
+    worstP=-1;
+    for (int i=1;i<nbPt;i++) {
+      NR::Point nPt;
+      bool      isForced=fk[i];
+      nPt[0]=Xk[i];
+      nPt[1]=Yk[i];
+      double nle=DistanceToCubic(start,res,nPt);
+      if ( isForced ) {
+        // forced points are favored for splitting the recursion; we do this by increasing their distance
+        if ( worstP < 0 || 2*nle > worstD ) {
+          worstP=i;
+          worstD=2*nle;
+        }
+      } else {
+        if ( worstP < 0 || nle > worstD ) {
+          worstP=i;
+          worstD=nle;
+        }
+      }
+    }
     return false;
   }
   {
@@ -392,20 +594,28 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
   cp1[1] = P[0];
   cp2[1] = P[1];
   
-  double
-    delta =
-    0;
-  for (int i = 1; i < nbPt - 1; i++)
+  double delta = 0;
   {
-    NR::Point
-    appP;
-    appP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0];
-    appP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1];
-    appP[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-    appP[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
-    delta += dot(appP,appP);
+    double worstD=0;
+    worstP=-1;
+    for (int i = 1; i < nbPt - 1; i++)
+    {
+      NR::Point appP;
+      appP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0];
+      appP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1];
+      appP[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
+      appP[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
+      double nadd= dot(appP,appP);
+      delta+=nadd;
+      if ( nadd > worstD ) {
+        worstD=nadd;
+        worstP=i;
+      } else if ( fk[i] && 2*nadd > worstD ) {
+        worstD=2*nadd;
+        worstP=i;
+      }
+    }
   }
-  
   
   if (delta < treshhold * treshhold)
   {
@@ -448,6 +658,9 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
       free (Qk);
       free (Xk);
       free (Yk);
+      free(fk);
+      res.stD[0]=res.stD[1]=0;
+      res.enD[0]=res.enD[1]=0;
       return true;
     }
     {
@@ -496,24 +709,34 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     cp1[1] = P[0];
     cp2[1] = P[1];
     
-    double
-      ndelta =
-      0;
-    for (int i = 1; i < nbPt - 1; i++)
+    double ndelta = 0;
     {
-      NR::Point
-	    appP;
-      appP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0];
-      appP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1];
-      appP[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-      appP[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
-      ndelta += dot(appP,appP);
+      double worstD=0;
+      worstP=-1;
+      for (int i = 1; i < nbPt - 1; i++)
+      {
+        NR::Point appP;
+        appP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0];
+        appP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1];
+        appP[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
+        appP[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
+        double nadd=dot(appP,appP);
+        ndelta += nadd;
+        if ( nadd > worstD ) {
+          worstD=nadd;
+          worstP=i;
+        } else if ( fk[i] && 2*nadd > worstD ) {
+          worstD=2*nadd;
+          worstP=i;
+        }
+      }
     }
     
     free (tk);
     free (Qk);
     free (Xk);
     free (Yk);
+    free(fk);
     
     if (ndelta < delta + 0.00001)
     {
@@ -521,16 +744,23 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
       res.enD = -3.0 * (cp2 - end);
       res.p = end;
       return true;
+    } else {
+      // nothing better to do
+      res.stD = 3.0 * (cp1 - start);
+      res.enD = -3.0 * (cp2 - end);
     }
-    
-    
     return false;
+  } else {    
+    // nothing better to do
+    res.stD = 3.0 * (cp1 - start);
+    res.enD = -3.0 * (cp2 - end);
   }
   
   free (tk);
   free (Qk);
   free (Xk);
   free (Yk);
+  free(fk);
   return false;
 }
 
@@ -632,7 +862,8 @@ Path::Coalesce (double tresh)
 	      nbPt = nextA - lastA + 1;
         
 	      path_descr_cubicto res;
-	      if (AttemptSimplify (tresh, res))
+        int worstP=-1;
+	      if (AttemptSimplify (tresh, res,worstP))
         {
           lastAddition.flags = descr_cubicto;
           pending_cubic=res;
@@ -666,7 +897,8 @@ Path::Coalesce (double tresh)
 	      nbPt = nextA - lastA + 1;
         
 	      path_descr_cubicto res;
-	      if (AttemptSimplify (0.1 * tresh, res))
+        int worstP=-1;
+	      if (AttemptSimplify (0.1 * tresh, res,worstP))
         {		// plus sensible parce que point force
             // ca passe
         } else  {
@@ -695,7 +927,8 @@ Path::Coalesce (double tresh)
 	      nbPt = nextA - lastA + 1;
         
 	      path_descr_cubicto res;
-	      if (AttemptSimplify (tresh, res))
+        int worstP=-1;
+	      if (AttemptSimplify (tresh, res,worstP))
         {
           lastAddition.flags = descr_cubicto;
           pending_cubic=res;
@@ -760,7 +993,7 @@ Path::Coalesce (double tresh)
 }
 
 void
-Path::DoCoalesce (Path * dest, double tresh)
+Path::DoCoalesce (Path * /*dest*/, double /*tresh*/)
 {
   
   

@@ -655,12 +655,12 @@ sp_offset_set_shape (SPShape * shape)
     
     if (o_width >= 1.0)
     {
-      orig->ConvertEvenLines (1.0);
+      orig->ConvertEvenLines (0.5);
       orig->Simplify (0.5);
     }
     else
     {
-      orig->ConvertEvenLines (1.0*o_width);
+      orig->ConvertEvenLines (0.5*o_width);
       orig->Simplify (0.5 * o_width);
     }
     
