@@ -1,3 +1,9 @@
+2003-12-24  Alexander Clausen <alex@skip86.com>
+
+	* src/interface.cpp:
+	Added partial DND (drop part only for now) for image/svg and image/svg+xml,
+	and a tweak to make uri-dnd with konqueror work.
+
 2003-12-24  Daniel Borgmann <spark@mayl.de>
 
 	* src/interface.cpp src/verbs.cpp src/object-ui.cpp src/modules/menu.cpp:
