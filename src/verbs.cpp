@@ -280,6 +280,12 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_EDIT_CLONE_ORIGINAL:
             sp_select_clone_original();
             break;
+        case SP_VERB_EDIT_TILE:
+            sp_selection_tile();
+            break;
+        case SP_VERB_EDIT_UNTILE:
+					//sp_selection_untile();
+            break;
         case SP_VERB_EDIT_CLEAR_ALL:
             sp_edit_clear_all();
             break;
@@ -841,6 +847,10 @@ static const SPVerbActionDef props[] = {
         N_("Cut the clone's link to its original"), NULL},
     {SP_VERB_EDIT_CLONE_ORIGINAL, "EditCloneOriginal", N_("Select _Original"),
         N_("Select the object to which the clone is linked"), NULL},
+    {SP_VERB_EDIT_TILE, "EditTile", N_("_Tile"),
+        N_("Convert selection to a rect with tiled pattern fill"), NULL},
+    {SP_VERB_EDIT_UNTILE, "EditUnTile", N_("_Untile"),
+        N_("Extract objects from a tiled pattern fill"), NULL},
     {SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"),
         N_("Delete all objects from document"), NULL},
     {SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select Al_l"),

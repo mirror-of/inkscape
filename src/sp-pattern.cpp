@@ -442,6 +442,7 @@ pattern_chain (SPPattern *pattern)
 	SPRepr *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
 
 	SPRepr *repr = sp_repr_new ("pattern");
+	sp_repr_set_attr(repr, "inkscape:collect", "always");
 	gchar *parent_ref = g_strconcat ("#", sp_repr_attr(SP_OBJECT_REPR(pattern), "id"), NULL);
 	sp_repr_set_attr (repr, "xlink:href",  parent_ref);
 	g_free (parent_ref);
@@ -453,6 +454,49 @@ pattern_chain (SPPattern *pattern)
 
 	return SP_PATTERN (child);
 }
+
+SPRepr *
+pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix transform)
+{
+	SPRepr *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
+
+	SPRepr *repr = sp_repr_new ("pattern");
+	sp_repr_set_attr(repr, "inkscape:collect", "always");
+	sp_repr_set_attr (repr, "patternUnits", "userSpaceOnUse");
+	sp_repr_set_double (repr, "width", bounds.extent(NR::X) * 1.25);
+	sp_repr_set_double (repr, "height", bounds.extent(NR::Y) * 1.25);
+
+	NRMatrix t;
+	transform.copyto(&t);
+
+            gchar c[256];
+            if (sp_svg_transform_write(c, 256, &t)) {
+                sp_repr_set_attr(repr, "patternTransform", c);
+            } else {
+                sp_repr_set_attr(repr, "patternTransform", NULL);
+            }
+
+	sp_repr_add_child (defsrepr, repr, NULL);
+	const gchar *pat_id = sp_repr_attr (repr, "id");
+	SPObject *pat_object = sp_document_lookup_id (document, pat_id);
+
+	for (GSList *i = reprs; i != NULL; i = i->next) {
+		SPRepr *dup = sp_repr_duplicate (((SPRepr *) i->data));
+		sp_repr_add_child(SP_OBJECT_REPR(pat_object), dup, NULL);
+		sp_repr_unref(dup);
+	}
+
+	SPRepr *rect = sp_repr_new ("rect");
+	sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
+	sp_repr_set_double (rect, "width", bounds.extent(NR::X) * 1.25);
+	sp_repr_set_double (rect, "height", bounds.extent(NR::Y) * 1.25);
+	sp_repr_set_double (rect, "x", bounds.min()[NR::X] * 1.25);
+	sp_repr_set_double (rect, "y", sp_document_height (document) - bounds.min()[NR::Y] * 1.25);
+
+	return rect;
+}
+
+
 
 // Access functions that look up fields up the chain of referenced patterns and return the first one which is set
 

@@ -20,6 +20,7 @@
 #include <libnr/nr-dim2.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-point.h>
+#include <libnr/nr-point-ops.h>
 #include <libnr/nr-values.h>
 #include <libnr/nr-maybe.h>
 
@@ -146,6 +147,10 @@ public:
 
 	/** Returns the smallest rectangle that encloses both rectangles. */
 	static Rect union_bounds(const Rect &a, const Rect &b);
+
+	inline Rect operator*(double s) const {
+		return Rect (s * min(), s * max());
+	}
 
 private:
 	Rect() {}

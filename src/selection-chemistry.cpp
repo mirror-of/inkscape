@@ -1364,6 +1364,65 @@ sp_select_clone_original()
     }
 }
 
+void
+sp_selection_tile()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop == NULL)
+        return;
+
+    SPDocument *document = SP_DT_DOCUMENT(desktop);
+
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    // check if something is selected
+    if (selection->isEmpty()) {
+        sp_view_set_statusf_flash(SP_VIEW(desktop), _("Select an object to tile."));
+        return;
+    }
+
+    NR::Rect r = selection->bounds();
+
+        sp_document_ensure_up_to_date(document);
+        NR::Point m = (NR::Point(0, sp_document_height(document)) - (r.min() + NR::Point (0, r.extent(NR::Y))));
+
+        g_print ("move by %g, %g\n", m[NR::X], m[NR::Y]);
+        sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
+        sp_document_ensure_up_to_date(document);
+
+    GSList *reprs = g_slist_copy((GSList *) selection->reprList());
+
+    SPRepr *parent = ((SPRepr *) reprs->data)->parent;
+    gboolean sort = TRUE;
+    for (GSList *i = reprs->next; i; i = i->next) {
+        if ((((SPRepr *) i->data)->parent) != parent) {
+            // We can tile items from different parents, but we cannot do sorting in this case
+            sort = FALSE;
+        }
+    }
+
+    if (sort)
+        reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
+
+    SPRepr *rect = pattern_tile (reprs, r, document, NR::Matrix(NR::translate(-m)));
+
+    // FIXME: to current layer!
+    sp_document_add_repr (document, rect);
+    SPItem *rectangle = SP_ITEM (sp_document_lookup_id (document, sp_repr_attr (rect, "id")));
+    sp_repr_unref (rect);
+
+    selection->clear();
+
+    for (GSList *i = reprs; i != NULL; i = i->next) {
+        SPObject *item = sp_document_lookup_id (document, sp_repr_attr (((SPRepr *) i->data), "id"));
+        item->deleteObject();
+    }
+
+    selection->setItem (rectangle);
+
+    sp_document_done (document);
+}
+
 
 /*
   Local Variables:

@@ -78,6 +78,7 @@ struct SPPatternClass {
 
 guint pattern_users (SPPattern *pattern);
 SPPattern *pattern_chain (SPPattern *pattern);
+SPRepr *pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix transformation);
 
 guint pattern_patternUnits (SPPattern *pat);
 guint pattern_patternContentUnits (SPPattern *pat);
