@@ -41,14 +41,28 @@
 
 ; Language files
 !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "German"
 
 ; MUI end ------
 
+; English strings
+LangString lng_Caption ${LANG_ENGLISH} "${PRODUCT_NAME} -- Open Source Scalable Vector Graphics Editor"
+LangString lng_Editor ${LANG_ENGLISH} "Do you want $(^Name) to be the default SVG editor?"
+LangString lng_Reader ${LANG_ENGLISH} "Do you want $(^Name) to be the default SVG reader?"
+LangString lng_Removed ${LANG_ENGLISH} "$(^Name) was successfully removed from your computer."
+LangString lng_Uninstall ${LANG_ENGLISH} "Are you sure you want to completely remove $(^Name) and all of its components?"
+
+; German strings
+LangString lng_Caption ${LANG_GERMAN} "${PRODUCT_NAME} -- Open Source SVG-Vektorillustrator"
+LangString lng_Editor ${LANG_GERMAN} "Wollen Sie $(^Name) zu Ihrem standardmäßigem Bearbeitungsprogramm für SVG machen?"
+LangString lng_Reader ${LANG_GERMAN} "Wollen Sie $(^Name) zu Ihrem standardmäßigem Anzeigeprogramm für SVG machen?"
+LangString lng_Removed ${LANG_GERMAN} "$(^Name) wurde erfolgreich von Ihrem Computer entfernt."
+LangString lng_Uninstall ${LANG_GERMAN} "Möchten Sie $(^Name) und alle seine Komponenten von Ihrem Rechner entfernen?"
 
 
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-Caption "${PRODUCT_NAME} -- Open Source Scalable Vector Graphics Editor"
+Caption $(lng_Caption)
 OutFile "Inkscape-${PRODUCT_VERSION}-1.win32.exe"
 InstallDir "$PROGRAMFILES\Inkscape"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -72,14 +86,14 @@ SectionEnd
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
 
-  MessageBox MB_YESNO|MB_ICONQUESTION "Do you want Inkscape to be the default SVG editor?" IDNO NoEditor
+  MessageBox MB_YESNO|MB_ICONQUESTION $(lng_Editor) IDNO NoEditor
   WriteRegStr HKCR ".svg" "" "svgfile"
   WriteRegStr HKCR ".svgz" "" "svgfile"
   WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
   WriteRegStr HKCR "svgfile\shell\edit\command" "" '$INSTDIR\Inkscape.exe "%1"'
   NoEditor:
 
-  MessageBox MB_YESNO|MB_ICONQUESTION "Do you want Inkscape to be the default SVG reader?" IDNO NoReader
+  MessageBox MB_YESNO|MB_ICONQUESTION $(lng_Reader) IDNO NoReader
   WriteRegStr HKCR ".svg" "" "svgfile"
   WriteRegStr HKCR ".svgz" "" "svgfile"
   WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
@@ -87,14 +101,13 @@ Section -Post
   NoReader:
 SectionEnd
 
-
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer."
+  MessageBox MB_ICONINFORMATION|MB_OK $(lng_Removed)
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 $(lng_Uninstall) IDYES +2
   Abort
 FunctionEnd
 

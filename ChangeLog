@@ -1,3 +1,7 @@
+2005-03-12  Kees Cook  <kees@outflux.net>
+
+    * inkscape.nsi: added German translation from Adib Taraben.
+
 2005-03-12  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-namedview.cpp, src/sp-metadata.cpp: it's valid for an SPObject
