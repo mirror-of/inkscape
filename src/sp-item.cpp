@@ -164,7 +164,7 @@ void SPItem::setLocked(bool locked) {
 }
 
 bool SPItem::isHidden() const {
-    return style->visibility.computed == SP_CSS_VISIBILITY_VISIBLE;
+    return style->visibility.computed != SP_CSS_VISIBILITY_VISIBLE;
 }
 
 void SPItem::setHidden(bool hide) {
