@@ -2715,14 +2715,18 @@ sp_css_attr_unset_uris (SPCSSAttr *css)
 }
 
 void
-sp_css_attr_scale_property_single (SPCSSAttr *css, const gchar *property, double ex)
+sp_css_attr_scale_property_single (SPCSSAttr *css, const gchar *property, double ex, bool only_with_units = false)
 {
     const gchar *w = sp_repr_css_property (css, property, NULL);
     if (w) {
         gchar *units = NULL;
         double wd = g_ascii_strtod (w, &units) * ex;
-        if (w == units) // nothing converted, non-numeric value
+        if (w == units) {// nothing converted, non-numeric value
             return;
+        }
+        if (only_with_units && (units == NULL || *units == NULL)) { // only_with_units, but no units found, do nothing
+            return;
+        }
         Inkscape::SVGOStringStream os;
         //g_print ("%s; %g; %g %s\n", w, ex, wd, units);
         os << wd << units; // reattach units!
@@ -2743,6 +2747,7 @@ sp_css_attr_scale (SPCSSAttr *css, double ex)
     sp_css_attr_scale_property_single (css, "kerning", ex);
     sp_css_attr_scale_property_single (css, "letter-spacing", ex);
     sp_css_attr_scale_property_single (css, "word-spacing", ex);
+    sp_css_attr_scale_property_single (css, "line-height", ex, true);
 
     return css;
 }
