@@ -391,7 +391,6 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			}
 			/* shift + wheel, zoom in--out */
 		} else if (event->scroll.state & GDK_SHIFT_MASK) {
-			NRRect d;
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
 				//				sp_desktop_get_display_area (desktop, &d);
