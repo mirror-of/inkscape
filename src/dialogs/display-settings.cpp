@@ -42,7 +42,8 @@ extern gint nr_arena_image_x_sample;
 extern gint nr_arena_image_y_sample;
 extern gdouble nr_arena_global_delta;
 
-#define SB_WIDTH 70
+#define SB_WIDTH 90
+#define SB_LONG_ADJUSTMENT 20
 #define SB_MARGIN 1
 #define SUFFIX_WIDTH 70
 #define HB_MARGIN 4
@@ -257,6 +258,13 @@ options_rotation_steps_changed (GtkMenuItem *item, gpointer data)
     prefs_set_int_attribute ( "options.rotationsnapsperpi", "value", snaps_new );
 } 
 
+static void
+options_dialogs_ontop_changed (GtkMenuItem *item, gpointer data)
+{
+    gint policy_new = GPOINTER_TO_INT (data);
+    prefs_set_int_attribute ( "options.transientpolicy", "value", policy_new );
+} 
+
 void 
 options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
 {
@@ -337,6 +345,74 @@ options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
     }
 }
 
+void 
+options_dialogs_ontop (GtkWidget *vb, GtkTooltips *tt)
+{
+    GtkWidget *hb = gtk_hbox_new (FALSE, HB_MARGIN);
+    gtk_widget_show (hb);
+    gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+
+    { // empty label for alignment
+        GtkWidget *l = gtk_label_new ("");
+        gtk_widget_set_usize (l, SUFFIX_WIDTH - SB_LONG_ADJUSTMENT, -1);
+        gtk_widget_show (l);
+        gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    }
+
+    {
+        GtkWidget *om = gtk_option_menu_new ();
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("None: dialogs are treated as regular windows; Normal: dialogs stay on top of document windows; Aggressive: same as Normal but may work better with some window managers."), NULL);
+        gtk_widget_set_usize (om, SB_WIDTH + SB_LONG_ADJUSTMENT, -1);
+        gtk_widget_show (om);
+        gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, SB_MARGIN);
+
+        GtkWidget *m = gtk_menu_new ();
+        gtk_widget_show (m);
+
+        int current = prefs_get_int_attribute ("options.transientpolicy", "value", 1);
+
+        {
+        const gchar *label = _("None");
+        GtkWidget *item = gtk_menu_item_new_with_label (label);
+        gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+                                 GTK_SIGNAL_FUNC (options_dialogs_ontop_changed),
+                                 GINT_TO_POINTER (0) );
+        gtk_widget_show (item);
+        gtk_menu_append (GTK_MENU (m), item);
+        }
+
+        {
+        const gchar *label = _("Normal");
+        GtkWidget *item = gtk_menu_item_new_with_label (label);
+        gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+                                 GTK_SIGNAL_FUNC (options_dialogs_ontop_changed),
+                                 GINT_TO_POINTER (1) );
+        gtk_widget_show (item);
+        gtk_menu_append (GTK_MENU (m), item);
+        }
+
+        {
+        const gchar *label = _("Aggressive");
+        GtkWidget *item = gtk_menu_item_new_with_label (label);
+        gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+                                 GTK_SIGNAL_FUNC (options_dialogs_ontop_changed),
+                                 GINT_TO_POINTER (2) );
+        gtk_widget_show (item);
+        gtk_menu_append (GTK_MENU (m), item);
+        }
+
+        gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
+        gtk_option_menu_set_history ( GTK_OPTION_MENU (om), current);
+    }
+
+    {
+        GtkWidget *l = gtk_label_new (_("Dialogs on top:"));
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show (l);
+        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+    }
+}
+
 
 static void
 sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
@@ -346,6 +422,11 @@ sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
                                  nr_arena_global_delta );
 } 
 
+static void
+options_freehand_tolerance_changed (GtkAdjustment *adj, gpointer data)
+{
+    prefs_set_double_attribute ("tools.freehand.pencil", "tolerance",  adj->value);
+}
 
 static void
 options_changed_double (GtkAdjustment *adj, gpointer data)
@@ -367,6 +448,21 @@ options_changed_percent (GtkAdjustment *adj, gpointer data)
     const gchar *prefs_path = (const gchar *) data;
     prefs_set_double_attribute (prefs_path, "value",  (adj->value)/100.0);
 }
+
+static void
+options_changed_boolean (GtkToggleButton *tb, gpointer data)
+{
+    const gchar *prefs_path = (const gchar *) data;
+    prefs_set_int_attribute (prefs_path, "value", gtk_toggle_button_get_active (tb));
+}
+
+static void
+options_changed_boolean_inverse (GtkToggleButton *tb, gpointer data)
+{
+    const gchar *prefs_path = (const gchar *) data;
+    prefs_set_int_attribute (prefs_path, "value", !gtk_toggle_button_get_active (tb));
+}
+
 
 void 
 options_sb (
@@ -430,6 +526,53 @@ options_sb (
 
 }
 
+
+void 
+options_checkbox (
+    gchar const *label, 
+    gchar const *tooltip, GtkTooltips *tt,
+    GtkWidget *box,
+    gchar const *prefs_path, gchar const *attr, gint def,
+    void (*changed)(GtkToggleButton *, gpointer)
+)
+{
+    GtkWidget *hb = gtk_hbox_new (FALSE, HB_MARGIN);
+    gtk_widget_show (hb);
+    gtk_box_pack_start (GTK_BOX (box), hb, FALSE, FALSE, VB_SKIP);
+
+    { // empty label for alignment
+        GtkWidget *l = gtk_label_new ("");
+        gtk_widget_set_usize (l, SUFFIX_WIDTH, -1);
+        gtk_widget_show (l);
+        gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    }
+
+
+    {
+
+        GtkWidget *b  = gtk_check_button_new ();
+
+        gint value = prefs_get_int_attribute (prefs_path, attr, def);
+
+        gtk_toggle_button_set_active ((GtkToggleButton *) b, value != 0);
+
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, tooltip, NULL);
+
+        gtk_widget_set_usize (b, SB_WIDTH, -1);
+        gtk_widget_show (b);
+        gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, SB_MARGIN);
+
+        gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (changed), (gpointer) prefs_path);
+    }
+
+    {
+        GtkWidget *l = gtk_label_new (label);
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show (l);
+        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+    }
+}
+
 void
 sp_display_dialog (void)
 {
@@ -490,7 +633,7 @@ sp_display_dialog (void)
         g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", 
                              G_CALLBACK (sp_dialog_unhide), dlg);
 
-	GtkTooltips *tt = gtk_tooltips_new();
+        GtkTooltips *tt = gtk_tooltips_new();
                              
         nb = gtk_notebook_new ();
         gtk_widget_show (nb);
@@ -505,27 +648,27 @@ sp_display_dialog (void)
         gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
-options_sb (
-    _("Grab sensitivity:"), 
-    _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
-    _("px"),
-    vb,
-    0.0, 30.0, 1.0, 1.0, 1.0,
-    "options.cursortolerance", "value", 8.0,
-    true, false,
-    sp_display_dialog_cursor_tolerance_changed
-    );
+        options_sb (
+            _("Grab sensitivity:"), 
+            _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
+            _("px"),
+            vb,
+            0.0, 30.0, 1.0, 1.0, 1.0,
+            "options.cursortolerance", "value", 8.0,
+            true, false,
+            sp_display_dialog_cursor_tolerance_changed
+            );
 
-options_sb (
-    _("Click/drag threshold:"), 
-    _("Maximum mouse drag (in pixels) which is considered a click, not a drag"), tt,
-    _("px"),
-    vb,
-    0.0, 20.0, 1.0, 1.0, 1.0,
-    "options.dragtolerance", "value", 4.0,
-    true, false,
-    options_changed_int
-    );
+        options_sb (
+            _("Click/drag threshold:"), 
+            _("Maximum mouse drag (in pixels) which is considered a click, not a drag"), tt,
+            _("px"),
+            vb,
+            0.0, 20.0, 1.0, 1.0, 1.0,
+            "options.dragtolerance", "value", 4.0,
+            true, false,
+            options_changed_int
+            );
 
 
 // Scrolling
@@ -536,16 +679,16 @@ options_sb (
         gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
-options_sb (
-    _("Mouse wheel scrolls by:"), 
-    _("One mouse wheel notch scrolls by this distance in pixels (horizontally with Shift)"), tt,
-    _("px"),
-    vb,
-    0.0, 1000.0, 1.0, 1.0, 1.0,
-    "options.wheelscroll", "value", 40.0,
-    true, false,
-    options_changed_int
-    );
+        options_sb (
+            _("Mouse wheel scrolls by:"), 
+            _("One mouse wheel notch scrolls by this distance in pixels (horizontally with Shift)"), tt,
+            _("px"),
+            vb,
+            0.0, 1000.0, 1.0, 1.0, 1.0,
+            "options.wheelscroll", "value", 40.0,
+            true, false,
+            options_changed_int
+            );
 
         frame = gtk_frame_new (_("Ctrl+arrows"));
         gtk_widget_show (frame);
@@ -554,27 +697,27 @@ options_sb (
         gtk_widget_show (vbvb);
         gtk_container_add (GTK_CONTAINER (frame), vbvb);
 
-options_sb (
-    _("Scroll by:"), 
-    _("Pressing Ctrl+arrow key scrolls by this distance (in pixels)"), tt,
-    _("px"),
-    vbvb,
-    0.0, 1000.0, 1.0, 1.0, 1.0,
-    "options.keyscroll", "value", 10.0,
-    true, false,
-    options_changed_int
-    );
+        options_sb (
+            _("Scroll by:"), 
+            _("Pressing Ctrl+arrow key scrolls by this distance (in pixels)"), tt,
+            _("px"),
+            vbvb,
+            0.0, 1000.0, 1.0, 1.0, 1.0,
+            "options.keyscroll", "value", 10.0,
+            true, false,
+            options_changed_int
+            );
 
-options_sb (
-    _("Acceleration:"), 
-    _("Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no acceleration)"), tt,
-    "",
-    vbvb,
-    0.0, 5.0, 0.01, 1.0, 1.0,
-    "options.scrollingacceleration", "value", 0.35,
-    false, false,
-    options_changed_double
-    );
+        options_sb (
+            _("Acceleration:"), 
+            _("Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no acceleration)"), tt,
+            "",
+            vbvb,
+            0.0, 5.0, 0.01, 1.0, 1.0,
+            "options.scrollingacceleration", "value", 0.35,
+            false, false,
+            options_changed_double
+            );
 
         frame = gtk_frame_new (_("Autoscrolling"));
         gtk_widget_show (frame);
@@ -583,27 +726,27 @@ options_sb (
         gtk_widget_show (vbvb);
         gtk_container_add (GTK_CONTAINER (frame), vbvb);
 
-options_sb (
-    _("Speed:"), 
-    _("How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn autoscroll off)"), tt,
-    "",
-    vbvb,
-    0.0, 5.0, 0.01, 1.0, 1.0,
-    "options.autoscrollspeed", "value", 0.7,
-    false, false,
-    options_changed_double
-    );
+        options_sb (
+            _("Speed:"), 
+            _("How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn autoscroll off)"), tt,
+            "",
+            vbvb,
+            0.0, 5.0, 0.01, 1.0, 1.0,
+            "options.autoscrollspeed", "value", 0.7,
+            false, false,
+            options_changed_double
+            );
 
-options_sb (
-    _("Threshold:"), 
-    _("How far (in pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), tt,
-    _("px"),
-    vbvb,
-    -600.0, 600.0, 1.0, 1.0, 1.0,
-    "options.autoscrolldistance", "value", -10.0,
-    true, false,
-    options_changed_int
-    );
+        options_sb (
+            _("Threshold:"), 
+            _("How far (in pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), tt,
+            _("px"),
+            vbvb,
+            -600.0, 600.0, 1.0, 1.0, 1.0,
+            "options.autoscrolldistance", "value", -10.0,
+            true, false,
+            options_changed_int
+            );
 
 // Steps
         l = gtk_label_new (_("Steps"));
@@ -613,54 +756,89 @@ options_sb (
         gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
-options_sb (
-    _("Arrow keys move by:"), 
-    _("Pressing an arrow key moves selected object(s) or node(s) by this distance (in points)"), tt,
-    _("pt"),
-    vb,
-    0.0, 3000.0, 0.01, 1.0, 1.0,
-    "options.nudgedistance", "value", 2.0,
-    false, false,
-    options_changed_double
-    );
+        options_sb (
+            _("Arrow keys move by:"), 
+            _("Pressing an arrow key moves selected object(s) or node(s) by this distance (in points)"), tt,
+            _("pt"),
+            vb,
+            0.0, 3000.0, 0.01, 1.0, 1.0,
+            "options.nudgedistance", "value", 2.0,
+            false, false,
+            options_changed_double
+            );
 
-options_sb (
-    _("> and < scale by:"), 
-    _("Pressing > or < scales selection up or down by this increment (in points)"), tt,
-    _("pt"),
-    vb,
-    0.0, 3000.0, 0.01, 1.0, 1.0,
-    "options.defaultscale", "value", 2.0,
-    false, false,
-    options_changed_double
-    );
+        options_sb (
+            _("> and < scale by:"), 
+            _("Pressing > or < scales selection up or down by this increment (in points)"), tt,
+            _("pt"),
+            vb,
+            0.0, 3000.0, 0.01, 1.0, 1.0,
+            "options.defaultscale", "value", 2.0,
+            false, false,
+            options_changed_double
+            );
 
-options_sb (
-    _("Inset/Outset by:"), 
-    _("Inset and Outset commands displace the path by this distance (in points)"), tt,
-    _("pt"),
-    vb,
-    0.0, 3000.0, 0.01, 1.0, 1.0,
-    "options.defaultoffsetwidth", "value", 2.0,
-    false, false,
-    options_changed_double
-    );
+        options_sb (
+            _("Inset/Outset by:"), 
+            _("Inset and Outset commands displace the path by this distance (in points)"), tt,
+            _("pt"),
+            vb,
+            0.0, 3000.0, 0.01, 1.0, 1.0,
+            "options.defaultoffsetwidth", "value", 2.0,
+            false, false,
+            options_changed_double
+            );
 
-options_rotation_steps (vb, tt);
+        options_rotation_steps (vb, tt);
 
-options_sb (
-    _("Zoom in/out by:"), 
-    _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), tt,
-    _("%"),
-    vb,
-    101.0, 500.0, 1.0, 1.0, 1.0,
-    "options.zoomincrement", "value", 1.414213562,
-    true, true,
-    options_changed_percent
-    );
+        options_sb (
+            _("Zoom in/out by:"), 
+            _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), tt,
+            _("%"),
+            vb,
+            101.0, 500.0, 1.0, 1.0, 1.0,
+            "options.zoomincrement", "value", 1.414213562,
+            true, true,
+            options_changed_percent
+            );
 
+// Save
+        l = gtk_label_new (_("Save"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
+        options_sb (
+            _("Max recent documents:"), 
+            _("The maximum length of the Open Recent list in the File menu"), tt,
+            "",
+            vb,
+            0.0, 1000.0, 1.0, 1.0, 1.0,
+            "options.maxrecentdocuments", "value", 20.0,
+            true, false,
+            options_changed_int
+            );
 
+// Export
+        l = gtk_label_new (_("Export"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+        options_sb (
+            _("Default resolution:"), 
+            _("Default bitmap resolution (in dots per inch) in the Export dialog"), tt, // FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
+            _("dpi"),
+            vb,
+            0.0, 6000.0, 1.0, 1.0, 1.0,
+            "dialogs.export.defaultxdpi", "value", 72.0,
+            true, false,
+            options_changed_int
+            );
 
 // Tools
         l = gtk_label_new (_("Tools"));
@@ -675,16 +853,65 @@ options_sb (
         gtk_container_add (GTK_CONTAINER (vb), nb_tools);
 
         // Selector        
-        l = gtk_label_new (_("Selector"));
-        gtk_widget_show (l);
-        GtkWidget *vb_sel = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb_sel);
-        gtk_container_set_border_width (GTK_CONTAINER (vb_sel), 4);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_sel, l);
+        {
+            l = gtk_label_new (_("Selector"));
+            gtk_widget_show (l);
+            GtkWidget *vb_sel = gtk_vbox_new (FALSE, 4);
+            gtk_widget_show (vb_sel);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_sel), 4);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_sel, l);
 
-        GtkWidget *selector_page = options_selector ();
-        gtk_widget_show (selector_page);
-        gtk_container_add (GTK_CONTAINER (vb_sel), selector_page);
+            GtkWidget *selector_page = options_selector ();
+            gtk_widget_show (selector_page);
+            gtk_container_add (GTK_CONTAINER (vb_sel), selector_page);
+        }
+
+        // Freehand
+        {
+            l = gtk_label_new (_("Pencil"));
+            gtk_widget_show (l);
+            GtkWidget *vb_sel = gtk_vbox_new (FALSE, 4);
+            gtk_widget_show (vb_sel);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_sel), 4);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_sel, l);
+
+            options_sb (
+                _("Tolerance:"), 
+                _("This value affects the amount of smoothing applied to freehand lines; lower values produce more uneven paths with more nodes"), tt,
+                "",
+                vb_sel,
+                0.0, 100.0, 0.01, 1.0, 1.0,
+                "tools.freehand.pencil", "tolerance", 10.0,
+                false, false,
+                options_freehand_tolerance_changed
+                );
+        }
+
+// Windows
+        l = gtk_label_new (_("Windows"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+        options_dialogs_ontop (vb, tt);
+
+options_checkbox (
+    _("Save window geometry"), 
+    _("Save the window size and position with each document (only for Inkscape SVG format)"), tt,
+    vb,
+    "options.savewindowgeometry", "value", 1,
+    options_changed_boolean
+    );
+
+options_checkbox (
+    _("Dialogs are hidden in taksbar"), 
+    _("Whether dialog windows are to be hidden in the window manager taskbar"), tt,
+    vb,
+    "options.dialogsskiptaskbar", "value", 1,
+    options_changed_boolean
+    );
 
 // Display        
         l = gtk_label_new (_("Display"));
