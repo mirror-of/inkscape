@@ -1,3 +1,9 @@
+2005-03-24  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: text-context.cpp, text-editing.cpp, text-editing.h:
+	  functions for applying style to selected text, and wire them
+	  up to ctrl-b/ctrl-i for bold/italic
+
 2005-03-23  Jon Phillips <jon@rejon.org>
 	* src/toolbox.h src/toolbox.cpp: Fixed warning messages.
 
@@ -7,6 +13,18 @@
 	  src/dialogs/swatches.h, src/dialogs/swatches.cpp:
 	  Preliminary work for 'Previewable' interface.
 
+2005-03-23  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: sp-text.cpp, libnrtype/Layout-TNG-Compute.cpp,
+	  libnrtype/Layout-TNG-Output.cpp: make text on path work correctly
+	  with accent glyphs and suchlike
+
+	* src/: text-chemistry.cpp, libnrtype/Layout-TNG.h: apply text's
+	  alignment to startOffset on new textpath elements, fixes bug
+	  1168145
+
+	* src/libnrtype/Layout-TNG-OutIter.cpp: selecting text to the end
+	  sometimes displays wrong
 
 2005-03-22  MenTaLguY  <mental@rydia.net>
 
@@ -39,6 +57,14 @@
 
       SPSelection -> Inkscape::Selection
 
+2005-03-22  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/text-context.cpp: pressing esc doesn't hide text selection
+
+	* src/: text-context.cpp, text-context.h, text-editing.cpp,
+	  text-editing.h, libnrtype/Layout-TNG-OutIter.cpp,
+	  libnrtype/Layout-TNG.h: make text selection inverse
+
 2005-03-21  Jon Phillips <jon@rejon.org>
 
 	* share/icons/icons.svg src/dropper-context.cpp
@@ -56,6 +82,17 @@
       new iterator classes that directly wrap the Glib list types
 
 2005-03-21  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: text-editing.cpp, libnrtype/Layout-TNG-OutIter.cpp: text
+	  selection doesn't show when it starts at the end of a line
+
+	* src/: text-context.cpp, text-editing.cpp: crash on overtyping
+	  selection, and displayed selection not removed on overtype
+
+	* src/text-editing.cpp: kerning information placed wrongly in text
+	  after child span element
+
+	* src/libnrtype/Layout-TNG-OutIter.cpp: crash when pressing home key
 
 	* src/: text-context.cpp, text-context.h: text selection using the
 	  mouse
