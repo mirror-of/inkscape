@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <functional>
 #include <gtkmm/liststore.h>
+#include <gtkmm/image.h>
 
 #include "desktop-handles.h"
 #include "selection.h"
@@ -48,12 +49,12 @@ public:
     : _a(NULL), _b(NULL)
     {
         if (a) {
-            _a = Gtk::manage(Glib::wrap(sp_icon_new(size, a)));
+            _a = Gtk::manage(new Gtk::Image(PixBufFactory::get().getIcon(a,size)));
             _a->set_no_show_all(true);
             add(*_a);
         }
         if (b) {
-            _b = Gtk::manage(Glib::wrap(sp_icon_new(size, b)));
+            _b = Gtk::manage(new Gtk::Image(PixBufFactory::get().getIcon(b,size)));
             _b->set_no_show_all(true);
             add(*_b);
         }
