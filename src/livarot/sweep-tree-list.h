@@ -12,7 +12,7 @@ class SweepTree;
 class SweepTreeList {
 public:
     int nbTree;   ///< Number of nodes in the tree.
-    int maxTree;  ///< Max number of nodes.
+    int const maxTree;   ///< Max number of nodes in the tree.
     SweepTree *trees;    ///< The array of nodes.
     SweepTree *racine;   ///< Root of the tree.
 
