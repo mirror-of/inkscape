@@ -261,17 +261,16 @@ sp_set_dxdy (SPObject *o, GList *dx, GList *dy)
 \brief   Ensures the dx and dy lists of child are exactly end positions long, either
 appending 0 values or cutting extra values from the lists
 */
-void
-sp_fill_dxdy (SPObject *child, gint end)
+static void
+sp_fill_dxdy (SPObject *child, guint end)
 {
 	guint dx_offset, dy_offset;
 	GList *dxnew, *dx = sp_effective_dx (child, &dx_offset);
 	GList *dynew, *dy = sp_effective_dy (child, &dy_offset);
-	gint i;
 
 	dxnew = g_list_copy (g_list_nth (dx, dx_offset));
 	// fill in missing...
-	for (i = g_list_length(dxnew); i < end; i++) {
+	for (guint i = g_list_length(dxnew); i < end; i++) {
 		SPSVGLength *length = g_new (SPSVGLength, 1);
 		length->value = 0;
 		length->computed = 0;
@@ -289,7 +288,7 @@ sp_fill_dxdy (SPObject *child, gint end)
 
 	dynew = g_list_copy (g_list_nth (dy, dy_offset));
 	// fill in missing...
-	for (i = g_list_length(dynew); i < end; i++) {
+	for (guint i = g_list_length(dynew); i < end; i++) {
 		SPSVGLength *length = g_new (SPSVGLength, 1);
 		length->value = 0;
 		length->computed = 0;
