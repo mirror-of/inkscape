@@ -168,6 +168,7 @@ sp_selected_path_break_apart (void)
 		sp_repr_unparent (SP_OBJECT_REPR (item));
 
 		curve = sp_curve_new_from_bpath (abp);
+		g_assert (curve != NULL);
 
 		GSList *list = sp_curve_split (curve);
 
