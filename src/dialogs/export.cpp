@@ -102,6 +102,7 @@ static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
 static const gchar *prefs_path = "dialogs.export";
 static gchar * original_name = NULL;
+static gchar * doc_export_name = NULL;
 
 /** What type of button is being pressed */
 enum selection_type {
@@ -128,6 +129,7 @@ sp_export_dialog_destroy ( GtkObject *object, gpointer data )
     wd.win = dlg = NULL;
     wd.stop = 0;
     g_free(original_name);
+    g_free(doc_export_name);
 
     return;
 } // end of sp_export_dialog_destroy()
@@ -475,6 +477,8 @@ sp_export_dialog (void)
                 gtk_entry_set_text (GTK_ENTRY (fe), name);
                 g_free(name);
             } 
+
+            doc_export_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(fe)));
         }
         g_signal_connect ( G_OBJECT (fe), "changed", 
                            G_CALLBACK (sp_export_filename_modified), dlg);
@@ -701,6 +705,14 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                     ydpi = atof(dpi_string);
                 }
 
+                if (filename == NULL) {
+                    if (doc_export_name != NULL) {
+                        filename = g_strdup(doc_export_name);
+                    } else {
+                        filename = g_strdup("");
+                    }
+                }
+
                 break;
             }
             case SELECTION_SELECTION:
@@ -742,6 +754,49 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                                 ydpi_search = FALSE;
                             }
                         }
+                    }
+
+                    /* If we still don't have a filename -- let's build
+                       one that's nice */
+                    if (filename == NULL) {
+                        const gchar * id = NULL;
+                        reprlst = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->reprList();
+                        for(; reprlst != NULL; reprlst = reprlst->next) {
+                            SPRepr * repr = (SPRepr *)reprlst->data;
+                            if (sp_repr_attr(repr, "id")) {
+                                id = sp_repr_attr(repr, "id");
+                                break;
+                            }
+                        }
+                        if (id == NULL) /* This should never happen */
+                            id = "bitmap";
+
+                        gchar * directory = NULL;
+                        const gchar * file_entry_text;
+
+                        file_entry_text = gtk_entry_get_text(GTK_ENTRY(file_entry));
+                        if (directory == NULL && file_entry_text != NULL && file_entry_text[0] != '\0') {
+                            // std::cout << "Directory from dialog" << std::endl;
+                            directory = g_dirname(file_entry_text);
+                        }
+                        
+                        if (directory == NULL) {
+                            /* Grab document directory */
+                            if (SP_DOCUMENT_URI(SP_ACTIVE_DOCUMENT)) {
+                                // std::cout << "Directory from document" << std::endl;
+                                directory = g_dirname(SP_DOCUMENT_URI(SP_ACTIVE_DOCUMENT));
+                            }
+                        }
+
+                        if (directory == NULL) {
+                            // std::cout << "Home Directory" << std::endl;
+                            directory = g_strdup(g_get_home_dir());
+                        }
+
+                        gchar * id_ext = g_strconcat(id, ".png", NULL);
+                        filename = g_build_filename(directory, id_ext, NULL);
+                        g_free(directory);
+                        g_free(id_ext);
                     }
                 }
                 break;
@@ -953,6 +1008,12 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             nv->pagecolor, 
             sp_export_progress_callback, base);
             
+    /* Reset the filename so that it can be changed again by changing
+       selections and all that */
+    g_free(original_name);
+    original_name = g_strdup(filename);
+    gtk_object_set_data (GTK_OBJECT (base), "filename-modified", (gpointer)FALSE);
+
     gtk_widget_destroy (dlg);
     g_object_set_data (G_OBJECT (base), "cancel", (gpointer) 0);
 
@@ -997,6 +1058,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
         default:
             break;
     }
+
     
     return;
 } // end of sp_export_export_clicked()
