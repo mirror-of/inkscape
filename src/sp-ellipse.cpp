@@ -67,6 +67,9 @@ static void sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags)
 static int sp_genericellipse_snappoints (SPItem *item, NRPoint *p, int size);
 
 static void sp_genericellipse_set_shape (SPShape *shape);
+static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint flags);
+
+static gboolean sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr);
 
 static SPShapeClass *ge_parent_class;
 
@@ -108,6 +111,7 @@ sp_genericellipse_class_init (SPGenericEllipseClass *klass)
 	ge_parent_class = (SPShapeClass*)g_type_class_ref (SP_TYPE_SHAPE);
 
 	sp_object_class->update = sp_genericellipse_update;
+	sp_object_class->write = sp_genericellipse_write;
 
 	item_class->snappoints = sp_genericellipse_snappoints;
 
@@ -180,10 +184,12 @@ static void sp_genericellipse_set_shape (SPShape *shape)
 	rx = ellipse->rx.computed;
 	ry = ellipse->ry.computed;
 
+	// figure out if we have a slice, guarding against rounding errors
 	len = fmod (ellipse->end - ellipse->start, SP_2PI);
 	if (len < 0.0) len += SP_2PI;
-	if (fabs (len) < 1e-9) {
+	if (fabs (len) < 1e-8 || fabs (len - SP_2PI) < 1e-8) {
 		slice = FALSE;
+		ellipse->end = ellipse->start + SP_2PI;
 	} else {
 		slice = TRUE;
 	}
@@ -292,6 +298,29 @@ sp_genericellipse_normalize (SPGenericEllipse *ellipse)
 	/* Now we keep: 0 <= start < end <= 2*PI */
 }
 
+static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint flags)
+{
+	SPGenericEllipse *ellipse = SP_GENERICELLIPSE (object);
+
+	if (flags & SP_OBJECT_WRITE_EXT) {
+		if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+			repr = sp_repr_new ("path");
+		}
+
+		sp_repr_set_double_attribute (repr, "sodipodi:cx", ellipse->cx.computed);
+		sp_repr_set_double_attribute (repr, "sodipodi:cy", ellipse->cy.computed);
+		sp_repr_set_double_attribute (repr, "sodipodi:rx", ellipse->rx.computed);
+		sp_repr_set_double_attribute (repr, "sodipodi:ry", ellipse->ry.computed);
+
+		sp_arc_set_elliptical_path_attribute (SP_ARC (object), SP_OBJECT_REPR (object));
+	}
+
+	if (((SPObjectClass *) ge_parent_class)->write)
+		((SPObjectClass *) ge_parent_class)->write (object, repr, flags);
+
+	return repr;
+}
+
 /* SVG <ellipse> element */
 
 static void sp_ellipse_class_init (SPEllipseClass *klass);
@@ -379,6 +408,8 @@ sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags)
 	sp_repr_set_double_attribute (repr, "cy", ellipse->cy.computed);
 	sp_repr_set_double_attribute (repr, "rx", ellipse->rx.computed);
 	sp_repr_set_double_attribute (repr, "ry", ellipse->ry.computed);
+
+	sp_arc_set_elliptical_path_attribute (SP_ARC (object), repr);
 	
 	if (((SPObjectClass *) ellipse_parent_class)->write)
 		(* ((SPObjectClass *) ellipse_parent_class)->write) (object, repr, flags);
@@ -645,7 +676,6 @@ sp_arc_init (SPArc *arc)
 	/* Nothing special */
 }
 
-
 static void
 sp_arc_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
@@ -740,7 +770,6 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 				    fa, fs, p2.x, p2.y);
 		}
 	}
-
 	return sp_repr_set_attr (repr, "d", c);
 }
 
@@ -749,6 +778,7 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 {
 	SPGenericEllipse *ge;
 	SPArc *arc;
+	gdouble len;
 
 	ge = SP_GENERICELLIPSE (object);
 	arc = SP_ARC (object);
@@ -757,17 +787,27 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 		if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 			repr = sp_repr_new ("path");
 		}
-
 		sp_repr_set_attr (repr, "sodipodi:type", "arc");
 		sp_repr_set_double_attribute (repr, "sodipodi:cx", ge->cx.computed);
 		sp_repr_set_double_attribute (repr, "sodipodi:cy", ge->cy.computed);
 		sp_repr_set_double_attribute (repr, "sodipodi:rx", ge->rx.computed);
 		sp_repr_set_double_attribute (repr, "sodipodi:ry", ge->ry.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:start", ge->start);
-		sp_repr_set_double_attribute (repr, "sodipodi:end", ge->end);
-		sp_repr_set_attr (repr, "sodipodi:open", (!ge->closed) ? "true" : NULL);
+
+		// write start and end only if they are non-trivial; otherwise remove
+		len = fmod (ge->end - ge->start, SP_2PI);
+		if (len < 0.0) len += SP_2PI;
+		if (!(fabs (len) < 1e-8 || fabs (len - SP_2PI) < 1e-8)) {
+			sp_repr_set_double_attribute (repr, "sodipodi:start", ge->start);
+			sp_repr_set_double_attribute (repr, "sodipodi:end", ge->end);
+			sp_repr_set_attr (repr, "sodipodi:open", (!ge->closed) ? "true" : NULL);
+		} else {
+			sp_repr_set_attr (repr, "sodipodi:end", NULL);
+			sp_repr_set_attr (repr, "sodipodi:start", NULL);
+			sp_repr_set_attr (repr, "sodipodi:open", NULL);
+		}
 
 		sp_arc_set_elliptical_path_attribute (arc, repr);
+
 	} else {
 		gdouble dt;
 		dt = fmod (ge->end - ge->start, SP_2PI);
@@ -846,11 +886,19 @@ sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_START:
-		sp_svg_number_read_d (value, &ge->start);
+		if (value) {
+			sp_svg_number_read_d (value, &ge->start);
+		} else {
+			ge->start = 0;
+		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_END:
-		sp_svg_number_read_d (value, &ge->end);
+		if (value) {
+			sp_svg_number_read_d (value, &ge->end);
+		} else {
+			ge->end = 2 * M_PI;
+		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_OPEN:
@@ -867,8 +915,8 @@ sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 static void
 sp_arc_modified (SPObject *object, guint flags)
 {
-	if (flags & SP_OBJECT_MODIFIED_FLAG) {
-		sp_arc_set_elliptical_path_attribute (SP_ARC (object), SP_OBJECT_REPR (object));
+	if (flags & SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG) {
+		sp_shape_set_shape ((SPShape *) object);
 	}
 
 	if (((SPObjectClass *) arc_parent_class)->modified)
