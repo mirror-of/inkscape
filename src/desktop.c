@@ -949,7 +949,7 @@ static gboolean
 sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 {
 	SPDocument *doc;
-
+	gint x = 0, y = 0, x1 = 0, y1 = 0;
 	doc = SP_VIEW_DOCUMENT (view);
 
 	if (doc && (((GObject *) doc)->ref_count == 1)) {
@@ -962,6 +962,11 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
 			gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_RESPONSE_YES);
+
+			//position it right under the cursor
+			gdk_window_get_pointer (NULL, &x, &y, NULL);
+			gtk_window_move((GtkWindow *) dlg, MAX(x-300, 0), MAX(y-100, 0));
+
 			b = gtk_dialog_run (GTK_DIALOG(dlg));
 			gtk_widget_destroy(dlg);
 			switch (b) {
