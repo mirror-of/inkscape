@@ -38,7 +38,7 @@ static void sp_marker_init (SPMarker *marker);
 
 static void sp_marker_build (SPObject *object, SPDocument *document, SPRepr *repr);
 static void sp_marker_release (SPObject *object);
-static void sp_marker_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_marker_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_marker_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_marker_write (SPObject *object, SPRepr *repr, guint flags);
 
@@ -65,7 +65,7 @@ sp_marker_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_marker_init,
 		};
-		type = g_type_register_static (SP_TYPE_GROUP, "SPMarker", &info, 0);
+		type = g_type_register_static (SP_TYPE_GROUP, "SPMarker", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -81,7 +81,7 @@ sp_marker_class_init (SPMarkerClass *klass)
 	sp_object_class = (SPObjectClass *) klass;
 	sp_item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_GROUP);
+	parent_class = (SPGroupClass *)g_type_class_ref (SP_TYPE_GROUP);
 
 	sp_object_class->build = sp_marker_build;
 	sp_object_class->release = sp_marker_release;
@@ -144,7 +144,7 @@ sp_marker_release (SPObject *object)
 }
 
 static void
-sp_marker_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_marker_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPItem *item;
 	SPMarker *marker;
@@ -239,8 +239,8 @@ sp_marker_set (SPObject *object, unsigned int key, const unsigned char *value)
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		if (value) {
 			int len;
-			unsigned char c[256];
-			const unsigned char *p, *e;
+			gchar c[256];
+			const gchar *p, *e;
 			unsigned int align, clip;
 			p = value;
 			while (*p && *p == 32) p += 1;
@@ -545,7 +545,7 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
 		view = NULL;
 	}
 	if (!view) {
-		view = malloc (sizeof (SPMarkerView) + (size - 1) * sizeof (NRArenaItem *));
+		view = (SPMarkerView *)malloc (sizeof (SPMarkerView) + (size - 1) * sizeof (NRArenaItem *));
 		for (i = 0; i < size; i++) view->items[i] = NULL;
 		view->next = marker->views;
 		marker->views = view;

@@ -27,7 +27,7 @@ static void sp_symbol_init (SPSymbol *symbol);
 
 static void sp_symbol_build (SPObject *object, SPDocument *document, SPRepr *repr);
 static void sp_symbol_release (SPObject *object);
-static void sp_symbol_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_symbol_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_symbol_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
 static void sp_symbol_remove_child (SPObject *object, SPRepr *child);
 static void sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags);
@@ -55,7 +55,7 @@ sp_symbol_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_symbol_init,
 		};
-		type = g_type_register_static (SP_TYPE_GROUP, "SPSymbol", &info, 0);
+		type = g_type_register_static (SP_TYPE_GROUP, "SPSymbol", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -71,7 +71,7 @@ sp_symbol_class_init (SPSymbolClass *klass)
 	sp_object_class = (SPObjectClass *) klass;
 	sp_item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_GROUP);
+	parent_class = (SPGroupClass *)g_type_class_ref (SP_TYPE_GROUP);
 
 	sp_object_class->build = sp_symbol_build;
 	sp_object_class->release = sp_symbol_release;
@@ -124,7 +124,7 @@ sp_symbol_release (SPObject *object)
 }
 
 static void
-sp_symbol_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_symbol_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPItem *item;
 	SPSymbol *symbol;
@@ -171,8 +171,8 @@ sp_symbol_set (SPObject *object, unsigned int key, const unsigned char *value)
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		if (value) {
 			int len;
-			unsigned char c[256];
-			const unsigned char *p, *e;
+			gchar c[256];
+			const gchar *p, *e;
 			unsigned int align, clip;
 			p = value;
 			while (*p && *p == 32) p += 1;

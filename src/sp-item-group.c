@@ -33,7 +33,7 @@ static void sp_group_build (SPObject * object, SPDocument * document, SPRepr * r
 static void sp_group_release (SPObject *object);
 static void sp_group_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
 static void sp_group_remove_child (SPObject * object, SPRepr * child);
-static void sp_group_order_changed (SPObject * object, SPRepr * child, SPRepr * old, SPRepr * new);
+static void sp_group_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref);
 static void sp_group_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_group_modified (SPObject *object, guint flags);
 static gint sp_group_sequence (SPObject *object, gint seq);
@@ -63,7 +63,7 @@ sp_group_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_group_init,
 		};
-		group_type = g_type_register_static (SP_TYPE_ITEM, "SPGroup", &group_info, 0);
+		group_type = g_type_register_static (SP_TYPE_ITEM, "SPGroup", &group_info, (GTypeFlags)0);
 	}
 	return group_type;
 }
@@ -79,7 +79,7 @@ sp_group_class_init (SPGroupClass *klass)
 	sp_object_class = (SPObjectClass *) klass;
 	item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_ITEM);
+	parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 
 	sp_object_class->build = sp_group_build;
 	sp_object_class->release = sp_group_release;
@@ -121,7 +121,7 @@ static void sp_group_build (SPObject *object, SPDocument * document, SPRepr * re
 		GType type;
 		SPObject * child;
 		type = sp_repr_type_lookup (rchild);
-		child = g_object_new (type, 0);
+		child = SP_OBJECT(g_object_new (type, 0));
 		if (last) {
 			last->next = sp_object_attach_reref (object, child, NULL);
 		} else {
@@ -175,7 +175,7 @@ sp_group_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	}
 
 	type = sp_repr_type_lookup (child);
-	ochild = g_object_new (type, 0);
+	ochild = SP_OBJECT(g_object_new (type, 0));
 	if (prev) {
 		prev->next = sp_object_attach_reref (object, ochild, prev->next);
 	} else {
@@ -229,7 +229,7 @@ sp_group_remove_child (SPObject * object, SPRepr * child)
 }
 
 static void
-sp_group_order_changed (SPObject *object, SPRepr *child, SPRepr *old, SPRepr *new)
+sp_group_order_changed (SPObject *object, SPRepr *child, SPRepr *old_ref, SPRepr *new_ref)
 {
 	SPGroup *group;
 	SPObject *childobj, *oldobj, *newobj, *o;
@@ -238,24 +238,24 @@ sp_group_order_changed (SPObject *object, SPRepr *child, SPRepr *old, SPRepr *ne
 	group = SP_GROUP (object);
 
 	if (((SPObjectClass *) (parent_class))->order_changed)
-		(* ((SPObjectClass *) (parent_class))->order_changed) (object, child, old, new);
+		(* ((SPObjectClass *) (parent_class))->order_changed) (object, child, old_ref, new_ref);
 
 	childobj = oldobj = newobj = NULL;
 	oldpos = newpos = 0;
 
 	/* Scan children list */
 	childpos = 0;
-	for (o = group->children; !childobj || (old && !oldobj) || (new && !newobj); o = o->next) {
+	for (o = group->children; !childobj || (old_ref && !oldobj) || (new_ref && !newobj); o = o->next) {
 		if (o->repr == child) {
 			childobj = o;
 		} else {
 			if (SP_IS_ITEM (o)) childpos += 1;
 		}
-		if (old && o->repr == old) {
+		if (old_ref && o->repr == old_ref) {
 			oldobj = o;
 			oldpos = childpos;
 		}
-		if (new && o->repr == new) {
+		if (new_ref && o->repr == new_ref) {
 			newobj = o;
 			newpos = childpos;
 		}
@@ -540,7 +540,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children)
 			SPItem *citem;
 			NRMatrixF ctrans;
 			gchar affinestr[80];
-			guchar *ss;
+			gchar *ss;
 
 			citem = SP_ITEM (child);
 
@@ -618,7 +618,7 @@ sp_item_group_item_list (SPGroup * group)
 }
 
 SPObject *
-sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const unsigned char *name)
+sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *name)
 {
 	SPObject *child;
 	child = (ref) ? ref->next : group->children;
