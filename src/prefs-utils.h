@@ -17,3 +17,5 @@ void prefs_set_double_attribute (gchar const *path, gchar const *attr, double va
 double prefs_get_double_attribute (gchar const *path, gchar const *attr, double def);
 double prefs_get_double_attribute_limited (gchar const *path, gchar const *attr, double def, double min, double max);
 
+gchar const *prefs_get_string_attribute (gchar const *path, gchar const *attr);
+void prefs_set_string_attribute (gchar const *path, gchar const *attr, gchar const *value);

@@ -116,3 +116,24 @@ prefs_get_double_attribute_limited (gchar const *path, gchar const *attr, double
 	} else 
 		return def;
 }
+
+gchar const *
+prefs_get_string_attribute (gchar const *path, gchar const *attr)
+{
+	SPRepr *repr;
+	repr = inkscape_get_repr (INKSCAPE, path);
+	if (repr) {
+		return (char *) sp_repr_attr (repr, attr);
+	}
+	return NULL;
+}
+
+void
+prefs_set_string_attribute (gchar const *path, gchar const *attr, gchar const *value)
+{
+	SPRepr *repr;
+	repr = inkscape_get_repr (INKSCAPE, path);
+	if (repr) {
+		sp_repr_set_attr (repr, attr, value);
+	}
+}
