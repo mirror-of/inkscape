@@ -50,17 +50,8 @@ dist:
 	$(MKDIR) inkscape$(S)fonts
 	$(CP) $(GTKDOS)$(S)fonts$(S)*.ttf inkscape$(S)fonts
 	$(CPDIR) share inkscape$(S)share
-	$(RMDIR) inkscape$(S)share$(S)CVS
-	$(RMDIR) inkscape$(S)share$(S)icons$(S)CVS
-	$(RMDIR) inkscape$(S)share$(S)screens$(S)CVS
-	$(RMDIR) inkscape$(S)share$(S)extensions$(S)CVS
-	$(RMDIR) inkscape$(S)share$(S)examples$(S)CVS
-	$(RMDIR) inkscape$(S)share$(S)clipart$(S)CVS
-	$(RMDIR) inkscape$(S)share$(S)clipart$(S)road_signs$(S)CVS
-	$(RMDIR) inkscape$(S)share$(S)tutorials$(S)CVS
-	$(RMDIR) inkscape$(S)share$(S)markers$(S)CVS
+	$(CPDIR) $(GTKDOS)$(S)share$(S)themes inkscape$(S)share
 	$(CPDIR) doc inkscape$(S)doc
-	$(RMDIR) inkscape$(S)doc$(S)CVS
 	$(MKDIR) inkscape$(S)data
 	$(MKDIR) inkscape$(S)locale
 	$(MAKE) -C po -f Makefile.mingw dist
