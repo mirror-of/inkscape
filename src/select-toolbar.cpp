@@ -86,7 +86,7 @@ sp_selection_layout_widget_update (SPWidget *spw, SPSelection *sel)
 
 		sp_selection_bbox (sel, &bbox);
 
-		if ((bbox.x1 - bbox.x0 > 1e-6) && (bbox.y1 - bbox.y0 > 1e-6)) {
+		if ((bbox.x1 - bbox.x0 > 1e-6) || (bbox.y1 - bbox.y0 > 1e-6)) {
 			GtkWidget *us;
 			GtkAdjustment *a;
 			const SPUnit *unit;
@@ -160,8 +160,7 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
 	sp_selection_bbox (sel, &bbox);
-	g_return_if_fail (bbox.x1 - bbox.x0 > 1e-9);
-	g_return_if_fail (bbox.y1 - bbox.y0 > 1e-9);
+	g_return_if_fail ((bbox.x1 - bbox.x0 > 1e-6) || (bbox.y1 - bbox.y0 > 1e-6));
 
 	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
 	x0 = sp_units_get_points (a->value, unit);
@@ -176,7 +175,12 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 		gdouble p2o[6], o2n[6], scale[6], s[6], t[6];
 
 		art_affine_translate (p2o, -bbox.x0, -bbox.y0);
-		art_affine_scale (scale, (x1 - x0) / (bbox.x1 - bbox.x0), (y1 - y0) / (bbox.y1 - bbox.y0));
+		if (fabs (bbox.x1 - bbox.x0) <= 1e-06)
+			art_affine_scale (scale, 1, (y1 - y0) / (bbox.y1 - bbox.y0));
+		else if (fabs (bbox.y1 - bbox.y0) <= 1e-06)
+			art_affine_scale (scale, (x1 - x0) / (bbox.x1 - bbox.x0), 1);
+		else 
+			art_affine_scale (scale, (x1 - x0) / (bbox.x1 - bbox.x0), (y1 - y0) / (bbox.y1 - bbox.y0));
 		art_affine_translate (o2n, x0, y0);
 		art_affine_multiply (s , p2o, scale);
 		art_affine_multiply (t , s, o2n);
