@@ -135,7 +135,7 @@ FileOpenDialog::show() {
             0,                      // nMaxFileTitle
             (const WCHAR *)dirW,    // lpstrInitialDir
             (const WCHAR *)titleW,  // lpstrTitle
-            OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY, // Flags
+            OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_NOCHANGEDIR, // Flags
             0,                      // nFileOffset
             0,                      // nFileExtension
             NULL,                   // lpstrDefExt
@@ -178,7 +178,7 @@ FileOpenDialog::show() {
             0,                     // nMaxFileTitle
             (const CHAR *)dir,     // lpstrInitialDir
             (const CHAR *)title,   // lpstrTitle
-            OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY, // Flags
+            OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_NOCHANGEDIR, // Flags
             0,                     // nFileOffset
             0,                     // nFileExtension
             NULL,                  // lpstrDefExt
@@ -296,7 +296,7 @@ FileSaveDialog::FileSaveDialog(
         0,                          // nMaxFileTitle
         (const CHAR *)dir,          // lpstrInitialDir
         "Save document to file",    // lpstrTitle
-        OFN_HIDEREADONLY,           // Flags
+        OFN_HIDEREADONLY | OFN_NOCHANGEDIR,           // Flags
         0,                          // nFileOffset
         0,                          // nFileExtension
         NULL,                       // lpstrDefExt

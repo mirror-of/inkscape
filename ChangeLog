@@ -8,6 +8,12 @@
 	* src/dialogs/stroke-style.cpp, libnr/nr-rect-l.cpp:
 	Fix a couple of compiler warnings.
 
+	* src/dialogs/filedialog-win32.cpp: add OFN_NOCHANGEDIR to Win32
+	flags in OPENFILENAME structs.  This prevents the open / save
+	boxes from changing the current directory.  Any change to the
+	current directory causes problems for subsequent attempts to
+	load icons from pixmaps.
+
 2004-04-19  bulia byak <bulia@users.sourceforge.net>
 
 	* shortcuts.cpp selection-chemistry.cpp selection-chemistry.h verbs.cpp verbs.h
