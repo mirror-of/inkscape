@@ -18,7 +18,6 @@ OBJECTS = \
 	dialogs/export.o \
 	dialogs/fill-style.o \
 	dialogs/item-properties.o \
-	dialogs/node-edit.o \
 	dialogs/object-attributes.o \
 	dialogs/object-properties.o \
 	dialogs/sp-attribute-widget.o \
@@ -267,7 +266,6 @@ LINTS = \
 	dialogs/export.lint \
 	dialogs/fill-style.lint \
 	dialogs/item-properties.lint \
-	dialogs/node-edit.lint \
 	dialogs/object-attributes.lint \
 	dialogs/object-properties.lint \
 	dialogs/sp-attribute-widget.lint \

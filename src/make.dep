@@ -408,6 +408,7 @@ dialogs/fill-style.o: \
 	dialogs/fill-style.h \
 	display/nr-arena-forward.h \
 	document.h \
+	document.h \
 	enums.h \
 	forward.h \
 	forward.h \
@@ -433,6 +434,9 @@ dialogs/fill-style.o: \
 	sp-paint-server.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	widgets/paint-selector.h \
 	widgets/sp-widget.h \
@@ -468,29 +472,6 @@ dialogs/item-properties.o: \
 	version.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
-	xml/repr.h
-
-dialogs/node-edit.o: \
-	dialogs/node-edit.cpp \
-	desktop-handles.h \
-	dialogs/node-edit.h \
-	display/nr-arena-forward.h \
-	enums.h \
-	forward.h \
-	helper/curve.h \
-	helper/helper-forward.h \
-	helper/units.h \
-	knot.h \
-	libnr/nr-types.h \
-	nodepath.h \
-	sp-item-group.h \
-	sp-item.h \
-	sp-marker.h \
-	sp-object.h \
-	sp-path.h \
-	sp-shape.h \
-	svg/svg-types.h \
-	version.h \
 	xml/repr.h
 
 dialogs/object-attributes.o: \
@@ -574,6 +555,7 @@ dialogs/stroke-style.o: \
 	dialogs/stroke-style.h \
 	display/nr-arena-forward.h \
 	document.h \
+	document.h \
 	enums.h \
 	forward.h \
 	forward.h \
@@ -608,6 +590,9 @@ dialogs/stroke-style.o: \
 	sp-paint-server.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	widgets/dash-selector.h \
 	widgets/paint-selector.h \
@@ -1233,6 +1218,9 @@ gradient-chemistry.o: \
 	sp-root.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr-action.h \
 	xml/repr-action.h \
@@ -1502,7 +1490,6 @@ interface.o: \
 	desktop-handles.h \
 	desktop.h \
 	dialogs/dialog-events.h \
-	dialogs/node-edit.h \
 	dir-util.h \
 	display/nr-arena-forward.h \
 	document.h \
@@ -2439,6 +2426,7 @@ object-edit.o: \
 	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
 	object-edit.h \
+	prefs-utils.h \
 	sp-ellipse.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -3036,6 +3024,9 @@ sp-clippath.o: \
 	sp-item.h \
 	sp-object-group.h \
 	sp-object.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3110,6 +3101,9 @@ sp-gradient.o: \
 	sp-paint-server.h \
 	sp-root.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr-action.h \
 	xml/repr-action.h \
@@ -3267,6 +3261,7 @@ sp-item.o: \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3352,6 +3347,9 @@ sp-mask.o: \
 	sp-mask.h \
 	sp-object-group.h \
 	sp-object.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3457,6 +3455,9 @@ sp-object-repr.o: \
 	sp-text.h \
 	sp-use.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3753,6 +3754,7 @@ sp-shape.o: \
 	style.h \
 	svg/svg-types.h \
 	uri-references.h \
+	uri.h \
 	uri.h \
 	version.h \
 	view.h \
@@ -4102,6 +4104,7 @@ style.o: \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -4209,15 +4212,16 @@ toolbox.o: \
 	dialogs/align.h \
 	dialogs/dialog-events.h \
 	dialogs/export.h \
-	dialogs/node-edit.h \
 	dialogs/object-properties.h \
 	dialogs/text-edit.h \
 	dialogs/transformation.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	file.h \
 	forward.h \
 	helper/action.h \
+	helper/curve.h \
 	helper/gnome-utils.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
@@ -4227,6 +4231,7 @@ toolbox.o: \
 	inkscape-stock.h \
 	inkscape.h \
 	interface.h \
+	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-object.h \
@@ -4237,13 +4242,19 @@ toolbox.o: \
 	macros.h \
 	module.h \
 	modules/menu.h \
+	nodepath.h \
 	path-chemistry.h \
 	prefs-utils.h \
 	select-toolbar.h \
 	selection-chemistry.h \
+	sp-item-group.h \
 	sp-item-transform.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	sp-path.h \
+	sp-shape.h \
+	svg/svg-types.h \
 	toolbox.h \
 	verbs.h \
 	version.h \
@@ -4322,11 +4333,13 @@ uri-references.o: \
 	sp-object.h \
 	uri-references.h \
 	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
 uri.o: \
 	uri.cpp \
+	uri.h \
 	uri.h
 
 verbs.o: \
@@ -4488,6 +4501,7 @@ widgets/font-selector.o: \
 widgets/gradient-image.o: \
 	widgets/gradient-image.cpp \
 	color.h \
+	document.h \
 	forward.h \
 	helper/nr-plain-stuff-gdk.h \
 	helper/nr-plain-stuff.h \
@@ -4500,6 +4514,9 @@ widgets/gradient-image.o: \
 	sp-object.h \
 	sp-paint-server.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	widgets/gradient-image.h \
 	xml/repr.h
@@ -4507,6 +4524,7 @@ widgets/gradient-image.o: \
 widgets/gradient-position.o: \
 	widgets/gradient-position.cpp \
 	color.h \
+	document.h \
 	forward.h \
 	helper/nr-gradient-gpl.h \
 	helper/nr-plain-stuff-gdk.h \
@@ -4526,6 +4544,9 @@ widgets/gradient-position.o: \
 	sp-object.h \
 	sp-paint-server.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	widgets/gradient-position.h \
 	xml/repr.h
@@ -4560,6 +4581,9 @@ widgets/gradient-selector.o: \
 	sp-paint-server.h \
 	sp-root.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	widgets/gradient-position.h \
 	widgets/gradient-selector.h \
@@ -4603,6 +4627,9 @@ widgets/gradient-vector.o: \
 	sp-paint-server.h \
 	sp-root.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	verbs.h \
 	version.h \
@@ -4662,6 +4689,7 @@ widgets/paint-selector.o: \
 	color.h \
 	color.h \
 	display/nr-arena-forward.h \
+	document.h \
 	forward.h \
 	forward.h \
 	helper/sp-intl.h \
@@ -4680,6 +4708,9 @@ widgets/paint-selector.o: \
 	sp-object.h \
 	sp-paint-server.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	widgets/gradient-selector.h \
 	widgets/paint-selector.h \

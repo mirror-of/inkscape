@@ -33,8 +33,6 @@ dialogs/fill-style.cpp
 dialogs/fill-style.h
 dialogs/item-properties.cpp
 dialogs/item-properties.h
-dialogs/node-edit.cpp
-dialogs/node-edit.h
 dialogs/object-attributes.cpp
 dialogs/object-attributes.h
 dialogs/object-properties.cpp
