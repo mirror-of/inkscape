@@ -16,6 +16,8 @@
 #include "helper/helper-forward.h"
 #include "forward.h"
 
+class SPSelection;
+
 #define SP_DT_IS_EDITABLE(d) (TRUE)
 
 #define SP_DT_EVENTCONTEXT(d) sp_desktop_event_context (d)

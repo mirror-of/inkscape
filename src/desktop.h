@@ -33,6 +33,8 @@ class SPDesktopWidgetClass;
 #include "forward.h"
 #include "view.h"
 
+class SPSelection;
+
 struct SPDesktop {
 	SPView view;
 

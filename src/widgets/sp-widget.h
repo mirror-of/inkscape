@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-
+class SPSelection;
 
 #define SP_TYPE_WIDGET (sp_widget_get_type ())
 #define SP_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_WIDGET, SPWidget))

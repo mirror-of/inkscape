@@ -1,5 +1,16 @@
 2004-04-19  MenTaLguY <mental@rydia.net>
 
+    * src/arc-context.cpp, src/desktop-handles.h, src/desktop.h,
+	  src/draw-context.cpp, src/draw-context.h, src/forward.h,
+	  src/inkscape-private.h, src/inkscape.cpp, src/node-context.cpp,
+	  src/node-context.h, src/rect-context.cpp, src/selection-chemistry.cpp,
+	  src/selection-chemistry.h, src/selection.cpp, src/selection.h,
+	  src/seltrans.h, src/spiral-context.cpp, src/star-context.cpp,
+	  src/star-context.h, src/text-context.cpp, src/dialogs/xml-tree.cpp,
+	  src/widgets/sp-widget.h:
+
+	  finished GObject removal from SPSelection
+
     * src/arc-context.h, src/arc-context.cpp, src/desktop.cpp, src/desktop.h,
 	  src/draw-context.cpp, src/draw-context.h, src/node-context.cpp,
 	  src/node-context.h, src/rect-context.cpp, src/rect-context.h,

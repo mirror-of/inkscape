@@ -14,6 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <sigc++/sigc++.h>
 #include "event-context.h"
 #include "knotholder.h"
 
@@ -40,6 +41,8 @@ struct SPStarContext {
 
     SPKnotHolder *knot_holder;
     SPRepr *repr;
+
+    SigC::Connection sel_changed_connection;
 };
 
 struct SPStarContextClass {

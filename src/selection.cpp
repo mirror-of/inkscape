@@ -28,44 +28,8 @@
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
-static GObjectClass *parent_class;
-
-GType
-sp_selection_get_type() {
-	return SPSelection::gobject_type();
-}
-
-GType
-SPSelection::gobject_type() {
-	static GType type = 0;
-	if (!type) {
-		GTypeInfo info = {
-			sizeof (SPSelectionClass),
-			NULL, NULL,
-			(GClassInitFunc)&SPSelection::_class_init,
-			NULL, NULL,
-			sizeof (SPSelection),
-			4,
-			(GInstanceInitFunc)&SPSelection::_init,
-			NULL
-		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPSelection", &info, (GTypeFlags)0);
-	}
-	return type;
-}
-
-void
-SPSelection::_class_init(SPSelectionClass *klass)
-{
-	GObjectClass *object_class = (GObjectClass *) klass;
-
-	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
-
-	object_class->dispose = &SPSelection::_dispose;
-}
-
-SPSelection::SPSelection()
-: _reprs(NULL), _items(NULL), _desktop(NULL), _flags(0), _idle(0)
+SPSelection::SPSelection(SPDesktop *desktop)
+: _reprs(NULL), _items(NULL), _desktop(desktop), _flags(0), _idle(0), _refcount(1)
 {
 }
 
@@ -76,20 +40,6 @@ SPSelection::~SPSelection() {
 		gtk_idle_remove(_idle);
 		_idle = 0;
 	}
-}
-
-void
-SPSelection::_init(void *mem)
-{
-	new (mem) SPSelection();
-}
-
-void
-SPSelection::_dispose(GObject *object)
-{
-	SPSelection *selection=(SPSelection *)(object);
-	selection->~SPSelection();
-	G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
 void
@@ -168,14 +118,6 @@ void SPSelection::invokeChanged() {
 		// this function gets called not only when selector is active!
 		updateStatusbar();
 	}
-}
-
-SPSelection *SPSelection::create(SPDesktop *desktop) {
-	SPSelection *selection = (SPSelection*)g_object_new (SP_TYPE_SELECTION, NULL);
-
-	selection->_desktop = desktop;
-
-	return selection;
 }
 
 bool SPSelection::includesItem(SPItem *item) const {

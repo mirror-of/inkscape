@@ -18,6 +18,8 @@
 #include "display/curve.h"
 #include "event-context.h"
 
+class SPSelection;
+
 /* Freehand context */
 
 #define SP_TYPE_DRAW_CONTEXT (sp_draw_context_get_type())

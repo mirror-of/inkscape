@@ -113,6 +113,8 @@ sp_star_context_init (SPStarContext * star_context)
     star_context->magnitude = 5;
     star_context->proportion = 0.5;
     star_context->isflatsided = false;
+
+    new (&star_context->sel_changed_connection) SigC::Connection();
 }
 
 static void
@@ -121,6 +123,9 @@ sp_star_context_dispose (GObject *object)
     SPEventContext *ec = SP_EVENT_CONTEXT (object);
 
     SPStarContext *sc = SP_STAR_CONTEXT (object);
+
+    sc->sel_changed_connection.disconnect();
+    sc->sel_changed_connection.~Connection();
 
     if (sc->knot_holder) {
         sp_knot_holder_destroy (sc->knot_holder);
@@ -133,9 +138,6 @@ sp_star_context_dispose (GObject *object)
         sc->repr = 0;
     }
 
-    if (SP_EVENT_CONTEXT_DESKTOP (sc)) {
-        sp_signal_disconnect_by_data (SP_DT_SELECTION (SP_EVENT_CONTEXT_DESKTOP (sc)), sc);
-    }
     /* fixme: This is necessary because we do not grab */
     if (sc->item) sp_star_finish (sc);
 
@@ -241,9 +243,8 @@ sp_star_context_setup (SPEventContext *ec)
             }
         }
 
-        g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)),
-            "changed", G_CALLBACK (sp_star_context_selection_changed), sc);
-
+    sc->sel_changed_connection.disconnect();
+    sc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_star_context_selection_changed), (gpointer)sc));
 }
 
 static void

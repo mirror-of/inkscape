@@ -156,10 +156,6 @@ sp_node_context_dispose (GObject *object)
 		nc->knot_holder = NULL;
 	}
 
-	if (SP_EVENT_CONTEXT_DESKTOP (nc)) {
-		sp_signal_disconnect_by_data (SP_DT_SELECTION (SP_EVENT_CONTEXT_DESKTOP (nc)), nc);
-	}
-
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 

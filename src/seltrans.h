@@ -20,6 +20,8 @@
 #include "desktop-handles.h"
 #include <vector>
 
+class SPSelection;
+
 class SPSelTrans;
 
 enum {

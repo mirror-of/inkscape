@@ -26,6 +26,8 @@ GType inkscape_get_type (void);
 void inkscape_ref (void);
 void inkscape_unref (void);
 
+class SPSelection;
+
 /*
  * These are meant solely for desktop, document etc. implementations
  */

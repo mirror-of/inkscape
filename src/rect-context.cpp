@@ -137,10 +137,6 @@ static void sp_rect_context_dispose(GObject *object)
         rc->repr = 0;
     }
 
-    if (SP_EVENT_CONTEXT_DESKTOP(rc)) {
-        sp_signal_disconnect_by_data(SP_DT_SELECTION(SP_EVENT_CONTEXT_DESKTOP(rc)), rc);
-    }
-
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 

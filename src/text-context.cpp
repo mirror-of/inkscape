@@ -215,7 +215,6 @@ sp_text_context_finish (SPEventContext *ec)
 
 	if (ec->desktop) {
   		sp_signal_disconnect_by_data (SP_DT_CANVAS (ec->desktop), tc);
-  		sp_signal_disconnect_by_data (SP_DT_SELECTION (ec->desktop), ec);
 	}
 }
 

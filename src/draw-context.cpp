@@ -164,7 +164,6 @@ sp_draw_context_dispose(GObject *object)
     }
 
     if (dc->selection) {
-        sp_signal_disconnect_by_data(dc->selection, dc);
         dc->selection = NULL;
     }
 
@@ -226,7 +225,6 @@ sp_draw_context_finish(SPEventContext *ec)
     }
 
     if (dc->selection) {
-        sp_signal_disconnect_by_data(dc->selection, dc);
         dc->selection = NULL;
     }
 

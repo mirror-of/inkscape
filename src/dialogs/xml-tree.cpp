@@ -14,6 +14,7 @@
 
 #include <config.h>
 
+#include <sigc++/sigc++.h>
 #include <string.h>
 #include <glib.h>
 #include <gtk/gtkmain.h>
@@ -63,6 +64,7 @@ typedef struct _EditableDest {
 } EditableDest;
 
 static GtkWidget * dlg = NULL;
+static SigC::Connection sel_changed_connection;
 static win_data wd;
 // impossible original values to make sure they are read from prefs
 static gint x = -1000, y = -1000, w = 0, h = 0; 
@@ -575,19 +577,14 @@ set_tree_desktop (SPDesktop * desktop)
         return;
     
     if (current_desktop) {
-        
-        if (SP_DT_SELECTION (current_desktop)) {
-            sp_signal_disconnect_by_data ( SP_DT_SELECTION (current_desktop),
-                                           dlg );
-        }
+        sel_changed_connection.disconnect();
         sp_signal_disconnect_by_data (current_desktop, dlg);
     }
     current_desktop = desktop;
     if (desktop) {
         g_signal_connect ( G_OBJECT (desktop), "shutdown", 
                            G_CALLBACK (on_desktop_shutdown), dlg );
-        g_signal_connect ( G_OBJECT (SP_DT_SELECTION (desktop)), "changed", 
-                           G_CALLBACK (on_desktop_selection_changed), dlg );
+        sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(SigC::slot(&on_desktop_selection_changed)); 
         set_tree_document (SP_DT_DOCUMENT (desktop));
         
     } else {

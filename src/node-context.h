@@ -15,6 +15,8 @@
 #include "nodepath.h"
 #include "knotholder.h"
 
+class SPSelection;
+
 #define SP_TYPE_NODE_CONTEXT            (sp_node_context_get_type ())
 #define SP_NODE_CONTEXT(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_NODE_CONTEXT, SPNodeContext))
 #define SP_NODE_CONTEXT_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), SP_TYPE_NODE_CONTEXT, SPNodeContextClass))

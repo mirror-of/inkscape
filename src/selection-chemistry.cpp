@@ -650,7 +650,6 @@ void sp_selection_paste(bool in_place)
 
 	SPSelection *selection = SP_DT_SELECTION(desktop);
 	g_assert (selection != NULL);
-	g_assert (SP_IS_SELECTION (selection));
 
 	// check if something is in the clipboard
 	if (clipboard == NULL) {
@@ -710,7 +709,6 @@ void sp_selection_paste_style()
 
 	SPSelection *selection = SP_DT_SELECTION(desktop);
 	g_assert (selection != NULL);
-	g_assert (SP_IS_SELECTION (selection));
 
 	// check if something is in the clipboard
 	if (clipboard == NULL) {
@@ -764,8 +762,6 @@ void sp_selection_paste_style()
 
 void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
 {
-	g_assert (SP_IS_SELECTION (selection));
-
 	for (GSList const *l = selection->itemList(); l != NULL; l = l-> next) {
 		SPItem *item = SP_ITEM(l->data);
 		sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
@@ -781,7 +777,7 @@ void sp_selection_remove_transform()
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 	SPSelection *selection = SP_DT_SELECTION(desktop);
-	if (!SP_IS_SELECTION (selection)) return;
+	if (!selection) return;
 
 	GSList const *l = sp_selection_repr_list (selection);
 	while (l != NULL) {
@@ -798,8 +794,6 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 	NRRect bbox;
 	NRMatrix p2o, o2n, scale, final, s;
 	double dx, dy, nx, ny;
-
-	g_assert (SP_IS_SELECTION (selection));
 
 	sp_selection_bbox (selection, &bbox);
 
@@ -1009,7 +1003,7 @@ sp_selection_move (gdouble dx, gdouble dy)
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	g_return_if_fail(SP_IS_DESKTOP (desktop));
 	SPSelection *selection = SP_DT_SELECTION(desktop);
-	if (!SP_IS_SELECTION(selection)) {
+	if (!selection) {
 		return;
 	}
 	if (sp_selection_is_empty(selection)) {
@@ -1037,7 +1031,7 @@ sp_selection_move_screen (gdouble dx, gdouble dy)
 	desktop = SP_ACTIVE_DESKTOP;
 	g_return_if_fail(SP_IS_DESKTOP (desktop));
 	selection = SP_DT_SELECTION (desktop);
-	if (!SP_IS_SELECTION(selection)) {
+	if (!selection) {
 		return;
 	}
 	if (sp_selection_is_empty(selection)) {

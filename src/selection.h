@@ -18,20 +18,25 @@
 #include "xml/repr.h"
 #include "libnr/nr-rect.h"
 
-struct SPSelection : public GObject {
+struct SPSelection {
 public:
+	SPSelection(SPDesktop *desktop);
+	~SPSelection();
+
 	SPDesktop *desktop() { return _desktop; }
 
 	SPSelection &reference() {
-		g_object_ref(this);
+		++_refcount;
 		return *this;
 	}
 	SPSelection const &reference() const {
-		g_object_ref(const_cast<SPSelection *>(this));
+		++_refcount;
 		return *this;
 	}
 	void unreference() const {
-		g_object_unref(const_cast<SPSelection *>(this));
+		if (!--_refcount) {
+			delete const_cast<SPSelection *>(this);
+		}
 	}
 
 	void addItem(SPItem *item);
@@ -65,7 +70,6 @@ public:
 	void invokeChanged();
 
 	static SPSelection *create(SPDesktop *desktop);
-	static GType gobject_type();
 
 	SigC::Connection connectChanged(SigC::Slot1<void, SPSelection *> slot) {
 		return _changed_signal.connect(slot);
@@ -75,14 +79,8 @@ public:
 	}
 
 private:
-	SPSelection();
-	~SPSelection();
 	SPSelection(SPSelection const &);
 	void operator=(SPSelection const &);
-
-	static void _init(void *mem);
-	static void _class_init(SPSelectionClass *klass);
-	static void _dispose(GObject *object);
 
 	static gboolean _idle_handler(SPSelection *selection);
 	static void _item_modified(SPItem *item, guint flags, SPSelection *selection);
@@ -98,6 +96,8 @@ private:
 	guint _flags;
 	guint _idle;
 
+	mutable unsigned _refcount;
+
 	SigC::Signal1<void, SPSelection *> _changed_signal;
 	SigC::Signal2<void, SPSelection *, guint> _modified_signal;
 };
@@ -109,7 +109,7 @@ struct SPSelectionClass {
 /* Constructor */
 
 inline SPSelection *sp_selection_new(SPDesktop *desktop) {
-	return SPSelection::create(desktop);
+	return new SPSelection(desktop);
 }
 
 /* This are private methods & will be removed from this file */

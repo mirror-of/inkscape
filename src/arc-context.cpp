@@ -125,10 +125,6 @@ static void sp_arc_context_dispose(GObject *object)
         ac->repr = 0;
     }
 
-    if (SP_EVENT_CONTEXT_DESKTOP (ac)) {
-        sp_signal_disconnect_by_data (SP_DT_SELECTION (SP_EVENT_CONTEXT_DESKTOP (ac)), ac);
-    }
-
 	/* fixme: This is necessary because we do not grab */
 	if (ac->item) sp_arc_finish (ac);
 
