@@ -87,16 +87,16 @@ SPDocument *sp_document_unref (SPDocument *doc);
  * Access methods
  */
 
-#define sp_document_repr_doc(d) (SP_DOCUMENT (d)->rdoc)
-#define sp_document_repr_root(d) (SP_DOCUMENT (d)->rroot)
-#define sp_document_root(d) (SP_DOCUMENT (d)->root)
-#define SP_DOCUMENT_ROOT(d)  (SP_DOCUMENT (d)->root)
+#define sp_document_repr_doc(d) (d->rdoc)
+#define sp_document_repr_root(d) (d->rroot)
+#define sp_document_root(d) (d->root)
+#define SP_DOCUMENT_ROOT(d)  (d->root)
 
 gdouble sp_document_width (SPDocument * document);
 gdouble sp_document_height (SPDocument * document);
-#define SP_DOCUMENT_URI(d) (SP_DOCUMENT (d)->uri)
-#define SP_DOCUMENT_NAME(d) (SP_DOCUMENT (d)->name)
-#define SP_DOCUMENT_BASE(d) (SP_DOCUMENT (d)->base)
+#define SP_DOCUMENT_URI(d) (d->uri)
+#define SP_DOCUMENT_NAME(d) (d->name)
+#define SP_DOCUMENT_BASE(d) (d->base)
 
 /*
  * Dictionary

@@ -1,5 +1,9 @@
 2004-02-10  MenTaLguY  <mental@rydia.net>
 
+	* src/document.h, src/document.cpp: get rid of casting macro uses
+
+2004-02-10  MenTaLguY  <mental@rydia.net>
+
 	* src/desktop.cpp, src/document-undo.cpp, src/document.cpp, src/file.cpp,
 	  src/gradient-chemistry.cpp, src/inkscape.cpp, src/interface.cpp,
 	  src/sp-metadata.cpp, src/sp-namedview.cpp, src/sp-object-repr.cpp,

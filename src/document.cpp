@@ -651,7 +651,7 @@ sp_document_idle_handler (gpointer data)
 	SPDocument *doc;
 	int repeat;
 
-	doc = SP_DOCUMENT (data);
+	doc = static_cast<SPDocument *>(data);
 
 #ifdef SP_DOCUMENT_DEBUG_IDLE
 	g_print ("->\n");
