@@ -460,6 +460,21 @@ fit_and_split(SPPencilContext *pc)
          * exact meeting point.  Probably we want 2nd order continuity. */
 
         g_assert(!sp_curve_empty(pc->red_curve));
+
+        /* Set up direction of next curve. */
+        {
+            /* Here we're relying on sp_darray_left_tangent looking only at the first two points. */
+            NArtBpath const &last_seg = *sp_curve_last_bpath(pc->red_curve);
+            g_assert(last_seg.code == NR_CURVETO);
+
+            /* Small but hopefully large enough for p[1] to differ from p[0]. */
+            double const iota = ( 1. / ( 1ul << 10 ) );
+
+            pc->p[0] = last_seg.c(3);
+            pc->p[1] = pc->p[0] + iota * (pc->p[0] - last_seg.c(2));
+            pc->npoints = 2;
+        }
+
         sp_curve_append_continuous(pc->green_curve, pc->red_curve, 0.0625);
         SPCurve *curve = sp_curve_copy(pc->red_curve);
 
@@ -470,11 +485,6 @@ fit_and_split(SPPencilContext *pc)
 
         pc->green_bpaths = g_slist_prepend(pc->green_bpaths, cshape);
 
-        g_assert( 3 <= pc->npoints );
-        for (int i = 0; i < 3; i++) {
-            pc->p[i] = pc->p[pc->npoints - 3 + i];
-        }
-        pc->npoints = 3;
         pc->red_curve_is_valid = false;
     }
 }
