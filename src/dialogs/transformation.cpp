@@ -476,7 +476,7 @@ sp_transformation_page_move_new (GObject *obj)
     gtk_box_pack_start (GTK_BOX (vb), tbl, FALSE, FALSE, 0);
 
     /* Unit selector */
-    GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+    GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     g_object_set_data (obj, "move_units", us);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop)
@@ -609,7 +609,7 @@ static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
     if (selection->isEmpty())
         return FALSE;
 
-    if ((old->base == SP_UNIT_ABSOLUTE) && 
+    if ((old->base == SP_UNIT_ABSOLUTE || old->base == SP_UNIT_DEVICE) && 
        (new_units->base == SP_UNIT_DIMENSIONLESS)) {
        
         /* Absolute to percentage */
@@ -625,7 +625,7 @@ static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
         return TRUE;
         
     } else if ((old->base == SP_UNIT_DIMENSIONLESS) && 
-              (new_units->base == SP_UNIT_ABSOLUTE)) {
+              (new_units->base == SP_UNIT_ABSOLUTE || new_units->base == SP_UNIT_DEVICE)) {
               
         /* Percentage to absolute */
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
@@ -675,7 +675,7 @@ sp_transformation_page_scale_new (GObject *obj)
 
     /* Unit selector */
     /* fixme: Default has to be percentage */
-    GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+    GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     g_object_set_data (obj, "scale_units", us);
     sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us),
                               &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
@@ -740,7 +740,7 @@ sp_transformation_scale_update (GObject *dlg, SPSelection *selection)
         NR::Rect bbox = selection->bounds();
         const SPUnit *unit = sp_unit_selector_get_unit (us);
         
-        if (unit->base == SP_UNIT_ABSOLUTE) {
+        if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
             sp_unit_selector_set_value_in_points (us, ax, bbox.extent(NR::X));
             sp_unit_selector_set_value_in_points (us, ay, bbox.extent(NR::Y));
         } else {
@@ -765,7 +765,7 @@ static void sp_transformation_scale_apply(GObject *dlg, SPSelection *selection)
     NR::Point const center(bbox.midpoint());
     SPUnit const *unit = sp_unit_selector_get_unit(us);
 
-    if (unit->base == SP_UNIT_ABSOLUTE) {
+    if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
         NR::scale const numerator(sp_unit_selector_get_value_in_points(us, ax),
                                   sp_unit_selector_get_value_in_points(us, ay));
         NR::scale const denominator(bbox.dimensions());
