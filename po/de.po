@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-23 00:20+0100\n"
-"PO-Revision-Date: 2005-02-21 19:53+0100\n"
+"PO-Revision-Date: 2005-02-23 18:24+0100\n"
 "Last-Translator: Jörg Müller <jfm@ram-brand.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,9 +29,8 @@ msgid "SVG Vector Illustrator"
 msgstr "SVG-Vektorillustrator"
 
 #: src/application/editor.cpp:149
-#, fuzzy
 msgid "Inkscape"
-msgstr "Inkscape SVG"
+msgstr "Inkscape"
 
 #. ## Add a menu for clear()
 #: src/application/editor.cpp:501 src/dialogs/debugdialog.cpp:144
@@ -68,341 +67,280 @@ msgid "_Help"
 msgstr "_Hilfe"
 
 #: src/application/editor.cpp:513
-#, fuzzy
 msgid "New"
 msgstr "_Neu"
 
 #. File menu
 #: src/application/editor.cpp:518 src/ui/stock-items.cpp:31
-#, fuzzy
 msgid "Open..."
 msgstr "Ö_ffnen..."
 
 #: src/application/editor.cpp:526
 msgid "Revert to Saved"
-msgstr ""
+msgstr "Dokument zurücksetzen"
 
 #: src/application/editor.cpp:531
-#, fuzzy
 msgid "Save"
 msgstr "_Speichern"
 
 #: src/application/editor.cpp:536
-#, fuzzy
 msgid "Save As..."
 msgstr "Speichern _unter..."
 
 #: src/application/editor.cpp:541
-#, fuzzy
 msgid "Import..."
 msgstr "_Importieren..."
 
 #: src/application/editor.cpp:546
-#, fuzzy
 msgid "Export..."
 msgstr "Exportieren"
 
 #: src/application/editor.cpp:551
-#, fuzzy
 msgid "Print..."
 msgstr "_Drucken..."
 
 #: src/application/editor.cpp:564
 msgid "Document properties (Shift+Ctrl+D)"
-msgstr ""
+msgstr "Dokumenteigenschaften (Umschalt+Strg+D)"
 
 #: src/application/editor.cpp:569
-#, fuzzy
 msgid "Global Inkscape preferences (Shift+Ctrl+P)"
-msgstr "Globale Einstellungen für Inkscape"
+msgstr "Globale Einstellungen für Inkscape (Umschalt+Strg+P)"
 
 #: src/application/editor.cpp:583
-#, fuzzy
 msgid "Undo"
 msgstr "_Rückgängig"
 
 # !!! "Wiederherstellen" war Original, "Wiederholen" ist aus Abiword
 #: src/application/editor.cpp:587
-#, fuzzy
 msgid "Redo"
 msgstr "_Wiederholen"
 
 #: src/application/editor.cpp:591
-#, fuzzy
 msgid "Cut"
 msgstr "A_usschneiden"
 
 #: src/application/editor.cpp:595
-#, fuzzy
 msgid "Copy"
 msgstr "_Kopieren"
 
 #: src/application/editor.cpp:599
-#, fuzzy
 msgid "Paste"
 msgstr "E_infügen"
 
 #: src/application/editor.cpp:613
-#, fuzzy
 msgid "Duplicate selected object(s) (Ctrl+D)"
-msgstr "Die gewählten Objekte duplizieren"
+msgstr "Die gewählten Objekte duplizieren (Strg+D)"
 
 #: src/application/editor.cpp:617
-#, fuzzy
 msgid "Clone selected object (Alt+D)"
-msgstr "Die gewählten Objekte duplizieren"
+msgstr "Die gewählten Objekte klonen (Alt+D)"
 
 #: src/application/editor.cpp:621
 msgid "Unlink clone from its original (Shift+Alt+D)"
-msgstr ""
+msgstr "Verknüpfung des Klons zum Original entfernen (Umschalt+Alt+D)"
 
 #: src/application/editor.cpp:652
 msgid "XML Editor dialog (Shift+Ctrl+X)"
-msgstr ""
+msgstr "XML Editor Dialog (Umschalt+Strg+X)"
 
 #: src/application/editor.cpp:661
-#, fuzzy
 msgid "Zoom in (+)"
-msgstr "Ansicht vergrößern"
+msgstr "Ansicht vergrößern (+)"
 
 #: src/application/editor.cpp:665
-#, fuzzy
 msgid "Zoom out (-)"
-msgstr "Ansicht verkleinern"
+msgstr "Ansicht verkleinern (-)"
 
 #: src/application/editor.cpp:669
-#, fuzzy
 msgid "Zoom to 1:1 (100%) (1)"
-msgstr "Den Größenfaktor auf 1:1 setzen"
+msgstr "Größenfaktor auf 1:1 (100%) setzen (1)"
 
 #: src/application/editor.cpp:673
-#, fuzzy
 msgid "Zoom to 1:2 (50%) (2)"
-msgstr "Den Größenfaktor auf 1:2 setzen"
+msgstr "Größenfaktor auf 1:2 (50%) setzen (2)"
 
 #: src/application/editor.cpp:677
-#, fuzzy
 msgid "Zoom to 2:1 (200%) (0)"
-msgstr "Den Größenfaktor auf 2:1 setzen"
+msgstr "Größenfaktor auf 2:1 (200%) setzen (0)"
 
 #: src/application/editor.cpp:681
-#, fuzzy
 msgid "Zoom to fit selection in window (3)"
-msgstr "Die Auswahl in das Fenster einpassen"
+msgstr "Größenfaktor der Auswahl ans Fenster anpassen (3)"
 
 #: src/application/editor.cpp:685
-#, fuzzy
 msgid "Zoom to fit drawing in window (4)"
-msgstr "Die Zeichnung in das Fenster einpassen"
+msgstr "Größenfaktor der Zeichnung ans Fenster anpassen (4)"
 
 #: src/application/editor.cpp:689
-#, fuzzy
 msgid "Zoom to fit page in window (5)"
-msgstr "Die Seite in das Fenster einpassen"
+msgstr "Größenfaktor der Seite ans Fenster anpassen"
 
 #: src/application/editor.cpp:693
-#, fuzzy
 msgid "Zoom to fit page width in window (6)"
-msgstr "Die Seitenbreite in das Fenster einpassen"
+msgstr "Größenfaktor der Seitenbreite ans Fenster anpassen"
 
 #: src/application/editor.cpp:697
-#, fuzzy
 msgid "Previous zoom (from history of zooms) (`)"
-msgstr "Vorherigen Größenfaktor einstellen (aus der Liste bisheriger Faktoren)"
+msgstr "Vorherigen Größenfaktor einstellen - aus der Liste früherer Faktoren (`)"
 
 #: src/application/editor.cpp:701
-#, fuzzy
 msgid "Next zoom (from history of zooms) (Shift+`)"
-msgstr "Nächsten Größenfaktor einstellen (aus der Liste bisheriger Faktoren)"
+msgstr "Nächsten Größenfaktor einstellen - aus der Liste früherer Faktoren (Umschalt+`)"
 
 #: src/application/editor.cpp:798
-#, fuzzy
 msgid "Fill and Stroke dialog (Shift+Ctrl+F)"
-msgstr "Füllung und Linie"
+msgstr "Füllungs- und Liniendialog (Shift+Strg+F)"
 
 #: src/application/editor.cpp:807
-#, fuzzy
 msgid "Group selected objects (Ctrl+G)"
-msgstr "Die gewählten Objekte gruppieren"
+msgstr "Gewählte Objekte gruppieren (Strg+G)"
 
 #: src/application/editor.cpp:811
-#, fuzzy
 msgid "Ungroup selected group(s) (Ctrl+U)"
-msgstr "Gruppierung der markierten Gruppe(n) aufheben"
+msgstr "Gruppierung ausgewählter Gruppe(n) aufheben (Strg+U)"
 
 #: src/application/editor.cpp:815
-#, fuzzy
 msgid "Raise selection up one step (PgUp)"
-msgstr "Die gewählten Objekte eine Stufe nach oben anheben"
+msgstr "Ausgewählte Objekte eine Stufe nach oben anheben (BildHoch)"
 
 #: src/application/editor.cpp:819
-#, fuzzy
 msgid "Lower selection down one step (PgDn)"
-msgstr "Die gewählten Objekte eine Stufe nach unten absenken"
+msgstr "Ausgewählte Objekte eine Stufe nach unten absenken (BildRunter)"
 
 #: src/application/editor.cpp:823
-#, fuzzy
 msgid "Raise selection to top (Home)"
-msgstr "Die gewählten Objekte nach ganz oben anheben"
+msgstr "Ausgewählte Objekte nach ganz oben anheben (POS1)"
 
 #: src/application/editor.cpp:827
-#, fuzzy
 msgid "Lower selection to bottom (End)"
-msgstr "Die gewählten Objekte nach ganz unten absenken"
+msgstr "Ausgewählte Objekte nach ganz unten absenken (ENDE)"
 
 #: src/application/editor.cpp:831
-#, fuzzy
 msgid "Move selection to new layer"
-msgstr "Die gewählten Objekte eine Stufe nach unten absenken"
+msgstr "Ausgewählte Objekte einer neuen Ebene zuweisen"
 
 #: src/application/editor.cpp:835
-#, fuzzy
 msgid "Move selection to next layer"
-msgstr "Auf nächste Ebene verschoben."
+msgstr "Auswahl in die nächste Ebene verschieben"
 
 #: src/application/editor.cpp:839
-#, fuzzy
 msgid "Move selection to previous layer"
-msgstr "Zur vorherigen Ebene verschoben"
+msgstr "Auswahl in die vorherige Ebene verschieben"
 
 #: src/application/editor.cpp:843
-#, fuzzy
 msgid "Move selection to top layer"
-msgstr "Die gewählten Objekte nach ganz oben anheben"
+msgstr "Auswahl in die oberste Ebene verschieben"
 
 #: src/application/editor.cpp:847
-#, fuzzy
 msgid "Move selection to bottom layer"
-msgstr "Die gewählten Objekte nach ganz unten absenken"
+msgstr "Auswahl in die unterste Ebene verschieben"
 
 #: src/application/editor.cpp:851
-#, fuzzy
 msgid "Rotate selection 90° clockwise (Shift+Ctrl+Right)"
-msgstr "Die gewählten Objekte um 90 Grad im Uhrzeigersinn drehen"
+msgstr "Ausgewählte Objekte um 90 Grad im Uhrzeigersinn drehen (Umschalt+Strg+RECHTS)"
 
 #: src/application/editor.cpp:855
-#, fuzzy
 msgid "Rotate selection 90° counter-clockwise (Shift+Ctrl+Left)"
-msgstr "Die gewählten Objekte um 90 Grad gegen den Uhrzeigersinn drehen"
+msgstr "Ausgewählte Objekte um 90 Grad gegen Uhrzeigersinn drehen (Umschalt+Strg+LINKS)"
 
 #: src/application/editor.cpp:859
-#, fuzzy
 msgid "Flip selection horizontally (H)"
-msgstr "Die gewählten Objekte horizontal spiegeln"
+msgstr "Auswahl horizontal spiegeln (H)"
 
 #: src/application/editor.cpp:863
-#, fuzzy
 msgid "Flip selection vertically (V)"
-msgstr "Die gewählten Objekte vertikal spiegeln"
+msgstr "Auswahl vertikal spiegeln (V)"
 
 #: src/application/editor.cpp:867
-#, fuzzy
 msgid "Transform"
 msgstr "Transformationen"
 
 #: src/application/editor.cpp:872
-#, fuzzy
 msgid "Align and Distribute dialog (Shift+Ctrl+A)"
-msgstr "Anordnen und Abstände angleichen"
+msgstr "Anordnen- und Abstände-Dialog (Umschalt+Strg+A)"
 
 #: src/application/editor.cpp:878
-#, fuzzy
 msgid "Convert selected object(s) to path(s) (Shift+Ctrl+C)"
-msgstr "Das gewählte Objekt in einen Pfad umwandeln"
+msgstr "Ausgewählte Objekte in Pfade umwandeln (Strg+Alt+C)"
 
 #: src/application/editor.cpp:882
-#, fuzzy
 msgid "Convert selected stroke(s) to path(s) (Ctrl+Alt+C)"
-msgstr "Ausgewählte Linien in Pfade umwandeln"
+msgstr "Ausgewählte Linien in Pfade umwandeln (Strg+Alt+C)"
 
 #: src/application/editor.cpp:932 src/verbs.cpp:1688
 msgid "Cl_eanup"
 msgstr "_Säubern"
 
 #: src/application/editor.cpp:937
-#, fuzzy
 msgid "Text and Font dialog (Shift+Ctrl+T)"
-msgstr "Text- und Schrift-Dialog"
+msgstr "Text- und Schrift-Dialog (Umschalt+Strg+T)"
 
 #: src/application/editor.cpp:969
-#, fuzzy
 msgid "Select tool"
 msgstr "Auswahlwerkzeug"
 
 #: src/application/editor.cpp:974
-#, fuzzy
 msgid "Node tool"
 msgstr "Knoten bearbeiten"
 
 #: src/application/editor.cpp:979
-#, fuzzy
 msgid "Zoom tool"
-msgstr "Ansichtsverkleinerung"
+msgstr "Größenfaktor"
 
 #: src/application/editor.cpp:983
-#, fuzzy
 msgid "Rectangle tool"
 msgstr "Rechteck"
 
 #: src/application/editor.cpp:987
-#, fuzzy
 msgid "Arc tool"
-msgstr "Bogenrolle:"
+msgstr "Bogen"
 
 #: src/application/editor.cpp:991
-#, fuzzy
 msgid "Star tool"
-msgstr "Anfang:"
+msgstr "Größenfaktor"
 
 #: src/application/editor.cpp:995
-#, fuzzy
 msgid "Spiral tool"
 msgstr "Spirale"
 
 #: src/application/editor.cpp:999
 msgid "Freehand tool"
-msgstr ""
+msgstr "Freihandlinie"
 
 #: src/application/editor.cpp:1003
 msgid "Pen tool"
-msgstr ""
+msgstr "Füller"
 
 #: src/application/editor.cpp:1007
-#, fuzzy
 msgid "Calligraphy tool"
 msgstr "Kalligraphie"
 
 #: src/application/editor.cpp:1011
-#, fuzzy
 msgid "Text tool"
-msgstr "_Nächster Größenfaktor"
+msgstr "Text"
 
 #: src/application/editor.cpp:1015
-#, fuzzy
 msgid "Dropper tool"
 msgstr "Ableger"
 
 #: src/application/editor.cpp:1020
-#, fuzzy
 msgid "When scaling objects, scale stroke width by same proportion"
 msgstr ""
 "Wenn Objekte skaliert werden, dann wird die Linienbreite ebenso mitskaliert."
 
 #: src/application/editor.cpp:1024
-#, fuzzy
 msgid "When scaling rectangles, scale radii of rounded corners"
 msgstr ""
 "Wenn Rechtecke skaliert werden, dann werden die Radien von abgerundeten "
 "Ecken ebenso mitskaliert."
 
 #: src/application/editor.cpp:1028
-#, fuzzy
 msgid "Transform gradients (in fill or stroke) along with objects"
 msgstr ""
 "Gradienten (in Füllung oder Linie) zusammen mit den Objekten transformieren"
 
 #: src/application/editor.cpp:1032
-#, fuzzy
 msgid "Transform patterns (in fill or stroke) along with objects"
 msgstr ""
 "Muster (in Füllung oder Linie) zusammen mit den Objekten transformieren"
@@ -424,14 +362,13 @@ msgid "Join paths at selected nodes with new segment"
 msgstr "Pfade an den gewählten Knoten mit neuem Segment verbinden"
 
 #: src/application/editor.cpp:1053
-#, fuzzy
 msgid "Delete segment between two nodes"
-msgstr "Die gewählten Knoten löschen"
+msgstr "Abschnitt zwischen zwei Knoten löschen"
 
 # !!! difference to "split"?
 #: src/application/editor.cpp:1057 src/toolbox.cpp:414
 msgid "Break path at selected nodes"
-msgstr "Pfad an den gewählten Knoten zerteilen"
+msgstr "Pfad an den gewählten Knoten auftrennen"
 
 #: src/application/editor.cpp:1061 src/toolbox.cpp:419
 msgid "Make selected nodes corner"
@@ -496,7 +433,7 @@ msgstr "%s bei %s"
 #. This is the distance by which the guide is to be moved.
 #: src/desktop-events.cpp:288
 msgid " relative by "
-msgstr "Relative Bewegung "
+msgstr "relative Bewegung um "
 
 #. TRANSLATORS: This string appears when double-clicking on a guide.
 #. This is the target location where the guide is to be moved.
@@ -1391,18 +1328,14 @@ msgstr ""
 "Sind die ausgewählten Objekte visuell hervorgehoben (wie beim "
 "Auswahlwerkzeug) "
 
-#: src/dialogs/display-settings.cpp:666
-#, fuzzy
+#: src/dialogs/display-settings.cpp:66
 msgid "Enable gradient editing"
-msgstr "Farbverlaufs-Editor"
+msgstr "Farbverlaufs-Editor aktiviert"
 
 # !!! Frage? Passiv formulieren?
 #: src/dialogs/display-settings.cpp:667
-#, fuzzy
 msgid "Whether selected objects display gradient editing controls"
-msgstr ""
-"Sind die ausgewählten Objekte visuell hervorgehoben (wie beim "
-"Auswahlwerkzeug) "
+msgstr "Anzeige der Gradienten-Anfasser für die ausgewählten Objekte aktiviert?"
 
 #: src/dialogs/display-settings.cpp:728
 msgid "<b>No objects selected</b> to take the style from."
@@ -1789,7 +1722,7 @@ msgstr ""
 
 #: src/dialogs/display-settings.cpp:1252
 msgid "Move in parallel"
-msgstr "sich parallel verschieben"
+msgstr "parallel verschoben"
 
 #: src/dialogs/display-settings.cpp:1253
 msgid "Clones are translated by the same vector as their original."
@@ -2950,46 +2883,39 @@ msgstr "Zur Vorgabe machen"
 
 #: src/dialogs/tiledialog.cpp:393
 msgid "No of columns"
-msgstr ""
+msgstr "Anzahl der Spalten"
 
 #: src/dialogs/tiledialog.cpp:395
-#, fuzzy
 msgid "Columns:"
-msgstr "<b>Spalten</b>:"
+msgstr "Spalten:"
 
 #: src/dialogs/tiledialog.cpp:411
 msgid "No of Rows"
-msgstr ""
+msgstr "Anzahl der Reihen"
 
 #: src/dialogs/tiledialog.cpp:413
-#, fuzzy
 msgid "Rows:"
-msgstr "Anzeigen:"
+msgstr "Reihen:"
 
 #: src/dialogs/tiledialog.cpp:427
-#, fuzzy
 msgid "Horizontal spacing between columns"
-msgstr "Horizontale Skalierung für jede Spalte"
+msgstr "Horizontale Abstände für jede Spalte"
 
 #: src/dialogs/tiledialog.cpp:431
-#, fuzzy
 msgid "Column spacing:"
-msgstr "Zeilenabstand:"
+msgstr "Spaltenabstand:"
 
 #: src/dialogs/tiledialog.cpp:445
-#, fuzzy
 msgid "Vertical spacing between Rows"
-msgstr "Vertikale Abstände"
+msgstr "Vertikale Abstände zwischen einzelnen Reihen"
 
 #: src/dialogs/tiledialog.cpp:448
-#, fuzzy
 msgid "Row spacing:"
-msgstr "Zeilenabstand:"
+msgstr "Abstand der Reihen:"
 
 #: src/dialogs/tiledialog.cpp:465
-#, fuzzy
 msgid "Arrange Objects"
-msgstr "Objekte"
+msgstr "Objekte Anordnen"
 
 #. ##Set up the Potrace panel
 #. #### brightness ####
@@ -3645,56 +3571,50 @@ msgid "Select file to import"
 msgstr "Wählen Sie die zu importierende Datei"
 
 #: src/gradient-drag.cpp:58
-#, fuzzy
 msgid "Linear gradient <b>start</b>"
-msgstr "Linearer Farbverlauf"
+msgstr "Linearer Farbverlauf <b>Anfang</b>"
 
 #. POINT_LG_P1
 #: src/gradient-drag.cpp:59
-#, fuzzy
 msgid "Linear gradient <b>end</b>"
-msgstr "Linearer Farbverlauf"
+msgstr "Linearer Farbverlauf <b>Ende</b>"
 
 #: src/gradient-drag.cpp:60
-#, fuzzy
 msgid "Radial gradient <b>center</b>"
-msgstr "Radialer Farbverlauf"
+msgstr "Radialer Farbverlauf <b>Zentrum</b>"
 
 #: src/gradient-drag.cpp:61 src/gradient-drag.cpp:62
-#, fuzzy
 msgid "Radial gradient <b>radius</b>"
-msgstr "Radialer Farbverlauf"
+msgstr "Radialer Farbverlauf <b>Radius</b>"
 
 #: src/gradient-drag.cpp:63
-#, fuzzy
 msgid "Radial gradient <b>focus</b>"
-msgstr "Radialer Farbverlauf"
+msgstr "Radialer Farbverlauf <b>Fokus</b>"
 
 #: src/gradient-drag.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
 "preserve angle"
-msgstr ""
-"Spirale von <b>innen</b> einrollen/ausrollen; Winkel mit <b>Strg</b> "
-"einrasten; <b>Alt</b> kovergiert/divergiert"
+msgstr "%s bei: %s%s; Ziehen mit <b>Strg</b> rastet Winkel ein,"
+" Ziehen mit <b>Strg+Alt</b> behält Winkel bei"
 
 #: src/gradient-drag.cpp:424
 msgid " (stroke)"
-msgstr ""
+msgstr "(Strich)"
 
 #: src/gradient-drag.cpp:426
 msgid ""
 "Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to "
 "separate focus"
-msgstr ""
+msgstr "<b>Zentrum</b> und <b>Fokus</b> des radialen Farbverlaufs ;<b>Umschalt+Ziehen</b> um den Fokus einzeln zu bewegen"
 
 #: src/gradient-drag.cpp:428
 #, c-format
 msgid ""
 "Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
 "separate"
-msgstr ""
+msgstr "Farbverlaufspunkt ist <b>%d</b> weiteren Farbverläufen zugewiesen. Ziehen mit <b>Umschalt</b> trennt die Zuweisung"
 
 #. TRANSLATORS: This is the filename of the `About Inkscape' picture in
 #. the `screens' directory.  Thus the translation of "about.svg" should be
@@ -4699,32 +4619,28 @@ msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Objekte auswählen, um Stil darauf anzuwenden."
 
 #: src/selection-chemistry.cpp:1113
-#, fuzzy
 msgid "Select <b>object(s)</b> to move to the layer above."
-msgstr "<b>Objekte</b> auswählen, die zum Pfad umgewandelt werden sollen."
+msgstr "<b>Objekte</b> auswählen, welche in die obere Ebene verschoben werden sollen."
 
 #: src/selection-chemistry.cpp:1130
-#, fuzzy
 msgid "No more layers above."
-msgstr "Keine aktuelle Ebene."
+msgstr "Keine weiteren Ebenen über dieser."
 
 #: src/selection-chemistry.cpp:1144
-#, fuzzy
 msgid "Select <b>object(s)</b> to move to the layer below."
-msgstr "<b>Objekte</b> auswählen, die zum Pfad umgewandelt werden sollen."
+msgstr "<b>Objekte</b> auswählen, welche in die untere Ebene verschoben werden sollen."
 
 #: src/selection-chemistry.cpp:1161
-#, fuzzy
 msgid "No more layers below."
-msgstr "Keine aktuelle Ebene."
+msgstr "Keine weiteren Ebenen unter dieser."
 
 #: src/selection-chemistry.cpp:1767
 msgid "Select a <b>clone</b> to unlink."
-msgstr "Klon auswählen, dessen Verküpfung aufgehoben wird."
+msgstr "<b>Klon</b> auswählen, dessen Verküpfung aufgehoben wird."
 
 #: src/selection-chemistry.cpp:1798
 msgid "<b>No clones to unlink</b> in the selection."
-msgstr "Keine Klone in der Auswahl, deren Verknüpfung aufgehoben werden kann."
+msgstr "<b>Keine Klone</b> in der Auswahl, deren Verknüpfung aufgehoben werden kann."
 
 #: src/selection-chemistry.cpp:1815
 msgid ""
@@ -5475,169 +5391,138 @@ msgid "Trace: Image has no bitmap data"
 msgstr "Vektorisieren: Bild enthält keine Pixelinformation"
 
 #: src/ui/dialog/align-and-distribute.h:35
-#, fuzzy
 msgid "Align and Distribute"
 msgstr "_Anordnen und Abstände angleichen..."
 
 #: src/ui/dialog/align-and-distribute.h:36
-#, fuzzy
 msgid "Align and Distribute Dialog"
-msgstr "Anordnen und Abstände angleichen"
+msgstr "Anordnen- und Abstände-Dialog"
 
 #: src/ui/dialog/export.h:33
-#, fuzzy
 msgid "Export Dialog"
-msgstr "Bereich exportieren"
+msgstr "Exportieren-Dialog"
 
 #: src/ui/dialog/extension-editor.h:28
-#, fuzzy
 msgid "Extension Editor"
-msgstr "Erweiterung \""
+msgstr "Erweiterungseditor"
 
 #: src/ui/dialog/extension-editor.h:29
 msgid "Extension Editor Dialog"
-msgstr ""
+msgstr "Erweiterungseditor Dialog"
 
 #: src/ui/dialog/fill-and-stroke.cpp:40
-#, fuzzy
 msgid "Stroke Paint"
 msgstr "Linienfarbe"
 
 #: src/ui/dialog/fill-and-stroke.cpp:41
-#, fuzzy
 msgid "Stroke Style"
 msgstr "Linienstil"
 
 #: src/ui/dialog/fill-and-stroke.h:32
-#, fuzzy
 msgid "Fill and Stroke"
 msgstr "_Füllung und Linie"
 
 #: src/ui/dialog/fill-and-stroke.h:33
-#, fuzzy
 msgid "Fill and Stroke Dialog"
-msgstr "Füllung und Linie"
+msgstr "Füllung- und Liniendialog"
 
 #: src/ui/dialog/find.cpp:37 src/ui/dialog/find.h:32
-#, fuzzy
 msgid "Find"
 msgstr "_Suchen"
 
 #: src/ui/dialog/find.h:33
-#, fuzzy
 msgid "Find Dialog"
-msgstr "Alle _Dialoge zeigen/verstecken"
+msgstr "Suchen-Dialog"
 
 #: src/ui/dialog/inkscape-preferences.cpp:80
-#, fuzzy
 msgid "Grab sensitivity"
-msgstr "Entfernung zum Erfassen:"
+msgstr "Entfernung zum Erfassen"
 
 #: src/ui/dialog/inkscape-preferences.cpp:84
-#, fuzzy
 msgid "Click/drag threshold"
 msgstr "Schwellwert für Klicken/Ziehen:"
 
 #: src/ui/dialog/inkscape-preferences.cpp:92
-#, fuzzy
 msgid "Mouse wheel scrolls by"
-msgstr "Mausrad rollt um:"
+msgstr "Mausrad rollt um"
 
 #: src/ui/dialog/inkscape-preferences.cpp:102
-#, fuzzy
 msgid "Scroll by"
-msgstr "Rolle um:"
+msgstr "Rolle um"
 
 #: src/ui/dialog/inkscape-preferences.cpp:107
-#, fuzzy
 msgid "Acceleration"
-msgstr "Beschleunigung:"
+msgstr "Beschleunigung"
 
 #: src/ui/dialog/inkscape-preferences.cpp:116
-#, fuzzy
 msgid "Speed"
-msgstr "Geschwindigkeit:"
+msgstr "Geschwindigkeit"
 
 #: src/ui/dialog/inkscape-preferences.cpp:119
-#, fuzzy
 msgid "Threshold"
-msgstr "Schwellwert:"
+msgstr "Schwellwert"
 
 #: src/ui/dialog/inkscape-preferences.cpp:127
-#, fuzzy
 msgid "Arrow keys move by"
-msgstr "Pfeiltasten bewegen um:"
+msgstr "Pfeiltasten bewegen um"
 
 #: src/ui/dialog/inkscape-preferences.cpp:132
-#, fuzzy
 msgid "> and < scale by"
-msgstr "> und < skalieren um:"
+msgstr "> und < skalieren um"
 
 # !!! maybe not the best translation
 #: src/ui/dialog/inkscape-preferences.cpp:137
-#, fuzzy
 msgid "Inset/Outset by"
 msgstr "Schrumpfen/Vergrößern um:"
 
 # !!! need %s
 #: src/ui/dialog/inkscape-preferences.cpp:156
-#, fuzzy
 msgid "Rotation snaps every"
-msgstr "Rotation rastet ein alle:"
+msgstr "Rotation rastet ein alle"
 
 #: src/ui/dialog/inkscape-preferences.cpp:160
-#, fuzzy
 msgid "Zoom in/out by"
-msgstr "Größenfaktor vergrößern/vermindern um:"
+msgstr "Größenfaktor vergrößern/vermindern um"
 
 #: src/ui/dialog/inkscape-preferences.h:33
-#, fuzzy
 msgid "Inkscape Preferences"
 msgstr "In_kscape-Einstellungen..."
 
 #: src/ui/dialog/inkscape-preferences.h:34
-#, fuzzy
 msgid "Inkscape Preferences Dialog"
-msgstr "In_kscape-Einstellungen..."
+msgstr "IInkscape-Einstellungsdialog"
 
 #: src/ui/dialog/layer-editor.h:28
-#, fuzzy
 msgid "Layer Editor"
-msgstr "XML-Editor"
+msgstr "Ebeneneditor"
 
 #: src/ui/dialog/layer-editor.h:29
-#, fuzzy
 msgid "Layer Editor Dialog"
-msgstr "Ebene nach ganz _oben"
+msgstr "Ebeneneditor-Dialog"
 
 #: src/ui/dialog/messages.h:33
-#, fuzzy
 msgid "Messages Dialog"
 msgstr "Meldungen"
 
 #: src/ui/dialog/text-properties.h:32
-#, fuzzy
 msgid "Text Properties"
-msgstr "_Objekteigenschaften..."
+msgstr "Texteigenschaften"
 
 #: src/ui/dialog/text-properties.h:33
-#, fuzzy
 msgid "Text Properties Dialog"
-msgstr "Objekteigenschaften"
+msgstr "Texteigenschaften-Dialog"
 
 #: src/ui/dialog/tree-editor.h:32 src/ui/dialog/tree-editor.h:33
-#, fuzzy
 msgid "Tree Editor"
-msgstr "XML-Editor"
+msgstr "Baumeditor"
 
 #: src/ui/dialog/xml-editor.h:28 src/verbs.cpp:1847
 msgid "XML Editor"
 msgstr "XML-Editor"
 
 #: src/ui/dialog/xml-editor.h:29
-#, fuzzy
 msgid "XML Editor Dialog"
-msgstr "XML-Editor"
+msgstr "XML-Editor-Dialog"
 
 #: src/ui/stock-items.cpp:33 src/verbs.cpp:1554
 msgid "Save _As..."
@@ -5648,9 +5533,8 @@ msgid "_Import..."
 msgstr "_Importieren..."
 
 #: src/ui/stock-items.cpp:35
-#, fuzzy
 msgid "_Export..."
-msgstr "_Importieren..."
+msgstr "_Exportieren..."
 
 #: src/ui/stock-items.cpp:36 src/verbs.cpp:1556
 msgid "_Print..."
@@ -5666,14 +5550,12 @@ msgid "Vac_uum Defs"
 msgstr "Leere Defs aufräumen"
 
 #: src/ui/stock-items.cpp:39
-#, fuzzy
 msgid "_Document Properties"
-msgstr "Dokument zurückgesetzt."
+msgstr "Dokumenteigenschaften"
 
 #: src/ui/stock-items.cpp:40
-#, fuzzy
 msgid "In_kscape Preferences"
-msgstr "In_kscape-Einstellungen..."
+msgstr "In_kscape-Einstellungen"
 
 # !!! translation is a bit clumsy...
 #. Edit menu
@@ -5698,43 +5580,36 @@ msgid "Unlin_k Clone"
 msgstr "Klonverbindung auf_trennen"
 
 #: src/ui/stock-items.cpp:48
-#, fuzzy
 msgid "Select _Original Clone"
-msgstr "_Original auswählen"
+msgstr "_Original Klon auswählen"
 
 #: src/ui/stock-items.cpp:49 src/verbs.cpp:1695
 msgid "_Make a Bitmap Copy"
 msgstr "Kopie als Bit_map"
 
 #: src/ui/stock-items.cpp:50
-#, fuzzy
 msgid "Tile"
-msgstr "Titel"
+msgstr "Kachel"
 
 #: src/ui/stock-items.cpp:51
-#, fuzzy
 msgid "Untile"
-msgstr "Datei"
+msgstr "Kachelung aufheben"
 
 #: src/ui/stock-items.cpp:52
-#, fuzzy
 msgid "Select A_ll"
 msgstr "_Alles auswählen"
 
 #: src/ui/stock-items.cpp:53
-#, fuzzy
 msgid "Select All in All La_yers"
 msgstr "Alles in allen Ebenen auswählen"
 
 #: src/ui/stock-items.cpp:54
-#, fuzzy
 msgid "In_vert Selection"
 msgstr "Auswahl umkehren"
 
 #: src/ui/stock-items.cpp:55
-#, fuzzy
 msgid "Select Non_e"
-msgstr "Auswahl"
+msgstr "Auswahl aufheben"
 
 #: src/ui/stock-items.cpp:56 src/verbs.cpp:1846
 msgid "_XML Editor..."
@@ -5742,31 +5617,28 @@ msgstr "_XML-Editor..."
 
 #. View menu
 #: src/ui/stock-items.cpp:59
-#, fuzzy
 msgid "_Zoom"
 msgstr "Größenfaktor"
 
 #: src/ui/stock-items.cpp:60
-#, fuzzy
 msgid "Zoom _In"
 msgstr "Ansichtsvergrößerung"
 
 #: src/ui/stock-items.cpp:61
-#, fuzzy
 msgid "Zoom _Out"
 msgstr "Ansichtsverkleinerung"
 
 #: src/ui/stock-items.cpp:62
 msgid "1:_1 (100%)"
-msgstr ""
+msgstr "1:_1 (100%)"
 
 #: src/ui/stock-items.cpp:63
 msgid "1:_2 (50%)"
-msgstr ""
+msgstr "1:_2 (50%)"
 
 #: src/ui/stock-items.cpp:64
 msgid "2:1 (2_00%)"
-msgstr ""
+msgstr "2:1 (2_00%)"
 
 #: src/ui/stock-items.cpp:65 src/verbs.cpp:1830
 msgid "_Selection"
@@ -5783,32 +5655,26 @@ msgid "_Page"
 msgstr "_Seite"
 
 #: src/ui/stock-items.cpp:68
-#, fuzzy
 msgid "_Width"
-msgstr "Breite:"
+msgstr "Breite"
 
 #: src/ui/stock-items.cpp:69
-#, fuzzy
 msgid "Pre_vious"
-msgstr "_Vorheriger Größenfaktor"
+msgstr "_Vorheriger"
 
 #: src/ui/stock-items.cpp:70
-#, fuzzy
 msgid "Nex_t"
-msgstr "_Nächster Größenfaktor"
+msgstr "_Nächster"
 
 #: src/ui/stock-items.cpp:72
-#, fuzzy
 msgid "_Commands bar"
 msgstr "Operationsleiste"
 
 #: src/ui/stock-items.cpp:73
-#, fuzzy
 msgid "Tool Co_ntrols bar"
-msgstr "Werkzeugoptionen"
+msgstr "Werkzeugoptionsleiste"
 
 #: src/ui/stock-items.cpp:74
-#, fuzzy
 msgid "_Tools bar"
 msgstr "Werkzeugleis_te"
 
@@ -5841,7 +5707,6 @@ msgid "_Messages..."
 msgstr "Nachrichten..."
 
 #: src/ui/stock-items.cpp:83
-#, fuzzy
 msgid "S_cripts..."
 msgstr "_Skripte..."
 
@@ -5864,47 +5729,40 @@ msgid "_New Layer..."
 msgstr "_Neue Ebene"
 
 #: src/ui/stock-items.cpp:90
-#, fuzzy
 msgid "R_ename Layer..."
 msgstr "Ebene umbenennen"
 
 #: src/ui/stock-items.cpp:91
-#, fuzzy
 msgid "D_uplicate Layer"
-msgstr "Knoten duplizieren"
+msgstr "Ebene duplizieren"
 
 #: src/ui/stock-items.cpp:92
-#, fuzzy
 msgid "_Anchor Layer"
-msgstr "Ebene ab_senken"
+msgstr "Ebene verankern"
 
 #: src/ui/stock-items.cpp:93
 msgid "Merge Do_wn"
-msgstr ""
+msgstr "Mit darunterliegender vereinen"
 
 #: src/ui/stock-items.cpp:94
-#, fuzzy
 msgid "_Delete Layer"
-msgstr "Ebene gelöscht."
+msgstr "Ebene löschen"
 
 #: src/ui/stock-items.cpp:95
-#, fuzzy
 msgid "Select Ne_xt Layer"
 msgstr "Zur nächsten Ebene umschalten"
 
 #: src/ui/stock-items.cpp:96
-#, fuzzy
 msgid "Select Pre_vious Layer"
 msgstr "Zur vorherigen Ebene umschalten"
 
 #: src/ui/stock-items.cpp:97
-#, fuzzy
 msgid "Select To_p Layer"
-msgstr "Drucker wählen"
+msgstr "Oberste Ebene wählen"
 
 #: src/ui/stock-items.cpp:98
 msgid "Select Botto_m Layer"
-msgstr ""
+msgstr "Unterste Ebene auswählen"
 
 #: src/ui/stock-items.cpp:99 src/verbs.cpp:1722
 msgid "_Raise Layer"
@@ -5953,39 +5811,32 @@ msgid "Lower to _Bottom"
 msgstr "nach ganz _unten absenken"
 
 #: src/ui/stock-items.cpp:113
-#, fuzzy
 msgid "Move to Ne_w Layer"
-msgstr "Auf nächste Ebene verschoben."
+msgstr "Auf neue Ebene verschieben"
 
 #: src/ui/stock-items.cpp:114
-#, fuzzy
 msgid "Move to Ne_xt Layer"
-msgstr "Auf nächste Ebene verschoben."
+msgstr "Auf nächste Ebene verschieben"
 
 #: src/ui/stock-items.cpp:115
-#, fuzzy
 msgid "Move to Pre_vious Layer"
-msgstr "Zur vorherigen Ebene verschoben"
+msgstr "Zur vorherigen Ebene verschieben"
 
 #: src/ui/stock-items.cpp:116
-#, fuzzy
 msgid "Move to To_p Layer"
-msgstr "Auf nächste Ebene verschoben."
+msgstr "Auf oberste Ebene verschieben"
 
 #: src/ui/stock-items.cpp:117
-#, fuzzy
 msgid "Move to B_ottom Layer"
-msgstr "Auf nächste Ebene verschoben."
+msgstr "Auf unterste Ebene verschieben"
 
 #: src/ui/stock-items.cpp:118
-#, fuzzy
 msgid "Rotate _90° CW"
-msgstr "Um 90 Grad nach _rechts drehen"
+msgstr "Um 90 Grad _rechtsherum drehen"
 
 #: src/ui/stock-items.cpp:119
-#, fuzzy
 msgid "Rotate 9_0° CCW"
-msgstr "Um 90 Grad nach _links drehen"
+msgstr "Um 90 Grad _linksherum drehen"
 
 #: src/ui/stock-items.cpp:120 src/verbs.cpp:1741
 msgid "Flip _Horizontally"
@@ -6013,7 +5864,6 @@ msgid "_Stroke to Path"
 msgstr "_Linie in Pfad umwandeln"
 
 #: src/ui/stock-items.cpp:129
-#, fuzzy
 msgid "_Trace Bitmap..."
 msgstr "Bitmap _vektorisieren"
 
@@ -6090,12 +5940,10 @@ msgid "_Text and Font..."
 msgstr "Text und _Schriftsatz..."
 
 #: src/ui/stock-items.cpp:148
-#, fuzzy
 msgid "_Put Text on Path"
 msgstr "Text an Pfad ausrichten"
 
 #: src/ui/stock-items.cpp:149
-#, fuzzy
 msgid "_Remove Text from Path"
 msgstr "Trenne Text von Pfad"
 
@@ -6121,13 +5969,12 @@ msgstr "Auswählen"
 
 #: src/ui/stock-items.cpp:162
 msgid "Arc"
-msgstr ""
+msgstr "Bogen"
 
 # !!!
 #: src/ui/stock-items.cpp:165
-#, fuzzy
 msgid "Freehand"
-msgstr "Fertig mit Freihandlinien"
+msgstr "Freihandlinien"
 
 #: src/ui/stock-items.cpp:167
 msgid "DynaDraw"
@@ -6135,72 +5982,61 @@ msgstr ""
 
 #. Select Tool controls
 #: src/ui/stock-items.cpp:172
-#, fuzzy
 msgid "Stroke"
 msgstr "Linienbreite"
 
 #: src/ui/stock-items.cpp:173
-#, fuzzy
 msgid "Corners"
-msgstr "Ecken:"
+msgstr "Ecken"
 
 #: src/ui/stock-items.cpp:174
-#, fuzzy
 msgid "Gradient"
-msgstr "Farbverlaufs-Editor"
+msgstr "Farbverlauf"
 
 #: src/ui/stock-items.cpp:175 src/widgets/paint-selector.cpp:178
 msgid "Pattern"
-msgstr "Muster:"
+msgstr "Muster"
 
 #. Node Tool controls
 #: src/ui/stock-items.cpp:178
-#, fuzzy
 msgid "Insert"
-msgstr "Invertieren"
+msgstr "Einfügen"
 
 #: src/ui/stock-items.cpp:179
-#, fuzzy
 msgid "Delete"
 msgstr "_Löschen"
 
 #: src/ui/stock-items.cpp:180
-#, fuzzy
 msgid "Join"
-msgstr "Verbindungsart:"
+msgstr "Verbinden"
 
 #: src/ui/stock-items.cpp:181
 msgid "Join Segment"
-msgstr ""
+msgstr "Segment verbinden"
 
 #: src/ui/stock-items.cpp:182
-#, fuzzy
 msgid "Delete Segment"
-msgstr "Auswahl löschen"
+msgstr "Segment löschen"
 
 #: src/ui/stock-items.cpp:183
-#, fuzzy
 msgid "Break"
-msgstr "Schwarz"
+msgstr "Unterbrechen"
 
 #: src/ui/stock-items.cpp:184
-#, fuzzy
 msgid "Corner"
-msgstr "Ecken:"
+msgstr "Ecke"
 
 #: src/ui/stock-items.cpp:186
-#, fuzzy
 msgid "Symmetric"
 msgstr "symmetrisch"
 
 #: src/ui/stock-items.cpp:187
-#, fuzzy
 msgid "Line"
-msgstr "Nutzungsbedingungen - Lizenz"
+msgstr "Linie"
 
 #: src/ui/stock-items.cpp:188
 msgid "Curve"
-msgstr ""
+msgstr "Kurve"
 
 #: src/verbs.cpp:920
 msgid "Moved to next layer."
@@ -6681,11 +6517,11 @@ msgstr "Den markierten Pfad in Unterpfade zerlegen"
 
 #: src/verbs.cpp:1703
 msgid "_Grid Arrange..."
-msgstr ""
+msgstr "Anordnen im Raster..."
 
 #: src/verbs.cpp:1704
 msgid "Arrange selection in grid pattern"
-msgstr ""
+msgstr "Auswahl im Raster anordnen"
 
 #: src/verbs.cpp:1707
 msgid "Create a new layer"
@@ -6700,42 +6536,36 @@ msgid "Rename the current layer"
 msgstr "Aktuelle Ebene umbenennen"
 
 #: src/verbs.cpp:1710
-#, fuzzy
 msgid "Switch to Layer Above"
-msgstr "Zur nächsten Ebene umschalten"
+msgstr "Zur oberen Ebene umschalten"
 
 #: src/verbs.cpp:1711
-#, fuzzy
 msgid "Switch to the layer above the current"
-msgstr "Zur nächsten Ebene im Dokument umschalten"
+msgstr "Zur nächsten oberen Ebene im Dokument umschalten"
 
 #: src/verbs.cpp:1712
-#, fuzzy
 msgid "Switch to Layer Below"
-msgstr "Zur nächsten Ebene umschalten"
+msgstr "Zur nächsten unteren Ebene umschalten"
 
 #: src/verbs.cpp:1713
-#, fuzzy
 msgid "Switch to the layer below the current"
-msgstr "Zur nächsten Ebene im Dokument umschalten"
+msgstr "Zur nächsten unteren Ebene im Dokument umschalten"
 
 #: src/verbs.cpp:1714
-#, fuzzy
 msgid "Move Selection to Layer Above"
-msgstr "Die gewählten Objekte nach ganz unten absenken"
+msgstr "Auswahl zur nächsten oberen Ebene verschieben"
 
 #: src/verbs.cpp:1715
 msgid "Move selection to the layer above the current"
-msgstr ""
+msgstr "Auswahl auf die Ebene darüber verschieben"
 
 #: src/verbs.cpp:1716
-#, fuzzy
 msgid "Move Selection to Layer Below"
-msgstr "Die gewählten Objekte eine Stufe nach unten absenken"
+msgstr "Auswahl eine Ebene tiefer verschieben"
 
 #: src/verbs.cpp:1717
 msgid "Move selection to the layer below the current"
-msgstr ""
+msgstr "Auswahl auf eine Ebene direkt unter dieser verschieben"
 
 #: src/verbs.cpp:1719
 msgid "Raise the current layer to the top"
