@@ -11,7 +11,7 @@
  */
 
 #include "require-config.h"   /* HAVE_GTK_WINDOW_FULLSCREEN */
-#include "helper/action.h"
+#include "helper/helper-forward.h"
 #include "forward.h"	/* SPView */
 
 enum {
