@@ -27,6 +27,7 @@
 #include "../gradient-chemistry.h"
 
 #include "../helper/sp-intl.h"
+#include <xml/repr.h>
 
 #include "gradient-vector.h"
 #include "gradient-position.h"

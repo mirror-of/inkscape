@@ -24,6 +24,7 @@
 #include "display/bezier-utils.h"
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
+#include "xml/repr.h"
 
 #include "sp-spiral.h"
 #include <libnr/nr-point.h>

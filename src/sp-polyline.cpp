@@ -19,6 +19,7 @@
 #include "attributes.h"
 #include "sp-polyline.h"
 #include "helper/sp-intl.h"
+#include "xml/repr.h"
 
 static void sp_polyline_class_init (SPPolyLineClass *klass);
 static void sp_polyline_init (SPPolyLine *polyline);

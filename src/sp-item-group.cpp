@@ -18,6 +18,7 @@
 #include "display/nr-arena-group.h"
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include <xml/repr.h>
 #include <xml/repr-get-children.h>
 #include "sp-object-repr.h"
 #include "svg/svg.h"

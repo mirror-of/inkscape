@@ -22,6 +22,7 @@
 #include "libnr/nr-matrix-ops.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
+#include "xml/repr.h"
 #include "attributes.h"
 #include "style.h"
 #include "version.h"

@@ -38,6 +38,7 @@
 #include "sp-paint-server.h"
 #include "style.h"
 #include "svg/stringstream.h"
+#include "xml/repr.h"
 
 namespace Inkscape {
 

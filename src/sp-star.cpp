@@ -25,6 +25,7 @@
 #include "desktop-affine.h"
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
+#include "xml/repr.h"
 
 #include "sp-star.h"
 

@@ -36,6 +36,7 @@
 #include "pixmaps/cursor-text-insert.xpm"
 #include "view.h"
 #include "helper/sp-intl.h"
+#include "xml/repr.h"
 #include "prefs-utils.h"
 
 #include "text-context.h"

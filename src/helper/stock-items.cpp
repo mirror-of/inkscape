@@ -23,6 +23,7 @@
 
 #include <libnr/nr-values.h>
 #include <libnr/nr-matrix.h>
+#include <xml/repr.h>
 #include "sp-defs.h"
 #include "document-private.h"
 #include "sp-gradient.h"

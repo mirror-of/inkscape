@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include "object-ui.h"
+#include "xml/repr.h"
 
 static void sp_object_type_menu (GType type, SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 

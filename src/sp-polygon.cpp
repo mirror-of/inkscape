@@ -21,6 +21,7 @@
 #include "sp-polygon.h"
 #include "helper/sp-intl.h"
 #include "svg/stringstream.h"
+#include "xml/repr.h"
 
 static void sp_polygon_class_init (SPPolygonClass *klass);
 static void sp_polygon_init (SPPolygon *polygon);

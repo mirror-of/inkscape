@@ -12,6 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <algorithm>
 #include <glib/gmain.h>
 #include "macros.h"
 #include "helper/sp-marshal.h"
@@ -25,7 +26,7 @@
 #include "tools-switch.h"
 #include "sp-item-group.h"
 #include "inkscape.h"
-#include <algorithm>
+#include "xml/repr.h"
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 

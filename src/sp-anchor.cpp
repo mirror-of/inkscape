@@ -20,6 +20,7 @@
 #include "helper/sp-intl.h"
 #include "display/sp-canvas.h"
 #include "dialogs/object-attributes.h"
+#include "xml/repr.h"
 #include "attributes.h"
 #include "sp-anchor.h"
 

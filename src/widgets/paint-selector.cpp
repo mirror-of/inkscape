@@ -39,6 +39,7 @@
 #include "../widgets/icon.h"
 #include "../inkscape-stock.h"
 #include "widgets/widget-sizes.h"
+#include "xml/repr.h"
 
 #include "sp-color-selector.h"
 #include "sp-color-notebook.h"

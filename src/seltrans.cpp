@@ -46,6 +46,7 @@
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrlrect.h"
 #include "prefs-utils.h"
+#include "xml/repr.h"
 
 static void sp_sel_trans_update_handles(SPSelTrans &seltrans);
 static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans);

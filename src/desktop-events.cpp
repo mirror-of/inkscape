@@ -38,6 +38,7 @@
 #include "helper/sp-intl.h"
 #include "dialogs/dialog-events.h"
 #include "message-context.h"
+#include "xml/repr.h"
 
 static void sp_dt_simple_guide_dialog (SPGuide * guide, SPDesktop * desktop);
 

@@ -24,6 +24,7 @@
 #include "display/canvas-grid.h"
 #include "helper/units.h"
 #include "svg/svg.h"
+#include "xml/repr.h"
 #include "attributes.h"
 #include "document.h"
 #include "desktop.h"

@@ -59,6 +59,7 @@ extern "C" {
 #include "../verbs.h"
 #include "../interface.h"
 #include "../svg/stringstream.h"
+#include <xml/repr.h>
 
 #include "text-edit.h"
 

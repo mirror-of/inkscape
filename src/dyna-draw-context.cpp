@@ -61,6 +61,7 @@
 #include "dyna-draw-context.h"
 #include "widgets/spw-utilities.h"
 #include <libnr/nr-point-fns.h>
+#include "xml/repr.h"
 
 #define DDC_RED_RGBA 0xff0000ff
 #define DDC_GREEN_RGBA 0x000000ff
