@@ -14,7 +14,7 @@
 	function instead of implicit casting.
 
 	* src/arc-context.cpp, src/selection.cpp, src/selection.h,
-	src/sp-ellipse.cpp:
+	src/sp-ellipse.cpp, src/sp-image.cpp:
 	Cleanups: greater conformance to Coding_Style, combine declaration
 	and first assignment of some vars.
 
