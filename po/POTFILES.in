@@ -190,6 +190,7 @@ src/sp-clippath.cpp
 src/sp-cursor.cpp
 src/sp-defs.cpp
 src/sp-ellipse.cpp
+src/sp-flowtext.cpp
 src/sp-gradient.cpp
 src/sp-guide.cpp
 src/sp-image.cpp
@@ -220,10 +221,6 @@ src/sp-spiral.cpp
 src/sp-star.cpp
 src/sp-symbol.cpp
 src/sp-text.cpp
-src/sp-typeset-kplayout.cpp
-src/sp-typeset-layout.cpp
-src/sp-typeset-utils.cpp
-src/sp-typeset.cpp
 src/sp-use-reference.cpp
 src/sp-use.cpp
 src/spiral-context.cpp
