@@ -751,7 +751,6 @@ static unsigned int
 nr_arena_glyphs_group_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 {
 	NRArenaGroup *group = NR_ARENA_GROUP (item);
-	NRArenaGlyphsGroup *ggroup = NR_ARENA_GLYPHS_GROUP (item);
 
 	guint ret = item->state;
 
@@ -767,8 +766,6 @@ nr_arena_glyphs_group_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 static NRArenaItem *
 nr_arena_glyphs_group_pick (NRArenaItem *item, NR::Point p, gdouble delta, unsigned int sticky)
 {
-	NRArenaGroup *group = NR_ARENA_GROUP (item);
-
 	NRArenaItem *picked = NULL;
 
 	if (((NRArenaItemClass *) group_parent_class)->pick)
