@@ -57,7 +57,7 @@ else
 
 
 # change me!!
-DTG := 20040108
+DTG := 20040112
 
 CC      = mingw32-gcc
 CXX     = mingw32-g++
