@@ -1562,7 +1562,7 @@ sp_color_picker_window_destroy(GtkObject *object, GObject *cp)
 static void
 sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
 {
-    if (g_object_get_data(G_OBJECT(cp), "update")) {
+    if (g_object_get_data(G_OBJECT(dlg), "update")) {
         return;
     }
 
