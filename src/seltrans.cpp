@@ -15,6 +15,7 @@
 # include <config.h>
 #endif
 #include <math.h>
+#include <cmath>
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>

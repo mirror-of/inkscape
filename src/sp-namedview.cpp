@@ -15,6 +15,9 @@
 #include "config.h"
 
 #include <math.h>
+
+#include <cmath>//stdc++ wrappers of c funcs
+
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
