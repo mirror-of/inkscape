@@ -531,7 +531,7 @@ sp_event_context_private_item_handler (SPEventContext *ec, SPItem *item, GdkEven
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
-		if ((event->button.button == 3) && !(event->button.state & GDK_SHIFT_MASK)) {
+		if ((event->button.button == 3) && !(event->button.state & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK)) {
 			sp_event_root_menu_popup (ec->desktop, item, event);
 			ret = TRUE;
 		}
