@@ -61,11 +61,14 @@ struct _SPNamedView {
 	guint32 gridcolor;
 	guint32 guidecolor;
 	guint32 guidehicolor;
+	guint32 bordercolor;
+	guint32 pagecolor;
+	guint32 pageshadow;
 
 	GSList * guides;
 	GSList * views;
 	GSList * gridviews;
-        gint viewcount;
+	gint viewcount;
 };
 
 struct _SPNamedViewClass {
