@@ -1,3 +1,7 @@
+2004-06-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/config.h.win32: Define PACKAGE_TARNAME, for require-config.h.
+
 2004-06-19  MenTaLguY  <mental@rydia.net>
 
 	* src/desktop.cpp, src/managed.h, src/rect-context.cpp,
@@ -24,7 +28,6 @@
 	
 2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/libnrtype/FontFactory.cpp, src/libnrtype/FontInstance.cpp
 	* src/extension/internal/ps.cpp (begin): Add some basic error handling.
 
 	* src/extension/internal/ps.cpp (setup): Simplify an expression now that

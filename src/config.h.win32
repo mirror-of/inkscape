@@ -23,6 +23,4 @@
 #define SODIPODI_EXTENSIONDIR "./extensions"
 #define SODIPODI_EXTENSIONDATADIR SODIPODI_EXTENSIONDIR
 
-
-
-
+#define PACKAGE_TARNAME   /* for require-config.h */
