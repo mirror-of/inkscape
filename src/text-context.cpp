@@ -429,6 +429,30 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_Escape:
 						sp_selection_empty (SP_DT_SELECTION (ec->desktop));
 						return TRUE;
+					case GDK_less:
+					case GDK_comma:
+						if (MOD__ALT) { 
+							if (MOD__SHIFT)
+								sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, -10);
+							else 
+								sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, -1);
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+							sp_text_context_update_cursor (tc);
+							return TRUE;
+						}
+						break;
+					case GDK_greater:
+					case GDK_period:
+						if (MOD__ALT) { 
+							if (MOD__SHIFT)
+								sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, 10);
+							else 
+								sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, 1);
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+							sp_text_context_update_cursor (tc);
+							return TRUE;
+						}
+						break;
 					default:
 						break;
 					}
