@@ -168,7 +168,7 @@ unsigned sp_text_get_length(SPObject *item)
     if (is_line_break_object(item)) length++;
     for (SPObject *child = item->firstChild() ; child ; child = SP_OBJECT_NEXT(child)) {
         if (SP_IS_STRING(child)) length += SP_STRING(child)->string.length();
-        else length += sp_text_get_length(SP_ITEM(child));
+        else length += sp_text_get_length(child);
     }
     return length;
 }

@@ -520,8 +520,8 @@ sp_text_adjust_fontsize_recursive (SPItem *item, double ex)
     if (style && !NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
         style->font_size.computed *= ex;
         if (style->text) {
-            style->text->letterspacing.computed *= ex;
-            style->text->wordspacing.computed *= ex;
+            style->letter_spacing.computed *= ex;
+            style->word_spacing.computed *= ex;
         }
         SP_OBJECT(item)->updateRepr();
     }
@@ -767,16 +767,16 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
     // calculate real value
     /* TODO: Consider calculating val unconditionally, i.e. drop the first `if' line, and
        get rid of the `else val = 0.0'.  Similarly below and in sp-string.cpp. */
-    if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
-        if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
-            val = style->font_size.computed * style->text->letterspacing.value;
-        } else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
-            val = style->font_size.computed * style->text->letterspacing.value * 0.5;
+    if (style->letter_spacing.value != 0 && style->letter_spacing.computed == 0) { // set in em or ex
+        if (style->letter_spacing.unit == SP_CSS_UNIT_EM) {
+            val = style->font_size.computed * style->letter_spacing.value;
+        } else if (style->letter_spacing.unit == SP_CSS_UNIT_EX) {
+            val = style->font_size.computed * style->letter_spacing.value * 0.5;
         } else { // unknown unit - should not happen
             val = 0.0;
         }
     } else { // there's a real value in .computed, or it's zero
-        val = style->text->letterspacing.computed;
+        val = style->letter_spacing.computed;
     }
 
     // divide increment by zoom and by the number of characters in the line,
@@ -788,18 +788,18 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
     val += zby;
 
     // set back value
-    style->text->letterspacing_normal = FALSE;
-    if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
-        if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
-            style->text->letterspacing.value = val / style->font_size.computed;
-        } else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
-            style->text->letterspacing.value = val / style->font_size.computed * 2;
+    style->letter_spacing.normal = FALSE;
+    if (style->letter_spacing.value != 0 && style->letter_spacing.computed == 0) { // set in em or ex
+        if (style->letter_spacing.unit == SP_CSS_UNIT_EM) {
+            style->letter_spacing.value = val / style->font_size.computed;
+        } else if (style->letter_spacing.unit == SP_CSS_UNIT_EX) {
+            style->letter_spacing.value = val / style->font_size.computed * 2;
         }
     } else {
-        style->text->letterspacing.computed = val;
+        style->letter_spacing.computed = val;
     }
 
-    style->text->letterspacing.set = TRUE;
+    style->letter_spacing.set = TRUE;
 
     gchar *str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT (text)));
     sp_repr_set_attr (SP_OBJECT_REPR (source_obj->parent), "style", str);

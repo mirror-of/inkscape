@@ -106,7 +106,7 @@ int Layout::_enum_converter(int input, EnumConversionItem const *conversion_tabl
 Layout::Direction Layout::InputStreamTextSource::styleComputeBlockProgression() const
 {
     // SPStyle's implementation of this is all wrong. FIXME.
-    if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB)
+    if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB_LR)
         return LEFT_TO_RIGHT;
     return TOP_TO_BOTTOM;
 }

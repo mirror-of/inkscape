@@ -27,14 +27,14 @@ namespace Text {
 
 // ******* enum conversion tables
 static const Layout::EnumConversionItem enum_convert_spstyle_direction_to_pango_direction[] = {
-	{SP_CSS_WRITING_MODE_LR, PANGO_DIRECTION_LTR},
-	{SP_CSS_WRITING_MODE_RL, PANGO_DIRECTION_RTL},
-	{SP_CSS_WRITING_MODE_TB, PANGO_DIRECTION_LTR}};   // this is correct
+	{SP_CSS_WRITING_MODE_LR_TB, PANGO_DIRECTION_LTR},
+	{SP_CSS_WRITING_MODE_RL_TB, PANGO_DIRECTION_RTL},
+	{SP_CSS_WRITING_MODE_TB_LR, PANGO_DIRECTION_LTR}};   // this is correct
 
 static const Layout::EnumConversionItem enum_convert_spstyle_direction_to_my_direction[] = {
-	{SP_CSS_WRITING_MODE_LR, Layout::LEFT_TO_RIGHT},
-	{SP_CSS_WRITING_MODE_RL, Layout::RIGHT_TO_LEFT},
-	{SP_CSS_WRITING_MODE_TB, Layout::LEFT_TO_RIGHT}};   // this is correct
+	{SP_CSS_WRITING_MODE_LR_TB, Layout::LEFT_TO_RIGHT},
+	{SP_CSS_WRITING_MODE_RL_TB, Layout::RIGHT_TO_LEFT},
+	{SP_CSS_WRITING_MODE_TB_LR, Layout::LEFT_TO_RIGHT}};   // this is correct
 
 /** \brief private to Layout. Does the real work of text flowing.
 
@@ -308,10 +308,10 @@ class Layout::Calculator
         GList *pango_items_glist = NULL;
         if (_flow._input_stream[_para.first_input_index]->Type() == TEXT_SOURCE) {
             Layout::InputStreamTextSource const *text_source = static_cast<Layout::InputStreamTextSource *>(_flow._input_stream[_para.first_input_index]);
-            if (text_source->style->text && text_source->style->text->direction_set) {
-                PangoDirection pango_direction = (PangoDirection)_enum_converter(text_source->style->text->direction, enum_convert_spstyle_direction_to_pango_direction, sizeof(enum_convert_spstyle_direction_to_pango_direction)/sizeof(enum_convert_spstyle_direction_to_pango_direction[0]));
+            if (text_source->style->direction.set) {
+                PangoDirection pango_direction = (PangoDirection)_enum_converter(text_source->style->direction.computed, enum_convert_spstyle_direction_to_pango_direction, sizeof(enum_convert_spstyle_direction_to_pango_direction)/sizeof(enum_convert_spstyle_direction_to_pango_direction[0]));
                 pango_items_glist = pango_itemize_with_base_dir(_pango_context, pango_direction, para_text.data(), 0, para_text.bytes(), attributes_list, NULL);
-                _para.direction = (Layout::Direction)_enum_converter(text_source->style->text->direction, enum_convert_spstyle_direction_to_my_direction, sizeof(enum_convert_spstyle_direction_to_my_direction)/sizeof(enum_convert_spstyle_direction_to_my_direction[0]));
+                _para.direction = (Layout::Direction)_enum_converter(text_source->style->direction.computed, enum_convert_spstyle_direction_to_my_direction, sizeof(enum_convert_spstyle_direction_to_my_direction)/sizeof(enum_convert_spstyle_direction_to_my_direction[0]));
             }
         }
         if (pango_items_glist == NULL) {
@@ -769,9 +769,9 @@ class Layout::Calculator
                             new_character.in_glyph = _flow._glyphs.size() - 1;
                             _flow._characters.push_back(new_character);
                             if (new_character.char_attributes.is_white)
-                                advance_width += text_source->style->text->wordspacing.computed + add_to_each_whitespace;    // justification
+                                advance_width += text_source->style->word_spacing.computed + add_to_each_whitespace;    // justification
                             if (new_character.char_attributes.is_cursor_position)
-                                advance_width += text_source->style->text->letterspacing.computed;
+                                advance_width += text_source->style->letter_spacing.computed;
                             iter_source_text++;
                             char_index_in_span++;
                             char_byte = iter_source_text.base() - iter_span->input_stream_first_character.base();
@@ -965,9 +965,9 @@ class Layout::Calculator
                         }
                         char_width *= font_size_multiplier;
                         if (char_attributes.is_cursor_position)
-                            char_width += text_source->style->text->letterspacing.computed;
+                            char_width += text_source->style->letter_spacing.computed;
                         if (char_attributes.is_white)
-                            char_width += text_source->style->text->wordspacing.computed;
+                            char_width += text_source->style->word_spacing.computed;
                         IFDEBUG(char_count++);
                         current_pos.total_width += char_width;
                         if (current_pos.total_width > available_width) {

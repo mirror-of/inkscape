@@ -161,6 +161,24 @@ struct SPIFontSize {
 	float computed;
 };
 
+struct SPITextDecoration {
+    unsigned int set : 1;
+    unsigned int inherit : 1;
+    unsigned int underline : 1;
+    unsigned int overline : 1;
+    unsigned int line_through : 1;
+    unsigned int blink : 1;    // "Conforming user agents are not required to support this value." yay!
+};
+
+struct SPILengthOrNormal {
+	unsigned int set : 1;
+	unsigned int inherit : 1;
+	unsigned int normal : 1;
+	unsigned int unit : 4;
+	float value;
+	float computed;
+};
+
 class SPTextStyle;
 
 class NRVpathDash {
@@ -190,6 +208,34 @@ struct SPStyle {
 	SPIEnum font_weight;
     /** Stretch of the font */
 	SPIEnum font_stretch;
+
+    /** First line indent of paragraphs (css2 16.1) */
+    SPILength text_indent;
+    /** text alignment (css2 16.2) (not to be confused with text-anchor) */
+    SPIEnum text_align;
+    /** text decoration (css2 16.3.1) */
+    SPITextDecoration text_decoration;
+    // 16.3.2 is text-shadow. That's complicated.
+    /** Line spacing (css2 10.8.1) */
+	SPILengthOrNormal line_height;
+    /** letter spacing (css2 16.4) */
+	SPILengthOrNormal letter_spacing;
+    /** word spacing (also css2 16.4) */
+	SPILengthOrNormal word_spacing;
+    /** capitalization (css2 16.5) */
+    SPIEnum text_transform;
+
+    /* CSS3 Text */
+    /** text direction (css3 text 3.2) */
+    SPIEnum direction;
+    /** block progression (css3 text 3.2) */
+    SPIEnum block_progression;
+	/** Writing mode (css3 text 3.2 and svg1.1 10.7.2) */
+	SPIEnum writing_mode;
+
+	/* SVG */
+	/** Anchor of the text (svg1.1 10.9.1) */
+	SPIEnum text_anchor;
 
 	/* Misc attributes */
 	unsigned int clip_set : 1;
@@ -239,12 +285,6 @@ struct SPStyle {
 	unsigned int stroke_dashoffset_set : 1;
 	/** stroke-opacity */
 	SPIScale24 stroke_opacity;
-
-	/* SVG */
-	/** Anchor of the text */
-	SPIEnum text_anchor;
-	/** Writing mode */
-	SPIEnum writing_mode;
 
 	/** Marker list */
 	SPIString marker[SP_MARKER_LOC_QTY];
@@ -375,16 +415,43 @@ enum SPCSSFontStretch {
 	SP_CSS_FONT_STRETCH_WIDER
 };
 
+enum SPCSSTextAlign {
+	SP_CSS_TEXT_ALIGN_LEFT,
+	SP_CSS_TEXT_ALIGN_RIGHT,
+	SP_CSS_TEXT_ALIGN_CENTER,
+    SP_CSS_TEXT_ALIGN_JUSTIFY
+    // also <string> is allowed, but only within table calls
+};
+
+enum SPCSSTextTransform {
+	SP_CSS_TEXT_TRANSFORM_CAPITALIZE,
+	SP_CSS_TEXT_TRANSFORM_UPPERCASE,
+	SP_CSS_TEXT_TRANSFORM_LOWERCASE,
+	SP_CSS_TEXT_TRANSFORM_NONE
+};
+
+enum SPCSSDirection {
+	SP_CSS_DIRECTION_LTR,
+	SP_CSS_DIRECTION_RTL
+};
+
+enum SPCSSBlockProgression {
+	SP_CSS_BLOCK_PROGRESSION_TB,
+	SP_CSS_BLOCK_PROGRESSION_RL,
+	SP_CSS_BLOCK_PROGRESSION_LR
+};
+
+enum SPCSSWritingMode {
+	SP_CSS_WRITING_MODE_LR_TB,
+	SP_CSS_WRITING_MODE_RL_TB,
+	SP_CSS_WRITING_MODE_TB_RL,
+	SP_CSS_WRITING_MODE_TB_LR
+};
+
 enum SPTextAnchor {
 	SP_CSS_TEXT_ANCHOR_START,
 	SP_CSS_TEXT_ANCHOR_MIDDLE,
 	SP_CSS_TEXT_ANCHOR_END
-};
-
-enum SPWritingMode {
-	SP_CSS_WRITING_MODE_LR,
-	SP_CSS_WRITING_MODE_RL,
-	SP_CSS_WRITING_MODE_TB
 };
 
 enum SPVisibility {
@@ -427,28 +494,8 @@ struct SPTextStyle {
 	/* CSS font properties */
 	SPIString font_family;
 
-	unsigned int font_size_adjust_set : 1;
-
-	/* fixme: Has to have 'none' option here */
-	float font_size_adjust;
-
 	/* fixme: The 'font' property is ugly, and not working (lauris) */
 	SPIString font;
-
-	/* CSS text properties */
-	unsigned int direction_set : 1;
-	unsigned int text_decoration_set : 1;
-	unsigned int unicode_bidi_set : 1;
-
-	unsigned int direction : 2;
-	unsigned int text_decoration : 3;
-	unsigned int unicode_bidi : 2;
-
-	unsigned int letterspacing_normal : 1;
-	SPILength letterspacing;
-
-	unsigned int wordspacing_normal : 1;
-	SPILength wordspacing;
 };
 
 SPCSSAttr * sp_css_attr_from_style (SPObject *object, guint flags = SP_STYLE_FLAG_IFSET);

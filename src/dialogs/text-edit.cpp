@@ -729,7 +729,7 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
         
-        if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR) {
+        if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB) {
             b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
                                                 INKSCAPE_STOCK_WRITING_MODE_LR );
         } else {

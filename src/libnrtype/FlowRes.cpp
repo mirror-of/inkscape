@@ -306,7 +306,7 @@ void               flow_res::ApplyLetterSpacing(void)
 		for (int j=chunks[i].s_st;j<chunks[i].s_en;j++) {
 			if ( spans[j].c_style == NULL ) continue;
 			//			if ( spans[j].c_style->with_style->text->letterspacing.set ) {
-				double sspc=spans[j].c_style->with_style->text->letterspacing.computed;
+				double sspc=spans[j].c_style->with_style->letter_spacing.computed;
 				for (int k=spans[j].l_st;k<spans[j].l_en;k++) {
 					if ( letters[k].no >= 0 ) lspc[letters[k].no]=spc+sspc;
 				}

@@ -132,6 +132,8 @@ static void sp_style_read_iscale24 (SPIScale24 *val, const gchar *str);
 static void sp_style_read_ienum(SPIEnum *val, gchar const *str, SPStyleEnum const *dict, bool can_explicitly_inherit);
 static void sp_style_read_istring (SPIString *val, const gchar *str);
 static void sp_style_read_ilength (SPILength *val, const gchar *str);
+static void sp_style_read_ilengthornormal (SPILengthOrNormal *val, const gchar *str);
+static void sp_style_read_itextdecoration (SPITextDecoration *val, const gchar *str);
 static void sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ifontsize (SPIFontSize *val, const gchar *str);
@@ -148,6 +150,8 @@ static gint sp_style_write_istring(gchar *p, gint len, gchar const *key, SPIStri
 static gint sp_style_write_ilength(gchar *p, gint len, gchar const *key, SPILength const *val, SPILength const *base, guint flags);
 static gint sp_style_write_ipaint(gchar *b, gint len, gchar const *key, SPIPaint const *paint, SPIPaint const *base, guint flags);
 static gint sp_style_write_ifontsize(gchar *p, gint len, gchar const *key, SPIFontSize const *val, SPIFontSize const *base, guint flags);
+static gint sp_style_write_ilengthornormal(gchar *p, gint const len, gchar const *const key, SPILengthOrNormal const *const val, SPILengthOrNormal const *const base, guint const flags);
+static gint sp_style_write_itextdecoration(gchar *p, gint const len, gchar const *const key, SPITextDecoration const *const val, SPITextDecoration const *const base, guint const flags);
 
 static void sp_style_paint_clear (SPStyle *style, SPIPaint *paint, unsigned int hunref, unsigned int unset);
 
@@ -245,10 +249,39 @@ static const SPStyleEnum enum_font_stretch[] = {
     {NULL, -1}
 };
 
+static const SPStyleEnum enum_text_align[] = {
+    {"left", SP_CSS_TEXT_ALIGN_LEFT},
+    {"right", SP_CSS_TEXT_ALIGN_RIGHT},
+    {"center", SP_CSS_TEXT_ALIGN_CENTER},
+    {"justify", SP_CSS_TEXT_ALIGN_JUSTIFY},
+    {NULL, -1}
+};
+
+static const SPStyleEnum enum_text_transform[] = {
+    {"capitalize", SP_CSS_TEXT_TRANSFORM_CAPITALIZE},
+    {"uppercase", SP_CSS_TEXT_TRANSFORM_UPPERCASE},
+    {"lowercase", SP_CSS_TEXT_TRANSFORM_LOWERCASE},
+    {"none", SP_CSS_TEXT_TRANSFORM_NONE},
+    {NULL, -1}
+};
+
 static const SPStyleEnum enum_text_anchor[] = {
     {"start", SP_CSS_TEXT_ANCHOR_START},
     {"middle", SP_CSS_TEXT_ANCHOR_MIDDLE},
     {"end", SP_CSS_TEXT_ANCHOR_END},
+    {NULL, -1}
+};
+
+static const SPStyleEnum enum_direction[] = {
+    {"ltr", SP_CSS_DIRECTION_LTR},
+    {"rtl", SP_CSS_DIRECTION_RTL},
+    {NULL, -1}
+};
+
+static const SPStyleEnum enum_block_progression[] = {
+    {"tb", SP_CSS_BLOCK_PROGRESSION_TB},
+    {"rl", SP_CSS_BLOCK_PROGRESSION_RL},
+    {"lr", SP_CSS_BLOCK_PROGRESSION_LR},
     {NULL, -1}
 };
 
@@ -260,12 +293,12 @@ static const SPStyleEnum enum_writing_mode[] = {
      * ECMA scripts may be surprised to find tb-rl in DOM if they set the attribute to rl, so
      * sharing enumerators for different strings may be a bug (once we support ecma script).
      */
-    {"lr-tb", SP_CSS_WRITING_MODE_LR},
-    {"rl-tb", SP_CSS_WRITING_MODE_RL},
-    {"tb-rl", SP_CSS_WRITING_MODE_TB},
-    {"lr", SP_CSS_WRITING_MODE_LR},
-    {"rl", SP_CSS_WRITING_MODE_RL},
-    {"tb", SP_CSS_WRITING_MODE_TB},
+    {"lr-tb", SP_CSS_WRITING_MODE_LR_TB},
+    {"rl-tb", SP_CSS_WRITING_MODE_RL_TB},
+    {"tb-rl", SP_CSS_WRITING_MODE_TB_RL},
+    {"lr", SP_CSS_WRITING_MODE_LR_TB},
+    {"rl", SP_CSS_WRITING_MODE_RL_TB},
+    {"tb", SP_CSS_WRITING_MODE_TB_RL},
     {NULL, -1}
 };
 
@@ -471,6 +504,42 @@ sp_style_read (SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     SPS_READ_PENUM_IF_UNSET(&style->font_variant, repr, "font-variant", enum_font_variant, true);
     SPS_READ_PENUM_IF_UNSET(&style->font_weight, repr, "font-weight", enum_font_weight, true);
     SPS_READ_PENUM_IF_UNSET(&style->font_stretch, repr, "font-stretch", enum_font_stretch, true);
+    /* Text (css2 chapter 16) */
+    SPS_READ_PLENGTH_IF_UNSET (&style->text_indent, repr, "text-indent");
+    SPS_READ_PENUM_IF_UNSET(&style->text_align, repr, "text-align", enum_text_align, true);
+    if (!style->text_decoration.set) {
+        val = repr->attribute("text-decoration");
+        if (val) {
+            sp_style_read_itextdecoration (&style->text_decoration, val);
+        }
+    }
+    if (!style->line_height.set) {
+        val = repr->attribute("line-height");
+        if (val) {
+            sp_style_read_ilengthornormal (&style->line_height, val);
+        }
+    }
+    if (!style->letter_spacing.set) {
+        val = repr->attribute("letter-spacing");
+        if (val) {
+            sp_style_read_ilengthornormal (&style->letter_spacing, val);
+        }
+    }
+    if (!style->word_spacing.set) {
+        val = repr->attribute("word-spacing");
+        if (val) {
+            sp_style_read_ilengthornormal (&style->word_spacing, val);
+        }
+    }
+    SPS_READ_PENUM_IF_UNSET(&style->text_transform, repr, "text-transform", enum_text_transform, true);
+    SPS_READ_PENUM_IF_UNSET(&style->direction, repr, "direction", enum_direction, true);
+    SPS_READ_PENUM_IF_UNSET(&style->block_progression, repr, "block_progression", enum_block_progression, true);
+
+    /* SVG */
+    SPS_READ_PENUM_IF_UNSET(&style->writing_mode, repr, "writing-mode",
+                            enum_writing_mode, true);
+    SPS_READ_PENUM_IF_UNSET(&style->text_anchor, repr, "text-anchor",
+                            enum_text_anchor, true);
 
     /* opacity */
     if (!style->opacity.set) {
@@ -572,12 +641,6 @@ sp_style_read (SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
             sp_style_read_istring (&style->text->font_family, val);
         }
     }
-
-    /* SVG */
-    SPS_READ_PENUM_IF_UNSET(&style->text_anchor, repr, "text-anchor",
-                            enum_text_anchor, true);
-    SPS_READ_PENUM_IF_UNSET(&style->writing_mode, repr, "writing-mode",
-                            enum_writing_mode, true);
 
     /* 5. Merge from parent */
     if (object) {
@@ -691,32 +754,72 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         }
         break;
     /* Text */
-    case SP_PROP_DIRECTION:
-        g_warning ("Unimplemented style property SP_PROP_DIRECTION: value: %s", val);
+    case SP_PROP_TEXT_INDENT:
+        SPS_READ_ILENGTH_IF_UNSET (&style->text_indent, val);
         break;
-    case SP_PROP_LETTER_SPACING:
-        if (!style->text_private) sp_style_privatize_text (style);
-        style->text->letterspacing_normal = FALSE;
-        if (strcmp(val, "normal") == 0) {
-            style->text->letterspacing_normal = TRUE;
-            val = "0";
-        }
-        sp_style_read_ilength (&style->text->letterspacing, val);
-        style->text->letterspacing.set = TRUE;
+    case SP_PROP_TEXT_ALIGN:
+        SPS_READ_IENUM_IF_UNSET(&style->text_align, val, enum_text_align, true);
         break;
     case SP_PROP_TEXT_DECORATION:
-        g_warning ("Unimplemented style property SP_PROP_TEXT_DECORATION: value: %s", val);
-        break;
-    case SP_PROP_UNICODE_BIDI:
-        g_warning ("Unimplemented style property SP_PROP_UNICODE_BIDI: value: %s", val);
-        break;
-    case SP_PROP_WORD_SPACING:
-        if (strcmp(val, "normal") != 0) {
-            g_warning("Unimplemented style property SP_PROP_WORD_SPACING: value: %s", val);
+        if (!style->text_decoration.set) {
+            sp_style_read_itextdecoration (&style->text_decoration, val);
         }
         break;
     case SP_PROP_LINE_HEIGHT:
-        // TODO: FIXME: store in style too, eliminate sodipodi:linespacing except for backwards commpatibility
+        if (!style->line_height.set) {
+            sp_style_read_ilengthornormal (&style->line_height, val);
+        }
+        break;
+    case SP_PROP_LETTER_SPACING:
+        if (!style->letter_spacing.set) {
+            sp_style_read_ilengthornormal (&style->letter_spacing, val);
+        }
+        break;
+    case SP_PROP_WORD_SPACING:
+        if (!style->word_spacing.set) {
+            sp_style_read_ilengthornormal (&style->word_spacing, val);
+        }
+        break;
+    case SP_PROP_TEXT_TRANSFORM:
+        SPS_READ_IENUM_IF_UNSET(&style->text_transform, val, enum_text_transform, true);
+        break;
+    /* Text (css3) */
+    case SP_PROP_DIRECTION:
+        SPS_READ_IENUM_IF_UNSET(&style->direction, val, enum_direction, true);
+        break;
+    case SP_PROP_BLOCK_PROGRESSION:
+        SPS_READ_IENUM_IF_UNSET(&style->block_progression, val, enum_block_progression, true);
+        break;
+    case SP_PROP_WRITING_MODE:
+        SPS_READ_IENUM_IF_UNSET(&style->writing_mode, val, enum_writing_mode, true);
+        break;
+    case SP_PROP_TEXT_ANCHOR:
+        SPS_READ_IENUM_IF_UNSET(&style->text_anchor, val, enum_text_anchor, true);
+        break;
+    /* Text (unimplemented) */
+    case SP_PROP_TEXT_RENDERING: {
+        /* Ignore the hint. */
+        SPIEnum dummy;
+        SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_text_rendering, true);
+        break;
+    }
+    case SP_PROP_ALIGNMENT_BASELINE:
+        g_warning ("Unimplemented style property SP_PROP_ALIGNMENT_BASELINE: value: %s", val);
+        break;
+    case SP_PROP_BASELINE_SHIFT:
+        g_warning ("Unimplemented style property SP_PROP_BASELINE_SHIFT: value: %s", val);
+        break;
+    case SP_PROP_DOMINANT_BASELINE:
+        g_warning ("Unimplemented style property SP_PROP_DOMINANT_BASELINE: value: %s", val);
+        break;
+    case SP_PROP_GLYPH_ORIENTATION_HORIZONTAL:
+        g_warning ("Unimplemented style property SP_PROP_ORIENTATION_HORIZONTAL: value: %s", val);
+        break;
+    case SP_PROP_GLYPH_ORIENTATION_VERTICAL:
+        g_warning ("Unimplemented style property SP_PROP_ORIENTATION_VERTICAL: value: %s", val);
+        break;
+    case SP_PROP_KERNING:
+        g_warning ("Unimplemented style property SP_PROP_KERNING: value: %s", val);
         break;
     /* Misc */
     case SP_PROP_CLIP:
@@ -914,37 +1017,6 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         }
         break;
                
-    /* Text */
-    case SP_PROP_TEXT_RENDERING: {
-        /* Ignore the hint. */
-        SPIEnum dummy;
-        SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_text_rendering, true);
-        break;
-    }
-    case SP_PROP_ALIGNMENT_BASELINE:
-        g_warning ("Unimplemented style property SP_PROP_ALIGNMENT_BASELINE: value: %s", val);
-        break;
-    case SP_PROP_BASELINE_SHIFT:
-        g_warning ("Unimplemented style property SP_PROP_BASELINE_SHIFT: value: %s", val);
-        break;
-    case SP_PROP_DOMINANT_BASELINE:
-        g_warning ("Unimplemented style property SP_PROP_DOMINANT_BASELINE: value: %s", val);
-        break;
-    case SP_PROP_GLYPH_ORIENTATION_HORIZONTAL:
-        g_warning ("Unimplemented style property SP_PROP_ORIENTATION_HORIZONTAL: value: %s", val);
-        break;
-    case SP_PROP_GLYPH_ORIENTATION_VERTICAL:
-        g_warning ("Unimplemented style property SP_PROP_ORIENTATION_VERTICAL: value: %s", val);
-        break;
-    case SP_PROP_KERNING:
-        g_warning ("Unimplemented style property SP_PROP_KERNING: value: %s", val);
-        break;
-    case SP_PROP_TEXT_ANCHOR:
-        SPS_READ_IENUM_IF_UNSET(&style->text_anchor, val, enum_text_anchor, true);
-        break;
-    case SP_PROP_WRITING_MODE:
-        SPS_READ_IENUM_IF_UNSET(&style->writing_mode, val, enum_writing_mode, true);
-        break;
     default:
         g_warning ("Invalid style property id: %d value: %s", id, val);
         break;
@@ -1173,6 +1245,48 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
                         : parent_val + 1);
         g_assert (style->font_stretch.computed <= (unsigned) SP_CSS_FONT_STRETCH_ULTRA_EXPANDED);
     }
+    /* text (css2) */
+    if (!style->text_indent.set || style->text_indent.inherit) {
+        style->text_indent.computed = parent->text_indent.computed;
+    }
+    if (!style->text_align.set || style->text_align.inherit) {
+        style->text_align.computed = parent->text_align.computed;
+    }
+    if (!style->text_decoration.set || style->text_decoration.inherit) {
+        style->text_decoration.underline = parent->text_decoration.underline;
+        style->text_decoration.overline = parent->text_decoration.overline;
+        style->text_decoration.line_through = parent->text_decoration.line_through;
+        style->text_decoration.blink = parent->text_decoration.blink;
+    }
+    if (!style->line_height.set || style->line_height.inherit) {
+        style->line_height.computed = parent->line_height.computed;
+        style->line_height.normal = parent->line_height.normal;
+    }
+    if (!style->letter_spacing.set || style->letter_spacing.inherit) {
+        style->letter_spacing.computed = parent->letter_spacing.computed;
+        style->letter_spacing.normal = parent->letter_spacing.normal;
+    }
+    if (!style->word_spacing.set || style->word_spacing.inherit) {
+        style->word_spacing.computed = parent->word_spacing.computed;
+        style->word_spacing.normal = parent->word_spacing.normal;
+    }
+    if (!style->text_transform.set || style->text_transform.inherit) {
+        style->text_transform.computed = parent->text_transform.computed;
+    }
+    if (!style->direction.set || style->direction.inherit) {
+        style->direction.computed = parent->direction.computed;
+    }
+    if (!style->block_progression.set || style->block_progression.inherit) {
+        style->block_progression.computed = parent->block_progression.computed;
+    }
+    if (!style->writing_mode.set || style->writing_mode.inherit) {
+        style->writing_mode.computed = parent->writing_mode.computed;
+    }
+    /* 'text-anchor' */
+    if (!style->text_anchor.set || style->text_anchor.inherit) {
+        style->text_anchor.computed = parent->text_anchor.computed;
+    }
+
     if (style->opacity.inherit) {
         style->opacity.value = parent->opacity.value;
     }
@@ -1232,22 +1346,11 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
     if (!style->stroke_opacity.set || style->stroke_opacity.inherit) {
         style->stroke_opacity.value = parent->stroke_opacity.value;
     }
-    /* 'text-anchor' */
-    if (!style->text_anchor.set || style->text_anchor.inherit) {
-        style->text_anchor.computed = parent->text_anchor.computed;
-    }
-    if (!style->writing_mode.set || style->writing_mode.inherit) {
-        style->writing_mode.computed = parent->writing_mode.computed;
-    }
 
     if (style->text && parent->text) {
         if (!style->text->font_family.set || style->text->font_family.inherit) {
             g_free (style->text->font_family.value);
             style->text->font_family.value = g_strdup (parent->text->font_family.value);
-        }
-        if (!style->text->letterspacing.set || style->text->letterspacing.inherit) {
-            style->text->letterspacing_normal = parent->text->letterspacing_normal;
-            style->text->letterspacing.computed = parent->text->letterspacing.computed;
         }
     }
 
@@ -1372,6 +1475,20 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
     p += sp_style_write_ienum (p, c + BMAX - p, "font-weight", enum_font_weight, &style->font_weight, NULL, flags);
     p += sp_style_write_ienum (p, c + BMAX - p, "font-stretch", enum_font_stretch, &style->font_stretch, NULL, flags);
 
+    /* Text */
+    p += sp_style_write_ilength (p, c + BMAX - p, "text-indent", &style->text_indent, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "text-align", enum_text_align, &style->text_align, NULL, flags);
+    p += sp_style_write_itextdecoration (p, c + BMAX - p, "text-decoration", &style->text_decoration, NULL, flags);
+    p += sp_style_write_ilengthornormal (p, c + BMAX - p, "line-height", &style->line_height, NULL, flags);
+    p += sp_style_write_ilengthornormal (p, c + BMAX - p, "letter-spacing", &style->letter_spacing, NULL, flags);
+    p += sp_style_write_ilengthornormal (p, c + BMAX - p, "word-spacing", &style->word_spacing, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "text-transform", enum_text_transform, &style->text_transform, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "direction", enum_direction, &style->direction, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "block-progression", enum_block_progression, &style->block_progression, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &style->writing_mode, NULL, flags);
+
+    p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &style->text_anchor, NULL, flags);
+
     /* fixme: Per type methods need default flag too (lauris)*/
     p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &style->opacity, NULL, flags);
     p += sp_style_write_ipaint (p, c + BMAX - p, "color", &style->color, NULL, flags);
@@ -1447,9 +1564,6 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
     /* fixme: */
     p += sp_text_style_write (p, c + BMAX - p, style->text, flags);
 
-    p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &style->text_anchor, NULL, flags);
-    p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &style->writing_mode, NULL, flags);
-
     /* Get rid of trailing `;'. */
     if (p != c) {
         --p;
@@ -1484,6 +1598,20 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
     p += sp_style_write_ienum (p, c + BMAX - p, "font-variant", enum_font_variant, &from->font_variant, &to->font_variant, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ienum (p, c + BMAX - p, "font-weight", enum_font_weight, &from->font_weight, &to->font_weight, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ienum (p, c + BMAX - p, "font-stretch", enum_font_stretch, &from->font_stretch, &to->font_stretch, SP_STYLE_FLAG_IFDIFF);
+
+    /* Text */
+    p += sp_style_write_ilength (p, c + BMAX - p, "text-indent", &from->text_indent, &to->text_indent, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ienum (p, c + BMAX - p, "text-align", enum_text_align, &from->text_align, &to->text_align, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_itextdecoration (p, c + BMAX - p, "text-decoration", &from->text_decoration, &to->text_decoration, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ilengthornormal (p, c + BMAX - p, "line-height", &from->line_height, &to->line_height, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ilengthornormal (p, c + BMAX - p, "letter-spacing", &from->letter_spacing, &to->letter_spacing, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ilengthornormal (p, c + BMAX - p, "word-spacing", &from->word_spacing, &to->word_spacing, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ienum (p, c + BMAX - p, "text-transform", enum_text_transform, &from->text_transform, &to->text_transform, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ienum (p, c + BMAX - p, "direction", enum_direction, &from->direction, &to->direction, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ienum (p, c + BMAX - p, "block-progression", enum_block_progression, &from->block_progression, &to->block_progression, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &from->writing_mode, &to->writing_mode, SP_STYLE_FLAG_IFDIFF);
+
+    p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &from->text_anchor, &to->text_anchor, SP_STYLE_FLAG_IFDIFF);
 
     /* fixme: Per type methods need default flag too */
     if (from->opacity.set && from->opacity.value != SP_SCALE24_MAX) {
@@ -1546,9 +1674,6 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
     /* fixme: */
     p += sp_text_style_write (p, c + BMAX - p, from->text, SP_STYLE_FLAG_IFDIFF);
 
-    p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &from->text_anchor, &to->text_anchor, SP_STYLE_FLAG_IFDIFF);
-    p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &from->writing_mode, &to->writing_mode, SP_STYLE_FLAG_IFDIFF);
-
     /* The reason we use IFSET rather than IFDIFF is the belief that the IFDIFF
      * flag is mainly only for attributes that don't handle explicit unset well.
      * We may need to revisit the behaviour of this routine. */
@@ -1600,16 +1725,6 @@ sp_style_clear (SPStyle *style)
     style->text->font.set = FALSE;
     style->text->font_family.set = FALSE;
 
-    style->text->letterspacing_normal = TRUE;
-    style->text->letterspacing.value = 0.0;
-    style->text->letterspacing.computed = 0.0;
-    style->text->letterspacing.set = FALSE;
-
-    style->text->wordspacing_normal = TRUE;
-    style->text->wordspacing.value = 0.0;
-    style->text->wordspacing.computed = 0.0;
-    style->text->wordspacing.set = FALSE;
-
     style->font_size.set = FALSE;
     style->font_size.type = SP_FONT_SIZE_LITERAL;
     style->font_size.value = SP_CSS_FONT_SIZE_MEDIUM;
@@ -1623,6 +1738,52 @@ sp_style_clear (SPStyle *style)
     style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
     style->font_stretch.set = FALSE;
     style->font_stretch.value = style->font_stretch.computed = SP_CSS_FONT_STRETCH_NORMAL;
+
+    /* text */
+    style->text_indent.set = FALSE;
+    style->text_indent.unit = SP_CSS_UNIT_NONE;
+    style->text_indent.computed = 0.0;
+
+    style->text_align.set = FALSE;
+    style->text_align.value = style->text_align.computed = SP_CSS_TEXT_ALIGN_LEFT;    // not strictly true, but sorted out by Text::Layout
+
+    style->text_decoration.set = FALSE;
+    style->text_decoration.underline = FALSE;
+    style->text_decoration.overline = FALSE;
+    style->text_decoration.line_through = FALSE;
+    style->text_decoration.blink = FALSE;
+
+    style->line_height.set = FALSE;
+    style->line_height.unit = SP_CSS_UNIT_PERCENT;
+    style->line_height.normal = TRUE;
+    style->line_height.value = style->line_height.computed = 1.0;
+
+    style->letter_spacing.set = FALSE;
+    style->letter_spacing.unit = SP_CSS_UNIT_NONE;
+    style->letter_spacing.normal = TRUE;
+    style->letter_spacing.value = style->line_height.computed = 0.0;
+
+    style->word_spacing.set = FALSE;
+    style->word_spacing.unit = SP_CSS_UNIT_NONE;
+    style->word_spacing.normal = TRUE;
+    style->word_spacing.value = style->line_height.computed = 0.0;
+
+    style->text_transform.set = FALSE;
+    style->text_transform.value = style->text_transform.computed = SP_CSS_TEXT_TRANSFORM_NONE;
+
+    style->direction.set = FALSE;
+    style->direction.value = style->direction.computed = SP_CSS_DIRECTION_LTR;
+
+    style->block_progression.set = FALSE;
+    style->block_progression.value = style->block_progression.computed = SP_CSS_BLOCK_PROGRESSION_TB;
+
+    style->writing_mode.set = FALSE;
+    style->writing_mode.value = style->writing_mode.computed = SP_CSS_WRITING_MODE_LR_TB;
+
+
+    style->text_anchor.set = FALSE;
+    style->text_anchor.value = style->text_anchor.computed = SP_CSS_TEXT_ANCHOR_START;
+
 
     style->opacity.value = SP_SCALE24_MAX;
     style->visibility.set = FALSE;
@@ -1660,11 +1821,6 @@ sp_style_clear (SPStyle *style)
     style->stroke_dash.n_dash = 0;
     style->stroke_dash.dash = NULL;
     style->stroke_dash.offset = 0.0;
-
-    style->text_anchor.set = FALSE;
-    style->text_anchor.value = style->text_anchor.computed = SP_CSS_TEXT_ANCHOR_START;
-    style->writing_mode.set = FALSE;
-    style->writing_mode.value = style->writing_mode.computed = SP_CSS_WRITING_MODE_LR;
 
     for (i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
         g_free(style->marker[i].value);
@@ -1825,11 +1981,6 @@ sp_text_style_clear (SPTextStyle *ts)
 {
     ts->font.set = FALSE;
     ts->font_family.set = FALSE;
-    ts->font_size_adjust_set = FALSE;
-
-    ts->direction_set = FALSE;
-    ts->text_decoration_set = FALSE;
-    ts->unicode_bidi_set = FALSE;
 }
 
 
@@ -1886,16 +2037,6 @@ sp_text_style_write(gchar *p, guint const len, SPTextStyle const *const st, guin
         flags = SP_STYLE_FLAG_IFSET;
 
     d += sp_style_write_istring (p + d, len - d, "font-family", &st->font_family, NULL, flags);
-    if ((flags == SP_STYLE_FLAG_ALWAYS) || st->letterspacing.set) {
-        if (st->letterspacing.inherit) {
-            d += g_snprintf(p + d, len - d, "letter-spacing:inherit;");
-        } else if (st->letterspacing_normal) {
-            d += g_snprintf(p + d, len - d, "letter-spacing:normal;");
-        } else {
-            d += sp_style_write_ilength(p + d, len - d, "letter-spacing", &st->letterspacing, NULL, flags);
-        }
-    }
-
     return d;
 }
 
@@ -2056,7 +2197,61 @@ sp_style_read_ilength (SPILength *val, const gchar *str)
     }
 }
 
+static void
+sp_style_read_ilengthornormal (SPILengthOrNormal *val, const gchar *str)
+{
+    if (!strcmp (str, "normal")) {
+        val->set = TRUE;
+        val->inherit = FALSE;
+        val->normal = TRUE;
+        val->unit = SP_CSS_UNIT_NONE;
+        val->value = val->computed = 0.0;
+    } else {
+        SPILength length;
+        sp_style_read_ilength (&length, str);
+        val->set = length.set;
+        val->inherit = length.inherit;
+        val->normal = FALSE;
+        val->unit = length.unit;
+        val->value = length.value;
+        val->computed = length.computed;
+    }
+}
 
+static void
+sp_style_read_itextdecoration (SPITextDecoration *val, const gchar *str)
+{
+    if (!strcmp (str, "inherit")) {
+        val->set = TRUE;
+        val->inherit = TRUE;
+    } else if (!strcmp (str, "none")) {
+        val->set = TRUE;
+        val->inherit = FALSE;
+        val->underline = FALSE;
+        val->overline = FALSE;
+        val->line_through = FALSE;
+        val->blink = FALSE;
+    } else {
+        val->set = TRUE;
+        val->inherit = FALSE;
+        val->underline = FALSE;
+        val->overline = FALSE;
+        val->line_through = FALSE;
+        val->blink = FALSE;
+        for ( ; *str ; str++ ) {
+            if (*str == ' ') continue;
+            if (!strncmp(str, "underline", 9) && (str[9] == ' ' || str[9] == '\0'))
+                val->underline = TRUE;
+            if (!strncmp(str, "overline", 8) && (str[8] == ' ' || str[8] == '\0'))
+                val->overline = TRUE;
+            if (!strncmp(str, "line-through", 12) && (str[12] == ' ' || str[12] == '\0'))
+                val->line_through = TRUE;
+            if (!strncmp(str, "blink", 5) && (str[5] == ' ' || str[5] == '\0'))
+                val->blink = TRUE;
+            while (*str && *str != ' ') str++;
+        }
+    }
+}
 
 /**
  *
@@ -2449,6 +2644,93 @@ sp_style_write_ilength(gchar *p, gint const len, gchar const *const key,
 }
 
 
+/**
+ *
+ */
+static bool
+sp_lengthornormal_differ(SPILengthOrNormal const *const a, SPILengthOrNormal const *const b)
+{
+    if (a->normal != b->normal) return true;
+    if (a->normal) return false;
+
+    if (a->unit != b->unit) {
+        if (a->unit == SP_CSS_UNIT_EM) return true;
+        if (a->unit == SP_CSS_UNIT_EX) return true;
+        if (a->unit == SP_CSS_UNIT_PERCENT) return true;
+        if (b->unit == SP_CSS_UNIT_EM) return true;
+        if (b->unit == SP_CSS_UNIT_EX) return true;
+        if (b->unit == SP_CSS_UNIT_PERCENT) return true;
+    }
+
+    return (a->computed != b->computed);
+}
+
+/**
+ *
+ */
+static gint
+sp_style_write_ilengthornormal(gchar *p, gint const len, gchar const *const key,
+                       SPILengthOrNormal const *const val, SPILengthOrNormal const *const base, guint const flags)
+{
+    if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
+        ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || sp_lengthornormal_differ (val, base)))) {
+        if (val->normal) {
+            return g_snprintf (p, len, "%s:normal;", key);
+        } else {
+            SPILength length;
+            length.set = val->set;
+            length.inherit = val->inherit;
+            length.unit = val->unit;
+            length.value = val->value;
+            length.computed = val->computed;
+            return sp_style_write_ilength(p, len, key, &length, NULL, SP_STYLE_FLAG_ALWAYS);
+        }
+    }
+    return 0;
+}
+
+/**
+ *
+ */
+static bool
+sp_textdecoration_differ(SPITextDecoration const *const a, SPITextDecoration const *const b)
+{
+    return    a->underline != b->underline
+           || a->overline != b->overline
+           || a->line_through != b->line_through
+           || a->blink != b->blink;
+}
+
+/**
+ *
+ */
+static gint
+sp_style_write_itextdecoration(gchar *p, gint const len, gchar const *const key,
+                       SPITextDecoration const *const val, SPITextDecoration const *const base, guint const flags)
+{
+	Inkscape::SVGOStringStream os;
+
+    if ((flags & SP_STYLE_FLAG_ALWAYS) ||
+        ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
+        ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || sp_textdecoration_differ (val, base)))) {
+        if (val->inherit) {
+            return g_snprintf (p, len, "%s:inherit;", key);
+        } else {
+            os << key << ":";
+            if (val->underline || val->overline || val->line_through || val->blink) {
+                if (val->underline) os << " underline";
+                if (val->overline) os << " overline";
+                if (val->line_through) os << " line-through";
+                if (val->blink) os << " blink";
+            } else
+                os << "none";
+            os << ";";
+            return g_strlcpy (p, os.str().c_str(), len);
+        }
+    }
+    return 0;
+}
 
 /**
  *
@@ -2681,15 +2963,21 @@ sp_css_attr_unset_text (SPCSSAttr *css)
     sp_repr_css_set_property (css, "font-weight", NULL);
     sp_repr_css_set_property (css, "font-stretch", NULL);
     sp_repr_css_set_property (css, "font-family", NULL);
+    sp_repr_css_set_property (css, "text-indent", NULL);
+    sp_repr_css_set_property (css, "text-align", NULL);
+    sp_repr_css_set_property (css, "text-decoration", NULL);
+    sp_repr_css_set_property (css, "line-height", NULL);
     sp_repr_css_set_property (css, "letter-spacing", NULL);
-    sp_repr_css_set_property (css, "word-spacing", NULL); // not implemented yet
-    sp_repr_css_set_property (css, "kerning", NULL); // not implemented yet
-    sp_repr_css_set_property (css, "text-decoration", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "word-spacing", NULL);
+    sp_repr_css_set_property (css, "text-transform", NULL);
+    sp_repr_css_set_property (css, "direction", NULL);
+    sp_repr_css_set_property (css, "block-progression", NULL);
+    sp_repr_css_set_property (css, "writing-mode", NULL);
     sp_repr_css_set_property (css, "text-anchor", NULL);
+    sp_repr_css_set_property (css, "kerning", NULL); // not implemented yet
     sp_repr_css_set_property (css, "dominant-baseline", NULL); // not implemented yet
     sp_repr_css_set_property (css, "alignment-baseline", NULL); // not implemented yet
     sp_repr_css_set_property (css, "baseline-shift", NULL); // not implemented yet
-    sp_repr_css_set_property (css, "writing-mode", NULL);
 
     return css;
 }

@@ -454,6 +454,7 @@ void convert_to_text(void)
     if (!group->layout.outputExists()) return;
 
     Inkscape::XML::Node *repr = sp_repr_new("svg:text");
+    repr->setAttribute("style", SP_OBJECT_REPR(group)->attribute("style"));
 
     for (Inkscape::Text::Layout::iterator it = group->layout.begin() ; it != group->layout.end() ; ) {
         
@@ -476,7 +477,7 @@ void convert_to_text(void)
             SPObject *source_obj;
             Glib::ustring::iterator span_text_start_iter;
             group->layout.getSourceOfCharacter(it, (void**)&source_obj, &span_text_start_iter);
-            span_tspan->setAttribute("style", sp_style_write_string((SP_IS_STRING(source_obj) ? source_obj->parent : source_obj)->style, SP_STYLE_FLAG_ALWAYS));
+            span_tspan->setAttribute("style", sp_style_write_difference((SP_IS_STRING(source_obj) ? source_obj->parent : source_obj)->style, group->style));
 
             it.nextStartOfSpan();
             if (SP_IS_STRING(source_obj)) {

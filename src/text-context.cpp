@@ -509,7 +509,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
-								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) {
 									tc->ipos = sp_te_down (tc->text, tc->ipos);
 								} else {
 									tc->ipos = MAX (tc->ipos - 1, 0);
@@ -530,7 +530,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
-								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) {
 									tc->ipos = sp_te_up (tc->text, tc->ipos);
 								} else {
 									tc->ipos = MIN (tc->ipos + 1, sp_te_get_length (tc->text));
@@ -551,7 +551,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
-								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) {
 									tc->ipos = MAX (tc->ipos - 1, 0);
 								} else {
 									tc->ipos = sp_te_up (tc->text, tc->ipos);
@@ -572,7 +572,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
-								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) {
 									tc->ipos = MIN (tc->ipos + 1, sp_te_get_length (tc->text));
 								} else {
 									tc->ipos = sp_te_down (tc->text, tc->ipos);

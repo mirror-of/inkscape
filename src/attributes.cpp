@@ -219,12 +219,25 @@ static const SPStyleProp props[] = {
 	{SP_PROP_FONT_VARIANT, "font-variant"},
 	{SP_PROP_FONT_WEIGHT, "font-weight"},
 	/* Text */
-	{SP_PROP_DIRECTION, "direction"},
-	{SP_PROP_LETTER_SPACING, "letter-spacing"},
+	{SP_PROP_TEXT_INDENT, "text-indent"},
+	{SP_PROP_TEXT_ALIGN, "text-align"},
 	{SP_PROP_TEXT_DECORATION, "text-decoration"},
-	{SP_PROP_UNICODE_BIDI, "unicode-bidi"},
-	{SP_PROP_WORD_SPACING, "word-spacing"},
 	{SP_PROP_LINE_HEIGHT, "line-height"},
+	{SP_PROP_LETTER_SPACING, "letter-spacing"},
+	{SP_PROP_WORD_SPACING, "word-spacing"},
+	{SP_PROP_TEXT_TRANSFORM, "text-transform"},
+	/* Text (css3) */
+	{SP_PROP_DIRECTION, "direction"},
+	{SP_PROP_BLOCK_PROGRESSION, "block-progression"},
+	{SP_PROP_WRITING_MODE, "writing-mode"},
+	{SP_PROP_UNICODE_BIDI, "unicode_bidi"},
+	{SP_PROP_ALIGNMENT_BASELINE, "alignment-baseline"},
+	{SP_PROP_BASELINE_SHIFT, "baseline-shift"},
+	{SP_PROP_DOMINANT_BASELINE, "dominant-baseline"},
+	{SP_PROP_GLYPH_ORIENTATION_HORIZONTAL, "glyph-orientation-horizontal"},
+	{SP_PROP_GLYPH_ORIENTATION_VERTICAL, "glyph-orientation-vertical"},
+	{SP_PROP_KERNING, "kerning"},
+	{SP_PROP_TEXT_ANCHOR, "text-anchor"},
 	/* Misc */
 	{SP_PROP_CLIP, "clip"},
 	{SP_PROP_COLOR, "color"},
@@ -272,15 +285,6 @@ static const SPStyleProp props[] = {
 	{SP_PROP_STROKE_OPACITY, "stroke-opacity"},
 	{SP_PROP_STROKE_WIDTH, "stroke-width"},
 	{SP_PROP_TEXT_RENDERING, "text-rendering"},
-	/* Text */
-	{SP_PROP_ALIGNMENT_BASELINE, "alignment-baseline"},
-	{SP_PROP_BASELINE_SHIFT, "baseline-shift"},
-	{SP_PROP_DOMINANT_BASELINE, "dominant-baseline"},
-	{SP_PROP_GLYPH_ORIENTATION_HORIZONTAL, "glyph-orientation-horizontal"},
-	{SP_PROP_GLYPH_ORIENTATION_VERTICAL, "glyph-orientation-vertical"},
-	{SP_PROP_KERNING, "kerning"},
-	{SP_PROP_TEXT_ANCHOR, "text-anchor"},
-	{SP_PROP_WRITING_MODE, "writing-mode"} 
 };
 
 #define n_attrs (sizeof (props) / sizeof (props[0]))
