@@ -1503,8 +1503,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Put text on path"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_TEXTFROMPATH, "SelectionTextFromPath", N_("_Remove from Path"),
         N_("Remove text from path"), NULL),
-    new SelectionVerb(SP_VERB_SELECTION_REMOVE_KERNS, "SelectionTextRemoveKerns", N_("Remove Manual _Kerning"),
-        N_("Remove all manual kerning from a text object"), NULL),
+    new SelectionVerb(SP_VERB_SELECTION_REMOVE_KERNS, "SelectionTextRemoveKerns", N_("Remove Manual _Kerns"),
+        N_("Remove all manual kerns from a text object"), NULL),
 
     new SelectionVerb(SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"),
         N_("Union of selected objects"), "union"),
