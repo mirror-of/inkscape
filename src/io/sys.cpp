@@ -269,6 +269,40 @@ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
     return exists;
 }
 
+/** Wrapper around g_dir_open, but taking a utf8name as first argument. */
+GDir *
+Inkscape::IO::dir_open(gchar const *const utf8name, guint const flags, GError **const error)
+{
+    gchar *const opsys_name = g_filename_from_utf8(utf8name, -1, NULL, NULL, error);
+    if (opsys_name) {
+        GDir *ret = g_dir_open(opsys_name, flags, error);
+        g_free(opsys_name);
+        return ret;
+    } else {
+        return NULL;
+    }
+}
+
+/**
+ * Like g_dir_read_name, but returns a utf8name (which must be freed, unlike g_dir_read_name).
+ *
+ * N.B. Skips over any dir entries that fail to convert to utf8.
+ */
+gchar *
+Inkscape::IO::dir_read_utf8name(GDir *dir)
+{
+    for (;;) {
+        gchar const *const opsys_name = g_dir_read_name(dir);
+        if (!opsys_name) {
+            return NULL;
+        }
+        gchar *utf8_name = g_filename_to_utf8(opsys_name, -1, NULL, NULL, NULL);
+        if (utf8_name) {
+            return utf8_name;
+        }
+    }
+}
+
 
 gchar* Inkscape::IO::filename_to_utf8_fallback( const gchar *opsysstring,
                                                 gssize len,

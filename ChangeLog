@@ -1,3 +1,8 @@
+2005-04-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/io/sys.h, src/io/sys.cpp (dir_open, dir_read_utf8name):
+	  New functions: utf8 wrappers around g_dir_open, g_dir_read_name.
+
 2005-04-02  Bryce Harrington <bryce@bryceharrington.org>
 
 	* configure.ac share/ui/menus-bars.xml, src/Makefile.am,
