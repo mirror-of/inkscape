@@ -26,6 +26,7 @@
 #include "../verbs.h"
 #include "../interface.h"
 #include "../seltrans.h"
+#include "../dropper-context.h"
 
 #include "display-settings.h"
 
@@ -110,6 +111,15 @@ options_selector_cue_toggled (GtkToggleButton *button)
 	}
 }
 
+static void
+options_dropper_pick_toggled (GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active (button)) {
+		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		prefs_set_int_attribute ("tools.dropper", "pick", val);
+	}
+}
+
 /**
 * Small helper function to make options_selector a little less
 * verbose.
@@ -127,7 +137,9 @@ static GtkWidget* sp_select_context_add_radio (
     GtkTooltips* tt,
     const gchar* n,
     const gchar* tip,
-    const char* v,
+    const char* v_string,
+    guint v_uint,
+    bool isint,
     gboolean s,
     void (*h)(GtkToggleButton*)
     )
@@ -137,7 +149,12 @@ static GtkWidget* sp_select_context_add_radio (
             );
 	gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), r, tip, NULL);
 	gtk_widget_show (r);
-	gtk_object_set_data (GTK_OBJECT (r), "value", (void*) v);
+
+  if (isint)
+	gtk_object_set_data (GTK_OBJECT (r), "value", GUINT_TO_POINTER (v_uint));
+  else 
+	gtk_object_set_data (GTK_OBJECT (r), "value", (void*) v_string);
+
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (r), s);
 	gtk_box_pack_start (GTK_BOX (fb), r, FALSE, FALSE, 0);
 	gtk_signal_connect (GTK_OBJECT (r), "toggled", GTK_SIGNAL_FUNC (h), NULL);
@@ -152,8 +169,7 @@ options_selector ()
 
     GtkTooltips *tt = gtk_tooltips_new();
 
-    vb = gtk_vbox_new (FALSE, 4);
-    gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+    vb = gtk_vbox_new (FALSE, VB_MARGIN);
 
     f = gtk_frame_new (_("When transforming, show:"));
     gtk_widget_show (f);
@@ -166,13 +182,13 @@ options_selector ()
     gchar const *show = prefs_get_string_attribute ("tools.select", "show");
 
     b = sp_select_context_add_radio (
-        NULL, fb, tt, _("Objects"), _("Show the actual objects when moving or transforming"), "content",
+        NULL, fb, tt, _("Objects"), _("Show the actual objects when moving or transforming"), "content", 0, false,
         (show == NULL) || !strcmp (show, "content"),
         options_selector_show_toggled
         );
 
     sp_select_context_add_radio(
-        b, fb, tt, _("Box outline"), _("Show only a box outline of the objects when moving or transforming"), "outline",
+        b, fb, tt, _("Box outline"), _("Show only a box outline of the objects when moving or transforming"), "outline",  0, false,
         show && !strcmp (show, "outline"),
         options_selector_show_toggled
         );
@@ -188,13 +204,13 @@ options_selector ()
     gchar const *transform = prefs_get_string_attribute ("tools.select", "transform");
 
     b = sp_select_context_add_radio (
-        NULL, fb, tt, _("Optimized"), _("If possible, apply transformation to objects without adding a transform= attribute"), "optimize",
+        NULL, fb, tt, _("Optimized"), _("If possible, apply transformation to objects without adding a transform= attribute"), "optimize",  0, false,
         (transform == NULL) || !strcmp (transform, "optimize"),
         options_selector_transform_toggled
         );
 
     sp_select_context_add_radio (
-        b, fb, tt, _("Preserved"), _("Always store transformation as a transform= attribute on objects"), "keep",
+        b, fb, tt, _("Preserved"), _("Always store transformation as a transform= attribute on objects"), "keep",  0, false,
         transform && !strcmp (transform, "keep"),
         options_selector_transform_toggled
         );
@@ -210,22 +226,60 @@ options_selector ()
     gchar const *cue = prefs_get_string_attribute ("tools.select", "cue");
 
     b = sp_select_context_add_radio (
-        NULL, fb, tt, _("None"), _("No per-object selection indication"), "none",
+        NULL, fb, tt, _("None"), _("No per-object selection indication"), "none", 0, false,
         cue && !strcmp (cue, "none"),
         options_selector_cue_toggled
         );
 
     b = sp_select_context_add_radio (
-        b, fb, tt, _("Mark"), _("Each selected object has a diamond mark in the top left corner"), "mark",
+        b, fb, tt, _("Mark"), _("Each selected object has a diamond mark in the top left corner"), "mark", 0, false,
         (cue == NULL) || !strcmp (cue, "mark"),
         options_selector_cue_toggled
         );
 
     sp_select_context_add_radio (
-        b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), "bbox",
+        b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), "bbox", 0, false,
         cue && !strcmp (cue, "bbox"),
         options_selector_cue_toggled
         );        
+
+    return vb;
+}
+
+
+static GtkWidget *
+options_dropper ()
+{
+    GtkWidget *vb, *f, *fb, *b;
+
+    GtkTooltips *tt = gtk_tooltips_new();
+
+    vb = gtk_vbox_new (FALSE, VB_MARGIN);
+//    gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+
+    f = gtk_frame_new (_("Picking colors:"));
+    gtk_widget_show (f);
+    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+    fb = gtk_vbox_new (FALSE, 0);
+    gtk_widget_show (fb);
+    gtk_container_add (GTK_CONTAINER (f), fb);
+
+    guint pick = prefs_get_int_attribute ("tools.dropper", "pick", 0);
+
+    b = sp_select_context_add_radio (
+        NULL, fb, tt, _("Pick visible color (no alpha)"), _("Pick the visible color under cursor, taking into account the page background and disregarding the transparency of objects"), 
+        NULL, SP_DROPPER_PICK_VISIBLE, true,
+        (pick == SP_DROPPER_PICK_VISIBLE),
+        options_dropper_pick_toggled
+        );
+
+    b = sp_select_context_add_radio (
+        b, fb, tt, _("Pick objects' color (including alpha)"), _("Pick the actual color of object(s) under cursor, including their accumulated transparency"), 
+        NULL, SP_DROPPER_PICK_ACTUAL, true,
+        (pick == SP_DROPPER_PICK_ACTUAL),
+        options_dropper_pick_toggled
+        );
 
     return vb;
 }
@@ -856,36 +910,51 @@ sp_display_dialog (void)
         {
             l = gtk_label_new (_("Selector"));
             gtk_widget_show (l);
-            GtkWidget *vb_sel = gtk_vbox_new (FALSE, 4);
-            gtk_widget_show (vb_sel);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_sel), 4);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_sel, l);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, 4);
+            gtk_widget_show (vb_tool);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), 4);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
 
             GtkWidget *selector_page = options_selector ();
             gtk_widget_show (selector_page);
-            gtk_container_add (GTK_CONTAINER (vb_sel), selector_page);
+            gtk_container_add (GTK_CONTAINER (vb_tool), selector_page);
         }
 
         // Freehand
         {
             l = gtk_label_new (_("Pencil"));
             gtk_widget_show (l);
-            GtkWidget *vb_sel = gtk_vbox_new (FALSE, 4);
-            gtk_widget_show (vb_sel);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_sel), 4);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_sel, l);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, 4);
+            gtk_widget_show (vb_tool);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), 4);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
 
             options_sb (
                 _("Tolerance:"), 
                 _("This value affects the amount of smoothing applied to freehand lines; lower values produce more uneven paths with more nodes"), tt,
                 "",
-                vb_sel,
+                vb_tool,
                 0.0, 100.0, 0.01, 1.0, 1.0,
                 "tools.freehand.pencil", "tolerance", 10.0,
                 false, false,
                 options_freehand_tolerance_changed
                 );
         }
+
+        // Dropper
+        {
+            l = gtk_label_new (_("Dropper"));
+            gtk_widget_show (l);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, 4);
+            gtk_widget_show (vb_tool);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), 4);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+
+            GtkWidget *dropper_page = options_dropper ();
+            gtk_widget_show (dropper_page);
+            gtk_container_add (GTK_CONTAINER (vb_tool), dropper_page);
+        }
+
 
 // Windows
         l = gtk_label_new (_("Windows"));

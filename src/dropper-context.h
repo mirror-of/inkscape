@@ -24,6 +24,11 @@
 class SPDropperContext;
 class SPDropperContextClass;
 
+enum {
+      SP_DROPPER_PICK_VISIBLE,
+      SP_DROPPER_PICK_ACTUAL  
+};
+
 struct SPDropperContext {
 	SPEventContext event_context;
 
@@ -31,6 +36,11 @@ struct SPDropperContext {
 
 	SPCanvasItem *area;
 	NR::Point centre;
+
+	double R;
+	double G;
+	double B;
+	double alpha;
 };
 
 struct SPDropperContextClass {
