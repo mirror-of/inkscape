@@ -142,27 +142,10 @@ sp_png_write_rgba (const gchar *filename, const guchar *px, int width, int heigh
 	sig_bit.alpha = 8;
 	png_set_sBIT(png_ptr, info_ptr, &sig_bit);
 
-#if 0
-	/* Optional gamma chunk is strongly suggested if you have any guess
-	 * as to the correct gamma of the image.
-	 */
-	png_set_gAMA(png_ptr, info_ptr, gamma);
-#endif
-
 	/* Optionally write comments into the image */
 	text_ptr[0].key = "Software";
 	text_ptr[0].text = "Inkscape";
 	text_ptr[0].compression = PNG_TEXT_COMPRESSION_NONE;
-
-#if 0
-	text_ptr[1].key = "Author";
-	text_ptr[1].text = "Unknown";
-	text_ptr[1].compression = PNG_TEXT_COMPRESSION_NONE;
-	text_ptr[2].key = "Description";
-	text_ptr[2].text = "a picture";
-	text_ptr[2].compression = PNG_TEXT_COMPRESSION_zTXt;
-	png_set_text(png_ptr, info_ptr, text_ptr, 3);
-#endif
 
 	png_set_text(png_ptr, info_ptr, text_ptr, 1);
 
@@ -300,13 +283,6 @@ sp_png_write_rgba_striped (const gchar *filename, int width, int height,
 	/* if the image has an alpha channel then */
 	sig_bit.alpha = 8;
 	png_set_sBIT(png_ptr, info_ptr, &sig_bit);
-
-#if 0
-	/* Optional gamma chunk is strongly suggested if you have any guess
-	 * as to the correct gamma of the image.
-	 */
-	png_set_gAMA(png_ptr, info_ptr, gamma);
-#endif
 
 	/* Optionally write comments into the image */
 	text_ptr[0].key = "Title";

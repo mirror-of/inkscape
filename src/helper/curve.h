@@ -27,11 +27,11 @@ struct _SPCurve {
 	gint length;		/* Num allocated Bpaths */
 	gint substart;		/* subpath start */
 	gdouble x, y;		/* previous moveto position */
-	guint sbpath : 1;	/* Bpath is static */
-	guint hascpt : 1;	/* Currentpoint is defined */
-	guint posset : 1;	/* Previous was moveto */
-	guint moving : 1;	/* Bpath end is moving */
-	guint closed : 1;	/* All subpaths are closed */
+	bool sbpath : 1;	/* Bpath is static */
+	bool hascpt : 1;	/* Currentpoint is defined */
+	bool posset : 1;	/* Previous was moveto */
+	bool moving : 1;	/* Bpath end is moving */
+	bool closed : 1;	/* All subpaths are closed */
 };
 
 #define SP_CURVE_LENGTH(c) (((SPCurve *)(c))->end)

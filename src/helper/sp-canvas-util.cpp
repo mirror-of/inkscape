@@ -19,35 +19,6 @@
 #include <libart_lgpl/art_rgb_svp.h>
 #include "sp-canvas-util.h"
 
-#if 0
-/*
- * Grabs canvas item, but unlike the original method does not pass
- * illegal key event mask to canvas, who passes it ahead to Gdk, but
- * instead sets event mask in canvas struct by hand
- */
-
-int
-sp_canvas_item_grab (GnomeCanvasItem *item, unsigned int event_mask, GdkCursor *cursor, guint32 etime)
-{
-	int ret;
-
-	g_return_val_if_fail (item != NULL, -1);
-	g_return_val_if_fail (GNOME_IS_CANVAS_ITEM (item), -1);
-
-	ret = gnome_canvas_item_grab (item,
-				      event_mask & (~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)),
-				      cursor,
-				      etime);
-			
-	/* fixme: Top hack (Lauris) */
-	/* fixme: If we add key masks to event mask, Gdk will abort (Lauris) */
-	/* fixme: But Canvas actualle does get key events, so all we need is routing these here */
-	item->canvas->grabbed_event_mask = event_mask;
-
-	return ret;
-}
-#endif
-
 void
 sp_canvas_update_bbox (SPCanvasItem *item, int x1, int y1, int x2, int y2)
 {
