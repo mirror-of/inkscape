@@ -104,7 +104,7 @@ static guint ntoolbox_drop_target_entries = ENTRIES_SIZE(toolbox_drop_target_ent
 static void sp_maintoolbox_open_files(gchar * buffer);
 static void sp_maintoolbox_open_one_file_with_check(gpointer filename, gpointer unused);
 
-static GtkWidget *window = NULL;
+static GtkWidget *dlg = NULL;
 
 static win_data wd;
 
@@ -113,15 +113,16 @@ static gint x = 0, y = 0;
 static void
 sp_maintoolbox_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (INKSCAPE, window);
-	window = NULL;
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
+	wd.win = dlg = NULL;
+	wd.stop = 0;
 }
 
-static void
+static gboolean
 sp_maintoolbox_delete (GtkObject *object, gpointer data)
 {
-	gtk_window_get_position ((GtkWindow *) window, &x, &y);
-	gtk_widget_destroy (window);
+	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+	return FALSE; // which means, go ahead and destroy it
 }
 
 void
@@ -129,26 +130,27 @@ sp_maintoolbox_create_toplevel (void)
 {
 	GtkWidget *toolbox;
 
-	if (!window) {
+	if (!dlg) {
 		/* Create window */
-		window = sp_window_new (_("Inkscape"), FALSE);
-		gtk_window_move ((GtkWindow *) window, x, y);
-		sp_transientize (window);
-		wd.win = window;
+		dlg = sp_window_new (_("Inkscape"), FALSE);
+		gtk_window_move ((GtkWindow *) dlg, x, y);
+		sp_transientize (dlg);
+		wd.win = dlg;
 		wd.stop = 0;
 		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
-		gtk_signal_connect (GTK_OBJECT (window), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), window);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
 
-		gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (sp_maintoolbox_destroy), window);
-		gtk_signal_connect (GTK_OBJECT (window), "delete_event", GTK_SIGNAL_FUNC (sp_maintoolbox_delete), window);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", GTK_SIGNAL_FUNC (sp_maintoolbox_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", GTK_SIGNAL_FUNC (sp_maintoolbox_delete), dlg);
 
 		toolbox = sp_maintoolbox_new ();
 		gtk_widget_show (toolbox);
-		gtk_container_add (GTK_CONTAINER (window), toolbox);
+		gtk_container_add (GTK_CONTAINER (dlg), toolbox);
 
-		gtk_widget_show (window);
+		gtk_widget_show (dlg);
+
 	} else {
-		gtk_window_present (GTK_WINDOW (window));
+		gtk_window_present (GTK_WINDOW (dlg));
 	}
 };
 
