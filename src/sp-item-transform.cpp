@@ -38,7 +38,6 @@ sp_item_rotate_rel (SPItem * item, double angle)
   nr_matrix_set_translate (NR_MATRIX_D_FROM_DOUBLE (s),x,y);
   nr_matrix_set_translate (NR_MATRIX_D_FROM_DOUBLE (t),-x,-y);
 
-
   tstr[79] = '\0';
 
   // rotate item
@@ -49,12 +48,22 @@ sp_item_rotate_rel (SPItem * item, double angle)
   nr_matrix_f_from_d (&f, NR_MATRIX_D_FROM_DOUBLE (newaff));
   sp_item_set_i2d_affine (item, &f);
 
-  //update repr
-  if (sp_svg_transform_write (tstr, 80, &item->transform)) {
-	  sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
-  } else {
-	  sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", NULL);
-  }
+#if 1
+	// this method is consistent with sp_selection_apply_affine()
+	// it uses each item's own transform writer 
+	// (so e.g. no transform= is ever added to a path, but its nodes always have final coordinates)
+	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+	sp_object_read_attr (SP_OBJECT (item), "transform");
+#else
+	// this is the old method, always adding transform= attribute
+	// I think it's wrong --bb
+	if (sp_svg_transform_write (tstr, 80, &item->transform)) {
+		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
+	} else {
+		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", NULL);
+	}
+#endif
+
 }
 
 void
@@ -86,12 +95,22 @@ sp_item_scale_rel (SPItem *item, double dx, double dy)
 
 	sp_item_set_i2d_affine (item, &new_transform);
 
-	//update repr
-	if (sp_svg_transform_write (tstr, 79, &item->transform)) {
+#if 1
+	// this method is consistent with sp_selection_apply_affine()
+	// it uses each item's own transform writer 
+	// (so e.g. no transform= is ever added to a path, but its nodes always have final coordinates)
+	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+	sp_object_read_attr (SP_OBJECT (item), "transform");
+#else
+	// this is the old method, always adding transform= attribute
+	// I think it's wrong --bb
+	if (sp_svg_transform_write (tstr, 80, &item->transform)) {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
 	} else {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", NULL);
 	}
+#endif
+
 } 
 
 void
@@ -131,12 +150,23 @@ sp_item_skew_rel (SPItem *item, double dx, double dy)
 	art_affine_multiply (newaff, v, s);
 	nr_matrix_f_from_d (&new_transform, NR_MATRIX_D_FROM_DOUBLE (newaff));
 	sp_item_set_i2d_affine (item, &new_transform);
-	//update repr
-	if (sp_svg_transform_write (tstr, 79, &item->transform)) {
+
+#if 1
+	// this method is consistent with sp_selection_apply_affine()
+	// it uses each item's own transform writer 
+	// (so e.g. no transform= is ever added to a path, but its nodes always have final coordinates)
+	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+	sp_object_read_attr (SP_OBJECT (item), "transform");
+#else
+	// this is the old method, always adding transform= attribute
+	// I think it's wrong --bb
+	if (sp_svg_transform_write (tstr, 80, &item->transform)) {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
 	} else {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", NULL);
 	}
+#endif
+
 }
 
 void
@@ -154,11 +184,21 @@ sp_item_move_rel (SPItem * item, double dx, double dy)
 	nr_matrix_multiply (&new_transform, &cur, NR_MATRIX_D_FROM_DOUBLE (move));
 	sp_item_set_i2d_affine (item, &new_transform);
 
-	//update repr
-	if (sp_svg_transform_write (tstr, 79, &item->transform)) {
+#if 1
+	// this method is consistent with sp_selection_apply_affine()
+	// it uses each item's own transform writer 
+	// (so e.g. no transform= is ever added to a path, but its nodes always have final coordinates)
+	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+	sp_object_read_attr (SP_OBJECT (item), "transform");
+#else
+	// this is the old method, always adding transform= attribute
+	// I think it's wrong --bb
+	if (sp_svg_transform_write (tstr, 80, &item->transform)) {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
 	} else {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", NULL);
 	}
+#endif
+
 }
 
