@@ -933,6 +933,7 @@ sp_ui_context_menu (SPView *view, SPItem *item)
                 gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
             }
             if ( SP_IS_GROUP(item) && item != dt->currentLayer() ) {
+                // TRANSLATORS: "Make Current Layer" means "Make it the current layer"
                 GtkWidget *w = gtk_menu_item_new_with_label(_("Make Current Layer"));
                 g_object_set_data(G_OBJECT(w), "group", item);
                 g_signal_connect(G_OBJECT(w), "activate", GCallback(enter_group), dt);
