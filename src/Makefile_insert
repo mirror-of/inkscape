@@ -210,6 +210,7 @@ libinkpost_a_SOURCES =	\
 	fill-or-stroke.h	\
 	fixes.cpp \
 	gradient-chemistry.cpp gradient-chemistry.h	\
+	memeq.h	\
 	round.h
 
 inkscape_private_libs =	\
