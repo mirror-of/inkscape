@@ -1,3 +1,10 @@
+2004-11-23  Kees Cook  <kees@outflux.net>
+
+	* share/tutorials: added Josh's changes, resized, repositioned for
+	  800x600.
+	* src/verbs.h, src/verbs.cpp, src/interface.cpp: added tracing
+	  tutorial.
+
 2004-11-23  MenTaLguY  <mental@rydia.net>
 
 	* src/rect-context.cpp: disallow drawing on locked or invisible layers

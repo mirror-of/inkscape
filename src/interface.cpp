@@ -957,6 +957,7 @@ sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_TUTORIAL_BASIC),
         Inkscape::Verb::get(SP_VERB_TUTORIAL_SHAPES),
 	Inkscape::Verb::get(SP_VERB_TUTORIAL_ADVANCED),
+	Inkscape::Verb::get(SP_VERB_TUTORIAL_TRACING),
 	Inkscape::Verb::get(SP_VERB_TUTORIAL_DESIGN),
 	Inkscape::Verb::get(SP_VERB_TUTORIAL_TIPS),
 	
