@@ -21,6 +21,9 @@ static const char preferences_skeleton[] =
 "  <group id=\"template\">"
 "    <sodipodi:namedview"
 "       id=\"base\""
+"       pagecolor=\"#ffffff\""
+"       bordercolor=\"#666666\""
+"       inkscape:pageshadow=\"2\""
 "       inkscape:zoom=\"0.43415836\""
 "       inkscape:cx=\"305.259528\""
 "       inkscape:cy=\"417.849475\""
@@ -96,7 +99,6 @@ static const char preferences_skeleton[] =
 "    <group id=\"zoomincrement\" value=\"1.414213562\"/>"
 "    <group id=\"keyscroll\" value=\"10\"/>"
 "    <group id=\"wheelscroll\" value=\"40\"/>"
-"    <group id=\"pageshadow\" value=\"2\"/>"
 "  </group>"
 
 "</inkscape>";
