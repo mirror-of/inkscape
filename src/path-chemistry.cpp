@@ -45,10 +45,11 @@ void
 sp_selected_path_combine (void)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (!SP_IS_DESKTOP(desktop)) return;
+	if (!SP_IS_DESKTOP(desktop))
+	  return;
+	
 	SPSelection *selection = SP_DT_SELECTION (desktop);
-
-	GSList *items = (GSList *) sp_selection_item_list (selection);
+	GSList *items = (GSList *) selection->itemList();
 
 	if (g_slist_length (items) < 2) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select at least 2 objects to combine."));
@@ -73,7 +74,7 @@ sp_selected_path_combine (void)
 
 	sp_selected_path_to_curves0 (FALSE, 0);
 
-	items = (GSList *) sp_selection_item_list (selection);
+	items = (GSList *) selection->itemList();
 
 	items = g_slist_copy (items);
 
@@ -130,7 +131,9 @@ void
 sp_selected_path_break_apart (void)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (!SP_IS_DESKTOP(desktop)) return;
+	if (!SP_IS_DESKTOP(desktop))
+	  return;
+	
 	SPSelection *selection = SP_DT_SELECTION (desktop);
 
 	if (selection->isEmpty()) {
@@ -140,7 +143,7 @@ sp_selected_path_break_apart (void)
 
 	bool did = false;
 
-	for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
+	for (GSList *items = g_slist_copy((GSList *) selection->itemList());
 			 items != NULL;
 			 items = items->next) {
 
@@ -218,27 +221,23 @@ sp_selected_path_to_curves (void)
 static void
 sp_selected_path_to_curves0 (gboolean do_document_done, guint32 text_grouping_policy)
 {
-	SPDesktop *dt;
-	SPItem *item;
-	SPRepr  *repr;
-	
-	GSList * il;
-	GSList * l;
-	SPObject *parent;
-	
-	dt = SP_ACTIVE_DESKTOP;
-	if (!dt) return;
-	il = (GSList *) sp_selection_item_list (SP_DT_SELECTION (dt));
-	if (!il) return;
+	SPDesktop *dt = SP_ACTIVE_DESKTOP;
+	if (!dt)
+	  return;
 
-	l = il;
+	GSList *il = (GSList *) SP_DT_SELECTION(dt)->itemList();
+	if (!il)
+	  return;
+
+	GSList *l = il;
 	while (l) {
-		item = (SPItem *)l->data;
+		SPItem *item = (SPItem *)l->data;
 		l    = l->next;
-		repr = sp_selected_item_to_curved_repr (item, 0);
+		SPRepr *repr = sp_selected_item_to_curved_repr (item, 0);
 		if (!repr)
-			continue;
-		parent = SP_OBJECT_PARENT (item);
+		  continue;
+		
+		SPObject *parent = SP_OBJECT_PARENT (item);
 		sp_repr_add_child (SP_OBJECT_REPR (parent), 
 				   repr, SP_OBJECT_REPR (item));
 		sp_repr_unparent (SP_OBJECT_REPR (item));
@@ -252,35 +251,31 @@ sp_selected_path_to_curves0 (gboolean do_document_done, guint32 text_grouping_po
 static SPRepr *
 sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 {
-	SPCurve *curve;
-	SPRepr  *repr;
-	gchar  *style_str;
-	gchar  *def_str;
-	
 	if (!item)
-		return NULL;
-		
+	  return NULL;
+
+	SPCurve *curve = NULL;
 	if (SP_IS_SHAPE (item)) {
 		curve = sp_shape_get_curve (SP_SHAPE (item));
 	} else if (SP_IS_TEXT (item)) {
 		curve = sp_text_normalized_bpath (SP_TEXT (item));
-	} else {
-		curve = NULL;
 	}
 	
-	if (!curve) return NULL;
+	if (!curve)
+	  return NULL;
 	
-	repr = sp_repr_new ("path");
+	SPRepr *repr = sp_repr_new ("path");
 	/* Transformation */
 	sp_repr_set_attr (repr, "transform", 
 			  sp_repr_attr (SP_OBJECT_REPR (item), "transform"));
 	/* Style */
-	style_str = sp_style_write_difference (SP_OBJECT_STYLE (item), 
+	gchar *style_str = sp_style_write_difference (SP_OBJECT_STYLE (item), 
 					       SP_OBJECT_STYLE (SP_OBJECT_PARENT (item)));
 	sp_repr_set_attr (repr, "style", style_str);
 	g_free (style_str);
+
 	/* Definition */
-	def_str = sp_svg_write_path (curve->bpath);
+	gchar *def_str = sp_svg_write_path (curve->bpath);
 	sp_repr_set_attr (repr, "d", def_str);
 	g_free (def_str);
 	sp_curve_unref (curve);
@@ -290,23 +285,22 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 void
 sp_path_cleanup (SPPath *path)
 {
-	SPCurve *curve;
-	GSList *curves, *c;
-	SPStyle *style;
-	gboolean dropped;
+	if (strcmp (sp_repr_name (SP_OBJECT_REPR (path)), "path"))
+	  return;
 
-	if (strcmp (sp_repr_name (SP_OBJECT_REPR (path)), "path")) return;
+	SPStyle *style = SP_OBJECT_STYLE (path);
+	if (style->fill.type == SP_PAINT_TYPE_NONE)
+	  return;
 
-	style = SP_OBJECT_STYLE (path);
-	if (style->fill.type == SP_PAINT_TYPE_NONE) return;
-
-	curve = sp_shape_get_curve (SP_SHAPE (path));
-	if (!curve) return;
-	c = sp_curve_split (curve);
+	SPCurve *curve = sp_shape_get_curve (SP_SHAPE (path));
+	if (!curve)
+	  return;
+	
+	GSList *c = sp_curve_split (curve);
 	sp_curve_unref (curve);
 
-	dropped = FALSE;
-	curves = NULL;
+	gboolean dropped = FALSE;
+	GSList *curves = NULL;
 	while (c) {
 		curve = (SPCurve *) c->data;
 		if (curve->closed) {
