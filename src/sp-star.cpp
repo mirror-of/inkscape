@@ -28,10 +28,6 @@
 
 #include "sp-star.h"
 
-#define noSTAR_VERBOSE
-
-#define SP_EPSILON 1e-9
-
 static void sp_star_class_init (SPStarClass *klass);
 static void sp_star_init (SPStar *star);
 
