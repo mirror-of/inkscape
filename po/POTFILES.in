@@ -23,6 +23,7 @@ src/dialogs/display-settings.cpp
 src/dialogs/export.cpp
 src/dialogs/filedialog.cpp
 src/dialogs/fill-style.cpp
+src/dialogs/find.cpp
 src/dialogs/item-properties.cpp
 src/dialogs/object-attributes.cpp
 src/dialogs/object-properties.cpp
@@ -190,6 +191,7 @@ src/sp-spiral.cpp
 src/sp-star.cpp
 src/sp-symbol.cpp
 src/sp-text.cpp
+src/sp-typeset.cpp
 src/sp-use.cpp
 src/spiral-context.cpp
 src/splivarot.cpp
