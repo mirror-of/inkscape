@@ -347,7 +347,7 @@ can leave your ideas and requests there.</p>
 <mouse><key><left-click/></key> <action>select an object</action></mouse>
 <note>When you left-click on an object, previous selection is deselected.</note>
 <mouse><key><shift/><left-click/></key> <action>toggle selection </action></mouse>
-<note>Shift-click adds an object to the current selection if it was not selected, or deselects it otherwise.</note>
+<note>Shift+click adds an object to the current selection if it was not selected, or deselects it otherwise.</note>
 </group>
 
 <group>
