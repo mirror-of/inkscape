@@ -71,10 +71,15 @@ class ScriptDialogImpl : public ScriptDialog, public Gtk::Dialog
     /**
      * Execute the script
      */
+    void execute(Inkscape::Extension::Script::InkscapeScript::ScriptLanguage lang);
+
+    /**
+     * Execute a Python script
+     */
     void executePython();
 
     /**
-     * Execute the script
+     * Execute a Perl script
      */
     void executePerl();
 
@@ -87,17 +92,31 @@ class ScriptDialogImpl : public ScriptDialog, public Gtk::Dialog
 
     Gtk::Menu   fileMenu;
 
+    //## Script text
+    Gtk::Frame          scriptTextFrame;
     Gtk::ScrolledWindow scriptTextScroll;
+    Gtk::TextView       scriptText;
 
-    Gtk::TextView scriptText;
+    //## Output text
+    Gtk::Frame          outputTextFrame;
+    Gtk::ScrolledWindow outputTextScroll;
+    Gtk::TextView       outputText;
+
+    //## Error text
+    Gtk::Frame          errorTextFrame;
+    Gtk::ScrolledWindow errorTextScroll;
+    Gtk::TextView       errorText;
+
 
  
 };
 
 static char *defaultPythonCodeStr =
-    "desktop  = inkscape.getDesktop()\n"
+    "desktop = inkscape.getDesktop()\n"
+    "dialogmanager = inkscape.getDialogManager()\n"
     "document = desktop.getDocument()\n"
     "document.hello()\n"
+    "dialogmanager.showAbout()\n"
     "";
 
 
@@ -106,13 +125,35 @@ static char *defaultPythonCodeStr =
 //## E V E N T S
 //#########################################################################
 
+static void textViewClear(Gtk::TextView &view)
+{
+    Glib::RefPtr<Gtk::TextBuffer> buffer = view.get_buffer();
+    buffer->erase(buffer->begin(), buffer->end());
+}
+
+
 /**
  * Also a public method.  Remove all text from the dialog
  */
 void ScriptDialogImpl::clear()
 {
-    Glib::RefPtr<Gtk::TextBuffer> buffer = scriptText.get_buffer();
-    buffer->erase(buffer->begin(), buffer->end());
+    textViewClear(scriptText);
+    textViewClear(outputText);
+    textViewClear(errorText);
+}
+
+/**
+ * Execute the script in the dialog
+ */
+void
+ScriptDialogImpl::execute(Inkscape::Extension::Script::InkscapeScript::ScriptLanguage
+lang)
+{
+    Glib::ustring script = scriptText.get_buffer()->get_text(true);
+    Glib::ustring output;
+    Glib::ustring error;
+    Inkscape::Extension::Script::InkscapeScript engine;
+    engine.interpretScript(script, output, error, lang);
 }
 
 /**
@@ -120,12 +161,7 @@ void ScriptDialogImpl::clear()
  */
 void ScriptDialogImpl::executePython()
 {
-    Glib::RefPtr<Gtk::TextBuffer> buffer = scriptText.get_buffer();
-    Glib::ustring text = buffer->get_text(true);
-    char *ctext = (char *)text.raw().c_str();
-    Inkscape::Extension::Script::InkscapeScript engine;
-    engine.interpretScript(ctext, 
-       Inkscape::Extension::Script::InkscapeScript::PYTHON);
+    execute(Inkscape::Extension::Script::InkscapeScript::PYTHON);
 }
 
 /**
@@ -133,12 +169,7 @@ void ScriptDialogImpl::executePython()
  */
 void ScriptDialogImpl::executePerl()
 {
-    Glib::RefPtr<Gtk::TextBuffer> buffer = scriptText.get_buffer();
-    Glib::ustring text = buffer->get_text(true);
-    char *ctext = (char *)text.raw().c_str();
-    Inkscape::Extension::Script::InkscapeScript engine;
-    engine.interpretScript(ctext, 
-       Inkscape::Extension::Script::InkscapeScript::PERL);
+    execute(Inkscape::Extension::Script::InkscapeScript::PERL);
 }
 
 
@@ -166,12 +197,35 @@ ScriptDialogImpl::ScriptDialogImpl()
     mainVBox->pack_start(menuBar, Gtk::PACK_SHRINK);
     
 
-    //### Set up the text widget
+    //### Set up the script field
     scriptText.set_editable(true);
     scriptText.get_buffer()->set_text(defaultPythonCodeStr);
     scriptTextScroll.add(scriptText);
     scriptTextScroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
-    mainVBox->pack_start(scriptTextScroll);
+    scriptTextFrame.set_label(_("Script"));
+    scriptTextFrame.set_shadow_type(Gtk::SHADOW_NONE);
+    scriptTextFrame.add(scriptTextScroll);
+    mainVBox->pack_start(scriptTextFrame);
+
+    //### Set up the output field
+    outputText.set_editable(true);
+    outputText.get_buffer()->set_text("");
+    outputTextScroll.add(outputText);
+    outputTextScroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
+    outputTextFrame.set_label(_("Output"));
+    outputTextFrame.set_shadow_type(Gtk::SHADOW_NONE);
+    outputTextFrame.add(outputTextScroll);
+    mainVBox->pack_start(outputTextFrame);
+
+    //### Set up the error field
+    errorText.set_editable(true);
+    errorText.get_buffer()->set_text("");
+    errorTextScroll.add(errorText);
+    errorTextScroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
+    errorTextFrame.set_label(_("Errors"));
+    errorTextFrame.set_shadow_type(Gtk::SHADOW_NONE);
+    errorTextFrame.add(errorTextScroll);
+    mainVBox->pack_start(errorTextFrame);
 
     show_all_children();
 

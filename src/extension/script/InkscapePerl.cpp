@@ -11,11 +11,12 @@
  
 
 
+#include "InkscapePerl.h"
+
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 
-#include "InkscapePerl.h"
 
 #include <stdio.h>
 
@@ -53,8 +54,11 @@ InkscapePerl::~InkscapePerl()
     
 
 
-bool InkscapePerl::interpretScript(char *codeBuf)
+bool InkscapePerl::interpretScript(Glib::ustring &script,
+                                 Glib::ustring &output,
+                                 Glib::ustring &error)
 {
+    char *codeBuf = (char *)script.raw().c_str();
     int ret = InkscapePerlParseBuf(inkscape_module_script, codeBuf);
     if (!ret)
         {

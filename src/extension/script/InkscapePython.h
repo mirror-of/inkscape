@@ -13,6 +13,7 @@
  */
 
 #include "InkscapeInterpreter.h"
+#include <glibmm.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -40,14 +41,12 @@ public:
     /*
      *
      */
-    virtual bool interpretScript(char *str);
+    virtual bool interpretScript(Glib::ustring &script,
+                                 Glib::ustring &output,
+                                 Glib::ustring &error);
     
     
 
-    /*
-     *
-     */
-    virtual bool interpretFile(char *fileName);
     
 private:
 

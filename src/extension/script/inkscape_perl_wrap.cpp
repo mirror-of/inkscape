@@ -851,8 +851,9 @@ static void _swig_create_magic(CPerlObj *pPerl, SV *sv, const char *name, int (C
 
 #define  SWIGTYPE_p_Inkscape__Extension__Script__Desktop swig_types[0] 
 #define  SWIGTYPE_p_Inkscape__Extension__Script__Inkscape swig_types[1] 
-#define  SWIGTYPE_p_Inkscape__Extension__Script__Document swig_types[2] 
-static swig_type_info *swig_types[4];
+#define  SWIGTYPE_p_Inkscape__Extension__Script__DialogManager swig_types[2] 
+#define  SWIGTYPE_p_Inkscape__Extension__Script__Document swig_types[3] 
+static swig_type_info *swig_types[5];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1043,21 +1044,73 @@ XS(_wrap_Inkscape_getDesktop) {
 }
 
 
-XS(_wrap_Inkscape_about) {
+XS(_wrap_Inkscape_getDialogManager) {
     {
         Inkscape::Extension::Script::Inkscape *arg1 = (Inkscape::Extension::Script::Inkscape *) 0 ;
+        Inkscape::Extension::Script::DialogManager *result;
         int argvi = 0;
         dXSARGS;
         
         if ((items < 1) || (items > 1)) {
-            SWIG_croak("Usage: Inkscape_about(self);");
+            SWIG_croak("Usage: Inkscape_getDialogManager(self);");
         }
         {
             if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_Inkscape__Extension__Script__Inkscape,0) < 0) {
-                SWIG_croak("Type error in argument 1 of Inkscape_about. Expected _p_Inkscape__Extension__Script__Inkscape");
+                SWIG_croak("Type error in argument 1 of Inkscape_getDialogManager. Expected _p_Inkscape__Extension__Script__Inkscape");
             }
         }
-        (arg1)->about();
+        result = (Inkscape::Extension::Script::DialogManager *)(arg1)->getDialogManager();
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_Inkscape__Extension__Script__DialogManager, SWIG_SHADOW|0);
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_delete_DialogManager) {
+    {
+        Inkscape::Extension::Script::DialogManager *arg1 = (Inkscape::Extension::Script::DialogManager *) 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: delete_DialogManager(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_Inkscape__Extension__Script__DialogManager,0) < 0) {
+                SWIG_croak("Type error in argument 1 of delete_DialogManager. Expected _p_Inkscape__Extension__Script__DialogManager");
+            }
+        }
+        delete arg1;
+        
+        
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_DialogManager_showAbout) {
+    {
+        Inkscape::Extension::Script::DialogManager *arg1 = (Inkscape::Extension::Script::DialogManager *) 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: DialogManager_showAbout(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_Inkscape__Extension__Script__DialogManager,0) < 0) {
+                SWIG_croak("Type error in argument 1 of DialogManager_showAbout. Expected _p_Inkscape__Extension__Script__DialogManager");
+            }
+        }
+        (arg1)->showAbout();
         
         
         XSRETURN(argvi);
@@ -1175,11 +1228,13 @@ XS(_wrap_Document_hello) {
 
 static swig_type_info _swigt__p_Inkscape__Extension__Script__Desktop[] = {{"inkscape_perl::Desktop", 0, "Inkscape::Extension::Script::Desktop *", 0, 0, 0, 0},{"inkscape_perl::Desktop", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_Inkscape__Extension__Script__Inkscape[] = {{"inkscape_perl::Inkscape", 0, "Inkscape::Extension::Script::Inkscape *", 0, 0, 0, 0},{"inkscape_perl::Inkscape", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_Inkscape__Extension__Script__DialogManager[] = {{"inkscape_perl::DialogManager", 0, "Inkscape::Extension::Script::DialogManager *", 0, 0, 0, 0},{"inkscape_perl::DialogManager", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_Inkscape__Extension__Script__Document[] = {{"inkscape_perl::Document", 0, "Inkscape::Extension::Script::Document *", 0, 0, 0, 0},{"inkscape_perl::Document", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 
 static swig_type_info *swig_types_initial[] = {
 _swigt__p_Inkscape__Extension__Script__Desktop, 
 _swigt__p_Inkscape__Extension__Script__Inkscape, 
+_swigt__p_Inkscape__Extension__Script__DialogManager, 
 _swigt__p_Inkscape__Extension__Script__Document, 
 0
 };
@@ -1200,7 +1255,9 @@ static swig_command_info swig_commands[] = {
 {"inkscape_perlc::getInkscape", _wrap_getInkscape},
 {"inkscape_perlc::delete_Inkscape", _wrap_delete_Inkscape},
 {"inkscape_perlc::Inkscape_getDesktop", _wrap_Inkscape_getDesktop},
-{"inkscape_perlc::Inkscape_about", _wrap_Inkscape_about},
+{"inkscape_perlc::Inkscape_getDialogManager", _wrap_Inkscape_getDialogManager},
+{"inkscape_perlc::delete_DialogManager", _wrap_delete_DialogManager},
+{"inkscape_perlc::DialogManager_showAbout", _wrap_DialogManager_showAbout},
 {"inkscape_perlc::delete_Desktop", _wrap_delete_Desktop},
 {"inkscape_perlc::Desktop_getDocument", _wrap_Desktop_getDocument},
 {"inkscape_perlc::delete_Document", _wrap_delete_Document},
@@ -1268,6 +1325,7 @@ XS(SWIG_init) {
     }
     
     SWIG_TypeClientData(SWIGTYPE_p_Inkscape__Extension__Script__Inkscape, (void*) "inkscape_perl::Inkscape");
+    SWIG_TypeClientData(SWIGTYPE_p_Inkscape__Extension__Script__DialogManager, (void*) "inkscape_perl::DialogManager");
     SWIG_TypeClientData(SWIGTYPE_p_Inkscape__Extension__Script__Desktop, (void*) "inkscape_perl::Desktop");
     SWIG_TypeClientData(SWIGTYPE_p_Inkscape__Extension__Script__Document, (void*) "inkscape_perl::Document");
     ST(0) = &PL_sv_yes;

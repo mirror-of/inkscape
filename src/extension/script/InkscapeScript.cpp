@@ -49,7 +49,10 @@ InkscapeScript::~InkscapeScript()
 /**
  *
  */
-bool InkscapeScript::interpretScript(char *script, ScriptLanguage language)
+bool InkscapeScript::interpretScript(Glib::ustring &script,
+                                 Glib::ustring &output,
+                                 Glib::ustring &error,
+                                 ScriptLanguage language)
 {
 
     InkscapeInterpreter *interp;
@@ -72,7 +75,7 @@ bool InkscapeScript::interpretScript(char *script, ScriptLanguage language)
     if (!interp)
         return false;
 
-    if (!interp->interpretScript(script))
+    if (!interp->interpretScript(script, output, error))
         {
         fprintf(stderr, "error in executing script\n");
         return false;
@@ -86,7 +89,10 @@ bool InkscapeScript::interpretScript(char *script, ScriptLanguage language)
 /**
  *
  */
-bool InkscapeScript::interpretUri(char *uri, ScriptLanguage language)
+bool InkscapeScript::interpretUri(Glib::ustring &uri,
+                                 Glib::ustring &output,
+                                 Glib::ustring &error,
+                                 ScriptLanguage language)
 {
 
     InkscapeInterpreter *interp;
@@ -109,9 +115,9 @@ bool InkscapeScript::interpretUri(char *uri, ScriptLanguage language)
     if (!interp)
         return false;
 
-    if (!interp->interpretUri(uri))
+    if (!interp->interpretUri(uri, output, error))
         {
-        fprintf(stderr, "error in executing script '%s'\n", uri);
+        fprintf(stderr, "error in executing script '%s'\n", uri.raw().c_str());
         return false;
         }
         

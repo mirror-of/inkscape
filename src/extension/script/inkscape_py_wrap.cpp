@@ -1077,12 +1077,13 @@ SWIG_Python_LookupTypePointer(swig_type_info ***type_list_handle) {
 #define  SWIGTYPE_p_Inkscape__Extension__Script__Desktop swig_types[0] 
 #define  SWIGTYPE_p_Inkscape__Extension__Script__Inkscape swig_types[1] 
 #define  SWIGTYPE_p_char swig_types[2] 
-#define  SWIGTYPE_size_t swig_types[3] 
-#define  SWIGTYPE_std__size_t swig_types[4] 
-#define  SWIGTYPE_p_Inkscape__Extension__Script__Document swig_types[5] 
-#define  SWIGTYPE_ptrdiff_t swig_types[6] 
-#define  SWIGTYPE_std__ptrdiff_t swig_types[7] 
-static swig_type_info *swig_types[9];
+#define  SWIGTYPE_p_Inkscape__Extension__Script__DialogManager swig_types[3] 
+#define  SWIGTYPE_size_t swig_types[4] 
+#define  SWIGTYPE_std__size_t swig_types[5] 
+#define  SWIGTYPE_p_Inkscape__Extension__Script__Document swig_types[6] 
+#define  SWIGTYPE_ptrdiff_t swig_types[7] 
+#define  SWIGTYPE_std__ptrdiff_t swig_types[8] 
+static swig_type_info *swig_types[10];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1148,17 +1149,18 @@ static PyObject *_wrap_Inkscape_getDesktop(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_Inkscape_about(PyObject *, PyObject *args) {
+static PyObject *_wrap_Inkscape_getDialogManager(PyObject *, PyObject *args) {
     PyObject *resultobj;
     Inkscape::Extension::Script::Inkscape *arg1 = (Inkscape::Extension::Script::Inkscape *) 0 ;
+    Inkscape::Extension::Script::DialogManager *result;
     PyObject * obj0 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"O:Inkscape_about",&obj0)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:Inkscape_getDialogManager",&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_Inkscape__Extension__Script__Inkscape, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    (arg1)->about();
+    result = (Inkscape::Extension::Script::DialogManager *)(arg1)->getDialogManager();
     
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_Inkscape__Extension__Script__DialogManager, 0);
     return resultobj;
     fail:
     return NULL;
@@ -1169,6 +1171,47 @@ static PyObject * Inkscape_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_Inkscape__Extension__Script__Inkscape, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static PyObject *_wrap_delete_DialogManager(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    Inkscape::Extension::Script::DialogManager *arg1 = (Inkscape::Extension::Script::DialogManager *) 0 ;
+    PyObject * obj0 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:delete_DialogManager",&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_Inkscape__Extension__Script__DialogManager, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    delete arg1;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DialogManager_showAbout(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    Inkscape::Extension::Script::DialogManager *arg1 = (Inkscape::Extension::Script::DialogManager *) 0 ;
+    PyObject * obj0 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:DialogManager_showAbout",&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_Inkscape__Extension__Script__DialogManager, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    (arg1)->showAbout();
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * DialogManager_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_Inkscape__Extension__Script__DialogManager, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
@@ -1259,8 +1302,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"getInkscape", _wrap_getInkscape, METH_VARARGS, NULL},
 	 { (char *)"delete_Inkscape", _wrap_delete_Inkscape, METH_VARARGS, NULL},
 	 { (char *)"Inkscape_getDesktop", _wrap_Inkscape_getDesktop, METH_VARARGS, NULL},
-	 { (char *)"Inkscape_about", _wrap_Inkscape_about, METH_VARARGS, NULL},
+	 { (char *)"Inkscape_getDialogManager", _wrap_Inkscape_getDialogManager, METH_VARARGS, NULL},
 	 { (char *)"Inkscape_swigregister", Inkscape_swigregister, METH_VARARGS, NULL},
+	 { (char *)"delete_DialogManager", _wrap_delete_DialogManager, METH_VARARGS, NULL},
+	 { (char *)"DialogManager_showAbout", _wrap_DialogManager_showAbout, METH_VARARGS, NULL},
+	 { (char *)"DialogManager_swigregister", DialogManager_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Desktop", _wrap_delete_Desktop, METH_VARARGS, NULL},
 	 { (char *)"Desktop_getDocument", _wrap_Desktop_getDocument, METH_VARARGS, NULL},
 	 { (char *)"Desktop_swigregister", Desktop_swigregister, METH_VARARGS, NULL},
@@ -1276,6 +1322,7 @@ static PyMethodDef SwigMethods[] = {
 static swig_type_info _swigt__p_Inkscape__Extension__Script__Desktop[] = {{"_p_Inkscape__Extension__Script__Desktop", 0, "Inkscape::Extension::Script::Desktop *", 0, 0, 0, 0},{"_p_Inkscape__Extension__Script__Desktop", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_Inkscape__Extension__Script__Inkscape[] = {{"_p_Inkscape__Extension__Script__Inkscape", 0, "Inkscape::Extension::Script::Inkscape *", 0, 0, 0, 0},{"_p_Inkscape__Extension__Script__Inkscape", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_Inkscape__Extension__Script__DialogManager[] = {{"_p_Inkscape__Extension__Script__DialogManager", 0, "Inkscape::Extension::Script::DialogManager *", 0, 0, 0, 0},{"_p_Inkscape__Extension__Script__DialogManager", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__size_t[] = {{"_size_t", 0, "size_t", 0, 0, 0, 0},{"_size_t", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__std__size_t[] = {{"_std__size_t", 0, "std::size_t", 0, 0, 0, 0},{"_std__size_t", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_Inkscape__Extension__Script__Document[] = {{"_p_Inkscape__Extension__Script__Document", 0, "Inkscape::Extension::Script::Document *", 0, 0, 0, 0},{"_p_Inkscape__Extension__Script__Document", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -1286,6 +1333,7 @@ static swig_type_info *swig_types_initial[] = {
 _swigt__p_Inkscape__Extension__Script__Desktop, 
 _swigt__p_Inkscape__Extension__Script__Inkscape, 
 _swigt__p_char, 
+_swigt__p_Inkscape__Extension__Script__DialogManager, 
 _swigt__size_t, 
 _swigt__std__size_t, 
 _swigt__p_Inkscape__Extension__Script__Document, 

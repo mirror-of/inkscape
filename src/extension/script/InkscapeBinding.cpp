@@ -92,6 +92,44 @@ Document *DesktopImpl::getDocument()
 
 
 //#########################################################################
+//# D I A L O G    M A N A G E R
+//#########################################################################
+
+class DialogManagerImpl : public DialogManager
+{
+public:
+    DialogManagerImpl();
+    
+    virtual ~DialogManagerImpl();
+    
+    virtual void showAbout();
+    
+private:
+
+
+};
+
+DialogManagerImpl::DialogManagerImpl()
+{
+
+}
+
+    
+DialogManagerImpl::~DialogManagerImpl()
+{
+
+}
+    
+
+void DialogManagerImpl::showAbout()
+{
+    sp_help_about();
+
+}
+
+
+
+//#########################################################################
 //# I N K S C A P E
 //#########################################################################
 
@@ -104,11 +142,13 @@ public:
     
     virtual Desktop *getDesktop();
     
-    virtual void about();
+    virtual DialogManager *getDialogManager();
     
 private:
 
     DesktopImpl desktop;
+
+    DialogManagerImpl dialogManager;
 
 };
 
@@ -134,15 +174,12 @@ InkscapeImpl::~InkscapeImpl()
 Desktop *InkscapeImpl::getDesktop()
 {
     return &desktop;
-
 }
 
-void InkscapeImpl::about()
+DialogManager *InkscapeImpl::getDialogManager()
 {
-    sp_help_about();
-
+    return &dialogManager;
 }
-
 
 
 

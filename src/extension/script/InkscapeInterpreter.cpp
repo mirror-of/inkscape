@@ -43,7 +43,9 @@ InkscapeInterpreter::~InkscapeInterpreter()
 /*
  *  Interpret an in-memory string
  */
-bool InkscapeInterpreter::interpretScript(char *codeStr)
+bool InkscapeInterpreter::interpretScript(Glib::ustring &script,
+                                 Glib::ustring &output,
+                                 Glib::ustring &error)
 {
     //do nothing.  let the subclasses implement this
     return true;
@@ -55,28 +57,29 @@ bool InkscapeInterpreter::interpretScript(char *codeStr)
 /*
  *  Interpret a named file
  */
-bool InkscapeInterpreter::interpretUri(char *uri)
+bool InkscapeInterpreter::interpretUri(Glib::ustring &uri,
+                                 Glib::ustring &output,
+                                 Glib::ustring &error)
 {
-    std::ifstream ins(uri);
+    char *curi = (char *)uri.raw().c_str();
+    std::ifstream ins(curi);
     if (!ins.good())
         {
-        printf("interpretUri: Could not open %s for reading\n", uri);
+        printf("interpretUri: Could not open %s for reading\n", curi);
         return false;
         }
         
-    Inkscape::SVGOStringStream os;
+    Glib::ustring buf;
     
     while (!ins.eof())
         {
-        char ch = ins.get();
-        os << ch;
+        gunichar ch = (gunichar) ins.get();
+        buf.push_back(ch);
         }
 
     ins.close();
     
-    char *buf = (char *) os.str().c_str();
-
-    bool ret = interpretScript(buf);
+    bool ret = interpretScript(buf, output, error);
 
     return ret;
 

@@ -52,7 +52,7 @@ class Inkscape(_object):
         except: pass
 
     def getDesktop(*args): return _inkscape_py.Inkscape_getDesktop(*args)
-    def about(*args): return _inkscape_py.Inkscape_about(*args)
+    def getDialogManager(*args): return _inkscape_py.Inkscape_getDialogManager(*args)
 
 class InkscapePtr(Inkscape):
     def __init__(self, this):
@@ -60,6 +60,28 @@ class InkscapePtr(Inkscape):
         if not hasattr(self,"thisown"): _swig_setattr(self, Inkscape, 'thisown', 0)
         _swig_setattr(self, Inkscape,self.__class__,Inkscape)
 _inkscape_py.Inkscape_swigregister(InkscapePtr)
+
+class DialogManager(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DialogManager, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DialogManager, name)
+    def __init__(self): raise RuntimeError, "No constructor defined"
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ Inkscape::Extension::Script::DialogManager instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __del__(self, destroy=_inkscape_py.delete_DialogManager):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def showAbout(*args): return _inkscape_py.DialogManager_showAbout(*args)
+
+class DialogManagerPtr(DialogManager):
+    def __init__(self, this):
+        _swig_setattr(self, DialogManager, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, DialogManager, 'thisown', 0)
+        _swig_setattr(self, DialogManager,self.__class__,DialogManager)
+_inkscape_py.DialogManager_swigregister(DialogManagerPtr)
 
 class Desktop(_object):
     __swig_setmethods__ = {}

@@ -64,7 +64,38 @@ sub DESTROY {
 }
 
 *getDesktop = *inkscape_perlc::Inkscape_getDesktop;
-*about = *inkscape_perlc::Inkscape_about;
+*getDialogManager = *inkscape_perlc::Inkscape_getDialogManager;
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : inkscape_perl::DialogManager ##############
+
+package inkscape_perl::DialogManager;
+@ISA = qw( inkscape_perl );
+%OWNER = ();
+%ITERATORS = ();
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        inkscape_perlc::delete_DialogManager($self);
+        delete $OWNER{$self};
+    }
+}
+
+*showAbout = *inkscape_perlc::DialogManager_showAbout;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);

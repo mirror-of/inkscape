@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-
+#include <glibmm.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -36,16 +36,20 @@ public:
     /**
      *
      */
-    virtual bool interpretScript(char *script);
+    virtual bool interpretScript(Glib::ustring &script,
+                                 Glib::ustring &output,
+                                 Glib::ustring &error);
 
     /**
      *
      */
-    virtual bool interpretUri(char *uri);
+    virtual bool interpretUri(Glib::ustring &uri,
+                              Glib::ustring &output,
+                              Glib::ustring &error);
 
 
 
-}; //class InkscapeScript
+}; //class InkscapeInterpreter
 
 
 

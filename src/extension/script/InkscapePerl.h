@@ -13,6 +13,7 @@
  */
  
 #include "InkscapeInterpreter.h"
+#include <glibmm.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -39,7 +40,9 @@ public:
     /*
      *
      */
-    bool interpretScript(char *str);
+    bool interpretScript(Glib::ustring &script,
+                         Glib::ustring &output,
+                         Glib::ustring &error);
     
     
 

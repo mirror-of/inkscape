@@ -13,6 +13,7 @@
  */
 
 
+#include <glibmm.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -45,12 +46,18 @@ public:
     /**
      *
      */
-    bool interpretScript(char *script, ScriptLanguage language);
+    bool interpretScript(Glib::ustring &script,
+                         Glib::ustring &output,
+                         Glib::ustring &error,
+                         ScriptLanguage language);
 
     /**
      *
      */
-    bool interpretUri(char *uri, ScriptLanguage language);
+    bool interpretUri(Glib::ustring &uri,
+                      Glib::ustring &output,
+                      Glib::ustring &error,
+                      ScriptLanguage language);
 
 
 

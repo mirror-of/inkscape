@@ -10,9 +10,10 @@
  */
 
 
+#include <Python.h>
+
 #include "InkscapePython.h"
 
-#include <Python.h>
 
 #include <stdio.h>
 
@@ -52,7 +53,9 @@ static bool initialized = false;
 /*
  *  Interpret an in-memory string
  */
-bool InkscapePython::interpretScript(char *codeStr)
+bool InkscapePython::interpretScript(Glib::ustring &script,
+                                 Glib::ustring &output,
+                                 Glib::ustring &error)
 {
     if (!initialized)
         {
@@ -60,6 +63,7 @@ bool InkscapePython::interpretScript(char *codeStr)
         init_inkscape_py();
         initialized = true;
         }
+    char *codeStr = (char *)script.raw().c_str();
     PyRun_SimpleString(inkscape_module_script);
     PyRun_SimpleString("inkscape = _inkscape_py.getInkscape()\n");
     PyRun_SimpleString(codeStr);
@@ -70,25 +74,6 @@ bool InkscapePython::interpretScript(char *codeStr)
     
     
 
-/*
- *  Interpret a named file
- */
-bool InkscapePython::interpretFile(char *fileName)
-{
-    if (!initialized)
-        {
-        Py_Initialize();
-        init_inkscape_py();
-        initialized = true;
-        }
-    PyRun_SimpleString(inkscape_module_script);
-    PyRun_SimpleString("inkscape = _inkscape_py.getInkscape()\n");
-    FILE *f = fopen(fileName, "r");
-    PyRun_SimpleFile(f, fileName);
-    fclose(f);
-    //Py_Finalize();
-    return true;
-}
 
 
 
