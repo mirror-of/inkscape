@@ -8,14 +8,41 @@
    height="256pt"
    sodipodi:docname="icons.svg"
    inkscape:version="0.39cvs"
-   sodipodi:docbase="/home/d/ink/inkscape/share/icons"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xml="http://www.w3.org/XML/1998/namespace"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase="/home/d/ink/inkscape/share/icons">
   <defs
      id="defs3">
+    <marker
+       style="overflow:visible;"
+       id="TriangleInS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleInS">
+      <path
+         transform="scale(-0.2)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path2571"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow2S"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2S">
+      <path
+         transform="scale(0.3) translate(-5,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="arrowMarkerPath2"
+         sodipodi:nodetypes="cccc" />
+    </marker>
     <linearGradient
        id="linearGradient2485">
       <stop
@@ -384,6 +411,9 @@
        r="0.65247440"
        fx="0.31111112"
        fy="0.33123028" />
+    <radialGradient
+       xlink:href="#linearGradient2485"
+       id="radialGradient2630" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -392,9 +422,9 @@
      showgrid="false"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="7.9999996"
-     inkscape:cx="484.94387"
-     inkscape:cy="209.42619"
+     inkscape:zoom="31.999998"
+     inkscape:cx="544.36557"
+     inkscape:cy="23.936456"
      inkscape:window-width="1140"
      inkscape:window-height="660"
      inkscape:window-x="14"
@@ -6102,4 +6132,18 @@
      d="M 616.37877,51.351047 L 622.86745,51.351047 L 629.73942,70.680177 L 624.04402,70.680177 L 622.94156,67.954367 L 616.14038,67.954367 L 615.03791,70.680177 L 609.47942,70.680177 L 616.37877,51.351047 z M 621.89316,64.218887 L 619.55466,56.116267 L 617.16140,64.218887 L 621.89316,64.218887 z "
      id="path1953"
      sodipodi:nodetypes="ccccccccccccc" />
+  <g
+     id="width_height_lock"
+     transform="matrix(0.893014,0.000000,0.000000,0.996343,71.83827,1.069215)">
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.3556368;marker-start:none;marker-end:none;"
+       d="M 677.02533,290.05799 C 677.02533,284.50908 683.85340,284.11969 683.85340,290.35996"
+       id="path2627"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill-rule:evenodd;stroke:#000000;stroke-width:2.1475177;marker-start:none;marker-end:none;"
+       d="M 676.40450,290.92345 C 676.61178,296.15532 683.97096,296.42135 684.38557,291.01212 C 678.32203,290.92456 676.40450,290.92345 676.40450,290.92345 z "
+       id="path2629"
+       sodipodi:nodetypes="ccc" />
+  </g>
 </svg>
