@@ -21,6 +21,7 @@ INCLUDES =	\
 	$(INKSCAPE_CFLAGS)
 
 include Makefile_insert
+include application/Makefile_insert
 include dialogs/Makefile_insert
 include display/Makefile_insert
 include extension/Makefile_insert
@@ -50,6 +51,7 @@ bin_PROGRAMS = inkscape inkview
 
 noinst_LIBRARIES =	\
 	libinkpre.a	\
+	application/libinkapp.a	\
 	dialogs/libspdialogs.a	\
 	display/libspdisplay.a	\
 	extension/implementation/libimplementation.a	\
@@ -86,6 +88,7 @@ EXTRA_DIST =	\
 	make.ofiles	\
 	Doxyfile	\
 	algorithms/makefile.in	\
+	application/makefile.in	\
 	dialogs/makefile.in	\
 	display/makefile.in	\
 	extension/makefile.in	\

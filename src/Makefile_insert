@@ -222,6 +222,7 @@ libinkpost_a_SOURCES =	\
 
 inkscape_private_libs =	\
 	libinkpre.a	\
+	application/libinkapp.a	\
 	dialogs/libspdialogs.a	\
 	trace/libtrace.a  \
 	xml/libspxml.a	\
