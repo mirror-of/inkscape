@@ -2,6 +2,7 @@
 #include <glib.h>
 #include <math.h>
 
+#include "isnan.h" //temporary fix for isnan()
 
 /** Scales this vector to make it a unit vector (within rounding error).
  *
@@ -15,7 +16,7 @@
 void NR::Point::normalize() {
 	double len = hypot(_pt[0], _pt[1]);
 	g_return_if_fail(len != 0);
-	g_return_if_fail(!isnan(len));
+	g_return_if_fail(!isNaN(len));
 	static double const inf = 1e400;
 	if(len != inf) {
 		*this /= len;

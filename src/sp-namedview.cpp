@@ -36,6 +36,8 @@
 #include "sp-namedview.h"
 #include "prefs-utils.h"
 
+#include "isnan.h" //temp fox for isnan().  include last
+
 #define PTPERMM (72.0 / 25.4)
 
 #define DEFAULTTOLERANCE 5.0
@@ -563,9 +565,9 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 	}
 
 	// restore zoom and view
-	if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !isnan (nv->zoom)
-			&& nv->cx != HUGE_VAL && !isnan (nv->cx) 
-			&& nv->cy != HUGE_VAL && !isnan (nv->cy)) {
+	if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !isNaN (nv->zoom)
+			&& nv->cx != HUGE_VAL && !isNaN (nv->cx) 
+			&& nv->cy != HUGE_VAL && !isNaN (nv->cy)) {
 		sp_desktop_zoom_absolute (desktop, nv->cx, nv->cy, nv->zoom);
 	} 
 

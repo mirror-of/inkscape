@@ -51,6 +51,8 @@
 #include "prefs-utils.h"
 #include "xml/repr.h"
 
+#include "isnan.h" //temp fix.  make sure included last
+
 static void sp_sel_trans_update_handles(SPSelTrans &seltrans);
 static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans);
 
@@ -819,7 +821,7 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 	}
 
 	pt = ( point - norm ) * NR::scale(s) + norm;
-	if (isnan(pt[X] + pt[Y])) {
+	if (isNaN(pt[X] + pt[Y])) {
 		g_warning("point=(%g, %g), norm=(%g, %g), s=(%g, %g)\n",
 			  point[X], point[Y], norm[X], norm[Y], s[X], s[Y]);
 	}
@@ -1009,7 +1011,7 @@ void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle const &handle, 
 	}
 	NR::scale s(1, 1);
 	s[dim] = ( pt[dim] - scale_origin[dim] ) / offset;
-	if (isnan(s[dim])) {
+	if (isNaN(s[dim])) {
 		g_warning("s[dim]=%g, pt[dim]=%g, scale_origin[dim]=%g, point[dim]=%g\n",
 			  s[dim], pt[dim], scale_origin[dim], seltrans->point[dim]);
 	}
