@@ -15,6 +15,8 @@
 #include <libnr/nr-types.h>
 #include <svg/svg-types.h>
 
+G_BEGIN_DECLS
+
 /* Generic */
 
 unsigned int sp_svg_boolean_read (const gchar *str, unsigned int *val);
@@ -74,5 +76,7 @@ int sp_svg_write_color (char * buf, int buflen, unsigned int color);
 
 ArtBpath * sp_svg_read_path (const char * str);
 char * sp_svg_write_path (const ArtBpath * bpath);
+
+G_END_DECLS
 
 #endif
