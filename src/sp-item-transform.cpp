@@ -13,6 +13,7 @@
  */
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include "svg/svg.h"
 #include "sp-item-transform.h"
 #include "sp-item.h"
@@ -25,14 +26,11 @@ static NR::translate inverse(NR::translate const m)
 
 void sp_item_rotate_rel(SPItem *item, NR::rotate const &rotation)
 {
-	NRRect b;
-	sp_item_bbox_desktop(item, &b);
-
-	NR::translate const s(b.x0 + (b.x1 - b.x0)/2,
-			      b.y0 + (b.y1 - b.y0)/2);
+	NR::translate const s(sp_item_bbox_desktop(item).midpoint());
 
 	// Rotate item.
-	sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * inverse(s) * rotation * s);
+	sp_item_set_i2d_affine(item,
+			       sp_item_i2d_affine(item) * inverse(s) * rotation * s);
 
 #if 1
 	// this method is consistent with sp_selection_apply_affine()

@@ -1,5 +1,8 @@
 2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item-transform.cpp (sp_item_rotate_rel):
+	Use NR::Rect and .midpoint.
+
 	* src/dropper-context.cpp (sp_dropper_context_root_handler):
 	Cleanup: use translate rather than setting individual matrix elements.
 
