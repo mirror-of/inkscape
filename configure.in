@@ -522,7 +522,6 @@ share/screens/Makefile
 share/templates/Makefile
 share/tutorials/Makefile
 inkscape.spec
-inkscape.1
 inkview.1
 ])
 
