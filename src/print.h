@@ -25,6 +25,11 @@ unsigned int sp_print_image_R8G8B8A8_N (SPPrintContext *ctx,
 					guchar *px, unsigned int w, unsigned int h, unsigned int rs,
 					const NRMatrix *transform, const SPStyle *style);
 
+unsigned int sp_print_text (SPPrintContext* ctx, const char* text, NR::Point p,
+			    const SPStyle* style);
+
+void sp_print_get_param(SPPrintContext *ctx, gchar *name, bool *value);
+
 
 /* UI */
 void sp_print_preview_document (SPDocument *doc);

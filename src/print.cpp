@@ -86,6 +86,16 @@ sp_print_image_R8G8B8A8_N (SPPrintContext *ctx,
 	return ctx->module->image(px, w, h, rs, transform, style);
 }
 
+unsigned int sp_print_text (SPPrintContext* ctx, const char* text, NR::Point p,
+			    const SPStyle* style)
+{
+  return ctx->module->text(text, p, style);
+}
+
+void sp_print_get_param(SPPrintContext *ctx, gchar* name, bool *value)
+{
+  ctx->module->get_param(name, value);
+}
 
 #include "display/nr-arena.h"
 #include "display/nr-arena-item.h"
