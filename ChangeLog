@@ -1,3 +1,9 @@
+2004-01-17 Jon <jon@protofunk.org>
+        * src/desktop.cpp: Changed the document shadow to 1 pixel. It as
+          set to 5, which is really cheesy. I changed it in the 
+          constructor for SP_desktop_new in the function 
+          sp_ctrlrect_set_shadow().
+
 2004-01-17 Bryce <bryce@bryceharrington.com>
 
 	* src/sp-root.cpp, src/sp-symbol.cpp:  Fixing NRMatrix's a -> &a

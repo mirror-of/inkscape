@@ -347,7 +347,10 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 	// display rect and zoom are now handled in sp_desktop_widget_realize(), 
 	/* desktop->page = sp_canvas_item_new (page, SP_TYPE_CTRLRECT, NULL); */
 	sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
-	sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page), 1, 0x3f3f3fff);
+	
+        // the following changes the document shadow on the canvas
+        // It was originally set to 5, which is really cheesy!
+        sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page), 1, 0x3f3f3fff);
 
 	/* Connect event for page resize */
 	desktop->doc2dt[5] = sp_document_height (document);
