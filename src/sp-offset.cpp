@@ -730,7 +730,7 @@ sp_offset_set_shape (SPShape * shape)
     {
       // aie.... plus rien
       res_d = strdup ("M 0 0 L 0 0 z");
-      printf("%s\n",res_d);
+      //printf("%s\n",res_d);
     }
     else
     {
