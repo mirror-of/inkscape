@@ -390,17 +390,6 @@ dnl
 dnl AM_CONDITIONAL(ENABLE_LIBINKSCAPE, test "x$splib" != "xno")
 dnl
 
-dnl ******************************
-dnl Frontline/Autotrace support
-dnl ******************************
-dnl ifdef([AM_PATH_FRONTLINE],
-dnl 	[AM_PATH_FRONTLINE("0.5.1",[AC_DEFINE(ENABLE_AUTOTRACE)
-dnl 		INKSCAPE_CFLAGS="$FRONTLINE_CFLAGS $INKSCAPE_CFLAGS"
-dnl 		INKSCAPE_LIBS="$FRONTLINE_LIBS $INKSCAPE_LIBS"], 
-dnl 	AC_MSG_WARN([Cannot find Frontline library.])
-dnl 	AC_MSG_WARN([AutoTrace function are disabled.]))
-dnl ])
-
 AC_SUBST(INKSCAPE_CFLAGS)
 AC_SUBST(INKSCAPE_LIBS)
 
