@@ -245,7 +245,9 @@ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
     bool exists;
     gchar *filename;
 
-    if (g_utf8_validate(utf8name, -1, NULL)) {
+    // this is potentially wrong (JonCruz), but it works correctly for
+    // our code under Windows with funny home directories (Kees).
+    if (!g_utf8_validate(utf8name, -1, NULL)) {
         filename = g_strdup(utf8name);
     }
     else {
