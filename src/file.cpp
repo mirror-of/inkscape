@@ -313,6 +313,7 @@ sp_file_save_dialog (SPDocument *doc)
 {
     SPRepr *repr = sp_document_repr_root (doc);
 	const gchar * default_extension = NULL;
+	gchar * save_loc;
 
 	default_extension = sp_repr_attr(repr, "inkscape:output_extension");
 	if (default_extension == NULL) {
@@ -320,9 +321,13 @@ sp_file_save_dialog (SPDocument *doc)
 	}
 	// printf("Extension: %s\n", default_extension);
 
+	save_loc = doc->uri; /* \todo should use a getter */
+	if (save_loc == NULL)
+		save_loc = save_path;
+
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
-                 (const char *)save_path,
+                 (const char *)save_loc,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (const char *)_("Select file to save"),
 				 default_extension
@@ -364,7 +369,8 @@ sp_file_save_dialog (SPDocument *doc)
         sucess = file_save (doc, fileName, selectionType, TRUE);
         g_free (save_path);
         save_path = g_dirname (fileName);
-        save_path = g_strdup (save_path);
+        if (save_path)
+			save_path = g_strconcat (save_path, G_DIR_SEPARATOR_S, NULL);
         g_free (fileName);
         return sucess;
     } else {

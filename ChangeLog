@@ -1,3 +1,10 @@
+2004-04-14  Ted Gould <ted@gould.cx>
+
+	* src/file.cpp, dialogs/filedialog.cpp:
+	Making it so that the filename will get placed in the save as dialog
+	if there is a name for the file.  Otherwise the last save directory
+	is used (properly now)
+
 2004-04-15  MenTaLguY <mental@rydia.net>
 
 	* most files in src/: removed many old "compatable" struct typedefs

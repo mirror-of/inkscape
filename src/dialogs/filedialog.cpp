@@ -91,9 +91,10 @@ FileOpenDialog::FileOpenDialog(const char *dir,
     have to wait until Gtk2.4 is on all platforms
     */
     GtkWidget *dlg = gtk_file_selection_new (title);
-    if ( !dir )
-        dir = "";
-	gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
+
+	/* Set the pwd and/or the filename */
+    if (dir != NULL)
+		gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
 
     /*
     Add the selection type menu (svg/with extensions/etc) to the dialog
@@ -225,11 +226,9 @@ FileSaveDialog::FileSaveDialog(
     */
     GtkWidget *dlg = gtk_file_selection_new (title);
 
-	/* This doesn't seem to do anything useful, so I'm dropping it */
-	/*
+	/* Set the pwd and/or the filename */
     if (dir != NULL)
 		gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
-	*/
 
     /*
     Add the selection type menu (svg/with extensions/etc) to the dialog
