@@ -191,6 +191,9 @@ sp_text_context_finish (SPEventContext *ec)
 {
 	SPTextContext *tc = SP_TEXT_CONTEXT (ec);
 
+	tc->sel_changed_connection.disconnect();
+	tc->sel_modified_connection.disconnect();
+
 	sp_text_context_forget_text (SP_TEXT_CONTEXT (ec));
 
 	if (tc->imc) {
