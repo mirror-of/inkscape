@@ -46,9 +46,9 @@ static void sp_event_context_class_init (SPEventContextClass *klass);
 static void sp_event_context_init (SPEventContext *event_context);
 static void sp_event_context_dispose (GObject *object);
 
-static void sp_event_context_private_setup (SPEventContext *ec);
-static gint sp_event_context_private_root_handler (SPEventContext * event_context, GdkEvent * event);
-static gint sp_event_context_private_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
+static void sp_event_context_private_setup(SPEventContext *ec);
+static gint sp_event_context_private_root_handler(SPEventContext *event_context, GdkEvent *event);
+static gint sp_event_context_private_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
 static void set_event_location (SPDesktop * desktop, GdkEvent * event);
 
@@ -254,23 +254,20 @@ grab_allow_again ()
 	return FALSE; // so that it is only called once
 }
 
-static gint
-sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *event)
+static gint sp_event_context_private_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
-	static NRPoint s;
-	NRPoint p;
+	static NR::Point button_w;
 	static unsigned int panning = 0;
-	gint ret;
-	SPDesktop * desktop;
-	ret = FALSE;
 
-	desktop = event_context->desktop;
+	SPDesktop *desktop = event_context->desktop;
 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
-	gdouble zoom_inc = prefs_get_double_attribute_limited ("options.zoomincrement", "value", 1.414213562, 1.01, 10);
-	gdouble acceleration = prefs_get_double_attribute_limited ("options.scrollingacceleration", "value", 0, 0, 6);
-	int key_scroll = prefs_get_int_attribute_limited ("options.keyscroll", "value", 10, 0, 1000);
-	int wheel_scroll = prefs_get_int_attribute_limited ("options.wheelscroll", "value", 40, 0, 1000);
+	double const zoom_inc = prefs_get_double_attribute_limited("options.zoomincrement", "value", M_SQRT2, 1.01, 10);
+	double const acceleration = prefs_get_double_attribute_limited("options.scrollingacceleration", "value", 0, 0, 6);
+	int const key_scroll = prefs_get_int_attribute_limited("options.keyscroll", "value", 10, 0, 1000);
+	int const wheel_scroll = prefs_get_int_attribute_limited("options.wheelscroll", "value", 40, 0, 1000);
+
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_2BUTTON_PRESS:
@@ -298,8 +295,8 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				break;
 			}
 
-			s.x = event->button.x;
-			s.y = event->button.y;
+			button_w = NR::Point(event->button.x,
+					     event->button.y);
 			panning = 2;
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 					     GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
@@ -309,8 +306,8 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			break;
 		case 3:
 			if (event->button.state & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK) {
-				s.x = event->button.x;
-				s.y = event->button.y;
+				button_w = NR::Point(event->button.x,
+						     event->button.y);
 				panning = 3;
 				sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 						     GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
@@ -348,7 +345,10 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				// gobble subsequent motion events to prevent "sticking" when scrolling is slow
 				gobble_motion_events (panning == 2 ? GDK_BUTTON2_MASK : GDK_BUTTON3_MASK);
 
-				sp_desktop_scroll_world (event_context->desktop, event->motion.x - s.x, event->motion.y - s.y);
+				NR::Point const motion_w(event->motion.x,
+							 event->motion.y);
+				NR::Point const moved_w( motion_w - button_w );
+				sp_desktop_scroll_world(event_context->desktop, moved_w);
 				ret = TRUE;
 			}
 		}
@@ -360,12 +360,14 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 
 			if (within_tolerance) {
 				dontgrab ++;
-				sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
-				if (event->button.state & GDK_SHIFT_MASK) {
-					sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, 1/(pow(zoom_inc, dontgrab)));
-				} else {
-					sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, (pow(zoom_inc, dontgrab)));
-				}
+				NR::Point const event_w(event->button.x,
+							event->button.y);
+				NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
+				double const zoom_power = ( (event->button.state & GDK_SHIFT_MASK)
+							    ? -dontgrab
+							    : dontgrab );
+				sp_desktop_zoom_relative_keep_point(desktop, event_dt,
+								    pow(zoom_inc, zoom_power));
 				gtk_timeout_add (250, (GtkFunction) grab_allow_again, NULL);
 			}
 
@@ -479,21 +481,17 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			}
 			/* shift + wheel, zoom in--out */
 		} else if (event->scroll.state & GDK_CONTROL_MASK) {
+			double rel_zoom;
 			switch (event->scroll.direction) {
-			case GDK_SCROLL_UP:
-				//				sp_desktop_get_display_area (desktop, &d);
-				//				sp_desktop_zoom_relative_keep_point (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_inc);
-				sp_desktop_w2d_xy_point (desktop, &p, event->scroll.x, event->scroll.y);
-				sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, zoom_inc);
-				break;
-			case GDK_SCROLL_DOWN:
-				//				sp_desktop_get_display_area (desktop, &d);
-				//				sp_desktop_zoom_relative_keep_point (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / zoom_inc);
-				sp_desktop_w2d_xy_point (desktop, &p, event->scroll.x, event->scroll.y);
-				sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, 1 / zoom_inc);
-				break;
-			default:
-				break;
+			case GDK_SCROLL_UP:   rel_zoom = zoom_inc;     break;
+			case GDK_SCROLL_DOWN: rel_zoom = 1 / zoom_inc; break;
+			default:              rel_zoom = 0.0;          break;
+			}
+			if (rel_zoom != 0.0) {
+				NR::Point const scroll_w(event->scroll.x,
+							 event->scroll.y);
+				NR::Point const scroll_dt(sp_desktop_w2d_xy_point(desktop, scroll_w));
+				sp_desktop_zoom_relative_keep_point(desktop, scroll_dt, rel_zoom);
 			}
 			/* no modifier, pan up--down (left--right on multiwheel mice?) */
 		} else {
@@ -700,17 +698,16 @@ sp_event_context_config_widget (SPEventContext *ec)
 	return NULL;
 }
 
-static void
-set_event_location (SPDesktop * desktop, GdkEvent * event)
+static void set_event_location(SPDesktop *desktop, GdkEvent *event)
 {
-	NRPoint p;
-
-	if (event->type != GDK_MOTION_NOTIFY)
+	if (event->type != GDK_MOTION_NOTIFY) {
 		return;
+	}
 
-	sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
-	sp_view_set_position (SP_VIEW (desktop), p.x, p.y);
-	sp_desktop_set_coordinate_status (desktop, p.x, p.y, 0);
+	NR::Point const button_w(event->button.x, event->button.y);
+	NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+	sp_view_set_position(SP_VIEW(desktop), button_dt);
+	sp_desktop_set_coordinate_status(desktop, button_dt, 0);
 }
 
 void

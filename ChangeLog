@@ -1,5 +1,8 @@
 2004-02-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/event-context.cpp (sp_event_context_private_root_handler,
+	set_event_location): NR::Point'ification.
+
 	* src/desktop.h (sp_desktop_zoom_relative_keep_point,
 	sp_desktop_scroll_world): Add NR::Point version.
 
