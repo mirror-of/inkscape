@@ -206,100 +206,101 @@ sp_transformation_dialog_switch_page (GtkNotebook *notebook, GtkNotebookPage *pa
 static GtkWidget *
 sp_transformation_dialog_new (void)
 {
-	GtkWidget *dlg;
-	GtkWidget *hb, *vb, *nbook, *page, *hs, *bb, *b, *l;
-	SPSelection *sel;
-	gchar title[500];
+	if  (!dlg) {
+		GtkWidget *hb, *vb, *nbook, *page, *hs, *bb, *b, *l;
+		SPSelection *sel;
+		gchar title[500];
 
-	sp_ui_dialog_title_string (SP_VERB_DIALOG_TRANSFORM, title);
+		sp_ui_dialog_title_string (SP_VERB_DIALOG_TRANSFORM, title);
 
-	dlg = sp_window_new (title, TRUE);
-	if (x == -1000 || y == -1000) {
-		x = prefs_get_int_attribute (prefs_path, "x", 0);
-		y = prefs_get_int_attribute (prefs_path, "y", 0);
+		dlg = sp_window_new (title, TRUE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
+		if (w ==0 || h == 0) {
+			w = prefs_get_int_attribute (prefs_path, "w", 0);
+			h = prefs_get_int_attribute (prefs_path, "h", 0);
+		}
+		if (x != 0 || y != 0) 
+			gtk_window_move ((GtkWindow *) dlg, x, y);
+		else
+			gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
+		sp_transientize (dlg);
+		wd.win = dlg;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_transformation_dialog_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_transformation_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_transformation_dialog_delete), dlg);
+
+		/* Toplevel hbox */
+		hb = gtk_hbox_new (FALSE, 0);
+		gtk_widget_show (hb);
+		gtk_container_add (GTK_CONTAINER (dlg), hb);
+
+		/* Toplevel vbox */
+		vb = gtk_vbox_new (FALSE, 4);
+		gtk_widget_show (vb);
+		gtk_box_pack_start (GTK_BOX (hb), vb, TRUE, TRUE, 0);
+
+		/* Notebook for individual transformations */
+		nbook = gtk_notebook_new ();
+		gtk_widget_show (nbook);
+		gtk_box_pack_start (GTK_BOX (vb), nbook, TRUE, TRUE, 0);
+		g_object_set_data (G_OBJECT (dlg), "notebook", nbook);
+		/* Separator */
+		hs = gtk_hseparator_new ();
+		gtk_widget_show (hs);
+		gtk_box_pack_start (GTK_BOX (vb), hs, FALSE, FALSE, 0);
+		/* Buttons */
+		bb = gtk_hbox_new (FALSE, 0);
+		gtk_widget_show (bb);
+		gtk_box_pack_start (GTK_BOX (vb), bb, FALSE, FALSE, 0);
+		b = gtk_button_new_from_stock (GTK_STOCK_APPLY);
+		g_object_set_data (G_OBJECT (dlg), "apply", b);
+		gtk_widget_show (b);
+		gtk_box_pack_start (GTK_BOX (bb), b, TRUE, TRUE, 0);
+		g_signal_connect (G_OBJECT (b), "clicked", G_CALLBACK (sp_transformation_dialog_apply), dlg);
+		b = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+		gtk_widget_show (b);
+		gtk_box_pack_start (GTK_BOX (bb), b, TRUE, TRUE, 0);
+		g_signal_connect (G_OBJECT (b), "clicked", G_CALLBACK (sp_transformation_dialog_close), dlg);
+
+		/* Move page */
+		l = gtk_label_new (_("Move"));
+		gtk_widget_show( l );
+		page = sp_transformation_page_move_new (G_OBJECT (dlg));
+		gtk_widget_show (page);
+		gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
+		g_object_set_data (G_OBJECT (dlg), "move", page);
+
+		/* Scale page */
+		l = gtk_label_new (_("Scale"));
+		gtk_widget_show( l );
+		page = sp_transformation_page_scale_new (G_OBJECT (dlg));
+		gtk_widget_show (page);
+		gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
+		g_object_set_data (G_OBJECT (dlg), "scale", page);
+
+		/* Rotate page */
+		l = gtk_label_new (_("Rotate"));
+		gtk_widget_show( l );
+		page = sp_transformation_page_rotate_new (G_OBJECT (dlg));
+		gtk_widget_show (page);
+		gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
+		g_object_set_data (G_OBJECT (dlg), "rotate", page);
+
+		/* Connect signals */
+		g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (sp_transformation_dialog_selection_changed), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (sp_transformation_dialog_selection_modified), dlg);
+		g_signal_connect (G_OBJECT (nbook), "switch_page", G_CALLBACK (sp_transformation_dialog_switch_page), dlg);
+
+		sel = (SP_ACTIVE_DESKTOP) ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL;
+		sp_transformation_dialog_update_selection (G_OBJECT (dlg), 0, sel);
 	}
-	if (w ==0 || h == 0) {
-		w = prefs_get_int_attribute (prefs_path, "w", 0);
-		h = prefs_get_int_attribute (prefs_path, "h", 0);
-	}
-	if (x != 0 || y != 0) 
-		gtk_window_move ((GtkWindow *) dlg, x, y);
-	else
-		gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
-	if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
-	sp_transientize (dlg);
-	wd.win = dlg;
-	wd.stop = 0;
-	g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
-	gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
-	gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_transformation_dialog_destroy), dlg);
-	gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_transformation_dialog_delete), dlg);
-	g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_transformation_dialog_delete), dlg);
-
-	/* Toplevel hbox */
-	hb = gtk_hbox_new (FALSE, 0);
-	gtk_widget_show (hb);
-	gtk_container_add (GTK_CONTAINER (dlg), hb);
-
-	/* Toplevel vbox */
-	vb = gtk_vbox_new (FALSE, 4);
-	gtk_widget_show (vb);
-	gtk_box_pack_start (GTK_BOX (hb), vb, TRUE, TRUE, 0);
-
-	/* Notebook for individual transformations */
-	nbook = gtk_notebook_new ();
-	gtk_widget_show (nbook);
-	gtk_box_pack_start (GTK_BOX (vb), nbook, TRUE, TRUE, 0);
-	g_object_set_data (G_OBJECT (dlg), "notebook", nbook);
-	/* Separator */
-	hs = gtk_hseparator_new ();
-	gtk_widget_show (hs);
-	gtk_box_pack_start (GTK_BOX (vb), hs, FALSE, FALSE, 0);
-	/* Buttons */
-	bb = gtk_hbox_new (FALSE, 0);
-	gtk_widget_show (bb);
-	gtk_box_pack_start (GTK_BOX (vb), bb, FALSE, FALSE, 0);
-	b = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-	g_object_set_data (G_OBJECT (dlg), "apply", b);
-	gtk_widget_show (b);
-	gtk_box_pack_start (GTK_BOX (bb), b, TRUE, TRUE, 0);
-	g_signal_connect (G_OBJECT (b), "clicked", G_CALLBACK (sp_transformation_dialog_apply), dlg);
-	b = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
-	gtk_widget_show (b);
-	gtk_box_pack_start (GTK_BOX (bb), b, TRUE, TRUE, 0);
-	g_signal_connect (G_OBJECT (b), "clicked", G_CALLBACK (sp_transformation_dialog_close), dlg);
-
-	/* Move page */
-	l = gtk_label_new (_("Move"));
-	gtk_widget_show( l );
-	page = sp_transformation_page_move_new (G_OBJECT (dlg));
-	gtk_widget_show (page);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
-	g_object_set_data (G_OBJECT (dlg), "move", page);
-
-	/* Scale page */
-	l = gtk_label_new (_("Scale"));
-	gtk_widget_show( l );
-	page = sp_transformation_page_scale_new (G_OBJECT (dlg));
-	gtk_widget_show (page);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
-	g_object_set_data (G_OBJECT (dlg), "scale", page);
-
-	/* Rotate page */
-	l = gtk_label_new (_("Rotate"));
-	gtk_widget_show( l );
-	page = sp_transformation_page_rotate_new (G_OBJECT (dlg));
-	gtk_widget_show (page);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
-	g_object_set_data (G_OBJECT (dlg), "rotate", page);
-
-	/* Connect signals */
-	g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (sp_transformation_dialog_selection_changed), dlg);
-	g_signal_connect (G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (sp_transformation_dialog_selection_modified), dlg);
-	g_signal_connect (G_OBJECT (nbook), "switch_page", G_CALLBACK (sp_transformation_dialog_switch_page), dlg);
-
-	sel = (SP_ACTIVE_DESKTOP) ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL;
-	sp_transformation_dialog_update_selection (G_OBJECT (dlg), 0, sel);
 
 	gtk_window_present ((GtkWindow *) dlg);
 
