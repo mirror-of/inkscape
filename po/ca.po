@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-29 17:30+0100\n"
+"POT-Creation-Date: 2005-01-30 12:27+0100\n"
 "PO-Revision-Date: 2004-11-21 00:32+0100\n"
 "Last-Translator: Xavier Conde Rueda <xaviconde@eresmas.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -314,291 +314,292 @@ msgid ""
 msgstr ""
 "Per clonar un conjunt d'objectes, <b>agrupeu-los</b> i <b>cloneu el grup</b>."
 
-#: src/dialogs/clonetiler.cpp:968
+#: src/dialogs/clonetiler.cpp:969
 #, fuzzy
 msgid "_Symmetry"
 msgstr "simètric"
 
-#: src/dialogs/clonetiler.cpp:971
+#: src/dialogs/clonetiler.cpp:972
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr ""
 
 #. TRANSLATORS: "translation" means "shift" here
-#: src/dialogs/clonetiler.cpp:982
+#: src/dialogs/clonetiler.cpp:983
 msgid "<b>P1</b>: simple translation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:983
+#: src/dialogs/clonetiler.cpp:984
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:984
+#: src/dialogs/clonetiler.cpp:985
 msgid "<b>PM</b>: reflection"
 msgstr ""
 
 #. TRANSLATORS: "glide reflection" is a reflection and a translation combined
 #. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
-#: src/dialogs/clonetiler.cpp:987
+#: src/dialogs/clonetiler.cpp:988
 msgid "<b>PG</b>: glide reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:988
+#: src/dialogs/clonetiler.cpp:989
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:989
+#: src/dialogs/clonetiler.cpp:990
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:990
+#: src/dialogs/clonetiler.cpp:991
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:991
+#: src/dialogs/clonetiler.cpp:992
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:992
+#: src/dialogs/clonetiler.cpp:993
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:993
+#: src/dialogs/clonetiler.cpp:994
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:994
+#: src/dialogs/clonetiler.cpp:995
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:995
+#: src/dialogs/clonetiler.cpp:996
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:996
+#: src/dialogs/clonetiler.cpp:997
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:997
+#: src/dialogs/clonetiler.cpp:998
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:998
+#: src/dialogs/clonetiler.cpp:999
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:999
+#: src/dialogs/clonetiler.cpp:1000
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1000
+#: src/dialogs/clonetiler.cpp:1001
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1025
+#: src/dialogs/clonetiler.cpp:1026
 msgid "S_hift"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1032 src/dialogs/clonetiler.cpp:1100
-#: src/dialogs/clonetiler.cpp:1163 src/dialogs/clonetiler.cpp:1215
+#: src/dialogs/clonetiler.cpp:1033 src/dialogs/clonetiler.cpp:1101
+#: src/dialogs/clonetiler.cpp:1164 src/dialogs/clonetiler.cpp:1216
 msgid "Per row:"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1040 src/dialogs/clonetiler.cpp:1064
-#: src/dialogs/clonetiler.cpp:1108 src/dialogs/clonetiler.cpp:1128
+#: src/dialogs/clonetiler.cpp:1041 src/dialogs/clonetiler.cpp:1065
+#: src/dialogs/clonetiler.cpp:1109 src/dialogs/clonetiler.cpp:1129
 #: src/dialogs/object-attributes.cpp:86 src/dialogs/object-attributes.cpp:94
 msgid "X:"
 msgstr "X:"
 
 #. TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
-#: src/dialogs/clonetiler.cpp:1042
+#: src/dialogs/clonetiler.cpp:1043
 #, c-format
 msgid "Horizontal shift per each row (in % of tile width)"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1047 src/dialogs/clonetiler.cpp:1070
-#: src/dialogs/clonetiler.cpp:1113 src/dialogs/clonetiler.cpp:1134
+#: src/dialogs/clonetiler.cpp:1048 src/dialogs/clonetiler.cpp:1071
+#: src/dialogs/clonetiler.cpp:1114 src/dialogs/clonetiler.cpp:1135
 #: src/dialogs/object-attributes.cpp:87 src/dialogs/object-attributes.cpp:95
 msgid "Y:"
 msgstr "Y:"
 
 #. TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
-#: src/dialogs/clonetiler.cpp:1049
+#: src/dialogs/clonetiler.cpp:1050
 #, c-format
 msgid "Vertical shift per each row (in % of tile height)"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1055 src/dialogs/clonetiler.cpp:1119
-#: src/dialogs/clonetiler.cpp:1177 src/dialogs/clonetiler.cpp:1229
+#: src/dialogs/clonetiler.cpp:1056 src/dialogs/clonetiler.cpp:1120
+#: src/dialogs/clonetiler.cpp:1178 src/dialogs/clonetiler.cpp:1230
 msgid "Per column:"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1064
+#: src/dialogs/clonetiler.cpp:1065
 #, c-format
 msgid "Horizontal shift per each column (in % of tile width)"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1070
+#: src/dialogs/clonetiler.cpp:1071
 #, c-format
 msgid "Vertical shift per each column (in % of tile height)"
 msgstr ""
 
 #. TRANSLATORS: "Alternate" is a verb here
-#: src/dialogs/clonetiler.cpp:1078 src/dialogs/clonetiler.cpp:1142
-#: src/dialogs/clonetiler.cpp:1194 src/dialogs/clonetiler.cpp:1246
+#: src/dialogs/clonetiler.cpp:1079 src/dialogs/clonetiler.cpp:1143
+#: src/dialogs/clonetiler.cpp:1195 src/dialogs/clonetiler.cpp:1247
 #, fuzzy
 msgid "Alternate sign"
 msgstr "alternant"
 
-#: src/dialogs/clonetiler.cpp:1078
+#: src/dialogs/clonetiler.cpp:1079
 msgid "Alternate the sign of the shifts for each row or column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1084 src/dialogs/clonetiler.cpp:1148
-#: src/dialogs/clonetiler.cpp:1200 src/dialogs/clonetiler.cpp:1252
+#: src/dialogs/clonetiler.cpp:1085 src/dialogs/clonetiler.cpp:1149
+#: src/dialogs/clonetiler.cpp:1201 src/dialogs/clonetiler.cpp:1253
 #, fuzzy
 msgid "Randomize:"
 msgstr "Aleatorització:"
 
-#: src/dialogs/clonetiler.cpp:1084
+#: src/dialogs/clonetiler.cpp:1085
 msgid "How much to randomize tile positions"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1093
+#: src/dialogs/clonetiler.cpp:1094
 #, fuzzy
 msgid "Sc_ale"
 msgstr "Escala"
 
-#: src/dialogs/clonetiler.cpp:1108
+#: src/dialogs/clonetiler.cpp:1109
 #, fuzzy
 msgid "Horizontal scale per each row"
 msgstr "Coordenada horitzontal de la selecció"
 
-#: src/dialogs/clonetiler.cpp:1113
+#: src/dialogs/clonetiler.cpp:1114
 msgid "Vertical scale per each row"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1128
+#: src/dialogs/clonetiler.cpp:1129
 #, fuzzy
 msgid "Horizontal scale per each column"
 msgstr "Coordenada horitzontal de la selecció"
 
-#: src/dialogs/clonetiler.cpp:1134
+#: src/dialogs/clonetiler.cpp:1135
 msgid "Vertical scale per each column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1142
+#: src/dialogs/clonetiler.cpp:1143
 msgid "Alternate the sign of the scale increment for each row or column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1148
+#: src/dialogs/clonetiler.cpp:1149
 msgid "How much to randomize tile sizes"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1156
+#: src/dialogs/clonetiler.cpp:1157
 #, fuzzy
 msgid "_Rotation"
 msgstr "Relació"
 
-#: src/dialogs/clonetiler.cpp:1171 src/dialogs/clonetiler.cpp:1186
+#: src/dialogs/clonetiler.cpp:1172 src/dialogs/clonetiler.cpp:1187
 #: src/toolbox.cpp:1833
 msgid "Angle:"
 msgstr "Angle:"
 
-#: src/dialogs/clonetiler.cpp:1171
+#: src/dialogs/clonetiler.cpp:1172
 msgid "Rotate tiles by this angle for each row"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1186
+#: src/dialogs/clonetiler.cpp:1187
 msgid "Rotate tiles by this angle for each column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1194
+#: src/dialogs/clonetiler.cpp:1195
 msgid "Alternate the rotation direction for each row or column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1200
+#: src/dialogs/clonetiler.cpp:1201
 msgid "How much to randomize tile rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1208
+#: src/dialogs/clonetiler.cpp:1209
 msgid "_Opacity"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1223 src/dialogs/clonetiler.cpp:1238
+#: src/dialogs/clonetiler.cpp:1224 src/dialogs/clonetiler.cpp:1239
 msgid "Dissolve:"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1223
+#: src/dialogs/clonetiler.cpp:1224
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1238
+#: src/dialogs/clonetiler.cpp:1239
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1246
+#: src/dialogs/clonetiler.cpp:1247
 msgid "Alternate the sign of opacity changes for each row or column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1252
+#: src/dialogs/clonetiler.cpp:1253
 msgid "How much to randomize tile opacity"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1269
+#: src/dialogs/clonetiler.cpp:1270
 #, fuzzy
 msgid "<b>Rows</b>:"
 msgstr "<b>Nou:</b>"
 
-#: src/dialogs/clonetiler.cpp:1279
+#: src/dialogs/clonetiler.cpp:1280
 msgid "How many rows in the tiling"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1295
+#: src/dialogs/clonetiler.cpp:1296
 #, fuzzy
 msgid "<b>Columns</b>:"
 msgstr "<b>Cercle</b>"
 
-#: src/dialogs/clonetiler.cpp:1305
+#: src/dialogs/clonetiler.cpp:1306
 msgid "How many columns in the tiling"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1321
+#: src/dialogs/clonetiler.cpp:1322
 msgid "Use saved size and position of the tile"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1324
+#: src/dialogs/clonetiler.cpp:1325
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1339
+#: src/dialogs/clonetiler.cpp:1340
 #, fuzzy
 msgid " <b>_Create</b> "
 msgstr "<b>Cercle</b>"
 
-#: src/dialogs/clonetiler.cpp:1341
+#: src/dialogs/clonetiler.cpp:1342
 msgid "Create and tile the clones of the selection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1347
+#: src/dialogs/clonetiler.cpp:1348
 #, fuzzy
 msgid " Re_move "
 msgstr "Sup_rimeix l'enllaç"
 
-#: src/dialogs/clonetiler.cpp:1348
+#: src/dialogs/clonetiler.cpp:1349
 #, fuzzy
 msgid "Remove existing tiled clones of the selected object (siblings only)"
 msgstr ""
 "Recorda l'estil del primer objecte seleccionat com a estil d'aquesta eina"
 
-#: src/dialogs/clonetiler.cpp:1354
+#: src/dialogs/clonetiler.cpp:1355
 #, fuzzy
 msgid " R_eset "
 msgstr "Sup_rimeix l'enllaç"
 
-#: src/dialogs/clonetiler.cpp:1355
-msgid "Reset all shifts, scales, rotates, and opacities to zero"
+#. TRANSLATORS: "change" is a noun here
+#: src/dialogs/clonetiler.cpp:1357
+msgid "Reset all shifts, scales, rotates, and opacity changes to zero"
 msgstr ""
 
 #: src/dialogs/debugdialog.cpp:138
@@ -2913,7 +2914,7 @@ msgstr "Expansió:"
 
 #: src/extension/extension.cpp:273
 #, fuzzy
-msgid "\" failed to load beacuse "
+msgid "\" failed to load because "
 msgstr "No s'ha pogut carregar el fitxer demanat %s"
 
 #. This is some filler text, needs to change before relase
@@ -3068,46 +3069,46 @@ msgstr "Preferències del rotulador"
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr "Ha fallat l'autodetecció de format. El fitxer s'obrirà com a SVG."
 
-#: src/file.cpp:217 src/file.cpp:848
+#: src/file.cpp:181 src/file.cpp:812
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "No s'ha pogut carregar el fitxer demanat %s"
 
-#: src/file.cpp:241
+#: src/file.cpp:205
 msgid "Document not saved yet.  Cannot revert."
 msgstr "No s'ha desat el document. No es pot recuperar l'estat anterior."
 
-#: src/file.cpp:247
+#: src/file.cpp:211
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 "Es perdran els canvis. Esteu segur que voleu tornar a carregar el document %"
 "s?"
 
-#: src/file.cpp:274
+#: src/file.cpp:238
 msgid "Document reverted."
 msgstr "S'ha recuperat el document anterior."
 
-#: src/file.cpp:276
+#: src/file.cpp:240
 msgid "Document not reverted."
 msgstr "No s'ha recuperat el document anterior."
 
-#: src/file.cpp:388
+#: src/file.cpp:352
 msgid "Select file to open"
 msgstr "Seleccioneu el fitxer per obrir"
 
-#: src/file.cpp:480
+#: src/file.cpp:444
 #, c-format
 msgid "Removed <b>%i</b> unused item in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused items in &lt;defs&gt;."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/file.cpp:485
+#: src/file.cpp:449
 msgid "No unused items in &lt;defs&gt;."
 msgstr ""
 
-#: src/file.cpp:509
+#: src/file.cpp:473
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -3116,38 +3117,38 @@ msgstr ""
 "No s'ha trobat cap extensió de l'Inkscape per desar el document (%s). És "
 "possible que es desconegui l'extensió del fitxer."
 
-#: src/file.cpp:510 src/file.cpp:516
+#: src/file.cpp:474 src/file.cpp:480
 msgid "Document not saved."
 msgstr "No s'ha desat el document."
 
-#: src/file.cpp:515
+#: src/file.cpp:479
 #, c-format
 msgid "File %s could not be saved."
 msgstr "No s'ha pogut desar el document %s."
 
-#: src/file.cpp:524
+#: src/file.cpp:488
 msgid "Document saved."
 msgstr "S'ha desat el document."
 
-#: src/file.cpp:572
+#: src/file.cpp:536
 #, c-format
 msgid "drawing%s"
 msgstr "dibuix%s"
 
-#: src/file.cpp:578
+#: src/file.cpp:542
 #, c-format
 msgid "drawing-%d%s"
 msgstr "dibuix-%d%s"
 
-#: src/file.cpp:611
+#: src/file.cpp:575
 msgid "Select file to save to"
 msgstr "Seleccioneu el fitxer per desar-hi"
 
-#: src/file.cpp:695
+#: src/file.cpp:659
 msgid "No changes need to be saved."
 msgstr "No hi ha cap canvi per desar."
 
-#: src/file.cpp:874
+#: src/file.cpp:838
 msgid "Select file to import"
 msgstr "Seleccioneu el fitxer per importar"
 
@@ -3287,16 +3288,16 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Ex quadrats"
 
-#: src/inkscape.cpp:460
+#: src/inkscape.cpp:462
 msgid "Untitled document"
 msgstr "Document sense títol"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:491
+#: src/inkscape.cpp:493
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "L'Inkscape ha trobat un error intern i es tancarà ara.\n"
 
-#: src/inkscape.cpp:492
+#: src/inkscape.cpp:494
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
@@ -3304,11 +3305,11 @@ msgstr ""
 "S'han fet còpies de seguretat automàtiques dels documents sense desar a les "
 "següents ubicacions:\n"
 
-#: src/inkscape.cpp:493
+#: src/inkscape.cpp:495
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "No s'ha pogut fer còpia de seguretat dels següents documents:\n"
 
-#: src/inkscape.cpp:665
+#: src/inkscape.cpp:667
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
@@ -3317,7 +3318,7 @@ msgstr ""
 "%s no és un fitxer de dades.\n"
 "%s"
 
-#: src/inkscape.cpp:666
+#: src/inkscape.cpp:668
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -3328,7 +3329,7 @@ msgstr ""
 "o no teniu permís de lectura.\n"
 "%s"
 
-#: src/inkscape.cpp:668
+#: src/inkscape.cpp:670
 #, c-format
 msgid ""
 "%s is not a valid preferences file.\n"
@@ -3337,7 +3338,7 @@ msgstr ""
 "%s no és un fitxer de preferències vàlid.\n"
 "%s"
 
-#: src/inkscape.cpp:669
+#: src/inkscape.cpp:671
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
@@ -3345,7 +3346,7 @@ msgstr ""
 "L'Inkscape s'executarà amb la configuració predeterminada.\n"
 "No es desarà la nova configuració."
 
-#: src/inkscape.cpp:1186
+#: src/inkscape.cpp:1188
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -3354,7 +3355,7 @@ msgstr ""
 "No s'ha pogut crear el directori %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1187
+#: src/inkscape.cpp:1189
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -3363,7 +3364,7 @@ msgstr ""
 "%s no és un directori vàlid.\n"
 "%s"
 
-#: src/inkscape.cpp:1188
+#: src/inkscape.cpp:1190
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -3372,7 +3373,7 @@ msgstr ""
 "No es pot crear el fitxer %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1189
+#: src/inkscape.cpp:1191
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -3381,7 +3382,7 @@ msgstr ""
 "No es pot escriure el fitxer %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1190
+#: src/inkscape.cpp:1192
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
@@ -3987,27 +3988,27 @@ msgid ""
 "rectangle; with <b>Shift</b> to draw around the starting point"
 msgstr ""
 
-#: src/select-context.cpp:237
+#: src/select-context.cpp:242
 msgid "Move canceled."
 msgstr "No s'ha mogut."
 
-#: src/select-context.cpp:245
+#: src/select-context.cpp:250
 msgid "Selection canceled."
 msgstr "S'ha cancel·lat la selecció."
 
-#: src/select-context.cpp:693
+#: src/select-context.cpp:698
 msgid "<b>Ctrl</b>: select in groups, move hor/vert"
 msgstr "<b>Ctrl</b>: selecciona en grups, mou hor/vert"
 
-#: src/select-context.cpp:694
+#: src/select-context.cpp:699
 msgid "<b>Shift</b>: toggle select, force rubberband, disable snapping"
 msgstr ""
 
-#: src/select-context.cpp:695
+#: src/select-context.cpp:700
 msgid "<b>Alt</b>: select under, move selected"
 msgstr ""
 
-#: src/select-context.cpp:917
+#: src/select-context.cpp:922
 #, c-format
 msgid ""
 "<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
@@ -4295,12 +4296,12 @@ msgstr "línia guia vertical"
 msgid "horizontal guideline"
 msgstr "línia guia horitzontal"
 
-#: src/sp-image.cpp:666
+#: src/sp-image.cpp:667
 #, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "<b>La imatge té una referència incorrecta</b>: %s"
 
-#: src/sp-image.cpp:668
+#: src/sp-image.cpp:669
 #, c-format
 msgid "<b>Image</b> %d x %d: %s"
 msgstr "<b>Imatge</b> %d x %d: %s"
@@ -5634,8 +5635,9 @@ msgid "_Unflow Text"
 msgstr ""
 
 #: src/verbs.cpp:1724
-msgid "Convert selected flowtext to text"
-msgstr ""
+#, fuzzy
+msgid "Convert selected flowed text(s) to regular text objects"
+msgstr "Converteix els objectes seleccionats en camins"
 
 #: src/verbs.cpp:1726
 msgid "Flip _Horizontally"
