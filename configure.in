@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT(inkscape, 0.35)
+AC_INIT(inkscape, 0.36cvs)
 AC_CONFIG_SRCDIR(src/main.c)
 AM_INIT_AUTOMAKE
 

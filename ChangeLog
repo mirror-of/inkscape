@@ -1,10 +1,15 @@
+2003-11-11  Ted Gould <ted@gould.cx>
+
+	* Starting 0.36 development
+
 2003-11-10  Ted Gould <ted@gould.cx>
+
 	* Release 0.35
 
 2003-11-08  Bryce Harrington <brycehar@bryceharrington.com>
 	* Updated About dialog
 	* Fixed bug on Editing Windows dialog
-	
+
 2003-11-08  Manny the Gnome
 	* Remove KDE dialog option
 
