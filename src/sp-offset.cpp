@@ -36,6 +36,7 @@
 #include "sp-offset.h"
 
 #include "libnr/nr-types.h"
+#include <libnr/nr-point-fns.h>
 
 #define noOFFSET_VERBOSE
 

@@ -1,3 +1,9 @@
+2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/livarot/PathOutline.cpp, src/livarot/PathSimplify.cpp,
+	src/livarot/PathStroke.cpp, src/sp-offset.cpp:
+	#include libnr/nr-point-fns.h.
+
 2004-02-12  MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr-util.cpp, src/xml/repr.h: pruned some obsolete

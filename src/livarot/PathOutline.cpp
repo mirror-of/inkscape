@@ -9,6 +9,7 @@
 #include "Path.h"
 //#include "MyMath.h"
 #include <math.h>
+#include <libnr/nr-point-fns.h>
 
 void
 Path::Outline (Path * dest, double width, JoinType join, ButtType butt,

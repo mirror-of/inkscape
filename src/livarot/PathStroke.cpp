@@ -8,6 +8,7 @@
 
 #include "Path.h"
 #include "Shape.h"
+#include <libnr/nr-point-fns.h>
 
 // until i find something better
 NR::Point StrokeNormalize(const NR::Point v) {
