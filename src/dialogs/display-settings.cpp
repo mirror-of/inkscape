@@ -31,6 +31,10 @@
 #include "../dropper-context.h"
 #include "../enums.h"
 #include "../selcue.h"
+#include "../selection.h"
+#include "../selection-chemistry.h"
+#include "../style.h"
+#include "xml/repr-private.h"
 
 #include "display-settings.h"
 
@@ -82,8 +86,14 @@ sp_display_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 
 } // end of sp_display_dialog_delete()
 
-
-
+static void
+prefs_switch_page (GtkNotebook *notebook,
+							  GtkNotebookPage *page,
+							  guint page_num,
+							  gchar *attr)
+{
+     prefs_set_int_attribute ("dialogs.preferences", attr, page_num);
+}
 
 static void
 options_selector_show_toggled (GtkToggleButton *button)
@@ -155,8 +165,11 @@ options_dropper_pick_toggled (GtkToggleButton *button)
 *
 * \param b Another radio button in the group, or NULL for the first.
 * \param fb Box to add the button to.
-* \param n Name for the button.
-* \param v Key for the button's value.
+* \param n Label for the button.
+* \param tip Tooltip.
+* \param v_string Key for the button's value, if it is a string.
+* \param v_uint Key for the button's value, if it is a uint.
+* \param isint Whether this is astring or uint.
 * \param s Initial state of the button.
 * \param h Toggled handler function.
 */
@@ -504,7 +517,6 @@ options_changed_boolean (GtkToggleButton *tb, gpointer data)
     prefs_set_int_attribute (prefs_path, prefs_attr, gtk_toggle_button_get_active (tb));
 }
 
-
 void 
 options_sb (
     gchar const *label, 
@@ -631,6 +643,126 @@ selcue_checkbox (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
         );
 }
 
+
+/**
+* Helper function for new_objects_style
+*
+* \param b Another radio button in the group, or NULL for the first.
+* \param fb Box to add the button to.
+* \param n Label for the button.
+* \param tip Tooltip.
+* \param v_uint Key for the button's value
+* \param s Initial state of the button.
+* \param h Toggled handler function.
+*/
+static GtkWidget* new_objects_style_add_radio (
+    GtkWidget* b,
+    GtkWidget* fb,
+    GtkTooltips* tt,
+    const gchar* n,
+    const gchar* tip,
+    guint v_uint,
+    gboolean s,
+    void (*h)(GtkToggleButton*, gpointer),
+    gchar const *prefs_path,
+    gchar const *attr,
+    GtkWidget *button
+    )
+{
+	GtkWidget* r = gtk_radio_button_new_with_label (
+            b ? gtk_radio_button_group (GTK_RADIO_BUTTON (b)) : NULL, n
+            );
+	gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), r, tip, NULL);
+	gtk_widget_show (r);
+
+	gtk_object_set_data (GTK_OBJECT (r), "value", GUINT_TO_POINTER (v_uint));
+	gtk_object_set_data (GTK_OBJECT (r), "attr", (gpointer) attr);
+	gtk_object_set_data (GTK_OBJECT (r), "button_to_activate", (gpointer) button);
+
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (r), s);
+	gtk_box_pack_start (GTK_BOX (fb), r, FALSE, FALSE, 0);
+	gtk_signal_connect (GTK_OBJECT (r), "toggled", GTK_SIGNAL_FUNC (h), (gpointer) prefs_path);
+
+       return r;
+}
+
+static void
+style_from_selection_to_tool (GtkWidget *widget,  const gchar* prefs_path)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop == NULL)
+        return;
+
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    SPItem *item = selection->singleItem();
+
+    SPCSSAttr *css = take_style_from_item (item);
+
+    // only store text style for the text tool
+    if (!g_strrstr ((const gchar *) prefs_path, "text")) {
+        css = sp_css_attr_unset_text (css);
+    }
+
+    // we cannot store properties with uris - they will be invalid in other documents
+    css = sp_css_attr_unset_uris (css);
+
+    sp_repr_css_change (inkscape_get_repr (INKSCAPE, prefs_path), css, "style");
+}
+
+static void
+options_changed_radio (GtkToggleButton *tb, gpointer data)
+{
+    const gchar *prefs_path = (const gchar *) data;
+    const gchar *prefs_attr = (const gchar *) g_object_get_data (G_OBJECT(tb), "attr");
+    const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (tb), "value"));
+
+    prefs_set_int_attribute (prefs_path, prefs_attr, val);
+
+    GtkWidget *button = (GtkWidget *) g_object_get_data (G_OBJECT(tb), "button_to_activate");
+    if (button)
+        gtk_widget_set_sensitive (button, !val);
+}
+
+void
+new_objects_style (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
+{
+    GtkWidget *f = gtk_frame_new (_("Create new objects with:"));
+    gtk_widget_show (f);
+    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+    GtkWidget *fb = gtk_vbox_new (FALSE, 0);
+    gtk_widget_show (fb);
+    gtk_container_add (GTK_CONTAINER (f), fb);
+
+    guint usecurrent = prefs_get_int_attribute (path, "usecurrent", 0);
+
+    GtkWidget *take = gtk_button_new_with_label (_("Take from selection"));
+    gtk_tooltips_set_tip (tt, take, _("Remember the style of the (first) selected object as this tool's style"), NULL);
+    gtk_widget_show (take);
+
+    GtkWidget *b = new_objects_style_add_radio (
+        NULL, fb, tt, _("Current style"), _("Current style is updated every time you change the style of any object (its fill, stroke, transparency, etc.)"),
+        1,
+        usecurrent != 0,
+        options_changed_radio,
+        path, "usecurrent", take
+        );
+
+    new_objects_style_add_radio (
+        b, fb, tt, _("This tool's own style:"), _("Each tool may store its own style to apply to the newly created objects. Use the button below to set it."), 
+        0,
+        usecurrent == 0,
+        options_changed_radio,
+        path, "usecurrent", take
+        );
+
+    gtk_widget_set_sensitive (take, (usecurrent == 0));
+    gtk_box_pack_start (GTK_BOX (fb), take, FALSE, FALSE, 0);
+    gtk_signal_connect (GTK_OBJECT (take), "clicked", GTK_SIGNAL_FUNC (style_from_selection_to_tool), (void *) path);
+}
+
+
 static GtkWidget *
 options_dropper ()
 {
@@ -725,30 +857,20 @@ sp_display_dialog (void)
         g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", 
                              G_CALLBACK (sp_transientize_callback), &wd);
                              
-        gtk_signal_connect ( GTK_OBJECT (dlg), "event", 
-                             GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
         
-        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", 
-                             G_CALLBACK (sp_display_dialog_destroy), dlg);
+        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_display_dialog_destroy), dlg);
+        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_display_dialog_delete), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_display_dialog_delete), dlg);
         
-        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", 
-                             G_CALLBACK (sp_display_dialog_delete), dlg);
-        
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", 
-                             G_CALLBACK (sp_display_dialog_delete), dlg);
-        
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", 
-                             G_CALLBACK (sp_dialog_hide), dlg);
-        
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", 
-                             G_CALLBACK (sp_dialog_unhide), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
 
         GtkTooltips *tt = gtk_tooltips_new();
                              
         nb = gtk_notebook_new ();
         gtk_widget_show (nb);
         gtk_container_add (GTK_CONTAINER (dlg), nb);
-
 
 // Mouse                                      
         vb = new_tab (nb, _("Mouse"));
@@ -939,19 +1061,34 @@ sp_display_dialog (void)
             gtk_container_add (GTK_CONTAINER (vb_shapes), nb_shapes);
 
             // Rect
-            new_tab(nb_shapes, _("Rectangle"));
+            {
+            GtkWidget *vb_tool = new_tab(nb_shapes, _("Rectangle"));
+            new_objects_style (vb_tool, tt, "tools.shapes.rect");
+            }
 
             // Ellipse
-            new_tab(nb_shapes, _("Ellipse"));
+            {
+            GtkWidget *vb_tool = new_tab(nb_shapes, _("Ellipse"));
+            new_objects_style (vb_tool, tt, "tools.shapes.arc");
+            }
 
             // Star
-            new_tab(nb_shapes, _("Star"));
+            {
+            GtkWidget *vb_tool = new_tab(nb_shapes, _("Star"));
+            new_objects_style (vb_tool, tt, "tools.shapes.star");
+            }
 
             // Spiral
-            new_tab(nb_shapes, _("Spiral"));
+            {
+            GtkWidget *vb_tool = new_tab(nb_shapes, _("Spiral"));
+            new_objects_style (vb_tool, tt, "tools.shapes.spiral");
+            }
 
             // common for all shapes
             selcue_checkbox (vb_shapes, tt, "tools.shapes");
+
+            g_signal_connect(GTK_OBJECT (nb_shapes), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_shapes");
+            gtk_notebook_set_current_page (GTK_NOTEBOOK (nb_shapes), prefs_get_int_attribute ("dialogs.preferences", "page_shapes", 0));
         }
 
         // Freehand
@@ -969,6 +1106,8 @@ sp_display_dialog (void)
                 options_freehand_tolerance_changed
                 );
 
+            new_objects_style (vb_tool, tt, "tools.freehand.pencil");
+
             selcue_checkbox (vb_tool, tt, "tools.freehand.pencil");
         }
 
@@ -976,12 +1115,16 @@ sp_display_dialog (void)
         {
             GtkWidget *vb_tool = new_tab (nb_tools, _("Pen"));
 
+            new_objects_style (vb_tool, tt, "tools.freehand.pen");
+
             selcue_checkbox (vb_tool, tt, "tools.freehand.pen");
         }
 
         // Text
         {
             GtkWidget *vb_tool = new_tab (nb_tools, _("Text"));
+
+            new_objects_style (vb_tool, tt, "tools.text");
 
             selcue_checkbox (vb_tool, tt, "tools.text");
         }
@@ -994,6 +1137,9 @@ sp_display_dialog (void)
             gtk_widget_show (dropper_page);
             gtk_container_add (GTK_CONTAINER (vb_tool), dropper_page);
         }
+
+        g_signal_connect(GTK_OBJECT (nb_tools), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_tools");
+        gtk_notebook_set_current_page (GTK_NOTEBOOK (nb_tools), prefs_get_int_attribute ("dialogs.preferences", "page_tools", 0));
 
 
 // Windows
@@ -1258,6 +1404,9 @@ options_checkbox (
 
         gtk_option_menu_set_history ( GTK_OPTION_MENU (om), 
                                       nr_arena_image_x_sample);
+
+        g_signal_connect(GTK_OBJECT (nb), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_top");
+        gtk_notebook_set_current_page (GTK_NOTEBOOK (nb), prefs_get_int_attribute ("dialogs.preferences", "page_top", 0));
                              
     } // end of if (!dlg)
     
