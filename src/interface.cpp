@@ -1023,6 +1023,9 @@ sp_ui_overwrite_file (const gchar * filename)
 											  NULL);
 		gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 
+		sp_transientize (dialog);
+		gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+
 		hbox = gtk_hbox_new(FALSE, 5);
 		boxdata = gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
 		gtk_widget_show(boxdata);
