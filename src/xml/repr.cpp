@@ -591,7 +591,11 @@ sp_repr_remove_child (SPRepr *repr, SPRepr *child)
 		     a crash in the XML editor when deleting the 
 		     'namedview' node.  There is a better solution but
 		     it's much more involved.  See Inkscape Bug #850971 */
- 		  if (!strcmp(sp_repr_name(child), "sodipodi:namedview")) {
+		// added a check that the namedview is top-level (child of svg), 
+		// otherwise this freezes when trying to ungroup imported group   --bb
+ 		  if (!strcmp (sp_repr_name (child), "sodipodi:namedview") 
+                    && 
+			!strcmp (sp_repr_name (sp_repr_parent (child)), "svg")) {
 		    allowed = FALSE;
 		  } else {
 		    allowed = (* rl->vector->remove_child) (repr, child, ref, rl->data);
