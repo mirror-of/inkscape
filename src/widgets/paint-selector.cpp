@@ -625,6 +625,8 @@ sp_paint_selector_set_mode_clone (SPPaintSelector *psel)
         psel->selector = NULL;
     }
 
+    // TRANSLATORS: "Clone" is a noun here. This message is to notify the user
+    // that the currently selected object is a clone.
     gtk_frame_set_label (GTK_FRAME (psel->frame), _("Clone Selected"));
 }
 
