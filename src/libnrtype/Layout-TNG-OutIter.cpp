@@ -550,6 +550,61 @@ void Layout::getSourceOfCharacter(iterator const &it, void **source_cookie, Glib
     }
 }
 
+void Layout::simulateLayoutUsingKerning(iterator const &from, iterator const &to, OptionalTextTagAttrs *result) const
+{
+    SPSVGLength zero_length;
+    zero_length = 0.0;
+
+    result->x.clear();
+    result->y.clear();
+    result->dx.clear();
+    result->dy.clear();
+    result->rotate.clear();
+    if (to._char_index <= from._char_index)
+        return;
+    result->dx.reserve(to._char_index - from._char_index);
+    result->dy.reserve(to._char_index - from._char_index);
+    result->rotate.reserve(to._char_index - from._char_index);
+    for (unsigned char_index = from._char_index ; char_index < to._char_index ; char_index++) {
+        if (!_characters[char_index].char_attributes.is_char_break)
+            continue;
+        if (char_index == 0)
+            continue;
+        if (_characters[char_index].chunk(this).in_line != _characters[char_index - 1].chunk(this).in_line)
+            continue;
+
+        unsigned prev_cluster_char_index;
+        for (prev_cluster_char_index = char_index - 1 ;
+             prev_cluster_char_index != 0 && !_characters[prev_cluster_char_index].char_attributes.is_cursor_position ;
+             prev_cluster_char_index--);
+        if (_characters[char_index].span(this).in_chunk == _characters[char_index - 1].span(this).in_chunk) {
+            // dx is zero for the first char in a chunk
+            // this algorithm works by comparing the summed widths of the glyphs with the observed
+            // difference in x coordinates of characters, and subtracting the two to produce the x kerning.
+            double glyphs_width = 0.0;
+            if (_characters[prev_cluster_char_index].in_glyph != -1)
+                for (int glyph_index = _characters[prev_cluster_char_index].in_glyph ; glyph_index < _characters[char_index].in_glyph ; glyph_index++)
+                    glyphs_width += _glyphs[glyph_index].width;
+            if (_characters[char_index].span(this).direction == RIGHT_TO_LEFT)
+                glyphs_width = -glyphs_width;
+            double dx = (_characters[char_index].x + _characters[char_index].span(this).x_start - _characters[prev_cluster_char_index].x - _characters[prev_cluster_char_index].span(this).x_start) - glyphs_width;
+            if (fabs(dx) > 0.0001) {
+                result->dx.resize(char_index - from._char_index + 1, zero_length);
+                result->dx.back() = dx;
+            }
+        }
+        double dy = _characters[char_index].span(this).baseline_shift - _characters[prev_cluster_char_index].span(this).baseline_shift;
+        if (fabs(dy) > 0.0001) {
+            result->dy.resize(char_index - from._char_index + 1, zero_length);
+            result->dy.back() = dy;
+        }
+        if (_characters[char_index].in_glyph != -1 && _glyphs[_characters[char_index].in_glyph].rotation != 0.0) {
+            result->rotate.resize(char_index - from._char_index + 1, zero_length);
+            result->rotate.back() = _glyphs[_characters[char_index].in_glyph].rotation;
+        }
+    }
+}
+
 #define PREV_START_OF_ITEM(this_func)                                                    \
     {                                                                                    \
         _cursor_moving_vertically = false;                                               \

@@ -45,6 +45,10 @@ element.
 */
 class TextTagAttributes {
 public:
+    TextTagAttributes() {}
+    TextTagAttributes(Inkscape::Text::Layout::OptionalTextTagAttrs const &attrs)
+        : attributes(attrs) {}
+
     /// fill in all the fields of #attributes from the given node
     void readFrom(Inkscape::XML::Node const *node);
 

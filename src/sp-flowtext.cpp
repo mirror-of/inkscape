@@ -23,6 +23,7 @@
 #include "sp-flowregion.h"
 #include "sp-flowtext.h"
 #include "sp-string.h"
+#include "sp-text.h"
 
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-translate.h"
@@ -435,7 +436,7 @@ void SPFlowtext::rebuildLayout()
     _buildLayoutInput(this, exclusion_shape, &shapes, &pending_line_break_object);
     delete exclusion_shape;
     layout.calculateFlow();
-    //g_print(layout.dumpAsText().c_str());
+    g_print(layout.dumpAsText().c_str());
 }
 
 void SPFlowtext::_clearFlow(NRArenaGroup *in_arena)
@@ -481,17 +482,28 @@ void SPFlowtext::convert_to_text()
 
 	        Inkscape::XML::Node *span_tspan = sp_repr_new("svg:tspan");
             NR::Point anchor_point = group->layout.characterAnchorPoint(it);
-            Inkscape::Text::Layout::iterator it_chunk_start = it;
-            it_chunk_start.thisStartOfChunk();
-            if (it == it_chunk_start) {
+            // use kerning to simulate justification and whatnot
+            Inkscape::Text::Layout::iterator it_span_end = it;
+            it_span_end.nextStartOfSpan();
+            Inkscape::Text::Layout::OptionalTextTagAttrs attrs;
+            group->layout.simulateLayoutUsingKerning(it, it_span_end, &attrs);
+            TextTagAttributes(attrs).writeTo(span_tspan);
+            // set x,y attributes only when we need to
+            if (!item->transform.test_identity()) {
                 sp_repr_set_double(span_tspan, "x", anchor_point[NR::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
-                // don't set y so linespacing adjustments and things will still work
-            }
-            Inkscape::Text::Layout::iterator it_shape_start = it;
-            it_shape_start.thisStartOfShape();
-            if (it == it_shape_start)
                 sp_repr_set_double(span_tspan, "y", anchor_point[NR::Y]);
-            // TODO: dx attributes from justification (or maybe letter-spacing and word-spacing)
+            } else {
+                Inkscape::Text::Layout::iterator it_chunk_start = it;
+                it_chunk_start.thisStartOfChunk();
+                if (it == it_chunk_start) {
+                    sp_repr_set_double(span_tspan, "x", anchor_point[NR::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+                    // don't set y so linespacing adjustments and things will still work
+                }
+                Inkscape::Text::Layout::iterator it_shape_start = it;
+                it_shape_start.thisStartOfShape();
+                if (it == it_shape_start)
+                    sp_repr_set_double(span_tspan, "y", anchor_point[NR::Y]);
+            }
 
             SPObject *source_obj;
             Glib::ustring::iterator span_text_start_iter;
@@ -502,7 +514,7 @@ void SPFlowtext::convert_to_text()
                 g_free(style_text);
             }
 
-            it.nextStartOfSpan();
+            it = it_span_end;
             if (SP_IS_STRING(source_obj)) {
                 Glib::ustring *string = &SP_STRING(source_obj)->string;
                 SPObject *span_end_obj;

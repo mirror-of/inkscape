@@ -351,7 +351,6 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
         }
         g_free(midpoint_otp);
 
-        //offset += character_advance;
         char_index = next_cluster_char_index;
     }
 

@@ -511,6 +511,15 @@ public:
     alignment and RIGHT is bottom. */
     inline Alignment paragraphAlignment(iterator const &it) const;
 
+    /** Returns kerning information which could cause the current output
+    to be exactly reproduced if the letter and word spacings were zero and
+    full justification was not used. The x and y arrays are not used, but
+    they are cleared. The dx applied to the first character in a chunk
+    will always be zero. If the region between \a from and \a to crosses
+    a line break then the results may be surprising, and are undefined.
+    Trailing zeros on the returned arrays will be trimmed. */
+    void simulateLayoutUsingKerning(iterator const &from, iterator const &to, OptionalTextTagAttrs *result) const;
+
     //@}
 
     /// it's useful for this to be public so that ScanlineMaker can use it
