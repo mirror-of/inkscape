@@ -135,6 +135,7 @@ sp_document_init (SPDocument *doc)
 
 	doc->advertize = FALSE;
 	doc->keepalive = FALSE;
+	doc->virgin    = TRUE;
 
 	doc->modified_id = 0;
 

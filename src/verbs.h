@@ -20,6 +20,7 @@ enum {
     /* File */
     SP_VERB_FILE_NEW,
     SP_VERB_FILE_OPEN,
+    SP_VERB_FILE_REVERT,
     SP_VERB_FILE_SAVE,
     SP_VERB_FILE_SAVE_AS,
     SP_VERB_FILE_PRINT,

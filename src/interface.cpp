@@ -365,7 +365,7 @@ static GtkWidget *
 sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
 {
     SPAction *action;
-    GtkWidget *item, *icon;
+    GtkWidget *item;
 
     if (verb == SP_VERB_NONE) {
 
@@ -432,7 +432,11 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
     GtkWidget *item_recent, *menu_recent;
 
     static const sp_verb_t file_verbs_one[] = {
-        SP_VERB_FILE_NEW, SP_VERB_FILE_OPEN, SP_VERB_LAST
+        SP_VERB_FILE_NEW,
+	SP_VERB_FILE_OPEN,
+        /* commented out until implemented */
+	// SP_VERB_FILE_REVERT,
+	SP_VERB_LAST
     };
 
     static const sp_verb_t file_verbs_two[] = {

@@ -46,6 +46,7 @@
 #include "prefs-utils.h"
 
 #include "sp-namedview.h"
+#include "desktop-handles.h"
 
 #include "extension/extension.h"
 /* #include "extension/menu.h"  */
@@ -115,19 +116,29 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
 {
     SPDocument *doc;
 	
-	try {
-		doc = Inkscape::Extension::open (key, uri);
-	} catch (Inkscape::Extension::Input::no_extension_found &e) {
-		doc = NULL;
-	} catch (Inkscape::Extension::Input::open_failed &e) {
-		doc = NULL;
-	}
+    try {
+        doc = Inkscape::Extension::open (key, uri);
+    } catch (Inkscape::Extension::Input::no_extension_found &e) {
+        doc = NULL;
+    } catch (Inkscape::Extension::Input::open_failed &e) {
+        doc = NULL;
+    }
 
     if (doc) {
-        SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
-        sp_document_unref (doc);
-        sp_create_window (dtw, TRUE);
-        sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
+        // If the current desktop is empty, open the document there
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        SPDocument *existing = SP_DT_DOCUMENT (desktop);
+        if (existing->virgin) {
+            sp_desktop_change_document (desktop, doc);
+        }
+        else {
+            SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
+            sp_document_unref (doc);
+            sp_create_window (dtw, TRUE);
+            desktop = SP_DESKTOP(dtw->view);
+        }
+        sp_namedview_window_from_document (desktop);
+        doc->virgin = FALSE;
     } else {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
         sp_ui_error_dialog (text);
@@ -135,6 +146,36 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
     }
 }
 
+/**
+ *  Handle prompting user for "do you want to revert"?  Revert on "OK"
+ */
+void
+sp_file_revert_dialog ()
+{
+    SPDesktop  *desktop = SP_ACTIVE_DESKTOP;
+    SPDocument *doc = SP_DT_DOCUMENT(desktop);
+
+    if (sp_repr_attr (sp_document_repr_root (doc), "sodipodi:modified") != NULL &&
+            1/* doc has original file and type, see below ... */) {
+        GtkWidget *dialog;
+
+        dialog = gtk_message_dialog_new(
+                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(desktop->owner))),
+                GTK_DIALOG_DESTROY_WITH_PARENT,
+                GTK_MESSAGE_WARNING,
+                GTK_BUTTONS_YES_NO,
+                "Changes will be lost!  Revert document?");
+        gint response;
+        response = gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        if (response == GTK_RESPONSE_YES) {
+            doc->virgin=TRUE;
+            /* FIXME: reload document here.  Looks like SPDocument
+             * will require both the original URI and "filetype"
+             * from the "sp_file_open" call */
+        }
+    }
+}
 
 
 /**
@@ -150,9 +191,9 @@ sp_file_open_dialog (gpointer object, gpointer data)
                  (const char *)_("Select file to open"));
     bool success = dlg->show();
     gchar *fileName = success ? g_strdup(dlg->getFilename()) : NULL;
-	Inkscape::Extension::Extension * selection = dlg->getSelectionType();
+    Inkscape::Extension::Extension * selection = dlg->getSelectionType();
     delete dlg;
-	if (!success) return;
+    if (!success) return;
     if (fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
@@ -752,4 +793,4 @@ sp_file_print_preview (gpointer object, gpointer data)
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

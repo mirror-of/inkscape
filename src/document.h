@@ -28,6 +28,7 @@ struct _SPDocument {
 
 	unsigned int advertize : 1;
 	unsigned int keepalive : 1;
+	unsigned int virgin    : 1; /* Has the document never been touched? */
 
 	SPReprDoc *rdoc; /* Our SPReprDoc */
 	SPRepr *rroot; /* Root element of SPReprDoc */

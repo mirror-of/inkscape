@@ -187,6 +187,9 @@ sp_verb_action_file_perform (SPAction *action, void * data, void *pdata)
         case SP_VERB_FILE_OPEN:
             sp_file_open_dialog (NULL, NULL);
             break;
+        case SP_VERB_FILE_REVERT:
+            sp_file_revert_dialog ();
+            break;
         case SP_VERB_FILE_SAVE:
             sp_file_save (NULL, NULL);
             break;
@@ -777,6 +780,8 @@ static const SPVerbActionDef props[] = {
         GTK_STOCK_NEW },
     {SP_VERB_FILE_OPEN, "FileOpen", N_("_Open..."), N_("Open existing document"),
         GTK_STOCK_OPEN },
+    {SP_VERB_FILE_REVERT, "FileRevert", N_("_Revert"), N_("Revert to on-disk version of document"),
+        NULL },
     {SP_VERB_FILE_SAVE, "FileSave", N_("_Save"), N_("Save document"),
         GTK_STOCK_SAVE },
     {SP_VERB_FILE_SAVE_AS, "FileSaveAs", N_("Save _As..."),

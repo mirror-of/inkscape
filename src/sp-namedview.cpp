@@ -527,6 +527,9 @@ sp_namedview_show (SPNamedView * nv, gpointer desktop)
 	sp_namedview_setup_grid_item (nv, item);
 }
 
+/*
+ * Restores window geometry from the document settings
+ */
 void 
 sp_namedview_window_from_document (SPDesktop *desktop)
 {

@@ -50,6 +50,11 @@ void sp_file_open (const gchar *uri, Inkscape::Extension::Extension *key);
  */
 void sp_file_open_dialog (gpointer object, gpointer data);
 
+/**
+ * Reverts file to disk-copy on "YES"
+ */
+void sp_file_revert_dialog ();
+
 /*######################
 ## S A V E
 ######################*/
