@@ -1411,6 +1411,8 @@ sp_nodepath_node_deselect (SPPathNode * node)
 void
 sp_nodepath_deselect (SPNodePath *nodepath)
 {
+	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
+
 	while (nodepath->selected) {
 		sp_node_set_selected ((SPPathNode *) nodepath->selected->data, FALSE);
 		nodepath->selected = g_list_remove (nodepath->selected, nodepath->selected->data);
