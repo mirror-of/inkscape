@@ -123,6 +123,10 @@ static struct StockIcon
   {INKSCAPE_STOCK_OBJECT_ALIGN, INKSCAPE_PIXMAPDIR, "object_align.xpm"},
   {INKSCAPE_STOCK_OBJECT_FONT, INKSCAPE_PIXMAPDIR, "object_font.xpm"},
 
+ {INKSCAPE_STOCK_PROPERTIES_FILL_PAGE, INKSCAPE_PIXMAPDIR, "properties_fill.xpm"},
+ {INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE, INKSCAPE_PIXMAPDIR, "properties_stroke.xpm"},
+ {INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE, INKSCAPE_PIXMAPDIR, "properties_stroke.xpm"},
+
 };
 
 static gint stock_icon_count = sizeof (stock_icons) / sizeof (*stock_icons);

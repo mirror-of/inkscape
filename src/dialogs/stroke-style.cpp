@@ -55,6 +55,7 @@
 #include "../inkscape-stock.h"
 #include "dialog-events.h"
 
+
 #include "stroke-style.h"
 
 /* Paint */
@@ -784,7 +785,7 @@ sp_stroke_radio_button ( GtkWidget* tb, const char* n, const char* xpm,
     gtk_signal_connect (GTK_OBJECT (tb), "toggled",
                 GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled),
                 spw);
-    px = gtk_image_new_from_file (xpm);
+    px = gtk_image_new_from_stock ( n,GTK_ICON_SIZE_LARGE_TOOLBAR );
     g_assert(px != NULL);
     gtk_widget_show (px);
     gtk_container_add (GTK_CONTAINER (tb), px);

@@ -139,7 +139,8 @@ sp_object_properties_page( GtkWidget *nb,
     l = gtk_label_new (_(label));
     gtk_widget_show (l);
     gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-    px = gtk_image_new_from_file (label_image);
+   // px = gtk_image_new_from_file (label_image);
+    px = gtk_image_new_from_stock ( label_image, GTK_ICON_SIZE_LARGE_TOOLBAR );
     gtk_widget_show (px);
     gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
     gtk_widget_show (page);
@@ -246,17 +247,17 @@ sp_object_properties_dialog (void)
         /* Fill page */
         page = sp_fill_style_widget_new ();
         sp_object_properties_page(nb, page, "Fill", "fill",
-                    INKSCAPE_ICONS_DIR "/properties_fill.xpm");
+                    INKSCAPE_STOCK_PROPERTIES_FILL_PAGE);
 
         /* Stroke paint page */
         page = sp_stroke_style_paint_widget_new ();
         sp_object_properties_page(nb, page, "Stroke paint", "stroke-paint",
-                    INKSCAPE_ICONS_DIR "/properties_stroke.xpm");
+                    INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE);
 
         /* Stroke line page */
         page = sp_stroke_style_line_widget_new ();
         sp_object_properties_page(nb, page, "Stroke style", "stroke-line",
-                    INKSCAPE_ICONS_DIR "/properties_stroke.xpm");
+                    INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE);
 
         /* Modify style selector */
         hs = gtk_hseparator_new ();
