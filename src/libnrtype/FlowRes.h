@@ -55,6 +55,8 @@ class checked_vector : public std::vector<T> {
  *  - glyphs
  * additionaly, glyphs are also grouped in groups of consistent style, to avoid the letter step, and to
  * make use of te NRArenaGlyphsGroup class.
+ *
+ * A span is a run of letters of the same style, a group is a run of glyphs of the same style.
  */
 class flow_res {
 public:
@@ -122,26 +124,9 @@ public:
 	int               nbSpan, maxSpan;
 	std::vector<flow_styled_span>   spans;
 
-	// temporary variables
-	bool              last_style_set;
-	text_style*       last_c_style;
-	bool              last_rtl;
-	// these are set outside the Feed() functions because they are constant on the line => no need to pass them
-	// down as parameters
-	double            cur_ascent, cur_descent, cur_leading;
-	text_holder*      cur_mommy;
-	int               cur_offset;
-	
 	flow_res(void);
 	~flow_res(void);
 	
-	// utility functions to fill the arrays
-	void               Reset(void);
-
-    /** Adds a new group to the end of the #groups array. It is
-    initialised to contain no glyphs. */
-	void               AddGroup(text_style* g_s);
-
     /** Adds the specified glyph to the end of the #glyphs array and
     extends the last letter and last group to include this new glyph.
     Neither #spans nor #chunks are altered. Called by flow_eater
@@ -156,11 +141,6 @@ public:
 	void               StartChunk(double x_st, double x_en, double y, bool rtl, double spacing);
 
 	void               SetChunkInfo(double ascent, double descent, double leading, text_holder* mommy);
-
-    /** Begins a new span by creating a new entry at the end of the #spans
-    array. It is initialised with the given style and direction and contains
-    no letters. The current chunk is extended to contain the new span. */
-	void               StartSpan(text_style* i_style, bool rtl);
 
     /** empty function */
 	void               EndWord(void);
@@ -196,15 +176,14 @@ public:
 	//  - make it vertical at position (to_x,to_y)
 	void               Verticalize(int no, double to_x, double to_y);
 	//  - put it on a path -> set the x_st/ y/ rotate values in the letter, and x_en becomes the letter length
+    /** Move and rotate the individual glyphs in chunk \a no so that they
+    are aligned along path \a i_path. The operation of this algorithm is
+    discussed in detail in SVG1.1 section 10.13.3: "Text on a path layout
+    rules". */
 	void               ApplyPath(int no, Path* i_path);
 	//  - translate the line to position (to_x, to_y). if the_start==false, the end of the line is set to (to_x, to_y)
 	void               TranslateChunk(int no, double to_x, double to_y, bool the_start);
 
-	// utility accessors
-	int                ChunkType(int no);
-	SPObject*          ChunkSourceStart(int no);
-	SPObject*          ChunkSourceEnd(int no);
-	
 	// functions for doing the showing
 	//  - put glyphs on the canvas; set the paintbox on each nr_arena_glyph_group of the flow_res (used for paintserver fill)
 	void               Show(NRArenaGroup* in_arena, NRRect *paintbox);
@@ -231,6 +210,34 @@ public:
 	void               PositionToLetter(double px, double py, int &c, int &s, int &l, bool &l_start, bool &l_end);
 	//  - from letter to position. return the position in (px,py), the line height in 'size', and the caret rotation in 'angle'
 	void               LetterToPosition(int c, int s, int l, bool l_start, bool l_end, double &px, double &py, double &size, double &angle);
+
+private:
+	// utility functions to fill the arrays
+	void               Reset(void);
+
+    /** Adds a new group to the end of the #groups array. It is
+    initialised to contain no glyphs. */
+	void               AddGroup(text_style* g_s);
+
+    /** Begins a new span by creating a new entry at the end of the #spans
+    array. It is initialised with the given style and direction and contains
+    no letters. The current chunk is extended to contain the new span. */
+	void               StartSpan(text_style* i_style, bool rtl);
+
+	// utility accessors
+	int                ChunkType(int no);
+	SPObject*          ChunkSourceStart(int no);
+	SPObject*          ChunkSourceEnd(int no);
+
+	// temporary variables
+	bool              last_style_set;
+	text_style*       last_c_style;
+	bool              last_rtl;
+	// these are set outside the Feed() functions because they are constant on the line => no need to pass them
+	// down as parameters
+	double            cur_ascent, cur_descent, cur_leading;
+	text_holder*      cur_mommy;
+	int               cur_offset;
 };
 
 #endif

@@ -21,7 +21,7 @@ typedef struct flow_requirement {
 	bool               next_line;
 	int                min_elem_no,min_elem_pos; // la boite min_elem_pos doit etre incluse pour passer le cap
 	int                min_brk,min_fallback;
-	double             score_malus;
+	double             score_malus;       ///french: malus: surcharge (car insurance)
 	
 	bool               Equals(flow_requirement& a) const {
 		if ( fabs(ascent-a.ascent) > 0.01 ) return false;
@@ -110,9 +110,9 @@ public:
 	bool							Pop(int &i_brk,flow_requirement &i_req,int &t_id);
 private:
     enum {
-	task_pending      = 0,
-	task_done         = 1,
-	task_freezed      = 2
+	    task_pending      = 0,
+	    task_done         = 1,
+	    task_freezed      = 2
     };
 
 	typedef struct one_task {

@@ -59,15 +59,20 @@ public:
 	one_flow_src(SPObject* i_me);
 	virtual ~one_flow_src(void);
 	
+    /** joins this element as a child of \a inside and after \a after. */
 	void              Link(one_flow_src* after, one_flow_src* inside);
 	void              DoPositions(bool for_text);
 	void              DoFill(flow_src* what);
 	one_flow_src*     Locate(int utf8_pos, int &ucs4_pos, bool src_start, bool src_end, bool must_be_text);
+    /** returns the total number of bytes before an absolute character
+    index over the whole tree. */
 	int               Do_UCS4_2_UTF8(int ucs4_pos);
+    /** returns the total number of characters before an absolute byte
+    index over the whole tree. */
 	int               Do_UTF8_2_UCS4(int utf8_pos);
 	
 	// introspection
-	virtual int       Type(void) {return flw_none;};
+	virtual int       Type(void) =0;
 	// asks for kerning info to be pushed in the text_holder. st/ en /offset are ucs4 positions
 	virtual void      PushInfo(int st,int en,int offset,text_holder* into);
 	// tells the element to remove the info such as x/y/dx/dy/rotate stuff it might hold for the specified portion
@@ -186,25 +191,44 @@ public:
  * source of the flow
  * it has a flow_styles and thus holds an array of all the text_styles used in the source text
  */
+/** \brief collects all the one_flow_src classes together into one place for easier processing.
+
+Used as a store of amalgamated one_flow_src classes.
+
+This class actually does very little by itself. The collection of data is
+performed by the one_flow_src tree and the bulk of the processing is done
+by the text_holder class.
+
+Usage:
+ -# construct
+ -# call one_flow_src::DoFill() on the root element of your tree
+ -# call Prepare()
+ -# use a flow_maker
+ -# destruct
+*/
 class flow_src {
 public:
 	typedef struct one_elem {
 		int               type;
-		text_holder*      text;
+		text_holder*      text;     ///only valid for elements of type flw_text
 		one_flow_src*     obj;
 	} one_elem;
 	int                 nbElem, maxElem;
 	one_elem*           elems;
-	
-    flow_styles styles;
-	
+
 	text_holder*        cur_holder;
 	
+    /** all the text_style classes necessary to render this text. They are
+    all deleted on destruction. */
+    flow_styles styles;
+
 	bool                min_mode;
 
 	flow_src(void);
 	~flow_src(void);
 		
+    /** internal libnrtype method. a simple append to the #elems array.
+    Called by the one_flow_src::Fill() inheritors. */
 	void                AddElement(int i_type,text_holder* i_text,one_flow_src* i_obj);
 
 	/** extracts just the raw text from the #cur_holder element. Line
@@ -213,19 +237,45 @@ public:
     don't* */
     char*               Summary(void) const;
 	
+    /** internal libnrtype method. Conanicalises the values in it parameters,
+    such that if \a pos is out of bounds it and \a no are corrected to the
+    nearest neighbour.
+     \param no   index into #elems
+     \param pos  index into text_holder::boxes
+    */
 	void                Clean(int &no,int &pos);
 	
+    /** initialise the text_holder member of all the flw_text items of
+    #elems. This includes calling text_holder::DoChunking() and
+    text_holder::ComputeBoxes(). This must be called prior to using this
+    class in a flow_maker. */
 	void                Prepare(void);
 	
 	// wrapper for their text_holder counterparts, mainly.
+    /** internal libnrtype method. Compute the four metrics for the piece of
+    text at #elems \a from_no and text_holder::boxes \a from_pos. If
+    \a from_no is not a text item, the metrics for the first text after it
+    will be returned. */
 	void                MetricsAt(int from_no,int from_pos,double &ascent,double &descent,double &leading,bool &flow_rtl);
+
+    /** internal libnrtype method. Calls text_holder::ComputeSols() to
+    calculate all the possible wrapping positions for the text starting
+    at the given position. line_solutions::StartLine() must already have
+    been called. */
 	void                ComputeSol(int from_no,int from_pos,line_solutions *sols,bool &flow_rtl);
+
+    /** internal libnrtype method. Calls text_holder::Feed() repeatedly to
+    send all the glyphs from in the given range to the flow_res associated
+    with \a baby. */
 	void                Feed(int st_no,int st_pos,int en_no,int en_pos,bool flow_rtl,flow_eater* baby);
+
 	// finds the text_holder in the specified input span in the one_elem array
+    /** internal libnrtype method. Returns the first text_holder in the given
+    span. */
 	text_holder*        ParagraphBetween(int st_no,int st_pos,int en_no,int en_pos);
 
-	/** debug method. Dumps a textual representation of the contents of this
-    class to stdout. */
+	/** debug method. Dumps an overview of the contents of #elems to
+    stdout. */
     void                Affiche(void) const;
 };
 

@@ -25,6 +25,9 @@ This class stores both the specification of a font style (including
 the fill and outline colours) and references to the objects needed to
 retrieve rendering information about that font.
 
+It also acts as the link in the rendering chain between a text_holder
+and a flow_eater.
+
 This is probably supposed to be an internal libnrtype class but, as
 usual, convert_to_text() fiddles with it. */
 class text_style {
@@ -52,7 +55,8 @@ public:
 	void             SetFont(font_instance* iFont,double iSize,double iShift);
 	
     /** compute the box_sizes for a specified string of text rendered in
-    the font represented by this class.
+    the font represented by this class. Fundamentally, it adds up the
+    widths returned by pango_shape().
 
       \param iText   the text to measure (UTF-8)
       \param iLen    length of iText in BYTES, or -1 if it is 0-terminated
@@ -102,9 +106,9 @@ public:
     */
 	void             Feed(char* iText,int iLen,bool hyphen,void *pan,flow_eater* baby,double const *kern_x,double const *kern_y);
 };
-	
+
 /** \brief internal libnrtype class
-	
+
 A simple inheritance from std::vector which auto-deletes all its contents on destruction.
 */
 class flow_styles : public std::vector<text_style*> {

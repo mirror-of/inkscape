@@ -45,7 +45,7 @@ public:
 	bool           style_end_set;
 	int						 style_end_no,style_end_pos;
 	double         style_end_ascent,style_end_descent,style_end_leading;
-	
+
     /** The last call to PushBox() contained a font change such that the
     baseline of the line needs to be changed and the whole line
     recalculated. */
@@ -87,7 +87,7 @@ public:
     PushBox() to detect when larger text comes in that would necessitate
     moving the baseline.
     */
-	void						SetLineSizes(double ascent,double descent,double leading);
+	void            SetLineSizes(double ascent,double descent,double leading);
 
     /** Clears out nearly everything, including #sols, but not what was
     set by NewLine(). */
@@ -97,7 +97,7 @@ public:
 	void            EndLine(void);
 	
 	/** TODO. Sets #cur_line = #last_word */
-	void            StartWord(void);
+    void            StartWord(void);
 
     /** Processes the given box and creates any new solutions in #sols and
     #style_end_sol that fit the criteria specified in NewLine(). 
@@ -111,7 +111,7 @@ public:
      \param last_in_rgn  This is the last box in a region. A region is a
                          single flow_dest class.
      \param is_word  Update #last_word.
-     \ret  true if no more data will fit on the current line, given the
+     \return  true if no more data will fit on the current line, given the
            parameters set with NewLine().
     */
 	bool            PushBox(box_sizes const &s,int end_no,int end_pos,bool is_white,bool last_in_para,bool last_in_rgn,bool is_word);

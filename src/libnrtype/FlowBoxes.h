@@ -43,10 +43,11 @@ Usage:
 -# (optional) Call AddKerning().
 -# Call DoChunking()
 -# Call ComputeBoxes()
--# Work out the area in which you want to render the text (usually using
-   flow_dest).
--# Set up a line_solutions
--# Call ComputeSols()
+-# Repeat:
+   -# Work out the area in which you want to render the text (usually using
+      flow_dest).
+   -# Set up a line_solutions
+   -# Call ComputeSols()
 -# Once you are happy with the solution, call Feed().
 
 Terminology:
@@ -74,6 +75,10 @@ method - the whole implementation is broken) :
 - the whole concept of spans is flawed, given the effort that goes in to
   keeping both the start and end points maintained. Single control points
   marking where the changes happen would be a much better implementation.
+- the re-ordering of counterdirectional boxes and glyphs means the fields
+  in flow_res are reversed which makes logical cursor movement a nightmare
+  to implement. That and the SVG spec explicitly requires that glyphs are
+  rendered in character order.
 */
 class text_holder {
 public:
@@ -212,8 +217,8 @@ public:
     set up the available space on the line. If \a flow_rtl is true then
     \a from_box indexes from the end of #boxes. \a with_no is an index in
     to a flow_src::elems array to use for marking the outputted solutions.
-     \ret  true if the end of the allocated width was reached before all
-           the boxes were consumed (ie true if we wrapped). */
+     \return true if the end of the allocated width was reached before all
+             the boxes were consumed (ie true if we wrapped). */
 	bool           ComputeSols(int from_box,line_solutions* sols,int with_no,bool last_in_para,bool last_in_rgn,bool flow_rtl);
 
 	// send boxes st_pos to en_pos (reverse if flow_rtl is not boxes[0].rtl) to the baby for recording glyphs
@@ -223,7 +228,7 @@ public:
     flow_eater::StartLine() must have been called on \a baby prior to calling
     this method.
     */
-	void					 Feed(int st_pos,int en_pos,bool flow_rtl,flow_eater* baby);
+	void           Feed(int st_pos,int en_pos,bool flow_rtl,flow_eater* baby);
 	
     /** Assigns a font style to the section of #raw_text between the two
     byte values given.
@@ -240,7 +245,7 @@ public:
     /** debug method. Dumps to stdout the contents of the #ctrls array.
     (From the French 'afficher', to display, in case you were wondering. */
 	void           AfficheCtrl(void);
-	
+
     /** debug method. Dumps to stdout the contents of the #boxes array. */
 	void           AfficheBoxes(void);
 	
@@ -297,7 +302,7 @@ private:
     /** adds a new element to the end of the #boxes array and returns the
     index of this new element. */
 	int            AddBox(one_flow_box &i_b);
-	
+
     /** Any spans in the #ctrls array which are of type \a a_t and enclose
     a control of type \a b_t will be split into two spans, one on either
     side of the control, so that the control is no longer enclosed.
@@ -310,7 +315,7 @@ private:
     particular ordering within the array, ie the last element is copied into
     the hole created. See SortCtrl(). */
 	void           SubCtrl(int no);
-	
+
 	// utility ctrl position functions
     /** \a n_st is an index into #ctrls. This method increments \a n_st
     until it indexes an item with the given \a typ. To search from the
