@@ -392,7 +392,8 @@ private:
     outlineCallback *arcto;
   };
 
-  void SubContractOutline (Path * dest, outline_callbacks & calls,
+  void SubContractOutline (path_descr* pd, int num_pd,
+			   Path * dest, outline_callbacks & calls,
 			   double tolerance, double width, JoinType join,
 			   ButtType butt, double miter, bool closeIfNeeded,
 			   bool skipMoveto, NR::Point & lastP, NR::Point & lastT);
