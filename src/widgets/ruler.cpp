@@ -15,11 +15,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include "widget-sizes.h"
 #include "ruler.h"
 
-
-#define RULER_WIDTH           14
-#define RULER_HEIGHT          14
 #define MINIMUM_INCR          5
 #define MAXIMUM_SUBDIVIDE     5
 #define MAXIMUM_SCALES        10
@@ -127,8 +125,6 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
   PangoFontDescription *pango_desc;
   PangoContext *pango_context;
   PangoLayout *pango_layout;
-  PangoLanguage *pango_lang;
-  PangoFontMetrics *pango_metrics;
   gint i;
   gint width, height;
   gint xthickness;
@@ -159,20 +155,22 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
   
   // Create the pango layout
   pango_context = gtk_widget_get_pango_context (widget);
+
   pango_layout = pango_layout_new (pango_context);
-  pango_lang = pango_context_get_language (pango_context);
-  pango_metrics = pango_context_get_metrics (pango_context, pango_desc, pango_lang);
-  
-  digit_height = pango_font_metrics_get_ascent (pango_metrics) / PANGO_SCALE;
-  
-  
+
+  PangoFontDescription *fs = pango_font_description_new ();
+  pango_font_description_set_size (fs, RULER_FONT_SIZE);
+  pango_layout_set_font_description (pango_layout, fs);
+  pango_font_description_free (fs);
+
+  digit_height = (int) floor (RULER_FONT_SIZE * RULER_FONT_VERTICAL_SPACING / PANGO_SCALE + 0.5);
+
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
 
   width = widget->allocation.width;
   height = widget->allocation.height;// - ythickness * 2;
 
-   
   gtk_paint_box (widget->style, ruler->backing_store,
 		 GTK_STATE_NORMAL, GTK_SHADOW_NONE, 
 		 NULL, widget, "hruler",
@@ -417,8 +415,6 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
   PangoFontDescription *pango_desc;
   PangoContext *pango_context;
   PangoLayout *pango_layout;
-  PangoLanguage *pango_lang;
-  PangoFontMetrics *pango_metrics;
   gint i, j;
   gint width, height;
   gint xthickness;
@@ -450,11 +446,15 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
   
   // Create the pango layout
   pango_context = gtk_widget_get_pango_context (widget);
+
   pango_layout = pango_layout_new (pango_context);
-  pango_lang = pango_context_get_language (pango_context);
-  pango_metrics = pango_context_get_metrics (pango_context, pango_desc, pango_lang);
-  
-  digit_height = pango_font_metrics_get_ascent (pango_metrics) / PANGO_SCALE;
+
+  PangoFontDescription *fs = pango_font_description_new ();
+  pango_font_description_set_size (fs, RULER_FONT_SIZE);
+  pango_layout_set_font_description (pango_layout, fs);
+  pango_font_description_free (fs);
+
+  digit_height = (int) floor (RULER_FONT_SIZE * RULER_FONT_VERTICAL_SPACING / PANGO_SCALE + 0.5);
   
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
