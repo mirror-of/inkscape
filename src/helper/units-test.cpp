@@ -98,11 +98,22 @@ test_bases()
     return utest_end();
 }
 
+static bool
+test_unit_table()
+{
+    utest_start("unit table");
+    UTEST_TEST("sp_units_table_sane") {
+        UTEST_ASSERT(sp_units_table_sane());
+    }
+    return utest_end();
+}
+
 int
 main(int argc, char *argv[])
 {
     int const ret = ( ( test_conversions()
-                        && test_bases() )
+                        && test_bases()
+                        && test_unit_table() )
                       ? EXIT_SUCCESS
                       : EXIT_FAILURE );
     return ret;

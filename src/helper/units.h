@@ -105,6 +105,9 @@ const SPUnit *sp_unit_get_default (void);
 const SPUnit *sp_unit_get_by_name (const gchar *name);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 
+/** Used solely by units-test.cpp. */
+bool sp_units_table_sane();
+
 #define SP_UNITS_ALL (SP_UNIT_DIMENSIONLESS | SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE | SP_UNIT_VOLATILE)
 
 GSList *sp_unit_get_list (guint bases);
@@ -125,9 +128,22 @@ gboolean sp_convert_distance_full (gdouble *distance, const SPUnit *from, const 
 gdouble sp_distance_get_units (SPDistance *distance, const SPUnit *unit);
 gdouble sp_distance_get_points (SPDistance *distance);
 
-gdouble sp_points_get_units (gdouble points, const SPUnit *unit);
-gdouble sp_units_get_points (gdouble units, const SPUnit *unit);
+gdouble sp_points_get_units(gdouble const points, SPUnit const &unit);
+gdouble sp_units_get_points(gdouble const units, SPUnit const &unit);
 
+/* Deprecated.  Use SPUnit& version. */
+inline gdouble
+sp_points_get_units(gdouble const points, SPUnit const *unit)
+{
+	return sp_points_get_units(points, *unit);
+}
+
+/* Deprecated.  Use SPUnit& version. */
+inline gdouble
+sp_units_get_points(gdouble const units, SPUnit const *unit)
+{
+	return sp_units_get_points(units, *unit);
+}
 
 
 #endif 

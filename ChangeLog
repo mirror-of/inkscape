@@ -1,5 +1,11 @@
 2004-06-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/units.h, src/helper/units.cpp:
+	  Add reference version of sp_points_get_units, sp_units_get_points.
+	  Implement as simple multiplication instead of sp_convert_distance.
+	  (sp_units_table_sane): New function.
+	* src/helper/units-test.cpp: Test sp_units_table_sane.
+
 	* src/sp-object-repr.cpp: Move some declarations to first use.
 	* src/sp-object-repr.h, src/sp-object-repr.cpp (sp_object_type_register):
 	  Change return type to void.

@@ -236,18 +236,32 @@ sp_distance_get_points (SPDistance *distance)
 }
 
 gdouble
-sp_points_get_units (gdouble points, const SPUnit *unit)
+sp_units_get_points(gdouble const units, SPUnit const &unit)
 {
-	sp_convert_distance (&points, &sp_units[SP_UNIT_PT], unit);
-
-	return points;
+	gdouble const ret = units * unit.unittobase;
+	if (unit.base != SP_UNIT_ABSOLUTE) {
+		g_warning("no exact unit conversion available");
+	}
+	return ret;
 }
 
 gdouble
-sp_units_get_points (gdouble units, const SPUnit *unit)
+sp_points_get_units(gdouble const points, SPUnit const &unit)
 {
-	sp_convert_distance (&units, unit, &sp_units[SP_UNIT_PT]);
-
-	return units;
+	gdouble const ret = points / unit.unittobase;
+	if (unit.base != SP_UNIT_ABSOLUTE) {
+		g_warning("no exact unit conversion available");
+	}
+	return ret;
 }
 
+bool
+sp_units_table_sane()
+{
+	for (unsigned i = 0; i < G_N_ELEMENTS(sp_units); ++i) {
+		if (unsigned(sp_units[i].unit_id) != i) {
+			return false;
+		}
+	}
+	return true;
+}
