@@ -47,6 +47,11 @@
 	  changes are "interactive" (i.e. from the XML editor); this fixes
 	  the problem with SPStar's points= attribute updating (bug #910142)
 
+	* src/sp-clippath.cpp, src/sp-mask.cpp, src/sp-namedview.cpp,
+	  src/sp-root.cpp, src/sp-symbol.cpp:
+	  simplified SPObject::remove_child handlers, focusing particularly
+	  on making them not rely on the repr still being attached
+
 2004-03-14  rejon <jon@protofunk.org>
 
     * src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 

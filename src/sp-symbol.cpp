@@ -29,7 +29,6 @@ static void sp_symbol_build (SPObject *object, SPDocument *document, SPRepr *rep
 static void sp_symbol_release (SPObject *object);
 static void sp_symbol_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_symbol_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
-static void sp_symbol_remove_child (SPObject *object, SPRepr *child);
 static void sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_symbol_modified (SPObject *object, guint flags);
 static SPRepr *sp_symbol_write (SPObject *object, SPRepr *repr, guint flags);
@@ -78,7 +77,6 @@ sp_symbol_class_init (SPSymbolClass *klass)
 	sp_object_class->release = sp_symbol_release;
 	sp_object_class->set = sp_symbol_set;
 	sp_object_class->child_added = sp_symbol_child_added;
-	sp_object_class->remove_child = sp_symbol_remove_child;
 	sp_object_class->update = sp_symbol_update;
 	sp_object_class->modified = sp_symbol_modified;
 	sp_object_class->write = sp_symbol_write;
@@ -242,17 +240,6 @@ sp_symbol_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 
 	if (((SPObjectClass *) (parent_class))->child_added)
 		((SPObjectClass *) (parent_class))->child_added (object, child, ref);
-}
-
-static void
-sp_symbol_remove_child (SPObject * object, SPRepr * child)
-{
-	SPSymbol *symbol;
-
-	symbol = (SPSymbol *) object;
-
-	if (((SPObjectClass *) (parent_class))->remove_child)
-		((SPObjectClass *) (parent_class))->remove_child (object, child);
 }
 
 static void

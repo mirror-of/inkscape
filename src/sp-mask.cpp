@@ -39,7 +39,6 @@ static void sp_mask_build (SPObject *object, SPDocument *document, SPRepr *repr)
 static void sp_mask_release (SPObject * object);
 static void sp_mask_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_mask_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
-static void sp_mask_remove_child (SPObject *object, SPRepr *child);
 static void sp_mask_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_mask_modified (SPObject *object, guint flags);
 static SPRepr *sp_mask_write (SPObject *object, SPRepr *repr, guint flags);
@@ -84,7 +83,6 @@ sp_mask_class_init (SPMaskClass *klass)
 	sp_object_class->release = sp_mask_release;
 	sp_object_class->set = sp_mask_set;
 	sp_object_class->child_added = sp_mask_child_added;
-	sp_object_class->remove_child = sp_mask_remove_child;
 	sp_object_class->update = sp_mask_update;
 	sp_object_class->modified = sp_mask_modified;
 	sp_object_class->write = sp_mask_write;
@@ -205,17 +203,6 @@ sp_mask_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 			}
 		}
 	}
-}
-
-static void
-sp_mask_remove_child (SPObject *object, SPRepr *child)
-{
-	SPMask *cp;
-
-	cp = SP_MASK (object);
-
-	/* Invoke SPObjectGroup implementation */
-	((SPObjectClass *) (parent_class))->remove_child (object, child);
 }
 
 static void

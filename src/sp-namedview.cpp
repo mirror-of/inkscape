@@ -458,19 +458,21 @@ static void
 sp_namedview_remove_child (SPObject * object, SPRepr * child)
 {
 	SPNamedView * nv;
-	SPObject * no;
-	const gchar * id;
 
 	nv = (SPNamedView *) object;
 
-	id = sp_repr_attr (child, "id");
-	no = sp_document_lookup_id (object->document, id);
-	g_assert (no != NULL);
+	GSList *iter;
+	GSList **ref;
 
-	if (SP_IS_GUIDE (no)) {
-		SPGuide * g;
-		g = (SPGuide *) no;
-		nv->guides = g_slist_remove (nv->guides, g);
+	ref = &nv->guides;
+	for ( iter = nv->guides ; iter ; iter = iter->next ) {
+		if ( SP_OBJECT_REPR((SPObject *)iter->data) == child ) {
+			*ref = iter->next;
+			iter->next = NULL;
+			g_slist_free_1(iter);
+			break;
+		}
+		ref = &iter->next;
 	}
 
 	if (((SPObjectClass *) (parent_class))->remove_child)

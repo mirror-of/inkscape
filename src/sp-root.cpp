@@ -381,17 +381,21 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 static void sp_root_remove_child(SPObject *object, SPRepr *child)
 {
 	SPRoot *root = (SPRoot *) object;
-	gchar const *id = sp_repr_attr(child, "id");
-	SPObject *co = sp_document_lookup_id(object->document, id);
-	g_assert( co != NULL );
 
-	if (SP_IS_DEFS (co) && root->defs == (SPDefs *) co) {
-		SPObject *c;
-		/* We search for next <defs> node - it is not beautiful, but works */
-		for (c = co->next; c != NULL; c = c->next) {
-			if (SP_IS_DEFS (c)) break;
+	if ( root->defs && SP_OBJECT_REPR(root->defs) == child ) {
+		SPObject *iter;
+		/* We search for first remaining <defs> node - it is not beautiful, but works */
+		for ( iter = sp_object_first_child(object) ; iter ; iter = SP_OBJECT_NEXT(iter) ) {
+			if ( SP_IS_DEFS(iter) && (SPDefs *)iter != root->defs ) {
+				root->defs = (SPDefs *)iter;
+				break;
+			}
 		}
-		root->defs = SP_DEFS (c);
+		if (!iter) {
+			/* we should probably create a new <defs> here? */
+			g_critical("Last <defs> removed");
+			root->defs = NULL;
+		}
 	}
 
 	if (((SPObjectClass *) (parent_class))->remove_child)
