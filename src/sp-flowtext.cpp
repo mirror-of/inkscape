@@ -447,7 +447,7 @@ static void FlowReLink(SPObject *object, one_flow_src *&after, one_flow_src *fro
     }
 
     // special cases
-/*
+
     if ( SP_IS_FLOWDIV(object) ) {
         mine = &(SP_FLOWDIV(object)->fin);
         mine->Link(after, from);
@@ -457,7 +457,7 @@ static void FlowReLink(SPObject *object, one_flow_src *&after, one_flow_src *fro
         mine->Link(after, from);
         after = mine;
     }
-*/
+
 }
 
 void SPFlowtext::UpdateFlowSource()
