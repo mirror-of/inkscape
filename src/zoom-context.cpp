@@ -78,8 +78,8 @@ sp_zoom_context_class_init (SPZoomContextClass * klass)
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
-	event_context_class->setup = sp_zoom_context_setup;
 	object_class->dispose = sp_zoom_context_dispose;
+	event_context_class->setup = sp_zoom_context_setup;
 
 	event_context_class->root_handler = sp_zoom_context_root_handler;
 	event_context_class->item_handler = sp_zoom_context_item_handler;
@@ -102,6 +102,10 @@ sp_zoom_context_setup (SPEventContext *ec)
 {
 	if (prefs_get_int_attribute("tools.zoom", "selcue", 0) != 0)
 		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+
+    if (((SPEventContextClass *) parent_class)->setup) {
+        ((SPEventContextClass *) parent_class)->setup(ec);
+    }
 }
 
 static void
