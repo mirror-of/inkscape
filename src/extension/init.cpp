@@ -98,7 +98,7 @@ update_pref (gchar const * pref_path, gchar const * pref_attr,
 	This should be a list of all the internal modules
 	that need to initialized.  This is just a convinent
 	place to put them.  Also, this function calls
-	build_module_from_dir to parse the Sodipodi extensions
+	build_module_from_dir to parse the Inkscape extensions
 	directory.
 */
 void

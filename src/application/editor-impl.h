@@ -19,6 +19,7 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/table.h>
+#include <gtkmm/entry.h>
 #include <gtkmm/ruler.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/statusbar.h>
@@ -76,6 +77,8 @@ public:
     void onDialogTrace();
     void onDialogXmlEditor();
 
+    void onUriChanged();
+
 protected:
     // Child widgets:
     Gtk::Table           _main_window_table;
@@ -86,6 +89,8 @@ protected:
     UI::Widget::Toolbox  *_tool_ctrl;
     Gtk::Toolbar         *_select_ctrl;
     Gtk::Toolbar         *_uri_ctrl;
+    Gtk::Label           _uri_label;
+    Gtk::Entry           _uri_entry;
     Gtk::Toolbar         *_node_ctrl;
 
     Gtk::HRuler          _top_ruler;

@@ -148,7 +148,7 @@ open_internal(Extension *in_plug, gpointer in_data)
         gchar const *filename = (gchar const *)parray[0];
         Input **pimod = (Input **)parray[1];
 
-        // skip all the rest if we already found someone to open it
+        // skip all the rest if we already found a function to open it
         // since they're ordered by preference now.
         if (!*pimod) {
             gchar const *ext = dynamic_cast<Input *>(in_plug)->get_extension();

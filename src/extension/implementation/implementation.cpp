@@ -49,8 +49,8 @@ Implementation::prefs_input (Inkscape::Extension::Input * module, const gchar * 
 
 SPDocument *
 Implementation::open (Inkscape::Extension::Input * module, const gchar * filename) {
-	/* throw open_failed(); */
-	return NULL;
+    /* throw open_failed(); */
+    return NULL;
 } /* Implementation::open */
 
 GtkDialog *

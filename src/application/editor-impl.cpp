@@ -331,6 +331,13 @@ Editor::EditorImpl::onDialogXmlEditor()
 }
 
 void
+Editor::EditorImpl::onUriChanged()
+{
+    g_message("onUriChanged called");
+    
+}
+
+void
 Editor::EditorImpl::initMenuActions()
 {
     _act_grp->add(Gtk::Action::create("MenuFile",   _("_File")));
@@ -954,12 +961,18 @@ Editor::EditorImpl::initToolControlsBar()
 void
 Editor::EditorImpl::initUriBar()
 {
-/*
-    _uri_ctrl = static_cast<Gtk::Toolbar*>(_ui_mgr->get_widget("/UriBar"));
-    if (_uri_ctrl != NULL) {
-        _toolbars_vbox.pack_start(*Gtk::manage(_uri_ctrl), Gtk::PACK_SHRINK);
-    }
-*/
+    // TODO:  Create an Inkscape::UI::Widget::UriBar class (?)
+
+    _uri_ctrl = new Gtk::Toolbar();
+
+    _uri_label.set_label(_("URI:"));
+    _uri_ctrl->add(_uri_label);
+    _uri_ctrl->add(_uri_entry);
+
+    _uri_entry.signal_activate()
+        .connect_notify(sigc::mem_fun(*this, &Editor::EditorImpl::onUriChanged));
+
+    _toolbars_vbox.pack_start(*Gtk::manage(_uri_ctrl), Gtk::PACK_SHRINK);
 }
 
 void

@@ -7,6 +7,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "implementation/implementation.h"
 #include "timer.h"
 #include "input.h"
@@ -140,22 +144,27 @@ Input::open (const gchar *uri)
     if (!loaded()) {
         set_state(Extension::STATE_LOADED);
     }
-    if (!loaded()) return NULL;
+    if (!loaded()) {
+        return NULL;
+    }
     timer->touch();
 
     SPDocument * doc = NULL;
 
-    // TODO fix this to work on WindowsXP (is this fixed now? -Kees)
+#ifdef WITH_GNOME_VFS
+    doc = imp->open(this, uri);
+#else
     if (Inkscape::IO::file_test(uri, G_FILE_TEST_EXISTS)) {
         doc = imp->open(this, uri);
-
-        if (doc != NULL) {
-            Inkscape::XML::Node * repr = sp_document_repr_root(doc);
-            gboolean saved = sp_document_get_undo_sensitive(doc);
-            sp_document_set_undo_sensitive (doc, FALSE);
-            sp_repr_set_attr(repr, "inkscape:output_extension", output_extension);
-            sp_document_set_undo_sensitive (doc, saved);
-        }
+    }
+#endif
+    
+    if (doc != NULL) {
+        Inkscape::XML::Node * repr = sp_document_repr_root(doc);
+        gboolean saved = sp_document_get_undo_sensitive(doc);
+        sp_document_set_undo_sensitive (doc, FALSE);
+        sp_repr_set_attr(repr, "inkscape:output_extension", output_extension);
+        sp_document_set_undo_sensitive (doc, saved);
     }
 
     return doc;

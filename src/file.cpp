@@ -159,8 +159,7 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
         if (existing && existing->virgin) {
             // If the current desktop is empty, open the document there
             sp_desktop_change_document(desktop, doc);
-        }
-        else {
+        } else {
             // create a whole new desktop and window
             SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
             sp_create_window(dtw, TRUE);

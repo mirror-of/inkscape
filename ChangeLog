@@ -1,3 +1,18 @@
+2005-04-02  Bryce Harrington <bryce@bryceharrington.org>
+
+	* configure.ac share/ui/menus-bars.xml, src/Makefile.am,
+	  src/Makefile_insert, src/file.cpp,
+	  src/application/editor-impl.cpp,
+	  src/application/editor-impl.h,
+	  src/extension/init.cpp, src/extension/input.cpp,
+	  src/extension/system.cpp,
+	  src/extension/implementation/implementation.cpp,
+	  src/extension/implementation/plugin.cpp,
+	  src/extension/implementation/script.cpp,
+	  src/extension/internal/svg.cpp
+	: Implementing preliminary load-from-URI functionality.
+	
+
 2005-04-02  MenTaLguY  <mental@rydia.net>
 
 	* src/document-undo.cpp, src/xml/event-fns.h, src/xml/event.cpp,

@@ -218,7 +218,7 @@ if test "x$with_gp" = "xyes"; then
 		dnl No gnome-print found
 		if test "x$with_gp" = "xyes"; then
 			dnl Gnome-print was explicitly asked, so stop
-			AC_MSG_ERROR([--with-gnome-print was specified, but appropriate libgnomeprint development packages could not found])
+			AC_MSG_ERROR([--with-gnome-print was specified, but appropriate libgnomeprint development packages could not be found])
 		else 
 			# gp is no, tell us for the log file 
 			AC_MSG_RESULT($gp)
@@ -236,6 +236,40 @@ AM_CONDITIONAL(USE_GNOME_PRINT, test "x$gp" = "xyes")
 if test "x$gp" = "xyes"; then
 	AC_DEFINE(WITH_GNOME_PRINT, 1, [Use gnome print font database and spooler frontend])
 fi
+
+dnl ******************************
+dnl gnome vfs checking
+dnl ******************************
+
+AC_ARG_WITH(gnome-vfs,
+	AC_HELP_STRING([--with-gnome-vfs], [use gnome vfs for loading files]),
+	[with_gnome_vfs=$withval], [with_gnome_vfs=auto])
+
+if test "x$with_gnome_vfs" = "xyes"; then
+        dnl Have to test gnome-vfs presence
+	PKG_CHECK_MODULES(GNOME_VFS, gnome-vfs-2.0 >= 2.0, gnome_vfs=yes, gnome_vfs=no)
+	if test "x$gnome_vfs" != "xyes"; then
+	        dnl No gnome-vfs found
+		if test "x$with_gnome_vfs" = "xyes"; then
+		        dnl Gnome-VFS was explicitly asked for, so stop
+			AC_MSG_ERROR([--with-gnome-vfs was specified, but appropriate libgnomevfs development packages could not be found])
+		else
+			# gnome-vfs is no, tell us for the log file
+			AC_MSG_RESULT($gnome_vfs)
+		fi
+	fi
+else
+	dnl Asked to ignore gnome-vfs
+	gnome_vfs=no
+fi
+
+AM_CONDITIONAL(USE_GNOME_VFS, test "x$gnome_vfs" = "xyes")
+if test "x$gnome_vfs" = "xyes"; then
+	AC_DEFINE(WITH_GNOME_VFS, 1, [Use gnome vfs file load functionality])
+fi
+
+AC_SUBST(GNOME_VFS_CFLAGS)
+AC_SUBST(GNOME_VFS_LIBS)
 
 dnl ******************************
 dnl libinkjar checking
@@ -685,6 +719,7 @@ Configuration:
 
         Use Xft font database:    ${xft_ok}
         Use gnome-print:          ${gp}
+	Use gnome-vfs             ${gnome_vfs}
         Use openoffice files:     ${ij}
         Use MMX optimizations:    ${use_mmx_asm}
         Use relocation support:   ${enable_binreloc}

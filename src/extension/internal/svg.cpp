@@ -27,6 +27,10 @@
 #include "extension/system.h"
 #include "extension/output.h"
 
+#ifdef WITH_GNOME_VFS
+#include <libgnomevfs/gnome-vfs.h>
+#endif
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -89,28 +93,36 @@ Svg::init(void)
 			"</output>\n"
 		"</inkscape-extension>", new Svg());
 
+#ifdef WITH_GNOME_VFS
+    gnome_vfs_init();
+#endif
+
+
 	return;
 }
 
 
-#ifdef USE_GNOME_VFS
+#ifdef WITH_GNOME_VFS
+#define BUF_SIZE 8192
+
 gchar *
 _load_uri (const gchar *uri)
 {
-    GnomeVFSHandle   *handle;
+    GnomeVFSHandle   *handle = NULL;
     GnomeVFSFileSize  bytes_read;
-    gchar             buffer[BUF_SIZE];
-    gchar            *doc;
-    gchar            *new_doc;
+    gchar             buffer[BUF_SIZE] = "";
+    gchar            *doc = NULL;
+    gchar            *new_doc = NULL;
 
     GnomeVFSResult result = gnome_vfs_open (&handle, uri, GNOME_VFS_OPEN_READ);
+
     while (result == GNOME_VFS_OK) {
         result = gnome_vfs_read (handle, buffer, BUF_SIZE, &bytes_read);
+        buffer[bytes_read] = '\0';
 
         if (doc == NULL) {
             doc = g_strndup(buffer, bytes_read);
         } else {
-            buffer[bytes_read] = '\0';
             new_doc = g_strconcat(doc, buffer, NULL);
             g_free(doc);
             doc = new_doc;
@@ -134,9 +146,12 @@ _load_uri (const gchar *uri)
 SPDocument *
 Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
-#ifdef USE_GNOME_VFS
+#ifdef WITH_GNOME_VFS
 	gchar * buffer = _load_uri(uri);
-	return sp_document_new_from_mem(buffer, strlen(buffer), 1);
+	SPDocument * doc = sp_document_new_from_mem(buffer, strlen(buffer), 1);
+
+        g_free(buffer);
+        return doc;
 #else
 	return sp_document_new (uri, TRUE);
 #endif

@@ -245,18 +245,19 @@ inkscape_private_libs =	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\
 	extension/script/libscript.a	\
-	$(inkjar_libs)	\
+	$(inkjar_libs)		\
 	libinkpost.a
 
-all_libs =	\
+all_libs =			\
 	$(inkscape_private_libs)	\
 	$(INKSCAPE_LIBS)	\
 	$(GNOME_PRINT_LIBS)	\
-	$(XFT_LIBS)	\
+	$(GNOME_VFS_LIBS)	\
+	$(XFT_LIBS)		\
 	$(FREETYPE_LIBS)	\
-	$(kdeldadd)	\
-	$(win32ldflags) \
-	$(PERL_LDFLAGS) \
+	$(kdeldadd)		\
+	$(win32ldflags)		\
+	$(PERL_LDFLAGS)		\
 	$(PYTHON_LIBS)
 
 desktop.$(OBJEXT): helper/sp-marshal.h
