@@ -300,30 +300,35 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
             break;
     }
 
-    for (unsigned span_index = 0 ; span_index < _spans.size() ; span_index++) {
-        _spans[span_index].x_start += offset;
-        _spans[span_index].x_end += offset;
-    }
-
-    for (unsigned char_index = 0 ; char_index < _characters.size() ; char_index++) {
-        int next_char_glyph_index;
+    for (unsigned char_index = 0 ; char_index < _characters.size() ; ) {
+        int next_cluster_glyph_index;
+        unsigned next_cluster_char_index;
         double character_advance;
-        if (char_index == _characters.size() - 1) {
-            next_char_glyph_index = _glyphs.size();
-            character_advance = 0.0;
+        Span const &span = _characters[char_index].span(this);
+
+        for (next_cluster_char_index = char_index + 1 ;
+             next_cluster_char_index < _characters.size() && !_characters[next_cluster_char_index].char_attributes.is_char_break ;
+             next_cluster_char_index++);
+
+        if (next_cluster_char_index == _characters.size()) {
+            next_cluster_glyph_index = _glyphs.size();
+            character_advance = 0.0;   // arbitrary because we're not going to advance
         } else {
-            next_char_glyph_index = _characters[char_index + 1].in_glyph;
-            character_advance =   (_glyphs[next_char_glyph_index].x + _glyphs[next_char_glyph_index].chunk(this).left_x)
-                                - (_glyphs[_characters[char_index].in_glyph].x + _characters[char_index].chunk(this).left_x);
+            next_cluster_glyph_index = _characters[next_cluster_char_index].in_glyph;
+            character_advance =   (_glyphs[next_cluster_glyph_index].x + _glyphs[next_cluster_glyph_index].chunk(this).left_x)
+                                - (_glyphs[_characters[char_index].in_glyph].x + span.chunk(this).left_x);
         }
 
+        double start_offset = offset + span.x_start + _characters[char_index].x;
         double cluster_width = 0.0;
-        for (int glyph_index = _characters[char_index].in_glyph ; glyph_index < next_char_glyph_index ; glyph_index++)
+        for (int glyph_index = _characters[char_index].in_glyph ; glyph_index < next_cluster_glyph_index ; glyph_index++)
             cluster_width += _glyphs[glyph_index].width;
-        double end_offset = offset + cluster_width;
+        if (span.direction == RIGHT_TO_LEFT)
+            start_offset -= cluster_width;
+        double end_offset = start_offset + cluster_width;
 
         int unused = 0;
-        double midpoint_offset = (offset + end_offset) * 0.5;
+        double midpoint_offset = (start_offset + end_offset) * 0.5;
             // as far as I know these functions are const, they're just not marked as such
         Path::cut_position *midpoint_otp = const_cast<Path&>(path).CurvilignToPosition(1, &midpoint_offset, unused);
         if (midpoint_offset >= 0.0 && midpoint_otp != NULL && midpoint_otp[0].piece >= 0) {
@@ -332,9 +337,13 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
 
             const_cast<Path&>(path).PointAndTangentAt(midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, tangent);
             double rotation = atan2(tangent[1], tangent[0]);
-            for (int glyph_index = _characters[char_index].in_glyph ; glyph_index < next_char_glyph_index ; glyph_index++) {
-                _glyphs[glyph_index].x = midpoint[0] - _characters[char_index].chunk(this).left_x - tangent[0] * cluster_width * 0.5 - tangent[1] * _characters[char_index].span(this).baseline_shift;
-                _glyphs[glyph_index].y = midpoint[1] - _lines.front().baseline_y - tangent[1] * cluster_width * 0.5 + tangent[0] * _characters[char_index].span(this).baseline_shift;
+            for (int glyph_index = _characters[char_index].in_glyph ; glyph_index < next_cluster_glyph_index ; glyph_index++) {
+                double tangent_shift = -cluster_width * 0.5 + _glyphs[glyph_index].x - (_characters[char_index].x + span.x_start);
+                double normal_shift = _glyphs[glyph_index].y;
+                if (span.direction == RIGHT_TO_LEFT)
+                    tangent_shift += cluster_width;
+                _glyphs[glyph_index].x = midpoint[0] - span.chunk(this).left_x + tangent[0] * tangent_shift - tangent[1] * normal_shift;
+                _glyphs[glyph_index].y = midpoint[1] - _lines.front().baseline_y + tangent[1] * tangent_shift + tangent[0] * normal_shift;
                 _glyphs[glyph_index].rotation += rotation;
             }
         } else {  // outside the bounds of the path: hide the glyphs
@@ -342,8 +351,15 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
         }
         g_free(midpoint_otp);
 
-        offset += character_advance;
+        //offset += character_advance;
+        char_index = next_cluster_char_index;
     }
+
+    for (unsigned span_index = 0 ; span_index < _spans.size() ; span_index++) {
+        _spans[span_index].x_start += offset;
+        _spans[span_index].x_end += offset;
+    }
+
     _path_fitted = &path;
 }
 

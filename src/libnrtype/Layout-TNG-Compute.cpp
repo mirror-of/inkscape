@@ -1029,10 +1029,13 @@ class Layout::Calculator
                     InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_flow._input_stream[unbroken_span.input_index]);
                     Glib::ustring::const_iterator iter_source_text = Glib::ustring::const_iterator(unbroken_span.input_stream_first_character.base() + it_span->start.char_byte) ;
                     unsigned char_index_in_unbroken_span = it_span->start.char_index;
+                    unsigned cluster_start_char_index = _flow._characters.size();
                     double font_size_multiplier = new_span.font_size / (PANGO_SCALE * _font_factory_size_multiplier);
 
                     for (unsigned glyph_index = it_span->start_glyph_index ; glyph_index < it_span->end_glyph_index ; glyph_index++) {
                         unsigned char_byte = iter_source_text.base() - unbroken_span.input_stream_first_character.base();
+                        if (unbroken_span.glyph_string->glyphs[glyph_index].attr.is_cluster_start)
+                            cluster_start_char_index = _flow._characters.size();
 
                         if (unbroken_span.glyph_string->log_clusters[glyph_index] < (int)unbroken_span.text_bytes
                             && *iter_source_text == UNICODE_SOFT_HYPHEN
@@ -1058,7 +1061,7 @@ class Layout::Calculator
                         // create the Layout::Glyph
                         Layout::Glyph new_glyph;
                         new_glyph.glyph = unbroken_span.glyph_string->glyphs[glyph_index].glyph;
-                        new_glyph.in_character = _flow._characters.size();
+                        new_glyph.in_character = cluster_start_char_index;
                         new_glyph.rotation = glyph_rotate;
                         new_glyph.x = x + counter_directional_width_remaining + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier;
                         new_glyph.y = _y_offset + unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset * font_size_multiplier;
@@ -1090,7 +1093,20 @@ class Layout::Calculator
                         unsigned end_byte;
                         if (glyph_index == (unsigned)unbroken_span.glyph_string->num_glyphs - 1)
                             end_byte = it_span->start.iter_span->text_bytes;
-                        else end_byte = unbroken_span.glyph_string->log_clusters[glyph_index + 1];
+                        else {
+                            // output chars for the whole cluster that is commenced by this glyph
+                            if (unbroken_span.glyph_string->glyphs[glyph_index].attr.is_cluster_start) {
+                                int next_cluster_glyph_index = glyph_index + 1;
+                                while (next_cluster_glyph_index < unbroken_span.glyph_string->num_glyphs
+                                       && !unbroken_span.glyph_string->glyphs[next_cluster_glyph_index].attr.is_cluster_start)
+                                    next_cluster_glyph_index++;
+                                if (next_cluster_glyph_index < unbroken_span.glyph_string->num_glyphs)
+                                    end_byte = unbroken_span.glyph_string->log_clusters[next_cluster_glyph_index];
+                                else 
+                                    end_byte = it_span->start.iter_span->text_bytes;
+                            } else
+                                end_byte = char_byte;    // don't output any chars if we're not at the start of a cluster
+                        }
                         while (char_byte < end_byte) {
                             Layout::Character new_character;
                             new_character.in_span = _flow._spans.size();
