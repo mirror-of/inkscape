@@ -159,6 +159,9 @@ sp_document_undo (SPDocument *doc)
 		doc->priv->undo = g_slist_remove (doc->priv->undo, log);
 		sp_repr_undo_log (log);
 		doc->priv->redo = g_slist_prepend (doc->priv->redo, log);
+
+		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+
 		ret = TRUE;
 	} else {
 		ret = FALSE;
@@ -192,6 +195,9 @@ sp_document_redo (SPDocument *doc)
 		doc->priv->redo = g_slist_remove (doc->priv->redo, log);
 		sp_repr_replay_log (log);
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
+
+		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+
 		ret = TRUE;
 	} else {
 		ret = FALSE;
