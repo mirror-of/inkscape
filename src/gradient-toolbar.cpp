@@ -44,6 +44,7 @@
 #include "path-chemistry.h"
 #include "inkscape-private.h"
 #include "document.h"
+#include "document-private.h"
 #include "inkscape.h"
 #include "desktop.h"
 #include "desktop-handles.h"
@@ -271,11 +272,14 @@ gr_read_selection (SPSelection *selection, SPGradient **gr_selected, bool *gr_mu
     }
  }
 
-
 static void 
-gr_tb_selection_changed (SPSelection *selection, gpointer data)
+gr_tb_selection_changed (SPSelection *sel_sender, gpointer data)
 {
     GtkWidget *widget = (GtkWidget *) data;
+
+    SPDesktop *desktop = (SPDesktop *) g_object_get_data (G_OBJECT(widget), "desktop");
+    SPSelection *selection = SP_DT_SELECTION (desktop); // take from desktop, not from args
+
     GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT (widget), "menu");
     if (om) gtk_widget_destroy (om);
 
@@ -287,12 +291,24 @@ gr_tb_selection_changed (SPSelection *selection, gpointer data)
 
     gr_read_selection (selection, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
 
-    om = gr_vector_list (SP_DT_DOCUMENT(selection->desktop()), selection->isEmpty(), gr_selected, gr_multi);
+    om = gr_vector_list (SP_DT_DOCUMENT(desktop), selection->isEmpty(), gr_selected, gr_multi);
     g_object_set_data (G_OBJECT (widget), "menu", om);
   
     gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
 
     gtk_widget_show_all (widget);
+}
+
+static void
+gr_defs_release (SPObject *defs, GtkWidget *widget)
+{
+    gr_tb_selection_changed (NULL, (gpointer) widget);
+}
+
+static void
+gr_defs_modified (SPObject *defs, guint flags, GtkWidget *widget)
+{
+    gr_tb_selection_changed (NULL, (gpointer) widget);
 }
 
 
@@ -311,6 +327,7 @@ gr_change_widget (SPDesktop *desktop)
     gr_read_selection (selection, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
  
     GtkWidget *widget = gtk_hbox_new(FALSE, FALSE);
+    g_object_set_data (G_OBJECT (widget), "desktop", desktop);
 
     GtkWidget *om = gr_vector_list (document, selection->isEmpty(), gr_selected, gr_multi);
     g_object_set_data (G_OBJECT (widget), "menu", om);
@@ -324,6 +341,9 @@ gr_change_widget (SPDesktop *desktop)
         );
 
 //    g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(delete_connection), connection);
+
+	g_signal_connect (G_OBJECT (SP_DOCUMENT_DEFS (document)), "release", G_CALLBACK (gr_defs_release), widget);
+	g_signal_connect (G_OBJECT (SP_DOCUMENT_DEFS (document)), "modified", G_CALLBACK (gr_defs_modified), widget);
 
     gtk_widget_show_all (widget);
     return widget;
