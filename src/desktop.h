@@ -295,6 +295,7 @@ void fullscreen(SPDesktop *dt);
 
 void sp_desktop_widget_layout (SPDesktopWidget *dtw);
 
+void sp_desktop_apply_css_recursive (SPObject *o, SPCSSAttr *css, bool skip_lines);
 void sp_desktop_set_color (SPDesktop *desktop, const ColorRGBA &color, bool is_relative, bool fill);
 void sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css);
 

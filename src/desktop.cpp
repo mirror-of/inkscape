@@ -55,6 +55,7 @@
 #include "selection.h"
 #include "select-context.h"
 #include "sp-namedview.h"
+#include "sp-text.h"
 #include "sp-item.h"
 #include "sp-item-group.h"
 #include "sp-root.h"
@@ -2117,6 +2118,20 @@ sp_desktop_set_color (SPDesktop *desktop, const ColorRGBA &color, bool is_relati
 }
 
 void
+sp_desktop_apply_css_recursive (SPObject *o, SPCSSAttr *css, bool skip_lines)
+{
+    // tspans with role=line are not regular objects in that they are not assignable style of their own,
+    // but must always inherit from the parent text
+    if (!skip_lines || !(SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE)) {
+        sp_repr_css_change (SP_OBJECT_REPR (o), css, "style");
+    }
+
+    for (SPObject *child = sp_object_first_child(SP_OBJECT(o)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        sp_desktop_apply_css_recursive (child, css, skip_lines);
+    }
+}
+
+void
 sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css)
 {
 // 1. Set internal value, write to prefs
@@ -2131,8 +2146,7 @@ sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css)
 // 3. If nobody has intercepted the signal, apply the style to the selection
     if (!intercepted) {
         for (const GSList *i = desktop->selection->itemList(); i != NULL; i = i->next) {
-            // FIXME: prevent _recursive from changing tspans with sodipodi:role="line" ?
-            sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+            sp_desktop_apply_css_recursive (SP_OBJECT (i->data), css, true);
         }
     }
 }
