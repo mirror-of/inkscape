@@ -19,6 +19,7 @@
 
 #include <math.h>
 #include <list>
+#include <utility>
 #include "sp-guide.h"
 #include "sp-namedview.h"
 #include "desktop.h"
@@ -138,8 +139,9 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
  * They return the updated transformation parameter. 
  */
 
-NR::Coord sp_desktop_dim_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
-                                   NR::Coord const dx, NR::Dim2 const dim)
+std::pair<NR::Coord, bool> sp_desktop_dim_snap_list(SPDesktop const *dt,
+                                                    Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                    NR::Coord const dx, NR::Dim2 const dim)
 {
     NR::Coord dist = NR_HUGE;
     NR::Coord xdist = dx;
@@ -157,7 +159,7 @@ NR::Coord sp_desktop_dim_snap_list(SPDesktop const *dt, Snapper::PointType t, co
         }
     }
 
-    return xdist;
+    return std::make_pair(xdist, dist < NR_HUGE);
 }
 
 double sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,

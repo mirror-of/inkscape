@@ -107,8 +107,9 @@ gdouble sp_desktop_dim_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point
 NR::Coord sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
                                       NR::Point const &norm, NR::scale const &s);
 
-NR::Coord sp_desktop_dim_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
-                                   double const dx, NR::Dim2 const dim);
+std::pair<NR::Coord, bool> sp_desktop_dim_snap_list(SPDesktop const *dt,
+                                                    Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                    double const dx, NR::Dim2 const dim);
 
 NR::Coord sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
                                          NR::Point const &norm, double const sx, NR::Dim2 const dim);
