@@ -1,4 +1,4 @@
-.TH inkview 1 "January 11, 2004" INKSCAPE "Inkscape\-0.36"
+.TH inkview 1 "December 28, 2004" INKSCAPE "Inkscape\-0.40"
 .SH NAME
 inkview \- slideshow program which uses SVG files
 
@@ -21,9 +21,12 @@ files supplied on the command line in the given order.
  Return: pop up window with slide buttons (first, prev, next, last)
 
 .SH EXAMPLES
-On the Debian Distribution you can use the command
-.B inkview /usr/share/inkscape/examples/*.svg{,.gz}
-to browse throug the examples inkcluded in the inkscape package
+You can use the command
+.B inkview @prefix@/share/inkscape/examples/*.svg*
+.\" Actually ${datadir}/inkscape/..., but config.status won't fully
+.\" expand that.  We could use the makefile to do substitutions instead
+.\" of using config.status if we want to correct this.
+to browse through the examples included in the inkscape package.
 
 .SH OPTIONS
 There are no options yet.
@@ -35,13 +38,13 @@ There are no options yet.
 .SH "SEE ALSO"
 .BR inkscape(1)
 
-.I http://www.inkscape.org
+.I http://www.inkscape.org/
 
 .SH AUTHORS
 
 Johan Ceuppens
 
-This codebase owes its existance to a large number of contributors
+This codebase owes its existence to a large number of contributors
 throughout its various incarnations.  See inkscape(1) for more information.
 
 This man-page was written by Wolfram Quester <wolfi@mittelerde.physik.uni\-konstanz.de>
