@@ -11,6 +11,7 @@
  */
 
 #include <libnr/nr_config.h>
+#include <glib.h>
 
 typedef NRULong NRType;
 
@@ -31,7 +32,7 @@ typedef struct _NRActiveObjectClass NRActiveObjectClass;
 #define nr_return_if_fail(expr) if (!(expr) && nr_emit_fail_warning (__FILE__, __LINE__, "?", #expr)) return
 #define nr_return_val_if_fail(expr,val) if (!(expr) && nr_emit_fail_warning (__FILE__, __LINE__, "?", #expr)) return (val)
 
-unsigned int nr_emit_fail_warning (const unsigned char *file, unsigned int line, const unsigned char *method, const unsigned char *expr);
+unsigned int nr_emit_fail_warning (const gchar *file, unsigned int line, const gchar *method, const gchar *expr);
 
 #ifndef NR_DISABLE_CAST_CHECKS
 #define NR_CHECK_INSTANCE_CAST(ip, tc, ct) ((ct *) nr_object_check_instance_cast (ip, tc))
@@ -48,7 +49,7 @@ void *nr_object_check_instance_cast (void *ip, NRType tc);
 unsigned int nr_object_check_instance_type (void *ip, NRType tc);
 
 NRType nr_object_register_type (NRType parent,
-				      unsigned char *name,
+				      gchar *name,
 				      unsigned int csize,
 				      unsigned int isize,
 				      void (* cinit) (NRObjectClass *),
@@ -65,7 +66,7 @@ struct _NRObjectClass {
 	NRType type;
 	NRObjectClass *parent;
 
-	unsigned char *name;
+	gchar *name;
 	unsigned int csize;
 	unsigned int isize;
 	void (* cinit) (NRObjectClass *);

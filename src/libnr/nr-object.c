@@ -17,7 +17,7 @@
 #include "nr-object.h"
 
 unsigned int
-nr_emit_fail_warning (const unsigned char *file, unsigned int line, const unsigned char *method, const unsigned char *expr)
+nr_emit_fail_warning (const gchar *file, unsigned int line, const gchar *method, const gchar *expr)
 {
 	fprintf (stderr, "File %s line %d (%s): Assertion %s failed\n", file, line, method, expr);
 	return 1;
@@ -64,7 +64,7 @@ nr_object_check_instance_type (void *ip, NRType tc)
 
 NRType
 nr_object_register_type (NRType parent,
-			 unsigned char *name,
+			 gchar *name,
 			 unsigned int csize,
 			 unsigned int isize,
 			 void (* cinit) (NRObjectClass *),
@@ -85,7 +85,7 @@ nr_object_register_type (NRType parent,
 	type = classes_len;
 	classes_len += 1;
 
-	classes[type] = malloc (csize);
+	classes[type] = (NRObjectClass*)malloc (csize);
 	klass = classes[type];
 	memset (klass, 0, csize);
 
@@ -150,7 +150,7 @@ nr_object_new (NRType type)
 	nr_return_val_if_fail (type < classes_len, NULL);
 
 	klass = classes[type];
-	object = malloc (klass->isize);
+	object = (NRObject*)malloc (klass->isize);
 	nr_object_setup (object, type);
 
 	return object;
@@ -283,14 +283,14 @@ nr_active_object_add_listener (NRActiveObject *object, const NRObjectEventVector
 	NRObjectListener *listener;
 
 	if (!object->callbacks) {
-		object->callbacks = malloc (sizeof (NRObjectCallbackBlock));
+		object->callbacks = (NRObjectCallbackBlock*)malloc (sizeof (NRObjectCallbackBlock));
 		object->callbacks->size = 1;
 		object->callbacks->length = 0;
 	}
 	if (object->callbacks->length >= object->callbacks->size) {
 		int newsize;
 		newsize = object->callbacks->size << 1;
-		object->callbacks = realloc (object->callbacks, sizeof (NRObjectCallbackBlock) + (newsize - 1) * sizeof (NRObjectListener));
+		object->callbacks = (NRObjectCallbackBlock*)realloc (object->callbacks, sizeof (NRObjectCallbackBlock) + (newsize - 1) * sizeof (NRObjectListener));
 		object->callbacks->size = newsize;
 	}
 	listener = object->callbacks->listeners + object->callbacks->length;

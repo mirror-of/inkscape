@@ -70,7 +70,7 @@ nr_svp_from_svl (NRSVL *svl, NRFlat *flat)
 		svl = sl;
 	}
 
-	svp = malloc (sizeof (NRSVP) + (nsegs - 1) * sizeof (NRSVPSegment));
+	svp = (NRSVP*)malloc (sizeof (NRSVP) + (nsegs - 1) * sizeof (NRSVPSegment));
 	svp->length = nsegs;
 	if (nsegs > 0) {
 		unsigned int sidx, pidx;
@@ -285,14 +285,14 @@ void
 nr_svl_build_finish_segment (NRSVLBuild *svlb)
 {
 	if (svlb->refvx) {
-		NRSVL *new;
+		NRSVL *new_svl;
 		/* We have running segment */
 		if (svlb->dir > 0) {
 			/* We are upwards, prepended, so reverse */
 			svlb->refvx = nr_vertex_reverse_list (svlb->refvx);
 		}
-		new = nr_svl_new_full (svlb->refvx, &svlb->bbox, (!svlb->reverse) ? svlb->dir : -svlb->dir);
-		*svlb->svl = nr_svl_insert_sorted (*svlb->svl, new);
+		new_svl = nr_svl_new_full (svlb->refvx, &svlb->bbox, (!svlb->reverse) ? svlb->dir : -svlb->dir);
+		*svlb->svl = nr_svl_insert_sorted (*svlb->svl, new_svl);
 	}
 	svlb->refvx = NULL;
 }
@@ -580,7 +580,7 @@ nr_art_svp_from_svl (NRSVL * svl)
 	int n_segs, sn;
 
 	if (!svl) {
-		asvp = art_alloc (sizeof (ArtSVP));
+		asvp = (ArtSVP *)art_alloc (sizeof (ArtSVP));
 		asvp->n_segs = 0;
 		return asvp;
 	}
@@ -588,7 +588,7 @@ nr_art_svp_from_svl (NRSVL * svl)
 	n_segs = 0;
 	for (s = svl; s != NULL; s = s->next) n_segs++;
 
-	asvp = art_alloc (sizeof (ArtSVP) + (n_segs - 1) * sizeof (ArtSVPSeg));
+	asvp = (ArtSVP *)art_alloc (sizeof (ArtSVP) + (n_segs - 1) * sizeof (ArtSVPSeg));
 	asvp->n_segs = n_segs;
 
 	sn = 0;
