@@ -191,6 +191,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 	static unsigned int panning = 0;
 	gint ret;
 	SPDesktop * desktop;
+	GdkEvent *event_next;
 	ret = FALSE;
 
 	desktop = event_context->desktop;
@@ -273,6 +274,20 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				// (indicating they intend to move the object, not click), then always process the 
 				// motion notify coordinates as given (no snapping back to origin)
 				within_tolerance = false; 
+
+				// gobble subsequent motion events to prevent "sticking" when scrolling is slow
+				event_next = gdk_event_get ();
+				// while the next event is also a motion notify with the same button,
+				while (event_next && event_next->type == GDK_MOTION_NOTIFY && 
+						     ((panning == 2 && (event_next->motion.state & GDK_BUTTON2_MASK)) ||
+							(panning == 3 && (event_next->motion.state & GDK_BUTTON3_MASK)))) {
+					// kill it
+					gdk_event_free (event_next);
+					// get next
+					event_next = gdk_event_get ();
+				}
+				// otherwise, put it back onto the queue
+				if (event_next) gdk_event_put (event_next);
 
 				sp_desktop_scroll_world (event_context->desktop, event->motion.x - s.x, event->motion.y - s.y);
 				ret = TRUE;
