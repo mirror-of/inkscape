@@ -1,5 +1,9 @@
 2003-11-28 MenTaLguY <mental@rydia.net>
 
+	* src/xml/repr-action-test.c, src/utest/utest.inc: made test
+	  control structure a little clearer (hopefully) by hiding it.
+          Also some initial Doxygenification of the unit testing stuff.
+
 	* src/Makefile.am: added utest/ subdir
 
 	* doc/architecture.svg: reworked architecture diagram a bit
