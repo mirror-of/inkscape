@@ -113,7 +113,7 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, Gtk::BuiltinIconSize size
 
         Gtk::Button *btn = new Gtk::Button(blank);
         Gdk::Color color;
-        color.set_rgb(_r << 8, _g << 8, _b << 8);
+        color.set_rgb((_r << 8)|_r, (_g << 8)|_g, (_b << 8)|_b);
         btn->modify_bg(Gtk::STATE_NORMAL, color);
         btn->modify_bg(Gtk::STATE_ACTIVE, color);
         btn->modify_bg(Gtk::STATE_PRELIGHT, color);
@@ -167,7 +167,7 @@ static char* trim( char* str ) {
 }
 
 void skipWhitespace( char*& str ) {
-    while ( *str && (*str == ' ' || *str == '\t' ) ) {
+    while ( *str == ' ' || *str == '\t' ) {
         str++;
     }
 }
@@ -214,7 +214,7 @@ static void loadPaletteFile( gchar const *filename )
                         } else {
                             char *ptr = block;
                             // very simple check for header versus entry
-                            while ( *ptr && (*ptr == ' ' || *ptr == '\t') ) {
+                            while ( *ptr == ' ' || *ptr == '\t' ) {
                                 ptr++;
                             }
                             if ( *ptr == 0 ) {
@@ -228,7 +228,7 @@ static void loadPaletteFile( gchar const *filename )
                                 int g = 0;
                                 int b = 0;
                                 skipWhitespace(ptr);
-                                if ( ptr ) {
+                                if ( *ptr ) {
                                     hasErr = parseNum(ptr, r);
                                     if ( !hasErr ) {
                                         skipWhitespace(ptr);
