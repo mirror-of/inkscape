@@ -16,15 +16,11 @@
 #include <glib.h>
 #include <sigc++/sigc++.h>
 #include <exception>
+#include "uri.h"
 #include "forward.h"
 #include "document.h"
 
 namespace Inkscape {
-
-class UnsupportedURIException {
-public:
-	const char *what() const { return "Unsupported or malformed URI"; }
-};
 
 /**
  * A class encapsulating a reference to a particular URI; observers can
@@ -37,19 +33,20 @@ class URIReference : public SigC::Object {
 public:
 	/**
 	 * Constructs a reference object given an SPDocument *
-	 * and a uri which is resolved relative to that document.
+	 * and a uri.
 	 *
-	 * Throws an UnsupportedURIException if the uri is unsupported
-	 * or malformed.
+	 * Throws a BadURIException if the URI is unsupported,
+	 * or the fragment identifier is xpointer and malformed.
 	 *
-	 * @param rel_document document to resolve references relative to
-	 * @param uri a CSS url() specification
+	 * @param rel_document document for relative URIs
+	 * @param uri the URI to watch
 	 *
 	 * @see SPObject
 	 * @see sp_object_href
 	 * @see sp_object_hunref
 	 */
-	URIReference(SPDocument *rel_document, const gchar *uri);
+	URIReference(SPDocument *rel_document, const URI &uri)
+	  throw(BadURIException);
 
 	/**
 	 * Destructor.  Calls shutdown() if the reference has not been

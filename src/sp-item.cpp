@@ -177,46 +177,50 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	}
 	case SP_PROP_CLIP_PATH: {
-		SPObject *cp;
 		if (item->clip_ref) {
 			delete item->clip_ref;
 			item->clip_ref = NULL;
 		}
-		if (value) {
+
+		gchar *uri=( value ? Inkscape::parse_css_url(value) : NULL );
+		SPObject *cp=NULL;
+
+		if (uri) {
 			try {
-				item->clip_ref = new Inkscape::URIReference(SP_OBJECT_DOCUMENT(object), value);
+				item->clip_ref = new Inkscape::URIReference(SP_OBJECT_DOCUMENT(object), Inkscape::URI(uri));
 				item->clip_ref->changedSignal().connect(SigC::bind(SigC::slot(clip_ref_changed), item));
 				cp = item->clip_ref->getObject();
-			} catch (Inkscape::UnsupportedURIException &e) {
+			} catch (Inkscape::BadURIException &e) {
 				g_warning("%s", e.what());
 				item->clip_ref = NULL;
-				cp = NULL;
 			}
-		} else {
-			cp = NULL;
+			g_free(uri);
 		}
+
 		clip_ref_changed(NULL, cp, item);
 		break;
 	}
 	case SP_PROP_MASK: {
-		SPObject *m;
 		if (item->mask_ref) {
 			delete item->mask_ref;
 			item->mask_ref = NULL;
 		}
-		if (value) {
+
+		gchar *uri=( value ? Inkscape::parse_css_url(value) : NULL );
+		SPObject *m=NULL;
+
+		if (uri) {
 			try {
-				item->mask_ref = new Inkscape::URIReference(SP_OBJECT_DOCUMENT(object), value);
+				item->mask_ref = new Inkscape::URIReference(SP_OBJECT_DOCUMENT(object), Inkscape::URI(uri));
 				item->mask_ref->changedSignal().connect(SigC::bind(SigC::slot(mask_ref_changed), item));
-				m  = item->mask_ref->getObject();
-			} catch (Inkscape::UnsupportedURIException &e) {
+				m = item->mask_ref->getObject();
+			} catch (Inkscape::BadURIException &e) {
 				g_warning("%s", e.what());
 				item->mask_ref = NULL;
-				m = NULL;
 			}
-		} else {
-			m = NULL;
+			g_free(uri);
 		}
+
 		mask_ref_changed(NULL, m, item);
 		break;
 	}

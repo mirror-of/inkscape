@@ -21,6 +21,18 @@
 #include "forward.h"
 #include "sp-marker.h"
 
+namespace Inkscape {
+
+/**
+ * Parses a CSS url() specification; temporary hack until
+ * style stuff is redone.
+ * \param string the CSS string to parse
+ * \return a newly-allocated URL string (or NULL); free with g_free()
+ */
+gchar *parse_css_url(const gchar *string);
+
+};
+
 typedef struct _SPIFloat SPIFloat;
 typedef struct _SPIScale24 SPIScale24;
 typedef struct _SPIInt SPIInt;

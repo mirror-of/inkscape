@@ -73,6 +73,7 @@ inkscapelib_src = \
 	document.cpp document.h document-private.h \
 	document-undo.cpp \
 	uri-references.cpp uri-references.h \
+	uri.cpp uri.h \
 	version.cpp version.h
 
 noinst_LTLIBRARIES = libinkscape.la

@@ -23,13 +23,40 @@ static gchar *uri_to_id(SPDocument *document, const gchar *uri);
 
 namespace Inkscape {
 
-URIReference::URIReference(SPDocument *rel_document, const gchar *uri) {
-	gchar *id = uri_to_id(rel_document, uri);
-	if (!id) {
+URIReference::URIReference(SPDocument *rel_document, const URI &uri)
+  throw(BadURIException)
+: _obj(NULL)
+{
+	const gchar *fragment;
+	gchar *id;
+
+	fragment = uri.getFragment();
+	if (!fragment) {
 		throw UnsupportedURIException();
 	}
 
-	_obj = NULL;
+	/* FIXME !!! real xpointer support should be delegated to document */
+	/* for now this handles the minimal xpointer form that SVG 1.0
+	 * requires of us
+	 */
+	if (!strncmp(fragment, "xpointer(", 9)) {
+		/* FIXME !!! this is wasteful */
+		if (!strncmp(fragment, "xpointer(id(", 12)) {
+			id = g_strdup(fragment+12);
+			int len=strlen(id);
+			if ( len < 3 || strcmp(id+len-2, "))") ) {
+				g_free(id);
+				throw MalformedURIException();
+			}
+		} else {
+			throw UnsupportedURIException();
+		}
+	} else {
+		id = g_strdup(fragment);
+	}
+
+	/* FIXME !!! validate id somewhere */
+
 	_setObject(sp_document_lookup_id(rel_document, id));
 
 	_connection = sp_document_id_changed_connect(rel_document, id, SigC::slot(*this, &URIReference::_setObject));

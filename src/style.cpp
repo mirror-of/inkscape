@@ -36,6 +36,63 @@
 #include "sp-paint-server.h"
 #include "style.h"
 
+namespace Inkscape {
+
+gchar *parse_css_url(const gchar *string) {
+	const gchar *iter;
+	gchar *result;
+	gchar end_char;
+	GString *temp;
+
+	iter = string;
+
+	for ( ; g_ascii_isspace(*iter) ; iter = g_utf8_next_char(iter) );
+	if (strncmp(iter, "url(", 4)) return NULL;
+	iter += 4;
+
+	if ( *iter == '"' || *iter == '\'' ) {
+		end_char = *iter;
+		iter += 1;
+	} else {
+		end_char = *iter;
+	}
+
+	temp = g_string_new(NULL);
+
+	for ( ; *iter ; iter = g_utf8_next_char(iter) ) {
+		if ( *iter == '(' || *iter == ')' ||
+		     *iter == '"' || *iter == '\'' ||
+		     g_ascii_isspace(*iter) ||
+		     g_ascii_iscntrl(*iter) )
+		{
+			break;
+		}
+		if ( *iter == '\\' ) {
+			iter = g_utf8_next_char(iter);
+		}
+		if ( *iter & (gchar)0x80 ) {
+			break;
+		} else {
+			g_string_append_c(temp, *iter);
+		}
+	}
+
+	if ( *iter == end_char && end_char != ')' ) {
+		iter = g_utf8_next_char(iter);
+	}
+	if ( *iter == ')' ) {
+		result = temp->str;
+		g_string_free(temp, FALSE);
+	} else {
+		result = NULL;
+		g_string_free(temp, TRUE);
+	}
+
+	return result;
+}
+
+};
+
 #define BMAX 8192
 
 #define SP_STYLE_FLAG_IFSET (1 << 0)

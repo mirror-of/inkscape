@@ -1,3 +1,9 @@
+2004-01-05 MenTaLguY <mental@rydia.net>
+
+	* src/uri-references.cpp, src/uri-references.h,
+	  src/uri.cpp, src/uri.h, sp-item.cpp:
+	  new URI code
+
 2004-01-04 MenTaLguY <mental@rydia.net>
 
 	* src/object-ui.cpp: flattened group submenu

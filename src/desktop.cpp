@@ -1009,8 +1009,6 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			gtk_label_set_markup(GTK_LABEL(GTK_MESSAGE_DIALOG(dialog)->label), markup);
 			g_free(markup);
 
-			gtk_window_set_title(GTK_WINDOW(dialog), "Warning: Document modified");
-			
 			GtkWidget *close_button;
 			close_button = gtk_button_new_with_mnemonic(_("Close _without saving"));
 			gtk_widget_show(close_button);
