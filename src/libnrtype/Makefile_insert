@@ -28,6 +28,17 @@ libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/RasterFont.h \
 	libnrtype/raster-glyph.h	\
 	libnrtype/raster-position.h	\
+	libnrtype/text_holder.cpp	\
+	libnrtype/text_holder.h	\
+	libnrtype/text_style.cpp	\
+	libnrtype/text_style.h	\
+	libnrtype/FlowUtils.cpp	\
+	libnrtype/FlowUtils.h	\
+	libnrtype/FlowSrc.cpp	\
+	libnrtype/FlowSrc.h	\
+	libnrtype/FlowEater.cpp	\
+	libnrtype/FlowEater.h	\
+	libnrtype/FlowDefs.h	\
 	libnrtype/TextWrapper.cpp \
 	libnrtype/TextWrapper.h 
 

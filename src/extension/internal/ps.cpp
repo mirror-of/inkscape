@@ -593,7 +593,7 @@ PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
   
   Inkscape::SVGOStringStream os;
 
-  os << "/Times-Roman findfont\n";
+  os << "/" << style->text->font_family.value << " findfont\n";
   os << style->font_size.computed << " scalefont\n";
   os << "setfont newpath\n";
   os << p[NR::X] << " " << p[NR::Y] << " moveto\n";

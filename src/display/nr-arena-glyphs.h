@@ -32,9 +32,8 @@ NRType nr_arena_glyphs_get_type (void);
 
 struct NRArenaGlyphs : public NRArenaItem {
 	/* Glyphs data */
-	SPCurve *curve;
 	SPStyle *style;
-	NRMatrix transform;
+	NRMatrix g_transform;
 	font_instance *font;
 	gint glyph;
 

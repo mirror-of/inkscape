@@ -35,6 +35,8 @@
 #include "xml/repr-private.h"
 #include "object-edit.h"
 #include "prefs-utils.h"
+#include "sp-flowtext.h"
+//#include "sp-flowregion.h" //FIXME: conflict of two different Path classes!
 
 #include "helper/stlport.h"
 
@@ -117,6 +119,18 @@ static Path::Node *active_node = NULL;
 Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 {
 	SPRepr *repr = SP_OBJECT (item)->repr;
+
+	if (SP_IS_FLOWTEXT(item)) {
+		for (SPObject *child = sp_object_first_child(SP_OBJECT(item)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+			//			if SP_IS_FLOWREGION (child) {
+				SPObject *grandchild = sp_object_first_child(SP_OBJECT(child));
+				if (grandchild && SP_IS_PATH (grandchild)) {
+					item = SP_ITEM (grandchild);
+					break;
+				}
+				//			}
+		}
+	}
 
 	if (!SP_IS_PATH (item))
         return NULL;

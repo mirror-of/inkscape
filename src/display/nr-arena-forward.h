@@ -34,6 +34,9 @@ struct NRArenaImageClass;
 struct NRArenaGlyphs;
 struct NRArenaGlyphsClass;
 
+struct NRArenaGlyphsGroup;
+struct NRArenaGlyphsGroupClass;
+
 #endif
 
 /*
