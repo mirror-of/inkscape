@@ -1394,6 +1394,9 @@ sp_stroke_style_update_marker_buttons(SPWidget *spw, const GSList *objects,
   gchar *marker_type    = object->style->marker[loc].value;
 
   g_message("'%s' marker is '%s'", stock_type, marker_type);
+  if (! marker_type) {
+    return;
+  }
   
   /* Iterate through the objects and check the styles */
   for (GSList *l = objects->next; l != NULL; l = l->next) {
