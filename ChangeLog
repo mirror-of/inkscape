@@ -1,3 +1,10 @@
+2004-02-12  Johan Ceuppens  <jceuppen@easynet.be>
+	
+	* configure.in src/Makefile.am: --with-inkjar (default no)
+	* src/inkjar/Makefile.am src/inkjar/jar.cpp src/inkjar/jar.h:
+	inital import of libinkjar, this can be moved to LGPL after
+	rewriting the macros.
+
 2004-02-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/seltrans.cpp (sp_sel_trans_handle_new_event,
