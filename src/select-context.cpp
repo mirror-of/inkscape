@@ -224,7 +224,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 	
 			if (!(event->button.state & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK)) {
 				// if shift or ctrl was pressed, do not move objects; 
-				// pass the event to root handler which will perform rubberband, shift-click, ctrl-click
+				// pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
 
 				sc->dragging = TRUE;
 				sc->moved = FALSE;
@@ -346,6 +346,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	SPSelTrans *seltrans;
 	SPSelection *selection;
 	SPItem *item = NULL, *group = NULL;
+	SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
 	gint ret = FALSE;
 	NRPoint p;
 	NRRect b;
@@ -380,30 +381,48 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 			sc->button_press_shift = (event->button.state & GDK_SHIFT_MASK) ? TRUE : FALSE;
 			sc->button_press_ctrl = (event->button.state & GDK_CONTROL_MASK) ? TRUE : FALSE;
 
+			sc->moved = FALSE;
+
 			ret = TRUE;
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (event->motion.state & GDK_BUTTON1_MASK) {
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
+
+			if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+				break; // do not drag if we're still within tolerance from origin
+			within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+
+			if (sc->button_press_ctrl) // if ctrl was pressed and we're away from the origin, we want to ctrl-drag rather than click
+				sc->dragging = TRUE;
+
 			if (sc->dragging) {
-
-				if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
-					break; // do not drag if we're still within tolerance from origin
-				within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
-
-				/* User has dragged fast, so we get events on root */
-				if (!sc->moved) {
-					if (!sp_selection_item_selected (selection, sc->item)) {
-						// have to select here since selecting is done when releasing
-						sp_sel_trans_reset_state (seltrans);
-						sp_selection_set_item (selection, sc->item);
-					}
-					sp_sel_trans_grab (seltrans, &p, -1, -1, FALSE);
-					sc->moved = TRUE;
-				} 
-				sp_selection_moveto (seltrans, p.x, p.y, event->button.state);
-				ret = TRUE;
+				/* User has dragged fast, so we get events on root (lauris)*/
+				// not only that; we will end up here when ctrl-dragging as well
+				if (sp_rubberband_rect (&b)) sp_rubberband_stop ();
+				item_at_point = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, FALSE);
+				if (item_at_point || sc->moved) { // drag only if starting from a point, or if something is already grabbed
+					if (!sc->moved) {
+						item_in_group = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, TRUE);
+						group_at_point = sp_desktop_group_at_point (desktop, event->button.x, event->button.y);
+						// if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
+						if ((!item_in_group || !sp_selection_item_selected (selection, item_in_group)) && 
+								(!group_at_point || !sp_selection_item_selected (selection, group_at_point))) {
+							// have to select here since selecting is done when releasing
+							sp_sel_trans_reset_state (seltrans);
+							// when simply ctrl-dragging, we don't want to go into groups
+							if (item_at_point && !sp_selection_item_selected (selection, item_at_point))
+								sp_selection_set_item (selection, item_at_point);
+						} // otherwise, do not change selection so that dragging selected-within-group items is possible
+						sp_sel_trans_grab (seltrans, &p, -1, -1, FALSE);
+						sc->moved = TRUE;
+					} 
+					sp_selection_moveto (seltrans, p.x, p.y, event->button.state);
+					ret = TRUE;
+				} else {
+					sc->dragging = FALSE;
+				}
 			} else {
 				sp_rubberband_move (p.x, p.y);
 			}
