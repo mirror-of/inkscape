@@ -26,9 +26,9 @@
 #include "macros.h"
 #include "xml/repr.h"
 #include "xml/repr-private.h"
-#include "desktop-handles.h"
-#include "inkscape.h"
 #include "sp-item.h"
+#include "enums.h"
+#include "prefs-utils.h"
 
 #include "sp-use.h"
 
@@ -420,6 +420,12 @@ that the clone stays unmoved or moves in parallel (depending on user setting) re
 */
 static void sp_use_move_compensation (SPUse *use)
 {
+	guint mode = prefs_get_int_attribute ("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
+
+	// user wants no compensation
+	if (mode == SP_CLONE_COMPENSATION_NONE)
+		return;
+
 	SPItem *ref = use->ref->getObject();
 
 	// this is not a real use, but a clone of another use; 
@@ -461,23 +467,24 @@ static void sp_use_move_compensation (SPUse *use)
 
 	// 	mm_print ("par", NR::Matrix (NR::translate (op - np)));
 
+	NR::Point original_move (np - op);
+
 	// transform both old and new midpoints
 	NR::Matrix t = sp_use_get_parent_transform (use);
 	np *= t;
 	op *= t;
-	// this is how the clone would move, if we allow it to
-	NR::Matrix affine (NR::translate ((op - np)));
 
-	//	mm_print ("  t", t);
-	//	mm_print ("aff", affine);
+	// np - op is how the clone would move, if we allow it to
+	NRMatrix clone_move;
+	if (mode == SP_CLONE_COMPENSATION_PARALLEL)
+		clone_move = NR::Matrix (NR::translate (op - np + original_move));
+	else 
+		clone_move = NR::Matrix (NR::translate (op - np));
 
+	// do the compensation
 	SPItem *item = SP_ITEM(use);
-
-	// compensation: clones stay unmoved
-	NRMatrix affine_n = affine;
-	NRMatrix affine_nn;
-	nr_matrix_multiply (&affine_nn, &item->transform, &affine_n);
-	sp_item_write_transform (item, SP_OBJECT_REPR (item), &affine_nn);
+	nr_matrix_multiply (&item->transform, &item->transform, &clone_move);
+	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
 }
 
 static void

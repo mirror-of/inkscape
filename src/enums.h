@@ -61,5 +61,11 @@ enum {
 /* fill-rule */
 /* clip-rule */
 
+enum {
+	SP_CLONE_COMPENSATION_PARALLEL,
+	SP_CLONE_COMPENSATION_UNMOVED,
+	SP_CLONE_COMPENSATION_NONE
+};
+
 #endif
 

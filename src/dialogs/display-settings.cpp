@@ -27,6 +27,7 @@
 #include "../interface.h"
 #include "../seltrans.h"
 #include "../dropper-context.h"
+#include "../enums.h"
 
 #include "display-settings.h"
 
@@ -97,6 +98,15 @@ options_store_transform_toggled (GtkToggleButton *button)
 	if (gtk_toggle_button_get_active (button)) {
 		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
 		prefs_set_int_attribute ("options.preservetransform", "value", val);
+	}
+}
+
+static void
+options_clone_compensation_toggled (GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active (button)) {
+		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		prefs_set_int_attribute ("options.clonecompensation", "value", val);
 	}
 }
 
@@ -975,6 +985,40 @@ options_checkbox (
                 options_store_transform_toggled
                 );
         }
+
+        // Clone compensation
+        {
+            GtkWidget *f = gtk_frame_new (_("When the original moves, its clone:"));
+            gtk_widget_show (f);
+            gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+            GtkWidget *fb = gtk_vbox_new (FALSE, 0);
+            gtk_widget_show (fb);
+            gtk_container_add (GTK_CONTAINER (f), fb);
+
+            gint compense = prefs_get_int_attribute ("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
+
+            GtkWidget *b = 
+            sp_select_context_add_radio (
+                NULL, fb, tt, _("Moves in parallel"), _("Clone is translated by the same vector as its original."), NULL, SP_CLONE_COMPENSATION_PARALLEL, true,
+                compense == SP_CLONE_COMPENSATION_PARALLEL,
+                options_clone_compensation_toggled
+                );
+
+            sp_select_context_add_radio (
+                b, fb, tt, _("Stays unmoved"), _("Clone preserves its position when its original is moved."), NULL, SP_CLONE_COMPENSATION_UNMOVED, true,
+                compense == SP_CLONE_COMPENSATION_UNMOVED,
+                options_clone_compensation_toggled
+                );
+
+            sp_select_context_add_radio (
+                b, fb, tt, _("Moves according to transform"), _("Clone moves according to the value of its transform= attribute. For example, a rotated clone will move in a different direction than its original."), NULL, SP_CLONE_COMPENSATION_NONE, true,
+                compense == SP_CLONE_COMPENSATION_NONE,
+                options_clone_compensation_toggled
+                );
+        }
+
+
      
         /* Oversample */
         hb = gtk_hbox_new (FALSE, 4);
