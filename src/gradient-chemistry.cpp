@@ -823,15 +823,22 @@ SPGradient *
 sp_gradient_vector_for_object(SPDocument *const doc, SPDesktop *const desktop,
                               SPObject *const o, bool const is_fill)
 {
-    // take the color of the object
-    SPStyle const &style = *SP_OBJECT_STYLE(o);
-    SPIPaint const &paint = ( is_fill
-                              ? style.fill
-                              : style.stroke );
-    guint32 const rgba( paint.type == SP_PAINT_TYPE_COLOR
-                        ? sp_color_get_rgba32_ualpha(&paint.value.color, 0xff)
-                        : sp_desktop_get_color(desktop, is_fill) );
-    // if o doesn't use flat color, then take current color of the desktop.
+    guint32 rgba = 0;
+    if (o == NULL || SP_OBJECT_STYLE(o) == NULL) {
+        rgba = sp_desktop_get_color(desktop, is_fill);
+    } else {
+        // take the color of the object
+        SPStyle const &style = *SP_OBJECT_STYLE(o);
+        SPIPaint const &paint = ( is_fill
+                                  ? style.fill
+                                  : style.stroke );
+        if (paint.type == SP_PAINT_TYPE_COLOR) {
+            rgba = sp_color_get_rgba32_ualpha(&paint.value.color, 0xff);
+        } else {
+            // if o doesn't use flat color, then take current color of the desktop.
+            rgba = sp_desktop_get_color(desktop, is_fill);
+        }
+    }
 
     return sp_document_default_gradient_vector(doc, rgba);
 }
