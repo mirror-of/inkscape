@@ -753,11 +753,10 @@ sp_selection_rotate_90 (void)
 }
 
 void
-sp_selection_move_screen (gdouble sx, gdouble sy)
+sp_selection_move (gdouble dx, gdouble dy)
 {
   SPDesktop * desktop;
   SPSelection * selection;
-  gdouble dx,dy,zf;
 
   desktop = SP_ACTIVE_DESKTOP;
   g_return_if_fail(SP_IS_DESKTOP (desktop));
@@ -765,12 +764,31 @@ sp_selection_move_screen (gdouble sx, gdouble sy)
   if (!SP_IS_SELECTION (selection)) return;
   if sp_selection_is_empty(selection) return;
 
-  zf = SP_DESKTOP_ZOOM (desktop);
-  dx = sx / zf;
-  dy = sy / zf;
-  sp_selection_move_relative (selection,dx,dy);
+  sp_selection_move_relative (selection, dx, dy);
 
-  //
+  sp_selection_changed (selection);
+  sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+void
+sp_selection_move_screen (gdouble dx, gdouble dy)
+{
+  SPDesktop * desktop;
+  SPSelection * selection;
+  gdouble zdx, zdy, zoom;
+
+  desktop = SP_ACTIVE_DESKTOP;
+  g_return_if_fail(SP_IS_DESKTOP (desktop));
+  selection = SP_DT_SELECTION (desktop);
+  if (!SP_IS_SELECTION (selection)) return;
+  if sp_selection_is_empty(selection) return;
+
+  // same as sp_selection_move but divide deltas by zoom factor
+  zoom = SP_DESKTOP_ZOOM (desktop);
+  zdx = dx / zoom;
+  zdy = dy / zoom;
+  sp_selection_move_relative (selection, zdx, zdy);
+
   sp_selection_changed (selection);
   sp_document_done (SP_DT_DOCUMENT (desktop));
 }
