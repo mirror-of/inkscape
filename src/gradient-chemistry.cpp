@@ -269,6 +269,9 @@ sp_gradient_fork_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGra
 	}
 }
 
+/**
+ * Convert an item's gradient to userspace if necessary, also fork it if necessary. Returns the new gradient.
+ */
 SPGradient *
 sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *property)
 {
