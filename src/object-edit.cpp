@@ -12,6 +12,7 @@
 
 #include "config.h"
 
+#include <glib.h>
 #include <math.h>
 
 #include "sp-rect.h"
@@ -20,6 +21,10 @@
 #include "sp-spiral.h"
 #include "sp-offset.h"
 #include "prefs-utils.h"
+#include "document.h"
+#include <style.h>
+
+#include "sp-pattern.h"
 
 #include "macros.h"
 #include "object-edit.h"
@@ -27,6 +32,11 @@
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-scale.h>
 #include <libnr/nr-scale-ops.h>
+
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
+
+#define sp_round(v,m) (((v) < 0.0) ? ((ceil ((v) / (m) - 0.5)) * (m)) : ((floor ((v) / (m) + 0.5)) * (m)))
 
 static SPKnotHolder *sp_rect_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_arc_knot_holder (SPItem *item, SPDesktop *desktop);
@@ -53,6 +63,41 @@ sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
 	return NULL;
 }
 
+
+/* Pattern manipulation */
+
+static void
+sp_pattern_xy_set (SPItem *item, const NR::Point &p, guint state)
+{
+    SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
+
+     if (state)  {
+         gdouble x = p[NR::X] - pat->patternTransform[4];
+         gdouble y = p[NR::Y] - pat->patternTransform[5];
+
+         sp_shape_adjust_pattern (item, NULL, NR::Matrix(NR::translate(x,y)));
+
+
+     }
+
+    sp_object_request_update ((SPObject *) item, SP_OBJECT_MODIFIED_FLAG);
+
+}
+
+
+static NR::Point sp_pattern_xy_get (SPItem *item)
+{
+    SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
+
+    gdouble x = pat->patternTransform[4];
+    gdouble y = pat->patternTransform[5];
+
+    return  NR::Point(x, y);
+
+}
+
+
+
 /* SPRect */
 
 static NR::Point sp_rect_rx_get (SPItem *item)
@@ -66,7 +111,7 @@ static void
 sp_rect_rx_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPRect *rect = SP_RECT(item);
-	
+
 	if (state & GDK_CONTROL_MASK) {
 		gdouble temp = MIN (rect->height.computed, rect->width.computed) / 2.0;
 		rect->rx.computed = rect->ry.computed = CLAMP (rect->x.computed + rect->width.computed - p[NR::X], 0.0, temp);
@@ -90,15 +135,15 @@ static void
 sp_rect_ry_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPRect *rect = SP_RECT(item);
-	
+
 	if (state & GDK_CONTROL_MASK) {
 		gdouble temp = MIN (rect->height.computed, rect->width.computed) / 2.0;
 		rect->rx.computed = rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, temp);
 		rect->ry.set = rect->rx.set = TRUE;
 	} else {
-		if (!rect->rx.set || rect->rx.computed == 0) 
+		if (!rect->rx.set || rect->rx.computed == 0)
 			rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, MIN(rect->height.computed / 2.0, rect->width.computed / 2.0));
-		else 
+		else
 			rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, rect->height.computed / 2.0);
 		rect->ry.set = TRUE;
 	}
@@ -116,7 +161,7 @@ static void
 sp_rect_wh_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPRect *rect = SP_RECT(item);
-	
+
 	if (state & GDK_CONTROL_MASK) {
 		gdouble ratio = (rect->width.computed / rect->height.computed);
 		gdouble minx = p[NR::X] - (rect->x.computed + rect->width.computed);
@@ -151,11 +196,15 @@ static SPKnotHolder *
 sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
 {
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
-	
-	sp_knot_holder_add (knot_holder, sp_rect_rx_set, sp_rect_rx_get);
+ 	sp_knot_holder_add (knot_holder, sp_rect_rx_set, sp_rect_rx_get);
 	sp_knot_holder_add (knot_holder, sp_rect_ry_set, sp_rect_ry_get);
 	sp_knot_holder_add (knot_holder, sp_rect_wh_set, sp_rect_wh_get);
-	
+    if ((SP_OBJECT(item)->style->fill.type == SP_PAINT_TYPE_PAINTSERVER)
+        && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
+        {
+            sp_knot_holder_add_full (knot_holder, sp_pattern_xy_set, sp_pattern_xy_get, SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+        }
+
 	return knot_holder;
 }
 
@@ -243,14 +292,19 @@ static SPKnotHolder *
 sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 {
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
-	
+
 	sp_knot_holder_add (knot_holder,
 			    sp_arc_start_set,
 			    sp_arc_start_get);
 	sp_knot_holder_add (knot_holder,
 			    sp_arc_end_set,
 			    sp_arc_end_get);
-	
+    if ((SP_OBJECT(item)->style->fill.type == SP_PAINT_TYPE_PAINTSERVER)
+        && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
+        {
+            sp_knot_holder_add_full (knot_holder, sp_pattern_xy_set, sp_pattern_xy_get, SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+        }
+
 	return knot_holder;
 }
 
@@ -266,10 +320,10 @@ sp_star_knot1_set (SPItem *item, const NR::Point &p, guint state)
 
         double arg1 = atan2(d);
 	double darg1 = arg1 - star->arg[0];
-        
+
 	if (state & GDK_CONTROL_MASK) {
 		star->r[0]    = L2(d);
-	} else {		
+	} else {
 		star->r[0]    = L2(d);
 		star->arg[0]  = arg1;
 		star->arg[1] += darg1;
@@ -329,6 +383,11 @@ sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
 
 	if (star->flatsided == false)
 	    sp_knot_holder_add (knot_holder, sp_star_knot2_set, sp_star_knot2_get);
+    if ((SP_OBJECT(item)->style->fill.type == SP_PAINT_TYPE_PAINTSERVER)
+         && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
+         {
+             sp_knot_holder_add_full (knot_holder, sp_pattern_xy_set, sp_pattern_xy_get, SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+         }
 
 	return knot_holder;
 }
@@ -424,6 +483,11 @@ sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 	sp_knot_holder_add (knot_holder,
 			    sp_spiral_outer_set,
 			    sp_spiral_outer_get);
+    if ((SP_OBJECT(item)->style->fill.type == SP_PAINT_TYPE_PAINTSERVER)
+         && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
+         {
+             sp_knot_holder_add_full (knot_holder, sp_pattern_xy_set, sp_pattern_xy_get, SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+         }
 
 	return knot_holder;
 }
@@ -434,11 +498,11 @@ static void
 sp_offset_offset_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPOffset *offset = SP_OFFSET (item);
-	
+
 	offset->rad = sp_offset_distance_to_original(offset, p);
 	offset->knot = p;
 	offset->knotSet=true;
-	
+
 	sp_object_request_update ((SPObject *) offset, SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -446,7 +510,7 @@ sp_offset_offset_set (SPItem *item, const NR::Point &p, guint state)
 static NR::Point sp_offset_offset_get (SPItem *item)
 {
 	SPOffset *offset = SP_OFFSET (item);
-	
+
 	NR::Point np;
 	sp_offset_top_point(offset,&np);
 	return np;
@@ -460,7 +524,19 @@ sp_offset_knot_holder (SPItem * item, SPDesktop *desktop)
 	sp_knot_holder_add (knot_holder,
 			    sp_offset_offset_set,
 			    sp_offset_offset_get);
+    if ((SP_OBJECT(item)->style->fill.type == SP_PAINT_TYPE_PAINTSERVER)
+         && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
+        {
+            sp_knot_holder_add_full (knot_holder, sp_pattern_xy_set, sp_pattern_xy_get, SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+        }
 
 	return knot_holder;
 }
+
+
+
+
+
+
+
 
