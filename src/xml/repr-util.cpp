@@ -421,24 +421,6 @@ SPRepr * sp_repr_duplicate_and_parent (SPRepr * repr)
 	return new_repr;
 }
 
-void
-sp_repr_remove_signals (SPRepr * repr)
-{
-	g_assert (repr != NULL);
-
-	g_warning ("need to remove signal handlers by hand");
-#if 0
-	sp_repr_set_signal (repr, "destroy", NULL, NULL);
-	sp_repr_set_signal (repr, "child_added", NULL, NULL);
-	sp_repr_set_signal (repr, "child_removed", NULL, NULL);
-	sp_repr_set_signal (repr, "attr_changed_pre", NULL, NULL);
-	sp_repr_set_signal (repr, "attr_changed", NULL, NULL);
-	sp_repr_set_signal (repr, "content_changed_pre", NULL, NULL);
-	sp_repr_set_signal (repr, "content_changed", NULL, NULL);
-	sp_repr_set_signal (repr, "order_changed", NULL, NULL);
-#endif
-}
-
 const gchar *
 sp_repr_attr_inherited (SPRepr *repr, const gchar *key)
 {

@@ -1,5 +1,9 @@
 2004-02-07  MenTaLguY <mental@rydia.net>
 
+    * src/xml/repr.h, src/xml/repr-util.cpp:
+
+      cleaned up old code in #if 0 sections
+
     * src/display/canvas-arena.cpp, src/display/nr-arena-glyphs.cpp,
       src/display/nr-arena-item.cpp, src/display/nr-arena-shape.cpp,
       src/display/nr-arena.cpp, src/display/nr-arena.h:

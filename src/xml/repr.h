@@ -183,19 +183,6 @@ const  char *sp_repr_attr (const SPRepr *repr, const gchar *key);
 unsigned int sp_repr_set_content (SPRepr *repr, const gchar *content);
 unsigned int sp_repr_set_attr (SPRepr *repr, const gchar *key, const gchar *value);
 
-#if 0
-/*
- * Returns list of attribute strings
- * List should be freed by caller, but attributes not
- */
-GList * sp_repr_attributes (SPRepr * repr);
-#endif
-
-#if 0
-void sp_repr_set_data (SPRepr * repr, void * data);
-void * sp_repr_data (SPRepr * repr);
-#endif
-
 /* Tree */
 SPRepr *sp_repr_parent (SPRepr *repr);
 SPRepr *sp_repr_children (SPRepr *repr);
@@ -204,10 +191,6 @@ SPRepr *sp_repr_next (SPRepr *repr);
 unsigned int sp_repr_add_child (SPRepr * repr, SPRepr * child, SPRepr * ref);
 unsigned int sp_repr_remove_child (SPRepr * repr, SPRepr * child);
 void sp_repr_write_stream (SPRepr * repr, FILE * file, int level, gboolean whitespace);
-
-//#if 0
-//const GList *sp_repr_get_children_list (SPRepr * repr);
-//#endif
 
 int sp_repr_n_children (SPRepr * repr);
 
@@ -270,8 +253,6 @@ void sp_repr_append_child (SPRepr * repr, SPRepr * child);
 const gchar * sp_repr_doc_attr (SPRepr * repr, const gchar * key);
 
 SPRepr * sp_repr_duplicate_and_parent (SPRepr * repr);
-
-void sp_repr_remove_signals (SPRepr * repr);
 
 const  gchar *sp_repr_attr_inherited (SPRepr *repr, const  gchar *key);
 unsigned int sp_repr_set_attr_recursive (SPRepr *repr, const  gchar *key, const  gchar *value);
