@@ -44,8 +44,13 @@ sp_help_about (void)
     GtkWidget *v;
     gint width, height;
 
+
+    /* REJON: INKSCAPE_PIXMAPSDIR was changed to INKSCAPE_SCREENSDIR to 
+     * coordinate with the directory reorganization.
+     */
+
     if (!w) {
-        doc = sp_document_new (INKSCAPE_PIXMAPDIR "/about.svg", FALSE, TRUE);
+        doc = sp_document_new (INKSCAPE_SCREENSDIR "/about.svg", FALSE, TRUE);
         g_return_if_fail (doc != NULL);
         version = sp_document_lookup_id (doc, "version");
         
@@ -92,10 +97,14 @@ sp_help_about (void)
 
 } // close sp_help_about()
 
+/* REJON: I changed the following vars to INKSCAPE_SCREENSDIR to point to the 
+ * new location of where screens will be kept.
+ */
+
 void
 sp_help_tutorial (void)
 {
-	gchar *c = g_strconcat (INKSCAPE_PIXMAPDIR, _("/tutorial.svg"), NULL);
+	gchar *c = g_strconcat (INKSCAPE_SCREENSDIR, _("/tutorial.svg"), NULL);
 	sp_file_open (c, NULL);
 	g_free (c);
 }
@@ -103,7 +112,7 @@ sp_help_tutorial (void)
 void
 sp_help_keys (void)
 {
-	gchar *c = g_strconcat (INKSCAPE_PIXMAPDIR, _("/keys.svg"), NULL);
+	gchar *c = g_strconcat (INKSCAPE_SCREENSDIR, _("/keys.svg"), NULL);
 	sp_file_open (c, NULL);
 	g_free (c);
 }

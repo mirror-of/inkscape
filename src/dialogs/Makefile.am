@@ -7,7 +7,8 @@
 # replaced by selection 'changed' signal handlers
 #
 
-iconsdir = $(datadir)/inkscape
+# REJON: I'm changing the following to coincide with dir. reorg.
+iconsdir = $(datadir)/inkscape/icons
 
 INCLUDES = \
 	-I.. \

@@ -17,7 +17,8 @@ AM_CPPFLAGS = \
 
 INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
-	-DINKSCAPE_PIXMAPDIR=\""$(datadir)/inkscape"\" \
+	-DINKSCAPE_PIXMAPDIR=\""$(datadir)/inkscape/icons"\" \
+	-DINKSCAPE_SCREENSDIR=\""$(datadir)/inkscape/screens"\" \
 	-DINKSCAPE_DATADIR=\""$(datadir)"\" \
 	-I$(srcdir) \
 	-I$(srcdir)/xml \

@@ -392,10 +392,12 @@ src/extension/Makefile
 src/extension/internal/Makefile
 src/extension/implementation/Makefile
 src/inkjar/Makefile
-extensions/Makefile
+share/Makefile
+share/extensions/Makefile
 doc/Makefile
 po/Makefile.in
-icons/Makefile
+share/icons/Makefile
+share/screens/Makefile
 inkscape.spec
 inkscape.1
 inkview.1

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src doc icons po extensions
+SUBDIRS = src doc share po
 
 appicondir = $(datadir)/pixmaps
 appicon_DATA = inkscape.png
@@ -10,10 +10,12 @@ Graphics_in_files = inkscape.desktop.in
 Graphics_DATA = $(Graphics_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
-dist-hook:
-	mkdir $(distdir)/samples
-	cp $(srcdir)/samples/*svg $(distdir)/samples
-	cp $(srcdir)/samples/*png $(distdir)/samples
+## dist-hook:
+##	mkdir $(distdir)/samples
+##	cp $(srcdir)/samples/*svg $(distdir)/samples
+##	cp $(srcdir)/samples/*png $(distdir)/samples
+##	cp $(srcdir)/AUTHORS $(distdir)
+##	cp $(srcdir)/NEWS $(distdir)
 
 
 man_MANS = inkscape.1 \

@@ -140,7 +140,12 @@ inkscape_gtk_stock_init (void) {
         gchar *filename = (gchar *) g_build_filename (INKSCAPE_PIXMAPDIR,
                       stock_icons[i].filename, NULL);
         if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
+            // testing
             g_critical ("Unable to load stock pixmap %s\n", filename);
+            // g_critical ("Unable to load stock pixmap %s\n", 
+            //             INKSCAPE_PIXMAPDIR);
+            // g_critical ("Unable to load stock pixmap %s\n", 
+            //             stock_icons[i].filename);
             g_free (filename);
             continue;
         }

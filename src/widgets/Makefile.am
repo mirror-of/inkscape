@@ -3,7 +3,8 @@
 # Author: Lauris Kaplinski <lauris@ximian.com>
 #
 
-iconsdir = $(datadir)/inkscape
+# REJON: changing the following to be in accord w/dir. reorg
+iconsdir = $(datadir)/inkscape/icons
 
 INCLUDES = \
 	-I.. \

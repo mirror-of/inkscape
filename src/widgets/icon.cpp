@@ -318,93 +318,105 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int sc
 }
 
 static guchar *
-sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale)
+sp_icon_image_load_svg ( const gchar *name, 
+                         unsigned int size, 
+                         unsigned int scale )
 {
-	static SPDocument *doc = NULL;
-	static NRArena *arena = NULL;
-	static NRArenaItem *root = NULL;
-	static unsigned int edoc = FALSE;
-	guchar *px;
+    static SPDocument *doc = NULL;
+    static NRArena *arena = NULL;
+    static NRArenaItem *root = NULL;
+    static unsigned int edoc = FALSE;
+    guchar *px;
 
-	/* Try to load from document */
-	if (!edoc && !doc) {
-		if (g_file_test("icons/icons.svg", G_FILE_TEST_IS_REGULAR)) {
-			doc = sp_document_new ("icons/icons.svg", FALSE, FALSE);
-		}
-		if ( !doc && g_file_test(INKSCAPE_PIXMAPDIR "/icons.svg", G_FILE_TEST_IS_REGULAR) ) {
-			doc = sp_document_new (INKSCAPE_PIXMAPDIR "/icons.svg", FALSE, FALSE);
-		}
-		if (doc) {
-			unsigned int visionkey;
-			sp_document_ensure_up_to_date (doc);
-			/* Create new arena */
-			arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
-			/* Create ArenaItem and set transform */
-			visionkey = sp_item_display_key_new (1);
-			/* fixme: Memory manage root if needed (Lauris) */
-			root = sp_item_invoke_show (SP_ITEM (SP_DOCUMENT_ROOT (doc)), arena, visionkey, SP_ITEM_SHOW_PRINT);
-		} else {
-			edoc = TRUE;
-		}
-	}
+    /* Try to load from document */
+    if (!edoc && !doc) {
+        if (g_file_test("icons/icons.svg", G_FILE_TEST_IS_REGULAR)) {
+            doc = sp_document_new ("icons/icons.svg", FALSE, FALSE);
+        }
+        if ( !doc && g_file_test( INKSCAPE_PIXMAPDIR "/icons.svg", 
+                                  G_FILE_TEST_IS_REGULAR) )
+        {
+            doc = sp_document_new ( INKSCAPE_PIXMAPDIR "/icons.svg", 
+                                    FALSE, FALSE );
+        }
+        if (doc) {
+            unsigned int visionkey;
+            sp_document_ensure_up_to_date (doc);
+            /* Create new arena */
+            arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+            /* Create ArenaItem and set transform */
+            visionkey = sp_item_display_key_new (1);
+            /* fixme: Memory manage root if needed (Lauris) */
+            root = sp_item_invoke_show ( SP_ITEM (SP_DOCUMENT_ROOT (doc)), 
+                                         arena, visionkey, SP_ITEM_SHOW_PRINT );
+        } else {
+            edoc = TRUE;
+        }
+    }
 
-	if (!edoc && doc) {
-		SPObject *object;
-		object = sp_document_lookup_id (doc, name);
-		if (object && SP_IS_ITEM (object)) {
-			/* Find bbox in document */
-			NRMatrix i2doc;
-			sp_item_i2doc_affine(SP_ITEM(object), &i2doc);
-			NRRect dbox;
-			sp_item_invoke_bbox(SP_ITEM(object), &dbox, &i2doc, TRUE);
-			/* This is in document coordinates, i.e. pixels */
-			if (!nr_rect_f_test_empty (&dbox)) {
-				NRRectL ibox, area, ua;
-				NRMatrix t;
-				NRPixBlock B;
-				NRGC gc;
-				double sf;
-				int width, height, dx, dy;
-				/* Update to renderable state */
-				sf = 0.8 * size / scale;
-				nr_matrix_set_scale (&t, sf, sf);
-				nr_arena_item_set_transform (root, &t);
-				nr_matrix_set_identity (&gc.transform);
-				nr_arena_item_invoke_update (root, NULL, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
-				/* Item integer bbox in points */
-				ibox.x0 = (int) floor (sf * dbox.x0 + 0.5);
-				ibox.y0 = (int) floor (sf * dbox.y0 + 0.5);
-				ibox.x1 = (int) floor (sf * dbox.x1 + 0.5);
-				ibox.y1 = (int) floor (sf * dbox.y1 + 0.5);
-				/* Find button visible area */
-				width = ibox.x1 - ibox.x0;
-				height = ibox.y1 - ibox.y0;
-				dx = (size - width) / 2;
-				dy = (size - height) / 2;
-				area.x0 = ibox.x0 - dx;
-				area.y0 = ibox.y0 - dy;
-				area.x1 = area.x0 + size;
-				area.y1 = area.y0 + size;
-				/* Actual renderable area */
-				ua.x0 = MAX (ibox.x0, area.x0);
-				ua.y0 = MAX (ibox.y0, area.y0);
-				ua.x1 = MIN (ibox.x1, area.x1);
-				ua.y1 = MIN (ibox.y1, area.y1);
-				/* Set up pixblock */
-				px = nr_new (guchar, 4 * size * size);
-				memset (px, 0x00, 4 * size * size);
-				/* Render */
-				nr_pixblock_setup_extern (&B, NR_PIXBLOCK_MODE_R8G8B8A8N,
-							  ua.x0, ua.y0, ua.x1, ua.y1,
-							  px + 4 * size * (ua.y0 - area.y0) + 4 * (ua.x0 - area.x0),
-							  4 * size, FALSE, FALSE);
-				nr_arena_item_invoke_render (root, &ua, &B, NR_ARENA_ITEM_RENDER_NO_CACHE);
-				nr_pixblock_release (&B);
-				return px;
-			}
-		}
-	}
+    if (!edoc && doc) {
+        SPObject *object;
+        object = sp_document_lookup_id (doc, name);
+        if (object && SP_IS_ITEM (object)) {
+            /* Find bbox in document */
+            NRMatrix i2doc;
+            sp_item_i2doc_affine(SP_ITEM(object), &i2doc);
+            NRRect dbox;
+            sp_item_invoke_bbox(SP_ITEM(object), &dbox, &i2doc, TRUE);
+            /* This is in document coordinates, i.e. pixels */
+            if (!nr_rect_f_test_empty (&dbox))
+            {
+                NRRectL ibox, area, ua;
+                NRMatrix t;
+                NRPixBlock B;
+                NRGC gc;
+                double sf;
+                int width, height, dx, dy;
+                /* Update to renderable state */
+                sf = 0.8 * size / scale;
+                nr_matrix_set_scale (&t, sf, sf);
+                nr_arena_item_set_transform (root, &t);
+                nr_matrix_set_identity (&gc.transform);
+                nr_arena_item_invoke_update ( root, NULL, &gc, 
+                                              NR_ARENA_ITEM_STATE_ALL, 
+                                              NR_ARENA_ITEM_STATE_NONE );
+                /* Item integer bbox in points */
+                ibox.x0 = (int) floor (sf * dbox.x0 + 0.5);
+                ibox.y0 = (int) floor (sf * dbox.y0 + 0.5);
+                ibox.x1 = (int) floor (sf * dbox.x1 + 0.5);
+                ibox.y1 = (int) floor (sf * dbox.y1 + 0.5);
+                /* Find button visible area */
+                width = ibox.x1 - ibox.x0;
+                height = ibox.y1 - ibox.y0;
+                dx = (size - width) / 2;
+                dy = (size - height) / 2;
+                area.x0 = ibox.x0 - dx;
+                area.y0 = ibox.y0 - dy;
+                area.x1 = area.x0 + size;
+                area.y1 = area.y0 + size;
+                /* Actual renderable area */
+                ua.x0 = MAX (ibox.x0, area.x0);
+                ua.y0 = MAX (ibox.y0, area.y0);
+                ua.x1 = MIN (ibox.x1, area.x1);
+                ua.y1 = MIN (ibox.y1, area.y1);
+                /* Set up pixblock */
+                px = nr_new (guchar, 4 * size * size);
+                memset (px, 0x00, 4 * size * size);
+                /* Render */
+                nr_pixblock_setup_extern ( &B, NR_PIXBLOCK_MODE_R8G8B8A8N,
+                                           ua.x0, ua.y0, ua.x1, ua.y1,
+                                           px + 4 * size * (ua.y0 - area.y0) + 
+                                           4 * (ua.x0 - area.x0),
+                                           4 * size, FALSE, FALSE );
+                nr_arena_item_invoke_render ( root, &ua, &B, 
+                                              NR_ARENA_ITEM_RENDER_NO_CACHE );
+                nr_pixblock_release (&B);
+                return px;
+            }
+        }
+    }
 
-	return NULL;
-}
+    return NULL;
+
+} // end of sp_icon_image_load_svg()
 
