@@ -9,6 +9,10 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <gtkmm/iconfactory.h>
 #include <gtkmm/stock.h>
 #include <glibmm/miscutils.h>
@@ -16,12 +20,13 @@
 
 #include "icons.h"
 #include "stock.h"
+#include "path-prefix.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Icons {
 
-Glib::ustring const get_icon_path(Glib::ustring const &filename);
+static Glib::ustring const get_icon_path(char const *utf8_basename);
 
 void
 init()
@@ -611,15 +616,25 @@ init()
     icons->add_default();
 }
 
-Glib::ustring const
-get_icon_path(Glib::ustring const &filename)
+/** Returns the icon filename (in the operating system encoding used for filenames) whose basename
+    in utf8 encoding is \a utf8_basename.
+**/
+static Glib::ustring const
+get_icon_path(char const *const utf8_basename)
 {
-    // TODO:  this is a hack, use PIXMAP_PATH when we have a build system
-    Glib::ustring path("/usr/share/inkscape");
-    path += "/icons/";
-    path += filename;
+    /* Given that INKSCAPE_PIXMAPDIR is often a compiled constant, I suppose we should
+       interpret it as utf8: under windows, the encoding for filenames can change from
+       day to day even for a given file. */
+    static char *const opsys_iconsdir = g_filename_from_utf8(INKSCAPE_PIXMAPDIR, -1,
+                                                             NULL, NULL, NULL);
 
-    return path;
+    g_assert(g_utf8_validate(utf8_basename, -1, NULL));
+    char *const opsys_basename = g_filename_from_utf8(utf8_basename, -1, NULL, NULL, NULL);
+    char *const ret_cstr = g_build_filename(opsys_iconsdir, opsys_basename);
+    Glib::ustring const ret(ret_cstr);
+    g_free(ret_cstr);
+    g_free(opsys_basename);
+    return ret;
 }
 
 } // namespace Icon
