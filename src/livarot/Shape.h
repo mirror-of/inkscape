@@ -135,15 +135,18 @@ public:
     void SortEdges();	// sort the edges if needed (checks the need_edges_sorting falg)
 
     // primitives for topological manipulations
-    inline int Other(int p, int b)	// endpoint of edge at index b that is different from the point p
+  
+    // endpoint of edge at index b that is different from the point p      
+    inline int Other(int p, int b) const
     {
 	if (getEdge(b).st == p) {
 	    return getEdge(b).en;
 	}
 	return getEdge(b).st;
     }
-    
-    inline int NextAt(int p, int b)	// next edge (after edge b) in the double-linked list at point p
+
+    // next edge (after edge b) in the double-linked list at point p  
+    inline int NextAt(int p, int b) const	
     {
 	if (p == getEdge(b).st) {
 	    return getEdge(b).nextS;
@@ -154,8 +157,9 @@ public:
 	
 	return -1;
     }
-    
-    inline int PrevAt(int p, int b)	// previous edge
+
+    // previous edge
+    inline int PrevAt(int p, int b) const
     {
 	if (p == getEdge(b).st) {
 	    return getEdge(b).prevS;
@@ -166,8 +170,9 @@ public:
 	
 	return -1;
     }
-    
-    inline int CycleNextAt(int p, int b)	// same as NextAt, but the list is considered circular
+
+    // same as NextAt, but the list is considered circular  
+    inline int CycleNextAt(int p, int b) const	
     {
 	if (p == getEdge(b).st) {
 	    if (getEdge(b).nextS < 0) {
@@ -184,8 +189,9 @@ public:
 	
 	return -1;
     }
-    
-    inline int CyclePrevAt(int p, int b)	// same as PrevAt, but the list is considered circular
+
+    // same as PrevAt, but the list is considered circular  
+    inline int CyclePrevAt(int p, int b) const
     {
 	if (p == getEdge(b).st) {
 	    if (getEdge(b).prevS < 0) {
