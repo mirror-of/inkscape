@@ -81,22 +81,11 @@ class Trace
      */
     ~Trace();
 
-    /**
-     *
-     */
-    TracingEngine *getTracingEngine();
 
     /**
      *
      */
-    void setTracingEngine(TracingEngine *engine);
-
-
-
-    /**
-     *
-     */
-    gboolean convertImageToPath();
+    gboolean convertImageToPath(TracingEngine *engine);
 
     /**
      *
@@ -108,15 +97,6 @@ class Trace
      */
     static gboolean staticShowTraceDialog();
 
-
-
-
-
-    private:
-
-
-
-    TracingEngine *engine;
 
 
 };//class Trace

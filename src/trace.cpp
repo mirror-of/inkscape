@@ -49,30 +49,10 @@ Trace::~Trace()
 }
 
 
-
-/**
- *
- */
-void Trace::setTracingEngine(TracingEngine *newEngine)
-{
-    engine = newEngine;
-}
-
-
-/**
- *
- */
-TracingEngine *Trace::getTracingEngine()
-{
-    return engine;
-}
-
-
-
 /**
  *  Static no-knowledge version
  */
-gboolean Trace::convertImageToPath()
+gboolean Trace::convertImageToPath(TracingEngine *engine)
 {
     if (!SP_ACTIVE_DESKTOP)
         {
@@ -156,7 +136,8 @@ gboolean Trace::convertImageToPath()
 gboolean Trace::staticConvertImageToPath()
 {
     Trace trace;
-    trace.convertImageToPath();
+    Inkscape::Potrace::PotraceTracingEngine engine;
+    trace.convertImageToPath(&engine);
     return true;
 }
 

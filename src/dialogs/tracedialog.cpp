@@ -122,8 +122,7 @@ void TraceDialogImpl::responseCallback(int response_id)
         Inkscape::Potrace::PotraceTracingEngine pte;
         double threshold = potraceBrightnessSpinner.get_value();
         pte.setBrightnessThreshold(threshold);
-        tracer.setTracingEngine(&pte);
-        tracer.convertImageToPath();
+        tracer.convertImageToPath(&pte);
         }
 
 
