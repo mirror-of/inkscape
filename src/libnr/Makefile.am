@@ -10,13 +10,19 @@ INCLUDES = \
 
 TESTS = nr-types-test$(EXEEXT)	\
 	nr-point-fns-test$(EXEEXT)	\
-	nr-matrix-test$(EXEEXT)
+	nr-matrix-test$(EXEEXT)	\
+	nr-rotate-test$(EXEEXT)	\
+	nr-scale-test$(EXEEXT)	\
+	nr-translate-test$(EXEEXT)
 # automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
 # TESTS items can be scripts etc.
 
 check_PROGRAMS = nr-types-test	\
 	nr-point-fns-test	\
-	nr-matrix-test
+	nr-matrix-test	\
+	nr-rotate-test	\
+	nr-scale-test	\
+	nr-translate-test
 
 if USE_MMX
 mmx_sources = \
@@ -83,4 +89,13 @@ nr_point_fns_test_SOURCES = nr-point-fns-test.cpp
 nr_point_fns_test_LDADD = -lglib-2.0 libnr.a
 
 nr_matrix_test_SOURCES = nr-matrix-test.cpp
-nr_matrix_test_LDADD = -lglib-2.0 libnr.a
+nr_matrix_test_LDADD = libnr.a -lglib-2.0
+
+nr_rotate_test_SOURCES = nr-rotate-test.cpp
+nr_rotate_test_LDADD = libnr.a -lglib-2.0
+
+nr_scale_test_SOURCES = nr-scale-test.cpp
+nr_scale_test_LDADD = libnr.a -lglib-2.0
+
+nr_translate_test_SOURCES = nr-translate-test.cpp
+nr_translate_test_LDADD = libnr.a -lglib-2.0

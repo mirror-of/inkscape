@@ -1,5 +1,11 @@
 2004-02-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/Makefile.am:
+	New files nr-rotate-test.cpp, nr-scale-test.cpp, nr-translate-test.cpp.
+	* src/libnr/nr-matrix-test.cpp: Move lots of things to the new files.
+	Add tests for the operator* additions of 2004-02-23.
+	Don't #include .cpp files where linking against them suffices.
+
 	* src/livarot/Makefile.am (Path_test_LDADD): Fix order of libs.
 
 	* src/select-toolbar.cpp (sp_object_layout_any_value_changed):
