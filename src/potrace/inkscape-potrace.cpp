@@ -8,6 +8,10 @@
 #include "path.h"
 #include "bitmap.h"
 
+//## New stuff - bob
+#include "canny.h"
+#include "graymap-gdk.h"
+
 #include <inkscape.h>
 #include <desktop.h>
 #include <document.h>
@@ -67,48 +71,83 @@ writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
             writePaths(child, data);
             }
         }
-
-
 }
 
-
-
-char *
-PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * pixbuf)
+GrayMap *
+PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
 {
     if (!pixbuf)
         return NULL;
 
-    //##Get the dimensions
-    int width       = gdk_pixbuf_get_width(pixbuf);
-    int height      = gdk_pixbuf_get_height(pixbuf);
-    guchar *pixdata = gdk_pixbuf_get_pixels(pixbuf);
-    int rowstride   = gdk_pixbuf_get_rowstride(pixbuf);
-    int n_channels  = gdk_pixbuf_get_n_channels(pixbuf);
+    GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
 
-    //g_message("w:%d h:%d rowstride:%d channels:%d\n",
-    //       width, height, rowstride, n_channels);
+    GrayMap *newGm = NULL;
 
-    bitmap_t *bm = bm_new(width, height);
+    if (useBrightness)
+        {
+        newGm = GrayMapCreate(gm->width, gm->height);
+        double cutoff =  3.0 * ( brightnessThreshold * 256.0 );
+        for (int y=0 ; y<gm->height ; y++)
+            {
+            for (int x=0 ; x<gm->width ; x++)
+                {
+                double brightness = (double)gm->getPixel(gm, x, y);
+                if (brightness > cutoff)
+                    newGm->setPixel(newGm, x, y, 255);
+                else
+                    newGm->setPixel(newGm, x, y, 0);
+                }
+            }
+
+        }
+
+    if (useCanny)
+        {
+        newGm = grayMapCanny(gm);
+        }
+
+    gm->destroy(gm);
+
+    return newGm;
+}
+
+GdkPixbuf *
+PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
+{
+    GrayMap *gm = filter(pixbuf);
+    if (!gm)
+        return NULL;
+
+    GdkPixbuf *newBuf = grayMapToGdkPixbuf(gm);
+
+    gm->destroy(gm);
+
+    return newBuf;
+
+}
+
+
+char *
+PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
+{
+    if (!thePixbuf)
+        return NULL;
+
+    GrayMap *grayMap = filter(thePixbuf);
+
+    bitmap_t *bm = bm_new(grayMap->width, grayMap->height);
     bm_clear(bm, 0);
 
-    double cutoff =  3.0 * ( brightnessThreshold * 256.0 );
-    //g_message("threshold:%f  cutoff:%f\n", brightnessThreshold, cutoff);
-
-    //##Read the data out of the Pixbuf
-    int x,y;
-    int row=0;
-    for (y=0 ; y<height ; y++)
+    //##Read the data out of the GrayMap
+    for (int y=0 ; y<grayMap->height ; y++)
         {
-        guchar *p = pixdata + row;
-        for (x=0 ; x<width ; x++)
+        for (int x=0 ; x<grayMap->width ; x++)
             {
-            double brightness = (double)p[0]+(double)p[1]+(double)p[2];
-            BM_UPUT(bm, x, y, brightness > cutoff ? 0 : 1);
-            p += n_channels;
+            BM_UPUT(bm, x, y, grayMap->getPixel(grayMap, x, y) ? 0 : 1);
             }
-        row += rowstride;
         }
+
+    grayMap->destroy(grayMap);
 
     //##Debug
     /*

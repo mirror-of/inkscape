@@ -15,6 +15,8 @@
 #include <glib.h>
 #include <trace.h>
 
+#include "graymap.h"
+
 namespace Inkscape
 {
 namespace Potrace
@@ -31,6 +33,8 @@ class PotraceTracingEngine : public TracingEngine
      */
     PotraceTracingEngine()
         {
+        useCanny            = false;
+        useBrightness       = true;
         brightnessThreshold = 0.5;
         }
 
@@ -49,13 +53,45 @@ class PotraceTracingEngine : public TracingEngine
         }
 
     /**
+     * Do I use Canny filtering
+     */
+    void setUseCanny(bool val)
+        {
+        useCanny = val;
+        }
+
+    /**
+     * Do I use the brightness threshold to make line art?
+     */
+    void setUseBrightness(bool val)
+        {
+        useBrightness = val;
+        }
+
+    /**
      *
      */
     virtual char *getPathDataFromPixbuf(GdkPixbuf *pixbuf);
 
+    /**
+     *
+     */
+    GrayMap *filter(GdkPixbuf * pixbuf);
+
+    /**
+     *
+     */
+    GdkPixbuf *preview(GdkPixbuf * pixbuf);
+
+
+
     private:
 
     double brightnessThreshold;
+
+    bool useCanny;
+
+    bool useBrightness;
 
 };//class PotraceTracingEngine
 

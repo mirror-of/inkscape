@@ -1,6 +1,7 @@
 #ifndef __CANNY_H__
 #define __CANNY_H__
 
+#include "graymap.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #ifndef TRUE
@@ -20,6 +21,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+GrayMap *grayMapCanny(GrayMap *gm);
 
 GdkPixbuf *gdkCanny(GdkPixbuf *img);
 

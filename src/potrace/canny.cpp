@@ -236,8 +236,8 @@ static GrayMap *canny(GrayMap *gm)
 
 
 
-static GrayMap *
-doCanny(GrayMap *gm)
+GrayMap *
+grayMapCanny(GrayMap *gm)
 {
     if (!gm)
         return NULL;
@@ -268,7 +268,7 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img)
 
     /*grayMap->writePPM(grayMap, "gbefore.ppm");*/
 
-    GrayMap *cannyGm = doCanny(grayMap);
+    GrayMap *cannyGm = grayMapCanny(grayMap);
 
     grayMap->destroy(grayMap);
 
