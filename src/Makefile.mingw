@@ -40,12 +40,15 @@ helper/sp-marshal.h:
 #svg/libinksvg.a widgets/libinkwidgets.a xml/libinkxml.a
 
 
-inkscape.exe: libinkscape.a main.o winmain.o inkres.o 
-	$(CXX) -o inkscape.exe main.o winmain.o inkscape.o inkres.o libinkscape.a $(LIBS)
+#RES=inkres.o
+RES=
+
+inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
+	$(CXX) -o inkscape.exe main.o winmain.o inkscape.o $(RES) libinkscape.a $(LIBS)
 	strip inkscape.exe
 
 inkres.o: inkscape.rc
-	windres inkscape.rc inkres.o
+	$(WINDRES) inkscape.rc $(RES)
 
 libinkscape.a: $(OBJ)
 	make -C dialogs    -f Makefile.mingw
