@@ -985,7 +985,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
             }
 
             NR::Matrix add_rot=NR::identity();
-            if ( ly->rotate_set ) add_rot=NR::identity()*NR::rotate(ly->rotate);
+            if ( ly->rotate_set ) add_rot=NR::identity()*NR::rotate(M_PI*ly->rotate/180); // angle default to degrees
             NR::Matrix const a( NR::Matrix(flip_y) * add_rot
                         * NR::translate(pt)
                         * NR::translate(sp_char_dx(dx, dx_offset + pos),

@@ -1497,7 +1497,7 @@ void            path_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &o
       sp_repr_css_set (span_repr,style_repr, "style");
     }
   
-    sp_repr_set_double (span_repr, "rotate", ang);
+    sp_repr_set_double (span_repr, "rotate", 180*ang/M_PI);
     sp_repr_set_double (span_repr, "x", ts_pos[0]);
     sp_repr_set_double (span_repr, "y", ts_pos[1]);
     
