@@ -899,29 +899,31 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 }
 
 
-/**
- *
- */
-static void
-trim_space (const gchar *str, gint length, gint *left, gint *right)
+static bool
+is_css_S(gchar const c)
 {
-    const gchar *p;
-    gint i;
-
-    if (left) {
-        p = str;
-        for (i = 0 ; p && isspace (*p) && i < length; i++, p++)
-            {}
-        *left = i;
-    }
-    if (right) {
-        for (i = length - 1, p = str + i; p && isspace (*p) && i >= 0; i--, p--)
-            {}
-        *right = i + 1 - *left;
+    /* Like g_ascii_isspace, but false for '\v'. */
+    switch (c) {
+        case ' ':
+        case '\t':
+        case '\r':
+        case '\n':
+        case '\f':
+            return true;
+        default:
+            return false;
     }
 }
 
-
+/* Bug: doesn't allow unicode or other escapes.
+   Bug: doesn't distinguish between initial char (non-numeric, not hyphen) and others. */
+static bool
+is_css_ident_char(guchar const c)
+{
+    return (g_ascii_isalnum(c)
+            || (c == '-')
+            || (0x80 <= c));
+}
 
 /**
  * Parses a style="" string and merges it with an existing SPStyle
@@ -929,68 +931,106 @@ trim_space (const gchar *str, gint length, gint *left, gint *right)
 void
 sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 {
+    /* Reference: http://www.w3.org/TR/SVG11/styling.html#StyleAttribute: ``When CSS styling is
+     * used, CSS inline style is specified by including semicolon-separated property declarations
+     * of the form "name : value" within the style attribute''.
+     *
+     * That's fairly ambiguous.  Is a `value' allowed to contain semicolons?  Why does it say
+     * "including", what else is allowed in the style attribute value?
+
+     * Note: I believe a strict reading of the spec doesn't allow space at the beginning of a style
+     * string: see section D.2 of http://www.w3.org/TR/REC-CSS2/grammar.html, where whitespace is
+     * given a specific token S, and see the definitions of `declaration' and `property' at
+     * http://www.w3.org/TR/REC-CSS2/syndata.html.
+     *
+     * The SVG spec is quite ambiguous about what semicolons are allowed.  Probably the intent is
+     * that style strings are like CSS ruleset bodies, where there must be exactly one semicolon
+     * between declarations, and no semicolon at the beginning or end.  Whereas the SVG 1.1 spec
+     * merely says "semicolon-separated" (cf. "space-separated" which is usually understood as
+     * allowing any number of spaces at the beginning and end, and any non-zero number of spaces
+     * between items).
+     *
+     * N.B. Inkscape up to 0.40 (and probably sodipodi) write style strings with trailing
+     * semicolon.  Given the ambiguity of the spec, we should continue to allow this.
+     *
+     * Indeed, we currently allow any number of semicolons at the beginning or end,
+     * and any non-zero number of semicolons between declarations.
+     */
+
     gchar property [BMAX];
     gchar value [BMAX];
 
-    while (*p) {
+    for (;;) {
 
-        /* fixme: Use of isalpha seems to assume that p is valid.  E.g. it skips over
-           punctuation, and the behaviour for accented characters varies according to
-           LC_CTYPE. */
-        while (!isalpha (*p)) {
-            if (!*p) return;
-            p ++;
+        /* Bug: we don't allow CSS comments. */
+
+        while (is_css_S(*p) || *p == ';') {
+            ++p;
         }
-
-        const gchar *s = strchr (p, ':');
-        if (!s) {
-            g_warning ("No separator at style at: %s", p);
+        if (!*p) {
             return;
         }
 
-        const gchar *e = strchr (p, ';');
-        if (!e) {
-            e = p + strlen (p);
-            // i think this is legal, so no need to warn
-            //g_warning ("No end marker at style at: %s", p);
+        gchar const *property_begin = p;
+        while (is_css_ident_char(*p)) {
+            ++p;
+        }
+        gchar const *property_end = p;
+        if (property_begin == property_end) {
+            /* TODO: Don't use g_warning for SVG errors. */
+            g_warning("Empty style property at: %s", property_begin);
+            return;
+        }
+        size_t const property_len = property_end - property_begin;
+        if (property_len >= sizeof(property)) {
+            /* TODO: Don't use g_warning for SVG errors. */
+            g_warning("Exceedingly long style property %.20s...", property_begin);
+            return;
+        }
+        memcpy(property, property_begin, property_len);
+        property[property_len] = '\0';
+
+        while (is_css_S(*p)) {
+            ++p;
         }
 
-        gint len = MIN (s - p, 4095);
-        if (len < 1) {
-            g_warning ("Empty style property at: %s", p);
+        if (*p++ != ':') {
+            /* TODO: Don't use g_warning for SVG errors. */
+            g_warning("No separator at style at: %s", property_begin);
             return;
         }
 
-        gint left, right;
-        trim_space (p, len, &left, &right);
-
-        if (left >= right || right > len) {
-            g_warning ("Empty style property at: %s", p);
-            return;
+        while (is_css_S(*p)) {
+            ++p;
         }
 
-        memcpy (property, &p[left], right);
-        property[right] = '\0';
+        gchar const *const value_begin = p;
+        gchar const *decl_end = strchr(p, ';');
+        if (!decl_end) {
+            decl_end = p + strlen(p);
+        }
+        gchar const *value_end = decl_end;
+        while (is_css_S(*--value_end))
+            ;
+        ++value_end;
 
-        gint idx = sp_attribute_lookup (property);
+        gint const idx = sp_attribute_lookup(property);
         if (idx > 0) {
-            len = MIN (e - s - 1, 4095);
-            if (len > 0) {
-                trim_space (s + 1, len, &left, &right);
-                if (left < right) {
-                    memcpy (value, s + 1 + left, right);
-                    value[right] = '\0';
-                    sp_style_merge_property (style, idx, value);
-                }
+            size_t const value_len = value_end - value_begin;
+            if (value_len != 0) {
+                memcpy(value, value_begin, value_len);
+                value[value_len] = '\0';
+                sp_style_merge_property(style, idx, value);
             } else {
-                g_warning ("No style property value at: %s", p);
+                /* TODO: Don't use g_warning for SVG errors. */
+                g_warning("No style property value at: %s", property_begin);
             }
         } else {
-            g_warning ("Unknown style property at: %s", p);
+            /* TODO: Don't use g_warning for SVG errors. */
+            g_warning("Unknown style property at: %s", property_begin);
         }
-        if (!*e)
-            return;
-        p = e + 1;
+
+        p = decl_end;
     }
 }
 

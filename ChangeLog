@@ -1,3 +1,9 @@
+2004-12-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/style.cpp (sp_style_merge_from_style_string):
+	  More standards-conforming parsing of style strings into prop:value
+	  pairs.
+
 2004-12-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/style.h, src/style.cpp, src/libnrtype/font-style-to-pos.cpp:
