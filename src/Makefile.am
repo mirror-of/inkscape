@@ -85,6 +85,10 @@ inkscapelib_src = \
 	uri.cpp uri.h \
 	version.cpp version.h \
 	\
+	streams-handles.h streams-handles.cpp \
+	streams-zlib.h streams-zlib.cpp \
+	streams-gzip.h streams-gzip.cpp \
+	\
 	approx-equal.h remove-last.h
 
 noinst_LTLIBRARIES = libinkscape.la
