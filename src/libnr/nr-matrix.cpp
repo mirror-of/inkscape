@@ -150,6 +150,13 @@ Matrix::operator NRMatrix*() const {
 	return d;
 }
 
+Matrix::operator NRMatrix() const {
+	NRMatrix d;
+	for(int i = 0; i < 6; i++)
+		d.c[i] = c[i];
+	return d;
+}
+
 Matrix operator*(const Matrix m0, const Matrix m1)
 {
 	Matrix d;

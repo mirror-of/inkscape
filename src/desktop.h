@@ -51,7 +51,7 @@ struct _SPDesktop {
 	SPCanvasGroup *sketch;
 	SPCanvasGroup *controls;
 	SPCanvasItem *page;
-	gdouble d2w[6], w2d[6], doc2dt[6];
+	NR::Matrix d2w, w2d, doc2dt;
 
         gint number;
 	gboolean active;

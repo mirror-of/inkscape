@@ -798,7 +798,7 @@ fit_and_split_line (SPDynaDrawContext *dc,
 	NRPoint b[4];
 	gdouble tolerance;
 
-	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE_LINE;
+	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d.c[0] * TOLERANCE_LINE;
 	tolerance = tolerance * tolerance;
 
 	if (sp_bezier_fit_cubic (b, dc->point1, dc->npoints, tolerance) > 0
@@ -853,7 +853,7 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 {
 	gdouble tolerance;
 
-	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE_CALLIGRAPHIC;
+	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d.c[0] * TOLERANCE_CALLIGRAPHIC;
 	tolerance = tolerance * tolerance;
 
 #ifdef DYNA_DRAW_VERBOSE

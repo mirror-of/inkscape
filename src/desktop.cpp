@@ -133,11 +133,8 @@ sp_desktop_get_type (void)
 static void
 sp_desktop_class_init (SPDesktopClass *klass)
 {
-	GObjectClass *object_class;
-	SPViewClass *view_class;
-
-	object_class = G_OBJECT_CLASS (klass);
-	view_class = (SPViewClass *) klass;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	SPViewClass *view_class = (SPViewClass *) klass;
 
 	parent_class = (SPViewClass*)g_type_class_peek_parent (klass);
 
@@ -192,9 +189,9 @@ sp_desktop_init (SPDesktop *desktop)
 	desktop->sketch = NULL;
 	desktop->controls = NULL;
 
-	nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w));
-	nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (desktop->w2d));
-	nr_matrix_set_scale (NR_MATRIX_D_FROM_DOUBLE (desktop->doc2dt), 0.8, -0.8);
+	desktop->d2w.set_identity();
+	desktop->w2d.set_identity();
+	desktop->doc2dt = NR::scale(NR::Point(0.8, -0.8));
 
 	desktop->guides_active = FALSE;
 
@@ -206,9 +203,7 @@ sp_desktop_init (SPDesktop *desktop)
 static void
 sp_desktop_dispose (GObject *object)
 {
-	SPDesktop *dt;
-
-	dt = SP_DESKTOP (object);
+	SPDesktop *dt = SP_DESKTOP (object);
 
 	if (dt->inkscape) {
 		inkscape_remove_desktop (dt);
@@ -241,9 +236,7 @@ sp_desktop_dispose (GObject *object)
 static void
 sp_desktop_request_redraw (SPView *view)
 {
-	SPDesktop *dt;
-
-	dt = SP_DESKTOP (view);
+	SPDesktop *dt = SP_DESKTOP (view);
 
 	if (dt->main) {
 		gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (dt->main)->canvas));
@@ -253,13 +246,11 @@ sp_desktop_request_redraw (SPView *view)
 static void
 sp_desktop_document_resized (SPView *view, SPDocument *doc, gdouble width, gdouble height)
 {
-	SPDesktop *desktop;
+	SPDesktop *desktop = SP_DESKTOP (view);
 
-	desktop = SP_DESKTOP (view);
+	desktop->doc2dt.c[5] = height;
 
-	desktop->doc2dt[5] = height;
-
-	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
+	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt.c);
 
 	sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, width, height);
 }
@@ -296,19 +287,17 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPDesktop
 static SPView *
 sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 {
-	SPDesktop *desktop;
 	SPCanvasGroup *root;
 	/* *page; */
 	NRArenaItem *ai;
-	SPDocument *document;
 
-	document = SP_OBJECT_DOCUMENT (namedview);
+	SPDocument *document = SP_OBJECT_DOCUMENT (namedview);
 	/* Kill flicker */
 	sp_document_ensure_up_to_date (document);
 
 	/* Setup widget */
 
-	desktop = (SPDesktop *) g_object_new (SP_TYPE_DESKTOP, NULL);
+	SPDesktop *desktop = (SPDesktop *) g_object_new (SP_TYPE_DESKTOP, NULL);
 
 	/* Connect document */
 	sp_view_set_document (SP_VIEW (desktop), document);
@@ -359,8 +348,8 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 	}
 
 	/* Connect event for page resize */
-	desktop->doc2dt[5] = sp_document_height (document);
-	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
+	desktop->doc2dt.c[5] = sp_document_height (document);
+	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt.c);
 
 	g_signal_connect (G_OBJECT (desktop->selection), "modified", G_CALLBACK (sp_desktop_selection_modified), desktop);
 
@@ -466,7 +455,7 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
 
 	if (!px) px = sp_unit_get_by_abbreviation ("px");
 
-	px2doc = sqrt (fabs (desktop->w2d[0] * desktop->w2d[3]));
+	px2doc = sqrt (fabs (desktop->w2d.c[0] * desktop->w2d.c[3]));
 	desktop->gridsnap = (desktop->namedview->snaptogrid) ? desktop->namedview->gridtolerance : 0.0;
 	sp_convert_distance_full (&desktop->gridsnap, desktop->namedview->gridtoleranceunit, px, 1.0, px2doc);
 	desktop->guidesnap = (desktop->namedview->snaptoguides) ? desktop->namedview->guidetolerance : 0.0;
@@ -1320,9 +1309,9 @@ sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float 
 
 	if (!NR_DF_TEST_CLOSE (newscale, scale, 1e-4 * scale)) {
 		/* Set zoom factors */
-		nr_matrix_set_scale (NR_MATRIX_D_FROM_DOUBLE (dt->d2w), newscale, -newscale);
-		nr_matrix_invert (NR_MATRIX_D_FROM_DOUBLE (dt->w2d), NR_MATRIX_D_FROM_DOUBLE (dt->d2w));
-		sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), dt->d2w);
+		dt->d2w = NR::scale(NR::Point(newscale, -newscale));
+		dt->w2d = dt->d2w.inverse();
+		sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), dt->d2w.c);
 		clear = TRUE;
 	} else {
 		clear = FALSE;
@@ -1404,7 +1393,7 @@ sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
 
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 
-	scale = dt->d2w[0];
+	scale = dt->d2w.c[0];
 
 	area->x0 = viewbox.x0 / scale;
 	area->y0 = viewbox.y1 / -scale;

@@ -368,8 +368,8 @@ sp_sel_trans_ungrab (SPSelTrans * seltrans)
 	}
 
 	if (seltrans->items) {
-		int i;
-		for (i = 0; i < seltrans->nitems; i++) sp_object_unref (SP_OBJECT (seltrans->items[i]), NULL);
+		for (int i = 0; i < seltrans->nitems; i++)
+			sp_object_unref (SP_OBJECT (seltrans->items[i]), NULL);
 		nr_free (seltrans->items);
 		seltrans->items = NULL;
 	}

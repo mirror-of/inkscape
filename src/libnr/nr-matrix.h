@@ -128,6 +128,7 @@ public:
 	// legacy
 	void copyto(NRMatrix* nrm);
 	operator NRMatrix*() const;
+	operator NRMatrix() const;
 };
 
 // Matrix factories
