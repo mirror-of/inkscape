@@ -771,10 +771,13 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     } else if ((state & GDK_MOD1_MASK) == 0) {
         /* Snap as normal.  Alt-drag will not snap to the grid even if it is enabled. */
         for (unsigned int dim = 0 ; dim < 2 ; ++dim) {
-            dxy[dim] = sp_desktop_dim_snap_list (desktop, Snapper::BBOX_POINT, seltrans->bbox_points,
-                                                 dxy[dim], NR::Dim2(dim));
-            dxy[dim] = sp_desktop_dim_snap_list (desktop, Snapper::SNAP_POINT, seltrans->snap_points,
-                                                 dxy[dim], NR::Dim2(dim));
+            NR::Coord b = sp_desktop_dim_snap_list (desktop, Snapper::BBOX_POINT, seltrans->bbox_points,
+                                                    dxy[dim], NR::Dim2(dim));
+            NR::Coord s = sp_desktop_dim_snap_list (desktop, Snapper::SNAP_POINT, seltrans->snap_points,
+                                                    dxy[dim], NR::Dim2(dim));
+
+            /* Pick the snap that puts us closest to the original point */
+            dxy[dim] = fabs(b - dxy[dim]) < fabs(s - dxy[dim]) ? b : s;
         }
     }
 
