@@ -192,7 +192,7 @@ knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data)
 		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;
 		if (e->knot == knot) {
 			NR::Point const q = *p / sp_item_i2d_affine(item);
-			e->knot_set (item, q, state);
+			e->knot_set (item, q, e->knot->drag_origin / sp_item_i2d_affine(item), state);
 			break;
 		}
 	}

@@ -38,6 +38,7 @@ struct SPKnot {
 	guint size;			/* Always square */
 	NR::Point pos;			/* Our desktop coordinates */
 	NR::Point grabbed_rel_pos;	/* Grabbed relative position */
+	NR::Point drag_origin;	/* Origin of drag */
 	GtkAnchorType anchor;		/* Anchor */
 
 	SPKnotShapeType shape;		/* Shape type */

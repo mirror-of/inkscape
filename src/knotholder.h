@@ -21,7 +21,7 @@
 #include <libnr/nr-forward.h>
 #include <xml/xml-forward.h>
 
-typedef void (* SPKnotHolderSetFunc) (SPItem *item, NR::Point const &p, guint state);
+typedef void (* SPKnotHolderSetFunc) (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state);
 typedef NR::Point (* SPKnotHolderGetFunc) (SPItem *item);
 /* fixme: Think how to make callbacks most sensitive (Lauris) */
 typedef void (* SPKnotHolderReleasedFunc) (SPItem *item);

@@ -33,10 +33,11 @@ struct SPKnotHolderEntity {
     /**
      * Called solely from knot_moved_handler.
      *
-     * \param p Requested position of the knot, in item coordinates.
-     * \param state GTK event state.
+     * \param p Requested position of the knot, in item coordinates
+     * \param origin Position where the knot started being dragged
+     * \param state GTK event state (for keyboard modifiers)
      */
-    void (* knot_set) (SPItem *item, NR::Point const &p, guint state);
+    void (* knot_set) (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state);
 
     /**
      * Returns the position of the knot representation, in item coordinates.

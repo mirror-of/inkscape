@@ -487,6 +487,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 
 			p = sp_desktop_w2d_xy_point (knot->desktop, NR::Point(event->button.x, event->button.y));
 			knot->grabbed_rel_pos = p - knot->pos;
+			knot->drag_origin = knot->pos;
 			if (!nograb) {
 				sp_canvas_item_grab (knot->item,
 						     KNOT_EVENT_MASK,
