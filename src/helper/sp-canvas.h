@@ -30,6 +30,10 @@
 
 #define canvas_tiled_redraw
 
+#ifdef canvas_tiled_redraw
+#include <stdint.h>
+#endif
+
 enum {
 	SP_CANVAS_UPDATE_REQUESTED  = 1 << 0,
 	SP_CANVAS_UPDATE_AFFINE     = 1 << 1
