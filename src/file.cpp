@@ -445,9 +445,13 @@ sp_file_open_dialog(gpointer object, gpointer data)
 void
 sp_file_vacuum()
 {
-
     SPDocument* doc = SP_ACTIVE_DOCUMENT;
     SPDefs *defs = SP_ROOT(SP_DOCUMENT_ROOT(doc))->defs;
+
+    int before = 0;
+    for (SPObject *i = sp_object_first_child(defs); i != NULL; i = SP_OBJECT_NEXT(i)) {
+        before ++;
+    }
 
     for ( SPObject* def = defs->firstChild () ;
           def ; def = SP_OBJECT_NEXT (def) )
@@ -458,6 +462,18 @@ sp_file_vacuum()
     }
 
     sp_document_done (doc);
+
+    int after = 0;
+    for (SPObject *i = sp_object_first_child(defs); i != NULL; i = SP_OBJECT_NEXT(i)) {
+        after ++;
+    }
+
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (before - after > 0) {
+        dt->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,  _("Removed <b>%i</b> unused items in &lt;defs&gt;."), before - after);
+    } else {
+        dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE,  _("No unused items in &lt;defs&gt;."));
+    }
 }
 
 
