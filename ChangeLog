@@ -1,8 +1,12 @@
 2003-11-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/style.c (sp_style_merge_from_parent): Fix some
+	  unsigned-related bugs with "font-weight=lighter",
+	  "font-stretch=narrower", "opacity=...".
+
 	* src/modules/system.c (sp_module_system_save): Partial fix for
 	  unrecognized filetype: show a CRITICAL warning instead of
-	  segfaulting (uninitialized var).
+	  segfaulting due to uninitialized var.
 
 2003-11-29 Kees Cook <inkscape@outflux.net>
 

@@ -728,21 +728,36 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 	} else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLD) {
 		style->font_weight.computed = SP_CSS_FONT_WEIGHT_700;
 	} else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_LIGHTER) {
-		style->font_weight.computed = CLAMP (parent->font_weight.computed - 1, SP_CSS_FONT_WEIGHT_100, SP_CSS_FONT_WEIGHT_900);
+		unsigned const parent_val = parent->font_weight.computed;
+		g_assert (SP_CSS_FONT_WEIGHT_100 == 0);
+		style->font_weight.computed = (parent_val == SP_CSS_FONT_WEIGHT_100
+					       ? parent_val
+					       : parent_val - 1);
+		g_assert (style->font_weight.computed <= (unsigned) SP_CSS_FONT_WEIGHT_900);
 	} else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_DARKER) {
-		style->font_weight.computed = CLAMP (parent->font_weight.computed + 1, SP_CSS_FONT_WEIGHT_100, SP_CSS_FONT_WEIGHT_900);
+		unsigned const parent_val = parent->font_weight.computed;
+		g_assert (parent_val <= SP_CSS_FONT_WEIGHT_900);
+		style->font_weight.computed = (parent_val == SP_CSS_FONT_WEIGHT_900
+					       ? parent_val
+					       : parent_val + 1);
+		g_assert (style->font_weight.computed <= (unsigned) SP_CSS_FONT_WEIGHT_900);
 	}
 	/* 'font-stretch' */
 	if (!style->font_stretch.set || style->font_stretch.inherit) {
 		style->font_stretch.computed = parent->font_stretch.computed;
 	} else if (style->font_stretch.value == SP_CSS_FONT_STRETCH_NARROWER) {
-		style->font_stretch.computed = CLAMP (parent->font_stretch.computed - 1,
-						      SP_CSS_FONT_STRETCH_ULTRA_CONDENSED,
-						      SP_CSS_FONT_STRETCH_ULTRA_EXPANDED);
+		unsigned const parent_val = parent->font_stretch.computed;
+		style->font_stretch.computed = (parent_val == SP_CSS_FONT_STRETCH_ULTRA_CONDENSED
+						? parent_val
+						: parent_val - 1);
+		g_assert (style->font_stretch.computed <= (unsigned) SP_CSS_FONT_STRETCH_ULTRA_EXPANDED);
 	} else if (style->font_stretch.value == SP_CSS_FONT_STRETCH_WIDER) {
-		style->font_stretch.computed = CLAMP (parent->font_stretch.computed + 1,
-						      SP_CSS_FONT_STRETCH_ULTRA_CONDENSED,
-						      SP_CSS_FONT_STRETCH_ULTRA_EXPANDED);
+		unsigned const parent_val = parent->font_stretch.computed;
+		g_assert (parent_val <= SP_CSS_FONT_STRETCH_ULTRA_EXPANDED);
+		style->font_stretch.computed = (parent_val == SP_CSS_FONT_STRETCH_ULTRA_EXPANDED
+						? parent_val
+						: parent_val + 1);
+		g_assert (style->font_stretch.computed <= (unsigned) SP_CSS_FONT_STRETCH_ULTRA_EXPANDED);
 	}
 	if (style->opacity.inherit) {
 		style->opacity.value = parent->opacity.value;
@@ -1288,8 +1303,8 @@ sp_style_read_iscale24 (SPIScale24 *val, const gchar *str)
 		if (sp_svg_number_read_f (str, &value)) {
 			val->set = TRUE;
 			val->inherit = FALSE;
+			value = CLAMP (value, 0.0f, (gfloat) SP_SCALE24_MAX);
 			val->value = SP_SCALE24_FROM_FLOAT (value);
-			val->value = CLAMP (val->value, 0, SP_SCALE24_MAX);
 		}
 	}
 }
