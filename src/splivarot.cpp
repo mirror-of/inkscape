@@ -795,7 +795,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     tstr[79] = '\0';
     
     repr = sp_repr_new ("path");
-    sp_repr_set_attr (repr, "sodipodi:type", "offset");
+    sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
     if (expand > 0)
       {
 	sp_repr_set_double_attribute (repr, "inkscape:radius", o_width);

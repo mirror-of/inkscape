@@ -218,7 +218,7 @@ sp_offset_write (SPObject * object, SPRepr * repr, guint flags)
     /* Fixme: we may replace these attributes by
     * inkscape:offset="cx cy exp revo rad arg t0"
     */
-    sp_repr_set_attr (repr, "sodipodi:type", "offset");
+    sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
     sp_repr_set_double_attribute (repr, "inkscape:radius", offset->rad);
     sp_repr_set_attr (repr, "inkscape:original", offset->original);
     sp_repr_set_attr (repr, "inkscape:href", offset->sourceObject);

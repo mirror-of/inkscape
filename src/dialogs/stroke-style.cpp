@@ -1371,15 +1371,14 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gcha
   marker_xpm[2] = g_strconcat(marker_name, INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, NULL);
   marker_xpm[3] = NULL;
 
-  for (int i=0; i<INKSCAPE_STOCK_MARKER_QTY; i++) {
+  for (int i=0; marker_xpm[i] ; i++) {
     tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), marker_xpm[i]));
     g_assert(tb != NULL);
     if (tb != NULL) {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
     }
-    
+    g_free(marker_xpm);
   }
-  g_strfreev(marker_xpm);
 }
 
 /**
@@ -1409,12 +1408,11 @@ sp_stroke_style_update_marker_buttons(SPWidget *spw, const GSList *objects,
   }
   
   if ( marker_valid ) {
-    gchar *widget_name[2];
-    widget_name[0] = g_strconcat(stock_type, ":", marker_type, NULL);
-    widget_name[1] = NULL;
-    g_message("Widget name is '%s'", widget_name[0]);
-    tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), widget_name[0]));
-    g_strfreev(widget_name);
+    gchar *widget_name;
+    widget_name = g_strconcat(stock_type, ":", marker_type, NULL);
+    g_message("Widget name is '%s'", widget_name);
+    tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), widget_name));
+    g_free(widget_name);
   } 
   sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), stock_type);
 }
