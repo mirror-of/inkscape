@@ -638,7 +638,7 @@ msgid ""
 "<b>More than one object selected.</b>  Cannot take style from multiple "
 "objects."
 msgstr ""
-"<b>二つ以上のオブジェクトが選択されています。スタイルを記憶するために一つだけ"
+"<b>二つ以上のオブジェクトが選択されています。</b>スタイルを記憶するために一つだけ"
 "選択してください。"
 
 #: src/dialogs/display-settings.cpp:760
