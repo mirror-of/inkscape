@@ -167,7 +167,7 @@ spsvgview_SOURCES = \
 	view.cpp view.h \
 	svg-view.cpp svg-view.h \
 	dir-util.cpp dir-util.h \
-	modules/ps.c modules/ps.h \
+	modules/ps.cpp modules/ps.h \
 	module.cpp module.h \
 	print.cpp print.h
 
