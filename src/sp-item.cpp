@@ -143,6 +143,20 @@ sp_item_init(SPItem *item)
     new (&item->_transformed_signal) sigc::signal<void, NR::Matrix const *, SPItem *>();
 }
 
+bool SPItem::isLocked() const {
+    return !sensitive;
+}
+
+bool SPItem::isHidden(unsigned display_key) const {
+    for ( SPItemView *view(display) ; view ; view = view->next ) {
+        if ( view->key == display_key ) {
+            g_assert(view->arenaitem != NULL);
+            return !view->arenaitem->visible;
+        }
+    }
+    return true;
+}
+
 namespace {
 
 bool is_item(SPObject const &object) {

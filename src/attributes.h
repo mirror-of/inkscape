@@ -18,9 +18,6 @@ const unsigned char *sp_attribute_name (unsigned char id);
 
 #define SP_ATTRIBUTE_IS_CSS(k) (((k) >= SP_PROP_FONT) && ((k) <= SP_PROP_WRITING_MODE))
 
-/* This is not nice, but we have to ensure name->id works */
-#define SP_ATTR_FILL SP_PROP_FILL
-
 enum {
 	SP_ATTR_INVALID,
 	/* SPObject */
