@@ -205,7 +205,7 @@ count_gradient_hrefs (SPObject *o, SPGradient *gr)
  * If gr has other users, create a new private; also check if gr links to vector, relink if not
  */
 SPGradient *
-sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGradientType type, SPObject *o)
+sp_gradient_fork_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGradientType type, SPObject *o)
 {
 	g_return_val_if_fail (gr != NULL, NULL);
 	g_return_val_if_fail (vector != NULL, NULL);
@@ -275,8 +275,8 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *pro
 {
 	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
 
-	// First, clone it if it is shared
-	gr = sp_gradient_clone_private_if_necessary (gr, sp_gradient_get_vector (gr, FALSE), 
+	// First, fork it if it is shared
+	gr = sp_gradient_fork_private_if_necessary (gr, sp_gradient_get_vector (gr, FALSE), 
 					 SP_IS_RADIALGRADIENT (gr) ? SP_GRADIENT_TYPE_RADIAL : SP_GRADIENT_TYPE_LINEAR, SP_OBJECT (item));
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
@@ -364,7 +364,7 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *pro
 		sp_repr_set_attr (repr, "gradientUnits", "userSpaceOnUse");
 	}
 
-	// apply the gradient to the item (may be necessary if we cloned it); not recursive
+	// apply the gradient to the item (may be necessary if we forked it); not recursive
 	// generally because grouped items will be taken care of later (we're being called
 	// from sp_item_adjust_paint_recursive); however text and all its children should all
 	// refer to one gradient, hence the recursive call for text (because we can't/don't
@@ -448,7 +448,7 @@ sp_item_set_gradient (SPItem *item, SPGradient *gr, SPGradientType type, bool is
 		} else {
 			// the gradient is not private, or it is shared with someone else;
 			// normalize it (this includes creating new private if necessary)
-			SPGradient *normalized = sp_gradient_clone_private_if_necessary (current, gr, type, item);
+			SPGradient *normalized = sp_gradient_fork_private_if_necessary (current, gr, type, item);
 
 			g_return_val_if_fail (normalized != NULL, NULL);
 
