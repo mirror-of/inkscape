@@ -1,3 +1,9 @@
+2004-01-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* icons/Makefile.am: s/icons_dir/iconsdir/g for automake.
+	* src/dialogs/Makefile.am, src/widgets/Makefile.am:
+	  s/icons_dir/iconsdir/g for consistency with icons/Makefile.am.
+
 2004-01-27  jon phillips <jon@users.sourceforge.net>
 
         * Makefile.am: changed 'glade' globally to 'icons'

@@ -1,5 +1,5 @@
 
-icons_dir = $(datadir)/inkscape
+iconsdir = $(datadir)/inkscape
 
 images = about.svg icons.svg
 

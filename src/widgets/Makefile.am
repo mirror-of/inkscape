@@ -3,13 +3,13 @@
 # Author: Lauris Kaplinski <lauris@ximian.com>
 #
 
-icons_dir = $(datadir)/inkscape
+iconsdir = $(datadir)/inkscape
 
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
 	$(INKSCAPE_CFLAGS) \
-	-DINKSCAPE_PIXMAPDIR=\""$(icons_dir)"\"
+	-DINKSCAPE_PIXMAPDIR=\""$(iconsdir)"\"
 
 noinst_LIBRARIES = libspwidgets.a
 
