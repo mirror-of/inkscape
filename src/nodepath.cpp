@@ -1889,6 +1889,9 @@ node_grabbed (SPKnot * knot, guint state, gpointer data)
 
 	n = (SPPathNode *) data;
 
+	n->origin.x = knot->x;
+	n->origin.y = knot->y;
+
 	if (!n->selected) {
 		sp_nodepath_node_select (n, (state & GDK_SHIFT_MASK), FALSE);
 	}
@@ -1912,8 +1915,16 @@ node_request (SPKnot *knot, NRPointF *p, guint state, gpointer data)
 	n = (SPPathNode *) data;
 
 	/* fixme: This goes to "moved" event? */
-	sp_nodepath_selected_nodes_move (n->subpath->nodepath,
-					 p->x - knot->x, p->y - knot->y);
+
+	if (state & GDK_CONTROL_MASK) {                                         
+		if (fabs(p->x - n->origin.x) > fabs(p->y - n->origin.y)) {
+			sp_nodepath_selected_nodes_move (n->subpath->nodepath, p->x - knot->x, n->origin.y - n->pos.y);
+		} else {
+			sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin.x - n->pos.x, p->y - knot->y);
+		}
+	} else {
+		sp_nodepath_selected_nodes_move (n->subpath->nodepath, p->x - knot->x, p->y - knot->y);
+	}
 
 	return TRUE;
 }

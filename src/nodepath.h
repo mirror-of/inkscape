@@ -55,6 +55,7 @@ struct _SPPathNode {
 	guint code : 4;
 	guint selected : 1;
 	NRPointF pos;
+	NRPointF origin;
 	SPKnot * knot;
 	SPPathNodeSide n;
 	SPPathNodeSide p;
