@@ -160,14 +160,15 @@ std::pair<NR::Coord, bool> namedview_dim_snap_list(SPNamedView const *nv,
     return std::make_pair(xdist, dist < NR_HUGE);
 }
 
-double namedview_vector_snap_list(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
-				   NR::Point const &norm, NR::scale const &s)
+std::pair<double, bool> namedview_vector_snap_list(SPNamedView const *nv,
+                                                   Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                   NR::Point const &norm, NR::scale const &s)
 {
     using NR::X;
     using NR::Y;
 
     if (namedview_will_snap_something(nv) == false) {
-        return s[X];
+        return std::make_pair(s[X], false);
     }
     
     NR::Coord dist = NR_HUGE;
@@ -189,7 +190,7 @@ double namedview_vector_snap_list(SPNamedView const *nv, Snapper::PointType t, c
         }
     }
     
-    return ratio;
+    return std::make_pair(ratio, dist < NR_HUGE);
 }
 
 
