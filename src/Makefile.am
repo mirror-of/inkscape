@@ -74,7 +74,6 @@ EXTRA_DIST =	\
 	extension/internal/win32.cpp	\
 	extension/internal/win32.h	\
 	helper/sp-marshal.list	\
-	libnrtype/codepages.h	\
 	utest/utest.h
 
 EXTRA_PROGRAMS =	\
