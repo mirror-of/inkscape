@@ -149,9 +149,9 @@ Potrace::convertImageToPath()
     /* process the image */
     path_t *plist;
     int ret = bm_to_pathlist(bm, &plist);
-    if (!ret)
+    if (ret)
         {
-        g_warning("Potrace::convertImageToPath: image has no bitmap data\n");
+        g_warning("Potrace::convertImageToPath: trouble tracing temp image\n");
         return false;
         }
 
@@ -171,8 +171,13 @@ Potrace::convertImageToPath()
     //## copy the path information into our Curve
     writePaths(curve, plist);
 
-
     pathlist_free(plist);
+
+    //##Write our new info to the repr side
+    //reprobj->updateRepr();
+
+    //## inform the document, so we can undo
+    sp_document_done(doc);
 
     return true;
 }
