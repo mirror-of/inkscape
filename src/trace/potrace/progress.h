@@ -61,15 +61,19 @@ static inline void progress_subrange_start(double a, double b, const progress_t 
   sub->epsilon = prog->epsilon;
   sub->min = min;
   sub->max = max;
+  sub->d_prev = prog->d_prev;
   return;
 }
 
 static inline void progress_subrange_end(progress_t *prog, progress_t *sub) {
-  if (prog->callback != NULL && sub->callback == NULL) {
-    progress_update(sub->b, prog);
-  }
-}    
-
+  if (prog->callback != NULL) {
+    if (sub->callback == NULL) {
+      progress_update(sub->b, prog);
+    } else {
+      prog->d_prev = sub->d_prev;
+    }
+  }    
+}
 
 #endif /* PROGRESS_H */
 

@@ -465,7 +465,9 @@ int bm_to_pathlist(const potrace_bitmap_t *bm, path_t **plistp, const potrace_pa
       list_insert_beforehook(p, hook);
     }
 
-    progress_update(1-y/(double)bm1->h, progress);
+    if (bm1->h > 0) { /* to be sure */
+      progress_update(1-y/(double)bm1->h, progress);
+    }
   }
 
   pathlist_to_tree(plist, bm1);
