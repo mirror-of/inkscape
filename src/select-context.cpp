@@ -777,12 +777,21 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 	SPDesktop *desktop = seltrans->desktop;
 
 	NR::Point dxy = xy - sp_sel_trans_point_desktop(seltrans);
-	if (state & GDK_MOD1_MASK) {
-		dxy /= 10;
-	}
 
-	for(unsigned dim = 0 ; dim < 2 ; ++dim) {
-		dxy[dim] = sp_desktop_dim_snap_list(desktop, seltrans->spp, seltrans->spp_length, dxy[dim], dim);
+	gchar const* pref = prefs_get_string_attribute ("tools.select", "move_with_grid");
+	bool snap = (pref == NULL || !strcmp(pref, "snap"));
+	bool alternate = (state & GDK_SHIFT_MASK);
+	
+	if ((snap && alternate) || (!snap && !alternate)) {
+		/* Keep offset: snap the moved distance to the grid */
+		sp_desktop_free_snap (desktop, dxy);
+	} else if (((snap && !alternate) || (!snap && alternate)) && (state & GDK_MOD1_MASK) == 0) {
+	        /* Snap as normal.  Alt-drag will not snap to the grid even if it is enabled. */
+		for(unsigned int dim = 0 ; dim < 2 ; ++dim) {
+			dxy[dim] = sp_desktop_dim_snap_list(desktop, seltrans->spp,
+							    seltrans->spp_length, dxy[dim],
+							    dim);
+		}
 	}
 
 	/* N.B. If we ever implement angled guides, then we'll want to make sure that the movement
