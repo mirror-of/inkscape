@@ -183,6 +183,10 @@ List<Polygon> *stroke_impl(Polygon const &polygon, JoinFn join, CapFn cap,
 {
     bool is_clockwise(true); // is the original polygon clockwise?
     NR::Point cusp(-HUGE_VAL, -HUGE_VAL);
+
+    if (!polygon.vertices()) {
+        return NULL;
+    }
     
     Yoke start(NULL, NULL, NULL);
     Yoke end(NULL, polygon.vertices(), NULL);
@@ -232,6 +236,15 @@ List<Polygon> *stroke_impl(Polygon const &polygon, JoinFn join, CapFn cap,
                    cons_mutable(b + offset, right));
     }
 
+    if (!start.center) {
+        if ( polygon.isClosed() && cap == cap_round ) {
+            // TODO make a round dot
+            return NULL;
+        } else {
+            return NULL;
+        }
+    }
+
     // ensure that the inner polygon is on the right-hand side of the yokes
     if (!is_clockwise) {
         start = Yoke(start.right, start.center, start.left);
@@ -252,7 +265,7 @@ List<Polygon> *stroke_impl(Polygon const &polygon, JoinFn join, CapFn cap,
                new List<Polygon>(to_polygon(*end.right),
                NULL));
     } else {
-        // connect inner and outer polygons to each other with end caps
+        // bridge inner and outer polygons with end caps
         cap(*start.right, *start.left, start.center->data(), smoothness);
         cap(*end.left, *end.right, start.center->data(), smoothness);
 
