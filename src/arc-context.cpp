@@ -361,8 +361,8 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 		case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
 		case GDK_Meta_R:
 			sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
-												_("<b>Ctrl:</b> make circle or integer-ratio ellipse, snap arc/segment angle"),
-												_("<b>Shift:</b> draw around the starting point"),
+												_("<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"),
+												_("<b>Shift</b>: draw around the starting point"),
 												NULL);
 			break;
 		case GDK_Up: 

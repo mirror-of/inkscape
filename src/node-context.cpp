@@ -352,8 +352,8 @@ void
 sp_node_context_show_modifier_tip (SPEventContext *event_context, GdkEvent *event)
 {
        sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
-                 _("<b>Ctrl:</b> toggle node type, snap handle angle, move hor/vert; <b>Ctrl+Alt</b>: move along handles"),
-                 _("<b>Shift:</b> toggle node selection, disable snapping, rotate both handles"),
+                 _("<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl+Alt</b>: move along handles"),
+                 _("<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"),
                  _("<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"));
 }
 
