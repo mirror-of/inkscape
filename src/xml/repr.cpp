@@ -862,7 +862,7 @@ sp_repr_document_new_list (GSList *reprs)
 
 	for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
 		SPRepr *repr=(SPRepr *)iter->data;
-		sp_repr_add_child (&doc->repr, repr, NULL);
+		sp_repr_append_child(&doc->repr, repr);
 	}
 
 	g_assert(sp_repr_document_root(doc) != NULL);

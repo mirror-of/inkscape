@@ -1,5 +1,9 @@
 2004-04-04  MenTaLguY <mental@rydia.net>
 
+	* src/xml/repr-io.cpp, src/xml/repr.cpp, src/xml/repr.h:
+	Take the full list of document node children from libxml, and
+	append them in the correct order.  This fixes bug #929348.
+
 	* src/xml/repr-io.cpp, src/xml/repr.cpp, src/xml/repr-private.h:
 	Added API for coping with comments at the root level (i.e. siblings
 	of the root XML node), and made corresponding changes to the repr-io

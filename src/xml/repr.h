@@ -189,7 +189,6 @@ SPRepr *sp_repr_next (SPRepr *repr);
 
 unsigned int sp_repr_add_child (SPRepr * repr, SPRepr * child, SPRepr * ref);
 unsigned int sp_repr_remove_child (SPRepr * repr, SPRepr * child);
-void sp_repr_write_stream (SPRepr * repr, FILE * file, int level, gboolean whitespace);
 
 int sp_repr_n_children (SPRepr * repr);
 
