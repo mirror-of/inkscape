@@ -88,6 +88,8 @@ void sp_paint_selector_get_gradient_gs2d_matrix_f(SPPaintSelector const *psel, N
 void sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, SPGradientUnits units, SPGradientSpread spread);
 void sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnits *units, SPGradientSpread *spread);
 
+void sp_gradient_selector_attrs_to_gradient (SPGradient *gr, SPPaintSelector *psel);
+
 void sp_paint_selector_get_color_alpha (SPPaintSelector *psel, SPColor *color, gfloat *alpha);
 
 SPGradient *sp_paint_selector_get_gradient_vector (SPPaintSelector *psel);

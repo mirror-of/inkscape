@@ -441,8 +441,8 @@ sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnit
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
 	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
-	if (units) *units = (SPGradientUnits)gsel->gradientUnits;
-	if (spread) *spread = (SPGradientSpread)gsel->gradientSpread;
+	if (units) *units = sp_gradient_selector_get_units (gsel);
+	if (spread) *spread = sp_gradient_selector_get_spread (gsel);
 }
 
 /**
@@ -599,6 +599,19 @@ sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient 
 	r *= e;
 
 	sp_radialgradient_set_position (rg, p1[NR::X], p1[NR::Y], p2[NR::X], p2[NR::Y], r);
+
+
+}
+
+void
+sp_gradient_selector_attrs_to_gradient (SPGradient *gr, SPPaintSelector *psel)
+{
+	SPGradientUnits units;
+	SPGradientSpread spread;
+	sp_paint_selector_get_gradient_properties (psel, &units, &spread);
+	sp_gradient_set_units (gr, units);
+	sp_gradient_set_spread (gr, spread);
+	SP_OBJECT(gr)->updateRepr();
 }
 
 static void
