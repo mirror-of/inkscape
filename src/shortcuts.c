@@ -44,12 +44,16 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_O, SP_VERB_FILE_OPEN, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_s, SP_VERB_FILE_SAVE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_S, SP_VERB_FILE_SAVE, FALSE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_s, SP_VERB_FILE_SAVE_AS, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_S, SP_VERB_FILE_SAVE_AS, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_p, SP_VERB_FILE_PRINT, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_P, SP_VERB_FILE_PRINT, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_p, SP_VERB_FILE_PRINT_PREVIEW, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_P, SP_VERB_FILE_PRINT_PREVIEW, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_e, SP_VERB_FILE_EXPORT, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_E, SP_VERB_FILE_EXPORT, FALSE);
+	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_q, SP_VERB_FILE_QUIT, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_Q, SP_VERB_FILE_QUIT, TRUE);
 	/* Event contexts */
 	sp_shortcut_set_verb (GDK_F1, SP_VERB_CONTEXT_SELECT, TRUE);
 	sp_shortcut_set_verb (GDK_s, SP_VERB_CONTEXT_SELECT, TRUE);
@@ -83,17 +87,24 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (GDK_i, SP_VERB_CONTEXT_SPIRAL, TRUE);
 	sp_shortcut_set_verb (GDK_I, SP_VERB_CONTEXT_SPIRAL, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_F9, SP_VERB_CONTEXT_STAR, TRUE);
-	/* Zooming */
-	sp_shortcut_set_verb (GDK_plus, SP_VERB_ZOOM_IN, TRUE);
+	/* Zooming and desktop */
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_plus, SP_VERB_ZOOM_IN, TRUE);
 	sp_shortcut_set_verb (GDK_equal, SP_VERB_ZOOM_IN, FALSE);
 	sp_shortcut_set_verb (GDK_KP_Add, SP_VERB_ZOOM_IN, FALSE);
 	sp_shortcut_set_verb (GDK_minus, SP_VERB_ZOOM_OUT, TRUE);
 	sp_shortcut_set_verb (GDK_KP_Subtract, SP_VERB_ZOOM_OUT, FALSE);
-	sp_shortcut_set_verb (GDK_0, SP_VERB_ZOOM_PAGE, TRUE);
-	sp_shortcut_set_verb (GDK_KP_0, SP_VERB_ZOOM_PAGE, FALSE);
 	sp_shortcut_set_verb (GDK_1, SP_VERB_ZOOM_1_1, TRUE);
 	sp_shortcut_set_verb (GDK_KP_1, SP_VERB_ZOOM_1_1, FALSE);
-	sp_shortcut_set_verb (GDK_KP_5, SP_VERB_ZOOM_DRAWING, TRUE);
+	sp_shortcut_set_verb (GDK_2, SP_VERB_ZOOM_1_2, TRUE);
+	sp_shortcut_set_verb (GDK_KP_2, SP_VERB_ZOOM_1_2, TRUE);
+	sp_shortcut_set_verb (GDK_3, SP_VERB_ZOOM_SELECTION, TRUE);
+	sp_shortcut_set_verb (GDK_KP_3, SP_VERB_ZOOM_SELECTION, TRUE);
+	sp_shortcut_set_verb (GDK_4, SP_VERB_ZOOM_DRAWING, TRUE);
+	sp_shortcut_set_verb (GDK_KP_4, SP_VERB_ZOOM_DRAWING, TRUE);
+	sp_shortcut_set_verb (GDK_5, SP_VERB_ZOOM_PAGE, TRUE);
+	sp_shortcut_set_verb (GDK_KP_5, SP_VERB_ZOOM_PAGE, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_bar, SP_VERB_TOGGLE_GUIDES, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_numbersign, SP_VERB_TOGGLE_GRID, TRUE);
 	/* Edit */
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_z, SP_VERB_EDIT_UNDO, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_Z, SP_VERB_EDIT_UNDO, FALSE);
@@ -101,6 +112,8 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_Y, SP_VERB_EDIT_REDO, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_z, SP_VERB_EDIT_REDO, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_Z, SP_VERB_EDIT_REDO, FALSE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_y, SP_VERB_EDIT_UNDO, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_Y, SP_VERB_EDIT_UNDO, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_x, SP_VERB_EDIT_CUT, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_X, SP_VERB_EDIT_CUT, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_c, SP_VERB_EDIT_COPY, TRUE);
@@ -110,18 +123,23 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (GDK_Delete, SP_VERB_EDIT_DELETE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_d, SP_VERB_EDIT_DUPLICATE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_D, SP_VERB_EDIT_DUPLICATE, FALSE);
-	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_a, SP_VERB_EDIT_SELECT_ALL, TRUE);
 	/* Selection */
 	sp_shortcut_set_verb (GDK_Home, SP_VERB_SELECTION_TO_FRONT, TRUE);
+	sp_shortcut_set_verb (GDK_KP_Home, SP_VERB_SELECTION_TO_FRONT, TRUE);
 	sp_shortcut_set_verb (GDK_End, SP_VERB_SELECTION_TO_BACK, TRUE);
+	sp_shortcut_set_verb (GDK_KP_End, SP_VERB_SELECTION_TO_BACK, TRUE);
 	sp_shortcut_set_verb (GDK_Page_Up, SP_VERB_SELECTION_RAISE, TRUE);
+	sp_shortcut_set_verb (GDK_KP_Page_Up, SP_VERB_SELECTION_RAISE, TRUE);
 	sp_shortcut_set_verb (GDK_Page_Down, SP_VERB_SELECTION_LOWER, TRUE);
+	sp_shortcut_set_verb (GDK_KP_Page_Down, SP_VERB_SELECTION_LOWER, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_g, SP_VERB_SELECTION_GROUP, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_G, SP_VERB_SELECTION_GROUP, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_u, SP_VERB_SELECTION_UNGROUP, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_U, SP_VERB_SELECTION_UNGROUP, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_g, SP_VERB_SELECTION_UNGROUP, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_G, SP_VERB_SELECTION_UNGROUP, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_u, SP_VERB_SELECTION_GROUP, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_U, SP_VERB_SELECTION_GROUP, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_k, SP_VERB_SELECTION_COMBINE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_K, SP_VERB_SELECTION_COMBINE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_k, SP_VERB_SELECTION_BREAK_APART, TRUE);
