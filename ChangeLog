@@ -1,3 +1,52 @@
+2004-09-18  Carl Hetherington <inkscape@carlh.net>
+
+	* src/livarot/AVL.cpp, src/livarot/AVL.h,
+	src/livarot/DblLinked.cpp, src/livarot/DblLinked.h,
+	src/livarot/LivarotDefs.h, src/livarot/ShapeRaster.cpp,
+	src/livarot/ShapeSweep.cpp, src/livarot/sweep-tree.cpp: replace
+	leftFoo and rightFoo with foo[2] in a few places.
+
+2004-09-17  Carl Hetherington <inkscape@carlh.net>
+
+	* src/livarot/Shape.h: use a std::vector for Shape::chgts.  Add
+	clearIncidenceData();
+
+	* src/livarot/Shape.cpp: Add clearIncidenceData().  Initialise
+	iData in the constructor.
+
+	* src/livarot/ShapeSweep.cpp: coding style cleanups.  Use a
+	std::vector for Shape::chgts.  Use clearIncidenceData().
+
+2004-09-16  Carl Hetherington <inkscape@carlh.net>
+
+	* src/livarot/ShapeUtils.h, src/livarot/ShapeSweepUtils.cpp,
+	src/livarot/sweep-tree.cpp, src/livarot/sweep-tree.h,
+	src/livarot/sweep-event.cpp, src/livarot/sweep-event.h,
+	src/livarot/Shape.h: split up ShapeUtils.h and ShapeSweepUtils.cpp
+	into two separate files.
+
+	* src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp,
+	src/livarot/sweep-event.cpp, src/livarot/sweep-event.h:
+	Make SweepEventQueue into a proper class, and move some static
+	methods from SweepEvent into it.
+
+	* src/livarot/ShapeSweep.cpp, src/livarot/sweep-event.cpp,
+	src/livarot/sweep-event.h, src/livarot/sweep-tree.cpp: make member
+	variables of SweepEventQueue private.
+
+	* src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/sweep-tree.cpp, src/livarot/sweep-tree.h,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: make
+	SweepTreeList into a proper class.
+
+	* src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: remove
+	unnecessary Shape::_has_sweep_data.
+
+	* src/livarot/Shape.h, src/livarot/Shape.cpp,
+	src/livarot/ShapeSweep.cpp: use an enum rather than an int.
+
 2004-09-16  MenTaLguY <mental@rydia.net>
 
 	* src/render/stroke.cpp: a little more work on the stroking code
