@@ -160,5 +160,6 @@ void sp_text_get_cursor_coords (SPText *text, gint position, NR::Point &p0, NR::
 
 void sp_adjust_kerning_screen (SPText *text, gint pos, SPDesktop *desktop, NR::Point by);
 void sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop, gdouble by);
+void sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by);
 
 #endif

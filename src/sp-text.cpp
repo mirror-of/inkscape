@@ -1653,7 +1653,7 @@ sp_text_set (SPObject *object, unsigned int key, const gchar *value)
         text->ly.linespacing = 1.0;
         if (value) {
             text->ly.linespacing = sp_svg_read_percentage (value, 1.0);
-            text->ly.linespacing = CLAMP (text->ly.linespacing, 0.01, 10.0);
+            text->ly.linespacing = CLAMP (text->ly.linespacing, 0.0, 1000.0);
         }
         sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
         break;
@@ -2974,6 +2974,49 @@ sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop
     sp_repr_set_attr (SP_OBJECT_REPR (child), "style", str);
     g_free (str);
 }
+
+
+/**
+\brief   Adjusts linespacing in the text object so that the total height is changed by by visible pixels at the current zoom. 
+*/
+void
+sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)
+{
+    NR::Rect bbox = sp_item_bbox_desktop (SP_ITEM (text));
+
+    SPStyle *style = SP_OBJECT_STYLE (text);
+
+	// the value is stored as multiple of font size (i.e. in em)
+	double val = style->font_size.computed * text->ly.linespacing;
+
+	// calculate the number of lines
+	SPObject *child;
+	int lines = 0;
+	for (child = text->children; child != NULL; child = child->next) {
+		if (SP_IS_TSPAN (child) && SP_TSPAN (child)->role == SP_TSPAN_ROLE_LINE)
+			lines ++;
+	}
+
+    // divide increment by zoom and by the number of lines,
+    // so that the entire object is expanded by by pixels
+    gdouble zoom = SP_DESKTOP_ZOOM (desktop);
+    gdouble zby = by / (zoom * (lines > 1 ? lines - 1 : 1));
+
+    // divide increment by matrix expansion 
+    NR::Matrix t = sp_item_i2doc_affine (SP_ITEM(text));
+    zby = zby / NR::expansion(t);
+
+    val += zby;
+
+	// fixme: why not allow it to be negative? needs fixing in many places, though
+	if (val < 0) val = 0;
+
+	// set back value
+	text->ly.linespacing = val / style->font_size.computed;
+      sp_object_request_update (SP_OBJECT (text), SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+      sp_repr_set_double (SP_OBJECT_REPR (text), "sodipodi:linespacing", text->ly.linespacing);
+}
+
 
 
 
