@@ -1,3 +1,7 @@
+2003-12-21  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* POTFILES.in, *.po: Change .c filenames to .cpp.
+
 2003-09-24  Vincent van Adrighem  <adrighem@gnome.org>
 
 	* nl.po: Dutch translation updated by Jeroen van der Vegt.
