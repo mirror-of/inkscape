@@ -1,6 +1,11 @@
+2004-02-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/utest/utest.h (UTEST_NAMED_ASSERT):
+	Wrap this macro in static_cast<void>().
+
 2004-02-17  MenTaLguY <mental@rydia.net>
 
-    * src/interface.cpp: fixed signal connection in recent items menu
+	* src/interface.cpp: fixed signal connection in recent items menu
 
 	* src/file.cpp: fix compile and pass UTF-8 "URIs" down to module code
 
@@ -13,16 +18,16 @@
 
 2004-02-16  MenTaLguY <mental@rydia.net>
 
-    * src/interface.cpp: fixed bug with underscores in 'open recent' filenames
+	* src/interface.cpp: fixed bug with underscores in 'open recent' filenames
 
-    * src/libnr/nr-rect.h, src/libnr/nr-types.h: moved NR::Rect to nr-rect.h,
+	* src/libnr/nr-rect.h, src/libnr/nr-types.h: moved NR::Rect to nr-rect.h,
 	  minor updates
 
-    * src/libnr/nr-maybe.h: continued work on maybe implementation
+	* src/libnr/nr-maybe.h: continued work on maybe implementation
 
-    * src/libnr/nr-types.h, src/libnr/nr-rect.cpp, src/libnr/nr-maybe.h,
-      src/seltrans.cpp:
-      started on revising the NR::Rect stuff, and introduced NR::ConvexHull
+	* src/libnr/nr-types.h, src/libnr/nr-rect.cpp, src/libnr/nr-maybe.h,
+	  src/seltrans.cpp:
+	  started on revising the NR::Rect stuff, and introduced NR::ConvexHull
 
 2004-02-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
@@ -31,7 +36,7 @@
 2004-02-14  MenTaLguY <mental@rydia.net>
 
 	* src/svg/svg-path.cpp: switched to locale-safe iostreams-based path
-							serialization
+	serialization
 
 	* src/xml/repr-io.cpp, src/xml/repr.cpp, src/widgets/sp-xmlview-tree.cpp,
 	  src/widgets/sp-xmlview-content.cpp, src/dialogs/xml-tree.cpp:

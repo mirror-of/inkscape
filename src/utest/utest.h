@@ -75,7 +75,7 @@ utest__fail(const char *a, const char *b, const char *c)
   * \param _name The descriptive label to use.
   * \param _cond The condition to test.
   */
-#define UTEST_NAMED_ASSERT(_name, _cond) ((_cond) || utest__fail("Assertion `", (_name), "' failed"))
+#define UTEST_NAMED_ASSERT(_name, _cond) static_cast<void>((_cond) || utest__fail("Assertion `", (_name), "' failed"))
 
 int utest__test(const char *name) {
 	utest__tests++;
