@@ -145,7 +145,6 @@
 	* configure.ac, src/extension/script/Makefile_insert: automake cleanups
 	  to deal with perl/python detection.
 
-
 2004-12-20  David Turner <novalis@gnu.org>
 	* src/widgets/gradient-vector.cpp:
 	  Fixed bug with gradient stops at 0 and 100%.  Closes 1085920.
