@@ -1,3 +1,12 @@
+2004-04-11  Jon Phillip <jon@rejon.org>
+
+	* Makefile.mingw share/Makefile.am src/Makefile.am 
+	  share/markers/Makefile.am share/markers/.cvsignore: Added the proper 
+      infrastructure to get files to the right location for markers.
+
+	* share/tutorials/tipsandtricks.svg: Deleted the URL trick because it no 
+      longer works or something.
+
 2004-04-11  Kees Cook <kees@outflux.net>
 
 	* src/verbs.h, src/verbs.cpp: added verbs for the Help and Tutorials menus.
