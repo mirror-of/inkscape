@@ -149,7 +149,9 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 void
 sp_transientize (GtkWidget *dialog)
 {
-    gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_UTILITY);
+    if (!gtk_window_get_modal(GTK_WINDOW (dialog))) {
+        gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_UTILITY);
+    }
 
     if (prefs_get_int_attribute ( "options.dialogsskiptaskbar", "value", 0)) {
         gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
