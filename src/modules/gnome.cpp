@@ -18,6 +18,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
+#include <helper/canvas-bpath.h>
 
 #include <glib.h>
 #include <gtk/gtkdialog.h>
@@ -29,7 +30,7 @@
 #include <libgnomeprintui/gnome-print-master-preview.h>
 #endif
 #include <libgnomeprintui/gnome-print-dialog.h>
-
+//#include <libgnomeprintui/gnome-print-unit-selector.h>
 #include "helper/sp-intl.h"
 #include "enums.h"
 #include "document.h"
@@ -73,7 +74,10 @@ sp_module_print_gnome_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_print_gnome_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE_PRINT, "SPModulePrintGnome", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE_PRINT, 
+					       "SPModulePrintGnome", 
+					       &info, 
+					       (GTypeFlags)0);
 	}
 	return type;
 }
@@ -87,7 +91,7 @@ sp_module_print_gnome_class_init (SPModulePrintClass *klass)
 	g_object_class = (GObjectClass *)klass;
 	module_print_class = (SPModulePrintClass *) klass;
 
-	print_gnome_parent_class = g_type_class_peek_parent (klass);
+	print_gnome_parent_class = (SPModulePrintClass *)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_print_gnome_finalize;
 
@@ -121,15 +125,17 @@ sp_module_print_gnome_finalize (GObject *object)
 static unsigned int
 sp_module_print_gnome_setup (SPModulePrint *mod)
 {
-	SPModulePrintGnome *gpmod;
+    SPModulePrintGnome *gpmod;
         GnomePrintConfig *config;
+#if 0
 	GtkWidget *dlg, *vbox, *sel;
+#endif
 	int btn;
 
 	gpmod = (SPModulePrintGnome *) mod;
 
 	config = gnome_print_config_default ();
-
+#if 0
 	dlg = gtk_dialog_new_with_buttons (_("Select printer"), NULL,
 					   GTK_DIALOG_MODAL,
 					   GTK_STOCK_PRINT,
@@ -148,9 +154,10 @@ sp_module_print_gnome_setup (SPModulePrint *mod)
 	btn = gtk_dialog_run (GTK_DIALOG (dlg));
 	gtk_widget_destroy (dlg);
         if (btn != GTK_RESPONSE_OK) return FALSE;
-
-	gpmod->gpc = gnome_print_context_new (config);
-
+#endif
+       	gpmod->gpc = gnome_print_context_new (config);
+	if (gpmod->gpc == NULL)
+	    fprintf(stderr, "grumble\n");
 	gnome_print_config_unref (config);
 
 	return TRUE;
@@ -203,7 +210,7 @@ sp_module_print_gnome_begin (SPModulePrint *mod, SPDocument *doc)
 
 	gpmod = (SPModulePrintGnome *) mod;
 
-	gnome_print_beginpage (gpmod->gpc, SP_DOCUMENT_NAME (doc));
+	gnome_print_beginpage (gpmod->gpc, (const guchar *)SP_DOCUMENT_NAME (doc));
 	gnome_print_translate (gpmod->gpc, 0.0, sp_document_height (doc));
 	/* From desktop points to document pixels */
 	gnome_print_scale (gpmod->gpc, 0.8, -0.8);
@@ -304,7 +311,9 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 		dpbox.y0 = pbox->y0;
 		dpbox.x1 = pbox->x1;
 		dpbox.y1 = pbox->y1;
-		painter = sp_paint_server_painter_new(SP_STYLE_FILL_SERVER(style), NR_MATRIX_D_TO_DOUBLE(&ctm), &dpbox);
+		painter = sp_paint_server_painter_new(SP_STYLE_FILL_SERVER(style), 
+						      ctm->c,
+						      &dpbox);
 		if (painter) {
 			NRRect cbox;
 			NRRectL ibox;

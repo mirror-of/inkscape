@@ -89,9 +89,9 @@ nr_type_read_xft_list (void)
 		family = NULL;
 		for (j = gfamilies.length - 1; j >= 0; j--) {
 			int len;
-			len = strlen (gfamilies.names[j]);
-			if (!strncmp (gfamilies.names[j], gnames.names[i], len)) {
-				family = gfamilies.names[j];
+			len = strlen ((gchar *)(gfamilies.names[j]));
+			if (!strncmp ((gchar *)(gfamilies.names[j]), (gchar*)(gnames.names[i]), len)) {
+				family = (gchar *)(gfamilies.names[j]);
 				break;
 			}
 		}
@@ -99,7 +99,7 @@ nr_type_read_xft_list (void)
 			tdef = nr_new (NRTypeFaceDefFT2, 1);
 			tdef->def.next = NULL;
 			tdef->def.pdef = NULL;
-			nr_type_xft_build_def (tdef, gnames.names[i], family);
+			nr_type_xft_build_def (tdef, (gchar *)gnames.names[i], (gchar *)family);
 			nr_type_register ((NRTypeFaceDef *) tdef);
 		}
 	}
@@ -131,7 +131,7 @@ nr_type_xft_init (void)
 			   XFT_SCALABLE, XftTypeBool, 1, XFT_OUTLINE, XftTypeBool, 1, 0,
 			   XFT_FAMILY, 0);
 	NRXftFamilies.length = fs->nfont;
-	NRXftFamilies.names = nr_new (gchar *, NRXftFamilies.length);
+	NRXftFamilies.names = nr_new (guchar *, NRXftFamilies.length);
 	NRXftFamilies.destructor = NULL;
 	XftFontSetDestroy (fs);
 
@@ -144,7 +144,7 @@ nr_type_xft_init (void)
 				      XFT_SCALABLE, XftTypeBool, 1, XFT_OUTLINE, XftTypeBool, 1, 0,
 				      XFT_FAMILY, XFT_WEIGHT, XFT_SLANT, XFT_FILE, XFT_INDEX, 0);
 	NRXftTypefaces.length = NRXftPatterns->nfont;
-	NRXftTypefaces.names = nr_new (gchar *, NRXftTypefaces.length);
+	NRXftTypefaces.names = nr_new (guchar *, NRXftTypefaces.length);
 	NRXftTypefaces.destructor = NULL;
 	NRXftNamedict = g_hash_table_new (g_str_hash, g_str_equal);
 	NRXftFamilydict = g_hash_table_new (g_str_hash, g_str_equal);
@@ -233,10 +233,10 @@ nr_type_xft_init (void)
 				char *name = g_strdup_printf ("%s %s %s", fn, wn, sn);
 				if (!g_hash_table_lookup (NRXftNamedict, name)) {
 					if (!g_hash_table_lookup (NRXftFamilydict, fn)) {
-						NRXftFamilies.names[fpos] = g_strdup (fn);
+						NRXftFamilies.names[fpos] = (guchar *)g_strdup (fn);
 						g_hash_table_insert (NRXftFamilydict, NRXftFamilies.names[fpos++], (void *) TRUE);
 					}
-					NRXftTypefaces.names[pos++] = name;
+					NRXftTypefaces.names[pos++] = (guchar *)name;
 					g_hash_table_insert (NRXftNamedict, name, NRXftPatterns->fonts[i]);
 				} else {
 					g_free (name);

@@ -155,18 +155,23 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 	sp_document_ensure_up_to_date (doc);
 
 	mod = NULL;
-	if (direct) mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
+	if (direct) 
+	    mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
+
 #ifdef WIN32
-	if (!direct) mod = (SPModulePrint *)g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
+	if (!direct) 
+	    mod = (SPModulePrint *)g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
 #endif
 #ifdef WITH_GNOME_PRINT
-	if (!direct) mod = (SPModulePrint *)g_object_new (SP_TYPE_MODULE_PRINT_GNOME, NULL);
+	if (!direct) 
+	    mod = (SPModulePrint *)g_object_new (SP_TYPE_MODULE_PRINT_GNOME, NULL);
 #endif
-	if (!mod) mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
+	if (!mod) 
+	    mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
 
 	ret = FALSE;
 	if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->setup)
-		ret = ((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->setup (mod);
+	    ret = ((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->setup (mod);
 
 	if (ret) {
 		/* fixme: This has to go into module constructor somehow */

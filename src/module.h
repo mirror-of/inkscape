@@ -119,6 +119,7 @@ GType sp_module_get_type (void);
 /** A quick way to get the ID of a module */
 #define SP_MODULE_ID(m) (((SPModule *) (m))->id)
 
+SPModule * sp_module_new (GType type, SPRepr *repr);
 SPModule *sp_module_new_from_path (GType type, const char *path);
 
 SPModule *sp_module_ref (SPModule *mod);

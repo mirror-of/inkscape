@@ -168,7 +168,7 @@ nr_type_directory_family_list_get (NRNameList *flist)
 	}
 
 	flist->length = flen;
-	flist->names = fnames;
+	flist->names = (guchar **)fnames;
 	flist->destructor = NULL;
 
 	return flist;
@@ -222,10 +222,10 @@ nr_type_directory_style_list_get (const gchar *family, NRNameList *styles)
 		tlen = 0;
 		for (tdef = fdef->faces; tdef; tdef = tdef->next) tlen += 1;
 		styles->length = tlen;
-		styles->names = nr_new (gchar *, styles->length);
+		styles->names = nr_new (guchar *, styles->length);
 		pos = 0;
 		for (tdef = fdef->faces; tdef; tdef = tdef->next) {
-			styles->names[pos] = tdef->name;
+			styles->names[pos] = (guchar *)tdef->name;
 			pos += 1;
 		}
 	} else {
