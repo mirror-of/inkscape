@@ -1,5 +1,9 @@
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/document.cpp (sp_document_create): 
+	* src/preferences-skeleton.h:
+	  Use INKSCAPE_VERSION from inkscape_version.h instead of VERSION.
+
 	* src/libnr/nr-rotate-test.cpp: Use new rotate_equalp function. 
 
 	* src/libnr/nr-translate-ops.h (operator-): New function.

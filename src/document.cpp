@@ -24,6 +24,7 @@
 #include "helper/sp-marshal.h"
 #include "helper/sp-intl.h"
 #include "inkscape-private.h"
+#include "inkscape_version.h"
 #include "sp-object-repr.h"
 #include "sp-root.h"
 #include "sp-namedview.h"
@@ -279,7 +280,7 @@ sp_document_create (SPReprDoc *rdoc,
 
 	/* fixme: Not sure about this, but lets assume ::build updates */
 	sp_repr_set_attr (rroot, "sodipodi:version", SODIPODI_VERSION);
-	sp_repr_set_attr (rroot, "inkscape:version", VERSION);
+	sp_repr_set_attr (rroot, "inkscape:version", INKSCAPE_VERSION);
 	/* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
 
 	/* A quick hack to get namespaces into doc */

@@ -1,7 +1,10 @@
-#define __PREFERENCES_SKELETON_H__
+#ifndef SEEN_PREFERENCES_SKELETON_H
+#define SEEN_PREFERENCES_SKELETON_H
 
-static const char preferences_skeleton[] =
-"<inkscape version=\"" VERSION "\"\n"
+#include <inkscape_version.h>
+
+static char const preferences_skeleton[] =
+"<inkscape version=\"" INKSCAPE_VERSION "\"\n"
 "  xmlns:sodipodi=\"http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd\"\n"
 "  xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\">\n"
 "  <group id=\"window\">\n"
@@ -153,7 +156,10 @@ static const char preferences_skeleton[] =
 "\n"
 "</inkscape>\n";
 
-#define PREFERENCES_SKELETON_SIZE (sizeof (preferences_skeleton) - 1)
+#define PREFERENCES_SKELETON_SIZE (sizeof(preferences_skeleton) - 1)
+
+
+#endif /* !SEEN_PREFERENCES_SKELETON_H */
 
 /*
   Local Variables:
