@@ -1,3 +1,13 @@
+2005-03-18  MenTaLguY  <mental@rydia.net>
+
+	* src/file.cpp, src/sp-item-group.cpp, src/xml/Makefile_insert,
+	  src/xml/node-fns-tree.cpp, src/xml/node-fns-tree.h,
+	  src/xml/node-fns.cpp, src/xml/node-fns.h, src/xml/node-iterators.h,
+	  src/xml/repr.cpp, src/xml/simple-node.cpp:
+
+	  renamed node-fns-tree to node-fns, and moved sp_repr_prev etc
+	  into Inkscape::XML namespace (as e.g. previous_node)
+
 2005-03-18  cyreve  <cyreve@users.sourceforge.net>
 
 	* src/: make.dep, make.files, make.ofiles, libnrtype/FlowBoxes.cpp,

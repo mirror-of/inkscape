@@ -30,7 +30,7 @@
 #include <gtkmm.h>
 
 #include "macros.h"
-#include "xml/node-fns-tree.h"
+#include "xml/node-fns.h"
 #include "document.h"
 #include "document-private.h"
 #include "selection-chemistry.h"
@@ -739,7 +739,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
         // move imported defs to our document's defs
         SPObject *in_defs = SP_DOCUMENT_DEFS(in_doc);
         SPObject *defs = SP_DOCUMENT_DEFS(doc);
-        Inkscape::XML::Node *last_def = sp_repr_last_child(SP_OBJECT_REPR(in_defs));
+        Inkscape::XML::Node *last_def = SP_OBJECT_REPR(in_defs)->lastChild();
         for (SPObject *child = sp_object_first_child(defs);
              child != NULL; child = SP_OBJECT_NEXT(child))
         {

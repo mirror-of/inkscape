@@ -16,11 +16,11 @@
 #include <string.h>
 
 #include "display/nr-arena-group.h"
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-matrix-fns.h>
-#include <xml/repr.h>
-#include <xml/node-fns-tree.h>
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-matrix-fns.h"
+#include "xml/repr.h"
+#include "xml/node-fns.h"
 #include "sp-object-repr.h"
 #include "svg/svg.h"
 #include "document.h"
@@ -566,7 +566,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 	/* Step 3 - add nonitems */
 	if (objects) {
-	    Inkscape::XML::Node *last_def = sp_repr_last_child(SP_OBJECT_REPR(defs));
+	    Inkscape::XML::Node *last_def = SP_OBJECT_REPR(defs)->lastChild();
 	    while (objects) {
 		sp_repr_add_child(SP_OBJECT_REPR(defs), (Inkscape::XML::Node *) objects->data, last_def);
 		sp_repr_unref ((Inkscape::XML::Node *) objects->data);

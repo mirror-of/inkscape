@@ -13,19 +13,19 @@
 #define SEEN_INKSCAPE_XML_SP_REPR_ITERATORS_H
 
 #include "util/forward-pointer-iterator.h"
-#include "xml/repr.h"
+#include "xml/node.h"
 
 namespace Inkscape {
 namespace XML {
 
 struct NodeSiblingIteratorStrategy {
-    static Node const *next(Node const *repr) {
-        return sp_repr_next(const_cast<Node *>(repr));
+    static Node const *next(Node const *node) {
+        return ( node ? node->next() : NULL );
     }
 };
 struct NodeParentIteratorStrategy {
-    static Node const *next(Node const *repr) {
-        return sp_repr_parent(const_cast<Node *>(repr));
+    static Node const *next(Node const *node) {
+        return ( node ? node->parent() : NULL );
     }
 };
 

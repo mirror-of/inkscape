@@ -21,7 +21,7 @@
 #include "algorithms/find-if-before.h"
 #include "xml/simple-node.h"
 #include "xml/node-event-vector.h"
-#include "xml/node-fns-tree.h"
+#include "xml/node-fns.h"
 #include "xml/repr.h"
 #include "xml/node-observer.h"
 
@@ -295,7 +295,7 @@ void SimpleNode::removeChild(Node *child) {
     g_assert(child);
     g_assert(child->parent() == this);
 
-    Node *ref = ( child != _first_child ? sp_repr_prev(child) : NULL );
+    Node *ref = ( child != _first_child ? previous_node(child) : NULL );
 
     Node *next = child->next();
     if (ref) {
@@ -333,7 +333,7 @@ void SimpleNode::changeOrder(Node *child, Node *ref) {
     g_return_if_fail(child != ref);
     g_return_if_fail(!ref || ref->parent() == this);
 
-    Node *const prev = sp_repr_prev(child);
+    Node *const prev = previous_node(child);
 
     if (prev == ref) { return; }
 
