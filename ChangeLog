@@ -1,5 +1,11 @@
 2004-01-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/widgets/sp-color-notebook.cpp (getCurrentSelector): Address
+	  unsignedness warning (thus fixing a minor buglet).
+
+	* Too many files to list (58 .cpp files, phew!): Address `missing
+	  initializer for value_table' warnings.
+
 	* src/libnr/nr-values.h, src/libnr/nr-values.cpp: Add `Point
 	  component_vectors[2]' global constant (moved from desktop-snap.cpp).
 

@@ -389,7 +389,7 @@ ColorNotebook::ColorNotebook( SPColorSelector* csel )
 SPColorSelector* ColorNotebook::getCurrentSelector()
 {
     SPColorSelector* csel = NULL;
-    guint current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (_book));
+    gint current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (_book));
 
     if ( current_page >= 0 )
     {
