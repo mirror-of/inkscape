@@ -193,14 +193,18 @@ double namedview_vector_snap_list(SPNamedView const *nv, Snapper::PointType t, c
 }
 
 
-/* Try to snap points in `p' after they have been scaled by `sx' with respect to
-** the origin `norm'.
-*/
-double namedview_dim_snap_list_scale(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
-				      NR::Point const &norm, double const sx, NR::Dim2 dim)
+/**
+ *    Try to snap points in `p' after they have been scaled by `sx' with respect to
+ *    the origin `norm'.  The best snap is the one that changes the scale least.
+ *
+ *    \return Pair containing snapped scale and a flag which is true if a snap was made.
+ */
+std::pair<double, bool> namedview_dim_snap_list_scale(SPNamedView const *nv,
+                                                      Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                      NR::Point const &norm, double const sx, NR::Dim2 dim)
 {
     if (namedview_will_snap_something(nv) == false) {
-        return sx;
+        return std::make_pair(sx, false);
     }
 
     g_assert(dim < 2);
@@ -211,17 +215,27 @@ double namedview_dim_snap_list_scale(SPNamedView const *nv, Snapper::PointType t
     for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
         NR::Point q = *i;
         NR::Point check = q;
+
+        /* Scaled version of the point we are looking at */
         check[dim] = (sx * (q - norm) + norm)[dim];
+        
         if (fabs (q[dim] - norm[dim]) > MIN_DIST_NORM) {
-            const gdouble d = namedview_dim_snap (nv, t, check, dim);
-            if (d < dist) {
+            /* Snap this point */
+            const NR::Coord d = namedview_dim_snap (nv, t, check, dim);
+            /* Work out the resulting scale factor */
+            double snapped_scale = (check[dim] - norm[dim]) / (q[dim] - norm[dim]);
+            
+            if (dist == NR_HUGE || fabs(snapped_scale - sx) < fabs(scale - sx)) {
+                /* This is either the first point, or the snapped scale
+                ** is the closest yet to the original.
+                */
+                scale = snapped_scale;
                 dist = d;
-                scale = (check[dim] - norm[dim]) / (q[dim] - norm[dim]);
             }
         }
     }
 
-    return scale;
+    return std::make_pair(scale, dist < NR_HUGE);
 }
 
 double namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
