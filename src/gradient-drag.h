@@ -37,6 +37,10 @@ struct GrDraggable {
 	SPItem *item;
 	guint point_num;
 	bool fill_or_stroke;
+
+    inline int equals (GrDraggable *other) {
+		return ((item == other->item) && (point_num == other->point_num) && (fill_or_stroke == other->fill_or_stroke));
+    }
 };
 
 struct GrDrag;
@@ -83,7 +87,7 @@ struct GrDrag {
 
 	void addLine (NR::Point p1, NR::Point p2);
 
-	void addDragger (NR::Point p, GrDraggable *draggable);
+	void addDragger (GrDraggable *draggable);
 
 	void addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke);
 	void addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke);

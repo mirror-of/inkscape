@@ -563,101 +563,74 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 	}
 }
 
+/**
+Returns the position of point point_num of the gradient applied to item (either fill_or_stroke), 
+in desktop coordinates.
+*/
 
-/** Returns the first point of a linear gradient \a lg (as applied to the \item) in desktop coordinates
- */
 NR::Point
-sp_lg_get_p1(SPItem *item, SPLinearGradient *lg)
+sp_item_gradient_get_coords (SPItem *item, guint point_num, bool fill_or_stroke)
 {
-    NR::Point p1(lg->x1.computed, lg->y1.computed);
-    if (SP_GRADIENT(lg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+    SPStyle *style = SP_OBJECT_STYLE (item);
+    SPGradient *gradient = NULL;
+
+    if (fill_or_stroke) {
+        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
+            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+            if (SP_IS_GRADIENT (server)) {
+                gradient = SP_GRADIENT (server);
+            }
+        }
+    } else {
+        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
+            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
+            if (SP_IS_GRADIENT (server)) {
+                gradient = SP_GRADIENT (server);
+            }
+        }
+    }
+
+    NR::Point p (0, 0);
+
+    if (!gradient)
+        return p;
+
+    if (SP_IS_LINEARGRADIENT(gradient)) {
+        SPLinearGradient *lg = SP_LINEARGRADIENT(gradient);
+        switch (point_num) {
+            case POINT_LG_P1:
+                p = NR::Point (lg->x1.computed, lg->y1.computed);
+                break;
+            case POINT_LG_P2:
+                p = NR::Point (lg->x2.computed, lg->y2.computed);
+                break;
+        }
+    } else     if (SP_IS_RADIALGRADIENT(gradient)) {
+        SPRadialGradient *rg = SP_RADIALGRADIENT(gradient);
+        switch (point_num) {
+            case POINT_RG_CENTER:
+                p = NR::Point (rg->cx.computed, rg->cy.computed);
+                break;
+            case POINT_RG_FOCUS:
+                p = NR::Point (rg->fx.computed, rg->fy.computed);
+                break;
+            case POINT_RG_R1:
+                p = NR::Point (rg->cx.computed + rg->r.computed, rg->cy.computed);
+                break;
+            case POINT_RG_R2:
+                p = NR::Point (rg->cx.computed, rg->cy.computed - rg->r.computed);
+                break;
+        }
+    }
+
+    if (SP_GRADIENT(gradient)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
         NRRect bbox;
         sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
         sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
-        p1 *= NR::Matrix(bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+        p *= NR::Matrix(bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
     }
-    p1 *= NR::Matrix(lg->gradientTransform) * sp_item_i2d_affine(item);
-    return p1;
-}
-
-/** Returns the second point of a linear gradient \a lg (as applied to the \item) in desktop coordinates
- */
-NR::Point
-sp_lg_get_p2(SPItem *item, SPLinearGradient *lg)
-{
-    NR::Point p2(lg->x2.computed, lg->y2.computed);
-    if (SP_GRADIENT(lg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-        NRRect bbox;
-        sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
-        sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
-        p2 *= NR::Matrix(bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
-    }
-    p2 *= NR::Matrix(lg->gradientTransform) * sp_item_i2d_affine(item);
-    return p2;
-}
-
-/** Returns the center of a radial gradient \a rg (as applied to the \item) in desktop coordinates
- */
-NR::Point
-sp_rg_get_center (SPItem *item, SPRadialGradient *rg)
-{
-	NR::Point p (rg->cx.computed, rg->cy.computed);
-	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRRect bbox;
-		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
-		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
-		p *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
-	}
-	p *= NR::Matrix (rg->gradientTransform) * sp_item_i2d_affine (item);
-	return p;
-}
-
-/** Returns the focus of a radial gradient \a rg (as applied to the \item) in desktop coordinates
- */
-NR::Point
-sp_rg_get_focus (SPItem *item, SPRadialGradient *rg)
-{
-	NR::Point p (rg->fx.computed, rg->fy.computed);
-	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRRect bbox;
-		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
-		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
-		p *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
-	}
-	p *= NR::Matrix (rg->gradientTransform) * sp_item_i2d_affine (item);
-	return p;
-}
-
-/** Returns the first radius of a radial gradient \a rg (as applied to the \item) in desktop coordinates
- */
-NR::Point
-sp_rg_get_r1 (SPItem *item, SPRadialGradient *rg)
-{
-	NR::Point p (rg->cx.computed + rg->r.computed, rg->cy.computed);
-	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRRect bbox;
-		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
-		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
-		p *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
-	}
-	p *= NR::Matrix (rg->gradientTransform) * sp_item_i2d_affine (item);
-	return p;
-}
-
-/** Returns the second radius of a radial gradient \a rg (as applied to the \item) in desktop coordinates
- */
-NR::Point
-sp_rg_get_r2 (SPItem *item, SPRadialGradient *rg)
-{
-	NR::Point p (rg->cx.computed, rg->cy.computed -  + rg->r.computed);
-	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRRect bbox;
-		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
-		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
-		p *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
-	}
-	p *= NR::Matrix (rg->gradientTransform) * sp_item_i2d_affine (item);
-	return p;
+    p *= NR::Matrix(gradient->gradientTransform) * sp_item_i2d_affine(item);
+    return p;
 }
 
 

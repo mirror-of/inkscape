@@ -526,7 +526,7 @@ GrDrag::restoreSelected (GrDraggable *da1)
         GrDragger *dragger = (GrDragger *) i->data;
         for (GSList const* j = dragger->draggables; j != NULL; j = j->next) {
             GrDraggable *da2 = (GrDraggable *) j->data;
-            if (da1->item == da2->item && da1->point_num == da2->point_num && da1->fill_or_stroke == da2->fill_or_stroke) {
+            if (da1->equals (da2)) {
                 setSelected (dragger);
                 return;
             }
@@ -570,8 +570,10 @@ If there already exists a dragger within MERGE_DIST of p, add the draggable to i
 new dragger and add it to draggers list
  */
 void 
-GrDrag::addDragger (NR::Point p, GrDraggable *draggable)
+GrDrag::addDragger (GrDraggable *draggable)
 {
+    NR::Point p = sp_item_gradient_get_coords (draggable->item, draggable->point_num, draggable->fill_or_stroke);
+
     for (GSList *i = this->draggers; i != NULL; i = i->next) {
         GrDragger *dragger = (GrDragger *) i->data;
         if (NR::L2 (dragger->point - p) < MERGE_DIST) {
@@ -592,10 +594,10 @@ Add draggers for the radial gradient rg on item
 void 
 GrDrag::addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke)
 {
-    addDragger (sp_rg_get_center (item, rg), new GrDraggable (item, POINT_RG_CENTER, fill_or_stroke));
-    addDragger (sp_rg_get_focus (item, rg), new GrDraggable (item, POINT_RG_FOCUS, fill_or_stroke));
-    addDragger (sp_rg_get_r1(item, rg), new GrDraggable (item, POINT_RG_R1, fill_or_stroke));
-    addDragger (sp_rg_get_r2(item, rg), new GrDraggable (item, POINT_RG_R2, fill_or_stroke));
+    addDragger (new GrDraggable (item, POINT_RG_CENTER, fill_or_stroke));
+    addDragger (new GrDraggable (item, POINT_RG_FOCUS, fill_or_stroke));
+    addDragger (new GrDraggable (item, POINT_RG_R1, fill_or_stroke));
+    addDragger (new GrDraggable (item, POINT_RG_R2, fill_or_stroke));
 }
 
 /**
@@ -604,8 +606,8 @@ Add draggers for the linear gradient lg on item
 void 
 GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke)
 {
-    addDragger (sp_lg_get_p1 (item, lg), new GrDraggable (item, POINT_LG_P1, fill_or_stroke));
-    addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, fill_or_stroke));
+    addDragger (new GrDraggable (item, POINT_LG_P1, fill_or_stroke));
+    addDragger (new GrDraggable (item, POINT_LG_P2, fill_or_stroke));
 }
 
 
@@ -697,27 +699,22 @@ GrDrag::updateLines ()
         if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
-                SPLinearGradient *lg = SP_LINEARGRADIENT (server);
-                this->addLine (sp_lg_get_p1 (item, lg), sp_lg_get_p2 (item, lg));
+                this->addLine (sp_item_gradient_get_coords (item, POINT_LG_P1, true), sp_item_gradient_get_coords (item, POINT_LG_P2, true));
             } else if (SP_IS_RADIALGRADIENT (server)) {
-                SPRadialGradient *rg = SP_RADIALGRADIENT (server);
-                NR::Point center = sp_rg_get_center (item, rg);
-                this->addLine (center, sp_rg_get_r1 (item, rg));
-                this->addLine (center, sp_rg_get_r2 (item, rg));
+                NR::Point center = sp_item_gradient_get_coords (item, POINT_RG_CENTER, true);
+                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R1, true));
+                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R2, true));
             }
         }
 
         if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
-                SPLinearGradient *lg = SP_LINEARGRADIENT (server);
-
-                this->addLine (sp_lg_get_p1 (item, lg), sp_lg_get_p2 (item, lg));
+                this->addLine (sp_item_gradient_get_coords (item, POINT_LG_P1, false), sp_item_gradient_get_coords (item, POINT_LG_P2, false));
             } else if (SP_IS_RADIALGRADIENT (server)) {
-                SPRadialGradient *rg = SP_RADIALGRADIENT (server);
-                NR::Point center = sp_rg_get_center (item, rg);
-                this->addLine (center, sp_rg_get_r1 (item, rg));
-                this->addLine (center, sp_rg_get_r2 (item, rg));
+                NR::Point center = sp_item_gradient_get_coords (item, POINT_RG_CENTER, false);
+                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R1, false));
+                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R2, false));
             }
         }
     }

@@ -55,13 +55,7 @@ SPGradient *sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, cons
 void sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool set);
 
 void sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_desk, bool fill_or_stroke, bool write_repr);
-
-NR::Point sp_lg_get_p1 (SPItem *item, SPLinearGradient *lg);
-NR::Point sp_lg_get_p2 (SPItem *item, SPLinearGradient *lg);
-NR::Point sp_rg_get_center (SPItem *item, SPRadialGradient *rg);
-NR::Point sp_rg_get_focus (SPItem *item, SPRadialGradient *rg);
-NR::Point sp_rg_get_r1 (SPItem *item, SPRadialGradient *rg);
-NR::Point sp_rg_get_r2 (SPItem *item, SPRadialGradient *rg);
+NR::Point sp_item_gradient_get_coords (SPItem *item, guint point_num, bool fill_or_stroke);
 
 #endif
 
