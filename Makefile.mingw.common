@@ -1,8 +1,8 @@
 
+VERSION=0.37cvs
+
 CC = gcc
 CXX = g++
-
-GTK = c:\gtk
 
 #GTKINC = -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include \
 #-I/usr/include/atk-1.0 -I/usr/include/pango-1.0 -I/usr/X11R6/include \
@@ -12,6 +12,8 @@ GTK = c:\gtk
 # -lm -lpangoxft-1.0 -lpangox-1.0 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0
 
 GTK=c:/gtk
+#Same thing, DOS style
+GTKDOS=c:\gtk
 
 GTKINC = -I$(GTK)/include/gtk-2.0 -I$(GTK)/lib/gtk-2.0/include \
 -I$(GTK)/include/atk-1.0 -I$(GTK)/include/pango-1.0 \

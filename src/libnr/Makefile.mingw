@@ -27,3 +27,5 @@ nr_config.h: nr_config.h.mingw
 clean:
 	$(RM) *.o
 	$(RM) *.a
+	$(RM) nr_config.h
+

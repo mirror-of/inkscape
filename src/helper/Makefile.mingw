@@ -27,3 +27,5 @@ sp-marshal.o: sp-marshal.cpp.mingw
 clean:
 	$(RM) *.o
 	$(RM) *.a
+	$(RM) sp-marshal.h
+	$(RM) sp-marshal.cpp
