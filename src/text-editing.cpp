@@ -303,6 +303,33 @@ static SPString* sp_te_seek_next_string_recursive(SPObject *start_obj)
     return NULL;
 }
 
+/** inserts the given characters into the given string and inserts
+corresponding new x/y/dx/dy/rotate attributes into all its parents. */
+static void insert_into_spstring(SPString *string_item, Glib::ustring::iterator iter_at, gchar const *utf8)
+{
+    unsigned char_index = 0;
+    unsigned char_count = g_utf8_strlen(utf8, -1);
+    Glib::ustring *string = &SP_STRING(string_item)->string;
+
+    for (Glib::ustring::iterator it = string->begin() ; it != iter_at ; it++)
+        char_index++;
+    string->replace(iter_at, iter_at, utf8);
+
+    SPObject *parent_item = string_item;
+    for ( ; ; ) {
+        parent_item = SP_OBJECT_PARENT(parent_item);
+        TextTagAttributes *attributes;
+        if (SP_IS_TEXT(parent_item)) attributes = &SP_TEXT(parent_item)->attributes;
+        else if(SP_IS_TSPAN(parent_item)) attributes = &SP_TSPAN(parent_item)->attributes;
+        else if(SP_IS_TEXTPATH(parent_item)) attributes = &SP_TEXTPATH(parent_item)->attributes;
+        else break;
+
+        attributes->insert(char_index, char_count);
+        for (SPObject *sibling = SP_OBJECT_PARENT(parent_item)->firstChild() ; sibling && sibling != parent_item ; sibling = SP_OBJECT_NEXT(sibling))
+            char_index += sp_text_get_length(sibling);
+    }
+}
+
 /**
  * \pre \a utf8[] is valid UTF-8 text.
 Returns position after inserted
@@ -325,9 +352,8 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
     layout->getSourceOfCharacter(it, (void**)&source_obj, &iter_text);
     if (SP_IS_STRING(source_obj)) {
         // the simple case
-        Glib::ustring *string = &SP_STRING(source_obj)->string;
         if (!cursor_at_start) iter_text++;
-        string->replace(iter_text, iter_text, utf8);
+        insert_into_spstring(SP_STRING(source_obj), iter_text, utf8);
     } else {
         // the not-so-simple case where we're at a line break or other control char; add to the next child/sibling SPString
         if (cursor_at_start) {
@@ -347,7 +373,7 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
                 g_assert(SP_IS_STRING(source_obj->firstChild()));
                 string_item = SP_STRING(source_obj->firstChild());
             }
-            SP_STRING(string_item)->string.insert(0, utf8);
+            insert_into_spstring(string_item, string_item->string.begin(), utf8);
         }
     }
 
@@ -494,6 +520,35 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
     return next_item;
 }
 
+/** erases the given characters from the given string and deletes the
+corresponding x/y/dx/dy/rotate attributes from all its parents. */
+static void erase_from_spstring(SPString *string_item, Glib::ustring::iterator iter_from, Glib::ustring::iterator iter_to)
+{
+    unsigned char_index = 0;
+    unsigned char_count = 0;
+    Glib::ustring *string = &SP_STRING(string_item)->string;
+
+    for (Glib::ustring::iterator it = string->begin() ; it != iter_from ; it++)
+        char_index++;
+    for (Glib::ustring::iterator it = iter_from ; it != iter_to ; it++)
+        char_count++;
+    string->erase(iter_from, iter_to);
+
+    SPObject *parent_item = string_item;
+    for ( ; ; ) {
+        parent_item = SP_OBJECT_PARENT(parent_item);
+        TextTagAttributes *attributes;
+        if (SP_IS_TEXT(parent_item)) attributes = &SP_TEXT(parent_item)->attributes;
+        else if(SP_IS_TSPAN(parent_item)) attributes = &SP_TSPAN(parent_item)->attributes;
+        else if(SP_IS_TEXTPATH(parent_item)) attributes = &SP_TEXTPATH(parent_item)->attributes;
+        else break;
+
+        attributes->erase(char_index, char_count);
+        for (SPObject *sibling = SP_OBJECT_PARENT(parent_item)->firstChild() ; sibling && sibling != parent_item ; sibling = SP_OBJECT_NEXT(sibling))
+            char_index += sp_text_get_length(sibling);
+    }
+}
+
 /* Returns start position */
 gint
 sp_te_delete (SPItem *item, gint i_start, gint i_end)
@@ -520,7 +575,7 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
     if (start_item == end_item) {
         // the quick case where we're deleting stuff all from the same string
         if (SP_IS_STRING(start_item)) {     // always true (if it_start != it_end anyway)
-            SP_STRING(start_item)->string.erase(start_text_iter, end_text_iter);
+            erase_from_spstring(SP_STRING(start_item), start_text_iter, end_text_iter);
         }
     } else {
         SPObject *sub_item = start_item;
@@ -529,7 +584,7 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
             if (sub_item == end_item) {
                 if (SP_IS_STRING(sub_item)) {
                     Glib::ustring *string = &SP_STRING(sub_item)->string;
-                    string->erase(string->begin(), end_text_iter);
+                    erase_from_spstring(SP_STRING(sub_item), string->begin(), end_text_iter);
                     SPObject *prev_item = SP_OBJECT_PREV(sub_item);
                     if (merge_nodes_if_possible(prev_item, sub_item))
                         sub_item = prev_item;
@@ -550,11 +605,11 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
                 break;
             }
             if (SP_IS_STRING(sub_item)) {
-                Glib::ustring *string = &SP_STRING(sub_item)->string;
+                SPString *string = SP_STRING(sub_item);
                 if (sub_item == start_item)
-                    string->erase(start_text_iter, string->end());
+                    erase_from_spstring(string, start_text_iter, string->string.end());
                 else
-                    string->erase();
+                    erase_from_spstring(string, string->string.begin(), string->string.end());
             }
             // walk to the next item in the tree
             if (sub_item->hasChildren())
@@ -704,20 +759,12 @@ sp_te_adjust_kerning_screen (SPItem *item, gint i_position, SPDesktop *desktop, 
     NR::Matrix t = sp_item_i2doc_affine(text);
     factor = factor / NR::expansion(t);
     by = factor * by;
-    // need to change the dx/dy in all the ancestors too, so that if the topmost span ever gets deleted the
-    // following text will keep the new kern
-    for ( ; ; ) {
-        source_item = SP_OBJECT_PARENT(source_item);
-        TextTagAttributes *attributes;
-        if (SP_IS_TEXT(source_item)) attributes = &SP_TEXT(source_item)->attributes;
-        else if(SP_IS_TSPAN(source_item)) attributes = &SP_TSPAN(source_item)->attributes;
-        else if(SP_IS_TEXTPATH(source_item)) attributes = &SP_TEXTPATH(source_item)->attributes;
-        else break;
 
-        attributes->addToDxDy(char_index, by);
-        for (SPObject *sibling = SP_OBJECT_PARENT(source_item)->firstChild() ; sibling && sibling != source_item ; sibling = SP_OBJECT_NEXT(sibling))
-            char_index += sp_text_get_length(sibling);
-    }
+    source_item = SP_OBJECT_PARENT(source_item);
+    if (SP_IS_TEXT(source_item)) SP_TEXT(source_item)->attributes.addToDxDy(char_index, by);
+    else if(SP_IS_TSPAN(source_item)) SP_TSPAN(source_item)->attributes.addToDxDy(char_index, by);
+    else if(SP_IS_TEXTPATH(source_item)) SP_TEXTPATH(source_item)->attributes.addToDxDy(char_index, by);
+
     text->updateRepr();
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
