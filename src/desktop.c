@@ -773,6 +773,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	dtw->coord_status = gtk_statusbar_new ();
 	gtk_widget_set_usize (dtw->coord_status, 128, 0);
 	gtk_statusbar_push (GTK_STATUSBAR (dtw->coord_status), 0, "");
+	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->coord_status), FALSE);
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->coord_status, FALSE, FALSE, 2);
 
 	dtw->select_status = gtk_statusbar_new ();
