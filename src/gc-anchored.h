@@ -44,7 +44,7 @@ class Anchored {
 public:
     void anchor() const {
         if (!_anchor) {
-            _anchor = new Anchor(GC_base(this));
+            _anchor = new Anchor(GC_base(const_cast<Anchored *>(this)));
         }
         _anchor->refcount++;
     }
