@@ -207,6 +207,7 @@ SPCSSAttr *sp_repr_css_attr_inherited(Inkscape::XML::Node *repr, gchar const *at
 
 gchar const *sp_repr_css_property(SPCSSAttr *css, gchar const *name, gchar const *defval);
 void sp_repr_css_set_property(SPCSSAttr *css, gchar const *name, gchar const *value);
+void sp_repr_css_unset_property(SPCSSAttr *css, gchar const *name);
 double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double defval);
 
 void sp_repr_css_set(Inkscape::XML::Node *repr, SPCSSAttr *css, gchar const *key);

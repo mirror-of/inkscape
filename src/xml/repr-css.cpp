@@ -116,6 +116,15 @@ sp_repr_css_set_property (SPCSSAttr * css, const gchar * name, const gchar * val
 	sp_repr_set_attr ((Node *) css, name, value);
 }
 
+void
+sp_repr_css_unset_property (SPCSSAttr * css, const gchar * name)
+{
+	g_assert (css != NULL);
+	g_assert (name != NULL);
+
+	sp_repr_set_attr ((Node *) css, name, "inkscape:unset");
+}
+
 double
 sp_repr_css_double_property (SPCSSAttr * css, const gchar * name, double defval)
 {
@@ -137,6 +146,10 @@ sp_repr_css_set (Node * repr, SPCSSAttr * css, const gchar * attr)
 	for ( List<AttributeRecord const> iter = css->attributeList() ;
 	      iter ; ++iter )
 	{
+		if (iter->value && !strcmp(iter->value, "inkscape:unset")) {
+			continue;
+		}
+
 		buffer.append(g_quark_to_string(iter->key));
 		buffer.push_back(':');
 		buffer.append(iter->value);
