@@ -1,3 +1,10 @@
+2004-01-30  Kees Cook  <kees@outflux.net>
+
+	* src/make.dep, src/make.exclude, src/make.files, src/make.ofiles,
+	  src/io/uristream.cpp, src/io/sys.cpp: additional win32 changes
+	  using Jon Cruz's new mkdir function.  Getting Win32 to compile the
+	  "io" directory.
+
 2004-01-28  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-object.h, src/sp-object.cpp:

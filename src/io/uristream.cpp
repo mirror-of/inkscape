@@ -13,7 +13,11 @@
 
 #include "uristream.h"
 
-
+#ifdef WIN32
+// For now to get at is_os_wide().
+# include "extension/internal/win32.h"
+using Inkscape::Extension::Internal::PrintWin32;
+#endif
 
 
 namespace Inkscape

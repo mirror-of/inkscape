@@ -11,9 +11,13 @@
  */
 
 
-#include <config.h>
-#include <sys/stat.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <glib.h>
 #include <gtkmm.h>
 #include <gtk/gtkdialog.h>
@@ -29,7 +33,6 @@
 using Inkscape::Extension::Internal::PrintWin32;
 
 #endif
-
 
 //#define INK_DUMP_FILENAME_CONV 1
 #undef INK_DUMP_FILENAME_CONV
@@ -220,7 +223,7 @@ int Inkscape::IO::mkdir_utf8name( char const *utf8name )
         DEBUG_MESSAGE( dumpMk, "           is_os_wide() false  ( '%s' )[%d]", utf8name, (counter++) );
         gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
         DEBUG_MESSAGE( dumpMk, "           STEP 1              ( '%s' )[%d]", utf8name, (counter++) );
-        retval = std::mkdir(filename);
+        retval = ::mkdir(filename);
         DEBUG_MESSAGE( dumpMk, "           STEP 2              ( '%s' )[%d]", utf8name, (counter++) );
         g_free(filename);
         DEBUG_MESSAGE( dumpMk, "           STEP 3              ( '%s' )[%d]", utf8name, (counter++) );
