@@ -433,6 +433,8 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
         }
         rc.item = (SPItem *) desktop->currentLayer()->appendChildRepr(repr);
         sp_repr_unref(repr);
+        rc.item->transform = NRMatrix(SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer()));
+        rc.item->updateRepr();
     }
 
     NR::Point p0, p1;

@@ -17,6 +17,8 @@
 #include <math.h>
 #include <string.h>
 
+#include <list>
+
 #include "macros.h"
 #include "svg/svg.h"
 #include "print.h"
@@ -124,6 +126,28 @@ sp_item_init(SPItem *item)
     if (!object->style) object->style = sp_style_new_from_object(SP_OBJECT(item));
 
     new (&item->_transformed_signal) SigC::Signal2<void, NR::Matrix const *, SPItem *>();
+}
+
+namespace {
+
+NR::Matrix partial_xform(SPObject *object, SPObject *ancestor) {
+    NR::Matrix xform=NR::identity();
+    while ( object != ancestor ) {
+        if (SP_IS_ITEM(object)) {
+            xform = xform * NR::Matrix(SP_ITEM(object)->transform);
+        }
+        object = SP_OBJECT_PARENT(object);
+    }
+    return xform;
+}
+
+NR::Matrix SPItem::getRelativeTransform(SPObject *object) {
+    g_return_val_if_fail(object != NULL, NR::identity());
+    SPObject *ancestor=this->nearestCommonAncestor(object);
+    return partial_xform(this, ancestor) *
+           partial_xform(object, ancestor).inverse();
+}
+
 }
 
 static void

@@ -580,8 +580,10 @@ set_to_accumulated(SPDynaDrawContext *dc)
             }
             dc->repr = repr;
 
-            desktop->currentLayer()->appendChildRepr(dc->repr);
+            SPItem *item=SP_ITEM(desktop->currentLayer()->appendChildRepr(dc->repr));
             sp_repr_unref(dc->repr);
+            item->transform = NRMatrix(SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer()));
+            item->updateRepr();
             SP_DT_SELECTION(desktop)->setRepr(dc->repr);
         }
         abp = nr_artpath_affine(sp_curve_first_bpath(dc->accumulated), sp_desktop_dt2root_affine(desktop));

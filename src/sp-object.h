@@ -146,6 +146,7 @@ struct SPObject : public GObject {
 	SPStyle *style;
 
 	bool isAncestorOf(SPObject *object);
+	SPObject *nearestCommonAncestor(SPObject *object);
 
 	SPObject *firstChild() { return children; }
 

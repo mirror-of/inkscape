@@ -5,6 +5,23 @@
 	  src/xml/repr.cpp, src/xml/sp-repr-attr.h: applied peter's patch to
 	  break out NRReprAttr
 
+	* src/sp-object.cpp, src/sp-object.h:
+
+	  added SPObject::nearestCommonAncestor, which given another SPObject
+	  returns the nearest common ancestor of the two SPObjects.
+
+	* src/sp-item.cpp, src/sp-item.h:
+
+	  added SPItem::getRelativeTransform, which computes the SPItem's
+	  transform relative to another SPObject
+
+	* src/arc-context.cpp, src/draw-context.cpp, src/dyna-draw-context.cpp,
+	  src/rect-context.cpp, src/spiral-context.cpp, src/star-context.cpp,
+	  src/text-context.cpp:
+
+	  drawing tools now cope with drawing within transformed groups
+	  (i.e. layers)
+
 2004-06-27  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-object.h: remove sp_object_request_update,

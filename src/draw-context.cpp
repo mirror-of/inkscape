@@ -626,9 +626,11 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
 
         if (!dc->white_item) {
             /* Attach repr */
-            dt->currentLayer()->appendChildRepr(repr);
+            SPItem *item = SP_ITEM(dt->currentLayer()->appendChildRepr(repr));
             dc->selection->setRepr(repr);
             sp_repr_unref(repr);
+            item->transform = NRMatrix(SP_ITEM(dt->currentRoot())->getRelativeTransform(dt->currentLayer()));
+            item->updateRepr();
         }
 
         sp_document_done(doc);

@@ -99,7 +99,9 @@ struct SPItem : public SPObject {
 
 	SigC::Signal2<void, NR::Matrix const *, SPItem *> _transformed_signal;
 
-       SigC::Connection connectTransformed(SigC::Slot2<void, NR::Matrix const *, SPItem *> slot) {
+	NR::Matrix getRelativeTransform(SPObject *obj);
+
+	SigC::Connection connectTransformed(SigC::Slot2<void, NR::Matrix const *, SPItem *> slot) {
                 return _transformed_signal.connect(slot);
         }
 };
