@@ -64,7 +64,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS COPYING ChangeLog NEWS README
+%doc AUTHORS COPYING ChangeLog NEWS README doc/keys.html
 %{_bindir}/inkscape
 %{_bindir}/inkview
 %{_datadir}/applications/inkscape.desktop
