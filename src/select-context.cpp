@@ -695,9 +695,11 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 			break;
  		case GDK_bracketleft:
 			sp_selection_rotate (selection, 180/snaps);
+			ret = TRUE;
 			break;
  		case GDK_bracketright:
 			sp_selection_rotate (selection, -180/snaps);
+			ret = TRUE;
 			break;
  		}
 	  break;

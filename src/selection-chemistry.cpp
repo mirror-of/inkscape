@@ -874,6 +874,9 @@ sp_selection_rotate (SPSelection *selection, gdouble angle)
 	center.y = 0.5 * (bbox.y0 + bbox.y1);
 
 	sp_selection_rotate_relative (selection, &center, angle);
+
+	sp_selection_changed (selection);
+	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
 }
 
 void
