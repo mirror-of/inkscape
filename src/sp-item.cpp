@@ -1,8 +1,9 @@
 #define __SP_ITEM_C__
 
-/*
+/** \file
  * Base class for visual SVG elements
- *
+ */
+/*
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -776,10 +777,10 @@ static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform
 
 
 /**
- * Requires: \a ancestor really is an ancestor (>=) of \a object.
- *   ("Ancestor (>=)" here includes as far as \a object itself.)
+ * \pre \a ancestor really is an ancestor (\>=) of \a object.
+ *   ("Ancestor (\>=)" here includes as far as \a object itself.)
  *
- * Requires: in_same_coordsys_as_anc(object, ancestor).
+ * \pre in_same_coordsys_as_anc(object, ancestor).
  */
 NR::Matrix
 i2anc_affine(SPObject const *object, SPObject const *const ancestor) {
@@ -815,7 +816,7 @@ NR::Matrix SPItem::getRelativeTransform(SPObject const *dest) const {
 
 /**
  * Returns the accumulated transformation of the item and all its ancestors, including root's viewport.
- * Requires: item != NULL && SP_IS_ITEM(item).
+ * \pre (item != NULL) and SP_IS_ITEM(item).
  */
 NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 {
@@ -851,7 +852,7 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 /**
  * Returns the accumulated transformation of the item and all its ancestors, but excluding root's viewport.
  * Used in path operations mostly.
- * Requires: item != NULL && SP_IS_ITEM(item).
+ * \pre (item != NULL) and SP_IS_ITEM(item).
  */
 NR::Matrix sp_item_i2root_affine(SPItem const *item)
 {
