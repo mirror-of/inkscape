@@ -157,6 +157,8 @@ sp_event_context_update_cursor(SPEventContext *ec)
             GdkBitmap *mask = NULL;
             sp_cursor_bitmap_and_mask_from_xpm(&bitmap, &mask, ec->cursor_shape);
             if ((bitmap != NULL) && (mask != NULL)) {
+                if (ec->cursor)
+                    gdk_cursor_unref (ec->cursor);
                 ec->cursor = gdk_cursor_new_from_pixmap(bitmap, mask,
                                                         &w->style->black, &w->style->white,
                                                         ec->hot_x, ec->hot_y);
