@@ -27,6 +27,8 @@ potrace_libpotrace_a_SOURCES =	\
 	potrace/graymap.h	\
 	potrace/rgbmap.cpp	\
 	potrace/rgbmap.h	\
+	potrace/quantize.cpp	\
+	potrace/quantize.h	\
 	potrace/greymap.cpp \
 	potrace/greymap.h \
 	potrace/inkscape-potrace.cpp	\

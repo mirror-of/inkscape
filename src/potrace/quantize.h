@@ -1,8 +1,8 @@
-#ifndef __CANNY_H__
-#define __CANNY_H__
+#ifndef __QUANTIZE_H__
+#define __QUANTIZE_H__
 
 #include "graymap.h"
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include "rgbmap.h"
 
 #ifndef TRUE
 #define TRUE  1
@@ -13,7 +13,7 @@
 #endif
 
 /*#########################################################################
-### C A N N Y    E D G E    D E T E C T I O N
+### Q U A N T I Z E
 #########################################################################*/
 
 
@@ -22,12 +22,7 @@
 extern "C" {
 #endif
 
-GrayMap *grayMapCanny(GrayMap *gm, 
-             double lowThreshold, double highThreshold);
-
-GdkPixbuf *gdkCanny(GdkPixbuf *img,
-            double lowThreshold, double highThreshold);
-
+GrayMap *quantizeBand(RgbMap *rgbmap, int nrColors);
 
 
 #ifdef __cplusplus
@@ -35,7 +30,7 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img,
 #endif
 
 
-#endif /* __CANNY_H__ */
+#endif /* __QUANTIZE_H__ */
 
 /*#########################################################################
 ### E N D    O F    F I L E

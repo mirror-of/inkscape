@@ -42,6 +42,23 @@ class PotraceTracingEngine : public TracingEngine
     /**
      * Do I use the brightness threshold to make line art?
      */
+    void setUseQuantization(bool val)
+        {
+        useQuantization = val;
+        }
+
+    /**
+     * Sets the halfway point for black/white
+     */
+    void setQuantizationNrColors(int val)
+        {
+        quantizationNrColors = val;
+        }
+
+
+    /**
+     * Do I use the brightness threshold to make line art?
+     */
     void setUseBrightness(bool val)
         {
         useBrightness = val;
@@ -100,6 +117,10 @@ class PotraceTracingEngine : public TracingEngine
 
 
     private:
+
+    //## quantization items
+    bool useQuantization;
+    int quantizationNrColors;
 
     //## brightness items
     bool useBrightness;

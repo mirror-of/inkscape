@@ -10,6 +10,7 @@
 
 //## New stuff - bob
 #include "canny.h"
+#include "quantize.h"
 #include "imagemap-gdk.h"
 
 #include <inkscape.h>
@@ -39,12 +40,15 @@ PotraceTracingEngine::PotraceTracingEngine()
 {
 
     //##### Our defaults
-    useBrightness       = true;
-    brightnessThreshold = 0.5;
+    useQuantization      = false;
+    quantizationNrColors = 16;
 
-    useCanny            = false;
-    cannyHighThreshold  = 0.65;
-    cannyLowThreshold   = 0.1;
+    useBrightness        = true;
+    brightnessThreshold  = 0.5;
+
+    useCanny             = false;
+    cannyHighThreshold   = 0.65;
+    cannyLowThreshold    = 0.1;
 
 
     //##### Potrace's defaults
@@ -133,13 +137,21 @@ PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
     if (!pixbuf)
         return NULL;
 
-    GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
-
-    GrayMap *newGm = NULL;
-
-    if (useBrightness)
+    /*### Color quantization -- banding ###*/
+    if (useQuantization)
         {
-        newGm = GrayMapCreate(gm->width, gm->height);
+        RgbMap *rgbmap = gdkPixbufToRgbMap(pixbuf);
+        GrayMap *newGm = quantizeBand(rgbmap, quantizationNrColors);
+        rgbmap->destroy(rgbmap);
+        return newGm;
+        }
+
+    /*### Brightness threshold ###*/
+    else if (useBrightness)
+        {
+        GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
+
+        GrayMap *newGm = GrayMapCreate(gm->width, gm->height);
         double cutoff =  3.0 * ( brightnessThreshold * 256.0 );
         for (int y=0 ; y<gm->height ; y++)
             {
@@ -153,17 +165,23 @@ PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
                 }
             }
 
+        gm->destroy(gm);
         //newGm->writePPM(newGm, "brightness.ppm");
+        return newGm;
         }
+
+    /*### Canny edge detection ###*/
     else if (useCanny)
         {
-        newGm = grayMapCanny(gm, cannyLowThreshold, cannyHighThreshold);
+        GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
+        GrayMap *newGm = grayMapCanny(gm, cannyLowThreshold, cannyHighThreshold);
+        gm->destroy(gm);
         //newGm->writePPM(newGm, "canny.ppm");
+        return newGm;
         }
 
-    gm->destroy(gm);
 
-    return newGm;
+    return NULL;//none of the above
 }
 
 GdkPixbuf *
