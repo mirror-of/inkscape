@@ -59,6 +59,7 @@ static void sp_shape_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transfor
 void sp_shape_print (SPItem * item, SPPrintContext * ctx);
 static NRArenaItem *sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_shape_hide (SPItem *item, unsigned int key);
+static std::vector<NR::Point> sp_shape_snappoints (SPItem *item);
 
 static void sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai);
 static int sp_shape_has_markers (SPShape* shape);
@@ -108,6 +109,7 @@ sp_shape_class_init (SPShapeClass *klass)
 	item_class->print = sp_shape_print;
 	item_class->show = sp_shape_show;
 	item_class->hide = sp_shape_hide;
+        item_class->snappoints = sp_shape_snappoints;
 }
 
 static void
@@ -872,6 +874,32 @@ sp_shape_adjust_stroke (SPItem *item, gdouble ex)
         SP_OBJECT(item)->updateRepr();
     }
 }
+
+
+static std::vector<NR::Point> sp_shape_snappoints(SPItem* item)
+{
+    g_assert(item != NULL);
+    g_assert(SP_IS_SHAPE(item));
+
+    std::vector<NR::Point> p;
+
+    SPShape *shape = SP_SHAPE(item);
+    if (shape->curve == NULL) {
+        return p;
+    }
+
+    NR::Matrix const i2d (sp_item_i2d_affine (item));
+
+    /* Use the end points of each segment of the path */
+    NArtBpath const *bp = shape->curve->bpath;
+    while (bp->code != NR_END) {
+        p.push_back(NR::Point(bp->x3, bp->y3) * i2d);
+        bp++;
+    }
+
+    return p;
+}
+
 
 
 /*
