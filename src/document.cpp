@@ -450,46 +450,50 @@ sp_document_height (SPDocument * document)
 }
 
 void
-sp_document_set_uri (SPDocument *doc, const gchar *uri)
+sp_document_set_uri (SPDocument *document, const gchar *uri)
 {
-	g_return_if_fail (doc != NULL);
-	g_return_if_fail (SP_IS_DOCUMENT (doc));
+	g_return_if_fail (document != NULL);
+	g_return_if_fail (SP_IS_DOCUMENT (document));
 
-	if (doc->name) {
-		g_free (doc->name);
-		doc->name = NULL;
+	if (document->name) {
+		g_free (document->name);
+		document->name = NULL;
 	}
-	if (doc->base) {
-		g_free (doc->base);
-		doc->base = NULL;
+	if (document->base) {
+		g_free (document->base);
+		document->base = NULL;
 	}
-	if (doc->uri) {
-		g_free (doc->uri);
-		doc->uri = NULL;
+	if (document->uri) {
+		g_free (document->uri);
+		document->uri = NULL;
 	}
 
 	if (uri) {
-		gchar *s, *p;
-		doc->uri = g_strdup (uri);
+
+#ifndef WIN32
+		// compute absolute path
+		char *full_path;
+		full_path = (char *) g_malloc (1000);
+		inkscape_rel2abs (uri, g_get_current_dir(), full_path, 1000);
+		document->uri = g_strdup (full_path);
+		g_free (full_path);
+#else
+	//TODO:WIN32: program the windows equivalent of the above code for finding out 
+	// the normalized absolute path of the file, including the drive letter
+		document->uri = g_strdup (uri);
+#endif
+	
 		/* fixme: Think, what this means for images (Lauris) */
-		s = g_strdup (uri);
-		p = strrchr (s, '/');
-		if (p) {
-			doc->name = g_strdup (p + 1);
-			p[1] = '\0';
-			doc->base = g_strdup (s);
-		} else {
-			doc->base = NULL;
-			doc->name = g_strdup (doc->uri);
-		}
-		g_free (s);
+		document->base = g_path_get_dirname (document->uri);
+		document->name = g_path_get_basename (document->uri);
+
 	} else {
-		doc->uri = g_strdup_printf (_("Unnamed document %d"), ++doc_count);
-		doc->base = NULL;
-		doc->name = g_strdup (doc->uri);
+		document->uri = g_strdup_printf (_("Unnamed document %d"), ++doc_count);
+		document->base = NULL;
+		document->name = g_strdup (document->uri);
 	}
 
-	g_signal_emit (G_OBJECT (doc), signals [URI_SET], 0, doc->uri);
+	g_signal_emit (G_OBJECT (document), signals [URI_SET], 0, document->uri);
 }
 
 void
