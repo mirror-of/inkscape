@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-19 14:39+0200\n"
+"POT-Creation-Date: 2004-06-22 22:02+0200\n"
 "PO-Revision-Date: 2003-03-03 14:59+0100\n"
 "Last-Translator: Alessio Frusciante <algol@firenze.linux.it>\n"
 "Language-Team: Italiano <tp@lists.linux.it>\n"
@@ -54,28 +54,28 @@ msgid "Zoom"
 msgstr "Ingrandimento"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:847
+#: src/desktop.cpp:848
 msgid "Cursor coordinates"
 msgstr ""
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:857
+#: src/desktop.cpp:858
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:896
+#: src/desktop.cpp:897
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:898
+#: src/desktop.cpp:899
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1035
+#: src/desktop.cpp:1041
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -84,11 +84,11 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1049 src/desktop.cpp:1108
+#: src/desktop.cpp:1055 src/desktop.cpp:1114
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1093
+#: src/desktop.cpp:1099
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -97,25 +97,25 @@ msgid ""
 "Do you want to save this file in another format?"
 msgstr ""
 
-#: src/desktop.cpp:1450
+#: src/desktop.cpp:1456
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1479
+#: src/desktop.cpp:1485
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1876 src/dialogs/align.cpp:445
+#: src/desktop.cpp:1884 src/dialogs/align.cpp:445
 #: src/dialogs/desktop-properties.cpp:609 src/dialogs/export.cpp:277
 msgid "Page"
 msgstr "Pagina"
 
-#: src/desktop.cpp:1880 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
+#: src/desktop.cpp:1888 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
 msgid "Drawing"
 msgstr "Disegno"
 
-#: src/desktop.cpp:1884 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
+#: src/desktop.cpp:1892 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
 msgid "Selection"
 msgstr "Selezione"
 
@@ -309,7 +309,8 @@ msgid "Snap points to guides"
 msgstr "Muoviti sulla griglia"
 
 #: src/dialogs/desktop-properties.cpp:600
-msgid "Guides color:"
+#, fuzzy
+msgid "Guide color:"
 msgstr "Colore delle guide:"
 
 #: src/dialogs/desktop-properties.cpp:601
@@ -391,7 +392,7 @@ msgstr "Unità:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1365
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1361
 #: src/toolbox.cpp:1573
 msgid "Width:"
 msgstr "Larghezza:"
@@ -474,7 +475,7 @@ msgstr "Muoviti sulla griglia"
 #: src/dialogs/display-settings.cpp:263
 msgid ""
 "Default action is to snap the points of objects to the grid, even if the "
-"object was not previously snapped.  Shift-drag selects the alternative "
+"object was not previously snapped.  Shift+drag selects the alternative "
 "behaviour."
 msgstr ""
 
@@ -485,7 +486,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:271
 msgid ""
 "Default action is to snap objects to having the same offset from the grid as "
-"they did before the move.  Shift-drag selects the alternative behaviour."
+"they did before the move.  Shift+drag selects the alternative behaviour."
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:323
@@ -725,13 +726,12 @@ msgid "Shapes"
 msgstr "Forma"
 
 #. Rect
-#: src/dialogs/display-settings.cpp:938
-#, fuzzy
-msgid "Rect"
+#: src/dialogs/display-settings.cpp:938 src/sp-rect.cpp:259 src/verbs.cpp:953
+msgid "Rectangle"
 msgstr "Rettangolo"
 
 #. Ellipse
-#: src/dialogs/display-settings.cpp:941 src/sp-ellipse.cpp:437
+#: src/dialogs/display-settings.cpp:941 src/sp-ellipse.cpp:443
 #: src/verbs.cpp:955
 msgid "Ellipse"
 msgstr "Ellisse"
@@ -885,7 +885,7 @@ msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1106
-msgid "Scale rounded corners in rects"
+msgid "Scale rounded corners in rectangles"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1107
@@ -950,7 +950,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1163
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
-"rect with bitmap fill"
+"rectangle with bitmap fill"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1170
@@ -1160,8 +1160,8 @@ msgstr "Disegna rettangolo"
 
 #: src/dialogs/find.cpp:518
 #, fuzzy
-msgid "Rects"
-msgstr "Oggetto"
+msgid "Rectangles"
+msgstr "Rettangolo"
 
 #: src/dialogs/find.cpp:523
 msgid "Search ellipses, arcs, circles"
@@ -1437,7 +1437,7 @@ msgstr ""
 
 #: src/dialogs/object-attributes.cpp:64
 #, fuzzy
-msgid "Revolution:"
+msgid "Revolutions:"
 msgstr "Selezione"
 
 #: src/dialogs/object-attributes.cpp:65
@@ -1533,13 +1533,13 @@ msgstr "Mano libera"
 msgid "Calligraphic line"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1063 src/widgets/gradient-vector.cpp:262
+#: src/dialogs/stroke-style.cpp:1058 src/widgets/gradient-vector.cpp:262
 #: src/widgets/paint-selector.cpp:812
 #, fuzzy
 msgid "No document selected"
 msgstr "Ultimo selezionato"
 
-#: src/dialogs/stroke-style.cpp:1372
+#: src/dialogs/stroke-style.cpp:1368
 #, fuzzy
 msgid "Stroke width"
 msgstr "Larghezza del tratto"
@@ -1547,7 +1547,7 @@ msgstr "Larghezza del tratto"
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1392
+#: src/dialogs/stroke-style.cpp:1388
 #, fuzzy
 msgid "Join:"
 msgstr "Unisci:"
@@ -1555,21 +1555,21 @@ msgstr "Unisci:"
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1406
+#: src/dialogs/stroke-style.cpp:1402
 msgid "Miter join"
 msgstr "Giunzione ad angolo"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1416
+#: src/dialogs/stroke-style.cpp:1412
 msgid "Round join"
 msgstr "Giunzione stondata"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1426
+#: src/dialogs/stroke-style.cpp:1422
 msgid "Bevel join"
 msgstr "Giunzione smussata"
 
@@ -1580,60 +1580,60 @@ msgstr "Giunzione smussata"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1437
+#: src/dialogs/stroke-style.cpp:1433
 #, fuzzy
 msgid "Miter limit:"
 msgstr "Giunzione ad angolo"
 
-#: src/dialogs/stroke-style.cpp:1445
+#: src/dialogs/stroke-style.cpp:1441
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr ""
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1458
+#: src/dialogs/stroke-style.cpp:1454
 #, fuzzy
 msgid "Cap:"
 msgstr "Ciano:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1471
+#: src/dialogs/stroke-style.cpp:1467
 msgid "Butt cap"
 msgstr ""
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1480
+#: src/dialogs/stroke-style.cpp:1476
 #, fuzzy
 msgid "Round cap"
 msgstr "Giunzione stondata"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1489
+#: src/dialogs/stroke-style.cpp:1485
 #, fuzzy
 msgid "Square cap"
 msgstr "Estremità squadrate"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1495
+#: src/dialogs/stroke-style.cpp:1491
 #, fuzzy
 msgid "Pattern:"
 msgstr "Motivo"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1516
+#: src/dialogs/stroke-style.cpp:1512
 #, fuzzy
 msgid "Start Markers:"
 msgstr "Proprietà della stella"
 
-#: src/dialogs/stroke-style.cpp:1526
+#: src/dialogs/stroke-style.cpp:1522
 msgid "Mid Markers:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1537
+#: src/dialogs/stroke-style.cpp:1533
 msgid "End Markers:"
 msgstr ""
 
@@ -1850,10 +1850,6 @@ msgid ""
 "will not be loaded."
 msgstr ""
 
-#: src/extension/system.cpp:100
-msgid "Format autodetect failed. The file is being opened as SVG."
-msgstr ""
-
 #: src/extension/internal/eps-out.cpp:70
 #, fuzzy
 msgid "EPS Output Settings"
@@ -1874,8 +1870,8 @@ msgid "Select printer"
 msgstr "Selezione"
 
 #: src/extension/internal/gnome.cpp:124
-#, fuzzy, c-format
-msgid "Inkscape (doc name %s..): Print Preview"
+#, fuzzy
+msgid "Inkscape: Print Preview"
 msgstr "Sodipodi (nome del doc %s..): Anteprima di stampa"
 
 #: src/extension/internal/ps.cpp:110
@@ -1933,11 +1929,15 @@ msgid ""
 "Use '| prog arg...' to pipe to a program."
 msgstr ""
 
-#: src/extension/internal/ps.cpp:892
+#: src/extension/internal/ps.cpp:913
 msgid "write error occurred"
 msgstr ""
 
-#: src/file.cpp:153 src/file.cpp:583
+#: src/extension/system.cpp:100
+msgid "Format autodetect failed. The file is being opened as SVG."
+msgstr ""
+
+#: src/file.cpp:153 src/file.cpp:595
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr ""
@@ -2002,16 +2002,16 @@ msgstr "Disegno"
 msgid "drawing-%d%s"
 msgstr "Disegno"
 
-#: src/file.cpp:390
+#: src/file.cpp:404
 #, fuzzy
-msgid "Select file to save"
+msgid "Select file to save to"
 msgstr "Selezione il file da aprire"
 
-#: src/file.cpp:469
+#: src/file.cpp:481
 msgid "No changes need to be saved."
 msgstr ""
 
-#: src/file.cpp:606
+#: src/file.cpp:618
 msgid "Select file to import"
 msgstr "Seleziona il file da importare"
 
@@ -2098,8 +2098,9 @@ msgid "m"
 msgstr "m"
 
 #: src/helper/units.cpp:42
-msgid "meters"
-msgstr "metri"
+#, fuzzy
+msgid "Meters"
+msgstr "Metro"
 
 #: src/helper/units.cpp:43
 msgid "Inch"
@@ -2140,33 +2141,34 @@ msgstr "Testo"
 msgid "Ex squares"
 msgstr ""
 
-#: src/inkscape.cpp:464
+#: src/inkscape.cpp:467
 #, fuzzy
 msgid "Untitled document"
 msgstr "Documento senza nome %d"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:495
+#: src/inkscape.cpp:498
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr ""
 
-#: src/inkscape.cpp:496
+#: src/inkscape.cpp:499
 msgid ""
-"Automatic backups of unsaved documents were done to following locations:\n"
+"Automatic backups of unsaved documents were done to the following "
+"locations:\n"
 msgstr ""
 
-#: src/inkscape.cpp:497
-msgid "Automatic backup of following documents failed:\n"
+#: src/inkscape.cpp:500
+msgid "Automatic backup of the following documents failed:\n"
 msgstr ""
 
-#: src/inkscape.cpp:659
+#: src/inkscape.cpp:662
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:660
+#: src/inkscape.cpp:663
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -2174,48 +2176,48 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:662
+#: src/inkscape.cpp:665
 #, c-format
 msgid ""
-"%s is not valid preferences file.\n"
+"%s is not a valid preferences file.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:663
+#: src/inkscape.cpp:666
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
 msgstr ""
 
-#: src/inkscape.cpp:1155
+#: src/inkscape.cpp:1158
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1156
+#: src/inkscape.cpp:1159
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1157
+#: src/inkscape.cpp:1160
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1158
+#: src/inkscape.cpp:1161
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1159
+#: src/inkscape.cpp:1162
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
@@ -2368,7 +2370,7 @@ msgstr ""
 
 #: src/main.cpp:142
 #, fuzzy
-msgid "Export document to png file"
+msgid "Export document to a PNG file"
 msgstr "Esporta il disegno come png"
 
 #: src/main.cpp:145
@@ -2390,7 +2392,7 @@ msgid "x0:y0:x1:y1"
 msgstr ""
 
 #: src/main.cpp:151
-msgid "The width of generated bitmap in pixels (overwrites dpi)"
+msgid "The width of the generated bitmap in pixels (overrides export-dpi)"
 msgstr ""
 
 #: src/main.cpp:151
@@ -2398,7 +2400,7 @@ msgid "WIDTH"
 msgstr ""
 
 #: src/main.cpp:153
-msgid "The height of generated bitmap in pixels (overwrites dpi)"
+msgid "The height of the generated bitmap in pixels (overrides export-dpi)"
 msgstr ""
 
 #: src/main.cpp:153
@@ -2424,10 +2426,10 @@ msgstr ""
 "mouse"
 
 #: src/main.cpp:161
-msgid "Prefer bitmap (xpm) icons to SVG ones"
+msgid "Prefer bitmap (XPM) icons to SVG ones"
 msgstr ""
 
-#: src/main.cpp:255 src/main.cpp:339
+#: src/main.cpp:261 src/main.cpp:345
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -2476,7 +2478,8 @@ msgstr ""
 #: src/nodepath.cpp:2744
 #, c-format
 msgid ""
-"0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
+"0 out of %i nodes selected. Click, Shift+click, or drag around nodes to "
+"select."
 msgstr ""
 
 #: src/nodepath.cpp:2748
@@ -2564,7 +2567,7 @@ msgstr "Parametri del desktop"
 #. Link dialog
 #: src/object-ui.cpp:418
 #, fuzzy
-msgid "Rect _Properties"
+msgid "Rectangle _Properties"
 msgstr "Proprietá del testo"
 
 #. Link dialog
@@ -2620,12 +2623,12 @@ msgstr "Alza la selezione al punto piú alto"
 msgid "No paths to reverse in the selection."
 msgstr ""
 
-#: src/rect-context.cpp:517
+#: src/rect-context.cpp:516
 #, fuzzy, c-format
 msgid "Draw rectangle: %s x %s"
 msgstr "Disegna rettangolo"
 
-#: src/select-context.cpp:645
+#: src/select-context.cpp:646
 msgid "Move cancelled."
 msgstr ""
 
@@ -2634,25 +2637,10 @@ msgstr ""
 msgid "Selection cancelled."
 msgstr "Selezione"
 
-#: src/select-context.cpp:803
+#: src/select-context.cpp:805
 #, fuzzy, c-format
 msgid "Move by %s, %s"
 msgstr "Muovi"
-
-#: src/select-context.cpp:812
-msgid "Click selection to toggle scale/rotation handles"
-msgstr ""
-
-#. no items
-#: src/select-context.cpp:815
-msgid "No objects selected. Click, Shift+click, drag around objects to select."
-msgstr ""
-
-#. multiple items
-#: src/select-context.cpp:819
-#, c-format
-msgid "%i objects selected. %s."
-msgstr ""
 
 #: src/select-toolbar.cpp:390
 #, fuzzy
@@ -2686,131 +2674,147 @@ msgstr ""
 msgid "Select some objects to duplicate."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:236
+#: src/selection-chemistry.cpp:235
 #, fuzzy
 msgid "Select two or more objects to group."
 msgstr "Alza la selezione al punto piú alto"
 
-#: src/selection-chemistry.cpp:244
+#: src/selection-chemistry.cpp:243
 #, fuzzy
 msgid "Select at least two objects to group."
 msgstr "Nessun gradiente definito"
 
-#: src/selection-chemistry.cpp:253
+#: src/selection-chemistry.cpp:252
 msgid "You cannot group objects from different groups or layers."
 msgstr ""
 
-#: src/selection-chemistry.cpp:301
+#: src/selection-chemistry.cpp:300
 msgid "Select a group to ungroup."
 msgstr ""
 
-#: src/selection-chemistry.cpp:335
+#: src/selection-chemistry.cpp:334
 msgid "No groups to ungroup in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:402
+#: src/selection-chemistry.cpp:401
 #, fuzzy
 msgid "Select some objects to raise."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:408 src/selection-chemistry.cpp:486
+#: src/selection-chemistry.cpp:407 src/selection-chemistry.cpp:485
 msgid "You cannot raise/lower objects from different groups or layers."
 msgstr ""
 
-#: src/selection-chemistry.cpp:452
+#: src/selection-chemistry.cpp:451
 #, fuzzy
 msgid "Select some objects to raise to top."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:480
+#: src/selection-chemistry.cpp:479
 #, fuzzy
 msgid "Select some objects to lower."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:536
+#: src/selection-chemistry.cpp:535
 #, fuzzy
 msgid "Select some objects to lower to bottom."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:570
+#: src/selection-chemistry.cpp:569
 msgid "Nothing to undo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:579
+#: src/selection-chemistry.cpp:578
 msgid "Nothing to redo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:655
+#: src/selection-chemistry.cpp:654
 msgid "Nothing was copied."
 msgstr ""
 
-#: src/selection-chemistry.cpp:717 src/selection-chemistry.cpp:778
+#: src/selection-chemistry.cpp:716 src/selection-chemistry.cpp:777
 #, fuzzy
-msgid "Nothing in the clipboard."
+msgid "Nothing on the clipboard."
 msgstr "Copia la selezione"
 
-#: src/selection-chemistry.cpp:784
+#: src/selection-chemistry.cpp:783
 #, fuzzy
 msgid "Select objects to paste style to."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:1268
+#: src/selection-chemistry.cpp:1267
 #, fuzzy
 msgid "Select an object to clone."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:1274
+#: src/selection-chemistry.cpp:1273
 msgid "If you want to clone several objects, group them and clone the group."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1305
+#: src/selection-chemistry.cpp:1304
 #, fuzzy
 msgid "Select a clone to unlink."
 msgstr "Selezione il file da aprire"
 
-#: src/selection-chemistry.cpp:1336
+#: src/selection-chemistry.cpp:1335
 msgid "No clones to unlink in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1353
+#: src/selection-chemistry.cpp:1352
 msgid "Select a single clone to go to its original."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1361
+#: src/selection-chemistry.cpp:1360
 msgid "This clone's original is not a visible object (it is in <defs>)"
 msgstr ""
 
-#: src/selection-chemistry.cpp:1388
+#: src/selection-chemistry.cpp:1387
 #, fuzzy
 msgid "Select an object to tile."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:1452
+#: src/selection-chemistry.cpp:1451
 #, fuzzy
-msgid "Select an object with pattern fill to to untile."
+msgid "Select an object with pattern fill to untile."
 msgstr "Converti gli oggetti selezionati in curve"
 
-#: src/selection-chemistry.cpp:1503
+#: src/selection-chemistry.cpp:1502
 msgid "No pattern fills to untile in the selection."
 msgstr ""
 
+#: src/selection-describer.cpp:30
+msgid "Click selection to toggle scale/rotation handles"
+msgstr ""
+
+#. no items
+#: src/selection-describer.cpp:32
+msgid ""
+"No objects selected. Click, Shift+click, or drag around objects to select."
+msgstr ""
+
+#. multiple items
+#: src/selection-describer.cpp:36
+#, c-format
+msgid "%i objects selected. %s."
+msgstr ""
+
 #. status text
-#: src/seltrans.cpp:748 src/seltrans.cpp:808
+#: src/seltrans.cpp:764 src/seltrans.cpp:824
 #, c-format
 msgid "Scale %0.2f%%, %0.2f%%"
 msgstr ""
 
-#: src/seltrans.cpp:873
+#: src/seltrans.cpp:892
 #, c-format
 msgid "Skew %0.2f%c %0.2f%c"
 msgstr ""
 
-#: src/seltrans.cpp:920
+#: src/seltrans.cpp:939
 #, c-format
 msgid "Rotate by %0.2f deg"
 msgstr ""
 
-#: src/seltrans.cpp:949
+#: src/seltrans.cpp:968
 #, c-format
 msgid "Center at (%s,%s)"
 msgstr ""
@@ -2825,11 +2829,11 @@ msgstr "Sodipodi: %s: %s: %d"
 msgid "Link to %s"
 msgstr ""
 
-#: src/sp-ellipse.cpp:582
+#: src/sp-ellipse.cpp:588
 msgid "Circle"
 msgstr ""
 
-#: src/sp-ellipse.cpp:857
+#: src/sp-ellipse.cpp:863
 msgid "Arc"
 msgstr ""
 
@@ -2853,31 +2857,31 @@ msgstr ""
 msgid "Color image %d x %d: %s"
 msgstr ""
 
-#: src/sp-image.cpp:745
+#: src/sp-image.cpp:735
 msgid "Trace"
 msgstr ""
 
-#: src/sp-image.cpp:891
+#: src/sp-image.cpp:881
 #, c-format
-msgid "Error to write %s: %s"
+msgid "Error writing %s: %s"
 msgstr ""
 
-#: src/sp-image.cpp:925
+#: src/sp-image.cpp:915
 #, fuzzy
 msgid "Untitled"
 msgstr "Unità"
 
-#: src/sp-image.cpp:930
+#: src/sp-image.cpp:920
 #, fuzzy
 msgid "Document Name:"
 msgstr "Documento"
 
-#: src/sp-image.cpp:943
+#: src/sp-image.cpp:933
 #, fuzzy
 msgid "Unknown"
 msgstr "Elemento sconosciuto :-("
 
-#: src/sp-image.cpp:949
+#: src/sp-image.cpp:939
 #, fuzzy
 msgid "Image URI:"
 msgstr "Immagine"
@@ -2895,10 +2899,6 @@ msgstr "Oggetto"
 #, c-format
 msgid "Path (%i nodes)"
 msgstr ""
-
-#: src/sp-rect.cpp:261 src/verbs.cpp:953
-msgid "Rectangle"
-msgstr "Rettangolo"
 
 #: src/sp-star.cpp:253
 #, c-format
@@ -3236,8 +3236,8 @@ msgstr ""
 
 #: src/tools-switch.cpp:117
 msgid ""
-"To edit a path, click, Shift+click, drag around nodes to select. To edit a "
-"shape, drag its controls."
+"To edit a path, click, Shift+click, or drag around nodes to select. To edit "
+"a shape, drag its controls."
 msgstr ""
 
 #: src/tools-switch.cpp:123
@@ -3276,8 +3276,7 @@ msgid "Click to select or create text object, then type."
 msgstr ""
 
 #: src/tools-switch.cpp:171
-msgid ""
-"Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."
+msgid "Click or drag around an area to zoom in, Shift+click to zoom out."
 msgstr ""
 
 #: src/tools-switch.cpp:177
@@ -3406,7 +3405,7 @@ msgstr "Esporta il disegno come png"
 
 #: src/verbs.cpp:820
 #, fuzzy
-msgid "N_ext window"
+msgid "N_ext Window"
 msgstr "Chiudi finestra"
 
 #: src/verbs.cpp:821
@@ -3415,7 +3414,7 @@ msgstr ""
 
 #: src/verbs.cpp:822
 #, fuzzy
-msgid "P_rev window"
+msgid "P_revious Window"
 msgstr "Chiudi finestra"
 
 #: src/verbs.cpp:823
@@ -3565,7 +3564,7 @@ msgid "_Tile"
 msgstr "_File"
 
 #: src/verbs.cpp:854
-msgid "Convert selection to a rect with tiled pattern fill"
+msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr ""
 
 #: src/verbs.cpp:855
@@ -4040,7 +4039,7 @@ msgid "Show or hide guides"
 msgstr "Mostra le guide"
 
 #: src/verbs.cpp:981
-msgid "Nex_t zoom"
+msgid "Nex_t Zoom"
 msgstr ""
 
 #: src/verbs.cpp:981
@@ -4048,7 +4047,7 @@ msgid "Next zoom (from the history of zooms)"
 msgstr ""
 
 #: src/verbs.cpp:983
-msgid "Pre_v zoom"
+msgid "Pre_vious Zoom"
 msgstr ""
 
 #: src/verbs.cpp:983
@@ -4617,6 +4616,17 @@ msgstr "Attributi"
 #: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
 msgstr "Valore"
+
+#, fuzzy
+#~ msgid "Rect"
+#~ msgstr "Rettangolo"
+
+#, fuzzy
+#~ msgid "Rects"
+#~ msgstr "Oggetto"
+
+#~ msgid "meters"
+#~ msgstr "metri"
 
 #, fuzzy
 #~ msgid "Horizontal lines"
