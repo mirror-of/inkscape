@@ -73,7 +73,7 @@ SPRepr *
 sp_repr_new_text(gchar const *content)
 {
     g_return_val_if_fail(content != NULL, NULL);
-    SPRepr *repr = sp_repr_new_from_code(SP_XML_TEXT_NODE, g_quark_from_static_string("text"));
+    SPRepr *repr = sp_repr_new_from_code(SP_XML_TEXT_NODE, g_quark_from_static_string("string"));
     repr->content = SharedCString::copy(content);
     return repr;
 }
