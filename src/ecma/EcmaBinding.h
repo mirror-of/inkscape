@@ -23,10 +23,8 @@ namespace Inkscape {
 
 
 //Forward declarations
-class  EcmaObjectt;
+class  EcmaObject;
 struct EcmaObjectPrivate;  //hide impl specifics
-class  EcmaScript;
-struct EcmaScriptPrivate;  //hide impl specifics
 class  EcmaBinding;
 struct EcmaBindingPrivate;  //hide impl specifics
 
@@ -87,11 +85,12 @@ public:
     struct EcmaObjectPrivate *pdata;
 
 
-private:
     /**
      * My owner
      */
     EcmaBinding *owner;
+
+private:
     
     /**
      * The node above me
@@ -121,52 +120,6 @@ private:
 
 
 
-
-
-
-/**
- * This is one <script> node or onClick="script" chunk from the SVG tree
- */
-class EcmaScript
-{
-
-
-
-public:
-
-
-    /**
-     * Constructor.
-     *
-     * @param parent.  The EcmaBinding container that owns this script
-     * chunk.
-     *
-     */
-    EcmaScript(EcmaBinding *parent) throw (EcmaException);
-
-    /**
-     * Destructor.  Should perform any cleanup, esp the JSContext
-     * library.
-     */
-    virtual ~EcmaScript();
-
-    /**
-     * Implementation-specific data
-     */
-    struct EcmaScriptPrivate *pdata;
-
-
-private:
-
-    /**
-     * The EcmaBinding engine that owns me
-     */
-    EcmaBinding *parent;
-
-
-
-
-};//class EcmaScript
 
 
 
@@ -203,6 +156,20 @@ public:
      */
     virtual ~EcmaBinding();
     
+    /** 
+     * Recursive processing of the internal SVG tree.  Called by
+     * processDocument() and itself.
+     *
+     * @param node.  The current node to process, with its children
+     * @return  true for success..  false for a 'soft' error.  Throw
+     * an exception for a 'hard' error.
+     *
+     */
+    EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
+                                                throw (EcmaException);
+
+
+
     /**
      * Get ECMAScript nodes from document and compile scripts
      * This is before running anything.
@@ -211,6 +178,11 @@ public:
      *
      */
     bool processDocument(SPDocument *document) throw (EcmaException);
+
+    /**
+     * Root object of our EcmaObject tree
+     */
+    EcmaObject *rootObject;
 
     /**
      * Implementation-specific data
