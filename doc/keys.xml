@@ -67,6 +67,18 @@ can leave your ideas and requests there.</p>
 
 </section>
 
+*<section title="Layers" color="d0d0d0">
+<group>
+<keys><key><shift/><misc f="PgUp"/></key> <action>move selected objects to next layer</action></keys>
+<keys><key><shift/><misc f="PgDn"/></key> <action>move selected objects to previous layer</action></keys>
+<keys><key><shift/><ctrl/><misc f="PgUp"/></key> <action>raise current layer</action></keys>
+<keys><key><shift/><ctrl/><misc f="PgDn"/></key> <action>lower current layer</action></keys>
+<keys><key><shift/><ctrl/><misc f="Home"/></key> <action>raise current layer to top among siblings</action></keys>
+<keys><key><shift/><ctrl/><misc f="End"/></key> <action>lower current layer to bottom among siblings</action></keys>
+</group>
+</section>
+
+
 *<section title="Dialogs" color="f0eae7">
 <group>
 <keys><key><shift/><ctrl/>F</key> <action>Fill and Stroke</action></keys>

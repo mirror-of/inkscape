@@ -1,3 +1,7 @@
+2004-11-02  MenTaLguY  <mental@rydia.net>
+
+	* doc/keys.xml: added documentation of layer keys
+
 2004-11-01  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/align.cpp, src/dialogs/debugdialog.cpp: localized
