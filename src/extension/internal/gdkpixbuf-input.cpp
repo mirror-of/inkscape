@@ -19,22 +19,19 @@ SPDocument *
 GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 {
     /* Try pixbuf */
-    GdkPixbuf *pb;
     SPDocument * doc = sp_document_new(NULL, TRUE, TRUE);
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
     GError* error = NULL;
-    const gchar * docbase, * relname;
-    SPRepr * rdoc;
     gchar* localFilename = g_filename_from_utf8 ( uri,
                                                   -1,
                                                   &bytesRead,
                                                   &bytesWritten,
                                                   &error);
-    pb = gdk_pixbuf_new_from_file (localFilename, NULL);
-    rdoc = sp_document_repr_root (doc);
-    docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
-    relname = sp_relative_path_from_path (uri, docbase);
+    GdkPixbuf *pb = gdk_pixbuf_new_from_file (localFilename, NULL);
+    SPRepr *rdoc = sp_document_repr_root (doc);
+    const gchar *docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
+    const gchar *relname = sp_relative_path_from_path (uri, docbase);
 
     if (pb) {
         SPRepr *repr = NULL;
@@ -98,31 +95,23 @@ GdkpixbufInput::init (void)
     for (formatlist = formatlisthead = gdk_pixbuf_get_formats ();
          formatlist != NULL;
          formatlist = g_slist_next(formatlist)) {
-        GdkPixbufFormat * pixformat;
-        gchar * xmlString;
 
-        gchar * name;
-        gchar ** extensions;
-        gchar ** mimetypes;
-        gchar * description;
-        int i, j;
+        GdkPixbufFormat *pixformat = (GdkPixbufFormat *)formatlist->data;
 
-        pixformat = (GdkPixbufFormat *)formatlist->data;
+        gchar *name =        gdk_pixbuf_format_get_name(pixformat);
+        gchar *description = gdk_pixbuf_format_get_description(pixformat);
+        gchar **extensions =  gdk_pixbuf_format_get_extensions(pixformat);
+        gchar **mimetypes =   gdk_pixbuf_format_get_mime_types(pixformat);
 
-        name =        gdk_pixbuf_format_get_name(pixformat);
-        description = gdk_pixbuf_format_get_description(pixformat);
-        extensions =  gdk_pixbuf_format_get_extensions(pixformat);
-        mimetypes =   gdk_pixbuf_format_get_mime_types(pixformat);
-
-        for (i = 0; extensions[i] != NULL; i++) {
-        for (j = 0; mimetypes[j] != NULL; j++) {
+        for (int i = 0; extensions[i] != NULL; i++) {
+        for (int j = 0; mimetypes[j] != NULL; j++) {
 
             /* thanks but no thanks, we'll handle SVG extensions... */        
             if (strcmp(extensions[i], "svg") == 0) {
                 continue;
             }
 
-            xmlString = g_strdup_printf(
+            gchar *xmlString = g_strdup_printf(
                 "<inkscape-extension>\n"
                     "<name>%s GDK pixbuf Input</name>\n"
                     "<id>org.inkscape.input.gdkpixbuf.%s</id>\n"
@@ -143,10 +132,9 @@ GdkpixbufInput::init (void)
                 );
 
             Inkscape::Extension::build_from_mem(xmlString, new GdkpixbufInput());
+            g_free(xmlString);
         }}
 
-
-        g_free(xmlString);
         g_free(name);
         g_free(description);
         g_strfreev(mimetypes);
@@ -154,7 +142,6 @@ GdkpixbufInput::init (void)
      }
 
      g_slist_free (formatlisthead);
-
 
     return;
 }
