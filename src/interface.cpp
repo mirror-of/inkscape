@@ -505,7 +505,7 @@ sp_ui_dialogs_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
                 SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
                 SP_VERB_DIALOG_ITEM,
                 SP_VERB_DIALOG_XML_EDITOR,
-                SP_VERB_DIALOG_DOCUMENT,
+								//                SP_VERB_DIALOG_DOCUMENT,
                 SP_VERB_DIALOG_NAMEDVIEW,
                 SP_VERB_DIALOG_TOOL_OPTIONS,
 								//                SP_VERB_DIALOG_TOOL_ATTRIBUTES,
