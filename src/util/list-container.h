@@ -210,6 +210,9 @@ public:
     void pop_front() {
         if (_head) {
             _head = rest(_head);
+            if (!_head) {
+                _tail = _head;
+            }
         }
     }
 
