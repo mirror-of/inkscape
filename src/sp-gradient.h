@@ -149,8 +149,8 @@ void sp_gradient_ensure_colors (SPGradient *gradient);
 /* Sets gradient vector to given value, does not update reprs */
 void sp_gradient_set_vector (SPGradient *gradient, SPGradientVector *vector);
 
-void sp_gradient_set_units (SPGradient *gr, unsigned int units);
-void sp_gradient_set_spread (SPGradient *gr, unsigned int spread);
+void sp_gradient_set_units (SPGradient *gr, SPGradientUnits units);
+void sp_gradient_set_spread (SPGradient *gr, SPGradientSpread spread);
 
 /* Gradient repr methods */
 void sp_gradient_repr_set_vector (SPGradient *gradient, SPRepr *repr, SPGradientVector *vector);

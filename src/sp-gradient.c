@@ -40,7 +40,7 @@ static void sp_stop_class_init (SPStopClass * klass);
 static void sp_stop_init (SPStop * stop);
 
 static void sp_stop_build (SPObject * object, SPDocument * document, SPRepr * repr);
-static void sp_stop_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_stop_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_stop_write (SPObject *object, SPRepr *repr, guint flags);
 
 static SPObjectClass * stop_parent_class;
@@ -59,7 +59,7 @@ sp_stop_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_stop_init,
 		};
-		type = g_type_register_static (SP_TYPE_OBJECT, "SPStop", &info, 0);
+		type = g_type_register_static (SP_TYPE_OBJECT, "SPStop", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -71,7 +71,7 @@ sp_stop_class_init (SPStopClass * klass)
 
 	sp_object_class = (SPObjectClass *) klass;
 
-	stop_parent_class = g_type_class_ref (SP_TYPE_OBJECT);
+	stop_parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
 
 	sp_object_class->build = sp_stop_build;
 	sp_object_class->set = sp_stop_set;
@@ -98,12 +98,12 @@ sp_stop_build (SPObject * object, SPDocument * document, SPRepr * repr)
 }
 
 static void
-sp_stop_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_stop_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPStop *stop;
 	guint32 color;
 	gdouble opacity;
-	const guchar *p;
+	const gchar *p;
 
 	stop = SP_STOP (object);
 
@@ -148,7 +148,7 @@ static SPRepr *
 sp_stop_write (SPObject *object, SPRepr *repr, guint flags)
 {
 	SPStop *stop;
-	unsigned char c[64], s[1024];
+	gchar c[64], s[1024];
 
 	stop = SP_STOP (object);
 
@@ -178,7 +178,7 @@ static void sp_gradient_init (SPGradient *gr);
 
 static void sp_gradient_build (SPObject *object, SPDocument *document, SPRepr *repr);
 static void sp_gradient_release (SPObject *object);
-static void sp_gradient_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_gradient_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_gradient_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
 static void sp_gradient_remove_child (SPObject *object, SPRepr *child);
 static void sp_gradient_modified (SPObject *object, guint flags);
@@ -206,7 +206,7 @@ sp_gradient_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_gradient_init,
 		};
-		gradient_type = g_type_register_static (SP_TYPE_PAINT_SERVER, "SPGradient", &gradient_info, 0);
+		gradient_type = g_type_register_static (SP_TYPE_PAINT_SERVER, "SPGradient", &gradient_info, (GTypeFlags)0);
 	}
 	return gradient_type;
 }
@@ -220,7 +220,7 @@ sp_gradient_class_init (SPGradientClass *klass)
 	gobject_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	gradient_parent_class = g_type_class_ref (SP_TYPE_PAINT_SERVER);
+	gradient_parent_class = (SPPaintServerClass *)g_type_class_ref (SP_TYPE_PAINT_SERVER);
 
 	sp_object_class->build = sp_gradient_build;
 	sp_object_class->release = sp_gradient_release;
@@ -273,7 +273,7 @@ sp_gradient_build (SPObject *object, SPDocument *document, SPRepr *repr)
 		SPObject *child;
 		type = sp_repr_type_lookup (rchild);
 		if (g_type_is_a (type, SP_TYPE_OBJECT)) {
-			child = g_object_new(type, 0);
+			child = SP_OBJECT(g_object_new(type, 0));
 			if (last) {
 				last->next = sp_object_attach_reref (object, child, NULL);
 			} else {
@@ -335,7 +335,7 @@ sp_gradient_release (SPObject *object)
 }
 
 static void
-sp_gradient_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGradient *gr;
 
@@ -423,7 +423,7 @@ sp_gradient_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	sp_gradient_invalidate_vector (gr);
 
 	type = sp_repr_type_lookup (child);
-	ochild = g_object_new(type, 0);
+	ochild = SP_OBJECT(g_object_new(type, 0));
 	ochild->parent = object;
 
 	prev = NULL;
@@ -549,7 +549,7 @@ sp_gradient_write (SPObject *object, SPRepr *repr, guint flags)
 	}
 
 	if (gr->href) {
-		unsigned char *str;
+		gchar *str;
 		str = g_strdup_printf ("#%s", SP_OBJECT_ID (gr->href));
 		sp_repr_set_attr (repr, "xlink:href", str);
 		g_free (str);
@@ -625,7 +625,7 @@ sp_gradient_set_vector (SPGradient *gradient, SPGradientVector *vector)
 		gradient->vector = NULL;
 	}
 	if (!gradient->vector) {
-		gradient->vector = g_malloc (sizeof (SPGradientVector) + (vector->nstops - 1) * sizeof (SPGradientStop));
+		gradient->vector = (SPGradientVector *)g_malloc (sizeof (SPGradientVector) + (vector->nstops - 1) * sizeof (SPGradientStop));
 	}
 	memcpy (gradient->vector, vector, sizeof (SPGradientVector) + (vector->nstops - 1) * sizeof (SPGradientStop));
 
@@ -633,7 +633,7 @@ sp_gradient_set_vector (SPGradient *gradient, SPGradientVector *vector)
 }
 
 void
-sp_gradient_set_units (SPGradient *gr, unsigned int units)
+sp_gradient_set_units (SPGradient *gr, SPGradientUnits units)
 {
 	if (units != gr->units) {
 		gr->units = units;
@@ -642,7 +642,7 @@ sp_gradient_set_units (SPGradient *gr, unsigned int units)
 }
 
 void
-sp_gradient_set_spread (SPGradient *gr, unsigned int spread)
+sp_gradient_set_spread (SPGradient *gr, SPGradientSpread spread)
 {
 	if (spread != gr->spread) {
 		gr->spread = spread;
@@ -667,7 +667,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 	if (vector) {
 		for (i = 0; i < vector->nstops; i++) {
 			SPRepr *child;
-			guchar c[64], s[256];
+			gchar c[64], s[256];
 			child = sp_repr_new ("stop");
 			sp_repr_set_double_attribute (child, "offset",
 						      vector->stops[i].offset * (vector->end - vector->start) + vector->start);
@@ -828,7 +828,7 @@ sp_gradient_ensure_colors (SPGradient *gr)
 	}
 
 	if (!gr->color) {
-		gr->color = g_new (guchar, 4 * NCOLORS);
+		gr->color = g_new (gchar, 4 * NCOLORS);
 	}
 
 	for (i = 0; i < gr->vector->nstops - 1; i++) {
@@ -893,7 +893,7 @@ sp_gradient_ensure_colors (SPGradient *gr)
  */
 
 void
-sp_gradient_render_vector_line_rgba (SPGradient *gradient, guchar *buf, gint len, gint pos, gint span)
+sp_gradient_render_vector_line_rgba (SPGradient *gradient, gchar *buf, gint len, gint pos, gint span)
 {
 	gint x, idx, didx;
 
@@ -922,7 +922,7 @@ sp_gradient_render_vector_line_rgba (SPGradient *gradient, guchar *buf, gint len
 }
 
 void
-sp_gradient_render_vector_line_rgb (SPGradient *gradient, guchar *buf, gint len, gint pos, gint span)
+sp_gradient_render_vector_line_rgb (SPGradient *gradient, gchar *buf, gint len, gint pos, gint span)
 {
 	gint x, idx, didx;
 
@@ -959,7 +959,7 @@ sp_gradient_render_vector_line_rgb (SPGradient *gradient, guchar *buf, gint len,
 }
 
 void
-sp_gradient_render_vector_block_rgba (SPGradient *gradient, guchar *buf, gint width, gint height, gint rowstride,
+sp_gradient_render_vector_block_rgba (SPGradient *gradient, gchar *buf, gint width, gint height, gint rowstride,
 				      gint pos, gint span, gboolean horizontal)
 {
 	g_return_if_fail (gradient != NULL);
@@ -978,12 +978,12 @@ sp_gradient_render_vector_block_rgba (SPGradient *gradient, guchar *buf, gint wi
 			memcpy (buf + y * rowstride, buf, 4 * width);
 		}
 	} else {
-		guchar *tmp;
+		gchar *tmp;
 		gint x, y;
 		tmp = alloca (4 * height);
 		sp_gradient_render_vector_line_rgba (gradient, tmp, height, pos, span);
 		for (y = 0; y < height; y++) {
-			guchar *b;
+			gchar *b;
 			b = buf + y * rowstride;
 			for (x = 0; x < width; x++) {
 				*b++ = tmp[0];
@@ -997,7 +997,7 @@ sp_gradient_render_vector_block_rgba (SPGradient *gradient, guchar *buf, gint wi
 }
 
 void
-sp_gradient_render_vector_block_rgb (SPGradient *gradient, guchar *buf, gint width, gint height, gint rowstride,
+sp_gradient_render_vector_block_rgb (SPGradient *gradient, gchar *buf, gint width, gint height, gint rowstride,
 				     gint pos, gint span, gboolean horizontal)
 {
 	g_return_if_fail (gradient != NULL);
@@ -1010,12 +1010,12 @@ sp_gradient_render_vector_block_rgb (SPGradient *gradient, guchar *buf, gint wid
 	g_return_if_fail (span > 0);
 
 	if (horizontal) {
-		guchar *tmp;
+		gchar *tmp;
 		gint x, y;
 		tmp = alloca (4 * width);
 		sp_gradient_render_vector_line_rgba (gradient, tmp, width, pos, span);
 		for (y = 0; y < height; y++) {
-			guchar *b, *t;
+			gchar *b, *t;
 			b = buf + y * rowstride;
 			t = tmp;
 			for (x = 0; x < width; x++) {
@@ -1032,12 +1032,12 @@ sp_gradient_render_vector_block_rgb (SPGradient *gradient, guchar *buf, gint wid
 			}
 		}
 	} else {
-		guchar *tmp;
+		gchar *tmp;
 		gint x, y;
 		tmp = alloca (4 * height);
 		sp_gradient_render_vector_line_rgba (gradient, tmp, height, pos, span);
 		for (y = 0; y < height; y++) {
-			guchar *b, *t;
+			gchar *b, *t;
 			b = buf + y * rowstride;
 			t = tmp + 4 * y;
 			for (x = 0; x < width; x++) {
@@ -1223,7 +1223,7 @@ static void sp_lineargradient_class_init (SPLinearGradientClass * klass);
 static void sp_lineargradient_init (SPLinearGradient * lg);
 
 static void sp_lineargradient_build (SPObject *object, SPDocument * document, SPRepr * repr);
-static void sp_lineargradient_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_lineargradient_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_lineargradient_write (SPObject *object, SPRepr *repr, guint flags);
 
 static SPPainter *sp_lineargradient_painter_new (SPPaintServer *ps, const double *affine, const NRRectF *bbox);
@@ -1301,7 +1301,7 @@ sp_lineargradient_build (SPObject * object, SPDocument * document, SPRepr * repr
 }
 
 static void
-sp_lineargradient_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_lineargradient_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPLinearGradient * lg;
 
@@ -1565,7 +1565,7 @@ static void sp_radialgradient_class_init (SPRadialGradientClass *klass);
 static void sp_radialgradient_init (SPRadialGradient *rg);
 
 static void sp_radialgradient_build (SPObject *object, SPDocument *document, SPRepr *repr);
-static void sp_radialgradient_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_radialgradient_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags);
 
 static SPPainter *sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRectF *bbox);
@@ -1645,7 +1645,7 @@ sp_radialgradient_build (SPObject *object, SPDocument *document, SPRepr *repr)
 }
 
 static void
-sp_radialgradient_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_radialgradient_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPRadialGradient *rg;
 
