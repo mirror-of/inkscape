@@ -1,3 +1,8 @@
+2004-04-19  Peter  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dialogs/stroke-style.cpp: Cleanups: greater conformance to
+	CodingStyle.  Moved some declarations to their first use.
+
 2004-04-19  Carl Hetherington <inkscape@carlh.net>
 
 	* src/dialogs/stroke-style.cpp, libnr/nr-rect-l.cpp:
@@ -5,64 +10,64 @@
 
 2004-04-19  bulia byak <bulia@users.sourceforge.net>
 
-        * shortcuts.cpp selection-chemistry.cpp selection-chemistry.h verbs.cpp verbs.h
-        interface.cpp: Clone command (Edit menu, Shift+Ctrl+N)
+	* shortcuts.cpp selection-chemistry.cpp selection-chemistry.h verbs.cpp verbs.h
+	interface.cpp: Clone command (Edit menu, Shift+Ctrl+N)
 
-        * sp-use.cpp: Update propagated to parent class (SPItem), misc fixes
+	* sp-use.cpp: Update propagated to parent class (SPItem), misc fixes
  
-        * sp-polygon.cpp: Fix for points= updating by adding set_shape call into _write
-        (bug 910142)
+	* sp-polygon.cpp: Fix for points= updating by adding set_shape call into _write
+	(bug 910142)
 
-        * text-context.cpp: Do not create text object unless a printable key was
-        pressed; fixes 934280
+	* text-context.cpp: Do not create text object unless a printable key was
+	pressed; fixes 934280
  
-        * widgets/dash-selector.cpp dialogs/stroke-style.cpp: Removed marker buttons,
-        fixed g_free crash in marker menus, added tooltips, added stroke-miterlimit
-        spinbutton
+	* widgets/dash-selector.cpp dialogs/stroke-style.cpp: Removed marker buttons,
+	fixed g_free crash in marker menus, added tooltips, added stroke-miterlimit
+	spinbutton
 
-        * splivarot.cpp: Outline handles multiple objects; All commands use correct
-        stroke_miterlimit
+	* splivarot.cpp: Outline handles multiple objects; All commands use correct
+	stroke_miterlimit
 
-        * splivarot.cpp sp-offset.cpp: Fix for 932642 
+	* splivarot.cpp sp-offset.cpp: Fix for 932642 
 
-        * helper/sodipodi-ctrlrect.cpp: Simplify and fix dashes and offsets
+	* helper/sodipodi-ctrlrect.cpp: Simplify and fix dashes and offsets
  
-        * widgets/gradient-selector.cpp: Tooltip edits 
+	* widgets/gradient-selector.cpp: Tooltip edits 
 
-        * verbs.cpp verbs.cpp verbs.h interface.cpp...: Remove tool options
+	* verbs.cpp verbs.cpp verbs.h interface.cpp...: Remove tool options
 
-        * seltrans.cpp: Pivot marker made inverse
+	* seltrans.cpp: Pivot marker made inverse
 
-        * toolbox.cpp: More defocusing
+	* toolbox.cpp: More defocusing
  
-        * *-context.cpp: Eliminated config widgets from all tools 
+	* *-context.cpp: Eliminated config widgets from all tools 
 
-        * toolbox.cpp sp-ellipse.cpp: Ellipse fixes, tooltips
+	* toolbox.cpp sp-ellipse.cpp: Ellipse fixes, tooltips
  
-        * verbs.cpp: Options -> Preferences
+	* verbs.cpp: Options -> Preferences
  
-        * dialogs/display-settings.cpp: An options dialog, completely new; selector
-        widget grafted here
+	* dialogs/display-settings.cpp: An options dialog, completely new; selector
+	widget grafted here
 
-        * preferences-skeleton.h node-context.cpp select-context.cpp: scaling uses
-        defaultscale
+	* preferences-skeleton.h node-context.cpp select-context.cpp: scaling uses
+	defaultscale
  
-        * dialogs/display-settings.cpp display/nr-arena-image.cpp: Make oversample
-        saveable
+	* dialogs/display-settings.cpp display/nr-arena-image.cpp: Make oversample
+	saveable
 
-        * toolbox.cpp: Aux toolbar for calligraphic
+	* toolbox.cpp: Aux toolbar for calligraphic
 
-        * preferences-skeleton.h: fill-opacity:1 for calligraphic 
+	* preferences-skeleton.h: fill-opacity:1 for calligraphic 
 
-        * select-context.cpp seltrans.cpp seltrans.cpp: Patch to enable box and none
-        options for per-object selection cue
+	* select-context.cpp seltrans.cpp seltrans.cpp: Patch to enable box and none
+	options for per-object selection cue
 
-        * main.cpp: Removed C-locale setting, not needed anymore; temporary switch of
-        gettext encoding for console output
+	* main.cpp: Removed C-locale setting, not needed anymore; temporary switch of
+	gettext encoding for console output
  
-        * inkscape.cpp: Memory fix from sodi
+	* inkscape.cpp: Memory fix from sodi
 
-        * right-click finishes pen (patch by Carl)  draw-context.cpp
+	* right-click finishes pen (patch by Carl)  draw-context.cpp
 
 2004-04-19  Carl Hetherington <inkscape@carlh.net>
 
@@ -100,7 +105,7 @@
 	  src/selection.cpp, src/selection.h, src/seltrans.cpp, src/sp-gradient.cpp,
 	  src/sp-item.cpp, src/sp-offset.cpp, src/dialogs/transformation.cpp,
 	  src/libnr/nr-rect.cpp, src/libnr/nr-rect.h:
-      Cleaned up NR::Rect API and made SPSelection's desktop pointer private.
+	  Cleaned up NR::Rect API and made SPSelection's desktop pointer private.
 
 	* src/display/sp-canvas.cpp, src/libnr/nr-convex-hull.h,
 	  src/libnr/nr-rect.h: 
@@ -156,7 +161,7 @@
 
 2004-04-16  MenTaLguY <mental@rydia.net>
 
-    * src/selection.cpp, src/selection.h, src/forward.h: initial
+	* src/selection.cpp, src/selection.h, src/forward.h: initial
 	  C++ification of SPSelection class
 
 2004-04-15  Kees Cook <kees@outflux.net>
@@ -226,7 +231,7 @@
 	* configure.in: Implemented gcc version test for >= 3.0.0
 	* src/file.cpp, src/interface.cpp, share/icons/icons.svg, src/verbs.cbb:
 	  finished "File / Revert" implementation.  Found a memory leak in
-      "file_save".  Added more sanity checking to "sp_file_revert" and more
+	  "file_save".  Added more sanity checking to "sp_file_revert" and more
 	  status messages.
 	* src/main.cpp, src/file.h, src/file.cpp: removed redundant code, implemented
 	  in "sp_file_open".
@@ -252,15 +257,15 @@
 	  is untouched.  (RFE#928517)
 	  Added support for future "File/Revert" handling.  Needs
 	  a little more support in the SPDocument structure.  See notes in
-      "src/file.cpp", function "sp_file_revert_dialog".
+	  "src/file.cpp", function "sp_file_revert_dialog".
 
 2004-04-13  Ted Gould <ted@gould.cx>
 
 	* configure.in, share/Makefile.am, share/clipart/Makefile.am,
-      share/examples/Makefile.am, share/fonts/Makefile.am
-      share/gradients/Makefile.am, share/keyboards/Makefile.am
-      share/markers/Makefile.am, share/palettes/Makefile.am
-      share/screens/Makefile.am, share/templates/Makefile.am:
+	  share/examples/Makefile.am, share/fonts/Makefile.am
+	  share/gradients/Makefile.am, share/keyboards/Makefile.am
+	  share/markers/Makefile.am, share/palettes/Makefile.am
+	  share/screens/Makefile.am, share/templates/Makefile.am:
 	Making it so that the clipart and everything else gets put in
 	the tarball, and also get installed in the share directory.  Many
 	of these have just 'README' files, but they now have good place-
@@ -270,7 +275,7 @@
 
 	* src/dialogs/stroke-style.cpp, src/Makefile.am, src/dialogs/Makefile.am,
 	  src/widgets/Makefile.am, configure.in: fixed up INKSCAPE_*DIR paths so CVS
-      will compile happily for me.  This way if paths change, files will be
+	  will compile happily for me.  This way if paths change, files will be
 	  recompiled.  The old way would let configure run again (changing the
 	  datadir path) without forcing a recompile, which could break the
 	  compiled paths.
@@ -288,19 +293,19 @@
 2004-04-11  Ted Gould <ted@gould.cx>
 
 	* src/extension/system.cpp, src/extension/internal/eps-out.cpp
-      src/extension/internal/eps-out.h:
+	  src/extension/internal/eps-out.h:
 	First pass at a file save dialog with EPS output.  The dialog
 	sets the bounding box in the file.  Comments encouraged.
 
 2004-04-11  Ted Gould <ted@gould.cx>
 
 	* src/file.cpp, src/main.cpp, src/print.cpp, src/extension/init.cpp,
-      src/extension/init.h, src/extension/system.cpp, src/extension/system.h,
-      src/extension/implementation/script.cpp, src/extension/internal/eps-out.cpp,
-      src/extension/internal/gnome.cpp, src/extension/internal/ps-out.cpp,
-      src/extension/internal/ps.cpp, src/extension/internal/svg.cpp,
-      src/extension/internal/win32.cpp:
-    Change alot of files, but small changes.  Basically just took
+	  src/extension/init.h, src/extension/system.cpp, src/extension/system.h,
+	  src/extension/implementation/script.cpp, src/extension/internal/eps-out.cpp,
+	  src/extension/internal/gnome.cpp, src/extension/internal/ps-out.cpp,
+	  src/extension/internal/ps.cpp, src/extension/internal/svg.cpp,
+	  src/extension/internal/win32.cpp:
+	Change alot of files, but small changes.  Basically just took
 	system.cpp and init.cpp and finally ported them to the Inkscape::
 	Extension namespace.  Cleaned up the code in them a bunch, it is
 	much easier to read now!  All the other files are just referencing
@@ -323,11 +328,11 @@
 	* Makefile.mingw share/Makefile.am src/Makefile.am 
 	  share/markers/Makefile.am share/markers/.cvsignore config.h.mingw 
 	  configure.in: 
-      Added the proper infrastructure to get files to the right location for 
-      markers.
+	  Added the proper infrastructure to get files to the right location for 
+	  markers.
 
 	* share/tutorials/tipsandtricks.svg: Deleted the URL trick because it no 
-      longer works or something.
+	  longer works or something.
 
 2004-04-11  Kees Cook <kees@outflux.net>
 
@@ -341,9 +346,9 @@
 2004-04-09  Ted Gould <ted@gould.cx>
 
 	* share/extensions/Makefile.am, share/extensions/epsi_output.inkmod,
-      share/extensions/ps2epsi.sh, src/extension/extension.cpp,
-      src/extension/extension.h, src/extension/init.cpp,
-      src/extension/implementation/implementation.cpp,
+	  share/extensions/ps2epsi.sh, src/extension/extension.cpp,
+	  src/extension/extension.h, src/extension/init.cpp,
+	  src/extension/implementation/implementation.cpp,
 	  src/extension/implementation/implementation.h,
 	  src/extension/implementation/script.cpp,
 	  src/extension/implementation/script.h,
@@ -358,17 +363,17 @@
 
 	  2) Adding the concepts of a 'helper extension' to scripts.  This
 	     allows them to use other extensions for handling the data, so
-		 they don't have to deal with SVG directly - Inkscape will
-		 build the pipeline.  An example of this is the epsi output.
+	     they don't have to deal with SVG directly - Inkscape will
+	     build the pipeline.  An example of this is the epsi output.
 
-      3) Adding the bounding box change provided by Carl Hetherington
+	  3) Adding the bounding box change provided by Carl Hetherington
 	     to the Postscript output.  The EPS output plugin sets this, so
-		 now EPSes have smaller bounding boxes.  A GUI needs to be
-		 written for this setting.
+	     now EPSes have smaller bounding boxes.  A GUI needs to be
+	     written for this setting.
 
 2004-04-08  MenTaLguY <mental@rydia.net>
 
-    * configure.in, src/svg/ftos.cpp: fix for OS X build
+	* configure.in, src/svg/ftos.cpp: fix for OS X build
 
 	* src/extensions/internal.ps.cpp: crash fix
 
@@ -500,7 +505,7 @@
 2004-04-03  Ted Gould <ted@gould.cx>
 
 	* share/extensions/svgz_input.inkmod, src/file.cpp,
-      src/extension/extension.cpp, src/extension/internal/svg.cpp:
+	  src/extension/extension.cpp, src/extension/internal/svg.cpp:
 	Making it so that input extensions can specify the output extension
 	that gets used to save them.  If this field isn't filled in, the value
 	gets set to NULL, and then the Save As dialog is used instead of
@@ -509,8 +514,8 @@
 2004-04-03  Ted Gould <ted@gould.cx>
 
 	* src/file.cpp, src/main.cpp, src/extension/extension.cpp,
-      src/extension/extension.h, src/extension/system.cpp,
-      src/extension/internal/svg.cpp:
+	  src/extension/extension.h, src/extension/system.cpp,
+	  src/extension/internal/svg.cpp:
 	Fixing the output_extension flag to not be saved in a file, but also
 	to be able to be specified by the input module.  Also, this fixes
 	the commandline processing of files to make them use the extension
@@ -868,7 +873,7 @@
 2004-03-14  Bryce Harrington <bryce@bryceharrington.com>
 
 	* src/view.cpp:  Adding an accumulator function for checking
-  	  return values of shutdown signal handlers, so that if any one of
+	  return values of shutdown signal handlers, so that if any one of
 	  them returns a value indicating an abort of the shutdown, the
 	  shutdown process will be aborted.
 
@@ -6048,7 +6053,7 @@ Wed Dec  4 01:05:05 2002  Mitsuru Oka  <oka326@parkcity.ne.jp>
 	(gtk_event_box_new_with_image_file_and_tooltips) 
 	(gtk_event_box_force_draw_parent): New functions.
 
-	* src/widgets/sp-menu-button.c 	(sp_menu_button_draw_arrow): New function.
+	* src/widgets/sp-menu-button.c (sp_menu_button_draw_arrow): New function.
 	(sp_menu_button_draw): used sp_menu_button_draw_arrow.
 	(sp_menu_button_expose): ditto.
 
@@ -10538,7 +10543,7 @@ Sun Mar  3 03:40:07 2002  Mitsuru Oka  <oka326@parkcity.ne.jp>
 2000-09-12  Lauris Kaplinski  <lauris@helixcode.com>
 
 	* src/*.c, glade/desktop.*, src/dialog/desktop-properties.*:
-	Hacked together a preliminary guideline support stuff.	It
+	Hacked together a preliminary guideline support stuff.  It
 	sucks really for anything other than scaling, but now we have
 	at least something to improve in future.
 
