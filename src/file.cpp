@@ -147,7 +147,7 @@ sp_file_exit()
  *  Open a file, add the document to the desktop
  */
 bool
-sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key)
+sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_recent)
 {
     SPDocument *doc;
     try {
@@ -179,7 +179,9 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key)
         sp_namedview_window_from_document(desktop);
         doc->virgin = FALSE;
 
-        prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
+        if (add_to_recent) {
+            prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
+        }
 
         return TRUE;
     } else {
