@@ -3,6 +3,9 @@
 	* src/desktop.cpp: prevent crash by adding a check for 
 	layer == NULL to SPDesktopWidget::_buildLayerStatusMenuItem.
 
+	* src/selection-chemistry.cpp: prevent crash on copying empty
+	groups.
+
 2004-07-04  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-object.cpp: fixed bug #979281 -- I had accidentally

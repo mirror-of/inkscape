@@ -690,7 +690,8 @@ void sp_selection_copy()
     SPItem *item = SP_ITEM (items->data);
     // write the complete cascaded style, context-free
     style_clipboard = sp_css_attr_from_style (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
-    if (SP_IS_GROUP(item) || (SP_IS_TEXT(item) && SP_OBJECT(item)->children && SP_OBJECT(item)->children->next == NULL)) {
+    if ((SP_IS_GROUP(item) && SP_OBJECT(item)->children) ||
+        (SP_IS_TEXT (item) && SP_OBJECT(item)->children && SP_OBJECT(item)->children->next == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its first child
         SPCSSAttr *temp = sp_css_attr_from_style (sp_object_last_child (item), SP_STYLE_FLAG_ALWAYS);
