@@ -899,8 +899,8 @@ sp_document_default_gradient_vector(SPDocument *document, guint32 color)
 }
 
 /**
-Return the preferred vector for \a o, made from its current fill or stroke color, or from desktop
-style if \a o is NULL or doesn't have flat color.
+Return the preferred vector for \a o, made from (in order of preference) its current vector,
+current fill or stroke color, or from desktop style if \a o is NULL or doesn't have style.
 */
 SPGradient *
 sp_gradient_vector_for_object(SPDocument *const doc, SPDesktop *const desktop,

@@ -45,6 +45,7 @@ void sp_object_ensure_fill_gradient_normalized (SPObject *object);
 void sp_object_ensure_stroke_gradient_normalized (SPObject *object);
 
 SPGradient *sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *property);
+SPGradient *sp_gradient_reset_to_userspace (SPGradient *gr, SPItem *item);
 
 void sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool set);
 
