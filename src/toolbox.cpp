@@ -1935,14 +1935,21 @@ sp_arctb_startend_value_changed(GtkAdjustment *adj,  SPWidget *tbl, const gchar*
          items != NULL;
          items = items->next)
     {
-        if (SP_IS_ARC ((SPItem *) items->data)) {
+        SPItem *item = SP_ITEM (items->data);
 
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+        if (SP_IS_ARC (item) && SP_IS_GENERICELLIPSE (item)) {
 
-            if (adj->value != 0)
-                sp_repr_set_double(repr, namespaced_name, (adj->value * M_PI)/ 180);
-            else
-                sp_repr_set_attr (repr, namespaced_name, NULL);
+            SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+            SPArc *arc = SP_ARC(item);
+
+            if (!strcmp (value_name, "start"))
+                ge->start = (adj->value * M_PI)/ 180;
+            else 
+                ge->end = (adj->value * M_PI)/ 180;
+
+            sp_genericellipse_normalize (ge);
+            ((SPObject *)arc)->updateRepr();
+            ((SPObject *)arc)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
             modmade = true;
         }
