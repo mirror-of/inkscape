@@ -19,12 +19,12 @@
 #include "sp-polygon.h"
 #include "helper/sp-intl.h"
 
-static void sp_polygon_class_init (SPPolygonClass *class);
+static void sp_polygon_class_init (SPPolygonClass *klass);
 static void sp_polygon_init (SPPolygon *polygon);
 
 static void sp_polygon_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static SPRepr *sp_polygon_write (SPObject *object, SPRepr *repr, guint flags);
-static void sp_polygon_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_polygon_set (SPObject *object, unsigned int key, const gchar *value);
 
 static gchar *sp_polygon_description (SPItem *item);
 
@@ -45,23 +45,23 @@ sp_polygon_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_polygon_init,
 		};
-		polygon_type = g_type_register_static (SP_TYPE_SHAPE, "SPPolygon", &polygon_info, 0);
+		polygon_type = g_type_register_static (SP_TYPE_SHAPE, "SPPolygon", &polygon_info, (GTypeFlags)0);
 	}
 	return polygon_type;
 }
 
 static void
-sp_polygon_class_init (SPPolygonClass *class)
+sp_polygon_class_init (SPPolygonClass *klass)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	gobject_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_SHAPE);
+	parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
 
 	sp_object_class->build = sp_polygon_build;
 	sp_object_class->write = sp_polygon_write;
@@ -148,7 +148,7 @@ sp_polygon_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_polygon_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_polygon_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPPolygon *polygon;
 

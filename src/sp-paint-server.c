@@ -41,7 +41,7 @@ sp_paint_server_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_paint_server_init,
 		};
-		type = g_type_register_static (SP_TYPE_OBJECT, "SPPaintServer", &info, 0);
+		type = g_type_register_static (SP_TYPE_OBJECT, "SPPaintServer", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -53,7 +53,7 @@ sp_paint_server_class_init (SPPaintServerClass *klass)
 
 	sp_object_class = (SPObjectClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_OBJECT);
+	parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
 
 	sp_object_class->release = sp_paint_server_release;
 }
@@ -104,7 +104,7 @@ sp_paint_server_painter_new (SPPaintServer *ps, const gdouble *affine, const NRR
 	if (painter) {
 		painter->next = ps->painters;
 		painter->server = ps;
-		painter->type = G_OBJECT_TYPE (ps);
+		painter->type = (SPPainterType) G_OBJECT_TYPE (ps);
 		ps->painters = painter;
 	}
 

@@ -25,7 +25,7 @@
 #include "style.h"
 #include "sp-chars.h"
 
-static void sp_chars_class_init (SPCharsClass *class);
+static void sp_chars_class_init (SPCharsClass *klass);
 static void sp_chars_init (SPChars *chars);
 
 static void sp_chars_release (SPObject *object);
@@ -52,7 +52,7 @@ sp_chars_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_chars_init,
 		};
-		type = g_type_register_static (SP_TYPE_ITEM, "SPChars", &info, 0);
+		type = g_type_register_static (SP_TYPE_ITEM, "SPChars", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -68,7 +68,7 @@ sp_chars_class_init (SPCharsClass *klass)
 	sp_object_class = (SPObjectClass *) klass;
 	item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_ITEM);
+	parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 
 	sp_object_class->release = sp_chars_release;
 	sp_object_class->modified = sp_chars_modified;
