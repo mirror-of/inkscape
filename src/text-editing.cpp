@@ -845,15 +845,14 @@ sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::it
     SPObject *source_obj;
     unsigned nb_let;
     layout->getSourceOfCharacter(position, (void**)&source_obj);
-    if (source_obj == NULL) {    // end of text
+    if (source_obj == NULL)    // end of text
         source_obj = text->lastChild();
-        nb_let = sp_text_get_length(source_obj);
-    } else if (SP_IS_STRING(source_obj)) {
-        nb_let = SP_STRING(source_obj)->string.length();
+    else if (SP_IS_STRING(source_obj))
         source_obj = source_obj->parent;
-    } else {  // line break
-        nb_let = sp_text_get_length(source_obj);
-    }
+    while (!is_line_break_object(source_obj))
+        source_obj = SP_OBJECT_PARENT(source_obj);
+    nb_let = sp_text_get_length(source_obj);
+
     SPStyle *style = SP_OBJECT_STYLE (source_obj);
 
     // calculate real value
