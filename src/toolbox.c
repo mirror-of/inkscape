@@ -56,8 +56,8 @@
 #include "dialogs/node-edit.h"
 #include "dialogs/dialog-events.h"
 
-#define TOOL_BUTTON_SIZE 24
-#define COMMAND_BUTTON_SIZE 24
+#define TOOL_BUTTON_SIZE 26
+#define AUX_BUTTON_SIZE 22
 
 static GtkWidget * sp_select_toolbox_new (void);
 static GtkWidget * sp_node_toolbox_new (void);
@@ -156,8 +156,8 @@ aux_toolbox_size_request (GtkWidget *widget,
                           GtkRequisition *requisition,
                           gpointer user_data)
 {
-	if ( requisition->height < 28 ) {
-		requisition->height = 28;
+	if ( requisition->height < AUX_BUTTON_SIZE + 4 ) {
+		requisition->height = AUX_BUTTON_SIZE + 4;
 	}
 }
 
@@ -195,15 +195,15 @@ sp_select_toolbox_new ()
 	tt = gtk_tooltips_new ();
 	tb = gtk_hbox_new (FALSE, 0);
 
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_GROUP, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_UNGROUP, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_FRONT, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_BACK, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_RAISE, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_LOWER, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_ROTATE_90, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_HORIZONTAL, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_VERTICAL, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_GROUP, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_UNGROUP, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_FRONT, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_BACK, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_RAISE, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_LOWER, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_ROTATE_90, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_HORIZONTAL, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_VERTICAL, tt);
 
 	return tb;
 }
@@ -217,15 +217,15 @@ sp_node_toolbox_new ()
 	tt = gtk_tooltips_new ();
 	tb = gtk_hbox_new (FALSE, 0);
 
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_insert", GTK_SIGNAL_FUNC (sp_node_path_edit_add), tt, _("Insert new nodes into selected segments"));
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_delete", GTK_SIGNAL_FUNC (sp_node_path_edit_delete), tt, _("Delete selected nodes"));
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_join", GTK_SIGNAL_FUNC (sp_node_path_edit_join), tt, _("Join lines at selected nodes"));
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_join_segment", GTK_SIGNAL_FUNC (sp_node_path_edit_join_segment), tt, _("Join lines at selected nodes with new segment"));
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_break", GTK_SIGNAL_FUNC (sp_node_path_edit_break), tt, _("Break line at selected nodes"));
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_cusp", GTK_SIGNAL_FUNC (sp_node_path_edit_cusp), tt, _("Make selected nodes corner"));
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_smooth", GTK_SIGNAL_FUNC (sp_node_path_edit_smooth), tt, _("Make selected nodes smooth"));
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_line", GTK_SIGNAL_FUNC (sp_node_path_edit_toline), tt, _("Make selected segments lines"));
-	sp_toolbox_button_new (tb, COMMAND_BUTTON_SIZE, "node_curve", GTK_SIGNAL_FUNC (sp_node_path_edit_tocurve), tt, _("Make selected segments curves"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_insert", GTK_SIGNAL_FUNC (sp_node_path_edit_add), tt, _("Insert new nodes into selected segments"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_delete", GTK_SIGNAL_FUNC (sp_node_path_edit_delete), tt, _("Delete selected nodes"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_join", GTK_SIGNAL_FUNC (sp_node_path_edit_join), tt, _("Join lines at selected nodes"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_join_segment", GTK_SIGNAL_FUNC (sp_node_path_edit_join_segment), tt, _("Join lines at selected nodes with new segment"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_break", GTK_SIGNAL_FUNC (sp_node_path_edit_break), tt, _("Break line at selected nodes"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_cusp", GTK_SIGNAL_FUNC (sp_node_path_edit_cusp), tt, _("Make selected nodes corner"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_smooth", GTK_SIGNAL_FUNC (sp_node_path_edit_smooth), tt, _("Make selected nodes smooth"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_line", GTK_SIGNAL_FUNC (sp_node_path_edit_toline), tt, _("Make selected segments lines"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_curve", GTK_SIGNAL_FUNC (sp_node_path_edit_tocurve), tt, _("Make selected segments curves"));
 
 	return tb;
 }
@@ -239,14 +239,14 @@ sp_zoom_toolbox_new ()
 	tt = gtk_tooltips_new ();
 	tb = gtk_hbox_new (FALSE, 0);
 
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_IN, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_OUT, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_1, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_2, tt);
-	sp_toolbox_button_new_from_verb(tb, COMMAND_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_2_1, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_IN, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_OUT, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_1, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_2, tt);
+	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_2_1, tt);
 
 	return tb;
 }

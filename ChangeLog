@@ -1,3 +1,7 @@
+2003-11-30 MenTaLguY <mental@rydia.net>
+
+	* src/toolbox.c: made tool buttons larger, aux buttons smaller
+
 2003-11-29  bulia byak <bulia@dr.com>
 
 	* src/selection-ch emistry.c src/selection-chemistry.h src/verbs.c src/verbs.h
