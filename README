@@ -1,13 +1,13 @@
 
-Sodipodi
+Inkscape
 --------
 
-Sodipodi is (or at least should be) a vector illustrator program for
+Inkscape is (or at least should be) a vector illustrator program for
 the GNOME environment.  It is currently in active development and
 approaching general usability.
 
 If you are more interested in hacking, you can also try out
-KIllustrator, Gill and sketch. Sodipodi eagerly borrows code from
+KIllustrator, Gill and sketch. Inkscape eagerly borrows code from
 every other free program under the Sun (hey - isn't it the main point
 about free software?)
 
@@ -15,7 +15,7 @@ You can always find the freshest sodipodi at GNOME CVS.  The official
 homepage is http://sodipodi.sourceforge.net/ You can also find links
 to the binary & source code packages there.
 
-Sodipodi uses the standard procedure for compilation and installation: 
+Inkscape uses the standard procedure for compilation and installation: 
 
 ./configure
 make
