@@ -52,14 +52,17 @@
 #include "modules/win32.h"
 #endif
 
+#ifndef WIN32
 static void sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, const gchar *key);
+#endif
 
 gchar *open_path = NULL;
 gchar *save_path = NULL;
 gchar *import_path = NULL;
 gchar *export_path = NULL;
 
-void sp_file_new (void)
+void
+sp_file_new (void)
 {
 	SPDocument * doc;
 	SPViewWidget *dtw;
@@ -134,7 +137,8 @@ sp_file_open_dialog_type_selected (SPMenu *menu, gpointer itemdata, GObject *fse
 	g_object_set_data (fsel, "type-key", itemdata);
 }
 
-void sp_file_open_dialog (gpointer object, gpointer data)
+void
+sp_file_open_dialog (gpointer object, gpointer data)
 {
 #ifdef WIN32
 	char *filename;
@@ -228,15 +232,17 @@ sp_file_save_dialog (SPDocument *doc)
 	b = gtk_dialog_run (GTK_DIALOG (dlg));
 
 	if (b == GTK_RESPONSE_OK) {
-		sp_file_save_ok (dlg, doc, (gchar*)((SPMenu *) menu)->activedata);
+		sp_file_save_ok (dlg, doc, (gchar const *)((SPMenu *) menu)->activedata);
 	}
 
 	gtk_widget_destroy (dlg);
 #endif
 }
 
+#ifndef WIN32
 static void
-sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, const gchar *key) {
+sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, gchar const *key)
+{
 	GtkFileSelection *fs;
 	const gchar *filename;
 	const gchar      *raw_filename;
@@ -269,6 +275,7 @@ sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, const gchar *key) {
 		gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
 	}
 }
+#endif
 
 void
 sp_file_save_document (SPDocument *doc)
@@ -388,7 +395,8 @@ sp_file_do_import (SPDocument *doc, const gchar *filename)
 	}
 }
 
-void sp_file_import (GtkWidget * widget)
+void
+sp_file_import (GtkWidget * widget)
 {
         SPDocument *doc;
 #ifdef WIN32
@@ -456,7 +464,8 @@ sp_file_print_preview (gpointer object, gpointer data)
 	}
 }
 
-void sp_file_exit (void)
+void
+sp_file_exit (void)
 {
 	sp_ui_close_all ();
 	// no need to call inkscape_exit here; last document being closed will take care of that
