@@ -50,6 +50,7 @@
 #define SP_OBJECT_DOCUMENT(o) (((SPObject *) (o))->document)
 #define SP_OBJECT_PARENT(o) (((SPObject *) (o))->parent)
 #define SP_OBJECT_NEXT(o) (((SPObject *) (o))->next)
+#define SP_OBJECT_PREV(o) (sp_object_prev ((SPObject *) (o)))
 #define SP_OBJECT_HREFCOUNT(o) (((SPObject *) (o))->hrefcount)
 #define SP_OBJECT_STYLE(o) (((SPObject *) (o))->style)
 #define SP_OBJECT_TITLE(o) sp_object_title_get ((SPObject *) (o))
@@ -512,5 +513,8 @@ const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, c
 SPVersion sp_object_get_sodipodi_version (SPObject *object);
 
 int sp_object_compare_position(SPObject const *first, SPObject const *second);
+
+SPObject *sp_object_prev(SPObject *child);
+
 
 #endif

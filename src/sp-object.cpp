@@ -1240,3 +1240,14 @@ sp_object_get_sodipodi_version (SPObject *object)
 	
 	return zero_version;
 }
+
+SPObject *
+sp_object_prev(SPObject *child)
+{
+    SPObject *parent = SP_OBJECT_PARENT(child);
+    for ( SPObject *i = sp_object_first_child(parent); i; i = SP_OBJECT_NEXT(i) ) {
+        if (SP_OBJECT_NEXT(i) == child)
+            return i;
+    }
+    return NULL;
+}
