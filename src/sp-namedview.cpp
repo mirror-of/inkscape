@@ -543,17 +543,16 @@ sp_namedview_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 void
-sp_namedview_show (SPNamedView * nv, gpointer desktop)
+sp_namedview_show(SPNamedView *const nv, SPDesktop *const desktop)
 {
-	SPDesktop * dt;
 	GSList * l, *v;
 	SPCanvasItem * item;
 
-	dt = SP_DESKTOP (desktop);
-
 	for (l = nv->guides; l != NULL; l = l->next) {
-		sp_guide_show (SP_GUIDE (l->data), dt->guides, (GCallback)sp_dt_guide_event);
-		if (dt->guides_active) sp_guide_sensitize (SP_GUIDE (l->data), SP_DT_CANVAS (dt), TRUE);
+		sp_guide_show(SP_GUIDE(l->data), desktop->guides, (GCallback)sp_dt_guide_event);
+		if (desktop->guides_active) {
+			sp_guide_sensitize(SP_GUIDE(l->data), SP_DT_CANVAS(desktop), TRUE);
+		}
 		if (nv->showguides) {
 			for (v = SP_GUIDE (l->data)->views; v != NULL; v = v->next) {
 				sp_canvas_item_show (SP_CANVAS_ITEM (v->data));
@@ -567,7 +566,7 @@ sp_namedview_show (SPNamedView * nv, gpointer desktop)
 
 	nv->views = g_slist_prepend (nv->views, desktop);
 
-	item = sp_canvas_item_new (SP_DT_GRID (dt), SP_TYPE_CGRID, NULL);
+	item = sp_canvas_item_new (SP_DT_GRID(desktop), SP_TYPE_CGRID, NULL);
 	// since we're keeping a copy, we need to bump up the ref count
 	gtk_object_ref (GTK_OBJECT(item));
 	nv->gridviews = g_slist_prepend (nv->gridviews, item);
@@ -666,9 +665,8 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 }
 
 void
-sp_namedview_hide (SPNamedView * nv, gpointer desktop)
+sp_namedview_hide(SPNamedView *const nv, SPDesktop *const desktop)
 {
-	SPDesktop * dt;
 	GSList * l;
 
 	g_assert (nv != NULL);
@@ -677,16 +675,16 @@ sp_namedview_hide (SPNamedView * nv, gpointer desktop)
 	g_assert (SP_IS_DESKTOP (desktop));
 	g_assert (g_slist_find (nv->views, desktop));
 
-	dt = SP_DESKTOP (desktop);
-
 	for (l = nv->guides; l != NULL; l = l->next) {
-		sp_guide_hide (SP_GUIDE (l->data), SP_DT_CANVAS (dt));
+		sp_guide_hide(SP_GUIDE(l->data), SP_DT_CANVAS(desktop));
 	}
 
 	nv->views = g_slist_remove (nv->views, desktop);
 
 	for (l = nv->gridviews; l != NULL; l = l->next) {
-		if (SP_CANVAS_ITEM (l->data)->canvas == SP_DT_CANVAS (dt)) break;
+		if (SP_CANVAS_ITEM(l->data)->canvas == SP_DT_CANVAS(desktop)) {
+			break;
+		}
 	}
 
 	g_assert (l);

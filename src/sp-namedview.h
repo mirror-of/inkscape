@@ -84,8 +84,8 @@ struct SPNamedViewClass {
 
 GType sp_namedview_get_type(void);
 
-void sp_namedview_show(SPNamedView *namedview, gpointer desktop);
-void sp_namedview_hide(SPNamedView *namedview, gpointer desktop);
+void sp_namedview_show(SPNamedView *namedview, SPDesktop *desktop);
+void sp_namedview_hide(SPNamedView *namedview, SPDesktop *desktop);
 
 void sp_namedview_activate_guides(SPNamedView *nv, gpointer desktop, gboolean active);
 guint sp_namedview_viewcount(SPNamedView *nv);
