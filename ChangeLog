@@ -1,3 +1,9 @@
+2004-05-13  John Cliff <simarilius@yahoo.com>
+
+	* src/dialogs/stroke-style.cpp: Switched to using get_stock to retrieve markers.
+	* src/helpers/stock-items.h, src/helpers/stock-items.cpp: created to handle stock items.
+	* src/prefix.h: Added marker and gradient directorys.
+
 2004-05-13  Kees Cook <kees@outflux.net>
 
 	* configure.in, src/main.cpp, config.h.mingw, debian/rules:
