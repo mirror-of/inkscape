@@ -1,5 +1,7 @@
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-macros.h: Don't #include nr-matrix.h, nr-rect.h.
+
 	* src/arc-context.h, src/desktop-affine.h, src/dir-util.h,
 	  src/draw-context.h, src/dyna-draw-context.h, src/help.h,
 	  src/knotholder.h, src/prefs-utils.h, src/select-toolbar.h,

@@ -19,9 +19,6 @@
 #endif
 #include <assert.h>
 
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-rect.h>
-
 #define nr_new(t,n) ((t *) malloc ((n) * sizeof (t)))
 #define nr_free free
 #define nr_renew(p,t,n) ((t *) realloc (p, (n) * sizeof (t)))
