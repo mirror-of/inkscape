@@ -1468,13 +1468,13 @@ sp_style_clear (SPStyle *style)
     style->font_size.value = SP_CSS_FONT_SIZE_MEDIUM;
     style->font_size.computed = 12.0;
     style->font_style.set = FALSE;
-    style->font_style.computed = SP_CSS_FONT_STYLE_NORMAL;
+    style->font_style.value = style->font_style.computed = SP_CSS_FONT_STYLE_NORMAL;
     style->font_variant.set = FALSE;
-    style->font_variant.computed = SP_CSS_FONT_VARIANT_NORMAL;
+    style->font_variant.value = style->font_variant.computed = SP_CSS_FONT_VARIANT_NORMAL;
     style->font_weight.set = FALSE;
-    style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
+    style->font_weight.value = style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
     style->font_stretch.set = FALSE;
-    style->font_stretch.computed = SP_CSS_FONT_STRETCH_NORMAL;
+    style->font_stretch.value = style->font_stretch.computed = SP_CSS_FONT_STRETCH_NORMAL;
 
     style->opacity.value = SP_SCALE24_MAX;
     style->display = TRUE;
@@ -1486,26 +1486,33 @@ sp_style_clear (SPStyle *style)
     style->fill.type = SP_PAINT_TYPE_COLOR;
     sp_color_set_rgb_float (&style->fill.value.color, 0.0, 0.0, 0.0);
     style->fill_opacity.value = SP_SCALE24_MAX;
-    style->fill_rule.value = SP_WIND_RULE_NONZERO;
+    style->fill_rule.value = style->fill_rule.computed = SP_WIND_RULE_NONZERO;
 
-    style->stroke.set = FALSE;
     style->stroke.type = SP_PAINT_TYPE_NONE;
+    style->stroke.set = FALSE;
     sp_color_set_rgb_float (&style->stroke.value.color, 0.0, 0.0, 0.0);
+    style->stroke_opacity.value = SP_SCALE24_MAX;
+
     style->stroke_width.set = FALSE;
     style->stroke_width.unit = SP_CSS_UNIT_NONE;
     style->stroke_width.computed = 1.0;
-    style->stroke_linecap.value = SP_STROKE_LINECAP_BUTT;
-    style->stroke_linejoin.value = SP_STROKE_LINEJOIN_MITER;
+
+    style->stroke_linecap.set = FALSE;
+    style->stroke_linecap.value = style->stroke_linecap.computed = SP_STROKE_LINECAP_BUTT;
+    style->stroke_linejoin.set = FALSE;
+    style->stroke_linejoin.value = style->stroke_linejoin.computed = SP_STROKE_LINEJOIN_MITER;
+
+    style->stroke_miterlimit.set = FALSE;
     style->stroke_miterlimit.value = 4.0;
+
     style->stroke_dash.n_dash = 0;
     style->stroke_dash.dash = NULL;
     style->stroke_dash.offset = 0.0;
-    style->stroke_opacity.value = SP_SCALE24_MAX;
 
     style->text_anchor.set = FALSE;
-    style->text_anchor.computed = SP_CSS_TEXT_ANCHOR_START;
+    style->text_anchor.value = style->text_anchor.computed = SP_CSS_TEXT_ANCHOR_START;
     style->writing_mode.set = FALSE;
-    style->writing_mode.computed = SP_CSS_WRITING_MODE_LR;
+    style->writing_mode.value = style->writing_mode.computed = SP_CSS_WRITING_MODE_LR;
 
     for (i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
         g_free(style->marker[i].value);
