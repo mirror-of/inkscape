@@ -1738,29 +1738,76 @@ sp_selection_create_bitmap_copy ()
         return;
     }
 
+    // List of the items to show; all others will be hidden
     GSList *items = g_slist_copy ((GSList *) selection->itemList());
 
+    // Generate a random value from the current time (you may create bitmap from the same object(s)
+    // multiple times, and this is done so that they don't clash)
     GTimeVal cu;
     g_get_current_time (&cu);
     guint current = (int) (cu.tv_sec * 1000000 + cu.tv_usec) % 1024; 
 
-    gchar const *filename = g_strdup_printf ("%s-%s-%u.png", document->name, sp_repr_attr (SP_OBJECT_REPR(items->data), "id"), current);
-    gchar const *filepath = g_build_filename (document->base?document->base:"", filename, NULL);
+    // Create the filename
+    gchar *filename = g_strdup_printf ("%s-%s-%u.png", document->name, sp_repr_attr (SP_OBJECT_REPR(items->data), "id"), current);
+    // Imagemagick is known not to handle spaces in filenames, so we replace anything but letters,
+    // digits, and a few other chars, with "_"
+    filename = g_strcanon (filename, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.=+~$#@^&!?", '_');
+    // Build the complete path by adding document->base if set
+    gchar *filepath = g_build_filename (document->base?document->base:"", filename, NULL);
 
     //g_print ("%s\n", filepath);
 
+    // Get the bounding box of the selection
     NRRect bbox;
     sp_document_ensure_up_to_date (document);
     selection->bounds(&bbox);
 
-    double res = 300 / MIN ((bbox.x1 - bbox.x0), (bbox.y1 - bbox.y0));
+    // Calculate resolution
+    double res;
+    uint prefs_res = prefs_get_int_attribute ("options.createbitmap", "resolution", 0);
+    if (prefs_res != 0) {
+        // If it's given explicitly in prefs, take it
+        res = prefs_res;
+    } else {
+        // Otherwise look up minimum bitmap size (default 250 pixels) and calculate resolution from it
+        uint prefs_min = prefs_get_int_attribute ("options.createbitmap", "minsize", 250);
+        res = prefs_min / MIN ((bbox.x1 - bbox.x0), (bbox.y1 - bbox.y0));
+    }
+
+    // The width and height of the bitmap in pixels
     int width = (int) floor ((bbox.x1 - bbox.x0) * res);
     int height =(int) floor ((bbox.y1 - bbox.y0) * res);
 
-    NR::Matrix eek = NR::scale(0.8, -0.8) * NR::translate(0, sp_document_height(document));
+    // Find out if we have to run a filter
+    const gchar *run = NULL;
+    const gchar *filter = prefs_get_string_attribute ("options.createbitmap", "filter");
+    if (filter) {
+        // filter command is given;
+        // see if we have a parameter to pass to it
+        const gchar *param1 = prefs_get_string_attribute ("options.createbitmap", "filter_param1");
+        if (param1) {
+            if (param1[strlen(param1) - 1] == '%') {
+                // if the param string ends with %, interpret it as a percentage of the image's max dimension
+                gchar p1[256];
+                g_ascii_dtostr (p1, 256, ceil (g_ascii_strtod (param1, NULL) * MAX(width, height) / 100));
+                // the first param is always the image filename, the second is param1
+                run = g_strdup_printf ("%s \"%s\" %s", filter, filepath, p1);
+            } else {
+                // otherwise pass the param1 unchanged
+                run = g_strdup_printf ("%s \"%s\" %s", filter, filepath, param1);
+            }
+        } else {
+            // run without extra parameter
+            run = g_strdup_printf ("%s \"%s\"", filter, filepath);
+        }
+    }
 
+
+    // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
+    NR::Matrix eek = NR::scale(0.8, -0.8) * NR::translate(0, sp_document_height(document));
     NR::Matrix t = NR::scale (1/res, -1/res) * NR::translate (bbox.x0, bbox.y1) * eek.inverse(); 
 
+    // Do the export
     sp_export_png_file(document, filepath,
                    bbox.x0, bbox.y0, bbox.x1, bbox.y1,
                    width, height,
@@ -1771,29 +1818,45 @@ sp_selection_create_bitmap_copy ()
 
     g_slist_free (items);
 
+    // Run filter, if any
+    if (run) {
+        g_print ("Running external filter: %s\n", run);
+        system (run);
+    }
+
+    // Import the image back
     GdkPixbuf *pb = gdk_pixbuf_new_from_file (filepath, NULL);
     if (pb) {
+        // Create the repr for the image
         SPRepr * repr = sp_repr_new ("image");
         sp_repr_set_attr (repr, "xlink:href", filename);
         sp_repr_set_attr (repr, "sodipodi:absref", filepath);
         sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
         sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
 
+        // Write transform
         gchar c[256];
         if (sp_svg_transform_write(c, 256, t)) {
             sp_repr_set_attr(repr, "transform", c);
         } 
 
+        // Add it to the current layer
         desktop->currentLayer()->appendChildRepr(repr);
 
+        // Set selection to the new image
         selection->clear();
         selection->addRepr(repr);
 
+        // Clean up
         sp_repr_unref (repr);
-        sp_document_done (document);
         gdk_pixbuf_unref (pb);
+
+        // Complete undoable transaction
+        sp_document_done (document);
     }
 
+    g_free (filename);
+    g_free (filepath);
 }
 
 
