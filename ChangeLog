@@ -1,5 +1,11 @@
+2004-04-12  Kees Cook <kees@outflux.net>
+
+	* src/dialogs/stroke-style.cpp, src/Makefile.am, src/dialogs/Makefile.am,
+	  src/widgets/Makefile.am, configure.in: fixed up INKSCAPE_*DIR paths so CVS
+      will compile happily for me.
+
 2004-04-13  John Cliff	<simarilius@yahoo.com>
-	* src/sp-shape.cpp, src/dialogs/stroke-style.cpp
+	* src/sp-shape.cpp, src/dialogs/stroke-style.cpp:
 	Couple of changes to marker related code, mid and end markers now point in correct 
 	direction, turning off start markers behaves correctly.
 	This follows on from changes made by me and Carl Hetherington that were commited 
@@ -7,7 +13,6 @@
 	src/inkscape-stock.cpp, src/sp-item.cpp, src/sp-marker.cpp, src/sp-shape.cpp,
 	src/style.cpp, src/style.h, src/dialogs/stroke-style.cpp 
 	to implement marker UI and fixes to the marker rendering code.
-
 
 2004-04-11  Ted Gould <ted@gould.cx>
 

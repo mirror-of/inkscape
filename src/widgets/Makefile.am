@@ -3,14 +3,11 @@
 # Author: Lauris Kaplinski <lauris@ximian.com>
 #
 
-# REJON: changing the following to be in accord w/dir. reorg
-iconsdir = $(datadir)/inkscape/icons
-
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
 	$(INKSCAPE_CFLAGS) \
-	-DINKSCAPE_PIXMAPDIR=\""$(iconsdir)"\"
+	-DINKSCAPE_PIXMAPDIR=\""$(pkgdatadir)/icons"\"
 
 noinst_LIBRARIES = libspwidgets.a
 

@@ -12,13 +12,17 @@ SUBDIRS = libarikkei libnr livarot libnrtype xml svg helper widgets dialogs disp
 AM_CPPFLAGS = \
 	-DINKSCAPE_VERSION=\""$(VERSION)"\"
 
+# These INKSCAPE_*DIR items really need a cleaner way to make it into
+# the subdirectories.  Unfortunately, we want them to be overridden
+# during a "make install" (I think) if the user defines "prefix" to be
+# somewhere else.  See dialogs/Makefile.am too.
 INCLUDES = \
-	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
-	-DINKSCAPE_PIXMAPDIR=\""$(datadir)/inkscape/icons"\" \
-	-DINKSCAPE_SCREENSDIR=\""$(datadir)/inkscape/screens"\" \
-	-DINKSCAPE_TUTORIALSDIR=\""$(datadir)/inkscape/tutorials"\" \
-	-DINKSCAPE_MARKERSDIR=\""$(datadir)/inkscape/markers"\" \
 	-DINKSCAPE_DATADIR=\""$(datadir)"\" \
+	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
+	-DINKSCAPE_PIXMAPDIR=\""$(pkgdatadir)/icons"\" \
+	-DINKSCAPE_SCREENSDIR=\""$(pkgdatadir)/screens"\" \
+	-DINKSCAPE_TUTORIALSDIR=\""$(pkgdatadir)/tutorials"\" \
+	-DINKSCAPE_MARKERSDIR=\""$(pkgdatadir)/markers"\" \
 	-I$(srcdir) \
 	-I$(srcdir)/xml \
 	-I$(srcdir)/svg \

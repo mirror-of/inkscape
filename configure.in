@@ -417,8 +417,9 @@ echo "
 Configuration:
 
         Source code location:     ${srcdir}
+        Destination path prefix:  ${prefix}
         Compiler:                 ${CXX}
-	CPPFLAGS:                 ${CPPFLAGS}
+        CPPFLAGS:                 ${CPPFLAGS}
         CXXFLAGS:                 ${CXXFLAGS}
         LDFLAGS:                  ${LDFLAGS}
 

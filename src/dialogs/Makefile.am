@@ -7,15 +7,12 @@
 # replaced by selection 'changed' signal handlers
 #
 
-# REJON: I'm changing the following to coincide with dir. reorg.
-iconsdir = $(datadir)/inkscape/icons
-
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/dialogs \
-	-DINKSCAPE_ICONS_DIR=\""$(iconsdir)"\" \
-	-DINKSCAPE_PIXMAPDIR=\""$(iconsdir)"\" \
+        -DINKSCAPE_PIXMAPDIR=\""$(pkgdatadir)/icons"\" \
+        -DINKSCAPE_MARKERSDIR=\""$(pkgdatadir)/markers"\" \
 	$(INKSCAPE_CFLAGS)
 
 noinst_LIBRARIES = libspdialogs.a
