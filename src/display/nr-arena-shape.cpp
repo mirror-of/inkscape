@@ -121,7 +121,6 @@ nr_arena_shape_init (NRArenaShape *shape)
 static void
 nr_arena_shape_finalize (NRObject *object)
 {
-    NRArenaItem *item = (NRArenaItem *) object;
     NRArenaShape *shape = (NRArenaShape *) (object);
 
     if (shape->fill_shp) delete shape->fill_shp;
