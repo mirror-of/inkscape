@@ -156,6 +156,7 @@ TESTS =	\
 	libnr/nr-translate-test$(EXEEXT)	\
 	libnr/nr-types-test$(EXEEXT)	\
 	libnr/test-nr$(EXEEXT)	\
+	util/list-container-test$(EXEEXT)	\
 	xml/test-xml$(EXEEXT)	\
 	xml/quote-test$(EXEEXT)	\
 	xml/repr-action-test$(EXEEXT)
