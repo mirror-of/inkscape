@@ -15,6 +15,8 @@
 
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-scale-matrix-ops.h"
@@ -555,7 +557,7 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
 		view = NULL;
 	}
 	if (!view) {
-		view = (SPMarkerView *)malloc (sizeof (SPMarkerView) + (size - 1) * sizeof (NRArenaItem *));
+		view = (SPMarkerView *)malloc (sizeof (SPMarkerView) + (size) * sizeof (NRArenaItem *));
 		for (i = 0; i < size; i++) view->items[i] = NULL;
 		view->next = marker->views;
 		marker->views = view;
