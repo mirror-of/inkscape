@@ -94,14 +94,26 @@ sp_selection_layout_widget_update (SPWidget *spw, SPSelection *sel)
 			us = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "units");
 			unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 
-			a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
-			gtk_adjustment_set_value (a, sp_points_get_units (bbox.x0, unit));
-			a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "Y");
-			gtk_adjustment_set_value (a, sp_points_get_units (bbox.y0, unit));
-			a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "width");
-			gtk_adjustment_set_value (a, sp_points_get_units (bbox.x1 - bbox.x0, unit));
-			a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
-			gtk_adjustment_set_value (a, sp_points_get_units (bbox.y1 - bbox.y0, unit));
+			if (unit->base == SP_UNIT_ABSOLUTE) {
+				a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
+				gtk_adjustment_set_value (a, sp_points_get_units (bbox.x0, unit));
+				a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "Y");
+				gtk_adjustment_set_value (a, sp_points_get_units (bbox.y0, unit));
+				a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "width");
+				gtk_adjustment_set_value (a, sp_points_get_units (bbox.x1 - bbox.x0, unit));
+				a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
+				gtk_adjustment_set_value (a, sp_points_get_units (bbox.y1 - bbox.y0, unit));
+			} else {
+				a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
+				gtk_adjustment_set_value (a, 100.0);
+				a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "Y");
+				gtk_adjustment_set_value (a, 100.0);
+				a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "width");
+				gtk_adjustment_set_value (a, 100.0);
+				a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
+				gtk_adjustment_set_value (a, 100.0);
+
+			}
 
 			gtk_widget_set_sensitive (f, TRUE);
 		} else {
@@ -141,13 +153,12 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	GtkWidget *us;
 	GtkAdjustment *a;
 	const SPUnit *unit;
-	NRRect bbox;
-	gdouble x0, y0, x1, y1, dx0, dy0, dx1, dy1;
-	SPSelection *sel;
+	gdouble x0, y0, x1, y1, dx0, dy0, dx1, dy1, xrel, yrel;
 
-	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
+	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) {
+		return;
+	}
 
-	sel = SP_WIDGET_SELECTION (spw);
 	us = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "units");
 	unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 	if (sp_unit_selector_update_test (SP_UNIT_SELECTOR (us))) {
@@ -159,38 +170,63 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	}
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-	sel->bounds(&bbox);
-	g_return_if_fail ((bbox.x1 - bbox.x0 > 1e-6) || (bbox.y1 - bbox.y0 > 1e-6));
+	SPSelection *selection = SP_WIDGET_SELECTION (spw);
+	NR::Rect bbox = selection->bounds();
 
-	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
-	x0 = sp_units_get_points (a->value, unit);
-	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "Y");
-	y0 = sp_units_get_points (a->value, unit);
-	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "width");
-	x1 = x0 + sp_units_get_points (a->value, unit);
-	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
-	y1 = y0 + sp_units_get_points (a->value, unit);
+	if (!((bbox.max()[NR::X] - bbox.min()[NR::X] > 1e-6) || (bbox.max()[NR::Y] - bbox.min()[NR::Y] > 1e-6))) {
+		return;
+	}
 
-	dx0 = fabs (x0 - bbox.x0) > 1e-6 ? fabs (x0 - bbox.x0) : 0;
-	dx1 = fabs (x1 - bbox.x1) > 1e-6 ? fabs (x1 - bbox.x1) : 0;
-	dy0 = fabs (y0 - bbox.y0) > 1e-6 ? fabs (y0 - bbox.y0) : 0;
-	dy1 = fabs (y1 - bbox.y1) > 1e-6 ? fabs (y1 - bbox.y1) : 0;
+	if (unit->base == SP_UNIT_ABSOLUTE) {
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
+		x0 = sp_units_get_points (a->value, unit);
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "Y");
+		y0 = sp_units_get_points (a->value, unit);
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "width");
+		x1 = x0 + sp_units_get_points (a->value, unit);
+		xrel = sp_units_get_points (a->value, unit) / bbox.extent(NR::X);
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
+		y1 = y0 + sp_units_get_points (a->value, unit);
+		yrel = sp_units_get_points (a->value, unit) / bbox.extent(NR::Y);
+	} else {
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
+		x0 = a->value * bbox.min()[NR::X] / 100.0;
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "Y");
+		y0 = a->value * bbox.min()[NR::Y] / 100.0;
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "width");
+		xrel = a->value * 0.01;
+		x1 = x0 + xrel * bbox.extent(NR::X);
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
+		yrel = a->value * 0.01;
+		y1 = y0 + yrel * bbox.extent(NR::Y);
+	}
+
+	GtkWidget *lock = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (spw), "lock"));
+	if (SP_BUTTON_IS_DOWN (lock)) {
+		if (fabs (xrel - 1.0) < 1e-6) {
+			x1 = x0 + yrel * bbox.extent(NR::X);
+		} else if (fabs (yrel - 1.0) < 1e-6) {
+			y1 = y0 + xrel * bbox.extent(NR::Y);
+		}
+	}
+
+	dx0 = fabs (x0 - bbox.min()[NR::X]) > 1e-6 ? fabs (x0 - bbox.min()[NR::X]) : 0;
+	dx1 = fabs (x1 - bbox.max()[NR::X]) > 1e-6 ? fabs (x1 - bbox.max()[NR::X]) : 0;
+	dy0 = fabs (y0 - bbox.min()[NR::Y]) > 1e-6 ? fabs (y0 - bbox.min()[NR::Y]) : 0;
+	dy1 = fabs (y1 - bbox.max()[NR::Y]) > 1e-6 ? fabs (y1 - bbox.max()[NR::Y]) : 0;
 
 	if (dx0 || dx1 || dy0 || dy1) {
-		NR::translate const p2o(-bbox.x0, -bbox.y0);
+		NR::translate const p2o(-bbox.min());
 		NR::scale scale(1, 1);
-		if ( fabs( bbox.x1 - bbox.x0 ) <= 1e-06 ) {
-			scale = NR::scale(1,
-					  ( y1 - y0 ) / ( bbox.y1 - bbox.y0 ));
-		} else if ( fabs( bbox.y1 - bbox.y0 ) <= 1e-06 ) {
-			scale = NR::scale(( x1 - x0 ) / ( bbox.x1 - bbox.x0 ),
-					  1);
+		if ( fabs( bbox.extent(NR::X) ) <= 1e-06 ) {
+			scale = NR::scale(1, ( y1 - y0 ) / ( bbox.extent(NR::Y) ));
+		} else if ( fabs( bbox.extent(NR::Y) ) <= 1e-06 ) {
+			scale = NR::scale(( x1 - x0 ) / ( bbox.extent(NR::X) ), 1);
 		} else {
-			scale = NR::scale(( x1 - x0 ) / ( bbox.x1 - bbox.x0 ),
-					  ( y1 - y0 ) / ( bbox.y1 - bbox.y0 ));
+			scale = NR::scale(( x1 - x0 ) / ( bbox.extent(NR::X) ), ( y1 - y0 ) / ( bbox.extent(NR::Y) ));
 		}
 		NR::translate const o2n(x0, y0);
-		sp_selection_apply_affine(sel, p2o * scale * o2n);
+		sp_selection_apply_affine(selection, p2o * scale * o2n);
 
  		if (dx0) 
  			sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "selector:toolbar:move:horizontal");
@@ -246,6 +282,74 @@ sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkW
 	return hb;
 }
 
+static gboolean aux_set_unit(SPUnitSelector *,
+                                                 SPUnit const *old,
+                                                 SPUnit const *new_units,
+                                                 GObject *dlg)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    
+    if (!desktop) {
+        return FALSE;
+    }
+    
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+    
+    if (selection->isEmpty())
+        return FALSE;
+
+    if ((old->base == SP_UNIT_ABSOLUTE) && 
+       (new_units->base == SP_UNIT_DIMENSIONLESS)) {
+       
+        /* Absolute to percentage */
+        g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
+ 
+        GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "X"));
+        GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "Y"));
+        GtkAdjustment *aw = GTK_ADJUSTMENT(g_object_get_data (dlg, "width"));
+        GtkAdjustment *ah = GTK_ADJUSTMENT(g_object_get_data (dlg, "height"));
+
+        float x = sp_units_get_points (ax->value, old);
+        float y = sp_units_get_points (ay->value, old);
+        float w = sp_units_get_points (aw->value, old);
+        float h = sp_units_get_points (ah->value, old);
+
+        NR::Rect bbox = selection->bounds();
+
+        gtk_adjustment_set_value (ax, 100.0 * x / bbox.min()[NR::X]);
+        gtk_adjustment_set_value (ay, 100.0 * y / bbox.min()[NR::Y]);
+        gtk_adjustment_set_value (aw, 100.0 * w / bbox.extent(NR::X));
+        gtk_adjustment_set_value (ah, 100.0 * h / bbox.extent(NR::Y));
+
+        g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
+        return TRUE;
+        
+    } else if ((old->base == SP_UNIT_DIMENSIONLESS) && 
+              (new_units->base == SP_UNIT_ABSOLUTE)) {
+              
+        /* Percentage to absolute */
+        g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
+
+        GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "X"));
+        GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "Y"));
+        GtkAdjustment *aw = GTK_ADJUSTMENT(g_object_get_data (dlg, "width"));
+        GtkAdjustment *ah = GTK_ADJUSTMENT(g_object_get_data (dlg, "height"));
+
+        NR::Rect bbox = selection->bounds();
+
+        gtk_adjustment_set_value (ax, sp_points_get_units (0.01 * ax->value * bbox.min()[NR::X], new_units));
+        gtk_adjustment_set_value (ay, sp_points_get_units (0.01 * ay->value * bbox.min()[NR::Y], new_units));
+        gtk_adjustment_set_value (aw, sp_points_get_units (0.01 * aw->value * bbox.extent(NR::X), new_units));
+        gtk_adjustment_set_value (ah, sp_points_get_units (0.01 * ah->value * bbox.extent(NR::Y), new_units));
+
+        g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+
 
 GtkWidget *
 sp_select_toolbox_new (SPDesktop *desktop)
@@ -292,6 +396,8 @@ sp_select_toolbox_new (SPDesktop *desktop)
 
 	// create the units menu
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+	sp_unit_selector_add_unit ( SP_UNIT_SELECTOR (us), sp_unit_get_by_abbreviation ("%"), 0 );
+	g_signal_connect ( G_OBJECT (us), "set_unit", G_CALLBACK (aux_set_unit), spw );
 
 	// four spinbuttons
 
@@ -300,10 +406,23 @@ sp_select_toolbox_new (SPDesktop *desktop)
 	aux_toolbox_space (vb, AUX_BETWEEN_SPINBUTTONS);
 	gtk_container_add (GTK_CONTAINER (vb),
 		sp_select_toolbox_spinbutton ("Y", "Y", -1e6, us, spw, _("Vertical coordinate of selection"), FALSE));
-	aux_toolbox_space (vb, AUX_BETWEEN_SPINBUTTONS);
+	aux_toolbox_space (vb, AUX_BETWEEN_BUTTON_GROUPS);
+
 	gtk_container_add (GTK_CONTAINER (vb),
 		sp_select_toolbox_spinbutton ("W", "width", 1e-3, us, spw, _("Width of selection"), FALSE));
-	aux_toolbox_space (vb, AUX_BETWEEN_SPINBUTTONS);
+
+	// lock toggle
+	GtkWidget *lockbox = gtk_vbox_new (TRUE, 0);
+	GtkWidget *lock = sp_button_new_from_data (9,
+                                                 SP_BUTTON_TYPE_TOGGLE, 	 
+                                                 NULL, 	 
+                                                 "width_height_lock", 	 
+                                                 _("Change both width and height by the same proportion"), 	 
+                                                 tt); 	 
+	gtk_box_pack_start (GTK_BOX (lockbox), lock, TRUE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vb), lockbox, FALSE, FALSE, 0);
+	gtk_object_set_data (GTK_OBJECT (spw), "lock", lock);
+
 	gtk_container_add (GTK_CONTAINER (vb),
 		sp_select_toolbox_spinbutton ("H", "height", 1e-3, us, spw, _("Height of selection"), FALSE));
 
