@@ -50,6 +50,24 @@
 
 #include <pango/pango.h>
 
+// FIXME: move all these to ancestor class of both text and flowtext
+
+gint
+sp_flowtext_get_length (SPFlowtext *text)
+{
+    if ( text->f_src == NULL ) text->UpdateFlowSource();
+    one_flow_src *cur = &text->contents;
+    gint length = 0;
+    while (cur) {
+			length += cur->ucs4_en-cur->ucs4_st;
+			cur = cur->next;
+    }
+
+    return length;
+}
+
+// END of ancestor stuff
+
 static void sp_flowtext_class_init(SPFlowtextClass *klass);
 static void sp_flowtext_init(SPFlowtext *group);
 static void sp_flowtext_dispose(GObject *object);
@@ -343,12 +361,10 @@ sp_flowtext_print(SPItem *item, SPPrintContext *ctx)
     if ( group->f_res ) group->f_res->Print(ctx, &pbox, &dbox, &bbox, ctm);
 }
 
-static gchar *sp_flowtext_description(SPItem * /*item*/)
-{
-    //g_return_val_if_fail(SP_IS_FLOWTEXT(item), NULL);
 
-    //return g_strdup_printf(_("Text flow"));
-    return g_strdup_printf("<b>Flowed text</b>");
+static gchar *sp_flowtext_description(SPItem *item)
+{
+    return g_strdup_printf("<b>Flowed text</b> (%d characters)", sp_flowtext_get_length (SP_FLOWTEXT (item)));
 }
 
 static NRArenaItem *
@@ -431,6 +447,7 @@ static void FlowReLink(SPObject *object, one_flow_src *&after, one_flow_src *fro
     }
 
     // special cases
+/*
     if ( SP_IS_FLOWDIV(object) ) {
         mine = &(SP_FLOWDIV(object)->fin);
         mine->Link(after, from);
@@ -440,6 +457,7 @@ static void FlowReLink(SPObject *object, one_flow_src *&after, one_flow_src *fro
         mine->Link(after, from);
         after = mine;
     }
+*/
 }
 
 void SPFlowtext::UpdateFlowSource()
@@ -449,12 +467,13 @@ void SPFlowtext::UpdateFlowSource()
 
     one_flow_src *last = NULL;
     FlowReLink(SP_OBJECT(this), last, NULL);
+  
     contents.DoPositions(false);
+  
     contents.DoFill(f_src);
-
+  
     f_src->Prepare();
-    //f_src->Affiche();
-}
+}  
 
 void SPFlowtext::UpdateFlowDest()
 {
