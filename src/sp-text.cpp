@@ -860,6 +860,7 @@ sp_text_insert_line (SPText *text, gint utf8_pos)
 {
 	// no updateRepr in thios function because SPRepr are handled directly
 	if ( text->f_src == NULL ) return NULL;
+
 	int  ucs4_pos=0;
 	one_flow_src* into=text->contents.Locate(utf8_pos,ucs4_pos,true,false,false);
 	//printf("pos=%i -> %i in %x\n",utf8_pos,ucs4_pos,into);
@@ -1065,13 +1066,14 @@ sp_text_insert (SPText *text, gint utf8_pos, const gchar *utf8)
 		}
 		return utf8_pos;
 	}
+
 	// round to the letter granularity
 	int    c_st=-1,s_st=-1,l_st=-1;
 	bool   l_start_st=false,l_end_st=false;
 	text->f_res->OffsetToLetter(utf8_pos,c_st,s_st,l_st,l_start_st,l_end_st);
 	if ( l_st < 0 ) return utf8_pos;
 	text->f_res->LetterToOffset(c_st,s_st,l_st,l_start_st,l_end_st,utf8_pos);
-	utf8_pos=text->f_res->letters[l_st].utf8_offset;
+	//utf8_pos=text->f_res->letters[l_st].utf8_offset;
 	int  ucs4_pos=text->f_res->letters[l_st].ucs4_offset;
 	
 	one_flow_src* cur=&text->contents;
