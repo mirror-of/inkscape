@@ -409,6 +409,7 @@ void ColorNotebook::_colorChanged(const SPColor& color, gfloat alpha)
 
 	g_return_if_fail (_csel != NULL);
 	g_return_if_fail (SP_IS_COLOR_NOTEBOOK (_csel));
+	g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
 
 	cselPage = getCurrentSelector();
 	if ( cselPage )
@@ -457,6 +458,8 @@ void ColorNotebook::_rgbaEntryChanged(GtkEntry* entry)
 
 void ColorNotebook::_updateRgbaEntry( const SPColor& color, gfloat alpha )
 {
+    g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
+
     if ( !_updatingrgba )
     {
         gchar s[32];

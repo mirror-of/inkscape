@@ -1,5 +1,14 @@
 2004-01-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/widgets/paint-selector.cpp (sp_paint_selector_set_color_alpha,
+	sp_paint_selector_get_color_alpha, sp_paint_selector_system_color_set),
+	src/widgets/sp-color-gtkselector.cpp (ColorGtkselector::_colorChanged),
+	src/widgets/sp-color-notebook.cpp (ColorNotebook::_colorChanged,
+	ColorNotebook::_updateRgbaEntry), src/widgets/sp-color-selector.cpp
+	(ColorSelector::setAlpha, ColorSelector::setColorAlpha,
+	ColorSelector::_updateInternals):
+	Add assertions that alpha is in [0.0, 1.0].
+
 	* src/libnr/nr-types.h, src/libnr/nr-rect.cpp (NR::Rect::corner):
 	Change argument to unsigned, thus changing remainder operator to modulo
 	operator, thus fixing bug for "negative" arguments (-1u etc.).

@@ -144,6 +144,7 @@ void ColorGtkselector::_colorChanged( const SPColor& color, gfloat alpha )
     float rgb[3];
     g_return_if_fail (_csel != NULL);
     g_return_if_fail (SP_IS_COLOR_GTKSELECTOR (_csel));
+    g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
 
     sp_color_copy (&_color, &color);
     _alpha = alpha;

@@ -208,6 +208,7 @@ SPColor ColorSelector::getColor() const
 
 void ColorSelector::setAlpha( gfloat alpha )
 {
+    g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
     setColorAlpha( _color, alpha );
 }
 
@@ -219,6 +220,8 @@ gfloat ColorSelector::getAlpha() const
 // Called from the outside to set the color
 void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha )
 {
+    g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
+
     if ( !sp_color_is_close( &color, &_color, _epsilon )
          || (fabs ((_alpha) - (alpha)) >= _epsilon ) )
     {
@@ -261,6 +264,7 @@ void ColorSelector::_released()
 // Called from subclasses to update color and broadcast if needed
 void ColorSelector::_updateInternals( const SPColor& color, gfloat alpha, gboolean held )
 {
+    g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
     gboolean colorDifferent = ( !sp_color_is_close( &color, &_color, _epsilon )
                                 || ( fabs((_alpha) - (alpha)) >= _epsilon ) );
 

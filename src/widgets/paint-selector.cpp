@@ -277,6 +277,7 @@ sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode)
 void
 sp_paint_selector_set_color_alpha (SPPaintSelector *psel, const SPColor *color, float alpha)
 {
+	g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
 	SPColorSelector *csel;
 	SPColor oldColor;
 	gfloat oldAlpha;
@@ -435,6 +436,9 @@ sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnit
 	if (spread) *spread = (SPGradientSpread)gsel->gradientSpread;
 }
 
+/**
+ * Ensures: (alpha == NULL) || (*alpha in [0.0, 1.0]).
+ */
 void
 sp_paint_selector_get_color_alpha (SPPaintSelector *psel, SPColor *color, gfloat *alpha)
 {
@@ -443,6 +447,10 @@ sp_paint_selector_get_color_alpha (SPPaintSelector *psel, SPColor *color, gfloat
 	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 
 	csel->base->getColorAlpha( *color, alpha );
+
+	g_assert( !alpha
+		  || ( ( 0.0 <= *alpha )
+		       && ( *alpha <= 1.0 ) ) );
 }
 
 SPGradient *
@@ -580,6 +588,7 @@ sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient 
 void
 sp_paint_selector_system_color_set (SPPaintSelector *psel, const SPColor *color, float opacity)
 {
+	g_return_if_fail( ( 0.0 <= opacity ) && ( opacity <= 1.0 ) );
 	if ((psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_RGB) ||
 	    (psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_CMYK)) {
 		GtkToggleButton *gd;
