@@ -33,9 +33,9 @@
 
 	* src/arc-context.cpp, src/document.cpp, src/draw-context.cpp,
 	src/selection.cpp, src/selection.h, src/selection-chemistry.cpp,
-	src/sp-ellipse.cpp, src/sp-image.cpp, src/sp-offset.cpp,
-	src/sp-rect.cpp, src/sp-spiral.cpp, src/sp-star.cpp, src/sp-text.cpp,
-	src/bonobo/canvas-translator.cpp:
+	src/sp-ellipse.cpp, src/sp-gradient.cpp, src/sp-image.cpp,
+	src/sp-offset.cpp, src/sp-rect.cpp, src/sp-spiral.cpp, src/sp-star.cpp,
+	src/sp-text.cpp, src/bonobo/canvas-translator.cpp:
 	Cleanups: greater conformance to Coding_Style, combine declaration
 	and first assignment of some vars.
 

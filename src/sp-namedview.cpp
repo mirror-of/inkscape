@@ -637,29 +637,21 @@ sp_namedview_setup_grid_item (SPNamedView * nv, SPCanvasItem * item)
 			       NULL);
 }
 
-const gchar *
-sp_namedview_get_name (SPNamedView * nv)
+gchar const *sp_namedview_get_name(SPNamedView *nv)
 {
 	SPException ex;
-	gchar * name;
-
 	SP_EXCEPTION_INIT (&ex);
-  
-	name = (gchar *)sp_object_getAttribute (SP_OBJECT (nv), "id", &ex);
-
-	return name;
+	return sp_object_getAttribute(SP_OBJECT(nv), "id", &ex);
 }
 
-guint
-sp_namedview_viewcount (SPNamedView * nv)
+guint sp_namedview_viewcount(SPNamedView *nv)
 {
  g_assert (SP_IS_NAMEDVIEW (nv));
 
  return ++nv->viewcount;
 }
 
-const GSList *
-sp_namedview_view_list (SPNamedView * nv)
+GSList const *sp_namedview_view_list(SPNamedView *nv)
 {
  g_assert (SP_IS_NAMEDVIEW (nv));
 
