@@ -52,7 +52,7 @@ void *nr_object_check_instance_cast (void *ip, NRType tc);
 unsigned int nr_object_check_instance_type (void *ip, NRType tc);
 
 NRType nr_object_register_type (NRType parent,
-				      gchar *name,
+				      gchar const *name,
 				      unsigned int csize,
 				      unsigned int isize,
 				      void (* cinit) (NRObjectClass *),

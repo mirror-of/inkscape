@@ -720,7 +720,7 @@ overlaps (const NRRect *what, const NRRect *box)
 }
 
 static GSList *
-find_items_in_area (GSList *s, SPGroup *group, NRRect *area,
+find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
                     int (*test)(const NRRect *, const NRRect *))
 {
 	SPObject * o;
@@ -810,7 +810,7 @@ find_group_at_point (gint dkey, SPGroup *group, double x, double y)
  */
 
 GSList *
-sp_document_items_in_box (SPDocument *document, NRRect *box)
+sp_document_items_in_box (SPDocument *document, NRRect const *box)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
@@ -829,7 +829,7 @@ sp_document_items_in_box (SPDocument *document, NRRect *box)
  */
 
 GSList *
-sp_document_partial_items_in_box (SPDocument *document, NRRect *box)
+sp_document_partial_items_in_box (SPDocument *document, NRRect const *box)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);

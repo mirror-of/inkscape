@@ -40,7 +40,7 @@ void sp_unit_selector_set_unit (SPUnitSelector *selector, const SPUnit *unit);
 void sp_unit_selector_add_adjustment (SPUnitSelector *selector, GtkAdjustment *adjustment);
 void sp_unit_selector_remove_adjustment (SPUnitSelector *selector, GtkAdjustment *adjustment);
 
-gboolean sp_unit_selector_update_test (SPUnitSelector *selector);
+gboolean sp_unit_selector_update_test (SPUnitSelector const *selector);
 
 float sp_unit_selector_get_value_in_points (SPUnitSelector *selector, GtkAdjustment *adj);
 void sp_unit_selector_set_value_in_points (SPUnitSelector *selector, GtkAdjustment *adj, float value);

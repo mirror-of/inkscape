@@ -36,7 +36,7 @@
 #include "tools-switch.h"
 
 void
-prefs_set_int_attribute (gchar *path, gchar *attr, gint value)
+prefs_set_int_attribute (gchar const *path, gchar const *attr, gint value)
 {
 	SPRepr *repr;
 	repr = inkscape_get_repr (INKSCAPE, path);
@@ -46,7 +46,7 @@ prefs_set_int_attribute (gchar *path, gchar *attr, gint value)
 }
 
 gint
-prefs_get_int_attribute (gchar *path, gchar *attr, gint def)
+prefs_get_int_attribute (gchar const *path, gchar const *attr, gint def)
 {
 	SPRepr *repr;
 	repr = inkscape_get_repr (INKSCAPE, path);
@@ -60,7 +60,7 @@ prefs_get_int_attribute (gchar *path, gchar *attr, gint def)
 \brief Retrieves an int attribute guarding against screwed-up data; if the value is beyond limits, default is returned
 */
 gint
-prefs_get_int_attribute_limited (gchar *path, gchar *attr, gint def, gint min, gint max)
+prefs_get_int_attribute_limited (gchar const *path, gchar const *attr, gint def, gint min, gint max)
 {
 	gint v; 
 
@@ -77,7 +77,7 @@ prefs_get_int_attribute_limited (gchar *path, gchar *attr, gint def, gint min, g
 }
 
 void
-prefs_set_double_attribute (gchar *path, gchar *attr, double value)
+prefs_set_double_attribute (gchar const *path, gchar const *attr, double value)
 {
 	SPRepr *repr;
 	repr = inkscape_get_repr (INKSCAPE, path);
@@ -87,7 +87,7 @@ prefs_set_double_attribute (gchar *path, gchar *attr, double value)
 }
 
 double
-prefs_get_double_attribute (gchar *path, gchar *attr, double def)
+prefs_get_double_attribute (gchar const *path, gchar const *attr, double def)
 {
 	SPRepr *repr;
 	repr = inkscape_get_repr (INKSCAPE, path);
@@ -101,7 +101,7 @@ prefs_get_double_attribute (gchar *path, gchar *attr, double def)
 \brief Retrieves an int attribute guarding against screwed-up data; if the value is beyond limits, default is returned
 */
 double
-prefs_get_double_attribute_limited (gchar *path, gchar *attr, double def, double min, double max)
+prefs_get_double_attribute_limited (gchar const *path, gchar const *attr, double def, double min, double max)
 {
 	double v; 
 

@@ -1,5 +1,12 @@
 2004-01-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/document.h, src/document.cpp,
+	  src/prefs-utils.h, src/prefs-utils.cpp,
+	  src/select-toolbar.cpp,
+	  src/helper/unit-menu.h, src/helper/unit-menu.cpp,
+	  src/libnr/nr-object.h, src/libnr/nr-object.cpp:
+	  Mark some pointer function arguments as not being written through.
+
 	* src/path-chemistry.cpp (sp_selected_path_combine): Fix what appears
 	  to be a memory leak.  Change string concatenation from Omega(n^2) to
 	  Omega(n).

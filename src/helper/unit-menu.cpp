@@ -334,7 +334,7 @@ sp_unit_selector_remove_adjustment (SPUnitSelector *us, GtkAdjustment *adj)
 }
 
 gboolean
-sp_unit_selector_update_test (SPUnitSelector *selector)
+sp_unit_selector_update_test (SPUnitSelector const *selector)
 {
 	g_return_val_if_fail (selector != NULL, FALSE);
 	g_return_val_if_fail (SP_IS_UNIT_SELECTOR (selector), FALSE);

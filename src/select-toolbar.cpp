@@ -300,8 +300,8 @@ spinbutton_keypress (GtkWidget *w, GdkEventKey *event, gpointer data)
 	return FALSE; // I didn't consume the event
 }
 
-GtkWidget *
-sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkWidget *us, GtkWidget *spw, gchar *tooltip, gboolean altx)
+static GtkWidget *
+sp_select_toolbox_spinbutton (gchar const *label, gchar const *data, float lower_limit, GtkWidget *us, GtkWidget *spw, gchar const *tooltip, gboolean altx)
 {
 	GtkTooltips *tt;
 	GtkWidget *hb, *l, *sb;
