@@ -29,10 +29,10 @@ ${srcdir}/tools-version.sh
 check_version ()
 {
     if expr $1 \>= $2 > /dev/null; then
-	echo "yes (version $1)"
+    echo "yes (version $1)"
     else
-	echo "Too old (found version $1)!"
-	DIE=1
+    echo "Too old (found version $1)!"
+    DIE=1
     fi
 }
 
@@ -127,9 +127,9 @@ if test -z "$ACLOCAL_FLAGS"; then
 
     for file in $m4list
     do
-	if [ ! -f "$acdir/$file" ]; then
-	    echo
-	    echo "WARNING: aclocal's directory is $acdir, but..."
+    if [ ! -f "$acdir/$file" ]; then
+        echo
+        echo "WARNING: aclocal's directory is $acdir, but..."
             echo "         no file $acdir/$file"
             echo "         You may see fatal macro warnings below."
             echo "         If these files are installed in /some/dir, set the ACLOCAL_FLAGS "

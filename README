@@ -52,6 +52,12 @@ Open can handle only svg graphics
 It does not yet handle following svg shapes:
 - circle
 
+
+
+OLD
+===
+
+
 When importing svg generated with ill2svg, all paths are usually grouped.
 Ungroup these manually.
 

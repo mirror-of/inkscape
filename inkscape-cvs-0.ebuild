@@ -28,13 +28,13 @@ DEPEND="dev-libs/libsigc++"
 RDEPEND=${DEPEND}
 
 src_compile() {
-	myconf="--program-suffix=-cvs ${myconf}"
-	./autogen.sh ${myconf} || die
-	econf ${myconf} || die "Configure failed"
-	emake || die "Make failed"
+    myconf="--program-suffix=-cvs ${myconf}"
+    ./autogen.sh ${myconf} || die
+    econf ${myconf} || die "Configure failed"
+    emake || die "Make failed"
 }
 
 src_install() {
-	dodoc AUTHORS COPYING HACKING ChangeLog INSTALL NEWS README TODO
-	make DESTDIR="${D}" install || die "Install failed"
+    dodoc AUTHORS COPYING HACKING ChangeLog INSTALL NEWS README TODO
+    make DESTDIR="${D}" install || die "Install failed"
 }
