@@ -823,7 +823,9 @@ sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 			sp_repr_set_attr (repr, "xml:space", xml_space);
 		}
 
-		if ( object->collectionPolicy() == SPObject::ALWAYS_COLLECT ) {
+		if ( flags & SP_OBJECT_WRITE_EXT &&
+		     object->collectionPolicy() == SPObject::ALWAYS_COLLECT )
+		{
 			sp_repr_set_attr(repr, "inkscape:collect", "always");
 		} else {
 			sp_repr_set_attr(repr, "inkscape:collect", NULL);
