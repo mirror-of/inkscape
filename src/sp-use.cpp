@@ -641,7 +641,8 @@ sp_use_unlink(SPUse *use)
     // merge style from the use
     SPStyle *unli_sty = SP_OBJECT_STYLE (unlinked);
     SPStyle *use_sty = SP_OBJECT_STYLE (use);
-    sp_style_merge_from_parent (unli_sty, use_sty);
+    sp_style_merge_from_parent (unli_sty, use_sty, true); // inherit the set flags, too
+
     // special case for opacity: it is not inherited per the spec, but since use's opacity affected
     // its display, we must not lose it after unlinking
     unli_sty->opacity.value = SP_SCALE24_FROM_FLOAT (
