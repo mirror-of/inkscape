@@ -160,9 +160,6 @@ bool SPItem::isHidden() const {
 }
 
 void SPItem::setHidden(bool hide) {
-    // this isn't necessarily right from a CSS point of view, since
-    // visibility isn't an inherited property, but it sort of is for
-    // our purposes here, maybe..
     style->visibility_set = TRUE;
     style->visibility = !hide;
     updateRepr();
@@ -172,7 +169,14 @@ bool SPItem::isHidden(unsigned display_key) const {
     for ( SPItemView *view(display) ; view ; view = view->next ) {
         if ( view->key == display_key ) {
             g_assert(view->arenaitem != NULL);
-            return !view->arenaitem->visible;
+            for ( NRArenaItem *arenaitem = view->arenaitem ;
+                  arenaitem ; arenaitem = arenaitem->parent )
+            {
+                if (!arenaitem->visible) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
     return true;

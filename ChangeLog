@@ -1,3 +1,8 @@
+2004-11-06  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-item.cpp: fix desktop-specific version of SPItem::isHidden()
+	                   to deal correctly with parent visibility
+
 2004-11-05  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/layer-selector.cpp: more work on making the lock/hide
