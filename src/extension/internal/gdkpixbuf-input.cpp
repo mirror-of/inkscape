@@ -87,10 +87,10 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 void
 GdkpixbufInput::init (void)
 {
-    GSList * formatlist;
+    GSList * formatlist, * formatlisthead;
 
     /* \todo I'm not sure if I need to free this list */
-    for (formatlist = gdk_pixbuf_get_formats ();
+    for (formatlist = formatlisthead = gdk_pixbuf_get_formats ();
          formatlist != NULL;
          formatlist = g_slist_next(formatlist)) {
         GdkPixbufFormat * pixformat;
@@ -104,11 +104,6 @@ GdkpixbufInput::init (void)
 
         pixformat = (GdkPixbufFormat *)formatlist->data;
 
-        /* thanks but no thanks, we'll handle SVG extensions... */        
-        if (strcmp(gdk_pixbuf_format_get_extensions(pixformat)[0],"svg")==0) {
-            continue;
-        }
-
         name =        gdk_pixbuf_format_get_name(pixformat);
         description = gdk_pixbuf_format_get_description(pixformat);
         extensions =  gdk_pixbuf_format_get_extensions(pixformat);
@@ -116,6 +111,12 @@ GdkpixbufInput::init (void)
 
         for (i = 0; extensions[i] != NULL; i++) {
         for (j = 0; mimetypes[j] != NULL; j++) {
+
+            /* thanks but no thanks, we'll handle SVG extensions... */        
+            if (strcmp(extensions[i], "svg") == 0) {
+                continue;
+            }
+
             xmlString = g_strdup_printf(
                 "<spmodule>\n"
                     "<name>%s GDK pixbuf Input</name>\n"
@@ -147,7 +148,7 @@ GdkpixbufInput::init (void)
         g_strfreev(extensions);
      }
 
-     g_slist_free (formatlist);
+     g_slist_free (formatlisthead);
 
 
     return;
