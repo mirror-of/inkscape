@@ -1652,6 +1652,7 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
 
     /* Drag */
     {
+        // TRANSLATORS: "drag" means "resistance" here
         GtkWidget *hb = sp_tb_spinbutton (_("Drag:"), _("How much resistance affects the movement of the pen"), 
                                           "tools.calligraphic", "drag", 0.5,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
