@@ -436,13 +436,12 @@ spdc_endpoint_snap(SPDrawContext *dc, NR::Point &p, guint state)
 \brief  Snaps new node's handle relative to the new node
 */
 static void
-spdc_endpoint_snap_handle(SPDrawContext *dc, NR::Point &p, guint state)
+spdc_endpoint_snap_handle(SPPenContext *pc, NR::Point &p, guint const state)
 {
-    if ( dc->npoints == 5 ) {
-        spdc_endpoint_snap_internal(dc, p, dc->p[3], state);
-    } else {
-        spdc_endpoint_snap_internal(dc, p, dc->p[0], state);
-    }
+    g_return_if_fail(( pc->npoints == 2 ||
+                       pc->npoints == 5   ));
+
+    spdc_endpoint_snap_internal(pc, p, pc->p[pc->npoints - 2], state);
 }
 
 
@@ -1357,9 +1356,9 @@ sp_pen_context_set(SPEventContext *ec, const gchar *key, const gchar *val)
 gint
 sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
 {
-    SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
-    SPPenContext *pc = SP_PEN_CONTEXT(ec);
-    SPDesktop *dt = ec->desktop;
+    SPDrawContext *const dc = SP_DRAW_CONTEXT(ec);
+    SPPenContext *const pc = SP_PEN_CONTEXT(ec);
+    SPDesktop *const dt = ec->desktop;
 
     gint ret = FALSE;
 
@@ -1518,7 +1517,7 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 /* Placing controls is last operation in CLOSE state */
 
                 // snap the handle
-                spdc_endpoint_snap_handle(dc, p, event->motion.state);
+                spdc_endpoint_snap_handle(pc, p, event->motion.state);
 
                 spdc_pen_set_ctrl(pc, p, event->motion.state);
                 ret = TRUE;
