@@ -2,6 +2,9 @@
 #include <style.h>
 
 /* 'lighter' and 'darker' have to be resolved earlier */
+/**
+Given a style struct (CSS representation), sets the corresponding fields in a NRTypePosDef.
+ */
 NRTypePosDef
 font_style_to_pos (SPStyle const &style)
 {
@@ -99,6 +102,15 @@ font_style_to_pos (SPStyle const &style)
 
 	default:
 		ret.stretch = NR_POS_STRETCH_NORMAL;
+		break;
+	}
+
+	switch (style.font_variant.computed) {
+	case SP_CSS_FONT_VARIANT_SMALL_CAPS:
+		ret.stretch = NR_POS_VARIANT_SMALLCAPS;
+		break;
+	default:
+		ret.stretch = NR_POS_VARIANT_NORMAL;
 		break;
 	}
 

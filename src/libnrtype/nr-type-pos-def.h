@@ -25,6 +25,12 @@
 #define NR_POS_STRETCH_EXTRA_EXPANDED	 228
 #define NR_POS_STRETCH_ULTRA_EXPANDED	 228
 
+// This is an enumerate, rather than on/off property,
+// for I sincerely hope the vocabulary of this property will be
+// extended by the W3C in the future to allow for more fancy fonts
+#define NR_POS_VARIANT_NORMAL	 	 	 0
+#define NR_POS_VARIANT_SMALLCAPS 	 	 1
+
 /* Mapping from CSS weight numbers.
 
    for i in `seq 9`; do
@@ -58,6 +64,7 @@ public:
 	unsigned int oblique : 1;
 	unsigned int weight : 8;
 	unsigned int stretch : 8;
+	unsigned int variant : 8;
 	/* These can probably be made sensible sizes rather than bitfields; for the moment we'll
 	   keep the old definition. */
 
@@ -66,7 +73,8 @@ public:
 	  italic(0),
 	  oblique(0),
 	  weight(NR_POS_WEIGHT_NORMAL),
-	  stretch(NR_POS_STRETCH_NORMAL)
+	  stretch(NR_POS_STRETCH_NORMAL),
+	  variant(NR_POS_VARIANT_NORMAL)
 	  { }
 
 	NRTypePosDef(char const *description);
@@ -75,7 +83,9 @@ public:
 
 int parse_name_for_weight (char const *c);
 int parse_name_for_stretch (char const *c);
+int parse_name_for_variant (char const *c);
 const char *weight_to_css (int weight);
 const char *stretch_to_css (int stretch);
+const char *variant_to_css (int variant);
 
 #endif /* __NR_TYPE_POS_DEF_H__ */

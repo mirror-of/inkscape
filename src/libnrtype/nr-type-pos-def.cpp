@@ -84,6 +84,28 @@ parse_name_for_stretch (char const *cc)
 }
 
 /**
+Given a font name or style name, returns a constant describing its apparent variant (normal/smallcaps).
+*/
+int
+parse_name_for_variant (char const *cc)
+{
+	gchar *c = g_strdup(cc);
+	for (char *p = c ; *p != '\0' ; ++p) {
+		*p = g_ascii_tolower(*p);
+	}
+
+	gint variant;
+	if (strstr (c, "small caps") || strstr (c, "smallcaps")) {
+		variant = NR_POS_VARIANT_SMALLCAPS;
+	} else {
+		variant = NR_POS_VARIANT_NORMAL;
+	}
+
+	g_free (c);
+	return variant;
+}
+
+/**
 Given a weight constant, returns the CSS value for font-weight.
 */
 const char *
@@ -157,6 +179,25 @@ stretch_to_css (int stretch)
 	return NULL;
 }
 
+/**
+Given a variant constant, returns the CSS value for font-variant.
+*/
+const char *
+variant_to_css (int stretch)
+{
+	switch (stretch) {
+	case NR_POS_VARIANT_SMALLCAPS:
+		return "small-caps";
+		break;
+	case NR_POS_VARIANT_NORMAL:
+		return "normal";
+		break;
+	default:
+		break;
+	}
+	return NULL;
+}
+
 
 NRTypePosDef::NRTypePosDef(char const *description) {
 	// we cannot use strcasestr, it's linux only... so we must lowercase the string first
@@ -173,6 +214,8 @@ NRTypePosDef::NRTypePosDef(char const *description) {
 	weight = parse_name_for_weight (c);
 
 	stretch = parse_name_for_stretch (c);
+
+	variant = parse_name_for_variant (c);
 
 	g_free (c);
 }

@@ -248,7 +248,8 @@ nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, uns
 
 		// The only font style information that FT provides is the italic and bold bits.
 		// We will use the italic bit, but for weight and stretch, the only thing we 
-		// can do is parse the style name.
+		// can do is parse the style name. Probably when we switch to Pango, we
+		// can use its data instead.
 
 	} else if (!strcmp (key, "weight")) {
 		//		val = (tff->ft_face->style_flags & FT_STYLE_FLAG_BOLD) ? "bold" : "normal";
@@ -257,6 +258,9 @@ nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, uns
 	} else if (!strcmp (key, "stretch")) {
 		gint w = parse_name_for_stretch (tff->ft_face->style_name);
 		val = stretch_to_css (w);
+	} else if (!strcmp (key, "variant")) {
+		gint w = parse_name_for_variant (tff->ft_face->style_name);
+		val = variant_to_css (w);
 	} else {
 		g_warning ("Unknown font attribute requested: %s", key);
 		val = "";
