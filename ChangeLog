@@ -1,3 +1,12 @@
+2004-02-18  MenTaLguY <mental@rydia.net>
+
+    * src/widgets/icon.cpp, src/widgets/icon.h: rewrote to use gdk for
+	  compositing; now it looks tolerable with ANY theme!
+
+    * src/dialogs/item-properties.cpp: slight stabs at implementing "visible"
+
+    * src/libnr/nr-types.h: added warning for depreciated casts
+
 2004-02-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/align.cpp (sp_align_arrange_clicked): Cleanup.

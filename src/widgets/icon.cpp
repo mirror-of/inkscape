@@ -101,11 +101,9 @@ sp_icon_destroy (GtkObject *object)
 
 	icon = SP_ICON (object);
 
-	if (icon->px) {
-		if (!(GTK_OBJECT_FLAGS (icon) & SP_ICON_FLAG_STATIC_DATA)) {
-			nr_free (icon->px);
-		}
-		icon->px = NULL;
+	if (icon->pb) {
+		g_object_unref(G_OBJECT(icon->pb));
+		icon->pb = NULL;
 	}
 
 	((GtkObjectClass *) (parent_class))->destroy (object);
@@ -153,15 +151,16 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 {
 	char c[256];
 	SPIcon *icon;
+	guchar *pixels;
 
 
 	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
 
 	icon->size = CLAMP (size, 1, 128);
 	g_snprintf (c, 256, "%d:%d:%s", icon->size, scale, name);
-	icon->px = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
+	pixels = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 
-	GTK_OBJECT_FLAGS (icon) &= ~SP_ICON_FLAG_STATIC_DATA;
+	icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, (GdkPixbufDestroyNotify)nr_free, NULL);
 
 	return (GtkWidget *) icon;
 }
@@ -187,8 +186,8 @@ sp_icon_new_from_data (unsigned int size, const guchar *px)
 
 	icon->size = CLAMP (size, 1, 128);
 
-	GTK_OBJECT_FLAGS (icon) |= SP_ICON_FLAG_STATIC_DATA;
-	icon->px = (guchar*)px; // Why are we losing const here?
+	/* we lose const -- bad */
+	icon->pb = gdk_pixbuf_new_from_data((guchar *)px, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, NULL, NULL);
 
 	return (GtkWidget *) icon;
 }
@@ -274,61 +273,9 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 	x1 = MIN (area->x + area->width,  widget->allocation.x + padx + static_cast< int > (icon->size) );
 	y1 = MIN (area->y + area->height, widget->allocation.y + pady + static_cast< int > (icon->size) );
 
-	for (y = y0; y < y1; y += 64) {
-		for (x = x0; x < x1; x += 64) {
-			NRPixBlock bpb;
-			int xe, ye;
-			xe = MIN (x + 64, x1);
-			ye = MIN (y + 64, y1);
-			nr_pixblock_setup_fast (&bpb, NR_PIXBLOCK_MODE_R8G8B8, x, y, xe, ye, FALSE);
-
-			if (icon->px) {
-				GtkStyle *style;
-				GdkColor *color;
-				unsigned int br, bg, bb;
-				int xx, yy;
-
-				/* fixme: We support only plain-color themes */
-				/* fixme: But who needs other ones anyways? (Lauris) */
-
-				/* buttons with relief = none don't paint their background when in normal state */
-				if (GTK_IS_BUTTON (widget->parent) && gtk_button_get_relief (GTK_BUTTON (widget->parent)) == GTK_RELIEF_NONE && widget->state == GTK_STATE_NORMAL) {
-					style = widget->style;
-				} else {
-					gtk_widget_ensure_style (widget->parent);
-					style = widget->parent->style;
-				}
-
-				color = &style->bg[widget->state];
-
-				br = (color->red & 0xff00) >> 8;
-				bg = (color->green & 0xff00) >> 8;
-				bb = (color->blue & 0xff00) >> 8;
-
-				for (yy = y; yy < ye; yy++) {
-					const guchar *s;
-					guchar *d;
-					d = NR_PIXBLOCK_PX (&bpb) + (yy - y) * bpb.rs;
-					s = icon->px + 4 * (yy - pady - widget->allocation.y) * icon->size + 4 * (x - padx - widget->allocation.x);
-					for (xx = x; xx < xe; xx++) {
-						d[0] = NR_COMPOSEN11 (s[0], s[3], br);
-						d[1] = NR_COMPOSEN11 (s[1], s[3], bg);
-						d[2] = NR_COMPOSEN11 (s[2], s[3], bb);
-						s += 4;
-						d += 3;
-					}
-				}
-			}
-
-			gdk_draw_rgb_image (widget->window, widget->style->black_gc,
-					    x, y,
-					    xe - x, ye - y,
-					    GDK_RGB_DITHER_MAX,
-					    NR_PIXBLOCK_PX (&bpb), bpb.rs);
-
-			nr_pixblock_release (&bpb);
-		}
-	}
+	if (icon->pb) {
+		gdk_draw_pixbuf(GDK_DRAWABLE(widget->window), NULL, icon->pb, x0 - widget->allocation.x - padx, y0 - widget->allocation.y - pady, x0, y0, x1 - x0, y1 - y0, GDK_RGB_DITHER_NORMAL, x0, y0);
+	}	
 }
 
 static guchar *

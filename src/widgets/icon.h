@@ -31,14 +31,12 @@ typedef struct _SPIconClass SPIconClass;
 
 #include <gtk/gtkwidget.h>
 
-#define SP_ICON_FLAG_STATIC_DATA (1 << 24)
-
 struct _SPIcon {
 	GtkWidget widget;
 
 	int size;
 
-	guchar *px;
+	GdkPixbuf *pb;
 };
 
 struct _SPIconClass {
