@@ -7,7 +7,10 @@
 include ../Makefile.mingw.common
 
 
-#DLL stuff
+###################################
+# G E N E R A T E D    F I L E S
+###################################
+
 #Check for 'generated' files
 #all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h \
 #inkscape.exe inkview.exe
@@ -25,12 +28,23 @@ helper/sp-marshal.cpp: helper/sp-marshal.cpp.mingw
 inkscape_version.h: inkscape_version.h.mingw
 	$(CP) inkscape_version.h.mingw inkscape_version.h
 
+
+###################################
+# D E P E N D E N C I E S
+###################################
+
 include ./make.ofiles
 include ./make.dep
 
 INC += $(INCLUDEPATH)
 
 OBJ = $(OBJECTS)
+
+
+
+###################################
+# O U T P U T S
+###################################
 
 RES=inkres.o
 
@@ -63,6 +77,30 @@ libinkscape.a: $(OBJ)
 	ar crv libinkscape.a $(OBJ)
 	$(RANLIB) libinkscape.a
 
+
+
+
+
+###################################
+# P L U G I N S
+###################################
+
+.o.dll:
+	$(DLLWRAP) --def=inkscape.def --driver-name=g++ \
+	-o $@ $< $(LIBS)
+
+PLUGS = extension/plugin/gimpgrad.dll
+
+plugins: $(PLUGS)
+
+
+
+
+
+
+###################################
+# C L E A N U P
+###################################
 
 clean:
 	$(foreach a, $(OBJ), $(shell $(RM) $(subst /,$(S), $(a))))
