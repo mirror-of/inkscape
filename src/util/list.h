@@ -25,6 +25,9 @@ template <typename T> class List;
 template <typename T> class MutableList;
 
 template <typename T>
+bool is_empty(List<T> const &list);
+
+template <typename T>
 typename List<T>::reference first(List<T> const &list);
 
 template <typename T>
@@ -38,82 +41,59 @@ MutableList<T> const &set_rest(MutableList<T> const &list,
                                MutableList<T> const &rest);
 
 template <typename T>
-class ListBase {
-public:
-    typedef std::forward_iterator_tag iterator_category;
-    typedef T value_type;
-    typedef std::ptrdiff_t difference_type;
-    typedef typename Traits::Reference<value_type>::LValue reference;
-    typedef typename Traits::Reference<value_type>::RValue const_reference;
-    typedef typename Traits::Reference<value_type>::Pointer pointer;
+struct ListCell : public GC::Managed<> {
+    ListCell() {}
+    ListCell(typename Traits::Reference<T>::RValue v, ListCell *n)
+    : value(v), next(n) {}
 
-    operator bool() const { return _cell != NULL; }
-
-protected:
-    ListBase() : _cell(NULL) {}
-    ListBase(const_reference value, ListBase const &next)
-    : _cell(new Cell(value, next._cell)) {}
-
-    bool _is_equivalent(ListBase const &other) const {
-        return _cell == other._cell;
-    }
-
-    reference _first() const { return _cell->value; }
-    ListBase &_rest() const {
-        return reinterpret_cast<ListBase &>(_cell->next);
-    }
-    void _advance() { _cell = _cell->next; }
-
-private:
-    struct Cell : public GC::Managed<> {
-        Cell() {}
-        Cell(const_reference v, Cell *n) : value(v), next(n) {}
-
-        T value;
-        Cell *next;
-    };
-
-    Cell *_cell;
-
-    explicit ListBase(Cell *cell) : _cell(cell) {}
+    T value;
+    ListCell *next;
 };
 
 template <typename T> class List;
 
 template <typename T>
-class List<T const> : public ListBase<T> {
+class List<T const> {
 public:
+    typedef std::forward_iterator_tag iterator_category;
     typedef T const value_type;
+    typedef std::ptrdiff_t difference_type;
     typedef typename Traits::Reference<value_type>::LValue reference;
     typedef typename Traits::Reference<value_type>::RValue const_reference;
     typedef typename Traits::Reference<value_type>::Pointer pointer;
 
-    List() : ListBase<T>() {}
+    List() : _cell(NULL) {}
     explicit List(const_reference value, List const &next=List())
-    : ListBase<T>(value, next) {}
+    : _cell(new ListCell<T>(value, next._cell)) {}
 
-    reference operator*() const { return this->_first(); }
-    pointer operator->() const { return &this->_first(); }
+    operator bool() const { return this->_cell; }
+
+    reference operator*() const { return this->_cell->value; }
+    pointer operator->() const { return &this->_cell->value; }
 
     bool operator==(List const &other) const {
-        return this->_is_equivalent(other);
+        return this->_cell == other._cell;
     }
     bool operator!=(List const &other) const {
-        return !this->_is_equivalent(other);
+        return this->_cell != other._cell;
     }
 
     List &operator++() {
-        this->_advance();
+        this->_cell = this->_cell->next;
         return *this;
     }
     List operator++(int) {
         List old(*this);
-        this->_advance();
+        this->_cell = this->_cell->next;
         return old;
     }
 
     friend reference first<>(List const &);
     friend List const &rest<>(List const &);
+    friend bool is_empty<>(List const &);
+
+protected:
+    ListCell<T> *_cell;
 };
 
 template <typename T>
@@ -128,57 +108,66 @@ public:
     explicit List(const_reference value, List const &next=List())
     : List<T const>(value, next) {}
 
-    reference operator*() const { return this->_first(); }
-    pointer operator->() const { return &this->_first(); }
+    reference operator*() const { return this->_cell->value; }
+    pointer operator->() const { return &this->_cell->value; }
 
     List &operator++() {
-        this->_advance();
+        this->_cell = this->_cell->next;
         return *this;
     }
     List operator++(int) {
         List old(*this);
-        this->_advance();
+        this->_cell = this->_cell->next;
         return old;
     }
 
     friend reference first<>(List const &);
     friend List const &rest<>(List const &);
+    friend bool is_empty<>(List const &);
 };
 
 template <typename T>
-class List<T &> : public ListBase<T &> {
+class List<T &> {
 public:
+    typedef std::forward_iterator_tag iterator_category;
     typedef T &value_type;
+    typedef std::ptrdiff_t difference_type;
     typedef typename Traits::Reference<value_type>::LValue reference;
     typedef typename Traits::Reference<value_type>::RValue const_reference;
     typedef typename Traits::Reference<value_type>::Pointer pointer;
 
-    List() : ListBase<T &>() {}
+    List() : _cell(NULL) {}
     List(const_reference value, List const &next=List())
-    : ListBase<T &>(value, next) {}
+    : _cell(new ListCell<T &>(value, next._cell)) {}
 
-    reference operator*() const { return this->_first(); }
-    pointer operator->() const { return &this->_first(); }
+    operator bool() const { return this->_cell; }
+
+    reference operator*() const { return this->_cell->value; }
+    pointer operator->() const { return &this->_cell->value; }
 
     bool operator==(List const &other) const {
-        return this->_is_equivalent(other);
+        return this->_cell == other._cell;
     }
     bool operator!=(List const &other) const {
-        return !this->_is_equivalent(other);
+        return this->_cell != other._cell;
     }
 
     List &operator++() {
-        this->_advance();
+        this->_cell = this->_cell->next;
         return *this;
     }
     List operator++(int) {
         List old(*this);
-        this->_advance();
+        this->_cell = this->_cell->next;
         return old;
     }
 
     friend reference first<>(List const &);
     friend List const &rest<>(List const &);
+    friend bool is_empty<>(List const &);
+
+protected:
+    ListCell<T &> *_cell;
 };
 
 template <typename T>
@@ -190,12 +179,12 @@ public:
     : List<T>(value, next) {}
 
     MutableList &operator++() {
-        this->_advance();
+        this->_cell = this->_cell->next;
         return *this;
     }
     MutableList operator++(int) {
         MutableList old(*this);
-        this->_advance();
+        this->_cell = this->_cell->next;
         return old;
     }
 
@@ -206,24 +195,30 @@ public:
 
 /** @brief Creates a (non-empty) linked list.
  * 
- * Creates a new linked list with a copy of the given value ('first');
- * the remainder of the list will be the list provided as 'rest'.
+ * Creates a new linked list with a copy of the given value (\a first)
+ * in its first element; the remainder of the list will be the list
+ * provided as \a rest.
  *
  * The remainder of the list -- the "tail" -- is incorporated by
- * reference, not by value, so changes to that list will affect this one.
+ * reference rather than being copied.
  *
- * The copied value is managed by the garbage collector as non-finalized
- * memory; if it has a non-trivial destructor, that destructor will not
- * be automatically called when the list is destroyed.
+ * The returned value can also be treated as an STL forward iterator.
  *
- * An exception to this is if the value type derives from
- * Inkscape::GC::Finalized; such objects will have their destructors
- * called even when the list is automatically destroyed.
+ * These lists are designed to store simple values like pointers,
+ * references, and scalar values.  While they can be used to directly
+ * store more complex objects, destructors for those objects will not
+ * be called unless those objects derive from Inkscape::GC::Finalized.
+ *
+ * In general it's better to use lists to store pointers or references
+ * to objects requiring finalization and manage object lifetimes separately.
+ *
+ * @see Inkscape::GC::Finalized
  *
  * cons() is synonymous with List<T>(first, rest), except that the
- * compiler will usually be able to infer T from the type of 'rest'
+ * compiler will usually be able to infer T from the type of \a rest.
  *
- * If you need to create an empty list, call the List<> constructor
+ * If you need to create an empty list (which can, for example, be used
+ * as an 'end' value with STL algorithms), call the List<> constructor
  * with no arguments, like so:
  *
  *  List<int>()
@@ -249,11 +244,10 @@ inline List<T> cons(typename Traits::Reference<T>::RValue first,
  *
  * Creates a new linked list, but one whose tail can be exchanged for
  * another later by using set_rest() or assignment through rest()
- * as an lvalue.
+ * as an lvalue.  It's otherwise identical to the "non-mutable" form.
  *
  * This form of cons() is synonymous with MutableList<T>(first, rest),
- * except that the compiler can usually infer the T from the type of
- * 'rest'.
+ * except that the compiler can usually infer T from the type of \a rest.
  *
  * As with List<>, you can create an empty list like so:
  *
@@ -284,7 +278,7 @@ inline MutableList<T> cons(typename Traits::Reference<T>::RValue first,
  * @returns true if the list is empty, false otherwise.
  */
 template <typename T>
-inline bool is_empty(List<T> const &list) { return !list; }
+inline bool is_empty(List<T> const &list) { return !list._cell; }
 
 /** @brief Returns the first value in a linked list.
  *
@@ -309,7 +303,7 @@ inline bool is_empty(List<T> const &list) { return !list; }
  */
 template <typename T>
 inline typename List<T>::reference first(List<T> const &list) {
-    return list._first();
+    return list._cell->value;
 }
 
 /** @brief Returns the remainder of a linked list after the first element.
@@ -329,7 +323,7 @@ inline typename List<T>::reference first(List<T> const &list) {
  */
 template <typename T>
 inline List<T> const &rest(List<T> const &list) {
-    return static_cast<List<T> &>(list._rest());
+    return reinterpret_cast<List<T> const &>(list._cell->next);
 }
 
 /** @brief Returns a reference to the remainder of a linked list after
@@ -354,7 +348,7 @@ inline List<T> const &rest(List<T> const &list) {
  */
 template <typename T>
 inline MutableList<T> &rest(MutableList<T> const &list) {
-    return static_cast<MutableList<T> &>(list._rest());
+    return reinterpret_cast<MutableList<T> &>(list._cell->next);
 }
 
 /** @brief Sets a new tail for an existing linked list.
@@ -377,7 +371,8 @@ template <typename T>
 inline MutableList<T> const &set_rest(MutableList<T> const &list,
                                       MutableList<T> const &rest)
 {
-    return static_cast<MutableList<T> &>(list._rest()) = rest;
+    list._cell->next = rest._cell;
+    return reinterpret_cast<MutableList<T> &>(list._cell->next);
 }
 
 }

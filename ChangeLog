@@ -1,3 +1,9 @@
+2004-10-30  MenTaLguY  <mental@rydia.net>
+
+	* src/util/list.h: more list cleanups and documentation
+
+	* src/verbs.cpp: call sp_document_done() for layer verbs too
+
 2004-10-30  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/dialogs/item-properties.cpp, src/sp-object.h:  Cleaning up

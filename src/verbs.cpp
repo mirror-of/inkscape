@@ -869,6 +869,7 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
             SPObject *layer=Inkscape::create_layer(dt->currentRoot(), dt->currentLayer());
             dt->setCurrentLayer(layer);
             SP_DT_SELECTION(dt)->clear();
+            sp_document_done(SP_DT_DOCUMENT(dt));
             dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
             break;
         }
@@ -880,7 +881,11 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
             SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
             if (next) {
                 dt->setCurrentLayer(next);
-                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to next layer."));
+                // TODO move selected objects to top of next
+                sp_document_done(SP_DT_DOCUMENT(dt));
+                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Moved to next layer."));
+            } else {
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move past last layer."));
             }
             break;
         }
@@ -888,7 +893,11 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
             SPObject *prev=Inkscape::previous_layer(dt->currentRoot(), dt->currentLayer());
             if (prev) {
                 dt->setCurrentLayer(prev);
-                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to previous layer."));
+                // TODO move selected objects to top of prev
+                sp_document_done(SP_DT_DOCUMENT(dt));
+                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Moved to previous layer."));
+            } else {
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move past first layer."));
             }
             break;
         }
@@ -933,10 +942,12 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
                         message = _("Lowered layer.");
                         break;
                 };
+                sp_document_done(SP_DT_DOCUMENT(dt));
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
             } else {
                 dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move layer any further."));
             }
+
             break;
         }
         case SP_VERB_LAYER_DELETE: {
@@ -954,6 +965,8 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
                 }
                 old_layer->deleteObject();
                 sp_object_unref(old_layer, NULL);
+
+                sp_document_done(SP_DT_DOCUMENT(dt));
 
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Deleted layer."));
             } else {
