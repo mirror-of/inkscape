@@ -86,11 +86,8 @@ sp_gradient_position_get_type (void)
 static void
 sp_gradient_position_class_init (SPGradientPositionClass *klass)
 {
-    GtkObjectClass *object_class;
-    GtkWidgetClass *widget_class;
-
-    object_class = (GtkObjectClass *) klass;
-    widget_class = (GtkWidgetClass *) klass;
+    GtkObjectClass *object_class = (GtkObjectClass *) klass;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *) klass;
 
     parent_class = (GtkWidgetClass*)gtk_type_class (GTK_TYPE_WIDGET);
 
@@ -173,8 +170,6 @@ static void
 sp_gradient_position_realize (GtkWidget *widget)
 {
     GdkWindowAttr attributes;
-    gint attributes_mask;
-
     SPGradientPosition *pos = SP_GRADIENT_POSITION (widget);
 
     GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -194,7 +189,7 @@ sp_gradient_position_realize (GtkWidget *widget)
 			      GDK_POINTER_MOTION_MASK |
 			      GDK_ENTER_NOTIFY_MASK |
 			      GDK_LEAVE_NOTIFY_MASK);
-    attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+    gint attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
     widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
     gdk_window_set_user_data (widget->window, widget);
@@ -299,7 +294,9 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 	    //g_print("d = %f\n", d);
 	    if ((d < RADIUS) && !(event->state & GDK_SHIFT_MASK)) {
 		pos->dragging = 1;
+		NR::Point delta = pos->radial.f - pos->radial.center;
 		pos->radial.center = mouse_gs;
+		pos->radial.f = mouse_gs + delta;
 	    }
 	    d = fabs(NR::L2(mouse_gs - pos->radial.center) - pos->radial.r);
 	    //g_print("d = %f, r = %f\n", d, pos->radial.r);
@@ -369,9 +366,12 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 	}
     } else {
 	switch(pos->dragging) {
-	case 1:
-	    pos->radial.f = pos->radial.center = mouse_gs;
+	case 1: {
+	    NR::Point delta = pos->radial.f - pos->radial.center;
+	    pos->radial.center = mouse_gs;
+	    pos->radial.f = mouse_gs + delta;
 	    break;
+	}
 	case 2:
 	    pos->radial.f = mouse_gs;
 	    break;
@@ -393,9 +393,7 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 GtkWidget *
 sp_gradient_position_new (SPGradient *gradient)
 {
-    SPGradientPosition *position;
-
-    position = (SPGradientPosition*)gtk_type_new (SP_TYPE_GRADIENT_POSITION);
+    SPGradientPosition *position = (SPGradientPosition*)gtk_type_new (SP_TYPE_GRADIENT_POSITION);
 
     sp_gradient_position_set_gradient (position, gradient);
 
