@@ -154,12 +154,12 @@ Matrix Matrix::inverse() const
 	
 	NR::Coord det = _c[0] * _c[3] - _c[1] * _c[2];
 	if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
-		Coord t = _c[3] / det;
 		d._c[3] = _c[0] / det;
-		d._c[0] = t;
+		d._c[0] = _c[3] / det;
 
 		d._c[1] = -_c[1] / det;
 		d._c[2] = -_c[2] / det;
+
 		d._c[4] = -_c[4] * d._c[0] - _c[5] * d._c[2];
 		d._c[5] = -_c[4] * d._c[1] - _c[5] * d._c[3];
 	} else {
