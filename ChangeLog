@@ -1,3 +1,9 @@
+2004-08-13  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/repr-action.h, src/xml/repr-action.cpp:
+
+	  simplified code now that we can take advantage of garbage collection
+
 2004-08-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/xml-tree.cpp (set_dt_select):

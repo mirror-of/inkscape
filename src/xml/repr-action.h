@@ -6,6 +6,8 @@
 
 #include <xml/xml-forward.h>
 
+#include "gc-object.h"
+
 struct SPReprAction;
 struct SPReprActionAdd;
 struct SPReprActionDel;
@@ -34,11 +36,11 @@ struct SPReprActionDel {
 
 struct SPReprActionChgAttr {
 	int key;
-	gchar *oldval, *newval;
+	gchar const *oldval, *newval;
 };
 
 struct SPReprActionChgContent {
-	gchar *oldval, *newval;
+	gchar const *oldval, *newval;
 };
 
 struct SPReprActionChgOrder {
@@ -46,7 +48,9 @@ struct SPReprActionChgOrder {
 	SPRepr *oldref, *newref;
 };
 
-struct SPReprAction {
+struct SPReprAction
+: public Inkscape::GC::Object<Inkscape::GC::SCANNED, Inkscape::GC::MANUAL>
+{
 	SPReprAction *next;
 	SPReprActionType type;
 	SPRepr *repr;
