@@ -51,7 +51,8 @@ sp_help_about (void)
      */
 
     if (!w) {
-	 char *about = g_build_filename(INKSCAPE_SCREENSDIR, "/about.svg", NULL);
+	 char *about = g_build_filename(INKSCAPE_SCREENSDIR,
+			                _("about.svg"), NULL);
         doc = sp_document_new (about, FALSE, TRUE);
 	 g_free(about);
         g_return_if_fail (doc != NULL);
@@ -104,7 +105,7 @@ void
 sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data)
 {
     gchar *name = (gchar *) data;
-    gchar *c = g_strconcat (INKSCAPE_TUTORIALSDIR, "/", name, NULL);
+    gchar *c = g_build_filename (INKSCAPE_TUTORIALSDIR, "/", name, NULL);
     sp_file_open (c, NULL);
     g_free (c);
 }
@@ -112,7 +113,7 @@ sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data)
 void
 sp_help_open_screen (const gchar * name)
 {
-    gchar *c = g_strconcat (INKSCAPE_SCREENSDIR, "/", name, NULL);
+    gchar *c = g_build_filename (INKSCAPE_SCREENSDIR, "/", name, NULL);
     sp_file_open (c, NULL);
     g_free (c);
 }

@@ -1,3 +1,8 @@
+2004-05-08  Kees Cook <kees@outflux.net>
+
+	* src/verbs.cpp, src/help.cpp: localizing "about" and "keys" stuff.
+	* po/*.po: rebuilt for new strings.
+
 2004-05-08  Carl Hetherington <inkscape@carlh.net>
 
 	* src/dialogs/desktop-properties.cpp: the usual cleanups.  Also

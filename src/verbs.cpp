@@ -660,7 +660,7 @@ sp_verb_action_help_perform (SPAction *action, void * data, void * pdata)
 {
     switch ((int) data) {
         case SP_VERB_HELP_KEYS:
-            sp_help_open_screen ("keys.svg");
+            sp_help_open_screen (_("keys.svg"));
             break;
         case SP_VERB_HELP_ABOUT:
             sp_help_about ();
