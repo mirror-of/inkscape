@@ -72,6 +72,7 @@
 #define INKSCAPE_STOCK_FILL_GRADIENT         "fill_gradient"
 #define INKSCAPE_STOCK_FILL_RADIAL           "fill_radial"
 #define INKSCAPE_STOCK_FILL_PATTERN          "fill_pattern"
+#define INKSCAPE_STOCK_FILL_UNSET          "fill_unset"
 #define INKSCAPE_STOCK_FILL_FRACTAL          "fill_fractal"
 
 //#define INKSCAPE_STOCK_GUIDE_DIALOG          "guide_dialog"

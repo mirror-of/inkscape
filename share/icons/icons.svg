@@ -10,11 +10,11 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
    sodipodi:version="0.32"
-   width="766.00000pt"
+   width="872.00000pt"
    height="256pt"
    sodipodi:docname="icons.svg"
    inkscape:version="0.41+cvs"
-   sodipodi:docbase="/scratch/src/inkscape/inkscape/share/icons">
+   sodipodi:docbase="/home/d/ink/inkscape/share/icons">
   <defs
      id="defs3">
     <linearGradient
@@ -774,9 +774,9 @@
      showgrid="true"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="1.1091384"
-     inkscape:cx="478.75000"
-     inkscape:cy="159.99999"
+     inkscape:zoom="6.1725963"
+     inkscape:cx="990.26054"
+     inkscape:cy="297.21831"
      inkscape:window-width="1158"
      inkscape:window-height="536"
      inkscape:window-x="0"
@@ -7651,5 +7651,24 @@ http://www.inkscape.org/</dc:description>
        width="25.000004"
        id="rect2500"
        style="fill:none;fill-rule:evenodd;stroke-width:0.052083399" />
+  </g>
+  <g
+     id="fill_unset"
+     transform="translate(60.00000,-6.000000)">
+    <g
+       transform="translate(321.0165,0.591361)"
+       id="g2496">
+      <rect
+         y="15.625036"
+         x="596.87494"
+         height="24.999990"
+         width="25.000004"
+         id="rect2499"
+         style="fill:none;fill-rule:evenodd;stroke-width:0.052083399" />
+    </g>
+    <path
+       style="font-size:24.000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Hegel-Black"
+       d="M 929.47240,19.600517 C 931.02439,19.600535 932.40039,19.984534 933.60040,20.752517 C 934.96039,21.632533 935.64039,22.816532 935.64040,24.304517 C 935.64039,25.552529 935.22439,26.536528 934.39240,27.256517 L 932.11240,28.672517 C 931.36039,29.168525 930.98439,29.864525 930.98440,30.760517 L 926.64040,30.760517 L 926.64040,30.136517 C 926.64039,28.808526 926.99239,27.800527 927.69640,27.112517 C 927.88839,26.920528 928.53639,26.528528 929.64040,25.936517 C 930.34439,25.600529 930.69639,25.136529 930.69640,24.544517 C 930.69639,24.128530 930.52839,23.792531 930.19240,23.536517 C 929.87239,23.280531 929.48839,23.152531 929.04040,23.152517 C 928.54439,23.152531 928.13639,23.304531 927.81640,23.608517 C 927.49639,23.896531 927.33639,24.296530 927.33640,24.808517 L 927.36040,25.168517 L 922.41640,25.168517 C 922.41640,24.208530 922.60840,23.376531 922.99240,22.672517 C 923.36040,21.952532 923.91240,21.344533 924.64840,20.848517 C 925.86440,20.016534 927.47239,19.600535 929.47240,19.600517 M 926.37640,32.392517 L 931.27240,32.392517 L 931.27240,36.976517 L 926.37640,36.976517 L 926.37640,32.392517"
+       id="text2490" />
   </g>
 </svg>
