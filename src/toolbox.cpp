@@ -99,6 +99,7 @@ static GtkWidget *sp_rect_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_spiral_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_calligraphy_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
+static GtkWidget *sp_gradient_toolbox_new(SPDesktop *desktop);
 
 static struct {
     gchar const *type_name;
@@ -117,7 +118,7 @@ static struct {
     { "SPPenContext",      "pen_tool",       SP_VERB_CONTEXT_PEN, SP_VERB_CONTEXT_PEN_PREFS },
     { "SPDynaDrawContext", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
     { "SPTextContext",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
-    //{ "SPGradientContext", "gradient_tool", SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
+//{ "SPGradientContext", "gradient_tool", SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
     { "SPDropperContext",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
     { NULL, NULL, 0, 0 }
 };
@@ -138,6 +139,7 @@ static struct {
     { "SPPenContext", "pen_toolbox", NULL },
     { "SPDynaDrawContext", "calligraphy_toolbox", sp_calligraphy_toolbox_new },
     { "SPTextContext", "text_toolbox", NULL },
+    { "SPGradientContext", "gradient_toolbox", sp_gradient_toolbox_new },
     { NULL, NULL, NULL }
 };
 
@@ -2227,6 +2229,36 @@ sp_arc_toolbox_new(SPDesktop *desktop)
     return tbl;
 }
 
+
+
+//########################
+//##       Gradient     ##
+//########################
+
+static GtkWidget *
+sp_gradient_toolbox_new(SPDesktop *desktop)
+{
+    GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
+
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
+
+    GtkTooltips *tt = gtk_tooltips_new();
+
+    sp_toolbox_add_label(tbl, _("<b>New:</b>"));
+
+    gtk_widget_show_all(tbl);
+    sp_set_font_size(tbl, AUX_FONT_SIZE);
+
+/* // wait when we have the Change part
+    sigc::connection *connection = new sigc::connection(
+        SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_gradient_toolbox_selection_changed), (GtkObject *)tbl))
+        );
+    g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
+*/
+
+    return tbl;
+}
 
 /*
   Local Variables:
