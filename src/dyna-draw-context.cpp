@@ -225,6 +225,22 @@ sp_dyna_draw_context_setup(SPEventContext *ec)
     sp_event_context_read(ec, "width");
 }
 
+/** Returns \a x wrapped around to between 0 and less than 360,
+    or 0 if \a x isn't finite.
+**/
+static double mod360(double const x)
+{
+    double const m = fmod(x, 360.0);
+    double const ret = ( isnan(m)
+                         ? 0.0
+                         : ( m < 0
+                             ? m + 360
+                             : m ) );
+    g_return_val_if_fail(0.0 <= ret && ret < 360.0,
+                         0.0);
+    return ret;
+}
+
 static void
 sp_dyna_draw_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
 {
@@ -238,13 +254,9 @@ sp_dyna_draw_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
         ddc->drag = CLAMP(dval, DRAG_MIN, DRAG_MAX);
     } else if (!strcmp(key, "angle")) {
         double const dval = ( val
-                              ? fmod(atof(val), 360.0)
-                              : 0.5 );
-        ddc->angle = ( dval > 0
-                       ? dval
-                       : dval + 360.0 );
-        /* fixme: Can someone please confirm that the above is correct, disallowing ddc->angle to
-           be 0 but allowing it to be 360?  (I'm unfamiliar with ddc->angle usage.) */
+                              ? mod360(atof(val))
+                              : 0.0 );
+        ddc->angle = dval;
     } else if (!strcmp(key, "width")) {
         double const dval = ( val ? atof(val) : 0.1 );
         ddc->width = CLAMP(dval, -1000.0, 1000.0);

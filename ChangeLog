@@ -1,5 +1,8 @@
 2004-03-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dyna-draw-context.cpp (sp_dyna_draw_context_set):
+	Tweak angle setting: prefer 0.0 instead of 360.0.
+
 	* src/dyna-draw-context.h, src/dyna-draw-context.cpp: Cleanup:
 	Greater conformance to CodingStyle.  Mostly whitespace changes.
 
