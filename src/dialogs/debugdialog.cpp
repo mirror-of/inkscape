@@ -11,6 +11,9 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include "debugdialog.h"
 
@@ -20,7 +23,10 @@
 #include <gtkmm/textview.h>
 #include <gtkmm/button.h>
 
+#include <dialogs/dialog-events.h>
+#include "helper/sp-intl.h"
 
+#include <glib.h>
 
 namespace Inkscape
 {
@@ -74,12 +80,31 @@ class DebugDialogImpl : public DebugDialog, public Gtk::Dialog
      */
     void message(char *msg);
     
+    /**
+     * Redirect g_log() messages to this widget
+     */
+    void captureLogMessages();
+
+    /**
+     * Return g_log() messages to normal handling
+     */
+    void releaseLogMessages();
+
 
 
     private:
 
 
+    Gtk::MenuBar menuBar;
+
+    Gtk::Menu   fileMenu;
+
+    Gtk::ScrolledWindow textScroll;
+
     Gtk::TextView messageText;
+
+    guint dialogHandler;
+
 
 
 
@@ -112,20 +137,27 @@ void DebugDialogImpl::clear()
  */
 DebugDialogImpl::DebugDialogImpl()
 {
+    set_title(_("Messages"));
+    set_size_request(300, 400);
 
-    Gtk::VBox *vbox = get_vbox();
+    Gtk::VBox *mainVBox = get_vbox();
 
-    Gtk::Button button("Hello World");
-
-    button.signal_clicked().connect(
-         sigc::mem_fun(*this, &DebugDialogImpl::clear));
-
-    vbox->pack_start(button);
+    //## Add a menu for clear()
+    menuBar.items().push_back( Gtk::Menu_Helpers::MenuElem("_File", fileMenu) );
+    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem("_Clear",
+           sigc::mem_fun(*this, &DebugDialogImpl::clear) ) );
+    mainVBox->pack_start(menuBar, Gtk::PACK_SHRINK);
+    
 
     //### Set up the text widget
     messageText.set_editable(false);
-    vbox->pack_start(messageText);
+    textScroll.add(messageText);
+    textScroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
+    mainVBox->pack_start(textScroll);
 
+    show_all_children();
+
+    dialogHandler = 0;
 }
 
 /**
@@ -154,6 +186,10 @@ DebugDialogImpl::~DebugDialogImpl()
 
 void DebugDialogImpl::show()
 {
+    //call super()
+    Gtk::Dialog::show();
+    //sp_transientize((GtkWidget *)gobj());  //Make transient
+    raise();
 
 }
 
@@ -161,7 +197,8 @@ void DebugDialogImpl::show()
 
 void DebugDialogImpl::hide()
 {
-
+    //call super()
+    Gtk::Dialog::hide();
 }
 
 
@@ -192,6 +229,41 @@ void DebugDialog::showInstance()
 {
     DebugDialog *debugDialog = getInstance();
     debugDialog->show();
+}
+
+
+void dialogLoggingFunction(const gchar *log_domain,
+                           GLogLevelFlags log_level,
+                           const gchar *messageText,
+                           gpointer user_data)
+{
+    DebugDialogImpl *dlg = (DebugDialogImpl *)user_data;
+
+    dlg->message((char *)messageText);
+
+}
+
+
+void DebugDialogImpl::captureLogMessages()
+{
+    if ( !dialogHandler )
+        {
+        dialogHandler = g_log_set_handler(NULL,
+            (GLogLevelFlags)(G_LOG_LEVEL_ERROR   | G_LOG_LEVEL_CRITICAL |
+                             G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE  |
+                             G_LOG_LEVEL_INFO    | G_LOG_LEVEL_DEBUG),
+              dialogLoggingFunction,
+              (gpointer)this);
+        }
+}
+
+void DebugDialogImpl::releaseLogMessages()
+{
+    if ( dialogHandler )
+        {
+        g_log_remove_handler(NULL, dialogHandler);
+        dialogHandler = 0;
+        }
 }
 
 

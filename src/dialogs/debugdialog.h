@@ -36,7 +36,7 @@ class DebugDialog
     /**
      * Constructor
      */
-    DebugDialog();
+    DebugDialog() {};
 
 
     /**
@@ -69,6 +69,16 @@ class DebugDialog
      * Display a message
      */
     virtual void message(char *msg) = 0;
+
+    /**
+     * Redirect g_log() messages to this widget
+     */
+    virtual void captureLogMessages() = 0;
+
+    /**
+     * Return g_log() messages to normal handling
+     */
+    virtual void releaseLogMessages() = 0;
 
     /**
      * Get a shared singleton instance
