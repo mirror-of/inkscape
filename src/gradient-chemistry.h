@@ -50,6 +50,8 @@ void sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, b
 
 void sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_desk, bool fill_or_stroke, bool write_repr, bool scale);
 NR::Point sp_item_gradient_get_coords (SPItem *item, guint point_num, bool fill_or_stroke);
+SPGradient *sp_item_gradient_get_vector (SPItem *item, bool fill_or_stroke);
+SPGradientSpread sp_item_gradient_get_spread (SPItem *item, bool fill_or_stroke);
 
 #endif
 

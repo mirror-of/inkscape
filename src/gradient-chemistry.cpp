@@ -582,6 +582,52 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 	}
 }
 
+
+SPGradient *
+sp_item_gradient (SPItem *item, bool fill_or_stroke)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+    SPGradient *gradient = NULL;
+
+    if (fill_or_stroke) {
+        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
+            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+            if (SP_IS_GRADIENT (server)) {
+                gradient = SP_GRADIENT (server);
+            }
+        }
+    } else {
+        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
+            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
+            if (SP_IS_GRADIENT (server)) {
+                gradient = SP_GRADIENT (server);
+            }
+        }
+    }
+ 
+   return gradient;
+}
+
+
+SPGradient *
+sp_item_gradient_get_vector (SPItem *item, bool fill_or_stroke)
+{
+    SPGradient *gradient = sp_item_gradient (item, fill_or_stroke);
+
+    if (gradient)
+        return sp_gradient_get_vector (gradient, false);
+    return NULL;
+}
+
+SPGradientSpread 
+sp_item_gradient_get_spread (SPItem *item, bool fill_or_stroke)
+{
+    SPGradient *gradient = sp_item_gradient (item, fill_or_stroke);
+
+    return sp_gradient_get_spread (gradient);
+}
+
+
 /**
 Returns the position of point point_num of the gradient applied to item (either fill_or_stroke), 
 in desktop coordinates.
