@@ -1005,7 +1005,7 @@ void sp_selection_paste(bool in_place)
         desktop->namedview->grid_snapper.setDistance(NR_HUGE);
         namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, m);
         desktop->namedview->grid_snapper.setDistance(curr_gridsnap);
-        sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
+        sp_selection_move_relative(selection, m);
     }
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
@@ -1043,7 +1043,7 @@ void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine,
     if (selection->isEmpty())
         return;
 
-    for (GSList const *l = selection->itemList(); l != NULL; l = l-> next) {
+    for (GSList const *l = selection->itemList(); l != NULL; l = l->next) {
         SPItem *item = SP_ITEM(l->data);
 
 #if 0 /* Re-enable this once persistent guides have a graphical indication.
@@ -1164,6 +1164,11 @@ sp_selection_skew_relative(SPSelection *selection, NR::Point const &align, doubl
                           0, 0);
     NR::Matrix const final( n2d * skew * d2n );
     sp_selection_apply_affine(selection, final);
+}
+
+void sp_selection_move_relative(SPSelection *selection, NR::Point const &move)
+{
+    sp_selection_apply_affine(selection, NR::Matrix(NR::translate(move)));
 }
 
 void sp_selection_move_relative(SPSelection *selection, double dx, double dy)

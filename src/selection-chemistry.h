@@ -53,6 +53,7 @@ void sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, 
 void sp_selection_scale_relative(SPSelection *selection, NR::Point const &align, NR::scale const &scale);
 void sp_selection_rotate_relative (SPSelection *selection, NR::Point const &center, gdouble angle);
 void sp_selection_skew_relative (SPSelection *selection, NR::Point const &align, double dx, double dy);
+void sp_selection_move_relative (SPSelection *selection, NR::Point const &move);
 void sp_selection_move_relative (SPSelection *selection, double dx, double dy);
 
 void sp_selection_rotate_90_cw (void);
