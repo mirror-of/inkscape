@@ -4095,7 +4095,7 @@ msgstr "Výber <b>neobsahuje text na ceste</b>."
 #: src/text-chemistry.cpp:222
 #, fuzzy
 msgid "Select <b>text(s)</b> to remove kerns from."
-msgstr "Vybrať <b>text a cestu<b/> na odstránenie z cesty."
+msgstr "Vybrať <b>text a cestu</b> na odstránenie z cesty."
 
 #: src/text-context.cpp:356
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
