@@ -754,11 +754,9 @@ sp_text_adjust_coords_recursive (SPItem *item, NR::Matrix const &m, double ex)
         }
 
         /* Recalculate dx/dy lists */
-        if (sp_repr_attr(SP_OBJECT_REPR(item), "dx") || sp_repr_attr(SP_OBJECT_REPR(item), "dy")) {
-          // FIXME: The entire chain of ancestors share the same dx/dy lists, but we only want to
-          // scale it once, so we do it for the element that has the actual attributes. This is
-          // STILL not 100% correct because the actual list may be the result of a combination of
-          // several dx/dy attrs in an ancestor chain.
+        if (SP_IS_TEXT(item)) {
+            // ScaleDXDY will update the kerns in the entire chain of linked flow_src's of the text
+            // object, therefore we call it only once for the root <text> but not for tspans
             contents->ScaleDXDY (ex);
         }
     }
