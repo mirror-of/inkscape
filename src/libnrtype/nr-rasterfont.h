@@ -31,7 +31,7 @@ struct _NRRasterFont {
 NRRasterFont *nr_rasterfont_ref (NRRasterFont *rf);
 NRRasterFont *nr_rasterfont_unref (NRRasterFont *rf);
 
-NRPoint *nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph, NRPoint *adv);
+NR::Point nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph);
 NRRect *nr_rasterfont_glyph_area_get (NRRasterFont *rf, int glyph, NRRect *area);
 
 void nr_rasterfont_glyph_mask_render (NRRasterFont *rf, int glyph, NRPixBlock *mask, float x, float y);
@@ -40,7 +40,7 @@ void nr_rasterfont_glyph_mask_render (NRRasterFont *rf, int glyph, NRPixBlock *m
 
 NRRasterFont *nr_rasterfont_generic_new (NRFont *font, NRMatrix *transform);
 void nr_rasterfont_generic_free (NRRasterFont *rf);
-NRPoint *nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph, NRPoint *adv);
+NR::Point nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph);
 NRRect *nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRect *area);
 void nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, NRPixBlock *m, float x, float y);
 

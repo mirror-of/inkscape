@@ -33,7 +33,7 @@ NRFont *nr_font_unref (NRFont *font);
 NRBPath *nr_font_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *d, unsigned int ref);
 void nr_font_glyph_outline_unref (NRFont *font, unsigned int glyph);
 
-NRPoint *nr_font_glyph_advance_get (NRFont *font, unsigned int glyph, NRPoint *adv);
+NR::Point nr_font_glyph_advance_get (NRFont *font, unsigned int glyph);
 NRRect *nr_font_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area);
 
 NRRasterFont *nr_rasterfont_new (NRFont *font, NRMatrix *transform);
@@ -45,7 +45,7 @@ void nr_font_generic_free (NRFont *font);
 
 NRBPath *nr_font_generic_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *d, unsigned int ref);
 void nr_font_generic_glyph_outline_unref (NRFont *font, unsigned int glyph);
-NRPoint *nr_font_generic_glyph_advance_get (NRFont *font, unsigned int glyph, NRPoint *adv);
+NR::Point nr_font_generic_glyph_advance_get (NRFont *font, unsigned int glyph);
 NRRect *nr_font_generic_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area);
 
 NRRasterFont *nr_font_generic_rasterfont_new (NRFont *font, NRMatrix *transform);

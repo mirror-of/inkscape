@@ -44,10 +44,9 @@ nr_rasterfont_unref (NRRasterFont *rf)
 	return NULL;
 }
 
-NRPoint *
-nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph, NRPoint *adv)
+NR::Point nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph)
 {
-	return ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_advance_get (rf, glyph, adv);
+	return ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_advance_get (rf, glyph);
 }
 
 NRRect *
@@ -181,18 +180,9 @@ nr_rasterfont_generic_free (NRRasterFont *rf)
 	nr_free (rf);
 }
 
-NRPoint *
-nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph, NRPoint *adv)
+NR::Point nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph)
 {
-	NRPoint a;
-
-	if (nr_font_glyph_advance_get (rf->font, glyph, &a)) {
-		adv->x = NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
-		adv->y = NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
-		return adv;
-	}
-
-	return NULL;
+	return NR::Matrix(&rf->transform) * nr_font_glyph_advance_get (rf->font, glyph);
 }
 
 NRRFGlyphSlot *
@@ -314,24 +304,23 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 	slot = rf->pages[page] + code;
 
 	if ((flags & NR_RASTERFONT_ADVANCE_FLAG) && !slot->has_advance) {
-		NRPoint a;
-		if (nr_font_glyph_advance_get (rf->font, glyph, &a)) {
-			switch (slot->type) {
-			case NRRF_TYPE_TINY:
-				slot->glyph.tg.advance.x = static_cast<NR::ICoord>(NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y));
-				slot->glyph.tg.advance.y = static_cast<NR::ICoord>(NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y));
-				break;
-			case NRRF_TYPE_IMAGE:
-				slot->glyph.ig.advance.x = static_cast<NR::ICoord>(NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y));
-				slot->glyph.ig.advance.y = static_cast<NR::ICoord>(NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y));
-				break;
-			case NRRF_TYPE_SVP:
-				slot->glyph.sg.advance.x = static_cast<gint32>(NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y));
-				slot->glyph.sg.advance.y = static_cast<gint32>(NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y));
-				break;
-			default:
-				break;
-			}
+		NR::Point a = nr_font_glyph_advance_get (rf->font, glyph);
+		NR::Point tp = NR::Matrix(&rf->transform) * a;
+		NRPointL ip;
+		ip.x = static_cast<NR::ICoord>(tp[NR::X]);
+		ip.y = static_cast<NR::ICoord>(tp[NR::Y]);
+		switch (slot->type) {
+		case NRRF_TYPE_TINY:
+			slot->glyph.tg.advance = ip;
+			break;
+		case NRRF_TYPE_IMAGE:
+			slot->glyph.ig.advance = ip;
+			break;
+		case NRRF_TYPE_SVP:
+			slot->glyph.sg.advance = ip;
+			break;
+		default:
+			break;
 		}
 		slot->has_advance = 1;
 	}

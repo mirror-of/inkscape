@@ -57,19 +57,19 @@ struct _NRTypeFaceClass {
 	unsigned int (* attribute_get) (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 	NRBPath *(* glyph_outline_get) (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *path, unsigned int ref);
 	void (* glyph_outline_unref) (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
-	NRPoint *(* glyph_advance_get) (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
+	NR::Point (* glyph_advance_get) (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 	unsigned int (* lookup) (NRTypeFace *tf, unsigned int rule, unsigned int glyph);
 	NRFont *(* font_new) (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
 
 	void (* font_free) (NRFont *font);
 	NRBPath *(* font_glyph_outline_get) (NRFont *font, unsigned int glyph, NRBPath *path, unsigned int ref);
 	void (* font_glyph_outline_unref) (NRFont *font, unsigned int glyph);
-	NRPoint *(* font_glyph_advance_get) (NRFont *font, unsigned int glyph, NRPoint *adv);
+	NR::Point (* font_glyph_advance_get) (NRFont *font, unsigned int glyph);
 	NRRect *(* font_glyph_area_get) (NRFont *font, unsigned int glyph, NRRect *area);
 	NRRasterFont *(* rasterfont_new) (NRFont *font, NRMatrix *transform);
 
 	void (* rasterfont_free) (NRRasterFont *rfont);
-	NRPoint *(* rasterfont_glyph_advance_get) (NRRasterFont *rfont, unsigned int glyph, NRPoint *adv);
+	NR::Point (* rasterfont_glyph_advance_get) (NRRasterFont *rfont, unsigned int glyph);
 	NRRect *(* rasterfont_glyph_area_get) (NRRasterFont *rfont, unsigned int glyph, NRRect *area);
 	void (* rasterfont_glyph_mask_render) (NRRasterFont *rfont, unsigned int glyph, NRPixBlock *m, float x, float y);
 };
@@ -99,7 +99,7 @@ unsigned int nr_typeface_attribute_get (NRTypeFace *tf, const gchar *key, gchar 
 
 NRBPath *nr_typeface_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 void nr_typeface_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
-NRPoint *nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
+NR::Point nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 
 unsigned int nr_typeface_lookup_default (NRTypeFace *tf, unsigned int unival);
 

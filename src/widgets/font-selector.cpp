@@ -513,20 +513,20 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			py = 0.0;
 			len = 0;
 			bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
+// XXX: FIXME: why does this code ignore adv.y
 			while (p && *p && (len < SPFP_MAX_LEN)) {
 				unsigned int unival;
-				NRPoint adv;
 				NRRect gbox;
 				unival = g_utf8_get_char (p);
 				glyphs[len] = nr_typeface_lookup_default (tface, unival);
 				hpos[len] = (int)px;
-				nr_rasterfont_glyph_advance_get (fprev->rfont, glyphs[len], &adv);
+				NR::Point adv = nr_rasterfont_glyph_advance_get (fprev->rfont, glyphs[len]);
 				nr_rasterfont_glyph_area_get (fprev->rfont, glyphs[len], &gbox);
 				bbox.x0 = MIN (px + gbox.x0, bbox.x0);
 				bbox.y0 = MIN (py + gbox.y0, bbox.y0);
 				bbox.x1 = MAX (px + gbox.x1, bbox.x1);
 				bbox.y1 = MAX (py + gbox.y1, bbox.y1);
-				px += adv.x;
+				px += adv[NR::X];
 				len += 1;
 				p = g_utf8_next_char (p);
 			}

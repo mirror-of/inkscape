@@ -217,7 +217,7 @@ sp_string_calculate_dimensions (SPString *string)
 		spadv.y = 0.0;
 	}
 	spglyph = nr_typeface_lookup_default (face, ' ');
-	nr_font_glyph_advance_get (font, spglyph, &spadv);
+	spadv = nr_font_glyph_advance_get (font, spglyph);
 
 	if (string->text) {
 		const gchar *p;
@@ -256,10 +256,10 @@ sp_string_calculate_dimensions (SPString *string)
 					string->bbox.x1 = MAX (string->bbox.x1, string->advance.x + bbox.x1);
 					string->bbox.y1 = MAX (string->bbox.y1, string->advance.y - bbox.y0);
 				}
-				if (nr_font_glyph_advance_get (font, glyph, &adv)) {
-					string->advance.x += adv.x;
-					string->advance.y -= adv.y;
-				}
+				adv = nr_font_glyph_advance_get (font, glyph);
+				string->advance.x += adv.x;
+				string->advance.y -= adv.y;
+				
 				inspace = FALSE;
 				intext = TRUE;
 			}
@@ -327,7 +327,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 		spadv.y = 0.0;
 	}
 	spglyph = nr_typeface_lookup_default (face, ' ');
-	nr_font_glyph_advance_get (font, spglyph, &spadv);
+	spadv = nr_font_glyph_advance_get (font, spglyph);
 
 	/* fixme: Find a way how to manipulate these */
 	x = cp->x;
@@ -372,10 +372,11 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 			a.c[5] = y;
 
 			sp_chars_add_element (chars, glyph, font, &a);
-			if (nr_font_glyph_advance_get (font, glyph, &adv)) {
-				x += adv.x;
-				y -= adv.y;
-			}
+			adv = nr_font_glyph_advance_get (font, glyph);
+			
+			x += adv.x;
+			y -= adv.y;
+			
 			inspace = FALSE;
 			intext = TRUE;
 		}

@@ -52,10 +52,9 @@ nr_font_glyph_outline_unref (NRFont *font, unsigned int glyph)
 	((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_outline_unref (font, glyph);
 }
 
-NRPoint *
-nr_font_glyph_advance_get (NRFont *font, unsigned int glyph, NRPoint *adv)
+NR::Point nr_font_glyph_advance_get (NRFont *font, unsigned int glyph)
 {
-	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_advance_get (font, glyph, adv);
+	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_advance_get (font, glyph);
 }
 
 NRRect *
@@ -152,15 +151,9 @@ nr_font_generic_glyph_outline_unref (NRFont *font, unsigned int glyph)
 	/* NOP by now */
 }
 
-NRPoint *
-nr_font_generic_glyph_advance_get (NRFont *font, unsigned int glyph, NRPoint *adv)
+NR::Point nr_font_generic_glyph_advance_get (NRFont *font, unsigned int glyph)
 {
-	((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->glyph_advance_get (font->face, glyph, font->metrics, adv);
-
-	adv->x *= (font->size / 1000.0);
-	adv->y *= (font->size / 1000.0);
-
-	return adv;
+	return (font->size / 1000.0) * ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->glyph_advance_get (font->face, glyph, font->metrics);
 }
 
 NRRect *

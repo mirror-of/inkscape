@@ -129,10 +129,9 @@ nr_typeface_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned in
 	((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_outline_unref (tf, glyph, metrics);
 }
 
-NRPoint *
-nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv)
+NR::Point nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
-	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_advance_get (tf, glyph, metrics, adv);
+	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_advance_get (tf, glyph, metrics);
 }
 
 unsigned int
@@ -175,7 +174,7 @@ static void nr_typeface_empty_finalize (NRObject *object);
 static unsigned int nr_typeface_empty_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 static NRBPath *nr_typeface_empty_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 static void nr_typeface_empty_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
-static NRPoint *nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
+static NR::Point nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static unsigned int nr_typeface_empty_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
 static NRFont *nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
@@ -299,18 +298,12 @@ nr_typeface_empty_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsig
 {
 }
 
-static NRPoint *
-nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv)
+static NR::Point nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
 	if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
-		adv->x = 0.0;
-		adv->y = -1000.0;
-	} else {
-		adv->x = 1000.0;
-		adv->y = 0.0;
+		return NR::Point(0.0, -1000.0);
 	}
-
-	return adv;
+	return NR::Point(1000.0, 0.0);
 }
 
 static unsigned int

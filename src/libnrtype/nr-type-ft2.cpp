@@ -33,7 +33,7 @@ static void nr_typeface_ft2_setup (NRTypeFace *tface, NRTypeFaceDef *def);
 static unsigned int nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 static NRBPath *nr_typeface_ft2_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 static void nr_typeface_ft2_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
-static NRPoint *nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
+static NR::Point nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static unsigned int nr_typeface_ft2_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
 static NRFont *nr_typeface_ft2_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
@@ -316,8 +316,7 @@ nr_typeface_ft2_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigne
 	}
 }
 
-static NRPoint *
-nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv)
+static NR::Point nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
 	NRTypeFaceFT2 *tff;
 	NRTypeFaceGlyphFT2 *slot;
@@ -331,11 +330,10 @@ nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned 
 	}
 
 	if (slot) {
-		*adv = slot->advance;
-		return adv;
+		return slot->advance;
 	}
 
-	return NULL;
+	return NR::Point(0,0);
 }
 
 static unsigned int
