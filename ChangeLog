@@ -5,7 +5,7 @@
 
 2003-12-26  MenTaLguY <mental@rydia.net>
 
-	* configure.in: added Gtkmm dependency
+	* configure.in: added Gtkmm dependency, removed AC_FUNC_MALLOC
 
 2003-12-25  MenTaLguY <mental@rydia.net>
 
