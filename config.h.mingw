@@ -10,8 +10,6 @@
 #define VERSION "0.38cvs"
 #endif
 
-#define INKSCAPE_VERSION      VERSION
-
 /*######################################
 #### RESOURCE DIRECTORIES
 ######################################*/
@@ -20,11 +18,7 @@
 #define INKSCAPE_DATADIR       "."
 #define INKSCAPE_MODULESDIR    "modules"
 #define INKSCAPE_EXTENSIONDIR  "share\\extensions"
-#define INKSCAPE_PIXMAPDIR     "share\\icons"
 #define INKSCAPE_ICONS_DIR     "share\\icons"
-#define INKSCAPE_SCREENSDIR    "share\\screens"
-#define INKSCAPE_TUTORIALSDIR  "share\\tutorials"
-#define INKSCAPE_MARKERSDIR    "share\\markers"
 
 #define GETTEXT_PACKAGE "inkscape"
 
