@@ -28,6 +28,8 @@
 
 #include "helper-forward.h"
 
+#define canvas_tiled_redraw
+
 enum {
 	SP_CANVAS_UPDATE_REQUESTED  = 1 << 0,
 	SP_CANVAS_UPDATE_AFFINE     = 1 << 1
@@ -106,8 +108,14 @@ struct _SPCanvas {
 	int x0, y0;
 
 	/* Area that needs redrawing, stored as a microtile array */
+#ifndef canvas_tiled_redraw
 	ArtUta *redraw_area;
-
+#else
+  int    tLeft,tTop,tRight,tBottom;
+  int    tileH,tileV;
+  uint8_t *tiles;
+#endif
+  
 	/* Last known modifier state, for deferred repick when a button is down */
 	int state;
 

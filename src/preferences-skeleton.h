@@ -108,6 +108,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"autoscrolldistance\" value=\"-10\"/>"
 "    <group id=\"simplifythreshold\" value=\"0.003\"/>"
 "    <group id=\"dialogsskiptaskbar\" value=\"1\"/>"
+"    <group id=\"arenatilescachesize\" value=\"8192\"/>"
 "  </group>"
 
 "</inkscape>";

@@ -680,7 +680,7 @@ sp_canvas_group_class_init (SPCanvasGroupClass *klass)
 }
 
 static void
-sp_canvas_group_init (SPCanvasGroup *group)
+sp_canvas_group_init (SPCanvasGroup */*group*/)
 {
 	/* Nothing here */
 }
@@ -860,6 +860,10 @@ static gint sp_canvas_focus_out (GtkWidget *widget, GdkEventFocus *event);
 
 static GtkWidgetClass *canvas_parent_class;
 
+#ifdef canvas_tiled_redraw
+void sp_canvas_resize_tiles(SPCanvas* canvas,int nl,int nt,int nr,int nb);
+void sp_canvas_dirty_rect(SPCanvas* canvas,int nl,int nt,int nr,int nb);
+#endif
 /**
  * sp_canvas_get_type:
  *
@@ -937,6 +941,12 @@ sp_canvas_init (SPCanvas *canvas)
 	gtk_object_sink (GTK_OBJECT (canvas->root));
 
 	canvas->need_repick = TRUE;
+
+#ifdef canvas_tiled_redraw
+  canvas->tiles=NULL;
+  canvas->tLeft=canvas->tTop=canvas->tRight=canvas->tBottom=0;
+  canvas->tileH=canvas->tileV=0;
+#endif
 }
 
 /* Convenience function to remove the idle handler of a canvas */
@@ -960,10 +970,20 @@ shutdown_transients (SPCanvas *canvas)
 	 */
 	if (canvas->need_redraw) {
 		canvas->need_redraw = FALSE;
+#ifdef canvas_tiled_redraw
+#else
 		art_uta_free (canvas->redraw_area);
 		canvas->redraw_area = NULL;
-	}
 
+#endif
+  }
+#ifdef canvas_tiled_redraw
+  if ( canvas->tiles ) free(canvas->tiles);
+  canvas->tiles=NULL;
+  canvas->tLeft=canvas->tTop=canvas->tRight=canvas->tBottom=0;
+  canvas->tileH=canvas->tileV=0;
+#endif
+  
 	if (canvas->grabbed_item) {
 		canvas->grabbed_item = NULL;
 		gdk_pointer_ungrab (GDK_CURRENT_TIME);
@@ -1060,6 +1080,9 @@ sp_canvas_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 	SPCanvas *canvas = SP_CANVAS (widget);
 
 	/* Schedule redraw of new region */
+#ifdef canvas_tiled_redraw
+  sp_canvas_resize_tiles(canvas,canvas->x0,canvas->y0,canvas->x0+allocation->width,canvas->y0+allocation->height);
+#endif
 	if (allocation->width > widget->allocation.width) {
 		sp_canvas_request_redraw (canvas,
 					  canvas->x0 + widget->allocation.width,
@@ -1097,6 +1120,10 @@ scroll_to (SPCanvas *canvas, float x, float y, unsigned int clear)
 	canvas->x0 = ix;
 	canvas->y0 = iy;
 
+#ifdef canvas_tiled_redraw
+  sp_canvas_resize_tiles(canvas,canvas->x0,canvas->y0,canvas->x0+canvas->widget.allocation.width,canvas->y0+canvas->widget.allocation.height);
+#endif
+  
 	if (!clear) {
 		if ((dx != 0) || (dy != 0)) {
 			int width, height;
@@ -1456,6 +1483,18 @@ sp_canvas_motion (GtkWidget *widget, GdkEventMotion *event)
 #define IMAGE_WIDTH_AA 341
 #define IMAGE_HEIGHT_AA 64
 
+int sp_canvas_bigtile_floor(int x)
+{
+  int r=x&(~127);
+  return r/128;
+}
+int sp_canvas_bigtile_ceil(int x)
+{
+  int r=x&(~127);
+  if ( x&127 ) r+=128;
+  return r/128;
+}
+
 static void
 sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
 {
@@ -1465,8 +1504,8 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
 
 	int draw_x1 = MAX (xx0, canvas->x0);
 	int draw_y1 = MAX (yy0, canvas->y0);
-	int draw_x2 = MIN (xx1, draw_x1 + GTK_WIDGET (canvas)->allocation.width);
-	int draw_y2 = MIN (yy1, draw_y1 + GTK_WIDGET (canvas)->allocation.height);
+	int draw_x2 = MIN (xx1, canvas->x0/*draw_x1*/ + GTK_WIDGET (canvas)->allocation.width);
+	int draw_y2 = MIN (yy1, canvas->y0/*draw_y1*/ + GTK_WIDGET (canvas)->allocation.height);
 
 	int bw = draw_x2 - draw_x1;
 	int bh = draw_y2 - draw_y1;
@@ -1475,16 +1514,16 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
 
 	int sw, sh;
 	/* 65536 is max cached buffer and we need 3 channels */
-	if (bw * bh < 21845) {
-		/* We can go with single buffer */
+  if (bw * bh < 21845) {
+		// We can go with single buffer 
 		sw = bw;
 		sh = bh;
 	} else if (bw <= (16 * IMAGE_WIDTH_AA)) {
-		/* Go with row buffer */
+		// Go with row buffer 
 		sw = bw;
 		sh = 21845 / bw;
 	} else if (bh <= (16 * IMAGE_HEIGHT_AA)) {
-		/* Go with column buffer */
+		// Go with column buffer 
 		sw = 21845 / bh;
 		sh = bh;
 	} else {
@@ -1492,7 +1531,7 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
 		sh = IMAGE_HEIGHT_AA;
 	}
 
-	/* As we can come from expose, we have to tile here */
+	// As we can come from expose, we have to tile here 
 	for (int y0 = draw_y1; y0 < draw_y2; y0 += sh) {
 		int y1 = MIN (y0 + sh, draw_y2);
 		for (int x0 = draw_x1; x0 < draw_x2; x0 += sw) {
@@ -1507,34 +1546,34 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
 			buf.rect.y1 = y1;
 			GdkColor *color = &widget->style->bg[GTK_STATE_NORMAL];
 			buf.bg_color = (((color->red & 0xff00) << 8)
-					| (color->green & 0xff00)
-					| (color->blue >> 8));
+                      | (color->green & 0xff00)
+                      | (color->blue >> 8));
 			buf.is_bg = 1;
 			buf.is_buf = 0;
-
+      
 			if (canvas->root->object.flags & SP_CANVAS_ITEM_VISIBLE) {
 				SP_CANVAS_ITEM_GET_CLASS (canvas->root)->render (canvas->root, &buf);
 			}
-
+      
 			if (buf.is_bg) {
 				gdk_rgb_gc_set_foreground (canvas->pixmap_gc, buf.bg_color);
 				gdk_draw_rectangle (SP_CANVAS_WINDOW (canvas),
-						    canvas->pixmap_gc,
-						    TRUE,
-						    x0 - canvas->x0, y0 - canvas->y0,
-						    x1 - x0, y1 - y0);
+                            canvas->pixmap_gc,
+                            TRUE,
+                            x0 - canvas->x0, y0 - canvas->y0,
+                            x1 - x0, y1 - y0);
 			} else {
 				gdk_draw_rgb_image_dithalign (SP_CANVAS_WINDOW (canvas),
-							      canvas->pixmap_gc,
-							      x0 - canvas->x0, y0 - canvas->y0,
-							      x1 - x0, y1 - y0,
-							      GDK_RGB_DITHER_MAX,
-							      buf.buf,
-							      sw * 3,
-							      x0 - canvas->x0, y0 - canvas->y0);
+                                      canvas->pixmap_gc,
+                                      x0 - canvas->x0, y0 - canvas->y0,
+                                      x1 - x0, y1 - y0,
+                                      GDK_RGB_DITHER_MAX,
+                                      buf.buf,
+                                      sw * 3,
+                                      x0 - canvas->x0, y0 - canvas->y0);
 			}
 			nr_pixelstore_64K_free (buf.buf);
-	  	}
+    }
 	}
 }
 
@@ -1560,10 +1599,11 @@ sp_canvas_expose (GtkWidget *widget, GdkEventExpose *event)
 		rect.y1 = rect.y0 + rects[i].height;
 
 		if (canvas->need_update || canvas->need_redraw) {
-			ArtUta *uta;
+//			ArtUta *uta;
 			/* Update or drawing is scheduled, so just mark exposed area as dirty */
-			uta = art_uta_from_irect (&rect);
-			sp_canvas_request_redraw_uta (canvas, uta);
+//			uta = art_uta_from_irect (&rect);
+//			sp_canvas_request_redraw_uta (canvas, uta);
+			sp_canvas_request_redraw (canvas, rect.x0, rect.y0, rect.x1, rect.y1);
 		} else {
 			/* No pending updates, draw exposed area immediately */
 			sp_canvas_paint_rect (canvas, rect.x0, rect.y0, rect.x1, rect.y1);
@@ -1697,15 +1737,16 @@ paint (SPCanvas *canvas)
 	if (!canvas->need_redraw)
 		return TRUE;
 
+	GtkWidget const *widget = GTK_WIDGET(canvas);
+	int const canvas_x1 = canvas->x0 + widget->allocation.width;
+	int const canvas_y1 = canvas->y0 + widget->allocation.height;
+
+#ifndef canvas_tiled_redraw
 	rects = art_rect_list_from_uta (canvas->redraw_area, IMAGE_WIDTH_AA, IMAGE_HEIGHT_AA, &n_rects);
 
 	art_uta_free (canvas->redraw_area);
 	canvas->redraw_area = NULL;
-	canvas->need_redraw = FALSE;
 
-	GtkWidget const *widget = GTK_WIDGET(canvas);
-	int const canvas_x1 = canvas->x0 + widget->allocation.width;
-	int const canvas_y1 = canvas->y0 + widget->allocation.height;
 	for (int i = 0; i < n_rects; i++) {
 		int x0 = MAX (rects[i].x0, canvas->x0);
 		int y0 = MAX (rects[i].y0, canvas->y0);
@@ -1716,9 +1757,40 @@ paint (SPCanvas *canvas)
 			sp_canvas_paint_rect (canvas, x0, y0, x1, y1);
 	  	}
 	}
-
 	art_free (rects);
-
+#else 
+  for (int j=canvas->tTop&(~3);j<canvas->tBottom;j+=4) {
+    for (int i=canvas->tLeft&(~3);i<canvas->tRight;i+=4) {
+      int  ind=(i-canvas->tLeft)+(j-canvas->tTop)*canvas->tileH;
+      int  mode=0;
+      
+      int pl=i+1,pr=i,pt=j+4,pb=j;
+      for (int l=MAX(j,canvas->tTop);l<MIN(j+4,canvas->tBottom);l++) {
+        for (int k=MAX(i,canvas->tLeft);k<MIN(i+4,canvas->tRight);k++) {
+          if ( canvas->tiles[(k-canvas->tLeft)+(l-canvas->tTop)*canvas->tileH] ) {
+            mode|=1<<((k-i)+(l-j)*4);
+            if ( k < pl ) pl=k;
+            if ( k+1 > pr ) pr=k+1;
+            if ( l < pt ) pt=l;
+            if ( l+1 > pb ) pb=l+1;
+          }
+          canvas->tiles[(k-canvas->tLeft)+(l-canvas->tTop)*canvas->tileH]=0;
+        }
+      }
+      
+      if ( mode ) {
+        int x0 = 0,y0 = 0,x1 = 0,y1 = 0;
+        x0 = MAX (pl*32, canvas->x0);
+        y0 = MAX (pt*32, canvas->y0);
+        x1 = MIN (pr*32, canvas_x1);
+        y1 = MIN (pb*32, canvas_y1);
+        if ((x0 < x1) && (y0 < y1)) sp_canvas_paint_rect (canvas, x0, y0, x1, y1);
+      }
+    }
+  }
+#endif
+  
+	canvas->need_redraw = FALSE;
 	return TRUE;
 }
 
@@ -1962,7 +2034,8 @@ sp_canvas_request_redraw_uta (SPCanvas *canvas, ArtUta *uta)
 
 	if (!GTK_WIDGET_DRAWABLE (canvas))
 		return;
-
+  
+#ifndef canvas_tiled_redraw
 	visible.x0 = DISPLAY_X1 (canvas);
 	visible.y0 = DISPLAY_Y1 (canvas);
 	visible.x1 = visible.x0 + GTK_WIDGET (canvas)->allocation.width;
@@ -1989,6 +2062,7 @@ sp_canvas_request_redraw_uta (SPCanvas *canvas, ArtUta *uta)
 	}
 
 	add_idle (canvas);
+#endif
 }
 
 void
@@ -2017,10 +2091,15 @@ sp_canvas_request_redraw (SPCanvas *canvas, int x0, int y0, int x1, int y1)
 
 	art_irect_intersect (&clip, &bbox, &visible);
 
+#ifndef canvas_tiled_redraw
 	if (!art_irect_empty (&clip)) {
 		uta = art_uta_from_irect (&clip);
 		sp_canvas_request_redraw_uta (canvas, uta);
 	}
+#else
+  sp_canvas_dirty_rect(canvas,x0,y0,x1,y1);
+  add_idle (canvas);
+#endif
 }
 
 void sp_canvas_window_to_world(SPCanvas const *canvas, double winx, double winy, double *worldx, double *worldy)
@@ -2084,4 +2163,77 @@ NRRect *sp_canvas_get_viewbox(SPCanvas const *canvas, NRRect *viewbox)
 
 	return viewbox;
 }
+
+#ifdef canvas_tiled_redraw
+int sp_canvas_tile_floor(int x)
+{
+  int r=x&(~31);
+  return r/32;
+}
+int sp_canvas_tile_ceil(int x)
+{
+  int r=x&(~31);
+  if ( x&31 ) r+=32;
+  return r/32;
+}
+void sp_canvas_resize_tiles(SPCanvas* canvas,int nl,int nt,int nr,int nb)
+{
+  if ( nl >= nr || nt >= nb ) {
+    if ( canvas->tiles ) free(canvas->tiles);
+    canvas->tLeft=canvas->tTop=canvas->tRight=canvas->tBottom=0;
+    canvas->tileH=canvas->tileV=0;
+    canvas->tiles=NULL;
+    return;
+  }
+  int tl=sp_canvas_tile_floor(nl);
+  int tt=sp_canvas_tile_floor(nt);
+  int tr=sp_canvas_tile_ceil(nr);
+  int tb=sp_canvas_tile_ceil(nb);
+
+  int nh=tr-tl,nv=tb-tt;
+  uint8_t* ntiles=(uint8_t*)malloc(nh*nv*sizeof(uint8_t));
+  for (int i=tl;i<tr;i++) {
+    for (int j=tt;j<tb;j++) {
+      int ind=(i-tl)+(j-tt)*nh;
+      if ( i >= canvas->tLeft && i < canvas->tRight && j >= canvas->tTop && j < canvas->tBottom ) {
+        ntiles[ind]=canvas->tiles[(i-canvas->tLeft)+(j-canvas->tTop)*canvas->tileH];
+      } else {
+        ntiles[ind]=0;
+      }
+    }
+  }
+  if ( canvas->tiles ) free(canvas->tiles);
+  canvas->tiles=ntiles;
+  canvas->tLeft=tl;
+  canvas->tTop=tt;
+  canvas->tRight=tr;
+  canvas->tBottom=tb;
+  canvas->tileH=nh;
+  canvas->tileV=nv;
+}
+
+void sp_canvas_dirty_rect(SPCanvas* canvas,int nl,int nt,int nr,int nb)
+{
+  if ( nl >= nr || nt >= nb ) {
+    return;
+  }
+  int tl=sp_canvas_tile_floor(nl);
+  int tt=sp_canvas_tile_floor(nt);
+  int tr=sp_canvas_tile_ceil(nr);
+  int tb=sp_canvas_tile_ceil(nb);
+  if ( tl >= canvas->tRight || tr <= canvas->tLeft || tt >= canvas->tBottom || tb <= canvas->tTop ) return;
+  if ( tl < canvas->tLeft ) tl=canvas->tLeft;
+  if ( tr > canvas->tRight ) tr=canvas->tRight;
+  if ( tt < canvas->tTop ) tt=canvas->tTop;
+  if ( tb > canvas->tBottom ) tb=canvas->tBottom;
+  
+  canvas->need_redraw = TRUE;
+  
+  for (int i=tl;i<tr;i++) {
+    for (int j=tt;j<tb;j++) {
+      canvas->tiles[(i-canvas->tLeft)+(j-canvas->tTop)*canvas->tileH]=1;
+    }
+  }
+}
+#endif
 

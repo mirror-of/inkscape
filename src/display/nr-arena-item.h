@@ -60,6 +60,8 @@ typedef struct _NRGC NRGC;
 #include <libnr/nr-object.h>
 #include "nr-arena-forward.h"
 
+#define arena_item_tile_cache
+
 struct _NRGC {
 	NRMatrix transform;
 };
@@ -83,7 +85,12 @@ struct _NRArenaItem {
 
 	/* Key for secondary rendering */
 	unsigned int key;
-
+  
+#ifdef arena_item_tile_cache
+  bool     skipCaching;
+  double   activity;
+#endif
+  
 	/* BBox in grid coordinates */
 	NRRectL bbox;
 	/* Our affine */
