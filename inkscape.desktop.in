@@ -11,7 +11,7 @@ Categories=Application;Graphics;VectorGraphics;GTK;
 MimeType=image/svg+xml
 
 FilePattern=inkscape
-Exec=inkscape %U
+Exec=inkscape %F
 TryExec=inkscape
 Terminal=false
 StartupNotify=true
