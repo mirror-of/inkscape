@@ -1,3 +1,7 @@
+2004-07-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/utest/utest.h: Add include guard.
+
 2004-07-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/decimal-round.h (decimal_round): New file, new function.

@@ -1,3 +1,6 @@
+#ifndef SEEN_UTEST_UTEST_H
+#define SEEN_UTEST_UTEST_H
+
 /* Ultra-minimal unit testing framework */
 /* This file is in the public domain */
 
@@ -108,6 +111,8 @@ int utest_end(void) {
 	}
 }
 
+
+#endif /* !SEEN_UTEST_UTEST_H */
 
 /*
   Local Variables:
