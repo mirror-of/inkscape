@@ -155,6 +155,7 @@ PERLLIB = -L$(GTK)/perl/lib/CORE -lperl58
 #For Python
 PYTHONINC = -I$(GTK)/python/include
 PYTHONLIB = -L$(GTK)/python/libs -lpython24
+#PYTHONLIB = -L$(GTK)/python/libs/libpython24.a
 
 # remove -DLIBXML_STATIC 
 INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
@@ -162,7 +163,7 @@ $(PERLINC) $(PYTHONINC) -I$(GTK)/include/libxml2 \
 -I$(GTK)/include/freetype2 \
 
 
-LIBS = $(GTKLIB) -lxml2 \
+LIBS = $(GTKLIB) $(PERLLIB) $(PYTHONLIB) -lxml2 \
 $(GTK)/lib/iconv.lib	\
 -lfreetype6.dll -lfontconfig-1.dll -lpng -lpopt $(GTK)/lib/zdll.lib \
 -lgc -mwindows -lws2_32 -lintl
