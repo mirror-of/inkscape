@@ -559,7 +559,7 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
             SP_OBJECT_REPR(new_parent_item)->addChild(new_span_repr, NULL);
         }
 
-        gchar *style = sp_style_write_difference(SP_OBJECT_STYLE(new_parent_item), SP_OBJECT_STYLE(item));
+        gchar *style = sp_style_write_difference(SP_OBJECT_STYLE(item), SP_OBJECT_STYLE(new_parent_item));
         new_span_repr->setAttribute("style", style);
         g_free(style);
         TextTagAttributes *attributes = attributes_for_object(new_parent_item);

@@ -373,6 +373,13 @@ void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape,
 
     for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_STRING(child)) {
+            if (*pending_line_break_object) {
+                if (SP_IS_FLOWREGIONBREAK(*pending_line_break_object))
+                    layout.appendControlCode(Inkscape::Text::Layout::SHAPE_BREAK, *pending_line_break_object);
+                else
+                    layout.appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, *pending_line_break_object);
+                *pending_line_break_object = NULL;
+            }
             layout.appendText(SP_STRING(child)->string, root->style, child);
         } else if (SP_IS_FLOWREGION(child)) {
             std::vector<Shape*> const &computed = SP_FLOWREGION(child)->computed;
