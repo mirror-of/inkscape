@@ -1,3 +1,13 @@
+/*
+ * Implementation of the file dialog interfaces defined in filedialog.h
+ *
+ * Authors:
+ *   The Inkscape Organization
+ *
+ * Copyright (C) 2004 The Inkscape Organization
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -41,6 +51,11 @@ namespace Dialogs
 /*#########################################################################
 ### SVG Preview Widget
 #########################################################################*/
+/**
+ * Simple class for displaying an SVG file in the "preview widget."
+ * Currently, this is just a wrapper of the sp_svg_view Gtk widget.
+ * Hopefully we will eventually replace with a pure Gtkmm widget.
+ */
 class SVGPreview : public Gtk::VBox
 {
     public:
