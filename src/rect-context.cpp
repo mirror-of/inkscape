@@ -33,6 +33,12 @@
 #include "rect-context.h"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
+#include "object-edit.h"
+#include "knotholder.h"
+#include "xml/repr.h"
+#include "xml/repr-private.h"
+#include "prefs-utils.h"
+
 
 static void sp_rect_context_class_init (SPRectContextClass * klass);
 static void sp_rect_context_init (SPRectContext * rect_context);
@@ -49,6 +55,12 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state);
 static void sp_rect_finish (SPRectContext * rc);
 
 static SPEventContextClass * parent_class;
+
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
+static bool within_tolerance = false;
+
+SPItem *item_to_select = NULL;
 
 GtkType
 sp_rect_context_get_type (void)
@@ -113,13 +125,104 @@ static void
 sp_rect_context_dispose (GObject *object)
 {
 	SPRectContext * rc;
+	SPEventContext * ec;
 
 	rc = SP_RECT_CONTEXT (object);
+	ec = SP_EVENT_CONTEXT (object);
 
 	/* fixme: This is necessary because we do not grab */
 	if (rc->item) sp_rect_finish (rc);
 
+	if (rc->knot_holder) {
+		sp_knot_holder_destroy (rc->knot_holder);
+		rc->knot_holder = NULL;
+	}
+
+	if (rc->repr) { // remove old listener
+		sp_repr_remove_listener_by_data (rc->repr, ec);
+		sp_repr_unref (rc->repr);
+		rc->repr = 0;
+	}
+
+	if (SP_EVENT_CONTEXT_DESKTOP (rc)) {
+		sp_signal_disconnect_by_data (SP_DT_SELECTION (SP_EVENT_CONTEXT_DESKTOP (rc)), rc);
+	}
+
 	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data)
+{
+	SPRectContext *rc;
+	SPEventContext *ec;
+	
+	rc = SP_RECT_CONTEXT (data);
+	ec = SP_EVENT_CONTEXT (rc);
+
+	if (rc->knot_holder) {
+		sp_knot_holder_destroy (rc->knot_holder);
+	}
+	rc->knot_holder = NULL;
+
+	SPDesktop *desktop = ec->desktop;
+
+	SPItem *item = sp_selection_item (SP_DT_SELECTION(desktop));
+
+	if (item) {
+		rc->knot_holder = sp_item_knot_holder (item, desktop);
+	}
+}
+
+static SPReprEventVector shape_repr_events = {
+	NULL, /* destroy */
+	NULL, /* add_child */
+	NULL, /* child_added */
+	NULL, /* remove_child */
+	NULL, /* child_removed */
+	NULL, /* change_attr */
+	shape_event_attr_changed,
+	NULL, /* change_list */
+	NULL, /* content_changed */
+	NULL, /* change_order */
+	NULL  /* order_changed */
+};
+
+/**
+\brief  Callback that processes the "changed" signal on the selection; 
+destroys old and creates new knotholder
+*/
+void
+sp_rect_context_selection_changed (SPSelection * selection, gpointer data)
+{
+	SPRectContext *rc;
+	SPEventContext *ec;
+	SPRepr *old_repr = NULL;
+	
+	rc = SP_RECT_CONTEXT (data);
+	ec = SP_EVENT_CONTEXT (rc);
+
+	if (rc->knot_holder) { // desktroy knotholder
+		sp_knot_holder_destroy (rc->knot_holder);
+		rc->knot_holder = NULL;
+	}
+
+	if (rc->repr) { // remove old listener
+		sp_repr_remove_listener_by_data (rc->repr, ec);
+		sp_repr_unref (rc->repr);
+		rc->repr = 0;
+	}
+
+	SPItem *item = sp_selection_item (selection);
+	if (item) {
+		rc->knot_holder = sp_item_knot_holder (item, ec->desktop);
+		SPRepr *repr = SP_OBJECT_REPR (item);
+		if (repr) {
+			rc->repr = repr;
+			sp_repr_ref (repr);
+			sp_repr_add_listener (repr, &shape_repr_events, ec);
+			sp_repr_synthesize_events (repr, &shape_repr_events, ec);
+		}
+	}
 }
 
 static void
@@ -131,6 +234,21 @@ sp_rect_context_setup (SPEventContext *ec)
 
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
+
+	SPItem *item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
+	if (item) {
+		rc->knot_holder = sp_item_knot_holder (item, ec->desktop);
+		SPRepr *repr = SP_OBJECT_REPR (item);
+		if (repr) {
+			rc->repr = repr;
+			sp_repr_ref (repr);
+			sp_repr_add_listener (repr, &shape_repr_events, ec);
+			sp_repr_synthesize_events (repr, &shape_repr_events, ec);
+		}
+	}
+
+	g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)), 
+		"changed", G_CALLBACK (sp_rect_context_selection_changed), rc);
 
 	sp_event_context_read (ec, "rx_ratio");
 	sp_event_context_read (ec, "ry_ratio");
@@ -155,9 +273,29 @@ sp_rect_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 static gint
 sp_rect_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event)
 {
-	gint ret;
+	SPDesktop *desktop = event_context->desktop;
 
-	ret = FALSE;
+	gint ret = FALSE;
+
+	switch (event->type) {
+	case GDK_BUTTON_PRESS:
+		if (event->button.button == 1) {
+
+			// save drag origin
+			xp = (gint) event->button.x; 
+			yp = (gint) event->button.y;
+			within_tolerance = true;
+
+			// remember clicked item, disregarding groups
+			item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+
+			ret = TRUE;
+		}
+		break;
+		// motion and release are always on root (why?)
+	default:
+		break;
+	}
 
 	if (((SPEventContextClass *) parent_class)->item_handler)
 		ret = ((SPEventContextClass *) parent_class)->item_handler (event_context, item, event);
@@ -172,10 +310,21 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
 	SPDesktop *desktop = event_context->desktop;
 	SPRectContext *rc = SP_RECT_CONTEXT(event_context);
 
+	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+
 	gint ret = FALSE;
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
+
+			// save drag origin
+			xp = (gint) event->button.x; 
+			yp = (gint) event->button.y;
+			within_tolerance = true;
+
+			// remember clicked item, disregarding groups
+			item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+
 			dragging = true;
 			/* Position center */
 			NR::Point const button_w(event->button.x,
@@ -192,7 +341,19 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
+		gdk_window_set_cursor (GTK_WIDGET (SP_DT_CANVAS (desktop))->window, event_context->cursor);
 		if (dragging && (event->motion.state & GDK_BUTTON1_MASK)) {
+
+			if ( within_tolerance
+			     && ( abs( (gint) event->motion.x - xp ) < tolerance )
+			     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+				break; // do not drag if we're within tolerance from origin
+			}
+			// Once the user has moved farther than tolerance from the original location 
+			// (indicating they intend to draw, not click), then always process the 
+			// motion notify coordinates as given (no snapping back to origin)
+			within_tolerance = false; 
+
 			NR::Point const motion_w(event->motion.x,
 						 event->motion.y);
 			NR::Point const motion_dt(sp_desktop_w2d_xy_point(event_context->desktop, motion_w));
@@ -201,9 +362,22 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
+		xp = yp = 0; 
 		if (event->button.button == 1) {
 			dragging = false;
-			sp_rect_finish (rc);
+
+			if (!within_tolerance) {
+				// we've been dragging, finish the rect
+				sp_rect_finish (rc);
+			} else if (item_to_select) {
+				// no dragging, select clicked item if any
+				sp_selection_set_item (SP_DT_SELECTION (desktop), item_to_select);
+			} else {
+				// click in an empty space
+				sp_selection_empty (SP_DT_SELECTION (desktop));
+			}
+
+			item_to_select = NULL;
 			ret = TRUE;
 			sp_canvas_item_ungrab (SP_CANVAS_ITEM (desktop->acetate), event->button.time);
 		}
@@ -218,6 +392,9 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
 			if (!MOD__CTRL_ONLY)
 				ret = TRUE;
 			break;
+		case GDK_Escape:
+			sp_selection_empty (SP_DT_SELECTION (desktop)); // deselect
+			//TODO: make dragging escapable by Esc
 		default:
 			break;
 		}

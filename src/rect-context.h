@@ -15,6 +15,7 @@
  */
 
 #include "event-context.h"
+#include "knotholder.h"
 
 #define SP_TYPE_RECT_CONTEXT            (sp_rect_context_get_type ())
 #define SP_RECT_CONTEXT(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_RECT_CONTEXT, SPRectContext))
@@ -29,6 +30,9 @@ struct _SPRectContext {
 	SPEventContext event_context;
 	SPItem *item;
 	NR::Point center;
+
+	SPKnotHolder *knot_holder;
+	SPRepr *repr;
 	
   	gdouble rx_ratio;	/* roundness ratio (x direction) */
   	gdouble ry_ratio;	/* roundness ratio (y direction) */
