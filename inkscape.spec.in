@@ -4,15 +4,15 @@ Version:	@VERSION@
 Release:	CVS
 Copyright:	GPL
 Group:		Applications/Graphics
-Source:		inkscape-%{version}.tar.gz
+Source:		%{name}-%{version}.tar.gz
 URL:		http://inkscape.sourceforge.net/
 Prefix:		%{_prefix}
 Packager:	Automatic
-Vendor:		%{packager}
+Vendor:		The Inkscape Project
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 %description
-Inkscape is a SVG based generic vector-drawing program for Linux/Unix/Windows.
+Inkscape is a SVG based generic vector-drawing program for Linux/Unix/Windows/Mac.
 
 %prep
 %setup
@@ -37,10 +37,9 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS COPYING ChangeLog NEWS README TODO
+%doc AUTHORS COPYING ChangeLog NEWS README
 %{_bindir}/inkscape
 %{_bindir}/inkview
-%{_libdir}/inkscape/extensions/*
 %{_datadir}/applications/inkscape.desktop
 %{_datadir}/locale/*/LC_MESSAGES/inkscape.mo
 %{_datadir}/pixmaps/*
@@ -48,6 +47,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/*
 
 %changelog
+* Sat Jul 17 2004 Bryce W. Harrington <bryce@bryceharrington.com>
+- Removing _libdir and TODO, updating description
+
 * Thu May 01 2003 Christian Schaller <uraeus@gnome.org>
 - Fix up the spec file for current release
 
