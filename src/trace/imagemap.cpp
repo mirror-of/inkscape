@@ -14,16 +14,16 @@
 
 static void gSetPixel(GrayMap *me, int x, int y, unsigned long val)
 {
-    long offset = y * me->width + x;
     if (val>765)
         val = 765;
-    me->pixels[offset] = val;
+    unsigned long *pix = me->rows[y] + x;
+    *pix = val;
 }
 
 static unsigned long gGetPixel(GrayMap *me, int x, int y)
 {
-    long offset = y * me->width + x;
-    return me->pixels[offset];
+    unsigned long *pix = me->rows[y] + x;
+    return *pix;
 }
 
 
@@ -58,6 +58,8 @@ static void gDestroy(GrayMap *me)
 {
     if (me->pixels)
         free(me->pixels);
+    if (me->rows)
+        free(me->rows);
     free(me);
 }
 
@@ -79,10 +81,19 @@ GrayMap *GrayMapCreate(int width, int height)
     me->height = height;
     me->pixels = (unsigned long *) 
               malloc(sizeof(unsigned long) * width * height);
-    if (!me->pixels)
+    me->rows = (unsigned long **) 
+              malloc(sizeof(unsigned long *) *  height);
+    if (!me->pixels || !me->rows)
         {
         free(me);
         return NULL;
+        }
+
+    unsigned long *row = me->pixels;
+    for (int i=0 ; i<height ; i++)
+        {
+        me->rows[i] = row;
+        row += width;
         }
 
     return me;
@@ -100,24 +111,22 @@ GrayMap *GrayMapCreate(int width, int height)
 
 static void rSetPixel(RgbMap *me, int x, int y, int r, int g, int b)
 {
-    long offset = y * me->width + x;
-    RGB rgb;
-    rgb.r = r;
-    rgb.g = g;
-    rgb.b = b;
-    me->pixels[offset] = rgb;
+    RGB *pix = me->rows[y] + x;
+    pix->r = r;
+    pix->g = g;
+    pix->b = b;
 }
 
 static void rSetPixelRGB(RgbMap *me, int x, int y, RGB rgb)
 {
-    long offset = y * me->width + x;
-    me->pixels[offset] = rgb;
+    RGB *pix = me->rows[y] + x;
+    *pix = rgb;
 }
 
 static RGB rGetPixel(RgbMap *me, int x, int y)
 {
-    long offset = y * me->width + x;
-    return me->pixels[offset];
+    RGB *pix = me->rows[y] + x;
+    return *pix;
 }
 
 
@@ -152,6 +161,8 @@ static void rDestroy(RgbMap *me)
 {
     if (me->pixels)
         free(me->pixels);
+    if (me->rows)
+        free(me->rows);
     free(me);
 }
 
@@ -177,10 +188,19 @@ RgbMap *RgbMapCreate(int width, int height)
     me->height = height;
     me->pixels = (RGB *) 
               malloc(sizeof(RGB) * width * height);
+    me->rows = (RGB **) 
+              malloc(sizeof(RGB *) * height);
     if (!me->pixels)
         {
         free(me);
         return NULL;
+        }
+
+    RGB *row = me->pixels;
+    for (int i=0 ; i<height ; i++)
+        {
+        me->rows[i] = row;
+        row += width;
         }
 
     return me;

@@ -66,9 +66,14 @@ struct GrayMap_def
     int height;
 
     /**
-     *
+     *  The pixel array
      */
     unsigned long *pixels;
+
+    /**
+     *  Pointer to the beginning of each row
+     */
+    unsigned long **rows;
 
 };
 
@@ -155,9 +160,14 @@ struct RgbMap_def
     int height;
 
     /**
-     *
+     * The allocated array of pixels
      */
     RGB *pixels;
+
+    /**
+     * Pointers to the beginning of each row of pixels
+     */
+    RGB **rows;
 
 };
 
