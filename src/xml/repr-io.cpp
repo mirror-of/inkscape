@@ -203,8 +203,6 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     SPReprDoc *rdoc=NULL;
 
     if (root != NULL) {
-        rdoc = sp_repr_document_new_list(reprs);
-
         /* promote elements of SVG documents that don't use namespaces
          * into the SVG namespace */
         if ( default_ns && !strcmp(default_ns, SP_SVG_NS_URI)
@@ -212,6 +210,8 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
         {
             promote_to_svg_namespace(root);
         }
+
+        rdoc = sp_repr_document_new_list(reprs);
     }
 
     for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
