@@ -183,8 +183,8 @@ all_libs =	\
 	$(win32ldflags)
 
 desktop.$(OBJEXT): helper/sp-marshal.h
-document.$(OBJEXT): helper/sp-marshal.h
-inkscape.$(OBJEXT): helper/sp-marshal.h
+document.$(OBJEXT): helper/sp-marshal.h inkscape_version.h
+inkscape.$(OBJEXT): helper/sp-marshal.h inkscape_version.h
 knot.$(OBJEXT): helper/sp-marshal.h
 selection.$(OBJEXT): helper/sp-marshal.h
 sp-object.$(OBJEXT): helper/sp-marshal.h

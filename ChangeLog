@@ -1,3 +1,11 @@
+2004-05-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/Makefile_insert: Add missing dependencies on inkscape_version.h.
+	* src/display/Makefile_insert: Adapt dependency object names for
+	  `subdir-objects' automake option.
+	* src/helper/Makefile_insert: Adapt dependency object names for
+	  lack of libspchelp-specific CPPFLAGS.
+
 2004-05-17  Carl Hetherington <inkscape@carlh.net>
 
 	* src/libnrtype/nr-type-w32.cpp: Tentative fix for

@@ -11,7 +11,7 @@ helper/all: helper/libspchelp.a
 helper/clean:
 	rm -f helper/libspchelp.a $(helper_libspchelp_a_OBJECTS)
 
-helper_libspchelp_a-unit-menu.$(OBJEXT): helper/sp-marshal.h
+helper_libspchelp_a-unit-menu.$(OBJEXT) helper/unit-menu.$(OBJEXT): helper/sp-marshal.h
 
 helper_libspchelp_a_SOURCES =	\
 	helper/action.cpp	\
