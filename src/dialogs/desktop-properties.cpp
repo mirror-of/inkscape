@@ -11,6 +11,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <locale>
+#include <sstream>
+
 #include <config.h>
 
 #include <gtk/gtknotebook.h>
@@ -246,15 +249,30 @@ sp_doc_dialog_whatever_changed ( GtkAdjustment *adjustment, GtkWidget *dialog )
     /* SVG does not support meters as a unit, so we must translate meters to 
      * cm when writing
      */
-    if (!strcmp(sp_unit_selector_get_unit (us)->abbr, "m")) {
+    const SPUnit *unit = sp_unit_selector_get_unit (us);
+    if (!strcmp(unit->abbr, "m")) {
         g_snprintf (c, 32, "%g%s", 100*adjustment->value, "cm");
     } else {
-        g_snprintf ( c, 32, "%g%s", adjustment->value, 
-                     sp_unit_selector_get_unit (us)->abbr );
+        g_snprintf ( c, 32, "%g%s", adjustment->value, unit->abbr);
     }
+
 
     sp_repr_set_attr (repr, key, c);
 
+    if (!strcmp(key, "width") || !strcmp(key, "height")) {
+
+        //A short-term hack to set the viewBox to be 1.25 x the size
+        // of the page.
+        gdouble vbWidth  = (gdouble)atof(sp_repr_attr (repr, "width"))  * 1.25;
+        gdouble vbHeight = (gdouble)atof(sp_repr_attr (repr, "height")) * 1.25;
+        std::ostringstream os;
+        os.imbue(std::locale::classic());
+        os.setf(std::ios::showpoint);
+        os.precision(8);
+        os << "0 0 " << vbWidth << " " << vbHeight;
+        gchar const *strVal = (gchar const *)os.str().c_str();
+        sp_repr_set_attr (repr, "viewBox", g_strdup(strVal));
+    }
     sp_document_done (doc);
 }
 
