@@ -1,5 +1,8 @@
 2004-02-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/seltrans-handles.cpp, src/seltrans-handles.h, src/seltrans.cpp: 
+	Preserve constness of SPSelTransHandle's.
+
 	* src/sp-item.h, src/sp-item.cpp (sp_item_set_item_transform):
 	Make static.  Use NR::Matrix, and avoid NULL special case.
 	Update callers.

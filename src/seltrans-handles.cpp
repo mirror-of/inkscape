@@ -3,7 +3,7 @@
 #include "seltrans-handles.h"
 
 
-const SPSelTransHandle handles_scale[] = {
+SPSelTransHandle const handles_scale[] = {
 //anchor         cursor                   control  action                request                       x    y
  {GTK_ANCHOR_SE, GDK_TOP_LEFT_CORNER,     0,       sp_sel_trans_scale,   sp_sel_trans_scale_request,   0,   1},
  {GTK_ANCHOR_S,  GDK_TOP_SIDE,            3,       sp_sel_trans_stretch, sp_sel_trans_stretch_request, 0.5, 1},
@@ -15,7 +15,7 @@ const SPSelTransHandle handles_scale[] = {
  {GTK_ANCHOR_E,  GDK_LEFT_SIDE,           2,       sp_sel_trans_stretch, sp_sel_trans_stretch_request, 0,   0.5}
 };
 
-const SPSelTransHandle handles_rotate[] = {
+SPSelTransHandle const handles_rotate[] = {
  {GTK_ANCHOR_SE, GDK_EXCHANGE,            4,       sp_sel_trans_rotate,  sp_sel_trans_rotate_request,  0,   1},
  {GTK_ANCHOR_S,  GDK_SB_H_DOUBLE_ARROW,   5,       sp_sel_trans_skew,    sp_sel_trans_skew_request,    0.5, 1},
  {GTK_ANCHOR_SW, GDK_EXCHANGE,            6,       sp_sel_trans_rotate,  sp_sel_trans_rotate_request,  1,   1},
@@ -26,6 +26,6 @@ const SPSelTransHandle handles_rotate[] = {
  {GTK_ANCHOR_E,  GDK_SB_V_DOUBLE_ARROW,   11,      sp_sel_trans_skew,    sp_sel_trans_skew_request,    0,   0.5}
 };
 
-const SPSelTransHandle handle_center =
+SPSelTransHandle const handle_center =
   {GTK_ANCHOR_CENTER, GDK_CROSSHAIR,      12,      sp_sel_trans_center,  sp_sel_trans_center_request,  0.5, 0.5};
 
