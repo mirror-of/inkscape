@@ -13,30 +13,30 @@ even be possible to avoid forward references for recursive/looping code.)
 
 
 
-src/draw-context.cpp:fit_and_split
+src/pencil-context.cpp:fit_and_split
 
 Very loose proof of !sp_curve_empty (dc->red_curve) assertion:
 fit_and_split is called successively with its input varying only by appending a point.
-For the n_segs > 0 && dc->npoints < SP_DRAW_POINTS_MAX condition to fail,
+For the n_segs > 0 && dc->npoints < G_N_ELEMENTS(pc->p) condition to fail,
 we must have at least 3 distinct points, which means that a previous call had 2 distinct points,
 in which case we'd have filled in dc->red_curve to a non-empty curve.
 
 
-src/draw-context.cpp:fit_and_split
+src/pencil-context.cpp:fit_and_split
 
 Loose proof of 2 <= dc->npoints:
 Was true at top of function if "dc->npoints > 1" assertion holds.
 We don't pass dc to anything in the meantime.
 
 
-src/draw-context.cpp:fit_and_split
+src/pencil-context.cpp:fit_and_split
 
 Proof of precondition: The only caller is spdc_add_freehand_point (by
 textual search in that file, and staticness).  See proof for that
 function.
 
 
-src/draw-context.cpp:spdc_add_freehand_point
+src/pencil-context.cpp:spdc_add_freehand_point
 
 Proof of fit_and_split `dc->npoints > 1' requirement:
 It initially unconditionally asserts `dc->npoints > 0'.  There are no function calls or modifications
