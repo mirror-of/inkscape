@@ -1,4 +1,8 @@
-Sodipodi coding style
+Inkscape coding style
+
+(Derived from "Sodipodi coding style" written 18/01/2002 by Lauris
+Kaplinski.)
+
 
 Not absolutely mandatory, but helps in getting your patches accepted,
 and keeps other developers constantly happy.
@@ -7,12 +11,25 @@ after serious calculation, I find that breaking of rules gives
 prettier code in given case. But most of the time these stand
 rock solid.
 
+If you disagree with any of these rules (or if you can give rationale
+for a rule that is often broken by other Inkscape developers) then
+please add to the `Discussion, Rationale' section following the rule
+list.
+
 
 1. The rule of active maintainership
 
 * If you own file and maintain it actively, do whatever you like
 EXCEPTION - keep it compilable with normal unix/windows compilers
 EXCEPTION - do not use extra libraries unless made in configure options
+
+Even so, if you choose not to follow some of the rest of these rules,
+then do consider updating the `Discussion, Rationale' section.  If
+this file contains no arguments in favour of a particular deviation
+from these rules, then other people are more likely to consider the
+deviation as an error or result of laziness, and accordingly change
+the code.
+
 
 2. The unicode rulez rule
 
@@ -25,7 +42,7 @@ EXCEPTION - do not use extra libraries unless made in configure options
 * Lines are generally broken somewhere around column 140
 
 
-4. Anti alignement and tabulation rule
+4. Anti alignment and tabulation rule
 
 * Tabs are 8 space
 * There is never tabs INSIDE one-line statement.
@@ -35,7 +52,8 @@ EXCEPTION - aligning arguments is allowed while initializing
 
 5. Spacing rule
 
-* There is single space around binary and assignement operators
+* There is single space around binary operators (including assignment operators
+  but excluding the comma operator)
 * There is no space between unary operator and argument
 * There is single space between function name and argument list
 * There is no space between array name and subscript
@@ -82,7 +100,7 @@ EXCEPTION - if many case labels are collated, there can be single
   declaration
 
 
-12. General file readablity rule
+12. General file readability rule
 
 * Static helper and member functions have to be declared at the
   beginning of file, and defined at the end of file
@@ -93,6 +111,10 @@ EXCEPTION - if many case labels are collated, there can be single
 * Avoid excessive enumerations, unless they are semantically ordered
   integers, use #define instead
 * Do not typedef enumeration, use unsigned int instead
+
+  XXX This rule has led to at least one bug.  Unless someone can give
+  rationale for its existence, this rule will be deleted or reversed.
+  Consequently rule 13.1 would also disappear.
 
 
 14. Variable length
@@ -113,5 +135,89 @@ EXCEPTION - if many case labels are collated, there can be single
 * If statement can be understood immediately, make it one-liner
 
 
-18/01/2002
-Lauris Kaplinski
+Discussion, Rationale
+~~~~~~~~~~~~~~~~~~~~~
+
+5. Spacing rule
+
+5.1. Binary operators
+
+The extra space facilitates reading.  This outweighs the cost of typing the extra spaces.
+
+5.3. Function application
+
+An advantage of having space between the function name and its first
+argument is readability: ease of seeing where one starts and the other
+ends.
+
+
+6. Function rule
+
+Rationale given in GNU coding standards:
+
+  It is also important for function definitions to start the name of
+  the function in column zero.  This helps people to search for function
+  definitions, and may also help certain tools recognize them.
+
+
+7. Curly braces inconstancy rule
+
+7.1. Function definition opening brace on new line.
+
+Rationale given in GNU coding standards:
+
+  It is important to put the open-brace that starts the body of a C
+  function in column zero, and avoid putting any other open-brace or
+  open-parenthesis or open-bracket in column zero.  Several tools look
+  for open-braces in column zero to find the beginnings of C
+  functions.  These tools will not work on code not formatted that
+  way.
+
+
+7.2. Curly braces start at the same line for all other statements
+
+More efficient use of vertical space.
+
+The argument in favour is particularly strong if one accepts something
+like rule 8 (requiring braces for most compound statements).
+
+An exception could be made where the brace makes it clearer where the
+condition ends and the body begins, as in the following:
+
+	while (blah (blah, blah,
+		     blah, blah (blah,
+				 blah))
+	       || ((blah blah)
+		   && (blah blah blah))
+	       || (blah (blah, blah,
+			 blah, blah) == 0)) {
+		blah (blah, blah,
+		      blah, blah);
+		blah (blah);
+	}
+
+
+11. Variable initialization rule
+
+On whether we should declare vars at the beginning of a block, or
+declare anywhere (typically at the same time as their first use).
+
+Declaring "in the middle of a block" (i.e. after one or more
+non-declaration statements) requires either C99 support (e.g. gcc) or
+C++.  Shouldn't be a big problem if we're going to require C++ anyway.
+
+Advantage of existing "declare at beginning of a block" can have an
+advantage of being easier to find the declaration of a var.
+
+OTOH, most vars are short-lived, so it's even easier to find the
+declaration if it is where it's being used.
+
+Declaring at first use tends to reduce uninitialized var bugs.
+
+One possible advantage of "declare at beginning of a block" is that
+its disadvantages tend to be most noticeable when the block is already
+too long; i.e. the problems can act as a "mental nudge" that the code
+needs fixing.
+
+Proponents of "declare in middle of block" should find examples where
+it would be an improvement and that don't need refactoring anyway.
