@@ -20,18 +20,18 @@
 
 void
 spw_checkbutton(GtkWidget * dialog, GtkWidget * t,
-		const guchar * label, guchar * key, int col, int row,
+		const gchar * label, gchar * key, int col, int row,
 		int sensitive, GCallback cb);
 
 void
 spw_dropdown(GtkWidget * dialog, GtkWidget * t,
-	     const guchar * label, guchar * key, int row,
+	     const gchar * label, gchar * key, int row,
 	     GtkWidget * selector
 	     );
 
 void
 spw_unit_selector(GtkWidget * dialog, GtkWidget * t,
-		  const guchar * label, guchar * key, int row,
+		  const gchar * label, gchar * key, int row,
 		  GtkWidget * us, GCallback cb);
 
 #endif

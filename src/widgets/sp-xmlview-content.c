@@ -29,7 +29,7 @@ static void sp_xmlview_content_destroy (GtkObject * object);
 
 void sp_xmlview_content_changed (GtkTextBuffer *tb, SPXMLViewContent *text);
 
-static void event_content_changed (SPRepr * repr, const guchar * old_content, const guchar * new_content, gpointer data);
+static void event_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data);
 
 static GtkTextViewClass * parent_class = NULL;
 
@@ -54,7 +54,7 @@ sp_xmlview_content_new (SPRepr * repr)
 	SPXMLViewContent *text;
 
 	tb = gtk_text_buffer_new (NULL);
-	text = gtk_type_new (SP_TYPE_XMLVIEW_CONTENT);
+	text = (SPXMLViewContent*)gtk_type_new (SP_TYPE_XMLVIEW_CONTENT);
 	gtk_text_view_set_buffer (GTK_TEXT_VIEW (text), tb);
 
 	g_signal_connect (G_OBJECT (tb), "changed", G_CALLBACK (sp_xmlview_content_changed), text);
@@ -116,7 +116,7 @@ sp_xmlview_content_class_init (SPXMLViewContentClass * klass)
 
 	object_class = (GtkObjectClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_TEXT_VIEW);
+	parent_class = (GtkTextViewClass*)gtk_type_class (GTK_TYPE_TEXT_VIEW);
 
 	object_class->destroy = sp_xmlview_content_destroy;
 }
@@ -141,7 +141,7 @@ sp_xmlview_content_destroy (GtkObject * object)
 }
 
 void
-event_content_changed (SPRepr * repr, const guchar * old_content, const guchar * new_content, gpointer data)
+event_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data)
 {
 	SPXMLViewContent * text;
 	text = SP_XMLVIEW_CONTENT (data);

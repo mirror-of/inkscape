@@ -27,7 +27,7 @@ static void sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass);
 static void sp_xmlview_attr_list_init (SPXMLViewAttrList * list);
 static void sp_xmlview_attr_list_destroy (GtkObject * object);
 
-static void event_attr_changed (SPRepr * repr, const guchar * name, const guchar * old_value, const guchar * new_value, gpointer data);
+static void event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data);
 
 static GtkCListClass * parent_class = NULL;
 
@@ -50,7 +50,7 @@ sp_xmlview_attr_list_new (SPRepr * repr)
 {
 	SPXMLViewAttrList * list;
 
-	list = g_object_new (SP_TYPE_XMLVIEW_ATTR_LIST, "n_columns", 2, NULL);
+	list = (SPXMLViewAttrList*)g_object_new (SP_TYPE_XMLVIEW_ATTR_LIST, "n_columns", 2, NULL);
 
 	gtk_clist_set_column_title (GTK_CLIST (list), 0, _("Attribute"));
 	gtk_clist_set_column_title (GTK_CLIST (list), 1, _("Value"));
@@ -114,7 +114,7 @@ sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass)
 	object_class = (GtkObjectClass *) klass;
 	object_class->destroy = sp_xmlview_attr_list_destroy;
 
-	parent_class = gtk_type_class (GTK_TYPE_CLIST);
+	parent_class = (GtkCListClass*)gtk_type_class (GTK_TYPE_CLIST);
 }
 
 void
@@ -136,11 +136,11 @@ sp_xmlview_attr_list_destroy (GtkObject * object)
 }
 
 void
-event_attr_changed (SPRepr * repr, const guchar * name, const guchar * old_value, const guchar * new_value, gpointer data)
+event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data)
 {
 	gint row;
 	SPXMLViewAttrList * list;
-	guchar new_text[64 + 4];
+	gchar new_text[64 + 4];
 	gchar *gtktext;
 
 	list = SP_XMLVIEW_ATTR_LIST (data);

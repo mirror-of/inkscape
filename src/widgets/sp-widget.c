@@ -58,13 +58,13 @@ spw_repr_destroy (SPRepr *repr, gpointer data)
 }
 
 static void
-spw_repr_attr_changed (SPRepr *repr, const guchar *key, const guchar *oldval, const guchar *newval, gpointer data)
+spw_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
 {
 	g_signal_emit (G_OBJECT (data), signals[ATTR_CHANGED], 0, key, oldval, newval);
 }
 
 static void
-spw_repr_content_changed (SPRepr *repr, const guchar *oldval, const guchar *newval, gpointer data)
+spw_repr_content_changed (SPRepr *repr, const gchar *oldval, const gchar *newval, gpointer data)
 {
 	/* Signalling goes here */
 }
@@ -110,7 +110,7 @@ sp_widget_class_init (SPWidgetClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_BIN);
+	parent_class = (GtkBinClass*)gtk_type_class (GTK_TYPE_BIN);
 
 	object_class->destroy = sp_widget_destroy;
 
@@ -298,7 +298,7 @@ sp_widget_new_global (Inkscape *inkscape)
 {
 	SPWidget *spw;
 
-	spw = gtk_type_new (SP_TYPE_WIDGET);
+	spw = (SPWidget*)gtk_type_new (SP_TYPE_WIDGET);
 
 	if (!sp_widget_construct_global (spw, inkscape)) {
 		gtk_object_unref (GTK_OBJECT (spw));
@@ -315,7 +315,7 @@ sp_widget_new_repr (SPRepr *repr)
 
 	g_return_val_if_fail (repr != NULL, NULL);
 
-	spw = gtk_type_new (SP_TYPE_WIDGET);
+	spw = (SPWidget*)gtk_type_new (SP_TYPE_WIDGET);
 
 	if (!sp_widget_construct_repr (spw, repr)) {
 		gtk_object_unref (GTK_OBJECT (spw));
