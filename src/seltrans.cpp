@@ -231,11 +231,10 @@ sp_sel_trans_increase_state (SPSelTrans * seltrans)
 }
 
 void
-sp_sel_trans_set_center (SPSelTrans * seltrans, gdouble x, gdouble y)
+sp_sel_trans_set_center (SPSelTrans * seltrans, NR::Point p)
 {
-	seltrans->center.x = x;
-	seltrans->center.y = y;
-
+	seltrans->center = p;
+	
 	sp_sel_trans_update_handles (seltrans);
 }
 
@@ -341,6 +340,12 @@ sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrix *affine, NRPoint *norm)
 	seltrans->changed = TRUE;
 
 	sp_sel_trans_update_handles (seltrans);
+}
+void
+sp_sel_trans_transform (SPSelTrans * seltrans, const NR::Matrix& affine, NR::Point& norm) {
+	NRPoint n = norm;
+	sp_sel_trans_transform (seltrans, affine, &n);
+	norm = n;
 }
 
 void
@@ -816,7 +821,7 @@ sp_sel_trans_scale_request (SPSelTrans *seltrans, SPSelTransHandle *handle, NR::
 	gchar status[80];
 	SPDesktop *desktop;
 	int xd, yd;
-	
+
 	NRPoint pp = pt;
 	NRPoint* p = &pp;
 	desktop = seltrans->desktop;
@@ -825,33 +830,33 @@ sp_sel_trans_scale_request (SPSelTrans *seltrans, SPSelTransHandle *handle, NR::
 	sp_sel_trans_origin_desktop (seltrans, &norm);
 
 	if (fabs (point.x - norm.x) > 0.001) {
-		sx = (pp.x - norm.x) / (point.x - norm.x);
-		if (fabs (sx) < 1e-9) sx = 1e-9;
-		xd = TRUE;
+	        sx = (pp.x - norm.x) / (point.x - norm.x);
+	        if (fabs (sx) < 1e-9) sx = 1e-9;
+	        xd = TRUE;
 	} else {
-		sx = 0.0;
-		xd = FALSE;
+	        sx = 0.0;
+	        xd = FALSE;
 	}
 	if (fabs (point.y - norm.y) > 0.001) {
-		sy = (pp.y - norm.y) / (point.y - norm.y);
-		if (fabs (sy) < 1e-9) sy = 1e-9;
-		yd = TRUE;
+	        sy = (pp.y - norm.y) / (point.y - norm.y);
+	        if (fabs (sy) < 1e-9) sy = 1e-9;
+	        yd = TRUE;
 	} else {
-		sy = 0.0;
-		yd = FALSE;
+	        sy = 0.0;
+	        yd = FALSE;
 	}
 
 	if (state & GDK_CONTROL_MASK) {
-		double r;
-		if (!xd || !yd) return FALSE;
+	        double r;
+	        if (!xd || !yd) return FALSE;
 	        if (fabs (sy) > fabs (sx)) sy = fabs (sx) * sy / fabs (sy);
-		if (fabs (sx) > fabs (sy)) sx = fabs (sy) * sx / fabs (sx);
-		r = sp_desktop_vector_snap_list (desktop, seltrans->spp, seltrans->spp_length, &norm, sx, sy);
-		sx = fabs (r) * sx / fabs (sx);
-		sy = fabs (r) * sy / fabs (sy);
+	        if (fabs (sx) > fabs (sy)) sx = fabs (sy) * sx / fabs (sx);
+	        r = sp_desktop_vector_snap_list (desktop, seltrans->spp, seltrans->spp_length, &norm, sx, sy);
+	        sx = fabs (r) * sx / fabs (sx);
+	        sy = fabs (r) * sy / fabs (sy);
 	} else {
-		if (xd) sx = sp_desktop_horizontal_snap_list_scale (desktop, seltrans->spp, seltrans->spp_length, &norm, sx);
-		if (yd) sy = sp_desktop_vertical_snap_list_scale (desktop, seltrans->spp, seltrans->spp_length, &norm, sy);
+	        if (xd) sx = sp_desktop_horizontal_snap_list_scale (desktop, seltrans->spp, seltrans->spp_length, &norm, sx);
+	        if (yd) sy = sp_desktop_vertical_snap_list_scale (desktop, seltrans->spp, seltrans->spp_length, &norm, sy);
 	}
 
 	pp.x = (point.x - norm.x) * sx + norm.x;
@@ -1001,37 +1006,23 @@ sp_sel_trans_skew_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR:
 gboolean
 sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
 {
-	NRPoint norm, point, q1, q2;
-	double h1, h2;
-	NRMatrix r1, r2, n2p, p2n;
-	NRMatrix rotate;
-	double dx1, dx2, dy1, dy2, angle;
-	SPDesktop * desktop;
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
-
-
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
-	desktop = seltrans->desktop;
+	SPDesktop *desktop = seltrans->desktop;
 
-	sp_sel_trans_point_desktop (seltrans, &point);
-	sp_sel_trans_origin_desktop (seltrans, &norm);
+	const NR::Point point = seltrans->point;
+	NR::Point norm = seltrans->origin;
 	
 	// rotate affine in rotate
-	dx1 = point.x - norm.x;
-	dy1 = point.y - norm.y;
-	dx2 = pp.x    - norm.x;
-	dy2 = pp.y    - norm.y;
+	NR::Point d1 = point - norm;
+	NR::Point d2 = pt    - norm;
 
-	h1 = hypot (dx1, dy1);
-	if (fabs (h1) < 1e-15) return FALSE;
-	q1.x = (dx1) / h1;
-	q1.y = (dy1) / h1;
-	h2 = hypot (dx2, dy2);
+	NR::Coord h1 = NR::L2 (d1);
+	if (h1 < 1e-15) return FALSE;
+	NR::Point q1 = d1 / h1;
+	NR::Coord h2 = NR::L2 (d2);
 	if (fabs (h2) < 1e-15) return FALSE;
-	q2.x = (dx2) / h2;
-	q2.y = (dy2) / h2;
+	NR::Point q2 = d2 / h2;
 
 	if (state & GDK_CONTROL_MASK) {
 		/* Have to restrict movement. */
@@ -1041,39 +1032,29 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 		if (snaps) {
 			theta = ( M_PI / snaps ) * floor( theta * snaps / M_PI + .5 );
 		}
-		q1.x = 1.0;
-		q1.y = 0.0;
-		q2.x = cos(theta);
-		q2.y = sin(theta);
+		q1 = NR::Point(1, 0);
+		q2 = NR::Point(cos(theta), sin(theta));
 	}
-
-	r1.c[0] = q1.x;  r1.c[1] = -q1.y;  r1.c[2] =  q1.y;  r1.c[3] = q1.x;  r1.c[4] = 0;  r1.c[5] = 0;
-	r2.c[0] = q2.x;  r2.c[1] =  q2.y;  r2.c[2] = -q2.y;  r2.c[3] = q2.x;  r2.c[4] = 0;  r2.c[5] = 0;
-	nr_matrix_set_translate (&n2p, norm.x, norm.y);
-	nr_matrix_invert (&p2n, &n2p);
-	nr_matrix_multiply (&rotate, &p2n, &r1);
-	nr_matrix_multiply (&rotate, &rotate, &r2);
-	nr_matrix_multiply (&rotate, &rotate, &n2p);
+	NR::Matrix r1 = NR::rotate(q1);
+	NR::Matrix r2 = NR::rotate(q2);
+	NR::Matrix n2p = NR::translate(norm);
+	NR::Matrix rotate = ((n2p.inverse() * r1.inverse()) * r2) * n2p;
 
 #if 0
 	/* Snap */
 	sp_desktop_circular_snap_list (desktop, seltrans->spp, seltrans->spp_length, &norm, &rotate);
 #endif
-	pp.x = NR_MATRIX_DF_TRANSFORM_X (&rotate, point.x, point.y);
-	pp.y = NR_MATRIX_DF_TRANSFORM_Y (&rotate, point.x, point.y);
+	pt = rotate * point;
 
 	/* status text */
-	dx2 = pp.x    - norm.x;
-	dy2 = pp.y    - norm.y;
-
-	angle = 180 / M_PI * atan2 (dy2*dx1-dy1*dx2, dx2*dx1+dy2*dy1);
+	double angle = 180 / M_PI * atan2 (NR::dot(NR::rot90(d1), d2), 
+					   NR::dot(d1, d2));
 
 	if (angle > 180) angle -= 360;
 	if (angle < -180) angle += 360;
 
 	sp_view_set_statusf (SP_VIEW (seltrans->desktop), "Rotate by %0.2f deg", angle);
 
-	pt = pp;
 	return TRUE;
 }
 
@@ -1084,12 +1065,12 @@ sp_sel_trans_center_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	GString * xs, * ys;
 	SPDesktop * desktop;
 	NRPoint point;
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
 
 	
 	desktop  = seltrans->desktop;
-	sp_desktop_free_snap (desktop, p);
+	sp_desktop_free_snap (desktop, pt);
+	NRPoint pp = pt;
+	NRPoint* p = &pp;
 
 	if (state & GDK_CONTROL_MASK) {
 	        sp_sel_trans_point_desktop (seltrans, &point);
@@ -1124,157 +1105,116 @@ sp_sel_trans_center_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 void
 sp_sel_trans_stretch (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
 {
-	NRMatrix stretch;
-	double sx = 1.0, sy = 1.0;
-	NRPoint norm, point;
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
-
-
-	sp_sel_trans_point_desktop (seltrans, &point);
-	sp_sel_trans_origin_desktop (seltrans, &norm);
-
+	int dim;
 	switch (handle->cursor) {
-	case GDK_TOP_SIDE:
-	case GDK_BOTTOM_SIDE:
-		if (fabs (point.y - norm.y) < 1e-15) return;
-		sy = (pp.y - norm.y) / (point.y - norm.y);
-		if (fabs (sy) < 1e-15) sy = 1e-15;
-		if (state & GDK_CONTROL_MASK) {
-			if (fabs (sy) > fabs (sx)) sy = sy / fabs (sy);
-			if (fabs (sy) < fabs (sx)) sx = fabs (sy) * sx / fabs (sx);
-		}
-		break;
 	case GDK_LEFT_SIDE:
 	case GDK_RIGHT_SIDE:
-		if (fabs (point.x - norm.x) < 1e-15) return;
-		sx = (pp.x - norm.x) / (point.x - norm.x);
-		if (fabs (sx) < 1e-15) sx = 1e-15;
-		if (state & GDK_CONTROL_MASK) {
-			if (fabs (sx) > fabs (sy)) sx = sx / fabs (sx);
-			if (fabs (sx) < fabs (sy)) sy = fabs (sx) * sy / fabs (sy);
-		}
+		dim = NR::X;
 		break;
-	default:
+	case GDK_TOP_SIDE:
+	case GDK_BOTTOM_SIDE:
+		dim = NR::Y;
 		break;
 	}
+	
+	NR::Point s(1, 1);
 
-	if (fabs (sx) < 1e-15) sx = 1e-15; 
-	if (fabs (sy) < 1e-15) sy = 1e-15;
-	nr_matrix_set_scale (&stretch, sx, sy);
-	sp_sel_trans_transform (seltrans, &stretch, &norm);
-	pt = pp;
+	const NR::Point point = seltrans->point;
+	NR::Point norm = seltrans->origin;
+	const NR::Point offset = point - norm;
+	
+	if (fabs (offset[dim]) < 1e-15)
+		return;
+	s[dim] = (pt[dim] - norm[dim]) / (offset[dim]);
+	if (fabs (s[dim]) < 1e-15)
+		s[dim] = 1e-15;
+	if (state & GDK_CONTROL_MASK) {
+		if (fabs (s[dim]) > fabs (s[1-dim]))
+			s[dim] = s[dim] / fabs (s[dim]);
+		if (fabs (s[dim]) < fabs (s[1-dim]))
+			s[1-dim] = fabs (s[dim]) * s[1-dim] / fabs (s[1-dim]);
+	}
+	
+	for(int i = 0; i < 2; i++)
+		if (fabs (s[i]) < 1e-15)
+			s[i] = 1e-15;
+	NR::Matrix stretch = NR::scale(s);
+	sp_sel_trans_transform (seltrans, stretch, norm);
 }
 
 void
 sp_sel_trans_scale (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state) 
 {
-	NRMatrix scale;
-	double sx, sy;
-	NRPoint norm, point;
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
-
-
-	sp_sel_trans_point_desktop (seltrans, &point);
-	sp_sel_trans_origin_desktop (seltrans, &norm);
-
-	if (fabs (point.x - norm.x) > 1e-9) {
-		sx = (pp.x - norm.x) / (point.x - norm.x);
-	} else {
-		sx = 1.0;
+	const NR::Point point = seltrans->point;
+	NR::Point norm = seltrans->origin;
+	const NR::Point offset = point - norm;
+	
+	NR::Point s(1, 1);
+	for(int i = 0; i < 2; i++) {
+		if (fabs (offset[i]) > 1e-9)
+			s[i] = (pt[i] - norm[i]) / offset[i];
+		if (fabs (s[i]) < 1e-9)
+			s[i] = 1e-9; 
 	}
-
-	if (fabs (point.y - norm.y) > 1e-9) {
-		sy = (pp.y - norm.y) / (point.y - norm.y);
-	} else {
-		sy = 1.0;
-	}
-
-	if (fabs (sx) < 1e-9) sx = 1e-9; 
-	if (fabs (sy) < 1e-9) sy = 1e-9;
-
-	nr_matrix_set_scale (&scale, sx, sy);
-	sp_sel_trans_transform (seltrans, &scale, &norm);
-	pt = pp;
+	NR::Matrix scale = NR::scale(s);
+	sp_sel_trans_transform (seltrans, scale, norm);
 }
 
 void
 sp_sel_trans_skew (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
 {
-        NRMatrix skew;
-	NRPoint norm, point;
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
-
-
-	sp_sel_trans_point_desktop (seltrans, &point);
-	sp_sel_trans_origin_desktop (seltrans, &norm);
+	const NR::Point point = seltrans->point;
+	NR::Point norm = seltrans->origin;
+	const NR::Point offset = point - norm;
   
-	skew.c[4]=0;
-	skew.c[5]=0;
-	
+	int dim;
 	switch (handle->cursor) {
 	case GDK_SB_H_DOUBLE_ARROW:
-		if (fabs (point.y - norm.y) < 1e-15) return;
-		skew.c[2] = (pp.x - point.x) / (point.y - norm.y);
-		skew.c[3] = (pp.y - norm.y) / (point.y - norm.y);
-		skew.c[1] = 0;
-		skew.c[0] = 1;
+		dim = NR::Y;
 		break;
 	case GDK_SB_V_DOUBLE_ARROW:
-		if (fabs (point.x - norm.x) < 1e-15) return;
-		skew.c[1] = (pp.y - point.y) / (point.x - norm.x);
-		skew.c[0] = (pp.x - norm.x) / (point.x - norm.x);
-		skew.c[2] = 0;
-		skew.c[3] = 1;
-		break;
-	default:
+		dim = NR::X;
 		break;
 	}
-
-	if (fabs (skew.c[0]) < 1e-15) skew.c[0] = 1e-15;
-	if (fabs (skew.c[3]) < 1e-15) skew.c[3] = 1e-15;
-	sp_sel_trans_transform (seltrans, &skew, &norm);
-	pt = pp;
+	if (fabs (offset[dim]) < 1e-15)
+		return;
+        NR::Matrix skew = NR::identity();
+	skew.c[2*dim + dim] = (pt[dim] - norm[dim]) / offset[dim];
+	skew.c[2*dim + (1-dim)] = (pt[1-dim] - point[1-dim]) / offset[dim];
+	skew.c[2*(1-dim) + (dim)] = 0;
+	skew.c[2*(1-dim) + (1-dim)] = 1;
+	
+	for(int i = 0; i < 2; i++)
+		if (fabs (skew.c[3*i]) < 1e-15)
+			skew.c[3*i] = 1e-15;
+	sp_sel_trans_transform (seltrans, skew, norm);
 }
 
 void
 sp_sel_trans_rotate (SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point& pt, guint state)
 {
-        NRPoint q1, q2, point, norm;
-	NRMatrix rotate, r1, r2;
-	double h1, h2;
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
+	const NR::Point point = seltrans->point;
+	NR::Point norm = seltrans->origin;
+	const NR::Point offset = point - norm;
 
+	const NR::Coord h1 = NR::L2(offset);
+	if (h1 < 1e-15)
+		return;
+	const NR::Point q1 = offset / h1;
+	const NR::Coord h2 = NR::L2 (pt - norm);
+	if (h2 < 1e-15)
+		return;
+	const NR::Point q2 = (pt - norm) / h2;
+	const NR::Matrix r1 = NR::rotate(q1);
+	const NR::Matrix r2 = NR::rotate(q2);
 
-	sp_sel_trans_point_desktop (seltrans, &point);
-	sp_sel_trans_origin_desktop (seltrans, &norm);
-
-	h1 = hypot (point.x - norm.x, point.y - norm.y);
-	if (fabs (h1) < 1e-15) return;
-	q1.x = (point.x - norm.x) / h1;
-	q1.y = (point.y - norm.y) / h1;
-	h2 = hypot (pp.x - norm.x, pp.y - norm.y);
-	if (fabs (h2) < 1e-15) return;
-	q2.x = (pp.x - norm.x) / h2;
-	q2.y = (pp.y - norm.y) / h2;
-	r1.c[0] = q1.x;  r1.c[1] = -q1.y;  r1.c[2] =  q1.y;  r1.c[3] = q1.x;  r1.c[4] = 0;  r1.c[5] = 0;
-	r2.c[0] = q2.x;  r2.c[1] =  q2.y;  r2.c[2] = -q2.y;  r2.c[3] = q2.x;  r2.c[4] = 0;  r2.c[5] = 0;
-
-	nr_matrix_multiply (&rotate, &r1, &r2);
-	sp_sel_trans_transform (seltrans, &rotate, &norm);
-	pt = pp;
+	NR::Matrix rotate = r1.inverse() * r2;
+	sp_sel_trans_transform (seltrans, rotate, norm);
 }
 
 void
 sp_sel_trans_center (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
 {
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
-
-	sp_sel_trans_set_center (seltrans, pp.x, pp.y);
-	pt = pp;
+	sp_sel_trans_set_center (seltrans, pt);
 }
 
