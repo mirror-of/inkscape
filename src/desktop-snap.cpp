@@ -18,6 +18,7 @@
  */
 
 #include <math.h>
+#include <list>
 #include "sp-guide.h"
 #include "sp-namedview.h"
 #include "desktop.h"
@@ -28,6 +29,9 @@
 #include <libnr/nr-scale.h>
 #include <libnr/nr-scale-ops.h>
 #include <libnr/nr-values.h>
+
+static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *desktop);
+
 
 /* Minimal distance to norm before point is considered for snap. */
 #define MIN_DIST_NORM 1.0
@@ -118,67 +122,26 @@ static double round_to_nearest_multiple_plus(double x, double const c1, double c
 
 NR::Coord sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Point const &d)
 {
-    NR::Coord best = NR_HUGE;
-    NR::Coord upper = NR_HUGE;
-
     g_assert (desktop != NULL);
     g_assert (SP_IS_DESKTOP (desktop));
 
-    NR::Coord len = L2(d);
-    if (len < 1e-18) {
-        return sp_desktop_free_snap (desktop, req);
-    }
-    
-    NR::Point const v = NR::unit_vector(d);
+    std::list<const Snapper*> snappers = sp_desktop_get_snappers(desktop);
 
-    SPNamedView const &nv = *desktop->namedview;
-    NR::Point snapped = req;
+    NR::Coord best = NR_HUGE;
+    for (std::list<const Snapper*>::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
+        NR::Point trial_req = req;
+        NR::Coord dist = (*i)->vector_snap(desktop, trial_req, d);
 
-    if (nv.guide_snapper.getEnabled()) {
-        upper = nv.guide_snapper.getDistance();
-        for (GSList const *l = nv.guides; l != NULL; l = l->next) {
-            SPGuide const &g = *SP_GUIDE(l->data);
-            NR::Point trial(req);
-            NR::Coord const dist = sp_intersector_a_vector_snap(trial,
-                                                                v,
-                                                                g.normal,
-                                                                g.position);
-            
-            if (dist < upper) {
-                upper = best = dist;
-                snapped = trial;
-            }
+        if (dist < best) {
+            req = trial_req;
+            best = dist;
         }
     }
 
-    if (nv.grid_snapper.getEnabled()) {
-        /*  find nearest grid line (either H or V whatever is closer) along
-         *  the vector to the requested point.  If the distance along the
-         *  vector is less than the snap distance then snap.
-         */
-        upper = MIN(best, nv.grid_snapper.getDistance());
-        
-        for (unsigned int i = 0; i < 2; ++i) {
-            NR::Point trial(req);
-            NR::Coord const rounded = round_to_nearest_multiple_plus(req[i],
-                                                                     nv.gridspacing[i],
-                                                                     nv.gridorigin[i]);
-            
-            NR::Coord const dist = sp_intersector_a_vector_snap (trial,
-                                                                 v,
-                                                                 component_vectors[i],
-                                                                 rounded);
-
-            if (dist < upper) {
-                upper = best = dist;
-                snapped = trial;
-            }
-        }
-    }
-    
-    req = snapped;
     return best;
 }
+
+
 
 /**
  * If c1==0 (and c0 is finite), then returns +/-inf.  This makes grid spacing of zero
@@ -309,6 +272,16 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, const std::vector
 }
 
 
+/* FIXME: this should probably be in SPNamedView */
+static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *desktop)
+{
+    std::list<const Snapper*> s;
+    s.push_back(&desktop->namedview->grid_snapper);
+    s.push_back(&desktop->namedview->guide_snapper);
+    return s;
+}
+
+
 Snapper::Snapper(NR::Coord const d)
     : _distance(d), _enabled(false), _snap_to_points(false), _snap_to_bbox(false)
 {
@@ -360,9 +333,97 @@ GridSnapper::GridSnapper(NR::Coord const d) : Snapper(d)
 
 }
 
+NR::Coord GridSnapper::vector_snap(SPDesktop const *desktop, NR::Point &req, NR::Point const &d) const
+{
+    if (getEnabled() == false) {
+        return NR_HUGE;
+    }
+    
+    g_assert(desktop != NULL);
+    g_assert(SP_IS_DESKTOP(desktop));
+
+    NR::Coord len = L2(d);
+    if (len < NR_EPSILON) {
+        return sp_desktop_free_snap (desktop, req);
+    }
+
+    NR::Point const v = NR::unit_vector(d);
+
+    SPNamedView const &nv = *desktop->namedview;
+    NR::Point snapped = req;
+    NR::Coord best = NR_HUGE;
+    NR::Coord upper = NR_HUGE;
+
+    /*  find nearest grid line (either H or V whatever is closer) along
+     *  the vector to the requested point.  If the distance along the
+     *  vector is less than the snap distance then snap.
+     */
+    upper = MIN(best, getDistance());
+        
+    for (unsigned int i = 0; i < 2; ++i) {
+        NR::Point trial(req);
+        NR::Coord const rounded = round_to_nearest_multiple_plus(req[i],
+                                                                 nv.gridspacing[i],
+                                                                 nv.gridorigin[i]);
+            
+        NR::Coord const dist = sp_intersector_a_vector_snap (trial,
+                                                             v,
+                                                             component_vectors[i],
+                                                             rounded);
+        
+        if (dist < upper) {
+            upper = best = dist;
+            snapped = trial;
+        }
+    }
+
+    req = snapped;
+    return best;
+}
+
 GuideSnapper::GuideSnapper(NR::Coord const d) : Snapper(d)
 {
 
+}
+
+NR::Coord GuideSnapper::vector_snap(SPDesktop const *desktop, NR::Point &req, NR::Point const &d) const
+{
+    if (getEnabled() == false) {
+        return NR_HUGE;
+    }
+    
+    g_assert(desktop != NULL);
+    g_assert(SP_IS_DESKTOP(desktop));
+
+    NR::Coord len = L2(d);
+    if (len < NR_EPSILON) {
+        return sp_desktop_free_snap (desktop, req);
+    }
+
+    NR::Point const v = NR::unit_vector(d);
+
+    SPNamedView const &nv = *desktop->namedview;
+    NR::Point snapped = req;
+    NR::Coord best = NR_HUGE;
+    NR::Coord upper = NR_HUGE;
+
+    upper = nv.guide_snapper.getDistance();
+    for (GSList const *l = nv.guides; l != NULL; l = l->next) {
+        SPGuide const &g = *SP_GUIDE(l->data);
+        NR::Point trial(req);
+        NR::Coord const dist = sp_intersector_a_vector_snap(trial,
+                                                            v,
+                                                            g.normal,
+                                                            g.position);
+        
+        if (dist < upper) {
+            upper = best = dist;
+            snapped = trial;
+        }
+    }
+
+    req = snapped;
+    return best;
 }
 
 /*

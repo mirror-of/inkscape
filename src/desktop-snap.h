@@ -38,15 +38,16 @@ public:
     void setSnapToPoints(bool s);
     void setSnapToBBox(bool s);
     void setEnabled(bool s);
+    void setDistance(NR::Coord const d);
 
     bool getSnapToPoints() const;
     bool getSnapToBBox() const;
     bool getEnabled() const;
-    
-    void setDistance(NR::Coord const d);
-
     NR::Coord getDistance() const;
 
+    virtual NR::Coord vector_snap(SPDesktop const *desktop,
+                                  NR::Point &req,
+                                  NR::Point const &d) const = 0;
 private:
     NR::Coord _distance;
     bool _enabled;
@@ -59,6 +60,11 @@ class GridSnapper : public Snapper
 {
 public:
     GridSnapper(NR::Coord const d);
+
+    NR::Coord vector_snap(SPDesktop const *desktop,
+                          NR::Point &req,
+                          NR::Point const &d) const;
+    
 };
 
 ///< Snap to guides
@@ -66,6 +72,10 @@ class GuideSnapper : public Snapper
 {
 public:
     GuideSnapper(NR::Coord const d);
+
+    NR::Coord vector_snap(SPDesktop const *desktop,
+                          NR::Point &req,
+                          NR::Point const &d) const;
 };
 
 
