@@ -1776,26 +1776,25 @@ spdc_pen_set_initial_point(SPPenContext *pc, NR::Point const p)
 }
 
 static void
-spdc_pen_set_subsequent_point(SPPenContext *pc, NR::Point const p)
+spdc_pen_set_subsequent_point(SPPenContext *const pc, NR::Point const p)
 {
-    SPDrawContext *dc = SP_DRAW_CONTEXT(pc);
-    g_assert( dc->npoints != 0 );
+    g_assert( pc->npoints != 0 );
+    /* todo: Check callers to see whether 2 <= npoints is guaranteed. */
 
-    dc->p[2] = p;
-    dc->p[3] = p;
-    dc->p[4] = p;
-    dc->npoints = 5;
-    sp_curve_reset(dc->red_curve);
-    sp_curve_moveto(dc->red_curve, dc->p[0]);
+    pc->p[2] = p;
+    pc->p[3] = p;
+    pc->p[4] = p;
+    pc->npoints = 5;
+    sp_curve_reset(pc->red_curve);
+    sp_curve_moveto(pc->red_curve, pc->p[0]);
     if ( (pc->onlycurves)
-         || ( dc->p[1][NR::X] != dc->p[0][NR::X] )
-         || ( dc->p[1][NR::Y] != dc->p[0][NR::Y] ) )
+         || ( pc->p[1] != pc->p[0] ) )
     {
-        sp_curve_curveto(dc->red_curve, dc->p[1], dc->p[2], dc->p[3]);
+        sp_curve_curveto(pc->red_curve, pc->p[1], p, p);
     } else {
-        sp_curve_lineto(dc->red_curve, dc->p[3]);
+        sp_curve_lineto(pc->red_curve, p);
     }
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), dc->red_curve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
 }
 
 static void
