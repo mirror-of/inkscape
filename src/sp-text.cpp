@@ -490,16 +490,11 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
  * Member functions
  */
 
-unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, SPObject **pending_line_break_object)
+unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset)
 {
     unsigned length = 0;
-    unsigned child_attrs_offset = 0;
+    int child_attrs_offset = 0;
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
-
-    if (*pending_line_break_object) {
-        layout.appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, *pending_line_break_object);
-        *pending_line_break_object = NULL;
-    }
 
     if (SP_IS_TEXT(root)) {
         SP_TEXT(root)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
@@ -517,30 +512,32 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
         child_attrs_offset = parent_attrs_offset;
     }
 
-    bool is_line_break = false;
     if (SP_IS_TSPAN(root))
         if (SP_TSPAN(root)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
-            is_line_break = true;
+            // we need to allow the first line not to have role=line, but still set the source_cookie to the right value
+            SPObject *prev_object = SP_OBJECT_PREV(root);
+            if (prev_object && SP_IS_TSPAN(prev_object)) {
+                if (!layout.inputExists())
+                    layout.appendText("", prev_object->style, prev_object, &optional_attrs);
+                layout.appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, prev_object);
+            }
             if (!root->hasChildren())
                 layout.appendText("", root->style, root, &optional_attrs);
+            length++;     // interpreting line breaks as a character for the purposes of x/y/etc attributes
+                          // is a liberal interpretation of the svg spec, but a strict reading would mean
+                          // that if the first line is empty the second line would take its place at the
+                          // start position. Very confusing.
+            child_attrs_offset--;
         }
 
     for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TSPAN (child) || SP_IS_TEXTPATH (child)) {
-            length += _buildLayoutInput(child, optional_attrs, child_attrs_offset + length, pending_line_break_object);
+            length += _buildLayoutInput(child, optional_attrs, child_attrs_offset + length);
         } else if (SP_IS_STRING (child)) {
             Glib::ustring const &string = SP_STRING(child)->string;
             layout.appendText(string, root->style, child, &optional_attrs, child_attrs_offset + length);
             length += string.length();
         }
-    }
-
-    if (is_line_break) {
-        length++;     // interpreting line breaks as a character for the purposes of x/y/etc attributes
-                      // is a liberal interpretation of the svg spec, but a strict reading would mean
-                      // that if the first line is empty the second line would take its place at the
-                      // start position. Very confusing.
-        *pending_line_break_object = root;
     }
 
     return length;
@@ -550,8 +547,7 @@ void SPText::rebuildLayout()
 {
     layout.clear();
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
-    SPObject *pending_line_break_object = NULL;
-    _buildLayoutInput(this, optional_attrs, 0, &pending_line_break_object);
+    _buildLayoutInput(this, optional_attrs, 0);
     layout.calculateFlow();
     for (SPObject *child = firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TEXTPATH(child) && SP_TEXTPATH(child)->originalPath != NULL) {
