@@ -30,7 +30,7 @@
  * also re-order the SPUnitId enum values accordingly.  Run `make check' (which
  * calls sp_unit_table_sane) to ensure that the two are in sync.
  */
-static const SPUnit sp_units[] = {
+SPUnit const sp_units[] = {
 	{SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, N_("Unit"), "", N_("Units"), ""},
 	{SP_UNIT_PT, SP_UNIT_ABSOLUTE, 1.0, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
 	{SP_UNIT_PX, SP_UNIT_DEVICE, 1.0, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")},
@@ -48,14 +48,6 @@ static const SPUnit sp_units[] = {
 };
 
 #define sp_num_units G_N_ELEMENTS(sp_units)
-
-SPUnit const &
-sp_unit_get_by_id(SPUnitId const id)
-{
-	unsigned const ix = unsigned(id);
-	g_return_val_if_fail(ix < sp_num_units, sp_units[SP_UNIT_PX]);
-	return sp_units[ix];
-}
 
 
 /* Base units are the ones used by gnome-print and paper descriptions */

@@ -15,6 +15,7 @@
  *
  */
 
+#include <glib/gmessages.h>
 #include <glib/gslist.h>
 #include <glib/gtypes.h>
 
@@ -69,7 +70,8 @@ enum SPUnitId {
 	SP_UNIT_M,	// metres
 	SP_UNIT_IN,	// inches
 	SP_UNIT_EM,	// font-size of relevant font
-	SP_UNIT_EX	// x-height of relevant font
+	SP_UNIT_EX,	// x-height of relevant font
+	sp_max_unit_id = SP_UNIT_EX	// For bounds-checking in sp_unit_get_by_id.
 };
 
 /*
@@ -102,7 +104,20 @@ struct SPDistance {
 
 const SPUnit *sp_unit_get_identity (guint base);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
-SPUnit const &sp_unit_get_by_id(SPUnitId const id);
+
+extern SPUnit const sp_units[];
+
+inline SPUnit const &
+sp_unit_get_by_id(SPUnitId const id)
+{
+	/* inline because the compiler should optimize away the g_return_val_if_fail test in the
+	   usual case that the argument value is known at compile-time, leaving just
+	   "return sp_units[constant]". */
+	unsigned const ix = unsigned(id);
+	g_return_val_if_fail(ix <= sp_max_unit_id, sp_units[SP_UNIT_PX]);
+	return sp_units[ix];
+}
+
 
 /** Used solely by units-test.cpp. */
 bool sp_units_table_sane();
