@@ -139,6 +139,7 @@ static void sp_style_read_ifontsize (SPIFontSize *val, const gchar *str);
 static void sp_style_read_penum(SPIEnum *val, Inkscape::XML::Node *repr, const gchar *key, const SPStyleEnum *dict, bool can_explicitly_inherit);
 static void sp_style_read_plength (SPILength *val, Inkscape::XML::Node *repr, const gchar *key);
 static void sp_style_read_pfontsize (SPIFontSize *val, Inkscape::XML::Node *repr, const gchar *key);
+static void sp_style_read_pfloat (SPIFloat *val, Inkscape::XML::Node *repr, const gchar *key);
 
 static gint sp_style_write_ifloat(gchar *p, gint len, gchar const *key, SPIFloat const *val, SPIFloat const *base, guint flags);
 static gint sp_style_write_iscale24(gchar *p, gint len, gchar const *key, SPIScale24 const *val, SPIScale24 const *base, guint flags);
@@ -155,6 +156,8 @@ static void sp_style_paint_clear (SPStyle *style, SPIPaint *paint, unsigned int 
 
 #define SPS_READ_ILENGTH_IF_UNSET(v,s) if (!(v)->set) {sp_style_read_ilength ((v), (s));}
 #define SPS_READ_PLENGTH_IF_UNSET(v,r,k) if (!(v)->set) {sp_style_read_plength ((v), (r), (k));}
+
+#define SPS_READ_PFLOAT_IF_UNSET(v,r,k) if (!(v)->set) {sp_style_read_pfloat ((v), (r), (k));}
 
 #define SPS_READ_IFONTSIZE_IF_UNSET(v,s) if (!(v)->set) {sp_style_read_ifontsize ((v), (s));}
 #define SPS_READ_PFONTSIZE_IF_UNSET(v,r,k) if (!(v)->set) {sp_style_read_pfontsize ((v), (r), (k));}
@@ -510,6 +513,7 @@ sp_style_read (SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     SPS_READ_PLENGTH_IF_UNSET (&style->stroke_width, repr, "stroke-width");
     SPS_READ_PENUM_IF_UNSET(&style->stroke_linecap, repr, "stroke-linecap", enum_stroke_linecap, true);
     SPS_READ_PENUM_IF_UNSET(&style->stroke_linejoin, repr, "stroke-linejoin", enum_stroke_linejoin, true);
+    SPS_READ_PFLOAT_IF_UNSET(&style->stroke_miterlimit, repr, "stroke-miterlimit");
  
     /* markers */
     if (!style->marker[SP_MARKER_LOC].set) {
@@ -1191,13 +1195,6 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
         sp_style_merge_ipaint (style, &style->stroke, &parent->stroke);
     }
     if (!style->stroke_width.set || style->stroke_width.inherit) {
-        style->stroke_width.unit = parent->stroke_width.unit;
-        style->stroke_width.value = parent->stroke_width.value;
-        /* TODO: The above looks suspicious.  What if the unit is em or ex, and the parent has
-           different font-size or font-family (x height) from the child?  The spec says that only
-           the computed value is inherited.  I think we should be ignoring value if (!set ||
-           inherit).  Hence, I think we should remove the above two lines, as they may be hiding
-           bugs. */
         style->stroke_width.computed = parent->stroke_width.computed;
     } else {
         /* Update computed value for any change in font inherited from parent. */
@@ -1250,9 +1247,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
         }
         if (!style->text->letterspacing.set || style->text->letterspacing.inherit) {
             style->text->letterspacing_normal = parent->text->letterspacing_normal;
-            style->text->letterspacing.value = parent->text->letterspacing.value;
             style->text->letterspacing.computed = parent->text->letterspacing.computed;
-            style->text->letterspacing.unit = parent->text->letterspacing.unit;
         }
     }
 
@@ -2247,8 +2242,6 @@ sp_style_read_plength (SPILength *val, Inkscape::XML::Node *repr, const gchar *k
     }
 }
 
-
-
 /**
  *
  */
@@ -2259,6 +2252,20 @@ sp_style_read_pfontsize (SPIFontSize *val, Inkscape::XML::Node *repr, const gcha
     str = repr->attribute(key);
     if (str) {
         sp_style_read_ifontsize (val, str);
+    }
+}
+
+
+/**
+ *
+ */
+static void
+sp_style_read_pfloat (SPIFloat *val, Inkscape::XML::Node *repr, const gchar *key)
+{
+    const gchar *str;
+    str = repr->attribute(key);
+    if (str) {
+        sp_style_read_ifloat (val, str);
     }
 }
 
