@@ -435,30 +435,24 @@ static void sp_transformation_move_value_changed(GtkAdjustment *, GObject *dlg)
 static void
 sp_transformation_move_relative_toggled (GtkToggleButton *tb, GObject *dlg)
 {
-    SPDesktop *desktop;
-    SPSelection *selection;
-    SPUnitSelector *us;
-    GtkAdjustment *ax, *ay;
-    NRRect bbox;
-    float x, y;
-
-    desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     
     if (!desktop)
         return;
         
-    selection = SP_DT_SELECTION (desktop);
+    SPSelection *selection = SP_DT_SELECTION (desktop);
     
     if (selection->isEmpty())
         return;
 
     /* Read values from widget */
-    us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
-    ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
-    ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
-    x = sp_unit_selector_get_value_in_points (us, ax);
-    y = sp_unit_selector_get_value_in_points (us, ay);
+    SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
+    GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
+    GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
+    float x = sp_unit_selector_get_value_in_points (us, ax);
+    float y = sp_unit_selector_get_value_in_points (us, ay);
 
+    NRRect bbox;
     selection->bounds(&bbox);
 
     g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
@@ -779,19 +773,17 @@ sp_transformation_page_scale_new (GObject *obj)
 static void
 sp_transformation_scale_update (GObject *dlg, SPSelection *selection)
 {
-    GtkWidget *page;
-
-    page = GTK_WIDGET(g_object_get_data (dlg, "scale"));
+    GtkWidget *page = GTK_WIDGET(g_object_get_data (dlg, "scale"));
 
     if (selection && !selection->isEmpty()) {
     
         GtkAdjustment *ax, *ay;
         SPUnitSelector *us;
         const SPUnit *unit;
-        NRRect bbox;
         ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
         ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
         us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
+        NRRect bbox;
         selection->bounds(&bbox);
         unit = sp_unit_selector_get_unit (us);
         
