@@ -20,6 +20,7 @@
 
 #include "svg.h"
 #include "stringstream.h"
+#include "../unit-constants.h"
 
 #include <glib.h>
 
@@ -280,27 +281,27 @@ sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, flo
 		switch (uval) {
 		case UVAL('p','x'):
 			if (unit) *unit = SP_SVG_UNIT_PX;
-			if (computed) *computed = v * 1.0;
+			if (computed) *computed = v;
 			break;
 		case UVAL('p','t'):
 			if (unit) *unit = SP_SVG_UNIT_PT;
-			if (computed) *computed = v * 1.25;
+			if (computed) *computed = v * PX_PER_PT;
 			break;
 		case UVAL('p','c'):
 			if (unit) *unit = SP_SVG_UNIT_PC;
-			if (computed) *computed = v * 15.0;
+			if (computed) *computed = v * 12 * PX_PER_PT;
 			break;
 		case UVAL('m','m'):
 			if (unit) *unit = SP_SVG_UNIT_MM;
-			if (computed) *computed = v * 3.543307;
+			if (computed) *computed = v * PX_PER_MM;
 			break;
 		case UVAL('c','m'):
 			if (unit) *unit = SP_SVG_UNIT_CM;
-			if (computed) *computed = v * 35.43307;
+			if (computed) *computed = v * PX_PER_CM;
 			break;
 		case UVAL('i','n'):
 			if (unit) *unit = SP_SVG_UNIT_IN;
-			if (computed) *computed = v * 90.0;
+			if (computed) *computed = v * PX_PER_IN;
 			break;
 		case UVAL('e','m'):
 			if (unit) *unit = SP_SVG_UNIT_EM;
