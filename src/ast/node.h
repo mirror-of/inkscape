@@ -26,18 +26,27 @@ class Node : public gc {
 public:
     class InvalidTransformation : public std::runtime_error {
     public:
-        InvalidTransformation() {}
-        const char *what() const { return _("Invalid transformation"); }
+        InvalidTransformation() : runtime_error("invalid transformation") {}
     };
 
     virtual Node const *traverse(BranchName const &branch, unsigned pos) const;
 
-    virtual Node const &insertBefore(BranchName const &branch, unsigned pos, Node const *node) const throw(InvalidTransformation);
-    virtual Node const &replaceWith(BranchName const &branch, unsigned pos, Node const *node) const throw(InvalidTransformation);
-    virtual Node const &removeAt(BranchName const &branch, unsigned pos) const throw(InvalidTransformation);
+    virtual Node const &insertBefore(BranchName const &branch, unsigned pos,
+                                     Node const *node) const
+    throw(InvalidTransformation);
+
+    virtual Node const &replaceWith(BranchName const &branch, unsigned pos,
+                                    Node const *node) const
+    throw(InvalidTransformation);
+
+    virtual Node const &removeAt(BranchName const &branch, unsigned pos) const
+    throw(InvalidTransformation);
 
     virtual void write(std::ostream &stream) const;
     virtual CString const &toString() const=0;
+
+private:
+    void operator=(Node const &);
 };
 
 };

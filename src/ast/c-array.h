@@ -19,7 +19,6 @@
 #include <cstring>
 #include <glib/glib.h>
 #include <libxml/tree.h>
-#include "ast/null-pointer.h"
 
 namespace Inkscape {
 namespace AST {
@@ -27,12 +26,8 @@ namespace AST {
 template <typename T>
 struct CArray {
 public:
-    static CArray const &create_unsafe(T const *array) throw(NullPointer) {
-        if (array) {
-            return _create_unsafe(array);
-        } else {
-            throw NullPointer();
-        }
+    static CArray const &create_unsafe(T const *array) throw() {
+        return *reinterpret_cast<CArray<T> const *>(array);
     }
 
     T const *toPointer() const throw() {
@@ -47,13 +42,7 @@ public:
         return toPointer();
     }
 
-protected:
-    static CArray<T> const &_create_unsafe(T const *array) throw() {
-        return *reinterpret_cast<CArray<T> const *>(array);
-    }
-
 private:
-    CArray();
     void operator=(CArray<T> const &);
 };
 

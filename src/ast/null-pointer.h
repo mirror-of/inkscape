@@ -19,7 +19,7 @@ namespace AST {
 
 class NullPointer : public std::runtime_error {
 public:
-    char const *what() const { return "null pointer"; }
+    NullPointer() : runtime_error("null pointer") {}
 }
 
 };

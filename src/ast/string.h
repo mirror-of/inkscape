@@ -13,17 +13,17 @@
 #define SEEN_INKSCAPE_AST_STRING_H
 
 #include <sys/types.h>
+#include <gc/gc_cpp.h>
 #include <new>
 #include "ast/c-string.h"
 
 namespace Inkscape {
 namespace AST {
 
-struct String {
+struct String : public gc {
 public:
-    static String const &create(CString const &string) throw(std::bad_alloc) {
-        return *(new (GC) String(string));
-    }
+    explicit String(CString const &string)
+    : _string(string), _bytes(0), _chars(0) {}
 
     size_t byteLength() const {
         return _bytes ? _bytes : ( _bytes = std::strlen(_string) );
@@ -32,15 +32,20 @@ public:
         return _chars ? _chars : ( _chars = g_utf8_strlen(_string) );
     }
 
-    operator CString const &() const throw() { return _string; }
-    operator char const *() const throw() { return _string; }
-    operator gchar const *() const throw() { return _string; }
-    operator xmlChar const *() const throw() { return _string; }
+    operator CString const &() const throw() {
+        return _string;
+    }
+    operator char const *() const throw() {
+        return _string.toPointer();
+    }
+    operator gchar const *() const throw() {
+        return reinterpret_cast<gchar const *>(_string.toPointer());
+    }
+    operator xmlChar const *() const throw() {
+        return reinterpret_cast<xmlChar const *>(_string.toPointer());
+    }
 
 private:
-    String(CString const &string, size_t bytes=0, size_t chars=0)
-    : _string(string), _bytes(bytes), _chars(chars) {}
-
     CString const &_string;
     mutable size_t _bytes;
     mutable size_t _chars;
