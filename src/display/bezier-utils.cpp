@@ -562,7 +562,7 @@ sp_darray_left_tangent(NR::Point const d[], unsigned const len)
 static NR::Point
 sp_darray_right_tangent(NR::Point const d[], unsigned const len)
 {
-    g_assert( len >= 2 );
+    g_assert( 2 <= len );
     unsigned const last = len - 1;
     unsigned const prev = last - 1;
     g_assert( d[last] != d[prev] );
@@ -581,10 +581,10 @@ sp_darray_right_tangent(NR::Point const d[], unsigned const len)
 NR::Point
 sp_darray_right_tangent(NR::Point const d[], unsigned const len, double const tolerance_sq)
 {
-    g_assert( len >= 2 );
+    g_assert( 2 <= len );
     g_assert( 0 <= tolerance_sq );
     unsigned const last = len - 1;
-    for (unsigned i = last;; i--) {
+    for (unsigned i = last - 1;; i--) {
         NR::Point const pi(d[i]);
         NR::Point const t(pi - d[last]);
         double const distsq = dot(t, t);
