@@ -507,11 +507,13 @@ TraceDialogImpl::TraceDialogImpl()
     potraceMultiScanHBox3.pack_start(potraceMultiScanMonoRadioButton, false, false, MARGIN);
     tips.set_tip(potraceMultiScanMonoRadioButton, _("Same as Color, but convert result to grayscale"));
 
+    // TRANSLATORS: "Stack" is a verb here
     potraceMultiScanStackButton.set_label(_("Stack"));
     potraceMultiScanStackButton.set_active(true);
     potraceMultiScanHBox3.pack_end(potraceMultiScanStackButton, false, false, MARGIN);
     tips.set_tip(potraceMultiScanStackButton, _("Stack scans vertically (no gaps) or tile horizontally (usually with gaps)"));
 
+    // TRANSLATORS: "Smooth" is a verb here
     potraceMultiScanSmoothButton.set_label(_("Smooth"));
     potraceMultiScanSmoothButton.set_active(true);
     potraceMultiScanHBox3.pack_end(potraceMultiScanSmoothButton, false, false, MARGIN);
