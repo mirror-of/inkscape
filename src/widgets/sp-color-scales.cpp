@@ -246,11 +246,22 @@ void ColorScales::_recalcColor( gboolean changing )
 /* Helpers for setting color value */
 gfloat get1( const GtkAdjustment *a )
 {
-	return (a->value)/255;
+	gfloat v = gtk_adjustment_get_value  (GTK_ADJUSTMENT (a));
+
+	if (v > 0.0 && v < 1.0) {
+		//				g_print ("%g\n", a->value);
+		return (v);
+	} else {
+		//				g_print ("%g, but %g\n", a->value, (a->value)/255);
+		return (v)/255;
+	}
 }
 
 void set255( GtkAdjustment *a, gfloat v)
 {
+	if (v > 1)
+	gtk_adjustment_set_value  (a, v);
+else
 	gtk_adjustment_set_value  (a, v*255.0);
 }
 
