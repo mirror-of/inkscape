@@ -186,6 +186,9 @@ sp_select_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
     } 
 }
 
+/**
+Returns item at point p in desktop; if state includes alt key mask, cyclically selects under; honors into_groups
+*/
 SPItem *
 sp_select_context_find_item (SPDesktop *desktop, NR::Point const p, int state, gboolean into_groups)
 {
@@ -237,7 +240,13 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                 } else {
                     sc->dragging = TRUE;
                     sc->moved = FALSE;
-                    sc->item = item;
+
+                    // remember the clicked item in sc->item:
+                    if (event->button.state & GDK_MOD1_MASK) { // alt-click
+                        sc->item = sp_select_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
+                    } else { // simple click
+                        sc->item = item;
+                    }
 
                     rb_escaped = drag_escaped = 0;
 
@@ -305,22 +314,22 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                 } else if (!drag_escaped) {
                     // item has not been moved -> do selecting
                     if (!selection->isEmpty()) {
-                        if (event->button.state & GDK_SHIFT_MASK) {
+                        if (event->button.state & GDK_SHIFT_MASK) { // shift-click, with previous selection
                             sp_sel_trans_reset_state(seltrans);
                             if (selection->includesItem(sc->item)) {
                                 selection->removeItem(sc->item);
                             } else {
                                 selection->addItem(sc->item);
                             }
-                        } else {
-                            if (selection->includesItem(sc->item)) {   /* FIXME: sc->item can be NULL */
+                        } else { // simple click, with previous selection
+                            if (selection->includesItem(sc->item)) {
                                 sp_sel_trans_increase_state(seltrans);
                             } else {
                                 sp_sel_trans_reset_state(seltrans);
                                 selection->setItem(sc->item);
                             }
                         }
-                    } else {
+                    } else { // simple or shift click, no previous selection
                         sp_sel_trans_reset_state(seltrans);
                         selection->setItem(sc->item);
                     }
@@ -502,7 +511,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                                     selection->setItem(sc->item);
                                 }
                             }
-                        } else {
+                        } else { // simple or shift click, no previous selection
                             sp_sel_trans_reset_state(seltrans);
                             selection->setItem(sc->item);
                         }
@@ -540,14 +549,15 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             sc->button_press_shift = FALSE;
 
                             if (sc->button_press_ctrl) {
-                                //item = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
+                                // go into groups
                                 item = sp_select_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
                                 group = sp_desktop_group_at_point(desktop, NR::Point(event->button.x, event->button.y));
                                 sc->button_press_ctrl = FALSE;
                             } else {
-                                //item = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), FALSE);
+                                // don't go into groups
                                 item = sp_select_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
                             }
+
                             // if there's both a group and an item at point, deselect group to prevent double selection
                             if (group) {
                                 if (selection->includesItem(group)) {

@@ -747,6 +747,9 @@ find_items_in_area (GSList *s, SPGroup *group, unsigned int dkey, NRRect const *
 
 extern gdouble nr_arena_global_delta;
 
+/**
+Returns true if an item is among the descendants of group (recursively).
+ */
 bool item_is_in_group (SPItem *item, SPGroup *group)
 {
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
@@ -760,6 +763,9 @@ bool item_is_in_group (SPItem *item, SPGroup *group)
 	return false;
 }
 
+/**
+Returns the first item from the list which is at the point, or NULL if none. 
+*/
 SPItem*
 sp_document_item_from_list_at_point_bottom (unsigned int dkey, const GSList *list, NR::Point const p, bool take_insensitive)
 {
@@ -774,7 +780,14 @@ sp_document_item_from_list_at_point_bottom (unsigned int dkey, const GSList *lis
 	return NULL;
 }
 
-
+/**
+Returns the topmost (in z-order) item from the descendants of group (recursively) which
+is at the point p, or NULL if none. Honors into_groups on whether to recurse into
+non-layer groups or not. Honors take_insensitive on whether to return insensitive
+items. If upto != NULL, then if item upto is encountered (at any level), stops searching
+upwards in z-order and returns what it has found so far (i.e. the found item is
+guaranteed to be lower than upto).
+ */
 SPItem*
 find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboolean into_groups, bool take_insensitive = false, SPItem *upto = NULL)
 {
@@ -811,6 +824,10 @@ find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboole
 	return seen;
 }
 
+/**
+Returns the bottommost non-layer group from the descendants of group which is at point
+p, or NULL if none.
+ */
 SPItem*
 find_group_at_point (unsigned int dkey, SPGroup *group, NR::Point const p)
 {
