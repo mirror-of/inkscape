@@ -16,7 +16,7 @@
 
 typedef struct {
 	gint code;
-	guchar *name;
+	gchar *name;
 } SPStyleProp;
 
 static const SPStyleProp props[] = {
@@ -257,6 +257,6 @@ sp_attribute_name (unsigned char id)
 {
 	if (id >= n_attrs) return NULL;
 
-	return props[id].name;
+	return (unsigned char*)props[id].name;
 }
 

@@ -178,7 +178,7 @@ struct _SPModulePrintClass {
 			       const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
 	unsigned int (* stroke) (SPModulePrint *modp, const NRBPath *bpath, const NRMatrixF *transform, const SPStyle *style,
 				 const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
-	unsigned int (* image) (SPModulePrint *modp, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
+	unsigned int (* image) (SPModulePrint *modp, gchar *px, unsigned int w, unsigned int h, unsigned int rs,
 				const NRMatrixF *transform, const SPStyle *style);
 };
 
