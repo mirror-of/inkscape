@@ -378,7 +378,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		break;
 	case GDK_SCROLL:
 		/* ctrl + wheel, pan left--right */
-		if (event->scroll.state & GDK_CONTROL_MASK) {
+		if (event->scroll.state & GDK_SHIFT_MASK) {
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
 				sp_desktop_scroll_world (desktop, wheel_scroll, 0);
@@ -390,7 +390,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				break;
 			}
 			/* shift + wheel, zoom in--out */
-		} else if (event->scroll.state & GDK_SHIFT_MASK) {
+		} else if (event->scroll.state & GDK_CONTROL_MASK) {
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
 				//				sp_desktop_get_display_area (desktop, &d);
