@@ -12,50 +12,50 @@ config.h: config.h.mingw
 dist:
 	deltree /y inkscape
 	mkdir inkscape
-	copy src\inkscape.exe inkscape
-	copy $(GTKDOS)\bin\libgtkmm-2.0-1.dll inkscape
-	copy $(GTKDOS)\bin\libsigc-1.2-5.dll inkscape
-	copy $(GTKDOS)\bin\libgdkmm-2.0-1.dll inkscape
-	copy $(GTKDOS)\bin\libglibmm-2.0-1.dll inkscape
-	copy $(GTKDOS)\bin\libatkmm-1.0-1.dll inkscape
-	copy $(GTKDOS)\bin\libpangomm-1.0-1.dll inkscape
-	copy $(GTKDOS)\bin\freetype-6.dll inkscape
-	copy $(GTKDOS)\bin\libart_lgpl_2-2.dll inkscape
-	copy $(GTKDOS)\bin\libatk-1.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libgdk-win32-2.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libgdk_pixbuf-2.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libglib-2.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libgmodule-2.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libgobject-2.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libgtk-win32-2.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libiconv-2.dll inkscape
-	copy $(GTKDOS)\bin\libpango-1.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libpangowin32-1.0-0.dll inkscape
-	copy $(GTKDOS)\bin\libpng12.dll inkscape
-	copy $(GTKDOS)\bin\msvcr70.dll inkscape
-	copy $(GTKDOS)\bin\zlib-1.dll inkscape
-	copy $(GTKDOS)\bin\zlib.dll inkscape
+	$(CP) src$(S)inkscape.exe inkscape
+#	$(CP) $(GTKDOS)$(S)bin$(S)libgtkmm-2.0-1.dll inkscape
+#	$(CP) $(GTKDOS)$(S)bin$(S)libgdkmm-2.0-1.dll inkscape
+#	$(CP) $(GTKDOS)$(S)bin$(S)libglibmm-2.0-1.dll inkscape
+#	$(CP) $(GTKDOS)$(S)bin$(S)libatkmm-1.0-1.dll inkscape
+#	$(CP) $(GTKDOS)$(S)bin$(S)libpangomm-1.0-1.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libsigc-1.2-5.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)freetype-6.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libart_lgpl_2-2.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libatk-1.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libgdk-win32-2.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libgdk_pixbuf-2.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libglib-2.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libgmodule-2.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libgobject-2.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libgtk-win32-2.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libiconv-2.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libpango-1.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libpangowin32-1.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libpng12.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)msvcr70.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)zlib-1.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)zlib.dll inkscape
 	strip -g inkscape/*.dll
 #These two don't like 'strip'
-	copy $(GTKDOS)\bin\iconv.dll inkscape
-	copy $(GTKDOS)\bin\intl.dll inkscape
-	xcopy /e /i $(GTKDOS)\etc inkscape\etc
-	mkdir inkscape\lib
-	xcopy /e /i $(GTKDOS)\lib\gtk-2.0 inkscape\lib\gtk-2.0
-	xcopy /e /i $(GTKDOS)\lib\glib-2.0 inkscape\lib\glib-2.0
-	xcopy /e /i $(GTKDOS)\lib\locale inkscape\lib\locale
-	xcopy /e /i $(GTKDOS)\lib\pango inkscape\lib\pango
-	mkdir inkscape\pixmaps
-	copy glade\*.xpm inkscape\pixmaps
-	copy glade\*.png inkscape\pixmaps
-	copy glade\*.svg inkscape\pixmaps
-	mkdir inkscape\data
-	mkdir inkscape\extensions
-	mkdir inkscape\locale
-	mkdir inkscape\modules
-	mkdir inkscape\samples
-	copy samples\*.svg inkscape\samples
-	copy samples\*.png inkscape\samples
+	$(CP) $(GTKDOS)$(S)bin$(S)iconv.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)intl.dll inkscape
+	xcopy /e /i $(GTKDOS)$(S)etc inkscape$(S)etc
+	mkdir inkscape$(S)lib
+	xcopy /e /i $(GTKDOS)$(S)lib$(S)gtk-2.0 inkscape$(S)lib$(S)gtk-2.0
+	xcopy /e /i $(GTKDOS)$(S)lib$(S)glib-2.0 inkscape$(S)lib$(S)glib-2.0
+	xcopy /e /i $(GTKDOS)$(S)lib$(S)locale inkscape$(S)lib$(S)locale
+	xcopy /e /i $(GTKDOS)$(S)lib$(S)pango inkscape$(S)lib$(S)pango
+	mkdir inkscape$(S)pixmaps
+	$(CP) glade$(S)*.xpm inkscape$(S)pixmaps
+	$(CP) glade$(S)*.png inkscape$(S)pixmaps
+	$(CP) glade$(S)*.svg inkscape$(S)pixmaps
+	mkdir inkscape$(S)data
+	mkdir inkscape$(S)extensions
+	mkdir inkscape$(S)locale
+	mkdir inkscape$(S)modules
+	mkdir inkscape$(S)samples
+	$(CP) samples$(S)*.svg inkscape$(S)samples
+	$(CP) samples$(S)*.png inkscape$(S)samples
 
 clean:
 	$(RM) -rf inkscape
