@@ -392,6 +392,16 @@ SPObject *sp_object_first_child(SPObject *parent)
 	return parent->children;
 }
 
+SPObject *sp_object_last_child(SPObject *parent)
+{
+	if (!sp_object_first_child(parent))
+		return NULL;
+	SPObject *child;
+	for (child = sp_object_first_child(parent); SP_OBJECT_NEXT (child); child = SP_OBJECT_NEXT (child)) 
+		;
+	return child;
+}
+
 SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr)
 {
 	g_return_val_if_fail(object != NULL, NULL);

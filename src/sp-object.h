@@ -326,6 +326,7 @@ void sp_object_detach (SPObject *parent, SPObject *object);
 void sp_object_detach_unref (SPObject *parent, SPObject *object);
 
 SPObject *sp_object_first_child(SPObject *parent);
+SPObject *sp_object_last_child(SPObject *parent);
 SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr);
 
 void sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr, unsigned int cloned);
