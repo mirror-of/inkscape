@@ -794,12 +794,14 @@ sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc)
 	// we update cursor without scrolling, because this position may not be final;
 	// item_handler moves cusros to the point of click immediately
 	sp_text_context_update_cursor (tc, false);
+    sp_text_context_update_text_selection (tc);
 }
 
 static void
 sp_text_context_selection_modified (SPSelection *selection, guint flags, SPTextContext *tc)
 {
 	sp_text_context_update_cursor (tc);
+    sp_text_context_update_text_selection (tc);
 }
 
 static void
