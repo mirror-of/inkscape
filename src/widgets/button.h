@@ -32,7 +32,7 @@ enum {
 };
 
 struct _SPBChoiceData {
-	unsigned char *px;
+	guchar *px;
 	SPAction *action;
 };
 
@@ -82,8 +82,8 @@ unsigned int sp_button_get_option (SPButton *button);
 void sp_button_set_option (SPButton *button, unsigned int option);
 
 GtkWidget *sp_button_new_from_data (unsigned int size, unsigned int type,
-				    const unsigned char *name,
-				    const unsigned char *tip,
+				    const gchar *name,
+				    const gchar *tip,
 				    GtkTooltips *tooltips);
 
 #endif

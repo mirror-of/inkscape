@@ -80,7 +80,7 @@ sp_toolbox_class_init (SPToolBoxClass * klass)
 	widget_class = (GtkWidgetClass *) klass;
 	toolbox_class = (SPToolBoxClass *) klass;
 
-	parent_class = gtk_type_class (gtk_vbox_get_type ());
+	parent_class = (GtkVBoxClass*)gtk_type_class (gtk_vbox_get_type ());
 
 	toolbox_signals[SET_STATE] = g_signal_new ("set_state",
 		G_TYPE_FROM_CLASS(object_class),
@@ -266,7 +266,7 @@ sp_toolbox_new (GtkWidget * contents, const gchar * name, const gchar * internal
 	if (!tt)
 	  tt = gtk_tooltips_new ();
 	
-	t = gtk_type_new (SP_TYPE_TOOLBOX);
+	t = (SPToolBox*)gtk_type_new (SP_TYPE_TOOLBOX);
 
 	t->contents = contents;
 	t->name = g_strdup (name);

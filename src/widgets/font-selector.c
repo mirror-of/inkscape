@@ -82,7 +82,7 @@ static void sp_font_selector_size_changed (GtkEditable *editable, SPFontSelector
 
 static void sp_font_selector_emit_set (SPFontSelector *fsel);
 
-static const guchar *sizes[] = {
+static const gchar *sizes[] = {
 	"8", "9", "10", "11", "12", "13", "14",
 	"16", "18", "20", "22", "24", "26", "28",
 	"32", "36", "40", "48", "56", "64", "72",
@@ -117,7 +117,7 @@ sp_font_selector_class_init (SPFontSelectorClass *klass)
   
 	object_class = (GtkObjectClass *) klass;
   
-	fs_parent_class = gtk_type_class (GTK_TYPE_HBOX);
+	fs_parent_class = (GtkHBoxClass*)gtk_type_class (GTK_TYPE_HBOX);
 
 	fs_signals[FONT_SET] = gtk_signal_new ("font_set",
 					       GTK_RUN_FIRST,
@@ -261,13 +261,13 @@ sp_font_selector_family_select_row (GtkCList *clist, gint row, gint column, GdkE
 	gtk_clist_clear (GTK_CLIST (fsel->style));
 
 	if (fsel->familyidx < fsel->families.length) {
-		const unsigned char *family;
+		const gchar *family;
 		family = fsel->families.names[fsel->familyidx];
 		if (nr_type_directory_style_list_get (family, &fsel->styles)) {
 			gint i;
 			gtk_clist_freeze (GTK_CLIST (fsel->style));
 			for (i = 0; i < fsel->styles.length; i++) {
-				const unsigned char *p;
+				const gchar *p;
 
 				p = fsel->styles.names[i] + strlen (family);
 				while (*p && isspace (*p)) p += 1;
@@ -331,7 +331,7 @@ sp_font_selector_new (void)
 {
 	SPFontSelector *fsel;
   
-	fsel = gtk_type_new (SP_TYPE_FONT_SELECTOR);
+	fsel = (SPFontSelector*)gtk_type_new (SP_TYPE_FONT_SELECTOR);
   
 	gtk_clist_select_row (GTK_CLIST (fsel->family), 0, 0);
 
@@ -347,7 +347,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 	scl = GTK_CLIST (fsel->style);
 
 	if (font) {
-		unsigned char n[256], s[8];
+		gchar n[256], s[8];
 		int i;
 		nr_typeface_family_name_get (NR_FONT_TYPEFACE (font), n, 256);
 		for (i = 0; i < fsel->families.length; i++) {
@@ -371,7 +371,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 }
 
 void
-sp_font_selector_set_font_fuzzy (SPFontSelector *fsel, const guchar *family, const guchar *style)
+sp_font_selector_set_font_fuzzy (SPFontSelector *fsel, const gchar *family, const gchar *style)
 {
 	NRTypeFace *tf;
 	NRFont *font;
@@ -399,7 +399,7 @@ struct _SPFontPreview
 
 	NRFont *font;
 	NRRasterFont *rfont;
-	unsigned char *phrase;
+	gchar *phrase;
 	unsigned long rgba;
 };
 
@@ -445,7 +445,7 @@ sp_font_preview_class_init (SPFontPreviewClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
   
-	fp_parent_class = gtk_type_class (GTK_TYPE_DRAWING_AREA);
+	fp_parent_class = (GtkDrawingAreaClass*)gtk_type_class (GTK_TYPE_DRAWING_AREA);
 
 	object_class->destroy = sp_font_preview_destroy;
 
@@ -502,7 +502,7 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 	if (GTK_WIDGET_DRAWABLE (widget)) {
 		if (fprev->rfont) {
 			NRTypeFace *tface;
-			unsigned char *p;
+			gchar *p;
 			int glyphs[SPFP_MAX_LEN];
 			int hpos[SPFP_MAX_LEN];
 			float px, py;
@@ -526,7 +526,7 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 				NRRectF gbox;
 				unival = g_utf8_get_char (p);
 				glyphs[len] = nr_typeface_lookup_default (tface, unival);
-				hpos[len] = px;
+				hpos[len] = (int)px;
 				nr_rasterfont_glyph_advance_get (fprev->rfont, glyphs[len], &adv);
 				nr_rasterfont_glyph_area_get (fprev->rfont, glyphs[len], &gbox);
 				bbox.x0 = MIN (px + gbox.x0, bbox.x0);
@@ -541,7 +541,7 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			starty = widget->allocation.height - (widget->allocation.height - (bbox.y1 - bbox.y0)) / 2 - bbox.y1;
 			for (y = event->area.y; y < event->area.y + event->area.height; y += 64) {
 				for (x = event->area.x; x < event->area.x + event->area.width; x += 64) {
-					unsigned char *ps;
+					guchar *ps;
 					NRPixBlock pb, m;
 					int x0, y0, x1, y1;
 					int i;
@@ -580,7 +580,7 @@ sp_font_preview_new (void)
 {
 	GtkWidget *w;
 
-	w = gtk_type_new (SP_TYPE_FONT_PREVIEW);
+	w = (GtkWidget*)gtk_type_new (SP_TYPE_FONT_PREVIEW);
 
 	return w;
 }
@@ -611,7 +611,7 @@ sp_font_preview_set_rgba32 (SPFontPreview *fprev, guint32 rgba)
 }
 
 void
-sp_font_preview_set_phrase (SPFontPreview *fprev, const guchar *phrase)
+sp_font_preview_set_phrase (SPFontPreview *fprev, const gchar *phrase)
 {
 	if (fprev->phrase) g_free (fprev->phrase);
 	if (phrase) {

@@ -42,7 +42,7 @@ GtkType sp_font_selector_get_type (void);
 GtkWidget *sp_font_selector_new (void);
 
 void sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font);
-void sp_font_selector_set_font_fuzzy (SPFontSelector *fsel, const guchar *family, const guchar *style);
+void sp_font_selector_set_font_fuzzy (SPFontSelector *fsel, const gchar *family, const gchar *style);
 
 NRFont *sp_font_selector_get_font (SPFontSelector *fsel);
 
@@ -54,7 +54,7 @@ GtkWidget *sp_font_preview_new (void);
 
 void sp_font_preview_set_font (SPFontPreview *fprev, NRFont *font);
 void sp_font_preview_set_rgba32 (SPFontPreview *fprev, guint32 rgba);
-void sp_font_preview_set_phrase (SPFontPreview *fprev, const guchar *phrase);
+void sp_font_preview_set_phrase (SPFontPreview *fprev, const gchar *phrase);
 
 G_END_DECLS
 

@@ -68,7 +68,7 @@ static void sp_color_selector_rgba_entry_changed (GtkEntry *entry, SPColorSelect
 
 static void sp_color_selector_update_sliders (SPColorSelector *csel, guint channels);
 
-static const guchar *sp_color_selector_hue_map (void);
+static const gchar *sp_color_selector_hue_map (void);
 
 static GtkVBoxClass *parent_class;
 static guint csel_signals[LAST_SIGNAL] = {0};
@@ -100,28 +100,28 @@ sp_color_selector_class_init (SPColorSelectorClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_VBOX);
+	parent_class = (GtkVBoxClass*)gtk_type_class (GTK_TYPE_VBOX);
 
 	csel_signals[GRABBED] =  gtk_signal_new ("grabbed",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPColorSelectorClass, grabbed),
 						 gtk_marshal_NONE__NONE,
 						 GTK_TYPE_NONE, 0);
 	csel_signals[DRAGGED] =  gtk_signal_new ("dragged",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPColorSelectorClass, dragged),
 						 gtk_marshal_NONE__NONE,
 						 GTK_TYPE_NONE, 0);
 	csel_signals[RELEASED] = gtk_signal_new ("released",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPColorSelectorClass, released),
 						 gtk_marshal_NONE__NONE,
 						 GTK_TYPE_NONE, 0);
 	csel_signals[CHANGED] =  gtk_signal_new ("changed",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPColorSelectorClass, changed),
 						 gtk_marshal_NONE__NONE,
@@ -161,12 +161,12 @@ sp_color_selector_init (SPColorSelector *csel)
 		/* Slider */
 		csel->s[i] = sp_color_slider_new (csel->a[i]);
 		gtk_widget_show (csel->s[i]);
-		gtk_table_attach (GTK_TABLE (t), csel->s[i], 1, 2, i, i + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, XPAD, YPAD);
+		gtk_table_attach (GTK_TABLE (t), csel->s[i], 1, 2, i, i + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), XPAD, YPAD);
 
 		/* Spinbutton */
 		csel->b[i] = gtk_spin_button_new (GTK_ADJUSTMENT (csel->a[i]), 0.01, 2);
 		gtk_widget_show (csel->b[i]);
-		gtk_table_attach (GTK_TABLE (t), csel->b[i], 2, 3, i, i + 1, 0, 0, XPAD, YPAD);
+		gtk_table_attach (GTK_TABLE (t), csel->b[i], 2, 3, i, i + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD);
 
 		/* Attach channel value to adjustment */
 		gtk_object_set_data (GTK_OBJECT (csel->a[i]), "channel", GINT_TO_POINTER (i));
@@ -239,7 +239,7 @@ sp_color_selector_new (void)
 {
 	SPColorSelector *csel;
 
-	csel = gtk_type_new (SP_TYPE_COLOR_SELECTOR);
+	csel = (SPColorSelector*)gtk_type_new (SP_TYPE_COLOR_SELECTOR);
 
 	sp_color_selector_set_any_rgba_float (csel, 1.0, 1.0, 1.0, 1.0);
 
@@ -584,8 +584,8 @@ sp_color_selector_get_rgba32 (SPColorSelector *csel)
 	gfloat c[4];
 	guint32 rgba;
 
-	g_return_val_if_fail (csel != NULL, 0.0);
-	g_return_val_if_fail (SP_IS_COLOR_SELECTOR (csel), 0.0);
+	g_return_val_if_fail (csel != NULL, 0L);
+	g_return_val_if_fail (SP_IS_COLOR_SELECTOR (csel), 0L);
 
 	sp_color_selector_get_rgba_floatv (csel, c);
 
@@ -641,7 +641,7 @@ sp_color_selector_set_mode (SPColorSelector *csel, SPColorSelectorMode mode)
 		gtk_label_set_text (GTK_LABEL (csel->l[1]), _("Saturation:"));
 		gtk_label_set_text (GTK_LABEL (csel->l[2]), _("Value:"));
 		gtk_label_set_text (GTK_LABEL (csel->l[3]), _("Alpha:"));
-		sp_color_slider_set_map (SP_COLOR_SLIDER (csel->s[0]), sp_color_selector_hue_map ());
+		sp_color_slider_set_map (SP_COLOR_SLIDER (csel->s[0]), (guchar*)sp_color_selector_hue_map ());
 		gtk_widget_hide (csel->l[4]);
 		gtk_widget_hide (csel->s[4]);
 		gtk_widget_hide (csel->b[4]);
@@ -811,7 +811,7 @@ sp_color_selector_update_sliders (SPColorSelector *csel, guint channels)
 						    SP_RGBA32_F_COMPOSE (csel->a[0]->value, csel->a[1]->value, csel->a[2]->value, 1.0));
 		}
 		if (!csel->updatingrgba) {
-			guchar s[32];
+			gchar s[32];
 			/* Update RGBA entry */
 			g_snprintf (s, 32, "%08x", SP_RGBA32_F_COMPOSE (csel->a[0]->value, csel->a[1]->value, csel->a[2]->value, csel->a[3]->value));
 			gtk_entry_set_text (GTK_ENTRY (csel->rgbae), s);
@@ -843,7 +843,7 @@ sp_color_selector_update_sliders (SPColorSelector *csel, guint channels)
 						    SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 1.0));
 		}
 		if (!csel->updatingrgba) {
-			guchar s[32];
+			gchar s[32];
 			/* Update RGBA entry */
 			sp_color_hsv_to_rgb_floatv (rgb0, csel->a[0]->value, csel->a[1]->value, csel->a[2]->value);
 			g_snprintf (s, 32, "%08x", SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], csel->a[3]->value));
@@ -901,15 +901,15 @@ sp_color_selector_update_sliders (SPColorSelector *csel, guint channels)
 #endif
 }
 
-static const guchar *
+static const gchar *
 sp_color_selector_hue_map (void)
 {
-	static guchar *map = NULL;
+	static gchar *map = NULL;
 
 	if (!map) {
-		guchar *p;
+		gchar *p;
 		gint h;
-		map = g_new (guchar, 4 * 1024);
+		map = g_new (gchar, 4 * 1024);
 		p = map;
 		for (h = 0; h < 1024; h++) {
 			gfloat rgb[3];

@@ -84,28 +84,28 @@ sp_color_slider_class_init (SPColorSliderClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+	parent_class = (GtkWidgetClass*)gtk_type_class (GTK_TYPE_WIDGET);
 
 	slider_signals[GRABBED] = gtk_signal_new ("grabbed",
-						  GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						  (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						  GTK_CLASS_TYPE(object_class),
 						  GTK_SIGNAL_OFFSET (SPColorSliderClass, grabbed),
 						  gtk_marshal_NONE__NONE,
 						  GTK_TYPE_NONE, 0);
 	slider_signals[DRAGGED] = gtk_signal_new ("dragged",
-						  GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						  (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						  GTK_CLASS_TYPE(object_class),
 						  GTK_SIGNAL_OFFSET (SPColorSliderClass, dragged),
 						  gtk_marshal_NONE__NONE,
 						  GTK_TYPE_NONE, 0);
 	slider_signals[RELEASED] = gtk_signal_new ("released",
-						  GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						  (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						  GTK_CLASS_TYPE(object_class),
 						  GTK_SIGNAL_OFFSET (SPColorSliderClass, released),
 						  gtk_marshal_NONE__NONE,
 						  GTK_TYPE_NONE, 0);
 	slider_signals[CHANGED] = gtk_signal_new ("changed",
-						  GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						  (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						  GTK_CLASS_TYPE(object_class),
 						  GTK_SIGNAL_OFFSET (SPColorSliderClass, changed),
 						  gtk_marshal_NONE__NONE,
@@ -264,8 +264,8 @@ sp_color_slider_button_press (GtkWidget *widget, GdkEventButton *event)
 		gtk_adjustment_set_value (slider->adjustment, CLAMP ((gfloat) (event->x - cx) / cw, 0.0, 1.0));
 		gtk_signal_emit (GTK_OBJECT (slider), slider_signals[DRAGGED]);
 		gdk_pointer_grab (widget->window, FALSE,
-				  GDK_POINTER_MOTION_MASK |
-				  GDK_BUTTON_RELEASE_MASK,
+				  (GdkEventMask)(GDK_POINTER_MOTION_MASK |
+				  GDK_BUTTON_RELEASE_MASK),
 				  NULL, NULL, event->time);
 	}
 
@@ -312,7 +312,7 @@ sp_color_slider_new (GtkAdjustment *adjustment)
 {
 	SPColorSlider *slider;
 
-	slider = gtk_type_new (SP_TYPE_COLOR_SLIDER);
+	slider = (SPColorSlider*)gtk_type_new (SP_TYPE_COLOR_SLIDER);
 
 	sp_color_slider_set_adjustment (slider, adjustment);
 
@@ -416,11 +416,11 @@ sp_color_slider_adjustment_value_changed (GtkAdjustment *adjustment, SPColorSlid
 			gfloat value;
 			value = slider->value;
 			slider->value = adjustment->value;
-			ax = cx + value * cw - ARROW_SIZE / 2 - 1;
-			ay = ch - ARROW_SIZE + cy * 2 - 1;
+			ax = (int)(cx + value * cw - ARROW_SIZE / 2 - 1);
+			ay = (int)(ch - ARROW_SIZE + cy * 2 - 1);
 			gtk_widget_queue_draw_area (widget, ax, ay, ARROW_SIZE + 2, ARROW_SIZE + 2);
-			ax = cx + slider->value * cw - ARROW_SIZE / 2 - 1;
-			ay = ch - ARROW_SIZE + cy * 2 - 1;
+			ax = (int)(cx + slider->value * cw - ARROW_SIZE / 2 - 1);
+			ay = (int)(ch - ARROW_SIZE + cy * 2 - 1);
 			gtk_widget_queue_draw_area (widget, ax, ay, ARROW_SIZE + 2, ARROW_SIZE + 2);
 		} else {
 			slider->value = adjustment->value;
@@ -451,9 +451,9 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 	carea.height = widget->allocation.height - 2 * carea.y;
 
 	/* Arrow area */
-	aarea.x = slider->value * carea.width - ARROW_SIZE / 2 + carea.x;
+	aarea.x = (int)(slider->value * carea.width - ARROW_SIZE / 2 + carea.x);
 	aarea.width = ARROW_SIZE;
-	aarea.y = carea.height - ARROW_SIZE + carea.y * 2;
+	aarea.y = (int)(carea.height - ARROW_SIZE + carea.y * 2);
 	aarea.height = ARROW_SIZE;
 
 	/* Actual paintable area */
@@ -489,7 +489,7 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 
 	/* Draw shadow */
 	gtk_paint_shadow (widget->style, widget->window,
-			  widget->state, GTK_SHADOW_IN,
+			  (GtkStateType)widget->state, GTK_SHADOW_IN,
 			  area, widget, "colorslider",
 			  0, 0,
 			  warea.width, warea.height);
@@ -506,7 +506,7 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 	if (gdk_rectangle_intersect (area, &aarea, &apaint)) {
 		/* Draw arrow */
 		gtk_draw_arrow (widget->style, widget->window,
-				widget->state, GTK_SHADOW_OUT,
+				(GtkStateType)widget->state, GTK_SHADOW_OUT,
 				GTK_ARROW_UP, TRUE,
 				aarea.x, aarea.y,
 				ARROW_SIZE, ARROW_SIZE);

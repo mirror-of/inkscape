@@ -39,6 +39,6 @@ struct _SPMenuClass {
 GType sp_menu_get_type (void);
 
 GtkWidget *sp_menu_new (void);
-void sp_menu_append (SPMenu *menu, const unsigned char *name, const unsigned char *tip, const void *data);
+void sp_menu_append (SPMenu *menu, const gchar *name, const gchar *tip, const void *data);
 
 #endif

@@ -34,7 +34,7 @@ typedef enum {
 
 struct _SPColorSelector {
 	GtkVBox vbox;
-	gint8 mode;
+	SPColorSelectorMode mode;
 	guint updating : 1;
 	guint updatingrgba : 1;
 	guint dragging : 1;

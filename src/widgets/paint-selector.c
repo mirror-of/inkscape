@@ -54,7 +54,7 @@ static void sp_paint_selector_class_init (SPPaintSelectorClass *klass);
 static void sp_paint_selector_init (SPPaintSelector *slider);
 static void sp_paint_selector_destroy (GtkObject *object);
 
-static GtkWidget *sp_paint_selector_style_button_add (SPPaintSelector *psel, const guchar *px, SPPaintSelectorMode mode, GtkRadioButton *last);
+static GtkWidget *sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *px, SPPaintSelectorMode mode, GtkRadioButton *last);
 static void sp_paint_selector_style_button_toggled (GtkToggleButton *tb, SPPaintSelector *psel);
 
 static void sp_paint_selector_set_mode_empty (SPPaintSelector *psel);
@@ -97,34 +97,34 @@ sp_paint_selector_class_init (SPPaintSelectorClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_VBOX);
+	parent_class = (GtkVBoxClass*)gtk_type_class (GTK_TYPE_VBOX);
 
 	psel_signals[MODE_CHANGED] = gtk_signal_new ("mode_changed",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPPaintSelectorClass, mode_changed),
 						 gtk_marshal_NONE__UINT,
 						 GTK_TYPE_NONE, 1, GTK_TYPE_UINT);
 	psel_signals[GRABBED] =  gtk_signal_new ("grabbed",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPPaintSelectorClass, grabbed),
 						 gtk_marshal_NONE__NONE,
 						 GTK_TYPE_NONE, 0);
 	psel_signals[DRAGGED] =  gtk_signal_new ("dragged",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPPaintSelectorClass, dragged),
 						 gtk_marshal_NONE__NONE,
 						 GTK_TYPE_NONE, 0);
 	psel_signals[RELEASED] = gtk_signal_new ("released",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPPaintSelectorClass, released),
 						 gtk_marshal_NONE__NONE,
 						 GTK_TYPE_NONE, 0);
 	psel_signals[CHANGED] =  gtk_signal_new ("changed",
-						 GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						 GTK_CLASS_TYPE(object_class),
 						 GTK_SIGNAL_OFFSET (SPPaintSelectorClass, changed),
 						 gtk_marshal_NONE__NONE,
@@ -141,7 +141,7 @@ sp_paint_selector_init (SPPaintSelector *psel)
 {
 	GtkWidget *w;
 
-	psel->mode = -1;
+	psel->mode = (SPPaintSelectorMode)-1; // huh?  do you mean 0xff?
 
 	/* Paint style button box */
 	psel->style = gtk_hbox_new (FALSE, 0);
@@ -192,7 +192,7 @@ sp_paint_selector_destroy (GtkObject *object)
 }
 
 static GtkWidget *
-sp_paint_selector_style_button_add (SPPaintSelector *psel, const guchar *pixmap, SPPaintSelectorMode mode, GtkRadioButton *last)
+sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *pixmap, SPPaintSelectorMode mode, GtkRadioButton *last)
 {
 	GtkWidget *b, *w;
 	gchar *path;
@@ -216,7 +216,7 @@ static void
 sp_paint_selector_style_button_toggled (GtkToggleButton *tb, SPPaintSelector *psel)
 {
 	if (!psel->update && gtk_toggle_button_get_active (tb)) {
-		sp_paint_selector_set_mode (psel, GPOINTER_TO_UINT (gtk_object_get_data (GTK_OBJECT (tb), "mode")));
+		sp_paint_selector_set_mode (psel, (SPPaintSelectorMode)GPOINTER_TO_UINT (gtk_object_get_data (GTK_OBJECT (tb), "mode")));
 	}
 }
 
@@ -225,7 +225,7 @@ sp_paint_selector_new (void)
 {
 	SPPaintSelector *psel;
 
-	psel = gtk_type_new (SP_TYPE_PAINT_SELECTOR);
+	psel = (SPPaintSelector*)gtk_type_new (SP_TYPE_PAINT_SELECTOR);
 
 	sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
 
@@ -283,7 +283,7 @@ sp_paint_selector_set_color_rgba_floatv (SPPaintSelector *psel, gfloat *rgba)
 #endif
 	sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
 
-	csel = gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
+	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 
 	sp_color_selector_set_any_rgba_float (csel, rgba[0], rgba[1], rgba[2], rgba[3]);
 }
@@ -297,7 +297,7 @@ sp_paint_selector_set_color_cmyka_floatv (SPPaintSelector *psel, gfloat *cmyka)
 #endif
 	sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
 
-	csel = gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
+	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 
 	sp_color_selector_set_any_cmyka_float (csel, cmyka[0], cmyka[1], cmyka[2], cmyka[3], cmyka[4]);
 }
@@ -311,7 +311,7 @@ sp_paint_selector_set_gradient_linear (SPPaintSelector *psel, SPGradient *vector
 #endif
 	sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR);
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	sp_gradient_selector_set_mode (gsel, SP_GRADIENT_SELECTOR_MODE_LINEAR);
 	sp_gradient_selector_set_vector (gsel, (vector) ? SP_OBJECT_DOCUMENT (vector) : NULL, vector);
@@ -326,7 +326,7 @@ sp_paint_selector_set_lgradient_position (SPPaintSelector *psel, gdouble x0, gdo
 	g_return_if_fail (SP_IS_PAINT_SELECTOR (psel));
 	g_return_if_fail (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR);
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	sp_gradient_selector_set_lgradient_position (gsel, x0, y0, x1, y1);
 }
@@ -340,7 +340,7 @@ sp_paint_selector_set_gradient_radial (SPPaintSelector *psel, SPGradient *vector
 #endif
 	sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL);
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	sp_gradient_selector_set_mode (gsel, SP_GRADIENT_SELECTOR_MODE_RADIAL);
 	sp_gradient_selector_set_vector (gsel, (vector) ? SP_OBJECT_DOCUMENT (vector) : NULL, vector);
@@ -355,7 +355,7 @@ sp_paint_selector_set_rgradient_position (SPPaintSelector *psel, gdouble cx, gdo
 	g_return_if_fail (SP_IS_PAINT_SELECTOR (psel));
 	g_return_if_fail (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL);
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	sp_gradient_selector_set_rgradient_position (gsel, cx, cy, fx, fy, r);
 }
@@ -370,7 +370,7 @@ sp_paint_selector_set_gradient_bbox (SPPaintSelector *psel, gdouble x0, gdouble 
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	sp_gradient_selector_set_bbox (gsel, x0, y0, x1, y1);
 }
@@ -385,7 +385,7 @@ sp_paint_selector_set_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrixF *
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	sp_gradient_selector_set_gs2d_matrix_f (gsel, gs2d);
 }
@@ -400,7 +400,7 @@ sp_paint_selector_get_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrixF *
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	sp_gradient_selector_get_gs2d_matrix_f (gsel, gs2d);
 }
@@ -412,7 +412,7 @@ sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, unsigned int u
 	g_return_if_fail (SP_IS_PAINT_SELECTOR (psel));
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 	sp_gradient_selector_set_units (gsel, units);
 	sp_gradient_selector_set_spread (gsel, spread);
 }
@@ -424,7 +424,7 @@ sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, unsigned int *
 	g_return_if_fail (SP_IS_PAINT_SELECTOR (psel));
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 	if (units) *units = gsel->gradientUnits;
 	if (spread) *spread = gsel->gradientSpread;
 }
@@ -436,7 +436,7 @@ sp_paint_selector_get_rgba_floatv (SPPaintSelector *psel, gfloat *rgba)
 
 	g_return_if_fail (psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_RGB);
 
-	csel = gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
+	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 
 	sp_color_selector_get_rgba_floatv (csel, rgba);
 }
@@ -448,7 +448,7 @@ sp_paint_selector_get_cmyka_floatv (SPPaintSelector *psel, gfloat *cmyka)
 
 	g_return_if_fail (psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
 
-	csel = gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
+	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 
 	sp_color_selector_get_cmyka_floatv (csel, cmyka);
 }
@@ -461,7 +461,7 @@ sp_paint_selector_get_gradient_vector (SPPaintSelector *psel)
 	g_return_val_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			      (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL), NULL);
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	return sp_gradient_selector_get_vector (gsel);
 }
@@ -474,7 +474,7 @@ sp_paint_selector_get_gradient_position_floatv (SPPaintSelector *psel, gfloat *p
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
 
-	gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 
 	if (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) {
 		sp_gradient_selector_get_lgradient_position_floatv (gsel, pos);
@@ -589,7 +589,7 @@ sp_paint_selector_system_color_set (SPPaintSelector *psel, const SPColor *color,
 	if ((psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_RGB) ||
 	    (psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_CMYK)) {
 		GtkToggleButton *gd;
-		gd = g_object_get_data (G_OBJECT (psel->selector), "get_dropper");
+		gd = (GtkToggleButton*)g_object_get_data (G_OBJECT (psel->selector), "get_dropper");
 		if (gtk_toggle_button_get_active (gd)) {
 			if (psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_RGB) {
 				float rgba[4];
@@ -658,7 +658,7 @@ sp_paint_selector_color_mode_select (GtkWidget *menu, SPColorSelectorMode cselmo
 	SPColorSelector *csel;
 	SPPaintSelectorMode pselmode;
 
-	csel = gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
+	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 	/* We have to set it manually here, because RGB/HSV is ignored by psel */
 	sp_color_selector_set_mode (csel, cselmode);
 
@@ -717,8 +717,8 @@ sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mod
 
 	if ((psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_RGB) || (psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_CMYK)) {
 		/* Already have color selector */
-		csel = gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
-		cselmode = gtk_object_get_data (GTK_OBJECT (psel->selector), "mode-menu");
+		csel = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
+		cselmode = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (psel->selector), "mode-menu");
 	} else {
 		GtkWidget *vb, *hb, *l, *m, *cb;
 		if (psel->selector) {
@@ -833,7 +833,7 @@ sp_paint_selector_set_mode_gradient (SPPaintSelector *psel, SPPaintSelectorMode 
 
 	if ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) || (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL)) {
 		/* Already have gradient selector */
-		gsel = gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+		gsel = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
 	} else {
 		if (psel->selector) {
 			gtk_widget_destroy (psel->selector);

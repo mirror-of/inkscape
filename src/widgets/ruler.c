@@ -108,7 +108,7 @@ sp_hruler_motion_notify (GtkWidget      *widget,
   if (event->is_hint)
     gdk_window_get_pointer (widget->window, &x, NULL, NULL);
   else
-    x = event->x;
+    x = (int)event->x;
 
   ruler->position = ruler->lower + ((ruler->upper - ruler->lower) * x) / widget->allocation.width;
 
@@ -185,7 +185,7 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
    *  text_width = gdk_string_width(font, unit_str), so that the result
    *  for the scale looks consistent with an accompanying vruler
    */
-  scale = ceil (ruler->max_size / ruler->metric->pixels_per_unit);
+  scale = (int)(ceil (ruler->max_size / ruler->metric->pixels_per_unit));
   sprintf (unit_str, "%d", scale);
   text_width = strlen (unit_str) * digit_height + 1;
 
@@ -389,7 +389,7 @@ sp_vruler_motion_notify (GtkWidget      *widget,
   if (event->is_hint)
     gdk_window_get_pointer (widget->window, NULL, &y, NULL);
   else
-    y = event->y;
+    y = (int)event->y;
 
   ruler->position = ruler->lower + ((ruler->upper - ruler->lower) * y) / widget->allocation.height;
 
@@ -465,7 +465,7 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
    *   of this displayed text. Use this height to find a scale which
    *   leaves sufficient room for drawing the ruler.  
    */
-  scale = ceil (ruler->max_size / ruler->metric->pixels_per_unit);
+  scale = (int)ceil (ruler->max_size / ruler->metric->pixels_per_unit);
   sprintf (unit_str, "%d", scale);
   text_height = strlen (unit_str) * digit_height + 1;
 

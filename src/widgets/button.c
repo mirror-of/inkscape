@@ -96,7 +96,7 @@ sp_button_class_init (SPButtonClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (GtkWidgetClass*)g_type_class_peek_parent (klass);
 
 	object_class->destroy = sp_button_destroy;
 
@@ -514,7 +514,7 @@ sp_button_new (unsigned int size, unsigned int type, SPAction *action, GtkToolti
 {
 	SPButton *button;
 
-	button = g_object_new (SP_TYPE_BUTTON, NULL);
+	button = (SPButton *)g_object_new (SP_TYPE_BUTTON, NULL);
 
 	button->noptions = 1;
 	button->type = type;
@@ -532,7 +532,7 @@ sp_button_menu_new (unsigned int size, unsigned int type, unsigned int noptions,
 {
 	SPButton *button;
 
-	button = g_object_new (SP_TYPE_BUTTON, NULL);
+	button = (SPButton *)g_object_new (SP_TYPE_BUTTON, NULL);
 
 	button->noptions = CLAMP (noptions, 1, 16);
 	button->type = type;
@@ -644,11 +644,11 @@ static void
 sp_button_set_composed_tooltip (SPButton *button, GtkWidget *widget, SPAction *action)
 {
 	if (action->shortcut) {
-		unsigned char c[16384];
-		unsigned char *as, *cs, *ss;
-		as = (action->shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "";
-		cs = (action->shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "";
-		ss = (action->shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "";
+		gchar c[16384];
+		gchar *as, *cs, *ss;
+		as = (gchar*)((action->shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "");
+		cs = (gchar*)((action->shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "");
+		ss = (gchar*)((action->shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "");
 		g_snprintf (c, 16384, "%s [%s%s%s%s]", action->tip, as, cs, ss, gdk_keyval_name (action->shortcut & 0xffffff));
 		gtk_tooltips_set_tip (button->tooltips, widget, c, NULL);
 	} else {
@@ -684,7 +684,7 @@ sp_button_paint (SPButton *button, GdkRectangle *area)
 	x1 = MIN (area->x + area->width, iarea.x1);
 	y1 = MIN (area->y + area->height, iarea.y1);
 
-	gtk_paint_box (widget->style, widget->window, widget->state,
+	gtk_paint_box (widget->style, widget->window, (GtkStateType)widget->state,
 		       (button->down) ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
 		       area, widget, "button",
 		       widget->allocation.x,
@@ -842,8 +842,8 @@ sp_button_paint_arrow (NRRectL *parea, int x0, int y0, int x1, int y1, unsigned 
 GtkWidget *
 sp_button_new_from_data (unsigned int size,
 			 unsigned int type,
-			 const unsigned char *name,
-			 const unsigned char *tip,
+			 const gchar *name,
+			 const gchar *tip,
 			 GtkTooltips *tooltips)
 {
 	GtkWidget *button;

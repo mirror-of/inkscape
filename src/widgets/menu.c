@@ -53,7 +53,7 @@ sp_menu_class_init (SPMenuClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (GtkMenuClass*)g_type_class_peek_parent (klass);
 
 	object_class->destroy = sp_menu_destroy;
 
@@ -88,7 +88,7 @@ sp_menu_new (void)
 {
 	SPMenu *menu;
 
-	menu = g_object_new (SP_TYPE_MENU, NULL);
+	menu = (SPMenu*)g_object_new (SP_TYPE_MENU, NULL);
 
 	menu->tt = gtk_tooltips_new ();
 
@@ -104,7 +104,7 @@ sp_menu_item_activate (GObject *object, SPMenu *menu)
 }
 
 void
-sp_menu_append (SPMenu *menu, const unsigned char *label, const unsigned char *tip, const void *data)
+sp_menu_append (SPMenu *menu, const gchar *label, const gchar *tip, const void *data)
 {
 	GtkWidget *mi;
 	GList *cl;

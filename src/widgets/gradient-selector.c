@@ -82,28 +82,28 @@ sp_gradient_selector_class_init (SPGradientSelectorClass *klass)
 
 	object_class = (GtkObjectClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_VBOX);
+	parent_class = (GtkVBoxClass*)gtk_type_class (GTK_TYPE_VBOX);
 
 	signals[GRABBED] =  gtk_signal_new ("grabbed",
-					    GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+					    (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 					    GTK_CLASS_TYPE(object_class),
 					    GTK_SIGNAL_OFFSET (SPGradientSelectorClass, grabbed),
 					    gtk_marshal_NONE__NONE,
 					    GTK_TYPE_NONE, 0);
 	signals[DRAGGED] =  gtk_signal_new ("dragged",
-					    GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+					    (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 					    GTK_CLASS_TYPE(object_class),
 					    GTK_SIGNAL_OFFSET (SPGradientSelectorClass, dragged),
 					    gtk_marshal_NONE__NONE,
 					    GTK_TYPE_NONE, 0);
 	signals[RELEASED] = gtk_signal_new ("released",
-					    GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+					    (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 					    GTK_CLASS_TYPE(object_class),
 					    GTK_SIGNAL_OFFSET (SPGradientSelectorClass, released),
 					    gtk_marshal_NONE__NONE,
 					    GTK_TYPE_NONE, 0);
 	signals[CHANGED] =  gtk_signal_new ("changed",
-					    GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+					    (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 					    GTK_CLASS_TYPE(object_class),
 					    GTK_SIGNAL_OFFSET (SPGradientSelectorClass, changed),
 					    gtk_marshal_NONE__NONE,
@@ -223,7 +223,7 @@ sp_gradient_selector_new (void)
 {
 	SPGradientSelector *sel;
 
-	sel = gtk_type_new (SP_TYPE_GRADIENT_SELECTOR);
+	sel = (SPGradientSelector*)gtk_type_new (SP_TYPE_GRADIENT_SELECTOR);
 
 	return (GtkWidget *) sel;
 }

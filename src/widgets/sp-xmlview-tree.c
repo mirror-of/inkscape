@@ -42,11 +42,11 @@ static void node_data_free (gpointer data);
 static GtkCTreeNode * add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SPRepr * repr);
 
 static void element_child_added (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer data);
-static void element_attr_changed (SPRepr * repr, const guchar * key, const guchar * old_value, const guchar * new_value, gpointer data);
+static void element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value, const gchar * new_value, gpointer data);
 static void element_child_removed (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer data);
 static void element_order_changed (SPRepr * repr, SPRepr * child, SPRepr * oldref, SPRepr * newref, gpointer data);
 
-static void text_content_changed (SPRepr * repr, const guchar * old_content, const guchar * new_content, gpointer data);
+static void text_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data);
 
 static void tree_move (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkCTreeNode * new_sibling);
 
@@ -93,7 +93,7 @@ sp_xmlview_tree_new (SPRepr * repr, void * factory, void * data)
 {
 	SPXMLViewTree * tree;
 
-	tree = g_object_new (SP_TYPE_XMLVIEW_TREE, "n_columns", 1, "tree_column", 0, NULL);
+	tree = (SPXMLViewTree*)g_object_new (SP_TYPE_XMLVIEW_TREE, "n_columns", 1, "tree_column", 0, NULL);
 
 	gtk_clist_column_titles_hide (GTK_CLIST (tree));
 	gtk_ctree_set_line_style (GTK_CTREE (tree), GTK_CTREE_LINES_NONE);
@@ -256,7 +256,7 @@ element_child_added (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer ptr)
 }
 
 void
-element_attr_changed (SPRepr * repr, const guchar * key, const guchar * old_value, const guchar * new_value, gpointer ptr)
+element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value, const gchar * new_value, gpointer ptr)
 {
 	NodeData * data;
 	gchar *label;
@@ -307,7 +307,7 @@ element_order_changed (SPRepr * repr, SPRepr * child, SPRepr * oldref, SPRepr * 
 }
 
 void
-text_content_changed (SPRepr * repr, const guchar * old_content, const guchar * new_content, gpointer ptr)
+text_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer ptr)
 {
 	NodeData *data;
 	gchar *label;

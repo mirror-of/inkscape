@@ -57,7 +57,7 @@ sp_color_preview_class_init (SPColorPreviewClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+	parent_class = (GtkWidgetClass*)gtk_type_class (GTK_TYPE_WIDGET);
 
 	object_class->destroy = sp_color_preview_destroy;
 
@@ -129,7 +129,7 @@ sp_color_preview_new (guint32 rgba)
 {
 	SPColorPreview *image;
 
-	image = gtk_type_new (SP_TYPE_COLOR_PREVIEW);
+	image = (SPColorPreview*)gtk_type_new (SP_TYPE_COLOR_PREVIEW);
 
 	sp_color_preview_set_rgba32 (image, rgba);
 
@@ -165,7 +165,7 @@ sp_color_preview_paint (SPColorPreview *cp, GdkRectangle *area)
 
 	/* Draw shadow */
 	gtk_draw_shadow (widget->style, widget->window,
-			 widget->state, GTK_SHADOW_ETCHED_IN,
+			 (GtkStateType)widget->state, GTK_SHADOW_ETCHED_IN,
 			 warea.x, warea.y,
 			 warea.width, warea.height);
 

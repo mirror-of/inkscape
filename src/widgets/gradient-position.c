@@ -90,28 +90,28 @@ sp_gradient_position_class_init (SPGradientPositionClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+	parent_class = (GtkWidgetClass*)gtk_type_class (GTK_TYPE_WIDGET);
 
 	position_signals[GRABBED] = gtk_signal_new ("grabbed",
-						    GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						    (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						    GTK_CLASS_TYPE(object_class),
 						    GTK_SIGNAL_OFFSET (SPGradientPositionClass, grabbed),
 						    gtk_marshal_NONE__NONE,
 						    GTK_TYPE_NONE, 0);
 	position_signals[DRAGGED] = gtk_signal_new ("dragged",
-						    GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						    (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						    GTK_CLASS_TYPE(object_class),
 						    GTK_SIGNAL_OFFSET (SPGradientPositionClass, dragged),
 						    gtk_marshal_NONE__NONE,
 						    GTK_TYPE_NONE, 0);
 	position_signals[RELEASED] = gtk_signal_new ("released",
-						     GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						     (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						     GTK_CLASS_TYPE(object_class),
 						     GTK_SIGNAL_OFFSET (SPGradientPositionClass, released),
 						     gtk_marshal_NONE__NONE,
 						     GTK_TYPE_NONE, 0);
 	position_signals[CHANGED] = gtk_signal_new ("changed",
-						    GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+						    (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 						    GTK_CLASS_TYPE(object_class),
 						    GTK_SIGNAL_OFFSET (SPGradientPositionClass, changed),
 						    gtk_marshal_NONE__NONE,
@@ -291,7 +291,7 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 				pos->dragging = TRUE;
 				pos->changed = FALSE;
 				gdk_pointer_grab (widget->window, FALSE,
-						  GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+						  (GdkEventMask)(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
 						  NULL, NULL, event->time);
 			} else {
 				float x1, y1;
@@ -310,7 +310,7 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 					if (GTK_WIDGET_DRAWABLE (pos)) gtk_widget_queue_draw (GTK_WIDGET (pos));
 				}
 				gdk_pointer_grab (widget->window, FALSE,
-						  GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+						  (GdkEventMask)(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
 						  NULL, NULL, event->time);
 			}
 		}
@@ -321,7 +321,7 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 				pos->dragging = TRUE;
 				pos->changed = FALSE;
 				gdk_pointer_grab (widget->window, FALSE,
-						  GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+						  (GdkEventMask)(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
 						  NULL, NULL, event->time);
 			} else if (event->state & GDK_SHIFT_MASK) {
 				float fx, fy;
@@ -340,7 +340,7 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 					if (GTK_WIDGET_DRAWABLE (pos)) gtk_widget_queue_draw (GTK_WIDGET (pos));
 				}
 				gdk_pointer_grab (widget->window, FALSE,
-						  GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+						  (GdkEventMask)(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
 						  NULL, NULL, event->time);
 			} else {
 				float cx, cy;
@@ -361,7 +361,7 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 					if (GTK_WIDGET_DRAWABLE (pos)) gtk_widget_queue_draw (GTK_WIDGET (pos));
 				}
 				gdk_pointer_grab (widget->window, FALSE,
-						  GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+						  GdkEventMask(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
 						  NULL, NULL, event->time);
 			}
 		}
@@ -521,7 +521,7 @@ sp_gradient_position_new (SPGradient *gradient)
 {
 	SPGradientPosition *position;
 
-	position = gtk_type_new (SP_TYPE_GRADIENT_POSITION);
+	position = (SPGradientPosition*)gtk_type_new (SP_TYPE_GRADIENT_POSITION);
 
 	sp_gradient_position_set_gradient (position, gradient);
 
@@ -958,19 +958,19 @@ spgp_clip_line (long *c, long x0, long y0, long x1, long y1)
 		e = MIN (e, MAX (t0, t1));
 	}
 
-	c[0] = px + s * vx;
-	c[1] = py + s * vy;
-	c[2] = px + e * vx;
-	c[3] = py + e * vy;
+	c[0] = (long)(px + s * vx);
+	c[1] = (long)(py + s * vy);
+	c[2] = (long)(px + e * vx);
+	c[3] = (long)(py + e * vy);
 }
 
 void
-spgp_draw_line (unsigned char *px, int w, int h, int rs, int x0, int y0, int x1, int y1, unsigned long c0, unsigned long c1)
+spgp_draw_line (guchar *px, int w, int h, int rs, int x0, int y0, int x1, int y1, unsigned long c0, unsigned long c1)
 {
 	long deltax, deltay, xinc1, xinc2, yinc1, yinc2;
 	long den, num, numadd, numpixels;
 	long x, y, curpixel;
-	unsigned char c[8];
+	guchar c[8];
 
 	if ((x0 < 0) && (x1 < 0)) return;
 	if ((x0 >= w) && (x1 >= w)) return;
@@ -1027,7 +1027,7 @@ spgp_draw_line (unsigned char *px, int w, int h, int rs, int x0, int y0, int x1,
 
 	for (curpixel = 0; curpixel <= numpixels; curpixel++) {
 		if ((x >= 0) && (y >= 0) && (x < w) && (y < h)) {
-			unsigned char *d, *s;
+			guchar *d, *s;
 			d = px + y * rs + 3 * x;
 			s = &c[4 * (curpixel & 0x1)];
 			d[0] = NR_COMPOSEN11 (s[0], s[3], d[0]);
@@ -1046,12 +1046,12 @@ spgp_draw_line (unsigned char *px, int w, int h, int rs, int x0, int y0, int x1,
 }
 
 void
-spgp_draw_rect (unsigned char *px, int w, int h, int rs, int x0, int y0, int x1, int y1, unsigned long c0, unsigned long c1)
+spgp_draw_rect (guchar *px, int w, int h, int rs, int x0, int y0, int x1, int y1, unsigned long c0, unsigned long c1)
 {
 	int sx, sy, ex, ey, x, y;
-	unsigned char s[4];
-	unsigned char f[4];
-	unsigned char *p;
+	guchar s[4];
+	guchar f[4];
+	guchar *p;
 
 	if (x0 >= w) return;
 	if (y0 >= h) return;

@@ -91,10 +91,10 @@ sp_dash_selector_class_init (SPDashSelectorClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = gtk_type_class (GTK_TYPE_HBOX);
+	parent_class = (GtkHBoxClass*)gtk_type_class (GTK_TYPE_HBOX);
 
 	signals[CHANGED] = gtk_signal_new ("changed",
-					   GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
+					   (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
 					   G_TYPE_FROM_CLASS (klass),
 					   GTK_SIGNAL_OFFSET (SPDashSelectorClass, changed),
 					   gtk_marshal_NONE__NONE,
@@ -176,7 +176,7 @@ sp_dash_selector_new (SPRepr *drepr)
 		}
 	}
 
-	dsel = gtk_type_new (SP_TYPE_DASH_SELECTOR);
+	dsel = (GtkWidget*)gtk_type_new (SP_TYPE_DASH_SELECTOR);
 
 	return dsel;
 }
@@ -225,7 +225,7 @@ sp_dash_selector_get_dash (SPDashSelector *dsel, int *ndash, double **dash, doub
 	double *pattern;
 	int nd;
 
-	pattern = gtk_object_get_data (GTK_OBJECT (dsel), "pattern");
+	pattern = (double*)gtk_object_get_data (GTK_OBJECT (dsel), "pattern");
 
 	nd = 0;
 	while (pattern[nd] >= 0.0) nd += 1;
@@ -291,7 +291,7 @@ sp_dash_selector_dash_activate (GtkObject *object, SPDashSelector *dsel)
 {
 	double *pattern;
 
-	pattern = gtk_object_get_data (object, "pattern");
+	pattern = (double*)gtk_object_get_data (object, "pattern");
 	gtk_object_set_data (GTK_OBJECT (dsel), "pattern", pattern);
 
 	gtk_signal_emit (GTK_OBJECT (dsel), signals[CHANGED]);
