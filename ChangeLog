@@ -1,3 +1,16 @@
+2004-03-11  bulia byak <bulia@users.sourceforge.net>
+
+	* src/sp-item.h src/sp-item.cpp: Restore i2root_affine: same as i2doc but
+	without c2p, fixes 914039
+
+	* src/selection-chemistry.cpp: Grouping z-order fix
+
+	* src/path-chemistry.cpp: Combine/Break Apart fixes: preserve z-order and
+	parent, diagnostics, multiple selected, cleanup, fixes
+
+	* src/libnrtype/nr-type-directory.cpp: Fix win32 memory hog (unfreed
+	g_ascii_tolower in ink_strstr), implement caching of looked-up faces
+
 2004-03-10  bulia byak <bulia@users.sourceforge.net>
  
 	* src/sp-offset.cpp: Coalesce threshold depends on item size (less transform),
