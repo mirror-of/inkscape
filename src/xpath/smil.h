@@ -237,7 +237,7 @@ class TimeList
     /**
      *
      */
-    virtual Time *item(in unsigned long index) = 0;
+    virtual Time *item(unsigned long index) = 0;
 
     /**
      *
@@ -426,7 +426,7 @@ class ElementTimeManipulation
     /**
      *
      */
-    virtual boolean getAutoReverse() =0;
+    virtual bool getAutoReverse() =0;
 
     /**
      *
@@ -499,7 +499,7 @@ class ElementSyncBehavior
     /**
      *
      */
-    virtual boolean getSyncMaster() =0;
+    virtual bool getSyncMaster() =0;
 
 
 
@@ -597,22 +597,22 @@ class ElementTimeControl
     /**
      *
      */
-    bool beginElement() throw (dom::DOMException) =0;
+    virtual bool beginElement() throw (dom::DOMException) =0;
 
     /**
      *
      */
-    bool beginElementAt(float offset) throw (dom::DOMException) =0;
+    virtual bool beginElementAt(float offset) throw (dom::DOMException) =0;
 
     /**
      *
      */
-    bool endElement() throw (dom::DOMException) =0;
+    virtual bool endElement() throw (dom::DOMException) =0;
 
     /**
      *
      */
-    bool endElementAt(float offset) throw (dom::DOMException) =0;
+    virtual bool endElementAt(float offset) throw (dom::DOMException) =0;
 
 };
 
@@ -688,7 +688,7 @@ class ElementTest
     /**
      *
      */
-    virtual boolean getSystemCaptions() =0;
+    virtual bool getSystemCaptions() =0;
 
     /**
      *

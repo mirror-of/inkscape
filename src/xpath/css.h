@@ -61,7 +61,6 @@ class RGBColor;
 class CSSRuleList 
 {
 
-
     /**
      *
      */
@@ -412,7 +411,7 @@ class CSSValue
         CSS_PRIMITIVE_VALUE = 1,
         CSS_VALUE_LIST      = 2,
         CSS_CUSTOM          = 3
-        }
+        };
 
     /**
      *
@@ -670,7 +669,7 @@ class ElementCSSInlineStyle
     /**
      *
      */
-    virtual CSSStyleDeclaration getStyle() =0;
+    virtual CSSStyleDeclaration *getStyle() =0;
 };
 
 

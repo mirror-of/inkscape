@@ -362,9 +362,6 @@ class SVGNumber
     virtual void setValue(float val) throw (DOMException) =0;
 
 
-{
-
-
 };//
 
 
@@ -1062,7 +1059,7 @@ class SVGStylable
     /**
      *
      */
-    css::CSSValue *getPresentationAttribute (DOMString& name ) =0;
+    virtual css::CSSValue *getPresentationAttribute (DOMString& name ) =0;
 
 
 };//
@@ -1094,7 +1091,7 @@ class SVGLocatable
     /**
      *
      */
-    virtual SVGRect   *getBBox (  ) =0;
+    virtual SVGRect *getBBox (  ) =0;
 
     /**
      *
@@ -1109,7 +1106,7 @@ class SVGLocatable
     /**
      *
      */
-    virtual SVGMatrix *getTransformToElement (SVGElement element )
+    virtual SVGMatrix *getTransformToElement (SVGElement *element )
                     throw( SVGException ) =0;
 
 
@@ -1262,12 +1259,12 @@ class SVGFitToViewBox
     /**
      *
      */
-    virtual SVGAnimatedRect getViewBox() =0;
+    virtual SVGAnimatedRect *getViewBox() =0;
 
     /**
      *
      */
-    virtual SVGAnimatedPreserveAspectRatio getPreserveAspectRatio() =0;
+    virtual SVGAnimatedPreserveAspectRatio *getPreserveAspectRatio() =0;
 
 
 
@@ -1652,7 +1649,7 @@ class SVGSVGElement : virtual public SVGElement,
     /**
      *
      */
-    virtual boolean animationsPaused (  ) =0;
+    virtual bool animationsPaused (  ) =0;
     
     /**
      *
@@ -2479,13 +2476,13 @@ class SVGTransformList
     /**
      *
      */
-    virtual unsigned long numberOfItems;
+    virtual unsigned long getNumberOfItems() =0;;
 
 
     /**
      *
      */
-    virtual void   clear (  )
+    virtual void clear (  )
                     throw( DOMException ) =0;
 
     /**
@@ -2532,7 +2529,7 @@ class SVGTransformList
     /**
      *
      */
-    virtual SVGTransform consolidate (  ) =0;
+    virtual SVGTransform *consolidate (  ) =0;
 
 
 
@@ -3804,15 +3801,15 @@ class SVGPathElement :
     virtual SVGPathSegArcAbs 
               *createSVGPathSegArcAbs (float x, float y,
                          float r1, float r2, float angle,
-                         boolean largeArcFlag, boolean sweepFlag ) =0;
+                         bool largeArcFlag, bool sweepFlag ) =0;
 
     /**
      *
      */
     virtual SVGPathSegArcRel 
               *createSVGPathSegArcRel (float x, float y, float r1, 
-                         float r2, float angle, boolean largeArcFlag,
-                         boolean sweepFlag ) =0;
+                         float r2, float angle, bool largeArcFlag,
+                         bool sweepFlag ) =0;
 
     /**
      *
@@ -4211,7 +4208,7 @@ class SVGTextContentElement :
     /**
      *
      */
-    virtual long getCharNumAtPosition (SVGPoint point ) =0;
+    virtual long getCharNumAtPosition (SVGPoint *point ) =0;
 
     /**
      *
@@ -4280,9 +4277,8 @@ class SVGTextPositioningElement : virtual public SVGTextContentElement
 /**
  *
  */
-class SVGTextElement : 
-                SVGTextPositioningElement,
-                    virtual public SVGTransformable
+class SVGTextElement : virtual public SVGTextPositioningElement,
+                       virtual public SVGTransformable
 {
 
 };
@@ -5231,7 +5227,7 @@ class SVGFEBlendElement :
         SVG_FEBLEND_MODE_SCREEN   = 3,
         SVG_FEBLEND_MODE_DARKEN   = 4,
         SVG_FEBLEND_MODE_LIGHTEN  = 5
-        );
+        };
 
     /**
      *
@@ -6368,7 +6364,7 @@ class SVGAnimationElement :
     /**
      *
      */
-    virtual SVGElement getTargetElement() =0;
+    virtual SVGElement *getTargetElement() =0;
 
 
     /**

@@ -54,7 +54,11 @@ class DOMException : public std::exception
 
     public:
 
+    DOMException()
+        {}
+
     DOMException(short theCode)
+
         {
         code = theCode;
         }

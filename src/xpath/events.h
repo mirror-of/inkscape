@@ -47,7 +47,15 @@ class Event;
  */
 class EventException : public dom::DOMException
 {
-    unsigned short   code;
+    public:
+
+    EventException(short theCode)
+        {
+        code = theCode;
+        }
+
+    ~EventException() throw()
+       {}
 };
 
     /**
@@ -157,12 +165,12 @@ class Event
     /**
      *
      */
-    virtual boolean getBubbles() =0;
+    virtual bool getBubbles() =0;
 
     /**
      *
      */
-    virtual boolean getCancelable() =0;
+    virtual bool getCancelable() =0;
 
     /**
      *
@@ -387,7 +395,7 @@ class MutationEvent : virtual public Event
     virtual void initMutationEvent(DOMString& typeArg, 
                            bool canBubbleArg, 
                            bool cancelableArg, 
-                           Node relatedNodeArg, 
+                           Node *relatedNodeArg, 
                            DOMString& prevValueArg, 
                            DOMString& newValueArg, 
                            DOMString& attrNameArg, 

@@ -109,7 +109,7 @@ class StyleSheetList
     /**
      *
      */
-    virtual StyleSheet *item(in unsigned long index) =0;
+    virtual StyleSheet *item(unsigned long index) =0;
 };
 
 

@@ -13,7 +13,7 @@
 #ifndef __DOMIMPL_H__
 #define __DOMIMPL_H__
 
-#include "dom.h"
+#include "svg.h"
 
 #include <map>
 #include <vector>
