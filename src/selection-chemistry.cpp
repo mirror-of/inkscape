@@ -66,30 +66,50 @@ void sp_selection_duplicate (gpointer object, gpointer data)
 {
 	SPDesktop * desktop;
 	SPSelection * selection;
-	GSList * selected, * newsel;
-	SPRepr * copy;
-	SPItem * item;
+	GSList *reprs, *newsel, *i;
+	SPRepr *copy, *parent;
+	//	SPItem *item;
+	gboolean sort = TRUE;
 
 	desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 
 	selection = SP_DT_SELECTION (desktop);
 
-	if (sp_selection_is_empty (selection)) return;
+	// check if something is selected
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select some objects to duplicate."));
+		return;
+	}
 
-	selected = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+	reprs = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+
 	sp_selection_empty (selection);
 
-	selected = g_slist_sort (selected, (GCompareFunc) sp_repr_compare_position);
+	parent = ((SPRepr *) reprs->data)->parent;
+	for (i = reprs->next; i; i = i->next) {
+		if ((((SPRepr *) i->data)->parent) != parent) {
+			// We can duplicate items from different parents, but we cannot do sorting in this case
+			sort = FALSE;
+		}
+	}
+
+	if (sort)
+		reprs = g_slist_sort (reprs, (GCompareFunc) sp_repr_compare_position);
 
 	newsel = NULL;
 
-	while (selected) {
-		copy = sp_repr_duplicate ((SPRepr *) selected->data);
-		item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), copy);
-		g_assert (item != NULL);
+	while (reprs) {
+		parent = ((SPRepr *) reprs->data)->parent;
+		copy = sp_repr_duplicate ((SPRepr *) reprs->data);
+
+		sp_repr_append_child (parent, copy);
+
+		//item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), copy);
+		//g_assert (item != NULL);
+
 		newsel = g_slist_prepend (newsel, copy);
-		selected = g_slist_remove (selected, selected->data);
+		reprs = g_slist_remove (reprs, reprs->data);
 		sp_repr_unref (copy);
 	}
 
@@ -536,29 +556,23 @@ void sp_selection_lower_to_bottom (GtkWidget * widget)
 	sp_document_done (document);
 }
 
-#if 0
 void
-sp_undo (GtkWidget * widget)
+sp_undo (SPDesktop *desktop, SPDocument *doc)
 {
-	SPDesktop * desktop;
-
-	desktop = SP_ACTIVE_DESKTOP;
 	if (SP_IS_DESKTOP(desktop)) {
-		sp_document_undo (SP_DT_DOCUMENT (desktop));
+		if (!sp_document_undo (SP_DT_DOCUMENT (desktop)))
+			sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing to undo."));
 	}
 }
 
 void
-sp_redo (GtkWidget * widget)
+sp_redo (SPDesktop *desktop, SPDocument *doc)
 {
-	SPDesktop * desktop;
-
-	desktop = SP_ACTIVE_DESKTOP;
 	if (SP_IS_DESKTOP(desktop)) {
-		sp_document_redo (SP_DT_DOCUMENT (desktop));
+		if (!sp_document_redo (SP_DT_DOCUMENT (desktop)))
+			sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing to redo."));
 	}
 }
-#endif
 
 void
 sp_selection_cut (GtkWidget * widget)

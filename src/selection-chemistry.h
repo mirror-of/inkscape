@@ -51,6 +51,9 @@ void sp_selection_move_screen (gdouble dx, gdouble dy);
 void sp_selection_item_next (void);
 void sp_selection_item_prev (void);
 
+void sp_undo (SPDesktop *desktop, SPDocument *doc);
+void sp_redo (SPDesktop *desktop, SPDocument *doc);
+
 /* selection cycling */
 
 typedef enum
