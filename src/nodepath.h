@@ -63,11 +63,17 @@ struct _SPPathNode {
 SPNodePath * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
 void sp_nodepath_destroy (SPNodePath * nodepath);
 
+void update_object (SPNodePath * np);
+
 void sp_nodepath_deselect (SPNodePath *nodepath);
 void sp_nodepath_select_all (SPNodePath *nodepath);
 void sp_nodepath_select_next (SPNodePath *nodepath);
 void sp_nodepath_select_prev (SPNodePath *nodepath);
 void sp_nodepath_select_rect (SPNodePath * nodepath, NRRectD * b, gboolean incremental);
+GList *save_nodepath_selection (SPNodePath *nodepath);
+void restore_nodepath_selection (SPNodePath *nodepath, GList *r);
+gboolean nodepath_repr_changed (SPNodePath * np);
+void update_repr (SPNodePath * np);
 gboolean node_key (GdkEvent * event);
 
 /* possibly private functions */
@@ -75,6 +81,7 @@ gboolean node_key (GdkEvent * event);
 void sp_node_selected_add_node (void);
 void sp_node_selected_delete (void);
 void sp_node_selected_break (void);
+void sp_node_selected_duplicate (void);
 void sp_node_selected_join (void);
 void sp_node_selected_join_segment (void);
 void sp_node_selected_set_type (SPPathNodeType type);
