@@ -34,6 +34,8 @@ static void sp_ctrlrect_render (SPCanvasItem *item, SPCanvasBuf *buf);
 
 static SPCanvasItemClass *parent_class;
 
+static const guint DASH_LENGTH = 4;
+
 GtkType
 sp_ctrlrect_get_type (void)
 {
@@ -74,6 +76,7 @@ static void
 sp_ctrlrect_init (SPCtrlRect *cr)
 {
 	cr->has_fill = FALSE;
+        cr->dashed = FALSE;
 
 	cr->rect.x0 = cr->rect.y0 = cr->rect.x1 = cr->rect.y1 = 0;
 
@@ -107,7 +110,7 @@ sp_ctrlrect_destroy (GtkObject *object)
 #define COMPOSE(b,f,a) ( ( ((guchar) b) * ((guchar) (0xff - a)) + ((guchar) ((b ^ ~f) + b/4 - (b>127? 63 : 0))) * ((guchar) a) ) / 0xff )
 
 static void
-sp_ctrlrect_hline (SPCanvasBuf *buf, gint y, gint xs, gint xe, guint32 rgba)
+sp_ctrlrect_hline (SPCanvasBuf *buf, gint y, gint xs, gint xe, guint32 rgba, guint dashed)
 {
 	if ((y >= buf->rect.y0) && (y < buf->rect.y1)) {
 		guint r, g, b, a;
@@ -120,17 +123,30 @@ sp_ctrlrect_hline (SPCanvasBuf *buf, gint y, gint xs, gint xe, guint32 rgba)
 		x0 = MAX (buf->rect.x0, xs);
 		x1 = MIN (buf->rect.x1, xe + 1);
 		p = buf->buf + (y - buf->rect.y0) * buf->buf_rowstride + (x0 - buf->rect.x0) * 3;
+                guint dash_on = 1;
+                guint dash_counter = 0;
 		for (x = x0; x < x1; x++) {
+                    if (dash_on) {
 			p[0] = COMPOSE (p[0], r, a);
 			p[1] = COMPOSE (p[1], g, a);
 			p[2] = COMPOSE (p[2], b, a);
-			p += 3;
+                    }
+
+                    p += 3;
+
+                    if (dashed) {
+                        dash_counter++;
+                        if (dash_counter >= DASH_LENGTH) {
+                            dash_counter = 0;
+                            dash_on = 1 - dash_on;
+                        }
+                    }
 		}
 	}
 }
 
 static void
-sp_ctrlrect_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba)
+sp_ctrlrect_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba, guint dashed)
 {
 	if ((x >= buf->rect.x0) && (x < buf->rect.x1)) {
 		guint r, g, b, a;
@@ -143,11 +159,24 @@ sp_ctrlrect_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba)
 		y0 = MAX (buf->rect.y0, ys);
 		y1 = MIN (buf->rect.y1, ye + 1);
 		p = buf->buf + (y0 - buf->rect.y0) * buf->buf_rowstride + (x - buf->rect.x0) * 3;
+                guint dash_on = 1;
+                guint dash_counter = 0;
 		for (y = y0; y < y1; y++) {
+                    if (dash_on) {
 			p[0] = COMPOSE (p[0], r, a);
 			p[1] = COMPOSE (p[1], g, a);
 			p[2] = COMPOSE (p[2], b, a);
-			p += buf->buf_rowstride;
+                    }
+                    
+                    p += buf->buf_rowstride;
+
+                    if (dashed) {
+                        dash_counter++;
+                        if (dash_counter >= DASH_LENGTH) {
+                            dash_counter = 0;
+                            dash_on = 1 - dash_on;
+                        }
+                    }
 		}
 	}
 }
@@ -196,24 +225,24 @@ sp_ctrlrect_render (SPCanvasItem *item, SPCanvasBuf *buf)
 			buf->is_buf = TRUE;
 		}
 		/* Top */
-		sp_ctrlrect_hline (buf, cr->area.y0, cr->area.x0, cr->area.x1, cr->border_color);
+		sp_ctrlrect_hline (buf, cr->area.y0 - 1, cr->area.x0, cr->area.x1, cr->border_color, cr->dashed);
 		/* Bottom */
-		sp_ctrlrect_hline (buf, cr->area.y1, cr->area.x0, cr->area.x1, cr->border_color);
+		sp_ctrlrect_hline (buf, cr->area.y1 - 1, cr->area.x0, cr->area.x1, cr->border_color, cr->dashed);
 		/* Left */
-		sp_ctrlrect_vline (buf, cr->area.x0, cr->area.y0 + 1, cr->area.y1 - 1, cr->border_color);
+		sp_ctrlrect_vline (buf, cr->area.x0, cr->area.y0 - 1, cr->area.y1 - 1, cr->border_color, cr->dashed);
 		/* Right */
-		sp_ctrlrect_vline (buf, cr->area.x1, cr->area.y0 + 1, cr->area.y1 - 1, cr->border_color);
+		sp_ctrlrect_vline (buf, cr->area.x1, cr->area.y0 - 1, cr->area.y1 - 1, cr->border_color, cr->dashed);
 		if (cr->shadow_size > 0) {
 			/* Right shadow */
 			sp_ctrlrect_area (buf, cr->area.x1 + 1, cr->area.y0 + cr->shadow_size,
 					  cr->area.x1 + cr->shadow_size, cr->area.y1 + cr->shadow_size, cr->shadow_color);
 			/* Bottom shadow */
-			sp_ctrlrect_area (buf, cr->area.x0 + cr->shadow_size, cr->area.y1 + 1,
+			sp_ctrlrect_area (buf, cr->area.x0 + cr->shadow_size, cr->area.y1 - 1,
 					  cr->area.x1, cr->area.y1 + cr->shadow_size, cr->shadow_color);
 		}
 		if (cr->has_fill) {
 			/* Fill */
-			sp_ctrlrect_area (buf, cr->area.x0 + 1, cr->area.y0 + 1,
+			sp_ctrlrect_area (buf, cr->area.x0 + 1, cr->area.y0 - 1,
 					  cr->area.x1 - 1, cr->area.y1 - 1, cr->fill_color);
 		}
 	}
@@ -344,3 +373,22 @@ sp_ctrlrect_set_rect (SPCtrlRect * cr, ArtDRect * r)
 
 	sp_canvas_item_request_update (SP_CANVAS_ITEM (cr));
 }
+
+void
+sp_ctrlrect_set_dashed (SPCtrlRect * cr, guint d)
+{
+    cr->dashed = d;
+
+    sp_canvas_item_request_update (SP_CANVAS_ITEM (cr));
+}
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

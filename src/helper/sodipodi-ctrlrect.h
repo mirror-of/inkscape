@@ -33,7 +33,8 @@ struct _SPCtrlRect {
 	SPCanvasItem item;
 
 	guint has_fill : 1;
-
+    guint dashed : 1;
+    
 	ArtDRect rect;
 	gint shadow;
 
@@ -55,6 +56,7 @@ GtkType sp_ctrlrect_get_type (void);
 void sp_ctrlrect_set_area (SPCtrlRect *rect, double x0, double y0, double x1, double y1);
 void sp_ctrlrect_set_color (SPCtrlRect *rect, guint32 border_color, gboolean has_fill, guint32 fill_color);
 void sp_ctrlrect_set_shadow (SPCtrlRect *rect, gint shadow_size, guint32 shadow_color);
+void sp_ctrlrect_set_dashed (SPCtrlRect *rect, guint dashed);
 
 /* Deprecated */
 void sp_ctrlrect_set_rect (SPCtrlRect * rect, ArtDRect * box);
@@ -62,3 +64,14 @@ void sp_ctrlrect_set_rect (SPCtrlRect * rect, ArtDRect * box);
 
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
