@@ -780,6 +780,15 @@ public:
         {return _glyph_index == other._glyph_index && _char_index == other._char_index;}
     bool operator!= (iterator const &other) const
         {return _glyph_index != other._glyph_index || _char_index != other._char_index;}
+
+    /* FIXME: Please document why the below are inconsistent with the above (in the case of equal
+     * char index but different glyph index, e.g. arabic character with multiple glyphs); or remove
+     * these operators, or change implementation of operator< to _char_index < o._char_index ||
+     * _glyph_index < o._glyph_index (and similarly the other operators).  Also, I'm inclined
+     * to add assertions of equal parent, and that (ch<=o.ch && g<=o.g)||(vice versa).
+     *
+     * If the existing semantics are deliberate, then consider adding a named function
+     * instead of using operator< in strange ways. */
     bool operator< (iterator const &other) const
         {return _char_index < other._char_index;}
     bool operator<= (iterator const &other) const
@@ -1006,3 +1015,15 @@ inline bool Layout::iterator::prevCharacter()
 }//namespace Inkscape
 
 #endif
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
