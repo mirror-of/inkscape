@@ -11,6 +11,7 @@
 
 #include <string.h>
 
+#include "interface.h"
 #include "filedialog.h"
 #include "helper/sp-intl.h"
 #include "prefs-utils.h"
@@ -324,6 +325,12 @@ FileSaveDialog::show() {
     if (b == GTK_RESPONSE_OK) {
         gchar * dialog_filename =
             (gchar *)gtk_file_selection_get_filename (GTK_FILE_SELECTION(dlg));
+
+		if (g_file_test(dialog_filename, G_FILE_TEST_IS_DIR)) {
+			sp_ui_error_dialog(_("No filename specified.  Unable to save."));
+			return FALSE;
+		}
+
 		g_free(filename);
 	    filename = g_strdup(dialog_filename);
 
