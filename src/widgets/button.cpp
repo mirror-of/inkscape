@@ -175,9 +175,8 @@ sp_button_new (unsigned int size, SPButtonType type, SPAction *action, GtkToolti
 	if (tooltips) g_object_ref ((GObject *) tooltips);
 	sp_button_set_action (button, action);
 
-	if (button->type == SP_BUTTON_TYPE_TOGGLE) {
-		gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-	}
+	// The Inkscape style is no-relief buttons
+	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
 
 	return (GtkWidget *) button;
 }
