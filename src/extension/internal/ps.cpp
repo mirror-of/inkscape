@@ -72,665 +72,660 @@ namespace Extension {
 namespace Internal {
 
 PrintPS::PrintPS() :
-	_stream(NULL),
- 	_dpi(72),
-	_bitmap(false)
+    _stream(NULL),
+    _dpi(72),
+    _bitmap(false)
 {
 }
 
-PrintPS::~PrintPS (void)
+PrintPS::~PrintPS(void)
 {
-	/* fixme: should really use pclose for popen'd streams */
-	if (_stream) fclose (_stream);
+    /* fixme: should really use pclose for popen'd streams */
+    if (_stream) fclose(_stream);
 
-	/* restore default signal handling for SIGPIPE */
+    /* restore default signal handling for SIGPIPE */
 #if !defined(_WIN32) && !defined(__WIN32__)
-	(void) signal(SIGPIPE, SIG_DFL);
+    (void) signal(SIGPIPE, SIG_DFL);
 #endif
 
-	return;
+    return;
 }
 
 unsigned int
-PrintPS::setup (Inkscape::Extension::Print * mod)
+PrintPS::setup(Inkscape::Extension::Print * mod)
 {
-	static const gchar *pdr[] = {"72", "75", "100", "144", "150", "200", "300", "360", "600", "1200", "2400", NULL};
-	GtkWidget *dlg, *vbox, *f, *vb, *rb, *hb, *combo, *l, *e;
-	GtkTooltips *tt;
-	GList *sl;
-	int i;
-	int response;
-	unsigned int ret;
+    static const gchar *pdr[] = {"72", "75", "100", "144", "150", "200", "300", "360", "600", "1200", "2400", NULL};
+    GtkWidget *dlg, *vbox, *f, *vb, *rb, *hb, *combo, *l, *e;
+    GtkTooltips *tt;
+    GList *sl;
+    int i;
+    int response;
+    unsigned int ret;
 #ifdef TED
-	SPRepr *repr;
+    SPRepr *repr;
 #endif
-	bool p2bm;
+    bool p2bm;
 
 #ifdef TED
-	repr = ((SPModule *) mod)->repr;
+    repr = ((SPModule *) mod)->repr;
 #endif
 
-	ret = FALSE;
+    ret = FALSE;
 
-	/* Create dialog */
-	tt = gtk_tooltips_new ();
-	g_object_ref ((GObject *) tt);
-	gtk_object_sink ((GtkObject *) tt);
+    /* Create dialog */
+    tt = gtk_tooltips_new();
+    g_object_ref((GObject *) tt);
+    gtk_object_sink((GtkObject *) tt);
 
-     dlg = gtk_dialog_new_with_buttons (_("Print Destination"),
-						 (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"),
-                                       (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_DESTROY_WITH_PARENT),
-                                       GTK_STOCK_CANCEL,
-                                       GTK_RESPONSE_CANCEL,
-                                       GTK_STOCK_PRINT,
-                                       GTK_RESPONSE_OK,
-                                       NULL);
+    dlg = gtk_dialog_new_with_buttons(_("Print Destination"),
+                                      (GtkWindow *) g_object_get_data(G_OBJECT(SP_ACTIVE_DESKTOP), "window"),
+                                      (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_DESTROY_WITH_PARENT),
+                                      GTK_STOCK_CANCEL,
+                                      GTK_RESPONSE_CANCEL,
+                                      GTK_STOCK_PRINT,
+                                      GTK_RESPONSE_OK,
+                                      NULL);
 
-	gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_RESPONSE_OK);
+    gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_OK);
 
-	vbox = GTK_DIALOG (dlg)->vbox;
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);
-	/* Print properties frame */
-	f = gtk_frame_new (_("Print properties"));
-	gtk_box_pack_start (GTK_BOX (vbox), f, FALSE, FALSE, 4);
-	vb = gtk_vbox_new (FALSE, 4);
-	gtk_container_add (GTK_CONTAINER (f), vb);
-	gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
-	/* Print type */
-	p2bm = mod->get_param_bool("bitmap");
-	rb = gtk_radio_button_new_with_label (NULL, _("Print using PostScript operators"));
-	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
-						  _("Use PostScript vector operators. The resulting image is usually smaller "
-						    "in file size and can be arbitrarily scaled, but alpha transparency, "
-							"gradients and patterns will be lost."), NULL);
-	if (!p2bm) gtk_toggle_button_set_active ((GtkToggleButton *) rb, TRUE);
-	gtk_box_pack_start (GTK_BOX (vb), rb, FALSE, FALSE, 0);
-	rb = gtk_radio_button_new_with_label (gtk_radio_button_get_group ((GtkRadioButton *) rb), _("Print as bitmap"));
-	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
-						  _("Print everything as bitmap. The resulting image is usually larger "
-						    "in file size and cannot be arbitrarily scaled without quality loss, "
-							"but all objects will be rendered exactly as displayed."), NULL);
-	if (p2bm) gtk_toggle_button_set_active ((GtkToggleButton *) rb, TRUE);
-	gtk_box_pack_start (GTK_BOX (vb), rb, FALSE, FALSE, 0);
-	/* Resolution */
-	hb = gtk_hbox_new (FALSE, 4);
-	gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-	combo = gtk_combo_new ();
-	gtk_combo_set_value_in_list (GTK_COMBO (combo), FALSE, FALSE);
-	gtk_combo_set_use_arrows (GTK_COMBO (combo), TRUE);
-	gtk_combo_set_use_arrows_always (GTK_COMBO (combo), TRUE);
-	gtk_widget_set_usize (combo, 64, -1);
-	gtk_tooltips_set_tip ((GtkTooltips *) tt, GTK_COMBO (combo)->entry,
-						  _("Preferred resolution (dots per inch) of bitmap"), NULL);
-	/* Setup strings */
-	sl = NULL;
-	for (i = 0; pdr[i] != NULL; i++) {
-		sl = g_list_prepend (sl, (gpointer) pdr[i]);
-	}
-	sl = g_list_reverse (sl);
-	gtk_combo_set_popdown_strings (GTK_COMBO (combo), sl);
-	g_list_free (sl);
-	if (1) {
-		const gchar * val = NULL;
-		val = mod->get_param_string("resolution");
-		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry), val);
-	}
-	gtk_box_pack_end (GTK_BOX (hb), combo, FALSE, FALSE, 0);
-	l = gtk_label_new (_("Resolution:"));
-	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    vbox = GTK_DIALOG(dlg)->vbox;
+    gtk_container_set_border_width(GTK_CONTAINER(vbox), 4);
+    /* Print properties frame */
+    f = gtk_frame_new(_("Print properties"));
+    gtk_box_pack_start(GTK_BOX(vbox), f, FALSE, FALSE, 4);
+    vb = gtk_vbox_new(FALSE, 4);
+    gtk_container_add(GTK_CONTAINER(f), vb);
+    gtk_container_set_border_width(GTK_CONTAINER(vb), 4);
+    /* Print type */
+    p2bm = mod->get_param_bool("bitmap");
+    rb = gtk_radio_button_new_with_label(NULL, _("Print using PostScript operators"));
+    gtk_tooltips_set_tip((GtkTooltips *) tt, rb,
+                         _("Use PostScript vector operators. The resulting image is usually smaller "
+                           "in file size and can be arbitrarily scaled, but alpha transparency, "
+                           "gradients and patterns will be lost."), NULL);
+    if (!p2bm) gtk_toggle_button_set_active((GtkToggleButton *) rb, TRUE);
+    gtk_box_pack_start(GTK_BOX(vb), rb, FALSE, FALSE, 0);
+    rb = gtk_radio_button_new_with_label(gtk_radio_button_get_group((GtkRadioButton *) rb), _("Print as bitmap"));
+    gtk_tooltips_set_tip((GtkTooltips *) tt, rb,
+                         _("Print everything as bitmap. The resulting image is usually larger "
+                           "in file size and cannot be arbitrarily scaled without quality loss, "
+                           "but all objects will be rendered exactly as displayed."), NULL);
+    if (p2bm) gtk_toggle_button_set_active((GtkToggleButton *) rb, TRUE);
+    gtk_box_pack_start(GTK_BOX(vb), rb, FALSE, FALSE, 0);
+    /* Resolution */
+    hb = gtk_hbox_new(FALSE, 4);
+    gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
+    combo = gtk_combo_new();
+    gtk_combo_set_value_in_list(GTK_COMBO(combo), FALSE, FALSE);
+    gtk_combo_set_use_arrows(GTK_COMBO(combo), TRUE);
+    gtk_combo_set_use_arrows_always(GTK_COMBO(combo), TRUE);
+    gtk_widget_set_usize(combo, 64, -1);
+    gtk_tooltips_set_tip((GtkTooltips *) tt, GTK_COMBO(combo)->entry,
+                         _("Preferred resolution (dots per inch) of bitmap"), NULL);
+    /* Setup strings */
+    sl = NULL;
+    for (i = 0; pdr[i] != NULL; i++) {
+        sl = g_list_prepend(sl, (gpointer) pdr[i]);
+    }
+    sl = g_list_reverse(sl);
+    gtk_combo_set_popdown_strings(GTK_COMBO(combo), sl);
+    g_list_free(sl);
+    if (1) {
+        const gchar * val = NULL;
+        val = mod->get_param_string("resolution");
+        gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combo)->entry), val);
+    }
+    gtk_box_pack_end(GTK_BOX(hb), combo, FALSE, FALSE, 0);
+    l = gtk_label_new(_("Resolution:"));
+    gtk_box_pack_end(GTK_BOX(hb), l, FALSE, FALSE, 0);
 
-	/* Print destination frame */
-	f = gtk_frame_new (_("Print destination"));
-	gtk_box_pack_start (GTK_BOX (vbox), f, FALSE, FALSE, 4);
-	vb = gtk_vbox_new (FALSE, 4);
-	gtk_container_add (GTK_CONTAINER (f), vb);
-	gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+    /* Print destination frame */
+    f = gtk_frame_new(_("Print destination"));
+    gtk_box_pack_start(GTK_BOX(vbox), f, FALSE, FALSE, 4);
+    vb = gtk_vbox_new(FALSE, 4);
+    gtk_container_add(GTK_CONTAINER(f), vb);
+    gtk_container_set_border_width(GTK_CONTAINER(vb), 4);
 
-	l = gtk_label_new (_("Use '> filename' to print to file.\n"
-			     "Use '| prog arg...' to pipe to a program."));
-	gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
+    l = gtk_label_new(_("Use '> filename' to print to file.\n"
+                        "Use '| prog arg...' to pipe to a program."));
+    gtk_box_pack_start(GTK_BOX(vb), l, FALSE, FALSE, 0);
 
-	e = gtk_entry_new ();
-	if (1) {
-		const gchar *val;
-		val = mod->get_param_string("destination");
-		gtk_entry_set_text (GTK_ENTRY (e), val);
-	}
-	gtk_box_pack_start (GTK_BOX (vb), e, FALSE, FALSE, 0);
+    e = gtk_entry_new();
+    if (1) {
+        const gchar *val;
+        val = mod->get_param_string("destination");
+        gtk_entry_set_text(GTK_ENTRY(e), val);
+    }
+    gtk_box_pack_start(GTK_BOX(vb), e, FALSE, FALSE, 0);
 
-	// pressing enter in the destination field is the same as clicking Print:
-	gtk_entry_set_activates_default (GTK_ENTRY(e), TRUE);
+    // pressing enter in the destination field is the same as clicking Print:
+    gtk_entry_set_activates_default(GTK_ENTRY(e), TRUE);
 
-	gtk_widget_show_all (vbox);
+    gtk_widget_show_all(vbox);
 
-	response = gtk_dialog_run (GTK_DIALOG (dlg));
+    response = gtk_dialog_run(GTK_DIALOG(dlg));
 
-	g_object_unref ((GObject *) tt);
+    g_object_unref((GObject *) tt);
 
-	if (response == GTK_RESPONSE_OK) {
-		const gchar *fn;
-		const char *sstr;
+    if (response == GTK_RESPONSE_OK) {
+        const gchar *fn;
+        const char *sstr;
 
-		_bitmap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
-		sstr = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (combo)->entry));
-		_dpi = (unsigned int) MAX ((int)(atof (sstr)), 1);
-		/* Arrgh, have to do something */
-		fn = gtk_entry_get_text (GTK_ENTRY (e));
-		/* g_print ("Printing to %s\n", fn); */
+        _bitmap = gtk_toggle_button_get_active((GtkToggleButton *) rb);
+        sstr = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(combo)->entry));
+        _dpi = (unsigned int) MAX((int)(atof(sstr)), 1);
+        /* Arrgh, have to do something */
+        fn = gtk_entry_get_text(GTK_ENTRY(e));
+        /* g_print("Printing to %s\n", fn); */
 
-		mod->set_param_bool("bitmap", _bitmap);
-		mod->set_param_string("resolution", (gchar *)sstr);
-		mod->set_param_string("destination", (gchar *)fn);
-		ret = TRUE;
-	}
+        mod->set_param_bool("bitmap", _bitmap);
+        mod->set_param_string("resolution", (gchar *)sstr);
+        mod->set_param_string("destination", (gchar *)fn);
+        ret = TRUE;
+    }
 
-	gtk_widget_destroy (dlg);
+    gtk_widget_destroy(dlg);
 
-	return ret;
+    return ret;
 }
 
 unsigned int
-PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
+PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
 {
-	Inkscape::SVGOStringStream os;
-	int res;
-	FILE *osf, *osp;
-	const gchar * fn;
+    Inkscape::SVGOStringStream os;
+    int res;
+    FILE *osf, *osp;
+    const gchar * fn;
 
-	fn = mod->get_param_string("destination");
+    fn = mod->get_param_string("destination");
 
-	osf = NULL;
-	osp = NULL;
+    osf = NULL;
+    osp = NULL;
 
-	gsize bytesRead = 0;
-	gsize bytesWritten = 0;
-	GError* error = NULL;
-	gchar* local_fn = g_filename_from_utf8 ( fn,
-                                 -1,  &bytesRead,  &bytesWritten, &error);
-	fn = local_fn;
+    gsize bytesRead = 0;
+    gsize bytesWritten = 0;
+    GError* error = NULL;
+    gchar* local_fn = g_filename_from_utf8( fn,
+                                            -1,  &bytesRead,  &bytesWritten, &error);
+    fn = local_fn;
 
-	/* TODO: Replace the below fprintf's with something that does the right thing whether in
-	 * gui or batch mode (e.g. --print=blah).  Consider throwing an exception: currently one of
-	 * the callers (sp_print_document_to_file, "ret = mod->begin(doc)") wrongly ignores the
-	 * return code.
-	 */
-	if (fn != NULL) {
-		if (*fn == '|') {
-			fn += 1;
-			while (isspace (*fn)) fn += 1;
+    /* TODO: Replace the below fprintf's with something that does the right thing whether in
+     * gui or batch mode (e.g. --print=blah).  Consider throwing an exception: currently one of
+     * the callers (sp_print_document_to_file, "ret = mod->begin(doc)") wrongly ignores the
+     * return code.
+     */
+    if (fn != NULL) {
+        if (*fn == '|') {
+            fn += 1;
+            while (isspace(*fn)) fn += 1;
 #ifndef WIN32
-			osp = popen (fn, "w");
+            osp = popen(fn, "w");
 #else
-			osp = _popen (fn, "w");
+            osp = _popen(fn, "w");
 #endif
-			if (!osp) {
-				fprintf(stderr, "inkscape: popen(%s): %s\n",
-					fn, strerror(errno));
-				return 0;
-			}
-			_stream = osp;
-		} else if (*fn == '>') {
-			fn += 1;
-			while (isspace (*fn)) fn += 1;
-			Inkscape::IO::dump_fopen_call(fn, "K");
-			osf = Inkscape::IO::fopen_utf8name(fn, "w+");
-			if (!osf) {
-				fprintf(stderr, "inkscape: fopen(%s): %s\n",
-					fn, strerror(errno));
-				return 0;
-			}
-			_stream = osf;
-		} else {
-			gchar *qn;
-			/* put cwd stuff in here */
-			/* FIXME: quote fn */
-			qn = g_strdup_printf ("lpr -P %s", fn);
+            if (!osp) {
+                fprintf(stderr, "inkscape: popen(%s): %s\n",
+                        fn, strerror(errno));
+                return 0;
+            }
+            _stream = osp;
+        } else if (*fn == '>') {
+            fn += 1;
+            while (isspace(*fn)) fn += 1;
+            Inkscape::IO::dump_fopen_call(fn, "K");
+            osf = Inkscape::IO::fopen_utf8name(fn, "w+");
+            if (!osf) {
+                fprintf(stderr, "inkscape: fopen(%s): %s\n",
+                        fn, strerror(errno));
+                return 0;
+            }
+            _stream = osf;
+        } else {
+            gchar *qn;
+            /* put cwd stuff in here */
+            /* FIXME: quote fn */
+            qn = g_strdup_printf("lpr -P %s", fn);
 #ifndef WIN32
-			osp = popen (qn, "w");
+            osp = popen(qn, "w");
 #else
-			osp = _popen (qn, "w");
+            osp = _popen(qn, "w");
 #endif
-			if (!osp) {
-				fprintf(stderr, "inkscape: popen(%s): %s\n",
-					qn, strerror(errno));
-				return 0;
-			}
-			g_free (qn);
-			_stream = osp;
-		}
-	}
+            if (!osp) {
+                fprintf(stderr, "inkscape: popen(%s): %s\n",
+                        qn, strerror(errno));
+                return 0;
+            }
+            g_free(qn);
+            _stream = osp;
+        }
+    }
 
-	g_free(local_fn);
+    g_free(local_fn);
 
-	if (_stream) {
-		/* fixme: this is kinda icky */
+    if (_stream) {
+        /* fixme: this is kinda icky */
 #if !defined(_WIN32) && !defined(__WIN32__)
-		(void) signal(SIGPIPE, SIG_IGN);
+        (void) signal(SIGPIPE, SIG_IGN);
 #endif
-	}
+    }
 
-	res = fprintf (_stream, "%%!PS-Adobe-2.0\n");
-	/* flush this to test output stream as early as possible */
-	if (fflush(_stream)) {
-/*		g_print("caught error in sp_module_print_plain_begin\n");*/
-		if (ferror(_stream)) {
-			g_print("Error %d on output stream: %s\n", errno,
-				g_strerror(errno));
-		}
-		g_print("Printing failed\n");
-		/* fixme: should use pclose() for pipes */
-		fclose(_stream);
-		_stream = NULL;
-		fflush(stdout);
-		return 0;
-	}
-	_width = sp_document_width (doc);
-	_height = sp_document_height (doc);
+    res = fprintf(_stream, "%%!PS-Adobe-2.0\n");
+    /* flush this to test output stream as early as possible */
+    if (fflush(_stream)) {
+        /*g_print("caught error in sp_module_print_plain_begin\n");*/
+        if (ferror(_stream)) {
+            g_print("Error %d on output stream: %s\n", errno,
+                    g_strerror(errno));
+        }
+        g_print("Printing failed\n");
+        /* fixme: should use pclose() for pipes */
+        fclose(_stream);
+        _stream = NULL;
+        fflush(stdout);
+        return 0;
+    }
+    _width = sp_document_width(doc);
+    _height = sp_document_height(doc);
 
-	NRRect d;
-	bool   pageBoundingBox;
-	bool   pageLandscape;
-	pageBoundingBox = mod->get_param_bool("pageBoundingBox");
-	// printf("Page Bounding Box: %s\n", pageBoundingBox ? "TRUE" : "FALSE");
-	if (pageBoundingBox)
-	{
-		d.x0 = d.y0 = 0;
-		d.x1 = ceil (sp_document_width (doc));
-		d.y1 = ceil (sp_document_height (doc));
-	}
-	else
-	{
-		SPItem* doc_item = SP_ITEM (sp_document_root (doc));
-		sp_item_invoke_bbox(doc_item, &d, sp_item_i2r_affine(doc_item), TRUE);
-	}
+    NRRect d;
+    bool   pageBoundingBox;
+    bool   pageLandscape;
+    pageBoundingBox = mod->get_param_bool("pageBoundingBox");
+    // printf("Page Bounding Box: %s\n", pageBoundingBox ? "TRUE" : "FALSE");
+    if (pageBoundingBox) {
+        d.x0 = d.y0 = 0;
+        d.x1 = ceil(sp_document_width(doc));
+        d.y1 = ceil(sp_document_height(doc));
+    } else {
+        SPItem* doc_item = SP_ITEM(sp_document_root(doc));
+        sp_item_invoke_bbox(doc_item, &d, sp_item_i2r_affine(doc_item), TRUE);
+    }
 
-	if (res >= 0) {
+    if (res >= 0) {
 
-		os << "%%Creator: " << PACKAGE_STRING << "\n";
-		// This will become problematic if inkscape gains the
-		// ability to handle multi paged documents. If this is
-		// the case the %%Orientation: comments should be
-		// renamed to %%PageOrientation: and moved to the
-		// respective pages.
-		os << "%%Pages: 1\n";
+        os << "%%Creator: " << PACKAGE_STRING << "\n";
+        // This will become problematic if inkscape gains the
+        // ability to handle multi paged documents. If this is
+        // the case the %%Orientation: comments should be
+        // renamed to %%PageOrientation: and moved to the
+        // respective pages.
+        os << "%%Pages: 1\n";
 
-		pageLandscape = (d.x1 - d.x0 > d.y1 - d.y0) ? true : false;
+        pageLandscape = (d.x1 - d.x0 > d.y1 - d.y0) ? true : false;
 
-		if (pageLandscape) {
-			os << "%%Orientation: Landscape\n";
-			os << "%%BoundingBox: " << (int) (_height - d.y1) << " "
-						<< (int) d.x0 << " "
-						<< (int) ceil (_height - d.y0) << " "
-						<< (int) ceil (d.x1) << "\n";
-			// According to Mike Sweet (the author of CUPS)
-			// HiResBoundingBox is only appropriate
-			// for EPS files. This means that we should
-			// distinguish if we export to ps or eps here.
-			// FIXME: I couldn't find HiResBoundingBox in the PS
-			// reference manual, so I guess we should skip
-			// it.
-			os << "%%HiResBoundingBox: " << (_height - d.y1) << " "
-						<< d.x0 << " "
-						<< (_height - d.y0) << " "
-						<< d.x1 << "\n";
-		}
-		else
-		{
-			os << "%%Orientation: Portrait\n";
-			os << "%%BoundingBox: " << (int) d.x0 << " "
-						<< (int) d.y0 << " "
-						<< (int) ceil (d.x1) << " "
-						<< (int) ceil (d.y1) << "\n";
-			os << "%%HiResBoundingBox: " << d.x0 << " "
-						<< d.y0 << " "
-						<< d.x1 << " "
-						<< d.y1 << "\n";
-		}
+        if (pageLandscape) {
+            os << "%%Orientation: Landscape\n";
+            os << "%%BoundingBox: " << (int) (_height - d.y1) << " "
+               << (int) d.x0 << " "
+               << (int) ceil(_height - d.y0) << " "
+               << (int) ceil(d.x1) << "\n";
+            // According to Mike Sweet (the author of CUPS)
+            // HiResBoundingBox is only appropriate
+            // for EPS files. This means that we should
+            // distinguish if we export to ps or eps here.
+            // FIXME: I couldn't find HiResBoundingBox in the PS
+            // reference manual, so I guess we should skip
+            // it.
+            os << "%%HiResBoundingBox: " << (_height - d.y1) << " "
+               << d.x0 << " "
+               << (_height - d.y0) << " "
+               << d.x1 << "\n";
+        } else {
+            os << "%%Orientation: Portrait\n";
+            os << "%%BoundingBox: " << (int) d.x0 << " "
+               << (int) d.y0 << " "
+               << (int) ceil(d.x1) << " "
+               << (int) ceil(d.y1) << "\n";
+            os << "%%HiResBoundingBox: " << d.x0 << " "
+               << d.y0 << " "
+               << d.x1 << " "
+               << d.y1 << "\n";
+        }
 
-		os << "%%EndComments\n";
-		// This will become problematic if we print
-		// multi paged documents:
-		os << "%%Page: 1 1\n";
+        os << "%%EndComments\n";
+        // This will become problematic if we print
+        // multi paged documents:
+        os << "%%Page: 1 1\n";
 
-		if (pageLandscape) {
-			os << 90 << " rotate\n";
-			if (_bitmap) {
-				os << "0 " << (int) -ceil (_height) << " translate\n";
-			}
-		} else
-			if (!_bitmap) {
-				os << "0 " << (int) ceil (_height) << " translate\n";
-			}
+        if (pageLandscape) {
+            os << 90 << " rotate\n";
+            if (_bitmap) {
+                os << "0 " << (int) -ceil(_height) << " translate\n";
+            }
+        } else {
+            if (!_bitmap) {
+                os << "0 " << (int) ceil(_height) << " translate\n";
+            }
+        }
 
-		if (!_bitmap) {
-			os << "0.8 -0.8 scale\n";
-		}
+        if (!_bitmap) {
+            os << "0.8 -0.8 scale\n";
+        }
+    }
 
-	}
-
-	return fprintf (_stream, "%s", os.str().c_str());
+    return fprintf(_stream, "%s", os.str().c_str());
 }
 
 unsigned int
-PrintPS::finish (Inkscape::Extension::Print *mod)
+PrintPS::finish(Inkscape::Extension::Print *mod)
 {
-	int res;
+    int res;
 
-	if (!_stream) return 0;
+    if (!_stream) return 0;
 
-	if (_bitmap) {
-		double x0, y0, x1, y1;
-		int width, height;
-		float scale;
-		NRMatrix affine;
-		guchar *px;
-		int y;
+    if (_bitmap) {
+        double x0, y0, x1, y1;
+        int width, height;
+        float scale;
+        NRMatrix affine;
+        guchar *px;
+        int y;
 
-		scale = _dpi / 72.0;
+        scale = _dpi / 72.0;
 
-		y0 = 0.0;
-		x0 = 0.0;
-		x1 = _width;
-		y1 = _height;
+        y0 = 0.0;
+        x0 = 0.0;
+        x1 = _width;
+        y1 = _height;
 
-		width = (int) (_width * scale + 0.5);
-		height = (int) (_height * scale + 0.5);
+        width = (int) (_width * scale + 0.5);
+        height = (int) (_height * scale + 0.5);
 
-		affine.c[0] = width / ((x1 - x0) * 1.25);
-		affine.c[1] = 0.0;
-		affine.c[2] = 0.0;
-		affine.c[3] = height / ((y1 - y0) * 1.25);
-		affine.c[4] = -affine.c[0] * x0 * 1.25;
-		affine.c[5] = -affine.c[3] * y0 * 1.25;
+        affine.c[0] = width / ((x1 - x0) * 1.25);
+        affine.c[1] = 0.0;
+        affine.c[2] = 0.0;
+        affine.c[3] = height / ((y1 - y0) * 1.25);
+        affine.c[4] = -affine.c[0] * x0 * 1.25;
+        affine.c[5] = -affine.c[3] * y0 * 1.25;
 
-		nr_arena_item_set_transform (mod->root, &affine);
+        nr_arena_item_set_transform(mod->root, &affine);
 
-		px = nr_new (guchar, 4 * width * 64);
+        px = nr_new(guchar, 4 * width * 64);
 
-		for (y = 0; y < height; y += 64) {
-			NRRectL bbox;
-			NRGC gc(NULL);
-			NRMatrix imgt;
-			NRPixBlock pb;
-			/* Set area of interest */
-			bbox.x0 = 0;
-			bbox.y0 = y;
-			bbox.x1 = width;
-			bbox.y1 = MIN (height, y + 64);
-			/* Update to renderable state */
-			nr_matrix_set_identity (&gc.transform);
-			nr_arena_item_invoke_update (mod->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
-			/* Render */
-			/* This should take guchar* instead of unsigned char*) */
-			nr_pixblock_setup_extern (&pb, NR_PIXBLOCK_MODE_R8G8B8A8N,
-						  bbox.x0, bbox.y0, bbox.x1, bbox.y1,
-						  (guchar*)px, 4 * width, FALSE, FALSE);
-			memset (px, 0xff, 4 * width * 64);
-			nr_arena_item_invoke_render (mod->root, &bbox, &pb, 0);
-			/* Blitter goes here */
-			imgt.c[0] = (bbox.x1 - bbox.x0) / scale;
-			imgt.c[1] = 0.0;
-			imgt.c[2] = 0.0;
-			imgt.c[3] = (bbox.y1 - bbox.y0) / scale;
-			imgt.c[4] = 0.0;
-			imgt.c[5] = _height - y / scale - (bbox.y1 - bbox.y0) / scale;
+        for (y = 0; y < height; y += 64) {
+            NRRectL bbox;
+            NRGC gc(NULL);
+            NRMatrix imgt;
+            NRPixBlock pb;
+            /* Set area of interest */
+            bbox.x0 = 0;
+            bbox.y0 = y;
+            bbox.x1 = width;
+            bbox.y1 = MIN(height, y + 64);
+            /* Update to renderable state */
+            nr_matrix_set_identity(&gc.transform);
+            nr_arena_item_invoke_update(mod->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
+            /* Render */
+            /* This should take guchar* instead of unsigned char*) */
+            nr_pixblock_setup_extern(&pb, NR_PIXBLOCK_MODE_R8G8B8A8N,
+                                     bbox.x0, bbox.y0, bbox.x1, bbox.y1,
+                                     (guchar*)px, 4 * width, FALSE, FALSE);
+            memset(px, 0xff, 4 * width * 64);
+            nr_arena_item_invoke_render(mod->root, &bbox, &pb, 0);
+            /* Blitter goes here */
+            imgt.c[0] = (bbox.x1 - bbox.x0) / scale;
+            imgt.c[1] = 0.0;
+            imgt.c[2] = 0.0;
+            imgt.c[3] = (bbox.y1 - bbox.y0) / scale;
+            imgt.c[4] = 0.0;
+            imgt.c[5] = _height - y / scale - (bbox.y1 - bbox.y0) / scale;
 
-			print_image (_stream, px, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0, 4 * width, &imgt);
-		}
+            print_image(_stream, px, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0, 4 * width, &imgt);
+        }
 
-		nr_free (px);
-	}
+        nr_free(px);
+    }
 
-	res = fprintf (_stream, "showpage\n");
+    res = fprintf(_stream, "showpage\n");
 
-	/* Flush stream to be sure */
-	(void) fflush (_stream);
+    /* Flush stream to be sure */
+    (void) fflush(_stream);
 
-	/* fixme: should really use pclose for popen'd streams */
-	fclose (_stream);
-	_stream = 0;
+    /* fixme: should really use pclose for popen'd streams */
+    fclose(_stream);
+    _stream = 0;
 
-	return res;
+    return res;
 }
 
 unsigned int
-PrintPS::bind (Inkscape::Extension::Print *mod, const NRMatrix *transform, float opacity)
+PrintPS::bind(Inkscape::Extension::Print *mod, const NRMatrix *transform, float opacity)
 {
-	if (!_stream) return 0;  // XXX: fixme, returning -1 as unsigned.
-	if (_bitmap) return 0;
+    if (!_stream) return 0;  // XXX: fixme, returning -1 as unsigned.
+    if (_bitmap) return 0;
 
+    Inkscape::SVGOStringStream os;
+    os << "gsave [" << transform->c[0] << " "
+       << transform->c[1] << " "
+       << transform->c[2] << " "
+       << transform->c[3] << " "
+       << transform->c[4] << " "
+       << transform->c[5] << "] concat\n";
+
+    return fprintf(_stream, "%s", os.str().c_str());
+}
+
+unsigned int
+PrintPS::release(Inkscape::Extension::Print *mod)
+{
+    if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+    if (_bitmap) return 0;
+
+    return fprintf(_stream, "grestore\n");
+}
+
+void
+PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style)
+{
+    float rgb[3];
+    sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
+
+    os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+}
+
+void
+PrintPS::print_stroke_style(SVGOStringStream &os, const SPStyle *style)
+{
+    float rgb[3];
+    sp_color_get_rgb_floatv(&style->stroke.value.color, rgb);
+
+    os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+
+    if (style->stroke_dasharray_set) {
+        if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
+            int i;
+            os << "[";
+            for (i = 0; i < style->stroke_dash.n_dash; i++) {
+                if ((i)) {
+                    os << " ";
+                }
+                os << style->stroke_dash.dash[i];
+            }
+            os << "] " << style->stroke_dash.offset << " setdash\n";
+        }
+    } else {
+        os << "[] 0 setdash\n";
+    }
+
+    os << style->stroke_width.computed << " setlinewidth\n";
+    os << style->stroke_linejoin.computed << " setlinejoin\n";
+    os << style->stroke_linecap.computed << " setlinecap\n";
+}
+
+
+unsigned int
+PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+              const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
+{
+    if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+    if (_bitmap) return 0;
+
+    if (style->fill.type == SP_PAINT_TYPE_COLOR) {
         Inkscape::SVGOStringStream os;
-	os << "gsave [" << transform->c[0] << " "
-			<< transform->c[1] << " "
-			<< transform->c[2] << " "
-			<< transform->c[3] << " "
-			<< transform->c[4] << " "
-			<< transform->c[5] << "] concat\n";
 
-	return fprintf (_stream, "%s", os.str().c_str());
-}
+        print_fill_style(os, style);
 
-unsigned int
-PrintPS::release (Inkscape::Extension::Print *mod)
-{
-	if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
-	if (_bitmap) return 0;
+        print_bpath(os, bpath->path);
 
-	return fprintf (_stream, "grestore\n");
-}
+        if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
+            os << "eofill\n";
+        } else {
+            os << "fill\n";
+        }
+        fprintf(_stream, "%s", os.str().c_str());
+    }
 
-void
-PrintPS::print_fill_style (SVGOStringStream &os, const SPStyle *style)
-{
-		float rgb[3];
-		sp_color_get_rgb_floatv (&style->fill.value.color, rgb);
-
-		os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
-}
-
-void
-PrintPS::print_stroke_style (SVGOStringStream &os, const SPStyle *style)
-{
-	float rgb[3];
-	sp_color_get_rgb_floatv (&style->stroke.value.color, rgb);
-
-	os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
-
-	if (style->stroke_dasharray_set) {
-		if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
-			int i;
-			os << "[";
-			for (i = 0; i < style->stroke_dash.n_dash; i++) {
-				if ((i)) {
-					os << " ";
-				}
-				os << style->stroke_dash.dash[i];
-			}
-			os << "] " << style->stroke_dash.offset << " setdash\n";
-		}
-	} else {
-		os << "[] 0 setdash\n";
-	}
-
-	os << style->stroke_width.computed << " setlinewidth\n";
-	os << style->stroke_linejoin.computed << " setlinejoin\n";
-	os << style->stroke_linecap.computed << " setlinecap\n";
+    return 0;
 }
 
 
 unsigned int
-PrintPS::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-			    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
+PrintPS::stroke(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+                const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-	if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
-	if (_bitmap) return 0;
+    if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+    if (_bitmap) return 0;
 
-	if (style->fill.type == SP_PAINT_TYPE_COLOR) {
-        	Inkscape::SVGOStringStream os;
+    if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
+        Inkscape::SVGOStringStream os;
 
-		print_fill_style (os, style);
+        print_stroke_style(os, style);
 
-		print_bpath (os, bpath->path);
+        print_bpath(os, bpath->path);
 
-		if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
-			os << "eofill\n";
-		} else {
-			os << "fill\n";
-		}
-		fprintf (_stream, "%s", os.str().c_str());
-	}
+        os << "stroke\n";
 
-	return 0;
-}
+        fprintf(_stream, "%s", os.str().c_str());
+    }
 
-
-unsigned int
-PrintPS::stroke (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-			      const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
-{
-	if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
-	if (_bitmap) return 0;
-
-	if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
-        	Inkscape::SVGOStringStream os;
-
-		print_stroke_style (os, style);
-
-		print_bpath (os, bpath->path);
-
-		os << "stroke\n";
-
-		fprintf (_stream, "%s", os.str().c_str());
-	}
-
-	return 0;
+    return 0;
 }
 
 unsigned int
-PrintPS::image (Inkscape::Extension::Print *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
-			     const NRMatrix *transform, const SPStyle *style)
+PrintPS::image(Inkscape::Extension::Print *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
+               const NRMatrix *transform, const SPStyle *style)
 {
-	if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
-	if (_bitmap) return 0;
+    if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+    if (_bitmap) return 0;
 
-	return print_image (_stream, px, w, h, rs, transform);
+    return print_image(_stream, px, w, h, rs, transform);
 #if 0
-	fprintf (_stream, "gsave\n");
-	fprintf (_stream, "/rowdata %d string def\n", 3 * w);
-	fprintf (_stream, "[%g %g %g %g %g %g] concat\n",
-		 transform->c[0],
-		 transform->c[1],
-		 transform->c[2],
-		 transform->c[3],
-		 transform->c[4],
-		 transform->c[5]);
-	fprintf (_stream, "%d %d 8 [%d 0 0 -%d 0 %d]\n", w, h, w, h, h);
-	fprintf (_stream, "{currentfile rowdata readhexstring pop}\n");
-	fprintf (_stream, "false 3 colorimage\n");
+    fprintf(_stream, "gsave\n");
+    fprintf(_stream, "/rowdata %d string def\n", 3 * w);
+    fprintf(_stream, "[%g %g %g %g %g %g] concat\n",
+            transform->c[0],
+            transform->c[1],
+            transform->c[2],
+            transform->c[3],
+            transform->c[4],
+            transform->c[5]);
+    fprintf(_stream, "%d %d 8 [%d 0 0 -%d 0 %d]\n", w, h, w, h, h);
+    fprintf(_stream, "{currentfile rowdata readhexstring pop}\n");
+    fprintf(_stream, "false 3 colorimage\n");
 
-	for (unsigned int r = 0; r < h; r++) {
-		guchar *s;
-		unsigned int c0, c1, c;
-		s = px + r * rs;
-		for (c0 = 0; c0 < w; c0 += 24) {
-			c1 = MIN (w, c0 + 24);
-			for (c = c0; c < c1; c++) {
-				static const char xtab[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-				fputc (xtab[s[0] >> 4], _stream);
-				fputc (xtab[s[0] & 0xf], _stream);
-				fputc (xtab[s[1] >> 4], _stream);
-				fputc (xtab[s[1] & 0xf], _stream);
-				fputc (xtab[s[2] >> 4], _stream);
-				fputc (xtab[s[2] & 0xf], _stream);
-				s += 4;
-			}
-			fputs ("\n", _stream);
-		}
-	}
+    for (unsigned int r = 0; r < h; r++) {
+        guchar *s;
+        unsigned int c0, c1, c;
+        s = px + r * rs;
+        for (c0 = 0; c0 < w; c0 += 24) {
+            c1 = MIN(w, c0 + 24);
+            for (c = c0; c < c1; c++) {
+                static const char xtab[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+                fputc(xtab[s[0] >> 4], _stream);
+                fputc(xtab[s[0] & 0xf], _stream);
+                fputc(xtab[s[1] >> 4], _stream);
+                fputc(xtab[s[1] & 0xf], _stream);
+                fputc(xtab[s[2] >> 4], _stream);
+                fputc(xtab[s[2] & 0xf], _stream);
+                s += 4;
+            }
+            fputs("\n", _stream);
+        }
+    }
 
-	fprintf (_stream, "grestore\n");
+    fprintf(_stream, "grestore\n");
 
-	return 0;
+    return 0;
 #endif
 }
 
 const char *
-PrintPS::PSFontName (const SPStyle *style)
+PrintPS::PSFontName(const SPStyle *style)
 {
-	font_instance *tf = (font_factory::Default())->Face(style->text->font_family.value, font_style_to_pos(*style));
+    font_instance *tf = (font_factory::Default())->Face(style->text->font_family.value, font_style_to_pos(*style));
 
-	char const *n;
-	char name_buf[256];
+    char const *n;
+    char name_buf[256];
 
-	if (tf) {
-		tf->PSName(name_buf, sizeof(name_buf));
-		n = name_buf;
-		tf->Unref();
-	} else {
-		// this system does not have this font, so just use the name from SVG in the hope that PS interpreter will make sense of it
-		bool i = (style->font_style.value == SP_CSS_FONT_STYLE_ITALIC);
-		bool o = (style->font_style.value == SP_CSS_FONT_STYLE_OBLIQUE);
-		bool b = (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLD) ||
-			(style->font_weight.value >= SP_CSS_FONT_WEIGHT_500 && style->font_weight.value <= SP_CSS_FONT_WEIGHT_900);
+    if (tf) {
+        tf->PSName(name_buf, sizeof(name_buf));
+        n = name_buf;
+        tf->Unref();
+    } else {
+        // this system does not have this font, so just use the name from SVG in the hope that PS interpreter will make sense of it
+        bool i = (style->font_style.value == SP_CSS_FONT_STYLE_ITALIC);
+        bool o = (style->font_style.value == SP_CSS_FONT_STYLE_OBLIQUE);
+        bool b = (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLD) ||
+            (style->font_weight.value >= SP_CSS_FONT_WEIGHT_500 && style->font_weight.value <= SP_CSS_FONT_WEIGHT_900);
 
-		n = g_strdup_printf ("%s%s%s%s",
-								 g_strdelimit (style->text->font_family.value, " ", '-'),
-								 (b || i || o) ? "-" : "",
-								 (b) ? "Bold" : "",
-								 (i) ? "Italic" : ((o) ? "Oblique" : "") );
-	}
+        n = g_strdup_printf("%s%s%s%s",
+                            g_strdelimit(style->text->font_family.value, " ", '-'),
+                            (b || i || o) ? "-" : "",
+                            (b) ? "Bold" : "",
+                            (i) ? "Italic" : ((o) ? "Oblique" : "") );
+    }
 
-	return g_strdup (n);
+    return g_strdup(n);
 }
 
 
 unsigned int
-PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
-	       const SPStyle* style)
+PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
+              const SPStyle* style)
 {
-  if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
-  if (_bitmap) return 0;
+    if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+    if (_bitmap) return 0;
 
-  Inkscape::SVGOStringStream os;
+    Inkscape::SVGOStringStream os;
 
-  // Escape chars
-  // FlowResOut feeds us text char by char
-  if (!strcmp (text, "(")) {
-	text = "\\(";
-  } else if (!strcmp (text, ")")) {
-	text = "\\)";
-  } else if (!strcmp (text, "\\")) {
-	text = "\\\\";
-  }
+    // Escape chars
+    // FlowResOut feeds us text char by char
+    if (!strcmp(text, "(")) {
+        text = "\\(";
+    } else if (!strcmp(text, ")")) {
+        text = "\\)";
+    } else if (!strcmp(text, "\\")) {
+        text = "\\\\";
+    }
 
-  // set font
-  const char *fn = PSFontName (style);
-  os << "/" << fn << " findfont\n";
-  os << style->font_size.computed << " scalefont\n";
-  os << "setfont\n";
-  g_free ((void *) fn);
+    // set font
+    const char *fn = PSFontName(style);
+    os << "/" << fn << " findfont\n";
+    os << style->font_size.computed << " scalefont\n";
+    os << "setfont\n";
+    g_free((void *) fn);
 
-  if (style->fill.type == SP_PAINT_TYPE_COLOR) {
-	// set fill style
-	print_fill_style (os, style);
-	// paint fill
-	os << "newpath\n";
-	os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
-	os << "(" << text << ") show\n";
-  }
+    if (style->fill.type == SP_PAINT_TYPE_COLOR) {
+        // set fill style
+        print_fill_style(os, style);
+        // paint fill
+        os << "newpath\n";
+        os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
+        os << "(" << text << ") show\n";
+    }
 
-  if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
- 	// set stroke style
-	print_stroke_style (os, style);
-	// paint stroke
-	os << "newpath\n";
-	os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
-	os << "(" << text << ") false charpath stroke\n";
-  }
+    if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
+        // set stroke style
+        print_stroke_style(os, style);
+        // paint stroke
+        os << "newpath\n";
+        os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
+        os << "(" << text << ") false charpath stroke\n";
+    }
 
-  fprintf (_stream, "%s", os.str().c_str());
+    fprintf(_stream, "%s", os.str().c_str());
 
-  return 0;
+    return 0;
 }
 
 
@@ -738,44 +733,44 @@ PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
 /* PostScript helpers */
 
 void
-PrintPS::print_bpath (SVGOStringStream &os, const NArtBpath *bp)
+PrintPS::print_bpath(SVGOStringStream &os, const NArtBpath *bp)
 {
-	unsigned int closed;
+    unsigned int closed;
 
-	os << "newpath\n";
-	closed = FALSE;
-	while (bp->code != NR_END) {
-		switch (bp->code) {
-		case NR_MOVETO:
-			if (closed) {
-				os << "closepath\n";
-			}
-			closed = TRUE;
-			os << bp->x3 << " " << bp->y3 << " moveto\n";
-			break;
-		case NR_MOVETO_OPEN:
-			if (closed) {
-				os << "closepath\n";
-			}
-			closed = FALSE;
-			os << bp->x3 << " " << bp->y3 << " moveto\n";
-			break;
-		case NR_LINETO:
-			os << bp->x3 << " " << bp->y3 << " lineto\n";
-			break;
-		case NR_CURVETO:
-			os << bp->x1 << " " << bp->y1 << " "
-			   << bp->x2 << " " << bp->y2 << " "
-			   << bp->x3 << " " << bp->y3 << " curveto\n";
-			break;
-		default:
-			break;
-		}
-		bp += 1;
-	}
-	if (closed) {
-		os << "closepath\n";
-	}
+    os << "newpath\n";
+    closed = FALSE;
+    while (bp->code != NR_END) {
+        switch (bp->code) {
+            case NR_MOVETO:
+                if (closed) {
+                    os << "closepath\n";
+                }
+                closed = TRUE;
+                os << bp->x3 << " " << bp->y3 << " moveto\n";
+                break;
+            case NR_MOVETO_OPEN:
+                if (closed) {
+                    os << "closepath\n";
+                }
+                closed = FALSE;
+                os << bp->x3 << " " << bp->y3 << " moveto\n";
+                break;
+            case NR_LINETO:
+                os << bp->x3 << " " << bp->y3 << " lineto\n";
+                break;
+            case NR_CURVETO:
+                os << bp->x1 << " " << bp->y1 << " "
+                   << bp->x2 << " " << bp->y2 << " "
+                   << bp->x3 << " " << bp->y3 << " curveto\n";
+                break;
+            default:
+                break;
+        }
+        bp += 1;
+    }
+    if (closed) {
+        os << "closepath\n";
+    }
 }
 
 /* The following code is licensed under GNU GPL.
@@ -790,290 +785,273 @@ PrintPS::print_bpath (SVGOStringStream &os, const NArtBpath *bp)
 * \param dst Buffer for output.
 */
 void
-PrintPS::compress_packbits (int nin,
-                            guchar *src,
-                            int *nout,
-                            guchar *dst)
+PrintPS::compress_packbits(int nin,
+                           guchar *src,
+                           int *nout,
+                           guchar *dst)
 
 {
-  register guchar c;
-  int nrepeat, nliteral;
-  guchar *run_start;
-  guchar *start_dst = dst;
-  guchar *last_literal = NULL;
+    register guchar c;
+    int nrepeat, nliteral;
+    guchar *run_start;
+    guchar *start_dst = dst;
+    guchar *last_literal = NULL;
 
- for (;;)
- {
-   if (nin <= 0) break;
+    for (;;) {
+        if (nin <= 0) break;
 
-   run_start = src;
-   c = *run_start;
+        run_start = src;
+        c = *run_start;
 
-   /* Search repeat bytes */
-   if ((nin > 1) && (c == src[1]))
-   {
-     nrepeat = 1;
-     nin -= 2;
-     src += 2;
-     while ((nin > 0) && (c == *src))
-     {
-       nrepeat++;
-       src++;
-       nin--;
-       if (nrepeat == 127) break; /* Maximum repeat */
-     }
+        /* Search repeat bytes */
+        if ((nin > 1) && (c == src[1])) {
+            nrepeat = 1;
+            nin -= 2;
+            src += 2;
+            while ((nin > 0) && (c == *src)) {
+                nrepeat++;
+                src++;
+                nin--;
+                if (nrepeat == 127) break; /* Maximum repeat */
+            }
 
-     /* Add two-byte repeat to last literal run ? */
-     if (   (nrepeat == 1)
-         && (last_literal != NULL) && (((*last_literal)+1)+2 <= 128))
-     {
-       *last_literal += 2;
-       *(dst++) = c;
-       *(dst++) = c;
-       continue;
-     }
+            /* Add two-byte repeat to last literal run ? */
+            if ( (nrepeat == 1)
+                 && (last_literal != NULL) && (((*last_literal)+1)+2 <= 128) )
+            {
+                *last_literal += 2;
+                *(dst++) = c;
+                *(dst++) = c;
+                continue;
+            }
 
-     /* Add repeat run */
-     *(dst++) = (guchar)((-nrepeat) & 0xff);
-     *(dst++) = c;
-     last_literal = NULL;
-     continue;
-   }
-   /* Search literal bytes */
-   nliteral = 1;
-   nin--;
-   src++;
-
-   for (;;)
-   {
-     if (nin <= 0) break;
-
-     if ((nin >= 2) && (src[0] == src[1])) /* A two byte repeat ? */
-       break;
-
-     nliteral++;
-     nin--;
-     src++;
-     if (nliteral == 128) break; /* Maximum literal run */
-   }
-
-   /* Could be added to last literal run ? */
-   if ((last_literal != NULL) && (((*last_literal)+1)+nliteral <= 128))
-   {
-     *last_literal += nliteral;
-   }
-   else
-   {
-     last_literal = dst;
-     *(dst++) = (guchar)(nliteral-1);
-   }
-   while (nliteral-- > 0) *(dst++) = *(run_start++);
- }
- *nout = dst - start_dst;
-}
-
-void
-PrintPS::ascii85_init (void)
-{
-  ascii85_len = 0;
-  ascii85_linewidth = 0;
-}
-
-void
-PrintPS::ascii85_flush (SVGOStringStream &os)
-{
-  char c[5];
-  int i;
-  gboolean zero_case = (ascii85_buf == 0);
-  static int max_linewidth = 75;
-
-  for (i=4; i >= 0; i--)
-    {
-      c[i] = (ascii85_buf % 85) + '!';
-      ascii85_buf /= 85;
-    }
-  /* check for special case: "!!!!!" becomes "z", but only if not
-   * at end of data. */
-  if (zero_case && (ascii85_len == 4))
-    {
-      if (ascii85_linewidth >= max_linewidth)
-      {
-	os << '\n';
-        ascii85_linewidth = 0;
-      }
-      os << 'z';
-      ascii85_linewidth++;
-    }
-  else
-    {
-      for (i=0; i < ascii85_len+1; i++)
-      {
-        if ((ascii85_linewidth >= max_linewidth) && (c[i] != '%'))
-        {
-	  os << '\n';
-          ascii85_linewidth = 0;
+            /* Add repeat run */
+            *(dst++) = (guchar)((-nrepeat) & 0xff);
+            *(dst++) = c;
+            last_literal = NULL;
+            continue;
         }
-	os << c[i];
+        /* Search literal bytes */
+        nliteral = 1;
+        nin--;
+        src++;
+
+        for (;;) {
+            if (nin <= 0) break;
+
+            if ((nin >= 2) && (src[0] == src[1])) /* A two byte repeat ? */
+                break;
+
+            nliteral++;
+            nin--;
+            src++;
+            if (nliteral == 128) break; /* Maximum literal run */
+        }
+
+        /* Could be added to last literal run ? */
+        if ((last_literal != NULL) && (((*last_literal)+1)+nliteral <= 128)) {
+            *last_literal += nliteral;
+        } else {
+            last_literal = dst;
+            *(dst++) = (guchar)(nliteral-1);
+        }
+        while (nliteral-- > 0) *(dst++) = *(run_start++);
+    }
+    *nout = dst - start_dst;
+}
+
+void
+PrintPS::ascii85_init(void)
+{
+    ascii85_len = 0;
+    ascii85_linewidth = 0;
+}
+
+void
+PrintPS::ascii85_flush(SVGOStringStream &os)
+{
+    char c[5];
+    int i;
+    gboolean zero_case = (ascii85_buf == 0);
+    static int max_linewidth = 75;
+
+    for (i=4; i >= 0; i--) {
+        c[i] = (ascii85_buf % 85) + '!';
+        ascii85_buf /= 85;
+    }
+    /* check for special case: "!!!!!" becomes "z", but only if not
+     * at end of data. */
+    if (zero_case && (ascii85_len == 4)) {
+        if (ascii85_linewidth >= max_linewidth) {
+            os << '\n';
+            ascii85_linewidth = 0;
+        }
+        os << 'z';
         ascii85_linewidth++;
-      }
+    } else {
+        for (i=0; i < ascii85_len+1; i++) {
+            if ((ascii85_linewidth >= max_linewidth) && (c[i] != '%')) {
+                os << '\n';
+                ascii85_linewidth = 0;
+            }
+            os << c[i];
+            ascii85_linewidth++;
+        }
     }
 
-  ascii85_len = 0;
-  ascii85_buf = 0;
+    ascii85_len = 0;
+    ascii85_buf = 0;
 }
 
 inline void
-PrintPS::ascii85_out (guchar byte, SVGOStringStream &os)
+PrintPS::ascii85_out(guchar byte, SVGOStringStream &os)
 {
-  if (ascii85_len == 4)
-    ascii85_flush (os);
+    if (ascii85_len == 4)
+        ascii85_flush(os);
 
-  ascii85_buf <<= 8;
-  ascii85_buf |= byte;
-  ascii85_len++;
+    ascii85_buf <<= 8;
+    ascii85_buf |= byte;
+    ascii85_len++;
 }
 
 void
-PrintPS::ascii85_nout (int n, guchar *uptr, SVGOStringStream &os)
+PrintPS::ascii85_nout(int n, guchar *uptr, SVGOStringStream &os)
 {
- while (n-- > 0)
- {
-   ascii85_out (*uptr, os);
-   uptr++;
- }
+    while (n-- > 0) {
+        ascii85_out(*uptr, os);
+        uptr++;
+    }
 }
 
 void
-PrintPS::ascii85_done (SVGOStringStream &os)
+PrintPS::ascii85_done(SVGOStringStream &os)
 {
-  if (ascii85_len)
-    {
-      /* zero any unfilled buffer portion, then flush */
-      ascii85_buf <<= (8 * (4-ascii85_len));
-      ascii85_flush (os);
+    if (ascii85_len) {
+        /* zero any unfilled buffer portion, then flush */
+        ascii85_buf <<= (8 * (4-ascii85_len));
+        ascii85_flush(os);
     }
 
-  os << "~>\n";
+    os << "~>\n";
 }
 
 unsigned int
-PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
-		   const NRMatrix *transform)
+PrintPS::print_image(FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
+                     const NRMatrix *transform)
 {
-	unsigned int i, j;
-	/* gchar *data, *src; */
-	guchar *packb = NULL, *plane = NULL;
-        Inkscape::SVGOStringStream os;
+    unsigned int i, j;
+    /* gchar *data, *src; */
+    guchar *packb = NULL, *plane = NULL;
+    Inkscape::SVGOStringStream os;
 
-	os << "gsave\n";
-	os << "[" << transform->c[0] << " "
-		<< transform->c[1] << " "
-		<< transform->c[2] << " "
-		<< transform->c[3] << " "
-		<< transform->c[4] << " "
-		<< transform->c[5] << "] concat\n";
-	os << width << " " << height << " 8 ["
-		<< width << " 0 0 -" << height << " 0 " << height << "]\n";
+    os << "gsave\n";
+    os << "[" << transform->c[0] << " "
+       << transform->c[1] << " "
+       << transform->c[2] << " "
+       << transform->c[3] << " "
+       << transform->c[4] << " "
+       << transform->c[5] << "] concat\n";
+    os << width << " " << height << " 8 ["
+       << width << " 0 0 -" << height << " 0 " << height << "]\n";
 
 
-	/* Write read image procedure */
-	os << "% Strings to hold RGB-samples per scanline\n";
-	os << "/rstr " << width << " string def\n";
-	os << "/gstr " << width << " string def\n";
-	os << "/bstr " << width << " string def\n";
-	os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter rstr readstring pop}\n";
-	os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter gstr readstring pop}\n";
-	os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter bstr readstring pop}\n";
-	os << "true 3\n";
+    /* Write read image procedure */
+    os << "% Strings to hold RGB-samples per scanline\n";
+    os << "/rstr " << width << " string def\n";
+    os << "/gstr " << width << " string def\n";
+    os << "/bstr " << width << " string def\n";
+    os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter rstr readstring pop}\n";
+    os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter gstr readstring pop}\n";
+    os << "{currentfile /ASCII85Decode filter /RunLengthDecode filter bstr readstring pop}\n";
+    os << "true 3\n";
 
-	/* Allocate buffer for packbits data. Worst case: Less than 1% increase */
-	packb = (guchar *)g_malloc ((width * 105)/100+2);
-	plane = (guchar *)g_malloc (width);
+    /* Allocate buffer for packbits data. Worst case: Less than 1% increase */
+    packb = (guchar *)g_malloc((width * 105)/100+2);
+    plane = (guchar *)g_malloc(width);
 
-	/* ps_begin_data (ofp); */
-	os << "colorimage\n";
+    /* ps_begin_data(ofp); */
+    os << "colorimage\n";
 
 #define GET_RGB_TILE(begin) \
   {int scan_lines; \
     scan_lines = (i+tile_height-1 < height) ? tile_height : (height-i); \
-    gimp_pixel_rgn_get_rect (&pixel_rgn, begin, 0, i, width, scan_lines); \
+    gimp_pixel_rgn_get_rect(&pixel_rgn, begin, 0, i, width, scan_lines); \
     src = begin; }
 
-	for (i = 0; i < height; i++) {
-		/* if ((i % tile_height) == 0) GET_RGB_TILE (data); */ /* Get more data */
-		guchar *plane_ptr, *src_ptr;
-		int rgb, nout;
-		guchar *src;
+    for (i = 0; i < height; i++) {
+        /* if ((i % tile_height) == 0) GET_RGB_TILE(data); */ /* Get more data */
+        guchar *plane_ptr, *src_ptr;
+        int rgb, nout;
+        guchar *src;
 
-		src = px + i * rs;
+        src = px + i * rs;
 
-		/* Iterate over RGB */
-		for (rgb = 0; rgb < 3; rgb++) {
-			src_ptr = src + rgb;
-			plane_ptr = plane;
-			for (j = 0; j < width; j++) {
-				*(plane_ptr++) = *src_ptr;
-				src_ptr += 4;
-			}
-			compress_packbits (width, plane, &nout, packb);
+        /* Iterate over RGB */
+        for (rgb = 0; rgb < 3; rgb++) {
+            src_ptr = src + rgb;
+            plane_ptr = plane;
+            for (j = 0; j < width; j++) {
+                *(plane_ptr++) = *src_ptr;
+                src_ptr += 4;
+            }
+            compress_packbits(width, plane, &nout, packb);
 
-			ascii85_init ();
-			ascii85_nout (nout, packb, os);
-			ascii85_out (128, os); /* Write EOD of RunLengthDecode filter */
-			ascii85_done (os);
-		}
-	}
-	/* ps_end_data (ofp); */
-
-#if 0
-	fprintf (ofp, "showpage\n");
-	g_free (data);
-#endif
-
-	g_free (packb);
-	g_free (plane);
+            ascii85_init();
+            ascii85_nout(nout, packb, os);
+            ascii85_out(128, os); /* Write EOD of RunLengthDecode filter */
+            ascii85_done(os);
+        }
+    }
+    /* ps_end_data(ofp); */
 
 #if 0
-	if (ferror (ofp))
-	{
-		g_message (_("write error occurred"));
-		return (FALSE);
-	}
+    fprintf(ofp, "showpage\n");
+    g_free(data);
 #endif
 
-	os << "grestore\n";
+    g_free(packb);
+    g_free(plane);
 
-	fprintf (ofp, "%s", os.str().c_str());
+#if 0
+    if (ferror(ofp)) {
+        g_message(_("write error occurred"));
+        return (FALSE);
+    }
+#endif
 
-	return 0;
+    os << "grestore\n";
+
+    fprintf(ofp, "%s", os.str().c_str());
+
+    return 0;
 #undef GET_RGB_TILE
 }
 
 bool
-PrintPS::textToPath (Inkscape::Extension::Print * ext)
+PrintPS::textToPath(Inkscape::Extension::Print * ext)
 {
-	return ext->get_param_bool("textToPath");
+    return ext->get_param_bool("textToPath");
 }
 
 void
-PrintPS::init (void)
+PrintPS::init(void)
 {
-	Inkscape::Extension::Extension * ext;
+    Inkscape::Extension::Extension * ext;
 
-	/* SVG in */
+    /* SVG in */
     ext = Inkscape::Extension::build_from_mem(
-		"<inkscape-extension>\n"
-			"<name>Postscript Print</name>\n"
-			"<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"
-			"<param name=\"bitmap\" type=\"boolean\">FALSE</param>\n"
-			"<param name=\"resolution\" type=\"string\">72</param>\n"
-			"<param name=\"destination\" type=\"string\">lp</param>\n"
-			"<param name=\"pageBoundingBox\" type=\"boolean\">TRUE</param>\n"
-			"<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
-			"<print/>\n"
-		"</inkscape-extension>", new PrintPS());
+        "<inkscape-extension>\n"
+        "<name>Postscript Print</name>\n"
+        "<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"
+        "<param name=\"bitmap\" type=\"boolean\">FALSE</param>\n"
+        "<param name=\"resolution\" type=\"string\">72</param>\n"
+        "<param name=\"destination\" type=\"string\">lp</param>\n"
+        "<param name=\"pageBoundingBox\" type=\"boolean\">TRUE</param>\n"
+        "<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
+        "<print/>\n"
+        "</inkscape-extension>", new PrintPS());
 
-	return;
+    return;
 }
 
 
@@ -1082,3 +1060,15 @@ PrintPS::init (void)
 }; /* namespace Inkscape */
 
 /* End of GNU GPL code */
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
