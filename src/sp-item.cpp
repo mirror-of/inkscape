@@ -182,7 +182,9 @@ sp_item_clip_release (SPClipPath *cp, SPItem *item)
 		}
 		/* Detach clippath */
 		sp_signal_disconnect_by_data (item->clip, item);
-		item->clip = sp_object_hunref (SP_OBJECT (item->clip), item);
+		delete item->clip_ref;
+		item->clip_ref = NULL;
+		item->clip = NULL;
 	}
 }
 

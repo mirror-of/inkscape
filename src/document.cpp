@@ -119,7 +119,11 @@ sp_document_class_init (SPDocumentClass * klass)
 static void
 free_id_signal(gpointer p)
 {
-	delete reinterpret_cast<SigC::Signal1<void, SPObject *> *>(p);
+	SigC::Signal1<void, SPObject *> *signal = reinterpret_cast<SigC::Signal1<void, SPObject *> *>(p);
+	if (!signal->empty()) {
+		g_warning("Lingering document id observers");
+	}
+	delete signal;
 }
 
 static void
@@ -183,10 +187,6 @@ sp_document_dispose (GObject *object)
 		}
 
 		if (priv->iddef) g_hash_table_destroy (priv->iddef);
-		if (!g_hash_table_size(priv->idsignals)) {
-			/* FIXME !!! warn only for nonempty signals */
-			g_warning("Lingering id change signals");
-		}
 		if (priv->idsignals) g_hash_table_destroy (priv->idsignals);
 
 		if (doc->rdoc) sp_repr_document_unref (doc->rdoc);
@@ -539,14 +539,16 @@ sp_document_def_id (SPDocument * document, const gchar * id, SPObject * object)
 	} else {
 		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) != NULL);
 		g_hash_table_remove(document->priv->iddef, GINT_TO_POINTER(idq));
-		if ( signal && signal->empty() ) {
-			g_hash_table_remove(document->priv->idsignals, GINT_TO_POINTER(idq));
-			signal = NULL;
-		}
 	}
 
 	if (signal) {
-		signal->emit(object);
+		if (!signal->empty()) {
+			signal->emit(object);
+		} else {
+			/* dispose of unused signal */
+			g_hash_table_remove(document->priv->idsignals, GINT_TO_POINTER(idq));
+			signal = NULL;
+		}
 	}
 }
 
