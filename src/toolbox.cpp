@@ -999,14 +999,11 @@ static SPReprEventVector star_tb_repr_events =
 static void
 sp_star_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-    g_assert(selection != NULL);
-    
-    SPDesktop *desktop = (SPDesktop *) gtk_object_get_data (GTK_OBJECT (tbl), "desktop");
     int no_stars_selected = 0;
     SPRepr *repr = NULL;
     SPRepr *oldrepr = NULL;
     
-    for (const GSList *items = SP_DT_SELECTION(desktop)->itemList();
+    for (const GSList *items = selection->itemList();
          items != NULL;
          items = items->next)
     {
@@ -1015,7 +1012,7 @@ sp_star_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
             repr = SP_OBJECT_REPR((SPItem *) items->data);
         }
     }
-    
+
     if (no_stars_selected == 1) {
 
         oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
@@ -1344,15 +1341,12 @@ static SPReprEventVector rect_tb_repr_events = {
 static void
 sp_rect_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-    g_assert(selection != NULL);
-  
-    SPDesktop *desktop = (SPDesktop *) gtk_object_get_data (GTK_OBJECT (tbl), "desktop");
     int rects_selected = 0;
     SPRepr *repr = NULL;
     SPItem *item = NULL;
     SPRepr *oldrepr = NULL;
   
-    for (const GSList *items = SP_DT_SELECTION(desktop)->itemList();
+    for (const GSList *items = selection->itemList();
          items != NULL;
          items = items->next) {
         if (SP_IS_RECT ((SPItem *) items->data)) {
@@ -1594,12 +1588,11 @@ static SPReprEventVector spiral_tb_repr_events = {
 static void
 sp_spiral_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-    SPDesktop *desktop = (SPDesktop *) gtk_object_get_data (GTK_OBJECT (tbl), "desktop");
     int no_spirals_selected = 0;
     SPRepr *repr = NULL;
     SPRepr *oldrepr = NULL;
   
-    for (const GSList *items = SP_DT_SELECTION(desktop)->itemList();
+    for (const GSList *items = selection->itemList();
          items != NULL;
          items = items->next)
     {
@@ -2055,12 +2048,11 @@ static SPReprEventVector arc_tb_repr_events = {
 static void
 sp_arc_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-  SPDesktop *desktop = (SPDesktop *) gtk_object_get_data (GTK_OBJECT (tbl), "desktop");
   int no_arcs_selected = 0;
   SPRepr *repr = NULL;
   SPRepr *oldrepr = NULL;
   
-  for (const GSList *items = SP_DT_SELECTION (desktop)->itemList();
+  for (const GSList *items = selection->itemList();
        items != NULL;
        items = items->next)
   {
