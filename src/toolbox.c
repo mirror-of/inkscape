@@ -39,10 +39,6 @@
 #include "inkscape-private.h"
 #include "document.h"
 #include "inkscape.h"
-#if 0
-#include "event-broker.h"
-#include "zoom-context.h"
-#endif
 #include "extension.h"
 #include "sp-item-transform.h"
 #include "desktop-handles.h"
@@ -254,57 +250,6 @@ enum {
 	SP_TOOLBOX_DRAW_PEN,
 	SP_TOOLBOX_DRAW_DYNAHAND
 };
-
-#if 0
-static void
-sp_toolbox_draw_set_object (SPButton *button, gpointer data)
-{
-	unsigned int mode;
-
-	mode = sp_button_get_option (button);
-
-	switch (mode) {
-	case SP_TOOLBOX_DRAW_RECT:
-		sp_event_context_set_rect (NULL);
-		break;
-	case SP_TOOLBOX_DRAW_ARC:
-		sp_event_context_set_arc (NULL);
-		break;
-	case SP_TOOLBOX_DRAW_STAR:
-		sp_event_context_set_star (NULL);
-		break;
-	case SP_TOOLBOX_DRAW_SPIRAL:
-		sp_event_context_set_spiral (NULL);
-		break;
-	default:
-		g_warning ("Illegal draw code %d", mode);
-		break;
-	}
-}
-
-static void
-sp_toolbox_draw_set_freehand (SPButton *button, gpointer data)
-{
-	unsigned int mode;
-
-	mode = sp_button_get_option (button);
-
-	switch (mode) {
-	case SP_TOOLBOX_DRAW_FREEHAND:
-		sp_event_context_set_freehand (NULL);
-		break;
-	case SP_TOOLBOX_DRAW_PEN:
-		sp_event_context_set_pen (NULL);
-		break;
-	case SP_TOOLBOX_DRAW_DYNAHAND:
-		sp_event_context_set_dynahand (NULL);
-		break;
-	default:
-		g_warning ("Illegal draw code %d", mode);
-		break;
-	}
-}
-#endif
 
 static GtkWidget *
 sp_toolbox_button_new (GtkWidget *t, int pos, const gchar *pxname, GtkSignalFunc handler, GtkTooltips *tt, const gchar *tip)
