@@ -31,6 +31,7 @@
 #include "prefs-utils.h"
 #include "inkscape.h"
 #include "macros.h"
+#include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
 #include "xml/repr.h"
@@ -85,8 +86,16 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     void hide();
     void hideF12();
 
+    /**
+     * Do the actual work
+     */
     void Grid_Arrange();
 
+
+    /**
+     * Respond to selection change
+     */
+    void TileDialogImpl::updateSelection();
 
 
     /**
@@ -101,11 +110,15 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     void on_col_spinbutton_changed();
     void on_xpad_spinbutton_changed();
     void on_ypad_spinbutton_changed();
-
+    void on_RowSize_checkbutton_changed();
+    void on_ColSize_checkbutton_changed();
+    void on_rowSize_spinbutton_changed();
+    void on_colSize_spinbutton_changed();
     private:
 
     bool userHidden;
     bool updating;
+
 
 
     Gtk::Notebook   notebook;
@@ -115,28 +128,44 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     Gtk::Button           *TileOkButton;
     Gtk::Button           *TileCancelButton;
 
-    //Number selected label
+    // Number selected label
     Gtk::Label            SelectionContentsLabel;
 
-    //Number per Row
+    // Number per Row
     Gtk::HBox             NoPerRowBox;
     Gtk::Label            NoPerRowLabel;
     Gtk::SpinButton       NoPerRowSpinner;
 
-    //Number per Column
+    // Number per Column
     Gtk::HBox             NoPerColBox;
     Gtk::Label            NoPerColLabel;
     Gtk::SpinButton       NoPerColSpinner;
 
-    //padding in x
+    // padding in x
     Gtk::HBox             XPadBox;
     Gtk::Label            XPadLabel;
     Gtk::SpinButton       XPadSpinner;
 
-    //padding in y
+    // padding in y
     Gtk::HBox             YPadBox;
     Gtk::Label            YPadLabel;
     Gtk::SpinButton       YPadSpinner;
+
+    // Row height
+    bool AutoRowSize;
+    Gtk::VBox             RowHeightVBox;
+    Gtk::HBox             RowHeightBox;
+    Gtk::Label            RowHeightLabel;
+    Gtk::SpinButton       RowHeightSpinner;
+    Gtk::CheckButton      RowHeightButton;
+
+    // Column width
+    bool AutoColSize;
+    Gtk::VBox             ColumnWidthVBox;
+    Gtk::HBox             ColumnWidthBox;
+    Gtk::Label            ColumnWidthLabel;
+    Gtk::SpinButton       ColumnWidthSpinner;
+    Gtk::CheckButton      ColumnWidthButton;
 
 };
 
@@ -157,13 +186,13 @@ void TileDialogImpl::Grid_Arrange ()
 {
 
     int cnt;
-    double grid_left,grid_top,widest,tallest,paddingx,paddingy,width, height, item_x, item_y, new_x, new_y;
-    widest = 0;
-    tallest = 0;
+    double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y;
+    col_width = 0;
+    row_height = 0;
     paddingx = XPadSpinner.get_value();
     paddingy = YPadSpinner.get_value();
     grid_left = 9999;
-    grid_top = 9999;
+    grid_top = 99999;
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
@@ -171,30 +200,51 @@ void TileDialogImpl::Grid_Arrange ()
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         NRRect b;
-        sp_item_bbox_desktop((SPItem *) items->data, &b);
-        width = b.x1 - b.x0;
-        height = b.y1 - b.y0;
-        item_x = b.x0;
-        item_y = b.y0;
+        SPItem *item=SP_ITEM(items->data);
+        sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
+        width = fabs (b.x1 - b.x0);
+        height = fabs (b.y1 - b.y0);
+
+        #ifdef DEBUG_GRID_ARRANGE
+        g_print("\n x0 = %f x1= %f",b.x0,b.x1);
+        #endif
+
         if (b.x0 < grid_left) grid_left = b.x0;
         if (b.y0 < grid_top) grid_top = b.y0;
-        if (width > widest) widest = width;
-        if (height > tallest) tallest = height;
+        if (width > col_width) col_width = width;
+        if (height > row_height) row_height = height;
     }
+    // if auto set, update the spinners to reflect the value
+    if (ColumnWidthButton.get_active()) ColumnWidthSpinner.set_value(col_width);
+    if (RowHeightButton.get_active()) RowHeightSpinner.set_value(row_height);
+    // otherwise get the spinner values to use.
+    if (!ColumnWidthButton.get_active()) col_width = ColumnWidthSpinner.get_value();
+    if (!RowHeightButton.get_active())  row_height = RowHeightSpinner.get_value();
+
     cnt=0;
     const GSList *items2 = selection->itemList();
     GSList *rev = g_slist_copy((GSList *) items2);
     rev = g_slist_sort(rev, (GCompareFunc) sp_item_repr_compare_position);
+
+#ifdef DEBUG_GRID_ARRANGE
+        g_print("\n row_height = %f col_width= %f",row_height,col_width);
+        g_print("\n grid_left = %f grid_top= %f",grid_left,grid_top);
+#endif
+
     int noPerRow = NoPerRowSpinner.get_value_as_int();
     for (; rev != NULL; rev = rev->next) {
             Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) rev->data);
             SPItem *item=SP_ITEM(rev->data);
             NRRect b;
-            sp_item_bbox_desktop((SPItem *) rev->data, &b);
+            sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
             width = b.x1 - b.x0;
             height = b.y1 - b.y0;
-            new_x = grid_left + ((widest - width)/2) + (( widest + paddingx ) * (cnt % noPerRow));
-            new_y =grid_top + ((tallest - height)/2) +(( tallest + paddingy ) * (cnt / noPerRow));
+            new_x = grid_left + ((col_width - width)/2) + (( col_width + paddingx ) * (cnt % noPerRow));
+            new_y = grid_top + ((row_height - height)/2) +(( row_height + paddingy ) * (cnt / noPerRow));
+            #ifdef DEBUG_GRID_ARRANGE
+            g_print("\n x0 = %f x1= %f new_x= %f",b.x0,b.x1, new_x);
+            g_print("\n width = %f ",width);
+            #endif
             NR::Point move = NR::Point(new_x-b.x0, b.y0 - new_y);
             NR::Matrix const &affine = NR::Matrix(NR::translate(move));
             sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
@@ -236,7 +286,7 @@ void TileDialogImpl::responseCallback(int response_id)
 
 
 /**
- * changed value in columns spinbox.
+ * changed value in # of columns spinbox.
  */
 void TileDialogImpl::on_row_spinbutton_changed()
 {
@@ -258,12 +308,10 @@ void TileDialogImpl::on_row_spinbutton_changed()
     NoPerColSpinner.set_value(PerCol);
     prefs_set_double_attribute ("dialogs.gridtiler", "NoPerRow", NoPerRowSpinner.get_value());
     updating=false;
-
-
 }
 
 /**
- * changed value in rows spinbox.
+ * changed value in # of rows spinbox.
  */
 void TileDialogImpl::on_col_spinbutton_changed()
 {
@@ -285,8 +333,6 @@ void TileDialogImpl::on_col_spinbutton_changed()
     prefs_set_double_attribute ("dialogs.gridtiler", "NoPerRow", PerRow);
 
     updating=false;
-
-
 }
 
 /**
@@ -296,7 +342,6 @@ void TileDialogImpl::on_xpad_spinbutton_changed()
 {
 
     prefs_set_double_attribute ("dialogs.gridtiler", "XPad", XPadSpinner.get_value());
-  //  g_print("x padding %f \n",XPadSpinner.get_value());
 
 }
 
@@ -307,9 +352,116 @@ void TileDialogImpl::on_ypad_spinbutton_changed()
 {
 
     prefs_set_double_attribute ("dialogs.gridtiler", "YPad", YPadSpinner.get_value());
-  //  g_print("y padding %f \n",YPadSpinner.get_value());
 
 }
+
+
+/**
+ * checked/unchecked autosize Rows button.
+ */
+void TileDialogImpl::on_RowSize_checkbutton_changed()
+{
+
+   if (RowHeightButton.get_active()) {
+       prefs_set_double_attribute ("dialogs.gridtiler", "AutoRowSize", 20);
+   } else {
+       prefs_set_double_attribute ("dialogs.gridtiler", "AutoRowSize", -20);
+   }
+   RowHeightBox.set_sensitive ( !RowHeightButton.get_active());
+}
+
+/**
+ * checked/unchecked autosize Rows button.
+ */
+void TileDialogImpl::on_ColSize_checkbutton_changed()
+{
+
+   if (ColumnWidthButton.get_active()) {
+       prefs_set_double_attribute ("dialogs.gridtiler", "AutoColSize", 20);
+   } else {
+       prefs_set_double_attribute ("dialogs.gridtiler", "AutoColSize", -20);
+   }
+   ColumnWidthBox.set_sensitive ( !ColumnWidthButton.get_active());
+
+}
+
+/**
+ * changed value in columns spinbox.
+ */
+void TileDialogImpl::on_rowSize_spinbutton_changed()
+{
+    // quit if run by the attr_changed listener
+    if (updating) {
+            return;
+        }
+
+    // in turn, prevent listener from responding
+    updating = true;
+    prefs_set_double_attribute ("dialogs.gridtiler", "RowHeight", RowHeightSpinner.get_value());
+    updating=false;
+
+}
+
+/**
+ * changed value in rows spinbox.
+ */
+void TileDialogImpl::on_colSize_spinbutton_changed()
+{
+    // quit if run by the attr_changed listener
+    if (updating) {
+            return;
+        }
+
+    // in turn, prevent listener from responding
+    updating = true;
+    prefs_set_double_attribute ("dialogs.gridtiler", "ColWidth", ColumnWidthSpinner.get_value());
+    updating=false;
+
+}
+
+/**
+ * Desktop selection changed
+ */
+void TileDialogImpl::updateSelection()
+{
+    double width, height,col_width, row_height;
+    // quit if run by the attr_changed listener
+    if (updating) {
+            return;
+        }
+
+    col_width=0;
+    row_height=0;
+    // in turn, prevent listener from responding
+    updating = true;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+    const GSList *items = selection->itemList();
+    int selcount = g_slist_length((GSList *)items);
+    for (; items != NULL; items = items->next) {
+        NRRect b;
+        SPItem *item=SP_ITEM(items->data);
+        sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
+        width = fabs (b.x1 - b.x0);
+        height = fabs (b.y1 - b.y0);
+        if (width > col_width) col_width = width;
+        if (height > row_height) row_height = height;
+    }
+
+    // Update the number of rows assuming number of columns wanted remains same.
+    double PerCol = ceil(selcount / NoPerRowSpinner.get_value());
+    NoPerColSpinner.set_value(PerCol);
+
+    // if the selection has less than the number set for one row, reduce it appropriately
+    if (selcount<NoPerRowSpinner.get_value()) {
+        double PerRow = ceil(selcount / NoPerColSpinner.get_value());
+        NoPerRowSpinner.set_value(PerRow);
+        prefs_set_double_attribute ("dialogs.gridtiler", "NoPerRow", PerRow);
+    }
+    updating=false;
+
+}
+
 
 /*##########################
 ## Experimental
@@ -326,7 +478,11 @@ static void unhideCallback(GtkObject *object, gpointer dlgPtr)
     dlg->showF12();
 }
 
-
+static void updateSelectionCallback(GtkObject *object,GtkWidget *dlg)
+{
+    TileDialogImpl *tledlg = (TileDialogImpl *) dlg;
+    tledlg->updateSelection();
+}
 
 //#########################################################################
 //## C O N S T R U C T O R    /    D E S T R U C T O R
@@ -357,6 +513,8 @@ TileDialogImpl::TileDialogImpl()
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
+     //  Dont have a clue why the below crashes IS every time you change the selection
+     //   g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), dlg);
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (hideCallback), (void *)this );
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (unhideCallback), (void *)this );
     }
@@ -373,10 +531,7 @@ TileDialogImpl::TileDialogImpl()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     SPSelection *selection = SP_DT_SELECTION (desktop);
-/*
-    const GSList *items = selection->itemList();
-    int selcount = g_slist_length(items);
-*/
+
     //SelectionContentsLabel(_("objects selected:"));
     GSList const *items = selection->itemList();
     int selcount = g_slist_length((GSList *)items);
@@ -418,9 +573,9 @@ TileDialogImpl::TileDialogImpl()
 
     /*#### X padding ####*/
 
-    XPadSpinner.set_digits(3);
+    XPadSpinner.set_digits(1);
     XPadSpinner.set_increments(0.2, 2);
-    XPadSpinner.set_range(1.0, 999.0);
+    XPadSpinner.set_range(0.0, 999.0);
     double XPad = prefs_get_double_attribute ("dialogs.gridtiler", "XPad", 15);
     XPadSpinner.set_value(XPad);
     XPadBox.pack_end(XPadSpinner, false, false, MARGIN);
@@ -436,9 +591,9 @@ TileDialogImpl::TileDialogImpl()
 
     /*#### Y Padding ####*/
 
-    YPadSpinner.set_digits(3);
+    YPadSpinner.set_digits(1);
     YPadSpinner.set_increments(0.2, 2);
-    YPadSpinner.set_range(1.0, 999.0);
+    YPadSpinner.set_range(0.0, 999.0);
     double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
     YPadSpinner.set_value(YPad);
     YPadBox.pack_end(YPadSpinner, false, false, MARGIN);
@@ -451,12 +606,68 @@ TileDialogImpl::TileDialogImpl()
     TileBox.pack_start(YPadBox, false, false, MARGIN);
 
 
+    /*#### Row Height ####*/
+    RowHeightButton.set_label(_("Auto Scale Row Height: "));
+    double AutoRow = prefs_get_double_attribute ("dialogs.gridtiler", "AutoRowSize", 15);
+    if (AutoRow>0)
+         AutoRowSize=true;
+    else
+         AutoRowSize=false;
+    RowHeightButton.set_active(AutoRowSize);
+
+    RowHeightVBox.pack_start(RowHeightButton, false, false, MARGIN);
+    tips.set_tip(RowHeightButton, _("Automatically scale Rows to fit selected objects."));
+    RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_RowSize_checkbutton_changed));
 
 
+    RowHeightSpinner.set_digits(1);
+    RowHeightSpinner.set_increments(0.2, 2);
+    RowHeightSpinner.set_range(1.0, 9999.0);
+    double RowHeight = prefs_get_double_attribute ("dialogs.gridtiler", "RowHeight", 50);
+    RowHeightSpinner.set_value(RowHeight);
+    RowHeightBox.pack_end(RowHeightSpinner, false, false, MARGIN);
+    RowHeightSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_rowSize_spinbutton_changed));
+    tips.set_tip(ColumnWidthSpinner, _("Row height."));
+
+    RowHeightLabel.set_label(_("Row height:"));
+    RowHeightBox.pack_end(RowHeightLabel, false, false, MARGIN);
+    RowHeightBox.set_sensitive (!RowHeightButton.get_active());
 
 
+    RowHeightVBox.pack_end(RowHeightBox, false, false, MARGIN);
+    TileBox.pack_start(RowHeightVBox, false, false, MARGIN);
+
+    /*#### Column Width ####*/
 
 
+    ColumnWidthButton.set_label(_("Auto Scale Column Width: "));
+    double AutoCol = prefs_get_double_attribute ("dialogs.gridtiler", "AutoColSize", 15);
+    if (AutoCol>0)
+         AutoColSize=true;
+    else
+         AutoColSize=false;
+    ColumnWidthButton.set_active(AutoColSize);
+
+    ColumnWidthVBox.pack_start(ColumnWidthButton, false, false, MARGIN);
+    tips.set_tip(ColumnWidthButton, _("Automatically scale Columnss to fit selected objects."));
+    ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ColSize_checkbutton_changed));
+
+
+    ColumnWidthSpinner.set_digits(1);
+    ColumnWidthSpinner.set_increments(0.2, 2);
+    ColumnWidthSpinner.set_range(1.0, 9999.0);
+    double ColumnWidth = prefs_get_double_attribute ("dialogs.gridtiler", "ColumnWidth", 50);
+    ColumnWidthSpinner.set_value(ColumnWidth);
+    ColumnWidthBox.pack_end(ColumnWidthSpinner, false, false, MARGIN);
+    ColumnWidthSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_colSize_spinbutton_changed));
+    tips.set_tip(ColumnWidthSpinner, _("Column width."));
+
+    ColumnWidthLabel.set_label(_("Column width:"));
+    ColumnWidthBox.pack_end(ColumnWidthLabel, false, false, MARGIN);
+    ColumnWidthBox.set_sensitive ( !ColumnWidthButton.get_active() );
+
+    ColumnWidthVBox.pack_end(ColumnWidthBox, false, false, MARGIN);
+    TileBox.pack_start(ColumnWidthVBox, false, false, MARGIN);
 
     mainVBox->pack_start(TileBox);
 
@@ -468,7 +679,8 @@ TileDialogImpl::TileDialogImpl()
 
     //## Connect the signal
     signal_response().connect(
-         sigc::mem_fun(*this, &TileDialogImpl::responseCallback) );
+    sigc::mem_fun(*this, &TileDialogImpl::responseCallback) );
+
 }
 
 /**
