@@ -609,12 +609,12 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			break;
 
  		case GDK_bracketleft:
-			if (MOD__CTRL) {
+			if ( MOD__CTRL && !MOD__ALT && ( snaps != 0 ) ) {
 				if (nc->leftctrl)
 					sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, -1);
 				if (nc->rightctrl)
 					sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, 1);
-			} else if (MOD__ALT) {
+			} else if ( MOD__ALT && !MOD__CTRL ) {
 				if (nc->leftalt && nc->rightalt)
 					sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, 1, 0);
 				else {
@@ -623,18 +623,18 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 					if (nc->rightalt)
 						sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, 1, 1);
 				}
-			} else {
+			} else if ( snaps != 0 ) {
 				sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, 0);
 			}
 			ret = TRUE;
 			break;
  		case GDK_bracketright:
-			if (MOD__CTRL) {
+			if ( MOD__CTRL && !MOD__ALT && ( snaps != 0 ) ) {
 				if (nc->leftctrl)
 					sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, -1);
 				if (nc->rightctrl)
 					sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, 1);
-			} else if (MOD__ALT) {
+			} else if ( MOD__ALT && !MOD__CTRL ) {
 				if (nc->leftalt && nc->rightalt)
 					sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, -1, 0);
 				else {
@@ -643,7 +643,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 					if (nc->rightalt)
 						sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, -1, 1);
 				}
-			} else {
+			} else if ( snaps != 0 ) {
 				sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, 0);
 			}
 			ret = TRUE;

@@ -1,3 +1,15 @@
+2004-01-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/node-context.cpp (sp_node_context_root_handler):
+	* src/object-edit.cpp (sp_arc_start_set, sp_arc_end_set,
+	sp_spiral_inner_set, sp_spiral_outer_set):
+	* src/select-context.cpp (sp_select_context_root_handler):
+	* src/seltrans.cpp (sp_sel_trans_rotate_request):
+	Fix for options.rotationsnapsperpi == 0.
+
+	* src/event-context.cpp (sp_event_context_private_root_handler):
+	Address warning.
+
 2004-01-22  bulia byak <bulia@users.sourceforge.net>
 
 	* src/attributes.h src/attributes.cpp: Added pagecolor, bordercolor, borderopacity (from sodipodi), pageshadow.

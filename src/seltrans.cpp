@@ -33,6 +33,7 @@
 #include "sp-metrics.h"
 #include "helper/sp-ctrlline.h"
 #include "prefs-utils.h"
+#include <libnr/nr-point-fns.h>
 
 static void sp_sel_trans_update_handles (SPSelTrans * seltrans);
 static void sp_sel_trans_update_volatile_state (SPSelTrans * seltrans);
@@ -1015,20 +1016,19 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	q2.x = (dx2) / h2;
 	q2.y = (dy2) / h2;
 
-	if (state & GDK_CONTROL_MASK) {                                         
-		double cost, sint, theta;                                       
-		/* Have to restrict movement */                                 
-		cost = q1.x * q2.x + q1.y * q2.y;                               
-		sint = q1.x * q2.y - q1.y * q2.x;                               
-		cost = CLAMP (cost, -1.0, 1.0);                                 
-		theta = acos (cost);                                            
-		theta = (M_PI / snaps) * floor (snaps * theta / M_PI + M_PI / (2 * snaps));
-		if (sint < 0.0) theta = -theta;                                 
-		q1.x = 1.0;                                                     
-		q1.y = 0.0;                                                     
-		q2.x = cos (theta);                                             
-		q2.y = sin (theta);                                             
-	}                                                                       
+	if (state & GDK_CONTROL_MASK) {
+		/* Have to restrict movement. */
+		double cos_t = NR::dot(q1, q2);
+		double sin_t = NR::dot(NR::rot90(q1), q2);
+		double theta = atan2(sin_t, cos_t);
+		if (snaps) {
+			theta = ( M_PI / snaps ) * floor( theta * snaps / M_PI + .5 );
+		}
+		q1.x = 1.0;
+		q1.y = 0.0;
+		q2.x = cos(theta);
+		q2.y = sin(theta);
+	}
 
 	r1.c[0] = q1.x;  r1.c[1] = -q1.y;  r1.c[2] =  q1.y;  r1.c[3] = q1.x;  r1.c[4] = 0;  r1.c[5] = 0;
 	r2.c[0] = q2.x;  r2.c[1] =  q2.y;  r2.c[2] = -q2.y;  r2.c[3] = q2.x;  r2.c[4] = 0;  r2.c[5] = 0;

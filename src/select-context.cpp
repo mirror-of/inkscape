@@ -700,7 +700,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				sp_selection_rotate_screen (selection, 1);
 			} else if (MOD__CTRL) {
 				sp_selection_rotate (selection, 90);
-			} else {
+			} else if (snaps) {
 				sp_selection_rotate (selection, 180/snaps);
 			}
 			ret = TRUE;
@@ -710,7 +710,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				sp_selection_rotate_screen (selection, -1);
 			} else if (MOD__CTRL) {
 				sp_selection_rotate (selection, -90);
-			} else {
+			} else if (snaps) {
 				sp_selection_rotate (selection, -180/snaps);
 			}
 			ret = TRUE;
