@@ -1191,13 +1191,15 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
 	if (gtk_toggle_button_get_active (tb)) {
 		const GSList *items, *i, *r;
 		GSList *reprs;
-		const gchar *join, *cap, *start_marker;
+		const gchar *join, *cap, *start_marker, *mid_marker, *end_marker;
 		SPCSSAttr *css;
 
 		items = sp_widget_get_item_list (spw);
 		join = (const gchar *)gtk_object_get_data (GTK_OBJECT (tb), "join");
 		cap = (const gchar *)gtk_object_get_data (GTK_OBJECT (tb), "cap");
 		start_marker = (const gchar*)gtk_object_get_data (GTK_OBJECT (tb), "start_marker");
+		mid_marker = (const gchar*)gtk_object_get_data (GTK_OBJECT (tb), "mid_marker");
+		end_marker = (const gchar*)gtk_object_get_data (GTK_OBJECT (tb), "end_marker");
 
 		if (spw->inkscape) {
 			reprs = NULL;
@@ -1226,20 +1228,31 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
 			}
 			sp_stroke_style_set_cap_buttons (spw, GTK_WIDGET (tb));
 		} else if (start_marker) {
-		  /* Update the start marker style value based on what's set in the widget */
-
+		        /* Update the start marker style value based on what's set in the widget */
 		        sp_repr_css_set_property (css, "marker-start", start_marker);
 			for (r = reprs; r != NULL; r = r->next) {
 			        sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 			}
-			/* TODO:  Inkscape crashes when this is called - needs to be investigated and fixed,
-			   since we have to update the buttons.
 			sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), INKSCAPE_STOCK_START_MARKER);
-			*/
+			/* TODO:  Add <def> for the relevant marker type if it isn't already there */
+		} else if (mid_marker) {
+		        sp_repr_css_set_property (css, "marker-mid", mid_marker);
+			for (r = reprs; r != NULL; r = r->next) {
+			        sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
+			}
+			sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), INKSCAPE_STOCK_MID_MARKER);
+		} else if (end_marker) {
+		        sp_repr_css_set_property (css, "marker-end", end_marker);
+			for (r = reprs; r != NULL; r = r->next) {
+			        sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
+			}
+			sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), INKSCAPE_STOCK_END_MARKER);
 		}
 
 		sp_repr_css_attr_unref (css);
-		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		if (spw->inkscape) {
+		  sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		}
 
 		g_slist_free (reprs);
 	}
@@ -1393,17 +1406,19 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, gchar *mar
   /* Set up the various xpm's as an array so that new kinds of markers can be added
    * without having to cut and paste the code itself.
    */
-  gchar *marker_xpm[INKSCAPE_STOCK_MARKER_QTY];
+  gchar *marker_xpm[INKSCAPE_STOCK_MARKER_QTY+1];
   marker_xpm[0] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_NONE, NULL);
   marker_xpm[1] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_FILLED_ARROW, NULL);
   marker_xpm[2] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, NULL);
+  marker_xpm[3] = NULL;
 
   for (int i=0; i<INKSCAPE_STOCK_MARKER_QTY; i++) {
     tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), marker_xpm[i]));
     g_assert(tb != NULL);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+    if (tb != NULL) {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+    }
     
   }
   g_strfreev(marker_xpm);
-
 }
