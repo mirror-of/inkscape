@@ -10,8 +10,9 @@
 #include "Shape.h"
 #include "LivarotDefs.h"
 #include "livarot/sweep-event-queue.h"
+#include "livarot/sweep-tree-list.h"
 
-#include "../libnr/nr-matrix.h"
+#include "libnr/nr-matrix.h"
 
 //int   doDebug=0;
 
