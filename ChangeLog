@@ -14,6 +14,22 @@
 	Use the extension system to build the list of allowable file types
 	for save.  This means that save as PS and EPS work properly.
 
+	* src/streams-zlib.cpp src/livarot/PathConversion.cpp
+	src/livarot/PathCutting.cpp src/livarot/PathSimplify.cpp
+        src/livarot/PathStroke.cpp src/livarot/Shape.cpp
+	src/livarot/ShapeMisc.cpp src/display/nr-arena-glyphs.cpp
+	src/helper/sodipodi-ctrlrect.cpp src/helper/sp-canvas.cpp
+	Fix compiler warnings, mostly about unused variables.
+
+	* src/helper/sp-canvas-util.cpp
+	Fix what I and someone else considered to be an obvious typo.  The
+	function in question isn't used, however, so it's a bit difficult
+	to test.
+
+	* src/libnrtype/nr-rasterfont.cpp
+	Fix a warning wrt a cast from NR::Matrix to NRMatrix.
+	
+
 2004-04-14  Ted Gould <ted@gould.cx>
 
 	* src/file.cpp, dialogs/filedialog.cpp:
