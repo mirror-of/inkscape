@@ -1281,32 +1281,13 @@ sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 	 *        garbage or something similar (Lauris) */
 	/* fixme: Originally I had 1023.9999 here - not sure whether
 	 *        we have really to cut out ceil int (Lauris) */
-#if 0
-	art_affine_scale (color2norm, gr->len / (gdouble) NCOLORS, gr->len / (gdouble) NCOLORS);
-	SP_PRINT_TRANSFORM ("color2norm", color2norm);
-	/* Now we have normalized vector */
-#else
 	nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (color2norm));
-#endif
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
 		gdouble norm2pos[6], bbox2user[6];
 		gdouble color2pos[6], color2tpos[6], color2user[6];
 
-#if 0
-		/* This is easy case, as we can just ignore percenting here */
-		/* fixme: Still somewhat tricky, but I think I got it
-		 *        correct (lauris) */
-		norm2pos[0] = lg->x2.computed - lg->x1.computed;
-		norm2pos[1] = lg->y2.computed - lg->y1.computed;
-		norm2pos[2] = lg->y2.computed - lg->y1.computed;
-		norm2pos[3] = lg->x1.computed - lg->x2.computed;
-		norm2pos[4] = lg->x1.computed;
-		norm2pos[5] = lg->y1.computed;
-		SP_PRINT_TRANSFORM ("norm2pos", norm2pos);
-#else
 		nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (norm2pos));
-#endif
 
 		/* gradientTransform goes here (Lauris) */
 		SP_PRINT_TRANSFORM ("gradientTransform", gr->transform);
@@ -1339,19 +1320,7 @@ sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		/* Currently we do ignore percentages at all, but that
 		 * is not good (lauris) */
 
-#if 0
-		/* fixme: Do percentages (Lauris) */
-		// this looks wrong (skew rather than rotate) -- njh
-		norm2pos[0] = lg->x2.computed - lg->x1.computed;
-		norm2pos[1] = lg->y2.computed - lg->y1.computed;
-		norm2pos[2] = lg->y2.computed - lg->y1.computed;
-		norm2pos[3] = lg->x1.computed - lg->x2.computed;
-		norm2pos[4] = lg->x1.computed;
-		norm2pos[5] = lg->y1.computed;
-		SP_PRINT_TRANSFORM ("norm2pos", norm2pos);
-#else
 		nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (norm2pos));
-#endif
 
 		/* gradientTransform goes here (Lauris) */
 		SP_PRINT_TRANSFORM ("gradientTransform", gr->transform);

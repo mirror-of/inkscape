@@ -138,12 +138,8 @@ sp_root_init (SPRoot *root)
 static void
 sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
-	SPGroup *group;
-	SPRoot *root;
-	SPObject *o;
-
-	group = (SPGroup *) object;
-	root = (SPRoot *) object;
+	SPGroup *group = (SPGroup *) object;
+	SPRoot *root = (SPRoot *) object;
 
 	if (sp_repr_attr (repr, "sodipodi:docname") || sp_repr_attr (repr, "SP-DOCNAME")) {
 		/* so we have a nonzero initial version */
@@ -167,7 +163,7 @@ sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	group->mode = SP_GROUP_MODE_LAYER;
 
 	/* Search for first <defs> node */
-	for (o = group->children; o != NULL; o = o->next) {
+	for (SPObject *o = group->children; o != NULL; o = o->next) {
 		if (SP_IS_DEFS (o)) {
 			root->defs = SP_DEFS (o);
 			break;
@@ -183,9 +179,7 @@ sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 static void
 sp_root_release (SPObject *object)
 {
-	SPRoot * root;
-
-	root = (SPRoot *) object;
+	SPRoot *root = (SPRoot *) object;
 
 	root->defs = NULL;
 
@@ -202,12 +196,10 @@ sp_root_release (SPObject *object)
 static void
 sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPItem *item;
-	SPRoot *root;
 	gulong unit;
 
-	item = SP_ITEM (object);
-	root = SP_ROOT (object);
+	SPItem *item = SP_ITEM (object);
+	SPRoot *root = SP_ROOT (object);
 
 	switch (key) {
 	case SP_ATTR_VERSION:
@@ -383,19 +375,14 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 static void
 sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 {
-	SPRoot *root;
-	SPGroup *group;
-	SPObject *co;
-	const gchar * id;
-
-	root = (SPRoot *) object;
-	group = (SPGroup *) object;
+	SPRoot *root = (SPRoot *) object;
+	SPGroup *group = (SPGroup *) object;
 
 	if (((SPObjectClass *) (parent_class))->child_added)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
-	id = sp_repr_attr (child, "id");
-	co = sp_document_lookup_id (object->document, id);
+	const gchar *id = sp_repr_attr (child, "id");
+	SPObject *co = sp_document_lookup_id (object->document, id);
 	g_assert (co != NULL);
 
 	if (SP_IS_DEFS (co)) {
@@ -417,14 +404,9 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 static void
 sp_root_remove_child (SPObject * object, SPRepr * child)
 {
-	SPRoot * root;
-	SPObject * co;
-	const gchar * id;
-
-	root = (SPRoot *) object;
-
-	id = sp_repr_attr (child, "id");
-	co = sp_document_lookup_id (object->document, id);
+	SPRoot *root = (SPRoot *) object;
+	const gchar *id = sp_repr_attr (child, "id");
+	SPObject *co = sp_document_lookup_id (object->document, id);
 	g_assert (co != NULL);
 
 	if (SP_IS_DEFS (co) && root->defs == (SPDefs *) co) {
@@ -448,18 +430,11 @@ sp_root_remove_child (SPObject * object, SPRepr * child)
 static void
 sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 {
-	SPItem *item;
-	SPRoot *root;
-	SPItemCtx *ictx, rctx;
 	SPItemView *v;
 
-	item = SP_ITEM (object);
-	root = SP_ROOT (object);
-	ictx = (SPItemCtx *) ctx;
-
-#if 0
-	g_print ("viewPort %g %g %g %g\n", ictx->vp.x0, ictx->vp.y0, ictx->vp.x1, ictx->vp.y1);
-#endif
+	SPItem *item = SP_ITEM (object);
+	SPRoot *root = SP_ROOT (object);
+	SPItemCtx *ictx = (SPItemCtx *) ctx;
 
 	/* fixme: This will be invoked too often (Lauris) */
 	/* fixme: We should calculate only if parent viewport has changed (Lauris) */
@@ -477,18 +452,8 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		root->height.computed = root->height.value * (ictx->vp.y1 - ictx->vp.y0);
 	}
 
-#if 0
-	g_print ("<svg> raw %g %g %g %g\n",
-		 root->x.value, root->y.value,
-		 root->width.value, root->height.value);
-
-	g_print ("<svg> computed %g %g %g %g\n",
-		 root->x.computed, root->y.computed,
-		 root->width.computed, root->height.computed);
-#endif
-
 	/* Create copy of item context */
-	rctx = *ictx;
+	SPItemCtx rctx = *ictx;
 
 	/* Calculate child to parent transformation */
 	root->c2p.set_identity();
@@ -618,9 +583,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 static void
 sp_root_modified (SPObject *object, guint flags)
 {
-	SPRoot *root;
-
-	root = SP_ROOT (object);
+	SPRoot *root = SP_ROOT (object);
 
 	if (((SPObjectClass *) (parent_class))->modified)
 		(* ((SPObjectClass *) (parent_class))->modified) (object, flags);
@@ -638,9 +601,7 @@ sp_root_modified (SPObject *object, guint flags)
 static SPRepr *
 sp_root_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	SPRoot *root;
-
-	root = SP_ROOT (object);
+	SPRoot *root = SP_ROOT (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("svg");
