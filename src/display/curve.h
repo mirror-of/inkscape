@@ -16,8 +16,9 @@
 
 #include <glib/gtypes.h>
 #include <glib/gslist.h>
-#include <libnr/nr-path.h>
-namespace NR { class Point; }
+
+#include "libnr/nr-forward.h"
+
 
 struct SPCurve {
     gint refcount;
