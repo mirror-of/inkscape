@@ -1,3 +1,9 @@
+2004-05-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/main.cpp (main): Test ENABLE_NLS instead of HAVE_NLS (which
+	wasn't getting defined).  Restores translations on *nix systems
+	when inkscape translations aren't in system-wide /usr/share/locale.
+
 2004-05-10  Carl Hetherington <inkscape@carlh.net>
 
 	* src/sp-item.cpp, src/dialogs/display-settings.cpp: primitive
@@ -146,8 +152,8 @@
 
 2004-05-05 Spundun Bhatt <spundun@isi.edu>
  
-        * configure.in: Stole Nathan's configure hack and used it to 
-        support gtkmm-2.4
+	* configure.in: Stole Nathan's configure hack and used it to 
+	support gtkmm-2.4
  
 2004-05-06  Ted Gould  <ted@gould.cx>
 
@@ -205,7 +211,7 @@
 
 2004-04-30  MenTaLguY <mental@rydia.net>
 
-    * src/sp-use.cpp: call parent class' write methods rather than
+	* src/sp-use.cpp: call parent class' write methods rather than
 	  attempting to do everything (wrongly) ourselves; among other
 	  things, <use> transform attributes weren't getting written
 
@@ -218,14 +224,14 @@
 	* src/sp-use.cpp: cleanups and succession logic for <use>
 	  deletion
 
-    * src/widgets/sp-hwrap-box.cpp, src/widgets/sp-hwrap-box.h,
+	* src/widgets/sp-hwrap-box.cpp, src/widgets/sp-hwrap-box.h,
 	  src/widgets/sp-vwrap-box.cpp, src/widgets/sp-vwrap-box.h,
 	  src/widgets/sp-wrap-box.cpp, src/widgets/sp-wrap-box.h,
 	  src/widgets/test-wrapbox.cpp, src/widgets/Makefile_insert:
 
 	  Removed unused (and imperfect) "wrapbox" widgets.
 
-    * src/sp-object.h, src/sp-object.cpp, src/sp-item-group.cpp:
+	* src/sp-object.h, src/sp-object.cpp, src/sp-item-group.cpp:
 
 	  Removed unused sp_object_invoke_forall and sp_object_sequence
 	  methods.  (forall might be nice to have, but we can do better
@@ -254,7 +260,7 @@
 	  removed dead assertion (it's always valid to retrieve the
 	  translation component of a matrix)
 
-    * src/selection-chemistry.cpp:
+	* src/selection-chemistry.cpp:
 
 	  delete items via SPItem (SPObject), not repr
 
@@ -263,7 +269,7 @@
 	  added SPObject::deleteObject() and a delete notification signal;
 	  SPObject now inherits from GObject in the C++ sense
 
-    * src/sp-use.h:
+	* src/sp-use.h:
 
 	  don't accept references to the use or its ancestors (preventing
 	  infinite loops)
@@ -272,7 +278,7 @@
 
 	  added automatic deletion when referrent is deleted
 
-    * src/uri-reference.h:
+	* src/uri-reference.h:
 
 	  added URIReference::getOwner()
 
