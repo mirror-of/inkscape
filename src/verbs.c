@@ -40,6 +40,8 @@
 #include "zoom-context.h"
 #include "dropper-context.h"
 
+#include "tools-switch.h"
+
 #include "inkscape-private.h"
 #include "file.h"
 #include "document.h"
@@ -246,65 +248,40 @@ sp_verb_action_ctx_perform (SPAction *action, void *data)
 
 	switch ((int) data) {
 	case SP_VERB_CONTEXT_SELECT:
-		sp_desktop_set_event_context (dt, SP_TYPE_SELECT_CONTEXT, "tools.select");
-		/* fixme: This is really ugly hack. We should bind and unbind class methods */
-		sp_desktop_activate_guides (dt, TRUE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_SELECT);
 		break;
 	case SP_VERB_CONTEXT_NODE:
-		sp_desktop_set_event_context (dt, SP_TYPE_NODE_CONTEXT, "tools.nodes");
-		sp_desktop_activate_guides (dt, TRUE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_NODES);
 		break;
 	case SP_VERB_CONTEXT_RECT:
-		sp_desktop_set_event_context (dt, SP_TYPE_RECT_CONTEXT, "tools.shapes.rect");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_SHAPES_RECT);
 		break;
 	case SP_VERB_CONTEXT_ARC:
-		sp_desktop_set_event_context (dt, SP_TYPE_ARC_CONTEXT, "tools.shapes.arc");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_SHAPES_ARC);
 		break;
 	case SP_VERB_CONTEXT_STAR:
-		sp_desktop_set_event_context (dt, SP_TYPE_STAR_CONTEXT, "tools.shapes.star");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_SHAPES_STAR);
 		break;
 	case SP_VERB_CONTEXT_SPIRAL:
-		sp_desktop_set_event_context (dt, SP_TYPE_SPIRAL_CONTEXT, "tools.shapes.spiral");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_SHAPES_SPIRAL);
 		break;
 	case SP_VERB_CONTEXT_PENCIL:
-		sp_desktop_set_event_context (dt, SP_TYPE_PENCIL_CONTEXT, "tools.freehand.pencil");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_FREEHAND_PENCIL);
 		break;
 	case SP_VERB_CONTEXT_PEN:
-		sp_desktop_set_event_context (dt, SP_TYPE_PEN_CONTEXT, "tools.freehand.pen");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_FREEHAND_PEN);
 		break;
 	case SP_VERB_CONTEXT_CALLIGRAPHIC:
-		sp_desktop_set_event_context (dt, SP_TYPE_DYNA_DRAW_CONTEXT, "tools.calligraphic");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_CALLIGRAPHIC);
 		break;
 	case SP_VERB_CONTEXT_TEXT:
-		sp_desktop_set_event_context (dt, SP_TYPE_TEXT_CONTEXT, "tools.text");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_TEXT);
 		break;
 	case SP_VERB_CONTEXT_ZOOM:
-		sp_desktop_set_event_context (dt, SP_TYPE_ZOOM_CONTEXT, "tools.zoom");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_ZOOM);
 		break;
 	case SP_VERB_CONTEXT_DROPPER:
-		sp_desktop_set_event_context (dt, SP_TYPE_DROPPER_CONTEXT, "tools.dropper");
-		sp_desktop_activate_guides (dt, FALSE);
-		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		tools_switch_current (TOOLS_DROPPER);
 		break;
 	default:
 		break;
