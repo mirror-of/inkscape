@@ -99,10 +99,10 @@ CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION)
 
 
 .cpp.o:
-    $(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
 
 .c.o:
-    $(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
 
 
 
