@@ -487,10 +487,12 @@ verify_grad(SPGradient *gradient)
 static SPStop*
 sp_prev_stop(SPStop *stop, SPGradient *gradient)
 {
-	if (sp_repr_attr(SP_OBJECT_REPR(sp_object_first_child(SP_OBJECT(gradient))),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(stop)),"id")) return NULL;
+	if (sp_repr_attr(SP_OBJECT_REPR(sp_object_first_child(SP_OBJECT(gradient))),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(stop)),"id")) 
+		return NULL;
 	for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
 		if (SP_IS_STOP (ochild)) {
-			if (sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT_NEXT(ochild)),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(stop)),"id")) return SP_STOP(ochild);
+			if (sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT_NEXT(ochild)),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(stop)),"id")) 
+				return SP_STOP(ochild);
 		}
 	}
 	return NULL;
@@ -500,8 +502,10 @@ static SPStop*
 sp_next_stop(SPStop *stop)
 {
   SPObject *ochild = SP_OBJECT_NEXT(stop);
-  if (ochild != NULL && SP_IS_STOP (ochild)) return SP_STOP(ochild);
-  else return NULL;
+  if (ochild != NULL && SP_IS_STOP (ochild)) 
+		return SP_STOP(ochild);
+  else 
+		return NULL;
 }
 
 
@@ -630,21 +634,45 @@ offadjustmentChanged( GtkAdjustment *adjustment, GtkWidget *vb)
     stop->offset = adjustment->value;
     sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
 
+    sp_document_done (SP_OBJECT_DOCUMENT (stop));
+}
+
+guint32
+sp_average_color (guint32 c1, guint32 c2, gdouble p = 0.5)
+{
+	guint32 r = (guint32) (SP_RGBA32_R_U (c1) * p + SP_RGBA32_R_U (c2) * (1 - p));
+	guint32 g = (guint32) (SP_RGBA32_G_U (c1) * p + SP_RGBA32_G_U (c2) * (1 - p));
+	guint32 b = (guint32) (SP_RGBA32_B_U (c1) * p + SP_RGBA32_B_U (c2) * (1 - p));
+	guint32 a = (guint32) (SP_RGBA32_A_U (c1) * p + SP_RGBA32_A_U (c2) * (1 - p));
+
+	return SP_RGBA32_U_COMPOSE (r, g, b, a);
 }
 
 
 static void
 sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 {
-	SPGradient *gradient = (SPGradient *)g_object_get_data (G_OBJECT(vb), "gradient");
-	verify_grad(gradient);
+	SPGradient *gradient = (SPGradient *) g_object_get_data (G_OBJECT(vb), "gradient");
+	verify_grad (gradient);
 	GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(vb), "stopmenu");
-	if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
-	SPStop *stop = (SPStop *)g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop");
-	g_assert(stop != NULL) ;
+
+	SPStop *stop = (SPStop *) g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop");
+
+	if (stop == NULL) 
+		return;
+
 	SPRepr *new_stop_repr = NULL;
-	SPStop *next = NULL;
-	next = sp_next_stop(stop);
+
+	SPStop *next = sp_next_stop (stop);
+
+	if (next == NULL) {
+		SPStop *prev = sp_prev_stop (stop, gradient);
+		if (prev != NULL) {
+			next = stop;
+			stop = prev;
+		}
+	}
+
 	if (next != NULL) {
 		new_stop_repr = sp_repr_duplicate(SP_OBJECT_REPR(stop));
 		sp_repr_add_child (SP_OBJECT_REPR(gradient), new_stop_repr, SP_OBJECT_REPR(stop));
@@ -656,7 +684,18 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 
 	SPStop *newstop = (SPStop *) sp_document_lookup_id (SP_OBJECT_DOCUMENT(gradient), sp_repr_attr (new_stop_repr, "id"));
    
-	newstop->offset = (newstop->offset+next->offset) * 0.5 ;
+	newstop->offset = (stop->offset + next->offset) * 0.5 ;
+
+	guint32 c1 = sp_color_get_rgba32_falpha (&stop->color, stop->opacity);
+	guint32 c2 = sp_color_get_rgba32_falpha (&next->color, next->opacity);
+	guint32 cnew = sp_average_color (c1, c2);
+
+	Inkscape::SVGOStringStream os;
+	gchar c[64];
+	sp_svg_write_color (c, 64, cnew);
+	gdouble opacity = (gdouble) SP_RGBA32_A_F (cnew);
+	os << "stop-color:" << c << ";stop-opacity:" << opacity <<";";
+	sp_repr_set_attr (SP_OBJECT_REPR (newstop), "style", os.str().c_str());
 
 	sp_gradient_vector_widget_load_gradient (vb, gradient);
 	sp_repr_unref (new_stop_repr);
@@ -987,7 +1026,6 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	SPColor color;
 	float alpha;
 	guint32 rgb;
-	gchar c[64];
 
 	if (blocked) return;
 
@@ -1023,6 +1061,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 
 	sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
 	Inkscape::SVGOStringStream os;
+	gchar c[64];
 	sp_svg_write_color (c, 64, rgb);
 	os << "stop-color:" << c << ";stop-opacity:" << (gdouble) alpha <<";";
 	sp_repr_set_attr (SP_OBJECT_REPR (stop), "style", os.str().c_str());
