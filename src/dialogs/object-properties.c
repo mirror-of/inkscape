@@ -49,17 +49,16 @@ static void
 sp_object_properties_dialog_destroy (GtkObject *object, gpointer data)
 {
 	sp_signal_disconnect_by_data (INKSCAPE, dlg);
-	dlg = NULL;
+	wd.win = dlg = NULL;
+	wd.stop = 0;
 }
 
-static void
-sp_object_properties_dialog_delete (GtkObject *object, gpointer data)
+static gboolean
+sp_object_properties_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 {
 	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
 	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
-	sp_signal_disconnect_by_data (INKSCAPE, dlg);
-	gtk_widget_destroy (dlg);
-	dlg = NULL;
+	return FALSE; // which means, go ahead and destroy it
 }
 
 static void
@@ -132,8 +131,8 @@ sp_object_properties_dialog (void)
 		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
 		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
 
-		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", GTK_SIGNAL_FUNC (sp_object_properties_dialog_destroy), dlg);
-		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", GTK_SIGNAL_FUNC (sp_object_properties_dialog_delete), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_object_properties_dialog_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_object_properties_dialog_delete), dlg);
 
 		vb = gtk_vbox_new (FALSE, 0);
 		gtk_widget_show (vb);
