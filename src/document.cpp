@@ -741,7 +741,7 @@ overlaps (const NRRect *what, const NRRect *box)
 }
 
 static GSList *
-find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
+find_items_in_area (GSList *s, SPGroup *group, unsigned int dkey, NRRect const *area,
                     int (*test)(const NRRect *, const NRRect *), bool take_insensitive = false)
 {
 	g_return_val_if_fail (SP_IS_GROUP (group), s);
@@ -749,9 +749,9 @@ find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) &&
-		    SP_GROUP (o)->layerMode() == SPGroup::LAYER )
+		    SP_GROUP (o)->layerMode(dkey) == SPGroup::LAYER )
 		{
-			s = find_items_in_area (s, SP_GROUP (o), area, test);
+			s = find_items_in_area(s, SP_GROUP(o), dkey, area, test);
 		} else {
 			SPItem *child = SP_ITEM(o);
 			NRRect box;
@@ -768,13 +768,13 @@ find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
 extern gdouble nr_arena_global_delta;
 
 SPItem*
-find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_groups, bool take_insensitive = false)
+find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboolean into_groups, bool take_insensitive = false)
 {
 	SPItem *seen = NULL, *newseen = NULL;
 
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
-		if (SP_IS_GROUP (o) && (SP_GROUP (o)->layerMode() == SPGroup::LAYER || into_groups))	{
+		if (SP_IS_GROUP (o) && (SP_GROUP (o)->layerMode(dkey) == SPGroup::LAYER || into_groups))	{
 			// if nothing found yet, recurse into the group
 			newseen = find_item_at_point (dkey, SP_GROUP (o), p, into_groups);
 			if (newseen) {
@@ -796,13 +796,13 @@ find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_
 }
 
 SPItem*
-find_group_at_point (gint dkey, SPGroup *group, NR::Point const p)
+find_group_at_point (unsigned int dkey, SPGroup *group, NR::Point const p)
 {
 	SPItem *seen = NULL;
 
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
-		if (SP_IS_GROUP (o) && SP_GROUP (o)->layerMode() != SPGroup::LAYER ) {
+		if (SP_IS_GROUP (o) && SP_GROUP (o)->layerMode(dkey) != SPGroup::LAYER ) {
 			SPItem *child = SP_ITEM(o);
 			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
@@ -823,7 +823,7 @@ find_group_at_point (gint dkey, SPGroup *group, NR::Point const p)
  */
 
 GSList *
-sp_document_items_in_box (SPDocument *document, NRRect const *box)
+sp_document_items_in_box (SPDocument *document, unsigned int dkey, NRRect const *box)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
@@ -831,7 +831,7 @@ sp_document_items_in_box (SPDocument *document, NRRect const *box)
 	g_return_val_if_fail (box != NULL, NULL);
 
 	return find_items_in_area (NULL, SP_GROUP (document->root),
-	                           box, is_within);
+	                           dkey, box, is_within);
 }
 
 /*
@@ -842,7 +842,7 @@ sp_document_items_in_box (SPDocument *document, NRRect const *box)
  */
 
 GSList *
-sp_document_partial_items_in_box (SPDocument *document, NRRect const *box)
+sp_document_partial_items_in_box (SPDocument *document, unsigned int dkey, NRRect const *box)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
@@ -850,7 +850,7 @@ sp_document_partial_items_in_box (SPDocument *document, NRRect const *box)
 	g_return_val_if_fail (box != NULL, NULL);
 
 	return find_items_in_area (NULL, SP_GROUP (document->root),
-	                           box, overlaps);
+	                           dkey, box, overlaps);
 }
 
 SPItem*

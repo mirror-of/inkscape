@@ -497,7 +497,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         sp_rubberband_stop();
                         sp_sel_trans_reset_state(seltrans);
                         // find out affected items:
-                        l = sp_document_items_in_box(SP_DT_DOCUMENT(desktop), &b);
+                        l = sp_document_items_in_box(SP_DT_DOCUMENT(desktop), desktop->dkey, &b);
                         if (event->button.state & GDK_SHIFT_MASK) {
                             // with shift, add to selection
                             while (l) {

@@ -13,6 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <map>
 #include "sp-item.h"
 
 #define SP_TYPE_GROUP            (sp_group_get_type ())
@@ -23,11 +24,11 @@
 
 struct SPGroup : public SPItem {
 	enum LayerMode { GROUP, LAYER };
-	LayerMode mode;
 
-	// TODO this needs to be settable on a per-display-key basis
-	LayerMode layerMode() { return mode; }
-	void setLayerMode(LayerMode mode);
+	std::map<unsigned int, LayerMode> _display_modes;
+
+	LayerMode layerMode(unsigned int dkey);
+	void setLayerMode(unsigned int dkey, LayerMode mode);
 };
 
 struct SPGroupClass {

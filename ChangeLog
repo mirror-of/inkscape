@@ -9,6 +9,15 @@
 
 	  HAPPY NATHAN#@$?#$#@$!?!?!?
 
+	* src/desktop.cpp, src/desktop.h, src/document.cpp, src/document.h,
+	  src/interface.cpp, src/select-context.cpp, src/selection-chemistry.cpp,
+	  src/sp-item-group.cpp, src/sp-item-group.h, src/widgets/widget-sizes.h:
+
+	  Added selection-changes-current-layer and other layer refinements.
+	  Except for fixing the currently broken layer combo box on the status
+	  bar, I think this is pretty much the last of the layerish work I'm
+	  willing to do for 0.39 since we're in freeze now.
+
 2004-07-03  Kees Cook  <kees@outflux.net>
 
 	* src/document.cpp, src/dialogs/desktop-properties.cpp, 

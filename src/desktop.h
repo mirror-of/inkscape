@@ -24,6 +24,8 @@ class SPDesktopWidgetClass;
 #define SP_IS_DESKTOP_WIDGET(o) (GTK_CHECK_TYPE ((o), SP_TYPE_DESKTOP_WIDGET))
 #define SP_IS_DESKTOP_WIDGET_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_DESKTOP_WIDGET))
 
+#include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkmenu.h>
 #include <sigc++/sigc++.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
@@ -103,6 +105,7 @@ struct SPDesktop : public SPView {
 	SPNamedView *namedview;
 	SPSelection *selection; ///< current selection; will never generally be NULL
 	SigC::Connection sel_modified_connection;
+	SigC::Connection sel_changed_connection;
 	SPEventContext *event_context;
 
 	unsigned int dkey;
@@ -138,11 +141,13 @@ struct SPDesktop : public SPView {
 	SigC::Connection connectCurrentLayerChanged(SigC::Slot1<void, SPObject *> slot) {
 		return _layer_changed_signal.connect(slot);
 	}
+	SPObject *layerForObject(SPObject *object);
 
 	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
 	static void _layer_activated(SPObject *layer, SPDesktop *desktop);
 	static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
 	static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
+	static void _selection_changed(SPSelection *selection, SPDesktop *desktop);
 
 	SigC::Signal4<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
 	SigC::Signal1<bool, const SPCSSAttr *, StopOnTrue> _set_style_signal;
@@ -261,6 +266,8 @@ struct SPDesktopWidget {
         GtkWidget *zoom_status;
 	gulong zoom_update;
 
+	GtkWidget *layer_selector;
+
         gint coord_status_id, select_status_id;
 
 	SPCanvas *canvas;
@@ -268,6 +275,11 @@ struct SPDesktopWidget {
 	GtkAdjustment *hadj, *vadj;
 
 	void setMessage(Inkscape::MessageType type, gchar const *message);
+	static void _update_layer_display(SPObject *layer, SPDesktopWidget *widget);
+	static void _activate_layer_menu(GtkOptionMenu *selector, SPDesktopWidget *widget);
+	static void _deactivate_layer_menu(GtkOptionMenu *selector, SPDesktopWidget *widget);
+	unsigned _buildLayerMenuItems(GtkMenu *menu, SPObject *layer);
+	void _buildLayerStatusMenuItem(GtkMenu *menu, SPObject *layer);
 };
 
 struct SPDesktopWidgetClass {

@@ -205,6 +205,7 @@ sp_desktop_init (SPDesktop *desktop)
     desktop->is_fullscreen = FALSE;
 
     new (&desktop->sel_modified_connection) SigC::Connection();
+    new (&desktop->sel_changed_connection) SigC::Connection();
 
     new (&desktop->_set_colorcomponent_signal) SigC::Signal4<bool, ColorComponent, float, bool, bool>();
     new (&desktop->_set_style_signal) SigC::Signal1<bool, const SPCSSAttr *, StopOnTrue>();
@@ -224,6 +225,9 @@ sp_desktop_dispose (GObject *object)
 
     dt->sel_modified_connection.disconnect();
     dt->sel_modified_connection.~Connection();
+
+    dt->sel_changed_connection.disconnect();
+    dt->sel_changed_connection.~Connection();
 
     dt->_set_colorcomponent_signal.~Signal4();
     dt->_set_style_signal.~Signal1();
@@ -276,6 +280,20 @@ void SPDesktop::setCurrentLayer(SPObject *object) {
     g_return_if_fail(SP_IS_GROUP(object));
     g_return_if_fail( currentRoot() == object || currentRoot()->isAncestorOf(object));
     _layer_hierarchy->setBottom(object);
+}
+
+SPObject *SPDesktop::layerForObject(SPObject *object) {
+    g_return_val_if_fail(object != NULL, NULL);
+
+    SPObject *root=currentRoot();
+    object = SP_OBJECT_PARENT(object);
+    while ( object && object != root ) {
+        if ( SP_IS_GROUP(object) && SP_GROUP(object)->layerMode(this->dkey) == SPGroup::LAYER ) {
+            return object;
+        }
+        object = SP_OBJECT_PARENT(object);
+    }
+    return NULL;
 }
 
 static void
@@ -345,6 +363,8 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     /* Setup widget */
     SPDesktop *desktop = (SPDesktop *) g_object_new (SP_TYPE_DESKTOP, NULL);
 
+    desktop->dkey = sp_item_display_key_new (1);
+
     /* Connect document */
     sp_view_set_document (SP_VIEW (desktop), document);
 
@@ -403,7 +423,14 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
         )
     );
 
-    desktop->dkey = sp_item_display_key_new (1);
+    desktop->sel_changed_connection.disconnect();
+    desktop->sel_changed_connection = desktop->selection->connectChanged(
+        SigC::bind(
+            SigC::slot(&SPDesktop::_selection_changed),
+            desktop
+        )
+    );
+
     NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (desktop))),
                                            SP_CANVAS_ARENA (desktop->drawing)->arena, desktop->dkey, SP_ITEM_SHOW_DISPLAY);
     if (ai) {
@@ -888,6 +915,13 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, STATUS_COORD_SKIP);
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), coord_box, FALSE, FALSE, 1);
 
+    dtw->layer_selector = gtk_option_menu_new();
+    gtk_tooltips_set_tip(tt, dtw->layer_selector, _("Current layer"), NULL);
+    gtk_widget_set_usize(dtw->layer_selector, -1, SP_ICON_SIZE_BUTTON);
+    gtk_box_pack_start(GTK_BOX(dtw->statusbar), dtw->layer_selector, FALSE, FALSE, 1);
+    g_signal_connect(G_OBJECT(dtw->layer_selector), "pressed", GCallback(&SPDesktopWidget::_activate_layer_menu), dtw);
+    g_signal_connect(G_OBJECT(dtw->layer_selector), "released", GCallback(&SPDesktopWidget::_deactivate_layer_menu), dtw);
+
     // statusbar
     dtw->select_status = gtk_statusbar_new ();
     sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);
@@ -1275,6 +1309,9 @@ sp_desktop_widget_new (SPNamedView *namedview)
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
 
+    dtw->desktop->connectCurrentLayerChanged(SigC::bind(SigC::slot(&SPDesktopWidget::_update_layer_display), dtw));
+    SPDesktopWidget::_update_layer_display(dtw->desktop->currentLayer(), dtw);
+
     dtw->menubar = sp_ui_main_menubar (SP_VIEW (dtw->desktop));
     gtk_widget_show_all (dtw->menubar);
     gtk_box_pack_start (GTK_BOX (gtk_bin_get_child (GTK_BIN (dtw))), dtw->menubar, FALSE, FALSE, 0);
@@ -1331,30 +1368,30 @@ void SPDesktop::_set_status_message(SPView *view, Inkscape::MessageType type, co
 
 namespace {
 
-void apply_layer_mode(SPGroup *layer, SPGroup::LayerMode mode) {
+void apply_layer_mode(unsigned int dkey, SPGroup *layer, SPGroup::LayerMode mode) {
     // TODO - this mode needs to be settable on a per-desktop basis
     //        (see comments in sp-item-group.h)
     if (SP_OBJECT_PARENT(layer)) {
         SPObject *iter=sp_object_first_child(SP_OBJECT_PARENT(layer));
         while (iter) {
             if (SP_IS_GROUP(iter)) {
-                SP_GROUP(iter)->setLayerMode(mode);
+                SP_GROUP(iter)->setLayerMode(dkey, mode);
             }
             iter = SP_OBJECT_NEXT(iter);
         }
     } else {
-        SP_GROUP(layer)->setLayerMode(mode);
+        SP_GROUP(layer)->setLayerMode(dkey, mode);
     }
 }
 
 void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
     g_return_if_fail(SP_IS_GROUP(layer));
-    apply_layer_mode(SP_GROUP(layer), SPGroup::LAYER);
+    apply_layer_mode(desktop->dkey, SP_GROUP(layer), SPGroup::LAYER);
 }
 
 void SPDesktop::_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
     g_return_if_fail(SP_IS_GROUP(layer));
-    apply_layer_mode(SP_GROUP(layer), SPGroup::GROUP);
+    apply_layer_mode(desktop->dkey, SP_GROUP(layer), SPGroup::GROUP);
 }
 
 }
@@ -1363,6 +1400,21 @@ void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
                                          SPDesktop *desktop)
 {
     desktop->_layer_changed_signal.emit(bottom);
+}
+
+void SPDesktop::_selection_changed(SPSelection *selection, SPDesktop *desktop)
+{
+    // TODO - only change the layer for single selections, or what?
+    SPItem *item=selection->singleItem();
+    if (item) {
+        SPObject *layer=desktop->layerForObject(item);
+        if ( layer &&
+             layer != desktop->currentLayer() &&
+             layer != desktop->currentRoot() )
+        {
+            desktop->setCurrentLayer(layer);
+        }
+    }
 }
 
 void SPDesktopWidget::setMessage(Inkscape::MessageType type, const gchar *message)
@@ -2090,7 +2142,121 @@ sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css)
     }
 }
 
+void SPDesktopWidget::_update_layer_display(SPObject *layer,
+                                            SPDesktopWidget *widget)
+{
+    GtkOptionMenu *selector=GTK_OPTION_MENU(widget->layer_selector);
+    GtkWidget *menu=gtk_menu_new();
+    widget->_buildLayerStatusMenuItem(GTK_MENU(menu), layer);
+    gtk_option_menu_set_menu(selector, menu);
+    gtk_option_menu_set_history(selector, 0);
+}
 
+void SPDesktopWidget::_activate_layer_menu(GtkOptionMenu *selector,
+                                           SPDesktopWidget *widget)
+{
+    g_message("DEBUG: activating layer menu");
+    SPObject *layer=widget->desktop->currentLayer();
+    GtkWidget *menu=gtk_menu_new();
+    unsigned offset=widget->_buildLayerMenuItems(GTK_MENU(menu), layer);
+    gtk_option_menu_set_menu(selector, menu);
+    gtk_option_menu_set_history(selector, offset);
+}
+
+void SPDesktopWidget::_deactivate_layer_menu(GtkOptionMenu *selector,
+                                             SPDesktopWidget *widget)
+{
+    g_message("DEBUG: deactivating layer menu");
+    SPObject *layer=widget->desktop->currentLayer();
+    GtkWidget *menu=gtk_menu_new();
+    widget->_buildLayerStatusMenuItem(GTK_MENU(menu), layer);
+    gtk_option_menu_set_menu(selector, menu);
+    gtk_option_menu_set_history(selector, 0);
+}
+
+namespace {
+
+void select_layer(GtkMenuItem *item, SPObject *layer) {
+    SPDesktop *desktop=SP_DESKTOP(g_object_get_data(G_OBJECT(item), "desktop"));
+    desktop->setCurrentLayer(layer);
+}
+
+void build_item(SPDesktop *desktop, GtkMenu *menu, SPObject *layer,
+                unsigned indent, bool selected)
+{
+    gchar *label=g_strdup_printf("%*s#%s", indent*2, "", SP_OBJECT_ID(layer));
+    GtkWidget *item=gtk_check_menu_item_new_with_label(label);
+    g_free(label);
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), selected);
+    g_object_set_data(G_OBJECT(item), "desktop", desktop);
+    g_signal_connect(G_OBJECT(item), "activate", GCallback(&select_layer), layer);
+    sp_set_font_size(item, STATUS_LAYER_FONT_SIZE);
+    gtk_widget_show(item);
+    gtk_menu_append(menu, item);
+}
+
+unsigned build_ancestor_items(SPDesktop *desktop, GtkMenu *menu,
+                              SPObject *layer, SPObject *root,
+                              unsigned indent)
+{
+    if ( layer && layer != root ) {
+        unsigned offset=build_ancestor_items(desktop, menu, SP_OBJECT_PARENT(layer), root, indent);
+        build_item(desktop, menu, layer, indent+offset, false);
+        return offset+1;
+    } else {
+        return 0;
+    }
+}
+
+unsigned build_sibling_items(SPDesktop *desktop, GtkMenu *menu,
+                             SPObject *layer, SPObject *parent,
+                             unsigned indent)
+{
+    unsigned offset=0;
+    bool found=false;
+    SPObject *iter=sp_object_first_child(parent);
+    while (iter) {
+        if ( iter == layer ) {
+            build_item(desktop, menu, iter, indent, true);
+            found = true;
+        } else {
+            build_item(desktop, menu, iter, indent, false);
+            if (!found) {
+                offset++;
+            }
+        }
+        iter = SP_OBJECT_NEXT(iter);
+    }
+    return offset;
+}
+
+unsigned SPDesktopWidget::_buildLayerMenuItems(GtkMenu *menu, SPObject *layer)
+{
+    SPDesktop *desktop=this->desktop;
+    SPObject *root=desktop->currentRoot();
+    SPObject *parent=SP_OBJECT_PARENT(layer);
+    if ( parent && layer != root ) {
+        unsigned offset;
+        offset = build_ancestor_items(desktop, menu, parent, root, 0);
+        offset += build_sibling_items(desktop, menu, layer, parent, offset);
+        return offset;
+    } else {
+        build_sibling_items(desktop, menu, NULL, layer, 0);
+        return 0;
+    }
+}
+
+void SPDesktopWidget::_buildLayerStatusMenuItem(GtkMenu *menu, SPObject *layer)
+{
+    SPDesktop *desktop=this->desktop;
+    SPObject *root=desktop->currentRoot();
+    SPObject *parent=SP_OBJECT_PARENT(layer);
+    if ( parent && layer != root ) {
+        build_item(desktop, menu, layer, 0, true);
+    }
+}
+
+}
 
 /*
   Local Variables:

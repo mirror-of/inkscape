@@ -151,8 +151,8 @@ const GSList *sp_document_get_resource_list (SPDocument *document, const gchar *
  * Misc
  */
 
-GSList * sp_document_items_in_box (SPDocument *document, NRRect const *box);
-GSList * sp_document_partial_items_in_box (SPDocument *document, NRRect const *box);
+GSList * sp_document_items_in_box (SPDocument *document, unsigned int dkey, NRRect const *box);
+GSList * sp_document_partial_items_in_box (SPDocument *document, unsigned int dkey, NRRect const *box);
 SPItem * sp_document_item_at_point (SPDocument *document, unsigned int key, NR::Point const p, gboolean into_groups);
 SPItem * sp_document_group_at_point (SPDocument *document, unsigned int key,  NR::Point const p);
 

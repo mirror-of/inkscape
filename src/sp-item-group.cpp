@@ -33,6 +33,7 @@
 
 static void sp_group_class_init (SPGroupClass *klass);
 static void sp_group_init (SPGroup *group);
+static void sp_group_dispose (GObject *object);
 
 static void sp_group_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
 static void sp_group_remove_child (SPObject * object, SPRepr * child);
@@ -84,6 +85,8 @@ sp_group_class_init (SPGroupClass *klass)
 
 	parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 
+	object_class->dispose = sp_group_dispose;
+
 	sp_object_class->child_added = sp_group_child_added;
 	sp_object_class->remove_child = sp_group_remove_child;
 	sp_object_class->order_changed = sp_group_order_changed;
@@ -101,7 +104,14 @@ sp_group_class_init (SPGroupClass *klass)
 static void
 sp_group_init (SPGroup *group)
 {
-	group->mode = SPGroup::GROUP;
+	new (&group->_display_modes) std::map<unsigned int, SPGroup::LayerMode>();
+}
+
+static void
+sp_group_dispose(GObject *object)
+{
+	SPGroup *group=(SPGroup *)object;
+	group->_display_modes.~map();
 }
 
 static void
@@ -328,8 +338,8 @@ sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	group = (SPGroup *) item;
 
 	ai = NRArenaGroup::create(arena);
-	nr_arena_group_set_transparent (NR_ARENA_GROUP (ai),
-	                                group->mode != SPGroup::GROUP);
+	nr_arena_group_set_transparent(NR_ARENA_GROUP (ai),
+	                               group->layerMode(key) != SPGroup::GROUP);
 
 	ar = NULL;
 
@@ -501,20 +511,30 @@ sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *nam
 	return child;
 }
 
-void SPGroup::setLayerMode(SPGroup::LayerMode mode)
-{
+SPGroup::LayerMode SPGroup::layerMode(unsigned int dkey) {
+	std::map<unsigned int, LayerMode>::iterator iter;
+	iter = _display_modes.find(dkey);
+	if ( iter != _display_modes.end() ) {
+		return (*iter).second;
+	} else {
+		return GROUP;
+	}
+}
+
+void SPGroup::setLayerMode(unsigned int dkey, SPGroup::LayerMode mode) {
 	SPItemView *view;
 
-	if (this->mode == mode) return;
+	if ( layerMode(dkey) == mode ) {
+		return;
+	}
+	_display_modes[dkey] = mode;
 
-	this->mode = mode;
-
-	/* FIXME !!! this probably dips a little too deeply into
-	             SPItem's internals... */
 	for ( view = this->display ; view ; view = view->next ) {
-		NRArenaGroup *arena_group=NR_ARENA_GROUP(view->arenaitem);
-		if (arena_group) {
-			nr_arena_group_set_transparent(arena_group, mode != SPGroup::GROUP);
+		if ( view->key == dkey ) {
+			NRArenaGroup *arena_group=NR_ARENA_GROUP(view->arenaitem);
+			if (arena_group) {
+				nr_arena_group_set_transparent(arena_group, mode != SPGroup::GROUP);
+			}
 		}
 	}
 }

@@ -1140,7 +1140,7 @@ sp_selection_item_next(void)
     if (SP_CYCLING == SP_CYCLE_VISIBLE) {
         NRRect dbox;
         sp_desktop_get_display_area(desktop, &dbox);
-        children = sp_document_items_in_box(document, &dbox);
+        children = sp_document_items_in_box(document, desktop->dkey, &dbox);
     } else {
         children = sp_item_group_item_list(SP_GROUP(sp_document_root(document)));
     }
@@ -1194,7 +1194,7 @@ sp_selection_item_prev(void)
     if (SP_CYCLING == SP_CYCLE_VISIBLE) {
         NRRect dbox;
         sp_desktop_get_display_area(desktop, &dbox);
-        children = sp_document_items_in_box(document, &dbox);
+        children = sp_document_items_in_box(document, desktop->dkey, &dbox);
     } else {
         children = sp_item_group_item_list(SP_GROUP(sp_document_root(document)));
     }

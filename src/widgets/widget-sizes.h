@@ -27,6 +27,8 @@
 #define STATUS_COORD_SKIP 1
 #define STATUS_COORD_WIDTH 84
 
+#define STATUS_LAYER_FONT_SIZE 7700
+
 #define RULER_WIDTH           12
 #define RULER_HEIGHT          12
 #define RULER_FONT_SIZE 7000

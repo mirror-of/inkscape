@@ -893,6 +893,10 @@ static void leave_group(GtkMenuItem *, SPDesktop *desktop) {
     desktop->setCurrentLayer(SP_OBJECT_PARENT(desktop->currentLayer()));
 }
 
+static void leave_all_groups(GtkMenuItem *, SPDesktop *desktop) {
+    desktop->setCurrentLayer(desktop->currentRoot());
+}
+
 static void enter_group(GtkMenuItem *mi, SPDesktop *desktop) {
     desktop->setCurrentLayer(reinterpret_cast<SPObject *>(g_object_get_data(G_OBJECT(mi), "group")));
 }
@@ -924,22 +928,29 @@ sp_ui_context_menu (SPView *view, SPItem *item)
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DUPLICATE, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DELETE, view);
 
-        if ( dt && ( dt->currentLayer() != dt->currentRoot() || SP_IS_GROUP(item) && item != dt->currentLayer() ) ) {
+        if ( dt->currentLayer() != dt->currentRoot() ) {
             sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
-            if ( dt->currentLayer() != dt->currentRoot() ) {
-                GtkWidget *w = gtk_menu_item_new_with_label(_("Ascend to Parent Layer"));
+            if ( SP_OBJECT_PARENT(dt->currentLayer()) != dt->currentRoot() ) {
+                GtkWidget *w = gtk_menu_item_new_with_label(_("Edit parent layer"));
                 g_signal_connect(G_OBJECT(w), "activate", GCallback(leave_group), dt);
                 gtk_widget_show(w);
                 gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
+
             }
-            if ( SP_IS_GROUP(item) && item != dt->currentLayer() ) {
-                // TRANSLATORS: "Make Current Layer" means "Make it the current layer"
-                GtkWidget *w = gtk_menu_item_new_with_label(_("Make Current Layer"));
-                g_object_set_data(G_OBJECT(w), "group", item);
-                g_signal_connect(G_OBJECT(w), "activate", GCallback(enter_group), dt);
-                gtk_widget_show(w);
-                gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
-            }
+            GtkWidget *w = gtk_menu_item_new_with_label(_("Edit root"));
+            g_signal_connect(G_OBJECT(w), "activate", GCallback(leave_all_groups), dt);
+            gtk_widget_show(w);
+            gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
+        }
+        if ( SP_IS_GROUP(item) && item != dt->currentLayer() ) {
+            sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
+            gchar *label=g_strdup_printf(_("Edit group #%s as layer"), SP_OBJECT_ID(item));
+            GtkWidget *w = gtk_menu_item_new_with_label(label);
+            g_free(label);
+            g_object_set_data(G_OBJECT(w), "group", item);
+            g_signal_connect(G_OBJECT(w), "activate", GCallback(enter_group), dt);
+            gtk_widget_show(w);
+            gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
         }
 	/* Item menu */
 	if (item) {
