@@ -117,11 +117,6 @@ class Trace
      */
     static gboolean staticConvertImageToPath();
 
-    /**
-     *  Get a singleton instance of this class and execute
-     *  showTraceDialog()
-     */
-    static gboolean staticShowTraceDialog();
 
 
 

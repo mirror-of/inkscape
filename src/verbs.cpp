@@ -39,8 +39,7 @@
 #include "dialogs/item-properties.h"
 #include "dialogs/find.h"
 #include "dialogs/debugdialog.h"
-
-#include "trace/trace.h"
+#include "dialogs/tracedialog.h"
 
 #include "tools-switch.h"
 #include "inkscape-private.h"
@@ -783,7 +782,8 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
             sp_selected_path_reverse ();
             break;
         case SP_VERB_SELECTION_POTRACE:
-            Inkscape::Trace::staticShowTraceDialog();
+            //Inkscape::Trace::staticShowTraceDialog();
+            Inkscape::UI::Dialogs::TraceDialog::showInstance();
             break;
 
         case SP_VERB_SELECTION_COMBINE:

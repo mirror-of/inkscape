@@ -52,7 +52,7 @@ noinst_LIBRARIES =	\
 	livarot/libvarot.a	\
 	svg/libspsvg.a	\
 	widgets/libspwidgets.a	\
-	potrace/libpotrace.a  \
+	trace/libtrace.a  \
 	xml/libspxml.a	\
 	libinkpost.a
 

@@ -199,7 +199,7 @@ libinkpost_a_SOURCES =	\
 inkscape_private_libs =	\
 	libinkpre.a	\
 	dialogs/libspdialogs.a	\
-	potrace/libpotrace.a  \
+	trace/libtrace.a  \
 	xml/libspxml.a	\
 	svg/libspsvg.a	\
 	widgets/libspwidgets.a	\

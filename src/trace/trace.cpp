@@ -244,22 +244,6 @@ gboolean Trace::staticConvertImageToPath()
 
 
 
-/**
- *  Static no-knowledge version
- */
-gboolean Trace::staticShowTraceDialog()
-{
-    Inkscape::UI::Dialogs::TraceDialog *dlg = 
-          Inkscape::UI::Dialogs::TraceDialog::getInstance();
-    dlg->setTrace(NULL);
-    dlg->show();
-    
-    return true;
-}
-
-
-
-
 
 
 }//namespace Inkscape
