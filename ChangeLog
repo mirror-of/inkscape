@@ -1,3 +1,10 @@
+2005-02-22  Ted Gould  <ted@gould.cx>
+
+	* src/interface.cpp:
+
+	Changing the effects menu to be driven by the preferences file so that the
+	file can be the same whether or not the effects are shown.
+
 2005-02-22  MenTaLguY  <mental@rydia.net>
 
 	* src/desktop-style.cpp, src/selection-chemistry.cpp,
