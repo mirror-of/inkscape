@@ -79,6 +79,7 @@ save_menu_switch (GtkWidget * widget, GtkWidget * filesel)
 	/* Change file name here */
 	filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION(filesel));
 	if (extension != NULL &&
+			*extension != NULL &&
 			old_extension != NULL &&
 			g_str_has_suffix(filename, old_extension)) {
 		gchar * work0_filename;
