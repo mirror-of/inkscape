@@ -1,6 +1,6 @@
 /*
  * This is the code that moves all of the SVG loading and saving into
- * the module format.  Really Sodipodi is built to handle these formats
+ * the module format.  Really Inkscape is built to handle these formats
  * internally, so this is just calling those internal functions.
  *
  * Authors:
@@ -53,22 +53,22 @@ svg_init(void)
 				"<extension>svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
 				"<filetypename>Scalable Vector Graphic (SVG)</filetypename>\n"
-				"<filetypetooltip>Sodipodi native file format and W3C standard</filetypetooltip>\n"
+				"<filetypetooltip>Inkscape native file format and W3C standard</filetypetooltip>\n"
 			"</input>\n"
 		"</spmodule>"));
 	g_return_if_fail(imod != NULL);
 	imod->open = svg_open;
 
-	/* SVG out Sodipodi*/
+	/* SVG out Inkscape*/
     omod = SP_MODULE_OUTPUT(sp_module_system_build_from_mem(
 		"<spmodule>\n"
-			"<name>SVG Output Sodipodi</name>\n"
+			"<name>SVG Output Inkscape</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</id>\n"
 			"<output>\n"
 				"<extension>svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
 				"<filetypename>SVG with &quot;xmlns:sodipodi&quot; namespace</filetypename>\n"
-				"<filetypetooltip>Scalable Vector Graphics format with Sodipodi extensions</filetypetooltip>\n"
+				"<filetypetooltip>Scalable Vector Graphics format with Inkscape extensions</filetypetooltip>\n"
 			"</output>\n"
 		"</spmodule>"));
 	g_return_if_fail(omod != NULL);
@@ -77,7 +77,7 @@ svg_init(void)
 	/* SVG out */
     omod = SP_MODULE_OUTPUT(sp_module_system_build_from_mem(
 		"<spmodule>\n"
-			"<name>SVG Output Sodipodi</name>\n"
+			"<name>SVG Output</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG "</id>\n"
 			"<output>\n"
 				"<extension>svg</extension>\n"
@@ -110,7 +110,7 @@ svg_open (SPModule *mod, const gchar *uri)
 /**
 	\return    None
 	\brief     This is the function that does all of the SVG saves in
-	           Sodipodi.  It detects whether it should do a Sodipodi
+	           Inkscape.  It detects whether it should do a Inkscape
 			   namespace save internally.
 	\param     mod   Extension to use.
 	\param     doc   Document to save.
@@ -119,10 +119,10 @@ svg_open (SPModule *mod, const gchar *uri)
 	This function first checks it's parameters, and makes sure that
 	we're getting good data.  It also checks the module ID of the
 	incoming module to figure out if this is save should include
-	the Sodipodi namespace stuff or not.  The result of that comparison
+	the Inkscape namespace stuff or not.  The result of that comparison
 	is stored in the spns variable.
 
-	If there is not to be Sodipodi name spaces a new document is created
+	If there is not to be Inkscape name spaces a new document is created
 	without.  (I think, I'm not sure on this code)
 
 	All of the internally referenced imageins are also set to relative
