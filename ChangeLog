@@ -1,3 +1,12 @@
+2004-02-09  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/widgets/sp-color-wheel.h, src/widgets/sp-color-wheel.cpp,
+	src/widgets/sp-color-wheel-selector.h,
+	src/widgets/sp-color-wheel-selector.cpp,
+	src/widgets/sp-color-gtkselector.cpp,
+	src/widgets/sp-color-notebook.cpp
+	Added new, smaller color wheel selector.
+
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/nr-arena-group.h, src/display/nr-arena-group.cpp
