@@ -266,7 +266,7 @@ sp_desktop_dispose (GObject *object)
     }
 
     if (dt->selection) {
-	Inkscape::GC::release(dt->selection);
+        Inkscape::GC::release(dt->selection);
         dt->selection = NULL;
     }
 
@@ -442,15 +442,15 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     // context ever?
     sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
 
-    // display rect and zoom are now handled in sp_desktop_widget_realize() 
+    // display rect and zoom are now handled in sp_desktop_widget_realize()
     sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
     sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page_border), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
-        
+
     /* the following sets the page shadow on the canvas
        It was originally set to 5, which is really cheesy!
        It now is an attribute in the document's namedview. If a value of
        0 is used, then the constructor for a shadow is not initialized.
-    */        
+    */
 
     if ( desktop->namedview->pageshadow != 0 ) {
         sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page_border), desktop->namedview->pageshadow, 0x3f3f3fff);
@@ -595,8 +595,8 @@ sp_desktop_set_document (SPView *view, SPDocument *doc)
         sp_namedview_show (desktop->namedview, desktop);
         /* Ugly hack */
         sp_desktop_activate_guides (desktop, TRUE);
-	/* Ugly hack */
-	sp_dt_namedview_modified (desktop->namedview, SP_OBJECT_MODIFIED_FLAG, desktop);
+        /* Ugly hack */
+        sp_dt_namedview_modified (desktop->namedview, SP_OBJECT_MODIFIED_FLAG, desktop);
     }
 }
 
@@ -689,7 +689,7 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
     SPEventContext *ref = dt->event_context;
     while (ref && ref->next && ref->next->key != key)
         ref = ref->next;
-        
+
     if (ref && ref->next) {
         ec = ref->next;
         ref->next = ec->next;
@@ -703,12 +703,12 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 
 /* Private helpers */
 
-//TODO: below comment is by lauris; I don't quite understand his underlines idea. Let's wait and see if this 
+//TODO: below comment is by lauris; I don't quite understand his underlines idea. Let's wait and see if this
 //ever gets implemented in sodipodi. I filled in a simple implementation for sp_desktop_set_coordinate_status
 //which was empty. --bb
 
 /* fixme: The idea to have underlines is good, but have to fit it into desktop/widget framework (Lauris) */
-/* set the coordinate statusbar underline single coordinates with undeline-mask 
+/* set the coordinate statusbar underline single coordinates with undeline-mask
  * x and y are document coordinates
  * underline :
  *   0 - don't underline;
@@ -723,7 +723,7 @@ void
 sp_desktop_set_coordinate_status (SPDesktop *desktop, NR::Point p, guint underline)
 {
     gchar cstr[64];
-    
+
     g_snprintf (cstr, 64, "%6.2f, %6.2f", desktop->owner->dt2r * p[NR::X], desktop->owner->dt2r * p[NR::Y]);
 
     gtk_label_set_text (GTK_LABEL (desktop->owner->coord_status), cstr);
@@ -771,25 +771,29 @@ sp_desktop_group_at_point (SPDesktop const *desktop, NR::Point const p)
 /**
 \brief  Returns the mouse point in document coordinates; if mouse is outside the canvas, returns the center of canvas viewpoint
 */
-NR::Point 
+NR::Point
 sp_desktop_point (SPDesktop const *desktop)
 {
-	gint x, y;
-	gdk_window_get_pointer (GTK_WIDGET (desktop->owner->canvas)->window, &x, &y, NULL);
-	NR::Point pw = sp_canvas_window_to_world (desktop->owner->canvas, NR::Point(x, y));
-	NR::Point p = sp_desktop_w2d_xy_point (desktop, pw);
+    gint x, y;
+    gdk_window_get_pointer (GTK_WIDGET (desktop->owner->canvas)->window, &x, &y, NULL);
+    NR::Point pw = sp_canvas_window_to_world (desktop->owner->canvas, NR::Point(x, y));
+    NR::Point p = sp_desktop_w2d_xy_point (desktop, pw);
 
-	NRRect r;
-	sp_canvas_get_viewbox (desktop->owner->canvas, &r);
+    NRRect r;
+    sp_canvas_get_viewbox (desktop->owner->canvas, &r);
 
-	NR::Point r0 = sp_desktop_w2d_xy_point (desktop, NR::Point(r.x0, r.y0));
-	NR::Point r1 = sp_desktop_w2d_xy_point (desktop, NR::Point(r.x1, r.y1));
+    NR::Point r0 = sp_desktop_w2d_xy_point (desktop, NR::Point(r.x0, r.y0));
+    NR::Point r1 = sp_desktop_w2d_xy_point (desktop, NR::Point(r.x1, r.y1));
 
-	if (p[NR::X] >= r0[NR::X] && p[NR::X] <= r1[NR::X] && p[NR::Y] >= r1[NR::Y] && p[NR::Y] <= r0[NR::Y]) {
-		return p;
-	} else {
-		return (r0 + r1) / 2;
-	}
+    if (p[NR::X] >= r0[NR::X] &&
+        p[NR::X] <= r1[NR::X] &&
+        p[NR::Y] >= r1[NR::Y] &&
+        p[NR::Y] <= r0[NR::Y])
+    {
+        return p;
+    } else {
+        return (r0 + r1) / 2;
+    }
 }
 
 
@@ -920,12 +924,12 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_table_attach (GTK_TABLE (tbl), dtw->hscrollbar, 1, 2, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
     /* Vertical scrollbar and the sticky zoom button */
     dtw->vscrollbar_box = gtk_vbox_new (FALSE, 0);
-    dtw->sticky_zoom = sp_button_new_from_data (10, 	 
-                                                 SP_BUTTON_TYPE_TOGGLE, 	 
-                                                 NULL, 	 
-                                                 "sticky_zoom", 	 
-                                                 _("Zoom drawing if window size changes"), 	 
-                                                 dtw->tt); 	 
+    dtw->sticky_zoom = sp_button_new_from_data (10,
+                                                 SP_BUTTON_TYPE_TOGGLE,
+                                                 NULL,
+                                                 "sticky_zoom",
+                                                 _("Zoom drawing if window size changes"),
+                                                 dtw->tt);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dtw->sticky_zoom), prefs_get_int_attribute ("options.stickyzoom", "value", 0));
     gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->sticky_zoom, FALSE, FALSE, 0);
     dtw->vadj = (GtkAdjustment *) gtk_adjustment_new (0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
@@ -1026,8 +1030,8 @@ sp_desktop_widget_set_title (SPDesktopWidget *dtw)
     if (window) {
         gchar const *uri = SP_DOCUMENT_NAME (SP_VIEW_WIDGET_DOCUMENT (dtw));
         gchar const *fname = ( SPShowFullFielName
-			       ? uri
-			       : g_basename(uri) );
+                               ? uri
+                               : g_basename(uri) );
         GString *name = g_string_new ("");
         if (dtw->desktop->number > 1) {
             g_string_sprintf (name, _("%s: %d - Inkscape"), fname, dtw->desktop->number);
@@ -1105,7 +1109,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (dtw->desktop->namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
     sp_desktop_widget_namedview_modified (dtw->desktop->namedview, SP_OBJECT_MODIFIED_FLAG, dtw);
-      
+
     sp_desktop_widget_set_title (dtw);
 }
 
@@ -1113,8 +1117,8 @@ static gint
 sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
     if (event->type == GDK_BUTTON_PRESS) {
-		// defocus any spinbuttons
-		gtk_widget_grab_focus (GTK_WIDGET(dtw->canvas));
+        // defocus any spinbuttons
+        gtk_widget_grab_focus (GTK_WIDGET(dtw->canvas));
     }
 
     if ((event->type == GDK_BUTTON_PRESS) && (event->button.button == 3)) {
@@ -1128,9 +1132,9 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
     if (GTK_WIDGET_CLASS (dtw_parent_class)->event) {
         return (* GTK_WIDGET_CLASS (dtw_parent_class)->event) (widget, event);
     } else {
-        // The keypress events need to be passed to desktop handler explicitly, 
-        // because otherwise the event contexts only receive keypresses when the mouse cursor 
-        // is over the canvas. This redirection is only done for keypresses and only if there's no 
+        // The keypress events need to be passed to desktop handler explicitly,
+        // because otherwise the event contexts only receive keypresses when the mouse cursor
+        // is over the canvas. This redirection is only done for keypresses and only if there's no
         // current item on the canvas, because item events and all mouse events are caught
         // and passed on by the canvas acetate (I think). --bb
         if (event->type == GDK_KEY_PRESS && !dtw->canvas->current_item) {
@@ -1167,7 +1171,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
     if (doc && (((GObject *) doc)->ref_count == 1)) {
         if (sp_repr_attr (sp_document_repr_root (doc), "sodipodi:modified") != NULL) {
             GtkWidget *dialog;
-                        
+
             dialog = gtk_message_dialog_new(
                 GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dtw))),
                 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1182,11 +1186,10 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                   "If you close without saving, your changes will be discarded."),
                 SP_DOCUMENT_NAME(doc));
 
-            /* FIXME !!! Gtk 2.3+ gives us
-	       gtk_message_dialog_set_markup() (and actually even
-	       gtk_message_dialog_new_with_markup(..., format, ...)!) --
-	       until then, we will have to be a little bit evil here and
-	       poke at GtkMessageDialog::label, which is private... */
+            /* FIXME !!! Gtk 2.3+ gives us gtk_message_dialog_set_markup() (and actually even
+               gtk_message_dialog_new_with_markup(..., format, ...)!) -- until then, we will have
+               to be a little bit evil here and poke at GtkMessageDialog::label, which is
+               private... */
 
             gtk_label_set_markup(GTK_LABEL(GTK_MESSAGE_DIALOG(dialog)->label), markup);
             g_free(markup);
@@ -1195,11 +1198,11 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
             close_button = gtk_button_new_with_mnemonic(_("Close _without saving"));
             gtk_widget_show(close_button);
             gtk_dialog_add_action_widget(GTK_DIALOG(dialog), close_button, GTK_RESPONSE_NO);
-                        
+
             gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
             gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
             gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
-                        
+
             gint response;
             response = gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
@@ -1213,7 +1216,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                     sp_document_unref(doc);
                     return TRUE;
                 }
-		break;
+                break;
             case GTK_RESPONSE_NO:
                 break;
             default: // cancel pressed, or dialog was closed
@@ -1221,11 +1224,11 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                 break;
             }
         }
-		/* Code to check data loss */
-		bool allow_data_loss = FALSE;
+        /* Code to check data loss */
+        bool allow_data_loss = FALSE;
         while (sp_repr_attr (sp_document_repr_root (doc), "inkscape:dataloss") != NULL && allow_data_loss == FALSE) {
             GtkWidget *dialog;
-                        
+
             dialog = gtk_message_dialog_new(
                 GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dtw))),
                 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1239,13 +1242,12 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                 _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format (%s) that may cause data loss!</span>\n\n"
                   "Do you want to save this file in another format?"),
                 SP_DOCUMENT_NAME(doc),
-				Inkscape::Extension::db.get(sp_repr_attr(sp_document_repr_root(doc), "inkscape:output_extension"))->get_name());
+                Inkscape::Extension::db.get(sp_repr_attr(sp_document_repr_root(doc), "inkscape:output_extension"))->get_name());
 
-            /* FIXME !!! Gtk 2.3+ gives us
-	       gtk_message_dialog_set_markup() (and actually even
-	       gtk_message_dialog_new_with_markup(..., format, ...)!) --
-	       until then, we will have to be a little bit evil here and
-	       poke at GtkMessageDialog::label, which is private... */
+            /* FIXME !!! Gtk 2.3+ gives us gtk_message_dialog_set_markup() (and actually even
+               gtk_message_dialog_new_with_markup(..., format, ...)!) -- until then, we will have
+               to be a little bit evil here and poke at GtkMessageDialog::label, which is
+               private... */
 
             gtk_label_set_markup(GTK_LABEL(GTK_MESSAGE_DIALOG(dialog)->label), markup);
             g_free(markup);
@@ -1254,11 +1256,11 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
             close_button = gtk_button_new_with_mnemonic(_("Close _without saving"));
             gtk_widget_show(close_button);
             gtk_dialog_add_action_widget(GTK_DIALOG(dialog), close_button, GTK_RESPONSE_NO);
-                        
+
             gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
             gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
             gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
-                        
+
             gint response;
             response = gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
@@ -1272,9 +1274,9 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                     sp_document_unref(doc);
                     return TRUE;
                 }
-		break;
+                break;
             case GTK_RESPONSE_NO:
-				allow_data_loss = TRUE;
+                allow_data_loss = TRUE;
                 break;
             default: // cancel pressed, or dialog was closed
                 return TRUE;
@@ -1389,7 +1391,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
     sp_tool_toolbox_set_desktop (dtw->tool_toolbox, dtw->desktop);
     sp_aux_toolbox_set_desktop (dtw->aux_toolbox, dtw->desktop);
     sp_commands_toolbox_set_desktop (dtw->commands_toolbox, dtw->desktop);
-       
+
     return SP_VIEW_WIDGET (dtw);
 }
 
@@ -1411,7 +1413,7 @@ sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktop
 /*
  * the statusbars
  *
- * we have 
+ * we have
  * - coordinate status   set with sp_desktop_coordinate_status which is currently not unset
  * - selection status    which is used in two ways:
  *    * sp_desktop_default_status sets the default status text which is visible
@@ -1421,8 +1423,8 @@ sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktop
 */
 
 typedef struct {
-    GtkStatusbar *sb; 
-    guint message_id; 
+    GtkStatusbar *sb;
+    guint message_id;
 } statusbar_data;
 
 void SPDesktop::_set_status_message(SPView *view, Inkscape::MessageType type, const gchar *message)
@@ -1584,7 +1586,7 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
     SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
     if (!dtw) return;
 
-    // save the zoom 
+    // save the zoom
     if (log) {
         sp_push_current_zoom (dt, &(dt->zooms_past));
         // if we do a logged zoom, our zoom-forward list is invalidated, so delete it
@@ -1646,11 +1648,11 @@ sp_desktop_prev_zoom (SPDesktop *dt)
     sp_push_current_zoom (dt, &(dt->zooms_future));
 
     // restore previous zoom
-    sp_desktop_set_display_area (dt, 
+    sp_desktop_set_display_area (dt,
                                  ((NRRect *) dt->zooms_past->data)->x0,
-                                 ((NRRect *) dt->zooms_past->data)->y0, 
-                                 ((NRRect *) dt->zooms_past->data)->x1, 
-                                 ((NRRect *) dt->zooms_past->data)->y1, 
+                                 ((NRRect *) dt->zooms_past->data)->y0,
+                                 ((NRRect *) dt->zooms_past->data)->x1,
+                                 ((NRRect *) dt->zooms_past->data)->y1,
                                  0, false);
 
     // remove the just-added zoom from the past zooms list
@@ -1669,11 +1671,11 @@ sp_desktop_next_zoom (SPDesktop *dt)
     sp_push_current_zoom (dt, &(dt->zooms_past));
 
     // restore next zoom
-    sp_desktop_set_display_area (dt, 
+    sp_desktop_set_display_area (dt,
                                  ((NRRect *) dt->zooms_future->data)->x0,
-                                 ((NRRect *) dt->zooms_future->data)->y0, 
-                                 ((NRRect *) dt->zooms_future->data)->x1, 
-                                 ((NRRect *) dt->zooms_future->data)->y1, 
+                                 ((NRRect *) dt->zooms_future->data)->y0,
+                                 ((NRRect *) dt->zooms_future->data)->x1,
+                                 ((NRRect *) dt->zooms_future->data)->y1,
                                  0, false);
 
     // remove the just-used zoom from the zooms_future list
@@ -1711,7 +1713,7 @@ sp_desktop_zoom_absolute_keep_point (SPDesktop *dt, double cx, double cy, double
     // maximum or minimum zoom reached, but there's no exact equality because of rounding errors;
     // this check prevents "sliding" when trying to zoom in at maximum zoom;
     // someone please fix calculations properly and remove this hack
-    if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.025 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01)) 
+    if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.025 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01))
         return;
 
     NRRect viewbox;
@@ -1794,7 +1796,7 @@ sp_desktop_zoom_selection (SPDesktop *dt)
 {
     NRRect d;
     SP_DT_SELECTION(dt)->bounds(&d);
-    
+
     if ((fabs (d.x1 - d.x0) < 0.1) || (fabs (d.y1 - d.y0) < 0.1)) return;
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }
@@ -1839,53 +1841,54 @@ void sp_desktop_scroll_world(SPDesktop *dt, double dx, double dy)
 bool
 sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p, gdouble autoscrollspeed)
 {
-	NRRect dbox;
-	sp_desktop_get_display_area (desktop, &dbox);
+    NRRect dbox;
+    sp_desktop_get_display_area (desktop, &dbox);
 
-	gdouble autoscrolldistance = (gdouble) prefs_get_int_attribute_limited ("options.autoscrolldistance", "value", 0, -1000, 10000);
+    gdouble autoscrolldistance = (gdouble) prefs_get_int_attribute_limited ("options.autoscrolldistance", "value", 0, -1000, 10000);
 
-	// autoscrolldistance is in screen pixels, but the display area is in document units
-	autoscrolldistance /= SP_DESKTOP_ZOOM (desktop);
+    // autoscrolldistance is in screen pixels, but the display area is in document units
+    autoscrolldistance /= SP_DESKTOP_ZOOM (desktop);
 
-	// FIXME: njh: we need an expandBy function for rects
-	dbox.x0 -= autoscrolldistance;
-	dbox.x1 += autoscrolldistance;
-	dbox.y0 -= autoscrolldistance;
-	dbox.y1 += autoscrolldistance;
+    // FIXME: njh: we need an expandBy function for rects
+    dbox.x0 -= autoscrolldistance;
+    dbox.x1 += autoscrolldistance;
+    dbox.y0 -= autoscrolldistance;
+    dbox.y1 += autoscrolldistance;
 
-	if (!((*p)[NR::X] > dbox.x0 && (*p)[NR::X] < dbox.x1) || !((*p)[NR::Y] > dbox.y0 && (*p)[NR::Y] < dbox.y1)) {
+    if (!((*p)[NR::X] > dbox.x0 && (*p)[NR::X] < dbox.x1) ||
+        !((*p)[NR::Y] > dbox.y0 && (*p)[NR::Y] < dbox.y1)   ) {
 
-		NR::Point const s_w( (*p) * desktop->d2w );
+        NR::Point const s_w( (*p) * desktop->d2w );
 
-		gdouble x_to;
-		if ((*p)[NR::X] < dbox.x0)
-			x_to = dbox.x0;
-		else if ((*p)[NR::X] > dbox.x1)
-			x_to = dbox.x1;
-		else 
-			x_to = (*p)[NR::X];
+        gdouble x_to;
+        if ((*p)[NR::X] < dbox.x0)
+            x_to = dbox.x0;
+        else if ((*p)[NR::X] > dbox.x1)
+            x_to = dbox.x1;
+        else
+            x_to = (*p)[NR::X];
 
-		gdouble y_to;
-		if ((*p)[NR::Y] < dbox.y0)
-			y_to = dbox.y0;
-		else if ((*p)[NR::Y] > dbox.y1)
-			y_to = dbox.y1;
-		else 
-			y_to = (*p)[NR::Y];
+        gdouble y_to;
+        if ((*p)[NR::Y] < dbox.y0)
+            y_to = dbox.y0;
+        else if ((*p)[NR::Y] > dbox.y1)
+            y_to = dbox.y1;
+        else
+            y_to = (*p)[NR::Y];
 
-		NR::Point const d_dt(x_to, y_to);
-		NR::Point const d_w( d_dt * desktop->d2w );
-		NR::Point const moved_w( d_w - s_w );
+        NR::Point const d_dt(x_to, y_to);
+        NR::Point const d_w( d_dt * desktop->d2w );
+        NR::Point const moved_w( d_w - s_w );
 
-		if (autoscrollspeed == 0)
-			autoscrollspeed = prefs_get_double_attribute_limited ("options.autoscrollspeed", "value", 1, 0, 10);
+        if (autoscrollspeed == 0)
+            autoscrollspeed = prefs_get_double_attribute_limited ("options.autoscrollspeed", "value", 1, 0, 10);
 
-		if (autoscrollspeed != 0)
-			sp_desktop_scroll_world(desktop, autoscrollspeed * moved_w);
+        if (autoscrollspeed != 0)
+            sp_desktop_scroll_world(desktop, autoscrollspeed * moved_w);
 
-		return true;
-	}
-	return false;
+        return true;
+    }
+    return false;
 }
 
 static void
@@ -1993,13 +1996,13 @@ sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data)
     gdouble new_scrolled = gtk_spin_button_get_value (spin);
     const gchar *b = gtk_entry_get_text (GTK_ENTRY (spin));
     gdouble new_typed = atof (b);
-    
+
     if (sp_dtw_zoom_value_to_display (new_scrolled) == new_typed) { // the new value is set by scrolling
         *new_val = new_scrolled;
     } else { // the new value is typed in
         *new_val = sp_dtw_zoom_display_to_value (new_typed);
     }
-    
+
     return TRUE;
 }
 
@@ -2126,7 +2129,7 @@ fullscreen(SPDesktop *dt)
     if (GTK_IS_WINDOW(topw)) {
         if (dt->is_fullscreen) {
             dt->is_fullscreen = FALSE;
-            gtk_window_unfullscreen(topw);        
+            gtk_window_unfullscreen(topw);
             sp_desktop_widget_layout (dt->owner);
         } else {
             dt->is_fullscreen = TRUE;
