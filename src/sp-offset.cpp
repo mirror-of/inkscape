@@ -52,7 +52,7 @@ static void sp_offset_update (SPObject * object, SPCtx * ctx, guint flags);
 static void sp_offset_release (SPObject * object);
 
 static gchar *sp_offset_description (SPItem * item);
-static int sp_offset_snappoints (SPItem * item, NRPoint * p, int size);
+static int sp_offset_snappoints (SPItem * item, NR::Point * p, int size);
 static void sp_offset_set_shape (SPShape * shape);
 
 Path *bpath_to_liv_path (ArtBpath * bpath);
@@ -129,15 +129,9 @@ sp_offset_get_type (void)
 static void
 sp_offset_class_init (SPOffsetClass * klass)
 {
-  GObjectClass *gobject_class;
-  SPObjectClass *sp_object_class;
-  SPItemClass *item_class;
-  SPShapeClass *shape_class;
-  
-  gobject_class = (GObjectClass *) klass;
-  sp_object_class = (SPObjectClass *) klass;
-  item_class = (SPItemClass *) klass;
-  shape_class = (SPShapeClass *) klass;
+  SPObjectClass *sp_object_class = (SPObjectClass *) klass;
+  SPItemClass *item_class = (SPItemClass *) klass;
+  SPShapeClass *shape_class = (SPShapeClass *) klass;
   
   parent_class = (SPShapeClass *) g_type_class_ref (SP_TYPE_SHAPE);
   
@@ -203,10 +197,7 @@ sp_offset_build (SPObject * object, SPDocument * document, SPRepr * repr)
 static SPRepr *
 sp_offset_write (SPObject * object, SPRepr * repr, guint flags)
 {
-  SPOffset *offset;
-  char *d;
-  
-  offset = SP_OFFSET (object);
+  SPOffset *offset = SP_OFFSET (object);
   
   if ((flags & SP_OBJECT_WRITE_BUILD) && !repr)
   {
@@ -224,7 +215,7 @@ sp_offset_write (SPObject * object, SPRepr * repr, guint flags)
     sp_repr_set_attr (repr, "inkscape:href", offset->sourceObject);
   }
   
-  d = sp_svg_write_path (((SPShape *) offset)->curve->bpath);
+  char *d = sp_svg_write_path (((SPShape *) offset)->curve->bpath);
   sp_repr_set_attr (repr, "d", d);
   g_free (d);
   
@@ -238,11 +229,7 @@ sp_offset_write (SPObject * object, SPRepr * repr, guint flags)
 static void
 sp_offset_release (SPObject * object)
 {
-  SPItem *item;
-  SPOffset *offset;
-  
-  item = (SPItem *) object;
-  offset = (SPOffset *) object;
+  SPOffset *offset = (SPOffset *) object;
   
   if (offset->original)
     free (offset->original);
@@ -273,12 +260,9 @@ sp_offset_release (SPObject * object)
 static void
 sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 {
-  SPOffset *offset;
-  SPShape *shape;
   gulong unit;
   
-  offset = SP_OFFSET (object);
-  shape = SP_SHAPE (object);
+  SPOffset *offset = SP_OFFSET (object);
   
   if ( offset->sourceDirty ) refresh_offset_source(offset);
   
@@ -398,7 +382,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 static void
 sp_offset_update (SPObject * object, SPCtx * ctx, guint flags)
 {
-  SPOffset* offset=SP_OFFSET(object);
+  SPOffset* offset = SP_OFFSET(object);
   if ( offset->sourceDirty ) refresh_offset_source(offset);
   if (flags &
       (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -556,10 +540,7 @@ liv_svg_dump_path2 (Path * path)
 static void
 sp_offset_set_shape (SPShape * shape)
 {
-  SPOffset *offset;
-  SPCurve *c;
-  
-  offset = SP_OFFSET (shape);
+  SPOffset *offset = SP_OFFSET (shape);
   
   sp_object_request_modified (SP_OBJECT (offset), SP_OBJECT_MODIFIED_FLAG);
   
@@ -578,7 +559,7 @@ sp_offset_set_shape (SPShape * shape)
     const char *res_d = sp_repr_attr(SP_OBJECT(shape)->repr,"inkscape:original");
     if ( res_d ) {
       ArtBpath *bpath = sp_svg_read_path (res_d);
-      c = sp_curve_new_from_bpath (bpath);
+      SPCurve *c = sp_curve_new_from_bpath (bpath);
       sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
       sp_curve_unref (c);
     }
@@ -706,7 +687,7 @@ sp_offset_set_shape (SPShape * shape)
     delete orig;
     
     ArtBpath *bpath = sp_svg_read_path (res_d);
-    c = sp_curve_new_from_bpath (bpath);
+    SPCurve *c = sp_curve_new_from_bpath (bpath);
     sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
     sp_curve_unref (c);
     
@@ -716,7 +697,7 @@ sp_offset_set_shape (SPShape * shape)
 
 
 static int
-sp_offset_snappoints (SPItem * item, NRPoint * p, int size)
+sp_offset_snappoints (SPItem * item, NR::Point * p, int size)
 {
   if (((SPItemClass *) parent_class)->snappoints)
     return ((SPItemClass *) parent_class)->snappoints (item, p, size);
@@ -728,15 +709,20 @@ sp_offset_snappoints (SPItem * item, NRPoint * p, int size)
 // utilitaires pour les poignees
 
 bool
-vectors_are_clockwise (double ax, double ay, double bx, double by, double cx,
-                       double cy)
+vectors_are_clockwise (NR::Point A, NR::Point B, NR::Point C)
+/* FIXME: This can be done using linear operations, more stably and
+ *  faster.  method: transform A and C into B's space, A should be
+ *  negative and B should be positive in the orthogonal component.  I
+ *  think this is equivalent to 
+ *  dot(A, rot90(B))*dot(C, rot90(B)) == -1.  
+ *    -- njh */
 {
-  double ab_s = ay * bx - ax * by;
-  double ab_c = ax * bx + ay * by;
-  double bc_s = by * cx - bx * cy;
-  double bc_c = bx * cx + by * cy;
-  double ca_s = cy * ax - cx * ay;
-  double ca_c = cx * ax + cy * ay;
+  double ab_s = dot(A, rot90(B));
+  double ab_c = dot(A, B);
+  double bc_s = dot(B, rot90(C));
+  double bc_c = dot(B, C);
+  double ca_s = dot(C, rot90(A));
+  double ca_c = dot(C, A);
   
   double ab_a = acos (ab_c);
   if (ab_c <= -1.0)
@@ -796,7 +782,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
       if (theRes->pts[i].dI + theRes->pts[i].dO > 0)
 	    {
         NR::Point nx = theRes->pts[i].x;
-        NR::Point nxpx=px-nx;
+        NR::Point nxpx = px-nx;
 	      double ndist = sqrt (dot(nxpx,nxpx));
 	      if (ptSet == false || fabs (ndist) < fabs (ptDist))
         {
@@ -826,7 +812,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
               nex = -nex;
             }
             
-            if (vectors_are_clockwise (nex[0], nex[1], nx[0], nx[1], prx[0], prx[1]))
+            if (vectors_are_clockwise (nex, nx, prx))
             {
               if (theRes->aretes[cb].st == i)
               {
@@ -890,14 +876,13 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 void
 sp_offset_top_point (SPOffset * offset, NR::Point *px)
 {
-  (*px)[NR::X] = (*px)[NR::Y] = 0;
+  (*px) = NR::Point(0, 0);
   if (offset == NULL)
     return;
   
   if (offset->knotSet)
   {
-    (*px)[NR::X] = offset->knotx;
-    (*px)[NR::Y] = offset->knoty;
+    (*px) = offset->knot;
     return;
   }
   

@@ -511,8 +511,9 @@ sp_dyna_draw_timeout_handler (gpointer data)
 	sp_dyna_draw_get_curr_vpoint (dc, &xd, &yd);
 	p.x = xd;
 	p.y = yd;
-
-	sp_desktop_free_snap (desktop, &p);
+	NR::Point pp(p);
+	sp_desktop_free_snap (desktop, pp);
+	p = pp;
   
 	if ((dc->curx != dc->lastx) || (dc->cury != dc->lasty)) {
 		sp_dyna_draw_brush (dc);
@@ -547,7 +548,9 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 			sp_dyna_draw_get_curr_vpoint (dc, &xd, &yd);
 			p.x = xd;
 			p.y = yd;
-			sp_desktop_free_snap (desktop, &p);
+			NR::Point pp(p);
+			sp_desktop_free_snap (desktop, pp);
+			p = pp;
 			sp_curve_reset (dc->accumulated);
 			if (dc->repr) {
 				dc->repr = NULL;
@@ -595,8 +598,10 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 			sp_dyna_draw_get_curr_vpoint (dc, &xd, &yd);
 			p.x = xd;
 			p.y = yd;
-
-			sp_desktop_free_snap (desktop, &p);
+			
+			NR::Point pp(p);
+			sp_desktop_free_snap (desktop, pp);
+			p = pp;
 
 			if ((dc->curx != dc->lastx) || (dc->cury != dc->lasty)) {
 				sp_dyna_draw_brush (dc);

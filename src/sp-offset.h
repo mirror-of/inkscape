@@ -44,7 +44,7 @@ struct _SPOffset
   bool   sourceDirty;
 
   bool knotSet;
-  double knotx, knoty;
+  NR::Point knot;
 };
 
 struct _SPOffsetClass

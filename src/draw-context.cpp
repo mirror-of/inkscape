@@ -418,11 +418,15 @@ spdc_endpoint_snap_internal (SPDrawContext *dc, NRPoint *p, NRPoint *o, guint st
 			p->y = o->y + bdot * by;
 
 			/* Snap it along best vector */
-			sp_desktop_vector_snap (SP_EVENT_CONTEXT_DESKTOP (dc), p, bx, by);
+			NR::Point pp(*p);
+			sp_desktop_vector_snap (SP_EVENT_CONTEXT_DESKTOP (dc), pp, NR::Point(bx, by));
+			*p = pp;
 		}
 	} else {
 		/* Free */
-		sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), p);
+		NR::Point pp(*p);
+		sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), pp);
+		*p = pp;
 	}
 }
 
@@ -994,7 +998,9 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				if (anchor) {
 					p = anchor->dp;
 				} else {
-					sp_desktop_free_snap (dt, &p);
+					NR::Point pp(p);
+					sp_desktop_free_snap (dt, pp);
+					p = pp;
 				}
 				if (dc->npoints != 0) { // buttonpress may have happened before we entered draw context!
 					spdc_add_freehand_point (pc, &p, event->motion.state);
@@ -1095,11 +1101,11 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 static void
 spdc_set_startpoint (SPPencilContext *pc, NRPoint *p, guint state)
 {
-	SPDrawContext *dc;
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
-	dc = SP_DRAW_CONTEXT (pc);
-
-	sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), p);
+	NR::Point pp(*p);
+	sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), pp);
+	*p = pp;
 
 	dc->npoints = 0;
 	dc->p[dc->npoints++] = *p;

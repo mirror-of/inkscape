@@ -447,17 +447,13 @@ sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 static void
 sp_offset_offset_set (SPItem *item, const NRPoint *p, guint state)
 {
-	SPOffset *offset;
-
-	offset = SP_OFFSET (item);
-
-  NR::Point  np(p->x,p->y);
-	offset->rad = sp_offset_distance_to_original(offset,np);
-  offset->knotx=p->x;
-  offset->knoty=p->y;
-  offset->knotSet=true;
-
-  sp_object_request_update ((SPObject *) offset, SP_OBJECT_MODIFIED_FLAG);
+	SPOffset *offset = SP_OFFSET (item);
+	
+	offset->rad = sp_offset_distance_to_original(offset, *p);
+	offset->knot = *p;
+	offset->knotSet=true;
+	
+	sp_object_request_update ((SPObject *) offset, SP_OBJECT_MODIFIED_FLAG);
 }
 
 

@@ -247,8 +247,8 @@ Point abs(Point const &b);
 class Rect {
 public:
 	Rect() {}
-	Rect(NRRect& r) : _min(r.x0, r.y0), _max(r.x1, r.y1) {}
-	Rect(Rect& r) : _min(r._min), _max(r._max) {}
+	Rect(const NRRect& r) : _min(r.x0, r.y0), _max(r.x1, r.y1) {}
+	Rect(const Rect& r) : _min(r._min), _max(r._max) {}
 	
 	const Point &topleft() const { return _min; }
 	Point topright() const { return Point(_max[X], _min[Y]); }

@@ -67,10 +67,12 @@ SPItem *sp_selection_item (SPSelection * selection);
 SPRepr *sp_selection_repr (SPSelection * selection);
 
 NRRect *sp_selection_bbox (SPSelection *selection, NRRect *bbox);
+NR::Rect sp_selection_bbox (SPSelection *selection);
 NRRect *sp_selection_bbox_document (SPSelection *selection, NRRect *bbox);
+NR::Rect sp_selection_bbox_document (SPSelection *selection);
 
 /* Returns number of points used */
-int sp_selection_snappoints (SPSelection *selection, NRPoint *points, int size);
+int sp_selection_snappoints (SPSelection *selection, NR::Point *points, int size);
 
 
 

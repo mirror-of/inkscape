@@ -16,6 +16,7 @@
 #include <libnr/nr-matrix.h>
 #include "knot.h"
 #include "desktop-handles.h"
+#include <vector>
 
 typedef struct _SPSelTrans SPSelTrans;
 
@@ -48,26 +49,24 @@ struct _SPSelTrans {
 	unsigned int show_handles : 1;
 	unsigned int empty : 1;
 	unsigned int changed : 1;
-
-	SPItem **items;
-	NR::Matrix *transforms;
-	int nitems;
-
-	NRPoint *spp;
+	
+	std::vector<std::pair<SPItem *,NR::Matrix> > items;
+	
+	NR::Point *spp;
 	int spp_length;
 
 	NR::Rect box;
-        NR::Matrix current;
-        NR::Point opposit;
-        NR::Point origin;
+	NR::Matrix current;
+	NR::Point opposit;
+	NR::Point origin;
 	NR::Point point;
 	NR::Point center;
 	SPKnot *shandle[8];
 	SPKnot *rhandle[8];
 	SPKnot *chandle;
-        SPCanvasItem *norm;
-        SPCanvasItem *grip;
-        SPCanvasItem *l[4];
+	SPCanvasItem *norm;
+	SPCanvasItem *grip;
+	SPCanvasItem *l[4];
 	guint sel_changed_id;
 	guint sel_modified_id;
 	GSList *stamp_cache;

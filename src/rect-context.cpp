@@ -184,10 +184,10 @@ sp_rect_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			dragging = TRUE;
 			/* Position center */
 			sp_desktop_w2d_xy_point (event_context->desktop, &fp, event->button.x, event->button.y);
-			rc->center.x = fp.x;
-			rc->center.y = fp.y;
 			/* Snap center to nearest magnetic point */
-			sp_desktop_free_snap (event_context->desktop, &rc->center);
+			NR::Point cent(fp);
+			sp_desktop_free_snap (event_context->desktop, cent);
+			rc->center = cent;
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 					     GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | 
 					     GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
@@ -235,16 +235,12 @@ sp_rect_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 }
 
 static void
-sp_rect_drag (SPRectContext * rc, double x, double y, guint state)
+sp_rect_drag (SPRectContext * rc, double xx, double yy, guint state)
 {
-	SPDesktop * desktop;
-	NRPoint p0, p1;
-	gdouble x0, y0, x1, y1, w, h;
-	GString * xs, * ys;
-	gchar status[80];
-	NRPoint fp;
+	NR::Point p0, p1;
+	const NR::Point pt(xx, yy);
 
-	desktop = SP_EVENT_CONTEXT (rc)->desktop;
+	SPDesktop * desktop = SP_EVENT_CONTEXT (rc)->desktop;
 
 	if (!rc->item) {
 		SPRepr * repr, * style;
@@ -265,80 +261,66 @@ sp_rect_drag (SPRectContext * rc, double x, double y, guint state)
 	/* This is bit ugly, but so we are */
 
 	if (state & GDK_CONTROL_MASK) {
-		gdouble dx, dy;
+		NR::Point delta = pt - rc->center;
 		/* fixme: Snapping */
-		dx = x - rc->center.x;
-		dy = y - rc->center.y;
-		if ((fabs (dx) > fabs (dy)) && (dy != 0.0)) {
-			dx = floor (dx/dy + 0.5) * dy;
-		} else if (dx != 0.0) {
-			dy = floor (dy/dx + 0.5) * dx;
+		if ((fabs (delta[0]) > fabs (delta[1])) && (delta[1] != 0.0)) {
+			delta[0] = floor (delta[0]/delta[1] + 0.5) * delta[1];
+		} else if (delta[0] != 0.0) {
+			delta[1] = floor (delta[1]/delta[0] + 0.5) * delta[0];
 		}
-		p1.x = rc->center.x + dx;
-		p1.y = rc->center.y + dy;
+		p1 = rc->center + delta;
 		if (state & GDK_SHIFT_MASK) {
-			gdouble l0, l1;
-			p0.x = rc->center.x - dx;
-			p0.y = rc->center.y - dy;
-			l0 = sp_desktop_vector_snap (desktop, &p0, p0.x - p1.x, p0.y - p1.y);
-			l1 = sp_desktop_vector_snap (desktop, &p1, p1.x - p0.x, p1.y - p0.y);
+			p0 = rc->center - delta;
+			const NR::Coord l0 = sp_desktop_vector_snap (desktop, p0, p0 - p1);
+			const NR::Coord l1 = sp_desktop_vector_snap (desktop, p1, p1 - p0);
+			
 			if (l0 < l1) {
-				p1.x = 2 * rc->center.x - p0.x;
-				p1.y = 2 * rc->center.y - p0.y;
+				p1 = 2 * NR::Point(rc->center) - p0;
 			} else {
-				p0.x = 2 * rc->center.x - p1.x;
-				p0.y = 2 * rc->center.y - p1.y;
+				p0 = 2 * NR::Point(rc->center) - p1;
 			}
 		} else {
-			p0.x = rc->center.x;
-			p0.y = rc->center.y;
-			sp_desktop_vector_snap (desktop, &p1, p1.x - p0.x, p1.y - p0.y);
+			p0 = rc->center;
+			sp_desktop_vector_snap (desktop, p1, 
+									p1 - p0);
 		}
 	} else if (state & GDK_SHIFT_MASK) {
-		double p0h, p0v, p1h, p1v;
 		/* Corner point movements are bound */
-		p0.x = 2 * rc->center.x - x;
-		p0.y = 2 * rc->center.y - y;
-		p1.x = x;
-		p1.y = y;
-		p0h = sp_desktop_horizontal_snap (desktop, &p0);
-		p0v = sp_desktop_vertical_snap (desktop, &p0);
-		p1h = sp_desktop_horizontal_snap (desktop, &p1);
-		p1v = sp_desktop_vertical_snap (desktop, &p1);
+		p1 = pt;
+		p0 = 2 * NR::Point(rc->center) - p1;
+		const NR::Coord p0h = sp_desktop_horizontal_snap (desktop, &p0);
+		const NR::Coord p0v = sp_desktop_vertical_snap (desktop, &p0);
+		const NR::Coord p1h = sp_desktop_horizontal_snap (desktop, &p1);
+		const NR::Coord p1v = sp_desktop_vertical_snap (desktop, &p1);
 		if (p0h < p1h) {
 			/* Use Point 0 horizontal position */
-			p1.x = 2 * rc->center.x - p0.x;
+			p1[NR::X] = 2 * rc->center.x - p0[NR::X];
 		} else {
-			p0.x = 2 * rc->center.x - p1.x;
+			p0[NR::X] = 2 * rc->center.x - p1[NR::X];
 		}
 		if (p0v < p1v) {
 			/* Use Point 0 vertical position */
-			p1.y = 2 * rc->center.y - p0.y;
+			p1[NR::Y] = 2 * rc->center.y - p0[NR::Y];
 		} else {
-			p0.y = 2 * rc->center.y - p1.y;
+			p0[NR::Y] = 2 * rc->center.y - p1[NR::Y];
 		}
 	} else {
 		/* Free movement for corner point */
-		p0.x = rc->center.x;
-		p0.y = rc->center.y;
-		p1.x = x;
-		p1.y = y;
-		sp_desktop_free_snap (desktop, &p1);
+		p0 = rc->center;
+		p1 = pt;
+		sp_desktop_free_snap (desktop, p1);
 	}
 
-	sp_desktop_dt2root_xy_point (desktop, &fp, p0.x, p0.y);
-	p0.x = fp.x;
-	p0.y = fp.y;
-	sp_desktop_dt2root_xy_point (desktop, &fp, p1.x, p1.y);
-	p1.x = fp.x;
-	p1.y = fp.y;
-
-	x0 = MIN (p0.x, p1.x);
-	y0 = MIN (p0.y, p1.y);
-	x1 = MAX (p0.x, p1.x);
-	y1 = MAX (p0.y, p1.y);
-	w  = x1 - x0;
-	h  = y1 - y0;
+	p0 = sp_desktop_dt2root_xy_point (desktop, p0);
+	p1 = sp_desktop_dt2root_xy_point (desktop, p1);
+	
+	// FIXME: use NR::Rect
+	const NR::Coord x0 = MIN (p0[NR::X], p1[NR::X]);
+	const NR::Coord y0 = MIN (p0[NR::Y], p1[NR::Y]);
+	const NR::Coord x1 = MAX (p0[NR::X], p1[NR::X]);
+	const NR::Coord y1 = MAX (p0[NR::Y], p1[NR::Y]);
+	const NR::Coord w  = x1 - x0;
+	const NR::Coord h  = y1 - y0;
 
 	sp_rect_position_set (SP_RECT (rc->item), x0, y0, w, h);
 	if (rc->rx_ratio != 0.0)
@@ -347,6 +329,8 @@ sp_rect_drag (SPRectContext * rc, double x, double y, guint state)
 		sp_rect_set_ry(SP_RECT (rc->item), TRUE, 0.5 * rc->ry_ratio * h); 
 
 	// status text
+	GString * xs, * ys;
+	gchar status[80];
 	xs = SP_PT_TO_METRIC_STRING (fabs(x1-x0), SP_DEFAULT_METRIC);
 	ys = SP_PT_TO_METRIC_STRING (fabs(y1-y0), SP_DEFAULT_METRIC);
 	g_snprintf (status, 80, "Draw rectangle  %s x %s", xs->str, ys->str);

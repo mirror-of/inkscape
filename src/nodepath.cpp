@@ -906,22 +906,19 @@ sp_nodepath_selected_nodes_move (SPNodePath * nodepath, gdouble dx, gdouble dy)
 	by = dy;
 
 	for (l = nodepath->selected; l != NULL; l = l->next) {
-		SPPathNode * n;
-		NRPoint p;
-		n = (SPPathNode *) l->data;
-		p.x = n->pos.x + dx;
-		p.y = n->pos.y + dy;
+		SPPathNode * n = (SPPathNode *) l->data;
+		NR::Point p(n->pos.x + dx, n->pos.y + dy);
 		dist = sp_desktop_horizontal_snap (nodepath->desktop, &p);
 		if (dist < besth) {
 			g_message("Snapping X");
 			besth = dist;
-			bx = p.x - n->pos.x;
+			bx = p[0] - n->pos.x;
 		}
 		dist = sp_desktop_vertical_snap (nodepath->desktop, &p);
 		if (dist < bestv) {
 			g_message("Snapping Y");
 			bestv = dist;
-			by = p.y - n->pos.y;
+			by = p[1] - n->pos.y;
 		}
 	}
 
@@ -2363,9 +2360,7 @@ node_ctrl_grabbed (SPKnot * knot, guint state, gpointer data)
 static void
 node_ctrl_ungrabbed (SPKnot * knot, guint state, gpointer data)
 {
-	SPPathNode * n;
-
-	n = (SPPathNode *) data;
+	SPPathNode *n = (SPPathNode *) data;
 
 	// forget origin and set knot position once more (because it can be wrong now due to restrictions)
 	if (n->p.knot == knot) {
@@ -2384,12 +2379,11 @@ node_ctrl_ungrabbed (SPKnot * knot, guint state, gpointer data)
 static gboolean
 node_ctrl_request (SPKnot * knot, NRPoint *p, guint state, gpointer data)
 {
-	SPPathNode * n;
 	SPPathNodeSide * me, * opposite;
 	ArtPathcode othercode;
 	gint which;
 
-	n = (SPPathNode *) data;
+	SPPathNode *n = (SPPathNode *) data;
 
 	if (n->p.knot == knot) {
 		me = &n->p;
@@ -2423,9 +2417,13 @@ node_ctrl_request (SPKnot * knot, NRPoint *p, guint state, gpointer data)
 			p->x = n->pos.x + ndx / linelen * scal;
 			p->y = n->pos.y + ndy / linelen * scal;
 		}
-		sp_desktop_vector_snap (n->subpath->nodepath->desktop, p, ndx, ndy);
+		NR::Point pp = *p;
+		sp_desktop_vector_snap (n->subpath->nodepath->desktop, pp, NR::Point(ndx, ndy));
+		*p = pp;
 	} else {
-		sp_desktop_free_snap (n->subpath->nodepath->desktop, p);
+		NR::Point pp = *p;
+		sp_desktop_free_snap (n->subpath->nodepath->desktop, pp);
+		*p = pp;
 	}
 
 	sp_node_adjust_knot (n, -which);

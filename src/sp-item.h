@@ -114,7 +114,7 @@ struct _SPItemClass {
 	void (* hide) (SPItem *item, unsigned int key);
 
 	/* Returns a number of points used */ 
-	int (* snappoints) (SPItem *item, NRPoint *points, int size);
+	int (* snappoints) (SPItem *item, NR::Point *points, int size);
 
 	/* Write item transform to repr optimally */
 	void (* write_transform) (SPItem *item, SPRepr *repr, NRMatrix *transform);
@@ -140,7 +140,7 @@ unsigned int sp_item_display_key_new (unsigned int numkeys);
 NRArenaItem *sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 void sp_item_invoke_hide (SPItem *item, unsigned int key);
 
-int sp_item_snappoints (SPItem *item, NRPoint *points, int size);
+int sp_item_snappoints (SPItem *item, NR::Point *points, int size);
 
 void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 

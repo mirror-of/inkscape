@@ -47,7 +47,7 @@ static void sp_item_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_item_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar * sp_item_private_description (SPItem * item);
-static int sp_item_private_snappoints (SPItem *item, NRPoint *p, int size);
+static int sp_item_private_snappoints (SPItem *item, NR::Point *p, int size);
 
 static SPItemView *sp_item_view_new_prepend (SPItemView *list, SPItem *item, unsigned int flags, unsigned int key, NRArenaItem *arenaitem);
 static SPItemView *sp_item_view_list_remove (SPItemView *list, SPItemView *view);
@@ -80,11 +80,7 @@ sp_item_get_type (void)
 static void
 sp_item_class_init (SPItemClass *klass)
 {
-	GObjectClass *object_class;
-	SPObjectClass *sp_object_class;
-
-	object_class = (GObjectClass *) klass;
-	sp_object_class = (SPObjectClass *) klass;
+	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
 	parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
 
@@ -101,9 +97,7 @@ sp_item_class_init (SPItemClass *klass)
 static void
 sp_item_init (SPItem *item)
 {
-	SPObject *object;
-
-	object = SP_OBJECT (item);
+	SPObject *object = SP_OBJECT (item);
 
 	item->sensitive = TRUE;
 	item->printable = TRUE;
@@ -138,9 +132,7 @@ sp_item_build (SPObject * object, SPDocument * document, SPRepr * repr)
 static void
 sp_item_release (SPObject * object)
 {
-	SPItem *item;
-
-	item = (SPItem *) object;
+	SPItem *item = (SPItem *) object;
 
 	if (item->clip_ref) {
 		item->clip_ref->detach();
@@ -166,10 +158,7 @@ sp_item_release (SPObject * object)
 static void
 sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPItem *item;
-	SPItemView *v;
-
-	item = (SPItem *) object;
+	SPItem *item = (SPItem *) object;
 
 	switch (key) {
 	case SP_ATTR_TRANSFORM: {
@@ -183,7 +172,7 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	}
 	case SP_PROP_CLIP_PATH: {
-		gchar *uri=Inkscape::parse_css_url(value);
+		gchar *uri = Inkscape::parse_css_url(value);
 		if (uri) {
 			try {
 				item->clip_ref->attach(Inkscape::URI(uri));
@@ -216,13 +205,13 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 	case SP_ATTR_SODIPODI_INSENSITIVE:
 		item->sensitive = !value;
-		for (v = item->display; v != NULL; v = v->next) {
+		for (SPItemView *v = item->display; v != NULL; v = v->next) {
 			nr_arena_item_set_sensitive (v->arenaitem, item->sensitive);
 		}
 		break;
 	case SP_ATTR_SODIPODI_NONPRINTABLE:
 		item->printable = !value;
-		for (v = item->display; v != NULL; v = v->next) {
+		for (SPItemView *v = item->display; v != NULL; v = v->next) {
 			if (v->flags & SP_ITEM_SHOW_PRINT) {
 				nr_arena_item_set_visible (v->arenaitem, item->printable);
 			}
@@ -300,9 +289,7 @@ mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
 static void
 sp_item_update (SPObject *object, SPCtx *ctx, guint flags)
 {
-	SPItem *item;
-
-	item = SP_ITEM (object);
+	SPItem *item = SP_ITEM (object);
 
 	if (((SPObjectClass *) (parent_class))->update)
 		(* ((SPObjectClass *) (parent_class))->update) (object, ctx, flags);
@@ -415,26 +402,21 @@ sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
 }
 
 static int
-sp_item_private_snappoints (SPItem *item, NRPoint *p, int size)
+sp_item_private_snappoints (SPItem *item, NR::Point *p, int size)
 {
 	if (size < 4) return 0;
 	NRMatrix i2d;
 	sp_item_i2d_affine(item, &i2d);
-        NRRect bbox;
+	NRRect bbox;
 	sp_item_invoke_bbox(item, &bbox, &i2d, TRUE);
-	p[0].x = bbox.x0;
-	p[0].y = bbox.y0;
-	p[1].x = bbox.x1;
-	p[1].y = bbox.y0;
-	p[2].x = bbox.x1;
-	p[2].y = bbox.y1;
-	p[3].x = bbox.x0;
-	p[3].y = bbox.y1;
+	NR::Rect bbox2(bbox);
+	for(int i = 0; i < 4; i++)
+		p[i] = bbox2.corner(i);
 	return 4;
 }
 
 int
-sp_item_snappoints (SPItem *item, NRPoint *p, int size)
+sp_item_snappoints (SPItem *item, NR::Point *p, int size)
 {
 	g_return_val_if_fail (item != NULL, 0);
 	g_return_val_if_fail (SP_IS_ITEM (item), 0);

@@ -69,9 +69,7 @@ sp_selection_get_type (void)
 static void
 sp_selection_class_init (SPSelectionClass *klass)
 {
-	GObjectClass *object_class;
-
-	object_class = (GObjectClass *) klass;
+	GObjectClass *object_class = (GObjectClass *) klass;
 
 	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
@@ -108,9 +106,7 @@ sp_selection_init (SPSelection *selection)
 static void
 sp_selection_dispose (GObject *object)
 {
-	SPSelection *selection;
-
-	selection = SP_SELECTION (object);
+	SPSelection *selection = SP_SELECTION (object);
 
 	sp_selection_frozen_empty (selection);
 
@@ -166,14 +162,11 @@ sp_selection_selected_item_modified (SPItem *item, guint flags, SPSelection *sel
 static gint
 sp_selection_idle_handler (gpointer data)
 {
-	SPSelection *selection;
-	guint flags;
-
-	selection = SP_SELECTION (data);
+	SPSelection *selection = SP_SELECTION (data);
 
 	/* Clear our id, so next request will be rescheduled */
 	selection->idle = 0;
-	flags = selection->flags;
+	guint flags = selection->flags;
 	selection->flags = 0;
 	/* Emit our own "modified" signal */
 	g_signal_emit (G_OBJECT (selection), selection_signals [MODIFIED], 0, flags);
@@ -204,11 +197,9 @@ sp_selection_frozen_empty (SPSelection * selection)
 void
 sp_selection_update_statusbar (SPSelection * selection)
 {
-	gint len;
-
 	const char* when_selected = _("Click selection to toggle scale/rotation handles");
 
-	len = g_slist_length (selection->items);
+	gint len = g_slist_length (selection->items);
 
 	if (len == 0) {
 		sp_view_set_statusf (SP_VIEW (selection->desktop), _("No objects selected. Click, Shift+click, drag around objects to select."));
@@ -236,12 +227,9 @@ sp_selection_changed (SPSelection * selection)
 void
 sp_current_selection_changed ()
 {
-	SPDesktop * desktop;
-	SPSelection * selection;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION (desktop);
 	if (!SP_IS_SELECTION (selection)) return;
 
 	sp_selection_changed (selection);
@@ -250,9 +238,7 @@ sp_current_selection_changed ()
 SPSelection *
 sp_selection_new (SPDesktop * desktop)
 {
-	SPSelection * selection;
-
-	selection = (SPSelection*)g_object_new (SP_TYPE_SELECTION, NULL);
+	SPSelection *selection = (SPSelection*)g_object_new (SP_TYPE_SELECTION, NULL);
 
 	selection->desktop = desktop;
 
@@ -273,13 +259,11 @@ sp_selection_item_selected (SPSelection * selection, SPItem * item)
 gboolean
 sp_selection_repr_selected (SPSelection * selection, SPRepr * repr)
 {
-	GSList * l;
-
 	g_return_val_if_fail (selection != NULL, FALSE);
 	g_return_val_if_fail (SP_IS_SELECTION (selection), FALSE);
 	g_return_val_if_fail (repr != NULL, FALSE);
 
-	for (l = selection->items; l != NULL; l = l->next) {
+	for (GSList * l = selection->items; l != NULL; l = l->next) {
 		if (((SPObject *)l->data)->repr == repr) return TRUE;
 	}
 
@@ -289,11 +273,9 @@ sp_selection_repr_selected (SPSelection * selection, SPRepr * repr)
 void
 sp_selection_deselect_under_group (SPSelection * selection, SPGroup * group)
 {
-	SPObject * o;
-
 	if (!SP_IS_GROUP (group)) return;
 
-	for (o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject * o = group->children ; o != NULL ; o = o->next ) {
 		if (sp_selection_item_selected (selection, SP_ITEM(o))) {
 			sp_selection_remove_item (selection, SP_ITEM(o));
 		}
@@ -332,17 +314,14 @@ sp_selection_add_item (SPSelection * selection, SPItem * item)
 void
 sp_selection_add_repr (SPSelection * selection, SPRepr * repr)
 {
-	const gchar * id;
-	SPObject * object;
-
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 	g_return_if_fail (repr != NULL);
 
-	id = sp_repr_attr (repr, "id");
+	const gchar *id = sp_repr_attr (repr, "id");
 	g_return_if_fail (id != NULL);
 
-	object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
+	SPObject * object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_ITEM (object));
 
@@ -365,17 +344,14 @@ sp_selection_set_item (SPSelection * selection, SPItem * item)
 void
 sp_selection_set_repr (SPSelection * selection, SPRepr * repr)
 {
-	const gchar * id;
-	SPObject * object;
-
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 	g_return_if_fail (repr != NULL);
 
-	id = sp_repr_attr (repr, "id");
+	const gchar *id = sp_repr_attr (repr, "id");
 	g_return_if_fail (id != NULL);
 
-	object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
+	SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_ITEM (object));
 
@@ -403,17 +379,14 @@ sp_selection_remove_item (SPSelection * selection, SPItem * item)
 void
 sp_selection_remove_repr (SPSelection * selection, SPRepr * repr)
 {
-	const gchar * id;
-	SPObject * object;
-
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 	g_return_if_fail (repr != NULL);
 
-	id = sp_repr_attr (repr, "id");
+	const gchar *id = sp_repr_attr (repr, "id");
 	g_return_if_fail (id != NULL);
 
-	object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
+	SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_ITEM (object));
 
@@ -423,17 +396,14 @@ sp_selection_remove_repr (SPSelection * selection, SPRepr * repr)
 void
 sp_selection_set_item_list (SPSelection * selection, const GSList * list)
 {
-	SPItem * i;
-	const GSList * l;
-
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 
 	sp_selection_frozen_empty (selection);
 
 	if (list != NULL) {
-		for (l = list; l != NULL; l = l->next) {
-			i = (SPItem *) l->data;
+		for (const GSList *l = list; l != NULL; l = l->next) {
+			SPItem *i = (SPItem *) l->data;
 			if (!SP_IS_ITEM (i)) break;
 			selection->items = g_slist_prepend (selection->items, i);
 			g_signal_connect (G_OBJECT (i), "release",
@@ -449,24 +419,18 @@ sp_selection_set_item_list (SPSelection * selection, const GSList * list)
 void
 sp_selection_set_repr_list (SPSelection * selection, const GSList * list)
 {
-	GSList * itemlist;
-	const GSList * l;
-	SPRepr * repr;
-	const gchar * id;
-	SPObject * object;
-
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 
-	itemlist = NULL;
+	GSList *itemlist = NULL;
 
-	for (l = list; l != NULL; l = l->next) {
-		repr = (SPRepr *) l->data;
+	for (const GSList *l = list; l != NULL; l = l->next) {
+		SPRepr *repr = (SPRepr *) l->data;
 		g_return_if_fail (repr != NULL);
-		id = sp_repr_attr (repr, "id");
+		const gchar *id = sp_repr_attr (repr, "id");
 		g_return_if_fail (id != NULL);
 
-		object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
+		SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
 		g_return_if_fail (object != NULL);
 		g_return_if_fail (SP_IS_ITEM (object));
 
@@ -501,17 +465,14 @@ sp_selection_item_list (SPSelection * selection)
 const GSList *
 sp_selection_repr_list (SPSelection * selection)
 {
-	SPItem * i;
-	GSList * l;
-
 	g_return_val_if_fail (selection != NULL, NULL);
 	g_return_val_if_fail (SP_IS_SELECTION (selection), NULL);
 
 	g_slist_free (selection->reprs);
 	selection->reprs = NULL;
 
-	for (l = selection->items; l != NULL; l = l->next) {
-		i = (SPItem *) l->data;
+	for (GSList *l = selection->items; l != NULL; l = l->next) {
+		SPItem *i = (SPItem *) l->data;
 		selection->reprs = g_slist_prepend (selection->reprs, SP_OBJECT (i)->repr);
 	}
 
@@ -545,10 +506,6 @@ sp_selection_repr (SPSelection * selection)
 NRRect *
 sp_selection_bbox (SPSelection *selection, NRRect *bbox)
 {
-	SPItem *item;
-	NRRect b;
-	GSList *l;
-
 	g_return_val_if_fail (selection != NULL, NULL);
 	g_return_val_if_fail (SP_IS_SELECTION (selection), NULL);
 	g_return_val_if_fail (bbox != NULL, NULL);
@@ -561,8 +518,9 @@ sp_selection_bbox (SPSelection *selection, NRRect *bbox)
 	bbox->x0 = bbox->y0 = 1e18;
 	bbox->x1 = bbox->y1 = -1e18;
 
-	for (l = selection->items; l != NULL; l = l-> next) {
-		item = SP_ITEM (l->data);
+	for (GSList *l = selection->items; l != NULL; l = l-> next) {
+		SPItem *item = SP_ITEM (l->data);
+		NRRect b;
 		sp_item_bbox_desktop (item, &b);
 		if (b.x0 < bbox->x0) bbox->x0 = b.x0;
 		if (b.y0 < bbox->y0) bbox->y0 = b.y0;
@@ -573,11 +531,16 @@ sp_selection_bbox (SPSelection *selection, NRRect *bbox)
 	return bbox;
 }
 
+NR::Rect sp_selection_bbox (SPSelection *selection)
+{
+	NRRect r;
+	sp_selection_bbox(selection, &r);
+	return r;
+}
+
 NRRect *
 sp_selection_bbox_document (SPSelection *selection, NRRect *bbox)
 {
-	GSList *l;
-
 	g_return_val_if_fail (selection != NULL, NULL);
 	g_return_val_if_fail (SP_IS_SELECTION (selection), NULL);
 	g_return_val_if_fail (bbox != NULL, NULL);
@@ -590,7 +553,7 @@ sp_selection_bbox_document (SPSelection *selection, NRRect *bbox)
 	bbox->x0 = bbox->y0 = 1e18;
 	bbox->x1 = bbox->y1 = -1e18;
 
-	for (l = selection->items; l != NULL; l = l-> next) {
+	for (GSList *l = selection->items; l != NULL; l = l-> next) {
 		NRMatrix i2doc;
 		sp_item_i2doc_affine(SP_ITEM(l->data), &i2doc);
 		sp_item_invoke_bbox(SP_ITEM(l->data), bbox, &i2doc, FALSE);
@@ -599,17 +562,22 @@ sp_selection_bbox_document (SPSelection *selection, NRRect *bbox)
 	return bbox;
 }
 
+NR::Rect sp_selection_bbox_document (SPSelection *selection)
+{
+	NRRect r;
+	sp_selection_bbox_document (selection, &r);
+	return NR::Rect(r);
+}
+
 int
-sp_selection_snappoints (SPSelection *selection, NRPoint *points, int size)
+sp_selection_snappoints (SPSelection *selection, NR::Point *points, int size)
 /* compute the list of points in the selection 
  * which are to be considered for snapping */
 {
-        GSList *l;
-
 	g_return_val_if_fail (selection != NULL, 0);
 	g_return_val_if_fail (SP_IS_SELECTION (selection), 0);
 
-	l = selection->items;
+	GSList *l = selection->items;
 
 	if (l == NULL) {
 		return 0;
@@ -618,29 +586,10 @@ sp_selection_snappoints (SPSelection *selection, NRPoint *points, int size)
 		return sp_item_snappoints (SP_ITEM (l->data), points, size);
 	} else {
 		/* selection has more than one item -> take corners of selection */
-		NRRect bbox;
-		sp_selection_bbox (selection, &bbox);
-
+		NR::Rect bbox = sp_selection_bbox (selection);
 		int pos = 0;
-		if (pos < size) {
-			points[pos].x = bbox.x0;
-			points[pos].y = bbox.y0;
-			pos += 1;
-		}
-		if (pos < size) {
-			points[pos].x = bbox.x1;
-			points[pos].y = bbox.y0;
-			pos += 1;
-		}
-		if (pos < size) {
-			points[pos].x = bbox.x1;
-			points[pos].y = bbox.y1;
-			pos += 1;
-		}
-		if (pos < size) {
-			points[pos].x = bbox.x0;
-			points[pos].y = bbox.y1;
-			pos += 1;
+		for (; pos < size; pos++) {
+			points[pos] = bbox.corner(pos);
 		}
 		return pos;
 	}

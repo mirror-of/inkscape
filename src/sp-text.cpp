@@ -774,7 +774,7 @@ static void sp_text_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform,
 static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_text_hide (SPItem *item, unsigned int key);
 static char * sp_text_description (SPItem *item);
-static int sp_text_snappoints (SPItem *item, NRPoint *p, int size);
+static int sp_text_snappoints (SPItem *item, NR::Point *p, int size);
 static void sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
@@ -1453,7 +1453,7 @@ sp_text_set_shape (SPText *text)
 }
 
 static int
-sp_text_snappoints (SPItem *item, NRPoint *p, int size)
+sp_text_snappoints (SPItem *item, NR::Point *p, int size)
 {
 	/* we use corners of item and x,y coordinates of ellipse */
 	int pos = 0;
