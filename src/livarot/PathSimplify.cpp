@@ -43,7 +43,6 @@
 #define N01(t) ((1.0-t))
 #define N11(t) (t)
 
-//#define pseudo_douglas_pecker 1
 
 
 void
@@ -68,24 +67,7 @@ Path::Simplify (double treshhold)
     pts = (char *) (tp + lastM);
     nbPt = lastP - lastM;
     
-#ifdef pseudo_douglas_pecker
-    {
-      path_lineto *tp = (path_lineto *) pts;
-      NR::Point const moveToPt = tp[0].p;
-      NR::Point const endToPt = tp[nbPt-1].p;
-      MoveTo (moveToPt);
-      
-      if ( nbPt <= 1 ) {
-      } else if ( nbPt == 2 ) {
-        LineTo(endToPt);
-      } else {
-        DoSimplify (treshhold,16);
-        if (NR::LInfty (endToPt - moveToPt) < 0.0001) Close ();
-      }
-    }
-#else
     DoSimplify (treshhold);
-#endif
 
     lastM = lastP;
   }
@@ -149,54 +131,9 @@ double    DistanceToCubic(NR::Point &start,Path::path_descr_cubicto res,NR::Poin
 //  return RecDistanceToCubic(start,res.stD,res.p,res.enD,pt,nle,8,0.0,1.0);
 }
 // simplification on a subpath
-#ifdef pseudo_douglas_pecker
-void
-Path::DoSimplify (double treshhold,int recLevel)
-#else 
 void
 Path::DoSimplify (double treshhold,int /*recLevel*/)
-#endif
 {
-#ifdef pseudo_douglas_pecker
-  if ( nbPt <= 2 ) {
-    path_lineto *tp = (path_lineto *) pts;
-    LineTo(tp[nbPt-1].p);
-    return;
-  }
-  // dichotomic method: split at worse approximation point, and more precisely, at the closest forced point, if one exists
-  path_descr_cubicto  res;
-  path_lineto *tp = (path_lineto *) pts;
-  NR::Point moveToPt = tp[0].p;
-
-  int    worstP=-1;
-  if ( AttemptSimplify (treshhold,res,worstP) ) {
-    CubicTo(res.p,res.stD,res.enD);
-  } else {
-    if ( recLevel <= 0 ) {
-      CubicTo(res.p,res.stD,res.enD);
-      return;
-    }
-    if ( worstP > 0 && worstP < nbPt-1) { // pas les 2 extremites
-      char *savPts = pts;
-      int savNbPt = nbPt;
-      
-      nbPt=worstP;
-      DoSimplify (treshhold,recLevel-1);      
-      
-      path_lineto *tp = (path_lineto *) savPts;
-      pts = (char *) (tp + worstP);
-      nbPt=savNbPt-worstP;
-      DoSimplify (treshhold,recLevel-1);      
-      
-      pts = savPts;
-      nbPt = savNbPt;
-    } else {
-      // pas trouve de point pour casser: pas bon
-      CubicTo(res.p,res.stD,res.enD);
-    }
-  }
-
-#else
   // non-dichotomic method: grow an interval of points approximated by a curve, until you reach the treshhold, and repeat
   if (nbPt <= 1)
     return;
@@ -285,7 +222,6 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
   g_free(data.fk);
   pts = savPts;
   nbPt = savNbPt;
-#endif
 }
 
 // warning: slow
