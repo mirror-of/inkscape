@@ -26,6 +26,7 @@
 #include "attributes.h"
 #include "document.h"
 #include "sp-object-repr.h"
+#include "sp-flowregion.h"
 #include "uri.h"
 #include "uri-references.h"
 #include "macros.h"
@@ -437,6 +438,11 @@ sp_use_move_compensate(NR::Matrix const *mp, SPItem *original, SPUse *self)
         return;
     }
 
+    // never compensate uses which are used in flowtext 
+    if (SP_OBJECT_PARENT(self) && SP_IS_FLOWREGION(SP_OBJECT_PARENT(self))) {
+        return;
+    }
+
     guint mode = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
     // user wants no compensation
     if (mode == SP_CLONE_COMPENSATION_NONE)
@@ -513,6 +519,11 @@ sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use)
 static void
 sp_use_delete_self(SPObject *deleted, SPUse *self)
 {
+    // always delete uses which are used in flowtext 
+    if (SP_OBJECT_PARENT(self) && SP_IS_FLOWREGION(SP_OBJECT_PARENT(self))) {
+        SP_OBJECT(self)->deleteObject();
+    }
+
     guint const mode = prefs_get_int_attribute("options.cloneorphans", "value",
                                                SP_CLONE_ORPHANS_UNLINK);
 
