@@ -70,7 +70,7 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_GUIDEHICOLOR, "guidehicolor"},
 	{SP_ATTR_GUIDEHIOPACITY, "guidehiopacity"},
 	{SP_ATTR_SHOWBORDER, "showborder"},
-	{SP_ATTR_SHOWPAGESHADOW, "showpageshadow"},
+	{SP_ATTR_SHOWPAGESHADOW, "inkscape:showpageshadow"},
 	{SP_ATTR_BORDERLAYER, "borderlayer"},
 	{SP_ATTR_BORDERCOLOR, "bordercolor"},
 	{SP_ATTR_BORDEROPACITY, "borderopacity"},

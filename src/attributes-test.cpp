@@ -378,7 +378,7 @@ static struct {char const *attr; bool supported;} const all_attrs[] = {
     {"guidehiopacity", true},
     {"showborder", true},
     {"showpageborder", true},
-    {"showpageshadow", true},
+    {"inkscape:showpageshadow", true},
     {"borderlayer", true},
     {"bordercolor", true},
     {"borderopacity", true},

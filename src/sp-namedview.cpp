@@ -161,7 +161,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, Inkscape::XML::Nod
 	sp_object_read_attr (object, "guidehicolor");
 	sp_object_read_attr (object, "guidehiopacity");
 	sp_object_read_attr (object, "showborder");
-	sp_object_read_attr (object, "showpageshadow");
+	sp_object_read_attr (object, "inkscape:showpageshadow");
 	sp_object_read_attr (object, "borderlayer");
 	sp_object_read_attr (object, "bordercolor");
 	sp_object_read_attr (object, "borderopacity");

@@ -1056,7 +1056,7 @@ sp_desktop_dialog(void)
 	/* Page Shadow toggle */
         cb = G_CALLBACK(sp_dtw_whatever_toggled);
         spw_checkbutton(dlg, t, _("Show page shadow"),
-		                  "showpageshadow", 0, 5, 0, cb);
+		                  "inkscape:showpageshadow", 0, 5, 0, cb);
 
 	
         l = gtk_label_new(_("Default units:"));
@@ -1479,7 +1479,7 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         }
 
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), 
-		"showpageshadow");
+		"inkscape:showpageshadow");
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->showpageshadow);
 	
         cp = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(dialog), "pagecolor"));
