@@ -19,6 +19,8 @@
 	  new child-count-related routines, and added mutation signals
 	  to SPReprDoc
 
+	* src/desktop.cpp: call the "Active Group" widget by its TRUE NAME!
+
 	* src/widgets/Makefile_insert, src/widgets/document-tree-model.cpp,
 	  src/widgets/document-tree-model.h, src/widgets/layer-selector.cpp,
 	  src/widgets/layer-selector.h:
