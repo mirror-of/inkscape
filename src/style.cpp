@@ -273,6 +273,14 @@ static SPStyleEnum const enum_visibility[] = {
     {NULL, -1}
 };
 
+static SPStyleEnum const enum_overflow[] = {
+    {"visible", SP_CSS_OVERFLOW_VISIBLE},
+    {"hidden", SP_CSS_OVERFLOW_HIDDEN},
+    {"scroll", SP_CSS_OVERFLOW_SCROLL},
+    {"auto", SP_CSS_OVERFLOW_AUTO},
+    {NULL, -1}
+};
+
 static SPStyleEnum const enum_display[] = {
     {"none",      SP_CSS_DISPLAY_NONE},
     {"inline",    SP_CSS_DISPLAY_INLINE},
@@ -453,6 +461,7 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     /* CSS2 */
     SPS_READ_PENUM_IF_UNSET(&style->visibility, repr, "visibility", enum_visibility, true);
     SPS_READ_PENUM_IF_UNSET(&style->display, repr, "display", enum_display, true);
+    SPS_READ_PENUM_IF_UNSET(&style->overflow, repr, "overflow", enum_overflow, true);
     /* Font */
     SPS_READ_PFONTSIZE_IF_UNSET (&style->font_size, repr, "font-size");
     SPS_READ_PENUM_IF_UNSET(&style->font_style, repr, "font-style", enum_font_style, true);
@@ -718,11 +727,8 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         SPS_READ_IENUM_IF_UNSET(&style->display, val, enum_display, true);
         break;
     case SP_PROP_OVERFLOW:
-        // FIXME: temporaily disabled, for our markers.svg uses overflow: visible to show properly in batik.
-        // Inkscape acts as if "visible" is set, at least for markers.
-        // Replace this with a proper implementation of the property.
-
-        //g_warning ("Unimplemented style property SP_PROP_OVERFLOW: %d value: %s", id, val);
+        // FIXME: not supported properly yet, we just read and write it, but act as if it is always "display"
+        SPS_READ_IENUM_IF_UNSET(&style->overflow, val, enum_overflow, true);
         break;
     case SP_PROP_VISIBILITY:
         SPS_READ_IENUM_IF_UNSET(&style->visibility, val, enum_visibility, true);
@@ -1438,6 +1444,7 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
 
     p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &style->visibility, NULL, flags);
     p += sp_style_write_ienum (p, c + BMAX - p, "display", enum_display, &style->display, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "overflow", enum_overflow, &style->overflow, NULL, flags);
 
     /* fixme: */
     p += sp_text_style_write (p, c + BMAX - p, style->text, flags);
@@ -1536,6 +1543,7 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
 
     p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &from->visibility, &to->visibility, SP_STYLE_FLAG_IFSET);
     p += sp_style_write_ienum (p, c + BMAX - p, "display", enum_display, &from->display, &to->display, SP_STYLE_FLAG_IFSET);
+    p += sp_style_write_ienum (p, c + BMAX - p, "overflow", enum_overflow, &from->overflow, &to->overflow, SP_STYLE_FLAG_IFSET);
 
     /* fixme: */
     p += sp_text_style_write (p, c + BMAX - p, from->text, SP_STYLE_FLAG_IFDIFF);
@@ -1623,6 +1631,8 @@ sp_style_clear (SPStyle *style)
     style->visibility.value = style->visibility.computed = SP_CSS_VISIBILITY_VISIBLE;
     style->display.set = FALSE;
     style->display.value = style->display.computed = SP_CSS_DISPLAY_INLINE;
+    style->overflow.set = FALSE;
+    style->overflow.value = style->overflow.computed = SP_CSS_OVERFLOW_VISIBLE;
 
     style->color.type = SP_PAINT_TYPE_COLOR;
     sp_color_set_rgb_float (&style->color.value.color, 0.0, 0.0, 0.0);

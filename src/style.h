@@ -196,6 +196,9 @@ struct SPStyle {
 	/** display */
 	SPIEnum display;
 
+	/* overflow */
+	SPIEnum overflow;
+
 	/* visibility */
 	SPIEnum visibility;
 
@@ -381,6 +384,13 @@ enum SPVisibility {
 	SP_CSS_VISIBILITY_HIDDEN,
 	SP_CSS_VISIBILITY_COLLAPSE,
 	SP_CSS_VISIBILITY_VISIBLE
+};
+
+enum SPOverflow {
+	SP_CSS_OVERFLOW_VISIBLE,
+	SP_CSS_OVERFLOW_HIDDEN,
+	SP_CSS_OVERFLOW_SCROLL,
+	SP_CSS_OVERFLOW_AUTO
 };
 
 // TODO: more display types
