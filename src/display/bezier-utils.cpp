@@ -29,6 +29,9 @@
 #endif
 
 #include <math.h>
+
+#include <cmath> //needed for portable std::isnan calls
+
 #ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>
 #endif

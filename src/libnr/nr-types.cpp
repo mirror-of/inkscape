@@ -2,6 +2,8 @@
 #include <glib.h>
 #include <math.h>
 
+#include <cmath> //for portable std::isnan
+
 
 /** Scales this vector to make it a unit vector (within rounding error).
  *
