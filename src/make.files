@@ -1,4 +1,3 @@
-ResourceManager.h
 application.cpp
 application.h
 approx-equal.h
@@ -33,6 +32,8 @@ dialogs/filedialog-win32.cpp
 dialogs/filedialog.h
 dialogs/fill-style.cpp
 dialogs/fill-style.h
+dialogs/find.cpp
+dialogs/find.h
 dialogs/in-dt-coordsys.cpp
 dialogs/in-dt-coordsys.h
 dialogs/item-properties.cpp
@@ -165,7 +166,6 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
-ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h
@@ -226,6 +226,9 @@ libnr/nr-rect-ops.h
 libnr/nr-rect.cpp
 libnr/nr-rect.h
 libnr/nr-render.h
+libnr/nr-rotate-fns-test.cpp
+libnr/nr-rotate-fns.cpp
+libnr/nr-rotate-fns.h
 libnr/nr-rotate-ops.h
 libnr/nr-rotate-test.cpp
 libnr/nr-rotate.h
@@ -337,7 +340,6 @@ prefs-utils.cpp
 prefs-utils.h
 print.cpp
 print.h
-radial.h
 rect-context.cpp
 rect-context.h
 remove-last.h
@@ -553,5 +555,6 @@ xml/repr-private.h
 xml/repr-util.cpp
 xml/repr.cpp
 xml/repr.h
+xml/xml-forward.h
 zoom-context.cpp
 zoom-context.h

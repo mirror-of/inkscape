@@ -70,7 +70,8 @@ arc-context.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 attributes.o: \
 	attributes.cpp \
@@ -116,7 +117,8 @@ desktop-affine.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 desktop-events.o: \
 	desktop-events.cpp \
@@ -173,7 +175,8 @@ desktop-events.o: \
 	view.h \
 	widgets/icon.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 desktop-handles.o: \
 	desktop-handles.cpp \
@@ -236,7 +239,8 @@ desktop-snap.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 desktop.o: \
 	desktop.cpp \
@@ -319,7 +323,8 @@ desktop.o: \
 	widgets/spinbutton-events.h \
 	widgets/spw-utilities.h \
 	widgets/widget-sizes.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/align.o: \
 	dialogs/align.cpp \
@@ -368,7 +373,8 @@ dialogs/align.o: \
 	widgets/button.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/desktop-properties.o: \
 	dialogs/desktop-properties.cpp \
@@ -433,7 +439,8 @@ dialogs/desktop-properties.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/dialog-events.o: \
 	dialogs/dialog-events.cpp \
@@ -471,7 +478,8 @@ dialogs/dialog-events.o: \
 	view.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/display-settings.o: \
 	dialogs/display-settings.cpp \
@@ -511,7 +519,8 @@ dialogs/display-settings.o: \
 	verbs.h \
 	verbs.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/export.o: \
 	dialogs/export.cpp \
@@ -568,7 +577,8 @@ dialogs/export.o: \
 	view.h \
 	widgets/menu.h \
 	widgets/spw-utilities.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/filedialog-win32.o: \
 	dialogs/filedialog-win32.cpp \
@@ -582,7 +592,8 @@ dialogs/filedialog-win32.o: \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/fill-style.o: \
 	dialogs/fill-style.cpp \
@@ -611,6 +622,8 @@ dialogs/fill-style.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-path.h \
@@ -644,7 +657,56 @@ dialogs/fill-style.o: \
 	widgets/paint-selector.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
+
+dialogs/find.o: \
+	dialogs/find.cpp \
+	desktop-handles.h \
+	desktop.h \
+	dialogs/dialog-events.h \
+	document.h \
+	forward.h \
+	helper/action.h \
+	helper/helper-forward.h \
+	helper/sp-intl.h \
+	helper/unit-menu.h \
+	helper/units.h \
+	helper/units.h \
+	helper/window.h \
+	inkscape-stock.h \
+	inkscape.h \
+	interface.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-object.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale-ops.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h \
+	macros.h \
+	prefs-utils.h \
+	selection-chemistry.h \
+	selection.h \
+	sp-object.h \
+	verbs.h \
+	verbs.h \
+	version.h \
+	view.h \
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/in-dt-coordsys.o: \
 	dialogs/in-dt-coordsys.cpp \
@@ -674,7 +736,8 @@ dialogs/in-dt-coordsys.o: \
 	sp-root.h \
 	svg/svg-types.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/item-properties.o: \
 	dialogs/item-properties.cpp \
@@ -737,7 +800,8 @@ dialogs/item-properties.o: \
 	widgets/menu.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/object-attributes.o: \
 	dialogs/object-attributes.cpp \
@@ -770,7 +834,8 @@ dialogs/object-attributes.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/object-properties.o: \
 	dialogs/object-properties.cpp \
@@ -815,21 +880,23 @@ dialogs/object-properties.o: \
 	prefs-utils.h \
 	verbs.h \
 	view.h \
+	widgets/icon.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/sp-attribute-widget.o: \
 	dialogs/sp-attribute-widget.cpp \
 	dialogs/sp-attribute-widget.h \
 	document.h \
 	forward.h \
-	forward.h \
 	libnr/nr-forward.h \
 	macros.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/stroke-style.o: \
 	dialogs/stroke-style.cpp \
@@ -857,6 +924,7 @@ dialogs/stroke-style.o: \
 	gradient-chemistry.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
+	helper/stock-items.h \
 	helper/unit-menu.h \
 	helper/units.h \
 	helper/units.h \
@@ -868,6 +936,8 @@ dialogs/stroke-style.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
@@ -913,7 +983,8 @@ dialogs/stroke-style.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/text-edit.o: \
 	dialogs/text-edit.cpp \
@@ -983,7 +1054,8 @@ dialogs/text-edit.o: \
 	version.h \
 	view.h \
 	widgets/font-selector.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/transformation.o: \
 	dialogs/transformation.cpp \
@@ -1028,7 +1100,8 @@ dialogs/transformation.o: \
 	verbs.h \
 	verbs.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/xml-tree.o: \
 	dialogs/xml-tree.cpp \
@@ -1100,7 +1173,8 @@ dialogs/xml-tree.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dir-util.o: \
 	dir-util.cpp \
@@ -1112,6 +1186,7 @@ display/bezier-utils.o: \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
+	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h
@@ -1226,19 +1301,9 @@ display/curve.o: \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-path.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-point.h
 
 display/gnome-canvas-acetate.o: \
 	display/gnome-canvas-acetate.cpp \
@@ -1353,7 +1418,8 @@ display/nr-arena-glyphs.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 display/nr-arena-group.o: \
 	display/nr-arena-group.cpp \
@@ -1501,7 +1567,8 @@ display/nr-arena-shape.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 display/nr-arena.o: \
 	display/nr-arena.cpp \
@@ -1564,19 +1631,13 @@ display/nr-plain-stuff-gdk.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock-pattern.h \
 	libnr/nr-pixblock.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 display/nr-plain-stuff.o: \
@@ -1760,7 +1821,8 @@ document-undo.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 document.o: \
 	document.cpp \
@@ -1784,6 +1846,7 @@ document.o: \
 	helper/units.h \
 	inkscape-private.h \
 	inkscape.h \
+	inkscape_version.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -1817,7 +1880,8 @@ document.o: \
 	version.h \
 	view.h \
 	xml/repr-action.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 draw-context.o: \
 	draw-context.cpp \
@@ -1885,7 +1949,8 @@ draw-context.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dropper-context.o: \
 	dropper-context.cpp \
@@ -1945,7 +2010,8 @@ dropper-context.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 dyna-draw-context.o: \
 	dyna-draw-context.cpp \
@@ -2000,7 +2066,8 @@ dyna-draw-context.o: \
 	view.h \
 	widgets/menu.h \
 	widgets/spw-utilities.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 event-context.o: \
 	event-context.cpp \
@@ -2061,6 +2128,7 @@ event-context.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
+	xml/xml-forward.h \
 	zoom-context.h
 
 extension/db.o: \
@@ -2075,7 +2143,8 @@ extension/db.o: \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/extension.o: \
 	extension/extension.cpp \
@@ -2098,7 +2167,8 @@ extension/extension.o: \
 	sp-object.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/implementation/implementation.o: \
 	extension/implementation/implementation.cpp \
@@ -2114,7 +2184,8 @@ extension/implementation/implementation.o: \
 	libnr/nr-path.h \
 	libnr/nr-point.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/implementation/script.o: \
 	extension/implementation/script.cpp \
@@ -2166,7 +2237,8 @@ extension/implementation/script.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/init.o: \
 	extension/init.cpp \
@@ -2195,7 +2267,8 @@ extension/init.o: \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/internal/eps-out.o: \
 	extension/internal/eps-out.cpp \
@@ -2215,7 +2288,8 @@ extension/internal/eps-out.o: \
 	libnr/nr-path.h \
 	print.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/internal/gdkpixbuf-input.o: \
 	extension/internal/gdkpixbuf-input.cpp \
@@ -2232,7 +2306,8 @@ extension/internal/gdkpixbuf-input.o: \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/internal/ps-out.o: \
 	extension/internal/ps-out.cpp \
@@ -2250,7 +2325,8 @@ extension/internal/ps-out.o: \
 	libnr/nr-path.h \
 	print.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/internal/ps.o: \
 	extension/internal/ps.cpp \
@@ -2304,7 +2380,8 @@ extension/internal/ps.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/internal/svg.o: \
 	extension/internal/svg.cpp \
@@ -2324,7 +2401,8 @@ extension/internal/svg.o: \
 	sp-object.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/internal/win32.o: \
 	extension/internal/win32.cpp \
@@ -2360,7 +2438,8 @@ extension/internal/win32.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extension/system.o: \
 	extension/system.cpp \
@@ -2389,7 +2468,8 @@ extension/system.o: \
 	verbs.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 extract-uri-test.o: \
 	extract-uri-test.cpp \
@@ -2466,7 +2546,8 @@ file.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 fixes.o: \
 	fixes.cpp
@@ -2477,6 +2558,7 @@ geom.o: \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
+	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h
@@ -2527,7 +2609,8 @@ gradient-chemistry.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 help.o: \
 	help.cpp \
@@ -2577,7 +2660,8 @@ help.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 helper/action.o: \
 	helper/action.cpp \
@@ -2585,20 +2669,9 @@ helper/action.o: \
 	helper/action.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-object.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	view.h
 
 helper/gnome-utils.o: \
@@ -2659,7 +2732,8 @@ helper/stock-items.o: \
 	uri.h \
 	version.h \
 	xml/repr-action.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 helper/unit-menu.o: \
 	helper/unit-menu.cpp \
@@ -2687,7 +2761,8 @@ helper/window.o: \
 	shortcuts.h \
 	verbs.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 inkjar/jar.o: \
 	inkjar/jar.cpp \
@@ -2716,6 +2791,7 @@ inkscape.o: \
 	helper/units.h \
 	inkscape-private.h \
 	inkscape.h \
+	inkscape_version.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -2745,7 +2821,8 @@ inkscape.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 interface.o: \
 	interface.cpp \
@@ -2809,6 +2886,7 @@ interface.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
+	xml/xml-forward.h \
 	zoom-context.h
 
 knot.o: \
@@ -2852,7 +2930,8 @@ knot.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 knotholder.o: \
 	knotholder.cpp \
@@ -2896,7 +2975,8 @@ knotholder.o: \
 	uri.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 libnr/have_mmx.o: \
 	libnr/have_mmx.S
@@ -2910,20 +2990,14 @@ libnr/nr-blit.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 libnr/nr-compose-transform.o: \
@@ -2932,20 +3006,15 @@ libnr/nr-compose-transform.o: \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-pixops.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-translate.h
 
 libnr/nr-compose.o: \
 	libnr/nr-compose.cpp \
@@ -2982,36 +3051,26 @@ libnr/nr-matrix-fns.o: \
 	libnr/nr-matrix-fns.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix-fns.h \
 	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-translate.h
 
 libnr/nr-matrix.o: \
 	libnr/nr-matrix.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
@@ -3019,22 +3078,8 @@ libnr/nr-matrix.o: \
 
 libnr/nr-object.o: \
 	libnr/nr-object.cpp \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-object.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-object.h
 
 libnr/nr-path.o: \
 	libnr/nr-path.cpp \
@@ -3043,6 +3088,8 @@ libnr/nr-path.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
@@ -3050,7 +3097,6 @@ libnr/nr-path.o: \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
@@ -3064,21 +3110,15 @@ libnr/nr-pixblock-line.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock-line.h \
 	libnr/nr-pixblock-pixel.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 libnr/nr-pixblock-pattern.o: \
@@ -3088,21 +3128,15 @@ libnr/nr-pixblock-pattern.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock-pattern.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 libnr/nr-pixblock-pixel.o: \
@@ -3112,20 +3146,14 @@ libnr/nr-pixblock-pixel.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock-pixel.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 libnr/nr-pixblock.o: \
@@ -3136,24 +3164,19 @@ libnr/nr-pixblock.o: \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 libnr/nr-point-fns.o: \
 	libnr/nr-point-fns.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
+	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h
@@ -3165,17 +3188,11 @@ libnr/nr-rect-l.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 libnr/nr-rect.o: \
@@ -3186,7 +3203,6 @@ libnr/nr-rect.o: \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
@@ -3200,27 +3216,47 @@ libnr/nr-rect.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h
 
+libnr/nr-rotate-fns-test.o: \
+	libnr/nr-rotate-fns-test.cpp \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-macros.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rotate-fns.h \
+	libnr/nr-rotate.h \
+	utest/utest.h
+
+libnr/nr-rotate-fns.o: \
+	libnr/nr-rotate-fns.cpp \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-macros.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rotate-fns.h \
+	libnr/nr-rotate-ops.h \
+	libnr/nr-rotate.h
+
 libnr/nr-rotate-test.o: \
 	libnr/nr-rotate-test.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix-fns.h \
 	libnr/nr-matrix-ops.h \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
+	libnr/nr-rotate-fns.h \
 	libnr/nr-rotate-ops.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	utest/utest.h
 
 libnr/nr-scale-test.o: \
@@ -3241,22 +3277,16 @@ libnr/nr-svp-render.o: \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
 	libnr/nr-svp-render.h \
 	libnr/nr-svp.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 libnr/nr-svp.o: \
@@ -3267,7 +3297,6 @@ libnr/nr-svp.o: \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-path.h \
@@ -3288,23 +3317,18 @@ libnr/nr-translate-test.o: \
 	libnr/nr-translate-test.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix-fns.h \
 	libnr/nr-matrix-ops.h \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate-ops.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	utest/utest.h
 
 libnr/nr-types.o: \
@@ -3463,7 +3487,8 @@ libnrtype/font-style-to-pos.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 libnrtype/nr-font.o: \
 	libnrtype/nr-font.cpp \
@@ -3608,21 +3633,7 @@ libnrtype/nr-type-pos-def.o: \
 
 libnrtype/nr-type-primitives.o: \
 	libnrtype/nr-type-primitives.cpp \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	libnrtype/nr-type-primitives.h
 
 libnrtype/nr-type-w32.o: \
@@ -3732,21 +3743,16 @@ livarot/PathConversion.o: \
 	livarot/PathConversion.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate-ops.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale-ops.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	livarot/AVL.h \
 	livarot/DblLinked.h \
 	livarot/LivarotDefs.h \
@@ -3790,6 +3796,7 @@ livarot/PathOutline.o: \
 	livarot/PathOutline.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
+	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -3800,22 +3807,17 @@ livarot/PathSimplify.o: \
 	livarot/PathSimplify.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix-fns.h \
 	libnr/nr-matrix-ops.h \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	livarot/LivarotDefs.h \
 	livarot/Path.h
 
@@ -3823,20 +3825,15 @@ livarot/PathStroke.o: \
 	livarot/PathStroke.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate-ops.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	livarot/AVL.h \
 	livarot/DblLinked.h \
 	livarot/LivarotDefs.h \
@@ -3848,6 +3845,7 @@ livarot/Shape.o: \
 	livarot/Shape.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
+	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -3872,6 +3870,7 @@ livarot/ShapeMisc.o: \
 	livarot/ShapeMisc.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
+	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -3916,20 +3915,14 @@ livarot/ShapeSweep.o: \
 	livarot/ShapeSweep.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	livarot/AVL.h \
 	livarot/DblLinked.h \
 	livarot/LivarotDefs.h \
@@ -3940,6 +3933,7 @@ livarot/ShapeSweepUtils.o: \
 	livarot/ShapeSweepUtils.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
+	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -4027,7 +4021,8 @@ node-context.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 nodepath.o: \
 	nodepath.cpp \
@@ -4098,7 +4093,8 @@ nodepath.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 object-edit.o: \
 	object-edit.cpp \
@@ -4145,7 +4141,8 @@ object-edit.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 object-ui.o: \
 	object-ui.cpp \
@@ -4201,7 +4198,8 @@ object-ui.o: \
 	uri.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 path-chemistry.o: \
 	path-chemistry.cpp \
@@ -4267,7 +4265,8 @@ path-chemistry.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 prefix.o: \
 	prefix.cpp \
@@ -4344,6 +4343,7 @@ prefs-utils.o: \
 	view.h \
 	widgets/menu.h \
 	xml/repr.h \
+	xml/xml-forward.h \
 	zoom-context.h
 
 print.o: \
@@ -4399,7 +4399,8 @@ print.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 rect-context.o: \
 	rect-context.cpp \
@@ -4467,7 +4468,8 @@ rect-context.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 rubberband.o: \
 	rubberband.cpp \
@@ -4534,7 +4536,8 @@ satisfied-guide-cns.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 select-context.o: \
 	select-context.cpp \
@@ -4597,7 +4600,8 @@ select-context.o: \
 	view.h \
 	widgets/menu.h \
 	widgets/spw-utilities.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 select-toolbar.o: \
 	select-toolbar.cpp \
@@ -4667,7 +4671,8 @@ select-toolbar.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 selection-chemistry.o: \
 	selection-chemistry.cpp \
@@ -4709,7 +4714,9 @@ selection-chemistry.o: \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
+	libnr/nr-rotate-fns.h \
 	libnr/nr-rotate.h \
+	libnr/nr-scale-ops.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
@@ -4741,7 +4748,8 @@ selection-chemistry.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 selection.o: \
 	selection.cpp \
@@ -4781,7 +4789,8 @@ selection.o: \
 	tools-switch.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 seltrans-handles.o: \
 	seltrans-handles.cpp \
@@ -4877,7 +4886,8 @@ seltrans.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 shortcuts.o: \
 	shortcuts.cpp \
@@ -4931,7 +4941,8 @@ slideshow.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-anchor.o: \
 	sp-anchor.cpp \
@@ -4968,7 +4979,8 @@ sp-anchor.o: \
 	svg-view.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-animation.o: \
 	sp-animation.cpp \
@@ -4977,7 +4989,8 @@ sp-animation.o: \
 	sp-animation.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-chars.o: \
 	sp-chars.cpp \
@@ -4997,6 +5010,9 @@ sp-chars.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
@@ -5029,7 +5045,8 @@ sp-chars.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-clippath.o: \
 	sp-clippath.cpp \
@@ -5070,7 +5087,8 @@ sp-clippath.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-cursor.o: \
 	sp-cursor.cpp \
@@ -5086,7 +5104,8 @@ sp-defs.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-ellipse.o: \
 	sp-ellipse.cpp \
@@ -5137,7 +5156,8 @@ sp-ellipse.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-gradient.o: \
 	sp-gradient.cpp \
@@ -5196,7 +5216,8 @@ sp-gradient.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-guide.o: \
 	sp-guide.cpp \
@@ -5239,7 +5260,8 @@ sp-guide.o: \
 	sp-object.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-image.o: \
 	sp-image.cpp \
@@ -5302,7 +5324,8 @@ sp-image.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-item-group.o: \
 	sp-item-group.cpp \
@@ -5361,7 +5384,8 @@ sp-item-group.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-item-notify-moveto.o: \
 	sp-item-notify-moveto.cpp \
@@ -5394,7 +5418,8 @@ sp-item-notify-moveto.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-item-rm-unsatisfied-cns.o: \
 	sp-item-rm-unsatisfied-cns.cpp \
@@ -5426,7 +5451,8 @@ sp-item-rm-unsatisfied-cns.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-item-transform.o: \
 	sp-item-transform.cpp \
@@ -5461,7 +5487,8 @@ sp-item-transform.o: \
 	sp-object.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-item-update-cns.o: \
 	sp-item-update-cns.cpp \
@@ -5494,7 +5521,8 @@ sp-item-update-cns.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-item.o: \
 	sp-item.cpp \
@@ -5559,7 +5587,8 @@ sp-item.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-line.o: \
 	sp-line.cpp \
@@ -5607,7 +5636,8 @@ sp-line.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-marker.o: \
 	sp-marker.cpp \
@@ -5663,7 +5693,8 @@ sp-marker.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-mask.o: \
 	sp-mask.cpp \
@@ -5704,7 +5735,8 @@ sp-mask.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-metrics.o: \
 	sp-metrics.cpp \
@@ -5721,7 +5753,8 @@ sp-metrics.o: \
 	svg/ftos.h \
 	svg/stringstream.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-namedview.o: \
 	sp-namedview.cpp \
@@ -5770,7 +5803,8 @@ sp-namedview.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-object-group.o: \
 	sp-object-group.cpp \
@@ -5782,7 +5816,8 @@ sp-object-group.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-object-repr.o: \
 	sp-object-repr.cpp \
@@ -5858,7 +5893,8 @@ sp-object-repr.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-object.o: \
 	sp-object.cpp \
@@ -5900,7 +5936,8 @@ sp-object.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-offset.o: \
 	sp-offset.cpp \
@@ -5969,7 +6006,8 @@ sp-offset.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-paint-server.o: \
 	sp-paint-server.cpp \
@@ -5979,24 +6017,19 @@ sp-paint-server.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock-pattern.h \
 	libnr/nr-pixblock.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	sp-object.h \
 	sp-paint-server.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-path.o: \
 	sp-path.cpp \
@@ -6044,7 +6077,8 @@ sp-path.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-pattern.o: \
 	sp-pattern.cpp \
@@ -6093,7 +6127,8 @@ sp-pattern.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-polygon.o: \
 	sp-polygon.cpp \
@@ -6133,7 +6168,8 @@ sp-polygon.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-polyline.o: \
 	sp-polyline.cpp \
@@ -6171,7 +6207,8 @@ sp-polyline.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-rect.o: \
 	sp-rect.cpp \
@@ -6223,7 +6260,8 @@ sp-rect.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-root.o: \
 	sp-root.cpp \
@@ -6276,7 +6314,8 @@ sp-root.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-shape.o: \
 	sp-shape.cpp \
@@ -6352,7 +6391,8 @@ sp-shape.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-spiral.o: \
 	sp-spiral.cpp \
@@ -6398,7 +6438,8 @@ sp-spiral.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-star.o: \
 	sp-star.cpp \
@@ -6450,7 +6491,8 @@ sp-star.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-symbol.o: \
 	sp-symbol.cpp \
@@ -6475,6 +6517,7 @@ sp-symbol.o: \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
@@ -6503,7 +6546,8 @@ sp-symbol.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-text.o: \
 	sp-text.cpp \
@@ -6578,7 +6622,8 @@ sp-text.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-typeset-kplayout.o: \
 	sp-typeset-kplayout.cpp \
@@ -6657,7 +6702,8 @@ sp-typeset-kplayout.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-typeset-layout.o: \
 	sp-typeset-layout.cpp \
@@ -6736,7 +6782,8 @@ sp-typeset-layout.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-typeset-utils.o: \
 	sp-typeset-utils.cpp \
@@ -6793,12 +6840,15 @@ sp-typeset-utils.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-typeset.o: \
 	sp-typeset.cpp \
 	attributes.h \
 	color.h \
+	desktop-handles.h \
+	desktop.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
@@ -6811,8 +6861,10 @@ sp-typeset.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
+	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
+	inkscape.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -6846,6 +6898,7 @@ sp-typeset.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
+	selection.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -6863,11 +6916,13 @@ sp-typeset.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	view.h \
 	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 sp-use.o: \
 	sp-use.cpp \
@@ -6927,7 +6982,8 @@ sp-use.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 spiral-context.o: \
 	spiral-context.cpp \
@@ -6995,7 +7051,8 @@ spiral-context.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 splivarot.o: \
 	splivarot.cpp \
@@ -7074,7 +7131,8 @@ splivarot.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 star-context.o: \
 	star-context.cpp \
@@ -7143,7 +7201,8 @@ star-context.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 streams-gzip.o: \
 	streams-gzip.cpp \
@@ -7226,7 +7285,8 @@ style.o: \
 	uri.h \
 	version.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 svg-view.o: \
 	svg-view.cpp \
@@ -7263,7 +7323,8 @@ svg-view.o: \
 	svg-view.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 svg/ftos.o: \
 	svg/ftos.cpp \
@@ -7293,21 +7354,19 @@ svg/svg-affine.o: \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 svg/svg-color.o: \
 	svg/svg-color.cpp \
@@ -7321,7 +7380,8 @@ svg/svg-color.o: \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 svg/svg-length.o: \
 	svg/svg-length.cpp \
@@ -7337,7 +7397,8 @@ svg/svg-length.o: \
 	svg/ftos.h \
 	svg/stringstream.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 svg/svg-path.o: \
 	svg/svg-path.cpp \
@@ -7354,7 +7415,8 @@ svg/svg-path.o: \
 	svg/gnome-canvas-bpath-util.h \
 	svg/stringstream.h \
 	widgets/menu.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 text-context.o: \
 	text-context.cpp \
@@ -7417,7 +7479,8 @@ text-context.o: \
 	uri.h \
 	version.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 toolbox.o: \
 	toolbox.cpp \
@@ -7521,7 +7584,8 @@ toolbox.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 tools-switch.o: \
 	tools-switch.cpp \
@@ -7595,6 +7659,7 @@ tools-switch.o: \
 	view.h \
 	widgets/menu.h \
 	xml/repr.h \
+	xml/xml-forward.h \
 	zoom-context.h
 
 uri-references.o: \
@@ -7607,7 +7672,8 @@ uri-references.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 uri.o: \
 	uri.cpp \
@@ -7623,6 +7689,7 @@ verbs.o: \
 	dialogs/desktop-properties.h \
 	dialogs/display-settings.h \
 	dialogs/export.h \
+	dialogs/find.h \
 	dialogs/item-properties.h \
 	dialogs/object-properties.h \
 	dialogs/text-edit.h \
@@ -7703,6 +7770,7 @@ verbs.o: \
 	view.h \
 	widgets/menu.h \
 	xml/repr.h \
+	xml/xml-forward.h \
 	zoom-context.h
 
 version.o: \
@@ -7721,7 +7789,8 @@ view.o: \
 	libnr/nr-point.h \
 	macros.h \
 	view.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/button.o: \
 	widgets/button.cpp \
@@ -7794,7 +7863,8 @@ widgets/dash-selector.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/font-selector.o: \
 	widgets/font-selector.cpp \
@@ -7840,19 +7910,13 @@ widgets/gradient-image.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock-pattern.h \
 	libnr/nr-pixblock.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-point-l.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
 	sp-gradient.h \
@@ -7864,7 +7928,8 @@ widgets/gradient-image.o: \
 	uri.h \
 	version.h \
 	widgets/gradient-image.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/gradient-position.o: \
 	widgets/gradient-position.cpp \
@@ -7923,7 +7988,8 @@ widgets/gradient-position.o: \
 	uri.h \
 	version.h \
 	widgets/gradient-position.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/gradient-selector.o: \
 	widgets/gradient-selector.cpp \
@@ -7975,7 +8041,8 @@ widgets/gradient-selector.o: \
 	widgets/gradient-selector.h \
 	widgets/gradient-vector.h \
 	xml/repr-action.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/gradient-vector.o: \
 	widgets/gradient-vector.cpp \
@@ -8054,7 +8121,8 @@ widgets/gradient-vector.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/icon.o: \
 	widgets/icon.cpp \
@@ -8093,7 +8161,8 @@ widgets/icon.o: \
 	sp-object.h \
 	version.h \
 	widgets/icon.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/menu.o: \
 	widgets/menu.cpp \
@@ -8115,6 +8184,8 @@ widgets/paint-selector.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-pixblock.h \
@@ -8129,6 +8200,7 @@ widgets/paint-selector.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	sp-gradient.h \
+	sp-gradient.h \
 	sp-item.h \
 	sp-object.h \
 	sp-paint-server.h \
@@ -8138,11 +8210,13 @@ widgets/paint-selector.o: \
 	uri.h \
 	version.h \
 	widgets/gradient-selector.h \
+	widgets/icon.h \
 	widgets/menu.h \
 	widgets/paint-selector.h \
 	widgets/sp-color-notebook.h \
 	widgets/sp-color-selector.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/ruler.o: \
 	widgets/ruler.cpp \
@@ -8159,7 +8233,8 @@ widgets/ruler.o: \
 	widgets/menu.h \
 	widgets/ruler.h \
 	widgets/widget-sizes.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/sp-color-gtkselector.o: \
 	widgets/sp-color-gtkselector.cpp \
@@ -8233,20 +8308,15 @@ widgets/sp-color-wheel.o: \
 	forward.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
 	libnr/nr-rotate-ops.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h \
 	widgets/sp-color-wheel.h
 
 widgets/sp-widget.o: \
@@ -8284,7 +8354,8 @@ widgets/sp-widget.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/sp-xmlview-attr-list.o: \
 	widgets/sp-xmlview-attr-list.cpp \
@@ -8293,7 +8364,8 @@ widgets/sp-xmlview-attr-list.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/sp-xmlview-content.o: \
 	widgets/sp-xmlview-content.cpp \
@@ -8335,7 +8407,8 @@ widgets/sp-xmlview-content.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/sp-xmlview-tree.o: \
 	widgets/sp-xmlview-tree.cpp \
@@ -8343,7 +8416,8 @@ widgets/sp-xmlview-tree.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/spinbutton-events.o: \
 	widgets/spinbutton-events.cpp \
@@ -8356,7 +8430,8 @@ widgets/spinbutton-events.o: \
 	widgets/spinbutton-events.h \
 	widgets/widget-sizes.h \
 	xml/repr.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 widgets/spw-utilities.o: \
 	widgets/spw-utilities.cpp \
@@ -8375,47 +8450,46 @@ widgets/spw-utilities.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	selection.h \
 	view.h \
 	widgets/button.h \
 	widgets/spw-utilities.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 xml/repr-action-test.o: \
 	xml/repr-action-test.cpp \
 	utest/utest.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 xml/repr-action.o: \
 	xml/repr-action.cpp \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 xml/repr-css.o: \
 	xml/repr-css.cpp \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 xml/repr-io.o: \
 	xml/repr-io.cpp \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 xml/repr-util.o: \
 	xml/repr-util.cpp \
@@ -8423,13 +8497,15 @@ xml/repr-util.o: \
 	svg/stringstream.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 xml/repr.o: \
 	xml/repr.cpp \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h
+	xml/repr.h \
+	xml/xml-forward.h
 
 zoom-context.o: \
 	zoom-context.cpp \
@@ -8469,4 +8545,5 @@ zoom-context.o: \
 	version.h \
 	view.h \
 	xml/repr.h \
+	xml/xml-forward.h \
 	zoom-context.h
