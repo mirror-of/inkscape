@@ -127,22 +127,7 @@ sp_object_properties_dialog_handler (GtkWindow *win, GdkEvent *event, gpointer d
 			}
 			break;
 		}
-	case GDK_BUTTON_PRESS:
-		switch (event->button.button) {
-		case 1:
-			gdk_event_get_root_coords (event, &x, &y);
-			gtk_window_begin_move_drag ((GtkWindow *) dlg, 1, x, y, event->button.time);
-			ret = TRUE; 
-			break;
-		case 2:
-			gdk_event_get_root_coords (event, &x, &y);
-			gtk_window_begin_move_drag ((GtkWindow *) dlg, 2, x, y, event->button.time);
-			ret = TRUE; 
-			break;
-		}
-		break;
 	}
-
 	return ret; 
 }
 
@@ -152,29 +137,18 @@ sp_object_properties_dialog (void)
 	if (!dlg) {
 		GtkWidget *vb, *nb, *hb, *l, *px, *page, *hs, *om, *m, *mi;
 
-GtkWidget *event_box;
-
 		dlg = sp_window_new (_("Object style"), TRUE);
 
-//no decorations
-gtk_window_set_decorated ((GtkWindow *) dlg, FALSE); 
-
-//if there's an active canvas, attach dialog to it as a transient
+		// if there's an active canvas, attach dialog to it as a transient:
  if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
 	gtk_window_set_transient_for ((GtkWindow *) dlg, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", GTK_SIGNAL_FUNC (sp_object_properties_dialog_destroy), dlg);
-
-gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_object_properties_dialog_handler), dlg); //now all uncatched keypresses from the window will be handled
-
-// invisible parent widget that catches events (for some reason, window can only catch keypresses, not mouse events):
-event_box = gtk_event_box_new(); //create
-gtk_container_add (GTK_CONTAINER (dlg), event_box); //insert into window
-gtk_widget_show(event_box); //show
- g_signal_connect(G_OBJECT(event_box), "button_press_event", G_CALLBACK(sp_object_properties_dialog_handler), (gpointer) dlg); //assign event handler
+		//now all uncatched keypresses from the window will be handled:
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_object_properties_dialog_handler), dlg);
 
 		vb = gtk_vbox_new (FALSE, 0);
 		gtk_widget_show (vb);
-		gtk_container_add (GTK_CONTAINER (event_box), vb); // put it to the event_box, not dlg itself
+		gtk_container_add (GTK_CONTAINER (dlg), vb); 
 
 		nb = gtk_notebook_new ();
 		gtk_widget_show (nb);
