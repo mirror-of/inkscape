@@ -294,6 +294,11 @@ sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 	path = (SPPath *) item;
 	shape = (SPShape *) item;
 
+	// since we're optimizing the given transform completely into d=,
+	// the item's transform must be reset
+	nr_matrix_set_identity (&item->transform);
+	sp_repr_set_attr (repr, "transform", NULL);
+
 	/* Calculate the DF */
 	ex = NR_MATRIX_DF_EXPANSION (transform);
 
@@ -322,6 +327,5 @@ sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 			g_free (str);
 		}
 	}
-	sp_repr_set_attr (repr, "transform", NULL);
 }
 

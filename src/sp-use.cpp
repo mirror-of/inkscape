@@ -53,6 +53,9 @@ static void sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use);
 
 static SPItemClass * parent_class;
 
+//void mm_print (gchar *say, NR::Matrix m)
+//{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
+
 GType
 sp_use_get_type (void)
 {
@@ -132,8 +135,6 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	// We don't need to create child here: 
 	// reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
 	// which will call sp_use_href_changed, and that will take care of the child
-
-	//g_print ("built!\n");
 }
 
 static void
@@ -287,7 +288,7 @@ sp_use_description (SPItem * item)
 	if (use->child) 
 		return g_strdup_printf (_("Clone of: %s. Use Shift+D to look up original"), sp_item_description (SP_ITEM (use->child))); 
 
-	return g_strdup ("Orphaned clone");
+	return g_strdup (_("Orphaned clone"));
 }
 
 static NRArenaItem *
@@ -347,7 +348,7 @@ sp_use_root (SPUse *use)
 Returns the effective transform that goes from the ultimate original to given SPUse, both ends included
  */
 NR::Matrix
-sp_use_complete_transform (SPUse *use)
+sp_use_get_root_transform (SPUse *use)
 {
 	//track the ultimate source of a chain of uses
 	SPObject *orig = use->child;
@@ -383,9 +384,12 @@ sp_use_complete_transform (SPUse *use)
 	return t;
 }
 
-
+/**
+Returns the transform that leads to the use from its immediate original.
+Does not inlcude the original's transform if any.
+ */
 NR::Matrix
-sp_use_parent_transform (SPUse *use)
+sp_use_get_parent_transform (SPUse *use)
 {
 	NR::Matrix t;
 	t.set_identity();
@@ -399,12 +403,6 @@ sp_use_parent_transform (SPUse *use)
 }
 
 
-//void m_print (gchar *say, NRMatrix *m)
-//{ g_print ("%s %g %g %g %g %g %g\n", say, m->c[0], m->c[1], m->c[2], m->c[3], m->c[4], m->c[5]); }
-
-void mm_print (gchar *say, NR::Matrix m)
-{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
-
 using NR::X;
 using NR::Y;
 
@@ -414,29 +412,42 @@ inline bool point_equalp(NR::Point const &a, NR::Point const &b)
 		 NR_DF_TEST_CLOSE(a[Y], b[Y], 1e-5) );
 }
 
+/**
+Sensing a movement of the original, this listener function attempts to compensate for it in such a way
+that the clone stays unmoved or moves in parallel (depending on user setting) regardless of the clone's transform.
+*/
 static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
 	SPUse *use = SP_USE (data);
 	SPItem *ref = use->ref->getObject();
- 	//SPItem *ref = SP_ITEM(use->child);
 
-	//	if (SP_IS_OBJECT (use) && SP_OBJECT_DOCUMENT (use))
-	//	sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT (use));
+	// this is not a real use, but a clone of another use; 
+	// we skip it, otherwise duplicate compensation will occur
+	if (SP_OBJECT_IS_CLONED (use))
+		return;
 
+ 	//g_print ("=====%s, %p\n", sp_repr_attr(SP_OBJECT_REPR (use), "id"), use);
+ 	//g_print ("%s: %s/%s\n", name, old_value, new_value);
+
+	// find out the current bbox of the original
 	NRRect bbox;
 	NRMatrix i2doc;
 	sp_item_i2doc_affine(ref, &i2doc);
 	sp_item_invoke_bbox(ref, &bbox, &i2doc, TRUE);
 	
-
-	NR::Rect n = bbox;//sp_item_bbox_desktop (ref);//bbox;
+	// remember it
+	NR::Rect n = bbox;
 	NR::Rect o = use->original;
 	use->original = n;
+
+ 	//mm_print ("old", NR::Matrix (NR::translate (o.midpoint())));
+ 	//mm_print ("new", NR::Matrix (NR::translate (n.midpoint())));
 
 	// if dimensions changed, this is not pure move, so quit
 	if (!point_equalp (n.dimensions(), o.dimensions())) 
 		return;
 
+	// find out midpoints
 	NR::Point np = (n.midpoint());
 	NR::Point op = (o.midpoint());
 
@@ -444,23 +455,17 @@ static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, con
 	if (point_equalp (op, np))
 		return;
 
-// 	g_print ("=====%s, %p\n", sp_repr_attr(SP_OBJECT_REPR (use), "id"), use);
-// 	g_print ("%s: %s/%s\n", name, old_value, new_value);
-// 	mm_print ("o", NR::Matrix (NR::translate (op)));
-// 	mm_print ("n", NR::Matrix (NR::translate (np)));
-// 	mm_print ("moved", NR::Matrix (NR::translate (op - np)));
-
-	NR::Matrix t = sp_use_parent_transform (use);
+	// transform both old and new midpoints
+	NR::Matrix t = sp_use_get_parent_transform (use);
 	np *= t;
 	op *= t;
+	// this is how the clone would move, if we allow it to
 	NR::Matrix affine (NR::translate ((op - np)));
-	//affine = affine.inverse();
-
-//	mm_print ("moved_t", affine);
 
 	SPItem *item = SP_ITEM(use);
+
+	// compensation: clones stay unmoved
 	NRMatrix affine_n = affine;
-	//sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
 	nr_matrix_multiply (&item->transform, &item->transform, &affine_n);
 	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
 }
@@ -515,21 +520,16 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 	}
 
 	// connect signal callbacks for adjusting use's transform when the original is moved,
-	// to implement "stays unmoved" and "preserves relative distance" modes (user-selectable)
+	// to implement "stays unmoved" and "moves in parallel" modes (user-selectable)
  	if (old_ref && use->repr) {
 		sp_repr_remove_listener_by_data (use->repr, use);
 		sp_repr_unref (use->repr);
 		use->repr = NULL;
  	}
- 	if (SP_IS_ITEM (ref) && SP_OBJECT_REPR (ref)) {
 
-	NRRect bbox;
-	NRMatrix i2doc;
-	sp_item_i2doc_affine(SP_ITEM(ref), &i2doc);
-	sp_item_invoke_bbox(SP_ITEM(ref), &bbox, &i2doc, TRUE);
-	use->original = bbox;
-
-		use->repr = SP_OBJECT_REPR (ref);
+	SPItem *refobj = use->ref->getObject();
+ 	if (SP_IS_ITEM (refobj) && SP_OBJECT_REPR (refobj)) {
+		use->repr = SP_OBJECT_REPR (refobj);
 		sp_repr_ref (use->repr);
 		sp_repr_add_listener (use->repr, &use_repr_events, use);
 		sp_repr_synthesize_events (use->repr, &use_repr_events, use);
@@ -549,6 +549,16 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	use = SP_USE (object);
 	ictx = (SPItemCtx *) ctx;
 	cctx = *ictx;
+
+	// remember the original's bbox
+	SPItem *refobj = use->ref->getObject();
+ 	if (SP_IS_ITEM (refobj)) {
+		NRRect bbox;
+		NRMatrix i2doc;
+		sp_item_i2doc_affine(SP_ITEM(refobj), &i2doc);
+		sp_item_invoke_bbox(SP_ITEM(refobj), &bbox, &i2doc, TRUE);
+		use->original = bbox;
+ 	}
 
 	if (((SPObjectClass *) (parent_class))->update)
 		((SPObjectClass *) (parent_class))->update (object, ctx, flags);
@@ -634,7 +644,7 @@ sp_use_unlink (SPUse *use)
 	SPItem *orig = sp_use_root (use);
 
 	//calculate the accummulated transform, starting from the original
-	NR::Matrix t = sp_use_complete_transform (use);
+	NR::Matrix t = sp_use_get_root_transform (use);
  
 	// create copy of the original
 	SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(orig));
