@@ -30,9 +30,11 @@ public:
         *this = other;
     }
     ListContainer &operator=(ListContainer const &other) {
+        clear();
         for ( const_iterator iter = other.begin() ; iter ; ++iter ) {
             push_back(*iter);
         }
+        return *this;
     }
     void swap(ListContainer<T> &other) {
         std::swap(other._head, _head);
@@ -69,7 +71,7 @@ public:
             ++iter;
             ++other_iter;
         }
-        return false;
+        return bool(other_iter);
     }
     bool operator>=(ListContainer const &other) const {
         return !operator<(other);
