@@ -174,10 +174,10 @@ static SPRepr *sp_anchor_write(SPObject *object, SPRepr *repr, guint flags)
 static gchar *sp_anchor_description(SPItem *item)
 {
     SPAnchor *anchor = SP_ANCHOR(item);
-    char c[128];
-    g_snprintf(c, 128, _("<b>Link</b> to %s"), anchor->href);
-
-    return g_strdup(c);
+    if (anchor->href) 
+        return g_strdup_printf (_("<b>Link</b> to %s"), anchor->href);
+    else 
+        return g_strdup (_("<b>Link</b> without URI"));
 }
 
 /* fixme: We should forward event to appropriate container/view */
