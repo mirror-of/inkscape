@@ -32,20 +32,20 @@ static void sp_object_finalize (GObject * object);
 
 static void sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr);
 
-static void sp_object_private_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_object_private_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_object_private_write (SPObject *object, SPRepr *repr, guint flags);
 
 /* Real handlers of repr signals */
 
-static unsigned int sp_object_repr_change_attr (SPRepr *repr, const guchar *key, const guchar *oldval, const guchar *newval, gpointer data);
-static void sp_object_repr_attr_changed (SPRepr *repr, const guchar *key, const guchar *oldval, const guchar *newval, gpointer data);
+static unsigned int sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data);
+static void sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data);
 
-static void sp_object_repr_content_changed (SPRepr *repr, const guchar *oldcontent, const guchar *newcontent, gpointer data);
+static void sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data);
 
 static void sp_object_repr_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data);
 static unsigned int sp_object_repr_remove_child (SPRepr *repr, SPRepr *child, SPRepr *ref, void *data);
 
-static void sp_object_repr_order_changed (SPRepr *repr, SPRepr *child, SPRepr *old, SPRepr *new, gpointer data);
+static void sp_object_repr_order_changed (SPRepr *repr, SPRepr *child, SPRepr *old, SPRepr *newer, gpointer data);
 
 static gchar * sp_object_get_unique_id (SPObject * object, const gchar * defid);
 
@@ -98,11 +98,11 @@ sp_object_class_init (SPObjectClass * klass)
 
 	object_signals[RELEASE] =  g_signal_new ("release",
 						 G_TYPE_FROM_CLASS (klass),
-						 G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+						 (GSignalFlags)(G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS),
 						 G_STRUCT_OFFSET (SPObjectClass, release),
 						 NULL, NULL,
 						 sp_marshal_VOID__VOID,
-						 G_TYPE_NONE, (GTypeFlags)0);
+						 G_TYPE_NONE, 0);
 	object_signals[MODIFIED] = g_signal_new ("modified",
                                                  G_TYPE_FROM_CLASS (klass),
                                                  G_SIGNAL_RUN_FIRST,
@@ -397,18 +397,18 @@ sp_object_repr_remove_child (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer 
 /* fixme: */
 
 static void
-sp_object_repr_order_changed (SPRepr * repr, SPRepr * child, SPRepr * old, SPRepr * new, gpointer data)
+sp_object_repr_order_changed (SPRepr * repr, SPRepr * child, SPRepr * old, SPRepr * newer, gpointer data)
 {
 	SPObject * object;
 
 	object = SP_OBJECT (data);
 
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->order_changed)
-		(* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->order_changed) (object, child, old, new);
+		(* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->order_changed) (object, child, old, newer);
 }
 
 static void
-sp_object_private_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	g_assert (SP_IS_DOCUMENT (object->document));
 	/* fixme: rething that cloning issue */
@@ -456,21 +456,21 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 
 	keyid = sp_attribute_lookup (key);
 	if (keyid != SP_ATTR_INVALID) {
-		const unsigned char *value;
+		const gchar *value;
 		value = sp_repr_attr (object->repr, key);
 		sp_object_set (object, keyid, value);
 	}
 }
 
 static unsigned int
-sp_object_repr_change_attr (SPRepr *repr, const guchar *key, const guchar *oldval, const guchar *newval, gpointer data)
+sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
 {
 	SPObject * object;
 	gpointer defid;
 
 	object = SP_OBJECT (data);
 
-	if (strcmp (key, "id") == 0) {
+	if (strcmp ((const char*)key, "id") == 0) {
 		if (!newval) return FALSE;
 		defid = sp_document_lookup_id (object->document, newval);
 		if (defid == object) return TRUE;
@@ -481,7 +481,7 @@ sp_object_repr_change_attr (SPRepr *repr, const guchar *key, const guchar *oldva
 }
 
 static void
-sp_object_repr_attr_changed (SPRepr *repr, const guchar *key, const guchar *oldval, const guchar *newval, gpointer data)
+sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
 {
 	SPObject * object;
 
@@ -491,7 +491,7 @@ sp_object_repr_attr_changed (SPRepr *repr, const guchar *key, const guchar *oldv
 }
 
 static void
-sp_object_repr_content_changed (SPRepr *repr, const guchar *oldcontent, const guchar *newcontent, gpointer data)
+sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data)
 {
 	SPObject * object;
 
@@ -514,7 +514,7 @@ sp_object_invoke_forall (SPObject *object, SPObjectMethod func, gpointer data)
 
 	repr = SP_OBJECT_REPR (object);
 	for (child = repr->children; child != NULL; child = child->next) {
-		const unsigned char *id;
+		const gchar *id;
 		SPObject *cho;
 		id = sp_repr_attr (child, "id");
 		cho = sp_document_lookup_id (SP_OBJECT_DOCUMENT (object), id);
@@ -736,7 +736,7 @@ sp_object_getAttribute (const SPObject *object, const gchar *key, SPException *e
 	if (!SP_EXCEPTION_IS_OK (ex)) return NULL;
 
 	/* fixme: Exception if object is NULL? */
-	return (const guchar *) sp_repr_attr (object->repr, key);
+	return (const gchar *) sp_repr_attr (object->repr, key);
 }
 
 void
@@ -789,7 +789,7 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 	}
 
 	len = strlen (name) + 17;
-	b = alloca (len);
+	b = (gchar*) alloca (len);
 	g_assert (b != NULL);
 	realid = NULL;
 
@@ -815,11 +815,11 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 
 /* Style */
 
-const guchar *
+const gchar *
 sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def)
 {
 	const gchar *style;
-	const guchar *val;
+	const gchar *val;
 
 	g_return_val_if_fail (object != NULL, NULL);
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);

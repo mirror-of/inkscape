@@ -204,6 +204,6 @@ void sp_object_removeAttribute (SPObject *object, const gchar *key, SPException 
 
 /* Style */
 
-const guchar *sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def);
+const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def);
 
 #endif
