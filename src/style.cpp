@@ -1252,7 +1252,6 @@ Dumps the style to a CSS string, with either SP_STYLE_FLAG_IFSET or SP_STYLE_FLA
 flags. Used with Always for copying an object's complete cascaded style to style_clipboard. When
 you need a CSS string for an object in the document tree, you normally call
 sp_style_write_difference instead to take into account the object's parent.
-FIXME: merge with write_difference, much duplicate code!
 
 \pre flags in {IFSET, ALWAYS}.
 */
@@ -1506,7 +1505,8 @@ sp_style_clear (SPStyle *style)
     style->font_variant.set = FALSE;
     style->font_variant.value = style->font_variant.computed = SP_CSS_FONT_VARIANT_NORMAL;
     style->font_weight.set = FALSE;
-    style->font_weight.value = style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
+    style->font_weight.value = SP_CSS_FONT_WEIGHT_NORMAL;
+    style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
     style->font_stretch.set = FALSE;
     style->font_stretch.value = style->font_stretch.computed = SP_CSS_FONT_STRETCH_NORMAL;
 
