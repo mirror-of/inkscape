@@ -9,6 +9,9 @@
 	Add very basic feature to allow PS text to be exported as real
 	text, rather than being converted to paths first.  Needs some
 	work, mostly on font handling.
+
+	* src/seltrans.cpp: Slightly improve placement of the bounding
+	box selection cue.
 	
 2004-04-17  MenTaLguY <mental@rydia.net>
 	* src/inkscape.cpp, src/node-context.cpp, src/selection-chemistry.cpp,
