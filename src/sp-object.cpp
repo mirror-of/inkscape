@@ -300,26 +300,25 @@ const SPObject *AncestorSon (SPObject const *obj, SPObject const *ancestor) {
 }
 
 
-/** Return value:
- *     0   positions are equivalent
- *     0   first object is ancestor of the second (normally shouldn't happen)
- *     0   no common ancestor between the two objects
- *     1   second object is ancestor of itself (??)
- *     1   first object's position is greater than the second
- *    -1   first object's position is less than the second
- *     
+/** 
+ * Works for different-parent objects, so long as they have a common ancestor. Return value:
+ *    0    positions are equivalent
+ *    1    first object's position is greater than the second
+ *   -1    first object's position is less than the second
  */
 int
 sp_object_compare_position(SPObject const *first, SPObject const *second)
 {
+	if (first == second) return 0;
+
 	SPObject const *ancestor = first->nearestCommonAncestor(second);
-	if (ancestor == NULL) return FALSE;
+	if (ancestor == NULL) return 0; // cannot compare, no common ancestor!
 
 	// we have an object and its ancestor (should not happen when sorting selection)
 	if (ancestor == first)
-		return TRUE;
+		return 1;
 	if (ancestor == second)
-		return FALSE;
+		return -1;
 
 	SPObject const *to_first = AncestorSon (first, ancestor);
 	SPObject const *to_second = AncestorSon (second, ancestor);

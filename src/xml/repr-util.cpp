@@ -357,11 +357,7 @@ int sp_repr_get_int_attribute (SPRepr * repr, const char * key, int def)
 }
 
 /** 
- * Precondition:
- *    Both first and second must belong to the same parent, otherwise
- *    this function will assert.
- * 
- * Return value:
+ *  Works for different-parent objects, so long as they have a common ancestor. Return value:
  *    0    positions are equivalent
  *    1    first object's position is greater than the second
  *   -1    first object's position is less than the second
@@ -384,9 +380,9 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
         g_assert(ancestor != NULL);
 
         if (ancestor == first) {
-            return TRUE;
+            return 1;
         } else if (ancestor == second) {
-            return FALSE;
+            return -1;
         } else {
             SPRepr const *to_first = AncetreFils(first, ancestor);
             SPRepr const *to_second = AncetreFils(second, ancestor);
