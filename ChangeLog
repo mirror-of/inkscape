@@ -1,5 +1,9 @@
 2004-04-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/bezier-utils-test.cpp: Add tests for generate_bezier,
+	sp_bezier_fit_cubic_full.
+	Change to a simpler test bezier.
+
 	* src/helper/bezier-utils.cpp (sp_darray_left_tangent,
 	sp_darray_right_tangent):
 	Switch to using just the two end points for calculating the gradient.

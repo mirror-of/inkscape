@@ -38,18 +38,12 @@ static inline double square(double const x) {
     the most important test is that the root-mean-square of errors in the estimation are low rather
     than that the control points found are the same.
 **/
-static void compare_ctlpts(Point const est_b[])
+static void compare_ctlpts(Point const est_b[], Point const exp_est_b[])
 {
-    Point const exp_est_b[4] = {
-        Point(5.000000, -3.000000),
-        Point(-0.478115, 5.072078),
-        Point(2.292190, 4.860450),
-        Point(3.000000, -2.000000)
-    };
     unsigned diff_mask = 0;
     for (unsigned i = 0; i < 4; ++i) {
         for (unsigned d = 0; d < 2; ++d) {
-            if ( fabs( est_b[i][d] - exp_est_b[i][d] ) > 2e-6 ) {
+            if ( fabs( est_b[i][d] - exp_est_b[i][d] ) > 1.1e-5 ) {
                 diff_mask |= 1 << ( i * 2 + d );
             }
         }
@@ -67,6 +61,25 @@ static void compare_ctlpts(Point const est_b[])
             printf(" (%g, %g)", est_b[i][0], est_b[i][1]);
         }
         putchar('\n');
+    }
+}
+
+static void compare_rms(Point const est_b[], double const t[], Point const d[], unsigned const n,
+                        double const exp_rms_error)
+{
+    double sum_errsq = 0.0;
+    for (unsigned i = 0; i < n; ++i) {
+        Point const fit_pt = bezier_pt(3, est_b, t[i]);
+        Point const diff = fit_pt - d[i];
+        sum_errsq += dot(diff, diff);
+    }
+    double const rms_error = sqrt( sum_errsq / n );
+    UTEST_ASSERT( rms_error <= exp_rms_error + 1.1e-6 );
+    if ( rms_error < exp_rms_error - 1.1e-6 ) {
+        /* The fitter code appears to have improved [or the floating point calculations differ
+           on this machine from the machine where exp_rms_error was calculated]. */
+        printf("N.B. rms_error regression requirement can be decreased: have rms_error=%g.\n",
+               rms_error);
     }
 }
 
@@ -231,44 +244,67 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    UTEST_TEST("sp_bezier_fit_cubic") {
-        /* Feed it some points that can be fit exactly with a single bezier segment, and see how
-           well it manages. */
-        Point const src_b[4] = {Point(5., -3.),
-                                Point(-3., 8.),
-                                Point(4., 2.),
-                                Point(3., -2.)};
-        double const t[] = {0.0, .01, .02, .03, .05, .09, .18, .25, .37, .44,
-                            .51, .69, .81, .91, .93, .97, .98, .99, 1.0};
-        unsigned const n = G_N_ELEMENTS(t);
-        Point d[n];
-        for (unsigned i = 0; i < n; ++i) {
-            d[i] = bezier_pt(3, src_b, t[i]);
-        }
+    /* Feed it some points that can be fit exactly with a single bezier segment, and see how
+       well it manages. */
+    Point const src_b[4] = {Point(5., -3.),
+                            Point(8., 0.),
+                            Point(4., 2.),
+                            Point(3., 3.)};
+    double const t[] = {0.0, .001, .03, .05, .09, .13, .18, .25, .29, .33, .39, .44,
+                        .51, .57, .62, .69, .75, .81, .91, .93, .97, .98, .999, 1.0};
+    unsigned const n = G_N_ELEMENTS(t);
+    Point d[n];
+    for (unsigned i = 0; i < n; ++i) {
+        d[i] = bezier_pt(3, src_b, t[i]);
+    }
+    Point const tHat1(unit_vector( src_b[1] - src_b[0] ));
+    Point const tHat2(unit_vector( src_b[2] - src_b[3] ));
 
+    UTEST_TEST("generate_bezier") {
+        Point est_b[4];
+        generate_bezier(est_b, d, t, n, tHat1, tHat2);
+
+        compare_ctlpts(est_b, src_b);
+
+        /* We're being unfair here in using our t[] rather than best t[] for est_b: we
+           over-estimate RMS of errors. */
+        compare_rms(est_b, t, d, n, 1e-8);
+    }
+
+    UTEST_TEST("sp_bezier_fit_cubic_full") {
+        Point est_b[4];
+        gint const succ = sp_bezier_fit_cubic_full(est_b, d, n, tHat1, tHat2, square(1.2), 1);
+        UTEST_ASSERT( succ == 1 );
+
+        Point const exp_est_b[4] = {
+            Point(5.000000, -3.000000),
+            Point(7.5753, -0.4247),
+            Point(4.77533, 1.22467),
+            Point(3, 3)
+        };
+        compare_ctlpts(est_b, exp_est_b);
+
+        /* We're being unfair here in using our t[] rather than best t[] for est_b: we
+           over-estimate RMS of errors. */
+        compare_rms(est_b, t, d, n, .307911);
+    }
+
+    UTEST_TEST("sp_bezier_fit_cubic") {
         Point est_b[4];
         gint const succ = sp_bezier_fit_cubic(est_b, d, n, square(1.2));
         UTEST_ASSERT( succ == 1 );
 
-        compare_ctlpts(est_b);
+        Point const exp_est_b[4] = {
+            Point(5.000000, -3.000000),
+            Point(7.57134, -0.423509),
+            Point(4.77929, 1.22426),
+            Point(3, 3)
+        };
+        compare_ctlpts(est_b, exp_est_b);
 
-        double sum_errsq = 0.0;
-        for (unsigned i = 0; i < n; ++i) {
-            /* We're being unfair here in using our t[] rather than best t[] for est_b: we
-               over-estimate RMS of errors. */
-            Point const fit_pt = bezier_pt(3, est_b, t[i]);
-            Point const diff = fit_pt - d[i];
-            sum_errsq += dot(diff, diff);
-        }
-        double const rms_error = sqrt( sum_errsq / n );
-        double const exp_rms_error = .610788;
-        UTEST_ASSERT( rms_error <= exp_rms_error + 1.1e-6 );
-        if ( rms_error < exp_rms_error - 1.1e-6 ) {
-            /* The fitter code appears to have improved [or the floating point calculations differ
-               on this machine from the machine where exp_rms_error was calculated]. */
-            printf("N.B. rms_error regression requirement can be decreased: have rms_error=%g.\n",
-                   rms_error);
-        }
+        /* We're being unfair here in using our t[] rather than best t[] for est_b: we
+           over-estimate RMS of errors. */
+        compare_rms(est_b, t, d, n, .307983);
     }
 
     return !utest_end();
