@@ -49,7 +49,9 @@ int main(int argc, char *argv[])
 
     UTEST_TEST("operator/(scale, scale)") {
         NR::scale const sa_b( sa / sb );
-        UTEST_ASSERT( sa_b == NR::scale(-0.75, 2./3.) );
+        NR::scale const exp_sa_b(-0.75, 2./3.);
+        UTEST_ASSERT( sa_b[0] == exp_sa_b[0] );
+        UTEST_ASSERT( fabs( sa_b[1] - exp_sa_b[1] ) < 1e-10 );
     }
 
     return ( utest_end()
