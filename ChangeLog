@@ -12,8 +12,11 @@
 	* src/spiral-context.cpp: Use new message API.  Some
 	declaration-to-first-use and const fixes.
 
-	* src/spiral-context.h: Inherit SPSpiralContext from
-	SPEventContext to get access to the new message API.
+	* src/star-context.cpp: Use new message API.  Remove the unused
+	sp_star_context_item_handler().
+
+	* src/spiral-context.h, src/star-context.h: Inherit
+	from SPEventContext to get access to the new message API.
 
 	* src/streams-zlib.cpp: fix a compiler warning.
 
@@ -22,6 +25,10 @@
 
 	* src/libnrtype/FlowRes.cpp, src/libnrtype/FlowResOut.cpp,
 	src/libnrtype/FlowSrc.cpp: fix some compiler warnings.
+
+	* src/inkjar/jar.cpp: fixed a compiler warning and added a FIXME.
+
+	* src/object-edit.cpp: make use of sp_pattern_extract_trans.
 	
 	
 2004-08-13  MenTaLguY  <mental@rydia.net>
