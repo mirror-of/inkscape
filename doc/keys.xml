@@ -212,7 +212,19 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>Grouping</title>
+<title>Clone</title>
+<keys><key><alt/>D</key>	 <action>clone object</action></keys> 
+<note>A clone can be moved/scaled/rotated/skewed independently, but it updates the path, fill, and stroke from its original.</note>
+<note>The clone is placed exactly over the original object and is selected.</note>
+<note>You can only clone one object at a time; if you want to clone several objects together, group them and clone the group.</note>
+<keys><key><shift/><alt/>D</key>	 <action>unlink clone</action></keys> 
+<note>Unlinking a clone cuts the link to the original, turning the clone into a plain copy.</note>
+<keys><key><shift/>D</key>	 <action>select original</action></keys> 
+<note>To find out which object this is a clone of, select the clone and give this command. The original will be selected.</note>
+</group>
+
+<group>
+<title>Group</title>
 <keys> <key><shift/><ctrl/>U</key>  <key><ctrl/>G</key> <action>group selected objects</action></keys>
 <note>Use Ctrl+click to select objects within group.</note>
 <keys><key><shift/><ctrl/>G</key> <key><ctrl/>U</key>  <action>ungroup selected group(s)</action></keys>
@@ -251,6 +263,7 @@ can leave your ideas and requests there.</p>
 <note>Division cuts the bottom object into pieces by the top object, preserving the fill and stroke of the bottom.</note>
 <keys><key><ctrl/><alt/>/</key>  <action>cut path</action></keys>
 <note>Cut Path cuts the bottom object's stroke only where it is intersected by the top path, removing any fill from the result.</note>
+<note>The result of any boolean operation inherits the id= attribute and therefore the clones of the bottom object.</note>
 </group>
 
 <group>
@@ -270,15 +283,17 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>Combining</title>
+<title>Combine</title>
 <keys><key><ctrl/>K</key>  <action>combine paths</action></keys>
 <note>This is different from grouping in that combined paths create one object.</note>
 <note>This is different from Union in that overlapping areas are not affected.</note>
+<note>Whether overlapping areas are filled is controlled by the Fill: winding/alternating switch on the Fill &amp; Stroke dialog.</note>
 <keys><key><shift/><ctrl/>K</key>  <action>break paths apart</action></keys>
 <note>This attempts to break an object into constituent paths; it will fail if the object is one solid path.</note>
 </group>
 
 <group>
+<title>Simplify</title>
 <keys><key><ctrl/>L</key>  <action>simplify</action></keys>
 <note>This command attempts to simplify selected path(s) by removing extra nodes. It converts all objects to paths first.</note>
 <note>If you invoke this command several times in quick succession, it will act more and more aggressively.</note>
@@ -604,34 +619,6 @@ can leave your ideas and requests there.</p>
 <note>See the corresponding shape tools for their editing shortcuts, all of which also work in node tool.</note>
 </group>
 
-
-<!--
-<group>
-<title>Editing rectangle</title>
-<mouse><key><ctrl/><left-drag/></key> <action>lock the rounded corner circular</action></mouse>
-<note>When rounding corners of a rectangle, dragging only one control will ensure the corner is always circular.</note>
-<note>You can drag both controls for an elliptic rounded corner, or drag one with Ctrl to make sure the other one is synchronized.</note>
-</group>
-
-<group>
-<title>Editing ellipse</title>
-<mouse><key><ctrl/><left-drag/></key> <action>restrict the arc or segment to angle steps</action></mouse>
-<note>The default angle step is 15 degrees.</note>
-</group>
-
-<group>
-<title>Editing star</title>
-<mouse><key><ctrl/><left-drag/></key> <action>keep star rays radial (no skew)</action></mouse>
-</group>
-
-<group>
-<title>Editing spiral</title>
-<mouse><key><ctrl/><left-drag/></key> <action>snap controls to angle steps</action></mouse>
-<note>The default angle step is 15 degrees.</note>
-<mouse><key><alt/><left-drag/></key> <action>lock spiral radius</action></mouse>
-<note>This has effect when dragging the outer control of the spiral.</note>
-</group>
--->
 
 <group>
 <title>Cancel</title>
