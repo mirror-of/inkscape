@@ -1037,14 +1037,16 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt,
                     // TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
-                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each row (in % of tile width)"), "d_x_per_y");
+                    _("Horizontal shift per each row (in % of tile width)"), "d_x_per_y");
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
 
                 {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt,
                     // TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each row (in % of tile height)"), "d_y_per_y");
+                    _("Vertical shift per each row (in % of tile height)"), "d_y_per_y");
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
