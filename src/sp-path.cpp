@@ -19,6 +19,8 @@
 #endif
 #include <string.h>
 
+#include <display/curve.h>
+#include <libnr/n-art-bpath.h>
 #include <libnr/nr-path.h>
 #include <libnr/nr-values.h>
 #include <libnr/nr-macros.h>
@@ -42,12 +44,12 @@ static void sp_path_init(SPPath *path);
 static void sp_path_finalize(GObject *obj);
 static void sp_path_release(SPObject *object);
 
-static void sp_path_build(SPObject * object, SPDocument * document, SPRepr * repr);
-static void sp_path_set(SPObject *object, unsigned int key, const gchar *value);
+static void sp_path_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_path_set(SPObject *object, unsigned key, gchar const *value);
 
 static SPRepr *sp_path_write(SPObject *object, SPRepr *repr, guint flags);
 static NR::Matrix sp_path_set_transform(SPItem *item, NR::Matrix const &xform);
-static gchar * sp_path_description(SPItem * item);
+static gchar * sp_path_description(SPItem *item);
 
 static void sp_path_update(SPObject *object, SPCtx *ctx, guint flags);
 
@@ -161,7 +163,7 @@ sp_path_build(SPObject *object, SPDocument *document, SPRepr *repr)
     sp_object_read_attr(object, "d");
 
     /* d is a required attribute */
-    const gchar* d = sp_object_getAttribute(object, "d", NULL);
+    gchar const *d = sp_object_getAttribute(object, "d", NULL);
     if (d == NULL) {
         sp_object_set(object, sp_attribute_lookup("d"), strdup(""));
     }
@@ -175,35 +177,29 @@ sp_path_build(SPObject *object, SPDocument *document, SPRepr *repr)
     sp_conn_end_pair_build(object);
 
     if (sp_version_inside_range(version, 0, 0, 0, 25)) {
-        SPShape *shape;
-        SPCSSAttr *css;
-        const gchar *val;
-        gboolean changed;
-        gboolean open;
-        shape = (SPShape *) path;
+        SPShape *shape = (SPShape *) path;
         /* Remove fill from open paths for compatibility with inkscape < 0.25 */
         /* And set fill-rule of closed paths to evenodd */
         /* We force style rewrite at moment (Lauris) */
-        changed = TRUE;
-        open = FALSE;
+        gboolean changed = TRUE;
+        gboolean open = FALSE;
         if (shape->curve && shape->curve->bpath) {
-            NArtBpath *bp;
-            for (bp = shape->curve->bpath; bp->code != NR_END; bp++) {
+            for (NArtBpath *bp = shape->curve->bpath; bp->code != NR_END; bp++) {
                 if (bp->code == NR_MOVETO_OPEN) {
                     open = TRUE;
                     break;
                 }
             }
         }
-        css = sp_repr_css_attr(repr, "style");
+        SPCSSAttr *css = sp_repr_css_attr(repr, "style");
         if (open) {
-            val = sp_repr_css_property(css, "fill", NULL);
+            gchar const *val = sp_repr_css_property(css, "fill", NULL);
             if (val && strcmp(val, "none")) {
                 sp_repr_css_set_property(css, "fill", "none");
                 changed = TRUE;
             }
         } else {
-            val = sp_repr_css_property(css, "fill-rule", NULL);
+            gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
             if (!val) {
                 sp_repr_css_set_property(css, "fill-rule", "evenodd");
                 changed = TRUE;
@@ -237,7 +233,7 @@ sp_path_release(SPObject *object)
  *  for setting attributes and markers on a path object.
  */
 static void
-sp_path_set(SPObject *object, unsigned int key, const gchar *value)
+sp_path_set(SPObject *object, unsigned int key, gchar const *value)
 {
     SPPath *path = (SPPath *) object;
 
