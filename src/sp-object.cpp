@@ -450,6 +450,8 @@ sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *prev)
 	if (!next) {
 		parent->_last_child = object;
 	}
+    if (!object->xml_space.set)
+        object->xml_space.value = parent->xml_space.value;
 }
 
 void sp_object_reorder(SPObject *object, SPObject *prev) {

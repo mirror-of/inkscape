@@ -485,7 +485,6 @@ void SPFlowtext::convert_to_text()
                 span_tspan->setAttribute("style", *style_text ? NULL : style_text);
                 g_free(style_text);
             }
-            span_tspan->setAttribute("xml:space", "preserve");
 
             it.nextStartOfSpan();
             if (SP_IS_STRING(source_obj)) {
