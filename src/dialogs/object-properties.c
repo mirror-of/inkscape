@@ -35,7 +35,7 @@
 #include "inkscape.h"
 #include "fill-style.h"
 #include "stroke-style.h"
-#include "../desktop.h"
+#include "dialog-events.h"
 
 #include "object-properties.h"
 
@@ -103,34 +103,6 @@ sp_object_properties_color_set (Inkscape *inkscape, SPColor *color, double opaci
 	}
 }
 
-static gboolean
-sp_object_properties_dialog_handler (GtkWindow *win, GdkEvent *event, gpointer data)
-{
-	gboolean ret = FALSE; 
-	gdouble x, y;
-	GtkWindow *w;
-	SPDesktopWidget *dtw;
-
-	switch (event->type) {
-	case GDK_KEY_PRESS:
-		switch (event->key.keyval) {
-		case GDK_Escape: 
-			gtk_widget_destroy (dlg);
-			ret = TRUE; 
-			break;
-		default: 
-			if (w = gtk_window_get_transient_for ((GtkWindow *) dlg)) {
-				dtw = g_object_get_data (G_OBJECT (w), "desktopwidget");
-				inkscape_activate_desktop (dtw->desktop);
-				gtk_propagate_event (GTK_WIDGET (dtw->canvas), event);
-				ret = TRUE; 
-			}
-			break;
-		}
-	}
-	return ret; 
-}
-
 void
 sp_object_properties_dialog (void)
 {
@@ -140,11 +112,11 @@ sp_object_properties_dialog (void)
 		dlg = sp_window_new (_("Object style"), TRUE);
 
 		// if there's an active canvas, attach dialog to it as a transient:
- if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
-	gtk_window_set_transient_for ((GtkWindow *) dlg, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
+		if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
+			gtk_window_set_transient_for ((GtkWindow *) dlg, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", GTK_SIGNAL_FUNC (sp_object_properties_dialog_destroy), dlg);
 		//now all uncatched keypresses from the window will be handled:
-		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_object_properties_dialog_handler), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
 
 		vb = gtk_vbox_new (FALSE, 0);
 		gtk_widget_show (vb);
