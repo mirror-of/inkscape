@@ -752,7 +752,7 @@ sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, gdouble d
 {
 	SPDrawAnchor *a;
 
-	g_print ("Creating anchor at %g %g\n", dx, dy);
+	sp_status_display(g_strdup_printf ("Creating anchor at %g %g", dx, dy));
 
 	a = g_new (SPDrawAnchor, 1);
 
@@ -1001,7 +1001,9 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				}
 				dc->ea = anchor;
 				/* Write curves to object */
-				g_print ("Finishing freehand\n");
+
+				sp_status_display(g_strdup_printf ("Finishing freehand"));
+
 				spdc_concat_colors_and_flush (dc, FALSE);
 				dc->sa = NULL;
 				dc->ea = NULL;
