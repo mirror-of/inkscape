@@ -203,8 +203,6 @@ void sp_edit_cleanup(gpointer, gpointer)
 	sp_document_done (doc);
 }
 
-/* fixme: sequencing */
-
 void sp_selection_group()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -243,6 +241,9 @@ void sp_selection_group()
 
 	p = g_slist_sort (p, (GCompareFunc) sp_repr_compare_position);
 
+	// remember the position of the topmost object
+	gint topmost = sp_repr_position ((SPRepr *) g_slist_last(p)->data);
+
 	SPRepr *group = sp_repr_new("g");
 
 	while (p) {
@@ -257,6 +258,10 @@ void sp_selection_group()
 
 	// add the new group to the group members' common parent
 	sp_repr_append_child (parent, group);
+
+	// move to the position of the topmost
+	sp_repr_set_position_absolute (group, topmost > 1 ? topmost - 1 : 0);
+
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
 	sp_selection_set_repr (selection, group);
