@@ -5,8 +5,10 @@
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Ted Gould <ted@gould.cx>
  *
- * This code is in public domain
+ * Lauris: This code is in public domain
+ * Ted: This code is under the GNU GPL
  */
 
 /* Gnome Print */
@@ -38,100 +40,31 @@
 
 #include "gnome.h"
 
-static void sp_module_print_gnome_class_init (SPModulePrintClass *klass);
-static void sp_module_print_gnome_init (SPModulePrintGnome *gpmod);
-static void sp_module_print_gnome_finalize (GObject *object);
+#include <extension/extension.h>
+#include <extension/system.h>
 
-static unsigned int sp_module_print_gnome_setup (SPModulePrint *mod);
-static unsigned int sp_module_print_gnome_set_preview (SPModulePrint *mod);
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
 
-static unsigned int sp_module_print_gnome_begin (SPModulePrint *mod, SPDocument *doc);
-static unsigned int sp_module_print_gnome_finish (SPModulePrint *mod);
-
-static unsigned int sp_module_print_gnome_bind (SPModulePrint *mod, const NRMatrix *transform, float opacity);
-static unsigned int sp_module_print_gnome_release (SPModulePrint *mod);
-static unsigned int sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-						const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-static unsigned int sp_module_print_gnome_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-						  const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-static unsigned int sp_module_print_gnome_image (SPModulePrint *mod, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-						 const NRMatrix *transform, const SPStyle *style);
-
-static SPModulePrintClass *print_gnome_parent_class;
-
-GType
-sp_module_print_gnome_get_type (void)
-{
-    static GType type = 0;
-    if (!type) {
-	GTypeInfo info = {
-	    sizeof (SPModulePrintGnomeClass),
-	    NULL, NULL,
-	    (GClassInitFunc) sp_module_print_gnome_class_init,
-	    NULL, NULL,
-	    sizeof (SPModulePrintGnome),
-	    16,
-	    (GInstanceInitFunc) sp_module_print_gnome_init,
-	};
-	type = g_type_register_static (SP_TYPE_MODULE_PRINT, 
-				       "SPModulePrintGnome", 
-				       &info, 
-				       (GTypeFlags)0);
-    }
-    return type;
-}
-
-static void
-sp_module_print_gnome_class_init (SPModulePrintClass *klass)
-{
-    GObjectClass *g_object_class;
-    SPModulePrintClass *module_print_class;
-
-    g_object_class = (GObjectClass *)klass;
-    module_print_class = (SPModulePrintClass *) klass;
-
-    print_gnome_parent_class = (SPModulePrintClass *)g_type_class_peek_parent (klass);
-
-    g_object_class->finalize = sp_module_print_gnome_finalize;
-
-    module_print_class->setup = sp_module_print_gnome_setup;
-    module_print_class->set_preview = sp_module_print_gnome_set_preview;
-    module_print_class->begin = sp_module_print_gnome_begin;
-    module_print_class->finish = sp_module_print_gnome_finish;
-    module_print_class->bind = sp_module_print_gnome_bind;
-    module_print_class->release = sp_module_print_gnome_release;
-    module_print_class->fill = sp_module_print_gnome_fill;
-    module_print_class->stroke = sp_module_print_gnome_stroke;
-    module_print_class->image = sp_module_print_gnome_image;
-}
-
-static void
-sp_module_print_gnome_init (SPModulePrintGnome *fmod)
+PrintGNOME::PrintGNOME (void)
 {
     /* Nothing here */
 }
 
-static void
-sp_module_print_gnome_finalize (GObject *object)
+PrintGNOME::~PrintGNOME (void)
 {
-    SPModulePrintGnome *gpmod;
-
-    gpmod = (SPModulePrintGnome *) object;
-	
-    G_OBJECT_CLASS (print_gnome_parent_class)->finalize (object);
+	return;
 }
 
-static unsigned int
-sp_module_print_gnome_setup (SPModulePrint *mod)
+unsigned int
+PrintGNOME::setup (Inkscape::Extension::Print *mod)
 {
-    SPModulePrintGnome *gpmod;
     GnomePrintConfig *config;
 #if OLDGnome
     GtkWidget *dlg, *vbox, *sel;
 #endif
     int btn;
-
-    gpmod = (SPModulePrintGnome *) mod;
 
     config = gnome_print_config_default ();
 #if OLDGnome
@@ -154,27 +87,25 @@ sp_module_print_gnome_setup (SPModulePrint *mod)
     gtk_widget_destroy (dlg);
     if (btn != GTK_RESPONSE_OK) return FALSE;
 #endif
-    gpmod->gpc = gnome_print_context_new (config);
+    _gpc = gnome_print_context_new (config);
     gnome_print_config_unref (config);
 
     return TRUE;
 }
 
-static unsigned int
-sp_module_print_gnome_set_preview (SPModulePrint *mod)
+unsigned int
+PrintGNOME::set_preview (Inkscape::Extension::Print *mod)
 {
 #if OLDGnome
-    SPModulePrintGnome *gpmod;
     SPPrintContext ctx;
     GnomePrintContext *gpc;
     GnomePrintMaster *gpm;
     GtkWidget *gpmp;
     gchar *title;
 
-    gpmod = (SPModulePrintGnome *) mod;
 
     gpm = gnome_print_master_new();
-    gpmod->gpc = gnome_print_master_get_context (gpm);
+    _gpc = gnome_print_master_get_context (gpm);
 
     g_return_if_fail (gpm != NULL);
     g_return_if_fail (gpc != NULL);
@@ -200,43 +131,32 @@ sp_module_print_gnome_set_preview (SPModulePrint *mod)
     return 0;
 }
 
-static unsigned int
-sp_module_print_gnome_begin (SPModulePrint *mod, SPDocument *doc)
+unsigned int
+PrintGNOME::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 {
-    SPModulePrintGnome *gpmod;
-
-    gpmod = (SPModulePrintGnome *) mod;
-
-    gnome_print_beginpage (gpmod->gpc, (const guchar *)SP_DOCUMENT_NAME (doc));
-    gnome_print_translate (gpmod->gpc, 0.0, sp_document_height (doc));
+    gnome_print_beginpage (_gpc, (const guchar *)SP_DOCUMENT_NAME (doc));
+    gnome_print_translate (_gpc, 0.0, sp_document_height (doc));
     /* From desktop points to document pixels */
-    gnome_print_scale (gpmod->gpc, 0.8, -0.8);
+    gnome_print_scale (_gpc, 0.8, -0.8);
 
     return 0;
 }
 
-static unsigned int
-sp_module_print_gnome_finish (SPModulePrint *mod)
+unsigned int
+PrintGNOME::finish (Inkscape::Extension::Print *mod)
 {
-    SPModulePrintGnome *gpmod;
-
-    gpmod = (SPModulePrintGnome *) mod;
-
-    gnome_print_showpage (gpmod->gpc);
-    gnome_print_context_close (gpmod->gpc);
+    gnome_print_showpage (_gpc);
+    gnome_print_context_close (_gpc);
 
     return 0;
 }
 
-static unsigned int
-sp_module_print_gnome_bind (SPModulePrint *mod, const NRMatrix *transform, float opacity)
+unsigned int
+PrintGNOME::bind (Inkscape::Extension::Print *mod, const NRMatrix *transform, float opacity)
 {
-    SPModulePrintGnome *gpmod;
     gdouble t[6];
 
-    gpmod = (SPModulePrintGnome *) mod;
-
-    gnome_print_gsave (gpmod->gpc);
+	gnome_print_gsave(_gpc);
 
     t[0] = transform->c[0];
     t[1] = transform->c[1];
@@ -245,33 +165,25 @@ sp_module_print_gnome_bind (SPModulePrint *mod, const NRMatrix *transform, float
     t[4] = transform->c[4];
     t[5] = transform->c[5];
 
-    gnome_print_concat (gpmod->gpc, t);
+    gnome_print_concat (_gpc, t);
 
     /* fixme: Opacity? (lauris) */
 
     return 0;
 }
 
-static unsigned int
-sp_module_print_gnome_release (SPModulePrint *mod)
+unsigned int
+PrintGNOME::release (Inkscape::Extension::Print *mod)
 {
-    SPModulePrintGnome *gpmod;
-
-    gpmod = (SPModulePrintGnome *) mod;
-
-    gnome_print_grestore (gpmod->gpc);
-
+    gnome_print_grestore (_gpc);
     return 0;
 }
 
-static unsigned int
-sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+unsigned int
+PrintGNOME::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-    SPModulePrintGnome *gpmod;
     gdouble t[6];
-
-    gpmod = (SPModulePrintGnome *) mod;
 
     /* CTM is for information purposes only */
     /* We expect user coordinate system to be set up already */
@@ -286,18 +198,18 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
     if (style->fill.type == SP_PAINT_TYPE_COLOR) {
 	float rgb[3], opacity;
 	sp_color_get_rgb_floatv (&style->fill.value.color, rgb);
-	gnome_print_setrgbcolor (gpmod->gpc, rgb[0], rgb[1], rgb[2]);
+	gnome_print_setrgbcolor (_gpc, rgb[0], rgb[1], rgb[2]);
 
 	/* fixme: */
 	opacity = SP_SCALE24_TO_FLOAT (style->fill_opacity.value) * SP_SCALE24_TO_FLOAT (style->opacity.value);
-	gnome_print_setopacity (gpmod->gpc, opacity);
+	gnome_print_setopacity (_gpc, opacity);
 
-	gnome_print_bpath (gpmod->gpc, bpath->path, FALSE);
+	gnome_print_bpath (_gpc, bpath->path, FALSE);
 
 	if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
-	    gnome_print_eofill (gpmod->gpc);
+	    gnome_print_eofill (_gpc);
 	} else {
-	    gnome_print_fill (gpmod->gpc);
+	    gnome_print_fill (_gpc);
 	}
     } else if (style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
 	SPPainter *painter;
@@ -326,14 +238,14 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 
 	    nr_matrix_invert (&d2i, ctm);
 
-	    gnome_print_gsave (gpmod->gpc);
+	    gnome_print_gsave (_gpc);
 
-	    gnome_print_bpath (gpmod->gpc, bpath->path, FALSE);
+	    gnome_print_bpath (_gpc, bpath->path, FALSE);
 
 	    if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
-		gnome_print_eoclip (gpmod->gpc);
+		gnome_print_eoclip (_gpc);
 	    } else {
-		gnome_print_clip (gpmod->gpc);
+		gnome_print_clip (_gpc);
 	    }
 	    dd2i[0] = d2i.c[0];
 	    dd2i[1] = d2i.c[1];
@@ -341,22 +253,22 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 	    dd2i[3] = d2i.c[3];
 	    dd2i[4] = d2i.c[4];
 	    dd2i[5] = d2i.c[5];
-	    gnome_print_concat (gpmod->gpc, dd2i);
+	    gnome_print_concat (_gpc, dd2i);
 	    /* Now we are in desktop coordinates */
 	    for (y = ibox.y0; y < ibox.y1; y+= 64) {
 		for (x = ibox.x0; x < ibox.x1; x+= 64) {
 		    NRPixBlock pb;
 		    nr_pixblock_setup_fast (&pb, NR_PIXBLOCK_MODE_R8G8B8A8N, x, y, x + 64, y + 64, TRUE);
 		    painter->fill (painter, &pb);
-		    gnome_print_gsave (gpmod->gpc);
-		    gnome_print_translate (gpmod->gpc, x, y + 64);
-		    gnome_print_scale (gpmod->gpc, 64, -64);
-		    gnome_print_rgbaimage (gpmod->gpc, NR_PIXBLOCK_PX (&pb), 64, 64, pb.rs);
-		    gnome_print_grestore (gpmod->gpc);
+		    gnome_print_gsave (_gpc);
+		    gnome_print_translate (_gpc, x, y + 64);
+		    gnome_print_scale (_gpc, 64, -64);
+		    gnome_print_rgbaimage (_gpc, NR_PIXBLOCK_PX (&pb), 64, 64, pb.rs);
+		    gnome_print_grestore (_gpc);
 		    nr_pixblock_release (&pb);
 		}
 	    }
-	    gnome_print_grestore (gpmod->gpc);
+	    gnome_print_grestore (_gpc);
 	    sp_painter_free (painter);
 	}
     }
@@ -364,14 +276,11 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
     return 0;
 }
 
-static unsigned int
-sp_module_print_gnome_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+unsigned int
+PrintGNOME::stroke (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			      const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-    SPModulePrintGnome *gpmod;
     gdouble t[6];
-
-    gpmod = (SPModulePrintGnome *) mod;
 
     /* CTM is for information purposes only */
     /* We expect user coordinate system to be set up already */
@@ -386,38 +295,35 @@ sp_module_print_gnome_stroke (SPModulePrint *mod, const NRBPath *bpath, const NR
     if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
 	float rgb[3], opacity;
 	sp_color_get_rgb_floatv (&style->stroke.value.color, rgb);
-	gnome_print_setrgbcolor (gpmod->gpc, rgb[0], rgb[1], rgb[2]);
+	gnome_print_setrgbcolor (_gpc, rgb[0], rgb[1], rgb[2]);
 
 	/* fixme: */
 	opacity = SP_SCALE24_TO_FLOAT (style->stroke_opacity.value) * SP_SCALE24_TO_FLOAT (style->opacity.value);
-	gnome_print_setopacity (gpmod->gpc, opacity);
+	gnome_print_setopacity (_gpc, opacity);
 
 	if (style->stroke_dash.n_dash > 0) {
-	    gnome_print_setdash (gpmod->gpc, style->stroke_dash.n_dash, style->stroke_dash.dash, style->stroke_dash.offset);
+	    gnome_print_setdash (_gpc, style->stroke_dash.n_dash, style->stroke_dash.dash, style->stroke_dash.offset);
 	} else {
-	    gnome_print_setdash (gpmod->gpc, 0, NULL, 0.0);
+	    gnome_print_setdash (_gpc, 0, NULL, 0.0);
 	}
 
-	gnome_print_setlinewidth (gpmod->gpc, style->stroke_width.computed);
-	gnome_print_setlinejoin (gpmod->gpc, style->stroke_linejoin.computed);
-	gnome_print_setlinecap (gpmod->gpc, style->stroke_linecap.computed);
+	gnome_print_setlinewidth (_gpc, style->stroke_width.computed);
+	gnome_print_setlinejoin (_gpc, style->stroke_linejoin.computed);
+	gnome_print_setlinecap (_gpc, style->stroke_linecap.computed);
 
-	gnome_print_bpath (gpmod->gpc, bpath->path, FALSE);
+	gnome_print_bpath (_gpc, bpath->path, FALSE);
 
-	gnome_print_stroke (gpmod->gpc);
+	gnome_print_stroke (_gpc);
     }
 
     return 0;
 }
 
-static unsigned int
-sp_module_print_gnome_image (SPModulePrint *mod, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
+unsigned int
+PrintGNOME::image (Inkscape::Extension::Print *mod, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
 			     const NRMatrix *transform, const SPStyle *style)
 {
-    SPModulePrintGnome *gpmod;
     gdouble t[6];
-
-    gpmod = (SPModulePrintGnome *) mod;
 
     t[0] = transform->c[0];
     t[1] = transform->c[1];
@@ -426,9 +332,9 @@ sp_module_print_gnome_image (SPModulePrint *mod, unsigned char *px, unsigned int
     t[4] = transform->c[4];
     t[5] = transform->c[5];
 
-    gnome_print_gsave (gpmod->gpc);
+    gnome_print_gsave (_gpc);
 
-    gnome_print_concat (gpmod->gpc, t);
+    gnome_print_concat (_gpc, t);
 
     if (style->opacity.value != SP_SCALE24_MAX) {
 	guchar *dpx, *d, *s;
@@ -446,14 +352,34 @@ sp_module_print_gnome_image (SPModulePrint *mod, unsigned char *px, unsigned int
 		d += 4;
 	    }
 	}
-	gnome_print_rgbaimage (gpmod->gpc, dpx, w, h, w * 4);
+	gnome_print_rgbaimage (_gpc, dpx, w, h, w * 4);
 	g_free (dpx);
     } else {
-	gnome_print_rgbaimage (gpmod->gpc, px, w, h, rs);
+	gnome_print_rgbaimage (_gpc, px, w, h, rs);
     }
 
-    gnome_print_grestore (gpmod->gpc);
+    gnome_print_grestore (_gpc);
 
     return 0;
 }
 
+void
+PrintGNOME::init (void)
+{
+	Inkscape::Extension::Extension * ext;
+	
+	/* SVG in */
+    ext = sp_module_system_build_from_mem(
+		"<spmodule>\n"
+			"<name>GNOME Print</name>\n"
+			"<id>" SP_MODULE_KEY_PRINT_GNOME "</id>\n"
+			"<print/>\n"
+		"</spmodule>");
+	ext->set_implementation(new PrintGNOME());
+
+	return;
+}
+
+}; /* namespace Internal */
+}; /* namespace Extension */
+}; /* namespace Inkscape */

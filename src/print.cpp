@@ -25,8 +25,10 @@
 #include "style.h"
 #include "sp-paint-server.h"
 #include "extension/extension.h"
+#include "extension/system.h"
 #include "print.h"
 
+#if 0
 #include <extension/internal/ps.h>
 
 #ifdef WIN32
@@ -36,11 +38,12 @@
 #ifdef WITH_GNOME_PRINT
 #include <extension/internal/gnome.h>
 #endif
+#endif
 
 /* Identity typedef */
 
 struct _SPPrintContext {
-	SPModulePrint module;
+	Inkscape::Extension::Print * module;
 };
 
 unsigned int sp_print_bind(SPPrintContext *ctx, NR::Matrix const &transform, float opacity)
@@ -52,39 +55,27 @@ unsigned int sp_print_bind(SPPrintContext *ctx, NR::Matrix const &transform, flo
 unsigned int
 sp_print_bind (SPPrintContext *ctx, const NRMatrix *transform, float opacity)
 {
-	if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->bind)
-		return ((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->bind (SP_MODULE_PRINT (ctx), transform, opacity);
-
-	return 0;
+	return ctx->module->bind(transform, opacity);
 }
 
 unsigned int
 sp_print_release (SPPrintContext *ctx)
 {
-	if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->release)
-		return ((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->release (SP_MODULE_PRINT (ctx));
-
-	return 0;
+	return ctx->module->release();
 }
 
 unsigned int
 sp_print_fill (SPPrintContext *ctx, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 	       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-	if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->fill)
-		return ((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->fill (SP_MODULE_PRINT (ctx), bpath, ctm, style, pbox, dbox, bbox);
-
-	return 0;
+	return ctx->module->fill(bpath, ctm, style, pbox, dbox, bbox);
 }
 
 unsigned int
 sp_print_stroke (SPPrintContext *ctx, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 		 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-	if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->stroke)
-		return ((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->stroke (SP_MODULE_PRINT (ctx), bpath, ctm, style, pbox, dbox, bbox);
-
-	return 0;
+	return ctx->module->stroke(bpath, ctm, style, pbox, dbox, bbox);
 }
 
 unsigned int
@@ -92,10 +83,7 @@ sp_print_image_R8G8B8A8_N (SPPrintContext *ctx,
 			   guchar *px, unsigned int w, unsigned int h, unsigned int rs,
 			   const NRMatrix *transform, const SPStyle *style)
 {
-	if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->image)
-		return ((SPModulePrintClass *) G_OBJECT_GET_CLASS (ctx))->image (SP_MODULE_PRINT (ctx), px, w, h, rs, transform, style);
-
-	return 0;
+	return ctx->module->image(px, w, h, rs, transform, style);
 }
 
 
@@ -107,27 +95,19 @@ sp_print_image_R8G8B8A8_N (SPPrintContext *ctx,
 void
 sp_print_preview_document (SPDocument *doc)
 {
-	SPModulePrint *mod;
+	Inkscape::Extension::Print *mod;
 	unsigned int ret;
 
 	sp_document_ensure_up_to_date (doc);
 
-#ifdef WIN32
-	mod = (SPModulePrint *) g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
-#else
-// Some unix probably
-#ifdef WITH_GNOME_PRINT
-	mod = (SPModulePrint *) sp_module_new (SP_TYPE_MODULE_PRINT_GNOME, NULL);
-#else
-	mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
-#endif
-#endif
+	mod = sp_module_system_get_print(SP_MODULE_KEY_PRINT_DEFAULT);
 
-	ret = FALSE;
-	if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->set_preview)
-		ret = ((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->set_preview (mod);
+	ret = mod->set_preview ();
 
 	if (ret) {
+		SPPrintContext context;
+		context.module = mod;
+
 		/* fixme: This has to go into module constructor somehow */
 		/* Create new arena */
 		mod->base = SP_ITEM (sp_document_root (doc));
@@ -135,11 +115,9 @@ sp_print_preview_document (SPDocument *doc)
 		mod->dkey = sp_item_display_key_new (1);
 		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
 		/* Print document */
-		if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->begin)
-			ret = ((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->begin (mod, doc);
-		sp_item_invoke_print (mod->base, (SPPrintContext *) mod);
-		if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->finish)
-			ret = ((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->finish (mod);
+		ret = mod->begin (doc);
+		sp_item_invoke_print (mod->base, &context);
+		ret = mod->finish ();
 		/* Release arena */
 		sp_item_invoke_hide (mod->base, mod->dkey);
 		mod->base = NULL;
@@ -149,37 +127,29 @@ sp_print_preview_document (SPDocument *doc)
 		mod->arena = NULL;
 	}
 
-	g_object_unref (G_OBJECT (mod));
+	return;
 }
 
 void
 sp_print_document (SPDocument *doc, unsigned int direct)
 {
-	SPModulePrint *mod;
+	Inkscape::Extension::Print *mod;
 	unsigned int ret;
 
 	sp_document_ensure_up_to_date (doc);
 
-	mod = NULL;
-	if (direct) 
-	    mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
+	if (direct) {
+		mod = sp_module_system_get_print(SP_MODULE_KEY_PRINT_PS);
+	} else {
+		mod = sp_module_system_get_print(SP_MODULE_KEY_PRINT_DEFAULT);
+	}
 
-#ifdef WIN32
-	if (!direct) 
-	    mod = (SPModulePrint *)g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
-#endif
-#ifdef WITH_GNOME_PRINT
-	if (!direct) 
-	    mod = (SPModulePrint *)g_object_new (SP_TYPE_MODULE_PRINT_GNOME, NULL);
-#endif
-	if (!mod) 
-	    mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
-
-	ret = FALSE;
-	if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->setup)
-	    ret = ((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->setup (mod);
+	ret = mod->setup();
 
 	if (ret) {
+		SPPrintContext context;
+		context.module = mod;
+
 		/* fixme: This has to go into module constructor somehow */
 		/* Create new arena */
 		mod->base = SP_ITEM (sp_document_root (doc));
@@ -187,11 +157,9 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 		mod->dkey = sp_item_display_key_new (1);
 		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
 		/* Print document */
-		if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->begin)
-			ret = ((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->begin (mod, doc);
-		sp_item_invoke_print (mod->base, (SPPrintContext *) mod);
-		if (((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->finish)
-			ret = ((SPModulePrintClass *) G_OBJECT_GET_CLASS (mod))->finish (mod);
+		ret = mod->begin (doc);
+		sp_item_invoke_print (mod->base, &context);
+		ret = mod->finish ();
 		/* Release arena */
 		sp_item_invoke_hide (mod->base, mod->dkey);
 		mod->base = NULL;
@@ -201,7 +169,7 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 		mod->arena = NULL;
 	}
 
-	g_object_unref (G_OBJECT (mod));
+	return;
 }
 
 void

@@ -18,13 +18,13 @@
 #include <sp-object.h>
 #include <document.h>
 #include <dir-util.h>
-#include <extension.h>
+#include "../implementation/implementation.h"
 #include "svg.h"
-#include "../system.h"
+#include <extension/system.h>
 
-/* Prototypes */
-static void svg_save (SPModule *mod, SPDocument *doc, const gchar *uri);
-static SPDocument * svg_open (SPModule *mod, const gchar *uri);
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
 
 /**
 	\return   None
@@ -39,13 +39,12 @@ static SPDocument * svg_open (SPModule *mod, const gchar *uri);
 	the end of each call.
 */
 void
-svg_init(void)
+Svg::init(void)
 {
-	SPModuleInput * imod;
-	SPModuleOutput * omod;
-
+	Inkscape::Extension::Extension * ext;
+	
 	/* SVG in */
-    imod = SP_MODULE_INPUT(sp_module_system_build_from_mem(
+    ext = sp_module_system_build_from_mem(
 		"<spmodule>\n"
 			"<name>SVG Input</name>\n"
 			"<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
@@ -55,12 +54,11 @@ svg_init(void)
 				"<filetypename>Scalable Vector Graphic (SVG)</filetypename>\n"
 				"<filetypetooltip>Inkscape native file format and W3C standard</filetypetooltip>\n"
 			"</input>\n"
-		"</spmodule>"));
-	g_return_if_fail(imod != NULL);
-	imod->open = svg_open;
+		"</spmodule>");
+	ext->set_implementation(new Svg());
 
 	/* SVG out Inkscape*/
-    omod = SP_MODULE_OUTPUT(sp_module_system_build_from_mem(
+    ext = sp_module_system_build_from_mem(
 		"<spmodule>\n"
 			"<name>SVG Output Inkscape</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</id>\n"
@@ -70,12 +68,11 @@ svg_init(void)
 				"<filetypename>SVG with extension namespaces</filetypename>\n"
 				"<filetypetooltip>Scalable Vector Graphics format with Inkscape extensions</filetypetooltip>\n"
 			"</output>\n"
-		"</spmodule>"));
-	g_return_if_fail(omod != NULL);
-	omod->save = svg_save;
+		"</spmodule>");
+	ext->set_implementation(new Svg());
 
 	/* SVG out */
-    omod = SP_MODULE_OUTPUT(sp_module_system_build_from_mem(
+    ext = sp_module_system_build_from_mem(
 		"<spmodule>\n"
 			"<name>SVG Output</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG "</id>\n"
@@ -85,9 +82,8 @@ svg_init(void)
 				"<filetypename>Plain SVG</filetypename>\n"
 				"<filetypetooltip>Scalable Vector Graphics format</filetypetooltip>\n"
 			"</output>\n"
-		"</spmodule>"));
-	g_return_if_fail(omod != NULL);
-	omod->save = svg_save;
+		"</spmodule>");
+	ext->set_implementation(new Svg());
 
 	return;
 }
@@ -101,8 +97,8 @@ svg_init(void)
 
 	This function is really simple, it just calles sp_document_new...
 */
-static SPDocument *
-svg_open (SPModule *mod, const gchar *uri)
+SPDocument *
+Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
 	return sp_document_new (uri, TRUE, TRUE);
 }
@@ -116,7 +112,7 @@ svg_open (SPModule *mod, const gchar *uri)
 	\param     doc   Document to save.
 	\param     uri   The filename to save the file to.
 
-	This function first checks its parameters, and makes sure that
+	This function first checks it's parameters, and makes sure that
 	we're getting good data.  It also checks the module ID of the
 	incoming module to figure out if this is save should include
 	the Inkscape namespace stuff or not.  The result of that comparison
@@ -131,8 +127,8 @@ svg_open (SPModule *mod, const gchar *uri)
 	This really needs to be fleshed out more, but I don't quite understand
 	all of this code.  I just stole it.
 */
-static void
-svg_save (SPModule *mod, SPDocument *doc, const gchar *uri)
+void
+Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 {
 	SPRepr *repr;
 	gboolean spns;
@@ -143,10 +139,20 @@ svg_save (SPModule *mod, SPDocument *doc, const gchar *uri)
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(uri != NULL);
 
-	// are we saving with extension namespaces?
-	spns = (!SP_MODULE_ID (mod) || !strcmp (SP_MODULE_ID (mod), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+	save_path = g_dirname (uri);
 
-	// first take care of the images
+	spns = (!mod->get_id() || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+	if (spns) {
+		rdoc = NULL;
+		repr = sp_document_repr_root (doc);
+		sp_repr_set_attr (repr, "sodipodi:docbase", save_path);
+		sp_repr_set_attr (repr, "sodipodi:docname", uri);
+	} else {
+		rdoc = sp_repr_document_new ("svg");
+		repr = sp_repr_document_root (rdoc);
+		repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD);
+	}
+
 	images = sp_document_get_resource_list (doc, "image");
 	for (l = images; l != NULL; l = l->next) {
 		SPRepr *ir;
@@ -157,30 +163,18 @@ svg_save (SPModule *mod, SPDocument *doc, const gchar *uri)
 			href = sp_repr_attr (ir, "sodipodi:absref");
 		}
 		if (href && g_path_is_absolute (href)) {
-			// TODO: this returns . for filename-only, so instead we want to use g_path_get_dirname() from an absolutized (and normalized) path
-			save_path = g_dirname (uri);
-			// TODO: can we use inkscape_abs2rel()?
 			relname = sp_relative_path_from_path (href, save_path);
 			sp_repr_set_attr (ir, "xlink:href", relname);
 		}
 	}
 
-	if (spns) {
-		// first set the sodipodi:docbase and sodipodi:docname attributes
-		sp_document_set_uri (doc, uri);
-		// for saving with extensions, simply write the document's repr
-		repr = sp_document_repr_root (doc);
-		sp_repr_save_file (sp_repr_document (repr), uri);
-	} else {
-		// create a new empty repr
-		rdoc = sp_repr_document_new ("svg");
-		repr = sp_repr_document_root (rdoc);
-		// write a copy of the document repr without extensions
-		repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD);
-		// save that copy
-		sp_repr_save_file (sp_repr_document (repr), uri);
-		// clean up
-		sp_repr_document_unref (rdoc);
-	}
+	/* TODO: */
+	sp_repr_save_file (sp_repr_document (repr), uri);
+	sp_document_set_uri (doc, uri);
+
+	if (!spns) sp_repr_document_unref (rdoc);
+
+	return;
 }
 
+};};}; /* namespace inkscape, module, implementation */

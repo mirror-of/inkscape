@@ -17,11 +17,11 @@
 
 #include <extension/extension.h>
 
-SPModule * sp_module_db_get (const gchar *key);
-void sp_module_db_register (SPModule *module);
-void sp_module_db_unregister (SPModule *module);
+Inkscape::Extension::Extension * sp_module_db_get (const gchar *key);
+void sp_module_db_register (Inkscape::Extension::Extension *module);
+void sp_module_db_unregister (Inkscape::Extension::Extension *module);
 const gchar *sp_module_db_get_unique_id (gchar *c, int len, const gchar *val);
-void sp_module_db_foreach (void (*in_func)(SPModule * in_plug, gpointer in_data), gpointer in_data);
+void sp_module_db_foreach (void (*in_func)(Inkscape::Extension::Extension * in_plug, gpointer in_data), gpointer in_data);
 
 #endif /* __MODULES_DB_H__ */
 

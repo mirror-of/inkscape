@@ -1,13 +1,15 @@
-#ifndef __SP_MODULE_WIN32_H__
-#define __SP_MODULE_WIN32_H__
+#ifndef __INKSCAPE_EXTENSION_INTERNAL_PRINT_WIN32_H__
+#define __INKSCAPE_EXTENSION_INTERNAL_PRINT_WIN32_H__
 
 /*
  * Windows stuff
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Ted Gould <ted@gould.cx>
  *
- * This code is in public domain
+ * Lauris: This code is in public domain
+ * Ted: This code is released under the GNU GPL
  */
 
 #include <config.h>
@@ -21,49 +23,66 @@
 #endif
 #include <windows.h>
 
-#include <extension.h>
+#include <extension/extension.h>
+#include <extension/implementation/implementation.h>
+
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
 
 /* Initialization */
 
-void sp_win32_init (int argc, char **argv, const char *name);
-void sp_win32_finish (void);
-
-/* Platform detection */
-gboolean sp_win32_is_os_wide();
-
-
-/* Printing */
-
-#define SP_TYPE_MODULE_PRINT_WIN32 (sp_module_print_win32_get_type())
-#define SP_MODULE_PRINT_WIN32(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE_PRINT_WIN32, SPModulePrintWin32))
-#define SP_IS_MODULE_PRINT_WIN32(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MODULE_PRINT_WIN32))
-
-typedef struct _SPModulePrintWin32 SPModulePrintWin32;
-typedef struct _SPModulePrintWin32Class SPModulePrintWin32Class;
-
-struct _SPModulePrintWin32 {
-	SPModulePrint module;
-
+class PrintWin32 : public Inkscape::Extension::Implementation::Implementation {
 	/* Document dimensions */
-	float PageWidth;
-	float PageHeight;
+	float _PageWidth;
+	float _PageHeight;
 
-	HDC hDC;
+	HDC _hDC;
 
-	unsigned int landscape;
+	unsigned int _landscape;
+
+	void main_init (int argc, char **argv, const char *name);
+	void finish (void);
+
+	/* File dialogs */
+	char *get_open_filename (unsigned char *dir, unsigned char *filter, unsigned char *title);
+	char *get_write_filename (unsigned char *dir, unsigned char *filter, unsigned char *title);
+	char *get_save_filename (unsigned char *dir, unsigned int *spns);
+
+	/* Platform detection */
+	gboolean is_os_wide();
+
+	void gdk_event_handler (GdkEvent *event);
+	VOID CALLBACK timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
+	UINT_PTR CALLBACK print_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
+
+public:
+	PrintWin32 (void);
+	virtual ~PrintWin32 (void);
+
+	/* Print functions */
+	virtual unsigned int setup (Inkscape::Extension::Print * module);
+	virtual unsigned int set_preview (Inkscape::Extension::Print * module);
+
+	virtual unsigned int begin (Inkscape::Extension::Print * module, SPDocument *doc);
+	virtual unsigned int finish (Inkscape::Extension::Print * module);
+
+	/* Rendering methods */
+	virtual unsigned int bind (Inkscape::Extension::Print * module, const NRMatrix *transform, float opacity);
+	virtual unsigned int release (Inkscape::Extension::Print * module);
+	virtual unsigned int fill (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+			       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+	virtual unsigned int stroke (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
+				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+	virtual unsigned int image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
+				const NRMatrix *transform, const SPStyle *style);
+
+	static void init (void);
+
 };
 
-struct _SPModulePrintWin32Class {
-	SPModulePrintClass module_print_class;
-};
+}; /* namespace Internal */
+}; /* namespace Extension */
+}; /* namespace Inkscape */
 
-GType sp_module_print_win32_get_type (void);
-
-/* File dialogs */
-
-char *sp_win32_get_open_filename (unsigned char *dir, unsigned char *filter, unsigned char *title);
-char *sp_win32_get_write_filename (unsigned char *dir, unsigned char *filter, unsigned char *title);
-
-char *sp_win32_get_save_filename (unsigned char *dir, unsigned int *spns);
-
-#endif
+#endif /* __INKSCAPE_EXTENSION_INTERNAL_PRINT_WIN32_H__ */

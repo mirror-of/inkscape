@@ -9,8 +9,6 @@
  * This code is in public domain
  */
 
-#define USE_TIMER
-
 #include <config.h>
 
 #include <libnr/nr-macros.h>
@@ -24,10 +22,14 @@
 
 /* Initialization */
 
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
+
 static unsigned int SPWin32Modal = FALSE;
 
-static void
-sp_win32_gdk_event_handler (GdkEvent *event)
+void
+PrintWin32::gdk_event_handler (GdkEvent *event)
 {
 	if (SPWin32Modal) {
 		/* Win32 widget is modal, filter events */
@@ -57,20 +59,20 @@ sp_win32_gdk_event_handler (GdkEvent *event)
 }
 
 void
-sp_win32_init (int argc, char **argv, const char *name)
+PrintWin32::main_init (int argc, char **argv, const char *name)
 {
 	gdk_event_handler_set ((GdkEventFunc) sp_win32_gdk_event_handler, NULL, NULL);
 }
 
 void
-sp_win32_finish (void)
+PrintWin32::finish (void)
 {
 }
 
 #define SP_FOREIGN_MAX_ITER 10
 
 VOID CALLBACK
-sp_win32_timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+PrintWin32::timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 	int cdown = 0;
 	while ((cdown++ < SP_FOREIGN_MAX_ITER) && gdk_events_pending ()) {
@@ -83,7 +85,7 @@ sp_win32_timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 /* Platform detection */
 
 gboolean
-sp_win32_is_os_wide()
+PrintWin32::is_os_wide()
 {
 	static gboolean initialized = FALSE;
 	static gboolean is_wide = FALSE;
@@ -112,76 +114,21 @@ sp_win32_is_os_wide()
 
 /* Printing */
 
-static void sp_module_print_win32_class_init (SPModulePrintWin32Class *klass);
-static void sp_module_print_win32_init (SPModulePrintWin32 *pmod);
-static void sp_module_print_win32_finalize (GObject *object);
-
-static unsigned int sp_module_print_win32_setup (SPModulePrint *mod);
-static unsigned int sp_module_print_win32_begin (SPModulePrint *mod, SPDocument *doc);
-static unsigned int sp_module_print_win32_finish (SPModulePrint *mod);
-
-static SPModulePrintClass *print_win32_parent_class;
-
-GType
-sp_module_print_win32_get_type (void)
-{
-	static GType type = 0;
-	if (!type) {
-		GTypeInfo info = {
-			sizeof (SPModulePrintWin32Class),
-			NULL, NULL,
-			(GClassInitFunc) sp_module_print_win32_class_init,
-			NULL, NULL,
-			sizeof (SPModulePrintWin32),
-			16,
-			(GInstanceInitFunc) sp_module_print_win32_init,
-		};
-		type = g_type_register_static (SP_TYPE_MODULE_PRINT, "SPModulePrintWin32", &info, (GTypeFlags)0);
-	}
-	return type;
-}
-
-static void
-sp_module_print_win32_class_init (SPModulePrintWin32Class *klass)
-{
-	GObjectClass *g_object_class;
-	SPModulePrintClass *module_print_class;
-
-	g_object_class = (GObjectClass *)klass;
-	module_print_class = (SPModulePrintClass *) klass;
-
-	print_win32_parent_class = (SPModulePrintClass *)g_type_class_peek_parent (klass);
-
-	g_object_class->finalize = sp_module_print_win32_finalize;
-
-	module_print_class->setup = sp_module_print_win32_setup;
-	module_print_class->begin = sp_module_print_win32_begin;
-	module_print_class->finish = sp_module_print_win32_finish;
-
-}
-
-static void
-sp_module_print_win32_init (SPModulePrintWin32 *pmod)
+void
+PrintWin32::PrintWin32 (void)
 {
 	/* Nothing here */
 }
 
-static void
-sp_module_print_win32_finalize (GObject *object)
+void
+PrintWin32::~PrintWin32 (void)
 {
-	SPModulePrintWin32 *w32mod;
-
-	w32mod = (SPModulePrintWin32 *) object;
-	
-	DeleteDC (w32mod->hDC);
-
-	G_OBJECT_CLASS (print_win32_parent_class)->finalize (object);
+	DeleteDC (_hDC);
 }
 
-#ifdef USE_TIMER
 
 UINT_PTR CALLBACK
-sp_w32_print_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+PrintWin32::print_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
 #if 0
 	int cdown = 0;
@@ -192,12 +139,10 @@ sp_w32_print_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 #endif
 	return 0;
 }
-#endif
 
-static unsigned int
-sp_module_print_win32_setup (SPModulePrint *mod)
+unsigned int
+PrintWin32::setup (Inkscape::Extension::Print *mod)
 {
-	SPModulePrintWin32 *w32mod;
 	HRESULT res;
 	PRINTDLG pd = {
 		sizeof (PRINTDLG),
@@ -212,33 +157,25 @@ sp_module_print_win32_setup (SPModulePrint *mod)
 		0, /* lCustData */
 		NULL, NULL, NULL, NULL, NULL, NULL
 	};
-#ifdef USE_TIMER
 	UINT_PTR timer;
-#endif
 	int caps;
 
-	w32mod = (SPModulePrintWin32 *) mod;
-
 	SPWin32Modal = TRUE;
-#ifdef USE_TIMER
 	pd.Flags |= PD_ENABLEPRINTHOOK;
 	pd.lpfnPrintHook = sp_w32_print_hook;
 	timer = SetTimer (NULL, 0, 40, sp_win32_timer);
-#endif
 
 	res = PrintDlg (&pd);
 
-#ifdef USE_TIMER
 	KillTimer (NULL, timer);
-#endif
 	SPWin32Modal = FALSE;
 
 	if (!res) return FALSE;
 
-	w32mod->hDC = pd.hDC;
+	_hDC = pd.hDC;
 
 #if 0
-	caps = GetDeviceCaps (w32mod->hDC, RASTERCAPS);
+	caps = GetDeviceCaps (_hDC, RASTERCAPS);
 	if (caps & RC_BANDING) {
 		printf ("needs banding\n");
 	}
@@ -256,17 +193,16 @@ sp_module_print_win32_setup (SPModulePrint *mod)
 		DEVMODE *devmodep;
 		devmodep = (DEVMODE *)pd.hDevMode;
 		if (devmodep->dmFields & DM_ORIENTATION) {
-			w32mod->landscape = (devmodep->dmOrientation == DMORIENT_LANDSCAPE);
+			_landscape = (devmodep->dmOrientation == DMORIENT_LANDSCAPE);
 		}
 	}
 
 	return TRUE;
 }
 
-static unsigned int
-sp_module_print_win32_begin (SPModulePrint *mod, SPDocument *doc)
+unsigned int
+PrintWin32::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 {
-	SPModulePrintWin32 *w32mod;
 	DOCINFO di = {
 		sizeof (DOCINFO),
 		NULL, /* lpszDocName */
@@ -276,27 +212,24 @@ sp_module_print_win32_begin (SPModulePrint *mod, SPDocument *doc)
 	};
 	int res;
 
-	w32mod = (SPModulePrintWin32 *) mod;
-
-	w32mod->PageWidth = sp_document_width (doc);
-	w32mod->PageHeight = sp_document_height (doc);
+	_PageWidth = sp_document_width (doc);
+	_PageHeight = sp_document_height (doc);
 
 	di.lpszDocName = SP_DOCUMENT_NAME (doc);
 
 	SPWin32Modal = TRUE;
 
-	res = StartDoc (w32mod->hDC, &di);
-	res = StartPage (w32mod->hDC);
+	res = StartDoc (_hDC, &di);
+	res = StartPage (_hDC);
 
 	SPWin32Modal = FALSE;
 
 	return 0;
 }
 
-static unsigned int
-sp_module_print_win32_finish (SPModulePrint *mod)
+unsigned int
+PrintWin32::finish (Inkscape::Extension::Print *mod)
 {
-	SPModulePrintWin32 *w32mod;
 	int dpiX, dpiY;
 	int pPhysicalWidth, pPhysicalHeight;
 	int pPhysicalOffsetX, pPhysicalOffsetY;
@@ -326,22 +259,20 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 	RECT wrect;
 	int res;
 
-	w32mod = (SPModulePrintWin32 *) mod;
-
 	SPWin32Modal = TRUE;
 
 	// Number of pixels per logical inch
-	dpiX = (float) GetDeviceCaps (w32mod->hDC, LOGPIXELSX);
-	dpiY = (float) GetDeviceCaps (w32mod->hDC, LOGPIXELSY);
+	dpiX = (float) GetDeviceCaps (_hDC, LOGPIXELSX);
+	dpiY = (float) GetDeviceCaps (_hDC, LOGPIXELSY);
 	// Size in pixels of the printable area
-	pPhysicalWidth = GetDeviceCaps (w32mod->hDC, PHYSICALWIDTH); 
-	pPhysicalHeight = GetDeviceCaps (w32mod->hDC, PHYSICALHEIGHT); 
+	pPhysicalWidth = GetDeviceCaps (_hDC, PHYSICALWIDTH); 
+	pPhysicalHeight = GetDeviceCaps (_hDC, PHYSICALHEIGHT); 
 	// Top left corner of prontable area
-	pPhysicalOffsetX = GetDeviceCaps (w32mod->hDC, PHYSICALOFFSETX); 
-	pPhysicalOffsetY = GetDeviceCaps (w32mod->hDC, PHYSICALOFFSETY); 
+	pPhysicalOffsetX = GetDeviceCaps (_hDC, PHYSICALOFFSETX); 
+	pPhysicalOffsetY = GetDeviceCaps (_hDC, PHYSICALOFFSETY); 
 	// Size in pixels of the printable area
-	pPrintableWidth = GetDeviceCaps (w32mod->hDC, HORZRES); 
-	pPrintableHeight = GetDeviceCaps (w32mod->hDC, VERTRES); 
+	pPrintableWidth = GetDeviceCaps (_hDC, HORZRES); 
+	pPrintableHeight = GetDeviceCaps (_hDC, VERTRES); 
 
 	// Scaling from document to device
 	scalex = dpiX / 72.0;
@@ -362,8 +293,8 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 	y0 = pPhysicalOffsetY;
 	x1 = x0 + pPrintableWidth;
 	y1 = y0 + pPrintableHeight;
-	x1 = MIN (x1, (int) (w32mod->PageWidth * scalex));
-	y1 = MIN (y1, (int) (w32mod->PageHeight * scaley));
+	x1 = MIN (x1, (int) (_PageWidth * scalex));
+	y1 = MIN (y1, (int) (_PageHeight * scaley));
 
 	width = x1 - x0;
 	height = y1 - y0;
@@ -411,8 +342,8 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 			px[i*4+2] = temp;
 		}
 
-		SetStretchBltMode(w32mod->hDC, COLORONCOLOR);
-		res = StretchDIBits (w32mod->hDC,
+		SetStretchBltMode(_hDC, COLORONCOLOR);
+		res = StretchDIBits (_hDC,
 						bbox.x0 - x0, bbox.y0 - y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0,
 						0, 0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0,
 						px,
@@ -427,8 +358,8 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 
 	nr_free (px);
 
-	res = EndPage (w32mod->hDC);
-	res = EndDoc (w32mod->hDC);
+	res = EndPage (_hDC);
+	res = EndDoc (_hDC);
 
 	SPWin32Modal = FALSE;
 
@@ -438,7 +369,7 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 /* File dialogs */
 
 char *
-sp_win32_get_open_filename (unsigned char *dir, unsigned char *filter, unsigned char *title)
+PrintWin32::get_open_filename (unsigned char *dir, unsigned char *filter, unsigned char *title)
 {
 	char fnbuf[4096] = {0};
 	OPENFILENAME ofn = {
@@ -464,20 +395,14 @@ sp_win32_get_open_filename (unsigned char *dir, unsigned char *filter, unsigned 
 		NULL /* lpTemplateName */
 	};
 	int retval;
-#ifdef USE_TIMER
 	UINT_PTR timer;
-#endif
 
 	SPWin32Modal = TRUE;
-#ifdef USE_TIMER
 	timer = SetTimer (NULL, 0, 40, sp_win32_timer);
-#endif
 
 	retval = GetOpenFileName (&ofn);
 
-#ifdef USE_TIMER
 	KillTimer (NULL, timer);
-#endif
 	SPWin32Modal = FALSE;
 
 	if (!retval) {
@@ -489,13 +414,13 @@ sp_win32_get_open_filename (unsigned char *dir, unsigned char *filter, unsigned 
 }
 
 char *
-sp_win32_get_write_filename (unsigned char *dir, unsigned char *filter, unsigned char *title)
+PrintWin32::get_write_filename (unsigned char *dir, unsigned char *filter, unsigned char *title)
 {
 	return NULL;
 }
 
 char *
-sp_win32_get_save_filename (unsigned char *dir, unsigned int *spns)
+PrintWin32::get_save_filename (unsigned char *dir, unsigned int *spns)
 {
 	char fnbuf[4096] = {0};
 	OPENFILENAME ofn = {
@@ -521,20 +446,14 @@ sp_win32_get_save_filename (unsigned char *dir, unsigned int *spns)
 		NULL /* lpTemplateName */
 	};
 	int retval;
-#ifdef USE_TIMER
 	UINT_PTR timer;
-#endif
 
 	SPWin32Modal = TRUE;
-#ifdef USE_TIMER
 	timer = SetTimer (NULL, 0, 40, sp_win32_timer);
-#endif
 
 	retval = GetSaveFileName (&ofn);
 
-#ifdef USE_TIMER
 	KillTimer (NULL, timer);
-#endif
 	SPWin32Modal = FALSE;
 
 	if (!retval) {
@@ -546,4 +465,23 @@ sp_win32_get_save_filename (unsigned char *dir, unsigned int *spns)
 	return g_strdup (fnbuf);
 }
 
+void
+PrintWin32::init (void)
+{
+	Inkscape::Extension::Extension * ext;
+	
+	/* SVG in */
+    ext = sp_module_system_build_from_mem(
+		"<spmodule>\n"
+			"<name>Windows 32-bit Print</name>\n"
+			"<id>" SP_MODULE_KEY_PRINT_WIN32 "</id>\n"
+			"<print/>\n"
+		"</spmodule>");
+	ext->set_implementation(new PrintWin32());
 
+	return;
+}
+
+}; /* namespace Internal */
+}; /* namespace Extension */
+}; /* namespace Inkscape */

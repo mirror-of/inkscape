@@ -22,13 +22,13 @@
 #include "system.h"
 #include "db.h"
 
-static void sp_module_menu_open_internal    (SPModule * in_plug,
+static void sp_module_menu_open_internal    (Inkscape::Extension::Extension * in_plug,
                                              gpointer   data);
-static void sp_module_menu_save_internal    (SPModule * in_plug,
+static void sp_module_menu_save_internal    (Inkscape::Extension::Extension * in_plug,
                                              gpointer   data);
-static void sp_module_menu_about_internal   (SPModule * in_plug,
+static void sp_module_menu_about_internal   (Inkscape::Extension::Extension * in_plug,
                                              gpointer   data);
-static void sp_module_menu_filter_internal  (SPModule * in_plug,
+static void sp_module_menu_filter_internal  (Inkscape::Extension::Extension * in_plug,
                                              gpointer   data);
 
 /**
@@ -69,26 +69,26 @@ sp_module_menu_open (void)
 	added using the sp_menu_append function.
 */
 static void
-sp_module_menu_open_internal (SPModule * in_plug, gpointer data)
+sp_module_menu_open_internal (Inkscape::Extension::Extension * in_plug, gpointer data)
 {
-	if (SP_IS_MODULE_INPUT(in_plug)) {
+	if (dynamic_cast<Inkscape::Extension::Input *>(in_plug)) {
 		const gchar * name;
 		const gchar * tooltip;
-		SPModuleInput * imod;
+		Inkscape::Extension::Input * imod;
 
-		imod = SP_MODULE_INPUT(in_plug);
+		imod = dynamic_cast<Inkscape::Extension::Input *>(in_plug);
 
-		name = imod->filetypename;
+		name = imod->get_filetypename();
 		if (name == NULL) {
-			name = in_plug->name;
+			name = in_plug->get_name();
 		}
 
-		tooltip = imod->filetypetooltip;
+		tooltip = imod->get_filetypetooltip();
 
 		sp_menu_append (SP_MENU(data),
 						name,
 						tooltip,
-				        in_plug->id);
+				        in_plug->get_id());
 	}
 
 	return;
@@ -133,26 +133,26 @@ sp_module_menu_save (void)
 	added using the sp_menu_append function.
 */
 static void
-sp_module_menu_save_internal (SPModule * in_plug, gpointer data)
+sp_module_menu_save_internal (Inkscape::Extension::Extension * in_plug, gpointer data)
 {
-	if (SP_IS_MODULE_OUTPUT(in_plug)) {
+	if (dynamic_cast<Inkscape::Extension::Output *>(in_plug)) {
 		const gchar * name;
 		const gchar * tooltip;
-		SPModuleOutput * omod;
+		Inkscape::Extension::Output * omod;
 
-		omod = SP_MODULE_OUTPUT(in_plug);
+		omod = dynamic_cast<Inkscape::Extension::Output *>(in_plug);
 
-		name = omod->filetypename;
+		name = omod->get_filetypename();
 		if (name == NULL) {
-			name = in_plug->name;
+			name = in_plug->get_name();
 		}
 
-		tooltip = omod->filetypetooltip;
+		tooltip = omod->get_filetypetooltip();
 
 		sp_menu_append (SP_MENU(data),
 						name,
 						tooltip,
-				        in_plug->id);
+				        in_plug->get_id());
 	}
 
 	return;
@@ -186,12 +186,12 @@ sp_module_menu_about (void)
 	parameters around.  It will do more in the future.
 */
 static void
-sp_module_menu_about_internal (SPModule * in_plug, gpointer data)
+sp_module_menu_about_internal (Inkscape::Extension::Extension * in_plug, gpointer data)
 {
 	sp_menu_append (SP_MENU(data),
-					in_plug->name,
+					in_plug->get_name(),
 					NULL,
-					in_plug->id);
+					in_plug->get_id());
 
 	return;
 }
@@ -250,18 +250,18 @@ sp_module_menu_filter (void)
 	it is passed the key of the module.
 */
 static void
-sp_module_menu_filter_internal (SPModule * in_plug, gpointer data)
+sp_module_menu_filter_internal (Inkscape::Extension::Extension * in_plug, gpointer data)
 {
-	if (SP_IS_MODULE_FILTER(in_plug)) {
+	if (dynamic_cast<Inkscape::Extension::Filter *>(in_plug)) {
 		GtkWidget * item;
 
-		item = gtk_menu_item_new_with_label(in_plug->name);
+		item = gtk_menu_item_new_with_label(in_plug->get_name());
 		gtk_widget_show(GTK_WIDGET(item));
 		gtk_menu_append(GTK_MENU(data), GTK_WIDGET(item));
 		g_signal_connect(G_OBJECT(item),
 		                 "activate",
                          GTK_SIGNAL_FUNC(sp_module_system_filter),
-                         in_plug->id);
+                         in_plug->get_id());
 	}
 
 	return;

@@ -20,7 +20,7 @@
 /** Holds the callback and user-supplied data used by sp_module_db_foreach_internal()
  * */
 struct ModuleDBForeachClosure {
-	void (* in_func)(SPModule * in_plug, gpointer in_data);
+	void (* in_func)(Inkscape::Extension::Extension * in_plug, gpointer in_data);
 	gpointer in_data;
 };
 
@@ -38,12 +38,11 @@ static void sp_module_db_foreach_internal (gpointer in_key, gpointer in_value, g
 	\param     module  The module to be registered.
 */
 void
-sp_module_db_register (SPModule *module)
+sp_module_db_register (Inkscape::Extension::Extension *module)
 {
-	g_return_if_fail(module != NULL);
-	g_return_if_fail(module->id != NULL);
+	g_return_if_fail(module->get_id() != NULL);
 
-	g_hash_table_insert (moduledict, module->id, module);
+	g_hash_table_insert (moduledict, module->get_id(), module);
 }
 
 /**
@@ -51,17 +50,16 @@ sp_module_db_register (SPModule *module)
 	\param     module  The module to be removed.
 */
 void
-sp_module_db_unregister (SPModule *module)
+sp_module_db_unregister (Inkscape::Extension::Extension * module)
 {
-	g_return_if_fail(module != NULL);
-	g_return_if_fail(module->id != NULL);
+	g_return_if_fail(module->get_id() != NULL);
 
-	g_hash_table_remove (moduledict, module->id);
+	g_hash_table_remove (moduledict, module->get_id());
 }
 
 /**
-	\return    A reference to the SPModule specified by the input key.
-	\brief     This function looks up a SPModule by using its unique
+	\return    A reference to the Inkscape::Extension::Extension specified by the input key.
+	\brief     This function looks up a Inkscape::Extension::Extension by using its unique
 	           id.  It then returns a reference to that module.
 	\param     key   The unique ID of the module
 
@@ -69,19 +67,16 @@ sp_module_db_unregister (SPModule *module)
   	module; the caller is responsible for releasing that reference
 	when it is no longer needed.
 */
-SPModule *
+	Inkscape::Extension::Extension *
 sp_module_db_get (const gchar *key)
 {
-	SPModule *mod;
+	Inkscape::Extension::Extension *mod;
 
 	if (moduledict == NULL) {
 		moduledict = g_hash_table_new (g_str_hash, g_str_equal);
 	}
 
-	mod = (SPModule *)g_hash_table_lookup (moduledict, key);
-	if (mod != NULL) {
-		sp_module_ref (mod);
-	}
+	mod = (Inkscape::Extension::Extension *)g_hash_table_lookup (moduledict, key);
 
 	return mod;
 }
@@ -111,7 +106,7 @@ sp_module_db_get_unique_id (gchar *c, int len, const gchar *val)
 	callback for each one.
 */
 void
-sp_module_db_foreach (void (*in_func)(SPModule * in_plug, gpointer in_data), gpointer in_data)
+sp_module_db_foreach (void (*in_func)(Inkscape::Extension::Extension * in_plug, gpointer in_data), gpointer in_data)
 {
 	g_return_if_fail(moduledict != NULL);
 
@@ -136,6 +131,6 @@ static void
 sp_module_db_foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data)
 {
 	ModuleDBForeachClosure *closure=reinterpret_cast<ModuleDBForeachClosure *>(in_data);
-	closure->in_func(SP_MODULE(in_value), closure->in_data);
+	closure->in_func(reinterpret_cast<Inkscape::Extension::Extension *>(in_value), closure->in_data);
 }
 

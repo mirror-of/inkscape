@@ -27,8 +27,15 @@ void         sp_module_system_save                (const gchar * key,
                                                    const gchar *  filename);
 void         sp_module_system_filter              (GtkObject * object,
                                                    const gchar *  key);
-SPModule *   sp_module_system_build_from_file     (const gchar  * filename);
-SPModule *   sp_module_system_build_from_mem      (const gchar *  buffer);
+Inkscape::Extension::Print * sp_module_system_get_print (const gchar * key);
+
+Inkscape::Extension::Extension *   sp_module_system_build_from_file     (const gchar  * filename);
+Inkscape::Extension::Extension *   sp_module_system_build_from_mem      (const gchar *  buffer);
+
+Inkscape::Extension::Extension *sp_module_system_get (const unsigned char *key);
+
+void sp_module_system_menu_open (SPMenu *menu);
+void sp_module_system_menu_save (SPMenu *menu);
 
 #endif /* __MODULES_SYSTEM_H__ */
 

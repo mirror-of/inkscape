@@ -21,7 +21,7 @@
 #include <xml/repr-private.h>
 #include <interface.h>
 #include <document.h>
-#include <inkscape.h>
+/* #include <inkscape.h> */
 #include <desktop.h>
 #include <desktop-handles.h>
 #include <selection.h>
@@ -31,16 +31,23 @@
 
 #include "../system.h"
 
+#include "../extension.h"
+#include "implementation.h"
 #include "script.h"
 
 /** This is the command buffer that gets allocated from the stack */
 #define BUFSIZE (255)
 
-/* Prototypes */
-static void extension_execute (const gchar * command, const gchar * filein, const gchar * fileout);
-
+/* Namespaces */
+namespace Inkscape {
+namespace Extension {
+namespace Implementation {
 
 /* Real functions */
+Script::Script (void) {
+	command = NULL;
+	return;
+}
 /**
 	\return    A string with the complete string with the relative directory expanded
 	\brief     This function takes in a Repr that contains a reldir entry
@@ -57,7 +64,7 @@ static void extension_execute (const gchar * command, const gchar * filein, cons
 	free what they are given (and should do it too!).
 */
 gchar *
-solve_reldir (SPRepr * reprin) {
+Script::solve_reldir (SPRepr * reprin) {
 	const gchar * reldir;
 
 	reldir = sp_repr_attr(reprin, "reldir");
@@ -104,16 +111,18 @@ solve_reldir (SPRepr * reprin) {
 	Finally, the module is set to loaded!
 */
 
-void
-extension_load (SPModule *module)
+bool
+Script::load (Inkscape::Extension::Extension * module)
 {
 	SPRepr * child_repr;
 	gchar * command_text = NULL;
-	/* This should probably check to find the executable... */
-	g_return_if_fail(SP_IS_MODULE(module));
-	g_return_if_fail(module->repr != NULL);
 
-	child_repr = sp_repr_children(module->repr);
+	if (module->loaded()) {
+		return TRUE;
+	}
+
+	/* This should probably check to find the executable... */
+	child_repr = sp_repr_children(module->get_repr());
 	while (child_repr != NULL) {
 		if (!strcmp(sp_repr_name(child_repr), "extension")) {
 			child_repr = sp_repr_children(child_repr);
@@ -130,24 +139,12 @@ extension_load (SPModule *module)
 		child_repr = sp_repr_next(child_repr);
 	}
 
-	g_return_if_fail(command_text != NULL);
+	g_return_val_if_fail(command_text != NULL, FALSE);
 
-	sp_repr_set_attr(module->repr, "command", command_text);
-	g_free(command_text);
+	g_free(command);
+	command = command_text;
 
-	if (SP_IS_MODULE_INPUT(module)) {
-		SP_MODULE_INPUT(module)->open = extension_open;
-		SP_MODULE_INPUT(module)->prefs = extension_input_prefs;
-	} else if (SP_IS_MODULE_OUTPUT(module)) {
-		SP_MODULE_OUTPUT(module)->save = extension_save;
-		SP_MODULE_OUTPUT(module)->prefs = extension_output_prefs;
-	} else if (SP_IS_MODULE_FILTER(module)) {
-		SP_MODULE_FILTER(module)->filter = extension_filter;
-		SP_MODULE_FILTER(module)->prefs = extension_filter_prefs;
-	}
-
-	module->state = SP_MODULE_LOADED;
-	return;
+	return TRUE;
 }
 
 /**
@@ -160,22 +157,13 @@ extension_load (SPModule *module)
 	much memory to leave around anyway.
 */
 void
-extension_unload (SPModule *module)
+Script::unload (Inkscape::Extension::Extension * module)
 {
-	sp_repr_set_attr(module->repr, "command", NULL);
-
-	if (SP_IS_MODULE_INPUT(module)) {
-		SP_MODULE_INPUT(module)->open = NULL;
-		SP_MODULE_INPUT(module)->prefs = NULL;
-	} else if (SP_IS_MODULE_OUTPUT(module)) {
-		SP_MODULE_OUTPUT(module)->save = NULL;
-		SP_MODULE_OUTPUT(module)->prefs = NULL;
-	} else if (SP_IS_MODULE_FILTER(module)) {
-		SP_MODULE_FILTER(module)->filter = NULL;
-		SP_MODULE_FILTER(module)->prefs = NULL;
+	if (module->loaded()) {
+		g_free(command);
+		module->set_state(Inkscape::Extension::Extension::STATE_UNLOADED);
+		return;
 	}
-
-	module->state = SP_MODULE_UNLOADED;
 	return;
 }
 
@@ -188,7 +176,7 @@ extension_unload (SPModule *module)
 	This function should really do something, right now it doesn't.
 */
 GtkDialog *
-extension_input_prefs (SPModule * module, const gchar * filename)
+Script::prefs (Inkscape::Extension::Input * module, const gchar * filename)
 {
 	/* Sad, this should really do something... */
 	return NULL;
@@ -202,7 +190,7 @@ extension_input_prefs (SPModule * module, const gchar * filename)
 	This function should really do something, right now it doesn't.
 */
 GtkDialog *
-extension_output_prefs (SPModule * module)
+Script::prefs (Inkscape::Extension::Output * module)
 {
 	/* Sad, this should really do something... */
 	return NULL;
@@ -216,7 +204,7 @@ extension_output_prefs (SPModule * module)
 	This function should really do something, right now it doesn't.
 */
 GtkDialog *
-extension_filter_prefs (SPModule * module)
+Script::prefs (Inkscape::Extension::Filter * module)
 {
 	/* Sad, this should really do something... */
 	return NULL;
@@ -234,7 +222,7 @@ extension_filter_prefs (SPModule * module)
 	create on of those the function g_mkstemp is used, with a filename with
 	the header of sp_ext_.
 
-	The extension is then executed using the 'extension_execute' function
+	The extension is then executed using the 'execute' function
 	with the filname coming in, and the temporary filename.  After
 	That executing, the SVG should be in the temporary file.
 
@@ -244,7 +232,7 @@ extension_filter_prefs (SPModule * module)
 	That document is then returned from this function.
 */
 SPDocument *
-extension_open (SPModule * module, const gchar * filename)
+Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 {
 	char tempfilename_out_x[] = "/tmp/sp_ext_XXXXXX";
 	gchar * tempfilename_out;
@@ -268,7 +256,7 @@ extension_open (SPModule * module, const gchar * filename)
 		}
 	}
 
-	extension_execute(sp_repr_attr(module->repr, "command"), (gchar *)filename, (gchar *)tempfilename_out);
+	execute(command, (gchar *)filename, (gchar *)tempfilename_out);
 
 	mydoc = sp_module_system_open(SP_MODULE_KEY_INPUT_SVG, tempfilename_out);
 	sp_document_set_uri(mydoc, (const gchar *)filename);
@@ -303,7 +291,7 @@ extension_open (SPModule * module, const gchar * filename)
 	delete the temporary file.
 */
 void
-extension_save (SPModule * module, SPDocument * doc, const gchar * filename)
+Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gchar * filename)
 {
 	gchar tempfilename_in_x[] = "/tmp/sp_ext_XXXXXX";
 	gchar * tempfilename_in;
@@ -328,7 +316,7 @@ extension_save (SPModule * module, SPDocument * doc, const gchar * filename)
 
 	sp_module_system_save(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE, doc, tempfilename_in);
 
-	extension_execute(sp_repr_attr(module->repr, "command"), (gchar *)tempfilename_in, (gchar *)filename);
+	execute(command, (gchar *)tempfilename_in, (gchar *)filename);
 
 	unlink(tempfilename_in);
 
@@ -347,7 +335,7 @@ extension_save (SPModule * module, SPDocument * doc, const gchar * filename)
 	\param     doc      Document to run through the filter.
 
 	This function is a little bit trickier than the previous two.  It
-	needs two temporary files to get its work done.  Both of these
+	needs two temporary files to get it's work done.  Both of these
 	files have random names created for them using the g_mkstemp function
 	with the sp_ext_ prefix in the temporary directory.  Like the other
 	functions, the temporary files are deleted at the end.
@@ -363,19 +351,19 @@ extension_save (SPModule * module, SPDocument * doc, const gchar * filename)
 	The command string is filled with the data, and then after the execution
 	it is freed.
 
-	The extension_execute function is used at the core of this function
-	to execute the script on the two SVG documents (actually only one
+	The execute function is used at the core of this function
+	to execute the Script on the two SVG documents (actually only one
 	exists at the time, the other is created by that script).  At that
 	point both should be full, and the second one is loaded.
 */
 void
-extension_filter (SPModule * module, SPDocument * doc)
+Script::filter (Inkscape::Extension::Filter * module, SPDocument * doc)
 {
 	char tempfilename_in_x[] = "/tmp/sp_ext_XXXXXX";
 	gchar * tempfilename_in;
 	char tempfilename_out_x[] = "/tmp/sp_ext_XXXXXX";
 	gchar * tempfilename_out;
-	char * command;
+	char * command = NULL;
 	SPItem * selected;
 	SPDocument * mydoc;
 
@@ -420,16 +408,18 @@ extension_filter (SPModule * module, SPDocument * doc)
 	/* TODO: I don't think this is the best way to do this, plus,
 	         it needs to handle all of the cases where there is more
 			 than one object selected.  This is a start though. */
-	selected = sp_selection_item (SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
+	/* selected = sp_selection_item (SP_DT_SELECTION (SP_ACTIVE_DESKTOP)); */
+	/* TODO: fix this */
+	selected = NULL;
 	if (selected != NULL && !SP_OBJECT_IS_CLONED(selected)) {
 		command = g_strdup_printf("%s --id=%s",
-		                          sp_repr_attr(module->repr, "command"),
+		                          command,
 		                          SP_OBJECT_ID(selected));
 	} else {
-		command = g_strdup_printf("%s", sp_repr_attr(module->repr, "command"));
+		command = g_strdup_printf("%s", command);
 	}
 
-	extension_execute(command, tempfilename_in, tempfilename_out);
+	execute(command, tempfilename_in, tempfilename_out);
 	g_free(command);
 
 	mydoc = sp_module_system_open(SP_MODULE_KEY_INPUT_SVG, tempfilename_out);
@@ -483,8 +473,8 @@ extension_filter (SPModule * module, SPDocument * doc)
 	At the very end (after the data has been coppied) both of the files
 	are closed, and we return to what we were doing.
 */
-static void
-extension_execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
+void
+Script::execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
 {
 	FILE * ppipe;
 	FILE * pfile;
@@ -553,3 +543,6 @@ extension_execute (const gchar * in_command, const gchar * filein, const gchar *
 	return;
 }
 
+}; /* Inkscape  */
+}; /* module  */
+}; /* Implementation  */

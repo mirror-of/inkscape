@@ -35,7 +35,7 @@ check-recursive: all-recursive
 # longer; and the dependency won't have any effect if someone does `make check'
 # from a subdirectory.
 
-bin_PROGRAMS = inkscape inkview
+bin_PROGRAMS = inkscape 
 
 inkscapelib_src = \
 	macros.h \
@@ -92,9 +92,9 @@ inkscapelib_src = \
 	\
 	approx-equal.h remove-last.h
 
-noinst_LTLIBRARIES = libinkscape.la
-libinkscape_la_SOURCES = $(inkscapelib_src)
-spproglibs = libinkscape.la
+noinst_LIBRARIES = libinkscape.a
+libinkscape_a_SOURCES = $(inkscapelib_src)
+spproglibs = libinkscape.a
 
 inkscape_SOURCES = \
 	$(spprogsrc) \
@@ -241,4 +241,4 @@ TESTS = extract-uri-test$(EXEEXT)
 check_PROGRAMS = extract-uri-test
 
 extract_uri_test_SOURCES = extract-uri-test.cpp
-extract_uri_test_LDADD = libinkscape.la -lglib-2.0
+extract_uri_test_LDADD = libinkscape.a -lglib-2.0

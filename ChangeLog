@@ -1,3 +1,23 @@
+2004-03-02  Ted Gould  <ted@gould.cx>
+
+	* src/Makefile.am, src/print.cpp,
+	  src/extension/db.cpp, src/extension/db.h, 
+	  src/extension/extension.cpp, src/extension/extension.h, 
+	  src/extension/system.cpp, src/extension/system.h, 
+	  src/extension/init.cpp, src/extension/menu.cpp, 
+	  src/extension/impelementation/Makefile.am,
+	  src/extension/impelementation/implementation.cpp,
+	  src/extension/impelementation/implementation.h,
+	  src/extension/impelementation/script.h,
+	  src/extension/impelementation/script.cpp,
+	  src/extension/internal/gnome.cpp, src/extension/internal/gnome.h, 
+	  src/extension/internal/ps.cpp, src/extension/internal/ps.h, 
+	  src/extension/internal/svg.cpp, src/extension/internal/svg.h, 
+	  src/extension/internal/win32.cpp, src/extension/internal/win32.h:
+
+	  Turning the extensions stuff into having C++ objects instead
+	  of GTK+ objects.  This effected alot of files.
+
 2004-03-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/curve.h, src/helper/curve.cpp

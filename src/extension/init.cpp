@@ -23,6 +23,13 @@
 #include "system.h"
 #include "implementation/script.h"
 #include "internal/svg.h"
+#include "internal/ps.h"
+#ifdef WITH_GNOME_PRINT
+#include "internal/gnome.h"
+#endif
+#ifdef WIN32
+#include "internal/win32.h"
+#endif
 
 /** This is the extention that all files are that are pulled from
     the extension directory and parsed */
@@ -44,7 +51,15 @@ static void build_module_from_dir (const gchar * dirname);
 void
 sp_modules_init (void)
 {
-	svg_init();
+	/* TODO: Change to Internal */
+	Inkscape::Extension::Internal::Svg::init();
+	Inkscape::Extension::Internal::PrintPS::init();
+#ifdef WITH_GNOME_PRINT
+	Inkscape::Extension::Internal::PrintGNOME::init();
+#endif
+#ifdef WIN32
+	Inkscape::Extension::Internal::PrintWin32::init();
+#endif
 	build_module_from_dir(INKSCAPE_MODULESDIR);
 
 	return;

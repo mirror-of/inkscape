@@ -52,111 +52,51 @@
 #include "style.h"
 
 #include "ps.h"
+#include <extension/system.h>
 
-static void sp_module_print_plain_class_init (SPModulePrintPlainClass *klass);
-static void sp_module_print_plain_init (SPModulePrintPlain *fmod);
-static void sp_module_print_plain_finalize (GObject *object);
 
-static unsigned int sp_module_print_plain_setup (SPModulePrint *mod);
-static unsigned int sp_module_print_plain_begin (SPModulePrint *mod, SPDocument *doc);
-static unsigned int sp_module_print_plain_finish (SPModulePrint *mod);
-static unsigned int sp_module_print_plain_bind (SPModulePrint *mod, const NRMatrix *transform, float opacity);
-static unsigned int sp_module_print_plain_release (SPModulePrint *mod);
-static unsigned int sp_module_print_plain_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-						const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-static unsigned int sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-						  const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-static unsigned int sp_module_print_plain_image (SPModulePrint *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
-						 const NRMatrix *transform, const SPStyle *style);
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
 
-static void sp_print_bpath (FILE *stream, const ArtBpath *bp);
-static unsigned int sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
-				       const NRMatrix *transform);
-
-static SPModulePrintClass *print_plain_parent_class;
-
-GType
-sp_module_print_plain_get_type (void)
+PrintPS::PrintPS (void)
 {
-	static GType type = 0;
-	if (!type) {
-		GTypeInfo info = {
-			sizeof (SPModulePrintPlainClass),
-			NULL, NULL,
-			(GClassInitFunc) sp_module_print_plain_class_init,
-			NULL, NULL,
-			sizeof (SPModulePrintPlain),
-			16,
-			(GInstanceInitFunc) sp_module_print_plain_init,
-			NULL,
-		};
-		type = (GType) g_type_register_static (SP_TYPE_MODULE_PRINT, "SPModulePrintPlain", &info, (GTypeFlags)0);
-	}
-	return type;
+	_dpi = 72;
+
+	return;
 }
 
-static void
-sp_module_print_plain_class_init (SPModulePrintPlainClass *klass)
+PrintPS::~PrintPS (void)
 {
-	GObjectClass *g_object_class;
-	SPModulePrintClass *module_print_class;
-
-	g_object_class = (GObjectClass *)klass;
-	module_print_class = (SPModulePrintClass *) klass;
-
-	print_plain_parent_class = (SPModulePrintClass*)g_type_class_peek_parent (klass);
-
-	g_object_class->finalize = sp_module_print_plain_finalize;
-
-	module_print_class->setup = sp_module_print_plain_setup;
-	module_print_class->begin = sp_module_print_plain_begin;
-	module_print_class->finish = sp_module_print_plain_finish;
-	module_print_class->bind = sp_module_print_plain_bind;
-	module_print_class->release = sp_module_print_plain_release;
-	module_print_class->fill = sp_module_print_plain_fill;
-	module_print_class->stroke = sp_module_print_plain_stroke;
-	module_print_class->image = sp_module_print_plain_image;
-}
-
-static void
-sp_module_print_plain_init (SPModulePrintPlain *pmod)
-{
-	pmod->dpi = 72;
-}
-
-static void
-sp_module_print_plain_finalize (GObject *object)
-{
-	SPModulePrintPlain *gpmod;
-
-	gpmod = (SPModulePrintPlain *) object;
-	
 	/* fixme: should really use pclose for popen'd streams */
-	if (gpmod->stream) fclose (gpmod->stream);
+	if (_stream) fclose (_stream);
 
 	/* restore default signal handling for SIGPIPE */
 #if !defined(_WIN32) && !defined(__WIN32__)
 	(void) signal(SIGPIPE, SIG_DFL);
 #endif
-	G_OBJECT_CLASS (print_plain_parent_class)->finalize (object);
+
+	return;
 }
 
-static unsigned int
-sp_module_print_plain_setup (SPModulePrint *mod)
+unsigned int
+PrintPS::setup (Inkscape::Extension::Print * mod)
 {
 	static const gchar *pdr[] = {"72", "75", "100", "144", "150", "200", "300", "360", "600", "1200", "2400", NULL};
-	SPModulePrintPlain *pmod;
 	GtkWidget *dlg, *vbox, *f, *vb, *rb, *hb, *combo, *l, *e;
 	GtkTooltips *tt;
 	GList *sl;
 	int i;
 	int response;
 	unsigned int ret;
+#ifdef TED
 	SPRepr *repr;
+#endif
 	unsigned int p2bm;
 
-	pmod = (SPModulePrintPlain *) mod;
+#ifdef TED
 	repr = ((SPModule *) mod)->repr;
+#endif
 
 	ret = FALSE;
 
@@ -183,7 +123,9 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 	gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
 	/* Print type */
 	p2bm = FALSE;
+#ifdef TED
 	if (repr) sp_repr_get_boolean (repr, "bitmap", &p2bm);
+#endif
 	rb = gtk_radio_button_new_with_label (NULL, _("Print using PostScript operators"));
 	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
 						  _("Use PostScript vector operators, resulting image will be (usually) smaller "
@@ -216,11 +158,15 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 	sl = g_list_reverse (sl);
 	gtk_combo_set_popdown_strings (GTK_COMBO (combo), sl);
 	g_list_free (sl);
+#ifdef TED
 	if (repr) {
 		const gchar *val;
 		val = sp_repr_attr (repr, "resolution");
 		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry), val);
 	}
+#else
+	gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry), NULL);
+#endif
 	gtk_box_pack_end (GTK_BOX (hb), combo, FALSE, FALSE, 0);
 	l = gtk_label_new (_("Resolution:"));
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
@@ -238,6 +184,7 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 	gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
 
 	e = gtk_entry_new ();
+#ifdef TED
 	if (repr && sp_repr_attr (repr, "destination")) {
 		const gchar *val;
 		val = sp_repr_attr (repr, "destination");
@@ -245,6 +192,9 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 	} else {
 		gtk_entry_set_text (GTK_ENTRY (e), "lp");
 	}
+#else
+	gtk_entry_set_text (GTK_ENTRY (e), "lp");
+#endif
 	gtk_box_pack_start (GTK_BOX (vb), e, FALSE, FALSE, 0);
 
 	gtk_widget_show_all (vbox);
@@ -257,17 +207,19 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 		const gchar *fn;
 		const char *sstr;
 		FILE *osf, *osp;
-		pmod->bitmap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
+		_bitmap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
 		sstr = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (combo)->entry));
-		pmod->dpi = (unsigned int) MAX ((int)(atof (sstr)), 1);
+		_dpi = (unsigned int) MAX ((int)(atof (sstr)), 1);
 		/* Arrgh, have to do something */
 		fn = gtk_entry_get_text (GTK_ENTRY (e));
 		/* g_print ("Printing to %s\n", fn); */
+#ifdef TED
 		if (repr) {
-			sp_repr_set_attr (repr, "bitmap", (pmod->bitmap) ? "true" : "false");
+			sp_repr_set_attr (repr, "bitmap", (_bitmap) ? "true" : "false");
 			sp_repr_set_attr (repr, "resolution", sstr);
 			sp_repr_set_attr (repr, "destination", fn);
 		}
+#endif
 		osf = NULL;
 		osp = NULL;
 		if (fn) {
@@ -279,12 +231,12 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 #else
 				osp = _popen (fn, "w");
 #endif
-				pmod->stream = osp;
+				_stream = osp;
 			} else if (*fn == '>') {
 				fn += 1;
 				while (isspace (*fn)) fn += 1;
 				osf = fopen (fn, "w+");
-				pmod->stream = osf;
+				_stream = osf;
 			} else {
 				gchar *qn;
 				qn = g_strdup_printf ("lpr -P %s", fn);
@@ -294,10 +246,10 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 				osp = _popen (qn, "w");
 #endif
 				g_free (qn);
-				pmod->stream = osp;
+				_stream = osp;
 			}
 		}
-		if (pmod->stream) {
+		if (_stream) {
 			/* fixme: this is kinda icky */
 #if !defined(_WIN32) && !defined(__WIN32__)
 			(void) signal(SIGPIPE, SIG_IGN);
@@ -311,51 +263,45 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 	return ret;
 }
 
-static unsigned int
-sp_module_print_plain_begin (SPModulePrint *mod, SPDocument *doc)
+unsigned int
+PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 {
-	SPModulePrintPlain *pmod;
 	int res;
 
-	pmod = (SPModulePrintPlain *) mod;
-
-	res = fprintf (pmod->stream, "%%!\n");
+	res = fprintf (_stream, "%%!\n");
 	/* flush this to test output stream as early as possible */
-	if (fflush(pmod->stream)) {
+	if (fflush(_stream)) {
 /*		g_print("caught error in sp_module_print_plain_begin\n");*/
-		if (ferror(pmod->stream)) {
+		if (ferror(_stream)) {
 			g_print("Error %d on output stream: %s\n", errno,
 				g_strerror(errno));
 		}
 		g_print("Printing failed\n");
 		/* fixme: should use pclose() for pipes */
-		fclose(pmod->stream);
-		pmod->stream = NULL;
+		fclose(_stream);
+		_stream = NULL;
 		fflush(stdout);
 		return 0;
 	}
-	pmod->width = sp_document_width (doc);
-	pmod->height = sp_document_height (doc);
+	_width = sp_document_width (doc);
+	_height = sp_document_height (doc);
 
-	if (pmod->bitmap) return 0;
+	if (_bitmap) return 0;
 
-	if (res >= 0) res = fprintf (pmod->stream, "%g %g translate\n", 0.0, sp_document_height (doc));
-	if (res >= 0) res = fprintf (pmod->stream, "0.8 -0.8 scale\n");
+	if (res >= 0) res = fprintf (_stream, "%g %g translate\n", 0.0, sp_document_height (doc));
+	if (res >= 0) res = fprintf (_stream, "0.8 -0.8 scale\n");
 
 	return res;
 }
 
-static unsigned int
-sp_module_print_plain_finish (SPModulePrint *mod)
+unsigned int
+PrintPS::finish (Inkscape::Extension::Print *mod)
 {
 	int res;
 
-	SPModulePrintPlain *pmod;
+	if (!_stream) return 0;
 
-	pmod = (SPModulePrintPlain *) mod;
-	if (!pmod->stream) return 0;
-
-	if (pmod->bitmap) {
+	if (_bitmap) {
 		double x0, y0, x1, y1;
 		int width, height;
 		float scale;
@@ -363,15 +309,15 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 		guchar *px;
 		int y;
 
-		scale = pmod->dpi / 72.0;
+		scale = _dpi / 72.0;
 
 		y0 = 0.0;
 		x0 = 0.0;
-		x1 = pmod->width;
-		y1 = pmod->height;
+		x1 = _width;
+		y1 = _height;
 
-		width = (int) (pmod->width * scale + 0.5);
-		height = (int) (pmod->height * scale + 0.5);
+		width = (int) (_width * scale + 0.5);
+		height = (int) (_height * scale + 0.5);
 
 		affine.c[0] = width / ((x1 - x0) * 1.25);
 		affine.c[1] = 0.0;
@@ -410,144 +356,124 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 			imgt.c[2] = 0.0;
 			imgt.c[3] = (bbox.y1 - bbox.y0) / scale;
 			imgt.c[4] = 0.0;
-			imgt.c[5] = pmod->height - y / scale - (bbox.y1 - bbox.y0) / scale;
+			imgt.c[5] = _height - y / scale - (bbox.y1 - bbox.y0) / scale;
 
-			sp_ps_print_image (pmod->stream, px, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0, 4 * width, &imgt);
+			print_image (_stream, px, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0, 4 * width, &imgt);
 		}
 
 		nr_free (px);
 	}
 
-	res = fprintf (pmod->stream, "showpage\n");
+	res = fprintf (_stream, "showpage\n");
 
 	return res;
 }
 
-static unsigned int
-sp_module_print_plain_bind (SPModulePrint *mod, const NRMatrix *transform, float opacity)
+unsigned int
+PrintPS::bind (Inkscape::Extension::Print *mod, const NRMatrix *transform, float opacity)
 {
-	SPModulePrintPlain *pmod;
+	if (!_stream) return 0;  // XXX: fixme, returning -1 as unsigned.
+	if (_bitmap) return 0;
 
-	pmod = (SPModulePrintPlain *) mod;
-
-	if (!pmod->stream) return 0;  // XXX: fixme, returning -1 as unsigned.
-	if (pmod->bitmap) return 0;
-
-	return fprintf (pmod->stream, "gsave [%g %g %g %g %g %g] concat\n",
+	return fprintf (_stream, "gsave [%g %g %g %g %g %g] concat\n",
 			transform->c[0], transform->c[1],
 			transform->c[2], transform->c[3],
 			transform->c[4], transform->c[5]);
 }
 
-static unsigned int
-sp_module_print_plain_release (SPModulePrint *mod)
+unsigned int
+PrintPS::release (Inkscape::Extension::Print *mod)
 {
-	SPModulePrintPlain *pmod;
+	if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+	if (_bitmap) return 0;
 
-	pmod = (SPModulePrintPlain *) mod;
-
-	if (!pmod->stream) return 0; // XXX: fixme, returning -1 as unsigned.
-	if (pmod->bitmap) return 0;
-
-	return fprintf (pmod->stream, "grestore\n");
+	return fprintf (_stream, "grestore\n");
 }
 
-static unsigned int
-sp_module_print_plain_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+unsigned int
+PrintPS::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-	SPModulePrintPlain *pmod;
-
-	pmod = (SPModulePrintPlain *) mod;
-
-	if (!pmod->stream) return 0; // XXX: fixme, returning -1 as unsigned.
-	if (pmod->bitmap) return 0;
+	if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+	if (_bitmap) return 0;
 
 	if (style->fill.type == SP_PAINT_TYPE_COLOR) {
 		float rgb[3];
 
 		sp_color_get_rgb_floatv (&style->fill.value.color, rgb);
 
-		fprintf (pmod->stream, "%g %g %g setrgbcolor\n", rgb[0], rgb[1], rgb[2]);
+		fprintf (_stream, "%g %g %g setrgbcolor\n", rgb[0], rgb[1], rgb[2]);
 
-		sp_print_bpath (pmod->stream, bpath->path);
+		print_bpath (_stream, bpath->path);
 
 		if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
-			fprintf (pmod->stream, "eofill\n");
+			fprintf (_stream, "eofill\n");
 		} else {
-			fprintf (pmod->stream, "fill\n");
+			fprintf (_stream, "fill\n");
 		}
 	}
 
 	return 0;
 }
 
-static unsigned int
-sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+unsigned int
+PrintPS::stroke (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			      const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
-	SPModulePrintPlain *pmod;
-
-	pmod = (SPModulePrintPlain *) mod;
-
-	if (!pmod->stream) return 0; // XXX: fixme, returning -1 as unsigned.
-	if (pmod->bitmap) return 0;
+	if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+	if (_bitmap) return 0;
 
 	if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
 		float rgb[3];
 
 		sp_color_get_rgb_floatv (&style->stroke.value.color, rgb);
 
-		fprintf (pmod->stream, "%g %g %g setrgbcolor\n", rgb[0], rgb[1], rgb[2]);
+		fprintf (_stream, "%g %g %g setrgbcolor\n", rgb[0], rgb[1], rgb[2]);
 
-		sp_print_bpath (pmod->stream, bpath->path);
+		print_bpath (_stream, bpath->path);
 
 		if (style->stroke_dash.n_dash > 0) {
 			int i;
-			fprintf (pmod->stream, "[");
+			fprintf (_stream, "[");
 			for (i = 0; i < style->stroke_dash.n_dash; i++) {
-				fprintf (pmod->stream, (i) ? " %g" : "%g", style->stroke_dash.dash[i]);
+				fprintf (_stream, (i) ? " %g" : "%g", style->stroke_dash.dash[i]);
 			}
-			fprintf (pmod->stream, "] %g setdash\n", style->stroke_dash.offset);
+			fprintf (_stream, "] %g setdash\n", style->stroke_dash.offset);
 		} else {
-			fprintf (pmod->stream, "[] 0 setdash\n");
+			fprintf (_stream, "[] 0 setdash\n");
 		}
 
-		fprintf (pmod->stream, "%g setlinewidth\n", style->stroke_width.computed);
-		fprintf (pmod->stream, "%d setlinejoin\n", style->stroke_linejoin.computed);
-		fprintf (pmod->stream, "%d setlinecap\n", style->stroke_linecap.computed);
+		fprintf (_stream, "%g setlinewidth\n", style->stroke_width.computed);
+		fprintf (_stream, "%d setlinejoin\n", style->stroke_linejoin.computed);
+		fprintf (_stream, "%d setlinecap\n", style->stroke_linecap.computed);
 
-		fprintf (pmod->stream, "stroke\n");
+		fprintf (_stream, "stroke\n");
 	}
 
 	return 0;
 }
 
-static unsigned int
-sp_module_print_plain_image (SPModulePrint *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
+unsigned int
+PrintPS::image (Inkscape::Extension::Print *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
 			     const NRMatrix *transform, const SPStyle *style)
 {
-	SPModulePrintPlain *pmod;
+	if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+	if (_bitmap) return 0;
 
-	pmod = (SPModulePrintPlain *) mod;
-
-	if (!pmod->stream) return 0; // XXX: fixme, returning -1 as unsigned.
-	if (pmod->bitmap) return 0;
-
-	return sp_ps_print_image (pmod->stream, px, w, h, rs, transform);
+	return print_image (_stream, px, w, h, rs, transform);
 #if 0
-	fprintf (pmod->stream, "gsave\n");
-	fprintf (pmod->stream, "/rowdata %d string def\n", 3 * w);
-	fprintf (pmod->stream, "[%g %g %g %g %g %g] concat\n",
+	fprintf (_stream, "gsave\n");
+	fprintf (_stream, "/rowdata %d string def\n", 3 * w);
+	fprintf (_stream, "[%g %g %g %g %g %g] concat\n",
 		 transform->c[0],
 		 transform->c[1],
 		 transform->c[2],
 		 transform->c[3],
 		 transform->c[4],
 		 transform->c[5]);
-	fprintf (pmod->stream, "%d %d 8 [%d 0 0 -%d 0 %d]\n", w, h, w, h, h);
-	fprintf (pmod->stream, "{currentfile rowdata readhexstring pop}\n");
-	fprintf (pmod->stream, "false 3 colorimage\n");
+	fprintf (_stream, "%d %d 8 [%d 0 0 -%d 0 %d]\n", w, h, w, h, h);
+	fprintf (_stream, "{currentfile rowdata readhexstring pop}\n");
+	fprintf (_stream, "false 3 colorimage\n");
 
 	for (r = 0; r < h; r++) {
 		guchar *s;
@@ -557,19 +483,19 @@ sp_module_print_plain_image (SPModulePrint *mod, guchar *px, unsigned int w, uns
 			c1 = MIN (w, c0 + 24);
 			for (c = c0; c < c1; c++) {
 				static const char xtab[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-				fputc (xtab[s[0] >> 4], pmod->stream);
-				fputc (xtab[s[0] & 0xf], pmod->stream);
-				fputc (xtab[s[1] >> 4], pmod->stream);
-				fputc (xtab[s[1] & 0xf], pmod->stream);
-				fputc (xtab[s[2] >> 4], pmod->stream);
-				fputc (xtab[s[2] & 0xf], pmod->stream);
+				fputc (xtab[s[0] >> 4], _stream);
+				fputc (xtab[s[0] & 0xf], _stream);
+				fputc (xtab[s[1] >> 4], _stream);
+				fputc (xtab[s[1] & 0xf], _stream);
+				fputc (xtab[s[2] >> 4], _stream);
+				fputc (xtab[s[2] & 0xf], _stream);
 				s += 4;
 			}
-			fputs ("\n", pmod->stream);
+			fputs ("\n", _stream);
 		}
 	}
 
-	fprintf (pmod->stream, "grestore\n");
+	fprintf (_stream, "grestore\n");
 
 	return 0;
 #endif
@@ -577,8 +503,8 @@ sp_module_print_plain_image (SPModulePrint *mod, guchar *px, unsigned int w, uns
 
 /* PostScript helpers */
 
-static void
-sp_print_bpath (FILE *stream, const ArtBpath *bp)
+void
+PrintPS::print_bpath (FILE *stream, const ArtBpath *bp)
 {
 	unsigned int closed;
 
@@ -618,11 +544,11 @@ sp_print_bpath (FILE *stream, const ArtBpath *bp)
 
 /* The following code is licensed under GNU GPL */
 
-static void
-compress_packbits (int nin,
-                   guchar *src,
-                   int *nout,
-                   guchar *dst)
+void
+PrintPS::compress_packbits (int nin,
+                            guchar *src,
+                            int *nout,
+                            guchar *dst)
 
 {register gchar c;
  int nrepeat, nliteral;
@@ -700,19 +626,15 @@ compress_packbits (int nin,
  *nout = dst - start_dst;
 }
 
-static guint32 ascii85_buf;
-static int ascii85_len = 0;
-static int ascii85_linewidth = 0;
-
-static void
-ascii85_init (void)
+void
+PrintPS::ascii85_init (void)
 {
   ascii85_len = 0;
   ascii85_linewidth = 0;
 }
 
-static void
-ascii85_flush (FILE *ofp)
+void
+PrintPS::ascii85_flush (FILE *ofp)
 {
   char c[5];
   int i;
@@ -754,8 +676,8 @@ ascii85_flush (FILE *ofp)
   ascii85_buf = 0;
 }
 
-static inline void
-ascii85_out (gchar byte, FILE *ofp)
+inline void
+PrintPS::ascii85_out (gchar byte, FILE *ofp)
 {
   if (ascii85_len == 4)
     ascii85_flush (ofp);
@@ -765,8 +687,8 @@ ascii85_out (gchar byte, FILE *ofp)
   ascii85_len++;
 }
 
-static void
-ascii85_nout (int n, gchar *uptr, FILE *ofp)
+void
+PrintPS::ascii85_nout (int n, gchar *uptr, FILE *ofp)
 {
  while (n-- > 0)
  {
@@ -775,8 +697,8 @@ ascii85_nout (int n, gchar *uptr, FILE *ofp)
  }
 }
 
-static void
-ascii85_done (FILE *ofp)
+void
+PrintPS::ascii85_done (FILE *ofp)
 {
   if (ascii85_len)
     {
@@ -790,8 +712,8 @@ ascii85_done (FILE *ofp)
   putc ('\n', ofp);
 }
 
-static unsigned int
-sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
+unsigned int
+PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
 		   const NRMatrix *transform)
 {
 	unsigned int i, j;
@@ -878,7 +800,26 @@ sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int heigh
 #undef GET_RGB_TILE
 }
 
+void
+PrintPS::init (void)
+{
+	Inkscape::Extension::Extension * ext;
+	
+	/* SVG in */
+    ext = sp_module_system_build_from_mem(
+		"<spmodule>\n"
+			"<name>Postscript Print</name>\n"
+			"<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"
+			"<print/>\n"
+		"</spmodule>");
+	ext->set_implementation(new PrintPS());
+
+	return;
+}
+
+
+}; /* namespace Internal */
+}; /* namespace Extension */
+}; /* namespace Inkscape */
+
 /* End of GNU GPL code */
-
-
-

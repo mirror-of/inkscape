@@ -1,37 +1,56 @@
-#ifndef __SP_GNOME_H__
-#define __SP_GNOME_H__
+#ifndef __INKSCAPE_EXTENSION_INTERNAL_PRINT_GNOME_H__
+#define __INKSCAPE_EXTENSION_INTERNAL_PRINT_GNOME_H__
 
 /*
  * Gnome stuff
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Ted Gould <ted@gould.cx>
  *
- * This code is in public domain
+ * Lauris: This code is in public domain
+ * Ted: This code is under the GNU GPL
  */
 
 #include <config.h>
-
-#define SP_TYPE_MODULE_PRINT_GNOME (sp_module_print_gnome_get_type())
-#define SP_MODULE_PRINT_GNOME(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE_PRINT_GNOME, SPModulePrintGnome))
-#define SP_IS_MODULE_PRINT_GNOME(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MODULE_PRINT_GNOME))
-
-typedef struct _SPModulePrintGnome SPModulePrintGnome;
-typedef struct _SPModulePrintGnomeClass SPModulePrintGnomeClass;
 
 #include <libgnomeprint/gnome-print.h>
 
 #include "../extension.h"
 
-struct _SPModulePrintGnome {
-	SPModulePrint module;
-	GnomePrintContext *gpc;
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
+
+class PrintGNOME : public Inkscape::Extension::Implementation::Implementation {
+	GnomePrintContext * _gpc;
+
+public:
+	PrintGNOME (void);
+	virtual ~PrintGNOME (void);
+
+	/* Print functions */
+	virtual unsigned int setup (Inkscape::Extension::Print * module);
+	virtual unsigned int set_preview (Inkscape::Extension::Print * module);
+
+	virtual unsigned int begin (Inkscape::Extension::Print * module, SPDocument *doc);
+	virtual unsigned int finish (Inkscape::Extension::Print * module);
+
+	/* Rendering methods */
+	virtual unsigned int bind (Inkscape::Extension::Print * module, const NRMatrix *transform, float opacity);
+	virtual unsigned int release (Inkscape::Extension::Print * module);
+	virtual unsigned int fill (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+			       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+	virtual unsigned int stroke (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
+				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+	virtual unsigned int image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
+				const NRMatrix *transform, const SPStyle *style);
+
+	static void init (void);
 };
 
-struct _SPModulePrintGnomeClass {
-	SPModulePrintClass module_print_class;
-};
+}; /* namespace Internal */
+}; /* namespace Extension */
+}; /* namespace Inkscape */
 
-GType sp_module_print_gnome_get_type (void);
-
-#endif
+#endif /* __INKSCAPE_EXTENSION_INTERNAL_PRINT_GNOME_H__ */

@@ -1,17 +1,26 @@
-#ifndef __SP_MODULE_H__
-#define __SP_MODULE_H__
+/* Co-dependent headerfiles.  This works out, trust me --Ted */
+#include "implementation/implementation.h"
+
+#ifndef __INK_EXTENSION_H__
+#define __INK_EXTENSION_H__
 
 /*
  * Frontend to certain, possibly pluggable, actions
  *
  * Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2003 Authors
+ * Copyright (C) 2002-2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <gtk/gtk.h>
+#include "widgets/menu.h"
+#include "xml/repr.h"
+#include "forward.h"
+#include <libnr/nr-path.h>
+#include <display/nr-arena-forward.h>
 
 /** The key that is used to identify that the I/O should be autodetected */
 #define SP_MODULE_KEY_AUTODETECT "autodetect"
@@ -26,225 +35,137 @@
 /** Which output module should be used? */
 #define SP_MODULE_KEY_OUTPUT_DEFAULT SP_MODULE_KEY_AUTODETECT
 
-/** A quick identifier to for the GtkType of an SPModule */
-#define SP_TYPE_MODULE (sp_module_get_type ())
-/** A macro to cast something to an SPModule */
-#define SP_MODULE(o)  (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE, SPModule))
-/** A macro to check if something is a SPModule (or subclass) */
-#define SP_IS_MODULE(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MODULE))
+#define SP_MODULE_KEY_PRINT_PS    "modules.print.ps"
+#define SP_MODULE_KEY_PRINT_GNOME "modules.print.gnome"
+#define SP_MODULE_KEY_PRINT_WIN32 "modules.print.win32"
+#ifdef WIN32
+#define SP_MODULE_KEY_PRINT_DEFAULT  SP_MODULE_KEY_PRINT_WIN32
+#else
+#ifdef WITH_GNOME_PRINT
+#define SP_MODULE_KEY_PRINT_DEFAULT  SP_MODULE_KEY_PRINT_GNOME
+#else
+#define SP_MODULE_KEY_PRINT_DEFAULT  SP_MODULE_KEY_PRINT_PS
+#endif
+#endif
 
-typedef struct _SPModule SPModule;
-typedef struct _SPModuleClass SPModuleClass;
+/* New C++ Stuff */
+#define MIME_SVG "image/svg+xml"
 
-/** A quick identifier to for the GtkType of an SPModuleInput */
-#define SP_TYPE_MODULE_INPUT (sp_module_input_get_type ())
-/** A macro to cast something to an SPModuleInput */
-#define SP_MODULE_INPUT(o)  (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE_INPUT, SPModuleInput))
-/** A macro to check if something is a SPModuleInput (or subclass) */
-#define SP_IS_MODULE_INPUT(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MODULE_INPUT))
+namespace Inkscape {
+namespace Extension {
 
-typedef struct _SPModuleInput SPModuleInput;
-typedef struct _SPModuleInputClass SPModuleInputClass;
+/* Some early prototypes just for fun. */
+class Input;
+class Output;
+class Filter;
 
-/** A quick identifier to for the GtkType of an SPModuleOutput */
-#define SP_TYPE_MODULE_OUTPUT (sp_module_output_get_type())
-/** A macro to cast something to an SPModuleOutput */
-#define SP_MODULE_OUTPUT(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE_OUTPUT, SPModuleOutput))
-/** A macro to check if something is a SPModuleOutput (or subclass) */
-#define SP_IS_MODULE_OUTPUT(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MODULE_OUTPUT))
-
-typedef struct _SPModuleOutput SPModuleOutput;
-typedef struct _SPModuleOutputClass SPModuleOutputClass;
-
-/** A quick identifier to for the GtkType of an SPModuleFilter */
-#define SP_TYPE_MODULE_FILTER (sp_module_filter_get_type())
-/** A macro to cast something to an SPModuleFilter */
-#define SP_MODULE_FILTER(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE_FILTER, SPModuleFilter))
-/** A macro to check if something is a SPModuleFilter (or subclass) */
-#define SP_IS_MODULE_FILTER(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MODULE_FILTER))
-
-typedef struct _SPModuleFilter SPModuleFilter;
-typedef struct _SPModuleFilterClass SPModuleFilterClass;
-
-/** A quick identifier to for the GtkType of an SPModulePrint */
-#define SP_TYPE_MODULE_PRINT (sp_module_print_get_type())
-/** A macro to cast something to an SPModulePrint */
-#define SP_MODULE_PRINT(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE_PRINT, SPModulePrint))
-/** A macro to check if something is a SPModulePrint (or subclass) */
-#define SP_IS_MODULE_PRINT(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MODULE_PRINT))
-
-typedef struct _SPModulePrint SPModulePrint;
-typedef struct _SPModulePrintClass SPModulePrintClass;
-
-#include <gtk/gtk.h>
-#include "widgets/menu.h"
-#include "xml/repr.h"
-#include "forward.h"
-
-/** An enumeration to identify if the module has been loaded or not. */
-typedef enum {
-	SP_MODULE_LOADED,
-	SP_MODULE_UNLOADED
-} sp_module_state_t;
-
-/* SPModule */
-
-/** The object that is the basis for the module system.  This object
-    contains all of the information that all modules have.  The
+/** The object that is the basis for the Extension system.  This object
+    contains all of the information that all Extension have.  The
 	individual items are detailed within. */
-struct _SPModule {
-	GObject object;                     /**< Parent class */
+class Extension {
+public:
+	/** An enumeration to identify if the Extension has been loaded or not. */
+	typedef enum {
+		STATE_LOADED,
+		STATE_UNLOADED
+	} state_t;
 
-	SPRepr *repr;                       /**< The XML description of the module */
+private:
+	gchar *id;                          /**< The unique identifier for the Extension */
+	gchar *name;                        /**< A user friendly name for the Extension */
+	state_t state;                      /**< Which state the Extension is currently in */
 
-	gchar *id;                          /**< The unique identifier for the module */
+protected:
+	SPRepr *repr;                       /**< The XML description of the Extension */
+	Implementation::Implementation * imp;         /**< An object that holds all the functions for making this work */
 
-	gchar *name;                        /**< A user friendly name for the module */
-	sp_module_state_t state;            /**< Which state the module is currently in */
+public:
+	Extension(SPRepr * in_repr);
+	virtual ~Extension(void);
 
-	void (*load) (SPModule *module);    /**< The function that should be called to load the module */
-	void (*unload) (SPModule *module);  /**< The function that should be called to unload the module */
+	void set_state (state_t in_state);
+	state_t get_state (void);
+	bool loaded (void);
+	SPRepr * get_repr (void);
+	gchar * get_id (void);
+	gchar * get_name (void);
+	Implementation::Implementation * set_implementation (Implementation::Implementation * in_imp);
 };
 
-/** All of the information that is global for all SPModules */
-struct _SPModuleClass {
-	GObjectClass parent_class;          /**< Parent class */
-
-	void (*build) (SPModule *module, SPRepr *repr);
-	                                    /**< The function that is used to build SPModules */
-};
-
-GType sp_module_get_type (void);
-
-/** A quick way to get the ID of a module */
-#define SP_MODULE_ID(m) (((SPModule *) (m))->id)
-
-SPModule * sp_module_new (GType type, SPRepr *repr);
-SPModule *sp_module_new_from_path (GType type, const char *path);
-
-SPModule *sp_module_ref (SPModule *mod);
-SPModule *sp_module_unref (SPModule *mod);
-
-/* ModuleInput */
-
-/** Now there are some things that make an Input module unique.  And
-    they are stored in this structure. */
-struct _SPModuleInput {
-	SPModule module;             /**< The data in the parent class */
+class Input : public Extension {
 	gchar *mimetype;             /**< What is the mime type this inputs? */
 	gchar *extension;            /**< The extension of the input files */
 	gchar *filetypename;         /**< A userfriendly name for the file type */
 	gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
-	GtkDialog * (*prefs) (SPModule * module, const gchar * filename);
-	                             /**< The function to find out information about the file */
-	SPDocument * (*open) (SPModule * module, const gchar * filename);
-	                             /**< Hey, there needs to be some function to do the work! */
+public:
+    Input (SPRepr * in_repr);
+	virtual ~Input (void);
+	SPDocument * open (const gchar *uri);
+	gchar * get_extension(void);
+	gchar * get_filetypename(void);
+	gchar * get_filetypetooltip(void);
+	GtkDialog * prefs (const gchar *uri);
 };
 
-/** More of a place holder for the Glib Object system */
-struct _SPModuleInputClass {
-	SPModuleClass module_class; /**< Parent class */
-};
-
-GType sp_module_input_get_type (void);
-
-SPModuleInput * sp_module_input_new (SPRepr * in_repr);
-SPDocument *sp_module_input_document_open (SPModuleInput *mod, const unsigned char *uri, unsigned int advertize, unsigned int keepalive);
-
-/* ModuleOutput */
-
-/** Now there are some things that make an Output module unique.  And
-    they are stored in this structure. */
-struct _SPModuleOutput {
-	SPModule module;             /**< The data in the parent class */
+class Output : public Extension {
 	gchar *mimetype;             /**< What is the mime type this inputs? */
 	gchar *extension;            /**< The extension of the input files */
 	gchar *filetypename;         /**< A userfriendly name for the file type */
 	gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
-	GtkDialog * (*prefs) (SPModule * module);
-	                             /**< The function to find out information about the file */
-	void (*save) (SPModule * module, SPDocument * doc, const gchar * filename);
-	                             /**< Hey, there needs to be some function to do the work! */
+public:
+	Output (SPRepr * in_repr);
+	virtual ~Output (void);
+
+	void save (SPDocument *doc, const gchar *uri);
+	GtkDialog * prefs (void);
+	gchar * get_extension();
+	gchar * get_filetypename();
+	gchar * get_filetypetooltip();
 };
 
-/** More of a place holder for the Glib Object system */
-struct _SPModuleOutputClass {
-	SPModuleClass module_class; /**< Parent class */
+class Filter : public Extension {
+
+public:
+	Filter (SPRepr * in_repr);
+	virtual ~Filter (void);
+
+	GtkDialog * prefs (void);
+	void filter (SPDocument * doc);
 };
 
-SPModuleOutput * sp_module_output_new (SPRepr * in_repr);
-GType sp_module_output_get_type (void);
+class Print : public Extension {
 
-void sp_module_output_document_save (SPModuleOutput *mod, SPDocument *doc, const unsigned char *uri);
-
-/* ModuleFilter */
-
-/** All of the data that is needed for every Filter module is stored
-    in this structure. */
-struct _SPModuleFilter {
-	SPModule module;  /**< Parent class */
-
-	GtkDialog * (*prefs) (SPModule * module);
-	                  /**< The function to find out information about the file */
-	/* TODO: need to figure out what we need here */
-	void (*filter) (SPModule * module, SPDocument * document);
-	                  /**< Hey, there needs to be some function to do the work! */
-};
-
-/** More of a place holder for the Glib Object system */
-struct _SPModuleFilterClass {
-	SPModuleClass module_class; /**< Parent class */
-};
-
-SPModuleFilter * sp_module_filter_new (SPRepr * in_repr);
-GType sp_module_filter_get_type (void);
-
-/* ModulePrint */
-
-#include <libnr/nr-path.h>
-#include <display/nr-arena-forward.h>
-
-struct _SPModulePrint {
-	SPModule module;
-
-	/* Copy of document image */
+public: /* TODO: These are public for the short term, but this should be fixed */
 	SPItem *base;
 	NRArena *arena;
 	NRArenaItem *root;
 	unsigned int dkey;
-};
 
-struct _SPModulePrintClass {
-	SPModuleClass module_class;
+public:
+	Print (SPRepr * in_repr);
+	~Print (void);
 
 	/* FALSE means user hit cancel */
-	unsigned int (* setup) (SPModulePrint *modp);
-	unsigned int (* set_preview) (SPModulePrint *modp);
+	unsigned int setup (void);
+	unsigned int set_preview (void);
 
-	unsigned int (* begin) (SPModulePrint *modp, SPDocument *doc);
-	unsigned int (* finish) (SPModulePrint *modp);
+	unsigned int begin (SPDocument *doc);
+	unsigned int finish (void);
 
 	/* Rendering methods */
-	unsigned int (* bind) (SPModulePrint *modp, const NRMatrix *transform, float opacity);
-	unsigned int (* release) (SPModulePrint *modp);
-	unsigned int (* fill) (SPModulePrint *modp, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+	unsigned int bind (const NRMatrix *transform, float opacity);
+	unsigned int release (void);
+	unsigned int fill (const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-	unsigned int (* stroke) (SPModulePrint *modp, const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
+	unsigned int stroke (const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
 				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-	unsigned int (* image) (SPModulePrint *modp, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
+	unsigned int image (unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
 				const NRMatrix *transform, const SPStyle *style);
 };
 
-SPModulePrint * sp_module_print_new (SPRepr * in_repr);
-GType sp_module_print_get_type (void);
+}; /* namespace Extension */
+}; /* namespace Inkscape */
 
-/* Global methods */
-
-SPModule *sp_module_system_get (const unsigned char *key);
-
-void sp_module_system_menu_open (SPMenu *menu);
-void sp_module_system_menu_save (SPMenu *menu);
-
-#endif
+#endif /* __INK_EXTENSION_H__ */

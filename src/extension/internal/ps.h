@@ -1,39 +1,77 @@
-#ifndef __SP_PS_H__
-#define __SP_PS_H__
+#ifndef __EXTENSION_INTERNAL_PS_H__
+#define __EXTENSION_INTERNAL_PS_H__
 
 /*
- * PostScript printing
+ * This is the internal module used to do Postscript Printing
  *
  * Author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
+ * 	   Lauris Kaplinski <lauris@kaplinski.com>
+ * 	   Ted Gould <ted@gould.cx>
  *
- * This code is in public domain
+ * Lauris: This code is in the public domain
+ * Ted:    This code is under the GNU GPL
  */
 
 #include <config.h>
-
-#define SP_TYPE_MODULE_PRINT_PLAIN (sp_module_print_plain_get_type())
-#define SP_MODULE_PRINT_PLAIN(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE_PRINT_PLAIN, SPModulePrintPlain))
-#define SP_IS_MODULE_PRINT_PLAIN(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MODULE_PRINT_PLAIN))
-
-typedef struct _SPModulePrintPlain SPModulePrintPlain;
-typedef struct _SPModulePrintPlainClass SPModulePrintPlainClass;
-
 #include <extension/extension.h>
+#include <extension/implementation/implementation.h>
 
-struct _SPModulePrintPlain {
-	SPModulePrint module;
-	unsigned int bitmap : 1;
-	unsigned int dpi : 15;
-	float width;
-	float height;
-	FILE *stream;
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
+
+class PrintPS : public Inkscape::Extension::Implementation::Implementation {
+    unsigned int _bitmap : 1;
+    unsigned int _dpi : 15;
+    float  _width;
+    float  _height;
+    FILE * _stream;
+
+	void print_bpath (FILE *stream, const ArtBpath *bp);
+	unsigned int print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
+				       const NRMatrix *transform);
+	void compress_packbits (int nin, guchar *src, int *nout, guchar *dst);
+
+	/* ASCII 85 variables */
+	guint32 ascii85_buf;
+	int ascii85_len;
+	int ascii85_linewidth;
+	/* ASCII 85 Functions */
+	void ascii85_init (void);
+	void ascii85_flush (FILE *ofp);
+	inline void ascii85_out (gchar byte, FILE *ofp);
+	void ascii85_nout (int n, gchar *uptr, FILE *ofp);
+	void ascii85_done (FILE *ofp);
+
+
+public:
+	PrintPS (void);
+	virtual ~PrintPS (void);
+
+	/* Print functions */
+	virtual unsigned int setup (Inkscape::Extension::Print * module);
+	/*
+	virtual unsigned int set_preview (Inkscape::Extension::Print * module);
+	*/
+
+	virtual unsigned int begin (Inkscape::Extension::Print * module, SPDocument *doc);
+	virtual unsigned int finish (Inkscape::Extension::Print * module);
+
+	/* Rendering methods */
+	virtual unsigned int bind (Inkscape::Extension::Print * module, const NRMatrix *transform, float opacity);
+	virtual unsigned int release (Inkscape::Extension::Print * module);
+	virtual unsigned int fill (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+			       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+	virtual unsigned int stroke (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
+				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+	virtual unsigned int image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
+				const NRMatrix *transform, const SPStyle *style);
+
+	static void init (void);
 };
 
-struct _SPModulePrintPlainClass {
-	SPModulePrintClass module_print_class;
-};
+}; /* namespace Internal */
+}; /* namespace Extension */
+}; /* namespace Inkscape */
 
-GType sp_module_print_plain_get_type (void);
-
-#endif
+#endif /* __EXTENSION_INTERNAL_PS_H__ */

@@ -7,7 +7,7 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2003 Authors
+ * Copyright (C) 2002-2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -25,10 +25,9 @@
 #include "db.h"
 #include "implementation/script.h"
 
-static void open_internal (SPModule * in_plug, gpointer in_data);
-static void save_internal (SPModule * in_plug, gpointer in_data);
-static SPModule * build_from_reprdoc (SPReprDoc * doc);
-static void load_module (SPModule * in_mod);
+static void open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data);
+static void save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data);
+static Inkscape::Extension::Extension * build_from_reprdoc (SPReprDoc * doc);
 
 /**
 	\return   A new document created from the filename passed in
@@ -58,7 +57,7 @@ SPDocument *
 sp_module_system_open (const gchar * key, const gchar * filename)
 {
 	gpointer parray[2];
-	SPModuleInput * imod = NULL;
+	Inkscape::Extension::Input * imod = NULL;
 	GtkDialog * prefs = NULL;
 	SPDocument * doc;
 	SPRepr * repr;
@@ -68,21 +67,19 @@ sp_module_system_open (const gchar * key, const gchar * filename)
 		parray[1] = (gpointer)&imod;
 		sp_module_db_foreach(open_internal, (gpointer)&parray);
 	} else {
-		imod = SP_MODULE_INPUT(sp_module_db_get(key));
+		imod = dynamic_cast<Inkscape::Extension::Input *>(sp_module_db_get(key));
 	}
 
-	g_return_val_if_fail(SP_IS_MODULE_INPUT(imod), NULL);
-	load_module(SP_MODULE(imod));
-	g_return_val_if_fail(SP_MODULE(imod)->state != SP_MODULE_UNLOADED, NULL);
+	g_return_val_if_fail(imod != NULL, NULL);
+	imod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
+	g_return_val_if_fail(imod->loaded(), NULL);
 
-	if (imod->prefs != NULL) {
-		prefs = imod->prefs(SP_MODULE(imod), filename);
-		if (prefs != NULL) {
-			gtk_dialog_run(prefs);
-		}
+	prefs = imod->prefs(filename);
+	if (prefs != NULL) {
+		gtk_dialog_run(prefs);
 	}
 
-	doc = imod->open(SP_MODULE(imod), filename);
+	doc = imod->open(filename);
 
 	if(!doc)
 		return NULL;
@@ -123,20 +120,20 @@ sp_module_system_open (const gchar * key, const gchar * filename)
 	module.
 */
 static void
-open_internal (SPModule * in_plug, gpointer in_data)
+open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 {
-	if (SP_IS_MODULE_INPUT(in_plug)) {
+	if (dynamic_cast<Inkscape::Extension::Input *>(in_plug)) {
 		const gchar * ext;
 		gpointer * parray;
 		const gchar * filename;
 		size_t filename_len, ext_len;
-		SPModuleInput ** pimod;
+		Inkscape::Extension::Input ** pimod;
 
 		parray = (gpointer *)in_data;
 		filename = (const gchar *)parray[0];
-		pimod = (SPModuleInput **)parray[1];
+		pimod = (Inkscape::Extension::Input **)parray[1];
 
-		ext = SP_MODULE_INPUT(in_plug)->extension;
+		ext = dynamic_cast<Inkscape::Extension::Input *>(in_plug)->get_extension();
 
 		filename_len = strlen (filename);
 		ext_len = strlen (ext);
@@ -148,7 +145,7 @@ open_internal (SPModule * in_plug, gpointer in_data)
 			return;
 		}
 
-		*pimod = SP_MODULE_INPUT(in_plug);
+		*pimod = dynamic_cast<Inkscape::Extension::Input *>(in_plug);
 	}
 
 	return;
@@ -182,7 +179,7 @@ open_internal (SPModule * in_plug, gpointer in_data)
 void
 sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filename)
 {
-	SPModuleOutput * omod;
+	Inkscape::Extension::Output * omod;
 	gpointer parray[2];
 	GtkDialog * prefs;
 	SPRepr *repr;
@@ -193,22 +190,20 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 		omod = NULL;
 		sp_module_db_foreach(save_internal, (gpointer)&parray);
 	} else {
-		omod = SP_MODULE_OUTPUT(sp_module_db_get(key));
+		omod = dynamic_cast<Inkscape::Extension::Output *>(sp_module_db_get(key));
 	}
 
-	if (!SP_IS_MODULE_OUTPUT(omod)) {
+	if (!dynamic_cast<Inkscape::Extension::Output *>(omod)) {
 		printf("Unable to find output module to handle file: %s\n", filename);
 		return;
 	}
 
-	load_module(SP_MODULE(omod));
-	g_return_if_fail(SP_MODULE(omod)->state != SP_MODULE_UNLOADED);
+	omod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
+	g_return_if_fail(omod->loaded());
 
-	if (omod->prefs != NULL) {
-		prefs = omod->prefs(SP_MODULE(omod));
-		if (prefs != NULL) {
-			gtk_dialog_run(prefs);
-		}
+	prefs = omod->prefs();
+	if (prefs != NULL) {
+		gtk_dialog_run(prefs);
 	}
 
 	repr = sp_document_repr_root (doc);
@@ -216,7 +211,7 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 	sp_repr_set_attr (repr, "sodipodi:modified", NULL);
 	sp_document_set_undo_sensitive (doc, TRUE);
 
-	return omod->save(SP_MODULE(omod), doc, filename);
+	return omod->save(doc, filename);
 }
 
 /**
@@ -242,20 +237,20 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 	module.
 */
 static void
-save_internal (SPModule * in_plug, gpointer in_data)
+save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 {
-	if (SP_IS_MODULE_OUTPUT(in_plug)) {
+	if (dynamic_cast<Inkscape::Extension::Output *>(in_plug)) {
 		const gchar * ext;
 		gpointer * parray;
 		const gchar * filename;
-		SPModuleOutput ** pomod;
+		Inkscape::Extension::Output ** pomod;
 		size_t filename_len, ext_len;
 
 		parray = (gpointer *)in_data;
 		filename = (const gchar *)parray[0];
-		pomod = (SPModuleOutput **)parray[1];
+		pomod = (Inkscape::Extension::Output **)parray[1];
 
-		ext = SP_MODULE_OUTPUT(in_plug)->extension;
+		ext = dynamic_cast<Inkscape::Extension::Output *>(in_plug)->get_extension();
 
 		ext_len = strlen (ext);
 		filename_len = strlen (filename);
@@ -267,26 +262,7 @@ save_internal (SPModule * in_plug, gpointer in_data)
 			return;
 		}
 
-		*pomod = SP_MODULE_OUTPUT(in_plug);
-	}
-
-	return;
-}
-
-/**
-	\return   None
-	\brief    Loads a module
-	\param    in_mod  The module that is loaded
-
-	Basically this is a function to load a module, and it calls
-	the load function in that module to do so.  Nothing more interesting
-	than that.
-*/
-static void
-load_module (SPModule * in_mod)
-{
-	if (in_mod->state == SP_MODULE_UNLOADED) {
-		in_mod->load(in_mod);
+		*pomod = dynamic_cast<Inkscape::Extension::Output *>(in_plug);
 	}
 
 	return;
@@ -307,23 +283,28 @@ load_module (SPModule * in_mod)
 void
 sp_module_system_filter (GtkObject * object, const gchar * key)
 {
-	SPModuleFilter * fmod;
+	Inkscape::Extension::Filter * fmod;
 	SPDocument * doc;
 
 	g_return_if_fail(key != NULL);
 
-	fmod = SP_MODULE_FILTER(sp_module_db_get(key));
-	g_return_if_fail(SP_IS_MODULE_FILTER(fmod));
+	fmod = dynamic_cast<Inkscape::Extension::Filter *>(sp_module_db_get(key));
+	g_return_if_fail(fmod != NULL);
 
-	load_module(SP_MODULE(fmod));
-	g_return_if_fail(SP_MODULE(fmod)->state != SP_MODULE_UNLOADED);
+	fmod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
+	g_return_if_fail(fmod->loaded());
 
 	doc = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
 	g_return_if_fail(doc != NULL);
 
-	return fmod->filter(SP_MODULE(fmod), doc);
+	return fmod->filter(doc);
 }
 
+Inkscape::Extension::Print *
+sp_module_system_get_print (const gchar * key)
+{
+	return dynamic_cast<Inkscape::Extension::Print *>(sp_module_db_get(key));
+}
 /**
 	\return   The built module
 	\brief    Creates a module from a SPReprDoc describing the module
@@ -343,11 +324,11 @@ sp_module_system_filter (GtkObject * object, const gchar * key)
 	these are not set.  This case could apply to modules that are
 	built in (like the SVG load/save functions).
 */
-static SPModule *
+static Inkscape::Extension::Extension *
 build_from_reprdoc (SPReprDoc * doc)
 {
 	SPRepr * repr;
-	SPModule * module = NULL;
+	Inkscape::Extension::Extension * module = NULL;
 	enum {
 		MODULE_EXTENSION,
 		MODULE_UNKNOWN_IMP
@@ -356,6 +337,7 @@ build_from_reprdoc (SPReprDoc * doc)
 		MODULE_INPUT,
 		MODULE_OUTPUT,
 		MODULE_FILTER,
+		MODULE_PRINT,
 		MODULE_UNKNOWN_FUNC
 	} module_functional_type = MODULE_UNKNOWN_FUNC;
 	SPRepr * old_repr;
@@ -384,6 +366,9 @@ build_from_reprdoc (SPReprDoc * doc)
 		if (!strcmp(sp_repr_name(child_repr), "filter")) {
 			module_functional_type = MODULE_FILTER;
 		}
+		if (!strcmp(sp_repr_name(child_repr), "print")) {
+			module_functional_type = MODULE_PRINT;
+		}
 		if (!strcmp(sp_repr_name(child_repr), "extension")) {
 			module_implementation_type = MODULE_EXTENSION;
 		}
@@ -397,26 +382,22 @@ build_from_reprdoc (SPReprDoc * doc)
 	{
 		case MODULE_INPUT:
 			{
-				SPModuleInput * imod;
-
-				imod = sp_module_input_new(repr);
-				module = SP_MODULE(imod);
+				module = new Inkscape::Extension::Input(repr);
 				break;
 			}
 		case MODULE_OUTPUT:
 			{
-				SPModuleOutput * omod;
-
-				omod = sp_module_output_new(repr);
-				module = SP_MODULE(omod);
+				module = new Inkscape::Extension::Output(repr);
 				break;
 			}
 		case MODULE_FILTER:
 			{
-				SPModuleFilter * fmod;
-
-				fmod = sp_module_filter_new(repr);
-				module = SP_MODULE(fmod);
+				module = new Inkscape::Extension::Filter(repr);
+				break;
+			}
+		case MODULE_PRINT:
+			{
+				module = new Inkscape::Extension::Print(repr);
 				break;
 			}
 		default:
@@ -426,8 +407,13 @@ build_from_reprdoc (SPReprDoc * doc)
 
 	switch (module_implementation_type) {
 		case MODULE_EXTENSION:
-			module->load   = extension_load;
-			module->unload = extension_unload;
+			Inkscape::Extension::Implementation::Implementation * imp;
+			Inkscape::Extension::Implementation::Script * script;
+
+			script = new Inkscape::Extension::Implementation::Script();
+			imp = dynamic_cast<Inkscape::Extension::Implementation::Implementation *>(script);
+
+			module->set_implementation(imp);
 			break;
 	default:
 		;
@@ -448,7 +434,7 @@ while_end:
 	This function calls build_from_reprdoc with using sp_repr_read_file
 	to create the reprdoc.
 */
-SPModule *
+Inkscape::Extension::Extension *
 sp_module_system_build_from_file (const gchar * filename)
 {
 	/* TODO: Need to define namespace here, need to write the
@@ -465,7 +451,7 @@ sp_module_system_build_from_file (const gchar * filename)
 	This function calls build_from_reprdoc with using sp_repr_read_mem
 	to create the reprdoc.  It finds the length of the buffer using strlen.
 */
-SPModule *
+Inkscape::Extension::Extension *
 sp_module_system_build_from_mem (const gchar * buffer)
 {
 	return build_from_reprdoc (sp_repr_read_mem(buffer, strlen(buffer), NULL));

@@ -15,12 +15,25 @@
 #ifndef __SVG_H__
 #define __SVG_H__
 
+#include "../implementation/implementation.h"
 
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
 
-void svg_init(void);
+class Svg : Inkscape::Extension::Implementation::Implementation {
 
+public:
+	void          save  (Inkscape::Extension::Output *mod,
+	                     SPDocument *doc,
+	                     const gchar *uri);
+	SPDocument *  open  (Inkscape::Extension::Input *mod,
+	                     const gchar *uri);
+	static void   init  (void);
 
+};
 
+};};}; /* namespace Inkscape, Extension, Implementation */
 #endif /* __SVG_H__ */
 
 /*
