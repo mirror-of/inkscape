@@ -1278,6 +1278,23 @@ sp_desktop_zoom_page (SPDesktop *dt)
 }
 
 void
+sp_desktop_zoom_page_width (SPDesktop *dt)
+{
+	NRRectF d;
+
+	sp_desktop_get_display_area (dt, &d);
+
+	d.x0 = 0.0;
+	d.x1 = sp_document_width (SP_DT_DOCUMENT (dt));
+
+	if ((fabs (d.x1 - d.x0) < 1.0)) return;
+
+	d.y1 = d.y0 = (d.y1 + d.y0) / 2;
+
+	sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
+}
+
+void
 sp_desktop_zoom_selection (SPDesktop *dt)
 {
 	SPSelection * selection;

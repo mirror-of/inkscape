@@ -403,6 +403,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc)
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_SELECTION);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_DRAWING);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PAGE);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PAGE_WIDTH);
 	/* View:New View*/
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item (menu, NULL, _("New View"), G_CALLBACK(sp_ui_new_view), NULL);

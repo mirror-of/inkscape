@@ -325,6 +325,9 @@ sp_verb_action_zoom_perform (SPAction *action, void *data)
 	case SP_VERB_ZOOM_PAGE:
 		sp_desktop_zoom_page (dt);
 		break;
+	case SP_VERB_ZOOM_PAGE_WIDTH:
+		sp_desktop_zoom_page_width (dt);
+		break;
 	case SP_VERB_ZOOM_DRAWING:
 		sp_desktop_zoom_drawing (dt);
 		break;
@@ -418,8 +421,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_INVALID, NULL, NULL, NULL, NULL},
 	{SP_VERB_NONE, "None", N_("None"), N_("Does nothing"), NULL},
 	/* File */
-	{SP_VERB_FILE_NEW, "FileNew", N_("New"), N_("Create new SVG document"), GTK_STOCK_NEW },
-	{SP_VERB_FILE_OPEN, "FileOpen", N_("Open..."), N_("Open existing SVG document"), GTK_STOCK_OPEN },
+	{SP_VERB_FILE_NEW, "FileNew", N_("New"), N_("Create new document"), GTK_STOCK_NEW },
+	{SP_VERB_FILE_OPEN, "FileOpen", N_("Open..."), N_("Open existing document"), GTK_STOCK_OPEN },
 	{SP_VERB_FILE_SAVE, "FileSave", N_("Save"), N_("Save document"), GTK_STOCK_SAVE },
 	{SP_VERB_FILE_SAVE_AS, "FileSaveAs", N_("Save As..."), N_("Save document under new name"), GTK_STOCK_SAVE_AS },
 	{SP_VERB_FILE_PRINT, "FilePrint", N_("Print..."), N_("Print document"), GTK_STOCK_PRINT },
@@ -429,8 +432,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_FILE_EXPORT, "FileExport", N_("Export"), N_("Export document as PNG bitmap"), "file_export"},
 	{SP_VERB_FILE_QUIT, "FileQuit", N_("Quit"), N_("Quit"), "file_quit"},
 	/* Edit */
-	{SP_VERB_EDIT_UNDO, "EditUndo", N_("Undo"), N_("Revert last action"), GTK_STOCK_UNDO},
-	{SP_VERB_EDIT_REDO, "EditRedo", N_("Redo"), N_("Do again undone action"), GTK_STOCK_REDO},
+	{SP_VERB_EDIT_UNDO, "EditUndo", N_("Undo"), N_("Undo last action"), GTK_STOCK_UNDO},
+	{SP_VERB_EDIT_REDO, "EditRedo", N_("Redo"), N_("Do again last undone action"), GTK_STOCK_REDO},
 	{SP_VERB_EDIT_CUT, "EditCut", N_("Cut"), N_("Cut selected objects to clipboard"), GTK_STOCK_CUT},
 	{SP_VERB_EDIT_COPY, "EditCopy", N_("Copy"), N_("Copy selected objects to clipboard"), GTK_STOCK_COPY},
 	{SP_VERB_EDIT_PASTE, "EditPaste", N_("Paste"), N_("Paste objects from clipboard"), GTK_STOCK_PASTE},
@@ -448,37 +451,38 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("Combine"), N_("Combine multiple paths"), "selection_combine"},
 	{SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break Apart"), N_("Break selected path to subpaths"), "selection_break"},
 	/* Object */
-	{SP_VERB_OBJECT_ROTATE_90, "ObjectRotate90", N_("Rotate 90 degrees"), N_("Rotates object 90 degrees clockwise"), "object_rotate"},
-	{SP_VERB_OBJECT_FLATTEN, "ObjectFlatten", N_("Flatten object"), N_("Remove transformations from object"), "object_reset"},
-	{SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("Convert to Curves"), N_("Convert selected object to path"), "object_tocurve"},
+	{SP_VERB_OBJECT_ROTATE_90, "ObjectRotate90", N_("Rotate 90 degrees"), N_("Rotate object 90 degrees clockwise"), "object_rotate"},
+	{SP_VERB_OBJECT_FLATTEN, "ObjectFlatten", N_("Remove transformations"), N_("Remove transformations from object"), "object_reset"},
+	{SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("Convert to Curves"), N_("Convert selected objects to paths"), "object_tocurve"},
 	{SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally", N_("Flip Horizontally"),
 	 N_("Flip selected objects horizontally"), "object_flip_hor"},
 	{SP_VERB_OBJECT_FLIP_VERTICAL, "ObjectFlipVertically", N_("Flip Vertically"),
 	 N_("Flip selected objects vertically"), "object_flip_ver"},
 	/* Event contexts */
 	{SP_VERB_CONTEXT_SELECT, "DrawSelect", N_("Select"), N_("Select and transform objects"), "draw_select"},
-	{SP_VERB_CONTEXT_NODE, "DrawNode", N_("Node edit"), N_("Modify existing objects by control nodes"), "draw_node"},
+	{SP_VERB_CONTEXT_NODE, "DrawNode", N_("Node edit"), N_("Edit path nodes in selected object"), "draw_node"},
 	{SP_VERB_CONTEXT_RECT, "DrawRect", N_("Rectangle"), N_("Create rectangles and squares with optional rounded corners"), "draw_rect"},
-	{SP_VERB_CONTEXT_ARC, "DrawArc", N_("Ellipse"), N_("Create circles, ellipses and arcs"), "draw_arc"},
+	{SP_VERB_CONTEXT_ARC, "DrawArc", N_("Ellipse"), N_("Create circles, ellipses, and arcs"), "draw_arc"},
 	{SP_VERB_CONTEXT_STAR, "DrawStar", N_("Star"), N_("Create stars and polygons"), "draw_star"},
 	{SP_VERB_CONTEXT_SPIRAL, "DrawSpiral", N_("Spiral"), N_("Create spirals"), "draw_spiral"},
 	{SP_VERB_CONTEXT_PENCIL, "DrawPencil", N_("Pencil"), N_("Draw freehand curves and straight lines"), "draw_freehand"},
-	{SP_VERB_CONTEXT_PEN, "DrawPen", N_("Pen"), N_("Draw precisely positioned curved and straight lines"), "draw_pen"},
+	{SP_VERB_CONTEXT_PEN, "DrawPen", N_("Pen"), N_("Draw Bezier curves and straight lines"), "draw_pen"},
 	{SP_VERB_CONTEXT_CALLIGRAPHIC, "DrawCalligrphic", N_("Calligraphy"), N_("Draw calligraphic lines"), "draw_dynahand"},
 	{SP_VERB_CONTEXT_TEXT, "DrawText", N_("Text"), N_("Create and edit text objects"), "draw_text"},
 	{SP_VERB_CONTEXT_ZOOM, "DrawZoom", N_("Zoom"), N_("Zoom into precisely selected area"), "draw_zoom"},
 	{SP_VERB_CONTEXT_DROPPER, "DrawDropper", N_("Dropper"), N_("Pick averaged colors from image"), "draw_dropper"},
 	/* Zooming */
-	{SP_VERB_ZOOM_IN, "ZoomIn", N_("In"), N_("Zoom in drawing"), "zoom_in"},
-	{SP_VERB_ZOOM_OUT, "ZoomOut", N_("Out"), N_("Zoom out drawing"), "zoom_out"},
+	{SP_VERB_ZOOM_IN, "ZoomIn", N_("In"), N_("Zoom in"), "zoom_in"},
+	{SP_VERB_ZOOM_OUT, "ZoomOut", N_("Out"), N_("Zoom out"), "zoom_out"},
 	{SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Grid"), N_("Toggle grid"), "toggle_grid"},
 	{SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("Guides"), N_("Toggle guides"), "toggle_guides"},
-	{SP_VERB_ZOOM_1_1, "Zoom1:0", N_("1:1"), N_("Set zoom factor to 1:1"), "zoom_1_to_1"},
-	{SP_VERB_ZOOM_1_2, "Zoom1:2", N_("1:2"), N_("Set zoom factor to 1:2"), "zoom_1_to_2"},
-	{SP_VERB_ZOOM_2_1, "Zoom2:1", N_("2:1"), N_("Set zoom factor to 2:1"), "zoom_2_to_1"},
-	{SP_VERB_ZOOM_PAGE, "ZoomPage", N_("Page"), N_("Fit the whole page into window"), "zoom_page"},
-	{SP_VERB_ZOOM_DRAWING, "ZoomDrawing", N_("Drawing"), N_("Fit the whole drawing into window"), "zoom_draw"},
-	{SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("Selection"), N_("Fit the whole selection into window"), "zoom_select"},
+	{SP_VERB_ZOOM_1_1, "Zoom1:0", N_("1:1"), N_("Zoom to 1:1"), "zoom_1_to_1"},
+	{SP_VERB_ZOOM_1_2, "Zoom1:2", N_("1:2"), N_("Zoom to 1:2"), "zoom_1_to_2"},
+	{SP_VERB_ZOOM_2_1, "Zoom2:1", N_("2:1"), N_("Zoom to 2:1"), "zoom_2_to_1"},
+	{SP_VERB_ZOOM_PAGE, "ZoomPage", N_("Page"), N_("Fit page in window"), "zoom_page"},
+	{SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page width"), N_("Fit page width in window"), NULL},
+	{SP_VERB_ZOOM_DRAWING, "ZoomDrawing", N_("Drawing"), N_("Fit drawing in window"), "zoom_draw"},
+	{SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("Selection"), N_("Fit selection in window"), "zoom_select"},
 	/* Dialogs */
 	{SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Display"), N_("Global display settings"), NULL},
 	{SP_VERB_DIALOG_DOCUMENT, "DialogDocument", N_("Document Settings"), N_("Page layout"), NULL},
