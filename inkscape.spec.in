@@ -39,6 +39,7 @@ rm -rf %{buildroot}
 %defattr(-, root, root)
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
 %{_bindir}/inkscape
+%{_bindir}/inkview
 %{_libdir}/inkscape/extensions/*
 %{_datadir}/applications/inkscape.desktop
 %{_datadir}/locale/*/LC_MESSAGES/inkscape.mo
