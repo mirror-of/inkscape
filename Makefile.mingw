@@ -44,7 +44,7 @@ dist:
 	$(CP) $(GTKDOS)$(S)python$(S)python24.dll inkscape
 	$(CPDIR) $(GTKDOS)$(S)etc inkscape$(S)etc
 	echo "#### Inserted by Inkscape Makefile.mingw" > inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
-	echo "gtk-font-name=\"verdana 6.5\""           >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
+	echo "gtk-font-name=\"verdana 9\""             >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
 	echo ""                                        >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
 	$(MKDIR) inkscape$(S)lib
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)gtk-2.0 inkscape$(S)lib$(S)gtk-2.0
