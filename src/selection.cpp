@@ -124,7 +124,9 @@ void SPSelection::_clear()
 }
 
 bool SPSelection::includes(SPObject *obj) const {
-    g_return_val_if_fail (obj != NULL, FALSE);
+    if (obj == NULL)
+        return FALSE;
+
     g_return_val_if_fail(SP_IS_OBJECT(obj), FALSE);
 
     return ( g_slist_find(_objs, obj) != NULL );
