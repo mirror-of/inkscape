@@ -1340,6 +1340,9 @@ TutorialVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_TUTORIAL_TRACING:
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-tracing.svg"));
             break;
+        case SP_VERB_TUTORIAL_CALLIGRAPHY:
+            sp_help_open_tutorial (NULL, (gpointer)_("tutorial-calligraphy.svg"));
+            break;
         case SP_VERB_TUTORIAL_DESIGN:
             sp_help_open_tutorial (NULL, (gpointer)_("elementsofdesign.svg"));
             break;
@@ -1743,11 +1746,13 @@ Verb * Verb::_base_verbs[] = {
         N_("Advanced Inkscape topics"), NULL/*"tutorial_advanced"*/),
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new TutorialVerb(SP_VERB_TUTORIAL_TRACING, "TutorialsTracing", N_("Inkscape: T_racing"),
-        N_("Using the Inkscape tracing tool"), NULL/*"tutorial_tracing"*/),
+        N_("Using bitmap tracing"), NULL/*"tutorial_tracing"*/),
+    new TutorialVerb(SP_VERB_TUTORIAL_CALLIGRAPHY, "TutorialsCalligraphy", N_("Inkscape: _Calligraphy"),
+        N_("Using the Calligraphy pen tool"), NULL),
     new TutorialVerb(SP_VERB_TUTORIAL_DESIGN, "TutorialsDesign", N_("_Elements of Design"),
-        N_("Elements of Design tutorial"), NULL/*"tutorial_design"*/),
+        N_("Principles of design in the tutorial form"), NULL/*"tutorial_design"*/),
     new TutorialVerb(SP_VERB_TUTORIAL_TIPS, "TutorialsTips", N_("_Tips and Tricks"),
-        N_("Miscellaneous Tips and Tricks"), NULL/*"tutorial_tips"*/),
+        N_("Miscellaneous tips and tricks"), NULL/*"tutorial_tips"*/),
 
     /* Footer */
     new Verb(SP_VERB_LAST, NULL, NULL, NULL, NULL)
