@@ -666,7 +666,11 @@ gchar *sp_svg_write_path(ArtBpath const *bpath)
         os << " z ";
     }
 
-    return g_strdup(os.gcharp());
+//    std::string s = os.str();
+//    gchar *ret = g_strdup(s.c_str());
+//    delete (s);
+//    return ret;
+    return g_strdup (os.str().c_str());
 }
 
 /*
