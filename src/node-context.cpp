@@ -133,11 +133,8 @@ sp_node_context_init (SPNodeContext * node_context)
 static void
 sp_node_context_dispose (GObject *object)
 {
-	SPNodeContext * nc;
-	SPEventContext * ec;
-
-	nc = SP_NODE_CONTEXT (object);
-	ec = SP_EVENT_CONTEXT (object);
+	SPNodeContext * nc = SP_NODE_CONTEXT (object);
+	SPEventContext * ec = SP_EVENT_CONTEXT (object);
 
 	nc->sel_changed_connection.disconnect();
 	nc->sel_changed_connection.~connection();
@@ -166,10 +163,7 @@ sp_node_context_dispose (GObject *object)
 static void
 sp_node_context_setup (SPEventContext *ec)
 {
-	SPNodeContext *nc;
-	SPItem *item;
-	nc = SP_NODE_CONTEXT (ec);
-	SPRepr *repr;
+	SPNodeContext *nc = SP_NODE_CONTEXT (ec);
 
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
@@ -178,7 +172,7 @@ sp_node_context_setup (SPEventContext *ec)
 	nc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(sigc::bind(sigc::ptr_fun(&sp_node_context_selection_changed), (gpointer)nc));
 
 	SPSelection *selection = SP_DT_SELECTION (ec->desktop);
-	item = selection->singleItem();
+	SPItem *item = selection->singleItem();
 
 	nc->nodepath = NULL;
 	nc->knot_holder = NULL;
@@ -188,18 +182,18 @@ sp_node_context_setup (SPEventContext *ec)
 		if ( nc->nodepath) {
 			//point pack to parent in case nodepath is deleted
 			nc->nodepath->nodeContext = nc;
-		}
-		else {
+		} else {
 			nc->knot_holder = sp_item_knot_holder (item, ec->desktop);
 		}
 
-
-		// setting listener
-		repr = SP_OBJECT (item)->repr;
-		if (repr) {
-			sp_repr_ref (repr);
-			sp_repr_add_listener (repr, &nodepath_repr_events, ec);
-			sp_repr_synthesize_events (repr, &nodepath_repr_events, ec);
+		if (nc->nodepath || nc->knot_holder) {
+			// setting listener
+			SPRepr *repr = SP_OBJECT_REPR (item);
+			if (repr) {
+				sp_repr_ref (repr);
+				sp_repr_add_listener (repr, &nodepath_repr_events, ec);
+				sp_repr_synthesize_events (repr, &nodepath_repr_events, ec);
+			}
 		}
 	}
 
@@ -218,14 +212,10 @@ destroys old and creates new nodepath and reassigns listeners to the new selecte
 void
 sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 {
-	SPNodeContext * nc;
-	SPEventContext * ec;
-	SPDesktop *desktop;
-	SPItem * item;
-	SPRepr *old_repr = NULL, *repr;
+	SPNodeContext * nc = SP_NODE_CONTEXT (data);
+	SPEventContext * ec = SP_EVENT_CONTEXT (nc);
 
-	nc = SP_NODE_CONTEXT (data);
-	ec = SP_EVENT_CONTEXT (nc);
+	SPRepr *old_repr = NULL;
 
 	if (nc->nodepath) {
 		old_repr = nc->nodepath->repr;
@@ -241,9 +231,9 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 		sp_repr_unref (old_repr);
 	}
 
-	item = selection->singleItem();
+	SPItem * item = selection->singleItem();
 	
-	desktop = selection->desktop();
+	SPDesktop *desktop = selection->desktop();
 	nc->nodepath = NULL;
 	nc->knot_holder = NULL;
 	if (item) {
@@ -253,12 +243,15 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 		} else {
 			nc->knot_holder = sp_item_knot_holder (item, desktop);
 		}
-		// setting new listener
-		repr = SP_OBJECT (item)->repr;
-		if (repr) {
-			sp_repr_ref (repr);
-			sp_repr_add_listener (repr, &nodepath_repr_events, ec);
-			sp_repr_synthesize_events (repr, &nodepath_repr_events, ec);
+
+		if (nc->nodepath || nc->knot_holder) {
+			// setting new listener
+			SPRepr *repr = SP_OBJECT_REPR (item);
+			if (repr) {
+				sp_repr_ref (repr);
+				sp_repr_add_listener (repr, &nodepath_repr_events, ec);
+				sp_repr_synthesize_events (repr, &nodepath_repr_events, ec);
+			}
 		}
 	}
 	sp_nodepath_update_statusbar (nc->nodepath);
