@@ -114,7 +114,6 @@ static void
 sp_pattern_init (SPPattern *pat)
 {
 	pat->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
-	pat->patternUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
 
 	nr_matrix_set_identity (&pat->patternTransform);
 
