@@ -3,6 +3,14 @@
 
 struct SPRepr;
 struct SPReprDoc;
+struct SPCSSAttr;
+struct SPXMLNs;
+
+typedef struct SPRepr SPXMLNode;
+typedef struct SPRepr SPXMLText;
+typedef struct SPRepr SPXMLElement;
+typedef struct SPReprAttr SPXMLAttribute;
+typedef struct SPReprDoc SPXMLDocument;
 
 
 #endif /* !SEEN_XML_FORWARD_H */

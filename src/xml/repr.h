@@ -30,13 +30,6 @@
  * NB! Unless explicitly stated all methods are noref/nostrcpy
  */
 
-typedef struct SPRepr SPXMLNode;
-typedef struct SPRepr SPXMLText;
-typedef struct SPRepr SPXMLElement;
-typedef struct SPReprAttr SPXMLAttribute;
-typedef struct SPReprDoc SPXMLDocument;
-typedef struct SPXMLNs SPXMLNs;
-
 
 /**
 
@@ -203,8 +196,6 @@ gboolean sp_repr_save_file(SPReprDoc *doc, gchar const *filename);
 void sp_repr_print(SPRepr *repr);
 
 /* CSS stuff */
-
-typedef struct SPCSSAttr SPCSSAttr;
 
 SPCSSAttr *sp_repr_css_attr_new(void);
 void sp_repr_css_attr_unref(SPCSSAttr *css);
