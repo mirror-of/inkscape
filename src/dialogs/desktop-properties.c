@@ -186,8 +186,6 @@ sp_desktop_dialog_new (void)
 	GCallback cb;
 	int row;
 
-	cb = G_CALLBACK(sp_dtw_whatever_changed);
-
 	dialog = sp_window_new (_("Desktop settings"), FALSE);
 
 	nb = gtk_notebook_new ();
@@ -208,6 +206,7 @@ sp_desktop_dialog_new (void)
 
 	/* Checkbuttons */
 	row = 0;
+	cb = G_CALLBACK(sp_dtw_whatever_toggled);
 	spw_checkbutton(dialog, t, _("Show grid"), "showgrid", 0, row, 0, cb);
 	spw_checkbutton(dialog, t, _("Snap to grid"), "snaptogrid", 1, row++, 0, cb);
 
@@ -217,22 +216,20 @@ sp_desktop_dialog_new (void)
 	spw_checkbutton(dialog, t, _("Iso grid"), "isogrid", 0, row, 0, cb);
 	spw_checkbutton(dialog, t, _("Hex grid"), "hexgrid", 1, row++, 0, cb);
 
+	cb = G_CALLBACK(sp_dtw_whatever_changed);
+
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
 	spw_dropdown(dialog, t, _("Grid units:"), "grid_units", row++, us);
 
-	spw_unit_selector(dialog, t, _("Origin X:"), "gridoriginx", row++, us,
-			  G_CALLBACK (sp_dtw_whatever_changed));
-	spw_unit_selector(dialog, t, _("Origin Y:"), "gridoriginy", row++, us,
-			  G_CALLBACK (sp_dtw_whatever_changed));
+	spw_unit_selector(dialog, t, _("Origin X:"), "gridoriginx", row++, us, cb);
+	spw_unit_selector(dialog, t, _("Origin Y:"), "gridoriginy", row++, us, cb);
 	
-	spw_unit_selector(dialog, t, _("Spacing X:"), "gridspacingx", row++, us,
-			  G_CALLBACK (sp_dtw_whatever_changed));
-	spw_unit_selector(dialog, t, _("Spacing Y:"), "gridspacingy", row++, us,
-			  G_CALLBACK (sp_dtw_whatever_changed));
+	spw_unit_selector(dialog, t, _("Spacing X:"), "gridspacingx", row++, us, cb);
+	spw_unit_selector(dialog, t, _("Spacing Y:"), "gridspacingy", row++, us, cb);
 
  	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-	
-	g_assert(us != NULL);
+        spw_dropdown(dialog, t, _("Snap units:"), "grid_snap_units", row++, us);
+
 	spw_unit_selector(dialog, t, _("Snap distance:"), "gridtolerance", row++, us,
 			  G_CALLBACK (sp_dtw_grid_snap_distance_changed) );
 
@@ -250,9 +247,11 @@ sp_desktop_dialog_new (void)
 	gtk_table_set_col_spacings (GTK_TABLE (t), 4);
 	gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
+	cb = G_CALLBACK(sp_dtw_whatever_toggled);
 	spw_checkbutton(dialog, t, _("Show guides"), "showguides", 0, row, 1, cb);
 	spw_checkbutton(dialog, t, _("Snap to guides"), "snaptoguides", 1, row++, 0, cb);
 
+	cb = G_CALLBACK(sp_dtw_whatever_toggled);
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
 	spw_dropdown(dialog, t, _("Snap units:"), "guide_snap_units", row++, us);
 
