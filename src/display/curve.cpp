@@ -293,8 +293,9 @@ sp_curve_concat(GSList const *list)
     return new_curve;
 }
 
+/** Returns a list of new curves corresponding to the subpaths in \a curve. */
 GSList *
-sp_curve_split(SPCurve *curve)
+sp_curve_split(SPCurve const *curve)
 {
     g_return_val_if_fail(curve != NULL, NULL);
 
@@ -314,6 +315,8 @@ sp_curve_split(SPCurve *curve)
         new_curve->closed = (new_curve->bpath->code == NR_MOVETO);
         new_curve->hascpt = (new_curve->bpath->code == NR_MOVETO_OPEN);
         l = g_slist_append(l, new_curve);
+        /* effic: Use g_slist_prepend instead.  Either work backwards from the end of curve,
+           or work forwards as at present but do g_slist_reverse before returning. */
         p += i;
     }
 
@@ -1166,7 +1169,9 @@ sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &new_p0, NR::Point co
 
 /** \var SPCurve::hascpt
  *
- * True iff currentpoint is defined.
+ * True iff current point is defined.  Initially false for a new curve; becomes true after moveto;
+ * becomes false on closepath.  Curveto, lineto etc. require hascpt; hascpt remains true after
+ * lineto/curveto.
  */
 
 /** \var SPCurve::posSet

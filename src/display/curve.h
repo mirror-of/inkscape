@@ -54,7 +54,7 @@ void sp_curve_finish(SPCurve *curve);
 void sp_curve_ensure_space(SPCurve *curve, gint space);
 SPCurve *sp_curve_copy(SPCurve *curve);
 SPCurve *sp_curve_concat(GSList const *list);
-GSList *sp_curve_split(SPCurve *curve);
+GSList *sp_curve_split(SPCurve const *curve);
 void sp_curve_transform(SPCurve *curve, NR::Matrix const &);
 void sp_curve_transform(SPCurve *curve, NR::translate const &);
 void sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &, NR::Point const &);
