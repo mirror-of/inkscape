@@ -127,7 +127,8 @@ sp_shortcut_init ()
 	sp_shortcut_set (GDK_KP_Multiply, SP_VERB_CONTEXT_STAR, true);
 
 	/* Zooming and desktop */
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_plus, SP_VERB_ZOOM_IN, true);
+	sp_shortcut_set (GDK_plus, SP_VERB_ZOOM_IN, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_plus, SP_VERB_ZOOM_IN, false);
 	sp_shortcut_set (GDK_equal, SP_VERB_ZOOM_IN, false);
 	sp_shortcut_set (GDK_KP_Add, SP_VERB_ZOOM_IN, false);
 

@@ -1,3 +1,8 @@
+2004-01-02  MenTaLguY <mental@rydia.net>
+
+	* src/shortcuts.cpp: zoom in shortcut fix for german and other
+	  keyboards from schumaml
+
 2004-01-02  Alexander Clausen <alex@skip86.com>
 	
 	* src/spsvgview.cpp src/inkview.cpp src/Makefile.am: re-enabled svg viewer,
