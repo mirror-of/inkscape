@@ -298,8 +298,7 @@ font_factory::font_factory(void)
 	pango_ft2_font_map_set_resolution((PangoFT2FontMap*)fontServer, 72, 72);
 	fontContext=pango_ft2_font_map_create_context((PangoFT2FontMap*)fontServer);
 	pango_ft2_font_map_set_default_substitute((PangoFT2FontMap*)fontServer,FactorySubstituteFunc,this,NULL);
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	fontContext=pango_win32_get_context();
 	fontServer=pango_win32_font_map_for_display();
 	wCache=pango_win32_font_map_get_font_cache(fontServer);
@@ -317,8 +316,7 @@ font_factory::~font_factory(void)
 #ifdef WITH_XFT
 	g_object_unref(fontServer);
 	//	pango_ft2_shutdown_display();
-#endif
-#ifdef WIN32
+#elif defined(WIN32)
 	pango_win32_shutdown_display();
 #endif
 	//	g_object_unref(fontContext);
