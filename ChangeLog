@@ -1,5 +1,7 @@
 2004-05-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item.cpp: Cleanup: greater conformance to CodingStyle.
+
 	* acinclude.m4: Remove.
 
 2004-05-16  Carl Hetherington  <inkscape@carlh.net>
@@ -100,17 +102,17 @@
 
 	   b) the NRObject-derived inheritance chain is always first in cases
 	      of multiple inheritance (the NRObject must be first in the memory
-		  layout)
+	      layout)
 
-       c) The subclass in question overrides NRObjectClass::cpp_ctor in its
+	   c) The subclass in question overrides NRObjectClass::cpp_ctor in its
 	      own class_init function, with a pointer to a function that calls
-		  the specific subclass' constructor (via placement new -- you will
-		  need to #include <new> for this to work)
+	      the specific subclass' constructor (via placement new -- you will
+	      need to #include <new> for this to work)
 
-		  n.b. Objects of classes which do not override cpp_ctor will appear
-		  to the C++ runtime system (RTTI and virtual dispatch, at least) as
-		  objects of the closest ancestor class which does override it
-		  (NRObject or NRActiveObject if nothing else).
+	      n.b. Objects of classes which do not override cpp_ctor will appear
+	      to the C++ runtime system (RTTI and virtual dispatch, at least) as
+	      objects of the closest ancestor class which does override it
+	      (NRObject or NRActiveObject if nothing else).
 
 2004-05-15  MenTaLguY  <mental@rydia.net>
 
@@ -299,41 +301,41 @@
 	* share/markers/markers.svg: Cleanup, sizes, remove manual previews 
 
 	* style.cpp: Disabled warning for overflow property (we need it for markers)
- 
+
 	* splivarot.cpp: Fixed transform when doing boolop inside group 
 
 	* libnr/nr-path.cpp: Ported fix from sodi, fixes two bugs with endnodes of a
 	curve on the same hor/vert line
- 
+
 	* sp-namedview.cpp: Use set_default_size instead of _resize for setting window
 	from namedview
- 
+
 	* preferences-skeleton.h dialogs/item-properties.cpp: Objects props
 	transientized (better late than never)
 
 	* dialogs/display-settings.cpp: Added simplify threshold
- 
+
 	* sp-use.cpp: Mega-kill use on unlink
- 
+
 	* preferences-skeleton.h dialogs/display-settings.cpp: Orphaned clones options
- 
+
 	* sp-item-group.cpp: Prevent jumps when ungrouping clone with its original
- 
+
 	* sp-object.cpp: Fix crash when deleting clone and its original
- 
+
 	* toolbox.cpp, tool contexts: Alt-x and top panel keyboard shortcuts now work
 	for all tools
 
 	* sp-use.cpp enums.h: Unlink option on self-delete
 
 	* sp-use.cpp: Fix: disappeating clone on undoing ungrouping (_show finally works properly)
- 
+
 	* splivarot.cpp: Boolops: cleanup, preserve id, parent, position, fix to take
 	style from the bottom object
- 
+
 	* interface.cpp verbs.cpp shortcuts.cpp: Mnemonics, tooltips, shortcuts,
 	cleanup, autoraise removed from menu
- 
+
 2004-05-07  Kees Cook <kees@outflux.net>
 
 	* src/verbs.cpp: re-localizing tutorials.  My goof!

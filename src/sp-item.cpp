@@ -44,21 +44,21 @@
 
 #define noSP_ITEM_DEBUG_IDLE
 
-static void sp_item_class_init (SPItemClass *klass);
-static void sp_item_init (SPItem *item);
+static void sp_item_class_init(SPItemClass *klass);
+static void sp_item_init(SPItem *item);
 
-static void sp_item_build (SPObject * object, SPDocument * document, SPRepr * repr);
-static void sp_item_release (SPObject *object);
-static void sp_item_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_item_update (SPObject *object, SPCtx *ctx, guint flags);
-static SPRepr *sp_item_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_item_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_item_release(SPObject *object);
+static void sp_item_set(SPObject *object, unsigned key, gchar const *value);
+static void sp_item_update(SPObject *object, SPCtx *ctx, guint flags);
+static SPRepr *sp_item_write(SPObject *object, SPRepr *repr, guint flags);
 static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform);
 
-static gchar * sp_item_private_description (SPItem * item);
+static gchar *sp_item_private_description(SPItem *item);
 static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size);
 
-static SPItemView *sp_item_view_new_prepend (SPItemView *list, SPItem *item, unsigned int flags, unsigned int key, NRArenaItem *arenaitem);
-static SPItemView *sp_item_view_list_remove (SPItemView *list, SPItemView *view);
+static SPItemView *sp_item_view_new_prepend(SPItemView *list, SPItem *item, unsigned flags, unsigned key, NRArenaItem *arenaitem);
+static SPItemView *sp_item_view_list_remove(SPItemView *list, SPItemView *view);
 
 static SPObjectClass *parent_class;
 
@@ -66,444 +66,446 @@ static void clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 static void mask_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 
 GType
-sp_item_get_type (void)
+sp_item_get_type(void)
 {
-	static GType type = 0;
-	if (!type) {
-		GTypeInfo info = {
-			sizeof (SPItemClass),
-			NULL, NULL,
-			(GClassInitFunc) sp_item_class_init,
-			NULL, NULL,
-			sizeof (SPItem),
-			16,
-			(GInstanceInitFunc) sp_item_init,
-			NULL,	/* value_table */
-		};
-		type = g_type_register_static (SP_TYPE_OBJECT, "SPItem", &info, (GTypeFlags)0);
-	}
-	return type;
+    static GType type = 0;
+    if (!type) {
+        GTypeInfo info = {
+            sizeof(SPItemClass),
+            NULL, NULL,
+            (GClassInitFunc) sp_item_class_init,
+            NULL, NULL,
+            sizeof(SPItem),
+            16,
+            (GInstanceInitFunc) sp_item_init,
+            NULL,   /* value_table */
+        };
+        type = g_type_register_static(SP_TYPE_OBJECT, "SPItem", &info, (GTypeFlags)0);
+    }
+    return type;
 }
 
 static void
-sp_item_class_init (SPItemClass *klass)
+sp_item_class_init(SPItemClass *klass)
 {
-	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
+    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
-	parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
+    parent_class = (SPObjectClass *)g_type_class_ref(SP_TYPE_OBJECT);
 
-	sp_object_class->build = sp_item_build;
-	sp_object_class->release = sp_item_release;
-	sp_object_class->set = sp_item_set;
-	sp_object_class->update = sp_item_update;
-	sp_object_class->write = sp_item_write;
+    sp_object_class->build = sp_item_build;
+    sp_object_class->release = sp_item_release;
+    sp_object_class->set = sp_item_set;
+    sp_object_class->update = sp_item_update;
+    sp_object_class->write = sp_item_write;
 
-	klass->description = sp_item_private_description;
-	klass->snappoints = sp_item_private_snappoints;
+    klass->description = sp_item_private_description;
+    klass->snappoints = sp_item_private_snappoints;
 }
 
 static void
-sp_item_init (SPItem *item)
+sp_item_init(SPItem *item)
 {
-	SPObject *object = SP_OBJECT (item);
+    SPObject *object = SP_OBJECT(item);
 
-	item->sensitive = TRUE;
-	item->printable = TRUE;
+    item->sensitive = TRUE;
+    item->printable = TRUE;
 
-	nr_matrix_set_identity (&item->transform);
+    nr_matrix_set_identity(&item->transform);
 
-	item->display = NULL;
+    item->display = NULL;
 
-	item->clip_ref = new SPClipPathReference(SP_OBJECT(item));
-	item->clip_ref->changedSignal().connect(SigC::bind(SigC::slot(clip_ref_changed), item));
+    item->clip_ref = new SPClipPathReference(SP_OBJECT(item));
+    item->clip_ref->changedSignal().connect(SigC::bind(SigC::slot(clip_ref_changed), item));
 
-	item->mask_ref = new SPMaskReference(SP_OBJECT(item));
-	item->mask_ref->changedSignal().connect(SigC::bind(SigC::slot(mask_ref_changed), item));
+    item->mask_ref = new SPMaskReference(SP_OBJECT(item));
+    item->mask_ref->changedSignal().connect(SigC::bind(SigC::slot(mask_ref_changed), item));
 
-	if (!object->style) object->style = sp_style_new_from_object (SP_OBJECT (item));
+    if (!object->style) object->style = sp_style_new_from_object(SP_OBJECT(item));
 
-	new (&item->_transformed_signal) SigC::Signal2<void, NR::Matrix const *, SPItem *>();
+    new (&item->_transformed_signal) SigC::Signal2<void, NR::Matrix const *, SPItem *>();
 }
 
 static void
-sp_item_build (SPObject * object, SPDocument * document, SPRepr * repr)
+sp_item_build(SPObject *object, SPDocument *document, SPRepr *repr)
 {
-	sp_object_read_attr (object, "style");
-	sp_object_read_attr (object, "transform");
-	sp_object_read_attr (object, "clip-path");
-	sp_object_read_attr (object, "mask");
-	sp_object_read_attr (object, "sodipodi:insensitive");
-	sp_object_read_attr (object, "sodipodi:nonprintable");
+    sp_object_read_attr(object, "style");
+    sp_object_read_attr(object, "transform");
+    sp_object_read_attr(object, "clip-path");
+    sp_object_read_attr(object, "mask");
+    sp_object_read_attr(object, "sodipodi:insensitive");
+    sp_object_read_attr(object, "sodipodi:nonprintable");
 
-	if (((SPObjectClass *) (parent_class))->build)
-		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);
+    if (((SPObjectClass *) (parent_class))->build) {
+        (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
+    }
 }
 
 static void
-sp_item_release (SPObject * object)
+sp_item_release(SPObject *object)
 {
-	SPItem *item = (SPItem *) object;
+    SPItem *item = (SPItem *) object;
 
-	if (item->clip_ref) {
-		item->clip_ref->detach();
-		delete item->clip_ref;
-		item->clip_ref = NULL;
-	}
+    if (item->clip_ref) {
+        item->clip_ref->detach();
+        delete item->clip_ref;
+        item->clip_ref = NULL;
+    }
 
-	if (item->mask_ref) {
-		item->mask_ref->detach();
-		delete item->mask_ref;
-		item->mask_ref = NULL;
-	}
+    if (item->mask_ref) {
+        item->mask_ref->detach();
+        delete item->mask_ref;
+        item->mask_ref = NULL;
+    }
 
-	if (((SPObjectClass *) (parent_class))->release)
-		((SPObjectClass *) parent_class)->release (object);
+    if (((SPObjectClass *) (parent_class))->release) {
+        ((SPObjectClass *) parent_class)->release(object);
+    }
 
-	while (item->display) {
-		nr_arena_item_unparent (item->display->arenaitem);
-		item->display = sp_item_view_list_remove (item->display, item->display);
-	}
+    while (item->display) {
+        nr_arena_item_unparent(item->display->arenaitem);
+        item->display = sp_item_view_list_remove(item->display, item->display);
+    }
 
-	item->_transformed_signal.~Signal2();
+    item->_transformed_signal.~Signal2();
 }
 
 static void
-sp_item_set (SPObject *object, unsigned int key, const gchar *value)
+sp_item_set(SPObject *object, unsigned key, gchar const *value)
 {
-	SPItem *item = (SPItem *) object;
+    SPItem *item = (SPItem *) object;
 
-	switch (key) {
-	case SP_ATTR_TRANSFORM: {
-		NRMatrix t;
-		if (value && sp_svg_transform_read (value, &t)) {
-			sp_item_set_item_transform(item, t);
-		} else {
-			sp_item_set_item_transform(item, NR::identity());
-		}
-		break;
-	}
-	case SP_PROP_CLIP_PATH: {
-		gchar *uri = Inkscape::parse_css_url(value);
-		if (uri) {
-			try {
-				item->clip_ref->attach(Inkscape::URI(uri));
-			} catch (Inkscape::BadURIException &e) {
-				g_warning("%s", e.what());
-				item->clip_ref->detach();
-			}
-			g_free(uri);
-		} else {
-			item->clip_ref->detach();
-		}
+    switch (key) {
+        case SP_ATTR_TRANSFORM: {
+            NRMatrix t;
+            if (value && sp_svg_transform_read(value, &t)) {
+                sp_item_set_item_transform(item, t);
+            } else {
+                sp_item_set_item_transform(item, NR::identity());
+            }
+            break;
+        }
+        case SP_PROP_CLIP_PATH: {
+            gchar *uri = Inkscape::parse_css_url(value);
+            if (uri) {
+                try {
+                    item->clip_ref->attach(Inkscape::URI(uri));
+                } catch (Inkscape::BadURIException &e) {
+                    g_warning("%s", e.what());
+                    item->clip_ref->detach();
+                }
+                g_free(uri);
+            } else {
+                item->clip_ref->detach();
+            }
 
-		break;
-	}
-	case SP_PROP_MASK: {
-		gchar *uri=Inkscape::parse_css_url(value);
-		if (uri) {
-			try {
-				item->mask_ref->attach(Inkscape::URI(uri));
-			} catch (Inkscape::BadURIException &e) {
-				g_warning("%s", e.what());
-				item->mask_ref->detach();
-			}
-			g_free(uri);
-		} else {
-			item->clip_ref->detach();
-		}
+            break;
+        }
+        case SP_PROP_MASK: {
+            gchar *uri=Inkscape::parse_css_url(value);
+            if (uri) {
+                try {
+                    item->mask_ref->attach(Inkscape::URI(uri));
+                } catch (Inkscape::BadURIException &e) {
+                    g_warning("%s", e.what());
+                    item->mask_ref->detach();
+                }
+                g_free(uri);
+            } else {
+                item->clip_ref->detach();
+            }
 
-		break;
-	}
-	case SP_ATTR_SODIPODI_INSENSITIVE:
-		item->sensitive = !value;
-		for (SPItemView *v = item->display; v != NULL; v = v->next) {
-			nr_arena_item_set_sensitive (v->arenaitem, item->sensitive);
-		}
-		break;
-	case SP_ATTR_SODIPODI_NONPRINTABLE:
-		item->printable = !value;
-		for (SPItemView *v = item->display; v != NULL; v = v->next) {
-			if (v->flags & SP_ITEM_SHOW_PRINT) {
-				nr_arena_item_set_visible (v->arenaitem, item->printable);
-			}
-		}
-		break;
-	case SP_ATTR_STYLE:
-		sp_style_read_from_object (object->style, object);
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-		break;
-	default:
-		if (SP_ATTRIBUTE_IS_CSS (key)) {
-			sp_style_read_from_object (object->style, object);
-			sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-		} else {
-		  if (((SPObjectClass *) (parent_class))->set) {
-		    (* ((SPObjectClass *) (parent_class))->set) (object, key, value);
-		  }
-		}
-		break;
-	}
+            break;
+        }
+        case SP_ATTR_SODIPODI_INSENSITIVE:
+            item->sensitive = !value;
+            for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                nr_arena_item_set_sensitive(v->arenaitem, item->sensitive);
+            }
+            break;
+        case SP_ATTR_SODIPODI_NONPRINTABLE:
+            item->printable = !value;
+            for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                if (v->flags & SP_ITEM_SHOW_PRINT) {
+                    nr_arena_item_set_visible(v->arenaitem, item->printable);
+                }
+            }
+            break;
+        case SP_ATTR_STYLE:
+            sp_style_read_from_object(object->style, object);
+            sp_object_request_update(object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            break;
+        default:
+            if (SP_ATTRIBUTE_IS_CSS(key)) {
+                sp_style_read_from_object(object->style, object);
+                sp_object_request_update(object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            } else {
+                if (((SPObjectClass *) (parent_class))->set) {
+                    (* ((SPObjectClass *) (parent_class))->set)(object, key, value);
+                }
+            }
+            break;
+    }
 }
 
 static void
 clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)
 {
-	if (old_clip) {
-		SPItemView *v;
-		/* Hide clippath */
-		for (v = item->display; v != NULL; v = v->next) {
-			sp_clippath_hide (SP_CLIPPATH (old_clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-			nr_arena_item_set_clip (v->arenaitem, NULL);
-		}
-	}
-	if (SP_IS_CLIPPATH (clip)) {
-		NRRect bbox;
-		SPItemView *v;
-		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
-		for (v = item->display; v != NULL; v = v->next) {
-			NRArenaItem *ai;
-			if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
-			ai = sp_clippath_show (SP_CLIPPATH (clip), NR_ARENA_ITEM_ARENA (v->arenaitem), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-			nr_arena_item_set_clip (v->arenaitem, ai);
-			nr_arena_item_unref (ai);
-			sp_clippath_set_bbox (SP_CLIPPATH (clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
-		}
-	}
+    if (old_clip) {
+        SPItemView *v;
+        /* Hide clippath */
+        for (v = item->display; v != NULL; v = v->next) {
+            sp_clippath_hide(SP_CLIPPATH(old_clip), NR_ARENA_ITEM_GET_KEY(v->arenaitem));
+            nr_arena_item_set_clip(v->arenaitem, NULL);
+        }
+    }
+    if (SP_IS_CLIPPATH(clip)) {
+        NRRect bbox;
+        sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
+        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+            if (!v->arenaitem->key) {
+                NR_ARENA_ITEM_SET_KEY(v->arenaitem, sp_item_display_key_new(3));
+            }
+            NRArenaItem *ai = sp_clippath_show(SP_CLIPPATH(clip),
+                                               NR_ARENA_ITEM_ARENA(v->arenaitem),
+                                               NR_ARENA_ITEM_GET_KEY(v->arenaitem));
+            nr_arena_item_set_clip(v->arenaitem, ai);
+            nr_arena_item_unref(ai);
+            sp_clippath_set_bbox(SP_CLIPPATH(clip), NR_ARENA_ITEM_GET_KEY(v->arenaitem), &bbox);
+        }
+    }
 }
 
 static void
 mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
 {
-	if (old_mask) {
-		SPItemView *v;
-		/* Hide mask */
-		for (v = item->display; v != NULL; v = v->next) {
-			sp_mask_hide (SP_MASK (old_mask), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-			nr_arena_item_set_mask (v->arenaitem, NULL);
-		}
-	}
-	if (SP_IS_MASK (mask)) {
-		NRRect bbox;
-		SPItemView *v;
-		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
-		for (v = item->display; v != NULL; v = v->next) {
-			NRArenaItem *ai;
-			if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
-			ai = sp_mask_show (SP_MASK (mask), NR_ARENA_ITEM_ARENA (v->arenaitem), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-			nr_arena_item_set_mask (v->arenaitem, ai);
-			nr_arena_item_unref (ai);
-			sp_mask_set_bbox (SP_MASK (mask), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
-		}
-	}
+    if (old_mask) {
+        /* Hide mask */
+        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+            sp_mask_hide(SP_MASK(old_mask), NR_ARENA_ITEM_GET_KEY(v->arenaitem));
+            nr_arena_item_set_mask(v->arenaitem, NULL);
+        }
+    }
+    if (SP_IS_MASK(mask)) {
+        NRRect bbox;
+        sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
+        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+            if (!v->arenaitem->key) {
+                NR_ARENA_ITEM_SET_KEY(v->arenaitem, sp_item_display_key_new(3));
+            }
+            NRArenaItem *ai = sp_mask_show(SP_MASK(mask),
+                                           NR_ARENA_ITEM_ARENA(v->arenaitem),
+                                           NR_ARENA_ITEM_GET_KEY(v->arenaitem));
+            nr_arena_item_set_mask(v->arenaitem, ai);
+            nr_arena_item_unref(ai);
+            sp_mask_set_bbox(SP_MASK(mask), NR_ARENA_ITEM_GET_KEY(v->arenaitem), &bbox);
+        }
+    }
 }
 
 static void
-sp_item_update (SPObject *object, SPCtx *ctx, guint flags)
+sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-	SPItem *item = SP_ITEM (object);
+    SPItem *item = SP_ITEM(object);
 
-	if (((SPObjectClass *) (parent_class))->update)
-		(* ((SPObjectClass *) (parent_class))->update) (object, ctx, flags);
+    if (((SPObjectClass *) (parent_class))->update)
+        (* ((SPObjectClass *) (parent_class))->update)(object, ctx, flags);
 
-	if (flags & (SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) {
-		SPItemView *v;
-		SPClipPath *clip_path;
-		SPMask *mask;
+    if (flags & (SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) {
+        if (flags & SP_OBJECT_MODIFIED_FLAG) {
+            for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                nr_arena_item_set_transform(v->arenaitem, &item->transform);
+            }
+        }
 
-		if (flags & SP_OBJECT_MODIFIED_FLAG) {
-			for (v = item->display; v != NULL; v = v->next) {
-				nr_arena_item_set_transform (v->arenaitem, &item->transform);
-			}
-		}
+        SPClipPath *clip_path = item->clip_ref->getObject();
+        SPMask *mask = item->mask_ref->getObject();
 
-		clip_path = item->clip_ref->getObject();
-		mask = item->mask_ref->getObject();
+        if ( clip_path || mask ) {
+            NRRect bbox;
+            sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
+            if (clip_path) {
+                for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                    sp_clippath_set_bbox(clip_path, NR_ARENA_ITEM_GET_KEY(v->arenaitem), &bbox);
+                }
+            }
+            if (mask) {
+                for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                    sp_mask_set_bbox(mask, NR_ARENA_ITEM_GET_KEY(v->arenaitem), &bbox);
+                }
+            }
+        }
 
-		if ( clip_path || mask ) {
-			NRRect bbox;
-
-			sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
-			if (clip_path) {
-				for (v = item->display; v != NULL; v = v->next) {
-					sp_clippath_set_bbox (clip_path, NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
-				}
-			}
-			if (mask) {
-				for (v = item->display; v != NULL; v = v->next) {
-					sp_mask_set_bbox (mask, NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
-				}
-			}
-		}
-
-		if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-			for (v = item->display; v != NULL; v = v->next) {
-				nr_arena_item_set_opacity (v->arenaitem, SP_SCALE24_TO_FLOAT (object->style->opacity.value));
-			}
-		}
-	}
+        if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
+            for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                nr_arena_item_set_opacity(v->arenaitem, SP_SCALE24_TO_FLOAT(object->style->opacity.value));
+            }
+        }
+    }
 }
 
 static SPRepr *
-sp_item_write (SPObject *object, SPRepr *repr, guint flags)
+sp_item_write(SPObject *object, SPRepr *repr, guint flags)
 {
-	SPItem *item;
-	gchar c[256];
-	gchar *s;
+    SPItem *item = SP_ITEM(object);
 
-	item = SP_ITEM (object);
+    gchar c[256];
+    if (sp_svg_transform_write(c, 256, &item->transform)) {
+        sp_repr_set_attr(repr, "transform", c);
+    } else {
+        sp_repr_set_attr(repr, "transform", NULL);
+    }
 
-	if (sp_svg_transform_write (c, 256, &item->transform)) {
-		sp_repr_set_attr (repr, "transform", c);
-	} else {
-		sp_repr_set_attr (repr, "transform", NULL);
-	}
+    if (SP_OBJECT_PARENT(object)) {
+        gchar *s = sp_style_write_difference(SP_OBJECT_STYLE(object), SP_OBJECT_STYLE(SP_OBJECT_PARENT(object)));
+        if (s) {
+            sp_repr_set_attr(repr, "style", (*s) ? s : NULL);
+            g_free(s);
+        }
+    }
+    //else {
+    //    sp_repr_set_attr(repr, "style", NULL);
+    //}
 
-	if (SP_OBJECT_PARENT (object)) {
-		s = sp_style_write_difference (SP_OBJECT_STYLE (object), SP_OBJECT_STYLE (SP_OBJECT_PARENT (object)));
-		if (s) {
-			sp_repr_set_attr (repr, "style", (*s) ? s : NULL);
-			g_free (s);
-		}
-	} 
-	//else {
-	//		sp_repr_set_attr (repr, "style", NULL);
-	//	}
+    if (flags & SP_OBJECT_WRITE_EXT) {
+        sp_repr_set_attr(repr, "sodipodi:insensitive", item->sensitive ? NULL : "true");
+    }
 
-	if (flags & SP_OBJECT_WRITE_EXT) {
-		sp_repr_set_attr (repr, "sodipodi:insensitive", item->sensitive ? NULL : "true");
-	}
+    if (((SPObjectClass *) (parent_class))->write) {
+        ((SPObjectClass *) (parent_class))->write(object, repr, flags);
+    }
 
-	if (((SPObjectClass *) (parent_class))->write)
-		((SPObjectClass *) (parent_class))->write (object, repr, flags);
-
-	return repr;
+    return repr;
 }
 
 void
 sp_item_invoke_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear)
 {
-	sp_item_invoke_bbox_full (item, bbox, transform, 0, clear);
+    sp_item_invoke_bbox_full(item, bbox, transform, 0, clear);
 }
 
 void
 sp_item_invoke_bbox_full(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear)
 {
-	g_assert (item != NULL);
-	g_assert (SP_IS_ITEM (item));
-	g_assert (bbox != NULL);
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
+    g_assert(bbox != NULL);
 
-	if (clear) {
-		bbox->x0 = bbox->y0 = 1e18;
-		bbox->x1 = bbox->y1 = -1e18;
-	}
+    if (clear) {
+        bbox->x0 = bbox->y0 = 1e18;
+        bbox->x1 = bbox->y1 = -1e18;
+    }
 
-	if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->bbox)
-		((SPItemClass *) G_OBJECT_GET_CLASS (item))->bbox (item, bbox, transform, flags);
+    if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->bbox) {
+        ((SPItemClass *) G_OBJECT_GET_CLASS(item))->bbox(item, bbox, transform, flags);
+    }
 }
 
-unsigned sp_item_pos_in_parent(SPItem *item) {
-	g_assert(item != NULL);
-	g_assert(SP_IS_ITEM(item));
+unsigned sp_item_pos_in_parent(SPItem *item)
+{
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
 
-	SPObject *parent = SP_OBJECT_PARENT(item);
-	g_assert(parent != NULL);
-	g_assert(SP_IS_OBJECT(parent));
+    SPObject *parent = SP_OBJECT_PARENT(item);
+    g_assert(parent != NULL);
+    g_assert(SP_IS_OBJECT(parent));
 
-	SPObject *object = SP_OBJECT(item);
+    SPObject *object = SP_OBJECT(item);
 
-	SPObject *iter;
-	unsigned pos=0;
-	for ( iter = sp_object_first_child(parent) ; iter ; iter = SP_OBJECT_NEXT(iter)) {
-		if ( iter == object ) {
-			return pos;
-		}
-		if (SP_IS_ITEM(iter)) {
-			pos++;
-		}
-	}
+    unsigned pos=0;
+    for ( SPObject *iter = sp_object_first_child(parent) ; iter ; iter = SP_OBJECT_NEXT(iter)) {
+        if ( iter == object ) {
+            return pos;
+        }
+        if (SP_IS_ITEM(iter)) {
+            pos++;
+        }
+    }
 
-	g_assert_not_reached();
-	return 0;
+    g_assert_not_reached();
+    return 0;
 }
 
 void
-sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
+sp_item_bbox_desktop(SPItem *item, NRRect *bbox)
 {
-	g_assert (item != NULL);
-	g_assert (SP_IS_ITEM (item));
-	g_assert (bbox != NULL);
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
+    g_assert(bbox != NULL);
 
-	sp_item_invoke_bbox(item, bbox, sp_item_i2d_affine(item), TRUE);
+    sp_item_invoke_bbox(item, bbox, sp_item_i2d_affine(item), TRUE);
 }
 
 NR::Rect sp_item_bbox_desktop(SPItem *item)
 {
-	NRRect ret;
-	sp_item_bbox_desktop(item, &ret);
-	return NR::Rect(ret);
+    NRRect ret;
+    sp_item_bbox_desktop(item, &ret);
+    return NR::Rect(ret);
 }
 
 static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size)
 {
-	if (size < 2) return 0;
-	NRRect bbox;
-	sp_item_invoke_bbox(item, &bbox, sp_item_i2d_affine(item), TRUE);
-	NR::Rect const bbox2(bbox);
-	/* Just a pair of opposite corners of the bounding box suffices given that we don't yet
-	   support angled guide lines. */
-	int i = 0;
-	p[i++] = bbox2.min();
-	p[i++] = bbox2.max();
-	return i;
+    if (size < 2) {
+        return 0;
+    }
+    NRRect bbox;
+    sp_item_invoke_bbox(item, &bbox, sp_item_i2d_affine(item), TRUE);
+    NR::Rect const bbox2(bbox);
+    /* Just a pair of opposite corners of the bounding box suffices given that we don't yet
+       support angled guide lines. */
+    int i = 0;
+    p[i++] = bbox2.min();
+    p[i++] = bbox2.max();
+    return i;
 }
 
 int sp_item_snappoints(SPItem *item, NR::Point p[], int size)
 {
-	g_return_val_if_fail (item != NULL, 0);
-	g_return_val_if_fail (SP_IS_ITEM (item), 0);
+    g_return_val_if_fail(item != NULL, 0);
+    g_return_val_if_fail(SP_IS_ITEM(item), 0);
 
-	SPItemClass const &item_class = *(SPItemClass const *) G_OBJECT_GET_CLASS(item);
-	if (item_class.snappoints) {
-	        return item_class.snappoints(item, p, size);
-	}
+    SPItemClass const &item_class = *(SPItemClass const *) G_OBJECT_GET_CLASS(item);
+    if (item_class.snappoints) {
+        return item_class.snappoints(item, p, size);
+    }
 
-	return 0;
+    return 0;
 }
 
 void
-sp_item_invoke_print (SPItem *item, SPPrintContext *ctx)
+sp_item_invoke_print(SPItem *item, SPPrintContext *ctx)
 {
-	if (item->printable) {
-		if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->print) {
-			if (!nr_matrix_test_identity (&item->transform, NR_EPSILON) ||
-			    SP_OBJECT_STYLE (item)->opacity.value != SP_SCALE24_MAX) {
-				sp_print_bind (ctx, &item->transform, SP_SCALE24_TO_FLOAT (SP_OBJECT_STYLE (item)->opacity.value));
-				((SPItemClass *) G_OBJECT_GET_CLASS (item))->print (item, ctx);
-				sp_print_release (ctx);
-			} else {
-				((SPItemClass *) G_OBJECT_GET_CLASS (item))->print (item, ctx);
-			}
-		}
-	}
+    if (item->printable) {
+        if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->print) {
+            if (!nr_matrix_test_identity(&item->transform, NR_EPSILON) ||
+                SP_OBJECT_STYLE(item)->opacity.value != SP_SCALE24_MAX) {
+                sp_print_bind(ctx, &item->transform, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
+                ((SPItemClass *) G_OBJECT_GET_CLASS(item))->print(item, ctx);
+                sp_print_release(ctx);
+            } else {
+                ((SPItemClass *) G_OBJECT_GET_CLASS(item))->print(item, ctx);
+            }
+        }
+    }
 }
 
 static gchar *
-sp_item_private_description (SPItem * item)
+sp_item_private_description(SPItem *item)
 {
-	return g_strdup (_("Object"));
+    return g_strdup(_("Object"));
 }
 
 gchar *
-sp_item_description (SPItem * item)
+sp_item_description(SPItem *item)
 {
-	g_assert (item != NULL);
-	g_assert (SP_IS_ITEM (item));
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
 
-	if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->description)
-		return ((SPItemClass *) G_OBJECT_GET_CLASS (item))->description (item);
+    if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->description) {
+        return ((SPItemClass *) G_OBJECT_GET_CLASS(item))->description(item);
+    }
 
-	g_assert_not_reached ();
-	return NULL;
+    g_assert_not_reached();
+    return NULL;
 }
 
 /**
@@ -512,144 +514,141 @@ sp_item_description (SPItem * item)
 * \return First allocated key; hence if the returned key is n
 * you can use n, n + 1, ..., n + (numkeys - 1)
 */
-unsigned int
-sp_item_display_key_new (unsigned int numkeys)
+unsigned
+sp_item_display_key_new(unsigned numkeys)
 {
-	static unsigned int dkey = 0;
+    static unsigned dkey = 0;
 
-	dkey += numkeys;
+    dkey += numkeys;
 
-	return dkey - numkeys;
+    return dkey - numkeys;
 }
 
 NRArenaItem *
-sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
+sp_item_invoke_show(SPItem *item, NRArena *arena, unsigned key, unsigned flags)
 {
-	NRArenaItem *ai;
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
+    g_assert(arena != NULL);
+    g_assert(NR_IS_ARENA(arena));
 
-	g_assert (item != NULL);
-	g_assert (SP_IS_ITEM (item));
-	g_assert (arena != NULL);
-	g_assert (NR_IS_ARENA (arena));
+    NRArenaItem *ai = NULL;
+    if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->show) {
+        ai = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->show(item, arena, key, flags);
+    }
 
-	ai = NULL;
+    if (ai != NULL) {
+        item->display = sp_item_view_new_prepend(item->display, item, flags, key, ai);
+        nr_arena_item_set_transform(ai, &item->transform);
+        nr_arena_item_set_opacity(ai, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
+        nr_arena_item_set_sensitive(ai, item->sensitive);
+        if (flags & SP_ITEM_SHOW_PRINT) {
+            nr_arena_item_set_visible(ai, item->printable);
+        }
+        if (item->clip_ref->getObject()) {
+            NRArenaItem *ac;
+            if (!item->display->arenaitem->key) NR_ARENA_ITEM_SET_KEY(item->display->arenaitem, sp_item_display_key_new(3));
+            ac = sp_clippath_show(item->clip_ref->getObject(), arena, NR_ARENA_ITEM_GET_KEY(item->display->arenaitem));
+            nr_arena_item_set_clip(ai, ac);
+            nr_arena_item_unref(ac);
+        }
+        if (item->mask_ref->getObject()) {
+            NRArenaItem *ac;
+            if (!item->display->arenaitem->key) NR_ARENA_ITEM_SET_KEY(item->display->arenaitem, sp_item_display_key_new(3));
+            ac = sp_mask_show(item->mask_ref->getObject(), arena, NR_ARENA_ITEM_GET_KEY(item->display->arenaitem));
+            nr_arena_item_set_mask(ai, ac);
+            nr_arena_item_unref(ac);
+        }
+        NR_ARENA_ITEM_SET_DATA(ai, item);
+    }
 
-	if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->show)
-		ai = ((SPItemClass *) G_OBJECT_GET_CLASS (item))->show (item, arena, key, flags);
-
-	if (ai != NULL) {
-		item->display = sp_item_view_new_prepend (item->display, item, flags, key, ai);
-		nr_arena_item_set_transform (ai, &item->transform);
-		nr_arena_item_set_opacity (ai, SP_SCALE24_TO_FLOAT (SP_OBJECT_STYLE (item)->opacity.value));
-		nr_arena_item_set_sensitive (ai, item->sensitive);
-		if (flags & SP_ITEM_SHOW_PRINT) {
-			nr_arena_item_set_visible (ai, item->printable);
-		}
-		if (item->clip_ref->getObject()) {
-			NRArenaItem *ac;
-			if (!item->display->arenaitem->key) NR_ARENA_ITEM_SET_KEY (item->display->arenaitem, sp_item_display_key_new (3));
-			ac = sp_clippath_show (item->clip_ref->getObject(), arena, NR_ARENA_ITEM_GET_KEY (item->display->arenaitem));
-			nr_arena_item_set_clip (ai, ac);
-			nr_arena_item_unref (ac);
-		}
-		if (item->mask_ref->getObject()) {
-			NRArenaItem *ac;
-			if (!item->display->arenaitem->key) NR_ARENA_ITEM_SET_KEY (item->display->arenaitem, sp_item_display_key_new (3));
-			ac = sp_mask_show (item->mask_ref->getObject(), arena, NR_ARENA_ITEM_GET_KEY (item->display->arenaitem));
-			nr_arena_item_set_mask (ai, ac);
-			nr_arena_item_unref (ac);
-		}
-		NR_ARENA_ITEM_SET_DATA (ai, item);
-	}
-
-	return ai;
+    return ai;
 }
 
 void
-sp_item_invoke_hide (SPItem *item, unsigned int key)
+sp_item_invoke_hide(SPItem *item, unsigned key)
 {
-	SPItemView *v, *ref, *next;
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
 
-	g_assert (item != NULL);
-	g_assert (SP_IS_ITEM (item));
+    if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->hide) {
+        ((SPItemClass *) G_OBJECT_GET_CLASS(item))->hide(item, key);
+    }
 
-	if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->hide)
-		((SPItemClass *) G_OBJECT_GET_CLASS (item))->hide (item, key);
-
-	ref = NULL;
-	v = item->display;
-	while (v != NULL) {
-		next = v->next;
-		if (v->key == key) {
-			if (item->clip_ref->getObject()) {
-				sp_clippath_hide (item->clip_ref->getObject(), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-				nr_arena_item_set_clip (v->arenaitem, NULL);
-			}
-			if (item->mask_ref->getObject()) {
-				sp_mask_hide (item->mask_ref->getObject(), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-				nr_arena_item_set_mask (v->arenaitem, NULL);
-			}
-			if (!ref) {
-				item->display = v->next;
-			} else {
-				ref->next = v->next;
-			}
-			nr_arena_item_unparent (v->arenaitem);
-			g_free (v);
-		} else {
-			ref = v;
-		}
-		v = next;
-	}
+    SPItemView *ref = NULL;
+    SPItemView *v = item->display;
+    while (v != NULL) {
+        SPItemView *next = v->next;
+        if (v->key == key) {
+            if (item->clip_ref->getObject()) {
+                sp_clippath_hide(item->clip_ref->getObject(), NR_ARENA_ITEM_GET_KEY(v->arenaitem));
+                nr_arena_item_set_clip(v->arenaitem, NULL);
+            }
+            if (item->mask_ref->getObject()) {
+                sp_mask_hide(item->mask_ref->getObject(), NR_ARENA_ITEM_GET_KEY(v->arenaitem));
+                nr_arena_item_set_mask(v->arenaitem, NULL);
+            }
+            if (!ref) {
+                item->display = v->next;
+            } else {
+                ref->next = v->next;
+            }
+            nr_arena_item_unparent(v->arenaitem);
+            g_free(v);
+        } else {
+            ref = v;
+        }
+        v = next;
+    }
 }
 
 /**
 Find out the difference between the previous transform of an item (from its repr) and the new transform
 */
 NR::Matrix
-sp_item_transform_delta (SPItem *item, NRMatrix *transform)
+sp_item_transform_delta(SPItem *item, NRMatrix *transform)
 {
-
-	NR::Matrix t_old (NR::identity());
-	const gchar *t_attr = sp_repr_attr(SP_OBJECT_REPR(item), "transform");
-	if (t_attr) {
-		NRMatrix t;
-		if (sp_svg_transform_read (t_attr, &t))
-			t_old = t;
-	}
-	return t_old.inverse() * NR::Matrix(transform);
+    NR::Matrix t_old(NR::identity());
+    gchar const *t_attr = sp_repr_attr(SP_OBJECT_REPR(item), "transform");
+    if (t_attr) {
+        NRMatrix t;
+        if (sp_svg_transform_read(t_attr, &t)) {
+            t_old = t;
+        }
+    }
+    return t_old.inverse() * NR::Matrix(transform);
 }
 
 /**
  Scale stroke width in the item; both style field and the CSS in the repr are written to
 */
 void
-sp_item_adjust_stroke_width (SPItem *item, double expansion)
+sp_item_adjust_stroke_width(SPItem *item, double expansion)
 {
-	if (!SP_OBJECT_STYLE(item))
-		return;
+    if (!SP_OBJECT_STYLE(item))
+        return;
 
-	SP_OBJECT_STYLE(item)->stroke_width.computed *= expansion;
+    SP_OBJECT_STYLE(item)->stroke_width.computed *= expansion;
 
-	SPCSSAttr *css = sp_repr_css_attr_new();
-	Inkscape::SVGOStringStream os_width;
-	os_width << SP_OBJECT_STYLE(item)->stroke_width.computed;
-	sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
-	sp_repr_css_change (SP_OBJECT_REPR(item), css, "style");
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    Inkscape::SVGOStringStream os_width;
+    os_width << SP_OBJECT_STYLE(item)->stroke_width.computed;
+    sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
+    sp_repr_css_change(SP_OBJECT_REPR(item), css, "style");
 }
 
 /**
  Recursively scale stroke width in \a item and its children by \a expansion
 */
 void
-sp_item_adjust_stroke_width_recursive (SPItem *item, double expansion)
+sp_item_adjust_stroke_width_recursive(SPItem *item, double expansion)
 {
-	sp_item_adjust_stroke_width (item, expansion);
+    sp_item_adjust_stroke_width(item, expansion);
 
-	for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
-		if (SP_IS_ITEM(o))
-			sp_item_adjust_stroke_width_recursive (SP_ITEM (o), expansion);
-	}
+    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+        if (SP_IS_ITEM(o))
+            sp_item_adjust_stroke_width_recursive(SP_ITEM(o), expansion);
+    }
 }
 
 /**
@@ -659,72 +658,72 @@ stored optimized. Send _transformed_signal. Invoke _write method so that the rep
 updated with the new transform.
  */
 void
-sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv)
+sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv)
 {
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (SP_IS_ITEM (item));
-	g_return_if_fail (repr != NULL);
+    g_return_if_fail(item != NULL);
+    g_return_if_fail(SP_IS_ITEM(item));
+    g_return_if_fail(repr != NULL);
 
-	// calculate the relative transform, if not given by the adv attribute 
-	NR::Matrix advertized_transform;
-	if (adv != NULL) {
-		advertized_transform = *adv;
-	} else {
-		advertized_transform = sp_item_transform_delta (item, transform);
-	}
+    // calculate the relative transform, if not given by the adv attribute
+    NR::Matrix advertized_transform;
+    if (adv != NULL) {
+        advertized_transform = *adv;
+    } else {
+        advertized_transform = sp_item_transform_delta(item, transform);
+    }
 
-	NR::Matrix xform(transform);
+    NR::Matrix xform(transform);
 
-	// compensate for stroke scaling, depending on user preference
-	if (prefs_get_int_attribute("options.scalestroke", "value", 1) == 0) {
-		double expansion = NR::expansion(advertized_transform.inverse());
-		sp_item_adjust_stroke_width_recursive (item, expansion);
-	}
+    // compensate for stroke scaling, depending on user preference
+    if (prefs_get_int_attribute("options.scalestroke", "value", 1) == 0) {
+        double expansion = NR::expansion(advertized_transform.inverse());
+        sp_item_adjust_stroke_width_recursive(item, expansion);
+    }
 
-	// run the object's set_transform if transforms are stored optimized  
-	gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
-	if (!transform) {
-		sp_item_set_item_transform(item, NR::identity());
-	} else {
-		if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform && !preserve) {
-			xform = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, xform);
-		}
-		sp_item_set_item_transform(item, xform);
-	}
+    // run the object's set_transform if transforms are stored optimized
+    gint preserve = prefs_get_int_attribute("options.preservetransform", "value", 0);
+    if (!transform) {
+        sp_item_set_item_transform(item, NR::identity());
+    } else {
+        if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform && !preserve) {
+            xform = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, xform);
+        }
+        sp_item_set_item_transform(item, xform);
+    }
 
-	// send the relative transform with a _transformed_signal
-	item->_transformed_signal.emit (&advertized_transform, item);
+    // send the relative transform with a _transformed_signal
+    item->_transformed_signal.emit(&advertized_transform, item);
 
-	sp_object_invoke_write(SP_OBJECT(item), SP_OBJECT_REPR(item), SP_OBJECT_WRITE_EXT);
+    sp_object_invoke_write(SP_OBJECT(item), SP_OBJECT_REPR(item), SP_OBJECT_WRITE_EXT);
 }
 
 gint
-sp_item_event (SPItem *item, SPEvent *event)
+sp_item_event(SPItem *item, SPEvent *event)
 {
-	g_return_val_if_fail (item != NULL, FALSE);
-	g_return_val_if_fail (SP_IS_ITEM (item), FALSE);
-	g_return_val_if_fail (event != NULL, FALSE);
+    g_return_val_if_fail(item != NULL, FALSE);
+    g_return_val_if_fail(SP_IS_ITEM(item), FALSE);
+    g_return_val_if_fail(event != NULL, FALSE);
 
-	if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->event)
-		return ((SPItemClass *) G_OBJECT_GET_CLASS(item))->event (item, event);
+    if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->event)
+        return ((SPItemClass *) G_OBJECT_GET_CLASS(item))->event(item, event);
 
-	return FALSE;
+    return FALSE;
 }
 
 /* Sets item private transform (not propagated to repr) */
 
 static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform)
 {
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (SP_IS_ITEM (item));
+    g_return_if_fail(item != NULL);
+    g_return_if_fail(SP_IS_ITEM(item));
 
-	if (!matrix_equalp(transform, item->transform, NR_EPSILON)) {
-		item->transform = transform;
-    // the SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a transformation
-    // it's apparently not used anywhere else
-		sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG|SP_OBJECT_USER_MODIFIED_FLAG_B); 
-		sp_item_rm_unsatisfied_cns(*item);
-	}
+    if (!matrix_equalp(transform, item->transform, NR_EPSILON)) {
+        item->transform = transform;
+        /* The SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a
+           transformation.  It's apparently not used anywhere else. */
+        sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_USER_MODIFIED_FLAG_B);
+        sp_item_rm_unsatisfied_cns(*item);
+    }
 }
 
 /**
@@ -733,34 +732,33 @@ static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform
  */
 NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 {
-	g_assert(item != NULL);
-	g_assert(SP_IS_ITEM(item));
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
 
-	NR::Matrix ret(NR::identity());
-	g_assert(ret.test_identity());
+    NR::Matrix ret(NR::identity());
+    g_assert(ret.test_identity());
 
-	/* Note that this routine may be called for items that are not members of
-	** the root.  For example, markers are members of a <def> object.  Hence
-	** we terminate either when reaching the top of the tree, or when a
-	** non-item object is reached.
-	*/
-	while ( NULL != SP_OBJECT_PARENT(item) && SP_IS_ITEM (SP_OBJECT_PARENT(item)))
-	{
-		ret *= NR::Matrix(&item->transform);
-		item = SP_ITEM(SP_OBJECT_PARENT(item));
-	}
+    /* Note that this routine may be called for items that are not members of
+    ** the root.  For example, markers are members of a <def> object.  Hence
+    ** we terminate either when reaching the top of the tree, or when a
+    ** non-item object is reached.
+    */
+    while ( NULL != SP_OBJECT_PARENT(item) && SP_IS_ITEM(SP_OBJECT_PARENT(item)) ) {
+        ret *= NR::Matrix(&item->transform);
+        item = SP_ITEM(SP_OBJECT_PARENT(item));
+    }
 
-	/* Then we only do root-related stuff if we found a root item */
-	if (SP_IS_ROOT(item)) {
-	SPRoot const *root = SP_ROOT(item);
+    /* Then we only do root-related stuff if we found a root item */
+    if (SP_IS_ROOT(item)) {
+        SPRoot const *root = SP_ROOT(item);
 
-	/* Viewbox is relative to root's transform
-	   (http://www.w3.org/TR/SVG11/coords.html#ViewBoxAttributeEffectOnSiblingAttributes). */
-	ret *= root->c2p;
-	ret *= NR::Matrix(&item->transform);
-	}
+        // Viewbox is relative to root's transform:
+        // http://www.w3.org/TR/SVG11/coords.html#ViewBoxAttributeEffectOnSiblingAttributes
+        ret *= root->c2p;
+        ret *= NR::Matrix(&item->transform);
+    }
 
-	return ret;
+    return ret;
 }
 
 /**
@@ -770,174 +768,173 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
  */
 NR::Matrix sp_item_i2root_affine(SPItem const *item)
 {
-	g_assert(item != NULL);
-	g_assert(SP_IS_ITEM(item));
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
 
-	NR::Matrix ret(NR::identity());
-	g_assert(ret.test_identity());
-	while ( NULL != SP_OBJECT_PARENT(item) )
-	{
-		ret *= NR::Matrix(&item->transform);
-		item = SP_ITEM(SP_OBJECT_PARENT(item));
-	}
-	g_assert(SP_IS_ROOT(item));
-	
-	ret *= NR::Matrix(&item->transform);
+    NR::Matrix ret(NR::identity());
+    g_assert(ret.test_identity());
+    while ( NULL != SP_OBJECT_PARENT(item) ) {
+        ret *= NR::Matrix(&item->transform);
+        item = SP_ITEM(SP_OBJECT_PARENT(item));
+    }
+    g_assert(SP_IS_ROOT(item));
 
-	return ret;
+    ret *= NR::Matrix(&item->transform);
+
+    return ret;
 }
 
 NRMatrix *sp_item_i2doc_affine(SPItem const *item, NRMatrix *affine)
 {
-	g_return_val_if_fail (item != NULL, NULL);
-	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
+    g_return_val_if_fail(item != NULL, NULL);
+    g_return_val_if_fail(SP_IS_ITEM(item), NULL);
+    g_return_val_if_fail(affine != NULL, NULL);
 
-	*affine = sp_item_i2doc_affine(item);
-	return affine;
+    *affine = sp_item_i2doc_affine(item);
+    return affine;
 }
 
 NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *affine)
 {
-	g_return_val_if_fail (item != NULL, NULL);
-	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
+    g_return_val_if_fail(item != NULL, NULL);
+    g_return_val_if_fail(SP_IS_ITEM(item), NULL);
+    g_return_val_if_fail(affine != NULL, NULL);
 
-	*affine = sp_item_i2root_affine(item);
-	return affine;
+    *affine = sp_item_i2root_affine(item);
+    return affine;
 }
 
 /* Transformation to normalized (0,0-1,1) viewport */
 
 NRMatrix *
-sp_item_i2vp_affine (SPItem const *item, NRMatrix *affine)
+sp_item_i2vp_affine(SPItem const *item, NRMatrix *affine)
 {
-	g_return_val_if_fail (item != NULL, NULL);
-	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
+    g_return_val_if_fail(item != NULL, NULL);
+    g_return_val_if_fail(SP_IS_ITEM(item), NULL);
+    g_return_val_if_fail(affine != NULL, NULL);
 
-	nr_matrix_set_identity(affine);
+    nr_matrix_set_identity(affine);
 
-	while (SP_OBJECT_PARENT (item)) {
-		nr_matrix_multiply(affine, affine, &item->transform);
-		item = (SPItem *) SP_OBJECT_PARENT (item);
-	}
+    while (SP_OBJECT_PARENT(item)) {
+        nr_matrix_multiply(affine, affine, &item->transform);
+        item = (SPItem *) SP_OBJECT_PARENT(item);
+    }
 
-	g_return_val_if_fail (SP_IS_ROOT (item), NULL);
+    g_return_val_if_fail(SP_IS_ROOT(item), NULL);
 
-	SPRoot *root = SP_ROOT(item);
+    SPRoot *root = SP_ROOT(item);
 
-	/* fixme: (Lauris) */
-	*affine = NR::Matrix(affine) * root->c2p;
+    /* fixme: (Lauris) */
+    *affine = NR::Matrix(affine) * root->c2p;
 
-	affine->c[0] /= root->width.computed;
-	affine->c[1] /= root->height.computed;
-	affine->c[2] /= root->width.computed;
-	affine->c[3] /= root->height.computed;
+    affine->c[0] /= root->width.computed;
+    affine->c[1] /= root->height.computed;
+    affine->c[2] /= root->width.computed;
+    affine->c[3] /= root->height.computed;
 
-	return affine;
+    return affine;
 }
 
 /* fixme: This is EVIL!!! */
 
 NR::Matrix sp_item_i2d_affine(SPItem const *item)
 {
-	g_assert(item != NULL);
-	g_assert(SP_IS_ITEM(item));
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
 
-	NR::Matrix const ret( sp_item_i2doc_affine(item)
-			      * NR::scale(0.8, -0.8)
-			      * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item))) );
+    NR::Matrix const ret( sp_item_i2doc_affine(item)
+                          * NR::scale(0.8, -0.8)
+                          * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item))) );
 #ifndef NDEBUG
-	NRMatrix tst;
-	sp_item_i2d_affine(item, &tst);
-	assert_close( ret, NR::Matrix(&tst) );
+    NRMatrix tst;
+    sp_item_i2d_affine(item, &tst);
+    assert_close( ret, NR::Matrix(&tst) );
 #endif
-	return ret;
+    return ret;
 }
 
 NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *affine)
 {
-	g_return_val_if_fail (item != NULL, NULL);
-	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
+    g_return_val_if_fail(item != NULL, NULL);
+    g_return_val_if_fail(SP_IS_ITEM(item), NULL);
+    g_return_val_if_fail(affine != NULL, NULL);
 
-	sp_item_i2doc_affine(item, affine);
+    sp_item_i2doc_affine(item, affine);
 
-	NRMatrix doc2dt;
-	nr_matrix_set_scale (&doc2dt, 0.8, -0.8);
-	doc2dt.c[5] = sp_document_height (SP_OBJECT_DOCUMENT (item));
+    NRMatrix doc2dt;
+    nr_matrix_set_scale(&doc2dt, 0.8, -0.8);
+    doc2dt.c[5] = sp_document_height(SP_OBJECT_DOCUMENT(item));
 
-	nr_matrix_multiply(affine, affine, &doc2dt);
+    nr_matrix_multiply(affine, affine, &doc2dt);
 
-	return affine;
+    return affine;
 }
 
 void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &i2dt)
 {
-	g_return_if_fail( item != NULL );
-	g_return_if_fail( SP_IS_ITEM(item) );
+    g_return_if_fail( item != NULL );
+    g_return_if_fail( SP_IS_ITEM(item) );
 
-	NR::Matrix dt2p; /* desktop to item parent transform */
-	if (SP_OBJECT_PARENT (item)) {
-		dt2p = sp_item_i2d_affine((SPItem *) SP_OBJECT_PARENT(item)).inverse();
-	} else {
-		dt2p = ( NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item)))
-			 * NR::scale(1.25, -1.25) );
-	}
+    NR::Matrix dt2p; /* desktop to item parent transform */
+    if (SP_OBJECT_PARENT(item)) {
+        dt2p = sp_item_i2d_affine((SPItem *) SP_OBJECT_PARENT(item)).inverse();
+    } else {
+        dt2p = ( NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item)))
+                 * NR::scale(1.25, -1.25) );
+    }
 
-	NR::Matrix const i2p( i2dt * dt2p );
-	sp_item_set_item_transform(item, i2p);
+    NR::Matrix const i2p( i2dt * dt2p );
+    sp_item_set_item_transform(item, i2p);
 }
 
 
 NRMatrix *
 sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt, NRMatrix *affine)
 {
-	/* fixme: Implement the right way (Lauris) */
-	NRMatrix i2dt;
-	sp_item_i2d_affine(item, &i2dt);
-	nr_matrix_invert(affine, &i2dt);
-	return affine;
+    /* fixme: Implement the right way (Lauris) */
+    NRMatrix i2dt;
+    sp_item_i2d_affine(item, &i2dt);
+    nr_matrix_invert(affine, &i2dt);
+    return affine;
 }
 
 /* Item views */
 
 static SPItemView *
-sp_item_view_new_prepend (SPItemView * list, SPItem * item, unsigned int flags, unsigned int key, NRArenaItem *arenaitem)
+sp_item_view_new_prepend(SPItemView *list, SPItem *item, unsigned flags, unsigned key, NRArenaItem *arenaitem)
 {
-	SPItemView * new_view;
+    SPItemView *new_view;
 
-	g_assert (item != NULL);
-	g_assert (SP_IS_ITEM (item));
-	g_assert (arenaitem != NULL);
-	g_assert (NR_IS_ARENA_ITEM (arenaitem));
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
+    g_assert(arenaitem != NULL);
+    g_assert(NR_IS_ARENA_ITEM(arenaitem));
 
-	new_view = g_new (SPItemView, 1);
+    new_view = g_new(SPItemView, 1);
 
-	new_view->next = list;
-	new_view->flags = flags;
-	new_view->key = key;
-	new_view->arenaitem = arenaitem;
+    new_view->next = list;
+    new_view->flags = flags;
+    new_view->key = key;
+    new_view->arenaitem = arenaitem;
 
-	return new_view;
+    return new_view;
 }
 
 static SPItemView *
-sp_item_view_list_remove (SPItemView *list, SPItemView *view)
+sp_item_view_list_remove(SPItemView *list, SPItemView *view)
 {
-	if (view == list) {
-		list = list->next;
-	} else {
-		SPItemView *prev;
-		prev = list;
-		while (prev->next != view) prev = prev->next;
-		prev->next = view->next;
-	}
+    if (view == list) {
+        list = list->next;
+    } else {
+        SPItemView *prev;
+        prev = list;
+        while (prev->next != view) prev = prev->next;
+        prev->next = view->next;
+    }
 
-	g_free (view);
+    g_free(view);
 
-	return list;
+    return list;
 }
 
 /* Convert distances into SVG units */
@@ -948,142 +945,143 @@ static const SPUnit *em = NULL;
 static const SPUnit *ex = NULL;
 
 gdouble
-sp_item_distance_to_svg_viewport (SPItem *item, gdouble distance, const SPUnit *unit)
+sp_item_distance_to_svg_viewport(SPItem *item, gdouble distance, SPUnit const *unit)
 {
-	NRMatrix i2doc;
-	double dx, dy;
-	double a2u, u2a;
+    /* TODO: This function is identical to sp_item_distance_to_svg_bbox (other than a warning
+     * for percentages).  Check that there's no copy&paste bug, and consider merging the two
+     * functions. */
+    g_return_val_if_fail(item != NULL, distance);
+    g_return_val_if_fail(SP_IS_ITEM(item), distance);
+    g_return_val_if_fail(unit != NULL, distance);
 
-	g_return_val_if_fail (item != NULL, distance);
-	g_return_val_if_fail (SP_IS_ITEM (item), distance);
-	g_return_val_if_fail (unit != NULL, distance);
+    NRMatrix i2doc;
+    sp_item_i2doc_affine(item, &i2doc);
+    double dx = i2doc.c[0] + i2doc.c[2];
+    double dy = i2doc.c[1] + i2doc.c[3];
+    double const u2a = sqrt(dx * dx + dy * dy) * M_SQRT1_2;
+    /* todo: It's probably safe to use of hypot(X,Y) for these
+       sqrt(X*X + Y*Y) calculations.  hypot has less numerical
+       error; don't know about speed difference.  njh thinks hypot
+       is typically slower. */
 
-	sp_item_i2doc_affine (item, &i2doc);
-	dx = i2doc.c[0] + i2doc.c[2];
-	dy = i2doc.c[1] + i2doc.c[3];
-	u2a = sqrt (dx * dx + dy * dy) * M_SQRT1_2;
-	/* todo: It's probably safe to use of hypot(X,Y) for these
-	   sqrt(X*X + Y*Y) calculations.  hypot has less numerical
-	   error; don't know about speed difference.  njh thinks hypot
-	   is typically slower. */
-	a2u = u2a > 1e-9 ? 1 / u2a : 1e9;
-
-	if (unit->base == SP_UNIT_DIMENSIONLESS) {
-		/* Check for percentage */
-		if (!percent) percent = sp_unit_get_by_abbreviation ("%");
-		if (unit == percent) {
-			/* Percentage of viewport */
-			/* fixme: full viewport support (Lauris) */
-			dx = sp_document_width (SP_OBJECT_DOCUMENT (item));
-			dy = sp_document_height (SP_OBJECT_DOCUMENT (item));
-			return 0.01 * distance * sqrt (dx * dx + dy * dy) * M_SQRT1_2;
-		} else {
-			/* Treat as userspace */
-			return distance * unit->unittobase * u2a;
-		}
-	} else if (unit->base == SP_UNIT_VOLATILE) {
-		/* Either em or ex */
-		/* fixme: This need real care */
-		if (!em) em = sp_unit_get_by_abbreviation ("em");
-		if (!ex) ex = sp_unit_get_by_abbreviation ("ex");
-		if (unit == em) {
-			return distance * 12.0;
-		} else {
-			return distance * 10.0;
-		}
-	} else {
-		/* Everything else can be done in one step */
-		/* We just know, that pt == 1.25 * px */
-		if (!absolute) absolute = sp_unit_get_identity (SP_UNIT_ABSOLUTE);
-		sp_convert_distance_full (&distance, unit, absolute, u2a, 0.8);
-		return distance;
-	}
+    if (unit->base == SP_UNIT_DIMENSIONLESS) {
+        /* Check for percentage */
+        if (!percent) percent = sp_unit_get_by_abbreviation("%");
+        if (unit == percent) {
+            /* Percentage of viewport */
+            /* fixme: full viewport support (Lauris) */
+            dx = sp_document_width(SP_OBJECT_DOCUMENT(item));
+            dy = sp_document_height(SP_OBJECT_DOCUMENT(item));
+            return 0.01 * distance * sqrt(dx * dx + dy * dy) * M_SQRT1_2;
+        } else {
+            /* Treat as userspace */
+            return distance * unit->unittobase * u2a;
+        }
+    } else if (unit->base == SP_UNIT_VOLATILE) {
+        /* Either em or ex */
+        /* fixme: This need real care */
+        if (!em) em = sp_unit_get_by_abbreviation("em");
+        if (!ex) ex = sp_unit_get_by_abbreviation("ex");
+        if (unit == em) {
+            return distance * 12.0;
+        } else {
+            return distance * 10.0;
+        }
+    } else {
+        /* Everything else can be done in one step */
+        /* We just know, that pt == 1.25 * px */
+        if (!absolute) absolute = sp_unit_get_identity(SP_UNIT_ABSOLUTE);
+        sp_convert_distance_full(&distance, unit, absolute, u2a, 0.8);
+        return distance;
+    }
 }
 
 gdouble
-sp_item_distance_to_svg_bbox (SPItem *item, gdouble distance, const SPUnit *unit)
+sp_item_distance_to_svg_bbox(SPItem *item, gdouble distance, SPUnit const *unit)
 {
-	NRMatrix i2doc;
-	double dx, dy;
-	double a2u, u2a;
+    /* TODO: This function is identical to sp_item_distance_to_svg_viewport (other than a warning
+     * for percentages).  Check that there's no copy&paste bug, and consider merging the two
+     * functions. */
+    g_return_val_if_fail(item != NULL, distance);
+    g_return_val_if_fail(SP_IS_ITEM(item), distance);
+    g_return_val_if_fail(unit != NULL, distance);
 
-	g_return_val_if_fail (item != NULL, distance);
-	g_return_val_if_fail (SP_IS_ITEM (item), distance);
-	g_return_val_if_fail (unit != NULL, distance);
+    NRMatrix i2doc;
+    sp_item_i2doc_affine(item, &i2doc);
+    double dx = i2doc.c[0] + i2doc.c[2];
+    double dy = i2doc.c[1] + i2doc.c[3];
+    double const u2a = sqrt(dx * dx + dy * dy) * M_SQRT1_2;
 
-	g_return_val_if_fail (item != NULL, distance);
-	g_return_val_if_fail (SP_IS_ITEM (item), distance);
-	g_return_val_if_fail (unit != NULL, distance);
-
-	sp_item_i2doc_affine (item, &i2doc);
-	dx = i2doc.c[0] + i2doc.c[2];
-	dy = i2doc.c[1] + i2doc.c[3];
-	u2a = sqrt (dx * dx + dy * dy) * M_SQRT1_2;
-	a2u = u2a > 1e-9 ? 1 / u2a : 1e9;
-
-	if (unit->base == SP_UNIT_DIMENSIONLESS) {
-		/* Check for percentage */
-		if (!percent) percent = sp_unit_get_by_abbreviation ("%");
-		if (unit == percent) {
-			/* Percentage of viewport */
-			/* fixme: full viewport support (Lauris) */
-			g_warning ("file %s: line %d: Implement real item bbox percentage etc.", __FILE__, __LINE__);
-			dx = sp_document_width (SP_OBJECT_DOCUMENT (item));
-			dy = sp_document_height (SP_OBJECT_DOCUMENT (item));
-			return 0.01 * distance * sqrt (dx * dx + dy * dy) * M_SQRT1_2;
-		} else {
-			/* Treat as userspace */
-			return distance * unit->unittobase * u2a;
-		}
-	} else if (unit->base == SP_UNIT_VOLATILE) {
-		/* Either em or ex */
-		/* fixme: This need real care */
-		if (!em) em = sp_unit_get_by_abbreviation ("em");
-		if (!ex) ex = sp_unit_get_by_abbreviation ("ex");
-		if (unit == em) {
-			return distance * 12.0;
-		} else {
-			return distance * 10.0;
-		}
-	} else {
-		/* Everything else can be done in one step */
-		/* We just know, that pt == 1.25 * px */
-		if (!absolute) absolute = sp_unit_get_identity (SP_UNIT_ABSOLUTE);
-		sp_convert_distance_full (&distance, unit, absolute, u2a, 0.8);
-		return distance;
-	}
+    if (unit->base == SP_UNIT_DIMENSIONLESS) {
+        /* Check for percentage */
+        if (!percent) percent = sp_unit_get_by_abbreviation("%");
+        if (unit == percent) {
+            /* Percentage of viewport */
+            /* fixme: full viewport support (Lauris) */
+            g_warning("file %s: line %d: Implement real item bbox percentage etc.", __FILE__, __LINE__);
+            dx = sp_document_width(SP_OBJECT_DOCUMENT(item));
+            dy = sp_document_height(SP_OBJECT_DOCUMENT(item));
+            return 0.01 * distance * sqrt(dx * dx + dy * dy) * M_SQRT1_2;
+        } else {
+            /* Treat as userspace */
+            return distance * unit->unittobase * u2a;
+        }
+    } else if (unit->base == SP_UNIT_VOLATILE) {
+        /* Either em or ex */
+        /* fixme: This need real care */
+        if (!em) em = sp_unit_get_by_abbreviation("em");
+        if (!ex) ex = sp_unit_get_by_abbreviation("ex");
+        if (unit == em) {
+            return distance * 12.0;
+        } else {
+            return distance * 10.0;
+        }
+    } else {
+        /* Everything else can be done in one step */
+        /* We just know, that pt == 1.25 * px */
+        if (!absolute) absolute = sp_unit_get_identity(SP_UNIT_ABSOLUTE);
+        sp_convert_distance_full(&distance, unit, absolute, u2a, 0.8);
+        return distance;
+    }
 }
 
 /**
 Return the arenaitem corresponding to the given item in the display with the given key
  */
 NRArenaItem *
-sp_item_get_arenaitem (SPItem *item, unsigned int key)
+sp_item_get_arenaitem(SPItem *item, unsigned key)
 {
-	SPItemView *iv;
+    for ( SPItemView *iv = item->display ; iv ; iv = iv->next ) {
+        if ( iv->key == key ) {
+            return iv->arenaitem;
+        }
+    }
 
-	for ( iv = item->display ; iv ; iv = iv->next ) {
-		if ( iv->key == key ) {
-			return iv->arenaitem;
-		}
-	}
-
-	return NULL;
+    return NULL;
 }
 
 int
-sp_item_repr_compare_position (SPItem * first, SPItem * second)
+sp_item_repr_compare_position(SPItem *first, SPItem *second)
 {
-    SPRepr * parent;
-    int p1, p2;
+    SPRepr *parent = sp_repr_parent(SP_OBJECT_REPR(first));
+    g_assert(parent == sp_repr_parent(SP_OBJECT_REPR(second)));
 
-    parent = sp_repr_parent (SP_OBJECT_REPR (first));
-    g_assert (parent == sp_repr_parent (SP_OBJECT_REPR (second)));
-
-    p1 = sp_repr_position (SP_OBJECT_REPR (first));
-    p2 = sp_repr_position (SP_OBJECT_REPR (second));
+    int const p1 = sp_repr_position(SP_OBJECT_REPR(first));
+    int const p2 = sp_repr_position(SP_OBJECT_REPR(second));
 
     if (p1 > p2) return 1;
     if (p1 < p2) return -1;
     return 0;
 }
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
