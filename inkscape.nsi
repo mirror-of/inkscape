@@ -1,19 +1,23 @@
 ;-------------------------------------------------
 
 Name "Inkscape"
-Caption "Inkscape Installer"
+Caption "Inkscape -- Open Source Scalable Vector Graphics Editor"
 Icon "inkscape32x16col.ico"
-OutFile "InkscapeInstaller.exe"
+OutFile "inkscape-0.37-1.win32.exe"
 
 ; The default installation directory
 InstallDir "c:\Inkscape"
+LicenseData "COPYING"
 
 ;-------------------------------------------------
 
 ; Pages
 
+Page license
 Page directory
 Page instfiles
+UninstPage uninstConfirm
+UninstPage instfiles
 
 ;-------------------------------------------------
 

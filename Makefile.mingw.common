@@ -57,7 +57,7 @@ else
 
 
 # change me!!
-DTG := 20040209
+DTG := 20040210
 
 CC      = mingw32-gcc
 CXX     = mingw32-g++
@@ -92,7 +92,7 @@ endif
 
 
 
-VERSION = \"0.37cvs${DTG}\"
+VERSION = \"0.37-${DTG}\"
 
 
 CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION)
