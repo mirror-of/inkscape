@@ -29,27 +29,33 @@
 #include <ctype.h>
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-rotate-fns.h>
+#include <libnr/nr-rotate-ops.h>
+#include <libnr/nr-rotate-matrix-ops.h>
+#include <libnr/nr-translate-rotate-ops.h>
+#include <libnr/nr-translate-ops.h>
 #include <libnr/nr-values.h>
 #include <glib.h>
 #include "svg.h"
 
 #ifndef M_PI
-#define M_PI 3.1415927
+# define M_PI 3.14159265358979323846
 #endif
 
-unsigned int
-sp_svg_transform_read (const gchar *str, NRMatrix *transform)
+bool
+sp_svg_transform_read(gchar const *str, NR::Matrix *transform)
 {
-	NRMatrix m, a;
 	int idx;
 	char keyword[32];
 	double args[6];
 	int n_args;
 	size_t key_len;
 
-	if (str == NULL) return 0;
+	if (str == NULL) return false;
 
-	nr_matrix_set_identity (&a);
+	NR::Matrix a(NR::identity());
 
 	idx = 0;
 	while (str[idx]) {
@@ -67,13 +73,13 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 				break;
 			}
 		}
-		if (key_len >= sizeof (keyword)) return 0;
+		if (key_len >= sizeof (keyword)) return false;
 		keyword[key_len] = '\0';
 
 		/* skip whitespace */
 		while (g_ascii_isspace (str[idx])) idx++;
 
-		if (str[idx] != '(') return 0;
+		if (str[idx] != '(') return false;
 		idx++;
 
 		for (n_args = 0; ; n_args++) {
@@ -84,7 +90,7 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			while (g_ascii_isspace (str[idx])) idx++;
 			c = str[idx];
 			if (g_ascii_isdigit (c) || c == '+' || c == '-' || c == '.') {
-				if (n_args == sizeof (args) / sizeof (args[0])) return 0; /* Too many args */
+				if (n_args == sizeof (args) / sizeof (args[0])) return false; /* Too many args */
 				args[n_args] = g_ascii_strtod (str + idx, &end_ptr);
 				
 				//printf("took %d chars from '%s' to make %f\n",
@@ -101,76 +107,63 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			} else if (c == ')') {
 				break;
 			} else {
-				return 0;
+				return false;
 			}
 		}
 		idx++;
 
 		/* ok, have parsed keyword and args, now modify the transform */
 		if (!strcmp (keyword, "matrix")) {
-			if (n_args != 6) return 0;
-			nr_matrix_multiply (&a, NR_MATRIX_D_FROM_DOUBLE (args), &a);
+			if (n_args != 6) return false;
+			a = NR_MATRIX_D_FROM_DOUBLE(args) * a;
 		} else if (!strcmp (keyword, "translate")) {
 			if (n_args == 1) {
 				args[1] = 0;
 			} else if (n_args != 2) {
-				return 0;
+				return false;
 			}
-			nr_matrix_set_translate (&m, args[0], args[1]);
-			nr_matrix_multiply (&a, &m, &a);
+			a = NR::translate(args[0], args[1]) * a;
 		} else if (!strcmp (keyword, "scale")) {
 			if (n_args == 1) {
 				args[1] = args[0];
 			} else if (n_args != 2) {
-				return 0;
+				return false;
 			}
-			nr_matrix_set_scale (&m, args[0], args[1]);
-			nr_matrix_multiply (&a, &m, &a);
+			a = NR::scale(args[0], args[1]) * a;
 		} else if (!strcmp (keyword, "rotate")) {
-			double s, c;
-			if (n_args != 1) return 0;
-			s = sin (args[0] * M_PI / 180.0);
-			c = cos (args[0] * M_PI / 180.0);
-			m.c[0] = c;
-			m.c[1] = s;
-			m.c[2] = -s;
-			m.c[3] = c;
-			m.c[4] = 0.0;
-			m.c[5] = 0.0;
-			nr_matrix_multiply (&a, &m, &a);
+			if (n_args != 1 && n_args != 3) {
+				return false;
+			}
+			NR::rotate const rot(rotate_degrees(args[0]));
+			if (n_args == 3) {
+				a = ( NR::translate(-args[1], -args[2])
+				      * rot
+				      * NR::translate(args[1], args[2])
+				      * a );
+			} else {
+				a = rot * a;
+			}
 		} else if (!strcmp (keyword, "skewX")) {
-			if (n_args != 1) return 0;
-			m.c[0] = 1;
-			m.c[1] = 0;
-			m.c[2] = tan (args[0] * M_PI / 180.0);
-			m.c[3] = 1;
-			m.c[4] = 0.0;
-			m.c[5] = 0.0;
-			nr_matrix_multiply (&a, &m, &a);
+			if (n_args != 1) return false;
+			a = ( NR::Matrix(1, 0,
+					 tan(args[0] * M_PI / 180.0), 1,
+					 0, 0)
+			      * a );
 		} else if (!strcmp (keyword, "skewY")) {
-			if (n_args != 1) return 0;
-			m.c[0] = 1;
-			m.c[1] = tan (args[0] * M_PI / 180.0);
-			m.c[2] = 0;
-			m.c[3] = 1;
-			m.c[4] = 0.0;
-			m.c[5] = 0.0;
-			nr_matrix_multiply (&a, &m, &a);
+			if (n_args != 1) return false;
+			a = ( NR::Matrix(1, tan(args[0] * M_PI / 180.0),
+					 0, 1,
+					 0, 0)
+			      * a );
 		} else {
-			return 0; /* unknown keyword */
+			return false; /* unknown keyword */
 		}
 		/* Skip trailing whitespace */
              while (g_ascii_isspace (str[idx])) idx++;
 	}
 
-	transform->c[0] = a.c[0];
-	transform->c[1] = a.c[1];
-	transform->c[2] = a.c[2];
-	transform->c[3] = a.c[3];
-	transform->c[4] = a.c[4];
-	transform->c[5] = a.c[5];
-
-	return 1;
+	*transform = a;
+	return true;
 }
 
 #define EQ(a,b) (fabs ((a) - (b)) < 1e-9)
