@@ -174,12 +174,10 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
 SPObject*
 get_stock_item(gchar const *urn)
 {
-    const gchar *e;
-
     g_assert(urn!=NULL);
     /* check its an inkscape URN */
     if (!strncmp (urn, "urn:inkscape:", 13)) {
-    e = urn + 13;
+    const gchar *e = urn + 13;
     int a =0;
     gchar *name = g_strdup(e);
     while (*name != ':' && *name != '\0'){
@@ -194,11 +192,9 @@ get_stock_item(gchar const *urn)
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
     SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
 
-    SPObject *object;
-    bool exists = false;
-    SPObject *child;
+    SPObject *object = NULL;
     if (!strcmp(base,"marker"))  {
-                                   for (child = sp_object_first_child(SP_OBJECT(defs)) ;
+                                   for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ;
                                         child != NULL;
                                         child = SP_OBJECT_NEXT(child) )
                                            {
@@ -207,13 +203,12 @@ get_stock_item(gchar const *urn)
                                                     SP_IS_MARKER(child))
                                                     {
                                                         object = child;
-                                                        exists = true;
                                                     }
                                            }
 
       }
     else if (!strcmp(base,"pattern"))  {
-                                   for (child = sp_object_first_child(SP_OBJECT(defs)) ;
+                                   for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ;
                                         child != NULL;
                                         child = SP_OBJECT_NEXT(child) )
                                            {
@@ -221,13 +216,12 @@ get_stock_item(gchar const *urn)
                                                     SP_IS_PATTERN(child))
                                                     {
                                                         object = child;
-                                                        exists = true;
                                                     }
                                            }
 
      }
      else   if (!strcmp(base,"gradient"))  {
-                                   for (child = sp_object_first_child(SP_OBJECT(defs)) ;
+                                   for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ;
                                         child != NULL;
                                         child = SP_OBJECT_NEXT(child) )
                                            {
@@ -235,13 +229,12 @@ get_stock_item(gchar const *urn)
                                                     SP_IS_GRADIENT(child))
                                                     {
                                                         object = child;
-                                                        exists = true;
                                                     }
                                            }
 
                     }
 
-    if (!exists) {
+    if (object == NULL) {
 
                    if (!strcmp(base,"marker"))  {
                            object = sp_marker_load_from_svg( name, doc);
