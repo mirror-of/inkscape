@@ -8,13 +8,68 @@
  */
 
 #include "eps-out.h"
+#include <gtk/gtk.h>
 #include <print.h>
+#include <helper/sp-intl.h>
 #include <extension/system.h>
 #include <extension/db.h>
+#include <dialogs/dialog-events.h>
 
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
+
+EpsOutput::EpsOutput (void)
+{
+	dialog = NULL;
+	return;
+}
+
+EpsOutput::~EpsOutput (void)
+{
+	if (dialog != NULL)
+		gtk_widget_destroy(GTK_WIDGET(dialog));
+	return;
+}
+
+void
+EpsOutput::pageBoxToggle (GtkWidget * widget, Inkscape::Extension::Output * omod)
+{
+	omod->set_param("pageBoundingBox", (bool)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+	return;
+}
+
+GtkDialog *
+EpsOutput::prefs (Inkscape::Extension::Output * module)
+{
+	GtkWidget * checkbox;
+	bool pageBox;
+
+	if (dialog != NULL)
+		return dialog;
+
+	dialog = GTK_DIALOG(
+		     gtk_dialog_new_with_buttons (_("EPS Output Settings"),
+			                              NULL,
+										  (GtkDialogFlags)(GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
+										  GTK_STOCK_CANCEL,
+										  GTK_RESPONSE_CANCEL,
+										  GTK_STOCK_OK,
+										  GTK_RESPONSE_OK,
+										  NULL));
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+
+	sp_transientize(GTK_WIDGET(dialog));
+
+	checkbox = gtk_check_button_new_with_label(_("Make bounding box around full page"));
+	module->get_param("pageBoundingBox", &pageBox);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), pageBox);
+	g_signal_connect(G_OBJECT(checkbox), "toggled", G_CALLBACK(pageBoxToggle), (gpointer)module);
+	gtk_widget_show(checkbox);
+	gtk_box_pack_start(GTK_BOX(dialog->vbox), checkbox, FALSE, FALSE, 5);
+
+	return dialog;
+}
 
 /**
     \brief  This function calls the print system with the filename
@@ -31,6 +86,7 @@ EpsOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
 {
 	gchar * final_name;
 	bool old_val;
+	bool new_val;
 	Inkscape::Extension::Extension * ext;
 
 	ext = Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_PS);
@@ -38,7 +94,8 @@ EpsOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
 		return;
 
 	ext->get_param("pageBoundingBox", (bool *)&old_val);
-	ext->set_param("pageBoundingBox", (bool)FALSE);
+	mod->get_param("pageBoundingBox", (bool *)&new_val);
+	ext->set_param("pageBoundingBox", (bool)new_val);
 
 	final_name = g_strdup_printf("> %s", uri);
 	sp_print_document_to_file(doc, final_name);
@@ -63,6 +120,7 @@ EpsOutput::init (void)
 		"<spmodule>\n"
 			"<name>Encapsulated Postscript Output</name>\n"
 			"<id>module.output.eps</id>\n"
+			"<param name=\"pageBoundingBox\" type=\"boolean\">FALSE</param>\n"
 			"<output>\n"
 				"<extension>.eps</extension>\n"
 				"<mimetype>image/x-e-postscript</mimetype>\n"

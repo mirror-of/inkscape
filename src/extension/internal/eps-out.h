@@ -11,6 +11,7 @@
 #ifndef EXTENSION_INTERNAL_EPS_OUT_H
 #define EXTENSION_INTERNAL_EPS_OUT_H
 
+#include <gtk/gtk.h>
 #include <extension/implementation/implementation.h>
 
 namespace Inkscape {
@@ -18,8 +19,13 @@ namespace Extension {
 namespace Internal {
 
 class EpsOutput : Inkscape::Extension::Implementation::Implementation {
+	GtkDialog * dialog;
+	static void pageBoxToggle (GtkWidget * widget, Inkscape::Extension::Output * omod);
 
 public:
+	EpsOutput();
+	virtual ~EpsOutput();
+    GtkDialog *   prefs (Inkscape::Extension::Output * module);
 	void          save  (Inkscape::Extension::Output *mod,
 	                     SPDocument *doc,
 	                     const gchar *uri);

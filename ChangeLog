@@ -1,5 +1,12 @@
 2004-04-11  Ted Gould <ted@gould.cx>
 
+	* src/extension/system.cpp, src/extension/internal/eps-out.cpp
+      src/extension/internal/eps-out.h:
+	First pass at a file save dialog with EPS output.  The dialog
+	sets the bounding box in the file.  Comments encouraged.
+
+2004-04-11  Ted Gould <ted@gould.cx>
+
 	* src/file.cpp, src/main.cpp, src/print.cpp, src/extension/init.cpp,
       src/extension/init.h, src/extension/system.cpp, src/extension/system.h,
       src/extension/implementation/script.cpp, src/extension/internal/eps-out.cpp,

@@ -237,7 +237,14 @@ save (Extension * key, SPDocument * doc, const gchar * filename, bool setextensi
 
 	prefs = omod->prefs();
 	if (prefs != NULL) {
-		gtk_dialog_run(prefs);
+		gint response;
+
+		response = gtk_dialog_run(prefs);
+		gtk_widget_hide(GTK_WIDGET(prefs));
+
+		if (response != GTK_RESPONSE_OK) {
+			return;
+		}
 	}
 
 	if (setextension) {
