@@ -240,22 +240,28 @@ sp_offset_write (SPObject * object, SPRepr * repr, guint flags)
 {
   SPOffset *offset = SP_OFFSET (object);
   
-  if ((flags & SP_OBJECT_WRITE_BUILD) && !repr)
-  {
+  if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
     repr = sp_repr_new ("path");
   }
   
-  if (flags & SP_OBJECT_WRITE_EXT)
-  {
+  if (flags & SP_OBJECT_WRITE_EXT) {
     /* Fixme: we may replace these attributes by
-    * inkscape:offset="cx cy exp revo rad arg t0"
-    */
+		 * inkscape:offset="cx cy exp revo rad arg t0"
+		 */
     sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
     sp_repr_set_double (repr, "inkscape:radius", offset->rad);
     sp_repr_set_attr (repr, "inkscape:original", offset->original);
     sp_repr_set_attr (repr, "inkscape:href", offset->sourceObject);
   }
-  
+
+
+  // Make sure the object has curve 
+  SPCurve *curve = sp_shape_get_curve (SP_SHAPE (offset));
+  if (curve == NULL) {
+    sp_offset_set_shape (SP_SHAPE (offset));
+  }
+
+  // write that curve to "d"
   char *d = sp_svg_write_path (((SPShape *) offset)->curve->bpath);
   sp_repr_set_attr (repr, "d", d);
   g_free (d);
