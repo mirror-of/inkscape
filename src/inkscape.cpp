@@ -27,6 +27,11 @@
 #include <unistd.h>
 #define HAS_PROC_SELF_EXE  //to get path of executable
 #else
+
+// For now to get at is_os_wide().
+#include "extension/internal/win32.h"
+using Inkscape::Extension::Internal::PrintWin32;
+
 #include <direct.h>
 #define _WIN32_IE 0x0400
 #define HAS_SHGetSpecialFolderPath
@@ -64,10 +69,6 @@
 #include "io/sys.h"
 
 #include "extension/init.h"
-
-#ifdef WIN32
-#define mkdir(d,m) _mkdir((d))
-#endif
 
 static Inkscape::Application *inkscape = NULL;
 
@@ -1103,7 +1104,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 {
     gchar *dn = profile_path(NULL);
     if (!g_file_test(dn, G_FILE_TEST_EXISTS)) {
-        if (mkdir (dn, S_IRWXU | S_IRGRP | S_IXGRP))
+        if (Inkscape::IO::mkdir_utf8name(dn))
         {
             if (inkscape->use_gui) {
                 /* Cannot create directory */
@@ -1234,16 +1235,61 @@ profile_path(const char *filename)
         // c:\Documents and Settings\userName\; this
         // closes bug #933461
         if (!homedir) {
-            char pathBuf[MAX_PATH+1];
-            if (SHGetSpecialFolderPath(NULL, pathBuf, CSIDL_APPDATA, 1))
-                homedir = g_strdup(pathBuf);
+            if ( PrintWin32::is_os_wide() )
+            {
+                wchar_t pathBuf[MAX_PATH+1];
+                if (SHGetSpecialFolderPathW(NULL, pathBuf, CSIDL_APPDATA, 1))
+                {
+                    gchar* utf8Path = g_utf16_to_utf8( pathBuf, -1, NULL, NULL, NULL );
+                    if ( utf8Path )
+                    {
+                        homedir = utf8Path;
+                    }
+                }
+            }
+            else
+            {
+                char pathBuf[MAX_PATH+1];
+                if (SHGetSpecialFolderPathA(NULL, pathBuf, CSIDL_APPDATA, 1))
+                {
+                    gchar* utf8Path = g_filename_to_utf8( pathBuf, -1, NULL, NULL, NULL );
+                    if ( utf8Path )
+                    {
+                        homedir = utf8Path;
+                    }
+                }
+            }
         }
 #endif
         if (!homedir) {
             homedir = g_get_home_dir();
+            if (!g_utf8_validate(homedir, -1, NULL)) {
+                g_warning( "g_get_home_dir() IS NOT UTF-8" );
+            }
+            gchar* utf8Path = g_filename_to_utf8( homedir, -1, NULL, NULL, NULL );
+            if ( utf8Path )
+            {
+                g_free(const_cast<gchar*>(homedir));
+                homedir = utf8Path;
+                if (!g_utf8_validate(homedir, -1, NULL)) {
+                    g_warning( "g_get_home_dir() post A IS NOT UTF-8" );
+                }
+            }
         }
         if (!homedir) {
             homedir = g_path_get_dirname(INKSCAPE->argv0);
+            if (!g_utf8_validate(homedir, -1, NULL)) {
+                g_warning( "g_path_get_dirname() IS NOT UTF-8" );
+            }
+            gchar* utf8Path = g_filename_to_utf8( homedir, -1, NULL, NULL, NULL );
+            if ( utf8Path )
+            {
+                g_free(const_cast<gchar*>(homedir));
+                homedir = utf8Path;
+                if (!g_utf8_validate(homedir, -1, NULL)) {
+                    g_warning( "g_get_home_dir() post B IS NOT UTF-8" );
+                }
+            }
         }
     }
     return g_build_filename(homedir, INKSCAPE_PROFILE_DIR, filename, NULL);
