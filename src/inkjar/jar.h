@@ -10,6 +10,7 @@
 #include <glib/gtypes.h>
 #include <zlib.h>
 #include <inttypes.h>
+
 namespace Inkjar {
 
 unsigned const RDSZ  = 4096;
