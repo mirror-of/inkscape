@@ -5,9 +5,142 @@ help in debugging that assertion failure.
 
 It's currently ordered by caller.
 
+(Re-ordering to avoid forward references in proofs might be a good idea,
+though this would in some cases require splitting up the proofs for a routine,
+e.g. proving preconditions of g called from f, then proving g's postcondition,
+then using that to prove something else in f again.  Furthermore it may not
+even be possible to avoid forward references for recursive/looping code.)
 
 
-seltrans.cpp:sp_sel_trans_update_handles
+
+src/draw-context.cpp:fit_and_split
+
+Very loose proof of !sp_curve_empty (dc->red_curve) assertion:
+fit_and_split is called successively with its input varying only by appending a point.
+For the n_segs > 0 && dc->npoints < SP_DRAW_POINTS_MAX condition to fail,
+we must have at least 3 distinct points, which means that a previous call had 2 distinct points,
+in which case we'd have filled in dc->red_curve to a non-empty curve.
+
+
+src/draw-context.cpp:fit_and_split
+
+Loose proof of 2 <= dc->npoints:
+Was true at top of function if "dc->npoints > 1" assertion holds.
+We don't pass dc to anything in the meantime.
+
+
+src/draw-context.cpp:fit_and_split
+
+Proof of precondition: The only caller is spdc_add_freehand_point (by
+textual search in that file, and staticness).  See proof for that
+function.
+
+
+src/draw-context.cpp:spdc_add_freehand_point
+
+Proof of fit_and_split `dc->npoints > 1' requirement:
+It initially unconditionally asserts `dc->npoints > 0'.  There are no function calls or modifications
+of dc or dc->npoints other than incrementing dc->npoints after that assertion.
+We assume that integer overflow doesn't occur during that increment,
+so we get dc->npoints > 1.
+
+
+src/display/bezier-utils.cpp:compute_max_error
+
+Proof of postcondition: *splitPoint is set only from i, which goes from 1 to less than last.
+i isn't written to in the loop body: only uses are indexing built-in arrays d and u
+(and RHS of assignment).
+
+
+src/display/bezier-utils.cpp:sp_bezier_fit_cubic_full
+
+Proof of `nsegs1 != 0' assertion: nsegs1 is const.  Have already
+returned in the (nsegs1 < 0) case, so !(nsegs1 < 0), i.e. nsegs1 >= 0
+(given that nsegs1 is gint).  nsegs1 is set to
+sp_bezier_fit_cubic_full(_, _, splitPoint + 1, ...).  We will show
+that sp_bezier_fit_cubic_full ensures len < 2 || ret != 0.  splitPoint
+> 0 from compute_max_error postcondition combined with error >=
+precondition and thus having handled the compute_max_error returning 0
+case: if returned 0 for maxError then maxError <= error * 9.0 would be
+true, and we recalculate splitPoint; if the renewed maxError is 0 then
+the maxError <= error test will succeed and we return.  If we don't
+return, then the most recent compute_max_error must have returned
+non-zero, which implies (through compute_max_error postcondition) that
+splitPoint would have been set s.t. 0 < splitPoint.  splitPoint is not
+subsequently written to.  (It is subsequently passed only to
+sp_darray_center_tangent 2nd arg, which is a plain unsigned rather
+than reference.)  0 < splitPoint < last guarantees splitPoint + 1 >=
+2.  (We know splitPoint + 1 won't overflow because last = len - 1 and
+len is of the same type as splitPoint.)  Passing splitPoint + 1 for
+len of the call that sets nsegs1 ensures that nsegs1 is non-zero (from
+the len < 2 || ret != 0 property that we show below).  QED.
+
+Proof that len < 2 || (failed no-dups precondition) || ret != 0: All
+returns are either -1, 0, 1, or nsegs1 + nsegs2.  There are two
+literal 0 cases: one conditional on len < 2, and the other for failed
+precondition (non-uniqued data).  For the nsegs1 + nsegs2 case, we've
+already ruled out nsegs1 < 0 (through conditional return) and nsegs2 <
+0 (same).  The nsegs1 + nsegs2 case occurs only when we recurse; we've
+already shown the desired property for non-recursive case.  In the
+nsegs1 non-recursive case, we have that nsegs1 != 0, which combined
+with !(nsegs1 < 0) and !(nsegs2 < 0) implies that nsegs1 + nsegs2
+either overflows or is greater than 0.  We should be able to show that
+nsegs1 + nsegs2 < len even with exact arithmetic.  (Very loose proof:
+given that len >= 2 (from earlier conditional return), we can fit len
+points using len-1 segments even using straight line segments.)
+nsegs1 and nsegs2 are the same type as len, and we've shown that
+nsegs1 + nsegs2 in exact arithmetic is >= 0 from each operand being
+non-negative, so nsegs1 + nsegs2 doesn't overflow.  Thus nsegs1 +
+nsegs2 > 0.  Thus we have shown for each return point that either the
+return value is -1 or > 0 or occurs when len < 2 or in failure of
+no-dups precondition.  (We should also show that no-dups outer
+precondition being met implies it being met for inner instances of
+sp_bezier_fit_cubic_full, because we pass a subsequence of the data
+array, and don't write to that array.)  QED.
+
+We should also show that the recursion is finite for the inductive
+proof to hold.  The finiteness comes from inner calls having len > 0
+and len less than that of outer calls (from splitPoint calculation and
+0 < splitPoint < last for recursive case and last < len and transitive
+property of < for gint).  If len < 2 then we don't recurse
+(conditional return).
+
+We should go over this proof to make it clear that there are no
+"forward references" other than for recursive case.  We could also be
+more formal in use of inductive proof (e.g. clearly stating what the
+base and inductive premises are; namely the non-recursing and
+recursing cases of sp_bezier_fit_cubic_full).
+
+Better proof sketch that nseg1 + nsegs2 < len: ret < len for each
+recursive case other than where len > 0 precondition fails.  nsegs1 is
+calculated for inner len=splitPoint + 1, nsegs2 for inner len=len -
+splitPoint.  Assuming exact arithmetic we'll transform that to ret <=
+len - 1.  Implies that in exact arithmetic, nsegs1 + nsegs2 <=
+(splitPoint + 1 - 1) + (len - splitPoint - 1).  Simplifying RHS (using
+exact arithmetic): nsegs1 + nsegs2 <= len - 1, i.e. nsegs1 + nsegs2 <
+len.  Presumably we can show that machine arithmetic gets the same
+results as exact arithmetic from similar arguments used so far for
+showing that overflow doesn't occur.  For the recursive case the
+return values are either nsegs1 + nsegs2 or -1.
+
+We should also show that inner preconditions hold, especially the len
+> 0 precondition.  (For nsegs1 call, we use 0 < splitPoint and that
+splitPoint + 1 doesn't overflow.  For nsegs2 call, we pass len -
+splitPoint; combine with splitPoint < last, last = len - 1, and no
+overflow.)  We've already sketched a proof for no-dups precondition.
+The others are fairly simple.
+
+For error >= 0: error is const, and we pass it to all recursions.
+
+For inner max_depth >= 0: recursions are conditional on outer
+max_depth > 1 before setting rec_max_depth to max_depth - 1,
+and passing rec_max_depth as inner max_depth value,
+so we have inner max_depth >= 1 so inner max_depth >= 0.
+max_depth and rec_max_depth are both const.
+
+
+
+src/seltrans.cpp:sp_sel_trans_update_handles
 
 Proof of requirements of sp_show_handles:
 
@@ -22,7 +155,7 @@ probably doesn't have access to seltrans.
 
 
 
-seltrans.cpp:sp_show_handles
+src/seltrans.cpp:sp_show_handles
 
 Proof of precondition:
 
@@ -30,7 +163,7 @@ sp_show_handles is static.  Searching reveals calls only in sp_sel_trans_update_
 
 
 
-sp-spiral.cpp:sp_spiral_fit_and_draw
+src/sp-spiral.cpp:sp_spiral_fit_and_draw
 
 Proof of postcondition is_unit_vector(*hat2):
 
@@ -41,7 +174,7 @@ We pass it only to sp_bezier_fit_cubic_full, which claims constness of *hat2.
 Proof of unconditionalness: Not inside if/for/while.  No previous `return'.
 
 
-sp-spiral.cpp:sp_spiral_set_shape
+src/sp-spiral.cpp:sp_spiral_set_shape
 
 Loose proof of requirements for sp_spiral_fit_and_draw:
 

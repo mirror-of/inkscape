@@ -1,3 +1,9 @@
+2004-08-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/draw-context.cpp (fit_and_split):
+	  Slight simplification: don't handle impossible condition npoints < 2.
+	* src/proofs: Update accordingly.  (Also add some bezier-utils proofs.)
+
 2004-08-03  MenTaLguY  <mental@rydia.net>
 
 	* src/dialogs/rdf.cpp, src/xml/repr-util.cpp, src/xml/repr.h:
