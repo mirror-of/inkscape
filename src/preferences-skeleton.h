@@ -89,7 +89,7 @@ static const char preferences_skeleton[] =
 "  </group>"
 
 "  <group id=\"options\">"
-"    <group id=\"nudgedistance\" value=\"2.8346457\"/>"
+"    <group id=\"nudgedistance\" value=\"2\"/>"
 "    <group id=\"rotationsnapsperpi\" value=\"12\"/>"
 "    <group id=\"cursortolerance\" value=\"8.0\"/>"
 "    <group id=\"dragtolerance\" value=\"4.0\"/>"
