@@ -14,5 +14,6 @@
 
 gboolean sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data);
 void sp_transientize (GtkWidget *win);
+void sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 
 #endif

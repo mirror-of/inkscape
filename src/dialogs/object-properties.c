@@ -112,6 +112,8 @@ sp_object_properties_dialog (void)
 		dlg = sp_window_new (_("Object style"), TRUE);
 
 		sp_transientize (dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), dlg);
+
 		//now all uncatched keypresses from the window will be handled:
 		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
 

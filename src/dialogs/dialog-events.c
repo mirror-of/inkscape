@@ -54,9 +54,19 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 }
 
 void
-sp_transientize (GtkWidget * dialog)
+sp_transientize (GtkWidget *dialog)
 {
 	// if there's an active canvas, attach dialog to it as a transient:
 	if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
 		gtk_window_set_transient_for ((GtkWindow *) dialog, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
+}
+
+void
+sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
+{
+	//	g_warning (gtk_window_get_title (g_object_get_data (G_OBJECT (desktop), "window")));
+	if (g_object_get_data (G_OBJECT (desktop), "window")) {
+		gtk_window_set_transient_for ((GtkWindow *) dialog, (GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"));
+		gtk_window_present ((GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"));
+	}
 }
