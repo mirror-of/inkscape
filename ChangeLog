@@ -1,3 +1,8 @@
+2004-08-16  Peter Moulder  <pmoulder@river>
+
+	* src/sp-rect.cpp (sp_rect_set_transform): Call sp_rect_set_shape,
+	  so that bbox is up-to-date.
+
 2004-08-15  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/object-edit.cpp: fix a regression in my cleanups from yesterday.
@@ -22,7 +27,7 @@
 
 	* src/util/share-c-string.cpp, src/util/share-c-string.h:
 
-      add Inksape::Util::share_c_string, a function to make an
+	  add Inksape::Util::share_c_string, a function to make an
 	  immutable and garbage-collected copy of a string which can
 	  safely be shared
 	
@@ -32,7 +37,7 @@
 	  start sharing rather than copying strings, and taking advantage
 	  of garbage collection
 
-2004-08-15  Peter Moulder  <pmoulder@river>
+2004-08-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-flowtext.cpp: CodingStyle changes.
 

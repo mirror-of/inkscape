@@ -270,10 +270,14 @@ sp_rect_set_shape(SPShape *shape)
                                      ? rect->rx.computed
                                      : 0.0 ) ),
                                .5 * rect->height.computed);
-
     /* TODO: Handle negative rx or ry as per
      * http://www.w3.org/TR/SVG11/shapes.html#RectElementRXAttribute once Inkscape has proper error
-     * handling (see http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing). */
+     * handling (see http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing).
+     */
+
+    /* We don't use proper circular/elliptical arcs, but bezier curves can approximate a 90-degree
+     * arc fairly well.
+     */
     if ((rx > 1e-18) && (ry > 1e-18)) {
         sp_curve_moveto(c, x + rx, y + 0.0);
         sp_curve_curveto(c, x + rx * (1 - C1), y + 0.0, x + 0.0, y + ry * (1 - C1), x + 0.0, y + ry);
@@ -393,6 +397,8 @@ sp_rect_set_transform(SPItem *item, NR::Matrix const &xform)
 
     // Adjust pattern fill
     sp_shape_adjust_pattern(item, NR::identity(), xform / ret);
+
+    sp_rect_set_shape(&rect->shape);
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
