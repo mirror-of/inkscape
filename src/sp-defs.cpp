@@ -139,7 +139,7 @@ static SPRepr *sp_defs_write(SPObject *object, SPRepr *repr, guint flags)
         GSList *l = NULL;
         for ( SPObject *child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
             SPRepr *crepr = child->updateRepr(NULL, flags);
-            l = g_slist_prepend(l, crepr);
+            if (crepr) l = g_slist_prepend(l, crepr);
         }
         
         while (l) {
