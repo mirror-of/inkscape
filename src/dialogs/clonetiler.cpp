@@ -978,9 +978,12 @@ clonetiler_dialog (void)
                 int group;
                 gchar const *label;
             } const sym_groups[] = {
+                // TRANSLATORS: "translation" means "shift" here
                 {TILE_P1, _("<b>P1</b>: simple translation")},
                 {TILE_P2, _("<b>P2</b>: 180&#176; rotation")},
                 {TILE_PM, _("<b>PM</b>: reflection")},
+                // TRANSLATORS: "glide reflection" is a reflection and a translation combined
+                //  For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
                 {TILE_PG, _("<b>PG</b>: glide reflection")},
                 {TILE_CM, _("<b>CM</b>: reflection + glide reflection")},
                 {TILE_PMM, _("<b>PMM</b>: reflection + reflection")},
@@ -1133,6 +1136,7 @@ clonetiler_dialog (void)
 
 
             {
+                // TRANSLATORS: "Alternate" is a verb here
                 GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the sign of the scale increment for each row or column"), "alternate_scale");
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
@@ -1184,6 +1188,7 @@ clonetiler_dialog (void)
 
 
             {
+                // TRANSLATORS: "Alternate" is a verb here
                 GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the rotation direction for each row or column"), "alternate_rot");
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
@@ -1235,6 +1240,7 @@ clonetiler_dialog (void)
 
 
             {
+                // TRANSLATORS: "Alternate" is a verb here
                 GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the sign of opacity changes for each row or column"), "alternate_opacity");
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
