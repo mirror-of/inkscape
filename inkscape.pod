@@ -311,7 +311,7 @@ direction marks a return to the codebase's Gill roots.
 
 =head1 COPYRIGHT AND LICENSE
 
-B<Copyright (C)> 1999, 2000, 2001, 2002, 2003 by Authors.  
+B<Copyright (C)> 1999-2004 by Authors.  
 
 B<Inkscape> is free software; you can redistribute it and/or modify it
 under the terms of the GPL.  
