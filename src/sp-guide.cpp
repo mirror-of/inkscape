@@ -24,7 +24,7 @@
 enum {
 	PROP_0,
 	PROP_COLOR,
-	PROP_HICOLOR,
+	PROP_HICOLOR
 };
 
 static void sp_guide_class_init (SPGuideClass * klass);
