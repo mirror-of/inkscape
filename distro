@@ -27,7 +27,7 @@ VER="0.8.1"
 # 
 # Display an error message to stderr and exit
 #
-function Fatal {
+Fatal () {
     echo -e "${PN}: $1\nTerminating...." 1>&2
     test -n "$2" && exit $2
     exit 1
@@ -39,7 +39,7 @@ function Fatal {
 #
 # Display help information and exit
 #
-function Help {
+Help () {
     cat <<EOF
 Usage: ${PN} [OPTION]...
 Print certain distribution information.  With no OPTION, same as -f.
@@ -63,7 +63,7 @@ EOF
 #
 # Display version information and exit
 #
-function Version {
+Version () {
     cat <<EOF
 ${PN} v${VER}
 
@@ -159,7 +159,7 @@ esac
 sum="`expr $ALL + $CODENAME + $FTPNAME + $NAME + $RELEASE`"
 if test $sum -eq 0 || test $FTPNAME -eq 1; then
     # FIXME: incorporate this bit into the case statement
-    name="`echo $filename | sed -e 's!/etc/!!' -e 's!-*release$!!' -e 's!_version$!!' -e 's!-version!!' -e 's!\.issue!!' |  tr '[A-Z]' '[a-z]' | tr -d '-'`"
+    name="`echo $filename | sed -e 's|/etc/||' -e 's|-*release$||' -e 's|[-_]version$||' -e 's|\.issue||' |  tr '[A-Z]' '[a-z]' | tr -d '-'`"
     # If that didn't work, then we likely have Solaris, Debian,
     # FreeBSD, or maybe even ROCK LINUX
     
@@ -218,25 +218,26 @@ elif test $CODENAME -eq 1 ; then
     fi
 elif test $ALL -eq 1 ; then
     # Call the script recursively to get the desired string, since the
-    # Solaris format isn't the same.  It is done through bash as a hack 
+    # Solaris format isn't the same.  It is done through sh as a hack
     # to help when developing the script, and it isn't executable
-    string="`bash $0 --name`"
-    if test "`uname`" = "Linux"; then
+    string=`sh "$0" --name`
+    if test x"`uname`" = x"Linux"; then
         # We only want to add the word "release" for Linux
         # distributions.  It's  not a convention to use the word
         # "release" for any other type of system.
 
         # Don't add the word 'release' if we're on debian testing
-        if test "`bash $0 --release`" != "testing/unstable"; then
+        if test x"`sh $0 --release`" != x"testing/unstable"; then
             string="$string release"
         fi
     fi
-    string="$string `bash $0 --release`"
-    if test -n "`bash $0 --codename`"; then
-        string="$string (`bash $0 --codename`)"
+    string="$string `sh $0 --release`"
+    codename=`sh "$0" --codename`
+    if test -n "$codename"; then
+        string="$string ($codename)"
     fi
     # Strip out instances of too many spaces
-    string="`echo $string | tr '  ' ' '`"
+    string="`echo $string | tr -s ' '`"
     echo "$string"
 elif test $NAME -eq 1 ; then
     case "`uname`" in
