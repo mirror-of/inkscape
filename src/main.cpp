@@ -443,8 +443,8 @@ sp_do_export_png (SPDocument *doc)
 
 	if (sp_export_width) {
 		width = atoi (sp_export_width);
-		if ((width < 16) || (width > 65536)) {
-			g_warning ("Export width %d out of range (16 - 65536)", width);
+		if ((width < 1) || (width > 65536)) {
+			g_warning ("Export width %d out of range (1 - 65536)", width);
 			return;
 		}
 		dpi = (gdouble) width * 72.0 / (area.x1 - area.x0);
@@ -452,8 +452,8 @@ sp_do_export_png (SPDocument *doc)
 
 	if (sp_export_height) {
 		height = atoi (sp_export_height);
-		if ((height < 16) || (height > 65536)) {
-			g_warning ("Export height %d out of range (16 - 65536)", width);
+		if ((height < 1) || (height > 65536)) {
+			g_warning ("Export height %d out of range (1 - 65536)", width);
 			return;
 		}
 		dpi = (gdouble) height * 72.0 / (area.y1 - area.y0);
