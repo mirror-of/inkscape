@@ -114,7 +114,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 	doc->actionkey = key;
 
 	doc->virgin = FALSE;
-	if (!sp_repr_attr (doc->rroot, "sodipodi:modified")) {
+	if (!doc->rroot->attribute("sodipodi:modified")) {
 		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
 	}
 
@@ -246,4 +246,3 @@ sp_document_clear_redo (SPDocument *doc)
 		g_slist_free_1 (current);
 	}
 }
-

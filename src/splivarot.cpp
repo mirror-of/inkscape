@@ -425,15 +425,15 @@ sp_selected_path_boolop (bool_op bop)
     }
     gint pos = repr_source->position();
     Inkscape::XML::Node *parent = sp_repr_parent (repr_source);
-    const char *id = sp_repr_attr (repr_source, "id");
-    const char *style = sp_repr_attr (repr_source, "style");
+    const char *id = repr_source->attribute("id");
+    const char *style = repr_source->attribute("style");
     
 
     // remove source paths
     selection->clear();
     for (GSList *l = il; l != NULL; l = l->next) {
         // if this is the bottommost object,
-        if (!strcmp (sp_repr_attr (SP_OBJECT_REPR (l->data), "id"), id)) {
+        if (!strcmp (SP_OBJECT_REPR (l->data)->attribute("id"), id)) {
             // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
             SP_OBJECT (l->data)->deleteObject(false);
         } else {
@@ -615,7 +615,7 @@ sp_selected_path_outline ()
         }
 
         NR::Matrix const transform(item->transform);
-        gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
+        gchar *style = g_strdup (SP_OBJECT_REPR (item)->attribute("style"));
 
         float o_width, o_miter;
         JoinType o_join;
@@ -705,7 +705,7 @@ sp_selected_path_outline ()
         // remember parent
         Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
-        const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+        const char *id = SP_OBJECT_REPR (item)->attribute("id");
 
         selection->removeItem (item);
         SP_OBJECT (item)->deleteObject(false);
@@ -858,7 +858,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
 
     sp_item_write_transform(item, SP_OBJECT_REPR(item), NR::identity());
 
-    style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
+    style = g_strdup (SP_OBJECT (item)->repr->attribute("style"));
 
     // remember the position of the item
     gint pos = SP_OBJECT_REPR (item)->position();
@@ -994,7 +994,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
         g_free (str);
     
         if ( updating ) {
-            const char *id = sp_repr_attr(SP_OBJECT(item)->repr,"id");
+            const char *id = SP_OBJECT(item)->repr->attribute("id");
             const char *uri = g_strdup_printf ("#%s", id);
             sp_repr_set_attr (repr, "xlink:href", uri);
             g_free ((void *) uri);
@@ -1091,7 +1091,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
         sp_item_write_transform(item, SP_OBJECT_REPR(item), NR::identity());
 
-        gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
+        gchar *style = g_strdup (SP_OBJECT_REPR (item)->attribute("style"));
 
         float o_width, o_miter;
         JoinType o_join;
@@ -1236,7 +1236,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         // remember parent
         Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
-        const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+        const char *id = SP_OBJECT_REPR (item)->attribute("id");
 
         selection->removeItem (item);
         SP_OBJECT (item)->deleteObject(false);
@@ -1335,7 +1335,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
     */
     sp_item_write_transform(item, SP_OBJECT_REPR(item), NR::identity());
 
-    gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
+    gchar *style = g_strdup(SP_OBJECT_REPR (item)->attribute("style"));
 
     Path *orig = Path_for_item (item, false);
     if (orig == NULL) {
@@ -1350,7 +1350,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
     // remember parent
     Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
     // remember id
-    const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+    const char *id = SP_OBJECT_REPR (item)->attribute("id");
 
     //If a group was selected, to not change the selection list
     if (modifySelection)

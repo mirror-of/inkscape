@@ -157,7 +157,7 @@ sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 
     /* Fixes old Sodipodi nodetype to namespaced parameter */
     if (sp_version_inside_range(version, 0, 0, 0, 25)) {
-        gchar const *str = sp_repr_attr(repr, "SODIPODI-PATH-NODE-TYPES");
+        gchar const *str = repr->attribute("SODIPODI-PATH-NODE-TYPES");
         sp_repr_set_attr(repr, "sodipodi:nodetypes", str);
         sp_repr_set_attr(repr, "SODIPODI-PATH-NODE-TYPES", NULL);
     }

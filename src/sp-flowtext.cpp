@@ -608,7 +608,7 @@ void convert_to_text(void)
 
     Inkscape::XML::Node *parent = SP_OBJECT_REPR(object)->parent();
     Inkscape::XML::Node *repr = sp_repr_new("svg:text");
-    sp_repr_set_attr(repr, "style", sp_repr_attr(SP_OBJECT_REPR(object), "style"));
+    sp_repr_set_attr(repr, "style", SP_OBJECT_REPR(object)->attribute("style"));
     parent->appendChild(repr);
     // add a tspan for each chunk of the flow
     double last_kern_y = 0;

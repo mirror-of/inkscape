@@ -497,8 +497,8 @@ sp_marker_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		sp_repr_set_attr (repr, "orient", NULL);
 	}
 	/* fixme: */
-	sp_repr_set_attr (repr, "viewBox", sp_repr_attr (object->repr, "viewBox"));
-	sp_repr_set_attr (repr, "preserveAspectRatio", sp_repr_attr (object->repr, "preserveAspectRatio"));
+	sp_repr_set_attr (repr, "viewBox", object->repr->attribute("viewBox"));
+	sp_repr_set_attr (repr, "preserveAspectRatio", object->repr->attribute("preserveAspectRatio"));
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
@@ -653,4 +653,3 @@ sp_marker_view_remove (SPMarker *marker, SPMarkerView *view, unsigned int destro
 	}
 	g_free (view);
 }
-

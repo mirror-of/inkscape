@@ -452,7 +452,7 @@ build_from_file(gchar const *filename)
        DTD in general for this stuff */
     Inkscape::XML::Document *doc = sp_repr_read_file(filename, NULL);
     Extension *ext = build_from_reprdoc(doc, NULL);
-    sp_repr_document_unref(doc);
+    Inkscape::GC::release(doc);
     if (ext == NULL)
         g_warning("Unable to create extension from definition file %s.\n", filename);
     return ext;
@@ -472,7 +472,7 @@ build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp)
 {
     Inkscape::XML::Document *doc = sp_repr_read_mem(buffer, strlen(buffer), NULL);
     Extension *ext = build_from_reprdoc(doc, in_imp);
-    sp_repr_document_unref(doc);
+    Inkscape::GC::release(doc);
     return ext;
 }
 

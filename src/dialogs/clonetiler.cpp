@@ -649,7 +649,7 @@ clonetiler_apply (GtkWidget *widget, void *)
 
     SPObject *obj = SP_OBJECT(selection->singleItem());
     Inkscape::XML::Node *obj_repr = SP_OBJECT_REPR(obj);
-    const char *id_href = g_strdup_printf("#%s", sp_repr_attr (obj_repr, "id"));
+    const char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     SPObject *parent = SP_OBJECT_PARENT (obj);
 
     clonetiler_remove (NULL, NULL);

@@ -453,12 +453,12 @@ pattern_chain (SPPattern *pattern)
 
 	Inkscape::XML::Node *repr = sp_repr_new ("svg:pattern");
 	sp_repr_set_attr(repr, "inkscape:collect", "always");
-	gchar *parent_ref = g_strconcat ("#", sp_repr_attr(SP_OBJECT_REPR(pattern), "id"), NULL);
+	gchar *parent_ref = g_strconcat ("#", SP_OBJECT_REPR(pattern)->attribute("id"), NULL);
 	sp_repr_set_attr (repr, "xlink:href",  parent_ref);
 	g_free (parent_ref);
 
 	sp_repr_add_child (defsrepr, repr, NULL);
-	const gchar *child_id = sp_repr_attr(repr, "id");
+	const gchar *child_id = repr->attribute("id");
 	SPObject *child = document->getObjectById(child_id);
 	g_assert (SP_IS_PATTERN (child));
 
@@ -470,7 +470,7 @@ sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *pr
 {
 	if (pattern_users(pattern) > 1) {
 		pattern = pattern_chain (pattern);
-		gchar *href = g_strconcat ("url(#", sp_repr_attr (SP_OBJECT_REPR (pattern), "id"), ")", NULL);
+		gchar *href = g_strconcat ("url(#", SP_OBJECT_REPR (pattern)->attribute("id"), ")", NULL);
 
 		SPCSSAttr *css = sp_repr_css_attr_new ();
 		sp_repr_css_set_property (css, property, href);
@@ -521,17 +521,17 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 
 
 	defsrepr->appendChild(repr);
-	const gchar *pat_id = sp_repr_attr (repr, "id");
+	const gchar *pat_id = repr->attribute("id");
 	SPObject *pat_object = document->getObjectById(pat_id);
 
 	gchar m[256];
 
 	for (GSList *i = reprs; i != NULL; i = i->next) {
-		Inkscape::XML::Node *dup = sp_repr_duplicate (((Inkscape::XML::Node *) i->data));
+		Inkscape::XML::Node *dup = ((Inkscape::XML::Node *) i->data)->duplicate();
 		sp_repr_add_child(SP_OBJECT_REPR(pat_object), dup, NULL);
 
 		NR::Matrix dup_transform;
-		if (!sp_svg_transform_read (sp_repr_attr (dup, "transform"), &dup_transform)) 
+		if (!sp_svg_transform_read (dup->attribute("transform"), &dup_transform)) 
 			dup_transform = NR::identity();
 		dup_transform *= move;
 
@@ -1000,4 +1000,3 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 		}
 	}
 }
-

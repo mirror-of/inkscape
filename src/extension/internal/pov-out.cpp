@@ -133,7 +133,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         {
         //### Fetch the object from the repr info
         Inkscape::XML::Node *rpath = results[indx];
-        gchar *id  = (gchar *)sp_repr_attr(rpath, "id");
+        gchar *id  = (gchar *)rpath->attribute("id");
         SPObject *reprobj = SP_ACTIVE_DOCUMENT->getObjectByRepr(rpath);
         if (!reprobj)
             continue;

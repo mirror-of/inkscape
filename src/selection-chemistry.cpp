@@ -159,7 +159,7 @@ void sp_selection_duplicate()
 
     while (reprs) {
         parent = ((Inkscape::XML::Node *) reprs->data)->parent();
-        Inkscape::XML::Node *copy = sp_repr_duplicate((Inkscape::XML::Node *) reprs->data);
+        Inkscape::XML::Node *copy = ((Inkscape::XML::Node *) reprs->data)->duplicate();
 
         parent->appendChild(copy);
 
@@ -388,7 +388,7 @@ void sp_selection_group()
     while (p) {
         Inkscape::XML::Node *spnew;
         Inkscape::XML::Node *current = (Inkscape::XML::Node *) p->data;
-        spnew = sp_repr_duplicate(current);
+        spnew = current->duplicate();
         sp_repr_unparent(current);
         group->appendChild(spnew);
         sp_repr_unref(spnew);
@@ -729,7 +729,7 @@ void sp_copy_gradient (GSList **defs_clip, SPGradient *gradient)
 
     while (ref) { 
         // climb up the refs, copying each one in the chain
-        Inkscape::XML::Node *grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(ref));
+        Inkscape::XML::Node *grad_repr = SP_OBJECT_REPR(ref)->duplicate();
         *defs_clip = g_slist_prepend (*defs_clip, grad_repr);
 
         ref = ref->ref->getObject();
@@ -742,7 +742,7 @@ void sp_copy_pattern (GSList **defs_clip, SPPattern *pattern)
 
     while (ref) {
         // climb up the refs, copying each one in the chain
-        Inkscape::XML::Node *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(ref));
+        Inkscape::XML::Node *pattern_repr = SP_OBJECT_REPR(ref)->duplicate();
         *defs_clip = g_slist_prepend (*defs_clip, pattern_repr);
 
         // items in the pattern may also use gradients and other patterns, so we need to recurse here as well
@@ -758,7 +758,7 @@ void sp_copy_pattern (GSList **defs_clip, SPPattern *pattern)
 
 void sp_copy_marker (GSList **defs_clip, SPMarker *marker)
 {
-    Inkscape::XML::Node *marker_repr = sp_repr_duplicate(SP_OBJECT_REPR(marker));
+    Inkscape::XML::Node *marker_repr = SP_OBJECT_REPR(marker)->duplicate();
     *defs_clip = g_slist_prepend (*defs_clip, marker_repr);
 }
 
@@ -770,7 +770,7 @@ void sp_copy_textpath_path (GSList **defs_clip, SPTextPath *tp, const GSList *it
         return;
     if (items && g_slist_find ((GSList *) items, path)) // do not copy it to defs if it is already in the list of items copied
         return;
-    Inkscape::XML::Node *repr = sp_repr_duplicate (SP_OBJECT_REPR(path));
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(path)->duplicate();
     *defs_clip = g_slist_prepend (*defs_clip, repr);
 }
 
@@ -882,7 +882,7 @@ void sp_selection_copy_impl (const GSList *items, GSList **clip, GSList **defs_c
 
             Inkscape::XML::Node *repr = SP_OBJECT_REPR (i->data);
 
-            Inkscape::XML::Node *copy = sp_repr_duplicate(repr);
+            Inkscape::XML::Node *copy = repr->duplicate();
 
             // copy complete inherited style
             SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
@@ -981,9 +981,9 @@ paste_defs (GSList **defs_clip, SPDocument *doc)
     for (GSList *gl = *defs_clip; gl != NULL; gl = gl->next) {
         SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
         Inkscape::XML::Node *repr = (Inkscape::XML::Node *) gl->data;
-        gchar const *id = sp_repr_attr(repr, "id");
+        gchar const *id = repr->attribute("id");
         if (!id || !doc->getObjectById(id)) {
-            Inkscape::XML::Node *copy = sp_repr_duplicate(repr);
+            Inkscape::XML::Node *copy = repr->duplicate();
             sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
             sp_repr_unref(copy);
         }
@@ -998,12 +998,12 @@ GSList *sp_selection_paste_impl (SPDocument *document, SPObject *parent, GSList 
     // add objects to document
     for (GSList *l = *clip; l != NULL; l = l->next) {
         Inkscape::XML::Node *repr = (Inkscape::XML::Node *) l->data;
-        Inkscape::XML::Node *copy = sp_repr_duplicate(repr);
+        Inkscape::XML::Node *copy = repr->duplicate();
 
         // premultiply the item transform by the accumulated parent transform in the paste layer
         NR::Matrix local = sp_item_i2doc_affine(SP_ITEM(parent));
         if (!local.test_identity()) {
-            gchar const *t_str = sp_repr_attr (copy, "transform");
+            gchar const *t_str = copy->attribute("transform");
             NR::Matrix item_t (NR::identity());
             if (t_str)
                 sp_svg_transform_read(t_str, &item_t);
@@ -1743,7 +1743,7 @@ sp_selection_clone()
     Inkscape::XML::Node *clone = sp_repr_new("svg:use");
     sp_repr_set_attr(clone, "x", "0");
     sp_repr_set_attr(clone, "y", "0");
-    sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr(sel_repr, "id")));
+    sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sel_repr->attribute("id")));
 
     // add the new clone to the top of the original's parent
     parent->appendChild(clone);
@@ -1890,7 +1890,7 @@ sp_selection_tile(bool apply)
     // create a list of duplicates
     GSList *repr_copies = NULL;
     for (GSList *i = items; i != NULL; i = i->next) {
-        Inkscape::XML::Node *dup = sp_repr_duplicate ((SP_OBJECT_REPR (i->data)));
+        Inkscape::XML::Node *dup = (SP_OBJECT_REPR (i->data))->duplicate();
         repr_copies = g_slist_prepend (repr_copies, dup);
     }
     
@@ -1974,7 +1974,7 @@ sp_selection_untile()
         pat_transform *= item->transform;
 
         for (SPObject *child = sp_object_first_child(SP_OBJECT(pattern)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-            Inkscape::XML::Node *copy = sp_repr_duplicate (SP_OBJECT_REPR(child));
+            Inkscape::XML::Node *copy = SP_OBJECT_REPR(child)->duplicate();
             SPItem *i = SP_ITEM (desktop->currentLayer()->appendChildRepr(copy));
 
            // FIXME: relink clones to the new canvas objects
@@ -2032,7 +2032,7 @@ sp_selection_create_bitmap_copy ()
     guint current = (int) (cu.tv_sec * 1000000 + cu.tv_usec) % 1024; 
 
     // Create the filename
-    gchar *filename = g_strdup_printf ("%s-%s-%u.png", document->name, sp_repr_attr (SP_OBJECT_REPR(items->data), "id"), current);
+    gchar *filename = g_strdup_printf ("%s-%s-%u.png", document->name, SP_OBJECT_REPR(items->data)->attribute("id"), current);
     // Imagemagick is known not to handle spaces in filenames, so we replace anything but letters,
     // digits, and a few other chars, with "_"
     filename = g_strcanon (filename, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.=+~$#@^&!?", '_');

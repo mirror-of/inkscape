@@ -757,7 +757,7 @@ sp_image_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	if (image->y.set) sp_repr_set_double (repr, "y", image->y.computed);
 	if (image->width.set) sp_repr_set_double (repr, "width", image->width.computed);
 	if (image->height.set) sp_repr_set_double (repr, "height", image->height.computed);
-	sp_repr_set_attr (repr, "preserveAspectRatio", sp_repr_attr (object->repr, "preserveAspectRatio"));
+	sp_repr_set_attr (repr, "preserveAspectRatio", object->repr->attribute("preserveAspectRatio"));
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
@@ -891,8 +891,8 @@ sp_image_repr_read_image (Inkscape::XML::Node * repr)
 	gchar * fullname;
 	GdkPixbuf * pixbuf;
 
-	filename = sp_repr_attr (repr, "xlink:href");
-	if (filename == NULL) filename = sp_repr_attr (repr, "href"); /* FIXME */
+	filename = repr->attribute("xlink:href");
+	if (filename == NULL) filename = repr->attribute("href"); /* FIXME */
 	if (filename != NULL) {
 		if (strncmp (filename,"file:",5) == 0) {
 			fullname = g_filename_from_uri(filename, NULL, NULL);
@@ -908,7 +908,7 @@ sp_image_repr_read_image (Inkscape::XML::Node * repr)
 			if (pixbuf != NULL) return pixbuf;
 		} else if (!g_path_is_absolute (filename)) {
 			/* try to load from relative pos */
-			docbase = sp_repr_attr (sp_repr_document_root (sp_repr_document (repr)), "sodipodi:docbase");
+			docbase = sp_repr_document_root (sp_repr_document (repr))->attribute("sodipodi:docbase");
 			if (!docbase) docbase = ".";
 			fullname = g_build_filename(docbase, filename, NULL);
 			pixbuf = Inkscape::IO::pixbuf_new_from_file( fullname, NULL );
@@ -921,7 +921,7 @@ sp_image_repr_read_image (Inkscape::XML::Node * repr)
 		}
 	}
 	/* at last try to load from sp absolute path name */
-	filename = sp_repr_attr (repr, "sodipodi:absref");
+	filename = repr->attribute("sodipodi:absref");
 	if (filename != NULL) {
 		pixbuf = Inkscape::IO::pixbuf_new_from_file( filename, NULL );
 		if (pixbuf != NULL) return pixbuf;

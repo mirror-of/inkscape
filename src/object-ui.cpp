@@ -225,7 +225,7 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
             clone = sp_repr_new("svg:use");
             sp_repr_set_attr(clone, "x", "0");
             sp_repr_set_attr(clone, "y", "0");
-            sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr((Inkscape::XML::Node *)i->data, "id")));
+            sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", ((Inkscape::XML::Node *)i->data)->attribute("id")));
 
             // add the new clone to the top of the original's parent
             region_repr->appendChild(clone);
@@ -268,8 +268,8 @@ sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 	SPObject *object = SP_OBJECT_DOCUMENT (item)->getObjectByRepr(repr);
 	g_return_if_fail (SP_IS_ANCHOR (object));
 
-	const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
-	Inkscape::XML::Node *child = sp_repr_duplicate (SP_OBJECT_REPR (item));
+	const char *id = SP_OBJECT_REPR (item)->attribute("id");
+	Inkscape::XML::Node *child = SP_OBJECT_REPR (item)->duplicate();
 	SP_OBJECT (item)->deleteObject(false);
 	sp_repr_add_child (repr, child, NULL);
 	sp_repr_set_attr (child, "id", id);
@@ -548,4 +548,3 @@ sp_spiral_spiral_properties (GtkMenuItem *menuitem, SPAnchor *anchor)
 {
 	sp_object_attributes_dialog (SP_OBJECT (anchor), "SPSpiral");
 }
-

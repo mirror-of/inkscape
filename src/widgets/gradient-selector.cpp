@@ -411,7 +411,7 @@ sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel)
 	gr = sp_gradient_vector_selector_get_gradient (SP_GRADIENT_VECTOR_SELECTOR (sel->vectors));
 
 	if (gr) {
-		repr = sp_repr_duplicate (SP_OBJECT_REPR (gr));
+		repr = SP_OBJECT_REPR (gr)->duplicate();
 	} else {
 		Inkscape::XML::Node *stop;
 		repr = sp_repr_new ("svg:linearGradient");
@@ -442,4 +442,3 @@ sp_gradient_selector_spread_activate (GtkWidget *widget, SPGradientSelector *sel
 
 	g_signal_emit (G_OBJECT (sel), signals[CHANGED], 0);
 }
-

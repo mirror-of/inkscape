@@ -1447,7 +1447,7 @@ cmd_duplicate_node (GtkObject * object, gpointer data)
     g_assert (selected_repr != NULL);
 
     parent = sp_repr_parent (selected_repr);
-    dup = sp_repr_duplicate (selected_repr);
+    dup = selected_repr->duplicate();
     sp_repr_add_child (parent, dup, selected_repr);
 
     sp_document_done (current_document);

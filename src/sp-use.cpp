@@ -618,7 +618,7 @@ sp_use_unlink(SPUse *use)
     NR::Matrix t = sp_use_get_root_transform(use);
 
     // create copy of the original
-    Inkscape::XML::Node *copy = sp_repr_duplicate(SP_OBJECT_REPR(orig));
+    Inkscape::XML::Node *copy = SP_OBJECT_REPR(orig)->duplicate();
 
     // add the duplicate repr just after the existing one
     sp_repr_add_child(parent, copy, repr);

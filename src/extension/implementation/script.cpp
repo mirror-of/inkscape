@@ -88,7 +88,7 @@ gchar *
 Script::solve_reldir (Inkscape::XML::Node * reprin) {
     const gchar * reldir;
 
-    reldir = sp_repr_attr(reprin, "reldir");
+    reldir = reprin->attribute("reldir");
 
     if (reldir == NULL) {
         return g_strdup(sp_repr_children(reprin)->content());

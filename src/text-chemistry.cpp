@@ -116,12 +116,12 @@ text_put_on_path()
     // create textPath and put it into the text
     Inkscape::XML::Node *textpath = sp_repr_new("svg:textPath");
     // reference the shape
-    sp_repr_set_attr(textpath, "xlink:href", g_strdup_printf("#%s", sp_repr_attr(SP_OBJECT_REPR(shape), "id")));
+    sp_repr_set_attr(textpath, "xlink:href", g_strdup_printf("#%s", SP_OBJECT_REPR(shape)->attribute("id")));
     sp_repr_add_child(SP_OBJECT_REPR(text), textpath, NULL);
 
     for ( GSList *i = text_reprs ; i ; i = i->next ) {
         // make a copy of each text child
-        Inkscape::XML::Node *copy = sp_repr_duplicate((Inkscape::XML::Node *) i->data);
+        Inkscape::XML::Node *copy = ((Inkscape::XML::Node *) i->data)->duplicate();
         // We cannot have multiline in textpath, so remove line attrs from tspans
         if (!strcmp(copy->name(), "svg:tspan")) {
             sp_repr_set_attr(copy, "sodipodi:role", NULL);

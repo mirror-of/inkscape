@@ -391,8 +391,8 @@ sp_symbol_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		repr = sp_repr_new ("svg:symbol");
 	}
 
-	sp_repr_set_attr (repr, "viewBox", sp_repr_attr (object->repr, "viewBox"));
-	sp_repr_set_attr (repr, "preserveAspectRatio", sp_repr_attr (object->repr, "preserveAspectRatio"));
+	sp_repr_set_attr (repr, "viewBox", object->repr->attribute("viewBox"));
+	sp_repr_set_attr (repr, "preserveAspectRatio", object->repr->attribute("preserveAspectRatio"));
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);

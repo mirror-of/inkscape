@@ -382,8 +382,8 @@ Extension::make_param (Inkscape::XML::Node * paramrepr)
 	gchar * param_name;
     Extension::param_t * param;
 
-    name = sp_repr_attr(paramrepr, "name");
-    type = sp_repr_attr(paramrepr, "type");
+    name = paramrepr->attribute("name");
+    type = paramrepr->attribute("type");
     // defaultval = paramrepr->content();
     defaultval = sp_repr_children(paramrepr)->content();
 

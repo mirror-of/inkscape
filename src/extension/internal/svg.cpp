@@ -161,7 +161,7 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 	}
 
 	if (!spns) {
-		sp_repr_document_unref (rdoc);
+		Inkscape::GC::release(rdoc);
 	}
 
 	g_free(save_path);

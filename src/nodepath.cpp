@@ -148,7 +148,7 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
     if (length == 0)
         return NULL; // prevent crash for one-node paths
 
-    gchar const *nodetypes = sp_repr_attr(repr, "sodipodi:nodetypes");
+    gchar const *nodetypes = repr->attribute("sodipodi:nodetypes");
     gchar *typestr = parse_nodetypes(nodetypes, length);
 
     //Create new nodepath
@@ -276,7 +276,7 @@ gboolean nodepath_repr_d_changed(Path::Path *np, char const *newd)
 
     char const *attr_d = ( newd
                            ? newd
-                           : sp_repr_attr(SP_OBJECT(np->path)->repr, "d") );
+                           : SP_OBJECT(np->path)->repr->attribute("d") );
 
     gboolean ret;
     if (attr_d && svgpath)
@@ -300,7 +300,7 @@ gboolean nodepath_repr_typestr_changed(Path::Path *np, char const *newtypestr)
     gchar *typestr = create_typestr(np);
     char const *attr_typestr = ( newtypestr
                                  ? newtypestr
-                                 : sp_repr_attr(SP_OBJECT(np->path)->repr, "sodipodi:nodetypes") );
+                                 : SP_OBJECT(np->path)->repr->attribute("sodipodi:nodetypes") );
     gboolean const ret = (attr_typestr && strcmp(attr_typestr, typestr));
 
     g_free(typestr);
@@ -433,7 +433,7 @@ static void stamp_repr(Path::Path *np)
     g_assert(np);
 
     Inkscape::XML::Node *old_repr = SP_OBJECT(np->path)->repr;
-    Inkscape::XML::Node *new_repr = sp_repr_duplicate(old_repr);
+    Inkscape::XML::Node *new_repr = old_repr->duplicate();
 
     // remember the position of the item
     gint pos = old_repr->position();

@@ -147,7 +147,7 @@ sp_root_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr
 	SPGroup *group = (SPGroup *) object;
 	SPRoot *root = (SPRoot *) object;
 
-	if (sp_repr_attr (repr, "sodipodi:docname") || sp_repr_attr (repr, "SP-DOCNAME")) {
+	if (repr->attribute("sodipodi:docname") || repr->attribute("SP-DOCNAME")) {
 		/* so we have a nonzero initial version */
 		root->original.sodipodi.major = 0;
 		root->original.sodipodi.minor = 1;
@@ -362,7 +362,7 @@ sp_root_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML
 	if (((SPObjectClass *) (parent_class))->child_added)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
-	gchar const *id = sp_repr_attr(child, "id");
+	gchar const *id = child->attribute("id");
 	SPObject *co = object->document->getObjectById(id);
 	g_assert (co != NULL);
 
@@ -613,7 +613,7 @@ sp_root_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	sp_repr_set_double (repr, "y", root->y.computed);
 	sp_repr_set_double (repr, "width", root->width.computed);
 	sp_repr_set_double (repr, "height", root->height.computed);
-	sp_repr_set_attr (repr, "viewBox", sp_repr_attr (object->repr, "viewBox"));
+	sp_repr_set_attr (repr, "viewBox", object->repr->attribute("viewBox"));
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
@@ -675,4 +675,3 @@ sp_root_print (SPItem *item, SPPrintContext *ctx)
 
 	sp_print_release (ctx);
 }
-

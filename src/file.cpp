@@ -744,7 +744,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
              child != NULL; child = SP_OBJECT_NEXT(child))
         {
             // FIXME: in case of id conflict, newly added thing will be re-ided and thus likely break a reference to it from imported stuff
-            sp_repr_add_child(SP_OBJECT_REPR(in_defs), sp_repr_duplicate(SP_OBJECT_REPR(child)), last_def);
+            sp_repr_add_child(SP_OBJECT_REPR(in_defs), SP_OBJECT_REPR(child)->duplicate(), last_def);
         }
 
         Inkscape::XML::Node *repr = sp_document_repr_root(doc);
@@ -765,7 +765,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
 
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
-                    newgroup->appendChild(sp_repr_duplicate(SP_OBJECT_REPR(child)));
+                    newgroup->appendChild(SP_OBJECT_REPR(child)->duplicate());
                 }
             }
 
@@ -783,7 +783,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             // just add one item
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
-                    Inkscape::XML::Node *newitem = sp_repr_duplicate(SP_OBJECT_REPR(child));
+                    Inkscape::XML::Node *newitem = SP_OBJECT_REPR(child)->duplicate();
 
                     if (desktop) {
                         // Add it to the current layer

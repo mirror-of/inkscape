@@ -77,7 +77,7 @@ sp_repr_type_lookup (Inkscape::XML::Node *repr)
 	if ( repr->type() == Inkscape::XML::TEXT_NODE ) {
 		return SP_TYPE_STRING;
 	} else if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
-		gchar const * const type_name = sp_repr_attr(repr, "sodipodi:type");
+		gchar const * const type_name = repr->attribute("sodipodi:type");
 		return ( type_name
 			 ? name_to_gtype(SODIPODI_TYPE, type_name)
 			 : name_to_gtype(REPR_NAME, repr->name()) );

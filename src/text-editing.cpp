@@ -424,7 +424,7 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
             // If the line to be merged has a prev sibling and it's also a line,
             for (SPObject *child = sp_object_first_child(SP_OBJECT(i->data)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 // copy all children to it
-                Inkscape::XML::Node *copy = sp_repr_duplicate (SP_OBJECT_REPR (child));
+                Inkscape::XML::Node *copy = SP_OBJECT_REPR (child)->duplicate();
                 SP_OBJECT_REPR(prev)->appendChild(copy);
                 sp_repr_unref (copy);
             }

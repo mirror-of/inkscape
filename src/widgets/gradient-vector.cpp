@@ -480,7 +480,7 @@ verify_grad(SPGradient *gradient)
 	}
 	if (i < 2) {
 		sp_repr_set_double (SP_OBJECT_REPR(stop), "offset", 0.0);
-		Inkscape::XML::Node *child = sp_repr_duplicate(SP_OBJECT_REPR(stop));
+		Inkscape::XML::Node *child = SP_OBJECT_REPR(stop)->duplicate();
 		sp_repr_set_double (child, "offset", 1.0);
 		sp_repr_add_child (SP_OBJECT_REPR(gradient), child, SP_OBJECT_REPR (stop));
 	}
@@ -560,7 +560,7 @@ update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
 				gtk_container_add ( GTK_CONTAINER (hb), cpv );
 				g_object_set_data ( G_OBJECT (i), "preview", cpv );
 				Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) sl->data);
-				GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
+				GtkWidget *l = gtk_label_new (repr->attribute("id"));
 				gtk_widget_show (l);
 				gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 				gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
@@ -711,11 +711,11 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 	}
 
 	if (next != NULL) {
-		new_stop_repr = sp_repr_duplicate(SP_OBJECT_REPR(stop));
+		new_stop_repr = SP_OBJECT_REPR(stop)->duplicate();
 		sp_repr_add_child (SP_OBJECT_REPR(gradient), new_stop_repr, SP_OBJECT_REPR(stop));
 	} else {
 		next = stop;
-		new_stop_repr = sp_repr_duplicate(SP_OBJECT_REPR(sp_prev_stop(stop, gradient)));
+		new_stop_repr = SP_OBJECT_REPR(sp_prev_stop(stop, gradient))->duplicate();
 		sp_repr_add_child (SP_OBJECT_REPR(gradient), new_stop_repr, SP_OBJECT_REPR(sp_prev_stop(stop, gradient)));
 	}
 
@@ -987,7 +987,7 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 	update_stop_list (GTK_WIDGET(mnu), gradient, NULL);
 
 	// Once the user edits a gradient, it stops being auto-collectable
-	if (sp_repr_attr (SP_OBJECT_REPR(gradient), "inkscape:collect")) {
+	if (SP_OBJECT_REPR(gradient)->attribute("inkscape:collect")) {
 		SPDocument *document = SP_OBJECT_DOCUMENT (gradient);
 		gboolean saved = sp_document_get_undo_sensitive(document);
 		sp_document_set_undo_sensitive (document, FALSE);
@@ -1139,4 +1139,3 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 
 	blocked = FALSE;
 }
-

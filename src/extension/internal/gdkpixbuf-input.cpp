@@ -25,7 +25,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
     sp_document_set_undo_sensitive (doc, FALSE); // no need to undo in this temporary document
     GdkPixbuf* pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
     Inkscape::XML::Node *rdoc = sp_document_repr_root (doc);
-    const gchar *docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
+    const gchar *docbase = rdoc->attribute("sodipodi:docbase");
     const gchar *relname = sp_relative_path_from_path (uri, docbase);
 
     if (pb) {         /* We are readable */
@@ -71,7 +71,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             sp_repr_set_double (pat, "width", width);
             sp_repr_set_double (pat, "height", height);
             SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc))->appendChild(pat);
-            const gchar *pat_id = sp_repr_attr(pat, "id");
+            const gchar *pat_id = pat->attribute("id");
             SPObject *pat_object = doc->getObjectById(pat_id);
 
             Inkscape::XML::Node *im = sp_repr_new ("svg:image");

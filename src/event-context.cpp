@@ -669,7 +669,7 @@ sp_event_context_read(SPEventContext *ec, gchar const *key)
     g_return_if_fail(key != NULL);
 
     if (ec->repr) {
-        gchar const *val = sp_repr_attr(ec->repr, key);
+        gchar const *val = ec->repr->attribute(key);
         if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->set)
             ((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->set(ec, key, val);
     }

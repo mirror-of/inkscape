@@ -101,7 +101,7 @@ prefs_get_string_attribute(gchar const *path, gchar const *attr)
 {
     Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
-        return (char *) sp_repr_attr(repr, attr);
+        return (char *) repr->attribute(attr);
     }
     return NULL;
 }
@@ -161,8 +161,8 @@ prefs_get_recent_files()
              child != NULL;
              child = child->next(), i += 2)
         {
-            gchar const *uri = sp_repr_attr(child, "uri");
-            gchar const *name = sp_repr_attr(child, "name");
+            gchar const *uri = child->attribute("uri");
+            gchar const *name = child->attribute("name");
             datalst[i]     = uri;
             datalst[i + 1] = name;
         }

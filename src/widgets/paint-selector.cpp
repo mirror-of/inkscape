@@ -897,7 +897,7 @@ ink_pattern_menu (GtkWidget *mnu)
 				GtkWidget *hb = gtk_hbox_new (FALSE, 4);
 				gtk_widget_show (hb);
 				Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) pl->data);
-				GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
+				GtkWidget *l = gtk_label_new (repr->attribute("id"));
 				gtk_widget_show (l);
 				gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 				gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
@@ -938,7 +938,7 @@ sp_update_pattern_list ( SPPaintSelector *psel,  SPPattern *pattern)
 
 		gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(TRUE));
 
-		gchar *patname = (gchar *) sp_repr_attr(SP_OBJECT_REPR(pattern),"id");
+		gchar *patname = (gchar *) SP_OBJECT_REPR(pattern)->attribute("id");
 
 		GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu (GTK_OPTION_MENU(mnu)));
 		GList *kids = GTK_MENU_SHELL(m)->children;
@@ -947,7 +947,7 @@ sp_update_pattern_list ( SPPaintSelector *psel,  SPPattern *pattern)
 		int i = 0;
 
 		for (; kids != NULL; kids = kids->next) {
-			gchar *men_pat = (gchar *) sp_repr_attr(SP_OBJECT_REPR(g_object_get_data(G_OBJECT(kids->data), "pattern")),"id");
+			gchar *men_pat = (gchar *) SP_OBJECT_REPR(g_object_get_data(G_OBJECT(kids->data), "pattern"))->attribute("id");
 			if ( strcmp(men_pat, patname) == 0 ) {
 				patpos = i;
 			}
@@ -1034,5 +1034,3 @@ sp_paint_selector_get_pattern (SPPaintSelector *psel)
 
 	return pat;
 }
-
-

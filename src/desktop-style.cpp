@@ -77,7 +77,7 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
 
     if (!(skip_lines
           && ((SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE) || SP_IS_TEXTPATH(o))
-          && !sp_repr_attr(SP_OBJECT_REPR(o), "style"))
+          && !SP_OBJECT_REPR(o)->attribute("style"))
         &&
         !(SP_IS_FLOWTEXT(o) ||
           SP_IS_FLOWREGION(o) ||
@@ -217,14 +217,14 @@ Returns the font size (in SVG pixels) of the text tool style (if text tool uses 
 double
 sp_desktop_get_font_size_tool(SPDesktop *desktop)
 {
-    gchar const *desktop_style = sp_repr_attr(inkscape_get_repr(INKSCAPE, "desktop"), "style");
+    gchar const *desktop_style = inkscape_get_repr(INKSCAPE, "desktop")->attribute("style");
     gchar const *style_str = NULL;
     if ((prefs_get_int_attribute("tools.text", "usecurrent", 0) != 0) && desktop_style) {
         style_str = desktop_style;
     } else {
         Inkscape::XML::Node *tool_repr = inkscape_get_repr(INKSCAPE, "tools.text");
         if (tool_repr) {
-            style_str = sp_repr_attr(tool_repr, "style");
+            style_str = tool_repr->attribute("style");
         }
     }
 

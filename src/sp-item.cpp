@@ -843,7 +843,7 @@ NR::Matrix
 sp_item_transform_repr (SPItem *item)
 {
     NR::Matrix t_old(NR::identity());
-    gchar const *t_attr = sp_repr_attr(SP_OBJECT_REPR(item), "transform");
+    gchar const *t_attr = SP_OBJECT_REPR(item)->attribute("transform");
     if (t_attr) {
         NR::Matrix t;
         if (sp_svg_transform_read(t_attr, &t)) {

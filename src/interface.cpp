@@ -1272,11 +1272,11 @@ sp_ui_drag_data_received (GtkWidget * widget,
 		sp_repr_set_attr (newgroup, "style", style);
 
 		for (Inkscape::XML::Node *child = repr->firstChild(); child != NULL; child = child->next()) {
-			Inkscape::XML::Node * newchild = sp_repr_duplicate (child);
+			Inkscape::XML::Node * newchild = child->duplicate();
 			newgroup->appendChild(newchild);
 		}
 
-		sp_repr_document_unref (rnewdoc);
+		Inkscape::GC::release(rnewdoc);
 
             SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             // Add it to the current layer

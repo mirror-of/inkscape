@@ -888,7 +888,7 @@ static Inkscape::XML::Node *
 sp_object_private_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
-		repr = sp_repr_duplicate (SP_OBJECT_REPR (object));
+		repr = SP_OBJECT_REPR (object)->duplicate();
 		if (!( flags & SP_OBJECT_WRITE_EXT )) {
 			sp_repr_set_attr(repr, "inkscape:collect", NULL);
 		}
@@ -942,7 +942,7 @@ Inkscape::XML::Node *SPObject::updateRepr(Inkscape::XML::Node *repr, unsigned in
 		g_warning ("Class %s does not implement ::write", G_OBJECT_TYPE_NAME (this));
 		if (!repr) {
 			if (flags & SP_OBJECT_WRITE_BUILD) {
-				repr = sp_repr_duplicate (SP_OBJECT_REPR (this));
+				repr = SP_OBJECT_REPR (this)->duplicate();
 			}
 			/* fixme: else probably error (Lauris) */
 		} else {

@@ -115,7 +115,7 @@ SPDocument::~SPDocument() {
 		if (priv->iddef) g_hash_table_destroy (priv->iddef);
 		if (priv->reprdef) g_hash_table_destroy (priv->reprdef);
 
-		if (rdoc) sp_repr_document_unref (rdoc);
+		if (rdoc) Inkscape::GC::release(rdoc);
 
 		/* Free resources */
 		g_hash_table_foreach_remove (priv->resources, sp_document_resource_list_free, this);
@@ -216,8 +216,8 @@ sp_document_create (Inkscape::XML::Document *rdoc,
 	/* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
 
 	/* Quick hack 2 - get default image size into document */
-	if (!sp_repr_attr (rroot, "width")) sp_repr_set_attr (rroot, "width", A4_WIDTH_STR);
-	if (!sp_repr_attr (rroot, "height")) sp_repr_set_attr (rroot, "height", A4_HEIGHT_STR);
+	if (!rroot->attribute("width")) sp_repr_set_attr (rroot, "width", A4_WIDTH_STR);
+	if (!rroot->attribute("height")) sp_repr_set_attr (rroot, "height", A4_HEIGHT_STR);
         /* End of quick hack 2 */
 
 	/* Quick hack 3 - Set uri attributes */
@@ -250,7 +250,7 @@ sp_document_create (Inkscape::XML::Document *rdoc,
 			sp_repr_set_attr (rnew, "id", "base");
 		} else {
 			// otherwise, take from preferences
-			rnew = sp_repr_duplicate (r);
+			rnew = r->duplicate();
 		}
 		// insert into the document
 		sp_repr_add_child (rroot, rnew, NULL);

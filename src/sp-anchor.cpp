@@ -142,7 +142,7 @@ static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value
 }
 
 
-#define COPY_ATTR(rd,rs,key) sp_repr_set_attr((rd), (key), sp_repr_attr(rs, key));
+#define COPY_ATTR(rd,rs,key) sp_repr_set_attr((rd), (key), rs->attribute(key));
 
 static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {

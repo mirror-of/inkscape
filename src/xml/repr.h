@@ -145,17 +145,17 @@ inline Inkscape::XML::Node *sp_repr_unref(Inkscape::XML::Node *repr) {
 	Inkscape::GC::release(repr);
 	return NULL;
 }
-inline Inkscape::XML::Node *sp_repr_duplicate(Inkscape::XML::Node const *repr) {
+/*inline Inkscape::XML::Node *sp_repr_duplicate(Inkscape::XML::Node const *repr) {
 	return repr->duplicate();
-}
+}*/
 
 Inkscape::XML::Document *sp_repr_document_new(gchar const *rootname);
-inline void sp_repr_document_ref(Inkscape::XML::Document *doc) {
+/*inline void sp_repr_document_ref(Inkscape::XML::Document *doc) {
 	Inkscape::GC::anchor(doc);
 }
 inline void sp_repr_document_unref(Inkscape::XML::Document *doc) {
 	Inkscape::GC::release(doc);
-}
+}*/
 
 inline Inkscape::XML::Node *sp_repr_document_root(Inkscape::XML::Document const *doc) {
 	return const_cast<Inkscape::XML::Node *>(doc->root());
@@ -179,9 +179,6 @@ inline unsigned int sp_repr_merge(Inkscape::XML::Node *repr, Inkscape::XML::Node
 }
 
 /* Contents */
-inline const char *sp_repr_attr(Inkscape::XML::Node const *repr, gchar const *key) {
-	return repr->attribute(key);
-}
 inline unsigned int sp_repr_set_content(Inkscape::XML::Node *repr, gchar const *content) {
 	repr->setContent(content);
 	return true;

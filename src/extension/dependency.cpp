@@ -59,7 +59,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
 
     sp_repr_ref(_repr);
 
-    const gchar * location = sp_repr_attr(_repr, "location");
+    const gchar * location = _repr->attribute("location");
     for (int i = 0; i < LOCATION_CNT && location != NULL; i++) {
         if (!strcmp(location, _location_str[i])) {
             _location = (location_t)i;
@@ -67,7 +67,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
         }
     }
 
-    const gchar * type = sp_repr_attr(_repr, "type");
+    const gchar * type = _repr->attribute("type");
     for (int i = 0; i < TYPE_CNT && type != NULL; i++) {
         if (!strcmp(type, _type_str[i])) {
             _type = (type_t)i;
@@ -77,7 +77,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
 
     _string = sp_repr_children(_repr)->content();
 
-    _description = sp_repr_attr(_repr, "description");
+    _description = _repr->attribute("description");
 
     return;
 }

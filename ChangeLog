@@ -1,3 +1,11 @@
+2005-02-20 SwinginCelt  <swinginceltgmail.com>
+
+	* Replaced all sp_repr_attr calls with direct call to
+	  repr->attribute.
+	* Replaced all sp_repr_document_unref calls with direct call to
+	  Inkscape::GC::release(...).
+	* Removed iinline sp_repr_document_ref because it wasn't used anywhere.
+
 2005-02-20  MenTaLguY  <mental@rydia.net>
 
 	* src/inkscape.cpp: removed unused signals

@@ -476,7 +476,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	GSList *objects = NULL;
 	for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 
-		Inkscape::XML::Node *nrepr = sp_repr_duplicate (SP_OBJECT_REPR (child));
+		Inkscape::XML::Node *nrepr = SP_OBJECT_REPR (child)->duplicate();
 
 		if (SP_IS_ITEM (child)) {
 			gchar affinestr[80];

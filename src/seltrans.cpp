@@ -401,7 +401,7 @@ void sp_sel_trans_stamp(SPSelTrans *seltrans)
             // remember parent
             Inkscape::XML::Node *parent = sp_repr_parent(original_repr);
 
-            Inkscape::XML::Node *copy_repr = sp_repr_duplicate(original_repr);
+            Inkscape::XML::Node *copy_repr = original_repr->duplicate();
 
             // add the new repr to the parent
             parent->appendChild(copy_repr);

@@ -303,7 +303,7 @@ inkscape_dispose (GObject *object)
     if (inkscape->preferences && inkscape->save_preferences) {
         /* fixme: This is not the best place */
         inkscape_save_preferences (inkscape);
-        sp_repr_document_unref (inkscape->preferences);
+        Inkscape::GC::release(inkscape->preferences);
         inkscape->preferences = NULL;
         inkscape->save_preferences = FALSE;
     }
@@ -614,14 +614,14 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
         GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, safeFn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
-        sp_repr_document_unref (doc);
+        Inkscape::GC::release(doc);
         g_free(safeFn);
         g_free (fn);
         return FALSE;
     }
 
     sp_repr_document_merge (config, doc, "id");
-    sp_repr_document_unref (doc);
+    Inkscape::GC::release(doc);
     g_free (fn);
     return TRUE;
 }

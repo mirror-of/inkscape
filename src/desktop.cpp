@@ -1171,7 +1171,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
     g_assert(desktop != NULL);
     if (inkscape_is_sole_desktop_for_document(*desktop)) {
         SPDocument *doc=SP_VIEW_DOCUMENT (view);
-        if (sp_repr_attr (sp_document_repr_root (doc), "sodipodi:modified") != NULL) {
+        if (sp_document_repr_root(doc)->attribute("sodipodi:modified") != NULL) {
             GtkWidget *dialog;
 
             dialog = gtk_message_dialog_new(
@@ -1228,7 +1228,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
         }
         /* Code to check data loss */
         bool allow_data_loss = FALSE;
-        while (sp_repr_attr (sp_document_repr_root (doc), "inkscape:dataloss") != NULL && allow_data_loss == FALSE) {
+        while (sp_document_repr_root(doc)->attribute("inkscape:dataloss") != NULL && allow_data_loss == FALSE) {
             GtkWidget *dialog;
 
             dialog = gtk_message_dialog_new(
@@ -1244,7 +1244,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
                 _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format (%s) that may cause data loss!</span>\n\n"
                   "Do you want to save this file in another format?"),
                 SP_DOCUMENT_NAME(doc),
-                Inkscape::Extension::db.get(sp_repr_attr(sp_document_repr_root(doc), "inkscape:output_extension"))->get_name());
+                Inkscape::Extension::db.get(sp_document_repr_root(doc)->attribute("inkscape:output_extension"))->get_name());
 
             /* FIXME !!! Gtk 2.3+ gives us gtk_message_dialog_set_markup() (and actually even
                gtk_message_dialog_new_with_markup(..., format, ...)!) -- until then, we will have
