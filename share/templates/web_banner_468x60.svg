@@ -3,8 +3,8 @@
 "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
-   width="468pt"
-   height="60pt"
+   width="468px"
+   height="60px"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -21,9 +21,10 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.2051282"
-     inkscape:cx="234.00000"
-     inkscape:cy="29.999994"
+     inkscape:zoom="1.2"
+     inkscape:cx="234"
+     inkscape:cy="30"
+     inkscape:document-units="px"
      inkscape:current-layer="layer1" />
   <metadata
      id="metadata4">
