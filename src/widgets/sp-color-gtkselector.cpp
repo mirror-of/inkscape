@@ -57,7 +57,7 @@ sp_color_gtkselector_get_type (void)
 static void
 sp_color_gtkselector_class_init (SPColorGtkselectorClass *klass)
 {
-	static const gchar* nameset[] = {N_("Wheel"), 0};
+	static const gchar* nameset[] = {N_("System"), 0};
 	GtkObjectClass *object_class;
 	GtkWidgetClass *widget_class;
 	SPColorSelectorClass *selector_class;
@@ -119,7 +119,7 @@ sp_color_gtkselector_hide_all (GtkWidget *widget)
 }
 
 GtkWidget *
-sp_color_gtkselector_new (GType selector_type, SPColorSpaceType colorspace)
+sp_color_gtkselector_new (GType, SPColorSpaceType colorspace)
 {
 	SPColorGtkselector *csel;
 

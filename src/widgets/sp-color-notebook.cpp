@@ -37,6 +37,7 @@
 #include "sp-color-notebook.h"
 
 #include "sp-color-scales.h"
+#include "sp-color-wheel-selector.h"
 #include "sp-color-gtkselector.h"
 
 struct _SPColorNotebookTracker {
@@ -111,8 +112,8 @@ sp_color_notebook_switch_page(GtkNotebook *notebook,
 	}
 }
 
-void ColorNotebook::switchPage(GtkNotebook *notebook,
-                              GtkNotebookPage *page,
+void ColorNotebook::switchPage(GtkNotebook*,
+                              GtkNotebookPage*,
                               guint page_num)
 {
     SPColorSelector* csel;
@@ -199,11 +200,12 @@ void ColorNotebook::init()
 
 	/* tempory hardcoding to get types loaded */
 	SP_TYPE_COLOR_SCALES;
+	SP_TYPE_COLOR_WHEEL_SELECTOR;
 
 	/* REJON: Comment out the next line to not use the normal GTK Color 
            wheel. */
 
-        SP_TYPE_COLOR_GTKSELECTOR;
+//        SP_TYPE_COLOR_GTKSELECTOR;
 
 	_updating = FALSE;
 	_btn = 0;
@@ -321,13 +323,13 @@ void ColorNotebook::init()
 	_rgbal = gtk_label_new ("RGBA:");
 /*	   gtk_misc_set_alignment (GTK_MISC (_l[i]), 1.0, 0.5); */
 	gtk_widget_show (_rgbal);
-	gtk_table_attach (GTK_TABLE (table), _rgbal, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+	gtk_table_attach (GTK_TABLE (table), _rgbal, 0, 1, row, row + 1, GTK_FILL, GTK_SHRINK, XPAD, YPAD);
 	_rgbae = gtk_entry_new ();
 	sp_dialog_defocus_on_enter (_rgbae);
 	gtk_entry_set_max_length (GTK_ENTRY (_rgbae), 16);
 	gtk_entry_set_width_chars (GTK_ENTRY (_rgbae), 10);
 	gtk_widget_show (_rgbae);
-	gtk_table_attach (GTK_TABLE (table), _rgbae, 1, 2, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+	gtk_table_attach (GTK_TABLE (table), _rgbae, 1, 2, row, row + 1, GTK_FILL, GTK_SHRINK, XPAD, YPAD);
 
 #ifdef SPCS_PREVIEW
 	_p = sp_color_preview_new (0xffffffff);
@@ -483,7 +485,7 @@ void ColorNotebook::_updateRgbaEntry( const SPColor& color, gfloat alpha )
     }
 }
 
-void ColorNotebook::_entryGrabbed (SPColorSelector *csel, SPColorNotebook *colorbook)
+void ColorNotebook::_entryGrabbed (SPColorSelector *, SPColorNotebook *colorbook)
 {
     ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
     nb->_grabbed();
@@ -502,7 +504,7 @@ void ColorNotebook::_entryDragged (SPColorSelector *csel, SPColorNotebook *color
 	nb->_dragging = oldState;
 }
 
-void ColorNotebook::_entryReleased (SPColorSelector *csel, SPColorNotebook *colorbook)
+void ColorNotebook::_entryReleased (SPColorSelector *, SPColorNotebook *colorbook)
 {
     ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
     nb->_released();
