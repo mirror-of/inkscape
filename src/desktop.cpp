@@ -2248,6 +2248,10 @@ unsigned SPDesktopWidget::_buildLayerMenuItems(GtkMenu *menu, SPObject *layer)
 
 void SPDesktopWidget::_buildLayerStatusMenuItem(GtkMenu *menu, SPObject *layer)
 {
+    if (layer == NULL) {
+        return;
+    }
+        
     SPDesktop *desktop=this->desktop;
     SPObject *root=desktop->currentRoot();
     SPObject *parent=SP_OBJECT_PARENT(layer);
