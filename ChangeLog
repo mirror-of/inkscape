@@ -1,5 +1,7 @@
 2003-11-28 MenTaLguY <mental@rydia.net>
 
+	* src/Makefile.am: added utest/ subdir
+
 	* doc/architecture.svg: reworked architecture diagram a bit
 
 	* doc/class-hierarchy.dia: added first shot at documenting the

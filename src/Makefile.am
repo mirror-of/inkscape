@@ -3,7 +3,7 @@
 module_libs = modules/libspmodules.a
 module_src = module.c module.h
 
-SUBDIRS = libarikkei libnr libnrtype xml svg helper widgets dialogs display modules
+SUBDIRS = libarikkei libnr libnrtype xml svg helper widgets dialogs display modules utest
 
 AM_CPPFLAGS = \
 	-DINKSCAPE_VERSION=\""$(VERSION)"\"
