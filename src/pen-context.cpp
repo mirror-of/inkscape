@@ -367,6 +367,12 @@ static gint
 pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
 {
     gint ret = FALSE;
+
+    if (mevent.state & GDK_BUTTON2_MASK || mevent.state & GDK_BUTTON3_MASK) {
+        // allow middle-button scrolling
+        return FALSE;
+    }
+
     NR::Point const event_w(mevent.x,
                             mevent.y);
     if (pen_within_tolerance) {

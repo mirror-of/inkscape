@@ -222,6 +222,11 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
     gint ret = FALSE;
     SPDesktop *const dt = pc->desktop;
 
+    if (mevent.state & GDK_BUTTON2_MASK || mevent.state & GDK_BUTTON3_MASK) {
+        // allow middle-button scrolling
+        return FALSE;
+    }
+
     if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab && pc->is_drawing) {
         /* Grab mouse, so release will not pass unnoticed */
         pc->grab = SP_CANVAS_ITEM(dt->acetate);
