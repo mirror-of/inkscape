@@ -21,5 +21,3 @@
 
 #include "VoronoiGraph.h"
 #include "VoronoiConstr.h"
-
-

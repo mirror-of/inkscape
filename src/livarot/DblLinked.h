@@ -15,24 +15,24 @@
 #include <string.h>
 //#include <iostream.h>
 
-class DblLinked {
+class DblLinked
+{
 public:
-	DblLinked*   leftElem;
-	DblLinked*   rightElem;
-	
-	DblLinked(void);
-	~DblLinked(void);
+  DblLinked * leftElem;
+  DblLinked *rightElem;
 
-	void         MakeNew(void);
-	void         MakeDelete(void);
+    DblLinked (void);
+   ~DblLinked (void);
 
-	void         InsertOnLeft(DblLinked* of);
-	void         InsertOnRight(DblLinked* of);
-	void         InsertBetween(DblLinked* l,DblLinked* r);
-	void         Extract(void);
+  void MakeNew (void);
+  void MakeDelete (void);
 
-	void        Relocate(DblLinked* to);
+  void InsertOnLeft (DblLinked * of);
+  void InsertOnRight (DblLinked * of);
+  void InsertBetween (DblLinked * l, DblLinked * r);
+  void Extract (void);
+
+  void Relocate (DblLinked * to);
 };
 
 #endif
-

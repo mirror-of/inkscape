@@ -10,7 +10,9 @@
 //#include <ApplicationServices/ApplicationServices.h>
 
 // debug routine for vizualizing the polygons
-void              Shape::Plot(float ix,float iy,float ir,float mx,float my,bool doPoint,bool edgesNo,bool pointsNo,bool doDir)
+void
+Shape::Plot (float ix, float iy, float ir, float mx, float my, bool doPoint,
+	     bool edgesNo, bool pointsNo, bool doDir)
 {
 /*	Rect   r;
 	::SetRect(&r,0,0,800,800);

@@ -17,40 +17,41 @@
 
 #include "DblLinked.h"
 
-class AVLTree : public DblLinked {
+class AVLTree:public DblLinked
+{
 public:
-	AVLTree*         dad;
-	AVLTree*         sonL;
-	AVLTree*         sonR;
-	
-	int              balance;
+  AVLTree * dad;
+  AVLTree *sonL;
+  AVLTree *sonR;
 
-//	AVLTree*         leftElem;
-//	AVLTree*         rightElem;
-	
-	AVLTree(void);
-	~AVLTree(void);
+  int balance;
 
-	void        MakeNew(void);
-	void        MakeDelete(void);
+//      AVLTree*         leftElem;
+//      AVLTree*         rightElem;
 
-	int         Remove(AVLTree* &racine,bool rebalance=true);
-	int         Remove(AVLTree* &racine,AVLTree* &startNode,int &diff);
+    AVLTree (void);
+   ~AVLTree (void);
 
-	int         Insert(AVLTree* &racine,int insertType,AVLTree* insertL,AVLTree* insertR,bool rebalance);
-	int         Insert(AVLTree* &racine,int insertType,AVLTree* insertL,AVLTree* insertR);
+  void MakeNew (void);
+  void MakeDelete (void);
 
-	AVLTree*    LeftLeaf(AVLTree* from,bool from_dad);
-	AVLTree*    RightLeaf(AVLTree* from,bool from_dad);
+  int Remove (AVLTree * &racine, bool rebalance = true);
+  int Remove (AVLTree * &racine, AVLTree * &startNode, int &diff);
 
-	AVLTree*    Leftmost(void);
+  int Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
+	      AVLTree * insertR, bool rebalance);
+  int Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
+	      AVLTree * insertR);
 
-	int         RestoreBalances(AVLTree* from,AVLTree* &racine);
-	int         RestoreBalances(int diff,AVLTree* &racine);
+  AVLTree *LeftLeaf (AVLTree * from, bool from_dad);
+  AVLTree *RightLeaf (AVLTree * from, bool from_dad);
 
-	void        Relocate(AVLTree* to);
+  AVLTree *Leftmost (void);
+
+  int RestoreBalances (AVLTree * from, AVLTree * &racine);
+  int RestoreBalances (int diff, AVLTree * &racine);
+
+  void Relocate (AVLTree * to);
 };
 
 #endif
-
-

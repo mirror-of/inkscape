@@ -15,21 +15,29 @@
 #include <string.h>
 //#include <iostream.h>
 
-typedef struct vec2 {
-	float    x,y;
-} vec2;
+typedef struct vec2
+{
+  float x, y;
+}
+vec2;
 
-typedef struct mat2 {
-	float     xx,xy,yx,yy;
-} mat2;
+typedef struct mat2
+{
+  float xx, xy, yx, yy;
+}
+mat2;
 
-typedef struct vec2d {
-	double    x,y;
-} vec2d;
+typedef struct vec2d
+{
+  double x, y;
+}
+vec2d;
 
-typedef struct mat2d {
-	double     xx,xy,yx,yy;
-} mat2d;
+typedef struct mat2d
+{
+  double xx, xy, yx, yy;
+}
+mat2d;
 
 #define RotCCW(a) {\
 	float _t=(a).x;\
@@ -124,9 +132,9 @@ typedef struct mat2d {
 
 #define L_VEC_Cmp(a,b) ((fabs(a.y-b.y)<0.0000001)? \
 												((fabs(a.x-b.x)<0.0000001)?0:((a.x > b.x)?1:-1)): \
-												((a.y > b.y)?1:-1)) 
-	
-#define L_VAL_Cmp(a,b) ((fabs(a-b)<0.0000001)?0:((a>b)?1:-1)) 
+												((a.y > b.y)?1:-1))
+
+#define L_VAL_Cmp(a,b) ((fabs(a-b)<0.0000001)?0:((a>b)?1:-1))
 
 #define L_VEC_Normalize(d) { \
 	double l=sqrt(d.x*d.x+d.y*d.y); \
@@ -154,7 +162,7 @@ typedef struct mat2d {
 	double t=d.x;d.x=-d.y;d.y=t; \
 }
 
-#define L_VAL_Zero(a) ((fabs(a)<0.00000001)?0:((a>0)?1:-1)) 
+#define L_VAL_Zero(a) ((fabs(a)<0.00000001)?0:((a>0)?1:-1))
 
 #define L_VEC_Cross(a,b,r) { \
 	r=a.x*b.x+a.y*b.y; \
@@ -174,7 +182,7 @@ typedef struct mat2d {
 #define L_MAT_SetL(m,a,b) {m.xx=a.x;m.xy=a.y;m.yx=b.x;m.yy=b.y;};
 
 #define L_MAT_Init(m) {m.xx=m.xy=m.yx=m.yy=0;};
-	
+
 #define L_MAT_Col(m,no,r) { \
 		if ( no == 0 ) { \
 			r.x=m.xx; \
@@ -184,7 +192,7 @@ typedef struct mat2d {
 			r.x=m.xy; \
 			r.y=m.yy; \
 		} \
-	}; 
+	};
 
 #define L_MAT_Row(m,no,r) { \
 		if ( no == 0 ) { \
@@ -196,9 +204,9 @@ typedef struct mat2d {
 			r.y=m.yy; \
 		} \
 	};
-	
+
 #define L_MAT_Det(m,d) {d=m.xx*m.yy-m.xy*m.yx;};
-	
+
 #define L_MAT_Neg(m) {m.xx=-m.xx;m.xy=-m.xy;m.yx=-m.yx;m.yy=-m.yy;};
 
 #define L_MAT_Trs(m) {double t=m.xy;m.xy=m.yx;m.yx=t;};
@@ -237,7 +245,7 @@ typedef struct mat2d {
 #define L_MAT_MulC(u,v,m) {m.xx=u.xx*v;m.xy=u.xy*v;m.yx=u.yx*v;m.yy=u.yy*v;};
 
 #define L_MAT_DivC(u,v,m) {m.xx=u.xx/v;m.xy=u.xy/v;m.yx=u.yx/v;m.yy=u.yy/v;};
-	
+
 #define L_MAT_MulV(m,v,r) { \
 	vec2d t; \
 		t.x=m.xx*v.x+m.xy*v.y; \
@@ -251,7 +259,7 @@ typedef struct mat2d {
 			t.y=m.xy*v.x+m.yy*v.y; \
 				r=t; \
 };
-	
+
 
 
 #endif

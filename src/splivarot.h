@@ -27,6 +27,6 @@ void sp_selected_path_inset ();
 void sp_selected_path_outline ();
 
 // simplifies a path (removes small segments and the like)
-void sp_selected_path_simplify();
+void sp_selected_path_simplify ();
 
 #endif
