@@ -130,8 +130,8 @@ sp_item_init(SPItem *item)
 
 namespace {
 
-NR::Matrix partial_xform(SPObject *object, SPObject *ancestor) {
-    NR::Matrix xform=NR::identity();
+NR::Matrix partial_xform(SPObject const *object, SPObject const *ancestor) {
+    NR::Matrix xform = NR::identity();
     while ( object != ancestor ) {
         if (SP_IS_ITEM(object)) {
             xform *= SP_ITEM(object)->transform;

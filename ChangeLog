@@ -1,5 +1,7 @@
 2004-08-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item.cpp (partial_xform): Mark pointers as not written through.
+
 	* src/arc-context.cpp, src/draw-context.cpp, src/dyna-draw-context.cpp,
 	  src/path-chemistry.cpp, src/rect-context.cpp,
 	  src/selection-chemistry.cpp, src/seltrans.cpp, src/sp-flowdiv.cpp,
