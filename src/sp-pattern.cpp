@@ -463,8 +463,8 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 	SPRepr *repr = sp_repr_new ("pattern");
 	sp_repr_set_attr(repr, "inkscape:collect", "always");
 	sp_repr_set_attr (repr, "patternUnits", "userSpaceOnUse");
-	sp_repr_set_double (repr, "width", bounds.extent(NR::X) * 1.25);
-	sp_repr_set_double (repr, "height", bounds.extent(NR::Y) * 1.25);
+	sp_repr_set_double (repr, "width", bounds.extent(NR::X));
+	sp_repr_set_double (repr, "height", bounds.extent(NR::Y));
 
 	NRMatrix t;
 	transform.copyto(&t);
@@ -488,10 +488,10 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 
 	SPRepr *rect = sp_repr_new ("rect");
 	sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
-	sp_repr_set_double (rect, "width", bounds.extent(NR::X) * 1.25);
-	sp_repr_set_double (rect, "height", bounds.extent(NR::Y) * 1.25);
-	sp_repr_set_double (rect, "x", bounds.min()[NR::X] * 1.25);
-	sp_repr_set_double (rect, "y", sp_document_height (document) - bounds.min()[NR::Y] * 1.25);
+	sp_repr_set_double (rect, "width", bounds.extent(NR::X));
+	sp_repr_set_double (rect, "height", bounds.extent(NR::Y));
+	sp_repr_set_double (rect, "x", bounds.min()[NR::X]);
+	sp_repr_set_double (rect, "y", bounds.min()[NR::Y]);
 
 	return rect;
 }

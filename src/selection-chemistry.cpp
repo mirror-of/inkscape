@@ -1383,12 +1383,9 @@ sp_selection_tile()
 
     NR::Rect r = selection->bounds();
 
-        sp_document_ensure_up_to_date(document);
-        NR::Point m = (NR::Point(0, sp_document_height(document)) - (r.min() + NR::Point (0, r.extent(NR::Y))));
-
-        g_print ("move by %g, %g\n", m[NR::X], m[NR::Y]);
-        sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
-        sp_document_ensure_up_to_date(document);
+    sp_document_ensure_up_to_date(document);
+    NR::Point m = (NR::Point(0, sp_document_height(document)) - (r.min() + NR::Point (0, r.extent(NR::Y))));
+    sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
 
     GSList *reprs = g_slist_copy((GSList *) selection->reprList());
 
@@ -1404,7 +1401,11 @@ sp_selection_tile()
     if (sort)
         reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
 
-    SPRepr *rect = pattern_tile (reprs, r, document, NR::Matrix(NR::translate(-m)));
+    reprs = g_slist_reverse (reprs);
+
+    SPRepr *rect = pattern_tile (reprs, 
+                                 NR::Rect (sp_desktop_d2doc_xy_point(desktop, r.min()), sp_desktop_d2doc_xy_point(desktop, r.max())),
+                                 document, NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, r.min()))));
 
     // FIXME: to current layer!
     sp_document_add_repr (document, rect);
