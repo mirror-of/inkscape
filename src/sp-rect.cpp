@@ -195,16 +195,18 @@ sp_rect_update(SPObject *object, SPCtx *ctx, guint flags)
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         SPRect *rect = (SPRect *) object;
         SPStyle *style = object->style;
-        SPItemCtx *ictx = (SPItemCtx *) ctx;
-        double const d = 1.0 / NR_MATRIX_DF_EXPANSION(&ictx->i2vp);
-        double const w = d * (ictx->vp.x1 - ictx->vp.x0);
-        double const h = d * (ictx->vp.y1 - ictx->vp.y0);
-        sp_svg_length_update(&rect->x, style->font_size.computed, style->font_size.computed * 0.5, w);
-        sp_svg_length_update(&rect->y, style->font_size.computed, style->font_size.computed * 0.5, h);
-        sp_svg_length_update(&rect->width, style->font_size.computed, style->font_size.computed * 0.5, w);
-        sp_svg_length_update(&rect->height, style->font_size.computed, style->font_size.computed * 0.5, h);
-        sp_svg_length_update(&rect->rx, style->font_size.computed, style->font_size.computed * 0.5, w);
-        sp_svg_length_update(&rect->ry, style->font_size.computed, style->font_size.computed * 0.5, h);
+        SPItemCtx const *ictx = (SPItemCtx const *) ctx;
+        double const d = NR_MATRIX_DF_EXPANSION(&ictx->i2vp);
+        double const w = (ictx->vp.x1 - ictx->vp.x0) / d;
+        double const h = (ictx->vp.y1 - ictx->vp.y0) / d;
+        double const em = style->font_size.computed;
+        double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
+        sp_svg_length_update(&rect->x, em, ex, w);
+        sp_svg_length_update(&rect->y, em, ex, h);
+        sp_svg_length_update(&rect->width, em, ex, w);
+        sp_svg_length_update(&rect->height, em, ex, h);
+        sp_svg_length_update(&rect->rx, em, ex, w);
+        sp_svg_length_update(&rect->ry, em, ex, h);
         sp_shape_set_shape((SPShape *) object);
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
