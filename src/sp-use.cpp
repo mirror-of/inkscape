@@ -451,8 +451,11 @@ sp_use_modified (SPObject *object, guint flags)
 	}
 }
 
-//void print_m (gchar *say, NRMatrix *m)
+//void m_print (gchar *say, NRMatrix *m)
 //{ g_print ("%s %g %g %g %g %g %g\n", say, m->c[0], m->c[1], m->c[2], m->c[3], m->c[4], m->c[5]); }
+
+//void mm_print (gchar *say, NR::Matrix m)
+//{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
 
 SPItem *
 sp_use_unlink (SPUse *use)
@@ -480,17 +483,17 @@ sp_use_unlink (SPUse *use)
 	for (GSList *i = chain; i != NULL; i = i->next) {
 		SPItem *i_tem = SP_ITEM(i->data);
 
-		t = t * NR::Matrix (&i_tem->transform);
-
 		// "An additional transformation translate(x,y) is appended to the end (i.e.,
 		// right-side) of the transform attribute on the generated 'g', where x and y
 		// represent the values of the x and y attributes on the 'use' element." - http://www.w3.org/TR/SVG11/struct.html#UseElement
 		if (SP_IS_USE(i_tem)) {
 			SPUse *i_use = SP_USE(i_tem);
 			if ((i_use->x.set && i_use->x.computed != 0) || (i_use->y.set && i_use->y.computed != 0)) {
-				t = NR::Matrix (NR::translate (i_use->x.set ? i_use->x.computed : 0, i_use->y.set ? i_use->y.computed : 0)) * t;
+				t = t * NR::translate (i_use->x.set ? i_use->x.computed : 0, i_use->y.set ? i_use->y.computed : 0);
 			}
 		}
+
+		t = t * NR::Matrix (&i_tem->transform);
 	}
  
 	// create copy of the original
