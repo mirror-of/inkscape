@@ -483,7 +483,7 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
     }
 
     SPSelection *selection = SP_DT_SELECTION(desktop);
-    GSList *slist = (GSList *) sp_selection_item_list(selection);
+    GSList *slist = (GSList *) selection->itemList();
     
     if (!slist) {
         return;
@@ -665,34 +665,26 @@ sp_align_bbox_sort ( const void *a, const void *b )
 
 static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
 {
-    SPDesktop *desktop;
-    SPSelection *selection;
-    const GSList *slist, *l;
-    struct _SPBBoxSort *bbs;
-    int len;
-    unsigned int changed;
-
-    desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     
     if (!desktop)
         return;
 
-    selection = SP_DT_SELECTION (desktop);
-    slist = sp_selection_item_list (selection);
+    const GSList* slist = SP_DT_SELECTION(desktop)->itemList();
     if (!slist)
         return;
     
     if (!slist->next)
         return;
 
-    len = g_slist_length ((GSList *) slist);
-    bbs = g_new (struct _SPBBoxSort, len);
+    int len = g_slist_length ((GSList *) slist);
+    struct _SPBBoxSort *bbs = g_new (struct _SPBBoxSort, len);
     
     
     {
         unsigned pos = 0;
         
-        for (l = slist; l != NULL; l = l->next) {
+        for (const GSList *l = slist; l != NULL; l = l->next) {
             bbs[pos].item = SP_ITEM (l->data);
             sp_item_bbox_desktop (bbs[pos].item, &bbs[pos].bbox);
             bbs[pos].anchor = 
@@ -705,7 +697,7 @@ static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
 
     qsort (bbs, len, sizeof (struct _SPBBoxSort), sp_align_bbox_sort);
 
-    changed = FALSE;
+    unsigned int changed = FALSE;
 
     if (!layout[2])
     {
@@ -756,32 +748,24 @@ static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
 
 static void sp_align_distribute_v_clicked(GtkWidget *, gchar const *layout)
 {
-    SPDesktop *desktop;
-    SPSelection *selection;
-    const GSList *slist, *l;
-    struct _SPBBoxSort *bbs;
-    int len;
-    unsigned int changed;
-
-    desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop)
         return;
 
-    selection = SP_DT_SELECTION (desktop);
-    slist = sp_selection_item_list (selection);
+    const GSList *slist = SP_DT_SELECTION(desktop)->itemList();
     if (!slist)
         return;
     
     if (!slist->next)
         return;
 
-    len = g_slist_length ((GSList *) slist);
-    bbs = g_new (struct _SPBBoxSort, len);
+    int len = g_slist_length ((GSList *) slist);
+    struct _SPBBoxSort *bbs = g_new (struct _SPBBoxSort, len);
     
     
     {
         unsigned pos = 0;
-        for (l = slist; l != NULL; l = l->next) {
+        for (const GSList *l = slist; l != NULL; l = l->next) {
             bbs[pos].item = SP_ITEM (l->data);
             sp_item_bbox_desktop (bbs[pos].item, &bbs[pos].bbox);
             bbs[pos].anchor = 
@@ -794,7 +778,7 @@ static void sp_align_distribute_v_clicked(GtkWidget *, gchar const *layout)
     
     qsort ( bbs, len, sizeof (struct _SPBBoxSort), sp_align_bbox_sort );
 
-    changed = FALSE;
+    unsigned int changed = FALSE;
 
     
     if (!layout[2]) 
