@@ -96,11 +96,6 @@ gdouble sp_document_height (SPDocument * document);
 
 void sp_document_def_id(SPDocument *document, const gchar *id, SPObject *object);
 SigC::Connection sp_document_id_changed_connect(SPDocument *document, const gchar *id, SigC::Slot1<void, SPObject *>);
-inline __attribute__((deprecated)) SPObject *sp_document_lookup_id(SPDocument *document, const gchar *id)
-{
-	g_assert(document != NULL);
-	return document->getObjectById(id);
-}
 
 /*
  * Undo & redo

@@ -709,11 +709,7 @@ set_dt_select (SPRepr *repr)
             repr = sp_repr_parent(repr);
         } // end of while loop
             
-        id = sp_repr_attr(repr, "id");
-        object = 
-            (id) ? sp_document_lookup_id 
-                (SP_DT_DOCUMENT (current_desktop), id) : NULL;
-                
+        object = SP_DT_DOCUMENT(current_desktop)->getObjectByRepr(repr);
     } else {
         object = NULL;
     }
