@@ -1,5 +1,11 @@
 2003-11-24 bulia byak <bulia@dr.com>
 
+	* src/preferences-skeleton.h: new group for global interface options
+	* src/prefs-utils.h src/prefs-utils.c: new functions for double attributes
+	* src/select-context.c src/node-context.c: nudge distance (without alt) is taken from preferences (default 1 mm)
+
+2003-11-24 bulia byak <bulia@dr.com>
+
 	New keys in node editor:	
 	* esc deselects and cancels rubberband and node dragging
 	* ctrl-a selects all nodes
