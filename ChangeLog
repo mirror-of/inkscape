@@ -1,3 +1,13 @@
+2004-08-08  Ted Gould  <ted@gould.cx>
+
+	* src/svg-profile.h, src/Makefile_insert:
+
+	Adding the first support in for trying to determine which profiles are
+	used with certain functionality, and if that is used by the current
+	document.  Really, right now, there is no code changes to anything that
+	compiles.  But this is the header file that contains the class that
+	I'm plannig to use in the future.
+
 2004-08-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnrtype/RasterFont.h, src/libnrtype/RasterFont.cpp:

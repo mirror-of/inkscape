@@ -158,6 +158,7 @@ libinkpre_a_SOURCES =	\
 	tools-switch.cpp tools-switch.h\
 	uri.cpp uri.h	\
 	uri-references.cpp uri-references.h	\
+	svg-profile.h \
 	verbs.cpp verbs.h	\
 	version.cpp version.h	\
 	view.cpp view.h	\
