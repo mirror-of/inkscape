@@ -118,6 +118,7 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_SODIPODI_ARG2, "sodipodi:arg2"},
 	{SP_ATTR_INKSCAPE_FLATSIDED, "inkscape:flatsided"},
 	{SP_ATTR_INKSCAPE_ROUNDED, "inkscape:rounded"},
+	{SP_ATTR_INKSCAPE_RANDOMIZED, "inkscape:randomized"},
 	/* SPSpiral */
 	{SP_ATTR_SODIPODI_EXPANSION, "sodipodi:expansion"},
 	{SP_ATTR_SODIPODI_REVOLUTION, "sodipodi:revolution"},

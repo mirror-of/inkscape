@@ -39,6 +39,8 @@ struct SPStarContext : public SPEventContext {
 	bool isflatsided;
 	/* rounded corners ratio */
 	gdouble rounded;
+	// randomization
+	gdouble randomized;
 
     SPKnotHolder *knot_holder;
     SPRepr *repr;

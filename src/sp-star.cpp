@@ -29,6 +29,7 @@
 #include "libnr/nr-point.h"
 #include "libnr/nr-point-fns.h"
 #include "libnr/nr-point-ops.h"
+#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-point-l.h"
 
 #include "sp-star.h"
@@ -107,6 +108,7 @@ sp_star_init (SPStar * star)
 	star->arg[0] = star->arg[1] = 0.0;
 	star->flatsided = 0;
 	star->rounded = 0.0;
+	star->randomized = 0.0;
 }
 
 static void
@@ -124,6 +126,7 @@ sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "sodipodi:arg2");
 	sp_object_read_attr (object, "inkscape:flatsided");
 	sp_object_read_attr (object, "inkscape:rounded");
+	sp_object_read_attr (object, "inkscape:randomized");
 }
 
 static SPRepr *
@@ -146,6 +149,7 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 		sp_repr_set_double (repr, "sodipodi:arg2", star->arg[1]);
 		sp_repr_set_boolean (repr, "inkscape:flatsided", star->flatsided);
 		sp_repr_set_double (repr, "inkscape:rounded", star->rounded);
+		sp_repr_set_double (repr, "inkscape:randomized", star->randomized);
 	}
 
 	sp_star_set_shape ((SPShape *) star);
@@ -244,6 +248,14 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
+	case SP_ATTR_INKSCAPE_RANDOMIZED:
+		if (value) {
+			star->randomized = g_ascii_strtod (value, NULL);
+		} else {
+			star->randomized = 0.0;
+		}
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+		break;
 	default:
 		if (((SPObjectClass *) parent_class)->set)
 			((SPObjectClass *) parent_class)->set (object, key, value);
@@ -281,6 +293,49 @@ NR::Point
 rot90_rel (NR::Point o, NR::Point n)
 {
 	return ((1/NR::L2(n - o)) * NR::Point ((n - o)[NR::Y],  (o - n)[NR::X]));
+}
+
+/**
+Returns a unique 32 bit int for a given point.
+Obvious (but acceptable for my purposes) limits to uniqueness:
+- returned value for x,y repeats for x+n*1024,y+n*1024
+- returned value is unchanged when the point is moved by less than 1/1024 of px
+*/
+guint32
+point_unique_int (NR::Point o)
+{
+	return ((guint32) 
+	65536 * 
+		(((int) floor (o[NR::X] * 64)) % 1024 + ((int) floor (o[NR::X] * 1024)) % 64) 
+	+
+     		(((int) floor (o[NR::Y] * 64)) % 1024 + ((int) floor (o[NR::Y] * 1024)) % 64)
+	);
+}
+
+/**
+Returns the next pseudorandom value using the Linear Congruential Generator algorithm (LCG)
+with the parameters (m = 2^32, a = 69069, b = 1). These parameters give a full-period generator,
+i.e. it is guaranteed to go through all integers < 2^32 (see http://random.mat.sbg.ac.at/~charly/server/server.html)
+*/
+guint32
+lcg_next (guint32 prev)
+{
+	guint64 t = (( 69069 * prev + 1 ) % 4294967296ll);
+	return ((guint32) t);
+}
+
+/**
+Returns a random number in the range [-0.5, 0.5] from the given seed, stepping the given number of steps from the seed
+*/
+double
+rnd (guint32 seed, uint steps) {
+
+	guint32 lcg = seed;
+
+	for (; steps > 0; steps --)
+		lcg = lcg_next (lcg);
+
+	return ((double) lcg / 4294967296ll) - 0.5;
 }
 
 NR::Point
@@ -322,8 +377,22 @@ sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 		ret = (star->rounded * next_len * -1) * rot;
 	}
 
-	// add the vector to o to get the final curvepoint
-	return o + ret;
+	if (star->randomized == 0) {
+		// add the vector to o to get the final curvepoint
+		return o + ret;
+	} else {
+		// the seed corresponding to the exact point
+		guint32 seed = point_unique_int (o);
+
+		// randomly rotate (by step 3 from the seed) and scale (by step 4) the vector
+		ret = ret * NR::Matrix (NR::rotate (star->randomized * M_PI * rnd (seed, 3)));
+		ret *= ( 1 + star->randomized * rnd (seed, 4));
+
+		// the randomized corner point
+		NR::Point o_randomized = sp_star_get_xy (star, point, index, true);
+
+		return o_randomized + ret;
+	}
 }
 
 
@@ -340,63 +409,66 @@ sp_star_set_shape (SPShape *shape)
 	gint sides = star->sides;
 	bool not_rounded = (fabs (star->rounded) < 1e-4);
 
+	// note that we pass randomized=true to sp_star_get_xy, because the curve must be randomized;
+	// other places that call that function (e.g. the knotholder) need the exact point
+
 	// draw 1st segment
-	sp_curve_moveto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+	sp_curve_moveto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0, true));
 	if (star->flatsided == false) {
 		if (not_rounded) {
-			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
+			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0, true));
 		} else {
 			sp_curve_curveto (c, 
 				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, 0, NEXT),
 				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, 0, PREV),
-				sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
+				sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0, true));
 		}
 	}
 
 	// draw all middle segments
 	for (gint i = 1; i < sides; i++) {
 		if (not_rounded) {
-			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i));
+			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i, true));
 		} else {
-		if (star->flatsided == false) {
-			sp_curve_curveto (c, 
-				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, i - 1, NEXT),
-				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i, PREV),
-				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i));
-		} else {
-			sp_curve_curveto (c, 
-				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i - 1, NEXT),
-				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i, PREV),
-				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i));
-		}
+			if (star->flatsided == false) {
+				sp_curve_curveto (c, 
+						sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, i - 1, NEXT),
+						sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i, PREV),
+						sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i, true));
+			} else {
+				sp_curve_curveto (c, 
+						sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i - 1, NEXT),
+						sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i, PREV),
+						sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i, true));
+			}
 		}
 		if (star->flatsided == false) {
 
 			if (not_rounded) {
-                       sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i));
+                       sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i, true));
 			} else {
 				sp_curve_curveto (c,
 					sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i, NEXT),
 					sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, i, PREV),
-					sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i));
+					sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i, true));
 			}
 		}
 	}
 	
 	// draw last segment
 		if (star->rounded == 0) {
-			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0, true));
 		} else {
 			if (star->flatsided == false) {
 			sp_curve_curveto (c, 
 				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, sides - 1, NEXT),
 				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, 0, PREV),
-				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0, true));
 			} else {
 			sp_curve_curveto (c, 
 				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, sides - 1, NEXT),
 				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, 0, PREV),
-				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0, true));
 			}
 		}
 
@@ -406,7 +478,7 @@ sp_star_set_shape (SPShape *shape)
 }
 
 void
-sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded)
+sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded, double randomized)
 {
 	g_return_if_fail (star != NULL);
 	g_return_if_fail (SP_IS_STAR (star));
@@ -423,6 +495,7 @@ sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gd
 	star->arg[1] = arg2;
 	star->flatsided = isflat;
 	star->rounded = rounded;
+	star->randomized = randomized;
 	SP_OBJECT(star)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -441,17 +514,33 @@ static void sp_star_snappoints(SPItem const *item, SnapPointsIter p)
  * @point: point type to obtain X-Y value
  * @index: index of vertex
  * @p: pointer to store X-Y value
+ * @randomized: false (default) if you want to get exact, not randomized point
  *
  * Initial item coordinate system is same as document coordinate system.
  */
 
 NR::Point
-sp_star_get_xy (SPStar *star, SPStarPoint point, gint index)
+sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, bool randomized)
 {
 	gdouble darg = 2.0 * M_PI / (double) star->sides;
 
 	double arg = star->arg[point];
 	arg += index * darg;
-	return star->r[point] * NR::Point(cos(arg), sin(arg)) + star->center;
+
+	NR::Point xy = star->r[point] * NR::Point(cos(arg), sin(arg)) + star->center;
+
+	if (!randomized || star->randomized == 0) {
+		// return the exact point
+		return xy;
+	} else { // randomize the point
+		// find out the seed, unique for this point so that randomization is the same so long as the original point is stationary
+		guint32 seed = point_unique_int (xy);
+		// the full range (corresponding to star->randomized == 1.0) is equal to the star's diameter
+		double range = 2 * MAX (star->r[0], star->r[1]);
+		// find out the random displacement; x is controlled by step 1 from the seed, y by the step 2
+		NR::Point shift (star->randomized * range * rnd (seed, 1), star->randomized * range * rnd (seed, 2));
+		// add the shift to the exact point
+		return xy + shift;
+	}
 }
 

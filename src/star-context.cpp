@@ -232,6 +232,7 @@ sp_star_context_setup (SPEventContext *ec)
     sp_event_context_read (ec, "proportion");
     sp_event_context_read (ec, "isflatsided");
     sp_event_context_read (ec, "rounded");
+    sp_event_context_read (ec, "randomized");
 
     SPSelection *selection = SP_DT_SELECTION(ec->desktop);
 
@@ -272,6 +273,8 @@ sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
             sc->isflatsided = false;
     } else if (!strcmp (key, "rounded")) {
         sc->rounded = (val) ? g_ascii_strtod (val, NULL) : 0.0;
+    } else if (!strcmp (key, "randomized")) {
+        sc->randomized = (val) ? g_ascii_strtod (val, NULL) : 0.0;
     }    
 }
 
@@ -425,17 +428,16 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
     if (state & GDK_CONTROL_MASK) {
         arg1 = sp_round(arg1, M_PI/snaps);
     }
-    bool isflat = sc->isflatsided;
-    double rounded = sc->rounded;
 
     sp_star_position_set(star, sc->magnitude, p0, r1, r1 * sc->proportion,
-                         arg1, arg1 + M_PI / sides, isflat, rounded);
+                         arg1, arg1 + M_PI / sides, sc->isflatsided, sc->rounded, sc->randomized);
 
     /* status text */
     GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
+
     sc->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
-                                      ( isflat
+                                      ( sc->isflatsided
                                       ? _("Draw polygon at (%s,%s)")
                                       : _("Draw star at (%s,%s)") ),
                                       xs->str, ys->str);

@@ -934,6 +934,40 @@ sp_stb_rounded_value_changed (GtkAdjustment *adj, SPWidget *tbl)
 }
 
 
+static void
+sp_stb_randomized_value_changed (GtkAdjustment *adj, SPWidget *tbl) 
+{
+    prefs_set_double_attribute ("tools.shapes.star", "randomized", (gdouble) adj->value);
+
+    // quit if run by the attr_changed listener
+    if (g_object_get_data (G_OBJECT (tbl), "freeze")) {
+        return;
+    }
+
+    // in turn, prevent listener from responding
+    g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (TRUE));
+
+    SPDesktop *desktop = (SPDesktop *) gtk_object_get_data (GTK_OBJECT (tbl), "desktop");
+    bool modmade = FALSE;
+
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+    const GSList *items = selection->itemList();
+    for (; items != NULL; items = items->next) {
+        if (SP_IS_STAR ((SPItem *) items->data)) {
+            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+            sp_repr_set_double (repr, "inkscape:randomized", (gdouble) adj->value);
+            SP_OBJECT (items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
+            modmade = true;
+        }
+    }
+    if (modmade)  sp_document_done (SP_DT_DOCUMENT (desktop));
+
+    g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
+
+    spinbutton_defocus (GTK_OBJECT (tbl));
+}
+
+
 static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data) 
 {
     GtkWidget *tbl = GTK_WIDGET(data);
@@ -962,6 +996,9 @@ static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
 
     adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "rounded");
     gtk_adjustment_set_value (adj, sp_repr_get_double_attribute (repr, "inkscape:rounded", 0.0));
+
+    adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "randomized");
+    gtk_adjustment_set_value (adj, sp_repr_get_double_attribute (repr, "inkscape:randomized", 0.0));
 
     GtkWidget *fscb = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "flat_checkbox");
     GtkWidget *prop_widget = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "prop_widget");
@@ -1066,6 +1103,8 @@ sp_stb_defaults (GtkWidget *widget,  SPWidget *tbl)
 	gtk_adjustment_set_value (adj, prop);
 	adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "rounded");
 	gtk_adjustment_set_value (adj, 0.0);
+	adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "randomized");
+	gtk_adjustment_set_value (adj, 0.0);
 
 	bool modmade=FALSE;
 	SPDesktop *desktop = SP_DESKTOP (g_object_get_data (G_OBJECT (tbl), "desktop"));
@@ -1081,6 +1120,7 @@ sp_stb_defaults (GtkWidget *widget,  SPWidget *tbl)
 				sp_repr_set_double(repr,"sodipodi:arg2", sp_repr_get_double_attribute (repr, "sodipodi:arg1", 0) + M_PI / mag);
 				sp_repr_set_double(repr,"sodipodi:r2", sp_repr_get_double_attribute (repr, "sodipodi:r1", 1.0)*prop);
 				sp_repr_set_double(repr,"inkscape:rounded", 0.0);
+				sp_repr_set_double(repr,"inkscape:randomized", 0.0);
 				SP_OBJECT (items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
 			}
 			modmade = true;
@@ -1172,7 +1212,15 @@ sp_star_toolbox_new (SPDesktop *desktop)
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
-
+    /* Randomization */
+    {
+        GtkWidget *hb = sp_tb_spinbutton (_("Randomization:"), _("Scatter randomly the corners and angles"), 
+                                          "tools.shapes.star", "randomized", 0.0,
+                                          NULL, (SPWidget *) tbl, FALSE, NULL,
+                                          -10.0, 10.0, 0.01, 0.1,
+                                          sp_stb_randomized_value_changed);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
 
     /* Reset */
     {
