@@ -857,6 +857,8 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_VERTICAL),
 
         Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_DIALOG_SWATCHES),
+        Inkscape::Verb::get(SP_VERB_NONE),
         Inkscape::Verb::get(SP_VERB_DIALOG_TRANSFORM),
         Inkscape::Verb::get(SP_VERB_DIALOG_ALIGN_DISTRIBUTE),
         Inkscape::Verb::get(SP_VERB_SELECTION_GRIDTILE),

@@ -1,3 +1,10 @@
+2005-03-14  Jon A. Cruz  <jon@joncruz.org>
+1234567890123456789012345678901234567890123456789012345678901234567890123456
+	* src/dialogs/Makefile_insert, src/dialogs/swatches.cpp,
+	  src/dialogs/swatches.h, src/verbs.h, src/verbs.cpp,
+	  src/interface.cpp:
+	  Initial cut of swatches panel.
+
 2005-03-18  MenTaLguY  <mental@rydia.net>
 
 	* src/file.cpp, src/sp-item-group.cpp, src/xml/Makefile_insert,

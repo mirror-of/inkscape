@@ -51,6 +51,7 @@
 #include "ui/dialog/dialog.h"
 #include "dialogs/iconpreview.h"
 #include "dialogs/extensions.h"
+#include "dialogs/swatches.h"
 
 #include "extension/effect.h"
 
@@ -1363,6 +1364,9 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_DIALOG_FILL_STROKE:
             sp_object_properties_dialog ();
             break;
+        case SP_VERB_DIALOG_SWATCHES:
+            show_panel( Inkscape::UI::Dialogs::SwatchesPanel::getInstance() );
+            break;
         case SP_VERB_DIALOG_TRANSFORM:
             sp_transformation_dialog_move ();
             break;
@@ -1896,6 +1900,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Preferences saved with the document"), GTK_STOCK_PROPERTIES ),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
         N_("Fill and Stroke dialog"), "fill_and_stroke"),
+    new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("Swatches..."),
+        N_("Swatches dialog"), GTK_STOCK_SELECT_COLOR),
     new DialogVerb(SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m..."),
         N_("Transform dialog"), "object_trans"),
     new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."),
