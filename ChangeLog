@@ -1,3 +1,8 @@
+2004-01-17 MenTaLguY <mental@rydia.net>
+
+	* src/uri.h, src/uri.cpp, src/uri-references.cpp:
+	  new Inkscape::URI implementation using libxml URI stuff
+
 2004-01-15  bulia byak <bulia@users.sourceforge.net>
 
 	* src/preferences-skeleton.h: Added: tools.freehand.perncil tolerance,

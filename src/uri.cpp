@@ -9,26 +9,31 @@ URI::URI(const URI &uri) {
 }
 
 URI::URI(const gchar *uri_string) throw(BadURIException) {
-	if ( uri_string[0] != '#' || !uri_string[1] ) {
-		throw UnsupportedURIException();
+	xmlURIPtr uri;
+	uri = xmlParseURI(uri_string);
+	if (!uri) {
+		throw MalformedURIException();
 	}
-	_impl = Impl::create(uri_string+1);
+	_impl = Impl::create(uri);
 }
 
 URI::~URI() {
 	_impl->unreference();
 }
 
-URI::Impl *URI::Impl::create(const gchar *fragment) {
-	if (fragment) {
-		return new Impl(g_strdup(fragment));
-	} else {
-		return new Impl(NULL);
-	}
+URI::Impl *URI::Impl::create(xmlURIPtr uri) {
+	return new Impl(uri);
 }
 
-URI::Impl::Impl(gchar *fragment)
-: _refcount(1),  _fragment(fragment) {}
+URI::Impl::Impl(xmlURIPtr uri)
+: _refcount(1), _uri(uri) {}
+
+URI::Impl::~Impl() {
+	if (_uri) {
+		xmlFreeURI(_uri);
+		_uri = NULL;
+	}
+}
 
 void URI::Impl::reference() {
 	_refcount++;
@@ -40,8 +45,16 @@ void URI::Impl::unreference() {
 	}
 }
 
+bool URI::Impl::isRelative() const {
+	return !_uri->scheme;
+}
+
+const gchar *URI::Impl::getQuery() const {
+	return (gchar *)_uri->query;
+}
+
 const gchar *URI::Impl::getFragment() const {
-	return _fragment;
+	return (gchar *)_uri->fragment;
 }
 
 };

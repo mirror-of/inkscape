@@ -3,6 +3,7 @@
 
 #include <glib.h>
 #include <exception>
+#include <libxml/uri.h>
 
 namespace Inkscape {
 
@@ -23,25 +24,28 @@ public:
 	URI(const URI &uri);
 	explicit URI(const gchar *uri_string) throw(BadURIException);
 	~URI();
-	const gchar *getFragment() const;
+
+	bool isRelative() const { return _impl->isRelative(); }
+	const gchar *getQuery() const { return _impl->getQuery(); }
+	const gchar *getFragment() const { return _impl->getFragment(); }
 private:
 	class Impl {
 	public:
-		static Impl *create(const gchar *fragment);
+		static Impl *create(xmlURIPtr uri);
 		void reference();
 		void unreference();
+
+		bool isRelative() const;
+		const gchar *getQuery() const;
 		const gchar *getFragment() const;
 	private:
-		Impl(gchar *fragment);
+		Impl(xmlURIPtr uri);
+		~Impl();
 		int _refcount;
-		gchar *_fragment;
+		xmlURIPtr _uri;
 	};
 	Impl *_impl;
 };
-
-inline const gchar *URI::getFragment() const {
-	return _impl->getFragment();
-}
 
 };
 

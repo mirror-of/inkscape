@@ -36,7 +36,7 @@ void URIReference::attach(SPDocument *rel_document, const URI &uri)
 	gchar *id;
 
 	fragment = uri.getFragment();
-	if (!fragment) {
+	if ( !uri.isRelative() || uri.getQuery() || !fragment ) {
 		throw UnsupportedURIException();
 	}
 
@@ -60,7 +60,7 @@ void URIReference::attach(SPDocument *rel_document, const URI &uri)
 		id = g_strdup(fragment);
 	}
 
-	/* FIXME !!! validate id somewhere */
+	/* FIXME !!! validate id as an NCName somewhere */
 
 	_connection.disconnect(); /* is this needed? */
 	_setObject(sp_document_lookup_id(rel_document, id));
