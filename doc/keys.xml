@@ -299,7 +299,7 @@ can leave your ideas and requests there.</p>
 <keys><key><ctrl/>L</key>  <action>simplify</action></keys>
 <note>This command attempts to simplify selected path(s) by removing extra nodes. It converts all objects to paths first.</note>
 <note>If you invoke this command several times in quick succession, it will act more and more aggressively.</note>
-<note>Invoking Simplify again after a pause restores the default threshold.</note>
+<note>Invoking Simplify again after a pause restores the default threshold (settable in the Inkscape Preferences dialog).</note>
 </group>
 
 </section>
