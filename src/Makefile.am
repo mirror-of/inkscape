@@ -144,8 +144,6 @@ check_PROGRAMS =	\
 	xml/quote-test	\
 	xml/repr-action-test
 
-# todo: consider consolidating some of the foo_CPPFLAGS into AM_CPPFLAGS / INCLUDES.
-
 
 # ################################################
 #
