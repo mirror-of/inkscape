@@ -10,7 +10,7 @@
  * This code is in public domain
  */
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-forward.h>
 
 #define NR_EPSILON 1e-18
 
