@@ -49,19 +49,19 @@ class Point{
 	    (If the y axis grows downwards and the x axis grows to the
 	    right, then this is 90 degrees clockwise.)
 	 **/
-	Point cw() {
+	Point cw() const {
 		return Point(-pt[Y], pt[X]);
 	}
 
-	double L1();
+	double L1() const ;
 /** Compute the L1 norm, or manhattan distance, of this vector */
-	double L2();
+	double L2() const ;
 /** Compute the L2 or euclidean norm of this vector */
-	double Linfty();
+	double Linfty() const ;
 /** Compute the L infinity or maximum norm of this vector */
 	void Normalize();
 	
-	operator NRPoint() {
+	operator NRPoint() const {
 		NRPoint nrp;
 		nrp.x = pt[0];
 		nrp.y = pt[1];
@@ -96,10 +96,19 @@ operator*(Point const &a, Point const &b) {
 }
 
 inline Point
-operator*(double s, Point const &b) {
+operator*(const double s, Point const &b) {
 	Point ret;
 	for(int i = 0; i < 2; i++) {
 		ret.pt[i] = s * b.pt[i];
+	}
+	return ret;
+}
+
+inline Point
+operator/(Point const &b, const double d) {
+	Point ret;
+	for(int i = 0; i < 2; i++) {
+		ret.pt[i] = b.pt[i] / d;
 	}
 	return ret;
 }
