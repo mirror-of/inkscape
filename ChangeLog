@@ -3,6 +3,9 @@
     * src/sp-item.cpp: the item's arenaitems shouldn't be destroyed until
 	  its children have had a chance to clean up
 
+    * src/sp-object.cpp: fix sp_object_reorder() to correctly handle
+	  next == NULL
+
 2004-03-06  MenTaLguY  <mental@rydia.net>
 
     * src/ast/*: initial work on AST code

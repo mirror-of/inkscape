@@ -254,7 +254,7 @@ void sp_object_reorder(SPObject *object, SPObject *next) {
 	g_return_if_fail(object->parent != NULL);
 	g_return_if_fail(object != next);
 	g_return_if_fail(!next || SP_IS_OBJECT(next));
-	g_return_if_fail(!next || next->parent != object->parent);
+	g_return_if_fail(!next || next->parent == object->parent);
 
 	SPObject *parent=object->parent;
 	SPObject **ref, **old_ref, **new_ref;
@@ -266,6 +266,9 @@ void sp_object_reorder(SPObject *object, SPObject *next) {
 		if ( *ref == next ) {
 			new_ref = ref;
 		}
+	}
+	if ( !new_ref && !next ) {
+		new_ref = ref;
 	}
 	g_assert(old_ref != NULL);
 	g_assert(new_ref != NULL);
