@@ -1,3 +1,8 @@
+2004-01-20 Jon Phillips <jon@protofunk.org>
+
+        * src/help.cpp: I cleaned up the code a little according to our coding 
+          standards and have/am adding comments to the help system.
+
 2004-01-20  bulia byak <bulia@users.sourceforge.net>
 
 	* src/selection-chemistry.cpp,h: New scaling utility functions
