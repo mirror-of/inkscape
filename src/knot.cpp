@@ -26,6 +26,7 @@
 #include "knot.h"
 #include "inkscape.h"
 #include "document.h"
+#include "prefs-utils.h"
 
 #include "sp-guide.h"
 
@@ -36,6 +37,10 @@
 #define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
 
 static int nograb = FALSE;
+
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
+static gboolean within_tolerance = FALSE;
 
 gint transform_escaped = 0; // if non-zero, resize or rotate was canceled by esc
 
@@ -448,6 +453,8 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	g_assert (knot != NULL);
 	g_assert (SP_IS_KNOT (knot));
 
+	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+
 	consumed = FALSE;
 
 	/* Run client universal event handler, if present */
@@ -460,10 +467,13 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
 			NRPoint p;
-			sp_desktop_w2d_xy_point (knot->desktop,
-				&p,
-				event->button.x,
-				event->button.y);
+
+			// save drag origin
+			xp = (gint) event->button.x; 
+			yp = (gint) event->button.y;
+			within_tolerance = TRUE;
+
+			sp_desktop_w2d_xy_point (knot->desktop, &p, event->button.x, event->button.y);
 			knot->hx = p.x - knot->x;
 			knot->hy = p.y - knot->y;
 			if (!nograb) {
@@ -509,6 +519,11 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		if (grabbed) {
 			NRPoint p;
 			NRPoint fp;
+
+			if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+				break; // do not drag if we're within tolerance from origin
+			within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+
 			if (!moved) {
 				g_signal_emit (G_OBJECT (knot),
 					       knot_signals[GRABBED], 0,
@@ -548,7 +563,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 					       knot_signals[UNGRABBED], 0,
 					       event->button.state);
 				sp_document_undo (SP_DT_DOCUMENT (knot->desktop));
-				sp_view_set_statusf_flash (SP_VIEW(knot->desktop), "Handle drag cancelled.");
+				sp_view_set_statusf_flash (SP_VIEW(knot->desktop), "Knot drag cancelled.");
 			} 
 			grabbed = FALSE;
 			moved = FALSE;
