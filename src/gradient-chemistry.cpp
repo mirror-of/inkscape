@@ -397,7 +397,31 @@ sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool s
 	}
 }
 
+void
+sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p)
+{
+	g_return_if_fail (SP_IS_GRADIENT (gradient));
 
+	p *= (gradient->gradientTransform).inverse();
+
+      SPRepr *repr = SP_OBJECT_REPR (gradient);
+
+	if (SP_IS_LINEARGRADIENT(gradient)) {
+		switch (point_num) {
+		case POINT_LG_P1:
+			sp_repr_set_double (repr, "x1", p[NR::X]);
+			sp_repr_set_double (repr, "y1", p[NR::Y]);
+			break;
+		case POINT_LG_P2:
+			sp_repr_set_double (repr, "x2", p[NR::X]);
+			sp_repr_set_double (repr, "y2", p[NR::Y]);
+			break;
+		default:
+			break;
+		}
+	} else { // radial: TODO
+	}
+}
 
 /*
  * Sets item fill or stroke to the gradient of the specified type with given vector, creating

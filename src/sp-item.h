@@ -180,6 +180,7 @@ void sp_item_snappoints(SPItem const *item, SnapPointsIter p);
 
 void sp_item_adjust_pattern (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
 void sp_item_adjust_gradient (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
+void sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p);
 void sp_item_adjust_stroke (SPItem *item, gdouble ex);
 
 void sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix const *transform, NR::Matrix const *adv = NULL);
