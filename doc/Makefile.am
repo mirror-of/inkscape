@@ -1,5 +1,4 @@
 EXTRA_DIST = API \
-             CVS \
              DEVELOPERS \
              README.document \
              WISHLIST \
