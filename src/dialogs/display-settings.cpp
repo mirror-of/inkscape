@@ -22,8 +22,6 @@
 #include "../prefs-utils.h"
 #include "dialog-events.h"
 #include "../macros.h"
-
-#include "dialog-events.h"
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
@@ -697,11 +695,19 @@ style_from_selection_to_tool (GtkWidget *widget,  const gchar* prefs_path)
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No objects selected</b> to take the style from."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
+                                       _("<b>No objects selected</b> to take the style from."));
         return;
     }
-
     SPItem *item = selection->singleItem();
+    if (!item) {
+        /* TODO: If each item in the selection has the same style then don't consider it an error.
+         * Maybe we should try to handle multiple selections anyway, e.g. the intersection of the
+         * style attributes for the selected items. */
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
+                                       _("<b>More than one object selected.</b>  Cannot take style from multiple objects."));
+        return;
+    }
 
     SPCSSAttr *css = take_style_from_item (item);
 
