@@ -14,6 +14,11 @@
 	src/libnrtype/RasterFont.cpp: split Ligne into float-line and
 	int-line.
 
+	* src/libnrtype/FlowDest.cpp, src/libnrtype/RasterFont.cpp,
+	src/libnrtype/raster-position.h, src/livarot/float-line.cpp,
+	src/livarot/float-line.h, src/livarot/int-line.cpp: use
+	std::vector for arrays in FloatLigne.
+
 2004-10-12  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile.am: added files
