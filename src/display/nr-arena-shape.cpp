@@ -399,8 +399,8 @@ void
 nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 {
     shape->delayed_shp = false;
-    if (shape->_fill.paint.type() != NRArenaShape::Paint::NONE) {
-	if ((shape->curve->end > 2) || (shape->curve->bpath[1].code == NR_CURVETO)) {
+    if ((shape->_fill.paint.type() != NRArenaShape::Paint::NONE) &&
+        ((shape->curve->end > 2) || (shape->curve->bpath[1].code == NR_CURVETO)) ) {
 	    if (TRUE || !shape->fill_shp) {
 		NR::Matrix  cached_to_new;
 		int isometry = 0;
@@ -418,22 +418,28 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 			NR::Matrix   tempMat(gc->transform);
 			thePath->LoadArtBPath(shape->curve->bpath,tempMat,true);
 		    }
+
 		    thePath->Convert(1.0);
-		    thePath->Fill(theShape,0);
+
+		    thePath->Fill(theShape, 0);
+
 		    if ( shape->_fill.rule == NRArenaShape::EVEN_ODD ) {
-			if ( shape->cached_fill->ConvertToShape(theShape,fill_oddEven) ) {
-			}
+                    shape->cached_fill->ConvertToShape(theShape, fill_oddEven);
+                    // alternatively, this speeds up rendering of oddeven shapes but disables AA :(        
+                    //shape->cached_fill->Copy(theShape);
 		    } else {
-			if ( shape->cached_fill->ConvertToShape(theShape,fill_nonZero) ) {
-			}
+                    shape->cached_fill->ConvertToShape(theShape, fill_nonZero);
 		    }
 		    shape->cached_fctm=gc->transform;
 		    delete theShape;
 		    delete thePath;
 		    if ( shape->fill_shp == NULL )
-			shape->fill_shp = new Shape;
+                   shape->fill_shp = new Shape;
+
 		    shape->fill_shp->Copy(shape->cached_fill);
-		} else if ( isometry != 0 ) {
+
+		} else {
+
 		    if ( shape->fill_shp == NULL )
 			shape->fill_shp=new Shape;
 		    shape->fill_shp->Reset(shape->cached_fill->numberOfPoints(),
@@ -454,9 +460,7 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
                     shape->fill_shp->needEdgesSorting();
 		}
 	    }
-//			shape->ctm = gc->transform;
 	}
-    }
 }
 
 void
@@ -466,16 +470,20 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
   
     shape->delayed_shp = false;
 
-    if (shape->_stroke.paint.type() != NRArenaShape::Paint::NONE) {
-	const float scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
-	if ( fabs(shape->_stroke.width * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+    const float scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
+
+    if ((shape->_stroke.paint.type() != NRArenaShape::Paint::NONE) &&
+        ( fabs(shape->_stroke.width * scale) > 0.01 )) { // sinon c'est 0=oon veut pas de bord
+
 	    const float width = MAX (0.125, shape->_stroke.width * scale);
 	    NR::Matrix cached_to_new;
+
 	    int isometry = 0;
 	    if ( shape->cached_stroke ) {
-		cached_to_new = shape->cached_sctm.inverse()*gc->transform;
+		cached_to_new = shape->cached_sctm.inverse() * gc->transform;
 		isometry = matrix_is_isometry(cached_to_new);
 	    }
+
 	    if ( isometry == 0 ) {
 		if ( shape->cached_stroke == NULL ) shape->cached_stroke=new Shape;
 		shape->cached_stroke->Reset();
@@ -483,9 +491,11 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 		Shape* theShape = new Shape;    
 		{
 		    NR::Matrix   tempMat(gc->transform);
-		    thePath->LoadArtBPath(shape->curve->bpath,tempMat,true);
+		    thePath->LoadArtBPath(shape->curve->bpath, tempMat, true);
 		}
+
 		thePath->Convert(1.0);
+
 		if (style->stroke_dash.n_dash) {      
 		    double dlen = 0.0;
 		    for (int i = 0; i < style->stroke_dash.n_dash; i++) {
@@ -536,17 +546,24 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 		    join = join_straight;
 		    break;
 		}
+
 		thePath->Stroke(theShape, false, 0.5*width, join, butt, 
 				0.5*width*shape->_stroke.mitre_limit);
 		
-		if ( shape->cached_stroke->ConvertToShape(theShape,fill_nonZero) ) {
-		}
+		shape->cached_stroke->ConvertToShape(theShape, fill_nonZero);
+           // disable ConvertToShape and enable this; it speeds it
+		// up hugely but uses evenodd, any way to switch it to nonzero without doing full ConvertToShape?
+		//shape->cached_stroke->Copy(theShape); 
+
 		shape->cached_sctm=gc->transform;
 		delete thePath;
 		delete theShape;
 		if ( shape->stroke_shp == NULL ) shape->stroke_shp=new Shape;
+
 		shape->stroke_shp->Copy(shape->cached_stroke);
-	    } else if ( isometry != 0 ) {
+
+	    } else {
+
 		if ( shape->stroke_shp == NULL )
 		    shape->stroke_shp=new Shape;
 		shape->stroke_shp->Reset(shape->cached_stroke->numberOfPoints(), shape->cached_stroke->numberOfEdges());
@@ -563,10 +580,9 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 		}
 		shape->stroke_shp->ForceToPolygon();
 		shape->stroke_shp->needPointsSorting();
-                shape->stroke_shp->needEdgesSorting();
+            shape->stroke_shp->needEdgesSorting();
 	    }
 	}
-    }
 }
 
 
