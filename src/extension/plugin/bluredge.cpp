@@ -69,6 +69,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
     selection->list(items);
     selection->clear();
 
+    std::list<SPItem *> new_items;
     for(std::list<SPItem *>::iterator item = items.begin();
             item != items.end(); item++) {
         SPItem * spitem = *item;
@@ -76,14 +77,12 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
         Inkscape::XML::Node * new_items[steps];
         Inkscape::XML::Node * new_group = sp_repr_new("svg:g");
         (SP_OBJECT_REPR(spitem)->parent())->appendChild(new_group);
+        /** \todo  Need to figure out how to get from XML::Node to SPItem */
+        /* new_items.push_back(); */
 
-        double stroke_orig_opacity = sp_repr_css_double_property(sp_repr_css_attr(SP_OBJECT_REPR(spitem), "style"), "opacity", 1.0);
-        char stroke_opacity_string[64];
-        sprintf(stroke_opacity_string, "%f", stroke_orig_opacity / (steps));
-
-        double fill_orig_opacity = sp_repr_css_double_property(sp_repr_css_attr(SP_OBJECT_REPR(spitem), "style"), "opacity", 1.0);
-        char fill_opacity_string[64];
-        sprintf(fill_opacity_string, "%f", fill_orig_opacity / (steps));
+        double orig_opacity = sp_repr_css_double_property(sp_repr_css_attr(SP_OBJECT_REPR(spitem), "style"), "opacity", 1.0);
+        char opacity_string[64];
+        sprintf(opacity_string, "%f", orig_opacity / (steps));
 
         for (int i = 0; i < steps; i++) {
             double offset = (width / (float)(steps - 1) * (float)i) - (width / 2.0);
@@ -91,8 +90,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
             new_items[i] = (SP_OBJECT_REPR(spitem))->duplicate();
 
             SPCSSAttr * css = sp_repr_css_attr(new_items[i], "style");
-            sp_repr_css_set_property(css, "stroke-opacity", stroke_opacity_string);
-            sp_repr_css_set_property(css, "fill-opacity",   fill_opacity_string);
+            sp_repr_css_set_property(css, "opacity", opacity_string);
             sp_repr_css_change(new_items[i], css, "style");
 
             new_group->appendChild(new_items[i]);
@@ -116,6 +114,10 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
     }
 
     prefs_set_double_attribute("options.defaultoffsetwidth", "value", old_offset);
+
+    selection->clear();
+    selection->addStlItemList(items);
+    selection->addStlItemList(new_items);
 
     return;
 }
