@@ -1,3 +1,15 @@
+inkscape (0.40) unstable; urgency=low
+
+  * New upstream version:
+
+      + First version that supports layers.
+      + Text on path.
+      + Improved calligraphy pen, freehand pencil and star tool.
+      + Three new tutorials.
+      + More detail at http://www.inkscape.org/cgi-bin/wiki.pl?ReleaseNotes
+
+ -- Peter Moulder <pmoulder@mail.csse.monash.edu.au>  Sun, 28 Nov 2004 23:04:36 +1100
+
 inkscape (0.39+cvs) unstable; urgency=low
 
   * Reduce differences from wolfi's official Debian package.
