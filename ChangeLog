@@ -13,6 +13,9 @@
 
 	* src/interface.cpp src/verbs.cpp src/object-ui.cpp src/modules/menu.cpp:
 	Added mnemonics and some HIGification
+	
+	* src/verbs.cpp: New: sp_action_get_title(), get action name without
+	underscores (for use in dialog titles or other places without mnemonics)
 
 2003-12-23  bulia byak <bulia@dr.com>
 
