@@ -33,6 +33,7 @@
 #include "widgets/sp-widget.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/gradient-vector.h"
+#include "widgets/gradient-image.h"
 #include "style.h"
 
 #include "prefs-utils.h"
@@ -99,41 +100,234 @@ static void gr_toggle_fillstroke (GtkWidget *button, gpointer data) {
     }
 }
 
-static void
-gr_selector_vector_set (SPGradientVectorSelector *gvs, SPGradient *gr, gpointer data)
-{
-		gr = sp_gradient_ensure_vector_normalized (gr);
 
-    g_print ("setting %p\n", gr);
+void
+gr_item_activate (GtkMenuItem *item, gpointer data)
+{
+    SPGradient *gr = (SPGradient *) g_object_get_data (G_OBJECT (item), "gradient");
+
+    g_print ("setting %s\n", SP_OBJECT_ID(gr));
 }
 
-static void 
-gr_tb_sel_changed(SPSelection *selection, gpointer data)
+gchar *
+gr_prepare_label (gchar *id)
 {
-    SPGradientVectorSelector *vectors =       (SPGradientVectorSelector *) data;
+    if (strlen(id) > 14 && (!strncmp (id, "linearGradient", 14) || !strncmp (id, "radialGradient", 14))) 
+        return g_strdup_printf ("<small>%s</small>", id+14);
+    return g_strdup_printf ("<small>%s</small>", id);
+}
 
-    if (g_slist_length((GSList *) selection->itemList()) == 1) {
+GtkWidget *
+gr_vector_list (SPDocument *document, bool selection_empty, SPGradient *gr_selected, bool gr_multi)
+{
+    GtkWidget *om = gtk_option_menu_new ();
+    GtkWidget *m = gtk_menu_new ();
 
-    SPItem *item = selection->singleItem();
+    GSList *gl = NULL;
+    const GSList *gradients = sp_document_get_resource_list (document, "gradient");
+		for (const GSList *i = gradients; i != NULL; i = i->next) {
+        if (SP_GRADIENT_HAS_STOPS (i->data)) {
+            gl = g_slist_prepend (gl, i->data);
+        }
+		}
+    gl = g_slist_reverse (gl);
 
+    guint pos = 0;
+    guint idx = 0;
+
+    if (!gl) {
+        GtkWidget *l = gtk_label_new("");
+        gtk_label_set_markup (GTK_LABEL(l), _("<small>No gradients</small>"));
+        GtkWidget *i = gtk_menu_item_new ();
+        gtk_container_add (GTK_CONTAINER (i), l);
+
+        gtk_widget_show (i);
+        gtk_menu_append (GTK_MENU (m), i);
+        gtk_widget_set_sensitive (om, FALSE);
+    } else if (selection_empty) {
+        GtkWidget *l = gtk_label_new("");
+        gtk_label_set_markup (GTK_LABEL(l), _("<small>Nothing selected</small>"));
+        GtkWidget *i = gtk_menu_item_new ();
+        gtk_container_add (GTK_CONTAINER (i), l);
+
+        gtk_widget_show (i);
+        gtk_menu_append (GTK_MENU (m), i);
+        gtk_widget_set_sensitive (om, FALSE);
+    } else {
+
+        if (gr_selected == NULL) {
+        GtkWidget *l = gtk_label_new("");
+        gtk_label_set_markup (GTK_LABEL(l), _("<small>No gradients</small>"));
+        GtkWidget *i = gtk_menu_item_new ();
+        gtk_container_add (GTK_CONTAINER (i), l);
+
+            gtk_widget_show (i);
+            gtk_menu_append (GTK_MENU (m), i);
+        }
+
+        if (gr_multi) {
+        GtkWidget *l = gtk_label_new("");
+        gtk_label_set_markup (GTK_LABEL(l), _("<small>Multiple gradients</small>"));
+        GtkWidget *i = gtk_menu_item_new ();
+        gtk_container_add (GTK_CONTAINER (i), l);
+
+            gtk_widget_show (i);
+            gtk_menu_append (GTK_MENU (m), i);
+        }
+
+        while (gl) {
+            SPGradient *gradient = SP_GRADIENT (gl->data);
+            gl = g_slist_remove (gl, gradient);
+
+            GtkWidget *i = gtk_menu_item_new ();
+            g_object_set_data (G_OBJECT (i), "gradient", gradient);
+            g_signal_connect (G_OBJECT (i), "activate", G_CALLBACK (gr_item_activate), NULL);
+
+            GtkWidget *image = sp_gradient_image_new (gradient);
+
+            GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+            GtkWidget *l = gtk_label_new ("");
+            gchar *label = gr_prepare_label (SP_OBJECT_ID (gradient));
+            gtk_label_set_markup (GTK_LABEL(l), label);
+            g_free (label);
+            gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+            gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+            gtk_box_pack_start (GTK_BOX (hb), image, FALSE, FALSE, 0);
+
+            gtk_widget_show_all (i);
+
+            gtk_container_add (GTK_CONTAINER (i), hb);
+
+            gtk_menu_append (GTK_MENU (m), i);
+
+            if (gradient == gr_selected) {
+                pos = idx;
+            }
+            idx ++;
+        }
+        gtk_widget_set_sensitive (om, TRUE);
+    }
+
+    gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
+    /* Select the current gradient, or the Multi/Nothing line */
+    if (gr_multi || gr_selected == NULL)
+        gtk_option_menu_set_history (GTK_OPTION_MENU (om), 0);
+    else 
+        gtk_option_menu_set_history (GTK_OPTION_MENU (om), pos);
+
+    return om;
+}
+
+
+void
+gr_read_selection (SPSelection *selection, SPGradient **gr_selected, bool *gr_multi, SPGradientSpread *spr_selected, bool *spr_multi) 
+{
+   for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
+        SPItem *item = SP_ITEM(i->data);
         SPStyle *style = SP_OBJECT_STYLE (item);
-
-        SPGradient *gr;
 
         if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
             if (SP_IS_GRADIENT (server)) {
-                gr = sp_gradient_get_vector (SP_GRADIENT (server), FALSE);
+                SPGradient *gradient = sp_gradient_get_vector (SP_GRADIENT (server), false);
+                SPGradientSpread spread = sp_gradient_get_spread (SP_GRADIENT (server));
+                if (gradient != *gr_selected) {
+                    if (*gr_selected != NULL) {
+                        *gr_multi = true;
+                    } else {
+                        *gr_selected = gradient;
+                    }
+                }
+                if (spread != *spr_selected) {
+                    if (*spr_selected != INT_MAX) {
+                        *spr_multi = true;
+                    } else {
+                        *spr_selected = spread;
+                    }
+                }
             }
         }
-
-        sp_gradient_vector_selector_set_gradient  (vectors, SP_DT_DOCUMENT (selection->desktop()), gr);
-    } else if (g_slist_length((GSList *)selection->itemList()) == 0) {
-        sp_gradient_vector_selector_set_gradient  (vectors, SP_DT_DOCUMENT (selection->desktop()), NULL);
+        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
+            if (SP_IS_GRADIENT (server)) {
+                SPGradient *gradient = sp_gradient_get_vector (SP_GRADIENT (server), false);
+                SPGradientSpread spread = sp_gradient_get_spread (SP_GRADIENT (server));
+                if (gradient != *gr_selected) {
+                    if (*gr_selected != NULL) {
+                        *gr_multi = true;
+                    } else {
+                        *gr_selected = gradient;
+                    }
+                }
+                if (spread != *spr_selected) {
+                    if (*spr_selected != INT_MAX) {
+                        *spr_multi = true;
+                    } else {
+                        *spr_selected = spread;
+                    }
+                }
+            }
+        }
     }
+ }
+
+
+static void 
+gr_tb_selection_changed (SPSelection *selection, gpointer data)
+{
+    GtkWidget *widget = (GtkWidget *) data;
+    GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT (widget), "menu");
+    if (om) gtk_widget_destroy (om);
+
+    SPGradient *gr_selected = NULL;
+    bool gr_multi = false;
+
+    SPGradientSpread spr_selected = (SPGradientSpread) INT_MAX; // meaning undefined
+    bool spr_multi = false;
+
+    gr_read_selection (selection, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
+
+    om = gr_vector_list (SP_DT_DOCUMENT(selection->desktop()), selection->isEmpty(), gr_selected, gr_multi);
+    g_object_set_data (G_OBJECT (widget), "menu", om);
+  
+    gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
+
+    gtk_widget_show_all (widget);
 }
 
 
+GtkWidget *
+gr_change_widget (SPDesktop *desktop)
+{
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+    SPDocument *document = SP_DT_DOCUMENT (desktop);
+
+    SPGradient *gr_selected = NULL;
+    bool gr_multi = false;
+
+    SPGradientSpread spr_selected = (SPGradientSpread) INT_MAX; // meaning undefined
+    bool spr_multi = false;
+
+    gr_read_selection (selection, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
+ 
+    GtkWidget *widget = gtk_hbox_new(FALSE, FALSE);
+
+    GtkWidget *om = gr_vector_list (document, selection->isEmpty(), gr_selected, gr_multi);
+    g_object_set_data (G_OBJECT (widget), "menu", om);
+  
+    gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
+
+    sigc::connection conn = selection->connectChanged(
+        sigc::bind (
+            sigc::ptr_fun(&gr_tb_selection_changed),
+            (gpointer)widget )
+        );
+
+//    g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(delete_connection), connection);
+
+    gtk_widget_show_all (widget);
+    return widget;
+}
 
 GtkWidget *
 sp_gradient_toolbox_new(SPDesktop *desktop)
@@ -232,32 +426,13 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
 
     aux_toolbox_space(tbl, AUX_SPACING);
 
-
     {
-/*
-        SPSelection *selection = SP_DT_SELECTION (desktop);
-      GtkWidget *vectors = sp_gradient_vector_selector_new (SP_DT_DOCUMENT(desktop), NULL);
-	gtk_widget_show (vectors);
-	gtk_box_pack_start (GTK_BOX (tbl), vectors, FALSE, FALSE, 0);
-	g_signal_connect (G_OBJECT (vectors), "vector_set", G_CALLBACK (gr_selector_vector_set), NULL);
-  sigc::connection conn = selection->connectChanged(
-        sigc::bind (
-            sigc::ptr_fun(&gr_tb_sel_changed), 
-            (gpointer)vectors )
-        );
-*/
+        GtkWidget *vectors = gr_change_widget (desktop);
+        gtk_box_pack_start (GTK_BOX (tbl), vectors, FALSE, FALSE, 0);
     }
-
 
     gtk_widget_show_all(tbl);
     sp_set_font_size(tbl, AUX_FONT_SIZE);
-
-/* // wait when we have the Change part
-    sigc::connection *connection = new sigc::connection(
-        SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_gradient_toolbox_selection_changed), (GtkObject *)tbl))
-        );
-    g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
-*/
 
     return tbl;
 }
