@@ -818,7 +818,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_tooltips_set_tip (tt, dtw->coord_status, _("Cursor coordinates"), NULL);
 	gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, SP_ICON_SIZE_BUTTON);
 	sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
-	gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, 1);
+	gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, STATUS_COORD_SKIP);
 	gtk_box_pack_start (GTK_BOX (sbar), coord_box, FALSE, FALSE, 1);
 
 	// statusbar
