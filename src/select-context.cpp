@@ -460,20 +460,18 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					if (sp_rubberband_rect (&b)) sp_rubberband_stop ();
 					if (sc->button_press_shift) {
 						// this was a shift-click, select what was clicked upon
-						l = sp_document_partial_items_in_box (SP_DT_DOCUMENT (desktop), &b);
-						// we want to select only the topmost object, so we leave only the last one in the list
-						while (l && l->next)
-							l = g_slist_remove (l, l->data);
-						if (l) {
-							item = SP_ITEM (l->data);
+
+						item = sp_document_item_at_point (SP_DT_DOCUMENT (desktop), event->button.x, event->button.y);
+						if (item) {
 							// toggle selected status
 							if (sp_selection_item_selected (selection, item)) {
 								sp_selection_remove_item (selection, item);
 							} else {
 								sp_selection_add_item (selection, item);
 							}
-							l = g_slist_remove (l, item);
+							item = NULL;
 						}
+
 					} else { // click without shift, simply deselect
 						if (!sp_selection_is_empty (selection)) {
 							if (!(rb_escaped) && !(drag_escaped)) // unless something was cancelled
