@@ -28,6 +28,12 @@ protected:
         throw InvalidBranch();
     }
 
+    List<BranchName> const *_selectBranches(BranchSelector selector) const
+    throw()
+    {
+        return NULL;
+    }
+
     Node const &_branchSize(BranchName const &branch) const
     throw(InvalidBranch)
     {
@@ -36,20 +42,20 @@ protected:
 
     Node const &_insert(BranchName const &branch, unsigned pos,
                         Node const &node) const
-    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)
+    throw(InvalidBranch)
     {
         throw InvalidBranch();
     }
 
     Node const &_replace(BranchName const &branch, unsigned pos,
                          Node const &node) const
-    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)
+    throw(InvalidBranch)
     {
         throw InvalidBranch();
     }
 
     Node const &_remove(BranchName const &branch, unsigned pos) const
-    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)
+    throw(InvalidBranch)
     {
         throw InvalidBranch();
     }

@@ -12,31 +12,25 @@
 #ifndef SEEN_INKSCAPE_AST_LENGTH_LIST_H
 #define SEEN_INKSCAPE_AST_LENGTH_LIST_H
 
-#include "ast/gc.h"
-#include "ast/functional-traits.h"
+#include "ast/list.h"
 
 namespace Inkscape {
 namespace AST {
 
 template <typename T>
-class LengthList : public SimpleGCObject<> {
+class LengthList : public List<T> {
 public:
-    typedef FunctionalTraits<T> value_traits;
-    typedef typename value_traits::value_type value_type;
-    typedef typename value_traits::reference_type reference_type;
-
     LengthList(LengthList<T> const *prev, reference_type value)
-    : _prev(prev), _pos(prev?prev->_pos+1:0), _value(value) {}
+    : List<T>(prev, value), _pos(prev?prev->length():0) {}
 
-    unsigned length() const { return _pos + 1; }
+    unsigned length() const { return _pos+1; }
     unsigned pos() const { return _pos; }
-    LengthList<T> const *prev() const { return _prev; }
 
-    reference_type value() const { return _value; }
+    LengthList<T> const *prev() const {
+        return reinterpret_cast<LengthList<T> const *>(List<T>::prev());
+    }
 
 private:
-    value_type _value;
-    LengthList<T> const *_prev;
     unsigned _pos;
 };
 

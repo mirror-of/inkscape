@@ -15,8 +15,10 @@
 #include <cstdlib>
 #include <iosfwd>
 #include <glib/glib.h>
+#include <sigc++/sigc++.h>
 
 #include "ast/gc.h"
+#include "ast/list.h"
 #include "ast/branch-name.h"
 #include "ast/invalid-branch.h"
 #include "ast/invalid-transformation.h"
@@ -25,16 +27,21 @@ namespace Inkscape {
 namespace AST {
 
 class String;
-class Path;
 
-class Node : public FinalizedGCObject<> {
+class Node : public SimpleGCObject<> {
 public:
-    virtual ~Node();
+    typedef SigC::Slot2<bool, Node const &, BranchName const &> BranchSelector;
 
     Node const *lookup(BranchName const &branch, unsigned pos) const
     throw(InvalidBranch)
     {
         return _lookup(branch, pos);
+    }
+
+    List<BranchName> const *selectBranches(BranchSelector selector) const
+    throw(std::bad_alloc)
+    {
+        return _selectBranches(selector);
     }
 
     unsigned branchSize(BranchName const &branch) const
@@ -80,6 +87,10 @@ public:
 protected:
     virtual Node const *_lookup(BranchName const &branch, unsigned pos) const
     throw(InvalidBranch)=0;
+
+    virtual List<BranchName> const *_selectBranches(BranchSelector selector)
+    const
+    throw(std::bad_alloc)=0;
 
     virtual unsigned _branchSize(BranchName const &branch) const
     throw(InvalidBranch)=0;

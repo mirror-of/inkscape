@@ -18,6 +18,12 @@ namespace Inkscape {
 namespace AST {
 
 template <typename T>
+unsigned LengthList<T>::length(LengthList<T> const *list)
+{
+    return list ? list->length() : 0;
+}
+
+template <typename T>
 typename LengthList<T>::pointer_type value_at(LengthList<T> const *list, unsigned pos)
 {
     while ( list && list->pos() > pos ) {
@@ -74,6 +80,19 @@ throw(std::bad_alloc)
         }
     } else {
         return NULL;
+    }
+}
+
+template <typename T>
+LengthList<T> const *reorder(LengthList<T> const *list, unsigned old_pos, unsigned new_pos)
+throw(std::bad_alloc)
+{
+    // TODO this is obviously very inefficient
+    LengthList<T>::pointer_type value=value_at(list, old_pos);
+    if (value) {
+        return insert(remove(list, old_pos), ( new_pos > old_pos ) ? new_pos - 1 : new_pos, value);
+    } else {
+        return list;
     }
 }
 
