@@ -15,9 +15,9 @@
 #ifndef SEEN_INKSCAPE_XML_SIMPLE_NODE_H
 #define SEEN_INKSCAPE_XML_SIMPLE_NODE_H
 
-#include "xml/sp-repr.h"
-#include "xml/sp-repr-attr.h"
-#include "xml/sp-repr-listener.h"
+#include "xml/node.h"
+#include "xml/attribute-record.h"
+#include "xml/node-listener.h"
 #include "xml/transaction-logger.h"
 
 namespace Inkscape {

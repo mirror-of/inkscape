@@ -45,7 +45,7 @@
 #include "../interface.h"
 
 #include "../xml/repr.h"
-#include "../xml/sp-repr-event-vector.h"
+#include "../xml/node-event-vector.h"
 
 #include "desktop-properties.h"
 #include "svg/stringstream.h"

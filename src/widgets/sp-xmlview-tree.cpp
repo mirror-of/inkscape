@@ -21,7 +21,7 @@
 #include <gtk/gtkctree.h>
 #include <gtk/gtkcontainer.h>
 #include "../xml/repr.h"
-#include "../xml/sp-repr-event-vector.h"
+#include "../xml/node-event-vector.h"
 #include "sp-xmlview-tree.h"
 
 struct NodeData {

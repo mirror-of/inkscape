@@ -405,7 +405,7 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 #include "../widgets/widget-sizes.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
-#include "../xml/sp-repr-event-vector.h"
+#include "../xml/node-event-vector.h"
 #include "../svg/svg.h"
 
 

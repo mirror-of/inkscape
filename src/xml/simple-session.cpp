@@ -14,8 +14,8 @@
 
 #include <glib/gmessages.h>
 #include "xml/simple-session.h"
-#include "xml/sp-repr-action.h"
-#include "xml/sp-repr-action-fns.h"
+#include "xml/event.h"
+#include "xml/event-fns.h"
 
 namespace Inkscape {
 

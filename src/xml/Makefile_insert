@@ -35,16 +35,14 @@ xml_libspxml_a_SOURCES =	\
 	xml/simple-node.cpp \
 	xml/simple-session.cpp \
 	xml/simple-session.h \
-	xml/sp-repr.h \
-	xml/sp-repr-attr.h \
+	xml/node.h \
+	xml/attribute-record.h \
 	xml/sp-css-attr.h \
-	xml/sp-repr-action.cpp	\
-	xml/sp-repr-action.h	\
-	xml/sp-repr-action-fns.h	\
-	xml/sp-repr-doc.h \
-	xml/sp-repr-event-vector.h \
-	xml/sp-repr-iterators.h	\
-	xml/sp-repr-listener.h \
+	xml/event.cpp xml/event.h xml/event-fns.h	\
+	xml/document.h \
+	xml/node-event-vector.h \
+	xml/node-iterators.h	\
+	xml/node-listener.h \
 	xml/sp-css-attr.h \
 	xml/text-node.h \
 	xml/transaction-logger.h

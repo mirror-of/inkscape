@@ -55,7 +55,7 @@
 #include "desktop-handles.h"
 #include "interface.h"
 #include "nodepath.h"
-#include "xml/sp-repr-event-vector.h"
+#include "xml/node-event-vector.h"
 #include "helper/gnome-utils.h"
 #include <glibmm/i18n.h>
 #include "helper/unit-menu.h"

@@ -16,7 +16,7 @@
 
 #include <glib/gtypes.h>
 
-#include "xml/sp-repr.h"
+#include "xml/node.h"
 
 namespace Inkscape {
 namespace XML {

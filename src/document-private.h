@@ -15,7 +15,7 @@
 
 #include <map>
 #include <sigc++/sigc++.h>
-#include "xml/sp-repr-action-fns.h"
+#include "xml/event-fns.h"
 #include "sp-defs.h"
 #include "sp-root.h"
 #include "document.h"

@@ -35,7 +35,7 @@
 
 #include "xml/repr.h"
 #include "xml/repr-sorting.h"
-#include "xml/sp-repr-attr.h"
+#include "xml/attribute-record.h"
 
 struct SPXMLNs {
     SPXMLNs *next;

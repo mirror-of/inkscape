@@ -17,8 +17,8 @@
 #include <glib/gtypes.h>
 #include "gc-anchored.h"
 
-#include "xml/sp-repr.h"
-#include "xml/sp-repr-doc.h"
+#include "xml/node.h"
+#include "xml/document.h"
 #include "xml/sp-css-attr.h"
 
 #define SP_SODIPODI_NS_URI "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"

@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef SEEN_INKSCAPE_XML_SP_REPR_H
-#define SEEN_INKSCAPE_XML_SP_REPR_H
+#ifndef SEEN_INKSCAPE_XML_NODE_H
+#define SEEN_INKSCAPE_XML_NODE_H
 
 #include <glib/gtypes.h>
 #include "gc-anchored.h"

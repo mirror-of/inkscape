@@ -70,7 +70,7 @@
 #include "message-stack.h"
 #include "message-context.h"
 #include "object-hierarchy.h"
-#include "xml/sp-repr-event-vector.h"
+#include "xml/node-event-vector.h"
 
 #include "file.h"
 

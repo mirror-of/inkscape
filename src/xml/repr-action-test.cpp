@@ -3,7 +3,7 @@
 #include "../utest/utest.h"
 
 #include "repr.h"
-#include "sp-repr-action-fns.h"
+#include "event-fns.h"
 
 int main(int argc, char *argv[]) {
 	Inkscape::XML::Document *document;

@@ -19,7 +19,7 @@
 #include <glib/gmessages.h>
 #include <cstring>
 #include "xml/simple-node.h"
-#include "xml/sp-repr-event-vector.h"
+#include "xml/node-event-vector.h"
 #include "xml/repr-get-children.h"
 #include "xml/repr.h"
 

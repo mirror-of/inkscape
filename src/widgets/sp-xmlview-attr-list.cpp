@@ -24,7 +24,7 @@
 #include "helper/sp-marshal.h"
 #include <glibmm/i18n.h>
 #include "../xml/repr.h"
-#include "../xml/sp-repr-event-vector.h"
+#include "../xml/node-event-vector.h"
 #include "sp-xmlview-attr-list.h"
 
 static void sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass);

@@ -27,7 +27,7 @@
 #include <glib.h>
 
 #include "xml/repr.h"
-#include "xml/sp-repr-attr.h"
+#include "xml/attribute-record.h"
 
 #include "io/sys.h"
 #include "io/inkscapestream.h"

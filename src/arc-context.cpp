@@ -36,7 +36,7 @@
 #include "sp-metrics.h"
 #include "knotholder.h"
 #include "xml/repr.h"
-#include "xml/sp-repr-event-vector.h"
+#include "xml/node-event-vector.h"
 #include "object-edit.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"

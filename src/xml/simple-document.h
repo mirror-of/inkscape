@@ -15,7 +15,7 @@
 #ifndef SEEN_INKSCAPE_XML_SIMPLE_DOCUMENT_H
 #define SEEN_INKSCAPE_XML_SIMPLE_DOCUMENT_H
 
-#include "xml/sp-repr-doc.h"
+#include "xml/document.h"
 #include "xml/simple-node.h"
 
 namespace Inkscape {

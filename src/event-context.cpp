@@ -21,7 +21,7 @@
 #include <gtk/gtkmenuitem.h>
 
 #include "display/sp-canvas.h"
-#include "xml/sp-repr-event-vector.h"
+#include "xml/node-event-vector.h"
 #include "xml/repr.h"
 #include "sp-cursor.h"
 #include "shortcuts.h"

@@ -36,7 +36,7 @@
 #include "document.h"
 #include "prefs-utils.h"
 #include "xml/repr.h"
-#include "xml/sp-repr-event-vector.h"
+#include "xml/node-event-vector.h"
 
 static void sp_node_context_class_init(SPNodeContextClass *klass);
 static void sp_node_context_init(SPNodeContext *node_context);

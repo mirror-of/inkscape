@@ -1,5 +1,32 @@
 2005-02-19  MenTaLguY  <mental@rydia.net>
 
+	* src/arc-context.cpp, src/desktop.cpp, src/document-private.h,
+	  src/document-undo.cpp, src/document.cpp, src/event-context.cpp,
+	  src/gradient-chemistry.cpp, src/gradient-chemistry.h,
+	  src/gradient-drag.cpp, src/gradient-drag.h, src/node-context.cpp,
+	  src/rect-context.cpp, src/sp-object.cpp, src/spiral-context.cpp,
+	  src/star-context.cpp, src/toolbox.cpp,
+	  src/dialogs/desktop-properties.cpp, src/widgets/gradient-vector.cpp,
+	  src/widgets/layer-selector.cpp, src/widgets/sp-widget.cpp,
+	  src/widgets/sp-xmlview-attr-list.cpp, src/widgets/sp-xmlview-content.cpp,
+	  src/widgets/sp-xmlview-tree.cpp, src/xml/Makefile_insert,
+	  src/xml/attribute-record.h, src/xml/document.h, src/xml/event-fns.h,
+	  src/xml/event.cpp, src/xml/event.h, src/xml/node-event-vector.h,
+	  src/xml/node-iterators.h, src/xml/node-listener.h, src/xml/node.h,
+	  src/xml/repr-action-test.cpp, src/xml/repr-css.cpp, src/xml/repr-io.cpp,
+	  src/xml/repr-sorting.cpp, src/xml/repr-util.cpp, src/xml/repr.cpp,
+	  src/xml/repr.h, src/xml/simple-document.h, src/xml/simple-node.cpp,
+	  src/xml/simple-node.h, src/xml/simple-session.cpp,
+	  src/xml/sp-css-attr.h, src/xml/sp-repr-action-fns.h,
+	  src/xml/sp-repr-action.cpp, src/xml/sp-repr-action.h,
+	  src/xml/sp-repr-attr.h, src/xml/sp-repr-doc.h,
+	  src/xml/sp-repr-event-vector.h, src/xml/sp-repr-iterators.h,
+	  src/xml/sp-repr-listener.h, src/xml/sp-repr.h:
+
+	  renamed header files to match new class names
+
+2005-02-19  MenTaLguY  <mental@rydia.net>
+
 	* src/arc-context.cpp, src/arc-context.h, src/desktop-events.cpp,
 	  src/desktop-style.cpp, src/desktop-style.h, src/desktop.cpp,
 	  src/document-private.h, src/document-undo.cpp, src/document.cpp,

@@ -15,7 +15,7 @@
 #include <list>
 
 #include "helper/sp-marshal.h"
-#include "xml/sp-repr-event-vector.h"
+#include "xml/node-event-vector.h"
 #include "attributes.h"
 #include "document.h"
 #include "style.h"

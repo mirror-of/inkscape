@@ -22,7 +22,7 @@
 #include <string.h>
 #include <gtk/gtkmain.h>
 #include "xml/repr.h"
-#include "xml/sp-repr-action-fns.h"
+#include "xml/event-fns.h"
 #include "helper/sp-marshal.h"
 #include <glibmm/i18n.h>
 #include "inkscape-private.h"

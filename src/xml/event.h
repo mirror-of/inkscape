@@ -8,7 +8,7 @@
 #include "util/shared-c-string-ptr.h"
 #include "util/forward-pointer-iterator.h"
 #include "gc-managed.h"
-#include "xml/sp-repr.h"
+#include "xml/node.h"
 
 namespace Inkscape {
 namespace XML {

@@ -15,7 +15,7 @@
 #ifndef SEEN_INKSCAPE_XML_SP_SPCSSATTR_H
 #define SEEN_INKSCAPE_XML_SP_SPCSSATTR_H
 
-#include "xml/sp-repr.h"
+#include "xml/node.h"
 
 class SPCSSAttr : virtual public Inkscape::XML::Node {
 };

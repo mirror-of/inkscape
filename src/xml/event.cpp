@@ -14,12 +14,12 @@
  */
 
 #include "repr.h"
-#include "sp-repr-action.h"
-#include "sp-repr-action-fns.h"
+#include "event.h"
+#include "event-fns.h"
 #include "util/list.h"
 #include "util/reverse-list.h"
-#include "xml/sp-repr.h"
-#include "xml/sp-repr-doc.h"
+#include "xml/node.h"
+#include "xml/document.h"
 #include "xml/session.h"
 
 using Inkscape::Util::List;

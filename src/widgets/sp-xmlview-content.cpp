@@ -19,7 +19,7 @@
 #include <gtk/gtkadjustment.h>
 
 #include "xml/repr.h"
-#include "xml/sp-repr-event-vector.h"
+#include "xml/node-event-vector.h"
 #include "sp-xmlview-content.h"
 #include "macros.h"
 #include "desktop-handles.h"
