@@ -616,7 +616,9 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 			&& nv->cx != HUGE_VAL && !isNaN (nv->cx) 
 			&& nv->cy != HUGE_VAL && !isNaN (nv->cy)) {
 		sp_desktop_zoom_absolute (desktop, nv->cx, nv->cy, nv->zoom);
-	} 
+	} else if (SP_DT_DOCUMENT(desktop)) { // document without saved zoom, zoom to its page
+		sp_desktop_zoom_page (desktop);
+	}
 
 	// cancel any history of zooms up to this point
 	if (desktop->zooms_past) {
