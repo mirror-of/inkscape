@@ -485,27 +485,16 @@ sp_desktop_dialog (void)
         wd.win = dlg;
         wd.stop = 0;
         
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", 
-                             G_CALLBACK (sp_transientize_callback), &wd );
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd );
                              
-        gtk_signal_connect ( GTK_OBJECT (dlg), "event", 
-                             GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
+        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
                              
-        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", 
-                             G_CALLBACK (sp_dtw_dialog_destroy), dlg );
-                             
-        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", 
-                             G_CALLBACK (sp_dtw_dialog_delete), dlg );
+        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_dtw_dialog_destroy), dlg );
+        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_dtw_dialog_delete), dlg );
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_dtw_dialog_delete), dlg );
         
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", 
-                             G_CALLBACK (sp_dtw_dialog_delete), dlg );
-        
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", 
-                             G_CALLBACK (sp_dialog_hide), dlg );
-        
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", 
-                             G_CALLBACK (sp_dialog_unhide), dlg );
-                             
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
         GtkWidget *nb = gtk_notebook_new ();
         gtk_widget_show (nb);
@@ -1173,13 +1162,20 @@ sp_color_picker_clicked (GObject *cp, void *data)
     
     if (!w)
     {
-        w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        gtk_window_set_title ( GTK_WINDOW (w), 
-                               (gchar *)g_object_get_data (cp, "title"));
+        w = sp_window_new (NULL, TRUE);
+        gtk_window_set_title ( GTK_WINDOW (w), (gchar *)g_object_get_data (cp, "title"));
         gtk_container_set_border_width (GTK_CONTAINER (w), 4);
         g_object_set_data (cp, "window", w);
-        g_signal_connect ( G_OBJECT (w), "destroy", 
-                           G_CALLBACK (sp_color_picker_window_destroy), cp);
+
+        gtk_window_set_position(GTK_WINDOW(w), GTK_WIN_POS_CENTER);
+        sp_transientize (w);
+
+        gtk_signal_connect ( GTK_OBJECT (w), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), w );
+
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), w );
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), w );
+
+        g_signal_connect ( G_OBJECT (w), "destroy", G_CALLBACK (sp_color_picker_window_destroy), cp);
 
         GtkWidget *vb = gtk_vbox_new (FALSE, 4);
         gtk_container_add (GTK_CONTAINER (w), vb);
@@ -1188,7 +1184,8 @@ sp_color_picker_clicked (GObject *cp, void *data)
 						  SP_COLORSPACE_TYPE_UNKNOWN);
         gtk_box_pack_start (GTK_BOX (vb), csel, TRUE, TRUE, 0);
         guint32 rgba = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (cp), "color"));
-	SPColor color;
+
+        SPColor color;
         sp_color_set_rgb_rgba32 (&color, rgba);
         SP_COLOR_SELECTOR(csel)->base->setColorAlpha( color, 
                                                       SP_RGBA32_A_F(rgba) );
