@@ -868,7 +868,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 	if ( text->f_src == NULL ) return NULL;
 	
     int  ucs4_pos=0;
-    one_flow_src* into=text->contents.Locate(utf8_pos,ucs4_pos,true,false,false);
+    one_flow_src* into=text->contents.Locate(utf8_pos, ucs4_pos, true, false, false);
     //printf("pos=%i -> %i in %x\n",utf8_pos,ucs4_pos,into);
     if ( into == NULL ) {
         // it's a 'append line' in fact
@@ -1178,27 +1178,31 @@ sp_text_delete (SPText *text, gint i_start, gint i_end)
 gint
 sp_text_up (SPText *text, gint i_position)
 {
-	int position=text->contents.Do_UCS4_2_UTF8(i_position);
+    int position=text->contents.Do_UCS4_2_UTF8(i_position);
+
    if ( text->f_res == NULL ) return i_position;
     int    c_p=-1,s_p=-1,l_p=-1;
     bool   l_start=false,l_end=false;
     text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
+
     if ( c_p >= 0 ) {
-        int c_o=l_p-text->f_res->chunks[c_p].l_st;
-        if ( l_end ) {l_end=false;c_o++;}
+        int l_o = l_p - text->f_res->chunks[c_p].l_st;
+        if ( l_end ) {
+            l_end=false;
+            l_o++;
+        }
         c_p--;
         if ( c_p < 0 ) {
             c_p=0;
             if ( text->f_res->chunks[c_p].l_st < text->f_res->chunks[c_p].l_en ) l_p=text->f_res->chunks[c_p].l_st; else l_p=0;
         } else {
             if ( text->f_res->chunks[c_p].l_st < text->f_res->chunks[c_p].l_en ) {
-                l_p=text->f_res->chunks[c_p].l_st+c_o;
+                l_p=text->f_res->chunks[c_p].l_st+l_o;
                 if ( l_p >= text->f_res->chunks[c_p].l_en ) l_p=text->f_res->chunks[c_p].l_en-1;
             } else l_p=text->f_res->chunks[c_p].l_st;
         }
         int   res=position;
         text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-//				int  ucs4_pos=text->f_res->letters[l_p].ucs4_offset;
         return text->contents.Do_UTF8_2_UCS4(res);
     }
     return i_position;
@@ -1468,7 +1472,7 @@ sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)
  */
 
 
-static void TextReLink(SPObject* object,one_flow_src* &after,one_flow_src* from,bool &first_line)
+static void TextReLink(SPObject* object, one_flow_src* &after, one_flow_src* from, bool &first_line)
 {
     one_flow_src*  mine=NULL;
     if ( SP_IS_TEXT(object) ) {
@@ -1561,7 +1565,7 @@ void SPText::UpdateFlowSource(void)
 			one_flow_src *cur=&contents;
 			one_flow_src *last_line=NULL;
 			while ( cur ) {
-				if ( cur->Type() == txt_tline ) {
+				if ( cur->Type() == txt_tline || cur->Type() == txt_firstline) {
 					last_line=cur;
 					SPTSpan *cspan = SP_TSPAN(cur->me);
 					cspan->last_tspan=false;
@@ -1573,11 +1577,12 @@ void SPText::UpdateFlowSource(void)
 				cspan->last_tspan=true;
 			}
 		}
+
     contents.DoPositions(true);
+
     contents.DoFill(f_src);
 
     f_src->Prepare();
-    //f_src->Affiche();
 }
 
 void SPText::ComputeFlowRes(void)
