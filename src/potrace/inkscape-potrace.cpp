@@ -99,12 +99,12 @@ PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
                 }
             }
 
-        newGm->writePPM(newGm, "brightness.ppm");
+        //newGm->writePPM(newGm, "brightness.ppm");
         }
     else if (useCanny)
         {
         newGm = grayMapCanny(gm);
-        newGm->writePPM(newGm, "canny.ppm");
+        //newGm->writePPM(newGm, "canny.ppm");
         }
 
     gm->destroy(gm);
