@@ -324,6 +324,7 @@ src/dialogs/Makefile
 src/display/Makefile
 src/modules/Makefile
 extensions/Makefile
+doc/Makefile
 po/Makefile.in
 glade/Makefile
 inkscape.spec

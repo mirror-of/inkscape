@@ -28,6 +28,7 @@
 #include <libnr/nr-pixblock-pattern.h>
 #include <libnr/nr-pixops.h>
 
+#include <gtk/gtkbutton.h>
 #include <gtk/gtkiconfactory.h>
 
 #include "forward.h"
@@ -292,13 +293,23 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 			nr_pixblock_setup_fast (&bpb, NR_PIXBLOCK_MODE_R8G8B8, x, y, xe, ye, FALSE);
 
 			if (icon->px) {
+				GtkStyle *style;
 				GdkColor *color;
 				unsigned int br, bg, bb;
 				int xx, yy;
 
 				/* fixme: We support only plain-color themes */
 				/* fixme: But who needs other ones anyways? (Lauris) */
-				color = &widget->style->bg[widget->state];
+
+				if (GTK_IS_BUTTON (widget->parent) && gtk_button_get_relief (GTK_BUTTON (widget->parent)) == GTK_RELIEF_NONE) {
+					style = widget->style;
+				} else {
+					gtk_widget_ensure_style (widget->parent);
+					style = widget->parent->style;
+				}
+
+				color = &style->bg[widget->state];
+
 				br = (color->red & 0xff00) >> 8;
 				bg = (color->green & 0xff00) >> 8;
 				bb = (color->blue & 0xff00) >> 8;

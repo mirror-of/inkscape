@@ -1,3 +1,8 @@
+2003-12-12  MenTaLguY <mental@rydia.net>
+
+	* doc/Makefile.am, Makefile.am, configure.in: include doc/
+	  subdirectory in distribution tarballs
+
 2003-12-12  bulia byak <bulia@dr.com>
 
 	* src/svg/svg-path.c src/desktop.h src/libnr/gen_nr_config.c src/libnr/nr-object.c

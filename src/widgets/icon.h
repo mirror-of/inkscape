@@ -36,7 +36,7 @@ typedef struct _SPIconClass SPIconClass;
 struct _SPIcon {
 	GtkWidget widget;
 
-	unsigned int size;
+	int size;
 
 	guchar *px;
 };

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src glade po extensions
+SUBDIRS = src doc glade po extensions
 
 appicondir = $(datadir)/pixmaps
 appicon_DATA = inkscape.png
