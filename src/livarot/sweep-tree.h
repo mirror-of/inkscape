@@ -1,7 +1,6 @@
 #ifndef INKSCAPE_LIVAROT_SWEEP_TREE_H
 #define INKSCAPE_LIVAROT_SWEEP_TREE_H
 
-#include "livarot/sweep-tree-list.h"   // FIXME: Remove this temporary #include.
 #include "libnr/nr-point.h"
 #include "livarot/AVL.h"
 
