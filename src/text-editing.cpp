@@ -100,21 +100,15 @@ NRArenaShape* sp_te_create_selection_arena_item(SPItem *item, NRArena *arena, In
     if (layout == NULL)
         return NULL;
 
-    Shape *sel_shape;
-    if (start > end)
-        sel_shape = layout->createSelectionShape(end, start, transform);
+    SPCurve *sel_curve;
+    if (start < end)
+        sel_curve = layout->createSelectionShape(start, end, transform);
     else
-        sel_shape = layout->createSelectionShape(start, end, transform);
-    Path sel_path;
-    sel_shape->ConvertToForme(&sel_path);
-    delete sel_shape;
-    sel_path.Convert(0.25);
-    NArtBpath *sel_bpath = (NArtBpath*)sel_path.MakeArtBPath();
-    SPCurve *sel_spcurve = sp_curve_new_from_bpath(sel_bpath);  // takes ownership of sel_bpath
+        sel_curve = layout->createSelectionShape(end, start, transform);
 
     NRRect  paintbox;
     NRBPath bp;
-    bp.path = SP_CURVE_BPATH(sel_spcurve);
+    bp.path = SP_CURVE_BPATH(sel_curve);
     paintbox.x0 = paintbox.y0 = NR_HUGE;
     paintbox.x1 = paintbox.y1 = -NR_HUGE;
     nr_path_matrix_bbox_union(&bp, NR::identity(), &paintbox);
@@ -125,10 +119,10 @@ NRArenaShape* sp_te_create_selection_arena_item(SPItem *item, NRArena *arena, In
     NRArenaShape *arena_shape = NRArenaShape::create(arena);
     nr_arena_shape_set_style (arena_shape, style);
     sp_style_unref(style);   // arena takes a reference
-    nr_arena_shape_set_path(arena_shape, sel_spcurve, false);
+    nr_arena_shape_set_path(arena_shape, sel_curve, false);
     nr_arena_shape_set_paintbox (arena_shape, &paintbox);
 
-    sp_curve_unref(sel_spcurve);  // arena takes a reference
+    sp_curve_unref(sel_curve);  // arena takes a reference
     return arena_shape;
     // with the return value do:
     //   nr_arena_item_add_child(flowed, arena_shape, NULL);

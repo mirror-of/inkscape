@@ -440,8 +440,8 @@ public:
 
     /** Basically uses characterBoundingBox() on all the characters from
     \a start to \a end and returns the union of these boxes. Free the result
-    with delete. */
-    Shape* createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const;
+    with sp_curve_unref(). */
+    SPCurve* createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const;
 
     inline bool isCursorPosition(iterator const &it) const;
 
@@ -729,13 +729,13 @@ public:
     bool operator!= (iterator const &other) const
         {return _glyph_index != other._glyph_index || _char_index != other._char_index;}
     bool operator< (iterator const &other) const
-        {return _glyph_index < other._glyph_index || _char_index < other._char_index;}
+        {return _char_index < other._char_index || _glyph_index < other._glyph_index;}
     bool operator<= (iterator const &other) const
-        {return _glyph_index <= other._glyph_index && _char_index <= other._char_index;}
+        {return _char_index <= other._char_index || _glyph_index <= other._glyph_index;}
     bool operator> (iterator const &other) const
-        {return _glyph_index > other._glyph_index || _char_index > other._char_index;}
+        {return _char_index > other._char_index || _glyph_index > other._glyph_index;}
     bool operator>= (iterator const &other) const
-        {return _glyph_index >= other._glyph_index && _char_index >= other._char_index;}
+        {return _char_index >= other._char_index || _glyph_index >= other._glyph_index;}
 
     /* **** visual-oriented methods **** */
 

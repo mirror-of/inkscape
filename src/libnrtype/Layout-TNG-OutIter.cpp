@@ -15,6 +15,7 @@
 #include "Layout-TNG-Scanline-Maker.h"
 #include "svg/svg-types.h"
 #include "libnr/nr-matrix-rotate-ops.h"
+#include "display/curve.h"
 
 namespace Inkscape {
 namespace Text {
@@ -337,20 +338,20 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
     unsigned char_index = it._char_index;
 
     if (it._char_index == _characters.size()) {
-        top_left[0] = bottom_right[0] = _chunks.back().left_x + _spans.back().x_end;
+        top_left[NR::X] = bottom_right[NR::X] = _chunks.back().left_x + _spans.back().x_end;
         char_index--;
     } else {
         double span_x = _spans[_characters[it._char_index].in_span].x_start + _characters[it._char_index].chunk(this).left_x;
-        top_left[0] = span_x + _characters[it._char_index].x;
+        top_left[NR::X] = span_x + _characters[it._char_index].x;
         if (it._char_index + 1 == _characters.size() || _characters[it._char_index + 1].in_span != _characters[it._char_index].in_span)
-            bottom_right[0] = _spans[_characters[it._char_index].in_span].x_end + _characters[it._char_index].chunk(this).left_x;
+            bottom_right[NR::X] = _spans[_characters[it._char_index].in_span].x_end + _characters[it._char_index].chunk(this).left_x;
         else
-            bottom_right[0] = span_x + _characters[it._char_index + 1].x;
+            bottom_right[NR::X] = span_x + _characters[it._char_index + 1].x;
     }
 
     double baseline_y = _characters[char_index].line(this).baseline_y + _characters[char_index].span(this).baseline_shift;
-    top_left[1] = baseline_y - _spans[_characters[char_index].in_span].line_height.ascent;
-    bottom_right[1] = baseline_y + _spans[_characters[char_index].in_span].line_height.descent;
+    top_left[NR::Y] = baseline_y - _spans[_characters[char_index].in_span].line_height.ascent;
+    bottom_right[NR::Y] = baseline_y + _spans[_characters[char_index].in_span].line_height.descent;
 
     if (rotation) {
         if (it._glyph_index == (int)_glyphs.size())
@@ -361,34 +362,20 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
     return NR::Rect(top_left, bottom_right);
 }
 
-Shape* Layout::createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const
+SPCurve* Layout::createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const
 {
     double rotation_angle;
-    Shape *selection_shape = new Shape;
-    Shape *shape_temp = new Shape;    // Shape::Booleen() can't copy from itself so to makes things faster we flip from one to another
-
-    Shape rect_shape;
-    Shape rect_shape_tidy;
+    SPCurve *selection_curve = sp_curve_new();
 
     for (iterator it = it_start ; it < it_end ; it.nextCharacter()) {
         NR::Rect box = characterBoundingBox(it, &rotation_angle);
-        Path rect_path;
         NR::Matrix total_transform = transform * NR::rotate(rotation_angle);
-        rect_path.MoveTo(box.corner(0) * total_transform);
+        sp_curve_moveto(selection_curve, box.corner(0) * total_transform);
         for(int i = 1; i < 4; i ++)
-            rect_path.LineTo(box.corner(i) * total_transform);
-        rect_path.Close();
-        rect_path.Convert(0.25);
-        rect_path.Fill(&rect_shape);
-        if (selection_shape->hasEdges()) {
-            rect_shape_tidy.ConvertToShape(&rect_shape);
-            shape_temp->Booleen(selection_shape, &rect_shape_tidy, bool_op_union);
-            std::swap(shape_temp, selection_shape);
-        } else
-            selection_shape->ConvertToShape(&rect_shape);
+            sp_curve_lineto(selection_curve, box.corner(i) * total_transform);
+        sp_curve_closepath(selection_curve);
     }
-    delete shape_temp;
-    return selection_shape;
+    return selection_curve;
 }
 
 void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *height, double *rotation) const
