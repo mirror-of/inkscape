@@ -783,6 +783,8 @@ clonetiler_checkbox (const char *label, GtkTooltips *tt, const char *tip, const 
     gtk_signal_connect ( GTK_OBJECT (b), "clicked", 
                          GTK_SIGNAL_FUNC (clonetiler_checkbox_toggled), (gpointer) attr);
 
+    g_object_set_data (G_OBJECT(b), "uncheckable", GINT_TO_POINTER(TRUE));
+
     return hb;
 }
 
@@ -846,6 +848,8 @@ clonetiler_percent_spinbox (const char *label, GtkTooltips *tt, const char *tip,
             gtk_signal_connect(GTK_OBJECT(a), "value_changed",
                            GTK_SIGNAL_FUNC(clonetiler_percent_changed), (gpointer) attr);
         }
+
+        g_object_set_data (G_OBJECT(sb), "zeroable", GINT_TO_POINTER(TRUE));
     }
 
     return hb;
@@ -869,6 +873,40 @@ static void
 clonetiler_keep_bbox_toggled (GtkToggleButton *tb, gpointer data)
 {
     prefs_set_int_attribute ("dialogs.clonetiler", "keepbbox", gtk_toggle_button_get_active (tb));
+}
+
+static void
+clonetiler_reset_recursive (GtkWidget *w)
+{
+    if (w && GTK_IS_OBJECT(w)) {
+        {
+            int r = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT(w), "zeroable"));
+            if (r && GTK_IS_SPIN_BUTTON(w)) { // spinbutton
+                GtkAdjustment *a = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(w));
+                gtk_adjustment_set_value (a, 0);
+            }
+        }
+        {
+            int r = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT(w), "uncheckable"));
+            if (r && GTK_IS_TOGGLE_BUTTON(w)) { // checkbox
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(w), FALSE);
+            }
+        }
+    }
+	
+    if (GTK_IS_CONTAINER(w)) {
+        GList *ch = gtk_container_get_children (GTK_CONTAINER(w));
+        for (GList *i = ch; i != NULL; i = i->next) {
+            clonetiler_reset_recursive (GTK_WIDGET(i->data));
+        }
+        g_list_free (ch);
+    }
+}
+
+static void
+clonetiler_reset (GtkWidget *widget, void *)
+{
+    clonetiler_reset_recursive (dlg);
 }
 
 void
@@ -1215,7 +1253,8 @@ clonetiler_dialog (void)
                 GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
 
                 {
-                    GtkWidget *l = gtk_label_new (_("Rows:"));
+                    GtkWidget *l = gtk_label_new ("");
+                    gtk_label_set_markup (GTK_LABEL(l), _("<b>Rows</b>:"));
                     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
                     gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
                 }
@@ -1240,7 +1279,8 @@ clonetiler_dialog (void)
                 GtkWidget *hb = gtk_hbox_new(FALSE, 4);
 
                 {
-                    GtkWidget *l = gtk_label_new (_("Columns:"));
+                    GtkWidget *l = gtk_label_new ("");
+                    gtk_label_set_markup (GTK_LABEL(l), _("<b>Columns</b>:"));
                     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
                     gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
                 }
@@ -1289,7 +1329,10 @@ clonetiler_dialog (void)
             gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
 
             {
-                GtkWidget *b = gtk_button_new_with_label (_(" Create "));
+                GtkWidget *b = gtk_button_new ();
+                GtkWidget *l = gtk_label_new ("");
+                gtk_label_set_markup (GTK_LABEL(l), _(" <b>Create</b> "));
+                gtk_container_add (GTK_CONTAINER(b), l);
                 gtk_tooltips_set_tip (tt, b, _("Create and tile the clones of the selection"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_apply), NULL);
                 gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
@@ -1299,6 +1342,13 @@ clonetiler_dialog (void)
                 GtkWidget *b = gtk_button_new_with_label (_(" Remove "));
                 gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_remove), NULL);
+                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
+            }
+
+            {
+                GtkWidget *b = gtk_button_new_with_label (_(" Reset "));
+                gtk_tooltips_set_tip (tt, b, _("Reset all shifts, scales, rotates, and opacities to zero"), NULL);
+                gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_reset), NULL);
                 gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
             }
         }
