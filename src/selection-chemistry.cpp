@@ -811,7 +811,7 @@ take_style_from_item (SPItem *item)
         css = sp_css_attr_unset_text (css);
     }
 
-    // FIXME: also transform gradient/pattern fills
+    // FIXME: also transform gradient/pattern fills, by forking?
     double ex = NR::expansion(sp_item_i2doc_affine(item));
     if (ex != 1.0) {
         css = sp_css_attr_scale (css, ex);
