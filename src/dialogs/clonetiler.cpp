@@ -288,7 +288,8 @@ clonetiler_get_transform (
 		break;
 	case TILE_P4M:
   {
-      NR::Matrix ori (NR::translate ((w + w) * (x/4) + dx,  (w + w) * (y/2) + dy));
+      double max = MAX(w, h);
+      NR::Matrix ori (NR::translate ((max + max) * (x/4) + dx,  (max + max) * (y/2) + dy));
       NR::Matrix dia1 (NR::translate (w/2 - h/2, h/2 - w/2));
       NR::Matrix dia2 (NR::translate (-h/2 + w/2, w/2 - h/2));
 		if (y % 2 == 0) {
@@ -316,7 +317,8 @@ clonetiler_get_transform (
 		break;
 	case TILE_P4G:
   {
-      NR::Matrix ori (NR::translate ((w + w) * (x/4) + dx,  (w + w) * y + dy));
+      double max = MAX(w, h);
+      NR::Matrix ori (NR::translate ((max + max) * (x/4) + dx,  (max + max) * y + dy));
       NR::Matrix dia1 (NR::translate (w/2 + h/2, h/2 - w/2));
       NR::Matrix dia2 (NR::translate (-h/2 + w/2, w/2 + h/2));
 		if (((x/4) + y) % 2 == 0) {
@@ -357,6 +359,42 @@ clonetiler_get_transform (
 }
 
 static void
+clonetiler_remove (GtkWidget *widget, void *)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop == NULL)
+        return;
+
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    // check if something is selected
+    if (selection->isEmpty() || g_slist_length((GSList *) selection->itemList()) > 1) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to remove."));
+        return;
+    }
+
+    SPObject *obj = SP_OBJECT(selection->singleItem());
+    SPRepr *obj_repr = SP_OBJECT_REPR(obj);
+    const char *id_href = g_strdup_printf("#%s", sp_repr_attr (obj_repr, "id"));
+    SPObject *parent = SP_OBJECT_PARENT (obj);
+
+// remove old tiling
+    GSList *to_delete = NULL;
+    for (SPObject *child = sp_object_first_child(parent); child != NULL; child = SP_OBJECT_NEXT(child)) {
+        if (SP_IS_USE(child) && 
+            !strcmp(id_href, sp_repr_attr(SP_OBJECT_REPR(child), "xlink:href")) && 
+            !strcmp(id_href, sp_repr_attr(SP_OBJECT_REPR(child), "inkscape:tiled-clone-of"))) {
+            to_delete = g_slist_prepend (to_delete, child);
+        }
+    }
+    for (GSList *i = to_delete; i; i = i->next) {
+        SP_OBJECT(i->data)->deleteObject();
+    }
+    g_slist_free (to_delete);
+}
+
+
+static void
 clonetiler_apply (GtkWidget *widget, void *)
 {
 
@@ -381,21 +419,9 @@ clonetiler_apply (GtkWidget *widget, void *)
     SPObject *obj = SP_OBJECT(selection->singleItem());
     SPRepr *obj_repr = SP_OBJECT_REPR(obj);
     const char *id_href = g_strdup_printf("#%s", sp_repr_attr (obj_repr, "id"));
-
-// remove old tiling
     SPObject *parent = SP_OBJECT_PARENT (obj);
-    GSList *to_delete = NULL;
-    for (SPObject *child = sp_object_first_child(parent); child != NULL; child = SP_OBJECT_NEXT(child)) {
-        if (SP_IS_USE(child) && 
-            !strcmp(id_href, sp_repr_attr(SP_OBJECT_REPR(child), "xlink:href")) && 
-            !strcmp(id_href, sp_repr_attr(SP_OBJECT_REPR(child), "inkscape:tiled-clone-of"))) {
-            to_delete = g_slist_prepend (to_delete, child);
-        }
-    }
-    for (GSList *i = to_delete; i; i = i->next) {
-        SP_OBJECT(i->data)->deleteObject();
-    }
-    g_slist_free (to_delete);
+
+    clonetiler_remove (NULL, NULL);
 
     double d_x_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_x_per_x", 0, -1, 1);
     double d_y_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_y_per_x", 0, -1, 1);
@@ -416,11 +442,37 @@ clonetiler_apply (GtkWidget *widget, void *)
 
     int type = prefs_get_int_attribute ("dialogs.clonetiler", "symmetrygroup", 0);
 
-    NRRect r;
-    sp_item_invoke_bbox(SP_ITEM(obj), &r, sp_item_i2doc_affine(SP_ITEM(obj)), TRUE);
-    NR::Point c = NR::Point ((r.x0 + r.x1)/2, (r.y0 + r.y1)/2); 
-    double w = fabs (r.x1 - r.x0); 
-    double h = fabs (r.y1 - r.y0); 
+    int keepbbox = prefs_get_int_attribute ("dialogs.clonetiler", "keepbbox", 1);
+
+    NR::Point c;
+    double w;
+    double h;
+
+    if (keepbbox && 
+        sp_repr_attr(obj_repr, "inkscape:tile-w") &&
+        sp_repr_attr(obj_repr, "inkscape:tile-h") &&
+        sp_repr_attr(obj_repr, "inkscape:tile-cx") &&
+        sp_repr_attr(obj_repr, "inkscape:tile-cy")) {
+
+        double cx = sp_repr_get_double_attribute (obj_repr, "inkscape:tile-cx", 0);
+        double cy = sp_repr_get_double_attribute (obj_repr, "inkscape:tile-cy", 0);
+
+        c = NR::Point (cx, cy);
+
+        w = sp_repr_get_double_attribute (obj_repr, "inkscape:tile-w", 0);
+        h = sp_repr_get_double_attribute (obj_repr, "inkscape:tile-h", 0);
+    } else {
+        NRRect r;
+        sp_item_invoke_bbox(SP_ITEM(obj), &r, sp_item_i2doc_affine(SP_ITEM(obj)), TRUE);
+        c = NR::Point ((r.x0 + r.x1)/2, (r.y0 + r.y1)/2); 
+        w = fabs (r.x1 - r.x0); 
+        h = fabs (r.y1 - r.y0); 
+
+        sp_repr_set_double (obj_repr, "inkscape:tile-w", w);
+        sp_repr_set_double (obj_repr, "inkscape:tile-h", h);
+        sp_repr_set_double (obj_repr, "inkscape:tile-cx", c[NR::X]);
+        sp_repr_set_double (obj_repr, "inkscape:tile-cy", c[NR::Y]);
+    }
 
     for (int x = 0; x < xmax; x ++) {
         for (int y = 0; y < ymax; y ++) {
@@ -478,6 +530,11 @@ clonetiler_xy_changed (GtkAdjustment *adj, gpointer data)
     prefs_set_int_attribute ("dialogs.clonetiler", pref, (int) round(adj->value));
 }
 
+static void
+clonetiler_keep_bbox_toggled (GtkToggleButton *tb, gpointer data)
+{
+    prefs_set_int_attribute ("dialogs.clonetiler", "keepbbox", gtk_toggle_button_get_active (tb));
+}
 
 void
 clonetiler_dialog (void)
@@ -533,10 +590,10 @@ clonetiler_dialog (void)
         gtk_box_pack_start (GTK_BOX (mainbox), nb, FALSE, FALSE, 0);
 
         {
-        GtkWidget *vb = clonetiler_new_tab (nb, _("Symmetry group"));
+        GtkWidget *vb = clonetiler_new_tab (nb, _("Symmetry"));
 
         GtkWidget *om = gtk_option_menu_new ();
-        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Select a symmetry group for the tiling"), NULL);
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Select one of the 17 symmetry groups for the tiling"), NULL);
         gtk_box_pack_end (GTK_BOX (vb), om, FALSE, FALSE, SB_MARGIN);
 
         GtkWidget *m = gtk_menu_new ();
@@ -646,11 +703,47 @@ clonetiler_dialog (void)
     }
     }
 
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+        gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
 
-        GtkWidget *apply = gtk_button_new_with_label (_("Apply"));
-        gtk_tooltips_set_tip (tt, apply, _("Create and tile the clones of the selection"), NULL);
-        gtk_signal_connect (GTK_OBJECT (apply), "clicked", GTK_SIGNAL_FUNC (clonetiler_apply), NULL);
-        gtk_box_pack_start (GTK_BOX (mainbox), apply, FALSE, FALSE, 0);
+        GtkWidget *b  = gtk_check_button_new ();
+        gint keepbbox = prefs_get_int_attribute ("dialogs.clonetiler", "keepbbox", 1);
+        gtk_toggle_button_set_active ((GtkToggleButton *) b, keepbbox != 0);
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Use the tile bounding box of the previous tiling (if any), instead of the actual bounding box of selection"), NULL);
+        gtk_widget_set_usize (b, SB_WIDTH, -1);
+        gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, SB_MARGIN);
+
+        gtk_signal_connect(GTK_OBJECT(b), "toggled",
+                           GTK_SIGNAL_FUNC(clonetiler_keep_bbox_toggled), NULL);
+
+    {
+        GtkWidget *l = gtk_label_new (_("Keep previous bbox"));
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show (l);
+        gtk_box_pack_end (GTK_BOX (hb), l, TRUE, TRUE, SB_MARGIN);
+    }
+
+    }
+
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+        gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
+
+        {
+        GtkWidget *b = gtk_button_new_with_label (_("Create"));
+        gtk_tooltips_set_tip (tt, b, _("Create and tile the clones of the selection"), NULL);
+        gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_apply), NULL);
+        gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, VB_MARGIN);
+        }
+
+        {
+        GtkWidget *b = gtk_button_new_with_label (_("Remove"));
+        gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
+        gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_remove), NULL);
+        gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, VB_MARGIN);
+        }
+    }
 
         gtk_widget_show_all (mainbox);
 

@@ -635,6 +635,9 @@ sp_use_unlink(SPUse *use)
     sp_repr_set_attr(copy, "id", sp_repr_attr(repr, "id"));
     sp_repr_unref(repr);
 
+    // remove tiled-clone-of if it was set on the clone
+    sp_repr_set_attr(copy, "inkscape:tiled-clone-of", NULL);
+
     // retrieve the SPItem of the resulting repr
     SPObject *unlinked = document->getObjectByRepr(copy);
     // establish the succession and let go of our object
