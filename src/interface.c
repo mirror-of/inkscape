@@ -161,7 +161,7 @@ sp_ui_close_view (GtkWidget * widget)
 	GtkWidget *w;
 
 	if (SP_ACTIVE_DESKTOP == NULL) return;
-	w = g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
+	w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
 	if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) return;
 	gtk_widget_destroy (w);
 }
@@ -171,7 +171,7 @@ sp_ui_close_all (void)
 {
 	while (SP_ACTIVE_DESKTOP) {
 		GtkWidget *w;
-		w = g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
+		w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
 		if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) return FALSE;
 		gtk_widget_destroy (w);
 	}
@@ -186,7 +186,7 @@ sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
 }
 
 static GtkWidget *
-sp_ui_menu_append_item (GtkMenu *menu, const guchar *stock, const guchar *label, GCallback callback, gpointer data)
+sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, GCallback callback, gpointer data)
 {
 	GtkWidget *item;
 
@@ -238,8 +238,8 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, unsigned int verb)
 		action = sp_verb_get_action (verb);
 		if (!action) return NULL;
 		if (action->shortcut) {
-			unsigned char c[256];
-			unsigned char *as, *cs, *ss;
+			gchar c[256];
+			const gchar *as, *cs, *ss;
 			GtkWidget *hb, *l;
 			as = (action->shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "";
 			cs = (action->shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "";
@@ -377,11 +377,11 @@ sp_ui_view_dock_toolbox (GObject *object, gpointer data)
 	GtkWidget *hb, *tb, *f;
 
 	if (!SP_ACTIVE_DESKTOP) return;
-	w = g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
+	w = (GObject*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
 	if (!w) return;
-	tb = g_object_get_data (w, "toolbox");
+	tb = (GtkWidget*)g_object_get_data (w, "toolbox");
 	if (tb) return;
-	hb = g_object_get_data (w, "hbox");
+	hb = (GtkWidget*)g_object_get_data (w, "hbox");
 	if (!hb) return;
 	f = gtk_frame_new (NULL);
 	gtk_frame_set_shadow_type (GTK_FRAME (f), GTK_SHADOW_OUT);
@@ -400,9 +400,9 @@ sp_ui_view_remove_toolbox (GObject *object, gpointer data)
 	GtkWidget *tb;
 
 	if (!SP_ACTIVE_DESKTOP) return;
-	w = g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
+	w = (GObject*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
 	if (!w) return;
-	tb = g_object_get_data (w, "toolbox");
+	tb = (GtkWidget*)g_object_get_data (w, "toolbox");
 	if (!tb) return;
 	gtk_widget_destroy (tb);
 	g_object_set_data (w, "toolbox", NULL);
@@ -600,7 +600,7 @@ sp_ui_generic_menu (SPView *v, SPItem *item)
 }
 
 static void
-sp_recent_open (GtkWidget *widget, const guchar *uri)
+sp_recent_open (GtkWidget *widget, const gchar *uri)
 {
 	sp_file_open (uri, NULL);
 }
@@ -613,7 +613,7 @@ sp_menu_append_recent_documents (GtkWidget *menu)
 	if (recent) {
 		SPRepr *child;
 		for (child = recent->children; child != NULL; child = child->next) {
-			const guchar *uri, *name;
+			const gchar *uri, *name;
 			uri = sp_repr_attr (child, "uri");
 			name = sp_repr_attr (child, "name");
 			/* fixme: I am pretty sure this is safe, but double check (Lauris) */
@@ -657,7 +657,7 @@ sp_ui_import_files(gchar * buffer)
 }
 
 static void
-sp_ui_import_one_file_with_check(gpointer filename, gpointer unused)
+sp_ui_import_one_file_with_check(gchar* filename, gpointer unused)
 {
 	if (filename) {
 		if (strlen(filename) > 2)

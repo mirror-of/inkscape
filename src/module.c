@@ -32,7 +32,7 @@ static void sp_module_finalize (GObject *object);
 
 static void sp_module_private_build (SPModule *module, SPRepr *repr);
 
-static const unsigned char *sp_module_get_unique_id (unsigned char *c, int len, const unsigned char *val);
+static const gchar *sp_module_get_unique_id (gchar *c, int len, const gchar *val);
 static void sp_module_register (SPModule *module);
 static void sp_module_unregister (SPModule *module);
 
@@ -52,7 +52,7 @@ sp_module_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPModule", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPModule", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -64,7 +64,7 @@ sp_module_class_init (SPModuleClass *klass)
 
 	g_object_class = (GObjectClass *)klass;
 
-	module_parent_class = g_type_class_peek_parent (klass);
+	module_parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_finalize;
 
@@ -100,8 +100,8 @@ static void
 sp_module_private_build (SPModule *module, SPRepr *repr)
 {
 	if (repr) {
-		const unsigned char *val;
-		unsigned char c[256];
+		const gchar *val;
+		gchar c[256];
 		val = sp_repr_attr (repr, "id");
 		val = sp_module_get_unique_id (c, 256, val);
 		module->id = g_strdup (val);
@@ -109,12 +109,12 @@ sp_module_private_build (SPModule *module, SPRepr *repr)
 		if (val) {
 			module->name = g_strdup (val);
 		}
-		sp_repr_get_boolean (repr, "about", &module->about);
+		sp_repr_get_boolean (repr, "about", (unsigned int*)&module->about);
 		val = sp_repr_attr (repr, "icon");
 		if (val) {
 			module->icon = g_strdup (val);
 		}
-		sp_repr_get_boolean (repr, "toolbox", &module->toolbox);
+		sp_repr_get_boolean (repr, "toolbox", (unsigned int*)&module->toolbox);
 		sp_module_register (module);
 	}
 }
@@ -124,7 +124,7 @@ sp_module_new (GType type, SPRepr *repr)
 {
 	SPModule *module;
 
-	module = g_object_new (type, NULL);
+	module = (SPModule*)g_object_new (type, NULL);
 
 	if (module) {
 		if (repr) sp_repr_ref (repr);
@@ -137,7 +137,7 @@ sp_module_new (GType type, SPRepr *repr)
 }
 
 SPModule *
-sp_module_new_from_path (GType type, const unsigned char *path)
+sp_module_new_from_path (GType type, const gchar *path)
 {
 	SPRepr *repr;
 
@@ -162,8 +162,8 @@ sp_module_unref (SPModule *mod)
 
 static GHashTable *moduledict = NULL;
 
-static const unsigned char *
-sp_module_get_unique_id (unsigned char *c, int len, const unsigned char *val)
+static const gchar *
+sp_module_get_unique_id (gchar *c, int len, const gchar *val)
 {
 	static int mnumber = 0;
 	if (!moduledict) moduledict = g_hash_table_new (g_str_hash, g_str_equal);
@@ -210,7 +210,7 @@ sp_module_input_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_input_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleInput", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleInput", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -224,7 +224,7 @@ sp_module_input_class_init (SPModuleInputClass *klass)
 	g_object_class = (GObjectClass *) klass;
 	module_class = (SPModuleClass *) klass;
 
-	input_parent_class = g_type_class_peek_parent (klass);
+	input_parent_class = (SPModuleClass*)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_input_finalize;
 
@@ -266,7 +266,7 @@ sp_module_input_build (SPModule *module, SPRepr *repr)
 		((SPModuleClass *) input_parent_class)->build (module, repr);
 
 	if (repr) {
-		const unsigned char *val;
+		const gchar *val;
 		val = sp_repr_attr (repr, "mimetype");
 		if (val) {
 			imod->mimetype = g_strdup (val);
@@ -279,7 +279,7 @@ sp_module_input_build (SPModule *module, SPRepr *repr)
 }
 
 SPDocument *
-sp_module_input_document_open (SPModuleInput *mod, const unsigned char *uri, unsigned int advertize, unsigned int keepalive)
+sp_module_input_document_open (SPModuleInput *mod, const gchar *uri, unsigned int advertize, unsigned int keepalive)
 {
 	return sp_document_new (uri, advertize, keepalive);
 }
@@ -306,7 +306,7 @@ GType sp_module_output_get_type (void) {
 			16,
 			(GInstanceInitFunc) sp_module_output_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleOutput", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleOutput", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -320,7 +320,7 @@ sp_module_output_class_init (SPModuleOutputClass *klass)
 	g_object_class = (GObjectClass *)klass;
 	module_class = (SPModuleClass *) klass;
 
-	output_parent_class = g_type_class_peek_parent (klass);
+	output_parent_class = (SPModuleClass*)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_output_finalize;
 
@@ -354,7 +354,7 @@ sp_module_output_build (SPModule *module, SPRepr *repr)
 		((SPModuleClass *) output_parent_class)->build (module, repr);
 
 	if (repr) {
-		const unsigned char *val;
+		const gchar *val;
 		val = sp_repr_attr (repr, "mimetype");
 		if (val) {
 			mo->mimetype = g_strdup (val);
@@ -367,7 +367,7 @@ sp_module_output_build (SPModule *module, SPRepr *repr)
 }
 
 void
-sp_module_output_document_save (SPModuleOutput *mod, SPDocument *doc, const unsigned char *uri)
+sp_module_output_document_save (SPModuleOutput *mod, SPDocument *doc, const gchar *uri)
 {
 	SPRepr *repr;
 	gboolean spns;
@@ -395,7 +395,7 @@ sp_module_output_document_save (SPModuleOutput *mod, SPDocument *doc, const unsi
 	images = sp_document_get_resource_list (doc, "image");
 	for (l = images; l != NULL; l = l->next) {
 		SPRepr *ir;
-		const guchar *href, *relname;
+		const gchar *href, *relname;
 		ir = SP_OBJECT_REPR (l->data);
 		href = sp_repr_attr (ir, "xlink:href");
 		if (spns && !g_path_is_absolute (href)) {
@@ -440,7 +440,7 @@ sp_module_filter_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_filter_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleFilter", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleFilter", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -452,7 +452,7 @@ sp_module_filter_class_init (SPModuleFilterClass *klass)
 
 	g_object_class = (GObjectClass *)klass;
 
-	filter_parent_class = g_type_class_peek_parent (klass);
+	filter_parent_class = (SPModuleClass*)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_filter_finalize;
 }
@@ -495,7 +495,7 @@ sp_module_print_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_print_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE, "SPModulePrint", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE, "SPModulePrint", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -507,7 +507,7 @@ sp_module_print_class_init (SPModulePrintClass *klass)
 
 	g_object_class = (GObjectClass *)klass;
 
-	print_parent_class = g_type_class_peek_parent (klass);
+	print_parent_class = (SPModuleClass*)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_print_finalize;
 }
@@ -533,11 +533,11 @@ sp_module_print_finalize (GObject *object)
 #include "modules/sp-module-sys.h"
 
 SPModule *
-sp_module_system_get (const unsigned char *key)
+sp_module_system_get (const gchar *key)
 {
 	SPModule *mod;
 	if (!moduledict) moduledict = g_hash_table_new (g_str_hash, g_str_equal);
-	mod = g_hash_table_lookup (moduledict, key);
+	mod = (SPModule*)g_hash_table_lookup (moduledict, key);
 	if (mod) sp_module_ref (mod);
 	return mod;
 }

@@ -79,7 +79,7 @@ void sp_file_new (void)
 }
 
 void
-sp_file_open (const unsigned char *uri, const unsigned char *key)
+sp_file_open (const gchar *uri, const gchar *key)
 {
 	SPDocument *doc;
 	SPModule *mod;
@@ -101,7 +101,7 @@ sp_file_open (const unsigned char *uri, const unsigned char *key)
 static void
 file_open_ok (GtkWidget *widget, GtkFileSelection *fs)
 {
-	unsigned char *filename;
+	gchar *filename;
 
 	filename = g_strdup (gtk_file_selection_get_filename (fs));
 
@@ -118,11 +118,11 @@ file_open_ok (GtkWidget *widget, GtkFileSelection *fs)
 	}
 
 	if (filename != NULL) {
-		gpointer key;
+		gchar* key;
 		if (open_path) g_free (open_path);
 		open_path = g_dirname (filename);
 		if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
-		key = g_object_get_data (G_OBJECT (fs), "type-key");
+		key = (gchar*)g_object_get_data (G_OBJECT (fs), "type-key");
 		sp_file_open (filename, key);
 		g_free (filename);
 	}
@@ -205,7 +205,7 @@ void sp_file_open_dialog (gpointer object, gpointer data)
 /* Save */
 
 static void
-sp_file_do_save (SPDocument *doc, const unsigned char *uri, const unsigned char *key)
+sp_file_do_save (SPDocument *doc, const gchar *uri, const gchar *key)
 {
 	SPModule *mod;
 
@@ -317,7 +317,7 @@ sp_file_save_dialog (SPDocument *doc)
 	if (b == GTK_RESPONSE_OK) {
 		const gchar *filename;
 		filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dlg));
-		sp_file_do_save (doc, filename, ((SPMenu *) menu)->activedata);
+		sp_file_do_save (doc, filename, (gchar*)((SPMenu *) menu)->activedata);
 		if (save_path) g_free (save_path);
 		save_path = g_dirname (filename);
 		save_path = g_strdup (save_path);
@@ -365,7 +365,7 @@ sp_file_save_as (gpointer object, gpointer data)
 }
 
 static void
-sp_file_do_import (SPDocument *doc, const unsigned char *filename)
+sp_file_do_import (SPDocument *doc, const gchar *filename)
 {
 	SPRepr *rdoc;
 	const gchar *e, *docbase, *relname;
@@ -547,13 +547,13 @@ sp_file_export_dialog (void *widget)
 
 struct SPEBP {
 	int width, height, sheight;
-	unsigned char r, g, b, a;
+	guchar r, g, b, a;
 	NRArenaItem *root;
-	unsigned char *px;
+	guchar *px;
 };
 
 static int
-sp_export_get_rows (const unsigned char **rows, int row, int num_rows, void *data)
+sp_export_get_rows (const guchar **rows, int row, int num_rows, void *data)
 {
 	struct SPEBP *ebp;
 	NRPixBlock pb;
@@ -578,7 +578,7 @@ sp_export_get_rows (const unsigned char **rows, int row, int num_rows, void *dat
 	nr_pixblock_setup_extern (&pb, NR_PIXBLOCK_MODE_R8G8B8A8N, bbox.x0, bbox.y0, bbox.x1, bbox.y1, ebp->px, 4 * ebp->width, FALSE, FALSE);
 
 	for (r = 0; r < num_rows; r++) {
-		unsigned char *p;
+		guchar *p;
 		p = NR_PIXBLOCK_PX (&pb) + r * pb.rs;
 		for (c = 0; c < ebp->width; c++) {
 			*p++ = ebp->r;
@@ -672,7 +672,7 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
 		sp_png_write_rgba_striped (filename, width, height, sp_export_get_rows, &ebp);
 		nr_pixelstore_64K_free (ebp.px);
 	} else {
-		ebp.px = nr_new (unsigned char, 4 * 64 * width);
+		ebp.px = nr_new (guchar, 4 * 64 * width);
 		ebp.sheight = 64;
 		sp_png_write_rgba_striped (filename, width, height, sp_export_get_rows, &ebp);
 		nr_free (ebp.px);

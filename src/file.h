@@ -19,7 +19,7 @@
 
 void sp_file_new (void);
 
-void sp_file_open (const unsigned char *uri, const unsigned char *key);
+void sp_file_open (const gchar *uri, const gchar *key);
 void sp_file_open_dialog (gpointer object, gpointer data);
 
 void sp_file_save (gpointer object, gpointer data);
