@@ -65,8 +65,8 @@
 /* Paint */
 
 static void sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel);
-static void sp_stroke_style_paint_modify_selection(SPWidget *spw, SPSelection *selection, guint flags, SPPaintSelector *psel);
-static void sp_stroke_style_paint_change_selection(SPWidget *spw, SPSelection *selection, SPPaintSelector *psel);
+static void sp_stroke_style_paint_selection_modified (SPWidget *spw, SPSelection *selection, guint flags, SPPaintSelector *psel);
+static void sp_stroke_style_paint_selection_changed (SPWidget *spw, SPSelection *selection, SPPaintSelector *psel);
 static void sp_stroke_style_paint_attr_changed(SPWidget *spw, gchar const *key, gchar const *oldval, gchar const *newval);
 static void sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel);
 static void sp_stroke_style_paint_update_repr(SPWidget *spw, SPRepr *repr);
@@ -97,10 +97,10 @@ sp_stroke_style_paint_widget_new(void)
                        GTK_SIGNAL_FUNC(sp_stroke_style_paint_construct),
                        psel);
     gtk_signal_connect(GTK_OBJECT(spw), "modify_selection",
-                       GTK_SIGNAL_FUNC(sp_stroke_style_paint_modify_selection),
+                       GTK_SIGNAL_FUNC(sp_stroke_style_paint_selection_modified),
                        psel);
     gtk_signal_connect(GTK_OBJECT(spw), "change_selection",
-                       GTK_SIGNAL_FUNC(sp_stroke_style_paint_change_selection),
+                       GTK_SIGNAL_FUNC(sp_stroke_style_paint_selection_changed),
                        psel);
     gtk_signal_connect(GTK_OBJECT(spw), "attr_changed",
                        GTK_SIGNAL_FUNC(sp_stroke_style_paint_attr_changed),
@@ -146,29 +146,25 @@ sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel)
 
 
 static void
-sp_stroke_style_paint_modify_selection( SPWidget *spw,
+sp_stroke_style_paint_selection_modified ( SPWidget *spw,
                                         SPSelection *selection,
                                         guint flags,
                                         SPPaintSelector *psel)
 {
     if (flags & ( SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG |
-                  SP_OBJECT_STYLE_MODIFIED_FLAG) )
-    {
+                  SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
         sp_stroke_style_paint_update(spw, selection);
     }
-
 }
-
 
 
 static void
-sp_stroke_style_paint_change_selection( SPWidget *spw,
+sp_stroke_style_paint_selection_changed ( SPWidget *spw,
                                         SPSelection *selection,
                                         SPPaintSelector *psel )
 {
-    sp_stroke_style_paint_update(spw, selection);
+    sp_stroke_style_paint_update (spw, selection);
 }
-
 
 
 static void
@@ -184,9 +180,8 @@ sp_stroke_style_paint_attr_changed( SPWidget *spw,
 }
 
 
-
 static void
-sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
+sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 {
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;
@@ -1129,9 +1124,10 @@ ink_marker_menu( GtkWidget *tbl, gchar *menu_id, SPDocument *sandbox)
 static void
 sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
 {
-    if (gtk_object_get_data(GTK_OBJECT(mnu), "update")) {
+    if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;
     }
+
     SPDesktop *desktop = inkscape_active_desktop();
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
     if (!SP_IS_DOCUMENT(doc)) {
