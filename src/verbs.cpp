@@ -34,6 +34,7 @@
 #include "dialogs/desktop-properties.h"
 #include "dialogs/display-settings.h"
 #include "dialogs/item-properties.h"
+#include "dialogs/find.h"
 
 #include "select-context.h"
 #include "node-context.h"
@@ -642,6 +643,9 @@ sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_DIALOG_XML_EDITOR:
             sp_xml_tree_dialog ();
             break;
+        case SP_VERB_DIALOG_FIND:
+            sp_find_dialog ();
+            break;
         case SP_VERB_DIALOG_TOGGLE:
             inkscape_dialogs_toggle ();
             break;
@@ -1000,6 +1004,8 @@ static const SPVerbActionDef props[] = {
         N_("Text and Font dialog"), "object_font"},
     {SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor..."),
         N_("XML Editor"), "xml_editor"},
+    {SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find..."),
+        N_("Find objects in document"), NULL},
     {SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/_Hide Dialogs"),
         N_("Show or hide all active dialogs"), "dialog_toggle"},
     {SP_VERB_DIALOG_ITEM, "DialogItem", N_("_Object Properties..."),

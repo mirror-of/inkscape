@@ -293,7 +293,7 @@ sp_view_set_statusf_timeout (SPView *view, guint msec, const gchar *format, ...)
 }
 
 //TODO: make user-settable
-#define STATUSBAR_FLASH_MSEC 1000
+#define STATUSBAR_FLASH_MSEC 2000
 #define STATUSBAR_ERROR_MSEC 5000
 
 /**
