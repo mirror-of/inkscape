@@ -176,13 +176,17 @@ gchar *URI::to_native_filename(gchar const* uri) throw(BadURIException)
 
 /* TODO !!! proper error handling */
 gchar *URI::toNativeFilename() const throw(BadURIException) {
-    gchar *string = toString();
-    gchar *filename = g_filename_from_uri(string, NULL, NULL);
-    g_free(string);
-    if (filename) {
-        return filename;
+    gchar *uriString = toString();
+    if (isRelativePath()) {
+        return uriString;
     } else {
-        throw MalformedURIException();
+        gchar *filename = g_filename_from_uri(uriString, NULL, NULL);
+        g_free(uriString);
+        if (filename) {
+            return filename;
+        } else {
+            throw MalformedURIException();
+        }
     }
 }
 
