@@ -68,9 +68,9 @@ enum {
     LAST_SIGNAL
 };
 
-static void sp_desktop_class_init (SPDesktopClass * klass);
-static void sp_desktop_init (SPDesktop * desktop);
-static void sp_desktop_dispose (GObject *object);
+static void sp_desktop_class_init(SPDesktopClass *klass);
+static void sp_desktop_init(SPDesktop *desktop);
+static void sp_desktop_dispose(GObject *object);
 
 static void sp_desktop_request_redraw (SPView *view);
 static void sp_desktop_set_document (SPView *view, SPDocument *doc);
@@ -102,7 +102,7 @@ static void sp_dtw_zoom_selection (GtkMenuItem *item, gpointer data);
 static void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
 static void sp_desktop_update_scrollbars (SPDesktop *desktop);
 
-SPViewClass * parent_class;
+SPViewClass *parent_class;
 static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
@@ -446,11 +446,12 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
 {
     static const SPUnit *px = NULL;
 
-    if (!px)
-        px = sp_unit_get_by_abbreviation ("px");
-        
+    if (!px) {
+	px = sp_unit_get_by_abbreviation("px");
+    }
+
     // Fixme: expansion?
-    gdouble px2doc = sqrt (fabs (desktop->w2d[0] * desktop->w2d[3]));
+    gdouble const px2doc = sqrt (fabs (desktop->w2d[0] * desktop->w2d[3]));
     desktop->gridsnap = (desktop->namedview->snaptogrid) ? desktop->namedview->gridtolerance : 0.0;
     sp_convert_distance_full (&desktop->gridsnap, desktop->namedview->gridtoleranceunit, px, 1.0, px2doc);
     desktop->guidesnap = (desktop->namedview->snaptoguides) ? desktop->namedview->guidetolerance : 0.0;
@@ -458,7 +459,7 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
 }
 
 void
-sp_desktop_activate_guides (SPDesktop * desktop, gboolean activate)
+sp_desktop_activate_guides(SPDesktop *desktop, gboolean activate)
 {
     desktop->guides_active = activate;
     sp_namedview_activate_guides (desktop->namedview, desktop, activate);
@@ -690,7 +691,6 @@ sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
 
     GtkObjectClass *object_class = (GtkObjectClass *) klass;
     GtkWidgetClass *widget_class = (GtkWidgetClass *) klass;
-    SPViewWidgetClass *vw_class = SP_VIEW_WIDGET_CLASS (klass);
 
     object_class->destroy = sp_desktop_widget_destroy;
 
@@ -869,11 +869,10 @@ sp_desktop_widget_set_title (SPDesktopWidget *dtw)
 {
     GtkWindow *window = GTK_WINDOW (gtk_object_get_data (GTK_OBJECT(dtw), "window"));
     if (window) {
-        const gchar *nv_name = sp_namedview_get_name (dtw->desktop->namedview);
-        const gchar *uri = SP_DOCUMENT_NAME (SP_VIEW_WIDGET_DOCUMENT (dtw));
-        const gchar * fname;
-        if (SPShowFullFielName) fname = uri;
-        else fname = g_basename (uri);
+        gchar const *uri = SP_DOCUMENT_NAME (SP_VIEW_WIDGET_DOCUMENT (dtw));
+        gchar const *fname = ( SPShowFullFielName
+			       ? uri
+			       : g_basename(uri) );
         GString *name = g_string_new ("");
         if (dtw->desktop->number > 1) {
             g_string_sprintf (name, _("%s: %d - Inkscape"), fname, dtw->desktop->number);
@@ -1104,14 +1103,17 @@ sp_desktop_widget_new (SPNamedView *namedview)
 static void
 sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktopWidget *dtw)
 {
-    NR::Point origin = dtw->dt2r * (NR::Point(x, y) - dtw->ruler_origin);
+    using NR::X;
+    using NR::Y;
+
+    NR::Point const origin = dtw->dt2r * ( NR::Point(x, y) - dtw->ruler_origin );
     /* fixme: */
-    GTK_RULER (dtw->hruler)->position = origin[0];
+    GTK_RULER(dtw->hruler)->position = origin[X];
     gtk_ruler_draw_pos (GTK_RULER (dtw->hruler));
-    GTK_RULER (dtw->vruler)->position = origin[1];
+    GTK_RULER(dtw->vruler)->position = origin[Y];
     gtk_ruler_draw_pos (GTK_RULER (dtw->vruler));
 
-    sp_desktop_set_coordinate_status (SP_DESKTOP (view), origin[0], origin[1], 0);
+    sp_desktop_set_coordinate_status(SP_DESKTOP(view), origin[X], origin[Y], 0);
 }
 
 /*
@@ -1248,12 +1250,12 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
     old_zoom->x1 = x1;
     old_zoom->y0 = y0;
     old_zoom->y1 = y1;
-    if (dt->zooms_past == NULL || !(
-            ((NRRect *) dt->zooms_past->data)->x0 == old_zoom->x0 &&
-            ((NRRect *) dt->zooms_past->data)->x1 == old_zoom->x1 &&
-            ((NRRect *) dt->zooms_past->data)->y0 == old_zoom->y0 &&
-            ((NRRect *) dt->zooms_past->data)->y1 == old_zoom->y1
-            )) {
+    if ( dt->zooms_past == NULL
+	 || !( ( ((NRRect *) dt->zooms_past->data)->x0 == old_zoom->x0 ) &&
+	       ( ((NRRect *) dt->zooms_past->data)->x1 == old_zoom->x1 ) &&
+	       ( ((NRRect *) dt->zooms_past->data)->y0 == old_zoom->y0 ) &&
+	       ( ((NRRect *) dt->zooms_past->data)->y1 == old_zoom->y1 ) ) )
+    {
         dt->zooms_past = g_list_prepend (dt->zooms_past, old_zoom);
         if (dt->can_go_forward == FALSE) {
             g_list_free (dt->zooms_future);
@@ -1281,8 +1283,8 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
     if (!NR_DF_TEST_CLOSE (newscale, scale, 1e-4 * scale)) {
         NR::Coord xform[6];
         /* Set zoom factors */
-        dt->d2w = NR::scale(NR::Point(newscale, -newscale));
-        dt->w2d = dt->d2w.inverse();
+        dt->d2w = NR::scale(newscale, -newscale);
+        dt->w2d = NR::scale(1/newscale, 1/-newscale);
         dt->d2w.copyto(xform);
         sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), xform);
         clear = TRUE;
@@ -1467,11 +1469,10 @@ sp_desktop_zoom_page_width (SPDesktop *dt)
 void
 sp_desktop_zoom_selection (SPDesktop *dt)
 {
-    NRRect d;
-
     SPSelection *selection = SP_DT_SELECTION (dt);
     g_return_if_fail (selection != NULL);
 
+    NRRect d;
     sp_selection_bbox (selection, &d);
     if ((fabs (d.x1 - d.x0) < 0.1) || (fabs (d.y1 - d.y0) < 0.1)) return;
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
@@ -1480,13 +1481,12 @@ sp_desktop_zoom_selection (SPDesktop *dt)
 void
 sp_desktop_zoom_drawing (SPDesktop *dt)
 {
-    NRRect d;
-
     SPDocument *doc = SP_VIEW_DOCUMENT (SP_VIEW (dt));
     g_return_if_fail (doc != NULL);
     SPItem *docitem = SP_ITEM (sp_document_root (doc));
     g_return_if_fail (docitem != NULL);
-        
+
+    NRRect d;
     sp_item_bbox_desktop (docitem, &d);
     if ((fabs (d.x1 - d.x0) < 1.0) || (fabs (d.y1 - d.y0) < 1.0)) return;
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);

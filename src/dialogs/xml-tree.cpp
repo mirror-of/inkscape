@@ -726,7 +726,7 @@ set_dt_select (SPRepr *repr)
              SP_IS_ROOT (object))) 
         {
             /* We cannot set selection to tspan, string, or root; failures and 
-             *crashes will occur
+             * crashes will occur. */
             /* TODO: when a tspan is highlighted, set selection to its parent 
              * text
              */

@@ -182,7 +182,7 @@ nr_rasterfont_generic_free (NRRasterFont *rf)
 
 NR::Point nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph)
 {
-	return rf->transform * nr_font_glyph_advance_get (rf->font, glyph);
+	return nr_font_glyph_advance_get(rf->font, glyph) * rf->transform;
 }
 
 NRRect *
@@ -301,8 +301,8 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 	slot = rf->pages[page] + code;
 
 	if ((flags & NR_RASTERFONT_ADVANCE_FLAG) && !slot->has_advance) {
-		NR::Point a = nr_font_glyph_advance_get (rf->font, glyph);
-		NR::Point tp = rf->transform * a;
+		NR::Point const a(nr_font_glyph_advance_get(rf->font, glyph));
+		NR::Point const tp(a * rf->transform);
 		NRPointL ip;
 		ip.x = static_cast<NR::ICoord>(tp[NR::X]);
 		ip.y = static_cast<NR::ICoord>(tp[NR::Y]);

@@ -9,11 +9,13 @@
  *
  * Copyright (C) 1999-2002 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
+ * Copyright (C) 2004 Monash University
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #include <libnr/nr-types.h>
+#include <libnr/nr-matrix.h>
 
 #include "helper/units.h"
 #include "display/nr-arena-forward.h"
@@ -114,7 +116,7 @@ struct _SPItemClass {
 	void (* hide) (SPItem *item, unsigned int key);
 
 	/* Returns a number of points used */ 
-	int (* snappoints) (SPItem *item, NR::Point *points, int size);
+	int (* snappoints) (SPItem *item, NR::Point points[], int size);
 
 	/* Write item transform to repr optimally */
 	void (* write_transform) (SPItem *item, SPRepr *repr, NRMatrix *transform);
@@ -140,7 +142,7 @@ unsigned int sp_item_display_key_new (unsigned int numkeys);
 NRArenaItem *sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 void sp_item_invoke_hide (SPItem *item, unsigned int key);
 
-int sp_item_snappoints (SPItem *item, NR::Point *points, int size);
+int sp_item_snappoints(SPItem *item, NR::Point points[], int size);
 
 void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 
@@ -154,8 +156,25 @@ NRArenaItem *sp_item_get_arenaitem (SPItem *item, unsigned int key);
 
 void sp_item_bbox_desktop (SPItem *item, NRRect *bbox);
 
+NR::Matrix sp_item_i2doc_affine(SPItem const *item);
+
+inline NR::Matrix sp_item_i2root_affine(SPItem const *item)
+{
+	return sp_item_i2doc_affine(item);
+	/* Not sure if this function was intended to differ from sp_item_i2doc_affine.
+	   Previously the two versions just had identical code, possibly a copy&paste bug. */
+}
+
+/* Old NRMatrix version (deprecated). */
 NRMatrix *sp_item_i2doc_affine (SPItem const *item, NRMatrix *transform);
-NRMatrix *sp_item_i2root_affine (SPItem const *item, NRMatrix *transform);
+
+inline NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *transform)
+{
+	return sp_item_i2doc_affine(item, transform);
+	/* Used to have identical code to sp_item_i2doc_affine.
+	   Is this a copy&paste bug, should there be a difference?  -- pjrm */
+}
+
 /* Transformation to normalized (0,0-1,1) viewport */
 NRMatrix *sp_item_i2vp_affine (SPItem const *item, NRMatrix *transform);
 
@@ -167,10 +186,12 @@ NRMatrix *sp_item_i2vp_affine (SPItem const *item, NRMatrix *transform);
  *
  * Returns TRANSFORM.
  */
+NR::Matrix sp_item_i2d_affine(SPItem const *item);
 NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *transform);
 NR::Matrix sp_item_i2d_affine(SPItem const *item);
 
-void sp_item_set_i2d_affine (SPItem *item, NRMatrix const *transform);
+void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &transform);
+void sp_item_set_i2d_affine(SPItem *item, NRMatrix const *transform);
 
 NRMatrix *sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt, NRMatrix *transform);
 

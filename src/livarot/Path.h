@@ -274,9 +274,6 @@ private:
   static void ArcAngles ( NR::Point const &iS,  NR::Point const &iE, double rx,
                          double ry, double angle, bool large, bool wise,
                          double &sang, double &eang);
-  static void ArcAnglesAndCenter ( NR::Point const &iS,  NR::Point const &iE, double rx,
-                         double ry, double angle, bool large, bool wise,
-                                  double &sang, double &eang,NR::Point &dr);
   static void QuadraticPoint (double t,  NR::Point &oPt,   NR::Point const &iS,   NR::Point const &iM,   NR::Point const &iE);
   static void CubicTangent (double t,  NR::Point &oPt,  NR::Point const &iS,
 			     NR::Point const &iSd,  NR::Point const &iE,

@@ -49,7 +49,7 @@ sp_desktop_dt2doc_affine (SPDesktop const *desktop, NRMatrix *dt2doc)
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 	g_return_val_if_fail (dt2doc != NULL, NULL);
 
-	nr_matrix_invert (dt2doc, desktop->doc2dt);
+	*dt2doc = desktop->doc2dt.inverse();
 
 	return dt2doc;
 }
@@ -78,8 +78,7 @@ sp_desktop_w2doc_affine (SPDesktop const *desktop, NRMatrix *w2doc)
 	return w2doc;
 }
 
-NRMatrix *
-sp_desktop_doc2w_affine (SPDesktop const * desktop, NRMatrix *doc2w)
+NRMatrix *sp_desktop_doc2w_affine(SPDesktop const *desktop, NRMatrix *doc2w)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
@@ -115,8 +114,7 @@ sp_desktop_w2d_xy_point (SPDesktop const *dt, NRPoint *p, double x, double y)
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
 	g_return_val_if_fail (p != NULL, NULL);
 
-	p->x = NR_MATRIX_DF_TRANSFORM_X (dt->w2d, x, y);
-	p->y = NR_MATRIX_DF_TRANSFORM_Y (dt->w2d, x, y);
+	*p = NR::Point(x, y) * dt->w2d;
 
 	return p;
 }
@@ -128,8 +126,7 @@ sp_desktop_d2w_xy_point (SPDesktop const *dt, NRPoint *p, double x, double y)
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
 	g_return_val_if_fail (p != NULL, NULL);
 
-	p->x = NR_MATRIX_DF_TRANSFORM_X (dt->d2w, x, y);
-	p->y = NR_MATRIX_DF_TRANSFORM_Y (dt->d2w, x, y);
+	*p = NR::Point(x, y) * dt->d2w;
 
 	return p;
 }
@@ -137,16 +134,11 @@ sp_desktop_d2w_xy_point (SPDesktop const *dt, NRPoint *p, double x, double y)
 NRPoint *
 sp_desktop_d2doc_xy_point (SPDesktop const *dt, NRPoint *p, double x, double y)
 {
-	NRMatrix dt2doc;
-
 	g_return_val_if_fail (dt != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
 	g_return_val_if_fail (p != NULL, NULL);
 
-	nr_matrix_invert (&dt2doc, dt->doc2dt);
-
-	p->x = NR_MATRIX_DF_TRANSFORM_X (&dt2doc, x, y);
-	p->y = NR_MATRIX_DF_TRANSFORM_Y (&dt2doc, x, y);
+	*p = NR::Point(x, y) * dt->doc2dt.inverse();
 
 	return p;
 }
@@ -158,8 +150,7 @@ sp_desktop_doc2d_xy_point (SPDesktop const *dt, NRPoint *p, double x, double y)
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
 	g_return_val_if_fail (p != NULL, NULL);
 
-	p->x = NR_MATRIX_DF_TRANSFORM_X (dt->doc2dt, x, y);
-	p->y = NR_MATRIX_DF_TRANSFORM_Y (dt->doc2dt, x, y);
+	*p = NR::Point(x, y) * dt->doc2dt;
 
 	return p;
 }
@@ -167,36 +158,22 @@ sp_desktop_doc2d_xy_point (SPDesktop const *dt, NRPoint *p, double x, double y)
 NRPoint *
 sp_desktop_w2doc_xy_point (SPDesktop const *dt, NRPoint *p, double x, double y)
 {
-	NRMatrix dt2doc;
-	double dtx, dty;
-
 	g_return_val_if_fail (dt != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
 	g_return_val_if_fail (p != NULL, NULL);
 
-	nr_matrix_invert (&dt2doc, dt->doc2dt);
-
-	dtx = NR_MATRIX_DF_TRANSFORM_X (dt->w2d, x, y);
-	dty = NR_MATRIX_DF_TRANSFORM_Y (dt->w2d, x, y);
-	p->x = NR_MATRIX_DF_TRANSFORM_X (&dt2doc, dtx, dty);
-	p->y = NR_MATRIX_DF_TRANSFORM_Y (&dt2doc, dtx, dty);
+	*p = NR::Point(x, y) * dt->w2d * dt->doc2dt.inverse();
 
 	return p;
 }
 
-NRPoint *
-sp_desktop_doc2w_xy_point (SPDesktop const *dt, NRPoint *p, double x, double y)
+NRPoint *sp_desktop_doc2w_xy_point(SPDesktop const *dt, NRPoint *p, double x, double y)
 {
-	double dtx, dty;
-
 	g_return_val_if_fail (dt != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
 	g_return_val_if_fail (p != NULL, NULL);
 
-	dtx = NR_MATRIX_DF_TRANSFORM_X (dt->doc2dt, x, y);
-	dty = NR_MATRIX_DF_TRANSFORM_Y (dt->doc2dt, x, y);
-	p->x = NR_MATRIX_DF_TRANSFORM_X (dt->d2w, dtx, dty);
-	p->y = NR_MATRIX_DF_TRANSFORM_Y (dt->d2w, dtx, dty);
+	*p = NR::Point(x, y) * dt->doc2dt * dt->d2w;
 
 	return p;
 }
@@ -269,7 +246,7 @@ NR::Matrix const sp_desktop_w2doc_affine (SPDesktop const *desktop)
 	return desktop->w2d * desktop->doc2dt.inverse();
 }
 
-NR::Matrix const sp_desktop_doc2w_affine (SPDesktop const * desktop)
+NR::Matrix const sp_desktop_doc2w_affine(SPDesktop const *desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
@@ -279,48 +256,47 @@ NR::Matrix const sp_desktop_doc2w_affine (SPDesktop const * desktop)
 
 NR::Matrix const sp_desktop_root2dt_affine (SPDesktop const *dt)
 {
-	const SPRoot *root = SP_ROOT (SP_DOCUMENT_ROOT (SP_VIEW_DOCUMENT (dt)));
-	
+	SPRoot const *root = SP_ROOT(SP_DOCUMENT_ROOT(SP_VIEW_DOCUMENT(dt)));
 	return root->c2p * dt->doc2dt;
 }
 
 NR::Matrix const sp_desktop_dt2root_affine (SPDesktop const *dt)
 {
-	return sp_desktop_root2dt_affine (dt).inverse();
+	return sp_desktop_root2dt_affine(dt).inverse();
 }
 
 
 
-NR::Point sp_desktop_w2d_xy_point (SPDesktop const *dt, const NR::Point p)
+NR::Point sp_desktop_w2d_xy_point(SPDesktop const *dt, NR::Point const p)
 {
 	assert (dt != NULL);
 	assert (SP_IS_DESKTOP (dt));
 
-	return dt->w2d * p;
+	return p * dt->w2d;
 }
 
-NR::Point sp_desktop_d2w_xy_point (SPDesktop const *dt, const NR::Point p)
+NR::Point sp_desktop_d2w_xy_point(SPDesktop const *dt, NR::Point const p)
 {
 	assert (dt != NULL);
 	assert (SP_IS_DESKTOP (dt));
 
-	return dt->d2w * p;
+	return p * dt->d2w;
 }
 
-NR::Point sp_desktop_d2doc_xy_point (SPDesktop const *dt, const NR::Point p)
+NR::Point sp_desktop_d2doc_xy_point(SPDesktop const *dt, NR::Point const p)
 {
 	assert (dt != NULL);
 	assert (SP_IS_DESKTOP (dt));
 
-	return dt->doc2dt.inverse() * p;
+	return p * dt->doc2dt.inverse();
 }
 
-NR::Point sp_desktop_doc2d_xy_point (SPDesktop const *dt, const NR::Point p)
+NR::Point sp_desktop_doc2d_xy_point(SPDesktop const *dt, NR::Point const p)
 {
 	assert (dt != NULL);
 	assert (SP_IS_DESKTOP (dt));
 
-	return dt->doc2dt * p;
+	return p * dt->doc2dt;
 }
 
 NR::Point sp_desktop_w2doc_xy_point (SPDesktop const *dt, const NR::Point p)
@@ -328,24 +304,24 @@ NR::Point sp_desktop_w2doc_xy_point (SPDesktop const *dt, const NR::Point p)
 	assert (dt != NULL);
 	assert (SP_IS_DESKTOP (dt));
 
-	return dt->doc2dt.inverse() * (dt->w2d * p);
+	return p * dt->w2d * dt->doc2dt.inverse();
 }
 
-NR::Point sp_desktop_doc2w_xy_point (SPDesktop const *dt, const NR::Point p)
+NR::Point sp_desktop_doc2w_xy_point(SPDesktop const *dt, NR::Point const p)
 {
 	assert (dt != NULL);
 	assert (SP_IS_DESKTOP (dt));
 
-	return dt->d2w * (dt->doc2dt * p);
+	return p * dt->doc2dt * dt->d2w;
 }
 
-NR::Point sp_desktop_root2dt_xy_point (SPDesktop const *dt, const NR::Point p)
+NR::Point sp_desktop_root2dt_xy_point(SPDesktop const *dt, NR::Point const p)
 {
-	return sp_desktop_root2dt_affine(dt) * p;
+	return p * sp_desktop_root2dt_affine(dt);
 }
 
-NR::Point sp_desktop_dt2root_xy_point (SPDesktop const *dt, const NR::Point p)
+NR::Point sp_desktop_dt2root_xy_point(SPDesktop const *dt, NR::Point const p)
 {
-	return sp_desktop_dt2root_affine (dt) * p;
+	return p * sp_desktop_dt2root_affine(dt);
 }
 

@@ -63,6 +63,8 @@ struct NRRectL {
 
 namespace NR {
 
+class Matrix;
+
 enum Dim2 { X=0, Y };
 
 class Point {
@@ -155,6 +157,9 @@ public:
 		}
 		return *this;
 	}
+
+	Point &operator*=(Matrix const &m);
+
 private:
 	Coord _pt[2];
 };

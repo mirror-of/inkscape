@@ -247,23 +247,23 @@ static gint
 sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 {
     SPGradientPosition *pos = SP_GRADIENT_POSITION (widget);
-    
+
     if (!pos->gradient) return FALSE;
-    
-    NR::Point mouse(event->x, event->y);
-    NR::Point mouse_gs = pos->w2gs * mouse;
-    
+
+    NR::Point const mouse(event->x, event->y);
+    NR::Point const mouse_gs( mouse * NR::Matrix(pos->w2gs) );
+
     if (pos->mode == SP_GRADIENT_POSITION_MODE_LINEAR) {
 	/* Linear mode */
 	if (event->button == 1) {
 	    pos->changed = FALSE;
 	    g_signal_emit (G_OBJECT (pos), position_signals[GRABBED], 0);
-	    double d = NR::L2(mouse - (pos->gs2w * pos->linear.start));
+	    double d = NR::L2( mouse - ( pos->linear.start * NR::Matrix(pos->gs2w) ) );
 	    if (d < RADIUS) {
 		pos->dragging = 1;
 		pos->linear.start = mouse_gs;
 	    }
-	    d = NR::L2(mouse - (pos->gs2w * pos->linear.end));
+	    d = NR::L2( mouse - ( pos->linear.end * NR::Matrix(pos->gs2w) ) );
 	    if (d < RADIUS) {
 		pos->dragging = 2;
 		pos->linear.end = mouse_gs;
@@ -281,7 +281,7 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 	if (event->button == 1) {
 	    pos->changed = FALSE;
 	    g_signal_emit (G_OBJECT (pos), position_signals[GRABBED], 0);
-	    double d = NR::L2(mouse - (pos->gs2w * pos->radial.f));
+	    double d = NR::L2( mouse - ( pos->radial.f * NR::Matrix(pos->gs2w) ) );
 	    //g_print("d = %f\n", d);
 	    if (d < RADIUS) {
 		pos->dragging = 2;
@@ -290,7 +290,7 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 	    
 	    // Preference is given to moving the center, unless the
 	    // shift key is down
-	    d = NR::L2(mouse - (pos->gs2w * pos->radial.center));
+	    d = NR::L2( mouse - ( pos->radial.center * NR::Matrix(pos->gs2w) ) );
 	    //g_print("d = %f\n", d);
 	    if ((d < RADIUS) && !(event->state & GDK_SHIFT_MASK)) {
 		pos->dragging = 1;
@@ -351,7 +351,7 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 {
     SPGradientPosition *pos = SP_GRADIENT_POSITION (widget);
 
-    NR::Point mouse_gs = pos->w2gs * NR::Point(event->x, event->y);
+    NR::Point const mouse_gs = NR::Point(event->x, event->y) * NR::Matrix(pos->w2gs);
     
     if (pos->mode == SP_GRADIENT_POSITION_MODE_LINEAR) {
 	switch(pos->dragging) {

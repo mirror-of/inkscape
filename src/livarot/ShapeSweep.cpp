@@ -2653,13 +2653,10 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
   NR::Point usvs;
   usvs = irs->pData[rSt].rx - ils->pData[lSt].rx;
 
-  NR::Matrix m;
   // pas sur de l'ordre des coefs de m
-  m[0] = ldir[0];
-  m[1] = ldir[1];
-  m[2] = rdir[0];
-  m[3] = rdir[1];
-
+  NR::Matrix m(ldir[0], ldir[1],
+	       rdir[0], rdir[1],
+	       0, 0);
   double det = m.det();
 
   double tdet = det * ils->eData[ilb].isqlength * irs->eData[irb].isqlength;

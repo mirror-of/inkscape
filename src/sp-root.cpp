@@ -180,7 +180,6 @@ static void
 sp_root_release (SPObject *object)
 {
 	SPRoot *root = (SPRoot *) object;
-
 	root->defs = NULL;
 
 	if (((SPObjectClass *) parent_class)->release)
@@ -198,8 +197,7 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	gulong unit;
 
-	SPItem *item = SP_ITEM (object);
-	SPRoot *root = SP_ROOT (object);
+	SPRoot *root = SP_ROOT(object);
 
 	switch (key) {
 	case SP_ATTR_VERSION:
@@ -381,8 +379,8 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	if (((SPObjectClass *) (parent_class))->child_added)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
-	const gchar *id = sp_repr_attr (child, "id");
-	SPObject *co = sp_document_lookup_id (object->document, id);
+	gchar const *id = sp_repr_attr(child, "id");
+	SPObject *co = sp_document_lookup_id(object->document, id);
 	g_assert (co != NULL);
 
 	if (SP_IS_DEFS (co)) {
@@ -401,13 +399,12 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
  *  
  *  Removes the given child from this SPRoot object.
  */
-static void
-sp_root_remove_child (SPObject * object, SPRepr * child)
+static void sp_root_remove_child(SPObject *object, SPRepr *child)
 {
 	SPRoot *root = (SPRoot *) object;
-	const gchar *id = sp_repr_attr (child, "id");
-	SPObject *co = sp_document_lookup_id (object->document, id);
-	g_assert (co != NULL);
+	gchar const *id = sp_repr_attr(child, "id");
+	SPObject *co = sp_document_lookup_id(object->document, id);
+	g_assert( co != NULL );
 
 	if (SP_IS_DEFS (co) && root->defs == (SPDefs *) co) {
 		SPObject *c;
@@ -486,6 +483,8 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 			width = (root->viewBox.x1 - root->viewBox.x0) * scale;
 			height = (root->viewBox.y1 - root->viewBox.y0) * scale;
 			/* Now place viewbox to requested position */
+			/* todo: Use an array lookup to find the 0.0/0.5/1.0 coefficients,
+			   as is done for dialogs/align.cpp. */
 			switch (root->aspect_align) {
 			case SP_ASPECT_XMIN_YMIN:
 				x = 0.0;
@@ -529,19 +528,22 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 				break;
 			}
 		}
+
 		/* Compose additional transformation from scale and position */
-		NR::Matrix q;
-		q[0] = width / (root->viewBox.x1 - root->viewBox.x0);
-		q[1] = 0.0;
-		q[2] = 0.0;
-		q[3] = height / (root->viewBox.y1 - root->viewBox.y0);
-		q[4] = -root->viewBox.x0 * q[0] + x;
-		q[5] = -root->viewBox.y0 * q[3] + y;
+		NR::Point const viewBox_min(root->viewBox.x0,
+					    root->viewBox.y0);
+		NR::Point const viewBox_max(root->viewBox.x1,
+					    root->viewBox.y1);
+		NR::scale const viewBox_length( viewBox_max - viewBox_min );
+		NR::scale const new_length(width, height);
+
 		/* Append viewbox transformation */
-		root->c2p = q * root->c2p;
+		/* TODO: The below looks suspicious to me (pjrm): I wonder whether the RHS
+		   expression should have c2p at the beginning rather than at the end.  Test it. */
+		root->c2p = NR::translate(-viewBox_min) * ( new_length / viewBox_length ) * NR::translate(x, y) * root->c2p;
 	}
 
-	nr_matrix_multiply (&rctx.i2doc, root->c2p, &rctx.i2doc);
+	rctx.i2doc = root->c2p * NR::Matrix(&rctx.i2doc);
 
 	/* Initialize child viewport */
 	if (root->viewBox_set) {
@@ -666,9 +668,10 @@ sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned in
 	SPRoot *root = SP_ROOT (item);
 
 	if (((SPItemClass *) (parent_class))->bbox) {
+		NRMatrix const product( root->c2p * NR::Matrix(transform) );
 		((SPItemClass *) (parent_class))->bbox (item, bbox, 
-												root->c2p*NR::Matrix(transform),
-												flags);
+							&product,
+							flags);
 	}
 }
 

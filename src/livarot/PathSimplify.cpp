@@ -213,7 +213,6 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
   double * Yk;				// la coordonnee traitee (x puis y)
   double * tk;				// les tk
   double *  Qk;				// les Qk
-  NR::Matrix M;				// la matrice tNN
   NR::Point P;
   NR::Point Q;
   
@@ -308,7 +307,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     tk[i] /= tk[nbPt - 1];
   
   // la matrice tNN
-  M[0] = M[2] = M[1] = M[3] = M[4] = M[5] = 0;
+  NR::Matrix M(0, 0, 0, 0, 0, 0);
   for (int i = 1; i < nbPt - 1; i++)
   {
     M[0] += N13 (tk[i]) * N13 (tk[i]);
@@ -351,7 +350,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     Q[1] += N23 (tk[i]) * Qk[i];
   }
   
-  P=M*Q;
+  P = Q * M;
   //  L_MAT_MulV (M, Q, P);
   cp1[0] = P[0];
   cp2[0] = P[1];
@@ -368,7 +367,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     Q[1] += N23 (tk[i]) * Qk[i];
   }
   
-  P=M*Q;
+  P = Q * M;
   //  L_MAT_MulV (M, Q, P);
   cp1[1] = P[0];
   cp2[1] = P[1];
@@ -455,7 +454,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
       Q[1] += N23 (tk[i]) * Qk[i];
     }
     
-    P=M*Q;
+    P = Q * M;
     //      L_MAT_MulV (M, Q, P);
     cp1[0] = P[0];
     cp2[0] = P[1];
@@ -472,7 +471,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
       Q[1] += N23 (tk[i]) * Qk[i];
     }
     
-    P=M*Q;
+    P = Q * M;
     //      L_MAT_MulV (M, Q, P);
     cp1[1] = P[0];
     cp2[1] = P[1];

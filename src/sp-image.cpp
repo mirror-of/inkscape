@@ -521,16 +521,16 @@ static int sp_image_snappoints (SPItem *item, NR::Point p[], int size)
 
 	int i = 0;
 	if (i < size) {
-		p[i++] = i2d * NR::Point(x0, y0);
+		p[i++] = NR::Point(x0, y0) * i2d;
 	}
 	if (i < size) {
-		p[i++] = i2d * NR::Point(x1, y0);
+		p[i++] = NR::Point(x1, y0) * i2d;
 	}
 	if (i < size) {
-		p[i++] = i2d * NR::Point(x1, y1);
+		p[i++] = NR::Point(x1, y1) * i2d;
 	}
 	if (i < size) {
-		p[i++] = i2d * NR::Point(x0, y1);
+		p[i++] = NR::Point(x0, y1) * i2d;
 	}
 
 	return i;

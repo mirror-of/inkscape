@@ -25,9 +25,18 @@ gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NR::Point* req);
 gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point& req, unsigned const dim);
 
 /* List of points methods */
-double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NR::Point const p[], int const length, NR::Point const norm, double const sy, unsigned const dim);
 
-double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], const int length, const NR::Point norm, NR::Point p);
+double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
+				   NR::Point const &norm, NR::Point const &s);
+
+double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
+				double const dx, unsigned const dim);
+
+double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NR::Point const p[], int const length,
+				      NR::Point const &norm, double const sx, unsigned const dim);
+
+double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NR::Point const p[], int const length,
+				     NR::Point const &norm, double const sx, unsigned const dim);
 
 // These little functions are only here to provide an edge between NR::Point-land and NR::Point-land.
 

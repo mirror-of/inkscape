@@ -776,12 +776,20 @@ void Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS, const NR:
 	
 	oPt = 3*t*t*ax+2*t*bx+cx;
 }
+
+static void ArcAnglesAndCenter(NR::Point const &iS, NR::Point const &iE,
+			       double rx, double ry, double angle,
+			       bool large, bool wise,
+			       double &sang, double &eang, NR::Point &dr);
+
 void Path::ArcAngles( const NR::Point &iS, const NR::Point &iE,double rx,double ry,double angle,bool large,bool wise,double &sang,double &eang)
 {
 	NR::Point  dr;
 	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
 }
-void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
+
+/* N.B. If iS == iE then sang,eang,dr each become NaN.  Probably a bug. */
+static void ArcAnglesAndCenter(NR::Point const &iS, NR::Point const &iE,
                               double rx, double ry, double angle,
                               bool large, bool wise,
                               double &sang, double &eang, NR::Point &dr)
@@ -791,15 +799,14 @@ void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
 	NR::Point cse(dot(se,ca),cross(se,ca));
 	cse[0] /= rx;
 	cse[1] /= ry;
-	double   l = dot(cse,cse);
-	const double d = sqrt(std::max(1-l/4, 0.0));
-	NR::Point   csd = cse.ccw();
-	l=sqrt(l);
-	csd/=l;
-	csd*=d;
-  
-	NR::Point  ra;
-	ra=-(csd+0.5*cse);
+	double const lensq = dot(cse,cse);
+	NR::Point csd = ( ( lensq < 4
+			    ? sqrt( 1/lensq - .25 )
+			    : 0.0 )
+			  * cse.ccw() );
+
+	NR::Point ra;
+	ra = -csd - 0.5 * cse;
 	if ( ra[0] <= -1 ) {
 		sang=M_PI;
 	} else if ( ra[0] >= 1 ) {
@@ -808,7 +815,8 @@ void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
 		sang=acos(ra[0]);
 		if ( ra[1] < 0 ) sang=2*M_PI-sang;
 	}
-	ra=-csd+0.5*cse;
+
+	ra = -csd + 0.5 * cse;
 	if ( ra[0] <= -1 ) {
 		eang=M_PI;
 	} else if ( ra[0] >= 1 ) {
@@ -820,14 +828,14 @@ void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
 	
 	csd[0]*=rx;csd[1]*=ry;
 	ca[1]=-ca[1]; // because it's the inverse rotation
-  
+
 	dr[0]=dot(csd,ca);
 	dr[1]=cross(csd,ca);
-  
+
 	ca[1]=-ca[1];
 	
 	if ( wise ) {
-		if ( large == true ) {
+		if (large) {
 			dr=-dr;
 			double  swap=eang;eang=sang;sang=swap;
 			eang+=M_PI;sang+=M_PI;
@@ -835,7 +843,7 @@ void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
 			if ( sang >= 2*M_PI ) sang-=2*M_PI;
 		}
 	} else {
-		if ( large == false ) {
+		if (!large) {
 			dr=-dr;
 			double  swap=eang;eang=sang;sang=swap;
 			eang+=M_PI;sang+=M_PI;
@@ -845,40 +853,47 @@ void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
 	}
 	dr+=0.5*(iS+iE);
 }
+
 void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
-                 double rx, double ry, double angle,
-                 bool large, bool wise, double tresh)
+                 double const rx, double const ry, double const angle,
+                 bool const large, bool const wise, double const tresh)
 {
-	if ( rx <= 0.0001 || ry <= 0.0001 )
-		return; // on ajoute toujours un lineto apres, donc c bon
-	
-	double       sang,eang;
-	NR::Point   dr;
+	/* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
+	   apart than the diameter.  Also check that we do the right thing for negative radius.
+	   (Same for the other DoArc functions in this file.) */
+	if ( rx <= 0.0001 || ry <= 0.0001 ) {
+		return;
+		// We always add a lineto afterwards, so this is fine.
+		// [on ajoute toujours un lineto apres, donc c bon]
+	}
+
+	double sang, eang;
+	NR::Point dr;
 	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
-  
-  double     incr=0.1;
-	if ( wise ) {
-		if ( sang < eang ) sang+=2*M_PI;
-    NR::rotate omega(-incr);
-    NR::rotate cb(angle+sang);
-    NR::scale  ar(NR::Point(rx,ry));
-		for (double b=sang-incr;b>eang;b-=incr) {
-      cb=omega*cb;
-			NR::Point  u=ar*cb;
-			AddPoint(u+dr);
+	/* TODO: This isn't as good numerically as treating iS and iE as primary.  E.g. consider
+	   the case of low curvature (i.e. very large radius). */
+
+	NR::scale const ar(rx, ry);
+	NR::rotate cb( angle + sang );
+	if (wise) {
+		double const incr = -0.1;
+		if ( sang < eang ) sang += 2*M_PI;
+		NR::rotate const omega(incr);
+		for (double b = sang + incr ; b > eang ; b += incr) {
+			cb = omega * cb;
+			AddPoint( cb.vec * ar + dr );
 		}
 	} else {
-		if ( sang > eang ) sang-=2*M_PI;
-    NR::rotate omega(incr);
-    NR::rotate cb(angle+sang);
-    NR::scale  ar(NR::Point(rx,ry));
-		for (double b=sang+incr;b<eang;b+=incr) {
-      cb=omega*cb;
-			NR::Point  u=ar*cb;
-			AddPoint(u + dr);
+		double const incr = 0.1;
+		if ( sang > eang ) sang -= 2*M_PI;
+		NR::rotate const omega(incr);
+		for (double b = sang + incr ; b < eang ; b += incr) {
+			cb = omega * cb;
+			AddPoint( cb.vec * ar + dr);
 		}
 	}
 }
+
 void Path::RecCubicTo( NR::Point const &iS, NR::Point const &isD, 
                        NR::Point const &iE, NR::Point const &ieD,
                        double tresh,int lev,double maxL)
@@ -956,41 +971,46 @@ void Path::RecBezierTo(const NR::Point &iP,
 	}
 }
 
-
 void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
-                 double rx,double ry,double angle,
-                 bool large,bool wise,double tresh,int piece)
+                 double const rx, double const ry, double const angle,
+                 bool const large, bool const wise, double const tresh, int const piece)
 {
-	if ( rx <= 0.0001 || ry <= 0.0001 ) return; // on ajoute toujours un lineto apres, donc c bon
-	
-	double       sang,eang;
-	NR::Point   dr;
+	/* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
+	   apart than the diameter.  Also check that we do the right thing for negative radius.
+	   (Same for the other DoArc functions in this file.) */
+	if ( rx <= 0.0001 || ry <= 0.0001 ) {
+		return;
+		// We always add a lineto afterwards, so this is fine.
+		// [on ajoute toujours un lineto apres, donc c bon]
+	}
+
+	double sang, eang;
+	NR::Point dr;
 	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
-  
-  
-  double     incr=0.1;
-	if ( wise ) {
-		if ( sang < eang ) sang+=2*M_PI;
-    NR::rotate omega(-incr);
-    NR::rotate cb(angle+sang);
-    NR::scale  ar(NR::Point(rx,ry));
-		for (double b=sang-incr;b>eang;b-=incr) {
-      cb=omega*cb;
-			NR::Point  u=ar*cb;
-			AddPoint(u+dr,piece,(sang-b)/(sang-eang));
+	/* TODO: This isn't as good numerically as treating iS and iE as primary.  E.g. consider
+	   the case of low curvature (i.e. very large radius). */
+
+	NR::scale const ar(rx, ry);
+	NR::rotate cb( angle + sang );
+	if (wise) {
+		double const incr = -0.1;
+		if ( sang < eang ) sang += 2*M_PI;
+		NR::rotate const omega(incr);
+		for (double b = sang + incr ; b > eang ; b += incr) {
+			cb = omega * cb;
+			AddPoint(cb.vec * ar + dr, piece, (sang-b)/(sang-eang));
 		}
 	} else {
-		if ( sang > eang ) sang-=2*M_PI;
-    NR::rotate omega(incr);
-    NR::rotate cb(angle+sang);
-    NR::scale  ar(NR::Point(rx,ry));
-		for (double b=sang+incr;b<eang;b+=incr) {
-      cb=omega*cb;
-			NR::Point  u=ar*cb;
-			AddPoint(u+dr,piece,(b-sang)/(eang-sang));
+		double const incr = 0.1;
+		if ( sang > eang ) sang -= 2*M_PI;
+		NR::rotate const omega(incr);
+		for (double b = sang + incr ; b < eang ; b += incr) {
+			cb = omega * cb;
+			AddPoint(cb.vec * ar + dr, piece, (b-sang)/(eang-sang));
 		}
 	}
 }
+
 void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD, 
                       NR::Point const &iE, NR::Point const &ieD,
                       double tresh,int lev,double st,double et,int piece)
@@ -1043,61 +1063,49 @@ void Path::RecBezierTo(NR::Point const &iP,
 	}
 }
 
-void Path::DoArc(NR::Point const &iS,NR::Point const &iE,
-                 double rx, double ry, double angle,
-                 bool large, bool wise, double tresh,
-                 int piece, offset_orig& orig)
+void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
+                 double const rx, double const ry, double const angle,
+                 bool const large, bool const wise, double const tresh,
+                 int const piece, offset_orig &orig)
 {
-	// on n'arrivera jamais ici, puisque les offsets sont fait de cubiques
-	if ( rx <= 0.0001 || ry <= 0.0001 ) return; // on ajoute toujours un lineto apres, donc c bon
-	
-	double       sang,eang;
-	NR::Point   dr;
+	// Will never arrive here, as offsets are made of cubics.
+	// [on n'arrivera jamais ici, puisque les offsets sont fait de cubiques]
+	/* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
+	   apart than the diameter.  Also check that we do the right thing for negative radius.
+	   (Same for the other DoArc functions in this file.) */
+	if ( rx <= 0.0001 || ry <= 0.0001 ) {
+		return;
+		// We always add a lineto afterwards, so this is fine.
+		// [on ajoute toujours un lineto apres, donc c bon]
+	}
+
+	double sang, eang;
+	NR::Point dr;
 	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
-  
-  /*	NR::Point  ca(cos(angle),sin(angle));
-	if ( wise ) {
-		if ( sang < eang ) sang+=2*M_PI;
-		for (double b=sang-0.1;b>eang;b-=0.1) {
-			NR::Point  cb(cos(b),sin(b));
-			NR::Point  ar(rx,ry);
-			NR::Point  u=ca^cb;
-			u*=ar;
-			AddPoint(u + dr,piece,(sang-b)/(sang-eang));
+	/* TODO: This isn't as good numerically as treating iS and iE as primary.  E.g. consider
+	   the case of low curvature (i.e. very large radius). */
+
+	NR::scale const ar(rx, ry);
+	NR::rotate cb( angle + sang );
+	if (wise) {
+		double const incr = -0.1;
+		if ( sang < eang ) sang += 2*M_PI;
+		NR::rotate const omega(incr);
+		for (double b = sang + incr ; b > eang ; b += incr) {
+			cb = omega * cb;
+			AddPoint(cb.vec * ar + dr, piece, (sang-b)/(sang-eang));
 		}
 	} else {
-		if ( sang > eang ) sang-=2*M_PI;
-		for (double b=sang+0.1;b<eang;b+=0.1) {
-			NR::Point  cb(cos(b),sin(b));
-			NR::Point  ar(rx,ry);
-			NR::Point  u=ca^cb;
-			u*=ar;
-			AddPoint(u + dr,piece,(b-sang)/(eang-sang));
-		}
-	}*/
-  double   incr=0.1;
-	if ( wise ) {
-		if ( sang < eang ) sang+=2*M_PI;
-    NR::rotate   omega(-incr);
-    NR::rotate   cb(angle+sang);
-    NR::scale    ar(NR::Point(rx,ry));
-		for (double b=sang-incr;b>eang;b-=incr) {
-      cb=omega*cb;
-			NR::Point  u=ar*cb;
-			AddPoint(u + dr,piece,(sang-b)/(sang-eang));
-		}
-	} else {
-		if ( sang > eang ) sang-=2*M_PI;
-    NR::rotate   omega(incr);
-    NR::rotate   cb(angle+sang);
-    NR::scale    ar(NR::Point(rx,ry));
-		for (double b=sang+incr;b<eang;b+=incr) {
-      cb=omega*cb;
-			NR::Point  u=ar*cb;
-			AddPoint(u + dr,piece,(b-sang)/(eang-sang));
+		double const incr = 0.1;
+		if ( sang > eang ) sang -= 2*M_PI;
+		NR::rotate const omega(incr);
+		for (double b = sang + incr ; b < eang ; b += incr) {
+			cb = omega * cb;
+			AddPoint(cb.vec * ar + dr, piece, (b-sang)/(eang-sang));
 		}
 	}
 }
+
 void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD, 
                       NR::Point const &iE, NR::Point const &ieD,
                       double tresh, int lev, double st, double et,

@@ -81,7 +81,6 @@ sp_text_context_get_type (void)
 static void
 sp_text_context_class_init (SPTextContextClass * klass)
 {
-	GObjectClass *object_class = (GObjectClass *) klass;
 	SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
@@ -532,8 +531,8 @@ sp_text_context_update_cursor (SPTextContext *tc)
 	if (tc->text) {
 		NR::Point p0, p1;
 		sp_text_get_cursor_coords (SP_TEXT (tc->text), tc->ipos, p0, p1);
-		NR::Point d0 = sp_item_i2d_affine (SP_ITEM (tc->text)) * p0;
-		NR::Point d1 = sp_item_i2d_affine (SP_ITEM (tc->text)) * p1;
+		NR::Point const d0 = p0 * sp_item_i2d_affine(SP_ITEM(tc->text));
+		NR::Point const d1 = p1 * sp_item_i2d_affine(SP_ITEM(tc->text));
 		sp_canvas_item_show (tc->cursor);
 		sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), d0, d1);
 		/* fixme: ... need another transformation to get canvas widget coordinate space? */

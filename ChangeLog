@@ -1,5 +1,3 @@
-2004-02-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-
 2004-02-09  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/widgets/sp-color-wheel.h, src/widgets/sp-color-wheel.cpp,
@@ -10,6 +8,22 @@
 	Added new, smaller color wheel selector.
 
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/desktop-affine.cpp, src/desktop-snap.cpp,
+	src/desktop-snap.h, src/desktop.cpp, src/knotholder.cpp,
+	src/nodepath.cpp, src/selection-chemistry.cpp, src/seltrans.cpp,
+	src/seltrans.h, src/sp-ellipse.cpp, src/sp-image.cpp,
+	src/sp-item.cpp, src/sp-item.h, src/sp-rect.cpp, src/sp-root.cpp,
+	src/text-context.cpp, src/dialogs/xml-tree.cpp,
+	src/libnr/Makefile.am, src/libnr/nr-matrix.cpp,
+	src/libnr/nr-matrix.h, src/libnr/nr-types.h,
+	src/libnrtype/nr-rasterfont.cpp, src/livarot/Path.h,
+	src/livarot/PathConversion.cpp, src/livarot/PathSimplify.cpp,
+	src/livarot/ShapeSweep.cpp, src/widgets/gradient-position.cpp,
+	src/widgets/sp-color-wheel-selector.cpp,
+	src/widgets/sp-color-wheel.cpp:
+	Change matrices to be suitable for right multiplication.
+	(Also miscellaneous cleanups as mentioned below.)
 
 	* src/widgets/sp-color-wheel-selector.cpp
 	(sp_color_wheel_selector_get_type):
@@ -38,7 +52,7 @@
 	function instead of implicit casting.
 
 	* src/arc-context.cpp, src/document.cpp, src/draw-context.cpp,
-	src/selection.cpp, src/selection.h, src/selection-chemistry.cpp,
+	src/selection.cpp, src/selection.h,
 	src/sp-ellipse.cpp, src/sp-gradient.cpp, src/sp-image.cpp,
 	src/sp-namedview.cpp, src/sp-offset.cpp, src/sp-rect.cpp,
 	src/sp-spiral.cpp, src/sp-star.cpp,

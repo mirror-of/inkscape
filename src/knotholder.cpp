@@ -109,8 +109,8 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 	g_object_set (G_OBJECT (e->knot->item), "mode", mode, NULL);
 	knot_holder->entity = g_slist_append (knot_holder->entity, e);
 
-	/* move to current point */
-	NR::Point dp = sp_item_i2d_affine(item) * e->knot_get (item);
+	/* Move to current point. */
+	NR::Point dp = e->knot_get(item) * sp_item_i2d_affine(item);
 	sp_knot_set_position (e->knot, &dp, SP_KNOT_STATE_NORMAL);
 
 	e->handler_id = g_signal_connect (G_OBJECT (e->knot), "moved", G_CALLBACK (knot_moved_handler), knot_holder);
@@ -134,24 +134,21 @@ knot_moved_handler (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 	for (GSList *el = knot_holder->entity; el; el = el->next) {
 		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;
 		if (e->knot == knot) {
-			NR::Point q = sp_item_i2d_affine(item).inverse() * *p;
-
+			NR::Point const q = *p * sp_item_i2d_affine(item).inverse();
 			e->knot_set (item, q, state);
-
 			break;
 		}
 	}
 	
 	sp_shape_set_shape (SP_SHAPE (item));
 
-	NR::Matrix i2d = sp_item_i2d_affine(item);
+	NR::Matrix const i2d(sp_item_i2d_affine(item));
 
 	for (GSList *el = knot_holder->entity; el; el = el->next) {
 		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;
 		GObject *kob = G_OBJECT (e->knot);
 
-		NR::Point dp = i2d * e->knot_get (item);
-
+		NR::Point dp( e->knot_get(item) * i2d );
 		g_signal_handler_block (kob, e->handler_id);
 		sp_knot_set_position (e->knot, &dp, SP_KNOT_STATE_NORMAL);
 		g_signal_handler_unblock (kob, e->handler_id);

@@ -123,30 +123,30 @@ Matrix::Matrix(const NRMatrix *nr) {
 	}
 }
 
-Matrix operator*(const Matrix &m0, const Matrix &m1)
+Matrix operator*(Matrix const &m0, Matrix const &m1)
 {
-	Matrix d;
-	
-	d[0] = m0[0] * m1[0] + m0[1] * m1[2];
-	d[1] = m0[0] * m1[1] + m0[1] * m1[3];
-	d[2] = m0[2] * m1[0] + m0[3] * m1[2];
-	d[3] = m0[2] * m1[1] + m0[3] * m1[3];
-	d[4] = m0[4] * m1[0] + m0[5] * m1[2] + m1[4];
-	d[5] = m0[4] * m1[1] + m0[5] * m1[3] + m1[5];
-	
-	return d;
+	Matrix ret(m0[0] * m1[0] + m0[1] * m1[2],          m0[0] * m1[1] + m0[1] * m1[3],
+		   m0[2] * m1[0] + m0[3] * m1[2],          m0[2] * m1[1] + m0[3] * m1[3],
+		   m0[4] * m1[0] + m0[5] * m1[2] + m1[4],  m0[4] * m1[1] + m0[5] * m1[3] + m1[5]);
+	return ret;
+}
+
+Matrix &Matrix::operator*=(Matrix const &o)
+{
+	*this = *this * o;
+	return *this;
 }
 
 Matrix Matrix::inverse() const
 {
-	Matrix d;
+	Matrix d(0,0,0,0,0,0);
 	
 	NR::Coord det = _c[0] * _c[3] - _c[1] * _c[2];
 	if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
 		Coord t = _c[3] / det;
 		d._c[3] = _c[0] / det;
 		d._c[0] = t;
-		t = -_c[1] / det;
+
 		d._c[1] = -_c[1] / det;
 		d._c[2] = -_c[2] / det;
 		d._c[4] = -_c[4] * d._c[0] - _c[5] * d._c[2];
@@ -158,71 +158,32 @@ Matrix Matrix::inverse() const
 	return d;
 }
 
-/*Matrix translate (const Point p)
-{
-	Matrix m;
-	m._c[0] = 1.0; m._c[2] = 0.0;
-	m._c[1] = 0.0; m._c[3] = 1.0;
-	// translation
-	for ( int i = 0 ; i < 2 ; i++ ) {
-		m._c[4+i] = p[i];
-	}
-	return m;
-}*/
-
 void Matrix::set_identity ()
 {
-	_c[0] = 1.0; _c[2] = 0.0;
-	_c[1] = 0.0; _c[3] = 1.0;
+	_c[0] = 1.0; _c[1] = 0.0;
+	_c[2] = 0.0; _c[3] = 1.0;
 	// translation
-	_c[4] = 0; _c[5] = 0;
+	_c[4] = 0.0; _c[5] = 0.0;
 }
 
 Matrix identity ()
 {
-	Matrix m;
-	m.set_identity();
-	return m;
+	Matrix ret(1.0, 0.0,
+		   0.0, 1.0,
+		   0.0, 0.0);
+	return ret;
 }
 
 Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset) {
-	Matrix m;
-	for (int i = 0; i < 2; i++) {
-		m[2*i + NR::X] = x_basis[i];
-		m[2*i + NR::Y] = y_basis[i];
-		m[4+i] = offset[i];
-	}
-	return m;
+	Matrix const ret(x_basis[X], y_basis[X],
+			 x_basis[Y], y_basis[Y],
+			 offset[X], offset[Y]);
+	return ret;
 }
 
-/*Matrix scale (const Point scale)
+rotate::rotate(NR::Coord const theta)
+	: vec(cos(theta), sin(theta))
 {
-	Matrix m;
-	m._c[0] = scale[NR::X];  m._c[2] = 0.0;
-	m._c[1] = 0.0;              m._c[3] = scale[NR::Y];
-	// translation
-	m._c[4] = 0.0;
-	m._c[5] = 0.0;
-	return m;
-}
-
-Matrix rotate(const NR::Coord theta)
-{
-	Matrix m;
-	NR::Coord sn = sin (theta);
-	NR::Coord cs = cos (theta);
-	m._c[0] = cs; m._c[2] = -sn;
-	m._c[1] = sn; m._c[3] = cs;
-	// translation
-	m._c[4] = 0.0;
-	m._c[5] = 0.0;
-	return m;
-}*/
-
-rotate::rotate(const NR::Coord theta)
-{
-	(*this)[X] = cos(theta);
-	(*this)[Y] = sin(theta);
 }
 
 NR::Coord Matrix::det() const {
@@ -267,7 +228,7 @@ NR::Coord *Matrix::copyto(NR::Coord *array) const {
 	return array;
 }
 
-double expansion(Matrix const & m) {
+double expansion(Matrix const &m) {
         return sqrt(fabs(m.det()));
 }
                                                                                 
@@ -275,11 +236,28 @@ bool Matrix::test_identity() const {
         return NR_MATRIX_DF_TEST_CLOSE (this, &NR_MATRIX_IDENTITY, NR_EPSILON);
 }
 
-bool transform_equalp(const Matrix &m0, const Matrix &m1, const NR::Coord epsilon) {
+bool transform_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon) {
         return NR_MATRIX_DF_TEST_TRANSFORM_CLOSE (&m0, &m1, epsilon);
                                                                                 
 }
-bool translate_equalp(const Matrix &m0, const Matrix &m1, const NR::Coord epsilon) {
+
+bool translate_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon) {
         return NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (&m0, &m1, epsilon);
 }
+
+void assert_close(Matrix const &a, Matrix const &b)
+{
+	if (!( transform_equalp(a, b, 1e-3) &&
+	       translate_equalp(a, b, 1e-3) )) {
+		fprintf(stderr,
+			"a = | %g %g |,\tb = | %g %g |\n"
+			"    | %g %g | \t    | %g %g |\n"
+			"    | %g %g | \t    | %g %g |\n",
+			a[0], a[1], b[0], b[1],
+			a[2], a[3], b[2], b[3],
+			a[4], a[5], b[4], b[5]);
+		abort();
+	}
+}
+
 };

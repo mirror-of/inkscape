@@ -47,7 +47,7 @@ static void sp_item_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_item_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar * sp_item_private_description (SPItem * item);
-static int sp_item_private_snappoints (SPItem *item, NR::Point *p, int size);
+static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size);
 
 static SPItemView *sp_item_view_new_prepend (SPItemView *list, SPItem *item, unsigned int flags, unsigned int key, NRArenaItem *arenaitem);
 static SPItemView *sp_item_view_list_remove (SPItemView *list, SPItemView *view);
@@ -401,22 +401,21 @@ sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
 	sp_item_invoke_bbox(item, bbox, &i2d, TRUE);
 }
 
-static int
-sp_item_private_snappoints (SPItem *item, NR::Point *p, int size)
+static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size)
 {
 	if (size < 4) return 0;
 	NRMatrix i2d;
 	sp_item_i2d_affine(item, &i2d);
 	NRRect bbox;
 	sp_item_invoke_bbox(item, &bbox, &i2d, TRUE);
-	NR::Rect bbox2(bbox);
-	for(int i = 0; i < 4; i++)
+	NR::Rect const bbox2(bbox);
+	for(unsigned i = 0; i < 4; i++) {
 		p[i] = bbox2.corner(i);
+	}
 	return 4;
 }
 
-int
-sp_item_snappoints (SPItem *item, NR::Point *p, int size)
+int sp_item_snappoints(SPItem *item, NR::Point p[], int size)
 {
 	g_return_val_if_fail (item != NULL, 0);
 	g_return_val_if_fail (SP_IS_ITEM (item), 0);
@@ -608,57 +607,39 @@ sp_item_set_item_transform (SPItem *item, const NRMatrix *transform)
 	}
 }
 
-NRMatrix *sp_item_i2doc_affine(SPItem const *item, NRMatrix *affine)
+/**
+ * Requires: item != NULL && SP_IS_ITEM(item).
+ */
+NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 {
-	SPRoot const *root;
+	g_assert(item != NULL);
+	g_assert(SP_IS_ITEM(item));
 
-	g_return_val_if_fail (item != NULL, NULL);
-	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
-
-	nr_matrix_set_identity(affine);
-
-	while (SP_OBJECT_PARENT (item)) {
-		nr_matrix_multiply(affine, affine, &item->transform);
-		item = (SPItem *) SP_OBJECT_PARENT (item);
+	NR::Matrix ret(NR::identity());
+	g_assert(ret.test_identity());
+	for (SPItem const *parent ; NULL != (parent = SP_ITEM(SP_OBJECT_PARENT(item))) ; item = parent) {
+		ret *= NR::Matrix(&item->transform);
 	}
-
-	g_return_val_if_fail (SP_IS_ROOT (item), NULL);
-
-	root = SP_ROOT (item);
+	g_assert(SP_IS_ROOT(item));
+	SPRoot const *root = SP_ROOT(item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply(affine, affine, root->c2p);
-	nr_matrix_multiply(affine, affine, &item->transform);
-
-	return affine;
-}
-
-NRMatrix *
-sp_item_i2root_affine (SPItem const *item, NRMatrix *affine)
-{
-	g_return_val_if_fail (item != NULL, NULL);
-	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
-
-	nr_matrix_set_identity(affine);
-
-	while (SP_OBJECT_PARENT (item)) {
-		nr_matrix_multiply(affine, affine, &item->transform);
-		item = (SPItem *) SP_OBJECT_PARENT (item);
-	}
-
-	g_return_val_if_fail (SP_IS_ROOT (item), NULL);
-
-	SPRoot *root = SP_ROOT(item);
-
-	/* fixme: (Lauris) */
-	nr_matrix_multiply(affine, affine, root->c2p);
-	nr_matrix_multiply(affine, affine, &item->transform);
+	ret *= root->c2p;
+	ret *= NR::Matrix(&item->transform);
 	/* fixme: The above line looks strange to me (pjrm).  I'd have thought
 	   it should either be removed or moved to before the c2p multiply.
-	   Can someone pls add a comment?  Similarly for i2doc_affine. */
+	   Can someone pls add a comment? */
 
+	return ret;
+}
+
+NRMatrix *sp_item_i2doc_affine(SPItem const *item, NRMatrix *affine)
+{
+	g_return_val_if_fail (item != NULL, NULL);
+	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
+	g_return_val_if_fail (affine != NULL, NULL);
+
+	*affine = sp_item_i2doc_affine(item);
 	return affine;
 }
 
@@ -686,7 +667,7 @@ sp_item_i2vp_affine (SPItem const *item, NRMatrix *affine)
 	SPRoot *root = SP_ROOT(item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply(affine, affine, root->c2p);
+	*affine = NR::Matrix(affine) * root->c2p;
 
 	affine->c[0] /= root->width.computed;
 	affine->c[1] /= root->height.computed;
@@ -698,26 +679,43 @@ sp_item_i2vp_affine (SPItem const *item, NRMatrix *affine)
 
 /* fixme: This is EVIL!!! */
 
+NR::Matrix sp_item_i2d_affine(SPItem const *item)
+{
+	g_assert(item != NULL);
+	g_assert(SP_IS_ITEM(item));
+
+	NR::Matrix const ret( sp_item_i2doc_affine(item)
+			      * NR::scale(0.8, -0.8)
+			      * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item))) );
+#ifndef NDEBUG
+	NRMatrix tst;
+	sp_item_i2d_affine(item, &tst);
+	assert_close( ret, NR::Matrix(&tst) );
+#endif
+	return ret;
+}
+
 NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *affine)
 {
-	NRMatrix doc2dt;
-
 	g_return_val_if_fail (item != NULL, NULL);
 	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
 	g_return_val_if_fail (affine != NULL, NULL);
 
 	sp_item_i2doc_affine(item, affine);
+
+	NRMatrix doc2dt;
 	nr_matrix_set_scale (&doc2dt, 0.8, -0.8);
 	doc2dt.c[5] = sp_document_height (SP_OBJECT_DOCUMENT (item));
+
 	nr_matrix_multiply(affine, affine, &doc2dt);
 
 	return affine;
 }
 
-NR::Matrix sp_item_i2d_affine(SPItem const *item) {
-	NRMatrix i2d;
-	sp_item_i2d_affine(item, &i2d);
-	return NR::Matrix(&i2d);
+void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &affine)
+{
+	NRMatrix const naffine(affine);
+	sp_item_set_i2d_affine(item, &naffine);
 }
 
 void sp_item_set_i2d_affine(SPItem *item, NRMatrix const *affine)

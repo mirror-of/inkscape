@@ -1145,7 +1145,7 @@ static void sp_color_wheel_process_in_triangle( SPColorWheel *wheel, gdouble x, 
 
     gdouble rot = (M_PI * 2 * wheel->_hue );
 
-    NR::Point result = NR::rotate(rot) * delta;
+    NR::Point result = delta * NR::rotate(rot);
 
     gdouble sat = CLAMP( result[NR::X] / (wheel->_inner * 1.5), 0.0, 1.0 );
 

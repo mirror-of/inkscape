@@ -98,12 +98,12 @@ sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Point cons
 	NR::Point v = d;
 	v.normalize();
 
-	SPNamedView * nv = desktop->namedview;
+	SPNamedView *nv = desktop->namedview;
 	NR::Point actual = req;
 	
 	if (nv->snaptoguides) {
 		upper = desktop->guidesnap;
-		for (GSList * l = nv->guides; l != NULL; l = l->next) {
+		for (GSList *l = nv->guides; l != NULL; l = l->next) {
 			NR::Point trial(req);
 			SPGuide const *g = SP_GUIDE (l->data);
 			gdouble dist = sp_intersector_a_vector_snap (trial, 
@@ -156,6 +156,7 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
 	return floor((x - c0) / c1 + .5) * c1 + c0;
 }
 
+
 /* 
  * functions for lists of points
  *
@@ -164,7 +165,7 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
  */
 
 double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
-				       double const dx, unsigned const dim)
+				double const dx, unsigned const dim)
 {
 	gdouble dist = NR_HUGE;
 	gdouble xdist = dx;
@@ -184,25 +185,31 @@ double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], i
 	return xdist;
 }
 
-double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length, NR::Point const norm, NR::Point s)
+double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
+				   NR::Point const &norm, NR::Point const &s)
 {
+	using NR::X;
+	using NR::Y;
+
 	if (!SNAP_ON(desktop)) {
-		return s[0];
+		return s[X];
 	}
 
 	double dist = NR_HUGE;
-	double ratio = fabs (s[0]);
+	double ratio = fabs(s[X]);
 	for (int i = 0 ; i < length ; i++) {
-		NR::Point q = p[i];
-		NR::Point check;
-		check = NR::scale(s) * (q - norm) + norm;
-		if (NR::LInfty(q - norm) > MIN_DIST_NORM) {
+		NR::Point const &q = p[i];
+		NR::Point check = ( q - norm ) * NR::scale(s) + norm;
+		if (NR::LInfty( q - norm ) > MIN_DIST_NORM) {
 			double d = sp_desktop_vector_snap(desktop, check, check - norm);
 			if ((d < 1e18) && (d < dist)) {
 				dist = d;
-				ratio = (fabs(q[0] - norm[0]) > fabs(q[1] - norm[1])) ? 
-					(check[0] - norm[0]) / (q[0] - norm[0]) : 
-					(check[1] - norm[1]) / (q[1] - norm[1]); 
+				NR::Dim2 const dominant = ( ( fabs( q[X] - norm[X] )  >
+							      fabs( q[Y] - norm[Y] ) )
+							    ? X
+							    : Y );
+				ratio = ( ( check[dominant] - norm[dominant] )
+					  / ( q[dominant] - norm[dominant] ) );
 			}
 		}
 	}
@@ -211,7 +218,7 @@ double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[]
 }
 
 double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NR::Point const p[], int const length,
-					     NR::Point const &norm, double const sx, unsigned const dim)
+				      NR::Point const &norm, double const sx, unsigned const dim)
 {
 	g_assert( dim < 2 );
 	if (!SNAP_ON (desktop))
@@ -237,7 +244,7 @@ double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NR::Point const 
 }
 
 double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NR::Point const p[], int const length,
-					    NR::Point const norm, double const sx, unsigned const dim)
+				     NR::Point const &norm, double const sx, unsigned const dim)
 {
 	g_assert( dim < 2 );
 	if (!SNAP_ON (desktop))
