@@ -11,7 +11,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+#include "path-prefix.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -24,8 +27,6 @@
 
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkiconfactory.h>
-
-#include "prefix.h"
 
 #include "forward.h"
 #include "inkscape-private.h"

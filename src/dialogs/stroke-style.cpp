@@ -16,7 +16,9 @@
 
 #define noSP_SS_VERBOSE
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <string.h>
 #include <glib.h>
@@ -57,7 +59,7 @@
 #include "xml/repr-private.h"
 #include "display/nr-arena.h"
 #include "display/nr-arena-item.h"
-#include "prefix.h"
+#include "path-prefix.h"
 #include "widgets/icon.h"
 #include "helper/stock-items.h"
 #include <file.h>

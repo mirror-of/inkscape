@@ -1,18 +1,11 @@
 ## Makefile.am fragment sourced by src/Makefile.am.
 
-extdir = $(libdir)/inkscape/extensions
-extdatadir = $(datadir)/inkscape/extensions
-moduledir = $(datadir)/inkscape/modules
-
 extension/all: extension/libextension.a extension/implementation/all extension/internal/all
 
 extension/clean: extension/implementation/clean extension/internal/clean
 	rm -f extension/libextension.a $(extension_libextension_a_OBJECTS)
 
 extension_libextension_a_CPPFLAGS =	\
-	-DINKSCAPE_EXTENSIONDIR=\""$(extdir)"\" 	\
-	-DINKSCAPE_EXTENSIONDATADIR=\""$(extdatadir)"\"	\
-	-DINKSCAPE_MODULESDIR=\""$(moduledir)"\"	\
 	-I$(srcdir)/extension	\
 	$(GNOME_PRINT_CFLAGS)
 

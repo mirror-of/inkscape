@@ -3,9 +3,12 @@
  * Written by: Mike Hearn <mike@theoretic.com>
  *             Hongli Lai <h.lai@chello.nl>
  * http://autopackage.org/
- *
+ * 
  * This source code is public domain. You can relicense this code
  * under whatever license you want.
+ *
+ * NOTE: if you're using C++ and are getting "undefined reference
+ * to br_*", try renaming prefix.c to prefix.cpp
  */
 
 /* WARNING, BEFORE YOU MODIFY PREFIX.C:
@@ -20,26 +23,32 @@
  * --> expands br_locate to foobar_br_locate
  */
 
-#ifndef BR_PTHREADS
-	/* Change 1 to 0 if you don't want thread support */
-	#define BR_PTHREADS 0
-#endif /* BR_PTHREADS */
-
 #ifndef _PREFIX_C_
 #define _PREFIX_C_
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#ifndef BR_PTHREADS
+	/* Change 1 to 0 if you don't want pthread support */
+	#define BR_PTHREADS 1
+#endif /* BR_PTHREADS */
+
 #include <stdlib.h>
 #include <stdio.h>
+#include <pthread.h>
 #include <limits.h>
 #include <string.h>
 #include "prefix.h"
 
-/*
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 #undef NULL
 #define NULL ((void *) 0)
-*/
-
-extern "C" {
 
 #ifdef __GNUC__
 	#define br_return_val_if_fail(expr,val) if (!(expr)) {fprintf (stderr, "** BinReloc (%s): assertion %s failed\n", __PRETTY_FUNCTION__, #expr); return val;}
@@ -101,15 +110,15 @@ br_locate (void *symbol)
 
 	while (!feof (f))
 	{
-		unsigned int start, end;
+		unsigned long start, end;
 
 		if (!fgets (line, sizeof (line), f))
 			continue;
 		if (!strstr (line, " r-xp ") || !strchr (line, '/'))
 			continue;
 
-		sscanf (line, "%x-%x ", &start, &end);
-		if (((unsigned int) symbol) >= start && ((unsigned int) symbol) < end)
+		sscanf (line, "%lx-%lx ", &start, &end);
+		if (symbol >= (void *) start && symbol < (void *) end)
 		{
 			char *tmp;
 			size_t len;
@@ -208,68 +217,45 @@ br_prepend_prefix (void *symbol, char *path)
 #endif /* ENABLE_BINRELOC */
 
 
-
-
-
-/* Thread stuff for thread safetiness */
+/* Pthread stuff for thread safetiness */
 #if BR_PTHREADS
 
-#include <glib.h>
+static pthread_key_t br_thread_key;
+static pthread_once_t br_thread_key_once = PTHREAD_ONCE_INIT;
 
-static GStaticPrivate br_thread_key;
-/* Mimic the functionality of g_once() until glib2.4 */
-GPrivate *br_once_key = NULL;
+
+static void
+br_thread_local_store_fini ()
+{
+	char *specific;
+
+	specific = (char *) pthread_getspecific (br_thread_key);
+	if (specific)
+	{
+		free (specific);
+		pthread_setspecific (br_thread_key, NULL);
+	}
+	pthread_key_delete (br_thread_key);
+	br_thread_key = 0;
+}
+
+
+static void
+br_str_free (void *str)
+{
+	if (str)
+		free (str);
+}
+
 
 static void
 br_thread_local_store_init ()
 {
-    if (!br_once_key) {
-		br_once_key = g_private_new(g_free);
-        g_static_private_init(&br_thread_key);
-    }
-
+	if (pthread_key_create (&br_thread_key, br_str_free) == 0)
+		atexit (br_thread_local_store_fini);
 }
 
-
-/**
- * br_thread_local_store:
- * str: A dynamically allocated string.
- * Returns: str. This return value must not be freed.
- *
- * Store str in a thread-local variable and return str. The next
- * you run this function, that variable is freed too.
- * This function is created so you don't have to worry about freeing
- * strings.
- *
- * Example:
- * char *foo;
- * foo = thread_local_store (strdup ("hello")); --> foo == "hello"
- * foo = thread_local_store (strdup ("world")); --> foo == "world"; "hello" is now freed.
- */
-const char *
-br_thread_local_store (char *str)
-{
-    if (!g_thread_supported ())
-        g_thread_init (NULL);
-
-    /*
-    This needs to be changed in the future (GLib2.4)
-    to use GOnce
-    */
-	br_thread_local_store_init();
-
-	/*
-	g_free() will be called for each set() and
-	when the threads ends.  Thus we do not need a fini()
-	*/
-	g_static_private_set (&br_thread_key, str, g_free);
-
-    return str;
-}
-
-
-#else /* !BR_PTHREADS */
-
+#else /* BR_PTHREADS */
 
 static char *br_last_value = NULL;
 
@@ -280,6 +266,9 @@ br_free_last_value ()
 		free (br_last_value);
 }
 
+#endif /* BR_PTHREADS */
+
+
 /**
  * br_thread_local_store:
  * str: A dynamically allocated string.
@@ -298,26 +287,31 @@ br_free_last_value ()
 const char *
 br_thread_local_store (char *str)
 {
-	static int initialized = 0;
+	#if BR_PTHREADS
+		char *specific;
 
-	if (!initialized)
-	    {
+		pthread_once (&br_thread_key_once, br_thread_local_store_init);
+
+		specific = (char *) pthread_getspecific (br_thread_key);
+		br_str_free (specific);
+		pthread_setspecific (br_thread_key, str);
+
+	#else /* BR_PTHREADS */
+		static int initialized = 0;
+
+		if (!initialized)
+		{
 			atexit (br_free_last_value);
 			initialized = 1;
 		}
 
-	if (br_last_value)
-		free (br_last_value);
-	br_last_value = str;
+		if (br_last_value)
+			free (br_last_value);
+		br_last_value = str;
+	#endif /* BR_PTHREADS */
 
-    return str;
+	return (const char *) str;
 }
-
-
-#endif /* !BR_PTHREADS */
-
-
-
 
 
 /**
@@ -332,13 +326,19 @@ char *
 br_strcat (const char *str1, const char *str2)
 {
 	char *result;
+	size_t len1, len2;
 
 	if (!str1) str1 = "";
 	if (!str2) str2 = "";
 
-	result = (char *) calloc (sizeof (char), strlen (str1) + strlen (str2) + 1);
-	result = strcpy (result, str1);
-	result = strcat (result, str2);
+	len1 = strlen (str1);
+	len2 = strlen (str2);
+
+	result = (char *) malloc (len1 + len2 + 1);
+	memcpy (result, str1, len1);
+	memcpy (result + len1, str2, len2);
+	result[len1 + len2] = '\0';
+
 	return result;
 }
 
@@ -354,6 +354,7 @@ br_strndup (char *str, size_t size)
 
 	len = strlen (str);
 	if (!len) return strdup ("");
+	if (size > len) size = len;
 
 	result = (char *) calloc (sizeof (char), len + 1);
 	memcpy (result, str, size);
@@ -403,8 +404,9 @@ br_extract_dir (const char *path)
  * or library is installed in an LSB-compatible directory structure.
  *
  * Example:
- * br_extract_prefix ("/usr/bin/gnome-panel");   --> Returns "/usr"
- * br_extract_prefix ("/usr/local/libfoo.so");   --> Returns "/usr/local"
+ * br_extract_prefix ("/usr/bin/gnome-panel");       --> Returns "/usr"
+ * br_extract_prefix ("/usr/local/lib/libfoo.so");   --> Returns "/usr/local"
+ * br_extract_prefix ("/usr/local/libfoo.so");       --> Returns "/usr"
  */
 char *
 br_extract_prefix (const char *path)
@@ -438,6 +440,9 @@ br_extract_prefix (const char *path)
 	return result;
 }
 
+
+#ifdef __cplusplus
 }
+#endif /* __cplusplus */
 
 #endif /* _PREFIX_C */

@@ -15,11 +15,8 @@
 #### RESOURCE DIRECTORIES
 ######################################*/
 
-#define PACKAGE_LOCALE_DIR     "locale"
 #define INKSCAPE_DATADIR       "."
-#define INKSCAPE_MODULESDIR    "modules"
-#define INKSCAPE_EXTENSIONDIR  "share\\extensions"
-#define INKSCAPE_ICONS_DIR     "share\\icons"
+#define PACKAGE_LOCALE_DIR     "locale"
 
 #define GETTEXT_PACKAGE "inkscape"
 

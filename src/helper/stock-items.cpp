@@ -16,7 +16,10 @@
 
 #define noSP_SS_VERBOSE
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+#include "path-prefix.h"
 
 #include <string.h>
 #include <glib.h>
@@ -29,7 +32,6 @@
 #include "sp-gradient.h"
 #include "sp-pattern.h"
 #include "sp-marker.h"
-#include "prefix.h"
 #include "desktop-handles.h"
 #include "inkscape.h"
 

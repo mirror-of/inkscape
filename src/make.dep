@@ -52,6 +52,7 @@ arc-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	snap.h \
 	sp-ellipse.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -178,6 +179,7 @@ desktop-events.o: \
 	refcounted.h \
 	require-config.h \
 	selcue.h \
+	snap.h \
 	sp-guide.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -245,6 +247,7 @@ desktop-handles.o: \
 
 desktop.o: \
 	desktop.cpp \
+	color-rgba.h \
 	color.h \
 	desktop-affine.h \
 	desktop-events.h \
@@ -314,6 +317,7 @@ desktop.o: \
 	selection-describer.h \
 	selection.h \
 	seltrans.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -340,6 +344,9 @@ desktop.o: \
 	widgets/spinbutton-events.h \
 	widgets/spw-utilities.h \
 	widgets/widget-sizes.h \
+	xml/repr-action.h \
+	xml/repr-private.h \
+	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -407,6 +414,7 @@ dialogs/desktop-properties.o: \
 	dialogs/rdf.h \
 	display/nr-arena-forward.h \
 	document.h \
+	document.h \
 	enums.h \
 	extension/extension-forward.h \
 	extension/implementation/implementation.h \
@@ -445,6 +453,7 @@ dialogs/desktop-properties.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -585,6 +594,7 @@ dialogs/export.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/db.h \
 	extension/extension-forward.h \
 	extension/extension.h \
 	file.h \
@@ -625,6 +635,7 @@ dialogs/export.o: \
 	refcounted.h \
 	require-config.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -1077,6 +1088,7 @@ dialogs/stroke-style.o: \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
 	marker-status.h \
+	path-prefix.h \
 	prefix.h \
 	refcounted.h \
 	require-config.h \
@@ -1333,6 +1345,7 @@ dir-util.o: \
 display/bezier-utils.o: \
 	display/bezier-utils.cpp \
 	display/bezier-utils.h \
+	isnan.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -1983,6 +1996,7 @@ document.o: \
 	color.h \
 	desktop-handles.h \
 	desktop.h \
+	dialogs/rdf.h \
 	dir-util.h \
 	display/canvas-arena.h \
 	display/nr-arena-forward.h \
@@ -2027,6 +2041,7 @@ document.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	snap.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -2102,6 +2117,7 @@ draw-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -2120,6 +2136,7 @@ draw-context.o: \
 
 dropper-context.o: \
 	dropper-context.cpp \
+	color-rgba.h \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
@@ -2176,6 +2193,7 @@ dropper-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -2245,6 +2263,7 @@ dyna-draw-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -2480,9 +2499,12 @@ extension/implementation/script.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	path-prefix.h \
+	prefix.h \
 	refcounted.h \
 	require-config.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -2529,6 +2551,9 @@ extension/init.o: \
 	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	path-prefix.h \
+	prefix.h \
+	prefs-utils.h \
 	require-config.h \
 	svg/ftos.h \
 	svg/stringstream.h \
@@ -4202,6 +4227,7 @@ file.o: \
 	require-config.h \
 	selection-chemistry.h \
 	selection.h \
+	snap.h \
 	sp-defs.h \
 	sp-image.h \
 	sp-item-group.h \
@@ -4323,6 +4349,7 @@ help.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	path-prefix.h \
 	prefix.h \
 	refcounted.h \
 	require-config.h \
@@ -4394,6 +4421,7 @@ helper/stock-items.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	path-prefix.h \
 	prefix.h \
 	sp-defs.h \
 	sp-gradient.h \
@@ -4462,6 +4490,7 @@ inkjar/jar.o: \
 inkscape-stock.o: \
 	inkscape-stock.cpp \
 	inkscape-stock.h \
+	path-prefix.h \
 	prefix.h
 
 inkscape.o: \
@@ -4507,7 +4536,9 @@ inkscape.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	path-prefix.h \
 	preferences-skeleton.h \
+	prefix.h \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
@@ -4588,6 +4619,7 @@ interface.o: \
 	selcue.h \
 	selection-chemistry.h \
 	shortcuts.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -5082,6 +5114,7 @@ libnr/nr-translate-test.o: \
 
 libnr/nr-types.o: \
 	libnr/nr-types.cpp \
+	isnan.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -5739,6 +5772,7 @@ nodepath.o: \
 	selcue.h \
 	selection-chemistry.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -6075,6 +6109,7 @@ rect-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -6176,6 +6211,7 @@ satisfied-guide-cns.o: \
 	message.h \
 	refcounted.h \
 	satisfied-guide-cns.h \
+	snap.h \
 	sp-guide-attachment.h \
 	sp-guide-constraint.h \
 	sp-guide.h \
@@ -6202,6 +6238,7 @@ selcue.o: \
 	display/nr-arena-forward.h \
 	display/sodipodi-ctrl.h \
 	display/sodipodi-ctrlrect.h \
+	display/sp-canvas-util.h \
 	display/sp-canvas.h \
 	display/sp-canvas.h \
 	enums.h \
@@ -6304,6 +6341,7 @@ select-context.o: \
 	selection.h \
 	seltrans-handles.h \
 	seltrans.h \
+	snap.h \
 	sp-cursor.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -6457,6 +6495,7 @@ selection-chemistry.o: \
 	require-config.h \
 	selection-chemistry.h \
 	selection.h \
+	snap.h \
 	sp-chars.h \
 	sp-defs.h \
 	sp-gradient.h \
@@ -6477,6 +6516,7 @@ selection-chemistry.o: \
 	sp-use.h \
 	style.h \
 	svg/svg-types.h \
+	tools-switch.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
@@ -6598,6 +6638,8 @@ seltrans-handles.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	message-context.h \
+	message.h \
 	selcue.h \
 	seltrans-handles.h \
 	seltrans.h
@@ -6624,6 +6666,7 @@ seltrans.o: \
 	helper/sp-intl.h \
 	inkscape-private.h \
 	inkscape.h \
+	isnan.h \
 	knot.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -6661,6 +6704,7 @@ seltrans.o: \
 	selection.h \
 	seltrans-handles.h \
 	seltrans.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item-update-cns.h \
 	sp-item.h \
@@ -6751,6 +6795,7 @@ snap.o: \
 	libnr/nr-scale-ops.h \
 	libnr/nr-scale.h \
 	libnr/nr-values.h \
+	snap.h \
 	sp-guide.h \
 	sp-namedview.h \
 	sp-object-group.h \
@@ -7486,6 +7531,7 @@ sp-marker.o: \
 	message.h \
 	print.h \
 	refcounted.h \
+	snap.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7574,6 +7620,7 @@ sp-namedview.o: \
 	forward.h \
 	helper/helper-forward.h \
 	helper/units.h \
+	isnan.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -7598,6 +7645,7 @@ sp-namedview.o: \
 	message.h \
 	prefs-utils.h \
 	refcounted.h \
+	snap.h \
 	sp-guide.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7657,6 +7705,7 @@ sp-object-repr.o: \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
 	livarot/livarot-forward.h \
+	snap.h \
 	sp-anchor.h \
 	sp-animation.h \
 	sp-chars.h \
@@ -8355,6 +8404,7 @@ sp-symbol.o: \
 	message.h \
 	print.h \
 	refcounted.h \
+	snap.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8616,8 +8666,6 @@ sp-typeset-layout.o: \
 
 sp-typeset-utils.o: \
 	sp-typeset-utils.cpp \
-	attributes.h \
-	color.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
@@ -8665,7 +8713,6 @@ sp-typeset-utils.o: \
 	sp-text.h \
 	sp-typeset-utils.h \
 	sp-typeset.h \
-	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -8884,6 +8931,7 @@ spiral-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -9036,6 +9084,7 @@ star-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -9601,6 +9650,7 @@ verbs.o: \
 	selection.h \
 	seltrans.h \
 	shortcuts.h \
+	snap.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -10020,6 +10070,7 @@ widgets/icon.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	path-prefix.h \
 	prefix.h \
 	sp-item.h \
 	sp-object.h \

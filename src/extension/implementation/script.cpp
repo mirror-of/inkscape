@@ -15,6 +15,8 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
+#include "path-prefix.h"
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>

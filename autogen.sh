@@ -146,6 +146,12 @@ if ! $ACLOCAL $ACLOCAL_FLAGS; then
    exit 1
 fi
 
+# Until binreloc is a full-fledged pkg-config's tool, we need to include
+# their m4 file manually.  But, since the "auto" option seems broken
+# we'll need to turn this off for now and just continue to use our
+# own autoconf macros.
+#cat binreloc.m4 >> aclocal.m4
+
 # optionally feature autoheader
 (autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 

@@ -22,8 +22,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+#include "path-prefix.h"
 
 #ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>
@@ -270,9 +272,11 @@ sp_main_gui(int argc, char const **argv)
     inkscape_gtk_stock_init();
 
     /* Set default icon */
-    if (g_file_test(INKSCAPE_DATADIR "/pixmaps/inkscape.png", (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
-        gtk_window_set_default_icon_from_file(INKSCAPE_DATADIR "/pixmaps/inkscape.png", NULL);
+    gchar *filename = (gchar *) g_build_filename (INKSCAPE_APPICONDIR, "inkscape.png", NULL);
+    if (g_file_test(filename, (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
+        gtk_window_set_default_icon_from_file(filename, NULL);
     }
+    g_free (filename);
 
     if (!sp_global_slideshow) {
         gboolean create_new = TRUE;

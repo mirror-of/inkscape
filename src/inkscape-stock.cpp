@@ -21,10 +21,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+#include "path-prefix.h"
+
 #include "gtk/gtkiconfactory.h"
 
-#include "prefix.h"
-#include "config.h"
 #include "inkscape-stock.h"
 
 static struct StockIcon

@@ -9,12 +9,17 @@
  *
  * See http://autopackage.org/docs/binreloc/ for
  * more information and how to use this.
+ *
+ * NOTE: if you're using C++ and are getting "undefined reference
+ * to br_*", try renaming prefix.c to prefix.cpp
  */
 
 #ifndef _PREFIX_H_
 #define _PREFIX_H_
 
+#ifdef __cplusplus
 extern "C" {
+#endif /* __cplusplus */
 
 /* WARNING, BEFORE YOU MODIFY PREFIX.C:
  *
@@ -77,6 +82,7 @@ char *br_locate		(void *symbol);
 char *br_locate_prefix	(void *symbol);
 char *br_prepend_prefix	(void *symbol, char *path);
 
+
 #endif /* ENABLE_BINRELOC */
 
 
@@ -97,50 +103,20 @@ char *br_prepend_prefix	(void *symbol, char *path);
 	#define BR_SBINDIR(suffix)	(br_thread_local_store (br_strcat (SBINDIR, suffix)))
 	#define BR_DATADIR(suffix)	(br_thread_local_store (br_strcat (DATADIR, suffix)))
 	#define BR_LIBDIR(suffix)	(br_thread_local_store (br_strcat (LIBDIR, suffix)))
+	#define BR_LIBEXECDIR(suffix)	(br_thread_local_store (br_strcat (LIBEXECDIR, suffix)))
 	#define BR_ETCDIR(suffix)	(br_thread_local_store (br_strcat (ETCDIR, suffix)))
 	#define BR_SYSCONFDIR(suffix)	(br_thread_local_store (br_strcat (SYSCONFDIR, suffix)))
 	#define BR_CONFDIR(suffix)	(br_thread_local_store (br_strcat (CONFDIR, suffix)))
 	#define BR_LOCALEDIR(suffix)	(br_thread_local_store (br_strcat (LOCALEDIR, suffix)))
 #endif
 
-#ifdef ENABLE_BINRELOC
-#  undef INKSCAPE_DATADIR
-#  undef INKSCAPE_PIXMAPDIR
-#  undef INKSCAPE_MODULESDIR
-#  define INKSCAPE_DATADIR DATADIR
-#  define INKSCAPE_PIXMAPDIR BR_DATADIR( "/inkscape/icons" )
-#  define INKSCAPE_SCREENSDIR BR_DATADIR( "/inkscape/screens" )
-#  define INKSCAPE_TUTORIALSDIR BR_DATADIR( "/inkscape/tutorials" )
-#  define INKSCAPE_PATTERNSDIR BR_DATADIR("/inkscape/patterns")
-#  define INKSCAPE_MARKERSDIR BR_DATADIR("/inkscape/markers")
-#  define INKSCAPE_MODULESDIR BR_DATADIR("/inkscape/extensions")
-#  define INKSCAPE_GRADIENTSDIR BR_DATADIR("/inkscape/gradients")
-#else
-#  ifdef WIN32
-#    define INKSCAPE_DATADIR "."
-#    define INKSCAPE_PIXMAPDIR "share\\icons"
-#    define INKSCAPE_SCREENSDIR "share\\screens"
-#    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
-#    define INKSCAPE_PATTERNSDIR "share\\patterns"
-#    define INKSCAPE_MARKERSDIR "share\\markers"
-#    define INKSCAPE_GRADIENTSDIR "share\\gradients"
-#  else
-#    ifndef INKSCAPE_PIXMAPDIR
-#      define INKSCAPE_PIXMAPDIR INKSCAPE_DATADIR "/inkscape/icons"
-#    endif
-#    define INKSCAPE_SCREENSDIR INKSCAPE_DATADIR "/inkscape/screens"
-#    define INKSCAPE_TUTORIALSDIR INKSCAPE_DATADIR "/inkscape/tutorials"
-#    define INKSCAPE_PATTERNSDIR "/inkscape/patterns"
-#    define INKSCAPE_MARKERSDIR INKSCAPE_DATADIR "/inkscape/markers"
-#    define INKSCAPE_GRADIENTSDIR "/inkscape/gradients"
-#  endif
-#endif
-
-
 char *br_strcat	(const char *str1, const char *str2);
 char *br_extract_dir	(const char *path);
 char *br_extract_prefix(const char *path);
 
+
+#ifdef __cplusplus
 }
+#endif /* __cplusplus */
 
 #endif /* _PREFIX_H_ */

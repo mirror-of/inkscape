@@ -3,6 +3,7 @@ arc-context.cpp
 arc-context.h
 attributes.cpp
 attributes.h
+color-rgba.h
 color.cpp
 color.h
 desktop-affine.cpp
@@ -344,6 +345,7 @@ inkscape.h
 inkscape_version.h
 interface.cpp
 interface.h
+isnan.h
 knot.cpp
 knot.h
 knotholder.cpp
@@ -493,6 +495,7 @@ object-ui.cpp
 object-ui.h
 path-chemistry.cpp
 path-chemistry.h
+path-prefix.h
 preferences-skeleton.h
 prefix.cpp
 prefix.h

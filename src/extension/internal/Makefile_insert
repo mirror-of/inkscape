@@ -8,9 +8,6 @@ extension/internal/clean:
 extension_internal_libinternal_a_CPPFLAGS = \
 	-Iextension	\
 	-I$(top_srcdir)/src/extension	\
-	-DINKSCAPE_EXTENSIONDIR=\""$(extdir)"\" 	\
-	-DINKSCAPE_EXTENSIONDATADIR=\""$(extdatadir)"\"	\
-	-DINKSCAPE_MODULESDIR=\""$(moduledir)"\"	\
 	$(GNOME_PRINT_CFLAGS)
 
 if USE_GNOME_PRINT

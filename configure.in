@@ -247,7 +247,6 @@ AC_ARG_ENABLE(binreloc,
        [  --enable-binreloc       compile with binary relocation support
                           (default=enable when available)],
        enable_binreloc=$enableval,enable_binreloc=no)
-BINRELOC_CFLAGS=
 
 AC_MSG_CHECKING(whether binary relocation support should be enabled)
 if test "$enable_binreloc" = "yes"; then
@@ -273,7 +272,6 @@ elif test "$enable_binreloc" = "auto"; then
                        "$datadir" = '${prefix}/share' -a "$libdir" = '${exec_prefix}/lib' -a \
                        "$libexecdir" = '${exec_prefix}/libexec' -a "$sysconfdir" = '${prefix}/etc'
                then
-                       BINRELOC_CFLAGS=-DENABLE_BINRELOC
                        AC_MSG_RESULT(yes)
                else
                        AC_MSG_RESULT(no)
@@ -292,8 +290,9 @@ else
        AC_MSG_RESULT(no (unknown value "$enable_binreloc"))
        enable_binreloc=no
 fi
+AC_DEFINE(BR_PTHREADS,[0],[Use binreloc thread support?])
 if test "$enable_binreloc" = "yes"; then
-   INKSCAPE_CFLAGS="$INKSCAPE_CFLAGS -DENABLE_BINRELOC"
+   AC_DEFINE(ENABLE_BINRELOC,,[Use AutoPackage?])
 fi
 
 dnl ******************************
@@ -469,16 +468,10 @@ inkscape_sharedir="${runtime_datadir}/${PACKAGE_NAME}"
 dnl Define our data paths for config.h
 AC_SUBST(INKSCAPE_DATADIR)
 AC_DEFINE_UNQUOTED([INKSCAPE_DATADIR], "${runtime_datadir}",
-					[Common data directory])
+					[Base data directory -- only path-prefix.h should use it!])
 AC_SUBST(PACKAGE_LOCALE_DIR)
 AC_DEFINE_UNQUOTED([PACKAGE_LOCALE_DIR], "${runtime_datadir}/locale",
 					[Localization directory])
-dnl It would be nice to rename "..._PIXMAPDIR" to "..._ICONSDIR" everywhere,
-dnl then this list can be replaced with a nice "for" loop.
-AC_SUBST(INKSCAPE_PIXMAPDIR)
-AC_SUBST(INKSCAPE_SCREENSDIR)
-AC_SUBST(INKSCAPE_TUTORIALSDIR)
-AC_SUBST(INKSCAPE_MARKERSDIR)
 
 dnl Have to add module makefiles (lauris)
 

@@ -13,8 +13,10 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"
 #endif
+#include "path-prefix.h"
+
 #include <inttypes.h>
 #include <dirent.h>
 #include <glib.h>
@@ -38,7 +40,6 @@
 #include "internal/ps-out.h"
 #include "internal/eps-out.h"
 #include "internal/gdkpixbuf-input.h"
-#include "prefix.h"
 #include "prefs-utils.h"
 
 namespace Inkscape {
@@ -108,7 +109,7 @@ init (void)
 #ifdef WIN32
 	Internal::PrintWin32::init();
 #endif
-	build_module_from_dir(INKSCAPE_MODULESDIR);
+	build_module_from_dir(INKSCAPE_EXTENSIONDIR);
 
 	/* now we need to check and make sure everyone is happy */
 	check_extensions();
@@ -157,7 +158,7 @@ build_module_from_dir (const gchar * dirname)
 			continue;
 		}
 
-		filename = g_strdup_printf("%s/%s", INKSCAPE_MODULESDIR, dentry->d_name);
+		filename = g_strdup_printf("%s/%s", INKSCAPE_EXTENSIONDIR, dentry->d_name);
 		build_from_file(filename);
 		g_free(filename);
 	}
