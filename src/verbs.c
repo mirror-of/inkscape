@@ -30,6 +30,7 @@
 
 #include "select-context.h"
 #include "node-context.h"
+#include "nodepath.h"
 #include "rect-context.h"
 #include "arc-context.h"
 #include "star-context.h"
@@ -118,9 +119,12 @@ static void
 sp_verb_action_edit_perform (SPAction *action, void *data)
 {
 	SPDesktop *dt;
+	SPEventContext *ec;
 
 	dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
+
+	ec = dt->event_context;
 
 	switch ((int) data) {
 	case SP_VERB_EDIT_UNDO:
@@ -151,7 +155,11 @@ sp_verb_action_edit_perform (SPAction *action, void *data)
 	  	sp_edit_clear_all (NULL, NULL);
 		break;
 	case SP_VERB_EDIT_SELECT_ALL:
-	  	sp_edit_select_all(NULL, NULL);
+		if (tools_isactive (dt, TOOLS_NODES)) {
+			sp_nodepath_select_all (SP_NODE_CONTEXT(ec)->nodepath);
+		} else {
+			sp_edit_select_all (NULL, NULL);
+		}
 		break;
 	default:
 		break;
