@@ -18,7 +18,7 @@
  * These subcomponents should not be items, or alternately
  * we have to invent set of flags to mark, whether standard
  * attributes are applicable to given item (I even like this
-																						* idea somewhat - Lauris)
+ * idea somewhat - Lauris)
  *
  */
 
