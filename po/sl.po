@@ -6,13 +6,12 @@ msgstr ""
 "Project-Id-Version: sl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-28 22:25-0700\n"
-"PO-Revision-Date: 2004-11-09 22:46+0100\n"
+"PO-Revision-Date: 2004-12-18 02:49+0100\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: sl_SI <sl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3.1\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape SVG Vector Illustrator"
@@ -37,13 +36,13 @@ msgstr "<b>Shift</b>: riši okrog začetne točke"
 #: src/pen-context.cpp:272 src/pencil-context.cpp:180 src/rect-context.cpp:465
 #: src/spiral-context.cpp:425 src/star-context.cpp:437
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
-msgstr ""
+msgstr "<b>Trenutni sloj je skrit</b>. Če želite risati po njem ga odkrijte."
 
 #: src/arc-context.cpp:433 src/dyna-draw-context.cpp:461
 #: src/pen-context.cpp:276 src/pencil-context.cpp:184 src/rect-context.cpp:469
 #: src/spiral-context.cpp:429 src/star-context.cpp:441
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
-msgstr ""
+msgstr "<b>Trenutni sloj je zaklenjen</b>. Če želite risati po njem ga odklenite."
 
 #: src/arc-context.cpp:512
 #, c-format
@@ -276,7 +275,7 @@ msgstr "Vodoravno poravnaj izbrana vozlišča"
 
 #: src/dialogs/align.cpp:540
 msgid "Align selected nodes vertically"
-msgstr "NAvpično poravnaj izbrana vozlišča"
+msgstr "Navpično poravnaj izbrana vozlišča"
 
 #: src/dialogs/align.cpp:543
 msgid "Distribute selected nodes horizontally"
@@ -851,7 +850,7 @@ msgstr "pik"
 
 #: src/dialogs/display-settings.cpp:1022
 msgid "> and < scale by:"
-msgstr "> in < raztegneta:"
+msgstr "> in < raztegujeta po:"
 
 #: src/dialogs/display-settings.cpp:1023
 msgid ""
@@ -995,9 +994,8 @@ msgid "Clones"
 msgstr "Kloni"
 
 #: src/dialogs/display-settings.cpp:1217
-#, fuzzy
 msgid "When the original moves, its clones and linked offsets:"
-msgstr "Če premaknem izvirnik, se kloni:"
+msgstr "Če premaknem izvirnik, se njegovi kloni in povezani odmiki:"
 
 #: src/dialogs/display-settings.cpp:1229
 msgid "Move in parallel"
@@ -1116,45 +1114,44 @@ msgstr "Vedno shrani preoblikovanja kot predmetovo lastnost preoblikovanje="
 
 #. Selecting
 #: src/dialogs/display-settings.cpp:1355
-#, fuzzy
 msgid "Selecting"
-msgstr "Izbira"
+msgstr "Izbiranje"
 
 #: src/dialogs/display-settings.cpp:1357
 msgid "Ctrl+A, Tab, Shift+Tab:"
-msgstr ""
+msgstr "Ctrl+A, Tab, Shift+Tab:"
 
 #: src/dialogs/display-settings.cpp:1366
-#, fuzzy
 msgid "Select only within current layer"
-msgstr "Izbriši trenutni sloj"
+msgstr "Izbiraj samo po trenutnem sloju"
 
 #: src/dialogs/display-settings.cpp:1367
 msgid ""
 "Uncheck this to make keyboard selection commands work on objects in all "
 "layers"
-msgstr ""
+msgstr "Če to izklopite, bodo ukazi za izbiranje s tipkovnico učinkovali na predmetih z vseh slojev."
 
 #: src/dialogs/display-settings.cpp:1374
 msgid "Ignore hidden objects"
-msgstr ""
+msgstr "Ne upoštevaj skritih predmetov"
 
 #: src/dialogs/display-settings.cpp:1375
 msgid ""
 "Uncheck this to be able to select objects that are hidden (either by "
 "themselves or by being in a hidden group or layer)"
-msgstr ""
+msgstr "Če to izključite, boste lahko izbirali tudi skrite predmete (ali same ali "
+"pa kot dele skrite skupine ali sloja)"
 
 #: src/dialogs/display-settings.cpp:1382
-#, fuzzy
 msgid "Ignore locked objects"
-msgstr "Unija izbranih predmetov"
+msgstr "Ne upoštevaj zaklenjenih predmetov"
 
 #: src/dialogs/display-settings.cpp:1383
 msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked group or layer)"
-msgstr ""
+msgstr "Če to izključite, boste lahko izbirali tudi zaklenjene predmete (ali same ali "
+"pa kot dele zaklenjene skupine ali sloja)"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
 #: src/dialogs/display-settings.cpp:1391
@@ -1400,9 +1397,9 @@ msgstr ""
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> object(s) found (out of <b>%d</b>), %s match."
-msgstr "%d najdenih predmet(ov) (od %d), %s jih ustreza."
+msgstr "<b>%d</b> najdenih predmet(ov) (od <b>%d</b>), %s jih ustreza."
 
 #: src/dialogs/find.cpp:431
 msgid "exact"
@@ -1539,31 +1536,28 @@ msgid "Limit search to the current selection"
 msgstr "Omejitev iskanja na trenutno izbiro"
 
 #: src/dialogs/find.cpp:770
-#, fuzzy
 msgid "Search in current _layer"
-msgstr "Spusti trenutni sloj"
+msgstr "Išči po trenutnem sloju"
 
 #: src/dialogs/find.cpp:774
-#, fuzzy
 msgid "Limit search to the current layer"
-msgstr "Omejitev iskanja na trenutno izbiro"
+msgstr "Omeji iskanje na trenutni sloj"
 
 #: src/dialogs/find.cpp:779
 msgid "Include _hidden"
-msgstr ""
+msgstr "Upoštevaj _skrite"
 
 #: src/dialogs/find.cpp:783
 msgid "Include hidden objects in search"
-msgstr ""
+msgstr "V iskanje vključi tudi skrite predmete"
 
 #: src/dialogs/find.cpp:788
 msgid "Include l_ocked"
-msgstr ""
+msgstr "Upoštevaj _zaklenjene"
 
 #: src/dialogs/find.cpp:792
-#, fuzzy
 msgid "Include locked objects in search"
-msgstr "Unija izbranih predmetov"
+msgstr "V iskanje vključi tudi zaklenjene predmete"
 
 #: src/dialogs/find.cpp:803
 msgid "Clear values"
@@ -1580,12 +1574,12 @@ msgstr "Izberi vse predmete, ki ustrezajo vsem izpolnjenim poljem."
 #. Create the label for the object id
 #: src/dialogs/item-properties.cpp:128
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: src/dialogs/item-properties.cpp:138
 msgid ""
 "The id= attribute (only letters, digits, and the characters .-_: allowed)"
-msgstr ""
+msgstr "Lastnost id= (dovoljene so samo črke, številke in znaki -_: )"
 
 #. Button for setting the object's label, title and description.
 #: src/dialogs/item-properties.cpp:147
@@ -1600,7 +1594,7 @@ msgstr "Oznaka"
 
 #: src/dialogs/item-properties.cpp:168
 msgid "A freeform label for the object"
-msgstr ""
+msgstr "Prosta oznaka predmeta"
 
 #. Create the label for the object title
 #: src/dialogs/item-properties.cpp:178 src/dialogs/rdf.cpp:225
@@ -1614,23 +1608,22 @@ msgstr "Opis"
 
 #. Hide
 #: src/dialogs/item-properties.cpp:230
-#, fuzzy
 msgid "Hide"
-msgstr "Strani:"
+msgstr "Skrij"
 
 #: src/dialogs/item-properties.cpp:232
 msgid "Check to make the object invisible"
-msgstr ""
+msgstr "Obkljukajte da skrijete predmet"
 
 #. Lock
 #. TRANSLATORS: "Lock" is a verb here
 #: src/dialogs/item-properties.cpp:241
 msgid "Lock"
-msgstr ""
+msgstr "Zakleni"
 
 #: src/dialogs/item-properties.cpp:243
 msgid "Check to make the object insensitive (not selectable by mouse)"
-msgstr ""
+msgstr "Obkljukajte in predmet bo neobčutljiv (ne boste ga mogli izbrati z miško)"
 
 #. Transformation matrix
 #: src/dialogs/item-properties.cpp:254
@@ -1647,13 +1640,12 @@ msgid "ID"
 msgstr "ID"
 
 #: src/dialogs/item-properties.cpp:514
-#, fuzzy
 msgid "ID invalid"
 msgstr "Oznaka ni veljavna"
 
 #: src/dialogs/item-properties.cpp:516
 msgid "ID exists"
-msgstr ""
+msgstr "Oznaka obstaja"
 
 #: src/dialogs/item-properties.cpp:539
 msgid "Label invalid"
@@ -1661,33 +1653,28 @@ msgstr "Oznaka ni veljavna"
 
 #: src/dialogs/layer-properties.cpp:49
 msgid "Layer Name:"
-msgstr ""
+msgstr "Ime sloja:"
 
 #: src/dialogs/layer-properties.cpp:130
-#, fuzzy
 msgid "Rename Layer"
 msgstr "Preimenuj sloj"
 
 #: src/dialogs/layer-properties.cpp:133
-#, fuzzy
 msgid "_Rename"
-msgstr "Ime datoteke"
+msgstr "P_reimenuj"
 
 #. TRANSLATORS: This means "The layer has been renamed"
 #: src/dialogs/layer-properties.cpp:144
-#, fuzzy
 msgid "Renamed layer"
-msgstr "Preimenuj sloj"
+msgstr "Preimenovan sloj"
 
 #: src/dialogs/layer-properties.cpp:148
-#, fuzzy
 msgid "Create Layer"
 msgstr "Ustvari nov sloj"
 
 #: src/dialogs/layer-properties.cpp:150
-#, fuzzy
 msgid "C_reate"
-msgstr "Ustvari"
+msgstr "_Ustvari"
 
 #: src/dialogs/layer-properties.cpp:164
 msgid "New layer created."
@@ -2179,23 +2166,19 @@ msgid "deg"
 msgstr "stopinj"
 
 #: src/dialogs/xml-tree.cpp:171
-#, fuzzy
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
-msgstr ""
-"<b>Pritisnite z miško</b>, da izberete ali ustvarite besedilo, nato lahko "
-"pišete."
+msgstr "<b>Kliknite</b> da izberete vozlišča, <b>povlecite</b> da jih preuredite."
 
 #: src/dialogs/xml-tree.cpp:183
-#, fuzzy
 msgid "<b>Click</b> attribute to edit."
-msgstr "<b>Urejevalnik XML</b> Izberi lastnosti in jih urejaj"
+msgstr "<b>Kliknite</b> lastnost, da jo spremenite."
 
 #: src/dialogs/xml-tree.cpp:187
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
-msgstr ""
+msgstr "Izbrana je lastnost <b>%s</b>. Ko končate pritisnite <b>Ctrl+Enter</b>, da shranim spremembe."
 
 #: src/dialogs/xml-tree.cpp:280
 msgid "Drag to reorder nodes"
@@ -2249,9 +2232,8 @@ msgstr "Nastavi lastnost"
 
 #. TRANSLATORS: "Set" is a verb here
 #: src/dialogs/xml-tree.cpp:531
-#, fuzzy
 msgid "Set"
-msgstr "Izberi"
+msgstr "Nastavi"
 
 #. TRANSLATORS: "Attribute" is a noun here
 #: src/dialogs/xml-tree.cpp:554
@@ -2274,7 +2256,7 @@ msgstr "Ustvari"
 #, c-format
 msgid ""
 "Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
-msgstr ""
+msgstr "Ne morem nastaviti <b>%s</b>: Nek obstoječ element že ima vrednost <b>%s</b>!"
 
 #: src/document.cpp:428
 #, c-format
@@ -2867,19 +2849,17 @@ msgstr "Pomoč"
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
 #: src/interface.cpp:1118
-#, fuzzy, c-format
+#, c-format
 msgid "Enter group #%s"
-msgstr "Uredi skupino #%s"
+msgstr "Vnesi skupino #%s"
 
 #: src/interface.cpp:1129
-#, fuzzy
 msgid "Go to parent"
-msgstr "Ni barve"
+msgstr "Pojdi do starša"
 
 #: src/interface.cpp:1135
-#, fuzzy
 msgid "Go to root"
-msgstr "Uredi korenino"
+msgstr "Pojdi na začetek"
 
 #: src/interface.cpp:1173
 msgid "Could not parse SVG data"
@@ -3251,12 +3231,11 @@ msgstr "Ustvari povezavo"
 #. Add Text to shape
 #: src/object-ui.cpp:152
 msgid "_Flow Text into Shape"
-msgstr ""
+msgstr "_Spustite besedilo po obliki"
 
 #: src/object-ui.cpp:227
-#, fuzzy
 msgid "Select <b>a shape</b> to flow text into."
-msgstr "Izberite <b>nekaj črt</b> za obrisanje."
+msgstr "Izberite <b>obliko</b> po kateri želite spustiti besedilo."
 
 #. "Ungroup"
 #: src/object-ui.cpp:317 src/verbs.cpp:1514
@@ -3482,11 +3461,11 @@ msgstr "Nič nisem presnel"
 
 #: src/selection-chemistry.cpp:933
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
-msgstr ""
+msgstr "<b>Trenutni sloj je skrit</b>. Če želite lepiti vanj ga odkrijte."
 
 #: src/selection-chemistry.cpp:937
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
-msgstr ""
+msgstr "<b>Trenutni sloj je zaklenjen</b>. Če želite lepiti vanj ga odkrijte."
 
 #: src/selection-chemistry.cpp:950 src/selection-chemistry.cpp:1001
 msgid "Nothing on the clipboard."
@@ -3539,19 +3518,16 @@ msgid ""
 msgstr "Predmet ki ga izbirate <b>ni viden</b> (je med &lt;defs&gt;)"
 
 #: src/selection-chemistry.cpp:1715
-#, fuzzy
 msgid "Select <b>object(s)</b> to convert to pattern."
-msgstr "Izberite nekaj <b>predmetov</b> za pretvorbo v črte."
+msgstr "Izberite <b>predmet(e)</b> za pretvorbo v vzorec."
 
 #: src/selection-chemistry.cpp:1801
-#, fuzzy
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
-msgstr "Izberite <b>tlakovan predmet</b> za razstaviti."
+msgstr "Izberite <b>predmet s tlakovanim polnilom</b> iz katerega želite izvleči predmete."
 
 #: src/selection-chemistry.cpp:1854
-#, fuzzy
 msgid "<b>No pattern fills</b> in the selection."
-msgstr "Med izbiro ni <b>polnjenj z vzorci</b>, ki bi jih lahko razstavil."
+msgstr "Med izbiro ni <b>polnjenj z vzorci</b>."
 
 #: src/selection-chemistry.cpp:1874
 msgid "Select <b>object(s)</b> to make a bitmap copy."
@@ -3644,9 +3620,8 @@ msgid "<b>Link</b> to %s"
 msgstr "<b>Povezava</b> do %s"
 
 #: src/sp-anchor.cpp:180
-#, fuzzy
 msgid "<b>Link</b> without URI"
-msgstr "<b>Povezava</b> do %s"
+msgstr "<b>Povezava</b> brez URI (naslova)"
 
 #: src/sp-ellipse.cpp:437
 msgid "<b>Ellipse</b>"
@@ -3861,7 +3836,7 @@ msgstr ""
 msgid ""
 "You cannot put text on a rectangle in this version. Convert rectangle to "
 "path first."
-msgstr ""
+msgstr "V tej različici ne morete spustiti besedila v pravokotnik. Najprej ga pretvorite v črte."
 
 #: src/text-chemistry.cpp:153
 msgid "Select <b>a text on path</b> to remove it from path."
@@ -3877,11 +3852,11 @@ msgstr "Izberite <b>besedila</b> za odstranitev zgoščevanj."
 
 #: src/text-context.cpp:353
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
-msgstr ""
+msgstr "<b>Trenutni sloj je skrit</b>. Če želite dodajati besedilo ga odkrijte."
 
 #: src/text-context.cpp:357
 msgid "<b>Current layer is locked</b>. Unlock it to be able to add text."
-msgstr ""
+msgstr "<b>Trenutni sloj je zaklenjen</b>. Če želite dodajati besedilo ga odkrijte."
 
 #: src/text-context.cpp:409
 msgid "No-break space"
@@ -3987,18 +3962,16 @@ msgid "Base radius to tip radius ratio"
 msgstr "Razmerje med bližnjo in oddaljeno točko"
 
 #: src/toolbox.cpp:1217
-#, fuzzy
 msgid "Rounded:"
-msgstr "Zaobljenost:"
+msgstr "Zaobljen:"
 
 #: src/toolbox.cpp:1217
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Koliko so koti zaobljeni (0 za ostre)"
 
 #: src/toolbox.cpp:1227
-#, fuzzy
 msgid "Randomized:"
-msgstr "Naključnost:"
+msgstr "Naključno:"
 
 #: src/toolbox.cpp:1227
 msgid "Scatter randomly the corners and angles"
@@ -4085,23 +4058,20 @@ msgid "Angle:"
 msgstr "Kot:"
 
 #: src/toolbox.cpp:1847
-#, fuzzy
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
-msgstr ""
-"Kot vrha peresa (v stopinjah; 0 = vodoravno; nima vpliva, če je ravnost = 0)"
+msgstr "Kot vrha peresa (v stopinjah; 0 = vodoravno; nima vpliva, če je nagibanje = 0)"
 
 #: src/toolbox.cpp:1857
-#, fuzzy
 msgid "Fixation:"
-msgstr "Razširitev:"
+msgstr "Nagibanje:"
 
 #: src/toolbox.cpp:1857
 msgid ""
 "How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
 "= fixed)"
-msgstr ""
+msgstr "Koliko je kot peresa nespremenljiv (0 = vedno pravokoten na smer poteze, 1 = stalen)"
 
 #: src/toolbox.cpp:1870
 msgid "Mass:"
@@ -4217,7 +4187,7 @@ msgstr ""
 msgid ""
 "<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow "
 "keys adjust width, <b>up</b>/<b>down</b> adjust angle."
-msgstr ""
+msgstr "<b>Povlecite</b> da ustvarite kaligrafsko potezo. Tipki <b>levo</b> <b>desno</b> spreminjajo širino, <b>gor</b> <b>dol</b> pa kot nagiba peresa."
 
 #: src/tools-switch.cpp:177
 msgid "<b>Click</b> to select or create text object, then type."
@@ -4277,14 +4247,14 @@ msgid "No current layer."
 msgstr "Ni trenutnega sloja."
 
 #: src/verbs.cpp:939
-#, fuzzy, c-format
+#, c-format
 msgid "Raised layer <b>%s</b>."
-msgstr "Dvignjen sloj."
+msgstr "Dvignjen sloj <b>%s</b>."
 
 #: src/verbs.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Lowered layer <b>%s</b>."
-msgstr "Spuščen sloj."
+msgstr "Spuščen sloj.<b>%s</b>."
 
 #: src/verbs.cpp:952
 msgid "Can't move layer any further."
@@ -4305,21 +4275,19 @@ msgstr "tutorial-basic.sl.svg"
 
 #: src/verbs.cpp:1335
 msgid "tutorial-shapes.svg"
-msgstr "tutorial-shapes.svg"
+msgstr "tutorial-shapes.sl.svg"
 
 #: src/verbs.cpp:1338
 msgid "tutorial-advanced.svg"
 msgstr "tutorial-advanced.sl.svg"
 
 #: src/verbs.cpp:1341
-#, fuzzy
 msgid "tutorial-tracing.svg"
-msgstr "tutorial-basic.sl.svg"
+msgstr "tutorial-tracing.sl.svg"
 
 #: src/verbs.cpp:1344
-#, fuzzy
 msgid "tutorial-calligraphy.svg"
-msgstr "tutorial-basic.sl.svg"
+msgstr "tutorial-calligraphy.sl.svg"
 
 #: src/verbs.cpp:1347
 msgid "elementsofdesign.svg"
@@ -4554,9 +4522,8 @@ msgstr "Izberi predmet, k kateremu je povezan dvojnik"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: src/verbs.cpp:1491
-#, fuzzy
 msgid "O_bject(s) to Pattern"
-msgstr "Predmet v črte"
+msgstr "Pre_dmet(i) v vzorce"
 
 #: src/verbs.cpp:1492
 msgid "Convert selection to a rectangle with tiled pattern fill"
@@ -4564,9 +4531,8 @@ msgstr "S tlakovanjem pretvori izbrano v pravokotnik"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: src/verbs.cpp:1494
-#, fuzzy
 msgid "Pattern to Ob_ject(s)"
-msgstr "Zamik vzorca"
+msgstr "Vzorec v pred_met(e)"
 
 #: src/verbs.cpp:1495
 msgid "Extract objects from a tiled pattern fill"
@@ -4658,12 +4624,10 @@ msgid "Remove text from path"
 msgstr "Odstrani besedilo s poti"
 
 #: src/verbs.cpp:1521
-#, fuzzy
 msgid "Remove Manual _Kerns"
 msgstr "Odstrani ročno _zgoščevanje"
 
 #: src/verbs.cpp:1522
-#, fuzzy
 msgid "Remove all manual kerns from a text object"
 msgstr "Odstrani vse ročne popravke razmakov črk v besedilu"
 
@@ -4856,18 +4820,16 @@ msgstr "Razstavi izbrane črte na manjše enote"
 
 #. Layer
 #: src/verbs.cpp:1587
-#, fuzzy
 msgid "_New Layer..."
-msgstr "Nov sloj"
+msgstr "_Nov sloj..."
 
 #: src/verbs.cpp:1588
 msgid "Create a new layer"
 msgstr "Ustvari nov sloj"
 
 #: src/verbs.cpp:1589
-#, fuzzy
 msgid "Ren_ame Layer..."
-msgstr "Preimenuj sloj"
+msgstr "P_reimenuj sloj..."
 
 #: src/verbs.cpp:1590
 msgid "Rename the current layer"
@@ -4890,45 +4852,40 @@ msgid "Switch to the previous layer in the document"
 msgstr "Premakni na prejšni sloj v dokumentu"
 
 #: src/verbs.cpp:1595
-#, fuzzy
 msgid "Layer to _Top"
-msgstr "Sloj na vrh"
+msgstr "Sloj na _vrh"
 
 #: src/verbs.cpp:1596
 msgid "Raise the current layer to the top"
 msgstr "Trenutni sloj dvigni na vrh"
 
 #: src/verbs.cpp:1597
-#, fuzzy
 msgid "Layer to _Bottom"
-msgstr "Sloj na dno"
+msgstr "Sloj na _dno"
 
 #: src/verbs.cpp:1598
 msgid "Lower the current layer to the bottom"
 msgstr "Spusti trnutni sloj na dno"
 
 #: src/verbs.cpp:1599
-#, fuzzy
 msgid "_Raise Layer"
-msgstr "Dvigni sloj"
+msgstr "_Dvigni sloj"
 
 #: src/verbs.cpp:1600
 msgid "Raise the current layer"
 msgstr "Dvigni trenutni sloj"
 
 #: src/verbs.cpp:1601
-#, fuzzy
 msgid "_Lower Layer"
-msgstr "Spusti sloj"
+msgstr "_Spusti sloj"
 
 #: src/verbs.cpp:1602
 msgid "Lower the current layer"
 msgstr "Spusti trenutni sloj"
 
 #: src/verbs.cpp:1603
-#, fuzzy
 msgid "_Delete Current Layer"
-msgstr "Izbriši trenutni sloj"
+msgstr "I_zbriši trenutni sloj"
 
 #: src/verbs.cpp:1604
 msgid "Delete the current layer"
@@ -5326,7 +5283,7 @@ msgstr "Okno preoblikovanja"
 
 #: src/verbs.cpp:1719
 msgid "_Align and Distribute..."
-msgstr "Poravnava in rapored"
+msgstr "Pora_vnava in rapored..."
 
 #: src/verbs.cpp:1720
 msgid "Align and Distribute dialog"
@@ -5391,7 +5348,7 @@ msgstr "Spisek bližnjic tipkovnice in miške"
 
 #: src/verbs.cpp:1737
 msgid "_About Inkscape"
-msgstr "O Inkscape-u"
+msgstr "_O Inkscape-u"
 
 #. "help_about"
 #. Tutorials
@@ -5423,32 +5380,27 @@ msgstr "Napredna navodila za uporabo"
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: src/verbs.cpp:1748
-#, fuzzy
 msgid "Inkscape: T_racing"
-msgstr "Inkscape: _Osnove"
+msgstr "Inkscape: _Prerisovanje"
 
 #: src/verbs.cpp:1749
-#, fuzzy
 msgid "Using bitmap tracing"
-msgstr "Izpiši različico Inkscape-a"
+msgstr "Uporabljate prerisovanje slik"
 
 #. "tutorial_tracing"
 #: src/verbs.cpp:1750
-#, fuzzy
 msgid "Inkscape: _Calligraphy"
-msgstr "Inkscape: _Osnove"
+msgstr "Inkscape: _Kaligrafija"
 
 #: src/verbs.cpp:1751
-#, fuzzy
 msgid "Using the Calligraphy pen tool"
-msgstr "Izpiši različico Inkscape-a"
+msgstr "Uporabljate kaligrafsko pero"
 
 #: src/verbs.cpp:1752
 msgid "_Elements of Design"
 msgstr "_Temelji oblikovanja"
 
 #: src/verbs.cpp:1753
-#, fuzzy
 msgid "Principles of design in the tutorial form"
 msgstr "Vodič skozi temeljne koncepte oblikovanja"
 
@@ -5458,7 +5410,6 @@ msgid "_Tips and Tricks"
 msgstr "Triki in nasveti"
 
 #: src/verbs.cpp:1755
-#, fuzzy
 msgid "Miscellaneous tips and tricks"
 msgstr "Razni namigi in triki"
 
@@ -5610,7 +5561,6 @@ msgstr "Več slogov"
 #. TRANSLATORS: "Clone" is a noun here. This message is to notify the user
 #. that the currently selected object is a clone.
 #: src/widgets/paint-selector.cpp:676
-#, fuzzy
 msgid "Clone selected"
 msgstr "Izbran klon"
 
@@ -5619,12 +5569,10 @@ msgid "No patterns in document"
 msgstr "V dokumentu ni vzorcev"
 
 #: src/widgets/paint-selector.cpp:1000
-#, fuzzy
 msgid ""
 "Use <b>Edit &gt; Object(s) to Pattern</b> to create a new pattern from "
 "selection."
-msgstr ""
-"Uporabite <b>Uredi &gt; Tlakuj</b>, da iz izbranega ustvarite nov vzorec."
+msgstr "Uporabite <b>Uredi &gt; Tlakuj</b>, da iz izbranega ustvarite nov vzorec."
 
 #: src/widgets/paint-selector.cpp:1013
 msgid "Pattern fill"
@@ -5691,7 +5639,7 @@ msgstr "_H"
 
 #: src/widgets/sp-color-scales.cpp:405 src/widgets/sp-color-scales.cpp:406
 msgid "Hue"
-msgstr "Odtenek"
+msgstr "Barvnost"
 
 #: src/widgets/sp-color-scales.cpp:407
 msgid "_S"
