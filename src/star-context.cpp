@@ -431,6 +431,17 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
     int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
     if (!sc->item) {
+
+        SPItem *layer=SP_ITEM(desktop->currentLayer());
+        if ( !layer || desktop->itemIsHidden(layer)) {
+            sc->_message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+            return;
+        }
+        if ( !layer || layer->isLocked()) {
+            sc->_message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+            return;
+        }
+
         /* Create object */
         SPRepr *repr = sp_repr_new ("path");
         sp_repr_set_attr (repr, "sodipodi:type", "star");

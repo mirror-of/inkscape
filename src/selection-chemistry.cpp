@@ -921,6 +921,16 @@ void sp_selection_paste(bool in_place)
     if (desktop == NULL) return;
     g_assert(SP_IS_DESKTOP(desktop));
 
+            SPItem *layer=SP_ITEM(desktop->currentLayer());
+            if ( !layer || desktop->itemIsHidden(layer)) {
+                desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to paste to it."));
+                return;
+            }
+            if ( !layer || layer->isLocked()) {
+                desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to paste to it."));
+                return;
+            }
+
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
     if (tools_isactive (desktop, TOOLS_TEXT)) {

@@ -346,6 +346,18 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		break;
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
+
+            SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(ec);
+            SPItem *layer=SP_ITEM(desktop->currentLayer());
+            if ( !layer || desktop->itemIsHidden(layer)) {
+                desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to add text."));
+                return TRUE;
+            }
+            if ( !layer || layer->isLocked()) {
+                desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to add text."));
+                return TRUE;
+            }
+
 			/* Button 1, set X & Y & new item */
 			SP_DT_SELECTION(ec->desktop)->clear();
 			NR::Point dtp = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));

@@ -193,6 +193,10 @@ sp_dyna_draw_context_dispose(GObject *object)
         ddc->currentshape = NULL;
     }
 
+    if (ddc->_message_context) {
+        delete ddc->_message_context;
+    }
+
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
@@ -223,6 +227,10 @@ sp_dyna_draw_context_setup(SPEventContext *ec)
     sp_event_context_read(ec, "width");
     sp_event_context_read(ec, "thinning");
     sp_event_context_read(ec, "flatness");
+
+    ddc->is_drawing = false;
+
+    ddc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
 }
 
 static void
@@ -442,6 +450,18 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
     switch (event->type) {
     case GDK_BUTTON_PRESS:
         if ( event->button.button == 1 ) {
+
+            SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
+            SPItem *layer=SP_ITEM(desktop->currentLayer());
+            if ( !layer || desktop->itemIsHidden(layer)) {
+                dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+                return TRUE;
+            }
+            if ( !layer || layer->isLocked()) {
+                dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+                return TRUE;
+            }
+
             NR::Point const button_w(event->button.x,
                                      event->button.y);
             NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
@@ -475,10 +495,12 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                 dc->timer_id = gtk_timeout_add(SAMPLE_TIMEOUT, sp_dyna_draw_timeout_handler, dc);
             }
             ret = TRUE;
+
+            dc->is_drawing = true;
         }
         break;
     case GDK_MOTION_NOTIFY:
-        if ( !dc->use_timeout && ( event->motion.state & GDK_BUTTON1_MASK ) ) {
+        if ( dc->is_drawing && !dc->use_timeout && ( event->motion.state & GDK_BUTTON1_MASK ) ) {
             dc->dragging = TRUE;
             dc->dynahand = TRUE;
 
@@ -505,6 +527,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
 
     case GDK_BUTTON_RELEASE:
         sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+        dc->is_drawing = false;
         if ( event->button.button == 1
              && dc->use_timeout
              && dc->timer_id != 0 )

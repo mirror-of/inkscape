@@ -459,10 +459,14 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
 
     if (!rc.item) {
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
 
-        if ( !layer || !layer->isVisibleAndUnlocked() ) {
-            rc._message_context->set(Inkscape::ERROR_MESSAGE, _("Layer is not editable."));
+        SPItem *layer=SP_ITEM(desktop->currentLayer());
+        if ( !layer || desktop->itemIsHidden(layer)) {
+            rc._message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+            return;
+        }
+        if ( !layer || layer->isLocked()) {
+            rc._message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
             return;
         }
 

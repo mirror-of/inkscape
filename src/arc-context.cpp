@@ -423,6 +423,17 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
     SPDesktop *desktop = SP_EVENT_CONTEXT(ac)->desktop;
 
     if (!ac->item) {
+
+        SPItem *layer=SP_ITEM(desktop->currentLayer());
+        if ( !layer || desktop->itemIsHidden(layer)) {
+            ac->_message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+            return;
+        }
+        if ( !layer || layer->isLocked()) {
+            ac->_message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+            return;
+        }
+
         /* Create object */
         SPRepr *repr = sp_repr_new("path");
         sp_repr_set_attr(repr, "sodipodi:type", "arc");

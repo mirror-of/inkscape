@@ -75,6 +75,10 @@ struct SPDynaDrawContext
 
     double vel_thin;
     double flatness;
+
+    Inkscape::MessageContext *_message_context;
+
+    bool is_drawing;
 };
 
 struct SPDynaDrawContextClass

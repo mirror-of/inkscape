@@ -21,6 +21,7 @@
 #include "draw-anchor.h"
 #include "draw-context.h"
 #include "modifier-fns.h"
+#include "sp-item.h"
 #include "prefs-utils.h"
 #include "snap.h"
 #include "display/bezier-utils.h"
@@ -106,6 +107,9 @@ sp_pencil_context_setup(SPEventContext *ec)
     if (((SPEventContextClass *) pencil_parent_class)->setup) {
         ((SPEventContextClass *) pencil_parent_class)->setup(ec);
     }
+
+    SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
+    pc->is_drawing = false;
 }
 
 
@@ -168,6 +172,19 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
 {
     gint ret = FALSE;
     if ( bevent.button == 1 ) {
+
+        SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
+        SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
+        SPItem *layer=SP_ITEM(desktop->currentLayer());
+        if ( !layer || desktop->itemIsHidden(layer)) {
+            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+            return TRUE;
+        }
+        if ( !layer || layer->isLocked()) {
+            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+            return TRUE;
+        }
+
         NR::Point const button_w(bevent.x,
                                  bevent.y);
         /* Find desktop coordinates */
@@ -193,6 +210,8 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
                 ret = TRUE;
                 break;
         }
+
+        pc->is_drawing = true;
     }
     return ret;
 }
@@ -202,7 +221,8 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
 {
     gint ret = FALSE;
     SPDesktop *const dt = pc->desktop;
-    if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
+
+    if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab && pc->is_drawing) {
         /* Grab mouse, so release will not pass unnoticed */
         pc->grab = SP_CANVAS_ITEM(dt->acetate);
         sp_canvas_item_grab(pc->grab, ( GDK_BUTTON_PRESS_MASK   |
@@ -230,7 +250,7 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
             break;
         default:
             /* We may be idle or already freehand */
-            if ( mevent.state & GDK_BUTTON1_MASK ) {
+            if ( mevent.state & GDK_BUTTON1_MASK && pc->is_drawing ) {
                 pc->state = SP_PENCIL_CONTEXT_FREEHAND;
                 if ( !pc->sa && !pc->green_anchor ) {
                     /* Create green anchor */
@@ -256,8 +276,11 @@ static gint
 pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &revent)
 {
     gint ret = FALSE;
-    if ( revent.button == 1 ) {
+
+    if ( revent.button == 1 && pc->is_drawing) {
         SPDesktop *const dt = pc->desktop;
+
+        pc->is_drawing = false;
 
         /* Find desktop coordinates */
         NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(revent.x,

@@ -21,6 +21,7 @@
 #include "draw-anchor.h"
 #include "draw-context.h"
 #include "prefs-utils.h"
+#include "sp-item.h"
 #include "display/canvas-bpath.h"
 #include "display/sp-canvas.h"
 #include "display/sp-ctrlline.h"
@@ -258,8 +259,22 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
 static gint
 pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
 {
+
     gint ret = FALSE;
     if ( bevent.button == 1 ) {
+
+        SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
+        SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
+        SPItem *layer=SP_ITEM(desktop->currentLayer());
+        if ( !layer || desktop->itemIsHidden(layer)) {
+            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+            return TRUE;
+        }
+        if ( !layer || layer->isLocked()) {
+            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+            return TRUE;
+        }
+
         NR::Point const event_w(bevent.x,
                                 bevent.y);
         pen_drag_origin_w = event_w;
