@@ -1,3 +1,8 @@
+2004-11-04  Kees Cook  <kees@outflux.net>
+
+	* src/dialogs/rdf.h, src/dialogs/rdf.cpp: added rdf:Bag for the
+	  dc:subject keyword list.  Closed bug #1021025.
+
 2004-11-04  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/layer-selector.cpp: togglable images and formatting

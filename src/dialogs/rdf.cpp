@@ -68,6 +68,23 @@
   </License>
   
 </rdf:RDF>
+
+
+Bag example:
+
+<dc:subject>
+<rdf:Bag>
+<rdf:li>open clip art logo</rdf:li>
+<rdf:li>images</rdf:li>
+<rdf:li>logo</rdf:li>
+<rdf:li>clip art</rdf:li>
+<rdf:li>ocal</rdf:li>
+<rdf:li>logotype</rdf:li>
+<rdf:li>filetype</rdf:li>
+</rdf:Bag>
+</dc:subject>
+
+
 */
 
 struct rdf_double_t rdf_license_empty [] = {
@@ -240,8 +257,8 @@ struct rdf_work_entity_t rdf_work_entities [] = {
     { "language", N_("Language"), "dc:language", RDF_CONTENT,
       N_("Two-letter language tag with optional subtags for the language of this document.  (e.g. 'en-GB')"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
-    { "subject", N_("Keywords"), "dc:subject", RDF_CONTENT,
-      N_("The topic of this document as key words, phrases, or classification."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+    { "subject", N_("Keywords"), "dc:subject", RDF_BAG,
+      N_("The topic of this document as comma-separated key words, phrases, or classifications."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     // TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
     // For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
@@ -422,6 +439,8 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
 {
     g_return_val_if_fail (repr != NULL, NULL);
     g_return_val_if_fail (entity != NULL, NULL);
+    static gchar * bag = NULL;
+    gchar * holder = NULL;
 
     //printf("Getting '%s' contents from '%s'\n",entity->tag,SP_REPR_NAME(repr));
 
@@ -432,6 +451,7 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             if ( temp == NULL ) return NULL;
             
             return sp_repr_content(temp);
+
         case RDF_AGENT:
             temp = sp_repr_lookup_name ( repr, "cc:Agent", 1 );
             if ( temp == NULL ) return NULL;
@@ -443,10 +463,44 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             if ( temp == NULL ) return NULL;
 
             return sp_repr_content(temp);
+
         case RDF_RESOURCE:
             return sp_repr_attr(repr, "rdf:resource");
+
         case RDF_XML:
             return "xml goes here";
+
+        case RDF_BAG:
+            /* clear the static string.  yucky. */
+            if (bag) g_free(bag);
+            bag = NULL;
+
+            temp = sp_repr_lookup_name ( repr, "rdf:Bag", 1 );
+            if ( temp == NULL ) {
+                /* backwards compatible: read contents */
+                temp = sp_repr_children(repr);
+                if ( temp == NULL ) return NULL;
+            
+                return sp_repr_content(temp);
+            }
+
+            for ( temp = sp_repr_children(temp) ;
+                  temp ;
+                  temp = sp_repr_next(temp) ) {
+                if (!strcmp(sp_repr_name(temp),"rdf:li")) {
+                    gchar * str = (gchar *)sp_repr_content(temp);
+                    if (bag) {
+                        holder = bag;
+                        bag = g_strconcat(holder, ", ", str, NULL);
+                        g_free(holder);
+                    }
+                    else {
+                        bag = g_strdup(str);
+                    }
+                }
+            }
+            return bag;
+
         default:
             break;
     }
@@ -461,8 +515,12 @@ rdf_set_repr_text ( SPRepr * repr,
     g_return_val_if_fail ( repr != NULL, 0);
     g_return_val_if_fail ( entity != NULL, 0);
     g_return_val_if_fail ( text != NULL, 0);
+    gchar * str = NULL;
+    gchar** strlist = NULL;
+    int i;
 
     SPRepr * temp=NULL;
+    SPRepr * child=NULL;
     SPRepr * parent=repr;
     switch (entity->datatype) {
         case RDF_CONTENT:
@@ -517,8 +575,52 @@ rdf_set_repr_text ( SPRepr * repr,
 
         case RDF_RESOURCE:
             return sp_repr_set_attr ( parent, "rdf:resource", text );
+
         case RDF_XML:
             return 1;
+
+        case RDF_BAG:
+            /* find/create the rdf:Bag item */
+            temp = sp_repr_lookup_name ( parent, "rdf:Bag", 1 );
+            if ( temp == NULL ) {
+                /* backward compatibility: drop the dc:subject contents */
+                while ( (temp = sp_repr_children( parent )) ) {
+                    sp_repr_remove_child( parent, temp );
+                }
+
+                temp = sp_repr_new ( "rdf:Bag" );
+                g_return_val_if_fail (temp != NULL, 0);
+
+                sp_repr_append_child ( parent, temp );
+                sp_repr_unref ( temp );
+            }
+            parent = temp;
+
+            /* toss all the old list items */
+            while ( (temp = sp_repr_children( parent )) ) {
+                sp_repr_remove_child( parent, temp );
+            }
+
+            /* chop our list up on commas */
+            strlist = g_strsplit( text, ",", 0);
+
+            for (i = 0; (str = strlist[i]); i++) {
+                temp = sp_repr_new ( "rdf:li" );
+                g_return_val_if_fail (temp != NULL, 0);
+
+                sp_repr_append_child ( parent, temp );
+                sp_repr_unref ( temp );
+
+                child = sp_repr_new_text( g_strstrip(str) );
+                g_return_val_if_fail (child != NULL, 0);
+
+                sp_repr_append_child ( temp, child );
+                sp_repr_unref ( child );
+            }
+            g_strfreev( strlist );
+
+            return 1;
+
         default:
             break;
     }

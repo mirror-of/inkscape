@@ -35,6 +35,7 @@ enum RDFType {
     RDF_AGENT,    // requires the "Agent" hierarchy before doing content
     RDF_RESOURCE, // stored in "rdf:resource" element
     RDF_XML,      // literal XML
+    RDF_BAG,      // rdf:Bag resources
 };
 
 /**
