@@ -23,6 +23,14 @@
 #include <gtkmm/entry.h>
 #include <gdkmm/pixbuf.h>
 
+//Temporary ugly hack
+//Remove these after the get_filter() calls in
+//show() on both classes are fixed
+#include <gtk/gtkfilechooser.h>
+#include <gtk/gtkfilefilter.h>
+
+
+
 #include <vector>
 #include <map>
 
@@ -707,7 +715,7 @@ void FileOpenDialogImpl::createFilterMenu()
 
     for (GSList *current_item = g_slist_next(extension_list);
          current_item; current_item = g_slist_next(current_item))
-    {
+        {
         Inkscape::Extension::DB::IOExtensionDescription * ioext = 
               reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
@@ -715,19 +723,19 @@ void FileOpenDialogImpl::createFilterMenu()
         upattern += ioext->file_extension;
         if (!( strcmp(".svg",  ioext->file_extension)==0 ||
                strcmp(".svgz", ioext->file_extension)==0   ))
-        {
+            {
             Gtk::FileFilter filter;
             Glib::ustring uname(_(ioext->name));
             filter.set_name(uname);
             filter.add_pattern(upattern);
             add_filter(filter);
             extensionMap[uname]=ioext->extension;
-        }
+            }
         //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
         allInkscapeFilter.add_pattern(upattern);
         if ( strncmp("image", ioext->mimetype, 5)==0 )
             allImageFilter.add_pattern(upattern);
-    }
+        }
 
     Inkscape::Extension::db.free_list(extension_list);
 }
@@ -742,6 +750,7 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
                                        char const *title) :
                  Gtk::FileChooserDialog(Glib::ustring(title))
 {
+
 
     /* One file at a time */
     set_select_multiple(false);
@@ -817,8 +826,6 @@ FileOpenDialogImpl::~FileOpenDialogImpl()
 }
 
 
-
-
 /**
  * Show this dialog modally.  Return true if user hits [OK]
  */
@@ -830,16 +837,25 @@ FileOpenDialogImpl::show()
     gint b = run();                        //Dialog
     hide();
 
-    if (b == GTK_RESPONSE_OK) {
-        if (get_filter()) {
+    if (b == GTK_RESPONSE_OK)
+        {
+        //This is a hack, to avoid the warning messages that
+        //Gtk::FileChooser::get_filter() returns
+        //should be:  Gtk::FileFilter *filter = get_filter();
+        GtkFileChooser *gtkFileChooser = Gtk::FileChooser::gobj();
+        GtkFileFilter *filter = gtk_file_chooser_get_filter(gtkFileChooser);
+        if (filter)
+            {
             //Get which extension was chosen, if any
-            extension = extensionMap[get_filter()->get_name()];
-        }
+            extension = extensionMap[gtk_file_filter_get_name(filter)];
+            }
         myFilename = get_filename();
         return TRUE;
-    } else {
-        return FALSE;
-    }
+        }
+    else
+       {
+       return FALSE;
+       }
 }
 
 
@@ -1008,7 +1024,7 @@ void FileSaveDialogImpl::createFilterMenu()
 
     for (GSList *current_item = g_slist_next(extension_list);
          current_item; current_item = g_slist_next(current_item))
-    {
+        {
         Inkscape::Extension::DB::IOExtensionDescription * ioext = 
               reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
@@ -1016,19 +1032,19 @@ void FileSaveDialogImpl::createFilterMenu()
         upattern += ioext->file_extension;
         if (!( strcmp(".svg",  ioext->file_extension)==0 ||
                strcmp(".svgz", ioext->file_extension)==0   ))
-        {
+            {
             Gtk::FileFilter filter;
             Glib::ustring uname(_(ioext->name));
             filter.set_name(uname);
             filter.add_pattern(upattern);
             add_filter(filter);
             extensionMap[uname]=ioext->extension;
-        }
+            }
         //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
         allInkscapeFilter.add_pattern(upattern);
         if ( strncmp("image", ioext->mimetype, 5)==0 )
             allImageFilter.add_pattern(upattern);
-    }
+        }
 
     Inkscape::Extension::db.free_list(extension_list);
 }
@@ -1127,25 +1143,35 @@ FileSaveDialogImpl::show()
     gint b = run();                        //Dialog
     hide();
 
-    if (b == GTK_RESPONSE_OK) {
-        if (get_filter()) {
+    if (b == GTK_RESPONSE_OK)
+        {
+        //This is a hack, to avoid the warning messages that
+        //Gtk::FileChooser::get_filter() returns
+        //should be:  Gtk::FileFilter *filter = get_filter();
+        GtkFileChooser *gtkFileChooser = Gtk::FileChooser::gobj();
+        GtkFileFilter *filter = gtk_file_chooser_get_filter(gtkFileChooser);
+        if (filter)
+            {
             // Get which extension was chosen, if any.
-            extension = extensionMap[get_filter()->get_name()];
-        }
+            extension = extensionMap[gtk_file_filter_get_name(filter)];
+            }
         myFilename = get_filename();
-        return TRUE;
-        /* FIXME: Why do we have more code after this `return' ? */
+
+        /*
+
+        // FIXME: Why do we have more code
 
         append_extension = checkbox.get_active();
         prefs_set_int_attribute("dialogs.save_as", "append_extension", append_extension);
-        prefs_set_string_attribute("dialogs.save_as", "default", ( extension != NULL
-                                                                   ? extension->get_id()
-                                                                   : "" ));
-
+        prefs_set_string_attribute("dialogs.save_as", "default", 
+                  ( extension != NULL ? extension->get_id() : "" ));
+        */
         return TRUE;
-    } else {
+        }
+    else 
+        {
         return FALSE;
-    }
+        }
 }
 
 
