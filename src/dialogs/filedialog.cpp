@@ -15,6 +15,7 @@
 #include "helper/sp-intl.h"
 #include "prefs-utils.h"
 
+#include <dialogs/dialog-events.h>
 #include <extension/db.h>
 
 #define IO_STORAGE_NAME "IOExtension"
@@ -158,6 +159,7 @@ FileOpenDialog::show()
     GtkWidget *dlg = nativeData->dlg;
 
     gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
+    sp_transientize (dlg);
     gint b = gtk_dialog_run (GTK_DIALOG (dlg));
 	gtk_widget_hide(GTK_WIDGET(dlg));
 
@@ -280,7 +282,7 @@ FileSaveDialog::FileSaveDialog(
     gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
     gtk_widget_show_all (hb);
 
-	checkbox = gtk_check_button_new_with_label(_("Automatically append filename extension"));
+	checkbox = gtk_check_button_new_with_label(_("Append filename extension automatically"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), nativeData->append_extension);
 	g_signal_connect(G_OBJECT(checkbox), "toggled", G_CALLBACK(checkbox_toggle), (gpointer)&nativeData->append_extension);
 	gtk_widget_show(checkbox);
@@ -315,6 +317,7 @@ FileSaveDialog::show() {
 
 	/* Reset the default back to autodetect */
     gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
+    sp_transientize (dlg);
     gint b = gtk_dialog_run (GTK_DIALOG (dlg));
 	gtk_widget_hide(GTK_WIDGET(dlg));
 
