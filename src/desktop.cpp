@@ -607,7 +607,8 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 static void sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDesktopWidget *dtw);
-static void sp_desktop_widget_view_status_set (SPView *view, const gchar *status, gboolean isdefault, SPDesktopWidget *dtw);
+static void sp_desktop_widget_view_status_set (SPView *view, const gchar *status, guint msec, SPDesktopWidget *dtw);
+gboolean sp_desktop_widget_view_status_remove (gpointer data);
 
 static void sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw);
 static void sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw);
@@ -774,7 +775,8 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->coord_status, FALSE, FALSE, 2);
 
 	dtw->select_status = gtk_statusbar_new ();
-	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, "");
+	// initially, display the selector message
+	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, "Click, Shift+click, drag around objects to select.");
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->select_status), TRUE);
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->select_status, TRUE, TRUE, 0);
 
@@ -1057,11 +1059,35 @@ sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDeskt
         with sp_desktop_clear_status making the default visible
  */
 
+typedef struct {
+	GtkStatusbar *sb; 
+	guint message_id; 
+} statusbar_data;
+
 static void 
-sp_desktop_widget_view_status_set (SPView *view, const gchar *status, gboolean isdefault, SPDesktopWidget *dtw)
+sp_desktop_widget_view_status_set (SPView *view, const gchar *status, guint msec, SPDesktopWidget *dtw)
 {
-	gtk_statusbar_pop (GTK_STATUSBAR (dtw->select_status), 0);
-	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, status ? status : "");
+	statusbar_data *d;
+	guint message_id;
+
+	message_id = gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, status ? status : "");
+
+	if (msec != 0) { // we want to remove the message after msec milliseconds
+		// save  the statusbar pointer and the message id
+		d = (statusbar_data *) g_malloc (sizeof (statusbar_data));
+		d->sb = GTK_STATUSBAR (dtw->select_status);
+		d->message_id = message_id; 
+		// call the remove function with this data
+		gtk_timeout_add (msec, (GtkFunction) sp_desktop_widget_view_status_remove, d);  
+	}
+}
+
+gboolean
+sp_desktop_widget_view_status_remove (gpointer d)
+{
+	gtk_statusbar_remove ((GtkStatusbar *) ((statusbar_data *) d)->sb, 0, ((statusbar_data *) d)->message_id);
+	g_free (d); // freeing memory that was allocated in _status_set; ugly, but inevitable
+	return FALSE; // this is a one-time timeout
 }
 
 static void
