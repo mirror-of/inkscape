@@ -1,3 +1,25 @@
+2003-12-26  bulia byak <bulia@dr.com>
+
+	* src/document.cpp: added rel2abs to sp_document_set_uri, simplified
+
+	* src/document.cpp: removed rel2abs into dir-util
+
+	* src/dir-util.cpp src/dir-util.h: moved rel2abs and abs2rel here
+
+	* src/modules/svg.cpp: Cleaned up svg_save: removed extraneous setting of docbase and
+	docname, moved uri_set before save, added comments
+
+	* src/document.h src/document.cpp src/desktop.h src/desktop.cpp: item_at_point: add
+	into_groups; group_at_point: new
+
+	* src/selection.cpp: When selecting a group, deselect all its descendants to prevent
+	double selection
+
+	* src/select-context.cpp src/select-context.h: Added ctrl-click/ctrl-shift-click to
+	select/add to selection regardless of grouping
+
+	* src/verbs.cpp: 2 more mnemo changes 
+
 2003-12-26  Nathan Hurst <njh@mail.csse.monash.edu.au>
 
 	* libnr: moving towards a fully class based Point and Matrix.
