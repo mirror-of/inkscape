@@ -1,12 +1,14 @@
 #define __SP_DISPLAY_SETTINGS_C__
 
 /*
-* Display settings dialog
+* Inkscape Preferences dialog
 *
-* Author:
+* Authors:
 *   Lauris Kaplinski <lauris@ximian.com>
+*   bulia byak
 *
 * Copyright (C) 2001 Ximian, Inc.
+* Copyright (C) 2001-2004 Authors
 *
 */
 
