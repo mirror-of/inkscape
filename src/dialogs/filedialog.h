@@ -5,6 +5,9 @@
 #include <glib.h>
 #include <extension/db.h>
 
+/* leave the implementation for the .cpp files */
+class Inkscape::Extension::Extension;
+
 namespace Inkscape
 {
 namespace UI
@@ -48,52 +51,43 @@ public:
 
 
     /**
-     * Constructor.
+     * Constructor ..  do not call directly
      * @param path the directory where to start searching
      * @param fileTypes one of FileDialogTypes
      * @param title the title of the dialog
      */
-    FileOpenDialog(const char *path, FileDialogType fileTypes, const char *title);
+    FileOpenDialog()
+        {};
+
+    /**
+     * Factory.
+     * @param path the directory where to start searching
+     * @param fileTypes one of FileDialogTypes
+     * @param title the title of the dialog
+     */
+    static FileOpenDialog *create(const char *path, FileDialogType fileTypes, const char *title);
 
 
     /**
      * Destructor.
      * Perform any necessary cleanups.
      */
-    ~FileOpenDialog();
+    virtual ~FileOpenDialog() {};
 
     /**
      * Show an OpenFile file selector.
      * @return the selected path if user selected one, else NULL
      */
-    bool show();
+    virtual bool show() =0;
 
     /**
      * Return the 'key' (filetype) of the selection, if any
      * @return a pointer to a string if successful (which must
      * be later freed with g_free(), else NULL.
      */
-	Inkscape::Extension::Extension * getSelectionType()
-        { return extension; }
-	gchar * getFilename (void) { return filename; }
+    virtual Inkscape::Extension::Extension * getSelectionType() = 0;
 
-private:
-
-    /**
-     * The extension to use to write this file
-     */
-	Inkscape::Extension::Extension * extension;
-
-	/**
-	 * Filename that was given
-	 */
-	gchar * filename;
-
-
-    /**
-     * Architecture-specific data
-     */
-    FileOpenNativeData *nativeData;
+    virtual gchar * getFilename () =0;
 
 }; //FileOpenDialog
 
@@ -101,11 +95,6 @@ private:
 
 
 
-
-/**
- * Architecture-specific data
- */
-typedef struct FileSaveNativeData_def FileSaveNativeData;
 
 /**
  * This class provides an implementation-independent API for
@@ -116,55 +105,55 @@ class FileSaveDialog
 public:
 
     /**
-     * Constructor.
+     * Constructor.  Do not call directly .   Use the factory.
      * @param path the directory where to start searching
      * @param fileTypes one of FileDialogTypes
      * @param title the title of the dialog
      * @param key a list of file types from which the user can select
      */
-    FileSaveDialog(const char *path, FileDialogType fileTypes, const char *title, const char * default_key);
+    FileSaveDialog ()
+        {};
+
+    /**
+     * Factory.
+     * @param path the directory where to start searching
+     * @param fileTypes one of FileDialogTypes
+     * @param title the title of the dialog
+     * @param key a list of file types from which the user can select
+     */
+    static FileSaveDialog *create(const char *path, FileDialogType fileTypes, const char *title, const char * default_key);
 
 
     /**
      * Destructor.
      * Perform any necessary cleanups.
      */
-    ~FileSaveDialog();
+    virtual ~FileSaveDialog() {};
 
 
     /**
      * Show an SaveAs file selector.
      * @return the selected path if user selected one, else NULL
      */
-    bool show();
+    virtual bool show() =0;
 
     /**
      * Return the 'key' (filetype) of the selection, if any
      * @return a pointer to a string if successful (which must
      * be later freed with g_free(), else NULL.
      */
-	Inkscape::Extension::Extension * getSelectionType()
-        { return extension; }
-	gchar * getFilename (void) { return filename; }
+    virtual Inkscape::Extension::Extension * getSelectionType() = 0;
 
-private:
+    virtual gchar * getFilename () =0;
 
-    /**
-     * The extension to use to write this file
-     */
-	Inkscape::Extension::Extension * extension;
-
-	/**
-	 * Filename that was given
-	 */
-	gchar * filename;
-
-    /**
-     * Architecture-specific data
-     */
-    FileSaveNativeData *nativeData;
 
 }; //FileSaveDialog
+
+
+
+
+
+
 
 
 }; //namespace Dialogs

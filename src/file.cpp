@@ -234,7 +234,7 @@ sp_file_open_dialog(gpointer object, gpointer data)
         open_path = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, NULL);
 
     Inkscape::UI::Dialogs::FileOpenDialog *dlg =
-        new Inkscape::UI::Dialogs::FileOpenDialog(
+        Inkscape::UI::Dialogs::FileOpenDialog::create(
                  (char const *)open_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (char const *)_("Select file to open"));
@@ -398,7 +398,7 @@ sp_file_save_dialog(SPDocument *doc)
     }
 
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
-        new Inkscape::UI::Dialogs::FileSaveDialog(
+        Inkscape::UI::Dialogs::FileSaveDialog::create(
                  (char const *) save_loc,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (char const *) _("Select file to save to"),
@@ -611,8 +611,8 @@ sp_file_import(GtkWidget *widget)
     if (!SP_IS_DOCUMENT(doc))
         return;
 
-    Inkscape::UI::Dialogs::FileOpenDialog *dlg
-        = new Inkscape::UI::Dialogs::FileOpenDialog(
+    Inkscape::UI::Dialogs::FileOpenDialog *dlg =
+        Inkscape::UI::Dialogs::FileOpenDialog::create(
                  (char const *)import_path,
                  Inkscape::UI::Dialogs::IMPORT_TYPES,
                  (char const *)_("Select file to import"));
