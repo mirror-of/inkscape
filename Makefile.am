@@ -22,12 +22,14 @@ man_MANS = inkscape.1 \
 		inkview.1
 
 EXTRA_DIST = \
+	fix-roff-punct	\
 	intltool-extract.in	\
 	intltool-merge.in	\
 	intltool-update.in	\
 	mkinstalldirs		\
 	$(Graphics_in_files)	\
 	inkscape.1		\
+	inkscape.pod		\
 	inkscape.spec.in	\
 	inkscape.spec		\
 	README HACKING		\
