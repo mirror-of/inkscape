@@ -33,6 +33,7 @@
 #include "desktop-affine.h"
 #include "pixmaps/cursor-text.xpm"
 #include "text-context.h"
+#include "view.h"
 
 static void sp_text_context_class_init (SPTextContextClass * klass);
 static void sp_text_context_init (SPTextContext * text_context);
@@ -347,18 +348,20 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				if (MOD__CTRL_ONLY) {
 					switch (event->key.keyval) {
 					case GDK_space:
-						/* Non-break space */
+						/* No-break space */
 						tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, "\302\240");
+						sp_status_display(g_strdup_printf("No-break space"));
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
 					case GDK_U:
 					case GDK_u:
-						/* fixme: We need indication etc. for unicode mode */
 						if (tc->unimode) {
 							tc->unimode = FALSE;
+							sp_status_clear();
 						} else {
 							tc->unimode = TRUE;
 							tc->unipos = 0;
+							sp_status_display(g_strdup_printf("Unicode: "));
 						}
 						if (tc->imc) {
 							gtk_im_context_reset (tc->imc);
@@ -371,6 +374,11 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					if (tc->unimode) {
 						if (isxdigit ((guchar) event->key.keyval)) {
 							tc->uni[tc->unipos] = event->key.keyval;
+							sp_status_display(g_strdup_printf("Unicode: %c%c%c%c", 
+                                                        tc->uni[0], 
+                                                        tc->unipos > 0 ? tc->uni[1] : ' ', 
+                                                        tc->unipos > 1 ? tc->uni[2] : ' ', 
+                                                        tc->unipos > 2 ? tc->uni[3] : ' ' ));
 							if (tc->unipos == 3) {
 								gchar u[7];
 								guint uv, len;
@@ -380,6 +388,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, u);
 								tc->unipos = 0;
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+								sp_status_display(g_strdup_printf("Unicode: "));
 								return TRUE;
 							} else {
 								tc->unipos += 1;
@@ -388,6 +397,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						} else { // non-hex-digit, canceling unimode
 							tc->unimode = FALSE;
 							gtk_im_context_reset (tc->imc);
+							sp_status_clear();
 							return TRUE;
 						}
 					}
