@@ -5,7 +5,7 @@
 
 #include <glib.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-
+#include <file.h>
 
 /*#########################################################################
 ### G R A Y M A P
@@ -32,7 +32,8 @@ static int gWritePPM(GrayMap *me, char *fileName)
     if (!fileName)
         return FALSE;
 
-    FILE *f = fopen(fileName, "wb");
+    Inkscape::IO::dump_fopen_call( fileName, "C" );
+    FILE *f = Inkscape::IO::fopen_utf8name(fileName, "wb");
     if (!f)
         return FALSE;
 
@@ -136,7 +137,8 @@ static int rWritePPM(RgbMap *me, char *fileName)
     if (!fileName)
         return FALSE;
 
-    FILE *f = fopen(fileName, "wb");
+    Inkscape::IO::dump_fopen_call(fileName, "D");
+    FILE *f = Inkscape::IO::fopen_utf8name(fileName, "wb");
     if (!f)
         return FALSE;
 

@@ -17,6 +17,7 @@
 #include <png.h>
 #include <glib.h>
 #include "png-write.h"
+#include "file.h"
 
 /* This is an example of how to use libpng to read and write PNG files.
  * The file libpng.txt is much more verbose then this.  If you have not
@@ -76,18 +77,8 @@ sp_png_write_rgba_striped (const gchar *filename, int width, int height,
 
 	/* open the file */
 
-	// TODO: bulia, please look over
-	gsize bytesRead = 0;
-	gsize bytesWritten = 0;
-	GError* error = NULL;
-	gchar* localFilename = g_filename_from_utf8 ( filename,
-												  -1,
-												  &bytesRead,
-												  &bytesWritten,
-												  &error);
-
-	fp = fopen (localFilename, "wb");
-	g_free (localFilename);
+	Inkscape::IO::dump_fopen_call(filename, "M");
+	fp = Inkscape::IO::fopen_utf8name(filename, "wb");
 	g_return_val_if_fail (fp != NULL, FALSE);
 
 	/* Create and initialize the png_struct with the desired error handler

@@ -61,6 +61,7 @@
 #include <extension/extension.h>
 #include <extension/print.h>
 
+#include "file.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -267,7 +268,8 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 		} else if (*fn == '>') {
 			fn += 1;
 			while (isspace (*fn)) fn += 1;
-			osf = fopen (fn, "w+");
+			Inkscape::IO::dump_fopen_call(fn, "K");
+			osf = Inkscape::IO::fopen_utf8name(fn, "w+");
 			if (!osf) {
 				fprintf(stderr, "inkscape: fopen(%s): %s\n",
 					fn, strerror(errno));

@@ -28,6 +28,8 @@
 #include "repr-private.h"
 #include <xml/sp-repr-attr.h>
 
+#include "file.h"
+
 static const gchar *sp_svg_doctype_str =
 "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\"\n"
 "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n";
@@ -62,6 +64,7 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
     GError* error = NULL;
+    // TODO: need to replace with our own fopen and reading
     gchar* localFilename = g_filename_from_utf8 ( filename,
                                  -1,  &bytesRead,  &bytesWritten, &error);
 
@@ -300,15 +303,8 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
     if (filename == NULL) {
         return FALSE;
     }
-
-    // TODO: bulia, please look over
-    gsize bytesRead = 0;
-    gsize bytesWritten = 0;
-    GError* error = NULL;
-    gchar* localFilename = g_filename_from_utf8 ( filename,
-                -1,&bytesRead,&bytesWritten,&error);
-
-    FILE *file = fopen(localFilename, "w");
+    Inkscape::IO::dump_fopen_call( filename, "B" );
+    FILE *file = Inkscape::IO::fopen_utf8name(filename, "w");
     if (file == NULL) {
         return FALSE;
     }
@@ -317,10 +313,6 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
 
     if (fclose (file) != 0) {
         return FALSE;
-    }
-
-    if ( localFilename != NULL ) {
-        g_free (localFilename);
     }
 
     return TRUE;

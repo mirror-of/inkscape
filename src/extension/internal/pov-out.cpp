@@ -37,6 +37,8 @@
 #include <vector>
 #include <string>
 
+#include "file.h"
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -106,7 +108,8 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
     findElementsByTagName(results, SP_ACTIVE_DOCUMENT->rroot, NULL);//Check all nodes
     if (results.size() == 0)
         return;
-    FILE *f = fopen(uri, "w");
+    Inkscape::IO::dump_fopen_call(uri, "L");
+    FILE *f = Inkscape::IO::fopen_utf8name(uri, "w");
     if (!f)
         return;
 

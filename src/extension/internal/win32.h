@@ -49,9 +49,6 @@ class PrintWin32 : public Inkscape::Extension::Implementation::Implementation {
 	char *get_write_filename (unsigned char *dir, unsigned char *filter, unsigned char *title);
 	char *get_save_filename (unsigned char *dir, unsigned int *spns);
 
-	/* Platform detection */
-	gboolean is_os_wide();
-
 	VOID CALLBACK timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
 
@@ -60,7 +57,10 @@ public:
 	virtual ~PrintWin32 (void);
 
 	/* Tell modules about me */
-    static void init (void);
+	static void init (void);
+
+	/* Platform detection */
+	static gboolean is_os_wide();
 
 	/* Print functions */
 	virtual unsigned int setup (Inkscape::Extension::Print * module);

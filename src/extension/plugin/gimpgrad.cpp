@@ -17,6 +17,7 @@
 #include <extension/implementation/implementation.h>
 #include <color-rgba.h>
 #include <document.h>
+#include "file.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -138,7 +139,8 @@ GimpGrad::open (Inkscape::Extension::Input *module, gchar const *filename)
 	FILE * gradient;
 	// std::cout << "Open filename: " << filename << std::endl;
 
-	gradient = fopen(filename, "r");
+	Inkscape::IO::dump_fopen_call(filename, "I");
+	gradient = Inkscape::IO::fopen_utf8name(filename, "r");
 	if (gradient == NULL) return NULL;
 
 	char tempstr[1024];
