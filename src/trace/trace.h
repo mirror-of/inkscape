@@ -21,8 +21,7 @@
 
 
 
-namespace Inkscape
-{
+namespace Inkscape {
 
 /**
  *

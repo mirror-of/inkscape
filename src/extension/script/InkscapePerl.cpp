@@ -27,12 +27,9 @@
 extern "C" int
 InkscapePerlParseBuf(char *startupCodeBuf, char *codeBuf);
 
-namespace Inkscape
-{
-namespace Extension
-{
-namespace Script
-{
+namespace Inkscape {
+namespace Extension {
+namespace Script {
 
 
 /*

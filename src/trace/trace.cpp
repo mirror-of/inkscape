@@ -30,8 +30,7 @@
 #include <xml/repr.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-namespace Inkscape
-{
+namespace Inkscape {
 
 /**
  *

@@ -16,12 +16,9 @@
 #include <iostream>
 #include <stdio.h>
 
-namespace Inkscape
-{
-namespace Extension
-{
-namespace Script
-{
+namespace Inkscape {
+namespace Extension {
+namespace Script {
 
 
 /**

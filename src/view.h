@@ -28,8 +28,8 @@
 #include "message-context.h"
 
 namespace Inkscape {
-	class MessageContext;
-	class MessageStack;
+class MessageContext;
+class MessageStack;
 }
 
 struct SPView {

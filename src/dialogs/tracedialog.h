@@ -15,12 +15,9 @@
 
 #include <trace/trace.h>
 
-namespace Inkscape
-{
-namespace UI
-{
-namespace Dialogs
-{
+namespace Inkscape {
+namespace UI {
+namespace Dialogs {
 
 
 /**

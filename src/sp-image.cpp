@@ -76,10 +76,8 @@ extern "C"
 
 }
 
-namespace Inkscape
-{
-namespace IO
-{
+namespace Inkscape {
+namespace IO {
 
 class PushPull
 {
