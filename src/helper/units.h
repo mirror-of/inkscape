@@ -50,7 +50,7 @@ enum {
 	SP_UNIT_DEVICE = (1 << 2), /* Semi-real device-dependent distances i.e. pixels */
 	SP_UNIT_USERSPACE = (1 << 3), /* Mathematical coordinates */
 	SP_UNIT_VOLATILE = (1 << 4) /* em and ex */
-} SPUnitBase;
+};
 
 /*
  * Notice, that for correct menus etc. you have to use
