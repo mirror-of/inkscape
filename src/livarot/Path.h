@@ -385,8 +385,8 @@ private:
   static void DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			   NR::Point prev, NR::Point next, double miter, double prevL,
 			   double nextL, int &rightStNo, int &rightEnNo,int pathID=-1,int pieceID=0,double tID=0.0);
-  static void RecRound (Shape * dest, int sNo, int eNo, NR::Point &iPt,
-			NR::Point &iS, NR::Point &iE, double tresh,
+  static void RecRound (Shape * dest, int sNo, int eNo, NR::Point const &iPt,
+			NR::Point const &iS, NR::Point const &iE, double tresh,
 			int lev);
   static void DashTo (Shape * dest, dashTo_info * dTo, double &dashAbs,
 		      int &dashNo, double &dashPos, bool & inGap,
