@@ -310,8 +310,6 @@ sp_document_create (SPReprDoc *rdoc,
 	if (!sp_repr_attr (rroot, "height")) sp_repr_set_attr (rroot, "height", A4_HEIGHT_STR);
         /* End of quick hack 2 */
 
-	g_print ("1u %s  b %s\n", document->uri, sp_repr_attr (rroot, "sodipodi:docbase"));
-
 	/* Quick hack 3 - Set uri attributes */
 	if (uri) {
 		/* fixme: Think, what this means for images (Lauris) */
@@ -540,8 +538,6 @@ void sp_document_set_uri(SPDocument *document, gchar const *uri)
 	sp_document_set_undo_sensitive (document, FALSE);
 	if (document->base)
             sp_repr_set_attr (repr, "sodipodi:docbase", document->base);
-
-	g_print ("2u %s  b %s\n", document->uri, sp_repr_attr (repr, "sodipodi:docbase"));
 
 	sp_repr_set_attr (repr, "sodipodi:docname", document->name);
 	sp_document_set_undo_sensitive (document, TRUE);
