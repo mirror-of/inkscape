@@ -5,6 +5,9 @@
 
 2004-03-01  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-point.h: NR::Point: Add explicit copy constructor and
+	operator= in the hope of fixing #907059.
+
 	* src/desktop-events.cpp (sp_dt_ruler_event): NR::Point'ification.
 
 	* src/selection.cpp (sp_selection_item_selected):
@@ -21,7 +24,7 @@
 	this heavily as it implements the most troublesome chunks of the
 	directory reorganization.
 
-	* Makefile.am Makefile.mingw config.h.mingw configure.in:
+	* Makefile.am, Makefile.mingw, config.h.mingw, configure.in:
 	Changed to coincide with the new changes.
 
 2004-02-28  Nathan Hurst <njh@mail.csse.monash.edu.au>

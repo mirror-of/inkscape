@@ -30,6 +30,19 @@ public:
         _pt[Y] = p.y;
     }
 
+    Point(Point const &p) {
+        for (unsigned i = 0; i < 2; ++i) {
+            _pt[i] = p._pt[i];
+        }
+    }
+
+    Point &operator=(Point const &p) {
+        for (unsigned i = 0; i < 2; ++i) {
+            _pt[i] = p._pt[i];
+        }
+        return *this;
+    }
+
     Coord operator[](unsigned i) const throw(std::out_of_range) {
         if ( i > Y ) {
             throw std::out_of_range("index out of range");
