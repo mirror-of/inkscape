@@ -25,12 +25,12 @@
 /* fixme: */
 #include "desktop-events.h"
 
-static void sp_use_class_init (SPUseClass *class);
+static void sp_use_class_init (SPUseClass *classname);
 static void sp_use_init (SPUse *use);
 
 static void sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_use_release (SPObject *object);
-static void sp_use_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_use_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_use_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_use_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_use_modified (SPObject *object, guint flags);
@@ -61,23 +61,23 @@ sp_use_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_use_init,
 		};
-		use_type = g_type_register_static (SP_TYPE_ITEM, "SPUse", &use_info, 0);
+		use_type = g_type_register_static (SP_TYPE_ITEM, "SPUse", &use_info, (GTypeFlags)0);
 	}
 	return use_type;
 }
 
 static void
-sp_use_class_init (SPUseClass *class)
+sp_use_class_init (SPUseClass *classname)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	gobject_class = (GObjectClass *) classname;
+	sp_object_class = (SPObjectClass *) classname;
+	item_class = (SPItemClass *) classname;
 
-	parent_class = g_type_class_ref (SP_TYPE_ITEM);
+	parent_class = (SPItemClass*)g_type_class_ref (SP_TYPE_ITEM);
 
 	sp_object_class->build = sp_use_build;
 	sp_object_class->release = sp_use_release;
@@ -130,7 +130,7 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 			g_return_if_fail (type > G_TYPE_NONE);
 			if (g_type_is_a (type, SP_TYPE_ITEM)) {
 				SPObject *childobj;
-				childobj = g_object_new (type, 0);
+				childobj = (SPObject*)g_object_new (type, 0);
 				use->child = sp_object_attach_reref (object, childobj, NULL);
 				sp_object_invoke_build (childobj, document, childrepr, TRUE);
 			}
@@ -156,7 +156,7 @@ sp_use_release (SPObject *object)
 }
 
 static void
-sp_use_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_use_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPUse *use;
 
@@ -336,7 +336,7 @@ sp_use_href_changed (SPUse * use)
 			if (g_type_is_a (type, SP_TYPE_ITEM)) {
 				SPObject * childobj;
 				SPItemView * v;
-				childobj = g_object_new (type, 0);
+				childobj = (SPObject*)g_object_new (type, 0);
 				use->child = sp_object_attach_reref (SP_OBJECT (use), childobj, NULL);
 				sp_object_invoke_build (childobj, SP_OBJECT (use)->document, repr, TRUE);
 				for (v = item->display; v != NULL; v = v->next) {

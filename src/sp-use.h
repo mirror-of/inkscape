@@ -34,7 +34,7 @@ struct _SPUse {
 	SPSVGLength y;
 	SPSVGLength width;
 	SPSVGLength height;
-	guchar *href;
+	gchar *href;
 };
 
 struct _SPUseClass {
