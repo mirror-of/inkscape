@@ -136,8 +136,8 @@ can leave your ideas and requests there.</p>
 <keys><key>=</key> <key>+</key> 	 <action>zoom in</action></keys>
 <keys><key>-</key>	 <action>zoom out</action></keys>
 <note>The keypad +/- keys do zooming even when you are editing a text object.</note>
-<mouse><key><mid-click/></key>  <action>zoom in</action></mouse>
-<mouse><key><shift/><mid-click/></key>  <action>zoom out</action></mouse>
+<mouse><key><mid-click/></key>  <key><ctrl/><right-click/></key>   <action>zoom in</action></mouse>
+<mouse><key><shift/><mid-click/></key>  <key><shift/><right-click/></key> <action>zoom out</action></mouse>
 <mouse><key><ctrl/><wheel/></key> <action>zoom in or out</action></mouse>
 </group>
 
@@ -162,7 +162,7 @@ can leave your ideas and requests there.</p>
 <title>Scrolling (panning)</title>
 <mouse><key><ctrl/><arrows/></key>  <action>scroll canvas</action></mouse>
 <mouse><key><mid-drag/></key>  <action>scroll canvas</action></mouse>
-<mouse><key><shift/><right-drag/></key>  <action>scroll canvas</action></mouse>
+<mouse><key><shift/><right-drag/></key> <key><ctrl/><right-drag/></key> <action>scroll canvas</action></mouse>
 <mouse><key><wheel/></key> <action>scroll canvas vertically</action></mouse>
 <mouse><key><shift/><wheel/></key> <action>scroll canvas horizontally</action></mouse>
 </group>

@@ -1056,14 +1056,20 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
 <xsl:with-param name="x" select="$x"/>
 <xsl:with-param name="y" select="$y"/>
 </xsl:apply-templates>
+<xsl:variable name="comma-skip">
+<xsl:choose>
+<xsl:when test="k:wheel | k:left-click | k:left-drag | k:mid-click | k:mid-drag | k:right-click | k:right-drag">0.4</xsl:when>
+<xsl:otherwise>1.0</xsl:otherwise>
+</xsl:choose>
+</xsl:variable>
 <xsl:if test="following-sibling::k:key/node()">
   <text
      xml:space="preserve"
      style="{$style-action}"
-     x="{$x + $w-key - 1}"
+     x="{$x + $w-key - $comma-skip}"
      y="{$y + $skip-keys-action}"
      ><tspan
-       x="{$x + $w-key - 1}"
+       x="{$x + $w-key - $comma-skip}"
        y="{$y + $skip-keys-action}"
        sodipodi:role="line"
        >,</tspan></text>

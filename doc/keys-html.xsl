@@ -60,7 +60,7 @@ h4 {font-weight: bold; font-style: italic}
 <tr bgcolor="{ancestor::k:section/@color}"><td colspan="3"><span class="note"><xsl:value-of select="text()"/></span></td></tr>
 </xsl:template>
 
-<xsl:template match="k:keys">
+<xsl:template match="k:keys | k:mouse">
 <tr bgcolor="{ancestor::k:section/@color}">
 <td align="right">
 <span class="key">
