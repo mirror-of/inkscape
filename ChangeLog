@@ -3,6 +3,10 @@
     * src/svg/svg-path.cpp: switched to locale-safe iostreams-based path
                             serialization
 
+    * src/xml/repr-io.cpp, src/xml/repr.cpp, src/widgets/sp-xmlview-tree.cpp,
+      src/widgets/sp-xmlview-content.cpp, src/dialogs/xml-tree.cpp:
+      basic support for XML comments
+
 2004-02-14  bulia byak <bulia@users.sourceforge.net>
 
   * src/dialogs/dialog-events.cpp: Added UTILITY hint to sp_transientize() 

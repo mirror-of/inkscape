@@ -670,13 +670,12 @@ propagate_tree_select (SPRepr * repr)
         sp_xmlview_attr_list_set_repr (attributes, NULL);
     }
     
-    if (repr && SP_REPR_TYPE (repr) == SP_XML_TEXT_NODE) {
+    if (repr && ( SP_REPR_TYPE (repr) == SP_XML_TEXT_NODE || SP_REPR_TYPE (repr) == SP_XML_COMMENT_NODE ) ) {
         sp_xmlview_content_set_repr (content, repr);
     } else {
         sp_xmlview_content_set_repr (content, NULL);
     }
 }
-
 
 
 SPRepr *
@@ -893,7 +892,7 @@ on_tree_select_row_show_if_text ( GtkCTree * tree, GtkCTreeNode * node,
     SPRepr * repr;
     repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
     
-    if (SP_REPR_TYPE (repr) == SP_XML_TEXT_NODE) {
+    if ( SP_REPR_TYPE (repr) == SP_XML_TEXT_NODE || SP_REPR_TYPE (repr) == SP_XML_COMMENT_NODE ) {
         gtk_widget_show (GTK_WIDGET (data));
     } else {
         gtk_widget_hide (GTK_WIDGET (data));

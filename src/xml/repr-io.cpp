@@ -27,8 +27,6 @@
 static const gchar *sp_svg_doctype_str =
 "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\"\n"
 "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n";
-static const gchar *sp_comment_str =
-"<!-- Created with Inkscape (http://www.inkscape.org/) -->\n";
 
 static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
 static SPRepr * sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
@@ -137,7 +135,6 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 		if (!strcmp (sp_repr_name (repr), "svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
 			
 			sp_repr_set_attr ((SPRepr *) rdoc, "doctype", sp_svg_doctype_str);
-			sp_repr_set_attr ((SPRepr *) rdoc, "comment", sp_comment_str);
 			/* always include XLink namespace */
 			sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_XLINK_NS_URI, "xlink"), SP_XLINK_NS_URI, repr);
 		}
@@ -220,7 +217,10 @@ sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default
 		return NULL;
 	}
 
-	if (node->type == XML_COMMENT_NODE) return NULL;
+	if (node->type == XML_COMMENT_NODE) {
+		return sp_repr_new_comment((const gchar *)node->content);
+	}
+
 	if (node->type == XML_ENTITY_DECL) return NULL;
 
 	sp_repr_qualified_name (c, 256, node->ns, node->name, default_ns, prefix_map);
@@ -260,8 +260,6 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
 	fputs ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n", fp);
 
 	str = sp_repr_attr ((SPRepr *) doc, "doctype");
-	if (str) fputs (str, fp);
-	str = sp_repr_attr ((SPRepr *) doc, "comment");
 	if (str) fputs (str, fp);
 
 	repr = sp_repr_document_root (doc);

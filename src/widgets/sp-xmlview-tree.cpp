@@ -47,6 +47,7 @@ static void element_child_removed (SPRepr * repr, SPRepr * child, SPRepr * ref, 
 static void element_order_changed (SPRepr * repr, SPRepr * child, SPRepr * oldref, SPRepr * newref, gpointer data);
 
 static void text_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data);
+static void comment_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data);
 
 static void tree_move (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkCTreeNode * new_sibling);
 
@@ -82,6 +83,20 @@ static const SPReprEventVector text_repr_events = {
         NULL, /* attr_changed */
         NULL, /* change_content */
         text_content_changed,
+        NULL, /* change_order */
+        NULL  /* order_changed */
+};
+
+static const SPReprEventVector comment_repr_events = {
+        NULL, /* destroy */
+        NULL, /* add_child */
+        NULL, /* child_added */
+        NULL, /* remove_child */
+        NULL, /* child_removed */
+        NULL, /* change_attr */
+        NULL, /* attr_changed */
+        NULL, /* change_content */
+        comment_content_changed,
         NULL, /* change_order */
         NULL  /* order_changed */
 };
@@ -199,6 +214,8 @@ add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SP
 
 	if ( SP_REPR_TYPE (repr) == SP_XML_TEXT_NODE ) {
 		vec = &text_repr_events;
+	} else if ( SP_REPR_TYPE (repr) == SP_XML_COMMENT_NODE ) {
+		vec = &comment_repr_events;
 	} else if ( SP_REPR_TYPE (repr) == SP_XML_ELEMENT_NODE ) {
 		vec = &element_repr_events;
 	} else {
@@ -207,6 +224,7 @@ add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SP
 
 	if (vec) {
 		gtk_clist_freeze (GTK_CLIST (tree));
+		/* cheat a little to get the id upated properly */
 		if (SP_REPR_TYPE (repr) == SP_XML_ELEMENT_NODE) {
 			element_attr_changed (repr, "id", NULL, NULL, data);
 		}
@@ -317,6 +335,21 @@ text_content_changed (SPRepr * repr, const gchar * old_content, const gchar * ne
 	if (data->tree->blocked) return;
 
 	label = g_strdup_printf ("\"%s\"", new_content);
+	gtk_ctree_node_set_text (GTK_CTREE (data->tree), data->node, 0, label);
+	g_free (label);
+}
+
+void
+comment_content_changed (SPRepr *repr, const gchar * old_content, const gchar *new_content, gpointer ptr)
+{
+	NodeData *data;
+	gchar *label;
+
+	data = (NodeData *) ptr;
+
+	if (data->tree->blocked) return;
+
+	label = g_strdup_printf ("<!--%s-->", new_content);
 	gtk_ctree_node_set_text (GTK_CTREE (data->tree), data->node, 0, label);
 	g_free (label);
 }
