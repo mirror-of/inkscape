@@ -60,6 +60,8 @@
 #include "sp-root.h"
 #include "sp-defs.h"
 #include "sp-text.h"
+#include "sp-shape.h"
+#include "sp-rect.h"
 #include "document-private.h"
 #include "xml/repr-private.h"
 #include "display/nr-arena.h"
@@ -1159,6 +1161,9 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
      SPSelection *selection = SP_DT_SELECTION(desktop);
      GSList const *items = selection->itemList();
      for (; items != NULL; items = items->next) {
+         SPItem *item = (SPItem *) items->data;
+         if (!SP_IS_SHAPE(item) || SP_IS_RECT(item)) // can't set marker to rect, until it's converted to using <path>
+             continue;
          SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
          if (selrepr) {
              sp_repr_css_change_recursive(selrepr, css, "style");
