@@ -24,6 +24,7 @@
 #include <gtk/gtkspinbutton.h>
 #include "../color.h"
 #include "../helper/sp-intl.h"
+#include "../dialogs/dialog-events.h"
 #include "sp-color-preview.h"
 #include "sp-color-selector.h"
 

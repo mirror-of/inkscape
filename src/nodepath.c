@@ -1274,10 +1274,10 @@ sp_nodepath_select_next (SPNodePath *nodepath)
 	}
 
 	if (last) { // there's at least one more node after selected
-		sp_nodepath_node_select (last->data, TRUE, TRUE);
+		sp_nodepath_node_select ((SPPathNode *) last->data, TRUE, TRUE);
 	} else { // no more nodes, select the first one in first subpath
 		subpath = (SPNodeSubPath *) nodepath->subpaths->data;
-		sp_nodepath_node_select (subpath->nodes->data, TRUE, TRUE);
+		sp_nodepath_node_select ((SPPathNode *) subpath->nodes->data, TRUE, TRUE);
 	}
 }
 
@@ -1310,7 +1310,7 @@ sp_nodepath_select_prev (SPNodePath *nodepath)
 	}
 
 	if (last) { // there's at least one more node after selected
-		sp_nodepath_node_select (last->data, TRUE, TRUE);
+		sp_nodepath_node_select ((SPPathNode *) last->data, TRUE, TRUE);
 	} else { // no more nodes, select the last one in last subpath
 		spl = g_list_last (nodepath->subpaths);
 		subpath = (SPNodeSubPath *) spl->data;
