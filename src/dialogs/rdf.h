@@ -17,13 +17,20 @@ struct rdf_license_t {
 
 extern rdf_license_t rdf_licenses [];
 
+enum RDFType {
+    RDF_CONTENT,
+    RDF_AGENT,
+    RDF_RESOURCE,
+};
+
 /**
  * \brief Holds known RDF/Work tags
  */
 struct rdf_work_entity_t {
-    char  *name;       /* unique name of this entity for internal reference */
-    gchar *title;      /* localized name of this entity for data entry labels */
-    gchar *tag;        /* namespace tag for the RDF/Work element */
+    char   *name;       /* unique name of this entity for internal reference */
+    gchar  *title;      /* localized name of this entity for data entry labels */
+    gchar  *tag;        /* namespace tag for the RDF/Work element */
+    RDFType datatype;  /* how to extract/inject the RDF information */
 };
 
 extern rdf_work_entity_t rdf_work_entities [];
@@ -46,8 +53,9 @@ struct rdf_t {
 
 struct rdf_work_entity_t * rdf_find_entity(char * name);
 
-gchar * rdf_get_work_entity(struct rdf_work_entity_t * entity);
-void    rdf_set_work_entity(struct rdf_work_entity_t * entity, gchar * string);
+const gchar * rdf_get_work_entity(struct rdf_work_entity_t * entity);
+void    rdf_set_work_entity(struct rdf_work_entity_t * entity,
+                            const gchar * string);
 
 struct rdf_license_t * rdf_get_license();
 void                   rdf_set_license(struct rdf_license_t * license);

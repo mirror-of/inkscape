@@ -1,3 +1,10 @@
+2004-06-30  Kees Cook  <kees@outflux.net>
+
+	* src/dialogs/desktop-properties.cpp, src/dialogs/rdf.h,
+	  src/dialogs/rdf.cpp: built the various functions needed to extract
+	  the RDF text elements from the DOM.  XML in the document will now
+	  be displayed in the entry fields.
+
 2004-06-28  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-action.cpp, src/xml/repr-action.h, src/xml/repr-css.cpp,

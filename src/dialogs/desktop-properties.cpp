@@ -881,7 +881,7 @@ sp_desktop_dialog(void)
         hb = gtk_hbox_new (FALSE, 4);
         gtk_widget_show (hb);
         gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-        l = gtk_label_new (_("License:"));
+        l = gtk_label_new (_("License"));
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
         gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
@@ -963,7 +963,8 @@ sp_doc_dialog_update_work_entity( struct rdf_work_entity_t * entity )
        GtkWidget *e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg),
                                                       entity->name);
 
-       gtk_entry_set_text ( GTK_ENTRY (e), rdf_get_work_entity( entity  ) );
+       const gchar * text = rdf_get_work_entity( entity );
+       gtk_entry_set_text ( GTK_ENTRY (e), text ? text : "" );
    } 
 }
 
