@@ -14,7 +14,7 @@
    height="256pt"
    sodipodi:docname="icons.svg"
    inkscape:version="0.40+cvs"
-   sodipodi:docbase="/home/d/ink/inkscape/share/icons">
+   sodipodi:docbase="/scratch/src/inkscape/inkscape/share/icons">
   <defs
      id="defs3">
     <linearGradient
@@ -1285,11 +1285,11 @@
      showgrid="true"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="1.0000000"
-     inkscape:cx="841.48398"
-     inkscape:cy="53.914734"
-     inkscape:window-width="1242"
-     inkscape:window-height="996"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="492.08212"
+     inkscape:cy="153.34027"
+     inkscape:window-width="798"
+     inkscape:window-height="536"
      inkscape:window-x="0"
      inkscape:window-y="0"
      showguides="true"
@@ -7044,7 +7044,7 @@ http://www.inkscape.org/</dc:description>
   </g>
   <g
      id="draw_calligraphic_new"
-     transform="translate(117.8887,-17.81894)">
+     transform="translate(117.8887,-16.19395)">
     <rect
        style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:0.052083399;stroke-opacity:1.0000000"
        id="rect13"

@@ -273,7 +273,7 @@ sp_ui_menuitem_add_icon ( GtkWidget *item, gchar * icon_name )
 {
     GtkWidget *icon;
 
-    icon = sp_icon_new_scaled (16, icon_name);
+    icon = sp_icon_new_scaled (SP_ICON_SIZE_BUTTON, icon_name);
     gtk_widget_show (icon);
     gtk_image_menu_item_set_image ((GtkImageMenuItem *) item, icon);
 } // end of sp_ui_menu_add_icon
