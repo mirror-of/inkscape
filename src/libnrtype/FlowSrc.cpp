@@ -670,7 +670,7 @@ char*             div_flow_src::WriteArray(int nb,SPSVGLength* array)
 	return s;
 }
 
-void              div_flow_src::TransformXY(NR::Matrix t, bool toplevel)
+void              div_flow_src::TransformXY(NR::Matrix const &t, bool toplevel)
 {
 	// fill in both arrays to the maximum length of either one
 	int max = MAX (nb_x, nb_y);
