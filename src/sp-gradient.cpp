@@ -1500,12 +1500,12 @@ sp_radialgradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transfo
 
 		NR::Matrix gs2user = NR::Matrix ((NRMatrix *) &gr->transform) * bbox2user;
 
-		NR::Matrix gs2px = gs2user * full_transform;
+		gs2px = gs2user * full_transform;
 	} else {
 		/* Problem: What to do, if we have mixed lengths and percentages? */
 		/* Currently we do ignore percentages at all, but that is not good (lauris) */
 
-		NR::Matrix gs2px = NR::Matrix ((NRMatrix *) &gr->transform) * full_transform;
+		gs2px = NR::Matrix ((NRMatrix *) &gr->transform) * full_transform;
 	}
 
 	NRMatrix gs2px_nr;
