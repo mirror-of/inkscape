@@ -353,9 +353,8 @@ int font_instance::MapUnicodeChar(gunichar c)
 	return res;
 }
 
-#ifdef WIN32
-#define FIXED_TO_FLOAT(p) ((p)->value + (double) (p)->fract / 65536.0)
-#endif
+
+
 
 void font_instance::LoadGlyph(int glyph_id)
 {
