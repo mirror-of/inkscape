@@ -74,6 +74,8 @@ inkscape_SOURCES = \
 	\
 	inkscape.c inkscape.h inkscape-private.h \
 	\
+	inkscape-stock.c inkscape-stock.h\
+	\
 	sp-namedview.c sp-namedview.h \
 	sp-guide.c sp-guide.h \
 	\

@@ -35,6 +35,7 @@
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkimage.h>
+#include <gtk/gtkiconfactory.h>
 
 #include "helper/sp-intl.h"
 #include "helper/unit-menu.h"
@@ -51,6 +52,7 @@
 #include "../selection.h"
 #include "../sp-item.h"
 #include "../inkscape.h"
+#include "../inkscape-stock.h"
 
 #include "stroke-style.h"
 
@@ -589,10 +591,10 @@ sp_stroke_style_line_widget_new (void)
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), "join-miter", tb);
+	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_MITER, tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"miter");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_miter.xpm");
+        px = gtk_image_new_from_stock (INKSCAPE_STOCK_JOIN_MITER, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -603,7 +605,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "join-round", tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"round");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_round.xpm");
+        px = gtk_image_new_from_stock (INKSCAPE_STOCK_JOIN_ROUND, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -614,7 +616,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "join-bevel", tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"bevel");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_bevel.xpm");
+        px = gtk_image_new_from_stock (INKSCAPE_STOCK_JOIN_BEVEL, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -632,10 +634,10 @@ sp_stroke_style_line_widget_new (void)
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), "cap-butt", tb);
+	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_BUTT, tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"butt");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_butt.xpm");
+        px = gtk_image_new_from_stock (INKSCAPE_STOCK_CAP_BUTT, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -643,10 +645,10 @@ sp_stroke_style_line_widget_new (void)
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), "cap-round", tb);
+	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_ROUND, tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"round");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_round.xpm");
+        px = gtk_image_new_from_stock (INKSCAPE_STOCK_CAP_ROUND, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -654,10 +656,10 @@ sp_stroke_style_line_widget_new (void)
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), "cap-square", tb);
+	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_SQUARE, tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"square");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_square.xpm");
+        px = gtk_image_new_from_stock (INKSCAPE_STOCK_CAP_SQUARE, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -796,13 +798,13 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 
 	switch (jointype) {
 	case SP_STROKE_LINEJOIN_MITER:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-miter"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_MITER));
 		break;
 	case SP_STROKE_LINEJOIN_ROUND:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-round"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_ROUND));
 		break;
 	case SP_STROKE_LINEJOIN_BEVEL:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-bevel"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_BEVEL));
 		break;
 	default:
 		tb = NULL;
@@ -812,13 +814,13 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 
 	switch (captype) {
 	case SP_STROKE_LINECAP_BUTT:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-butt"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_BUTT));
 		break;
 	case SP_STROKE_LINECAP_ROUND:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-round"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_ROUND));
 		break;
 	case SP_STROKE_LINECAP_SQUARE:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-square"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_SQUARE));
 		break;
 	default:
 		tb = NULL;
@@ -881,13 +883,13 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 	/* Join & Cap */
 	switch (style->stroke_linejoin.value) {
 	case SP_STROKE_LINEJOIN_MITER:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-miter"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_MITER));
 		break;
 	case SP_STROKE_LINEJOIN_ROUND:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-round"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_ROUND));
 		break;
 	case SP_STROKE_LINEJOIN_BEVEL:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-bevel"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_BEVEL));
 		break;
 	default:
 		tb = NULL;
@@ -897,13 +899,13 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 
 	switch (style->stroke_linecap.value) {
 	case SP_STROKE_LINECAP_BUTT:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-butt"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_BUTT));
 		break;
 	case SP_STROKE_LINECAP_ROUND:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-round"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_ROUND));
 		break;
 	case SP_STROKE_LINECAP_SQUARE:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-square"));
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_SQUARE));
 		break;
 	default:
 		tb = NULL;
@@ -1202,11 +1204,11 @@ sp_stroke_style_set_join_buttons (SPWidget *spw, GtkWidget *active)
 {
 	GtkWidget *tb;
 
-	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-miter"));
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_MITER));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-round"));
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_ROUND));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-bevel"));
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_BEVEL));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
 
@@ -1215,11 +1217,11 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 {
 	GtkWidget *tb;
 
-	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-butt"));
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_BUTT));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-round"));
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_ROUND));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-square"));
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_SQUARE));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
 

@@ -57,6 +57,7 @@
 #include "svg/svg.h"
 
 #include "inkscape-private.h"
+#include "inkscape-stock.h"
 
 #include "sp-namedview.h"
 #include "sp-guide.h"
@@ -238,6 +239,8 @@ sp_main_gui (int argc, const char **argv)
 	sp_win32_init (0, NULL, "Inkscape");
 #endif
 
+   inkscape_gtk_stock_init();
+   
 	/* Set default icon */
 	if (g_file_test (DATADIR "/pixmaps/inkscape.png", (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
 		gtk_window_set_default_icon_from_file (DATADIR "/pixmaps/inkscape.png", NULL);
