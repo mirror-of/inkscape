@@ -341,6 +341,9 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBox.pack_start(potraceCannyFrame);
 
     /*#### quantization ####*/
+    // TRANSLATORS: Color Quantization: the process of reducing the number of colors
+    //  in an image by selecting an optimized set of representative colors and then
+    //  re-applying this reduced set to the original image.
     potraceQuantRadioButton.set_label(_("Color Quantization"));
     potraceQuantRadioButton.set_group(potraceGroup);
     potraceQuantBox.pack_start(potraceQuantRadioButton);
