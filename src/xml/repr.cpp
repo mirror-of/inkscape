@@ -148,7 +148,7 @@ repr_doc_init (SPRepr *repr)
 
 	repr->doc = doc;
 	doc->log = NULL;
-	doc->is_logging = 0;
+	doc->is_logging = false;
 }
 
 SPRepr *
@@ -267,7 +267,7 @@ repr_doc_copy (SPRepr *to, const SPRepr *from)
 	SPReprDoc *to_doc=(SPReprDoc *)to;
 	repr_copy (to, from);
 	to_doc->log = NULL;
-	to_doc->is_logging = 0;
+	to_doc->is_logging = false;
 }
 
 const gchar *

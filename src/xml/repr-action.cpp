@@ -37,10 +37,11 @@ void
 sp_repr_begin_transaction (SPReprDoc *doc)
 {
 	if (doc->is_logging) {
+		/* FIXME !!! rethink discarding the existing log? */
 		sp_repr_free_log (doc->log);
 		doc->log = NULL;
 	} else {
-		doc->is_logging = 1;
+		doc->is_logging = true;
 	}
 }
 
@@ -48,10 +49,10 @@ void
 sp_repr_rollback (SPReprDoc *doc)
 {
 	if (doc->is_logging) {
+		doc->is_logging = false;
 		sp_repr_undo_log (doc->log);
 		sp_repr_free_log (doc->log);
 		doc->log = NULL;
-		doc->is_logging = 0;
 	}
 }
 
@@ -59,9 +60,9 @@ void
 sp_repr_commit (SPReprDoc *doc)
 {
 	if (doc->is_logging) {
+		doc->is_logging = false;
 		sp_repr_free_log (doc->log);
 		doc->log = NULL;
-		doc->is_logging = 0;
 	}
 }
 
@@ -73,7 +74,7 @@ sp_repr_commit_undoable (SPReprDoc *doc)
 	if (doc->is_logging) {
 		log = doc->log;
 		doc->log = NULL;
-		doc->is_logging = 0;
+		doc->is_logging = false;
 	}
 
 	return log;
@@ -83,6 +84,10 @@ void
 sp_repr_undo_log (SPReprAction *log)
 {
 	SPReprAction *action;
+
+	if (log) {
+		g_assert(!log->repr->doc->is_logging);
+	}
 
 	for ( action = log ; action ; action = action->next ) {
 		switch (action->type) {
@@ -120,6 +125,10 @@ void
 sp_repr_replay_log (SPReprAction *log)
 {
 	SPReprAction *action;
+
+	if (log) {
+		g_assert(!log->repr->doc->is_logging);
+	}
 
 	log = reverse_log (log);
 

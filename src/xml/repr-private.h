@@ -75,7 +75,7 @@ struct _SPRepr {
 
 struct _SPReprDoc {
 	SPRepr repr;
-	unsigned int is_logging;
+	bool is_logging;
 	SPReprAction *log;
 };
 

@@ -43,6 +43,7 @@ enum {
 #include "svg/svg-types.h"
 #include "enums.h"
 #include "sp-item-group.h"
+#include "uri-references.h"
 
 struct _SPMarker {
 	SPGroup group;
@@ -85,6 +86,17 @@ struct _SPMarkerClass {
 };
 
 GType sp_marker_get_type (void);
+
+class SPMarkerReference : public Inkscape::URIReference {
+	SPMarkerReference(SPObject *obj) : URIReference(obj) {}
+	SPMarker *getObject() const {
+		return (SPMarker *)URIReference::getObject();
+	}
+protected:
+	bool _acceptObject(SPObject *obj) const {
+		return SP_IS_MARKER(obj);
+	}
+};
 
 void sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size);
 NRArenaItem *sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,

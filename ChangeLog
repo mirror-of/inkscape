@@ -1,7 +1,15 @@
+2004-01-26 MenTaLguY <mental@rydia.net>
+
+	* src/xml/repr-action.c, src/xml/repr-action.h,
+	  src/xml/repr-private.h, src/xml/repr.cpp:
+
+	  made SPReprDoc::is_logging a C++ bool, and fixed sp_repr_rollback()
+	  to respect the no-logging-during-rollback invariant
+
 2004-01-25 MenTaLguY <mental@rydia.net>
 
 	* src/sp-object-repr.cpp, src/splivarot.cpp, src/sp-offset.cpp:
-	changed "offset" to "inkscape:offset" for sodipodi:type
+	  changed "offset" to "inkscape:offset" for sodipodi:type
 
 2004-01-24  bryce <brycehar@bryceharrington.com>
 
