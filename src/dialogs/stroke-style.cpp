@@ -1091,7 +1091,7 @@ ink_marker_menu( GtkWidget *tbl, gchar *menu_id, SPDocument *sandbox)
             GtkWidget *hb = gtk_hbox_new(FALSE,  MARKER_ITEM_MARGIN);
             gtk_widget_show(hb);
 
-            GtkWidget *l = gtk_label_new("None");
+            GtkWidget *l = gtk_label_new( _("None") );
             gtk_widget_show(l);
             gtk_misc_set_alignment(GTK_MISC(l), 0.0, 0.5);
 

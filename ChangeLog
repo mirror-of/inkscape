@@ -2,6 +2,7 @@
 
     * src/dialogs/desktop-preferences.cpp: corrected my usage of static
 	  l18n strings.
+    * src/dialogs/stroke-style.cpp: fixed missing l18n. (bug #994837)
 
 2004-07-18  MenTaLguY  <mental@rydia.net>
 
