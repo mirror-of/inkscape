@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         UTEST_ASSERT( NR::Matrix(r_id) == m_id );
         UTEST_ASSERT( NR::Matrix(r_id).test_identity() );
 
-        UTEST_ASSERT( rot234 == NR::rotate(NR::Point(cos(.234), sin(.234))) );
+        UTEST_ASSERT(rotate_equalp(rot234, NR::rotate(NR::Point(cos(.234), sin(.234))), 1e-12));
     }
 
     UTEST_TEST("operator=") {
