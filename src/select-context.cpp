@@ -51,8 +51,6 @@ static void sp_select_context_set (SPEventContext *ec, const gchar *key, const g
 static gint sp_select_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_select_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
 
-static GtkWidget *sp_select_context_config_widget (SPEventContext *ec);
-
 static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state);
 
 static SPEventContextClass * parent_class;
@@ -105,7 +103,6 @@ sp_select_context_class_init (SPSelectContextClass * klass)
 	event_context_class->set = sp_select_context_set;
 	event_context_class->root_handler = sp_select_context_root_handler;
 	event_context_class->item_handler = sp_select_context_item_handler;
-	event_context_class->config_widget = sp_select_context_config_widget;
 
 	// cursors in select context
 	CursorSelectMouseover = sp_cursor_new_from_xpm (cursor_select_m_xpm , 1, 1); 
@@ -816,154 +813,3 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 	g_free(status);
 }
 
-/* Gtk stuff */
-
-static void
-sp_select_context_show_toggled (GtkToggleButton *button, SPSelectContext *sc)
-{
-	if (gtk_toggle_button_get_active (button)) {
-		const gchar *val;
-		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
-		sp_repr_set_attr (SP_EVENT_CONTEXT_REPR (sc), "show", val);
-	}
-}
-
-static void
-sp_select_context_transform_toggled (GtkToggleButton *button, SPSelectContext *sc)
-{
-	if (gtk_toggle_button_get_active (button)) {
-		const gchar *val;
-		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
-		sp_repr_set_attr (SP_EVENT_CONTEXT_REPR (sc), "transform", val);
-	}
-}
-
-static void
-sp_select_context_cue_toggled (GtkToggleButton *button, SPSelectContext *sc)
-{
-	if (gtk_toggle_button_get_active (button)) {
-		const gchar *val;
-		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
-		sp_repr_set_attr (SP_EVENT_CONTEXT_REPR (sc), "cue", val);
-	}
-}
-
-/**
-* Small helper function to make sp_select_context_config_widget a little less
-* verbose.
-*
-* \param SelectContext sc to connect signals with.
-* \param b Another radio button in the group, or NULL for the first.
-* \param fb Box to add the button to.
-* \param n Name for the button.
-* \param v Key for the button's value.
-* \param s Initial state of the button.
-* \param h Toggled handler function.
-*/
-static GtkWidget* sp_select_context_add_radio (
-    SPSelectContext* sc,
-    GtkWidget* b,
-    GtkWidget* fb,
-    GtkTooltips* tt,
-    const gchar* n,
-    const gchar* tip,
-    const char* v,
-    gboolean s,
-    void (*h)(GtkToggleButton*, SPSelectContext*)
-    )
-{
-	GtkWidget* r = gtk_radio_button_new_with_label (
-            b ? gtk_radio_button_group (GTK_RADIO_BUTTON (b)) : NULL, n
-            );
-	gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), r, tip, NULL);
-	gtk_widget_show (r);
-	gtk_object_set_data (GTK_OBJECT (r), "value", (void*) v);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (r), s);
-	gtk_box_pack_start (GTK_BOX (fb), r, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (r), "toggled", GTK_SIGNAL_FUNC (h), sc);
-
-        return r;
-}
-
-static GtkWidget *
-sp_select_context_config_widget (SPEventContext *ec)
-{
-	SPSelectContext *sc;
-	GtkWidget *vb, *f, *fb, *b;
-	GtkTooltips *tt;
-
-	tt = gtk_tooltips_new();
-
-	sc = SP_SELECT_CONTEXT (ec);
-
-	vb = gtk_vbox_new (FALSE, 4);
-	gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
-
-	f = gtk_frame_new (_("When transforming, show:"));
-	gtk_widget_show (f);
-	gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-	fb = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (fb);
-	gtk_container_add (GTK_CONTAINER (f), fb);
-
-        b = sp_select_context_add_radio (
-            sc, NULL, fb, tt, _("Objects"), _("Show the actual objects when moving or transforming"), "content",
-            sc->seltrans.show == SP_SELTRANS_SHOW_CONTENT,
-            sp_select_context_show_toggled
-            );
-
-        sp_select_context_add_radio(
-            sc, b, fb, tt, _("Box outline"), _("Show only a box outline of the objects when moving or transforming"), "outline",
-            sc->seltrans.show == SP_SELTRANS_SHOW_OUTLINE,
-            sp_select_context_show_toggled
-            );
-
-	f = gtk_frame_new (_("Store transformation:"));
-	gtk_widget_show (f);
-	gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-	fb = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (fb);
-	gtk_container_add (GTK_CONTAINER (f), fb);
-
-        b = sp_select_context_add_radio (
-            sc, NULL, fb, tt, _("Optimized"), _("If possible, apply transformation to objects without adding a transform= attribute"), "optimize",
-            sc->seltrans.transform == SP_SELTRANS_TRANSFORM_OPTIMIZE,
-            sp_select_context_transform_toggled
-            );
-
-        sp_select_context_add_radio (
-            sc, b, fb, tt, _("Preserved"), _("Always store transformation as a transform= attribute on objects"), "keep",
-            sc->seltrans.transform == SP_SELTRANS_TRANSFORM_KEEP,
-            sp_select_context_transform_toggled
-            );
-        
-	f = gtk_frame_new (_("Per-object selection cue:"));
-	gtk_widget_show (f);
-	gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-	fb = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (fb);
-	gtk_container_add (GTK_CONTAINER (f), fb);
-
-        b = sp_select_context_add_radio (
-            sc, NULL, fb, tt, _("None"), _("No per-object selection indication"), "none",
-            sc->seltrans.cue == SP_SELTRANS_CUE_NONE,
-            sp_select_context_cue_toggled
-            );
-
-        b = sp_select_context_add_radio (
-            sc, b, fb, tt, _("Mark"), _("Each selected object has a diamond mark in the top left corner"), "mark",
-            sc->seltrans.cue == SP_SELTRANS_CUE_MARK,
-            sp_select_context_cue_toggled
-            );
-
-        sp_select_context_add_radio (
-            sc, b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), "bbox",
-            sc->seltrans.cue == SP_SELTRANS_CUE_BBOX,
-            sp_select_context_cue_toggled
-            );        
-        
-	return vb;
-}

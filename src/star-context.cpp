@@ -53,7 +53,6 @@ static void sp_star_context_dispose (GObject *object);
 static void sp_star_context_setup (SPEventContext *ec);
 static void sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
 static gint sp_star_context_root_handler (SPEventContext *ec, GdkEvent *event);
-static GtkWidget *sp_star_context_config_widget (SPEventContext *ec);
 
 static void sp_star_drag (SPStarContext * sc, NR::Point p, guint state);
 static void sp_star_finish (SPStarContext * sc);
@@ -93,7 +92,6 @@ sp_star_context_class_init (SPStarContextClass * klass)
     event_context_class->setup = sp_star_context_setup;
     event_context_class->set = sp_star_context_set;
     event_context_class->root_handler = sp_star_context_root_handler;
-    event_context_class->config_widget = sp_star_context_config_widget;
 }
 
 static void
@@ -472,107 +470,6 @@ sp_star_finish (SPStarContext * sc)
         sc->item = NULL;
     }
 }
-
-/* Gtk stuff */
-
-static void
-sp_sc_magnitude_value_changed (GtkAdjustment *adj, SPStarContext *sc)
-{
-    sp_repr_set_int (SP_EVENT_CONTEXT_REPR (sc), "magnitude", (gint) adj->value);
-}
-
-static void
-sp_sc_proportion_value_changed (GtkAdjustment *adj, SPStarContext *sc)
-{
-    sp_repr_set_double (SP_EVENT_CONTEXT_REPR (sc), "proportion", adj->value);
-}
-
-
-static void
-sp_sc_sides_flat_state_changed (GtkWidget *widget, SPStarContext *sc)
-{
-sp_repr_set_boolean (SP_EVENT_CONTEXT_REPR (sc), "isflatsided", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
-    
-}
-
-static void
-sp_sc_defaults (GtkWidget *widget, GtkObject *obj)
-{
-    GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (obj, "magnitude");
-    gtk_adjustment_set_value (adj, 3);
-    adj = (GtkAdjustment*)gtk_object_get_data (obj, "proportion");
-    gtk_adjustment_set_value (adj, 0.5);
-}
-
-static GtkWidget *
-sp_star_context_config_widget (SPEventContext *ec)
-{
-    SPStarContext *sc = SP_STAR_CONTEXT (ec);
-
-    GtkWidget *tbl = gtk_table_new (4, 2, FALSE);
-    gtk_container_set_border_width (GTK_CONTAINER (tbl), 4);
-    gtk_table_set_row_spacings (GTK_TABLE (tbl), 4);
-
-    /* Magnitude */
-    GtkWidget *l = gtk_label_new (_("Corners:"));
-    gtk_widget_show (l);
-    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-    gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 0, 1, 
-                      (GtkAttachOptions)0, 
-                      (GtkAttachOptions)0, 
-                      0, 0);
-    GtkObject *mag_adj = gtk_adjustment_new (sc->magnitude, 3, 32, 1, 1, 1);
-    gtk_object_set_data (GTK_OBJECT (tbl), "magnitude", mag_adj);
-    GtkWidget *sb1 = gtk_spin_button_new (GTK_ADJUSTMENT (mag_adj), 1, 0);
-    gtk_widget_show (sb1);
-    gtk_table_attach (GTK_TABLE (tbl), sb1, 1, 2, 0, 1, 
-                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-                      (GtkAttachOptions)0, 
-                      0, 0);
-    gtk_signal_connect (GTK_OBJECT (mag_adj), "value_changed", GTK_SIGNAL_FUNC (sp_sc_magnitude_value_changed), sc);
-
-    /* Proportion */
-    l = gtk_label_new (_("Proportion:"));
-    gtk_widget_show (l);
-    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-    gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, 
-                      (GtkAttachOptions)0, 
-                      (GtkAttachOptions)0, 
-                      0, 0);
-    GtkObject *proportion_adj = gtk_adjustment_new (sc->proportion, 0.01, 1.0, 0.01, 0.1, 0.1);
-    gtk_object_set_data (GTK_OBJECT (tbl), "proportion", proportion_adj);
-    GtkWidget *sb2 = gtk_spin_button_new (GTK_ADJUSTMENT (proportion_adj), 0.1, 2);
-    gtk_widget_show (sb2);
-    gtk_table_attach (GTK_TABLE (tbl), sb2, 1, 2, 1, 2, 
-                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-                      (GtkAttachOptions)0, 
-                      0, 0);
-    gtk_signal_connect (GTK_OBJECT (proportion_adj), "value_changed", GTK_SIGNAL_FUNC (sp_sc_proportion_value_changed), sc);
-    
-
-    /* Flat Sides checkbox */
-    GtkWidget *fscb = gtk_check_button_new_with_label (_("Flat Sided"));
-    gtk_widget_set_sensitive (GTK_WIDGET (fscb), TRUE);
-    gtk_widget_show (fscb);
-    gtk_table_attach (GTK_TABLE (tbl), fscb, 0, 2, 2, 3,
-                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-                      0, 0);
-
-    g_signal_connect (G_OBJECT(fscb), "toggled", GTK_SIGNAL_FUNC (sp_sc_sides_flat_state_changed ), sc);
-    
-    /* Reset */
-    GtkWidget *b = gtk_button_new_with_label (_("Defaults"));
-    gtk_widget_show (b);
-    gtk_table_attach (GTK_TABLE (tbl), b, 0, 2, 3, 4, 
-                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-                      0, 0);
-    gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_sc_defaults), tbl);
-
-    return tbl;
-}
-
 
 /*
   Local Variables:

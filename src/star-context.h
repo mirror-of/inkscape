@@ -40,8 +40,6 @@ struct _SPStarContext {
 
     SPKnotHolder *knot_holder;
     SPRepr *repr;
-
-
 };
 
 struct _SPStarContextClass {
@@ -49,8 +47,5 @@ struct _SPStarContextClass {
 };
 
 GtkType sp_star_context_get_type (void);
-
-
- GtkWidget *sp_star_context_config_widget (SPDesktop *desktop);
 
 #endif

@@ -53,8 +53,6 @@ static void sp_spiral_context_set (SPEventContext *ec, const gchar *key, const g
 
 static gint sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 
-static GtkWidget *sp_spiral_context_config_widget (SPEventContext *ec);
-
 static void sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state);
 static void sp_spiral_finish (SPSpiralContext * sc);
 
@@ -93,7 +91,6 @@ sp_spiral_context_class_init (SPSpiralContextClass * klass)
 	event_context_class->setup = sp_spiral_context_setup;
 	event_context_class->set = sp_spiral_context_set;
 	event_context_class->root_handler = sp_spiral_context_root_handler;
-	event_context_class->config_widget = sp_spiral_context_config_widget;
 }
 
 static void
@@ -474,116 +471,3 @@ sp_spiral_finish (SPSpiralContext * sc)
 		sc->item = NULL;
 	}
 }
-
-/* Gtk stuff */
-
-static void
-sp_sc_revolution_value_changed (GtkAdjustment *adj, SPSpiralContext *sc)
-{
-	sp_repr_set_int (SP_EVENT_CONTEXT_REPR (sc), "revolution", (gint) adj->value);
-}
-
-static void
-sp_sc_expansion_value_changed (GtkAdjustment *adj, SPSpiralContext *sc)
-{
-	sp_repr_set_double (SP_EVENT_CONTEXT_REPR (sc), "expansion", adj->value);
-}
-
-static void
-sp_sc_t0_value_changed (GtkAdjustment *adj, SPSpiralContext *sc)
-{
-	sp_repr_set_double (SP_EVENT_CONTEXT_REPR (sc), "t0", adj->value);
-}
-
-static void
-sp_sc_defaults (GtkWidget *widget, GtkObject *obj)
-{
-	GtkAdjustment *adj;
-
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "revolution");
-	gtk_adjustment_set_value (adj, 3.0);
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "expansion");
-	gtk_adjustment_set_value (adj, 1.0);
-	adj = (GtkAdjustment*)gtk_object_get_data (obj, "t0");
-	gtk_adjustment_set_value (adj, 0.0);
-}
-
-static GtkWidget *
-sp_spiral_context_config_widget (SPEventContext *ec)
-{
-	GtkWidget *tbl, *l, *sb, *b;
-	GtkObject *a;
-
-	SPSpiralContext *sc = SP_SPIRAL_CONTEXT (ec);
-
-	tbl = gtk_table_new (4, 2, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (tbl), 4);
-	gtk_table_set_row_spacings (GTK_TABLE (tbl), 4);
-
-	/* Revolution */
-	l = gtk_label_new (_("Revolution:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 0, 1, 
-			  (GtkAttachOptions)0, 
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	a = gtk_adjustment_new (sc->revo, 0.05, 20.0, 1.0, 1.0, 1.0);
-	gtk_object_set_data (GTK_OBJECT (tbl), "revolution", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1, 2);
-	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, 
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions)0, 
-			  0, 0);
-
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_sc_revolution_value_changed), sc);
-
-	/* Expansion */
-	l = gtk_label_new (_("Expansion:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, 
-			  (GtkAttachOptions)0, 
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	a = gtk_adjustment_new (sc->exp, 0.0, 1000.0, 0.1, 1.0, 1.0);
-	gtk_object_set_data (GTK_OBJECT (tbl), "expansion", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
-	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 1, 2, 
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_sc_expansion_value_changed), sc);
-
-	/* T0 */
-	l = gtk_label_new (_("Inner radius:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 2, 3,
-			  (GtkAttachOptions)0, 
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	a = gtk_adjustment_new (sc->t0, 0.0, 0.999, 0.1, 1.0, 1.0);
-	gtk_object_set_data (GTK_OBJECT (tbl), "t0", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
-	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 2, 3, 
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_sc_t0_value_changed), sc);
-
-	/* Reset */
-	b = gtk_button_new_with_label (_("Defaults"));
-	gtk_widget_show (b);
-	gtk_table_attach (GTK_TABLE (tbl), b, 0, 2, 3, 4,
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions)0, 
-			  0, 0);
-	gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_sc_defaults), tbl);
-
-	return tbl;
-}
-

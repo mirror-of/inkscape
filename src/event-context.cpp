@@ -685,18 +685,6 @@ sp_event_context_item_handler (SPEventContext * event_context, SPItem * item, Gd
 	return ret;
 }
 
-GtkWidget *
-sp_event_context_config_widget (SPEventContext *ec)
-{
-	g_return_val_if_fail (ec != NULL, NULL);
-	g_return_val_if_fail (SP_IS_EVENT_CONTEXT (ec), NULL);
-
-	if (((SPEventContextClass *) G_OBJECT_GET_CLASS (ec))->config_widget)
-		return ((SPEventContextClass *) G_OBJECT_GET_CLASS (ec))->config_widget (ec);
-
-	return NULL;
-}
-
 static void set_event_location(SPDesktop *desktop, GdkEvent *event)
 {
 	if (event->type != GDK_MOTION_NOTIFY) {
