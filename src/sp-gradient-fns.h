@@ -63,6 +63,14 @@ NRMatrix *sp_gradient_get_gs2d_matrix_f(SPGradient const *gr, NRMatrix const *ct
 					NRMatrix *gs2d);
 void sp_gradient_set_gs2d_matrix_f(SPGradient *gr, NRMatrix const *ctm, NRRect const *bbox, NRMatrix const *gs2d);
 
+NR::Matrix sp_gradient_get_g2d_matrix(SPGradient const *gr, NR::Matrix const &ctm,
+                                      NR::Rect const &bbox);
+NR::Matrix sp_gradient_get_gs2d_matrix(SPGradient const *gr, NR::Matrix const &ctm,
+                                       NR::Rect const &bbox);
+void sp_gradient_set_gs2d_matrix(SPGradient *gr, NR::Matrix const &ctm, NR::Rect const &bbox,
+                                 NR::Matrix const &gs2d);
+
+
 #endif /* !SEEN_SP_GRADIENT_FNS_H */
 
 /*

@@ -1,5 +1,9 @@
 2004-09-21  Peter Moulder  <pmoulder@river>
 
+	* src/sp-gradient.cpp (sp_gradient_get_g2d_matrix,
+	  sp_gradient_get_gs2d_matrix, sp_gradient_set_gs2d_matrix):
+	  New NR::Matrix/NR::Rect versions of existing functions.
+
 	* src/libnr/nr-matrix-translate-ops.h (operator/): New function.
 
 	* src/libnr/nr-matrix-scale-ops.cpp: New file.

@@ -992,81 +992,60 @@ sp_gradient_render_vector_block_rgb (SPGradient *gradient, guchar *buf, gint wid
 NRMatrix *
 sp_gradient_get_g2d_matrix_f(SPGradient const *gr, NRMatrix const *ctm, NRRect const *bbox, NRMatrix *g2d)
 {
-	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrix bb2u;
-		
-		bb2u.c[0] = bbox->x1 - bbox->x0;
-		bb2u.c[1] = 0.0;
-		bb2u.c[2] = 0.0;
-		bb2u.c[3] = bbox->y1 - bbox->y0;
-		bb2u.c[4] = bbox->x0;
-		bb2u.c[5] = bbox->y0;
-
-		nr_matrix_multiply (g2d, &bb2u, ctm);
-	} else {
-		*g2d = *ctm;
-	}
-
+	*g2d = sp_gradient_get_g2d_matrix(gr, *ctm, *bbox);
 	return g2d;
+}
+
+NR::Matrix
+sp_gradient_get_g2d_matrix(SPGradient const *gr, NR::Matrix const &ctm, NR::Rect const &bbox)
+{
+	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+		return ( NR::scale(bbox.dimensions())
+			 * NR::translate(bbox.min())
+			 * ctm );
+	} else {
+		return ctm;
+	}
 }
 
 NRMatrix *
 sp_gradient_get_gs2d_matrix_f(SPGradient const *gr, NRMatrix const *ctm, NRRect const *bbox, NRMatrix *gs2d)
 {
-	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		*gs2d = ( gr->gradientTransform
-			  * NR::scale(bbox->x1 - bbox->x0,
-				      bbox->y1 - bbox->y0)
-			  * NR::translate(bbox->x0, bbox->y0)
-			  * (*ctm) );
-	} else {
-		*gs2d = gr->gradientTransform * (*ctm);
-	}
-
+	*gs2d = sp_gradient_get_gs2d_matrix(gr, *ctm, *bbox);
 	return gs2d;
+}
+
+NR::Matrix
+sp_gradient_get_gs2d_matrix(SPGradient const *gr, NR::Matrix const &ctm, NR::Rect const &bbox)
+{
+	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+		return ( gr->gradientTransform
+			 * NR::scale(bbox.dimensions())
+			 * NR::translate(bbox.min())
+			 * ctm );
+	} else {
+		return gr->gradientTransform * ctm;
+	}
 }
 
 void
 sp_gradient_set_gs2d_matrix_f(SPGradient *gr, NRMatrix const *ctm, NRRect const *bbox, NRMatrix const *gs2d)
 {
-	NRMatrix g2d, d2g, gs2g;
+	sp_gradient_set_gs2d_matrix(gr, *ctm, *bbox, *gs2d);
+}
 
-	SP_PRINT_MATRIX ("* GS2D:", gs2d);
-
-	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrix bb2u;
-
-		bb2u.c[0] = bbox->x1 - bbox->x0;
-		bb2u.c[1] = 0.0;
-		bb2u.c[2] = 0.0;
-		bb2u.c[3] = bbox->y1 - bbox->y0;
-		bb2u.c[4] = bbox->x0;
-		bb2u.c[5] = bbox->y0;
-
-		SP_PRINT_MATRIX ("* BB2U:", &bb2u);
-
-		nr_matrix_multiply (&g2d, &bb2u, ctm);
-	} else {
-		g2d = *ctm;
+void
+sp_gradient_set_gs2d_matrix(SPGradient *gr, NR::Matrix const &ctm, NR::Rect const &bbox, NR::Matrix const &gs2d)
+{
+	gr->gradientTransform = gs2d / ctm;
+	if ( gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX ) {
+		gr->gradientTransform = ( gr->gradientTransform
+					  / NR::translate(bbox.min())
+					  / NR::scale(bbox.dimensions()) );
 	}
-
-	SP_PRINT_MATRIX ("* G2D:", &g2d);
-
-	nr_matrix_invert (&d2g, &g2d);
-	SP_PRINT_MATRIX ("* D2G:", &d2g);
-	SP_PRINT_MATRIX ("* G2D:", &g2d);
-	nr_matrix_invert (&g2d, &d2g);
-	SP_PRINT_MATRIX ("* D2G:", &d2g);
-	SP_PRINT_MATRIX ("* G2D:", &g2d);
-
-
-	nr_matrix_multiply (&gs2g, gs2d, &d2g);
-	SP_PRINT_MATRIX ("* GS2G:", &gs2g);
-
-	gr->gradientTransform = gs2g;
 	gr->gradientTransform_set = TRUE;
 
-	SP_OBJECT (gr)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	SP_OBJECT(gr)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /*
