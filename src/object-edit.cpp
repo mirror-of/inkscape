@@ -86,7 +86,7 @@ static gdouble sp_pattern_extract_scale (SPPattern *pat)
     return  xscale;
 }
 
-static NR::Point sp_pattern_extract_trans (SPPattern *pat)
+static NR::Point sp_pattern_extract_trans (const SPPattern *pat)
 {
     return NR::Point(pat->patternTransform[4], pat->patternTransform[5]);
 }
