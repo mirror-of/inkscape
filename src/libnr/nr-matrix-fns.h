@@ -32,6 +32,8 @@ bool matrix_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
 Matrix transform(Matrix const &m);
 translate get_translation(Matrix const &m);
 
+void matrix_print(const gchar *say, Matrix const &m);
+
 }  // namespace NR
 
 #endif /* !SEEN_NR_MATRIX_FNS_H */

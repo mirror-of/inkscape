@@ -35,6 +35,11 @@ translate get_translation(Matrix const &m) {
     return translate(m[4], m[5]);
 }
 
+void matrix_print(const gchar *say, Matrix const &m)
+{ 
+    printf ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]);
+}
+
 }  // namespace NR
 
 
