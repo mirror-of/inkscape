@@ -1,3 +1,9 @@
+2004-02-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dialogs/stroke-style.cpp: Rename DEBUG_MARKERS ifdef to
+	WITH_MARKER_GUI, and make more things conditional on it.
+	(Fixes failing assertion for the !defined case.)
+
 2004-02-27  Alexander Clausen <alex@skip86.com>
 
 	* src/desktop-events.cpp: fix my last fix *sigh*

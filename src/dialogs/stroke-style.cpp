@@ -742,7 +742,7 @@ static void sp_stroke_style_set_join_buttons ( SPWidget *spw,
 
 static void sp_stroke_style_set_cap_buttons ( SPWidget *spw, 
                                               GtkWidget *active );
-                                              
+
 static void sp_stroke_style_set_marker_buttons ( SPWidget *spw, 
                                                  GtkWidget *active, 
                                                  const gchar *marker_name );
@@ -750,10 +750,12 @@ static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed ( SPDashSelector *dsel, 
                                                 SPWidget *spw );
+#ifdef WITH_MARKER_GUI
 static void sp_stroke_style_update_marker_buttons( SPWidget *spw, 
                                                    const GSList *objects, 
                                                    unsigned int loc, 
                                                    const gchar *stock_type );
+#endif
 
                                                    
 /**
@@ -896,7 +898,7 @@ sp_stroke_style_line_widget_new (void)
                          spw );
     i++;
 
-#ifdef DEBUG_MARKERS
+#ifdef WITH_MARKER_GUI
     /* Start Marker */
     spw_label(t, _("Start Markers:"), 0, i);
     hb = spw_hbox(t, 3, 1, i);
@@ -1181,6 +1183,7 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
     
     sp_stroke_style_set_cap_buttons (spw, tb);
 
+#ifdef WITH_MARKER_GUI
     /* Markers */
     sp_stroke_style_update_marker_buttons ( spw, objects, 
                                             SP_MARKER_LOC_START, 
@@ -1191,6 +1194,7 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
     sp_stroke_style_update_marker_buttons ( spw, objects, 
                                             SP_MARKER_LOC_END, 
                                             INKSCAPE_STOCK_END_MARKER );
+#endif
 
     /* Dash */
     if (style->stroke_dash.n_dash > 0) {
@@ -1305,6 +1309,7 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
     
     sp_stroke_style_set_cap_buttons (spw, tb);
 
+#ifdef WITH_MARKER_GUI
     /* Toggle buttons for markers - marker-start, marker-mid, and marker-end */
     /* TODO:  There's also a generic 'marker' that applies to all, but we'll 
      * leave that for later 
@@ -1324,6 +1329,7 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
     tb = (GtkWidget*)gtk_object_get_data ( GTK_OBJECT (spw), 
                                            INKSCAPE_STOCK_END_MARKER );
     sp_stroke_style_set_marker_buttons (spw, tb, INKSCAPE_STOCK_END_MARKER);
+#endif
 
     /* Dash */
     if (style->stroke_dash.n_dash > 0) {
@@ -1745,7 +1751,6 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 }
 
 
-
 /**
 * Creates a set of marker buttons.  This routine creates togglebuttons for the
 * line markers.  Currently it provides just three options - none, filled or
@@ -1760,6 +1765,7 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 static void
 sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gchar *marker_name)
 {
+#ifdef WITH_MARKER_GUI
     /* Set up the various xpm's as an array so that new kinds of markers 
      * can be added without having to cut and paste the code itself.
      */
@@ -1778,8 +1784,11 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gcha
         }
         g_free(marker_xpm);
     }
+#endif
 }
 
+
+#ifdef WITH_MARKER_GUI
 /**
 * Checks the marker style settings for the selected objects and updates the
 * toggle buttons accordingly.
@@ -1817,6 +1826,7 @@ sp_stroke_style_update_marker_buttons ( SPWidget *spw,
     sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), stock_type);
 
 } // end of sp_stroke_style_update_marker_buttons()
+#endif
 
 
 /*
