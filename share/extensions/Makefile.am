@@ -6,7 +6,6 @@ otherstuffdir = $(datadir)/inkscape/extensions
 moduledir = $(datadir)/inkscape/extensions
 
 extensions = \
-	roundhole \
 	ill2svg.pl \
 	SpSVG.pm \
 	svg_dropshadow \
@@ -15,8 +14,7 @@ extensions = \
 	ps2epsi.sh \
 	txt2svg.pl
 
-otherstuff = \
-	roundhole.xpm
+otherstuff =
 
 modules = \
 	svgz_input.inx \
@@ -27,7 +25,6 @@ modules = \
 	eps_input.inx \
 	sk_input.inx \
 	wmf_input.inx \
-	roundhole.inx \
 	dropshadow.inx \
 	dia.inx \
 	epsi_output.inx \
