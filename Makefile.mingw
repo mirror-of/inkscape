@@ -40,6 +40,7 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)iconv.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)intl.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)xmlparse.dll inkscape
+	$(CP) $(GTKDOS)$(S)perl$(S)bin$(S)perl58.dll inkscape
 	$(CPDIR) $(GTKDOS)$(S)etc inkscape$(S)etc
 	echo "#### Inserted by Inkscape Makefile.mingw" > inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
 	echo "gtk-font-name=\"verdana 6.5\""           >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
