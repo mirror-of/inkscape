@@ -34,26 +34,39 @@ void SelectionDescriber::_updateMessageFromSelection(SPSelection *selection) {
     char const *when_selected = _("Click selection to toggle scale/rotation handles");
     if (!items) { // no items
         _context.set(Inkscape::NORMAL_MESSAGE, _("No objects selected. Click, Shift+click, or drag around objects to select."));
-    } else if (!items->next) { // one item
+    } else {
         SPItem *item = SP_ITEM(items->data);
         SPObject *layer = selection->desktop()->layerForObject (SP_OBJECT (item));
-        if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) || SP_IS_TEXT_TEXTPATH(item)) {
-            _context.setF(Inkscape::NORMAL_MESSAGE, "%s in layer <b>%s</b>. %s. %s.", 
-                          sp_item_description(item), layer->label(), _("Use <b>Shift+D</b> to look up original"), when_selected);
-        } else {
-            _context.setF(Inkscape::NORMAL_MESSAGE, "%s in layer <b>%s</b>. %s.", 
-                          sp_item_description(item), layer->label(), when_selected);
+        SPObject *root = selection->desktop()->currentRoot();
+        const gchar *layer_name = NULL;
+        if (layer != root) {
+            if (layer && layer->label()) {
+                layer_name = g_strdup_printf (_(" in layer <b>%s</b>"), layer->label());
+            } else {
+                layer_name = g_strdup_printf (_(" in layer <b><i>%s</i></b>"), layer->defaultLabel());
+            }
         }
-    } else { // multiple items
-        if (selection->numberOfLayers() == 1) {
-            SPItem *item = SP_ITEM(items->data);
-            SPObject *layer = selection->desktop()->layerForObject (SP_OBJECT (item));
-            _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected in layer <b>%s</b>. %s."), 
-                          g_slist_length((GSList *)items), layer->label(), when_selected);
-        } else {
-            _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected in <b>%i</b> layers. %s."), 
-                          g_slist_length((GSList *)items), selection->numberOfLayers(), when_selected);
+
+        if (!items->next) { // one item
+            if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) || SP_IS_TEXT_TEXTPATH(item)) {
+                _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
+                              sp_item_description(item), layer_name? layer_name : "", _("Use <b>Shift+D</b> to look up original"), when_selected);
+            } else {
+                _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s.", 
+                              sp_item_description(item), layer_name? layer_name : "", when_selected);
+            }
+        } else { // multiple items
+            if (selection->numberOfLayers() == 1) {
+                _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected%s. %s."), 
+                              g_slist_length((GSList *)items), layer_name? layer_name : "", when_selected);
+            } else {
+                _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected in <b>%i</b> layers. %s."), 
+                              g_slist_length((GSList *)items), selection->numberOfLayers(), when_selected);
+            }
         }
+
+        if (layer_name) 
+            g_free ((gchar *) layer_name);
     }
 }
 
