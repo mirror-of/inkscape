@@ -46,7 +46,7 @@ CPDIR  = cp -rf
 MSGFMT = msgfmt
 
 # Where is your GTK directory?
-GTK=$(HOME)/xmingw32/gtk
+GTK=$(HOME)/xmingw/gtk
 #Same thing, file system style
 GTKDOS=$(GTK)
 
@@ -97,7 +97,7 @@ endif
 VERSION = \"0.39cvs-${DTG}\"
 
 # the XP_WIN def is necessary for libjs.a
-CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
+CFLAGS = -O3 -Wall -mms-bitfields -DVERSION=$(VERSION) \
 -DXP_WIN -D_INTL_REDIRECT_INLINE -DHAVE_CONFIG_H
 
 
@@ -130,7 +130,7 @@ GTKLIB = -L$(GTK)/lib \
 -lsigc-1.2.dll\
 -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 \
 -lgdk_pixbuf-2.0 -lm -lpangoft2-1.0 -lpangowin32-1.0 -lpango-1.0 \
--lgobject-2.0 -lgmodule-2.0 -lglib-2.0
+-lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0
 
 INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
 -I$(GTK)/include/libart-2.0 -DLIBXML_STATIC -I$(GTK)/include/libxml2 \
