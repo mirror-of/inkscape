@@ -101,6 +101,7 @@ inkscape_SOURCES = \
 	desktop-snap.cpp desktop-snap.h \
 	sp-metrics.cpp sp-metrics.h \
 	toolbox.cpp toolbox.h \
+	select-toolbar.cpp select-toolbar.h\
 	\
 	verbs.cpp verbs.h \
 	shortcuts.cpp shortcuts.h \
