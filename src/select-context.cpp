@@ -276,6 +276,9 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 					sc->moved = TRUE;
 				}
 				sp_selection_moveto(seltrans, p, event->button.state);
+				if (sp_desktop_scroll_to_point (desktop, &p))
+					// unfortunately in complex drawings, gobbling results in losing grab of the object, for some mysterious reason
+					; //gobble_motion_events (GDK_BUTTON1_MASK);
 			}
 		}
 		break;
@@ -441,6 +444,9 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						sc->moved = TRUE;
 					}
 					sp_selection_moveto(seltrans, p, event->button.state);
+					if (sp_desktop_scroll_to_point (desktop, &p)) 
+						// unfortunately in complex drawings, gobbling results in losing grab of the object, for some mysterious reason
+						; //gobble_motion_events (GDK_BUTTON1_MASK);
 					ret = TRUE;
 				} else {
 					sc->dragging = FALSE;

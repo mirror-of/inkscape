@@ -2055,6 +2055,8 @@ node_request (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 		sp_nodepath_selected_nodes_move (n->subpath->nodepath, (*p)[NR::X] - n->pos[NR::X], (*p)[NR::Y] - n->pos[NR::Y]);
 	}
 
+	sp_desktop_scroll_to_point (n->subpath->nodepath->desktop, p);
+
 	return TRUE;
 }
 

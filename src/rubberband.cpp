@@ -18,7 +18,6 @@
 #include "rubberband.h"
 
 SPDesktop * sp_rb_desktop = NULL;
-NRRect sp_rb_dbox;
 SPCtrlRect * sp_rb = NULL;
 gboolean sp_rb_dragging = FALSE;
 ArtDRect sp_rb_rect;
@@ -37,8 +36,6 @@ void sp_rubberband_start (SPDesktop * desktop, NR::Point const &p)
 	sp_rb_rect.x0 = p[X];
 	sp_rb_rect.y0 = p[Y];
 	sp_rb_dragging = TRUE;
-
-	sp_desktop_get_display_area (sp_rb_desktop, &sp_rb_dbox);
 }
 
 void sp_rubberband_move(NR::Point const &p)
@@ -58,35 +55,8 @@ sp_rubberband_move (double x, double y)
 		sp_rb = (SPCtrlRect *) sp_canvas_item_new (SP_DT_CONTROLS (sp_rb_desktop), SP_TYPE_CTRLRECT, NULL);
 	}
 
-	if (!(x > sp_rb_dbox.x0 && x < sp_rb_dbox.x1) || !(y > sp_rb_dbox.y0 && y < sp_rb_dbox.y1)) {
-		NR::Point const s_dt(x, y);
-		NR::Point const s_w( s_dt * sp_rb_desktop->d2w );
-
-		gdouble x_to;
-		if (x < sp_rb_dbox.x0)
-			x_to = sp_rb_dbox.x0;
-		else if (x > sp_rb_dbox.x1)
-			x_to = sp_rb_dbox.x1;
-		else 
-			x_to = x;
-
-		gdouble y_to;
-		if (y < sp_rb_dbox.y0)
-			y_to = sp_rb_dbox.y0;
-		else if (y > sp_rb_dbox.y1)
-			y_to = sp_rb_dbox.y1;
-		else 
-			y_to = y;
-
-		NR::Point const d_dt(x_to, y_to);
-		NR::Point const d_w( d_dt * sp_rb_desktop->d2w );
-		NR::Point const moved_w( d_w - s_w );
-		gint const dx = (gint) moved_w[NR::X];
-		gint const dy = (gint) moved_w[NR::Y];
-		sp_desktop_scroll_world(sp_rb_desktop, dx, dy);
-
-		sp_desktop_get_display_area (sp_rb_desktop, &sp_rb_dbox);
-	}
+	NR::Point p(x, y);
+	sp_desktop_scroll_to_point (sp_rb_desktop, &p);
 
 	sp_rb_rect.x1 = x;
 	sp_rb_rect.y1 = y;
