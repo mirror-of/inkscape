@@ -188,6 +188,7 @@ sp_fill_style_widget_new (void)
     GtkWidget *m = gtk_menu_new ();
     gtk_widget_show (m);
 
+    /* TRANSLATORS: Use the "winding fill" method (fill-rule:nonzero): all overlapping areas are filled. */
     GtkWidget *mi = gtk_menu_item_new_with_label (_("winding"));
     gtk_widget_show (mi);
     gtk_menu_append (GTK_MENU (m), mi);
@@ -196,6 +197,7 @@ sp_fill_style_widget_new (void)
     g_signal_connect ( G_OBJECT (mi), "activate",
                        G_CALLBACK (sp_fill_style_widget_fill_rule_activate),
                        spw );
+    /* TRANSLATORS: Use the "alternating fill" method (fill-rule:evenodd): areas with odd number of overlaps are filled. */
     mi = gtk_menu_item_new_with_label (_("alternating"));
     gtk_widget_show (mi);
     gtk_menu_append (GTK_MENU (m), mi);
