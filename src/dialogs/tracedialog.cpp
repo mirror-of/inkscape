@@ -396,14 +396,14 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBrightnessRadioButton.set_label(_("Brightness"));
     potraceGroup = potraceBrightnessRadioButton.get_group();
     potraceBrightnessBox.pack_start(potraceBrightnessRadioButton, false, false, MARGIN);
-    tips.set_tip(potraceBrightnessRadioButton, _("Select tracing by a given brightness level"));
+    tips.set_tip(potraceBrightnessRadioButton, _("Trace by a given brightness level"));
 
     potraceBrightnessSpinner.set_digits(3);
     potraceBrightnessSpinner.set_increments(0.01, 0.1);
     potraceBrightnessSpinner.set_range(0.0, 1.0);
     potraceBrightnessSpinner.set_value(0.45);
     potraceBrightnessBox.pack_end(potraceBrightnessSpinner, false, false, MARGIN);
-    tips.set_tip(potraceBrightnessSpinner, _("Adjust brightness cutoff for black/white"));
+    tips.set_tip(potraceBrightnessSpinner, _("Brightness cutoff for black/white"));
 
     potraceBrightnessSpinnerLabel.set_label(_("Threshold:"));
     potraceBrightnessBox.pack_end(potraceBrightnessSpinnerLabel, false, false, MARGIN);
@@ -420,7 +420,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyRadioButton.set_label(_("Optimal Edge Detection (Canny)"));
     potraceCannyRadioButton.set_group(potraceGroup);
     potraceCannyBox.pack_start(potraceCannyRadioButton, false, false, MARGIN);
-    tips.set_tip(potraceCannyRadioButton, _("Select tracing by J. Canny's algorithm"));
+    tips.set_tip(potraceCannyRadioButton, _("Trace with edge detection by J. Canny's algorithm"));
     /*
     potraceCannyBox.pack_start(potraceCannySeparator);
     potraceCannyLoSpinnerLabel.set_label(_("Low"));
@@ -436,7 +436,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyHiSpinner.set_range(0.0, 1.0);
     potraceCannyHiSpinner.set_value(0.65);
     potraceCannyBox.pack_end(potraceCannyHiSpinner, false, false, MARGIN);
-    tips.set_tip(potraceCannyHiSpinner, _("Brightness cutoff for adjacent pixels (adjusts thickness)"));
+    tips.set_tip(potraceCannyHiSpinner, _("Brightness cutoff for adjacent pixels (determines edge thickness)"));
 
     potraceCannyHiSpinnerLabel.set_label(_("Threshold:"));
     potraceCannyBox.pack_end(potraceCannyHiSpinnerLabel, false, false, MARGIN);
@@ -455,14 +455,14 @@ TraceDialogImpl::TraceDialogImpl()
     potraceQuantRadioButton.set_label(_("Color Quantization"));
     potraceQuantRadioButton.set_group(potraceGroup);
     potraceQuantBox.pack_start(potraceQuantRadioButton, false, false, MARGIN);
-    tips.set_tip(potraceQuantRadioButton, _("Select tracing along the borders of reduced colors"));
+    tips.set_tip(potraceQuantRadioButton, _("Trace along the boundaries of reduced colors"));
 
     potraceQuantNrColorSpinner.set_digits(2);
     potraceQuantNrColorSpinner.set_increments(1.0, 4.0);
     potraceQuantNrColorSpinner.set_range(2.0, 64.0);
     potraceQuantNrColorSpinner.set_value(8.0);
     potraceQuantBox.pack_end(potraceQuantNrColorSpinner, false, false, MARGIN);
-    tips.set_tip(potraceQuantNrColorSpinner, _("Adjust the reduced number of colors"));
+    tips.set_tip(potraceQuantNrColorSpinner, _("The number of reduced colors"));
 
     potraceQuantNrColorLabel.set_label(_("Colors:"));
     potraceQuantBox.pack_end(potraceQuantNrColorLabel, false, false, MARGIN);
@@ -479,7 +479,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceMultiScanBrightnessRadioButton.set_label(_("Brightness"));
     potraceMultiScanBrightnessRadioButton.set_group(potraceGroup);
     potraceMultiScanHBox1.pack_start(potraceMultiScanBrightnessRadioButton, false, false, MARGIN);
-    tips.set_tip(potraceMultiScanBrightnessRadioButton, _("Repeated scanning with different brightness bands"));
+    tips.set_tip(potraceMultiScanBrightnessRadioButton, _("Trace the given number of brightness levels"));
 
     potraceMultiScanNrColorSpinner.set_digits(2);
     potraceMultiScanNrColorSpinner.set_increments(1.0, 4.0);
@@ -488,7 +488,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceMultiScanHBox1.pack_end(potraceMultiScanNrColorSpinner, false, false, MARGIN);
     potraceMultiScanNrColorLabel.set_label(_("Scans:"));
     potraceMultiScanHBox1.pack_end(potraceMultiScanNrColorLabel, false, false, MARGIN);
-    tips.set_tip(potraceMultiScanNrColorSpinner, _("Adjust desired number of scans"));
+    tips.set_tip(potraceMultiScanNrColorSpinner, _("The desired number of scans"));
 
     potraceMultiScanVBox.pack_start(potraceMultiScanHBox1, false, false, MARGIN);
 
@@ -496,7 +496,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceMultiScanColorRadioButton.set_label(_("Color"));
     potraceMultiScanColorRadioButton.set_group(potraceGroup);
     potraceMultiScanHBox2.pack_start(potraceMultiScanColorRadioButton, false, false, MARGIN);
-    tips.set_tip(potraceMultiScanColorRadioButton, _("Repeated scanning, once for each reduced color"));
+    tips.set_tip(potraceMultiScanColorRadioButton, _("Trace the given number of reduced colors"));
 
 
     potraceMultiScanVBox.pack_start(potraceMultiScanHBox2, false, false, MARGIN);
@@ -510,12 +510,12 @@ TraceDialogImpl::TraceDialogImpl()
     potraceMultiScanStackButton.set_label(_("Stack"));
     potraceMultiScanStackButton.set_active(true);
     potraceMultiScanHBox3.pack_end(potraceMultiScanStackButton, false, false, MARGIN);
-    tips.set_tip(potraceMultiScanStackButton, _("Stack scans vertically or tile horizontally"));
+    tips.set_tip(potraceMultiScanStackButton, _("Stack scans vertically (no gaps) or tile horizontally (usually with gaps)"));
 
     potraceMultiScanSmoothButton.set_label(_("Smooth"));
     potraceMultiScanSmoothButton.set_active(true);
     potraceMultiScanHBox3.pack_end(potraceMultiScanSmoothButton, false, false, MARGIN);
-    tips.set_tip(potraceMultiScanSmoothButton, _("Gaussian blur on bitmap before tracing"));
+    tips.set_tip(potraceMultiScanSmoothButton, _("Apply Gaussian blur to the bitmap before tracing"));
 
     potraceMultiScanVBox.pack_start(potraceMultiScanHBox3, false, false, MARGIN);
 
@@ -529,7 +529,7 @@ TraceDialogImpl::TraceDialogImpl()
     potracePreviewButton.signal_clicked().connect( 
          sigc::mem_fun(*this, &TraceDialogImpl::potracePreviewCallback) );
     potracePreviewBox.pack_end(potracePreviewButton, false, false, 0);//do not expand
-    tips.set_tip(potracePreviewButton, _("Show intermediate bitmap without tracing"));
+    tips.set_tip(potracePreviewButton, _("Preview the result without actual tracing"));
 
 
     potracePreviewImage.set_size_request(100,100);
@@ -549,7 +549,7 @@ TraceDialogImpl::TraceDialogImpl()
 
     /*#### Credits ####*/
     potraceCreditsLabel.set_text(
-         "Thanks to Peter Selinger, http://potrace.sourceforge.net"
+							 _("Thanks to Peter Selinger, http://potrace.sourceforge.net")
                          );
     potraceCreditsVBox.pack_start(potraceCreditsLabel, false, false, MARGIN);
     potraceCreditsFrame.set_label(_("Credits"));
