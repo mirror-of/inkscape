@@ -31,6 +31,9 @@
 #include "../livarot/Shape.h"
 #include "../livarot/Ligne.h"
 #include <libnr/nr-matrix-ops.h>
+#include <libnrtype/font-instance.h>
+#include <libnrtype/raster-glyph.h>
+#include <libnrtype/RasterFont.h>
 
 // defined in nr-arena-shape.cpp
 void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);

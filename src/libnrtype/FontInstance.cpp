@@ -4,8 +4,10 @@
  *
  */
 
-#include "FontInstance.h"
 #include "FontFactory.h"
+#include <libnr/nr-rect.h>
+#include <libnrtype/font-glyph.h>
+#include <libnrtype/font-instance.h>
 
 /* #include <layout/LEGlyphStorage.h> */
 
@@ -14,17 +16,18 @@
 
 #include "RasterFont.h"
 #ifdef WITH_XFT
-#include <freetype/ftoutln.h>
-#include <freetype/ftbbox.h>
-#include <freetype/internal/tttypes.h>
-#include <freetype/internal/ftstream.h>
-#include <freetype/tttags.h>
+# include <freetype/ftoutln.h>
+# include <freetype/ftbbox.h>
+# include <freetype/internal/tttypes.h>
+# include <freetype/internal/ftstream.h>
+# include <freetype/tttags.h>
+# include <pango/pangoft2.h>
 #endif
 
 #ifdef WIN32
-#include <config.h>
-#include <pango/pangowin32.h>
-#include <windows.h>
+# include <config.h>
+# include <pango/pangowin32.h>
+# include <windows.h>
 #endif
 
 size_t  font_style_hash::operator()(const font_style &x) const {

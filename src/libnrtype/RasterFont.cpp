@@ -6,13 +6,18 @@
 
 #include "RasterFont.h"
 
+#include <livarot/Ligne.h>
 #include <livarot/Path.h>
 #include <livarot/Shape.h>
-
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-ops.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-pixblock.h>
+#include <libnrtype/font-instance.h>
+#include <libnrtype/raster-glyph.h>
+#include <libnrtype/raster-position.h>
+
 
 static void glyph_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float ven);
 

@@ -31,7 +31,8 @@
 #include <glib.h>
 
 #include <libnrtype/FontFactory.h>
-#include <libnrtype/FontInstance.h>
+#include <libnrtype/font-instance.h>
+#include <libnrtype/raster-glyph.h>
 #include <libnrtype/RasterFont.h>
 #include <libnrtype/TextWrapper.h>
 
