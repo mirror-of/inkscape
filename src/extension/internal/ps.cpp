@@ -351,7 +351,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         // respective pages.
         os << "%%Pages: 1\n";
 
-        pageLandscape = (d.x1 - d.x0 > d.y1 - d.y0) ? true : false;
+        pageLandscape = ( d.y1 - d.y0 < d.x1 - d.x0 );
 
         if (pageLandscape) {
             os << "%%Orientation: Landscape\n";
@@ -383,12 +383,11 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         }
 
         os << "%%EndComments\n";
-        // This will become problematic if we print
-        // multi paged documents:
+        // This will become problematic if we print multi paged documents:
         os << "%%Page: 1 1\n";
 
         if (pageLandscape) {
-            os << 90 << " rotate\n";
+            os << "90 rotate\n";
             if (_bitmap) {
                 os << "0 " << (int) -ceil(_height) << " translate\n";
             }
@@ -478,7 +477,7 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
 
     res = fprintf(_stream, "showpage\n");
 
-    /* Flush stream to be sure */
+    /* Flush stream to be sure. */
     (void) fflush(_stream);
 
     /* fixme: should really use pclose for popen'd streams */
