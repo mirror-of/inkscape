@@ -17,7 +17,7 @@
 use strict;
 
 my $com = qr/(?:\#[^\n]*\n)/;
-my $str = qr/(?:"(?:[^"\\]|\\.)*"\n)/;
+my $str = qr/(?:"(?:[^"\\]|\\.)*")/;
 my $attrs = qr/(?: +[^<>]*)?/;
 my $span_attr = qr/(?: +(?:font_(?:desc|family)|face|size|style|weight|variant|stretch|(?:fore|back)ground|underline|rise|strikethrough|fallback|lang)\=\\\"[^\\\"]*\\\")/;
 
@@ -45,8 +45,11 @@ while(<>) {
 	if (!m{\A${com}*msgid[^\n]*\n${com}*msgstr[^\n]*\n${com}*\Z}) {
 	    po_error('Not in msg format');
 	}
-	elsif (!m{\A${com}*msgid ${str}${com}*msgstr ${str}${com}*\Z}) {
+	elsif (!m{\A${com}*msgid ${str}\s*\n${com}*msgstr ${str}\s*\n${com}*\Z}) {
 	    po_error('Mismatched quotes');
+	}
+	elsif (!m{\A${com}*msgid ${str}\n${com}*msgstr ${str}\n${com}*\Z}) {
+	    po_error('Trailing whitespace');
 	}
 	elsif (m{<([bisu]|big|su[bp]|small|span|tt)${attrs}>(?![^<>]*</\1>)}) {
 	    po_error("unclosed <$1>");

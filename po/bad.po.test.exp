@@ -68,3 +68,7 @@ msgstr "<b face=\"bold\">hi</b>"
 bad.po.test: Unexpected <span> attribute:
 msgid "bad18"
 msgstr "<span fdsa=\"bold\">hi</span>"
+
+bad.po.test: Trailing whitespace:
+msgid "bad19: trailing whitespace"
+msgstr "tabs etc. after string." 	 

@@ -80,3 +80,6 @@ msgstr "<span weight=\"bold\">hi</span>"
 
 msgid "bad18"
 msgstr "<span fdsa=\"bold\">hi</span>"
+
+msgid "bad19: trailing whitespace"
+msgstr "tabs etc. after string." 	 
