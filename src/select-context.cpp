@@ -262,8 +262,8 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 
 				sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 				if (!sc->moved) {
-					item_at_point = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, TRUE);
-					group_at_point = sp_desktop_group_at_point (desktop, event->button.x, event->button.y);
+					item_at_point = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+					group_at_point = sp_desktop_group_at_point (desktop, NR::Point(event->button.x, event->button.y));
 					// if neither a group nor an item (possibly in a group) at point are selected, set selection to the item passed with the event
 					if ((!item_at_point || !sp_selection_item_selected (selection, item_at_point)) && 
 					    (!group_at_point || !sp_selection_item_selected (selection, group_at_point))) {
@@ -423,11 +423,11 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				/* User has dragged fast, so we get events on root (lauris)*/
 				// not only that; we will end up here when ctrl-dragging as well
 				sp_rubberband_stop ();
-				item_at_point = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, FALSE);
+				item_at_point = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), FALSE);
 				if (item_at_point || sc->moved) { // drag only if starting from a point, or if something is already grabbed
 					if (!sc->moved) {
-						item_in_group = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, TRUE);
-						group_at_point = sp_desktop_group_at_point (desktop, event->button.x, event->button.y);
+						item_in_group = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+						group_at_point = sp_desktop_group_at_point (desktop, NR::Point(event->button.x, event->button.y));
 						// if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
 						if ((!item_in_group || !sp_selection_item_selected (selection, item_in_group)) && 
 								(!group_at_point || !sp_selection_item_selected (selection, group_at_point))) {
@@ -518,11 +518,11 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						sc->button_press_shift = FALSE;
 
 						if (sc->button_press_ctrl) {
-							item = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, TRUE);
-							group = sp_desktop_group_at_point (desktop, event->button.x, event->button.y);
+							item = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+							group = sp_desktop_group_at_point (desktop, NR::Point(event->button.x, event->button.y));
 							sc->button_press_ctrl = FALSE;
 						} else {
-							item = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, FALSE);
+							item = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), FALSE);
 						}
 						// if there's both a group and an item at point, deselect group to prevent double selection
 						if (group) {
@@ -544,7 +544,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 
 						sc->button_press_ctrl = FALSE;
 
-						item = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, TRUE);
+						item = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 
 						if (item) {
 							if (sp_selection_item_selected (selection, item)) {

@@ -730,11 +730,9 @@ static GSList *
 find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
                     int (*test)(const NRRect *, const NRRect *))
 {
-	SPObject * o;
-
 	g_return_val_if_fail (SP_IS_GROUP (group), s);
 
-	for ( o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject * o = group->children ; o != NULL ; o = o->next ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) &&
 		    SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER)
@@ -757,17 +755,16 @@ find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
 extern gdouble nr_arena_global_delta;
 
 SPItem*
-find_item_at_point (gint dkey, SPGroup *group, double x, double y, gboolean into_groups)
+find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_groups)
 {
-	SPObject * o;
 	SPItem *seen = NULL, *newseen = NULL;
 	NRArenaItem *arenaitem;
 
-	for ( o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject * o = group->children ; o != NULL ; o = o->next ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) && (SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER || into_groups))	{
 			// if nothing found yet, recurse into the group
-			newseen = find_item_at_point (dkey, SP_GROUP (o), x, y, into_groups);
+			newseen = find_item_at_point (dkey, SP_GROUP (o), p, into_groups);
 			if (newseen) {
 				seen = newseen;
 				newseen = NULL;
@@ -778,7 +775,7 @@ find_item_at_point (gint dkey, SPGroup *group, double x, double y, gboolean into
 			arenaitem = sp_item_get_arenaitem (child, dkey);
 
 			// seen remembers the last (topmost) of items pickable at this point
-			if (nr_arena_item_invoke_pick (arenaitem, x, y, nr_arena_global_delta, 1) != NULL) {
+			if (nr_arena_item_invoke_pick (arenaitem, p[NR::X], p[NR::Y], nr_arena_global_delta, 1) != NULL) {
 				seen = child;
 			}
 		}
@@ -787,13 +784,12 @@ find_item_at_point (gint dkey, SPGroup *group, double x, double y, gboolean into
 }
 
 SPItem*
-find_group_at_point (gint dkey, SPGroup *group, double x, double y)
+find_group_at_point (gint dkey, SPGroup *group, NR::Point const p)
 {
-	SPObject * o;
 	SPItem *seen = NULL;
 	NRArenaItem *arenaitem;
 
-	for ( o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject *o = group->children ; o != NULL ; o = o->next ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) && SP_GROUP (o)->mode != SP_GROUP_MODE_LAYER) {
 			SPItem * child = SP_ITEM (o);
@@ -801,7 +797,7 @@ find_group_at_point (gint dkey, SPGroup *group, double x, double y)
 			arenaitem = sp_item_get_arenaitem (child, dkey);
 
 			// seen remembers the last (topmost) of groups pickable at this point
-			if (nr_arena_item_invoke_pick (arenaitem, x, y, nr_arena_global_delta, 1) != NULL) {
+			if (nr_arena_item_invoke_pick (arenaitem, p[NR::X], p[NR::Y], nr_arena_global_delta, 1) != NULL) {
 				seen = child;
 			}
 		}
@@ -848,23 +844,23 @@ sp_document_partial_items_in_box (SPDocument *document, NRRect const *box)
 }
 
 SPItem*
-sp_document_item_at_point (SPDocument *document, unsigned int key, double x, double y, gboolean into_groups)
+sp_document_item_at_point (SPDocument *document, unsigned int key, NR::Point p, gboolean into_groups)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 
- 	return find_item_at_point (key, SP_GROUP (document->root), x, y, into_groups);
+ 	return find_item_at_point (key, SP_GROUP (document->root), p, into_groups);
 }
 
 SPItem*
-sp_document_group_at_point (SPDocument *document, unsigned int key, double x, double y)
+sp_document_group_at_point (SPDocument *document, unsigned int key, NR::Point const p)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 
- 	return find_group_at_point (key, SP_GROUP (document->root), x, y);
+ 	return find_group_at_point (key, SP_GROUP (document->root), p);
 }
 
 

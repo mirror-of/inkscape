@@ -633,19 +633,19 @@ sp_desktop_get_default_unit (SPDesktop *dt)
 }
 
 SPItem *
-sp_desktop_item_at_point (SPDesktop *desktop, gdouble x, gdouble y, gboolean into_groups)
+sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, gboolean into_groups)
 {
-       SPDocument *document=SP_VIEW (desktop)->doc;
+       SPDocument *document = SP_VIEW (desktop)->doc;
        g_return_val_if_fail (document != NULL, NULL);
-       return sp_document_item_at_point (document, desktop->dkey, x, y, into_groups);
+       return sp_document_item_at_point (document, desktop->dkey, p, into_groups);
 }
 
 SPItem *
-sp_desktop_group_at_point (SPDesktop *desktop, gdouble x, gdouble y)
+sp_desktop_group_at_point (SPDesktop const *desktop, NR::Point const p)
 {
-       SPDocument *document=SP_VIEW (desktop)->doc;
+       SPDocument *document = SP_VIEW (desktop)->doc;
        g_return_val_if_fail (document != NULL, NULL);
-       return sp_document_group_at_point (document, desktop->dkey, x, y);
+       return sp_document_group_at_point (document, desktop->dkey, p);
 }
 
 /* SPDesktopWidget */
