@@ -19,6 +19,7 @@
 #include <string.h>
 
 #include <inkscape.h>
+#include <xml/repr.h>
 #include <document.h>
 
 #include "EcmaBinding.h"
@@ -199,7 +200,6 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
     //Create an EcmaObject
     EcmaObject *obj = new EcmaObject(this, parent);
     
-/*Temp fix
     char *name = (char *) sp_repr_name(node);
     if (!name)
         throw EcmaException("processNode: unnamed node");
@@ -258,7 +258,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
         if (!processNode(child, obj))
             return NULL;
         }
-*/
+
     return obj;
 }
 
