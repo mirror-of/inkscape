@@ -2,6 +2,9 @@
 
 	* src/object-ui.cpp: 'Fill Settings' -> 'Fill and Stroke'
 
+	* src/FilePath.cpp, src/FilePath.h: removed until we can rethink
+	  the file stuff
+
 2004-01-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnrtype/nr-type-directory.h,
