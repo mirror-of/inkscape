@@ -13,7 +13,6 @@
 #include <glib.h>
 
 #include <libnr/nr-macros.h>
-#include <libnr/nr-values.h>
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-rotate.h>
