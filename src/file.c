@@ -458,9 +458,8 @@ sp_file_print_preview (gpointer object, gpointer data)
 
 void sp_file_exit (void)
 {
-	if (sp_ui_close_all ()) {
-		inkscape_exit (INKSCAPE);
-	}
+	sp_ui_close_all ();
+	// no need to call inkscape_exit here; last document being closed will take care of that
 }
 
 void

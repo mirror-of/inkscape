@@ -773,7 +773,7 @@ inkscape_remove_desktop (SPDesktop * desktop)
 
 	// if this was the last desktop, shut down the program
 	if (g_slist_length (inkscape->desktops) == 0)
-		sp_file_exit ();
+		inkscape_exit (inkscape);
 }
 
 void
@@ -1016,12 +1016,11 @@ void
 inkscape_exit (Inkscape *inkscape)
 {
 	//emit shutdown signal so that dialogs could remember layout
-	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SHUTDOWN_SIGNAL], 0);
+	g_signal_emit (G_OBJECT (INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);
 
 	if (inkscape->preferences) {
-		inkscape_save_preferences (inkscape);
+		inkscape_save_preferences (INKSCAPE);
 	}
-
 	gtk_main_quit ();
 }
 
