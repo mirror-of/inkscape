@@ -334,3 +334,13 @@ SPItem *SPSelection::_itemForRepr(SPRepr *repr) {
 	return SP_ITEM(object);
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-basic-offset:8
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
