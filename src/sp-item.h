@@ -91,7 +91,7 @@ struct _SPItem {
 	NRMatrix transform;
 
 	SPObject *clip;
-	SPURICallback *clip_uri_callback;
+	Inkscape::URIReference *clip_ref;
 	SPObject *mask;
 
 	SPItemView *display;

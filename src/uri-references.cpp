@@ -16,14 +16,52 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "document.h"
+#include "sp-object.h"
 #include "uri-references.h"
 
-struct _SPURICallback {
-	SPDocument *document;
-	SPDocumentIDCallback *callback;
-	SPURICallbackFunc func;
-	gpointer data;
-};
+static gchar *uri_to_id(SPDocument *document, const gchar *uri);
+
+namespace Inkscape {
+
+URIReference::URIReference(SPDocument *rel_document, const gchar *uri) {
+	gchar *id = uri_to_id(rel_document, uri);
+	if (!id) {
+		throw UnsupportedURIException();
+	}
+
+	_obj = sp_document_lookup_id(rel_document, id);
+	if (_obj) {
+		sp_object_href(_obj, NULL);
+	}
+
+	_connection = sp_document_id_changed_connect(rel_document, id, SigC::slot(*this, &URIReference::_onIDChanged));
+
+	g_free(id);
+}
+
+URIReference::~URIReference() {
+	_connection.disconnect();
+	if (_obj) {
+		sp_object_hunref(_obj, NULL);
+		_obj = NULL;
+	}
+}
+
+void URIReference::_onIDChanged(SPObject *obj) {
+	if (obj == _obj) return;
+
+	if (_obj) {
+		sp_object_hunref(_obj, NULL);
+	}
+	_obj = obj;
+	if (obj) {
+		sp_object_href(obj, NULL);
+	}
+
+	_changed_signal.emit(_obj);
+}
+
+}; /* namespace Inkscape */
 
 static gchar *
 uri_to_id(SPDocument *document, const gchar *uri)
@@ -55,42 +93,6 @@ uri_to_id(SPDocument *document, const gchar *uri)
 	id[len] = '\0';
 
 	return id;
-}
-
-
-static void
-id_callback(SPDocument *document, const gchar *id, SPObject *object, gpointer data)
-{
-	SPURICallback *callback=(SPURICallback *)data;
-	callback->func(object, callback->data);
-}
-
-SPURICallback *
-sp_uri_add_callback(SPDocument *document, const gchar *uri, SPURICallbackFunc func, gpointer data)
-{
-	gchar *id;
-	SPURICallback *callback;
-
-	/* FIXME !!! add signal handler for document 'destroy' signal to disable this callback if the document is destroyed */
-
-	id = uri_to_id(document, uri);
-	if (!id) return NULL;
-
-	callback = g_new(SPURICallback, 1);
-
-	callback->document = document;
-	callback->func = func;
-	callback->data = data;
-	callback->callback = sp_document_add_id_callback(document, id, id_callback, (gpointer)callback);
-
-	return callback;
-}
-
-void
-sp_uri_remove_callback(SPURICallback *callback)
-{
-	sp_document_remove_id_callback(callback->document, callback->callback);
-	g_free(callback);
 }
 
 SPObject *

@@ -13,6 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <sigc++/sigc++.h>
 #include "xml/repr-action.h"
 #include "sp-defs.h"
 #include "sp-root.h"
@@ -21,8 +22,8 @@
 #define SP_DOCUMENT_DEFS(d) ((SPObject *) SP_ROOT (SP_DOCUMENT_ROOT (d))->defs)
 
 struct _SPDocumentPrivate {
-	GHashTable * iddef;	/**< Dictionary of id -> SPObject mappings */
-	GHashTable *idcallbacks; /**< Callbacks for id changes */
+	GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
+	GHashTable *idsignals; /**< Dictionary of signals for id changes */
 
 	/* Resources */
 	/* It is GHashTable of GSLists */
@@ -34,12 +35,6 @@ struct _SPDocumentPrivate {
 	int history_size;
 	GSList * undo; /* Undo stack of reprs */
 	GSList * redo; /* Redo stack of reprs */
-};
-
-struct _SPDocumentIDCallback {
-	GQuark idq;
-	SPDocumentIDCallbackFunc func;
-	gpointer data;
 };
 
 #endif

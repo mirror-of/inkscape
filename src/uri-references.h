@@ -14,14 +14,46 @@
  */
 
 #include <glib.h>
+#include <sigc++/sigc++.h>
+#include <exception>
 #include "forward.h"
+#include "document.h"
 
-typedef struct _SPURICallback SPURICallback;
+namespace Inkscape {
 
-typedef void (*SPURICallbackFunc)(SPObject *object, gpointer data);
+class UnsupportedURIException {
+public:
+	const char *what() const { return "Unsupported or malformed URI"; }
+};
 
-SPURICallback *sp_uri_add_callback(SPDocument *document, const gchar *uri, SPURICallbackFunc func, gpointer data);
-void sp_uri_remove_callback(SPURICallback *callback);
+class URIReference : public SigC::Object {
+public:
+	URIReference(SPDocument *rel_document, const gchar *uri);
+	~URIReference();
+
+	SigC::Signal1<void, SPObject *> changedSignal();
+
+	SPObject *getObject();
+
+private:
+	SigC::Connection _connection;
+	SPObject *_obj;
+
+	SigC::Signal1<void, SPObject *> _changed_signal;
+
+	void _onIDChanged(SPObject *object);
+};
+
+inline SigC::Signal1<void, SPObject *> URIReference::changedSignal() {
+	return _changed_signal;
+}
+
+inline SPObject *URIReference::getObject() {
+	return _obj;
+}
+
+}
+
 SPObject *sp_uri_reference_resolve (SPDocument *document, const gchar *uri);
 
 #endif

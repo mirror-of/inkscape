@@ -54,7 +54,7 @@ static SPItemView *sp_item_view_list_remove (SPItemView *list, SPItemView *view)
 
 static SPObjectClass *parent_class;
 
-static void clip_obj_changed(SPObject *obj, gpointer data);
+static void clip_ref_changed(SPObject *clip, SPItem *item);
 
 GType
 sp_item_get_type (void)
@@ -111,7 +111,7 @@ sp_item_init (SPItem *item)
 	item->display = NULL;
 
 	item->clip = NULL;
-	item->clip_uri_callback = NULL;
+	item->clip_ref = NULL;
 	item->mask = NULL;
 
 	if (!object->style) object->style = sp_style_new_from_object (SP_OBJECT (item));
@@ -151,14 +151,14 @@ sp_item_release (SPObject * object)
 		item->display = sp_item_view_list_remove (item->display, item->display);
 	}
 
-	if (item->clip_uri_callback) {
-		sp_uri_remove_callback(item->clip_uri_callback);
-		item->clip_uri_callback = NULL;
+	if (item->clip_ref) {
+		delete item->clip_ref;
+		item->clip_ref = NULL;
 	}
 
 	if (item->clip) {
 		sp_signal_disconnect_by_data (item->clip, object);
-		item->clip = sp_object_hunref (SP_OBJECT (item->clip), object);
+		item->clip = NULL;
 	}
 
 	if (item->mask) {
@@ -237,16 +237,23 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 	case SP_PROP_CLIP_PATH: {
 		SPObject *cp;
-		if (item->clip_uri_callback) {
-			sp_uri_remove_callback(item->clip_uri_callback);
+		if (item->clip_ref) {
+			delete item->clip_ref;
 		}
 		if (value) {
-			item->clip_uri_callback = sp_uri_add_callback(SP_OBJECT_DOCUMENT(object), value, clip_obj_changed, (gpointer)item);
-			cp = sp_uri_reference_resolve(SP_OBJECT_DOCUMENT(object), value);
+			try {
+				item->clip_ref = new Inkscape::URIReference(SP_OBJECT_DOCUMENT(object), value);
+				item->clip_ref->changedSignal().connect(SigC::bind(SigC::slot(clip_ref_changed), item));
+				cp = item->clip_ref->getObject();
+			} catch (Inkscape::UnsupportedURIException &e) {
+				g_warning("%s", e.what());
+				item->clip_ref = NULL;
+				cp = NULL;
+			}
 		} else {
 			cp = NULL;
 		}
-		clip_obj_changed(cp, (gpointer)object);
+		clip_ref_changed(cp, item);
 		break;
 	}
 	case SP_PROP_MASK: {
@@ -317,10 +324,9 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 static void
-clip_obj_changed(SPObject *object, gpointer data)
+clip_ref_changed(SPObject *clip, SPItem *item)
 {
-	SPItem *item=SP_ITEM(data);
-	if (object != item->clip) {
+	if (clip != item->clip) {
 		if (item->clip) {
 			SPItemView *v;
 			/* Detach clippath */
@@ -330,12 +336,12 @@ clip_obj_changed(SPObject *object, gpointer data)
 				sp_clippath_hide (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
 				nr_arena_item_set_clip (v->arenaitem, NULL);
 			}
-			item->clip = sp_object_hunref (item->clip, SP_OBJECT(item));
+			item->clip = NULL;
 		}
-		if (SP_IS_CLIPPATH (object)) {
+		if (SP_IS_CLIPPATH (clip)) {
 			NRRect bbox;
 			SPItemView *v;
-			item->clip = sp_object_href (object, SP_OBJECT(item));
+			item->clip = clip;
 			g_signal_connect (G_OBJECT (item->clip), "release", G_CALLBACK (sp_item_clip_release), item);
 			g_signal_connect (G_OBJECT (item->clip), "modified", G_CALLBACK (sp_item_clip_modified), item);
 			sp_item_invoke_bbox (item, &bbox, NULL, TRUE);

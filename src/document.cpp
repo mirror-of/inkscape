@@ -117,6 +117,12 @@ sp_document_class_init (SPDocumentClass * klass)
 }
 
 static void
+free_id_signal(gpointer p)
+{
+	delete reinterpret_cast<SigC::Signal1<void, SPObject *> *>(p);
+}
+
+static void
 sp_document_init (SPDocument *doc)
 {
 	SPDocumentPrivate *p;
@@ -137,7 +143,7 @@ sp_document_init (SPDocument *doc)
 	p = g_new (SPDocumentPrivate, 1);
 
 	p->iddef = g_hash_table_new (g_direct_hash, g_direct_equal);
-	p->idcallbacks = g_hash_table_new (g_direct_hash, g_direct_equal);
+	p->idsignals = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, free_id_signal);
 
 	p->resources = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -177,7 +183,10 @@ sp_document_dispose (GObject *object)
 		}
 
 		if (priv->iddef) g_hash_table_destroy (priv->iddef);
-		if (priv->idcallbacks) g_hash_table_destroy (priv->idcallbacks);
+		if (!g_hash_table_size(priv->idsignals)) {
+			g_warning("Lingering id change signals");
+		}
+		if (priv->idsignals) g_hash_table_destroy (priv->idsignals);
 
 		if (doc->rdoc) sp_repr_document_unref (doc->rdoc);
 
@@ -516,10 +525,12 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 void
 sp_document_def_id (SPDocument * document, const gchar * id, SPObject * object)
 {
-	GSList *callbacks, *iter;
+	SigC::Signal1<void, SPObject *> *signal;
 	GQuark idq;
 
 	idq = g_quark_from_string(id);
+
+	signal = reinterpret_cast<SigC::Signal1<void, SPObject *> *>(g_hash_table_lookup(document->priv->idsignals, GINT_TO_POINTER(idq)));
 
 	if (object) {
 		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) == NULL);
@@ -527,49 +538,32 @@ sp_document_def_id (SPDocument * document, const gchar * id, SPObject * object)
 	} else {
 		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) != NULL);
 		g_hash_table_remove(document->priv->iddef, GINT_TO_POINTER(idq));
+		if ( signal && signal->empty() ) {
+			g_hash_table_remove(document->priv->idsignals, GINT_TO_POINTER(idq));
+			signal = NULL;
+		}
 	}
 
-	callbacks = (GSList *)g_hash_table_lookup(document->priv->idcallbacks, GINT_TO_POINTER(idq));
-
-	for ( iter = callbacks ; iter ; iter = iter->next ) {
-		SPDocumentIDCallback *callback;
-		callback = (SPDocumentIDCallback *)iter->data;
-		callback->func(document, id, object, callback->data);
+	if (signal) {
+		signal->emit(object);
 	}
 }
 
-SPDocumentIDCallback *
-sp_document_add_id_callback (SPDocument *document, const gchar *id, SPDocumentIDCallbackFunc func, gpointer data)
+SigC::Connection
+sp_document_id_changed_connect(SPDocument *doc, const gchar *id,
+                               SigC::Slot1<void, SPObject *> slot)
 {
-	GSList *callbacks;
-	SPDocumentIDCallback *callback;
+	SigC::Signal1<void, SPObject *> *signal;
 	GQuark idq;
 
 	idq = g_quark_from_string(id);
+	signal = reinterpret_cast<SigC::Signal1<void, SPObject *> *>(g_hash_table_lookup(doc->priv->idsignals, GINT_TO_POINTER(idq)));
+	if (!signal) {
+		signal = new SigC::Signal1<void, SPObject *>();
+		g_hash_table_insert(doc->priv->idsignals, GINT_TO_POINTER(idq), reinterpret_cast<gpointer>(signal));
+	}
 
-	callback = g_new(SPDocumentIDCallback, 1);
-	callback->idq = idq;
-	callback->func = func;
-	callback->data = data;
-
-	callbacks = (GSList *)g_hash_table_lookup(document->priv->idcallbacks, GINT_TO_POINTER(idq));
-	callbacks = g_slist_prepend(callbacks, (gpointer)callback);
-	g_hash_table_insert(document->priv->idcallbacks, GINT_TO_POINTER(idq), (gpointer)callbacks);
-
-	return callback;
-}
-
-void
-sp_document_remove_id_callback (SPDocument *document, SPDocumentIDCallback *callback)
-{
-	GSList *callbacks;
-
-	g_return_if_fail(callback != NULL);
-
-	callbacks = (GSList *)g_hash_table_lookup(document->priv->idcallbacks, GINT_TO_POINTER(callback->idq));
-	callbacks = g_slist_remove(callbacks, (gconstpointer)callback);
-	g_hash_table_insert(document->priv->idcallbacks, GINT_TO_POINTER(callback->idq), (gpointer)callbacks);
-	g_free(callback);
+	return signal->connect(slot);
 }
 
 SPObject *

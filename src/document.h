@@ -15,10 +15,9 @@
 
 #include <libnr/nr-types.h>
 #include <glib-object.h>
+#include <sigc++/sigc++.h>
 #include "xml/repr.h"
 #include "forward.h"
-
-typedef struct _SPDocumentIDCallback SPDocumentIDCallback;
 
 typedef struct _SPDocumentPrivate SPDocumentPrivate;
 
@@ -53,8 +52,7 @@ struct _SPDocumentClass {
 	void (* resized) (SPDocument *document, gdouble width, gdouble height);
 };
 
-/*
- * Fetches document from URI, or creates new, if NULL
+/* Fetches document from URI, or creates new, if NULL
  * Public document appear in document list
  */
 
@@ -83,13 +81,9 @@ gdouble sp_document_height (SPDocument * document);
  * Dictionary
  */
 
-void sp_document_def_id (SPDocument * document, const gchar * id, SPObject * object);
-SPObject * sp_document_lookup_id (SPDocument * document, const gchar * id);
-
-typedef void (*SPDocumentIDCallbackFunc)(SPDocument *document, const gchar *id, SPObject *obj, gpointer data);
-
-SPDocumentIDCallback *sp_document_add_id_callback(SPDocument *document, const gchar *id, SPDocumentIDCallbackFunc func, gpointer data);
-void sp_document_remove_id_callback(SPDocument *document, SPDocumentIDCallback *callback);
+void sp_document_def_id(SPDocument *document, const gchar *id, SPObject *object);
+SigC::Connection sp_document_id_changed_connect(SPDocument *document, const gchar *id, SigC::Slot1<void, SPObject *>);
+SPObject *sp_document_lookup_id(SPDocument *document, const gchar *id);
 
 /*
  * Undo & redo

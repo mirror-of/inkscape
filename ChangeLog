@@ -3,6 +3,12 @@
 	* src/shortcuts.cpp: zoom in shortcut fix for german and other
 	  keyboards from schumaml
 
+	* configure.in: added SigC++ 1.2 dependency
+
+	* src/document-private.h, src/document.h, src/document.cpp,
+	  src/sp-item.h, src/sp-item.cpp, src/uri-reference.h,
+	  src/uri-reference.cpp: rewrote URI monitoring code using SigC++
+
 2004-01-02  Alexander Clausen <alex@skip86.com>
 	
 	* src/spsvgview.cpp src/inkview.cpp src/Makefile.am: re-enabled svg viewer,
