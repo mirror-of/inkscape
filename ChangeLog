@@ -1,3 +1,8 @@
+2005-02-14  MenTaLguY  <mental@rydia.net>
+
+	* src/document.cpp: remove redundant assignment that appears to confuse
+	  gcc anyhow
+
 2005-02-14  Rob    <swingincelt@gmail.com>
 
     * Replaced inline function sp_repr_set_position_absolute with
@@ -56,20 +61,20 @@
 	
 	* util/units.h, util/units.cpp:  New inkscape_gtkmm units code
 
-2004-02-12  MenTaLguY  <mental@rydia.net>
+2005-02-12  MenTaLguY  <mental@rydia.net>
 
 	* src/document.cpp, src/document.h, src/sp-gradient-test.cpp:
 
 	  SPDocument is now a "real C++ class", managed by the garbage collector
 
-2004-02-12  MenTaLguY  <mental@rydia.net>
+2005-02-12  MenTaLguY  <mental@rydia.net>
 
 	* src/document-private.h, src/document.cpp, src/document.h, src/view.cpp,
 	  src/view.h, src/dialogs/xml-tree.cpp:
 
 	  switched SPDocument to sigc++ signals
 
-2004-02-12  Kees Cook  <kees@outflux.net>
+2005-02-12  Kees Cook  <kees@outflux.net>
 
     * Makefile.am, configure.ac, Makefile.mingw.common, inkscape.nsi: undoing
 	  my "configure" changes.  Was dumb and forgot about native compiles on
@@ -90,23 +95,23 @@
       src/xml/repr.cpp, src/xml/repr.h: inline function removal patches from
 	  Robert Crosbie.
 
-2004-02-11  Kees Cook  <kees@outflux.net>
+2005-02-11  Kees Cook  <kees@outflux.net>
 
     * src/Makefile.mingw, src/make.*: win32 compile updates.
 	* src/extensions/internal/gnome.cpp: added my missing "comment" code.
 	* src/shortcuts.cpp, doc/keys.xml, doc/keys.html, share/screens/keys.svg:
 	  added explicit ctrl-w. since gtk already binds it, we may as well show it.
 
-2004-02-10  Jon A. Cruz  <jon@joncruz.org>
+2005-02-10  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/inkscape.cpp: Changed from SHGetSpecialFolderPath to
 	  SHGetSpecialFolderLocation. Fixes bug #1085641
 
-2004-02-10  MenTaLguY  <mental@rydia.net>
+2005-02-10  MenTaLguY  <mental@rydia.net>
 
 	* src/document.h, src/document.cpp: get rid of casting macro uses
 
-2004-02-10  MenTaLguY  <mental@rydia.net>
+2005-02-10  MenTaLguY  <mental@rydia.net>
 
 	* src/desktop.cpp, src/document-undo.cpp, src/document.cpp, src/file.cpp,
 	  src/gradient-chemistry.cpp, src/inkscape.cpp, src/interface.cpp,
@@ -118,7 +123,7 @@
 	  get rid needless uses of SP_IS_DOCUMENT (if we can't trust the
 	  compiler's type checking, what can we trust?)
 
-2004-02-10  MenTaLguY  <mental@rydia.net>
+2005-02-10  MenTaLguY  <mental@rydia.net>
 
 	* src/desktop-style.h, src/desktop.h, src/document.h, src/event-context.h,
 	  src/inkscape.h, src/knotholder.h, src/nodepath.h,

@@ -94,8 +94,6 @@ SPDocument::SPDocument() {
 }
 
 SPDocument::~SPDocument() {
-	SPDocumentPrivate *priv = priv;
-
 	collectOrphans();
 
 	if (priv) {
