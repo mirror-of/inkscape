@@ -214,7 +214,7 @@ nr_arena_item_unref (NRArenaItem *item)
 unsigned int
 nr_arena_item_invoke_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int state, unsigned int reset)
 {
-	NRGC childgc;
+	NRGC childgc(gc);
 
 	nr_return_val_if_fail (item != NULL, NR_ARENA_ITEM_STATE_INVALID);
 	nr_return_val_if_fail (NR_IS_ARENA_ITEM (item), NR_ARENA_ITEM_STATE_INVALID);

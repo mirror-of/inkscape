@@ -1,3 +1,14 @@
+2004-06-03  MenTaLguY  <mental@rydia.net>
+
+	* src/file.cpp, src/extension/internal/ps.cpp,
+	  src/extension/internal/win32.cpp, src/sp-pattern.cpp,
+	  src/dialogs/stroke-style.cpp, src/display/nr-arena-glyphs.cpp,
+	  src/display/nr-arena-group.cpp, src/display/nr-arena-image.cpp,
+	  src/display/nr-arena-item.cpp, src/display/nr-arena-shape.cpp,
+	  src/widgets/icon.cpp, src/dialogs/nr-arena-item.h:
+
+	  Introduced the notion of "parent" NRGCs
+
 2004-06-02  bulia byak <bulia@users.sourceforge.net>
 
 	* src/selection.h, src/selection.cpp:

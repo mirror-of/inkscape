@@ -61,6 +61,8 @@
 #define arena_item_tile_cache
 
 struct NRGC {
+	NRGC(NRGC const *p) : parent(p) {}
+	NRGC const *parent;
 	NRMatrix transform;
 };
 

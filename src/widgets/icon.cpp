@@ -385,7 +385,7 @@ sp_icon_image_load_svg ( const gchar *name,
                 NRRectL ibox, area, ua;
                 NRMatrix t;
                 NRPixBlock B;
-                NRGC gc;
+                NRGC gc(NULL);
                 double sf;
                 int width, height, dx, dy;
                 /* Update to renderable state */

@@ -641,7 +641,7 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
   
     if ( shape->delayed_shp ) {
 	if ( nr_rect_l_test_intersect (area, &item->bbox) ) {
-	    NRGC   tempGC;
+	    NRGC   tempGC(NULL);
 	    tempGC.transform=shape->ctm;
 	    nr_arena_shape_update_stroke(shape,&tempGC);
 	    nr_arena_shape_update_fill(shape,&tempGC);
@@ -756,7 +756,7 @@ nr_arena_shape_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 
     if ( shape->delayed_shp ) {
 	if ( nr_rect_l_test_intersect (area, &item->bbox) ) {
-	    NRGC   tempGC;
+	    NRGC   tempGC(NULL);
 	    tempGC.transform=shape->ctm;
 	    nr_arena_shape_update_stroke(shape,&tempGC);
 	    nr_arena_shape_update_fill(shape,&tempGC);
@@ -815,7 +815,7 @@ nr_arena_shape_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int 
 	area.y0-=idelta;
 	area.y1+=idelta;
 	if ( nr_rect_l_test_intersect (&area, &item->bbox) ) {
-	    NRGC   tempGC;
+	    NRGC   tempGC(NULL);
 	    tempGC.transform=shape->ctm;
 	    nr_arena_shape_update_stroke(shape,&tempGC);
 	    nr_arena_shape_update_fill(shape,&tempGC);

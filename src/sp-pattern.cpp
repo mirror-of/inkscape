@@ -405,7 +405,7 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbo
 	SPPattern *pat;
 	SPPatPainter *pp;
 	SPObject *child;
-	NRGC gc;
+	NRGC gc(NULL);
 
 	pat = SP_PATTERN (ps);
 

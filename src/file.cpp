@@ -650,7 +650,7 @@ sp_export_get_rows (const guchar **rows, int row, int num_rows, void *data)
     bbox.x1 = ebp->width;
     bbox.y1 = row + num_rows;
     /* Update to renderable state */
-    NRGC gc;
+    NRGC gc(NULL);
     nr_matrix_set_identity (&gc.transform);
     nr_arena_item_invoke_update (ebp->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 

@@ -371,7 +371,7 @@ PrintPS::finish (Inkscape::Extension::Print *mod)
 
 		for (y = 0; y < height; y += 64) {
 			NRRectL bbox;
-			NRGC gc;
+			NRGC gc(NULL);
 			NRMatrix imgt;
 			NRPixBlock pb;
 			/* Set area of interest */

@@ -178,7 +178,7 @@ nr_arena_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 	unsigned int beststate = NR_ARENA_ITEM_STATE_ALL;
 
 	for (NRArenaItem *child = group->children; child != NULL; child = child->next) {
-		NRGC cgc;
+		NRGC cgc(gc);
 		nr_matrix_multiply (&cgc.transform, &group->child_transform, &gc->transform);
 		newstate = nr_arena_item_invoke_update (child, area, &cgc, state, reset);
 		beststate = beststate & newstate;

@@ -315,7 +315,7 @@ PrintWin32::finish (Inkscape::Extension::Print *mod)
 	for (row = 0; row < height; row += 64) {
 		NRPixBlock pb;
 		NRRectL bbox;
-		NRGC gc;
+		NRGC gc(NULL);
 		int num_rows;
 		int i;
 

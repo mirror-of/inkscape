@@ -819,7 +819,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     NRRectL ibox, area, ua;
     NRMatrix t;
     NRPixBlock B;
-    NRGC gc;
+    NRGC gc(NULL);
     double sf;
     int width, height, dx, dy;
 
