@@ -175,7 +175,9 @@ void Trace::convertImageToPathThread()
     SPRepr *pathRepr    = sp_repr_new("path");
     SPRepr *imgRepr     = SP_OBJECT(img)->repr;
     sp_repr_set_attr(pathRepr, "d", d);
+    sp_repr_set_attr(pathRepr, "d", d);
 
+    //### Get some information for the new transform()
     double x      = 0.0;
     double y      = 0.0;
     double width  = 0.0;
@@ -202,16 +204,11 @@ void Trace::convertImageToPathThread()
     
     NR::Matrix scal(NR::scale(iwscale, ihscale));
 
+    //# Convolve scale, translation, and the original transform
     NR::Matrix tf(scal);
     tf *= trans;
     tf *= selectedItem->transform;
 
-    /*
-    char *name = "transform";
-    const char *val  = sp_repr_attr(imgRepr, name);
-    if (val)
-        sp_repr_set_attr(pathRepr, name, val);
-    */
 
     //#Add to tree
     SPRepr *par = sp_repr_parent(imgRepr);
@@ -220,8 +217,6 @@ void Trace::convertImageToPathThread()
     free(d);
 
     //### Apply the transform from the image to the new shape
-    //NR::Matrix tf     = sp_item_i2doc_affine(selectedItem);
-    //NR::Matrix tf     = selectedItem->transform;
     SPObject *reprobj = doc->getObjectByRepr(pathRepr);
     if (reprobj)
         {
