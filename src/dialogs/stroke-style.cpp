@@ -1216,33 +1216,6 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
 } // end of sp_stroke_style_line_update()
 
 
-
-/** 
-*  \brief  This essentially does a lookup of the string representation of
-*  a given marker's id.  This is intended to be temporary until
-*  a solution with a proper hashmap or lookup table or something
-*  can be written.
-*/
-const gchar*
-marker_id_to_string(unsigned int id) 
-{
-
-    switch (id) {          
-        case SP_MARKER_NONE:
-            return INKSCAPE_STOCK_MARKER_NONE;
-            
-        case SP_MARKER_TRIANGLE:
-            return INKSCAPE_STOCK_MARKER_FILLED_ARROW;
-            
-        case SP_MARKER_ARROW:
-            return INKSCAPE_STOCK_MARKER_HOLLOW_ARROW;
-            
-        default:
-            return "error";
-    };
-}
-
-
 /**
  * \brief  This routine updates the GUI widgets from data in the repr for the 
  * line styles. It retrieves the current width, units, etc. from the dialog 
