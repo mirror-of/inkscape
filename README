@@ -49,15 +49,13 @@ Snapping to guidelines/grid work only for certain modes
 To break line (or add node) select its endpoints
 It should import png, bmp, jpg, xpm & gif bitmaps and svg vector images.
 Open can handle only svg graphics
-It does not yet handle following svg shapes:
-- circle
+
+
 
 
 
 OLD
 ===
-
-
 When importing svg generated with ill2svg, all paths are usually grouped.
 Ungroup these manually.
 
