@@ -149,6 +149,7 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 
 static ArtBpath *
 subpath_from_bpath (SPNodePath * np, ArtBpath * b, const gchar * t)
+// XXX: Fixme: t should be a proper type, rather than gchar
 {
 	SPNodeSubPath * sp;
 	SPPathNode * n;
@@ -168,7 +169,7 @@ subpath_from_bpath (SPNodePath * np, ArtBpath * b, const gchar * t)
 	} else {
 		npos = pos;
 	}
-	n = sp_nodepath_node_new (sp, NULL, *t, ART_MOVETO, &pos, &pos, &npos);
+	n = sp_nodepath_node_new (sp, NULL, (SPPathNodeType)*t, ART_MOVETO, &pos, &pos, &npos);
 	g_assert (sp->first == n);
 	g_assert (sp->last == n);
 
@@ -190,7 +191,7 @@ subpath_from_bpath (SPNodePath * np, ArtBpath * b, const gchar * t)
 		} else {
 			npos = pos;
 		}
-		n = sp_nodepath_node_new (sp, NULL, *t, b->code, &ppos, &pos, &npos);
+		n = sp_nodepath_node_new (sp, NULL, (SPPathNodeType)*t, b->code, &ppos, &pos, &npos);
 		b++;
 		t++;
 	}
@@ -462,27 +463,27 @@ sp_nodepath_current (void)
  */
 
 static void
-sp_nodepath_line_midpoint (SPPathNode * new, SPPathNode * end, gdouble t)
+sp_nodepath_line_midpoint (SPPathNode * new_path, SPPathNode * end, gdouble t)
 {
 	SPPathNode * start;
 	gdouble s;
 	gdouble f000, f001, f011, f111, f00t, f0tt, fttt, f11t, f1tt, f01t;
 
-	g_assert (new != NULL);
+	g_assert (new_path != NULL);
 	g_assert (end != NULL);
 
-	g_assert (end->p.other == new);
-	start = new->p.other;
+	g_assert (end->p.other == new_path);
+	start = new_path->p.other;
 	g_assert (start);
 
 	if (end->code == ART_LINETO) {
-		new->type = SP_PATHNODE_CUSP;
-		new->code = ART_LINETO;
-		new->pos.x = (t * start->pos.x + (1 - t) * end->pos.x);
-		new->pos.y = (t * start->pos.y + (1 - t) * end->pos.y);
+		new_path->type = SP_PATHNODE_CUSP;
+		new_path->code = ART_LINETO;
+		new_path->pos.x = (t * start->pos.x + (1 - t) * end->pos.x);
+		new_path->pos.y = (t * start->pos.y + (1 - t) * end->pos.y);
 	} else {
-		new->type = SP_PATHNODE_SMOOTH;
-		new->code = ART_CURVETO;
+		new_path->type = SP_PATHNODE_SMOOTH;
+		new_path->code = ART_CURVETO;
 		s = 1 - t;
 		f000 = start->pos.x;
 		f001 = start->n.pos.x;
@@ -495,9 +496,9 @@ sp_nodepath_line_midpoint (SPPathNode * new, SPPathNode * end, gdouble t)
 		f1tt = s * f01t + t * f11t;
 		fttt = s * f0tt + t * f1tt;
 		start->n.pos.x = f00t;
-		new->p.pos.x = f0tt;
-		new->pos.x = fttt;
-		new->n.pos.x = f1tt;
+		new_path->p.pos.x = f0tt;
+		new_path->pos.x = fttt;
+		new_path->n.pos.x = f1tt;
 		end->p.pos.x = f11t;
 		f000 = start->pos.y;
 		f001 = start->n.pos.y;
@@ -510,9 +511,9 @@ sp_nodepath_line_midpoint (SPPathNode * new, SPPathNode * end, gdouble t)
 		f1tt = s * f01t + t * f11t;
 		fttt = s * f0tt + t * f1tt;
 		start->n.pos.y = f00t;
-		new->p.pos.y = f0tt;
-		new->pos.y = fttt;
-		new->n.pos.y = f1tt;
+		new_path->p.pos.y = f0tt;
+		new_path->pos.y = fttt;
+		new_path->n.pos.y = f1tt;
 		end->p.pos.y = f11t;
 	}
 }
@@ -536,7 +537,7 @@ sp_nodepath_line_add_node (SPPathNode * end, gdouble t)
 
 	g_assert (start->n.other == end);
 
-	newnode = sp_nodepath_node_new (sp, end, SP_PATHNODE_SMOOTH, end->code, &start->pos, &start->pos, &start->n.pos);
+	newnode = sp_nodepath_node_new (sp, end, SP_PATHNODE_SMOOTH, (ArtPathcode)end->code, &start->pos, &start->pos, &start->n.pos);
 	sp_nodepath_line_midpoint (newnode, end, t);
 
 	sp_node_ensure_ctrls (start);
@@ -571,11 +572,11 @@ sp_nodepath_node_break (SPPathNode * node)
 		if (node == sp->last) return NULL;
 		newsubpath = sp_nodepath_subpath_new (np);
 
-		newnode = sp_nodepath_node_new (newsubpath, NULL, node->type, ART_MOVETO, &node->pos, &node->pos, &node->n.pos);
+		newnode = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)node->type, ART_MOVETO, &node->pos, &node->pos, &node->n.pos);
 
 		while (node->n.other) {
 			n = node->n.other;
-			sp_nodepath_node_new (newsubpath, NULL, n->type, n->code, &n->p.pos, &n->pos, &n->n.pos);
+			sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
 			sp_nodepath_node_destroy (n);
 		}
 
@@ -918,13 +919,13 @@ sp_node_selected_join (void)
 	if (a == sa->first) {
 		SPNodeSubPath *t;
 		p = sa->first->n.pos;
-		code = sa->first->n.other->code;
+		code = (ArtPathcode)sa->first->n.other->code;
 		t = sp_nodepath_subpath_new (sa->nodepath);
 		n = sa->last;
 		sp_nodepath_node_new (t, NULL, SP_PATHNODE_CUSP, ART_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
 		n = n->p.other;
 		while (n) {
-			sp_nodepath_node_new (t, NULL, n->type, n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
+			sp_nodepath_node_new (t, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
 			n = n->p.other;
 			if (n == sa->first) n = NULL;
 		}
@@ -932,7 +933,7 @@ sp_node_selected_join (void)
 		sa = t;
 	} else if (a == sa->last) {
 		p = sa->last->p.pos;
-		code = sa->last->code;
+		code = (ArtPathcode)sa->last->code;
 		sp_nodepath_node_destroy (sa->last);
 	} else {
 		code = ART_END;
@@ -942,12 +943,12 @@ sp_node_selected_join (void)
 	if (b == sb->first) {
 		sp_nodepath_node_new (sa, NULL, SP_PATHNODE_CUSP, code, &p, &c, &sb->first->n.pos);
 		for (n = sb->first->n.other; n != NULL; n = n->n.other) {
-			sp_nodepath_node_new (sa, NULL, n->type, n->code, &n->p.pos, &n->pos, &n->n.pos);
+			sp_nodepath_node_new (sa, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
 		}
 	} else if (b == sb->last) {
 		sp_nodepath_node_new (sa, NULL, SP_PATHNODE_CUSP, code, &p, &c, &sb->last->p.pos);
 		for (n = sb->last->p.other; n != NULL; n = n->p.other) {
-			sp_nodepath_node_new (sa, NULL, n->type, n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
+			sp_nodepath_node_new (sa, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
 		}
 	} else {
 		g_assert_not_reached ();
@@ -1013,18 +1014,18 @@ sp_node_selected_join_segment (void)
 	if (a == sa->first) {
 		SPNodeSubPath *t;
 		p = sa->first->pos;
-		code = sa->first->n.other->code;
+		code = (ArtPathcode)sa->first->n.other->code;
 		t = sp_nodepath_subpath_new (sa->nodepath);
 		n = sa->last;
 		sp_nodepath_node_new (t, NULL, SP_PATHNODE_CUSP, ART_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
 		for (n = n->p.other; n != NULL; n = n->p.other) {
-			sp_nodepath_node_new (t, NULL, n->type, n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
+			sp_nodepath_node_new (t, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
 		}
 		sp_nodepath_subpath_destroy (sa);
 		sa = t;
 	} else if (a == sa->last) {
 		p = sa->last->pos;
-		code = sa->last->code;
+		code = (ArtPathcode)sa->last->code;
 	} else {
 		code = ART_END;
 		g_assert_not_reached ();
@@ -1034,13 +1035,13 @@ sp_node_selected_join_segment (void)
 		n = sb->first;
 		sp_nodepath_node_new (sa, NULL, SP_PATHNODE_CUSP, code, &p, &n->pos, &n->n.pos);
 		for (n = n->n.other; n != NULL; n = n->n.other) {
-			sp_nodepath_node_new (sa, NULL, n->type, n->code, &n->p.pos, &n->pos, &n->n.pos);
+			sp_nodepath_node_new (sa, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
 		}
 	} else if (b == sb->last) {
 		n = sb->last;
 		sp_nodepath_node_new (sa, NULL, SP_PATHNODE_CUSP, code, &p, &n->pos, &n->p.pos);
 		for (n = n->p.other; n != NULL; n = n->p.other) {
- 			sp_nodepath_node_new (sa, NULL, n->type, n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
+ 			sp_nodepath_node_new (sa, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
 		}
 	} else {
 		g_assert_not_reached ();
@@ -1221,11 +1222,11 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 	/* I have line */
 
 	if (which_adjust == 1) {
-		mecode = me->other->code;
-		ocode = node->code;
+		mecode = (ArtPathcode)me->other->code;
+		ocode = (ArtPathcode)node->code;
 	} else {
-		mecode = node->code;
-		ocode = other->other->code;
+		mecode = (ArtPathcode)node->code;
+		ocode = (ArtPathcode)other->other->code;
 	}
 
 	if (mecode == ART_LINETO) return;
@@ -1683,7 +1684,7 @@ sp_nodepath_subpath_close (SPNodeSubPath * sp)
 static void
 sp_nodepath_subpath_open (SPNodeSubPath * sp, SPPathNode * n)
 {
-	SPPathNode * new;
+	SPPathNode * new_path;
 
 	g_assert (sp->closed);
 	g_assert (n->subpath == sp);
@@ -1691,14 +1692,14 @@ sp_nodepath_subpath_open (SPNodeSubPath * sp, SPPathNode * n)
 
 	/* We create new startpoint, current node will become last one */
 
-	new = sp_nodepath_node_new (sp, n->n.other, SP_PATHNODE_CUSP, ART_MOVETO, &n->pos, &n->pos, &n->n.pos);
+	new_path = sp_nodepath_node_new (sp, n->n.other, SP_PATHNODE_CUSP, ART_MOVETO, &n->pos, &n->pos, &n->n.pos);
 
 	sp->closed = FALSE;
 
-	sp->first = new;
+	sp->first = new_path;
 	sp->last = n;
 	n->n.other = NULL;
-	new->p.other = NULL;
+	new_path->p.other = NULL;
 }
 
 SPPathNode *
@@ -1715,7 +1716,7 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 		nodechunk = g_mem_chunk_create (SPPathNode, 32, G_ALLOC_AND_FREE);
 	}
 
-	n = g_mem_chunk_alloc (nodechunk);
+	n = (SPPathNode*)g_mem_chunk_alloc (nodechunk);
 
 	n->subpath = sp;
 	n->type = type;
@@ -1927,12 +1928,12 @@ sp_node_path_code_from_side (SPPathNode * node, SPPathNodeSide * me)
 	g_assert (node);
 
 	if (me == &node->p) {
-		if (node->p.other) return node->code;
+		if (node->p.other) return (ArtPathcode)node->code;
 		return ART_MOVETO;
 	}
 
 	if (me == &node->n) {
-		if (node->n.other) return node->n.other->code;
+		if (node->n.other) return (ArtPathcode)node->n.other->code;
 		return ART_MOVETO;
 	}
 

@@ -37,7 +37,7 @@ static void sp_mask_init (SPMask *mask);
 
 static void sp_mask_build (SPObject *object, SPDocument *document, SPRepr *repr);
 static void sp_mask_release (SPObject * object);
-static void sp_mask_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_mask_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_mask_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
 static void sp_mask_remove_child (SPObject *object, SPRepr *child);
 static void sp_mask_update (SPObject *object, SPCtx *ctx, guint flags);
@@ -63,7 +63,7 @@ sp_mask_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_mask_init,
 		};
-		type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPMask", &info, 0);
+		type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPMask", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -77,7 +77,7 @@ sp_mask_class_init (SPMaskClass *klass)
 	gobject_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_OBJECTGROUP);
+	parent_class = (SPObjectGroupClass*)g_type_class_ref (SP_TYPE_OBJECTGROUP);
 
 	sp_object_class->build = sp_mask_build;
 	sp_object_class->release = sp_mask_release;
@@ -140,7 +140,7 @@ sp_mask_release (SPObject * object)
 }
 
 static void
-sp_mask_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_mask_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPMask *mask;
 
@@ -393,17 +393,17 @@ sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRectF *bbox)
 SPMaskView *
 sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, NRArenaItem *arenaitem)
 {
-	SPMaskView *new;
+	SPMaskView *new_mask_view;
 
-	new = g_new (SPMaskView, 1);
+	new_mask_view = g_new (SPMaskView, 1);
 
-	new->next = list;
-	new->key = key;
-	new->arenaitem = nr_arena_item_ref (arenaitem);
-	new->bbox.x0 = new->bbox.x1 = 0.0;
-	new->bbox.y0 = new->bbox.y1 = 0.0;
+	new_mask_view->next = list;
+	new_mask_view->key = key;
+	new_mask_view->arenaitem = nr_arena_item_ref (arenaitem);
+	new_mask_view->bbox.x0 = new_mask_view->bbox.x1 = 0.0;
+	new_mask_view->bbox.y0 = new_mask_view->bbox.y1 = 0.0;
 
-	return new;
+	return new_mask_view;
 }
 
 SPMaskView *
