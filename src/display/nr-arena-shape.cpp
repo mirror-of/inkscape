@@ -22,11 +22,6 @@
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-blit.h>
 
-#include <libart_lgpl/art_misc.h>
-#include <libart_lgpl/art_bpath.h>
-#include <libart_lgpl/art_vpath_bpath.h>
-#include <libart_lgpl/art_vpath.h>
-
 #include <style.h>
 #include "nr-arena.h"
 #include "nr-arena-shape.h"
@@ -490,7 +485,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 			dlen += style->stroke_dash.dash[i] * scale;
 		    }
 		    if (dlen >= 1.0) {
-			ArtVpathDash dash;
+			NRVpathDash dash;
 			dash.offset = style->stroke_dash.offset * scale;
 			dash.n_dash = style->stroke_dash.n_dash;
 			dash.dash = g_new (double, dash.n_dash);

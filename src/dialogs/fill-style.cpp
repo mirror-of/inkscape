@@ -31,32 +31,28 @@
 
 #include <libnr/nr-values.h>
 
-#include <libart_lgpl/art_svp.h>
-#include <libart_lgpl/art_svp_wind.h>
+#include <libnr/nr-path.h>
 
-#include <libnr/nr-values.h>
-
-#include <libart_lgpl/art_svp.h>
-#include <libart_lgpl/art_svp_wind.h>
-
-#include "../helper/sp-intl.h"
-#include "../helper/window.h"
-#include "../svg/svg.h"
-#include "../svg/stringstream.h"
-#include "../widgets/sp-widget.h"
-#include "../sp-gradient.h"
-#include "../widgets/paint-selector.h"
-#include "../style.h"
-#include "../gradient-chemistry.h"
-#include "../document.h"
-#include "../desktop-handles.h"
-#include "../selection.h"
-#include "../sp-item.h"
-#include "../inkscape.h"
+#include <helper/sp-intl.h>
+#include <helper/window.h>
+#include <svg/svg.h>
+#include <svg/stringstream.h>
+#include <widgets/sp-widget.h>
+#include <sp-gradient.h>
+#include <widgets/paint-selector.h>
+#include <style.h>
+#include <gradient-chemistry.h>
+#include <document.h>
+#include <desktop-handles.h>
+#include <selection.h>
+#include <sp-item.h>
+#include <inkscape.h>
 
 #include "fill-style.h"
 
+// These can be deleted once we sort out the libart dependence.
 
+#define ART_WIND_RULE_NONZERO 0
 
 static void sp_fill_style_widget_construct          ( SPWidget *spw, 
                                                       SPPaintSelector *psel );

@@ -52,28 +52,12 @@ void nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear);
 /* Sorted vertex lists */
 
 typedef struct _NRVertex NRVertex;
-typedef struct _NRSVL NRSVL;
-typedef struct _NRFlat NRFlat;
 
 struct _NRVertex {
     NRVertex *next;
     NR::Coord x, y;
 };
 
-struct _NRSVL {
-    NRSVL *next;
-    NRVertex *vertex;
-    NRRect bbox;
-    gint16 dir;
-    gint16 wind;
-};
-
-struct _NRFlat {
-    NRFlat *next;
-    NR::Coord y, x0, x1;
-};
-
-NRSVP *nr_svp_from_svl (NRSVL *svl, NRFlat *flat);
 
 #endif
 

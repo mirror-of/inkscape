@@ -12,12 +12,6 @@
 #include "sp-canvas.h"
 #include "sp-canvas-util.h"
 
-#include <libart_lgpl/art_affine.h>
-#include <libart_lgpl/art_vpath.h>
-#include <libart_lgpl/art_svp.h>
-#include <libart_lgpl/art_svp_vpath.h>
-#include <libart_lgpl/art_svp_vpath_stroke.h>
-
 #include "sodipodi-ctrl.h"
 
 enum {

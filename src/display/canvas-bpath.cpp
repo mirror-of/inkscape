@@ -12,15 +12,6 @@
  *
  */
 
-#include <libart_lgpl/art_rect.h>
-#include <libart_lgpl/art_vpath.h>
-#include <libart_lgpl/art_bpath.h>
-//#include <libart_lgpl/art_svp.h>
-#include <libart_lgpl/art_vpath_bpath.h>
-//#include <libart_lgpl/art_svp_vpath.h>
-//#include <libart_lgpl/art_svp_point.h>
-//#include <libart_lgpl/art_rect_svp.h>
-//#include <libart_lgpl/art_rgb_svp.h>
 #include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "canvas-bpath.h"

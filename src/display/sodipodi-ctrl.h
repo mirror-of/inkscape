@@ -10,6 +10,7 @@
 #include <gtk/gtkenums.h>
 #include "sp-canvas.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <libnr/nr-rect-l.h>
 
 
 
@@ -52,7 +53,7 @@ struct _SPCtrl {
 	guint32 fill_color;
 	guint32 stroke_color;
 
-	ArtIRect box;			/* NB! x1 & y1 are included */
+	NRRectL box;			/* NB! x1 & y1 are included */
 	guchar *cache;
 	GdkPixbuf * pixbuf;
 };

@@ -117,7 +117,7 @@ static void sp_style_clear (SPStyle *style);
 static void sp_style_merge_property (SPStyle *style, gint id, const gchar *val);
 
 static void sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent);
-static void sp_style_read_dash (ArtVpathDash *dash, const gchar *str);
+static void sp_style_read_dash (NRVpathDash *dash, const gchar *str);
 
 static SPTextStyle *sp_text_style_new (void);
 static void sp_text_style_clear (SPTextStyle *ts);
@@ -1487,7 +1487,7 @@ sp_style_clear (SPStyle *style)
  *
  */
 static void
-sp_style_read_dash (ArtVpathDash *dash, const gchar *str)
+sp_style_read_dash (NRVpathDash *dash, const gchar *str)
 {
     gint n_dash;
     gdouble d[64];

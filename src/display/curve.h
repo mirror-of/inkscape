@@ -2,7 +2,7 @@
 #define __SP_CURVE_H__
 
 /*
- * Wrapper around ArtBpath
+ * Wrapper around NArtBpath
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -15,14 +15,14 @@
  */
 
 #include <glib.h>
-#include <libart_lgpl/art_bpath.h>
+#include <libnr/nr-path.h>
 namespace NR { class Point; }
 
 typedef struct _SPCurve SPCurve;
 
 struct _SPCurve {
 	gint refcount;
-	ArtBpath * bpath;
+	NArtBpath * bpath;
 	gint end;		/* ART_END position */
 	gint length;		/* Num allocated Bpaths */
 	gint substart;		/* subpath start */
@@ -41,9 +41,9 @@ struct _SPCurve {
 
 SPCurve * sp_curve_new (void);
 SPCurve * sp_curve_new_sized (gint length);
-SPCurve * sp_curve_new_from_bpath (ArtBpath * bpath);
-SPCurve * sp_curve_new_from_static_bpath (ArtBpath * bpath);
-SPCurve *sp_curve_new_from_foreign_bpath(ArtBpath const bpath[]);
+SPCurve * sp_curve_new_from_bpath (NArtBpath * bpath);
+SPCurve * sp_curve_new_from_static_bpath (NArtBpath * bpath);
+SPCurve *sp_curve_new_from_foreign_bpath(NArtBpath const bpath[]);
 
 SPCurve *sp_curve_ref (SPCurve *curve);
 SPCurve *sp_curve_unref (SPCurve *curve);
@@ -73,8 +73,8 @@ SPCurve *sp_curve_append_continuous (SPCurve *c0, SPCurve const *c1, gdouble tol
 
 #define sp_curve_is_empty sp_curve_empty
 gboolean sp_curve_empty (SPCurve * curve);
-ArtBpath *sp_curve_last_bpath (SPCurve const *curve);
-ArtBpath *sp_curve_first_bpath (SPCurve const *curve);
+NArtBpath *sp_curve_last_bpath (SPCurve const *curve);
+NArtBpath *sp_curve_first_bpath (SPCurve const *curve);
 
 void sp_curve_append (SPCurve *curve, SPCurve const *curve2, gboolean use_lineto);
 SPCurve *sp_curve_reverse (SPCurve *curve);

@@ -13,9 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libart_lgpl/art_vpath.h>
-#include <libart_lgpl/art_vpath_dash.h>
-
 #include "xml/repr.h"
 #include "color.h"
 #include "forward.h"
@@ -155,6 +152,13 @@ struct SPIFontSize {
 
 class SPTextStyle;
 
+class NRVpathDash {
+ public:
+  double offset;
+  int n_dash;
+  double *dash;
+};
+
 struct SPStyle {
 	int refcount;
 	/** Object we are attached to */
@@ -216,7 +220,7 @@ struct SPStyle {
 	/** stroke-miterlimit */
 	SPIFloat stroke_miterlimit;
 	/** stroke-dash* */
-	ArtVpathDash stroke_dash;
+	NRVpathDash stroke_dash;
 	unsigned int stroke_dasharray_set : 1;
 	unsigned int stroke_dashoffset_set : 1;
 	/** stroke-opacity */

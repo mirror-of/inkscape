@@ -26,13 +26,8 @@
 typedef struct _SPCanvasBPath SPCanvasBPath;
 typedef struct _SPCanvasBPathClass SPCanvasBPathClass;
 
-#include <libart_lgpl/art_vpath.h>
-#include <libart_lgpl/art_bpath.h>
-#include <libart_lgpl/art_svp.h>
-#include <libart_lgpl/art_svp_wind.h>
-#include <libart_lgpl/art_svp_vpath_stroke.h>
-#include "sp-canvas.h"
-#include "curve.h"
+#include <display/sp-canvas.h>
+#include <display/curve.h>
 
 #define bpath_liv
 

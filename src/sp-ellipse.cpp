@@ -154,15 +154,11 @@ sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags)
 
 /* fixme: Think (Lauris) */
 
-#include <libart_lgpl/art_misc.h>
-#include <libart_lgpl/art_bpath.h>
-
 static void sp_genericellipse_set_shape(SPShape *shape)
 {
 	double cx, cy, rx, ry, s, e;
 	double x0, y0, x1, y1, x2, y2, x3, y3;
 	double len;
-	double affine[6];
 	gint slice = FALSE;
 	gint i;
 
@@ -187,12 +183,12 @@ static void sp_genericellipse_set_shape(SPShape *shape)
 	} else {
 		slice = TRUE;
 	}
+	
+	NR::Matrix aff = NR::Matrix(NR::scale(rx, ry));
+	aff[4] = ellipse->cx.computed;
+	aff[5] = ellipse->cy.computed;
 
-	nr_matrix_set_scale (NR_MATRIX_D_FROM_DOUBLE (affine), rx, ry);
-	affine[4] = ellipse->cx.computed;
-	affine[5] = ellipse->cy.computed;
-
-	ArtBpath bpath[16];
+	NArtBpath bpath[16];
 	i = 0;
 	if (ellipse->closed) {
 		bpath[i].code = ART_MOVETO;
@@ -245,9 +241,7 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 	}
 
 	bpath[i].code = ART_END;
-
-	ArtBpath *abp = art_bpath_affine_transform(bpath, affine);
-	SPCurve *c = sp_curve_new_from_bpath(abp);
+	SPCurve *c = sp_curve_new_from_bpath(nr_artpath_affine(bpath, aff)); // mem leak.
 	sp_shape_set_curve_insync ((SPShape *) ellipse, c, TRUE);
 	sp_curve_unref (c);
 }

@@ -829,8 +829,8 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
     MAT2 mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
 
     GLYPHMETRICS  gmetrics;
-    ArtBpath      bpath[8192];
-    ArtBpath      *bp;
+    NArtBpath      bpath[8192];
+    NArtBpath      *bp;
     int           pos;
     int           stop;
 
@@ -938,8 +938,8 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
             gmetrics.gmptGlyphOrigin.y - 1000.0 - gmetrics.gmptGlyphOrigin.y);
         slot->outline.path = art_bpath_affine_transform (bpath, a);
     } else {
-        slot->outline.path = art_new (ArtBpath, bp - bpath + 1);
-        memcpy (slot->outline.path, bpath, (bp - bpath + 1) * sizeof (ArtBpath));
+        slot->outline.path = art_new (NArtBpath, bp - bpath + 1);
+        memcpy (slot->outline.path, bpath, (bp - bpath + 1) * sizeof (NArtBpath));
     }
 
     nr_free (gol);

@@ -19,12 +19,10 @@
 
 #include <libnrtype/nr-rasterfont.h>
 
-#include <libart_lgpl/art_svp.h>
-
-#include "display/curve.h"
-#include "forward.h"
-#include "sp-paint-server.h"
-#include "nr-arena-item.h"
+#include <display/curve.h>
+#include <forward.h>
+#include <sp-paint-server.h>
+#include <display/nr-arena-item.h>
 
 #define test_glyph_liv
 

@@ -246,7 +246,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 			     || shape->marker[SP_MARKER_LOC_MID]
 			     || shape->marker[SP_MARKER_LOC_END])) {
 		SPItemView *v;
-		ArtBpath *bp;
+		NArtBpath *bp;
 		int nmarker[SP_MARKER_LOC_QTY];
 		/* Determine the number of markers needed */
 		nmarker[SP_MARKER_LOC_START] = 0;
@@ -300,7 +300,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 * \return 1 if a marker is required here, otherwise 0.
 */
 static int
-sp_shape_marker_required (SPShape* shape, int m, ArtBpath* bp)
+sp_shape_marker_required (SPShape* shape, int m, NArtBpath* bp)
 {
     if (shape->marker[m] == NULL)
         return 0;
@@ -333,7 +333,7 @@ sp_shape_marker_required (SPShape* shape, int m, ArtBpath* bp)
 * \return Transform matrix.
 */
 static NRMatrix
-sp_shape_marker_get_transform (SPShape* shape, int m, ArtBpath* bp)
+sp_shape_marker_get_transform (SPShape* shape, int m, NArtBpath* bp)
 {
     NRMatrix t;
 
@@ -462,7 +462,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 {
 	SPStyle *style;
 	int nstart, nmid, nend;
-	ArtBpath *bp;
+	NArtBpath *bp;
 
 	style = ((SPObject *) shape)->style;
 
@@ -584,7 +584,7 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
 		sp_print_stroke (ctx, &bp, &i2d, style, &pbox, &dbox, &bbox);
 	}
 
-        for (ArtBpath* bp = shape->curve->bpath; bp->code != ART_END; bp++) {
+        for (NArtBpath* bp = shape->curve->bpath; bp->code != ART_END; bp++) {
             for (int m = SP_MARKER_LOC_START; m < SP_MARKER_LOC_QTY; m++) {
                 if (sp_shape_marker_required (shape, m, bp)) {
 
@@ -630,7 +630,7 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	if (shape->curve && (shape->marker[SP_MARKER_LOC_START] ||
 			     shape->marker[SP_MARKER_LOC_MID] ||
 			     shape->marker[SP_MARKER_LOC_END])) {
-		ArtBpath *bp;
+		NArtBpath *bp;
 		int nstart, nmid, nend;
 		/* Determine the number of markers needed */
 		nstart = 0;

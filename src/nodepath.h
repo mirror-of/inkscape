@@ -321,7 +321,7 @@ void sp_node_selected_set_type (Path::NodeType type);
 /**
  *
  */
-void sp_node_selected_set_line_type (ArtPathcode code);
+void sp_node_selected_set_line_type (NRPathcode code);
 
 /**
  *

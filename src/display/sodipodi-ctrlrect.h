@@ -15,7 +15,6 @@
  */
 
 #include <glib.h>
-#include <libart_lgpl/art_rect.h>
 #include "sp-canvas.h"
 
 
@@ -30,23 +29,23 @@ typedef struct _SPCtrlRect SPCtrlRect;
 typedef struct _SPCtrlRectClass SPCtrlRectClass;
 
 struct _SPCtrlRect {
-	SPCanvasItem item;
+    SPCanvasItem item;
 
-	guint has_fill : 1;
+    guint has_fill : 1;
     guint dashed : 1;
     
-	NRRect rect;
-	gint shadow;
-
-	ArtIRect area;
-	gint shadow_size;
-	guint32 border_color;
-	guint32 fill_color;
-	guint32 shadow_color;
+    NRRect rect;
+    gint shadow;
+    
+    NRRectL area;
+    gint shadow_size;
+    guint32 border_color;
+    guint32 fill_color;
+    guint32 shadow_color;
 };
 
 struct _SPCtrlRectClass {
-	SPCanvasItemClass parent_class;
+    SPCanvasItemClass parent_class;
 };
 
 

@@ -549,8 +549,7 @@ set_to_accumulated(SPDynaDrawContext *dc)
     SPDesktop *desktop = SP_EVENT_CONTEXT(dc)->desktop;
 
     if (!sp_curve_empty(dc->accumulated)) {
-        ArtBpath *abp;
-        gdouble d2doc[6];
+        NArtBpath *abp;
         gchar *str;
 
         if (!dc->repr) {
@@ -572,11 +571,10 @@ set_to_accumulated(SPDynaDrawContext *dc)
             sp_repr_unref(dc->repr);
             sp_selection_set_repr(SP_DT_SELECTION(desktop), dc->repr);
         }
-        sp_desktop_dt2root_affine(desktop, (NRMatrix *) d2doc);
-        abp = art_bpath_affine_transform(sp_curve_first_bpath(dc->accumulated), d2doc);
+        abp = nr_artpath_affine(sp_curve_first_bpath(dc->accumulated), sp_desktop_dt2root_affine(desktop));
         str = sp_svg_write_path(abp);
         g_assert( str != NULL );
-        art_free(abp);
+        nr_free(abp);
         sp_repr_set_attr(dc->repr, "d", str);
         g_free(str);
     } else {
@@ -593,7 +591,7 @@ static void
 concat_current_line(SPDynaDrawContext *dc)
 {
     if (!sp_curve_empty(dc->currentcurve)) {
-        ArtBpath *bpath;
+        NArtBpath *bpath;
         if (sp_curve_empty(dc->accumulated)) {
             bpath = sp_curve_first_bpath(dc->currentcurve);
             g_assert( bpath->code == ART_MOVETO_OPEN );

@@ -543,7 +543,7 @@ PrintPS::image (Inkscape::Extension::Print *mod, guchar *px, unsigned int w, uns
 /* PostScript helpers */
 
 void
-PrintPS::print_bpath (FILE *stream, const ArtBpath *bp)
+PrintPS::print_bpath (FILE *stream, const NArtBpath *bp)
 {
 	unsigned int closed;
 

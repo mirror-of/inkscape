@@ -79,7 +79,7 @@ static gchar *sp_offset_description (SPItem * item);
 static int sp_offset_snappoints(SPItem *item, NR::Point p[], int size);
 static void sp_offset_set_shape (SPShape * shape);
 
-Path *bpath_to_liv_path (ArtBpath * bpath);
+Path *bpath_to_liv_path (NArtBpath * bpath);
 
 void   refresh_offset_source(SPOffset* offset);
 
@@ -329,7 +329,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
           offset->original = NULL;
           offset->originalPath = NULL;
         }
-        ArtBpath *bpath;
+        NArtBpath *bpath;
         SPCurve *curve;
         
         offset->original = strdup (value);
@@ -458,9 +458,9 @@ sp_offset_description (SPItem * item)
 }
 
 // duplicate of splivarot
-// loads a ArtBpath (like the one stored in a SPCurve) into a livarot Path 
+// loads a NArtBpath (like the one stored in a SPCurve) into a livarot Path 
 Path *
-bpath_to_liv_path (ArtBpath * bpath)
+bpath_to_liv_path (NArtBpath * bpath)
 {
   if (bpath == NULL)
     return NULL;
@@ -602,7 +602,7 @@ sp_offset_set_shape (SPShape * shape)
     
     const char *res_d = sp_repr_attr(SP_OBJECT(shape)->repr,"inkscape:original");
     if ( res_d ) {
-      ArtBpath *bpath = sp_svg_read_path (res_d);
+      NArtBpath *bpath = sp_svg_read_path (res_d);
       SPCurve *c = sp_curve_new_from_bpath (bpath);
       sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
       sp_curve_unref (c);
@@ -850,7 +850,7 @@ sp_offset_set_shape (SPShape * shape)
     } 
     delete orig;
     
-    ArtBpath *bpath = sp_svg_read_path (res_d);
+    NArtBpath *bpath = sp_svg_read_path (res_d);
     SPCurve *c = sp_curve_new_from_bpath (bpath);
     sp_shape_set_curve_insync ((SPShape *) offset, c, TRUE);
     sp_curve_unref (c);
@@ -1134,7 +1134,7 @@ sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
     //    sp_repr_set_attr (SP_OBJECT(offset)->repr, "inkscape:original", newval);
     
     
-    ArtBpath *bpath;
+    NArtBpath *bpath;
     SPCurve *curve;
     
     bpath = sp_svg_read_path (newval);

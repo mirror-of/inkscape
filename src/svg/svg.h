@@ -73,10 +73,10 @@ int sp_svg_write_color (char * buf, int buflen, unsigned int color);
 
 /* NB! As paths can be long, we use here dynamic string */
 
-#include <libart_lgpl/art_bpath.h>
+#include <libnr/nr-path.h>
 
-ArtBpath * sp_svg_read_path (const char * str);
-char * sp_svg_write_path (const ArtBpath * bpath);
+NArtBpath * sp_svg_read_path (const char * str);
+char * sp_svg_write_path (const NArtBpath * bpath);
 
 
 

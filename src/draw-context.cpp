@@ -338,7 +338,7 @@ spdc_attach_selection(SPDrawContext *dc, SPSelection *sel)
             c = (SPCurve*)l->data;
             g_return_if_fail( c->end > 1 );
             if ( c->bpath->code == ART_MOVETO_OPEN ) {
-                ArtBpath *s, *e;
+                NArtBpath *s, *e;
                 SPDrawAnchor *a;
                 s = sp_curve_first_bpath(c);
                 e = sp_curve_last_bpath(c);
@@ -1154,7 +1154,7 @@ spdc_finish_endpoint(SPPencilContext *pc, NR::Point p, gboolean snap, guint stat
         sp_curve_reset(dc->red_curve);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
     } else {
-        ArtBpath *s, *e;
+        NArtBpath *s, *e;
         /* We have actual line */
         if (snap) {
             /* Do (bogus?) snap */
@@ -1655,7 +1655,7 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 break;
             } else {
                 NR::Point pt;
-                ArtBpath *p;
+                NArtBpath *p;
                 gint e;
                 /* Reset red curve */
                 sp_curve_reset(dc->red_curve);

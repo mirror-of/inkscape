@@ -19,17 +19,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-blit.h>
-#include <libart_lgpl/art_misc.h>
-#include <libart_lgpl/art_bpath.h>
-#include <libart_lgpl/art_vpath.h>
-#include <libart_lgpl/art_svp.h>
-#include <libart_lgpl/art_vpath_bpath.h>
-#include <libart_lgpl/art_rect_svp.h>
-#include <libart_lgpl/art_svp_vpath.h>
-#include <libart_lgpl/art_svp_vpath_stroke.h>
-#include <libart_lgpl/art_svp_wind.h>
-#include <libart_lgpl/art_svp_point.h>
-#include <libart_lgpl/art_gray_svp.h>
+#include <libnr/nr-path.h>
 #include "../style.h"
 #include "nr-arena.h"
 #include "nr-arena-glyphs.h"
@@ -358,16 +348,11 @@ nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int li
 
 	if (curve) {
 		if (transform) {
-			ArtBpath *abp;
-			double a[6];
-			a[0] = transform->c[0];
-			a[1] = transform->c[1];
-			a[2] = transform->c[2];
-			a[3] = transform->c[3];
-			a[4] = transform->c[4];
-			a[5] = transform->c[5];
-			abp = art_bpath_affine_transform (curve->bpath, a);
-			curve = sp_curve_new_from_bpath (abp);
+			NRBPath abp, s;
+			s.path = curve->bpath;
+			nr_path_duplicate_transform(&abp, &s, transform);
+			//abp = art_bpath_affine_transform (curve->bpath, a);
+			curve = sp_curve_new_from_bpath (abp.path);
 			glyphs->curve = curve;
 			glyphs->transform = *transform;
 		} else {

@@ -1999,7 +1999,6 @@ sp_text_set_shape (SPText *text)
     while (child != NULL) {
         SPObject *next, *spnew;
         SPString *string;
-        ArtDRect bbox;
         if (SP_IS_TSPAN (child)) {
             SPTSpan *tspan;
             /* fixme: Maybe break this up into 2 pieces - relayout and set shape (Lauris) */
@@ -2047,6 +2046,7 @@ sp_text_set_shape (SPText *text)
         NR::Point advance = NR::Point(string->ly->dx ? ((SPSVGLength *) string->ly->dx->data)->computed : 0.0,
                                      string->ly->dy ? ((SPSVGLength *) string->ly->dy->data)->computed : 0.0);
 
+        NRRect bbox;
         bbox.x0 = string->bbox.x0 + advance[NR::X];
         bbox.y0 = string->bbox.y0 + advance[NR::Y];
         bbox.x1 = string->bbox.x1 + advance[NR::X];

@@ -1507,7 +1507,7 @@ sp_canvas_expose (GtkWidget *widget, GdkEventExpose *event)
     gdk_region_get_rectangles (event->region, &rects, &n_rects);
 
     for (int i = 0; i < n_rects; i++) {
-        ArtIRect rect;
+        NRRectL rect;
 		
         rect.x0 = rects[i].x + canvas->x0;
         rect.y0 = rects[i].y + canvas->y0;
@@ -1728,9 +1728,9 @@ sp_canvas_request_update (SPCanvas *canvas)
 void
 sp_canvas_request_redraw (SPCanvas *canvas, int x0, int y0, int x1, int y1)
 {
-    ArtIRect bbox;
-    ArtIRect visible;
-    ArtIRect clip;
+    NRRectL bbox;
+    NRRectL visible;
+    NRRectL clip;
 
     g_return_if_fail (canvas != NULL);
     g_return_if_fail (SP_IS_CANVAS (canvas));
@@ -1748,7 +1748,7 @@ sp_canvas_request_redraw (SPCanvas *canvas, int x0, int y0, int x1, int y1)
     visible.x1 = visible.x0 + GTK_WIDGET (canvas)->allocation.width;
     visible.y1 = visible.y0 + GTK_WIDGET (canvas)->allocation.height;
 
-    art_irect_intersect (&clip, &bbox, &visible);
+    nr_rect_l_intersect (&clip, &bbox, &visible);
 
     sp_canvas_dirty_rect(canvas,x0,y0,x1,y1);
     add_idle (canvas);

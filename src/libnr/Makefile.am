@@ -67,7 +67,6 @@ libnr_a_SOURCES = \
 	nr-gradient.cpp nr-gradient.h \
 	nr-path.cpp nr-path.h \
 	nr-svp.cpp nr-svp.h nr-svp-private.h \
-	nr-svp-uncross.cpp nr-svp-uncross.h \
 	nr-svp-render.cpp nr-svp-render.h \
 	nr-uta.cpp nr-uta.h \
 	nr-object.cpp nr-object.h \

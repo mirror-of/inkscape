@@ -89,11 +89,8 @@ sp_selected_path_combine (void)
 
 		SPPath *path = (SPPath *) i->data;
 		SPCurve *c = sp_shape_get_curve (SP_SHAPE (path));
-
-		NRMatrix i2root;
-		sp_item_i2root_affine (SP_ITEM (path), &i2root);
-
-		ArtBpath *abp = art_bpath_affine_transform (c->bpath, NR_MATRIX_D_TO_DOUBLE (&i2root));
+		
+		NArtBpath *abp = nr_artpath_affine (c->bpath, sp_item_i2root_affine (SP_ITEM (path)));
 		sp_curve_unref (c);
 		gchar *str = sp_svg_write_path (abp);
 		art_free (abp);
@@ -162,12 +159,9 @@ sp_selected_path_break_apart (void)
 		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
 		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
 
-		NRMatrix i2root;
-		sp_item_i2root_affine (SP_ITEM (path), &i2root);
-
 		gchar *style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
 
-		ArtBpath *abp = art_bpath_affine_transform (curve->bpath, NR_MATRIX_D_TO_DOUBLE(&i2root));
+		NArtBpath *abp = nr_artpath_affine (curve->bpath, sp_item_i2root_affine (SP_ITEM (path)));
 
 		sp_curve_unref (curve);
 		sp_repr_unparent (SP_OBJECT_REPR (item));

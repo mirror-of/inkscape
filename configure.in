@@ -221,7 +221,7 @@ dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
 
-PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.0.0  libart-2.0 >= 2.3.10  libxml-2.0 >= 2-2.4.24  sigc++-1.2  gtkmm-2.0)
+PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.0.0  libxml-2.0 >= 2-2.4.24  sigc++-1.2  gtkmm-2.0)
 INKSCAPE_LIBS="$INKSCAPE_LIBS $POPT_LIBS -lpng -lz"
 
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.

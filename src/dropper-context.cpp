@@ -31,7 +31,7 @@
 #include <algorithm>
 
 #define C1 0.552
-static const ArtBpath spdc_circle[] = {
+static const NArtBpath spdc_circle[] = {
 	{ART_MOVETO, 0, 0, 0, 0, -1, 0},
 	{ART_CURVETO, -1, C1, -C1, 1, 0, 1},
 	{ART_CURVETO, C1, 1, 1, C1, 1, 0},
@@ -96,7 +96,7 @@ sp_dropper_context_setup (SPEventContext *ec)
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
 
-	SPCurve *c = sp_curve_new_from_static_bpath ((ArtBpath *) spdc_circle);
+	SPCurve *c = sp_curve_new_from_static_bpath ((NArtBpath *) spdc_circle);
 	dc->area = sp_canvas_bpath_new (SP_DT_CONTROLS (ec->desktop), c);
 	sp_curve_unref (c);
 	sp_canvas_bpath_set_fill (SP_CANVAS_BPATH (dc->area), 0x00000000, (SPWindRule)0);

@@ -28,7 +28,6 @@
 
 #include <math.h>
 #include <string.h>
-#include <libart_lgpl/art_misc.h>
 #include "gnome-canvas-bpath-util.h"
 #include "svg.h"
 #include "stringstream.h"
@@ -601,10 +600,10 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
 }
 
 
-ArtBpath *sp_svg_read_path(gchar const *str)
+NArtBpath *sp_svg_read_path(gchar const *str)
 {
     RSVGParsePathCtx ctx;
-    ArtBpath *bpath;
+    NArtBpath *bpath;
 
     ctx.bpath = gnome_canvas_bpath_def_new ();
     ctx.cpx = 0.0;
@@ -620,15 +619,15 @@ ArtBpath *sp_svg_read_path(gchar const *str)
 
     gnome_canvas_bpath_def_art_finish (ctx.bpath);
 
-    bpath = art_new (ArtBpath, ctx.bpath->n_bpath);
-    memcpy (bpath, ctx.bpath->bpath, ctx.bpath->n_bpath * sizeof (ArtBpath));
+    bpath = g_new (NArtBpath, ctx.bpath->n_bpath);
+    memcpy (bpath, ctx.bpath->bpath, ctx.bpath->n_bpath * sizeof (NArtBpath));
     g_assert ((bpath + ctx.bpath->n_bpath - 1)->code == ART_END);
     gnome_canvas_bpath_def_unref (ctx.bpath);
 
     return bpath;
 }
 
-gchar *sp_svg_write_path(ArtBpath const *bpath)
+gchar *sp_svg_write_path(NArtBpath const *bpath)
 {
     Inkscape::SVGOStringStream os;
     bool closed=false;

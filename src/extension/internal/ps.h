@@ -16,6 +16,8 @@
 #include <extension/extension.h>
 #include <extension/implementation/implementation.h>
 
+#include <libnr/nr-path.h>
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -27,7 +29,7 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
     float  _height;
     FILE * _stream;
 
-	void print_bpath (FILE *stream, const ArtBpath *bp);
+	void print_bpath (FILE *stream, const NArtBpath *bp);
 	unsigned int print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
 				       const NRMatrix *transform);
 	void compress_packbits (int nin, guchar *src, int *nout, guchar *dst);

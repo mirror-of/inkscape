@@ -95,7 +95,7 @@ sp_polygon_build (SPObject * object, SPDocument * document, SPRepr * repr)
  * Return value: points attribute string.
  */
 static gchar *
-sp_svg_write_polygon (const ArtBpath * bpath)
+sp_svg_write_polygon (const NArtBpath * bpath)
 {
 	Inkscape::SVGOStringStream os;
 	int i;
@@ -123,7 +123,7 @@ static SPRepr *
 sp_polygon_write (SPObject *object, SPRepr *repr, guint flags)
 {
         SPShape *shape;
-        ArtBpath *abp;
+        NArtBpath *abp;
         gchar *str;
 
 	shape = SP_SHAPE (object);

@@ -1,3 +1,36 @@
+2004-04-17  Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+	* configure.in src/draw-context.cpp src/dropper-context.cpp
+	src/dyna-draw-context.cpp src/nodepath.cpp src/nodepath.h
+	src/path-chemistry.cpp src/sp-chars.cpp src/sp-ellipse.cpp
+	src/sp-offset.cpp src/sp-path.cpp src/sp-polygon.cpp
+	src/sp-shape.cpp src/sp-text.cpp src/splivarot.cpp src/style.cpp
+	src/style.h src/dialogs/fill-style.cpp
+	src/dialogs/object-properties.cpp src/dialogs/stroke-style.cpp
+	src/display/canvas-bpath.cpp src/display/canvas-bpath.h
+	src/display/canvas-grid.h src/display/curve.cpp
+	src/display/curve.h src/display/nr-arena-glyphs.cpp
+	src/display/nr-arena-glyphs.h src/display/nr-arena-shape.cpp
+	src/display/sodipodi-ctrl.cpp src/display/sodipodi-ctrl.h
+	src/display/sodipodi-ctrlrect.h src/display/sp-canvas-util.cpp
+	src/display/sp-canvas-util.h src/display/sp-canvas.cpp
+	src/display/sp-canvas.h src/display/sp-ctrlline.cpp
+	src/extension/internal/ps.cpp src/extension/internal/ps.h
+	src/libnr/Makefile.am src/libnr/libnr.def src/libnr/nr-path.cpp
+	src/libnr/nr-path.h src/libnr/nr-svp-private.h
+	src/libnr/nr-svp-render.cpp src/libnr/nr-svp-render.h
+	src/libnr/nr-svp.cpp src/libnr/nr-svp.h
+	src/libnrtype/nr-rasterfont.cpp src/libnrtype/nr-type-ft2.cpp
+	src/libnrtype/nr-type-gnome.cpp src/libnrtype/nr-type-w32.cpp
+	src/libnrtype/nr-typeface.cpp src/livarot/PathCutting.cpp
+	src/svg/gnome-canvas-bpath-util.cpp
+	src/svg/gnome-canvas-bpath-util.h src/svg/svg-path.cpp
+	src/svg/svg.h: removed libart.
+
+	* src/libnr/nr-svp-uncross.cpp src/libnr/nr-svp-uncross.h: deleted
+	uncross and SVL routines.
+
+
 2004-04-15  Carl Hetherington <inkscape@carlh.net>
 
 	* src/make.exclude, src/make.dep, src/make.files, src/make.ofiles:

@@ -166,7 +166,7 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 		changed = TRUE;
 		open = FALSE;
 		if (shape->curve && shape->curve->bpath) {
-			ArtBpath *bp;
+			NArtBpath *bp;
 			for (bp = shape->curve->bpath; bp->code != ART_END; bp++) {
 				if (bp->code == ART_MOVETO_OPEN) {
 					open = TRUE;
@@ -213,7 +213,7 @@ sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 	switch (key) {
 	case SP_ATTR_D:
 		if (value) {
-			ArtBpath *bpath;
+			NArtBpath *bpath;
 			SPCurve *curve;
 			bpath = sp_svg_read_path (value);
 			curve = sp_curve_new_from_bpath (bpath);
@@ -245,7 +245,7 @@ static SPRepr *
 sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 {
 	SPShape *shape;
-	ArtBpath *abp;
+	NArtBpath *abp;
 	gchar *str;
 
 	shape = (SPShape *) object;

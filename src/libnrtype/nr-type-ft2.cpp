@@ -513,7 +513,7 @@ nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph)
 
 /* Outline conversion */
 
-static ArtBpath *tff_ol2bp (FT_Outline *ol, float transform[]);
+static NArtBpath *tff_ol2bp (FT_Outline *ol, float transform[]);
 
 static NRBPath *
 nr_typeface_ft2_ensure_outline (NRTypeFaceFT2 *tff, NRTypeFaceGlyphFT2 *slot, unsigned int glyph, unsigned int metrics)
@@ -549,17 +549,16 @@ nr_typeface_ft2_ensure_outline (NRTypeFaceFT2 *tff, NRTypeFaceGlyphFT2 *slot, un
 /* Bpath methods */
 
 typedef struct {
-	ArtBpath *bp;
+	NArtBpath *bp;
 	int start, end;
 	float *t;
 } TFFT2OutlineData;
 
 static int tfft2_move_to (FT_Vector * to, void * user)
 {
-	TFFT2OutlineData * od;
 	NRPoint p;
 
-	od = (TFFT2OutlineData *) user;
+	TFFT2OutlineData *od = (TFFT2OutlineData *) user;
 
 	p.x = to->x * od->t[0] + to->y * od->t[2] + od->t[4];
 	p.y = to->x * od->t[1] + to->y * od->t[3] + od->t[5];
@@ -578,13 +577,11 @@ static int tfft2_move_to (FT_Vector * to, void * user)
 
 static int tfft2_line_to (FT_Vector * to, void * user)
 {
-	TFFT2OutlineData * od;
-	ArtBpath *s;
 	NRPoint p;
 
-	od = (TFFT2OutlineData *) user;
+	TFFT2OutlineData *od = (TFFT2OutlineData *) user;
 
-	s = &od->bp[od->end - 1];
+	NArtBpath *s = &od->bp[od->end - 1];
 
 	p.x = to->x * od->t[0] + to->y * od->t[2] + od->t[4];
 	p.y = to->x * od->t[1] + to->y * od->t[3] + od->t[5];
@@ -602,7 +599,7 @@ static int tfft2_line_to (FT_Vector * to, void * user)
 static int tfft2_conic_to (FT_Vector * control, FT_Vector * to, void * user)
 {
 	TFFT2OutlineData *od;
-	ArtBpath *s, *e;
+	NArtBpath *s, *e;
 	NRPoint c;
 
 	od = (TFFT2OutlineData *) user;
@@ -656,12 +653,12 @@ FT_Outline_Funcs tfft2_outline_funcs = {
  * We support only 4x4 matrix here (do you need more?)
  */
 
-static ArtBpath *
+static NArtBpath *
 tff_ol2bp (FT_Outline * ol, float transform[])
 {
 	TFFT2OutlineData od;
 
-	od.bp = nr_new (ArtBpath, ol->n_points * 2 + ol->n_contours + 1);
+	od.bp = nr_new (NArtBpath, ol->n_points * 2 + ol->n_contours + 1);
 	od.start = od.end = 0;
 	od.t = transform;
 
@@ -669,7 +666,7 @@ tff_ol2bp (FT_Outline * ol, float transform[])
 
 	od.bp[od.end].code = ART_END;
 
-	od.bp = nr_renew (od.bp, ArtBpath, od.end + 1);
+	od.bp = nr_renew (od.bp, NArtBpath, od.end + 1);
 
 	return od.bp;
 }

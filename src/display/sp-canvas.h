@@ -20,9 +20,7 @@
 
 
 #include <libnr/nr-rect.h>
-#include <libart_lgpl/art_misc.h>
-#include <libart_lgpl/art_rect.h>
-#include <libart_lgpl/art_uta.h>
+#include <libnr/nr-rect-l.h>
 #include <gdk/gdk.h>
 #include <gtk/gtklayout.h>
 
@@ -38,7 +36,7 @@ enum {
 typedef struct {
 	guchar *buf;
 	int buf_rowstride;
-	ArtIRect rect;
+	NRRectL rect;
 	/* Background color, given as 0xrrggbb */
 	guint32 bg_color;
 	/* Invariant: at least one of the following flags is true. */
@@ -153,7 +151,6 @@ SPCanvasGroup *sp_canvas_root (SPCanvas *canvas);
 void sp_canvas_scroll_to (SPCanvas *canvas, float cx, float cy, unsigned int clear);
 void sp_canvas_update_now (SPCanvas *canvas);
 
-void sp_canvas_request_redraw_uta (SPCanvas *canvas, ArtUta *uta);
 void sp_canvas_request_redraw (SPCanvas *canvas, int x1, int y1, int x2, int y2);
 
 void sp_canvas_window_to_world(SPCanvas const *canvas, double winx, double winy, double *worldx, double *worldy);

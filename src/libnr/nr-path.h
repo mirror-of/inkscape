@@ -13,39 +13,29 @@
 #include <libnr/nr-forward.h>
 #include <libnr/nr-coord.h>
 
-typedef struct _NRVPath NRVPath;
 typedef struct _NRBPath NRBPath;
 
-enum {
-	NR_PATH_LINETO,
-	NR_PATH_CURVETO
+typedef enum {
+  ART_MOVETO,
+  ART_MOVETO_OPEN,
+  ART_CURVETO,
+  ART_LINETO,
+  ART_END
+} NRPathcode;
+
+class NArtBpath {
+ public:
+  /*< public >*/
+  NRPathcode code;
+  double x1, y1;
+  double x2, y2;
+  double x3, y3;
 };
 
-enum {
-	NR_WIND_RULE_NONZERO,
-	NR_WIND_RULE_EVENODD
-};
-
-#include <libart_lgpl/art_bpath.h>
-
-typedef struct _NRPathCode NRPathCode;
-typedef union _NRPathElement NRPathElement;
-
-struct _NRPathCode {
-	unsigned int length : 24;
-	unsigned int closed : 1;
-	unsigned int code : 1;
-};
-
-union _NRPathElement {
-	NRPathCode code;
-	NR::Coord value;
-};
-
-/* fixme: (Lauris) */
+NArtBpath* nr_artpath_affine(NArtBpath *s, NR::Matrix const &transform);
 
 struct _NRBPath {
-	ArtBpath *path;
+	NArtBpath *path;
 };
 
 NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NRMatrix const *transform);
@@ -59,3 +49,14 @@ void nr_path_matrix_point_bbox_wind_distance (NRBPath *bpath, NR::Matrix const &
 void nr_path_matrix_bbox_union (NRBPath *bpath, NRMatrix const *m, NRRect *bbox, NR::Coord tolerance);
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

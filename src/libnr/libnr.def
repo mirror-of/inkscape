@@ -28,7 +28,6 @@ EXPORTS
 	nr_active_object_add_listener
 	nr_active_object_get_type
 	nr_active_object_remove_listener_by_data
-	nr_art_svp_from_svl
 	nr_blit_pixblock_mask_rgba32
 	nr_blit_pixblock_pixblock_alpha
 	nr_blit_pixblock_pixblock_mask
@@ -62,8 +61,6 @@ EXPORTS
 	nr_pixblock_new
 	nr_pixblock_release
 	nr_pixblock_render_gray_noise
-	nr_pixblock_render_svl_mask_or
-	nr_pixblock_render_svl_rgba
 	nr_pixblock_render_svp_mask_or
 	nr_pixblock_setup
 	nr_pixblock_setup_extern
@@ -80,23 +77,8 @@ EXPORTS
 	nr_rect_l_intersect
 	nr_rect_l_union
 	nr_rgradient_renderer_setup
-	nr_svl_calculate_bbox
-	nr_svl_compare
-	nr_svl_free_list
-	nr_svl_free_one
-	nr_svl_from_art_bpath
-	nr_svl_from_art_svp
-	nr_svl_from_art_vpath
-	nr_svl_insert_sorted
-	nr_svl_move_sorted
-	nr_svl_new
-	nr_svl_new_full
-	nr_svl_new_vertex_wind
-	nr_svl_point_wind
-	nr_svl_remove
 	nr_svp_bbox
 	nr_svp_free
-	nr_svp_from_svl
 	nr_svp_point_distance
 	nr_svp_point_wind
 	nr_type_is_a

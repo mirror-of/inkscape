@@ -222,11 +222,8 @@ sp_chars_normalized_bpath (SPChars *chars)
 	GSList *cc = NULL;
 	for (SPCharElement *el = chars->elements; el != NULL; el = el->next) {
 		NRBPath bp;
-		gdouble a[6];
-		for (gint i = 0; i < 6; i++)
-			a[i] = el->transform.c[i];
 		if (nr_font_glyph_outline_get (el->font, el->glyph, &bp, FALSE)) {
-			ArtBpath *abp = art_bpath_affine_transform (bp.path, a);
+			NArtBpath *abp = nr_artpath_affine (bp.path, el->transform);
 			SPCurve *c = sp_curve_new_from_bpath (abp);
 			if (c)
 				cc = g_slist_prepend (cc, c);
@@ -278,14 +275,11 @@ sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrix *ctm, con
 	SPCharElement *el;
 
 	for (el = chars->elements; el != NULL; el = el->next) {
-		gdouble chela[6];
 		NRBPath bpath;
-		gint i;
 
-		for (i = 0; i < 6; i++) chela[i] = el->transform.c[i];
 		if (nr_font_glyph_outline_get (el->font, el->glyph, &bpath, FALSE)) {
 			NRBPath abp;
-			abp.path = art_bpath_affine_transform (bpath.path, chela);
+			abp.path = nr_artpath_affine (bpath.path, el->transform);
 			sp_chars_print_bpath (ctx, &abp, SP_OBJECT_STYLE (chars), ctm, pbox, dbox, bbox);
 			art_free (abp.path);
 		}

@@ -273,7 +273,7 @@ nr_typeface_empty_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, u
 static NRBPath *
 nr_typeface_empty_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref)
 {
-	static const ArtBpath gol[] = {
+	static const NArtBpath gol[] = {
 		{ART_MOVETO, 0, 0, 0, 0, 100.0, 100.0},
 		{ART_LINETO, 0, 0, 0, 0, 100.0, 900.0},
 		{ART_LINETO, 0, 0, 0, 0, 900.0, 900.0},
@@ -287,7 +287,7 @@ nr_typeface_empty_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigne
 		{ART_END, 0, 0, 0, 0, 0, 0}
 	};
 
-	d->path = (ArtBpath *) gol;
+	d->path = (NArtBpath *) gol;
 
 	return d;
 }

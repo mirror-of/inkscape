@@ -10,8 +10,7 @@
  *
  */
 
-#include <libart_lgpl/art_point.h>
-#include "sp-canvas.h"
+#include <display/sp-canvas.h>
 
 
 

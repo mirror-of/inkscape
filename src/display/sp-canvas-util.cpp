@@ -13,10 +13,6 @@
  */
 
 #include <string.h>
-#include <libart_lgpl/art_misc.h>
-//#include <libart_lgpl/art_affine.h>
-//#include <libart_lgpl/art_svp.h>
-#include <libart_lgpl/art_rgb_svp.h>
 #include "sp-canvas-util.h"
 #include <libnr/nr-matrix-ops.h>
 
@@ -87,61 +83,6 @@ sp_canvas_clear_buffer (SPCanvasBuf *buf)
 		for (y = buf->rect.y0; y < buf->rect.y1; y++) {
 			memset (buf->buf + (y - buf->rect.y0) * buf->buf_rowstride, r, 3 * (buf->rect.x1 - buf->rect.x0));
 		}
-	}
-}
-
-void
-sp_canvas_render_svp_translated (SPCanvasBuf * buf, ArtSVP * svp,
-	guint32 rgba, gint x, gint y)
-{
-	guint32 fg_color, bg_color;
-	int alpha;
-
-	sp_canvas_buf_ensure_buf (buf);
-
-	if (buf->is_bg) {
-		bg_color = buf->bg_color;
-		alpha = rgba & 0xff;
-		if (alpha == 0xff)
-			fg_color = rgba >> 8;
-		else {
-			/* composite over background color */
-			int bg_r, bg_g, bg_b;
-			int fg_r, fg_g, fg_b;
-			int tmp;
-
-			bg_r = (bg_color >> 16) & 0xff;
-			fg_r = (rgba >> 24) & 0xff;
-			tmp = (fg_r - bg_r) * alpha;
-			fg_r = bg_r + ((tmp + (tmp >> 8) + 0x80) >> 8);
-
-			bg_g = (bg_color >> 8) & 0xff;
-			fg_g = (rgba >> 16) & 0xff;
-			tmp = (fg_g - bg_g) * alpha;
-			fg_g = bg_g + ((tmp + (tmp >> 8) + 0x80) >> 8);
-
-			bg_b = bg_color & 0xff;
-			fg_b = (rgba >> 8) & 0xff;
-			tmp = (fg_b - bg_b) * alpha;
-			fg_b = bg_b + ((tmp + (tmp >> 8) + 0x80) >> 8);
-
-			fg_color = (fg_r << 16) | (fg_g << 8) | fg_b;
-		}
-		art_rgb_svp_aa (svp,
-				buf->rect.x0 - x, buf->rect.y0 - y,
-				buf->rect.x1 - x, buf->rect.y1 - y,
-				fg_color, bg_color,
-				buf->buf, buf->buf_rowstride,
-				NULL);
-		buf->is_bg = 0;
-		buf->is_buf = 1;
-	} else {
-		art_rgb_svp_alpha (svp,
-				   buf->rect.x0 - x, buf->rect.y0 - y,
-				   buf->rect.x1 - x, buf->rect.y1 - y,
-				   rgba,
-				   buf->buf, buf->buf_rowstride,
-				   NULL);
 	}
 }
 

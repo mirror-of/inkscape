@@ -16,11 +16,6 @@
 /* Renders graymask of svp into buffer */
 void nr_pixblock_render_svp_mask_or (NRPixBlock *d, NRSVP *svp);
 
-/* Renders graymask of svp into buffer */
-void nr_pixblock_render_svl_mask_or (NRPixBlock *d, NRSVL *svl);
-/* Renders colored SVP into buffer (has to be RGB/RGBA) */
-void nr_pixblock_render_svl_rgba (NRPixBlock *d, NRSVL *svl, guint32 rgba);
-
 #endif
 
 /*

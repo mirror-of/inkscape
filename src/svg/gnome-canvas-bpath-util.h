@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-#include <libart_lgpl/art_bpath.h>
+#include <libnr/nr-path.h>
 
 
 
@@ -23,7 +23,7 @@ typedef struct _GnomeCanvasBpathDef GnomeCanvasBpathDef;
 
 struct _GnomeCanvasBpathDef {
 	int ref_count;
-	ArtBpath *bpath;
+	NArtBpath *bpath;
 	int n_bpath;
 	int n_bpath_max;
 	int moveto_idx;
@@ -31,7 +31,7 @@ struct _GnomeCanvasBpathDef {
 
 
 GnomeCanvasBpathDef *gnome_canvas_bpath_def_new (void);
-GnomeCanvasBpathDef *gnome_canvas_bpath_def_new_from (ArtBpath *bpath);
+GnomeCanvasBpathDef *gnome_canvas_bpath_def_new_from (NArtBpath *bpath);
 GnomeCanvasBpathDef *gnome_canvas_bpath_def_ref (GnomeCanvasBpathDef *bpd);
 
 #define gnome_canvas_bpath_def_unref gnome_canvas_bpath_def_free

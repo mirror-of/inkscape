@@ -13,7 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libart_lgpl/art_svp.h>
 #include "sp-canvas.h"
 
 /* Miscellaneous utility & convenience functions for general canvas objects */
@@ -26,11 +25,6 @@ void sp_canvas_buf_ensure_buf (SPCanvasBuf *buf);
 
 void
 sp_canvas_clear_buffer (SPCanvasBuf * buf);
-
-/* render svp, translated to x, y */
-
-void
-sp_canvas_render_svp_translated (SPCanvasBuf *buf, ArtSVP *svp, guint32 rgba, gint x, gint y);
 
 /* get i2p (item to parent) affine transformation as general 6-element array */
 
