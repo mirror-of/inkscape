@@ -35,21 +35,22 @@ class UriInputStream : public InputStream
 {
 
 public:
+    UriInputStream(FILE *source, Inkscape::URI &uri) throw(StreamException);
 
     UriInputStream(Inkscape::URI &source) throw(StreamException);
-    
+
     virtual ~UriInputStream() throw(StreamException);
-    
+
     virtual int available() throw(StreamException);
-    
+
     virtual void close() throw(StreamException);
-    
+
     virtual int get() throw(StreamException);
-    
+
 private:
 
     bool closed;
-    
+
     FILE *inf;           //for file: uris
     unsigned char *data; //for data: uris
     int dataPos;         //  current read position in data field
@@ -74,19 +75,19 @@ class UriReader : public BasicReader
 public:
 
     UriReader(Inkscape::URI &source) throw(StreamException);
-    
+
     virtual ~UriReader() throw(StreamException);
-    
+
     virtual int available() throw(StreamException);
-    
+
     virtual void close() throw(StreamException);
-    
+
     virtual gunichar get() throw(StreamException);
-    
+
 private:
 
     UriInputStream *inputStream;
-    
+
 }; // class UriReader
 
 
@@ -105,23 +106,26 @@ class UriOutputStream : public OutputStream
 
 public:
 
+    UriOutputStream(FILE *fp, Inkscape::URI &destination) throw(StreamException);
+
     UriOutputStream(Inkscape::URI &destination) throw(StreamException);
-    
+
     virtual ~UriOutputStream() throw(StreamException);
-    
+
     virtual void close() throw(StreamException);
-    
+
     virtual void flush() throw(StreamException);
-    
+
     virtual void put(int ch) throw(StreamException);
 
 private:
 
     bool closed;
-    
+    bool ownsFile;
+
     FILE *outf;         //for file: uris
     Glib::ustring data; //for data: uris
-    
+
     Inkscape::URI &uri;
 
     int scheme;
@@ -142,19 +146,19 @@ class UriWriter : public BasicWriter
 public:
 
     UriWriter(Inkscape::URI &source) throw(StreamException);
-    
+
     virtual ~UriWriter() throw(StreamException);
-    
+
     virtual void close() throw(StreamException);
-    
+
     virtual void flush() throw(StreamException);
-    
+
     virtual void put(gunichar ch) throw(StreamException);
-    
+
 private:
 
     UriOutputStream *outputStream;
-    
+
 }; // class UriReader
 
 

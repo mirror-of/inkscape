@@ -140,6 +140,20 @@ UriInputStream::UriInputStream(Inkscape::URI &source)
     closed = false;
 }
 
+/**
+ *
+ */
+UriInputStream::UriInputStream(FILE *source, Inkscape::URI &uri)
+    throw (StreamException): inf(source),
+                             uri(uri)
+{
+    scheme = SCHEME_FILE;
+    if (!inf) {
+        Glib::ustring err = "UriInputStream passed NULL";
+        throw StreamException(err);
+    }
+    closed = false;
+}
 
 /**
  *
@@ -277,14 +291,33 @@ gunichar UriReader::get() throw(StreamException)
 //#########################################################################
 
 /**
+ * Temporary kludge
+ */
+UriOutputStream::UriOutputStream(FILE* fp, Inkscape::URI &destination)
+                    throw (StreamException): closed(false),
+                                             ownsFile(false),
+                                             outf(fp),
+                                             uri(destination),
+                                             scheme(SCHEME_FILE)
+{
+    if (!outf) {
+        Glib::ustring err = "UriOutputStream given null file ";
+        throw StreamException(err);
+    }
+}
+
+/**
  *
  */
 UriOutputStream::UriOutputStream(Inkscape::URI &destination)
-                    throw (StreamException): uri(destination)
+                    throw (StreamException): closed(false),
+                                             ownsFile(true),
+                                             outf(NULL),
+                                             uri(destination),
+                                             scheme(SCHEME_FILE)
 {
     //get information from uri
     char *schemestr = (char *) uri.getScheme();
-    scheme = SCHEME_FILE;
     if (!schemestr || strncmp("file", schemestr, 4)==0)
         scheme = SCHEME_FILE;
     else if (strncmp("data", schemestr, 4)==0)
@@ -312,8 +345,6 @@ UriOutputStream::UriOutputStream(Inkscape::URI &destination)
         break;
 
     }//switch
-
-    closed = false;
 }
 
 
@@ -340,7 +371,8 @@ void UriOutputStream::close() throw(StreamException)
             if (!outf)
                 return;
             fflush(outf);
-            fclose(outf);
+            if ( ownsFile )
+                fclose(outf);
             outf=NULL;
         break;
 
