@@ -1,5 +1,7 @@
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/xml/repr.h: Cleanup: greater conformance to CodingStyle.
+
 	* src/libnr/nr-macros.h: Don't #include nr-matrix.h, nr-rect.h.
 
 	* src/arc-context.h, src/desktop-affine.h, src/dir-util.h,
