@@ -1,3 +1,9 @@
+2004-11-21  Bryce Harrington <bryce@bryceharrington.org>
+
+	* src/dialogs/layer-properties.cpp, 
+	  src/dialogs/layer-properties.h: Hooking up layer rename
+	  functionality.	
+
 2004-11-21  Kees Cook  <kees@outflux.net>
 
 	* src/sp-object.cpp, src/sp-metadata.cpp: added some debugging, and
