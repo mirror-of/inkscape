@@ -171,7 +171,7 @@ the latest released version of the program, and more.
 
 =head1 SEE ALSO
 
-gimp(1), autotrace, frontline, ill2svg, rsvg, xfig(1), sodipodi,
+gimp(1), autotrace, frontline, ill2svg, rsvg(1), xfig(1), sodipodi,
 karbon14, dia(1X).
 
 =head1 NOTES
