@@ -38,6 +38,7 @@ libnrtype/nr-type-gnome.cpp
 libnrtype/nr-type-xft.cpp
 livarot/Path-test.cpp
 main.cpp
+potrace/potest.cpp
 round-test.cpp
 svg/gill-svg-path.cpp
 svg/tst.cpp
