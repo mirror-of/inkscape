@@ -39,7 +39,7 @@ struct SPTSpan : public SPItem {
 	guint        role : 2;
 	bool         last_tspan;
 	
-	div_flow_src     contents;
+	div_flow_src     contents;    // RH: deprecated, but still used to store the x/y/dx/dy/rotate attributes currently
 
 	SPSVGLength		 x,y;
 };
@@ -53,7 +53,7 @@ GType sp_tspan_get_type ();
 /* SPTextPath */
 
 struct SPTextPath : public SPItem {
-	div_flow_src	contents;
+	div_flow_src	contents;    // RH: deprecated, but still used to store the x/y/dx/dy/rotate attributes currently
 	SPSVGLength		 x,y;
 	
   Path           *originalPath;

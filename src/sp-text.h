@@ -24,6 +24,7 @@
 #include "libnr/nr-point.h"
 #include "libnrtype/FlowSrc.h"
 #include "svg/svg-types.h"
+#include "libnrtype/Layout-TNG.h"
 
 
 #define SP_TYPE_TEXT (sp_text_get_type())
@@ -43,19 +44,15 @@ class flow_res;
 /* SPText */
 
 struct SPText : public SPItem {
-    div_flow_src contents;
+    div_flow_src contents;    // RH: deprecated, but still used to store the x/y/dx/dy/rotate attributes currently
+    Inkscape::Text::Layout layout;
     SPSVGLength x,y;
     SPSVGLength linespacing;
 	
     guint relayout : 1;
 	
-    flow_src *f_src;
-    flow_res *f_res;
-
     void ClearFlow(NRArenaGroup *in_arena);
     void BuildFlow(NRArenaGroup *in_arena, NRRect *paintbox);
-    void UpdateFlowSource();
-    void ComputeFlowRes();
 };
 
 struct SPTextClass {

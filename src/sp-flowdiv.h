@@ -43,26 +43,19 @@ class flow_src;
 
 // these 3 are derivatives of SPItem to get the automatic style handling
 struct SPFlowdiv : public SPItem {
-	div_flow_src      contents;
-	control_flow_src	fin;
 };
 
 struct SPFlowtspan : public SPItem {
-	div_flow_src   contents;
 };
 
 struct SPFlowpara : public SPItem {
-	div_flow_src      contents;
-	control_flow_src	fin;
 };
 
 // these do not need any style
 struct SPFlowline : public SPObject {
-	control_flow_src   contents;
 };
 
 struct SPFlowregionbreak : public SPObject {
-	control_flow_src   contents;
 };
 
 

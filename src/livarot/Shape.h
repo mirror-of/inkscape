@@ -304,6 +304,9 @@ public:
     void QuickScan(float &pos, int &curP, float to, FillRule directed, BitLigne* line, float step);
     void QuickScan(float &pos, int &curP, float to, AlphaLigne* line, float step);
 
+    void Transform(NR::Matrix const &tr)
+        {for(std::vector<dg_point>::iterator it=_pts.begin();it!=_pts.end();it++) it->x*=tr;}
+
     std::vector<back_data> ebData;
     std::vector<voronoi_point> vorpData;
     std::vector<voronoi_edge> voreData;

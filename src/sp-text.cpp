@@ -67,6 +67,7 @@
 #include "print.h"
 #include "sp-metrics.h"
 #include "xml/repr.h"
+#include "xml/attribute-record.h"
 
 #include "sp-item.h"
 #include "sp-text.h"
@@ -106,8 +107,6 @@ static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 static void sp_text_request_relayout (SPText *text, guint flags);
 static void sp_text_update_immediate_state (SPText *text);
 static void sp_text_set_shape (SPText *text);
-
-static SPObject *sp_text_get_child_by_position (SPText *text, gint pos);
 
 static SPItemClass *text_parent_class;
 
@@ -163,8 +162,7 @@ static void
 sp_text_init (SPText *text)
 {
     new (&text->contents) div_flow_src(SP_OBJECT(text),txt_text);
-    text->f_res = NULL;
-    text->f_src = NULL;
+    new (&text->layout) Inkscape::Text::Layout;
     text->linespacing.set = 0;
     text->linespacing.value = text->linespacing.computed = 1.0;
 }
@@ -173,8 +171,7 @@ static void
 sp_text_release (SPObject *object)
 {
     SPText *text = SP_TEXT(object);
-    if ( text->f_src ) delete text->f_src;
-    if ( text->f_res ) delete text->f_res;
+    text->layout.~Layout();
     text->contents.~div_flow_src();
 
     if (((SPObjectClass *) text_parent_class)->release)
@@ -353,11 +350,6 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPText *text = SP_TEXT (object);
 
-    // when stamping, _write is called on the newly created object before _set_shape, so we need to
-    // reflow here too (bug 1077559)
-    if (flags & SP_OBJECT_WRITE_EXT)
-        text->UpdateFlowSource();
-
     if (flags & SP_OBJECT_WRITE_BUILD) {
         if (!repr)
             repr = sp_repr_new ("svg:text");
@@ -369,7 +361,7 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
             } else if (SP_IS_TEXTPATH (child)) {
                 crepr = child->updateRepr(NULL, flags);
             } else {
-                crepr = sp_repr_new_text(SP_STRING_TEXT (child));
+                crepr = sp_repr_new_text(SP_STRING(child)->string.c_str());
             }
             if (crepr) l = g_slist_prepend (l, crepr);
         }
@@ -385,7 +377,7 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
             } else if (SP_IS_TEXTPATH (child)) {
                 child->updateRepr(flags);
             } else {
-                SP_OBJECT_REPR (child)->setContent((SP_STRING_TEXT (child))?SP_STRING_TEXT (child):"");
+                SP_OBJECT_REPR (child)->setContent(SP_STRING(child)->string.c_str());
             }
         }
     }
@@ -438,7 +430,8 @@ static void
 sp_text_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const /*flags*/)
 {
     SPText *group = SP_TEXT(item);
-    if ( group->f_res ) group->f_res->BBox(bbox,transform);
+    //RH if ( group->f_res ) group->f_res->BBox(bbox,transform);
+    group->layout.getBoundingBox(bbox, transform);
 }
 
 
@@ -493,192 +486,129 @@ sp_text_description(SPItem *item)
     }
 }
 
+static void AccumulateAttributeLists(GList **output_list, GList const *parent_list, SPSVGLength *overlay_list, int overlay_list_length)
+{
+    *output_list = NULL;
+    while (parent_list || overlay_list_length) {
+        SPSVGLength const *this_item;
+        if (overlay_list_length) {
+            this_item = overlay_list;
+            overlay_list_length--;
+            overlay_list++;
+            if (parent_list)
+                parent_list = parent_list->next;
+        } else {
+            this_item = (SPSVGLength const *)parent_list->data;
+            parent_list = parent_list->next;
+        }
+        *output_list = g_list_append(*output_list, (void*)this_item);
+    }
+}
+
+static void IncrementOptionalAttrsFields(Inkscape::Text::Layout::OptionalTextTagAttrs *optional_attrs, int dist)
+{
+    while (dist) {
+        if (optional_attrs->x) optional_attrs->x = optional_attrs->x->next;
+        if (optional_attrs->y) optional_attrs->y = optional_attrs->y->next;
+        if (optional_attrs->dx) optional_attrs->dx = optional_attrs->dx->next;
+        if (optional_attrs->dy) optional_attrs->dy = optional_attrs->dy->next;
+        if (optional_attrs->rotate) optional_attrs->rotate = optional_attrs->rotate->next;
+        dist--;
+    }
+}
+
+static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs)
+{
+    int length = 0;
+
+    Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs_base, optional_attrs;
+    optional_attrs_base.x = NULL;
+    optional_attrs_base.y = NULL;
+    optional_attrs_base.dx = NULL;
+    optional_attrs_base.dy = NULL;
+    optional_attrs_base.rotate = NULL;
+
+    div_flow_src const *div_src = NULL;
+    if (SP_IS_TEXT(root)) {
+        AccumulateAttributeLists(&optional_attrs_base.x, parent_optional_attrs.x, &SP_TEXT(root)->x, 1);
+        AccumulateAttributeLists(&optional_attrs_base.y, parent_optional_attrs.y, &SP_TEXT(root)->y, 1);
+        optional_attrs = optional_attrs_base;
+        //div_src = &SP_TEXT(root)->contents;
+        // text elements don't read vectors properly. See lauris' fixme above.
+    }
+    else if (SP_IS_TSPAN(root) && SP_TSPAN(root)->role == SP_TSPAN_ROLE_UNSPECIFIED) div_src = &SP_TSPAN(root)->contents;
+    else if (SP_IS_TEXTPATH(root)) div_src = &SP_TEXTPATH(root)->contents;
+
+    if (div_src) {
+        AccumulateAttributeLists(&optional_attrs_base.x, parent_optional_attrs.x, div_src->x_s, div_src->nb_x);
+        AccumulateAttributeLists(&optional_attrs_base.y, parent_optional_attrs.y, div_src->y_s, div_src->nb_y);
+        AccumulateAttributeLists(&optional_attrs_base.dx, parent_optional_attrs.dx, div_src->dx_s, div_src->nb_dx);
+        AccumulateAttributeLists(&optional_attrs_base.dy, parent_optional_attrs.dy, div_src->dy_s, div_src->nb_dy);
+        AccumulateAttributeLists(&optional_attrs_base.rotate, parent_optional_attrs.rotate, div_src->rot_s, div_src->nb_rot);
+        optional_attrs = optional_attrs_base;
+    } else if (!SP_IS_TEXT(root)) {
+        optional_attrs = parent_optional_attrs;
+    }
+
+    if (SP_IS_TSPAN(root))
+        if (SP_TSPAN(root)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
+            length++;     // interpreting line breaks as a character for the purposes of x/y/etc attributes
+                          // is a liberal interpretation of the svg spec, but a strict reading would mean
+                          // that if the first line is empty the second line would take its place at the
+                          // start position. Very confusing.
+            if (layout->inputExists())
+                layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, root);
+            if (!root->hasChildren())
+                layout->appendText("", root->style, root, &optional_attrs);
+        }
+
+    for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if (SP_IS_TSPAN (child) || SP_IS_TEXTPATH (child)) {
+            int child_lengths = BuildLayoutInput(child, layout, optional_attrs);
+            IncrementOptionalAttrsFields(&optional_attrs, child_lengths);
+            length += child_lengths;
+        } else if (SP_IS_STRING (child)) {
+            Glib::ustring const &string = SP_STRING(child)->string;
+            layout->appendText(string, root->style, child, &optional_attrs);
+            int string_length = string.length();
+            IncrementOptionalAttrsFields(&optional_attrs, string_length);
+            length += string_length;
+        }
+    }
+    g_list_free(optional_attrs_base.x);
+    g_list_free(optional_attrs_base.y);
+    g_list_free(optional_attrs_base.dx);
+    g_list_free(optional_attrs_base.dy);
+    g_list_free(optional_attrs_base.rotate);
+    return length;
+}
 
 static void
 sp_text_set_shape (SPText *text)
 {
-    // brutal: reflow at each change
-    text->UpdateFlowSource();
-    text->ComputeFlowRes();
-
-    if ( text->f_res ) {
-        text->f_res->ApplyLetterSpacing();
-        text->f_res->ComputeIntervals();
-        // change the kern_y format to get actual dy values
-        for (int i=0;i<text->f_res->nbChunk;i++) {
-            text->f_res->ComputeDY(i);
-        }
-
-        // use the dimensions of the text chunks to position lines for tspans with sodipodi:role = line
-        double    cur_x=0,cur_y=0;
-        double    cur_a=0,cur_d=0,cur_l=0;
-        bool      use_linespacing=false;
-        if ( text->x.set ) cur_x=text->x.computed;
-        if ( text->y.set ) cur_y=text->y.computed;
-        if ( text->linespacing.set ) {
-            // use the linespacing computed for the text object
-            use_linespacing=true;
-            cur_l=text->linespacing.value*(SP_OBJECT_STYLE(SP_OBJECT(text))->font_size.computed);
-            cur_a=cur_d=0;
-        } else {
-            use_linespacing=true;
-            cur_l=SP_OBJECT_STYLE(SP_OBJECT(text))->font_size.computed; // should be using the max of the font-size on the line instead
-            cur_a=cur_d=0;
-        }
-        for (int i=0;i<text->f_src->nbElem;i++) {
-            if ( text->f_src->elems[i].type != flw_text ) continue; // nothing to do
-            SPObject *tst_o = text->f_src->elems[i].text->source_start->me;
-            if ( !(SP_IS_TSPAN(tst_o)) ) continue;
-            one_flow_src *div_o = text->f_src->elems[i].text->source_start;
-            int  div_o_type = ( div_o ? div_o->Type() : flw_none );
-            if ( div_o_type == txt_span ) {
-                // has its x/y set, or first tspan of the text
-                SPTSpan *cspan = SP_TSPAN(div_o->me);
-                if ( cspan->x.set ) cur_x=cspan->x.computed; else cspan->x.value=cspan->x.computed=cur_x;
-                if ( cspan->y.set ) cur_y=cspan->y.computed; else cspan->y.value=cspan->y.computed=cur_y;
-                continue;
-            }
-            if ( div_o_type != txt_firstline && div_o_type != txt_tline ) continue;
-            SPTSpan *tspan = SP_TSPAN(div_o->me);
-            SPStyle *tspan_style = SP_OBJECT_STYLE(tspan);
-            flow_res::flow_styled_chunk *cur = NULL;
-            for (int j = 0; j < text->f_res->nbChunk; j++) {
-                if ( text->f_res->chunks[j].mommy == text->f_src->elems[i].text ) {
-                    // found
-                    cur=&(text->f_res->chunks[j]);
-                    break;
-                }
-            }
-            if ( cur == NULL || use_linespacing == true ) {
-                if ( tspan->role != SP_TSPAN_ROLE_UNSPECIFIED ) {
-                    if ( /*tspan_style->writing_mode.set &&*/ tspan_style->writing_mode.computed == SP_CSS_WRITING_MODE_TB ) {
-                        if ( div_o_type != txt_firstline ) cur_x=cur_x+cur_d+cur_a+cur_l; // the chunk box is rotated
-                    } else {
-                        if ( div_o_type != txt_firstline )  cur_y=cur_y+cur_d+cur_a+cur_l;
-                    }
-                }
-            } else {
-                if ( tspan->role != SP_TSPAN_ROLE_UNSPECIFIED ) {
-                    if ( /*tspan_style->writing_mode.set &&*/ tspan_style->writing_mode.computed == SP_CSS_WRITING_MODE_TB ) {
-                        if ( div_o_type != txt_firstline ) cur_x=cur_x+cur_d+cur->ascent+cur->leading; // the chunk box is rotated
-                    } else {
-                        if ( div_o_type != txt_firstline ) cur_y=cur_y+cur_d+cur->ascent+cur->leading;
-                    }
-                }
-                if ( use_linespacing == false ) {
-                    cur_d=cur->descent;
-                    cur_a=cur->ascent;
-                    cur_l=cur->leading;
-                }
-            }
-            tspan->x.computed=cur_x;
-            tspan->x.set=1;
-            tspan->y.computed=cur_y;
-            tspan->y.set=1;
-            // this was labeled as 'evil' in the old sp-text.cpp
-            gboolean saved = sp_document_get_undo_sensitive(SP_OBJECT_DOCUMENT (tspan));
-            sp_document_set_undo_sensitive (SP_OBJECT_DOCUMENT (tspan), FALSE);
-            sp_repr_set_double (SP_OBJECT_REPR (tspan), "x", cur_x);
-            sp_repr_set_double (SP_OBJECT_REPR (tspan), "y", cur_y);
-            sp_document_set_undo_sensitive (SP_OBJECT_DOCUMENT (tspan), saved);
-        }
-        // the layout was done with lines all starting at (0,0) -> translate to the correct position, according to the start of each chunk
-        cur_x=cur_y=0;
-        if ( text->x.set ) cur_x=text->x.computed;
-        if ( text->y.set ) cur_y=text->y.computed;
-        for (int i=0;i<text->f_src->nbElem;i++) {
-            if ( text->f_src->elems[i].type != flw_text ) continue; // nothing to do
-            SPObject *tst_o = text->f_src->elems[i].text->source_start->me;
-            if ( !(SP_IS_TSPAN(tst_o)) && !(SP_IS_TEXT(tst_o)) && !(SP_IS_TEXTPATH(tst_o)) ) continue;
-            one_flow_src *div_o = text->f_src->elems[i].text->source_start;
-            int div_o_type = ( div_o ? div_o->Type() : flw_none );
-
-            flow_res::flow_styled_chunk *cur = NULL;
-            int                          cur_no = -1;
-            for (int j = 0; j < text->f_res->nbChunk; j++) {
-                if ( text->f_res->chunks[j].mommy == text->f_src->elems[i].text ) {
-                    // found
-                    cur = &(text->f_res->chunks[j]);
-                    cur_no = j;
-                    break;
-                }
-            }
-            if ( cur == NULL || cur_no < 0 ) continue;
-
-            if ( div_o_type == txt_text ) {
-                //printf("text %f %f\n",cur_x,cur_y);
-                SPStyle *text_style = SP_OBJECT_STYLE(text);
-                if ( /*text_style->writing_mode.set &&*/ text_style->writing_mode.computed == SP_CSS_WRITING_MODE_TB ) {
-                    text->f_res->Verticalize(cur_no,cur_x,cur_y);
-                } else {
-                    // gentle horizontal text
-                    int tr_start=1;
-                    //if ( text_style->text_anchor.set ) {
-                    if ( text_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START ) tr_start=1;
-                    if ( text_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_END ) tr_start=0;
-                    if ( text_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE ) {
-                        cur_x-=0.5*(cur->x_en-cur->x_st);
-                        tr_start=1;
-                    }
-                    //}
-                    text->f_res->TranslateChunk(cur_no,cur_x,cur_y,(tr_start));
-                }
-            } else if ( div_o_type == txt_tline || div_o_type == txt_firstline) {
-                SPTSpan* tspan=SP_TSPAN(tst_o);
-                cur_x=cur_y=0;
-                cur_x=tspan->x.computed;
-                cur_y=tspan->y.computed;
-                //printf("tline|firstline %f %f\n",cur_x,cur_y);
-                SPStyle* tspan_style=SP_OBJECT_STYLE(tspan);
-                if ( /*tspan_style->writing_mode.set &&*/ tspan_style->writing_mode.computed == SP_CSS_WRITING_MODE_TB ) {
-                    text->f_res->Verticalize(cur_no,cur_x,cur_y);
-                } else {
-                    // gentle horizontal text
-                    int tr_start=1;
-                    //if ( tspan_style->text_anchor.set ) {
-                    if ( tspan_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START ) tr_start=1;
-                    if ( tspan_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_END ) tr_start=0;
-                    if ( tspan_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE ) {
-                        cur_x-=0.5*(cur->x_en-cur->x_st);
-                        tr_start=1;
-                    }
-                    //}
-                    text->f_res->TranslateChunk(cur_no,cur_x,cur_y,(tr_start));
-                }
-            } else if ( div_o_type == txt_span ) {
-                SPTSpan* tspan=SP_TSPAN(tst_o);
-                cur_x=cur_y=0;
-                cur_x=tspan->x.computed;
-                cur_y=tspan->y.computed;
-                //printf("tspan %f %f\n",cur_x,cur_y);
-                SPStyle* tspan_style=SP_OBJECT_STYLE(tspan);
-                if ( /*tspan_style->writing_mode.set &&*/ tspan_style->writing_mode.computed == SP_CSS_WRITING_MODE_TB ) {
-                    text->f_res->Verticalize(cur_no,cur_x,cur_y);
-                } else {
-                    // gentle horizontal text
-                    int tr_start=1;
-                    //if ( tspan_style->text_anchor.set ) {
-                    if ( tspan_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START ) tr_start=1;
-                    if ( tspan_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_END ) tr_start=0;
-                    if ( tspan_style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE ) {
-                        cur_x-=0.5*(cur->x_en-cur->x_st);
-                        tr_start=1;
-                    }
-                    //}
-                    text->f_res->TranslateChunk(cur_no,cur_x,cur_y,(tr_start));
-                }
-            } else if ( div_o_type == txt_textpath ) {
-                SPTextPath* textpath=SP_TEXTPATH(tst_o);
-                text->f_res->ApplyPath(cur_no,textpath->originalPath);
-            } else {
-                // no owner, this is just an ordinary tspan
-                // shouldn't happen, chunks always have a good definition
-                //printf("nothing %f %f\n",cur_x,cur_y);
-                text->f_res->TranslateChunk(cur_no,cur_x,cur_y,true);
-            }
-        }
+    // because the text_styles are held by f_src, we need to delete this before, to avoid dangling pointers
+    for (SPItemView* v = text->display; v != NULL; v = v->next) {
+        text->ClearFlow(NR_ARENA_GROUP(v->arenaitem));
     }
 
+    Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
+    optional_attrs.x = NULL;
+    optional_attrs.y = NULL;
+    optional_attrs.dx = NULL;
+    optional_attrs.dy = NULL;
+    optional_attrs.rotate = NULL;
+    text->layout.clear();
+    BuildLayoutInput(text, &text->layout, optional_attrs);
+    text->layout.calculateFlow();
+    for (SPObject *child = sp_object_first_child(text) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if (SP_IS_TEXTPATH (child) && SP_TEXTPATH(child)->originalPath != NULL) {
+            SPSVGLength offset={0};
+            g_print(text->layout.dumpAsText().c_str());
+            text->layout.fitToPathAlign(offset, *SP_TEXTPATH(child)->originalPath);
+        }
+    }
+    g_print(text->layout.dumpAsText().c_str());
+    // todo: set the x,y attributes on role:line spans
 
     NRRect paintbox;
     sp_item_invoke_bbox(SP_ITEM(text), &paintbox, NR::identity(), TRUE);
@@ -831,19 +761,31 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
     NRMatrix ctm;
     sp_item_i2d_affine (item, &ctm);
 
-    if ( group->f_res ) group->f_res->Print(ctx,&pbox,&dbox,&bbox,ctm);
+    group->layout.print(ctx,&pbox,&dbox,&bbox,ctm);
 }
 
+static void sp_text_get_ustring_multiline(SPObject const *root, Glib::ustring &string)
+{
+    if (SP_IS_TSPAN(root) && SP_TSPAN(root)->role != SP_TSPAN_ROLE_UNSPECIFIED)
+        string += '\n';
+    for (SPObject const *child = root->firstChild() ; child ; child = SP_OBJECT_NEXT(child)) {
+        if (SP_IS_STRING(child))
+            string += SP_STRING(child)->string;
+        else if (child->hasChildren())
+            sp_text_get_ustring_multiline(child, string);
+        else if (SP_IS_TSPAN(root) && SP_TSPAN(root)->role != SP_TSPAN_ROLE_UNSPECIFIED)
+            string += '\n';
+    }
+}
 
 gchar *
 sp_text_get_string_multiline (SPText *text)
 {
-    if ( text->f_src == NULL ) text->UpdateFlowSource();
-    if ( text->f_src ) {
-        char* res=text->f_src->Summary();
-        return res;
-    }
-    return NULL;
+    Glib::ustring string;
+
+    sp_text_get_ustring_multiline(text, string);
+    if (string.empty()) return NULL;
+    return strdup(string.data() + 1);    // the first char will always be an unwanted line break
 }
 
 void
@@ -911,8 +853,7 @@ sp_text_normalized_bpath (SPText *text)
     g_return_val_if_fail (text != NULL, NULL);
     g_return_val_if_fail (SP_IS_TEXT (text), NULL);
 
-    if ( text->f_res ) return text->f_res->NormalizedBPath();
-    return sp_curve_new();
+    return text->layout.convertToCurves();
 }
 
 
@@ -975,198 +916,116 @@ sp_text_append_line(SPText *text)
     return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
 }
 
+static bool is_line_break_object(SPObject *object)
+{
+    return    SP_IS_TEXT(object)
+           || (SP_IS_TSPAN(object) && SP_TSPAN(object)->role != SP_TSPAN_ROLE_UNSPECIFIED);
+}    
+
+static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Node const *old_node)
+{
+    switch (old_node->type()) {
+        case Inkscape::XML::ELEMENT_NODE: {
+            Inkscape::XML::Node *new_node = sp_repr_new(old_node->name());
+            Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = old_node->attributeList();
+            GQuark const id_key = g_quark_from_string("id");
+            for ( ; attributes ; attributes++) {
+                if (attributes->key == id_key) continue;
+                new_node->setAttribute(g_quark_to_string(attributes->key), attributes->value);
+            }
+            return new_node;
+        }
+
+        case Inkscape::XML::TEXT_NODE:
+            return sp_repr_new_text(old_node->content());
+
+        case Inkscape::XML::COMMENT_NODE:
+            return sp_repr_new_comment(old_node->content());
+
+        case Inkscape::XML::DOCUMENT_NODE:
+            return NULL;   // this had better never happen
+    }
+    return NULL;
+}
+
+/** recursively divides the XML node tree into two objects: the original will
+contain all objects up to and including \a split_obj and the returned value
+will be the new leaf which represents the copy of \a split_obj and extends
+down the tree with new elements all the way to the common root which is the
+parent of the first line break node encountered.
+*/
+static SPObject* split_text_object_tree_at(SPObject *split_obj)
+{
+    if (is_line_break_object(split_obj)) {
+        Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
+        sp_repr_unref(new_node);
+        return SP_OBJECT_NEXT(split_obj);
+    }
+
+    SPObject *duplicate_obj = split_text_object_tree_at(SP_OBJECT_PARENT(split_obj));
+    // copy the split node
+    if (SP_IS_TSPAN(duplicate_obj) && duplicate_obj->hasChildren()) {
+        // workaround for the old code adding a string child we don't want
+        SP_OBJECT_REPR(duplicate_obj)->removeChild(SP_OBJECT_REPR(duplicate_obj->firstChild()));
+    }
+    Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
+    SP_OBJECT_REPR(duplicate_obj)->appendChild(new_node);
+    sp_repr_unref(new_node);
+    // TODO: I think this an appropriate place to sort out the copied attributes (x/y/dx/dy/rotate)
+
+    // then move all the subsequent nodes
+    split_obj = SP_OBJECT_NEXT(split_obj);
+    while (split_obj) {
+        Inkscape::XML::Node *move_repr = SP_OBJECT_REPR(split_obj);
+        SPObject *next_obj = SP_OBJECT_NEXT(split_obj);  // this is about to become invalidated by removeChild()
+        sp_repr_ref(move_repr);
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->removeChild(move_repr);
+        SP_OBJECT_REPR(duplicate_obj)->appendChild(move_repr);
+        sp_repr_unref(move_repr);
+
+        split_obj = next_obj;
+    }
+    return duplicate_obj->firstChild();
+}
 
 int
 sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 {
-    int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
-    // no updateRepr in this function because Inkscape::XML::Node are handled directly
-    if ( text->f_src == NULL ) return 0;
-
     // Disable newlines in a textpath; TODO: maybe on Enter in a textpath, separate it into two
     // texpaths attached to the same path, with a vertical shift
     if (SP_IS_TEXT_TEXTPATH (text)) 
         return 0;
-	
-    int  ucs4_pos=0;
-    one_flow_src* into=text->contents.Locate(utf8_pos, ucs4_pos, true, false, false);
-    //printf("pos=%i -> %i in %x\n",utf8_pos,ucs4_pos,into);
 
-    if ( into == NULL ) {
-        // it's a 'append line' in fact
-        Inkscape::XML::Node*   rtspan = sp_repr_new ("svg:tspan");
-        sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-        Inkscape::XML::Node*   rstring = sp_repr_new_text("");
-        sp_repr_add_child (rtspan, rstring, NULL);
-        sp_repr_unref (rstring);
-        SP_OBJECT_REPR (text)->appendChild(rtspan);
-        sp_repr_unref (rtspan);
-        SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-
+    Inkscape::Text::Layout::iterator it_split = text->layout.charIndexToIterator(i_ucs4_pos);
+    if (it_split == text->layout.end()) {
+        sp_text_append_line(text);
         return 1;
-
-    } else if ( into && into->dad ) {
-        if ( into->Type() == flw_text ) {
-            text_flow_src* into_obj=dynamic_cast<text_flow_src*>(into);
-            // the "usual" case of a newline in the middle of some text
-            // we need to split into->me in 2 parts
-            if ( into->dad->Type() == txt_span || into->dad->Type() == txt_tline || into->dad->Type() == txt_firstline ) {
-                div_flow_src* into_dad=dynamic_cast<div_flow_src*>(into->dad);
-                Inkscape::XML::Node*       into_repr=SP_OBJECT_REPR(into_dad->me);
-                if ( into->dad->dad ) {
-                    // just in case
-                    //sp_repr_set_attr (into_repr, "sodipodi:role", "line");
-                    // create the new tspan
-                    Inkscape::XML::Node*   rtspan = sp_repr_new ("svg:tspan");
-                    sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-                    Inkscape::XML::Node*   rstring = NULL;
-                    if ( into_obj->utf8_st < into_obj->utf8_en ) {
-                        rstring=sp_repr_new_text(into_obj->cleaned_up.utf8_text+(utf8_pos-into_obj->utf8_st));
-                    } else {
-                        rstring=sp_repr_new_text("");
-                    }
-                    sp_repr_add_child (rtspan, rstring, NULL);
-                    sp_repr_unref (rstring);
-                    sp_repr_add_child (SP_OBJECT_REPR (into->dad->dad->me), rtspan,SP_OBJECT_REPR(into->dad->me));
-                    sp_repr_unref (rtspan);
-                    char*  nval=into_dad->GetX(ucs4_pos-into_dad->ucs4_en,-1);
-                    if ( nval ) {
-                        sp_repr_set_attr(rtspan,"x",nval);
-                    }
-                    nval=into_dad->GetY(ucs4_pos-into_dad->ucs4_en,-1);
-                    if ( nval ) {
-                        sp_repr_set_attr(rtspan,"y",nval);
-                    }
-                    nval=into_dad->GetDX(ucs4_pos-into_dad->ucs4_en,-1);
-                    if ( nval ) {
-                        sp_repr_set_attr(rtspan,"dx",nval);
-                    }
-                    nval=into_dad->GetDY(ucs4_pos-into_dad->ucs4_en,-1);
-                    if ( nval ) {
-                        sp_repr_set_attr(rtspan,"dy",nval);
-                    }
-                    nval=into_dad->GetRot(ucs4_pos-into_dad->ucs4_en,-1);
-                    if ( nval ) {
-                        sp_repr_set_attr(rtspan,"rotate",nval);
-                    }
-                    // cut the old at the given position
-                    if ( into_obj->utf8_st < into_obj->utf8_en ) {
-                        //char savC=into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st];
-                        into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=0;
-                        SP_OBJECT_REPR(into->me)->setContent((into_obj->cleaned_up.utf8_text)?into_obj->cleaned_up.utf8_text:"");
-                        //into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=savC; // has been invalidated by the previous call, through the sp-string stuff
-                    }
-                    nval=into_dad->GetX(0,ucs4_pos-into_dad->ucs4_en);
-                    if ( nval ) {
-                        sp_repr_set_attr(into_repr,"x",nval);
-                    }
-                    nval=into_dad->GetY(0,ucs4_pos-into_dad->ucs4_en);
-                    if ( nval ) {
-                        sp_repr_set_attr(into_repr,"y",nval);
-                    }
-                    nval=into_dad->GetDX(0,ucs4_pos-into_dad->ucs4_en);
-                    if ( nval ) {
-                        sp_repr_set_attr(into_repr,"dx",nval);
-                    }
-                    nval=into_dad->GetDY(0,ucs4_pos-into_dad->ucs4_en);
-                    if ( nval ) {
-                        sp_repr_set_attr(into_repr,"dy",nval);
-                    }
-                    nval=into_dad->GetRot(0,ucs4_pos-into_dad->ucs4_en);
-                    if ( nval ) {
-                        sp_repr_set_attr(into_repr,"rotate",nval);
-                    }
-                    // transfer the children of into->dad that lie after into to the new tspan
-                    GList* templ=NULL;
-                    for (SPObject* child=into->me->next;child;child=child->next) {
-                        templ=g_list_append(templ,child);
-                    }
-                    for (GList *l = templ; l; l = l->next) {
-                        SPObject *child = (SPObject*) l->data;
-                        Inkscape::XML::Node *c_repr = SP_OBJECT_REPR(child);
-                        sp_repr_ref(c_repr);
-                        sp_repr_remove_child(into_repr, c_repr);
-                        rtspan->appendChild(c_repr);
-                        sp_repr_unref(c_repr);
-                    }
-                    g_list_free(templ);
-                    SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-
-                    return 1;
-
-                } else {
-                    // since it's a string, there's always at least the sp-text for dad
-                }
-
-            } else if ( into->dad->Type() == txt_text ) {
-                // special case
-                Inkscape::XML::Node*   firstspan = sp_repr_new ("svg:tspan");
-                Inkscape::XML::Node*   rtspan = sp_repr_new ("svg:tspan");
-                sp_repr_set_attr (firstspan, "sodipodi:role", "line");
-                sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-                Inkscape::XML::Node*   firststring =NULL;
-                Inkscape::XML::Node*   rstring =NULL;
-                if ( into_obj->utf8_st < into_obj->utf8_en ) {
-                    char savC=into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st];
-                    into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=0;
-                    firststring = sp_repr_new_text(into_obj->cleaned_up.utf8_text);
-                    into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=savC;
-                    rstring = sp_repr_new_text(into_obj->cleaned_up.utf8_text+(utf8_pos-into_obj->utf8_st));
-                } else {
-                    firststring = sp_repr_new_text("");
-                    rstring = sp_repr_new_text("");
-                }
-                sp_repr_add_child (rtspan, rstring, NULL);
-                sp_repr_unref (rstring);
-                sp_repr_add_child (firstspan, firststring, NULL);
-                sp_repr_unref (firststring);
-                // remove old string
-                sp_repr_remove_child(SP_OBJECT_REPR(into->dad->me), SP_OBJECT_REPR(into->me));
-                // add 2 lines
-                SP_OBJECT_REPR (into->dad->me)->appendChild(firstspan);
-                sp_repr_unref (firstspan);
-                SP_OBJECT_REPR (into->dad->me)->appendChild(rtspan);
-                sp_repr_unref (rtspan);
-                SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-
-                return 1;
-
-            }
-        } else if ( into->Type() == txt_text ) {
-            // ???
-        } else if ( into->Type() == txt_textpath ) {
-            // what to do in this case?
-        } else if ( into->Type() == txt_firstline || into->Type() == txt_tline ) {
-            // insert a new empty tspan in front of this one
-            if ( into->dad ) {
-                Inkscape::XML::Node*   rtspan = sp_repr_new ("svg:tspan");
-                sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-                Inkscape::XML::Node*   rstring = sp_repr_new_text("");
-                SPObject* prec=NULL;
-                for (SPObject* child = sp_object_first_child(into->dad->me) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-                    if ( child == into->me ) break;
-                    prec=child;
-                }
-                sp_repr_add_child (rtspan, rstring, NULL);
-                sp_repr_unref (rstring);
-                sp_repr_add_child (SP_OBJECT_REPR (into->dad->me), rtspan,(prec)?SP_OBJECT_REPR(prec):NULL);
-                sp_repr_unref (rtspan);
-                SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-
-                return 1;
-
-            } else {
-                // since it's a tline, there's always at least the sp-text for dad
-            }
-        } else if ( into->Type() == txt_span ) {
-            // add a sodipodi:role=line and we're done
-            sp_repr_set_attr (SP_OBJECT_REPR (into->me), "sodipodi:role", "line");
-            SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-
-            return 1;
-        }
     }
-    return 0;
+    SPObject *split_obj;
+    Glib::ustring::iterator split_text_iter;
+    text->layout.getSourceOfCharacter(it_split, (void**)&split_obj, &split_text_iter);
+
+    if (SP_IS_STRING(split_obj)) {
+        Glib::ustring *string = &SP_STRING(split_obj)->string;
+        // we need to split the entire text tree into two
+        SPString *new_string = SP_STRING(split_text_object_tree_at(split_obj));
+        SP_OBJECT_REPR(new_string)->setContent(&*split_text_iter.base());   // a little ugly
+        string->erase(split_text_iter, string->end());
+        SP_OBJECT_REPR(split_obj)->setContent(string->c_str());
+    } else if (is_line_break_object(split_obj)) {
+        if (SP_OBJECT_PREV(split_obj)) {   // always true
+            split_obj = SP_OBJECT_PREV(split_obj);
+            Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
+            SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
+            sp_repr_unref(new_node);
+        }
+    } else {
+        // TODO
+        // I think the only case to put here is arbitrary gaps, which nobody uses yet
+    }
+    SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    return 1;
 }
 
 gint
@@ -1175,24 +1034,9 @@ sp_text_append (SPText */*text*/, gchar const */*utf8*/)
     return 0;
 }
 
-static SPObject *
-sp_text_get_child_by_position (SPText *text, gint i_ucs4_pos)
-{
- 	int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
-   if ( text->f_res == NULL ) return NULL;
-    int   ucs4_pos=0;
-    one_flow_src *into = text->contents.Locate(utf8_pos,ucs4_pos, true, true, true);
-    //printf("ucs4 at offset %i = %i -> txt=%x",utf8_pos,ucs4_pos,into);
-    if ( into && into->Type() == flw_text ) {
-        if ( into->dad ) return into->dad->me;
-    }
-    return NULL;
-}
-
 void
 sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR::Point by)
 {
-    if ( text->f_src == NULL ) return;
     one_flow_src* cur=&text->contents;
 
     // divide increment by zoom
@@ -1219,23 +1063,13 @@ void
 sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *desktop, gdouble by)
 {
     gdouble val;
-    int     nb_let=0;
-    SPObject *child = sp_text_get_child_by_position (text, i_position);
-    if (!child) return;
-    {
-        int    c_p=-1,s_p=-1,l_p=-1;
-        bool   l_start=false,l_end=false;
-        //printf("letter at offset %i : ",pos);
-        text->f_res->OffsetToLetter(i_position, c_p, s_p, l_p, l_start, l_end);
-        //printf(" c=%i s=%i l=%i st=%i en=%i ",c_p,s_p,l_p,(l_start)?1:0,(l_end)?1:0);
-        if ( c_p >= 0 ) {
-            nb_let = text->f_res->chunks[c_p].l_en - text->f_res->chunks[c_p].l_st;
-            // printf(" -> nblet %i \n",nb_let);
-        } else {
-            //printf("none\n");
-        }
-    }
-    SPStyle *style = SP_OBJECT_STYLE (child);
+    Inkscape::Text::Layout::iterator it = text->layout.charIndexToIterator(i_position);
+    SPObject *source_obj;
+    text->layout.getSourceOfCharacter(it, (void**)&source_obj);
+    if (!SP_IS_STRING(source_obj)) return;   // FIXME? we could take a guess at which side the user wants
+
+    int nb_let = SP_STRING(source_obj)->string.length();
+    SPStyle *style = SP_OBJECT_STYLE (source_obj->parent);
 
     // calculate real value
     /* TODO: Consider calculating val unconditionally, i.e. drop the first `if' line, and
@@ -1257,7 +1091,7 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
     gdouble const zoom = SP_DESKTOP_ZOOM(desktop);
     gdouble const zby = (by
                          / (zoom * (nb_let > 1 ? nb_let - 1 : 1))
-                         / NR::expansion(sp_item_i2doc_affine(SP_ITEM(child))));
+                         / NR::expansion(sp_item_i2doc_affine(SP_ITEM(source_obj->parent))));
     val += zby;
 
     // set back value
@@ -1275,7 +1109,7 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
     style->text->letterspacing.set = TRUE;
 
     gchar *str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT (text)));
-    sp_repr_set_attr (SP_OBJECT_REPR (child), "style", str);
+    sp_repr_set_attr (SP_OBJECT_REPR (source_obj->parent), "style", str);
     g_free (str);
 }
 
@@ -1320,57 +1154,6 @@ sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)
  */
 
 
-static void TextReLink(SPObject* object, one_flow_src* &after, one_flow_src* from, bool &first_line)
-{
-    one_flow_src*  mine=NULL;
-    if ( SP_IS_TEXT(object) ) {
-        SPText* text=SP_TEXT(object);
-        mine=&(text->contents);
-        if ( /*SP_OBJECT_STYLE(object)->writing_mode.set &&*/ SP_OBJECT_STYLE(object)->writing_mode.computed == SP_CSS_WRITING_MODE_TB ) {
-            text->contents.vertical_layout=true;
-        } else {
-            text->contents.vertical_layout=false;
-        }
-        text->contents.SetStyle(SP_OBJECT_STYLE(object));
-    } else if ( SP_IS_TSPAN(object) ) {
-        SPTSpan* tspan=SP_TSPAN(object);
-        mine=&(tspan->contents);
-        if ( /*SP_OBJECT_STYLE(object)->writing_mode.set &&*/ SP_OBJECT_STYLE(object)->writing_mode.computed == SP_CSS_WRITING_MODE_TB ) {
-            tspan->contents.vertical_layout=true;
-        } else {
-            tspan->contents.vertical_layout=false;
-        }
-        if ( tspan->role == SP_TSPAN_ROLE_UNSPECIFIED ) {
-            tspan->contents.type=txt_span;
-            first_line=false;
-        } else {
-            tspan->contents.type=(first_line)?txt_firstline:txt_tline;
-            first_line=false;
-        }
-        tspan->contents.SetStyle(SP_OBJECT_STYLE(object));
-    } else if ( SP_IS_TEXTPATH(object) ) {
-        SPTextPath* textpath=SP_TEXTPATH(object);
-        mine=&(textpath->contents);
-        textpath->contents.SetStyle(SP_OBJECT_STYLE(object));
-    } else if ( SP_IS_STRING(object) ) {
-        mine=&(SP_STRING(object)->contents);
-    } else {
-        return;
-    }
-    if ( SP_IS_TEXT(object) || SP_IS_TSPAN(object) || SP_IS_TEXTPATH(object) ) {
-        (dynamic_cast<div_flow_src*>(mine))->UpdateLength(SP_OBJECT_STYLE(object)->font_size.computed,1.0);
-    }
-
-    mine->Link(after,from);
-    after=mine;
-
-    if ( SP_IS_TEXT(object) || SP_IS_TSPAN(object) || SP_IS_TEXTPATH(object) ) {
-        for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-            TextReLink(child,after,mine,first_line);
-        }
-    }
-}
-
 void SPText::ClearFlow(NRArenaGroup *in_arena)
 {
     nr_arena_item_request_render (NR_ARENA_ITEM (in_arena));
@@ -1385,74 +1168,9 @@ void SPText::ClearFlow(NRArenaGroup *in_arena)
 }
 
 void SPText::BuildFlow(NRArenaGroup* in_arena, NRRect *paintbox)
-{
-    if ( f_res ) f_res->Show(in_arena, paintbox);
+{  //RH: probably doesn't need to be its own function any more
+    layout.show(in_arena, paintbox);
 }
-
-void SPText::UpdateFlowSource(void)
-{
-    SPItem*   item=SP_ITEM((SPText*)this);
-    SPObject* object=SP_OBJECT(item);
-
-    // because the text_styles are held by f_src, we need to delete this before, to avoid dangling pointers
-    if ( f_res ) {
-        for (SPItemView* v = item->display; v != NULL; v = v->next) {
-            ClearFlow(NR_ARENA_GROUP(v->arenaitem));
-        }
-        delete f_res;
-        f_res=NULL;
-    }
-
-    if ( f_src ) delete f_src;
-    f_src=new flow_src;
-
-    one_flow_src *last = NULL;
-    bool first_line = true;
-    TextReLink(object, last, NULL, first_line);
-		{
-			one_flow_src *cur=&contents;
-			one_flow_src *last_line=NULL;
-			while ( cur ) {
-				if ( cur->Type() == txt_tline || cur->Type() == txt_firstline) {
-					last_line=cur;
-					SPTSpan *cspan = SP_TSPAN(cur->me);
-					cspan->last_tspan=false;
-				}
-				cur=cur->next;
-			}
-			if ( last_line ) {
-				SPTSpan *cspan = SP_TSPAN(last_line->me);
-				cspan->last_tspan=true;
-			}
-		}
-
-    contents.DoPositions(true);
-
-    contents.DoFill(f_src);
-
-    f_src->Prepare();
-}
-
-void SPText::ComputeFlowRes(void)
-{
-    //SPItem*   item=SP_ITEM((SPText*)this);
-    //SPObject* object=SP_OBJECT(item);
-
-    if ( f_src->nbElem <= 0 ) return;
-
-    flow_maker* f_mak=new flow_maker(f_src,NULL);
-    f_mak->justify=false;
-    f_mak->par_indent=0;
-    f_res=f_mak->TextWork();
-    delete f_mak;
-
-    if ( f_res ) {
-        f_res->ComputeIntervals();
-        f_res->ComputeLetterOffsets();
-    }
-    //f_res->AfficheOutput();
-}
-
 
 /*
   Local Variables:

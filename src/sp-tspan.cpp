@@ -203,19 +203,6 @@ sp_tspan_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
     sp_object_read_attr(object, "rotate");
     sp_object_read_attr(object, "sodipodi:role");
 	
-    bool no_content = true;
-    for (Inkscape::XML::Node* rch = repr->firstChild() ; rch != NULL; rch = rch->next()) {
-        if ( rch->type() == Inkscape::XML::TEXT_NODE ) {
-            no_content = false;
-            break;
-        }
-    }
-
-    if ( no_content ) {
-        Inkscape::XML::Node* rch = sp_repr_new_text("");
-        sp_repr_add_child(repr, rch, NULL);
-    }
-	
     if (((SPObjectClass *) tspan_parent_class)->build)
         ((SPObjectClass *) tspan_parent_class)->build(object, doc, repr);
 }
@@ -320,30 +307,18 @@ sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         repr = sp_repr_new("svg:tspan");
     }
 	
-    bool  became_empty=false;
-    if ( tspan->role != SP_TSPAN_ROLE_UNSPECIFIED ) {
-        if ( tspan->contents.type == txt_tline && tspan->last_tspan == false && tspan->contents.utf8_st >= tspan->contents.utf8_en ) {
-            became_empty=true;
-        }
-    }
-		
     char* nlist=NULL;
-    if ( became_empty == false ) {
-        if ( (nlist=tspan->contents.GetX()) ) {
-            sp_repr_set_attr(repr,"x",nlist);
-            g_free(nlist);
-        } else {
-            if ( tspan->x.set ) sp_repr_set_double(repr, "x", tspan->x.computed); else sp_repr_set_attr(repr, "x", NULL);
-        }
-        if ( (nlist=tspan->contents.GetY()) ) {
-            sp_repr_set_attr(repr,"y",nlist);
-            g_free(nlist);
-        } else {
-            if ( tspan->y.set ) sp_repr_set_double(repr, "y", tspan->y.computed); sp_repr_set_attr(repr, "y", NULL);
-        }
+    if ( (nlist=tspan->contents.GetX()) ) {
+        sp_repr_set_attr(repr,"x",nlist);
+        g_free(nlist);
     } else {
-        sp_repr_set_attr(repr, "x", NULL);
-        sp_repr_set_attr(repr, "y", NULL);
+        if ( tspan->x.set ) sp_repr_set_double(repr, "x", tspan->x.computed); else sp_repr_set_attr(repr, "x", NULL);
+    }
+    if ( (nlist=tspan->contents.GetY()) ) {
+        sp_repr_set_attr(repr,"y",nlist);
+        g_free(nlist);
+    } else {
+        if ( tspan->y.set ) sp_repr_set_double(repr, "y", tspan->y.computed); sp_repr_set_attr(repr, "y", NULL);
     }
     if ( (nlist=tspan->contents.GetDX()) ) {
         sp_repr_set_attr(repr,"dx",nlist);
@@ -363,17 +338,6 @@ sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     } else {
         sp_repr_set_attr(repr, "rotate", NULL);
     }
-    if (flags & SP_OBJECT_WRITE_EXT) {
-        if ( tspan->role != SP_TSPAN_ROLE_UNSPECIFIED ) {
-            if ( became_empty == false ) {
-                sp_repr_set_attr(repr, "sodipodi:role", "line");
-            } else {
-                sp_repr_set_attr(repr, "sodipodi:role", NULL);
-            }
-        } else {
-            sp_repr_set_attr(repr, "sodipodi:role", NULL);
-        }
-    }
 	
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         GSList *l = NULL;
@@ -384,7 +348,7 @@ sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
             } else if ( SP_IS_TEXTPATH(child) ) {
                 //c_repr = child->updateRepr(NULL, flags); // shouldn't happen
             } else if ( SP_IS_STRING(child) ) {
-                c_repr = sp_repr_new_text(SP_STRING_TEXT(child));
+                c_repr = sp_repr_new_text(SP_STRING(child)->string.c_str());
             }
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
@@ -400,7 +364,7 @@ sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
             } else if ( SP_IS_TEXTPATH(child) ) {
                 //c_repr = child->updateRepr(NULL, flags); // shouldn't happen
             } else if ( SP_IS_STRING(child) ) {
-                SP_OBJECT_REPR(child)->setContent((SP_STRING_TEXT(child))?SP_STRING_TEXT(child):"");
+                SP_OBJECT_REPR(child)->setContent(SP_STRING(child)->string.c_str());
             }
         }
     }
@@ -700,7 +664,7 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
             } else if ( SP_IS_TEXTPATH(child) ) {
                 //c_repr = child->updateRepr(NULL, flags); // shouldn't happen
             } else if ( SP_IS_STRING(child) ) {
-                c_repr = sp_repr_new_text(SP_STRING_TEXT(child));
+                c_repr = sp_repr_new_text(SP_STRING(child)->string.c_str());
             }
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
@@ -716,7 +680,7 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
             } else if ( SP_IS_TEXTPATH(child) ) {
                 //c_repr = child->updateRepr(NULL, flags); // shouldn't happen
             } else if ( SP_IS_STRING(child) ) {
-                SP_OBJECT_REPR(child)->setContent((SP_STRING_TEXT(child))?SP_STRING_TEXT(child):"");
+                SP_OBJECT_REPR(child)->setContent(SP_STRING(child)->string.c_str());
             }
         }
     }

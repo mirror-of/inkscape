@@ -7,14 +7,11 @@
  */
 
 #include <glib.h>
+#include <glibmm/ustring.h>
 
 #include <sigc++/sigc++.h>
 
 #include "sp-object.h"
-
-#include "libnrtype/FlowSrc.h"
-#include "libnrtype/FlowSrcText.h"
-
 
 #define SP_TYPE_STRING (sp_string_get_type ())
 #define SP_STRING(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_STRING, SPString))
@@ -24,18 +21,13 @@
 
 
 struct SPString : public SPObject {
-	partial_text     svg_contents;
-	text_flow_src    contents;
+    Glib::ustring  string;
 };
 
 struct SPStringClass {
 	SPObjectClass parent_class;
 };
 
-#define SP_STRING_TEXT(s) (sp_string_get_text(SP_STRING(s)))
-
 GType sp_string_get_type ();
-
-char*          sp_string_get_text(SPString* string);
 
 #endif

@@ -9,6 +9,7 @@
 #include "display/nr-arena-forward.h"
 
 #include "libnrtype/FlowSrc.h"
+#include "libnrtype/Layout-TNG.h"
 
 #define SP_TYPE_FLOWTEXT            (sp_flowtext_get_type ())
 #define SP_FLOWTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWTEXT, SPFlowtext))
@@ -16,30 +17,15 @@
 #define SP_IS_FLOWTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWTEXT))
 #define SP_IS_FLOWTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWTEXT))
 
-class flow_dest;
-class flow_src;
-class flow_res;
-class font_instance;
-class text_style;
-
 struct SPFlowtext : public SPItem {
-	div_flow_src      contents;
+    Inkscape::Text::Layout layout;
 
-	// layout options
+	// layout options  (RH: to be merged into css)
 	bool              justify;
 	double            par_indent;
 	int               algo;
 	double            min_scale,max_scale;
 
-	flow_src*	   f_src;
-	flow_res*         f_res;
-
-	flow_dest*        f_dst;
-	flow_dest*        f_excl;
-
-	void              UpdateFlowSource(void);
-	void              UpdateFlowDest(void);
-	void              ComputeFlowRes(void);
 	void              ClearFlow(NRArenaGroup* in_arena);
 	void              BuildFlow(NRArenaGroup* in_arena, 	NRRect *paintbox);
 };

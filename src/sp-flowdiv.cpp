@@ -14,16 +14,8 @@
 #include "sp-item.h"
 //#include "style.h"
 
-//#include "libnrtype/font-instance.h"
-//#include "libnrtype/FontFactory.h"
-//#include "libnrtype/font-style-to-pos.h"
-
-#include "libnrtype/FlowSrc.h"
-//#include "libnrtype/FlowStyle.h"
-
-#include "sp-flowregion.h"
 #include "sp-flowdiv.h"
-#include "sp-text.h" // for the SPString stuff
+#include "sp-string.h"
 
 static void sp_flowdiv_class_init (SPFlowdivClass *klass);
 static void sp_flowdiv_init (SPFlowdiv *group);
@@ -114,24 +106,17 @@ sp_flowdiv_class_init (SPFlowdivClass *klass)
 static void
 sp_flowdiv_init (SPFlowdiv *group)
 {
-	new (&group->contents) div_flow_src(SP_OBJECT(group),flw_div);
-	new (&group->fin) control_flow_src(SP_OBJECT(group),flw_line_brk);
 }
 
 static void
 sp_flowdiv_release (SPObject *object)
 {
-	SPFlowdiv *group = SP_FLOWDIV (object);
-	group->contents.~div_flow_src();
-	group->fin.~control_flow_src();
-	
 	if (((SPObjectClass *) flowdiv_parent_class)->release)
 		((SPObjectClass *) flowdiv_parent_class)->release (object);
 }
 static void
 sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
-//	SPFlowdiv *group=SP_FLOWDIV (object);
 	SPItemCtx *ictx=(SPItemCtx *) ctx;
 	SPItemCtx cctx=*ictx;
 
@@ -171,11 +156,8 @@ sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 static void
 sp_flowdiv_modified (SPObject *object, guint flags)
 {
-	SPFlowdiv *group;
 	SPObject *child;
 	GSList *l;
-	
-	group = SP_FLOWDIV (object);	
 	
 	if (((SPObjectClass *) (flowdiv_parent_class))->modified)
 		((SPObjectClass *) (flowdiv_parent_class))->modified (object, flags);
@@ -198,51 +180,21 @@ sp_flowdiv_modified (SPObject *object, guint flags)
 		g_object_unref (G_OBJECT (child));
 	}
 }
+
 static void
 sp_flowdiv_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
-	//sp_object_read_attr (object, "x");
-	//sp_object_read_attr (object, "y");
-	sp_object_read_attr (object, "dx");
-	sp_object_read_attr (object, "dy");
-	sp_object_read_attr (object, "rotate");
-	
 	if (((SPObjectClass *) flowdiv_parent_class)->build)
 		((SPObjectClass *) flowdiv_parent_class)->build (object, doc, repr);
 }
+
 static void
 sp_flowdiv_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPFlowdiv *group = SP_FLOWDIV (object);	
-	
-	/* fixme: Vectors */
-	switch (key) {
-/*    case SP_ATTR_X:
-			group->contents.SetX(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_Y:
-			group->contents.SetY(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;*/
-    case SP_ATTR_DX:
-			group->contents.SetDX(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_DY:
-			group->contents.SetDY(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_ROTATE:
-			group->contents.SetRot(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    default:
-			if (((SPObjectClass *) flowdiv_parent_class)->set)
-				(((SPObjectClass *) flowdiv_parent_class)->set) (object, key, value);
-			break;
-	}
+	if (((SPObjectClass *) flowdiv_parent_class)->set)
+		(((SPObjectClass *) flowdiv_parent_class)->set) (object, key, value);
 }
+
 static Inkscape::XML::Node *
 sp_flowdiv_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
@@ -258,7 +210,7 @@ sp_flowdiv_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA(child) ) {
 				c_repr = child->updateRepr(NULL, flags);
 			} else if ( SP_IS_STRING(child) ) {
-				c_repr = sp_repr_new_text(SP_STRING_TEXT (child));
+				c_repr = sp_repr_new_text(SP_STRING(child)->string.c_str());
 			}
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}
@@ -274,7 +226,7 @@ sp_flowdiv_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA(child) ) {
 				child->updateRepr(flags);
 			} else if ( SP_IS_STRING(child) ) {
-				SP_OBJECT_REPR (child)->setContent(SP_STRING_TEXT (child));
+				SP_OBJECT_REPR (child)->setContent(SP_STRING(child)->string.c_str());
 			}
 		}
 	}
@@ -334,15 +286,11 @@ sp_flowtspan_class_init (SPFlowtspanClass *klass)
 static void
 sp_flowtspan_init (SPFlowtspan *group)
 {
-	new (&group->contents) div_flow_src(SP_OBJECT(group),flw_span);
 }
 
 static void
 sp_flowtspan_release (SPObject *object)
 {
-	SPFlowtspan *group = SP_FLOWTSPAN (object);
-	group->contents.~div_flow_src();
-	
 	if (((SPObjectClass *) flowtspan_parent_class)->release)
 		((SPObjectClass *) flowtspan_parent_class)->release (object);
 }
@@ -389,11 +337,8 @@ sp_flowtspan_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 static void
 sp_flowtspan_modified (SPObject *object, guint flags)
 {
-	SPFlowtspan *group;
 	SPObject *child;
 	GSList *l;
-	
-	group = SP_FLOWTSPAN (object);	
 	
 	if (((SPObjectClass *) (flowtspan_parent_class))->modified)
 		((SPObjectClass *) (flowtspan_parent_class))->modified (object, flags);
@@ -419,53 +364,18 @@ sp_flowtspan_modified (SPObject *object, guint flags)
 static void
 sp_flowtspan_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
-	//sp_object_read_attr (object, "x");
-	//sp_object_read_attr (object, "y");
-	sp_object_read_attr (object, "dx");
-	sp_object_read_attr (object, "dy");
-	sp_object_read_attr (object, "rotate");
-	
 	if (((SPObjectClass *) flowtspan_parent_class)->build)
 		((SPObjectClass *) flowtspan_parent_class)->build (object, doc, repr);
 }
 static void
 sp_flowtspan_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPFlowtspan *group = SP_FLOWTSPAN (object);	
-	
-	/* fixme: Vectors */
-	switch (key) {
-/*    case SP_ATTR_X:
-			group->contents.SetX(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_Y:
-			group->contents.SetY(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;*/
-    case SP_ATTR_DX:
-			group->contents.SetDX(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_DY:
-			group->contents.SetDY(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_ROTATE:
-			group->contents.SetRot(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    default:
-			if (((SPObjectClass *) flowtspan_parent_class)->set)
-				(((SPObjectClass *) flowtspan_parent_class)->set) (object, key, value);
-			break;
-	}
+	if (((SPObjectClass *) flowtspan_parent_class)->set)
+		(((SPObjectClass *) flowtspan_parent_class)->set) (object, key, value);
 }
 static Inkscape::XML::Node *
 sp_flowtspan_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
-//	SPFlowtspan *group = SP_FLOWTSPAN (object);
-	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
 		if ( repr == NULL ) repr = sp_repr_new ("svg:flowSpan");
 		GSList *l = NULL;
@@ -476,7 +386,7 @@ sp_flowtspan_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA (child) ) {
 					c_repr = child->updateRepr(NULL, flags);
 			} else if ( SP_IS_STRING(child) ) {
-				c_repr = sp_repr_new_text(SP_STRING_TEXT (child));
+				c_repr = sp_repr_new_text(SP_STRING(child)->string.c_str());
 			}
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}
@@ -492,7 +402,7 @@ sp_flowtspan_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA (child) ) {
 					child->updateRepr(flags);
 			} else if ( SP_IS_STRING(child) ) {
-				SP_OBJECT_REPR (child)->setContent(SP_STRING_TEXT (child));
+				SP_OBJECT_REPR (child)->setContent(SP_STRING(child)->string.c_str());
 			}
 		}
 	}
@@ -553,16 +463,10 @@ sp_flowpara_class_init (SPFlowparaClass *klass)
 static void
 sp_flowpara_init (SPFlowpara *group)
 {
-	new (&group->contents) div_flow_src(SP_OBJECT(group),flw_para);
-	new (&group->fin) control_flow_src(SP_OBJECT(group),flw_line_brk);
 }
 static void
 sp_flowpara_release (SPObject *object)
 {
-	SPFlowpara *group = SP_FLOWPARA (object);
-	group->contents.~div_flow_src();
-	group->fin.~control_flow_src();
-	
 	if (((SPObjectClass *) flowpara_parent_class)->release)
 		((SPObjectClass *) flowpara_parent_class)->release (object);
 }
@@ -570,7 +474,6 @@ sp_flowpara_release (SPObject *object)
 static void
 sp_flowpara_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
-//	SPFlowpara *group=SP_FLOWPARA (object);
 	SPItemCtx *ictx=(SPItemCtx *) ctx;
 	SPItemCtx cctx=*ictx;
 	
@@ -610,11 +513,8 @@ sp_flowpara_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 static void
 sp_flowpara_modified (SPObject *object, guint flags)
 {
-	SPFlowpara *group;
 	SPObject *child;
 	GSList *l;
-	
-	group = SP_FLOWPARA (object);	
 	
 	if (((SPObjectClass *) (flowpara_parent_class))->modified)
 		((SPObjectClass *) (flowpara_parent_class))->modified (object, flags);
@@ -640,47 +540,14 @@ sp_flowpara_modified (SPObject *object, guint flags)
 static void
 sp_flowpara_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
-	//sp_object_read_attr (object, "x");
-	//sp_object_read_attr (object, "y");
-	sp_object_read_attr (object, "dx");
-	sp_object_read_attr (object, "dy");
-	sp_object_read_attr (object, "rotate");
-	
 	if (((SPObjectClass *) flowpara_parent_class)->build)
 		((SPObjectClass *) flowpara_parent_class)->build (object, doc, repr);
 }
 static void
 sp_flowpara_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPFlowpara *group = SP_FLOWPARA (object);	
-	
-	/* fixme: Vectors */
-	switch (key) {
-/*    case SP_ATTR_X:
-			group->contents.SetX(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_Y:
-			group->contents.SetY(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;*/
-    case SP_ATTR_DX:
-			group->contents.SetDX(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_DY:
-			group->contents.SetDY(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    case SP_ATTR_ROTATE:
-			group->contents.SetRot(value);
-			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-			break;
-    default:
-			if (((SPObjectClass *) flowpara_parent_class)->set)
-				(((SPObjectClass *) flowpara_parent_class)->set) (object, key, value);
-			break;
-	}
+	if (((SPObjectClass *) flowpara_parent_class)->set)
+		(((SPObjectClass *) flowpara_parent_class)->set) (object, key, value);
 }
 static Inkscape::XML::Node *
 sp_flowpara_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
@@ -697,7 +564,7 @@ sp_flowpara_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA (child) ) {
 				c_repr = child->updateRepr(NULL, flags);
 			} else if ( SP_IS_STRING(child) ) {
-				c_repr = sp_repr_new_text(SP_STRING_TEXT (child));
+				c_repr = sp_repr_new_text(SP_STRING(child)->string.c_str());
 			}
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}
@@ -713,7 +580,7 @@ sp_flowpara_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			} else if ( SP_IS_FLOWPARA (child) ) {
 				child->updateRepr(flags);
 			} else if ( SP_IS_STRING(child) ) {
-				SP_OBJECT_REPR (child)->setContent(SP_STRING_TEXT (child));
+				SP_OBJECT_REPR (child)->setContent(SP_STRING(child)->string.c_str());
 			}
 		}
 	}
@@ -769,14 +636,10 @@ sp_flowline_class_init (SPFlowlineClass *klass)
 static void
 sp_flowline_init (SPFlowline *group)
 {
-	new (&group->contents) control_flow_src(SP_OBJECT(group),flw_line_brk);
 }
 static void
 sp_flowline_release (SPObject *object)
 {
-	SPFlowline *group = SP_FLOWLINE (object);
-	group->contents.~control_flow_src();
-	
 	if (((SPObjectClass *) flowline_parent_class)->release)
 		((SPObjectClass *) flowline_parent_class)->release (object);
 }
@@ -784,10 +647,6 @@ sp_flowline_release (SPObject *object)
 static void
 sp_flowline_modified (SPObject *object, guint flags)
 {
-	SPFlowline *group;
-	
-	group = SP_FLOWLINE (object);	
-	
 	if (((SPObjectClass *) (flowline_parent_class))->modified)
 		((SPObjectClass *) (flowline_parent_class))->modified (object, flags);
 	
@@ -797,8 +656,6 @@ sp_flowline_modified (SPObject *object, guint flags)
 static Inkscape::XML::Node *
 sp_flowline_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
-	//	SPFlowline *group = SP_FLOWLINE (object);
-	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
 		if ( repr == NULL ) repr = sp_repr_new ("svg:flowLine");
 	} else {
@@ -855,14 +712,10 @@ sp_flowregionbreak_class_init (SPFlowregionbreakClass *klass)
 static void
 sp_flowregionbreak_init (SPFlowregionbreak *group)
 {
-	new (&group->contents) control_flow_src(SP_OBJECT(group),flw_rgn_brk);
 }
 static void
 sp_flowregionbreak_release (SPObject *object)
 {
-	SPFlowregionbreak *group = SP_FLOWREGIONBREAK (object);
-	group->contents.~control_flow_src();
-	
 	if (((SPObjectClass *) flowregionbreak_parent_class)->release)
 		((SPObjectClass *) flowregionbreak_parent_class)->release (object);
 }
@@ -870,10 +723,6 @@ sp_flowregionbreak_release (SPObject *object)
 static void
 sp_flowregionbreak_modified (SPObject *object, guint flags)
 {
-	SPFlowregionbreak *group;
-	
-	group = SP_FLOWREGIONBREAK (object);	
-	
 	if (((SPObjectClass *) (flowregionbreak_parent_class))->modified)
 		((SPObjectClass *) (flowregionbreak_parent_class))->modified (object, flags);
 	
@@ -883,8 +732,6 @@ sp_flowregionbreak_modified (SPObject *object, guint flags)
 static Inkscape::XML::Node *
 sp_flowregionbreak_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
-	//	SPFlowregionbreak *group = SP_FLOWREGIONBREAK (object);
-	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
 		if ( repr == NULL ) repr = sp_repr_new ("svg:flowLine");
 	} else {

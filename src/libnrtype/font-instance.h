@@ -79,6 +79,8 @@ public:
     double               Advance(int glyph_id, bool vertical);
 		                        // nominal advance of the font.
     bool                 FontMetrics(double &ascent, double &descent, double &leading);
+    bool                 FontSlope(double &run, double &rise);
+                                // for generating slanted cursors for oblique fonts
     NR::Rect             BBox(int glyph_id);
 
 		// creates a rasterfont for the given style

@@ -36,8 +36,17 @@
 #include "xml/repr.h"
 #include "object-edit.h"
 #include "prefs-utils.h"
-#include "sp-flowtext.h"
+
+// evil evil evil. There is a conflict in the namespace between two classes named Path
+//#include "sp-flowtext.h"
 //#include "sp-flowregion.h" //FIXME: conflict of two different Path classes!
+#define SP_TYPE_FLOWREGION            (sp_flowregion_get_type ())
+#define SP_IS_FLOWREGION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWREGION))
+GType sp_flowregion_get_type (void);
+#define SP_TYPE_FLOWTEXT            (sp_flowtext_get_type ())
+#define SP_IS_FLOWTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWTEXT))
+GType sp_flowtext_get_type (void);
+// end evil workaround
 
 #include "helper/stlport.h"
 
@@ -126,13 +135,13 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
     // real paths are outside the flowtext and thus editable as usual.
     if (SP_IS_FLOWTEXT(item)) {
         for (SPObject *child = sp_object_first_child(SP_OBJECT(item)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-            //if SP_IS_FLOWREGION(child) { // stupid! we can't include sp-flowregion.h because it has a Path class too; restore this line when this is renamed
-            SPObject *grandchild = sp_object_first_child(SP_OBJECT(child));
-            if (grandchild && SP_IS_PATH(grandchild)) {
-                item = SP_ITEM(grandchild);
-                break;
+            if SP_IS_FLOWREGION(child) {
+                SPObject *grandchild = sp_object_first_child(SP_OBJECT(child));
+                if (grandchild && SP_IS_PATH(grandchild)) {
+                    item = SP_ITEM(grandchild);
+                    break;
+                }
             }
-            //}
         }
     }
 

@@ -456,6 +456,26 @@ bool font_instance::FontMetrics(double &ascent,double &descent,double &leading)
 	return true;
 }
 
+bool font_instance::FontSlope(double &run, double &rise)
+{
+    run = 0.0;
+    rise = 1.0;
+
+    theFace=pango_ft2_font_get_face(pFont);
+
+	if ( theFace->units_per_EM == 0 ) return false; // bitmap font
+	
+	if ( pFont == NULL ) return false;
+	
+	if ( theFace == NULL ) return false;
+
+    TT_HoriHeader *hhea = (TT_HoriHeader*)FT_Get_Sfnt_Table(theFace, ft_sfnt_hhea);
+    if (hhea == NULL) return false;
+    run = hhea->caret_Slope_Run;
+    rise = hhea->caret_Slope_Rise;
+	return true;
+}
+
 NR::Rect font_instance::BBox(int glyph_id)
 {
 	int no=-1;

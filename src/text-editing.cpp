@@ -64,62 +64,14 @@
 
 #include "text-editing.h"
 
-div_flow_src *
-te_get_contents (SPItem *item)
+Inkscape::Text::Layout const * te_get_layout (SPItem *item)
 {
     if (SP_IS_TEXT(item)) {
-        return &(SP_TEXT(item)->contents);
+        return &(SP_TEXT(item)->layout);
     } else if (SP_IS_FLOWTEXT (item)) {
-        return &(SP_FLOWTEXT(item)->contents);
+        return &(SP_FLOWTEXT(item)->layout);
     }
     return NULL;
-}
-
-flow_res*
-te_get_f_res (SPItem *item)
-{
-    if (SP_IS_TEXT(item)) {
-        return SP_TEXT(item)->f_res;
-    } else if (SP_IS_FLOWTEXT (item)) {
-        return SP_FLOWTEXT(item)->f_res;
-    }
-    return NULL;
-}
-
-flow_src*
-te_get_f_src (SPItem *item)
-{
-    if (SP_IS_TEXT(item)) {
-        return SP_TEXT(item)->f_src;
-    } else if (SP_IS_FLOWTEXT (item)) {
-        return SP_FLOWTEXT(item)->f_src;
-    }
-    return NULL;
-}
-
-NR::Point
-te_getOrigin (SPItem *item)
-{
-    if (SP_IS_TEXT(item)) {
-        SPText *text = SP_TEXT(item);
-        return  NR::Point(text->x.computed, text->y.computed);
-    } else if (SP_IS_FLOWTEXT (item)) {
-       //FIXME!!!!!!!!
-        return NR::Point(0,0);
-    }
-    return NR::Point(0,0);
-}
-
-void
-te_UpdateFlowSource (SPItem *item)
-{
-    if (SP_IS_TEXT(item)) {
-        SPText *text = SP_TEXT(item);
-        if ( text->f_src == NULL ) text->UpdateFlowSource();
-    } else if (SP_IS_FLOWTEXT (item)) {
-        SPFlowtext *text = SP_FLOWTEXT(item);
-        if ( text->f_src == NULL ) text->UpdateFlowSource();
-    }
 }
 
 bool
@@ -134,161 +86,63 @@ sp_te_is_empty (SPItem *item)
 /* This gives us SUM (strlen (STRING)) + (LINES - 1) */
 gint
 sp_te_get_length (SPItem *item)
-{
-    te_UpdateFlowSource (item);
-    one_flow_src *cur = te_get_contents (item);
-
-    gint length = 0;
-    while (cur) {
-			length += cur->ucs4_en-cur->ucs4_st;
-			cur = cur->next;
-    }
-    return length;
+{  //RH: is it OK to rely on the output having been built?
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    if (layout) return layout->iteratorToCharIndex(layout->end());
+    return 0;
 }
 
 gint
 sp_te_up (SPItem *item, gint i_position)
 {
-    flow_res* f_res = te_get_f_res (item);
-    div_flow_src *contents = te_get_contents (item);
-
-    int position=contents->Do_UCS4_2_UTF8(i_position);
-
-   if ( f_res == NULL ) return i_position;
-    int    c_p=-1,s_p=-1,l_p=-1;
-    bool   l_start=false,l_end=false;
-    f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-
-    if ( c_p >= 0 ) {
-        int l_o = l_p - f_res->chunks[c_p].l_st;
-        if ( l_end ) {
-            l_end=false;
-            l_o++;
-        }
-        c_p--;
-        if ( c_p < 0 ) {
-            c_p=0;
-            if ( f_res->chunks[c_p].l_st < f_res->chunks[c_p].l_en ) l_p = f_res->chunks[c_p].l_st; else l_p=0;
-        } else {
-            if ( f_res->chunks[c_p].l_st < f_res->chunks[c_p].l_en ) {
-                l_p = f_res->chunks[c_p].l_st+l_o;
-                if ( l_p >= f_res->chunks[c_p].l_en ) l_p = f_res->chunks[c_p].l_en-1;
-            } else 
-                l_p = f_res->chunks[c_p].l_st;
-        }
-        int   res=position;
-        f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return contents->Do_UTF8_2_UCS4(res);
-    }
-    return i_position;
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    //RH: we must store the iterator itself, not the position because as it is this
+    //    code loses the x-coordinate for repeated up/down movement
+    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
+    it.cursorUp();
+    return layout->iteratorToCharIndex(it);
 }
 
 gint
 sp_te_down (SPItem *item, gint i_position)
 {
-    flow_res* f_res = te_get_f_res (item);
-    div_flow_src *contents = te_get_contents (item);
-
-    int position=contents->Do_UCS4_2_UTF8(i_position);
-    if ( f_res == NULL ) return i_position;
-    int    c_p=-1, s_p=-1, l_p=-1;
-    bool   l_start=false, l_end=false;
-    f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-    if ( c_p >= 0 ) {
-        int c_o=l_p - f_res->chunks[c_p].l_st;
-        if ( l_end ) {l_end=false;c_o++;}
-        c_p++;
-        if ( c_p >= f_res->nbChunk ) {
-            c_p=f_res->nbChunk-1;
-            if ( f_res->chunks[c_p].l_st < f_res->chunks[c_p].l_en ) l_p = f_res->chunks[c_p].l_en; else l_p = f_res->nbLetter;
-        } else {
-            if ( f_res->chunks[c_p].l_st < f_res->chunks[c_p].l_en ) {
-                l_p = f_res->chunks[c_p].l_st+c_o;
-                if ( l_p >= f_res->chunks[c_p].l_en ) l_p = f_res->chunks[c_p].l_en-1;
-            } else l_p = f_res->nbLetter;
-        }
-        int   res=position;
-        f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return contents->Do_UTF8_2_UCS4(res);
-    }
-    return i_position;
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    //RH: we must store the iterator itself, not the position because as it is this
+    //    code loses the x-coordinate for repeated up/down movement
+    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
+    it.cursorDown();
+    return layout->iteratorToCharIndex(it);
 }
 
 gint
 sp_te_start_of_line (SPItem *item, gint i_position)
 {
-    flow_res* f_res = te_get_f_res (item);
-    div_flow_src *contents = te_get_contents (item);
-
-    int position=contents->Do_UCS4_2_UTF8(i_position);
-    if ( f_res == NULL ) return i_position;
-    int    c_p=-1,s_p=-1,l_p=-1;
-    bool   l_start=false,l_end=false;
-    f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-    if ( c_p >= 0 ) {
-        if ( l_p >= 0 ) {
-            l_p=f_res->chunks[c_p].l_st;
-        }
-        l_start=true;
-        l_end=false;
-        int   res=position;
-        f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return contents->Do_UTF8_2_UCS4(res);
-    }
-    return i_position;
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
+    it.thisStartOfLine();
+    return layout->iteratorToCharIndex(it);
 }
 
 gint
 sp_te_end_of_line (SPItem *item, gint i_position)
 {
-    flow_res* f_res = te_get_f_res (item);
-    div_flow_src *contents = te_get_contents (item);
-
-    int position=contents->Do_UCS4_2_UTF8(i_position);
-   if ( f_res == NULL ) return i_position;
-    int    c_p=-1,s_p=-1,l_p=-1;
-    bool   l_start=false,l_end=false;
-    f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-    if ( c_p >= 0 ) {
-        if ( l_p >= 0 ) {
-            l_p = f_res->chunks[c_p].l_en-1;
-        }
-        l_start=true; // otherwise ends up at beginning of next line
-        l_end=false;
-				if ( c_p >= f_res->nbChunk-1 ) {l_start=false;l_end=true;}
-        int   res=position;
-        f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return contents->Do_UTF8_2_UCS4(res);
-    }
-    return i_position;
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
+    if (it.nextStartOfLine())
+        it.prevCursorPosition();
+    return layout->iteratorToCharIndex(it);
 }
 
 guint
 sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p)
 {
-    flow_res* f_res = te_get_f_res (item);
-    div_flow_src *contents = te_get_contents (item);
-
-    if ( f_res == NULL ) return 0;
-
     NR::Matrix  im=sp_item_i2d_affine (item);
     im = im.inverse();
 
     NR::Point p = i_p * im;
-    int    c_p=-1, s_p=-1, l_p=-1;
-    bool   l_start=false, l_end=false;
-    //printf("letter at position %f %f : ",p[0],p[1]);
-    f_res->PositionToLetter(p[0],p[1],c_p,s_p,l_p,l_start,l_end);
-    if ( l_p >= 0 || c_p >= 0 ) {
-        //printf(" c=%i s=%i l=%i st=%i en=%i ",c_p,s_p,l_p,(l_start)?1:0,(l_end)?1:0);
-        int position=0;
-        f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,position);
-        //printf(" -> offset %i \n",position);
-        return contents->Do_UTF8_2_UCS4(position);
-    } else {
-        //printf("none\n");
-    }
-    return 0;
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    Inkscape::Text::Layout::iterator it = layout->getNearestCursorPositionTo(p);
+    return layout->iteratorToCharIndex(it);
 }
 
 /*
@@ -306,6 +160,21 @@ char * dump_hexy(const gchar * utf8)
 }
 */
 
+/** finds the first SPString after the given position, including children, excluding parents */
+static SPString* sp_te_seek_next_string_recursive(SPObject *start_obj)
+{
+    while (start_obj) {
+        if (start_obj->hasChildren()) {
+            SPString *found_string = sp_te_seek_next_string_recursive(start_obj->firstChild());
+            if (found_string) return found_string;
+        }
+        if (SP_IS_STRING(start_obj)) return SP_STRING(start_obj);
+        start_obj = SP_OBJECT_NEXT(start_obj);
+        if (SP_IS_TSPAN(start_obj) && SP_TSPAN(start_obj)->role != SP_TSPAN_ROLE_UNSPECIFIED)
+            break;   // don't cross line breaks
+    }
+    return NULL;
+}
 
 /**
  * \pre \a utf8[] is valid UTF-8 text.
@@ -319,121 +188,128 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
         return i_ucs4_pos;
     }
 
-    flow_res* f_res = te_get_f_res (item);
-    flow_src* f_src = te_get_f_src (item);
-    div_flow_src *contents = te_get_contents (item);
-
- 	int utf8_pos=contents->Do_UCS4_2_UTF8(i_ucs4_pos);
-    int  utf8_len=strlen(utf8);
-    int  ucs4_len=0;
-    for (gchar const *p = utf8; *p; p = g_utf8_next_char(p)) {
-        ucs4_len++;
-    }
-    //g_print("insert '%s'(utf8:%d ucs4:%d) at %i\n",dump_hexy(utf8),utf8_len,ucs4_len,utf8_pos);
-    if ( f_src == NULL ) { // no source text?
-        return i_ucs4_pos;
-    }
-    if ( f_res == NULL ) {
-        // no output but some input means: totally empty text
-        int  ucs4_pos=0;
-        one_flow_src* into=contents->Locate(0,ucs4_pos,true,false,true);
-        if ( into && into->Type() == flw_text ) {
-            // found our guy
-            bool done=false;
-            into->Insert(0,ucs4_pos,utf8,utf8_len,ucs4_len,done);
-            SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
-            SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            return ucs4_len;
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_ucs4_pos);
+    SPObject *source_obj;
+    Glib::ustring::iterator iter_text;
+    // we want to insert after the previous char, not before the current char.
+    // it makes a difference at span boundaries
+    bool cursor_at_start = !it.prevCharacter();
+    layout->getSourceOfCharacter(it, (void**)&source_obj, &iter_text);
+    if (SP_IS_STRING(source_obj)) {
+        // the simple case
+        Glib::ustring *string = &SP_STRING(source_obj)->string;
+        if (!cursor_at_start) iter_text++;
+        string->replace(iter_text, iter_text, utf8);
+    } else {
+        // the not-so-simple case where we're at a line break or other control char; add to the last child/sibling SPString
+        if (cursor_at_start) {
+            source_obj = item;
+            if (source_obj->hasChildren())
+                source_obj = source_obj->firstChild();
         }
-        return i_ucs4_pos;
+        SPString *string_item = sp_te_seek_next_string_recursive(source_obj);
+        if (string_item == NULL) {
+            // need to add one in this (pathological) case
+            Inkscape::XML::Node *rstring = sp_repr_new_text("");
+            SP_OBJECT_REPR(source_obj)->addChild(rstring, NULL);        // this magically adds to the spobject tree too
+            sp_repr_unref(rstring);
+            g_assert(SP_IS_STRING(source_obj->firstChild()));
+            string_item = SP_STRING(source_obj->firstChild());
+        }
+        SP_STRING(string_item)->string.insert(0, utf8);
     }
 
-    // round to the letter granularity
-    int    c_st=-1,s_st=-1,l_st=-1;
-    bool   l_start_st=false,l_end_st=false;
-    f_res->OffsetToLetter(utf8_pos,c_st,s_st,l_st,l_start_st,l_end_st);
-    if ( l_st < 0 ) return i_ucs4_pos;
-    f_res->LetterToOffset(c_st,s_st,l_st,l_start_st,l_end_st,utf8_pos);
-    //utf8_pos=f_res->letters[l_st].utf8_offset;
-    int  ucs4_pos=f_res->letters[l_st].ucs4_offset;
-
-    one_flow_src* cur = contents;
-    bool  done=false;
-    while ( cur && done == false ) {
-        cur->Insert(utf8_pos,ucs4_pos,utf8,utf8_len,ucs4_len,done);
-        cur=cur->next;
-    }
     SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
     SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return i_ucs4_pos+ucs4_len;
+    return i_ucs4_pos + g_utf8_strlen(utf8, -1);
 }
 
 /* Returns start position */
 gint
 sp_te_delete (SPItem *item, gint i_start, gint i_end)
 {
-    flow_res* f_res = te_get_f_res (item);
-    flow_src* f_src = te_get_f_src (item);
-    div_flow_src *contents = te_get_contents (item);
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    Inkscape::Text::Layout::iterator it_start = layout->charIndexToIterator(i_start);
+    Inkscape::Text::Layout::iterator it_end = layout->charIndexToIterator(i_end);
+    SPObject *start_item, *end_item;
+    Glib::ustring::iterator start_text_iter, end_text_iter;
+    layout->getSourceOfCharacter(it_start, (void**)&start_item, &start_text_iter);
+    layout->getSourceOfCharacter(it_end, (void**)&end_item, &end_text_iter);
 
-    int start = contents->Do_UCS4_2_UTF8(i_start);
-    int end = contents->Do_UCS4_2_UTF8(i_end);
- 	//printf("delete %i -> %i\n",start,end);
-
-    if ( f_src == NULL || f_res == NULL ) 
-        return i_start;
-
-    // round to the letter granularity
-    int    c_st=-1, s_st=-1, l_st=-1;
-    int    c_en=-1, s_en=-1, l_en=-1;
-    bool   l_start_st=false, l_end_st=false;
-    bool   l_start_en=false, l_end_en=false;
-    f_res->OffsetToLetter(start, c_st, s_st, l_st, l_start_st, l_end_st);
-    f_res->OffsetToLetter(end, c_en, s_en, l_en, l_start_en, l_end_en);
-    if ( l_start_st == false && l_end_st == false ) l_start_st=true;
-    if ( l_start_en == false && l_end_en == false ) l_end_en=true;
-    if ( l_st < 0 || l_en < 0 || l_st > l_en ) return i_start;
-    if ( l_st == l_en && ( l_start_st == l_start_en || l_end_st == l_end_en ) ) return i_start;
-    f_res->LetterToOffset(c_st, s_st, l_st, l_start_st, l_end_st, start);
-    f_res->LetterToOffset(c_en, s_en, l_en, l_start_en, l_end_en, end);
-
-    // Find the last ofc
-    one_flow_src* last=NULL;
-    for (one_flow_src* cur = contents; cur; cur=cur->next) {
-        last=cur;
-    }
-
-    // list of line tspans that are to be merged
-    GSList *lines_to_merge = NULL;
-
-    for (one_flow_src* cur = last; cur; cur=cur->prev) {
-        if (start <= cur->utf8_st && end >= cur->utf8_en && 
-            SP_IS_TSPAN(cur->me) && SP_TSPAN(cur->me)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
-            // If the delete range fully covers this ofc and it comes from a line tspan, remember to merge it
-            lines_to_merge = g_slist_prepend (lines_to_merge, cur->me);
+    if (start_item == end_item) {
+        // the quick case where we're deleting stuff all from the same string
+        if (SP_IS_STRING(start_item)) {     // always true (if it_start != it_end anyway)
+            SP_STRING(start_item)->string.erase(start_text_iter, end_text_iter);
         }
-        // only those ofc's that overlap the delete range will be affected:
-        cur->Delete(start, end);
+    } else {
+        SPObject *sub_item = start_item;
+        // walk the tree from start_item to end_item, deleting as we go
+        while (sub_item != item) {
+            if (sub_item == end_item) {
+                if (SP_IS_STRING(sub_item)) {
+                    Glib::ustring *string = &SP_STRING(sub_item)->string;
+                    string->erase(string->begin(), end_text_iter);
+                    if (SP_OBJECT_PREV(sub_item) && SP_IS_STRING(SP_OBJECT_PREV(sub_item))) {
+                        // consecutive SPString amalgamation below only works on leaving the second string.
+                        // the last string doesn't leave in the same way, so amalgamate here
+                        SP_STRING(SP_OBJECT_PREV(sub_item))->string.append(*string);
+                        SP_OBJECT_REPR(SP_OBJECT_PARENT(sub_item))->removeChild(SP_OBJECT_REPR(sub_item));
+                    }
+                }
+                break;
+            }
+            if (SP_IS_STRING(sub_item)) {
+                Glib::ustring *string = &SP_STRING(sub_item)->string;
+                if (sub_item == start_item)
+                    string->erase(start_text_iter, string->end());
+                else
+                    string->erase();   // the SPObject itself will be deleted below
+            }
+            if (SP_IS_TSPAN(sub_item) && SP_TSPAN(sub_item)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
+                Inkscape::XML::Node *tspan_repr = SP_OBJECT_REPR(sub_item);
+                tspan_repr->setAttribute("sodipodi:role", NULL);
+                tspan_repr->setAttribute("x", NULL);
+                tspan_repr->setAttribute("y", NULL);
+                // the actual merging of two tspans will be done below (if they're the same style) (TODO)
+            }
+            // walk to the next item in the tree
+            if (sub_item->hasChildren())
+                sub_item = sub_item->firstChild();
+            else {
+                SPObject *next_item;
+                do {
+                    bool is_sibling = true;
+                    next_item = SP_OBJECT_NEXT(sub_item);
+                    if (next_item == NULL) {
+                        next_item = SP_OBJECT_PARENT(sub_item);
+                        is_sibling = false;
+                    }
+
+                    // delete empty objects we're leaving
+                    if (SP_IS_STRING(sub_item)) {
+                        if (SP_STRING(sub_item)->string.empty())
+                            SP_OBJECT_REPR(SP_OBJECT_PARENT(sub_item))->removeChild(SP_OBJECT_REPR(sub_item));
+                        else if (SP_OBJECT_PREV(sub_item) && SP_IS_STRING(SP_OBJECT_PREV(sub_item))) {
+                            // also amalgamate consecutive SPStrings into one
+                            SP_STRING(SP_OBJECT_PREV(sub_item))->string.append(SP_STRING(sub_item)->string);
+                            SP_OBJECT_REPR(SP_OBJECT_PARENT(sub_item))->removeChild(SP_OBJECT_REPR(sub_item));
+                        }
+                    } else if (!sub_item->hasChildren()) {
+                        if (!SP_IS_TSPAN(sub_item) || SP_TSPAN(sub_item)->role == SP_TSPAN_ROLE_UNSPECIFIED)
+                            SP_OBJECT_REPR(SP_OBJECT_PARENT(sub_item))->removeChild(SP_OBJECT_REPR(sub_item));
+                    }
+                    // TODO: merging of consecutive spans with identical styles into one
+
+                    sub_item = next_item;
+                    if (is_sibling) break;
+                    // no more siblings, go up a parent
+                } while (sub_item != item && sub_item != end_item);
+            }
+        }
     }
 
     SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
-
-    for (GSList *i = lines_to_merge; i; i = i->next) {
-        SPObject *prev = SP_OBJECT_PREV (i->data);
-        if (prev && SP_IS_TSPAN(prev) && SP_TSPAN(prev)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
-            // If the line to be merged has a prev sibling and it's also a line,
-            for (SPObject *child = sp_object_first_child(SP_OBJECT(i->data)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-                // copy all children to it
-                Inkscape::XML::Node *copy = SP_OBJECT_REPR (child)->duplicate();
-                SP_OBJECT_REPR(prev)->appendChild(copy);
-                sp_repr_unref (copy);
-            }
-            // delete line to be merged
-            SP_OBJECT(i->data)->deleteObject();
-        }
-    }
-    g_slist_free (lines_to_merge);
-
     SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     return i_start;
 }
@@ -441,27 +317,22 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
 void
 sp_te_get_cursor_coords (SPItem *item, gint i_position, NR::Point &p0, NR::Point &p1)
 {
-    flow_res* f_res = te_get_f_res (item);
-    div_flow_src *contents = te_get_contents (item);
-
-    int position = contents->Do_UCS4_2_UTF8(i_position);
-    p0 = p1 = te_getOrigin (item);
-    if ( f_res == NULL ) return;
-    int c_p = -1, s_p = -1, l_p = -1;
-    bool l_start = false, l_end = false;
-    //printf("letter at offset %i : ",position);
-    f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-    //printf(" c=%i s=%i l=%i st=%i en=%i ",c_p,s_p,l_p,(l_start)?1:0,(l_end)?1:0);
-    if ( l_p >= 0 ) {
-        double npx,npy,npa,nps;
-        f_res->LetterToPosition(c_p,s_p,l_p,l_start,l_end,npx,npy,nps,npa);
-        p0=NR::Point(npx,npy);
-        p1=NR::Point(-sin(npa),cos(npa));
-        p1=p0 - nps*p1;
-        //printf(" -> coord %f %f \n",npx,npy);
-    } else {
-        //printf("none\n");
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    if (!layout->outputExists()) {
+        if (SP_IS_TEXT(item)) {
+            p0[0] = SP_TEXT(item)->x.computed;
+            p0[1] = SP_TEXT(item)->y.computed;
+        } else if (SP_IS_FLOWTEXT(item)) {
+            p0[0] = 0.0;  // fixme
+            p0[1] = 0.0;
+        }
+        p1 = p0;
+        p1[1] -= item->style->font_size.computed;
+        return;
     }
+    double height, rotation;
+    layout->queryCursorShape(layout->charIndexToIterator(i_position), &p0, &height, &rotation);
+    p1 = NR::Point(p0[0] + height * sin(rotation), p0[1] - height * cos(rotation));
 }
 
 

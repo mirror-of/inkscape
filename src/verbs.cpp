@@ -69,7 +69,8 @@
 #include "prefs-utils.h"
 #include "splivarot.h"
 #include "sp-namedview.h"
-#include "sp-flowtext.h"
+//#include "sp-flowtext.h"   conflict between the two classes named Path. We only need one function, though.
+void convert_to_text(void);
 #include "layer-fns.h"
 #include "node-context.h"
 #include "verbs.h"
