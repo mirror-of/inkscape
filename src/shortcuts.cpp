@@ -137,6 +137,10 @@ sp_shortcut_init ()
 
 	sp_shortcut_set (GDK_1, SP_VERB_ZOOM_1_1, true);
 
+	sp_shortcut_set (GDK_grave, SP_VERB_ZOOM_PREV, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_grave, SP_VERB_ZOOM_NEXT, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_asciitilde, SP_VERB_ZOOM_NEXT, false);
+
 	// zooming via kp conflicts with shift-kp-arrows
 	//	sp_shortcut_set (GDK_KP_1, SP_VERB_ZOOM_1_1, false);
 	sp_shortcut_set (GDK_2, SP_VERB_ZOOM_1_2, true);
@@ -281,7 +285,6 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_M, SP_VERB_DIALOG_TRANSFORM, false);
 
 	sp_shortcut_set (GDK_F12, SP_VERB_DIALOG_TOGGLE, true);
-	sp_shortcut_set (GDK_grave, SP_VERB_DIALOG_TOGGLE, false);
 }
 
 void
