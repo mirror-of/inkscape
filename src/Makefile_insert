@@ -164,8 +164,10 @@ libinkpre_a_SOURCES =	\
 # libinkpost.a: Any object file that needs to be near the end of the link line.
 # gradient-chemistry.o is called by some things in display/.
 libinkpost_a_SOURCES =	\
+	decimal-round.h	\
 	fixes.cpp \
-	gradient-chemistry.cpp gradient-chemistry.h
+	gradient-chemistry.cpp gradient-chemistry.h	\
+	round.h
 
 inkscape_private_libs =	\
 	libinkpre.a	\
