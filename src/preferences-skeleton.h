@@ -157,7 +157,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"clonecompensation\" value=\"0\"/>\n"
 "    <group id=\"cloneorphans\" value=\"0\"/>\n"
 "    <group id=\"stickyzoom\" value=\"0\"/>\n"
-"    <group id=\"selcue\" value=\"1\"/>\n"
+"    <group id=\"selcue\" value=\"2\"/>\n"
 "    <group id=\"importbitmapsasimages\" value=\"1\"/>\n"
 "    <group id=\"transform\" stroke=\"1\" rectcorners=\"0\" pattern=\"1\" gradient=\"1\" />\n"
 "    <group id=\"createbitmap\" minsize=\"250\"/>\n"
