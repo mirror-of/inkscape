@@ -1155,12 +1155,15 @@ sp_node_selected_join_segment (void)
 
 		sp = a->subpath;
 
-                /*similar to sp_nodepath_subpath_close (sp), without the node destruction*/
-	        sp->closed = TRUE;
+		/*similar to sp_nodepath_subpath_close (sp), without the node destruction*/
+		sp->closed = TRUE;
 
-	        sp->first->p.other = sp->last;
-	        sp->last->n.other = sp->first;
-	        sp->last->n.pos = sp->first->n.pos;
+		sp->first->p.other = sp->last;
+		sp->last->n.other = sp->first;
+		sp->last->n.pos = sp->first->p.pos;
+
+		sp->first->code = sp->last->code;
+		sp->first = sp->last;
 
 		sp_nodepath_ensure_ctrls (sp->nodepath);
 
@@ -1173,11 +1176,10 @@ sp_node_selected_join_segment (void)
 	sa = a->subpath;
 	sb = b->subpath;
 
-
 	if (a == sa->first) {
 		SPNodeSubPath *t;
 		p = sa->first->pos;
-		code = (ArtPathcode)sa->first->n.other->code;
+		code = (ArtPathcode) sa->first->n.other->code;
 		t = sp_nodepath_subpath_new (sa->nodepath);
 		n = sa->last;
 		sp_nodepath_node_new (t, NULL, SP_PATHNODE_CUSP, ART_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
