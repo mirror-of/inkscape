@@ -776,7 +776,8 @@ clonetiler_checkbox (const char *label, GtkTooltips *tt, const char *tip, const 
     GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
 
     GtkWidget *b = gtk_check_button_new_with_label (label);
-
+    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, tip, NULL);
+ 
     int value = prefs_get_int_attribute ("dialogs.clonetiler", attr, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(b), value);
 
