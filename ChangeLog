@@ -1,9 +1,118 @@
+2005-03-18  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: make.dep, make.files, make.ofiles, libnrtype/FlowBoxes.cpp,
+	  libnrtype/FlowBoxes.h, libnrtype/FlowDefs.h,
+	  libnrtype/FlowDest.cpp, libnrtype/FlowDest.h,
+	  libnrtype/FlowEater.cpp, libnrtype/FlowEater.h,
+	  libnrtype/FlowRes.cpp, libnrtype/FlowRes.h,
+	  libnrtype/FlowResOut.cpp, libnrtype/FlowSols.cpp,
+	  libnrtype/FlowSols.h, libnrtype/FlowSrc.cpp, libnrtype/FlowSrc.h,
+	  libnrtype/FlowSrcText.cpp, libnrtype/FlowSrcText.h,
+	  libnrtype/FlowStyle.cpp, libnrtype/FlowStyle.h,
+	  libnrtype/FlowUtils.cpp, libnrtype/FlowUtils.h,
+	  libnrtype/Makefile_insert: remove all old text layout code (7,577
+	  lines)
+
+	* src/: sp-flowregion.cpp, sp-flowregion.h, sp-flowtext.cpp,
+	  sp-string.cpp, sp-tspan.cpp: purge flow_dest class from code
+
+	* src/: text-editing.cpp, libnrtype/Layout-TNG-Compute.cpp,
+	  libnrtype/Layout-TNG.cpp, libnrtype/Layout-TNG.h: define a value
+	  for line-height:normal and use it consistently
+
+	* src/: sp-text.cpp, sp-text.h, text-editing.cpp: adjust kerning
+	  attributes on adding/removing line breaks
+
 2005-03-17  MenTaLguY  <mental@rydia.net>
 
     * src/display/nr-arena-group.cpp, src/display/nr-arena-item.cpp:
 
 	  whoops, we were calling the 'children' vfunc rather than
 	  'last_child' when appending, hence the bug... fixed now.
+
+2005-03-17  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: sp-text.cpp, libnrtype/Layout-TNG-Compute.cpp,
+	  libnrtype/Layout-TNG-OutIter.cpp, libnrtype/Layout-TNG.h: x,y
+	  attributes on tspans set wrongly when alignment != left (bug
+	  1165427)
+
+	* src/: sp-text.cpp, sp-text.h: break before tspan role=line
+	  elements, ie allow first tspan not to have role=line
+
+	* src/: make.dep, make.files, make.ofiles, sp-flowtext.cpp,
+	  sp-object.cpp: fix inheritance problems with xml:space attribute
+
+	* src/libnrtype/Layout-TNG-OutIter.cpp: crash on pressing enter
+	  immediately after creating text
+
+	* src/: object-ui.cpp, sp-flowtext.cpp: set xml:space=preserve on
+	  new flowdiv elements
+
+	* src/libnrtype/Layout-TNG-Compute.cpp: second try at solving
+	  numerical problems when line-height is set
+
+	* src/: sp-flowtext.cpp, sp-flowtext.h, verbs.cpp: slightly
+	  objectify SPFlowtext and rearrange its updating a tiny bit
+
+	* src/: path-chemistry.cpp, sp-flowregion.cpp, sp-offset.cpp,
+	  sp-text.cpp, sp-text.h, sp-use-reference.cpp, splivarot.cpp:
+	  slightly objectify SPText & rearrange updating code, also fixes
+	  bug causing all letters to appear on top of each other
+
+	* src/libnrtype/Layout-TNG-Compute.cpp: characters will draw
+	  multiple times when x or y attributes set
+
+2005-03-16  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/text-editing.cpp: kerning: add/remove kerns with
+	  insertion/deletion of characters, and only apply kerns to the
+	  topmost xml object
+
+	* src/: help.cpp, selection-chemistry.cpp, sp-text.cpp, sp-text.h,
+	  text-context.cpp, text-editing.cpp, text-editing.h,
+	  dialogs/text-edit.cpp: move functions applying to both text and
+	  flowtext to text-editing & rename them. Also fixes crash on
+	  letter/linespacing adjustment for flowtext
+
+	* src/text-editing.cpp: fix crash on pressing delete at the end of
+	  text
+
+	* src/: text-editing.cpp, libnrtype/Layout-TNG-Compute.cpp,
+	  libnrtype/Layout-TNG-OutIter.cpp, libnrtype/Layout-TNG.h:
+	  position cursor correctly in empty text objects
+
+	* src/: sp-item-group.cpp, sp-object.cpp: optimise adding children
+	  to the end of a group - big improvement for tile clones
+
+	* src/: sp-flowtext.cpp, sp-text.cpp, text-context.cpp,
+	  text-editing.cpp, text-editing.h: text editing fixes: track line
+	  breaks with preceding para tag, finish abstracting line
+	  break/remove functions to work on flowtext
+
+	* src/libnrtype/Layout-TNG-Compute.cpp: cursor positioning
+	  off-by-one in some cases of wrapped text
+
+2005-03-15  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/libnrtype/Layout-TNG-Compute.cpp: small tweak to make cursor
+	  positioning work right in counterdirectional spans in fully
+	  justified text
+
+	* src/sp-text.cpp: tweak function for adjusting linespacing by
+	  keyboard to be more precise
+
+	* src/: attributes-test.cpp, attributes.cpp, make.dep, make.files,
+	  make.ofiles, style-test.cpp, style.cpp,
+	  libnrtype/Layout-TNG-Output.cpp: make the unit tests pass for the
+	  new styles, and workaround build breakage when pango < 1.8
+	  installed
+
+	* src/: sp-flowtext.cpp, sp-flowtext.h,
+	  libnrtype/Layout-TNG-Compute.cpp,
+	  libnrtype/Layout-TNG-Scanline-Makers.cpp, libnrtype/Layout-TNG.h:
+	  wiring up full justification to old attribute & fixing bugs in
+	  it, which turned in to a major refactoring of layout code
 
 2005-03-14  Jon Phillips <jon@rejon.org>
 	* src/attributes-test.cpp, src/attributes.cpp, src/attributes.h,
