@@ -9,6 +9,8 @@
 
 	* configure.in, src/main.c: removed freebsd-specific test and just check for fpsetmask() instead
 
+	* src/verbs.c: fixed quit icon
+
 2003-12-04  bulia byak <bulia@dr.com>
 
 	* src/toolbox.c: added convert to curves button, cosmetic changes in aux toolbar

@@ -433,7 +433,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Preview"), N_("Preview document printout"), GTK_STOCK_PRINT_PREVIEW },
 	{SP_VERB_FILE_IMPORT, "FileImport", N_("Import"), N_("Import bitmap or SVG image into document"), "file_import"},
 	{SP_VERB_FILE_EXPORT, "FileExport", N_("Export Bitmap"), N_("Export document as PNG bitmap"), "file_export"},
-	{SP_VERB_FILE_QUIT, "FileQuit", N_("Quit"), N_("Quit"), "file_quit"},
+	{SP_VERB_FILE_QUIT, "FileQuit", N_("Quit"), N_("Quit"), GTK_STOCK_QUIT},
 	/* Edit */
 	{SP_VERB_EDIT_UNDO, "EditUndo", N_("Undo"), N_("Undo last action"), GTK_STOCK_UNDO},
 	{SP_VERB_EDIT_REDO, "EditRedo", N_("Redo"), N_("Do again last undone action"), GTK_STOCK_REDO},
