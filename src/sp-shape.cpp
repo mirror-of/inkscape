@@ -322,113 +322,115 @@ sp_shape_marker_get_transform (SPShape* shape, int m, NArtBpath* bp)
 
     switch (m)
     {
-        case SP_MARKER_LOC_START:
-        {
-			float dx, dy, h;
-			if (bp[1].code == NR_LINETO) {
-				dx = bp[1].x3 - bp[0].x3;
-				dy = bp[1].y3 - bp[0].y3;
-			} else if (bp[1].code == NR_CURVETO) {
-				dx = bp[1].x1 - bp[0].x3;
-				dy = bp[1].y1 - bp[0].y3;
-			} else {
-				dx = 1.0;
-				dy = 0.0;
-			}
-			h = hypot (dx, dy);
-			if (h > 1e-9) {
-                t.c[0] = dx / h;
-                t.c[1] = dy / h;
-                t.c[2] = -dy / h;
-                t.c[3] = dx / h;
-                t.c[4] = bp->x3;
-                t.c[5] = bp->y3;
-			} else {
-                nr_matrix_set_translate (&t, bp->x3, bp->y3);
-			}
-            break;
+    case SP_MARKER_LOC_START:
+    {
+        float dx, dy, h;
+        if (bp[1].code == NR_LINETO) {
+            dx = bp[1].x3 - bp[0].x3;
+            dy = bp[1].y3 - bp[0].y3;
+        } else if (bp[1].code == NR_CURVETO) {
+            dx = bp[1].x1 - bp[0].x3;
+            dy = bp[1].y1 - bp[0].y3;
+        } else {
+            dx = 1.0;
+            dy = 0.0;
         }
-
-        case SP_MARKER_LOC_END:
-        {
-			float dx, dy, h;
-			if ((bp->code == NR_LINETO) && (bp > shape->curve->bpath)) {
-                dx = (bp - 1)->x3 - bp->x3;
-                dy = (bp - 1)->y3 - bp->y3 ;
-            } else if (bp->code == NR_CURVETO) {
-                dx = bp->x2 - bp->x3;
-                dy = bp->y2 - bp->y3 ;
-
-                /* If the second Bezier control point x2 and the end y3
-                ** are coincident, the arrow will not be rotated in a
-                ** sensible fashion.  In this case, this code tries to
-                ** use the second control point on a previous segment to decide
-                ** the arrow's direction.  FIXME: this may not actually
-                ** be in spec for SVG...
-                */
-                if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
-                    dx = bp->x3 - (bp - 1)->x2;
-                    dy = bp->y3 - (bp - 1)->y2;
-                }
-			} else {
-				dx = 1.0;
-				dy = 0.0;
-			}
-			h = hypot (dx, dy);
-			if (h > 1e-9) {
-                t.c[0] = dx / h;
-                t.c[1] = dy / h;
-                t.c[2] = -dy / h;
-                t.c[3] = dx / h;
-                t.c[4] = bp->x3;
-                t.c[5] = bp->y3;
-			} else {
-                nr_matrix_set_translate (&t, bp->x3, bp->y3);
-            }
-            break;
-			}
-
-        /* the following works on the average of the incoming
-        and outgoing curve tangents.*/
-
-        case SP_MARKER_LOC_MID:
-        {
-            float dx, dy, h;
-            if ((bp->code == NR_LINETO) && (bp > shape->curve->bpath)) {
-                dx = ((bp->x3 - (bp - 1)->x3)+(bp[1].x3 - bp[0].x3))/2;
-                dy = ((bp->y3 - (bp - 1)->y3)+(bp[1].y3 - bp[0].y3))/2;
-            } else if (bp->code == NR_CURVETO) {
-                dx = ((bp->x3 - bp->x2) + (bp[1].x1 - bp[0].x3))/2;
-                dy = ((bp->y3 - bp->y2) + (bp[1].y1 - bp[0].y3))/2;
-
-                /* If the second Bezier control point x2 and the end y3
-                ** are coincident, the arrow will not be rotated in a
-                ** sensible fashion.  In this case, this code tries to
-                ** use the second control point on a previous segment to decide
-                ** the arrow's direction.  FIXME: this may not actually
-                ** be in spec for SVG...
-                */
-                if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
-                    dx = (bp - 1)->x2 - bp->x3 ;
-                    dy = (bp - 1)->y2 - bp->y3 ;
-
-                }
-            } else {
-                dx = 1.0;
-                dy = 0.0;
-            }
-            h = hypot (dx, dy);
-            if (h > 1e-9) {
-                t.c[0] = dx / h;
-                t.c[1] = dy / h;
-                t.c[2] = -dy / h;
-                t.c[3] = dx / h;
-                t.c[4] = bp->x3;
-                t.c[5] = bp->y3;
-            } else {
+        h = hypot (dx, dy);
+        if (h > 1e-9) {
+            t.c[0] = dx / h;
+            t.c[1] = dy / h;
+            t.c[2] = -dy / h;
+            t.c[3] = dx / h;
+            t.c[4] = bp->x3;
+            t.c[5] = bp->y3;
+        } else {
             nr_matrix_set_translate (&t, bp->x3, bp->y3);
+        }
+        break;
+    }
+
+    case SP_MARKER_LOC_END:
+    {
+        float dx, dy, h;
+        if ((bp->code == NR_LINETO) && (bp > shape->curve->bpath)) {
+            dx = (bp - 1)->x3 - bp->x3;
+            dy = (bp - 1)->y3 - bp->y3 ;
+        } else if (bp->code == NR_CURVETO) {
+            dx = bp->x2 - bp->x3;
+            dy = bp->y2 - bp->y3 ;
+
+            /* If the second Bezier control point x2 and the end y3
+            ** are coincident, the arrow will not be rotated in a
+            ** sensible fashion.  In this case, this code tries to
+            ** use the second control point on a previous segment to decide
+            ** the arrow's direction.  FIXME: this may not actually
+            ** be in spec for SVG...
+            */
+            if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
+                dx = bp->x3 - (bp - 1)->x2;
+                dy = bp->y3 - (bp - 1)->y2;
             }
-            break;
+        } else {
+            dx = 1.0;
+            dy = 0.0;
+        }
+        h = hypot (dx, dy);
+        if (h > 1e-9) {
+            // This orients an end marker in the same direction as a start marker, not in the opposite direction.
+            // Both Adobe SVG plugin and Batik behave this way.
+            t.c[0] = -dx / h;
+            t.c[1] = -dy / h;
+            t.c[2] = dy / h;
+            t.c[3] = -dx / h;
+            t.c[4] = bp->x3;
+            t.c[5] = bp->y3;
+        } else {
+            nr_matrix_set_translate (&t, bp->x3, bp->y3);
+        }
+        break;
+    }
+
+    /* the following works on the average of the incoming
+       and outgoing curve tangents.*/
+
+    case SP_MARKER_LOC_MID:
+    {
+        float dx, dy, h;
+        if ((bp->code == NR_LINETO) && (bp > shape->curve->bpath)) {
+            dx = ((bp->x3 - (bp - 1)->x3)+(bp[1].x3 - bp[0].x3))/2;
+            dy = ((bp->y3 - (bp - 1)->y3)+(bp[1].y3 - bp[0].y3))/2;
+        } else if (bp->code == NR_CURVETO) {
+            dx = ((bp->x3 - bp->x2) + (bp[1].x1 - bp[0].x3))/2;
+            dy = ((bp->y3 - bp->y2) + (bp[1].y1 - bp[0].y3))/2;
+
+            /* If the second Bezier control point x2 and the end y3
+            ** are coincident, the arrow will not be rotated in a
+            ** sensible fashion.  In this case, this code tries to
+            ** use the second control point on a previous segment to decide
+            ** the arrow's direction.  FIXME: this may not actually
+            ** be in spec for SVG...
+            */
+            if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
+                dx = (bp - 1)->x2 - bp->x3 ;
+                dy = (bp - 1)->y2 - bp->y3 ;
+
+            }
+        } else {
+            dx = 1.0;
+            dy = 0.0;
+        }
+        h = hypot (dx, dy);
+        if (h > 1e-9) {
+            t.c[0] = dx / h;
+            t.c[1] = dy / h;
+            t.c[2] = -dy / h;
+            t.c[3] = dx / h;
+            t.c[4] = bp->x3;
+            t.c[5] = bp->y3;
+        } else {
+            nr_matrix_set_translate (&t, bp->x3, bp->y3);
+        }
+        break;
     }
 
     }
