@@ -10,3 +10,5 @@ inkscape
 inkscape_version.h
 inkview
 spsvgview
+inkscape.def
+*.dll

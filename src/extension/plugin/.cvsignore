@@ -3,6 +3,4 @@
 .libs
 *.lo
 *.la
-
-
-
+*.dll
