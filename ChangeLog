@@ -11,7 +11,8 @@
 	* src/sp-path.cpp: cope with sp_curve_new_from_bpath() returning
 	NULL in sp_path_set().  This is the other part of the fix for 934882.
 
-	* src/path-chemistry.cpp, src/sp-offset.cpp, src/sp-ellipse.cpp:
+	* src/path-chemistry.cpp, src/sp-offset.cpp, src/sp-ellipse.cpp,
+	src/display/nr-arena-glyhs.cpp:
 	added asserts for calls to sp_curve_new_from_bpath() which look
 	like they might not expect it to return NULL.
 
