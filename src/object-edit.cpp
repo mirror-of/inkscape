@@ -839,6 +839,8 @@ sp_spiral_outer_set (SPItem *item, const NR::Point &p, const NR::Point &origin, 
 			spiral->rad = rad_new;
 			spiral->t0 = pow (r0 / spiral->rad, 1/spiral->exp);
 		}
+		if (!std::isfinite(spiral->t0)) spiral->t0 = 0.0;
+		spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);	
 	}
 
 	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

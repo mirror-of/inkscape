@@ -3,7 +3,7 @@
 	* src/make.dep, src/make.exclude, src/make.files, src/make.ofiles,
 	  src/io/uristream.cpp, src/io/sys.cpp: additional win32 changes
 	  using Jon Cruz's new mkdir function.  Getting Win32 to compile the
-	  "io" directory.
+	  "io" directory.  Closes bug #1107305.
 	* src/file.cpp, src/inkscape-stock.cpp, src/inkscape.cpp,
 	  src/interface.cpp, src/main.cpp, src/dialogs/export.cpp,
 	  src/dialogs/stroke-style.cpp, src/extension/input.cpp,
@@ -14,6 +14,8 @@
 	* src/inkscape.cpp: removed call to g_free on non-alloced string.
 	  fixed up crash-save location to be utf8-okay.
 	* src/extension/extension.cpp: convert from utf8 before open.
+	* src/sp-spiral.cpp, src/object-edit.cpp: found place where CLAMP on
+	  spiral's t0 wasn't working.  Closes bug #1075640.
 
 2004-01-28  MenTaLguY  <mental@rydia.net>
 

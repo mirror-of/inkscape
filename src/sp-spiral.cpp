@@ -368,7 +368,7 @@ sp_spiral_set_shape (SPShape *shape)
 	SPCurve *c = sp_curve_new ();
 	
 #ifdef SPIRAL_VERBOSE
-	g_print ("ex=%g, revo=%g, rad=%g, arg=%g, t0=%g\n",
+	g_print ("cx=%g, cy=%g, exp=%g, revo=%g, rad=%g, arg=%g, t0=%g\n",
 		 spiral->cx,
 		 spiral->cy,
 		 spiral->exp,
@@ -420,7 +420,7 @@ sp_spiral_position_set       (SPSpiral          *spiral,
 	spiral->revo       = revo;
 	spiral->rad        = MAX (rad, 0.001);
 	spiral->arg        = arg;
-	spiral->t0         = t0;
+	spiral->t0         = CLAMP(t0, 0.0, 0.999);
 	
 	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
