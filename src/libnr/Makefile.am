@@ -62,4 +62,4 @@ testnr_LDADD =	\
 	-lglib-2.0
 
 nr_types_test_SOURCES = nr-types-test.cpp nr-types.cpp nr-point-fns.cpp
-#nr_types_test_LDADD = libnr.a
+nr_types_test_LDADD = -lglib-2.0
