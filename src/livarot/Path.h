@@ -461,7 +461,7 @@ private:
 		      int &lastLeft, int &lastRight, int nbDash,
 		      one_dash * dashs);
 
-  void DoSimplify(double treshhold);
+  void DoSimplify(int off, int N, double treshhold);
   bool AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto &res, int &worstP);
   static bool FitCubic(NR::Point const &start,
 		       path_descr_cubicto &res,

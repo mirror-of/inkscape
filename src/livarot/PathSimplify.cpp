@@ -52,27 +52,19 @@ void Path::Simplify(double treshhold)
     
     Reset();
   
-    char *savPts = pts;
-    int savNbPt = nbPt;
-  
     int lastM = 0;
-    while (lastM < savNbPt) {
+    while (lastM < nbPt) {
         int lastP = lastM + 1;
-        path_lineto *tp = (path_lineto *) savPts;
-        while (lastP < savNbPt
+        path_lineto *tp = (path_lineto *) pts;
+        while (lastP < nbPt
                && ((tp + lastP)->isMoveTo == polyline_lineto
                    || (tp + lastP)->isMoveTo == polyline_forced))
             lastP++;
-        pts = (char *) (tp + lastM);
-        nbPt = lastP - lastM;
         
-        DoSimplify(treshhold);
+        DoSimplify(lastM, lastP - lastM, treshhold);
 
         lastM = lastP;
     }
-  
-    pts = savPts;
-    nbPt = savNbPt;
 }
 
 
@@ -154,13 +146,12 @@ double DistanceToCubic(NR::Point const &start, Path::path_descr_cubicto res, NR:
 
 /**
  *    Simplification on a subpath.
- *    FIXME: reads points from pts.
  */
 
-void Path::DoSimplify(double treshhold)
+void Path::DoSimplify(int off, int N, double treshhold)
 {
   // non-dichotomic method: grow an interval of points approximated by a curve, until you reach the treshhold, and repeat
-    if (nbPt <= 1) {
+    if (N <= 1) {
         return;
     }
     
@@ -173,14 +164,14 @@ void Path::DoSimplify(double treshhold)
     data.totLen = 0;
     data.nbPt = data.maxPt = data.inPt = 0;
   
-    NR::Point const moveToPt = ((path_lineto *) pts)[0].p;
+    NR::Point const moveToPt = ((path_lineto *) pts)[off].p;
     MoveTo(moveToPt);
     NR::Point endToPt = moveToPt;
   
-    while (curP < nbPt - 1) {
+    while (curP < N - 1) {
 
         int lastP = curP + 1;
-        int N = 2;
+        int M = 2;
 
         // remettre a zero
         data.inPt = data.nbPt = 0;
@@ -194,37 +185,37 @@ void Path::DoSimplify(double treshhold)
             int worstP = -1;
             
             do {
-                if ((((path_lineto *) pts) + lastP)->isMoveTo == polyline_forced) {
+                if ((((path_lineto *) pts) + off + lastP)->isMoveTo == polyline_forced) {
                     contains_forced = true;
                 }
                 forced_pt = lastP;
                 lastP += step;
-                N += step;
-            } while (lastP < nbPt && ExtendFit(curP, N, data,
-                                               (contains_forced) ? 0.05 * treshhold : treshhold,
-                                               res, worstP) );
-            if (lastP >= nbPt) {
+                M += step;
+            } while (lastP < N && ExtendFit(off + curP, M, data,
+                                            (contains_forced) ? 0.05 * treshhold : treshhold,
+                                            res, worstP) );
+            if (lastP >= N) {
 
                 lastP -= step;
-                N -= step;
+                M -= step;
                 
             } else {
                 // le dernier a echoue
                 lastP -= step;
-                N -= step;
+                M -= step;
                 
                 if ( contains_forced ) {
                     lastP = forced_pt;
-                    N = lastP - curP + 1;
+                    M = lastP - curP + 1;
                 }
 
-                AttemptSimplify(curP, N, treshhold, res, worstP);       // ca passe forcement
+                AttemptSimplify(off + curP, M, treshhold, res, worstP);       // ca passe forcement
             }
             step /= 2;
         }
     
-        endToPt = ((path_lineto *) pts)[lastP].p;
-        if (N <= 2) {
+        endToPt = ((path_lineto *) pts)[off + lastP].p;
+        if (M <= 2) {
             LineTo(endToPt);
         } else {
             CubicTo(endToPt, res.stD, res.enD);
