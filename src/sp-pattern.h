@@ -22,7 +22,7 @@
 
 typedef struct _SPPatternClass SPPatternClass;
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-rect.h>
 #include "svg/svg-types.h"
 #include "sp-paint-server.h"
 

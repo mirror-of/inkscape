@@ -14,8 +14,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-types.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-rect.h>
 
 #include "helper/units.h"
 #include "display/nr-arena-forward.h"
