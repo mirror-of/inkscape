@@ -950,11 +950,13 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	if (fabs (h2) < 1e-15) return FALSE;
 	NR::Point q2 = d2 / h2;
 
+      double theta;
+
 	if (state & GDK_CONTROL_MASK) {
 		/* Have to restrict movement. */
 		double cos_t = NR::dot(q1, q2);
 		double sin_t = NR::dot(NR::rot90(q1), q2);
-		double theta = atan2(sin_t, cos_t);
+		theta = atan2(sin_t, cos_t);
 		if (snaps) {
 			theta = ( M_PI / snaps ) * floor( theta * snaps / M_PI + .5 );
 		}
@@ -967,8 +969,7 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	pt = point * NR::translate(-norm) * ( r2 / r1 ) * NR::translate(norm);
 
 	/* status text */
-	double angle = 180 / M_PI * atan2 (NR::dot(NR::rot90(d1), d2), 
-					   NR::dot(d1, d2));
+	double angle = 180 / M_PI * theta;
 
 	if (angle > 180) angle -= 360;
 	if (angle < -180) angle += 360;
