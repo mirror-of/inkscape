@@ -1,0 +1,14 @@
+<inkscape-extension>
+    <name>Windows Metafile Input</name>
+    <id>org.inkscape.input.wmf</id>
+    <input>
+        <extension>.wmf</extension>
+        <mimetype>application/x-wmf</mimetype>
+        <filetypename>Windows Metafile (*.wmf)</filetypename>
+        <filetypetooltip>A popular graphics file format for clipart</filetypetooltip>
+    </input>
+    <script>
+        <command reldir="path">wmf2svg</command>
+		<check reldir="path">wmf2svg</check>
+    </script>
+</inkscape-extension>

@@ -1,0 +1,16 @@
+<inkscape-extension>
+    <name>Postscript Input</name>
+    <id>org.inkscape.input.ps</id>
+    <input>
+        <extension>.ps</extension>
+        <mimetype>image/x-postscript</mimetype>
+        <filetypename>Postscript (*.ps)</filetypename>
+        <filetypetooltip>Postscript</filetypetooltip>
+		<output_extension>org.inkscape.output.ps</output_extension>
+    </input>
+    <script>
+        <command reldir="path">pstoedit -f sk</command>
+		<helper_extension>org.inkscape.input.sk</helper_extension>
+		<check reldir="path">pstoedit</check>
+    </script>
+</inkscape-extension>
