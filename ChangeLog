@@ -30,6 +30,9 @@
 
 	* src/display/sp-canvas.cpp: fix for win32 freeze-at-border bug,
 	copied from SP.
+
+	* src/knot.cpp, src/select-context.cpp: change spellings from
+	British to American English for translators.
 	
 2004-06-24  rejon <kidproto@users.sf.net>
 
