@@ -463,9 +463,9 @@
      showgrid="true"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="51.711297"
-     inkscape:cx="576.26171"
-     inkscape:cy="58.894363"
+     inkscape:zoom="22.046791"
+     inkscape:cx="183.88963"
+     inkscape:cy="119.89474"
      inkscape:window-width="1266"
      inkscape:window-height="927"
      inkscape:window-x="0"
@@ -4493,7 +4493,7 @@
        sodipodi:nodetypes="cccccccc" />
     <path
        style="stroke-width:1pt;"
-       d="M 216.55776,153.37259 C 241.54127,153.03089 218.46356,175.33273 231.38780,176.84434 L 231.38780,177.09825 C 216.03880,178.41974 230.95853,153.30911 216.55776,153.68117 L 216.55776,153.37259 z "
+       d="M 216.55776,153.37259 C 241.54127,153.03089 218.46356,175.33273 231.38780,176.84434 L 231.38780,177.09825 C 209.91533,177.09825 232.77285,153.76269 216.55776,153.68117 L 216.55776,153.37259 z "
        id="path1723"
        sodipodi:nodetypes="ccccc" />
     <path
