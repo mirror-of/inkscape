@@ -119,7 +119,7 @@ sp_selection_layout_widget_modify_selection (SPWidget *spw, SPSelection *selecti
 {
 	SPDesktop *desktop = (SPDesktop *) data;
 	if (desktop->selection == selection) { // only respond to changes in our desktop
-		if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG)) {
+		if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)) {
 			sp_selection_layout_widget_update (spw, selection);
 		}
 	}
