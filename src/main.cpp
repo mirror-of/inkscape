@@ -265,6 +265,15 @@ sp_main_gui (int argc, const char **argv)
 					sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
 				}
 				sp_document_unref (doc);
+			} else {
+				GtkWidget *msg;
+				gchar *text = g_strdup_printf (_("Failed to load the requested file %s"), (const gchar *) fl->data);
+				msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
+						GTK_BUTTONS_CLOSE, 
+						text);
+				gtk_dialog_run (GTK_DIALOG (msg));
+				gtk_widget_destroy (msg);
+				sp_file_new();
 			}
 			fl = g_slist_remove (fl, fl->data);
 		}

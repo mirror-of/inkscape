@@ -3,6 +3,9 @@
 	* src/file.cpp src/modules/system.cpp: Fix for 860199; returning NULL in
 	  sp_module_system_open when doc == NULL; added error dialog.
 
+	* src/main.cpp: Add error dialog when file given on command line does not
+	  exist, and create an empty document in that case.
+
 2003-12-24  MenTaLguY <mental@rydia.net>
 
 	* src/verbs.cpp: renamed 'XOR' to 'Exclude' on the menu
