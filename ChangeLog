@@ -5,6 +5,7 @@
 	* SF Patch #842951: variable declaration fixes in interface.c
 	* SF Patch #842953: small color picker update from John Bintz
 	* SF Patch #842955: additional Darwin updates from Peter
+	* Fixed stroke style literal string bug that caused warnings
 
 2003-11-16  MenTaLguY <mental@rydia.net>
 

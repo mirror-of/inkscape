@@ -598,22 +598,22 @@ sp_stroke_style_line_widget_new (void)
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
-	tb = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (tb)));
+	tb = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON (tb)));
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), "join-round", tb);
+	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_ROUND, tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"round");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
         px = gtk_image_new_from_stock (INKSCAPE_STOCK_JOIN_ROUND, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
-	tb = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (tb)));
+	tb = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON (tb)));
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
-	gtk_object_set_data (GTK_OBJECT (spw), "join-bevel", tb);
+	gtk_object_set_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_BEVEL, tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"bevel");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
         px = gtk_image_new_from_stock (INKSCAPE_STOCK_JOIN_BEVEL, GTK_ICON_SIZE_LARGE_TOOLBAR);
@@ -641,7 +641,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
-	tb = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (tb)));
+	tb = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON (tb)));
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
@@ -652,7 +652,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
-	tb = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (tb)));
+	tb = gtk_radio_button_new (gtk_radio_button_get_group (GTK_RADIO_BUTTON (tb)));
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
