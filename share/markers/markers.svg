@@ -96,7 +96,7 @@
        refY="0.0"
        orient="auto"
        inkscape:stockid="Legs">
-  <g transform="scale(0.7)"
+  <g transform="scale(-0.7)"
      id="g1163">
     <g
        id="g2032"
@@ -515,7 +515,7 @@
        refY="0.0"
        orient="auto"
        inkscape:stockid="Tail">
-      <g          transform="scale(1.2)"
+      <g          transform="scale(-1.2)"
          id="g1087">
   <path
      style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round;"
