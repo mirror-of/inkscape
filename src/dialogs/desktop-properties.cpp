@@ -473,19 +473,17 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
     struct inkscape_papers_t const *const paper = (struct inkscape_papers_t const *) data;
 
     GtkWidget *const ww = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "widthsb");
-    gtk_widget_set_sensitive(ww, FALSE);
     GtkWidget *const hw = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "heightsb");
+    gtk_widget_set_sensitive(ww, FALSE);
     gtk_widget_set_sensitive(hw, FALSE);
 
-    GtkWidget *const om = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
-    bool const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
-
-    SPUnitSelector *const us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dlg), "units");
-    SPUnit const *unit = sp_unit_selector_get_unit(us);
-    GtkAdjustment *const aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
-    GtkAdjustment *const ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
-
     if (paper) {
+        GtkWidget *const om = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
+        bool const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
+
+        SPUnitSelector *const us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dlg), "units");
+        SPUnit const *unit = sp_unit_selector_get_unit(us);
+
         double h, w;
         if (!landscape) {
             w = paper->width;
@@ -496,8 +494,11 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
         }
         SPUnit const * const pt = &sp_unit_get_by_id(SP_UNIT_PT);
         sp_convert_distance(&w, pt, unit);
-        gtk_adjustment_set_value(aw, w);
         sp_convert_distance(&h, pt, unit);
+
+        GtkAdjustment *const aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
+        GtkAdjustment *const ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
+        gtk_adjustment_set_value(aw, w);
         gtk_adjustment_set_value(ah, h);
     } else {
         gtk_widget_set_sensitive(ww, TRUE);
