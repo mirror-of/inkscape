@@ -27,9 +27,9 @@
 
 #include <map>
 
-#include <gtk/gtkbutton.h>
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkimage.h>
 
 
 #include "forward.h"
@@ -58,7 +58,6 @@ static guchar *sp_icon_image_load_pixmap (const gchar *name, unsigned int lsize,
 static guchar *sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psize );
 
 static guchar *sp_icon_image_load ( SPIcon* icon, const gchar *name );
-static guchar *sp_icon_image_load_gtk( SPIcon* icon, const gchar *name );
 
 static int sp_icon_get_phys_size( int size );
 
@@ -160,43 +159,69 @@ static int sp_icon_expose(GtkWidget *widget, GdkEventExpose *event)
 static GtkWidget *
 sp_icon_new_full( GtkIconSize lsize, const gchar *name )
 {
-	SPIcon *icon;
-	guchar *pixels;
+    static gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpGtk", 0, 0, 1 );
+    GtkWidget* widget = 0;
 
+    GtkStockItem stock;
+    if ( gtk_stock_lookup( name, &stock ) ) {
+        GtkWidget* img = gtk_image_new_from_stock( name, lsize );
+        if ( img ) {
+            GtkImageType type = gtk_image_get_storage_type( GTK_IMAGE(img) );
+            if ( type == GTK_IMAGE_STOCK ) {
+                widget = GTK_WIDGET(img);
+                img = 0;
 
-	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
+                if ( dump ) {
+                    g_message( "loaded gtk  '%s' %d  (GTK_IMAGE_STOCK)", name, lsize );
+                }
+            } else {
+                if ( dump ) {
+                    g_message( "skipped gtk '%s' %d  (not GTK_IMAGE_STOCK)", name, lsize );
+                }
+                g_object_unref( (GObject *)img );
+                img = 0;
+            }
+        }
+    }
 
-	icon->lsize = lsize;
-	icon->psize = sp_icon_get_phys_size(lsize);
+    if ( !widget ) {
+        SPIcon *icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
+        guchar *pixels = 0;
+
+        icon->lsize = lsize;
+        icon->psize = sp_icon_get_phys_size(lsize);
 
         //g_warning ("loading '%s' (%d:%d)", name, icon->psize, scale);
-	pixels = sp_icon_image_load_gtk( icon, name );
+        pixels = sp_icon_image_load( icon, name );
 
-	if (pixels) {
-		// don't pass the nr_free because we're caching the pixel
-		// space loaded through sp_icon_image_load_gtk
-		icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->psize, icon->psize, icon->psize * 4, /*(GdkPixbufDestroyNotify)nr_free*/NULL, NULL);
-		icon->pb_faded = gdk_pixbuf_copy(icon->pb);
+        if (pixels) {
+            // don't pass the nr_free because we're caching the pixel
+            // space loaded through ...
+            // I just changed this. make sire sp_icon_image_load still does the right thing.
+            icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->psize, icon->psize, icon->psize * 4, /*(GdkPixbufDestroyNotify)nr_free*/NULL, NULL);
+            icon->pb_faded = gdk_pixbuf_copy(icon->pb);
 
-		pixels = gdk_pixbuf_get_pixels(icon->pb_faded);
-		size_t stride = gdk_pixbuf_get_rowstride(icon->pb_faded);
-		pixels += 3; // alpha
-		for ( int row = 0 ; row < icon->psize ; row++ ) {
-			guchar *row_pixels=pixels;
-			for ( int column = 0 ; column < icon->psize ; column++ )
-			{
-				*row_pixels = *row_pixels >> 1;
-				row_pixels += 4;
-			}
-			pixels += stride;
-		}
-	}
-	else {
-	    /* we should do something more useful if we can't load the image */
+            pixels = gdk_pixbuf_get_pixels(icon->pb_faded);
+            size_t stride = gdk_pixbuf_get_rowstride(icon->pb_faded);
+            pixels += 3; // alpha
+            for ( int row = 0 ; row < icon->psize ; row++ ) {
+                guchar *row_pixels=pixels;
+                for ( int column = 0 ; column < icon->psize ; column++ )
+                {
+                    *row_pixels = *row_pixels >> 1;
+                    row_pixels += 4;
+                }
+                pixels += stride;
+            }
+        }
+        else {
+            /* we should do something more useful if we can't load the image */
             g_warning ("failed to load icon '%s'", name);
-	}
+        }
+        widget = GTK_WIDGET(icon);
+    }
 
-	return (GtkWidget *) icon;
+    return widget;
 }
 
 GtkWidget *
@@ -307,53 +332,6 @@ static int sp_icon_get_phys_size(int size)
     }
 
     return vals[size];
-}
-
-guchar *
-sp_icon_image_load_gtk( SPIcon* icon, const gchar *name )
-{
-    gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpGtk", 0, 0, 1 );
-
-    /* fixme: Make stock/nonstock configurable */
-    if (!strncmp (name, "gtk-", 4)) {
-        GtkWidget * host = gtk_button_new();
-        if ( dump ) {
-            g_message( "loading gtk '%s' %d:%d", name, icon->lsize, icon->psize );
-        }
-        GdkPixbuf *pb;
-        guchar *px, *spx; // pixel data is unsigned
-        int srs;
-        int y;
-        pb = gtk_widget_render_icon( host, name, icon->lsize, NULL );
-
-        int width = gdk_pixbuf_get_width(pb);
-        int height = gdk_pixbuf_get_height(pb);
-        if ( dump ) {
-            g_message( "          --'%s'  (%d,%d)", name, width, height );
-        }
-        icon->psize = std::max( width, height );
-
-        if (!gdk_pixbuf_get_has_alpha (pb)) gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
-        spx = gdk_pixbuf_get_pixels (pb);
-        srs = gdk_pixbuf_get_rowstride (pb);
-        size_t howBig = 4 * icon->psize * icon->psize;
-        px = nr_new (guchar, howBig);
-        memset( px, 0, howBig );
-        int dstStride = 4 * icon->psize;
-        for (y = 0; y < height; y++) {
-            memcpy( px + y * dstStride, spx + y * srs, 4 * width );
-        }
-
-        gint useOverlay = prefs_get_int_attribute_limited( "debug.icons", "overlayGtk", 0, 0, 1 );
-        if ( useOverlay ) {
-            sp_icon_overlay_pixels( px, icon->psize, icon->psize, 4 * icon->psize, 0xff, 0x00, 0xff );
-        }
-
-        g_object_unref ((GObject *) pb);
-        return px;
-    } else {
-        return sp_icon_image_load( icon, name );
-    }
 }
 
 static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area)
