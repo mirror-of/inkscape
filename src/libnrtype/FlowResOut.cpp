@@ -115,6 +115,14 @@ void flow_res::ApplyPath(int no, Path *i_path)
     }
 
     for (int i = chunks[no].s_st; i < chunks[no].s_en; i++) {
+
+       // these can be reused for more than one letter (when positioning invisible off-the-path
+       // letters), therefore declared here outside of the letter loop
+        NR::Point tangent;     
+        NR::Point origin;
+        NR::Point end;
+        double ang = 0;
+
         for (int j = spans[i].l_st; j < spans[i].l_en; j++) {
             // dummy
             int nb_glyph_p = 0;
@@ -149,8 +157,6 @@ void flow_res::ApplyPath(int no, Path *i_path)
                 NR::Point mid_tangent;
                 i_path->PointAndTangentAt(midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, mid_tangent);
 
-                NR::Point tangent;
-
                 if (startpoint_otp && startpoint_otp[0].piece >= 0 && endpoint_otp && endpoint_otp[0].piece >= 0) {
 
                     // if both start and endpoints are also on the path,
@@ -178,18 +184,17 @@ void flow_res::ApplyPath(int no, Path *i_path)
 
                 // glyph origin: baseline of glyph must be on midpoint, so we step back half of charwidth from midpoint
                 // in the direction of the tangent
-                NR::Point origin = midpoint - 0.5 * charwidth * tangent;
+                origin = midpoint - 0.5 * charwidth * tangent;
                 // from there, we apply the y displacement perpendicular to tangent (for vertical kerning)
                 origin -= letters[j].y * tangent.ccw();
                 letters[j].x_st = origin[NR::X];
                 letters[j].y = origin[NR::Y];
 
                 // glyph end: same as origin but to the other side of the midpoint
-                NR::Point end = origin + charwidth * tangent;
+                end = origin + charwidth * tangent;
                 letters[j].x_en = end[NR::X];
 
                 // rotation of the glyph
-                double ang = 0;
                 if ( tangent[NR::X] >= 1 ) {
                     ang = 0;
                 } else if ( tangent[NR::X] <= -1 ) {
@@ -203,7 +208,19 @@ void flow_res::ApplyPath(int no, Path *i_path)
                 
                 letters[j].rotate += ang;
             } else {
+                // This glyph is off the path; it is invisible,
                 letters[j].invisible = true;
+
+                // but we still want to fill in its coords, so that cursor could move correctly in
+                // this hidden part of the text
+                letters[j].x_st = end[NR::X];
+                letters[j].y = end[NR::Y];
+                letters[j].rotate += ang;
+
+                // step forward; we continue the off-the-path letters at the same angle as the last on-path letter
+                origin = end;
+                end = origin + charwidth * tangent;
+                letters[j].x_en = end[NR::X];
             }
             
             free(startpoint_otp);
