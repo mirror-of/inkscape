@@ -48,7 +48,7 @@ namespace Extension {
 
 /** This is the extention that all files are that are pulled from
     the extension directory and parsed */
-#define SP_MODULE_EXTENSION  "inkmod"
+#define SP_MODULE_EXTENSION  "inx"
 
 static void build_module_from_dir (const gchar * dirname);
 static void check_extensions (void);

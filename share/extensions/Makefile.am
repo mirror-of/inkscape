@@ -19,20 +19,20 @@ otherstuff = \
 	roundhole.xpm
 
 modules = \
-	svgz_input.inkmod \
-	svgz_output.inkmod \
-	ai_input.inkmod \
-	ai_output.inkmod \
-	ps_input.inkmod \
-	eps_input.inkmod \
-	sk_input.inkmod \
-	wmf_input.inkmod \
-	roundhole.inkmod \
-	dropshadow.inkmod \
-	dia.inkmod \
-	epsi_output.inkmod \
-	txt2svg.inkmod \
-	gimpgrad.inkmod
+	svgz_input.inx \
+	svgz_output.inx \
+	ai_input.inx \
+	ai_output.inx \
+	ps_input.inx \
+	eps_input.inx \
+	sk_input.inx \
+	wmf_input.inx \
+	roundhole.inx \
+	dropshadow.inx \
+	dia.inx \
+	epsi_output.inx \
+	txt2svg.inx \
+	gimpgrad.inx
 
 extension_SCRIPTS = \
 	$(extensions)

@@ -1,3 +1,11 @@
+2004-10-14  Ted Gould  <ted@gould.cx>
+
+	* share/extension/*.inkmod -> *.inx
+	src/extension/init.cpp
+
+	Changing the filename extension that is used to identify Inkscape
+	extensions to the one specified in the design document.
+
 2004-10-14  MenTaLguY  <mental@rydia.net>
 
 	* src/util/list.h: more 3.4 fixes
