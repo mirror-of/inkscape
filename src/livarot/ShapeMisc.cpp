@@ -82,13 +82,13 @@ Shape::ConvertToForme (Path * dest)
       int fi = 0;
       for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
-        if (getPoint(fi).firstA >= 0 && swdData[getPoint(fi).firstA].misc == 0)
+        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == 0)
           break;
       }
       lastPtUsed = fi + 1;
       if (fi < numberOfPoints())
       {
-        int bestB = getPoint(fi).firstA;
+        int bestB = getPoint(fi).incidentEdge[FIRST];
         while (bestB >= 0 && getEdge(bestB).st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
@@ -224,13 +224,13 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
       int fi = 0;
       for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
-        if (getPoint(fi).firstA >= 0 && swdData[getPoint(fi).firstA].misc == 0)
+        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == 0)
           break;
       }
       lastPtUsed = fi + 1;
       if (fi < numberOfPoints())
       {
-        int bestB = getPoint(fi).firstA;
+        int bestB = getPoint(fi).incidentEdge[FIRST];
         while (bestB >= 0 && getEdge(bestB).st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
@@ -378,7 +378,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       int fi = 0;
       for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
-        if (getPoint(fi).firstA >= 0 && swdData[getPoint(fi).firstA].misc == 0)
+        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == 0)
           break;
       }
       {
@@ -393,7 +393,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       lastPtUsed = fi + 1;
       if (fi < numberOfPoints())
       {
-        int bestB = getPoint(fi).firstA;
+        int bestB = getPoint(fi).incidentEdge[FIRST];
         while (bestB >= 0 && getEdge(bestB).st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
@@ -739,8 +739,8 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
             dest->ForcePoint ();
          } else {
             if ( _has_back_data ) {
-              int   prevEdge=getPoint(getEdge(bord).st).firstA;
-              int   nextEdge=getPoint(getEdge(bord).st).lastA;
+              int   prevEdge=getPoint(getEdge(bord).st).incidentEdge[FIRST];
+              int   nextEdge=getPoint(getEdge(bord).st).incidentEdge[LAST];
               if ( getEdge(prevEdge).en != getEdge(bord).st ) {
                 int  swai=prevEdge;prevEdge=nextEdge;nextEdge=swai;
               }

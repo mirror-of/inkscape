@@ -348,7 +348,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 	  int nbUp = 0, nbDn = 0;
 	  int upNo = -1, dnNo = -1;
-	  cb = ptSh->getPoint(nPt).firstA;
+	  cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
 	  while (cb >= 0 && cb < ptSh->numberOfEdges())
 	    {
 	      if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
@@ -383,7 +383,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 	  if (nbUp > 0)
 	    {
-	      cb = ptSh->getPoint(nPt).firstA;
+	      cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
 	      while (cb >= 0 && cb < ptSh->numberOfEdges())
 		{
 		  if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
@@ -517,7 +517,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 	  if (nbDn > 1)
 	    {			// si nbDn == 1 , alors dnNo a deja ete traite
-	      cb = ptSh->getPoint(nPt).firstA;
+	      cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
 	      while (cb >= 0 && cb < ptSh->numberOfEdges())
 		{
 		  if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
@@ -1171,7 +1171,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 	  int nbUp = 0, nbDn = 0;
 	  int upNo = -1, dnNo = -1;
-	  cb = ptSh->getPoint(nPt).firstA;
+	  cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
 	  while (cb >= 0 && cb < ptSh->numberOfEdges())
 	    {
 	      if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
@@ -1208,7 +1208,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 	  if (nbUp > 0)
 	    {
-	      cb = ptSh->getPoint(nPt).firstA;
+	      cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
 	      while (cb >= 0 && cb < ptSh->numberOfEdges())
 		{
 		  if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
@@ -1347,7 +1347,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 	  if (nbDn > 1)
 	    {			// si nbDn == 1 , alors dnNo a deja ete traite
-	      cb = ptSh->getPoint(nPt).firstA;
+	      cb = ptSh->getPoint(nPt).incidentEdge[FIRST];
 	      while (cb >= 0 && cb < ptSh->numberOfEdges())
 		{
 		  if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
@@ -2194,24 +2194,24 @@ Shape::AssembleAretes (FillRule directed)
   for (int i = 0; i < numberOfPoints(); i++) {
     if (getPoint(i).totalDegree() == 2) {
       int cb, cc;
-      cb = getPoint(i).firstA;
-      cc = getPoint(i).lastA;
+      cb = getPoint(i).incidentEdge[FIRST];
+      cc = getPoint(i).incidentEdge[LAST];
       bool  doublon=false;
       if ((getEdge(cb).st == getEdge(cc).st && getEdge(cb).en == getEdge(cc).en)
           || (getEdge(cb).st == getEdge(cc).en && getEdge(cb).en == getEdge(cc).en)) doublon=true;
       if ( directed == fill_justDont ) {
         if ( doublon ) {
           if ( ebData[cb].pathID > ebData[cc].pathID ) {
-            cc = getPoint(i).firstA; // on swappe pour enlever cc
-            cb = getPoint(i).lastA;
+            cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
+            cb = getPoint(i).incidentEdge[LAST];
           } else if ( ebData[cb].pathID == ebData[cc].pathID ) {
             if ( ebData[cb].pieceID > ebData[cc].pieceID ) {
-              cc = getPoint(i).firstA; // on swappe pour enlever cc
-              cb = getPoint(i).lastA;
+              cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
+              cb = getPoint(i).incidentEdge[LAST];
             } else if ( ebData[cb].pieceID == ebData[cc].pieceID ) { 
               if ( ebData[cb].tSt > ebData[cc].tSt ) {
-                cc = getPoint(i).firstA; // on swappe pour enlever cc
-                cb = getPoint(i).lastA;
+                cc = getPoint(i).incidentEdge[FIRST]; // on swappe pour enlever cc
+                cb = getPoint(i).incidentEdge[LAST];
               }
             }
           }
@@ -2261,11 +2261,11 @@ Shape::AssembleAretes (FillRule directed)
 	    }
     } else {
       int cb;
-      cb = getPoint(i).firstA;
+      cb = getPoint(i).incidentEdge[FIRST];
       while (cb >= 0 && cb < numberOfEdges()) {
 	      int other = Other (i, cb);
 	      int cc;
-	      cc = getPoint(i).firstA;
+	      cc = getPoint(i).incidentEdge[FIRST];
 	      while (cc >= 0 && cc < numberOfEdges()) {
           int ncc = NextAt (i, cc);
           bool  doublon=false;
@@ -2383,13 +2383,13 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 	int fi = 0;
 	for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
 	  {
-	    if (getPoint(fi).firstA >= 0 && swdData[getPoint(fi).firstA].misc == 0)
+	    if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == 0)
 	      break;
 	  }
 	lastPtUsed = fi + 1;
 	if (fi < numberOfPoints())
 	  {
-	    int bestB = getPoint(fi).firstA;
+	    int bestB = getPoint(fi).incidentEdge[FIRST];
 	    if (bestB >= 0)
 	      {
 		startBord = bestB;

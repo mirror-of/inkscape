@@ -182,12 +182,12 @@ public:
     {
 	if (p == getEdge(b).st) {
 	    if (getEdge(b).nextS < 0) {
-		return getPoint(p).firstA;
+		return getPoint(p).incidentEdge[FIRST];
 	    }
 	    return getEdge(b).nextS;
 	} else if (p == getEdge(b).en) {
 	    if (getEdge(b).nextE < 0) {
-		return getPoint(p).firstA;
+		return getPoint(p).incidentEdge[FIRST];
 	    }
 	    
 	    return getEdge(b).nextE;
@@ -201,12 +201,12 @@ public:
     {
 	if (p == getEdge(b).st) {
 	    if (getEdge(b).prevS < 0) {
-		return getPoint(p).lastA;
+		return getPoint(p).incidentEdge[LAST];
 	    }
 	    return getEdge(b).prevS;
 	} else if (p == getEdge(b).en) {
 	    if (getEdge(b).prevE < 0) {
-		return getPoint(p).lastA;
+		return getPoint(p).incidentEdge[LAST];
 	    }
 	    return getEdge(b).prevE;
 	}
@@ -330,7 +330,7 @@ public:
     {
 	NR::Point x;		// position
 	int dI, dO;		// indegree and outdegree
-	int firstA, lastA;	// first and last incident edge
+        int incidentEdge[2];    // first and last incident edge
 	int oldDegree;
 	
 	int totalDegree() const { return dI + dO; }
