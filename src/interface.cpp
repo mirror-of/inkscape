@@ -189,7 +189,7 @@ sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, G
 	if (stock) {
 		item = gtk_image_menu_item_new_from_stock (stock, NULL);
 	} else if (label) {
-		item = gtk_image_menu_item_new_with_label (label);
+		item = gtk_image_menu_item_new_with_mnemonic (label);
 	} else {
 		item = gtk_separator_menu_item_new ();
 	}
@@ -294,7 +294,7 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
 			GtkWidget *hb, *l;
 			sp_ui_shortcut_string (shortcut, c);
 			hb = gtk_hbox_new (FALSE, 16);
-			l = gtk_label_new (action->name);
+			l = gtk_label_new_with_mnemonic (action->name);
 			gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
 			gtk_box_pack_start ((GtkBox *) hb, l, TRUE, TRUE, 0);
 			l = gtk_label_new (c);
@@ -304,7 +304,7 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
 			item = gtk_image_menu_item_new ();
 			gtk_container_add ((GtkContainer *) item, hb);
 		} else {
-			item = gtk_image_menu_item_new_with_label (action->name);
+			item = gtk_image_menu_item_new_with_mnemonic (action->name);
 		}
 		if (action->image) {
 			icon = sp_icon_new_scaled (16, action->image);
@@ -351,7 +351,7 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 
 	sp_ui_menu_append (fm, file_verbs_one, view);
 
- 	item_recent = sp_ui_menu_append_item (fm, NULL, _("Open Recent"), NULL, NULL);
+ 	item_recent = sp_ui_menu_append_item (fm, NULL, _("Open _Recent"), NULL, NULL);
  	menu_recent = gtk_menu_new ();
  	sp_menu_append_recent_documents (GTK_WIDGET (menu_recent));
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_recent), menu_recent);
@@ -437,7 +437,7 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 		SP_VERB_LAST
 	};
 	sp_ui_menu_append (menu, selection, view);
-	sp_ui_menu_append_item (menu, NULL, _("Cleanup"), G_CALLBACK (sp_edit_cleanup), NULL);
+	sp_ui_menu_append_item (menu, NULL, _("Cl_eanup"), G_CALLBACK (sp_edit_cleanup), NULL);
 }
 
 static void
@@ -469,9 +469,9 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PAGE_WIDTH, view);
 	/* View:New View*/
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item (menu, NULL, _("New View"), G_CALLBACK(sp_ui_new_view), NULL);
+	sp_ui_menu_append_item (menu, NULL, _("_New View"), G_CALLBACK(sp_ui_new_view), NULL);
 	/* View:New Preview*/
-	sp_ui_menu_append_item (menu, NULL, _("New Preview"), G_CALLBACK(sp_ui_new_view_preview), NULL);
+	sp_ui_menu_append_item (menu, NULL, _("N_ew Preview"), G_CALLBACK(sp_ui_new_view_preview), NULL);
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 
 	sp_ui_menu_append (menu, dialog_verbs, view);
@@ -484,7 +484,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 static void
 sp_ui_help_menu(GtkWidget *m)
 {
-	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Inkscape"), G_CALLBACK(sp_help_about), NULL);
+	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 #ifdef WITH_MODULES
 #if 0
 	/* TODO: Modules need abouts too */
@@ -502,38 +502,38 @@ sp_ui_main_menubar (SPView *view)
 
 	mbar = gtk_menu_bar_new ();
 
-	mitem = gtk_menu_item_new_with_label (_("File"));
+	mitem = gtk_menu_item_new_with_mnemonic (_("_File"));
 	menu = gtk_menu_new ();
 	sp_ui_file_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
-	mitem = gtk_menu_item_new_with_label (_("Edit"));
+	mitem = gtk_menu_item_new_with_mnemonic (_("_Edit"));
 	menu = gtk_menu_new ();
 	sp_ui_edit_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
-	mitem = gtk_menu_item_new_with_label (_("Object"));
+	mitem = gtk_menu_item_new_with_mnemonic (_("_View"));
+	menu = gtk_menu_new ();
+	sp_ui_view_menu (GTK_MENU (menu), NULL, view);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
+	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
+	
+	mitem = gtk_menu_item_new_with_mnemonic (_("_Object"));
 	menu = gtk_menu_new ();
 	sp_ui_object_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
-	mitem = gtk_menu_item_new_with_label (_("View"));
-	menu = gtk_menu_new();
-	sp_ui_view_menu (GTK_MENU (menu), NULL, view);
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
-	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
-
 #ifdef WITH_MODULES
-	mitem = gtk_menu_item_new_with_label (_("Filters"));
-	menu = gtk_menu_new();
+	mitem = gtk_menu_item_new_with_mnemonic (_("Fil_ters"));
+	menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(mitem), GTK_WIDGET(sp_module_menu_filter()));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 #endif
 
-	mitem = gtk_menu_item_new_with_label (_("Help"));
+	mitem = gtk_menu_item_new_with_mnemonic (_("_Help"));
 	menu = gtk_menu_new ();
 	sp_ui_help_menu (menu);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));

@@ -216,13 +216,13 @@ sp_module_menu_filter (void)
 	menu = gtk_menu_new();
 
 	/* TODO: Implement this */
-	item = gtk_menu_item_new_with_label("Filter");
+	item = gtk_menu_item_new_with_mnemonic("_Filter");
 	gtk_widget_show(GTK_WIDGET(item));
 	gtk_menu_append(menu, GTK_WIDGET(item));
 	gtk_widget_set_sensitive(GTK_WIDGET(item), FALSE);
 
 	/* TODO: Implement this */
-	item = gtk_menu_item_new_with_label("Last Filter...");
+	item = gtk_menu_item_new_with_mnemonic("_Last Filter...");
 	gtk_widget_show(GTK_WIDGET(item));
 	gtk_menu_append(menu, GTK_WIDGET(item));
 	gtk_widget_set_sensitive(GTK_WIDGET(item), FALSE);

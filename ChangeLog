@@ -1,3 +1,8 @@
+2003-12-24  Daniel Borgmann <spark@mayl.de>
+
+	* src/interface.cpp src/verbs.cpp src/object-ui.cpp src/modules/menu.cpp:
+	Added mnemonics and some HIGification
+
 2003-12-23  bulia byak <bulia@dr.com>
 
 	* src/helper/sp-canvas.h: float-to-double fix

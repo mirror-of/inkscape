@@ -102,10 +102,10 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	item = (SPItem *) object;
 
 	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_label (_("Item"));
+	i = gtk_menu_item_new_with_mnemonic (_("_Item"));
 	m = gtk_menu_new ();
 	/* Item dialog */
-	w = gtk_menu_item_new_with_label (_("Item Properties"));
+	w = gtk_menu_item_new_with_mnemonic (_("Item _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_properties), item);
 	gtk_widget_show (w);
@@ -115,7 +115,7 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Select item */
-	w = gtk_menu_item_new_with_label (_("Select this"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Select This"));
 	if (sp_selection_item_selected (SP_DT_SELECTION (desktop), item)) {
 		gtk_widget_set_sensitive (w, FALSE);
 	} else {
@@ -125,18 +125,18 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Reset transformations */
-	w = gtk_menu_item_new_with_label (_("Reset transformation"));
+	w = gtk_menu_item_new_with_mnemonic (_("Reset _Transformation"));
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_reset_transformation), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Toggle sensitivity */
 	insensitive = (sp_repr_attr (SP_OBJECT_REPR (item), "sodipodi:insensitive") != NULL);
-	w = gtk_menu_item_new_with_label (insensitive ? _("Make sensitive") : _("Make insensitive"));
+	w = gtk_menu_item_new_with_mnemonic (insensitive ? _("Make s_ensitive") : _("Make i_nsensitive"));
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_toggle_sensitivity), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Create link */
-	w = gtk_menu_item_new_with_label (_("Create link"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Create Link"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_create_link), item);
 	gtk_widget_set_sensitive (w, !SP_IS_ANCHOR (item));
@@ -248,11 +248,11 @@ sp_group_menu (SPObject *object, SPDesktop *desktop, GtkMenu * menu)
 
 	item = (SPItem *) object;
 
-	i = gtk_menu_item_new_with_label (_("Group"));
+	i = gtk_menu_item_new_with_mnemonic (_("_Group"));
 	m = gtk_menu_new ();
 
 	/* Group dialog */
-	w = gtk_menu_item_new_with_label (_("Group Properties"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Group Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 #if 0
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_properties), item);
@@ -265,7 +265,7 @@ sp_group_menu (SPObject *object, SPDesktop *desktop, GtkMenu * menu)
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 	/* "Ungroup" */
-	w = gtk_menu_item_new_with_label (_("Ungroup"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Ungroup"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_group_ungroup_activate), item);
 	gtk_widget_show (w);
@@ -313,10 +313,10 @@ sp_anchor_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	item = (SPItem *) object;
 
 	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_label (_("Link"));
+	i = gtk_menu_item_new_with_mnemonic (_("_Link"));
 	m = gtk_menu_new ();
 	/* Link dialog */
-	w = gtk_menu_item_new_with_label (_("Link Properties"));
+	w = gtk_menu_item_new_with_mnemonic (_("Link _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_anchor_link_properties), item);
 	gtk_widget_show (w);
@@ -326,12 +326,12 @@ sp_anchor_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Select item */
-	w = gtk_menu_item_new_with_label (_("Follow link"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Follow Link"));
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_anchor_link_follow), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Reset transformations */
-	w = gtk_menu_item_new_with_label (_("Remove link"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Remove Link"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_anchor_link_remove), item);
 	gtk_widget_show (w);
@@ -394,10 +394,10 @@ sp_image_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	item = (SPItem *) object;
 
 	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_label (_("Image"));
+	i = gtk_menu_item_new_with_mnemonic (_("_Image"));
 	m = gtk_menu_new ();
 	/* Link dialog */
-	w = gtk_menu_item_new_with_label (_("Image Properties"));
+	w = gtk_menu_item_new_with_mnemonic (_("Image _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_image_image_properties), item);
 	gtk_widget_show (w);
@@ -405,7 +405,7 @@ sp_image_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 
 #ifdef ENABLE_AUTOTRACE
 	/* Autotrace dialog */
-	w = gtk_menu_item_new_with_label (_("Trace"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Trace"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_image_autotrace), item);
 	gtk_widget_show (w);
@@ -454,10 +454,10 @@ sp_shape_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	item = (SPItem *) object;
 
 	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_label (_("Shape"));
+	i = gtk_menu_item_new_with_mnemonic (_("_Shape"));
 	m = gtk_menu_new ();
 	/* Item dialog */
-	w = gtk_menu_item_new_with_label (_("Fill settings"));
+	w = gtk_menu_item_new_with_mnemonic (_("_Fill Settings"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_shape_fill_settings), item);
 	gtk_widget_show (w);
@@ -484,10 +484,10 @@ sp_rect_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	item = (SPItem *) object;
 
 	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_label (_("Rect"));
+	i = gtk_menu_item_new_with_mnemonic (_("_Rect"));
 	m = gtk_menu_new ();
 	/* Link dialog */
-	w = gtk_menu_item_new_with_label (_("Rect Properties"));
+	w = gtk_menu_item_new_with_mnemonic (_("Rect _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_rect_rect_properties), item);
 	gtk_widget_show (w);
@@ -520,10 +520,10 @@ sp_star_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	item = (SPItem *) object;
 
 	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_label (_("Star"));
+	i = gtk_menu_item_new_with_mnemonic (_("_Star"));
 	m = gtk_menu_new ();
 	/* Link dialog */
-	w = gtk_menu_item_new_with_label (_("Star Properties"));
+	w = gtk_menu_item_new_with_mnemonic (_("Star _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_star_star_properties), item);
 	gtk_widget_show (w);
@@ -556,10 +556,10 @@ sp_spiral_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	item = (SPItem *) object;
 
 	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_label (_("Spiral"));
+	i = gtk_menu_item_new_with_mnemonic (_("_Spiral"));
 	m = gtk_menu_new ();
 	/* Link dialog */
-	w = gtk_menu_item_new_with_label (_("Spiral Properties"));
+	w = gtk_menu_item_new_with_mnemonic (_("Spiral _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_spiral_spiral_properties), item);
 	gtk_widget_show (w);
