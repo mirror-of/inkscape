@@ -1,3 +1,8 @@
+2004-11-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/pen-context.cpp (spdc_endpoint_snap):
+	  Fix use of uninitialized value when snapping.
+
 2004-11-23  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/dialogs/layer-properties.cpp:  Fixing bug causing two new

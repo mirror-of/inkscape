@@ -200,7 +200,9 @@ sp_pen_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
 static void
 spdc_endpoint_snap(SPPenContext const *const pc, NR::Point &p, guint const state)
 {
-    spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
+    if (pc->npoints != 0) {
+        spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
+    }
 }
 
 /** Snaps new node's handle relative to the new node. */
