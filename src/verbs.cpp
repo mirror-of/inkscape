@@ -616,9 +616,6 @@ sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_DIALOG_NAMEDVIEW:
             sp_desktop_dialog ();
             break;
-        case SP_VERB_DIALOG_TOOL_OPTIONS:
-            sp_tool_options_dialog ();
-            break;
         case SP_VERB_DIALOG_FILL_STROKE:
             sp_object_properties_dialog ();
             break;
@@ -971,8 +968,6 @@ static const SPVerbActionDef props[] = {
         N_("Global Inkscape options"), "inkscape_options"},
     {SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Options"),
         N_("Options saved with the document"), "document_options"},
-    {SP_VERB_DIALOG_TOOL_OPTIONS, "DialogToolOptions", N_("Tool Optio_ns"),
-        N_("Tool options"), "dialog_tool_options"},
     {SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke"),
         N_("Fill and stroke settings"), "fill_and_stroke"},
     {SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m"),
