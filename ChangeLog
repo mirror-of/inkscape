@@ -1,3 +1,7 @@
+2004-05-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* acinclude.m4: Remove.
+
 2004-05-16  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/extension/internal/svg.cpp:
@@ -44,7 +48,7 @@
 	  src/widgets/gradient-selector.h, src/widgets/paint-selector.h,
 	  src/widgets/spinbutton-events.h, src/widgets/spw-utilities.h,
 	  src/xml/repr-action.h:
-	  Add missing header files.
+	  Add missing header files as detected by check-header-compile script.
 
 	* src/libnr/nr-rotate-fns.h, src/libnr/nr-rotate-fns.cpp: New files.
 	* src/libnr/nr-rotate-fns-test.cpp: New unit test.
