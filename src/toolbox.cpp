@@ -46,7 +46,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "interface.h"
-#include "nodepath.cpp"
+#include "nodepath.h"
 #include "xml/repr-private.h"
 #include "helper/gnome-utils.h"
 #include "helper/sp-intl.h"
