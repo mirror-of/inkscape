@@ -575,25 +575,25 @@ sp_document_default_gradient_vector (SPDocument *document, guint32 color)
 }
 
 /**
-Return the preferred vector for an object, made from its current color or from desktop style if none
+Return the preferred vector for \a o, made from its current color or from desktop style if \a o
+doesn't have flat color.
+
+\pre o != NULL
 */
 SPGradient *
-sp_gradient_vector_for_object (SPDocument *doc, SPDesktop *desktop, SPObject *o, bool is_fill)
+sp_gradient_vector_for_object(SPDocument *const doc, SPDesktop *const desktop, SPObject *const o, bool const is_fill)
 {
-    SPGradient *vector;
-
     // take the color of the object
-    guint type = is_fill ? SP_OBJECT_STYLE (o)->fill.type : SP_OBJECT_STYLE (o)->stroke.type;
-    if (type == SP_PAINT_TYPE_COLOR) {
-        gfloat d[4];
-        sp_color_get_rgb_floatv (is_fill ? &(SP_OBJECT_STYLE (o)->fill.value.color) : &(SP_OBJECT_STYLE (o)->stroke.value.color), d);
-        guint32 rgba = SP_RGBA32_F_COMPOSE(d[0], d[1], d[2], 1.0);
-        vector = sp_document_default_gradient_vector (doc, rgba);
-    } else { // if none, take current color of the desktop
-        vector = sp_document_default_gradient_vector (doc, sp_desktop_get_color (desktop, is_fill));
-    }
+    SPStyle const &style = *SP_OBJECT_STYLE(o);
+    SPIPaint const &paint = ( is_fill
+			      ? style.fill
+			      : style.stroke );
+    guint32 const rgba( paint.type == SP_PAINT_TYPE_COLOR
+			? sp_color_get_rgba32_ualpha(&paint.value.color, 0xff)
+			: sp_desktop_get_color(desktop, is_fill) );
+    // if o doesn't use flat color, then take current color of the desktop.
 
-    return vector;
+    return sp_document_default_gradient_vector(doc, rgba);
 }
 
 
