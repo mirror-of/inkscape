@@ -935,7 +935,7 @@ void Path::ConvertPositionsToForced(int nbPos, cut_position *poss)
                 
                 if ( fp >= 0 ) {
                     PathDescrMoveTo *oData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[fp]);
-                    dynamic_cast<PathDescrClose*>(descr_cmd[i])->p = oData->p;
+                    dynamic_cast<PathDescrLineTo*>(descr_cmd[i])->p = oData->p;
                 }
             }
             break;
@@ -985,10 +985,9 @@ void Path::ConvertPositionsToForced(int nbPos, cut_position *poss)
       }
     }
   }
-  
-  
+
   qsort(poss, nbPos, sizeof(cut_position), CmpPosition);
-  
+
   for (int curP=0;curP<nbPos;curP++) {
     int   cp=poss[curP].piece;
     if ( cp < 0 || cp >= int(descr_cmd.size()) ) break;
@@ -1041,7 +1040,7 @@ void Path::ConvertPositionsToForced(int nbPos, cut_position *poss)
           PathDescrLineTo *oData = dynamic_cast<PathDescrLineTo *>(descr_cmd[cp]);
           endP=oData->p;
         }
-        
+
         theP=ct*endP+(1-ct)*startP;
         
         InsertLineTo(endP,cp+1);
@@ -1059,7 +1058,6 @@ void Path::ConvertPositionsToForced(int nbPos, cut_position *poss)
             poss[j].piece+=2;
           }
         }
-        
       } else if ( typ == descr_arcto ) {
         NR::Point        endP;
         double           rx,ry,angle;
@@ -1229,7 +1227,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
   ConvertPositionsToForced(nbPos,poss);
 //  ConvertForcedToMoveTo();
   // on fait une version customizee a la place
-  
+
   Path*  res=new Path;
   
   NR::Point    lastP(0,0);
@@ -1280,7 +1278,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
         NR::Point   nMvtP=PrevPoint(hasForced);
         res->MoveTo(nMvtP);
         NR::Point   nLastP=nMvtP;
-        for (int k=hasForced+1;k<=j;k++) {
+        for (int k = hasForced + 1; k < j; k++) {
           int ntyp=descr_cmd[k]->getType();
           if ( ntyp == descr_moveto ) {
             // ne doit pas arriver
@@ -1375,7 +1373,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
     } else {
     }
   }
-  
+
   Copy(res);
   delete res;
   return;

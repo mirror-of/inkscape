@@ -1,3 +1,8 @@
+2004-10-26  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/livarot/PathCutting.cpp: fix a couple of bugs that I
+	introduced that cause crashes on cut path.
+
 2004-10-25  Jon A. Cruz  <jon@joncruz.org>
 	* src/file.cpp, src/file.h, src/inkscape.cpp, src/sp-image.cpp,
 	src/uri.cpp, src/uri.h, src/dialogs/filedialog.cpp,
