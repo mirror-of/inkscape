@@ -37,8 +37,8 @@
  *
  */
 
-typedef struct _SPUnit SPUnit;
-typedef struct _SPDistance SPDistance;
+struct SPUnit;
+struct SPDistance;
 
 /*
  * The base absolute unit is 1/72th of an inch (we are gnome PRINT, so sorry SI)
@@ -60,7 +60,7 @@ typedef enum {
  * because this would certainly confuse textdomain.
  */
 
-struct _SPUnit {
+struct SPUnit {
 	guint version : 8; /* Has to be 0 at moment */
 	guint base : 8; /* Base */
 	gdouble unittobase;
@@ -71,7 +71,7 @@ struct _SPUnit {
 	gchar const *abbr_plural;
 };
 
-struct _SPDistance {
+struct SPDistance {
 	const SPUnit *unit;
 	gdouble distance;
 };

@@ -24,8 +24,8 @@
 #define SP_IS_UNIT_SELECTOR(o) (GTK_CHECK_TYPE ((o), SP_TYPE_UNIT_SELECTOR))
 #define SP_IS_UNIT_SELECTOR_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_UNIT_SELECTOR))
 
-typedef struct _SPUnitSelector SPUnitSelector;
-typedef struct _SPUnitSelectorClass SPUnitSelectorClass;
+struct SPUnitSelector;
+struct SPUnitSelectorClass;
 
 GType sp_unit_selector_get_type (void);
 

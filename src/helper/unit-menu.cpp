@@ -25,7 +25,7 @@
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
 
-struct _SPUnitSelector {
+struct SPUnitSelector {
     GtkHBox box;
 
     GtkWidget *menu;
@@ -42,7 +42,7 @@ struct _SPUnitSelector {
     GSList *adjustments;
 };
 
-struct _SPUnitSelectorClass {
+struct SPUnitSelectorClass {
     GtkHBoxClass parent_class;
 
     gboolean (* set_unit) (SPUnitSelector *us, const SPUnit *old, const SPUnit *new_unit);

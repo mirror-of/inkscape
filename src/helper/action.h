@@ -19,18 +19,18 @@
 /** A macro to check whether or not something is an action */
 #define SP_IS_ACTION(o) (NR_CHECK_INSTANCE_TYPE ((o), SP_TYPE_ACTION))
 
-typedef struct _SPAction SPAction;
-typedef struct _SPActionClass SPActionClass;
+struct SPAction;
+struct SPActionClass;
 
 #include <libnr/nr-object.h>
 #include <view.h>
 
-typedef struct _SPActionEventVector SPActionEventVector;
+struct SPActionEventVector;
 
 /** This is a structure that is used to hold all the possible
     actions that can be taken with an action.  These are the
 	function pointers available */
-struct _SPActionEventVector {
+struct SPActionEventVector {
 	NRObjectEventVector object_vector;                                             /**< Parent class */
 	void (* perform) (SPAction *action, void *ldata, void *pdata);                 /**< Actually do the action of the event.  Called by sp_perform_action */
 	void (* set_active) (SPAction *action, unsigned int active, void *data);       /**< Callback for activation change */
@@ -41,7 +41,7 @@ struct _SPActionEventVector {
 /** All the data that is required to be an action.  This
     structure identifies the action and has the data to
 	create menus and toolbars for the action */
-struct _SPAction {
+struct SPAction {
 	NRActiveObject object;       /**< Parent Object */
 	unsigned int sensitive : 1;  /**< Value to track whether the action is sensitive */
 	unsigned int active : 1;     /**< Value to track whether the action is active */
@@ -53,7 +53,7 @@ struct _SPAction {
 };
 
 /** The action class is the same as its parent */
-struct _SPActionClass {
+struct SPActionClass {
 	NRActiveObjectClass parent_class; /**< Parent Class */
 };
 
