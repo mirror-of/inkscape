@@ -40,11 +40,14 @@ libspchelp_a_SOURCES = \
 #	pathops.c pathops.h
 
 sp-marshal.h: sp-marshal.list
-	glib-genmarshal --prefix=sp_marshal --header $< > $@
-                                                                                
+	glib-genmarshal --prefix=sp_marshal --header $(srcdir)/sp-marshal.list > tmp.$$$$ && \
+	 mv tmp.$$$$ sp-marshal.h
+
 sp-marshal.c: sp-marshal.list sp-marshal.h
-	echo '#include "helper/sp-marshal.h"' > $@
-	glib-genmarshal --prefix=sp_marshal --body $< >> $@
+	( echo '#include "helper/sp-marshal.h"' &&	\
+	  glib-genmarshal --prefix=sp_marshal --body $(srcdir)/sp-marshal.list )	\
+	 > tmp.$$$$ &&	\
+	 mv tmp.$$$$ sp-marshal.c
 
 sp-marshal.c sp-marshal.h: Makefile
 

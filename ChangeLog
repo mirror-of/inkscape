@@ -1,3 +1,7 @@
+2003-12-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/helper/Makefile.am: Try not to require Gnu make.
+
 2003-12-27  Alexander Clausen <alex@skip86.com>
 	
 	* src/interface.{h,cpp} (sp_ui_error_dialog): new function.
