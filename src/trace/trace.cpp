@@ -26,6 +26,7 @@
 #include <sp-image.h>
 #include <sp-path.h>
 #include <svg/stringstream.h>
+#include <display/curve.h>
 #include <xml/repr.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -38,6 +39,7 @@ namespace Inkscape
 Trace::Trace()
 {
     engine = NULL;
+    selectedItem = NULL;
 }
 
 
@@ -50,8 +52,8 @@ Trace::~Trace()
 }
 
 
-static SPImage *
-getSelectedSPImage()
+SPImage *
+Trace::getSelectedSPImage()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop)
@@ -85,6 +87,8 @@ getSelectedSPImage()
         //g_warning(msg);
         return NULL;
         }
+
+    selectedItem = item;
 
     SPImage *img = SP_IMAGE(item);
 
@@ -139,7 +143,7 @@ void Trace::convertImageToPathThread()
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
 
     SPImage *img = getSelectedSPImage();
-    if (!img)
+    if (!img || !selectedItem)
         {
         engine = NULL;
         return;
@@ -171,23 +175,37 @@ void Trace::convertImageToPathThread()
     sp_repr_set_attr(pathRepr, "d", d);
 
     //### Copy position info from <image> to <path>
-    char *xval = (char *)sp_repr_attr(imgRepr, "x");
-    char *yval = (char *)sp_repr_attr(imgRepr, "y");
+    NR::Matrix tf = sp_item_i2d_affine(selectedItem);
+    /*
+    double xpos = NR_MATRIX_DF_TRANSFORM_X(tf, ixval, iyval);
+    double ypos = NR_MATRIX_DF_TRANSFORM_Y(tf, ixval, iyval);
+    Inkscape::SVGOStringStream data;
+    data << "translate(" << xpos << ", " << ypos << ")" ;
+    sp_repr_set_attr(pathRepr, "transform", data.str().c_str());
+    */
+    /*
+    char *xvalstr = (char *)sp_repr_attr(imgRepr, "x");
+    char *yvalstr = (char *)sp_repr_attr(imgRepr, "y");
     if (xval && yval)
         {
         Inkscape::SVGOStringStream data;
         data << "translate(" << xval << ", " << yval << ")" ;
         sp_repr_set_attr(pathRepr, "transform", data.str().c_str());
         }
+    */
 
-
-    //SPObject *reprobj   = doc->getObjectByRepr(pathRepr);
+    SPObject *reprobj   = doc->getObjectByRepr(pathRepr);
 
     //#Add to tree
-    SPRepr *par         = sp_repr_parent(SP_OBJECT(img)->repr);
-    sp_repr_add_child(par, pathRepr, SP_OBJECT(img)->repr);
+    SPRepr *par = sp_repr_parent(imgRepr);
+    sp_repr_add_child(par, pathRepr, imgRepr);
 
     free(d);
+
+    //### Apply the transform from the image to the new shape
+    SPShape *newShape = SP_SHAPE(reprobj);
+    SPCurve *curve    = sp_shape_get_curve(newShape);
+    sp_curve_transform(curve, tf);
 
     //## inform the document, so we can undo
     sp_document_done(doc);

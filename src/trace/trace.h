@@ -14,6 +14,8 @@
 
 
 #include <glib.h>
+#include <sp-image.h>
+#include <sp-path.h>
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -141,7 +143,9 @@ class Trace
      */
     TracingEngine *engine;
 
+    SPImage *getSelectedSPImage();
 
+    SPItem *selectedItem;
 
 
 };//class Trace
