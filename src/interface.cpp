@@ -457,6 +457,101 @@ sp_ui_menu_append (GtkMenu *menu, const sp_verb_t *verbs, SPView *view)
     }
 }
 
+ static void 
+checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data) 	 
+ { 	 
+     const gchar *pref = (const gchar *) user_data;
+     SPView *view = (SPView *) g_object_get_data (G_OBJECT (menuitem), "view");
+
+     const gchar *pref_path;
+     if (SP_DESKTOP(view)->is_fullscreen)
+         pref_path = g_strconcat ("fullscreen.", pref, NULL);
+     else 
+         pref_path = g_strconcat ("window.", pref, NULL);
+
+     gboolean checked = gtk_check_menu_item_get_active(menuitem); 	 
+     prefs_set_int_attribute(pref_path, "state", checked);
+
+     sp_desktop_widget_layout (SP_DESKTOP(view)->owner);
+ } 	 
+  	 
+ static gboolean 
+checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data) 	 
+ { 	 
+     GtkCheckMenuItem *menuitem=GTK_CHECK_MENU_ITEM(widget); 	 
+
+     const gchar *pref = (const gchar *) user_data;
+     SPView *view = (SPView *) g_object_get_data (G_OBJECT(menuitem), "view");
+
+     const gchar *pref_path;
+     if (SP_DESKTOP(view)->is_fullscreen)
+         pref_path = g_strconcat ("fullscreen.", pref, NULL);
+     else 
+         pref_path = g_strconcat ("window.", pref, NULL);
+
+     gint ison = prefs_get_int_attribute_limited (pref_path, "state", 1, 0, 1); 	 
+
+     g_signal_handlers_block_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)checkitem_toggled, user_data); 	 
+     gtk_check_menu_item_set_active(menuitem, ison); 	 
+     g_signal_handlers_unblock_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)checkitem_toggled, user_data); 	 
+
+     return FALSE; 	 
+ }
+
+
+void
+sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar *label, const gchar *tip, const gchar *pref,
+                              void (*callback_toggle)(GtkCheckMenuItem *, gpointer user_data),
+                              gboolean (*callback_update)(GtkWidget *widget, GdkEventExpose *event, gpointer user_data),
+                                        sp_verb_t verb)
+{
+    GtkWidget *item;
+
+    if (verb) {
+        unsigned int shortcut = sp_shortcut_get_primary (verb);
+        if (shortcut) {
+            gchar c[256];
+            sp_ui_shortcut_string (shortcut, c);
+
+            GtkWidget *hb = gtk_hbox_new (FALSE, 16);
+
+            {
+            GtkWidget *l = gtk_label_new_with_mnemonic (label);
+            gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
+            gtk_box_pack_start ((GtkBox *) hb, l, TRUE, TRUE, 0);
+            }
+
+            {
+            GtkWidget *l = gtk_label_new (c);
+            gtk_misc_set_alignment ((GtkMisc *) l, 1.0, 0.5);
+            gtk_box_pack_end ((GtkBox *) hb, l, FALSE, FALSE, 0);
+            }
+
+            gtk_widget_show_all (hb);
+
+            item = gtk_check_menu_item_new ();
+            gtk_container_add ((GtkContainer *) item, hb);
+        } else {
+            item = gtk_check_menu_item_new_with_label (label);
+        }
+    } else {
+        item = gtk_check_menu_item_new_with_label (label);
+    }
+  	 
+    gtk_widget_show(item);
+  	 
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item); 	 
+
+    g_object_set_data (G_OBJECT (item), "view", (gpointer) view); 	 
+  	 
+    g_signal_connect( G_OBJECT(item), "toggled", (GCallback) callback_toggle, (void *) pref); 	 
+    g_signal_connect( G_OBJECT(item), "expose_event", (GCallback) callback_update, (void *) pref);
+	 
+    g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) tip ); 	 
+    g_signal_connect ( G_OBJECT (item), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL); 	 
+}
+
+
 
 static void
 sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
@@ -633,18 +728,20 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	SP_VERB_ZOOM_NEXT,
 
         SP_VERB_NONE,
+        SP_VERB_LAST
+    };
+
+    static const sp_verb_t view_verbs2[] = {
+	SP_VERB_DIALOG_TOGGLE,
+
+        SP_VERB_NONE,
 	SP_VERB_TOGGLE_GRID,
 	SP_VERB_TOGGLE_GUIDES,
-	SP_VERB_TOGGLE_RULERS,
-	SP_VERB_TOGGLE_SCROLLBARS,
 
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
         SP_VERB_NONE,
 	SP_VERB_FULLSCREEN,
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
-
-        SP_VERB_NONE,
-	SP_VERB_DIALOG_TOGGLE,
 
         SP_VERB_NONE,
 	SP_VERB_FILE_NEXT_DESKTOP,
@@ -657,7 +754,26 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
     sp_ui_menu_append (menu, view_verbs1, view);
 
-} // end of sp_ui_view_menu()
+    GtkWidget *item_showhide = sp_ui_menu_append_item (menu, NULL, _("Show/Hide"), _("Show or hide parts of the document window (differently for normal and fullscreen modes)"), view, NULL, NULL);
+    GtkMenu *m = (GtkMenu *) gtk_menu_new ();
+
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Menu"), _("Show or hide the menu bar"), "menu",
+                                  checkitem_toggled, checkitem_update, 0);
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Top Panel"), _("Show or hide the top panel (under the menu)"), "toppanel",
+                                  checkitem_toggled, checkitem_update, 0);
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Toolbox"), _("Show or hide the main toolbox (on the left)"), "toolbox",
+                                  checkitem_toggled, checkitem_update, 0);
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Rulers"), _("Show or hide the canvas rulers"), "rulers",
+                                  checkitem_toggled, checkitem_update, SP_VERB_TOGGLE_RULERS);
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Scrollbars"), _("Show or hide the canvas scrollbars"), "scrollbars",
+                                  checkitem_toggled, checkitem_update, SP_VERB_TOGGLE_SCROLLBARS);
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Statusbar"), _("Show or hide the statusbar (at the bottom of the window)"), "statusbar",
+                                  checkitem_toggled, checkitem_update, 0);
+
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_showhide), GTK_WIDGET (m));
+
+    sp_ui_menu_append (menu, view_verbs2, view);
+}
 
 
 /* Menus */

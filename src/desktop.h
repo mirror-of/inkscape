@@ -160,12 +160,12 @@ struct SPDesktopWidget {
 
 	unsigned int update : 1;
 
-	unsigned int decorations : 1;
-	unsigned int statusbar : 1;
-
 	SPDesktop *desktop;
 
-        GtkWidget *mbtn;
+	// the root vbox of the window layout
+	GtkWidget *vbox; 
+
+	GtkWidget *menubar, *statusbar;
 
 	GtkWidget *hscrollbar, *vscrollbar;
 
@@ -206,5 +206,7 @@ void sp_desktop_widget_show_decorations (SPDesktopWidget *dtw, gboolean show);
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
 void fullscreen(SPDesktop *dt);
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+
+void sp_desktop_widget_layout (SPDesktopWidget *dtw);
 
 #endif

@@ -719,8 +719,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     GtkWidget *tbl;
     GtkWidget *w;
 
-    GtkWidget *hbox, *vbox;
-    GtkWidget *sbar;
+    GtkWidget *hbox;
     GtkWidget *coord_box;
     GtkWidget *eventbox;
     GtkTooltips *tt;
@@ -730,25 +729,22 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     dtw->desktop = NULL;
 
-    dtw->decorations = TRUE;
-    dtw->statusbar = TRUE;
-
     tt = gtk_tooltips_new ();
 
     /* Main table */
-    vbox = gtk_vbox_new (FALSE, 0);
-    gtk_container_add (GTK_CONTAINER (dtw), vbox);
+    dtw->vbox = gtk_vbox_new (FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (dtw), dtw->vbox);
 
-    sbar = gtk_hbox_new (FALSE, 0);
-    gtk_widget_set_usize (sbar, -1, BOTTOM_BAR_HEIGHT);
-    gtk_box_pack_end (GTK_BOX (vbox), sbar, FALSE, TRUE, 0);
+    dtw->statusbar = gtk_hbox_new (FALSE, 0);
+    gtk_widget_set_usize (dtw->statusbar, -1, BOTTOM_BAR_HEIGHT);
+    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->statusbar, FALSE, TRUE, 0);
 
     hbox = gtk_hbox_new (FALSE, 0);
-    gtk_box_pack_end (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+    gtk_box_pack_end (GTK_BOX (dtw->vbox), hbox, TRUE, TRUE, 0);
     gtk_widget_show (hbox);
 
     dtw->aux_toolbox = sp_aux_toolbox_new ();
-    gtk_box_pack_end (GTK_BOX (vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
+    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
 
     dtw->tool_toolbox = sp_tool_toolbox_new ();
     gtk_box_pack_start (GTK_BOX (hbox), dtw->tool_toolbox, FALSE, TRUE, 0);
@@ -812,7 +808,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
     sp_set_font_size (dtw->zoom_status, STATUS_ZOOM_FONT_SIZE);
-    gtk_box_pack_start (GTK_BOX (sbar), dtw->zoom_status, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->zoom_status, FALSE, FALSE, 0);
 
     /* connecting canvas, scrollbars, rulers, statusbar */
     g_signal_connect (G_OBJECT (dtw->hadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
@@ -826,7 +822,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, SP_ICON_SIZE_BUTTON);
     sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
     gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, STATUS_COORD_SKIP);
-    gtk_box_pack_start (GTK_BOX (sbar), coord_box, FALSE, FALSE, 1);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), coord_box, FALSE, FALSE, 1);
 
     // statusbar
     dtw->select_status = gtk_statusbar_new ();
@@ -834,19 +830,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     // display the initial welcome message in the statusbar
     gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, _("Welcome to Inkscape! Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
     gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->select_status), TRUE);
-    gtk_box_pack_start (GTK_BOX (sbar), dtw->select_status, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->select_status, TRUE, TRUE, 0);
 
-    gtk_widget_show_all (vbox);
-
-    if (prefs_get_int_attribute ("options.showscrollbars", "value", 1) == 0) {
-        gtk_widget_hide_all (dtw->hscrollbar);
-        gtk_widget_hide_all (dtw->vscrollbar);
-    }
-
-    if (prefs_get_int_attribute ("options.showrulers", "value", 1) == 0) {
-        gtk_widget_hide_all (dtw->hruler);
-        gtk_widget_hide_all (dtw->vruler);
-    }
+    gtk_widget_show_all (dtw->vbox);
 }
 
 static void
@@ -1129,19 +1115,66 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
     return FALSE;
 }
 
-/* Constructor */
-
 static void
 sp_desktop_uri_set (SPView *view, const gchar *uri, SPDesktopWidget *dtw)
 {
     sp_desktop_widget_set_title (dtw);
 }
 
+/**
+ hide whatever the user does not want to see in the window
+ */
+void
+sp_desktop_widget_layout (SPDesktopWidget *dtw)
+{
+    bool fullscreen = dtw->desktop->is_fullscreen;
+
+    if (prefs_get_int_attribute (fullscreen ? "fullscreen.menu" : "window.menu", "state", 1) == 0) {
+        gtk_widget_hide_all (dtw->menubar);
+    } else {
+        gtk_widget_show_all (dtw->menubar);
+    }
+
+    if (prefs_get_int_attribute (fullscreen ? "fullscreen.toppanel" : "window.toppanel", "state", 1) == 0) {
+        gtk_widget_hide_all (dtw->aux_toolbox);
+    } else {
+        // we cannot just show_all because that will show all tools' panels;
+        // this is a function from toolbox.cpp that shows only the current tool's panel
+        show_aux_toolbox (dtw->aux_toolbox);
+    }
+
+    if (prefs_get_int_attribute (fullscreen ? "fullscreen.toolbox" : "window.toolbox", "state", 1) == 0) {
+        gtk_widget_hide_all (dtw->tool_toolbox);
+    } else {
+        gtk_widget_show_all (dtw->tool_toolbox);
+    }
+
+    if (prefs_get_int_attribute (fullscreen ? "fullscreen.statusbar" : "window.statusbar", "state", 1) == 0) {
+        gtk_widget_hide_all (dtw->statusbar);
+    } else {
+        gtk_widget_show_all (dtw->statusbar);
+    }
+
+    if (prefs_get_int_attribute (fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 1) == 0) {
+        gtk_widget_hide_all (dtw->hscrollbar);
+        gtk_widget_hide_all (dtw->vscrollbar);
+    } else {
+        gtk_widget_show_all (dtw->hscrollbar);
+        gtk_widget_show_all (dtw->vscrollbar);
+    }
+
+    if (prefs_get_int_attribute (fullscreen ? "fullscreen.rulers" : "window.rulers", "state", 1) == 0) {
+        gtk_widget_hide_all (dtw->hruler);
+        gtk_widget_hide_all (dtw->vruler);
+    } else {
+        gtk_widget_show_all (dtw->hruler);
+        gtk_widget_show_all (dtw->vruler);
+    }
+}
+
 SPViewWidget *
 sp_desktop_widget_new (SPNamedView *namedview)
 {
-    GtkWidget *mbar;
-
     SPDesktopWidget *dtw = (SPDesktopWidget*)gtk_type_new (SP_TYPE_DESKTOP_WIDGET);
 
     dtw->dt2r = 1.0 / namedview->gridunit->unittobase;
@@ -1170,13 +1203,15 @@ sp_desktop_widget_new (SPNamedView *namedview)
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
 
-    mbar = sp_ui_main_menubar (SP_VIEW (dtw->desktop));
-    gtk_widget_show_all (mbar);
-    gtk_box_pack_start (GTK_BOX (gtk_bin_get_child (GTK_BIN (dtw))), mbar, FALSE, FALSE, 0);
+    dtw->menubar = sp_ui_main_menubar (SP_VIEW (dtw->desktop));
+    gtk_widget_show_all (dtw->menubar);
+    gtk_box_pack_start (GTK_BOX (gtk_bin_get_child (GTK_BIN (dtw))), dtw->menubar, FALSE, FALSE, 0);
+
+    sp_desktop_widget_layout (dtw);
 
     sp_tool_toolbox_set_desktop (dtw->tool_toolbox, dtw->desktop);
     sp_aux_toolbox_set_desktop (dtw->aux_toolbox, dtw->desktop);
-        
+       
     return SP_VIEW_WIDGET (dtw);
 }
 
@@ -1288,11 +1323,11 @@ sp_desktop_toggle_rulers (SPDesktop *dt)
     if (GTK_WIDGET_VISIBLE (dt->owner->hruler)) {
         gtk_widget_hide_all (dt->owner->hruler);
         gtk_widget_hide_all (dt->owner->vruler);
-        prefs_set_int_attribute ("options.showrulers", "value", 0);
+        prefs_set_int_attribute (dt->is_fullscreen ? "fullscreen.rulers" : "window.rulers", "state", 0);
     } else {
         gtk_widget_show_all (dt->owner->hruler);
         gtk_widget_show_all (dt->owner->vruler);
-        prefs_set_int_attribute ("options.showrulers", "value", 1);
+        prefs_set_int_attribute (dt->is_fullscreen ? "fullscreen.rulers" : "window.rulers", "state", 1);
     }
 }
 
@@ -1302,13 +1337,26 @@ sp_desktop_toggle_scrollbars (SPDesktop *dt)
     if (GTK_WIDGET_VISIBLE (dt->owner->hscrollbar)) {
         gtk_widget_hide_all (dt->owner->hscrollbar);
         gtk_widget_hide_all (dt->owner->vscrollbar);
-        prefs_set_int_attribute ("options.showscrollbars", "value", 0);
+        prefs_set_int_attribute (dt->is_fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 0);
     } else {
         gtk_widget_show_all (dt->owner->hscrollbar);
         gtk_widget_show_all (dt->owner->vscrollbar);
-        prefs_set_int_attribute ("options.showscrollbars", "value", 1);
+        prefs_set_int_attribute (dt->is_fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 1);
     }
 }
+
+void
+sp_desktop_toggle_menubar (SPDesktop *dt)
+{
+    if (GTK_WIDGET_VISIBLE (dt->owner->menubar)) {
+        gtk_widget_hide_all (dt->owner->menubar);
+        prefs_set_int_attribute (dt->is_fullscreen ? "fullscreen.menu" : "window.menu", "state", 0);
+    } else {
+        gtk_widget_show_all (dt->owner->menubar);
+        prefs_set_int_attribute (dt->is_fullscreen ? "fullscreen.menu" : "window.menu", "state", 1);
+    }
+}
+
 
 /*
  * Sooner or later we want to implement two sets of methods
@@ -1884,9 +1932,11 @@ fullscreen(SPDesktop *dt)
         if (dt->is_fullscreen) {
             dt->is_fullscreen = FALSE;
             gtk_window_unfullscreen(topw);        
+            sp_desktop_widget_layout (dt->owner);
         } else {
             dt->is_fullscreen = TRUE;
             gtk_window_fullscreen(topw);
+            sp_desktop_widget_layout (dt->owner);
         }
     }
 }
