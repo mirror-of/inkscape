@@ -100,6 +100,9 @@ extension/menu.cpp
 extension/menu.h
 extension/system.cpp
 extension/system.h
+extract-uri-test.cpp
+extract-uri.cpp
+extract-uri.h
 file.cpp
 file.h
 forward.h
@@ -299,6 +302,8 @@ livarot/ShapeSweep.cpp
 livarot/ShapeSweepUtils.cpp
 livarot/ShapeUtils.h
 macros.h
+marker-status.cpp
+marker-status.h
 node-context.cpp
 node-context.h
 nodepath.cpp

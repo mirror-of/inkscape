@@ -49,6 +49,8 @@ OBJECTS = \
 	extension/internal/win32.o \
 	extension/menu.o \
 	extension/system.o \
+	extract-uri-test.o \
+	extract-uri.o \
 	file.o \
 	geom.o \
 	gradient-chemistry.o \
@@ -148,6 +150,7 @@ OBJECTS = \
 	livarot/ShapeMisc.o \
 	livarot/ShapeSweep.o \
 	livarot/ShapeSweepUtils.o \
+	marker-status.o \
 	node-context.o \
 	nodepath.o \
 	object-edit.o \
@@ -305,6 +308,8 @@ LINTS = \
 	extension/internal/win32.lint \
 	extension/menu.lint \
 	extension/system.lint \
+	extract-uri-test.lint \
+	extract-uri.lint \
 	file.lint \
 	geom.lint \
 	gradient-chemistry.lint \
@@ -404,6 +409,7 @@ LINTS = \
 	livarot/ShapeMisc.lint \
 	livarot/ShapeSweep.lint \
 	livarot/ShapeSweepUtils.lint \
+	marker-status.lint \
 	node-context.lint \
 	nodepath.lint \
 	object-edit.lint \
