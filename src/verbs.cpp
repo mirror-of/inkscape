@@ -1000,7 +1000,7 @@ static const SPVerbActionDef props[] = {
         N_("Text and Font dialog"), "object_font"},
     {SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor..."),
         N_("XML Editor"), "xml_editor"},
-    {SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("_Show/Hide Dialogs"),
+    {SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/_Hide Dialogs"),
         N_("Show or hide all active dialogs"), "dialog_toggle"},
     {SP_VERB_DIALOG_ITEM, "DialogItem", N_("_Object Properties..."),
         N_("Object Properties dialog"), "dialog_item_properties"},

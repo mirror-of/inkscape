@@ -507,35 +507,37 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar
 {
     GtkWidget *item;
 
-    if (verb) {
-        unsigned int shortcut = sp_shortcut_get_primary (verb);
-        if (shortcut) {
-            gchar c[256];
-            sp_ui_shortcut_string (shortcut, c);
+    unsigned int shortcut = 0;
+    if (verb)
+        shortcut = sp_shortcut_get_primary (verb);
 
-            GtkWidget *hb = gtk_hbox_new (FALSE, 16);
+    if (verb && shortcut) {
+        gchar c[256];
+        sp_ui_shortcut_string (shortcut, c);
 
-            {
+        GtkWidget *hb = gtk_hbox_new (FALSE, 16);
+
+        {
             GtkWidget *l = gtk_label_new_with_mnemonic (label);
             gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
             gtk_box_pack_start ((GtkBox *) hb, l, TRUE, TRUE, 0);
-            }
+        }
 
-            {
+        {
             GtkWidget *l = gtk_label_new (c);
             gtk_misc_set_alignment ((GtkMisc *) l, 1.0, 0.5);
             gtk_box_pack_end ((GtkBox *) hb, l, FALSE, FALSE, 0);
-            }
-
-            gtk_widget_show_all (hb);
-
-            item = gtk_check_menu_item_new ();
-            gtk_container_add ((GtkContainer *) item, hb);
-        } else {
-            item = gtk_check_menu_item_new_with_label (label);
         }
+
+        gtk_widget_show_all (hb);
+
+        item = gtk_check_menu_item_new ();
+        gtk_container_add ((GtkContainer *) item, hb);
     } else {
-        item = gtk_check_menu_item_new_with_label (label);
+        GtkWidget *l = gtk_label_new_with_mnemonic (label);
+        gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
+        item = gtk_check_menu_item_new ();
+        gtk_container_add ((GtkContainer *) item, l);
     }
   	 
     gtk_widget_show(item);
@@ -754,20 +756,20 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
     sp_ui_menu_append (menu, view_verbs1, view);
 
-    GtkWidget *item_showhide = sp_ui_menu_append_item (menu, NULL, _("Show/Hide"), _("Show or hide parts of the document window (differently for normal and fullscreen modes)"), view, NULL, NULL);
+    GtkWidget *item_showhide = sp_ui_menu_append_item (menu, NULL, _("_Show/Hide"), _("Show or hide parts of the document window (differently for normal and fullscreen modes)"), view, NULL, NULL);
     GtkMenu *m = (GtkMenu *) gtk_menu_new ();
 
-    sp_ui_menu_append_check_item_from_verb (m, view, _("Menu"), _("Show or hide the menu bar"), "menu",
+    sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
                                   checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb (m, view, _("Top Panel"), _("Show or hide the top panel (under the menu)"), "toppanel",
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Top _Panel"), _("Show or hide the top panel (under the menu)"), "toppanel",
                                   checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb (m, view, _("Toolbox"), _("Show or hide the main toolbox (on the left)"), "toolbox",
+    sp_ui_menu_append_check_item_from_verb (m, view, _("_Toolbox"), _("Show or hide the main toolbox (on the left)"), "toolbox",
                                   checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb (m, view, _("Rulers"), _("Show or hide the canvas rulers"), "rulers",
+    sp_ui_menu_append_check_item_from_verb (m, view, _("_Rulers"), _("Show or hide the canvas rulers"), "rulers",
                                   checkitem_toggled, checkitem_update, SP_VERB_TOGGLE_RULERS);
-    sp_ui_menu_append_check_item_from_verb (m, view, _("Scrollbars"), _("Show or hide the canvas scrollbars"), "scrollbars",
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Scroll_bars"), _("Show or hide the canvas scrollbars"), "scrollbars",
                                   checkitem_toggled, checkitem_update, SP_VERB_TOGGLE_SCROLLBARS);
-    sp_ui_menu_append_check_item_from_verb (m, view, _("Statusbar"), _("Show or hide the statusbar (at the bottom of the window)"), "statusbar",
+    sp_ui_menu_append_check_item_from_verb (m, view, _("_Statusbar"), _("Show or hide the statusbar (at the bottom of the window)"), "statusbar",
                                   checkitem_toggled, checkitem_update, 0);
 
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_showhide), GTK_WIDGET (m));
