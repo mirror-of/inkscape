@@ -18,7 +18,6 @@
 #include <gtk/gtktooltips.h>
 
 #include "forward.h"
-#include "verbs.h"
 
 GtkWidget *sp_tool_toolbox_new(void);
 void sp_tool_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop);
@@ -33,7 +32,7 @@ void show_aux_toolbox(GtkWidget *toolbox);
 
 GtkWidget *sp_toolbox_button_normal_new_from_verb(GtkWidget *t,
                                                   unsigned size,
-                                                  sp_verb_t verb,
+                                                  Inkscape::Verb * verb,
                                                   SPView *view,
                                                   GtkTooltips *tt);
 

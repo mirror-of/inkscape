@@ -326,7 +326,7 @@ sp_export_dialog (void)
         GtkWidget *vb, *f, *t, *hb, *fe, *hs, *b;
 
         gchar title[500];
-        sp_ui_dialog_title_string (SP_VERB_FILE_EXPORT, title);
+        sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_FILE_EXPORT), title);
 
         dlg = sp_window_new (title, TRUE);
         

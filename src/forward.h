@@ -189,6 +189,14 @@ class URIReference;
 
 struct box_solution;
 
+
+/* verbs */
+
+typedef int sp_verb_t;
+namespace Inkscape {
+    class Verb;
+}
+
 #endif /* !__FORWARD_H__ */
 
 /*

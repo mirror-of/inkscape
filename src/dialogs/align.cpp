@@ -402,7 +402,8 @@ void DialogAlign::on_ref_change(){
 //Make blink the master
 }
 
-void DialogAlign::on_tool_changed( sp_verb_t verb)
+/* verb here is not really a verb (not a Inkscape::Verb) */
+void DialogAlign::on_tool_changed(unsigned int verb)
 {
     setMode(verb == TOOLS_NODES) ;       
 }
@@ -861,7 +862,7 @@ sp_quick_align_dialog (void)
         GtkTooltips * tt = gtk_tooltips_new ();
 
         gchar title[500];
-        sp_ui_dialog_title_string (SP_VERB_DIALOG_ALIGN_DISTRIBUTE, title);
+        sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_DIALOG_ALIGN_DISTRIBUTE), title);
 
         dlg = sp_window_new (title, TRUE);
         if (x == -1000 || y == -1000) {

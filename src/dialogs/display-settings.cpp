@@ -693,7 +693,7 @@ sp_display_dialog (void)
     {
 
         gchar title[500];
-        sp_ui_dialog_title_string (SP_VERB_DIALOG_DISPLAY, title);
+        sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_DIALOG_DISPLAY), title);
 
         dlg = sp_window_new (title, TRUE);
         if (x == -1000 || y == -1000) {

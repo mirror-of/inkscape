@@ -1,3 +1,22 @@
+2004-09-27  Ted Gould  <ted@gould.cx>
+
+	* src/desktop.h, src/forward.h, src/interface.cpp, src/interface.h,
+	src/select-toolbar.cpp, src/shortcuts.cpp, src/shortcuts.h,
+	src/toolbox.cpp, src/toolbox.h, src/verbs.cpp, src/verbs.h,
+	src/dialogs/align.cpp, src/dialogs/align.h,
+	src/dialogs/desktop-properties.cpp, src/dialogs/display-settings.cpp,
+	src/dialogs/export.cpp, src/dialogs/find.cpp,
+	src/dialogs/item-properties.cpp, src/dialogs/object-properties.cpp,
+	src/dialogs/text-edit.cpp, src/dialogs/transformation.cpp,
+	src/dialogs/xml-tree.cpp, src/helper/action.cpp, src/helper/action.h:
+
+	Wow, alot of files changed.  The ones that changed the most are
+	verb.cpp and verb.h, which are almost entirely different.  What happened
+	here is the the verbs were made object oriented.  So, as the verbs
+	are built into everything, lots of files changed.  Now the code
+	for the verbs is much cleaner, and I think a little bit faster.
+	Also, it will be easier to extend the verbs for use in effects.
+
 2004-09-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp:

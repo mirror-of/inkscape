@@ -166,7 +166,7 @@ sp_object_properties_dialog (void)
         GtkWidget *vb, *nb, *hb, *l, *page, *hs, *om, *m, *mi;
 
         gchar title[500];
-        sp_ui_dialog_title_string (SP_VERB_DIALOG_FILL_STROKE, title);
+        sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_DIALOG_FILL_STROKE), title);
 
         dlg = sp_window_new (title, TRUE);
         if (x == -1000 || y == -1000) {

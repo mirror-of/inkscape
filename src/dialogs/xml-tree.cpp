@@ -1165,7 +1165,7 @@ on_document_uri_set ( SPDocument * document, const gchar * uri, gpointer data )
     gchar *t;
     gchar title[500];
 
-    sp_ui_dialog_title_string (SP_VERB_DIALOG_XML_EDITOR, title);
+    sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_DIALOG_XML_EDITOR), title);
     t = g_strdup_printf ("%s: %s", SP_DOCUMENT_NAME (document), title);
     gtk_window_set_title (GTK_WINDOW (dlg), t);
     g_free (t);

@@ -363,17 +363,17 @@ sp_select_toolbox_new(SPDesktop *desktop)
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);
 
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_OBJECT_ROTATE_90_CCW, view, tt);
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_OBJECT_ROTATE_90_CW, view, tt);
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_OBJECT_FLIP_HORIZONTAL, view, tt);
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_OBJECT_FLIP_VERTICAL, view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CCW), view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CW), view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_HORIZONTAL), view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_VERTICAL), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_TO_BACK, view, tt);
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_LOWER, view, tt);
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_RAISE, view, tt);
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_TO_FRONT, view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_SELECTION_TO_BACK), view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_SELECTION_LOWER), view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_SELECTION_RAISE), view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_SELECTION_TO_FRONT), view, tt);
 
     // Create the parent widget for x y w h tracker.
     GtkWidget *spw = sp_widget_new_global(INKSCAPE);

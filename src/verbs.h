@@ -6,24 +6,29 @@
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Ted Gould <ted@gould.cx>
  *
- * This code is in public domain
+ * This code is in public domain if done by Lauris
+ * This code is GPL if done by Ted
  */
 
 #include "require-config.h"   /* HAVE_GTK_WINDOW_FULLSCREEN */
 #include "helper/helper-forward.h"
-#include "forward.h"	/* SPView */
+#include "forward.h"    /* SPView */
 
+/** \brief This anonymous enum is used to provide a list of the Verbs
+           which are defined staticly in the verb files.  There may be
+		   other verbs which are defined dynamically also. */
 enum {
     /* Header */
-    SP_VERB_INVALID,
-    SP_VERB_NONE,
+    SP_VERB_INVALID,               /**< A dummy verb to represent doing something wrong. */
+    SP_VERB_NONE,                  /**< A dummy verb to represent not having a verb. */
     /* File */
-    SP_VERB_FILE_NEW,
-    SP_VERB_FILE_OPEN,
-    SP_VERB_FILE_REVERT,
-    SP_VERB_FILE_SAVE,
-    SP_VERB_FILE_SAVE_AS,
+    SP_VERB_FILE_NEW,              /**< A new file in a new window. */
+    SP_VERB_FILE_OPEN,             /**< Open a file. */
+    SP_VERB_FILE_REVERT,           /**< Revert this file to its original state. */
+    SP_VERB_FILE_SAVE,             /**< Save the current file with its saved filename */
+    SP_VERB_FILE_SAVE_AS,          /**< Save the current file with a new filename */
     SP_VERB_FILE_PRINT,
     SP_VERB_FILE_VACUUM,
     SP_VERB_FILE_PRINT_DIRECT,
@@ -156,17 +161,139 @@ enum {
     SP_VERB_LAST
 };
 
-typedef int sp_verb_t;
+gchar *sp_action_get_title (const SPAction *action);
 
-class SPVerbActionFactory {
+/* FIXME !!! we should probably go ahead and use GHashTables, actually -- more portable */
+
+#if defined(__GNUG__) && (__GNUG__ >= 3)
+# include <ext/hash_map>
+using __gnu_cxx::hash_map;
+#else
+# include <hash_map.h>
+#endif
+
+#if defined(__GNUG__) && (__GNUG__ >= 3)
+namespace __gnu_cxx {
+#endif
+
+template <>
+class hash<SPView *> {
+    typedef SPView *T;
 public:
-    virtual SPAction *make_action(sp_verb_t verb, SPView *view)=0;
+    size_t operator()(const T& x) const {
+        return (size_t)g_direct_hash((gpointer)x);
+    }
 };
 
-SPAction *sp_verb_get_action (sp_verb_t verb, SPView *view);
-sp_verb_t sp_verb_register (SPVerbActionFactory *factory);
-sp_verb_t sp_verb_find (const char * name);
+#if defined(__GNUG__) && (__GNUG__ >= 3)
+}; /* namespace __gnu_cxx */
+#endif
 
-gchar *sp_action_get_title (const SPAction *action);
+namespace Inkscape {
+
+/** \brief A class to represent things the user can do.  In many ways
+           these are 'action factories' as they are used to create
+		   individual actions that are based on a given view.
+*/
+class Verb {
+private:
+	/** \brief An easy to use defition of the table of verbs by code. */
+    typedef hash_map<unsigned int, Inkscape::Verb *> VerbTable;
+	/** \brief A table of all the dynamically created verbs. */
+    static VerbTable _verbs;
+	/** \brief The table of statically created verbs which are mostly
+	           'base verbs'. */
+    static Verb * _base_verbs[SP_VERB_LAST + 1];
+	/* Plus one because there is an entry for SP_VERB_LAST */
+
+	/** \brief A simple typedef to make using the action table easier. */
+    typedef hash_map<SPView *, SPAction *> ActionTable;
+	/** \brief A list of all the actions that have been created for this
+	           verb.  It is referenced by the view that they are created for. */
+    ActionTable * _actions;
+
+	/** \brief A unique textual ID for the verb. */
+    gchar const * _id;
+	/** \brief The full name of the verb.  (shown on menu entries) */
+    gchar const * _name;
+	/** \brief Tooltip for the verb. */
+    gchar const * _tip;
+	/** \brief Name of the image that represents the verb. */
+    gchar const * _image;
+	/** \brief Unique numerical representation of the verb.  In most cases
+	           it is a value from the anonymous enum at the top of this
+			   file. */
+    unsigned int  _code;
+
+public:
+	/** \brief Accessor to get the internal variable. */
+	unsigned int get_code (void) { return _code; }
+	/** \brief Accessor to get the internal variable. */
+	gchar const * get_id (void) { return _id; }
+
+protected:
+	SPAction * make_action_helper (SPView * view, SPActionEventVector * vector);
+    virtual SPAction * make_action (SPView * view);
+
+public:
+	/** \brief Inititalizes the Verb with the parameters
+	    \param code  Goes to \c _code
+		\param id    Goes to \c _id
+		\param name  Goes to \c _name
+		\param tip   Goes to \c _tip
+		\param image Goes to \c _image
+
+		This function also sets \c _actions to NULL.
+
+		\warning NO DATA IS COPIED BY CALLING THIS FUNCTION.  In many
+		respects this is very bad object oriented design, but it is done
+		for a reason.  All verbs today are of two types: 1) static or
+		2) created for extension.  In the static case all of the strings
+		are constants in the code, and thus don't really need to be copied.
+		In the extensions case the strings are identical to the ones
+		already created in the extension object, copying them would be
+		a waste of memory.
+	*/
+    Verb(const unsigned int code,
+	     gchar const * id,
+         gchar const * name,
+         gchar const * tip,
+         gchar const * image) :
+        _actions(NULL), _id(id), _name(name), _tip(tip), _image(image), _code(code) {
+    }
+    Verb (gchar const * id, gchar const * name, gchar const * tip, gchar const * image);
+	virtual ~Verb (void);
+
+    SPAction * get_action(SPView * view);
+
+private:
+    static Verb * get_search (unsigned int code);
+public:
+	/** \brief A function to turn a code into a verb.
+	    \param  code  The code to be translated
+		\return A pointer to a verb object or a NULL if not found.
+
+	    This is an inline function to translate the codes which are
+		static quickly.  This should optimize into very quick code
+		everywhere which hard coded \c codes are used.  In the case
+		where the \c code is not static the \c get_search function
+		is used.
+	*/
+    static Verb * get (unsigned int code) {
+        if (code <= SP_VERB_LAST) {
+            return _base_verbs[code];
+        } else {
+            return get_search(code);
+        }
+    }
+
+	/** \todo implement these!!! */
+	static Verb * find (gchar const * name);
+	static void delete_all_view (SPView * view);
+	void delete_view (SPView * view);
+}; /* Verb class */
+
+
+}; /* Inkscape namespace */
 
 #endif

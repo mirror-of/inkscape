@@ -325,7 +325,7 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
         if (event->state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
         if (event->state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
         if (event->state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
-        sp_shortcut_set (shortcut, (sp_verb_t)((int)data), true);
+        sp_shortcut_set (shortcut, (Inkscape::Verb *)((int)data), true);
     }
 }
 
@@ -370,7 +370,7 @@ sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 }
 
 void
-sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
+sp_ui_dialog_title_string (Inkscape::Verb * verb, gchar* c)
 {
     SPAction     *action;
     unsigned int shortcut;
@@ -378,7 +378,7 @@ sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
     gchar        key[256];
     gchar        *atitle;
 
-    action = sp_verb_get_action (verb, NULL);
+    action = verb->get_action(NULL);
     if (!action)
         return; 
 
@@ -406,19 +406,19 @@ sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
  */
 
 static GtkWidget *
-sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
+sp_ui_menu_append_item_from_verb (GtkMenu *menu, Inkscape::Verb * verb, SPView *view)
 {
     SPAction *action;
     GtkWidget *item;
 
-    if (verb == SP_VERB_NONE) {
+    if (verb->get_code() == SP_VERB_NONE) {
 
         item = gtk_separator_menu_item_new ();
 
     } else {
         unsigned int shortcut;
 
-        action = sp_verb_get_action (verb, view);
+        action = verb->get_action(view);
 
         if (!action) return NULL;
 
@@ -463,10 +463,11 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
 
 
 static void
-sp_ui_menu_append (GtkMenu *menu, const sp_verb_t *verbs, SPView *view)
+sp_ui_menu_append (GtkMenu *menu, Inkscape::Verb ** verbs, SPView *view)
 {
     int i;
-    for (i = 0; verbs[i] != SP_VERB_LAST; i++) {
+    for (i = 0; verbs[i]->get_code() != SP_VERB_LAST; i++) {
+        // std::cout << "Verb name: " << verbs[i]->get_id() << " Code: " << verbs[i]->get_code() << std::endl;
         sp_ui_menu_append_item_from_verb (menu, verbs[i], view);
     }
 }
@@ -528,7 +529,7 @@ void
 sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar *label, const gchar *tip, const gchar *pref,
                               void (*callback_toggle)(GtkCheckMenuItem *, gpointer user_data),
                               gboolean (*callback_update)(GtkWidget *widget, GdkEventExpose *event, gpointer user_data),
-                                        sp_verb_t verb)
+                                        Inkscape::Verb * verb)
 {
     GtkWidget *item;
 
@@ -537,7 +538,7 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar
 
     if (verb) {
         shortcut = sp_shortcut_get_primary (verb);
-        action = sp_verb_get_action (verb, view);
+        action = verb->get_action(view);
     }
 
     if (verb && shortcut) {
@@ -598,7 +599,7 @@ void
 sp_menu_append_new_templates (GtkWidget *menu, SPView *view)
 {
     // the Default must be there even if the templates dir is unreadable or empty
-    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_NEW, view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), Inkscape::Verb::get(SP_VERB_FILE_NEW), view);
 
     GDir *dir = g_dir_open (INKSCAPE_TEMPLATESDIR, 0, NULL);
     if (!dir)
@@ -668,43 +669,43 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 {
     sp_ui_menu_append_submenu (fm, view, sp_menu_append_new_templates, _("_New"), _("Create new document"), NULL);
 
-    static const sp_verb_t file_verbs_one[] = {
-	SP_VERB_FILE_OPEN,
-	SP_VERB_LAST
+    static Inkscape::Verb * file_verbs_one[] = {
+	Inkscape::Verb::get(SP_VERB_FILE_OPEN),
+	Inkscape::Verb::get(SP_VERB_LAST)
     };
 
     sp_ui_menu_append (fm, file_verbs_one, view);
 
     sp_ui_menu_append_submenu (fm, view, sp_menu_append_recent_documents, _("Open _Recent"), _("Open one of the recently visited documents"), "file_open_recent");
 
-    static const sp_verb_t file_verbs_two[] = {
-	SP_VERB_FILE_REVERT,
-        SP_VERB_FILE_SAVE,
-        SP_VERB_FILE_SAVE_AS,
+    static Inkscape::Verb * file_verbs_two[] = {
+	Inkscape::Verb::get(SP_VERB_FILE_REVERT),
+        Inkscape::Verb::get(SP_VERB_FILE_SAVE),
+        Inkscape::Verb::get(SP_VERB_FILE_SAVE_AS),
 
-        SP_VERB_NONE,
-        SP_VERB_FILE_IMPORT,
-        SP_VERB_FILE_EXPORT,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_FILE_IMPORT),
+        Inkscape::Verb::get(SP_VERB_FILE_EXPORT),
 
-        SP_VERB_NONE,
+        Inkscape::Verb::get(SP_VERB_NONE),
         /* commented out until implemented */
-	// SP_VERB_FILE_PRINT_PREVIEW,
-        SP_VERB_FILE_PRINT,
+	// Inkscape::Verb::get(SP_VERB_FILE_PRINT_PREVIEW),
+        Inkscape::Verb::get(SP_VERB_FILE_PRINT),
 #if defined(WIN32) || defined(WITH_GNOME_PRINT)
-	SP_VERB_FILE_PRINT_DIRECT,
+	Inkscape::Verb::get(SP_VERB_FILE_PRINT_DIRECT),
 #endif
 
-        SP_VERB_NONE,
-        SP_VERB_FILE_VACUUM,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_FILE_VACUUM),
 
-        SP_VERB_NONE,
-       SP_VERB_DIALOG_NAMEDVIEW,
-       SP_VERB_DIALOG_DISPLAY,
+        Inkscape::Verb::get(SP_VERB_NONE),
+       Inkscape::Verb::get(SP_VERB_DIALOG_NAMEDVIEW),
+       Inkscape::Verb::get(SP_VERB_DIALOG_DISPLAY),
 
-        SP_VERB_NONE,
-	SP_VERB_FILE_CLOSE_VIEW,
-	SP_VERB_FILE_QUIT,
-        SP_VERB_LAST
+        Inkscape::Verb::get(SP_VERB_NONE),
+	Inkscape::Verb::get(SP_VERB_FILE_CLOSE_VIEW),
+	Inkscape::Verb::get(SP_VERB_FILE_QUIT),
+        Inkscape::Verb::get(SP_VERB_LAST)
     };
 
     sp_ui_menu_append (fm, file_verbs_two, view);
@@ -715,42 +716,42 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 static void
 sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-    static const sp_verb_t edit_verbs[] = {
-        SP_VERB_EDIT_UNDO,
-        SP_VERB_EDIT_REDO,
+    static Inkscape::Verb * edit_verbs[] = {
+        Inkscape::Verb::get(SP_VERB_EDIT_UNDO),
+        Inkscape::Verb::get(SP_VERB_EDIT_REDO),
 
-        SP_VERB_NONE,
-        SP_VERB_EDIT_CUT,
-        SP_VERB_EDIT_COPY,
-        SP_VERB_EDIT_PASTE,
-        SP_VERB_EDIT_PASTE_IN_PLACE,
-        SP_VERB_EDIT_PASTE_STYLE,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_EDIT_CUT),
+        Inkscape::Verb::get(SP_VERB_EDIT_COPY),
+        Inkscape::Verb::get(SP_VERB_EDIT_PASTE),
+        Inkscape::Verb::get(SP_VERB_EDIT_PASTE_IN_PLACE),
+        Inkscape::Verb::get(SP_VERB_EDIT_PASTE_STYLE),
 
-        SP_VERB_NONE,
-       SP_VERB_DIALOG_FIND,
+        Inkscape::Verb::get(SP_VERB_NONE),
+       Inkscape::Verb::get(SP_VERB_DIALOG_FIND),
 
-        SP_VERB_NONE,
-        SP_VERB_EDIT_DUPLICATE,
-        SP_VERB_EDIT_CLONE,
-        SP_VERB_EDIT_UNLINK_CLONE,
-        SP_VERB_EDIT_CLONE_ORIGINAL,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE),
+        Inkscape::Verb::get(SP_VERB_EDIT_CLONE),
+        Inkscape::Verb::get(SP_VERB_EDIT_UNLINK_CLONE),
+        Inkscape::Verb::get(SP_VERB_EDIT_CLONE_ORIGINAL),
 
-        SP_VERB_NONE,
-        SP_VERB_EDIT_TILE,
-        SP_VERB_EDIT_UNTILE,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_EDIT_TILE),
+        Inkscape::Verb::get(SP_VERB_EDIT_UNTILE),
 
-        SP_VERB_NONE,
-        SP_VERB_EDIT_DELETE,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_EDIT_DELETE),
 
-        SP_VERB_NONE,
-        SP_VERB_EDIT_SELECT_ALL,
-        SP_VERB_EDIT_DESELECT,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL),
+        Inkscape::Verb::get(SP_VERB_EDIT_DESELECT),
 
-        SP_VERB_NONE,
-       SP_VERB_DIALOG_XML_EDITOR,
+        Inkscape::Verb::get(SP_VERB_NONE),
+       Inkscape::Verb::get(SP_VERB_DIALOG_XML_EDITOR),
 
-        SP_VERB_LAST
-    };
+        Inkscape::Verb::get(SP_VERB_LAST
+    )};
     sp_ui_menu_append (menu, edit_verbs, view);
 } // end of sp_ui_edit_menu
 
@@ -758,26 +759,26 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 static void
 sp_ui_layer_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-    static const sp_verb_t layer_verbs[] = {
-        SP_VERB_LAYER_NEW,
+    static Inkscape::Verb * layer_verbs[] = {
+        Inkscape::Verb::get(SP_VERB_LAYER_NEW),
 
-        SP_VERB_NONE,
+        Inkscape::Verb::get(SP_VERB_NONE),
 
-        SP_VERB_LAYER_NEXT,
-        SP_VERB_LAYER_PREV,
+        Inkscape::Verb::get(SP_VERB_LAYER_NEXT),
+        Inkscape::Verb::get(SP_VERB_LAYER_PREV),
 
-        SP_VERB_NONE,
+        Inkscape::Verb::get(SP_VERB_NONE),
         
-        SP_VERB_LAYER_RAISE,
-        SP_VERB_LAYER_LOWER,
-        SP_VERB_LAYER_TO_TOP,
-        SP_VERB_LAYER_TO_BOTTOM,
+        Inkscape::Verb::get(SP_VERB_LAYER_RAISE),
+        Inkscape::Verb::get(SP_VERB_LAYER_LOWER),
+        Inkscape::Verb::get(SP_VERB_LAYER_TO_TOP),
+        Inkscape::Verb::get(SP_VERB_LAYER_TO_BOTTOM),
 
-        SP_VERB_NONE,
+        Inkscape::Verb::get(SP_VERB_NONE),
 
-        SP_VERB_LAYER_DELETE,
+        Inkscape::Verb::get(SP_VERB_LAYER_DELETE),
 
-        SP_VERB_LAST
+        Inkscape::Verb::get(SP_VERB_LAST)
     };
     sp_ui_menu_append (menu, layer_verbs, view);
 }
@@ -785,32 +786,32 @@ sp_ui_layer_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 static void
 sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-    static const sp_verb_t selection[] = {
-        SP_VERB_DIALOG_FILL_STROKE,
-        SP_VERB_DIALOG_ITEM,
-        SP_VERB_NONE,
+    static Inkscape::Verb * selection[] = {
+        Inkscape::Verb::get(SP_VERB_DIALOG_FILL_STROKE),
+        Inkscape::Verb::get(SP_VERB_DIALOG_ITEM),
+        Inkscape::Verb::get(SP_VERB_NONE),
 
-        SP_VERB_SELECTION_GROUP,
-        SP_VERB_SELECTION_UNGROUP,
+        Inkscape::Verb::get(SP_VERB_SELECTION_GROUP),
+        Inkscape::Verb::get(SP_VERB_SELECTION_UNGROUP),
 
-        SP_VERB_NONE,
-        SP_VERB_SELECTION_RAISE,
-        SP_VERB_SELECTION_LOWER,
-        SP_VERB_SELECTION_TO_FRONT,
-        SP_VERB_SELECTION_TO_BACK,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_RAISE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_LOWER),
+        Inkscape::Verb::get(SP_VERB_SELECTION_TO_FRONT),
+        Inkscape::Verb::get(SP_VERB_SELECTION_TO_BACK),
 
-        SP_VERB_NONE,
-        //		SP_VERB_OBJECT_FLATTEN,
-        SP_VERB_OBJECT_ROTATE_90_CW,
-        SP_VERB_OBJECT_ROTATE_90_CCW,
-        SP_VERB_OBJECT_FLIP_HORIZONTAL,
-        SP_VERB_OBJECT_FLIP_VERTICAL,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        //		Inkscape::Verb::get(SP_VERB_OBJECT_FLATTEN),
+        Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CW),
+        Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CCW),
+        Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_HORIZONTAL),
+        Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_VERTICAL),
 
-        SP_VERB_NONE,
-        SP_VERB_DIALOG_TRANSFORM,
-        SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_DIALOG_TRANSFORM),
+        Inkscape::Verb::get(SP_VERB_DIALOG_ALIGN_DISTRIBUTE),
 
-        SP_VERB_LAST
+        Inkscape::Verb::get(SP_VERB_LAST)
     };
     sp_ui_menu_append (menu, selection, view);
 } // end of sp_ui_object_menu
@@ -819,34 +820,34 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 static void
 sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-    static const sp_verb_t selection[] = {
-        SP_VERB_OBJECT_TO_CURVE,
-        SP_VERB_SELECTION_OUTLINE,
-        SP_VERB_SELECTION_POTRACE,
+    static Inkscape::Verb * selection[] = {
+        Inkscape::Verb::get(SP_VERB_OBJECT_TO_CURVE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_OUTLINE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE),
 
-        SP_VERB_NONE,
-        SP_VERB_SELECTION_UNION,
-        SP_VERB_SELECTION_DIFF,
-        SP_VERB_SELECTION_INTERSECT,
-        SP_VERB_SELECTION_SYMDIFF,
-        SP_VERB_SELECTION_CUT,
-        SP_VERB_SELECTION_SLICE,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_UNION),
+        Inkscape::Verb::get(SP_VERB_SELECTION_DIFF),
+        Inkscape::Verb::get(SP_VERB_SELECTION_INTERSECT),
+        Inkscape::Verb::get(SP_VERB_SELECTION_SYMDIFF),
+        Inkscape::Verb::get(SP_VERB_SELECTION_CUT),
+        Inkscape::Verb::get(SP_VERB_SELECTION_SLICE),
 
-        SP_VERB_NONE,
-        SP_VERB_SELECTION_COMBINE,
-        SP_VERB_SELECTION_BREAK_APART,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_COMBINE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_BREAK_APART),
 
-        SP_VERB_NONE,
-        SP_VERB_SELECTION_INSET,
-        SP_VERB_SELECTION_OFFSET,
-        SP_VERB_SELECTION_DYNAMIC_OFFSET,
-        SP_VERB_SELECTION_LINKED_OFFSET,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_INSET),
+        Inkscape::Verb::get(SP_VERB_SELECTION_OFFSET),
+        Inkscape::Verb::get(SP_VERB_SELECTION_DYNAMIC_OFFSET),
+        Inkscape::Verb::get(SP_VERB_SELECTION_LINKED_OFFSET),
 
-        SP_VERB_NONE,
-        SP_VERB_SELECTION_SIMPLIFY,
-        SP_VERB_SELECTION_REVERSE,
-        SP_VERB_SELECTION_CLEANUP,
-        SP_VERB_LAST
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_SIMPLIFY),
+        Inkscape::Verb::get(SP_VERB_SELECTION_REVERSE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_CLEANUP),
+        Inkscape::Verb::get(SP_VERB_LAST)
     };
     sp_ui_menu_append (menu, selection, view);
 } // end of sp_ui_path_menu
@@ -854,46 +855,46 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 static void
 sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-    static const sp_verb_t view_verbs1[] = {
-	SP_VERB_ZOOM_1_1,
-	SP_VERB_ZOOM_1_2,
-	SP_VERB_ZOOM_2_1,
+    static Inkscape::Verb * view_verbs1[] = {
+	Inkscape::Verb::get(SP_VERB_ZOOM_1_1),
+	Inkscape::Verb::get(SP_VERB_ZOOM_1_2),
+	Inkscape::Verb::get(SP_VERB_ZOOM_2_1),
 
-        SP_VERB_NONE,
-	SP_VERB_ZOOM_SELECTION,
-	SP_VERB_ZOOM_DRAWING,
-	SP_VERB_ZOOM_PAGE,
-	SP_VERB_ZOOM_PAGE_WIDTH,
+        Inkscape::Verb::get(SP_VERB_NONE),
+	Inkscape::Verb::get(SP_VERB_ZOOM_SELECTION),
+	Inkscape::Verb::get(SP_VERB_ZOOM_DRAWING),
+	Inkscape::Verb::get(SP_VERB_ZOOM_PAGE),
+	Inkscape::Verb::get(SP_VERB_ZOOM_PAGE_WIDTH),
 
-        SP_VERB_NONE,
-	SP_VERB_ZOOM_PREV,
-	SP_VERB_ZOOM_NEXT,
+        Inkscape::Verb::get(SP_VERB_NONE),
+	Inkscape::Verb::get(SP_VERB_ZOOM_PREV),
+	Inkscape::Verb::get(SP_VERB_ZOOM_NEXT),
 
-        SP_VERB_NONE,
-        SP_VERB_LAST
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_LAST)
     };
 
-    static const sp_verb_t view_verbs2[] = {
-	SP_VERB_DIALOG_TOGGLE,
+    static Inkscape::Verb * view_verbs2[] = {
+	Inkscape::Verb::get(SP_VERB_DIALOG_TOGGLE),
 
-        SP_VERB_NONE,
-	SP_VERB_TOGGLE_GRID,
-	SP_VERB_TOGGLE_GUIDES,
+        Inkscape::Verb::get(SP_VERB_NONE),
+	Inkscape::Verb::get(SP_VERB_TOGGLE_GRID),
+	Inkscape::Verb::get(SP_VERB_TOGGLE_GUIDES),
 
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
-        SP_VERB_NONE,
-	SP_VERB_FULLSCREEN,
+        Inkscape::Verb::get(SP_VERB_NONE),
+	Inkscape::Verb::get(SP_VERB_FULLSCREEN),
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 
-        SP_VERB_NONE,
-      SP_VERB_DIALOG_DEBUG,
-        SP_VERB_NONE,
-	SP_VERB_FILE_PREV_DESKTOP,
-	SP_VERB_FILE_NEXT_DESKTOP,
-        SP_VERB_NONE,
-	SP_VERB_VIEW_NEW,
-	// SP_VERB_VIEW_NEW_PREVIEW,
-        SP_VERB_LAST
+        Inkscape::Verb::get(SP_VERB_NONE),
+      Inkscape::Verb::get(SP_VERB_DIALOG_DEBUG),
+        Inkscape::Verb::get(SP_VERB_NONE),
+	Inkscape::Verb::get(SP_VERB_FILE_PREV_DESKTOP),
+	Inkscape::Verb::get(SP_VERB_FILE_NEXT_DESKTOP),
+        Inkscape::Verb::get(SP_VERB_NONE),
+	Inkscape::Verb::get(SP_VERB_VIEW_NEW),
+	// Inkscape::Verb::get(SP_VERB_VIEW_NEW_PREVIEW),
+        Inkscape::Verb::get(SP_VERB_LAST)
     };
 
     sp_ui_menu_append (menu, view_verbs1, view);
@@ -910,9 +911,9 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     sp_ui_menu_append_check_item_from_verb (m, view, _("_Toolbox"), _("Show or hide the main toolbox (on the left)"), "toolbox",
                                   checkitem_toggled, checkitem_update, 0);
     sp_ui_menu_append_check_item_from_verb (m, view, NULL, NULL, "rulers",
-                                  checkitem_toggled, checkitem_update, SP_VERB_TOGGLE_RULERS);
+                                  checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS));
     sp_ui_menu_append_check_item_from_verb (m, view, NULL, NULL, "scrollbars",
-                                  checkitem_toggled, checkitem_update, SP_VERB_TOGGLE_SCROLLBARS);
+                                  checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS));
     sp_ui_menu_append_check_item_from_verb (m, view, _("_Statusbar"), _("Show or hide the statusbar (at the bottom of the window)"), "statusbar",
                                   checkitem_toggled, checkitem_update, 0);
 
@@ -924,13 +925,13 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 static void
 sp_ui_text_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-    static const sp_verb_t text_verbs[] = {
-        SP_VERB_DIALOG_TEXT,
+    static Inkscape::Verb * text_verbs[] = {
+        Inkscape::Verb::get(SP_VERB_DIALOG_TEXT),
 
-        SP_VERB_NONE,
-        SP_VERB_SELECTION_TEXTTOPATH,
+        Inkscape::Verb::get(SP_VERB_NONE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_TEXTTOPATH),
 
-        SP_VERB_LAST
+        Inkscape::Verb::get(SP_VERB_LAST)
     };
 
     sp_ui_menu_append (menu, text_verbs, view);
@@ -941,21 +942,21 @@ sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 {
     GtkWidget *item_tutorials, *menu_tutorials;
 
-    static const sp_verb_t help_verbs_one[] = {
-        SP_VERB_HELP_KEYS, SP_VERB_LAST
+    static Inkscape::Verb * help_verbs_one[] = {
+        Inkscape::Verb::get(SP_VERB_HELP_KEYS), Inkscape::Verb::get(SP_VERB_LAST)
     };
 
-    static const sp_verb_t tutorial_verbs[] = {
-        SP_VERB_TUTORIAL_BASIC,
-	SP_VERB_TUTORIAL_ADVANCED,
-	SP_VERB_TUTORIAL_DESIGN,
-	SP_VERB_TUTORIAL_TIPS,
+    static Inkscape::Verb * tutorial_verbs[] = {
+        Inkscape::Verb::get(SP_VERB_TUTORIAL_BASIC),
+	Inkscape::Verb::get(SP_VERB_TUTORIAL_ADVANCED),
+	Inkscape::Verb::get(SP_VERB_TUTORIAL_DESIGN),
+	Inkscape::Verb::get(SP_VERB_TUTORIAL_TIPS),
 	
-	SP_VERB_LAST
+	Inkscape::Verb::get(SP_VERB_LAST)
     };
 
-    static const sp_verb_t help_verbs_two[] = {
-        SP_VERB_HELP_ABOUT, SP_VERB_LAST
+    static Inkscape::Verb * help_verbs_two[] = {
+        Inkscape::Verb::get(SP_VERB_HELP_ABOUT), Inkscape::Verb::get(SP_VERB_LAST)
     };
 
     sp_ui_menu_append (fm, help_verbs_one, view);
@@ -1064,21 +1065,21 @@ sp_ui_context_menu (SPView *view, SPItem *item)
 	m = gtk_menu_new ();
 
 	/* Undo and Redo */
-	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_UNDO, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_REDO, view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (m), Inkscape::Verb::get(SP_VERB_EDIT_UNDO), view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (m), Inkscape::Verb::get(SP_VERB_EDIT_REDO), view);
 
 	/* Separator */
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
 
-	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_CUT, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_COPY, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_PASTE, view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (m), Inkscape::Verb::get(SP_VERB_EDIT_CUT), view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (m), Inkscape::Verb::get(SP_VERB_EDIT_COPY), view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (m), Inkscape::Verb::get(SP_VERB_EDIT_PASTE), view);
 
 	/* Separator */
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
 
-	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DUPLICATE, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DELETE, view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (m), Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE), view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (m), Inkscape::Verb::get(SP_VERB_EDIT_DELETE), view);
 
 	/* Item menu */
 	if (item) {

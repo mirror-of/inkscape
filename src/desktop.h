@@ -24,7 +24,7 @@
 #include "xml/xml-forward.h"
 #include "forward.h"
 #include "view.h"
-#include "verbs.h"
+
 namespace Inkscape { class ObjectHierarchy; }
 
 enum ColorComponent {

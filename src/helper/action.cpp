@@ -84,7 +84,7 @@ sp_action_new(SPView *view,
               const gchar *name,
               const gchar *tip,
               const gchar *image,
-		sp_verb_t verb)
+              Inkscape::Verb * verb)
 {
 	SPAction *action = (SPAction *)nr_object_new(SP_TYPE_ACTION);
 

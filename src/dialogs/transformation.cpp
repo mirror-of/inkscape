@@ -238,7 +238,7 @@ sp_transformation_dialog_new (void)
     if  (!dlg)
     {
         gchar title[500];
-        sp_ui_dialog_title_string (SP_VERB_DIALOG_TRANSFORM, title);
+        sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_DIALOG_TRANSFORM), title);
 
         dlg = sp_window_new (title, TRUE);
         if (x == -1000 || y == -1000) {

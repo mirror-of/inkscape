@@ -163,9 +163,9 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
 
 
 GtkWidget *
-sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, sp_verb_t verb, SPView *view, GtkTooltips *tt)
+sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, Inkscape::Verb * verb, SPView *view, GtkTooltips *tt)
 {
-    SPAction *action = sp_verb_get_action (verb, view);
+    SPAction *action = verb->get_action(view);
     if (!action) return NULL;
 	/* fixme: Handle sensitive/unsensitive */
 	/* fixme: Implement sp_button_new_from_action */
@@ -177,7 +177,7 @@ sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType t
     return b;
 }
 
-GtkWidget * sp_toolbox_button_normal_new_from_verb (GtkWidget *t, unsigned int size, sp_verb_t verb, SPView *view, GtkTooltips *tt)
+GtkWidget * sp_toolbox_button_normal_new_from_verb (GtkWidget *t, unsigned int size, Inkscape::Verb * verb, SPView *view, GtkTooltips *tt)
 {
 	return sp_toolbox_button_new_from_verb (t, size, SP_BUTTON_TYPE_NORMAL, verb, view, tt);
 }
@@ -422,16 +422,15 @@ sp_node_toolbox_new (SPDesktop *desktop)
 
     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_TO_CURVE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_OBJECT_TO_CURVE), view, tt);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_OUTLINE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_SELECTION_OUTLINE), view, tt);
 
     gtk_widget_show_all (tb);
 
     return tb;
 
 } // end of sp_node_toolbox_new()
-
 
 
 static GtkWidget *
@@ -445,40 +444,39 @@ sp_zoom_toolbox_new (SPDesktop *desktop)
     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0),
                         FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_IN, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_IN), view, tt);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_OUT, view, tt);
-
-    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, view, tt);
-
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, view, tt);
-
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, view, tt);
-
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE_WIDTH, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_OUT), view, tt);
 
     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PREV, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_SELECTION), view, tt);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_NEXT, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_DRAWING), view, tt);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_PAGE), view, tt);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_PAGE_WIDTH), view, tt);
 
     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_1, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_PREV), view, tt);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_1_2, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_NEXT), view, tt);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_2_1, view, tt);
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_1_1), view, tt);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_1_2), view, tt);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_2_1), view, tt);
 
     gtk_widget_show_all (tb);
 
     return tb;
 
 } // end of sp_zoom_toolbox_new()
-
 
 void
 sp_tool_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
@@ -540,7 +538,7 @@ setup_tool_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
         GtkWidget *button =
             sp_toolbox_button_new_from_verb ( toolbox, TOOL_BUTTON_SIZE,
                                               SP_BUTTON_TYPE_TOGGLE,
-                                              tools[i].verb, SP_VIEW (desktop),
+                                              Inkscape::Verb::get(tools[i].verb), SP_VIEW (desktop),
                                               tooltips );
 
         g_object_set_data ( G_OBJECT (toolbox), tools[i].data_name,
@@ -611,62 +609,62 @@ setup_commands_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
     GtkTooltips *tt = gtk_tooltips_new ();
     GtkWidget *tb = gtk_hbox_new (FALSE, 0);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_NEW, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_OPEN, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_SAVE, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_PRINT, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_FILE_NEW), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_FILE_OPEN), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_FILE_SAVE), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_FILE_PRINT), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_IMPORT, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_EXPORT, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_FILE_IMPORT), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_FILE_EXPORT), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNDO, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_REDO, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_UNDO), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_REDO), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_COPY, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_CUT, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_PASTE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_COPY), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_CUT), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_PASTE), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_SELECTION), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_DRAWING), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_ZOOM_PAGE), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_DUPLICATE, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_CLONE, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNLINK_CLONE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_CLONE), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_UNLINK_CLONE), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_GROUP, view, tt);
-    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_UNGROUP, view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_SELECTION_GROUP), view, tt);
+    sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_SELECTION_UNGROUP), view, tt);
 
 // disabled until we have icons for them:
 
 //     find
 
-//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_TILE, view, tt);
-//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNTILE, view, tt);
+//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_TILE), view, tt);
+//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_EDIT_UNTILE), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_FILL_STROKE, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_TEXT, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_XML_EDITOR, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_ALIGN_DISTRIBUTE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_DIALOG_FILL_STROKE), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_DIALOG_TEXT), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_DIALOG_XML_EDITOR), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_DIALOG_ALIGN_DISTRIBUTE), view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_DISPLAY, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_NAMEDVIEW, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_DIALOG_DISPLAY), view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_DIALOG_NAMEDVIEW), view, tt);
 
     gtk_widget_show_all (tb);
 

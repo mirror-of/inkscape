@@ -10,7 +10,7 @@
  * This code is in public domain
  */
 
-#include <verbs.h>
+#include <forward.h>
 
 /* We define high-bit mask for packing into single int */
 
@@ -21,10 +21,10 @@
 /* Returns true if action was performed */
 bool sp_shortcut_invoke (unsigned int shortcut, SPView *view);
 
-void sp_shortcut_set (unsigned int shortcut, sp_verb_t verb, bool is_primary);
+void sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary);
 void sp_shortcut_clear (unsigned int shortcut);
-sp_verb_t sp_shortcut_get_verb (unsigned int shortcut);
-unsigned int sp_shortcut_get_primary (sp_verb_t verb);
+Inkscape::Verb * sp_shortcut_get_verb (unsigned int shortcut);
+unsigned int sp_shortcut_get_primary (Inkscape::Verb * verb);
 
 #endif
 

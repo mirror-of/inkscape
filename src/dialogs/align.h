@@ -25,7 +25,7 @@
 #include "libnr/nr-dim2.h"
 
 #include "dialogs/dockable.h"
-#include "verbs.h"
+#include "forward.h"
 
 void sp_quick_align_dialog (void);
 
@@ -55,7 +55,7 @@ private :
     DialogAlign();    
     void on_ref_change();
     void setMode(bool nodeEdit);
-    void on_tool_changed( sp_verb_t verb);
+    void on_tool_changed(unsigned int verb);
     void addDistributeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
                                       guint row, guint col, bool onInterSpace, 
                                       NR::Dim2 orientation, float kBegin, float kEnd);
