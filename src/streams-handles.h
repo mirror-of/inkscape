@@ -12,7 +12,10 @@
 #ifndef __STREAM_HANDLES_H_
 #define __STREAM_HANDLES_H_
 
-#include <uri.h>
+#include <stdio.h>
+#include <exception>
+
+#include "forward.h"
 
 namespace Inkscape {
 
