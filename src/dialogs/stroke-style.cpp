@@ -1827,7 +1827,7 @@ sp_stroke_style_update_marker_buttons ( SPWidget *spw,
     SPObject *object      = SP_OBJECT (objects->data);
     gchar *marker_type    = object->style->marker[loc].value;
 
-    g_message("'%s' marker is '%s'", stock_type, marker_type);
+    //g_message("'%s' marker is '%s'", stock_type, marker_type);
     
     if (! marker_type) {
         return;
