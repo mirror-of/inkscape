@@ -1,13 +1,13 @@
 ; #######################################
 ; Inkscape NSIS installer project file
-; Used as of 0.38.1
+; Used as of 0.40
 ; #######################################
 
 ; #######################################
 ; DEFINES
 ; #######################################
 !define PRODUCT_NAME "Inkscape"
-!define PRODUCT_VERSION "0.38.1"
+!define PRODUCT_VERSION "0.40pre1-1"
 !define PRODUCT_PUBLISHER "Inkscape Organization"
 !define PRODUCT_WEB_SITE "http://www.inkscape.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\inkscape.exe"
@@ -20,14 +20,14 @@
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 !define MUI_ABORTWARNING
-!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\win-install.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
+!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !define MUI_LICENSEPAGE_RADIOBUTTONS
-!insertmacro MUI_PAGE_LICENSE "C:\ink\inkscape\Copying"
+!insertmacro MUI_PAGE_LICENSE "Copying"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -48,7 +48,7 @@
 
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Inkscape-0.38.1-1.win32.exe"
+OutFile "Inkscape-0.40pre1-1.win32.exe"
 InstallDir "$PROGRAMFILES\Inkscape"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -73,12 +73,14 @@ Section -Post
 
   MessageBox MB_YESNO|MB_ICONQUESTION "Do you want Inkscape to be the default SVG editor?" IDNO NoEditor
   WriteRegStr HKCR ".svg" "" "svgfile"
+  WriteRegStr HKCR ".svgz" "" "svgfile"
   WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
   WriteRegStr HKCR "svgfile\shell\edit\command" "" '$INSTDIR\Inkscape.exe "%1"'
   NoEditor:
 
   MessageBox MB_YESNO|MB_ICONQUESTION "Do you want Inkscape to be the default SVG reader?" IDNO NoReader
   WriteRegStr HKCR ".svg" "" "svgfile"
+  WriteRegStr HKCR ".svgz" "" "svgfile"
   WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
   WriteRegStr HKCR "svgfile\shell\open\command" "" '$INSTDIR\Inkscape.exe "%1"'
   NoReader:
