@@ -487,8 +487,8 @@ hasSuffix(Glib::ustring &str, Glib::ustring &ext)
         Glib::ustring::value_type ch = str[strpos];
         if (ch != ext[extpos])
         {
-            if ( ((ch & 0xff80) == 0) &&
-                 g_ascii_tolower((gchar)0x07f & ch) != (gchar)ext[extpos] )
+            if ( ((ch & 0xff80) != 0) ||
+                 static_cast<Glib::ustring::value_type>( g_ascii_tolower( static_cast<gchar>(0x07f & ch) ) ) != ext[extpos] )
             {
                 return false;
             }
