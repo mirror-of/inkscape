@@ -63,6 +63,7 @@ OBJECTS = \
 	ecma/EcmaBinding.o \
 	event-context.o \
 	extension/api.o \
+	extension/api.cpp \
 	extension/db.o \
 	extension/extension.o \
 	extension/implementation/implementation.o \
