@@ -39,7 +39,10 @@ creates a child text object with the text properly 'typeset'
  */
 
 
+#include "forward.h"
 #include "sp-item-group.h"
+#include "libnr/nr-forward.h"
+#include "libnr/nr-rect.h"
 #include "livarot/livarot-forward.h"
 #include "xml/xml-forward.h"
 
