@@ -222,7 +222,7 @@ struct rdf_work_entity_t rdf_work_entities [] = {
       N_("Two-letter language tag with optional subtags for the language of this document.  (e.g. 'en-GB')"), TRUE,
     },
     { "subject", N_("Keywords"), "dc:subject", RDF_CONTENT,
-      N_("The topic of this document as key words, phrases, or classication."), TRUE,
+      N_("The topic of this document as key words, phrases, or classification."), TRUE,
     },
     { "coverage", N_("Coverage"), "dc:coverage", RDF_CONTENT,
       N_("Extent or scope of this document."), TRUE,
@@ -235,7 +235,7 @@ struct rdf_work_entity_t rdf_work_entities [] = {
 
     /* this uses an element */
     { "license", N_("License"), "cc:license", RDF_RESOURCE,
-      N_("URI to the License namespace definition."), FALSE,
+      N_("URI to this document's license's namespace definition."), FALSE,
     },
     
     { NULL, NULL, NULL, RDF_CONTENT,
