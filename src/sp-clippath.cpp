@@ -372,7 +372,7 @@ sp_clippath_view_new_prepend (SPClipPathView *list, unsigned int key, NRArenaIte
 
 	new_path_view->next = list;
 	new_path_view->key = key;
-	new_path_view->arenaitem = nr_arena_item_ref (arenaitem);
+	new_path_view->arenaitem = nr_arena_item_ref(arenaitem);
 	new_path_view->bbox.x0 = new_path_view->bbox.x1 = 0.0;
 	new_path_view->bbox.y0 = new_path_view->bbox.y1 = 0.0;
 

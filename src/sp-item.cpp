@@ -750,6 +750,7 @@ sp_item_invoke_hide(SPItem *item, unsigned key)
                 ref->next = v->next;
             }
             nr_arena_item_unparent(v->arenaitem);
+            nr_arena_item_unref(v->arenaitem);
             g_free(v);
         } else {
             ref = v;
@@ -1151,7 +1152,7 @@ sp_item_view_new_prepend(SPItemView *list, SPItem *item, unsigned flags, unsigne
     new_view->next = list;
     new_view->flags = flags;
     new_view->key = key;
-    new_view->arenaitem = arenaitem;
+    new_view->arenaitem = nr_arena_item_ref(arenaitem);
 
     return new_view;
 }
@@ -1168,6 +1169,7 @@ sp_item_view_list_remove(SPItemView *list, SPItemView *view)
         prev->next = view->next;
     }
 
+    nr_arena_item_unref(view->arenaitem);
     g_free(view);
 
     return list;

@@ -1,3 +1,8 @@
+2004-11-10  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-item.cpp, src/sp-clippath.cpp, src/cp-mask.cpp:
+	  minor refcounting tweaks
+
 2004-11-10  Kees Cook  <kees@outflux.net>
 
 	* configure.ac, src/gc-core.h: corrected gc.h path detection.

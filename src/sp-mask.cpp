@@ -350,7 +350,7 @@ sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, NRArenaItem *arena
 
 	new_mask_view->next = list;
 	new_mask_view->key = key;
-	new_mask_view->arenaitem = nr_arena_item_ref (arenaitem);
+	new_mask_view->arenaitem = nr_arena_item_ref(arenaitem);
 	new_mask_view->bbox.x0 = new_mask_view->bbox.x1 = 0.0;
 	new_mask_view->bbox.y0 = new_mask_view->bbox.y1 = 0.0;
 
