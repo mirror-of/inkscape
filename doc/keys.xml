@@ -38,7 +38,6 @@ can leave your ideas and requests there.</p>
 <keys><key><ctrl/>P</key>	 <action>print document</action></keys>
 <keys><key><ctrl/>S</key>	 <action>save document</action></keys>
 <keys><key><shift/><ctrl/>S</key>	 <action>save under a new name</action></keys>
-<keys><key><ctrl/>W</key>	 <action>close window</action></keys>
 <keys><key><ctrl/>Q</key>	 <action>exit Inkscape</action></keys>
 </group>
 
@@ -194,11 +193,9 @@ can leave your ideas and requests there.</p>
 
 *<section title="Layers" color="f6f9d9">
 <group>
-
-<!-- NOT IMPLEMENTED YET: -->
-<!--<keys><key><shift/><misc f="PgUp"/></key> <action>move to next layer</action></keys>
-<keys><key><shift/><misc f="PgDn"/></key> <action>move to previous layer</action></keys>
-<note>These commands move the selected objects from one layer to another.</note>-->
+<keys><key><shift/><misc f="PgUp"/></key> <action>move to layer above</action></keys>
+<keys><key><shift/><misc f="PgDn"/></key> <action>move to layer below</action></keys>
+<note>These commands move the selected objects from one layer to another.</note>
 
 <keys><key><shift/><ctrl/><misc f="PgUp"/></key> <action>raise layer</action></keys>
 <keys><key><shift/><ctrl/><misc f="PgDn"/></key> <action>lower layer</action></keys>
