@@ -21,6 +21,7 @@
 #include <gtk/gtkmarshal.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtkadjustment.h>
+#include "helper/sp-marshal.h"
 #include "helper/sp-intl.h"
 #include "../xml/repr.h"
 #include "../xml/sp-repr-event-vector.h"
@@ -117,6 +118,15 @@ sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass)
 	object_class->destroy = sp_xmlview_attr_list_destroy;
 
 	parent_class = (GtkCListClass*)gtk_type_class (GTK_TYPE_CLIST);
+
+        g_signal_new (  "row-value-changed",
+			G_TYPE_FROM_CLASS(klass),
+			G_SIGNAL_RUN_FIRST,
+			G_STRUCT_OFFSET (SPXMLViewAttrListClass, row_changed),
+			NULL, NULL,
+			sp_marshal_NONE__UINT,
+			G_TYPE_NONE, 1,
+			G_TYPE_INT);
 }
 
 void
@@ -177,5 +187,8 @@ event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, 
 	}
 
 	gtk_clist_thaw (GTK_CLIST (list));
+
+	// send a "changed" signal so widget owners will know I've updated
+	g_signal_emit_by_name(G_OBJECT (list), "row-value-changed", row );
 }
 

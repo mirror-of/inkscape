@@ -2,6 +2,11 @@
 
 	* src/dialogs/rdf.h, src/dialogs/rdf.cpp: added rdf:Bag for the
 	  dc:subject keyword list.  Closed bug #1021025.
+	* src/dialogs/xml-tree.cpp, src/widgets/sp-xmlview-attr-list.cpp,
+	  src/widgets/sp-xmlview-attr-list.h: added status bar to XML
+	  editor.  added row-change callback for XML tree view.  This
+	  all supports a possible future solution to bug #869683.
+	* src/dialogs/desktop-properties.cpp: memory leak in RDF code.
 
 2004-11-04  MenTaLguY  <mental@rydia.net>
 

@@ -303,13 +303,13 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
     GtkWidget *e;
     GtkTextBuffer *buf;
     GtkTextIter start, end;
-    gchar const * text = NULL;
+    gchar * text = NULL;
 
     switch ( entity->format ) {
     case RDF_FORMAT_LINE:
         e = GTK_WIDGET (widget);
 
-        text = (gchar const *)gtk_entry_get_text ( GTK_ENTRY (e) );
+        text = g_strdup(gtk_entry_get_text ( GTK_ENTRY (e) ));
         break;
     case RDF_FORMAT_MULTILINE:
         buf = GTK_TEXT_BUFFER (widget);
@@ -317,8 +317,7 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
         gtk_text_buffer_get_start_iter(buf, &start);
         gtk_text_buffer_get_end_iter(buf, &end);
 
-        text = (gchar const *)gtk_text_buffer_get_text( buf, &start,
-                                                        &end, FALSE );
+        text = gtk_text_buffer_get_text( buf, &start, &end, FALSE );
         break;
     default:
         break;
@@ -328,6 +327,7 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
         /* if we changed an RDF entity, mark the document as changed */
         sp_document_done ( SP_ACTIVE_DOCUMENT );
     }
+    if (text) g_free(text);
 }
 
 /**

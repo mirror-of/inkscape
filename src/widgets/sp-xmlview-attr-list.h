@@ -35,6 +35,8 @@ struct SPXMLViewAttrList
 struct SPXMLViewAttrListClass
 {
 	GtkCListClass parent_class;
+
+	void (* row_changed) (SPXMLViewAttrList *list, gint row);
 };
 
 GtkType sp_xmlview_attr_list_get_type (void);

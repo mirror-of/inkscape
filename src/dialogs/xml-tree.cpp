@@ -62,6 +62,9 @@
 #include "shortcuts.h"
 #include <gdk/gdkkeysyms.h>
 
+#include "message-stack.h"
+#include "message-context.h"
+
 struct EditableDest {
     GtkEditable * editable;
     gchar * text;
@@ -73,6 +76,10 @@ static win_data wd;
 // impossible original values to make sure they are read from prefs
 static gint x = -1000, y = -1000, w = 0, h = 0;
 static gchar *prefs_path = "dialogs.xml";
+static GtkWidget *status = NULL;
+static Inkscape::MessageStack * _message_stack = NULL;
+static Inkscape::MessageContext * _message_context = NULL;
+static sigc::connection _message_changed_connection;
 
 static GtkTooltips * tooltips = NULL;
 static GtkEditable * attr_name = NULL;
@@ -120,6 +127,7 @@ static void on_tree_unselect_row_hide (GtkCTree * tree, GtkCTreeNode * node, gin
 
 static void on_attr_select_row (GtkCList *list, gint row, gint column, GdkEventButton *event, gpointer data);
 static void on_attr_unselect_row (GtkCList *list, gint row, gint column, GdkEventButton *event, gpointer data);
+static void on_attr_row_changed ( GtkCList *list, gint row, gpointer data );
 
 static void on_attr_select_row_enable (GtkCList *list, gint row, gint column, GdkEventButton *event, gpointer data);
 static void on_attr_unselect_row_disable (GtkCList *list, gint row, gint column, GdkEventButton *event, gpointer data);
@@ -134,6 +142,8 @@ static void on_desktop_selection_changed (SPSelection * selection);
 static void on_document_uri_set (SPDocument * document, const gchar * uri, gpointer data);
 
 static void on_clicked_get_editable_text (GtkWidget * widget, gpointer data);
+
+static void _set_status_message (Inkscape::MessageType type, const gchar *message, GtkWidget * dialog);
 
 static void cmd_new_element_node (GtkObject * object, gpointer data);
 static void cmd_new_text_node (GtkObject * object, gpointer data);
@@ -206,9 +216,28 @@ sp_xml_tree_dialog (void)
         gtk_container_set_border_width (GTK_CONTAINER (dlg), 0);
         gtk_window_set_default_size (GTK_WINDOW (dlg), 640, 384);
 
+        GtkWidget * vbox = gtk_vbox_new (FALSE, 0);
+        gtk_container_add (GTK_CONTAINER (dlg), vbox);
+
+        GtkWidget * hbox = gtk_hbox_new (FALSE, 0);
+        gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+
+        status = gtk_label_new (NULL);
+        gtk_misc_set_alignment (GTK_MISC (status), 0.0, 0.5);
+        gtk_widget_set_size_request (status, 1, -1);
+        gtk_label_set_markup (GTK_LABEL (status), "");
+        gtk_box_pack_start (GTK_BOX (hbox), gtk_hbox_new(FALSE, 0), FALSE, FALSE, 2);
+        gtk_box_pack_start (GTK_BOX (hbox), status, TRUE, TRUE, 0);
+
         paned = gtk_hpaned_new ();
         gtk_paned_set_position (GTK_PANED (paned), 256);
-        gtk_container_add (GTK_CONTAINER (dlg), paned);
+        gtk_box_pack_start (GTK_BOX (vbox), paned, TRUE, TRUE, 0);
+
+        _message_stack = new Inkscape::MessageStack();
+        _message_context = new Inkscape::MessageContext(_message_stack);
+        _message_changed_connection = _message_stack->connectChanged(
+            sigc::bind(sigc::ptr_fun(_set_status_message), dlg)
+        );
 
         /* tree view */
 
@@ -394,6 +423,8 @@ sp_xml_tree_dialog (void)
                            G_CALLBACK (on_attr_select_row), NULL);
         g_signal_connect ( G_OBJECT (attributes), "unselect_row",
                            G_CALLBACK (on_attr_unselect_row), NULL);
+        g_signal_connect ( G_OBJECT (attributes), "row-value-changed",
+                           G_CALLBACK (on_attr_row_changed), NULL);
 
         toolbar = gtk_toolbar_new ();
         gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
@@ -546,6 +577,8 @@ sp_xml_tree_dialog (void)
 
         g_signal_connect ((GObject *) dlg, "key_press_event", (GCallback) sp_xml_tree_key_press, NULL);
 
+        _message_context->set(Inkscape::NORMAL_MESSAGE,
+                              _("<b>XML Editor</b> Select attributes and edit them."));
     } // end of if (dlg == NULL)
 
     gtk_window_present ((GtkWindow *) dlg);
@@ -838,6 +871,15 @@ on_destroy (GtkObject * object, gpointer data)
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;
+
+    _message_changed_connection.disconnect();
+    delete _message_context;
+    _message_context = NULL;
+    Inkscape::GC::release(_message_stack);
+    _message_stack = NULL;
+    _message_changed_connection.~connection();
+
+    status = NULL;
 }
 
 
@@ -856,6 +898,14 @@ on_delete (GtkObject *object, GdkEvent *event, gpointer data)
     return FALSE; // which means, go ahead and destroy it
 }
 
+
+static void
+_set_status_message (Inkscape::MessageType type, const gchar *message, GtkWidget * dialog)
+{
+    if (status) {
+        gtk_label_set_markup (GTK_LABEL(status), message ? message : "");
+    }
+}
 
 
 void
@@ -974,7 +1024,6 @@ on_attr_select_row ( GtkCList *list, gint row, gint column,
 }
 
 
-
 void
 on_attr_unselect_row ( GtkCList *list, gint row, gint column,
                        GdkEventButton *event, gpointer data )
@@ -982,6 +1031,44 @@ on_attr_unselect_row ( GtkCList *list, gint row, gint column,
     selected_attr = 0;
 }
 
+
+void
+on_attr_row_changed ( GtkCList *list, gint row, gpointer data )
+{
+    gint attr = sp_xmlview_attr_list_get_row_key (list, row);
+
+    if (attr == selected_attr) {
+        /* if the attr changed, reselect the row in the list to sync
+           the edit box */
+
+        /*
+        // get current attr values
+        const gchar * name = g_quark_to_string (sp_xmlview_attr_list_get_row_key (list, row));
+        const gchar * value = sp_repr_attr (selected_repr, name);
+
+        g_warning("value: '%s'",value);
+
+        // get the edit box value
+        GtkTextIter start, end;
+        gtk_text_buffer_get_bounds ( gtk_text_view_get_buffer (attr_value),
+                                     &start, &end );
+        gchar * text = gtk_text_buffer_get_text ( gtk_text_view_get_buffer (attr_value),
+                                       &start, &end, TRUE );
+        g_warning("text: '%s'",text);
+
+        // compare to edit box
+        if (strcmp(text,value)) {
+            // issue warning if they're different
+            _message_stack->flash(Inkscape::WARNING_MESSAGE,
+                                  _("Attribute changed in GUI while editing values!"));
+        }
+        g_free (text);
+
+        gtk_clist_unselect_row ( GTK_CLIST(list), row, 0 );
+        gtk_clist_select_row ( GTK_CLIST(list), row, 0 );
+        */
+    }
+}
 
 
 void
