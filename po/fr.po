@@ -3489,9 +3489,8 @@ msgid "tutorial-basic.svg"
 msgstr "tutorial-basic.fr.svg"
 
 #: src/verbs.cpp:694
-#, fuzzy
 msgid "tutorial-advanced.svg"
-msgstr "tutorial-basic.fr.svg"
+msgstr "tutorial-advanced.fr.svg"
 
 #: src/verbs.cpp:697
 #, fuzzy
