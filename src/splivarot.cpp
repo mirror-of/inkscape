@@ -413,7 +413,7 @@ sp_selected_path_boolop (bool_op bop)
       
       sp_selection_add_item (selection, item);
       
-      {
+      if (bop == bool_op_slice) {
         SPCSSAttr *css;        
         
         css = sp_repr_css_attr_new ();
