@@ -182,7 +182,15 @@ sp_namedview_release (SPObject * object)
 		namedview->guides = NULL;
 	}
 
-	g_assert (!namedview->views);
+	/* 
+	  TODO:  This assert is getting hit when the XML editor is open and the user
+	  cancels an application quit (see Inkscape bug #864791).  But this assert
+	  doesn't seem to provide any value, since this routine doesn't refer to views
+	  at all.  So this should be reviewed in more depth to see if commenting out
+	  the assert introduces any new undesired behavior.
+
+	  g_assert (!namedview->views); 
+	 */
 
 	while (namedview->gridviews) {
 		gtk_object_destroy (GTK_OBJECT (namedview->gridviews->data));
