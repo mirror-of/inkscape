@@ -54,10 +54,17 @@ sp_help_about (void)
      */
 
     if (!w) {
-	 char *about = g_build_filename(INKSCAPE_SCREENSDIR,
-			                _("about.svg"), NULL);
+        /* TRANSLATORS: This is the filename of the `About Inkscape' picture in
+           the `screens' directory.  Thus the translation of "about.svg" should be
+           the filename of its translated version, e.g. about.zh.svg for Chinese.
+
+           N.B. about.svg changes once per release.  (We should probably rename
+           the original to about-0.40.svg etc. as soon as we have a translation.
+           If we do so, then add an item to release-checklist saying that the
+           string here should be changed.) */
+	char *about = g_build_filename(INKSCAPE_SCREENSDIR, _("about.svg"), NULL);
         doc = sp_document_new (about, FALSE, TRUE);
-	 g_free(about);
+        g_free(about);
         g_return_if_fail (doc != NULL);
         version = doc->getObjectById("version");
         
@@ -120,3 +127,15 @@ sp_help_open_screen(gchar const *name)
     sp_file_open(c, NULL);
     g_free(c);
 }
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
