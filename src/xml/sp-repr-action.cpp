@@ -114,7 +114,7 @@ sp_repr_replay_log (SPReprAction *log)
 	}
 
 	List<SPReprAction &> reversed(
-		reverse_list<SPReprAction &, SPReprAction::Iterator>(log, NULL)
+		reverse_list<SPReprAction::Iterator>(log, NULL)
 	);
 	for ( ; reversed ; ++reversed ) {
 		reversed->replayOne();

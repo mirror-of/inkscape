@@ -112,7 +112,7 @@ void LayerSelector::_updateLayer(SPObject *layer) {
         SPObject *root(_desktop->currentRoot());
 
         _buildEntries(0, cons(*root,
-            reverse_list<SPObject &, SPObject::ParentIterator>(layer, root)
+            reverse_list<SPObject::ParentIterator>(layer, root)
         ));
 
         _selector.set_active(
@@ -150,7 +150,7 @@ void LayerSelector::_buildSiblingEntries(
 
     Inkscape::Util::List<SPObject &> siblings(
         reverse_list_in_place(
-            filter_list<SPObject &, SPObject::SiblingIterator>(
+            filter_list<SPObject::SiblingIterator>(
                 is_layer(_desktop), parent.firstChild(), NULL
             )
         )

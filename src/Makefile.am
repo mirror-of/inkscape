@@ -90,7 +90,9 @@ EXTRA_DIST =	\
 	utest/test-1ary-cases.h	\
 	algorithms/find-last-if.h \
 	algorithms/longest-common-suffix.h \
+	traits/copy.h	\
 	traits/function.h	\
+	traits/list-copy.h	\
 	traits/reference.h
 
 EXTRA_PROGRAMS =	\

@@ -196,13 +196,12 @@ void SPItem::lowerOne() {
     using Inkscape::Util::reverse_list;
 
     MutableList<SPObject &> next_lower=std::find_if(
-        reverse_list<SPObject &, SPObject::SiblingIterator>(
+        reverse_list<SPObject::SiblingIterator>(
             SP_OBJECT_PARENT(this)->firstChild(), this
         ),
         MutableList<SPObject &>(),
         &is_item
     );
-
     if (next_lower) {
         ++next_lower;
         SPRepr *repr=SP_OBJECT_REPR(this);
@@ -217,7 +216,7 @@ void SPItem::lowerToBottom() {
     using Inkscape::Util::reverse_list;
 
     MutableList<SPObject &> bottom=find_last_if(
-        reverse_list<SPObject &, SPObject::SiblingIterator>(
+        reverse_list<SPObject::SiblingIterator>(
             SP_OBJECT_PARENT(this)->firstChild(), this
         ),
         MutableList<SPObject &>(),

@@ -28,11 +28,11 @@ template <typename BaseType, typename Strategy>
 class ForwardPointerIterator<BaseType const, Strategy> {
 public:
     typedef std::forward_iterator_tag iterator_category;
-    typedef BaseType const value_type;
+    typedef typename Traits::Reference<BaseType const>::LValue value_type;
     typedef std::ptrdiff_t difference_type;
-    typedef typename Traits::Reference<value_type>::LValue reference;
-    typedef typename Traits::Reference<value_type>::RValue const_reference;
-    typedef typename Traits::Reference<value_type>::Pointer pointer;
+    typedef typename Traits::Reference<BaseType const>::LValue reference;
+    typedef typename Traits::Reference<BaseType const>::RValue const_reference;
+    typedef typename Traits::Reference<BaseType const>::Pointer pointer;
 
     typedef ForwardPointerIterator<BaseType const, Strategy> Self;
 
@@ -71,10 +71,10 @@ class ForwardPointerIterator
 : public ForwardPointerIterator<BaseType const, Strategy>
 {
 public:
-    typedef BaseType value_type;
-    typedef typename Traits::Reference<value_type>::LValue reference;
-    typedef typename Traits::Reference<value_type>::RValue const_reference;
-    typedef typename Traits::Reference<value_type>::Pointer pointer;
+    typedef typename Traits::Reference<BaseType>::LValue value_type;
+    typedef typename Traits::Reference<BaseType>::LValue reference;
+    typedef typename Traits::Reference<BaseType>::RValue const_reference;
+    typedef typename Traits::Reference<BaseType>::Pointer pointer;
 
     typedef ForwardPointerIterator<BaseType const, Strategy> Ancestor;
     typedef ForwardPointerIterator<BaseType, Strategy> Self;

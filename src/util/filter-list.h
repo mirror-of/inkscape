@@ -13,26 +13,28 @@
 #define SEEN_INKSCAPE_UTIL_FILTER_LIST_H
 
 #include "util/list.h"
+#include "traits/list-copy.h"
 
 namespace Inkscape {
 
 namespace Util {
 
-template <typename T, typename InputIterator, typename UnaryPredicate>
-inline MutableList<T>
+template <typename InputIterator, typename UnaryPredicate>
+inline typename Traits::ListCopy<InputIterator>::ResultList
 filter_list(UnaryPredicate p, InputIterator start, InputIterator end) {
-    MutableList<T> head;
-    MutableList<T> tail;
+    typedef typename Traits::ListCopy<InputIterator>::ResultList ResultList;
+    ResultList head;
+    ResultList tail;
     while ( start != end && !p(*start) ) {
         ++start;
     }
     if ( start != end ) {
-        head = tail = MutableList<T>(*start);
+        head = tail = ResultList(*start);
         ++start;
     }
     while ( start != end ) {
         if (p(*start)) {
-            tail.setNext(MutableList<T>(*start));
+            tail.setNext(ResultList(*start));
             ++tail;
         }
         ++start;
@@ -40,10 +42,10 @@ filter_list(UnaryPredicate p, InputIterator start, InputIterator end) {
     return head;
 }
 
-template <typename T1, typename T2, typename UnaryPredicate>
-inline MutableList<T1>
-filter_list(UnaryPredicate p, List<T2> const &list) {
-    return filter_list(p, list, List<T2>());
+template <typename T, typename UnaryPredicate>
+inline typename Traits::ListCopy<List<T> >::ResultList
+filter_list(UnaryPredicate p, List<T> const &list) {
+    return filter_list(p, list, List<T>());
 }
 
 }

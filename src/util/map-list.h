@@ -43,9 +43,9 @@ inline MutableList<T1> map_list(UnaryFunction f, List<T2> list) {
 }
 
 template <typename T, typename UnaryFunction>
-inline MutableList<T>
-map_list_in_place(UnaryFunction f, MutableList<T> start,
-                                   MutableList<T> end=MutableList<T>())
+inline List<T>
+map_list_in_place(UnaryFunction f, List<T> start,
+                                   List<T> end=List<T>())
 {
     std::transform(start, end, start, f);
     return start;

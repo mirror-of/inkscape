@@ -13,14 +13,16 @@
 #define SEEN_INKSCAPE_UTIL_REVERSE_LIST_H
 
 #include "util/list.h"
+#include "traits/list-copy.h"
 
 namespace Inkscape {
 
 namespace Util {
 
-template <typename T, typename InputIterator>
-inline MutableList<T> reverse_list(InputIterator start, InputIterator end) {
-    MutableList<T> head;
+template <typename InputIterator>
+inline typename Traits::ListCopy<InputIterator>::ResultList
+reverse_list(InputIterator start, InputIterator end) {
+    typename Traits::ListCopy<InputIterator>::ResultList head;
     while ( start != end ) {
         head = cons(*start, head);
         ++start;
@@ -28,9 +30,10 @@ inline MutableList<T> reverse_list(InputIterator start, InputIterator end) {
     return head;
 }
 
-template <typename T1, typename T2>
-inline MutableList<T1> reverse_list(List<T2> const &list) {
-    return reverse_list(list, List<T2>());
+template <typename T>
+inline typename Traits::ListCopy<List<T> >::ResultList
+reverse_list(List<T> const &list) {
+    return reverse_list(list, List<T>());
 }
 
 template <typename T>
