@@ -1,5 +1,9 @@
 2004-06-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-clippath.h, src/sp-gradient.h, src/sp-marker.h, src/sp-mask.h, src/sp-pattern.h:
+	  Explicitly mark _acceptObject as virtual.
+	  (Already declared as virtual in base class.)
+
 	* src/file.cpp, src/main.cpp: Greater conformance to CodingStyle.
 
 	* src/node-context.h, src/selcue.h, src/sp-pattern.h,

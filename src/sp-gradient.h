@@ -150,7 +150,7 @@ public:
 		return (SPGradient *)URIReference::getObject();
 	}
 protected:
-	bool _acceptObject(SPObject *obj) const {
+	virtual bool _acceptObject(SPObject *obj) const {
 		return SP_IS_GRADIENT(obj);
 	}
 };

@@ -50,7 +50,7 @@ public:
 		return (SPClipPath *)URIReference::getObject();
 	}
 protected:
-	bool _acceptObject(SPObject *obj) const {
+	virtual bool _acceptObject(SPObject *obj) const {
 		return SP_IS_CLIPPATH(obj);
 	}
 };
