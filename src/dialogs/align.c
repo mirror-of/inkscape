@@ -14,6 +14,7 @@
 
 #include <config.h>
 
+#include <glib.h>
 #include <math.h>
 #include <stdlib.h>
 #include <libnr/nr-macros.h>
@@ -28,11 +29,15 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "widgets/button.h"
+#include "widgets/sp-widget.h"
 #include "inkscape.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "sp-item-transform.h"
 #include "selection.h"
+#include "dialog-events.h"
+#include "macros.h"
+
 
 #include "align.h"
 
@@ -123,12 +128,12 @@ static GtkWidget *dlg = NULL;
 
 static unsigned int base = SP_ALIGN_LAST;
 
-static int
-sp_quick_align_dialog_delete (void)
+static void
+sp_quick_align_dialog_destroy (void)
 {
-	if (GTK_WIDGET_VISIBLE (dlg)) gtk_widget_hide (dlg);
-
-	return TRUE;
+	//	if (GTK_WIDGET_VISIBLE (dlg)) gtk_widget_hide (dlg);
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
+	dlg = NULL;
 }
 
 static void
@@ -151,7 +156,13 @@ sp_quick_align_dialog (void)
 		GtkTooltips * tt = gtk_tooltips_new ();
 
 		dlg = sp_window_new (_("Align objects"), FALSE);
-		g_signal_connect (G_OBJECT (dlg), "delete_event", G_CALLBACK (sp_quick_align_dialog_delete), NULL);
+
+		// if there's an active canvas, attach dialog to it as a transient:
+		if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
+			gtk_window_set_transient_for ((GtkWindow *) dlg, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
+		g_signal_connect (G_OBJECT (dlg), "destroy", G_CALLBACK (sp_quick_align_dialog_destroy), NULL);
+		//now all uncatched keypresses from the window will be handled:
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
 
 		nb = gtk_notebook_new ();
 		gtk_container_add (GTK_CONTAINER (dlg), nb);
