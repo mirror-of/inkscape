@@ -26,6 +26,7 @@
 #include "svg/svg.h"
 #include "enums.h"
 #include "color.h"
+#include "color-rgba.h"
 #include "desktop.h"
 #include "prefs-utils.h"
 #include "sp-namedview.h"

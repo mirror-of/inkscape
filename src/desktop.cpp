@@ -45,6 +45,7 @@
 #include "display/canvas-arena.h"
 #include "forward.h"
 #include "inkscape-private.h"
+#include "color-rgba.h"
 #include "desktop.h"
 #include "desktop-events.h"
 #include "desktop-affine.h"
@@ -2243,13 +2244,14 @@ void SPDesktopWidget::_update_layer_display(SPObject *layer,
 
 }
 
+
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
