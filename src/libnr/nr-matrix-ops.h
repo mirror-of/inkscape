@@ -3,6 +3,7 @@
 #define SEEN_NR_MATRIX_OPS_H
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-translate.h>
 #include <libnr/nr-scale.h>
