@@ -99,7 +99,7 @@ sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filen
 		return NULL;
 
 	if (last_chance_svg == TRUE) {
-		sp_ui_error_dialog(_("Autodetect failed, but the file was able to be opened using the SVG input filter"));
+		sp_ui_error_dialog(_("Autodetect failed, but the file is being opened using the SVG input filter"));
 	}
 	
 	/* This kinda overkill as most of these are already set, but I want
