@@ -147,7 +147,7 @@ options:
 \&    \-f, \-\-file=FILENAME               
 \&    \-h, \-\-export\-height=HEIGHT        
 \&    \-i, \-\-bitmap\-icons                
-\&    \-p, \-\-print=FILENAME              
+\&    \-p, \-\-print=PRINTER              
 \&    \-s, \-\-slideshow                   
 \&    \-w, \-\-export\-width=WIDTH          
 \&    \-x, \-\-with\-gui                    
@@ -204,9 +204,15 @@ The height of generated bitmap in pixels (overwrites dpi)
 .IP "\fB\-i\fR, \fB\-\-bitmap\-icons\fR" 8
 .IX Item "-i, --bitmap-icons"
 Prefer bitmap (xpm) icons to \s-1SVG\s0 ones
-.IP "\fB\-p\fR \fI\s-1FILENAME\s0\fR, \fB\-\-print\fR=\fI\s-1FILENAME\s0\fR" 8
-.IX Item "-p FILENAME, --print=FILENAME"
-Print document(s) to specified output file (use `| program' for pipe)
+.IP "\fB\-p\fR \fI\s-1FILENAME\s0\fR, \fB\-\-print\fR=\fI\s-1PRINTER\s0\fR" 8
+.IX Item "-p PRINTER, --print=PRINTER"
+Print document(s) to specified printer using `lpr -P PRINTER'.
+Alternatively, use `| COMMAND' to specify a different command to pipe to,
+or use `> FILENAME' to write the postscript to a file instead of printing.
+Remember to do appropriate quoting for your shell, e.g.
+.Vb 1
+\&    inkscape \-\-print='| ps2pdf \- mydoc.pdf' mydoc.svg
+.Ve
 .IP "\fB\-s\fR, \fB\-\-slideshow\fR" 8
 .IX Item "-s, --slideshow"
 Show given files one-by-one, switch to next on any key/mouse event
@@ -248,7 +254,7 @@ better suited for production \s-1SVG\s0 processing.)
 Printing an \s-1SVG\s0 file directly:
 .PP
 .Vb 1
-\&    inkscape filename.svg \-p | lpr
+\&    inkscape filename.svg \-p '| lpr'
 .Ve
 .PP
 Converting \s-1SVG\s0 file to a png:
