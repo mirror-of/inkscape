@@ -32,6 +32,7 @@
 #include "path-chemistry.h"
 #include "desktop-affine.h"
 #include "libnr/nr-matrix.h"
+#include "style.h"
 
 #include "selection-chemistry.h"
 
@@ -594,12 +595,22 @@ void sp_selection_paste_style(GtkWidget *widget)
 		return;
 	}
 
-	GSList *selected = g_slist_copy((GSList *) sp_selection_repr_list(selection));
+	GSList *selected = g_slist_copy ((GSList *) sp_selection_item_list (selection));
 
 	for (GSList *l = selected; l != NULL; l = l->next) {
-		// take the css from first object on clipboard
-		SPCSSAttr *css = sp_repr_css_attr_inherited((SPRepr *) clipboard->data, "style");
-		sp_repr_css_set ((SPRepr *) l->data, css, "style");
+
+		// take the style from first object on clipboard
+		SPStyle *style = sp_style_new ();
+		sp_style_read_from_repr (style, (SPRepr *) clipboard->data);
+
+		// merge it with the current object's style
+		sp_style_merge_from_style_string (style, sp_repr_attr (SP_OBJECT_REPR (l->data), "style"));
+
+		// calculate the difference between the current object and its parent styles
+		gchar *newcss = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT_PARENT (l->data)));
+
+		// write the result to the object repr
+		sp_repr_set_attr (SP_OBJECT_REPR(l->data), "style", (newcss && *newcss) ? newcss : NULL);
 	}
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -752,8 +763,6 @@ sp_selection_rotate (SPSelection *selection, gdouble angle_degrees)
 
 	center.x = 0.5 * (bbox.x0 + bbox.x1);
 	center.y = 0.5 * (bbox.y0 + bbox.y1);
-
-	//	g_print ("%g  %g  %g  %g\n", bbox.x0, bbox.x1, bbox.y0, bbox.y1);
 
 	sp_selection_rotate_relative (selection, &center, angle_degrees);
 
