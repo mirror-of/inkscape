@@ -144,10 +144,9 @@ sp_arc_start_set (SPItem *item, const NR::Point &p, guint state)
 
 	ge->closed = (sp_genericellipse_side (ge, p) == -1) ? TRUE : FALSE;
 
-	gdouble dx = p[NR::X] - ge->cx.computed;
-	gdouble dy = p[NR::Y] - ge->cy.computed;
-
-	ge->start = atan2 (dy / ge->ry.computed, dx / ge->rx.computed);
+	NR::Point delta = p - NR::Point(ge->cx.computed, ge->cy.computed);
+	NR::scale sc(ge->rx.computed, ge->ry.computed);
+	ge->start = atan2 (delta * sc.inverse());
 	if ( ( state & GDK_CONTROL_MASK )
 	     && snaps )
 	{
@@ -175,9 +174,9 @@ sp_arc_end_set (SPItem *item, const NR::Point &p, guint state)
 
 	ge->closed = (sp_genericellipse_side (ge, p) == -1) ? TRUE : FALSE;
 
-	gdouble dx = p[NR::X] - ge->cx.computed;
-	gdouble dy = p[NR::Y] - ge->cy.computed;
-	ge->end = atan2 (dy / ge->ry.computed, dx / ge->rx.computed);
+	NR::Point delta = p - NR::Point(ge->cx.computed, ge->cy.computed);
+	NR::scale sc(ge->rx.computed, ge->ry.computed);
+	ge->end = atan2 (delta * sc.inverse());
 	if ( ( state & GDK_CONTROL_MASK )
 	     && snaps )
 	{
