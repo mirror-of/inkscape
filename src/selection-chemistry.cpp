@@ -82,6 +82,27 @@ SPCSSAttr *style_clipboard = NULL;
 
 static void sp_copy_stuff_used_by_item(GSList **defs_clip, SPItem *item, const GSList *items);
 
+void sp_selection_copy_one (Inkscape::XML::Node *repr, NR::Matrix full_t, GSList **clip)
+{
+    Inkscape::XML::Node *copy = repr->duplicate();
+
+    // copy complete inherited style
+    SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
+    sp_repr_css_set(copy, css, "style");
+    sp_repr_css_attr_unref(css);
+
+    // write the complete accummulated transform passed to us
+    // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
+    gchar affinestr[80];
+    if (sp_svg_transform_write(affinestr, 79, full_t)) {
+        sp_repr_set_attr (copy, "transform", affinestr);
+    } else {
+        sp_repr_set_attr (copy, "transform", NULL);
+    }
+
+    *clip = g_slist_prepend(*clip, copy);
+}
+
 void sp_selection_copy_impl (const GSList *items, GSList **clip, GSList **defs_clip, SPCSSAttr **style_clip)
 {
 
@@ -105,27 +126,7 @@ void sp_selection_copy_impl (const GSList *items, GSList **clip, GSList **defs_c
 
         // Copy item reprs:
         for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
-
-            Inkscape::XML::Node *repr = SP_OBJECT_REPR (i->data);
-
-            Inkscape::XML::Node *copy = repr->duplicate();
-
-            // copy complete inherited style
-            SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
-            sp_repr_css_set(copy, css, "style");
-            sp_repr_css_attr_unref(css);
-
-            // copy complete accummulated transform
-            NR::Matrix full_t = sp_item_i2doc_affine(SP_ITEM(i->data));
-            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
-            gchar affinestr[80]; 
-            if (sp_svg_transform_write(affinestr, 79, full_t)) {
-                sp_repr_set_attr (copy, "transform", affinestr);
-            } else {
-                sp_repr_set_attr (copy, "transform", NULL);
-            }
-
-            *clip = g_slist_prepend(*clip, copy);
+            sp_selection_copy_one (SP_OBJECT_REPR (i->data), sp_item_i2doc_affine(SP_ITEM (i->data)), clip);
         }
 
         *clip = g_slist_reverse(*clip);
@@ -489,6 +490,7 @@ void sp_selection_group()
 
     while (p) {
         Inkscape::XML::Node *current = (Inkscape::XML::Node *) p->data;
+
         if (current->parent() == topmost_parent) {
             Inkscape::XML::Node *spnew = current->duplicate();
             sp_repr_unparent(current);
@@ -497,12 +499,24 @@ void sp_selection_group()
             topmost --; // only reduce count for those items deleted from topmost_parent
         } else { // move it to topmost_parent first
                 GSList *temp_clip = NULL;
-                // create temporary list with that one item
-                GSList *one_item = g_slist_prepend (NULL, document->getObjectByRepr(current));
-                // copy
-                sp_selection_copy_impl (one_item, &temp_clip, NULL, NULL); // we're in the same doc, so no need to copy defs
-                // delete
-                sp_selection_delete_impl (one_item);
+
+                // At this point, current may already have no item, due to its being a clone whose original is already moved away
+                // So we copy it artificially calculating the transform from its repr->attr("transform") and the parent transform
+                gchar const *t_str = current->attribute("transform");
+                NR::Matrix item_t (NR::identity());
+                if (t_str)
+                    sp_svg_transform_read(t_str, &item_t);
+                item_t *= sp_item_i2doc_affine(SP_ITEM(document->getObjectByRepr(current->parent())));
+                //FIXME: when moving both clone and original from a transformed group (either by
+                //grouping into another parent, or by cut/paste) the transform from the original's
+                //parent becomes embedded into original itself, and this affects its clones. Fix
+                //this by remembering the transform diffs we write to each item into an array and
+                //then, if this is clone, looking up its original in that array and pre-multiplying
+                //it by the inverse of that original's transform diff.
+
+                sp_selection_copy_one (current, item_t, &temp_clip);
+                sp_repr_unparent(current);
+
                 // paste into topmost_parent (temporarily)
                 GSList *copied = sp_selection_paste_impl (document, document->getObjectByRepr(topmost_parent), &temp_clip, NULL);
                 if (temp_clip) g_slist_free (temp_clip);
