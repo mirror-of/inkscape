@@ -19,18 +19,21 @@
 */
 
 void
-spw_checkbutton(GtkWidget * dialog, GtkWidget * t,
+spw_label(GtkWidget * table, const gchar *label_text, int col, int row);
+
+void
+spw_checkbutton(GtkWidget * dialog, GtkWidget * table,
 		const gchar * label, gchar * key, int col, int row,
 		int sensitive, GCallback cb);
 
 void
-spw_dropdown(GtkWidget * dialog, GtkWidget * t,
+spw_dropdown(GtkWidget * dialog, GtkWidget * table,
 	     const gchar * label, gchar * key, int row,
 	     GtkWidget * selector
 	     );
 
 void
-spw_unit_selector(GtkWidget * dialog, GtkWidget * t,
+spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
 		  const gchar * label, gchar * key, int row,
 		  GtkWidget * us, GCallback cb);
 

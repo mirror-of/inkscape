@@ -39,6 +39,7 @@
 #include "helper/unit-menu.h"
 #include "../svg/svg.h"
 #include "../widgets/sp-widget.h"
+#include "../widgets/spw-utilities.h"
 #include "../sp-gradient.h"
 #include <widgets/paint-selector.h>
 #include <widgets/dash-selector.h>
@@ -682,10 +683,7 @@ sp_stroke_style_line_widget_new (void)
 
 #ifdef MARKERS
 	/* Start Marker */
-	l = gtk_label_new (_("Start Markers:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	spw_label(t, _("Start Markers:"), 0, i);
 
 	hb = gtk_hbox_new (FALSE, 4);
 	gtk_widget_show (hb);
