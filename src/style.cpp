@@ -37,6 +37,7 @@
 #include "uri-references.h"
 #include "sp-paint-server.h"
 #include "style.h"
+#include "stringstream.h"
 
 namespace Inkscape {
 
@@ -2045,12 +2046,15 @@ sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key)
 static gint
 sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIFloat *base, guint flags)
 {
+	Inkscape::SVGOStringStream os;
+
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (val->value != base->value))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
         } else {
-            return g_snprintf (p, len, "%s:%g;", key, val->value);
+            os << key << ":" << val->value << ";";
+			return g_strlcpy (p, os.str().c_str(), len);
         }
     }
     return 0;
@@ -2063,13 +2067,15 @@ sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIF
 static gint
 sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, SPIScale24 *base, guint flags)
 {
+	Inkscape::SVGOStringStream os;
 
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (val->value != base->value))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
         } else {
-            return g_snprintf (p, len, "%s:%g;", key, SP_SCALE24_TO_FLOAT (val->value));
+            os << key << ":" << SP_SCALE24_TO_FLOAT(val->value) << ";";
+			return g_strlcpy (p, os.str().c_str(), len);
         }
     }
     return 0;

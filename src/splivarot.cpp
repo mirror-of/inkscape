@@ -18,6 +18,7 @@
 #include <libart_lgpl/art_misc.h>
 #include "xml/repr.h"
 #include "svg/svg.h"
+#include "stringstream.h"
 #include "sp-path.h"
 #include "sp-text.h"
 #include "style.h"
@@ -1545,8 +1546,7 @@ Path_for_item (SPItem * item,bool doTransformation)
 gchar *
 liv_svg_dump_path (Path * path)
 {
-  GString *result;
-  result = g_string_sized_new (40);
+  Inkscape::SVGOStringStream os;
   
   for (int i = 0; i < path->descr_nb; i++)
   {
@@ -1555,12 +1555,12 @@ liv_svg_dump_path (Path * path)
     if (typ == descr_moveto)
     {
       Path::path_descr_moveto*  nData=(Path::path_descr_moveto*)(path->descr_data+theD.dStart);
-      g_string_sprintfa (result, "M %lf %lf ", nData->p[0], nData->p[1]);
+	  os << "M " << nData->p[0] << " " << nData->p[1] << " ";
     }
     else if (typ == descr_lineto)
     {
       Path::path_descr_lineto*  nData=(Path::path_descr_lineto*)(path->descr_data+theD.dStart);
-      g_string_sprintfa (result, "L %lf %lf ", nData->p[0], nData->p[1]);
+	  os << "L " << nData->p[0] << " " << nData->p[1] << " ";
     }
     else if (typ == descr_cubicto)
     {
@@ -1571,31 +1571,33 @@ liv_svg_dump_path (Path * path)
         lastX=tmp[0];
         lastY=tmp[1];
       }
-      g_string_sprintfa (result, "C %lf %lf %lf %lf %lf %lf ",
-                         lastX + nData->stD[0] / 3,
-                         lastY + nData->stD[1] / 3,
-                         nData->p[0] - nData->enD[0] / 3,
-                         nData->p[1] - nData->enD[1] / 3, nData->p[0],nData->p[1]);
-    }
+		os << "C " << lastX + nData->stD[0] / 3 << " "
+			<< lastY + nData->stD[1] / 3 << " "
+            << nData->p[0] - nData->enD[0] / 3 << " "
+            << nData->p[1] - nData->enD[1] / 3 << " "
+			<< nData->p[0] << " "
+			<< nData->p[1] << " ";
+	}
     else if (typ == descr_arcto)
     {
       Path::path_descr_arcto*  nData=(Path::path_descr_arcto*)(path->descr_data+theD.dStart);
-      //                      g_string_sprintfa (result, "L %lf %lf ",theD.d.a.x,theD.d.a.y);
-      g_string_sprintfa (result, "A %g %g %g %i %i %g %g ", nData->rx,nData->ry, nData->angle,
-                         (nData->large) ? 1 : 0,(nData->clockwise) ? 0 : 1, nData->p[NR::X],nData->p[NR::Y]);
+      os << "A " << nData->rx << " "
+			<< nData->ry << " "
+			<< nData->angle << " "
+			<< ((nData->large) ? "1" : "0") << " "
+			<< ((nData->clockwise) ? "0" : "1") << " "
+			<< nData->p[NR::X] << " "
+			<< nData->p[NR::Y] << " ";
     }
     else if (typ == descr_close)
     {
-      g_string_sprintfa (result, "z ");
+	  os << "z ";
     }
     else
     {
     }
   }
   
-  char *res;
-  res = result->str;
-  g_string_free (result, FALSE);
-  
-  return res;
+  return g_strdup (os.str().c_str());
+
 }

@@ -30,6 +30,7 @@
 #include <glib.h>
 
 #include "repr-private.h"
+#include "../svg/stringstream.h"
 
 /*#####################
 # DEFINITIONS
@@ -631,19 +632,14 @@ sp_repr_set_int (SPRepr *repr, const gchar *key, int val)
 unsigned int
 sp_repr_set_double (SPRepr *repr, const gchar *key, double val)
 {
-    gchar c[32];
-
+	Inkscape::SVGOStringStream os;
+	
     g_return_val_if_fail (repr != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
 
-    //## This can be done in several ways.  g_ascii_formatd()
-    //## might be the best for now.  g_snprintf() can be
-    //## affected by LOCALE.   g_ascii_formatd() is always "C" locale.
-    //g_snprintf (c, 32, "%.8f", val);
-    //sp_xml_dtoa (c, val, 8, 0, FALSE);
-    g_ascii_formatd (c, sizeof (c), "%.8f", val);
-
-    return sp_repr_set_attr (repr, key, c);
+	os << val;
+	
+	return sp_repr_set_attr (repr, key, os.str().c_str());
 }
 
 unsigned int
