@@ -175,7 +175,7 @@ main(int argc, char const **argv)
 
 #ifdef ENABLE_NLS
 #ifdef WIN32
-    gchar *pathBuf = g_strconcat(g_path_get_dirname(argv[0], "\\", PACKAGE_LOCALE_DIR, NULL);
+    gchar *pathBuf = g_strconcat(g_path_get_dirname(argv[0]), "\\", PACKAGE_LOCALE_DIR, NULL);
     bindtextdomain(GETTEXT_PACKAGE, pathBuf);
     g_free(pathBuf);
 #else

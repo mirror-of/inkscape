@@ -97,7 +97,8 @@ endif
 VERSION = \"0.39cvs-${DTG}\"
 
 # the XP_WIN def is necessary for libjs.a
-CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) -DXP_WIN -DHAVE_CONFIG_H
+CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
+-DXP_WIN -D_INTL_REDIRECT_INLINE -DHAVE_CONFIG_H
 
 
 .cpp.o:
@@ -135,8 +136,10 @@ INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
 -I$(GTK)/include/libart-2.0 -DLIBXML_STATIC -I$(GTK)/include/libxml2 \
 -I$(GTK)/include/freetype2
 
-LIBS = $(GTKLIB) -lxml2 $(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
--lfreetype -lpng -lpopt $(GTK)/lib/libz.lib -mwindows -lws2_32
+LIBS = $(GTKLIB) -lxml2 \
+$(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
+-lfreetype -lpng -lpopt $(GTK)/lib/libz.lib \
+-mwindows -lws2_32 -lintl
 
 
 ###########################
