@@ -1,3 +1,15 @@
+2004-05-06  Ted Gould  <ted@gould.cx>
+
+	* src/file.cpp, src/extension/extension.cpp, src/extension/init.cpp,
+	src/extension/internal/Makefile_insert,
+	src/extension/internal/gdkpixbuf-input.cpp,
+	src/extension/internal/gdkpixbuf-input.h:
+	  Changing the import functionality so that it works much more like open.
+	  You can use any format, and it will place that file directly in the
+	  document that you are working on.  Added input extensions that cover all
+	  of the bitmap formats that are covered with gdkpixbuf.  Also, more
+	  formats can be used using the scripting system.
+
 2004-05-06  Carl Hetherington <inkscape@carlh.net>
 
 	* src/sp-line.cpp, src/sp-mask.cpp, src/sp-metrics.cpp:

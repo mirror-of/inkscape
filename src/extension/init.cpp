@@ -33,6 +33,7 @@
 #endif
 #include "internal/ps-out.h"
 #include "internal/eps-out.h"
+#include "internal/gdkpixbuf-input.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -63,6 +64,7 @@ init (void)
 	Internal::PsOutput::init();
 	Internal::EpsOutput::init();
 	Internal::PrintPS::init();
+	Internal::GdkpixbufInput::init();
 #ifdef WITH_GNOME_PRINT
 	Internal::PrintGNOME::init();
 #endif

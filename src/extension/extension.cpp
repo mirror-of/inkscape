@@ -102,6 +102,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 */
 Extension::~Extension (void)
 {
+//	printf("Extension Destructor: %s\n", name);
 	set_state(STATE_UNLOADED);
 	db.unregister_ext(this);
     sp_repr_unref(repr);

@@ -226,6 +226,7 @@ sp_file_open_dialog (gpointer object, gpointer data)
     gchar *fileName = success ? g_strdup(dlg->getFilename()) : NULL;
     Inkscape::Extension::Extension * selection = dlg->getSelectionType();
     delete dlg;
+
     if (!success) return;
     if (fileName) {
         gsize bytesRead = 0;
@@ -262,7 +263,7 @@ sp_file_open_dialog (gpointer object, gpointer data)
         g_free (fileName);
     }
 
-
+    return;
 }
 
 
@@ -448,42 +449,20 @@ sp_file_save_as (gpointer object, gpointer data)
  *  Import a resource.  Called by sp_file_import()
  */
 static void
-file_import (SPDocument *doc, const gchar *filename)
+file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extension * key)
 {
-    if (filename && g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-        g_free (import_path);
-        if (filename[strlen(filename) - 1] != G_DIR_SEPARATOR) {
-            import_path = g_strconcat (filename, G_DIR_SEPARATOR_S, NULL);
-        } else {
-            import_path = g_strdup (filename);
-        }
-        return;
+    SPDocument *doc;
+	
+    try {
+        doc = Inkscape::Extension::open (key, uri);
+    } catch (Inkscape::Extension::Input::no_extension_found &e) {
+        doc = NULL;
+    } catch (Inkscape::Extension::Input::open_failed &e) {
+        doc = NULL;
     }
 
-    if (filename == NULL)
-        return;
-
-    import_path = g_dirname (filename);
-    if (import_path) import_path = g_strconcat (import_path, G_DIR_SEPARATOR_S, NULL);
-
-    SPRepr *rdoc = sp_document_repr_root (doc);
-
-    const gchar *docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
-    const gchar *relname = sp_relative_path_from_path (filename, docbase);
-    /* fixme: this should be implemented with mime types */
-    const gchar *e = sp_extension_from_path (filename);
-
-    if ((e == NULL) || (strcmp (e, "svg") == 0) || (strcmp (e, "xml") == 0)) {
-
-        SPReprDoc *rnewdoc = sp_repr_read_file (filename, SP_SVG_NS_URI);
-        if (rnewdoc == NULL) {
-            /*
-              We might need an error dialog here
-              for failing to load an SVG document
-            */
-            return;
-        }
-        SPRepr *repr = sp_repr_document_root (rnewdoc);
+    if (doc != NULL) {
+        SPRepr *repr = sp_document_repr_root (doc);
         const gchar *style = sp_repr_attr (repr, "style");
 
         SPRepr *newgroup = sp_repr_new ("g");
@@ -495,62 +474,18 @@ file_import (SPDocument *doc, const gchar *filename)
             sp_repr_append_child (newgroup, newchild);
         }
 
-        sp_repr_document_unref (rnewdoc);
+        sp_document_unref (doc);
 
-        sp_document_add_repr (doc, newgroup);
+        sp_document_add_repr (in_doc, newgroup);
         sp_repr_unref (newgroup);
-        sp_document_done (doc);
-        return;
+        sp_document_done (in_doc);
+    } else {
+        gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
+        sp_ui_error_dialog (text);
+        g_free (text);
     }
 
-    if ((strcmp (e, "png" ) == 0) ||
-        (strcmp (e, "jpg" ) == 0) ||
-        (strcmp (e, "jpeg") == 0) ||
-        (strcmp (e, "bmp" ) == 0) ||
-        (strcmp (e, "gif" ) == 0) ||
-        (strcmp (e, "tiff") == 0) ||
-        (strcmp (e, "xpm" ) == 0)) {
-
-        /* Try pixbuf */
-        GError *err = NULL;
-        // TODO: bulia, please look over
-        gsize bytesRead = 0;
-        gsize bytesWritten = 0;
-        GError* error = NULL;
-        gchar* localFilename = g_filename_from_utf8 ( filename,
-                                                      -1,
-                                                      &bytesRead,
-                                                      &bytesWritten,
-                                                      &error);
-        GdkPixbuf *pb = gdk_pixbuf_new_from_file (localFilename, &err);
-        if (pb) {
-            /* We are readable */
-            SPRepr *repr = sp_repr_new ("image");
-            sp_repr_set_attr (repr, "xlink:href", relname);
-            sp_repr_set_attr (repr, "sodipodi:absref", filename);
-            sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
-            sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
-            sp_document_add_repr (doc, repr);
-            sp_repr_unref (repr);
-            sp_document_done (doc);
-            gdk_pixbuf_unref (pb);
-        } else {
-            //error stuff here
-            if (err) {
-                gchar *text;
-                text = g_strdup_printf(
-                      _("Unable to import image '%s': %s"),
-                      filename, err->message);
-                sp_ui_error_dialog (text);
-                g_free (text);
-                g_error_free (err);
-            }
-        }
-        if ( localFilename != NULL )
-        {
-            g_free (localFilename);
-        }
-    }
+    return;
 }
 
 
@@ -572,8 +507,10 @@ sp_file_import (GtkWidget * widget)
                  (const char *)_("Select file to import"));
     bool success = dlg->show();
     char *fileName = success ? g_strdup(dlg->getFilename()) : NULL;
+    Inkscape::Extension::Extension * selection = dlg->getSelectionType();
     delete dlg;
-	if (!success) return;
+
+    if (!success) return;
     if (fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
@@ -601,11 +538,15 @@ sp_file_import (GtkWidget * widget)
             g_warning( "INPUT FILENAME IS NOT UTF-8" );
         }
 
+        g_free (import_path);
+        import_path = g_dirname (fileName);
+        if (import_path) import_path = g_strconcat (import_path, G_DIR_SEPARATOR_S, NULL);
 
-        file_import (doc, fileName);
+        file_import (doc, fileName, selection);
         g_free (fileName);
     }
 
+    return;
 }
 
 
