@@ -3,9 +3,9 @@ exampledir = $(datadir)/inkscape/examples
 
 example_DATA = \
 	README \
-	default-slide.svg \
 	gradient.svg \
-	intro.svg \
-	tiger.svgz
+	tiger.svgz \
+	markers.svg \
+	i18n.svg
 
 EXTRA_DIST = $(example_DATA)
