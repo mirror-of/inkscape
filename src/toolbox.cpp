@@ -414,11 +414,15 @@ sp_node_toolbox_new (SPDesktop *desktop)
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL,
                                     SP_VERB_OBJECT_TO_CURVE, view, tt);
 
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL,
+                                    SP_VERB_SELECTION_OUTLINE, view, tt);
+
     gtk_widget_show_all (tb);
 
     return tb;
 
 } // end of sp_node_toolbox_new()
+
 
 
 static GtkWidget *
@@ -449,6 +453,18 @@ sp_zoom_toolbox_new (SPDesktop *desktop)
 
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL,
                                     SP_VERB_ZOOM_PAGE, view, tt);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL,
+                                    SP_VERB_ZOOM_PAGE_WIDTH, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE,
+                        AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL,
+                                    SP_VERB_ZOOM_PREV, view, tt);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL,
+                                    SP_VERB_ZOOM_NEXT, view, tt);
 
     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE,
                         AUX_BETWEEN_BUTTON_GROUPS);

@@ -1,6 +1,6 @@
 #define __SP_INTERFACE_C__
 
-/*
+/**
  * Main UI stuff
  *
  * Authors:
@@ -141,7 +141,7 @@ static void sp_ui_new_view(GtkWidget * widget)
 }
 
 #if 0 /* To be re-enabled (and added to menu) once it works. */
-/* fixme: not yet working */
+/* TODO: not yet working */
 static void sp_ui_new_view_preview(GtkWidget *widget)
 {
 	SPDocument *document;
@@ -360,173 +360,212 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
 	return item;
 }
 
+
 static void
 sp_ui_menu_append (GtkMenu *menu, const sp_verb_t *verbs, SPView *view)
 {
-	int i;
-	for (i = 0; verbs[i] != SP_VERB_LAST; i++) {
-		sp_ui_menu_append_item_from_verb (menu, verbs[i], view);
-	}
+    int i;
+    for (i = 0; verbs[i] != SP_VERB_LAST; i++) {
+        sp_ui_menu_append_item_from_verb (menu, verbs[i], view);
+    }
 }
+
 
 static void
 sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 {
- 	GtkWidget *item_recent, *menu_recent;
-	static const sp_verb_t file_verbs_one[] = {
-		SP_VERB_FILE_NEW, SP_VERB_FILE_OPEN, SP_VERB_LAST
-        };
 
-	static const sp_verb_t file_verbs_two[] = {
-		SP_VERB_FILE_SAVE,
-		SP_VERB_FILE_SAVE_AS,
-		SP_VERB_NONE,
-		SP_VERB_FILE_IMPORT, 
-		SP_VERB_FILE_EXPORT,
-		SP_VERB_NONE,
-		SP_VERB_FILE_PRINT,
-		SP_VERB_LAST
-	};
+    GtkWidget *item_recent, *menu_recent;
 
-	sp_ui_menu_append (fm, file_verbs_one, view);
+    static const sp_verb_t file_verbs_one[] = {
+        SP_VERB_FILE_NEW, SP_VERB_FILE_OPEN, SP_VERB_LAST
+    };
 
- 	item_recent = sp_ui_menu_append_item (fm, NULL, _("Open _Recent"), NULL, NULL);
- 	menu_recent = gtk_menu_new ();
- 	sp_menu_append_recent_documents (GTK_WIDGET (menu_recent));
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_recent), menu_recent);
+    static const sp_verb_t file_verbs_two[] = {
+        SP_VERB_FILE_SAVE,
+        SP_VERB_FILE_SAVE_AS,
+        SP_VERB_NONE,
+        SP_VERB_FILE_IMPORT,
+        SP_VERB_FILE_EXPORT,
+        SP_VERB_NONE,
+        SP_VERB_FILE_PRINT,
+        SP_VERB_LAST
+    };
 
-	sp_ui_menu_append (fm, file_verbs_two, view);
+    sp_ui_menu_append (fm, file_verbs_one, view);
+
+    item_recent = sp_ui_menu_append_item (fm, NULL, _("Open _Recent"), NULL, NULL);
+    menu_recent = gtk_menu_new ();
+    sp_menu_append_recent_documents (GTK_WIDGET (menu_recent));
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_recent), menu_recent);
+
+    sp_ui_menu_append (fm, file_verbs_two, view);
 
 #ifdef WIN32
-	sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_PRINT_DIRECT, view);
+    sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_PRINT_DIRECT, view);
 #endif
 #ifdef WITH_GNOME_PRINT
-	sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_PRINT_DIRECT, view);
+    sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_PRINT_DIRECT, view);
 #endif
-/* commented out until implemented */
-/*	sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_PRINT_PREVIEW, view);*/
+    /* commented out until implemented */
+    /* sp_ui_menu_append_item_from_verb (fm,
+       SP_VERB_FILE_PRINT_PREVIEW, view);*/
 
-	sp_ui_menu_append_item_from_verb (fm, SP_VERB_NONE, view);
+    sp_ui_menu_append_item_from_verb (fm, SP_VERB_NONE, view);
 
-	sp_ui_menu_append_item (fm, GTK_STOCK_CLOSE, _("Close View"), G_CALLBACK (sp_ui_close_view), NULL);
-	sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_QUIT, view);
-}
+    sp_ui_menu_append_item ( fm, GTK_STOCK_CLOSE, _("Close View"),
+                             G_CALLBACK (sp_ui_close_view), NULL);
+
+    sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_QUIT, view);
+
+} // end of sp_ui_file_menu()
+
+
 
 static void
 sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-	static const sp_verb_t edit_verbs[] = {
-		SP_VERB_EDIT_UNDO, 
-		SP_VERB_EDIT_REDO,
-		SP_VERB_NONE,
-		SP_VERB_EDIT_CUT, 
-		SP_VERB_EDIT_COPY, 
-		SP_VERB_EDIT_PASTE, 
-		SP_VERB_EDIT_PASTE_IN_PLACE, 
-		SP_VERB_EDIT_PASTE_STYLE,
-		SP_VERB_NONE,
-		SP_VERB_EDIT_DUPLICATE, 
-		SP_VERB_EDIT_DELETE,
-		SP_VERB_NONE,
-		SP_VERB_EDIT_SELECT_ALL,
-		SP_VERB_EDIT_DESELECT,
-		SP_VERB_LAST
-	};
-	sp_ui_menu_append (menu, edit_verbs, view);
+    static const sp_verb_t edit_verbs[] = {
+        SP_VERB_EDIT_UNDO,
+        SP_VERB_EDIT_REDO,
+        SP_VERB_NONE,
+        SP_VERB_EDIT_CUT,
+        SP_VERB_EDIT_COPY,
+        SP_VERB_EDIT_PASTE,
+        SP_VERB_EDIT_PASTE_IN_PLACE,
+        SP_VERB_EDIT_PASTE_STYLE,
+        SP_VERB_NONE,
+        SP_VERB_EDIT_DUPLICATE,
+        SP_VERB_EDIT_DELETE,
+        SP_VERB_NONE,
+        SP_VERB_EDIT_SELECT_ALL,
+        SP_VERB_EDIT_DESELECT,
+        SP_VERB_LAST
+    };
+    sp_ui_menu_append (menu, edit_verbs, view);
+
 }
+
 
 static void
 sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-	static const sp_verb_t selection[] = {
-		SP_VERB_SELECTION_GROUP, 
-		SP_VERB_SELECTION_UNGROUP,
+    static const sp_verb_t selection[] = {
+        SP_VERB_SELECTION_GROUP,
+        SP_VERB_SELECTION_UNGROUP,
 
-		SP_VERB_NONE,
-		SP_VERB_SELECTION_TO_FRONT,
-		SP_VERB_SELECTION_TO_BACK,
-		SP_VERB_SELECTION_RAISE,
-		SP_VERB_SELECTION_LOWER,
+        SP_VERB_NONE,
+        SP_VERB_SELECTION_TO_FRONT,
+        SP_VERB_SELECTION_TO_BACK,
+        SP_VERB_SELECTION_RAISE,
+        SP_VERB_SELECTION_LOWER,
 
-		SP_VERB_NONE,
-		//		SP_VERB_OBJECT_FLATTEN,
-		SP_VERB_OBJECT_ROTATE_90,
-		SP_VERB_OBJECT_FLIP_HORIZONTAL,
-		SP_VERB_OBJECT_FLIP_VERTICAL,
+        SP_VERB_NONE,
+        //		SP_VERB_OBJECT_FLATTEN,
+        SP_VERB_OBJECT_ROTATE_90,
+        SP_VERB_OBJECT_FLIP_HORIZONTAL,
+        SP_VERB_OBJECT_FLIP_VERTICAL,
 
-		SP_VERB_LAST
-	};
-	sp_ui_menu_append (menu, selection, view);
+        SP_VERB_LAST
+    };
+    sp_ui_menu_append (menu, selection, view);
 }
+
 
 static void
 sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-	static const sp_verb_t selection[] = {
-		SP_VERB_OBJECT_TO_CURVE,
-		SP_VERB_SELECTION_OUTLINE,
+    static const sp_verb_t selection[] = {
+        SP_VERB_OBJECT_TO_CURVE,
+        SP_VERB_SELECTION_OUTLINE,
 
-		SP_VERB_NONE,
-		SP_VERB_SELECTION_UNION,
-		SP_VERB_SELECTION_DIFF,
-		SP_VERB_SELECTION_INTERSECT,
-		SP_VERB_SELECTION_SYMDIFF,
-		SP_VERB_SELECTION_CUT,
-		SP_VERB_SELECTION_SLICE,
+        SP_VERB_NONE,
+        SP_VERB_SELECTION_UNION,
+        SP_VERB_SELECTION_DIFF,
+        SP_VERB_SELECTION_INTERSECT,
+        SP_VERB_SELECTION_SYMDIFF,
+        SP_VERB_SELECTION_CUT,
+        SP_VERB_SELECTION_SLICE,
 
-		SP_VERB_NONE,
-		SP_VERB_SELECTION_COMBINE,
-		SP_VERB_SELECTION_BREAK_APART,
+        SP_VERB_NONE,
+        SP_VERB_SELECTION_COMBINE,
+        SP_VERB_SELECTION_BREAK_APART,
 
-		SP_VERB_NONE,
-		SP_VERB_SELECTION_INSET,
-		SP_VERB_SELECTION_OFFSET,
-		SP_VERB_SELECTION_DYNAMIC_OFFSET,
-		SP_VERB_SELECTION_LINKED_OFFSET,
+        SP_VERB_NONE,
+        SP_VERB_SELECTION_INSET,
+        SP_VERB_SELECTION_OFFSET,
+        SP_VERB_SELECTION_DYNAMIC_OFFSET,
+        SP_VERB_SELECTION_LINKED_OFFSET,
 
-		SP_VERB_NONE,
-		SP_VERB_SELECTION_SIMPLIFY,
-		SP_VERB_LAST
-	};
-	sp_ui_menu_append (menu, selection, view);
-	sp_ui_menu_append_item (menu, NULL, _("Cl_eanup"), G_CALLBACK (sp_edit_cleanup), NULL);
+        SP_VERB_NONE,
+        SP_VERB_SELECTION_SIMPLIFY,
+        SP_VERB_LAST
+    };
+    sp_ui_menu_append (menu, selection, view);
+    sp_ui_menu_append_item (menu, NULL, _("Cl_eanup"), G_CALLBACK (sp_edit_cleanup), NULL);
 }
+
+
 
 static void
 sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_1_1, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_1_2, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_2_1, view);
-	sp_ui_menu_append_item (GTK_MENU (menu), NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_SELECTION, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_DRAWING, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PAGE, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PAGE_WIDTH, view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_1_1, view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_1_2, view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_2_1, view);
 
-	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_NEXT, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PREV, view);
+    // next line appends a break in the menu
+    sp_ui_menu_append_item (GTK_MENU (menu), NULL, NULL, NULL, NULL);
 
-	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_GRID, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_GUIDES, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_RULERS, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_SCROLLBARS, view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_SELECTION,
+                                      view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_DRAWING,
+                                      view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PAGE, view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PAGE_WIDTH,
+                                      view);
+
+    // next line appends a break in the menu
+    sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
+
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_NEXT,
+                                      view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_ZOOM_PREV,
+                                      view);
+
+    // next line appends a break in the menu
+    sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
+
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_GRID,
+                                      view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_GUIDES,
+                                      view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_RULERS,
+                                      view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu),
+                                      SP_VERB_TOGGLE_SCROLLBARS, view);
 
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
-	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FULLSCREEN, view);
+    sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FULLSCREEN, view);
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
-	
-	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_NEXT_DESKTOP, view);
-	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_PREV_DESKTOP, view);
 
-	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item (menu, NULL, _("_New View"), G_CALLBACK(sp_ui_new_view), NULL);
-	//	sp_ui_menu_append_item (menu, NULL, _("New P_review"), G_CALLBACK(sp_ui_new_view_preview), NULL);
-}
+    // next line appends a break in the menu
+    sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_NEXT_DESKTOP, view);
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_PREV_DESKTOP, view);
+
+    // next line appends a break in the menu
+    sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
+    // REJON: The icon for New View is called "view_new" whenever a verb gets
+    // in place for the following item...
+    sp_ui_menu_append_item (menu, NULL, _("_New View"), G_CALLBACK(sp_ui_new_view), NULL);
+    /* sp_ui_menu_append_item (menu, NULL, _("New P_review"),
+       G_CALLBACK(sp_ui_new_view_preview), NULL); */
+
+} // end of sp_ui_view_menu()
+
+
 
 #ifndef WIN32
 static void window_policy_toggled(GtkCheckMenuItem *menuitem,

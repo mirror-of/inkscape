@@ -124,8 +124,8 @@
 #define INKSCAPE_STOCK_OBJECT_FONT           "object_font"
 
 #define INKSCAPE_STOCK_PROPERTIES_FILL_PAGE          "properties_fill"
-#define INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE          "properties_stroke_paint"
-#define INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE           "properties_stroke"
+#define INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE  "properties_stroke_paint"
+#define INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE        "properties_stroke"
 
 /**
  * Sets up the inkscape stock repository.

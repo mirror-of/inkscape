@@ -1,3 +1,10 @@
+2004-03-14  Jon Phillips <jon@jonphillips.info>
+
+    * src/toolbox.cpp src/verbs.cpp src/interface.cpp share/icons/icons.svg: 
+      I added all the icons in the VIEW menu. They might need some tweaking, 
+      but its a start. I also cleaned up some coding conventions for these 
+      files. 
+
 2004-03-14  Bryce Harrington <bryce@bryceharrington.com>
 
 	* src/view.cpp:  Adding an accumulator function for checking
