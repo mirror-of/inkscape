@@ -19,7 +19,45 @@
 #include "livarot/LivarotDefs.h"
 
 #include <pango/pango.h>
-#include <gdk/gdk.h>
+#include <glib.h>
+
+class text_with_info {
+public:
+  char*        utf8_text;
+  int          last_st,last_len;
+  
+  int          utf8_length;
+  int          unicode_length;
+  
+  gunichar*    uni_text;
+  int*         char_offset; // size unicode_length+1 (for safety)
+  
+  double*      kern_x;
+  double*      kern_y;
+  
+  char*        stripped; // in case there is a markup
+  int          markupType;
+  void*        markup;
+  
+  text_with_info(char* inText);
+  ~text_with_info(void);
+
+  char*        UTF8Text(void);
+  gunichar*    UnicodeText(void);
+  int          UTF8Length(void);
+  int          UnicodeLength(void);
+  
+  void         Kill(void);
+  
+  void         SetStdText(char* inText);
+  void         AppendStdText(char* inText);
+  
+  void         SetPangoText(char* inText);
+  void         AppendPangoText(char* inText);
+  
+  void         KernXForLastAddition(double *i_kern_x,int i_len);
+  void         KernYForLastAddition(double *i_kern_y,int i_len);
+};
 
 
 
@@ -136,27 +174,26 @@ public:
   } glyph_box;
 
   // source data
-  char*          theText; // not owned by the class
-  bool           own_text;
-  char*          theFace;
-  double         theSize;
+  text_with_info* theText;
+  bool            own_text;
+  char*           theFace;
+  double          theSize;
 
   // tempStuff
-  int            textLength;
-  double         baselineY;
-  PangoAttrList* theAttrs;
+  int             textLength;
+  double          baselineY;
+  PangoAttrList*  theAttrs;
     
   
-  elem_box*      words;
-  int            nbWord,maxWord;
+  elem_box*       words;
+  int             nbWord,maxWord;
   
-  glyph_box*     charas;
+  glyph_box*      charas;
   
-  pango_text_chunker(char* inText,char* font_family,double font_size,int flags,bool isMarked);
+  pango_text_chunker(text_with_info* inText,char* font_family,double font_size,int flags);
   virtual ~pango_text_chunker(void);
   
   virtual void                 SetText(char* inText,int flags);
-  virtual void                 ChangeText(int startPos,int endPos,char* inText,int flags);
   virtual int                  MaxIndex(void);
   
   virtual void                 InitialMetricsAt(int startPos,double &ascent,double &descent);
@@ -166,8 +203,7 @@ public:
   virtual void                 GlyphsInfo(int start_ind,int end_ind,int &nbG,double &totLength);
 
   void                         AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,NR::Point &cumul);
-  void                         SetTextWithMarkup(char* inText,int flags);
-  void                         SetTextWithAttrs(char* inText,PangoAttrList* resAttr,int flags);
+  void                         SetTextWithAttrs(text_with_info* inText,int flags);
   void                         AddDullGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en);
   void                         AddAttributedGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en,PangoAttrIterator *theIt);
 };
