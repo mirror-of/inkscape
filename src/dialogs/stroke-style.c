@@ -98,7 +98,6 @@ sp_stroke_style_paint_widget_new (void)
 	sp_stroke_style_paint_update (SP_WIDGET (spw), SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
 
 	return spw;
-	return spw;
 }
 
 void
