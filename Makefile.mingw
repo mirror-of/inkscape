@@ -24,6 +24,7 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)libgmodule-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgobject-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgtk-win32-2.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libgthread-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libiconv-2.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpango-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpangowin32-1.0-0.dll inkscape
