@@ -1725,158 +1725,154 @@ void             IntLigne::Copy(IntLigne* a)
 // go from runs with floating-point boundaries to integer boundaries:
 // that involves replacing floating-point boundaries that are not integer by single-pixel runs
 // so this function contains plenty of rounding and float->integer conversion (read: time-consuming)
+// Optimization Questions:
+//   * Why is this called so often compared with the other Copy() routines?
+//   * How does AddRun() look for optimization potential?
 void             IntLigne::Copy(FloatLigne* a)
 {
-	if ( a->nbRun <= 0 ) {
-		Reset();
-		return;
-	}
-/*  if ( showCopy ) {
-    printf("\nfloatligne:\n");
-    a->Affiche();
-  }*/
-	nbBord=0;
-	nbRun=0;
-	firstAc=lastAc=-1;
-	bool  pixExists=false;
-	int   curPos=(int)floor(a->runs[0].st)-1;
-	float lastSurf=0;
+    if ( a->nbRun <= 0 ) {
+	Reset();
+	return;
+    }
+    /*  if ( showCopy ) {
+	printf("\nfloatligne:\n");
+	a->Affiche();
+	}*/
+    nbBord=0;
+    nbRun=0;
+    firstAc=lastAc=-1;
+    bool  pixExists=false;
+    int   curPos=(int)floor(a->runs[0].st)-1;
+    float lastSurf=0;
+    float tolerance = 0.00001;
 	
-  // we take each run of the FloatLigne in sequence and make single-pixel runs of its boundaries as needed
-  // since the float_ligne_runs are non-overlapping, when a single-pixel run intersects with another runs, 
-  // it must intersect with the single-pixel run created for the end of that run. so instead of creating a new
-  // int_ligne_run, we just add the coverage to that run.
-	for (int i=0;i<a->nbRun;i++) {
-		float_ligne_run   runA=a->runs[i];
-		float curStF=floor(runA.st);
-		float curEnF=floor(runA.en);
-		int  curSt=(int)curStF;
-		int  curEn=(int)curEnF;
+    // we take each run of the FloatLigne in sequence and make single-pixel runs of its boundaries as needed
+    // since the float_ligne_runs are non-overlapping, when a single-pixel run intersects with another runs, 
+    // it must intersect with the single-pixel run created for the end of that run. so instead of creating a new
+    // int_ligne_run, we just add the coverage to that run.
+    for (int i=0; i<a->nbRun; i++) {
+	float_ligne_run runA = a->runs[i];
+	float curStF = floor(runA.st);
+	float curEnF = floor(runA.en);
+	int   curSt  = (int)curStF;
+	int   curEn  = (int)curEnF;
 
-    // stEx: start boundary is not integer -> create single-pixel run for it
-    // enEx: end boundary is not integer -> create single-pixel run for it
-    // miEx: the runs minus the eventual single-pixel runs is not empty
-		bool  stEx=true,miEx=true,enEx=true;
-		if ( runA.st-curStF < 0.00001 ) stEx=false;
-		if ( runA.en-curEnF < 0.00001 ) enEx=false;
-		int   miSt=curSt;
-		float miStF=curStF;
-		if ( stEx ) {
-			miSt=curSt+1;
-			miStF=curStF+1.0;
-		} else {
-			miSt=curSt;
-      miStF=curStF;
-		}
-		if ( miSt >= curEn ) miEx=false;
-
-    // msv and mev are the start and end value of the middle section of the run, that is the run minus the
-    // single-pixel runs creaed for its boundaries
-		float   msv;
-		if ( stEx == false /*miSt == runA.st*/ ) {
-			msv=runA.vst;
-		} else if ( enEx == false && miSt == curEn ) {
-			msv=runA.ven;
-		} else {
-//			msv=a->ValAt(miSt,runA.st,runA.en,runA.vst,runA.ven);
-			msv=runA.vst+(miStF-runA.st)*runA.pente;
-		}
-		float   mev;
-		if ( stEx == false && miEx == false /*curEn == runA.st*/ ) {
-			mev=runA.vst;
-		} else if ( enEx == false /*curEn == runA.en*/ ) {
-			mev=runA.ven;
-		} else {
-//			mev=a->ValAt(curEn,runA.st,runA.en,runA.vst,runA.ven);
-			mev=runA.vst+(curEnF-runA.st)*runA.pente;
-		}
-		
-    // check the different cases
-		if ( stEx ) {
-			if ( enEx ) {
-				// stEx && enEx
-				if ( curEn > curSt ) {
-					if ( pixExists ) {
-						if ( curPos < curSt ) {
-							AddRun(curPos,curPos+1,lastSurf,lastSurf);
-							lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
-							AddRun(curSt,curSt+1,lastSurf,lastSurf);
-						} else {
-							lastSurf+=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
-							AddRun(curSt,curSt+1,lastSurf,lastSurf);
-						}
-						pixExists=false;
-					} else {
-						lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
-						AddRun(curSt,curSt+1,lastSurf,lastSurf);						
-					}
-				} else {
-					if ( pixExists ) {
-						if ( curPos < curSt ) {
-							AddRun(curPos,curPos+1,lastSurf,lastSurf);
-							lastSurf=0.5*(a->runs[i].ven+a->runs[i].vst)*(a->runs[i].en-a->runs[i].st);
-							curPos=curSt;
-						} else {
-							lastSurf+=0.5*(a->runs[i].ven+a->runs[i].vst)*(a->runs[i].en-a->runs[i].st);
-						}
-					} else {
-						lastSurf=0.5*(a->runs[i].ven+a->runs[i].vst)*(a->runs[i].en-a->runs[i].st);
-						curPos=curSt;
-						pixExists=true;
-					}
-				}
-			} else {
-				// stEx && !enEx
-				if ( pixExists ) {
-					if ( curPos < curSt ) {
-						AddRun(curPos,curPos+1,lastSurf,lastSurf);
-						lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
-						AddRun(curSt,curSt+1,lastSurf,lastSurf);
-					} else {
-						lastSurf+=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
-						AddRun(curSt,curSt+1,lastSurf,lastSurf);
-					}
-					pixExists=false;
-				} else {
-					lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
-					AddRun(curSt,curSt+1,lastSurf,lastSurf);
-				}				
-			}
-		}
-		if ( miEx ) {
-			if ( pixExists ) {
-				if ( curPos < miSt ) {
-					AddRun(curPos,curPos+1,lastSurf,lastSurf);
-				}
-			}
-			pixExists=false;
-			AddRun(miSt,curEn,msv,mev);
-		}
-		if ( enEx ) {
-			if ( curEn > curSt ) {
-				lastSurf=0.5*(mev+a->runs[i].ven)*(a->runs[i].en-curEnF);
-				pixExists=true;
-				curPos=curEn;
-			} else {
-				if ( stEx ) {
-				} else {
-					if ( pixExists ) {
-						AddRun(curPos,curPos+1,lastSurf,lastSurf);
-					}
-					lastSurf=0.5*(mev+a->runs[i].ven)*(a->runs[i].en-curEnF);
-					pixExists=true;
-					curPos=curEn;					
-				}
-			}
-		}
+	// stEx: start boundary is not integer -> create single-pixel run for it
+	// enEx: end boundary is not integer -> create single-pixel run for it
+	// miEx: the runs minus the eventual single-pixel runs is not empty
+	bool  stEx  = true;
+	bool  miEx  = true;
+	bool  enEx  = true;
+	int   miSt  = curSt;
+	float miStF = curStF;
+	float msv;
+	float mev;
+	if ( runA.en - curEnF < tolerance ) {
+	    enEx=false;
 	}
-	if ( pixExists ) {
+
+	// msv and mev are the start and end value of the middle section of the run, that is the run minus the
+	// single-pixel runs creaed for its boundaries
+	if ( runA.st-curStF < tolerance /*miSt == runA.st*/ ) {
+	    stEx = false;
+	    msv  = runA.vst;
+	} else {
+	    miSt  += 1;
+	    miStF += 1.0;
+	    if ( enEx == false && miSt == curEn ) {
+		msv = runA.ven;
+	    } else {
+		//			msv=a->ValAt(miSt,runA.st,runA.en,runA.vst,runA.ven);
+		msv = runA.vst + (miStF-runA.st) * runA.pente;
+	    }
+	}
+
+	if ( miSt >= curEn ) {
+	    miEx=false;
+	}
+	if ( stEx == false && miEx == false /*curEn == runA.st*/ ) {
+	    mev = runA.vst;
+	} else if ( enEx == false /*curEn == runA.en*/ ) {
+	    mev = runA.ven;
+	} else {
+	    //			mev=a->ValAt(curEn,runA.st,runA.en,runA.vst,runA.ven);
+	    mev = runA.vst + (curEnF-runA.st) * runA.pente;
+	}
+	
+	// check the different cases
+	if ( stEx && enEx ) {
+	    // stEx && enEx
+	    if ( curEn > curSt ) {
+		if ( pixExists ) {
+		    if ( curPos < curSt ) {
+			AddRun(curPos,curPos+1,lastSurf,lastSurf);
+			lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
+			AddRun(curSt,curSt+1,lastSurf,lastSurf);
+		    } else {
+			lastSurf+=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
+			AddRun(curSt,curSt+1,lastSurf,lastSurf);
+		    }
+		    pixExists=false;
+		} else {
+		    lastSurf=0.5*(msv+a->runs[i].vst)*(miStF-a->runs[i].st);
+		    AddRun(curSt,curSt+1,lastSurf,lastSurf);						
+		}
+	    } else if ( pixExists ) {
+		if ( curPos < curSt ) {
+		    AddRun(curPos,curPos+1,lastSurf,lastSurf);
+		    lastSurf=0.5*(a->runs[i].ven+a->runs[i].vst)*(a->runs[i].en-a->runs[i].st);
+		    curPos=curSt;
+		} else {
+		    lastSurf += 0.5 * (a->runs[i].ven+a->runs[i].vst)*(a->runs[i].en-a->runs[i].st);
+		}
+	    } else {
+		lastSurf=0.5*(a->runs[i].ven+a->runs[i].vst)*(a->runs[i].en-a->runs[i].st);
+		curPos=curSt;
+		pixExists=true;
+	    }
+	} else if ( pixExists ) {
+	    if ( curPos < curSt ) {
 		AddRun(curPos,curPos+1,lastSurf,lastSurf);
+		lastSurf = 0.5 * (msv+a->runs[i].vst) * (miStF-a->runs[i].st);
+		AddRun(curSt,curSt+1,lastSurf,lastSurf);
+	    } else {
+		lastSurf += 0.5 * (msv+a->runs[i].vst) * (miStF-a->runs[i].st);
+		AddRun(curSt,curSt+1,lastSurf,lastSurf);
+	    }
+	    pixExists=false;
+	} else {
+	    lastSurf = 0.5 * (msv+a->runs[i].vst) * (miStF-a->runs[i].st);
+	    AddRun(curSt,curSt+1,lastSurf,lastSurf);
 	}
-/*  if ( showCopy ) {
-    printf("-> intligne:\n");
-    Affiche();
-  }*/
+	if ( miEx ) {
+	    if ( pixExists && curPos < miSt ) {
+		AddRun(curPos,curPos+1,lastSurf,lastSurf);
+	    }
+	    pixExists=false;
+	    AddRun(miSt,curEn,msv,mev);
+	}
+	if ( enEx ) {
+	    if ( curEn > curSt ) {
+		lastSurf=0.5*(mev+a->runs[i].ven)*(a->runs[i].en-curEnF);
+		pixExists=true;
+		curPos=curEn;
+	    } else if ( ! stEx ) {
+		if ( pixExists ) {
+		    AddRun(curPos,curPos+1,lastSurf,lastSurf);
+		}
+		lastSurf=0.5*(mev+a->runs[i].ven)*(a->runs[i].en-curEnF);
+		pixExists=true;
+		curPos=curEn;					
+	    }
+	}
+    }
+    if ( pixExists ) {
+	AddRun(curPos,curPos+1,lastSurf,lastSurf);
+    }
+    /*  if ( showCopy ) {
+	printf("-> intligne:\n");
+	Affiche();
+	}*/
 }
 
 
