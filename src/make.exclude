@@ -38,6 +38,9 @@ livarot/Path-test.cpp
 main.cpp
 mod360-test.cpp
 potrace/potest.cpp
+
+render
+
 round-test.cpp
 svg/ftos.cpp
 utest
