@@ -1,5 +1,11 @@
 2004-10-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/*: Move some things from nr-matrix-ops.h to new files.
+
+	* src/libnr/nr-point-fns.h, src/libnr/nr-point-fns.cpp:
+	  New function is_zero.  Move is_unit_vector here
+	  (was private to sp-spiral.cpp).
+
 	* src/display/bezier-utils-test.cpp: Disable a test, replacing with a
 	  todo printf and adding a comment explaining.
 
