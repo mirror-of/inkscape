@@ -294,9 +294,9 @@ FileSaveDialog::show() {
         }
 
     if (nativeData->ofn.nFilterIndex != 2)
-        extension = Inkscape::Extension::db.get(SVG_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
+        extension = Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
     else
-        extension = Inkscape::Extension::db.get(SVG_MODULE_KEY_OUTPUT_SVG);
+        extension = Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG);
 
     filename = g_strdup (nativeData->fnbuf);
 	return TRUE;
