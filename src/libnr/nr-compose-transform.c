@@ -16,6 +16,9 @@
 #include "nr-compose-transform.h"
 
 #ifdef WITH_MMX
+#ifdef __cplusplus
+extern "C" {
+#endif
 /* fixme: */
 int nr_have_mmx (void);
 void nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_0 (unsigned char *px, int w, int h, int rs,
@@ -25,6 +28,9 @@ void nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_n (unsigned char *px, int
 							  const unsigned char *spx, int sw, int sh, int srs,
 							  const long *FFd2s, const long *FF_S, unsigned int alpha, int dbits);
 #define NR_PIXOPS_MMX (1 && nr_have_mmx ())
+#ifdef __cplusplus
+};
+#endif
 #endif
 
 /* fixme: Implement missing (Lauris) */
