@@ -827,8 +827,6 @@ void sp_selection_scale_relative(SPSelection *selection, NR::Point const &align,
 		bbox.extent(NR::Y) * scale[NR::Y] > 1e6
 	) return;
 
-	double const max_len = bbox.maxExtent();
-
 	NR::translate const n2d(-align);
 	NR::translate const d2n(align);
 	NR::Matrix const final( n2d * scale * d2n );
