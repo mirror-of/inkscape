@@ -1,5 +1,9 @@
 2004-01-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-types.h, src/libnr/nr-rect.cpp (NR::Rect::corner):
+	Change argument to unsigned, thus changing remainder operator to modulo
+	operator, thus fixing bug for "negative" arguments (-1u etc.).
+
 	* src/dialogs/stroke-style.cpp (sp_stroke_style_paint_update_repr): fix
 	bug with unsigned->float alpha conversion.
 

@@ -221,7 +221,7 @@ namespace NR{
 
 /** returns the four corners of the rectangle in sequence for
  * the correct winding order. */
-const Point Rect::corner(const int i) {
+const Point Rect::corner(unsigned const i) {
 	switch(i % 4) {
 	case 0:
 		return topleft();
@@ -229,7 +229,7 @@ const Point Rect::corner(const int i) {
 		return topright();
 	case 2:
 		return bottomright();
-	case 3:
+	default: /* i.e. 3 */
 		return bottomleft();
 	}
 }

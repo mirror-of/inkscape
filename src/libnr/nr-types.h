@@ -229,7 +229,7 @@ class Rect{
 	Point bottomright() {return max;}
 /** returns the four corners of the rectangle in sequence for the
  * correct winding order. */
-	const Point corner(const int i);
+	const Point corner(unsigned const i);
 	
 /** returns a vector from topleft to bottom right. */
 	const Point dimensions();
