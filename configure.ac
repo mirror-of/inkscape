@@ -242,7 +242,7 @@ if test "x$with_perl" = "xyes"; then
     oldLDFLAGS="$LDFLAGS"
     CFLAGS="$CFLAGS $checkPERL_CFLAGS"
     LDFLAGS="$LDFLAGS $checkPERL_LDFLAGS"
-    AC_CHECK_FUNC([perl_run],[
+    AC_CHECK_FUNC([perl_alloc],[
 	PERL_CFLAGS="$checkPERL_CFLAGS"
 	PERL_LDFLAGS="$checkPERL_LDFLAGS"
         AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
@@ -285,7 +285,7 @@ if test "x$with_python" = "xyes"; then
     oldLIBS="$LIBS"
     CFLAGS="$CFLAGS $checkPYTHON_CFLAGS"
     LIBS="$LIBS $checkPYTHON_LIBS"
-    AC_CHECK_FUNC([PyParser_New],[
+    AC_CHECK_FUNC([Py_Initialize],[
 	PYTHON_CFLAGS="$checkPYTHON_CFLAGS"
 	PYTHON_LIBS="$checkPYTHON_LIBS"
         AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])

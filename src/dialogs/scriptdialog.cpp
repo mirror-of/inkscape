@@ -112,6 +112,8 @@ class ScriptDialogImpl : public ScriptDialog, public Gtk::Dialog
 };
 
 static char *defaultPythonCodeStr =
+    "# This is a sample Python script.\n"
+    "# To run it, select 'Execute Python' from the File menu above.\n"
     "desktop = inkscape.getDesktop()\n"
     "dialogmanager = inkscape.getDialogManager()\n"
     "document = desktop.getDocument()\n"

@@ -32,6 +32,7 @@
 	  src/extension/script/InkscapeScript.cpp: white space fix, and
 	  added config.h, and some small debugging for myself.  Hope Bob doesn't
 	  mind!  :)
+	* src/dialogs/scriptdialog.cpp: added comments to default code.
 
 2004-12-22  Kees Cook  <kees@outflux.net>
 
