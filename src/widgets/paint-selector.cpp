@@ -72,6 +72,7 @@ static void sp_paint_selector_style_button_toggled (GtkToggleButton *tb, SPPaint
 
 static void sp_paint_selector_set_mode_empty (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_multiple (SPPaintSelector *psel);
+static void sp_paint_selector_set_mode_clone (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_none (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mode);
 static void sp_paint_selector_set_mode_gradient (SPPaintSelector *psel, SPPaintSelectorMode mode);
@@ -267,7 +268,10 @@ sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode)
             sp_paint_selector_set_mode_gradient (psel, mode);
             break;
         case SP_PAINT_SELECTOR_MODE_PATTERN:
-            sp_paint_selector_set_mode_pattern (psel, mode);
+                    sp_paint_selector_set_mode_pattern (psel, mode);
+            break;
+        case SP_PAINT_SELECTOR_MODE_CLONE:
+            sp_paint_selector_set_mode_clone (psel);
             break;
 		default:
 			g_warning ("file %s: line %d: Unknown paint mode %d", __FILE__, __LINE__, mode);
@@ -608,6 +612,20 @@ sp_paint_selector_set_mode_multiple (SPPaintSelector *psel)
 	}
 
 	gtk_frame_set_label (GTK_FRAME (psel->frame), _("Multiple styles"));
+}
+
+static void
+sp_paint_selector_set_mode_clone (SPPaintSelector *psel)
+{
+    sp_paint_selector_set_style_buttons (psel, NULL);
+    gtk_widget_set_sensitive (psel->style, FALSE);
+
+    if (psel->selector) {
+        gtk_widget_destroy (psel->selector);
+        psel->selector = NULL;
+    }
+
+    gtk_frame_set_label (GTK_FRAME (psel->frame), _("Clone Selected"));
 }
 
 static void
