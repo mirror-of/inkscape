@@ -1,3 +1,10 @@
+2004-06-08  Ted Gould  <ted@gould.cx>
+
+	* src/main.cpp:
+
+	Added in a version command to our command line args.  This fixes
+	enhancement request 968642.
+
 2004-07-07  MenTaLguY  <mental@rydia.net>
 
 	* src/document.cpp, src/document.h, src/document-undo.cpp,

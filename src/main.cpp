@@ -58,6 +58,7 @@
 
 #include "inkscape-private.h"
 #include "inkscape-stock.h"
+#include "inkscape_version.h"
 
 #include "sp-namedview.h"
 #include "sp-guide.h"
@@ -97,6 +98,7 @@ enum {
 	SP_ARG_EXPORT_SVG,
 	SP_ARG_SLIDESHOW,
 	SP_ARG_BITMAP_ICONS,
+	SP_ARG_VERSION,
 	SP_ARG_LAST
 };
 
@@ -122,6 +124,8 @@ static gchar *sp_export_svg = NULL;
 
 static GSList *sp_process_args (poptContext ctx);
 struct poptOption options[] = {
+	{"version", 'V', POPT_ARG_NONE, NULL, SP_ARG_VERSION,
+     N_("Print the Inkscape version number"), NULL},
 	{"without-gui", 'z', POPT_ARG_NONE, NULL, SP_ARG_NOGUI,
 	 N_("Do not use X server (only process files from console)"),
 	 NULL},
@@ -523,6 +527,10 @@ sp_process_args (poptContext ctx)
 														 &error);
 				fl = g_slist_append (fl, (newFileName != NULL) ? newFileName : g_strdup (fn));
 			}
+			break;
+		case SP_ARG_VERSION:
+			printf("Inkscape %s (%s)\n", INKSCAPE_VERSION, __DATE__);
+			exit(0);
 			break;
 		default:
 			break;
