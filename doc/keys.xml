@@ -7,7 +7,7 @@ can leave your ideas and requests there.</p>
 
 <column>
 
-*<section title="Tools" color="f5fdf6">
+*<section title="Tools" color="f5f5f5">
 
 <group>
 <keys><key><keyf f="F1"/></key><key>s</key>    <action>selector</action></keys>
@@ -27,7 +27,7 @@ can leave your ideas and requests there.</p>
 </group>
 </section>
 
-*<section title="File" color="eeeff3">
+*<section title="File" color="f3f2e2">
 
 <group>
 <keys><key><ctrl/>N</key>	 <action>create new document</action></keys>
@@ -183,7 +183,7 @@ can leave your ideas and requests there.</p>
 </section>
 
 
-*<section title="Object" color="f5f1cc">
+*<section title="Object" color="f4ecf5">
 
 <group>
 <title>Undo/redo</title>
@@ -701,7 +701,7 @@ can leave your ideas and requests there.</p>
 </group>
 </section>
 
-*<section title="Spiral tool" color="ebe7e0">
+*<section title="Spiral tool" color="f3f3f3">
 <group>
 <title>Drawing</title>
 <mouse><key><left-drag/></key> <action>draw a spiral</action></mouse>
@@ -722,7 +722,7 @@ can leave your ideas and requests there.</p>
 </section>
 
 
-*<section title="Text tool" color="f5fdf6">
+*<section title="Text tool" color="eefdf3">
 
 <group>
 <mouse><key><left-click/></key> <action>create/activate a text object</action></mouse>
