@@ -6,64 +6,12 @@
 
 #include "canny.h"
 
-#include "graymap-gdk.h"
+#include "imagemap-gdk.h"
 
 
 /*#########################################################################
 ### C A N N Y
 #########################################################################*/
-
-static int gaussMatrix[] =
-{
-     2,  4,  5,  4, 2,
-     4,  9, 12,  9, 4,
-     5, 12, 15, 12, 5,
-     4,  9, 12,  9, 4,
-     2,  4,  5,  4, 2
-};
-
-static GrayMap *gaussian(GrayMap *gm)
-{
-    int width  = gm->width;
-    int height = gm->height;
-    int firstX = 2;
-    int lastX  = width-3;
-    int firstY = 2;
-    int lastY  = height-3;
-
-    GrayMap *newGm = GrayMapCreate(width, height);
-    if (!newGm)
-        return NULL;
-
-    for (int y = 0 ; y<height ; y++)
-        {
-        for (int x = 0 ; x<width ; x++)
-            {
-            unsigned long sum = 0;
-
-	    /* image boundaries */
-            if (x<firstX || x>lastX || y<firstY || y>lastY)
-                {
-                newGm->setPixel(newGm, x, y, gm->getPixel(gm, x, y));
-                continue;
-                }
-            int gaussIndex = 0;
-            for (int i= y-2 ; i<=y+2 ; i++)
-                {
-                for (int j= x-2; j<=x+2 ; j++)
-                    {
-                    sum += gm->getPixel(gm, j, i) * 
-                             gaussMatrix[gaussIndex++];
-		    }
-	        }
-            sum /= 115;
-	    newGm->setPixel(newGm, x, y, sum);
-	    }
-	}
-
-    return newGm;
-}
-
 
 
 static int sobelX[] =
@@ -243,7 +191,7 @@ grayMapCanny(GrayMap *gm, double lowThreshold, double highThreshold)
 {
     if (!gm)
         return NULL;
-    GrayMap *gaussGm = gaussian(gm);
+    GrayMap *gaussGm = gm->getGaussian(gm);
     if (!gaussGm)
         return NULL;
     /*gaussGm->writePPM(gaussGm, "gauss.ppm");*/

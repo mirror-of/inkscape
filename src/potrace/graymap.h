@@ -40,6 +40,11 @@ struct GrayMap_def
     /**
      *
      */
+    GrayMap * (*getGaussian)(GrayMap *me);
+
+    /**
+     *
+     */
     int (*writePPM)(GrayMap *me, char *fileName);
 
 

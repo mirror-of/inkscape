@@ -10,10 +10,12 @@
 #endif
 
 #include "graymap.h"
+#include "rgbmap.h"
+
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 /*#########################################################################
-### G R A Y M A P --- GDK
+### I M A G E    M A P --- GDK
 #########################################################################*/
 
 
@@ -24,9 +26,11 @@ extern "C" {
 
 GrayMap *gdkPixbufToGrayMap(GdkPixbuf *buf);
 
-
-
 GdkPixbuf *grayMapToGdkPixbuf(GrayMap *grayMap);
+
+RgbMap *gdkPixbufToRgbMap(GdkPixbuf *buf);
+
+GdkPixbuf *rgbMapToGdkPixbuf(RgbMap *rgbMap);
 
 
 #ifdef __cplusplus

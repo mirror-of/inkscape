@@ -10,7 +10,7 @@
 
 //## New stuff - bob
 #include "canny.h"
-#include "graymap-gdk.h"
+#include "imagemap-gdk.h"
 
 #include <inkscape.h>
 #include <desktop.h>

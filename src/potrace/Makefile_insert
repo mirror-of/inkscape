@@ -21,10 +21,12 @@ potrace_libpotrace_a_SOURCES =	\
 	potrace/curve.h \
 	potrace/flate.cpp \
 	potrace/flate.h \
-	potrace/graymap-gdk.cpp	\
-	potrace/graymap-gdk.h	\
+	potrace/imagemap-gdk.cpp	\
+	potrace/imagemap-gdk.h	\
 	potrace/graymap.cpp	\
 	potrace/graymap.h	\
+	potrace/rgbmap.cpp	\
+	potrace/rgbmap.h	\
 	potrace/greymap.cpp \
 	potrace/greymap.h \
 	potrace/inkscape-potrace.cpp	\
