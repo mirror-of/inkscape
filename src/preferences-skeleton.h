@@ -101,7 +101,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"zoomincrement\" value=\"1.414213562\"/>"
 "    <group id=\"keyscroll\" value=\"20\"/>"
 "    <group id=\"wheelscroll\" value=\"40\"/>"
-"    <group id=\"transientpolicy\" value=\"1\"/>"
+"    <group id=\"transientpolicy\" value=\"0\"/>"
 "  </group>"
 
 "</inkscape>";
