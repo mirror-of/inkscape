@@ -129,20 +129,17 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 void
 Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 {
-	SPRepr *repr;
-	gboolean spns;
-	const GSList *images, *l;
-	SPReprDoc *rdoc;
-	const gchar *save_path;
-
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(uri != NULL);
 
-	save_path = g_dirname (uri);
+	gchar const *save_path = g_dirname (uri);
 
-	spns = (!mod->get_id() || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+	gboolean const spns =
+	  (!mod->get_id() || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+
+	SPReprDoc *rdoc = NULL;
+	SPRepr *repr = NULL;
 	if (spns) {
-		rdoc = NULL;
 		repr = sp_document_repr_root (doc);
 	} else {
 		rdoc = sp_repr_document_new ("svg");
@@ -150,27 +147,27 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 		repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD);
 	}
 
-	images = sp_document_get_resource_list (doc, "image");
-	for (l = images; l != NULL; l = l->next) {
-		SPRepr *ir;
-		const gchar *href, *relname;
-		ir = SP_OBJECT_REPR (l->data);
-		href = sp_repr_attr (ir, "xlink:href");
+	GSList const *images = sp_document_get_resource_list (doc, "image");
+	for (GSList const *l = images; l != NULL; l = l->next) {
+		SPRepr *ir = SP_OBJECT_REPR (l->data);
+		const gchar *href = sp_repr_attr (ir, "xlink:href");
 		if (spns && !g_path_is_absolute (href)) {
 			href = sp_repr_attr (ir, "sodipodi:absref");
 		}
 		if (href && g_path_is_absolute (href)) {
-			relname = sp_relative_path_from_path (href, save_path);
+			const gchar *relname = sp_relative_path_from_path (href, save_path);
 			sp_repr_set_attr (ir, "xlink:href", relname);
 		}
 	}
 
-	gboolean s = sp_repr_save_file (sp_repr_document (repr), uri);
+	gboolean const s = sp_repr_save_file (sp_repr_document (repr), uri);
 	if (s == FALSE) {
-	  throw Inkscape::Extension::Output::save_failed();
+		throw Inkscape::Extension::Output::save_failed();
 	}
 
-	if (!spns) sp_repr_document_unref (rdoc);
+	if (!spns) {
+		sp_repr_document_unref (rdoc);
+	}
 
 	return;
 }
