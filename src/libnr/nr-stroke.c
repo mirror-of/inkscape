@@ -119,7 +119,7 @@ nr_svl_stroke_build_finish_subpath (NRSVLStrokeBuild *svlb)
 #ifdef NR_STROKE_VERBOSE
 	printf ("FINISH\n");
 #endif
-	if (svlb->npoints < 1) return;
+	if (svlb->npoints <= 1) return;
 	if (svlb->closed) {
 		float len, dx, dy;
 		/* Draw 2->3 + join 2->3->1 */
