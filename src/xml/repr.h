@@ -20,6 +20,10 @@
 #define SP_XLINK_NS_URI "http://www.w3.org/1999/xlink"
 #define SP_SVG_NS_URI "http://www.w3.org/2000/svg"
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 /*
  * NB! Unless explicitly stated all methods are noref/nostrcpy
  */
@@ -38,9 +42,6 @@ const  char *sp_xml_ns_prefix_uri (const gchar *prefix);
 
 /* SPXMLDocument */
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
 SPXMLText *sp_xml_document_createTextNode (SPXMLDocument *doc, const gchar *content);
 SPXMLElement *sp_xml_document_createElement (SPXMLDocument *doc, const gchar *name);
 SPXMLElement *sp_xml_document_createElementNS (SPXMLDocument *doc, const gchar *ns, const  char *qname);
@@ -185,10 +186,6 @@ int sp_repr_get_int_attribute (SPRepr * repr, const gchar * key, int def);
 unsigned int sp_repr_set_double_attribute (SPRepr * repr, const gchar * key, double value);
 unsigned int sp_repr_set_int_attribute (SPRepr * repr, const gchar * key, int value);
 
-#ifdef __cplusplus
-};
-#endif // __cplusplus
-
 int sp_repr_compare_position (SPRepr * first, SPRepr * second);
 
 int sp_repr_position (SPRepr * repr);
@@ -212,5 +209,9 @@ SPRepr       *sp_repr_lookup_child  (SPRepr    	        *repr,
 unsigned int   p_repr_overwrite     (SPRepr             *repr,
 				     const SPRepr       *src,
 				     const  gchar       *key);
+
+#ifdef __cplusplus
+};
+#endif // __cplusplus
 
 #endif

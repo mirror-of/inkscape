@@ -59,6 +59,10 @@
 #include "xml/repr.h"
 #include "forward.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 typedef void (* SPObjectMethod) (SPObject *object, gpointer data);
 
 typedef enum {
@@ -167,13 +171,7 @@ void sp_object_invoke_release (SPObject *object);
 
 void sp_object_set (SPObject *object, unsigned int key, const gchar *value);
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
 void sp_object_read_attr (SPObject *object, const gchar *key);
-#ifdef __cplusplus
-};
-#endif // __cplusplus
 
 /* Styling */
 
@@ -211,5 +209,9 @@ void sp_object_removeAttribute (SPObject *object, const gchar *key, SPException 
 /* Style */
 
 const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def);
+
+#ifdef __cplusplus
+};
+#endif // __cplusplus
 
 #endif
