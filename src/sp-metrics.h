@@ -7,29 +7,39 @@
 // known metrics so far
 // should be extended with meter, feet, yard etc
 typedef enum {
-        NONE,
+      NONE,
 	SP_MM,
 	SP_CM,
 	SP_IN,
-	SP_PT
+	SP_PT,
+	SP_PX,
+	SP_M
 } SPMetric;
 
-#define PT_PER_IN 90.0
-// all callers of the mentrics stuff assume "points" to be SVG pixels, hence the 90 instead of 72
+#define PT_PER_IN 72.0
+#define PX_PER_IN 90.0 // yet another place where the 90dpi is hard-coded
+#define M_PER_IN 0.0254
 #define CM_PER_IN 2.54
 #define MM_PER_IN 25.4
+#define MM_PER_MM 1.0
+#define MM_PER_CM 10.0
+#define MM_PER_M 1000.0
 #define IN_PER_PT (1 / PT_PER_IN)
 #define IN_PER_CM (1 / CM_PER_IN)
 #define IN_PER_MM (1 / MM_PER_IN)
 #define PT_PER_CM (PT_PER_IN / CM_PER_IN)
+#define M_PER_PT (M_PER_IN / PT_PER_IN)
+#define PT_PER_M (PT_PER_IN / M_PER_IN)
 #define CM_PER_PT (CM_PER_IN / PT_PER_IN)
-#define PT_PER_MM (PT_PER_IN / MM_PER_IN)
 #define MM_PER_PT (MM_PER_IN / PT_PER_IN)
+#define PT_PER_MM (PT_PER_IN / MM_PER_IN)
+#define MM_PER_PX (MM_PER_IN / PX_PER_IN)
 #define PT_PER_PT 1.0
+#define PT_PER_PX 0.8 // yet another place where the 90dpi is hard-coded
 #define IN_PER_IN 1.0
 
-// this should be configurable in central place
-#define SP_DEFAULT_METRIC SP_MM
+// this is used when we can't figure out the document preferred metric
+#define SP_DEFAULT_METRIC SP_PT
 
 gdouble sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, const SPMetric metric_dst);
 GString * sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SPMetric metric_dst, gboolean m);
@@ -45,19 +55,14 @@ GString * sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src
 // ruler metrics
 static const GtkRulerMetric sp_ruler_metrics[] =
 {
-  /* FIXME: The first of these items looks strange:
-   *   - The usual abbreviation for pixels is px, not Pi (which might be
-   *     mistaken for pica).
-   *   - Most of inkscape/sodipodi assumes there are 90 px to an inch, not 72.
-   *
-   * More pedantically, there's a big difference between a megametre (Mm) and a millimetre (mm).
-   * Similarly, the standard abbreviation for centimetres is cm, not Cm.
-   */
-  {"Pixels",      "Pi", PT_PER_PT, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
-  {"Millimeter",  "Mm", PT_PER_MM, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
-  {"Centimeters", "Cm", PT_PER_CM, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
-  {"Inches",      "In", PT_PER_IN, { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 }, { 1, 2, 4, 8, 16 }},
-  {"Points",      "Pt", PT_PER_PT, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+// NOTE: the order of records in this struct must correspond to the SPMetric enum.
+  {"NONE",  "", 1, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"millimeters",  "mm", PT_PER_MM, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"centimeters", "cm", PT_PER_CM, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"inches",      "in", PT_PER_IN, { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 }, { 1, 2, 4, 8, 16 }},
+  {"points",      "pt", PT_PER_PT, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"pixels",      "px", PT_PER_PX, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"meters",      "m", PT_PER_M, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
 };
 
 #endif

@@ -13,6 +13,9 @@ sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, con
   gdouble dst = 1;
 
   switch (metric_src) {
+  case SP_M:
+    src = M_PER_IN;
+    break;
   case SP_MM:
     src = MM_PER_IN;
     break;
@@ -25,12 +28,18 @@ sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, con
   case SP_PT:
     src = PT_PER_IN;
     break;
+  case SP_PX:
+    src = PX_PER_IN;
+    break;
   case NONE:
     src = 1;
     break;
   }
 
   switch (metric_dst) {
+  case SP_M:
+    dst = M_PER_IN;
+    break;
   case SP_MM:
     dst = MM_PER_IN;
     break;
@@ -42,6 +51,9 @@ sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, con
     break;
   case SP_PT:
     dst = PT_PER_IN;
+    break;
+  case SP_PX:
+    dst = PX_PER_IN;
     break;
   case NONE:
     dst = 1;
@@ -60,6 +72,10 @@ sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SP
   os.precision(5);
   
   switch (metric_dst) {
+  case SP_M:
+    os << len << (m?" m":"");
+	g_string_sprintf (str, os.str().c_str());
+    break;
   case SP_MM:
     os << len << (m?" mm":"");
 	g_string_sprintf (str, os.str().c_str());
@@ -74,6 +90,10 @@ sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SP
     break;
   case SP_PT:
 	os << len << (m?" pt":"");
+	g_string_sprintf (str, os.str().c_str());
+    break;
+  case SP_PX:
+	os << len << (m?" px":"");
 	g_string_sprintf (str, os.str().c_str());
     break;
   case NONE:
