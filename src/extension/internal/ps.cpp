@@ -316,7 +316,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
 #endif
     }
 
-    res = fprintf(_stream, "%%!PS-Adobe-2.0\n");
+    res = fprintf(_stream, "%%!PS-Adobe-3.0\n");
     /* flush this to test output stream as early as possible */
     if (fflush(_stream)) {
         /*g_print("caught error in sp_module_print_plain_begin\n");*/
