@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi VERSION\n"
-"POT-Creation-Date: 2003-11-08 12:29-0800\n"
+"POT-Creation-Date: 2003-11-10 20:27-0700\n"
 "PO-Revision-Date: 2001-08-11 22:32+0200\n"
 "Last-Translator: Emese Kovacs <emese@gnome.hu>\n"
 "Language-Team: Hungarian <hu@gnome.hu>\n"
@@ -42,19 +42,19 @@ msgstr "%s dokumentum megváltozott. Mented a változásokat?"
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
-#: src/dialogs/export.c:135 src/verbs.c:484
+#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:501
 msgid "Page"
 msgstr "Lap"
 
 #: src/desktop.c:1485 src/dialogs/align.c:287 src/dialogs/export.c:140
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Drawing"
 msgstr "Rajz"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:503
 msgid "Selection"
 msgstr "Kijelölés"
 
@@ -162,48 +162,48 @@ msgstr "Legnagyobb elem"
 msgid "Smallest item"
 msgstr "Legkisebb elem"
 
-#: src/dialogs/desktop-properties.c:191
+#: src/dialogs/desktop-properties.c:189
 msgid "Desktop settings"
 msgstr "Munkafelület beállításai"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.c:200
+#: src/dialogs/desktop-properties.c:198 src/verbs.c:496
 msgid "Grid"
 msgstr "Rács"
 
-#: src/dialogs/desktop-properties.c:211
+#: src/dialogs/desktop-properties.c:210
 msgid "Show grid"
 msgstr "Rács mutatása"
 
-#: src/dialogs/desktop-properties.c:212
+#: src/dialogs/desktop-properties.c:211
 msgid "Snap to grid"
 msgstr "Rácsra ugrás"
 
-#: src/dialogs/desktop-properties.c:214
+#: src/dialogs/desktop-properties.c:213
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "vízszintes mozgatás"
 
-#: src/dialogs/desktop-properties.c:215
+#: src/dialogs/desktop-properties.c:214
 #, fuzzy
 msgid "Vertical lines"
 msgstr "függõleges tükrözés"
 
-#: src/dialogs/desktop-properties.c:217
+#: src/dialogs/desktop-properties.c:216
 #, fuzzy
 msgid "Iso grid"
 msgstr "Rács mutatása"
 
-#: src/dialogs/desktop-properties.c:218
+#: src/dialogs/desktop-properties.c:217
 msgid "Hex grid"
 msgstr ""
 
-#: src/dialogs/desktop-properties.c:221
+#: src/dialogs/desktop-properties.c:222
 msgid "Grid units:"
 msgstr "Rácsegység:"
 
-#: src/dialogs/desktop-properties.c:223
+#: src/dialogs/desktop-properties.c:224
 msgid "Origin X:"
 msgstr "X origó:"
 
@@ -211,56 +211,56 @@ msgstr "X origó:"
 msgid "Origin Y:"
 msgstr "Y origó:"
 
-#: src/dialogs/desktop-properties.c:228
+#: src/dialogs/desktop-properties.c:227
 msgid "Spacing X:"
 msgstr "X távolság:"
 
-#: src/dialogs/desktop-properties.c:230
+#: src/dialogs/desktop-properties.c:228
 msgid "Spacing Y:"
 msgstr "Y távolság:"
 
-#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
+#: src/dialogs/desktop-properties.c:231 src/dialogs/desktop-properties.c:256
+msgid "Snap units:"
+msgstr "Ugrás mértékegysége:"
+
+#: src/dialogs/desktop-properties.c:233 src/dialogs/desktop-properties.c:258
 msgid "Snap distance:"
 msgstr "Ugrás hatósugara:"
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:236
 msgid "Grid color:"
 msgstr "Rács színe:"
 
-#: src/dialogs/desktop-properties.c:240
+#: src/dialogs/desktop-properties.c:237
 msgid "Grid color"
 msgstr "Rács színe"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:244
+#: src/dialogs/desktop-properties.c:241 src/verbs.c:497
 msgid "Guides"
 msgstr "Segédvonalak"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:251
 msgid "Show guides"
 msgstr "Segédvonalak mutatása"
 
-#: src/dialogs/desktop-properties.c:254
+#: src/dialogs/desktop-properties.c:252
 msgid "Snap to guides"
 msgstr "Segédvonalakra ugrás"
 
-#: src/dialogs/desktop-properties.c:257
-msgid "Snap units:"
-msgstr "Ugrás mértékegysége:"
-
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:261
 msgid "Guides color:"
 msgstr "Segédvonalak színe:"
 
-#: src/dialogs/desktop-properties.c:263
+#: src/dialogs/desktop-properties.c:262
 msgid "Guideline color"
 msgstr "Segédvonal színe"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:264
 msgid "Highlight color:"
 msgstr "Kijelölt szín:"
 
-#: src/dialogs/desktop-properties.c:266
+#: src/dialogs/desktop-properties.c:265
 #, fuzzy
 msgid "Highlighted guideline color"
 msgstr "Kijelölt segédvonal színe"
@@ -294,7 +294,7 @@ msgstr "Megjelenítés"
 msgid "Oversample bitmaps:"
 msgstr "Bitképek túlmintavételezése:"
 
-#: src/dialogs/display-settings.c:116 src/verbs.c:427
+#: src/dialogs/display-settings.c:116 src/verbs.c:441
 msgid "None"
 msgstr "Nincs"
 
@@ -411,7 +411,7 @@ msgstr "dpi"
 msgid "Export png file"
 msgstr "Fájl exportálása"
 
-#: src/dialogs/export.c:235 src/verbs.c:437
+#: src/dialogs/export.c:235 src/verbs.c:451
 msgid "Export"
 msgstr "Exportálás"
 
@@ -481,7 +481,7 @@ msgstr ""
 msgid "ID exists"
 msgstr ""
 
-#: src/dialogs/item-properties.c:428 src/verbs.c:499
+#: src/dialogs/item-properties.c:428 src/verbs.c:516
 msgid "Item properties"
 msgstr "Elem tulajdonságai"
 
@@ -666,7 +666,7 @@ msgstr "Szabadkézi"
 msgid "Calligraphic line"
 msgstr ""
 
-#: src/dialogs/object-properties.c:207 src/verbs.c:475
+#: src/dialogs/object-properties.c:207 src/verbs.c:490
 msgid "Text"
 msgstr "Szöveg"
 
@@ -675,7 +675,7 @@ msgstr "Szöveg"
 msgid "Object Size and Position"
 msgstr "Egyel feljebb"
 
-#: src/dialogs/object-properties.c:305 src/verbs.c:494
+#: src/dialogs/object-properties.c:305 src/verbs.c:511
 #, fuzzy
 msgid "Size and Position"
 msgstr "Egyel feljebb"
@@ -733,7 +733,7 @@ msgstr ""
 msgid "Set as default"
 msgstr ""
 
-#: src/dialogs/tool-attributes.c:46 src/verbs.c:492
+#: src/dialogs/tool-attributes.c:46 src/verbs.c:509
 #, fuzzy
 msgid "Tool attributes"
 msgstr "Attribútum"
@@ -792,7 +792,7 @@ msgid "No active tool"
 msgstr ""
 
 # src/main.c:168
-#: src/dialogs/tool-options.c:44 src/verbs.c:491
+#: src/dialogs/tool-options.c:44 src/verbs.c:508
 #, fuzzy
 msgid "Tool options"
 msgstr "Oaf beállítások"
@@ -1149,7 +1149,7 @@ msgid "Cleanup"
 msgstr ""
 
 #. View:Zoom
-#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:491
 msgid "Zoom"
 msgstr "Nagyítás"
 
@@ -1178,7 +1178,7 @@ msgid "Remove Docked Toolbox"
 msgstr ""
 
 #. File
-#: src/interface.c:475 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:443
 msgid "New"
 msgstr "Új"
 
@@ -1385,7 +1385,7 @@ msgid "Item"
 msgstr "Elem"
 
 #. Item dialog
-#: src/object-ui.c:108 src/verbs.c:499
+#: src/object-ui.c:108 src/verbs.c:516
 msgid "Item Properties"
 msgstr "Elem tulajdonságai"
 
@@ -1412,7 +1412,7 @@ msgstr ""
 msgid "Create link"
 msgstr ""
 
-#: src/object-ui.c:251 src/verbs.c:453
+#: src/object-ui.c:251 src/verbs.c:468
 msgid "Group"
 msgstr "Csoportosítás"
 
@@ -1423,7 +1423,7 @@ msgid "Group Properties"
 msgstr "Szöveg tulajdonságai"
 
 #. "Ungroup"
-#: src/object-ui.c:268 src/verbs.c:454
+#: src/object-ui.c:268 src/verbs.c:469
 msgid "Ungroup"
 msgstr "Csoport felbontása"
 
@@ -1492,7 +1492,7 @@ msgid "Rect Properties"
 msgstr "Szöveg tulajdonságai"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:523 src/verbs.c:470
+#: src/object-ui.c:523 src/verbs.c:485
 #, fuzzy
 msgid "Star"
 msgstr "Kihúzás"
@@ -1504,7 +1504,7 @@ msgid "Star Properties"
 msgstr "Szöveg tulajdonságai"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:559 src/verbs.c:471
+#: src/object-ui.c:559 src/verbs.c:486
 msgid "Spiral"
 msgstr ""
 
@@ -1524,31 +1524,31 @@ msgstr ""
 msgid "Roundness ratio for y:"
 msgstr ""
 
-#: src/select-context.c:592
+#: src/select-context.c:613
 #, fuzzy
 msgid "Visual transformation"
 msgstr "Átalakítás"
 
-#: src/select-context.c:600
+#: src/select-context.c:621
 #, fuzzy
 msgid "Show content"
 msgstr "Tartalom"
 
-#: src/select-context.c:607
+#: src/select-context.c:628
 #, fuzzy
 msgid "Show outline"
 msgstr "Segédvonalak mutatása"
 
-#: src/select-context.c:614
+#: src/select-context.c:635
 #, fuzzy
 msgid "Object transformation"
 msgstr "Átalakítás törlése"
 
-#: src/select-context.c:622
+#: src/select-context.c:643
 msgid "Optimize"
 msgstr ""
 
-#: src/select-context.c:629
+#: src/select-context.c:650
 msgid "Preserve"
 msgstr ""
 
@@ -1773,7 +1773,7 @@ msgstr ""
 msgid "Object"
 msgstr "Objektum"
 
-#: src/toolbox.c:443 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:511
 #, fuzzy
 msgid "Object size and position"
 msgstr "Egyel feljebb"
@@ -1783,7 +1783,7 @@ msgstr "Egyel feljebb"
 msgid "Text and font settings"
 msgstr "Munkafelület beállításai"
 
-#: src/toolbox.c:446 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:512
 #, fuzzy
 msgid "Object transformations"
 msgstr "Átalakítás törlése"
@@ -1845,505 +1845,520 @@ msgstr "Törli a kijelölt csomópontokat"
 msgid "Make selected segments curves"
 msgstr "A kijelölt szakaszokat görbévé alakítja"
 
-#: src/verbs.c:427
+#: src/verbs.c:441
 msgid "Does nothing"
 msgstr ""
 
-#: src/verbs.c:429
+#: src/verbs.c:443
 msgid "Create new SVG document"
 msgstr ""
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 #, fuzzy
 msgid "Open..."
 msgstr "Megnyitás"
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 msgid "Open existing SVG document"
 msgstr ""
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 #, fuzzy
 msgid "Save"
 msgstr "Mentés\t"
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 #, fuzzy
 msgid "Save document"
 msgstr "Dokumentum"
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 #, fuzzy
 msgid "Save As..."
 msgstr "Fájl mentése"
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 #, fuzzy
 msgid "Save document under new name"
 msgstr "Rakz mentése új fájlnév alá"
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 #, fuzzy
 msgid "Print..."
 msgstr "Nyomtatás"
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 #, fuzzy
 msgid "Print document"
 msgstr "Dokumentum"
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print Direct..."
 msgstr ""
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print directly to file or pipe"
 msgstr ""
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 #, fuzzy
 msgid "Print Preview"
 msgstr "Nyomtatási _kép"
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 #, fuzzy
 msgid "Preview document printout"
 msgstr "Rajz nyomtatási képe"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import"
 msgstr "Importálás"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import bitmap or SVG image into document"
 msgstr ""
 
-#: src/verbs.c:437
+#: src/verbs.c:451
 #, fuzzy
 msgid "Export document as PNG bitmap"
 msgstr "Kép exportálása PNG formátumba"
 
+#: src/verbs.c:452
+#, fuzzy
+msgid "Quit"
+msgstr "_Kilépés"
+
 #. Edit
-#: src/verbs.c:439
+#: src/verbs.c:454
 msgid "Undo"
 msgstr "Visszavonás"
 
-#: src/verbs.c:439
+#: src/verbs.c:454
 #, fuzzy
 msgid "Revert last action"
 msgstr "Átalakítás törlése"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Redo"
 msgstr "Újra"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Do again undone action"
 msgstr ""
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 msgid "Cut"
 msgstr "Kivágás"
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 #, fuzzy
 msgid "Cut selected objects to clipboard"
 msgstr "A kijelölt objektumok görbékké alakítása"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 msgid "Copy"
 msgstr "Másolás"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 #, fuzzy
 msgid "Copy selected objects to clipboard"
 msgstr "Kijelölés másolása a vágólapra"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 msgid "Paste"
 msgstr "Beillesztés"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 #, fuzzy
 msgid "Paste objects from clipboard"
 msgstr "Beillesztés a vágólapról"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 msgid "Delete"
 msgstr "Törlés"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 #, fuzzy
 msgid "Delete selected objects"
 msgstr "A kijelölt objektum(ok) törlése"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 msgid "Duplicate"
 msgstr "Kettõzés"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 #, fuzzy
 msgid "Duplicate selected objects"
 msgstr "A kijelölt objektum(ok) sokszorosítása"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 #, fuzzy
 msgid "Clear All"
 msgstr "Kitöltés színnel"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 msgid "Delete all objects from document"
 msgstr ""
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 #, fuzzy
 msgid "Select All"
 msgstr "Kijelölés"
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 #, fuzzy
 msgid "Select all objects in document"
 msgstr "A kijelölt objektumok tükrözése"
 
 #. Selection
-#: src/verbs.c:449
+#: src/verbs.c:464
 #, fuzzy
 msgid "Bring to Front"
 msgstr "_Elõtérbe hoz"
 
-#: src/verbs.c:449
+#: src/verbs.c:464
 #, fuzzy
 msgid "Raise selected objects to top"
 msgstr "A kijelölt objectum(ok) legelõre hozása"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 #, fuzzy
 msgid "Send to Back"
 msgstr "Háttérbe küld"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 #, fuzzy
 msgid "Lower selected objects to bottom"
 msgstr "A kijelölt objektum(ok) leghátra küldése"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 #, fuzzy
 msgid "Raise"
 msgstr "Tégla"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 #, fuzzy
 msgid "Raise selected objects one position"
 msgstr "A kijelölt objectum(ok) legelõre hozása"
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 msgid "Lower"
 msgstr ""
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 #, fuzzy
 msgid "Lower selected objects one position"
 msgstr "A kijelölt objektum(ok) leghátra küldése"
 
-#: src/verbs.c:453
+#: src/verbs.c:468
 msgid "Group selected objects"
 msgstr "A kijelölt objektumok csoportba rendezése"
 
-#: src/verbs.c:454
+#: src/verbs.c:469
 #, fuzzy
 msgid "Ungroup selected group"
 msgstr "A kijelölt csoport felbontása"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 #, fuzzy
 msgid "Combine"
 msgstr "Össze_vonás"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 msgid "Combine multiple paths"
 msgstr ""
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 #, fuzzy
 msgid "Break Apart"
 msgstr "_Széttördelés"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 msgid "Break selected path to subpaths"
 msgstr ""
 
 #. Object
-#: src/verbs.c:458
+#: src/verbs.c:473
 #, fuzzy
 msgid "Rotate 90 degrees"
 msgstr "90° beállítása"
 
-#: src/verbs.c:458
+#: src/verbs.c:473
 #, fuzzy
 msgid "Rotates object 90 degrees clockwise"
 msgstr "A kijelölt objektumok elforgatása +90°-kal"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 #, fuzzy
 msgid "Flatten object"
 msgstr "A kijelölt objektumok tükrözése"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 #, fuzzy
 msgid "Remove transformations from object"
 msgstr "Átalakítás törlése"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 #, fuzzy
 msgid "Convert to Curves"
 msgstr "_Görbévé alakítás"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 #, fuzzy
 msgid "Convert selected object to path"
 msgstr "A kijelölt objektumok görbékké alakítása"
 
-#: src/verbs.c:461
+#: src/verbs.c:476
 #, fuzzy
 msgid "Flip Horizontally"
 msgstr "vízszintes tükrözés"
 
-#: src/verbs.c:462
+#: src/verbs.c:477
 #, fuzzy
 msgid "Flip selected objects horizontally"
 msgstr "A kijelölt objektumok tükrözése"
 
-#: src/verbs.c:463
+#: src/verbs.c:478
 #, fuzzy
 msgid "Flip Vertically"
 msgstr "függõleges tükrözés"
 
-#: src/verbs.c:464
+#: src/verbs.c:479
 #, fuzzy
 msgid "Flip selected objects vertically"
 msgstr "A kijelölt objektumok tükrözése"
 
 #. Event contexts
-#: src/verbs.c:466
+#: src/verbs.c:481
 msgid "Select"
 msgstr "Kijelölés"
 
-#: src/verbs.c:466
+#: src/verbs.c:481
 #, fuzzy
 msgid "Select and transform objects"
 msgstr "Objektumok és csoportok kijelölése és átalakítása"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 #, fuzzy
 msgid "Node edit"
 msgstr "Csomópontszerkesztõ"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 #, fuzzy
 msgid "Modify existing objects by control nodes"
 msgstr "Objektumok szerkesztése vezérlõ node-ok segítségével"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Rectangle"
 msgstr "Téglalap"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Create rectangles and squares with optional rounded corners"
 msgstr ""
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Ellipse"
 msgstr "Ellipszis"
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Create circles, ellipses and arcs"
 msgstr ""
 
-#: src/verbs.c:470
+#: src/verbs.c:485
 msgid "Create stars and polygons"
 msgstr ""
 
-#: src/verbs.c:471
+#: src/verbs.c:486
 #, fuzzy
 msgid "Create spirals"
 msgstr "Téglalap rajzolása"
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 msgid "Pencil"
 msgstr ""
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 #, fuzzy
 msgid "Draw freehand curves and straight lines"
 msgstr "Szabadkézi vonal rajzolása"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 #, fuzzy
 msgid "Pen"
 msgstr "Százalék"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 msgid "Draw precisely positioned curved and straight lines"
 msgstr ""
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 msgid "Calligraphy"
 msgstr ""
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 #, fuzzy
 msgid "Draw calligraphic lines"
 msgstr "Ellipszis rajzolása"
 
-#: src/verbs.c:475
+#: src/verbs.c:490
 msgid "Create and edit text objects"
 msgstr ""
 
-#: src/verbs.c:476
+#: src/verbs.c:491
 msgid "Zoom into precisely selected area"
 msgstr ""
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 msgid "Dropper"
 msgstr ""
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 msgid "Pick averaged colors from image"
 msgstr ""
 
 #. Zooming
-#: src/verbs.c:479
+#: src/verbs.c:494
 #, fuzzy
 msgid "In"
 msgstr "Hüvelyk"
 
-#: src/verbs.c:479
+#: src/verbs.c:494
 #, fuzzy
 msgid "Zoom in drawing"
 msgstr "Nagyítás a rajzra"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 #, fuzzy
 msgid "Out"
 msgstr "Kivágás"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 #, fuzzy
 msgid "Zoom out drawing"
 msgstr "Nagyítás a rajzra"
 
-#: src/verbs.c:481
+#: src/verbs.c:496
+#, fuzzy
+msgid "Toggle grid"
+msgstr "Szélek ki- bekapcsolása"
+
+#: src/verbs.c:497
+#, fuzzy
+msgid "Toggle guides"
+msgstr "Szélek ki- bekapcsolása"
+
+#: src/verbs.c:498
 msgid "1:1"
 msgstr "1:1"
 
-#: src/verbs.c:481
+#: src/verbs.c:498
 #, fuzzy
 msgid "Set zoom factor to 1:1"
 msgstr "1:1 méret"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 msgid "1:2"
 msgstr "1:2"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 #, fuzzy
 msgid "Set zoom factor to 1:2"
 msgstr "1:1 méret"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 msgid "2:1"
 msgstr "2:1"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 #, fuzzy
 msgid "Set zoom factor to 2:1"
 msgstr "1:1 méret"
 
-#: src/verbs.c:484
+#: src/verbs.c:501
 msgid "Fit the whole page into window"
 msgstr ""
 
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Fit the whole drawing into window"
 msgstr ""
 
-#: src/verbs.c:486
+#: src/verbs.c:503
 msgid "Fit the whole selection into window"
 msgstr ""
 
 #. Dialogs
-#: src/verbs.c:488
+#: src/verbs.c:505
 msgid "Display"
 msgstr "Megjelenítés"
 
-#: src/verbs.c:488
+#: src/verbs.c:505
 #, fuzzy
 msgid "Global display settings"
 msgstr "Megjelenítés beállításai"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Document"
 msgstr "Dokumentum"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Page layout"
 msgstr ""
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 msgid "Editing Window"
 msgstr ""
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 #, fuzzy
 msgid "Editing window properties"
 msgstr "Elem tulajdonságai"
 
 # src/main.c:168
-#: src/verbs.c:491
+#: src/verbs.c:508
 #, fuzzy
 msgid "Tool Options"
 msgstr "Oaf beállítások"
 
-#: src/verbs.c:492
+#: src/verbs.c:509
 #, fuzzy
 msgid "Tool Attributes"
 msgstr "Attribútum"
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 msgid "Fill and Stroke"
 msgstr ""
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 #, fuzzy
 msgid "Fill and stroke settings"
 msgstr "Munkafelület beállításai"
 
-#: src/verbs.c:495
+#: src/verbs.c:512
 #, fuzzy
 msgid "Transformations"
 msgstr "Átalakítás"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 #, fuzzy
 msgid "Align and Distribute"
 msgstr "Attribútum"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 #, fuzzy
 msgid "Align and distribute"
 msgstr "Attribútum hozzáadása"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 #, fuzzy
 msgid "Text and Font"
 msgstr "Munkafelület beállításai"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 #, fuzzy
 msgid "Text editing and font settings"
 msgstr "Munkafelület beállításai"
 
-#: src/verbs.c:498
+#: src/verbs.c:515
 msgid "XML Editor"
 msgstr ""
 
@@ -2818,9 +2833,6 @@ msgstr "Érték"
 #~ msgid "Symmetric "
 #~ msgstr "Szimmetrikus"
 
-#~ msgid "Toggle Borders"
-#~ msgstr "Szélek ki- bekapcsolása"
-
 #~ msgid "Uncompressed file size:"
 #~ msgstr "Tömörítetlen fájlméret:"
 
@@ -3005,9 +3017,6 @@ msgstr "Érték"
 
 #~ msgid "_Open"
 #~ msgstr "_Megnyitás"
-
-#~ msgid "_Quit"
-#~ msgstr "_Kilépés"
 
 #~ msgid "Align to bottom left"
 #~ msgstr "Igazítás balra le"

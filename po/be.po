@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: be\n"
-"POT-Creation-Date: 2003-11-08 12:29-0800\n"
+"POT-Creation-Date: 2003-11-10 20:27-0700\n"
 "PO-Revision-Date: 2003-07-20 16:00+0300\n"
 "Last-Translator: Vital Khilko <dojlid@mova.org>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -46,19 +46,19 @@ msgstr "Дакумэнт %s мае незахаваныя зьмены, заха
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
-#: src/dialogs/export.c:135 src/verbs.c:484
+#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:501
 msgid "Page"
 msgstr "Аркуш"
 
 #: src/desktop.c:1485 src/dialogs/align.c:287 src/dialogs/export.c:140
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Drawing"
 msgstr "Рысаваньне"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:503
 msgid "Selection"
 msgstr "Вылучэньне"
 
@@ -159,48 +159,48 @@ msgstr "Большы элемэнт"
 msgid "Smallest item"
 msgstr "Меншы элемэнт"
 
-#: src/dialogs/desktop-properties.c:191
+#: src/dialogs/desktop-properties.c:189
 msgid "Desktop settings"
 msgstr "Акно рэдагаваньня"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.c:200
+#: src/dialogs/desktop-properties.c:198 src/verbs.c:496
 msgid "Grid"
 msgstr "Сетка"
 
-#: src/dialogs/desktop-properties.c:211
+#: src/dialogs/desktop-properties.c:210
 msgid "Show grid"
 msgstr "Паказаць сетку"
 
-#: src/dialogs/desktop-properties.c:212
+#: src/dialogs/desktop-properties.c:211
 msgid "Snap to grid"
 msgstr "Раўнаць па сетке"
 
-#: src/dialogs/desktop-properties.c:214
+#: src/dialogs/desktop-properties.c:213
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "Адлюстраваць гарызантальна"
 
-#: src/dialogs/desktop-properties.c:215
+#: src/dialogs/desktop-properties.c:214
 #, fuzzy
 msgid "Vertical lines"
 msgstr "Адлюстраваць вэртыкальна"
 
-#: src/dialogs/desktop-properties.c:217
+#: src/dialogs/desktop-properties.c:216
 #, fuzzy
 msgid "Iso grid"
 msgstr "Паказаць сетку"
 
-#: src/dialogs/desktop-properties.c:218
+#: src/dialogs/desktop-properties.c:217
 msgid "Hex grid"
 msgstr ""
 
-#: src/dialogs/desktop-properties.c:221
+#: src/dialogs/desktop-properties.c:222
 msgid "Grid units:"
 msgstr "Адзінкі сеткі:"
 
-#: src/dialogs/desktop-properties.c:223
+#: src/dialogs/desktop-properties.c:224
 msgid "Origin X:"
 msgstr "Зрух па Х:"
 
@@ -208,56 +208,56 @@ msgstr "Зрух па Х:"
 msgid "Origin Y:"
 msgstr "Зрух па Y:"
 
-#: src/dialogs/desktop-properties.c:228
+#: src/dialogs/desktop-properties.c:227
 msgid "Spacing X:"
 msgstr "Крок па Х:"
 
-#: src/dialogs/desktop-properties.c:230
+#: src/dialogs/desktop-properties.c:228
 msgid "Spacing Y:"
 msgstr "Крок па Y:"
 
-#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
+#: src/dialogs/desktop-properties.c:231 src/dialogs/desktop-properties.c:256
+msgid "Snap units:"
+msgstr "Адзінкі крокаў:"
+
+#: src/dialogs/desktop-properties.c:233 src/dialogs/desktop-properties.c:258
 msgid "Snap distance:"
 msgstr "Памер крокаў:"
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:236
 msgid "Grid color:"
 msgstr "Колер сеткі:"
 
-#: src/dialogs/desktop-properties.c:240
+#: src/dialogs/desktop-properties.c:237
 msgid "Grid color"
 msgstr "Колер сеткі"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:244
+#: src/dialogs/desktop-properties.c:241 src/verbs.c:497
 msgid "Guides"
 msgstr "Кіруючыя"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:251
 msgid "Show guides"
 msgstr "Паказаць кіруючыя"
 
-#: src/dialogs/desktop-properties.c:254
+#: src/dialogs/desktop-properties.c:252
 msgid "Snap to guides"
 msgstr "Раўнаць па кіруючых"
 
-#: src/dialogs/desktop-properties.c:257
-msgid "Snap units:"
-msgstr "Адзінкі крокаў:"
-
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:261
 msgid "Guides color:"
 msgstr "Колер кіруючых:"
 
-#: src/dialogs/desktop-properties.c:263
+#: src/dialogs/desktop-properties.c:262
 msgid "Guideline color"
 msgstr "Колер кіруючых рысаў"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:264
 msgid "Highlight color:"
 msgstr "Колер падсьвятленьня:"
 
-#: src/dialogs/desktop-properties.c:266
+#: src/dialogs/desktop-properties.c:265
 msgid "Highlighted guideline color"
 msgstr "Колер падсьвятленьня кіруючых рысаў"
 
@@ -287,7 +287,7 @@ msgstr "Вывад"
 msgid "Oversample bitmaps:"
 msgstr "Усярэджваць растр па кропках:"
 
-#: src/dialogs/display-settings.c:116 src/verbs.c:427
+#: src/dialogs/display-settings.c:116 src/verbs.c:441
 msgid "None"
 msgstr "Няма"
 
@@ -398,7 +398,7 @@ msgstr "dpi"
 msgid "Export png file"
 msgstr "Экспартуе файл png"
 
-#: src/dialogs/export.c:235 src/verbs.c:437
+#: src/dialogs/export.c:235 src/verbs.c:451
 msgid "Export"
 msgstr "Экспартаваць"
 
@@ -464,7 +464,7 @@ msgstr "Правільны ID"
 msgid "ID exists"
 msgstr ""
 
-#: src/dialogs/item-properties.c:428 src/verbs.c:499
+#: src/dialogs/item-properties.c:428 src/verbs.c:516
 msgid "Item properties"
 msgstr "Уласьцівасьці элемэнта"
 
@@ -630,7 +630,7 @@ msgstr "Вольныя рысы й пяро"
 msgid "Calligraphic line"
 msgstr "Каліграфічная рыса"
 
-#: src/dialogs/object-properties.c:207 src/verbs.c:475
+#: src/dialogs/object-properties.c:207 src/verbs.c:490
 msgid "Text"
 msgstr "Тэкст"
 
@@ -639,7 +639,7 @@ msgstr "Тэкст"
 msgid "Object Size and Position"
 msgstr "Памер і пазыцыя аб'екта"
 
-#: src/dialogs/object-properties.c:305 src/verbs.c:494
+#: src/dialogs/object-properties.c:305 src/verbs.c:511
 msgid "Size and Position"
 msgstr "Памер і пазыцыя"
 
@@ -692,7 +692,7 @@ msgstr "Тэкст і шрыфт"
 msgid "Set as default"
 msgstr "Усталяваць як дапомнае"
 
-#: src/dialogs/tool-attributes.c:46 src/verbs.c:492
+#: src/dialogs/tool-attributes.c:46 src/verbs.c:509
 msgid "Tool attributes"
 msgstr "Атрыбуты інструмэнта"
 
@@ -744,7 +744,7 @@ msgstr "Інструмэет ня мае атрыбутаў"
 msgid "No active tool"
 msgstr "Няма актыўных інструмэнтаў"
 
-#: src/dialogs/tool-options.c:44 src/verbs.c:491
+#: src/dialogs/tool-options.c:44 src/verbs.c:508
 msgid "Tool options"
 msgstr "Выбары інструмэнта"
 
@@ -1080,7 +1080,7 @@ msgid "Cleanup"
 msgstr "Ачысьціць"
 
 #. View:Zoom
-#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:491
 msgid "Zoom"
 msgstr "Маштабаваньне"
 
@@ -1107,7 +1107,7 @@ msgid "Remove Docked Toolbox"
 msgstr "Выдаліць прычэпленую панэлю інструмэнта"
 
 #. File
-#: src/interface.c:475 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:443
 msgid "New"
 msgstr "Стварыць"
 
@@ -1320,7 +1320,7 @@ msgid "Item"
 msgstr "Элемэнт"
 
 #. Item dialog
-#: src/object-ui.c:108 src/verbs.c:499
+#: src/object-ui.c:108 src/verbs.c:516
 msgid "Item Properties"
 msgstr "Уласьцівасьці элемэнта"
 
@@ -1347,7 +1347,7 @@ msgstr "Зрабіць нячулым"
 msgid "Create link"
 msgstr "Стварыць лучыва"
 
-#: src/object-ui.c:251 src/verbs.c:453
+#: src/object-ui.c:251 src/verbs.c:468
 msgid "Group"
 msgstr "Згрупаваць"
 
@@ -1357,7 +1357,7 @@ msgid "Group Properties"
 msgstr "Уласьцівасьці групы"
 
 #. "Ungroup"
-#: src/object-ui.c:268 src/verbs.c:454
+#: src/object-ui.c:268 src/verbs.c:469
 msgid "Ungroup"
 msgstr "Разгрупаваць"
 
@@ -1417,7 +1417,7 @@ msgid "Rect Properties"
 msgstr "Уласьцівасьці прамакутніка"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:523 src/verbs.c:470
+#: src/object-ui.c:523 src/verbs.c:485
 msgid "Star"
 msgstr "Зорка"
 
@@ -1427,7 +1427,7 @@ msgid "Star Properties"
 msgstr "Уласьцівасьці зоркі"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:559 src/verbs.c:471
+#: src/object-ui.c:559 src/verbs.c:486
 msgid "Spiral"
 msgstr "Спіраль"
 
@@ -1446,27 +1446,27 @@ msgstr "Каэфіцэнт акругленьня для х:"
 msgid "Roundness ratio for y:"
 msgstr "Каэфіцэнт акругленьня для y:"
 
-#: src/select-context.c:592
+#: src/select-context.c:613
 msgid "Visual transformation"
 msgstr "Візуальная трансфармацыя"
 
-#: src/select-context.c:600
+#: src/select-context.c:621
 msgid "Show content"
 msgstr "Паказаць зьмест"
 
-#: src/select-context.c:607
+#: src/select-context.c:628
 msgid "Show outline"
 msgstr "Паказаць контур"
 
-#: src/select-context.c:614
+#: src/select-context.c:635
 msgid "Object transformation"
 msgstr "Трансфармаваньне аб'екта"
 
-#: src/select-context.c:622
+#: src/select-context.c:643
 msgid "Optimize"
 msgstr "Аптымізаваць"
 
-#: src/select-context.c:629
+#: src/select-context.c:650
 msgid "Preserve"
 msgstr "Зьберагчы"
 
@@ -1741,7 +1741,7 @@ msgstr ""
 msgid "Object"
 msgstr "Аб'ект"
 
-#: src/toolbox.c:443 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:511
 msgid "Object size and position"
 msgstr "Памер і пазыцыя аб'екта"
 
@@ -1749,7 +1749,7 @@ msgstr "Памер і пазыцыя аб'екта"
 msgid "Text and font settings"
 msgstr "Усталёўкі тэкста й шрыфта"
 
-#: src/toolbox.c:446 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:512
 msgid "Object transformations"
 msgstr "Трансфармуе аб'ект"
 
@@ -1802,462 +1802,476 @@ msgstr "Робіць вылучаныя вузлы згладжанымі"
 msgid "Make selected segments curves"
 msgstr "Робіць вылучаныя сэгмэнты дугамі"
 
-#: src/verbs.c:427
+#: src/verbs.c:441
 msgid "Does nothing"
 msgstr "Нічога"
 
-#: src/verbs.c:429
+#: src/verbs.c:443
 msgid "Create new SVG document"
 msgstr "Стварае новы дакумэнт SVG"
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 msgid "Open..."
 msgstr "Адкрыць..."
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 msgid "Open existing SVG document"
 msgstr "Адкрывае існуючы дакумэнт SVG"
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 msgid "Save"
 msgstr "Захаваць"
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 msgid "Save document"
 msgstr "Захоўвае дакумэнт"
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 #, fuzzy
 msgid "Save As..."
 msgstr "Захаваць як"
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 msgid "Save document under new name"
 msgstr "Захоўвае дакумэнт пад новай назвай"
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 msgid "Print..."
 msgstr "Друк..."
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 msgid "Print document"
 msgstr "Друкуе дакумэнт"
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print Direct..."
 msgstr "Друк наўпрост..."
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print directly to file or pipe"
 msgstr "Друкуе наўпрост у файл ці канал"
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 msgid "Print Preview"
 msgstr "Перадпрагляд друку"
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 msgid "Preview document printout"
 msgstr "Папярэдні прагляд вываду дакумэнта на друк"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import"
 msgstr "Імпартаваць"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import bitmap or SVG image into document"
 msgstr "Імпартуе кропкавы ці SVG відарыс у дакумэнт"
 
-#: src/verbs.c:437
+#: src/verbs.c:451
 msgid "Export document as PNG bitmap"
 msgstr "Экспартуе дакумэнт як PNG відарыс"
 
+#: src/verbs.c:452
+msgid "Quit"
+msgstr ""
+
 #. Edit
-#: src/verbs.c:439
+#: src/verbs.c:454
 msgid "Undo"
 msgstr "Адкаціцца"
 
-#: src/verbs.c:439
+#: src/verbs.c:454
 msgid "Revert last action"
 msgstr "Адмяняе апошняе дзеяньне"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Redo"
 msgstr "Вярнуцца"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Do again undone action"
 msgstr "Паўтарае незавершанае дзеяньне"
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 msgid "Cut"
 msgstr "Выразаць"
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 msgid "Cut selected objects to clipboard"
 msgstr "Выразае вылучаныя аб'екты ў буфэр абмену"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 msgid "Copy"
 msgstr "Капіяваць"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 msgid "Copy selected objects to clipboard"
 msgstr "Капуе вылучаныя аб'екты ў буфэр абмену"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 msgid "Paste"
 msgstr "Уставіць"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 msgid "Paste objects from clipboard"
 msgstr "Устаўляе аб'екты з буфэра абмену"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 msgid "Delete"
 msgstr "Выдаліць"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 msgid "Delete selected objects"
 msgstr "Выдаляе вылучаныя аб'екты"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 msgid "Duplicate"
 msgstr "Падвоіць"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 msgid "Duplicate selected objects"
 msgstr "Падвойвае вылучаныя аб'екты"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 #, fuzzy
 msgid "Clear All"
 msgstr "Ачысьціць усё"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 msgid "Delete all objects from document"
 msgstr "Выдаляе ўсе аб'екты з дакумэнта"
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 msgid "Select All"
 msgstr "Вылучыць усё"
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 msgid "Select all objects in document"
 msgstr "Вылучае ўсе аб'екты ў дакумэнце"
 
 #. Selection
-#: src/verbs.c:449
+#: src/verbs.c:464
 msgid "Bring to Front"
 msgstr "Даслаць угору"
 
-#: src/verbs.c:449
+#: src/verbs.c:464
 msgid "Raise selected objects to top"
 msgstr "Падымае вылучаныя аб'екты на верхні слой"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 msgid "Send to Back"
 msgstr "Даслаць долу"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 msgid "Lower selected objects to bottom"
 msgstr "Апускае вылучаныя аб'екты на ніжні слой"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 msgid "Raise"
 msgstr "Падняць"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 #, fuzzy
 msgid "Raise selected objects one position"
 msgstr "Падымае вылучаныя аб'екты на верхні слой"
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 msgid "Lower"
 msgstr "Апусьціць"
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 #, fuzzy
 msgid "Lower selected objects one position"
 msgstr "Апускае вылучаныя аб'екты на ніжні слой"
 
-#: src/verbs.c:453
+#: src/verbs.c:468
 msgid "Group selected objects"
 msgstr "Групуе вылучаныя аб'екты"
 
-#: src/verbs.c:454
+#: src/verbs.c:469
 msgid "Ungroup selected group"
 msgstr "Разгрупоўвае вылучаныя аб'екты"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 msgid "Combine"
 msgstr "Камбінаваць"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 msgid "Combine multiple paths"
 msgstr "Камбінуе шмат шляхоў"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 #, fuzzy
 msgid "Break Apart"
 msgstr "Адасобіць"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 msgid "Break selected path to subpaths"
 msgstr "Разлучае вылучаны шлях на падшляхі"
 
 #. Object
-#: src/verbs.c:458
+#: src/verbs.c:473
 msgid "Rotate 90 degrees"
 msgstr "Павярнуць на 90°"
 
-#: src/verbs.c:458
+#: src/verbs.c:473
 #, fuzzy
 msgid "Rotates object 90 degrees clockwise"
 msgstr "Паварочвае аб'ект на 90° па сонцу"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 msgid "Flatten object"
 msgstr "Раўнае аб'ект"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 msgid "Remove transformations from object"
 msgstr "Выдаляе трансфармаваньне з аб'екта"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 #, fuzzy
 msgid "Convert to Curves"
 msgstr "Канвэртуе аб'ект у дугу"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 #, fuzzy
 msgid "Convert selected object to path"
 msgstr "Апускае вылучаныя аб'екты на ніжні слой"
 
-#: src/verbs.c:461
+#: src/verbs.c:476
 msgid "Flip Horizontally"
 msgstr "Адлюстраваць гарызантальна"
 
-#: src/verbs.c:462
+#: src/verbs.c:477
 msgid "Flip selected objects horizontally"
 msgstr "Адлюстроўвае вылучаны аб'ект гарызантальна"
 
-#: src/verbs.c:463
+#: src/verbs.c:478
 msgid "Flip Vertically"
 msgstr "Адлюстраваць вэртыкальна"
 
-#: src/verbs.c:464
+#: src/verbs.c:479
 msgid "Flip selected objects vertically"
 msgstr "Адлюстроўвае вылучаныя аб'екты вэртыкальна"
 
 #. Event contexts
-#: src/verbs.c:466
+#: src/verbs.c:481
 msgid "Select"
 msgstr "Вылучэньне"
 
-#: src/verbs.c:466
+#: src/verbs.c:481
 #, fuzzy
 msgid "Select and transform objects"
 msgstr "Інструмэнт вылучэньня - вылучае й трансфармуе аб'екты"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 msgid "Node edit"
 msgstr "Рэдагаваць вузел"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 msgid "Modify existing objects by control nodes"
 msgstr "Зьмяняе існуючыя аб'екты праз кіруючыя вузлы"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Rectangle"
 msgstr "Прамакутнік"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 #, fuzzy
 msgid "Create rectangles and squares with optional rounded corners"
 msgstr ""
 "Інструмэнт прамакутніка - стварае прамакутнікі й квадраты з магчымымі "
 "закругленымі кутамі"
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Ellipse"
 msgstr "Эліпс"
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 #, fuzzy
 msgid "Create circles, ellipses and arcs"
 msgstr "Інструмэнт дугі - стварае кругі, эліпсы й дугі"
 
-#: src/verbs.c:470
+#: src/verbs.c:485
 #, fuzzy
 msgid "Create stars and polygons"
 msgstr "Інструмэнт зоркі - стварае зоркі й палігоны"
 
-#: src/verbs.c:471
+#: src/verbs.c:486
 #, fuzzy
 msgid "Create spirals"
 msgstr "Стварыць лучыва"
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 msgid "Pencil"
 msgstr "Аловак"
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 #, fuzzy
 msgid "Draw freehand curves and straight lines"
 msgstr "Інструмэнт алоўка - рысуе вольныя дугі й простыя рысы"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 msgid "Pen"
 msgstr "Пяро"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 #, fuzzy
 msgid "Draw precisely positioned curved and straight lines"
 msgstr "Інструмэнт пера - рысуе дакладна спазыцыянаваныя дугі й прамыя рысы"
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 msgid "Calligraphy"
 msgstr "Каліграфія"
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 #, fuzzy
 msgid "Draw calligraphic lines"
 msgstr "Каліграфічная рыса"
 
-#: src/verbs.c:475
+#: src/verbs.c:490
 #, fuzzy
 msgid "Create and edit text objects"
 msgstr "Інструмэнт тэкста - стварае і рэдагуе тэкставыя аб'екты"
 
-#: src/verbs.c:476
+#: src/verbs.c:491
 #, fuzzy
 msgid "Zoom into precisely selected area"
 msgstr "Павялічвае маштаб дакладна вылучанае прасторы"
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 msgid "Dropper"
 msgstr "Піпетка"
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 #, fuzzy
 msgid "Pick averaged colors from image"
 msgstr "Інструмэнт піпеткі - бярэ колер з відарыса"
 
 #. Zooming
-#: src/verbs.c:479
+#: src/verbs.c:494
 msgid "In"
 msgstr "+"
 
-#: src/verbs.c:479
+#: src/verbs.c:494
 msgid "Zoom in drawing"
 msgstr "Павялічвае маштаб рысунка"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 msgid "Out"
 msgstr "-"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 msgid "Zoom out drawing"
 msgstr "Памяншае маштаб рысунка"
 
-#: src/verbs.c:481
+#: src/verbs.c:496
+#, fuzzy
+msgid "Toggle grid"
+msgstr "Паказаць сетку"
+
+#: src/verbs.c:497
+#, fuzzy
+msgid "Toggle guides"
+msgstr "Паказаць кіруючыя"
+
+#: src/verbs.c:498
 msgid "1:1"
 msgstr "1:1"
 
-#: src/verbs.c:481
+#: src/verbs.c:498
 msgid "Set zoom factor to 1:1"
 msgstr "Усталёўвае маштаб 1:1"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 msgid "1:2"
 msgstr "1:2"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 msgid "Set zoom factor to 1:2"
 msgstr "Усталёўвае маштаб 2:1"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 msgid "2:1"
 msgstr "2:1"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 msgid "Set zoom factor to 2:1"
 msgstr "Усталёўвае маштаб 2:1"
 
-#: src/verbs.c:484
+#: src/verbs.c:501
 msgid "Fit the whole page into window"
 msgstr "Запаўняе акно усёй старонкай"
 
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Fit the whole drawing into window"
 msgstr "Запаўняе рысаваньнем усё акно"
 
-#: src/verbs.c:486
+#: src/verbs.c:503
 msgid "Fit the whole selection into window"
 msgstr "Запаўняе вылучэньнем усё акно"
 
 #. Dialogs
-#: src/verbs.c:488
+#: src/verbs.c:505
 msgid "Display"
 msgstr "Дысплэй"
 
-#: src/verbs.c:488
+#: src/verbs.c:505
 msgid "Global display settings"
 msgstr "Глябальныя наладкі дысплэя"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Document"
 msgstr "Уласьцівасьці дакумэнта"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Page layout"
 msgstr "Арыентацыя аркуша"
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 msgid "Editing Window"
 msgstr "Акно рэдагаваньня"
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 msgid "Editing window properties"
 msgstr "Уласьцівасьці акна рэдагаваньня"
 
-#: src/verbs.c:491
+#: src/verbs.c:508
 msgid "Tool Options"
 msgstr "Выбары інструмэнтаў"
 
-#: src/verbs.c:492
+#: src/verbs.c:509
 msgid "Tool Attributes"
 msgstr "Атрыбуты інструмэнтаў"
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 msgid "Fill and Stroke"
 msgstr "Запаўненьне й штрыхоўка"
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 msgid "Fill and stroke settings"
 msgstr "Усталёўкі запаўненьня й штрыхоўкі"
 
-#: src/verbs.c:495
+#: src/verbs.c:512
 msgid "Transformations"
 msgstr "Трансфармаваньне вылучэньня"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 msgid "Align and Distribute"
 msgstr "Раўнаньне й прадстаўленьне"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 msgid "Align and distribute"
 msgstr "Раўнаньне й прадстаўленьне"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 msgid "Text and Font"
 msgstr "Тэкст і шрыфт"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 msgid "Text editing and font settings"
 msgstr "Рэдагаваньне тэкста й наладкі шрыфта"
 
-#: src/verbs.c:498
+#: src/verbs.c:515
 msgid "XML Editor"
 msgstr "Рэдактар XML"
 

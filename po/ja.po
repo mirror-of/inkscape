@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.33\n"
-"POT-Creation-Date: 2003-11-08 12:29-0800\n"
+"POT-Creation-Date: 2003-11-10 20:27-0700\n"
 "PO-Revision-Date: 2003-07-09 17:08+0900\n"
 "Last-Translator: Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "Language-Team: Japan GNOME Users Group <translation@gnome.gr.jp>\n"
@@ -45,19 +45,19 @@ msgstr "ドキュメント %s は未保存の変更がありますが、保存�
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
-#: src/dialogs/export.c:135 src/verbs.c:484
+#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:501
 msgid "Page"
 msgstr "ページ"
 
 #: src/desktop.c:1485 src/dialogs/align.c:287 src/dialogs/export.c:140
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Drawing"
 msgstr "描画"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:503
 msgid "Selection"
 msgstr "選択"
 
@@ -157,48 +157,48 @@ msgstr "最大要素"
 msgid "Smallest item"
 msgstr "最小の要素"
 
-#: src/dialogs/desktop-properties.c:191
+#: src/dialogs/desktop-properties.c:189
 msgid "Desktop settings"
 msgstr "デスクトップ設定"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.c:200
+#: src/dialogs/desktop-properties.c:198 src/verbs.c:496
 msgid "Grid"
 msgstr "グリッド"
 
-#: src/dialogs/desktop-properties.c:211
+#: src/dialogs/desktop-properties.c:210
 msgid "Show grid"
 msgstr "グリッドの表示"
 
-#: src/dialogs/desktop-properties.c:212
+#: src/dialogs/desktop-properties.c:211
 msgid "Snap to grid"
 msgstr "グリッドにあわせる"
 
-#: src/dialogs/desktop-properties.c:214
+#: src/dialogs/desktop-properties.c:213
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "水平方向に反転"
 
-#: src/dialogs/desktop-properties.c:215
+#: src/dialogs/desktop-properties.c:214
 #, fuzzy
 msgid "Vertical lines"
 msgstr "垂直方向に反転"
 
-#: src/dialogs/desktop-properties.c:217
+#: src/dialogs/desktop-properties.c:216
 #, fuzzy
 msgid "Iso grid"
 msgstr "グリッドの表示"
 
-#: src/dialogs/desktop-properties.c:218
+#: src/dialogs/desktop-properties.c:217
 msgid "Hex grid"
 msgstr ""
 
-#: src/dialogs/desktop-properties.c:221
+#: src/dialogs/desktop-properties.c:222
 msgid "Grid units:"
 msgstr "グリッドユニット:"
 
-#: src/dialogs/desktop-properties.c:223
+#: src/dialogs/desktop-properties.c:224
 msgid "Origin X:"
 msgstr "X方向の始点:"
 
@@ -206,56 +206,56 @@ msgstr "X方向の始点:"
 msgid "Origin Y:"
 msgstr "Y方向の始点:"
 
-#: src/dialogs/desktop-properties.c:228
+#: src/dialogs/desktop-properties.c:227
 msgid "Spacing X:"
 msgstr "X方向の間隔:"
 
-#: src/dialogs/desktop-properties.c:230
+#: src/dialogs/desktop-properties.c:228
 msgid "Spacing Y:"
 msgstr "Y方向の間隔:"
 
-#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
+#: src/dialogs/desktop-properties.c:231 src/dialogs/desktop-properties.c:256
+msgid "Snap units:"
+msgstr "ユニットに合わせる:"
+
+#: src/dialogs/desktop-properties.c:233 src/dialogs/desktop-properties.c:258
 msgid "Snap distance:"
 msgstr "合わせる距離:"
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:236
 msgid "Grid color:"
 msgstr "グリッドのカラー:"
 
-#: src/dialogs/desktop-properties.c:240
+#: src/dialogs/desktop-properties.c:237
 msgid "Grid color"
 msgstr "グリッドのカラー:"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:244
+#: src/dialogs/desktop-properties.c:241 src/verbs.c:497
 msgid "Guides"
 msgstr "ガイドライン"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:251
 msgid "Show guides"
 msgstr "ガイドラインの表示"
 
-#: src/dialogs/desktop-properties.c:254
+#: src/dialogs/desktop-properties.c:252
 msgid "Snap to guides"
 msgstr "ガイドに合わせる"
 
-#: src/dialogs/desktop-properties.c:257
-msgid "Snap units:"
-msgstr "ユニットに合わせる:"
-
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:261
 msgid "Guides color:"
 msgstr "ガイドカラー:"
 
-#: src/dialogs/desktop-properties.c:263
+#: src/dialogs/desktop-properties.c:262
 msgid "Guideline color"
 msgstr "ガイドラインカラー"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:264
 msgid "Highlight color:"
 msgstr "ハイライトカラー:"
 
-#: src/dialogs/desktop-properties.c:266
+#: src/dialogs/desktop-properties.c:265
 msgid "Highlighted guideline color"
 msgstr "ガイドラインカラーのハイライト"
 
@@ -285,7 +285,7 @@ msgstr "描画"
 msgid "Oversample bitmaps:"
 msgstr "オーバーサンプルビットマップ:"
 
-#: src/dialogs/display-settings.c:116 src/verbs.c:427
+#: src/dialogs/display-settings.c:116 src/verbs.c:441
 msgid "None"
 msgstr "なし"
 
@@ -396,7 +396,7 @@ msgstr "dpi"
 msgid "Export png file"
 msgstr "PNGファイルを出力"
 
-#: src/dialogs/export.c:235 src/verbs.c:437
+#: src/dialogs/export.c:235 src/verbs.c:451
 msgid "Export"
 msgstr "出力"
 
@@ -462,7 +462,7 @@ msgstr "このIDは有効です"
 msgid "ID exists"
 msgstr ""
 
-#: src/dialogs/item-properties.c:428 src/verbs.c:499
+#: src/dialogs/item-properties.c:428 src/verbs.c:516
 msgid "Item properties"
 msgstr "アイテムプロパティ"
 
@@ -628,7 +628,7 @@ msgstr "フリーハンドとペン"
 msgid "Calligraphic line"
 msgstr "カリグラフィック線"
 
-#: src/dialogs/object-properties.c:207 src/verbs.c:475
+#: src/dialogs/object-properties.c:207 src/verbs.c:490
 msgid "Text"
 msgstr "テキスト"
 
@@ -637,7 +637,7 @@ msgstr "テキスト"
 msgid "Object Size and Position"
 msgstr "オブジェクトの位置と大きさ"
 
-#: src/dialogs/object-properties.c:305 src/verbs.c:494
+#: src/dialogs/object-properties.c:305 src/verbs.c:511
 msgid "Size and Position"
 msgstr "位置と大きさ"
 
@@ -689,7 +689,7 @@ msgstr "テキストとフォント"
 msgid "Set as default"
 msgstr "既定値に設定"
 
-#: src/dialogs/tool-attributes.c:46 src/verbs.c:492
+#: src/dialogs/tool-attributes.c:46 src/verbs.c:509
 msgid "Tool attributes"
 msgstr "ツールの属性"
 
@@ -741,7 +741,7 @@ msgstr "ツールの属性がありません"
 msgid "No active tool"
 msgstr "アクティブなツールがありません"
 
-#: src/dialogs/tool-options.c:44 src/verbs.c:491
+#: src/dialogs/tool-options.c:44 src/verbs.c:508
 msgid "Tool options"
 msgstr "ツールオプション"
 
@@ -1071,7 +1071,7 @@ msgid "Cleanup"
 msgstr "掃除する"
 
 #. View:Zoom
-#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:491
 msgid "Zoom"
 msgstr "ズーム"
 
@@ -1098,7 +1098,7 @@ msgid "Remove Docked Toolbox"
 msgstr "ドックツールボックスの削除"
 
 #. File
-#: src/interface.c:475 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:443
 msgid "New"
 msgstr "新規"
 
@@ -1310,7 +1310,7 @@ msgid "Item"
 msgstr "アイテム"
 
 #. Item dialog
-#: src/object-ui.c:108 src/verbs.c:499
+#: src/object-ui.c:108 src/verbs.c:516
 msgid "Item Properties"
 msgstr "アイテムプロパティ"
 
@@ -1337,7 +1337,7 @@ msgstr "インセンシティブに設定"
 msgid "Create link"
 msgstr "リンクの作成"
 
-#: src/object-ui.c:251 src/verbs.c:453
+#: src/object-ui.c:251 src/verbs.c:468
 msgid "Group"
 msgstr "グループ化"
 
@@ -1347,7 +1347,7 @@ msgid "Group Properties"
 msgstr "グループのプロパティ"
 
 #. "Ungroup"
-#: src/object-ui.c:268 src/verbs.c:454
+#: src/object-ui.c:268 src/verbs.c:469
 msgid "Ungroup"
 msgstr "グループ解除"
 
@@ -1407,7 +1407,7 @@ msgid "Rect Properties"
 msgstr "矩形のプロパティ"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:523 src/verbs.c:470
+#: src/object-ui.c:523 src/verbs.c:485
 msgid "Star"
 msgstr "星"
 
@@ -1417,7 +1417,7 @@ msgid "Star Properties"
 msgstr "星のプロパティ"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:559 src/verbs.c:471
+#: src/object-ui.c:559 src/verbs.c:486
 msgid "Spiral"
 msgstr "螺旋"
 
@@ -1436,27 +1436,27 @@ msgstr "x の真円率:"
 msgid "Roundness ratio for y:"
 msgstr "y の真円率:"
 
-#: src/select-context.c:592
+#: src/select-context.c:613
 msgid "Visual transformation"
 msgstr "ビジュアル変形"
 
-#: src/select-context.c:600
+#: src/select-context.c:621
 msgid "Show content"
 msgstr "内容を表示"
 
-#: src/select-context.c:607
+#: src/select-context.c:628
 msgid "Show outline"
 msgstr "アウトラインの表示"
 
-#: src/select-context.c:614
+#: src/select-context.c:635
 msgid "Object transformation"
 msgstr "オブジェクトの変形"
 
-#: src/select-context.c:622
+#: src/select-context.c:643
 msgid "Optimize"
 msgstr "最適化"
 
-#: src/select-context.c:629
+#: src/select-context.c:650
 msgid "Preserve"
 msgstr "保護"
 
@@ -1722,7 +1722,7 @@ msgstr ""
 msgid "Object"
 msgstr "オブジェクト"
 
-#: src/toolbox.c:443 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:511
 msgid "Object size and position"
 msgstr "オブジェクトの位置と大きさ"
 
@@ -1730,7 +1730,7 @@ msgstr "オブジェクトの位置と大きさ"
 msgid "Text and font settings"
 msgstr "テキストとフォント設定"
 
-#: src/toolbox.c:446 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:512
 msgid "Object transformations"
 msgstr "オブジェクトの変形"
 
@@ -1783,442 +1783,456 @@ msgstr "選択ノードを滑かにする"
 msgid "Make selected segments curves"
 msgstr "選択セグメントを曲線にする"
 
-#: src/verbs.c:427
+#: src/verbs.c:441
 msgid "Does nothing"
 msgstr "何もしない"
 
-#: src/verbs.c:429
+#: src/verbs.c:443
 msgid "Create new SVG document"
 msgstr "新規 SVG ドキュメントを作成"
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 msgid "Open..."
 msgstr "開く..."
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 msgid "Open existing SVG document"
 msgstr "既存の SVG ドキュメントを開く"
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 msgid "Save"
 msgstr "保存"
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 msgid "Save document"
 msgstr "ドキュメントの保存"
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 msgid "Save As..."
 msgstr "名前をつけて保存..."
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 msgid "Save document under new name"
 msgstr "新規ファイル名でドキュメントを保存"
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 msgid "Print..."
 msgstr "印刷..."
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 msgid "Print document"
 msgstr "ドキュメントを印刷"
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print Direct..."
 msgstr "直接印刷..."
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print directly to file or pipe"
 msgstr "ファイルかパイプに直接印刷"
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 msgid "Print Preview"
 msgstr "印刷プレビュー"
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 msgid "Preview document printout"
 msgstr "印刷ドキュメントのプレビュー"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import"
 msgstr "読み込み"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import bitmap or SVG image into document"
 msgstr "ビットマップまたはSVGイメージをドキュメントに取り込む"
 
-#: src/verbs.c:437
+#: src/verbs.c:451
 msgid "Export document as PNG bitmap"
 msgstr "ドキュメントを PNG ビットマップとして出力"
 
+#: src/verbs.c:452
+msgid "Quit"
+msgstr ""
+
 #. Edit
-#: src/verbs.c:439
+#: src/verbs.c:454
 msgid "Undo"
 msgstr "元に戻す"
 
-#: src/verbs.c:439
+#: src/verbs.c:454
 msgid "Revert last action"
 msgstr "最後の操作を戻す"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Redo"
 msgstr "やり直し"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Do again undone action"
 msgstr "戻した操作を再実行"
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 msgid "Cut"
 msgstr "カット"
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 msgid "Cut selected objects to clipboard"
 msgstr "選択オブジェクトをクリップボードへ切り取り"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 msgid "Copy"
 msgstr "コピー"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 msgid "Copy selected objects to clipboard"
 msgstr "選択オブジェクトをクリップボードへ複製"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 msgid "Paste"
 msgstr "貼付け"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 msgid "Paste objects from clipboard"
 msgstr "オブジェクトをクリップボードから貼り付け"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 msgid "Delete"
 msgstr "削除"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 msgid "Delete selected objects"
 msgstr "選択したオブジェクトの削除"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 msgid "Duplicate"
 msgstr "複製"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 msgid "Duplicate selected objects"
 msgstr "選択オブジェクトの複製"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 msgid "Clear All"
 msgstr "全て消去"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 msgid "Delete all objects from document"
 msgstr "ドキュメントからすべてのオブジェクトを削除します"
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 msgid "Select All"
 msgstr "全て選択"
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 msgid "Select all objects in document"
 msgstr "ドキュメントのすべてのオブジェクトを選択します"
 
 #. Selection
-#: src/verbs.c:449
+#: src/verbs.c:464
 msgid "Bring to Front"
 msgstr "前面に持ってくる"
 
-#: src/verbs.c:449
+#: src/verbs.c:464
 msgid "Raise selected objects to top"
 msgstr "選択オブジェクトを最前面に移動"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 msgid "Send to Back"
 msgstr "背後に持っていく"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 msgid "Lower selected objects to bottom"
 msgstr "選択オブジェクトを最背面に移動"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 msgid "Raise"
 msgstr "上げる"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 msgid "Raise selected objects one position"
 msgstr "選択オブジェクトを一つ前面に移動"
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 msgid "Lower"
 msgstr "下げる"
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 msgid "Lower selected objects one position"
 msgstr "選択オブジェクトを一つ背面に移動"
 
-#: src/verbs.c:453
+#: src/verbs.c:468
 msgid "Group selected objects"
 msgstr "選択したオブジェクトのグループ化"
 
-#: src/verbs.c:454
+#: src/verbs.c:469
 msgid "Ungroup selected group"
 msgstr "選択したグループのグループ解除"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 msgid "Combine"
 msgstr "連結"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 msgid "Combine multiple paths"
 msgstr "複数パスの結合"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 msgid "Break Apart"
 msgstr "分割"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 msgid "Break selected path to subpaths"
 msgstr "選択したパスをサブパスに分割する"
 
 #. Object
-#: src/verbs.c:458
+#: src/verbs.c:473
 msgid "Rotate 90 degrees"
 msgstr "90度回転"
 
-#: src/verbs.c:458
+#: src/verbs.c:473
 msgid "Rotates object 90 degrees clockwise"
 msgstr "オブジェクト90度時計まわりに回転します"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 msgid "Flatten object"
 msgstr "オブジェクトを平坦にする"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 msgid "Remove transformations from object"
 msgstr "オブジェクトの変形を戻す"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 msgid "Convert to Curves"
 msgstr "曲線に変換"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 msgid "Convert selected object to path"
 msgstr "選択オブジェクトをパスに変換します"
 
-#: src/verbs.c:461
+#: src/verbs.c:476
 msgid "Flip Horizontally"
 msgstr "水平方向に反転"
 
-#: src/verbs.c:462
+#: src/verbs.c:477
 msgid "Flip selected objects horizontally"
 msgstr "選択オブジェクトを水平方向に反転します"
 
-#: src/verbs.c:463
+#: src/verbs.c:478
 msgid "Flip Vertically"
 msgstr "垂直方向に反転"
 
-#: src/verbs.c:464
+#: src/verbs.c:479
 msgid "Flip selected objects vertically"
 msgstr "選択オブジェクトを垂直方向に反転します"
 
 #. Event contexts
-#: src/verbs.c:466
+#: src/verbs.c:481
 msgid "Select"
 msgstr "選択"
 
-#: src/verbs.c:466
+#: src/verbs.c:481
 msgid "Select and transform objects"
 msgstr "選択して変形"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 msgid "Node edit"
 msgstr "ノードの編集"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 msgid "Modify existing objects by control nodes"
 msgstr "コントロールノードでオブジェクトを編集します"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Rectangle"
 msgstr "矩形"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Create rectangles and squares with optional rounded corners"
 msgstr "長方形や正方形を作成します。オプションで角を丸められます"
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Ellipse"
 msgstr "楕円"
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Create circles, ellipses and arcs"
 msgstr "楕円、弧を作成します"
 
-#: src/verbs.c:470
+#: src/verbs.c:485
 msgid "Create stars and polygons"
 msgstr "星型やポリゴンを作成します"
 
-#: src/verbs.c:471
+#: src/verbs.c:486
 msgid "Create spirals"
 msgstr "螺旋の作製"
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 msgid "Pencil"
 msgstr "ペンシル"
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 msgid "Draw freehand curves and straight lines"
 msgstr "フリーハンド線や直線を描画します"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 msgid "Pen"
 msgstr "ペン"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 msgid "Draw precisely positioned curved and straight lines"
 msgstr "明示的に位置を指定して曲線や直線を描画"
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 msgid "Calligraphy"
 msgstr "カリグラフィ"
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 msgid "Draw calligraphic lines"
 msgstr "カリグラフィック線を描画します"
 
-#: src/verbs.c:475
+#: src/verbs.c:490
 msgid "Create and edit text objects"
 msgstr "テキストオブジェクトを作成して編集します"
 
-#: src/verbs.c:476
+#: src/verbs.c:491
 #, fuzzy
 msgid "Zoom into precisely selected area"
 msgstr "選択した領域を拡大します"
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 msgid "Dropper"
 msgstr "スポイト"
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 msgid "Pick averaged colors from image"
 msgstr "画像から色を平均して取得"
 
 #. Zooming
-#: src/verbs.c:479
+#: src/verbs.c:494
 msgid "In"
 msgstr "(拡大)"
 
-#: src/verbs.c:479
+#: src/verbs.c:494
 msgid "Zoom in drawing"
 msgstr "描画領域にズーム"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 msgid "Out"
 msgstr "(縮小)"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 msgid "Zoom out drawing"
 msgstr "描画領域にズームアウト"
 
-#: src/verbs.c:481
+#: src/verbs.c:496
+#, fuzzy
+msgid "Toggle grid"
+msgstr "グリッドの表示"
+
+#: src/verbs.c:497
+#, fuzzy
+msgid "Toggle guides"
+msgstr "ガイドラインの表示"
+
+#: src/verbs.c:498
 msgid "1:1"
 msgstr "1:1"
 
-#: src/verbs.c:481
+#: src/verbs.c:498
 msgid "Set zoom factor to 1:1"
 msgstr "拡大比を 1:1 に設定"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 msgid "1:2"
 msgstr "1:2"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 msgid "Set zoom factor to 1:2"
 msgstr "拡大比を 1:2 に設定"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 msgid "2:1"
 msgstr "2:1"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 msgid "Set zoom factor to 2:1"
 msgstr "拡大比を 2:1 に設定"
 
-#: src/verbs.c:484
+#: src/verbs.c:501
 msgid "Fit the whole page into window"
 msgstr "ページ全体をウィンドウにフィット"
 
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Fit the whole drawing into window"
 msgstr "描画全体をウィンドウにフィット"
 
-#: src/verbs.c:486
+#: src/verbs.c:503
 msgid "Fit the whole selection into window"
 msgstr "選択全体をウィンドウにフィット"
 
 #. Dialogs
-#: src/verbs.c:488
+#: src/verbs.c:505
 msgid "Display"
 msgstr "ディスプレイ"
 
-#: src/verbs.c:488
+#: src/verbs.c:505
 msgid "Global display settings"
 msgstr "グローバル表示設定"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Document"
 msgstr "ドキュメント"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Page layout"
 msgstr "ページレイアウト"
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 msgid "Editing Window"
 msgstr "編集ウィンドウ"
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 msgid "Editing window properties"
 msgstr "編集ウィンドウのプロパティ"
 
-#: src/verbs.c:491
+#: src/verbs.c:508
 msgid "Tool Options"
 msgstr "ツールオプション"
 
-#: src/verbs.c:492
+#: src/verbs.c:509
 msgid "Tool Attributes"
 msgstr "ツール属性"
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 msgid "Fill and Stroke"
 msgstr "フィルとストローク"
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 msgid "Fill and stroke settings"
 msgstr "フィルとストローク設定"
 
-#: src/verbs.c:495
+#: src/verbs.c:512
 msgid "Transformations"
 msgstr "変形"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 msgid "Align and Distribute"
 msgstr "配置と間隔"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 msgid "Align and distribute"
 msgstr "配置と間隔"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 msgid "Text and Font"
 msgstr "テキストとフォント"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 msgid "Text editing and font settings"
 msgstr "テキスト編集とフォントの設定"
 
-#: src/verbs.c:498
+#: src/verbs.c:515
 msgid "XML Editor"
 msgstr "XMLエディタ"
 

@@ -1,7 +1,7 @@
 Name:		inkscape
 Summary:	A Vector Drawing Application
 Version:	@VERSION@
-Release:	CVS
+Release:	0
 Copyright:	GPL
 Group:		Applications/Graphics
 Source:		inkscape-%{version}.tar.gz

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.33pre\n"
-"POT-Creation-Date: 2003-11-08 12:29-0800\n"
+"POT-Creation-Date: 2003-11-10 20:27-0700\n"
 "PO-Revision-Date: 2003-09-11 00:32+0200\n"
 "Last-Translator: Francesc Dorca <f.dorca@filnet.es>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -43,19 +43,19 @@ msgstr "El document %s te canvis que no han estat desats. Els voleu desar?"
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
-#: src/dialogs/export.c:135 src/verbs.c:484
+#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:501
 msgid "Page"
 msgstr "Pàgina"
 
 #: src/desktop.c:1485 src/dialogs/align.c:287 src/dialogs/export.c:140
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Drawing"
 msgstr "Dibuix"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:503
 msgid "Selection"
 msgstr "Selecció"
 
@@ -164,50 +164,50 @@ msgstr "L'element més gran"
 msgid "Smallest item"
 msgstr "L'element més petit"
 
-#: src/dialogs/desktop-properties.c:191
+#: src/dialogs/desktop-properties.c:189
 #, fuzzy
 msgid "Desktop settings"
 msgstr "Paràmetres del contorn"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.c:200
+#: src/dialogs/desktop-properties.c:198 src/verbs.c:496
 msgid "Grid"
 msgstr "Graella"
 
-#: src/dialogs/desktop-properties.c:211
+#: src/dialogs/desktop-properties.c:210
 msgid "Show grid"
 msgstr "Mostra la graella"
 
-#: src/dialogs/desktop-properties.c:212
+#: src/dialogs/desktop-properties.c:211
 #, fuzzy
 msgid "Snap to grid"
 msgstr "Alinea amb les guies"
 
-#: src/dialogs/desktop-properties.c:214
+#: src/dialogs/desktop-properties.c:213
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "Volteja horitzontalment"
 
-#: src/dialogs/desktop-properties.c:215
+#: src/dialogs/desktop-properties.c:214
 #, fuzzy
 msgid "Vertical lines"
 msgstr "Volteja verticalment"
 
-#: src/dialogs/desktop-properties.c:217
+#: src/dialogs/desktop-properties.c:216
 #, fuzzy
 msgid "Iso grid"
 msgstr "Mostra la graella"
 
-#: src/dialogs/desktop-properties.c:218
+#: src/dialogs/desktop-properties.c:217
 msgid "Hex grid"
 msgstr ""
 
-#: src/dialogs/desktop-properties.c:221
+#: src/dialogs/desktop-properties.c:222
 msgid "Grid units:"
 msgstr "Unitats de la graella:"
 
-#: src/dialogs/desktop-properties.c:223
+#: src/dialogs/desktop-properties.c:224
 msgid "Origin X:"
 msgstr "Origen X:"
 
@@ -215,60 +215,60 @@ msgstr "Origen X:"
 msgid "Origin Y:"
 msgstr "Origen Y:"
 
-#: src/dialogs/desktop-properties.c:228
+#: src/dialogs/desktop-properties.c:227
 msgid "Spacing X:"
 msgstr "Espaiat X:"
 
-#: src/dialogs/desktop-properties.c:230
+#: src/dialogs/desktop-properties.c:228
 msgid "Spacing Y:"
 msgstr "Espaiat Y:"
 
-#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
+#: src/dialogs/desktop-properties.c:231 src/dialogs/desktop-properties.c:256
+#, fuzzy
+msgid "Snap units:"
+msgstr "Alinea amb les guies"
+
+#: src/dialogs/desktop-properties.c:233 src/dialogs/desktop-properties.c:258
 msgid "Snap distance:"
 msgstr ""
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:236
 #, fuzzy
 msgid "Grid color:"
 msgstr "Color del contorn"
 
-#: src/dialogs/desktop-properties.c:240
+#: src/dialogs/desktop-properties.c:237
 #, fuzzy
 msgid "Grid color"
 msgstr "Color del contorn"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:244
+#: src/dialogs/desktop-properties.c:241 src/verbs.c:497
 msgid "Guides"
 msgstr "Guies"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:251
 #, fuzzy
 msgid "Show guides"
 msgstr "Alinea amb les guies"
 
-#: src/dialogs/desktop-properties.c:254
+#: src/dialogs/desktop-properties.c:252
 msgid "Snap to guides"
 msgstr "Alinea amb les guies"
 
-#: src/dialogs/desktop-properties.c:257
-#, fuzzy
-msgid "Snap units:"
-msgstr "Alinea amb les guies"
-
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:261
 msgid "Guides color:"
 msgstr "Color de les guies:"
 
-#: src/dialogs/desktop-properties.c:263
+#: src/dialogs/desktop-properties.c:262
 msgid "Guideline color"
 msgstr "Color de la línia guia"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:264
 msgid "Highlight color:"
 msgstr ""
 
-#: src/dialogs/desktop-properties.c:266
+#: src/dialogs/desktop-properties.c:265
 msgid "Highlighted guideline color"
 msgstr "Color de la línia guia onfiguració de les línies guia"
 
@@ -300,7 +300,7 @@ msgstr "Dibuix"
 msgid "Oversample bitmaps:"
 msgstr "Sobremostreja els mapes de bits:"
 
-#: src/dialogs/display-settings.c:116 src/verbs.c:427
+#: src/dialogs/display-settings.c:116 src/verbs.c:441
 msgid "None"
 msgstr "Cap"
 
@@ -412,7 +412,7 @@ msgstr "ppp"
 msgid "Export png file"
 msgstr "Exporta el fitxer"
 
-#: src/dialogs/export.c:235 src/verbs.c:437
+#: src/dialogs/export.c:235 src/verbs.c:451
 msgid "Export"
 msgstr "Exporta"
 
@@ -483,7 +483,7 @@ msgstr "L'identificador és vàlid"
 msgid "ID exists"
 msgstr ""
 
-#: src/dialogs/item-properties.c:428 src/verbs.c:499
+#: src/dialogs/item-properties.c:428 src/verbs.c:516
 #, fuzzy
 msgid "Item properties"
 msgstr "Objecte de text"
@@ -667,7 +667,7 @@ msgstr "A mà alçada"
 msgid "Calligraphic line"
 msgstr "Línia cal·ligràfica"
 
-#: src/dialogs/object-properties.c:207 src/verbs.c:475
+#: src/dialogs/object-properties.c:207 src/verbs.c:490
 msgid "Text"
 msgstr "Text"
 
@@ -676,7 +676,7 @@ msgstr "Text"
 msgid "Object Size and Position"
 msgstr "Puja una posició"
 
-#: src/dialogs/object-properties.c:305 src/verbs.c:494
+#: src/dialogs/object-properties.c:305 src/verbs.c:511
 msgid "Size and Position"
 msgstr "Mida i posició"
 
@@ -730,7 +730,7 @@ msgstr "Text i tipus de lletra"
 msgid "Set as default"
 msgstr "Fixa per defecte"
 
-#: src/dialogs/tool-attributes.c:46 src/verbs.c:492
+#: src/dialogs/tool-attributes.c:46 src/verbs.c:509
 msgid "Tool attributes"
 msgstr "Atributs d'eina"
 
@@ -782,7 +782,7 @@ msgstr "L'eina no té atributs"
 msgid "No active tool"
 msgstr "No hi ha cap eina activa"
 
-#: src/dialogs/tool-options.c:44 src/verbs.c:491
+#: src/dialogs/tool-options.c:44 src/verbs.c:508
 msgid "Tool options"
 msgstr "Opcions d'eina"
 
@@ -1120,7 +1120,7 @@ msgid "Cleanup"
 msgstr "Neteja-ho tot"
 
 #. View:Zoom
-#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:491
 msgid "Zoom"
 msgstr "Zoom"
 
@@ -1148,7 +1148,7 @@ msgid "Remove Docked Toolbox"
 msgstr "Suprimeix caixa d'eines ancorada"
 
 #. File
-#: src/interface.c:475 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:443
 msgid "New"
 msgstr "Nou"
 
@@ -1359,7 +1359,7 @@ msgid "Item"
 msgstr "Element"
 
 #. Item dialog
-#: src/object-ui.c:108 src/verbs.c:499
+#: src/object-ui.c:108 src/verbs.c:516
 msgid "Item Properties"
 msgstr "Propietats de l'element"
 
@@ -1386,7 +1386,7 @@ msgstr "Fes insensible"
 msgid "Create link"
 msgstr "Crea un enllaç"
 
-#: src/object-ui.c:251 src/verbs.c:453
+#: src/object-ui.c:251 src/verbs.c:468
 msgid "Group"
 msgstr "Agrupa"
 
@@ -1396,7 +1396,7 @@ msgid "Group Properties"
 msgstr "Propietats del grup"
 
 #. "Ungroup"
-#: src/object-ui.c:268 src/verbs.c:454
+#: src/object-ui.c:268 src/verbs.c:469
 msgid "Ungroup"
 msgstr "Desagrupa"
 
@@ -1461,7 +1461,7 @@ msgid "Rect Properties"
 msgstr "Objecte de text"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:523 src/verbs.c:470
+#: src/object-ui.c:523 src/verbs.c:485
 #, fuzzy
 msgid "Star"
 msgstr "Contorn"
@@ -1473,7 +1473,7 @@ msgid "Star Properties"
 msgstr "Objecte de text"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:559 src/verbs.c:471
+#: src/object-ui.c:559 src/verbs.c:486
 #, fuzzy
 msgid "Spiral"
 msgstr "Especial"
@@ -1494,31 +1494,31 @@ msgstr "Radi de corbatura per x:"
 msgid "Roundness ratio for y:"
 msgstr "Radi de corbatura per y:"
 
-#: src/select-context.c:592
+#: src/select-context.c:613
 #, fuzzy
 msgid "Visual transformation"
 msgstr "Inicia la transformació"
 
-#: src/select-context.c:600
+#: src/select-context.c:621
 #, fuzzy
 msgid "Show content"
 msgstr "Contingut"
 
-#: src/select-context.c:607
+#: src/select-context.c:628
 #, fuzzy
 msgid "Show outline"
 msgstr "Alinea amb les guies"
 
-#: src/select-context.c:614
+#: src/select-context.c:635
 #, fuzzy
 msgid "Object transformation"
 msgstr "Inicia la transformació"
 
-#: src/select-context.c:622
+#: src/select-context.c:643
 msgid "Optimize"
 msgstr "Optimitza"
 
-#: src/select-context.c:629
+#: src/select-context.c:650
 #, fuzzy
 msgid "Preserve"
 msgstr "Previsualitza"
@@ -1745,7 +1745,7 @@ msgstr ""
 msgid "Object"
 msgstr "Recta"
 
-#: src/toolbox.c:443 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:511
 #, fuzzy
 msgid "Object size and position"
 msgstr "Puja una posició"
@@ -1755,7 +1755,7 @@ msgstr "Puja una posició"
 msgid "Text and font settings"
 msgstr "Paràmetres del gradient"
 
-#: src/toolbox.c:446 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:512
 #, fuzzy
 msgid "Object transformations"
 msgstr "Inicia la transformació"
@@ -1815,452 +1815,466 @@ msgstr "Suavitza els nodes seleccionats"
 msgid "Make selected segments curves"
 msgstr "Converteix els segments seleccionats en corbes"
 
-#: src/verbs.c:427
+#: src/verbs.c:441
 msgid "Does nothing"
 msgstr ""
 
-#: src/verbs.c:429
+#: src/verbs.c:443
 msgid "Create new SVG document"
 msgstr ""
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 msgid "Open..."
 msgstr "Obre"
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 msgid "Open existing SVG document"
 msgstr ""
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 msgid "Save"
 msgstr "Desa"
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 msgid "Save document"
 msgstr "Desa el document"
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 msgid "Save As..."
 msgstr "Desa com a..."
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 msgid "Save document under new name"
 msgstr ""
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 msgid "Print..."
 msgstr "Imprimeix..."
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 msgid "Print document"
 msgstr "Imprimeix document"
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print Direct..."
 msgstr ""
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print directly to file or pipe"
 msgstr ""
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 #, fuzzy
 msgid "Print Preview"
 msgstr "Previsualització d'impressió"
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 #, fuzzy
 msgid "Preview document printout"
 msgstr "Paràmetres del tipus de lletra"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import"
 msgstr "Importa"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import bitmap or SVG image into document"
 msgstr ""
 
-#: src/verbs.c:437
+#: src/verbs.c:451
 msgid "Export document as PNG bitmap"
 msgstr "Exporta el document com un mapa de bits PNG"
 
+#: src/verbs.c:452
+msgid "Quit"
+msgstr ""
+
 #. Edit
-#: src/verbs.c:439
+#: src/verbs.c:454
 msgid "Undo"
 msgstr "Desfés"
 
-#: src/verbs.c:439
+#: src/verbs.c:454
 msgid "Revert last action"
 msgstr "Desfès l'ultima acció"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Redo"
 msgstr "Refés"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Do again undone action"
 msgstr ""
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 msgid "Cut"
 msgstr "Talla"
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 msgid "Cut selected objects to clipboard"
 msgstr "Retalla els objectes seleccionats al porta-retalls"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 msgid "Copy"
 msgstr "Copia"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 msgid "Copy selected objects to clipboard"
 msgstr "Copia els objectes seleccionats al porta-retalls"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 msgid "Paste"
 msgstr "Enganxa"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 msgid "Paste objects from clipboard"
 msgstr ""
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 msgid "Delete"
 msgstr "Suprimeix"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 msgid "Delete selected objects"
 msgstr "Suprimeix el(s) objecte(s) seleccionat(s)"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 msgid "Duplicate"
 msgstr "Duplica"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 msgid "Duplicate selected objects"
 msgstr "Duplica el(s) objecte(s) seleccionat(s)"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 msgid "Clear All"
 msgstr "Esborra'ls tots"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 msgid "Delete all objects from document"
 msgstr ""
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 msgid "Select All"
 msgstr "Selecciona'ls tots"
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 msgid "Select all objects in document"
 msgstr "Selecciona tots els objectes del document"
 
 #. Selection
-#: src/verbs.c:449
+#: src/verbs.c:464
 msgid "Bring to Front"
 msgstr "Porta a primer pla"
 
-#: src/verbs.c:449
+#: src/verbs.c:464
 msgid "Raise selected objects to top"
 msgstr "Puja els objectes seleccionats a dalt de tot"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 msgid "Send to Back"
 msgstr "Envia al fons"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 msgid "Lower selected objects to bottom"
 msgstr "Baixa els objectes seleccionats a baix de tot"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 msgid "Raise"
 msgstr "Puja"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 msgid "Raise selected objects one position"
 msgstr "Puja el(s) objecte(s) seleccionat(s) una posició"
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 msgid "Lower"
 msgstr ""
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 msgid "Lower selected objects one position"
 msgstr "Baixa el(s) objecte(s) seleccionat(s) una posició"
 
-#: src/verbs.c:453
+#: src/verbs.c:468
 msgid "Group selected objects"
 msgstr "Agrupa els objectes seleccionats"
 
-#: src/verbs.c:454
+#: src/verbs.c:469
 msgid "Ungroup selected group"
 msgstr "Desagrupa els objectes seleccionats"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 msgid "Combine"
 msgstr "Combina"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 msgid "Combine multiple paths"
 msgstr "Combina múltiples camins"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 #, fuzzy
 msgid "Break Apart"
 msgstr "Trenca Apart"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 #, fuzzy
 msgid "Break selected path to subpaths"
 msgstr "Separa el node seleccionat"
 
 #. Object
-#: src/verbs.c:458
+#: src/verbs.c:473
 msgid "Rotate 90 degrees"
 msgstr "Gira 90 graus"
 
-#: src/verbs.c:458
+#: src/verbs.c:473
 #, fuzzy
 msgid "Rotates object 90 degrees clockwise"
 msgstr "Puja el(s) objecte(s) seleccionat(s) a la part superior"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 #, fuzzy
 msgid "Flatten object"
 msgstr "Suprimeix el(s) objecte(s) seleccionat(s)"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 #, fuzzy
 msgid "Remove transformations from object"
 msgstr "Inicia la transformació"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 msgid "Convert to Curves"
 msgstr "Converteix en corbes"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 msgid "Convert selected object to path"
 msgstr "Converteix els objectes seleccionats en corbes"
 
-#: src/verbs.c:461
+#: src/verbs.c:476
 msgid "Flip Horizontally"
 msgstr "Volteja horitzontalment"
 
-#: src/verbs.c:462
+#: src/verbs.c:477
 msgid "Flip selected objects horizontally"
 msgstr "Volteja horitzontalment el(s) objecte(s) seleccionat(s)"
 
-#: src/verbs.c:463
+#: src/verbs.c:478
 msgid "Flip Vertically"
 msgstr "Volteja verticalment"
 
-#: src/verbs.c:464
+#: src/verbs.c:479
 msgid "Flip selected objects vertically"
 msgstr "Volteja verticalment el(s) objecte(s) seleccionat(s)"
 
 #. Event contexts
-#: src/verbs.c:466
+#: src/verbs.c:481
 msgid "Select"
 msgstr "Selecciona"
 
-#: src/verbs.c:466
+#: src/verbs.c:481
 msgid "Select and transform objects"
 msgstr "Selecciona i transforma els objectes"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 msgid "Node edit"
 msgstr "Edició del node"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 msgid "Modify existing objects by control nodes"
 msgstr "Modifica els objectes existents mitjançant els nodes de control"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Rectangle"
 msgstr "Rectangle"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Create rectangles and squares with optional rounded corners"
 msgstr ""
 "Crea rectangles i quadrats, opcionalment amb les cantonades arrodonides"
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Ellipse"
 msgstr "El·lipse"
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Create circles, ellipses and arcs"
 msgstr "Crea cercles, el·lipses i arcs"
 
-#: src/verbs.c:470
+#: src/verbs.c:485
 msgid "Create stars and polygons"
 msgstr "Crea estrelles i polígons"
 
-#: src/verbs.c:471
+#: src/verbs.c:486
 msgid "Create spirals"
 msgstr "Crea espirals"
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 msgid "Pencil"
 msgstr "Llàpis"
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 msgid "Draw freehand curves and straight lines"
 msgstr "Dibuixa corbes a mà alçada i línies rectes"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 msgid "Pen"
 msgstr "Llàpis"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 msgid "Draw precisely positioned curved and straight lines"
 msgstr "Dibuixa corbes posicionades amb precisió i línies rectes"
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 msgid "Calligraphy"
 msgstr "Cal·ligrafia"
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 msgid "Draw calligraphic lines"
 msgstr "Dibuixa línies de cal·ligrafia"
 
-#: src/verbs.c:475
+#: src/verbs.c:490
 msgid "Create and edit text objects"
 msgstr "Crea i edita objectes de text"
 
-#: src/verbs.c:476
+#: src/verbs.c:491
 msgid "Zoom into precisely selected area"
 msgstr "Amplia una àrea seleccionada de forma precisa"
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 #, fuzzy
 msgid "Dropper"
 msgstr "Comptagotes"
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 msgid "Pick averaged colors from image"
 msgstr ""
 
 #. Zooming
-#: src/verbs.c:479
+#: src/verbs.c:494
 msgid "In"
 msgstr "Entrada"
 
-#: src/verbs.c:479
+#: src/verbs.c:494
 msgid "Zoom in drawing"
 msgstr "Amplia el dibuix"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 msgid "Out"
 msgstr "Sortida"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 msgid "Zoom out drawing"
 msgstr "Redueix el dibuix"
 
-#: src/verbs.c:481
+#: src/verbs.c:496
+#, fuzzy
+msgid "Toggle grid"
+msgstr "Mostra la graella"
+
+#: src/verbs.c:497
+#, fuzzy
+msgid "Toggle guides"
+msgstr "Alinea amb les guies"
+
+#: src/verbs.c:498
 msgid "1:1"
 msgstr "1:1"
 
-#: src/verbs.c:481
+#: src/verbs.c:498
 msgid "Set zoom factor to 1:1"
 msgstr "Fixa el factor d'ampliació 1:1"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 msgid "1:2"
 msgstr "1:2"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 msgid "Set zoom factor to 1:2"
 msgstr "Fixa el factor d'ampliació a 1:2"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 msgid "2:1"
 msgstr "2:1"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 msgid "Set zoom factor to 2:1"
 msgstr "Fixa el factor d'ampliació a 2:1"
 
-#: src/verbs.c:484
+#: src/verbs.c:501
 msgid "Fit the whole page into window"
 msgstr "Ajusta la pàgina a la finestra"
 
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Fit the whole drawing into window"
 msgstr "Ajusta el dibuix a la finestra"
 
-#: src/verbs.c:486
+#: src/verbs.c:503
 msgid "Fit the whole selection into window"
 msgstr "Ajusta la selecció a la finestra"
 
 #. Dialogs
-#: src/verbs.c:488
+#: src/verbs.c:505
 #, fuzzy
 msgid "Display"
 msgstr "Paràmetres d'emplenat"
 
-#: src/verbs.c:488
+#: src/verbs.c:505
 #, fuzzy
 msgid "Global display settings"
 msgstr "Paràmetres globals de presentació"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Document"
 msgstr "Document"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Page layout"
 msgstr "Esquema de la pàgina"
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 msgid "Editing Window"
 msgstr "Finestra d'edició"
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 msgid "Editing window properties"
 msgstr "Edita les propietats de la finestra"
 
-#: src/verbs.c:491
+#: src/verbs.c:508
 msgid "Tool Options"
 msgstr "Opcions de l'eina"
 
-#: src/verbs.c:492
+#: src/verbs.c:509
 msgid "Tool Attributes"
 msgstr "Atributs de l'eina"
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 msgid "Fill and Stroke"
 msgstr ""
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 msgid "Fill and stroke settings"
 msgstr "Paràmetres d'emplenat i contorn"
 
-#: src/verbs.c:495
+#: src/verbs.c:512
 msgid "Transformations"
 msgstr "Transformacions"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 msgid "Align and Distribute"
 msgstr "Alinea i distribueix"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 msgid "Align and distribute"
 msgstr "Alinea i distribueix"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 msgid "Text and Font"
 msgstr "Text i tipus de lletra"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 msgid "Text editing and font settings"
 msgstr "Paràmetres d'edicio de text i tipus de lletra"
 
-#: src/verbs.c:498
+#: src/verbs.c:515
 msgid "XML Editor"
 msgstr "Editor XML"
 

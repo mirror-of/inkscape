@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
-"POT-Creation-Date: 2003-11-08 12:29-0800\n"
+"POT-Creation-Date: 2003-11-10 20:27-0700\n"
 "PO-Revision-Date: 2002-01-15 13:30+0100\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -43,19 +43,19 @@ msgstr "Dokument %s har ugemte ændringer, skal de gemmes?"
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
-#: src/dialogs/export.c:135 src/verbs.c:484
+#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:501
 msgid "Page"
 msgstr "Side"
 
 #: src/desktop.c:1485 src/dialogs/align.c:287 src/dialogs/export.c:140
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Drawing"
 msgstr "Tegning"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:503
 msgid "Selection"
 msgstr "Valg"
 
@@ -163,48 +163,48 @@ msgstr "Største element"
 msgid "Smallest item"
 msgstr "Mindste element"
 
-#: src/dialogs/desktop-properties.c:191
+#: src/dialogs/desktop-properties.c:189
 msgid "Desktop settings"
 msgstr "Skrivebordets indstilinger"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.c:200
+#: src/dialogs/desktop-properties.c:198 src/verbs.c:496
 msgid "Grid"
 msgstr "Gitter"
 
-#: src/dialogs/desktop-properties.c:211
+#: src/dialogs/desktop-properties.c:210
 msgid "Show grid"
 msgstr "Vis gitter"
 
-#: src/dialogs/desktop-properties.c:212
+#: src/dialogs/desktop-properties.c:211
 msgid "Snap to grid"
 msgstr "Fastsæt til gitter"
 
-#: src/dialogs/desktop-properties.c:214
+#: src/dialogs/desktop-properties.c:213
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "vandret flytning"
 
-#: src/dialogs/desktop-properties.c:215
+#: src/dialogs/desktop-properties.c:214
 #, fuzzy
 msgid "Vertical lines"
 msgstr "Lodret centreringsværdi"
 
-#: src/dialogs/desktop-properties.c:217
+#: src/dialogs/desktop-properties.c:216
 #, fuzzy
 msgid "Iso grid"
 msgstr "Vis gitter"
 
-#: src/dialogs/desktop-properties.c:218
+#: src/dialogs/desktop-properties.c:217
 msgid "Hex grid"
 msgstr ""
 
-#: src/dialogs/desktop-properties.c:221
+#: src/dialogs/desktop-properties.c:222
 msgid "Grid units:"
 msgstr "Enheder for gitter:"
 
-#: src/dialogs/desktop-properties.c:223
+#: src/dialogs/desktop-properties.c:224
 msgid "Origin X:"
 msgstr "Udgangspunkt X:"
 
@@ -212,56 +212,56 @@ msgstr "Udgangspunkt X:"
 msgid "Origin Y:"
 msgstr "Udgangspunkt Y:"
 
-#: src/dialogs/desktop-properties.c:228
+#: src/dialogs/desktop-properties.c:227
 msgid "Spacing X:"
 msgstr "Afstand X:"
 
-#: src/dialogs/desktop-properties.c:230
+#: src/dialogs/desktop-properties.c:228
 msgid "Spacing Y:"
 msgstr "Afstand Y:"
 
-#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
+#: src/dialogs/desktop-properties.c:231 src/dialogs/desktop-properties.c:256
+msgid "Snap units:"
+msgstr "Fastsætnings enheder:"
+
+#: src/dialogs/desktop-properties.c:233 src/dialogs/desktop-properties.c:258
 msgid "Snap distance:"
 msgstr "Fastgørelsesafstand"
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:236
 msgid "Grid color:"
 msgstr "Gitterfarve:"
 
-#: src/dialogs/desktop-properties.c:240
+#: src/dialogs/desktop-properties.c:237
 msgid "Grid color"
 msgstr "Hjælpelinjefarve"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:244
+#: src/dialogs/desktop-properties.c:241 src/verbs.c:497
 msgid "Guides"
 msgstr "Hjælpelinjer"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:251
 msgid "Show guides"
 msgstr "Vis hjælpelinier"
 
-#: src/dialogs/desktop-properties.c:254
+#: src/dialogs/desktop-properties.c:252
 msgid "Snap to guides"
 msgstr "Fastsæt til hjælpelinier"
 
-#: src/dialogs/desktop-properties.c:257
-msgid "Snap units:"
-msgstr "Fastsætnings enheder:"
-
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:261
 msgid "Guides color:"
 msgstr "Farve for hjælpelinjer:"
 
-#: src/dialogs/desktop-properties.c:263
+#: src/dialogs/desktop-properties.c:262
 msgid "Guideline color"
 msgstr "Farver for hjælpelinier"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:264
 msgid "Highlight color:"
 msgstr "Farve for fremhævning:"
 
-#: src/dialogs/desktop-properties.c:266
+#: src/dialogs/desktop-properties.c:265
 #, fuzzy
 msgid "Highlighted guideline color"
 msgstr "Farve for fremhævede hjælpelinjer"
@@ -295,7 +295,7 @@ msgstr "Tegning"
 msgid "Oversample bitmaps:"
 msgstr "Flere tilfælde af bitmap:"
 
-#: src/dialogs/display-settings.c:116 src/verbs.c:427
+#: src/dialogs/display-settings.c:116 src/verbs.c:441
 msgid "None"
 msgstr "Ingen"
 
@@ -414,7 +414,7 @@ msgstr "dpi"
 msgid "Export png file"
 msgstr "Eksportér fil"
 
-#: src/dialogs/export.c:235 src/verbs.c:437
+#: src/dialogs/export.c:235 src/verbs.c:451
 msgid "Export"
 msgstr "Eksportér"
 
@@ -484,7 +484,7 @@ msgstr "ID er gyldig"
 msgid "ID exists"
 msgstr ""
 
-#: src/dialogs/item-properties.c:428 src/verbs.c:499
+#: src/dialogs/item-properties.c:428 src/verbs.c:516
 msgid "Item properties"
 msgstr "Egenskaber for element"
 
@@ -659,7 +659,7 @@ msgstr "Frihånd"
 msgid "Calligraphic line"
 msgstr ""
 
-#: src/dialogs/object-properties.c:207 src/verbs.c:475
+#: src/dialogs/object-properties.c:207 src/verbs.c:490
 msgid "Text"
 msgstr "Tekst"
 
@@ -668,7 +668,7 @@ msgstr "Tekst"
 msgid "Object Size and Position"
 msgstr "Position"
 
-#: src/dialogs/object-properties.c:305 src/verbs.c:494
+#: src/dialogs/object-properties.c:305 src/verbs.c:511
 #, fuzzy
 msgid "Size and Position"
 msgstr "Position"
@@ -728,7 +728,7 @@ msgstr ""
 msgid "Set as default"
 msgstr ""
 
-#: src/dialogs/tool-attributes.c:46 src/verbs.c:492
+#: src/dialogs/tool-attributes.c:46 src/verbs.c:509
 #, fuzzy
 msgid "Tool attributes"
 msgstr "%s attributter"
@@ -787,7 +787,7 @@ msgstr "%s attributter"
 msgid "No active tool"
 msgstr ""
 
-#: src/dialogs/tool-options.c:44 src/verbs.c:491
+#: src/dialogs/tool-options.c:44 src/verbs.c:508
 #, fuzzy
 msgid "Tool options"
 msgstr "Oaf valg"
@@ -1142,7 +1142,7 @@ msgid "Cleanup"
 msgstr ""
 
 #. View:Zoom
-#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:491
 msgid "Zoom"
 msgstr "Zoom"
 
@@ -1170,7 +1170,7 @@ msgid "Remove Docked Toolbox"
 msgstr ""
 
 #. File
-#: src/interface.c:475 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:443
 msgid "New"
 msgstr "Ny"
 
@@ -1381,7 +1381,7 @@ msgid "Item"
 msgstr "Element"
 
 #. Item dialog
-#: src/object-ui.c:108 src/verbs.c:499
+#: src/object-ui.c:108 src/verbs.c:516
 msgid "Item Properties"
 msgstr "Egenskaber for element"
 
@@ -1408,7 +1408,7 @@ msgstr "Gør ufølsom"
 msgid "Create link"
 msgstr "Opret lænke"
 
-#: src/object-ui.c:251 src/verbs.c:453
+#: src/object-ui.c:251 src/verbs.c:468
 msgid "Group"
 msgstr "Gruppér"
 
@@ -1418,7 +1418,7 @@ msgid "Group Properties"
 msgstr "Egenskaber for gruppe"
 
 #. "Ungroup"
-#: src/object-ui.c:268 src/verbs.c:454
+#: src/object-ui.c:268 src/verbs.c:469
 msgid "Ungroup"
 msgstr "Opdel gruppe"
 
@@ -1478,7 +1478,7 @@ msgid "Rect Properties"
 msgstr "Egenskaber for firkant"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:523 src/verbs.c:470
+#: src/object-ui.c:523 src/verbs.c:485
 msgid "Star"
 msgstr "Stjerne"
 
@@ -1488,7 +1488,7 @@ msgid "Star Properties"
 msgstr "Egenskaber for stjerne"
 
 #. Create toplevel menuitem
-#: src/object-ui.c:559 src/verbs.c:471
+#: src/object-ui.c:559 src/verbs.c:486
 msgid "Spiral"
 msgstr "Spiral"
 
@@ -1507,31 +1507,31 @@ msgstr ""
 msgid "Roundness ratio for y:"
 msgstr ""
 
-#: src/select-context.c:592
+#: src/select-context.c:613
 #, fuzzy
 msgid "Visual transformation"
 msgstr "Nulstil transformation"
 
-#: src/select-context.c:600
+#: src/select-context.c:621
 #, fuzzy
 msgid "Show content"
 msgstr "Indhold"
 
-#: src/select-context.c:607
+#: src/select-context.c:628
 #, fuzzy
 msgid "Show outline"
 msgstr "Vis hjælpelinier"
 
-#: src/select-context.c:614
+#: src/select-context.c:635
 #, fuzzy
 msgid "Object transformation"
 msgstr "Nulstil transformation"
 
-#: src/select-context.c:622
+#: src/select-context.c:643
 msgid "Optimize"
 msgstr ""
 
-#: src/select-context.c:629
+#: src/select-context.c:650
 msgid "Preserve"
 msgstr ""
 
@@ -1803,7 +1803,7 @@ msgstr ""
 msgid "Object"
 msgstr "Ting"
 
-#: src/toolbox.c:443 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:511
 #, fuzzy
 msgid "Object size and position"
 msgstr "Position"
@@ -1813,7 +1813,7 @@ msgstr "Position"
 msgid "Text and font settings"
 msgstr "Skrivebordets indstilinger"
 
-#: src/toolbox.c:446 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:512
 #, fuzzy
 msgid "Object transformations"
 msgstr "Nulstil transformation"
@@ -1875,504 +1875,519 @@ msgstr "Slet valgte knuder"
 msgid "Make selected segments curves"
 msgstr "Konvertér valgte segmenter til kurver"
 
-#: src/verbs.c:427
+#: src/verbs.c:441
 msgid "Does nothing"
 msgstr ""
 
-#: src/verbs.c:429
+#: src/verbs.c:443
 msgid "Create new SVG document"
 msgstr ""
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 #, fuzzy
 msgid "Open..."
 msgstr "_Åbn"
 
-#: src/verbs.c:430
+#: src/verbs.c:444
 msgid "Open existing SVG document"
 msgstr ""
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 msgid "Save"
 msgstr "Gem"
 
-#: src/verbs.c:431
+#: src/verbs.c:445
 #, fuzzy
 msgid "Save document"
 msgstr "Lagret dokument %d"
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 #, fuzzy
 msgid "Save As..."
 msgstr "Gem"
 
-#: src/verbs.c:432
+#: src/verbs.c:446
 #, fuzzy
 msgid "Save document under new name"
 msgstr "Gem tegning under nyt filnavn"
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 #, fuzzy
 msgid "Print..."
 msgstr "Punkt"
 
-#: src/verbs.c:433
+#: src/verbs.c:447
 #, fuzzy
 msgid "Print document"
 msgstr "Unavngivet dokument %d"
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print Direct..."
 msgstr ""
 
-#: src/verbs.c:434
+#: src/verbs.c:448
 msgid "Print directly to file or pipe"
 msgstr ""
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 #, fuzzy
 msgid "Print Preview"
 msgstr "Nyt smugkig"
 
-#: src/verbs.c:435
+#: src/verbs.c:449
 #, fuzzy
 msgid "Preview document printout"
 msgstr "Smugkig udskriftstegning"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import"
 msgstr "Importér"
 
-#: src/verbs.c:436
+#: src/verbs.c:450
 msgid "Import bitmap or SVG image into document"
 msgstr ""
 
-#: src/verbs.c:437
+#: src/verbs.c:451
 #, fuzzy
 msgid "Export document as PNG bitmap"
 msgstr "Eksportér billede til png"
 
+#: src/verbs.c:452
+#, fuzzy
+msgid "Quit"
+msgstr "_Afslut"
+
 #. Edit
-#: src/verbs.c:439
+#: src/verbs.c:454
 #, fuzzy
 msgid "Undo"
 msgstr "Fortryd "
 
-#: src/verbs.c:439
+#: src/verbs.c:454
 #, fuzzy
 msgid "Revert last action"
 msgstr "Nulstil transformation"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Redo"
 msgstr "Genopret"
 
-#: src/verbs.c:440
+#: src/verbs.c:455
 msgid "Do again undone action"
 msgstr ""
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 msgid "Cut"
 msgstr "Klip"
 
-#: src/verbs.c:441
+#: src/verbs.c:456
 #, fuzzy
 msgid "Cut selected objects to clipboard"
 msgstr "Omform valgte ting til kurver"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 msgid "Copy"
 msgstr "Kopiér"
 
-#: src/verbs.c:442
+#: src/verbs.c:457
 #, fuzzy
 msgid "Copy selected objects to clipboard"
 msgstr "Kopiér det markerede til klippebord"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 msgid "Paste"
 msgstr "Indsæt"
 
-#: src/verbs.c:443
+#: src/verbs.c:458
 #, fuzzy
 msgid "Paste objects from clipboard"
 msgstr "Indsæt fra klippebord"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 msgid "Delete"
 msgstr "Slet"
 
-#: src/verbs.c:444
+#: src/verbs.c:459
 #, fuzzy
 msgid "Delete selected objects"
 msgstr "Slet valgte knuder"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 msgid "Duplicate"
 msgstr "Duplikér"
 
-#: src/verbs.c:445
+#: src/verbs.c:460
 #, fuzzy
 msgid "Duplicate selected objects"
 msgstr "Vend valgte ting"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 #, fuzzy
 msgid "Clear All"
 msgstr "Farvefyld"
 
-#: src/verbs.c:446
+#: src/verbs.c:461
 msgid "Delete all objects from document"
 msgstr ""
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 #, fuzzy
 msgid "Select All"
 msgstr "Vælg"
 
-#: src/verbs.c:447
+#: src/verbs.c:462
 #, fuzzy
 msgid "Select all objects in document"
 msgstr "Vend valgte ting"
 
 #. Selection
-#: src/verbs.c:449
+#: src/verbs.c:464
 #, fuzzy
 msgid "Bring to Front"
 msgstr "Hent til _front"
 
-#: src/verbs.c:449
+#: src/verbs.c:464
 #, fuzzy
 msgid "Raise selected objects to top"
 msgstr "Hæv det valgte op til toppen"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 #, fuzzy
 msgid "Send to Back"
 msgstr "Send til _baggrund"
 
-#: src/verbs.c:450
+#: src/verbs.c:465
 #, fuzzy
 msgid "Lower selected objects to bottom"
 msgstr "Sænk det valgte til bunden"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 #, fuzzy
 msgid "Raise"
 msgstr "Radius:"
 
-#: src/verbs.c:451
+#: src/verbs.c:466
 #, fuzzy
 msgid "Raise selected objects one position"
 msgstr "Hæv det valgte op til toppen"
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 msgid "Lower"
 msgstr ""
 
-#: src/verbs.c:452
+#: src/verbs.c:467
 #, fuzzy
 msgid "Lower selected objects one position"
 msgstr "Sænk det valgte til bunden"
 
-#: src/verbs.c:453
+#: src/verbs.c:468
 msgid "Group selected objects"
 msgstr "Gruppér valgte ting"
 
-#: src/verbs.c:454
+#: src/verbs.c:469
 #, fuzzy
 msgid "Ungroup selected group"
 msgstr "Deler valgte ting op"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 #, fuzzy
 msgid "Combine"
 msgstr "_Kombinér"
 
-#: src/verbs.c:455
+#: src/verbs.c:470
 #, fuzzy
 msgid "Combine multiple paths"
 msgstr "Forbind valgte stier"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 #, fuzzy
 msgid "Break Apart"
 msgstr "_Bryd op"
 
-#: src/verbs.c:456
+#: src/verbs.c:471
 #, fuzzy
 msgid "Break selected path to subpaths"
 msgstr "Opbryd valgte knude"
 
 #. Object
-#: src/verbs.c:458
+#: src/verbs.c:473
 #, fuzzy
 msgid "Rotate 90 degrees"
 msgstr "Sæt vinkel til 90°"
 
-#: src/verbs.c:458
+#: src/verbs.c:473
 #, fuzzy
 msgid "Rotates object 90 degrees clockwise"
 msgstr "Drej valgte ting 90° med uret"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 #, fuzzy
 msgid "Flatten object"
 msgstr "Vend valgte ting"
 
-#: src/verbs.c:459
+#: src/verbs.c:474
 #, fuzzy
 msgid "Remove transformations from object"
 msgstr "Fjern transformation"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 #, fuzzy
 msgid "Convert to Curves"
 msgstr "Konvertér til ku_rver"
 
-#: src/verbs.c:460
+#: src/verbs.c:475
 #, fuzzy
 msgid "Convert selected object to path"
 msgstr "Omform valgte ting til kurver"
 
-#: src/verbs.c:461
+#: src/verbs.c:476
 #, fuzzy
 msgid "Flip Horizontally"
 msgstr "vend vandret"
 
-#: src/verbs.c:462
+#: src/verbs.c:477
 #, fuzzy
 msgid "Flip selected objects horizontally"
 msgstr "Vend valgte ting"
 
-#: src/verbs.c:463
+#: src/verbs.c:478
 #, fuzzy
 msgid "Flip Vertically"
 msgstr "vend lodret"
 
-#: src/verbs.c:464
+#: src/verbs.c:479
 #, fuzzy
 msgid "Flip selected objects vertically"
 msgstr "Vend valgte ting"
 
 #. Event contexts
-#: src/verbs.c:466
+#: src/verbs.c:481
 msgid "Select"
 msgstr "Vælg"
 
-#: src/verbs.c:466
+#: src/verbs.c:481
 #, fuzzy
 msgid "Select and transform objects"
 msgstr "Vælg og transformér"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 #, fuzzy
 msgid "Node edit"
 msgstr "Noderedigering"
 
-#: src/verbs.c:467
+#: src/verbs.c:482
 msgid "Modify existing objects by control nodes"
 msgstr ""
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Rectangle"
 msgstr "Firkant"
 
-#: src/verbs.c:468
+#: src/verbs.c:483
 msgid "Create rectangles and squares with optional rounded corners"
 msgstr ""
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Ellipse"
 msgstr "Elipse"
 
-#: src/verbs.c:469
+#: src/verbs.c:484
 msgid "Create circles, ellipses and arcs"
 msgstr ""
 
-#: src/verbs.c:470
+#: src/verbs.c:485
 msgid "Create stars and polygons"
 msgstr ""
 
-#: src/verbs.c:471
+#: src/verbs.c:486
 #, fuzzy
 msgid "Create spirals"
 msgstr "Tegn spiral"
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 msgid "Pencil"
 msgstr ""
 
-#: src/verbs.c:472
+#: src/verbs.c:487
 #, fuzzy
 msgid "Draw freehand curves and straight lines"
 msgstr "Tegn frihåndslinje"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 #, fuzzy
 msgid "Pen"
 msgstr "Procent"
 
-#: src/verbs.c:473
+#: src/verbs.c:488
 msgid "Draw precisely positioned curved and straight lines"
 msgstr ""
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 msgid "Calligraphy"
 msgstr ""
 
-#: src/verbs.c:474
+#: src/verbs.c:489
 msgid "Draw calligraphic lines"
 msgstr ""
 
-#: src/verbs.c:475
+#: src/verbs.c:490
 msgid "Create and edit text objects"
 msgstr ""
 
-#: src/verbs.c:476
+#: src/verbs.c:491
 msgid "Zoom into precisely selected area"
 msgstr ""
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 msgid "Dropper"
 msgstr ""
 
-#: src/verbs.c:477
+#: src/verbs.c:492
 msgid "Pick averaged colors from image"
 msgstr ""
 
 #. Zooming
-#: src/verbs.c:479
+#: src/verbs.c:494
 #, fuzzy
 msgid "In"
 msgstr "Tommer"
 
-#: src/verbs.c:479
+#: src/verbs.c:494
 #, fuzzy
 msgid "Zoom in drawing"
 msgstr "Zoom til tegning"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 #, fuzzy
 msgid "Out"
 msgstr "Klip"
 
-#: src/verbs.c:480
+#: src/verbs.c:495
 #, fuzzy
 msgid "Zoom out drawing"
 msgstr "Zoom til tegning"
 
-#: src/verbs.c:481
+#: src/verbs.c:496
+#, fuzzy
+msgid "Toggle grid"
+msgstr "Skift kanter"
+
+#: src/verbs.c:497
+#, fuzzy
+msgid "Toggle guides"
+msgstr "Skift kanter"
+
+#: src/verbs.c:498
 msgid "1:1"
 msgstr "1:1"
 
-#: src/verbs.c:481
+#: src/verbs.c:498
 #, fuzzy
 msgid "Set zoom factor to 1:1"
 msgstr "Zoom til 1:1"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 msgid "1:2"
 msgstr "1:2"
 
-#: src/verbs.c:482
+#: src/verbs.c:499
 #, fuzzy
 msgid "Set zoom factor to 1:2"
 msgstr "Zoom til 1:2"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 msgid "2:1"
 msgstr "2:1"
 
-#: src/verbs.c:483
+#: src/verbs.c:500
 #, fuzzy
 msgid "Set zoom factor to 2:1"
 msgstr "Zoom til 2:1"
 
-#: src/verbs.c:484
+#: src/verbs.c:501
 msgid "Fit the whole page into window"
 msgstr ""
 
-#: src/verbs.c:485
+#: src/verbs.c:502
 msgid "Fit the whole drawing into window"
 msgstr ""
 
-#: src/verbs.c:486
+#: src/verbs.c:503
 msgid "Fit the whole selection into window"
 msgstr ""
 
 #. Dialogs
-#: src/verbs.c:488
+#: src/verbs.c:505
 msgid "Display"
 msgstr "Skærm"
 
-#: src/verbs.c:488
+#: src/verbs.c:505
 #, fuzzy
 msgid "Global display settings"
 msgstr "Indstillinger for skærm"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Document"
 msgstr "Dokument"
 
-#: src/verbs.c:489
+#: src/verbs.c:506
 msgid "Page layout"
 msgstr ""
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 msgid "Editing Window"
 msgstr ""
 
-#: src/verbs.c:490
+#: src/verbs.c:507
 #, fuzzy
 msgid "Editing window properties"
 msgstr "Egenskaber for lænke"
 
-#: src/verbs.c:491
+#: src/verbs.c:508
 #, fuzzy
 msgid "Tool Options"
 msgstr "Oaf valg"
 
-#: src/verbs.c:492
+#: src/verbs.c:509
 #, fuzzy
 msgid "Tool Attributes"
 msgstr "Attributter"
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 msgid "Fill and Stroke"
 msgstr ""
 
-#: src/verbs.c:493
+#: src/verbs.c:510
 #, fuzzy
 msgid "Fill and stroke settings"
 msgstr "Skrivebordets indstilinger"
 
-#: src/verbs.c:495
+#: src/verbs.c:512
 #, fuzzy
 msgid "Transformations"
 msgstr "Transformation"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 #, fuzzy
 msgid "Align and Distribute"
 msgstr "Attributter"
 
-#: src/verbs.c:496
+#: src/verbs.c:513
 #, fuzzy
 msgid "Align and distribute"
 msgstr "Tilføj attribut"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 #, fuzzy
 msgid "Text and Font"
 msgstr "Skrivebordets indstilinger"
 
-#: src/verbs.c:497
+#: src/verbs.c:514
 #, fuzzy
 msgid "Text editing and font settings"
 msgstr "Skrivebordets indstilinger"
 
-#: src/verbs.c:498
+#: src/verbs.c:515
 msgid "XML Editor"
 msgstr ""
 
@@ -2873,9 +2888,6 @@ msgstr "Værdi"
 #~ msgid "Symmetric "
 #~ msgstr "Symmetrisk"
 
-#~ msgid "Toggle Borders"
-#~ msgstr "Skift kanter"
-
 #~ msgid "Uncompressed file size:"
 #~ msgstr "Ukomprimeret filstørrelse:"
 
@@ -3073,9 +3085,6 @@ msgstr "Værdi"
 
 #~ msgid "_Open"
 #~ msgstr "_Åbn"
-
-#~ msgid "_Quit"
-#~ msgstr "_Afslut"
 
 #~ msgid "lower selection to bottom"
 #~ msgstr "Sænk det valgte til bunden"
