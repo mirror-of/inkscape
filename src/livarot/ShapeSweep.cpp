@@ -115,7 +115,7 @@ Shape::Reoriente (Shape * a)
     }
   for (int i = 0; i < nbPt; i++)
     {
-      _pts[i].oldDegree = getPoint(i).dI + getPoint(i).dO;
+      _pts[i].oldDegree = getPoint(i).totalDegree();
     }
   for (int i = 0; i < a->nbAr; i++)
     {
@@ -720,7 +720,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   for (int i = 0; i < nbPt; i++)
     {
-      _pts[i].oldDegree = getPoint(i).dI + getPoint(i).dO;
+      _pts[i].oldDegree = getPoint(i).totalDegree();
     }
 //      Validate();
 
@@ -1650,7 +1650,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   
   for (int i = 0; i < nbPt; i++)
     {
-      _pts[i].oldDegree = getPoint(i).dI + getPoint(i).dO;
+      _pts[i].oldDegree = getPoint(i).totalDegree();
     }
 
   _need_edges_sorting = true;
@@ -2352,7 +2352,7 @@ Shape::AssembleAretes (FillRule directed)
   }
   
   for (int i = 0; i < nbPt; i++) {
-    if (getPoint(i).dI + getPoint(i).dO == 2) {
+    if (getPoint(i).totalDegree() == 2) {
       int cb, cc;
       cb = getPoint(i).firstA;
       cc = getPoint(i).lastA;
@@ -2568,7 +2568,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 			outsideW = Winding (fi);
 		      }
 		  }
-    if ( getPoint(fi).dI + getPoint(fi).dO == 1 ) {
+    if ( getPoint(fi).totalDegree() == 1 ) {
       if ( fi == aretes[startBord].en ) {
         if ( eData[startBord].weight == 0 ) {
           // on se contente d'inverser

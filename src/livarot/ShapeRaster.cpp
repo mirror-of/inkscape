@@ -830,7 +830,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			if ( getPoint(nPt).dI+getPoint(nPt).dO == 2 ) {
+			if ( getPoint(nPt).totalDegree() == 2 ) {
 				cb=getPoint(nPt).firstA;
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
@@ -1012,7 +1012,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			if ( getPoint(nPt).dI+getPoint(nPt).dO == 2 ) {
+			if ( getPoint(nPt).totalDegree() == 2 ) {
 				cb=getPoint(nPt).firstA;
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
@@ -1158,7 +1158,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			if ( getPoint(nPt).dI+getPoint(nPt).dO == 2 ) {
+			if ( getPoint(nPt).totalDegree() == 2 ) {
 				cb=getPoint(nPt).firstA;
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
@@ -1313,7 +1313,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			if ( getPoint(nPt).dI+getPoint(nPt).dO == 2 ) {
+			if ( getPoint(nPt).totalDegree() == 2 ) {
 				cb=getPoint(nPt).firstA;
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
@@ -1481,7 +1481,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			if ( getPoint(nPt).dI+getPoint(nPt).dO == 2 ) {
+			if ( getPoint(nPt).totalDegree() == 2 ) {
 				cb=getPoint(nPt).firstA;
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
@@ -1622,7 +1622,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			if ( getPoint(nPt).dI+getPoint(nPt).dO == 2 ) {
+			if ( getPoint(nPt).totalDegree() == 2 ) {
 				cb=getPoint(nPt).firstA;
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;

@@ -52,10 +52,12 @@ public:
   // topological information: who links who?
   struct dg_point
   {
-    NR::Point x;			// position
+    NR::Point x;		// position
     int dI, dO;			// indegree and outdegree
     int firstA, lastA;		// first and last incident edge
     int oldDegree;
+
+    int totalDegree() const { return dI + dO; }
   };
   struct dg_arete
   {

@@ -424,7 +424,7 @@ Shape::SwapPoints (int a, int b)
 {
   if (a == b)
     return;
-  if (getPoint(a).dI + getPoint(a).dO == 2 && getPoint(b).dI + getPoint(b).dO == 2)
+  if (getPoint(a).totalDegree() == 2 && getPoint(b).totalDegree() == 2)
     {
       int cb = getPoint(a).firstA;
       if (aretes[cb].st == a)
@@ -1527,7 +1527,7 @@ Shape::SortEdges (void)
   edge_list *list = (edge_list *) g_malloc(nbAr * sizeof (edge_list));
   for (int p = 0; p < nbPt; p++)
     {
-      int d = getPoint(p).dI + getPoint(p).dO;
+      int const d = getPoint(p).totalDegree();
       if (d > 1)
 	{
 	  int cb;
@@ -2032,8 +2032,7 @@ Shape::Eulerian (bool directed)
     {
       for (int i = 0; i < nbPt; i++)
 	{
-	  int d = getPoint(i).dI + getPoint(i).dO;
-	  if (d % 2 == 1)
+	  if (getPoint(i).totalDegree() % 2 == 1)
 	    {
 	      return false;
 	    }

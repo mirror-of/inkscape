@@ -850,7 +850,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
     // first get the minimum distance to the points
     for (int i = 0; i < theRes->numberOfPoints(); i++)
     {
-      if (theRes->getPoint(i).dI + theRes->getPoint(i).dO > 0)
+      if (theRes->getPoint(i).totalDegree() > 0)
 	    {
         NR::Point nx = theRes->getPoint(i).x;
         NR::Point nxpx = px-nx;

@@ -741,9 +741,9 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
           dest->LineTo (getPoint(aretes[bord].en).x);
           bord = swdData[bord].suivParc;
         }
-	      if (bord >= 0 && getPoint(aretes[bord].st).dI + getPoint(aretes[bord].st).dO > 2 ) {
+	      if (bord >= 0 && getPoint(aretes[bord].st).totalDegree() > 2 ) {
           dest->ForcePoint ();
-        } else if ( bord >= 0 && getPoint(aretes[bord].st).oldDegree > 2 && getPoint(aretes[bord].st).dI + getPoint(aretes[bord].st).dO == 2)  {
+        } else if ( bord >= 0 && getPoint(aretes[bord].st).oldDegree > 2 && getPoint(aretes[bord].st).totalDegree() == 2)  {
           if ( splitWhenForced ) {
             // pour les coupures
             dest->ForcePoint ();
