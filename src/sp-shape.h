@@ -13,10 +13,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "display/curve.h"
-
+#include "display/display-forward.h"
 #include "sp-item.h"
-#include "sp-marker.h"
+#include "sp-marker-loc.h"
 
 
 
