@@ -58,7 +58,7 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (GDK_F1, SP_VERB_CONTEXT_SELECT, FALSE);
 	sp_shortcut_set_verb (GDK_s, SP_VERB_CONTEXT_SELECT, TRUE);
 	sp_shortcut_set_verb (GDK_S, SP_VERB_CONTEXT_SELECT, FALSE);
-	sp_shortcut_set_verb (GDK_space, SP_VERB_CONTEXT_SELECT, FALSE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_space, SP_VERB_CONTEXT_SELECT, FALSE);
 	sp_shortcut_set_verb (GDK_F2, SP_VERB_CONTEXT_NODE, FALSE);
 	sp_shortcut_set_verb (GDK_n, SP_VERB_CONTEXT_NODE, TRUE);
 	sp_shortcut_set_verb (GDK_N, SP_VERB_CONTEXT_NODE, FALSE);
