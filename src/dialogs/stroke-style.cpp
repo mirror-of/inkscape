@@ -309,7 +309,8 @@ sp_stroke_style_paint_update_repr (SPWidget *spw, SPRepr *repr)
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
 		sp_paint_selector_set_mode (psel, pselmode);
-		sp_paint_selector_set_color_alpha (psel, &style->stroke.value.color, style->stroke_opacity.value);
+		sp_paint_selector_set_color_alpha(psel, &style->stroke.value.color,
+						  SP_SCALE24_TO_FLOAT(style->stroke_opacity.value));
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 		/* fixme: Think about it (Lauris) */
