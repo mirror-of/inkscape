@@ -394,8 +394,7 @@ sp_selected_path_boolop (bool_op bop)
         // only one command, presumably a moveto: it isn't a path
         for (GSList *l = il; l != NULL; l = l->next)
         {
-            // FIXME: use mega-kill API
-            sp_repr_unparent (SP_OBJECT_REPR (l->data));
+		SP_OBJECT (l->data)->deleteObject();
         }
         sp_document_done (SP_DT_DOCUMENT (desktop));
         selection->clear();
@@ -429,8 +428,14 @@ sp_selected_path_boolop (bool_op bop)
     // remove source paths
     selection->clear();
     for (GSList *l = il; l != NULL; l = l->next) {
-        // FIXME: use mega-kill API
-        sp_repr_unparent (SP_OBJECT_REPR (l->data));
+        // if this is the bottommost object,
+        if (!strcmp (sp_repr_attr (SP_OBJECT_REPR (l->data), "id"), id)) {
+            // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
+            SP_OBJECT (l->data)->deleteObject(false);
+        } else {
+            // delete the object for real, so that its clones can take appropriate action
+            SP_OBJECT (l->data)->deleteObject();
+        }
     }
     g_slist_free (il);
 

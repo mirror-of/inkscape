@@ -103,8 +103,15 @@ sp_selected_path_combine (void)
 		dstring = g_string_append(dstring, str);
 		g_free (str);
 
-		// FIXME: use megakill API
-		sp_repr_unparent (SP_OBJECT_REPR (path));
+		// if this is the bottommost object,
+		if (!strcmp (sp_repr_attr (SP_OBJECT_REPR (path), "id"), id)) {
+			// delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
+			SP_OBJECT (path)->deleteObject(false);
+		} else {
+			// delete the object for real, so that its clones can take appropriate action
+			SP_OBJECT (path)->deleteObject();
+		}
+
 		topmost --;
 	}
 
