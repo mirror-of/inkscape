@@ -27,8 +27,7 @@
 class SPStarContext;
 class SPStarContextClass;
 
-struct SPStarContext {
-	SPEventContext event_context;
+struct SPStarContext : public SPEventContext {
 	SPItem *item;
 	NR::Point center;
 
