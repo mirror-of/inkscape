@@ -1,3 +1,12 @@
+2004-11-21  Kees Cook  <kees@outflux.net>
+
+	* src/sp-object.cpp, src/sp-metadata.cpp: added some debugging, and
+	  fixed a dumb error in my metadata _release handler.  Should mostly
+	  close bug 1069772.
+	* src/Makefile_insert, src/sp-skeleton.cpp, src/sp-skeleton.h:
+	  created some example SPObject implementations for a basis for any
+	  new SPObjects in the future.
+
 2004-11-20  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/extension/db.h, src/extension/db.cpp, src/dialogs/filedialog.cpp:

@@ -27,8 +27,19 @@
 #include "sp-object.h"
 #include "algorithms/longest-common-suffix.h"
 
-#define noSP_OBJECT_DEBUG
 #define noSP_OBJECT_DEBUG_CASCADE
+
+#define noSP_OBJECT_DEBUG
+
+#ifdef SP_OBJECT_DEBUG
+# define debug(f, a...) { g_print("%s(%d) %s:", \
+                                  __FILE__,__LINE__,__FUNCTION__); \
+                          g_print(f, ## a); \
+                          g_print("\n"); \
+                        }
+#else
+# define debug(f, a...) /**/
+#endif
 
 static void sp_object_class_init (SPObjectClass * klass);
 static void sp_object_init (SPObject * object);
@@ -139,9 +150,7 @@ sp_object_class_init (SPObjectClass * klass)
 static void
 sp_object_init (SPObject * object)
 {
-#ifdef SP_OBJECT_DEBUG
-	g_print("sp_object_init: id=%x, typename=%s\n", object, g_type_name_from_instance((GTypeInstance*)object));
-#endif
+	debug("id=%x, typename=%s",object, g_type_name_from_instance((GTypeInstance*)object));
 
 	object->hrefcount = 0;
 	object->_total_hrefcount = 0;
@@ -526,6 +535,7 @@ static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * r
 
 static void sp_object_remove_child (SPObject * object, SPRepr * child)
 {
+	debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
 	SPObject *ochild = sp_object_get_child_by_repr(object, child);
 	g_return_if_fail(ochild != NULL);
 	sp_object_detach_unref(object, ochild);
@@ -549,6 +559,7 @@ static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr *
 
 static void sp_object_release(SPObject *object)
 {
+	debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
 	while (object->children) {
 		sp_object_detach_unref(object, object->children);
 	}
@@ -562,9 +573,7 @@ static void
 sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 {
 	/* Nothing specific here */
-#ifdef SP_OBJECT_DEBUG
-	g_print("sp_object_build: id=%x, typename=%s\n", object, g_type_name_from_instance((GTypeInstance*)object));
-#endif
+	debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
 
 	sp_object_read_attr (object, "xml:space");
 	sp_object_read_attr (object, "inkscape:label");
@@ -584,9 +593,8 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 void
 sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr, unsigned int cloned)
 {
-#ifdef SP_OBJECT_DEBUG
-	g_print("sp_object_invoke_build: id=%x, typename=%s\n", object, g_type_name_from_instance((GTypeInstance*)object));
-#endif
+	debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
+
 	g_assert (object != NULL);
 	g_assert (SP_IS_OBJECT (object));
 	g_assert (document != NULL);

@@ -17,15 +17,17 @@
 
 #include "attributes.h"
 #include "sp-metadata.h"
-#include "sp-item-group.h"
 #include "xml/repr.h"
 #include "document.h"
 
-#undef DEBUG_METADATA
+#include "sp-item-group.h"
+
+#define noDEBUG_METADATA
 #ifdef DEBUG_METADATA
 # define debug(f, a...) { g_print("%s(%d) %s:", \
                                   __FILE__,__LINE__,__FUNCTION__); \
                           g_print(f, ## a); \
+                          g_print("\n"); \
                         }
 #else
 # define debug(f, a...) /**/
@@ -83,7 +85,7 @@ sp_metadata_class_init (SPMetadataClass *klass)
 static void
 sp_metadata_init (SPMetadata *metadata)
 {
-    debug("%s: 0x%08x",__FUNCTION__,(unsigned int)metadata);
+    debug("0x%08x",(unsigned int)metadata);
 }
 
 /*
@@ -95,7 +97,7 @@ sp_metadata_init (SPMetadata *metadata)
 static void
 sp_metadata_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
-    debug("%s: 0x%08x",__FUNCTION__,(unsigned int)object);
+    debug("0x%08x",(unsigned int)object);
     if (((SPObjectClass *) metadata_parent_class)->build)
         ((SPObjectClass *) metadata_parent_class)->build (object, document, repr);
 
@@ -122,7 +124,12 @@ sp_metadata_build (SPObject *object, SPDocument *document, SPRepr *repr)
 static void
 sp_metadata_release (SPObject *object)
 {
-    debug("%s: 0x%08x",__FUNCTION__,(unsigned int)object);
+    debug("0x%08x",(unsigned int)object);
+
+    /* handle ourself */
+
+    if (((SPObjectClass *) metadata_parent_class)->release)
+        ((SPObjectClass *) metadata_parent_class)->release (object);
 }
 
 /*
@@ -131,7 +138,8 @@ sp_metadata_release (SPObject *object)
 static void
 sp_metadata_set (SPObject *object, unsigned int key, const gchar *value)
 {
-    debug("%s: 0x%08x",__FUNCTION__,(unsigned int)object);
+    debug("0x%08x %s(%u): '%s'",(unsigned int)object,
+            sp_attribute_name(key),key,value);
     SPMetadata * metadata;
 
     metadata = SP_METADATA (object);
@@ -147,7 +155,7 @@ sp_metadata_set (SPObject *object, unsigned int key, const gchar *value)
 static void
 sp_metadata_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    debug("%s: 0x%08x",__FUNCTION__,(unsigned int)object);
+    debug("0x%08x",(unsigned int)object);
     //SPMetadata *metadata = SP_METADATA(object);
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -167,9 +175,10 @@ sp_metadata_update(SPObject *object, SPCtx *ctx, guint flags)
 static SPRepr *
 sp_metadata_write(SPObject *object, SPRepr *repr, guint flags)
 {
-    debug("%s: 0x%08x",__FUNCTION__,(unsigned int)object);
+    debug("0x%08x",(unsigned int)object);
     //SPMetadata *metadata = SP_METADATA(object);
 
+    // only create a repr when we're writing out an Inkscape SVG
     if (flags & SP_OBJECT_WRITE_EXT) {
         if (repr) {
             // is this sane?
