@@ -755,7 +755,7 @@ clonetiler_apply (GtkWidget *widget, void *)
 GtkWidget *
 clonetiler_new_tab (GtkWidget *nb, const gchar *label)
 {
-    GtkWidget *l = gtk_label_new (label);
+    GtkWidget *l = gtk_label_new_with_mnemonic (label);
     GtkWidget *vb = gtk_vbox_new (FALSE, VB_MARGIN);
     gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
     gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
@@ -964,7 +964,7 @@ clonetiler_dialog (void)
         gtk_box_pack_start (GTK_BOX (mainbox), nb, FALSE, FALSE, 0);
 
         {
-            GtkWidget *vb = clonetiler_new_tab (nb, _("Symmetry"));
+            GtkWidget *vb = clonetiler_new_tab (nb, _("_Symmetry"));
 
             GtkWidget *om = gtk_option_menu_new ();
             gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Select one of the 17 symmetry groups for the tiling"), NULL);
@@ -1018,7 +1018,7 @@ clonetiler_dialog (void)
         }
 
         {
-            GtkWidget *vb = clonetiler_new_tab (nb, _("Shift"));
+            GtkWidget *vb = clonetiler_new_tab (nb, _("S_hift"));
 
             GtkWidget *table = gtk_hbox_new (TRUE, 4);
             gtk_container_set_border_width (GTK_CONTAINER (table), 4);
@@ -1081,7 +1081,7 @@ clonetiler_dialog (void)
 
 
         {
-            GtkWidget *vb = clonetiler_new_tab (nb, _("Scale"));
+            GtkWidget *vb = clonetiler_new_tab (nb, _("Sc_ale"));
 
             GtkWidget *table = gtk_hbox_new (TRUE, 4);
             gtk_container_set_border_width (GTK_CONTAINER (table), 4);
@@ -1143,7 +1143,7 @@ clonetiler_dialog (void)
 
 
         {
-            GtkWidget *vb = clonetiler_new_tab (nb, _("Rotation"));
+            GtkWidget *vb = clonetiler_new_tab (nb, _("_Rotation"));
 
             GtkWidget *table = gtk_hbox_new (TRUE, 4);
             gtk_container_set_border_width (GTK_CONTAINER (table), 4);
@@ -1194,7 +1194,7 @@ clonetiler_dialog (void)
 
 
         {
-            GtkWidget *vb = clonetiler_new_tab (nb, _("Opacity"));
+            GtkWidget *vb = clonetiler_new_tab (nb, _("_Opacity"));
 
             GtkWidget *table = gtk_hbox_new (TRUE, 4);
             gtk_container_set_border_width (GTK_CONTAINER (table), 4);
@@ -1324,7 +1324,7 @@ clonetiler_dialog (void)
             {
                 GtkWidget *b = gtk_button_new ();
                 GtkWidget *l = gtk_label_new ("");
-                gtk_label_set_markup (GTK_LABEL(l), _(" <b>Create</b> "));
+                gtk_label_set_markup_with_mnemonic (GTK_LABEL(l), _(" <b>_Create</b> "));
                 gtk_container_add (GTK_CONTAINER(b), l);
                 gtk_tooltips_set_tip (tt, b, _("Create and tile the clones of the selection"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_apply), NULL);
@@ -1332,14 +1332,14 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *b = gtk_button_new_with_label (_(" Remove "));
+                GtkWidget *b = gtk_button_new_with_mnemonic (_(" Re_move "));
                 gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_remove), NULL);
                 gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
             }
 
             {
-                GtkWidget *b = gtk_button_new_with_label (_(" Reset "));
+                GtkWidget *b = gtk_button_new_with_mnemonic (_(" R_eset "));
                 gtk_tooltips_set_tip (tt, b, _("Reset all shifts, scales, rotates, and opacities to zero"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_reset), NULL);
                 gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
