@@ -557,10 +557,12 @@ static void
 setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     GtkTooltips *tooltips=GTK_TOOLTIPS(g_object_get_data(G_OBJECT(toolbox), "tooltips"));
+    gint shrinkLeft = prefs_get_int_attribute_limited( "toolbox.left", "small", 0, 0, 1 );
+    GtkIconSize toolboxSize = shrinkLeft ? GTK_ICON_SIZE_SMALL_TOOLBAR : GTK_ICON_SIZE_LARGE_TOOLBAR;
 
     for (int i = 0 ; tools[i].type_name ; i++ ) {
         GtkWidget *button =
-            sp_toolbox_button_new_from_verb_with_doubleclick( toolbox, GTK_ICON_SIZE_SMALL_TOOLBAR,
+            sp_toolbox_button_new_from_verb_with_doubleclick( toolbox, toolboxSize,
                                                               SP_BUTTON_TYPE_TOGGLE,
                                                               Inkscape::Verb::get(tools[i].verb),
                                                               Inkscape::Verb::get(tools[i].doubleclick_verb),
@@ -624,7 +626,7 @@ setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);
 
-    gint shrinkTop = prefs_get_int_attribute_limited( "toolbox", "small", 0, 0, 1 );
+    gint shrinkTop = prefs_get_int_attribute_limited( "toolbox", "small", 1, 0, 1 );
     GtkIconSize toolboxSize = shrinkTop ? GTK_ICON_SIZE_SMALL_TOOLBAR : GTK_ICON_SIZE_LARGE_TOOLBAR;
 
     sp_toolbox_button_new_from_verb(tb, toolboxSize, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_FILE_NEW), view, tt);
