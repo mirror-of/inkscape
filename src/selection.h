@@ -22,6 +22,8 @@
 #include "refcounted.h"
 #include "xml/xml-forward.h"
 
+#include <list>
+
 /**
  * @brief The set of selected SPObjects for a given desktop.
  *
@@ -177,6 +179,8 @@ public:
 	GSList const *list();
 	/** @brief Returns the list of selected SPItems */
 	GSList const *itemList();
+	/** @brief Appends selected SPItems to list */
+	void list(std::list<SPItem *> &l);
 	/** @brief Returns a list of the xml nodes of all selected objects */
 	// TODO only returns reprs of SPItems currently; need a separate
 	//      method for that

@@ -440,3 +440,35 @@ sp_icon_image_load_svg ( const gchar *name,
 
 } // end of sp_icon_image_load_svg()
 
+
+
+
+
+PixBufFactory::PixBufFactory()
+{}
+
+PixBufFactory & PixBufFactory::get()
+{
+  static PixBufFactory pbf;
+  return pbf;
+}
+
+const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getFromSVG(const ID &id)
+{
+  Glib::RefPtr<Gdk::Pixbuf> inMap = _map[id];
+  //cached, return
+  if (inMap) return inMap;
+
+  //not cached, loading
+  int size(id.size());
+  guchar *data = sp_icon_image_load_svg(id.id().c_str(), size, id.scale());
+  Glib::RefPtr<Gdk::Pixbuf> pixbuf = 
+    Gdk::Pixbuf::create_from_data (
+				   data, 
+				   Gdk::COLORSPACE_RGB, 
+				   true, 
+				   8, size, size, size*4);
+  _map[id]=pixbuf;
+  return pixbuf;
+}
+

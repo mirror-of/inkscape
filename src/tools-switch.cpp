@@ -103,6 +103,14 @@ tools_active (SPDesktop *dt)
 void
 tools_switch (SPDesktop *dt, int num)
 {
+
+  if (dt)
+    {
+      dt->_tool_changed.emit(num);
+    }
+  
+  
+  
 	switch (num) {
 	case TOOLS_SELECT:
 		sp_desktop_set_event_context (dt, SP_TYPE_SELECT_CONTEXT, tool_names[num]);

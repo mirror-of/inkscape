@@ -52,5 +52,50 @@ guchar *sp_icon_image_load (const gchar *name, unsigned int size, unsigned int s
 guchar *sp_icon_image_load_gtk (GtkWidget *widget, const gchar *name, unsigned int size, unsigned int scale);
 
 
+#include <glibmm/ustring.h>
+#include <gdkmm/pixbuf.h>
+#include <map>
+
+class PixBufFactory {
+  //Singleton class handling pixbufs from icons.svg
+public :
+  static PixBufFactory &get();
+  class ID {
+  public :
+    ID(Glib::ustring id, unsigned int size , unsigned int scale ):
+      _id(id), _size(size), _scale(scale) {}
+    Glib::ustring id() const {return _id;}
+    int size() const {return _size;}
+    int scale() const {return _scale;}
+  private :
+    Glib::ustring _id;
+    unsigned int _size;
+    unsigned int _scale;
+  };
+
+
+  const Glib::RefPtr<Gdk::Pixbuf> getFromSVG(const Glib::ustring &oid) {
+    ID id (oid, 20, 20);
+    return getFromSVG(id);
+  }
+  const Glib::RefPtr<Gdk::Pixbuf> getFromSVG(const ID &id);
+
+private :
+  PixBufFactory ();
+  struct cmpID
+  {
+    bool operator()(const ID &i1, const ID &i2) const
+    {
+      int cmp = i1.id().compare(i2.id());
+      if (cmp == 0)
+	{
+	  if (i1.size() == i2.size()) return i1.scale() < i2.scale() ;
+	  return i1.size() < i2.size();
+	}
+      return cmp < 0;
+    }
+  };
+  std::map<ID, Glib::RefPtr<Gdk::Pixbuf>, cmpID> _map;
+};
 
 #endif

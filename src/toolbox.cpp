@@ -154,8 +154,10 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
     if (handler) gtk_signal_connect (GTK_OBJECT (b), "clicked", handler, NULL);
     gtk_box_pack_start (GTK_BOX (t), b, FALSE, FALSE, 0);
 
+   
     return b;
 }
+
 
 GtkWidget *
 sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, sp_verb_t verb, SPView *view, GtkTooltips *tt)
@@ -167,6 +169,8 @@ sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType t
     GtkWidget *b = sp_button_new (size, type, action, tt);
     gtk_widget_show (b);
     gtk_box_pack_start (GTK_BOX (t), b, FALSE, FALSE, 0);
+
+
     return b;
 }
 

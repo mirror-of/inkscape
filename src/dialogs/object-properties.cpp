@@ -13,6 +13,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+
+
+
+
 #include <config.h>
 
 #include <glib.h>
@@ -342,3 +346,4 @@ void sp_object_properties_fill (void)
   End:
 */
 // vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+

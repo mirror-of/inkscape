@@ -34,7 +34,7 @@ class SPDesktopWidgetClass;
 #include "forward.h"
 #include "style.h"
 #include "view.h"
-
+#include "verbs.h"
 namespace Inkscape { class ObjectHierarchy; }
 
 enum ColorComponent {
@@ -71,22 +71,6 @@ struct StopOnTrue {
 };
 
 
-
-
-
-// the marshaler for the set_color signals
-/*
-struct StopOnTrue {
-      typedef bool InType;
-      typedef bool OutType;
-      OutType  return_value_;
-
-      OutType value() { return return_value_; }
-      static OutType default_value() { return false; }
-      bool marshal(const InType& val) { return_value_ = val; return val; }
-
-      StopOnTrue() : return_value_(false) {}
-};*/
 
 
 class SPSelection;
@@ -160,7 +144,7 @@ struct SPDesktop : public SPView {
 
 	sigc::signal<void, SPObject *> _layer_changed_signal;
 
-
+	sigc::signal<void, sp_verb_t> _tool_changed;
 
 
 	Inkscape::MessageContext *_guides_message_context;

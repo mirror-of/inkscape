@@ -15,6 +15,7 @@
 #include "desktop-handles.h"
 #include "xml/xml-forward.h"
 
+#include <list>
 
 /** Radial objects are represented by an angle and a distance from
  * 0,0.  0,0 is represented by a == big_num.
@@ -115,7 +116,8 @@ class Path {
 	NR::Matrix i2d, d2i;
 /**  The DOM node which describes this NodePath */
 	SPRepr *repr;
-	
+	//STL compliant method to get the selected nodes
+	void selection(std::list<Node *> &l);
 };
 
 
@@ -272,9 +274,15 @@ gboolean node_key (GdkEvent * event);
  */
 void sp_nodepath_update_statusbar (Path::Path *nodepath);
 
+/**
+ * Align selected nodes on the specified axis
+ */
+void sp_nodepath_selected_align(Path::Path *nodepath, NR::Dim2 axis);
 
-
-
+/**
+ * Distribute selected nodes on the specified axis
+ */
+void sp_nodepath_selected_distribute(Path::Path *nodepath, NR::Dim2 axis);
 
 /* possibly private functions */
 
@@ -339,6 +347,8 @@ void sp_nodepath_selected_nodes_rotate (Path::Path * nodepath, gdouble angle, in
 void sp_nodepath_selected_nodes_rotate_screen (Path::Path * nodepath, gdouble angle, int which);
 void sp_nodepath_selected_nodes_scale (Path::Path * nodepath, gdouble grow, int which);
 void sp_nodepath_selected_nodes_scale_screen (Path::Path * nodepath, gdouble grow, int which);
+
+
 
 
 

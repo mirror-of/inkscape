@@ -33,6 +33,9 @@
 #include "inkscape.h"
 #include "xml/repr.h"
 
+
+#include "helper/stlport.h"
+
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
 SPSelection::SPSelection(SPDesktop *desktop)
@@ -197,6 +200,14 @@ void SPSelection::clear() {
 
 GSList const *SPSelection::list() {
     return _objs;
+}
+
+
+
+void SPSelection::list(std::list<SPItem *> &l)
+{
+    StlConv<SPItem *>::slist(l, itemList());
+//TODO : this adds a copying, rework when the selection becomes a stl list
 }
 
 GSList const *SPSelection::itemList() {

@@ -11,6 +11,69 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm/container.h>
+#include <gtkmm/buttonbox.h>
+#include <gtkmm/image.h>
+
+
+#include "dialogs/dockable.h"
+#include "dialogs/find.h"
+#include "widgets/icon.h"
+#include "dialogs/docker.h"
+
+
+
+
+class DialogFind : public Dockable
+{
+public :
+    static DialogFind & get();
+    void present();
+    virtual Gtk::Container & get_main_widget() {return _widget;}
+
+private :
+    DialogFind();    
+    virtual ~DialogFind(){};
+    Gtk::VBox _widget;
+    Docker *_pDocker;
+
+};
+
+
+
+GtkWidget *sp_find_dialog(){
+    DialogFind::get().present();
+    return NULL;
+}
+
+DialogFind::DialogFind():
+    Dockable("Find", "dialogs.find"),
+    _pDocker(0)
+{
+    PixBufFactory::ID id ("inkscape_options", 60, 60);
+    Gtk::Image*  pImage = 
+        Gtk::manage( new Gtk::Image(
+                         PixBufFactory::get().
+                         getFromSVG(id)));
+    _widget.pack_start(*pImage);
+    _widget.show_all();
+}
+
+DialogFind & DialogFind::get()
+{
+    static DialogFind &da = *(new DialogFind());    
+    return da;
+}
+void DialogFind::present()
+{
+    if ( !_pDocker)
+    {
+        _pDocker = new Docker();
+        _pDocker->dock(*this);
+    }
+    _pDocker->present(*this);
+}
+#if 0
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -684,3 +747,4 @@ sp_find_dialog (void)
   End:
 */
 // vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+#endif

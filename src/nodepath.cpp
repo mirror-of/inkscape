@@ -36,6 +36,8 @@
 #include "object-edit.h"
 #include "prefs-utils.h"
 
+#include "helper/stlport.h"
+
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 
@@ -751,7 +753,7 @@ static Path::Node *sp_nodepath_set_node_type(Path::Node *node, Path::NodeType ty
 	return node;
 }
 
-static void sp_node_moveto(Path::Node *node, NR::Point p)
+void sp_node_moveto(Path::Node *node, NR::Point p)
 {
 	NR::Point delta = p - node->pos;
 	node->pos = p;
@@ -910,6 +912,99 @@ static void sp_nodepath_ensure_ctrls(Path::Path *nodepath)
 	for (GList *l = nodepath->subpaths; l != NULL; l = l->next)
 		sp_nodepath_subpath_ensure_ctrls ((Path::SubPath *) l->data);
 }
+
+void Path::Path::selection(std::list<Node *> &l) 
+{
+  StlConv<Node *>::list(l, selected);
+//TODO : this adds a copying, rework when the selection becomes a stl list
+}
+
+void sp_nodepath_selected_align(Path::Path *nodepath, NR::Dim2 axis)
+{
+  if ( ! nodepath->selected->next ) return;
+  Path::Node *pNode = reinterpret_cast<Path::Node *>(nodepath->selected->data);
+  NR::Point dest(pNode->pos);
+  for (GList *l = nodepath->selected; l != NULL; l = l->next) 
+    {
+      pNode = reinterpret_cast<Path::Node *>(l->data);
+      if (pNode)
+	{
+	  dest[axis] = pNode->pos[axis];
+	  sp_node_moveto(pNode, dest);
+	}
+    }
+  if (axis == NR::X) 
+    {
+      update_repr_keyed (nodepath, "node:move:vertical");
+    }
+  else 
+    {
+      update_repr_keyed (nodepath, "node:move:horizontal");
+    }
+}
+
+struct NodeSort 
+{
+  Path::Node *_node;
+  NR::Coord _coord;
+  //TODO : use vectorof pointers instead of calling copy ctor
+  NodeSort(Path::Node *node, NR::Dim2 axis) :
+    _node(node), _coord (node->pos[axis])
+  {}
+  
+};
+
+bool operator< (const NodeSort &a, const NodeSort &b)
+{
+    return (a._coord < b._coord);
+}
+
+void sp_nodepath_selected_distribute(Path::Path *nodepath, NR::Dim2 axis)
+{
+  if ( ! (nodepath->selected->next && nodepath->selected->next->next) ) return;
+  Path::Node *pNode = reinterpret_cast<Path::Node *>(nodepath->selected->data);
+  std::vector<NodeSort> sorted;
+  for (GList *l = nodepath->selected; l != NULL; l = l->next) 
+    {
+      pNode = reinterpret_cast<Path::Node *>(l->data);
+      if (pNode)
+	{
+	  NodeSort n(pNode, axis);
+	  sorted.push_back(n);
+//	  dest[axis] = pNode->pos[axis];
+//	  sp_node_moveto(pNode, dest);
+	}
+    }
+  std::sort(sorted.begin(), sorted.end());
+  unsigned int len = sorted.size();
+  //overall bboxes span
+  float dist = (sorted.back()._coord -
+		sorted.front()._coord);
+  //new distance between each bbox
+  float step = (dist) / (len - 1);
+  float pos = sorted.front()._coord;
+  for ( std::vector<NodeSort> ::iterator it (sorted.begin());
+	it < sorted.end();
+	it ++ )
+    {
+      NR::Point dest((*it)._node->pos);
+      dest[axis] = pos;
+      sp_node_moveto((*it)._node, dest);
+      pos += step;
+    }
+
+
+  if (axis == NR::X) 
+    {
+      update_repr_keyed (nodepath, "node:move:horizontal");
+    }
+  else 
+    {
+      update_repr_keyed (nodepath, "node:move:vertical");
+    }
+}
+
+
 
 void
 sp_node_selected_add_node (void)
