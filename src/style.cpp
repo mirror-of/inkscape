@@ -1266,22 +1266,22 @@ sp_style_write_string (SPStyle *style, guint flags)
     marker_status("sp_style_write_string:  Writing markers");
     if (style->marker[SP_MARKER_LOC].set) {
         p += g_snprintf (p, c + BMAX - p, "marker:%s;", style->marker[SP_MARKER_LOC].value);
-    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
         p += g_snprintf (p, c + BMAX - p, "marker:none;");
     }
     if (style->marker[SP_MARKER_LOC_START].set) {
         p += g_snprintf (p, c + BMAX - p, "marker-start:%s;", style->marker[SP_MARKER_LOC_START].value);
-    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
         p += g_snprintf (p, c + BMAX - p, "marker-start:none;");
     }
     if (style->marker[SP_MARKER_LOC_MID].set) {
         p += g_snprintf (p, c + BMAX - p, "marker-mid:%s;", style->marker[SP_MARKER_LOC_MID].value);
-    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
         p += g_snprintf (p, c + BMAX - p, "marker-mid:none;");
     }
     if (style->marker[SP_MARKER_LOC_END].set) {
         p += g_snprintf (p, c + BMAX - p, "marker-end:%s;", style->marker[SP_MARKER_LOC_END].value);
-    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
         p += g_snprintf (p, c + BMAX - p, "marker-end:none;");
     }
 
@@ -1299,7 +1299,7 @@ sp_style_write_string (SPStyle *style, guint flags)
             }
             p += g_snprintf (p, c + BMAX - p, ";");
         }
-    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
         p += g_snprintf (p, c + BMAX - p, "stroke-dasharray:none;");
     }
 
@@ -1308,7 +1308,7 @@ sp_style_write_string (SPStyle *style, guint flags)
 		Inkscape::SVGOStringStream os;
         os << "stroke-dashoffset:" << style->stroke_dash.offset << ";";
 		p += g_strlcpy (p, os.str().c_str(), c + BMAX - p);
-    } else if (flags = SP_STYLE_FLAG_ALWAYS) {
+    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
         p += g_snprintf (p, c + BMAX - p, "stroke-dashoffset:0;");
     }
 
