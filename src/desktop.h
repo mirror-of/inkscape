@@ -115,15 +115,15 @@ SPItem *sp_desktop_group_at_point (SPDesktop const *desktop, NR::Point const p);
 
 NRRect *sp_desktop_get_display_area (SPDesktop *dt, NRRect *area);
 
-void sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float y1, float border);
-void sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom);
-void sp_desktop_zoom_relative (SPDesktop *dt, float cx, float cy, float zoom);
-void sp_desktop_zoom_relative_keep_point (SPDesktop *dt, float cx, float cy, float zoom);
+void sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, double y1, double border);
+void sp_desktop_zoom_absolute (SPDesktop *dt, double cx, double cy, double zoom);
+void sp_desktop_zoom_relative (SPDesktop *dt, double cx, double cy, double zoom);
+void sp_desktop_zoom_relative_keep_point (SPDesktop *dt, double cx, double cy, double zoom);
 void sp_desktop_zoom_page (SPDesktop *dt);
 void sp_desktop_zoom_page_width (SPDesktop *dt);
 void sp_desktop_zoom_drawing (SPDesktop *dt);
 void sp_desktop_zoom_selection (SPDesktop *dt);
-void sp_desktop_scroll_world (SPDesktop *dt, float dx, float dy);
+void sp_desktop_scroll_world (SPDesktop *dt, double dx, double dy);
 void sp_desktop_prev_zoom (SPDesktop *dt);
 void sp_desktop_next_zoom (SPDesktop *dt);
 
