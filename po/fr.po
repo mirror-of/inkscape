@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-07 20:23+0200\n"
+"POT-Creation-Date: 2004-06-07 21:43+0200\n"
 "PO-Revision-Date: 2004-04-02 20:41+0200\n"
 "Last-Translator: Frederic Rodrigo <f.rodrigo@tuxfamily.org>\n"
 "Language-Team: Français\n"
@@ -796,7 +796,7 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1034 src/dialogs/find.cpp:556
+#: src/dialogs/display-settings.cpp:1034 src/dialogs/find.cpp:558
 #, fuzzy
 msgid "Clones"
 msgstr "Fermer"
@@ -1151,117 +1151,119 @@ msgstr "Crée des spirales (F9)"
 msgid "Spirals"
 msgstr "Spirale"
 
-#: src/dialogs/find.cpp:541
+#. TRANSLATORS: polyline is a set of connected straight line segments
+#. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
+#: src/dialogs/find.cpp:543
 msgid "Search paths, lines, polylines"
 msgstr ""
 
-#: src/dialogs/find.cpp:541
+#: src/dialogs/find.cpp:543
 #, fuzzy
 msgid "Paths"
 msgstr "_Chemin"
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:548
 #, fuzzy
 msgid "Search text objects"
 msgstr "Objets sélectionnés"
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:548
 #, fuzzy
 msgid "Texts"
 msgstr "Texte"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:553
 msgid "Search groups"
 msgstr ""
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:553
 #, fuzzy
 msgid "Groups"
 msgstr "Grouper"
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:558
 msgid "Search clones"
 msgstr ""
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:563
 msgid "Search images"
 msgstr ""
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:563
 #, fuzzy
 msgid "Images"
 msgstr "Image"
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:568
 #, fuzzy
 msgid "Search offset objects"
 msgstr "Créer un d'objet offset dynamique"
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:568
 msgid "Offsets"
 msgstr ""
 
-#: src/dialogs/find.cpp:626
+#: src/dialogs/find.cpp:628
 #, fuzzy
 msgid "_Text: "
 msgstr "Texte"
 
-#: src/dialogs/find.cpp:626
+#: src/dialogs/find.cpp:628
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:627
+#: src/dialogs/find.cpp:629
 msgid "_ID: "
 msgstr ""
 
-#: src/dialogs/find.cpp:627
+#: src/dialogs/find.cpp:629
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:628
+#: src/dialogs/find.cpp:630
 #, fuzzy
 msgid "_Style: "
 msgstr " Style "
 
-#: src/dialogs/find.cpp:628
+#: src/dialogs/find.cpp:630
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:629
+#: src/dialogs/find.cpp:631
 #, fuzzy
 msgid "_Attribute: "
 msgstr "Attribut :"
 
-#: src/dialogs/find.cpp:629
+#: src/dialogs/find.cpp:631
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:642
+#: src/dialogs/find.cpp:644
 #, fuzzy
 msgid "Search in s_election"
 msgstr "Hauteur de le sélection"
 
-#: src/dialogs/find.cpp:646
+#: src/dialogs/find.cpp:648
 msgid "Limit search to the current selection"
 msgstr ""
 
-#: src/dialogs/find.cpp:655
+#: src/dialogs/find.cpp:657
 #, fuzzy
 msgid "_Clear"
 msgstr "Fermer"
 
-#: src/dialogs/find.cpp:655
+#: src/dialogs/find.cpp:657
 #, fuzzy
 msgid "Clear values"
 msgstr "Tout effacer"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:658
 #, fuzzy
 msgid "_Find"
 msgstr "Grille"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:658
 msgid "Select objects matching all of the fields you filled in"
 msgstr ""
 
@@ -2800,7 +2802,8 @@ msgstr ""
 msgid "Text (%s, %.5gpt)"
 msgstr "Texte (%s, %.5gpt)"
 
-#: src/sp-typeset.cpp:387
+#. TRANSLATORS: "typeset object" is a text that flows inside a shape
+#: src/sp-typeset.cpp:388
 #, fuzzy
 msgid "typeset object"
 msgstr "Objet texte"
@@ -2846,34 +2849,36 @@ msgstr ""
 "Un des objets n'est pas un chemin, impossible d'effectuer une opération "
 "booléenne."
 
-#: src/splivarot.cpp:536
+#. TRANSLATORS: "to outline" means "to convert stroke to path"
+#: src/splivarot.cpp:537
 #, fuzzy
 msgid "Select some paths to outline."
 msgstr "Sélectionner des chemins pour les grouper/dégrouper."
 
-#: src/splivarot.cpp:733
+#. TRANSLATORS: "to outline" means "to convert stroke to path"
+#: src/splivarot.cpp:735
 #, fuzzy
 msgid "No stroked paths to outline in the selection."
 msgstr "Pas de chemin à grouper/dégrouper dans la sélection."
 
-#: src/splivarot.cpp:820
+#: src/splivarot.cpp:822
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr ""
 "L'objet sélectionné n'est pas un chemin, impossible de grouper/dégrouper."
 
-#: src/splivarot.cpp:1019
+#: src/splivarot.cpp:1021
 msgid "Select some paths to inset/outset."
 msgstr "Sélectionner des chemins pour les grouper/dégrouper."
 
-#: src/splivarot.cpp:1225
+#: src/splivarot.cpp:1227
 msgid "No paths to inset/outset in the selection."
 msgstr "Pas de chemin à grouper/dégrouper dans la sélection."
 
-#: src/splivarot.cpp:1269
+#: src/splivarot.cpp:1271
 msgid "Select some paths to simplify."
 msgstr "Sélectionner les chemin à simplifier."
 
-#: src/splivarot.cpp:1362
+#: src/splivarot.cpp:1364
 msgid "No paths to simplify in the selection."
 msgstr "Pas de chemin simplifier dans la sélection."
 

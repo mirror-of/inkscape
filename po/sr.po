@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.39cvs20040603\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-07 20:23+0200\n"
+"POT-Creation-Date: 2004-06-07 21:43+0200\n"
 "PO-Revision-Date: 2004-06-03 19:37+0200\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -810,7 +810,7 @@ msgstr ""
 "сваки прозор помоћу дугмета у десном углу изнад траке за померање)"
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1034 src/dialogs/find.cpp:556
+#: src/dialogs/display-settings.cpp:1034 src/dialogs/find.cpp:558
 msgid "Clones"
 msgstr "Клонови"
 
@@ -1168,118 +1168,120 @@ msgstr "Исцртавање спирала (F9)"
 msgid "Spirals"
 msgstr "Спирала"
 
-#: src/dialogs/find.cpp:541
+#. TRANSLATORS: polyline is a set of connected straight line segments
+#. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
+#: src/dialogs/find.cpp:543
 msgid "Search paths, lines, polylines"
 msgstr ""
 
-#: src/dialogs/find.cpp:541
+#: src/dialogs/find.cpp:543
 #, fuzzy
 msgid "Paths"
 msgstr "_Линија"
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:548
 #, fuzzy
 msgid "Search text objects"
 msgstr "Изабране објекте"
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:548
 #, fuzzy
 msgid "Texts"
 msgstr "Текст"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:553
 msgid "Search groups"
 msgstr ""
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:553
 #, fuzzy
 msgid "Groups"
 msgstr "_Групиши"
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:558
 msgid "Search clones"
 msgstr ""
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:563
 msgid "Search images"
 msgstr ""
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:563
 #, fuzzy
 msgid "Images"
 msgstr "Адреса слике:"
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:568
 #, fuzzy
 msgid "Search offset objects"
 msgstr "Прављење објекта који се може динамички померати"
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:568
 #, fuzzy
 msgid "Offsets"
 msgstr "Размак:"
 
-#: src/dialogs/find.cpp:626
+#: src/dialogs/find.cpp:628
 #, fuzzy
 msgid "_Text: "
 msgstr "Текст"
 
-#: src/dialogs/find.cpp:626
+#: src/dialogs/find.cpp:628
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:627
+#: src/dialogs/find.cpp:629
 msgid "_ID: "
 msgstr ""
 
-#: src/dialogs/find.cpp:627
+#: src/dialogs/find.cpp:629
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:628
+#: src/dialogs/find.cpp:630
 #, fuzzy
 msgid "_Style: "
 msgstr "Стил"
 
-#: src/dialogs/find.cpp:628
+#: src/dialogs/find.cpp:630
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:629
+#: src/dialogs/find.cpp:631
 #, fuzzy
 msgid "_Attribute: "
 msgstr "Особина"
 
-#: src/dialogs/find.cpp:629
+#: src/dialogs/find.cpp:631
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:642
+#: src/dialogs/find.cpp:644
 #, fuzzy
 msgid "Search in s_election"
 msgstr "Висина избора"
 
-#: src/dialogs/find.cpp:646
+#: src/dialogs/find.cpp:648
 msgid "Limit search to the current selection"
 msgstr ""
 
-#: src/dialogs/find.cpp:655
+#: src/dialogs/find.cpp:657
 #, fuzzy
 msgid "_Clear"
 msgstr "_Затвори"
 
-#: src/dialogs/find.cpp:655
+#: src/dialogs/find.cpp:657
 #, fuzzy
 msgid "Clear values"
 msgstr "О_чисти све"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:658
 #, fuzzy
 msgid "_Find"
 msgstr "_Тражи..."
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:658
 msgid "Select objects matching all of the fields you filled in"
 msgstr ""
 
@@ -2815,7 +2817,8 @@ msgstr "Полигон са %d страна"
 msgid "Text (%s, %.5gpt)"
 msgstr "Текст (%s, %.5gpt)"
 
-#: src/sp-typeset.cpp:387
+#. TRANSLATORS: "typeset object" is a text that flows inside a shape
+#: src/sp-typeset.cpp:388
 #, fuzzy
 msgid "typeset object"
 msgstr "Изабране објекте"
@@ -2858,31 +2861,33 @@ msgid "One of the objects is not a path, cannot perform boolean operation."
 msgstr ""
 "Један од објеката није линија, није могуће применити буловску операцију."
 
-#: src/splivarot.cpp:536
+#. TRANSLATORS: "to outline" means "to convert stroke to path"
+#: src/splivarot.cpp:537
 msgid "Select some paths to outline."
 msgstr "Изаберите неке линије оивичавање."
 
-#: src/splivarot.cpp:733
+#. TRANSLATORS: "to outline" means "to convert stroke to path"
+#: src/splivarot.cpp:735
 msgid "No stroked paths to outline in the selection."
 msgstr "У избору нема исцртаних линија за оивичавање."
 
-#: src/splivarot.cpp:820
+#: src/splivarot.cpp:822
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr "Изабрани објекат није линија, не може да се скупља или шири."
 
-#: src/splivarot.cpp:1019
+#: src/splivarot.cpp:1021
 msgid "Select some paths to inset/outset."
 msgstr "Изаберите неку линију за скупљање или ширење."
 
-#: src/splivarot.cpp:1225
+#: src/splivarot.cpp:1227
 msgid "No paths to inset/outset in the selection."
 msgstr "У избору нема линија скупљање или ширење."
 
-#: src/splivarot.cpp:1269
+#: src/splivarot.cpp:1271
 msgid "Select some paths to simplify."
 msgstr "Изаберите неку линију за поједностављивање."
 
-#: src/splivarot.cpp:1362
+#: src/splivarot.cpp:1364
 msgid "No paths to simplify in the selection."
 msgstr "У избору нема линија за поједностављивање."
 
