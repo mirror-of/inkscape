@@ -462,8 +462,7 @@ sp_sel_trans_stamp (SPSelTrans * seltrans)
 	}
 }
 
-NRPoint *
-sp_sel_trans_point_desktop (SPSelTrans *seltrans, NRPoint *p)
+NRPoint *sp_sel_trans_point_desktop(SPSelTrans const *seltrans, NRPoint *p)
 {
 	g_return_val_if_fail (p != NULL, NULL);
 
@@ -473,8 +472,7 @@ sp_sel_trans_point_desktop (SPSelTrans *seltrans, NRPoint *p)
 	return p;
 }
 
-NRPoint *
-sp_sel_trans_origin_desktop (SPSelTrans *seltrans, NRPoint *p)
+NRPoint *sp_sel_trans_origin_desktop(SPSelTrans const *seltrans, NRPoint *p)
 {
 	g_return_val_if_fail (p != NULL, NULL);
 

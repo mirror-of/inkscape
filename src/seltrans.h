@@ -95,8 +95,13 @@ void sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrix *affine, NRPoint *n
 void sp_sel_trans_ungrab (SPSelTrans * seltrans);
 void sp_sel_trans_stamp (SPSelTrans * seltrans);
 
-NRPoint *sp_sel_trans_point_desktop (SPSelTrans *seltrans, NRPoint *p);
-NRPoint *sp_sel_trans_origin_desktop (SPSelTrans * seltrans, NRPoint *p);
+NRPoint *sp_sel_trans_point_desktop(SPSelTrans const *seltrans, NRPoint *p);
+NRPoint *sp_sel_trans_origin_desktop(SPSelTrans const *seltrans, NRPoint *p);
+
+inline NR::Point sp_sel_trans_point_desktop(SPSelTrans const *seltrans)
+{
+	return seltrans->point;
+}
 
 
 #endif

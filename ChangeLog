@@ -1,5 +1,10 @@
 2004-01-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/seltrans.h (sp_sel_trans_point_desktop): Add NR::Point version.
+
+	* src/seltrans.h, src/seltrans.cpp (sp_sel_trans_point_desktop,
+	sp_sel_trans_origin_desktop): Indicate that pointer isn't written through.
+
 	* src/node-context.cpp, src/select-context.cpp:
 	Make some globals static.
 
