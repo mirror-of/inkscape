@@ -19,7 +19,7 @@
 #include "forward.h"
 #include "sp-item.h"
 #include "libnr/nr-rect.h"
-#include "managed.h"
+#include "refcounted.h"
 #include "xml/xml-forward.h"
 
 /**
@@ -33,7 +33,7 @@
  * its children which might have been selected.
  *
  */
-class SPSelection : public Inkscape::Managed {
+class SPSelection : public Inkscape::Refcounted {
 public:
 	/**
 	 * Constructs an selection object, bound to a particular

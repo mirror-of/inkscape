@@ -1,5 +1,13 @@
 2004-06-23  MenTaLguY  <mental@rydia.net>
 
+	* src/Makefile_insert, src/desktop.cpp, src/managed.h,
+	  src/message-context.cpp, src/message-stack.h, src/refcounted.h,
+	  src/selection.h, src/view.cpp:
+
+	  Changed my mind.
+
+	  Inkscape::Managed is more properly called Inkscape::Refcounted
+
 	* src/libnrtype/Makefile_insert, src/libnrtype/codepages.h,
 	  src/libnrtype/cp1250.cpp, src/libnrtype/cp1251.cpp,
 	  src/libnrtype/cp1252.cpp, src/libnrtype/cp1253.cpp,

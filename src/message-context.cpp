@@ -19,12 +19,12 @@ namespace Inkscape {
 MessageContext::MessageContext(MessageStack *stack)
 : _stack(stack), _message_id(0)
 {
-    Managed::claim(_stack);
+    Refcounted::claim(_stack);
 }
 
 MessageContext::~MessageContext() {
     clear();
-    Managed::release(_stack);
+    Refcounted::release(_stack);
     _stack = NULL;
 }
 

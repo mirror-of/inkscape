@@ -65,7 +65,6 @@ libinkpre_a_SOURCES =	\
 	knot.cpp knot.h	\
 	knotholder.cpp knotholder.h	\
 	macros.h	\
-	managed.h \
 	marker-status.cpp marker-status.h	\
 	message.h \
 	message-context.cpp message-context.h \
@@ -81,6 +80,7 @@ libinkpre_a_SOURCES =	\
 	prefs-utils.cpp prefs-utils.h	\
 	print.cpp print.h	\
 	rect-context.cpp rect-context.h	\
+	refcounted.h \
 	require-config.h \
 	rubberband.cpp rubberband.h	\
 	satisfied-guide-cns.cpp satisfied-guide-cns.h	\

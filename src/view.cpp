@@ -168,7 +168,7 @@ void SPView::dispose(GObject *object) {
 	delete view->_legacy_message_context;
 	view->_legacy_message_context = NULL;
 
-	Inkscape::Managed::release(view->_message_stack);
+	Inkscape::Refcounted::release(view->_message_stack);
 	view->_message_stack = NULL;
 
 	if (view->doc) {
