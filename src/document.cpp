@@ -920,8 +920,9 @@ sp_document_partial_items_in_box (SPDocument *document, unsigned int dkey, NRRec
 	                           dkey, box, overlaps);
 }
 
-SPItem*
-sp_document_item_at_point (SPDocument *document, unsigned int key, NR::Point p, gboolean into_groups, SPItem *upto)
+SPItem *
+sp_document_item_at_point(SPDocument *document, unsigned const key, NR::Point const p,
+			  gboolean const into_groups, SPItem *upto)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
