@@ -26,7 +26,7 @@ ifeq ($(BUILD),cross)
 # CROSS COMPILER SETTINGS
 ###########################
 
-DTG = `date +%y%m%d.%H%M`
+DTG := $(shell date +%y%m%d.%H%M)
 
 CC      = i686-pc-mingw32-gcc
 CXX     = i686-pc-mingw32-g++
@@ -57,7 +57,7 @@ else
 
 
 # change me!!
-DTG = 20040108
+DTG := 20040108
 
 CC      = mingw32-gcc
 CXX     = mingw32-g++
