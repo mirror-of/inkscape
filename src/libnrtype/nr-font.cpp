@@ -21,6 +21,9 @@
 #include <libnr/nr-matrix-fns.h>
 #include "nr-font.h"
 
+/**
+ * Increments the reference count for the font.
+ */
 NRFont *
 nr_font_ref (NRFont *font)
 {
@@ -29,6 +32,9 @@ nr_font_ref (NRFont *font)
 	return font;
 }
 
+/**
+ * Decrements the reference count for the font, and if it hits zero, frees it.
+ */
 NRFont *
 nr_font_unref (NRFont *font)
 {
@@ -41,29 +47,44 @@ nr_font_unref (NRFont *font)
 	return NULL;
 }
 
+/**
+ * Retrieves the outline path for the glyph in the given font.
+ */
 NRBPath *
 nr_font_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *path, unsigned int ref)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_outline_get (font, glyph, path, ref);
 }
 
+/**
+ * Dereferences the font outline for the glyph
+ */
 void
 nr_font_glyph_outline_unref (NRFont *font, unsigned int glyph)
 {
 	((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_outline_unref (font, glyph);
 }
 
+/**
+ * Retrieves the NR::Point object for the given font and glyph
+ */
 NR::Point nr_font_glyph_advance_get (NRFont *font, unsigned int glyph)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_advance_get (font, glyph);
 }
 
+/**
+ * Retrieves the NRRect area for the given font and glyph
+ */
 NRRect *
 nr_font_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_area_get (font, glyph, area);
 }
 
+/**
+ * Creates a new rasterfont object from the given font object plus transform
+ */
 NRRasterFont *
 nr_rasterfont_new (NRFont *font, NR::Matrix transform)
 {
@@ -72,6 +93,10 @@ nr_rasterfont_new (NRFont *font, NR::Matrix transform)
 
 /* Generic implementation */
 
+/**
+ * Generic font structure consisting of a font, list of raster fonts, 
+ * and list of font BPath outlines.
+ */
 struct NRFontGeneric {
 	NRFont font;
 
@@ -80,6 +105,9 @@ struct NRFontGeneric {
 	NRBPath *outlines;
 };
 
+/**
+ * Creates a new generic font object for the given typeface, metrics, and transform
+ */
 NRFont *
 nr_font_generic_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
 {
@@ -97,6 +125,9 @@ nr_font_generic_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const tran
 	return (NRFont *) fg;
 }
 
+/**
+ * Frees the given font object, including its outlines and typeface
+ */
 void
 nr_font_generic_free (NRFont *font)
 {
@@ -113,6 +144,9 @@ nr_font_generic_free (NRFont *font)
 	nr_free (font);
 }
 
+/**
+ * Gets an outline path for the given font and glyph
+ */
 NRBPath *
 nr_font_generic_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *d, unsigned int ref)
 {
@@ -137,17 +171,27 @@ nr_font_generic_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *d,
 	return d;
 }
 
+/**
+ * No op
+ */
 void
 nr_font_generic_glyph_outline_unref (NRFont *font, unsigned int glyph)
 {
 	/* NOP by now */
 }
 
+/**
+ * Retrieves the horizontal positional advancement for the glyph in the
+ * given font.
+ */
 NR::Point nr_font_generic_glyph_advance_get (NRFont *font, unsigned int glyph)
 {
 	return (font->size / 1000.0) * ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->glyph_advance_get (font->face, glyph, font->metrics);
 }
 
+/**
+ * Gets the rectangular area that the glyph requires in the given font
+ */
 NRRect *
 nr_font_generic_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 {
@@ -161,6 +205,10 @@ nr_font_generic_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 	return !nr_rect_d_test_empty (area) ? area : NULL;
 }
 
+/**
+ * Creates a new generic raster font object for the given font and 
+ * transformation matrix.
+ */
 NRRasterFont *
 nr_font_generic_rasterfont_new (NRFont *font, NR::Matrix const transform)
 {
@@ -192,6 +240,9 @@ nr_font_generic_rasterfont_new (NRFont *font, NR::Matrix const transform)
 	return rf;
 }
 
+/**
+ * Frees the given list of raster font objects
+ */
 void
 nr_font_generic_rasterfont_free (NRRasterFont *rf)
 {
