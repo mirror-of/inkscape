@@ -10,6 +10,7 @@
  * This code is in public domain
  */
 
+#include <sigc++/sigc++.h>
 #include "event-context.h"
 #include "nodepath.h"
 #include "knotholder.h"
@@ -35,6 +36,8 @@ struct SPNodeContext {
 	gboolean rightalt;
 	gboolean leftctrl;
 	gboolean rightctrl;
+
+	SigC::Connection sel_changed_connection;
 };
 
 struct SPNodeContextClass {

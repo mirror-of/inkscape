@@ -110,9 +110,9 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 
 	sp_sel_trans_update_handles(*seltrans);
 
-	seltrans->selection = SP_DT_SELECTION (desktop);
-	g_signal_connect (G_OBJECT (seltrans->selection), "changed", G_CALLBACK (sp_sel_trans_sel_changed), seltrans);
-	g_signal_connect (G_OBJECT (seltrans->selection), "modified", G_CALLBACK (sp_sel_trans_sel_modified), seltrans);
+	seltrans->selection = SP_DT_SELECTION(desktop);
+
+	g_assert(seltrans->selection != NULL);
 
 	seltrans->norm = sp_canvas_item_new (SP_DT_CONTROLS (desktop),
 		SP_TYPE_CTRL,
@@ -148,11 +148,37 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 
 	seltrans->stamp_cache = NULL;
 	seltrans->item_bboxes = NULL;
+
+	/* we must call the constructors ourselves */
+	new (&seltrans->sel_changed_connection) SigC::Connection(
+		seltrans->selection->connectChanged(
+			SigC::bind(
+				SigC::slot(&sp_sel_trans_sel_changed),
+				(gpointer)seltrans
+			)
+		)
+	);
+	new (&seltrans->sel_modified_connection) SigC::Connection(
+		seltrans->selection->connectModified(
+			SigC::bind(
+				SigC::slot(&sp_sel_trans_sel_modified),
+				(gpointer)seltrans
+			)
+		)
+	);
+
 }
 
 void
 sp_sel_trans_shutdown (SPSelTrans *seltrans)
 {
+	seltrans->sel_changed_connection.disconnect();
+	seltrans->sel_modified_connection.disconnect();
+
+	/* destructors are not called automatically */
+	seltrans->sel_changed_connection.~Connection();
+	seltrans->sel_modified_connection.~Connection();
+
 	for (unsigned i = 0; i < 8; i++) {
 		if (seltrans->shandle[i]) {
 			g_object_unref (G_OBJECT (seltrans->shandle[i]));
@@ -181,10 +207,6 @@ sp_sel_trans_shutdown (SPSelTrans *seltrans)
 			gtk_object_destroy (GTK_OBJECT (seltrans->l[i]));
 			seltrans->l[i] = NULL;
 		}
-	}
-
-	if (seltrans->selection) {
-		sp_signal_disconnect_by_data (seltrans->selection, seltrans);
 	}
 
 	nr_free (seltrans->spp);

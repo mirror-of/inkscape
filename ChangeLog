@@ -1,3 +1,15 @@
+2004-04-19  MenTaLguY <mental@rydia.net>
+
+    * src/arc-context.h, src/arc-context.cpp, src/desktop.cpp, src/desktop.h,
+	  src/draw-context.cpp, src/draw-context.h, src/node-context.cpp,
+	  src/node-context.h, src/rect-context.cpp, src/rect-context.h,
+	  src/selection.cpp, src/selection.h, src/seltrans.cpp, src/seltrans.h,
+	  src/spiral-context.cpp, src/spiral-context.h, src/text-context.cpp,
+	  src/text-context.h, src/toolbox.cpp:
+
+	  migrated SPSelection to SigC++ signals (though it's a bit messy
+	  right now)
+
 2004-04-19  Peter  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/stroke-style.cpp: Cleanups: greater conformance to

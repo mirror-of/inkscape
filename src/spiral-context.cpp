@@ -112,6 +112,8 @@ sp_spiral_context_init (SPSpiralContext * spiral_context)
 	spiral_context->revo = 3.0;
 	spiral_context->exp = 1.0;
 	spiral_context->t0 = 0.0;
+
+	new (&spiral_context->sel_changed_connection) SigC::Connection();
 }
 
 static void
@@ -120,6 +122,9 @@ sp_spiral_context_dispose (GObject *object)
 	SPSpiralContext *sc = SP_SPIRAL_CONTEXT (object);
 
     SPEventContext *ec = SP_EVENT_CONTEXT (object);
+
+    sc->sel_changed_connection.disconnect();
+    sc->sel_changed_connection.~Connection();
 
 	/* fixme: This is necessary because we do not grab */
 	if (sc->item) sp_spiral_finish (sc);
@@ -240,9 +245,8 @@ sp_spiral_context_setup (SPEventContext *ec)
             }
         }
 
-        g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)),
-            "changed", G_CALLBACK (sp_spiral_context_selection_changed), sc);
-
+	sc->sel_changed_connection.disconnect();
+	sc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_spiral_context_selection_changed), (gpointer)sc));
 }
 
 static void
@@ -260,39 +264,6 @@ sp_spiral_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 		sc->t0 = (val) ? atof (val) : 0.0;
 		sc->t0 = CLAMP (sc->t0, 0.0, 0.999);
 	}
-}
-
-static gint
-sp_spiral_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event)
-{
-    SPDesktop *desktop = event_context->desktop;
-
-    gint ret = FALSE;
-
-    switch (event->type) {
-    case GDK_BUTTON_PRESS:
-        if (event->button.button == 1) {
-
-            // save drag origin
-            event_context->xp = (gint) event->button.x;
-            event_context->yp = (gint) event->button.y;
-            event_context->within_tolerance = true;
-
-            // remember clicked item, disregarding groups
-            event_context->item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
-
-            ret = TRUE;
-        }
-        break;
-        // motion and release are always on root (why?)
-    default:
-        break;
-    }
-
-    if (((SPEventContextClass *) parent_class)->item_handler)
-        ret = ((SPEventContextClass *) parent_class)->item_handler (event_context, item, event);
-
-    return ret;
 }
 
 static gint

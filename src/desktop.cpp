@@ -200,6 +200,8 @@ sp_desktop_init (SPDesktop *desktop)
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
     desktop->is_fullscreen = FALSE;
 #endif
+
+    new (&desktop->sel_modified_connection) SigC::Connection();
 }
 
 static void
@@ -220,7 +222,7 @@ sp_desktop_dispose (GObject *object)
     }
 
     if (dt->selection) {
-        g_object_unref (G_OBJECT (dt->selection));
+	dt->selection->unreference();
         dt->selection = NULL;
     }
 
@@ -233,6 +235,9 @@ sp_desktop_dispose (GObject *object)
 
     g_list_free (dt->zooms_past);
     g_list_free (dt->zooms_future);
+
+    dt->sel_modified_connection.disconnect();
+    dt->sel_modified_connection.~Connection();
 }
 
 static void
@@ -347,7 +352,13 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     desktop->doc2dt[5] = sp_document_height (document);
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
 
-    g_signal_connect (G_OBJECT (desktop->selection), "modified", G_CALLBACK (sp_desktop_selection_modified), desktop);
+    desktop->sel_modified_connection.disconnect();
+    desktop->sel_modified_connection = desktop->selection->connectModified(
+        SigC::bind(
+            SigC::slot(&sp_desktop_selection_modified),
+            desktop
+        )
+    );
 
     desktop->dkey = sp_item_display_key_new (1);
     NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (desktop))),
@@ -381,8 +392,10 @@ sp_desktop_prepare_shutdown (SPDesktop *dt)
         g_object_unref (G_OBJECT (ec));
     }
 
+    dt->sel_modified_connection.disconnect();
+
     if (dt->selection) {
-        g_object_unref (G_OBJECT (dt->selection));
+        dt->selection->unreference();
         dt->selection = NULL;
     }
 

@@ -32,6 +32,8 @@ struct SPArcContext {
 	SPItem * item;
 	NR::Point center;
 
+	SigC::Connection sel_changed_connection;
+
     SPKnotHolder *knot_holder;
     SPRepr *repr;
 

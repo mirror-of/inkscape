@@ -39,6 +39,7 @@
 
 static void sp_text_context_class_init (SPTextContextClass * klass);
 static void sp_text_context_init (SPTextContext * text_context);
+static void sp_text_context_dispose(GObject *obj);
 
 static void sp_text_context_setup (SPEventContext *ec);
 static void sp_text_context_finish (SPEventContext *ec);
@@ -83,9 +84,12 @@ sp_text_context_get_type (void)
 static void
 sp_text_context_class_init (SPTextContextClass * klass)
 {
+	GObjectClass *object_class=(GObjectClass *)klass;
 	SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
+
+	object_class->dispose = sp_text_context_dispose;
 
 	event_context_class->setup = sp_text_context_setup;
 	event_context_class->finish = sp_text_context_finish;
@@ -118,6 +122,20 @@ sp_text_context_init (SPTextContext *tc)
 	tc->nascent_object = 0;
 
 	tc->preedit_string = NULL;
+
+	new (&tc->sel_changed_connection) SigC::Connection();
+	new (&tc->sel_modified_connection) SigC::Connection();
+}
+
+static void
+sp_text_context_dispose(GObject *obj)
+{
+	SPTextContext *tc=SP_TEXT_CONTEXT(obj);
+	tc->sel_changed_connection.~Connection();
+	tc->sel_modified_connection.~Connection();
+	if (G_OBJECT_CLASS(parent_class)->dispose) {
+		G_OBJECT_CLASS(parent_class)->dispose(obj);
+	}
 }
 
 static void
@@ -153,14 +171,17 @@ sp_text_context_setup (SPEventContext *ec)
 		if (GTK_WIDGET_HAS_FOCUS (canvas)) {
 			sptc_focus_in (canvas, NULL, tc);
 		}
-
 	}
 
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
 
-	g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)), "changed", G_CALLBACK (sp_text_context_selection_changed), tc);
-	g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)), "modified", G_CALLBACK (sp_text_context_selection_modified), tc);
+	tc->sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(
+		SigC::bind(SigC::slot(&sp_text_context_selection_changed), tc)
+	);
+	tc->sel_modified_connection = SP_DT_SELECTION(desktop)->connectModified(
+		SigC::bind(SigC::slot(&sp_text_context_selection_modified), tc)
+	);
 
 	sp_text_context_selection_changed (SP_DT_SELECTION (desktop), tc);
 }

@@ -28,14 +28,7 @@
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
-enum {
-	CHANGED,
-	MODIFIED,
-	LAST_SIGNAL
-};
-
 static GObjectClass *parent_class;
-static guint selection_signals[LAST_SIGNAL] = { 0 };
 
 GType
 sp_selection_get_type() {
@@ -68,25 +61,7 @@ SPSelection::_class_init(SPSelectionClass *klass)
 
 	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
-	selection_signals [CHANGED] =  g_signal_new ("changed",
-						     G_TYPE_FROM_CLASS(klass),
-						     G_SIGNAL_RUN_FIRST,
-						     G_STRUCT_OFFSET (SPSelectionClass, changed),
-						     NULL, NULL,
-						     sp_marshal_NONE__NONE,
-						     G_TYPE_NONE, 0);
-	selection_signals [MODIFIED] = g_signal_new ("modified",
-						     G_TYPE_FROM_CLASS(klass),
-						     G_SIGNAL_RUN_FIRST,
-						     G_STRUCT_OFFSET (SPSelectionClass, modified),
-						     NULL, NULL,
-						     sp_marshal_NONE__UINT,
-						     G_TYPE_NONE, 1,
-						     G_TYPE_UINT);
-
 	object_class->dispose = &SPSelection::_dispose;
-
-	klass->changed = &SPSelection::_changed;
 }
 
 SPSelection::SPSelection()
@@ -115,11 +90,6 @@ SPSelection::_dispose(GObject *object)
 	SPSelection *selection=(SPSelection *)(object);
 	selection->~SPSelection();
 	G_OBJECT_CLASS(parent_class)->dispose(object);
-}
-
-void SPSelection::_changed(SPSelection *selection)
-{
-	inkscape_selection_changed(selection);
 }
 
 void
@@ -152,8 +122,7 @@ SPSelection::_idle_handler(SPSelection *selection)
 	guint flags = selection->_flags;
 	selection->_flags = 0;
 
-	/* Emit our own "modified" signal */
-	g_signal_emit (G_OBJECT (selection), selection_signals [MODIFIED], 0, flags);
+	selection->_modified_signal.emit(selection, flags);
 
 	/* Request "selection_modified" signal on Inkscape::Application */
 	inkscape_selection_modified (selection, flags);
@@ -174,6 +143,9 @@ void SPSelection::_clear()
 	}
 }
 
+// TODO : obviously SPSelection has no business touching the
+// status bar at all, really -- the _selection context_ should attach
+// a listener to the SPSelection and update the status bar based on that...
 void SPSelection::updateStatusbar()
 {
 	char const *when_selected = _("Click selection to toggle scale/rotation handles");
@@ -188,7 +160,9 @@ void SPSelection::updateStatusbar()
 }
 
 void SPSelection::invokeChanged() {
-	g_signal_emit(G_OBJECT (this), selection_signals [CHANGED], 0);
+	inkscape_selection_changed(this);
+
+	_changed_signal.emit(this);
 
 	if ( _desktop && tools_isactive(_desktop, TOOLS_SELECT) ) {
 		// this function gets called not only when selector is active!

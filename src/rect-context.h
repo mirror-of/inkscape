@@ -14,6 +14,7 @@
  * Released under GNU GPL
  */
 
+#include <sigc++/sigc++.h>
 #include "event-context.h"
 #include "knotholder.h"
 
@@ -36,6 +37,8 @@ struct SPRectContext {
 	
   	gdouble rx_ratio;	/* roundness ratio (x direction) */
   	gdouble ry_ratio;	/* roundness ratio (y direction) */
+
+	SigC::Connection sel_changed_connection;
 };
 
 struct SPRectContextClass {

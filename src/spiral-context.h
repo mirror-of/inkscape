@@ -14,6 +14,7 @@
  * Released under GNU GPL
  */
 
+#include <sigc++/sigc++.h>
 #include "knot.h"
 #include "event-context.h"
 #include "knotholder.h"
@@ -38,6 +39,7 @@ struct SPSpiralContext {
     SPKnotHolder *knot_holder;
     SPRepr *repr;
 
+    SigC::Connection sel_changed_connection;
 };
 
 struct SPSpiralContextClass {

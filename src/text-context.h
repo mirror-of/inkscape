@@ -14,6 +14,7 @@
  */
 
 /*  #include <gdk/gdkic.h> */
+#include <sigc++/sigc++.h>
 #include <gtk/gtkimcontext.h>
 #include "event-context.h"
 
@@ -28,6 +29,9 @@ class SPTextContextClass;
 
 struct SPTextContext {
 	SPEventContext event_context;
+
+	SigC::Connection sel_changed_connection;
+	SigC::Connection sel_modified_connection;
 
 	GtkIMContext *imc;
 

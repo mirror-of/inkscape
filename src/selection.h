@@ -13,6 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <sigc++/sigc++.h>
 #include "forward.h"
 #include "xml/repr.h"
 #include "libnr/nr-rect.h"
@@ -20,6 +21,18 @@
 struct SPSelection : public GObject {
 public:
 	SPDesktop *desktop() { return _desktop; }
+
+	SPSelection &reference() {
+		g_object_ref(this);
+		return *this;
+	}
+	SPSelection const &reference() const {
+		g_object_ref(const_cast<SPSelection *>(this));
+		return *this;
+	}
+	void unreference() const {
+		g_object_unref(const_cast<SPSelection *>(this));
+	}
 
 	void addItem(SPItem *item);
 	void addRepr(SPRepr *repr);
@@ -54,6 +67,13 @@ public:
 	static SPSelection *create(SPDesktop *desktop);
 	static GType gobject_type();
 
+	SigC::Connection connectChanged(SigC::Slot1<void, SPSelection *> slot) {
+		return _changed_signal.connect(slot);
+	}
+	SigC::Connection connectModified(SigC::Slot2<void, SPSelection *, guint> slot) {
+		return _modified_signal.connect(slot);
+	}
+
 private:
 	SPSelection();
 	~SPSelection();
@@ -67,7 +87,6 @@ private:
 	static gboolean _idle_handler(SPSelection *selection);
 	static void _item_modified(SPItem *item, guint flags, SPSelection *selection);
 	static void _release_item(SPItem *item, SPSelection *selection);
-	static void _changed(SPSelection *selection);
 
 	void _removeItemChildren(SPItem *item);
 	void _clear();
@@ -78,15 +97,13 @@ private:
 	SPDesktop *_desktop;
 	guint _flags;
 	guint _idle;
+
+	SigC::Signal1<void, SPSelection *> _changed_signal;
+	SigC::Signal2<void, SPSelection *, guint> _modified_signal;
 };
 
 struct SPSelectionClass {
 	GObjectClass parent_class;
-
-	void (* changed) (SPSelection *selection);
-
-	/* fixme: use fine granularity */
-	void (* modified) (SPSelection *selection, guint flags);
 };
 
 /* Constructor */

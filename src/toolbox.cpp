@@ -18,6 +18,7 @@
 
 #include <config.h>
 
+#include <sigc++/sigc++.h>
 #include <string.h>
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -134,6 +135,11 @@ static void update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontex
 static void setup_aux_toolbox (GtkWidget *toolbox, SPDesktop *desktop);
 static void update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 
+
+static void delete_connection(GObject *obj, SigC::Connection *connection) {
+	connection->disconnect();
+	delete connection;
+}
 
 static GtkWidget *
 sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, GtkSignalFunc handler, GtkTooltips *tt, const gchar *tip)
@@ -880,15 +886,10 @@ sp_star_toolbox_new (SPDesktop *desktop)
     gtk_widget_show_all (tbl);
     sp_set_font_size (tbl, AUX_FONT_SIZE);
 
-    g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)),
-            "changed", G_CALLBACK (sp_star_toolbox_selection_changed), tbl);
-
-
-    gtk_widget_show_all (tbl);
-    sp_set_font_size (tbl, AUX_FONT_SIZE);
-
-    g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)),
-            "changed", G_CALLBACK (sp_star_toolbox_selection_changed), tbl);
+    SigC::Connection *connection = new SigC::Connection(
+        SP_DT_SELECTION(desktop)->connectChanged(SigC::bind(SigC::slot(sp_star_toolbox_selection_changed), (GtkObject *)tbl))
+    );
+    g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 
     return tbl;
 }
@@ -1128,8 +1129,10 @@ sp_rect_toolbox_new (SPDesktop *desktop)
     gtk_widget_show_all (tbl);
     sp_set_font_size (tbl, AUX_FONT_SIZE);
 
-    g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)),
-            "changed", G_CALLBACK (sp_rect_toolbox_selection_changed), tbl);
+    SigC::Connection *connection = new SigC::Connection(
+        SP_DT_SELECTION(desktop)->connectChanged(SigC::bind(SigC::slot(sp_rect_toolbox_selection_changed), (GtkObject *)tbl))
+    );
+    g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 
     return tbl;
 }
@@ -1394,8 +1397,10 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
     gtk_widget_show_all (tbl);
     sp_set_font_size (tbl, AUX_FONT_SIZE);
 
-    g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)),
-            "changed", G_CALLBACK (sp_spiral_toolbox_selection_changed), tbl);
+    SigC::Connection *connection = new SigC::Connection(
+        SP_DT_SELECTION(desktop)->connectChanged(SigC::bind(SigC::slot(sp_spiral_toolbox_selection_changed), (GtkObject *)tbl))
+    );
+    g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 
     return tbl;
 }
@@ -1901,9 +1906,10 @@ sp_arc_toolbox_new (SPDesktop *desktop)
 
     }
 
-
-    g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)),
-            "changed", G_CALLBACK (sp_arc_toolbox_selection_changed), tbl);
+    SigC::Connection *connection = new SigC::Connection(
+        SP_DT_SELECTION(desktop)->connectChanged(SigC::bind(SigC::slot(sp_arc_toolbox_selection_changed), (GtkObject *)tbl))
+    );
+    g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 
     gtk_widget_show_all (tbl);
     sp_set_font_size (tbl, AUX_FONT_SIZE);

@@ -126,6 +126,8 @@ sp_node_context_init (SPNodeContext * node_context)
 	node_context -> rightalt = FALSE;
 	node_context -> leftctrl = FALSE;
 	node_context -> rightctrl = FALSE;
+
+	new (&node_context->sel_changed_connection) SigC::Connection();
 }
 
 static void
@@ -136,6 +138,9 @@ sp_node_context_dispose (GObject *object)
 
 	nc = SP_NODE_CONTEXT (object);
 	ec = SP_EVENT_CONTEXT (object);
+
+	nc->sel_changed_connection.disconnect();
+	nc->sel_changed_connection.~Connection();
 
 	if (nc->nodepath) {
 		sp_repr_remove_listener_by_data (nc->nodepath->repr, ec);
@@ -169,8 +174,8 @@ sp_node_context_setup (SPEventContext *ec)
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
 
-	g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)), 
-		"changed", G_CALLBACK (sp_node_context_selection_changed), nc);
+	nc->sel_changed_connection.disconnect();
+	nc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_node_context_selection_changed), (gpointer)nc));
 
 	item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
 

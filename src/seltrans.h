@@ -12,6 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <sigc++/sigc++.h>
 #include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
@@ -46,7 +47,10 @@ enum {
 
 struct SPSelTrans {
 	SPDesktop *desktop;
+
 	SPSelection *selection;
+	SigC::Connection sel_changed_connection;
+	SigC::Connection sel_modified_connection;
 
 	guint state : 1;
 	guint show : 1;

@@ -84,10 +84,8 @@ static void sp_rect_context_class_init(SPRectContextClass *klass)
 
     object_class->dispose = sp_rect_context_dispose;
 
-#if 1
     event_context_class->setup = sp_rect_context_setup;
     event_context_class->set = sp_rect_context_set;
-#endif
     event_context_class->root_handler  = sp_rect_context_root_handler;
     event_context_class->item_handler  = sp_rect_context_item_handler;
 }
@@ -106,15 +104,22 @@ static void sp_rect_context_init(SPRectContext *rect_context)
     event_context->item_to_select = NULL;
 
     rect_context->item = NULL;
+    rect_context->repr = NULL;
+    rect_context->knot_holder = NULL;
 
     rect_context->rx_ratio = 0.0;
     rect_context->ry_ratio = 0.0;
+
+    new (&rect_context->sel_changed_connection) SigC::Connection();
 }
 
 static void sp_rect_context_dispose(GObject *object)
 {
     SPRectContext *rc = SP_RECT_CONTEXT(object);
     SPEventContext *ec = SP_EVENT_CONTEXT(object);
+
+    rc->sel_changed_connection.disconnect();
+    rc->sel_changed_connection.~Connection();
 
     /* fixme: This is necessary because we do not grab */
     if (rc->item) {
@@ -227,8 +232,10 @@ static void sp_rect_context_setup(SPEventContext *ec)
         }
     }
 
-    g_signal_connect(G_OBJECT(SP_DT_SELECTION(ec->desktop)),
-                     "changed", G_CALLBACK(sp_rect_context_selection_changed), rc);
+    rc->sel_changed_connection.disconnect();
+    rc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(
+        SigC::bind(SigC::slot(&sp_rect_context_selection_changed), (gpointer)rc)
+    );
 
     sp_event_context_read(ec, "rx_ratio");
     sp_event_context_read(ec, "ry_ratio");

@@ -145,12 +145,18 @@ sp_draw_context_init(SPDrawContext *dc)
 
     dc->npoints = 0;
     dc->red_curve_is_valid=0x00;
+
+    new (&dc->sel_changed_connection) SigC::Connection();
+    new (&dc->sel_modified_connection) SigC::Connection();
 }
 
 static void
 sp_draw_context_dispose(GObject *object)
 {
     SPDrawContext *dc = SP_DRAW_CONTEXT(object);
+
+    dc->sel_changed_connection.~Connection();
+    dc->sel_modified_connection.~Connection();
 
     if (dc->grab) {
         sp_canvas_item_ungrab(dc->grab, GDK_CURRENT_TIME);
@@ -180,8 +186,12 @@ sp_draw_context_setup(SPEventContext *ec)
     dc->selection = SP_DT_SELECTION(dt);
 
     /* Connect signals to track selection changes */
-    g_signal_connect(G_OBJECT(dc->selection), "changed", G_CALLBACK(spdc_selection_changed), dc);
-    g_signal_connect(G_OBJECT(dc->selection), "modified", G_CALLBACK(spdc_selection_modified), dc);
+    dc->sel_changed_connection = dc->selection->connectChanged(
+        SigC::bind(SigC::slot(&spdc_selection_changed), dc)
+    );
+    dc->sel_modified_connection = dc->selection->connectModified(
+        SigC::bind(SigC::slot(&spdc_selection_modified), dc)
+    );
 
     /* Create red bpath */
     dc->red_bpath = sp_canvas_bpath_new(SP_DT_SKETCH(ec->desktop), NULL);
@@ -207,6 +217,9 @@ static void
 sp_draw_context_finish(SPEventContext *ec)
 {
     SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
+
+    dc->sel_changed_connection.disconnect();
+    dc->sel_modified_connection.disconnect();
 
     if (dc->grab) {
         sp_canvas_item_ungrab(dc->grab, GDK_CURRENT_TIME);

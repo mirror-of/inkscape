@@ -83,7 +83,7 @@ sp_arc_context_class_init (SPArcContextClass *klass)
 
 	object_class->dispose = sp_arc_context_dispose;
 
-    event_context_class->setup = sp_arc_context_setup;
+        event_context_class->setup = sp_arc_context_setup;
 	event_context_class->root_handler = sp_arc_context_root_handler;
 	event_context_class->item_handler = sp_arc_context_item_handler;
 }
@@ -102,12 +102,17 @@ static void sp_arc_context_init(SPArcContext *arc_context)
     event_context->item_to_select = NULL;
 
 	arc_context->item = NULL;
+
+	new (&arc_context->sel_changed_connection) SigC::Connection();
 }
 
 static void sp_arc_context_dispose(GObject *object)
 {
     SPEventContext *ec = SP_EVENT_CONTEXT (object);
 	SPArcContext *ac = SP_ARC_CONTEXT(object);
+
+    ac->sel_changed_connection.disconnect();
+    ac->sel_changed_connection.~Connection();
 
     if (ac->knot_holder) {
         sp_knot_holder_destroy (ac->knot_holder);
@@ -224,11 +229,10 @@ sp_arc_context_setup (SPEventContext *ec)
                 sp_repr_synthesize_events (repr, &shape_repr_events, ec);
             }
         }
-        g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)),
-            "changed", G_CALLBACK (sp_arc_context_selection_changed), ac);
 
+    ac->sel_changed_connection.disconnect();
+    ac->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_arc_context_selection_changed), (gpointer)ac));
 }
-
 
 static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {

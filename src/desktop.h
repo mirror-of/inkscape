@@ -24,6 +24,7 @@ class SPDesktopWidgetClass;
 #define SP_IS_DESKTOP_WIDGET(o) (GTK_CHECK_TYPE ((o), SP_TYPE_DESKTOP_WIDGET))
 #define SP_IS_DESKTOP_WIDGET_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_DESKTOP_WIDGET))
 
+#include <sigc++/sigc++.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
@@ -40,6 +41,7 @@ struct SPDesktop {
 
 	SPNamedView *namedview;
 	SPSelection *selection;
+	SigC::Connection sel_modified_connection;
 	SPEventContext *event_context;
 
 	unsigned int dkey;
