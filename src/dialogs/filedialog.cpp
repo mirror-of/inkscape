@@ -66,19 +66,39 @@ class SVGPreview : public Gtk::VBox
 
         bool setDocument(SPDocument *doc);
 
-        bool setFileName(const char *filename);
+        bool setFileName(Glib::ustring &fileName);
 
         bool setFromMem(const char *xmlBuffer);
 
-        bool set(const char *fileName, int dialogType);
+        bool set(Glib::ustring &fileName, int dialogType);
 
         bool setURI(URI &uri);
 
-    private:
+        /**
+         * Show image embedded in SVG
+         */
+        void showImage(Glib::ustring &fileName);
 
+        /**
+         * Show the "No preview" image
+         */
+        void showNoPreview();
+
+    private:
+        /**
+         * The svg document we are currently showing
+         */
         SPDocument *document;
 
+        /**
+         * The sp_svg_view widget
+         */
         GtkWidget *viewerGtk;
+
+        /**
+         * are we currently showing the "no preview" image?
+         */
+        bool showingNoPreview;
 
 };
 
@@ -107,12 +127,12 @@ bool SVGPreview::setDocument(SPDocument *doc)
     return true;
 }
 
-bool SVGPreview::setFileName(const char *filename)
+bool SVGPreview::setFileName(Glib::ustring &fileName)
 { 
-    SPDocument *doc = sp_document_new (filename, 0, 0);
+    SPDocument *doc = sp_document_new (fileName.c_str(), 0, 0);
     if (!doc)
         {
-        g_warning("SVGView: error loading document '%s'\n",filename);
+        g_warning("SVGView: error loading document '%s'\n",fileName.c_str());
         return false;
         }
 
@@ -140,71 +160,47 @@ bool SVGPreview::setFromMem(const char *xmlBuffer)
 
 
 
-bool SVGPreview::set(const char *fName, int dialogType)
+void SVGPreview::showImage(Glib::ustring &fileName)
 {
+    /*#####################################
+    # LET'S HAVE SOME FUN WITH SVG!
+    # Instead of just loading an image, why
+    # don't we make a lovely little svg and
+    # display it nicely?
+    #####################################*/
 
-    if (!g_file_test(fName, G_FILE_TEST_EXISTS))
-        return false;
+    //Arbitrary size of svg doc -- rather 'portrait' shaped
+    gint previewWidth  = 400;
+    gint previewHeight = 600;
 
-    if (dialogType == SVG_TYPES &&
-           (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz"))
-         )
-        {
-        bool retval = setFileName(fName);
-        return retval;
-        }
-    else if (/*(dialogType == IMPORT_TYPES || dialogType == EXPORT_TYPES) &&*/
-                 (
-                  g_str_has_suffix(fName, ".bmp" ) ||
-                  g_str_has_suffix(fName, ".gif" ) ||
-                  g_str_has_suffix(fName, ".jpg" ) ||
-                  g_str_has_suffix(fName, ".jpeg") ||
-                  g_str_has_suffix(fName, ".png" ) ||
-                  g_str_has_suffix(fName, ".tif" ) ||
-                  g_str_has_suffix(fName, ".tiff")
-                 )
-             )
-        {
+    //Get some image info. Smart pointer does not need to be deleted
+    Glib::RefPtr<Gdk::Pixbuf> img = Gdk::Pixbuf::create_from_file(fileName);
+    gint imgWidth  = img->get_width();
+    gint imgHeight = img->get_height();
 
-        /*#####################################
-        # LET'S HAVE SOME FUN WITH SVG!
-        # Instead of just loading an image, why
-        # don't we make a lovely little svg and
-        # display it nicely?
-        #####################################*/
+    //Find the minimum scale to fit the image inside the preview area
+    double scaleFactorX = (0.9 *(double)previewWidth)  / ((double)imgWidth);
+    double scaleFactorY = (0.9 *(double)previewHeight) / ((double)imgHeight);
+    double scaleFactor = scaleFactorX;
+    if (scaleFactorX > scaleFactorY)
+        scaleFactor = scaleFactorY;
 
-        //Arbitrary size of svg doc -- rather 'portrait' shaped
-        gint previewWidth  = 400;
-        gint previewHeight = 600;
+    //Now get the resized values
+    gint scaledImgWidth  = (int) (scaleFactor * (double)imgWidth);
+    gint scaledImgHeight = (int) (scaleFactor * (double)imgHeight);
 
-        //Get some image info. Smart pointer does not need to be deleted
-        Glib::RefPtr<Gdk::Pixbuf> img = Gdk::Pixbuf::create_from_file(fName);
-        gint imgWidth  = img->get_width();
-        gint imgHeight = img->get_height();
+    //center the image on the area
+    gint imgX = (previewWidth  - scaledImgWidth)  / 2;        
+    gint imgY = (previewHeight - scaledImgHeight) / 2;
 
-        //Find the minimum scale to fit the image inside the preview area
-        double scaleFactorX = (0.9 *(double)previewWidth)  / ((double)imgWidth);
-        double scaleFactorY = (0.9 *(double)previewHeight) / ((double)imgHeight);
-        double scaleFactor = scaleFactorX;
-        if (scaleFactorX > scaleFactorY)
-            scaleFactor = scaleFactorY;
+    //wrap a rectangle around the image
+    gint rectX      = imgX-1;        
+    gint rectY      = imgY-1;        
+    gint rectWidth  = scaledImgWidth +2;        
+    gint rectHeight = scaledImgHeight+2;        
 
-        //Now get the resized values
-        gint scaledImgWidth  = (int) (scaleFactor * (double)imgWidth);
-        gint scaledImgHeight = (int) (scaleFactor * (double)imgHeight);
-
-        //center the image on the area
-        gint imgX = (previewWidth  - scaledImgWidth)  / 2;        
-        gint imgY = (previewHeight - scaledImgHeight) / 2;
-
-        //wrap a rectangle around the image
-        gint rectX      = imgX-1;        
-        gint rectY      = imgY-1;        
-        gint rectWidth  = scaledImgWidth +2;        
-        gint rectHeight = scaledImgHeight+2;        
-
-        //Our template.  Modify to taste
-        gchar *xformat =
+    //Our template.  Modify to taste
+    gchar *xformat =
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
           "<svg\n"
           "xmlns=\"http://www.w3.org/2000/svg\"\n"
@@ -228,29 +224,35 @@ bool SVGPreview::set(const char *fName, int dialogType)
             "x=\"10\" y=\"26\">%d x %d</text>\n"
           "</svg>\n\n";
 
-        //Fill in the template
-        gchar *xmlBuffer = g_strdup_printf(xformat, 
-               previewWidth, previewHeight,
-               imgX, imgY, scaledImgWidth, scaledImgHeight,
-               fName,
-               rectX, rectY, rectWidth, rectHeight,
-               imgWidth, imgHeight);
+    //Fill in the template
+    gchar *xmlBuffer = g_strdup_printf(xformat, 
+           previewWidth, previewHeight,
+           imgX, imgY, scaledImgWidth, scaledImgHeight,
+           fileName.c_str(),
+           rectX, rectY, rectWidth, rectHeight,
+           imgWidth, imgHeight);
 
-        //g_message("%s\n", xmlBuffer);
+    //g_message("%s\n", xmlBuffer);
 
-        //now show it!
-        bool retval = setFromMem(xmlBuffer);
-        g_free(xmlBuffer);
-        return retval;
-        }
-    else
-        {
-        //Arbitrary size of svg doc -- rather 'portrait' shaped
-        gint previewWidth  = 300;
-        gint previewHeight = 600;
+    //now show it!
+    setFromMem(xmlBuffer);
+    g_free(xmlBuffer);
+}
 
-        //Our template.  Modify to taste
-        gchar *xformat =
+
+
+void SVGPreview::showNoPreview()
+{
+    //Are we already showing it?
+    if (showingNoPreview)
+        return;
+
+    //Arbitrary size of svg doc -- rather 'portrait' shaped
+    gint previewWidth  = 300;
+    gint previewHeight = 600;
+
+    //Our template.  Modify to taste
+    gchar *xformat =
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
           "<svg\n"
           "xmlns=\"http://www.w3.org/2000/svg\"\n"
@@ -321,15 +323,54 @@ bool SVGPreview::set(const char *fName, int dialogType)
           "x=\"190\" y=\"240\">%s</text>\n"
           "</svg>\n\n";
 
-        //Fill in the template
-        gchar *xmlBuffer = g_strdup_printf(xformat, 
-               previewWidth, previewHeight, _("No preview"));
+    //Fill in the template
+    gchar *xmlBuffer = g_strdup_printf(xformat, 
+           previewWidth, previewHeight, _("No preview"));
 
-        //g_message("%s\n", xmlBuffer);
+    //g_message("%s\n", xmlBuffer);
 
-        //now show it!
-        setFromMem(xmlBuffer);
-        g_free(xmlBuffer);
+    //now show it!
+    setFromMem(xmlBuffer);
+    g_free(xmlBuffer);
+    showingNoPreview = true;
+
+}
+
+bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
+{
+
+    if (!Glib::file_test(fileName, Glib::FILE_TEST_EXISTS))
+        return false;
+
+    gchar *fName = (gchar *)fileName.c_str();
+
+    if (dialogType == SVG_TYPES &&
+           (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz"))
+         )
+        {
+        bool retval = setFileName(fileName);
+        showingNoPreview = false;
+        return retval;
+        }
+    else if (/*(dialogType == IMPORT_TYPES || dialogType == EXPORT_TYPES) &&*/
+                 (
+                  g_str_has_suffix(fName, ".bmp" ) ||
+                  g_str_has_suffix(fName, ".gif" ) ||
+                  g_str_has_suffix(fName, ".jpg" ) ||
+                  g_str_has_suffix(fName, ".jpeg") ||
+                  g_str_has_suffix(fName, ".png" ) ||
+                  g_str_has_suffix(fName, ".tif" ) ||
+                  g_str_has_suffix(fName, ".tiff")
+                 )
+             )
+        {
+        showImage(fileName);
+        showingNoPreview = false;
+        return true;
+        }
+    else
+        {
+        showNoPreview();
         return false;
         }
 }
@@ -342,6 +383,7 @@ SVGPreview::SVGPreview()
     document = NULL;
     viewerGtk = NULL;
     set_size_request(150,150);
+    showingNoPreview = false;
 }
 
 SVGPreview::~SVGPreview()
@@ -522,11 +564,11 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
  */
 void FileOpenDialogImpl::updatePreviewCallback()
 {
-    gchar *fName = (gchar *)get_preview_filename().c_str();
-    if (!fName)
+    Glib::ustring fileName = get_preview_filename();
+    if (!fileName.c_str())
         return;
 
-    svgPreview.set(fName, dialogType);
+    svgPreview.set(fileName, dialogType);
     //leave the preview always on for now
     //bool retval = svgPreview.set(fName, dialogType);
     //set_preview_widget_active(retval);
@@ -802,11 +844,11 @@ class FileSaveDialogImpl : public FileSaveDialog, public Gtk::FileChooserDialog
  */
 void FileSaveDialogImpl::updatePreviewCallback()
 {
-    gchar *fName = (gchar *)get_preview_filename().c_str();
-    if (!fName)
+    Glib::ustring fileName = get_preview_filename();
+    if (!fileName.c_str())
         return;
 
-    bool retval = svgPreview.set(fName, dialogType);
+    bool retval = svgPreview.set(fileName, dialogType);
     set_preview_widget_active(retval);
 
 }
