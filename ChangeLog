@@ -1,5 +1,9 @@
 2004-01-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-svp-uncross.cpp (nr_segment_intersection): Mark some
+	pointer arguments as not being written through.
+	Add doc comment.
+
 	* src/selection-chemistry.cpp (sp_matrix_d_set_rotate):
 	Slight reduction in numerical error.
 	(Also rename variables from `angle' to `angle_degrees' in several

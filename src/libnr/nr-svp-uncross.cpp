@@ -48,7 +48,7 @@ static NRSVLSlice *nr_svl_slice_insert_sorted (NRSVLSlice *start, NRSVLSlice *sl
 static NRSVLSlice *nr_svl_slice_stretch_list (NRSVLSlice *slices, NRCoord y);
 
 static NR::Coord nr_vertex_segment_distance2 (NRVertex *v, NRVertex *s);
-static NR::Coord nr_segment_intersection (NRVertex *s0, NRVertex *s1, NR::Coord *x, NR::Coord *y);
+static NR::Coord nr_segment_intersection (NRVertex const *s0, NRVertex const *s1, NR::Coord *x, NR::Coord *y);
 
 #ifdef NR_EXTRA_CHECK
 static void
@@ -815,8 +815,15 @@ nr_vertex_segment_distance2 (NRVertex *vx, NRVertex *seg)
 	return dist2;
 }
 
+/**
+ * If s0 and s1 are parallel (or if s0 or s1 is zero-length) then return -SP_HUGE.
+ * Otherwise, set (*x, *y) to the intersection of the infinite lines
+ * described by s0 and s1, and return a non-negative value representing
+ * a sort of distance from that point to the closest of s0 and s1:
+ * 0.0 if the two segments really intersect, positive otherwise.
+ */
 static NR::Coord
-nr_segment_intersection (NRVertex *s0, NRVertex *s1, NR::Coord *x, NR::Coord *y)
+nr_segment_intersection (NRVertex const *s0, NRVertex const *s1, NR::Coord *x, NR::Coord *y)
 {
 	NR::Coord xba, yba, xdc, ydc, xac, yac;
 	NR::Coord d, numr, nums, r, s;
