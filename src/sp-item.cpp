@@ -929,3 +929,20 @@ sp_item_get_arenaitem (SPItem *item, unsigned int key)
 
 	return NULL;
 }
+
+int
+sp_item_repr_compare_position (SPItem * first, SPItem * second)
+{
+    SPRepr * parent;
+    int p1, p2;
+
+    parent = sp_repr_parent (SP_OBJECT_REPR (first));
+    g_assert (parent == sp_repr_parent (SP_OBJECT_REPR (second)));
+
+    p1 = sp_repr_position (SP_OBJECT_REPR (first));
+    p2 = sp_repr_position (SP_OBJECT_REPR (second));
+
+    if (p1 > p2) return 1;
+    if (p1 < p2) return -1;
+    return 0;
+}

@@ -200,4 +200,6 @@ NRMatrix *sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt, NRMatrix *trans
 gdouble sp_item_distance_to_svg_viewport (SPItem *item, gdouble distance, const SPUnit *unit);
 gdouble sp_item_distance_to_svg_bbox (SPItem *item, gdouble distance, const SPUnit *unit);
 
+int sp_item_repr_compare_position (SPItem * first, SPItem * second);
+
 #endif
