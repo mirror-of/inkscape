@@ -19,6 +19,7 @@
 #include <libnr/nr-values.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
+#include <libnr/nr-matrix-ops.h>
 
 #include <gtk/gtksignal.h>
 #include <gtk/gtkhbox.h>
@@ -493,103 +494,110 @@ sp_paint_selector_get_gradient_position_floatv (SPPaintSelector *psel, gfloat *p
 void
 sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient *lg, SPItem *item)
 {
-	gfloat p[4], gp[4];
-	NRMatrix fctm, gs2d, g2d, d2g, gs2g, g2gs;
-	NRRect fbb;
-	double e;
-	SPGradientUnits units;
-	SPGradientSpread spread;
-
 	g_return_if_fail (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR);
 
 	/* Units have to be set before position calculations */
+	SPGradientUnits units;
+	SPGradientSpread spread;
 	sp_paint_selector_get_gradient_properties (psel, &units, &spread);
 	sp_gradient_set_units (SP_GRADIENT (lg), units);
 	sp_gradient_set_spread (SP_GRADIENT (lg), spread);
-	/* Now position */
+
+	/* Get positions from the selector*/
+	gfloat p[4];
 	sp_paint_selector_get_gradient_position_floatv (psel, p);
+	NR::Point p1(p[0], p[1]);
+	NR::Point p2(p[2], p[3]);
+
 	/* Calculate raw gradient transform */
-	sp_item_invoke_bbox(item, &fbb, NR::identity(), TRUE);
-	sp_item_i2doc_affine (item, &fctm);
+	NRRect fbb_;
+	sp_item_invoke_bbox(item, &fbb_, NR::identity(), TRUE);
+	NR::Rect fbb(fbb_);
+
+	NR::Matrix fctm = sp_item_i2doc_affine (item);
+
+	NRMatrix gs2d;
 	sp_paint_selector_get_gradient_gs2d_matrix_f (psel, &gs2d);
-	sp_gradient_get_g2d_matrix_f (SP_GRADIENT (lg), &fctm, &fbb, &g2d);
-	nr_matrix_invert (&d2g, &g2d);
-	nr_matrix_multiply (&gs2g, &gs2d, &d2g);
+
+	NR::Matrix g2d = sp_gradient_get_g2d_matrix (SP_GRADIENT (lg), fctm, fbb);
+
+	NR::Matrix gs2g = NR::Matrix(gs2d) / g2d;
+
 	/* Normalize transform */
-	gp[0] = NR_MATRIX_DF_TRANSFORM_X (&gs2g, p[0], p[1]);
-	gp[1] = NR_MATRIX_DF_TRANSFORM_Y (&gs2g, p[0], p[1]);
-	gp[2] = NR_MATRIX_DF_TRANSFORM_X (&gs2g, p[2], p[3]);
-	gp[3] = NR_MATRIX_DF_TRANSFORM_Y (&gs2g, p[2], p[3]);
-	e = NR_MATRIX_DF_EXPANSION (&gs2g);
+	NR::Point gp1 = p1 * gs2g;
+	NR::Point gp2 = p2 * gs2g;
+
+	double e = NR::expansion(gs2g);
 	if (e < 0.001) e = 0.001;
-	gs2g.c[0] /= e;
-	gs2g.c[1] /= e;
-	gs2g.c[2] /= e;
-	gs2g.c[3] /= e;
-	gs2g.c[4] = 0.0;
-	gs2g.c[5] = 0.0;
-	nr_matrix_multiply (&gs2d, &gs2g, &g2d);
-	sp_gradient_set_gs2d_matrix_f (SP_GRADIENT (lg), &fctm, &fbb, &gs2d);
-	nr_matrix_invert (&g2gs, &gs2g);
-	p[0] = NR_MATRIX_DF_TRANSFORM_X (&g2gs, gp[0], gp[1]);
-	p[1] = NR_MATRIX_DF_TRANSFORM_Y (&g2gs, gp[0], gp[1]);
-	p[2] = NR_MATRIX_DF_TRANSFORM_X (&g2gs, gp[2], gp[3]);
-	p[3] = NR_MATRIX_DF_TRANSFORM_Y (&g2gs, gp[2], gp[3]);
-	sp_lineargradient_set_position (lg, p[0], p[1], p[2], p[3]);
+	gs2g[0] /= e;
+	gs2g[1] /= e;
+	gs2g[2] /= e;
+	gs2g[3] /= e;
+	gs2g[4] = 0.0;
+	gs2g[5] = 0.0;
+
+	gs2d = gs2g * NR::Matrix(g2d);
+	sp_gradient_set_gs2d_matrix (SP_GRADIENT (lg), fctm, fbb, gs2d);
+
+	p1 = gp1 * gs2g.inverse();
+	p2 = gp2 * gs2g.inverse();
+
+	sp_lineargradient_set_position (lg, p1[NR::X], p1[NR::Y], p2[NR::X], p2[NR::Y]);
 }
 
 void
 sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient *rg, SPItem *item)
 {
-	gfloat p[5], gp[4];
-	NRMatrix fctm, gs2d, g2d, d2g, gs2g, g2gs;
-	NRRect fbb;
-	double e;
-	SPGradientUnits units;
-	SPGradientSpread spread;
-
 	g_return_if_fail (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL);
 
+	SPGradientUnits units;
+	SPGradientSpread spread;
 	sp_paint_selector_get_gradient_properties (psel, &units, &spread);
 	sp_gradient_set_units (SP_GRADIENT (rg), units);
 	sp_gradient_set_spread (SP_GRADIENT (rg), spread);
+
 	/* Now position */
+	gfloat p[5];
 	sp_paint_selector_get_gradient_position_floatv (psel, p);
+	NR::Point p1(p[0], p[1]);
+	NR::Point p2(p[2], p[3]);
+	gdouble r = p[4];
+
 	/* Calculate raw gradient transform */
-	sp_item_invoke_bbox(item, &fbb, NR::identity(), TRUE);
-	sp_item_i2doc_affine (item, &fctm);
+	NRRect fbb_;
+	sp_item_invoke_bbox(item, &fbb_, NR::identity(), TRUE);
+	NR::Rect fbb(fbb_);
+
+	NR::Matrix fctm = sp_item_i2doc_affine (item);
+
+	NRMatrix gs2d;
 	sp_paint_selector_get_gradient_gs2d_matrix_f (psel, &gs2d);
-	sp_gradient_get_g2d_matrix_f (SP_GRADIENT (rg), &fctm, &fbb, &g2d);
-	nr_matrix_invert (&d2g, &g2d);
-	nr_matrix_multiply (&gs2g, &gs2d, &d2g);
+
+	NR::Matrix g2d = sp_gradient_get_g2d_matrix (SP_GRADIENT (rg), fctm, fbb);
+
+	NR::Matrix gs2g = NR::Matrix(gs2d) / g2d;
+
 	/* Normalize transform */
-	gp[0] = NR_MATRIX_DF_TRANSFORM_X (&gs2g, p[0], p[1]);
-	gp[1] = NR_MATRIX_DF_TRANSFORM_Y (&gs2g, p[0], p[1]);
-	gp[2] = NR_MATRIX_DF_TRANSFORM_X (&gs2g, p[2], p[3]);
-	gp[3] = NR_MATRIX_DF_TRANSFORM_Y (&gs2g, p[2], p[3]);
-#if 1
-	e = NR_MATRIX_DF_EXPANSION (&gs2g);
+	NR::Point gp1 = p1 * gs2g;
+	NR::Point gp2 = p2 * gs2g;
+
+	double e = NR::expansion(gs2g);
 	if (e < 0.001) e = 0.001;
-#else
-	e = 1.0;
-#endif
-	gs2g.c[0] /= e;
-	gs2g.c[1] /= e;
-	gs2g.c[2] /= e;
-	gs2g.c[3] /= e;
-#if 1
-	gs2g.c[4] = 0.0;
-	gs2g.c[5] = 0.0;
-#endif
-	nr_matrix_multiply (&gs2d, &gs2g, &g2d);
-	sp_gradient_set_gs2d_matrix_f (SP_GRADIENT (rg), &fctm, &fbb, &gs2d);
-	nr_matrix_invert (&g2gs, &gs2g);
-	p[0] = NR_MATRIX_DF_TRANSFORM_X (&g2gs, gp[0], gp[1]);
-	p[1] = NR_MATRIX_DF_TRANSFORM_Y (&g2gs, gp[0], gp[1]);
-	p[2] = NR_MATRIX_DF_TRANSFORM_X (&g2gs, gp[2], gp[3]);
-	p[3] = NR_MATRIX_DF_TRANSFORM_Y (&g2gs, gp[2], gp[3]);
-	p[4] *= e;
-	sp_radialgradient_set_position (rg, p[0], p[1], p[2], p[3], p[4]);
+	gs2g[0] /= e;
+	gs2g[1] /= e;
+	gs2g[2] /= e;
+	gs2g[3] /= e;
+	gs2g[4] = 0.0;
+	gs2g[5] = 0.0;
+
+	gs2d = gs2g * NR::Matrix(g2d);
+	sp_gradient_set_gs2d_matrix (SP_GRADIENT (rg), fctm, fbb, gs2d);
+
+	p1 = gp1 * gs2g.inverse();
+	p2 = gp2 * gs2g.inverse();
+	r *= e;
+
+	sp_radialgradient_set_position (rg, p1[NR::X], p1[NR::Y], p2[NR::X], p2[NR::Y], r);
 }
 
 static void
