@@ -1,3 +1,9 @@
+2005-04-01  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+    * src/style.cpp (sp_style_merge_from_dying_parent): New function to
+      combine the styles of the <use> element and its ghost child when
+      unlinking.
+    * src/sp-use.cpp: Use it.
+
 2005-03-31  Jon A. Cruz  <jon@joncruz.org>
     * src/ui/widget/panel.cpp, src/ui/widget/panel.h, src/path-prefix.h,
       src/dialogs/swatches.cpp, src/dialogs/swatches.h

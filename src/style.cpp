@@ -1,13 +1,16 @@
 #define __SP_STYLE_C__
 
+/** \file
+ * SPStyle-related functions.
+ */
 /*
- * SPStyle - a style object for SPItems
- *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Peter Moulder <pmoulder@mail.csse.monash.edu.au>
  *
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
+ * Copyright (C) 2005 Monash University
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -42,9 +45,16 @@
 #include "svg/stringstream.h"
 #include "xml/repr.h"
 #include "unit-constants.h"
+#include "isnan.h"
 
 namespace Inkscape {
 
+/**
+ * Parses a CSS url() specification; temporary hack until
+ * style stuff is redone.
+ * \param string the CSS string to parse
+ * \return a newly-allocated URL string (or NULL); free with g_free()
+ */
 gchar *parse_css_url(gchar const *string) {
     if (!string)
         return NULL;
@@ -368,7 +378,7 @@ sp_style_object_release(SPObject *object, SPStyle *style)
 
 
 /**
- *
+ * Returns a new SPStyle object with settings as per sp_style_clear().
  */
 SPStyle *
 sp_style_new()
@@ -389,7 +399,7 @@ sp_style_new()
 
 
 /**
- *
+ * Creates a new SPStyle object, and attaches it to the specified SPObject.
  */
 SPStyle *
 sp_style_new_from_object(SPObject *object)
@@ -647,7 +657,9 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
 
 
 /**
- *
+ * 1. Reset existing object style
+ * 2. Load current effective object style
+ * 3. Load i attributes from immediate parent (which has to be up-to-date)
  */
 void
 sp_style_read_from_object(SPStyle *style, SPObject *object)
@@ -1034,7 +1046,7 @@ is_css_ident_char(guchar const c)
 }
 
 /**
- * Parses a style="" string and merges it with an existing SPStyle
+ * Parses a style="" string and merges it with an existing SPStyle.
  */
 void
 sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
@@ -1142,66 +1154,73 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
     }
 }
 
+/** Indexed by SP_CSS_FONT_SIZE_blah. */
+static float const font_size_table[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
+
+static void
+sp_style_merge_font_size_from_parent(SPIFontSize &child, SPIFontSize const &parent)
+{
+    /* 'font-size' */
+    if (!child.set || child.inherit) {
+        /* Inherit the computed value.  Reference: http://www.w3.org/TR/SVG11/styling.html#Inheritance */
+        child.computed = parent.computed;
+    } else if (child.type == SP_FONT_SIZE_LITERAL) {
+        /* fixme: SVG and CSS do not specify clearly, whether we should use user or screen coordinates (Lauris) */
+        if (child.value < SP_CSS_FONT_SIZE_SMALLER) {
+            child.computed = font_size_table[child.value];
+        } else if (child.value == SP_CSS_FONT_SIZE_SMALLER) {
+            child.computed = parent.computed / 1.2;
+        } else if (child.value == SP_CSS_FONT_SIZE_LARGER) {
+            child.computed = parent.computed * 1.2;
+        } else {
+            /* Illegal value */
+        }
+    } else if (child.type == SP_FONT_SIZE_PERCENTAGE) {
+        /* Unlike most other lengths, percentage for font size is relative to parent computed value
+         * rather than viewport. */
+        child.computed = parent.computed * SP_F8_16_TO_FLOAT(child.value);
+    }
+}
 
 /**
- * Inherits properties from \a parent into \a style (per CSS, this is done only if the target is
- * not set or is equal to 'inherit'). Optionally copies the set flag from parent (used e.g. when
- * unlinking clones to inherit the style of the svg:use into the new object).
+ * Sets computed values in \a style, which may involve inheriting from (or in some other way
+ * calculating from) corresponding computed values of \a parent.
+ *
+ * References: http://www.w3.org/TR/SVG11/propidx.html shows what properties inherit by default.
+ * http://www.w3.org/TR/SVG11/styling.html#Inheritance gives general rules as to what it means to
+ * inherit a value.  http://www.w3.org/TR/REC-CSS2/cascade.html#computed-value is more precise
+ * about what the computed value is (not obvious for lengths).
+ *
+ * \pre \a parent's computed values are already up-to-date.
  */
 void
-sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent, bool inherit_set)
+sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
 {
     g_return_if_fail(style != NULL);
 
+    /* fixme: Check for existing callers that might pass null parent.  This should probably be
+       g_return_if_fail, or else we should make a best attempt to set computed values correctly
+       without having a parent (i.e. by assuming parent has initial values). */
     if (!parent)
         return;
 
     /* CSS2 */
     /* Font */
-    /* 'font-size' */
-    if (!style->font_size.set || style->font_size.inherit) {
-        /* I think inheriting computed value is correct here */
-        style->font_size.type = SP_FONT_SIZE_LENGTH;
-        style->font_size.computed = parent->font_size.computed;
-        if (inherit_set) 
-            style->font_size.set = parent->font_size.set;
-    } else if (style->font_size.type == SP_FONT_SIZE_LITERAL) {
-        static gfloat sizetable[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
-        /* fixme: SVG and CSS do not specify clearly, whether we should use user or screen coordinates (Lauris) */
-        if (style->font_size.value < SP_CSS_FONT_SIZE_SMALLER) {
-            style->font_size.computed = sizetable[style->font_size.value];
-        } else if (style->font_size.value == SP_CSS_FONT_SIZE_SMALLER) {
-            style->font_size.computed = parent->font_size.computed / 1.2;
-        } else if (style->font_size.value == SP_CSS_FONT_SIZE_LARGER) {
-            style->font_size.computed = parent->font_size.computed * 1.2;
-        } else {
-            /* Illegal value */
-        }
-    } else if (style->font_size.type == SP_FONT_SIZE_PERCENTAGE) {
-        /* fixme: SVG and CSS do no specify clearly, whether we should use parent or viewport values here (Lauris) */
-        /* it says the parent's. --mental */
-        style->font_size.computed = parent->font_size.computed * SP_F8_16_TO_FLOAT(style->font_size.value);
-    }
+    sp_style_merge_font_size_from_parent(style->font_size, parent->font_size);
 
     /* 'font-style' */
     if (!style->font_style.set || style->font_style.inherit) {
         style->font_style.computed = parent->font_style.computed;
-        if (inherit_set) 
-            style->font_style.set = parent->font_style.set;
     }
 
     /* 'font-variant' */
     if (!style->font_variant.set || style->font_variant.inherit) {
         style->font_variant.computed = parent->font_variant.computed;
-        if (inherit_set) 
-            style->font_variant.set = parent->font_variant.set;
     }
 
     /* 'font-weight' */
     if (!style->font_weight.set || style->font_weight.inherit) {
         style->font_weight.computed = parent->font_weight.computed;
-        if (inherit_set) 
-            style->font_weight.set = parent->font_weight.set;
     } else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_NORMAL) {
         /* fixme: This is unconditional, i.e. happens even if parent not present */
         style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
@@ -1226,8 +1245,6 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent, bo
     /* 'font-stretch' */
     if (!style->font_stretch.set || style->font_stretch.inherit) {
         style->font_stretch.computed = parent->font_stretch.computed;
-        if (inherit_set) 
-            style->font_stretch.set = parent->font_stretch.set;
     } else if (style->font_stretch.value == SP_CSS_FONT_STRETCH_NARROWER) {
         unsigned const parent_val = parent->font_stretch.computed;
         style->font_stretch.computed = (parent_val == SP_CSS_FONT_STRETCH_ULTRA_CONDENSED
@@ -1246,14 +1263,10 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent, bo
     /* text (css2) */
     if (!style->text_indent.set || style->text_indent.inherit) {
         style->text_indent.computed = parent->text_indent.computed;
-        if (inherit_set) 
-            style->text_indent.set = parent->text_indent.set;
     }
 
     if (!style->text_align.set || style->text_align.inherit) {
         style->text_align.computed = parent->text_align.computed;
-        if (inherit_set) 
-            style->text_align.set = parent->text_align.set;
     }
 
     if (!style->text_decoration.set || style->text_decoration.inherit) {
@@ -1261,59 +1274,41 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent, bo
         style->text_decoration.overline = parent->text_decoration.overline;
         style->text_decoration.line_through = parent->text_decoration.line_through;
         style->text_decoration.blink = parent->text_decoration.blink;
-        if (inherit_set) 
-            style->text_decoration.set = parent->text_decoration.set;
     }
 
     if (!style->line_height.set || style->line_height.inherit) {
         style->line_height.computed = parent->line_height.computed;
         style->line_height.normal = parent->line_height.normal;
-        if (inherit_set) 
-            style->line_height.set = parent->line_height.set;
     }
 
     if (!style->letter_spacing.set || style->letter_spacing.inherit) {
         style->letter_spacing.computed = parent->letter_spacing.computed;
         style->letter_spacing.normal = parent->letter_spacing.normal;
-        if (inherit_set) 
-            style->letter_spacing.set = parent->letter_spacing.set;
     }
 
     if (!style->word_spacing.set || style->word_spacing.inherit) {
         style->word_spacing.computed = parent->word_spacing.computed;
         style->word_spacing.normal = parent->word_spacing.normal;
-        if (inherit_set) 
-            style->word_spacing.set = parent->word_spacing.set;
     }
 
     if (!style->text_transform.set || style->text_transform.inherit) {
         style->text_transform.computed = parent->text_transform.computed;
-        if (inherit_set) 
-            style->text_transform.set = parent->text_transform.set;
     }
 
     if (!style->direction.set || style->direction.inherit) {
         style->direction.computed = parent->direction.computed;
-        if (inherit_set) 
-            style->direction.set = parent->direction.set;
     }
 
     if (!style->block_progression.set || style->block_progression.inherit) {
         style->block_progression.computed = parent->block_progression.computed;
-        if (inherit_set) 
-            style->block_progression.set = parent->block_progression.set;
     }
 
     if (!style->writing_mode.set || style->writing_mode.inherit) {
         style->writing_mode.computed = parent->writing_mode.computed;
-        if (inherit_set) 
-            style->writing_mode.set = parent->writing_mode.set;
     }
 
     if (!style->text_anchor.set || style->text_anchor.inherit) {
         style->text_anchor.computed = parent->text_anchor.computed;
-        if (inherit_set) 
-            style->text_anchor.set = parent->text_anchor.set;
     }
 
     if (style->opacity.inherit) {
@@ -1323,40 +1318,28 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent, bo
     /* Color */
     if (!style->color.set || style->color.inherit) {
         sp_style_merge_ipaint(style, &style->color, &parent->color);
-        if (inherit_set) 
-            style->color.set = parent->color.set;
     }
 
     /* Fill */
     if (!style->fill.set || style->fill.inherit || style->fill.currentcolor) {
         sp_style_merge_ipaint(style, &style->fill, &parent->fill);
-        if (inherit_set) 
-            style->fill.set = parent->fill.set;
     }
 
     if (!style->fill_opacity.set || style->fill_opacity.inherit) {
         style->fill_opacity.value = parent->fill_opacity.value;
-        if (inherit_set) 
-            style->fill_opacity.set = parent->fill_opacity.set;
     }
 
     if (!style->fill_rule.set || style->fill_rule.inherit) {
         style->fill_rule.computed = parent->fill_rule.computed;
-        if (inherit_set) 
-            style->fill_rule.set = parent->fill_rule.set;
     }
 
     /* Stroke */
     if (!style->stroke.set || style->stroke.inherit || style->stroke.currentcolor) {
         sp_style_merge_ipaint(style, &style->stroke, &parent->stroke);
-        if (inherit_set) 
-            style->stroke.set = parent->stroke.set;
     }
 
     if (!style->stroke_width.set || style->stroke_width.inherit) {
         style->stroke_width.computed = parent->stroke_width.computed;
-        if (inherit_set) 
-            style->stroke_width.set = parent->stroke_width.set;
     } else {
         /* Update computed value for any change in font inherited from parent. */
         double const em = style->font_size.computed;
@@ -1370,50 +1353,38 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent, bo
 
     if (!style->stroke_linecap.set || style->stroke_linecap.inherit) {
         style->stroke_linecap.computed = parent->stroke_linecap.computed;
-        if (inherit_set) 
-            style->stroke_linecap.set = parent->stroke_linecap.set;
     }
 
     if (!style->stroke_linejoin.set || style->stroke_linejoin.inherit) {
         style->stroke_linejoin.computed = parent->stroke_linejoin.computed;
-        if (inherit_set) 
-            style->stroke_linejoin.set = parent->stroke_linejoin.set;
     }
 
     if (!style->stroke_miterlimit.set || style->stroke_miterlimit.inherit) {
         style->stroke_miterlimit.value = parent->stroke_miterlimit.value;
-        if (inherit_set) 
-            style->stroke_miterlimit.set = parent->stroke_miterlimit.set;
     }
 
     if (!style->stroke_dasharray_set && parent->stroke_dasharray_set) {
+        /* TODO: This code looks wrong.  Why does the logic differ from the above properties?
+         * Similarly dashoffset below. */
         style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
         if (style->stroke_dash.n_dash > 0) {
             style->stroke_dash.dash = g_new(gdouble, style->stroke_dash.n_dash);
             memcpy(style->stroke_dash.dash, parent->stroke_dash.dash, style->stroke_dash.n_dash * sizeof(gdouble));
         }
-        if (inherit_set) 
-            style->stroke_dasharray_set = parent->stroke_dasharray_set;
     }
 
     if (!style->stroke_dashoffset_set && parent->stroke_dashoffset_set) {
         style->stroke_dash.offset = parent->stroke_dash.offset;
-        if (inherit_set) 
-            style->stroke_dashoffset_set = parent->stroke_dashoffset_set;
     }
 
     if (!style->stroke_opacity.set || style->stroke_opacity.inherit) {
         style->stroke_opacity.value = parent->stroke_opacity.value;
-        if (inherit_set) 
-            style->stroke_opacity.set = parent->stroke_opacity.set;
     }
 
     if (style->text && parent->text) {
         if (!style->text->font_family.set || style->text->font_family.inherit) {
             g_free(style->text->font_family.value);
             style->text->font_family.value = g_strdup(parent->text->font_family.value);
-            if (inherit_set) 
-                style->text->font_family.set = parent->text->font_family.set;
         }
     }
 
@@ -1422,9 +1393,438 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent, bo
         if (!style->marker[i].set || style->marker[i].inherit) {
             g_free(style->marker[i].value);
             style->marker[i].value = g_strdup(parent->marker[i].value);
-            if (inherit_set) 
-                style->marker[i].set = parent->marker[i].set;
         }
+    }
+}
+
+template <typename T>
+static void
+sp_style_merge_prop_from_dying_parent(T &child, T const &parent)
+{
+    if ( ( !(child.set) || child.inherit )
+         && parent.set && !(parent.inherit) )
+    {
+        child = parent;
+    }
+}
+
+static void
+sp_style_merge_string_prop_from_dying_parent(SPIString &child, SPIString const &parent)
+{
+    if ( ( !(child.set) || child.inherit )
+         && parent.set && !(parent.inherit) )
+    {
+        g_free(child.value);
+        child.value = g_strdup(parent.value);
+        child.set = parent.set;
+        child.inherit = parent.inherit;
+    }
+}
+
+static void
+sp_style_merge_paint_prop_from_dying_parent(SPStyle *style,
+                                            SPIPaint &child, SPIPaint const &parent)
+{
+    /* TODO: I haven't given this much attention.  See comments below about currentColor,
+       colorProfile, and relative URIs. */
+    if (!child.set || child.inherit || child.currentcolor) {
+        sp_style_merge_ipaint(style, &child, &parent);
+        child.set = parent.set;
+        child.inherit = parent.inherit;
+    }
+}
+
+static void
+sp_style_merge_rel_enum_prop_from_dying_parent(SPIEnum &child, SPIEnum const &parent,
+                                               unsigned const max_computed_val,
+                                               unsigned const smaller_val)
+{
+    /* We assume that min computed val is 0, contiguous up to max_computed_val,
+       then zero or more other absolute values, then smaller_val then larger_val. */
+    unsigned const min_computed_val = 0;
+    unsigned const larger_val = smaller_val + 1;
+    g_return_if_fail(min_computed_val < max_computed_val);
+    g_return_if_fail(max_computed_val < smaller_val);
+
+    if (parent.set && !parent.inherit) {
+        if (!child.set || child.inherit) {
+            child.value = parent.value;
+            child.set = parent.set;  // i.e. true
+            child.inherit = parent.inherit;  // i.e. false
+        } else if (child.value < smaller_val) {
+            /* Child has absolute value: leave as is. */
+        } else if ( ( child.value == smaller_val
+                      && parent.value == larger_val )
+                    || ( parent.value == smaller_val
+                         && child.value == larger_val ) )
+        {
+            child.set = false;
+            /* Note that this can result in a change in computed value in the rare case that
+               the parent's setting was a no-op (i.e. if the parent's parent's computed value
+               was already ultra-condensed or ultra-expanded).  However, I'd guess that the
+               change is for the better: I'd guess that if the properties were specified
+               relatively, then the intent is to counteract parent's effect. */
+        } else if (child.value == parent.value) {
+            /* Leave as is. */
+            /* It's unclear what to do if style and parent specify the same relative directive
+               (narrower or wider).  We can either convert to absolute specification or
+               coalesce to a single relative request (of half the strength of the original
+               pair).
+
+               Converting to a single level of relative specification is a better choice if the
+               newly-unlinked clone is itself cloned to other contexts (inheriting different
+               font stretchiness): it would preserve the effect that it will be narrower than
+               the inherited context in each case.  The disadvantage is that it will ~certainly
+               affect the computed value of the newly-unlinked clone. */
+        } else {
+            unsigned const parent_val = parent.computed;
+            child.value = ( child.value == smaller_val
+                            ? ( parent_val == min_computed_val
+                                ? parent_val
+                                : parent_val - 1 )
+                            : ( parent_val == max_computed_val
+                                ? parent_val
+                                : parent_val + 1 ) );
+            g_assert(child.value <= max_computed_val);
+            child.inherit = false;
+            g_assert(child.set);
+        }
+    }
+}
+
+template <typename LengthT>
+static void
+sp_style_merge_length_prop_from_dying_parent(LengthT &child, LengthT const &parent,
+                                             double const parent_child_em_ratio)
+{
+    if ( ( !(child.set) || child.inherit )
+         && parent.set && !(parent.inherit) )
+    {
+        child = parent;
+        switch (parent.unit) {
+            case SP_CSS_UNIT_EM:
+            case SP_CSS_UNIT_EX:
+                child.value *= parent_child_em_ratio;
+                // fixme: Have separate ex ratio parameter. Get x height from libnrtype or pango.
+                if (!isFinite(child.value)) {
+                    child.value = child.computed;
+                    child.unit = SP_CSS_UNIT_NONE;
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+static double
+get_relative_font_size_frac(SPIFontSize const &font_size)
+{
+    switch (font_size.type) {
+        case SP_FONT_SIZE_LITERAL: {
+            switch (font_size.value) {
+                case SP_CSS_FONT_SIZE_SMALLER:
+                    return 5.0 / 6.0;
+
+                case SP_CSS_FONT_SIZE_LARGER:
+                    return 6.0 / 5.0;
+
+                default:
+                    g_assert_not_reached();
+            }
+        }
+
+        case SP_FONT_SIZE_PERCENTAGE:
+            return SP_F8_16_TO_FLOAT(font_size.value);
+
+        case SP_FONT_SIZE_LENGTH:
+            g_assert_not_reached();
+    }
+    g_assert_not_reached();
+}
+
+/**
+ * Combine \a style and \a parent style specifications into a single style specification that
+ * preserves (as much as possible) the effect of the existing \a style being a child of \a parent.
+ *
+ * Called when the parent repr is to be removed (e.g. the parent is a \<use\> element that is being
+ * unlinked), in which case we copy/adapt property values that are explicitly set in \a parent,
+ * trying to retain the same visual appearance once the parent is removed.  Interesting cases are
+ * when there is unusual interaction with the parent's value (opacity, display) or when the value
+ * can be specified as relative to the parent computed value (font-size, font-weight etc.).
+ *
+ * Doesn't update computed values of \a style.  For correctness, you should subsequently call
+ * sp_style_merge_from_parent against the new parent (presumably \a parent's parent) even if \a
+ * style was previously up-to-date wrt \a parent.
+ *
+ * \pre \a parent's computed values are already up-to-date.
+ *   (\a style's computed values needn't be up-to-date.)
+ */
+void
+sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const parent)
+{
+    /*
+     * The general rule for each property is as follows:
+     *
+     *   If style is set to an absolute value, then leave it as is.
+     *
+     *   Otherwise (i.e. if style has a relative value):
+     *
+     *     If parent is set to an absolute value, then set style to the computed value.
+     *
+     *     Otherwise, calculate the combined relative value (e.g. multiplying the two percentages).
+     */
+
+    /* We do font-size first, to ensure that em size is up-to-date.
+     * fixme: We'll need to have more font-related things up the top once we're getting x-height
+     * from pango or libnrtype. */
+
+    /* Some things that allow relative specifications. */
+    {
+        /* font-size.  Note that we update the computed font-size of style,
+           to assist in em calculations later in this function. */
+        if (parent->font_size.set && !parent->font_size.inherit) {
+            if (!style->font_size.set || style->font_size.inherit) {
+                /* font_size inherits the computed value, so we can use the parent value
+                 * verbatim. */
+                style->font_size = parent->font_size;
+            } else if ( style->font_size.type == SP_FONT_SIZE_LENGTH ) {
+                /* Child already has absolute size (stored in computed value), so do nothing. */
+            } else if ( style->font_size.type == SP_FONT_SIZE_LITERAL
+                        && style->font_size.value < SP_CSS_FONT_SIZE_SMALLER ) {
+                /* Child already has absolute size, but we ensure that the computed value
+                   is up-to-date. */
+                unsigned const ix = style->font_size.value;
+                g_assert(ix < G_N_ELEMENTS(font_size_table));
+                style->font_size.computed = font_size_table[ix];
+            } else {
+                /* Child has relative size. */
+                double const child_frac(get_relative_font_size_frac(style->font_size));
+                style->font_size.set = true;
+                style->font_size.inherit = false;
+                style->font_size.computed = parent->font_size.computed * child_frac;
+
+                if ( ( parent->font_size.type == SP_FONT_SIZE_LITERAL
+                       && parent->font_size.value < SP_CSS_FONT_SIZE_SMALLER )
+                     || parent->font_size.type == SP_FONT_SIZE_LENGTH )
+                {
+                    /* Absolute value. */
+                    style->font_size.type = SP_FONT_SIZE_LENGTH;
+                    /* .value is unused for SP_FONT_SIZE_LENGTH. */
+                } else {
+                    /* Relative value. */
+                    double const parent_frac(get_relative_font_size_frac(parent->font_size));
+                    style->font_size.type = SP_FONT_SIZE_PERCENTAGE;
+                    style->font_size.value = SP_F8_16_FROM_FLOAT(parent_frac * child_frac);
+                }
+            }
+        }
+
+        /* 'font-stretch' */
+        sp_style_merge_rel_enum_prop_from_dying_parent(style->font_stretch,
+                                                       parent->font_stretch,
+                                                       SP_CSS_FONT_STRETCH_ULTRA_EXPANDED,
+                                                       SP_CSS_FONT_STRETCH_NARROWER);
+
+        /* font-weight */
+        sp_style_merge_rel_enum_prop_from_dying_parent(style->font_weight,
+                                                       parent->font_weight,
+                                                       SP_CSS_FONT_WEIGHT_900,
+                                                       SP_CSS_FONT_WEIGHT_LIGHTER);
+    }
+
+
+    /* Enum values that don't have any relative settings (other than `inherit'). */
+    {
+        SPIEnum SPStyle::*const fields[] = {
+            //nyi: SPStyle::clip_rule,
+            //nyi: SPStyle::color_interpolation,
+            //nyi: SPStyle::color_interpolation_filters,
+            //nyi: SPStyle::color_rendering,
+            &SPStyle::direction,
+            &SPStyle::fill_rule,
+            &SPStyle::font_style,
+            &SPStyle::font_variant,
+            //nyi: SPStyle::image_rendering,
+            //nyi: SPStyle::pointer_events,
+            //nyi: SPStyle::shape_rendering,
+            &SPStyle::stroke_linecap,
+            &SPStyle::stroke_linejoin,
+            &SPStyle::text_anchor,
+            //nyi: &SPStyle::text_rendering,
+            &SPStyle::visibility,
+            &SPStyle::writing_mode
+        };
+
+        for (unsigned i = 0; i < G_N_ELEMENTS(fields); ++i) {
+            SPIEnum SPStyle::*const fld = fields[i];
+            sp_style_merge_prop_from_dying_parent<SPIEnum>(style->*fld, parent->*fld);
+        }
+    }
+
+    /* A few other simple inheritance properties. */
+    {
+        sp_style_merge_prop_from_dying_parent<SPIScale24>(style->fill_opacity, parent->fill_opacity);
+        sp_style_merge_prop_from_dying_parent<SPIScale24>(style->stroke_opacity, parent->stroke_opacity);
+        sp_style_merge_prop_from_dying_parent<SPIFloat>(style->stroke_miterlimit, parent->stroke_miterlimit);
+
+        /* We currently treat text-decoration as if it were a simple inherited property (fixme).
+         * This code may need changing once we do the special fill/stroke inheritance mentioned by
+         * the spec.
+         */
+        sp_style_merge_prop_from_dying_parent<SPITextDecoration>(style->text_decoration,
+                                                                 parent->text_decoration);
+
+        //nyi: font-size-adjust,  // <number> | none | inherit
+        //nyi: glyph-orientation-horizontal,
+        //nyi: glyph-orientation-vertical,
+    }
+
+    /* Properties that involve length but are easy in other respects. */
+    {
+        /* The difficulty with lengths is that font-relative units need adjusting if the font
+         * varies between parent & child.
+         *
+         * Lengths specified in the existing child can stay as they are: its computed font
+         * specification should stay unchanged, so em & ex lengths should continue to mean the same
+         * size.
+         *
+         * Lengths specified in the dying parent in em or ex need to be scaled according to the
+         * ratio of em or ex size between parent & child.
+         */
+        double const parent_child_em_ratio = parent->font_size.computed / style->font_size.computed;
+
+        SPILength SPStyle::*const lfields[] = {
+            &SPStyle::stroke_width,
+            &SPStyle::text_indent
+        };
+        for (unsigned i = 0; i < G_N_ELEMENTS(lfields); ++i) {
+            SPILength SPStyle::*fld = lfields[i];
+            sp_style_merge_length_prop_from_dying_parent<SPILength>(style->*fld,
+                                                                    parent->*fld,
+                                                                    parent_child_em_ratio);
+        }
+
+        SPILengthOrNormal SPStyle::*const nfields[] = {
+            &SPStyle::letter_spacing,
+            &SPStyle::line_height,
+            &SPStyle::word_spacing
+        };
+        for (unsigned i = 0; i < G_N_ELEMENTS(nfields); ++i) {
+            SPILengthOrNormal SPStyle::*fld = nfields[i];
+            sp_style_merge_length_prop_from_dying_parent<SPILengthOrNormal>(style->*fld,
+                                                                            parent->*fld,
+                                                                            parent_child_em_ratio);
+        }
+
+        //nyi: &SPStyle::kerning: length or `auto'
+
+        /* fixme: Move stroke-dash and stroke-dash-offset here once they
+           can accept units. */
+    }
+
+    /* Properties that involve a URI but are easy in other respects. */
+    {
+        /* Could cause problems if original object was in another document and it used a relative
+           URL.  (At the time of writing, we don't allow hrefs to other documents, so this isn't a
+           problem yet.)  Paint properties also allow URIs. */
+        //nyi: cursor,   // may involve change in effect, but we can't do much better
+        //nyi: color-profile,
+
+        // Markers (marker-start, marker-mid, marker-end).
+        for (unsigned i = SP_MARKER_LOC; i < SP_MARKER_LOC_QTY; i++) {
+            sp_style_merge_string_prop_from_dying_parent(style->marker[i], parent->marker[i]);
+        }
+    }
+
+    /* CSS2 */
+    /* Font */
+
+    if (style->text && parent->text) {
+        sp_style_merge_string_prop_from_dying_parent(style->text->font_family,
+                                                     parent->text->font_family);
+    }
+
+    /* Properties that don't inherit by default.  Most of these need special handling. */
+    {
+        /*
+         * opacity's effect is cumulative; we set the new value to the combined effect.  We always
+         * convert explicit `inherit' to its computed value.  The default value for opacity is 1.0,
+         * not inherit.  (Note that stroke-opacity and fill-opacity are quite different from
+         * opacity, and don't need any special handling.)
+         */
+        if (style->opacity.inherit) {
+            style->opacity.value = parent->opacity.value;
+        }
+        style->opacity.value = SP_SCALE24_FROM_FLOAT(SP_SCALE24_TO_FLOAT(style->opacity.value) *
+                                                     SP_SCALE24_TO_FLOAT(parent->opacity.value) );
+
+        /* display is in principle similar to opacity, but implementation is easier. */
+        if ( parent->display.set && !parent->display.inherit
+                    && parent->display.value == SP_CSS_DISPLAY_NONE ) {
+            style->display.value = SP_CSS_DISPLAY_NONE;
+            style->display.set = true;
+            style->display.inherit = false;
+        } else if (style->display.inherit) {
+            style->display.value = parent->display.value;
+            style->display.set = parent->display.set;
+            style->display.inherit = parent->display.inherit;
+        } else {
+            /* Leave as is.  (display doesn't inherit by default.) */
+        }
+
+        /* fixme: Check that we correctly handle all properties that don't inherit by default
+         * (as shown in http://www.w3.org/TR/SVG11/propidx.html for most SVG 1.1 properties).
+         */
+    }
+
+    /* SPIPaint properties (including color). */
+    {
+        /* TODO: Think about the issues involved if specified as currentColor or if specified
+           relative to colorProfile, and if the currentColor or colorProfile differs between parent
+           & child.  See also comments elsewhere in this function about URIs. */
+        SPIPaint SPStyle::*const fields[] = {
+            &SPStyle::color,
+            &SPStyle::fill,
+            &SPStyle::stroke
+        };
+        for (unsigned i = 0; i < G_N_ELEMENTS(fields); ++i) {
+            SPIPaint SPStyle::*const fld = fields[i];
+            sp_style_merge_paint_prop_from_dying_parent(style, style->*fld, parent->*fld);
+        }
+    }
+
+    /* Things from SVG 1.2 or CSS3. */
+    {
+        /* Note: If we ever support setting string values for text-align then we'd need strdup
+         * handling here. */
+        sp_style_merge_prop_from_dying_parent<SPIEnum>(style->text_align, parent->text_align);
+
+        sp_style_merge_prop_from_dying_parent<SPIEnum>(style->text_transform, parent->text_transform);
+        sp_style_merge_prop_from_dying_parent<SPIEnum>(style->block_progression, parent->block_progression);
+    }
+
+    /* Note: this will need length handling once dasharray supports units. */
+    if ( ( !style->stroke_dasharray_set || style->stroke_dasharray_inherit )
+         && parent->stroke_dasharray_set && !parent->stroke_dasharray_inherit )
+    {
+        style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
+        if (style->stroke_dash.n_dash > 0) {
+            style->stroke_dash.dash = g_new(gdouble, style->stroke_dash.n_dash);
+            memcpy(style->stroke_dash.dash, parent->stroke_dash.dash, style->stroke_dash.n_dash * sizeof(gdouble));
+        }
+        style->stroke_dasharray_set = parent->stroke_dasharray_set;
+        style->stroke_dasharray_inherit = parent->stroke_dasharray_inherit;
+    }
+
+    /* Note: this will need length handling once dasharray_offset supports units. */
+    if (!style->stroke_dashoffset_set && parent->stroke_dashoffset_set) {
+        style->stroke_dash.offset = parent->stroke_dash.offset;
+        style->stroke_dashoffset_set = parent->stroke_dashoffset_set;
+        /* fixme: we don't currently allow stroke-dashoffset to be `inherit'.  TODO: Try to
+         * represent it as a normal SPILength; though will need to do something about existing
+         * users of stroke_dash.offset and stroke_dashoffset_set. */
     }
 }
 

@@ -1,9 +1,10 @@
 #ifndef __SP_STYLE_H__
 #define __SP_STYLE_H__
 
-/*
+/** \file
  * SPStyle - a style object for SPItems
- *
+ */
+/*
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -26,16 +27,8 @@ class Node;
 class SPCSSAttr;
 
 namespace Inkscape {
-
-/**
- * Parses a CSS url() specification; temporary hack until
- * style stuff is redone.
- * \param string the CSS string to parse
- * \return a newly-allocated URL string (or NULL); free with g_free()
- */
 gchar *parse_css_url(gchar const *string);
-
-}  // namespace Inkscape
+}
 
 class SPIFloat;
 class SPIScale24;
@@ -293,71 +286,32 @@ struct SPStyle {
     bool cloned; 
 };
 
-/**
- *
- */
 SPStyle *sp_style_new();
 
-/**
- *
- */
 SPStyle *sp_style_new_from_object(SPObject *object);
 
-/**
- *
- */
 SPStyle *sp_style_ref(SPStyle *style);
 
-/**
- *
- */
 SPStyle *sp_style_unref(SPStyle *style);
 
-/**
- * 1. Reset existing object style
- * 2. Load current effective object style
- * 3. Load i attributes from immediate parent (which has to be up-to-date)
- */
 void sp_style_read_from_object(SPStyle *style, SPObject *object);
 
-/**
- *
- */
 void sp_style_read_from_repr(SPStyle *style, Inkscape::XML::Node *repr);
 
-/**
- *
- */
 void sp_style_merge_from_style_string(SPStyle *style, gchar const *p);
 
-/**
- *
- */
-void sp_style_merge_from_parent(SPStyle *style, SPStyle const *parent, bool inherit_set = false);
+void sp_style_merge_from_parent(SPStyle *style, SPStyle const *parent);
 
-/**
- *
- */
+void sp_style_merge_from_dying_parent(SPStyle *style, SPStyle const *parent);
+
 gchar *sp_style_write_string(SPStyle const *style, guint flags = SP_STYLE_FLAG_IFSET);
 
-/**
- *
- */
 gchar *sp_style_write_difference(SPStyle const *from, SPStyle const *to);
 
-/**
- *
- */
 void sp_style_set_fill_color_alpha(SPStyle *style, SPColor const *color, float a, unsigned fill_set, unsigned opacity_set);
 
-/**
- *
- */
 void sp_style_set_stroke_color_alpha(SPStyle *style, SPColor const *color, float a, unsigned fill_set, unsigned opacity_set);
 
-/**
- *
- */
 void sp_style_set_opacity(SPStyle *style, float opacity, unsigned opacity_set);
 
 /* SPTextStyle */

@@ -623,64 +623,58 @@ sp_use_unlink(SPUse *use)
     Inkscape::XML::Node *parent = sp_repr_parent(repr);
     SPDocument *document = SP_OBJECT(use)->document;
 
-    //track the ultimate source of a chain of uses
+    // Track the ultimate source of a chain of uses.
     SPItem *orig = sp_use_root(use);
 
-    //calculate the accumulated transform, starting from the original
+    // Calculate the accumulated transform, starting from the original.
     NR::Matrix t = sp_use_get_root_transform(use);
 
-    // create copy of the original
+    // Create copy of the original.
     Inkscape::XML::Node *copy = SP_OBJECT_REPR(orig)->duplicate();
 
-    // add the duplicate repr just after the existing one
+    // Add the duplicate repr just after the existing one.
     sp_repr_add_child(parent, copy, repr);
 
-    // retrieve the SPItem of the resulting repr
+    // Retrieve the SPItem of the resulting repr.
     SPObject *unlinked = document->getObjectByRepr(copy);
 
-    // merge style from the use
-    SPStyle *unli_sty = SP_OBJECT_STYLE (unlinked);
-    SPStyle *use_sty = SP_OBJECT_STYLE (use);
-    sp_style_merge_from_parent (unli_sty, use_sty, true); // inherit the set flags, too
+    // Merge style from the use.
+    SPStyle *unli_sty = SP_OBJECT_STYLE(unlinked);
+    SPStyle const *use_sty = SP_OBJECT_STYLE(use);
+    sp_style_merge_from_dying_parent(unli_sty, use_sty);
+    sp_style_merge_from_parent(unli_sty, unlinked->parent->style);
 
-    // special case for opacity: it is not inherited per the spec, but since use's opacity affected
-    // its display, we must not lose it after unlinking
-    unli_sty->opacity.value = SP_SCALE24_FROM_FLOAT (
-        SP_SCALE24_TO_FLOAT (unli_sty->opacity.value) * SP_SCALE24_TO_FLOAT (use_sty->opacity.value));
-    if (unli_sty->opacity.value != SP_SCALE24_MAX) {
-        unli_sty->opacity.set = TRUE;
-    }
-    SP_OBJECT (unlinked)->updateRepr();
+    SP_OBJECT(unlinked)->updateRepr();
 
-    // hold onto our SPObject and repr for now
+    // Hold onto our SPObject and repr for now.
     sp_object_ref(SP_OBJECT(use), NULL);
     sp_repr_ref(repr);
 
-    // remove ourselves, not propagating delete events to avoid a
-    // chain-reaction with other elements that might reference us
+    // Remove ourselves, not propagating delete events to avoid a
+    // chain-reaction with other elements that might reference us.
     SP_OBJECT(use)->deleteObject(false);
 
-    // give the copy our old id and let go of our old repr
+    // Give the copy our old id and let go of our old repr.
     sp_repr_set_attr(copy, "id", repr->attribute("id"));
     sp_repr_unref(repr);
 
-    // remove tiled clone attrs
+    // Remove tiled clone attrs.
     sp_repr_set_attr(copy, "inkscape:tiled-clone-of", NULL);
     sp_repr_set_attr(copy, "inkscape:tile-w", NULL);
     sp_repr_set_attr(copy, "inkscape:tile-h", NULL);
     sp_repr_set_attr(copy, "inkscape:tile-cx", NULL);
     sp_repr_set_attr(copy, "inkscape:tile-cy", NULL);
 
-    // establish the succession and let go of our object
+    // Establish the succession and let go of our object.
     SP_OBJECT(use)->setSuccessor(unlinked);
     sp_object_unref(SP_OBJECT(use), NULL);
 
     SPItem *item = SP_ITEM(unlinked);
-    // set the accummulated transform
+    // Set the accummulated transform.
     {
         NR::Matrix nomove(NR::identity());
         NRMatrix ctrans = t.operator const NRMatrix&();
-        // advertise ourselves as not moving
+        // Advertise ourselves as not moving.
         sp_item_write_transform(item, SP_OBJECT_REPR(item), &ctrans, &nomove);
     }
     return item;
