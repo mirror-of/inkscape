@@ -25,11 +25,11 @@ namespace Extension {
 namespace Internal {
 
 class PrintPS : public Inkscape::Extension::Implementation::Implementation {
-    unsigned int _bitmap : 1;
-    unsigned int _dpi : 15;
     float  _width;
     float  _height;
     FILE * _stream;
+    unsigned short _dpi;
+    bool   _bitmap;
 
 	void print_bpath (SVGOStringStream &os, const NArtBpath *bp);
 	unsigned int print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,

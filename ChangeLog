@@ -4,8 +4,11 @@
 	whether or not it snapped anything.
 
 	* src/select-context.cpp: fix snap on move behaviour (again)
-	
+
 2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/extension/internal/ps.h: Twiddle the order of the fields.
+	  Replace bitfields with bool/short.
 
 	* src/libnrtype/Makefile_insert, src/libnrtype/FontInstance.h,
 	  src/make.files, src/make.ofiles, src/make.dep:
