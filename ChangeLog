@@ -1,5 +1,12 @@
 2004-02-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/desktop-affine.h, src/desktop-affine.cpp
+	(sp_desktop_w2d_xy_point, sp_desktop_d2w_xy_point,
+	sp_desktop_w2doc_xy_point, sp_desktop_doc2w_xy_point,
+	sp_desktop_d2doc_xy_point, sp_desktop_doc2d_xy_point,
+	sp_desktop_root2dt_xy_point, sp_desktop_dt2root_xy_point):
+	Remove old NRPoint versions of these functions.
+
 	* src/select-toolbar.cpp:
 	* src/toolbox.cpp:
 	* src/widgets/spw-utilities.cpp:
