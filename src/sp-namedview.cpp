@@ -402,25 +402,25 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_INKSCAPE_GRID_BBOX:
 		if (value) {
-			nv->grid_snapper.setSnapToBBox(sp_str_to_bool(value));
+			nv->grid_snapper.setSnapTo(Snapper::BBOX_POINT, sp_str_to_bool(value));
 			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		}
 		break;
 	case SP_ATTR_INKSCAPE_GUIDE_BBOX:
 		if (value) {
-			nv->guide_snapper.setSnapToBBox(sp_str_to_bool(value));
+			nv->guide_snapper.setSnapTo(Snapper::BBOX_POINT, sp_str_to_bool(value));
 			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		}
 		break;
 	case SP_ATTR_INKSCAPE_GRID_POINTS:
 		if (value) {
-			nv->grid_snapper.setSnapToPoints(sp_str_to_bool(value));
+			nv->grid_snapper.setSnapTo(Snapper::SNAP_POINT, sp_str_to_bool(value));
 			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		}
 		break;
 	case SP_ATTR_INKSCAPE_GUIDE_POINTS:
 		if (value) {
-			nv->guide_snapper.setSnapToPoints(sp_str_to_bool(value));
+			nv->guide_snapper.setSnapTo(Snapper::SNAP_POINT, sp_str_to_bool(value));
 			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		}
 		break;

@@ -847,10 +847,10 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getEnabled());
 
         o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:grid-bbox");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getSnapToBBox());
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getSnapTo(Snapper::BBOX_POINT));
         gtk_widget_set_sensitive(GTK_WIDGET(o), nv->grid_snapper.getEnabled());
         o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:grid-points");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getSnapToPoints());
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getSnapTo(Snapper::SNAP_POINT));
         gtk_widget_set_sensitive(GTK_WIDGET(o), nv->grid_snapper.getEnabled());
 
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "grid_units");
@@ -894,10 +894,10 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getEnabled());
 
         o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:guide-bbox");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getSnapToBBox());
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getSnapTo(Snapper::BBOX_POINT));
         gtk_widget_set_sensitive(GTK_WIDGET(o), nv->guide_snapper.getEnabled());
         o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:guide-points");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getSnapToPoints());
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getSnapTo(Snapper::SNAP_POINT));
         gtk_widget_set_sensitive(GTK_WIDGET(o), nv->guide_snapper.getEnabled());
 
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "guide_snap_units");
