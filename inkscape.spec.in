@@ -11,8 +11,14 @@ Packager:	Automatic
 Vendor:		The Inkscape Project
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
+# See debian/control for a full list of requirements.  Maybe someone using an
+# rpm-based distribution would like to translate some or all of the Debian
+# package names given in debian/control to rpm equivalent packages.
+Requires: gtk2 >= 2.4.0
+BuildRequires: gtk2-devel >= 2.4.0
+
 %description
-Inkscape is a SVG based generic vector-drawing program for Linux/Unix/Windows/Mac.
+Inkscape is an SVG-based generic vector-drawing program for Linux/Unix/Windows/Mac.
 
 %prep
 %setup
