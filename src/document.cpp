@@ -184,6 +184,7 @@ sp_document_dispose (GObject *object)
 
 		if (priv->iddef) g_hash_table_destroy (priv->iddef);
 		if (!g_hash_table_size(priv->idsignals)) {
+			/* FIXME !!! warn only for nonempty signals */
 			g_warning("Lingering id change signals");
 		}
 		if (priv->idsignals) g_hash_table_destroy (priv->idsignals);
