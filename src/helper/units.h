@@ -100,9 +100,6 @@ struct SPUnit {
 // (though this define is far from the only place to change it!)
 #define DEVICESCALE 0.8    
 
-/* Base units are the ones used by gnome-print and paper descriptions */
-
-const SPUnit *sp_unit_get_identity (guint base);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 const gchar *sp_unit_get_abbreviation (const SPUnit *unit);
 SPMetric sp_unit_get_metric(SPUnit const *unit);

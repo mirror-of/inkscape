@@ -22,6 +22,7 @@
 #include "helper/units.h"
 #include "helper/sp-intl.h"
 #include "sp-metrics.h"
+#include "unit-constants.h"
 
 /* todo: use some fancy unit program */
 
@@ -33,15 +34,15 @@
  */
 SPUnit const sp_units[] = {
     {SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, NONE, N_("Unit"), "", N_("Units"), ""},
-    {SP_UNIT_PT, SP_UNIT_ABSOLUTE, 1.0, SP_PT, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
-    {SP_UNIT_PX, SP_UNIT_DEVICE, 0.8, SP_PX, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")}, // yet another place where the 90dpi is hard-coded
-    /* Volatiles do not have default, so there are none here */
+    {SP_UNIT_PT, SP_UNIT_ABSOLUTE, PT_PER_PT, SP_PT, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
+    {SP_UNIT_PX, SP_UNIT_DEVICE, PT_PER_PX, SP_PX, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")}, 
     /* You can add new elements from this point forward */
     {SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, NONE, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
-    {SP_UNIT_MM, SP_UNIT_ABSOLUTE, (720. / 254.), SP_MM, N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
-    {SP_UNIT_CM, SP_UNIT_ABSOLUTE, (7200. / 254.), SP_CM, N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
-    {SP_UNIT_M, SP_UNIT_ABSOLUTE, (720000. / 254.), SP_M, N_("Meter"), N_("m"), N_("Meters"), N_("m")},
-    {SP_UNIT_IN, SP_UNIT_ABSOLUTE, (72.0), SP_IN, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
+    {SP_UNIT_MM, SP_UNIT_ABSOLUTE, PT_PER_MM, SP_MM, N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
+    {SP_UNIT_CM, SP_UNIT_ABSOLUTE, PT_PER_CM, SP_CM, N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
+    {SP_UNIT_M, SP_UNIT_ABSOLUTE, PT_PER_M, SP_M, N_("Meter"), N_("m"), N_("Meters"), N_("m")},
+    {SP_UNIT_IN, SP_UNIT_ABSOLUTE, PT_PER_IN, SP_IN, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
+    /* Volatiles do not have default, so there are none here */
     // TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
     {SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, NONE, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
     // TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
@@ -49,35 +50,6 @@ SPUnit const sp_units[] = {
 };
 
 #define sp_num_units G_N_ELEMENTS(sp_units)
-
-
-/* Base units are the ones used by gnome-print and paper descriptions */
-
-/* todo: Change param to SPUnitBase. */
-SPUnit const *
-sp_unit_get_identity(guint const base)
-{
-    SPUnitId ret_id;
-    switch (base) {
-        case SP_UNIT_DIMENSIONLESS:
-            ret_id = SP_UNIT_SCALE;
-            break;
-        case SP_UNIT_ABSOLUTE:
-            ret_id = SP_UNIT_PT;
-            break;
-        case SP_UNIT_DEVICE:
-            ret_id = SP_UNIT_PX;
-            break;
-        default:
-            g_warning("file %s: line %d: Illegal unit base 0x%x", __FILE__, __LINE__, base);
-            return NULL;
-            break;
-    }
-    SPUnit const &ret = sp_units[ret_id];
-    g_assert(guint(ret.base) == base);
-    g_assert(ret.unittobase == 1.0);
-    return &ret;
-}
 
 SPUnit const *
 sp_unit_get_by_abbreviation(gchar const *abbreviation)
