@@ -747,8 +747,10 @@ void sp_selection_paste_style()
 			}
 		}
 
-		// merge it with the current object's style
-		sp_style_merge_from_style_string (style, sp_repr_attr (SP_OBJECT_REPR (l->data), "style"));
+		// merge it with the current object's style, if any
+		const gchar *old_style = sp_repr_attr (SP_OBJECT_REPR (l->data), "style");
+		if (old_style)
+			sp_style_merge_from_style_string (style, old_style);
 
 		// calculate the difference between the current object and its parent styles
 		gchar *newcss = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT_PARENT (l->data)));
