@@ -14,6 +14,7 @@
 
 #include <dirent.h>
 #include <glib.h>
+#include <string.h>
 
 #include <xml/repr.h>
 

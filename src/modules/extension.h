@@ -18,13 +18,13 @@
 void          extension_load         (SPModule *module);
 void          extension_unload       (SPModule *module);
 GtkDialog *   extension_input_prefs  (SPModule * module,
-                                      const guchar * filename);
+                                      const gchar * filename);
 SPDocument *  extension_open         (SPModule * module,
-                                      const guchar * filename);
+                                      const gchar * filename);
 GtkDialog *   extension_output_prefs (SPModule * module);
 void          extension_save         (SPModule * module,
                                       SPDocument * doc,
-                                      const guchar * filename);
+                                      const gchar * filename);
 GtkDialog *   extension_filter_prefs (SPModule * module);
 void          extension_filter       (SPModule * module,
                                       SPDocument * document);

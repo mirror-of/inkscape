@@ -53,8 +53,8 @@ static void set_event_location (SPDesktop * desktop, GdkEvent * event);
 
 static GObjectClass *parent_class;
 
-static selector_toggled = 0;
-static switch_selector_to = 0;
+static gboolean selector_toggled = FALSE;
+static int switch_selector_to = 0;
 
 GType
 sp_event_context_get_type (void)
@@ -154,10 +154,10 @@ sp_toggle_selector (SPDesktop *dt)
 	if (tools_isactive (dt, TOOLS_SELECT)) {
 		if (selector_toggled) {
 			if (switch_selector_to) tools_switch (dt, switch_selector_to);
-			selector_toggled = 0;
+			selector_toggled = FALSE;
 		} else return;
 	} else {
-		selector_toggled = 1;
+		selector_toggled = TRUE;
 		switch_selector_to = tools_active (dt);
 		tools_switch (dt, TOOLS_SELECT);
 	}

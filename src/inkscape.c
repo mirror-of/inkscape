@@ -39,6 +39,7 @@
 
 #include "shortcuts.h"
 
+#include "file.h"
 #include "document.h"
 #include "desktop.h"
 #include "desktop-handles.h"

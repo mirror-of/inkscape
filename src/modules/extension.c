@@ -27,6 +27,7 @@
 #include <selection.h>
 #include <file.h>
 #include <sp-object.h>
+#include <sp-namedview.h>
 
 #include "system.h"
 
@@ -55,9 +56,9 @@ static void extension_execute (const gchar * command, const gchar * filein, cons
 	string.  This means that the caller of this function can always
 	free what they are given (and should do it too!).
 */
-guchar *
+gchar *
 solve_reldir (SPRepr * reprin) {
-	const guchar * reldir;
+	const gchar * reldir;
 	guchar * returnval;
 
 	reldir = sp_repr_attr(reprin, "reldir");
@@ -108,7 +109,7 @@ void
 extension_load (SPModule *module)
 {
 	SPRepr * child_repr;
-	guchar * command_text = NULL;
+	gchar * command_text = NULL;
 	/* This should probably check to find the executable... */
 	g_return_if_fail(SP_IS_MODULE(module));
 	g_return_if_fail(module->repr != NULL);
@@ -188,7 +189,7 @@ extension_unload (SPModule *module)
 	This function should really do something, right now it doesn't.
 */
 GtkDialog *
-extension_input_prefs (SPModule * module, const guchar * filename)
+extension_input_prefs (SPModule * module, const gchar * filename)
 {
 	/* Sad, this should really do something... */
 	return NULL;
@@ -244,15 +245,15 @@ extension_filter_prefs (SPModule * module)
 	That document is then returned from this function.
 */
 SPDocument *
-extension_open (SPModule * module, const guchar * filename)
+extension_open (SPModule * module, const gchar * filename)
 {
 	char tempfilename_out_x[] = "/tmp/sp_ext_XXXXXX";
-	char * tempfilename_out;
+	gchar * tempfilename_out;
 	SPDocument * mydoc;
 
-	tempfilename_out = (char *)tempfilename_out_x;
+	tempfilename_out = (gchar *)tempfilename_out_x;
 
-	if (mkstemp(tempfilename_out) == -1) {
+	if (mkstemp((char *)tempfilename_out) == -1) {
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -261,19 +262,19 @@ extension_open (SPModule * module, const guchar * filename)
 		} else if (errno == EEXIST) {
 			/* Now the  contents of template are undefined. */
 			perror("extension.c:  Could not create a unique temporary filename\n");
-			return;
+			return NULL;
 		} else {
 			perror("extension.c:  Unknown error creating temporary filename\n");
 			exit(-1);
 		}
 	}
 
-	extension_execute(sp_repr_attr(module->repr, "command"), filename, tempfilename_out);
+	extension_execute(sp_repr_attr(module->repr, "command"), (gchar *)filename, (gchar *)tempfilename_out);
 
 	mydoc = sp_module_system_open(SP_MODULE_KEY_INPUT_SVG, tempfilename_out);
-	sp_document_set_uri(mydoc, filename);
+	sp_document_set_uri(mydoc, (const gchar *)filename);
 
-	unlink(tempfilename_out);
+	unlink((char *)tempfilename_out);
 
 	return mydoc;
 }
@@ -303,12 +304,12 @@ extension_open (SPModule * module, const guchar * filename)
 	delete the temporary file.
 */
 void
-extension_save (SPModule * module, SPDocument * doc, const guchar * filename)
+extension_save (SPModule * module, SPDocument * doc, const gchar * filename)
 {
-	char tempfilename_in_x[] = "/tmp/sp_ext_XXXXXX";
-	char * tempfilename_in;
+	gchar tempfilename_in_x[] = "/tmp/sp_ext_XXXXXX";
+	gchar * tempfilename_in;
 
-	tempfilename_in = (char *)tempfilename_in_x;
+	tempfilename_in = tempfilename_in_x;
 
 	if (mkstemp(tempfilename_in) == -1) {
 		/* Error, couldn't create temporary filename */
@@ -328,7 +329,7 @@ extension_save (SPModule * module, SPDocument * doc, const guchar * filename)
 
 	sp_module_system_save(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE, doc, tempfilename_in);
 
-	extension_execute(sp_repr_attr(module->repr, "command"), tempfilename_in, filename);
+	extension_execute(sp_repr_attr(module->repr, "command"), (gchar *)tempfilename_in, (gchar *)filename);
 
 	unlink(tempfilename_in);
 
@@ -367,9 +368,9 @@ void
 extension_filter (SPModule * module, SPDocument * doc)
 {
 	char tempfilename_in_x[] = "/tmp/sp_ext_XXXXXX";
-	char * tempfilename_in;
+	gchar * tempfilename_in;
 	char tempfilename_out_x[] = "/tmp/sp_ext_XXXXXX";
-	char * tempfilename_out;
+	gchar * tempfilename_out;
 	char * command;
 	SPItem * selected;
 	SPDocument * mydoc;

@@ -65,6 +65,7 @@
 #ifdef WIN32
 #include "modules/win32.h"
 #endif
+#include "modules/init.h"
 
 #include "helper/sp-intl.h"
 

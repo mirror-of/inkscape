@@ -72,21 +72,21 @@ sp_module_db_unregister (SPModule *module)
 	be unreferenced after a call to this function.
 */
 SPModule *
-sp_module_db_get (const unsigned char *key)
+sp_module_db_get (const gchar *key)
 {
 	SPModule *mod;
 	if (moduledict == NULL) {
 		moduledict = g_hash_table_new (g_str_hash, g_str_equal);
 	}
-	mod = g_hash_table_lookup (moduledict, key);
+	mod = (SPModule *)g_hash_table_lookup (moduledict, key);
 	if (mod != NULL) {
 		sp_module_ref (mod);
 	}
 	return mod;
 }
 
-const unsigned char *
-sp_module_db_get_unique_id (unsigned char *c, int len, const unsigned char *val)
+const gchar *
+sp_module_db_get_unique_id (gchar *c, int len, const gchar *val)
 {
 	static int mnumber = 0;
 	if (moduledict == NULL) {
@@ -153,7 +153,7 @@ sp_module_db_foreach_internal (gpointer in_key, gpointer in_value, gpointer in_d
 {
 	gpointer * in_array = (gpointer *)in_data;
 	void (* in_func)(SPModule * in_plug, gpointer in_data);
-	in_func = in_array[0];
+	(void *)in_func = in_array[0];
 	return in_func(SP_MODULE(in_value), in_array[1]);
 }
 

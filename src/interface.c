@@ -20,6 +20,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include "inkscape.h"
+#include "inkscape-private.h"
 #include "modules/menu.h"
 #include "widgets/icon.h"
 

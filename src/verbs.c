@@ -50,6 +50,7 @@
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
 #include "shortcuts.h"
+#include "toolbox.h"
 
 #include "verbs.h"
 

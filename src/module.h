@@ -97,7 +97,7 @@ struct _SPModule {
 
 	SPRepr *repr;                       /**< The XML description of the module */
 
-	unsigned char *id;                  /**< The unique identifier for the module */
+	gchar *id;                          /**< The unique identifier for the module */
 
 	gchar *name;                        /**< A user friendly name for the module */
 	sp_module_state_t state;            /**< Which state the module is currently in */
@@ -119,7 +119,7 @@ GType sp_module_get_type (void);
 /** A quick way to get the ID of a module */
 #define SP_MODULE_ID(m) (((SPModule *) (m))->id)
 
-SPModule *sp_module_new_from_path (GType type, const unsigned char *path);
+SPModule *sp_module_new_from_path (GType type, const char *path);
 
 SPModule *sp_module_ref (SPModule *mod);
 SPModule *sp_module_unref (SPModule *mod);
@@ -135,9 +135,9 @@ struct _SPModuleInput {
 	gchar *filetypename;         /**< A userfriendly name for the file type */
 	gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
-	GtkDialog * (*prefs) (SPModule * module, const guchar * filename);
+	GtkDialog * (*prefs) (SPModule * module, const gchar * filename);
 	                             /**< The function to find out information about the file */
-	SPDocument * (*open) (SPModule * module, const guchar * filename);
+	SPDocument * (*open) (SPModule * module, const gchar * filename);
 	                             /**< Hey, there needs to be some function to do the work! */
 };
 
@@ -164,7 +164,7 @@ struct _SPModuleOutput {
 
 	GtkDialog * (*prefs) (SPModule * module);
 	                             /**< The function to find out information about the file */
-	void (*save) (SPModule * module, SPDocument * doc, const guchar * filename);
+	void (*save) (SPModule * module, SPDocument * doc, const gchar * filename);
 	                             /**< Hey, there needs to be some function to do the work! */
 };
 

@@ -12,6 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <string.h>
 #include <helper/sp-intl.h>
 #include <xml/repr.h>
 #include <sp-object.h>
@@ -19,10 +20,11 @@
 #include <dir-util.h>
 #include <module.h>
 #include "svg.h"
+#include "system.h"
 
 /* Prototypes */
-static void svg_save (SPModule *mod, SPDocument *doc, const guchar *uri);
-static SPDocument * svg_open (SPModule *mod, const guchar *uri);
+static void svg_save (SPModule *mod, SPDocument *doc, const gchar *uri);
+static SPDocument * svg_open (SPModule *mod, const gchar *uri);
 
 /**
 	\return   None
@@ -101,7 +103,7 @@ svg_init(void)
 	This function is really simple, it just calles sp_document_new...
 */
 static SPDocument *
-svg_open (SPModule *mod, const guchar *uri)
+svg_open (SPModule *mod, const gchar *uri)
 {
 	return sp_document_new (uri, TRUE, TRUE);
 }
@@ -131,7 +133,7 @@ svg_open (SPModule *mod, const guchar *uri)
 	all of this code.  I just stole it.
 */
 static void
-svg_save (SPModule *mod, SPDocument *doc, const guchar *uri)
+svg_save (SPModule *mod, SPDocument *doc, const gchar *uri)
 {
 	SPRepr *repr;
 	gboolean spns;
@@ -159,7 +161,7 @@ svg_save (SPModule *mod, SPDocument *doc, const guchar *uri)
 	images = sp_document_get_resource_list (doc, "image");
 	for (l = images; l != NULL; l = l->next) {
 		SPRepr *ir;
-		const guchar *href, *relname;
+		const gchar *href, *relname;
 		ir = SP_OBJECT_REPR (l->data);
 		href = sp_repr_attr (ir, "xlink:href");
 		if (spns && !g_path_is_absolute (href)) {

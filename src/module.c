@@ -27,6 +27,8 @@
 #include "document.h"
 #include "module.h"
 
+#include "modules/db.h"
+
 /**
 	\def IF_NOT_NULL_FREE
 
@@ -35,7 +37,7 @@
 	finalize functions, and then also when updating values.  It
 	doesn't do that much, but it makes the code easier to read
 */
-#define IF_NOT_NULL_FREE(x)   (x) != NULL ? g_free((x)) : 5
+#define IF_NOT_NULL_FREE(x)   if ((x) != NULL) g_free((x))
 
 /* SPModule */
 
@@ -53,7 +55,7 @@ static SPModule * sp_module_new (GType type, SPRepr *repr);
 
 	This is the parent class for the modules.  It should be
     GObject - but no promises */
-static GObjectClass *module_parent_class;
+static GObjectClass * module_parent_class;
 
 /**
 	\return  The type value for a SP Module
@@ -79,7 +81,7 @@ sp_module_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPModule", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPModule", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -101,7 +103,7 @@ sp_module_class_init (SPModuleClass *klass)
 
 	g_object_class = (GObjectClass *)klass;
 
-	module_parent_class = g_type_class_peek_parent (klass);
+	module_parent_class = (GObjectClass *)g_type_class_peek_parent ((void *)klass);
 
 	g_object_class->finalize = sp_module_finalize;
 
@@ -181,8 +183,8 @@ static void
 sp_module_private_build (SPModule *module, SPRepr *repr)
 {
 	if (repr != NULL) {
-		const unsigned char *val;
-		unsigned char c[256];
+		const gchar *val;
+		gchar c[256];
 		SPRepr * child_repr;
 
 		child_repr = sp_repr_children(repr);
@@ -206,7 +208,7 @@ sp_module_private_build (SPModule *module, SPRepr *repr)
 }
 
 SPModule *
-sp_module_new_from_path (GType type, const unsigned char *path)
+sp_module_new_from_path (GType type, const char *path)
 {
 	SPRepr *repr;
 
@@ -296,7 +298,7 @@ sp_module_new (GType type, SPRepr *repr)
 {
 	SPModule *module;
 
-	module = g_object_new (type, NULL);
+	module = (SPModule *)g_object_new (type, NULL);
 
 	g_return_val_if_fail(module != NULL, NULL);
 	if (repr == NULL) {
@@ -352,7 +354,7 @@ sp_module_input_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_input_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleInput", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleInput", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -377,7 +379,7 @@ sp_module_input_class_init (SPModuleInputClass *klass)
 	g_object_class = (GObjectClass *) klass;
 	module_class = (SPModuleClass *) klass;
 
-	input_parent_class = g_type_class_peek_parent (klass);
+	input_parent_class = (SPModuleClass *)g_type_class_peek_parent ((void *)klass);
 
 	g_object_class->finalize = sp_module_input_finalize;
 
@@ -551,7 +553,7 @@ GType sp_module_output_get_type (void) {
 			16,
 			(GInstanceInitFunc) sp_module_output_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleOutput", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleOutput", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -576,7 +578,7 @@ sp_module_output_class_init (SPModuleOutputClass *klass)
 	g_object_class = (GObjectClass *)klass;
 	module_class = (SPModuleClass *) klass;
 
-	output_parent_class = g_type_class_peek_parent (klass);
+	output_parent_class = (SPModuleClass *)g_type_class_peek_parent ((void *)klass);
 
 	g_object_class->finalize = sp_module_output_finalize;
 
@@ -746,7 +748,7 @@ sp_module_filter_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_filter_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleFilter", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE, "SPModuleFilter", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -769,7 +771,7 @@ sp_module_filter_class_init (SPModuleFilterClass *klass)
 
 	g_object_class = (GObjectClass *)klass;
 
-	filter_parent_class = g_type_class_peek_parent (klass);
+	filter_parent_class = (SPModuleClass *)g_type_class_peek_parent ((void *)klass);
 
 	g_object_class->finalize = sp_module_filter_finalize;
 
@@ -852,7 +854,7 @@ sp_module_print_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_print_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE, "SPModulePrint", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE, "SPModulePrint", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -864,7 +866,7 @@ sp_module_print_class_init (SPModulePrintClass *klass)
 
 	g_object_class = (GObjectClass *)klass;
 
-	print_parent_class = g_type_class_peek_parent (klass);
+	print_parent_class = (SPModuleClass *)g_type_class_peek_parent ((void *)klass);
 
 	g_object_class->finalize = sp_module_print_finalize;
 }

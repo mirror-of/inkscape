@@ -70,7 +70,7 @@ NULL
 };
 
 int 
-tools_id2num (char *id) 
+tools_id2num (const char *id) 
 {
   int i = 1;
   while (tool_ids[i])

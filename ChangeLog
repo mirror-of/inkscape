@@ -1,3 +1,8 @@
+2003-11-16  Ted Gould <ted@gould.cx>
+
+	* Updating everything so that it builds under g++ again.  Much
+	  of the updates were to the recently checked in modules code.
+
 2003-11-16  MenTaLguY <mental@rydia.net>
 
 	* New version code (version.c/version.h)

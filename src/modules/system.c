@@ -12,6 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <string.h>
+
 #include <xml/repr.h>
 #include <document.h>
 #include <inkscape.h>
@@ -53,7 +55,7 @@ static void load_module (SPModule * in_mod);
 	Lastly, the open function is called in the module itself.
 */
 SPDocument *
-sp_module_system_open (const guchar * key, const gchar * filename)
+sp_module_system_open (const gchar * key, const gchar * filename)
 {
 	gpointer parray[2];
 	SPModuleInput * imod;
@@ -107,13 +109,13 @@ static void
 open_internal (SPModule * in_plug, gpointer in_data)
 {
 	if (SP_IS_MODULE_INPUT(in_plug)) {
-		const guchar * ext;
+		const gchar * ext;
 		gpointer * parray;
-		const guchar * filename;
+		const gchar * filename;
 		SPModuleInput ** pimod;
 
 		parray = (gpointer *)in_data;
-		filename = (const guchar *)parray[0];
+		filename = (const gchar *)parray[0];
 		pimod = (SPModuleInput **)parray[1];
 
 		ext = SP_MODULE_INPUT(in_plug)->extension;
@@ -158,7 +160,7 @@ open_internal (SPModule * in_plug, gpointer in_data)
 	Lastly, the save function is called in the module itself.
 */
 void
-sp_module_system_save (const guchar * key, SPDocument * doc, const gchar * filename)
+sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filename)
 {
 	SPModuleOutput * omod;
 	gpointer parray[2];
@@ -212,13 +214,13 @@ static void
 save_internal (SPModule * in_plug, gpointer in_data)
 {
 	if (SP_IS_MODULE_OUTPUT(in_plug)) {
-		const guchar * ext;
+		const gchar * ext;
 		gpointer * parray;
-		const guchar * filename;
+		const gchar * filename;
 		SPModuleOutput ** pomod;
 
 		parray = (gpointer *)in_data;
-		filename = (const guchar *)parray[0];
+		filename = (const gchar *)parray[0];
 		pomod = (SPModuleOutput **)parray[1];
 
 		ext = SP_MODULE_OUTPUT(in_plug)->extension;
@@ -326,7 +328,7 @@ build_from_reprdoc (SPReprDoc * doc)
 	SPRepr * old_repr;
 	SPRepr * child_repr;
 
-	g_return_if_fail(doc != NULL);
+	g_return_val_if_fail(doc != NULL, NULL);
 
 	repr = sp_repr_document_root(doc);
 
@@ -412,7 +414,7 @@ while_end:
 	to create the reprdoc.
 */
 SPModule *
-sp_module_system_build_from_file (const guchar * filename)
+sp_module_system_build_from_file (const gchar * filename)
 {
 	return build_from_reprdoc (sp_repr_read_file(filename, NULL));
 }
@@ -427,7 +429,7 @@ sp_module_system_build_from_file (const guchar * filename)
 	to create the reprdoc.  It finds the length of the buffer using strlen.
 */
 SPModule *
-sp_module_system_build_from_mem (const guchar * buffer)
+sp_module_system_build_from_mem (const gchar * buffer)
 {
 	return build_from_reprdoc (sp_repr_read_mem(buffer, strlen(buffer), NULL));
 }

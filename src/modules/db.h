@@ -17,10 +17,10 @@
 
 #include <module.h>
 
-SPModule * sp_module_db_get (const guchar *key);
+SPModule * sp_module_db_get (const gchar *key);
 void sp_module_db_register (SPModule *module);
 void sp_module_db_unregister (SPModule *module);
-const unsigned char *sp_module_db_get_unique_id (unsigned char *c, int len, const unsigned char *val);
+const gchar *sp_module_db_get_unique_id (gchar *c, int len, const gchar *val);
 void sp_module_db_foreach (void (*in_func)(SPModule * in_plug, gpointer in_data), gpointer in_data);
 
 #endif /* __MODULES_DB_H__ */

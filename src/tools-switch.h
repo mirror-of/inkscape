@@ -25,7 +25,7 @@ enum {
   TOOLS_DROPPER
 };
 
-int tools_id2num (char *id);
+int tools_id2num (const char *id);
 char* tools_num2name (int num);
 int tools_isactive (SPDesktop *dt, int num);
 int tools_active (SPDesktop *dt);

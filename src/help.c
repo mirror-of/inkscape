@@ -30,7 +30,7 @@ sp_help_about_delete (GtkWidget *widget, GdkEvent *event, gpointer data)
 
 #ifndef INK_STATIC_CAST
 #ifdef __cplusplus
-#define INK_STATIC_CAST(t,v) static_cast<(t)>((v))
+#define INK_STATIC_CAST(t,v) static_cast< t >((v))
 #else
 #define INK_STATIC_CAST(t,v) ((t)(v))
 #endif

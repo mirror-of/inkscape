@@ -16,9 +16,9 @@
 
 #include <widgets/menu.h>
 
-SPMenu *  sp_module_menu_open    (void);
-SPMenu *  sp_module_menu_save    (void);
-SPMenu *  sp_module_menu_about   (void);
-GtkMenu * sp_module_menu_filter  (void);
+SPMenu *    sp_module_menu_open    (void);
+SPMenu *    sp_module_menu_save    (void);
+SPMenu *    sp_module_menu_about   (void);
+GtkWidget * sp_module_menu_filter  (void);
 
 #endif /* __MODULES_MENU_H__ */

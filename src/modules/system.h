@@ -20,14 +20,14 @@
 #include <module.h>
 
 
-SPDocument * sp_module_system_open                (const guchar * key,
+SPDocument * sp_module_system_open                (const gchar * key,
                                                    const gchar *  filename);
-void         sp_module_system_save                (const guchar * key,
+void         sp_module_system_save                (const gchar * key,
                                                    SPDocument *   doc,
                                                    const gchar *  filename);
 void         sp_module_system_filter              (GtkObject * object,
                                                    const gchar *  key);
-SPModule *   sp_module_system_build_from_file     (const guchar * filename);
-SPModule *   sp_module_system_build_from_mem      (const guchar * buffer);
+SPModule *   sp_module_system_build_from_file     (const gchar  * filename);
+SPModule *   sp_module_system_build_from_mem      (const gchar *  buffer);
 
 #endif /* __MODULES_SYSTEM_H__ */

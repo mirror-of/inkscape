@@ -20,6 +20,7 @@
 
 #include "menu.h"
 #include "system.h"
+#include "db.h"
 
 static void sp_module_menu_open_internal    (SPModule * in_plug,
                                              gpointer   data);
@@ -71,8 +72,8 @@ static void
 sp_module_menu_open_internal (SPModule * in_plug, gpointer data)
 {
 	if (SP_IS_MODULE_INPUT(in_plug)) {
-		const guchar * name;
-		const guchar * tooltip;
+		const gchar * name;
+		const gchar * tooltip;
 		SPModuleInput * imod;
 
 		imod = SP_MODULE_INPUT(in_plug);
@@ -135,8 +136,8 @@ static void
 sp_module_menu_save_internal (SPModule * in_plug, gpointer data)
 {
 	if (SP_IS_MODULE_OUTPUT(in_plug)) {
-		const guchar * name;
-		const guchar * tooltip;
+		const gchar * name;
+		const gchar * tooltip;
 		SPModuleOutput * omod;
 
 		omod = SP_MODULE_OUTPUT(in_plug);
@@ -206,11 +207,11 @@ sp_module_menu_about_internal (SPModule * in_plug, gpointer data)
 	the modules is tacked on to the end, and then the whole menu is
 	returned.
 */
-GtkMenu *
+GtkWidget *
 sp_module_menu_filter (void)
 {
-	GtkMenu *     menu;
-	GtkMenuItem * item;
+	GtkWidget *     menu;
+	GtkWidget *   item;
 
 	menu = gtk_menu_new();
 
@@ -252,7 +253,7 @@ static void
 sp_module_menu_filter_internal (SPModule * in_plug, gpointer data)
 {
 	if (SP_IS_MODULE_FILTER(in_plug)) {
-		GtkMenuItem * item;
+		GtkWidget * item;
 
 		item = gtk_menu_item_new_with_label(in_plug->name);
 		gtk_widget_show(GTK_WIDGET(item));
