@@ -972,6 +972,7 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
 
                 sp_document_done(SP_DT_DOCUMENT(dt));
 
+                // TRANSLATORS: this means "The layer has been deleted."
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Deleted layer."));
             } else {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
