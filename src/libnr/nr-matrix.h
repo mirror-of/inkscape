@@ -76,113 +76,329 @@ namespace NR {
  * and the rows of the matrix correspond to columns (elements) of the "input").
  */
 class Matrix {
-public:
+
+
+    public:
+
+    /**
+     * Various forms of constructor
+     */
+
+    /**
+     *
+     */
     explicit Matrix() { }
 
+
+    /**
+     *
+     */
     Matrix(Matrix const &m) {
-        for ( int i = 0 ; i < 6 ; i++ ) {
-            _c[i] = m._c[i];
-        }
+
+        NR::Coord const *src = m._c;
+        NR::Coord *dest      = _c;
+
+        *dest++ = *src++;  //0
+        *dest++ = *src++;  //1
+        *dest++ = *src++;  //2
+        *dest++ = *src++;  //3
+        *dest++ = *src++;  //4
+        *dest   = *src  ;  //5
+
     }
 
+
+
+
+    /**
+     *
+     */
     Matrix(NRMatrix const &m) {
-        for ( int i = 0 ; i < 6 ; i++ ) {
-            _c[i] = m.c[i];
-        }
+
+        NR::Coord const *src = m.c;
+        NR::Coord *dest      = _c;
+
+        *dest++ = *src++;  //0
+        *dest++ = *src++;  //1
+        *dest++ = *src++;  //2
+        *dest++ = *src++;  //3
+        *dest++ = *src++;  //4
+        *dest   = *src  ;  //5
+
     }
 
+
+
+
+    /**
+     *
+     */
     Matrix(double c0, double c1,
            double c2, double c3,
-           double c4, double c5)
-    {
-        _c[0] = c0; _c[1] = c1;
-        _c[2] = c2; _c[3] = c3;
-        _c[4] = c4; _c[5] = c5;
+           double c4, double c5) {
+
+        NR::Coord *dest = _c;
+
+        *dest++ = c0;  //0
+        *dest++ = c1;  //1
+        *dest++ = c2;  //2
+        *dest++ = c3;  //3
+        *dest++ = c4;  //4
+        *dest   = c5;  //5
+
     }
 
+
+
+    /**
+     *
+     */
     Matrix &operator=(Matrix const &m) {
-        for (unsigned i = 0 ; i < 6 ; ++i) {
-            _c[i] = m._c[i];
-        }
+
+        NR::Coord const *src = m._c;
+        NR::Coord *dest      = _c;
+
+        *dest++ = *src++;  //0
+        *dest++ = *src++;  //1
+        *dest++ = *src++;  //2
+        *dest++ = *src++;  //3
+        *dest++ = *src++;  //4
+        *dest   = *src  ;  //5
+
         return *this;
     }
 
+
+
+
+    /**
+     *
+     */
     explicit Matrix(scale const &sm) {
-        _c[0] = sm[X]; _c[1] = 0;
-        _c[2] = 0;     _c[3] =  sm[Y];
-        _c[4] = 0;     _c[5] = 0;
+
+        NR::Coord *dest  = _c;
+
+        *dest++ = sm[X]; //0
+        *dest++ = 0.0;   //1
+        *dest++ = 0.0;   //2
+        *dest++ = sm[Y]; //3
+        *dest++ = 0.0;   //4
+        *dest   = 0.0;   //5
+
     }
 
+
+
+
+
+
+    /**
+     *
+     */
     explicit Matrix(rotate const &r) {
-        _c[0] =  r.vec[X]; _c[1] = r.vec[Y];
-        _c[2] = -r.vec[Y]; _c[3] = r.vec[X];
-        _c[4] = 0;         _c[5] = 0;
+
+        NR::Coord *dest  = _c;
+
+        *dest++ =  r.vec[X]; //0
+        *dest++ =  r.vec[Y]; //1
+        *dest++ = -r.vec[Y]; //2
+        *dest++ =  r.vec[X]; //3
+        *dest++ =  0.0;      //4
+        *dest   =  0.0;      //5
+
     }
 
+
+
+
+    /**
+     *
+     */
     explicit Matrix(translate const &tm) {
-        _c[0] = 1;     _c[1] = 0;
-        _c[2] = 0;     _c[3] = 1;
-        _c[4] = tm[X]; _c[5] = tm[Y];
+
+        NR::Coord *dest  = _c;
+
+        *dest++ =  1.0;   //0
+        *dest++ =  0.0;   //1
+        *dest++ =  0.0;   //2
+        *dest++ =  1.0;   //3
+        *dest++ =  tm[X]; //4
+        *dest   =  tm[Y]; //5
     }
 
+
+
+    /**
+     *
+     */
     Matrix(NRMatrix const *nr);
 
+
+    /**
+     *
+     */
     bool test_identity() const;
+
+
+    /**
+     *
+     */
     bool is_translation(Coord const eps = 0.01) const;
 
+
+    /**
+     *
+     */
     Matrix inverse() const;
 
-    Matrix &operator*=(Matrix const &o);
 
-    Matrix &operator*=(scale const &o);
+    /**
+     *
+     */
+    Matrix &operator*=(Matrix const &other);
 
-    Matrix &operator*=(translate const &o) {
-        _c[4] += o[X];
-        _c[5] += o[Y];
+
+    /**
+     *
+     */
+    Matrix &operator*=(scale const &other);
+
+
+
+    /**
+     *
+     */
+    Matrix &operator*=(translate const &other) {
+        _c[4] += other[X];
+        _c[5] += other[Y];
         return *this;
     }
 
+
+
+    /**
+     *
+     */
     inline Coord &operator[](int const i) {
         return _c[i];
     }
 
+
+
+    /**
+     *
+     */
     inline Coord operator[](int const i) const {
         return _c[i];
     }
 
+
+    /**
+     *
+     */
     void set_identity();
 	
     // What do these do?  some kind of norm?
+    /**
+     *
+     */
     Coord det() const;
+
+
+    /**
+     *
+     */
     Coord descrim2() const;
+
+
+    /**
+     *
+     */
     Coord descrim() const;
+
+
+    /**
+     *
+     */
     double expansion() const;
+
+
+    /**
+     *
+     */
     double expansionX() const;
+
+
+    /**
+     *
+     */
     double expansionY() const;
 	
     // legacy
+
+
+    /**
+     *
+     */
     Matrix &assign(Coord const *array);
+
+
+    /**
+     *
+     */
     NRMatrix *copyto(NRMatrix* nrm) const;
+
+
+    /**
+     *
+     */
     Coord *copyto(Coord *array) const;
 
+
+
+    /**
+     *
+     */
     operator NRMatrix&() {
         g_assert(sizeof(_c) == sizeof(NRMatrix));
         return *reinterpret_cast<NRMatrix *>(_c);
     }
+
+
+
+    /**
+     *
+     */
     operator NRMatrix const&() const {
         g_assert(sizeof(_c) == sizeof(NRMatrix));
         return *reinterpret_cast<const NRMatrix *>(_c);
     }
+
+
+
+    /**
+     *
+     */
     operator NRMatrix*() {
         g_assert(sizeof(_c) == sizeof(NRMatrix));
         return reinterpret_cast<NRMatrix *>(_c);
     }
+
+
+    /**
+     *
+     */
     operator NRMatrix const*() const {
         g_assert(sizeof(_c) == sizeof(NRMatrix));
         return reinterpret_cast<NRMatrix const *>(_c);
     }
 
-private:
+
+
+
+    private:
+
+
     NR::Coord _c[6];
 };
 
@@ -190,6 +406,11 @@ private:
 extern void assert_close(Matrix const &a, Matrix const &b);
 
 } /* namespace NR */
+
+
+
+
+
 
 
 /*
