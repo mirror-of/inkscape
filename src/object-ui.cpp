@@ -230,15 +230,12 @@ sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 /* SPGroup */
 
 static void sp_item_group_ungroup_activate (GtkMenuItem *menuitem, SPGroup *group);
-static void sp_item_group_enter_group_activate(GtkMenuItem *menuitem, SPGroup *group);
 
 static void
 sp_group_menu (SPObject *object, SPDesktop *desktop, GtkMenu * menu)
 {
-	SPItem *item;
+	SPItem *item=SP_ITEM(object);
 	GtkWidget *w;
-
-	item = (SPItem *)object;
 
 	/* "Ungroup" */
 	w = gtk_menu_item_new_with_mnemonic (_("_Ungroup"));
@@ -246,12 +243,6 @@ sp_group_menu (SPObject *object, SPDesktop *desktop, GtkMenu * menu)
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_group_ungroup_activate), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (menu), w);
-
-	w = gtk_menu_item_new_with_label(_("Enter Group"));
-	gtk_object_set_data(GTK_OBJECT(w), "desktop", desktop);
-	gtk_signal_connect(GTK_OBJECT(w), "activate", GTK_SIGNAL_FUNC(sp_item_group_enter_group_activate), item);
-	gtk_widget_show(w);
-	gtk_menu_append(GTK_MENU(menu), w);
 }
 
 static void
@@ -271,13 +262,6 @@ sp_item_group_ungroup_activate (GtkMenuItem *menuitem, SPGroup *group)
 
 	SP_DT_SELECTION(desktop)->setItemList(children);
 	g_slist_free (children);
-}
-
-static void
-sp_item_group_enter_group_activate(GtkMenuItem *menuitem, SPGroup *group)
-{
-	SPDesktop *desktop=(SPDesktop *)gtk_object_get_data(GTK_OBJECT(menuitem), "desktop");
-	desktop->setCurrentLayer(group);
 }
 
 /* SPAnchor */

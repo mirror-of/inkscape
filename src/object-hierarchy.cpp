@@ -9,6 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <algorithm>
 #include <glib/gmessages.h>
 #include "sp-object.h"
 #include "object-hierarchy.h"
@@ -17,7 +18,7 @@ namespace Inkscape {
 
 ObjectHierarchy::ObjectHierarchy(SPObject *top) {
     if (top) {
-        _addBottom(top, top);
+        _addBottom(top);
     }
 }
 
@@ -25,23 +26,40 @@ ObjectHierarchy::~ObjectHierarchy() {
     _clear();
 }
 
+bool ObjectHierarchy::contains(SPObject *object) {
+    std::list<Record>::iterator iter;
+    for ( iter = _hierarchy.begin() ; iter != _hierarchy.end() ; ++iter ) {
+        if ( (*iter).object == object ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void ObjectHierarchy::clear() {
+    _clear();
+    _changed_signal.emit(NULL, NULL);
+}
+
 void ObjectHierarchy::setTop(SPObject *object) {
     g_return_if_fail(object != NULL);
 
-    if ( object == top() ) {
+    if ( top() == object ) {
         return;
     }
 
     if (!top()) {
-        _addBottom(object, object);
+        _addBottom(object);
     } else if (object->isAncestorOf(top())) {
         _addTop(object, SP_OBJECT_PARENT(top()));
-    } else if (object->isAncestorOf(bottom())) {
+    } else if ( object == bottom() || object->isAncestorOf(bottom()) ) {
         _trimAbove(object);
     } else {
         _clear();
-        _addBottom(object, object);
+        _addBottom(object);
     }
+
+    _changed_signal.emit(top(), bottom());
 }
 
 void ObjectHierarchy::_addTop(SPObject *senior, SPObject *junior) {
@@ -52,40 +70,52 @@ void ObjectHierarchy::_addTop(SPObject *senior, SPObject *junior) {
     while ( object != senior ) {
         g_assert(object != NULL);
         _hierarchy.push_back(_attach(object));
+        _added_signal.emit(object);
         object = SP_OBJECT_PARENT(object);
     }
 }
 
 void ObjectHierarchy::_trimAbove(SPObject *limit) {
     while ( !_hierarchy.empty() && _hierarchy.back().object != limit ) {
+        SPObject *object=_hierarchy.back().object;
+
+        sp_object_ref(object, NULL);
         _detach(_hierarchy.back());
         _hierarchy.pop_back();
+        _removed_signal.emit(object);
+        sp_object_unref(object, NULL);
     }
 }
 
 void ObjectHierarchy::setBottom(SPObject *object) {
     g_return_if_fail(object != NULL);
 
-    if ( object == bottom() ) {
+    if ( bottom() == object ) {
         return;
     }
 
     if (!top()) {
-        _addBottom(object, object);
+        _addBottom(object);
     } else if (bottom()->isAncestorOf(object)) {
         _addBottom(bottom(), object);
-    } else if (top()->isAncestorOf(object)) {
+    } else if ( top() == object || top()->isAncestorOf(object)) {
         _trimBelow(object);
     } else {
         _clear();
-        _addBottom(object, object);
+        _addBottom(object);
     }
+
+    _changed_signal.emit(top(), bottom());
 }
 
 void ObjectHierarchy::_trimBelow(SPObject *limit) {
     while ( !_hierarchy.empty() && _hierarchy.front().object != limit ) {
+        SPObject *object=_hierarchy.front().object;
+        sp_object_ref(object, NULL);
         _detach(_hierarchy.front());
         _hierarchy.pop_front();
+        _removed_signal.emit(object);
+        sp_object_unref(object, NULL);
     }
 }
 
@@ -95,9 +125,14 @@ void ObjectHierarchy::_addBottom(SPObject *senior, SPObject *junior) {
 
     if ( junior != senior ) {
         _addBottom(senior, SP_OBJECT_PARENT(junior));
+        _addBottom(junior);
     }
+}
 
-    _hierarchy.push_front(_attach(junior));
+void ObjectHierarchy::_addBottom(SPObject *object) {
+    g_assert(object != NULL);
+    _hierarchy.push_front(_attach(object));
+    _added_signal.emit(object);
 }
 
 void ObjectHierarchy::_trim_for_release(SPObject *object, ObjectHierarchy *hier)
@@ -105,8 +140,14 @@ void ObjectHierarchy::_trim_for_release(SPObject *object, ObjectHierarchy *hier)
     hier->_trimBelow(object);
     g_assert(!hier->_hierarchy.empty());
     g_assert(hier->_hierarchy.front().object == object);
+
+    sp_object_ref(object, NULL);
     hier->_detach(hier->_hierarchy.front());
     hier->_hierarchy.pop_front();
+    hier->_removed_signal.emit(object);
+    sp_object_unref(object, NULL);
+
+    hier->_changed_signal.emit(hier->top(), hier->bottom());
 }
 
 ObjectHierarchy::Record ObjectHierarchy::_attach(SPObject *object) {

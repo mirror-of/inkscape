@@ -205,6 +205,10 @@ sp_desktop_init (SPDesktop *desktop)
 
     new (&desktop->sel_modified_connection) SigC::Connection();
 
+    new (&desktop->_set_colorcomponent_signal) SigC::Signal4<bool, ColorComponent, float, bool, bool>();
+    new (&desktop->_set_style_signal) SigC::Signal1<bool, const SPCSSAttr *, StopOnTrue>();
+    new (&desktop->_layer_changed_signal) SigC::Signal1<void, SPObject *>();
+
     desktop->_guides_message_context = new Inkscape::MessageContext(desktop->messageStack());
 
     desktop->current = sp_repr_css_attr_inherited (inkscape_get_repr (INKSCAPE, "desktop"), "style");
@@ -219,6 +223,10 @@ sp_desktop_dispose (GObject *object)
 
     dt->sel_modified_connection.disconnect();
     dt->sel_modified_connection.~Connection();
+
+    dt->_set_colorcomponent_signal.~Signal4();
+    dt->_set_style_signal.~Signal1();
+    dt->_layer_changed_signal.~Signal1();
 
     if (dt->_layer_hierarchy) {
         delete dt->_layer_hierarchy;
@@ -493,9 +501,14 @@ sp_desktop_set_document (SPView *view, SPDocument *doc)
     }
 
     if (desktop->_layer_hierarchy) {
+        desktop->_layer_hierarchy->clear();
         delete desktop->_layer_hierarchy;
     }
-    desktop->_layer_hierarchy = new Inkscape::ObjectHierarchy(SP_DOCUMENT_ROOT(doc));
+    desktop->_layer_hierarchy = new Inkscape::ObjectHierarchy(NULL);
+    desktop->_layer_hierarchy->connectAdded(SigC::bind(SigC::slot(&SPDesktop::_layer_activated), desktop));
+    desktop->_layer_hierarchy->connectRemoved(SigC::bind(SigC::slot(&SPDesktop::_layer_deactivated), desktop));
+    desktop->_layer_hierarchy->connectChanged(SigC::bind(SigC::slot(&SPDesktop::_layer_hierarchy_changed), desktop));
+    desktop->_layer_hierarchy->setTop(SP_DOCUMENT_ROOT(doc));
 
     /* fixme: */
     if (desktop->drawing) {
@@ -1313,6 +1326,26 @@ void SPDesktop::_set_status_message(SPView *view, Inkscape::MessageType type, co
     if (desktop->owner) {
         desktop->owner->setMessage(type, message);
     }
+}
+
+void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
+    g_return_if_fail(SP_IS_GROUP(layer));
+    // TODO - this mode needs to be settable on a per-desktop basis
+    //        (see comments in sp-item-group.h)
+    sp_item_group_set_mode(SP_GROUP(layer), SP_GROUP_MODE_LAYER);
+}
+
+void SPDesktop::_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
+    g_return_if_fail(SP_IS_GROUP(layer));
+    // TODO - this mode needs to be settable on a per-desktop basis
+    //        (see comments in sp-item-group.h)
+    sp_item_group_set_mode(SP_GROUP(layer), SP_GROUP_MODE_GROUP);
+}
+
+void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
+                                         SPDesktop *desktop)
+{
+    desktop->_layer_changed_signal.emit(bottom);
 }
 
 void SPDesktopWidget::setMessage(Inkscape::MessageType type, const gchar *message)

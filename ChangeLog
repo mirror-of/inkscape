@@ -1,3 +1,26 @@
+2004-07-02  MenTaLguY  <mental@rydia.net>
+
+	* src/attributes.cpp, src/attributes.h, src/sp-item-group.cpp,
+	  src/sp-item-group.h:
+
+	  Removed the "inkscape:groupmode" attribute and added note about how
+	  the group/layer mode setting needs to be per-view, not global.
+
+	* src/desktop.cpp, src/desktop.h,
+	  src/object-hierarchy.cpp, src/object-hierarchy.h:
+
+	  Added notification signals for switching layers, as well as putting
+	  groups in layer mode when they are being used as layers.
+
+	  Notably, you can now call SPDesktop::connectCurrentLayerChanged() to
+	  connect to a SigC++ signal to be notified when the current layer
+	  changes.
+
+	* src/interface.cpp, src/object-ui.cpp:
+
+	  Fixed up the "Enter Group" and "Leave Group" context menu
+	  commands a bit, and implement them both in the same places.
+
 2004-07-02  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/desktop-snap.cpp, src/desktop-snap.h, src/snap.cpp,

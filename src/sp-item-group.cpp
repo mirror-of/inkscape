@@ -34,12 +34,10 @@
 static void sp_group_class_init (SPGroupClass *klass);
 static void sp_group_init (SPGroup *group);
 
-static void sp_group_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_group_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
 static void sp_group_remove_child (SPObject * object, SPRepr * child);
 static void sp_group_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref);
 static void sp_group_update (SPObject *object, SPCtx *ctx, guint flags);
-static void sp_group_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_group_modified (SPObject *object, guint flags);
 static SPRepr *sp_group_write (SPObject *object, SPRepr *repr, guint flags);
 
@@ -86,11 +84,9 @@ sp_group_class_init (SPGroupClass *klass)
 
 	parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 
-	sp_object_class->build = sp_group_build;
 	sp_object_class->child_added = sp_group_child_added;
 	sp_object_class->remove_child = sp_group_remove_child;
 	sp_object_class->order_changed = sp_group_order_changed;
-	sp_object_class->set = sp_group_set;
 	sp_object_class->update = sp_group_update;
 	sp_object_class->modified = sp_group_modified;
 	sp_object_class->write = sp_group_write;
@@ -106,14 +102,6 @@ static void
 sp_group_init (SPGroup *group)
 {
 	group->mode = SP_GROUP_MODE_GROUP;
-}
-
-static void sp_group_build (SPObject *object, SPDocument * document, SPRepr * repr)
-{
-	sp_object_read_attr (object, "inkscape:groupmode");
-
-	if (((SPObjectClass *) (parent_class))->build)
-		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);
 }
 
 static void
@@ -274,22 +262,6 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 		for (child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 			child->updateRepr(flags);
 		}
-	}
-
-	if (flags & SP_OBJECT_WRITE_EXT) {
-		const gchar *old_mode;
-		switch (group->mode) {
-		case SP_GROUP_MODE_GROUP:
-			old_mode = sp_repr_attr (repr, "inkscape:groupmode");
-			if (old_mode && strcmp(old_mode, "group") || flags & SP_OBJECT_WRITE_ALL) {
-				sp_repr_set_attr (repr, "inkscape:groupmode", "group");
-			}
-			break;
-		case SP_GROUP_MODE_LAYER:
-			sp_repr_set_attr (repr, "inkscape:groupmode", "layer");
-			break;
-		}
-		
 	}
 
 	if (((SPObjectClass *) (parent_class))->write)
@@ -527,23 +499,6 @@ sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *nam
 		child = SP_OBJECT_NEXT(child);
 	}
 	return child;
-}
-
-void
-sp_group_set (SPObject *object, unsigned int key, const gchar *value)
-{
-	SPGroup *group = SP_GROUP (object);
-
-	if ( key == SP_ATTR_INKSCAPE_GROUPMODE ) {
-		if (value && !strcmp(value, "layer")) {
-			sp_item_group_set_mode (group, SP_GROUP_MODE_LAYER);
-		} else {
-			sp_item_group_set_mode (group, SP_GROUP_MODE_GROUP);
-		}
-	} else {
-		if (((SPObjectClass *) parent_class)->set)
-			((SPObjectClass *) parent_class)->set (object, key, value);
-	}
 }
 
 SPGroupMode

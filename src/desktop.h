@@ -135,11 +135,19 @@ struct SPDesktop : public SPView {
 	SPObject *currentRoot();
 	SPObject *currentLayer();
 	void setCurrentLayer(SPObject *object);
+	SigC::Connection connectCurrentLayerChanged(SigC::Slot1<void, SPObject *> slot) {
+		return _layer_changed_signal.connect(slot);
+	}
 
 	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
+	static void _layer_activated(SPObject *layer, SPDesktop *desktop);
+	static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
+	static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
 
 	SigC::Signal4<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
 	SigC::Signal1<bool, const SPCSSAttr *, StopOnTrue> _set_style_signal;
+
+	SigC::Signal1<void, SPObject *> _layer_changed_signal;
 
 	Inkscape::MessageContext *_guides_message_context;
 
