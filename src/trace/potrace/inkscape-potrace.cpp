@@ -433,7 +433,7 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
 void
 PotraceTracingEngine::abort()
 {
-    g_message("PotraceTracingEngine::abort()\n");
+    //g_message("PotraceTracingEngine::abort()\n");
     keepGoing = 0;
 }
 

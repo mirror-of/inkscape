@@ -264,7 +264,7 @@ void Trace::convertImageToPath(TracingEngine *theEngine)
 void Trace::abort()
 {
 
-    g_message("Trace::abort() soon to be implemented\n");
+    //g_message("Trace::abort() soon to be implemented\n");
 
     //## Inform Trace's working thread
     keepGoing = false;
