@@ -10,6 +10,8 @@ templates_DATA = \
 	business_card_90x50mm.svg \
 	CD_cover_300dpi.svg \
 	default.svg \
+	default_mm.svg \
+	default_pt.svg \
 	desktop_1024x768.svg \
 	desktop_1600x1200.svg \
 	desktop_640x480.svg \
