@@ -18,6 +18,8 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 #include <libnr/nr-matrix-ops.h>
+#include "libnr/nr-matrix-div.h"
+#include "libnr/nr-matrix-fns.h"
 #include <libnr/nr-translate-matrix-ops.h>
 #include <gtk/gtksignal.h>
 #include "macros.h"
@@ -500,8 +502,8 @@ sp_pattern_transform_multiply (SPPattern *pattern, NR::Matrix postmul, bool set)
 	}
 }
 
-SPRepr *
-pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix transform)
+const gchar *
+pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix transform, NR::Matrix move)
 {
 	SPRepr *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
 
@@ -510,34 +512,40 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 	sp_repr_set_double (repr, "width", bounds.extent(NR::X));
 	sp_repr_set_double (repr, "height", bounds.extent(NR::Y));
 
-	NRMatrix t;
-	transform.copyto(&t);
+	gchar t[256];
+	if (sp_svg_transform_write(t, 256, transform)) {
+		sp_repr_set_attr(repr, "patternTransform", t);
+	} else {
+		sp_repr_set_attr(repr, "patternTransform", NULL);
+	}
 
-            gchar c[256];
-            if (sp_svg_transform_write(c, 256, &t)) {
-                sp_repr_set_attr(repr, "patternTransform", c);
-            } else {
-                sp_repr_set_attr(repr, "patternTransform", NULL);
-            }
 
 	sp_repr_append_child (defsrepr, repr);
 	const gchar *pat_id = sp_repr_attr (repr, "id");
 	SPObject *pat_object = document->getObjectById(pat_id);
 
+	gchar m[256];
+
 	for (GSList *i = reprs; i != NULL; i = i->next) {
 		SPRepr *dup = sp_repr_duplicate (((SPRepr *) i->data));
 		sp_repr_add_child(SP_OBJECT_REPR(pat_object), dup, NULL);
+
+		NR::Matrix dup_transform;
+		if (!sp_svg_transform_read (sp_repr_attr (dup, "transform"), &dup_transform)) 
+			dup_transform = NR::identity();
+		dup_transform *= move;
+
+		if (sp_svg_transform_write(m, 256, dup_transform)) {
+			sp_repr_set_attr(dup, "transform", m);
+		} else {
+			sp_repr_set_attr(dup, "transform", NULL);
+		}
+
 		sp_repr_unref(dup);
 	}
 
-	SPRepr *rect = sp_repr_new ("rect");
-	sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
-	sp_repr_set_double (rect, "width", bounds.extent(NR::X));
-	sp_repr_set_double (rect, "height", bounds.extent(NR::Y));
-	sp_repr_set_double (rect, "x", bounds.min()[NR::X]);
-	sp_repr_set_double (rect, "y", bounds.min()[NR::Y]);
-
-	return rect;
+	sp_repr_unref (repr);
+	return pat_id;
 }
 
 SPPattern *

@@ -29,7 +29,7 @@ void sp_selection_clone();
 void sp_selection_unlink();
 void sp_select_clone_original ();
 
-void sp_selection_tile();
+void sp_selection_tile(bool apply = true);
 void sp_selection_untile();
 
 void sp_selection_group();

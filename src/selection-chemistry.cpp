@@ -1583,7 +1583,7 @@ sp_select_clone_original()
 }
 
 void
-sp_selection_tile()
+sp_selection_tile(bool apply)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop == NULL)
@@ -1599,11 +1599,13 @@ sp_selection_tile()
         return;
     }
 
-    NR::Rect r = selection->bounds();
-
+    // calculate the transform to be applied to objects to move them to 0,0
     sp_document_ensure_up_to_date(document);
-    NR::Point m = (NR::Point(0, sp_document_height(document)) - (r.min() + NR::Point (0, r.extent(NR::Y))));
-    sp_selection_move_relative(selection, m[NR::X], m[NR::Y]); // FIXME: set adv=identity so that clones don't jump
+    NR::Rect r = selection->bounds();
+    NR::Point move_p = NR::Point(0, sp_document_height(document)) - (r.min() + NR::Point (0, r.extent(NR::Y)));
+    move_p[NR::Y] = -move_p[NR::Y];
+    move_p *= 1.25;
+    NR::Matrix move = NR::Matrix (NR::translate (move_p));
 
     GSList *reprs = g_slist_copy((GSList *) selection->reprList());
 
@@ -1629,29 +1631,39 @@ sp_selection_tile()
         repr_copies = g_slist_prepend (repr_copies, dup);
     }
     
-    // delete objects so that their clones don't get alerted; this object will be restored shortly 
-    for (GSList *i = reprs; i != NULL; i = i->next) {
-        SPObject *item = document->getObjectByRepr(((SPRepr *) i->data));
-        item->deleteObject (false);
+    NR::Rect bounds (sp_desktop_d2doc_xy_point(desktop, r.min()), sp_desktop_d2doc_xy_point(desktop, r.max()));
+
+    const gchar *pat_id = pattern_tile (repr_copies, bounds, document, 
+                                 NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, NR::Point(r.min()[NR::X], r.max()[NR::Y])))), move);
+
+    if (apply) {
+        // delete objects so that their clones don't get alerted; this object will be restored shortly 
+        for (GSList *i = reprs; i != NULL; i = i->next) {
+            SPObject *item = document->getObjectByRepr(((SPRepr *) i->data));
+            item->deleteObject (false);
+        }
+
+        SPRepr *rect = sp_repr_new ("rect");
+        sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
+        sp_repr_set_double (rect, "width", bounds.extent(NR::X));
+        sp_repr_set_double (rect, "height", bounds.extent(NR::Y));
+        sp_repr_set_double (rect, "x", bounds.min()[NR::X]);
+        sp_repr_set_double (rect, "y", bounds.min()[NR::Y]);
+
+        SPItem *rectangle = NULL;    
+        if (sort) { // restore parent and position
+            sp_repr_append_child (parent, rect);
+            sp_repr_set_position_absolute (rect, pos > 0 ? pos : 0);
+            rectangle = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(rect);
+        } else { // just add to the current layer
+            rectangle = SP_ITEM(desktop->currentLayer()->appendChildRepr(rect));
+        } 
+
+        sp_repr_unref (rect);
+
+        selection->clear();
+        selection->setItem (rectangle);
     }
-
-    SPRepr *rect = pattern_tile (repr_copies, 
-                                 NR::Rect (sp_desktop_d2doc_xy_point(desktop, r.min()), sp_desktop_d2doc_xy_point(desktop, r.max())),
-                                 document, NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, NR::Point(r.min()[NR::X], r.max()[NR::Y])))));
-
-    SPItem *rectangle = NULL;    
-    if (sort) { // restore parent and position
-        sp_repr_append_child (parent, rect);
-        sp_repr_set_position_absolute (rect, pos > 0 ? pos : 0);
-        rectangle = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(rect);
-    } else { // just add to the current layer
-        rectangle = SP_ITEM(desktop->currentLayer()->appendChildRepr(rect));
-    } 
-
-    sp_repr_unref (rect);
-
-    selection->clear();
-    selection->setItem (rectangle);
 
     sp_document_done (document);
 }
