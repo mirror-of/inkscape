@@ -36,12 +36,12 @@ template<typename T>
 class checked_vector : public std::vector<T> {
  public:
 	typename std::vector<T>::reference operator[](int index) {
-		g_assert(index >= 0 && index < (int) size());
+		g_assert(index >= 0 && index < (int) std::vector<T>::size());
 		//			g_print ("%d ", index);
     return std::vector<T>::operator[](index);
   }
 	typename std::vector<T>::const_reference operator[](int index) const {
-    g_assert(index >= 0 && index < (int) size());
+    g_assert(index >= 0 && index < (int) std::vector<T>::size());
     return std::vector<T>::operator[](index);
   }
 };
