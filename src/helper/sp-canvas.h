@@ -102,7 +102,7 @@ struct _SPCanvas {
 
 	SPCanvasItem *root;
 
-	float dx0, dy0;
+	double dx0, dy0;
 	int x0, y0;
 
 	/* Area that needs redrawing, stored as a microtile array */

@@ -1319,7 +1319,7 @@ sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
 {
 	SPDesktopWidget *dtw;
 	NRRect viewbox;
-	float scale;
+	double scale;
 
 	dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
 	if (!dtw) return NULL;
@@ -1341,12 +1341,15 @@ sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom)
 {
 	SPDesktopWidget *dtw;
 	NRRect viewbox;
-	float width2, height2;
+	double width2, height2;
 
 	dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
 	if (!dtw) return;
 
 	zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
+	
+	// maximum or minimum zoom reached, but there's no exact equality because of rounding errors:
+	if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.01) return; 
 
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 
