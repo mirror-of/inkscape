@@ -1162,6 +1162,8 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 	g_assert (SP_IS_OBJECT (object));
 	g_assert (SP_IS_DOCUMENT (object->document));
 
+	count ++;
+
 	const gchar *name = sp_repr_name (object->repr);
 	g_assert (name != NULL);
 
