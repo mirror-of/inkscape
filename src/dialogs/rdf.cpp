@@ -433,10 +433,10 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             
             return sp_repr_content(temp);
         case RDF_AGENT:
-            temp = sp_repr_lookup_name ( repr, "cc:Agent" );
+            temp = sp_repr_lookup_name ( repr, "cc:Agent", 1 );
             if ( temp == NULL ) return NULL;
 
-            temp = sp_repr_lookup_name ( temp, "dc:title" );
+            temp = sp_repr_lookup_name ( temp, "dc:title", 1 );
             if ( temp == NULL ) return NULL;
 
             temp = sp_repr_children(temp);
@@ -481,7 +481,7 @@ rdf_set_repr_text ( SPRepr * repr,
             }
 
         case RDF_AGENT:
-            temp = sp_repr_lookup_name ( parent, "cc:Agent" );
+            temp = sp_repr_lookup_name ( parent, "cc:Agent", 1 );
             if ( temp == NULL ) {
                 temp = sp_repr_new ( "cc:Agent" );
                 g_return_val_if_fail (temp != NULL, 0);
@@ -491,7 +491,7 @@ rdf_set_repr_text ( SPRepr * repr,
             }
             parent = temp;
 
-            temp = sp_repr_lookup_name ( parent, "dc:title" );
+            temp = sp_repr_lookup_name ( parent, "dc:title", 1 );
             if ( temp == NULL ) {
                 temp = sp_repr_new ( "dc:title" );
                 g_return_val_if_fail (temp != NULL, 0);
@@ -617,7 +617,7 @@ rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
     SPRepr * work = rdf_get_xml_repr ( doc, XML_TAG_NAME_WORK, build );
     if (!work) return NULL;
 
-    SPRepr * item = sp_repr_lookup_name ( work, name );
+    SPRepr * item = sp_repr_lookup_name ( work, name, 1 );
     if (item == NULL) {
         //printf("missing XML '%s'\n",name);
         if (!build) return NULL;

@@ -585,7 +585,7 @@ sp_repr_lookup_child (SPRepr       *repr,
  *  
  */
 SPRepr *
-sp_repr_lookup_name ( SPRepr *repr, gchar const *name )
+sp_repr_lookup_name ( SPRepr *repr, gchar const *name, gint maxdepth )
 {
     g_return_val_if_fail (repr != NULL, NULL);
     g_return_val_if_fail (name != NULL, NULL);
@@ -593,10 +593,14 @@ sp_repr_lookup_name ( SPRepr *repr, gchar const *name )
     GQuark const quark = g_quark_from_string (name);
 
     if ( (unsigned)repr->name == quark ) return repr;
+    if ( maxdepth == 0 ) return NULL;
+
+    // maxdepth == -1 means unlimited
+    if ( maxdepth == -1 ) maxdepth = 0;
 
     SPRepr * found = NULL;
     for (SPRepr *child = repr->children; child && !found; child = child->next) {
-        found = sp_repr_lookup_name ( child, name );
+        found = sp_repr_lookup_name ( child, name, maxdepth-1 );
     }
 
     return found;

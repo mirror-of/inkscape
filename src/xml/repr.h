@@ -320,7 +320,8 @@ unsigned int sp_repr_set_attr_recursive(SPRepr *repr, gchar const *key, gchar co
 
 /* Searching */
 SPRepr       *sp_repr_lookup_name   (SPRepr             *repr,
-		                     gchar const        *name);
+		                     gchar const        *name,
+				     gint               maxdepth = -1 );
 SPRepr       *sp_repr_lookup_child  (SPRepr    	        *repr,
 				     gchar const        *key,
 				     gchar const        *value);

@@ -1,3 +1,9 @@
+2004-10-03  Kees Cook  <kees@outflux.net>
+
+	* src/dialogs/rdf.cpp, src/dialogs/repr-util.cpp, src/dialogs/repr.h:
+	  Since "dc:title" can appear at multiple XML levels, a way to
+	  control max depth in searching was added.  (Closes bug #1009290)
+
 2004-09-30  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/document-tree-model.cpp:
