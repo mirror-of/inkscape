@@ -3,6 +3,31 @@ ad-hoc.  At least it gives an indication of what assert/g_assert calls have
 been checked by a developer.  If an assertion does trigger, then this file may
 help in debugging that assertion failure.
 
+It's currently ordered by caller.
+
+
+
+seltrans.cpp:sp_sel_trans_update_handles
+
+Proof of requirements of sp_show_handles:
+
+sp_show_handles requirements: !arg1.empty.
+
+Before any call to sp_show_handles is a test `if (... || seltrans.empty) { ...; return; }'
+(with no `break' etc. call preventing that `return').
+Each subsequent sp_show_handles call uses seltrans as arg1.
+seltrans is a reference.  There are no calls between that failing seltrans.empty test
+and the sp_show_handles calls that pass seltrans.  The sole call is sp_remove_handles,
+probably doesn't have access to seltrans.
+
+
+
+seltrans.cpp:sp_show_handles
+
+Proof of precondition:
+
+sp_show_handles is static.  Searching reveals calls only in sp_sel_trans_update_handles (proof above).
+
 
 
 sp-spiral.cpp:sp_spiral_fit_and_draw

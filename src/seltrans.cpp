@@ -35,11 +35,11 @@
 #include "prefs-utils.h"
 #include <libnr/nr-point-fns.h>
 
-static void sp_sel_trans_update_handles(SPSelTrans *seltrans);
-static void sp_sel_trans_update_volatile_state(SPSelTrans *seltrans);
+static void sp_sel_trans_update_handles(SPSelTrans &seltrans);
+static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans);
 
 static void sp_remove_handles(SPKnot *knot[], gint num);
-static void sp_show_handles(SPSelTrans *seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num);
+static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num);
 
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data);
@@ -96,11 +96,11 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 	for (i = 0; i < 8; i++) seltrans->rhandle[i] = NULL;
 	seltrans->chandle = NULL;
 
-	sp_sel_trans_update_volatile_state (seltrans);
+	sp_sel_trans_update_volatile_state(*seltrans);
 	
 	seltrans->center = seltrans->box.centre();
 
-	sp_sel_trans_update_handles (seltrans);
+	sp_sel_trans_update_handles(*seltrans);
 
 	seltrans->selection = SP_DT_SELECTION (desktop);
 	g_signal_connect (G_OBJECT (seltrans->selection), "changed", G_CALLBACK (sp_sel_trans_sel_changed), seltrans);
@@ -199,14 +199,14 @@ void sp_sel_trans_increase_state(SPSelTrans *seltrans)
 		seltrans->state = SP_SELTRANS_STATE_SCALE;
 	}
 
-	sp_sel_trans_update_handles (seltrans);
+	sp_sel_trans_update_handles(*seltrans);
 }
 
 void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
 {
 	seltrans->center = p;
 	
-	sp_sel_trans_update_handles (seltrans);
+	sp_sel_trans_update_handles(*seltrans);
 }
 
 void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const p, gdouble x, gdouble y, gboolean show_handles)
@@ -217,7 +217,7 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const p, gdouble x, gdoub
 
 	seltrans->grabbed = TRUE;
 	seltrans->show_handles = show_handles;
-	sp_sel_trans_update_volatile_state (seltrans);
+	sp_sel_trans_update_volatile_state(*seltrans);
 
 	seltrans->changed = FALSE;
 
@@ -249,7 +249,7 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const p, gdouble x, gdoub
 	}
 
 
-	sp_sel_trans_update_handles (seltrans);
+	sp_sel_trans_update_handles(*seltrans);
 	g_return_if_fail(seltrans->stamp_cache == NULL);
 }
 
@@ -282,7 +282,7 @@ void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, 
 
 	seltrans->changed = TRUE;
 
-	sp_sel_trans_update_handles (seltrans);
+	sp_sel_trans_update_handles(*seltrans);
 }
 
 void sp_sel_trans_ungrab(SPSelTrans *seltrans)
@@ -340,8 +340,10 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 			sp_canvas_item_hide (seltrans->l[i]);
 	}
 
-	sp_sel_trans_update_volatile_state (seltrans);
-	if (updh) sp_sel_trans_update_handles (seltrans);
+	sp_sel_trans_update_volatile_state(*seltrans);
+	if (updh) {
+		sp_sel_trans_update_handles(*seltrans);
+	}
 	if (seltrans->stamp_cache) {
 		g_slist_free(seltrans->stamp_cache);
 		seltrans->stamp_cache = NULL;
@@ -423,31 +425,31 @@ NRPoint *sp_sel_trans_origin_desktop(SPSelTrans const *seltrans, NRPoint *p)
 	return p;
 }
 
-static void sp_sel_trans_update_handles(SPSelTrans *seltrans)
+static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
 {
-	g_return_if_fail (seltrans != NULL);
-
-      	if ((!seltrans->show_handles) || (seltrans->empty)) {
-		sp_remove_handles (seltrans->shandle, 8);
-		sp_remove_handles (seltrans->rhandle, 8);
-		sp_remove_handles (&seltrans->chandle, 1);
+      	if ( !seltrans.show_handles
+	     || seltrans.empty )
+	{
+		sp_remove_handles(seltrans.shandle, 8);
+		sp_remove_handles(seltrans.rhandle, 8);
+		sp_remove_handles(&seltrans.chandle, 1);
 		return;
 	}
-	
-	if (seltrans->state == SP_SELTRANS_STATE_SCALE) {
-		sp_remove_handles (seltrans->rhandle, 8);
-		sp_remove_handles (&seltrans->chandle, 1);
-		sp_show_handles (seltrans, seltrans->shandle, handles_scale, 8);
+
+	if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
+		sp_remove_handles(seltrans.rhandle, 8);
+		sp_remove_handles(&seltrans.chandle, 1);
+		sp_show_handles(seltrans, seltrans.shandle, handles_scale, 8);
 	} else {
-		sp_remove_handles (seltrans->shandle, 8);
-		sp_remove_handles (&seltrans->chandle, 1);
-		sp_show_handles (seltrans, seltrans->rhandle, handles_rotate, 8);
+		sp_remove_handles(seltrans.shandle, 8);
+		sp_remove_handles(&seltrans.chandle, 1);
+		sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8);
 	}
 
 	// center handle
-	if (seltrans->chandle == NULL) {
-	  seltrans->chandle = sp_knot_new (seltrans->desktop);
-	  g_object_set (G_OBJECT (seltrans->chandle),
+	if ( seltrans.chandle == NULL ) {
+	  seltrans.chandle = sp_knot_new(seltrans.desktop);
+	  g_object_set(G_OBJECT(seltrans.chandle),
 			"anchor", handle_center.anchor, 
 			"shape", SP_CTRL_SHAPE_BITMAP,
 			"size", 13,
@@ -462,35 +464,35 @@ static void sp_sel_trans_update_handles(SPSelTrans *seltrans)
 			  //"stroke_mouseover", 0xffffffFF,
 			"pixbuf", handles[handle_center.control],
 			NULL);
-	  g_signal_connect (G_OBJECT (seltrans->chandle), "request",
+	  g_signal_connect(G_OBJECT(seltrans.chandle), "request",
 			    G_CALLBACK (sp_sel_trans_handle_request), (gpointer) &handle_center);
-	  g_signal_connect (G_OBJECT (seltrans->chandle), "moved",
+	  g_signal_connect(G_OBJECT(seltrans.chandle), "moved",
 			    G_CALLBACK (sp_sel_trans_handle_new_event), (gpointer) &handle_center);
-	  g_signal_connect (G_OBJECT (seltrans->chandle), "grabbed",
+	  g_signal_connect(G_OBJECT(seltrans.chandle), "grabbed",
 			    G_CALLBACK (sp_sel_trans_handle_grab), (gpointer) &handle_center);
-	  g_signal_connect (G_OBJECT (seltrans->chandle), "ungrabbed",
+	  g_signal_connect(G_OBJECT(seltrans.chandle), "ungrabbed",
 			    G_CALLBACK (sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
 	}
-	sp_knot_show (seltrans->chandle);
-	sp_knot_set_position (seltrans->chandle, &seltrans->center, 0);
+	sp_knot_show(seltrans.chandle);
+	sp_knot_set_position(seltrans.chandle, &seltrans.center, 0);
 }
 
-static void sp_sel_trans_update_volatile_state(SPSelTrans *seltrans)
+static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans)
 {
-	g_return_if_fail( seltrans != NULL );
+	SPSelection *selection = SP_DT_SELECTION(seltrans.desktop);
+	seltrans.empty = sp_selection_is_empty(selection);
 
-	SPSelection *selection = SP_DT_SELECTION(seltrans->desktop);
-	seltrans->empty = sp_selection_is_empty(selection);
-
-	if (seltrans->empty) return;
-
-	seltrans->box = sp_selection_bbox(selection);
-	if (seltrans->box.empty()) {
-		seltrans->empty = TRUE;
+	if (seltrans.empty) {
 		return;
 	}
 
-	seltrans->current.set_identity();
+	seltrans.box = sp_selection_bbox(selection);
+	if (seltrans.box.empty()) {
+		seltrans.empty = TRUE;
+		return;
+	}
+
+	seltrans.current.set_identity();
 }
 
 static void sp_remove_handles(SPKnot *knot[], gint num)
@@ -504,11 +506,13 @@ static void sp_remove_handles(SPKnot *knot[], gint num)
 	}
 }
 
-static void sp_show_handles (SPSelTrans *seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num)
+static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num)
 {
+	g_return_if_fail( !seltrans.empty );
+
 	for (gint i = 0; i < num; i++) {
 		if (knot[i] == NULL) {
-			knot[i] = sp_knot_new (seltrans->desktop);
+			knot[i] = sp_knot_new(seltrans.desktop);
 			g_object_set (G_OBJECT (knot[i]),
 					"anchor", handle[i].anchor, 
 					"shape", SP_CTRL_SHAPE_BITMAP,
@@ -538,8 +542,8 @@ static void sp_show_handles (SPSelTrans *seltrans, SPKnot *knot[], SPSelTransHan
 		sp_knot_show (knot[i]);
 
 		NR::Point const handle_pt(handle[i].x, handle[i].y);
-		NR::Point p( seltrans->box.topleft()
-			     + ( seltrans->box.dimensions()
+		NR::Point p( seltrans.box.topleft()
+			     + ( seltrans.box.dimensions()
 				 * NR::scale(handle_pt) ) );
 
 		//gtk_signal_handler_block_by_func (GTK_OBJECT (knot[i]),
@@ -643,9 +647,9 @@ static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data)
 	SPSelTrans *seltrans = (SPSelTrans *) data;
 
 	if (!seltrans->grabbed) {
-		sp_sel_trans_update_volatile_state (seltrans);
+		sp_sel_trans_update_volatile_state(*seltrans);
 		seltrans->center = seltrans->box.centre();
-		sp_sel_trans_update_handles (seltrans);
+		sp_sel_trans_update_handles(*seltrans);
 	}
 
 }
@@ -658,9 +662,9 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
 	seltrans = (SPSelTrans *) data;
 
 	if (!seltrans->grabbed) {
-		sp_sel_trans_update_volatile_state (seltrans);
+		sp_sel_trans_update_volatile_state(*seltrans);
 		seltrans->center = seltrans->box.centre();
-		sp_sel_trans_update_handles (seltrans);
+		sp_sel_trans_update_handles(*seltrans);
 	}
 
 }
