@@ -454,45 +454,42 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
 		return;
 	}
 
+	// center handle
+        if ( seltrans.chandle == NULL ) {
+            seltrans.chandle = sp_knot_new(seltrans.desktop);
+            g_object_set(G_OBJECT(seltrans.chandle),
+                         "anchor", handle_center.anchor, 
+                         "shape", SP_CTRL_SHAPE_BITMAP,
+                         "size", 13,
+                         "mode", SP_CTRL_MODE_XOR,
+                         "fill", 0x00000000,
+                         "fill_mouseover", 0x00000000,
+                         "stroke", 0x000000ff,
+                         "stroke_mouseover", 0xff0000b0,
+                         "pixbuf", handles[handle_center.control],
+                         NULL);
+            g_signal_connect(G_OBJECT(seltrans.chandle), "request",
+                             G_CALLBACK (sp_sel_trans_handle_request), (gpointer) &handle_center);
+            g_signal_connect(G_OBJECT(seltrans.chandle), "moved",
+                             G_CALLBACK (sp_sel_trans_handle_new_event), (gpointer) &handle_center);
+            g_signal_connect(G_OBJECT(seltrans.chandle), "grabbed",
+                             G_CALLBACK (sp_sel_trans_handle_grab), (gpointer) &handle_center);
+            g_signal_connect(G_OBJECT(seltrans.chandle), "ungrabbed",
+                             G_CALLBACK (sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
+        }
+
 	if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
 		sp_remove_handles(seltrans.rhandle, 8);
 		sp_remove_handles(&seltrans.chandle, 1);
 		sp_show_handles(seltrans, seltrans.shandle, handles_scale, 8);
+		sp_knot_hide(seltrans.chandle);
 	} else {
 		sp_remove_handles(seltrans.shandle, 8);
 		sp_remove_handles(&seltrans.chandle, 1);
 		sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8);
+		sp_knot_show(seltrans.chandle);
+		sp_knot_set_position(seltrans.chandle, &seltrans.center, 0);
 	}
-
-	// center handle
-	if ( seltrans.chandle == NULL ) {
-	  seltrans.chandle = sp_knot_new(seltrans.desktop);
-	  g_object_set(G_OBJECT(seltrans.chandle),
-			"anchor", handle_center.anchor, 
-			"shape", SP_CTRL_SHAPE_BITMAP,
-			"size", 13,
-			"mode", SP_CTRL_MODE_XOR,
-			"fill", 0x00000000,
-			"fill_mouseover", 0x00000000,
-			"stroke", 0x000000ff,
-			"stroke_mouseover", 0xff0000b0,
-			  //"fill", 0xff40ffa0,
-			  //"fill_mouseover", 0x40ffffa0,
-			  //"stroke", 0xFFb0b0ff,
-			  //"stroke_mouseover", 0xffffffFF,
-			"pixbuf", handles[handle_center.control],
-			NULL);
-	  g_signal_connect(G_OBJECT(seltrans.chandle), "request",
-			    G_CALLBACK (sp_sel_trans_handle_request), (gpointer) &handle_center);
-	  g_signal_connect(G_OBJECT(seltrans.chandle), "moved",
-			    G_CALLBACK (sp_sel_trans_handle_new_event), (gpointer) &handle_center);
-	  g_signal_connect(G_OBJECT(seltrans.chandle), "grabbed",
-			    G_CALLBACK (sp_sel_trans_handle_grab), (gpointer) &handle_center);
-	  g_signal_connect(G_OBJECT(seltrans.chandle), "ungrabbed",
-			    G_CALLBACK (sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
-	}
-	sp_knot_show(seltrans.chandle);
-	sp_knot_set_position(seltrans.chandle, &seltrans.center, 0);
 }
 
 static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans)
@@ -560,12 +557,7 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
 			     + ( seltrans.box.dimensions()
 				 * NR::scale(handle_pt) ) );
 
-		//gtk_signal_handler_block_by_func (GTK_OBJECT (knot[i]),
-		//				  GTK_SIGNAL_FUNC (sp_sel_trans_handle_new_event), &handle[i]);
 		sp_knot_set_position(knot[i], &p, 0);
-		//gtk_signal_handler_unblock_by_func (GTK_OBJECT (knot[i]),
-		//				    GTK_SIGNAL_FUNC (sp_sel_trans_handle_new_event), &handle[i]);
-
 	}
 }
 
@@ -675,7 +667,6 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
 
 	if (!seltrans->grabbed) {
 		sp_sel_trans_update_volatile_state(*seltrans);
-		seltrans->center = seltrans->box.midpoint();
 		sp_sel_trans_update_handles(*seltrans);
 	}
 
@@ -1087,3 +1078,13 @@ void sp_sel_trans_center(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Poi
 	sp_sel_trans_set_center (seltrans, pt);
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
