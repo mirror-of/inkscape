@@ -142,7 +142,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"savewindowgeometry\" value=\"1\"/>\n"
 "    <group id=\"defaultoffsetwidth\" value=\"2\"/>\n"
 "    <group id=\"defaultscale\" value=\"2\"/>\n"
-"    <group id=\"maxrecentdocuments\" value=\"20\"/>\n"
+"    <group id=\"maxrecentdocuments\" value=\"36\"/>\n"
 "    <group id=\"zoomincrement\" value=\"1.414213562\"/>\n"
 "    <group id=\"keyscroll\" value=\"10\"/>\n"
 "    <group id=\"wheelscroll\" value=\"40\"/>\n"
