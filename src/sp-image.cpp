@@ -49,7 +49,7 @@ static SPRepr *sp_image_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_image_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_image_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_image_description (SPItem * item);
-static std::vector<NR::Point> sp_image_snappoints(SPItem const *item);
+static void sp_image_snappoints(SPItem const *item, SnapPointsIter p);
 static NRArenaItem *sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static NR::Matrix sp_image_set_transform (SPItem *item, NR::Matrix const &xform);
 
@@ -499,15 +499,11 @@ sp_image_update_canvas_image (SPImage *image)
 	}
 }
 
-static std::vector<NR::Point> sp_image_snappoints(SPItem const *item)
+static void sp_image_snappoints(SPItem const *item, SnapPointsIter p)
 {
-     std::vector<NR::Point> p;
-
      if (((SPItemClass *) parent_class)->snappoints) {
-         p = ((SPItemClass *) parent_class)->snappoints (item);
+         ((SPItemClass *) parent_class)->snappoints (item, p);
      }
-
-     return p;
 }
 
 /*

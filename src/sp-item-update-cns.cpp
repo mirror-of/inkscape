@@ -13,7 +13,8 @@ using std::vector;
 
 void sp_item_update_cns(SPItem &item, SPDesktop const &desktop)
 {
-    vector<NR::Point> snappoints = sp_item_snappoints(&item);
+    vector<NR::Point> snappoints;
+    sp_item_snappoints(&item, SnapPointsIter(snappoints));
     /* TODO: Implement the ordering. */
     vector<SPGuideConstraint> found_cns;
     satisfied_guide_cns(desktop, snappoints, found_cns);

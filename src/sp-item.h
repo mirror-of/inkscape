@@ -106,6 +106,8 @@ struct SPItem : public SPObject {
         }
 };
 
+typedef std::back_insert_iterator<std::vector<NR::Point> > SnapPointsIter;
+
 struct SPItemClass {
 	SPObjectClass parent_class;
 
@@ -122,10 +124,10 @@ struct SPItemClass {
 	NRArenaItem * (* show) (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 	void (* hide) (SPItem *item, unsigned int key);
 
-	/* Return a vector of points that should be considered for snapping
+	/* Write to an iterator the points that should be considered for snapping
 	** as the item's `nodes'.
 	*/
-	std::vector<NR::Point> (* snappoints) (SPItem const *item);
+        void (* snappoints) (SPItem const *item, SnapPointsIter p);
 
 	/* Apply the transform optimally, and return any residual transformation */
 	NR::Matrix (* set_transform)(SPItem *item, NR::Matrix const &transform);
@@ -153,7 +155,7 @@ unsigned int sp_item_display_key_new (unsigned int numkeys);
 NRArenaItem *sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 void sp_item_invoke_hide (SPItem *item, unsigned int key);
 
-std::vector<NR::Point> sp_item_snappoints(SPItem const *item);
+void sp_item_snappoints(SPItem const *item, SnapPointsIter p);
 
 void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv = NULL);
 void sp_item_write_transform (SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix *adv = NULL);

@@ -39,7 +39,7 @@ static void sp_spiral_set (SPObject *object, unsigned int key, const gchar *valu
 static void sp_spiral_update (SPObject *object, SPCtx *ctx, guint flags);
 
 static gchar * sp_spiral_description (SPItem * item);
-static std::vector<NR::Point> sp_spiral_snappoints(SPItem const *item);
+static void sp_spiral_snappoints(SPItem const *item, SnapPointsIter p);
 static void sp_spiral_set_shape (SPShape *shape);
 
 static NR::Point sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t);
@@ -430,15 +430,11 @@ sp_spiral_position_set       (SPSpiral          *spiral,
 	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static std::vector<NR::Point> sp_spiral_snappoints(SPItem const *item)
+static void sp_spiral_snappoints(SPItem const *item, SnapPointsIter p)
 {
-	std::vector<NR::Point> p;
-  
 	if (((SPItemClass *) parent_class)->snappoints) {
-		p = ((SPItemClass *) parent_class)->snappoints (item);
+		((SPItemClass *) parent_class)->snappoints (item, p);
 	}
-	
-	return p;
 }
 
 /** Set *p to one of the points on the spiral; t specifies how far along the spiral.

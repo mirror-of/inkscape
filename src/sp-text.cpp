@@ -2195,7 +2195,7 @@ static void sp_text_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &tra
 static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_text_hide (SPItem *item, unsigned int key);
 static char * sp_text_description (SPItem *item);
-static std::vector<NR::Point> sp_text_snappoints(SPItem const *item);
+static void sp_text_snappoints(SPItem const *item, SnapPointsIter p);
 static NR::Matrix sp_text_set_transform (SPItem *item, NR::Matrix const &xform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
@@ -2853,15 +2853,11 @@ sp_text_set_shape (SPText *text)
 
 
 
-static std::vector<NR::Point> sp_text_snappoints(SPItem const *item)
+static void sp_text_snappoints(SPItem const *item, SnapPointsIter p)
 {
-     std::vector<NR::Point> p;
-    
      if (((SPItemClass *) text_parent_class)->snappoints) {
-         p = ((SPItemClass *) text_parent_class)->snappoints (item);
+         ((SPItemClass *) text_parent_class)->snappoints (item, p);
      }
-
-     return p;
 }
 
 

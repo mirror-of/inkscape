@@ -70,7 +70,7 @@ static void sp_genericellipse_init (SPGenericEllipse *ellipse);
 
 static void sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags);
 
-static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem const *item);
+static void sp_genericellipse_snappoints(SPItem const *item, SnapPointsIter p);
 
 static void sp_genericellipse_set_shape (SPShape *shape);
 static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint flags);
@@ -249,26 +249,22 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 	sp_curve_unref (c);
 }
 
-static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem const *item)
+static void sp_genericellipse_snappoints(SPItem const *item, SnapPointsIter p)
 {
 	SPGenericEllipse const *ge = SP_GENERICELLIPSE (item);
-
-	std::vector<NR::Point> p;
 
 	NR::Matrix const i2d = sp_item_i2d_affine(item);
 
 	/* Use the bounding box corners */
 	NRRect bbox;
 	sp_item_invoke_bbox(item, &bbox, i2d, TRUE);
-	p.push_back(NR::Point(bbox.x0, bbox.y0));
-	p.push_back(NR::Point(bbox.x1, bbox.y0));
-	p.push_back(NR::Point(bbox.x1, bbox.y1));
-	p.push_back(NR::Point(bbox.x0, bbox.y1));
+	*p = NR::Point(bbox.x0, bbox.y0);
+	*p = NR::Point(bbox.x1, bbox.y0);
+	*p = NR::Point(bbox.x1, bbox.y1);
+	*p = NR::Point(bbox.x0, bbox.y1);
 
 	/* And the centre */
-	p.push_back(NR::Point(ge->cx.computed, ge->cy.computed) * i2d);
-
-	return p;
+	*p = NR::Point(ge->cx.computed, ge->cy.computed) * i2d;
 }
 
 void

@@ -321,13 +321,12 @@ NR::Rect SPSelection::boundsInDocument() const {
  */
 std::vector<NR::Point> SPSelection::getSnapPoints() const {
     GSList const *items = const_cast<SPSelection *>(this)->itemList();
-    std::vector<NR::Point> all;
+    std::vector<NR::Point> p;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-	std::vector<NR::Point> p = sp_item_snappoints(SP_ITEM(iter->data));
-	copy(p.begin(), p.end(), back_inserter(all));
+	sp_item_snappoints(SP_ITEM(iter->data), SnapPointsIter(p));
     }
 
-    return all;
+    return p;
 }
 
 std::vector<NR::Point> SPSelection::getBBoxPoints() const {
