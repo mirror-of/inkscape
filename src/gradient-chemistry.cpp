@@ -467,6 +467,16 @@ sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p, bool
 				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 			}
 			break;
+		case POINT_RG_FOCUS:
+			rg->fx.computed = p[NR::X];
+			rg->fy.computed = p[NR::Y];
+			if (write_repr) {
+				sp_repr_set_double (repr, "fx", rg->fx.computed);
+				sp_repr_set_double (repr, "fy", rg->fy.computed);
+			} else {
+				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+			}
+			break;
 		case POINT_RG_R1:
 			{
 				NR::Point r1_w = (c + NR::Point(rg->r.computed, 0)) * gradient->gradientTransform * i2d;
@@ -563,6 +573,22 @@ NR::Point
 sp_rg_get_center (SPItem *item, SPRadialGradient *rg)
 {
 	NR::Point p (rg->cx.computed, rg->cy.computed);
+	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+		NRRect bbox;
+		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+		p *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+	}
+	p *= NR::Matrix (rg->gradientTransform) * sp_item_i2d_affine (item);
+	return p;
+}
+
+/** Returns the focus of a radial gradient \a rg (as applied to the \item) in desktop coordinates
+ */
+NR::Point
+sp_rg_get_focus (SPItem *item, SPRadialGradient *rg)
+{
+	NR::Point p (rg->fx.computed, rg->fy.computed);
 	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
 		NRRect bbox;
 		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));

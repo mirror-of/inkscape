@@ -59,6 +59,7 @@ void sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p,
 NR::Point sp_lg_get_p1 (SPItem *item, SPLinearGradient *lg);
 NR::Point sp_lg_get_p2 (SPItem *item, SPLinearGradient *lg);
 NR::Point sp_rg_get_center (SPItem *item, SPRadialGradient *rg);
+NR::Point sp_rg_get_focus (SPItem *item, SPRadialGradient *rg);
 NR::Point sp_rg_get_r1 (SPItem *item, SPRadialGradient *rg);
 NR::Point sp_rg_get_r2 (SPItem *item, SPRadialGradient *rg);
 

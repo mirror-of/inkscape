@@ -47,7 +47,7 @@ be moved when the knot moves. Normally there's one draggable in the list, but th
 be more when draggers are snapped together.
 */
 struct GrDragger {
-	GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKnotShapeType shape);
+	GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable);
 	~GrDragger();
 
 	GrDrag *parent;
@@ -65,6 +65,7 @@ struct GrDragger {
 	GSList *draggables;
 
 	void addDraggable(GrDraggable *draggable);
+	void updateKnotShape();
 
 	bool isA (guint point_num);
 	bool isA (SPItem *item, guint point_num, bool fill_or_stroke);
@@ -82,7 +83,7 @@ struct GrDrag {
 
 	void addLine (NR::Point p1, NR::Point p2);
 
-	void addDragger (NR::Point p, GrDraggable *draggable, SPKnotShapeType shape);
+	void addDragger (NR::Point p, GrDraggable *draggable);
 
 	void addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke);
 	void addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke);

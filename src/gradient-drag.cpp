@@ -175,6 +175,76 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
     // FIXME: take from prefs
     double snap_dist = SNAP_DIST / SP_DESKTOP_ZOOM (dragger->parent->desktop);
 
+    if (state & GDK_SHIFT_MASK) {
+        // with Shift; unsnap if we carry more than one draggable
+        if (dragger->draggables && dragger->draggables->next) {
+            // create a new dragger
+            GrDragger *dr_new = new GrDragger (dragger->parent, dragger->point, NULL);
+            dragger->parent->draggers = g_slist_prepend (dragger->parent->draggers, dr_new);
+            // relink to it all but the first draggable in the list
+            for (GSList const* i = dragger->draggables->next; i != NULL; i = i->next) {
+                GrDraggable *draggable = (GrDraggable *) i->data;
+                dr_new->addDraggable (draggable);
+            }
+            dr_new->updateKnotShape();
+            g_slist_free (dragger->draggables->next);
+            dragger->draggables->next = NULL;
+            dragger->updateKnotShape();
+            dragger->updateTip();
+        }
+    } else {
+        // without Shift; see if we need to snap to another dragger
+        for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
+            GrDragger *d_new = (GrDragger *) di->data;
+            if (d_new == dragger)
+                continue;
+            if (NR::L2 (d_new->point - p) < snap_dist) {
+
+                bool incest = false;
+                for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+                    GrDraggable *d1 = (GrDraggable *) i->data;
+                    for (GSList const* j = d_new->draggables; j != NULL; j = j->next) { // for all draggables of dragger
+                        GrDraggable *d2 = (GrDraggable *) j->data;
+                        if ((d1->item == d2->item) && (d1->fill_or_stroke == d2->fill_or_stroke)) {
+                            // we must not snap together the points of the same gradient!
+                            if (!((d1->point_num == POINT_RG_FOCUS && d2->point_num == POINT_RG_CENTER) ||
+                                  (d1->point_num == POINT_RG_CENTER && d2->point_num == POINT_RG_FOCUS))) {
+                                  // except that we can snap center and focus together
+                                incest = true;
+                            }
+                        }
+                    }
+                }
+                if (incest)
+                    continue;
+
+                // Now actually snap:
+                for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+                    GrDraggable *draggable = (GrDraggable *) i->data;
+                    // copy draggable to d_new:
+                    GrDraggable *da_new = new GrDraggable (draggable->item, draggable->point_num, draggable->fill_or_stroke);
+                    d_new->addDraggable (da_new); 
+                    // move to the exact position of d_new, writing to repr:
+                    sp_item_gradient_set_coords (da_new->item, da_new->point_num, d_new->point, da_new->fill_or_stroke, true);
+                }
+                // unlink and delete this dragger
+                dragger->parent->draggers = g_slist_remove (dragger->parent->draggers, dragger);
+                delete dragger;
+                d_new->parent->updateLines();
+                d_new->parent->setSelected (d_new);
+                d_new->updateKnotShape ();
+                d_new->updateTip ();
+                sp_document_done (SP_DT_DOCUMENT (d_new->parent->desktop));
+                // do the same as on ungrabbing
+                if (d_new->isA(POINT_RG_R1) || d_new->isA(POINT_RG_R2) || d_new->isA(POINT_RG_CENTER)) {
+                    // only if this is center or one of the radii; focus does not affect other draggers
+                    d_new->parent->updateDraggersReselect();
+                }
+                return;
+            }
+        }
+    }
+
     if (state & GDK_CONTROL_MASK) {
         unsigned snaps = abs(prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12));
         /* 0 means no snapping. */
@@ -245,13 +315,13 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
     }
 
     { // See if we need to snap to any of the levels
-        for (int i = 0; i < dragger->parent->hor_levels.size(); i++) {
+        for (guint i = 0; i < dragger->parent->hor_levels.size(); i++) {
             if (fabs(p[NR::Y] - dragger->parent->hor_levels[i]) < snap_dist) {
                 p[NR::Y] = dragger->parent->hor_levels[i];
                 sp_knot_moveto (knot, &p);
             }
         }
-        for (int i = 0; i < dragger->parent->vert_levels.size(); i++) {
+        for (guint i = 0; i < dragger->parent->vert_levels.size(); i++) {
             if (fabs(p[NR::X] - dragger->parent->vert_levels[i]) < snap_dist) {
                 p[NR::X] = dragger->parent->vert_levels[i];
                 sp_knot_moveto (knot, &p);
@@ -267,69 +337,6 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         sp_item_gradient_set_coords (draggable->item, draggable->point_num, p, draggable->fill_or_stroke, false);
     }
 
-    if (state & GDK_SHIFT_MASK) {
-        if (dragger->draggables && dragger->draggables->next) {
-            // create a new dragger
-            GrDragger *dr_new = new GrDragger (dragger->parent, p, NULL, 
-                                               gr_knot_shapes[((GrDraggable *) dragger->draggables->next->data)->point_num]);
-            dragger->parent->draggers = g_slist_prepend (dragger->parent->draggers, dr_new);
-            // relink to it all but the first draggable in the list
-            for (GSList const* i = dragger->draggables->next; i != NULL; i = i->next) {
-                GrDraggable *draggable = (GrDraggable *) i->data;
-                dr_new->addDraggable (draggable);
-            }
-            g_slist_free (dragger->draggables->next);
-            dragger->draggables->next = NULL;
-            dragger->updateTip();
-        }
-    } else {
-    // without Shift
-    // TODO: snap to bboxes, centers of all selected objects; lower priority than dragger snap
-    // see if we need to snap to another dragger
-    for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
-        GrDragger *d_new = (GrDragger *) di->data;
-        if (d_new == dragger)
-            continue;
-        if (NR::L2 (d_new->point - p) < snap_dist) {
-
-            bool incest = false;
-            for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
-                GrDraggable *d1 = (GrDraggable *) i->data;
-                for (GSList const* j = d_new->draggables; j != NULL; j = j->next) { // for all draggables of dragger
-                    GrDraggable *d2 = (GrDraggable *) j->data;
-                    if ((d1->item == d2->item) && (d1->fill_or_stroke == d2->fill_or_stroke)) {
-                        // we must not snap together the points of the same gradient!
-                        incest = true;
-                    }
-                }
-            }
-            if (incest)
-                continue;
-
-            // Now actually snap:
-            for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
-                GrDraggable *draggable = (GrDraggable *) i->data;
-                // copy draggable to d_new:
-                GrDraggable *da_new = new GrDraggable (draggable->item, draggable->point_num, draggable->fill_or_stroke);
-                d_new->addDraggable (da_new); 
-                // move to the exact position of d_new, writing to repr:
-                sp_item_gradient_set_coords (da_new->item, da_new->point_num, d_new->point, da_new->fill_or_stroke, true);
-            }
-            // unlink and delete this dragger
-            dragger->parent->draggers = g_slist_remove (dragger->parent->draggers, dragger);
-            delete dragger;
-            d_new->parent->updateLines();
-            d_new->parent->setSelected (d_new);
-            sp_document_done (SP_DT_DOCUMENT (d_new->parent->desktop));
-            // do the same as on ungrabbing
-            if (d_new->isA(POINT_RG_R1) || d_new->isA(POINT_RG_R2) || d_new->isA(POINT_RG_CENTER)) {
-                // only if this is center or one of the radii; focus does not affect other draggers
-                d_new->parent->updateDraggersReselect();
-            }
-            return;
-        }
-    }
-    }
 }
 
 /**
@@ -424,12 +431,26 @@ GrDragger::updateTip ()
 
     if (g_slist_length (this->draggables) == 1) {
         GrDraggable *draggable = (GrDraggable *) this->draggables->data;
-        this->knot->tip = g_strdup_printf (_("%s for: %s"), 
+        this->knot->tip = g_strdup_printf (_("%s for: %s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to preserve angle"), 
                                            gr_knot_descr[draggable->point_num], sp_item_description (draggable->item));
+    } else if (g_slist_length (draggables) == 2 && isA (POINT_RG_CENTER) && isA (POINT_RG_FOCUS)) {
+        this->knot->tip = g_strdup_printf (_("Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to separate focus"));
     } else {
         this->knot->tip = g_strdup_printf (_("Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to separate"), 
                                            g_slist_length (this->draggables));
     }
+}
+
+/**
+Adds a draggable to the dragger
+ */
+void
+GrDragger::updateKnotShape ()
+{
+    if (!draggables)
+        return;
+    GrDraggable *last = (GrDraggable *) g_slist_last(draggables)->data;
+    g_object_set (G_OBJECT (this->knot->item), "shape", gr_knot_shapes[last->point_num], NULL);
 }
 
 /**
@@ -444,7 +465,7 @@ GrDragger::addDraggable (GrDraggable *draggable)
 }
 
 
-GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKnotShapeType shape) 
+GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable) 
 {
     this->draggables = NULL;
 
@@ -455,7 +476,6 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKno
 
     // create the knot
     this->knot = sp_knot_new (parent->desktop, NULL);
-    g_object_set (G_OBJECT (this->knot->item), "shape", shape, NULL);
     g_object_set (G_OBJECT (this->knot->item), "mode", SP_KNOT_MODE_XOR, NULL);
     this->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_NORMAL;
 
@@ -471,6 +491,7 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKno
     // add the initial draggable
     if (draggable)
         this->addDraggable (draggable);
+    updateKnotShape();
 }
 
 GrDragger::~GrDragger ()
@@ -544,18 +565,20 @@ If there already exists a dragger within MERGE_DIST of p, add the draggable to i
 new dragger and add it to draggers list
  */
 void 
-GrDrag::addDragger (NR::Point p, GrDraggable *draggable, SPKnotShapeType shape)
+GrDrag::addDragger (NR::Point p, GrDraggable *draggable)
 {
     for (GSList *i = this->draggers; i != NULL; i = i->next) {
         GrDragger *dragger = (GrDragger *) i->data;
         if (NR::L2 (dragger->point - p) < MERGE_DIST) {
             // distance is small, merge this draggable into dragger, no need to create new dragger
             dragger->addDraggable (draggable);
+            dragger->updateKnotShape();
             return;
         }
     }
 
-    this->draggers = g_slist_prepend (this->draggers, new GrDragger(this, p, draggable, shape));
+    GrDragger *new_dragger = new GrDragger(this, p, draggable);
+    this->draggers = g_slist_prepend (this->draggers, new_dragger);
 }
 
 /**
@@ -564,9 +587,10 @@ Add draggers for the radial gradient rg on item
 void 
 GrDrag::addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke)
 {
-    addDragger (sp_rg_get_center (item, rg), new GrDraggable (item, POINT_RG_CENTER, fill_or_stroke), gr_knot_shapes[POINT_RG_CENTER]);
-    addDragger (sp_rg_get_r1(item, rg), new GrDraggable (item, POINT_RG_R1, fill_or_stroke), gr_knot_shapes[POINT_RG_R1]);
-    addDragger (sp_rg_get_r2(item, rg), new GrDraggable (item, POINT_RG_R2, fill_or_stroke), gr_knot_shapes[POINT_RG_R2]);
+    addDragger (sp_rg_get_center (item, rg), new GrDraggable (item, POINT_RG_CENTER, fill_or_stroke));
+    addDragger (sp_rg_get_focus (item, rg), new GrDraggable (item, POINT_RG_FOCUS, fill_or_stroke));
+    addDragger (sp_rg_get_r1(item, rg), new GrDraggable (item, POINT_RG_R1, fill_or_stroke));
+    addDragger (sp_rg_get_r2(item, rg), new GrDraggable (item, POINT_RG_R2, fill_or_stroke));
 }
 
 /**
@@ -575,8 +599,8 @@ Add draggers for the linear gradient lg on item
 void 
 GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke)
 {
-    addDragger (sp_lg_get_p1 (item, lg), new GrDraggable (item, POINT_LG_P1, fill_or_stroke), gr_knot_shapes[POINT_LG_P1]);
-    addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, fill_or_stroke), gr_knot_shapes[POINT_LG_P2]);
+    addDragger (sp_lg_get_p1 (item, lg), new GrDraggable (item, POINT_LG_P1, fill_or_stroke));
+    addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, fill_or_stroke));
 }
 
 
