@@ -43,6 +43,9 @@
 #include "nr-type-directory.h"
 #include "nr-type-pos-def.h"
 
+/**
+ * 
+ */
 struct NRFamilyDef {
 	NRFamilyDef *next;
 	gchar *name;
@@ -57,6 +60,9 @@ static double nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef c
 void nr_type_read_w32_list (void);
 #endif
 
+/**
+ * Global dictionaries of font types and families
+ */
 static NRTypeDict *typedict = NULL;
 static NRTypeDict *familydict = NULL;
 
@@ -66,6 +72,13 @@ static NRFamilyDef *families = NULL;
 GSList *family_warnings = NULL;
 GSList *style_warnings = NULL;
 
+/**
+ * Looks up the typeface for the given name from the typeface directory.
+ * If the directory doesn't exist yet, it first builds it.  If the typeface
+ * hasn't been created, it creates it.  
+ *
+ * Returns NULL if it wasn't able to find the typeface.
+ */
 NRTypeFace *
 nr_type_directory_lookup (const gchar *name)
 {
@@ -87,6 +100,9 @@ nr_type_directory_lookup (const gchar *name)
 	return NULL;
 }
 
+/**
+ * Does a strcmp(a, b) and returns result
+ */
 gint 
 compare_warnings (const void *a, const void *b)
 {
@@ -101,14 +117,24 @@ struct cache_unit{
 	NRTypeFaceDef *face;
 };
 
+/**
+ * Returns an int made up of the font properties (italic, oblique, weight, etc.)
+ * for the given font type pos definition.
+ */
 guint 
 spec_from_def (NRTypePosDef a)
 {
 	return a.italic + a.oblique * 10 + a.variant * 100 + a.weight * 1000 + a.stretch * 1000000;
 }
 
+/**
+ * A global cache list
+ */
 static GSList *cache = NULL;
 
+/**
+ * 
+ */
 gint 
 compare_cache (const void *a, const void *b)
 {
@@ -120,6 +146,10 @@ compare_cache (const void *a, const void *b)
 	}
 }
 
+/**
+ * Searches the cache for the typeface definition matching the given
+ * family and typeface pos definition.
+ */
 NRTypeFaceDef *
 search_cache (gchar *fam, NRTypePosDef a)
 {
@@ -133,6 +163,9 @@ search_cache (gchar *fam, NRTypePosDef a)
 		return NULL;
 }
 
+/**
+ * Adds the given typeface definition to the cache
+ */
 void
 add_to_cache (gchar *fam, NRTypePosDef a, NRTypeFaceDef *face)
 {
@@ -144,6 +177,9 @@ add_to_cache (gchar *fam, NRTypePosDef a, NRTypeFaceDef *face)
 }
 
 
+/**
+ * Performs a fuzzy lookup of a typeface for the family and typeface pos definition
+ */
 NRTypeFace *
 nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 {
@@ -224,12 +260,24 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 	return besttdef->typeface;
 }
 
+/**
+ * Removes the typeface definition from the typeface object
+ * 
+ * Q:  Why is this needed?
+ * Q:  Will this cause a memory leak?
+ */
 void
 nr_type_directory_forget_face (NRTypeFace *tf)
 {
 	tf->def->typeface = NULL;
 }
 
+/**
+ * Retrieves a name list of the typeface families.
+ * Builds the typeface directory if it hasn't been built yet.
+ * 
+ * Q:  Why is this needed?
+ */
 NRNameList *
 nr_type_directory_family_list_get (NRNameList *flist)
 {
@@ -257,6 +305,13 @@ nr_type_directory_family_list_get (NRNameList *flist)
 	return flist;
 }
 
+/**
+ * Registers a typeface definition.  Creates the family def as
+ * well if appropriate, and inserts it into the dictionary prior
+ * to inserting it into the typeface dictionary.
+ *
+ * Returns 0 if it's already in the dictionary, 1 otherwise.
+ */
 unsigned int
 nr_type_register (NRTypeFaceDef *def)
 {
@@ -282,12 +337,18 @@ nr_type_register (NRTypeFaceDef *def)
 	return 1;
 }
 
+/**
+ * Frees any typeface names in the given named list
+ */
 static void
 nr_type_directory_style_list_destructor (NRNameList *list)
 {
 	if (list->names) nr_free (list->names);
 }
 
+/**
+ * Provides an implementation of strcasestr() for Win32.
+ */
 bool
 ink_strstr (const char *haystack, const char *pneedle)
 {
@@ -319,6 +380,9 @@ ink_strstr (const char *haystack, const char *pneedle)
 #endif
 }
 
+/**
+ * Regular fonts are 'Regular', 'Roman', 'Normal', or 'Plain'
+ */
 // FIXME: make this UTF8, add non-English style names
 bool
 is_regular (const char *s)
@@ -330,6 +394,9 @@ is_regular (const char *s)
 	return false;
 }
 
+/**
+ * Non-bold fonts are 'Medium' or 'Book'
+ */
 bool
 is_nonbold (const char *s)
 {
@@ -338,6 +405,9 @@ is_nonbold (const char *s)
 	return false;
 }
 
+/**
+ * Italic fonts are 'Italic', 'Oblique', or 'Slanted'
+ */
 bool
 is_italic (const char *s)
 {
@@ -347,6 +417,9 @@ is_italic (const char *s)
 	return false;
 }
 
+/**
+ * Bold fonts are 'Bold'
+ */
 bool
 is_bold (const char *s)
 {
@@ -354,6 +427,9 @@ is_bold (const char *s)
 	return false;
 }
 
+/**
+ * Caps fonts are 'Caps'
+ */
 bool
 is_caps (const char *s)
 {
@@ -361,6 +437,9 @@ is_caps (const char *s)
 	return false;
 }
 
+/**
+ * Monospaced fonts are 'Mono'
+ */
 bool
 is_mono (const char *s)
 {
@@ -368,6 +447,9 @@ is_mono (const char *s)
 	return false;
 }
 
+/**
+ * Rounded fonts are 'Round'
+ */
 bool
 is_round (const char *s)
 {
@@ -375,6 +457,9 @@ is_round (const char *s)
 	return false;
 }
 
+/**
+ * Outline fonts are 'Outline'
+ */
 bool
 is_outline (const char *s)
 {
@@ -382,6 +467,9 @@ is_outline (const char *s)
 	return false;
 }
 
+/**
+ * Swash fonts are 'Swash'
+ */
 bool
 is_swash (const char *s)
 {
@@ -389,6 +477,14 @@ is_swash (const char *s)
 	return false;
 }
 
+/**
+ * Determines if two style names match.  This allows us to match
+ * based on the type of style rather than simply doing string matching,
+ * because for instance 'Plain' and 'Normal' mean the same thing.
+ * 
+ * Q:  Shouldn't this include the other tests such as is_outline, etc.?
+ * Q:  Is there a problem with strcasecmp on Win32?  Should it use stricmp?
+ */
 static int
 style_name_compare (const void *aa, const void *bb)
 {
@@ -414,6 +510,16 @@ style_name_compare (const void *aa, const void *bb)
 }
 
 
+/**
+ * Builds the type directory if it hasn't been built already.
+ * Looks up the font definition for the given font family.
+ * Assigns the directory destructor to the styles->destructor.
+ * If a definition exists for the font, it gets the fonts of
+ * that family and adds them to the styles->names array.
+ * Otherwise, it sets styles->names to null. 
+ *
+ * Returns the styles object.
+ */
 NRNameList *
 nr_type_directory_style_list_get (const gchar *family, NRNameList *styles)
 {
@@ -446,6 +552,9 @@ nr_type_directory_style_list_get (const gchar *family, NRNameList *styles)
 	return styles;
 }
 
+/**
+ * On Win32 performs a stricmp(a,b), otherwise does a strcasecmp(a,b)
+ */
 static int
 nr_type_family_def_compare (const void *a, const void *b)
 {
@@ -456,6 +565,10 @@ nr_type_family_def_compare (const void *a, const void *b)
 #endif
 }
 
+/**
+ * Builds the typeface directory.  On Win32 it uses nr_type_read_w32_list(),
+ * whereas for systems using Xft it uses nr_type_read_xft_list().
+ */
 static void
 nr_type_directory_build (void)
 {
@@ -527,6 +640,9 @@ nr_type_directory_build (void)
 	}
 }
 
+/**
+ * 
+ */
 /**
 Return "distance" between two font family names, allowing to choose the closest match or a sensible alternative if there's no match
  */
@@ -648,6 +764,9 @@ nr_type_distance_family (const gchar *ask_c, const gchar *bid_c)
 #define NR_TYPE_STRETCH_SCALE 2000.0F
 #define NR_TYPE_VARIANT_SCALE 10000.0F
 
+/**
+ * 
+ */
 static double
 nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 {
@@ -677,6 +796,9 @@ nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 	return dist;
 }
 
+/**
+ * 
+ */
 NRTypeFace *
 nr_type_build (const gchar *name, const gchar *family,
 	       const gchar *data, unsigned int size, unsigned int face)
