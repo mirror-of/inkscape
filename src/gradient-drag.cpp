@@ -314,7 +314,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         }
     }
 
-    { // See if we need to snap to any of the levels
+    if (!(state & GDK_SHIFT_MASK)) { // See if we need to snap to any of the levels
         for (guint i = 0; i < dragger->parent->hor_levels.size(); i++) {
             if (fabs(p[NR::Y] - dragger->parent->hor_levels[i]) < snap_dist) {
                 p[NR::Y] = dragger->parent->hor_levels[i];
