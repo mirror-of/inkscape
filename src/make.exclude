@@ -27,6 +27,7 @@ extension/plugin
 extract-uri-test.cpp
 helper/units-test.cpp
 inkview.cpp
+libnr/in-svg-plane-test.cpp
 libnr/nr-matrix-test.cpp
 libnr/nr-point-fns-test.cpp
 libnr/nr-rotate-fns-test.cpp
