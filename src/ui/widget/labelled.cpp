@@ -43,10 +43,12 @@ Labelled::Labelled(Glib::ustring const &label,
       _label(new Gtk::Label(label, 0.0, 0.5, mnemonic)),
       _suffix(new Gtk::Label(suffix, 0.0, 0.5))
 {
+    g_assert(g_utf8_validate(icon.c_str(), -1, NULL));
     if (icon != "") {
-        gchar * filename = g_build_filename(INKSCAPE_PIXMAPDIR, icon, NULL);
-        _icon = new Gtk::Image(filename);
-        g_free(filename);
+        gchar *const filename_utf8 = g_build_filename(INKSCAPE_PIXMAPDIR, icon.c_str(), NULL);
+        _icon = new Gtk::Image(filename_utf8);
+        // fixme-charset: Does Gtk::Image want a utf8 or opsys-encoded string?
+        g_free(filename_utf8);
         pack_start(*Gtk::manage(_icon), Gtk::PACK_SHRINK);
     }
     pack_start(*Gtk::manage(_label), Gtk::PACK_EXPAND_WIDGET, 6);
