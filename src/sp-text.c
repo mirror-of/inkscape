@@ -1999,7 +1999,7 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8)
 	SPObject *child;
 	SPString *string;
 	gchar *spnew, *ip;
-	int slen, ulen, i;
+	int slen, ulen;
 	gunichar u; 
 
 	g_return_val_if_fail (text != NULL, -1);
