@@ -5,6 +5,9 @@
 
 	* src/select-context.cpp: fix snap on move behaviour (again)
 
+	* src/widgets/dash-selector.cpp: fix off-by-one spotted by
+	valgrind.
+	
 2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnrtype/FontFactory.cpp, src/libnrtype/FontInstance.cpp
