@@ -1,3 +1,8 @@
+2004-07-28  David Turner
+
+	* sp-gradient.cpp, widgets/gradient-vector.cpp: fixed gradient handling to
+	properly render gradients with sharp color boundaries
+
 2004-07-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/inkview.cpp: Make the window title be the name of the
