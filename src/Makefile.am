@@ -79,13 +79,15 @@ EXTRA_DIST =	\
 	helper/sp-marshal.list	\
 	utest/utest.h \
 	algorithms/longest-common-suffix.h \
+	traits/function.h \
 	traits/list.h \
 	traits/reference.h \
 	traits/tree-iterator.h \
+	util/flip.h \
+	util/list-iterator.h \
 	util/parent-axis.h \
 	util/sibling-axis.h \
-	util/tuple.h \
-	util/list-iterator.h
+	util/tuple.h
 
 EXTRA_PROGRAMS =	\
 	inkview 	\

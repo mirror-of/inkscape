@@ -1,7 +1,14 @@
 2004-07-24  MenTaLguY  <mental@rydia.net>
 
-	* configure.in, src/Makefile.in, src/main.cpp, src/gc-core.h:
+	* configure.in, src/Makefile.am, src/main.cpp, src/gc-core.h:
 	  added libgc dependency
+
+	* src/Makefile.am, traits/function.h:
+	  added trait class for functions and C++ "functors"
+
+	* src/Makefile.am, util/flip.h:
+	  added flip() which, given a function with two arguments,
+	  returns an identical function with its arguments reversed
 
 2004-07-23  MenTaLguY  <mental@rydia.net>
 
