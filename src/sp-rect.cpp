@@ -396,7 +396,7 @@ sp_rect_set_transform(SPItem *item, NR::Matrix const &xform)
     sp_shape_adjust_stroke(item, sqrt(fabs(sw * sh)));
 
     // Adjust pattern fill
-    sp_shape_adjust_pattern(item, NR::identity(), xform / ret);
+    sp_shape_adjust_pattern(item, xform / ret);
 
     sp_rect_set_shape(&rect->shape);
 

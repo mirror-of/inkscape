@@ -654,7 +654,7 @@ void
 sp_item_adjust_pattern_recursive(SPItem *item, NR::Matrix advertized_transform)
 {
     if (SP_IS_ITEM (item)) {
-        sp_shape_adjust_pattern (item, NR::identity(), advertized_transform.inverse());
+        sp_shape_adjust_pattern (item, advertized_transform.inverse());
     }
 
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {

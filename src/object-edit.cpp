@@ -100,7 +100,7 @@ sp_pattern_xy_set (SPItem *item, const NR::Point &p, guint state)
 
      if (state)  {
 	 const NR::Point q = p - sp_pattern_extract_trans(pat);
-         sp_shape_adjust_pattern (item, NULL, NR::Matrix(NR::translate(q)));
+         sp_shape_adjust_pattern (item, NR::Matrix(NR::translate(q)));
      }
 
      item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -150,7 +150,7 @@ sp_pattern_angle_set (SPItem *item, const NR::Point &p, guint state)
     const NR::Point t = sp_pattern_extract_trans(pat);
     rot[4] = t[NR::X];
     rot[5] = t[NR::Y];
-    sp_shape_set_pattern (item, NULL,  rot);
+    sp_shape_adjust_pattern (item, rot, true);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -175,7 +175,7 @@ sp_pattern_scale_set (SPItem *item, const NR::Point &p, guint state)
     const NR::Point t = sp_pattern_extract_trans(pat);
     rot[4] = t[NR::X];
     rot[5] = t[NR::Y];
-    sp_shape_set_pattern (item, NULL, rot);
+    sp_shape_adjust_pattern (item, rot, true);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
 }

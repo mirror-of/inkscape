@@ -344,7 +344,7 @@ sp_path_set_transform(SPItem *item, NR::Matrix const &xform)
     sp_shape_adjust_stroke(item, NR::expansion(xform));
 
     // Adjust pattern fill
-    sp_shape_adjust_pattern(item, NR::identity(), xform);
+    sp_shape_adjust_pattern(item, xform);
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
