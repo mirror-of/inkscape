@@ -76,7 +76,10 @@ Point operator*(const Matrix a, const Point v);
 bool transform_equalp(const Matrix m0, const Matrix m1, const double epsilon);
 bool translate_equalp(const Matrix m0, const Matrix m1, const double epsilon);
 
-
+ Point operator*(const NRMatrix& nrm, const Point p) {
+	 return Point(NR_MATRIX_DF_TRANSFORM_X(&nrm, p.pt[0], p.pt[1]),
+		      NR_MATRIX_DF_TRANSFORM_Y(&nrm, p.pt[0], p.pt[1]));
+ }
 };
 
 #endif

@@ -138,6 +138,8 @@ inline void Point::Normalize() {
 		*this = (1/d)**this;
 }
 
+Point abs(Point const &b);
+
 }
 
 typedef struct _NRPointL {

@@ -32,3 +32,12 @@ double NR::Point::Linfty() const {
 		d = MAX(d, fabs(pt[i]));
 	return d;
 }
+
+inline NR::Point abs(NR::Point const &b) {
+	NR::Point ret;
+	for(int i = 0; i < 2; i++) {
+		ret.pt[i] = fabs(b.pt[i]);
+	}
+	return ret;
+}
+
