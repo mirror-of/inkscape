@@ -1,5 +1,6 @@
 2005-02-13  Bryce  <bryce@bryceharrington.org>
 
+	* ui/dialog/dialog.*, ui/dialog/dialog-manager.*:  Initial import
 	* io/simple-sax.*:  Adding Jon's simple SAX code
 	* ui/widget/*:  Initial import of inkscape_gtkmm widget stuff
 	* Adding Makefile_insert and makefile.in for ui/, ui/widget, and ui/dialog
