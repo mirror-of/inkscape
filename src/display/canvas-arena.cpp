@@ -15,13 +15,14 @@
 #include <string.h>
 #include <libnr/nr-blit.h>
 #include <gtk/gtksignal.h>
-#include "../display/sp-canvas.h"
-#include "../display/sp-canvas-util.h"
-#include "../helper/sp-marshal.h"
-#include "nr-arena.h"
-#include "nr-arena-group.h"
-#include "canvas-arena.h"
-#include "../prefs-utils.h"
+
+#include <display/sp-canvas.h>
+#include <display/sp-canvas-util.h>
+#include <helper/sp-marshal.h>
+#include <display/nr-arena.h>
+#include <display/nr-arena-group.h>
+#include <display/canvas-arena.h>
+#include <prefs-utils.h>
 
 enum {
 	ARENA_EVENT,
