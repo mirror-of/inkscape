@@ -52,6 +52,9 @@
 	  simplified SPObject::remove_child handlers, focusing particularly
 	  on making them not rely on the repr still being attached
 
+	* src/sp-object.cpp: SPObject::remove_child is now invoked after
+	  the repr has been removed (fixes bug #916188)
+
 2004-03-14  rejon <jon@protofunk.org>
 
     * src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 

@@ -49,7 +49,7 @@ static void sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const g
 static void sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data);
 
 static void sp_object_repr_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data);
-static unsigned int sp_object_repr_remove_child (SPRepr *repr, SPRepr *child, SPRepr *ref, void *data);
+static void sp_object_repr_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, void *data);
 
 static void sp_object_repr_order_changed (SPRepr *repr, SPRepr *child, SPRepr *old, SPRepr *newer, gpointer data);
 
@@ -61,8 +61,8 @@ SPReprEventVector object_event_vector = {
 	NULL, /* Destroy */
 	NULL, /* Add child */
 	sp_object_repr_child_added,
-	sp_object_repr_remove_child,
-	NULL, /* Child removed */
+	NULL, /* Remove child */
+	sp_object_repr_child_removed,
 	sp_object_repr_change_attr,
 	sp_object_repr_attr_changed,
 	NULL, /* Change content */
@@ -509,8 +509,8 @@ sp_object_repr_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer d
 		(*((SPObjectClass *)G_OBJECT_GET_CLASS(object))->child_added) (object, child, ref);
 }
 
-static unsigned int
-sp_object_repr_remove_child (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
+static void
+sp_object_repr_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
 {
 	SPObject * object;
 
@@ -519,8 +519,6 @@ sp_object_repr_remove_child (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer 
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->remove_child) {
 		(* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->remove_child) (object, child);
 	}
-
-	return TRUE;
 }
 
 /* fixme: */
