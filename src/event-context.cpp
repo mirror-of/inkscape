@@ -394,12 +394,14 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			NRRect d;
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
-				sp_desktop_get_display_area (desktop, &d);
-				sp_desktop_zoom_relative_keep_point (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_inc);
+				//				sp_desktop_get_display_area (desktop, &d);
+				//				sp_desktop_zoom_relative_keep_point (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_inc);
+				sp_desktop_zoom_relative_keep_point (desktop, event->scroll.x, event->scroll.y, zoom_inc);
 				break;
 			case GDK_SCROLL_DOWN:
-				sp_desktop_get_display_area (desktop, &d);
-				sp_desktop_zoom_relative_keep_point (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / zoom_inc);
+				//				sp_desktop_get_display_area (desktop, &d);
+				//				sp_desktop_zoom_relative_keep_point (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / zoom_inc);
+				sp_desktop_zoom_relative_keep_point (desktop, event->scroll.x, event->scroll.y, 1 / zoom_inc);
 				break;
 			default:
 				break;
