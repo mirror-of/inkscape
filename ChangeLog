@@ -2,6 +2,8 @@
 
     * src/inkscape.h, src/inkscape.cpp, src/widgets/icons.cpp:
 	  Added basic theme support!  Whee!
+    * share/inkscape/icons.svg: restoring original up/down/flip icons since
+	  icons are themable now.  We should stick to our original look.
 
 2005-01-17  MenTaLguY  <mental@rydia.net>
 
