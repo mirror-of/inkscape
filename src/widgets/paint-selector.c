@@ -418,7 +418,7 @@ sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, unsigned int u
 }
 
 void
-sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, unsigned int *units, unsigned int *spread)
+sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnits *units, SPGradientSpread *spread)
 {
 	SPGradientSelector *gsel;
 	g_return_if_fail (SP_IS_PAINT_SELECTOR (psel));
@@ -490,7 +490,8 @@ sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient 
 	NRMatrixF fctm, gs2d, g2d, d2g, gs2g, g2gs;
 	NRRectF fbb;
 	double e;
-	unsigned int units, spread;
+	SPGradientUnits units;
+	SPGradientSpread spread;
 
 	g_return_if_fail (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR);
 
@@ -537,7 +538,8 @@ sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient 
 	NRMatrixF fctm, gs2d, g2d, d2g, gs2g, g2gs;
 	NRRectF fbb;
 	double e;
-	unsigned int units, spread;
+	SPGradientUnits units;
+	SPGradientSpread spread;
 
 	g_return_if_fail (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL);
 

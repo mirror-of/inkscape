@@ -40,8 +40,8 @@ struct _SPGradientSelector {
 
 	guint mode : 1;
 
-	guint gradientUnits : 1;
-	guint gradientSpread : 2;
+	SPGradientUnits gradientUnits : 1;
+	SPGradientSpread gradientSpread : 2;
 
 	/* Vector selector */
 	GtkWidget *vectors;
