@@ -35,7 +35,7 @@ static void sp_chars_init (SPChars *chars);
 static void sp_chars_release (SPObject *object);
 static void sp_chars_modified (SPObject *object, guint flags);
 
-static void sp_chars_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_chars_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static NRArenaItem *sp_chars_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 
 static SPItemClass *parent_class;
@@ -130,7 +130,7 @@ sp_chars_modified (SPObject *object, unsigned int flags)
 }
 
 static void
-sp_chars_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+sp_chars_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
 	SPChars * const chars = SP_CHARS(item);
 

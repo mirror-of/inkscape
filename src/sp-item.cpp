@@ -59,7 +59,7 @@ static SPRepr *sp_item_write(SPObject *object, SPRepr *repr, guint flags);
 static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform);
 
 static gchar *sp_item_private_description(SPItem *item);
-static std::vector<NR::Point> sp_item_private_snappoints(SPItem *item);
+static std::vector<NR::Point> sp_item_private_snappoints(SPItem const *item);
 
 static SPItemView *sp_item_view_new_prepend(SPItemView *list, SPItem *item, unsigned flags, unsigned key, NRArenaItem *arenaitem);
 static SPItemView *sp_item_view_list_remove(SPItemView *list, SPItemView *view);
@@ -379,13 +379,13 @@ sp_item_write(SPObject *object, SPRepr *repr, guint flags)
 }
 
 void
-sp_item_invoke_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear)
+sp_item_invoke_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear)
 {
     sp_item_invoke_bbox_full(item, bbox, transform, 0, clear);
 }
 
 void
-sp_item_invoke_bbox_full(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear)
+sp_item_invoke_bbox_full(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear)
 {
     g_assert(item != NULL);
     g_assert(SP_IS_ITEM(item));
@@ -443,7 +443,7 @@ NR::Rect sp_item_bbox_desktop(SPItem *item)
     return NR::Rect(ret);
 }
 
-static std::vector<NR::Point> sp_item_private_snappoints(SPItem *item)
+static std::vector<NR::Point> sp_item_private_snappoints(SPItem const *item)
 {
     NRRect bbox;
     sp_item_invoke_bbox(item, &bbox, sp_item_i2d_affine(item), TRUE);
@@ -457,7 +457,7 @@ static std::vector<NR::Point> sp_item_private_snappoints(SPItem *item)
     return p;
 }
 
-std::vector<NR::Point> sp_item_snappoints(SPItem *item)
+std::vector<NR::Point> sp_item_snappoints(SPItem const *item)
 {
     g_assert (item != NULL);
     g_assert (SP_IS_ITEM(item));

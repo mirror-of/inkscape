@@ -110,7 +110,7 @@ struct SPItemClass {
 	SPObjectClass parent_class;
 
 	/* BBox union in given coordinate system */
-	void (* bbox) (SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+	void (* bbox) (SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 
 	/* Printing method. Assumes ctm is set to item affine matrix */
 	/* fixme: Think about it, and maybe implement generic export method instead (Lauris) */
@@ -125,7 +125,7 @@ struct SPItemClass {
 	/* Return a vector of points that should be considered for snapping
 	** as the item's `nodes'.
 	*/
-	std::vector<NR::Point> (* snappoints) (SPItem *item);
+	std::vector<NR::Point> (* snappoints) (SPItem const *item);
 
 	/* Apply the transform optimally, and return any residual transformation */
 	NR::Matrix (* set_transform)(SPItem *item, NR::Matrix const &transform);
@@ -140,8 +140,8 @@ struct SPItemClass {
 
 /* Methods */
 
-void sp_item_invoke_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear);
-void sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear);
+void sp_item_invoke_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear);
+void sp_item_invoke_bbox_full (SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear);
 
 unsigned sp_item_pos_in_parent(SPItem *item);
 
@@ -153,7 +153,7 @@ unsigned int sp_item_display_key_new (unsigned int numkeys);
 NRArenaItem *sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 void sp_item_invoke_hide (SPItem *item, unsigned int key);
 
-std::vector<NR::Point> sp_item_snappoints(SPItem *item);
+std::vector<NR::Point> sp_item_snappoints(SPItem const *item);
 
 void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv = NULL);
 void sp_item_write_transform (SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix *adv = NULL);

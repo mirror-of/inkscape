@@ -54,11 +54,11 @@ static void sp_shape_release (SPObject *object);
 static void sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_shape_modified (SPObject *object, unsigned int flags);
 
-static void sp_shape_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_shape_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 void sp_shape_print (SPItem * item, SPPrintContext * ctx);
 static NRArenaItem *sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_shape_hide (SPItem *item, unsigned int key);
-static std::vector<NR::Point> sp_shape_snappoints (SPItem *item);
+static std::vector<NR::Point> sp_shape_snappoints (SPItem const *item);
 
 static void sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai);
 static int sp_shape_has_markers (SPShape* shape);
@@ -502,9 +502,9 @@ sp_shape_modified (SPObject *object, unsigned int flags)
 	}
 }
 
-static void sp_shape_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+static void sp_shape_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-    SPShape *shape = SP_SHAPE (item);
+    SPShape const *shape = SP_SHAPE (item);
 
     if (shape->curve) {
 
@@ -933,14 +933,14 @@ sp_shape_adjust_stroke (SPItem *item, gdouble ex)
 }
 
 
-static std::vector<NR::Point> sp_shape_snappoints(SPItem* item)
+static std::vector<NR::Point> sp_shape_snappoints(SPItem const *item)
 {
     g_assert(item != NULL);
     g_assert(SP_IS_SHAPE(item));
 
     std::vector<NR::Point> p;
 
-    SPShape *shape = SP_SHAPE(item);
+    SPShape const *shape = SP_SHAPE(item);
     if (shape->curve == NULL) {
         return p;
     }

@@ -70,7 +70,7 @@ static void sp_genericellipse_init (SPGenericEllipse *ellipse);
 
 static void sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags);
 
-static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem *item);
+static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem const *item);
 
 static void sp_genericellipse_set_shape (SPShape *shape);
 static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint flags);
@@ -249,9 +249,9 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 	sp_curve_unref (c);
 }
 
-static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem *item)
+static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem const *item)
 {
-	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+	SPGenericEllipse const *ge = SP_GENERICELLIPSE (item);
 
 	std::vector<NR::Point> p;
 

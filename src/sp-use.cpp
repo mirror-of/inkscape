@@ -49,7 +49,7 @@ static SPRepr *sp_use_write(SPObject *object, SPRepr *repr, guint flags);
 static void sp_use_update(SPObject *object, SPCtx *ctx, guint flags);
 static void sp_use_modified(SPObject *object, guint flags);
 
-static void sp_use_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_use_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_use_print(SPItem *item, SPPrintContext *ctx);
 static gchar *sp_use_description(SPItem *item);
 static NRArenaItem *sp_use_show(SPItem *item, NRArena *arena, unsigned key, unsigned flags);
@@ -273,9 +273,9 @@ sp_use_write(SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_use_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+sp_use_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-    SPUse *use = SP_USE(item);
+    SPUse const *use = SP_USE(item);
 
     if (use->child && SP_IS_ITEM(use->child)) {
         SPItem *child = SP_ITEM(use->child);

@@ -44,7 +44,7 @@ static SPRepr *sp_marker_write (SPObject *object, SPRepr *repr, guint flags);
 
 static NRArenaItem *sp_marker_private_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_marker_private_hide (SPItem *item, unsigned int key);
-static void sp_marker_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_marker_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_marker_print (SPItem *item, SPPrintContext *ctx);
 
 static void sp_marker_view_remove (SPMarker *marker, SPMarkerView *view, unsigned int destroyitems);
@@ -514,7 +514,7 @@ sp_marker_private_hide (SPItem *item, unsigned int key)
 }
 
 static void
-sp_marker_bbox(SPItem *, NRRect *, NR::Matrix const &, unsigned const)
+sp_marker_bbox(SPItem const *, NRRect *, NR::Matrix const &, unsigned const)
 {
 	/* Break propagation */
 }

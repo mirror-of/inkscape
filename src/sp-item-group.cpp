@@ -41,12 +41,12 @@ static void sp_group_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_group_modified (SPObject *object, guint flags);
 static SPRepr *sp_group_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_group_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_group_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_group_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_group_description (SPItem * item);
 static NRArenaItem *sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_group_hide (SPItem * item, unsigned int key);
-static std::vector<NR::Point> sp_group_snappoints (SPItem *item);
+static std::vector<NR::Point> sp_group_snappoints (SPItem const *item);
 
 static SPItemClass * parent_class;
 
@@ -282,7 +282,7 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_group_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+sp_group_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(item)); o != NULL; o = SP_OBJECT_NEXT(o)) {
 		if (SP_IS_ITEM(o)) {
@@ -380,12 +380,11 @@ sp_group_hide (SPItem *item, unsigned int key)
 		((SPItemClass *) parent_class)->hide (item, key);
 }
 
-static std::vector<NR::Point> sp_group_snappoints (SPItem *item)
+static std::vector<NR::Point> sp_group_snappoints (SPItem const *item)
 {
-	SPGroup *g = (SPGroup *) item;
 	std::vector<NR::Point> points;
 
-	for (SPObject *o = sp_object_first_child(SP_OBJECT(item));
+	for (SPObject const *o = sp_object_first_child(SP_OBJECT(item));
 	     o != NULL;
 	     o = SP_OBJECT_NEXT(o))
 	{

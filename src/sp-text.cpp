@@ -1138,7 +1138,7 @@ static void sp_tspan_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_tspan_modified (SPObject *object, unsigned int flags);
 static SPRepr *sp_tspan_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_tspan_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_tspan_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static NRArenaItem *sp_tspan_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_tspan_hide (SPItem *item, unsigned int key);
 
@@ -1518,9 +1518,9 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
  *
  */
 static void
-sp_tspan_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+sp_tspan_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-    SPTSpan *tspan = SP_TSPAN(item);
+    SPTSpan const *tspan = SP_TSPAN(item);
 
     if (tspan->string) {
         sp_item_invoke_bbox_full(SP_ITEM(tspan->string), bbox, transform, flags, FALSE);
@@ -1595,7 +1595,7 @@ static void sp_textpath_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_textpath_modified (SPObject *object, unsigned int flags);
 static SPRepr *sp_textpath_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_textpath_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_textpath_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static NRArenaItem *sp_textpath_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_textpath_hide (SPItem *item, unsigned int key);
 
@@ -2112,9 +2112,9 @@ sp_textpath_write (SPObject *object, SPRepr *repr, guint flags)
  *
  */
 static void
-sp_textpath_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+sp_textpath_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-    SPTextPath *textpath = SP_TEXTPATH(item);
+    SPTextPath const *textpath = SP_TEXTPATH(item);
 
     if (textpath->string) {
         sp_item_invoke_bbox_full(SP_ITEM(textpath->string), bbox, transform, flags, FALSE);
@@ -2191,11 +2191,11 @@ static void sp_text_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_text_modified (SPObject *object, guint flags);
 static SPRepr *sp_text_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_text_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_text_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_text_hide (SPItem *item, unsigned int key);
 static char * sp_text_description (SPItem *item);
-static std::vector<NR::Point> sp_text_snappoints(SPItem *item);
+static std::vector<NR::Point> sp_text_snappoints(SPItem const *item);
 static NR::Matrix sp_text_set_transform (SPItem *item, NR::Matrix const &xform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
@@ -2610,10 +2610,10 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
  *
  */
 static void
-sp_text_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+sp_text_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
     for (SPObject *o = sp_object_first_child(SP_OBJECT(item)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
-        SPItem *child = SP_ITEM(o);
+        SPItem const *child = SP_ITEM(o);
         NR::Matrix const a(child->transform * transform);
         sp_item_invoke_bbox_full(child, bbox, a, flags, FALSE);
     }
@@ -2853,7 +2853,7 @@ sp_text_set_shape (SPText *text)
 
 
 
-static std::vector<NR::Point> sp_text_snappoints(SPItem *item)
+static std::vector<NR::Point> sp_text_snappoints(SPItem const *item)
 {
      std::vector<NR::Point> p;
     

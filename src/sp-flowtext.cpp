@@ -63,7 +63,7 @@ static SPRepr *sp_flowtext_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_flowtext_build(SPObject *object, SPDocument *document, SPRepr *repr);
 static void sp_flowtext_set(SPObject *object, unsigned key, gchar const *value);
 
-static void sp_flowtext_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_flowtext_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_flowtext_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_flowtext_description (SPItem * item);
 static NRArenaItem *sp_flowtext_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
@@ -330,11 +330,9 @@ sp_flowtext_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_flowtext_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const /*flags*/)
+sp_flowtext_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const /*flags*/)
 {
-	SPFlowtext * group;
-	
-	group = SP_FLOWTEXT (item);
+	SPFlowtext const * group = SP_FLOWTEXT (item);
 	
 	flow_res*  comp=group->f_res;
 	if ( comp && comp->nbGroup > 0 && comp->nbGlyph > 0 ) {

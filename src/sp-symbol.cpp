@@ -38,7 +38,7 @@ static SPRepr *sp_symbol_write (SPObject *object, SPRepr *repr, guint flags);
 
 static NRArenaItem *sp_symbol_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_symbol_hide (SPItem *item, unsigned int key);
-static void sp_symbol_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static void sp_symbol_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_symbol_print (SPItem *item, SPPrintContext *ctx);
 
 static SPGroupClass *parent_class;
@@ -439,9 +439,9 @@ sp_symbol_hide (SPItem *item, unsigned int key)
 }
 
 static void
-sp_symbol_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+sp_symbol_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-	SPSymbol *symbol = SP_SYMBOL(item);
+	SPSymbol const *symbol = SP_SYMBOL(item);
 
 	if (SP_OBJECT_IS_CLONED (symbol)) {
 		/* Cloned <symbol> is actually renderable */
