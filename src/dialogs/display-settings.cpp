@@ -754,10 +754,13 @@ sp_display_dialog (void)
         vb = new_tab (nb, _("Mouse"));
 
         options_sb (
-            // TRANSLATORS: "Grab" is a noun here
+            /* TRANSLATORS: "Grab" is a noun here.  "Grab sensitivity" is intended to mean how
+             * close on the screen you need to be to an object to be able to grab it with mouse (in
+             * pixels). */
             _("Grab sensitivity:"), 
-            _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
+            _("How close on the screen you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
             _("px"),
+            /* todo: allow real-world units. */
             vb,
             0.0, 30.0, 1.0, 1.0, 1.0,
             "options.cursortolerance", "value", 8.0,
@@ -767,8 +770,8 @@ sp_display_dialog (void)
 
         options_sb (
             _("Click/drag threshold:"), 
-            _("Maximum mouse drag (in pixels) which is considered a click, not a drag"), tt,
-            _("px"),
+            _("Maximum mouse drag (in screen pixels) which is considered a click, not a drag"), tt,
+            _("pixels"),
             vb,
             0.0, 20.0, 1.0, 1.0, 1.0,
             "options.dragtolerance", "value", 4.0,
@@ -782,8 +785,8 @@ sp_display_dialog (void)
 
         options_sb (
             _("Mouse wheel scrolls by:"), 
-            _("One mouse wheel notch scrolls by this distance in pixels (horizontally with Shift)"), tt,
-            _("px"),
+            _("One mouse wheel notch scrolls by this distance in screen pixels (horizontally with Shift)"), tt,
+            _("pixels"),
             vb,
             0.0, 1000.0, 1.0, 1.0, 1.0,
             "options.wheelscroll", "value", 40.0,
@@ -1093,6 +1096,7 @@ options_checkbox (
         }
 
 // Transforms
+        /* TRANSLATORS: Noun, i.e. transformations. */
         vb = new_tab (nb, _("Transforms"));
 
 options_checkbox (
@@ -1130,6 +1134,7 @@ options_checkbox (
 
      // Store transformation (global)
         {
+            /* TRANSLATORS: How to specify the affine transformation in the SVG file. */
             GtkWidget *f = gtk_frame_new (_("Store transformation:"));
             gtk_widget_show (f);
             gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
@@ -1169,6 +1174,8 @@ options_checkbox (
             );
 
 options_checkbox (
+    /* TRANSLATORS: When on, an imported bitmap creates an <image> element; otherwise it is a
+     * rectangle with bitmap fill. */
     _("Import bitmap as <image>"), 
     _("When on, an imported bitmap creates an <image> element; otherwise it is a rectangle with bitmap fill"), tt,
     vb,
@@ -1177,6 +1184,7 @@ options_checkbox (
     );
 
         options_sb (
+            /* TRANSLATORS: The maximum length of the Open Recent list in the File menu. */
             _("Max recent documents:"), 
             _("The maximum length of the Open Recent list in the File menu"), tt,
             "",
