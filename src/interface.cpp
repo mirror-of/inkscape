@@ -1269,7 +1269,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 
 		for (SPRepr *child = repr->firstChild(); child != NULL; child = child->next()) {
 			SPRepr * newchild = sp_repr_duplicate (child);
-			sp_repr_append_child (newgroup, newchild);
+			newgroup->appendChild(newchild);
 		}
 
 		sp_repr_document_unref (rnewdoc);

@@ -150,7 +150,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 								      ? NR::Y
 								      : NR::X ];
 				sp_repr_set_double(repr, "position", guide_pos_dt);
-				sp_repr_append_child (SP_OBJECT_REPR (desktop->namedview), repr);
+				SP_OBJECT_REPR (desktop->namedview)->appendChild(repr);
 				sp_repr_unref (repr);
 				sp_document_done (SP_DT_DOCUMENT (desktop));
 			}

@@ -206,12 +206,12 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
 	}
 
     SPRepr *root_repr = sp_repr_new ("svg:flowRoot");
-    sp_repr_append_child (SP_OBJECT_REPR (SP_OBJECT_PARENT (item)), root_repr);
+    SP_OBJECT_REPR (SP_OBJECT_PARENT (item))->appendChild(root_repr);
     SPObject *root_object = doc->getObjectByRepr(root_repr);
     g_return_if_fail (SP_IS_FLOWTEXT (root_object));
 
     SPRepr *region_repr = sp_repr_new ("svg:flowRegion");
-    sp_repr_append_child (root_repr, region_repr);
+    root_repr->appendChild(region_repr);
     SPObject *object = doc->getObjectByRepr(region_repr);
     g_return_if_fail (SP_IS_FLOWREGION (object));
 
@@ -228,23 +228,23 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
             sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr((SPRepr *)i->data, "id")));
 
             // add the new clone to the top of the original's parent
-            sp_repr_append_child(region_repr, clone);
+            region_repr->appendChild(clone);
          }
 
     }
 
     SPRepr *div_repr = sp_repr_new ("svg:flowDiv");
-    sp_repr_append_child (root_repr, div_repr);
+    root_repr->appendChild(div_repr);
     SPObject *div_object = doc->getObjectByRepr(div_repr);
     g_return_if_fail (SP_IS_FLOWDIV (div_object));
 
     SPRepr *para_repr = sp_repr_new ("svg:flowPara");
-    sp_repr_append_child (div_repr, para_repr);
+    div_repr->appendChild(para_repr);
     object = doc->getObjectByRepr(para_repr);
     g_return_if_fail (SP_IS_FLOWPARA (object));
 
     SPRepr *text = sp_repr_new_text ("This is flowed text. Currently, you can only edit it by using the XML editor. You can paste style (Ctrl+Shift+V) from regular text objects to it.");
-    sp_repr_append_child (para_repr, text);
+    para_repr->appendChild(text);
 
 
     sp_document_done (SP_OBJECT_DOCUMENT (object));

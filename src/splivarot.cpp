@@ -423,7 +423,7 @@ sp_selected_path_boolop (bool_op bop)
         repr_source = ((SPRepr *) sorted->data);
         g_slist_free (sorted);
     }
-    gint pos = sp_repr_position (repr_source);
+    gint pos = repr_source->position();
     SPRepr *parent = sp_repr_parent (repr_source);
     const char *id = sp_repr_attr (repr_source, "id");
     const char *style = sp_repr_attr (repr_source, "style");
@@ -503,7 +503,7 @@ sp_selected_path_boolop (bool_op bop)
             sp_repr_set_attr (repr, "transform", transform);
 
             // add the new repr to the parent
-            sp_repr_append_child (parent, repr);
+            parent->appendChild(repr);
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
@@ -527,7 +527,7 @@ sp_selected_path_boolop (bool_op bop)
         sp_repr_set_attr (repr, "transform", transform);
 
         sp_repr_set_attr (repr, "id", id);
-        sp_repr_append_child (parent, repr);
+        parent->appendChild(repr);
         sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
      
         selection->addRepr(repr);
@@ -701,7 +701,7 @@ sp_selected_path_outline ()
 
         sp_curve_unref (curve);
         // remember the position of the item
-        gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+        gint pos = SP_OBJECT_REPR (item)->position();
         // remember parent
         SPRepr *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
@@ -727,7 +727,7 @@ sp_selected_path_outline ()
             g_free (str);
 
             // add the new repr to the parent
-            sp_repr_append_child (parent, repr);
+            parent->appendChild(repr);
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
@@ -861,7 +861,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
 
     // remember the position of the item
-    gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+    gint pos = SP_OBJECT_REPR (item)->position();
     // remember parent
     SPRepr *parent = SP_OBJECT_REPR (item)->parent();
   
@@ -1005,7 +1005,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
         sp_repr_set_attr (repr, "style", style);
 
         // add the new repr to the parent
-        sp_repr_append_child (parent, repr);
+        parent->appendChild(repr);
 
         // move to the saved position 
         sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
@@ -1232,7 +1232,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
         sp_curve_unref (curve);
         // remember the position of the item
-        gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+        gint pos = SP_OBJECT_REPR (item)->position();
         // remember parent
         SPRepr *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
@@ -1256,7 +1256,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
             g_free (str);
 
             // add the new repr to the parent
-            sp_repr_append_child (parent, repr);
+            parent->appendChild(repr);
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
@@ -1346,7 +1346,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
 
     sp_curve_unref (curve);
     // remember the position of the item
-    gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+    gint pos = SP_OBJECT_REPR (item)->position();
     // remember parent
     SPRepr *parent = SP_OBJECT_REPR (item)->parent();
     // remember id
@@ -1377,7 +1377,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
     sp_repr_set_attr (repr, "id", id);
 
     // add the new repr to the parent
-    sp_repr_append_child (parent, repr);
+    parent->appendChild(repr);
 
     // move to the saved position 
     sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);

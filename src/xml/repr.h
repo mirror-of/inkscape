@@ -261,10 +261,6 @@ inline void sp_repr_unparent(SPRepr *repr) {
 	}
 }
 
-inline bool sp_repr_attr_is_set(SPRepr *repr, gchar const *key) {
-	return repr->attribute(key);
-}
-
 /* Convenience */
 unsigned int sp_repr_get_boolean(SPRepr *repr, gchar const *key, unsigned int *val);
 unsigned int sp_repr_get_int(SPRepr *repr, gchar const *key, int *val);
@@ -282,20 +278,8 @@ int sp_repr_get_int_attribute(SPRepr *repr, gchar const *key, int def);
 
 int sp_repr_compare_position(SPRepr *first, SPRepr *second);
 
-inline int sp_repr_position(SPRepr const *repr) {
-	return repr->position();
-}
 inline void sp_repr_set_position_absolute(SPRepr *repr, int pos) {
 	repr->setPosition(pos);
-}
-inline int sp_repr_n_children(SPRepr *repr) {
-	return repr->childCount();
-}
-inline SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
-	return repr->nthChild(n);
-}
-inline void sp_repr_append_child(SPRepr *repr, SPRepr *child) {
-	repr->appendChild(child);
 }
 
 /* Searching */

@@ -1411,7 +1411,7 @@ cmd_new_element_node (GtkObject * object, gpointer data)
         SPRepr * new_repr;
         new_repr = sp_repr_new (name.text);
         g_free (name.text);
-        sp_repr_append_child (selected_repr, new_repr);
+        selected_repr->appendChild(new_repr);
         set_tree_select (new_repr);
         set_dt_select (new_repr);
     }
@@ -1428,7 +1428,7 @@ cmd_new_text_node (GtkObject * object, gpointer data)
     g_assert (selected_repr != NULL);
 
     text = sp_repr_new_text ("");
-    sp_repr_append_child (selected_repr, text);
+    selected_repr->appendChild(text);
 
     sp_document_done (current_document);
 

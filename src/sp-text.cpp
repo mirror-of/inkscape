@@ -891,7 +891,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
             SPRepr *rstr = sp_repr_new_text(p);
             sp_repr_add_child (rtspan, rstr, NULL);
             sp_repr_unref(rstr);
-            sp_repr_append_child (repr, rtspan);
+            repr->appendChild(rtspan);
             sp_repr_unref(rtspan);
         }
         p = (e) ? e + 1 : NULL;
@@ -969,7 +969,7 @@ sp_text_append_line(SPText *text)
     sp_repr_add_child (rtspan, rstring, NULL);
     sp_repr_unref (rstring);
     /* Append to text */
-    sp_repr_append_child (SP_OBJECT_REPR (text), rtspan);
+    SP_OBJECT_REPR (text)->appendChild(rtspan);
     sp_repr_unref (rtspan);
 
     return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
@@ -999,7 +999,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
         SPRepr*   rstring = sp_repr_new_text("");
         sp_repr_add_child (rtspan, rstring, NULL);
         sp_repr_unref (rstring);
-        sp_repr_append_child (SP_OBJECT_REPR (text), rtspan);
+        SP_OBJECT_REPR (text)->appendChild(rtspan);
         sp_repr_unref (rtspan);
         SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
@@ -1086,7 +1086,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                         SPRepr *c_repr = SP_OBJECT_REPR(child);
                         sp_repr_ref(c_repr);
                         sp_repr_remove_child(into_repr, c_repr);
-                        sp_repr_append_child(rtspan, c_repr);
+                        rtspan->appendChild(c_repr);
                         sp_repr_unref(c_repr);
                     }
                     g_list_free(templ);
@@ -1123,9 +1123,9 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                 // remove old string
                 sp_repr_remove_child(SP_OBJECT_REPR(into->dad->me), SP_OBJECT_REPR(into->me));
                 // add 2 lines
-                sp_repr_append_child (SP_OBJECT_REPR (into->dad->me), firstspan);
+                SP_OBJECT_REPR (into->dad->me)->appendChild(firstspan);
                 sp_repr_unref (firstspan);
-                sp_repr_append_child (SP_OBJECT_REPR (into->dad->me), rtspan);
+                SP_OBJECT_REPR (into->dad->me)->appendChild(rtspan);
                 sp_repr_unref (rtspan);
                 SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 

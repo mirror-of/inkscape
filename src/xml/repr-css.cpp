@@ -183,7 +183,7 @@ sp_repr_css_attr_add_from_string (SPCSSAttr *css, const gchar *data)
 			val = g_strstrip (val);
 			if (*val == '\0') break;
 
-			if (!sp_repr_attr_is_set ((SPRepr *) css, key))
+			if (!css->attribute(key))
 				sp_repr_set_attr ((SPRepr *) css, key, val);
 		}
 		g_strfreev (token);

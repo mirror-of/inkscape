@@ -609,7 +609,7 @@ void convert_to_text(void)
     SPRepr *parent = SP_OBJECT_REPR(object)->parent();
     SPRepr *repr = sp_repr_new("svg:text");
     sp_repr_set_attr(repr, "style", sp_repr_attr(SP_OBJECT_REPR(object), "style"));
-    sp_repr_append_child(parent, repr);
+    parent->appendChild(repr);
     // add a tspan for each chunk of the flow
     double last_kern_y = 0;
     for (int i = 0; i < comp->nbChunk; i++) {
@@ -729,10 +729,10 @@ void convert_to_text(void)
                 comp->chars[t_en] = 0;
                 SPRepr *rstr = sp_repr_new_text(&comp->chars[t_st]);
                 comp->chars[t_en] = savC;
-                sp_repr_append_child(srepr, rstr);
+                srepr->appendChild(rstr);
                 sp_repr_unref(rstr);
 
-                sp_repr_append_child(repr, srepr);
+                repr->appendChild(srepr);
                 sp_repr_unref(srepr);
             }
         }

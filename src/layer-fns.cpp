@@ -44,7 +44,7 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
     g_free(id);
 
     if ( root == layer ) {
-        sp_repr_append_child(SP_OBJECT_REPR(root), repr);
+        SP_OBJECT_REPR(root)->appendChild(repr);
     } else {
         SPRepr *layer_repr=SP_OBJECT_REPR(layer);
         sp_repr_add_child(sp_repr_parent(layer_repr), repr, layer_repr);

@@ -746,7 +746,7 @@ clonetiler_apply (GtkWidget *widget, void *)
             }
 
             // add the new clone to the top of the original's parent
-            sp_repr_append_child(SP_OBJECT_REPR(parent), clone);
+            SP_OBJECT_REPR(parent)->appendChild(clone);
         }
     }
 

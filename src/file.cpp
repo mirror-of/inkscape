@@ -765,7 +765,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
 
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
-                    sp_repr_append_child(newgroup, sp_repr_duplicate(SP_OBJECT_REPR(child)));
+                    newgroup->appendChild(sp_repr_duplicate(SP_OBJECT_REPR(child)));
                 }
             }
 

@@ -154,7 +154,7 @@ sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector, SP
 	sp_gradient_repr_set_link (repr, vector);
 
 	/* Append the new private gradient to defs */
-	sp_repr_append_child (SP_OBJECT_REPR (defs), repr);
+	SP_OBJECT_REPR (defs)->appendChild(repr);
 	sp_repr_unref (repr);
 
 	// get corresponding object
@@ -543,7 +543,7 @@ sp_document_default_gradient_vector (SPDocument *document, guint32 color)
 
 	sp_repr_set_attr (stop, "offset", "0");
 
-	sp_repr_append_child (repr, stop);
+	repr->appendChild(stop);
 	sp_repr_unref (stop);
 
 	stop = sp_repr_new ("svg:stop");
@@ -556,7 +556,7 @@ sp_document_default_gradient_vector (SPDocument *document, guint32 color)
 
 	sp_repr_set_attr (stop, "offset", "1");
 
-	sp_repr_append_child (repr, stop);
+	repr->appendChild(stop);
 	sp_repr_unref (stop);
 
 	sp_repr_add_child (SP_OBJECT_REPR (defs), repr, NULL);

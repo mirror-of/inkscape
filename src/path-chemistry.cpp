@@ -83,7 +83,7 @@ sp_selected_path_combine (void)
 	items = g_slist_sort (items, (GCompareFunc) sp_item_repr_compare_position);
 
 	// remember the position of the topmost object
-	gint topmost = sp_repr_position (SP_OBJECT_REPR ((SPItem *) g_slist_last(items)->data));
+	gint topmost = (SP_OBJECT_REPR ((SPItem *) g_slist_last(items)->data))->position();
 
 	// remember the id of the bottomost object
 	const char *id = sp_repr_attr (SP_OBJECT_REPR ((SPItem *) items->data), "id");
@@ -131,7 +131,7 @@ sp_selected_path_combine (void)
 	g_string_free (dstring, TRUE);
 
 	// add the new group to the group members' common parent
-	sp_repr_append_child (parent, repr);
+	parent->appendChild(repr);
 
 	// move to the position of the topmost, reduced by the number of deleted items
 	sp_repr_set_position_absolute (repr, topmost > 0 ? topmost + 1 : 0);
@@ -177,7 +177,7 @@ sp_selected_path_break_apart (void)
 		did = true;
 
 		SPRepr *parent = SP_OBJECT_REPR (item)->parent();
-		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+		gint pos = SP_OBJECT_REPR (item)->position();
 		const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
 		gchar *style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
@@ -207,7 +207,7 @@ sp_selected_path_break_apart (void)
 			g_free (str);
 
 			// add the new repr to the parent
-			sp_repr_append_child (parent, repr);
+			parent->appendChild(repr);
 
 			// move to the saved position 
 			sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
@@ -271,7 +271,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		did = true;
 
 		// remember the position of the item
-		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+		gint pos = SP_OBJECT_REPR (item)->position();
 		// remember parent
 		SPRepr *parent = SP_OBJECT_REPR (item)->parent();
 		// remember id
@@ -285,7 +285,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		// restore id
 		sp_repr_set_attr (repr, "id", id);
 		// add the new repr to the parent
-		sp_repr_append_child (parent, repr);
+		parent->appendChild(repr);
 		// move to the saved position 
 		sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 

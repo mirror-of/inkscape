@@ -827,7 +827,7 @@ sp_marker_prev_new(unsigned size, gchar const *mname,
     SPObject *oldmarker = sandbox->getObjectById("sample");
     if (oldmarker)
         oldmarker->deleteObject(false);
-    sp_repr_append_child (defsrepr, mrepr);
+    defsrepr->appendChild(mrepr);
     sp_repr_unref (mrepr);
 
 // Uncomment this to get the sandbox documents saved (useful for debugging)

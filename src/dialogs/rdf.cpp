@@ -530,7 +530,7 @@ rdf_set_repr_text ( SPRepr * repr,
                 temp = sp_repr_new_text( text );
                 g_return_val_if_fail (temp != NULL, 0);
 
-                sp_repr_append_child ( parent, temp );
+                parent->appendChild(temp);
                 sp_repr_unref ( temp );
 
                 return TRUE;
@@ -545,7 +545,7 @@ rdf_set_repr_text ( SPRepr * repr,
                 temp = sp_repr_new ( "cc:Agent" );
                 g_return_val_if_fail (temp != NULL, 0);
 
-                sp_repr_append_child ( parent, temp );
+                parent->appendChild(temp);
                 sp_repr_unref ( temp );
             }
             parent = temp;
@@ -555,7 +555,7 @@ rdf_set_repr_text ( SPRepr * repr,
                 temp = sp_repr_new ( "dc:title" );
                 g_return_val_if_fail (temp != NULL, 0);
 
-                sp_repr_append_child ( parent, temp );
+                parent->appendChild(temp);
                 sp_repr_unref ( temp );
             }
             parent = temp;
@@ -565,7 +565,7 @@ rdf_set_repr_text ( SPRepr * repr,
                 temp = sp_repr_new_text( text );
                 g_return_val_if_fail (temp != NULL, 0);
 
-                sp_repr_append_child ( parent, temp );
+                parent->appendChild(temp);
                 sp_repr_unref ( temp );
 
                 return TRUE;
@@ -592,7 +592,7 @@ rdf_set_repr_text ( SPRepr * repr,
                 temp = sp_repr_new ( "rdf:Bag" );
                 g_return_val_if_fail (temp != NULL, 0);
 
-                sp_repr_append_child ( parent, temp );
+                parent->appendChild(temp);
                 sp_repr_unref ( temp );
             }
             parent = temp;
@@ -609,13 +609,13 @@ rdf_set_repr_text ( SPRepr * repr,
                 temp = sp_repr_new ( "rdf:li" );
                 g_return_val_if_fail (temp != NULL, 0);
 
-                sp_repr_append_child ( parent, temp );
+                parent->appendChild(temp);
                 sp_repr_unref ( temp );
 
                 child = sp_repr_new_text( g_strstrip(str) );
                 g_return_val_if_fail (child != NULL, 0);
 
-                sp_repr_append_child ( temp, child );
+                temp->appendChild(child);
                 sp_repr_unref ( child );
             }
             g_strfreev( strlist );
@@ -648,14 +648,14 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
             parent = sp_repr_new( XML_TAG_NAME_METADATA );
             g_return_val_if_fail ( parent != NULL, NULL);
 
-            sp_repr_append_child(svg, parent);
+            svg->appendChild(parent);
             sp_repr_unref(parent);
         }
 
         rdf = sp_repr_new( XML_TAG_NAME_RDF );
         g_return_val_if_fail (rdf != NULL, NULL);
 
-        sp_repr_append_child(parent, rdf);
+        parent->appendChild(rdf);
         sp_repr_unref(rdf);
     }
 
@@ -670,13 +670,13 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
             g_return_val_if_fail (metadata != NULL, NULL);
 
             /* attach the metadata node */
-            sp_repr_append_child ( want_metadata, metadata );
+            want_metadata->appendChild(metadata);
             sp_repr_unref ( metadata );
 
             /* move the RDF into it */
             sp_repr_ref ( rdf );
             sp_repr_unparent ( rdf );
-            sp_repr_append_child ( metadata, rdf );
+            metadata->appendChild(rdf);
             sp_repr_unref ( rdf );
     }
     
@@ -703,7 +703,7 @@ rdf_get_xml_repr( SPDocument * doc, gchar const * name, bool build )
 
         sp_repr_set_attr ( xml, "rdf:about", "" );
 
-        sp_repr_append_child(rdf, xml);
+        rdf->appendChild(xml);
         sp_repr_unref(xml);
     }
 
@@ -728,7 +728,7 @@ rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
         item = sp_repr_new( name );
         g_return_val_if_fail (item != NULL, NULL);
 
-        sp_repr_append_child(work, item);
+        work->appendChild(item);
         sp_repr_unref(item);
     }
 
@@ -931,7 +931,7 @@ rdf_set_license(SPDocument * document, struct rdf_license_t * license)
         g_assert ( child != NULL );
 
         sp_repr_set_attr ( child, "rdf:resource", detail->resource );
-        sp_repr_append_child ( repr, child );
+        repr->appendChild(child);
         sp_repr_unref ( child );
     }
 }

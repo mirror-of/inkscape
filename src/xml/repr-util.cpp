@@ -316,8 +316,8 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
     int p1, p2;
     if (sp_repr_parent(first) == sp_repr_parent(second)) {
         /* Basic case - first and second have same parent */
-        p1 = sp_repr_position(first);
-        p2 = sp_repr_position(second);
+        p1 = first->position();
+        p2 = second->position();
     } else {
         /* Special case - the two objects have different parents.  They
            could be in different groups or on different layers for
@@ -335,8 +335,8 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
             SPRepr const *to_first = AncetreFils(first, ancestor);
             SPRepr const *to_second = AncetreFils(second, ancestor);
             g_assert(sp_repr_parent(to_second) == sp_repr_parent(to_first));
-            p1 = sp_repr_position(to_first);
-            p2 = sp_repr_position(to_second);
+            p1 = to_first->position();
+            p2 = to_second->position();
         }
     }
 

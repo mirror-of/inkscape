@@ -418,12 +418,12 @@ sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel)
 		stop = sp_repr_new ("svg:stop");
 		sp_repr_set_attr (stop, "offset", "0");
 		sp_repr_set_attr (stop, "style", "stop-color:#000;stop-opacity:1;");
-		sp_repr_append_child (repr, stop);
+		repr->appendChild(stop);
 		sp_repr_unref (stop);
 		stop = sp_repr_new ("svg:stop");
 		sp_repr_set_attr (stop, "offset", "1");
 		sp_repr_set_attr (stop, "style", "stop-color:#fff;stop-opacity:1;");
-		sp_repr_append_child (repr, stop);
+		repr->appendChild(stop);
 		sp_repr_unref (stop);
 	}
 

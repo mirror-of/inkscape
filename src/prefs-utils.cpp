@@ -135,7 +135,7 @@ prefs_set_recent_file (const gchar * uri, const gchar * name) {
             if (child) {
                 sp_repr_change_order (recent, child, NULL);
             } else {
-                if (sp_repr_n_children (recent) >= max_documents) {
+                if (recent->childCount() >= max_documents) {
                     child = recent->firstChild();
                     // count to the last
                     for (i = 0; i < max_documents - 2; i ++) child = child->next();
@@ -163,7 +163,7 @@ prefs_get_recent_files(void) {
 		SPRepr *child;
 		const gchar ** datalst;
 		gint i;
-		gint docs = sp_repr_n_children (recent);
+		gint docs = recent->childCount();
 
 		datalst = (const gchar **)g_malloc(sizeof(gchar *) * ((docs * 2) + 1));
 

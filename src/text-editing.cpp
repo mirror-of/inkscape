@@ -436,7 +436,7 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
             for (SPObject *child = sp_object_first_child(SP_OBJECT(i->data)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 // copy all children to it
                 SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR (child));
-                sp_repr_append_child(SP_OBJECT_REPR(prev), copy);
+                SP_OBJECT_REPR(prev)->appendChild(copy);
                 sp_repr_unref (copy);
             }
             // delete line to be merged

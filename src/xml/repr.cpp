@@ -76,12 +76,12 @@ sp_repr_document_new(char const *rootname)
         sp_repr_set_attr(doc, "version", "1.0");
         sp_repr_set_attr(doc, "standalone", "no");
         SPRepr *comment = sp_repr_new_comment(" Created with Inkscape (http://www.inkscape.org/) ");
-        sp_repr_append_child(doc, comment);
+        doc->appendChild(comment);
         sp_repr_unref(comment);
     }
 
     SPRepr *root = sp_repr_new(rootname);
-    sp_repr_append_child(doc, root);
+    doc->appendChild(root);
     sp_repr_unref(root);
 
     return doc;

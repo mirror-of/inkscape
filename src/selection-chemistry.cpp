@@ -161,7 +161,7 @@ void sp_selection_duplicate()
         parent = ((SPRepr *) reprs->data)->parent();
         SPRepr *copy = sp_repr_duplicate((SPRepr *) reprs->data);
 
-        sp_repr_append_child(parent, copy);
+        parent->appendChild(copy);
 
         newsel = g_slist_prepend(newsel, copy);
         reprs = g_slist_remove(reprs, reprs->data);
@@ -381,7 +381,7 @@ void sp_selection_group()
     p = g_slist_sort(p, (GCompareFunc) sp_repr_compare_position);
 
     // Remember the position of the topmost object.
-    gint topmost = sp_repr_position((SPRepr *) g_slist_last(p)->data);
+    gint topmost = ((SPRepr *) g_slist_last(p)->data)->position();
 
     SPRepr *group = sp_repr_new("svg:g");
 
@@ -390,14 +390,14 @@ void sp_selection_group()
         SPRepr *current = (SPRepr *) p->data;
         spnew = sp_repr_duplicate(current);
         sp_repr_unparent(current);
-        sp_repr_append_child(group, spnew);
+        group->appendChild(spnew);
         sp_repr_unref(spnew);
         topmost --;
         p = g_slist_remove(p, current);
     }
 
     // Add the new group to the group members' common parent.
-    sp_repr_append_child(parent, group);
+    parent->appendChild(group);
 
     // Move to the position of the topmost, reduced by the number of deleted items.
     sp_repr_set_position_absolute(group, topmost > 0 ? topmost + 1 : 0);
@@ -1736,7 +1736,7 @@ sp_selection_clone()
     sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr(sel_repr, "id")));
 
     // add the new clone to the top of the original's parent
-    sp_repr_append_child(parent, clone);
+    parent->appendChild(clone);
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
 
@@ -1875,7 +1875,7 @@ sp_selection_tile(bool apply)
     SPObject *parent = SP_OBJECT_PARENT (items->data);
 
     // remember the position of the first item
-    gint pos = sp_repr_position (SP_OBJECT_REPR (items->data));
+    gint pos = SP_OBJECT_REPR (items->data)->position();
 
     // create a list of duplicates
     GSList *repr_copies = NULL;
@@ -1904,7 +1904,7 @@ sp_selection_tile(bool apply)
         sp_repr_set_double (rect, "y", bounds.min()[NR::Y]);
 
         // restore parent and position
-        sp_repr_append_child (SP_OBJECT_REPR (parent), rect);
+        SP_OBJECT_REPR (parent)->appendChild(rect);
         sp_repr_set_position_absolute (rect, pos > 0 ? pos : 0);
         SPItem *rectangle = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(rect);
 
@@ -2037,7 +2037,7 @@ sp_selection_create_bitmap_copy ()
     selection->bounds(&bbox);
 
     // Remember parent and z-order of the topmost one
-    gint pos = sp_repr_position (SP_OBJECT_REPR(g_slist_last(items)->data));
+    gint pos = SP_OBJECT_REPR(g_slist_last(items)->data)->position();
     SPObject *parent_object = SP_OBJECT_PARENT(g_slist_last(items)->data);
     SPRepr *parent = SP_OBJECT_REPR(parent_object);
 
@@ -2120,7 +2120,7 @@ sp_selection_create_bitmap_copy ()
         } 
 
         // add the new repr to the parent
-        sp_repr_append_child (parent, repr);
+        parent->appendChild(repr);
 
         // move to the saved position 
         sp_repr_set_position_absolute (repr, pos > 0 ? pos + 1 : 1);

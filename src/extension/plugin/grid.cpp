@@ -156,7 +156,7 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
     // Glib::ustring transform("scale(1.25 1.25)");
     // sp_repr_set_attr(path, "transform", transform.c_str());
 
-    sp_repr_append_child(current_layer, path);
+    current_layer->appendChild(path);
 
     return;
 }

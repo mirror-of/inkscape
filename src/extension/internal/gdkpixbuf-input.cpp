@@ -70,7 +70,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             sp_repr_set_attr (pat, "patternUnits", "userSpaceOnUse");
             sp_repr_set_double (pat, "width", width);
             sp_repr_set_double (pat, "height", height);
-            sp_repr_append_child (SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc)), pat);
+            SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc))->appendChild(pat);
             const gchar *pat_id = sp_repr_attr(pat, "id");
             SPObject *pat_object = doc->getObjectById(pat_id);
 

@@ -397,14 +397,14 @@ void sp_sel_trans_stamp(SPSelTrans *seltrans)
             SPRepr *original_repr = SP_OBJECT_REPR(original_item);
 
             // remember the position of the item
-            gint pos = sp_repr_position(original_repr);
+            gint pos = original_repr->position();
             // remember parent
             SPRepr *parent = sp_repr_parent(original_repr);
 
             SPRepr *copy_repr = sp_repr_duplicate(original_repr);
 
             // add the new repr to the parent
-            sp_repr_append_child(parent, copy_repr);
+            parent->appendChild(copy_repr);
             // move to the saved position
             sp_repr_set_position_absolute(copy_repr, pos > 0 ? pos : 0);
 

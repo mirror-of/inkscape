@@ -6,6 +6,18 @@
 	* inkview.1.in, share/extensions/inkscape-shadow-white.sh, 
 	  share/extensions/inkscape-shadow.sh: corrections found by Wolfram
 	  Quester during Debian packaging.
+    * src/desktop-events.cpp, src/file.cpp, src/gradient-chemistry.cpp,
+	  src/interface.cpp, src/layer-fns.cpp, src/nodepath.cpp,
+      src/object-ui.cpp, src/path-chemistry.cpp, src/prefs-utils.cpp,
+      src/selection-chemistry.cpp, src/seltrans.cpp, src/sp-flowtext.cpp,
+      src/sp-object.cpp, src/sp-pattern.cpp, src/sp-text.cpp, src/splivarot.cpp,
+      src/text-editing.cpp, src/dialogs/clonetiler.cpp, src/dialogs/rdf.cpp,
+      src/dialogs/stroke-style.cpp, src/dialogs/xml-tree.cpp,
+      src/extension/internal/gdkpixbuf-input.cpp, src/extension/plugin/grid.cpp,
+      src/widgets/gradient-selector.cpp, src/xml/repr-action-test.cpp,
+      src/xml/repr-css.cpp, src/xml/repr-io.cpp, src/xml/repr-util.cpp,
+      src/xml/repr.cpp, src/xml/repr.h: inline function removal patches from
+	  Robert Crosbie.
 
 2004-02-11  Kees Cook  <kees@outflux.net>
 

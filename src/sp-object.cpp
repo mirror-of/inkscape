@@ -331,7 +331,7 @@ sp_object_compare_position(SPObject const *first, SPObject const *second)
 
 SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 	if (!SP_OBJECT_IS_CLONED(this)) {
-		sp_repr_append_child(SP_OBJECT_REPR(this), repr);
+		SP_OBJECT_REPR(this)->appendChild(repr);
 		return SP_OBJECT_DOCUMENT(this)->getObjectByRepr(repr);
 	} else {
 		g_critical("Attempt to append repr as child of cloned object");

@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 		sp_repr_begin_transaction(document);
 		UTEST_ASSERT(sp_repr_parent(a) == NULL);
 
-		sp_repr_append_child(root, a);
+		root->appendChild(a);
 		UTEST_ASSERT(sp_repr_parent(a) == root);
 
 		sp_repr_rollback(document);
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	UTEST_TEST("rollback of node removal") {
-		sp_repr_append_child(root, a);
+		root->appendChild(a);
 
 		sp_repr_begin_transaction(document);
 		UTEST_ASSERT(sp_repr_parent(a) == root);
@@ -47,9 +47,9 @@ int main(int argc, char *argv[]) {
 	sp_repr_unparent(a);
 
 	UTEST_TEST("rollback of node reordering") {
-		sp_repr_append_child(root, a);
-		sp_repr_append_child(root, b);
-		sp_repr_append_child(root, c);
+		root->appendChild(a);
+		root->appendChild(b);
+		root->appendChild(c);
 
 		sp_repr_begin_transaction(document);
 		UTEST_ASSERT(sp_repr_next(a) == b);
