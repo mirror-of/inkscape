@@ -503,8 +503,8 @@ DialogAlign::DialogAlign():
                           "at even distances"), 
                         0, 0, false, NR::X, 1., 0.); 
     addDistributeButton("distribute_hcentre",
-                        _("Distribute centers of objects of objects "
-                          "at even distances horizontally"),
+                        _("Distribute centers of objects at even "
+                          "distances horizontally"),
                         0, 1, false, NR::X, .5, .5); 
     addDistributeButton("distribute_right",
                         _("Distribute right sides of objects at even " 
