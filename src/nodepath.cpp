@@ -2217,9 +2217,9 @@ static void node_ctrl_grabbed(SPKnot *knot, guint state, gpointer data)
 
     // remember the origin of the control
     if (n->p.knot == knot) {
-        n->p.origin = Radial(n->p.pos - n->pos);
+        n->p.origin = n->p.pos - n->pos;
     } else if (n->n.knot == knot) {
-        n->n.origin = Radial(n->n.pos - n->pos);
+        n->n.origin = n->n.pos - n->pos;
     } else {
         g_assert_not_reached();
     }
