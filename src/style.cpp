@@ -2188,6 +2188,9 @@ sp_style_write_ienum(gchar *p, gint const len, gchar const *const key,
     if ((flags & SP_STYLE_FLAG_ALWAYS) ||
         ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (!base->set || (val->computed != base->computed)))) {
+        if (val->inherit) {
+            return g_snprintf(p, len, "%s:inherit;", key);
+        }
         unsigned int i;
         for (i = 0; dict[i].key; i++) {
             if (dict[i].value == static_cast< gint > (val->value) ) {

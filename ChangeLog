@@ -3,6 +3,9 @@
 	* src/style.cpp (sp_style_write_string):
 	  Fix for when stroke-dasharray either explicitly set to `none', or
 	  inherits non-none.
+	
+	* src/style.cpp (sp_style_write_ienum):
+	  Fix: preserve explicit `inherit' request.
 
 2004-12-07  David Turner  <novalis@gnu.org>
 
