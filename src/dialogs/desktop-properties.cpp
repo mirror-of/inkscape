@@ -48,6 +48,9 @@
 #include "../verbs.h"
 #include "../interface.h"
 
+#include "../xml/repr.h"
+#include "../xml/repr-private.h"
+
 #include "desktop-properties.h"
 
 
@@ -79,15 +82,34 @@ static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; 
 static gchar *prefs_path = "dialogs.documentoptions";
 
+static void 
+docoptions_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data)
+{
+    if (dlg) sp_dtw_update (dlg, SP_ACTIVE_DESKTOP);
+}
+
+static SPReprEventVector docoptions_repr_events = {
+	NULL, /* destroy */
+	NULL, /* add_child */
+	NULL, /* child_added */
+	NULL, /* remove_child */
+	NULL, /* child_removed */
+	NULL, /* change_attr */
+	docoptions_event_attr_changed,
+	NULL, /* change_list */
+	NULL, /* content_changed */
+	NULL, /* change_order */
+	NULL  /* order_changed */
+};
 
 static void
 sp_dtw_dialog_destroy (GtkObject *object, gpointer data)
 {
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
+    sp_repr_remove_listener_by_data (SP_OBJECT_REPR (SP_ACTIVE_DESKTOP->namedview), dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;
 }
-
 
 static gboolean
 sp_dtw_dialog_delete ( GtkObject *object, GdkEvent *event, gpointer data )
@@ -102,7 +124,6 @@ sp_dtw_dialog_delete ( GtkObject *object, GdkEvent *event, gpointer data )
 
     return FALSE; // which means, go ahead and destroy it
 }
-
 
 static void
 sp_dtw_whatever_toggled ( GtkToggleButton *tb, GtkWidget *dialog )
@@ -452,7 +473,7 @@ sp_desktop_dialog (void)
         cb = G_CALLBACK(sp_dtw_whatever_toggled);
         
         spw_checkbutton( dlg, t, _("Show guides"), "showguides", 0, 
-                         row, 1, cb );
+                         row, 0, cb );
         spw_checkbutton( dlg, t, _("Snap to guides"), "snaptoguides", 1, 
                          row++, 0, cb);
 
@@ -540,8 +561,7 @@ sp_desktop_dialog (void)
                            G_CALLBACK (sp_doc_dialog_paper_selected), NULL);
         gtk_menu_prepend (GTK_MENU (m), i);
         gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
-
-        
+       
         
         /* Custom paper frame */
         f = gtk_frame_new (_("Custom paper"));
@@ -554,7 +574,6 @@ sp_desktop_dialog (void)
         gtk_table_set_row_spacings (GTK_TABLE (tt), 4);
         gtk_table_set_col_spacings (GTK_TABLE (tt), 4);
         gtk_container_add (GTK_CONTAINER (f), tt);
-
         
         
         l = gtk_label_new (_("Units:"));
@@ -569,7 +588,6 @@ sp_desktop_dialog (void)
                            (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                            (GtkAttachOptions)0, 0, 0);
         gtk_object_set_data (GTK_OBJECT (dlg), "units", us);
-
         
         
         l = gtk_label_new (_("Width:"));
@@ -592,9 +610,8 @@ sp_desktop_dialog (void)
         gtk_object_set_data (GTK_OBJECT (dlg), "widthsb", sb);
         g_signal_connect ( G_OBJECT (a), "value_changed", 
                            G_CALLBACK (sp_doc_dialog_whatever_changed), dlg );
-
-                           
-                           
+                        
+                          
         l = gtk_label_new (_("Height:"));
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
@@ -618,15 +635,14 @@ sp_desktop_dialog (void)
 
         // end of former "document settings" stuff
         
-        
-
-        /* fixme: We should listen namedview changes here as well */
         g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", 
                            G_CALLBACK (sp_dtw_activate_desktop), dlg);
                            
         g_signal_connect ( G_OBJECT (INKSCAPE), "deactivate_desktop", 
                            G_CALLBACK (sp_dtw_deactivate_desktop), dlg);
         sp_dtw_update (dlg, SP_ACTIVE_DESKTOP);
+
+        sp_repr_add_listener (SP_OBJECT_REPR (SP_ACTIVE_DESKTOP->namedview), &docoptions_repr_events, dlg);
         
     } // end of if (!dlg)
     
@@ -642,9 +658,9 @@ sp_dtw_activate_desktop ( Inkscape::Application *inkscape,
                           SPDesktop *desktop, 
                           GtkWidget *dialog )
 {
-    
+    if (desktop && dlg)
+        sp_repr_add_listener (SP_OBJECT_REPR (desktop->namedview), &docoptions_repr_events, dlg);
     sp_dtw_update (dialog, desktop);
-
 }
 
 
@@ -654,9 +670,11 @@ sp_dtw_deactivate_desktop ( Inkscape::Application *inkscape,
                             SPDesktop *desktop, 
                             GtkWidget *dialog )
 {
-
+    if (desktop && SP_IS_DESKTOP (desktop) && SP_IS_NAMEDVIEW (desktop->namedview) && dlg) {
+        // all these checks prevent crash when you close inkscape with the dialog open
+        sp_repr_remove_listener_by_data (SP_OBJECT_REPR (desktop->namedview), dlg);
+    }
     sp_dtw_update (dialog, NULL);
-    
 }
 
 static void
@@ -726,10 +744,10 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
         if (w) gtk_widget_set_sensitive (GTK_WIDGET (w), TRUE);
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "showguides");
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->showgrid);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->showguides);
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "snaptoguides");
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->snaptogrid);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->snaptoguides);
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "guide_snap_units");
         sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->guidetoleranceunit);
