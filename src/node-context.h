@@ -30,6 +30,11 @@ struct _SPNodeContext {
 
 	SPNodePath *nodepath;
 	SPKnotHolder *knot_holder;
+
+	gboolean leftalt;
+	gboolean rightalt;
+	gboolean leftctrl;
+	gboolean rightctrl;
 };
 
 struct _SPNodeContextClass {
