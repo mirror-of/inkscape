@@ -348,7 +348,11 @@ nr_typeface_ft2_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 	if (rule == NR_TYPEFACE_LOOKUP_RULE_DEFAULT) {
 		if (unival > 0xf0000) {
 			unsigned int idx;
-			idx = CLAMP (unival, 0xf0000, 0x1ffff) - 0xf0000;
+			idx = CLAMP (unival, 0xf0000, 0x1fffff) - 0xf0000;
+			/* FIXME: The above CLAMP call used to have 0x1ffff as its third argument,
+			   but that's presumably unintended, as 0x1ffff < the second argument
+			   0xf0000.  I've changed it to 0x1fffff, but that's only a guess as to the
+			   intention; I don't know much about this code.  -- pjrm */
 			return MIN (idx, tf->nglyphs - 1);
 		} else if (!tff->unimap || (tff->freelo && (unival >= 0xe000) && (unival <= 0xf8ff))) {
 			unsigned int idx;

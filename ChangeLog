@@ -1,3 +1,9 @@
+2003-12-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnrtype/nr-type-ft2.cpp (nr_typeface_ft2_lookup): Change apparently-erroneous
+	  arguments to CLAMP, and add a FIXME comment indicating that the new arguments are
+	  just a guess as to the original intent.
+
 2003-12-20  MenTaLguY <mental@rydia.net>
 
 	* src/help.cpp, glade/about_svg.tmpl, glade/about.svg:
