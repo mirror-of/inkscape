@@ -216,6 +216,7 @@ flow_res*          flow_maker::TextWork(void)
 			final_brk=cur_brk;
 			break;
 		}
+
 #ifdef text_maker_verbose
 		printf("curbrk=%i (%i %i)\n",cur_brk,cur_elem_no,cur_elem_pos);
 #endif
@@ -239,7 +240,15 @@ flow_res*          flow_maker::TextWork(void)
 		//sols->Affiche();
 	
 		if ( sols->nbSol <= 0 ) {
-			// no sols-> ouch. skip to next box (there should be a penalty)
+#ifdef text_maker_verbose
+			g_print("no sols-> ouch. skip to next box (there should be a penalty)\n");
+#endif
+			if (strlen(f_src->Summary()) == 0) {
+#ifdef text_maker_verbose
+				g_print("empty text, no use trying anymore\n");
+#endif
+				break;
+			}
 			int n_brk=AddBrk(cur_box,cur_elem_no,cur_elem_pos);
 			brks[n_brk].rtl=cur_req.rtl;
 			brks[n_brk].LinkAfter(cur_brk,false);
