@@ -587,6 +587,62 @@ void sp_selection_cut()
     sp_selection_delete();
 }
 
+void sp_copy_gradient (SPGradient *gradient)
+{
+    SPGradient *ref = gradient;
+    SPRepr *grad_repr;
+
+    while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
+
+        grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(gradient));
+        gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
+
+        gradient = ref;
+        ref = gradient->ref->getObject();
+    }
+
+    grad_repr = sp_repr_duplicate(SP_OBJECT_REPR(gradient));
+    gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
+}
+
+void sp_copy_pattern (SPPattern *pattern)
+{
+    SPRepr *pattern_repr;
+
+    pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(pattern));
+    gradient_clipboard = g_slist_prepend(gradient_clipboard, pattern_repr);
+}
+
+
+void sp_copy_stuff_used_by_item (SPItem *item)
+{
+    SPRepr *repr = SP_OBJECT_REPR(item);
+    SPStyle *style = sp_style_new();
+    sp_style_read_from_repr (style, repr);
+
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+        if (SP_IS_LINEARGRADIENT (server) || SP_IS_RADIALGRADIENT (server))
+            sp_copy_gradient (SP_GRADIENT(server));
+        if (SP_IS_PATTERN (server))
+            sp_copy_pattern (SP_PATTERN(server));
+    }
+
+    if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+        SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
+        if (SP_IS_LINEARGRADIENT (server) || SP_IS_RADIALGRADIENT (server))
+            sp_copy_gradient (SP_GRADIENT(server));
+        if (SP_IS_PATTERN (server))
+            sp_copy_pattern (SP_PATTERN(server));
+    }
+
+    // recurse
+    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+        if (SP_IS_ITEM(o))
+            sp_copy_stuff_used_by_item (SP_ITEM (o));
+    }
+}
+
 void sp_selection_copy()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -606,60 +662,27 @@ void sp_selection_copy()
     /* Clear old gradient clipboard */
     while (gradient_clipboard) {
         sp_repr_unref((SPRepr *) gradient_clipboard->data);
-        gradient_clipboard = g_slist_remove(gradient_clipboard, gradient_clipboard->data);
+        gradient_clipboard = g_slist_remove (gradient_clipboard, gradient_clipboard->data);
     }
 
-    for (; items != NULL; items = items->next){
-        SPRepr *repr = SP_OBJECT_REPR(items->data);
-        SPRepr *grad_repr;
-        SPStyle *style = sp_style_new();
-        sp_style_read_from_repr(style, repr);
-
-        if (style && style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {    /* Object has pattern or gradient fill*/
-            if (SP_IS_LINEARGRADIENT(SP_OBJECT_STYLE_FILL_SERVER(items->data)) ||
-                SP_IS_RADIALGRADIENT(SP_OBJECT_STYLE_FILL_SERVER(items->data))) {
-                SPGradient *gradient = SP_GRADIENT(SP_OBJECT_STYLE_FILL_SERVER(items->data));
-                SPGradient *ref = gradient;
-                while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
-                    grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(gradient));
-                    gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
-                    gradient = ref;
-                    ref = gradient->ref->getObject();
-                }
-                grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(gradient));
-                gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
-            }
-            else if (SP_IS_PATTERN(SP_OBJECT_STYLE_FILL_SERVER(items->data))){
-                SPPattern *pattern = SP_PATTERN(SP_OBJECT_STYLE_FILL_SERVER(items->data));
-                grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(pattern));
-                gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
-            }
-        }
-        if (style && style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {    /* Object has pattern or gradient fill*/
-            if (SP_IS_LINEARGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(items->data)) ||
-                SP_IS_RADIALGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(items->data))) {
-                SPGradient *gradient = SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(items->data));
-                SPGradient *ref = gradient;
-                while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
-                    grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(gradient));
-                    gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
-                    gradient = ref;
-                    ref = gradient->ref->getObject();
-                }
-                grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(gradient));
-                gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
-            }
-            else if (SP_IS_PATTERN(SP_OBJECT_STYLE_STROKE_SERVER(items->data))){
-                SPPattern *pattern = SP_PATTERN(SP_OBJECT_STYLE_STROKE_SERVER(items->data));
-                grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(pattern));
-                gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
-            }
-        }
+    // copy stuff referenced by the item to gradient_clipboard
+    for (; items != NULL; items = items->next) {
+        sp_copy_stuff_used_by_item (SP_ITEM (items->data));
     }
 
-    GSList *sl;
-    sl = g_slist_copy((GSList *) selection->reprList());
-    sl = g_slist_sort(sl, (GCompareFunc) sp_repr_compare_position);
+    GSList *reprs = g_slist_copy ((GSList *) selection->reprList());
+
+     SPRepr *parent = ((SPRepr *) reprs->data)->parent;
+     gboolean sort = TRUE;
+     for (GSList *i = reprs->next; i; i = i->next) {
+         if ((((SPRepr *) i->data)->parent) != parent) {
+             // We can copy items from different parents, but we cannot do sorting in this case
+             sort = FALSE;
+         }
+     }
+
+     if (sort)
+        reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
 
     /* Clear old clipboard */
     while (clipboard) {
@@ -667,9 +690,9 @@ void sp_selection_copy()
         clipboard = g_slist_remove(clipboard, clipboard->data);
     }
 
-    while (sl != NULL) {
-        SPRepr *repr = (SPRepr *) sl->data;
-        sl = g_slist_remove(sl, repr);
+    while (reprs != NULL) {
+        SPRepr *repr = (SPRepr *) reprs->data;
+        reprs = g_slist_remove (reprs, repr);
         SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
         SPRepr *copy = sp_repr_duplicate(repr);
         sp_repr_css_set(copy, css, "style");
