@@ -1,3 +1,8 @@
+2004-03-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/draw-context.h, src/draw-context.cpp: Cleanup: greater
+	conformance to CodingStyle.  Mostly whitespace changes.
+
 2004-03-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/widgets/sp-widget.h, src/widgets/sp-widget.cpp
