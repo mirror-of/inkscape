@@ -70,7 +70,6 @@ GType sp_zoom_context_get_type(void)
 
 static void sp_zoom_context_class_init(SPZoomContextClass *klass)
 {
-    GObjectClass *object_class = (GObjectClass *) klass;
     SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
     
     parent_class = (SPEventContextClass*) g_type_class_peek_parent(klass);
