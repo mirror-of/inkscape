@@ -1,3 +1,15 @@
+2004-04-18  Carl Hetherington <inkscape@carlh.net>
+
+	* src/print.cpp, src/print.h, src/sp-text.cpp
+	src/extension/extension.cpp src/extension/extension.h,
+	src/extension/implementation/implementation.cpp,
+	src/extension/implementation/implementation.h,
+	src/extension/internal/eps-out.cpp, src/extension/internal/eps-out.h,
+	src/extension/internal/ps.cpp, src/extension/internal/ps.h,
+	Add very basic feature to allow PS text to be exported as real
+	text, rather than being converted to paths first.  Needs some
+	work, mostly on font handling.
+	
 2004-04-17  MenTaLguY <mental@rydia.net>
 	* src/inkscape.cpp, src/node-context.cpp, src/selection-chemistry.cpp,
 	  src/selection.cpp, src/selection.h, src/seltrans.cpp, src/sp-gradient.cpp,
