@@ -64,7 +64,7 @@ static void sp_draw_context_init (SPDrawContext *dc);
 static void sp_draw_context_dispose (GObject *object);
 
 static void sp_draw_context_setup (SPEventContext *ec);
-static void sp_draw_context_set (SPEventContext *ec, const guchar *key, const guchar *value);
+static void sp_draw_context_set (SPEventContext *ec, const gchar *key, const gchar *value);
 static void sp_draw_context_finish (SPEventContext *ec);
 
 static gint sp_draw_context_root_handler (SPEventContext * event_context, GdkEvent * event);
@@ -224,7 +224,7 @@ sp_draw_context_finish (SPEventContext *ec)
 }
 
 static void
-sp_draw_context_set (SPEventContext *ec, const guchar *key, const guchar *value)
+sp_draw_context_set (SPEventContext *ec, const gchar *key, const gchar *value)
 {
 	SPDrawContext *dc;
 
@@ -1158,7 +1158,7 @@ static void sp_pen_context_dispose (GObject *object);
 
 static void sp_pen_context_setup (SPEventContext *ec);
 static void sp_pen_context_finish (SPEventContext *ec);
-static void sp_pen_context_set (SPEventContext *ec, const guchar *key, const guchar *val);
+static void sp_pen_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
 static gint sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event);
 
 static void spdc_pen_set_point (SPPenContext *pc, NRPointF *p, guint state);
@@ -1285,7 +1285,7 @@ sp_pen_context_finish (SPEventContext *ec)
 }
 
 static void
-sp_pen_context_set (SPEventContext *ec, const guchar *key, const guchar *val)
+sp_pen_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 {
 	SPPenContext *pc;
 

@@ -36,7 +36,7 @@ static void sp_rect_context_init (SPRectContext * rect_context);
 static void sp_rect_context_dispose (GObject *object);
 
 static void sp_rect_context_setup (SPEventContext *ec);
-static void sp_rect_context_set (SPEventContext *ec, const guchar *key, const guchar *val);
+static void sp_rect_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
 
 static gint sp_rect_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_rect_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
@@ -61,7 +61,7 @@ sp_rect_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_rect_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPRectContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPRectContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -75,7 +75,7 @@ sp_rect_context_class_init (SPRectContextClass * klass)
 	object_class = (GObjectClass *) klass;
 	event_context_class = (SPEventContextClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_rect_context_dispose;
 
@@ -133,7 +133,7 @@ sp_rect_context_setup (SPEventContext *ec)
 }
 
 static void
-sp_rect_context_set (SPEventContext *ec, const guchar *key, const guchar *val)
+sp_rect_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 {
 	SPRectContext *rc;
 
@@ -374,9 +374,9 @@ sp_rc_defaults (GtkWidget *widget, GtkObject *obj)
 {
 	GtkAdjustment *adj;
 
-	adj = gtk_object_get_data (obj, "rx_ratio");
+	adj = (GtkAdjustment*)gtk_object_get_data (obj, "rx_ratio");
 	gtk_adjustment_set_value (adj, 0.0);
-	adj = gtk_object_get_data (obj, "ry_ratio");
+	adj = (GtkAdjustment*)gtk_object_get_data (obj, "ry_ratio");
 	gtk_adjustment_set_value (adj, 0.0);
 }
 
@@ -397,30 +397,45 @@ sp_rect_context_config_widget (SPEventContext *ec)
 	l = gtk_label_new (_("Roundness ratio for x:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 0, 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 0, 1, 
+			  (GtkAttachOptions)0, 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 	a = gtk_adjustment_new (rc->rx_ratio, 0.0, 1.0, 0.01, 0.1, 0.1);
 	gtk_object_set_data (GTK_OBJECT (tbl), "rx_ratio", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, 
+			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_rc_rx_ratio_value_changed), rc);
 
 	/* ry_ratio */
 	l = gtk_label_new (_("Roundness ratio for y:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, 
+			  (GtkAttachOptions)0, 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 	a = gtk_adjustment_new (rc->ry_ratio, 0.0, 1.0, 0.01, 0.1, 0.1);
 	gtk_object_set_data (GTK_OBJECT (tbl), "ry_ratio", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 1, 2, 
+			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+			  (GtkAttachOptions)0, 
+			  0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_rc_ry_ratio_value_changed), rc);
 
 	/* Reset */
 	b = gtk_button_new_with_label (_("Defaults"));
 	gtk_widget_show (b);
-	gtk_table_attach (GTK_TABLE (tbl), b, 0, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), b, 0, 2, 2, 3, 
+			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+			  0, 0);
 	gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_rc_defaults), tbl);
 
 	return tbl;

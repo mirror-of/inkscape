@@ -44,7 +44,7 @@ static void sp_select_context_init (SPSelectContext * select_context);
 static void sp_select_context_dispose (GObject *object);
 
 static void sp_select_context_setup (SPEventContext *ec);
-static void sp_select_context_set (SPEventContext *ec, const guchar *key, const guchar *val);
+static void sp_select_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
 static gint sp_select_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_select_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
 
@@ -158,7 +158,7 @@ sp_select_context_setup (SPEventContext *ec)
 }
 
 static void
-sp_select_context_set (SPEventContext *ec, const guchar *key, const guchar *val)
+sp_select_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 {
 	SPSelectContext *sc;
 

@@ -95,7 +95,7 @@ static void sp_dyna_draw_context_init (SPDynaDrawContext *ddc);
 static void sp_dyna_draw_context_dispose (GObject *object);
 
 static void sp_dyna_draw_context_setup (SPEventContext *ec);
-static void sp_dyna_draw_context_set (SPEventContext *ec, const guchar *key, const guchar *val);
+static void sp_dyna_draw_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
 static gint sp_dyna_draw_context_root_handler (SPEventContext *ec, GdkEvent *event);
 
 static GtkWidget *sp_dyna_draw_context_config_widget (SPEventContext *ec);
@@ -259,7 +259,7 @@ sp_dyna_draw_context_setup (SPEventContext *ec)
 }
 
 static void
-sp_dyna_draw_context_set (SPEventContext *ec, const guchar *key, const guchar *val)
+sp_dyna_draw_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 {
 	SPDynaDrawContext *ddc;
 	gdouble dval;
