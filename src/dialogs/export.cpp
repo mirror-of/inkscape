@@ -32,8 +32,9 @@
 #include <gtk/gtkprogressbar.h>
 
 #include "helper/sp-intl.h"
-#include "helper/window.h"
 #include "helper/unit-menu.h"
+#include "helper/units.h"
+#include "helper/window.h"
 #include "widgets/spw-utilities.h"
 #include "inkscape.h"
 #include "inkscape-private.h"

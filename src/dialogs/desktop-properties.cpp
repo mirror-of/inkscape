@@ -32,8 +32,9 @@
 
 #include "macros.h"
 #include "helper/sp-intl.h"
-#include "helper/window.h"
 #include "helper/unit-menu.h"
+#include "helper/units.h"
+#include "helper/window.h"
 #include "svg/svg.h"
 #include "widgets/sp-color-selector.h"
 #include "widgets/sp-color-notebook.h"

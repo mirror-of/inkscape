@@ -21,6 +21,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenuitem.h>
 #include "helper/sp-marshal.h"
+#include "helper/units.h"
 #include "unit-menu.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"

@@ -57,6 +57,7 @@
 #include "helper/gnome-utils.h"
 #include "helper/sp-intl.h"
 #include "helper/unit-menu.h"
+#include "helper/units.h"
 
 #include "dialogs/object-properties.h"
 #include "dialogs/transformation.h"

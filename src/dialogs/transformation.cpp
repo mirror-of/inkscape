@@ -28,8 +28,9 @@
 
 #include "../inkscape-stock.h"
 #include "helper/sp-intl.h"
-#include "helper/window.h"
 #include "helper/unit-menu.h"
+#include "helper/units.h"
+#include "helper/window.h"
 #include "libnr/nr-scale.h"
 #include "libnr/nr-scale-ops.h"
 #include "macros.h"

@@ -29,6 +29,7 @@
 
 #include "helper/sp-intl.h"
 #include "helper/unit-menu.h"
+#include "helper/units.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "widgets/sp-widget.h"
