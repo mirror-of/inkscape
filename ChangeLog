@@ -1,5 +1,10 @@
 2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/nrtype-forward.h: New file.
+	* src/libnrtype/Makefile_insert: Add it to SOURCES.
+	* src/libnrtype/FontFactory.h, src/libnrtype/TextWrapper.h:
+	  #include it (replacing local declarations in some cases).
+
 	* src/livarot/livarot-forward.h: New file.
 	* src/livarot/Ligne.h, src/livarot/Path.h, src/livarot/Shape.h:
 	  #include it (replacing local declarations in some cases).

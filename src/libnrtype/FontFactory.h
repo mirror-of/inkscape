@@ -14,6 +14,7 @@
 #include <pango/pango.h>
 #include "nr-type-primitives.h"
 #include "nr-type-pos-def.h"
+#include <libnrtype/nrtype-forward.h>
 
 #ifdef WITH_XFT
 #include <pango/pangoft2.h>
@@ -24,8 +25,6 @@
 #include <windowsx.h>
 #include <pango/pangowin32.h>
 #endif
-
-class font_instance;
 
 // for the hashmap
 struct font_descr_hash : public std::unary_function<PangoFontDescription*,size_t> {

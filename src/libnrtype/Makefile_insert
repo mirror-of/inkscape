@@ -41,6 +41,7 @@ libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/nr-type-pos-def.h	\
 	libnrtype/nr-type-primitives.cpp	\
 	libnrtype/nr-type-primitives.h	\
+	libnrtype/nrtype-forward.h	\
 	libnrtype/FontFactory.cpp \
 	libnrtype/FontFactory.h \
 	libnrtype/FontInstance.cpp \

@@ -11,11 +11,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <glib.h>
-
 #include <pango/pango.h>
 
-class font_instance;
+#include <libnrtype/nrtype-forward.h>
+
 
 enum {
 	bnd_none = 0,
