@@ -1,4 +1,24 @@
 #include "geom.h"
+#include <math.h>
+
+NR::Coord L1(const NR::Point p) {
+	NR::Coord d = 0;
+	for(int i = 0; i < 2; i++)
+		d += fabs(p.pt[i]);
+	return d;
+}
+
+NR::Coord L2(const NR::Point p) {
+	return hypot(p.pt[0], p.pt[1]);
+}
+
+NR::Coord Linfty(const NR::Point p) {
+	NR::Coord d = 0;
+	for(int i = 0; i < 2; i++)
+		d = MAX(d, fabs(p.pt[i]));
+	return d;
+}
+
 
 /* Intersect two lines */
 

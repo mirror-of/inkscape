@@ -12,6 +12,13 @@
 
 #include "libnr/nr-types.h"
 
+extern NR::Coord L1(const NR::Point p);
+/** Compute the L1 norm, or manhattan distance, of this vector */
+extern NR::Coord L2(const NR::Point p);
+/** Compute the L2 or euclidean norm of this vector */
+extern NR::Coord Linfty(const NR::Point p);
+/** Compute the L infinity or maximum norm of this vector */
+
 typedef enum sp_intersector_kind{
 	intersects = 0,
 	parallel,
