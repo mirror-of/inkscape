@@ -137,7 +137,7 @@ public:
 
 	/** Translates the rectangle by p. */
 	void offset(Point p);
-	
+
 	/** Makes this rectangle large enough to include the point p. */
 	void expandTo(Point p);
 

@@ -29,6 +29,7 @@
 #include <sp-canvas.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-convex-hull.h>
 
 const gint sp_canvas_update_priority = G_PRIORITY_HIGH_IDLE;
 
@@ -641,29 +642,30 @@ static void
 sp_canvas_group_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags)
 {
     const SPCanvasGroup *group = SP_CANVAS_GROUP (item);
-
-    NRRect bbox;
-    bbox.x0 = 0;
-    bbox.y0 = 0;
-    bbox.x1 = 0;
-    bbox.y1 = 0;
+    NR::ConvexHull corners(NR::Point(0, 0));
+    bool empty=true;
 
     for (GList *list = group->items; list; list = list->next) {
         SPCanvasItem *i = (SPCanvasItem *)list->data;
 
         sp_canvas_item_invoke_update (i, affine, flags);
 
-        NRRect child_bbox;
-        child_bbox.x0 = i->x1;
-        child_bbox.y0 = i->y1;
-        child_bbox.x1 = i->x2;
-        child_bbox.y1 = i->y2;
-        nr_rect_d_union (&bbox, &bbox, &child_bbox);
+        if ( i->x2 > i->x1 && i->y2 > i->y1 ) {
+            if (empty) {
+                corners = NR::ConvexHull(NR::Point(i->x1, i->y1));
+                empty = false;
+            } else {
+                corners.add(NR::Point(i->x1, i->y1));
+            }
+            corners.add(NR::Point(i->x2, i->y2));
+        }
     }
-    item->x1 = bbox.x0;
-    item->y1 = bbox.y0;
-    item->x2 = bbox.x1;
-    item->y2 = bbox.y1;
+
+    NR::Rect const &bounds = corners.bounds();
+    item->x1 = bounds.min()[NR::X];
+    item->y1 = bounds.min()[NR::Y];
+    item->x2 = bounds.max()[NR::X];
+    item->y2 = bounds.max()[NR::Y];
 }
 
 /* Point handler for canvas groups */

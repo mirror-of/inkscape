@@ -19,21 +19,20 @@ namespace NR {
 
 class ConvexHull {
 public:
-	ConvexHull(const Point &p) : _bounds(p, p) {}
-	ConvexHull(const ConvexHull &h) : _bounds(h._bounds) {}
-													
-    Point const &midpoint() const {
+	explicit ConvexHull(Point const &p) : _bounds(p, p) {}
+
+    Point midpoint() const {
         return _bounds.midpoint();
     }
 
-	void add(const Point &p) {
+	void add(Point const &p) {
 		_bounds.expandTo(p);
 	}
-	void add(const ConvexHull &h) {
+	void add(ConvexHull const &h) {
 		_bounds.expandTo(h._bounds);
 	}
 		
-	Rect const &getBounds() const {
+	Rect const &bounds() const {
 		return _bounds;
 	}
 	

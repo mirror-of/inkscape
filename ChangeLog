@@ -1,3 +1,10 @@
+2004-04-17  MenTaLguY <mental@rydia.net>
+
+	* src/display/sp-canvas.cpp, src/libnr/nr-convex-hull.h,
+	  src/libnr/nr-rect.h: 
+
+	  First use of NR::ConvexHull (for propagating canvas bounding boxes)
+
 2004-04-17  Kees Cook <kees@outflux.net>
 
 	* share/icons/icons.svg, src/verbs.cpp: made last three ugly menu icons.
