@@ -30,16 +30,17 @@
 # include "config.h"
 #endif
 
-#ifndef BR_PTHREADS
-	/* Change 1 to 0 if you don't want pthread support */
-	#define BR_PTHREADS 1
-#endif /* BR_PTHREADS */
+
+/* PLEASE NOTE:  We use GThreads now for portability */
+/* @see http://developer.gnome.org/doc/API/2.0/glib/glib-Threads.html */
+#ifndef BR_THREADS
+    /* Change 1 to 0 if you don't want thread support */
+    #define BR_THREADS 1
+    #include <glib.h> //for GThreads
+#endif /* BR_THREADS */
 
 #include <stdlib.h>
 #include <stdio.h>
-#if BR_PTHREADS
-# include <pthread.h>
-#endif
 #include <limits.h>
 #include <string.h>
 #include "prefix.h"
@@ -60,6 +61,8 @@ extern "C" {
 
 
 #ifdef ENABLE_BINRELOC
+
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/param.h>
@@ -219,56 +222,29 @@ br_prepend_prefix (void *symbol, char *path)
 #endif /* ENABLE_BINRELOC */
 
 
-/* Pthread stuff for thread safetiness */
-#if BR_PTHREADS
+/* Thread stuff for thread safetiness */
+#if BR_THREADS
 
-static pthread_key_t br_thread_key;
-static pthread_once_t br_thread_key_once = PTHREAD_ONCE_INIT;
+GPrivate* br_thread_key = (GPrivate *)NULL;
 
+/*
+   We do not need local store init() or fini(), because
+   g_private_new (g_free) will take care of all of that
+   for us.  Isn't GLib wonderful?
+*/
 
-static void
-br_thread_local_store_fini ()
-{
-	char *specific;
-
-	specific = (char *) pthread_getspecific (br_thread_key);
-	if (specific)
-	{
-		free (specific);
-		pthread_setspecific (br_thread_key, NULL);
-	}
-	pthread_key_delete (br_thread_key);
-	br_thread_key = 0;
-}
-
-
-static void
-br_str_free (void *str)
-{
-	if (str)
-		free (str);
-}
-
-
-static void
-br_thread_local_store_init ()
-{
-	if (pthread_key_create (&br_thread_key, br_str_free) == 0)
-		atexit (br_thread_local_store_fini);
-}
-
-#else /* BR_PTHREADS */
+#else /* !BR_THREADS */
 
 static char *br_last_value = (char*)NULL;
 
 static void
 br_free_last_value ()
 {
-	if (br_last_value)
-		free (br_last_value);
+    if (br_last_value)
+        free (br_last_value);
 }
 
-#endif /* BR_PTHREADS */
+#endif /* BR_THREADS */
 
 
 /**
@@ -289,16 +265,19 @@ br_free_last_value ()
 const char *
 br_thread_local_store (char *str)
 {
-	#if BR_PTHREADS
-		char *specific;
+	#if BR_THREADS
+                if (!g_thread_supported ())
+                    {
+                    g_thread_init ((GThreadFunctions *)NULL);
+                    br_thread_key = g_private_new (g_free);
+                    }
 
-		pthread_once (&br_thread_key_once, br_thread_local_store_init);
+		char *specific = (char *) g_private_get (br_thread_key);
+		if (specific)
+                    free (specific);
+                g_private_set (br_thread_key, str);
 
-		specific = (char *) pthread_getspecific (br_thread_key);
-		br_str_free (specific);
-		pthread_setspecific (br_thread_key, str);
-
-	#else /* BR_PTHREADS */
+	#else /* !BR_THREADS */
 		static int initialized = 0;
 
 		if (!initialized)
@@ -310,7 +289,7 @@ br_thread_local_store (char *str)
 		if (br_last_value)
 			free (br_last_value);
 		br_last_value = str;
-	#endif /* BR_PTHREADS */
+	#endif /* BR_THREADS */
 
 	return (const char *) str;
 }
