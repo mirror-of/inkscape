@@ -138,7 +138,7 @@
 #    define JS_IMPORT_API(__x)      JS_EXPORT_API (__x)
 #endif
 
-#if defined(_WIN32) && !defined(__MWERKS__)
+#if defined(_WIN32) && !defined(__MWERKS__) &&!defined(__GNUC__)
 #    define JS_IMPORT_DATA(__x)      __declspec(dllimport) __x
 #else
 #    define JS_IMPORT_DATA(__x)     __x
