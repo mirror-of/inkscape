@@ -130,7 +130,8 @@ sp_bezier_fit_cubic_r(NR::Point *cbezier, NR::Point const *data, gint len, gdoub
     NR::Point *bezier = g_new(NR::Point, bezier_npts);
 
     /* call fit-cubic function with recursion */
-    gint ret = sp_bezier_fit_cubic_full(bezier, uniqued_data, uniqued_len, tHat1, tHat2, error, max_depth);
+    gint const ret = sp_bezier_fit_cubic_full(bezier, uniqued_data, uniqued_len,
+                                              tHat1, tHat2, error, max_depth);
     g_free(uniqued_data);
     for (gint i = 0; i < ret * 4; ++i) {
         cbezier[i] = NR::Point(bezier[i]);
@@ -169,9 +170,10 @@ copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len
 }
 
 gint
-sp_bezier_fit_cubic_full(NR::Point *bezier, NR::Point const data[], gint len,
+sp_bezier_fit_cubic_full(NR::Point bezier[],
+                         NR::Point const data[], gint const len,
                          NR::Point const &tHat1, NR::Point const &tHat2,
-                         double const error, gint max_depth)
+                         double const error, gint const max_depth)
 {
     int const maxIterations = 4;   /* Max times to try iterating */
 
@@ -208,7 +210,11 @@ sp_bezier_fit_cubic_full(NR::Point *bezier, NR::Point const data[], gint len,
         double *u = g_new(double, len);
         chord_length_parameterize(data, u, len);
         if ( u[len - 1] == 0.0 ) {
-            /* Zero-length path: every point in data[] is the same. */
+            /* Zero-length path: every point in data[] is the same.
+             *
+             * (Clients aren't allowed to pass such data; handling the case is defensive
+             * programming.)
+             */
             g_free(u);
             return 0;
         }
@@ -245,29 +251,33 @@ sp_bezier_fit_cubic_full(NR::Point *bezier, NR::Point const data[], gint len,
         /*
          *  Fitting failed -- split at max error point and fit recursively
          */
-        max_depth--;
+        gint const rec_max_depth = max_depth - 1;
 
         /* Unit tangent vector at splitPoint. */
         NR::Point tHatCenter = sp_darray_center_tangent(data, splitPoint, len);
-        gint const nsegs1 = sp_bezier_fit_cubic_full(bezier, data, splitPoint + 1, tHat1, tHatCenter, error, max_depth);
+        gint const nsegs1 = sp_bezier_fit_cubic_full(bezier, data, splitPoint + 1,
+                                                     tHat1, tHatCenter, error, rec_max_depth);
         if ( nsegs1 < 0 ) {
 #ifdef BEZIER_DEBUG
-            g_print("fit_cubic[1]: fail on max_depth:%d\n", max_depth);
+            g_print("fit_cubic[1]: recursive call failed\n");
 #endif
             return -1;
         }
+        g_assert( nsegs1 != 0 );
         tHatCenter = -tHatCenter;
-        gint const nsegs2 = sp_bezier_fit_cubic_full(bezier + nsegs1*4, data + splitPoint, len - splitPoint, tHatCenter, tHat2, error, max_depth);
+        gint const nsegs2 = sp_bezier_fit_cubic_full(bezier + nsegs1*4,
+                                                     data + splitPoint, len - splitPoint,
+                                                     tHatCenter, tHat2, error, rec_max_depth);
         if ( nsegs2 < 0 ) {
 #ifdef BEZIER_DEBUG
-            g_print("fit_cubic[2]: fail on max_depth:%d\n", max_depth);
+            g_print("fit_cubic[2]: recursive call failed\n");
 #endif
             return -1;
         }
 
 #ifdef BEZIER_DEBUG
         g_print("fit_cubic: success[nsegs: %d+%d=%d] on max_depth:%d\n",
-                nsegs1, nsegs2, nsegs1 + nsegs2, max_depth + 1);
+                nsegs1, nsegs2, nsegs1 + nsegs2, max_depth);
 #endif
         return nsegs1 + nsegs2;
     } else {
@@ -644,6 +654,7 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
  *  error is non-zero) set \a *splitPoint to the corresponding index.
  *
  *  Requires: 2 <= len.
+ *  Ensures: ret == 0.0 || (0 < *splitPoint && *splitPoint < len - 1).
  */
 static gdouble
 compute_max_error(NR::Point const d[], double const u[], unsigned const len, BezierCurve const bezCurve,
@@ -656,7 +667,9 @@ compute_max_error(NR::Point const d[], double const u[], unsigned const len, Bez
     g_assert( u[0] == 0.0 );
     g_assert( u[last] == 1.0 );
     /* I.e. assert that the error for the first & last points is zero.
-       Otherwise we should include those points in the below loop. */
+     * Otherwise we should include those points in the below loop.
+     * The assertion is also necessary to ensure 0 < splitPoint < last.
+     */
 
     double maxDistsq = 0.0; /* Maximum error */
     for (unsigned i = 1; i < last; i++) {
@@ -667,6 +680,9 @@ compute_max_error(NR::Point const d[], double const u[], unsigned const len, Bez
         }
     }
 
+    g_assert( maxDistsq == 0.0
+              || ( ( 0 < *splitPoint )
+                   && ( *splitPoint < last ) ) );
     return maxDistsq;
 }
 

@@ -1,3 +1,7 @@
+2004-08-05  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/display/bezier-utils.cpp: Misc. minor changes.
+
 2004-08-04  MenTaLguY  <mental@rydia.net>
 
 	* configure.in, src/gc-object.h, src/refcounted.h:
