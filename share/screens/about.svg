@@ -4,16 +4,19 @@
 <svg
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.39cvs"
+   inkscape:version="0.40cvs"
    width="600.00000pt"
    height="500.00000pt"
-   sodipodi:docname="about05.svg"
+   sodipodi:docname="about.svg"
+   sodipodi:docbase="/home/phillipsjd/Documents/projects/inkscape-project/inkscape/share/screens"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xml="http://www.w3.org/XML/1998/namespace"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   sodipodi:docbase="/home/d/ink">
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs3">
     <linearGradient
@@ -311,13 +314,13 @@
      pagecolor="#ffffff"
      inkscape:pageopacity="0.00000000"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.42954326"
-     inkscape:cx="162.35322"
-     inkscape:cy="165.67351"
+     inkscape:zoom="0.60746590"
+     inkscape:cx="162.35323"
+     inkscape:cy="165.67348"
      inkscape:window-width="1268"
      inkscape:window-height="998"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="3"
      showguides="true"
      snaptoguides="true"
      showborder="true" />
@@ -399,11 +402,11 @@
        id="versionno"
        sodipodi:linespacing="100%"><tspan
          id="versiontext"
-         style="fill:#000000;fill-opacity:1.0000000;"> Version 0.39</tspan></text>
+         style="fill:#000000;fill-opacity:1.0000000;"> Version 0.40CVS</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:16.000000;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
-       x="624.69241"
+       x="677.19238"
        y="509.98325"
        id="website"
        sodipodi:linespacing="100%"><tspan
@@ -532,4 +535,19 @@
        stroke-width="1"
        style="fill-opacity:1.0000000;stroke:none;stroke-opacity:1.0000000;fill:url(#linearGradient907);" />
   </g>
+  <metadata
+     id="metadata1358">
+    <rdf:RDF
+       id="RDF1359">
+      <cc:Work
+         rdf:about=""
+         id="Work1360">
+        <dc:format
+           id="format1361">image/svg+xml</dc:format>
+        <dc:type
+           id="type1363"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
 </svg>
