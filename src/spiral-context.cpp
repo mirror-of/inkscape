@@ -157,8 +157,7 @@ static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const g
     sc->knot_holder = NULL;
 
     SPDesktop *desktop = ec->desktop;
-
-    SPItem *item = sp_selection_item (SP_DT_SELECTION(desktop));
+    SPItem *item = SP_DT_SELECTION(desktop)->singleItem();
 
     if (item) {
         sc->knot_holder = sp_item_knot_holder (item, desktop);
@@ -203,7 +202,7 @@ sp_spiral_context_selection_changed (SPSelection * selection, gpointer data)
         sc->repr = 0;
     }
 
-    SPItem *item = sp_selection_item (selection);
+    SPItem *item = selection->singleItem();
     if (item) {
         sc->knot_holder = sp_item_knot_holder (item, ec->desktop);
         SPRepr *repr = SP_OBJECT_REPR (item);
@@ -230,7 +229,9 @@ sp_spiral_context_setup (SPEventContext *ec)
 	sp_event_context_read (ec, "revolution");
 	sp_event_context_read (ec, "t0");
 
-    SPItem *item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
+	SPSelection *selection = SP_DT_SELECTION(ec->desktop);
+
+    SPItem *item = selection->singleItem();
         if (item) {
             sc->knot_holder = sp_item_knot_holder (item, ec->desktop);
             SPRepr *repr = SP_OBJECT_REPR (item);
@@ -243,7 +244,7 @@ sp_spiral_context_setup (SPEventContext *ec)
         }
 
 	sc->sel_changed_connection.disconnect();
-	sc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_spiral_context_selection_changed), (gpointer)sc));
+	sc->sel_changed_connection = selection->connectChanged(SigC::bind(SigC::slot(&sp_spiral_context_selection_changed), (gpointer)sc));
 }
 
 static void
@@ -328,7 +329,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
                 SP_DT_SELECTION(desktop)->setItem(event_context->item_to_select);
             } else {
                 // click in an empty space
-                sp_selection_empty (SP_DT_SELECTION (desktop));
+                SP_DT_SELECTION(desktop)->clear();
             }
 
             event_context->item_to_select = NULL;
@@ -347,7 +348,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 				ret = TRUE;
 			break;
         case GDK_Escape:
-            sp_selection_empty (SP_DT_SELECTION (desktop)); // deselect
+            SP_DT_SELECTION(desktop)->clear();
             //TODO: make dragging escapable by Esc
 		default:
 			break;
