@@ -141,6 +141,7 @@ init (void)
 static void
 build_module_from_dir (const gchar * dirname)
 {
+#if 0
 	DIR * directory;
 	struct dirent * dentry;
 
@@ -167,7 +168,35 @@ build_module_from_dir (const gchar * dirname)
 	}
 
 	closedir(directory);
+#else
+        //# Hopefully doing this the Glib way is portable
+        
+        GError *err;
+	GDir *directory = g_dir_open(dirname, 0, &err);
+	if (directory == NULL) {
+		g_warning(_("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded."), dirname);
+		return;
+	}
 
+        gchar *filename;
+	while ((filename = (char *)g_dir_read_name(directory)) != NULL) {
+
+		if (strlen(filename) < strlen(SP_MODULE_EXTENSION)) {
+			continue;
+		}
+
+		if (strcmp(SP_MODULE_EXTENSION, filename + (strlen(filename) - strlen(SP_MODULE_EXTENSION)))) {
+			continue;
+		}
+
+		gchar *pathname = g_strdup_printf("%s/%s", INKSCAPE_EXTENSIONDIR, filename);
+		build_from_file(pathname);
+		g_free(pathname);
+	}
+
+	g_dir_close(directory);
+
+#endif
 	return;
 }
 
