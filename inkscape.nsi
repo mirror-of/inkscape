@@ -14,6 +14,7 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
+
 ; #######################################
 ; MUI   SETTINGS
 ; #######################################
@@ -42,32 +43,63 @@
 ; Language files
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "German"
+!insertmacro MUI_LANGUAGE "Italian"
 
-; MUI end ------
 
-; English strings
+
+; #######################################
+; STRING   LOCALIZATION
+; #######################################
+; Thanks to Adib Taraben and Luca Bruno for getting this started
+; Add your translation here!  :-)
+
+; Product name
 LangString lng_Caption ${LANG_ENGLISH} "${PRODUCT_NAME} -- Open Source Scalable Vector Graphics Editor"
+LangString lng_Caption ${LANG_GERMAN}  "${PRODUCT_NAME} -- Open Source SVG-Vektorillustrator"
+LangString lng_Caption ${LANG_ITALIAN} "${PRODUCT_NAME} -- Editor di grafica vettoriale Open Source"
+
+; File type association for editing
 LangString lng_Editor ${LANG_ENGLISH} "Do you want $(^Name) to be the default SVG editor?"
+LangString lng_Editor ${LANG_GERMAN}  "Wollen Sie $(^Name) zu Ihrem standardmäßigem Bearbeitungsprogramm für SVG machen?"
+LangString lng_Editor ${LANG_ITALIAN} "Impostare $(^Name) come editor SVG predefinito?"
+
+; File type association for reading
 LangString lng_Reader ${LANG_ENGLISH} "Do you want $(^Name) to be the default SVG reader?"
+LangString lng_Reader ${LANG_GERMAN}  "Wollen Sie $(^Name) zu Ihrem standardmäßigem Anzeigeprogramm für SVG machen?"
+LangString lng_Reader ${LANG_ITALIAN} "Impostare $(^Name) come lettore SVG predefinito?"
+
+; Post-Removal notice
 LangString lng_Removed ${LANG_ENGLISH} "$(^Name) was successfully removed from your computer."
+LangString lng_Removed ${LANG_GERMAN}  "$(^Name) wurde erfolgreich von Ihrem Computer entfernt."
+LangString lng_Removed ${LANG_ITALIAN} "$(^Name) è stato rimosso con successo dal sistema."
+
+; Ask to remove
 LangString lng_Uninstall ${LANG_ENGLISH} "Are you sure you want to completely remove $(^Name) and all of its components?"
-
-; German strings
-LangString lng_Caption ${LANG_GERMAN} "${PRODUCT_NAME} -- Open Source SVG-Vektorillustrator"
-LangString lng_Editor ${LANG_GERMAN} "Wollen Sie $(^Name) zu Ihrem standardmäßigem Bearbeitungsprogramm für SVG machen?"
-LangString lng_Reader ${LANG_GERMAN} "Wollen Sie $(^Name) zu Ihrem standardmäßigem Anzeigeprogramm für SVG machen?"
-LangString lng_Removed ${LANG_GERMAN} "$(^Name) wurde erfolgreich von Ihrem Computer entfernt."
-LangString lng_Uninstall ${LANG_GERMAN} "Möchten Sie $(^Name) und alle seine Komponenten von Ihrem Rechner entfernen?"
+LangString lng_Uninstall ${LANG_GERMAN}  "Möchten Sie $(^Name) und alle seine Komponenten von Ihrem Rechner entfernen?"
+LangString lng_Uninstall ${LANG_ITALIAN} "Rimuovere completamente $(^Name) e tutti i suoi componenti?"
 
 
 
-Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-Caption $(lng_Caption)
-OutFile "Inkscape-${PRODUCT_VERSION}-1.win32.exe"
-InstallDir "$PROGRAMFILES\Inkscape"
-InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
-ShowInstDetails show
+
+; #######################################
+; SETTINGS
+; #######################################
+
+Name              "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+Caption           $(lng_Caption)
+OutFile           "Inkscape-${PRODUCT_VERSION}-1.win32.exe"
+InstallDir        "$PROGRAMFILES\Inkscape"
+InstallDirRegKey  HKLM "${PRODUCT_DIR_REGKEY}" ""
+ShowInstDetails   show
 ShowUnInstDetails show
+
+
+
+
+; #######################################
+;  I N S T A L L E R    S E C T I O N S
+; #######################################
+
 
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
@@ -79,9 +111,13 @@ Section "MainSection" SEC01
   CreateShortCut "$DESKTOP\Inkscape.lnk" "$INSTDIR\inkscape.exe"
 SectionEnd
 
+
+
 Section -AdditionalIcons
   CreateShortCut "$SMPROGRAMS\Inkscape\Uninstall Inkscape.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
+
+
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
@@ -101,15 +137,21 @@ Section -Post
   NoReader:
 SectionEnd
 
+
+
 Function un.onUninstSuccess
   HideWindow
   MessageBox MB_ICONINFORMATION|MB_OK $(lng_Removed)
 FunctionEnd
 
+
+
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 $(lng_Uninstall) IDYES +2
   Abort
 FunctionEnd
+
+
 
 Section Uninstall
   Delete   "$DESKTOP\Inkscape.lnk"
@@ -122,5 +164,6 @@ Section Uninstall
 
   SetAutoClose true
 SectionEnd
+
 
 
