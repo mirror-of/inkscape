@@ -182,6 +182,10 @@ struct NRRect {
 	NR::Coord x0, y0, x1, y1;
 };
 
+inline bool empty(const NRRect r) {
+	return (r.x0 > r.x1) || (r.y0 > r.y1);
+}
+
 struct NRPointL {
 	NR::ICoord x, y;
 };

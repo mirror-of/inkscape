@@ -30,11 +30,11 @@ NRMatrix *nr_matrix_invert (NRMatrix *d, const NRMatrix *m);
 
 NRMatrix *nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
 
-NRMatrix *nr_matrix_set_translate (NRMatrix *m, NR::Coord x, NR::Coord y);
+NRMatrix *nr_matrix_set_translate (NRMatrix *m, const NR::Coord x, const NR::Coord y);
 
-NRMatrix *nr_matrix_set_scale (NRMatrix *m, NR::Coord sx, NR::Coord sy);
+NRMatrix *nr_matrix_set_scale (NRMatrix *m, const NR::Coord sx, const NR::Coord sy);
 
-NRMatrix *nr_matrix_set_rotate (NRMatrix *m, NR::Coord theta);
+NRMatrix *nr_matrix_set_rotate (NRMatrix *m, const NR::Coord theta);
 
 #define NR_MATRIX_DF_TRANSFORM_X(m,x,y) ((m)->c[0] * (x) + (m)->c[2] * (y) + (m)->c[4])
 #define NR_MATRIX_DF_TRANSFORM_Y(m,x,y) ((m)->c[1] * (x) + (m)->c[3] * (y) + (m)->c[5])
@@ -53,29 +53,29 @@ class Matrix{
   Points are  y  from the point of view of a matrix.
               1
 */
-	NR::Coord cc[6];
+	NR::Coord c[6];
 
 	Matrix() {
 	}
 
+	Matrix(const Matrix& m) {
+		for(int i = 0; i < 6; i++)
+			c[i] = m.c[i];
+	}
+
 	Matrix(NRMatrix const *nr);
 	
-	Matrix(Point x_basis, Point y_basis, Point offset);
-
 	bool test_identity() const;
 	Matrix inverse() const;
 	
 	Point operator*(const Point v) const {
 		// perhaps this should be done with a loop?  It's more
 		// readable this way though.
-		return Point(cc[0]*v.pt[0] + cc[2]*v.pt[1] + cc[4],
-			     cc[1]*v.pt[0] + cc[3]*v.pt[1] + cc[5]);
+		return Point(c[0]*v.pt[0] + c[2]*v.pt[1] + c[4],
+			     c[1]*v.pt[0] + c[3]*v.pt[1] + c[5]);
 	}
 
 	void set_identity();
-	void set_translate(const Point p);
-	void set_scale(const Point s);
-	void set_rotate(const NR::Coord angle);
 	
 	// What do these do?  some kind of norm?
 	NR::Coord Matrix::det() const;
@@ -83,9 +83,17 @@ class Matrix{
 	NR::Coord descrim() const;
 	
 	// legacy
-	void copy(NRMatrix* nrm);
+	void copyto(NRMatrix* nrm);
 	operator NRMatrix*() const;
 };
+ 
+// Matrix factories
+ Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset=Point(0,0));
+
+ Matrix identity();
+ Matrix translate(const Point p);
+ Matrix scale(const Point s);
+ Matrix rotate(const NR::Coord angle);
 
 Matrix operator*(const Matrix a, const Matrix b);
 
