@@ -482,32 +482,27 @@ sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
 static void
 sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
 {
-    GtkWidget *ww, *hw, *om;
-    gint landscape;
-    double h, w;
-    GtkAdjustment *aw, *ah;
-    SPUnitSelector *us;
-
     if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
-    struct inkscape_papers_t const *paper = (struct inkscape_papers_t const *) data;
+    struct inkscape_papers_t const *const paper = (struct inkscape_papers_t const *) data;
 
-    ww = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "widthsb");
+    GtkWidget *const ww = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "widthsb");
     gtk_widget_set_sensitive(ww, FALSE);
-    hw = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "heightsb");
+    GtkWidget *const hw = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "heightsb");
     gtk_widget_set_sensitive(hw, FALSE);
 
-    om = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
-    landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
+    GtkWidget *const om = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
+    bool const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
 
-    us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dlg), "units");
+    SPUnitSelector *const us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dlg), "units");
     SPUnit const *unit = sp_unit_selector_get_unit(us);
-    aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
-    ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
+    GtkAdjustment *const aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
+    GtkAdjustment *const ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
 
     if (paper) {
+        double h, w;
         if (!landscape) {
             w = paper->width;
             h = paper->height;
