@@ -89,7 +89,7 @@ protected:
 void sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size);
 NRArenaItem *sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 				      unsigned int key, unsigned int pos,
-				      NRMatrix *base, float linewidth);
+				      NR::Matrix const &base, float linewidth);
 void sp_marker_hide (SPMarker *marker, unsigned int key);
 
 #endif

@@ -549,9 +549,9 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 
             for (NArtBpath *bp = shape->curve->bpath; bp->code != NR_END; bp++) {
                 if (sp_shape_marker_required (shape, i, bp)) {
-                    NRMatrix m(sp_shape_marker_get_transform(shape, bp));
+                    NR::Matrix const m(sp_shape_marker_get_transform(shape, bp));
                     sp_marker_show_instance ((SPMarker* ) shape->marker[i], ai,
-                                             NR_ARENA_ITEM_GET_KEY (ai) + i, n, &m,
+                                             NR_ARENA_ITEM_GET_KEY(ai) + i, n, m,
                                              style->stroke_width.computed);
                     n++;
                 }

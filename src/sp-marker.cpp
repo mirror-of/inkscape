@@ -16,6 +16,9 @@
 #include <math.h>
 #include <string.h>
 
+#include "libnr/nr-matrix-fns.h"
+#include "libnr/nr-scale-matrix-ops.h"
+#include "libnr/nr-rotate-fns.h"
 #include "svg/svg.h"
 #include "display/nr-arena-group.h"
 #include "attributes.h"
@@ -563,11 +566,9 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
 NRArenaItem *
 sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 			 unsigned int key, unsigned int pos,
-			 NRMatrix *base, float linewidth)
+			 NR::Matrix const &base, float linewidth)
 {
-	SPMarkerView *v;
-
-	for (v = marker->views; v != NULL; v = v->next) {
+	for (SPMarkerView *v = marker->views; v != NULL; v = v->next) {
 		if (v->key == key) {
 			if (pos >= v->size) {
 			  return NULL;
@@ -585,23 +586,19 @@ sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 				}
 			}
 			if (v->items[pos]) {
-				NRMatrix m;
+				NR::Matrix m;
 				if (marker->orient_auto) {
-					m = *base;
+					m = base;
 				} else {
 					/* fixme: Orient units (Lauris) */
-					nr_matrix_set_rotate (&m, marker->orient * M_PI / 180.0);
-					m.c[4] = base->c[4];
-					m.c[5] = base->c[5];
+					m = NR::Matrix(rotate_degrees(marker->orient));
+					m *= get_translation(base);
 				}
 				if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
-					m.c[0] *= linewidth;
-					m.c[1] *= linewidth;
-					m.c[2] *= linewidth;
-					m.c[3] *= linewidth;
+					m = NR::scale(linewidth) * m;
 				}
 
-				nr_arena_item_set_transform (v->items[pos], &m);
+				nr_arena_item_set_transform(v->items[pos], m);
 			}
 			return v->items[pos];
 		}

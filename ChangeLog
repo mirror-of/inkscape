@@ -1,5 +1,8 @@
 2004-09-21  Peter Moulder  <pmoulder@river>
 
+	* src/sp-marker.h, src/sp-marker.cpp (sp_marker_show_instance):
+	  Change to using NR::Matrix instead of NRMatrix.  Update caller.
+
 	* src/sp-gradient.cpp (sp_gradient_get_g2d_matrix,
 	  sp_gradient_get_gs2d_matrix, sp_gradient_set_gs2d_matrix):
 	  New NR::Matrix/NR::Rect versions of existing functions.
