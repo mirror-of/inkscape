@@ -2,6 +2,7 @@
 #define __SP_XML_REPR_ACTION_H__
 
 #include <glib/gtypes.h>
+#include <glib/gquark.h>
 
 #include <xml/xml-forward.h>
 
@@ -74,7 +75,7 @@ SPReprAction *sp_repr_log_add (SPReprAction *log, SPRepr *repr,
 SPReprAction *sp_repr_log_remove (SPReprAction *log, SPRepr *repr,
                                   SPRepr *child, SPRepr *ref);
 
-SPReprAction *sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr, int key,
+SPReprAction *sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr, GQuark key,
                                    const gchar *oldval, const gchar *newval);
 SPReprAction *sp_repr_log_chgcontent (SPReprAction *log, SPRepr *repr,
                                       const gchar *oldval, const gchar *newval);

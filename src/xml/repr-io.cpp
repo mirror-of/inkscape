@@ -26,6 +26,7 @@
 #include <glib.h>
 
 #include "repr-private.h"
+#include <xml/sp-repr-attr.h>
 
 static const gchar *sp_svg_doctype_str =
 "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\"\n"
@@ -396,10 +397,8 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
         add_whitespace = FALSE; 
 
     for ( attr = repr->attributes ; attr != NULL ; attr = attr->next ) {
-        const gchar *key, *val;
-
-        key = SP_REPR_ATTRIBUTE_KEY (attr);
-        val = SP_REPR_ATTRIBUTE_VALUE (attr);
+        gchar const * const key = SP_REPR_ATTRIBUTE_KEY(attr);
+        gchar const * const val = SP_REPR_ATTRIBUTE_VALUE(attr);
         fputs ("\n", file);
         for ( i = 0 ; i < indent_level + 1 ; i++ ) {
             fputs ("  ", file);

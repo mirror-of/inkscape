@@ -33,12 +33,6 @@ struct SPReprClass {
 	void (*finalize)(SPRepr *repr);
 };
 
-struct SPReprAttr {
-	SPReprAttr *next;
-	int key;
-	gchar *value;
-};
-
 struct SPReprListener {
 	SPReprListener *next;
 	const SPReprEventVector *vector;
@@ -91,8 +85,6 @@ struct SPXMLNs {
 #define SP_REPR_NAME(r) g_quark_to_string ((r)->name)
 #define SP_REPR_TYPE(r) ((r)->type)
 #define SP_REPR_CONTENT(r) ((r)->content)
-#define SP_REPR_ATTRIBUTE_KEY(a) g_quark_to_string ((a)->key)
-#define SP_REPR_ATTRIBUTE_VALUE(a) ((a)->value)
 
 extern SPReprClass _sp_repr_xml_document_class;
 extern SPReprClass _sp_repr_xml_element_class;

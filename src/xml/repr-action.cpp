@@ -264,7 +264,7 @@ sp_repr_log_remove (SPReprAction *log, SPRepr *repr,
 }
 
 SPReprAction *
-sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr, int key,
+sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr, GQuark const key,
                      const gchar *oldval, const gchar *newval)
 {
 	SPReprAction *action;

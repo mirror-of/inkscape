@@ -27,6 +27,7 @@
 #include <glib.h>
 
 #include "repr-private.h"
+#include <xml/sp-repr-attr.h>
 
 typedef struct SPReprListener SPListener;
 
@@ -78,7 +79,7 @@ static void sp_repr_remove_attribute(SPRepr *repr, SPReprAttr *attr);
 static void sp_repr_remove_listener(SPRepr *repr, SPListener *listener);
 
 static SPReprAttr *sp_attribute_duplicate(SPReprAttr const *attr);
-static SPReprAttr *sp_attribute_new_from_code(int key, gchar const *value);
+static SPReprAttr *sp_attribute_new_from_code(GQuark key, gchar const *value);
 
 static SPRepr *sp_repr_alloc(SPReprClass *type);
 static void sp_repr_free(SPRepr *repr);
@@ -288,10 +289,10 @@ sp_repr_attr(SPRepr const *repr, gchar const *key)
     g_return_val_if_fail(key != NULL, NULL);
 
     /* retrieve an int identifier specific to this string */
-    unsigned const q = g_quark_from_string(key);
+    GQuark const q = g_quark_from_string(key);
 
     for (SPReprAttr *ra = repr->attributes; ra != NULL; ra = ra->next) {
-        if ( ra->key == static_cast<int>(q) ) {
+        if ( ra->key == q ) {
             return ra->value;
         }
     }
@@ -362,10 +363,10 @@ sp_repr_del_attr(SPRepr *repr, gchar const *key, bool is_interactive)
     g_return_val_if_fail(key != NULL, FALSE);
     g_return_val_if_fail(*key != '\0', FALSE);
 
-    unsigned const q = g_quark_from_string(key);
+    GQuark const q = g_quark_from_string(key);
     SPReprAttr *prev = NULL;
     SPReprAttr *attr;
-    for (attr = repr->attributes; attr && (attr->key != static_cast<int>(q)); attr = attr->next) {
+    for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next) {
         prev = attr;
     }
 
@@ -408,10 +409,10 @@ sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_int
     g_return_val_if_fail(key != NULL, FALSE);
     g_return_val_if_fail(*key != '\0', FALSE);
 
-    unsigned const q = g_quark_from_string(key);
+    GQuark const q = g_quark_from_string(key);
     SPReprAttr *prev = NULL;
     SPReprAttr *attr;
-    for (attr = repr->attributes; attr && (attr->key != static_cast<int>(q)); attr = attr->next) {
+    for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next) {
         prev = attr;
     }
 
@@ -965,7 +966,7 @@ sp_attribute_duplicate(SPReprAttr const *attr)
 }
 
 static SPReprAttr *
-sp_attribute_new_from_code(int key, gchar const *value)
+sp_attribute_new_from_code(GQuark const key, gchar const *value)
 {
     SPReprAttr *new_attr = sp_attribute_alloc();
     new_attr->next = NULL;

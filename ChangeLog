@@ -1,3 +1,10 @@
+2004-06-28  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/repr-action.cpp, src/xml/repr-action.h, src/xml/repr-css.cpp,
+	  src/xml/repr-io.cpp, src/xml/repr-private.h, src/xml/repr-util.cpp,
+	  src/xml/repr.cpp, src/xml/sp-repr-attr.h: applied peter's patch to
+	  break out NRReprAttr
+
 2004-06-27  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-object.h: remove sp_object_request_update,

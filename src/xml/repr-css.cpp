@@ -8,6 +8,7 @@
 
 #include "repr.h"
 #include "repr-private.h"
+#include <xml/sp-repr-attr.h>
 
 struct SPCSSAttr {
 	SPRepr repr;

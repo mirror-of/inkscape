@@ -29,8 +29,9 @@
 
 #include <glib.h>
 
-#include "repr-private.h"
-#include "../svg/stringstream.h"
+#include <svg/stringstream.h>
+#include <xml/repr-private.h>
+#include <xml/sp-repr-attr.h>
 
 /*#####################
 # DEFINITIONS
@@ -203,7 +204,6 @@ sp_xml_ns_auto_prefix (const char *uri)
 const gchar *
 sp_xml_ns_uri_prefix (const gchar *uri, const gchar *suggested)
 {
-    unsigned int key;
     SPXMLNs *iter;
     const char *prefix;
 
@@ -213,7 +213,7 @@ sp_xml_ns_uri_prefix (const gchar *uri, const gchar *suggested)
         sp_xml_ns_register_defaults ();
     }
 
-    key = g_quark_from_string (uri);
+    GQuark const key = g_quark_from_string (uri);
     prefix = NULL;
     for ( iter = namespaces ; iter ; iter = iter->next ) {
         if ( iter->uri == key ) {
@@ -247,7 +247,6 @@ sp_xml_ns_uri_prefix (const gchar *uri, const gchar *suggested)
 const gchar *
 sp_xml_ns_prefix_uri (const gchar *prefix)
 {
-    unsigned int key;
     SPXMLNs *iter;
     const char *uri;
 
@@ -257,7 +256,7 @@ sp_xml_ns_prefix_uri (const gchar *prefix)
         sp_xml_ns_register_defaults ();
     }
 
-    key = g_quark_from_string (prefix);
+    GQuark const key = g_quark_from_string(prefix);
     uri = NULL;
     for ( iter = namespaces ; iter ; iter = iter->next ) {
         if ( iter->prefix == key ) {
@@ -530,23 +529,21 @@ sp_repr_lookup_child (SPRepr       *repr,
                       const gchar *key,
                       const gchar *value)
 {
-    SPRepr *child;
-    SPReprAttr *attr;
-    unsigned int quark;
-
     g_return_val_if_fail (repr != NULL, NULL);
     g_return_val_if_fail (key != NULL, NULL);
     g_return_val_if_fail (value != NULL, NULL);
 
-    quark = g_quark_from_string (key);
+    GQuark const quark = g_quark_from_string (key);
 
     /* Fixme: we should use hash table for faster lookup? */
     
-    for (child = repr->children; child != NULL; child = child->next) {
-        for (attr = child->attributes; attr != NULL; attr = attr->next) {
-            if ( (static_cast< unsigned int > (attr->key) == quark) && !strcmp (attr->value, value))
+    for (SPRepr *child = repr->children; child != NULL; child = child->next) {
+        for (SPReprAttr *attr = child->attributes; attr != NULL; attr = attr->next) {
+            if ( ( attr->key == quark )
+                 && !strcmp(attr->value, value) ) {
                 return child;
         }
+    }
     }
 
     return NULL;
