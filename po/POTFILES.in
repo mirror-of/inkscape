@@ -15,6 +15,7 @@ src/desktop-events.cpp
 src/desktop-handles.cpp
 src/desktop.cpp
 src/dialogs/align.cpp
+src/dialogs/debugdialog.cpp
 src/dialogs/desktop-properties.cpp
 src/dialogs/dialog-events.cpp
 src/dialogs/display-settings.cpp
@@ -31,6 +32,7 @@ src/dialogs/rdf.cpp
 src/dialogs/sp-attribute-widget.cpp
 src/dialogs/stroke-style.cpp
 src/dialogs/text-edit.cpp
+src/dialogs/tracedialog.cpp
 src/dialogs/transformation.cpp
 src/dialogs/xml-tree.cpp
 src/dir-util.cpp
@@ -140,7 +142,6 @@ src/libnrtype/nr-type-primitives.cpp
 src/livarot/AVL.cpp
 src/livarot/AlphaLigne.cpp
 src/livarot/BitLigne.cpp
-src/livarot/DblLinked.cpp
 src/livarot/Ligne.cpp
 src/livarot/MySeg.cpp
 src/livarot/Path-test.cpp
@@ -189,6 +190,7 @@ src/sp-clippath.cpp
 src/sp-cursor.cpp
 src/sp-defs.cpp
 src/sp-ellipse.cpp
+src/sp-flowregion.cpp
 src/sp-flowtext.cpp
 src/sp-gradient.cpp
 src/sp-guide.cpp
