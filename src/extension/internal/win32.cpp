@@ -20,6 +20,7 @@
 
 #include "win32.h"
 #include "system.h"
+#include "extension/print.h"
 
 /* Initialization */
 
