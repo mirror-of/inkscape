@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-07 20:47+0100\n"
+"POT-Creation-Date: 2004-11-11 23:15+0100\n"
 "PO-Revision-Date: 2004-11-07 21:00+0100\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
@@ -25,7 +25,8 @@ msgid "SVG Vector Illustrator"
 msgstr "Vektoros (SVG) rajzoló"
 
 #: src/arc-context.cpp:364
-msgid "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
+msgid ""
+"<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
 msgstr ""
 "<b>Ctrl</b>: kör vagy egész-arányú ellipszis rajzolása; ellipszisív illetve -"
 "cikk szöghöz való illesztése"
@@ -83,7 +84,7 @@ msgid "Zoom drawing if window size changes"
 msgstr "A rajz nagyításának módosítása az ablak méretének változásakor"
 
 #: src/desktop.cpp:937 src/dialogs/display-settings.cpp:1081
-#: src/verbs.cpp:1629
+#: src/verbs.cpp:1631
 msgid "Zoom"
 msgstr "Nagyítás"
 
@@ -156,7 +157,7 @@ msgstr "Nincs következő nagyítás."
 
 #. Page page
 #: src/desktop.cpp:2042 src/dialogs/align.cpp:556 src/dialogs/align.cpp:1098
-#: src/dialogs/desktop-properties.cpp:929 src/dialogs/export.cpp:129
+#: src/dialogs/desktop-properties.cpp:932 src/dialogs/export.cpp:129
 msgid "Page"
 msgstr "Lap"
 
@@ -236,7 +237,8 @@ msgstr "Az objektumok bal oldalainak egyenletes távolságban való elrendezése
 
 #: src/dialogs/align.cpp:507 src/dialogs/align.cpp:1002
 msgid "Distribute centers of objects at even distances horizontally"
-msgstr "Az objektumok közepének egyenletes távolságban való vízszintes elrendezése"
+msgstr ""
+"Az objektumok közepének egyenletes távolságban való vízszintes elrendezése"
 
 #: src/dialogs/align.cpp:511 src/dialogs/align.cpp:1009
 msgid "Distribute right sides of objects at even distances"
@@ -252,7 +254,8 @@ msgstr "Az objektumok aljának egyenletes távolságban való elrendezése"
 
 #: src/dialogs/align.cpp:523 src/dialogs/align.cpp:1031
 msgid "Distribute centers of objects at even distances vertically"
-msgstr "Az objektumok közepének egyenletes távolságban való függőleges elrendezése"
+msgstr ""
+"Az objektumok közepének egyenletes távolságban való függőleges elrendezése"
 
 #: src/dialogs/align.cpp:527 src/dialogs/align.cpp:1023
 msgid "Distribute top sides of objects at even distances"
@@ -318,176 +321,176 @@ msgid "Release log messages"
 msgstr "Naplóüzenetek megjelenítésének megszüntetése"
 
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:810
+#: src/dialogs/desktop-properties.cpp:813
 msgid "Grid"
 msgstr "Rács"
 
 #. Checkbuttons
-#: src/dialogs/desktop-properties.cpp:818
+#: src/dialogs/desktop-properties.cpp:821
 msgid "Show grid"
 msgstr "Rács megjelenítése"
 
-#: src/dialogs/desktop-properties.cpp:819
+#: src/dialogs/desktop-properties.cpp:822
 msgid "Snap bounding boxes to grid"
 msgstr "Határoló téglalapok illesztése a rácsra"
 
-#: src/dialogs/desktop-properties.cpp:820
+#: src/dialogs/desktop-properties.cpp:823
 msgid "Snap points to grid"
 msgstr "Pontok illesztése a rácsra"
 
-#: src/dialogs/desktop-properties.cpp:838
+#: src/dialogs/desktop-properties.cpp:841
 msgid "Grid units:"
 msgstr "Rács-mértékegység:"
 
-#: src/dialogs/desktop-properties.cpp:840
+#: src/dialogs/desktop-properties.cpp:843
 msgid "Origin X:"
 msgstr "X-origó:"
 
-#: src/dialogs/desktop-properties.cpp:843
+#: src/dialogs/desktop-properties.cpp:846
 msgid "Origin Y:"
 msgstr "Y-origó:"
 
-#: src/dialogs/desktop-properties.cpp:846
+#: src/dialogs/desktop-properties.cpp:849
 msgid "Spacing X:"
 msgstr "X-távolság:"
 
-#: src/dialogs/desktop-properties.cpp:849
+#: src/dialogs/desktop-properties.cpp:852
 msgid "Spacing Y:"
 msgstr "Y-távolság:"
 
-#: src/dialogs/desktop-properties.cpp:853
-#: src/dialogs/desktop-properties.cpp:913
+#: src/dialogs/desktop-properties.cpp:856
+#: src/dialogs/desktop-properties.cpp:916
 msgid "Snap units:"
 msgstr "Illesztési mértékegység:"
 
-#: src/dialogs/desktop-properties.cpp:856
-#: src/dialogs/desktop-properties.cpp:916
+#: src/dialogs/desktop-properties.cpp:859
+#: src/dialogs/desktop-properties.cpp:919
 msgid "Snap distance:"
 msgstr "Illesztési távolság:"
 
-#: src/dialogs/desktop-properties.cpp:859
+#: src/dialogs/desktop-properties.cpp:862
 msgid "Minor grid line color:"
 msgstr "Az alrács színe:"
 
-#: src/dialogs/desktop-properties.cpp:860
+#: src/dialogs/desktop-properties.cpp:863
 msgid "Grid color"
 msgstr "Rács színe"
 
-#: src/dialogs/desktop-properties.cpp:862
+#: src/dialogs/desktop-properties.cpp:865
 msgid "Major grid line color:"
 msgstr "A főrács színe:"
 
-#: src/dialogs/desktop-properties.cpp:863
+#: src/dialogs/desktop-properties.cpp:866
 msgid "Grid emphasis color"
 msgstr "Rács-kiemelés színe"
 
-#: src/dialogs/desktop-properties.cpp:866
+#: src/dialogs/desktop-properties.cpp:869
 msgid "Major grid line spacing:"
 msgstr "A főrács vonalai közti távolság:"
 
 #. TRANSLATORS: This belongs to the "Major grid line spacing:" string,
 #. see grid settings in the "Document Preferences" dialog
-#: src/dialogs/desktop-properties.cpp:878
+#: src/dialogs/desktop-properties.cpp:881
 msgid "lines"
 msgstr "vonal"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:892
+#: src/dialogs/desktop-properties.cpp:895
 msgid "Guides"
 msgstr "Segédvonalak"
 
-#: src/dialogs/desktop-properties.cpp:900
+#: src/dialogs/desktop-properties.cpp:903
 msgid "Show guides"
 msgstr "Segédvonalak megjelenítése"
 
-#: src/dialogs/desktop-properties.cpp:901
+#: src/dialogs/desktop-properties.cpp:904
 msgid "Snap bounding boxes to guides"
 msgstr "Határoló téglalapok illesztése a segédvonalakra"
 
-#: src/dialogs/desktop-properties.cpp:902
+#: src/dialogs/desktop-properties.cpp:905
 msgid "Snap points to guides"
 msgstr "Pontok illesztése a segédvonalakra"
 
-#: src/dialogs/desktop-properties.cpp:920
+#: src/dialogs/desktop-properties.cpp:923
 msgid "Guide color:"
 msgstr "Segédvonalak színe:"
 
-#: src/dialogs/desktop-properties.cpp:921
+#: src/dialogs/desktop-properties.cpp:924
 msgid "Guideline color"
 msgstr "Segédvonalak színe"
 
-#: src/dialogs/desktop-properties.cpp:923
+#: src/dialogs/desktop-properties.cpp:926
 msgid "Highlight color:"
 msgstr "Kijelölési szín:"
 
-#: src/dialogs/desktop-properties.cpp:924
+#: src/dialogs/desktop-properties.cpp:927
 msgid "Highlighted guideline color"
 msgstr "Kijelölt segédvonal színe"
 
-#: src/dialogs/desktop-properties.cpp:939
+#: src/dialogs/desktop-properties.cpp:942
 msgid "Background (also for export)"
 msgstr "Háttér (exportáláshoz is)"
 
-#: src/dialogs/desktop-properties.cpp:940
+#: src/dialogs/desktop-properties.cpp:943
 msgid "Background color"
 msgstr "Háttérszín"
 
-#: src/dialogs/desktop-properties.cpp:944
+#: src/dialogs/desktop-properties.cpp:947
 msgid "Show canvas border"
 msgstr "A rajzvászon keretének megjelenítése"
 
-#: src/dialogs/desktop-properties.cpp:948
+#: src/dialogs/desktop-properties.cpp:951
 msgid "Border on top of drawing"
 msgstr "A keret a rajz előtt legyen"
 
-#: src/dialogs/desktop-properties.cpp:951
+#: src/dialogs/desktop-properties.cpp:954
 msgid "Border color"
 msgstr "A keret színe"
 
-#: src/dialogs/desktop-properties.cpp:952
+#: src/dialogs/desktop-properties.cpp:955
 msgid "Canvas border color"
 msgstr "A rajzvászon keretének színe"
 
-#: src/dialogs/desktop-properties.cpp:968
+#: src/dialogs/desktop-properties.cpp:971
 msgid "Canvas size:"
 msgstr "A rajzvászon mérete:"
 
-#: src/dialogs/desktop-properties.cpp:992 src/dialogs/export.cpp:129
+#: src/dialogs/desktop-properties.cpp:995 src/dialogs/export.cpp:129
 msgid "Custom"
 msgstr "Egyéni"
 
-#: src/dialogs/desktop-properties.cpp:1003
+#: src/dialogs/desktop-properties.cpp:1006
 msgid "Canvas orientation:"
 msgstr "A rajzvászon tájolása:"
 
-#: src/dialogs/desktop-properties.cpp:1015
+#: src/dialogs/desktop-properties.cpp:1018
 msgid "Landscape"
 msgstr "Fekvő"
 
-#: src/dialogs/desktop-properties.cpp:1021
+#: src/dialogs/desktop-properties.cpp:1024
 msgid "Portrait"
 msgstr "Álló"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:1030
+#: src/dialogs/desktop-properties.cpp:1033
 msgid "Custom canvas"
 msgstr "Egyéni rajzvászon"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:1042 src/dialogs/export.cpp:261
+#: src/dialogs/desktop-properties.cpp:1045 src/dialogs/export.cpp:261
 #: src/dialogs/transformation.cpp:519 src/dialogs/transformation.cpp:716
 msgid "Units:"
 msgstr "Mértékegység:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
+#: src/dialogs/desktop-properties.cpp:1047 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1355
-#: src/toolbox.cpp:1834
+#: src/toolbox.cpp:1824
 msgid "Width:"
 msgstr "Szélesség:"
 
-#: src/dialogs/desktop-properties.cpp:1066 src/dialogs/export.cpp:317
+#: src/dialogs/desktop-properties.cpp:1069 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:423 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
@@ -497,20 +500,20 @@ msgstr "Magasság:"
 #.
 #. * Ownership metadata tab
 #.
-#: src/dialogs/desktop-properties.cpp:1092
+#: src/dialogs/desktop-properties.cpp:1095
 msgid "Metadata"
 msgstr "Metaadatok"
 
 #. add license selector pull-down
-#: src/dialogs/desktop-properties.cpp:1111
+#: src/dialogs/desktop-properties.cpp:1114
 msgid "License"
 msgstr "Licenc"
 
-#: src/dialogs/desktop-properties.cpp:1141
+#: src/dialogs/desktop-properties.cpp:1144
 msgid "Proprietary"
 msgstr "Zárt (proprietary)"
 
-#: src/dialogs/desktop-properties.cpp:1656
+#: src/dialogs/desktop-properties.cpp:1659
 msgid "Close"
 msgstr "Bezárás"
 
@@ -544,8 +547,8 @@ msgstr "Kijelölés objektumonkénti jelzése:"
 
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:257 src/dialogs/display-settings.cpp:393
-#: src/dialogs/display-settings.cpp:448 src/dialogs/display-settings.cpp:1412
-#: src/dialogs/stroke-style.cpp:1069 src/interface.cpp:660 src/verbs.cpp:1418
+#: src/dialogs/display-settings.cpp:448 src/dialogs/display-settings.cpp:1419
+#: src/dialogs/stroke-style.cpp:1069 src/interface.cpp:660 src/verbs.cpp:1420
 msgid "None"
 msgstr "Nincs"
 
@@ -581,7 +584,8 @@ msgstr "A határoló téglalap túlsó széle"
 
 #: src/dialogs/display-settings.cpp:290
 msgid "Default scale origin will be on the bounding box of the item"
-msgstr "Az átméretezés alapértelmezett origója az elem határoló téglalapján lesz"
+msgstr ""
+"Az átméretezés alapértelmezett origója az elem határoló téglalapján lesz"
 
 #: src/dialogs/display-settings.cpp:296
 msgid "Farthest opposite node"
@@ -637,7 +641,8 @@ msgid "Show selection cue"
 msgstr "Kijelölési jel megjelenítése"
 
 #: src/dialogs/display-settings.cpp:654
-msgid "Whether selected objects display a selection cue (the same as in selector)"
+msgid ""
+"Whether selected objects display a selection cue (the same as in selector)"
 msgstr ""
 "A kijelölt objektumoknál megjelenik-e a megfelelő kijelölési jelző (a "
 "kijelölőeszközzel megegyezően)"
@@ -748,7 +753,8 @@ msgid "Click/drag threshold:"
 msgstr "Kattintás/húzás határa:"
 
 #: src/dialogs/display-settings.cpp:925
-msgid "Maximum mouse drag (in screen pixels) which is considered a click, not a drag"
+msgid ""
+"Maximum mouse drag (in screen pixels) which is considered a click, not a drag"
 msgstr ""
 "Az a maximális húzási távolság (képernyő-képpontban), ami még kattintásnak "
 "lesz véve, nem pedig húzásnak"
@@ -856,7 +862,8 @@ msgid "> and < scale by:"
 msgstr "A \">\" és a \"<\" billentyű méretezési mértéke:"
 
 #: src/dialogs/display-settings.cpp:1023
-msgid "Pressing > or < scales selection up or down by this increment (in points)"
+msgid ""
+"Pressing > or < scales selection up or down by this increment (in points)"
 msgstr ""
 "A \">\" illetve a \"<\" billentyű lenyomása ennyivel méretezi át (pontban "
 "mérve) a kijelölést"
@@ -866,7 +873,8 @@ msgid "Inset/Outset by:"
 msgstr "Zsugorítás/nyújtás mértéke:"
 
 #: src/dialogs/display-settings.cpp:1034
-msgid "Inset and Outset commands displace the path by this distance (in points)"
+msgid ""
+"Inset and Outset commands displace the path by this distance (in points)"
 msgstr ""
 "A zsugorítási és a nyújtási művelet ekkora (pontokban megadott) távolsággal "
 "mozdítja el a láncot"
@@ -905,23 +913,23 @@ msgstr "Csomópont"
 msgid "Shapes"
 msgstr "Alakzatok"
 
-#: src/dialogs/display-settings.cpp:1095 src/verbs.cpp:1613
+#: src/dialogs/display-settings.cpp:1095 src/verbs.cpp:1615
 msgid "Rectangle"
 msgstr "Téglalap"
 
-#: src/dialogs/display-settings.cpp:1101 src/verbs.cpp:1615
+#: src/dialogs/display-settings.cpp:1101 src/verbs.cpp:1617
 msgid "Ellipse"
 msgstr "Ellipszis"
 
-#: src/dialogs/display-settings.cpp:1107 src/verbs.cpp:1617
+#: src/dialogs/display-settings.cpp:1107 src/verbs.cpp:1619
 msgid "Star"
 msgstr "Csillag"
 
-#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1619
+#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1621
 msgid "Spiral"
 msgstr "Spirál"
 
-#: src/dialogs/display-settings.cpp:1126 src/verbs.cpp:1621
+#: src/dialogs/display-settings.cpp:1126 src/verbs.cpp:1623
 msgid "Pencil"
 msgstr "Ceruza"
 
@@ -938,29 +946,33 @@ msgstr ""
 "szabadkézi vonalakra; alacsonyabb érték esetén a láncok kevésbé lesznek "
 "egyenletesek és több csomópontot fognak tartalmazni"
 
-#: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1623
+#: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1625
 msgid "Pen"
 msgstr "Toll"
 
-#: src/dialogs/display-settings.cpp:1155 src/dialogs/text-edit.cpp:345
-#: src/verbs.cpp:1627
+#: src/dialogs/display-settings.cpp:1155 src/verbs.cpp:1627
+msgid "Calligraphy"
+msgstr "Művészi rajz"
+
+#: src/dialogs/display-settings.cpp:1162 src/dialogs/text-edit.cpp:345
+#: src/verbs.cpp:1629
 msgid "Text"
 msgstr "Szöveg"
 
-#: src/dialogs/display-settings.cpp:1164 src/verbs.cpp:1631
+#: src/dialogs/display-settings.cpp:1171 src/verbs.cpp:1633
 msgid "Dropper"
 msgstr "Színpipetta"
 
 #. Windows
-#: src/dialogs/display-settings.cpp:1176
+#: src/dialogs/display-settings.cpp:1183
 msgid "Windows"
 msgstr "Ablakok"
 
-#: src/dialogs/display-settings.cpp:1181
+#: src/dialogs/display-settings.cpp:1188
 msgid "Save window geometry"
 msgstr "Ablakgeometria elmentése"
 
-#: src/dialogs/display-settings.cpp:1182
+#: src/dialogs/display-settings.cpp:1189
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
@@ -968,21 +980,21 @@ msgstr ""
 "Ablakméret és -pozíció elmentése minden dokumentumba (csak Inkscape SVG "
 "fájlformátum esetén)"
 
-#: src/dialogs/display-settings.cpp:1189
+#: src/dialogs/display-settings.cpp:1196
 msgid "Dialogs are hidden in taskbar"
 msgstr "Párbeszédablakok ne jelenjenek meg a feladatlistában"
 
-#: src/dialogs/display-settings.cpp:1190
+#: src/dialogs/display-settings.cpp:1197
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr ""
 "A párbeszédablakok ki legyenek-e hagyva az ablakkezelő által megjelenített "
 "feladatlistából"
 
-#: src/dialogs/display-settings.cpp:1197
+#: src/dialogs/display-settings.cpp:1204
 msgid "Zoom when window is resized"
 msgstr "Nagyítás módosítása az ablakméret változásakor"
 
-#: src/dialogs/display-settings.cpp:1198
+#: src/dialogs/display-settings.cpp:1205
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
@@ -994,35 +1006,36 @@ msgstr ""
 "beállítható a kívánt viselkedés a jobb oldali gördítősáv feletti gombbal."
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1206 src/dialogs/find.cpp:649
+#: src/dialogs/display-settings.cpp:1213 src/dialogs/find.cpp:649
 msgid "Clones"
 msgstr "Klónok"
 
-#: src/dialogs/display-settings.cpp:1210
+#: src/dialogs/display-settings.cpp:1217
 msgid "When the original moves, its clones:"
 msgstr "Az eredeti objektum áthelyezésekor a klónjai:"
 
-#: src/dialogs/display-settings.cpp:1222
+#: src/dialogs/display-settings.cpp:1229
 msgid "Move in parallel"
 msgstr "Párhuzamosan elmozdulnak"
 
-#: src/dialogs/display-settings.cpp:1223
-msgid "Clones are translated by the same vector as their original."
-msgstr "A klónok ugyanazzal a vektorral lesznek elmozdítva, mint az eredeti objektum"
-
 #: src/dialogs/display-settings.cpp:1230
+msgid "Clones are translated by the same vector as their original."
+msgstr ""
+"A klónok ugyanazzal a vektorral lesznek elmozdítva, mint az eredeti objektum"
+
+#: src/dialogs/display-settings.cpp:1237
 msgid "Stay unmoved"
 msgstr "Nem mozdulnak el"
 
-#: src/dialogs/display-settings.cpp:1231
+#: src/dialogs/display-settings.cpp:1238
 msgid "Clones preserve their positions when their original is moved."
 msgstr "A klónok helye nem változik az eredeti objektum elmozdításakor"
 
-#: src/dialogs/display-settings.cpp:1238
+#: src/dialogs/display-settings.cpp:1245
 msgid "Move according to transform"
 msgstr "A \"transform\" tulajdonság szerint mozdulnak el"
 
-#: src/dialogs/display-settings.cpp:1239
+#: src/dialogs/display-settings.cpp:1246
 msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
@@ -1032,80 +1045,81 @@ msgstr ""
 "Példa: egy elforgatott klón más irányba mozdulhat el, mint az eredeti "
 "objektum."
 
-#: src/dialogs/display-settings.cpp:1248
+#: src/dialogs/display-settings.cpp:1255
 msgid "When the original is deleted, its clones:"
 msgstr "Az eredeti objektum törlésekor a klónjai:"
 
-#: src/dialogs/display-settings.cpp:1260
+#: src/dialogs/display-settings.cpp:1267
 msgid "Are unlinked"
 msgstr "Lekapcsolódnak"
 
-#: src/dialogs/display-settings.cpp:1260
+#: src/dialogs/display-settings.cpp:1267
 msgid "Orphaned clones are converted to regular objects."
 msgstr "Az elárvult klónok normál objektumokká lesznek alakítva"
 
-#: src/dialogs/display-settings.cpp:1266
+#: src/dialogs/display-settings.cpp:1273
 msgid "Are deleted"
 msgstr "Törlődnek"
 
-#: src/dialogs/display-settings.cpp:1266
+#: src/dialogs/display-settings.cpp:1273
 msgid "Orphaned clones are deleted along with their original."
 msgstr "Az elárvult klónok az eredeti objektummal együtt törlődnek"
 
 #. Transforms
 #. TRANSLATORS: Noun, i.e. transformations.
-#: src/dialogs/display-settings.cpp:1282
+#: src/dialogs/display-settings.cpp:1289
 msgid "Transforms"
 msgstr "Transzformációk"
 
-#: src/dialogs/display-settings.cpp:1285
+#: src/dialogs/display-settings.cpp:1292
 msgid "Scale stroke width"
 msgstr "Körvonalszélesség átméretezése"
 
-#: src/dialogs/display-settings.cpp:1286 src/select-toolbar.cpp:456
+#: src/dialogs/display-settings.cpp:1293 src/select-toolbar.cpp:456
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 "Objektumok átméretezésekor a körvonalszélesség is legyen - azonos arányban - "
 "átméretezve"
 
-#: src/dialogs/display-settings.cpp:1293
+#: src/dialogs/display-settings.cpp:1300
 msgid "Scale rounded corners in rectangles"
 msgstr "Lekerekített csúcsok átméretezése a téglalapokban"
 
-#: src/dialogs/display-settings.cpp:1294 src/select-toolbar.cpp:468
+#: src/dialogs/display-settings.cpp:1301 src/select-toolbar.cpp:468
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Téglalapok átméretezésekor a lekerekített csúcsok sugarai is legyenek "
 "átméretezve"
 
-#: src/dialogs/display-settings.cpp:1301
+#: src/dialogs/display-settings.cpp:1308
 msgid "Transform gradients"
 msgstr "Színátmenetek transzformációja"
 
-#: src/dialogs/display-settings.cpp:1302 src/select-toolbar.cpp:480
+#: src/dialogs/display-settings.cpp:1309 src/select-toolbar.cpp:480
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr ""
 "Színátmenetek transzformációja (kitöltésben és körvonalban) az objektumokkal "
 "együtt"
 
-#: src/dialogs/display-settings.cpp:1309
+#: src/dialogs/display-settings.cpp:1316
 msgid "Transform patterns"
 msgstr "Minták transzformációja"
 
-#: src/dialogs/display-settings.cpp:1310 src/select-toolbar.cpp:492
+#: src/dialogs/display-settings.cpp:1317 src/select-toolbar.cpp:492
 msgid "Transform patterns (in fill or stroke) along with the objects"
-msgstr "Minták transzformációja (kitöltésben és körvonalban) az objektumokkal együtt"
+msgstr ""
+"Minták transzformációja (kitöltésben és körvonalban) az objektumokkal együtt"
 
 #. TRANSLATORS: How to specify the affine transformation in the SVG file.
-#: src/dialogs/display-settings.cpp:1320
+#: src/dialogs/display-settings.cpp:1327
 msgid "Store transformation:"
 msgstr "Transzformáció tárolása:"
 
-#: src/dialogs/display-settings.cpp:1331
+#: src/dialogs/display-settings.cpp:1338
 msgid "Optimized"
 msgstr "Optimalizálva"
 
-#: src/dialogs/display-settings.cpp:1332
+#: src/dialogs/display-settings.cpp:1339
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
@@ -1113,44 +1127,44 @@ msgstr ""
 "\"transform=\" tulajdonság hozzáadása nélkül legyenek alkalmazva a "
 "transzformációk az objektumokra, amikor csak lehetséges"
 
-#: src/dialogs/display-settings.cpp:1339
+#: src/dialogs/display-settings.cpp:1346
 msgid "Preserved"
 msgstr "Megőrizve"
 
-#: src/dialogs/display-settings.cpp:1340
+#: src/dialogs/display-settings.cpp:1347
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
 "A transzformációk mindig \"transform=\" objektumtulajdonságban legyenek "
 "eltárolva"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
-#: src/dialogs/display-settings.cpp:1349
+#: src/dialogs/display-settings.cpp:1356
 msgid "Misc"
 msgstr "Egyéb"
 
-#: src/dialogs/display-settings.cpp:1352
+#: src/dialogs/display-settings.cpp:1359
 msgid "Default export resolution:"
 msgstr "Alapértelmezett exportálási felbontás:"
 
-#: src/dialogs/display-settings.cpp:1353
+#: src/dialogs/display-settings.cpp:1360
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr ""
 "Az alapértelmezett bitkép-felbontás (pont/hüvelykben) az exportálási "
 "párbeszédablakban"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1354 src/dialogs/export.cpp:418
+#: src/dialogs/display-settings.cpp:1361 src/dialogs/export.cpp:418
 #: src/dialogs/export.cpp:434
 msgid "dpi"
 msgstr "DPI"
 
 #. TRANSLATORS: When on, an imported bitmap creates an <image> element; otherwise it is a
 #. * rectangle with bitmap fill.
-#: src/dialogs/display-settings.cpp:1365
+#: src/dialogs/display-settings.cpp:1372
 msgid "Import bitmap as <image>"
 msgstr "Bitkép importálása <image>-ként"
 
-#: src/dialogs/display-settings.cpp:1366
+#: src/dialogs/display-settings.cpp:1373
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
 "rectangle with bitmap fill"
@@ -1160,19 +1174,20 @@ msgstr ""
 "kitöltéssel"
 
 #. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
-#: src/dialogs/display-settings.cpp:1374
+#: src/dialogs/display-settings.cpp:1381
 msgid "Max recent documents:"
 msgstr "Legutóbbi dokumentumok maximális száma:"
 
-#: src/dialogs/display-settings.cpp:1375
+#: src/dialogs/display-settings.cpp:1382
 msgid "The maximum length of the Open Recent list in the File menu"
-msgstr "A Fájl menüben megjelenő \"Legutóbbi megnyitása\" lista maximális hossza"
+msgstr ""
+"A Fájl menüben megjelenő \"Legutóbbi megnyitása\" lista maximális hossza"
 
-#: src/dialogs/display-settings.cpp:1385
+#: src/dialogs/display-settings.cpp:1392
 msgid "Simplification threshold:"
 msgstr "Egyszerűsítési küszöb:"
 
-#: src/dialogs/display-settings.cpp:1386
+#: src/dialogs/display-settings.cpp:1393
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
@@ -1183,23 +1198,23 @@ msgstr ""
 "fog kifejteni; ha viszont egy szünetet követően kerül újra végrehajtásra, "
 "akkor visszaáll az alapértelmezett küszöb."
 
-#: src/dialogs/display-settings.cpp:1401
+#: src/dialogs/display-settings.cpp:1408
 msgid "Oversample bitmaps:"
 msgstr "Bitképek túlmintavételezése:"
 
-#: src/dialogs/display-settings.cpp:1418
+#: src/dialogs/display-settings.cpp:1425
 msgid "2x2"
 msgstr "2x2"
 
-#: src/dialogs/display-settings.cpp:1424
+#: src/dialogs/display-settings.cpp:1431
 msgid "4x4"
 msgstr "4x4"
 
-#: src/dialogs/display-settings.cpp:1430
+#: src/dialogs/display-settings.cpp:1437
 msgid "8x8"
 msgstr "8x8"
 
-#: src/dialogs/display-settings.cpp:1436
+#: src/dialogs/display-settings.cpp:1443
 msgid "16x16"
 msgstr "16x16"
 
@@ -1272,50 +1287,50 @@ msgstr "Nem sikerült \"%s\" nevű fájlba exportálni.\n"
 msgid "Select a filename for exporting"
 msgstr "Adjon meg egy fájlnevet az exportáláshoz"
 
-#: src/dialogs/filedialog.cpp:360
+#: src/dialogs/filedialog.cpp:362
 msgid "No preview"
 msgstr "Nincs előnézet"
 
-#: src/dialogs/filedialog.cpp:461
+#: src/dialogs/filedialog.cpp:463
 msgid "too large for preview"
 msgstr "előnézet-készítéshez túl nagy"
 
-#: src/dialogs/filedialog.cpp:746 src/dialogs/filedialog.cpp:747
+#: src/dialogs/filedialog.cpp:748 src/dialogs/filedialog.cpp:749
 msgid "All Images"
 msgstr "Az összes kép"
 
-#: src/dialogs/filedialog.cpp:751 src/dialogs/filedialog.cpp:752
+#: src/dialogs/filedialog.cpp:753 src/dialogs/filedialog.cpp:754
 msgid "All Files"
 msgstr "Az összes fájl"
 
-#: src/dialogs/filedialog.cpp:758 src/dialogs/filedialog.cpp:759
+#: src/dialogs/filedialog.cpp:760 src/dialogs/filedialog.cpp:761
 msgid "All Inkscape Files"
 msgstr "Az összes Inkscape-fájl"
 
-#: src/dialogs/filedialog.cpp:763 src/dialogs/filedialog.cpp:764
+#: src/dialogs/filedialog.cpp:765 src/dialogs/filedialog.cpp:766
 msgid "SVG Files"
 msgstr "SVG-fájlok"
 
-#: src/dialogs/filedialog.cpp:769 src/dialogs/filedialog.cpp:770
+#: src/dialogs/filedialog.cpp:771 src/dialogs/filedialog.cpp:772
 msgid "Compressed SVG Files"
 msgstr "Tömörített SVG-fájlok"
 
-#: src/dialogs/filedialog.cpp:1146
+#: src/dialogs/filedialog.cpp:1148
 msgid "Inkscape SVG"
 msgstr "Inkscape-SVG"
 
-#: src/dialogs/filedialog.cpp:1153
+#: src/dialogs/filedialog.cpp:1155
 msgid "Plain SVG"
 msgstr "Normál SVG"
 
-#: src/dialogs/filedialog.cpp:1193
+#: src/dialogs/filedialog.cpp:1195
 msgid "Guess from extension"
 msgstr "Meghatározás a fájlkiterjesztés alapján"
 
 #. ###### Add the file types menu
 #. createFilterMenu();
 #. ###### Do we want the .xxx extension automatically added?
-#: src/dialogs/filedialog.cpp:1271
+#: src/dialogs/filedialog.cpp:1273
 msgid "Append filename extension automatically"
 msgstr "Fájlkiterjesztés automatikus hozzáfűzése"
 
@@ -1352,7 +1367,8 @@ msgstr "váltakozó"
 
 #: src/dialogs/find.cpp:82 src/dialogs/find.cpp:719
 msgid "Find objects by their text content (exact or partial match)"
-msgstr "Objektumok keresése a szövegtartalmuk alapján (pontos vagy részleges egyezés)"
+msgstr ""
+"Objektumok keresése a szövegtartalmuk alapján (pontos vagy részleges egyezés)"
 
 #: src/dialogs/find.cpp:83 src/dialogs/find.cpp:720
 msgid "Find objects by the value of the id attribute (exact or partial match)"
@@ -1361,7 +1377,8 @@ msgstr ""
 "(pontos vagy részleges egyezés)"
 
 #: src/dialogs/find.cpp:84 src/dialogs/find.cpp:721
-msgid "Find objects by the value of the style attribute (exact or partial match)"
+msgid ""
+"Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 "Objektumok keresése a stílusuk (a \"style\" tulajdonságuk értéke) alapján "
 "(pontos vagy részleges egyezés)"
@@ -1524,54 +1541,75 @@ msgstr "K_eresés"
 msgid "Select objects matching all of the fields you filled in"
 msgstr "Az összes kitöltött mező értékére illeszkedő objektumok kijelölése"
 
-#. Create the label for the object label
-#: src/dialogs/item-properties.cpp:125 src/dialogs/item-properties.cpp:420
-#: src/dialogs/item-properties.cpp:549 src/dialogs/item-properties.cpp:553
-msgid "Label"
-msgstr "Címke"
+#. Create the label for the object id
+#: src/dialogs/item-properties.cpp:126
+msgid "Id"
+msgstr ""
 
 #. Create the button for setting the object label
-#: src/dialogs/item-properties.cpp:143
+#: src/dialogs/item-properties.cpp:144
 msgid "Update Properties"
 msgstr "Tulajdonságok frissítése"
 
+#. Create the label for the object label
+#: src/dialogs/item-properties.cpp:155 src/dialogs/item-properties.cpp:455
+#: src/dialogs/item-properties.cpp:602 src/dialogs/item-properties.cpp:606
+msgid "Label"
+msgstr "Címke"
+
 # May contain a short, human readable description of the resource as plain, unmarked text.
 #. Create the label for the object title
-#: src/dialogs/item-properties.cpp:154 src/dialogs/rdf.cpp:225
+#: src/dialogs/item-properties.cpp:174 src/dialogs/rdf.cpp:225
 msgid "Title"
 msgstr "Cím"
 
 #. Create the frame for the object description
-#: src/dialogs/item-properties.cpp:174 src/dialogs/rdf.cpp:269
+#: src/dialogs/item-properties.cpp:194 src/dialogs/rdf.cpp:269
 msgid "Description"
 msgstr "Leírás"
 
-#: src/dialogs/item-properties.cpp:202
+#: src/dialogs/item-properties.cpp:222
 msgid "Sensitive"
 msgstr "Érzékeny"
 
-#: src/dialogs/item-properties.cpp:212
-msgid "Visible"
-msgstr "Látható"
+#. Whether to explicitly mark this object with visibility:hidden.
+#: src/dialogs/item-properties.cpp:233
+#, fuzzy
+msgid "Hide"
+msgstr "Oldalak:"
 
-#: src/dialogs/item-properties.cpp:220
+#: src/dialogs/item-properties.cpp:241
 msgid "Active"
 msgstr "Aktív"
 
-#: src/dialogs/item-properties.cpp:228
+#: src/dialogs/item-properties.cpp:249
 msgid "Printable"
 msgstr "Nyomtatható"
 
 #. Transformation matrix
-#: src/dialogs/item-properties.cpp:240
+#: src/dialogs/item-properties.cpp:261
 msgid "Transformation matrix"
 msgstr "Transzformációs mátrix"
 
-#: src/dialogs/item-properties.cpp:407
+#: src/dialogs/item-properties.cpp:427 src/dialogs/item-properties.cpp:434
 msgid "Ref"
 msgstr "Hivatkozás"
 
-#: src/dialogs/item-properties.cpp:551
+#: src/dialogs/item-properties.cpp:444 src/dialogs/item-properties.cpp:577
+#: src/dialogs/item-properties.cpp:584 src/main.cpp:196 src/main.cpp:203
+msgid "ID"
+msgstr "Azon."
+
+#: src/dialogs/item-properties.cpp:579
+#, fuzzy
+msgid "ID invalid"
+msgstr "Érvénytelen címke"
+
+#: src/dialogs/item-properties.cpp:581
+msgid "ID exists"
+msgstr "Létező azonosító"
+
+#: src/dialogs/item-properties.cpp:604
 msgid "Label invalid"
 msgstr "Érvénytelen címke"
 
@@ -1744,7 +1782,8 @@ msgid "Creator"
 msgstr "Készítő"
 
 #: src/dialogs/rdf.cpp:239
-msgid "Name of entity primarily responsible for making the content of this document."
+msgid ""
+"Name of entity primarily responsible for making the content of this document."
 msgstr ""
 "A dokumentum tartalmának elkészítéséért elsődlegesen felelős személy "
 "(entitás) neve."
@@ -1754,8 +1793,10 @@ msgid "Rights"
 msgstr "Jogok"
 
 #: src/dialogs/rdf.cpp:242
-msgid "Name of entity with rights to the Intellectual Property of this document."
-msgstr "A dokumentum szellemi tulajdonjogaival rendelkező személy (entitás) neve."
+msgid ""
+"Name of entity with rights to the Intellectual Property of this document."
+msgstr ""
+"A dokumentum szellemi tulajdonjogaival rendelkező személy (entitás) neve."
 
 #: src/dialogs/rdf.cpp:244
 msgid "Publisher"
@@ -2068,76 +2109,97 @@ msgstr "Relatív áthelyezés"
 msgid "deg"
 msgstr "fok"
 
-#: src/dialogs/xml-tree.cpp:249
+#: src/dialogs/xml-tree.cpp:171
+#, fuzzy
+msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
+msgstr ""
+"Szövegobjektum kijelölése vagy létrehozása: <b>kattintással</b>. "
+"Szövegmódosítás: gépeléssel."
+
+#: src/dialogs/xml-tree.cpp:183
+#, fuzzy
+msgid "<b>Click</b> attribute to edit."
+msgstr "<b>XML-szerkesztő</b>. Egy tulajdonság szerkesztéséhez jelölje ki azt."
+
+#: src/dialogs/xml-tree.cpp:187
+#, c-format
+msgid ""
+"Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
+"commit changes."
+msgstr ""
+
+#: src/dialogs/xml-tree.cpp:280
 msgid "Drag to reorder nodes"
 msgstr "A csomópontok átrendezhetők az egérrel"
 
-#: src/dialogs/xml-tree.cpp:270
+#: src/dialogs/xml-tree.cpp:300
 msgid "New element node"
 msgstr "Új elemcsomópont"
 
-#: src/dialogs/xml-tree.cpp:292
+#: src/dialogs/xml-tree.cpp:322
 msgid "New text node"
 msgstr "Új szövegcsomópont"
 
-#: src/dialogs/xml-tree.cpp:313
+#: src/dialogs/xml-tree.cpp:343
 msgid "Duplicate node"
 msgstr "Csomópont kettőzése"
 
-#: src/dialogs/xml-tree.cpp:334
+#: src/dialogs/xml-tree.cpp:364
 msgid "Delete node"
 msgstr "Csomópont törlése"
 
-#: src/dialogs/xml-tree.cpp:350
+#: src/dialogs/xml-tree.cpp:380
 msgid "Unindent node"
 msgstr "Csomópontot egy szinttel kijjebb"
 
-#: src/dialogs/xml-tree.cpp:365
+#: src/dialogs/xml-tree.cpp:395
 msgid "Indent node"
 msgstr "Csomópontot egy szinttel beljebb"
 
-#: src/dialogs/xml-tree.cpp:377
+#: src/dialogs/xml-tree.cpp:407
 msgid "Raise node"
 msgstr "Csomópontot eggyel feljebb"
 
-#: src/dialogs/xml-tree.cpp:389
+#: src/dialogs/xml-tree.cpp:419
 msgid "Lower node"
 msgstr "Csomópontot eggyel lejjebb"
 
-#: src/dialogs/xml-tree.cpp:434
+#: src/dialogs/xml-tree.cpp:464
 msgid "Delete attribute"
 msgstr "Tulajdonság törlése"
 
 #. TRANSLATORS: "Attribute" is a noun here
-#: src/dialogs/xml-tree.cpp:479
+#: src/dialogs/xml-tree.cpp:509
 msgid "Attribute name"
 msgstr "Tulajdonságnév"
 
 #. TRANSLATORS: "Set" is a verb here
-#: src/dialogs/xml-tree.cpp:499
+#: src/dialogs/xml-tree.cpp:529
 msgid "Set attribute"
 msgstr "Tulajdonság beállítása"
 
 #. TRANSLATORS: "Attribute" is a noun here
-#: src/dialogs/xml-tree.cpp:521
+#: src/dialogs/xml-tree.cpp:553
 msgid "Attribute value"
 msgstr "A tulajdonság értéke"
 
-#: src/dialogs/xml-tree.cpp:584
-msgid "<b>XML Editor</b> Select attributes and edit them."
-msgstr "<b>XML-szerkesztő</b>. Egy tulajdonság szerkesztéséhez jelölje ki azt."
-
-#: src/dialogs/xml-tree.cpp:1287
+#: src/dialogs/xml-tree.cpp:1320
 msgid "New element node..."
 msgstr "Új elemcsomópont..."
 
-#: src/dialogs/xml-tree.cpp:1308
+#: src/dialogs/xml-tree.cpp:1341
 msgid "Cancel"
 msgstr "Mégsem"
 
-#: src/dialogs/xml-tree.cpp:1314
+#: src/dialogs/xml-tree.cpp:1347
 msgid "Create"
 msgstr "Létrehozás"
+
+#: src/dialogs/xml-tree.cpp:1467
+#, c-format
+msgid ""
+"Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
+msgstr ""
 
 #: src/document.cpp:428
 #, c-format
@@ -2301,7 +2363,7 @@ msgstr ""
 "a kimenetnek egy program számára való átadásához pedig a\n"
 "következőt: \"| programnév argumentum ...\"."
 
-#: src/extension/internal/ps.cpp:970
+#: src/extension/internal/ps.cpp:1003
 msgid "write error occurred"
 msgstr "írási hiba történt"
 
@@ -2412,7 +2474,7 @@ msgstr "Válassza ki az importálandó fájlt"
 msgid "about.svg"
 msgstr "about.svg"
 
-#: src/help.cpp:81 src/verbs.cpp:1722
+#: src/help.cpp:81 src/verbs.cpp:1724
 msgid "About Inkscape"
 msgstr "Az Inkscape névjegye"
 
@@ -2552,7 +2614,8 @@ msgstr "A nem mentett dokumentumokról mentés készült a következő helyekre:
 
 #: src/inkscape.cpp:503
 msgid "Automatic backup of the following documents failed:\n"
-msgstr "Nem sikerült automatikus mentést készíteni a következő dokumentumokról:\n"
+msgstr ""
+"Nem sikerült automatikus mentést készíteni a következő dokumentumokról:\n"
 
 #: src/inkscape.cpp:676
 #, c-format
@@ -2779,7 +2842,8 @@ msgstr "Az Inkscape verziószámának kiírása"
 
 #: src/main.cpp:150
 msgid "Do not use X server (only process files from console)"
-msgstr "Az X grafikus rendszer ne legyen használva (fájlok feldolgozása a konzolról)"
+msgstr ""
+"Az X grafikus rendszer ne legyen használva (fájlok feldolgozása a konzolról)"
 
 #: src/main.cpp:155
 msgid "Try to use X server (even if $DISPLAY is not set)"
@@ -2839,7 +2903,8 @@ msgstr "SZÉLESSÉG"
 
 #: src/main.cpp:190
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
-msgstr "Az exportált bitkép magassága képpontban (felülbírálja az export-dpi értéket)"
+msgstr ""
+"Az exportált bitkép magassága képpontban (felülbírálja az export-dpi értéket)"
 
 #: src/main.cpp:191
 msgid "HEIGHT"
@@ -2847,16 +2912,14 @@ msgstr "MAGASSÁG"
 
 #: src/main.cpp:195
 msgid "The ID of the object to export (overrides export-area)"
-msgstr "Az exportálandó objektum azonosítója (felülbírálja az export-area értéket)"
-
-#: src/main.cpp:196 src/main.cpp:203
-msgid "ID"
-msgstr "Azon."
+msgstr ""
+"Az exportálandó objektum azonosítója (felülbírálja az export-area értéket)"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
 #: src/main.cpp:202
-msgid "Export just the object with export-id, hide all others (only with export-id)"
+msgid ""
+"Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Csak az export-id-vel rendelkező objektum exportálása; a többi elrejtése "
 "(csak export-id esetén)"
@@ -2923,7 +2986,8 @@ msgstr ""
 "mentén"
 
 #: src/node-context.cpp:356
-msgid "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
+msgid ""
+"<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
 msgstr ""
 "<b>Shift</b>: csomópontkijelölés bekapcsolása/kikapcsolása; illesztés "
 "kikapcsolása; mindkét vezérlőelem forgatása"
@@ -2989,7 +3053,8 @@ msgstr ""
 "vezérlőelemeket"
 
 #: src/nodepath.cpp:2902
-msgid "Select one path object with selector first, then switch back to node tool."
+msgid ""
+"Select one path object with selector first, then switch back to node tool."
 msgstr ""
 "Jelöljön ki egy láncot a kijelölőeszközzel, majd váltson vissza a "
 "csomóponteszközre."
@@ -3039,11 +3104,13 @@ msgstr ""
 
 #: src/object-edit.cpp:606
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
-msgstr "Az ellipszis <b>szélességének</b> beállítása. Körré alakítás: <b>Ctrl</b>."
+msgstr ""
+"Az ellipszis <b>szélességének</b> beállítása. Körré alakítás: <b>Ctrl</b>."
 
 #: src/object-edit.cpp:608
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
-msgstr "Az ellipszis <b>magasságának</b> beállítása. Körré alakítás: <b>Ctrl</b>."
+msgstr ""
+"Az ellipszis <b>magasságának</b> beállítása. Körré alakítás: <b>Ctrl</b>."
 
 #: src/object-edit.cpp:610
 msgid ""
@@ -3114,7 +3181,8 @@ msgstr "A kitöltőminta egyenletes <b>átméretezése</b>"
 
 #: src/object-edit.cpp:956
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
-msgstr "A kitöltőminta <b>elforgatása</b>. Szöghöz való illesztés: <b>Ctrl</b>."
+msgstr ""
+"A kitöltőminta <b>elforgatása</b>. Szöghöz való illesztés: <b>Ctrl</b>."
 
 #. Item dialog
 #: src/object-ui.cpp:107
@@ -3145,7 +3213,7 @@ msgid "_Create Link"
 msgstr "_Hivatkozás létrehozása"
 
 #. "Ungroup"
-#: src/object-ui.cpp:241 src/verbs.cpp:1499
+#: src/object-ui.cpp:241 src/verbs.cpp:1501
 msgid "_Ungroup"
 msgstr "Cso_port szétbontása"
 
@@ -3204,7 +3272,8 @@ msgid "At least one of the objects is <b>not a path</b>, cannot combine."
 msgstr "Egy vagy több objektum <b>nem lánc</b>; összevonás nem végezhető."
 
 #: src/path-chemistry.cpp:73
-msgid "You cannot combine objects from <b>different groups</b> or <b>layers</b>."
+msgid ""
+"You cannot combine objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "<b>Eltérő csoportban</b> illetve <b>rétegben</b> levő objektumok nem "
 "vonhatók össze."
@@ -3348,8 +3417,10 @@ msgstr "A kijelölésben <b>nincs szétbontható csoport</b>."
 msgid "Select <b>objects</b> to raise."
 msgstr "Jelölje ki az előrébb helyezendő <b>objektumokat</b>."
 
-#: src/selection-chemistry.cpp:439 src/selection-chemistry.cpp:517
-msgid "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
+#: src/selection-chemistry.cpp:439 src/selection-chemistry.cpp:491
+#: src/selection-chemistry.cpp:525 src/selection-chemistry.cpp:583
+msgid ""
+"You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "<b>Eltérő csoportban</b> illetve <b>rétegben</b> levő objektumok nem "
 "helyezhetők előrébb illetve hátrébb."
@@ -3358,39 +3429,39 @@ msgstr ""
 msgid "Select <b>object(s)</b> to raise to top."
 msgstr "Jelölje ki az elölre helyezendő <b>objektumo(ka)t</b>."
 
-#: src/selection-chemistry.cpp:511
+#: src/selection-chemistry.cpp:519
 msgid "Select <b>object(s)</b> to lower."
 msgstr "Jelölje ki a hátrébb helyezendő <b>objektumo(ka)t</b>."
 
-#: src/selection-chemistry.cpp:567
+#: src/selection-chemistry.cpp:575
 msgid "Select <b>object(s)</b> to lower to bottom."
 msgstr "Jelölje ki a hátulra helyezendő <b>objektumo(ka)t</b>."
 
-#: src/selection-chemistry.cpp:601
+#: src/selection-chemistry.cpp:617
 msgid "Nothing to undo."
 msgstr "Nincs visszavonható művelet."
 
-#: src/selection-chemistry.cpp:610
+#: src/selection-chemistry.cpp:626
 msgid "Nothing to redo."
 msgstr "Nincs újra végrehajtható művelet."
 
-#: src/selection-chemistry.cpp:760
+#: src/selection-chemistry.cpp:776
 msgid "Nothing was copied."
 msgstr "Nem történt másolás."
 
-#: src/selection-chemistry.cpp:873 src/selection-chemistry.cpp:924
+#: src/selection-chemistry.cpp:889 src/selection-chemistry.cpp:940
 msgid "Nothing on the clipboard."
 msgstr "A vágólap üres."
 
-#: src/selection-chemistry.cpp:930
+#: src/selection-chemistry.cpp:946
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Jelöljön ki <b>objektumo(ka)t</b> a stílus beillesztéséhez."
 
-#: src/selection-chemistry.cpp:1474
+#: src/selection-chemistry.cpp:1490
 msgid "Select an <b>object</b> to clone."
 msgstr "Jelölje ki a klónozandó <b>objektumot</b>."
 
-#: src/selection-chemistry.cpp:1480
+#: src/selection-chemistry.cpp:1496
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -3398,15 +3469,15 @@ msgstr ""
 "Ha több objektumot szeretne klónozni, akkor foglalja azokat <b>csoportba</"
 "b>, majd <b>klónozza a csoportot</b>."
 
-#: src/selection-chemistry.cpp:1511
+#: src/selection-chemistry.cpp:1527
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Jelölje ki a lekapcsolandó <b>klónt</b>."
 
-#: src/selection-chemistry.cpp:1542
+#: src/selection-chemistry.cpp:1558
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "A kijelölésben <b>nincs lekapcsolható klón</b>."
 
-#: src/selection-chemistry.cpp:1559
+#: src/selection-chemistry.cpp:1575
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path."
@@ -3415,7 +3486,7 @@ msgstr ""
 "peremet</b> kijelölve annak forrásához; <b>láncon levő szöveget</b> "
 "kijelölve pedig a lánchoz."
 
-#: src/selection-chemistry.cpp:1580
+#: src/selection-chemistry.cpp:1596
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, or "
 "textpath?)"
@@ -3423,39 +3494,41 @@ msgstr ""
 "A kijelölendő objektum <b>nem található</b> (elárvult klón, perem vagy "
 "szöveg-lánc?)"
 
-#: src/selection-chemistry.cpp:1586
+#: src/selection-chemistry.cpp:1602
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr "A kijelölendő objektum <b>nem látható</b> (&lt;defs&gt;-ben szerepel)"
 
-#: src/selection-chemistry.cpp:1613
+#: src/selection-chemistry.cpp:1629
 msgid "Select <b>object(s)</b> to tile."
 msgstr "Jelölje ki a csempévé alakítandó <b>objektumo(ka)t</b>."
 
-#: src/selection-chemistry.cpp:1699
+#: src/selection-chemistry.cpp:1715
 msgid "Select an <b>object with pattern fill</b> to untile."
 msgstr ""
 "Jelölje ki azt a <b>mintával kitöltött objektumot</b>, amelynek a csempézése "
 "megszüntetendő."
 
-#: src/selection-chemistry.cpp:1752
+#: src/selection-chemistry.cpp:1768
 msgid "<b>No pattern fills</b> to untile in the selection."
 msgstr ""
 "A kijelölésben <b>nincs olyan kitöltőminta</b>, amelynek a csempézése "
 "megszüntethető."
 
-#: src/selection-chemistry.cpp:1772
+#: src/selection-chemistry.cpp:1788
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "Jelölje ki a bitképbe másolandó <b>objektumo(ka)t</b>."
 
 #: src/selection-describer.cpp:30
 msgid "Click selection to toggle scale/rotation handles"
-msgstr "A méretezési és az elforgatási mód közti váltáshoz kattintson a kijelölésre"
+msgstr ""
+"A méretezési és az elforgatási mód közti váltáshoz kattintson a kijelölésre"
 
 #. no items
 #: src/selection-describer.cpp:32
-msgid "No objects selected. Click, Shift+click, or drag around objects to select."
+msgid ""
+"No objects selected. Click, Shift+click, or drag around objects to select."
 msgstr ""
 "Nincs kijelölve objektum. Kijelölés: kattintással (ha szükséges, Shifttel) "
 "vagy egy terület kijelölésével."
@@ -3491,8 +3564,10 @@ msgstr ""
 "átméretezés a forgatási középpontból: <b>Shift</b>."
 
 #: src/seltrans.cpp:489
-msgid "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
-msgstr "A kijelölés <b>nyírása</b>. Nyírás a túlsó oldalra vonatkozóan: <b>Shift</b>."
+msgid ""
+"<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
+msgstr ""
+"A kijelölés <b>nyírása</b>. Nyírás a túlsó oldalra vonatkozóan: <b>Shift</b>."
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
 #: src/seltrans.cpp:490
@@ -3506,7 +3581,8 @@ msgstr ""
 #: src/seltrans.cpp:776 src/seltrans.cpp:856
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
-msgstr "<b>Átméretezés</b>: %0.2f%% x %0.2f%%. Az arány megőrzése: <b>Ctrl</b>."
+msgstr ""
+"<b>Átméretezés</b>: %0.2f%% x %0.2f%%. Az arány megőrzése: <b>Ctrl</b>."
 
 #: src/seltrans.cpp:925
 #, c-format
@@ -3552,39 +3628,39 @@ msgstr "függőleges segédvonal"
 msgid "horizontal guideline"
 msgstr "vízszintes segédvonal"
 
-#: src/sp-image.cpp:671
+#: src/sp-image.cpp:673
 #, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "<b>Helytelen képhivatkozás</b>: %s"
 
-#: src/sp-image.cpp:673
+#: src/sp-image.cpp:675
 #, c-format
 msgid "<b>Image</b> %d x %d: %s"
 msgstr "%d x %d méretű <b>kép</b>: %s"
 
 #. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
-#: src/sp-image.cpp:1037
+#: src/sp-image.cpp:1039
 msgid "Trace"
 msgstr "Vektorizálás"
 
-#: src/sp-image.cpp:1184
+#: src/sp-image.cpp:1186
 #, c-format
 msgid "Error writing %s: %s"
 msgstr "Hiba \"%s\" írása közben: %s"
 
-#: src/sp-image.cpp:1218
+#: src/sp-image.cpp:1220
 msgid "Untitled"
 msgstr "Névtelen"
 
-#: src/sp-image.cpp:1223
+#: src/sp-image.cpp:1225
 msgid "Document Name:"
 msgstr "Dokumentumnév:"
 
-#: src/sp-image.cpp:1236
+#: src/sp-image.cpp:1238
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: src/sp-image.cpp:1242
+#: src/sp-image.cpp:1244
 msgid "Image URI:"
 msgstr "Kép-URI:"
 
@@ -3593,7 +3669,7 @@ msgstr "Kép-URI:"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "<b>%d</b> objektumot tartalmazó <b>csoport</b>"
 
-#: src/sp-item.cpp:631
+#: src/sp-item.cpp:649
 msgid "Object"
 msgstr "Objektum"
 
@@ -3601,7 +3677,8 @@ msgstr "Objektum"
 #. TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
 #: src/sp-offset.cpp:395
 #, c-format
-msgid "<b>Linked offset</b>, %s by %f pt. Use <b>Shift+D</b> to look up original"
+msgid ""
+"<b>Linked offset</b>, %s by %f pt. Use <b>Shift+D</b> to look up original"
 msgstr ""
 "<b>Kapcsolt perem</b>; %s %f ponttal (pt). Az eredeti objektum "
 "meghatározása: <b>Shift+D</b>."
@@ -3644,16 +3721,18 @@ msgstr "%d csúcsú <b>csillag</b>"
 msgid "<b>Polygon</b> with %d vertices"
 msgstr "%d csúcsú <b>sokszög</b>"
 
-#: src/sp-text.cpp:472
+#: src/sp-text.cpp:469
 msgid "<no name found>"
 msgstr "<név nem található>"
 
-#: src/sp-text.cpp:476
+#: src/sp-text.cpp:473
 #, c-format
-msgid "<b>Text on path</b> (%s, %.5gpt). Use <b>Shift+D</b> to look up the path"
-msgstr "<b>Láncon levő szöveg</b> (%s, %.5gpt). A lánc meghatározása: <b>Shift+D</b>."
+msgid ""
+"<b>Text on path</b> (%s, %.5gpt). Use <b>Shift+D</b> to look up the path"
+msgstr ""
+"<b>Láncon levő szöveg</b> (%s, %.5gpt). A lánc meghatározása: <b>Shift+D</b>."
 
-#: src/sp-text.cpp:478
+#: src/sp-text.cpp:475
 #, c-format
 msgid "<b>Text</b> (%s, %.5gpt)"
 msgstr "<b>Szöveg</b> (%s, %.5gpt)"
@@ -3662,7 +3741,8 @@ msgstr "<b>Szöveg</b> (%s, %.5gpt)"
 #: src/sp-use.cpp:308
 #, c-format
 msgid "<b>Clone</b> of: %s. Use <b>Shift+D</b> to look up original"
-msgstr "\"%s\" <b>klónja</b>. Az eredeti objektum meghatározása: <b>Shift+D</b>"
+msgstr ""
+"\"%s\" <b>klónja</b>. Az eredeti objektum meghatározása: <b>Shift+D</b>"
 
 #: src/sp-use.cpp:311
 msgid "<b>Orphaned clone</b>"
@@ -3679,7 +3759,8 @@ msgstr "<b>Alt</b>: a spirál sugarának megőrzése"
 #: src/spiral-context.cpp:460
 #, c-format
 msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Spirál</b>. Sugár: %s, szög: %5g. Szöghöz való illesztés: <b>Ctrl</b>."
+msgstr ""
+"<b>Spirál</b>. Sugár: %s, szög: %5g. Szöghöz való illesztés: <b>Ctrl</b>."
 
 #: src/splivarot.cpp:111
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
@@ -3702,7 +3783,8 @@ msgstr ""
 "felosztáshoz illetve láncelvágáshoz kijelölt objektumok <b>z-sorrendjét</b>."
 
 #: src/splivarot.cpp:179
-msgid "One of the objects is <b>not a path</b>, cannot perform boolean operation."
+msgid ""
+"One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr "Az egyik objektum <b>nem lánc</b>; logikai művelet nem hajtható végre."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
@@ -3744,12 +3826,14 @@ msgstr "<b>Ctrl</b>: szöghöz való illesztés; ágak sugárirányban való tar
 #: src/star-context.cpp:469
 #, c-format
 msgid "<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Sokszög</b>. Sugár: %s, szög: %5g. Szöghöz való illesztés: <b>Ctrl</b>."
+msgstr ""
+"<b>Sokszög</b>. Sugár: %s, szög: %5g. Szöghöz való illesztés: <b>Ctrl</b>."
 
 #: src/star-context.cpp:470
 #, c-format
 msgid "<b>Star</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Csillag</b>. Sugár: %s, szög: %5g. Szöghöz való illesztés: <b>Ctrl</b>."
+msgstr ""
+"<b>Csillag</b>. Sugár: %s, szög: %5g. Szöghöz való illesztés: <b>Ctrl</b>."
 
 #: src/text-chemistry.cpp:89
 msgid "Select <b>a text and a path</b> to put text on path."
@@ -3840,9 +3924,9 @@ msgstr "A kijelölt szakaszok egyenesekké alakítása"
 msgid "Make selected segments curves"
 msgstr "A kijelölt szakaszok görbékké alakítása"
 
-#: src/toolbox.cpp:1077 src/toolbox.cpp:1155 src/toolbox.cpp:1401
-#: src/toolbox.cpp:1440 src/toolbox.cpp:1650 src/toolbox.cpp:1690
-#: src/toolbox.cpp:2145 src/toolbox.cpp:2185
+#: src/toolbox.cpp:1077 src/toolbox.cpp:1165 src/toolbox.cpp:1407
+#: src/toolbox.cpp:1442 src/toolbox.cpp:1648 src/toolbox.cpp:1684
+#: src/toolbox.cpp:2132 src/toolbox.cpp:2168
 msgid "<b>New:</b>"
 msgstr "<b>Új:</b>"
 
@@ -3850,29 +3934,29 @@ msgstr "<b>Új:</b>"
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #. FIXME: implement averaging of all parameters for multiple selected
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
-#: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1403
-#: src/toolbox.cpp:1421 src/toolbox.cpp:1652 src/toolbox.cpp:1670
-#: src/toolbox.cpp:2147 src/toolbox.cpp:2166
+#: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1409
+#: src/toolbox.cpp:1427 src/toolbox.cpp:1650 src/toolbox.cpp:1668
+#: src/toolbox.cpp:2134 src/toolbox.cpp:2153
 msgid "<b>Change:</b>"
 msgstr "<b>Módosítás:</b>"
 
-#: src/toolbox.cpp:1163
+#: src/toolbox.cpp:1169
 msgid "Corners:"
 msgstr "Csúcsok:"
 
-#: src/toolbox.cpp:1163
+#: src/toolbox.cpp:1169
 msgid "Number of corners of a polygon or star"
 msgstr "A sokszög illetve csillag csúcsainak száma"
 
-#: src/toolbox.cpp:1176
+#: src/toolbox.cpp:1182
 msgid "Polygon"
 msgstr "Sokszög"
 
-#: src/toolbox.cpp:1183
+#: src/toolbox.cpp:1189
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Csillag helyett (1 vezérlőelemmel rendelkező) szabályos sokszög"
 
-#: src/toolbox.cpp:1193
+#: src/toolbox.cpp:1199
 msgid "Spoke ratio:"
 msgstr "Ágarány:"
 
@@ -3880,31 +3964,31 @@ msgstr "Ágarány:"
 # Base radius is the same for closest handle.
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:1196
+#: src/toolbox.cpp:1202
 msgid "Base radius to tip radius ratio"
 msgstr "Az alapponti és a csúcsponti sugár aránya"
 
-#: src/toolbox.cpp:1211
+#: src/toolbox.cpp:1217
 msgid "Roundedness:"
 msgstr "Lekerekítettség:"
 
-#: src/toolbox.cpp:1211
+#: src/toolbox.cpp:1217
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Mennyire lekerekítettek a sarkok (0: hegyesek)"
 
-#: src/toolbox.cpp:1221
+#: src/toolbox.cpp:1227
 msgid "Randomization:"
 msgstr "Véletlenszerűség:"
 
-#: src/toolbox.cpp:1221
+#: src/toolbox.cpp:1227
 msgid "Scatter randomly the corners and angles"
 msgstr "A csúcsok és a szögek véletlenszerű elrendezése"
 
-#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1908
+#: src/toolbox.cpp:1238 src/toolbox.cpp:1719 src/toolbox.cpp:1895
 msgid "Defaults"
 msgstr "Alapértelmezések"
 
-#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1909
+#: src/toolbox.cpp:1239 src/toolbox.cpp:1720 src/toolbox.cpp:1896
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3913,63 +3997,65 @@ msgstr ""
 "alapértelmezések módosítása az Inkscape-beállítások > Eszközök funkcióval "
 "lehetséges)"
 
-#: src/toolbox.cpp:1453
+#: src/toolbox.cpp:1451
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1453
+#: src/toolbox.cpp:1451
 msgid "Horizontal radius of rounded corners"
 msgstr "A lekerekített csúcsok vízszintes sugara"
 
-#: src/toolbox.cpp:1463
+#: src/toolbox.cpp:1461
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1463
+#: src/toolbox.cpp:1461
 msgid "Vertical radius of rounded corners"
 msgstr "A lekerekített csúcsok függőleges sugara"
 
-#: src/toolbox.cpp:1479
+#: src/toolbox.cpp:1477
 msgid "Not rounded"
 msgstr "Nem lekerekített"
 
-#: src/toolbox.cpp:1480
+#: src/toolbox.cpp:1478
 msgid "Make corners sharp"
 msgstr "A csúcsok szögletessé tétele"
 
-#: src/toolbox.cpp:1698
+#: src/toolbox.cpp:1688
 msgid "Turns:"
 msgstr "Fordulatok:"
 
-#: src/toolbox.cpp:1698
+#: src/toolbox.cpp:1688
 msgid "Number of revolutions"
 msgstr "A körbefordulások száma"
 
-#: src/toolbox.cpp:1708
+#: src/toolbox.cpp:1698
 msgid "Divergence:"
 msgstr "Tágulás:"
 
-#: src/toolbox.cpp:1708
+#: src/toolbox.cpp:1698
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
-msgstr "Mennyivel sűrűbbek illetve ritkábbak a külső fordulatok; 1 = egyenletes"
+msgstr ""
+"Mennyivel sűrűbbek illetve ritkábbak a külső fordulatok; 1 = egyenletes"
 
-#: src/toolbox.cpp:1718
+#: src/toolbox.cpp:1708
 msgid "Inner radius:"
 msgstr "Belső sugár:"
 
-#: src/toolbox.cpp:1718
+#: src/toolbox.cpp:1708
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "A legbelső fordulat sugara (a spirál méretéhez viszonyítva)"
 
-#: src/toolbox.cpp:1834
+#: src/toolbox.cpp:1824
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
-msgstr "A művészi toll szélessége (a látható rajzvászon-területhez viszonyítva)"
+msgstr ""
+"A művészi toll szélessége (a látható rajzvászon-területhez viszonyítva)"
 
-#: src/toolbox.cpp:1844
+#: src/toolbox.cpp:1834
 msgid "Thinning:"
 msgstr "Keskenyítés:"
 
-#: src/toolbox.cpp:1844
+#: src/toolbox.cpp:1834
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
@@ -3978,78 +4064,79 @@ msgstr ""
 "gyors vonalhúzás keskenyebb vonalat eredményez; ha 0-nál kisebb, akkor "
 "szélesebbet; 0 esetén pedig nem függ a szélesség a sebességtől)"
 
-#: src/toolbox.cpp:1857
+#: src/toolbox.cpp:1847
 msgid "Angle:"
 msgstr "Szög:"
 
-#: src/toolbox.cpp:1857
+#: src/toolbox.cpp:1847
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
 msgstr ""
-"A toll hegyének szöge (fokban; 0 fok esetén vízszintes; ha a "
-"rögzítettség értéke 0, akkor nincs hatása)"
+"A toll hegyének szöge (fokban; 0 fok esetén vízszintes; ha a rögzítettség "
+"értéke 0, akkor nincs hatása)"
 
-#: src/toolbox.cpp:1867
+#: src/toolbox.cpp:1857
 msgid "Fixation:"
 msgstr "Rögzítettség:"
 
-#: src/toolbox.cpp:1867
+#: src/toolbox.cpp:1857
 msgid ""
 "How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
 "= fixed)"
 msgstr ""
-"Mennyire rögzített a toll szöge (0: mindig merőleges a vonalhúzás "
-"irányára, 1: rögzített)"
+"Mennyire rögzített a toll szöge (0: mindig merőleges a vonalhúzás irányára, "
+"1: rögzített)"
 
-#: src/toolbox.cpp:1880
+#: src/toolbox.cpp:1870
 msgid "Mass:"
 msgstr "Tömeg:"
 
-#: src/toolbox.cpp:1880
+#: src/toolbox.cpp:1870
 msgid "How much inertia affects the movement of the pen"
 msgstr "Mekkora tehetetlenség hat a toll mozgására"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1894
+#: src/toolbox.cpp:1881
 msgid "Drag:"
 msgstr "Ellenállás:"
 
-#: src/toolbox.cpp:1894
+#: src/toolbox.cpp:1881
 msgid "How much resistance affects the movement of the pen"
 msgstr "Mekkora ellenállás hat a toll mozgására"
 
-#: src/toolbox.cpp:2193
+#: src/toolbox.cpp:2172
 msgid "Start:"
 msgstr "Kezdet:"
 
-#: src/toolbox.cpp:2193
+#: src/toolbox.cpp:2172
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Az ellipszisív kezdőpontjának szöge a vízszintestől számítva (fokban)"
 
-#: src/toolbox.cpp:2203
+#: src/toolbox.cpp:2182
 msgid "End:"
 msgstr "Vég:"
 
-#: src/toolbox.cpp:2203
+#: src/toolbox.cpp:2182
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Az ellipszisív végpontjának szöge a vízszintestől számítva (fokban)"
 
-#: src/toolbox.cpp:2214
+#: src/toolbox.cpp:2193
 msgid "Open arc"
 msgstr "Nyitott ellipszisív"
 
-#: src/toolbox.cpp:2215
-msgid "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
+#: src/toolbox.cpp:2194
+msgid ""
+"Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Váltás ellipszisív (nem lezárt alakzat) és -cikk (lezárt alakzat két "
 "sugárral) közt"
 
-#: src/toolbox.cpp:2242
+#: src/toolbox.cpp:2221
 msgid "Make whole"
 msgstr "Kiegészítés"
 
-#: src/toolbox.cpp:2243
+#: src/toolbox.cpp:2222
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Az alakzat teljes ellipszissé tétele (hogy ne ív illetve cikk legyen)"
 
@@ -4096,7 +4183,8 @@ msgstr ""
 "<b>vezérlőelemekkel</b>. Kijelölés: <b>kattintással</b>."
 
 #: src/tools-switch.cpp:159
-msgid "<b>Drag</b> to create a freehand line. Press <b>a</b> to toggle Append/New."
+msgid ""
+"<b>Drag</b> to create a freehand line. Press <b>a</b> to toggle Append/New."
 msgstr ""
 "Szabadkézi vonal létrehozása: <b>húzással</b>. A hozzáfűzési és az \"új vonal"
 "\" üzemmód közt az <b>\"a\"</b> billentyű vált."
@@ -4110,8 +4198,10 @@ msgstr ""
 "hozzáfűzési és az \"új vonal\" üzemmód közt az <b>\"a\"</b> billentyű vált."
 
 #: src/tools-switch.cpp:171
-msgid "<b>Drag</b> to paint a calligraphic stroke."
-msgstr "Művészi vonal rajzolása: <b>húzással</b>."
+msgid ""
+"<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow "
+"keys adjust width, <b>up</b>/<b>down</b> adjust angle."
+msgstr ""
 
 #: src/tools-switch.cpp:177
 msgid "<b>Click</b> to select or create text object, then type."
@@ -4190,1141 +4280,1141 @@ msgstr "A réteg nem mozdítható tovább."
 msgid "Deleted layer."
 msgstr "A réteg törölve."
 
-#: src/verbs.cpp:1309
+#: src/verbs.cpp:1311
 msgid "keys.svg"
 msgstr "keys.svg"
 
-#: src/verbs.cpp:1325
+#: src/verbs.cpp:1327
 msgid "tutorial-basic.svg"
 msgstr "tutorial-basic.svg"
 
-#: src/verbs.cpp:1328
+#: src/verbs.cpp:1330
 msgid "tutorial-shapes.svg"
 msgstr "tutorial-shapes.svg"
 
-#: src/verbs.cpp:1331
+#: src/verbs.cpp:1333
 msgid "tutorial-advanced.svg"
 msgstr "tutorial-advanced.svg"
 
-#: src/verbs.cpp:1334
+#: src/verbs.cpp:1336
 msgid "elementsofdesign.svg"
 msgstr "elementsofdesign.svg"
 
-#: src/verbs.cpp:1337
+#: src/verbs.cpp:1339
 msgid "tipsandtricks.svg"
 msgstr "tipsandtricks.svg"
 
-#: src/verbs.cpp:1418
+#: src/verbs.cpp:1420
 msgid "Does nothing"
 msgstr "Nincs funkció"
 
 #. File
-#: src/verbs.cpp:1421
+#: src/verbs.cpp:1423
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: src/verbs.cpp:1421
+#: src/verbs.cpp:1423
 msgid "Create new document from default template"
 msgstr "Új dokumentum létrehozása az alapértelmezett sablonból"
 
-#: src/verbs.cpp:1423
+#: src/verbs.cpp:1425
 msgid "_Open..."
 msgstr "_Megnyitás..."
 
-#: src/verbs.cpp:1424
+#: src/verbs.cpp:1426
 msgid "Open existing document"
 msgstr "Létező dokumentum megnyitása"
 
-#: src/verbs.cpp:1425
+#: src/verbs.cpp:1427
 msgid "Re_vert"
 msgstr "_Visszaállítás"
 
-#: src/verbs.cpp:1426
+#: src/verbs.cpp:1428
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr ""
 "Visszatérés a dokumentum legutóbb mentett változatához (a módosítások "
 "elvesznek)"
 
-#: src/verbs.cpp:1427
+#: src/verbs.cpp:1429
 msgid "_Save"
 msgstr "M_entés"
 
-#: src/verbs.cpp:1427
+#: src/verbs.cpp:1429
 msgid "Save document"
 msgstr "Dokumentum mentése"
 
-#: src/verbs.cpp:1429
+#: src/verbs.cpp:1431
 msgid "Save _As..."
 msgstr "Mentés más_ként..."
 
-#: src/verbs.cpp:1430
+#: src/verbs.cpp:1432
 msgid "Save document under new name"
 msgstr "Dokumentum mentése új névvel"
 
-#: src/verbs.cpp:1431
+#: src/verbs.cpp:1433
 msgid "_Print..."
 msgstr "_Nyomtatás..."
 
-#: src/verbs.cpp:1431
+#: src/verbs.cpp:1433
 msgid "Print document"
 msgstr "Dokumentum nyomtatása"
 
 #. TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
-#: src/verbs.cpp:1434
+#: src/verbs.cpp:1436
 msgid "Vac_uum Defs"
 msgstr "_Takarítás a definíciók közt"
 
-#: src/verbs.cpp:1434
+#: src/verbs.cpp:1436
 msgid "Remove unused stuff from the &lt;defs&gt; of the document"
 msgstr "A nem használt &lt;defs&gt;-elemek eltávolítása a dokumentumból"
 
-#: src/verbs.cpp:1436
+#: src/verbs.cpp:1438
 msgid "Print _Direct"
 msgstr "Köz_vetlen nyomtatás"
 
-#: src/verbs.cpp:1437
+#: src/verbs.cpp:1439
 msgid "Print directly to file or pipe"
 msgstr "Nyomtatás közvetlenül fájlba vagy egy program felé (csővezetékbe)"
 
-#: src/verbs.cpp:1438
+#: src/verbs.cpp:1440
 msgid "Print Previe_w"
 msgstr "N_yomtatási kép"
 
-#: src/verbs.cpp:1439
+#: src/verbs.cpp:1441
 msgid "Preview document printout"
 msgstr "A dokumentum nyomtatási képének megjelenítése"
 
-#: src/verbs.cpp:1440
+#: src/verbs.cpp:1442
 msgid "_Import..."
 msgstr "_Importálás..."
 
-#: src/verbs.cpp:1441
+#: src/verbs.cpp:1443
 msgid "Import bitmap or SVG image into document"
 msgstr "Bitkép vagy SVG-kép importálása a dokumentumba"
 
-#: src/verbs.cpp:1442
+#: src/verbs.cpp:1444
 msgid "_Export Bitmap..."
 msgstr "E_xportálás bitképbe..."
 
-#: src/verbs.cpp:1443
+#: src/verbs.cpp:1445
 msgid "Export document or selection as PNG bitmap"
 msgstr "A dokumentum vagy a kijelölés exportálása PNG formátumú képbe"
 
-#: src/verbs.cpp:1444
+#: src/verbs.cpp:1446
 msgid "N_ext Window"
 msgstr "Követke_ző ablak"
 
-#: src/verbs.cpp:1445
+#: src/verbs.cpp:1447
 msgid "Switch to the next document window"
 msgstr "Váltás a következő dokumentum ablakára"
 
-#: src/verbs.cpp:1446
+#: src/verbs.cpp:1448
 msgid "P_revious Window"
 msgstr "Előző _ablak"
 
-#: src/verbs.cpp:1447
+#: src/verbs.cpp:1449
 msgid "Switch to the previous document window"
 msgstr "Váltás az előző dokumentum ablakára"
 
-#: src/verbs.cpp:1448
+#: src/verbs.cpp:1450
 msgid "_Close"
 msgstr "_Bezárás"
 
-#: src/verbs.cpp:1449
+#: src/verbs.cpp:1451
 msgid "Close window"
 msgstr "Ablak bezárása"
 
-#: src/verbs.cpp:1450
+#: src/verbs.cpp:1452
 msgid "_Quit"
 msgstr "Ki_lépés"
 
-#: src/verbs.cpp:1450
+#: src/verbs.cpp:1452
 msgid "Quit Inkscape"
 msgstr "Kilépés az Inkscape-ből"
 
 #. Edit
-#: src/verbs.cpp:1453
+#: src/verbs.cpp:1455
 msgid "_Undo"
 msgstr "_Visszavonás"
 
-#: src/verbs.cpp:1453
+#: src/verbs.cpp:1455
 msgid "Undo last action"
 msgstr "A legutóbbi művelet visszavonása"
 
-#: src/verbs.cpp:1455
+#: src/verbs.cpp:1457
 msgid "_Redo"
 msgstr "Új_ra végrehajtás"
 
-#: src/verbs.cpp:1456
+#: src/verbs.cpp:1458
 msgid "Do again last undone action"
 msgstr "A legutóbbi visszavont művelet ismételt végrehajtása"
 
-#: src/verbs.cpp:1457
+#: src/verbs.cpp:1459
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: src/verbs.cpp:1458
+#: src/verbs.cpp:1460
 msgid "Cut selection to clipboard"
 msgstr "A kijelölés áthelyezése a vágólapra"
 
-#: src/verbs.cpp:1459
+#: src/verbs.cpp:1461
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: src/verbs.cpp:1460
+#: src/verbs.cpp:1462
 msgid "Copy selection to clipboard"
 msgstr "A kijelölés másolása a vágólapra"
 
-#: src/verbs.cpp:1461
+#: src/verbs.cpp:1463
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: src/verbs.cpp:1462
+#: src/verbs.cpp:1464
 msgid "Paste object(s) from clipboard to mouse point"
 msgstr "Objektum(ok) beillesztése a vágólapról az egér pozíciójához"
 
-#: src/verbs.cpp:1463
+#: src/verbs.cpp:1465
 msgid "Paste _Style"
 msgstr "_Stílus beillesztése"
 
-#: src/verbs.cpp:1464
+#: src/verbs.cpp:1466
 msgid "Apply style of the copied object to selection"
 msgstr "A kimásolt objektum stílusának alkalmazása a kijelölésre"
 
-#: src/verbs.cpp:1465
+#: src/verbs.cpp:1467
 msgid "Paste _In Place"
 msgstr "Beillesztés a megfelelő _helyre"
 
-#: src/verbs.cpp:1466
+#: src/verbs.cpp:1468
 msgid "Paste object(s) from clipboard to the original location"
 msgstr "Objektum(ok) beillesztése a vágólapról azok eredeti helyére"
 
-#: src/verbs.cpp:1467
+#: src/verbs.cpp:1469
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: src/verbs.cpp:1468
+#: src/verbs.cpp:1470
 msgid "Delete selection"
 msgstr "A kijelölés törlése"
 
-#: src/verbs.cpp:1469
+#: src/verbs.cpp:1471
 msgid "Duplic_ate"
 msgstr "Kettő_zés"
 
-#: src/verbs.cpp:1470
+#: src/verbs.cpp:1472
 msgid "Duplicate selected object(s)"
 msgstr "A kijelölt objektum(ok) kettőzése"
 
-#: src/verbs.cpp:1471
+#: src/verbs.cpp:1473
 msgid "Clo_ne"
 msgstr "Klón_ozás"
 
-#: src/verbs.cpp:1472
+#: src/verbs.cpp:1474
 msgid "Create a clone of selected object (a copy linked to the original)"
-msgstr "Klón (az eredetihez kapcsolt másolat) létrehozása a kijelölt objektumból"
+msgstr ""
+"Klón (az eredetihez kapcsolt másolat) létrehozása a kijelölt objektumból"
 
-#: src/verbs.cpp:1473
+#: src/verbs.cpp:1475
 msgid "Unlin_k Clone"
 msgstr "Klón _lekapcsolása"
 
-#: src/verbs.cpp:1474
+#: src/verbs.cpp:1476
 msgid "Cut the clone's link to its original"
 msgstr "A klónnak az eredeti objektummal való kapcsolatának megszüntetése"
 
-#: src/verbs.cpp:1475
+#: src/verbs.cpp:1477
 msgid "Select _Original"
 msgstr "Eredet_i kijelölése"
 
-#: src/verbs.cpp:1476
+#: src/verbs.cpp:1478
 msgid "Select the object to which the clone is linked"
 msgstr "Azon objektum kijelölése, amelyhez a klón kapcsolva van"
 
-#: src/verbs.cpp:1477
+#: src/verbs.cpp:1479
 msgid "_Tile"
 msgstr "_Csempézés"
 
-#: src/verbs.cpp:1478
+#: src/verbs.cpp:1480
 msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr "A kijelölés átalakítása csempézett téglalappá"
 
-#: src/verbs.cpp:1479
+#: src/verbs.cpp:1481
 msgid "_Untile"
 msgstr "Csempézés me_gszüntetése"
 
-#: src/verbs.cpp:1480
+#: src/verbs.cpp:1482
 msgid "Extract objects from a tiled pattern fill"
 msgstr "Objektumok kinyerése egy csempézett mintából"
 
-#: src/verbs.cpp:1481
+#: src/verbs.cpp:1483
 msgid "Clea_r All"
 msgstr "Minden objektum tör_lése"
 
-#: src/verbs.cpp:1482
+#: src/verbs.cpp:1484
 msgid "Delete all objects from document"
 msgstr "A dokumentumban levő összes objektum törlése"
 
-#: src/verbs.cpp:1483
+#: src/verbs.cpp:1485
 msgid "Select Al_l"
 msgstr "Min_den kijelölése"
 
-#: src/verbs.cpp:1484
+#: src/verbs.cpp:1486
 msgid "Select all objects or all nodes"
 msgstr "Az összes objektum vagy az összes csomópont kijelölése"
 
-#: src/verbs.cpp:1485
+#: src/verbs.cpp:1487
 msgid "D_eselect"
 msgstr "Kijelölés megszü_ntetése"
 
-#: src/verbs.cpp:1486
+#: src/verbs.cpp:1488
 msgid "Deselect any selected objects or nodes"
 msgstr "Az objektumok vagy csomópontok kijelölésének megszüntetése"
 
 #. Selection
-#: src/verbs.cpp:1489
+#: src/verbs.cpp:1491
 msgid "Raise to _Top"
 msgstr "_Elölre helyezés"
 
-#: src/verbs.cpp:1490
+#: src/verbs.cpp:1492
 msgid "Raise selection to top"
 msgstr "A kijelölt objektumok áthelyezése a többi elé"
 
-#: src/verbs.cpp:1491
+#: src/verbs.cpp:1493
 msgid "Lower to _Bottom"
 msgstr "_Hátulra helyezés"
 
-#: src/verbs.cpp:1492
+#: src/verbs.cpp:1494
 msgid "Lower selection to bottom"
 msgstr "A kijelölt objektumok áthelyezése a többi mögé"
 
-#: src/verbs.cpp:1493
+#: src/verbs.cpp:1495
 msgid "_Raise"
 msgstr "E_lőrébb helyezés"
 
-#: src/verbs.cpp:1494
+#: src/verbs.cpp:1496
 msgid "Raise selection one step"
 msgstr "A kijelölt objektumok eggyel előrébb való helyezése"
 
-#: src/verbs.cpp:1495
+#: src/verbs.cpp:1497
 msgid "_Lower"
 msgstr "Há_trébb helyezés"
 
-#: src/verbs.cpp:1496
+#: src/verbs.cpp:1498
 msgid "Lower selection one step"
 msgstr "A kijelölt objektumok eggyel hátrébb való helyezése"
 
-#: src/verbs.cpp:1497
+#: src/verbs.cpp:1499
 msgid "_Group"
 msgstr "_Csoportosítás"
 
-#: src/verbs.cpp:1498
+#: src/verbs.cpp:1500
 msgid "Group selected objects"
 msgstr "A kijelölt objektumok csoportba foglalása"
 
-#: src/verbs.cpp:1500
+#: src/verbs.cpp:1502
 msgid "Ungroup selected group(s)"
 msgstr "A kijelölt csoport(ok) szétbontása"
 
-#: src/verbs.cpp:1502
+#: src/verbs.cpp:1504
 msgid "_Put on Path"
 msgstr "Láncra való _illesztés"
 
-#: src/verbs.cpp:1503
+#: src/verbs.cpp:1505
 msgid "Put text on path"
 msgstr "Szöveg illesztése láncra"
 
-#: src/verbs.cpp:1504
+#: src/verbs.cpp:1506
 msgid "_Remove from Path"
 msgstr "Láncról való _eltávolítás"
 
-#: src/verbs.cpp:1505
+#: src/verbs.cpp:1507
 msgid "Remove text from path"
 msgstr "Szöveg eltávolítása láncról"
 
-#: src/verbs.cpp:1506
+#: src/verbs.cpp:1508
 msgid "Remove Manual _Kerns"
 msgstr "Kézi _alávágások eltávolítása"
 
-#: src/verbs.cpp:1507
+#: src/verbs.cpp:1509
 msgid "Remove all manual kerns from a text object"
 msgstr "Az összes kézi alávágás eltávolítása egy szövegobjektumból"
 
-#: src/verbs.cpp:1509
+#: src/verbs.cpp:1511
 msgid "_Union"
 msgstr "_Unió"
 
-#: src/verbs.cpp:1510
+#: src/verbs.cpp:1512
 msgid "Union of selected objects"
 msgstr "A kijelölt objektumok uniója"
 
-#: src/verbs.cpp:1511
+#: src/verbs.cpp:1513
 msgid "_Intersection"
 msgstr "_Metszet"
 
-#: src/verbs.cpp:1512
+#: src/verbs.cpp:1514
 msgid "Intersection of selected objects"
 msgstr "A kijelölt objektumok metszete"
 
-#: src/verbs.cpp:1513
+#: src/verbs.cpp:1515
 msgid "_Difference"
 msgstr "_Különbség"
 
-#: src/verbs.cpp:1514
+#: src/verbs.cpp:1516
 msgid "Difference of selected objects (bottom minus top)"
 msgstr "A kijelölt objektumok különbsége (hátulsó mínusz elülső)"
 
-#: src/verbs.cpp:1515
+#: src/verbs.cpp:1517
 msgid "E_xclusion"
 msgstr "Ki_zárás"
 
-#: src/verbs.cpp:1516
+#: src/verbs.cpp:1518
 msgid "Exclusive OR of selected objects"
 msgstr "Kizáró VAGY végrehajtása a kijelölt objektumokon"
 
-#: src/verbs.cpp:1517
+#: src/verbs.cpp:1519
 msgid "Di_vision"
 msgstr "_Felosztás"
 
-#: src/verbs.cpp:1518
+#: src/verbs.cpp:1520
 msgid "Cut the bottom object into pieces"
 msgstr "A hátulsó objektum feldarabolása"
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: src/verbs.cpp:1521
+#: src/verbs.cpp:1523
 msgid "Cut _Path"
 msgstr "Lánc el_vágása"
 
-#: src/verbs.cpp:1522
+#: src/verbs.cpp:1524
 msgid "Cut the bottom object's stroke into pieces, removing fill"
-msgstr "A hátulsó objektum körvonalának feldarabolása a kitöltés eltávolításával"
+msgstr ""
+"A hátulsó objektum körvonalának feldarabolása a kitöltés eltávolításával"
 
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:1526
+#: src/verbs.cpp:1528
 msgid "Ou_tset"
 msgstr "_Nyújtás"
 
-#: src/verbs.cpp:1527
+#: src/verbs.cpp:1529
 msgid "Outset selected path(s)"
 msgstr "A kijelölt lánc(ok) nyújtása"
 
-#: src/verbs.cpp:1529
+#: src/verbs.cpp:1531
 msgid "O_utset Path by 1px"
 msgstr "Lánc _nyújtása 1 képponttal"
 
-#: src/verbs.cpp:1530
+#: src/verbs.cpp:1532
 msgid "Outset selected path(s) by 1px"
 msgstr "A kijelölt lánc(ok) nyújtása 1 képpontnyival"
 
-#: src/verbs.cpp:1532
+#: src/verbs.cpp:1534
 msgid "O_utset Path by 10px"
 msgstr "Lánc _nyújtása 10 képponttal"
 
-#: src/verbs.cpp:1533
+#: src/verbs.cpp:1535
 msgid "Outset selected path(s) by 10px"
 msgstr "A kijelölt lánc(ok) nyújtása 10 képpontnyival"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:1537
+#: src/verbs.cpp:1539
 msgid "I_nset"
 msgstr "Zsu_gorítás"
 
-#: src/verbs.cpp:1538
+#: src/verbs.cpp:1540
 msgid "Inset selected path(s)"
 msgstr "A kijelölt lánc(ok) zsugorítása"
 
-#: src/verbs.cpp:1540
+#: src/verbs.cpp:1542
 msgid "I_nset Path by 1px"
 msgstr "Lánc zsu_gorítása 1 képponttal"
 
-#: src/verbs.cpp:1541
+#: src/verbs.cpp:1543
 msgid "Inset selected path(s) by 1px"
 msgstr "A kijelölt lánc(ok) zsugorítása 1 képpontnyival"
 
-#: src/verbs.cpp:1543
+#: src/verbs.cpp:1545
 msgid "I_nset Path by 10px"
 msgstr "Lánc zsu_gorítása 10 képponttal"
 
-#: src/verbs.cpp:1544
+#: src/verbs.cpp:1546
 msgid "Inset selected path(s) by 10px"
 msgstr "A kijelölt lánc(ok) zsugorítása 10 képpontnyival"
 
-#: src/verbs.cpp:1546
+#: src/verbs.cpp:1548
 msgid "D_ynamic Offset"
 msgstr "_Dinamikus perem"
 
-#: src/verbs.cpp:1546
+#: src/verbs.cpp:1548
 msgid "Create a dynamic offset object"
 msgstr "Dinamikus peremobjektum létrehozása"
 
-#: src/verbs.cpp:1548
+#: src/verbs.cpp:1550
 msgid "_Linked Offset"
 msgstr "Kap_csolt perem"
 
-#: src/verbs.cpp:1549
+#: src/verbs.cpp:1551
 msgid "Create a dynamic offset object linked to the original path"
 msgstr "Dinamikus peremobjektum létrehozása az eredeti lánchoz kapcsolva"
 
-#: src/verbs.cpp:1551
+#: src/verbs.cpp:1553
 msgid "_Stroke to Path"
 msgstr "Körvonal át_alakítása lánccá"
 
-#: src/verbs.cpp:1552
+#: src/verbs.cpp:1554
 msgid "Convert selected stroke(s) to path(s)"
 msgstr "A kijelölt körvonal(ak) lánccá/láncokká alakítása"
 
-#: src/verbs.cpp:1553
+#: src/verbs.cpp:1555
 msgid "Si_mplify"
 msgstr "_Egyszerűsítés"
 
-#: src/verbs.cpp:1554
+#: src/verbs.cpp:1556
 msgid "Simplify selected path(s) by removing extra nodes"
-msgstr "A kijelölt lánc(ok) egyszerűsítése az extra csomópontok eltávolításával"
+msgstr ""
+"A kijelölt lánc(ok) egyszerűsítése az extra csomópontok eltávolításával"
 
-#: src/verbs.cpp:1555
+#: src/verbs.cpp:1557
 msgid "Cl_eanup"
 msgstr "Meg_tisztítás"
 
-#: src/verbs.cpp:1556
+#: src/verbs.cpp:1558
 msgid "Clean up selected path(s)"
 msgstr "A kijelölt lánc(ok) megtisztítása"
 
-#: src/verbs.cpp:1557
+#: src/verbs.cpp:1559
 msgid "_Reverse"
 msgstr "Megfo_rdítás"
 
-#: src/verbs.cpp:1558
+#: src/verbs.cpp:1560
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
 msgstr ""
 "A kijelölt lánc(ok) irányának megfordítása. Hasznos lehet például a "
 "jelölőelemek megfordításához."
 
-#: src/verbs.cpp:1559
+#: src/verbs.cpp:1561
 msgid "_Trace Bitmap"
 msgstr "Bitkép vektor_izálása"
 
-#: src/verbs.cpp:1560
+#: src/verbs.cpp:1562
 msgid "Convert bitmap object to paths"
 msgstr "Bitkép-objektum átalakítása láncokká"
 
-#: src/verbs.cpp:1561
+#: src/verbs.cpp:1563
 msgid "_Make a Bitmap Copy"
 msgstr "Bitké_p-másolat készítése"
 
-#: src/verbs.cpp:1562
+#: src/verbs.cpp:1564
 msgid "Export selection to a bitmap and insert it into document"
 msgstr "A kijelölés exportálása bitképbe, majd beillesztése a dokumentumba"
 
-#: src/verbs.cpp:1563
+#: src/verbs.cpp:1565
 msgid "_Combine"
 msgstr "Összev_onás"
 
-#: src/verbs.cpp:1564
+#: src/verbs.cpp:1566
 msgid "Combine several paths into one"
 msgstr "Több lánc összevonása eggyé"
 
 # node-ok és szakaszok száma nem változik
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: src/verbs.cpp:1567
+#: src/verbs.cpp:1569
 msgid "Break _Apart"
 msgstr "_Szétbontás"
 
-#: src/verbs.cpp:1568
+#: src/verbs.cpp:1570
 msgid "Break selected path(s) into subpaths"
 msgstr "A kijelölt lánc(ok) alláncokra való bontása"
 
 #. Layer
-#: src/verbs.cpp:1571
+#: src/verbs.cpp:1573
 msgid "New Layer"
 msgstr "Új réteg"
 
-#: src/verbs.cpp:1572
+#: src/verbs.cpp:1574
 msgid "Create a new layer"
 msgstr "Új réteg létrehozása"
 
-#: src/verbs.cpp:1573
+#: src/verbs.cpp:1575
 msgid "Rename Layer"
 msgstr "Réteg átnevezése"
 
-#: src/verbs.cpp:1574
+#: src/verbs.cpp:1576
 msgid "Rename the current layer"
 msgstr "Az aktuális réteg átnevezése"
 
-#: src/verbs.cpp:1575
+#: src/verbs.cpp:1577
 msgid "Move to Next Layer"
 msgstr "Ugrás a következő rétegre"
 
-#: src/verbs.cpp:1576
+#: src/verbs.cpp:1578
 msgid "Switch to the next layer in the document"
 msgstr "Váltás a dokumentum következő rétegére"
 
-#: src/verbs.cpp:1577
+#: src/verbs.cpp:1579
 msgid "Move to Previous Layer"
 msgstr "Ugrás az előző rétegre"
 
-#: src/verbs.cpp:1578
+#: src/verbs.cpp:1580
 msgid "Switch to the previous layer in the document"
 msgstr "Váltás a dokumentum előző rétegére"
 
-#: src/verbs.cpp:1579
+#: src/verbs.cpp:1581
 msgid "Layer to Top"
 msgstr "Réteg elölre helyezése"
 
-#: src/verbs.cpp:1580
+#: src/verbs.cpp:1582
 msgid "Raise the current layer to the top"
 msgstr "Az aktuális réteg áthelyezése a többi elé"
 
-#: src/verbs.cpp:1581
+#: src/verbs.cpp:1583
 msgid "Layer to Bottom"
 msgstr "Réteg hátulra helyezése"
 
-#: src/verbs.cpp:1582
+#: src/verbs.cpp:1584
 msgid "Lower the current layer to the bottom"
 msgstr "Az aktuális réteg áthelyezése a többi mögé"
 
-#: src/verbs.cpp:1583
+#: src/verbs.cpp:1585
 msgid "Raise Layer"
 msgstr "Réteg előrébb helyezése"
 
-#: src/verbs.cpp:1584
+#: src/verbs.cpp:1586
 msgid "Raise the current layer"
 msgstr "Az aktuális réteg eggyel előrébb való helyezése"
 
-#: src/verbs.cpp:1585
+#: src/verbs.cpp:1587
 msgid "Lower Layer"
 msgstr "Réteg hátrébb helyezése"
 
-#: src/verbs.cpp:1586
+#: src/verbs.cpp:1588
 msgid "Lower the current layer"
 msgstr "Az aktuális réteg eggyel hátrébb való helyezése"
 
-#: src/verbs.cpp:1587
+#: src/verbs.cpp:1589
 msgid "Delete Current Layer"
 msgstr "Aktuális réteg törlése"
 
-#: src/verbs.cpp:1588
+#: src/verbs.cpp:1590
 msgid "Delete the current layer"
 msgstr "Az aktuális réteg törlése"
 
 #. Object
-#: src/verbs.cpp:1591
+#: src/verbs.cpp:1593
 msgid "Rotate _90 deg CW"
 msgstr "Elfo_rgatás -90 fokkal"
 
-#: src/verbs.cpp:1592
+#: src/verbs.cpp:1594
 msgid "Rotate selection 90 degrees clockwise"
-msgstr "A kijelölt objektumok elforgatása az óramutató járásának irányában 90 fokkal"
+msgstr ""
+"A kijelölt objektumok elforgatása az óramutató járásának irányában 90 fokkal"
 
-#: src/verbs.cpp:1593
+#: src/verbs.cpp:1595
 msgid "Rotate 9_0 deg CCW"
 msgstr "Elforgatás +_90 fokkal"
 
-#: src/verbs.cpp:1594
+#: src/verbs.cpp:1596
 msgid "Rotate selection 90 degrees counter-clockwise"
 msgstr ""
 "A kijelölt objektumok elforgatása az óramutató járásával ellentétes irányban "
 "90 fokkal"
 
-#: src/verbs.cpp:1595
+#: src/verbs.cpp:1597
 msgid "Remove _Transformations"
 msgstr "Transzformációk visszavo_nása"
 
-#: src/verbs.cpp:1596
+#: src/verbs.cpp:1598
 msgid "Remove transformations from object"
 msgstr "Az objektum transzformációjának megszüntetése"
 
-#: src/verbs.cpp:1597
+#: src/verbs.cpp:1599
 msgid "_Object to Path"
 msgstr "Objektum átalakítása _lánccá"
 
-#: src/verbs.cpp:1598
+#: src/verbs.cpp:1600
 msgid "Convert selected object(s) to path(s)"
 msgstr "A kijelölt objektum(ok) lánccá/láncokká alakítása"
 
-#: src/verbs.cpp:1599
+#: src/verbs.cpp:1601
 msgid "_Unflow Text"
 msgstr "Szövegtördelés me_gszüntetése"
 
-#: src/verbs.cpp:1600
+#: src/verbs.cpp:1602
 msgid "Convert selected flowtext to text"
 msgstr "A kijelölt tördelt szöveg normál szöveggé alakítása"
 
-#: src/verbs.cpp:1602
+#: src/verbs.cpp:1604
 msgid "Flip _Horizontally"
 msgstr "_Vízszintes tükrözés"
 
-#: src/verbs.cpp:1602
+#: src/verbs.cpp:1604
 msgid "Flip selection horizontally"
 msgstr "A kijelölt objektumok vízszintes tükrözése"
 
-#: src/verbs.cpp:1605
+#: src/verbs.cpp:1607
 msgid "Flip _Vertically"
 msgstr "_Függőleges tükrözés"
 
-#: src/verbs.cpp:1605
+#: src/verbs.cpp:1607
 msgid "Flip selection vertically"
 msgstr "A kijelölt objektumok függőleges tükrözése"
 
 #. Tools
-#: src/verbs.cpp:1609
+#: src/verbs.cpp:1611
 msgid "Select"
 msgstr "Kijelölés"
 
-#: src/verbs.cpp:1610
+#: src/verbs.cpp:1612
 msgid "Select and transform objects"
 msgstr "Objektumok kijelölése és transzformációja"
 
-#: src/verbs.cpp:1611
+#: src/verbs.cpp:1613
 msgid "Node Edit"
 msgstr "Csomópontszerkesztés"
 
-#: src/verbs.cpp:1612
+#: src/verbs.cpp:1614
 msgid "Edit path nodes or control handles"
 msgstr "Lánc-csomópontok és kontrollpontok szerkesztése"
 
-#: src/verbs.cpp:1614
+#: src/verbs.cpp:1616
 msgid "Create rectangles and squares"
 msgstr "Téglalapok és négyzetek rajzolása"
 
-#: src/verbs.cpp:1616
+#: src/verbs.cpp:1618
 msgid "Create circles, ellipses, and arcs"
 msgstr "Körök, ellipszisek és ívek rajzolása"
 
-#: src/verbs.cpp:1618
+#: src/verbs.cpp:1620
 msgid "Create stars and polygons"
 msgstr "Csillagok és sokszögek rajzolása"
 
-#: src/verbs.cpp:1620
+#: src/verbs.cpp:1622
 msgid "Create spirals"
 msgstr "Spirálok rajzolása"
 
-#: src/verbs.cpp:1622
+#: src/verbs.cpp:1624
 msgid "Draw freehand lines"
 msgstr "Szabadkézi vonalak rajzolása"
 
-#: src/verbs.cpp:1624
+#: src/verbs.cpp:1626
 msgid "Draw Bezier curves and straight lines"
 msgstr "Bézier-görbék és egyenes vonalak rajzolása"
 
-#: src/verbs.cpp:1625
-msgid "Calligraphy"
-msgstr "Művészi rajz"
-
-#: src/verbs.cpp:1626
+#: src/verbs.cpp:1628
 msgid "Draw calligraphic lines"
 msgstr "Művészi vonalak rajzolása"
 
-#: src/verbs.cpp:1628
+#: src/verbs.cpp:1630
 msgid "Create and edit text objects"
 msgstr "Szövegobjektumok létrehozása és szerkesztése"
 
-#: src/verbs.cpp:1630
+#: src/verbs.cpp:1632
 msgid "Zoom in or out"
 msgstr "Nagyítás és kicsinyítés"
 
-#: src/verbs.cpp:1632
+#: src/verbs.cpp:1634
 msgid "Pick averaged colors from image"
 msgstr "Átlagszín kiválasztása a képről - színpipetta"
 
 #. Tool prefs
-#: src/verbs.cpp:1635
+#: src/verbs.cpp:1637
 msgid "Selector Preferences"
 msgstr "Kijelölőeszköz-beállítások"
 
-#: src/verbs.cpp:1636
+#: src/verbs.cpp:1638
 msgid "Open Inkscape Preferences for the Selector tool"
 msgstr "A kijelölőeszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1637
+#: src/verbs.cpp:1639
 msgid "Node Tool Preferences"
 msgstr "Csomóponteszköz-beállítások"
 
-#: src/verbs.cpp:1638
+#: src/verbs.cpp:1640
 msgid "Open Inkscape Preferences for the Node tool"
 msgstr "A csomóponteszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1639
+#: src/verbs.cpp:1641
 msgid "Rectangle Preferences"
 msgstr "Téglalap-beállítások"
 
-#: src/verbs.cpp:1640
+#: src/verbs.cpp:1642
 msgid "Open Inkscape Preferences for the Rectangle tool"
 msgstr "A téglalapeszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1641
+#: src/verbs.cpp:1643
 msgid "Ellipse Preferences"
 msgstr "Ellipszis-beállítások"
 
-#: src/verbs.cpp:1642
+#: src/verbs.cpp:1644
 msgid "Open Inkscape Preferences for the Ellipse tool"
 msgstr "Az ellipsziseszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1643
+#: src/verbs.cpp:1645
 msgid "Star Preferences"
 msgstr "Csillag-beállítások"
 
-#: src/verbs.cpp:1644
+#: src/verbs.cpp:1646
 msgid "Open Inkscape Preferences for the Star tool"
 msgstr "A csillageszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1645
+#: src/verbs.cpp:1647
 msgid "Spiral Preferences"
 msgstr "Spirál-beállítások"
 
-#: src/verbs.cpp:1646
+#: src/verbs.cpp:1648
 msgid "Open Inkscape Preferences for the Spiral tool"
 msgstr "A spiráleszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1647
+#: src/verbs.cpp:1649
 msgid "Pencil Preferences"
 msgstr "Ceruza-beállítások"
 
-#: src/verbs.cpp:1648
+#: src/verbs.cpp:1650
 msgid "Open Inkscape Preferences for the Pencil tool"
 msgstr "A \"ceruza\" eszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1649
+#: src/verbs.cpp:1651
 msgid "Pen Preferences"
 msgstr "Toll-beállítások"
 
-#: src/verbs.cpp:1650
+#: src/verbs.cpp:1652
 msgid "Open Inkscape Preferences for the Pen tool"
 msgstr "A \"toll\" eszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1651
+#: src/verbs.cpp:1653
 msgid "Calligraphic Preferences"
 msgstr "Művészitoll-beállítások"
 
-#: src/verbs.cpp:1652
+#: src/verbs.cpp:1654
 msgid "Open Inkscape Preferences for the Calligraphy tool"
 msgstr "A \"művészi toll\" eszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1653
+#: src/verbs.cpp:1655
 msgid "Text Preferences"
 msgstr "Szövegeszköz-beállítások"
 
-#: src/verbs.cpp:1654
+#: src/verbs.cpp:1656
 msgid "Open Inkscape Preferences for the Text tool"
 msgstr "A szövegeszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1655
+#: src/verbs.cpp:1657
 msgid "Zoom Preferences"
 msgstr "Nagyítóeszköz-beállítások"
 
-#: src/verbs.cpp:1656
+#: src/verbs.cpp:1658
 msgid "Open Inkscape Preferences for the Zoom tool"
 msgstr "A nagyítóeszköz beállításainak megnyitása"
 
-#: src/verbs.cpp:1657
+#: src/verbs.cpp:1659
 msgid "Dropper Preferences"
 msgstr "Színpipetta-beállítások"
 
-#: src/verbs.cpp:1658
+#: src/verbs.cpp:1660
 msgid "Open Inkscape Preferences for the Dropper tool"
 msgstr "A \"színpipetta\" eszköz beállításainak megnyitása"
 
 #. Zooming
-#: src/verbs.cpp:1661
+#: src/verbs.cpp:1663
 msgid "Zoom In"
 msgstr "Nagyítás"
 
-#: src/verbs.cpp:1661
+#: src/verbs.cpp:1663
 msgid "Zoom in"
 msgstr "Nagyítás"
 
-#: src/verbs.cpp:1662
+#: src/verbs.cpp:1664
 msgid "Zoom Out"
 msgstr "Kicsinyítés"
 
-#: src/verbs.cpp:1662
+#: src/verbs.cpp:1664
 msgid "Zoom out"
 msgstr "Kicsinyítés"
 
-#: src/verbs.cpp:1663
+#: src/verbs.cpp:1665
 msgid "_Rulers"
 msgstr "_Vonalzók"
 
-#: src/verbs.cpp:1663
+#: src/verbs.cpp:1665
 msgid "Show or hide the canvas rulers"
 msgstr "A rajzvászon vonalzóinak megjelenítése vagy elrejtése"
 
-#: src/verbs.cpp:1664
+#: src/verbs.cpp:1666
 msgid "Scroll_bars"
 msgstr "_Gördítősávok"
 
-#: src/verbs.cpp:1664
+#: src/verbs.cpp:1666
 msgid "Show or hide the canvas scrollbars"
 msgstr "A rajzvászon gördítősávjainak megjelenítése vagy elrejtése"
 
-#: src/verbs.cpp:1665
+#: src/verbs.cpp:1667
 msgid "_Grid"
 msgstr "Rá_cs"
 
-#: src/verbs.cpp:1665
+#: src/verbs.cpp:1667
 msgid "Show or hide grid"
 msgstr "Rács megjelenítése vagy elrejtése"
 
-#: src/verbs.cpp:1666
+#: src/verbs.cpp:1668
 msgid "G_uides"
 msgstr "Se_gédvonalak"
 
-#: src/verbs.cpp:1666
+#: src/verbs.cpp:1668
 msgid "Show or hide guides"
 msgstr "Segédvonalak megjelenítése vagy elrejtése"
 
-#: src/verbs.cpp:1667
+#: src/verbs.cpp:1669
 msgid "Nex_t Zoom"
 msgstr "Kö_vetkező nagyítás"
 
-#: src/verbs.cpp:1667
+#: src/verbs.cpp:1669
 msgid "Next zoom (from the history of zooms)"
 msgstr "Következő nagyítás (a nagyítási előzményekből)"
 
-#: src/verbs.cpp:1669
+#: src/verbs.cpp:1671
 msgid "Pre_vious Zoom"
 msgstr "_Előző nagyítás"
 
-#: src/verbs.cpp:1669
+#: src/verbs.cpp:1671
 msgid "Previous zoom (from the history of zooms)"
 msgstr "Előző nagyítás (a nagyítási előzményekből)"
 
-#: src/verbs.cpp:1671
+#: src/verbs.cpp:1673
 msgid "Zoom 1:_1"
 msgstr "Tényleges (_1:1) méret"
 
-#: src/verbs.cpp:1671
+#: src/verbs.cpp:1673
 msgid "Zoom to 1:1"
 msgstr "Nagyítás beállítása a tényleges (1:1) méretre"
 
-#: src/verbs.cpp:1673
+#: src/verbs.cpp:1675
 msgid "Zoom 1:_2"
 msgstr "Felezett (1:_2) méret"
 
-#: src/verbs.cpp:1673
+#: src/verbs.cpp:1675
 msgid "Zoom to 1:2"
 msgstr "Nagyítás beállítása a tényleges méret felére (1:2)"
 
-#: src/verbs.cpp:1675
+#: src/verbs.cpp:1677
 msgid "_Zoom 2:1"
 msgstr "_Dupla (2:1) méret"
 
-#: src/verbs.cpp:1675
+#: src/verbs.cpp:1677
 msgid "Zoom to 2:1"
 msgstr "Nagyítás beállítása a tényleges méret kétszeresére (2:1)"
 
-#: src/verbs.cpp:1678
+#: src/verbs.cpp:1680
 msgid "_Fullscreen"
 msgstr "_Teljes képernyő"
 
-#: src/verbs.cpp:1678
+#: src/verbs.cpp:1680
 msgid "Stretch this document window to full screen"
 msgstr "A dokumentumablak teljes képernyősre való méretezése"
 
-#: src/verbs.cpp:1681
+#: src/verbs.cpp:1683
 msgid "D_uplicate Window"
 msgstr "A_blak kettőzése"
 
-#: src/verbs.cpp:1681
+#: src/verbs.cpp:1683
 msgid "Open a new window with the same document"
 msgstr "Új ablak nyitása ugyanezzel a dokumentummal"
 
-#: src/verbs.cpp:1683
+#: src/verbs.cpp:1685
 msgid "_New View Preview"
 msgstr "Ú_j nézet előnézete"
 
-#: src/verbs.cpp:1684
+#: src/verbs.cpp:1686
 msgid "New View Preview"
 msgstr "Új nézet előnézete"
 
 #. "view_new_preview"
-#: src/verbs.cpp:1685
+#: src/verbs.cpp:1687
 msgid "_Page"
 msgstr "_Lap"
 
-#: src/verbs.cpp:1686
+#: src/verbs.cpp:1688
 msgid "Zoom to fit page in window"
 msgstr ""
 "Nagyítási mérték beállítása akkorára, hogy pontosan a lap legyen látható az "
 "ablakban"
 
-#: src/verbs.cpp:1687
+#: src/verbs.cpp:1689
 msgid "Page _Width"
 msgstr "Lap_szélesség"
 
-#: src/verbs.cpp:1688
+#: src/verbs.cpp:1690
 msgid "Zoom to fit page width in window"
 msgstr ""
 "Nagyítási mérték beállítása akkorára, hogy a lap szélessége megegyezzen az "
 "ablak szélességével"
 
-#: src/verbs.cpp:1689
+#: src/verbs.cpp:1691
 msgid "_Drawing"
 msgstr "_Rajz"
 
-#: src/verbs.cpp:1690
+#: src/verbs.cpp:1692
 msgid "Zoom to fit drawing in window"
 msgstr ""
 "Nagyítási mérték beállítása akkorára, hogy pontosan a rajz legyen látható az "
 "ablakban"
 
-#: src/verbs.cpp:1691
+#: src/verbs.cpp:1693
 msgid "_Selection"
 msgstr "_Kijelölés"
 
-#: src/verbs.cpp:1692
+#: src/verbs.cpp:1694
 msgid "Zoom to fit selection in window"
 msgstr ""
 "Nagyítási mérték beállítása akkorára, hogy pontosan a kijelölés legyen "
 "látható az ablakban"
 
 #. Dialogs
-#: src/verbs.cpp:1695
+#: src/verbs.cpp:1697
 msgid "In_kscape Preferences..."
 msgstr "Inksc_ape-beállítások..."
 
-#: src/verbs.cpp:1696
+#: src/verbs.cpp:1698
 msgid "Global Inkscape preferences"
 msgstr "Az Inkscape globális beállításai"
 
-#: src/verbs.cpp:1697
+#: src/verbs.cpp:1699
 msgid "_Document Preferences..."
 msgstr "_Dokumentum-beállítások..."
 
-#: src/verbs.cpp:1698
+#: src/verbs.cpp:1700
 msgid "Preferences saved with the document"
 msgstr "A dokumentummal együtt elmentett beállítások"
 
-#: src/verbs.cpp:1699
+#: src/verbs.cpp:1701
 msgid "_Fill and Stroke..."
 msgstr "_Kitöltés és körvonal..."
 
-#: src/verbs.cpp:1700
+#: src/verbs.cpp:1702
 msgid "Fill and Stroke dialog"
 msgstr "\"Kitöltés és körvonal\" párbeszédablak"
 
-#: src/verbs.cpp:1701
+#: src/verbs.cpp:1703
 msgid "Transfor_m..."
 msgstr "Tr_anszformáció..."
 
-#: src/verbs.cpp:1702
+#: src/verbs.cpp:1704
 msgid "Transform dialog"
 msgstr "\"Transzformáció\" párbeszédablak"
 
-#: src/verbs.cpp:1703
+#: src/verbs.cpp:1705
 msgid "_Align and Distribute..."
 msgstr "_Igazítás és elrendezés..."
 
-#: src/verbs.cpp:1704
+#: src/verbs.cpp:1706
 msgid "Align and Distribute dialog"
 msgstr "\"Igazítás és elrendezés\" párbeszédablak"
 
-#: src/verbs.cpp:1705
+#: src/verbs.cpp:1707
 msgid "_Text and Font..."
 msgstr "_Szöveg és betűtípus..."
 
-#: src/verbs.cpp:1706
+#: src/verbs.cpp:1708
 msgid "Text and Font dialog"
 msgstr "\"Szöveg és betűtípus\" párbeszédablak"
 
-#: src/verbs.cpp:1707
+#: src/verbs.cpp:1709
 msgid "_XML Editor..."
 msgstr "_XML-szerkesztő..."
 
-#: src/verbs.cpp:1708
+#: src/verbs.cpp:1710
 msgid "XML Editor"
 msgstr "XML-szerkesztő"
 
-#: src/verbs.cpp:1709
+#: src/verbs.cpp:1711
 msgid "_Find..."
 msgstr "K_eresés..."
 
-#: src/verbs.cpp:1710
+#: src/verbs.cpp:1712
 msgid "Find objects in document"
 msgstr "Objektumok keresése a dokumentumban"
 
-#: src/verbs.cpp:1711
+#: src/verbs.cpp:1713
 msgid "_Messages..."
 msgstr "Üze_netek..."
 
-#: src/verbs.cpp:1712
+#: src/verbs.cpp:1714
 msgid "View debug messages"
 msgstr "Nyomkövetési üzenetek megjelenítése"
 
-#: src/verbs.cpp:1713
+#: src/verbs.cpp:1715
 msgid "Show/_Hide Dialogs"
 msgstr "_Párbeszédablakok megjelenítése/elrejtése"
 
-#: src/verbs.cpp:1714
+#: src/verbs.cpp:1716
 msgid "Show or hide all active dialogs"
 msgstr "Az összes aktív párbeszédablak megjelenítése vagy elrejtése"
 
-#: src/verbs.cpp:1715
+#: src/verbs.cpp:1717
 msgid "_Object Properties..."
 msgstr "_Objektum-tulajdonságok..."
 
-#: src/verbs.cpp:1716
+#: src/verbs.cpp:1718
 msgid "Object Properties dialog"
 msgstr "\"Objektum-tulajdonságok\" párbeszédablak"
 
 #. Help
-#: src/verbs.cpp:1719
+#: src/verbs.cpp:1721
 msgid "_Keys and Mouse"
 msgstr "_Billentyűzet és egér"
 
-#: src/verbs.cpp:1720
+#: src/verbs.cpp:1722
 msgid "Key and mouse shortcuts reference"
 msgstr "Billentyű- és egérkombinációk leírása"
 
-#: src/verbs.cpp:1721
+#: src/verbs.cpp:1723
 msgid "_About Inkscape"
 msgstr "Az Inkscape _névjegye"
 
 #. "help_about"
 #. Tutorials
-#: src/verbs.cpp:1725
+#: src/verbs.cpp:1727
 msgid "Inkscape: _Basic"
 msgstr "Inkscape: _Bevezetés"
 
-#: src/verbs.cpp:1726
+#: src/verbs.cpp:1728
 msgid "Getting started with Inkscape"
 msgstr "Bevezetés az Inkscape-be"
 
 #. "tutorial_basic"
-#: src/verbs.cpp:1727
+#: src/verbs.cpp:1729
 msgid "Inkscape: _Shapes"
 msgstr "Inkscape: _Alakzatok"
 
-#: src/verbs.cpp:1728
+#: src/verbs.cpp:1730
 msgid "Using shape tools to create and edit shapes"
 msgstr "Alakzatok létrehozása és szerkesztése az alakzateszközökkel"
 
-#: src/verbs.cpp:1729
+#: src/verbs.cpp:1731
 msgid "Inkscape: _Advanced"
 msgstr "Inkscape: _Haladó"
 
-#: src/verbs.cpp:1730
+#: src/verbs.cpp:1732
 msgid "Advanced Inkscape topics"
 msgstr "Haladó szintű Inkscape-témakörök"
 
 #. "tutorial_advanced"
-#: src/verbs.cpp:1731
+#: src/verbs.cpp:1733
 msgid "_Elements of Design"
 msgstr "A tervezés _elemei"
 
-#: src/verbs.cpp:1732
+#: src/verbs.cpp:1734
 msgid "Elements of Design tutorial"
 msgstr "\"A tervezés elemei\" kézikönyv"
 
 #. "tutorial_design"
-#: src/verbs.cpp:1733
+#: src/verbs.cpp:1735
 msgid "_Tips and Tricks"
 msgstr "_Tippek és trükkök"
 
-#: src/verbs.cpp:1734
+#: src/verbs.cpp:1736
 msgid "Miscellaneous Tips and Tricks"
 msgstr "Különböző tippek és trükkök"
 
@@ -5622,6 +5712,12 @@ msgstr "Tulajdonság"
 msgid "Value"
 msgstr "Érték"
 
+#~ msgid "Visible"
+#~ msgstr "Látható"
+
+#~ msgid "<b>Drag</b> to paint a calligraphic stroke."
+#~ msgstr "Művészi vonal rajzolása: <b>húzással</b>."
+
 #~ msgid "Flatness:"
 #~ msgstr "Laposság:"
 
@@ -5652,9 +5748,6 @@ msgstr "Érték"
 
 #~ msgid "Set ID"
 #~ msgstr "Azonosító beállítása"
-
-#~ msgid "ID exists"
-#~ msgstr "Létező azonosító"
 
 #~ msgid "Bitmap Tracing"
 #~ msgstr "Bitkép-vektorizálás"
@@ -6068,4 +6161,3 @@ msgstr "Érték"
 
 #~ msgid "evenodd"
 #~ msgstr "páros-páratlan"
-
