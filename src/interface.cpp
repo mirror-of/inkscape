@@ -125,8 +125,7 @@ sp_create_window (SPViewWidget *vw, gboolean editable)
 	inkscape_reactivate_desktop (SP_DESKTOP_WIDGET (vw)->desktop);
 }
 
-void
-sp_ui_new_view (GtkWidget * widget)
+static void sp_ui_new_view(GtkWidget * widget)
 {
 	SPDocument * document;
 	SPViewWidget *dtw;
@@ -141,9 +140,9 @@ sp_ui_new_view (GtkWidget * widget)
       sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
 }
 
-/* fixme: */
-void
-sp_ui_new_view_preview (GtkWidget *widget)
+#if 0 /* To be re-enabled (and added to menu) once it works. */
+/* fixme: not yet working */
+static void sp_ui_new_view_preview(GtkWidget *widget)
 {
 	SPDocument *document;
 	SPViewWidget *dtw;
@@ -157,6 +156,7 @@ sp_ui_new_view_preview (GtkWidget *widget)
 
 	sp_create_window (dtw, FALSE);
 }
+#endif
 
 void
 sp_ui_close_view (GtkWidget * widget)
