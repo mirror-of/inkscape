@@ -454,7 +454,7 @@ sp_star_set_shape (SPShape *shape)
 	}
 	
 	// draw last segment
-		if (star->rounded == 0) {
+		if (not_rounded) {
 			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0, true));
 		} else {
 			if (star->flatsided == false) {
