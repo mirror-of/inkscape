@@ -220,17 +220,6 @@ void sp_selection_changed(SPSelection *selection)
 	}
 }
 
-void
-sp_current_selection_changed ()
-{
-	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (desktop == NULL) return;
-	SPSelection *selection = SP_DT_SELECTION (desktop);
-	if (!SP_IS_SELECTION (selection)) return;
-
-	sp_selection_changed (selection);
-}
-
 SPSelection *sp_selection_new(SPDesktop *desktop)
 {
 	SPSelection *selection = (SPSelection*)g_object_new (SP_TYPE_SELECTION, NULL);
