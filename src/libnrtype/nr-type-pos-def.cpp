@@ -8,10 +8,7 @@ Given a font name or style name, returns a constant describing its apparent weig
 int
 parse_name_for_weight (char const *cc)
 {
-	gchar *c = g_strdup(cc);
-	for (char *p = c ; *p != '\0' ; ++p) {
-		*p = g_ascii_tolower(*p);
-	}
+	gchar *c = g_ascii_strdown (cc, -1);
 
 	gint weight;
 	if (strstr (c, "thin")) {
@@ -57,10 +54,7 @@ Given a font name or style name, returns a constant describing its apparent stre
 int
 parse_name_for_stretch (char const *cc)
 {
-	gchar *c = g_strdup(cc);
-	for (char *p = c ; *p != '\0' ; ++p) {
-		*p = g_ascii_tolower(*p);
-	}
+	gchar *c = g_ascii_strdown (cc, -1);
 
 	gint stretch;
 	if (strstr (c, "ultra narrow") || strstr (c, "ultra condensed") || strstr (c, "extra condensed")) {
@@ -89,13 +83,10 @@ Given a font name or style name, returns a constant describing its apparent vari
 int
 parse_name_for_variant (char const *cc)
 {
-	gchar *c = g_strdup(cc);
-	for (char *p = c ; *p != '\0' ; ++p) {
-		*p = g_ascii_tolower(*p);
-	}
+	gchar *c = g_ascii_strdown (cc, -1);
 
 	gint variant;
-	if (strstr (c, "small caps") || strstr (c, "smallcaps")) {
+	if (strstr (c, "small caps") || strstr (c, "smallcaps") || strstr (c, "caps")) {
 		variant = NR_POS_VARIANT_SMALLCAPS;
 	} else {
 		variant = NR_POS_VARIANT_NORMAL;
@@ -201,10 +192,7 @@ variant_to_css (int stretch)
 
 NRTypePosDef::NRTypePosDef(char const *description) {
 	// we cannot use strcasestr, it's linux only... so we must lowercase the string first
-	gchar *c = g_strdup(description);
-	for (char *p = c ; *p != '\0' ; ++p) {
-		*p = g_ascii_tolower(*p);
-	}
+	gchar *c = g_ascii_strdown (description, -1);
 
 	/* copied from nr-type-directory.cpp:nr_type_calculate_position. */
 

@@ -158,95 +158,79 @@ nr_type_xft_init (void)
 		char const *file;
 		XftPatternGetString (NRXftPatterns->fonts[i], XFT_FILE, 0, &file);
 		if (file) {
-			int len;
+
 			if (debug) {
 				fprintf (stderr, "%d\t Got filename %s\n", i, file);
 			}
-			len = strlen (file);
-			/* fixme: This is silly and evil */
-			/* But Freetype just does not load pfa reliably (Lauris) */
-			/* Changed to exclude pfa, better for OSX */
-			if ((len > 4) //&&
-			/*
-			    (!strcmp (file + len - 4, ".ttf") ||
-			     !strcmp (file + len - 4, ".TTF") ||
-			     !strcmp (file + len - 4, ".ttc") ||
-			     !strcmp (file + len - 4, ".TTC") ||
-			     !strcmp (file + len - 4, ".otf") ||
-			     !strcmp (file + len - 4, ".OTF") ||
-			     !strcmp (file + len - 4, ".pfb") ||
-			     !strcmp (file + len - 4, ".PFB"))) {
-			  */
-					// Commented out; needs to be investigated whether there are really any problems with pfa! --bb
-					//  strcmp (file + len - 4, ".pfa") &&
-					//			     strcmp (file + len - 4, ".PFA")
-					) {
-				char const *fn = NULL, *styn = NULL, *wn = NULL, *sn = NULL;
-				int weight;
-				int slant;
-				if (debug) {
-					fprintf (stderr, "%d\t Seems valid\n", i);
-				}
-				XftPatternGetString (NRXftPatterns->fonts[i], XFT_FAMILY, 0, &fn);
-				XftPatternGetString (NRXftPatterns->fonts[i], XFT_STYLE, 0, &styn);
-				XftPatternGetInteger (NRXftPatterns->fonts[i], XFT_WEIGHT, 0, &weight);
-				XftPatternGetInteger (NRXftPatterns->fonts[i], XFT_SLANT, 0, &slant);
-				switch (weight) {
-				case XFT_WEIGHT_LIGHT:
-					wn = "Light";
-					break;
-				case XFT_WEIGHT_MEDIUM:
-					wn = "Book";
-					break;
-				case XFT_WEIGHT_DEMIBOLD:
-					wn = "Demibold";
-					break;
-				case XFT_WEIGHT_BOLD:
-					wn = "Bold";
-					break;
-				case XFT_WEIGHT_BLACK:
-					wn = "Black";
-					break;
-				default:
-					wn = "";
-					break;
-				}
-				switch (slant) {
-				case XFT_SLANT_ROMAN:
-					sn = "Roman";
-					break;
-				case XFT_SLANT_ITALIC:
-					sn = "Italic";
-					break;
-				case XFT_SLANT_OBLIQUE:
-					sn = "Oblique";
-					break;
-				default:
-					sn = "";
-					break;
-				}
 
-				char *name = g_strdup_printf (
+			char const *fn = NULL, *styn = NULL, *wn = NULL, *sn = NULL;
+			int weight;
+			int slant;
+
+			XftPatternGetString (NRXftPatterns->fonts[i], XFT_FAMILY, 0, &fn);
+			XftPatternGetString (NRXftPatterns->fonts[i], XFT_STYLE, 0, &styn);
+			XftPatternGetInteger (NRXftPatterns->fonts[i], XFT_WEIGHT, 0, &weight);
+			XftPatternGetInteger (NRXftPatterns->fonts[i], XFT_SLANT, 0, &slant);
+
+			switch (weight) {
+			case XFT_WEIGHT_LIGHT:
+				wn = "Light";
+				break;
+			case XFT_WEIGHT_MEDIUM:
+				wn = "Book";
+				break;
+			case XFT_WEIGHT_DEMIBOLD:
+				wn = "Demibold";
+				break;
+			case XFT_WEIGHT_BOLD:
+				wn = "Bold";
+				break;
+			case XFT_WEIGHT_BLACK:
+				wn = "Black";
+				break;
+			default:
+				wn = "";
+				break;
+			}
+			switch (slant) {
+			case XFT_SLANT_ROMAN:
+				sn = "Roman";
+				break;
+			case XFT_SLANT_ITALIC:
+				sn = "Italic";
+				break;
+			case XFT_SLANT_OBLIQUE:
+				sn = "Oblique";
+				break;
+			default:
+				sn = "";
+				break;
+			}
+
+			char *name = g_strdup_printf (
                                     "%s%s%s%s%s%s%s", 
                                     fn, 
                                     styn ? " " : "", styn ? styn : "", 
                                     (wn && !styn) ? " " : "", (wn && !styn) ? wn : "", 
                                     (sn  && !styn) ? " " : "", (sn  && !styn) ? sn : "");
 
-				if (!g_hash_table_lookup (NRXftNamedict, name)) {
-					if (!g_hash_table_lookup (NRXftFamilydict, fn)) {
-						NRXftFamilies.names[fpos] = (guchar *)g_strdup (fn);
-						g_hash_table_insert (NRXftFamilydict, NRXftFamilies.names[fpos], (void *) TRUE);
-						fpos++;
-					}
-					NRXftTypefaces.names[pos] = (guchar *) name;
-					NRXftTypefaces.families[pos] = (guchar *) g_strdup (fn);
-					pos++;
-					g_hash_table_insert (NRXftNamedict, name, NRXftPatterns->fonts[i]);
-				} else {
-					// Not inserted, dupe; most likely the same font is available from different locations
-					g_free (name);
+			if (debug) {
+				fprintf (stderr, "%d\t Built full name: %s\n", i, name);
+			}
+
+			if (!g_hash_table_lookup (NRXftNamedict, name)) {
+				if (!g_hash_table_lookup (NRXftFamilydict, fn)) {
+					NRXftFamilies.names[fpos] = (guchar *)g_strdup (fn);
+					g_hash_table_insert (NRXftFamilydict, NRXftFamilies.names[fpos], (void *) TRUE);
+					fpos++;
 				}
+				NRXftTypefaces.names[pos] = (guchar *) name;
+				NRXftTypefaces.families[pos] = (guchar *) g_strdup (fn);
+				pos++;
+				g_hash_table_insert (NRXftNamedict, name, NRXftPatterns->fonts[i]);
+			} else {
+				// Not inserted, dupe; most likely the same font is available from different locations
+				g_free (name);
 			}
 		}
 	}

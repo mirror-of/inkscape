@@ -69,6 +69,10 @@ static NRTypeDict *familydict = NULL;
 
 static NRFamilyDef *families = NULL;
 
+// Store the list of families and styles for which we have already complained, so as to avoid duplication
+GSList *family_warnings = NULL;
+GSList *style_warnings = NULL;
+
 NRTypeFace *
 nr_type_directory_lookup (const gchar *name)
 {
@@ -90,6 +94,12 @@ nr_type_directory_lookup (const gchar *name)
 	return NULL;
 }
 
+gint 
+compare_warnings (const void *a, const void *b)
+{
+	return ((gint) strcmp ((char *) a, (char *) b));
+}
+
 NRTypeFace *
 nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 {
@@ -103,18 +113,29 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 	unsigned fbest = ~0u;
 	bestfdef = NULL;
 
-	for (fdef = families; fdef; fdef = fdef->next) {
-		unsigned const dist = nr_type_distance_family (family, fdef->name);
-		if (dist < fbest) {
-			fbest = dist;
-			bestfdef = fdef;
-			if (dist == 0) {
-				break;
+	char **familytokens = g_strsplit(family, ",", 0);
+
+	for (int i = 0; familytokens[i] != NULL; i++) {
+		char *familytoken = g_strchug (g_strchomp (familytokens[i]));
+		for (fdef = families; fdef; fdef = fdef->next) {
+			unsigned const dist = nr_type_distance_family (familytoken, fdef->name);
+			if (dist < fbest) {
+				fbest = dist;
+				bestfdef = fdef;
+				if (dist == 0) {
+					break;
+				}
 			}
 		}
 	}
 
 	if (!bestfdef) return NULL;
+
+	// Fixme: modal box?
+	if (fbest != 0 && !g_slist_find (family_warnings, (gpointer) family)) {
+		g_warning ("font-family: No exact match for '%s', using '%s'", family, bestfdef->name);
+		family_warnings = g_slist_append (family_warnings, (gpointer) family);
+	}
 
 	double best = NR_HUGE;
 	besttdef = NULL;
@@ -130,6 +151,12 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 				break;
 			}
 		}
+	}
+
+	// Fixme: modal box?
+	if (best != 0 && !g_slist_find (style_warnings, (gpointer) besttdef->name)) {
+		g_warning ("In family '%s', required style not found, using '%s'", bestfdef->name, besttdef->name);
+		style_warnings = g_slist_append (style_warnings, (gpointer) besttdef->name);
 	}
 
 	if (!besttdef->typeface) {
@@ -205,38 +232,83 @@ nr_type_directory_style_list_destructor (NRNameList *list)
 	if (list->names) nr_free (list->names);
 }
 
+bool
+ink_strstr (const char *a, const char *b)
+{
+#ifndef WIN32
+	return (strcasestr(a, b) != NULL);
+#else
+	return (bool) stristr(a, b);
+#endif
+}
+
 // FIXME: make this UTF8, add non-English style names
 bool
 is_regular (const char *s)
 {
-	if (strstr(s, "Regular")) return true;
-	if (strstr(s, "Roman")) return true;
-	if (strstr(s, "Normal")) return true;
-	if (strstr(s, "Plain")) return true;
+	if (ink_strstr(s, "Regular")) return true;
+	if (ink_strstr(s, "Roman")) return true;
+	if (ink_strstr(s, "Normal")) return true;
+	if (ink_strstr(s, "Plain")) return true;
 	return false;
 }
 
 bool
 is_nonbold (const char *s)
 {
-	if (strstr(s, "Medium")) return true;
-	if (strstr(s, "Book")) return true;
+	if (ink_strstr(s, "Medium")) return true;
+	if (ink_strstr(s, "Book")) return true;
 	return false;
 }
 
 bool
 is_italic (const char *s)
 {
-	if (strstr(s, "Italic")) return true;
-	if (strstr(s, "Oblique")) return true;
-	if (strstr(s, "Slanted")) return true;
+	if (ink_strstr(s, "Italic")) return true;
+	if (ink_strstr(s, "Oblique")) return true;
+	if (ink_strstr(s, "Slanted")) return true;
 	return false;
 }
 
 bool
 is_bold (const char *s)
 {
-	if (strstr(s, "Bold")) return true;
+	if (ink_strstr(s, "Bold")) return true;
+	return false;
+}
+
+bool
+is_caps (const char *s)
+{
+	if (ink_strstr(s, "Caps")) return true;
+	return false;
+}
+
+bool
+is_mono (const char *s)
+{
+	if (ink_strstr(s, "Mono")) return true;
+	return false;
+}
+
+bool
+is_round (const char *s)
+{
+	if (ink_strstr(s, "Round")) return true;
+	return false;
+}
+
+bool
+is_outline (const char *s)
+{
+	if (ink_strstr(s, "Outline")) return true;
+	return false;
+}
+
+bool
+is_swash (const char *s)
+{
+	if (ink_strstr(s, "Swash")) return true;
 	return false;
 }
 
@@ -257,6 +329,9 @@ style_name_compare (const void *aa, const void *bb)
 
  if (is_nonbold(a) && !is_nonbold(b)) return 1;
  if (is_nonbold(b) && !is_nonbold(a)) return -1;
+
+ if (is_caps(a) && !is_caps(b)) return 1;
+ if (is_caps(b) && !is_caps(a)) return -1;
 
  return strcasecmp (a, b);
 }
@@ -368,33 +443,130 @@ nr_type_directory_build (void)
 		NRTypeFaceDef *tdef;
 		for (tdef = fdef->faces; tdef; tdef = tdef->next) {
 			tdef->pdef = pdefs + pos;
-			*tdef->pdef = NRTypePosDef(tdef->name);
+			gchar *style;
+			if (!strncmp (tdef->name, tdef->family, strlen(tdef->family))) { // name starts with family, cut it off
+				style = tdef->name + strlen(tdef->family);
+			} else {
+				style = tdef->name;
+			}
+			// we need the pdef to reflect the font style only, not including family name
+			*tdef->pdef = NRTypePosDef(style);
 			++pos;
 		}
 	}
 }
 
+/**
+Return "distance" between two font family names, allowing to choose the closest match or a sensible alternative if there's no match
+ */
 static unsigned
-nr_type_distance_family (const gchar *ask, const gchar *bid)
+nr_type_distance_family (const gchar *ask_c, const gchar *bid_c)
 {
-	if (!g_ascii_strcasecmp (ask, bid)) {
+	// perfect match (modulo case), distance 0
+	if (!g_ascii_strcasecmp (ask_c, bid_c)) {
 		return 0;
+	}
+
+	unsigned int ret = 0;
+
+	// lowercase so we can use strstr everywhere
+	gchar *ask = g_ascii_strdown (ask_c, -1);
+	gchar *bid = g_ascii_strdown (bid_c, -1);
+
+	// take care of the generic families
+
+	if (!strcmp (ask, "serif")) {
+		if (!strcmp (bid, "bitstream vera serif") || !strcmp (bid, "luxi serif") || !strcmp (bid, "times new roman")) {
+			return 0;
+		} else if (strstr (bid, "times")) {
+			return (strlen(bid) - strlen("times")); // give the shortest one a chance to win
+		} else {
+			return 100;
+		}
+	}
+
+	if (!strcmp (ask, "sans-serif")) {
+		if (!strcmp (bid, "bitstream vera sans") || !strcmp (bid, "luxi sans") || !strcmp (bid, "arial") || !strcmp (bid, "verdana")) {
+			return 0;
+		} else if (strstr (bid, "arial")) {
+			return (strlen(bid) - strlen("arial")); 
+		} else if (strstr (bid, "helvetica")) {
+			return (strlen(bid) - strlen("helvetica")); 
+		} else {
+			return 100;
+		}
+	}
+
+	if (!strcmp (ask, "monospace")) {
+		if (!strcmp (bid, "bitstream vera sans mono") || !strcmp (bid, "luxi mono") || !strcmp (bid, "courier new") || !strcmp (bid, "andale mono")) {
+			return 0;
+		} else if (strstr (bid, "courier")) {
+			return (strlen(bid) - strlen("courier")); 
+		} else {
+			return 100;
+		}
 	}
 
 	size_t const alen = strlen (ask);
 	size_t const blen = strlen (bid);
-	if ( ( blen < alen )
-	     && !g_ascii_strncasecmp(ask, bid, blen) ) {
-		return 1;
-	} else if (!g_ascii_strcasecmp(bid, "bitstream cyberbit")) {
-		return 10;
-	} else if (!g_ascii_strcasecmp (bid, "arial")) {
-		return 100;
-	} else if (!g_ascii_strcasecmp (bid, "helvetica")) {
-		return 1000;
+
+	if ( ( blen < alen ) && !g_ascii_strncasecmp(ask, bid, blen) ) {
+	      // bid (available family) is the beginning of ask (the required family), let the closest-length match win
+		ret = alen - blen;
+	} else if ( ( alen < blen ) && !g_ascii_strncasecmp(bid, ask, alen) ) {
+	      // aks is the beginning of bid, let the closest-length match win, but this is less desirable than vice versa
+		ret = 2 * (blen - alen);
+	} else if (strstr (ask, bid)) {
+	      // bid is inside ask, let the closest-length match win
+		ret = 4 + alen - blen;
+	} else if (strstr (bid, ask)) {
+	      // ask is inside bid, let the closest-length match win, but this is less desirable than vice versa
+		ret = 8 + 2 * (blen - alen);
+	} else if (strstr (bid, "bitstream vera sans")) {
+		ret = 40;
+	} else if (strstr (bid, "luxi sans")) {
+		ret = 40;
+	} else if (strstr (bid, "verdana")) {
+		ret = 40;
+	} else if (strstr (bid, "helvetica")) {
+		ret = 80;
+	} else if (strstr (bid, "arial")) {
+		ret = 80;
+	} else if (strstr (bid, "times")) {
+		ret = 80;
 	} else {
-		return 10000;
+		ret = 1000;
 	}
+
+	// using monotype fonts instead of normal or vice versa sucks, discourage that
+	if (is_mono (ask) && !is_mono (bid) || is_mono (bid) && !is_mono (ask)) {
+		ret *= 2;
+	}
+
+	// same for caps
+	if (is_caps (ask) && !is_caps (bid) || is_caps (bid) && !is_caps (ask)) {
+		ret *= 2;
+	}
+
+	// same for swash
+	if (is_swash (ask) && !is_swash (bid) || is_swash (bid) && !is_swash (ask)) {
+		ret *= 2;
+	}
+
+	// same for outline
+	if (is_outline (ask) && !is_outline (bid) || is_outline (bid) && !is_outline (ask)) {
+		ret *= 2;
+	}
+
+	// same for round
+	if (is_round (ask) && !is_round (bid) || is_round (bid) && !is_round (ask)) {
+		ret *= 2;
+	}
+
+	g_free (ask);
+	g_free (bid);
+
+	return ret;
 }
 
 // These weights are defined inverse proportionally to the range of the corresponding parameters,
@@ -403,14 +575,15 @@ nr_type_distance_family (const gchar *ask, const gchar *bid)
 #define NR_TYPE_OBLIQUE_SCALE 1000.0F
 #define NR_TYPE_WEIGHT_SCALE 100.0F
 #define NR_TYPE_STRETCH_SCALE 2000.0F
+#define NR_TYPE_VARIANT_SCALE 10000.0F
 
 static double
 nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 {
-	double ditalic = 0, doblique = 0, dweight = 0, dstretch = 0;
+	double ditalic = 0, doblique = 0, dweight = 0, dstretch = 0, dvariant = 0;
 	double dist;
 
-	//g_print ("Ask: %d %d %d %d   Bid: %d %d %d %d\n", ask->italic, ask->oblique, ask->weight, ask->stretch,     bid->italic, bid->oblique, bid->weight, bid->stretch);
+	//g_print ("Ask: %d %d %d %d %d  Bid: %d %d %d %d %d\n", ask->italic, ask->oblique, ask->weight, ask->stretch, ask->variant,    bid->italic, bid->oblique, bid->weight, bid->stretch, bid->variant);
 
 	// For oblique, match italic if oblique not found, and vice versa
       if (ask->italic || bid->italic)
@@ -421,11 +594,14 @@ nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 				dweight = NR_TYPE_WEIGHT_SCALE * ((int) ask->weight - (int) bid->weight);
       if (ask->stretch || bid->stretch)
 				dstretch = NR_TYPE_STRETCH_SCALE * ((int) ask->stretch - (int) bid->stretch);
+      if (ask->variant || bid->variant)
+				dvariant = NR_TYPE_VARIANT_SCALE * ((int) ask->variant - (int) bid->variant);
 
 	dist = sqrt (ditalic * ditalic  +
 		     doblique * doblique  +
 		     dweight * dweight  +
-		     dstretch * dstretch);
+		     dstretch * dstretch  +
+                  dvariant * dvariant);
 
 	return dist;
 }

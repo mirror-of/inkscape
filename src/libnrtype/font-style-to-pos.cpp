@@ -68,6 +68,8 @@ font_style_to_pos (SPStyle const &style)
 
 	case SP_CSS_FONT_STYLE_NORMAL:
 	default:
+		ret.italic = 0;
+		ret.oblique = 0;
 		break;
 	}
 
@@ -107,10 +109,10 @@ font_style_to_pos (SPStyle const &style)
 
 	switch (style.font_variant.computed) {
 	case SP_CSS_FONT_VARIANT_SMALL_CAPS:
-		ret.stretch = NR_POS_VARIANT_SMALLCAPS;
+		ret.variant = NR_POS_VARIANT_SMALLCAPS;
 		break;
 	default:
-		ret.stretch = NR_POS_VARIANT_NORMAL;
+		ret.variant = NR_POS_VARIANT_NORMAL;
 		break;
 	}
 
