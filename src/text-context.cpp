@@ -816,7 +816,7 @@ sptc_focus_out (GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc)
 	return FALSE;
 }
 
-void
+static void
 sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc)
 {
 	if (!tc->text) {
