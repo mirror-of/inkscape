@@ -15,6 +15,8 @@
 	  fixes for floating-point portability issues, courtesy of
 	  Colin Marquardt.
 
+	* src/extensions/init.cpp: dirent.h requires inttypes.h on OS X
+
 2004-06-23  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile_insert, src/desktop.cpp, src/managed.h,

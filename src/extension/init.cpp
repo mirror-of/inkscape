@@ -15,6 +15,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+#include <inttypes.h>
 #include <dirent.h>
 #include <glib.h>
 #include <string.h>
