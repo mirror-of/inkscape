@@ -133,11 +133,8 @@ static void sp_arc_context_dispose(GObject *object)
 
 static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
-    SPArcContext *ac;
-    SPEventContext *ec;
-
-    ac = SP_ARC_CONTEXT (data);
-    ec = SP_EVENT_CONTEXT (ac);
+    SPArcContext *ac = SP_ARC_CONTEXT (data);
+    SPEventContext *ec = SP_EVENT_CONTEXT (ac);
 
     if (ac->knot_holder) {
         sp_knot_holder_destroy (ac->knot_holder);
@@ -146,7 +143,10 @@ static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const g
 
     SPDesktop *desktop = ec->desktop;
 
-    SPItem *item = sp_selection_item (SP_DT_SELECTION(desktop));
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+    g_assert(selection != NULL);
+    
+    SPItem *item = selection->singleItem();
 
     if (item) {
         ac->knot_holder = sp_item_knot_holder (item, desktop);
@@ -174,11 +174,8 @@ destroys old and creates new knotholder
 void
 sp_arc_context_selection_changed (SPSelection * selection, gpointer data)
 {
-    SPArcContext *ac;
-    SPEventContext *ec;
-
-    ac = SP_ARC_CONTEXT (data);
-    ec = SP_EVENT_CONTEXT (ac);
+    SPArcContext *ac = SP_ARC_CONTEXT (data);
+    SPEventContext *ec = SP_EVENT_CONTEXT (ac);
 
     if (ac->knot_holder) { // desktroy knotholder
         sp_knot_holder_destroy (ac->knot_holder);
@@ -191,7 +188,7 @@ sp_arc_context_selection_changed (SPSelection * selection, gpointer data)
         ac->repr = 0;
     }
 
-    SPItem *item = sp_selection_item (selection);
+    SPItem *item = selection->singleItem();
     if (item) {
         ac->knot_holder = sp_item_knot_holder (item, ec->desktop);
         SPRepr *repr = SP_OBJECT_REPR (item);
@@ -214,7 +211,10 @@ sp_arc_context_setup (SPEventContext *ec)
    if (((SPEventContextClass *) parent_class)->setup)
         ((SPEventContextClass *) parent_class)->setup (ec);
 
-   SPItem *item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
+   SPSelection *selection = SP_DT_SELECTION (ec->desktop);
+   g_assert(selection != NULL);
+   
+   SPItem *item = selection->singleItem();
         if (item) {
             ac->knot_holder = sp_item_knot_holder (item, ec->desktop);
             SPRepr *repr = SP_OBJECT_REPR (item);
@@ -325,10 +325,10 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 			sp_arc_finish (ac);
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
-                sp_selection_set_item (SP_DT_SELECTION (desktop), event_context->item_to_select);
+	        SP_DT_SELECTION (desktop)->setItem(event_context->item_to_select);
             } else {
                 // click in an empty space
-                sp_selection_empty (SP_DT_SELECTION (desktop));
+	        SP_DT_SELECTION (desktop)->clear();
             }
             event_context->xp = 0;
             event_context->yp = 0;
@@ -348,7 +348,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 				ret = TRUE;
 			break;
         case GDK_Escape:
-            sp_selection_empty (SP_DT_SELECTION (desktop)); // deselect
+	    SP_DT_SELECTION (desktop)->clear();
             //TODO: make dragging escapable by Esc
 		default:
 			break;
@@ -463,7 +463,7 @@ static void sp_arc_finish(SPArcContext *ac)
 
 		sp_object_invoke_write (SP_OBJECT (ac->item), SP_OBJECT_REPR (ac->item), SP_OBJECT_WRITE_EXT);
 
-		sp_selection_set_item (SP_DT_SELECTION (desktop), ac->item);
+		SP_DT_SELECTION(desktop)->setItem(ac->item);
 		sp_document_done (SP_DT_DOCUMENT (desktop));
 
 		ac->item = NULL;
