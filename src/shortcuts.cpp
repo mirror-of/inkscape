@@ -270,6 +270,15 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_a, Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL), true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_A, Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL), false);
 
+	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_a, Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS), true);
+	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_A, Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS), false);
+
+	sp_shortcut_set (GDK_exclam, Inkscape::Verb::get(SP_VERB_EDIT_INVERT), true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_exclam, Inkscape::Verb::get(SP_VERB_EDIT_INVERT), false);
+
+	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | GDK_exclam, Inkscape::Verb::get(SP_VERB_EDIT_INVERT_IN_ALL_LAYERS), true);
+	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_exclam, Inkscape::Verb::get(SP_VERB_EDIT_INVERT_IN_ALL_LAYERS), false);
+
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_g, Inkscape::Verb::get(SP_VERB_SELECTION_GROUP), true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_G, Inkscape::Verb::get(SP_VERB_SELECTION_GROUP), false);
 

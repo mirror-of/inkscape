@@ -192,26 +192,28 @@ void sp_edit_clear_all()
 }
 
 GSList *
-get_all_items (GSList *list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive)
+get_all_items (GSList *list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, const GSList *exclude)
 {
     for (SPObject *child = sp_object_first_child(SP_OBJECT(from)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_ITEM(child) &&
             !desktop->isLayer(SP_ITEM(child)) &&
             (!onlysensitive || !SP_ITEM(child)->isLocked()) && 
-            (!onlyvisible || !desktop->itemIsHidden(SP_ITEM(child))) )
+            (!onlyvisible || !desktop->itemIsHidden(SP_ITEM(child))) &&
+            (!exclude || !g_slist_find ((GSList *) exclude, child))
+            )
         {
             list = g_slist_prepend (list, SP_ITEM(child));
         }
 
         if (SP_IS_ITEM(child) && desktop->isLayer(SP_ITEM(child))) {
-            list = get_all_items (list, child, desktop, onlyvisible, onlysensitive);
+            list = get_all_items (list, child, desktop, onlyvisible, onlysensitive, exclude);
         }
     }
 
     return list;
 }
 
-void sp_edit_select_all()
+void sp_edit_select_all_full (bool force_all_layers, bool invert)
 {
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
     if (!dt)
@@ -227,7 +229,12 @@ void sp_edit_select_all()
 
     GSList *items = NULL;
 
-    if (inlayer) {
+    const GSList *exclude = NULL;
+    if (invert) {
+        exclude = selection->itemList();
+    }
+
+    if (inlayer && !force_all_layers) {
 
         if ( (onlysensitive && SP_ITEM(dt->currentLayer())->isLocked()) ||
              (onlyvisible && dt->itemIsHidden(SP_ITEM(dt->currentLayer()))) )
@@ -241,7 +248,9 @@ void sp_edit_select_all()
             if (item && (!onlysensitive || !item->isLocked())) {
                 if (!onlyvisible || !dt->itemIsHidden(item)) {
                     if (!dt->isLayer(item)) {
-                        items = g_slist_prepend (items, item); // leave it in the list
+                        if (!invert || !g_slist_find ((GSList *) exclude, item)) {
+                            items = g_slist_prepend (items, item); // leave it in the list
+                        }
                     }
                 }
             }
@@ -250,14 +259,36 @@ void sp_edit_select_all()
         g_slist_free (all_items);
 
     } else {
-        items = get_all_items (NULL, dt->currentRoot(), dt, onlyvisible, onlysensitive);
+        items = get_all_items (NULL, dt->currentRoot(), dt, onlyvisible, onlysensitive, exclude);
     }
 
+    selection->setList (items);
+
     if (items) {
-        selection->setList (items);
         g_slist_free (items);
     }
 }
+
+void sp_edit_select_all ()
+{
+    sp_edit_select_all_full (false, false);
+}
+
+void sp_edit_select_all_in_all_layers ()
+{
+    sp_edit_select_all_full (true, false);
+}
+
+void sp_edit_invert ()
+{
+    sp_edit_select_all_full (false, true);
+}
+
+void sp_edit_invert_in_all_layers ()
+{
+    sp_edit_select_all_full (true, true);
+}
+
 
 static void
 sp_group_cleanup(SPGroup *group)

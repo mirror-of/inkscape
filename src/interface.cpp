@@ -360,6 +360,7 @@ sp_key_name (guint keyval)
     else if (!strcmp (n, "numbersign" ))  return "#";
     else if (!strcmp (n, "bar" ))  return "|";
     else if (!strcmp (n, "slash" ))  return "/";
+    else if (!strcmp (n, "exclam" ))  return "!";
     else return n;
 }
 
@@ -783,6 +784,8 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
         Inkscape::Verb::get(SP_VERB_NONE),
         Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL),
+        Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS),
+        Inkscape::Verb::get(SP_VERB_EDIT_INVERT),
         Inkscape::Verb::get(SP_VERB_EDIT_DESELECT),
 
         Inkscape::Verb::get(SP_VERB_NONE),

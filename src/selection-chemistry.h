@@ -23,7 +23,11 @@ void sp_selection_cleanup();
 void sp_selection_delete();
 void sp_selection_duplicate();
 void sp_edit_clear_all();
+
 void sp_edit_select_all();
+void sp_edit_select_all_in_all_layers ();
+void sp_edit_invert ();
+void sp_edit_invert_in_all_layers ();
 
 void sp_selection_clone();
 void sp_selection_unlink();

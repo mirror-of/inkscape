@@ -745,6 +745,19 @@ EditVerb::perform (SPAction *action, void * data, void * pdata)
                 sp_edit_select_all();
             }
             break;
+        case SP_VERB_EDIT_INVERT:
+            if (tools_isactive (dt, TOOLS_NODES)) {
+                //FIXME: implement invert for nodes
+            } else {
+                sp_edit_invert();
+            }
+            break;
+        case SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS:
+            sp_edit_select_all_in_all_layers();
+            break;
+        case SP_VERB_EDIT_INVERT_IN_ALL_LAYERS:
+            sp_edit_invert_in_all_layers();
+            break;
         case SP_VERB_EDIT_DESELECT:
             if (tools_isactive (dt, TOOLS_NODES)) {
                 sp_nodepath_deselect (SP_NODE_CONTEXT(ec)->nodepath);
@@ -1586,6 +1599,12 @@ Verb * Verb::_base_verbs[] = {
         N_("Delete all objects from document"), NULL),
     new EditVerb(SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select Al_l"),
         N_("Select all objects or all nodes"), "selection_select_all"),
+    new EditVerb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS, "EditSelectAllInAllLayers", N_("Select All in All Layers"),
+        N_("Select all objects in all visible and unlocked layers"), NULL),
+    new EditVerb(SP_VERB_EDIT_INVERT, "EditInvert", N_("Invert Selection"),
+        N_("Invert selection (unselect what is selected and select everything else)"), NULL),
+    new EditVerb(SP_VERB_EDIT_INVERT_IN_ALL_LAYERS, "EditInvertInAllLayers", N_("Invert in All Layers"),
+        N_("Invert selection in all visible and unlocked layers"), NULL),
     new EditVerb(SP_VERB_EDIT_DESELECT, "EditDeselect", N_("D_eselect"),
         N_("Deselect any selected objects or nodes"), NULL),
 
