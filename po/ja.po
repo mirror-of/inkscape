@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-29 20:30+0900\n"
+"POT-Creation-Date: 2004-10-29 20:41+0200\n"
 "PO-Revision-Date: 2004-10-26 23:26+0900\n"
 "Last-Translator: shivaken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -32,8 +32,7 @@ msgstr "SVGベクトル イラストレータ"
 #: src/arc-context.cpp:364
 msgid ""
 "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
-msgstr ""
-"円／弧を作成 … <b>Ctrl</b>: 比率をスナップ"
+msgstr "円／弧を作成 … <b>Ctrl</b>: 比率をスナップ"
 
 #: src/arc-context.cpp:365 src/rect-context.cpp:398
 msgid "<b>Shift</b>: draw around the starting point"
@@ -45,8 +44,8 @@ msgid ""
 "<b>Ellipse</b>: %s x %s; with <b>Ctrl</b> to make circle or integer-ratio "
 "ellipse; with <b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>円／弧</b>: %s x %s … <b>Ctrl</b>: 比率をスナップ, "
-"<b>Shift</b>: 始点を中心に描画"
+"<b>円／弧</b>: %s x %s … <b>Ctrl</b>: 比率をスナップ, <b>Shift</b>: 始点を中"
+"心に描画"
 
 #. TRANSLATORS: object factory is an object that produces other objects
 #: src/bonobo/svg-doc-factory.cpp:39
@@ -158,140 +157,140 @@ msgid "No next zoom."
 msgstr "次のズームはありません"
 
 #. Page page
-#: src/desktop.cpp:2038 src/dialogs/align.cpp:1097
+#: src/desktop.cpp:2038 src/dialogs/align.cpp:1098
 #: src/dialogs/desktop-properties.cpp:926 src/dialogs/export.cpp:126
 msgid "Page"
 msgstr "ページ"
 
-#: src/desktop.cpp:2042 src/dialogs/align.cpp:1100 src/dialogs/export.cpp:126
+#: src/desktop.cpp:2042 src/dialogs/align.cpp:1101 src/dialogs/export.cpp:126
 msgid "Drawing"
 msgstr "描画"
 
-#: src/desktop.cpp:2046 src/dialogs/align.cpp:1103 src/dialogs/export.cpp:126
+#: src/desktop.cpp:2046 src/dialogs/align.cpp:1104 src/dialogs/export.cpp:126
 msgid "Selection"
 msgstr "選択"
 
-#: src/dialogs/align.cpp:457 src/dialogs/text-edit.cpp:210
+#: src/dialogs/align.cpp:458 src/dialogs/text-edit.cpp:210
 msgid "Layout"
 msgstr "レイアウト"
 
-#: src/dialogs/align.cpp:458 src/dialogs/align.cpp:972
+#: src/dialogs/align.cpp:459 src/dialogs/align.cpp:973
 msgid "Align"
 msgstr "整列"
 
-#: src/dialogs/align.cpp:459 src/dialogs/align.cpp:1048
+#: src/dialogs/align.cpp:460 src/dialogs/align.cpp:1049
 msgid "Distribute"
 msgstr "配置"
 
-#: src/dialogs/align.cpp:460
+#: src/dialogs/align.cpp:461
 msgid "Align Nodes"
 msgstr "ノード配置"
 
-#: src/dialogs/align.cpp:464
+#: src/dialogs/align.cpp:465
 msgid "Relative to: "
 msgstr "相対位置: "
 
-#: src/dialogs/align.cpp:468 src/dialogs/align.cpp:938
+#: src/dialogs/align.cpp:469 src/dialogs/align.cpp:939
 msgid "Right side of aligned objects to left side of anchor"
 msgstr "オブジェクトの右端をアンカーの左側にそろえて配置"
 
-#: src/dialogs/align.cpp:471 src/dialogs/align.cpp:940
+#: src/dialogs/align.cpp:472 src/dialogs/align.cpp:941
 msgid "Left side of aligned objects to left side of anchor"
 msgstr "オブジェクトの左端をアンカーの左側にそろえて配置"
 
-#: src/dialogs/align.cpp:474 src/dialogs/align.cpp:942
+#: src/dialogs/align.cpp:475 src/dialogs/align.cpp:943
 msgid "Center horizontally"
 msgstr "水平方向で中央に配置"
 
-#: src/dialogs/align.cpp:477 src/dialogs/align.cpp:944
+#: src/dialogs/align.cpp:478 src/dialogs/align.cpp:945
 msgid "Right side of aligned objects to right side of anchor"
 msgstr "オブジェクトの右端をアンカーの右側にそろえて配置"
 
-#: src/dialogs/align.cpp:480 src/dialogs/align.cpp:946
+#: src/dialogs/align.cpp:481 src/dialogs/align.cpp:947
 msgid "Left side of aligned objects to right side of anchor"
 msgstr "オブジェクトの左端をアンカーの右側にそろえて配置"
 
-#: src/dialogs/align.cpp:483 src/dialogs/align.cpp:949
+#: src/dialogs/align.cpp:484 src/dialogs/align.cpp:950
 msgid "Bottom of aligned objects to top of anchor"
 msgstr "オブジェクトの下端をアンカーの上側にそろえて配置"
 
-#: src/dialogs/align.cpp:486 src/dialogs/align.cpp:951
+#: src/dialogs/align.cpp:487 src/dialogs/align.cpp:952
 msgid "Top of aligned objects to top of anchor"
 msgstr "オブジェクトの上端をアンカーの上側にそろえて配置"
 
-#: src/dialogs/align.cpp:489 src/dialogs/align.cpp:953
+#: src/dialogs/align.cpp:490 src/dialogs/align.cpp:954
 msgid "Center vertically"
 msgstr "垂直方向で中央に配置"
 
-#: src/dialogs/align.cpp:492 src/dialogs/align.cpp:955
+#: src/dialogs/align.cpp:493 src/dialogs/align.cpp:956
 msgid "Bottom of aligned objects to bottom of anchor"
 msgstr "オブジェクトの下端をアンカーの下側にそろえて配置"
 
-#: src/dialogs/align.cpp:495 src/dialogs/align.cpp:957
+#: src/dialogs/align.cpp:496 src/dialogs/align.cpp:958
 msgid "Top of aligned objects to bottom of anchor"
 msgstr "オブジェクトの上端をアンカーの上側にそろえて配置"
 
-#: src/dialogs/align.cpp:502 src/dialogs/align.cpp:993
+#: src/dialogs/align.cpp:503 src/dialogs/align.cpp:994
 msgid "Distribute left sides of objects at even distances"
 msgstr "オブジェクトの左端の間隔を等幅にして配置"
 
-#: src/dialogs/align.cpp:506 src/dialogs/align.cpp:1001
+#: src/dialogs/align.cpp:507 src/dialogs/align.cpp:1002
 msgid "Distribute centers of objects at even distances horizontally"
 msgstr "オブジェクトの中央を水平方向に等幅にして配置"
 
-#: src/dialogs/align.cpp:510 src/dialogs/align.cpp:1008
+#: src/dialogs/align.cpp:511 src/dialogs/align.cpp:1009
 msgid "Distribute right sides of objects at even distances"
 msgstr "オブジェクトの右端の間隔を等幅にして配置"
 
-#: src/dialogs/align.cpp:514 src/dialogs/align.cpp:1015
+#: src/dialogs/align.cpp:515 src/dialogs/align.cpp:1016
 msgid "Distribute horizontal distance between objects equally"
 msgstr "オブジェクトの間隔を水平方向に等幅にして配置"
 
-#: src/dialogs/align.cpp:518 src/dialogs/align.cpp:1037
+#: src/dialogs/align.cpp:519 src/dialogs/align.cpp:1038
 msgid "Distribute bottom sides of objects at even distances"
 msgstr "オブジェクトの下端の間隔を等幅にして配置"
 
-#: src/dialogs/align.cpp:522 src/dialogs/align.cpp:1030
+#: src/dialogs/align.cpp:523 src/dialogs/align.cpp:1031
 msgid "Distribute centers of objects at even distances vertically"
 msgstr "オブジェクトの中央の間隔を垂直方向に等幅にして配置"
 
-#: src/dialogs/align.cpp:526 src/dialogs/align.cpp:1022
+#: src/dialogs/align.cpp:527 src/dialogs/align.cpp:1023
 msgid "Distribute top sides of objects at even distances"
 msgstr "オブジェクトの上端の間隔を等幅にして配置"
 
-#: src/dialogs/align.cpp:530 src/dialogs/align.cpp:1044
+#: src/dialogs/align.cpp:531 src/dialogs/align.cpp:1045
 msgid "Distribute vertical distance between objects equally"
 msgstr "オブジェクトの間隔を垂直方向に配置"
 
-#: src/dialogs/align.cpp:536
+#: src/dialogs/align.cpp:537
 msgid "Align selected nodes horizontally"
 msgstr "選択ノードを水平に配置"
 
-#: src/dialogs/align.cpp:539
+#: src/dialogs/align.cpp:540
 msgid "Align selected nodes vertically"
 msgstr "選択ノードを垂直に配置"
 
-#: src/dialogs/align.cpp:542
+#: src/dialogs/align.cpp:543
 msgid "Distribute selected nodes horizontally"
 msgstr "選択ノードを水平に整列"
 
-#: src/dialogs/align.cpp:545
+#: src/dialogs/align.cpp:546
 msgid "Distribute selected nodes vertically"
 msgstr "選択ノードを垂直に整列"
 
-#: src/dialogs/align.cpp:1085
+#: src/dialogs/align.cpp:1086
 msgid "Last selected"
 msgstr "最後の選択部分"
 
-#: src/dialogs/align.cpp:1088
+#: src/dialogs/align.cpp:1089
 msgid "First selected"
 msgstr "最初の選択部分"
 
-#: src/dialogs/align.cpp:1091
+#: src/dialogs/align.cpp:1092
 msgid "Biggest item"
 msgstr "最大オブジェクト"
 
-#: src/dialogs/align.cpp:1094
+#: src/dialogs/align.cpp:1095
 msgid "Smallest item"
 msgstr "最小オブジェクト"
 
@@ -464,7 +463,7 @@ msgstr "単位:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:1041 src/dialogs/export.cpp:293
 #: src/dialogs/export.cpp:400 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1365
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1359
 #: src/toolbox.cpp:1815
 msgid "Width:"
 msgstr "幅:"
@@ -523,7 +522,7 @@ msgstr "選択オブジェクトの明示方法:"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:257 src/dialogs/display-settings.cpp:393
 #: src/dialogs/display-settings.cpp:448 src/dialogs/display-settings.cpp:1412
-#: src/dialogs/stroke-style.cpp:1079 src/interface.cpp:660 src/verbs.cpp:1396
+#: src/dialogs/stroke-style.cpp:1073 src/interface.cpp:660 src/verbs.cpp:1396
 msgid "None"
 msgstr "なし"
 
@@ -776,8 +775,8 @@ msgid ""
 "How far (in pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
 msgstr ""
-"どれだけ端より外にカーソルを持っていけば自動スクロールが働くか。"
-"0以上でキャンバスより外、0以下でキャンバスの中で作動。"
+"どれだけ端より外にカーソルを持っていけば自動スクロールが働くか。0以上でキャン"
+"バスより外、0以下でキャンバスの中で作動。"
 
 #. Steps
 #: src/dialogs/display-settings.cpp:1008
@@ -877,8 +876,7 @@ msgstr "許容誤差:"
 msgid ""
 "This value affects the amount of smoothing applied to freehand lines; lower "
 "values produce more uneven paths with more nodes"
-msgstr ""
-"鉛筆ツールでできるパスの滑らかさ、少ないとパスを多く作成する"
+msgstr "鉛筆ツールでできるパスの滑らかさ、少ないとパスを多く作成する"
 
 #: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1591
 msgid "Pen"
@@ -932,7 +930,7 @@ msgstr ""
 "更するボタンがある)"
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1206 src/dialogs/find.cpp:646
+#: src/dialogs/display-settings.cpp:1206 src/dialogs/find.cpp:649
 msgid "Clones"
 msgstr "クローン"
 
@@ -1159,34 +1157,34 @@ msgstr "参照..."
 msgid "Export"
 msgstr "エクスポート"
 
-#: src/dialogs/export.cpp:958
+#: src/dialogs/export.cpp:949
 msgid "You have to enter a filename"
 msgstr "ファイル名を入力してください"
 
-#: src/dialogs/export.cpp:963
+#: src/dialogs/export.cpp:954
 msgid "The chosen area to be exported is invalid"
 msgstr "指定された範囲のエクスポートはできません"
 
-#: src/dialogs/export.cpp:970
+#: src/dialogs/export.cpp:961
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr "%s は存在しないか、ディレクトリではありません。\n"
 
-#: src/dialogs/export.cpp:984
+#: src/dialogs/export.cpp:975
 msgid "Export in progress"
 msgstr "エクスポートの進捗"
 
-#: src/dialogs/export.cpp:990
+#: src/dialogs/export.cpp:981
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "エクスポート %d x %d: %s"
 
-#: src/dialogs/export.cpp:1016
+#: src/dialogs/export.cpp:1007
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr "%sにエクスポートできませんでした。\n"
 
-#: src/dialogs/export.cpp:1119
+#: src/dialogs/export.cpp:1110
 msgid "Select a filename for exporting"
 msgstr "エクスポートするファイルを選択"
 
@@ -1267,177 +1265,177 @@ msgstr "全て"
 msgid "alternating"
 msgstr "交互"
 
-#: src/dialogs/find.cpp:79 src/dialogs/find.cpp:716
+#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:719
 msgid "Find objects by their text content (exact or partial match)"
 msgstr "含まれる文字列で検索"
 
-#: src/dialogs/find.cpp:80 src/dialogs/find.cpp:717
+#: src/dialogs/find.cpp:83 src/dialogs/find.cpp:720
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr "IDで検索(完全／一部一致)"
 
-#: src/dialogs/find.cpp:81 src/dialogs/find.cpp:718
+#: src/dialogs/find.cpp:84 src/dialogs/find.cpp:721
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr "スタイルで検索(完全／一部一致)"
 
-#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:719
+#: src/dialogs/find.cpp:85 src/dialogs/find.cpp:722
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr "名前で検索(完全／一部一致)"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:402
+#: src/dialogs/find.cpp:405
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
 msgstr "%d個のオブジェクトが見付かりました。(検索対象: %d個) %s一致"
 
-#: src/dialogs/find.cpp:403
+#: src/dialogs/find.cpp:406
 msgid "exact"
 msgstr "完全"
 
-#: src/dialogs/find.cpp:403
+#: src/dialogs/find.cpp:406
 msgid "partial"
 msgstr "一部"
 
-#: src/dialogs/find.cpp:410
+#: src/dialogs/find.cpp:413
 msgid "No objects found"
 msgstr "オブジェクトが見付かりませんでした"
 
-#: src/dialogs/find.cpp:568
+#: src/dialogs/find.cpp:571
 msgid "T_ype: "
 msgstr "タイプ:"
 
-#: src/dialogs/find.cpp:575
+#: src/dialogs/find.cpp:578
 msgid "Search in all object types"
 msgstr "全てのオブジェクトタイプから検索"
 
-#: src/dialogs/find.cpp:575
+#: src/dialogs/find.cpp:578
 msgid "All types"
 msgstr "全てのタイプ"
 
-#: src/dialogs/find.cpp:586
+#: src/dialogs/find.cpp:589
 msgid "Search all shapes"
 msgstr "全てのシェイプから検索"
 
-#: src/dialogs/find.cpp:586
+#: src/dialogs/find.cpp:589
 msgid "All shapes"
 msgstr "全てのシェイプツール"
 
-#: src/dialogs/find.cpp:603
+#: src/dialogs/find.cpp:606
 msgid "Search rectangles"
 msgstr "矩形を検索"
 
-#: src/dialogs/find.cpp:603
+#: src/dialogs/find.cpp:606
 msgid "Rectangles"
 msgstr "矩形"
 
-#: src/dialogs/find.cpp:608
+#: src/dialogs/find.cpp:611
 msgid "Search ellipses, arcs, circles"
 msgstr "楕・円を検索"
 
-#: src/dialogs/find.cpp:608
+#: src/dialogs/find.cpp:611
 msgid "Ellipses"
 msgstr "楕円"
 
-#: src/dialogs/find.cpp:613
+#: src/dialogs/find.cpp:616
 msgid "Search stars and polygons"
 msgstr "星型やポリゴンを検索"
 
-#: src/dialogs/find.cpp:613
+#: src/dialogs/find.cpp:616
 msgid "Stars"
 msgstr "星"
 
-#: src/dialogs/find.cpp:618
+#: src/dialogs/find.cpp:621
 msgid "Search spirals"
 msgstr "螺旋を検索"
 
-#: src/dialogs/find.cpp:618
+#: src/dialogs/find.cpp:621
 msgid "Spirals"
 msgstr "螺旋"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Search paths, lines, polylines"
 msgstr "パスや線を検索"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Paths"
 msgstr "パス"
 
-#: src/dialogs/find.cpp:636
+#: src/dialogs/find.cpp:639
 msgid "Search text objects"
 msgstr "テキストを検索"
 
-#: src/dialogs/find.cpp:636
+#: src/dialogs/find.cpp:639
 msgid "Texts"
 msgstr "テキスト"
 
-#: src/dialogs/find.cpp:641
+#: src/dialogs/find.cpp:644
 msgid "Search groups"
 msgstr "グループを検索"
 
-#: src/dialogs/find.cpp:641
+#: src/dialogs/find.cpp:644
 msgid "Groups"
 msgstr "グループ"
 
-#: src/dialogs/find.cpp:646
+#: src/dialogs/find.cpp:649
 msgid "Search clones"
 msgstr "クローンを検索"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Search images"
 msgstr "画像を検索"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Images"
 msgstr "画像"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:659
 msgid "Search offset objects"
 msgstr "オフセットオブジェクトを検索"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:659
 msgid "Offsets"
 msgstr "オフセット"
 
-#: src/dialogs/find.cpp:716
+#: src/dialogs/find.cpp:719
 msgid "_Text: "
 msgstr "テキスト: "
 
-#: src/dialogs/find.cpp:717
+#: src/dialogs/find.cpp:720
 msgid "_ID: "
 msgstr "_ID: "
 
-#: src/dialogs/find.cpp:718
+#: src/dialogs/find.cpp:721
 msgid "_Style: "
 msgstr "スタイル: "
 
-#: src/dialogs/find.cpp:719
+#: src/dialogs/find.cpp:722
 msgid "_Attribute: "
 msgstr "属性: "
 
-#: src/dialogs/find.cpp:732
+#: src/dialogs/find.cpp:735
 msgid "Search in s_election"
 msgstr "選択オブジェクトから検索"
 
-#: src/dialogs/find.cpp:736
+#: src/dialogs/find.cpp:739
 msgid "Limit search to the current selection"
 msgstr "選択したなかから検索"
 
 #. TRANSLATORS: "Clear" is a verb here
-#: src/dialogs/find.cpp:746
+#: src/dialogs/find.cpp:749
 msgid "_Clear"
 msgstr "クリア"
 
-#: src/dialogs/find.cpp:746
+#: src/dialogs/find.cpp:749
 msgid "Clear values"
 msgstr "値をクリア"
 
-#: src/dialogs/find.cpp:747
+#: src/dialogs/find.cpp:750
 msgid "_Find"
 msgstr "検索"
 
-#: src/dialogs/find.cpp:747
+#: src/dialogs/find.cpp:750
 msgid "Select objects matching all of the fields you filled in"
 msgstr "入力した項目を対象に検索"
 
@@ -1763,40 +1761,40 @@ msgstr "フラグメント"
 msgid "XML fragment for the RDF 'License' section."
 msgstr "RDFのライセンスの断片"
 
-#: src/dialogs/stroke-style.cpp:1062 src/widgets/gradient-vector.cpp:265
-#: src/widgets/paint-selector.cpp:863
+#: src/dialogs/stroke-style.cpp:1056 src/widgets/gradient-vector.cpp:265
+#: src/widgets/paint-selector.cpp:876
 msgid "No document selected"
 msgstr "ドキュメントが選択されていません"
 
-#: src/dialogs/stroke-style.cpp:1372
+#: src/dialogs/stroke-style.cpp:1366
 msgid "Stroke width"
 msgstr "線の幅"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1392
+#: src/dialogs/stroke-style.cpp:1386
 msgid "Join:"
 msgstr "結合:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1406
+#: src/dialogs/stroke-style.cpp:1400
 msgid "Miter join"
 msgstr "角"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1416
+#: src/dialogs/stroke-style.cpp:1410
 msgid "Round join"
 msgstr "丸"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1426
+#: src/dialogs/stroke-style.cpp:1420
 msgid "Bevel join"
 msgstr "斜"
 
@@ -1807,54 +1805,54 @@ msgstr "斜"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1437
+#: src/dialogs/stroke-style.cpp:1431
 msgid "Miter limit:"
 msgstr "連結リミット"
 
-#: src/dialogs/stroke-style.cpp:1445
+#: src/dialogs/stroke-style.cpp:1439
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "線をつなぐ限界の長さ(線幅を基準として)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1458
+#: src/dialogs/stroke-style.cpp:1452
 msgid "Cap:"
 msgstr "端:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1471
+#: src/dialogs/stroke-style.cpp:1465
 msgid "Butt cap"
 msgstr "角"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1480
+#: src/dialogs/stroke-style.cpp:1474
 msgid "Round cap"
 msgstr "丸"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1489
+#: src/dialogs/stroke-style.cpp:1483
 msgid "Square cap"
 msgstr "四角"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1495
+#: src/dialogs/stroke-style.cpp:1489
 msgid "Dashes:"
 msgstr "点線:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1516
+#: src/dialogs/stroke-style.cpp:1510
 msgid "Start Markers:"
 msgstr "先端"
 
-#: src/dialogs/stroke-style.cpp:1526
+#: src/dialogs/stroke-style.cpp:1520
 msgid "Mid Markers:"
 msgstr "中心"
 
-#: src/dialogs/stroke-style.cpp:1537
+#: src/dialogs/stroke-style.cpp:1531
 msgid "End Markers:"
 msgstr "終端"
 
@@ -1890,13 +1888,9 @@ msgstr "線の間隔:"
 msgid "Set as default"
 msgstr "デフォルトに設定"
 
-#: src/dialogs/tracedialog.cpp:294
-msgid "Bitmap Tracing"
-msgstr "ビットマップトレース"
-
 #. ##Set up the Potrace panel
 #. #### brightness ####
-#: src/dialogs/tracedialog.cpp:303
+#: src/dialogs/tracedialog.cpp:327
 msgid "Brightness"
 msgstr "明るさ"
 
@@ -1910,21 +1904,21 @@ msgstr "明るさ"
 #. potraceCannyLoSpinner.set_value(0.1);
 #. potraceCannyBox.pack_start(potraceCannyLoSpinner);
 #.
-#: src/dialogs/tracedialog.cpp:306 src/dialogs/tracedialog.cpp:332
+#: src/dialogs/tracedialog.cpp:330 src/dialogs/tracedialog.cpp:356
 msgid "Threshold"
 msgstr "閾値"
 
-#: src/dialogs/tracedialog.cpp:313
+#: src/dialogs/tracedialog.cpp:337
 msgid "Image Brightness"
 msgstr "画像の明るさ"
 
 #. #### canny edge detection ####
 #. TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
-#: src/dialogs/tracedialog.cpp:319
+#: src/dialogs/tracedialog.cpp:343
 msgid "Optimal Edge Detection (Canny)"
 msgstr "Cannyエッジ検出法"
 
-#: src/dialogs/tracedialog.cpp:339
+#: src/dialogs/tracedialog.cpp:363
 msgid "Edge Detection"
 msgstr "エッジ検出"
 
@@ -1932,47 +1926,42 @@ msgstr "エッジ検出"
 #. TRANSLATORS: Color Quantization: the process of reducing the number of colors
 #. in an image by selecting an optimized set of representative colors and then
 #. re-applying this reduced set to the original image.
-#: src/dialogs/tracedialog.cpp:347
+#: src/dialogs/tracedialog.cpp:371
 msgid "Color Quantization"
 msgstr "色定量化"
 
-#: src/dialogs/tracedialog.cpp:350
+#: src/dialogs/tracedialog.cpp:374
 msgid "Colors"
 msgstr "色の数"
 
-#: src/dialogs/tracedialog.cpp:357
+#: src/dialogs/tracedialog.cpp:381
 msgid "Quantization / Reduction"
 msgstr "色定量化／減色"
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:362
+#: src/dialogs/tracedialog.cpp:386
 msgid "Invert"
 msgstr "ファイルに復帰"
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:368
+#: src/dialogs/tracedialog.cpp:392
 msgid "Preview"
 msgstr "プレビュー"
 
-#: src/dialogs/tracedialog.cpp:375
+#: src/dialogs/tracedialog.cpp:399
 msgid "Intermediate Bitmap"
 msgstr "中間生成イメージ"
 
-#: src/dialogs/tracedialog.cpp:383
+#: src/dialogs/tracedialog.cpp:407
 msgid "Credits"
 msgstr "クレジット"
 
 #. done
 #. TRANSLATORS: Potrace is an application for transforming bitmaps into
 #. vector graphics (http://potrace.sourceforge.net/)
-#: src/dialogs/tracedialog.cpp:390
+#: src/dialogs/tracedialog.cpp:414
 msgid "Potrace"
 msgstr "Potrace"
-
-#. ##Set up the Other panel
-#: src/dialogs/tracedialog.cpp:393
-msgid "Other"
-msgstr "その他"
 
 #. Move page
 #: src/dialogs/transformation.cpp:321 src/dialogs/transformation.cpp:467
@@ -2219,7 +2208,7 @@ msgstr ""
 "'> ファイル名'でファイルに出力\n"
 "'| プログラム 引数...'で他のプログラムに出力を渡します。"
 
-#: src/extension/internal/ps.cpp:940
+#: src/extension/internal/ps.cpp:977
 msgid "write error occurred"
 msgstr "書き込みエラーが起こりました。"
 
@@ -2266,8 +2255,7 @@ msgstr "開くファイルを選択"
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
-msgstr ""
-"%sの拡張子では保存に適切なフォーマットが見つかりません。"
+msgstr "%sの拡張子では保存に適切なフォーマットが見つかりません。"
 
 #: src/file.cpp:484 src/file.cpp:490
 msgid "Document not saved."
@@ -2828,7 +2816,8 @@ msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
 msgstr ""
-"<b>ノード</b>: ドラッグでパスを編集 、<b>Ctrl</b>: 水平、垂直にスナップ、<b>Ctrl+Alt</b>: ハンドルの方向にスナップ"
+"<b>ノード</b>: ドラッグでパスを編集 、<b>Ctrl</b>: 水平、垂直にスナップ、"
+"<b>Ctrl+Alt</b>: ハンドルの方向にスナップ"
 
 #: src/nodepath.cpp:2719 src/nodepath.cpp:2743
 msgid ""
@@ -2867,7 +2856,8 @@ msgid ""
 "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around "
 "nodes to select."
 msgstr ""
-"<b>%i</b>のノードが選択可能、クリック、Shift+クリック、ドラッグでノードを選択してください。"
+"<b>%i</b>のノードが選択可能、クリック、Shift+クリック、ドラッグでノードを選択"
+"してください。"
 
 #: src/nodepath.cpp:2909
 #, c-format
@@ -2883,22 +2873,19 @@ msgstr "%i個のノードを選択しています。(%i個が選択可能) ノ�
 msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
-msgstr ""
-"<b>水平</b>半径を調整 … <b>Ctrl</b>: 垂直方向の半径を同じに"
+msgstr "<b>水平</b>半径を調整 … <b>Ctrl</b>: 垂直方向の半径を同じに"
 
 #: src/object-edit.cpp:433
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
-msgstr ""
-"<b>垂直</b>半径を調整 … <b>Ctrl</b>: 水平方向の半径を同じに"
+msgstr "<b>垂直</b>半径を調整 … <b>Ctrl</b>: 水平方向の半径を同じに"
 
 #: src/object-edit.cpp:435 src/object-edit.cpp:437
 msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
-msgstr ""
-"四角の<b>幅、高さ</b>を調節 … <b>Ctrl</b>: 縦または横を固定"
+msgstr "四角の<b>幅、高さ</b>を調節 … <b>Ctrl</b>: 縦または横を固定"
 
 #: src/object-edit.cpp:606
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -2913,23 +2900,22 @@ msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
 "segment"
-msgstr ""
-"円／弧の<b>始点</b> … <b>Ctrl</b>: 角度をスナップ"
+msgstr "円／弧の<b>始点</b> … <b>Ctrl</b>: 角度をスナップ"
 
 #: src/object-edit.cpp:612
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
 "segment"
-msgstr ""
-"円／弧の<b>終点</b> … <b>Ctrl</b>: 角度をスナップ"
+msgstr "円／弧の<b>終点</b> … <b>Ctrl</b>: 角度をスナップ"
 
 #: src/object-edit.cpp:717
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
 msgstr ""
-"星／ポリゴンの<b>半径</b>を調整 … <b>Shift</b>: 丸める、 <b>Alt</b>: ランダム化"
+"星／ポリゴンの<b>半径</b>を調整 … <b>Shift</b>: 丸める、 <b>Alt</b>: ランダム"
+"化"
 
 #: src/object-edit.cpp:720
 msgid ""
@@ -2937,7 +2923,8 @@ msgid ""
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
 "randomize"
 msgstr ""
-"星／ポリゴンの<b>内径</b>を調整 … <b>Shift</b>: 丸める、 <b>Alt</b>: ランダム化"
+"星／ポリゴンの<b>内径</b>を調整 … <b>Shift</b>: 丸める、 <b>Alt</b>: ランダム"
+"化"
 
 #: src/object-edit.cpp:882
 msgid ""
@@ -2951,7 +2938,8 @@ msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
 msgstr ""
-"螺旋の<b>外側</b>の巻き … <b>Ctrl</b>: 角度をスナップ、<b>Alt</b>: 拡大／縮小／回転"
+"螺旋の<b>外側</b>の巻き … <b>Ctrl</b>: 角度をスナップ、<b>Alt</b>: 拡大／縮小"
+"／回転"
 
 #: src/object-edit.cpp:921
 msgid "Adjust the <b>offset distance</b>"
@@ -3024,27 +3012,28 @@ msgid "Image _Properties"
 msgstr "イメージのプロパティ"
 
 #. Autotrace dialog
-#: src/object-ui.cpp:354
+#. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
+#: src/object-ui.cpp:355
 msgid "_Trace"
 msgstr "トレース"
 
 #. Item dialog
-#: src/object-ui.cpp:395
+#: src/object-ui.cpp:396
 msgid "_Fill and Stroke"
 msgstr "フィル／ストローク"
 
 #. Link dialog
-#: src/object-ui.cpp:415
+#: src/object-ui.cpp:416
 msgid "Rectangle _Properties"
 msgstr "矩形のプロパティ"
 
 #. Link dialog
-#: src/object-ui.cpp:441
+#: src/object-ui.cpp:442
 msgid "Star _Properties"
 msgstr "星のプロパティ"
 
 #. Link dialog
-#: src/object-ui.cpp:467
+#: src/object-ui.cpp:468
 msgid "Spiral _Properties"
 msgstr "螺旋のプロパティ"
 
@@ -3059,8 +3048,7 @@ msgstr "パスでないオブジェクトは連結できません。"
 #: src/path-chemistry.cpp:73
 msgid ""
 "You cannot combine objects from <b>different groups</b> or <b>layers</b>."
-msgstr ""
-"異なるグループ、レイヤーのオブジェクトは連結できません。"
+msgstr "異なるグループ、レイヤーのオブジェクトは連結できません。"
 
 #: src/path-chemistry.cpp:157
 msgid "Select <b>path(s)</b> to break apart."
@@ -3099,16 +3087,14 @@ msgstr "フリーハンドツールを終了"
 msgid ""
 "<b>Ctrl</b>: make square or integer-ratio rect, lock a rounded corner "
 "circular"
-msgstr ""
-"<b>Ctrl</b>: 四角を作成、または角の丸みを固定"
+msgstr "<b>Ctrl</b>: 四角を作成、または角の丸みを固定"
 
 #: src/rect-context.cpp:551
 #, c-format
 msgid ""
 "<b>Rectangle</b>: %s x %s; with <b>Ctrl</b> to make square or integer-ratio "
 "rectangle; with <b>Shift</b> to draw around the starting point"
-msgstr ""
-"<b>四角</b>:"
+msgstr "<b>四角</b>:"
 
 #: src/select-context.cpp:641
 msgid "<b>Ctrl</b>: select in groups, move hor/vert"
@@ -3136,7 +3122,8 @@ msgid ""
 "<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
 "with <b>Shift</b> to disable snapping"
 msgstr ""
-"<b>移動</b>[%s, %s] … <b>Ctrl</b>: 水平／垂直移動、<b>Shift</b>: スナップを無効化"
+"<b>移動</b>[%s, %s] … <b>Ctrl</b>: 水平／垂直移動、<b>Shift</b>: スナップを無"
+"効化"
 
 #: src/select-toolbar.cpp:400
 msgid "Horizontal coordinate of selection"
@@ -3236,7 +3223,8 @@ msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
 msgstr ""
-"複数のオブジェクトのクローンを作る場合、グループ化してクローンをしてください。"
+"複数のオブジェクトのクローンを作る場合、グループ化してクローンをしてくださ"
+"い。"
 
 #: src/selection-chemistry.cpp:1496
 msgid "Select a <b>clone</b> to unlink."
@@ -3258,13 +3246,15 @@ msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, or "
 "textpath?)"
 msgstr ""
-"[クローン、リンクオフセット、パスと結合したテキスト]のオリジナルが見つかりませんでした。"
+"[クローン、リンクオフセット、パスと結合したテキスト]のオリジナルが見つかりま"
+"せんでした。"
 
 #: src/selection-chemistry.cpp:1571
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
-msgstr "選択しようとしているオリジナルは可視ではありません。(&lt;defs&gt;にあります)"
+msgstr ""
+"選択しようとしているオリジナルは可視ではありません。(&lt;defs&gt;にあります)"
 
 #: src/selection-chemistry.cpp:1598
 msgid "Select <b>object(s)</b> to tile."
@@ -3305,7 +3295,8 @@ msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
 msgstr ""
-"回転／傾ける の<b>中心</b> … マウスで中心を変更できます。拡大／縮小もこの中心を使います。"
+"回転／傾ける の<b>中心</b> … マウスで中心を変更できます。拡大／縮小もこの中心"
+"を使います。"
 
 #: src/seltrans.cpp:484
 msgid ""
@@ -3319,13 +3310,13 @@ msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
 msgstr ""
-"オブジェクトを<b>拡大／縮小</b> … <b>Ctrl</b>: 形状を固定、<b>Shift</b>: 中心を固定"
+"オブジェクトを<b>拡大／縮小</b> … <b>Ctrl</b>: 形状を固定、<b>Shift</b>: 中心"
+"を固定"
 
 #: src/seltrans.cpp:489
 msgid ""
 "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
-msgstr ""
-"オブジェクトを<b>傾ける</b> … <b>Shift</b>: 反対側を固定"
+msgstr "オブジェクトを<b>傾ける</b> … <b>Shift</b>: 反対側を固定"
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
 #: src/seltrans.cpp:490
@@ -3394,28 +3385,29 @@ msgstr "<b>無効な画像参照</b>: %s"
 msgid "<b>Image</b> %d x %d: %s"
 msgstr "<b>画像</b> %d x %d: %s"
 
-#: src/sp-image.cpp:720
+#. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
+#: src/sp-image.cpp:721
 msgid "Trace"
 msgstr "トレース"
 
-#: src/sp-image.cpp:867
+#: src/sp-image.cpp:868
 #, c-format
 msgid "Error writing %s: %s"
 msgstr "%s の書き込みエラー: %s"
 
-#: src/sp-image.cpp:901
+#: src/sp-image.cpp:902
 msgid "Untitled"
 msgstr "無題"
 
-#: src/sp-image.cpp:906
+#: src/sp-image.cpp:907
 msgid "Document Name:"
 msgstr "ドキュメント名:"
 
-#: src/sp-image.cpp:919
+#: src/sp-image.cpp:920
 msgid "Unknown"
 msgstr "不明"
 
-#: src/sp-image.cpp:925
+#: src/sp-image.cpp:926
 msgid "Image URI:"
 msgstr "画像 URI:"
 
@@ -3586,7 +3578,8 @@ msgid ""
 "This text object is <b>already put to a path</b>. Remove it from the path "
 "first. Use <b>Shift+D</b> to look up its path."
 msgstr ""
-"このテキストは<b>すでにパスに追加されています</b>。<b>Shift+D</b>をつかってそのパスを見つけてください。"
+"このテキストは<b>すでにパスに追加されています</b>。<b>Shift+D</b>をつかってそ"
+"のパスを見つけてください。"
 
 #: src/text-chemistry.cpp:141
 msgid "Select <b>a text on path</b> to remove it from path."
@@ -3894,8 +3887,7 @@ msgid ""
 "<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to "
 "zoom out."
 msgstr ""
-"<b>クリック／ドラッグ</b>: ズームイン, <b>Shift＋クリック</b>: ズームアウ"
-"ト"
+"<b>クリック／ドラッグ</b>: ズームイン, <b>Shift＋クリック</b>: ズームアウト"
 
 #: src/tools-switch.cpp:189
 msgid ""
@@ -3907,19 +3899,16 @@ msgstr ""
 "ドラッグでドラッグした領域の色の平均を、<b>Ctrl+C</b>でマウスポインタの位置の"
 "色をクリップボードへコピー"
 
-#: src/trace/trace.cpp:68 src/trace/trace.cpp:77
-msgid "Trace: Nothing selected"
-msgstr "トレース: 何も選択されていません"
+#: src/trace/trace.cpp:69 src/trace/trace.cpp:78 src/trace/trace.cpp:86
+#, fuzzy
+msgid "Select an <b>image</b> to trace"
+msgstr "クローンするオブジェクトを選択してください。"
 
-#: src/trace/trace.cpp:85
-msgid "Trace: Selected object is not an image"
-msgstr "トレース: 選択されたオブジェクトは画像ではありません"
-
-#: src/trace/trace.cpp:137
+#: src/trace/trace.cpp:140
 msgid "Trace: No active document"
 msgstr "トレース: アクティブなドキュメントがありません"
 
-#: src/trace/trace.cpp:158
+#: src/trace/trace.cpp:161
 msgid "Trace: Image has no bitmap data"
 msgstr "トレース: イメージはビットマップではありません"
 
@@ -5084,39 +5073,16 @@ msgstr "サイズ:"
 msgid "AaBbCcIiPpQq12368.;/()"
 msgstr "AaBbCcIiPpQq12368.;/()"
 
-#: src/widgets/gradient-selector.cpp:138
+#: src/widgets/gradient-selector.cpp:137
 msgid "Edit"
 msgstr "グラデーションを編集"
 
-#: src/widgets/gradient-selector.cpp:143
+#: src/widgets/gradient-selector.cpp:142
 msgid "Add"
 msgstr "グラデーションを追加"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientUnitsAttribute
-#: src/widgets/gradient-selector.cpp:167
-msgid ""
-"Whether the gradient vector is defined in the user space coordinates "
-"(gradientUnits=\"userSpaceOnUse\") or relative to the object's bounding box "
-"(gradientUnits=\"objectBoundingBox\")"
-msgstr ""
-"グラデーション情報を配置する方法を次から選びます。\n"
-" ユーザ空間: ドキュメントの空間にグラデーションを配置。\n"
-" オブジェクト: オブジェクトの空間にグラデーションを配置。"
-
-#: src/widgets/gradient-selector.cpp:172
-msgid "object"
-msgstr "オブジェクト"
-
-#: src/widgets/gradient-selector.cpp:176
-msgid "user space"
-msgstr "ユーザ空間"
-
-#: src/widgets/gradient-selector.cpp:184
-msgid "Coordinates:"
-msgstr "配置対象:"
-
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-#: src/widgets/gradient-selector.cpp:197
+#: src/widgets/gradient-selector.cpp:166
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
@@ -5128,19 +5094,19 @@ msgstr ""
 " リフレクト: グラデーションを反転しながら繰り返し\n"
 " ダイレクト: グラデーションをそのまま繰り返し"
 
-#: src/widgets/gradient-selector.cpp:203
+#: src/widgets/gradient-selector.cpp:172
 msgid "none"
 msgstr "なし"
 
-#: src/widgets/gradient-selector.cpp:207
+#: src/widgets/gradient-selector.cpp:176
 msgid "reflected"
 msgstr "リフレクト"
 
-#: src/widgets/gradient-selector.cpp:211
+#: src/widgets/gradient-selector.cpp:180
 msgid "direct"
 msgstr "ダイレクト"
 
-#: src/widgets/gradient-selector.cpp:219
+#: src/widgets/gradient-selector.cpp:188
 msgid "Repeat:"
 msgstr "繰り返し:"
 
@@ -5185,19 +5151,19 @@ msgstr "色"
 msgid "Gradient editor"
 msgstr "グラデーションエディタ"
 
-#: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:674
+#: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:687
 msgid "No paint"
 msgstr "なし"
 
-#: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:742
+#: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:755
 msgid "Flat color"
 msgstr "フラットカラー"
 
-#: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:809
+#: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:822
 msgid "Linear gradient"
 msgstr "線形グラデーション"
 
-#: src/widgets/paint-selector.cpp:176 src/widgets/paint-selector.cpp:812
+#: src/widgets/paint-selector.cpp:176 src/widgets/paint-selector.cpp:825
 msgid "Radial gradient"
 msgstr "放射グラデーション"
 
@@ -5205,25 +5171,25 @@ msgstr "放射グラデーション"
 msgid "Pattern"
 msgstr "パターン"
 
-#: src/widgets/paint-selector.cpp:639
+#: src/widgets/paint-selector.cpp:652
 msgid "No objects"
 msgstr "オブジェクトが選択されていません"
 
-#: src/widgets/paint-selector.cpp:650
+#: src/widgets/paint-selector.cpp:663
 msgid "Multiple styles"
 msgstr "マルチスタイル"
 
 #. TRANSLATORS: "Clone" is a noun here. This message is to notify the user
 #. that the currently selected object is a clone.
-#: src/widgets/paint-selector.cpp:663
+#: src/widgets/paint-selector.cpp:676
 msgid "Clone Selected"
 msgstr "選択オブジェクトはクローンです"
 
-#: src/widgets/paint-selector.cpp:869
+#: src/widgets/paint-selector.cpp:882
 msgid "No patterns in document"
 msgstr "ドキュメントにパターンタイルがありません"
 
-#: src/widgets/paint-selector.cpp:997
+#: src/widgets/paint-selector.cpp:1010
 msgid "Pattern fill"
 msgstr "パターン"
 
@@ -5353,3 +5319,33 @@ msgstr "属性"
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Value"
 msgstr "値"
+
+#~ msgid "Bitmap Tracing"
+#~ msgstr "ビットマップトレース"
+
+#~ msgid "Other"
+#~ msgstr "その他"
+
+#~ msgid "Trace: Nothing selected"
+#~ msgstr "トレース: 何も選択されていません"
+
+#~ msgid "Trace: Selected object is not an image"
+#~ msgstr "トレース: 選択されたオブジェクトは画像ではありません"
+
+#~ msgid ""
+#~ "Whether the gradient vector is defined in the user space coordinates "
+#~ "(gradientUnits=\"userSpaceOnUse\") or relative to the object's bounding "
+#~ "box (gradientUnits=\"objectBoundingBox\")"
+#~ msgstr ""
+#~ "グラデーション情報を配置する方法を次から選びます。\n"
+#~ " ユーザ空間: ドキュメントの空間にグラデーションを配置。\n"
+#~ " オブジェクト: オブジェクトの空間にグラデーションを配置。"
+
+#~ msgid "object"
+#~ msgstr "オブジェクト"
+
+#~ msgid "user space"
+#~ msgstr "ユーザ空間"
+
+#~ msgid "Coordinates:"
+#~ msgstr "配置対象:"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 21:39+0200\n"
+"POT-Creation-Date: 2004-10-29 20:41+0200\n"
 "PO-Revision-Date: 2003-07-23 16:58+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -146,149 +146,149 @@ msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:2038 src/dialogs/align.cpp:1097
+#: src/desktop.cpp:2038 src/dialogs/align.cpp:1098
 #: src/dialogs/desktop-properties.cpp:926 src/dialogs/export.cpp:126
 msgid "Page"
 msgstr "Strana"
 
-#: src/desktop.cpp:2042 src/dialogs/align.cpp:1100 src/dialogs/export.cpp:126
+#: src/desktop.cpp:2042 src/dialogs/align.cpp:1101 src/dialogs/export.cpp:126
 msgid "Drawing"
 msgstr "Kresba"
 
-#: src/desktop.cpp:2046 src/dialogs/align.cpp:1103 src/dialogs/export.cpp:126
+#: src/desktop.cpp:2046 src/dialogs/align.cpp:1104 src/dialogs/export.cpp:126
 msgid "Selection"
 msgstr "Výběr"
 
-#: src/dialogs/align.cpp:457 src/dialogs/text-edit.cpp:210
+#: src/dialogs/align.cpp:458 src/dialogs/text-edit.cpp:210
 msgid "Layout"
 msgstr "Rozložení"
 
-#: src/dialogs/align.cpp:458 src/dialogs/align.cpp:972
+#: src/dialogs/align.cpp:459 src/dialogs/align.cpp:973
 msgid "Align"
 msgstr "Zarovnat"
 
-#: src/dialogs/align.cpp:459 src/dialogs/align.cpp:1048
+#: src/dialogs/align.cpp:460 src/dialogs/align.cpp:1049
 msgid "Distribute"
 msgstr "Rozmístit"
 
-#: src/dialogs/align.cpp:460
+#: src/dialogs/align.cpp:461
 #, fuzzy
 msgid "Align Nodes"
 msgstr "Zarovnat objekty"
 
-#: src/dialogs/align.cpp:464
+#: src/dialogs/align.cpp:465
 #, fuzzy
 msgid "Relative to: "
 msgstr "Relativní přesun"
 
-#: src/dialogs/align.cpp:468 src/dialogs/align.cpp:938
+#: src/dialogs/align.cpp:469 src/dialogs/align.cpp:939
 msgid "Right side of aligned objects to left side of anchor"
 msgstr "Pravá strana zarovnaných objektů k levé straně ukotvení"
 
-#: src/dialogs/align.cpp:471 src/dialogs/align.cpp:940
+#: src/dialogs/align.cpp:472 src/dialogs/align.cpp:941
 msgid "Left side of aligned objects to left side of anchor"
 msgstr "Levá strana zarovnaných objektů k levé straně ukotvení"
 
-#: src/dialogs/align.cpp:474 src/dialogs/align.cpp:942
+#: src/dialogs/align.cpp:475 src/dialogs/align.cpp:943
 msgid "Center horizontally"
 msgstr "Na střed vodorovně"
 
-#: src/dialogs/align.cpp:477 src/dialogs/align.cpp:944
+#: src/dialogs/align.cpp:478 src/dialogs/align.cpp:945
 msgid "Right side of aligned objects to right side of anchor"
 msgstr "Pravá strana zarovnaných objektů k pravé straně ukotvení"
 
-#: src/dialogs/align.cpp:480 src/dialogs/align.cpp:946
+#: src/dialogs/align.cpp:481 src/dialogs/align.cpp:947
 msgid "Left side of aligned objects to right side of anchor"
 msgstr "Levá strana zarovnaných objektů k pravé straně ukotvení"
 
-#: src/dialogs/align.cpp:483 src/dialogs/align.cpp:949
+#: src/dialogs/align.cpp:484 src/dialogs/align.cpp:950
 msgid "Bottom of aligned objects to top of anchor"
 msgstr "Dolní strana zarovnaných objektů k horní straně ukotvení"
 
-#: src/dialogs/align.cpp:486 src/dialogs/align.cpp:951
+#: src/dialogs/align.cpp:487 src/dialogs/align.cpp:952
 msgid "Top of aligned objects to top of anchor"
 msgstr "Horní strana zarovnaných objektů k horní straně ukotvení"
 
-#: src/dialogs/align.cpp:489 src/dialogs/align.cpp:953
+#: src/dialogs/align.cpp:490 src/dialogs/align.cpp:954
 msgid "Center vertically"
 msgstr "Na střed svisle"
 
-#: src/dialogs/align.cpp:492 src/dialogs/align.cpp:955
+#: src/dialogs/align.cpp:493 src/dialogs/align.cpp:956
 msgid "Bottom of aligned objects to bottom of anchor"
 msgstr "Dolní strana zarovnaných objektů k dolní straně ukotvení"
 
-#: src/dialogs/align.cpp:495 src/dialogs/align.cpp:957
+#: src/dialogs/align.cpp:496 src/dialogs/align.cpp:958
 #, fuzzy
 msgid "Top of aligned objects to bottom of anchor"
 msgstr "Horní strana zarovnaných objektů k horní straně ukotvení"
 
-#: src/dialogs/align.cpp:502 src/dialogs/align.cpp:993
+#: src/dialogs/align.cpp:503 src/dialogs/align.cpp:994
 msgid "Distribute left sides of objects at even distances"
 msgstr "Rozmístit levé strany objektů rovnoměrně vzdálené"
 
-#: src/dialogs/align.cpp:506 src/dialogs/align.cpp:1001
+#: src/dialogs/align.cpp:507 src/dialogs/align.cpp:1002
 #, fuzzy
 msgid "Distribute centers of objects at even distances horizontally"
 msgstr "Rozmístit středy objektů rovnoměrně vzdálené vodorovně"
 
-#: src/dialogs/align.cpp:510 src/dialogs/align.cpp:1008
+#: src/dialogs/align.cpp:511 src/dialogs/align.cpp:1009
 msgid "Distribute right sides of objects at even distances"
 msgstr "Rozmístit pravé strany objektů rovnoměrně vzdálené"
 
-#: src/dialogs/align.cpp:514 src/dialogs/align.cpp:1015
+#: src/dialogs/align.cpp:515 src/dialogs/align.cpp:1016
 msgid "Distribute horizontal distance between objects equally"
 msgstr "Rozdělit vodorovnou vzdálenost mezi objekty rovnoměrně"
 
-#: src/dialogs/align.cpp:518 src/dialogs/align.cpp:1037
+#: src/dialogs/align.cpp:519 src/dialogs/align.cpp:1038
 msgid "Distribute bottom sides of objects at even distances"
 msgstr "Rozmístit dolní strany objektů rovnoměrně vzdálené"
 
-#: src/dialogs/align.cpp:522 src/dialogs/align.cpp:1030
+#: src/dialogs/align.cpp:523 src/dialogs/align.cpp:1031
 #, fuzzy
 msgid "Distribute centers of objects at even distances vertically"
 msgstr "Rozmístit středy objektů rovnoměrně vzdálené svisle"
 
-#: src/dialogs/align.cpp:526 src/dialogs/align.cpp:1022
+#: src/dialogs/align.cpp:527 src/dialogs/align.cpp:1023
 msgid "Distribute top sides of objects at even distances"
 msgstr "Rozmístit horní strany objektů rovnoměrně vzdálené"
 
-#: src/dialogs/align.cpp:530 src/dialogs/align.cpp:1044
+#: src/dialogs/align.cpp:531 src/dialogs/align.cpp:1045
 msgid "Distribute vertical distance between objects equally"
 msgstr "Rozdělit svislou vzdálenost mezi objekty rovnoměrně"
 
-#: src/dialogs/align.cpp:536
+#: src/dialogs/align.cpp:537
 #, fuzzy
 msgid "Align selected nodes horizontally"
 msgstr "Přehodit vybrané objekty vodorovně"
 
-#: src/dialogs/align.cpp:539
+#: src/dialogs/align.cpp:540
 #, fuzzy
 msgid "Align selected nodes vertically"
 msgstr "Přehodit vybrané objekty svisle"
 
-#: src/dialogs/align.cpp:542
+#: src/dialogs/align.cpp:543
 #, fuzzy
 msgid "Distribute selected nodes horizontally"
 msgstr "Přehodit vybrané objekty vodorovně"
 
-#: src/dialogs/align.cpp:545
+#: src/dialogs/align.cpp:546
 #, fuzzy
 msgid "Distribute selected nodes vertically"
 msgstr "Rozmístit středy objektů rovnoměrně vzdálené svisle"
 
-#: src/dialogs/align.cpp:1085
+#: src/dialogs/align.cpp:1086
 msgid "Last selected"
 msgstr "Poslední vybraný"
 
-#: src/dialogs/align.cpp:1088
+#: src/dialogs/align.cpp:1089
 msgid "First selected"
 msgstr "První vybraný"
 
-#: src/dialogs/align.cpp:1091
+#: src/dialogs/align.cpp:1092
 msgid "Biggest item"
 msgstr "Největší položka"
 
-#: src/dialogs/align.cpp:1094
+#: src/dialogs/align.cpp:1095
 msgid "Smallest item"
 msgstr "Nejmenší položka"
 
@@ -962,7 +962,7 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1206 src/dialogs/find.cpp:646
+#: src/dialogs/display-settings.cpp:1206 src/dialogs/find.cpp:649
 #, fuzzy
 msgid "Clones"
 msgstr "Zavřít"
@@ -1200,35 +1200,35 @@ msgstr ""
 msgid "Export"
 msgstr "Export"
 
-#: src/dialogs/export.cpp:958
+#: src/dialogs/export.cpp:949
 msgid "You have to enter a filename"
 msgstr ""
 
-#: src/dialogs/export.cpp:963
+#: src/dialogs/export.cpp:954
 msgid "The chosen area to be exported is invalid"
 msgstr ""
 
-#: src/dialogs/export.cpp:970
+#: src/dialogs/export.cpp:961
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr ""
 
-#: src/dialogs/export.cpp:984
+#: src/dialogs/export.cpp:975
 #, fuzzy
 msgid "Export in progress"
 msgstr "Exportovat oblast"
 
-#: src/dialogs/export.cpp:990
+#: src/dialogs/export.cpp:981
 #, fuzzy, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Barevný obrázek %d × %d: %s"
 
-#: src/dialogs/export.cpp:1016
+#: src/dialogs/export.cpp:1007
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr ""
 
-#: src/dialogs/export.cpp:1119
+#: src/dialogs/export.cpp:1110
 #, fuzzy
 msgid "Select a filename for exporting"
 msgstr "Vyberte soubor pro import"
@@ -1316,202 +1316,202 @@ msgstr "Vykreslování"
 msgid "alternating"
 msgstr "Sytost:"
 
-#: src/dialogs/find.cpp:79 src/dialogs/find.cpp:716
+#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:719
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:80 src/dialogs/find.cpp:717
+#: src/dialogs/find.cpp:83 src/dialogs/find.cpp:720
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:81 src/dialogs/find.cpp:718
+#: src/dialogs/find.cpp:84 src/dialogs/find.cpp:721
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:719
+#: src/dialogs/find.cpp:85 src/dialogs/find.cpp:722
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:402
+#: src/dialogs/find.cpp:405
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
 msgstr ""
 
-#: src/dialogs/find.cpp:403
+#: src/dialogs/find.cpp:406
 #, fuzzy
 msgid "exact"
 msgstr "Text"
 
-#: src/dialogs/find.cpp:403
+#: src/dialogs/find.cpp:406
 #, fuzzy
 msgid "partial"
 msgstr "Spirála"
 
-#: src/dialogs/find.cpp:410
+#: src/dialogs/find.cpp:413
 #, fuzzy
 msgid "No objects found"
 msgstr "Žádné objekty"
 
-#: src/dialogs/find.cpp:568
+#: src/dialogs/find.cpp:571
 #, fuzzy
 msgid "T_ype: "
 msgstr "Typ:"
 
-#: src/dialogs/find.cpp:575
+#: src/dialogs/find.cpp:578
 msgid "Search in all object types"
 msgstr ""
 
-#: src/dialogs/find.cpp:575
+#: src/dialogs/find.cpp:578
 #, fuzzy
 msgid "All types"
 msgstr "Styl výplně"
 
-#: src/dialogs/find.cpp:586
+#: src/dialogs/find.cpp:589
 msgid "Search all shapes"
 msgstr ""
 
-#: src/dialogs/find.cpp:586
+#: src/dialogs/find.cpp:589
 #, fuzzy
 msgid "All shapes"
 msgstr "Všechny tvarovací nástroje"
 
-#: src/dialogs/find.cpp:603
+#: src/dialogs/find.cpp:606
 #, fuzzy
 msgid "Search rectangles"
 msgstr "Čtyřúhelník"
 
-#: src/dialogs/find.cpp:603
+#: src/dialogs/find.cpp:606
 #, fuzzy
 msgid "Rectangles"
 msgstr "Čtyřúhelník"
 
-#: src/dialogs/find.cpp:608
+#: src/dialogs/find.cpp:611
 msgid "Search ellipses, arcs, circles"
 msgstr ""
 
-#: src/dialogs/find.cpp:608
+#: src/dialogs/find.cpp:611
 #, fuzzy
 msgid "Ellipses"
 msgstr "Elipsa"
 
-#: src/dialogs/find.cpp:613
+#: src/dialogs/find.cpp:616
 #, fuzzy
 msgid "Search stars and polygons"
 msgstr "Tvorba hvězd a polygonů"
 
-#: src/dialogs/find.cpp:613
+#: src/dialogs/find.cpp:616
 #, fuzzy
 msgid "Stars"
 msgstr "Hvězda"
 
-#: src/dialogs/find.cpp:618
+#: src/dialogs/find.cpp:621
 #, fuzzy
 msgid "Search spirals"
 msgstr "Tvorba spirál"
 
-#: src/dialogs/find.cpp:618
+#: src/dialogs/find.cpp:621
 #, fuzzy
 msgid "Spirals"
 msgstr "Spirála"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Search paths, lines, polylines"
 msgstr ""
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Paths"
 msgstr ""
 
-#: src/dialogs/find.cpp:636
+#: src/dialogs/find.cpp:639
 #, fuzzy
 msgid "Search text objects"
 msgstr "Vybrané objekty"
 
-#: src/dialogs/find.cpp:636
+#: src/dialogs/find.cpp:639
 #, fuzzy
 msgid "Texts"
 msgstr "Text"
 
-#: src/dialogs/find.cpp:641
+#: src/dialogs/find.cpp:644
 msgid "Search groups"
 msgstr ""
 
-#: src/dialogs/find.cpp:641
+#: src/dialogs/find.cpp:644
 #, fuzzy
 msgid "Groups"
 msgstr "Seskupit"
 
-#: src/dialogs/find.cpp:646
+#: src/dialogs/find.cpp:649
 msgid "Search clones"
 msgstr ""
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Search images"
 msgstr ""
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 #, fuzzy
 msgid "Images"
 msgstr "Obrázek"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:659
 #, fuzzy
 msgid "Search offset objects"
 msgstr "Tvorba a úprava textových objektů"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:659
 msgid "Offsets"
 msgstr ""
 
-#: src/dialogs/find.cpp:716
+#: src/dialogs/find.cpp:719
 #, fuzzy
 msgid "_Text: "
 msgstr "Text"
 
-#: src/dialogs/find.cpp:717
+#: src/dialogs/find.cpp:720
 msgid "_ID: "
 msgstr ""
 
-#: src/dialogs/find.cpp:718
+#: src/dialogs/find.cpp:721
 #, fuzzy
 msgid "_Style: "
 msgstr "Styl"
 
-#: src/dialogs/find.cpp:719
+#: src/dialogs/find.cpp:722
 #, fuzzy
 msgid "_Attribute: "
 msgstr "Atribut"
 
-#: src/dialogs/find.cpp:732
+#: src/dialogs/find.cpp:735
 #, fuzzy
 msgid "Search in s_election"
 msgstr "Výběr"
 
-#: src/dialogs/find.cpp:736
+#: src/dialogs/find.cpp:739
 msgid "Limit search to the current selection"
 msgstr ""
 
 #. TRANSLATORS: "Clear" is a verb here
-#: src/dialogs/find.cpp:746
+#: src/dialogs/find.cpp:749
 #, fuzzy
 msgid "_Clear"
 msgstr "Zavřít"
 
-#: src/dialogs/find.cpp:746
+#: src/dialogs/find.cpp:749
 #, fuzzy
 msgid "Clear values"
 msgstr "Vyčistit vše"
 
-#: src/dialogs/find.cpp:747
+#: src/dialogs/find.cpp:750
 #, fuzzy
 msgid "_Find"
 msgstr "Mřížka"
 
-#: src/dialogs/find.cpp:747
+#: src/dialogs/find.cpp:750
 msgid "Select objects matching all of the fields you filled in"
 msgstr ""
 
@@ -1987,14 +1987,9 @@ msgstr "Mezery mezi řádky:"
 msgid "Set as default"
 msgstr "Nastavit jako výchozí"
 
-#: src/dialogs/tracedialog.cpp:294
-#, fuzzy
-msgid "Bitmap Tracing"
-msgstr "Velikost bitmapy"
-
 #. ##Set up the Potrace panel
 #. #### brightness ####
-#: src/dialogs/tracedialog.cpp:303
+#: src/dialogs/tracedialog.cpp:327
 #, fuzzy
 msgid "Brightness"
 msgstr "Výška:"
@@ -2009,22 +2004,22 @@ msgstr "Výška:"
 #. potraceCannyLoSpinner.set_value(0.1);
 #. potraceCannyBox.pack_start(potraceCannyLoSpinner);
 #.
-#: src/dialogs/tracedialog.cpp:306 src/dialogs/tracedialog.cpp:332
+#: src/dialogs/tracedialog.cpp:330 src/dialogs/tracedialog.cpp:356
 msgid "Threshold"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:313
+#: src/dialogs/tracedialog.cpp:337
 #, fuzzy
 msgid "Image Brightness"
 msgstr "Vlastnosti obrázku"
 
 #. #### canny edge detection ####
 #. TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
-#: src/dialogs/tracedialog.cpp:319
+#: src/dialogs/tracedialog.cpp:343
 msgid "Optimal Edge Detection (Canny)"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:339
+#: src/dialogs/tracedialog.cpp:363
 #, fuzzy
 msgid "Edge Detection"
 msgstr "Výběr"
@@ -2033,36 +2028,36 @@ msgstr "Výběr"
 #. TRANSLATORS: Color Quantization: the process of reducing the number of colors
 #. in an image by selecting an optimized set of representative colors and then
 #. re-applying this reduced set to the original image.
-#: src/dialogs/tracedialog.cpp:347
+#: src/dialogs/tracedialog.cpp:371
 #, fuzzy
 msgid "Color Quantization"
 msgstr "Kreslení barvy"
 
-#: src/dialogs/tracedialog.cpp:350
+#: src/dialogs/tracedialog.cpp:374
 #, fuzzy
 msgid "Colors"
 msgstr "Zavřít"
 
-#: src/dialogs/tracedialog.cpp:357
+#: src/dialogs/tracedialog.cpp:381
 msgid "Quantization / Reduction"
 msgstr ""
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:362
+#: src/dialogs/tracedialog.cpp:386
 msgid "Invert"
 msgstr ""
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:368
+#: src/dialogs/tracedialog.cpp:392
 #, fuzzy
 msgid "Preview"
 msgstr "Nový náhled"
 
-#: src/dialogs/tracedialog.cpp:375
+#: src/dialogs/tracedialog.cpp:399
 msgid "Intermediate Bitmap"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:383
+#: src/dialogs/tracedialog.cpp:407
 #, fuzzy
 msgid "Credits"
 msgstr "Rohy:"
@@ -2070,16 +2065,10 @@ msgstr "Rohy:"
 #. done
 #. TRANSLATORS: Potrace is an application for transforming bitmaps into
 #. vector graphics (http://potrace.sourceforge.net/)
-#: src/dialogs/tracedialog.cpp:390
+#: src/dialogs/tracedialog.cpp:414
 #, fuzzy
 msgid "Potrace"
 msgstr "Sledovat"
-
-#. ##Set up the Other panel
-#: src/dialogs/tracedialog.cpp:393
-#, fuzzy
-msgid "Other"
-msgstr "Seřadit"
 
 #. Move page
 #: src/dialogs/transformation.cpp:321 src/dialogs/transformation.cpp:467
@@ -3157,31 +3146,32 @@ msgid "Image _Properties"
 msgstr "Vlastnosti obrázku"
 
 #. Autotrace dialog
-#: src/object-ui.cpp:354
+#. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
+#: src/object-ui.cpp:355
 #, fuzzy
 msgid "_Trace"
 msgstr "Sledovat"
 
 #. Item dialog
-#: src/object-ui.cpp:395
+#: src/object-ui.cpp:396
 #, fuzzy
 msgid "_Fill and Stroke"
 msgstr "Výplň a čáry"
 
 #. Link dialog
-#: src/object-ui.cpp:415
+#: src/object-ui.cpp:416
 #, fuzzy
 msgid "Rectangle _Properties"
 msgstr "Vlastnosti čtyřúhelníku"
 
 #. Link dialog
-#: src/object-ui.cpp:441
+#: src/object-ui.cpp:442
 #, fuzzy
 msgid "Star _Properties"
 msgstr "Vlastnosti hvězdy"
 
 #. Link dialog
-#: src/object-ui.cpp:467
+#: src/object-ui.cpp:468
 #, fuzzy
 msgid "Spiral _Properties"
 msgstr "Vlastnosti spirály"
@@ -3547,28 +3537,29 @@ msgstr "Obrázek s chybným odkazem: %s"
 msgid "<b>Image</b> %d x %d: %s"
 msgstr "Barevný obrázek %d × %d: %s"
 
-#: src/sp-image.cpp:720
+#. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
+#: src/sp-image.cpp:721
 msgid "Trace"
 msgstr "Sledovat"
 
-#: src/sp-image.cpp:867
+#: src/sp-image.cpp:868
 #, fuzzy, c-format
 msgid "Error writing %s: %s"
 msgstr "Chyba při zápisu %s: %s"
 
-#: src/sp-image.cpp:901
+#: src/sp-image.cpp:902
 msgid "Untitled"
 msgstr "Nepojmenovaný"
 
-#: src/sp-image.cpp:906
+#: src/sp-image.cpp:907
 msgid "Document Name:"
 msgstr "Název dokumentu:"
 
-#: src/sp-image.cpp:919
+#: src/sp-image.cpp:920
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: src/sp-image.cpp:925
+#: src/sp-image.cpp:926
 msgid "Image URI:"
 msgstr "URI obrázku:"
 
@@ -5701,6 +5692,14 @@ msgstr "Atribut"
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Value"
 msgstr "Hodnota"
+
+#, fuzzy
+#~ msgid "Bitmap Tracing"
+#~ msgstr "Velikost bitmapy"
+
+#, fuzzy
+#~ msgid "Other"
+#~ msgstr "Seřadit"
 
 #, fuzzy
 #~ msgid "Trace: Nothing selected"

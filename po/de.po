@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.39\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 21:39+0200\n"
+"POT-Creation-Date: 2004-10-29 20:41+0200\n"
 "PO-Revision-Date: 2004-10-26 10:03+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -159,146 +159,146 @@ msgid "No next zoom."
 msgstr "Kein nächster Größenfaktor."
 
 #. Page page
-#: src/desktop.cpp:2038 src/dialogs/align.cpp:1097
+#: src/desktop.cpp:2038 src/dialogs/align.cpp:1098
 #: src/dialogs/desktop-properties.cpp:926 src/dialogs/export.cpp:126
 msgid "Page"
 msgstr "Seite"
 
 # not sure here -cm-
-#: src/desktop.cpp:2042 src/dialogs/align.cpp:1100 src/dialogs/export.cpp:126
+#: src/desktop.cpp:2042 src/dialogs/align.cpp:1101 src/dialogs/export.cpp:126
 msgid "Drawing"
 msgstr "Zeichnung"
 
-#: src/desktop.cpp:2046 src/dialogs/align.cpp:1103 src/dialogs/export.cpp:126
+#: src/desktop.cpp:2046 src/dialogs/align.cpp:1104 src/dialogs/export.cpp:126
 msgid "Selection"
 msgstr "Auswahl"
 
-#: src/dialogs/align.cpp:457 src/dialogs/text-edit.cpp:210
+#: src/dialogs/align.cpp:458 src/dialogs/text-edit.cpp:210
 msgid "Layout"
 msgstr "Layout"
 
-#: src/dialogs/align.cpp:458 src/dialogs/align.cpp:972
+#: src/dialogs/align.cpp:459 src/dialogs/align.cpp:973
 msgid "Align"
 msgstr "Ausrichten"
 
 # CHECK
-#: src/dialogs/align.cpp:459 src/dialogs/align.cpp:1048
+#: src/dialogs/align.cpp:460 src/dialogs/align.cpp:1049
 msgid "Distribute"
 msgstr "Abstände angleichen"
 
-#: src/dialogs/align.cpp:460
+#: src/dialogs/align.cpp:461
 msgid "Align Nodes"
 msgstr "Knoten ausrichten"
 
-#: src/dialogs/align.cpp:464
+#: src/dialogs/align.cpp:465
 msgid "Relative to: "
 msgstr "Relative Bewegung nach:"
 
-#: src/dialogs/align.cpp:468 src/dialogs/align.cpp:938
+#: src/dialogs/align.cpp:469 src/dialogs/align.cpp:939
 msgid "Right side of aligned objects to left side of anchor"
 msgstr ""
 "Rechte Seite der ausgerichteten Objekte an linker Seite der Verankerung"
 
-#: src/dialogs/align.cpp:471 src/dialogs/align.cpp:940
+#: src/dialogs/align.cpp:472 src/dialogs/align.cpp:941
 msgid "Left side of aligned objects to left side of anchor"
 msgstr ""
 "Linke Seite der ausgerichteten Objekte an rechter Seite der Verankerung"
 
-#: src/dialogs/align.cpp:474 src/dialogs/align.cpp:942
+#: src/dialogs/align.cpp:475 src/dialogs/align.cpp:943
 msgid "Center horizontally"
 msgstr "Horizontal zentrieren"
 
-#: src/dialogs/align.cpp:477 src/dialogs/align.cpp:944
+#: src/dialogs/align.cpp:478 src/dialogs/align.cpp:945
 msgid "Right side of aligned objects to right side of anchor"
 msgstr ""
 "Rechte Seiten der ausgerichteten Objekte an rechter Seite der Verankerung"
 
-#: src/dialogs/align.cpp:480 src/dialogs/align.cpp:946
+#: src/dialogs/align.cpp:481 src/dialogs/align.cpp:947
 msgid "Left side of aligned objects to right side of anchor"
 msgstr ""
 "Linke Seiten der ausgerichteten Objekte an linker Seite der Verankerung"
 
-#: src/dialogs/align.cpp:483 src/dialogs/align.cpp:949
+#: src/dialogs/align.cpp:484 src/dialogs/align.cpp:950
 msgid "Bottom of aligned objects to top of anchor"
 msgstr "Unterseiten der ausgerichteten Objekte an Oberseite der Verankerung"
 
-#: src/dialogs/align.cpp:486 src/dialogs/align.cpp:951
+#: src/dialogs/align.cpp:487 src/dialogs/align.cpp:952
 msgid "Top of aligned objects to top of anchor"
 msgstr "Oberseiten der ausgerichteten Objekte an Oberseite der Verankerung"
 
-#: src/dialogs/align.cpp:489 src/dialogs/align.cpp:953
+#: src/dialogs/align.cpp:490 src/dialogs/align.cpp:954
 msgid "Center vertically"
 msgstr "Vertikal zentrieren"
 
-#: src/dialogs/align.cpp:492 src/dialogs/align.cpp:955
+#: src/dialogs/align.cpp:493 src/dialogs/align.cpp:956
 msgid "Bottom of aligned objects to bottom of anchor"
 msgstr "Unterseiten der ausgerichteten Objekte an Unterseite der Verankerung"
 
-#: src/dialogs/align.cpp:495 src/dialogs/align.cpp:957
+#: src/dialogs/align.cpp:496 src/dialogs/align.cpp:958
 msgid "Top of aligned objects to bottom of anchor"
 msgstr "Oberseiten der ausgerichteten Objekte an Unterseite der Verankerung"
 
-#: src/dialogs/align.cpp:502 src/dialogs/align.cpp:993
+#: src/dialogs/align.cpp:503 src/dialogs/align.cpp:994
 msgid "Distribute left sides of objects at even distances"
 msgstr "Abstand zwischen linken Seiten der Objekte angleichen"
 
-#: src/dialogs/align.cpp:506 src/dialogs/align.cpp:1001
+#: src/dialogs/align.cpp:507 src/dialogs/align.cpp:1002
 msgid "Distribute centers of objects at even distances horizontally"
 msgstr "Horizontalen Abstand zwischen Objektmittelpunkten angleichen"
 
-#: src/dialogs/align.cpp:510 src/dialogs/align.cpp:1008
+#: src/dialogs/align.cpp:511 src/dialogs/align.cpp:1009
 msgid "Distribute right sides of objects at even distances"
 msgstr "Abstand zwischen rechten Seiten der Objekte angleichen"
 
-#: src/dialogs/align.cpp:514 src/dialogs/align.cpp:1015
+#: src/dialogs/align.cpp:515 src/dialogs/align.cpp:1016
 msgid "Distribute horizontal distance between objects equally"
 msgstr "Horizontalen Abstand zwischen Objekten angleichen"
 
-#: src/dialogs/align.cpp:518 src/dialogs/align.cpp:1037
+#: src/dialogs/align.cpp:519 src/dialogs/align.cpp:1038
 msgid "Distribute bottom sides of objects at even distances"
 msgstr "Abstand zwischen Objektoberseiten angleichen"
 
-#: src/dialogs/align.cpp:522 src/dialogs/align.cpp:1030
+#: src/dialogs/align.cpp:523 src/dialogs/align.cpp:1031
 msgid "Distribute centers of objects at even distances vertically"
 msgstr "Vertikalen Abstand zwischen Objektmittelpunkten angleichen"
 
-#: src/dialogs/align.cpp:526 src/dialogs/align.cpp:1022
+#: src/dialogs/align.cpp:527 src/dialogs/align.cpp:1023
 msgid "Distribute top sides of objects at even distances"
 msgstr "Abstand zwischen Objektoberseiten angleichen"
 
-#: src/dialogs/align.cpp:530 src/dialogs/align.cpp:1044
+#: src/dialogs/align.cpp:531 src/dialogs/align.cpp:1045
 msgid "Distribute vertical distance between objects equally"
 msgstr "Vertikalen Abstand zwischen Objekten angleichen"
 
-#: src/dialogs/align.cpp:536
+#: src/dialogs/align.cpp:537
 msgid "Align selected nodes horizontally"
 msgstr "Ausgewählte Knoten horizontal ausrichten"
 
-#: src/dialogs/align.cpp:539
+#: src/dialogs/align.cpp:540
 msgid "Align selected nodes vertically"
 msgstr "Ausgwählte Knoten vertikal ausrichten"
 
-#: src/dialogs/align.cpp:542
+#: src/dialogs/align.cpp:543
 msgid "Distribute selected nodes horizontally"
 msgstr "Ausgwählte Knoten horizontal gleichmässig anordnen"
 
-#: src/dialogs/align.cpp:545
+#: src/dialogs/align.cpp:546
 msgid "Distribute selected nodes vertically"
 msgstr "Ausgwählte Knoten vertikal gleichmässig anordnen"
 
-#: src/dialogs/align.cpp:1085
+#: src/dialogs/align.cpp:1086
 msgid "Last selected"
 msgstr "Zuletzt gewählt"
 
-#: src/dialogs/align.cpp:1088
+#: src/dialogs/align.cpp:1089
 msgid "First selected"
 msgstr "Zuerst gewählt"
 
-#: src/dialogs/align.cpp:1091
+#: src/dialogs/align.cpp:1092
 msgid "Biggest item"
 msgstr "Größtes Objekt"
 
-#: src/dialogs/align.cpp:1094
+#: src/dialogs/align.cpp:1095
 msgid "Smallest item"
 msgstr "Kleinstes Objekt"
 
@@ -986,7 +986,7 @@ msgstr ""
 "Knopf über dem rechten Rollbalken geändert wird)"
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1206 src/dialogs/find.cpp:646
+#: src/dialogs/display-settings.cpp:1206 src/dialogs/find.cpp:649
 msgid "Clones"
 msgstr "Klone"
 
@@ -1232,34 +1232,34 @@ msgstr "Auswählen..."
 msgid "Export"
 msgstr "Exportieren"
 
-#: src/dialogs/export.cpp:958
+#: src/dialogs/export.cpp:949
 msgid "You have to enter a filename"
 msgstr "Sie müssen einen Dateinamen angeben"
 
-#: src/dialogs/export.cpp:963
+#: src/dialogs/export.cpp:954
 msgid "The chosen area to be exported is invalid"
 msgstr "Der zum Exportieren gewählte Bereich ist ungültig"
 
-#: src/dialogs/export.cpp:970
+#: src/dialogs/export.cpp:961
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr "Verzeichnis %s existiert nicht oder ist kein Verzeichnis.\n"
 
-#: src/dialogs/export.cpp:984
+#: src/dialogs/export.cpp:975
 msgid "Export in progress"
 msgstr "Exportieren läuft"
 
-#: src/dialogs/export.cpp:990
+#: src/dialogs/export.cpp:981
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Exportiere [%d x %d] %s"
 
-#: src/dialogs/export.cpp:1016
+#: src/dialogs/export.cpp:1007
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr ""
 
-#: src/dialogs/export.cpp:1119
+#: src/dialogs/export.cpp:1110
 msgid "Select a filename for exporting"
 msgstr "Wählen Sie einen Namen für die zu exportierende Datei"
 
@@ -1341,183 +1341,183 @@ msgstr "gewunden"
 msgid "alternating"
 msgstr "alternierend"
 
-#: src/dialogs/find.cpp:79 src/dialogs/find.cpp:716
+#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:719
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 "Objekte nach ihrem Textinhalt finden (exakte oder partielle Übereinstimmung)"
 
-#: src/dialogs/find.cpp:80 src/dialogs/find.cpp:717
+#: src/dialogs/find.cpp:83 src/dialogs/find.cpp:720
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 "Objekte nach dem Wert ihres id-Attributs finden (exakte oder partielle "
 "Übereinstimmung)"
 
-#: src/dialogs/find.cpp:81 src/dialogs/find.cpp:718
+#: src/dialogs/find.cpp:84 src/dialogs/find.cpp:721
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 "Objekte nach ihren Stilen finden (exakte oder partielle Übereinstimmung)"
 
-#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:719
+#: src/dialogs/find.cpp:85 src/dialogs/find.cpp:722
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 "Objekte nach einem Attributnamen finden (exakte oder partielle "
 "Übereinstimmung)"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:402
+#: src/dialogs/find.cpp:405
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
 msgstr "%d Objekt(e) gefunden (von %d), %s passend."
 
-#: src/dialogs/find.cpp:403
+#: src/dialogs/find.cpp:406
 msgid "exact"
 msgstr "exakt"
 
-#: src/dialogs/find.cpp:403
+#: src/dialogs/find.cpp:406
 msgid "partial"
 msgstr "teilweise"
 
-#: src/dialogs/find.cpp:410
+#: src/dialogs/find.cpp:413
 msgid "No objects found"
 msgstr "Keine Objekte gefunden"
 
-#: src/dialogs/find.cpp:568
+#: src/dialogs/find.cpp:571
 msgid "T_ype: "
 msgstr "T_yp:"
 
-#: src/dialogs/find.cpp:575
+#: src/dialogs/find.cpp:578
 msgid "Search in all object types"
 msgstr "Alle Objekttypen durchsuchen"
 
-#: src/dialogs/find.cpp:575
+#: src/dialogs/find.cpp:578
 msgid "All types"
 msgstr "Alle Typen"
 
-#: src/dialogs/find.cpp:586
+#: src/dialogs/find.cpp:589
 msgid "Search all shapes"
 msgstr "Alle Formen durchsuchen"
 
-#: src/dialogs/find.cpp:586
+#: src/dialogs/find.cpp:589
 msgid "All shapes"
 msgstr "Alle Formen"
 
-#: src/dialogs/find.cpp:603
+#: src/dialogs/find.cpp:606
 msgid "Search rectangles"
 msgstr "Rechtecke durchsuchen"
 
-#: src/dialogs/find.cpp:603
+#: src/dialogs/find.cpp:606
 msgid "Rectangles"
 msgstr "Rechtecke"
 
-#: src/dialogs/find.cpp:608
+#: src/dialogs/find.cpp:611
 msgid "Search ellipses, arcs, circles"
 msgstr "Ellipsen, Bögen und Kreise durchsuchen"
 
-#: src/dialogs/find.cpp:608
+#: src/dialogs/find.cpp:611
 msgid "Ellipses"
 msgstr "Ellipsen"
 
-#: src/dialogs/find.cpp:613
+#: src/dialogs/find.cpp:616
 msgid "Search stars and polygons"
 msgstr "Sterne und Polygone durchsuchen"
 
-#: src/dialogs/find.cpp:613
+#: src/dialogs/find.cpp:616
 msgid "Stars"
 msgstr "Sterne"
 
-#: src/dialogs/find.cpp:618
+#: src/dialogs/find.cpp:621
 msgid "Search spirals"
 msgstr "Spiralen durchsuchen"
 
-#: src/dialogs/find.cpp:618
+#: src/dialogs/find.cpp:621
 msgid "Spirals"
 msgstr "Spiralen"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Search paths, lines, polylines"
 msgstr "Pfade, Linien oder Polylinien suchen"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Paths"
 msgstr "Pfade"
 
-#: src/dialogs/find.cpp:636
+#: src/dialogs/find.cpp:639
 msgid "Search text objects"
 msgstr "Textobjekte durchsuchen"
 
-#: src/dialogs/find.cpp:636
+#: src/dialogs/find.cpp:639
 msgid "Texts"
 msgstr "Texte"
 
-#: src/dialogs/find.cpp:641
+#: src/dialogs/find.cpp:644
 msgid "Search groups"
 msgstr "Gruppen durchsuchen"
 
-#: src/dialogs/find.cpp:641
+#: src/dialogs/find.cpp:644
 msgid "Groups"
 msgstr "Gruppen"
 
-#: src/dialogs/find.cpp:646
+#: src/dialogs/find.cpp:649
 msgid "Search clones"
 msgstr "Klone durchsuchen"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Search images"
 msgstr "Bilder durchsuchen"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Images"
 msgstr "Bilder"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:659
 msgid "Search offset objects"
 msgstr "Pfad-Versatz Objekte finden"
 
-#: src/dialogs/find.cpp:656
+#: src/dialogs/find.cpp:659
 msgid "Offsets"
 msgstr "Versatz"
 
-#: src/dialogs/find.cpp:716
+#: src/dialogs/find.cpp:719
 msgid "_Text: "
 msgstr "_Text: "
 
-#: src/dialogs/find.cpp:717
+#: src/dialogs/find.cpp:720
 msgid "_ID: "
 msgstr "_Kennung: "
 
-#: src/dialogs/find.cpp:718
+#: src/dialogs/find.cpp:721
 msgid "_Style: "
 msgstr "_Stil: "
 
-#: src/dialogs/find.cpp:719
+#: src/dialogs/find.cpp:722
 msgid "_Attribute: "
 msgstr "_Attribut: "
 
-#: src/dialogs/find.cpp:732
+#: src/dialogs/find.cpp:735
 msgid "Search in s_election"
 msgstr "_Auswahl durchsuchen"
 
-#: src/dialogs/find.cpp:736
+#: src/dialogs/find.cpp:739
 msgid "Limit search to the current selection"
 msgstr "Suche auf aktuelle Auswahl beschränken"
 
 #. TRANSLATORS: "Clear" is a verb here
-#: src/dialogs/find.cpp:746
+#: src/dialogs/find.cpp:749
 msgid "_Clear"
 msgstr "_Leeren"
 
-#: src/dialogs/find.cpp:746
+#: src/dialogs/find.cpp:749
 msgid "Clear values"
 msgstr "Werte leeren"
 
-#: src/dialogs/find.cpp:747
+#: src/dialogs/find.cpp:750
 msgid "_Find"
 msgstr "_Suchen"
 
-#: src/dialogs/find.cpp:747
+#: src/dialogs/find.cpp:750
 msgid "Select objects matching all of the fields you filled in"
 msgstr "Wähle Objekte aus, die zu allen angegebene Feldern passen"
 
@@ -1988,13 +1988,9 @@ msgstr "Zeilenabstand:"
 msgid "Set as default"
 msgstr "Zur Vorgabe machen"
 
-#: src/dialogs/tracedialog.cpp:294
-msgid "Bitmap Tracing"
-msgstr "Pixel vektorisieren"
-
 #. ##Set up the Potrace panel
 #. #### brightness ####
-#: src/dialogs/tracedialog.cpp:303
+#: src/dialogs/tracedialog.cpp:327
 msgid "Brightness"
 msgstr "Helligkeitswert"
 
@@ -2008,21 +2004,21 @@ msgstr "Helligkeitswert"
 #. potraceCannyLoSpinner.set_value(0.1);
 #. potraceCannyBox.pack_start(potraceCannyLoSpinner);
 #.
-#: src/dialogs/tracedialog.cpp:306 src/dialogs/tracedialog.cpp:332
+#: src/dialogs/tracedialog.cpp:330 src/dialogs/tracedialog.cpp:356
 msgid "Threshold"
 msgstr "Schwellwert:"
 
-#: src/dialogs/tracedialog.cpp:313
+#: src/dialogs/tracedialog.cpp:337
 msgid "Image Brightness"
 msgstr "Bildhelligkeit"
 
 #. #### canny edge detection ####
 #. TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
-#: src/dialogs/tracedialog.cpp:319
+#: src/dialogs/tracedialog.cpp:343
 msgid "Optimal Edge Detection (Canny)"
 msgstr "Optimierte Kantenerkennung (Canny)"
 
-#: src/dialogs/tracedialog.cpp:339
+#: src/dialogs/tracedialog.cpp:363
 msgid "Edge Detection"
 msgstr "Kantenerkennung"
 
@@ -2030,33 +2026,33 @@ msgstr "Kantenerkennung"
 #. TRANSLATORS: Color Quantization: the process of reducing the number of colors
 #. in an image by selecting an optimized set of representative colors and then
 #. re-applying this reduced set to the original image.
-#: src/dialogs/tracedialog.cpp:347
+#: src/dialogs/tracedialog.cpp:371
 msgid "Color Quantization"
 msgstr "Farbquantisierung"
 
-#: src/dialogs/tracedialog.cpp:350
+#: src/dialogs/tracedialog.cpp:374
 msgid "Colors"
 msgstr "Farben"
 
-#: src/dialogs/tracedialog.cpp:357
+#: src/dialogs/tracedialog.cpp:381
 msgid "Quantization / Reduction"
 msgstr "Quantisierung / Reduktion"
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:362
+#: src/dialogs/tracedialog.cpp:386
 msgid "Invert"
 msgstr "Invertieren"
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:368
+#: src/dialogs/tracedialog.cpp:392
 msgid "Preview"
 msgstr "Vorschau"
 
-#: src/dialogs/tracedialog.cpp:375
+#: src/dialogs/tracedialog.cpp:399
 msgid "Intermediate Bitmap"
 msgstr "Bitmap-Zwischenstufe"
 
-#: src/dialogs/tracedialog.cpp:383
+#: src/dialogs/tracedialog.cpp:407
 msgid "Credits"
 msgstr "Mitwirkende"
 
@@ -2064,14 +2060,9 @@ msgstr "Mitwirkende"
 #. done
 #. TRANSLATORS: Potrace is an application for transforming bitmaps into
 #. vector graphics (http://potrace.sourceforge.net/)
-#: src/dialogs/tracedialog.cpp:390
+#: src/dialogs/tracedialog.cpp:414
 msgid "Potrace"
 msgstr "Potrace: Vektorisieren"
-
-#. ##Set up the Other panel
-#: src/dialogs/tracedialog.cpp:393
-msgid "Other"
-msgstr "Anderes"
 
 #. Move page
 #: src/dialogs/transformation.cpp:321 src/dialogs/transformation.cpp:467
@@ -3194,27 +3185,28 @@ msgstr "Bildeigenschaften"
 
 # CHECK
 #. Autotrace dialog
-#: src/object-ui.cpp:354
+#. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
+#: src/object-ui.cpp:355
 msgid "_Trace"
 msgstr "Verfolgen"
 
 #. Item dialog
-#: src/object-ui.cpp:395
+#: src/object-ui.cpp:396
 msgid "_Fill and Stroke"
 msgstr "_Füllung und Linie"
 
 #. Link dialog
-#: src/object-ui.cpp:415
+#: src/object-ui.cpp:416
 msgid "Rectangle _Properties"
 msgstr "Rechteckseigenschaften"
 
 #. Link dialog
-#: src/object-ui.cpp:441
+#: src/object-ui.cpp:442
 msgid "Star _Properties"
 msgstr "Sterneigenschaften"
 
 #. Link dialog
-#: src/object-ui.cpp:467
+#: src/object-ui.cpp:468
 msgid "Spiral _Properties"
 msgstr "Spiraleigenschaften"
 
@@ -3602,28 +3594,29 @@ msgid "<b>Image</b> %d x %d: %s"
 msgstr "Farbbild %d x %d: %s"
 
 # CHECK
-#: src/sp-image.cpp:720
+#. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
+#: src/sp-image.cpp:721
 msgid "Trace"
 msgstr "Vektorisieren"
 
-#: src/sp-image.cpp:867
+#: src/sp-image.cpp:868
 #, c-format
 msgid "Error writing %s: %s"
 msgstr "Fehler beim Schreiben von %s: %s"
 
-#: src/sp-image.cpp:901
+#: src/sp-image.cpp:902
 msgid "Untitled"
 msgstr "Unbenannt"
 
-#: src/sp-image.cpp:906
+#: src/sp-image.cpp:907
 msgid "Document Name:"
 msgstr "Dokumentenname:"
 
-#: src/sp-image.cpp:919
+#: src/sp-image.cpp:920
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: src/sp-image.cpp:925
+#: src/sp-image.cpp:926
 msgid "Image URI:"
 msgstr "Bild-URI:"
 
@@ -5590,6 +5583,12 @@ msgstr "Attribut"
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Value"
 msgstr "Wert"
+
+#~ msgid "Bitmap Tracing"
+#~ msgstr "Pixel vektorisieren"
+
+#~ msgid "Other"
+#~ msgstr "Anderes"
 
 #~ msgid "Trace: Nothing selected"
 #~ msgstr "Vektorisieren: Nichts gewählt"
