@@ -54,6 +54,9 @@ Base64InputStream::Base64InputStream(InputStream &sourceStream)
                     : BasicInputStream(sourceStream)
 {
     outCount = 0;
+    padCount = 0;
+    closed   = false;
+    done     = false;
 }
 
 /**
@@ -98,49 +101,64 @@ int Base64InputStream::get()
     if (closed)
         return -1;
 
-    if (outCount > 0)
+    if (outCount - padCount > 0)
         {
-        return outBytes[outCount--];
+        return outBytes[3-(outCount--)];
         }
 
     if (done)
         return -1;
 
-    outCount = 0;
-
-    while (outCount < 4)
+    int inBytes[4];
+    int inCount = 0;
+    while (inCount < 4)
         {
         int ch = source.get();
         if (ch < 0)
             {
+            while (inCount < 4)  //pad if needed
+                {
+                inBytes[inCount++] = 0;
+                padCount++;
+                }
             done = true;
             break;
             }
-        if (ch <= 32 || ch > 126)
+        if (isspace(ch)) //ascii whitespace
             {
+            //nothing
             }
-        else if (ch == '=')
+        else if (ch == '=') //padding
             {
+            inBytes[inCount++] = 0;
+            padCount++;
             }
         else
             {
             int byteVal = base64decode[ch & 0x7f];
+            //printf("char:%c %d\n", ch, byteVal);
             if (byteVal < 0)
                 {
                 //Bad lookup value
                 }
-            outBytes[outCount++] = byteVal;
+            inBytes[inCount++] = byteVal;
             }
         }
 
-    //now try again
-    if (outCount > 0)
-        {
-        return outBytes[outCount--];
-        }
+    outBytes[0] = ((inBytes[0]<<2) & 0xfc) | ((inBytes[1]>>4) & 0x03);
+    outBytes[1] = ((inBytes[1]<<4) & 0xf0) | ((inBytes[2]>>2) & 0x0f);
+    outBytes[2] = ((inBytes[2]<<6) & 0xc0) | ((inBytes[3]   ) & 0x3f);
+    
+    outCount = 3;
 
-    //none of the above
+    //try again
+    if (outCount - padCount > 0)
+        {
+        return outBytes[3-(outCount--)];
+        }
+    
     return -1;
+
 }
 
 
@@ -186,17 +204,17 @@ void Base64OutputStream::close()
 
         int indx  = (int)((outBuf & 0x0003f000L) >> 12);
         int obyte = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
         indx      = (int)((outBuf & 0x00000fc0L) >>  6);
         obyte     = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
         indx      = (int)((outBuf & 0x0000003fL)      );
         obyte     = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
-        destination.put('=');
+        putc('=');
         }
     else if (bitCount == 8)
         {
@@ -204,14 +222,14 @@ void Base64OutputStream::close()
 
         int indx  = (int)((outBuf & 0x00000fc0L) >>  6);
         int obyte = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
         indx      = (int)((outBuf & 0x0000003fL)      );
         obyte     = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
-        destination.put('=');
-        destination.put('=');
+        putc('=');
+        putc('=');
         }
 
     destination.put('\n');
@@ -232,6 +250,20 @@ void Base64OutputStream::flush()
     destination.flush();
 }
 
+/**
+ * Private. Put a char to the output stream, checking for line length
+ */ 
+void Base64OutputStream::putc(int ch)
+{
+    destination.put(ch);
+    column++;
+    if (column >= 72)
+        {
+        destination.put('\r');
+        destination.put('\n');
+        column = 0;
+        }
+}
 
 
 /**
@@ -246,33 +278,28 @@ void Base64OutputStream::put(int ch)
         }
 
     outBuf   <<=  8;
-    outBuf   !=  (ch & 0xff);
+    outBuf   |=  (ch & 0xff);
     bitCount +=  8;
     if (bitCount >= 24)
         {
         int indx  = (int)((outBuf & 0x00fc0000L) >> 18);
         int obyte = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
         indx      = (int)((outBuf & 0x0003f000L) >> 12);
         obyte     = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
         indx      = (int)((outBuf & 0x00000fc0L) >>  6);
         obyte     = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
         indx      = (int)((outBuf & 0x0000003fL)      );
         obyte     = (int)base64encode[indx & 63];
-        destination.put(obyte);
+        putc(obyte);
 
         bitCount = 0;
         outBuf   = 0L;
-        if (++column >= 64)
-            {
-            destination.put('\n');
-            column = 0;
-            }
         }
 }
 

@@ -31,7 +31,7 @@ UriInputStream::UriInputStream(Inkscape::URI &source)
                     throw (StreamException): uri(source) 
 {
     char *cpath = (char *)uri.toNativeFilename();
-    printf("path:'%s'\n", cpath);
+    //printf("path:'%s'\n", cpath);
     inf = fopen(cpath, "rb");
     if (!inf)
        {

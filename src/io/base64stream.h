@@ -1,5 +1,6 @@
 #ifndef __INKSCAPE_IO_BASE64STREAM_H__
 #define __INKSCAPE_IO_BASE64STREAM_H__
+
 /**
  * Base64-enabled input and output streams
  *
@@ -50,9 +51,11 @@ public:
     
 private:
 
-    int outBytes[4];
+    int outBytes[3];
 
     int outCount;
+
+    int padCount;
 
     bool done;
 
@@ -86,6 +89,8 @@ public:
     virtual void put(int ch);
 
 private:
+
+    void putc(int ch);
 
     int column;
 
