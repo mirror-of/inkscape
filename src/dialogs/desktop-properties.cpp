@@ -259,6 +259,7 @@ sp_doc_dialog_whatever_changed ( GtkAdjustment *adjustment, GtkWidget *dialog )
 
     sp_repr_set_attr (repr, key, c);
 
+    /* Save this for later 
     if (!strcmp(key, "width") || !strcmp(key, "height")) {
 
         //A short-term hack to set the viewBox to be 1.25 x the size
@@ -274,6 +275,7 @@ sp_doc_dialog_whatever_changed ( GtkAdjustment *adjustment, GtkWidget *dialog )
         sp_repr_set_attr (repr, "viewBox", g_strdup(strVal));
 
     }
+    */
     sp_document_done (doc);
 }
 
