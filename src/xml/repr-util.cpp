@@ -309,6 +309,11 @@ sp_xml_node_get_Document (SPXMLNode *node)
 
 /* SPXMLElement */
 
+/** Returns the first child of \a repr, or NULL if \a repr has no children (or if repr is itself
+ *  NULL).
+ *
+ * \see sp_repr_next
+ */
 SPRepr *
 sp_repr_children (SPRepr *repr)
 {
@@ -321,6 +326,13 @@ sp_repr_children (SPRepr *repr)
     return repr->children;
 }
 
+/** Returns the next sibling of \a repr, or NULL if \a repr is the last sibling (or if repr is
+ *  NULL).
+ *
+ *  \see sp_repr_prev
+ *  \see sp_repr_parent
+ *  \see sp_repr_children
+ */
 SPRepr *
 sp_repr_next (SPRepr *repr)
 {
