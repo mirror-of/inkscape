@@ -238,7 +238,6 @@ sp_document_create (SPReprDoc *rdoc,
 	SPDocument *document;
 	SPRepr *rroot;
 	SPVersion sodipodi_version;
-	char *full_path;
 
 	rroot = sp_repr_document_root (rdoc);
 
@@ -252,7 +251,7 @@ sp_document_create (SPReprDoc *rdoc,
 
 #ifndef WIN32
 	if (uri) { // compute absolute path
-		full_path = (char *) g_malloc (1000);
+		 char *full_path = (char *) g_malloc (1000);
 		inkscape_rel2abs (uri, g_get_current_dir(), full_path, 1000);
 		document->uri = g_strdup (full_path);
 		g_free (full_path);
