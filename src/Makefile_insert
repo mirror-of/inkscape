@@ -135,6 +135,7 @@ libinkpre_a_SOURCES =	\
 	sp-item-update-cns.cpp sp-item-update-cns.h	\
 	sp-line.cpp sp-line.h	\
 	sp-linear-gradient.h	\
+	sp-linear-gradient-fns.h	\
 	splivarot.cpp splivarot.h	\
 	sp-marker.cpp sp-marker.h	\
 	sp-marker-loc.h	\
@@ -151,12 +152,14 @@ libinkpre_a_SOURCES =	\
 	sp-polygon.cpp sp-polygon.h	\
 	sp-polyline.cpp sp-polyline.h	\
 	sp-radial-gradient.h	\
+	sp-radial-gradient-fns.h	\
 	sp-rect.cpp sp-rect.h	\
 	sp-root.cpp sp-root.h	\
 	sp-shape.cpp sp-shape.h	\
 	sp-spiral.cpp sp-spiral.h	\
 	sp-star.cpp sp-star.h	\
 	sp-stop.h	\
+	sp-stop-fns.h	\
 	sp-symbol.cpp sp-symbol.h	\
 	sp-text.cpp sp-text.h	\
 	sp-string.cpp sp-string.h	\
@@ -170,7 +173,7 @@ libinkpre_a_SOURCES =	\
 	streams-jar.h streams-jar.cpp	\
 	style.cpp style.h	\
 	svg-view.cpp svg-view.h	\
-	text-chemistry.cpp text-chemistry.h	\	
+	text-chemistry.cpp text-chemistry.h	\
 	text-context.cpp text-context.h	\
 	toolbox.cpp toolbox.h	\
 	tools-switch.cpp tools-switch.h\
