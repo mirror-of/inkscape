@@ -19,8 +19,6 @@ widgets_libspwidgets_a_SOURCES =	\
 	widgets/font-selector.h	\
 	widgets/gradient-image.cpp	\
 	widgets/gradient-image.h	\
-	widgets/gradient-position.cpp	\
-	widgets/gradient-position.h	\
 	widgets/gradient-selector.cpp	\
 	widgets/gradient-selector.h	\
 	widgets/gradient-vector.cpp	\
