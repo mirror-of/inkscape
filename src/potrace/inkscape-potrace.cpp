@@ -14,9 +14,10 @@
 #include <selection.h>
 #include <sp-image.h>
 #include <sp-path.h>
+#include <svg/stringstream.h>
 #include <xml/repr.h>
-
 #include <gdk-pixbuf/gdk-pixbuf.h>
+
 
 
 //required by potrace
@@ -47,65 +48,51 @@ class PotraceImpl : public Potrace
 
 
 static void
-writePaths(SPCurve *curve, path_t *plist)
+writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
 {
 
+    path_t *node;
+    for (node=plist; node ; node=node->sibling)
+        {
+        dpoint_t *pt = node->fcurve[node->fm -1].c;
+        data << "M " << pt[2].x << " " << pt[2].y << " ";
+        for (int i=0 ; i<node->fm ; i++)
+            {
+            pt = node->fcurve[i].c;
+            switch (node->fcurve[i].tag)
+                {
+                case CORNER:
+                    data << "L " << pt[1].x << " " << pt[1].y << " " ;
+                    data << "L " << pt[2].x << " " << pt[2].y << " " ;
+                break;
+                case CURVETO:
+                    data << "C " << pt[1].x << " " << pt[1].y << " "
+                                 << pt[2].x << " " << pt[2].y << " "
+                                 << pt[3].x << " " << pt[3].y << " ";
 
+                break;
+                default:
+                break;
+                }
+            }
+        data << "z";
 
+        for (path_t *child=node->childlist; child ; child=child->sibling)
+            {
+            writePaths(child, data);
+            }
+        }
 
 
 }
 
 
 
-
-
-
-
-gboolean
-Potrace::convertImageToPath()
+static char *
+getPathDataFromPixbuf(GdkPixbuf * pixbuf)
 {
-    if (!SP_ACTIVE_DESKTOP)
-        {
-        g_warning("Potrace::convertImageToPath: no active desktop\n");
-        return false;
-        }
-    SPSelection *sel = SP_ACTIVE_DESKTOP->selection;
-    if (!sel)
-        {
-        g_warning("Potrace::convertImageToPath: nothing selected\n");
-        return false;
-        }
-
-    if (!SP_ACTIVE_DOCUMENT)
-        {
-        g_warning("Potrace::convertImageToPath: no active document\n");
-        return false;
-        }
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
-
-    SPItem *item = sel->singleItem();
-    if (!item)
-        {
-        g_warning("Potrace::convertImageToPath: null image\n");
-        return false;
-        }
-
-    if (!SP_IS_IMAGE(item))
-        {
-        g_warning("Potrace::convertImageToPath: object not an image\n");
-        return false;
-        }
-
-    SPImage *img = SP_IMAGE(item);
-
-    GdkPixbuf *pixbuf = img->pixbuf;
-
     if (!pixbuf)
-        {
-        g_warning("Potrace::convertImageToPath: image has no bitmap data\n");
-        return false;
-        }
+        return NULL;
 
     PotraceImpl potrace;
     potrace.threshold = 0.5;
@@ -158,6 +145,75 @@ Potrace::convertImageToPath()
     //## Free the Potrace bitmap
     bm_free(bm);
 
+
+
+    Inkscape::SVGOStringStream data;
+
+    data << "";
+
+    //## copy the path information into our d="" attribute string
+    writePaths(plist, data);
+
+    //# we are done with the pathlist
+    pathlist_free(plist);
+
+    //# get the svg <path> 'd' attribute
+    char *d = strdup(data.str().c_str());
+    g_message("### GOT '%s' \n", d);
+
+
+    return d;
+}
+
+
+
+gboolean
+Potrace::convertImageToPath()
+{
+    if (!SP_ACTIVE_DESKTOP)
+        {
+        g_warning("Potrace::convertImageToPath: no active desktop\n");
+        return false;
+        }
+    SPSelection *sel = SP_ACTIVE_DESKTOP->selection;
+    if (!sel)
+        {
+        g_warning("Potrace::convertImageToPath: nothing selected\n");
+        return false;
+        }
+
+    if (!SP_ACTIVE_DOCUMENT)
+        {
+        g_warning("Potrace::convertImageToPath: no active document\n");
+        return false;
+        }
+    SPDocument *doc = SP_ACTIVE_DOCUMENT;
+
+    SPItem *item = sel->singleItem();
+    if (!item)
+        {
+        g_warning("Potrace::convertImageToPath: null image\n");
+        return false;
+        }
+
+    if (!SP_IS_IMAGE(item))
+        {
+        g_warning("Potrace::convertImageToPath: object not an image\n");
+        return false;
+        }
+
+    SPImage *img = SP_IMAGE(item);
+
+    GdkPixbuf *pixbuf = img->pixbuf;
+
+    if (!pixbuf)
+        {
+        g_warning("Potrace::convertImageToPath: image has no bitmap data\n");
+        return false;
+        }
+
+    char *d = getPathDataFromPixbuf(pixbuf);
+
     SPRepr   *pathRepr  = sp_repr_new("path");
     SPObject *reprobj   = doc->getObjectByRepr(pathRepr);
     SPPath   *path      = SP_PATH(reprobj);
@@ -166,12 +222,7 @@ Potrace::convertImageToPath()
     SPRepr *par         = sp_repr_parent(SP_OBJECT(img)->repr);
     sp_repr_add_child(par, pathRepr, SP_OBJECT(img)->repr);
 
-    SPCurve *curve      = SP_SHAPE(path)->curve;
-
-    //## copy the path information into our Curve
-    writePaths(curve, plist);
-
-    pathlist_free(plist);
+    free(d);
 
     //##Write our new info to the repr side
     //reprobj->updateRepr();
