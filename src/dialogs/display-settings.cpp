@@ -497,13 +497,6 @@ options_changed_boolean (GtkToggleButton *tb, gpointer data)
     prefs_set_int_attribute (prefs_path, "value", gtk_toggle_button_get_active (tb));
 }
 
-static void
-options_changed_boolean_inverse (GtkToggleButton *tb, gpointer data)
-{
-    const gchar *prefs_path = (const gchar *) data;
-    prefs_set_int_attribute (prefs_path, "value", !gtk_toggle_button_get_active (tb));
-}
-
 
 void 
 options_sb (
@@ -928,6 +921,14 @@ options_checkbox (
     _("Whether dialog windows are to be hidden in the window manager taskbar"), tt,
     vb,
     "options.dialogsskiptaskbar", "value", 1,
+    options_changed_boolean
+    );
+
+options_checkbox (
+    _("Zoom when window is resized"), 
+    _("Zoom the drawing when document window is resized, to keep the same area visible"), tt,
+    vb,
+    "options.stickyzoom", "value", 0,
     options_changed_boolean
     );
 

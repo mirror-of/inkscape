@@ -827,15 +827,6 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     g_signal_connect (G_OBJECT (dtw->canvas), "event", G_CALLBACK (sp_desktop_widget_event), dtw);
     gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (dtw->canvas));
 
-    // sticky zoom buton (FIXME: to be removed when we have this setting in preferences)
-    dtw->sticky_zoom = sp_button_new_from_data (BOTTOM_BUTTON_SIZE,
-                                                SP_BUTTON_TYPE_TOGGLE,
-                                                NULL,
-                                                "sticky_zoom",
-                                                _("Zoom drawing if window size changes"),
-                                                tt);
-    gtk_box_pack_start (GTK_BOX (sbar), dtw->sticky_zoom, FALSE, FALSE, 0);
-
     // zoom status spinbutton
     dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
     gtk_tooltips_set_tip (tt, dtw->zoom_status, _("Zoom"), NULL);
@@ -948,9 +939,12 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         double zoom;
         sp_desktop_get_display_area (dtw->desktop, &area);
         zoom = SP_DESKTOP_ZOOM (dtw->desktop);
+
         if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
             GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
-        if (SP_BUTTON_IS_DOWN (dtw->sticky_zoom)) {
+
+        guint sticky = prefs_get_int_attribute ("options.stickyzoom", "value", 0);
+        if (sticky) {
             NRRect newarea;
             double zpsp;
             /* Calculate zoom per pixel */
@@ -963,6 +957,7 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         } else {
             sp_desktop_zoom_absolute (dtw->desktop, 0.5F * (area.x1 + area.x0), 0.5F * (area.y1 + area.y0), zoom);
         }
+
     } else {
         if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
             GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);

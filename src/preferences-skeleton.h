@@ -112,6 +112,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"arenatilescachesize\" value=\"8192\"/>\n"
 "    <group id=\"preservetransform\" value=\"0\"/>\n"
 "    <group id=\"clonecompensation\" value=\"0\"/>\n"
+"    <group id=\"stickyzoom\" value=\"0\"/>\n"
 "  </group>\n"
 "\n"
 "</inkscape>\n";
