@@ -383,7 +383,7 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
       return true;
     }
 
-  // totalement inefficace, alloue et desalloue tout le temps
+  // Totally inefficient, allocates & deallocates all the time.
   tk = (double *) malloc (nbPt * sizeof (double));
   Qk = (double *) malloc (nbPt * sizeof (double));
   Xk = (double *) malloc (nbPt * sizeof (double));
@@ -548,7 +548,7 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
       res.x = end.x;
       res.y = end.y;
 
-      // on raffine un peu
+      // Refine a little.
       for (int i = 1; i < nbPt - 1; i++)
 	{
 	  vec2
@@ -558,7 +558,7 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	  tk[i] = RaffineTk (pt, start, cp1, cp2, end, tk[i]);
 	  if (tk[i] < tk[i - 1])
 	    {
-	      // forcer l'ordre croissant
+	      // Force tk to be monotonic non-decreasing.
 	      tk[i] = tk[i - 1];
 	    }
 	}
@@ -576,7 +576,7 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
       L_MAT_Det (M, det);
       if (fabs (det) < 0.000001)
 	{
-	  // aie, non-inversible
+	  // aie, non-invertible
 
 	  free (tk);
 	  free (Qk);
@@ -669,8 +669,9 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 float
 Path::RaffineTk (vec2 pt, vec2 p0, vec2 p1, vec2 p2, vec2 p3, float it)
 {
-  // raffinement des tk
-  // une seule iteration de newtow rhapston, vu que de toute facon la courbe est approchée
+  // Refinement of the tk values.  ("raffine" in french = "refine".)
+  // Just one iteration of Newtow Raphson, given that we're approaching the curve anyway.
+  // [fr: vu que de toute facon la courbe est approchée]
   double Ax, Bx, Cx;
   double Ay, By, Cy;
   Ax =
@@ -732,7 +733,9 @@ Path::Coalesce (float tresh)
 	      descr_data[writeP++] = lastAddition;
 	    }
 	  lastAddition = descr_data[curP];
-	  descr_data[writeP++] = lastAddition;	// ajouté automatiquement (tant pis pour les moveto multiples)
+	  descr_data[writeP++] = lastAddition;
+	  // Added automatically (too bad about multiple moveto's).
+	  // [fr: (tant pis pour les moveto multiples)]
 
 	  firstP.x = descr_data[curP].d.m.x;
 	  firstP.y = descr_data[curP].d.m.y;
