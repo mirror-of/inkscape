@@ -206,7 +206,7 @@ void sp_nodepath_destroy(Path::Path *np) {
 /**
  *  Return the node count of a given NodeSubPath
  */
-gint sp_nodepath_subpath_get_node_count(Path::SubPath *subpath)
+static gint sp_nodepath_subpath_get_node_count(Path::SubPath *subpath)
 {
     if (!subpath)
         return 0;
@@ -217,7 +217,7 @@ gint sp_nodepath_subpath_get_node_count(Path::SubPath *subpath)
 /**
  *  Return the node count of a given NodePath
  */
-gint sp_nodepath_get_node_count(Path::Path *np)
+static gint sp_nodepath_get_node_count(Path::Path *np)
 {
     if (!np)
         return 0;
@@ -234,8 +234,7 @@ gint sp_nodepath_get_node_count(Path::Path *np)
  * Clean up a nodepath after editing.
  * Currently we are deleting trivial subpaths
  */
-void
-sp_nodepath_cleanup(Path::Path *nodepath)
+static void sp_nodepath_cleanup(Path::Path *nodepath)
 {
 	GList *badSubPaths = NULL;
 
@@ -888,7 +887,7 @@ static void sp_node_ensure_knot(Path::Node *node, gint which, gboolean show_knot
 	}
 }
 
-void sp_node_ensure_ctrls(Path::Node *node)
+static void sp_node_ensure_ctrls(Path::Node *node)
 {
 	g_assert (node != NULL);
 
@@ -2354,25 +2353,32 @@ static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
 	return ret;
 }
 
-void
-node_rotate_internal (Path::Node *n, gdouble angle, Radial &rme, Radial &rother, gboolean both)
+static void node_rotate_internal(Path::Node const &n, gdouble const angle,
+				 Radial &rme, Radial &rother, gboolean const both)
 {
 	rme.a += angle; 
-	if (both || n->type == Path::NODE_SMOOTH || n->type == Path::NODE_SYMM) 
+	if ( both
+	     || ( n.type == Path::NODE_SMOOTH )
+	     || ( n.type == Path::NODE_SYMM )  )
+	{
 		rother.a += angle;
+	}
 }
 
-void
-node_rotate_internal_screen (Path::Node *n, gdouble const angle, Radial &rme, Radial &rother, gboolean both)
+static void node_rotate_internal_screen(Path::Node const &n, gdouble const angle,
+					Radial &rme, Radial &rother, gboolean const both)
 {
+	gdouble const norm_angle = angle / SP_DESKTOP_ZOOM(n.subpath->nodepath->desktop);
+
 	gdouble r;
-
-	gdouble const norm_angle = angle / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop);
-
-	if (both || n->type == Path::NODE_SMOOTH || n->type == Path::NODE_SYMM) 
-		r = MAX (rme.r, rother.r);
-	else 
+	if ( both
+	     || ( n.type == Path::NODE_SMOOTH )
+	     || ( n.type == Path::NODE_SYMM )  )
+	{
+		r = MAX(rme.r, rother.r);
+	} else {
 		r = rme.r;
+	}
 
 	gdouble const weird_angle = atan2 (norm_angle, r);
 /* Bulia says norm_angle is just the visible distance that the
@@ -2380,12 +2386,15 @@ node_rotate_internal_screen (Path::Node *n, gdouble const angle, Radial &rme, Ra
  * a better name.*/
 
 	rme.a += weird_angle; 
-	if (both || n->type == Path::NODE_SMOOTH || n->type == Path::NODE_SYMM)  
+	if ( both
+	     || ( n.type == Path::NODE_SMOOTH )
+	     || ( n.type == Path::NODE_SYMM )  )
+	{
 		rother.a += weird_angle;
+	}
 }
 
-void
-node_rotate_common (Path::Node *n, gdouble angle, int which, gboolean screen)
+static void node_rotate_common(Path::Node *n, gdouble angle, int which, gboolean screen)
 {
 	Path::NodeSide *me, *other;
 	gboolean both = FALSE;
@@ -2406,9 +2415,9 @@ node_rotate_common (Path::Node *n, gdouble angle, int which, gboolean screen)
 	Radial rother(other->pos - n->pos);
 
 	if (screen) {
-		node_rotate_internal_screen (n, angle, rme, rother, both);
+		node_rotate_internal_screen(*n, angle, rme, rother, both);
 	} else {
-		node_rotate_internal (n, angle, rme, rother, both);
+		node_rotate_internal(*n, angle, rme, rother, both);
 	}
 
 	me->pos = n->pos + NR::Point(rme);
@@ -2448,7 +2457,7 @@ void sp_nodepath_selected_nodes_rotate_screen(Path::Path *nodepath, gdouble angl
 	update_repr (nodepath);
 }
 
-void node_scale(Path::Node *n, gdouble grow, int which)
+static void node_scale(Path::Node *n, gdouble grow, int which)
 {
 	bool both = false;
 	Path::NodeSide *me, *other;
@@ -2491,7 +2500,7 @@ void node_scale(Path::Node *n, gdouble grow, int which)
 	sp_node_ensure_ctrls (n);
 }
 
-void node_scale_screen (Path::Node *n, gdouble const grow, int which)
+static void node_scale_screen (Path::Node *n, gdouble const grow, int which)
 {
 	node_scale (n, grow / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop), which);
 }
@@ -2823,7 +2832,7 @@ static NRPathcode sp_node_path_code_from_side(Path::Node *node, Path::NodeSide *
 	return NR_END;
 }
 
-gchar const *sp_node_type_description(Path::Node *n)
+static gchar const *sp_node_type_description(Path::Node *n)
 {
 	switch (n->type) {
 	case Path::NODE_CUSP:
