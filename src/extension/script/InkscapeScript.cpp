@@ -81,6 +81,8 @@ bool InkscapeScript::interpretScript(char *script, ScriptLanguage language)
         return false;
         }
         
+    delete interp;
+    
     return true;
 }
 
