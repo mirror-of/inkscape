@@ -63,7 +63,9 @@ EXCEPTION - aligning arguments is allowed while initializing
 6. Function rule
 
 * Function declaration is one line
-* Function definition has return value and name on separate lines
+* Function definition has return type and name on separate lines;
+  in particular, the regexp `^NAME' should find the definition of
+  the function with that name.
 
 
 7. Curly braces inconstancy rule
