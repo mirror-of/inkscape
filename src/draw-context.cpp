@@ -1758,7 +1758,7 @@ spdc_pen_set_ctrl (SPPenContext *pc, NRPoint const *p, guint state)
 		sp_canvas_item_show (pc->c0);
 		sp_canvas_item_show (pc->cl0);
 		if (((pc->mode == SP_PEN_CONTEXT_MODE_CLICK) && (state & GDK_CONTROL_MASK)) ||
-		    ((pc->mode == SP_PEN_CONTEXT_MODE_DRAG) && !(state & GDK_MOD1_MASK))) {
+		    ((pc->mode == SP_PEN_CONTEXT_MODE_DRAG) && !(state & GDK_SHIFT_MASK))) {
 			gdouble dx, dy;
 			dx = p->x - dc->p[3].x;
 			dy = p->y - dc->p[3].y;
