@@ -2,6 +2,13 @@
 
 	* src/main.cpp: fpresetsticky -> fpsetsticky
 
+	* src/libnrtype/FlowBoxes.h, src/libnrtype/FlowDefs.h,
+	  src/libnrtype/FlowDest.h, src/libnrtype/FlowEater.h,
+	  src/libnrtype/FlowRes.h, src/libnrtype/FlowSols.h,
+	  src/libnrtype/FlowSrc.h, src/libnrtype/FlowSrcText.h,
+	  src/libnrtype/FlowStyle.h, src/libnrtype/FlowUtils.h:
+	  remove stdint.h which isn't being used here
+
 2004-11-11  Kees Cook  <kees@outflux.net>
 
     * src/seltrans.cpp, src/select-context.cpp: ref counting SPObjects
