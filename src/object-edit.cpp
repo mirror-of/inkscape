@@ -40,6 +40,9 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 
+#include "xml/repr.h"
+#include "xml/repr-private.h"
+
 #define sp_round(v,m) (((v) < 0.0) ? ((ceil ((v) / (m) - 0.5)) * (m)) : ((floor ((v) / (m) + 0.5)) * (m)))
 
 static SPKnotHolder *sp_rect_knot_holder (SPItem *item, SPDesktop *desktop);
@@ -95,7 +98,7 @@ static NR::Point sp_pattern_extract_trans (const SPPattern *pat)
 }
 
 static void
-sp_pattern_xy_set (SPItem *item, const NR::Point &p, guint state)
+sp_pattern_xy_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
@@ -131,7 +134,7 @@ static NR::Point sp_pattern_angle_get (SPItem *item)
 }
 
 static void
-sp_pattern_angle_set (SPItem *item, const NR::Point &p, guint state)
+sp_pattern_angle_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -156,7 +159,7 @@ sp_pattern_angle_set (SPItem *item, const NR::Point &p, guint state)
 }
 
 static void
-sp_pattern_scale_set (SPItem *item, const NR::Point &p, guint state)
+sp_pattern_scale_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
@@ -208,7 +211,7 @@ static NR::Point sp_rect_rx_get (SPItem *item)
 }
 
 static void
-sp_rect_rx_set (SPItem *item, const NR::Point &p, guint state)
+sp_rect_rx_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	SPRect *rect = SP_RECT(item);
 
@@ -232,7 +235,7 @@ static NR::Point sp_rect_ry_get (SPItem *item)
 }
 
 static void
-sp_rect_ry_set (SPItem *item, const NR::Point &p, guint state)
+sp_rect_ry_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	SPRect *rect = SP_RECT(item);
 
@@ -250,59 +253,188 @@ sp_rect_ry_set (SPItem *item, const NR::Point &p, guint state)
 	((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+static void
+sp_rect_rx_knot_click (SPItem *item, guint state)
+{
+	SPRect *rect = SP_RECT(item);
+
+	if (state & GDK_SHIFT_MASK) {
+		sp_repr_set_attr (SP_OBJECT_REPR(rect), "rx", NULL);
+		sp_repr_set_attr (SP_OBJECT_REPR(rect), "ry", NULL);
+	} else if (state & GDK_CONTROL_MASK) {
+		sp_repr_set_attr (SP_OBJECT_REPR(rect), "ry", sp_repr_attr (SP_OBJECT_REPR(rect), "rx"));
+	}
+}
+
+static void
+sp_rect_ry_knot_click (SPItem *item, guint state)
+{
+	SPRect *rect = SP_RECT(item);
+
+	if (state & GDK_SHIFT_MASK) {
+		sp_repr_set_attr (SP_OBJECT_REPR(rect), "rx", NULL);
+		sp_repr_set_attr (SP_OBJECT_REPR(rect), "ry", NULL);
+	} else if (state & GDK_CONTROL_MASK) {
+		sp_repr_set_attr (SP_OBJECT_REPR(rect), "rx", sp_repr_attr (SP_OBJECT_REPR(rect), "ry"));
+	}
+}
+
+#define SGN(x) ((x)>0?1:((x)<0?-1:0))
+
+static void
+sp_rect_clamp_radii (SPRect *rect)
+{
+	// clamp rounding radii so that they do not exceed width/height
+	if (2 * rect->rx.computed > rect->width.computed) {
+		rect->rx.computed = 0.5 * rect->width.computed;
+		rect->rx.set = TRUE;
+	}
+	if (2 * rect->ry.computed > rect->height.computed) {
+		rect->ry.computed = 0.5 * rect->height.computed;
+		rect->ry.set = TRUE;
+	}
+}
+
 static NR::Point sp_rect_wh_get (SPItem *item)
 {
 	SPRect *rect = SP_RECT(item);
 
-	return NR::Point(rect->x.computed + rect->width.computed,
-			 rect->y.computed + rect->height.computed);
+	return NR::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->height.computed);
 }
 
 static void
-sp_rect_wh_set (SPItem *item, const NR::Point &p, guint state)
+sp_rect_wh_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	SPRect *rect = SP_RECT(item);
 
 	if (state & GDK_CONTROL_MASK) {
-		gdouble ratio = (rect->width.computed / rect->height.computed);
-		gdouble minx = p[NR::X] - (rect->x.computed + rect->width.computed);
-		gdouble miny = p[NR::Y] - (rect->y.computed + rect->height.computed);
-		if (minx > miny) {
-			rect->width.computed += miny * ratio;
-			rect->height.computed += miny;
+		// original width/height when drag started
+		gdouble w_orig = (origin[NR::X] - rect->x.computed);
+		gdouble h_orig = (origin[NR::Y] - rect->y.computed);
+
+		//original ratio
+		gdouble ratio = (w_orig / h_orig);
+
+		// mouse displacement since drag started
+		gdouble minx = p[NR::X] - origin[NR::X];
+		gdouble miny = p[NR::Y] - origin[NR::Y];
+
+		if (fabs (minx) > fabs (miny)) {
+			// snap to horizontal or diagonal
+			rect->width.computed = MAX (w_orig + minx, 0);
+			if (minx != 0 && fabs (miny/minx) > 0.5 * 1/ratio && (SGN(minx) == SGN(miny))) {
+				// closer to the diagonal and in same-sign quarters, change both using ratio
+				rect->height.computed = MAX (h_orig + minx / ratio, 0);
+			} else {
+				// closer to the horizontal, change only width, height is h_orig
+				rect->height.computed = MAX (h_orig, 0);
+			}
 		} else {
-			rect->width.computed += minx;
-			rect->height.computed += minx / ratio;
+			// snap to vertical or diagonal
+			rect->height.computed = MAX (h_orig + miny, 0);
+			if (miny != 0 && fabs (minx/miny) > 0.5 * ratio && (SGN(minx) == SGN(miny))) {
+				// closer to the diagonal and in same-sign quarters, change both using ratio
+				rect->width.computed = MAX (w_orig + miny * ratio, 0);
+			} else {
+				// closer to the vertical, change only height, width is w_orig
+				rect->width.computed = MAX (w_orig, 0);
+			}
 		}
 		rect->width.set = rect->height.set = TRUE;
 	} else {
-		rect->width.computed = fabs (p[NR::X] - rect->x.computed);
-		if (2 * rect->rx.computed > rect->width.computed) {
-			rect->rx.computed = 0.5 * rect->width.computed;
-			rect->rx.set = TRUE;
-		}
-		rect->height.computed = fabs (p[NR::Y] - rect->y.computed);
-		if (2 * rect->ry.computed > rect->height.computed) {
-			rect->ry.computed = 0.5 * rect->height.computed;
-			rect->ry.set = TRUE;
-		}
+		// move freely
+		rect->width.computed = MAX (p[NR::X] - rect->x.computed, 0);
+		rect->height.computed = MAX (p[NR::Y] - rect->y.computed, 0);
 		rect->width.set = rect->height.set = TRUE;
 	}
+
+	sp_rect_clamp_radii (rect);
+
 	((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+static NR::Point sp_rect_xy_get (SPItem *item)
+{
+	SPRect *rect = SP_RECT(item);
 
+	return NR::Point(rect->x.computed, rect->y.computed);
+}
+
+static void
+sp_rect_xy_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+{
+	SPRect *rect = SP_RECT(item);
+
+	// opposite corner (unmoved)
+	gdouble opposite_x = (rect->x.computed + rect->width.computed);
+	gdouble opposite_y = (rect->y.computed + rect->height.computed);
+
+	// original width/height when drag started
+	gdouble w_orig = opposite_x - origin[NR::X];
+	gdouble h_orig = opposite_y - origin[NR::Y];
+
+	// mouse displacement since drag started
+	gdouble minx = p[NR::X] - origin[NR::X];
+	gdouble miny = p[NR::Y] - origin[NR::Y];
+
+	if (state & GDK_CONTROL_MASK) {
+		//original ratio
+		gdouble ratio = (w_orig / h_orig);
+
+		if (fabs (minx) > fabs(miny)) {
+			// snap to horizontal or diagonal
+			rect->x.computed = MIN (p[NR::X], opposite_x);
+			rect->width.computed = MAX (w_orig - minx, 0);
+			if (minx != 0 && fabs(miny/minx) > 0.5 * 1/ratio && (SGN(minx) == SGN(miny))) {
+				// closer to the diagonal and in same-sign quarters, change both using ratio
+				rect->y.computed = MIN (origin[NR::Y] + minx / ratio, opposite_y);
+				rect->height.computed = MAX (h_orig - minx / ratio, 0);
+			} else {
+				// closer to the horizontal, change only width, height is h_orig
+				rect->y.computed = MIN (origin[NR::Y], opposite_y);
+				rect->height.computed = MAX (h_orig, 0);
+			}
+		} else {
+			// snap to vertical or diagonal
+			rect->y.computed = MIN (p[NR::Y], opposite_y);
+			rect->height.computed = MAX (h_orig - miny, 0);
+			if (miny != 0 && fabs(minx/miny) > 0.5 *ratio && (SGN(minx) == SGN(miny))) {
+				// closer to the diagonal and in same-sign quarters, change both using ratio
+				rect->x.computed = MIN (origin[NR::X] + miny * ratio, opposite_x);
+				rect->width.computed = MAX (w_orig - miny * ratio, 0);
+			} else {
+				// closer to the vertical, change only height, width is w_orig
+				rect->x.computed = MIN (origin[NR::X], opposite_x);
+				rect->width.computed = MAX (w_orig, 0);
+			}
+		}
+		rect->width.set = rect->height.set = rect->x.set = rect->y.set = TRUE;
+	} else {
+		// move freely
+		rect->x.computed = MIN (p[NR::X], opposite_x);
+		rect->width.computed = MAX (w_orig - minx, 0);
+		rect->y.computed = MIN (p[NR::Y], opposite_y);
+		rect->height.computed = MAX (h_orig - miny, 0);
+		rect->width.set = rect->height.set = rect->x.set = rect->y.set = TRUE;
+	}
+
+	sp_rect_clamp_radii (rect);
+
+	((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
 
 static SPKnotHolder *
 sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
 {
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
- 	sp_knot_holder_add (knot_holder, sp_rect_rx_set, sp_rect_rx_get, NULL,
+ 	sp_knot_holder_add (knot_holder, sp_rect_rx_set, sp_rect_rx_get, sp_rect_rx_knot_click,
 				_("Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the vertical radius the same"));
-	sp_knot_holder_add (knot_holder, sp_rect_ry_set, sp_rect_ry_get, NULL,
+	sp_knot_holder_add (knot_holder, sp_rect_ry_set, sp_rect_ry_get, sp_rect_ry_knot_click,
 				_("Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the horizontal radius the same"));
 	sp_knot_holder_add (knot_holder, sp_rect_wh_set, sp_rect_wh_get, NULL,
-				_("Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to lock ratio")); // FIXME: hor/vert with ctrl!
+				_("Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to lock ratio or stretch in one dimension only"));
+	sp_knot_holder_add (knot_holder, sp_rect_xy_set, sp_rect_xy_get, NULL,
+				_("Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to lock ratio or stretch in one dimension only"));
 	sp_pat_knot_holder (item, knot_holder);
 	return knot_holder;
 }
@@ -328,7 +460,7 @@ sp_genericellipse_side (SPGenericEllipse *ellipse, const NR::Point &p)
 }
 
 static void
-sp_arc_start_set (SPItem *item, const NR::Point &p, guint state)
+sp_arc_start_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -358,7 +490,7 @@ static NR::Point sp_arc_start_get (SPItem *item)
 }
 
 static void
-sp_arc_end_set (SPItem *item, const NR::Point &p, guint state)
+sp_arc_end_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -404,7 +536,7 @@ sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 /* SPStar */
 
 static void
-sp_star_knot1_set (SPItem *item, const NR::Point &p, guint state)
+sp_star_knot1_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	SPStar *star = SP_STAR (item);
 
@@ -428,7 +560,7 @@ sp_star_knot1_set (SPItem *item, const NR::Point &p, guint state)
 }
 
 static void
-sp_star_knot2_set (SPItem *item, const NR::Point &p, guint state)
+sp_star_knot2_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	SPStar *star = SP_STAR (item);
 	if (star->flatsided == false) {
@@ -518,7 +650,7 @@ sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
  *   [control] constrain inner arg to round per PI/4
  */
 static void
-sp_spiral_inner_set (SPItem *item, const NR::Point &p, guint state)
+sp_spiral_inner_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -560,7 +692,7 @@ sp_spiral_inner_set (SPItem *item, const NR::Point &p, guint state)
  *   [control] constrain inner arg to round per PI/4
  */
 static void
-sp_spiral_outer_set (SPItem *item, const NR::Point &p, guint state)
+sp_spiral_outer_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -620,8 +752,10 @@ sp_spiral_outer_set (SPItem *item, const NR::Point &p, guint state)
 		// if alt not pressed and the values are sane, change the rad
 		if (!(state & GDK_MOD1_MASK) && rad_new > 1e-3 && rad_new/spiral->rad < 2) {
 			// adjust t0 too so that the inner point stays unmoved
-			spiral->t0 = (spiral->t0 * spiral->rad) / rad_new;
+			double r0;
+			sp_spiral_get_polar (spiral, spiral->t0, &r0, NULL);
 			spiral->rad = rad_new;
+			spiral->t0 = pow (r0 / spiral->rad, 1/spiral->exp);
 		}
 	}
 
@@ -674,7 +808,7 @@ sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 /* SPOffset */
 
 static void
-sp_offset_offset_set (SPItem *item, const NR::Point &p, guint state)
+sp_offset_offset_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
 {
 	SPOffset *offset = SP_OFFSET (item);
 
