@@ -1,3 +1,46 @@
+2005-03-12  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/sp-flowtext.cpp: svg spec requires us to break after flowline
+	  content, not before
+          
+2005-03-11  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/desktop-style.cpp, src/sp-text.cpp, src/sp-text.h,
+	  src/sp-tspan.cpp, src/sp-tspan.h, src/text-chemistry.cpp, src/text-editing.cpp,
+	  src/text-editing.h: combine the common attribute handling for text,
+	  tspan and textpath into one class
+
+	* src/sp-flowtext.cpp, src/sp-string.cpp: reimplement xml:space attribute
+
+	* src/sp-text.cpp, src/libnrtype/Layout-TNG-OutIter.cpp,
+	  src/libnrtype/Layout-TNG.h: apply calculated x/y attributes to tspan
+	  role=line elements
+
+	* src/libnrtype/Layout-TNG-Output.cpp: postscript text output
+	  incorrectly scaled (and other problems)
+          
+2005-03-10  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/sp-flowdiv.h, src/sp-flowtext.h,
+	  src/sp-text.cpp, src/sp-text.h, src/sp-tspan.h, src/text-context.cpp,
+	  src/text-editing.cpp, src/text-editing.h,
+	  src/libnrtype/Layout-TNG-Compute.cpp,
+	  src/libnrtype/Layout-TNG-OutIter.cpp: clean up xml tree properly on
+	  deleting line break, & fix various compile issues
+  
+  	* src/nodepath.cpp, src/sp-flowdiv.cpp,
+	  src/sp-flowdiv.h, src/sp-flowtext.cpp, src/sp-flowtext.h, src/sp-string.cpp,
+	  src/sp-string.h, src/sp-text.cpp, src/sp-text.h, src/sp-tspan.cpp, src/sp-tspan.h,
+	  src/text-editing.cpp, src/verbs.cpp, src/libnrtype/FontInstance.cpp,
+	  src/libnrtype/font-instance.h, src/livarot/Shape.h,
+	  src/libnrtype/Layout-TNG-Compute.cpp, src/libnrtype/Layout-TNG-Input.cpp,
+	  src/libnrtype/Layout-TNG-OutIter.cpp,
+	  src/libnrtype/Layout-TNG-Output.cpp,
+	  src/libnrtype/Layout-TNG-Scanline-Maker.h,
+	  src/libnrtype/Layout-TNG-Scanline-Makers.cpp,
+	  src/libnrtype/Layout-TNG.cpp, libnrtype/Layout-TNG.h: huge rewrite of
+	  text layout (and some text editing) code
+          
 2005-03-07  Kees Cook  <kees@outflux.net>
 
 	* src/libnr/have_mmx.S, src/libnr/nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP.S,
