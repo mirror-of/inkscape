@@ -9,9 +9,7 @@
 
 #include <helper/action.h>
 
-#include <gtkmm/dialog.h>
-#include <gtkmm/socket.h>
-#include <gtkmm/stock.h>
+#include "prefdialog.h"
 
 #include "implementation/implementation.h"
 #include "effect.h"
@@ -56,16 +54,7 @@ Effect::prefs (SPView * doc)
         return true;
     }
 
-    /* Note: these are pointers with new... the reason for this is
-     * because I can do a delete, which deletes them in teh proper order,
-     * while the auto-delete in the function does not. */
-    Gtk::Dialog * dialog = new Gtk::Dialog("Effect Preferences", true, true);
-    Gtk::Socket * socket = new Gtk::Socket();
-    dialog->get_vbox()->pack_start(*socket, true, true, 5);
-    socket->add_id(plug);
-    socket->show();
-    dialog->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    dialog->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+    PrefDialog * dialog = new PrefDialog(this->get_name(), plug);
     int response = dialog->run();
     dialog->hide();
 
