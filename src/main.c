@@ -253,7 +253,9 @@ sp_main_gui (int argc, const char **argv)
 		sp_maintoolbox_create_toplevel ();
 		inkscape_unref ();
 
-		while (fl) {
+		if (!fl) // no documents on command line, create empty
+			sp_file_new();
+		else while (fl) {
 			SPDocument *doc;
 			doc = sp_document_new ((const gchar *) fl->data, TRUE, TRUE);
 			if (doc) {
