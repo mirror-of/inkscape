@@ -466,15 +466,14 @@ void SPFlowtext::convert_to_text()
     Inkscape::XML::Node *repr = sp_repr_new("svg:text");
     repr->setAttribute("xml:space", "preserve");
     repr->setAttribute("style", SP_OBJECT_REPR(group)->attribute("style"));
+    NR::Point anchor_point = group->layout.characterAnchorPoint(group->layout.begin());
+    sp_repr_set_double(repr, "x", anchor_point[NR::X]);
+    sp_repr_set_double(repr, "y", anchor_point[NR::Y]);
 
     for (Inkscape::Text::Layout::iterator it = group->layout.begin() ; it != group->layout.end() ; ) {
         
 	    Inkscape::XML::Node *line_tspan = sp_repr_new("svg:tspan");
         line_tspan->setAttribute("sodipodi:role", "line");
-        NR::Point anchor_point = group->layout.characterAnchorPoint(it);
-        sp_repr_set_double(line_tspan, "x", anchor_point[0]);
-        sp_repr_set_double(line_tspan, "y", anchor_point[1]);
-        line_tspan->setAttribute("xml:space", "preserve");
 
         Inkscape::Text::Layout::iterator it_line_end = it;
         it_line_end.nextStartOfLine();
@@ -482,9 +481,18 @@ void SPFlowtext::convert_to_text()
 
 	        Inkscape::XML::Node *span_tspan = sp_repr_new("svg:tspan");
             NR::Point anchor_point = group->layout.characterAnchorPoint(it);
-            sp_repr_set_double(span_tspan, "x", anchor_point[0]);  // FIXME: this will pick up the wrong end of counter-directional runs
-            sp_repr_set_double(span_tspan, "y", anchor_point[1]);
+            Inkscape::Text::Layout::iterator it_chunk_start = it;
+            it_chunk_start.thisStartOfChunk();
+            if (it == it_chunk_start) {
+                sp_repr_set_double(span_tspan, "x", anchor_point[NR::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+                // don't set y so linespacing adjustments and things will still work
+            }
+            Inkscape::Text::Layout::iterator it_shape_start = it;
+            it_shape_start.thisStartOfShape();
+            if (it == it_shape_start)
+                sp_repr_set_double(span_tspan, "y", anchor_point[NR::Y]);
             // TODO: dx attributes from justification (or maybe letter-spacing and word-spacing)
+
             SPObject *source_obj;
             Glib::ustring::iterator span_text_start_iter;
             group->layout.getSourceOfCharacter(it, (void**)&source_obj, &span_text_start_iter);

@@ -850,19 +850,25 @@ void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, doub
     SPSVGLength zero_length;
     zero_length = 0.0;
 
-    // we can't apply a matrix to only one coordinate, so extend the shorter of x or y if necessary
-    if (attributes.x.size() < attributes.y.size()) {
-        if (attributes.x.empty()) attributes.x.resize(attributes.y.size(), zero_length);
-        else attributes.x.resize(attributes.y.size(), attributes.x.back());
-    } else if (attributes.y.size() < attributes.x.size()) {
-        if (attributes.y.empty()) attributes.y.resize(attributes.x.size(), zero_length);
-        else attributes.y.resize(attributes.x.size(), attributes.y.back());
-    }
     for (unsigned i = 0 ; i < attributes.x.size() ; i++) {
-        NR::Point point(attributes.x[i].computed, attributes.y[i].computed);
+        NR::Point point;
+        if (i < attributes.x.size()) point[NR::X] = attributes.x[i].computed;
+        else point[NR::X] = 0.0;
+        if (i < attributes.y.size()) point[NR::Y] = attributes.y[i].computed;
+        else point[NR::Y] = 0.0;
         point *= matrix;
-        attributes.x[i] = point[NR::X];
-        attributes.y[i] = point[NR::Y];
+        if (i < attributes.x.size())
+            attributes.x[i] = point[NR::X];
+        else if (point[NR::X] != 0.0) {
+            attributes.x.resize(i + 1, zero_length);
+            attributes.x[i] = point[NR::X];
+        }
+        if (i < attributes.y.size())
+            attributes.y[i] = point[NR::Y];
+        else if (point[NR::Y] != 0.0) {
+            attributes.y.resize(i + 1, zero_length);
+            attributes.y[i] = point[NR::Y];
+        }
     }
     for (std::vector<SPSVGLength>::iterator it = attributes.dx.begin() ; it != attributes.dx.end() ; it++)
         *it = it->computed * scale_x;

@@ -563,8 +563,8 @@ void Layout::getSourceOfCharacter(iterator const &it, void **source_cookie, Glib
     {                                                                                    \
         _cursor_moving_vertically = false;                                               \
         if (_char_index == 0) return false;                                              \
-        _char_index--;                                                                   \
         unsigned original_item = item_getter;                                            \
+        _char_index--;                                                                   \
         while (item_getter == original_item) {                                           \
             if (_char_index == 0) {                                                      \
                 _glyph_index = _parent_layout->_characters[_char_index].in_glyph;        \
