@@ -1,5 +1,9 @@
 2004-05-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile_insert: Move fixes.cpp from libinkpre.a to libinkpost.a.
+	* src/xml/Makefile_insert (xml_repr_action_test_LDADD):
+	  Add libinkpost.a, for fixes.o.  `make check' now works again.
+
 	* src/sp-text.cpp (sp_text_set_transform):
 	  Don't include SP_OBJECT_CHILD_MODIFIED_FLAG in flags for
 	  sp_object_request_update.  Addresses `critical' warning.

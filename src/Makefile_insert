@@ -57,7 +57,6 @@ libinkpre_a_SOURCES =	\
 	extract-uri.cpp extract-uri.h	\
 	file.cpp file.h	\
 	forward.h	\
-	fixes.cpp \
 	geom.cpp geom.h	\
 	help.cpp help.h	\
 	inkscape.cpp inkscape.h inkscape-private.h	\
@@ -154,6 +153,7 @@ libinkpre_a_SOURCES =	\
 # libinkpost.a: Any object file that needs to be near the end of the link line.
 # gradient-chemistry.o is called by some things in display/.
 libinkpost_a_SOURCES =	\
+	fixes.cpp \
 	gradient-chemistry.cpp gradient-chemistry.h
 
 inkscape_private_libs =	\
