@@ -46,6 +46,8 @@ INPUT = \
 	pencil-context.cpp	\
 	snap.cpp	\
 	snap.h	\
+	style.cpp	\
+	style.h	\
 	sp-gradient-fns.h	\
 	sp-item-notify-moveto.cpp	\
 	sp-item.cpp	\
@@ -59,7 +61,6 @@ INPUT = \
 	verbs.cpp	\
 	widgets/paint-selector.cpp	\
 	xml/quote.cpp	\
-	xml/repr-private.h	\
 	xml/repr-util.cpp	\
 	xml/repr.cpp
 
