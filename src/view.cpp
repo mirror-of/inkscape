@@ -198,8 +198,12 @@ sp_view_set_position (SPView *view, gdouble x, gdouble y)
 	g_signal_emit (G_OBJECT (view), signals[POSITION_SET], 0, x, y);
 }
 
-
-
+/**
+\brief Sets statusbar message permanently. The format string and the rest of arguments
+are as in printf(). Not to be used normally, because the message nev er disappears
+unless replaced by another message. In the majority of situations, one of the _flash or
+_error functions should be used instead.
+*/
 void
 sp_view_set_statusf (SPView *view, const gchar *format, ...)
 {
@@ -222,6 +226,14 @@ sp_view_set_statusf_timeout (SPView *view, guint msec, const gchar *format, ...)
 #define STATUSBAR_FLASH_MSEC 1000
 #define STATUSBAR_ERROR_MSEC 5000
 
+/**
+\brief Displays message temporarily for 1 second; when the message disappears, the one
+that was in the statusbar before is restored. The format string and the rest of
+arguments are as in printf(). Use this function for short helpful hints or explanations
+of non-trivial actions. Examples: "No-break space" when you press ctrl-space in text
+object; "Closing path" when hitting the anchor in freehand; "Selection cancelled" when
+pressing Esc cancelled rubberband selection.
+*/
 void
 sp_view_set_statusf_flash (SPView *view, const gchar *format, ...)
 {
@@ -231,6 +243,15 @@ sp_view_set_statusf_flash (SPView *view, const gchar *format, ...)
 	va_end (args);
 }
 
+/**
+\brief Displays message temporarily for 5 seconds; when the message disappears, the one
+that was in the statusbar before it is restored. The format string and the rest of
+arguments are as in printf(). Use this function for most non-fatal error messages
+(unless they are so important as to warrant a modal messagebox). Examples: "To join, you
+must have two endnodes selected" when you try to join nodes that are not exactly two
+endpoints; "To subtract, you must have two objects selected" for the boolean difference
+operation.
+*/
 void
 sp_view_set_statusf_error (SPView *view, const gchar *format, ...)
 {
@@ -256,6 +277,10 @@ sp_view_set_statusf_va (SPView *view, guint msec, const gchar *format, va_list a
 	g_free (status);
 }
 
+/**
+\brief Clears statusbar message permanently. Not to be used normally. In the majority of
+situations, one of the _flash or _error functions should be used instead.
+*/
 void
 sp_view_clear_status (SPView *view)
 {
@@ -264,7 +289,6 @@ sp_view_clear_status (SPView *view)
 
 	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, NULL, 0);
 }
-
 
 //deprecated, eliminate
 void
