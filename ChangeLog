@@ -1,6 +1,6 @@
 2004-06-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/main.cpp: Greater conformance to CodingStyle.
+	* src/file.cpp, src/main.cpp: Greater conformance to CodingStyle.
 
 	* src/node-context.h, src/selcue.h, src/sp-pattern.h,
 	  src/widgets/sp-color-wheel-selector.h:

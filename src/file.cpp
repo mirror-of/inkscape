@@ -63,10 +63,9 @@
  * Static globals are evil.  This will be gone soon
  * as C++ification continues
  */
-gchar *open_path   = NULL;
-gchar *save_path   = NULL;
-gchar *import_path = NULL;
-gchar *export_path = NULL;
+static gchar *open_path   = NULL;
+static gchar *save_path   = NULL;
+static gchar *import_path = NULL;
 
 
 
@@ -78,18 +77,18 @@ gchar *export_path = NULL;
  * Create a blank document and add it to the desktop
  */
 void
-sp_file_new (void)
+sp_file_new()
 {
 
-    SPDocument *doc = sp_document_new (NULL, TRUE, TRUE);
-    g_return_if_fail (doc != NULL);
+    SPDocument *doc = sp_document_new(NULL, TRUE, TRUE);
+    g_return_if_fail(doc != NULL);
 
-    SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
-    sp_document_unref (doc);
-    g_return_if_fail (dtw != NULL);
+    SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
+    sp_document_unref(doc);
+    g_return_if_fail(dtw != NULL);
 
-    sp_create_window (dtw, TRUE);
-    sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
+    sp_create_window(dtw, TRUE);
+    sp_namedview_window_from_document(SP_DESKTOP(dtw->view));
 }
 
 
@@ -101,9 +100,9 @@ sp_file_new (void)
  *  Perform document closures preceding an exit()
  */
 void
-sp_file_exit (void)
+sp_file_exit()
 {
-    sp_ui_close_all ();
+    sp_ui_close_all();
     // no need to call inkscape_exit here; last document being closed will take care of that
 }
 
@@ -116,12 +115,11 @@ sp_file_exit (void)
  *  Open a file, add the document to the desktop
  */
 bool
-sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
+sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key)
 {
     SPDocument *doc;
-	
     try {
-        doc = Inkscape::Extension::open (key, uri);
+        doc = Inkscape::Extension::open(key, uri);
     } catch (Inkscape::Extension::Input::no_extension_found &e) {
         doc = NULL;
     } catch (Inkscape::Extension::Input::open_failed &e) {
@@ -130,23 +128,23 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
 
     if (doc) {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        SPDocument *existing = desktop ? SP_DT_DOCUMENT (desktop) : NULL;
+        SPDocument *existing = desktop ? SP_DT_DOCUMENT(desktop) : NULL;
         if (existing && existing->virgin) {
             // If the current desktop is empty, open the document there
-            sp_desktop_change_document (desktop, doc);
+            sp_desktop_change_document(desktop, doc);
         }
         else {
             // create a whole new desktop and window
-            SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
-            sp_create_window (dtw, TRUE);
+            SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
+            sp_create_window(dtw, TRUE);
             desktop = SP_DESKTOP(dtw->view);
         }
         // everyone who cares now has a reference, get rid of ours
-        sp_document_unref (doc); 
+        sp_document_unref(doc); 
         // resize the window to match the document properties
         // (this may be redundant for new windows... if so, move to the "virgin"
         //  section above)
-        sp_namedview_window_from_document (desktop);
+        sp_namedview_window_from_document(desktop);
         doc->virgin = FALSE;
 
         prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
@@ -154,8 +152,8 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
         return TRUE;
     } else {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
-        sp_ui_error_dialog (text);
-        g_free (text);
+        sp_ui_error_dialog(text);
+        g_free(text);
         return FALSE;
     }
 }
@@ -164,7 +162,7 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
  *  Handle prompting user for "do you want to revert"?  Revert on "OK"
  */
 void
-sp_file_revert_dialog ()
+sp_file_revert_dialog()
 {
     SPDesktop  *desktop = SP_ACTIVE_DESKTOP;
     g_assert(desktop != NULL);
@@ -172,23 +170,21 @@ sp_file_revert_dialog ()
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
     g_assert(doc != NULL);
 
-    SPRepr     *repr = sp_document_repr_root (doc);
+    SPRepr     *repr = sp_document_repr_root(doc);
     g_assert(repr != NULL);
 
-    const gchar *uri = doc->uri;
+    gchar const *uri = doc->uri;
     if (!uri) {
-        sp_view_set_statusf_flash (SP_VIEW(desktop), _("Document not saved yet.  Cannot revert."));
+        sp_view_set_statusf_flash(SP_VIEW(desktop), _("Document not saved yet.  Cannot revert."));
         return;
     }
 
-    if (sp_repr_attr (repr, "sodipodi:modified") != NULL) {
-        GtkWidget *dialog;
-	gchar * text;
+    if (sp_repr_attr(repr, "sodipodi:modified") != NULL) {
         bool reverted = FALSE;
 
-	text = g_strdup_printf(_("Changes will be lost!  Are you sure you want to reload document %s?"), uri);
+        gchar *text = g_strdup_printf(_("Changes will be lost!  Are you sure you want to reload document %s?"), uri);
 
-        dialog = gtk_message_dialog_new(
+        GtkWidget *dialog = gtk_message_dialog_new(
                 GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(desktop->owner))),
                 GTK_DIALOG_DESTROY_WITH_PARENT,
                 GTK_MESSAGE_WARNING,
@@ -205,14 +201,14 @@ sp_file_revert_dialog ()
         }
 
         if (reverted) {
-            sp_view_set_statusf_flash (SP_VIEW(desktop), _("Document reverted."));
+            sp_view_set_statusf_flash(SP_VIEW(desktop), _("Document reverted."));
         }
         else {
-            sp_view_set_statusf_flash (SP_VIEW(desktop), _("Document not reverted."));
+            sp_view_set_statusf_flash(SP_VIEW(desktop), _("Document not reverted."));
         }
     }
     else {
-        sp_view_set_statusf_flash (SP_VIEW(desktop), _("Document not modified.  No need to revert."));
+        sp_view_set_statusf_flash(SP_VIEW(desktop), _("Document not modified.  No need to revert."));
     }
 }
 
@@ -221,16 +217,18 @@ sp_file_revert_dialog ()
  *  Display an file Open selector.  Open a document if OK is pressed.
  */
 void
-sp_file_open_dialog (gpointer object, gpointer data)
+sp_file_open_dialog(gpointer object, gpointer data)
 {
     Inkscape::UI::Dialogs::FileOpenDialog *dlg =
         new Inkscape::UI::Dialogs::FileOpenDialog(
-                 (const char *)open_path,
+                 (char const *)open_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
-                 (const char *)_("Select file to open"));
-    bool success = dlg->show();
-    gchar *fileName = success ? g_strdup(dlg->getFilename()) : NULL;
-    Inkscape::Extension::Extension * selection = dlg->getSelectionType();
+                 (char const *)_("Select file to open"));
+    bool const success = dlg->show();
+    gchar *fileName = ( success
+                        ? g_strdup(dlg->getFilename())
+                        : NULL );
+    Inkscape::Extension::Extension *selection = dlg->getSelectionType();
     delete dlg;
 
     if (!success) return;
@@ -245,7 +243,7 @@ sp_file_open_dialog (gpointer object, gpointer data)
                                                  &error);
         if ( newFileName != NULL )
         {
-            g_free (fileName);
+            g_free(fileName);
             fileName = newFileName;
         }
         else
@@ -262,11 +260,11 @@ sp_file_open_dialog (gpointer object, gpointer data)
         }
 
 
-        g_free (open_path);
-        open_path = g_dirname (fileName);
-        if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
-        sp_file_open (fileName, selection);
-        g_free (fileName);
+        g_free(open_path);
+        open_path = g_dirname(fileName);
+        if (open_path) open_path = g_strconcat(open_path, G_DIR_SEPARATOR_S, NULL);
+        sp_file_open(fileName, selection);
+        g_free(fileName);
     }
 
     return;
@@ -283,56 +281,56 @@ sp_file_open_dialog (gpointer object, gpointer data)
  * This 'save' function called by the others below
  */
 static bool
-file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *key, bool saveas)
+file_save(SPDocument *doc, gchar const *uri, Inkscape::Extension::Extension *key, bool saveas)
 {
     if (!doc || !uri) //Safety check
         return FALSE;
 
-	try {
-		Inkscape::Extension::save (key, doc, uri, saveas && (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1), saveas, TRUE); // save officially, with inkscape: attributes set
-	} catch (Inkscape::Extension::Output::no_extension_found &e) {
-		gchar * text;
-		text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);
-		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
-		sp_ui_error_dialog (text);
-                g_free (text);
-		return FALSE;
-	} catch (Inkscape::Extension::Output::save_failed &e) {
-		gchar * text;
-		text = g_strdup_printf(_("File %s could not be saved."), uri);
-		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
-		sp_ui_error_dialog (text);
-                g_free (text);
-		return FALSE;
-	} catch (Inkscape::Extension::Output::no_overwrite &e) {
-		return sp_file_save_dialog(doc);
-	}
+    try {
+        Inkscape::Extension::save(key, doc, uri,
+                                  saveas && prefs_get_int_attribute("dialogs.save_as", "append_extension", 1),
+                                  saveas, TRUE); // save officially, with inkscape: attributes set
+    } catch (Inkscape::Extension::Output::no_extension_found &e) {
+        gchar *text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);
+        sp_view_set_statusf_flash(SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+        sp_ui_error_dialog(text);
+        g_free(text);
+        return FALSE;
+    } catch (Inkscape::Extension::Output::save_failed &e) {
+        gchar *text = g_strdup_printf(_("File %s could not be saved."), uri);
+        sp_view_set_statusf_flash(SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+        sp_ui_error_dialog(text);
+        g_free(text);
+        return FALSE;
+    } catch (Inkscape::Extension::Output::no_overwrite &e) {
+        return sp_file_save_dialog(doc);
+    }
 
-	sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
-	return TRUE;
+    sp_view_set_statusf_flash(SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
+    return TRUE;
 }
 
 /**
  *  Display a SaveAs dialog.  Save the document if OK pressed.
  */
 gboolean
-sp_file_save_dialog (SPDocument *doc)
+sp_file_save_dialog(SPDocument *doc)
 {
-    SPRepr *repr = sp_document_repr_root (doc);
-    const gchar * default_extension = NULL;
-    gchar * save_loc;
-    Inkscape::Extension::Output * extension;
+    SPRepr *repr = sp_document_repr_root(doc);
+    gchar const *default_extension = NULL;
+    gchar *save_loc;
+    Inkscape::Extension::Output *extension;
 
     default_extension = sp_repr_attr(repr, "inkscape:output_extension");
     if (default_extension == NULL) {
-            default_extension = prefs_get_string_attribute("dialogs.save_as", "default");
+        default_extension = prefs_get_string_attribute("dialogs.save_as", "default");
     }
     // printf("Extension: %s\n", default_extension);
 
     if (doc->uri == NULL) {
         int i = 1;
-        const char * filename_extension;
-        char * temp_filename;
+        char const *filename_extension;
+        char *temp_filename;
 
         extension = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(default_extension));
         if (extension == NULL) {
@@ -359,18 +357,19 @@ sp_file_save_dialog (SPDocument *doc)
 
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
-                 (const char *)save_loc,
+                 (char const *) save_loc,
                  Inkscape::UI::Dialogs::SVG_TYPES,
-                 (const char *)_("Select file to save"),
-				 default_extension
-				 );
-    bool sucess = dlg->show();
-    char *fileName = sucess ? g_strdup(dlg->getFilename()) : NULL;
-    Inkscape::Extension::Extension * selectionType = dlg->getSelectionType();
-
+                 (char const *) _("Select file to save"),
+                 default_extension
+            );
+    bool success = dlg->show();
+    char *fileName = ( success
+                       ? g_strdup(dlg->getFilename())
+                       : NULL );
+    Inkscape::Extension::Extension *selectionType = dlg->getSelectionType();
     delete dlg;
     g_free(save_loc);
-    if (!sucess) return sucess;
+    if (!success) return success;
 
     if (fileName && *fileName) {
         gsize bytesRead = 0;
@@ -383,7 +382,7 @@ sp_file_save_dialog (SPDocument *doc)
                                                  &error);
         if ( newFileName != NULL )
         {
-            g_free (fileName);
+            g_free(fileName);
             fileName = newFileName;
         }
         else
@@ -399,19 +398,19 @@ sp_file_save_dialog (SPDocument *doc)
             g_warning( "INPUT FILENAME IS NOT UTF-8" );
         }
 
-        sucess = file_save (doc, fileName, selectionType, TRUE);
-        g_free (save_path);
+        success = file_save(doc, fileName, selectionType, TRUE);
+        g_free(save_path);
 
-        if (sucess)
+        if (success)
             prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
 
-        save_path = g_dirname (fileName);
+        save_path = g_dirname(fileName);
 
         if (save_path)
-            save_path = g_strconcat (save_path, G_DIR_SEPARATOR_S, NULL);
+            save_path = g_strconcat(save_path, G_DIR_SEPARATOR_S, NULL);
 
-        g_free (fileName);
-        return sucess;
+        g_free(fileName);
+        return success;
     } else {
         return FALSE;
     }
@@ -422,28 +421,25 @@ sp_file_save_dialog (SPDocument *doc)
  * Save a document, displaying a SaveAs dialog if necessary.
  */
 gboolean
-sp_file_save_document (SPDocument *doc)
+sp_file_save_document(SPDocument *doc)
 {
     gboolean success = TRUE;
 
-    SPRepr *repr = sp_document_repr_root (doc);
+    SPRepr *repr = sp_document_repr_root(doc);
 
     gchar const *fn = sp_repr_attr(repr, "sodipodi:modified");
     if (fn != NULL) {
-		if (doc->uri == NULL || 
-			    sp_repr_attr(repr, "inkscape:output_extension") == NULL) {
-			return sp_file_save_dialog (doc);
-		} else {
-			fn = g_strdup (doc->uri);
-			
-			const gchar *ext = sp_repr_attr(repr, "inkscape:output_extension");
-			success = file_save (doc, fn, Inkscape::Extension::db.get(ext), FALSE);
-
-			g_free ((void *) fn);
-		}
-
+        if (doc->uri == NULL || 
+            sp_repr_attr(repr, "inkscape:output_extension") == NULL) {
+            return sp_file_save_dialog(doc);
+        } else {
+            fn = g_strdup(doc->uri);			
+            gchar const *ext = sp_repr_attr(repr, "inkscape:output_extension");
+            success = file_save(doc, fn, Inkscape::Extension::db.get(ext), FALSE);
+            g_free((void *) fn);
+        }
     } else {
-        sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("No changes need to be saved."));
+        sp_view_set_statusf_flash(SP_VIEW(SP_ACTIVE_DESKTOP), _("No changes need to be saved."));
         success = TRUE;
     }
     
@@ -455,12 +451,12 @@ sp_file_save_document (SPDocument *doc)
  * Save a document.
  */
 bool
-sp_file_save (gpointer object, gpointer data)
+sp_file_save(gpointer object, gpointer data)
 {
     if (!SP_ACTIVE_DOCUMENT)
-        return FALSE;
-    sp_namedview_document_from_window (SP_ACTIVE_DESKTOP);
-    return sp_file_save_document (SP_ACTIVE_DOCUMENT);
+        return false;
+    sp_namedview_document_from_window(SP_ACTIVE_DESKTOP);
+    return sp_file_save_document(SP_ACTIVE_DOCUMENT);
 }
 
 
@@ -468,12 +464,12 @@ sp_file_save (gpointer object, gpointer data)
  *  Save a document, always displaying the SaveAs dialog.
  */
 bool
-sp_file_save_as (gpointer object, gpointer data)
+sp_file_save_as(gpointer object, gpointer data)
 {
     if (!SP_ACTIVE_DOCUMENT)
-        return FALSE;
-    sp_namedview_document_from_window (SP_ACTIVE_DESKTOP);
-    return sp_file_save_dialog (SP_ACTIVE_DOCUMENT);
+        return false;
+    sp_namedview_document_from_window(SP_ACTIVE_DESKTOP);
+    return sp_file_save_dialog(SP_ACTIVE_DOCUMENT);
 }
 
 
@@ -487,12 +483,11 @@ sp_file_save_as (gpointer object, gpointer data)
  *  Import a resource.  Called by sp_file_import()
  */
 static void
-file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extension * key)
+file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension *key)
 {
-    SPDocument *doc;
-	
+    SPDocument *doc;	
     try {
-        doc = Inkscape::Extension::open (key, uri);
+        doc = Inkscape::Extension::open(key, uri);
     } catch (Inkscape::Extension::Input::no_extension_found &e) {
         doc = NULL;
     } catch (Inkscape::Extension::Input::open_failed &e) {
@@ -503,44 +498,44 @@ file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extensi
         // the import extension has passed us a document, now we need to embed it into our document
 
         // move imported defs to our document's defs
-        SPObject *in_defs = SP_DOCUMENT_DEFS (in_doc);
-        SPObject *defs = SP_DOCUMENT_DEFS (doc);
+        SPObject *in_defs = SP_DOCUMENT_DEFS(in_doc);
+        SPObject *defs = SP_DOCUMENT_DEFS(doc);
         SPRepr *last_def = sp_repr_last_child(SP_OBJECT_REPR(in_defs));
         for (SPObject *child = sp_object_first_child(defs); child != NULL; child = SP_OBJECT_NEXT(child) ) {
             // FIXME: in case of id conflict, newly added thing will be re-ided and thus likely break a reference to it from imported stuff
             sp_repr_add_child(SP_OBJECT_REPR(in_defs), sp_repr_duplicate(SP_OBJECT_REPR(child)), last_def);
         }
 
-        SPRepr *repr = sp_document_repr_root (doc);
+        SPRepr *repr = sp_document_repr_root(doc);
         guint items_count = 0;
         for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
             if (SP_IS_ITEM(child))
                 items_count ++;
         }
-        const gchar *style = sp_repr_attr (repr, "style");
+        gchar const *style = sp_repr_attr(repr, "style");
 
         SPObject *new_obj = NULL;
 
         if (style || items_count > 1) {
             // create group
-            SPRepr *newgroup = sp_repr_new ("g");
-            sp_repr_set_attr (newgroup, "style", style);
+            SPRepr *newgroup = sp_repr_new("g");
+            sp_repr_set_attr(newgroup, "style", style);
 
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
-                    sp_repr_append_child (newgroup, sp_repr_duplicate(SP_OBJECT_REPR(child)));
+                    sp_repr_append_child(newgroup, sp_repr_duplicate(SP_OBJECT_REPR(child)));
                 }
             }
 
-            sp_document_add_repr (in_doc, newgroup);
+            sp_document_add_repr(in_doc, newgroup);
             new_obj = in_doc->getObjectByRepr(newgroup);
-            sp_repr_unref (newgroup);
+            sp_repr_unref(newgroup);
         } else {
             // just add one item
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
                     SPRepr *newitem = sp_repr_duplicate(SP_OBJECT_REPR(child));
-                    sp_document_add_repr (in_doc, newitem);
+                    sp_document_add_repr(in_doc, newitem);
                     new_obj = in_doc->getObjectByRepr(newitem);
                 }
             }
@@ -556,13 +551,13 @@ file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extensi
             sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
         }
 
-        sp_document_unref (doc);
-        sp_document_done (in_doc);
+        sp_document_unref(doc);
+        sp_document_done(in_doc);
 
     } else {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
-        sp_ui_error_dialog (text);
-        g_free (text);
+        sp_ui_error_dialog(text);
+        g_free(text);
     }
 
     return;
@@ -573,21 +568,22 @@ file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extensi
  *  Display an Open dialog, import a resource if OK pressed.
  */
 void
-sp_file_import (GtkWidget * widget)
+sp_file_import(GtkWidget *widget)
 {
-
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     if (!SP_IS_DOCUMENT(doc))
         return;
 
-    Inkscape::UI::Dialogs::FileOpenDialog *dlg =
-        new Inkscape::UI::Dialogs::FileOpenDialog(
-                 (const char *)import_path,
+    Inkscape::UI::Dialogs::FileOpenDialog *dlg
+        = new Inkscape::UI::Dialogs::FileOpenDialog(
+                 (char const *)import_path,
                  Inkscape::UI::Dialogs::IMPORT_TYPES,
-                 (const char *)_("Select file to import"));
+                 (char const *)_("Select file to import"));
     bool success = dlg->show();
-    char *fileName = success ? g_strdup(dlg->getFilename()) : NULL;
-    Inkscape::Extension::Extension * selection = dlg->getSelectionType();
+    char *fileName = ( success
+                       ? g_strdup(dlg->getFilename())
+                       : NULL );
+    Inkscape::Extension::Extension *selection = dlg->getSelectionType();
     delete dlg;
 
     if (!success) return;
@@ -602,7 +598,7 @@ sp_file_import (GtkWidget * widget)
                                                  &error);
         if ( newFileName != NULL )
         {
-            g_free (fileName);
+            g_free(fileName);
             fileName = newFileName;
         }
         else
@@ -618,12 +614,12 @@ sp_file_import (GtkWidget * widget)
             g_warning( "INPUT FILENAME IS NOT UTF-8" );
         }
 
-        g_free (import_path);
-        import_path = g_dirname (fileName);
-        if (import_path) import_path = g_strconcat (import_path, G_DIR_SEPARATOR_S, NULL);
+        g_free(import_path);
+        import_path = g_dirname(fileName);
+        if (import_path) import_path = g_strconcat(import_path, G_DIR_SEPARATOR_S, NULL);
 
-        file_import (doc, fileName, selection);
-        g_free (fileName);
+        file_import(doc, fileName, selection);
+        g_free(fileName);
     }
 
     return;
@@ -639,9 +635,9 @@ sp_file_import (GtkWidget * widget)
  *
  */
 void
-sp_file_export_dialog (void *widget)
+sp_file_export_dialog(void *widget)
 {
-    sp_export_dialog ();
+    sp_export_dialog();
 }
 
 #include <display/nr-arena-item.h>
@@ -652,7 +648,7 @@ struct SPEBP {
     guchar r, g, b, a;
     NRArenaItem *root;
     guchar *px;
-    unsigned int (*status) (float, void *);
+    unsigned (*status) (float, void *);
     void *data;
 };
 
@@ -661,17 +657,16 @@ struct SPEBP {
  *
  */
 static int
-sp_export_get_rows (const guchar **rows, int row, int num_rows, void *data)
+sp_export_get_rows(guchar const **rows, int row, int num_rows, void *data)
 {
-
     struct SPEBP *ebp = (struct SPEBP *) data;
 
     if (ebp->status) {
-        if (!ebp->status ((float) row / ebp->height, ebp->data)) return 0;
+        if (!ebp->status((float) row / ebp->height, ebp->data)) return 0;
     }
 
-    num_rows = MIN (num_rows, ebp->sheight);
-    num_rows = MIN (num_rows, ebp->height - row);
+    num_rows = MIN(num_rows, ebp->sheight);
+    num_rows = MIN(num_rows, ebp->height - row);
 
     /* Set area of interest */
     NRRectL bbox;
@@ -681,14 +676,16 @@ sp_export_get_rows (const guchar **rows, int row, int num_rows, void *data)
     bbox.y1 = row + num_rows;
     /* Update to renderable state */
     NRGC gc(NULL);
-    nr_matrix_set_identity (&gc.transform);
-    nr_arena_item_invoke_update (ebp->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
+    nr_matrix_set_identity(&gc.transform);
+    nr_arena_item_invoke_update(ebp->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 
     NRPixBlock pb;
-    nr_pixblock_setup_extern (&pb, NR_PIXBLOCK_MODE_R8G8B8A8N, bbox.x0, bbox.y0, bbox.x1, bbox.y1, ebp->px, 4 * ebp->width, FALSE, FALSE);
+    nr_pixblock_setup_extern(&pb, NR_PIXBLOCK_MODE_R8G8B8A8N,
+                             bbox.x0, bbox.y0, bbox.x1, bbox.y1,
+                             ebp->px, 4 * ebp->width, FALSE, FALSE);
 
     for (int r = 0; r < num_rows; r++) {
-        guchar *p = NR_PIXBLOCK_PX (&pb) + r * pb.rs;
+        guchar *p = NR_PIXBLOCK_PX(&pb) + r * pb.rs;
         for (int c = 0; c < ebp->width; c++) {
             *p++ = ebp->r;
             *p++ = ebp->g;
@@ -698,13 +695,13 @@ sp_export_get_rows (const guchar **rows, int row, int num_rows, void *data)
     }
 
     /* Render */
-    nr_arena_item_invoke_render (ebp->root, &bbox, &pb, 0);
+    nr_arena_item_invoke_render(ebp->root, &bbox, &pb, 0);
 
     for (int r = 0; r < num_rows; r++) {
-        rows[r] = NR_PIXBLOCK_PX (&pb) + r * pb.rs;
+        rows[r] = NR_PIXBLOCK_PX(&pb) + r * pb.rs;
     }
 
-    nr_pixblock_release (&pb);
+    nr_pixblock_release(&pb);
 
     return num_rows;
 }
@@ -716,26 +713,29 @@ sp_export_get_rows (const guchar **rows, int row, int num_rows, void *data)
  *  a file.
  */
 void
-sp_export_png_file (SPDocument *doc, const gchar *filename,
-            double x0, double y0, double x1, double y1,
-            unsigned int width, unsigned int height,
-            unsigned long bgcolor,
-            unsigned int (*status) (float, void*), void *data)
+sp_export_png_file(SPDocument *doc, gchar const *filename,
+                   double x0, double y0, double x1, double y1,
+                   unsigned width, unsigned height,
+                   unsigned long bgcolor,
+                   unsigned (*status)(float, void *),
+                   void *data)
 {
+    g_return_if_fail(doc != NULL);
+    g_return_if_fail(SP_IS_DOCUMENT(doc));
+    g_return_if_fail(filename != NULL);
+    g_return_if_fail(width >= 1);
+    g_return_if_fail(height >= 1);
 
-    g_return_if_fail (doc != NULL);
-    g_return_if_fail (SP_IS_DOCUMENT (doc));
-    g_return_if_fail (filename != NULL);
-    g_return_if_fail (width >= 1);
-    g_return_if_fail (height >= 1);
-	if (!sp_ui_overwrite_file(filename)) return;
+    if (!sp_ui_overwrite_file(filename)) {
+        return;
+    }
 
-    sp_document_ensure_up_to_date (doc);
+    sp_document_ensure_up_to_date(doc);
 
     /* Go to document coordinates */
     gdouble t = y0;
-    y0 = sp_document_height (doc) - y1;
-    y1 = sp_document_height (doc) - t;
+    y0 = sp_document_height(doc) - y1;
+    y1 = sp_document_height(doc) - t;
 
     /*
      * 1) a[0] * x0 + a[2] * y1 + a[4] = 0.0
@@ -761,43 +761,43 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
     affine.c[4] = -affine.c[0] * x0 * 1.25;
     affine.c[5] = -affine.c[3] * y0 * 1.25;
 
-    //SP_PRINT_MATRIX ("SVG2PNG", &affine);
+    //SP_PRINT_MATRIX("SVG2PNG", &affine);
 
     struct SPEBP ebp;
     ebp.width  = width;
     ebp.height = height;
-    ebp.r      = NR_RGBA32_R (bgcolor);
-    ebp.g      = NR_RGBA32_G (bgcolor);
-    ebp.b      = NR_RGBA32_B (bgcolor);
-    ebp.a      = NR_RGBA32_A (bgcolor);
+    ebp.r      = NR_RGBA32_R(bgcolor);
+    ebp.g      = NR_RGBA32_G(bgcolor);
+    ebp.b      = NR_RGBA32_B(bgcolor);
+    ebp.a      = NR_RGBA32_A(bgcolor);
 
     /* Create new arena */
     NRArena *arena = NRArena::create();
-    unsigned int dkey = sp_item_display_key_new (1);
+    unsigned dkey = sp_item_display_key_new(1);
 
     /* Create ArenaItem and set transform */
-    ebp.root = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), arena, dkey, SP_ITEM_SHOW_PRINT);
-    nr_arena_item_set_transform (ebp.root, &affine);
+    ebp.root = sp_item_invoke_show(SP_ITEM(sp_document_root(doc)), arena, dkey, SP_ITEM_SHOW_PRINT);
+    nr_arena_item_set_transform(ebp.root, &affine);
 
     ebp.status = status;
     ebp.data   = data;
 
     if ((width < 256) || ((width * height) < 32768)) {
-        ebp.px = nr_pixelstore_64K_new (FALSE, 0);
+        ebp.px = nr_pixelstore_64K_new(FALSE, 0);
         ebp.sheight = 65536 / (4 * width);
-        sp_png_write_rgba_striped (filename, width, height, sp_export_get_rows, &ebp);
-        nr_pixelstore_64K_free (ebp.px);
+        sp_png_write_rgba_striped(filename, width, height, sp_export_get_rows, &ebp);
+        nr_pixelstore_64K_free(ebp.px);
     } else {
-        ebp.px = nr_new (guchar, 4 * 64 * width);
+        ebp.px = nr_new(guchar, 4 * 64 * width);
         ebp.sheight = 64;
-        sp_png_write_rgba_striped (filename, width, height, sp_export_get_rows, &ebp);
-        nr_free (ebp.px);
+        sp_png_write_rgba_striped(filename, width, height, sp_export_get_rows, &ebp);
+        nr_free(ebp.px);
     }
 
     /* Free Arena and ArenaItem */
-    sp_item_invoke_hide (SP_ITEM (sp_document_root (doc)), dkey);
-    nr_arena_item_unref (ebp.root);
-    nr_object_unref ((NRObject *) arena);
+    sp_item_invoke_hide(SP_ITEM(sp_document_root(doc)), dkey);
+    nr_arena_item_unref(ebp.root);
+    nr_object_unref((NRObject *) arena);
 }
 
 
@@ -810,11 +810,11 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
  *  Print the current document, if any.
  */
 void
-sp_file_print (void)
+sp_file_print()
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     if (doc)
-        sp_print_document (doc, FALSE);
+        sp_print_document(doc, FALSE);
 }
 
 
@@ -823,11 +823,11 @@ sp_file_print (void)
  *  the machine's print drivers.
  */
 void
-sp_file_print_direct (void)
+sp_file_print_direct()
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     if (doc)
-        sp_print_document (doc, TRUE);
+        sp_print_document(doc, TRUE);
 }
 
 
@@ -836,12 +836,12 @@ sp_file_print_direct (void)
  * printed.
  */
 void
-sp_file_print_preview (gpointer object, gpointer data)
+sp_file_print_preview(gpointer object, gpointer data)
 {
 
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     if (doc)
-        sp_print_preview_document (doc);
+        sp_print_preview_document(doc);
 
 }
 
@@ -850,9 +850,9 @@ sp_file_print_preview (gpointer object, gpointer data)
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
