@@ -38,6 +38,8 @@
 #include "../desktop-handles.h"
 #include "../selection.h"
 #include "../sp-item.h"
+#include "../sp-text.h"
+#include "../sp-root.h"
 
 #include "../xml/repr-private.h"
 
@@ -561,9 +563,14 @@ set_dt_select (SPRepr *repr)
 
 	blocked++;
 	if (object && SP_IS_ITEM (object)) {
-		sp_selection_set_item (selection, SP_ITEM (object));
+		if (!(SP_IS_TSPAN (object) || SP_IS_STRING (object) || SP_IS_ROOT (object))) {
+			// We cannot set selection to tspan, string, or root; failures and crashes will occur
+			// FIXME: when a tspan is highlighted, set selection to its parent text
+			sp_selection_set_item (selection, SP_ITEM (object));
+		}
 	} else {
-		sp_selection_empty (selection);
+		if (object) // this prevents crash with an empty text node
+			sp_selection_empty (selection);
 	}
 	blocked--;
 }
