@@ -138,6 +138,7 @@ sp_text_context_init (SPTextContext *tc)
 	tc->show = FALSE;
 	tc->phase = 0;
 	tc->nascent_object = 0;
+    tc->dragging = 0;
 
 	new (&tc->sel_changed_connection) sigc::connection();
 	new (&tc->sel_modified_connection) sigc::connection();
@@ -288,12 +289,33 @@ sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 					// update display
 					sp_text_context_update_cursor (tc);
 					sp_text_context_update_text_selection (tc);
+                    tc->dragging = 1;
 				}
 				ret = TRUE;
 			}
 		}
 		break;
+    case GDK_BUTTON_RELEASE:
+        if (event->button.button == 1 && tc->dragging) {
+            tc->dragging = 0;
+            ret = TRUE;
+        }
+        break;
 	case GDK_MOTION_NOTIFY:
+		if (event->motion.state & GDK_BUTTON1_MASK && tc->dragging) {
+			// find out click point in document coordinates
+			NR::Point p = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
+			// set the cursor closest to that point
+			Inkscape::Text::Layout::iterator new_end = sp_te_get_position_by_coords (tc->text, p);
+			// update display
+            if (tc->text_sel_end != new_end) {
+                tc->text_sel_end = new_end;
+    			sp_text_context_update_cursor (tc);
+	    		sp_text_context_update_text_selection (tc);
+            }
+			ret = TRUE;
+            break;
+		}
 		// find out item under mouse, disregarding groups
 		item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 		if (SP_IS_TEXT (item_ungrouped) || SP_IS_FLOWTEXT (item_ungrouped)) {

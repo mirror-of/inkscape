@@ -59,6 +59,7 @@ struct SPTextContext {
 	guint show : 1;
 	guint phase : 1;
 	guint nascent_object : 1; // true if we're clicked on canvas to put cursor, but no text typed yet so ->text is still NULL
+    guint dragging : 1;
 
 	/* Preedit String */
 	gchar* preedit_string;
