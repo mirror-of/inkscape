@@ -15,15 +15,14 @@
 
 #include <libnr/nr-point.h>
 
-class SPView;
-class SPViewClass;
-
 #define SP_TYPE_VIEW (sp_view_get_type ())
 #define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, SPView))
 #define SP_IS_VIEW(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_VIEW))
 
 #include <sigc++/sigc++.h>
 #include <gtk/gtkeventbox.h>
+
+#include "helper/action.h"
 #include "forward.h"
 #include "message.h"
 #include "message-stack.h"
@@ -105,9 +104,6 @@ gboolean sp_view_shutdown (SPView *view);
 void sp_view_request_redraw (SPView *view);
 
 /* SPViewWidget */
-
-class SPViewWidget;
-class SPViewWidgetClass;
 
 #define SP_TYPE_VIEW_WIDGET (sp_view_widget_get_type ())
 #define SP_VIEW_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_VIEW_WIDGET, SPViewWidget))
