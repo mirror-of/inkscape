@@ -111,6 +111,15 @@ options_clone_compensation_toggled (GtkToggleButton *button)
 }
 
 static void
+options_clone_orphans_toggled (GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active (button)) {
+		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		prefs_set_int_attribute ("options.cloneorphans", "value", val);
+	}
+}
+
+static void
 options_selector_cue_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
@@ -932,6 +941,83 @@ options_checkbox (
     options_changed_boolean
     );
 
+
+// Clones
+        l = gtk_label_new (_("Clones"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, VB_MARGIN);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+        // Clone compensation
+        {
+            GtkWidget *f = gtk_frame_new (_("When the original moves, its clones:"));
+            gtk_widget_show (f);
+            gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+            GtkWidget *fb = gtk_vbox_new (FALSE, 0);
+            gtk_widget_show (fb);
+            gtk_container_add (GTK_CONTAINER (f), fb);
+
+            gint compense = prefs_get_int_attribute ("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
+
+            GtkWidget *b = 
+            sp_select_context_add_radio (
+                NULL, fb, tt, _("Move in parallel"), _("Clones are translated by the same vector as their original."), NULL, SP_CLONE_COMPENSATION_PARALLEL, true,
+                compense == SP_CLONE_COMPENSATION_PARALLEL,
+                options_clone_compensation_toggled
+                );
+
+            sp_select_context_add_radio (
+                b, fb, tt, _("Stay unmoved"), _("Clones preserve their positions when their original is moved."), NULL, SP_CLONE_COMPENSATION_UNMOVED, true,
+                compense == SP_CLONE_COMPENSATION_UNMOVED,
+                options_clone_compensation_toggled
+                );
+
+            sp_select_context_add_radio (
+                b, fb, tt, _("Move according to transform"), _("Each clone moves according to the value of its transform= attribute. For example, a rotated clone will move in a different direction than its original."), NULL, SP_CLONE_COMPENSATION_NONE, true,
+                compense == SP_CLONE_COMPENSATION_NONE,
+                options_clone_compensation_toggled
+                );
+        }
+
+        // Original deletion
+        {
+            GtkWidget *f = gtk_frame_new (_("When the original is deleted, its clones:"));
+            gtk_widget_show (f);
+            gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+            GtkWidget *fb = gtk_vbox_new (FALSE, 0);
+            gtk_widget_show (fb);
+            gtk_container_add (GTK_CONTAINER (f), fb);
+
+            gint orphans = prefs_get_int_attribute ("options.cloneorphans", "value", SP_CLONE_ORPHANS_UNLINK);
+
+            GtkWidget *b = 
+            sp_select_context_add_radio (
+                NULL, fb, tt, _("Are unlinked"), _("Orphaned clones are converted to regular objects."), NULL, SP_CLONE_ORPHANS_UNLINK, true,
+                orphans == SP_CLONE_ORPHANS_UNLINK,
+                options_clone_orphans_toggled
+                );
+
+            sp_select_context_add_radio (
+                b, fb, tt, _("Are deleted"), _("Orphaned clones are deleted along with their original."), NULL, SP_CLONE_ORPHANS_DELETE, true,
+                orphans == SP_CLONE_ORPHANS_DELETE,
+                options_clone_orphans_toggled
+                );
+
+/*
+            sp_select_context_add_radio (
+                b, fb, tt, _("Ask me"), _("Ask me what to do with the clones when their originals are deleted."), NULL, SP_CLONE_ORPHANS_ASKME, true,
+                orphans == SP_CLONE_ORPHANS_ASKME,
+                options_clone_orphans_toggled
+                );
+*/
+        }
+
+
+
 // To be broken into: Display, Save, Export, SVG, Commands
         l = gtk_label_new (_("Misc"));
         gtk_widget_show (l);
@@ -986,39 +1072,6 @@ options_checkbox (
                 options_store_transform_toggled
                 );
         }
-
-        // Clone compensation
-        {
-            GtkWidget *f = gtk_frame_new (_("When the original moves, its clone:"));
-            gtk_widget_show (f);
-            gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-            GtkWidget *fb = gtk_vbox_new (FALSE, 0);
-            gtk_widget_show (fb);
-            gtk_container_add (GTK_CONTAINER (f), fb);
-
-            gint compense = prefs_get_int_attribute ("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
-
-            GtkWidget *b = 
-            sp_select_context_add_radio (
-                NULL, fb, tt, _("Moves in parallel"), _("Clone is translated by the same vector as its original."), NULL, SP_CLONE_COMPENSATION_PARALLEL, true,
-                compense == SP_CLONE_COMPENSATION_PARALLEL,
-                options_clone_compensation_toggled
-                );
-
-            sp_select_context_add_radio (
-                b, fb, tt, _("Stays unmoved"), _("Clone preserves its position when its original is moved."), NULL, SP_CLONE_COMPENSATION_UNMOVED, true,
-                compense == SP_CLONE_COMPENSATION_UNMOVED,
-                options_clone_compensation_toggled
-                );
-
-            sp_select_context_add_radio (
-                b, fb, tt, _("Moves according to transform"), _("Clone moves according to the value of its transform= attribute. For example, a rotated clone will move in a different direction than its original."), NULL, SP_CLONE_COMPENSATION_NONE, true,
-                compense == SP_CLONE_COMPENSATION_NONE,
-                options_clone_compensation_toggled
-                );
-        }
-
 
      
         /* Oversample */
