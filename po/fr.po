@@ -506,7 +506,7 @@ msgstr " en "
 #. create dialog
 #: src/desktop-events.cpp:367
 msgid "Guideline"
-msgstr "Lignes de guide"
+msgstr "Ligne de guide"
 
 #: src/desktop-events.cpp:455
 #, c-format
@@ -534,7 +534,7 @@ msgid ""
 "use selector (arrow) to move or transform them."
 msgstr ""
 "<b>Bienvenue dans Inkscape!</b> Utilisez les formes ou l'outil de dessin à "
-"main levée pour créer des objets; utilisez les sélecteur (flèches) pour les "
+"main levée pour créer des objets; utilisez les sélecteurs (flèches) pour les "
 "déplacer ou les modifier."
 
 #: src/desktop.cpp:1038
@@ -558,7 +558,7 @@ msgstr ""
 "<span weight=\"bold\" size=\"larger\">Enregistrer les changements du "
 "document \"%s\" avant de fermer ?</span>\n"
 "\n"
-"Si vous fermez sans enregistrer vos changements seront perdus."
+"Si vous fermez sans enregistrer, vos changements seront perdus."
 
 #: src/desktop.cpp:1200 src/desktop.cpp:1258
 msgid "Close _without saving"
@@ -1259,7 +1259,7 @@ msgstr "Fermer"
 
 #: src/dialogs/display-settings.cpp:221
 msgid "When transforming, show:"
-msgstr "Lors des transformations, afficher :"
+msgstr "Lors des transformations, afficher :"
 
 #: src/dialogs/display-settings.cpp:232
 msgid "Objects"
@@ -1433,7 +1433,7 @@ msgid ""
 "fill, stroke, transparency, etc.)"
 msgstr ""
 "Le style courant est mis à jour chaque fois que le style d'un objet est "
-"changé (remplissage, contour, transparence, etc )"
+"changé (remplissage, contour, transparence, etc.)"
 
 #: src/dialogs/display-settings.cpp:798
 msgid "This tool's own style:"
@@ -1805,7 +1805,7 @@ msgid ""
 "example, a rotated clone will move in a different direction than its "
 "original."
 msgstr ""
-"Chaque clone est déplacé en fonction de son attribut \"transformation\". Par "
+"Chaque clone est déplacé en fonction de son attribut ‘transform’. Par "
 "exemple, un clone tourné sera déplacé dans une direction différente de celle "
 "de son original."
 
@@ -1889,7 +1889,7 @@ msgid ""
 "attribute"
 msgstr ""
 "Si possible, appliquer des transformations aux objets sans ajouter "
-"l'attribut \"transformation\""
+"l'attribut ‘transform’"
 
 #: src/dialogs/display-settings.cpp:1369
 msgid "Preserved"
@@ -1898,7 +1898,7 @@ msgstr "Préservé"
 #: src/dialogs/display-settings.cpp:1370
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
-"Toujours enregistrer les transformations dans l'attribut \"transformation\" "
+"Toujours enregistrer les transformations dans l'attribut ‘transform’ "
 "des objets"
 
 #. Selecting
@@ -2663,7 +2663,7 @@ msgstr "Créateur"
 #: src/dialogs/rdf.cpp:241
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
-msgstr "Nom de l'entité à l'origine de la création de ce document."
+msgstr "Entité principalement responsable de la création du contenu de ce document."
 
 #: src/dialogs/rdf.cpp:243
 msgid "Rights"
@@ -2698,7 +2698,7 @@ msgstr "Source"
 
 #: src/dialogs/rdf.cpp:254
 msgid "Unique URI to reference the source of this document."
-msgstr "URI unique pour référencer la source de ce document."
+msgstr "URI unique pour référencer la ressource dont le document actuel est dérivé."
 
 #: src/dialogs/rdf.cpp:256
 msgid "Relation"
@@ -2706,7 +2706,7 @@ msgstr "Relation"
 
 #: src/dialogs/rdf.cpp:257
 msgid "Unique URI to a related document."
-msgstr "URI unique vers un document en relation avec celui-ci."
+msgstr "URI unique à une ressource apparentée."
 
 #: src/dialogs/rdf.cpp:259
 msgid "Language"
@@ -2740,7 +2740,7 @@ msgstr "Couverture"
 
 #: src/dialogs/rdf.cpp:268
 msgid "Extent or scope of this document."
-msgstr "Portée ou objectif de ce document."
+msgstr "Etendue ou portée spacio-temporelle du contenu de ce document."
 
 #: src/dialogs/rdf.cpp:272
 msgid "A short account of the content of this document."
@@ -3465,7 +3465,7 @@ msgid ""
 "and patterns will be lost."
 msgstr ""
 "Utiliser les opérateurs vectoriels PostScript. Le fichier image résultant "
-"sera en général moins volumineux et reste redimenssionnable, cependant, la "
+"sera en général moins volumineux et reste redimenssionnable; cependant, la "
 "transparence alpha, les dégradés et les motifs de remplissage seront perdus."
 
 #: src/extension/internal/ps.cpp:150
@@ -3688,7 +3688,7 @@ msgstr ""
 #. string here should be changed.)
 #: src/help.cpp:65
 msgid "about.svg"
-msgstr ""
+msgstr "about.svg"
 
 #: src/help.cpp:81 src/verbs.cpp:1866
 msgid "About Inkscape"
@@ -4127,7 +4127,7 @@ msgstr ""
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Couleur de fond du bitmap exporté (n'importe quelle code de couleur "
-"compatible avec SVG)"
+"permis par SVG)"
 
 #: src/main.cpp:212
 msgid "COLOR"
@@ -5141,7 +5141,7 @@ msgstr "Unicode : %c%c%c%c"
 
 #: src/text-context.cpp:453
 msgid "Non-printable character"
-msgstr "Caractère non Imprimable"
+msgstr "Caractère non imprimable"
 
 #: src/toolbox.cpp:411
 msgid "Split path between two non-endpoint nodes"
@@ -5703,7 +5703,7 @@ msgstr "Tout sé_lectionner"
 #: src/ui/stock-items.cpp:53
 #, fuzzy
 msgid "Select All in All La_yers"
-msgstr "Sélectionner tout sur tous les claques"
+msgstr "Sélectionner tout sur tous les calques"
 
 #: src/ui/stock-items.cpp:54
 #, fuzzy
@@ -6464,7 +6464,7 @@ msgstr "Sélectionner tous les objets ou tous les nœuds"
 
 #: src/verbs.cpp:1612
 msgid "Select All in All Layers"
-msgstr "Sélectionner tout sur tous les claques"
+msgstr "Sélectionner tout sur tous les calques"
 
 #: src/verbs.cpp:1613
 msgid "Select all objects in all visible and unlocked layers"
