@@ -204,7 +204,7 @@ The height of generated bitmap in pixels (overwrites dpi)
 .IP "\fB\-i\fR, \fB\-\-bitmap\-icons\fR" 8
 .IX Item "-i, --bitmap-icons"
 Prefer bitmap (xpm) icons to \s-1SVG\s0 ones
-.IP "\fB\-p\fR \fI\s-1FILENAME\s0\fR, \fB\-\-print\fR=\fI\s-1PRINTER\s0\fR" 8
+.IP "\fB\-p\fR \fI\s-1PRINTER\s0\fR, \fB\-\-print\fR=\fI\s-1PRINTER\s0\fR" 8
 .IX Item "-p PRINTER, --print=PRINTER"
 Print document(s) to specified printer using `lpr \-P PRINTER'.
 Alternatively, use `| COMMAND' to specify a different command to pipe to,
