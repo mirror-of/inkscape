@@ -807,6 +807,16 @@ Input::open (const gchar *uri)
 }
 
 /**
+    \return  IETF mime-type for the extension
+	\brief   Get the mime-type that describes this extension
+*/
+gchar *
+Input::get_mimetype(void)
+{
+    return mimetype;
+}
+
+/**
     \return  Filename extension for the extension
 	\brief   Get the filename extension for this extension
 */
@@ -947,6 +957,16 @@ Output::check (void)
 		return FALSE;
 
 	return Extension::check();
+}
+
+/**
+    \return  IETF mime-type for the extension
+	\brief   Get the mime-type that describes this extension
+*/
+gchar *
+Output::get_mimetype(void)
+{
+    return mimetype;
 }
 
 /**

@@ -178,6 +178,7 @@ public:
     virtual      ~Input                (void);
     virtual bool  check                (void);
     SPDocument *  open                 (gchar const *uri);
+    gchar *       get_mimetype         (void);
     gchar *       get_extension        (void);
     gchar *       get_filetypename     (void);
     gchar *       get_filetypetooltip  (void);
@@ -202,6 +203,7 @@ public:
     void         save (SPDocument *doc,
                        gchar const *uri);
     GtkDialog *  prefs (void);
+    gchar *      get_mimetype(void);
     gchar *      get_extension(void);
     gchar *      get_filetypename(void);
     gchar *      get_filetypetooltip(void);

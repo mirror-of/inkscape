@@ -139,8 +139,8 @@ DB::input_internal (Extension * in_plug, gpointer data)
 		}
 
 		extension = imod->get_extension();
-
-		tooltip = imod->get_filetypetooltip();
+		mimetype  = imod->get_mimetype();
+		tooltip   = imod->get_filetypetooltip();
 
 		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
 		g_slist_append((GSList *)data, (gpointer)desc);
@@ -168,8 +168,8 @@ DB::output_internal (Extension * in_plug, gpointer data)
 		}
 
 		extension = omod->get_extension();
-
-		tooltip = omod->get_filetypetooltip();
+		mimetype  = omod->get_mimetype();
+		tooltip   = omod->get_filetypetooltip();
 
 		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
 		g_slist_append((GSList *)data, (gpointer)desc);
