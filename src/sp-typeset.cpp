@@ -942,7 +942,7 @@ void   refresh_typeset_source(SPTypeset *typeset,shape_dest *nDst)
   nDst->bbox=NR::Rect(NR::Point(nDst->theShape->leftX,nDst->theShape->topY),NR::Point(nDst->theShape->rightX,nDst->theShape->bottomY));
   typeset->layoutDirty=true;
   
-  SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+//  SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
@@ -976,7 +976,7 @@ void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
   nDst->length=nDst->thePath->Length();
   typeset->layoutDirty=true;
 
-  SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+//  SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 

@@ -223,6 +223,6 @@ GType sp_typeset_get_type (void);
 void        sp_typeset_set_text(SPObject* object,char* in_text,int text_type);
 void        sp_typeset_chain_shape(SPObject* object,char* shapeID);
 
-void        sp_typeset_build_one(void);
+void        sp_typeset_build_one(bool on_path);
 
 #endif

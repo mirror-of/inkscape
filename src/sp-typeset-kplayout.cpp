@@ -65,6 +65,8 @@ typedef struct one_break {
 
   // next breakpoint for index end_ind (linked list)
   int          next_for_ind;
+	// is in the stack of breakpoint awaiting to be treated
+	bool         is_pooled;
 } one_break;
 
 
@@ -134,6 +136,7 @@ int              break_holder::AddBrk(int st,int en,const box_solution &pos,int 
     brks[n].prev=-1;
     brks[n].next_for_ind=-1;
     brks[n].no_justification=noJust;
+		brks[n].is_pooled=false;
     nb_brk++;
     return n;
   }
@@ -146,8 +149,8 @@ int              break_holder::AddBrk(int st,int en,const box_solution &pos,int 
         brks[cur].end_ind=en;
         brks[cur].score_to_prev=delta;
         brks[cur].no_justification=noJust;
- //       printf(" replaced %i\n",cur);
-        return -1;
+//        printf(" replaced %i\n",cur);
+        return cur;
       } else {
 //        printf("%i -> %i  dumped\n",st,en);
         return -1;
@@ -168,6 +171,7 @@ int              break_holder::AddBrk(int st,int en,const box_solution &pos,int 
     brks[n].prev=after;
     brks[n].next_for_ind=pot_first[en];
     brks[n].no_justification=noJust;
+		brks[n].is_pooled=false;
     pot_first[en]=n;
     nb_brk++;
     return n;
@@ -381,7 +385,10 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
 
       cur_box=typeset->theDst->VeryFirst();
       int           cur_brk=brk_list->AddBrk(-1,-1,cur_box,-1,0,true);
-      pen_list->AddPending(cur_brk,nAscent,nDescent,false);
+      if ( brk_list->brks[cur_brk].is_pooled == false ) {
+				pen_list->AddPending(cur_brk,nAscent,nDescent,false);
+				brk_list->brks[cur_brk].is_pooled=true;
+			}
 
       int      best_brk=-1;
       double   best_score=0;
@@ -392,6 +399,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
         if ( pen_list->Pop(cur_brk,nAscent,nDescent,jump_to_next_line) == false ) {
           break;
         }
+				brk_list->brks[cur_brk].is_pooled=false;
 
         int    cur_pos=brk_list->brks[cur_brk].end_ind+1;
 //        printf("traite: %i: %i %f %f %i: s=%f\n",cur_brk,cur_pos,nAscent,nDescent,(jump_to_next_line)?1:0,brk_list->Score(cur_brk));
@@ -455,7 +463,10 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
             if ( sol[i].ascent > nAscent || sol[i].descent > nDescent ) {
               int p_line=(sameLine)?brk_list->PrevLine(cur_brk):cur_brk;
               if ( p_line >= 0 ) {
-                pen_list->AddPending(p_line,sol[i].ascent,sol[i].descent,true);
+								if ( brk_list->brks[p_line].is_pooled == false ) {
+									pen_list->AddPending(p_line,sol[i].ascent,sol[i].descent,true);
+									brk_list->brks[p_line].is_pooled=true;
+								}
               }
             } else {
               if ( sol[i].length < 0.001 ) {
@@ -465,8 +476,11 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
                   if ( n_brk >= 0 ) {
                     double    a,d;
                     typeset->theSrc->InitialMetricsAt(sol[i].end_ind+1,a,d);
-                    pen_list->AddPending(n_brk,a,d,true);
-                  }
+										if ( brk_list->brks[n_brk].is_pooled == false ) {
+											pen_list->AddPending(n_brk,a,d,true);
+											brk_list->brks[n_brk].is_pooled=true;
+										}
+									}
                 } else {
 //                  printf("qu'est ce que c'est que cette longueur nulle: %i %i \n",sol[i].start_ind,sol[i].end_ind);
                 }
@@ -476,8 +490,11 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
                 if ( n_brk >= 0 ) {
                   double    a,d;
                   typeset->theSrc->InitialMetricsAt(brk_list->brks[cur_brk].end_ind+1,a,d);
-                  pen_list->AddPending(n_brk,a,d,sol[i].endOfParagraph);
-                }
+									if ( brk_list->brks[n_brk].is_pooled == false ) {
+										pen_list->AddPending(n_brk,a,d,sol[i].endOfParagraph);
+										brk_list->brks[n_brk].is_pooled=true;
+									}
+								}
               } else {
                 double   delta=0;
                 if ( sol[i].endOfParagraph == false || sol[i].length > nLen) {
@@ -501,8 +518,11 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
                   } else {
                     double    a,d;
                     typeset->theSrc->InitialMetricsAt(sol[i].end_ind+1,a,d);
-                    pen_list->AddPending(n_brk,a,d,sol[i].endOfParagraph);
-                  }
+										if ( brk_list->brks[n_brk].is_pooled == false ) {
+											pen_list->AddPending(n_brk,a,d,sol[i].endOfParagraph);
+											brk_list->brks[n_brk].is_pooled=true;
+										}
+									}
                 }
               }
             }
@@ -513,10 +533,11 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
       } while ( 1 );
 
       if ( best_brk >= 0 ) {
+//				printf("bscore=%f\n",best_score);
         for (cur_brk=best_brk;cur_brk>=0;cur_brk=brk_list->brks[cur_brk].prev) {
           if ( brk_list->brks[cur_brk].start_ind <= brk_list->brks[cur_brk].end_ind ) {
-//            printf("bk=%i (->p=%i): s=%i e=%i l=%f\n",cur_brk,brk_list->brks[cur_brk].prev,brk_list->brks[cur_brk].start_ind,brk_list->brks[cur_brk].end_ind
-//                   ,brk_list->brks[cur_brk].pos.x_end-brk_list->brks[cur_brk].pos.x_start);
+//            printf("bk=%i (->p=%i): s=%i e=%i l=%f d=%f\n",cur_brk,brk_list->brks[cur_brk].prev,brk_list->brks[cur_brk].start_ind,brk_list->brks[cur_brk].end_ind
+//                   ,brk_list->brks[cur_brk].pos.x_end-brk_list->brks[cur_brk].pos.x_start,brk_list->brks[cur_brk].score_to_prev);
             steps=(typeset_step*)realloc(steps,(nb_step+1)*sizeof(typeset_step));
             if ( nb_step > 0 ) memmove(steps+1,steps,nb_step*sizeof(typeset_step));
             steps[0].box=brk_list->brks[cur_brk].pos;

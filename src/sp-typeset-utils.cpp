@@ -829,7 +829,7 @@ void                         pango_text_chunker::SetTextWithAttrs(text_wrapper* 
 		words[i].x_length=theSize*theText->boxes[i].width;
 		int s_pos=theText->glyph_text[words[i].t_first].uni_st;
 		words[i].is_return=theText->glyph_text[words[i].t_last+1].para_start;
-    words[i].is_white=words[i].is_return | (g_unichar_isspace(theText->uni32_text[s_pos]));
+    words[i].is_white=g_unichar_isspace(theText->uni32_text[s_pos]);
 		words[i].end_of_word=theText->boxes[i].word_end;
 //		printf("word %i: %i -> %i  l=%f  w=%i r=%i e=%i\n",i,words[i].t_first,words[i].t_last,words[i].x_length,(words[i].is_white)?1:0
 //					 ,(words[i].is_return)?1:0,(words[i].end_of_word)?1:0);
