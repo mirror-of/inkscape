@@ -24,6 +24,22 @@
 	  transitioned to SPObject::requestDisplayUpdate and
 	  SPObject::updateDisplay
 
+    * src/arc-context.cpp, src/document.cpp, src/gradient-chemistry.cpp,
+	  src/knotholder.cpp, src/main.cpp, src/rect-context.cpp,
+	  src/sp-anchor.cpp, src/sp-clippath.cpp, src/sp-defs.cpp,
+	  src/sp-gradient.cpp, src/sp-item-group.cpp, src/sp-item.cpp,
+	  src/sp-mask.cpp, src/sp-namedview.cpp, src/sp-object-group.cpp,
+	  src/sp-object.cpp, src/sp-object.h, src/sp-offset.cpp,
+	  src/sp-pattern.cpp, src/sp-rect.cpp, src/sp-shape.cpp,
+	  src/sp-spiral.cpp, src/sp-text.cpp, src/sp-use.cpp,
+	  src/spiral-context.cpp, src/splivarot.cpp, src/star-context.cpp,
+	  src/style.cpp, src/toolbox.cpp, src/dialogs/fill-style.cpp,
+	  src/dialogs/stroke-style.cpp, src/extension/internal/svg.cpp:
+
+	  transitioned to SPObject::requestModified, SPObject::emitModified,
+	  and SPObject::updateRepr; also reworked "minimal" version of
+	  updateRepr.
+
 2004-06-11  Ted Gould  <ted@gould.cx>
 
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp, src/prefs-utils.cpp,

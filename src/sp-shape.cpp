@@ -867,7 +867,7 @@ sp_shape_adjust_stroke (SPItem *item, gdouble ex)
                 style->stroke_dash.offset *= ex;
             }
 
-            sp_object_invoke_write(SP_OBJECT(item), SP_OBJECT_REPR(item), SP_OBJECT_WRITE_EXT);
+            SP_OBJECT(item)->updateRepr();
         }
     }
 }

@@ -656,7 +656,7 @@ sp_document_ensure_up_to_date (SPDocument *doc)
 			doc->root->updateDisplay((SPCtx *)&ctx, 0);
 		}
 		/* Emit "modified" signal on objects */
-		sp_object_invoke_modified (doc->root, 0);
+		doc->root->emitModified(0);
 		/* Emit our own "modified" signal */
 		g_signal_emit (G_OBJECT (doc), signals [MODIFIED], 0,
 			       SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG);
@@ -697,7 +697,7 @@ sp_document_idle_handler (gpointer data)
 	}
 
 	/* Emit "modified" signal on objects */
-	sp_object_invoke_modified (doc->root, 0);
+	doc->root->emitModified(0);
 
 #ifdef SP_DOCUMENT_DEBUG_IDLE
 	g_print ("\n->");

@@ -198,7 +198,7 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			pat->patternUnits_set = FALSE;
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_PATTERNCONTENTUNITS:
 		if (value) {
@@ -211,7 +211,7 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			pat->patternContentUnits_set = FALSE;
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_PATTERNTRANSFORM: {
 		NRMatrix t;
@@ -223,32 +223,32 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 			nr_matrix_set_identity (&pat->patternTransform);
 			pat->patternTransform_set = FALSE;
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	}
 	case SP_ATTR_X:
 		if (!sp_svg_length_read (value, &pat->x)) {
 			sp_svg_length_unset (&pat->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y:
 		if (!sp_svg_length_read (value, &pat->y)) {
 			sp_svg_length_unset (&pat->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_WIDTH:
 		if (!sp_svg_length_read (value, &pat->width)) {
 			sp_svg_length_unset (&pat->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
 		if (!sp_svg_length_read (value, &pat->height)) {
 			sp_svg_length_unset (&pat->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_VIEWBOX: {
 		/* fixme: Think (Lauris) */
@@ -277,7 +277,7 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			pat->viewBox_set = FALSE;
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	}
 	case SP_ATTR_XLINK_HREF:
@@ -397,7 +397,7 @@ sp_pattern_modified (SPObject *object, guint flags)
 		sp_object_ref (child, NULL);
 		l = g_slist_remove (l, child);
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			sp_object_invoke_modified (child, flags);
+			child->emitModified(flags);
 		}
 		sp_object_unref (child, NULL);
 	}
@@ -426,7 +426,7 @@ static void
 pattern_ref_modified (SPObject *ref, guint flags, SPPattern *pattern)
 {
 	if (SP_IS_OBJECT (pattern))
-		sp_object_request_modified (SP_OBJECT (pattern), SP_OBJECT_MODIFIED_FLAG);
+		SP_OBJECT (pattern)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 guint

@@ -473,7 +473,7 @@ static void sp_arc_finish(SPArcContext *ac)
 	if (ac->item != NULL) {
 		SPDesktop *desktop = SP_EVENT_CONTEXT (ac)->desktop;
 
-		sp_object_invoke_write (SP_OBJECT (ac->item), SP_OBJECT_REPR (ac->item), SP_OBJECT_WRITE_EXT);
+		SP_OBJECT (ac->item)->updateRepr();
 
 		SP_DT_SELECTION(desktop)->setItem(ac->item);
 		sp_document_done (SP_DT_DOCUMENT (desktop));

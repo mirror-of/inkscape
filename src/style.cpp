@@ -1175,12 +1175,12 @@ sp_style_paint_server_modified (SPPaintServer *server, guint flags, SPStyle *sty
         if (style->object) {
             /* fixme: I do not know, whether it is optimal - we are forcing reread of everything (Lauris) */
             /* fixme: We have to use object_modified flag, because parent flag is only available downstreams */
-            sp_object_request_modified (style->object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            style->object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
     } else if ((style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) && (server == style->stroke.value.paint.server)) {
         if (style->object) {
             /* fixme: */
-            sp_object_request_modified (style->object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            style->object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
     } else {
         g_assert_not_reached ();
@@ -1538,7 +1538,7 @@ sp_style_set_fill_color_alpha (SPStyle *style, const SPColor* color, gfloat a, u
     style->fill_opacity.value = SP_SCALE24_FROM_FLOAT (a);
 
     if (style->object) {
-        sp_object_request_modified (style->object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        style->object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     }
 }
 
@@ -1563,7 +1563,7 @@ sp_style_set_stroke_color_alpha (SPStyle *style, const SPColor* color, gfloat a,
     style->stroke_opacity.value = SP_SCALE24_FROM_FLOAT (a);
 
     if (style->object) {
-        sp_object_request_modified (style->object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        style->object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     }
 }
 
@@ -1582,7 +1582,7 @@ sp_style_set_opacity (SPStyle *style, gfloat opacity, unsigned int opacity_set)
     style->opacity.value = SP_SCALE24_FROM_FLOAT (opacity);
 
     if (style->object) {
-        sp_object_request_modified (style->object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        style->object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     }
 }
 

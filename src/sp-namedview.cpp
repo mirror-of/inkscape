@@ -214,16 +214,16 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 	switch (key) {
 	case SP_ATTR_VIEWONLY:
 		nv->editable = (!value);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SHOWGRID:
 		nv->showgrid = sp_str_to_bool (value);
 		sp_namedview_setup_grid (nv);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SNAPTOGRID:
 		nv->snaptogrid = sp_str_to_bool (value);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SHOWGUIDES:
 		if (!value) { // show guides if not specified, for backwards compatibility
@@ -232,11 +232,11 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 			nv->showguides = sp_str_to_bool (value);
 		}
 		sp_namedview_setup_guides (nv);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SNAPTOGUIDES:
 		nv->snaptoguides = sp_str_to_bool (value);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GRIDTOLERANCE:
 		nv->gridtoleranceunit = px;
@@ -244,7 +244,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			sp_nv_read_length (value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->gridtolerance, &nv->gridtoleranceunit);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GUIDETOLERANCE:
 		nv->guidetoleranceunit = px;
@@ -252,7 +252,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			sp_nv_read_length (value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->guidetolerance, &nv->guidetoleranceunit);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GRIDORIGINX:
 	case SP_ATTR_GRIDORIGINY:
@@ -265,7 +265,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		sp_convert_distance (&nv->gridorigin[d], nv->gridunit, pt);
 		sp_namedview_setup_grid (nv);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	}
 	case SP_ATTR_GRIDSPACINGX:
@@ -279,7 +279,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		sp_convert_distance (&nv->gridspacing[d], nv->gridunit, pt);
 		sp_namedview_setup_grid (nv);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	}
 	case SP_ATTR_GRIDCOLOR:
@@ -288,13 +288,13 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 			nv->gridcolor = (nv->gridcolor & 0xff) | sp_svg_read_color (value, nv->gridcolor);
 		}
 		sp_namedview_setup_grid (nv);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GRIDOPACITY:
 		nv->gridcolor = (nv->gridcolor & 0xffffff00) | (DEFAULTGRIDCOLOR & 0xff);
 		sp_nv_read_opacity (value, &nv->gridcolor);
 		sp_namedview_setup_grid (nv);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GUIDECOLOR:
 		nv->guidecolor = (nv->guidecolor & 0xff) | (DEFAULTGUIDECOLOR & 0xffffff00);
@@ -304,7 +304,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		for (l = nv->guides; l != NULL; l = l->next) {
 			g_object_set (G_OBJECT (l->data), "color", nv->guidecolor, NULL);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GUIDEOPACITY:
 		nv->guidecolor = (nv->guidecolor & 0xffffff00) | (DEFAULTGUIDECOLOR & 0xff);
@@ -312,7 +312,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		for (l = nv->guides; l != NULL; l = l->next) {
 			g_object_set (G_OBJECT (l->data), "color", nv->guidecolor, NULL);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GUIDEHICOLOR:
 		nv->guidehicolor = (nv->guidehicolor & 0xff) | (DEFAULTGUIDEHICOLOR & 0xffffff00);
@@ -322,7 +322,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		for (l = nv->guides; l != NULL; l = l->next) {
 			g_object_set (G_OBJECT (l->data), "hicolor", nv->guidehicolor, NULL);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GUIDEHIOPACITY:
 		nv->guidehicolor = (nv->guidehicolor & 0xffffff00) | (DEFAULTGUIDEHICOLOR & 0xff);
@@ -330,72 +330,72 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		for (l = nv->guides; l != NULL; l = l->next) {
 			g_object_set (G_OBJECT (l->data), "hicolor", nv->guidehicolor, NULL);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SHOWBORDER:
 		nv->showborder = (value) ? sp_str_to_bool (value) : TRUE;
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_BORDERLAYER:
 		nv->borderlayer = SP_BORDER_LAYER_BOTTOM;
 		if (value && !strcasecmp (value, "top")) nv->borderlayer = SP_BORDER_LAYER_TOP;
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_BORDERCOLOR:
 		nv->bordercolor = (nv->bordercolor & 0xff) | (DEFAULTBORDERCOLOR & 0xffffff00);
 		if (value) {
 			nv->bordercolor = (nv->bordercolor & 0xff) | sp_svg_read_color (value, nv->bordercolor);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_BORDEROPACITY:
 		nv->bordercolor = (nv->bordercolor & 0xffffff00) | (DEFAULTBORDERCOLOR & 0xff);
 		sp_nv_read_opacity (value, &nv->bordercolor);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_PAGECOLOR:
 		nv->pagecolor = (nv->pagecolor & 0xff) | (DEFAULTPAGECOLOR & 0xffffff00);
 		if (value) {
 			nv->pagecolor = (nv->pagecolor & 0xff) | sp_svg_read_color (value, nv->pagecolor);
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_PAGEOPACITY:
 		nv->pagecolor = (nv->pagecolor & 0xffffff00) | (DEFAULTPAGECOLOR & 0xff);
 		sp_nv_read_opacity (value, &nv->pagecolor);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_PAGESHADOW:
 		nv->pageshadow = value? atoi (value) : 2; // 2 is the default
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_ZOOM:
 		nv->zoom = value? g_ascii_strtod (value, NULL) : 0; // zero means not set
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_CX:
 		nv->cx = value? g_ascii_strtod (value, NULL) : HUGE_VAL; // HUGE_VAL means not set
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_CY:
 		nv->cy = value? g_ascii_strtod (value, NULL) : HUGE_VAL; // HUGE_VAL means not set
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_WINDOW_WIDTH:
 		nv->window_width = value? atoi (value) : -1; // -1 means not set
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_WINDOW_HEIGHT:
 		nv->window_height = value? atoi (value) : -1; // -1 means not set
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_WINDOW_X:
 		nv->window_x = value? atoi (value) : -1; // -1 means not set
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_WINDOW_Y:
 		nv->window_y = value? atoi (value) : -1; // -1 means not set
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)

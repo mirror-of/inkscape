@@ -648,9 +648,7 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                                                                SP_LINEARGRADIENT(lg),
                                                                SP_ITEM(i->data));
 
-                        sp_object_invoke_write(SP_OBJECT(lg),
-                                               SP_OBJECT_REPR(lg),
-                                               SP_OBJECT_WRITE_EXT);
+                        SP_OBJECT(lg)->updateRepr();
                     }
                 }
                 sp_document_done(SP_WIDGET_DOCUMENT(spw));
@@ -676,9 +674,7 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                         sp_paint_selector_write_radialgradient(psel,
                                                                SP_RADIALGRADIENT(lg),
                                                                SP_ITEM(i->data));
-                        sp_object_invoke_write(SP_OBJECT(lg),
-                                               SP_OBJECT_REPR(lg),
-                                               SP_OBJECT_WRITE_EXT);
+                        SP_OBJECT(lg)->updateRepr();
                     }
                 }
                 sp_document_done(SP_WIDGET_DOCUMENT(spw));
@@ -1176,7 +1172,7 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
         if (selrepr) {
             sp_repr_css_change_recursive(selrepr, css, "style");
         }
-        sp_object_request_modified(SP_OBJECT(items->data), SP_OBJECT_MODIFIED_FLAG);
+        SP_OBJECT(items->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         SP_OBJECT(items->data)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     }
 

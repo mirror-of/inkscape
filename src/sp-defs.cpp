@@ -135,7 +135,7 @@ sp_defs_modified (SPObject *object, guint flags)
 		child = SP_OBJECT (l->data);
 		l = g_slist_remove (l, child);
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			sp_object_invoke_modified (child, flags);
+			child->emitModified(flags);
 		}
 		g_object_unref (G_OBJECT (child));
 	}
@@ -156,7 +156,7 @@ sp_defs_write (SPObject *object, SPRepr *repr, guint flags)
 		if (!repr) repr = sp_repr_new ("defs");
 		l = NULL;
 		for (child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-			crepr = sp_object_invoke_write (child, NULL, flags);
+			crepr = child->updateRepr(NULL, flags);
 			l = g_slist_prepend (l, crepr);
 		}
 		while (l) {
@@ -166,7 +166,7 @@ sp_defs_write (SPObject *object, SPRepr *repr, guint flags)
 		}
 	} else {
 		for (child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-			sp_object_invoke_write (child, SP_OBJECT_REPR (child), flags);
+			child->updateRepr(flags);
 		}
 	}
 

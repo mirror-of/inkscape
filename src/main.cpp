@@ -391,7 +391,7 @@ sp_main_console (int argc, const char **argv)
 				SPRepr *repr;
 				rdoc = sp_repr_document_new ("svg");
 				repr = sp_repr_document_root (rdoc);
-				repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD);
+				repr = sp_document_root (doc)->updateRepr(repr, SP_OBJECT_WRITE_BUILD);
 				sp_repr_save_file (sp_repr_document (repr), sp_export_svg);
 			}
 		}

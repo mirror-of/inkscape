@@ -135,7 +135,7 @@ sp_anchor_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_XLINK_HREF:
 		g_free (anchor->href);
 		anchor->href = g_strdup (value);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_XLINK_TYPE:
 	case SP_ATTR_XLINK_ROLE:
@@ -144,7 +144,7 @@ sp_anchor_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_XLINK_SHOW:
 	case SP_ATTR_XLINK_ACTUATE:
 	case SP_ATTR_TARGET:
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)

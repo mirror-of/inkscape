@@ -658,7 +658,7 @@ sp_stb_magnitude_value_changed (GtkAdjustment *adj, SPWidget *tbl)
             SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_int(repr,"sodipodi:sides",(gint)adj->value);
             sp_repr_set_double(repr,"sodipodi:arg2",sp_repr_get_double_attribute (repr, "sodipodi:arg1", 0.5) + M_PI / (gint)adj->value);
-            sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+            SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
         }
     }
@@ -699,7 +699,7 @@ sp_stb_proportion_value_changed (GtkAdjustment *adj, SPWidget *tbl)
                 sp_repr_set_double(repr, "sodipodi:r1", r2*adj->value);
             }
 
-            sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+            SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
         }
     }
@@ -740,7 +740,7 @@ sp_stb_sides_flat_state_changed (GtkWidget *widget, GtkObject *tbl)
             if (SP_IS_STAR ((SPItem *) items->data))
             { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_attr(repr, "inkscape:flatsided", "true");
-            sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+            SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
             }
         }
@@ -750,7 +750,7 @@ sp_stb_sides_flat_state_changed (GtkWidget *widget, GtkObject *tbl)
             if (SP_IS_STAR ((SPItem *) items->data))	{
                 SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
                 sp_repr_set_attr(repr, "inkscape:flatsided", "false");
-                sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
             }
         }
@@ -1282,7 +1282,7 @@ sp_spl_tb_value_changed (GtkAdjustment *adj, SPWidget *tbl, const gchar* value_n
         if (SP_IS_SPIRAL ((SPItem *) items->data)) {
             SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_double( repr, namespaced_name, adj->value );
-            sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+            SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
         }
     }
@@ -1762,7 +1762,7 @@ sp_arctb_open_state_changed (GtkWidget *widget, GtkObject *tbl)
            if (SP_IS_ARC ((SPItem *) items->data)) {
                SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
                sp_repr_set_attr(repr, "sodipodi:open", "true");
-               sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+               SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                modmade = true;
            }
        }
@@ -1774,7 +1774,7 @@ sp_arctb_open_state_changed (GtkWidget *widget, GtkObject *tbl)
             if (SP_IS_ARC ((SPItem *) items->data))    {
                 SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
                 sp_repr_set_attr(repr, "sodipodi:open", NULL);
-                sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
             }
         }

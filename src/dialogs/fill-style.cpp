@@ -838,9 +838,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                                  (SP_ITEM (i->data), vector );
                         sp_paint_selector_write_lineargradient ( psel,
                                 SP_LINEARGRADIENT (lg), SP_ITEM (i->data));
-                        sp_object_invoke_write ( SP_OBJECT (lg),
-                                                 SP_OBJECT_REPR (lg),
-                                                 SP_OBJECT_WRITE_EXT );
+                        SP_OBJECT(lg)->updateRepr();
                     }
                 }
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -872,9 +870,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                             (SP_ITEM (i->data), vector);
                         sp_paint_selector_write_radialgradient (psel,
                                 SP_RADIALGRADIENT (rg), SP_ITEM (i->data));
-                        sp_object_invoke_write ( SP_OBJECT (rg),
-                                                 SP_OBJECT_REPR (rg),
-                                                 SP_OBJECT_WRITE_EXT );
+                        SP_OBJECT(rg)->updateRepr();
                     }
                 } // end if
 

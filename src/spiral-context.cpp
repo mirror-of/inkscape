@@ -448,7 +448,7 @@ sp_spiral_finish (SPSpiralContext * sc)
 		SPSpiral  *spiral = SP_SPIRAL (sc->item);
 
 		sp_shape_set_shape(SP_SHAPE(spiral));
-		sp_object_invoke_write (SP_OBJECT (spiral), NULL, SP_OBJECT_WRITE_EXT);
+		SP_OBJECT (spiral)->updateRepr(NULL, SP_OBJECT_WRITE_EXT);
 
 		SP_DT_SELECTION(desktop)->setItem(sc->item);
 		sp_document_done (SP_DT_DOCUMENT (desktop));

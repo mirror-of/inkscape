@@ -590,7 +590,7 @@ sp_use_modified(SPObject *object, guint flags)
     if (child) {
         g_object_ref(G_OBJECT(child));
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-            sp_object_invoke_modified(child, flags);
+            child->emitModified(flags);
         }
         g_object_unref(G_OBJECT(child));
     }

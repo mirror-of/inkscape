@@ -183,7 +183,7 @@ struct SPObject : public GObject {
 		_successor = successor;
 	}
 
-	SPRepr *updateRepr();
+	SPRepr *updateRepr(unsigned int flags=SP_OBJECT_WRITE_EXT);
 	SPRepr *updateRepr(SPRepr *repr, unsigned int flags);
 
 	void requestDisplayUpdate(unsigned int flags);

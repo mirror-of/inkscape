@@ -358,7 +358,7 @@ sp_spiral_set_shape (SPShape *shape)
 
 	SPSpiral *spiral = SP_SPIRAL(shape);
 
-	sp_object_request_modified (SP_OBJECT (spiral), SP_OBJECT_MODIFIED_FLAG);
+	SP_OBJECT (spiral)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 
 	SPCurve *c = sp_curve_new ();
 	

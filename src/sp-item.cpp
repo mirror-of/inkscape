@@ -740,7 +740,7 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
     // send the relative transform with a _transformed_signal
     item->_transformed_signal.emit(&advertized_transform, item);
 
-    sp_object_invoke_write(SP_OBJECT(item), SP_OBJECT_REPR(item), SP_OBJECT_WRITE_EXT);
+    SP_OBJECT(item)->updateRepr();
 }
 
 gint

@@ -982,7 +982,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
 
         // The object just created from a temporary repr is only a seed. 
         // We need to invoke its write which will update its real repr (in particular adding d=)
-        sp_object_invoke_write (SP_OBJECT (nitem), SP_OBJECT_REPR (nitem), SP_OBJECT_WRITE_EXT);
+        SP_OBJECT (nitem)->updateRepr();
 
         sp_repr_unref (repr);
 

@@ -1338,7 +1338,7 @@ sp_tspan_modified (SPObject *object, unsigned int flags)
     SPObject *ochild;
     for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
         if (flags || (ochild->mflags & SP_OBJECT_MODIFIED_FLAG)) {
-            sp_object_invoke_modified (ochild, flags);
+            ochild->emitModified(flags);
         }
     }
 }
@@ -1827,7 +1827,7 @@ sp_text_modified (SPObject *object, guint flags)
         child = SP_OBJECT (l->data);
         l = g_slist_remove (l, child);
         if (cflags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-            sp_object_invoke_modified (child, cflags);
+            child->emitModified(cflags);
         }
         sp_object_unref (SP_OBJECT (child), object);
     }
@@ -1852,7 +1852,7 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
         GSList *l = NULL;
         for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
             if (SP_IS_TSPAN (child)) {
-                crepr = sp_object_invoke_write (child, NULL, flags);
+                crepr = child->updateRepr(NULL, flags);
                 if (crepr) l = g_slist_prepend (l, crepr);
             } else {
                 crepr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (child));
@@ -1866,7 +1866,7 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
     } else {
         for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
             if (SP_IS_TSPAN (child)) {
-                sp_object_invoke_write (child, SP_OBJECT_REPR (child), flags);
+                child->updateRepr(flags);
             } else {
                 sp_repr_set_content (SP_OBJECT_REPR (child), SP_STRING_TEXT (child));
             }

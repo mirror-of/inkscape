@@ -480,7 +480,7 @@ sp_star_finish (SPStarContext * sc)
 
         sp_shape_set_shape(SP_SHAPE(sc->item));
 
-        sp_object_invoke_write(object, NULL, SP_OBJECT_WRITE_EXT);
+        object->updateRepr(NULL, SP_OBJECT_WRITE_EXT);
 
         SP_DT_SELECTION(desktop)->setItem(sc->item);
         sp_document_done(SP_DT_DOCUMENT(desktop));

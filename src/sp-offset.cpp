@@ -585,7 +585,7 @@ sp_offset_set_shape (SPShape * shape)
 {
   SPOffset *offset = SP_OFFSET (shape);
   
-  sp_object_request_modified (SP_OBJECT (offset), SP_OBJECT_MODIFIED_FLAG);
+  SP_OBJECT (offset)->requestModified(SP_OBJECT_MODIFIED_FLAG);
   
   if ( offset->originalPath == NULL ) {
     // oops : no path?! (the offset object should do harakiri)

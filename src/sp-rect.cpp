@@ -475,7 +475,7 @@ sp_rect_set_visible_rx (SPRect *rect, gdouble rx)
 					SP_ITEM(rect)->transform);
 		rect->rx.set = TRUE;
 	}
-	sp_object_invoke_write(SP_OBJECT(rect), SP_OBJECT_REPR(rect), SP_OBJECT_WRITE_EXT);
+	SP_OBJECT(rect)->updateRepr();
 }
 
 void
@@ -491,7 +491,7 @@ sp_rect_set_visible_ry (SPRect *rect, gdouble ry)
 					SP_ITEM(rect)->transform);
 		rect->ry.set = TRUE;
 	}
-	sp_object_invoke_write(SP_OBJECT(rect), SP_OBJECT_REPR(rect), SP_OBJECT_WRITE_EXT);
+	SP_OBJECT(rect)->updateRepr();
 }
 
 gdouble

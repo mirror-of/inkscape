@@ -713,7 +713,7 @@ sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval
 	// manual changes to extension attributes require the normal
 	// attributes, which depend on them, to be updated immediately
 	if (is_interactive) {
-		sp_object_invoke_write (object, repr, 0);
+		object->updateRepr(repr, 0);
 	}
 }
 
@@ -767,11 +767,11 @@ sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 	return repr;
 }
 
-SPRepr *SPObject::updateRepr() {
+SPRepr *SPObject::updateRepr(unsigned int flags) {
 	if (!SP_OBJECT_IS_CLONED(this)) {
 		SPRepr *repr=SP_OBJECT_REPR(this);
 		g_return_val_if_fail(repr != NULL, NULL);
-		updateRepr(repr, SP_OBJECT_WRITE_EXT);
+		updateRepr(repr, flags);
 	} else {
 		return NULL;
 	}

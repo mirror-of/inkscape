@@ -144,7 +144,7 @@ sp_group_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 		}
 	}
 
-	sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /* fixme: hide (Lauris) */
@@ -155,7 +155,7 @@ sp_group_remove_child (SPObject * object, SPRepr * child)
 	if (((SPObjectClass *) (parent_class))->remove_child)
 		(* ((SPObjectClass *) (parent_class))->remove_child) (object, child);
 
-	sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void
@@ -174,7 +174,7 @@ sp_group_order_changed (SPObject *object, SPRepr *child, SPRepr *old_ref, SPRepr
 		}
 	}
 
-	sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void
@@ -241,7 +241,7 @@ sp_group_modified (SPObject *object, guint flags)
 		child = SP_OBJECT (l->data);
 		l = g_slist_remove (l, child);
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			sp_object_invoke_modified (child, flags);
+			child->emitModified(flags);
 		}
 		g_object_unref (G_OBJECT (child));
 	}
@@ -261,7 +261,7 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 		if (!repr) repr = sp_repr_new ("g");
 		l = NULL;
 		for (child = sp_object_first_child(object); child != NULL; child = SP_OBJECT_NEXT(child) ) {
-			crepr = sp_object_invoke_write (child, NULL, flags);
+			crepr = child->updateRepr(NULL, flags);
 			if (crepr) l = g_slist_prepend (l, crepr);
 		}
 		while (l) {
@@ -271,7 +271,7 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 		}
 	} else {
 		for (child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-			sp_object_invoke_write (child, SP_OBJECT_REPR (child), flags);
+			child->updateRepr(flags);
 		}
 	}
 
