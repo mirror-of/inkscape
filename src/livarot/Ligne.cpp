@@ -1440,6 +1440,16 @@ void             IntLigne::Copy(BitLigne* a)
 		Reset();
 		return;
 	}
+	if ( a->curMin < a->st ) a->curMin=a->st;
+	if ( a->curMax < a->st ) {
+		Reset();
+		return;
+	}
+	if ( a->curMin > a->en ) {
+		Reset();
+		return;
+	}
+	if ( a->curMax > a->en ) a->curMax=a->en;
 	nbBord=0;
 	nbRun=0;
 
@@ -1502,6 +1512,8 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 		if ( as[i]->curMin < curMin ) curMin=as[i]->curMin;
 		if ( as[i]->curMax > curMax ) curMax=as[i]->curMax;
 	}
+	if ( curMin < as[0]->st ) curMin=as[0]->st;
+	if ( curMax > as[0]->en ) curMax=as[0]->en;
 	if ( curMax <= curMin ) {
 		Reset();
 		return;
