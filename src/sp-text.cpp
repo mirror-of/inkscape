@@ -1185,7 +1185,6 @@ sp_text_get_child_by_position (SPText *text, gint i_ucs4_pos)
 void
 sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR::Point by)
 {
-	int position=text->contents.Do_UCS4_2_UTF8(i_position);
     if ( text->f_src == NULL ) return;
     one_flow_src* cur=&text->contents;
 
@@ -1201,8 +1200,8 @@ sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR:
     by_x.value=by_x.computed=by[0];
     by_y.value=by_y.computed=by[1];
     while ( cur ) {
-        cur->AddValue(position, by_x, 2, true, false);
-        cur->AddValue(position, by_y, 3, true, false);
+        cur->AddValue(i_position, by_x, 2, true, false);
+        cur->AddValue(i_position, by_y, 3, true, false);
         cur=cur->next;
     }
     SP_OBJECT(text)->updateRepr();

@@ -445,7 +445,7 @@ void              one_flow_src::Delete(int /*i_utf8_st*/,int /*i_utf8_en*/)
 void              one_flow_src::DeleteInfo(int /*i_utf8_st*/,int /*i_utf8_en*/,int /*i_ucs4_st*/,int /*i_ucs4_en*/)
 {
 }
-void              one_flow_src::AddValue(int /*utf8_pos*/,SPSVGLength &/*val*/,int /*type*/,bool /*increment*/, bool /* multiply */)
+void              one_flow_src::AddValue(int /*ucs4_pos*/,SPSVGLength &/*val*/,int /*type*/,bool /*increment*/, bool /* multiply */)
 {
 }
 
@@ -558,11 +558,10 @@ void              text_flow_src::Delete(int i_utf8_st,int i_utf8_en)
 		cur_dad=cur_dad->dad;
 	}
 }
-void              text_flow_src::AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment, bool multiply)
+void              text_flow_src::AddValue(int ucs4_pos, SPSVGLength &val, int v_type, bool increment, bool multiply)
 {
-	if ( utf8_pos >= utf8_st && utf8_pos < utf8_en ) {
-		int ucs4_pos=ucs4_st+cleaned_up.UTF8_2_UCS4(utf8_pos-utf8_st);
-		if ( dad ) (dynamic_cast<div_flow_src*>(dad))->DoAddValue(utf8_pos,ucs4_pos,val,v_type, increment, multiply);
+	if ( ucs4_pos >= ucs4_st && ucs4_pos < ucs4_en ) {
+		if ( dad ) (dynamic_cast<div_flow_src*>(dad))->DoAddValue(ucs4_pos, val, v_type, increment, multiply);
 	}
 }
 int               text_flow_src::UCS4_2_UTF8(int ucs4_pos)
@@ -706,7 +705,7 @@ void              div_flow_src::ScaleDXDY(double ex)
     by_x.value = by_x.computed = ex;
     by_y.value = by_y.computed = ex;
     while ( cur ) {
-	for (int position = cur->utf8_st; position < cur->utf8_en; position ++ ) {
+	for (int position = cur->ucs4_st; position < cur->ucs4_en; position ++ ) {
 			cur->AddValue(position, by_x, 2, false, true);
 			cur->AddValue(position, by_y, 3, false, true);
 	}
@@ -959,7 +958,7 @@ void              div_flow_src::Delete(int i_utf8_st,int i_utf8_en)
 		utf8_st=utf8_en; // we mark it as deleted
 	}
 }
-void              div_flow_src::DoAddValue(int /*utf8_pos*/,int ucs4_pos,SPSVGLength &val,int v_type, bool increment, bool multiply)
+void              div_flow_src::DoAddValue(int ucs4_pos, SPSVGLength &val, int v_type, bool increment, bool multiply)
 {
 	int ucs4_offset=ucs4_pos-ucs4_en;
 	if ( ucs4_offset >= 0 ) {
