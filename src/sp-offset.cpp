@@ -32,12 +32,12 @@
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 
+#include "prefs-utils.h"
 #include "sp-text.h"
 #include "sp-shape.h"
-
 #include "sp-offset.h"
 #include "sp-use-reference.h"
-#include "prefs-utils.h"
+#include "uri.h"
 
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-point.h"

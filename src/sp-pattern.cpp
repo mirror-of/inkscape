@@ -30,7 +30,7 @@
 #include "sp-item.h"
 #include "document.h"
 #include "document-private.h"
-
+#include "uri.h"
 #include "sp-pattern.h"
 
 /*

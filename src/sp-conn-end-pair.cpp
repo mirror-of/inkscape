@@ -4,6 +4,7 @@
 #include "sp-conn-end-pair.h"
 #include "sp-conn-end.h"
 #include "sp-object.h"
+#include "uri.h"
 #include "display/curve.h"
 #include "libnr/nr-matrix-div.h"
 #include "xml/repr.h"

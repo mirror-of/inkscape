@@ -17,6 +17,7 @@
 #include <ctype.h>
 #include "document.h"
 #include "sp-object.h"
+#include "uri.h"
 #include "uri-references.h"
 
 static gchar *uri_to_id(SPDocument *document, const gchar *uri);

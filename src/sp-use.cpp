@@ -25,6 +25,7 @@
 #include "attributes.h"
 #include "document.h"
 #include "sp-object-repr.h"
+#include "uri.h"
 #include "uri-references.h"
 #include "macros.h"
 #include "xml/repr.h"

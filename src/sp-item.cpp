@@ -26,6 +26,7 @@
 #include "display/nr-arena-item.h"
 #include "attributes.h"
 #include "document.h"
+#include "uri.h"
 #include "uri-references.h"
 
 #include "selection.h"

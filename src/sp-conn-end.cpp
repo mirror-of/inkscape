@@ -10,6 +10,7 @@
 #include "xml/repr.h"
 #include "sp-conn-end.h"
 #include "sp-path.h"
+#include "uri.h"
 
 static void change_endpts(SPCurve *const curve, NR::Point const h2endPt[2]);
 static NR::Point calc_bbox_conn_pt(NR::Rect const &bbox, NR::Point const &p);

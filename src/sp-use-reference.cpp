@@ -15,10 +15,10 @@
 #include "display/curve.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
-
+#include "prefs-utils.h"
 #include "sp-shape.h"
 #include "sp-text.h"
-#include "prefs-utils.h"
+#include "uri.h"
 
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"

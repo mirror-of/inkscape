@@ -34,6 +34,7 @@
 #include "document-private.h"
 #include "sp-object-repr.h"
 #include "sp-gradient.h"
+#include "uri.h"
 #include "uri-references.h"
 
 #define SP_MACROS_SILENT
