@@ -189,6 +189,24 @@ sp_nodepath_destroy (SPNodePath * np)
 	g_free (np);
 }
 
+
+/**
+ *  Return the node count of a given NodePath
+ */
+gint
+sp_nodepath_get_node_count(SPNodePath * np)
+{
+  if (!np)
+    return 0;
+  gint nodeCount = 0;
+  for (GList *item = np->subpaths ; item ; item=item->next)
+    {
+    SPNodeSubPath *subpath = (SPNodeSubPath *)item->data;
+    nodeCount += g_list_length(subpath->nodes);
+    }
+  return nodeCount;
+}
+
 /**
 \brief Returns true if the argument nodepath and the d attribute in its repr do not match. 
  This may happen if repr was changed in e.g. XML editor or by undo.
@@ -1327,10 +1345,12 @@ sp_node_selected_delete (void)
 
 	update_repr (nodepath);
 
-	if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
-		sp_nodepath_destroy (nodepath);
-		sp_selection_delete (NULL, NULL);
-		return;
+	// if the entire nodepath is removed, delete the selected object.
+	if (nodepath->subpaths == NULL ||
+		sp_nodepath_get_node_count(nodepath) < 2) {
+			sp_nodepath_destroy (nodepath);
+			sp_selection_delete (NULL, NULL);
+			return;
 	}
 
 	sp_nodepath_update_statusbar (nodepath);
@@ -1479,10 +1499,12 @@ sp_node_selected_delete_segment (void)
 
 	update_repr (nodepath);
 
-	if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
-		sp_nodepath_destroy (nodepath);
-		sp_selection_delete (NULL, NULL);
-		return;
+	// if the entire nodepath is removed, delete the selected object.
+	if (nodepath->subpaths == NULL ||
+		sp_nodepath_get_node_count(nodepath) < 2) {
+			sp_nodepath_destroy (nodepath);
+			sp_selection_delete (NULL, NULL);
+			return;
 	}
 
 	sp_nodepath_update_statusbar (nodepath);
