@@ -544,7 +544,7 @@ private:
     complex. This copies them to be the right length and starting at zero.
     We also don't want to write five bits of identical code just with
     different variable names. */
-    static void _copyInputVector(std::vector<SPSVGLength> const &input_vector, unsigned input_offset, std::vector<SPSVGLength> *output_vector, unsigned max_length);
+    static void _copyInputVector(std::vector<SPSVGLength> const &input_vector, unsigned input_offset, std::vector<SPSVGLength> *output_vector, size_t max_length);
 
     /** There are a few cases where we have different sets of enums meaning
     the same thing, eg Pango font styles vs. SPStyle font styles. These need
