@@ -350,7 +350,7 @@ spdc_detach_selection(SPDrawContext *dc, SPSelection *sel)
 \param state  keyboard state to check if ctrl was pressed
 */
 void
-spdc_endpoint_snap_internal(SPDrawContext *dc, NR::Point &p, NR::Point const o, guint state)
+spdc_endpoint_snap_internal(SPEventContext const *const ec, NR::Point &p, NR::Point const o, guint const state)
 {
     if ( state & GDK_CONTROL_MASK ) {
         /* Constrained motion */
@@ -386,11 +386,11 @@ spdc_endpoint_snap_internal(SPDrawContext *dc, NR::Point &p, NR::Point const o, 
             p = o + bdot * best;
 
             /* Snap it along best vector */
-            namedview_vector_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(dc)->namedview, p, best);
+            namedview_vector_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview, p, best);
         }
     } else if ((state & GDK_SHIFT_MASK) == 0) {
         /* Free */
-        namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(dc)->namedview, p);
+        namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview, p);
     }
 }
 
