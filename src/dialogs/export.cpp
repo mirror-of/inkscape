@@ -330,6 +330,12 @@ sp_export_dialog (void)
 	}
 
 	gtk_window_present ((GtkWindow *) dlg);
+
+	// if there's a selection, set up to export it by default
+	if (!sp_selection_is_empty (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))) {
+		GtkWidget *button = sp_search_by_value_recursive (dlg, "key", "selection");
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+	}
 }
 
 static void
