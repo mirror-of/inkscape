@@ -5,6 +5,13 @@
 
 	  SPSelection now derives from Inkscape::Managed
 
+	* src/Makefile_insert, src/select-context.cpp, src/select-context.h,
+	  src/selection-describer.h, src/selection-describer.cpp:
+
+	  Introduced Inkscape::SelectionDescriber to which SPSelectContext
+	  delegates the task of displaying descriptions of the current
+	  selection.  This fixes bug #945735.
+
 2004-06-19  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/desktop-snap.{cpp,h}: sp_desktop_dim_snap_list returns

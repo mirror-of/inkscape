@@ -53,8 +53,6 @@ static void sp_select_context_set(SPEventContext *ec, gchar const *key, gchar co
 static gint sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 static gint sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
-static void sp_select_context_update_statusbar(SPSelectContext *sc);
-
 static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state);
 
 static SPEventContextClass *parent_class;
@@ -131,6 +129,7 @@ sp_select_context_init(SPSelectContext *sc)
     sc->dragging = FALSE;
     sc->moved = FALSE;
     sc->button_press_shift = FALSE;
+    sc->_describer = NULL;
 }
 
 static void
@@ -145,6 +144,9 @@ sp_select_context_dispose(GObject *object)
 
     sp_sel_trans_shutdown(&sc->seltrans);
 
+    delete sc->_describer;
+    sc->_describer = NULL;
+
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
@@ -157,12 +159,14 @@ sp_select_context_setup(SPEventContext *ec)
         ((SPEventContextClass *) parent_class)->setup(ec);
     }
 
-    sp_sel_trans_init(&select_context->seltrans, ec->desktop);
+    SPDesktop *desktop = ec->desktop;
+
+    select_context->_describer = new Inkscape::SelectionDescriber(desktop->selection, desktop->messageStack());
+
+    sp_sel_trans_init(&select_context->seltrans, desktop);
 
     sp_event_context_read(ec, "show");
     sp_event_context_read(ec, "transform");
-
-    sp_select_context_update_statusbar(select_context);
 }
 
 static void
@@ -276,7 +280,6 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     // item has been moved
                     sp_sel_trans_ungrab(seltrans);
                     sc->moved = FALSE;
-                    sp_select_context_update_statusbar(sc);
                 } else {
                     // item has not been moved -> do selecting
                     if (!selection->isEmpty()) {
@@ -454,7 +457,6 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         // item has been moved
                         sp_sel_trans_ungrab(seltrans);
                         sc->moved = FALSE;
-                        sp_select_context_update_statusbar(sc);
                     } else {
                         // item has not been moved -> simply a click, do selecting
                         if (!selection->isEmpty()) {
@@ -641,14 +643,12 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             sc->item = NULL;
                             sp_document_undo(SP_DT_DOCUMENT(desktop));
                             drag_escaped = 1;
-                            sp_select_context_update_statusbar(sc);
                             SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move cancelled."));
                         }
                     } else {
                         if (sp_rubberband_rect(&b)) { // cancel rubberband
                             sp_rubberband_stop();
                             rb_escaped = 1;
-                            sp_select_context_update_statusbar(sc);
                             SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection cancelled."));
                         } else {
                             selection->clear();
@@ -808,20 +808,6 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     sp_view_set_status(SP_VIEW(seltrans->desktop), status, FALSE);
     g_free(status);
 }
-
-static void sp_select_context_update_statusbar(SPSelectContext *sc) {
-    SPEventContext *ec=SP_EVENT_CONTEXT(sc);
-    char const *when_selected = _("Click selection to toggle scale/rotation handles");
-    GSList const *items = SP_DT_SELECTION(ec->desktop)->itemList();
-    if (!items) { // no items
-        ec->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("No objects selected. Click, Shift+click, drag around objects to select."));
-    } else if (!items->next) { // one item
-        ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE, "%s. %s.", sp_item_description(SP_ITEM(items->data)), when_selected);
-    } else { // multiple items
-        ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("%i objects selected. %s."), g_slist_length((GSList *)items), when_selected);
-    }
-}
-
 
 /*
   Local Variables:

@@ -85,6 +85,7 @@ libinkpre_a_SOURCES =	\
 	satisfied-guide-cns.cpp satisfied-guide-cns.h	\
 	select-context.cpp select-context.h	\
 	selection-chemistry.cpp selection-chemistry.h	\
+	selection-describer.cpp selection-describer.h   \
 	selection.cpp selection.h	\
 	select-toolbar.cpp select-toolbar.h\
 	seltrans.cpp seltrans.h	\

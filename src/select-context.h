@@ -13,6 +13,7 @@
  */
 
 #include "event-context.h"
+#include "selection-describer.h"
 #include "seltrans.h"
 
 #define SP_TYPE_SELECT_CONTEXT            (sp_select_context_get_type ())
@@ -24,8 +25,7 @@
 class SPSelectContext;
 class SPSelectContextClass;
 
-struct SPSelectContext {
-	SPEventContext event_context;
+struct SPSelectContext : public SPEventContext {
 	guint dragging : 1;
 	guint moved : 1;
 	guint button_press_shift : 1;
@@ -33,6 +33,7 @@ struct SPSelectContext {
 	SPItem *item;
 	SPCanvasItem *grabbed;
 	SPSelTrans seltrans;
+	Inkscape::SelectionDescriber *_describer;
 };
 
 struct SPSelectContextClass {
