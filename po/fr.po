@@ -1652,7 +1652,7 @@ msgstr "Description"
 #. Hide
 #: src/dialogs/item-properties.cpp:230
 msgid "Hide"
-msgstr "Cacher :"
+msgstr "Cacher"
 
 #: src/dialogs/item-properties.cpp:232
 msgid "Check to make the object invisible"
