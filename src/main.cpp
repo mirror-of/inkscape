@@ -139,6 +139,11 @@ static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
 static int sp_new_gui = FALSE;
 
+static gchar *sp_export_png_utf8 = NULL;
+static gchar *sp_export_svg_utf8 = NULL;
+static gchar *sp_global_printer_utf8 = NULL;
+
+
 static GSList *sp_process_args(poptContext ctx);
 struct poptOption options[] = {
     {"version", 'V', 
@@ -316,37 +321,35 @@ main(int argc, char **argv)
     return app.run();
 }
 
+void fixupSingleFilename( gchar **orig, gchar **spare )
+{
+    if ( orig && *orig && **orig ) {
+        GError *error = NULL;
+        gchar *newFileName = Inkscape::IO::filename_to_utf8_fallback(*orig, -1, NULL, NULL, &error);
+        if ( newFileName )
+        {
+            *orig = newFileName;
+            if ( spare ) {
+                *spare = newFileName;
+            }
+//             g_message("Set a replacement fixup");
+        }
+    }
+}
+
 GSList *fixupFilenameEncoding( GSList* fl )
 {
     GSList *newFl = NULL;
-    int count = 0;
     while ( fl ) {
         gchar *fn = static_cast<gchar*>(fl->data);
         fl = g_slist_remove( fl, fl->data );
-
-        if ( !g_utf8_validate(fn, -1, NULL) ) {
-            g_message( "file #%d is not valid UTF-8", count);
-
-            GError *error = NULL;
-            gchar *newFileName = g_filename_to_utf8(fn, -1, NULL, NULL, &error);
-            if ( newFileName ) {
-                if ( !g_utf8_validate(newFileName, -1, NULL) ) {
-                    g_warning( "input filename did not yield UTF-8 for #%d", count );
-                    g_free( newFileName );
-                } else {
-                    g_free( fn );
-                    fn = newFileName;
-                }
-                newFileName = 0;
-            } else {
-                gchar const *charset;
-                g_get_charset(&charset);
-                g_warning( "input filename conversion failed for #%d with locale charset '%s'", count, charset );
-            }
+        gchar *newFileName = Inkscape::IO::filename_to_utf8_fallback(fn, -1, NULL, NULL, NULL);
+        if ( newFileName ) {
+            g_free( fn );
+            fn = newFileName;
+            newFileName = 0;
         }
         newFl = g_slist_append( newFl, fn );
-
-        count++;
     }
     return newFl;
 }
@@ -377,6 +380,12 @@ int sp_common_main( int argc, char const **argv, GSList **flDest )
     // Now let's see if the file list still holds up
     fl = fixupFilenameEncoding( fl );
 
+    // Check the globals for filename-fixup
+    fixupSingleFilename( &sp_export_png, &sp_export_png_utf8 );
+    fixupSingleFilename( &sp_export_svg, &sp_export_svg_utf8 );
+    fixupSingleFilename( &sp_global_printer, &sp_global_printer_utf8 );
+
+    // Return the list if wanted, else free it up.
     if ( flDest ) {
         *flDest = fl;
         fl = 0;
@@ -676,6 +685,8 @@ sp_do_export_png(SPDocument *doc)
     g_print("Area %g:%g:%g:%g exported to %d x %d pixels (%g dpi)\n", area.x0, area.y0, area.x1, area.y1, width, height, dpi);
 
     g_print("Bitmap saved as: %s\n", filename);
+//     Inkscape::IO::dump_fopen_call( filename, "BitmapExp" );
+    
 
     if ((width >= 1) && (height >= 1) && (width < 65536) && (height < 65536)) {
         sp_export_png_file(doc, filename, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true, sp_export_id_only ? items : NULL);
@@ -697,19 +708,7 @@ sp_process_args(poptContext ctx)
             case SP_ARG_FILE: {
                 gchar const *fn = poptGetOptArg(ctx);
                 if (fn != NULL) {
-                    GError *error = NULL;
-                    gchar *newFileName = NULL;
-                    if ( g_utf8_validate(fn, -1, NULL) ) {
-                        newFileName = g_strdup(fn);
-                    } else {
-                        newFileName = g_filename_to_utf8(fn, -1, NULL, NULL, &error);
-                        if ( newFileName && !g_utf8_validate(newFileName, -1, NULL) ) {
-                            g_warning( "input filename conversion failed" );
-                        }
-                    }
-                    fl = g_slist_append(fl, ( (newFileName != NULL)
-                                              ? newFileName
-                                              : g_strdup(fn) ));
+                    fl = g_slist_append(fl, g_strdup(fn));
                 }
                 break;
             }
@@ -727,19 +726,7 @@ sp_process_args(poptContext ctx)
     gchar const ** const args = poptGetArgs(ctx);
     if (args != NULL) {
         for (unsigned i = 0; args[i] != NULL; i++) {
-            // TODO: bulia, please look over
-            gsize bytesRead = 0;
-            gsize bytesWritten = 0;
-            GError *error = NULL;
-            // fixme: check to see if this will leak args[i]
-            gchar *newFileName = g_filename_to_utf8(args[i],
-                                                    -1,
-                                                    &bytesRead,
-                                                    &bytesWritten,
-                                                    &error);
-            fl = g_slist_append(fl, ( (newFileName != NULL)
-                                      ? newFileName
-                                      : (gpointer) args[i]));
+            fl = g_slist_append(fl, g_strdup(args[i]));
         }
     }
 

@@ -266,6 +266,38 @@ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
 }
 
 
+gchar* Inkscape::IO::filename_to_utf8_fallback( const gchar *opsysstring,
+                                                gssize len,
+                                                gsize *bytes_read,
+                                                gsize *bytes_written,
+                                                GError **error )
+{
+    gchar *result = NULL;
+    if ( opsysstring ) {
+        gchar *newFileName = g_filename_to_utf8( opsysstring, len, bytes_read, bytes_written, error );
+        if ( newFileName ) {
+            if ( !g_utf8_validate(newFileName, -1, NULL) ) {
+                g_warning( "input filename did not yield UTF-8" );
+                g_free( newFileName );
+            } else {
+                result = newFileName;
+            }
+            newFileName = 0;
+        } else if ( g_utf8_validate(opsysstring, -1, NULL) ) {
+            // This *might* be a case that we want
+            // g_warning( "input failed filename->utf8, fell back to original" );
+            // TODO handle cases when len >= 0
+            result = g_strdup( opsysstring );
+        } else {
+            gchar const *charset = 0;
+            g_get_charset(&charset);
+            g_warning( "input filename conversion failed for file with locale charset '%s'", charset );
+        }
+    }
+    return result;
+}
+
+
 gchar* Inkscape::IO::sanitizeString( gchar const * str )
 {
     gchar *result = NULL;
