@@ -1,6 +1,7 @@
 *~
+.deps
+.dirstamp
+.libs
 Makefile
 Makefile.in
-.deps
 makefile
-.dirstamp
