@@ -12,6 +12,7 @@
 #include "config.h"
 
 #include <math.h>
+#include <string.h>
 #include <gdk/gdkkeysyms.h>
 #include "svg/svg.h"
 #include "helper/sp-canvas-util.h"
@@ -52,8 +53,6 @@ static gchar * parse_nodetypes (const gchar * types, gint length);
 
 /* Object updating */
 
-static void update_object (SPNodePath * np);
-static void update_repr (SPNodePath * np);
 static void stamp_repr  (SPNodePath * np);
 static SPCurve * create_curve (SPNodePath * np);
 static gchar * create_typestr (SPNodePath * np);
@@ -61,6 +60,7 @@ static gchar * create_typestr (SPNodePath * np);
 static void sp_node_ensure_ctrls (SPPathNode * node);
 
 void sp_nodepath_node_select (SPPathNode * node, gboolean incremental, gboolean override);
+void sp_nodepath_node_deselect (SPPathNode * node);
 void sp_nodepath_select_rect (SPNodePath * nodepath, NRRectD *b, gboolean incremental);
 
 static void sp_node_set_selected (SPPathNode * node, gboolean selected);
@@ -101,7 +101,9 @@ static ArtPathcode sp_node_path_code_from_side (SPPathNode * node, SPPathNodeSid
 // active_node indicates mouseover node
 static SPPathNode * active_node = NULL;
 
-/* Creation from object */
+/**
+\brief Creates new nodepath from item 
+*/
 
 SPNodePath *
 sp_nodepath_new (SPDesktop * desktop, SPItem * item)
@@ -240,11 +242,7 @@ parse_nodetypes (const gchar * types, gint length)
 	return typestr;
 }
 
-/*
- * Object updating
- */
-
-static void
+void
 update_object (SPNodePath * np)
 {
 	SPCurve * curve;
@@ -258,7 +256,38 @@ update_object (SPNodePath * np)
 	sp_curve_unref (curve);
 }
 
-static void
+/**
+\brief Returns true if the argument nodepath and its repr do not match. This may happen if repr was changed in e.g. XML editor or by undo.
+*/
+gboolean
+nodepath_repr_changed (SPNodePath * np)
+{
+	SPCurve * curve;
+	gchar * typestr;
+	gchar * svgpath;
+	const char *attr_d;
+	const char *attr_typestr;
+	gboolean r; 
+
+	g_assert (np);
+
+	curve = create_curve (np);
+	typestr = create_typestr (np);
+
+	svgpath = sp_svg_write_path (curve->bpath);
+
+	attr_d = sp_repr_attr (SP_OBJECT (np->path)->repr, "d");
+	attr_typestr = sp_repr_attr (SP_OBJECT (np->path)->repr, "sodipodi:nodetypes");
+
+	r = strcmp (attr_d, svgpath) || (attr_typestr && strcmp (attr_typestr, typestr));
+
+	g_free (svgpath);
+	g_free (typestr);
+	sp_curve_unref (curve);
+	return r;
+}
+
+void
 update_repr (SPNodePath * np)
 {
 	SPCurve * curve;
@@ -459,11 +488,10 @@ sp_nodepath_current (void)
 	return SP_NODE_CONTEXT (event_context)->nodepath;
 }
 
-/*
- * Fills node and control positions for three nodes, splitting line
- * marked by end at distance t
+/**
+ \brief Fills node and control positions for three nodes, splitting line
+  marked by end at distance t
  */
-
 static void
 sp_nodepath_line_midpoint (SPPathNode * new_path, SPPathNode * end, gdouble t)
 {
@@ -549,6 +577,9 @@ sp_nodepath_line_add_node (SPPathNode * end, gdouble t)
 	return newnode;
 }
 
+/**
+\brief Break the path at the node: duplicate the argument node, start a new subpath with the duplicate, and copy all nodes after the argument node to it
+*/
 static SPPathNode *
 sp_nodepath_node_break (SPPathNode * node)
 {
@@ -569,21 +600,54 @@ sp_nodepath_node_break (SPPathNode * node)
 	} else {
 		SPNodeSubPath * newsubpath;
 		SPPathNode * newnode;
-		SPPathNode * n;
+		SPPathNode * n, *nn;
+
+		// no break for end nodes
 		if (node == sp->first) return NULL;
 		if (node == sp->last) return NULL;
+
+		// create a new subpath
 		newsubpath = sp_nodepath_subpath_new (np);
 
+		// duplicate the break node as start of the new subpath
 		newnode = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)node->type, ART_MOVETO, &node->pos, &node->pos, &node->n.pos);
 
-		while (node->n.other) {
+		while (node->n.other) { // copy the remaining nodes into the new subpath
 			n = node->n.other;
-			sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
-			sp_nodepath_node_destroy (n);
+			nn = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
+			if (n->selected) {
+				sp_nodepath_node_select (nn, TRUE, TRUE); //preserve selection
+			}
+			sp_nodepath_node_destroy (n); // remove the point on the original subpath
 		}
 
 		return newnode;
 	}
+}
+
+static SPPathNode *
+sp_nodepath_node_duplicate (SPPathNode * node)
+{
+	SPNodePath * np;
+	SPNodeSubPath * sp;
+	SPPathNode * newnode;
+	ArtPathcode code; 
+
+	g_assert (node);
+	g_assert (node->subpath);
+	g_assert (g_list_find (node->subpath->nodes, node));
+
+	sp = node->subpath;
+	np = sp->nodepath;
+
+	code = (ArtPathcode) node->code; 
+	if (code == ART_MOVETO) { // if node is the endnode,
+		node->code = ART_LINETO; // new one is inserted before it, so change that to line
+	}
+
+	newnode = sp_nodepath_node_new (sp, node, (SPPathNodeType)node->type, code, &node->p.pos, &node->pos, &node->n.pos);
+
+	return newnode;
 }
 
 static void
@@ -737,6 +801,7 @@ sp_node_selected_move (gdouble dx, gdouble dy)
 	if (!nodepath) return;
 
 	sp_nodepath_selected_nodes_move (nodepath, dx, dy);
+	update_repr (nodepath);
 }
 
 void
@@ -759,6 +824,7 @@ sp_node_selected_move_screen (gdouble dx, gdouble dy)
 	if (!nodepath) return;
 
 	sp_nodepath_selected_nodes_move (nodepath, zdx, zdy);
+	update_repr (nodepath);
 }
 
 static void
@@ -890,6 +956,7 @@ sp_node_selected_break (void)
 	SPNodePath * nodepath;
 	SPPathNode * n, * nn;
 	GList * l;
+	GList *temp = NULL;
 
 	nodepath = sp_nodepath_current ();
 	if (!nodepath) return;
@@ -898,9 +965,43 @@ sp_node_selected_break (void)
 		n = (SPPathNode *) l->data;
 		nn = sp_nodepath_node_break (n);
 		if (nn == NULL) continue; // no break, no new node 
-		/* seems that we can prepend here ;-) */
-		nn->selected = TRUE;
-		nodepath->selected = g_list_prepend (nodepath->selected, nn);
+		temp = g_list_prepend (temp, nn);
+	}
+
+	if (temp) sp_nodepath_deselect (nodepath);
+	for (l = temp; l != NULL; l = l->next) {
+		sp_nodepath_node_select ((SPPathNode *) l->data, TRUE, TRUE);
+	}
+
+	sp_nodepath_ensure_ctrls (nodepath);
+
+	update_repr (nodepath);
+}
+
+/**
+\brief duplicate selected nodes
+*/
+void
+sp_node_selected_duplicate (void)
+{
+	SPNodePath * nodepath;
+	SPPathNode * n, * nn;
+	GList * l;
+	GList *temp = NULL;
+
+	nodepath = sp_nodepath_current ();
+	if (!nodepath) return;
+
+	for (l = nodepath->selected; l != NULL; l = l->next) {
+		n = (SPPathNode *) l->data;
+		nn = sp_nodepath_node_duplicate (n);
+		if (nn == NULL) continue; // could not duplicate
+		temp = g_list_prepend (temp, nn);
+	}
+
+	if (temp) sp_nodepath_deselect (nodepath);
+	for (l = temp; l != NULL; l = l->next) {
+		sp_nodepath_node_select ((SPPathNode *) l->data, TRUE, TRUE);
 	}
 
 	sp_nodepath_ensure_ctrls (nodepath);
@@ -1178,7 +1279,6 @@ sp_node_set_selected (SPPathNode * node, gboolean selected)
 }
 
 /**
-\return none
 \brief select a node
 \param node     the node to select
 \param incremental   if true, add to selection, otherwise deselect others
@@ -1194,7 +1294,7 @@ sp_nodepath_node_select (SPPathNode * node, gboolean incremental, gboolean overr
 	if (incremental) {
 		if (override) {
 			if (!g_list_find (nodepath->selected, node)) {
-				nodepath->selected = g_list_prepend (nodepath->selected, node);
+				nodepath->selected = g_list_append (nodepath->selected, node);
 			}
 			sp_node_set_selected (node, TRUE);
 		} else { // toggle
@@ -1203,16 +1303,34 @@ sp_nodepath_node_select (SPPathNode * node, gboolean incremental, gboolean overr
 				nodepath->selected = g_list_remove (nodepath->selected, node);
 			} else {
 				g_assert (!g_list_find (nodepath->selected, node));
-				nodepath->selected = g_list_prepend (nodepath->selected, node);
+				nodepath->selected = g_list_append (nodepath->selected, node);
 			}
 			sp_node_set_selected (node, !node->selected);
 		}
 	} else {
 		sp_nodepath_deselect (nodepath);
-		nodepath->selected = g_list_prepend (nodepath->selected, node);
+		nodepath->selected = g_list_append (nodepath->selected, node);
 		sp_node_set_selected (node, TRUE);
 	}
 }
+
+/**
+\brief deselect a node
+\param node     the node to deselect
+*/
+void
+sp_nodepath_node_deselect (SPPathNode * node)
+{
+	SPNodePath * nodepath;
+
+	nodepath = node->subpath->nodepath;
+
+	if (nodepath->selected) {
+		sp_node_set_selected (node, FALSE);
+		nodepath->selected = g_list_remove (nodepath->selected, node);
+	}
+}
+
 
 /**
 \brief deselect all nodes in the nodepath
@@ -1251,9 +1369,9 @@ sp_nodepath_select_all (SPNodePath *nodepath)
 void
 sp_nodepath_select_next (SPNodePath *nodepath)
 {
-	SPPathNode *node;
+	SPPathNode *node, *last = NULL;
 	SPNodeSubPath * subpath, *subpath_next;
-	GList * spl, * nl, *last = NULL;
+	GList * spl, * nl = NULL;
 
 	if (nodepath->selected) {
 		for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
@@ -1261,11 +1379,11 @@ sp_nodepath_select_next (SPNodePath *nodepath)
 			for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
 				node = (SPPathNode *) nl->data;
 				if (node->selected) {
-					if (nl->next) // there's a next node on this subpath
-						last = nl->next;
+					if (node->n.other) // there's a next node on this subpath
+						last = node->n.other;
 					else if (spl->next) { // there's a next subpath
 						subpath_next = (SPNodeSubPath *) spl->next->data;
-						last = subpath_next->nodes;
+						last = subpath_next->first;
 					}
 				}
 			}
@@ -1274,10 +1392,10 @@ sp_nodepath_select_next (SPNodePath *nodepath)
 	}
 
 	if (last) { // there's at least one more node after selected
-		sp_nodepath_node_select ((SPPathNode *) last->data, TRUE, TRUE);
+		sp_nodepath_node_select ((SPPathNode *) last, TRUE, TRUE);
 	} else { // no more nodes, select the first one in first subpath
 		subpath = (SPNodeSubPath *) nodepath->subpaths->data;
-		sp_nodepath_node_select ((SPPathNode *) subpath->nodes->data, TRUE, TRUE);
+		sp_nodepath_node_select ((SPPathNode *) subpath->first, TRUE, TRUE);
 	}
 }
 
@@ -1287,9 +1405,9 @@ sp_nodepath_select_next (SPNodePath *nodepath)
 void
 sp_nodepath_select_prev (SPNodePath *nodepath)
 {
-	SPPathNode *node;
+	SPPathNode *node, *last = NULL;
 	SPNodeSubPath * subpath, *subpath_prev;
-	GList * spl, * nl, *last = NULL;
+	GList * spl, * nl = NULL;
 
 	if (nodepath->selected) {
 		for (spl = g_list_last (nodepath->subpaths); spl != NULL; spl = spl->prev) {
@@ -1297,11 +1415,11 @@ sp_nodepath_select_prev (SPNodePath *nodepath)
 			for (nl = g_list_last (subpath->nodes); nl != NULL; nl = nl->prev) {
 				node = (SPPathNode *) nl->data;
 				if (node->selected) {
-					if (nl->prev) // there's a prev node on this subpath
-						last = nl->prev;
+					if (node->p.other) // there's a prev node on this subpath
+						last = node->p.other;
 					else if (spl->prev) { // there's a prev subpath
 						subpath_prev = (SPNodeSubPath *) spl->prev->data;
-						last = g_list_last (subpath_prev->nodes);
+						last = subpath_prev->last;
 					}
 				}
 			}
@@ -1310,13 +1428,11 @@ sp_nodepath_select_prev (SPNodePath *nodepath)
 	}
 
 	if (last) { // there's at least one more node after selected
-		sp_nodepath_node_select ((SPPathNode *) last->data, TRUE, TRUE);
+		sp_nodepath_node_select ((SPPathNode *) last, TRUE, TRUE);
 	} else { // no more nodes, select the last one in last subpath
 		spl = g_list_last (nodepath->subpaths);
 		subpath = (SPNodeSubPath *) spl->data;
-		nl = g_list_last (subpath->nodes);
-		node = (SPPathNode *) nl->data;
-		sp_nodepath_node_select (node, TRUE, TRUE);
+		sp_nodepath_node_select ((SPPathNode *) subpath->last, TRUE, TRUE);
 	}
 }
 
@@ -1350,6 +1466,57 @@ sp_nodepath_select_rect (SPNodePath *nodepath, NRRectD *b, gboolean incremental)
 			}
 		}
 	}
+}
+
+/**
+\brief saves selected nodes in a nodepath into a list containing integer positions of all selected nodes
+*/
+GList *save_nodepath_selection (SPNodePath *nodepath)
+{
+	GList *r = NULL;
+	SPPathNode *node, *last = NULL;
+	SPNodeSubPath * subpath, *subpath_next;
+	GList * spl, * nl = NULL;
+	guint i = 0;
+
+	if (!nodepath->selected) return NULL; 
+
+		for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
+			subpath = (SPNodeSubPath *) spl->data;
+			for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
+				node = (SPPathNode *) nl->data;
+				i ++; 
+				if (node->selected) {
+					r = g_list_append (r, GINT_TO_POINTER (i));
+					}
+				}
+			}
+		return r;
+}
+
+/**
+\brief restores selection by selecting nodes whose positions are in the list
+*/
+void restore_nodepath_selection (SPNodePath *nodepath, GList *r)
+{
+	SPPathNode *node, *last = NULL;
+	SPNodeSubPath * subpath, *subpath_next;
+	GList * spl, * nl = NULL;
+	guint i = 0;
+
+		sp_nodepath_deselect (nodepath);
+
+		for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
+			subpath = (SPNodeSubPath *) spl->data;
+			for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
+				node = (SPPathNode *) nl->data;
+				i ++; 
+				if (g_list_find (r, GINT_TO_POINTER (i))) {
+					sp_nodepath_node_select (node, TRUE, TRUE);
+					}
+				}
+			}
+
 }
 
 /**
@@ -1438,10 +1605,9 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 	sp_node_ensure_ctrls (node);
 }
 
-/*
- * Adjusts control point according to node type and line code
+/**
+ \brief Adjusts control point according to node type and line code
  */
-
 static void
 sp_node_adjust_knots (SPPathNode * node)
 {
@@ -1510,7 +1676,6 @@ sp_node_adjust_knots (SPPathNode * node)
 /*
  * Knot events
  */
-
 static gboolean
 node_event (SPKnot * knot, GdkEvent * event, SPPathNode * n)
 {
