@@ -147,7 +147,7 @@ sp_draw_context_init(SPDrawContext *dc)
     dc->green_color = 0x00ff007f;
 
     dc->npoints = 0;
-    dc->red_curve_is_valid=0x00;
+    dc->red_curve_is_valid = false;
 
     new (&dc->sel_changed_connection) sigc::connection();
     new (&dc->sel_modified_connection) sigc::connection();
@@ -470,7 +470,7 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
     sp_curve_reset(dc->blue_curve);
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), NULL);
     /* Red */
-    if ( dc->red_curve_is_valid ) {
+    if (dc->red_curve_is_valid) {
         sp_curve_append_continuous(c, dc->red_curve, 0.0625);
     }
     sp_curve_reset(dc->red_curve);
@@ -671,7 +671,7 @@ static void fit_and_split(SPDrawContext *dc)
         sp_curve_moveto(dc->red_curve, b[0]);
         sp_curve_curveto(dc->red_curve, b[1], b[2], b[3]);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), dc->red_curve);
-        dc->red_curve_is_valid=0x01;
+        dc->red_curve_is_valid = true;
     } else {
         /* Fit and draw and copy last point */
 
@@ -695,7 +695,7 @@ static void fit_and_split(SPDrawContext *dc)
             dc->p[i] = dc->p[dc->npoints - 2 + i];
         }
         dc->npoints = 2;
-        dc->red_curve_is_valid=0x00;
+        dc->red_curve_is_valid = false;
     }
 }
 
@@ -720,7 +720,7 @@ spdc_reset_colors(SPDrawContext *dc)
     dc->sa = NULL;
     dc->ea = NULL;
     dc->npoints = 0;
-    dc->red_curve_is_valid=0x00;
+    dc->red_curve_is_valid = false;
 }
 
 static void
@@ -1109,7 +1109,7 @@ spdc_set_startpoint(SPPencilContext *pc, NR::Point p, guint state)
 
     dc->npoints = 0;
     dc->p[dc->npoints++] = p;
-    dc->red_curve_is_valid=0x00;
+    dc->red_curve_is_valid = false;
 }
 
 /*
@@ -1138,7 +1138,7 @@ spdc_set_endpoint(SPPencilContext *pc, NR::Point p, guint state)
     sp_curve_moveto(dc->red_curve, dc->p[0]);
     sp_curve_lineto(dc->red_curve, dc->p[1]);
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), dc->red_curve);
-    dc->red_curve_is_valid=0x01;
+    dc->red_curve_is_valid = true;
 }
 
 /*

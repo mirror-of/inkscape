@@ -71,7 +71,7 @@ struct SPDrawContext : public SPEventContext{
 
     NR::Point p[SP_DRAW_POINTS_MAX];
     gint npoints;
-    char red_curve_is_valid;
+    bool red_curve_is_valid;
 };
 
 struct SPDrawContextClass : public SPEventContextClass{};

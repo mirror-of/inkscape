@@ -1,3 +1,9 @@
+2004-10-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/draw-context.h: Change red_curve_is_valid from char to bool.
+	* src/draw-context.cpp: Change red_curve_is_valid assignments from
+	  0x00/0x01 to false/true (using find & replace).
+
 2004-10-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-object-repr.cpp (sp_repr_type_lookup): Distinguish between XML
