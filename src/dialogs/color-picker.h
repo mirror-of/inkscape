@@ -22,12 +22,13 @@ void
 sp_color_picker_button(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, GtkWidget *t,
                        gchar const *label, gchar *key,
                        gchar *color_dialog_label,
+                       gchar *tip,
                        gchar *opacity_key,
                        int row);
 
 GtkWidget *
 sp_color_picker_new(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, gchar *colorkey, gchar *alphakey,
-                    gchar *title, guint32 rgba);
+                    gchar *title, gchar *tip, guint32 rgba);
 
 void sp_color_picker_set_rgba32(GtkWidget *cp, guint32 rgba);
 

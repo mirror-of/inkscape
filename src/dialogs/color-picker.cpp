@@ -39,6 +39,7 @@ void
 sp_color_picker_button(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, GtkWidget *t,
                        gchar const *label, gchar *key,
                        gchar *color_dialog_label,
+                       gchar *tip,
                        gchar *opacity_key,
                        int row)
 {
@@ -49,7 +50,7 @@ sp_color_picker_button(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, Gtk
                      (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
                      (GtkAttachOptions)0, 0, 0);
 
-    GtkWidget *cp = sp_color_picker_new(repr, undo, dlg, key, opacity_key, color_dialog_label, 0);
+    GtkWidget *cp = sp_color_picker_new(repr, undo, dlg, key, opacity_key, color_dialog_label, tip, 0);
     gtk_widget_show(cp);
     gtk_table_attach(GTK_TABLE(t), cp, 1, 2, row, row+1,
                      (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
@@ -80,7 +81,7 @@ sp_color_picker_destroy(GtkObject *cp, gpointer data)
  */
 GtkWidget *
 sp_color_picker_new(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, gchar *colorkey, gchar *alphakey,
-                    gchar *title, guint32 rgba)
+                    gchar *title, gchar *tip, guint32 rgba)
 {
     GtkWidget *b = gtk_button_new();
 
@@ -90,6 +91,10 @@ sp_color_picker_new(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, gchar 
 
     gtk_widget_show(cpv);
     gtk_container_add(GTK_CONTAINER(b), cpv);
+
+    GtkTooltips *tt = gtk_tooltips_new();
+    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, tip, NULL);
+
     g_object_set_data(G_OBJECT(b), "preview", cpv);
 
     g_object_set_data(G_OBJECT(b), "colorkey", colorkey);
