@@ -166,7 +166,7 @@ prefs_get_recent_files(void) {
 		gint i;
 		gint docs = sp_repr_n_children (recent);
 
-		datalst = (const gchar **)g_malloc(sizeof(gchar *) * (docs * 2) + 1);
+		datalst = (const gchar **)g_malloc(sizeof(gchar *) * ((docs * 2) + 1));
 
 		for (i = 0, child = recent->children;
 				child != NULL;
