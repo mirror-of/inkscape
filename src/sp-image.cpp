@@ -387,6 +387,7 @@ GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
         //g_message("unable to open file");
     }
 
+/*
     if ( buf )
     {
         const gchar* bloop = gdk_pixbuf_get_option( buf, "Inkscape::DpiX" );
@@ -400,6 +401,7 @@ GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
             g_message("DPI Y is [%s]", bloop);
         }
     }
+*/
 
     return buf;
 }
