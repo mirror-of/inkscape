@@ -3,10 +3,13 @@
 	* layer-fns.cpp:  documenting
 	* layer-selector.cpp:  documenting & fixing funky widget resizing
 	* object-ui.cpp, dialogs/item-properties.cpp, sp-object.h,
-	  sp-object.cpp: add ability to set inkscape:label from "Item
-	  Properties", remove id setting from "Item Properties", switch to
-	  using SPObject::label()/SPObject?::defaultLabel() in UI where
-	  object ID is currently used.  Documenting.
+	  sp-object.cpp, widgets/layer-selector.cpp: add ability to set
+	  inkscape:label from "Item Properties", remove id setting from
+	  "Item Properties", switch to using
+	  SPObject::label()/SPObject?::defaultLabel() in UI where object
+	  ID is currently used.  Documenting.  Switching from "label" to
+	  "inkscape:label" where appropriate.  Adding
+	  visible()/setVisible() functions and activating checkbox.
 	
 2004-10-29  Kees Cook  <kees@outflux.net>
 

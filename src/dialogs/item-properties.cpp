@@ -151,43 +151,38 @@ sp_item_widget_new (void)
     gtk_table_attach ( GTK_TABLE (t), cb, 0, 1, 0, 1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
-                       
     gtk_signal_connect ( GTK_OBJECT (cb), "toggled", 
                          GTK_SIGNAL_FUNC (sp_item_widget_sensitivity_toggled), 
                          spw );
-                         
     gtk_object_set_data (GTK_OBJECT (spw), "sensitive", cb);
+
     cb = gtk_check_button_new_with_label (_("Visible"));
-    gtk_widget_set_sensitive (GTK_WIDGET (cb), FALSE);
     gtk_widget_show (cb);
     gtk_table_attach ( GTK_TABLE (t), cb, 1, 2, 0, 1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
-
     g_signal_connect (G_OBJECT(cb), "toggled", G_CALLBACK(sp_item_widget_visibility_toggled), spw);
-                       
     gtk_object_set_data (GTK_OBJECT (spw), "visible", cb);
+
     cb = gtk_check_button_new_with_label (_("Active"));
     gtk_widget_set_sensitive (GTK_WIDGET (cb), FALSE);
     gtk_widget_show (cb);
     gtk_table_attach ( GTK_TABLE (t), cb, 0, 1, 1, 2, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
-                       
     gtk_object_set_data (GTK_OBJECT (spw), "active", cb);
+
     cb = gtk_check_button_new_with_label (_("Printable"));
     gtk_widget_show (cb);
     gtk_table_attach ( GTK_TABLE (t), cb, 1, 2, 1, 2, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
-                       
     gtk_signal_connect ( GTK_OBJECT (cb), "toggled", 
                          GTK_SIGNAL_FUNC (sp_item_widget_printability_toggled),
                          spw );
     gtk_object_set_data (GTK_OBJECT (spw), "printable", cb);
 
     
-
     f = gtk_frame_new (_("Transformation matrix"));
     gtk_widget_show (f);
     gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
@@ -327,6 +322,11 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
     /* Sensitive */
     GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "sensitive"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->sensitive);
+
+    /* Visible */
+    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "visible"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), 
+                                  ((SPObject*)item)->visible());
 
     /* Printable */
     w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "printable"));
