@@ -25,6 +25,7 @@
 #define SP_MODULE_KEY_AUTODETECT "autodetect"
 /** This is the key for the SVG input module */
 #define SP_MODULE_KEY_INPUT_SVG "org.inkscape.input.svg"
+#define SP_MODULE_KEY_INPUT_SVGZ "org.inkscape.input.svgz"
 /** Specifies the input module that should be used if none are selected */
 #define SP_MODULE_KEY_INPUT_DEFAULT SP_MODULE_KEY_AUTODETECT
 /** The key for outputing standard W3C SVG */

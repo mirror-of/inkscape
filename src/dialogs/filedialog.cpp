@@ -780,8 +780,11 @@ void FileOpenDialogImpl::createFilterMenu()
 
     for (Inkscape::Extension::DB::InputList::iterator current_item = extension_list.begin();
          current_item != extension_list.end(); current_item++)
-        {
+    {
         Inkscape::Extension::Input * imod = *current_item;
+
+        // FIXME: would be nice to grey them out instead of not listing them
+        if (imod->deactivated()) continue;
 
         Glib::ustring upattern("*");
         FileDialogExtensionToPattern (upattern, imod->get_extension());
@@ -797,7 +800,7 @@ void FileOpenDialogImpl::createFilterMenu()
         allInkscapeFilter.add_pattern(upattern);
         if ( strncmp("image", imod->get_mimetype(), 5)==0 )
             allImageFilter.add_pattern(upattern);
-        }
+    }
 
     return;
 }
@@ -1139,8 +1142,11 @@ void FileSaveDialogImpl::createFileTypeMenu()
 
     for (Inkscape::Extension::DB::OutputList::iterator current_item = extension_list.begin();
          current_item != extension_list.end(); current_item++)
-        {
+    {
         Inkscape::Extension::Output * omod = *current_item;
+
+        // FIXME: would be nice to grey them out instead of not listing them
+        if (omod->deactivated()) continue;
 
         FileType type;
         type.name     = (_(omod->get_filetypename()));
@@ -1149,7 +1155,7 @@ void FileSaveDialogImpl::createFileTypeMenu()
         type.extension= omod;
         fileTypeComboBox.append_text(type.name);
         fileTypes.push_back(type);
-        }
+    }
 
     //#Let user choose
     FileType guessType;

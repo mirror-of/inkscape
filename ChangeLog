@@ -12,6 +12,9 @@
 	* src/extension/dependancy.cpp: made repr-attr tags untranslatable.
 	* src/extension/system.cpp: correcting extension autodetection when
 	  there are conflicting matching modules.
+	* src/dialogs/filedialog.cpp, src/extension/extension.h,
+	  src/extension/internal/svg.cpp: .svgz loading works again as
+	  expected.  Non-functioning modules are not listed in file dialogs.
 
 2005-01-31  Jon A. Cruz  <jon@joncruz.org>
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp,

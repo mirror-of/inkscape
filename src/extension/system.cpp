@@ -156,13 +156,9 @@ open_internal(Extension *in_plug, gpointer in_data)
             gchar *filenamelower = g_utf8_strdown(filename, -1);
             gchar *extensionlower = g_utf8_strdown(ext, -1);
 
-            //g_print("trying '%s' against '%s': ",filenamelower,extensionlower);
-
             if (g_str_has_suffix(filenamelower, extensionlower)) {
                 *pimod = dynamic_cast<Input *>(in_plug);
-                //g_print("yup\n");
             }
-            //else { g_print("nope\n"); }
 
             g_free(filenamelower);
             g_free(extensionlower);

@@ -62,6 +62,22 @@ Svg::init(void)
 			"</input>\n"
 		"</inkscape-extension>", new Svg());
 
+#ifdef WIN32
+    // with the new libxml DLL, it can automatically open compressed files
+    ext = Inkscape::Extension::build_from_mem(
+		"<inkscape-extension>\n"
+			"<name>SVGZ Input</name>\n"
+			"<id>" SP_MODULE_KEY_INPUT_SVGZ "</id>\n"
+                        "    <dependency type=\"extension\">" SP_MODULE_KEY_INPUT_SVG "</dependency>\n"
+			"<input>\n"
+				"<extension>.svgz</extension>\n"
+				"<mimetype>image/x-svgz</mimetype>\n"
+				"<filetypename>Compressed Inkscape SVG (*.svgz)</filetypename>\n"
+				"<filetypetooltip>Inkscape's native file format compressed with GZip</filetypetooltip>\n"
+			"</input>\n"
+		"</inkscape-extension>", new Svg());
+#endif
+
 	/* SVG out Inkscape */
     ext = Inkscape::Extension::build_from_mem(
 		"<inkscape-extension>\n"
