@@ -1344,5 +1344,8 @@ sp_select_clone_original ()
 	if (original) {
 		selection->clear();
 		selection->setItem(original);
+		if (SP_CYCLING == SP_CYCLE_FOCUS) {
+			scroll_to_show_item(desktop, original);
+		}
 	}
 }
