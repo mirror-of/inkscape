@@ -413,7 +413,8 @@ bpath_to_liv_path (ArtBpath * bpath)
   {
     int i;
     bool closed = false;
-    float lastX, lastY;
+    float lastX = 0.0;
+	float lastY = 0.0;
 
     for (i = 0; bpath[i].code != ART_END; i++)
       {

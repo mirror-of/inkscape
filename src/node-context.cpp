@@ -279,7 +279,7 @@ sp_nodepath_update_from_item (SPNodeContext *nc, SPItem *item)
 static void 
 nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data)
 {
-	SPItem *item;
+	SPItem *item = NULL;
 	const char *newd = NULL, *newtypestr = NULL;
 	gboolean changed = FALSE;
 

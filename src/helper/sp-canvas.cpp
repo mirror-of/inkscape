@@ -151,7 +151,7 @@ sp_canvas_item_new (SPCanvasGroup *parent, GtkType type, const gchar *first_arg_
 static void
 item_post_create_setup (SPCanvasItem *item)
 {
-	GtkObject *obj = GTK_OBJECT (item);
+	//GtkObject *obj = GTK_OBJECT (item);
 
 	group_add (SP_CANVAS_GROUP (item->parent), item);
 
@@ -1054,7 +1054,7 @@ sp_canvas_unrealize (GtkWidget *widget)
 static void
 sp_canvas_size_request (GtkWidget *widget, GtkRequisition *req)
 {
-	SPCanvas *canvas = SP_CANVAS (widget);
+	//SPCanvas *canvas = SP_CANVAS (widget);
 
 	req->width = 256;
 	req->height = 256;
@@ -1693,7 +1693,7 @@ paint (SPCanvas *canvas)
 	ArtIRect *rects;
 	gint n_rects;
 
-	GtkWidget *widget = GTK_WIDGET (canvas);
+	//GtkWidget *widget = GTK_WIDGET (canvas);
 
 	if (canvas->need_update) {
 		double affine[6];
