@@ -40,6 +40,7 @@
 #include "dialogs/desktop-properties.h"
 #include "macros.h"
 #include "tools-switch.h"
+#include "prefs-utils.h"
 
 static void sp_event_context_class_init (SPEventContextClass *klass);
 static void sp_event_context_init (SPEventContext *event_context);
@@ -55,6 +56,10 @@ static GObjectClass *parent_class;
 
 static gboolean selector_toggled = FALSE;
 static int switch_selector_to = 0;
+
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
+static bool within_tolerance = false;
 
 GType
 sp_event_context_get_type (void)
@@ -164,16 +169,34 @@ sp_toggle_selector (SPDesktop *dt)
 	}
 }
 
+// This is a hack that is necessary because when middle-clicking too fast, button_press
+// events come for all clicks but there's button_release only for the first one. So
+// after a release, we must prohibit the next grab for some time, or the grab will
+// stuck.  Perhaps this is caused by some wrong handling of events among contexts and
+// not by a GDK bug; if someone can fix this properly this would be great.
+gint dontgrab = 0;
+gboolean 
+grab_allow_again () 
+{
+	dontgrab--; 
+	if (dontgrab < 0) dontgrab = 0;
+	return FALSE; // so that it is only called once
+}
+
 static gint
 sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *event)
 {
 	static NRPoint s;
+	NRPoint p;
 	static unsigned int panning = 0;
 	gint ret;
 	SPDesktop * desktop;
 	ret = FALSE;
 
-       	desktop = event_context->desktop;
+	desktop = event_context->desktop;
+
+	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+	gdouble zoom_inc = prefs_get_double_attribute_limited ("options.zoomincrement", "value", 1.414213562, 1.01, 10);
 
 	switch (event->type) {
 	case GDK_2BUTTON_PRESS:
@@ -186,14 +209,27 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		}
 		break;
 	case GDK_BUTTON_PRESS:
+
+		// save drag origin
+		xp = (gint) event->button.x; 
+		yp = (gint) event->button.y;
+		within_tolerance = true;
+
 		switch (event->button.button) {
 		case 2:
+
+			if (dontgrab) { // double-click, still not permitted to grab; increase the counter to guard against triple click
+				dontgrab ++; 
+				gtk_timeout_add (250, (GtkFunction) grab_allow_again, NULL);
+				break;
+			}
+
 			s.x = event->button.x;
 			s.y = event->button.y;
 			panning = 2;
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 					     GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-					     NULL, event->button.time);
+					     NULL, event->button.time-1);
 
 			ret = TRUE;
 			break;
@@ -217,13 +253,25 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (panning) {
-			if (((panning == 2) && !(event->motion.state & GDK_BUTTON2_MASK)) ||
-			    ((panning == 3) && !(event->motion.state & GDK_BUTTON3_MASK))) {
+			if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK)) ||
+					(panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
 				/* Gdk seems to lose button release for us sometimes :-( */
 				panning = 0;
+				dontgrab = 0;
 				sp_canvas_item_ungrab (SP_CANVAS_ITEM (desktop->acetate), event->button.time);
 				ret = TRUE;
-			} else {
+			} else {//if (panning && (event->motion.state & GDK_BUTTON2_MASK || event->motion.state & GDK_BUTTON3_MASK)) {
+
+				if ( within_tolerance
+						 && ( abs( (gint) event->motion.x - xp ) < tolerance )
+						 && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+					break; // do not drag if we're within tolerance from origin
+				}
+				// Once the user has moved farther than tolerance from the original location 
+				// (indicating they intend to move the object, not click), then always process the 
+				// motion notify coordinates as given (no snapping back to origin)
+				within_tolerance = false; 
+
 				sp_desktop_scroll_world (event_context->desktop, event->motion.x - s.x, event->motion.y - s.y);
 				ret = TRUE;
 			}
@@ -233,8 +281,21 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		if (panning == event->button.button) {
 			panning = 0;
 			sp_canvas_item_ungrab (SP_CANVAS_ITEM (desktop->acetate), event->button.time);
+
+			if (within_tolerance) {
+				dontgrab ++;
+				sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
+				if (event->button.state & GDK_SHIFT_MASK) {
+					sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, 1/(pow(zoom_inc, dontgrab)));
+				} else {
+					sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, (pow(zoom_inc, dontgrab)));
+				}
+				gtk_timeout_add (250, (GtkFunction) grab_allow_again, NULL);
+			}
+
 			ret = TRUE;
-		}
+		} 
+		xp = yp = 0; 
 		break;
         case GDK_KEY_PRESS:
 		switch (event->key.keyval) {
@@ -332,11 +393,11 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
 				sp_desktop_get_display_area (desktop, &d);
-				sp_desktop_zoom_relative (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, SP_DESKTOP_ZOOM_INC);
+				sp_desktop_zoom_relative_keep_point (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_inc);
 				break;
 			case GDK_SCROLL_DOWN:
 				sp_desktop_get_display_area (desktop, &d);
-				sp_desktop_zoom_relative (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / SP_DESKTOP_ZOOM_INC);
+				sp_desktop_zoom_relative_keep_point (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / zoom_inc);
 				break;
 			default:
 				break;
