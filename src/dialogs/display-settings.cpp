@@ -45,8 +45,6 @@ extern gint nr_arena_image_x_sample;
 extern gint nr_arena_image_y_sample;
 extern gdouble nr_arena_global_delta;
 
-static GtkWidget *sp_display_dialog_new (void);
-
 static void
 sp_display_dialog_destroy (GtkObject *object, gpointer data)
 {

@@ -398,7 +398,6 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 static GtkWidget *sp_gradient_vector_widget_new (SPGradient *gradient);
 
 static void sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient);
-static void sp_gradient_vector_dialog_close (GtkWidget *widget, GtkWidget *dialog);
 static gint sp_gradient_vector_dialog_delete (GtkWidget *widget, GdkEvent *event, GtkWidget *dialog);
 static void sp_gradient_vector_dialog_destroy (GtkObject *object, gpointer data);
 
@@ -534,12 +533,6 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 	/* Fill preview */
 	w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), "preview");
 	sp_gradient_image_set_gradient (SP_GRADIENT_IMAGE (w), gradient);
-}
-
-static void
-sp_gradient_vector_dialog_close (GtkWidget *widget, GtkWidget *dialog)
-{
-	gtk_widget_hide (dialog);
 }
 
 static void
