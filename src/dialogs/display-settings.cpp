@@ -1023,7 +1023,7 @@ options_checkbox (
 
 options_checkbox (
     _("Zoom when window is resized"), 
-    _("Zoom the drawing when document window is resized, to keep the same area visible"), tt,
+    _("Zoom drawing when document window is resized, to keep the same area visible (this is the default which can be changed in any window using the button above the right scrollbar)"), tt,
     vb,
     "options.stickyzoom", "value", 0,
     options_changed_boolean
