@@ -20,7 +20,7 @@ typedef struct _NRTDEntry NRTDEntry;
 
 struct _NRTDEntry {
 	NRTDEntry *next;
-	const unsigned char *key;
+	const gchar *key;
 	void *val;
 };
 
@@ -57,7 +57,7 @@ nr_type_dict_new (void)
 }
 
 static unsigned int
-nr_str_hash (const unsigned char *p)
+nr_str_hash (const gchar *p)
 {
 	unsigned int h;
 
@@ -71,7 +71,7 @@ nr_str_hash (const unsigned char *p)
 }
 
 void
-nr_type_dict_insert (NRTypeDict *td, const unsigned char *key, void *val)
+nr_type_dict_insert (NRTypeDict *td, const gchar *key, void *val)
 {
 	if (key) {
 		NRTDEntry *tde;
@@ -95,7 +95,7 @@ nr_type_dict_insert (NRTypeDict *td, const unsigned char *key, void *val)
 }
 
 void *
-nr_type_dict_lookup (NRTypeDict *td, const unsigned char *key)
+nr_type_dict_lookup (NRTypeDict *td, const gchar *key)
 {
 	if (key) {
 		NRTDEntry *tde;

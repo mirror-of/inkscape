@@ -100,19 +100,19 @@ nr_typeface_new (NRTypeFaceDef *def)
 }
 
 unsigned int
-nr_typeface_name_get (NRTypeFace *tf, unsigned char *str, unsigned int size)
+nr_typeface_name_get (NRTypeFace *tf, gchar *str, unsigned int size)
 {
 	return nr_typeface_attribute_get (tf, "name", str, size);
 }
 
 unsigned int
-nr_typeface_family_name_get (NRTypeFace *tf, unsigned char *str, unsigned int size)
+nr_typeface_family_name_get (NRTypeFace *tf, gchar *str, unsigned int size)
 {
 	return nr_typeface_attribute_get (tf, "family", str, size);
 }
 
 unsigned int
-nr_typeface_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size)
+nr_typeface_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->attribute_get (tf, key, str, size);
 }
@@ -172,7 +172,7 @@ static void nr_typeface_empty_class_init (NRTypeFaceEmptyClass *klass);
 static void nr_typeface_empty_init (NRTypeFaceEmpty *tfe);
 static void nr_typeface_empty_finalize (NRObject *object);
 
-static unsigned int nr_typeface_empty_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size);
+static unsigned int nr_typeface_empty_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 static NRBPath *nr_typeface_empty_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 static void nr_typeface_empty_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static NRPointF *nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPointF *adv);
@@ -244,9 +244,9 @@ nr_typeface_empty_finalize (NRObject *object)
 static NRFont *empty_fonts = NULL;
 
 static unsigned int
-nr_typeface_empty_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size)
+nr_typeface_empty_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
-	const unsigned char *val;
+	const gchar *val;
 	int len;
 
 	if (!strcmp (key, "name")) {
@@ -361,7 +361,7 @@ nr_typeface_empty_font_free (NRFont *font)
 }
 
 void
-nr_type_empty_build_def (NRTypeFaceDef *def, const unsigned char *name, const unsigned char *family)
+nr_type_empty_build_def (NRTypeFaceDef *def, const gchar *name, const gchar *family)
 {
 	def->type = NR_TYPE_TYPEFACE_EMPTY;
 	def->name = strdup (name);

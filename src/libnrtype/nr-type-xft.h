@@ -18,7 +18,7 @@
 void nr_type_xft_typefaces_get (NRNameList *names);
 void nr_type_xft_families_get (NRNameList *names);
 
-void nr_type_xft_build_def (NRTypeFaceDefFT2 *dft2, const unsigned char *name, const unsigned char *family);
+void nr_type_xft_build_def (NRTypeFaceDefFT2 *dft2, const gchar *name, const gchar *family);
 
 void nr_type_read_xft_list (void);
 

@@ -30,7 +30,7 @@ static void nr_typeface_ft2_init (NRTypeFaceFT2 *tff);
 static void nr_typeface_ft2_finalize (NRObject *object);
 
 static void nr_typeface_ft2_setup (NRTypeFace *tface, NRTypeFaceDef *def);
-static unsigned int nr_typeface_ft2_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size);
+static unsigned int nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 static NRBPath *nr_typeface_ft2_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 static void nr_typeface_ft2_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static NRPointF *nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPointF *adv);
@@ -149,7 +149,7 @@ nr_typeface_ft2_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 			return;
 		}
 	} else {
-		ft_result = FT_New_Memory_Face (ft_library, dft2->data.data, dft2->size, dft2->face, &ft_face);
+		ft_result = FT_New_Memory_Face (ft_library, (FT_Byte*)dft2->data.data, dft2->size, dft2->face, &ft_face);
 		if (ft_result != FT_Err_Ok) {
 			fprintf (stderr, "Error loading typeface %s from memory", dft2->def.name);
 			return;
@@ -198,9 +198,9 @@ static NRBPath *nr_typeface_ft2_ensure_outline (NRTypeFaceFT2 *tff, NRTypeFaceGl
 
 void
 nr_type_ft2_build_def (NRTypeFaceDefFT2 *dft2,
-		       const unsigned char *name,
-		       const unsigned char *family,
-		       const unsigned char *file,
+		       const gchar *name,
+		       const gchar *family,
+		       const gchar *file,
 		       unsigned int face)
 {
 	dft2->def.type = NR_TYPE_TYPEFACE_FT2;
@@ -214,9 +214,9 @@ nr_type_ft2_build_def (NRTypeFaceDefFT2 *dft2,
 
 void
 nr_type_ft2_build_def_data (NRTypeFaceDefFT2 *dft2,
-			    const unsigned char *name,
-			    const unsigned char *family,
-			    const unsigned char *data,
+			    const gchar *name,
+			    const gchar *family,
+			    const gchar *data,
 			    unsigned int size,
 			    unsigned int face)
 {
@@ -231,10 +231,10 @@ nr_type_ft2_build_def_data (NRTypeFaceDefFT2 *dft2,
 }
 
 static unsigned int
-nr_typeface_ft2_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size)
+nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
 	NRTypeFaceFT2 *tff;
-	const unsigned char *val;
+	const gchar *val;
 	int len;
 
 	tff = (NRTypeFaceFT2 *) tf;

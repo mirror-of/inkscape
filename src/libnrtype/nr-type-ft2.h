@@ -27,8 +27,8 @@ struct _NRTypeFaceDefFT2 {
 	NRTypeFaceDef def;
 	unsigned int is_file : 1;
 	union {
-		unsigned char *file;
-		const unsigned char *data;
+		gchar *file;
+		const gchar *data;
 	} data;
 	unsigned int size;
 	unsigned int face;
@@ -65,16 +65,16 @@ struct _NRTypeFaceFT2Class {
 
 void
 nr_type_ft2_build_def (NRTypeFaceDefFT2 *dft2,
-		       const unsigned char *name,
-		       const unsigned char *family,
-		       const unsigned char *file,
+		       const gchar *name,
+		       const gchar *family,
+		       const gchar *file,
 		       unsigned int face);
 
 void
 nr_type_ft2_build_def_data (NRTypeFaceDefFT2 *dft2,
-			    const unsigned char *name,
-			    const unsigned char *family,
-			    const unsigned char *data,
+			    const gchar *name,
+			    const gchar *family,
+			    const gchar *data,
 			    unsigned int size,
 			    unsigned int face);
 #endif

@@ -41,8 +41,8 @@ struct _NRTypeFaceDef {
 	NRType type;
 	NRTypePosDef *pdef;
 	unsigned int idx;
-	unsigned char *name;
-	unsigned char *family;
+	gchar *name;
+	gchar *family;
 	NRTypeFace *typeface;
 };
 
@@ -54,7 +54,7 @@ struct _NRTypeFaceClass {
 
 	void (* setup) (NRTypeFace *tface, NRTypeFaceDef *def);
 
-	unsigned int (* attribute_get) (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size);
+	unsigned int (* attribute_get) (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 	NRBPath *(* glyph_outline_get) (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *path, unsigned int ref);
 	void (* glyph_outline_unref) (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 	NRPointF *(* glyph_advance_get) (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPointF *adv);
@@ -93,9 +93,9 @@ NRTypeFace *nr_typeface_new (NRTypeFaceDef *def);
 /* NRTypeFace *nr_typeface_unref (NRTypeFace *tf); */
 #define nr_typeface_unref(t) (NRTypeFace *) nr_object_unref ((NRObject *) (t))
 
-unsigned int nr_typeface_name_get (NRTypeFace *tf, unsigned char *str, unsigned int size);
-unsigned int nr_typeface_family_name_get (NRTypeFace *tf, unsigned char *str, unsigned int size);
-unsigned int nr_typeface_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size);
+unsigned int nr_typeface_name_get (NRTypeFace *tf, gchar *str, unsigned int size);
+unsigned int nr_typeface_family_name_get (NRTypeFace *tf, gchar *str, unsigned int size);
+unsigned int nr_typeface_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 
 NRBPath *nr_typeface_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 void nr_typeface_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
@@ -105,6 +105,6 @@ unsigned int nr_typeface_lookup_default (NRTypeFace *tf, unsigned int unival);
 
 NRFont *nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size);
 
-void nr_type_empty_build_def (NRTypeFaceDef *def, const unsigned char *name, const unsigned char *family);
+void nr_type_empty_build_def (NRTypeFaceDef *def, const gchar *name, const gchar *family);
 
 #endif

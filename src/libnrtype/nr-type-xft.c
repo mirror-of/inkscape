@@ -48,11 +48,11 @@ nr_type_xft_families_get (NRNameList *names)
 }
 
 void
-nr_type_xft_build_def (NRTypeFaceDefFT2 *dft2, const unsigned char *name, const unsigned char *family)
+nr_type_xft_build_def (NRTypeFaceDefFT2 *dft2, const gchar *name, const gchar *family)
 {
 	XftPattern *pat;
 
-	pat = g_hash_table_lookup (NRXftNamedict, name);
+	pat = (XftPattern *)g_hash_table_lookup (NRXftNamedict, name);
 	if (pat) {
 		char *file;
 		int index;
@@ -85,7 +85,7 @@ nr_type_read_xft_list (void)
 
 	for (i = gnames.length - 1; i >= 0; i--) {
 		NRTypeFaceDefFT2 *tdef;
-		const unsigned char *family;
+		const gchar *family;
 		family = NULL;
 		for (j = gfamilies.length - 1; j >= 0; j--) {
 			int len;
@@ -131,7 +131,7 @@ nr_type_xft_init (void)
 			   XFT_SCALABLE, XftTypeBool, 1, XFT_OUTLINE, XftTypeBool, 1, 0,
 			   XFT_FAMILY, 0);
 	NRXftFamilies.length = fs->nfont;
-	NRXftFamilies.names = nr_new (unsigned char *, NRXftFamilies.length);
+	NRXftFamilies.names = nr_new (gchar *, NRXftFamilies.length);
 	NRXftFamilies.destructor = NULL;
 	XftFontSetDestroy (fs);
 
@@ -144,7 +144,7 @@ nr_type_xft_init (void)
 				      XFT_SCALABLE, XftTypeBool, 1, XFT_OUTLINE, XftTypeBool, 1, 0,
 				      XFT_FAMILY, XFT_WEIGHT, XFT_SLANT, XFT_FILE, XFT_INDEX, 0);
 	NRXftTypefaces.length = NRXftPatterns->nfont;
-	NRXftTypefaces.names = nr_new (unsigned char *, NRXftTypefaces.length);
+	NRXftTypefaces.names = nr_new (gchar *, NRXftTypefaces.length);
 	NRXftTypefaces.destructor = NULL;
 	NRXftNamedict = g_hash_table_new (g_str_hash, g_str_equal);
 	NRXftFamilydict = g_hash_table_new (g_str_hash, g_str_equal);

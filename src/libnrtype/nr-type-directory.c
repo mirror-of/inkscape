@@ -50,7 +50,7 @@ typedef struct _NRFamilyDef NRFamilyDef;
 
 struct _NRFamilyDef {
 	NRFamilyDef *next;
-	unsigned char *name;
+	gchar *name;
 	NRTypeFaceDef *faces;
 };
 
@@ -62,8 +62,8 @@ struct _NRTypePosDef {
 };
 
 static void nr_type_directory_build (void);
-static void nr_type_calculate_position (NRTypePosDef *pdef, const unsigned char *name);
-static float nr_type_distance_family_better (const unsigned char *ask, const unsigned char *bid, float best);
+static void nr_type_calculate_position (NRTypePosDef *pdef, const gchar *name);
+static float nr_type_distance_family_better (const gchar *ask, const gchar *bid, float best);
 static float nr_type_distance_position_better (NRTypePosDef *ask, NRTypePosDef *bid, float best);
 
 static void nr_type_read_private_list (void);
@@ -77,13 +77,13 @@ static NRTypeDict *familydict = NULL;
 static NRFamilyDef *families = NULL;
 
 NRTypeFace *
-nr_type_directory_lookup (const unsigned char *name)
+nr_type_directory_lookup (const gchar *name)
 {
 	NRTypeFaceDef *tdef;
 
 	if (!typedict) nr_type_directory_build ();
 
-	tdef = nr_type_dict_lookup (typedict, name);
+	tdef = (NRTypeFaceDef *)nr_type_dict_lookup (typedict, name);
 
 	if (tdef) {
 		if (!tdef->typeface) {
@@ -98,7 +98,7 @@ nr_type_directory_lookup (const unsigned char *name)
 }
 
 NRTypeFace *
-nr_type_directory_lookup_fuzzy (const unsigned char *family, const unsigned char *description)
+nr_type_directory_lookup_fuzzy (const gchar *family, const gchar *description)
 {
 	NRFamilyDef *fdef, *bestfdef;
 	float best, dist;
@@ -155,7 +155,7 @@ NRNameList *
 nr_type_directory_family_list_get (NRNameList *flist)
 {
 	static int flen = 0;
-	static unsigned char **fnames = NULL;
+	static gchar **fnames = NULL;
 
 	if (!typedict) nr_type_directory_build ();
 
@@ -163,7 +163,7 @@ nr_type_directory_family_list_get (NRNameList *flist)
 		NRFamilyDef *fdef;
 		int pos;
 		for (fdef = families; fdef; fdef = fdef->next) flen += 1;
-		fnames = nr_new (unsigned char *, flen);
+		fnames = nr_new (gchar *, flen);
 		pos = 0;
 		for (fdef = families; fdef; fdef = fdef->next) {
 			fnames[pos] = fdef->name;
@@ -185,7 +185,7 @@ nr_type_register (NRTypeFaceDef *def)
 
 	if (nr_type_dict_lookup (typedict, def->name)) return 0;
 
-	fdef = nr_type_dict_lookup (familydict, def->family);
+	fdef = (NRFamilyDef *)nr_type_dict_lookup (familydict, def->family);
 	if (!fdef) {
 		fdef = nr_new (NRFamilyDef, 1);
 		fdef->name = strdup (def->family);
@@ -210,13 +210,13 @@ nr_type_directory_style_list_destructor (NRNameList *list)
 }
 
 NRNameList *
-nr_type_directory_style_list_get (const unsigned char *family, NRNameList *styles)
+nr_type_directory_style_list_get (const gchar *family, NRNameList *styles)
 {
 	NRFamilyDef *fdef;
 
 	if (!typedict) nr_type_directory_build ();
 
-	fdef = nr_type_dict_lookup (familydict, family);
+	fdef = (NRFamilyDef*)nr_type_dict_lookup (familydict, family);
 
 	styles->destructor = nr_type_directory_style_list_destructor;
 
@@ -226,7 +226,7 @@ nr_type_directory_style_list_get (const unsigned char *family, NRNameList *style
 		tlen = 0;
 		for (tdef = fdef->faces; tdef; tdef = tdef->next) tlen += 1;
 		styles->length = tlen;
-		styles->names = nr_new (unsigned char *, styles->length);
+		styles->names = nr_new (gchar *, styles->length);
 		pos = 0;
 		for (tdef = fdef->faces; tdef; tdef = tdef->next) {
 			styles->names[pos] = tdef->name;
@@ -321,10 +321,10 @@ nr_type_directory_build (void)
 }
 
 static void
-nr_type_calculate_position (NRTypePosDef *pdef, const unsigned char *name)
+nr_type_calculate_position (NRTypePosDef *pdef, const gchar *name)
 {
-	unsigned char c[256];
-	unsigned char *p;
+	gchar c[256];
+	gchar *p;
 
 	strncpy (c, name, 255);
 	c[255] = 0;
@@ -376,7 +376,7 @@ nr_type_calculate_position (NRTypePosDef *pdef, const unsigned char *name)
 }
 
 static float
-nr_type_distance_family_better (const unsigned char *ask, const unsigned char *bid, float best)
+nr_type_distance_family_better (const gchar *ask, const gchar *bid, float best)
 {
 	int alen, blen;
 
@@ -425,11 +425,11 @@ nr_type_distance_position_better (NRTypePosDef *ask, NRTypePosDef *bid, float be
 	return MIN (dist, best);
 }
 
-static unsigned char privatename[] = "/.inkscape/private-fonts";
+static gchar privatename[] = "/.inkscape/private-fonts";
 
 #if 0
 static unsigned int
-nr_type_next_token (const unsigned char *img, unsigned int len, unsigned int p, int *tokenp)
+nr_type_next_token (const gchar *img, unsigned int len, unsigned int p, int *tokenp)
 {
 	/* Skip whitespace */
 	while (((img[p] == ' ') || (img[p] == '\t')) && (p < len)) p++;
@@ -447,14 +447,14 @@ nr_type_next_token (const unsigned char *img, unsigned int len, unsigned int p, 
 static void
 nr_type_read_private_list (void)
 {
-	unsigned char *homedir, *filename;
+	gchar *homedir, *filename;
 	int len;
 	struct stat st;
 
 	homedir = getenv ("HOME");
 	if (!homedir) return;
 	len = strlen (homedir);
-	filename = nr_new (unsigned char, len + sizeof (privatename) + 1);
+	filename = nr_new (gchar, len + sizeof (privatename) + 1);
 	strcpy (filename, homedir);
 	strcpy (filename + len, privatename);
 
@@ -468,14 +468,14 @@ nr_type_read_private_list (void)
 
 #if 1
 	if (!stat (filename, &st) && S_ISREG (st.st_mode) && (st.st_size > 8)) {
-		unsigned char *cdata;
+		gchar *cdata;
 		ArikkeiToken ft, lt;
 		int fd;
 		fd = open (filename, O_RDONLY | O_BINARY);
 		if (!fd) return;
-		cdata = mmap (NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
+		cdata = (gchar*)mmap (NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
 		close (fd);
-		if ((cdata == NULL) || (cdata == (unsigned char *) -1)) return;
+		if ((cdata == NULL) || (cdata == (gchar *) -1)) return;
 		arikkei_token_set_from_data (&ft, cdata, 0, st.st_size);
 		arikkei_token_get_first_line (&ft, &lt);
 		while (lt.start < lt.end) {
@@ -493,7 +493,7 @@ nr_type_read_private_list (void)
 					arikkei_token_strip (&tokens[2], &familyt);
 					face = 0;
 					if (nfnt > 0) {
-						unsigned char b[32];
+						gchar b[32];
 						arikkei_token_strncpy (&fnt[1], b, 32);
 						face = atoi (b);
 					}
@@ -501,7 +501,7 @@ nr_type_read_private_list (void)
 					    !arikkei_token_is_empty (&namet) &&
 					    !arikkei_token_is_empty (&familyt)) {
 						NRTypeFaceDefFT2 *dft2;
-						unsigned char f[1024], n[1024], m[1024];
+						gchar f[1024], n[1024], m[1024];
 						dft2 = nr_new (NRTypeFaceDefFT2, 1);
 						dft2->def.next = NULL;
 						dft2->def.pdef = NULL;
@@ -520,9 +520,9 @@ nr_type_read_private_list (void)
 	}
 #else
 	if (!stat (filename, &st) && S_ISREG (st.st_mode) && (st.st_size > 8)) {
-		unsigned char *img;
+		gchar *img;
 		int fh, rbytes, nentries, p;
-		img = nr_new (unsigned char, st.st_size + 1);
+		img = nr_new (gchar, st.st_size + 1);
 		if (!img) return;
 		fh = open (filename, O_RDONLY);
 		if (fh < 1) return;
@@ -595,8 +595,8 @@ nr_type_read_private_list (void)
 }
 
 NRTypeFace *
-nr_type_build (const unsigned char *name, const unsigned char *family,
-	       const unsigned char *data, unsigned int size, unsigned int face)
+nr_type_build (const gchar *name, const gchar *family,
+	       const gchar *data, unsigned int size, unsigned int face)
 {
 	NRTypeFaceDefFT2 *dft2;
 
