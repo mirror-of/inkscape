@@ -2,6 +2,7 @@
 
 	* src/select-context.cpp:
 	* src/xml/repr.h:
+	  src/sp-defs.h:
 	  Cleanup: greater conformance to CodingStyle.
 
 	* src/libnr/nr-macros.h: Don't #include nr-matrix.h, nr-rect.h.
