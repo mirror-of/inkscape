@@ -174,12 +174,14 @@ sp_node_context_setup (SPEventContext *ec)
 
 	if (item) {
 		nc->nodepath = sp_nodepath_new (ec->desktop, item);
-		if (! nc->nodepath) {
+		if ( nc->nodepath) {
+			//point pack to parent in case nodepath is deleted
+			nc->nodepath->nodeContext = nc;
+		}
+		else {
 			nc->knot_holder = sp_item_knot_holder (item, ec->desktop);
 		}
 
-		//point pack to parent in case nodepath is deleted
-		nc->nodepath->nodeContext = nc;
 
 		// setting listener
 		repr = SP_OBJECT (item)->repr;
