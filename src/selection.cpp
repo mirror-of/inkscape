@@ -303,7 +303,7 @@ std::vector<NR::Point> SPSelection::getSnapPoints() const {
     GSList const *items = const_cast<SPSelection *>(this)->itemList();
     std::vector<NR::Point> all;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-	std::vector<NR::Point> p = sp_item_snappoints(const_cast<SPSelection *>(this)->singleItem());
+	std::vector<NR::Point> p = sp_item_snappoints(SP_ITEM(iter->data));
 	copy(p.begin(), p.end(), back_inserter(all));
     }
 
