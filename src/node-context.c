@@ -230,107 +230,131 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		}
 		break;
 	case GDK_KEY_PRESS:
-		if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK)) {
-			switch (event->key.keyval) {
-			case GDK_Insert:
-			case GDK_KP_Insert:
-				sp_node_selected_add_node ();
-				ret = TRUE;
-				break;
-			case GDK_Delete:
-			case GDK_KP_Delete:
-				sp_node_selected_delete ();
-				ret = TRUE;
-				break;
-			case GDK_C:
+		switch (event->key.keyval) {
+		case GDK_Insert:
+		case GDK_KP_Insert:
+			// with any modifiers
+			sp_node_selected_add_node ();
+			ret = TRUE;
+			break;
+		case GDK_Delete:
+		case GDK_KP_Delete:
+			// with any modifiers
+			sp_node_selected_delete ();
+			ret = TRUE;
+			break;
+		case GDK_C:
+			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
 				sp_node_selected_set_type (SP_PATHNODE_CUSP);
 				ret = TRUE;
-				break;
-			case GDK_S:
+			}
+			break;
+		case GDK_S:
+			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
 				sp_node_selected_set_type (SP_PATHNODE_SMOOTH);
 				ret = TRUE;
-				break;
-			case GDK_Y:
+			}
+			break;
+		case GDK_Y:
+			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
 				sp_node_selected_set_type (SP_PATHNODE_SYMM);
 				ret = TRUE;
-				break;
-			case GDK_B:
+			}
+			break;
+		case GDK_B:
+			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
 				sp_node_selected_break ();
 				ret = TRUE;
-				break;
-			case GDK_J:
+			}
+			break;
+		case GDK_J:
+			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
 				sp_node_selected_join ();
 				ret = TRUE;
-				break;
-			case GDK_L:
+			}
+			break;
+		case GDK_L:
+			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
 				sp_node_selected_set_line_type (ART_LINETO);
 				ret = TRUE;
-				break;
-			case GDK_K:
+			}
+			break;
+		case GDK_K:
+			if ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK)) { // only shift
 				sp_node_selected_set_line_type (ART_CURVETO);
 				ret = TRUE;
-				break;
-				// arrow keys, with shift:
-			case GDK_Left: 
-			case GDK_KP_Left: 
-				sp_node_selected_move (-10, 0);
-				ret = TRUE;
-				break;
-			case GDK_Right: 
-			case GDK_KP_Right: 
-				sp_node_selected_move (10, 0);
-				ret = TRUE;
-				break;
-			case GDK_Up: 
-			case GDK_KP_Up: 
-				sp_node_selected_move (0, 10);
-				ret = TRUE;
-				break;
-			case GDK_Down: 
-			case GDK_KP_Down: 
-				sp_node_selected_move (0, -10);
-				ret = TRUE;
-				break;
-			default:
-				break;
 			}
-		}
-		if (!(event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK)) {
-			switch (event->key.keyval) {
-			case GDK_space:
-				if ((event->key.state & GDK_BUTTON1_MASK)
-				    && (nc->nodepath == NULL)) {
-					ret = sp_node_context_stamp(nc);
+			break;
+		case GDK_space:
+			// stamping when node-editing is a strange idea - the entire shape is duplicated 
+			// it may be useful however, so let it be 
+			if ((event->key.state & GDK_BUTTON1_MASK)
+					&& (nc->nodepath == NULL)) {
+				ret = sp_node_context_stamp(nc);
+			}
+			break;
+
+			// arrow keys:
+			// this was copied over from select-context.c, 
+			// with "sp_selection_" replaced by "sp_node_selected"; 
+			// maybe we could make this a shared function?
+		case GDK_Left: // move selection left
+		case GDK_KP_Left: 
+			if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
+				if (event->key.state & GDK_MOD1_MASK) { // alt
+					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move_screen (-10, 0); // shift
+					else sp_node_selected_move_screen (-1, 0); // no shift
 				}
-				break;
-				// arrow keys, without shift:
-			case GDK_Left: 
-			case GDK_KP_Left: 
-				sp_node_selected_move (-1, 0);
+				else { // no alt
+					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move (-10, 0); // shift
+					else sp_node_selected_move (-1, 0); // no shift
+				}
 				ret = TRUE;
-				break;
-			case GDK_Right: 
-			case GDK_KP_Right: 
-				sp_node_selected_move (1, 0);
-				ret = TRUE;
-				break;
-			case GDK_Up: 
-			case GDK_KP_Up: 
-				sp_node_selected_move (0, 1);
-				ret = TRUE;
-				break;
-			case GDK_Down: 
-			case GDK_KP_Down: 
-				sp_node_selected_move (0, -1);
-				ret = TRUE;
-				break;
-			default:
-				ret = node_key (event);
-				break;
 			}
+			break;
+		case GDK_Up: // move selection up
+		case GDK_KP_Up: 
+			if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
+				if (event->key.state & GDK_MOD1_MASK) { // alt
+					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move_screen (0, 10); // shift
+					else sp_node_selected_move_screen (0, 1); // no shift
+				}
+				else { // no alt
+					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move (0, 10); // shift
+					else sp_node_selected_move (0, 1); // no shift
+				}
+				ret = TRUE;
+			}
+			break;
+		case GDK_Right: // move selection right
+		case GDK_KP_Right: 
+			if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
+				if (event->key.state & GDK_MOD1_MASK) { // alt
+					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move_screen (10, 0); // shift
+					else sp_node_selected_move_screen (1, 0); // no shift
+				}
+				else { // no alt
+					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move (10, 0); // shift
+					else sp_node_selected_move (1, 0); // no shift
+				}
+				ret = TRUE;
+			}
+			break;
+		case GDK_Down: // move selection down
+		case GDK_KP_Down: 
+			if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
+				if (event->key.state & GDK_MOD1_MASK) { // alt
+					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move_screen (0, -10); // shift
+					else sp_node_selected_move_screen (0, -1); // no shift
+				}
+				else { // no alt
+					if (event->key.state & GDK_SHIFT_MASK) sp_node_selected_move (0, -10); // shift
+					else sp_node_selected_move (0, -1); // no shift
+				}
+				ret = TRUE;
+			}
+			break;
 		}
-
-
 		break;
 	default:
 		break;
