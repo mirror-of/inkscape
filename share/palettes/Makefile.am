@@ -2,6 +2,7 @@
 palettesdir = $(datadir)/inkscape/palettes
 
 palettes_DATA = \
-	README
+    README \
+    svg.gpl
 
 EXTRA_DIST = $(palettes_DATA)
