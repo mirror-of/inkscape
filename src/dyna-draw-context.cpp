@@ -456,7 +456,7 @@ sp_dyna_draw_brush (SPDynaDrawContext *dc)
 		delx = dc->angx * width;
 		dely = dc->angy * width;
 
-#if 0
+#if DYNA_DRAW_VERBOSE
 		g_print ("brush:: [w:%g] [dc->w:%g] [dc->vel:%g]\n", width, dc->width, dc->vel);
 		g_print("brush:: [del: %g, %g]\n", delx, dely);
 #endif
@@ -583,9 +583,11 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 			dc->dynahand = TRUE;
 
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
-#if 0
+
+#if DYNA_DRAW_VERBOSE
 			g_print ("(%g %g)=>(%g %g)\n", event->motion.x, event->motion.y, p.x, p.y);
 #endif
+
 			if (! sp_dyna_draw_apply (dc, p.x, p.y)) {
 				ret = TRUE;
 				break;
@@ -614,7 +616,7 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 		if (dc->dragging && event->button.button == 1) {
 			dc->dragging = FALSE;
 
-/*            g_print ("[release]\n"); */
+			/* release */
 			if (dc->dynahand) {
 				dc->dynahand = FALSE;
 				/* Remove all temporary line segments */
@@ -701,20 +703,15 @@ set_to_accumulated (SPDynaDrawContext * dc)
 	  /* Create object */
 	  repr = sp_repr_new ("path");
 	  /* Set style */
-#if 1
+
           if (dc->use_calligraphic)
             style = inkscape_get_repr (INKSCAPE, "tools.calligraphic");
           else
             style = inkscape_get_repr (INKSCAPE, "tools.freehand");
-#else
-/*  	  style = inkscape_get_repr (INKSCAPE, "paint.dynahand"); */
-	  style = inkscape_get_repr (INKSCAPE, "tools.freehand");
-#endif
+
 	  if (style)
 	    {
 	      css = sp_repr_css_attr_inherited (style, "style");
-/*	      sp_repr_css_set_property (css, "stroke", "none"); */
-/*	      sp_repr_css_set_property (css, "fill-rule", "nonzero"); */
 	      sp_repr_css_set (repr, css, "style");
 	      sp_repr_css_attr_unref (css);
 	    }

@@ -793,7 +793,7 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 	g_free(status);
 }
 
-/* Gtk styff */
+/* Gtk stuff */
 
 static void
 sp_select_context_show_toggled (GtkToggleButton *button, SPSelectContext *sc)

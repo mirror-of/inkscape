@@ -369,13 +369,6 @@ sp_spiral_inner_set (SPItem *item, const NRPoint *p, guint state)
 
 	spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
 
-#if 0
-	/* outer point synchronize with inner point, if SHIFT is pressed */
-	if (state & GDK_SHIFT_MASK) {
-		spiral->revo += spiral->revo * (t0 - spiral->t0);
-	}
-	spiral->t0 = t0;
-#endif
 	sp_object_request_update ((SPObject *) spiral, SP_OBJECT_MODIFIED_FLAG);
 }
 

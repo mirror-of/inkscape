@@ -262,7 +262,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				dontgrab = 0;
 				sp_canvas_item_ungrab (SP_CANVAS_ITEM (desktop->acetate), event->button.time);
 				ret = TRUE;
-			} else {//if (panning && (event->motion.state & GDK_BUTTON2_MASK || event->motion.state & GDK_BUTTON3_MASK)) {
+			} else {
 
 				if ( within_tolerance
 						 && ( abs( (gint) event->motion.x - xp ) < tolerance )
@@ -372,9 +372,6 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			ret= TRUE;
 			break;
 		}
-#if 0
-		g_print ("What a funny key: %d \n", event->key.keyval);
-#endif
 		break;
 	case GDK_SCROLL:
 		/* ctrl + wheel, pan left--right */
@@ -649,11 +646,3 @@ sp_event_root_menu_popup (SPDesktop *desktop, SPItem *item, GdkEvent *event)
 	}
 }
 
-#if 0
-static void
-sp_event_grab_item_destroy (GtkObject * object, gpointer data)
-{
-	gtk_menu_item_remove_submenu (GTK_MENU_ITEM (data));
-	gtk_widget_set_sensitive (GTK_WIDGET (data), FALSE);
-}
-#endif

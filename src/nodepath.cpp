@@ -1837,12 +1837,10 @@ sp_nodepath_select_rect (SPNodePath *nodepath, NRRect *b, gboolean incremental)
 		subpath = (SPNodeSubPath *) spl->data;
 		for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
 			node = (SPPathNode *) nl->data;
-#if 0
-			art_affine_point (&p, &node->pos, nodepath->i2d);
-#else
+
 			p.x = node->pos.x;
 			p.y = node->pos.y;
-#endif
+
 			if ((p.x > b->x0) && (p.x < b->x1) && (p.y > b->y0) && (p.y < b->y1)) {
 				sp_nodepath_node_select (node, TRUE, FALSE);
 			}
@@ -2951,11 +2949,6 @@ sp_nodepath_node_destroy (SPPathNode * node)
 		node->subpath->nodepath->selected = g_list_remove (node->subpath->nodepath->selected, node);
 	}
 
-	/*
-	sp_knot_hide (node->knot);
-	sp_knot_hide (node->p.knot);
-	sp_knot_hide (node->n.knot);
-	*/
 	node->subpath->nodes = g_list_remove (node->subpath->nodes, node);
 
 	g_object_unref (G_OBJECT (node->knot));

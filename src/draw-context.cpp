@@ -299,7 +299,6 @@ spdc_set_attach (SPDrawContext *dc, gboolean attach)
 static void
 spdc_selection_changed (SPSelection *sel, SPDrawContext *dc)
 {
-	//	g_print ("Selection changed in draw context\n");
 	if (dc->attach) {
 		spdc_attach_selection (dc, sel);
 	}
@@ -310,7 +309,6 @@ spdc_selection_changed (SPSelection *sel, SPDrawContext *dc)
 static void
 spdc_selection_modified (SPSelection *sel, guint flags, SPDrawContext *dc)
 {
-	//g_print ("Selection modified in draw context\n");
 	if (dc->attach) {
 		spdc_attach_selection (dc, sel);
 	}
@@ -482,7 +480,7 @@ spdc_concat_colors_and_flush (SPDrawContext *dc, gboolean forceclosed)
 
 	/* Step A - test, whether we ended on green anchor */
 	if (forceclosed || (dc->green_anchor && dc->green_anchor->active)) {
-		//g_print ("We hit green anchor, closing Green-Blue-Red\n");
+		// We hit green anchor, closing Green-Blue-Red
 		sp_view_set_statusf_flash (SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (dc)), "Path is closed.");
 		sp_curve_closepath_current (c);
 		/* Closed path, just flush */
@@ -493,11 +491,11 @@ spdc_concat_colors_and_flush (SPDrawContext *dc, gboolean forceclosed)
 
 	/* Step B - both start and end anchored to same curve */
 	if (dc->sa && dc->ea && (dc->sa->curve == dc->ea->curve)) {
-		//		g_print ("We hit bot start and end of single curve, closing paths\n");
+		// We hit bot start and end of single curve, closing paths
 		sp_view_set_statusf_flash (SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (dc)), "Closing path.");
 		if (dc->sa->start) {
 			SPCurve *r;
-			//g_print ("Reversing curve\n");
+			// Reversing curve
 			r = sp_curve_reverse (c);
 			sp_curve_unref (c);
 			c = r;
@@ -934,11 +932,7 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-#if 0
-			/* Grab mouse, so release will not pass unnoticed */
-			dc->grab = SP_CANVAS_ITEM (dt->acetate);
-			sp_canvas_item_grab (dc->grab, SPDC_EVENT_MASK, NULL, event->button.time);
-#endif
+
 			/* Find desktop coordinates */
 			NRPoint p;
 			sp_desktop_w2d_xy_point (dt, &p, event->button.x, event->button.y);
@@ -965,13 +959,13 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		break;
 	case GDK_MOTION_NOTIFY:
 	{
-#if 1
+
 		if ((event->motion.state & GDK_BUTTON1_MASK) && !dc->grab) {
 			/* Grab mouse, so release will not pass unnoticed */
 			dc->grab = SP_CANVAS_ITEM (dt->acetate);
 			sp_canvas_item_grab (dc->grab, SPDC_EVENT_MASK, NULL, event->button.time);
 		}
-#endif
+
 		/* Find desktop coordinates */
 		NRPoint p;
 		sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
@@ -1060,13 +1054,13 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			default:
 				break;
 			}
-#if 1
+
 			if (dc->grab) {
 				/* Release grab now */
 				sp_canvas_item_ungrab (dc->grab, event->button.time);
 				dc->grab = NULL;
 			}
-#endif
+
 			dc->grab = NULL;
 			ret = TRUE;
 		}
@@ -1385,11 +1379,6 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			yp = (gint) event->button.y;
 			within_tolerance = true;
 
-#if 0
-			/* Grab mouse, so release will not pass unnoticed */
-			dc->grab = SP_CANVAS_ITEM (dt->acetate);
-			sp_canvas_item_grab (dc->grab, SPDC_EVENT_MASK, NULL, event->button.time);
-#endif
 			/* Find desktop coordinates */
 			NRPoint p;
 			sp_desktop_w2d_xy_point (dt, &p, event->button.x, event->button.y);
@@ -1432,10 +1421,9 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					} else {
 						/* Set end anchor */
 						dc->ea = anchor;
-					if (!anchor) { 	/* Snap node only if not hitting anchor */
-						spdc_endpoint_snap (dc, &p, event->motion.state);
-					}
-					//						spdc_endpoint_snap (dc, &p, event->motion.state);
+						if (!anchor) { 	/* Snap node only if not hitting anchor */
+							spdc_endpoint_snap (dc, &p, event->motion.state);
+						}
 						spdc_pen_set_subsequent_point (pc, &p);
 						if (dc->green_anchor && dc->green_anchor->active) {
 							pc->state = SP_PEN_CONTEXT_CLOSE;
@@ -1473,13 +1461,12 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		// motion notify coordinates as given (no snapping back to origin)
 		within_tolerance = false; 
 
-#if 1
 		if ((event->motion.state & GDK_BUTTON1_MASK) && !dc->grab) {
 			/* Grab mouse, so release will not pass unnoticed */
 			dc->grab = SP_CANVAS_ITEM (dt->acetate);
 			sp_canvas_item_grab (dc->grab, SPDC_EVENT_MASK, NULL, event->button.time);
 		}
-#endif
+
 		/* Find desktop coordinates */
 		NRPoint p;
 		sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
@@ -1627,13 +1614,13 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			default:
 				break;
 			}
-#if 1
+
 			if (dc->grab) {
 				/* Release grab now */
 				sp_canvas_item_ungrab (dc->grab, event->button.time);
 				dc->grab = NULL;
 			}
-#endif
+
 			ret = TRUE;
 		}
 		break;

@@ -104,18 +104,6 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 	g_return_if_fail (knot_get != NULL);
 	
 	item = SP_ITEM (knot_holder->item);
-#if 0
-#define KH_EPSILON 1e-6
-	/* Precondition for knot_set and knot_get */
-	{
-		NRPoint p1, p2;
-		knot_get (item, &p1);
-		knot_set (item, &p1, 0);
-		knot_get (item, &p2);
-		g_assert (fabs(p1.x - p2.x) < KH_EPSILON &&
-			  fabs(p1.y - p2.y) < KH_EPSILON);
-	}
-#endif
 
 	/* create new SPKnotHolderEntry */
 	e = g_new (SPKnotHolderEntity, 1);
