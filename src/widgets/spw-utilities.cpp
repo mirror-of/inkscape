@@ -14,6 +14,7 @@
 #include <config.h>
 
 #include <math.h>
+#include <string.h>
 #include <stdlib.h>
 #include <libnr/nr-macros.h>
 
@@ -189,7 +190,7 @@ sp_set_font_size (GtkWidget *w, guint font)
 }
 
 /**
-\brief  Returns the descendant of w which has the data with the given key, or NULL if there's none
+\brief  Finds the descendant of w which has the data with the given key and returns the data, or NULL if there's none
 */
 gpointer
 sp_search_by_data_recursive (GtkWidget *w, gpointer key)
@@ -206,6 +207,31 @@ sp_search_by_data_recursive (GtkWidget *w, gpointer key)
 		for (GList *i = ch; i != NULL; i = i->next) {
 			r = sp_search_by_data_recursive(GTK_WIDGET(i->data), key);
 			if (r) return r;
+		}
+	}
+
+	return NULL;
+}
+
+/**
+\brief  Returns the descendant of w which has the given key and value pair, or NULL if there's none
+*/
+GtkWidget *
+sp_search_by_value_recursive (GtkWidget *w, gchar *key, gchar *value)
+{
+	gchar *r = NULL;
+	GtkWidget *child;
+
+	if (w && GTK_IS_OBJECT(w)) {
+		r = (gchar *) gtk_object_get_data (GTK_OBJECT(w), key);
+	}
+	if (r && !strcmp (r, value)) return w;
+	
+	if (GTK_IS_CONTAINER(w)) {
+		GList *ch = gtk_container_get_children (GTK_CONTAINER(w));
+		for (GList *i = ch; i != NULL; i = i->next) {
+			child = sp_search_by_value_recursive(GTK_WIDGET(i->data), key, value);
+			if (child) return child;
 		}
 	}
 
