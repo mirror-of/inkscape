@@ -1,3 +1,47 @@
+2004-01-22  bulia byak <bulia@users.sourceforge.net>
+
+	* src/attributes.h src/attributes.cpp: Added pagecolor, bordercolor, borderopacity (from sodipodi), pageshadow.
+
+	* src/sp-namedview.h src/sp-namedview.cpp: Added reading page attributes.
+ 
+	* src/desktop.cpp: Added setting page and border color (from sodipodi), pageshadow taken from namedview.
+
+	* src/preferences-skeleton.h: Moved pageshadow into namedview, added page and border colors to the template.
+ 
+	* src/dialogs/desktop-properties.cpp: Added page and border color selectors (from
+	sodipodi), moved former document settings here.
+
+	* src/verbs.cpp src/verbs.h: Removed document settings, renamed editing window into document options.
+
+	* src/interface.cpp: Removed document settings command.
+
+	* src/dialogs/document-properties.cpp,h src/dialogs/tool-attributes.cpp,h: Removed.
+
+	* src/dialogs/object-properties.cpp: Removed size and position dialog.
+
+	* src/dialogs/Makefile.am: Removed unused dialogs.
+
+	* src/verbs.cpp src/verbs.h: Removed unused dialog verbs.
+
+	* src/dyna-draw-context.cpp: Removed debug output.
+
+	* src/node-context.h: New members for tracking left, right/alt, ctrl.
+
+	* src/nodepath.cpp: Reorganize [] <> code, add update_repr (oops). Fix near-zero handles behavior with <>.
+
+	* src/sp-item-transform.cpp: More correct transformation writing method: use each
+	item's transform writer instead of simply adding transform= attribute.
+ 
+	* src/document.cpp src/document.h src/document-undo.cpp: Added
+	sp_document_ensure_up_to_date on each undoable action, fixes bbox problems (bug
+	879249). Added callback to reset actionkey on each selection change, so that
+	same-key actions on different objects are not lumped together.
+ 
+	* src/selection-chemistry.cpp: Removed spurious sp_selection_changed calls from all
+	transformation functions, coalesced [] <> rotates and scales.
+
+	* src/select-toolbar.cpp: Coalesced spinbutton moves and scales. 
+
 2004-01-21 MenTaLguY <mental@rydia.net>
 
 	* src/desktop-snap.cpp, src/desktop.cpp, src/nodepath.cpp,
