@@ -419,11 +419,21 @@ sp_text_description(SPItem *item)
     }
 }
 
-static unsigned BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset)
+/** Recursively walks the xml tree adding tags and their contents. The
+non-trivial code does two things: firstly, it manages the positioning
+attributes and their inheritance rules, and secondly it keeps track of line
+breaks and makes sure both that they are assigned the correct SPObject and
+that we don't get a spurious extra one at the end of the flow. */
+static unsigned BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, SPObject **pending_line_break_object)
 {
     unsigned length = 0;
     unsigned child_attrs_offset = 0;
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
+
+    if (*pending_line_break_object) {
+        layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, *pending_line_break_object);
+        *pending_line_break_object = NULL;
+    }
 
     if (SP_IS_TEXT(root)) {
         SP_TEXT(root)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
@@ -445,26 +455,28 @@ static unsigned BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout,
     if (SP_IS_TSPAN(root))
         if (SP_TSPAN(root)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
             is_line_break = true;
-            if (layout->inputExists())
-                layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, root);
             if (!root->hasChildren())
                 layout->appendText("", root->style, root, &optional_attrs);
         }
 
     for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TSPAN (child) || SP_IS_TEXTPATH (child)) {
-            length += BuildLayoutInput(child, layout, optional_attrs, child_attrs_offset + length);
+            length += BuildLayoutInput(child, layout, optional_attrs, child_attrs_offset + length, pending_line_break_object);
         } else if (SP_IS_STRING (child)) {
             Glib::ustring const &string = SP_STRING(child)->string;
             layout->appendText(string, root->style, child, &optional_attrs, child_attrs_offset + length);
             length += string.length();
         }
     }
-    if (is_line_break)
+
+    if (is_line_break) {
         length++;     // interpreting line breaks as a character for the purposes of x/y/etc attributes
                       // is a liberal interpretation of the svg spec, but a strict reading would mean
                       // that if the first line is empty the second line would take its place at the
                       // start position. Very confusing.
+        *pending_line_break_object = root;
+    }
+
     return length;
 }
 
@@ -478,7 +490,8 @@ sp_text_set_shape (SPText *text)
 
     text->layout.clear();
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
-    BuildLayoutInput(text, &text->layout, optional_attrs, 0);
+    SPObject *pending_line_break_object = NULL;
+    BuildLayoutInput(text, &text->layout, optional_attrs, 0, &pending_line_break_object);
     text->layout.calculateFlow();
     for (SPObject *child = text->firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TEXTPATH(child) && SP_TEXTPATH(child)->originalPath != NULL) {
@@ -497,8 +510,7 @@ sp_text_set_shape (SPText *text)
         if (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED) continue;
         if (!tspan->attributes.singleXYCoordinates()) continue;
         Inkscape::Text::Layout::iterator iter = text->layout.sourceToIterator(tspan);
-        if (iter == text->layout.end()) continue;
-        if (iter.nextCharacter()) {   // line breaks live at the end of their preceding line
+        if (iter.prevStartOfParagraph()) {   // the iterator will point just before the line break
             NR::Point anchor_point = text->layout.characterAnchorPoint(iter);
             sp_repr_set_double(SP_OBJECT_REPR(tspan), "x", anchor_point[NR::X]);
             sp_repr_set_double(SP_OBJECT_REPR(tspan), "y", anchor_point[NR::Y]);
@@ -777,7 +789,6 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
         nb_let = SP_STRING(source_obj)->string.length();
         source_obj = source_obj->parent;
     } else {  // line break
-        if (SP_OBJECT_PREV(source_obj)) source_obj = SP_OBJECT_PREV(source_obj);
         nb_let = sp_text_get_length(source_obj);
     }
     SPStyle *style = SP_OBJECT_STYLE (source_obj);

@@ -33,7 +33,7 @@ void sp_te_get_cursor_coords (SPItem *item, gint i_position, NR::Point &p0, NR::
 
 gint sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8);
 gint sp_te_delete (SPItem *item, gint i_start, gint i_end);
-bool sp_te_insert_line (SPText *text, gint i_ucs4_pos);
+bool sp_te_insert_line (SPItem *text, gint i_ucs4_pos);
 
 
 #endif

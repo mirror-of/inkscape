@@ -143,14 +143,15 @@ sp_flowtext_remove_child(SPObject *object, Inkscape::XML::Node *child)
 }
 
 //RH:fixme: these should be member functions
-static void BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Shape const *exclusion_shape, std::list<Shape> *shapes)
+static void BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Shape const *exclusion_shape, std::list<Shape> *shapes, SPObject **pending_line_break_object)
 {
-    if (SP_IS_FLOWDIV(root) || SP_IS_FLOWPARA(root))
-        if (layout->inputExists())
-            layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, root);
-    if (SP_IS_FLOWREGIONBREAK(root))
-        if (layout->inputExists())
-            layout->appendControlCode(Inkscape::Text::Layout::SHAPE_BREAK, root);
+    if (*pending_line_break_object) {
+        if (SP_IS_FLOWREGIONBREAK(*pending_line_break_object))
+            layout->appendControlCode(Inkscape::Text::Layout::SHAPE_BREAK, *pending_line_break_object);
+        else
+            layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, *pending_line_break_object);
+        *pending_line_break_object = NULL;
+    }
 
     for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_STRING(child)) {
@@ -166,11 +167,14 @@ static void BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Sha
             }
         }
         else if (!SP_IS_FLOWREGIONEXCLUDE(child))
-            BuildLayoutInput(child, layout, exclusion_shape, shapes);
+            BuildLayoutInput(child, layout, exclusion_shape, shapes, pending_line_break_object);
     }
 
-    if (SP_IS_FLOWLINE(root))     // yep, the spec specifies that we break after the content for these. I suspect most people will use it like <br/>, though, so it won't have any content
-        layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, root);
+    if (SP_IS_FLOWDIV(root) || SP_IS_FLOWPARA(root) || SP_IS_FLOWREGIONBREAK(root) || SP_IS_FLOWLINE(root)) {
+        if (!root->hasChildren())
+            layout->appendText("", root->style, root);
+        *pending_line_break_object = root;
+    }
 }
 
 static Shape* BuildExclusionShape(SPObject *object)
@@ -236,7 +240,8 @@ sp_flowtext_update(SPObject *object, SPCtx *ctx, unsigned flags)
 
     group->layout.clear();
     Shape *exclusion_shape = BuildExclusionShape(group);
-    BuildLayoutInput(group, &group->layout, exclusion_shape, &shapes);
+    SPObject *pending_line_break_object = NULL;
+    BuildLayoutInput(group, &group->layout, exclusion_shape, &shapes, &pending_line_break_object);
     delete exclusion_shape;
     group->layout.calculateFlow();
     //g_print(group->layout.dumpAsText().c_str());

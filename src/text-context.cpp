@@ -480,7 +480,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							sp_text_context_setup_text (tc);                                                 
 							tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
 						}
-						if (sp_te_insert_line (SP_TEXT (tc->text), tc->ipos))
+						if (sp_te_insert_line (tc->text, tc->ipos))
                             tc->ipos++;
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
