@@ -1,3 +1,9 @@
+2004-11-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/display/bezier-utils.cpp (generate_bezier): For the sake of
+	  our current pencil tool, don't use free optimization of the end
+	  tangent vector.
+
 2004-11-21  MenTaLguY <mental@rydia.net>
 
 	* src/verbs.cpp: add accels for layer menu items

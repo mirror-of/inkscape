@@ -351,18 +351,12 @@ generate_bezier(NR::Point bezier[],
                          ? sp_darray_right_tangent(data, len, tolerance_sq)
                          : tHat2 );
     estimate_lengths(bezier, data, u, len, est_tHat1, est_tHat2);
+    /* We find that sp_darray_right_tangent tends to produce better results
+       for our current freehand tool than full estimation. */
     if (est1) {
         estimate_bi(bezier, 1, data, u, len);
-    }
-    if (est2) {
-        estimate_bi(bezier, 2, data, u, len);
-    }
-    if (est1 || est2) {
-        if (est1 && (bezier[1] != bezier[0])) {
+        if (bezier[1] != bezier[0]) {
             est_tHat1 = unit_vector(bezier[1] - bezier[0]);
-        }
-        if (est2 && (bezier[2] != bezier[3])) {
-            est_tHat2 = unit_vector(bezier[2] - bezier[3]);
         }
         estimate_lengths(bezier, data, u, len, est_tHat1, est_tHat2);
     }
