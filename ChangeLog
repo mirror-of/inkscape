@@ -1,3 +1,9 @@
+2005-03-27  Jon Phillips <jon@rejon.org>
+	* src/toolbox.cpp src/toolbox.h	src/ui/dialog/dialog-manager.cpp 
+	  src/ui/dialog/dialog-manager.h: Added generic dialog adding, 
+	  deleting, and getting and fixed toolboxes to be static with no 
+	  warnings.
+
 2005-03-26  Bryce <bryce@bryceharrington.com>
 
 	* share/ui/keybindings.rc, share/ui/menus-bars.xml

@@ -14,6 +14,7 @@
 #define INKSCAPE_UI_DIALOG_MANAGER_H
 
 #include "dialog.h"
+#include <map>
 
 namespace Inkscape {
 namespace UI {
@@ -34,11 +35,14 @@ public:
               dynamically add/remove dialogs at run time (this might
               be useful for extensions that wish to add or replace
               the standard dialogs. */
-    /*
+  
+    typedef std::map<gchar const*, Dialog*>    DialogMap;
+    
+
     Dialog* getDialog(gchar const* dlgName); 
     void    addDialog(gchar const* dlgName, Dialog * dlg);
-    void    deleteDialog(gchar const* dlgName);
-    */
+    bool    deleteDialog(gchar const* dlgName);
+    void    deleteAllDialogs(); 
 
     Dialog* getAboutDialog();
     Dialog* getAlignAndDistributeDialog();
@@ -62,7 +66,7 @@ protected:
     DialogManager(DialogManager const &d);
     DialogManager& operator=(DialogManager const &d);
 
-    /* map<gchar const*, Dialog*>    _dialog_map; */
+    DialogManager::DialogMap    _dialog_map;
 
     Dialog            *_about_dialog;
     Dialog            *_align_and_distribute_dialog;

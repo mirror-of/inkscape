@@ -93,6 +93,70 @@ DialogManager::~DialogManager()
     //        Appears to cause a segfault if we do
 }
 
+
+/**
+ * Gets a dilog by dialog name, which is the key to the map which contains
+ * a pointer to a dialog.
+ */
+Dialog* DialogManager::getDialog(gchar const* dlgName) 
+{
+    DialogMap::const_iterator iter = _dialog_map.find(dlgName);
+    if (iter != _dialog_map.end())
+        return (*iter).second; // dialog found
+    else
+        return NULL;    // dialog not found
+}
+
+/**
+ * Adds a dialog to the map structure and connects it to the standard
+ * signals for a dialog.
+ */
+void DialogManager::addDialog(gchar const* dlgName, Dialog * dlg) 
+{
+    _dialog_map[dlgName] = dlg; 
+
+    hide_dialogs.connect(sigc::mem_fun(*_dialog_map[dlgName],
+                                       &Dialog::onHideDialogs));
+    hide_f12.connect(sigc::mem_fun(*_dialog_map[dlgName],
+                                   &Dialog::onHideF12));
+    show_dialogs.connect(sigc::mem_fun(*_dialog_map[dlgName],
+                                       &Dialog::onShowDialogs));
+    show_f12.connect(sigc::mem_fun(*_dialog_map[dlgName],
+                                   &Dialog::onShowF12));
+}
+
+/**
+ * Deletes a dialog from the map structure and from existence.
+ */
+bool DialogManager::deleteDialog(gchar const* dlgName) 
+{
+    DialogMap::iterator iter = _dialog_map.find(dlgName);
+    if (iter != _dialog_map.end())
+    {
+        delete (*iter).second;
+        _dialog_map.erase(iter);
+        return true;
+    } 
+    else 
+        return false;
+}
+
+/**
+ * Deletes all dialogs
+ */
+void DialogManager::deleteAllDialogs()
+{
+
+    DialogMap::iterator iter = _dialog_map.begin();
+    while (iter != _dialog_map.end()) 
+    {
+        delete (*iter).second;
+        ++iter;
+    }
+
+}
+
+
 #if 1==2
 Dialog* DialogManager::getAboutDialog() {
     if (_about_dialog == NULL) {

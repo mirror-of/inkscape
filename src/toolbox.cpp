@@ -105,8 +105,6 @@ static GtkWidget *sp_calligraphy_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_dropper_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
 
-static void sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj);
-
 
 static struct {
     gchar const *type_name;
@@ -160,6 +158,10 @@ static void update_aux_toolbox(SPDesktop *desktop, SPEventContext *eventcontext,
 static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 
+static void toggle_dropper_color_pick (GtkWidget *button, gpointer data);
+static void sp_dropper_copy( GtkWidget *widget, GtkObject *obj);
+static void sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj);
+static bool sp_style_changed (const SPCSSAttr *css, gpointer data);
 
 /* Global text entry widgets necessary for update */
 GtkWidget *dropper_rgb_entry, 
@@ -2402,7 +2404,7 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
  * color representation. This is useful for passing values between various 
  * input boxes, or directly to xml.
  */
-void
+static void
 sp_dropper_copy( GtkWidget *widget, GtkObject *obj)
 {
     GtkWidget *tbl = GTK_WIDGET(obj);
@@ -2426,7 +2428,7 @@ sp_dropper_copy( GtkWidget *widget, GtkObject *obj)
  *       for the hex value ppl. want for web pages, etc.
  */
 
-void
+static void
 sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj)
 {
     GtkWidget *tbl = GTK_WIDGET(obj);
@@ -2442,7 +2444,7 @@ sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj)
  * Sets the input boxes with the changed color and opacity. This is used as a 
  * callback for style changing.
  */
-bool
+static bool
 sp_style_changed (const SPCSSAttr *css, gpointer data)
 {
     // GrDrag *drag = (GrDrag *) data;
