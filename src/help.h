@@ -15,7 +15,7 @@
 
 void sp_help_about (void);
 void sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data);
-void sp_help_keys (void);
+void sp_help_open_screen (const gchar * name);
 
 #endif
 

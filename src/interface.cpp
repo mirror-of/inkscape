@@ -675,19 +675,45 @@ sp_ui_dialogs_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 /* Menus */
 
 static void
-sp_ui_help_menu (GtkWidget *m)
+sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 {
-    sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Keys and Mouse"), G_CALLBACK(sp_help_keys), NULL);
+    GtkWidget *item_tutorials, *menu_tutorials;
 
-    GtkWidget *item_t = sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Tutorials"), NULL, NULL);
-    GtkWidget *menu_t = gtk_menu_new ();
-    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("Inkscape: _Basic"),    G_CALLBACK(sp_help_open_tutorial), (void *)_("tutorial-basic.svg"));
-    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("Inkscape: _Advanced"), G_CALLBACK(sp_help_open_tutorial), (void *)_("tutorial-advanced.svg"));
-    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("_Elements of Design"), G_CALLBACK(sp_help_open_tutorial), (void *)_("elementsofdesign.svg"));
-    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("_Tips and Tricks"), G_CALLBACK(sp_help_open_tutorial), (void *)_("tipsandtricks.svg"));
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_t), menu_t);
+    static const sp_verb_t help_verbs_one[] = {
+        SP_VERB_HELP_KEYS, SP_VERB_LAST
+    };
 
-    sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_About Inkscape"), G_CALLBACK(sp_help_about), NULL);
+    static const sp_verb_t tutorial_verbs[] = {
+        SP_VERB_TUTORIAL_BASIC,
+	SP_VERB_TUTORIAL_ADVANCED,
+	SP_VERB_TUTORIAL_DESIGN,
+	SP_VERB_TUTORIAL_TIPS,
+	
+	SP_VERB_LAST
+    };
+
+    static const sp_verb_t help_verbs_two[] = {
+        SP_VERB_HELP_ABOUT, SP_VERB_LAST
+    };
+
+    sp_ui_menu_append (fm, help_verbs_one, view);
+
+    /* There isn't a way to handle "sub menus" (which could really be seen as a
+     * list of verb arguments) in the verb system right now, so we have to build
+     * the submenu by hand.  Luckily, we can populate it using the same verb system.
+     */
+    item_tutorials = sp_ui_menu_append_item (fm, NULL, _("_Tutorials"), NULL, NULL);
+    /* should sp_ui_menu_append_item be modified to take an image name? */
+    GtkWidget * icon = sp_icon_new_scaled (16, "help_tutorials");
+    gtk_widget_show (icon);
+    gtk_image_menu_item_set_image ((GtkImageMenuItem *) item_tutorials, icon);
+    menu_tutorials = gtk_menu_new ();
+
+    sp_ui_menu_append (GTK_MENU (menu_tutorials), tutorial_verbs, view);
+
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_tutorials), menu_tutorials);
+
+    sp_ui_menu_append (fm, help_verbs_two, view);
 
 #ifdef WITH_MODULES
 	/* TODO: Modules need abouts too
@@ -695,6 +721,7 @@ sp_ui_help_menu (GtkWidget *m)
 			                   GTK_WIDGET(sp_module_menu_about()));
     */
 #endif /* WITH_MODULES */
+
 }
 
 GtkWidget *
@@ -743,7 +770,7 @@ sp_ui_main_menubar (SPView *view)
 
 	mitem = gtk_menu_item_new_with_mnemonic (_("_Help"));
 	menu = gtk_menu_new ();
-	sp_ui_help_menu (menu);
+	sp_ui_help_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 

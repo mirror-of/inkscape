@@ -1,3 +1,12 @@
+2004-04-11  Kees Cook <kees@outflux.net>
+
+	* src/verbs.h, src/verbs.cpp: added verbs for the Help and Tutorials menus.
+	* src/interface.cpp: replaced contents of sp_ui_menu_help to use new verbs.
+	* src/help.h, src/help.cpp: replaced sp_help_keys with more generic
+	  sp_help_open_screen, similar to sp_help_open_tutorial.
+	* share/icons/icons.svg: created really ugly "help_tutorials" and
+	  "help_keys" icons.  The "help_keys" one needs the most help.  :)
+
 2004-04-09  Ted Gould <ted@gould.cx>
 
 	* share/extensions/Makefile.am, share/extensions/epsi_output.inkmod,

@@ -106,9 +106,9 @@ sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data)
 }
 
 void
-sp_help_keys (void)
+sp_help_open_screen (const gchar * name)
 {
-    gchar *c = g_strconcat (INKSCAPE_SCREENSDIR, _("/keys.svg"), NULL);
+    gchar *c = g_strconcat (INKSCAPE_SCREENSDIR, "/", name, NULL);
     sp_file_open (c, NULL);
     g_free (c);
 }

@@ -52,6 +52,7 @@
 #include "tools-switch.h"
 #include "inkscape-private.h"
 #include "file.h"
+#include "help.h"
 #include "document.h"
 #include "desktop.h"
 #include "selection.h"
@@ -633,6 +634,41 @@ sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
 } // end of sp_verb_action_dialog_perform()
 
 
+static void
+sp_verb_action_help_perform (SPAction *action, void * data, void * pdata)
+{
+    switch ((int) data) {
+        case SP_VERB_HELP_KEYS:
+            sp_help_open_screen ("keys.svg");
+            break;
+        case SP_VERB_HELP_ABOUT:
+            sp_help_about ();
+            break;
+	default:
+	    break;
+    }
+} // end of sp_verb_action_help_perform()
+
+static void
+sp_verb_action_tutorial_perform (SPAction *action, void * data, void * pdata)
+{
+    switch ((int) data) {
+        case SP_VERB_TUTORIAL_BASIC:
+            sp_help_open_tutorial (NULL, (gpointer) "tutorial-basic.svg");
+            break;
+        case SP_VERB_TUTORIAL_ADVANCED:
+            sp_help_open_tutorial (NULL, (gpointer) "tutorial-advanced.svg");
+            break;
+        case SP_VERB_TUTORIAL_DESIGN:
+            sp_help_open_tutorial (NULL, (gpointer) "elementsofdesign.svg");
+            break;
+        case SP_VERB_TUTORIAL_TIPS:
+            sp_help_open_tutorial (NULL, (gpointer) "tipsandtricks.svg");
+            break;
+	default:
+	    break;
+    }
+} // end of sp_verb_action_tutorial_perform()
 
 
 /**
@@ -682,6 +718,20 @@ static SPActionEventVector action_zoom_vector =
 static SPActionEventVector action_dialog_vector =
             {{NULL}, sp_verb_action_dialog_perform, NULL, NULL, NULL};
 
+/**
+ * Action vector to define functions called if a staticly defined help verb
+ * is called
+ */
+static SPActionEventVector action_help_vector =
+            {{NULL}, sp_verb_action_help_perform, NULL, NULL, NULL};
+
+/**
+ * Action vector to define functions called if a staticly defined tutorial verb
+ * is called
+ */
+static SPActionEventVector action_tutorial_vector =
+            {{NULL}, sp_verb_action_tutorial_perform, NULL, NULL, NULL};
+
 #define SP_VERB_IS_FILE(v) ((v >= SP_VERB_FILE_NEW) && (v <= SP_VERB_FILE_QUIT))
 #define SP_VERB_IS_EDIT(v) ((v >= SP_VERB_EDIT_UNDO) && (v <= SP_VERB_EDIT_DESELECT))
 #define SP_VERB_IS_SELECTION(v) ((v >= SP_VERB_SELECTION_TO_FRONT) && (v <= SP_VERB_SELECTION_BREAK_APART))
@@ -694,6 +744,8 @@ static SPActionEventVector action_dialog_vector =
 #endif /* HAVE_GTK_FULLSCREEN */
 
 #define SP_VERB_IS_DIALOG(v) ((v >= SP_VERB_DIALOG_DISPLAY) && (v <= SP_VERB_DIALOG_ITEM))
+#define SP_VERB_IS_HELP(v) ((v >= SP_VERB_HELP_KEYS) && (v <= SP_VERB_HELP_ABOUT))
+#define SP_VERB_IS_TUTORIAL(v) ((v >= SP_VERB_TUTORIAL_BASIC) && (v <= SP_VERB_TUTORIAL_TIPS))
 
 
 /**
@@ -922,6 +974,22 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_DIALOG_ITEM, "DialogItem", N_("Item _Properties"),
         N_("Item properties"), NULL},
 
+    /* Help */
+    {SP_VERB_HELP_KEYS, "HelpKeys", N_("_Keys and Mouse"),
+        N_("Display help for Keys and Mouse"), "help_keys"},
+    {SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"),
+        N_("About Inkscape"), /*"help_about"*/"inkscape_options"},
+
+    /* Tutorials */
+    {SP_VERB_TUTORIAL_BASIC, "TutorialsBasic", N_("Inkscape: _Basic"),
+        N_("Tutorial for the Basics"), NULL/*"tutorial_basic"*/},
+    {SP_VERB_TUTORIAL_ADVANCED, "TutorialsAdvanced", N_("Inkscape: _Advanced"),
+        N_("Tutorial for the Advanced"), NULL/*"tutorial_advanced"*/},
+    {SP_VERB_TUTORIAL_DESIGN, "TutorialsDesign", N_("_Elements of Design"),
+        N_("Elements of Design"), NULL/*"tutorial_design"*/},
+    {SP_VERB_TUTORIAL_TIPS, "TutorialsTips", N_("_Tips and Tricks"),
+        N_("Various Tips and Tricks"), NULL/*"tutorial_tips"*/},
+
     /* Footer */
     {SP_VERB_LAST, NULL, NULL, NULL, NULL}
 };
@@ -970,6 +1038,16 @@ make_action (sp_verb_t verb, SPView *view)
     } else if (SP_VERB_IS_DIALOG (verb)) {
         nr_active_object_add_listener ((NRActiveObject *) action,
                         (NRObjectEventVector *) &action_dialog_vector,
+                        sizeof (SPActionEventVector),
+                        (void *) verb);
+    } else if (SP_VERB_IS_HELP (verb)) {
+        nr_active_object_add_listener ((NRActiveObject *) action,
+                        (NRObjectEventVector *) &action_help_vector,
+                        sizeof (SPActionEventVector),
+                        (void *) verb);
+    } else if (SP_VERB_IS_TUTORIAL (verb)) {
+        nr_active_object_add_listener ((NRActiveObject *) action,
+                        (NRObjectEventVector *) &action_tutorial_vector,
                         sizeof (SPActionEventVector),
                         (void *) verb);
     }
