@@ -135,7 +135,7 @@ sp_module_db_foreach (void (*in_func)(SPModule * in_plug, gpointer in_data), gpo
 static void
 sp_module_db_foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data)
 {
-	ModuleDBForeachClosure *closure=reinterpret_cast<ModuleDBForeachData *>(in_data);
+	ModuleDBForeachClosure *closure=reinterpret_cast<ModuleDBForeachClosure *>(in_data);
 	closure->in_func(SP_MODULE(in_value), closure->in_data);
 }
 
