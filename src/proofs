@@ -180,8 +180,10 @@ Loose proof of requirements for sp_spiral_fit_and_draw:
 
  Proof of dstep > 0:
  
-  SAMPLE_STEP equals .25.  spiral->revo is bounded to [0.05, 20.0] by various CLAMP calls.
-  (todo: Get CLAMP to ensure it never returns NaN.)  SAMPLE_SIZE equals 8.
+  SAMPLE_STEP equals .25.
+  spiral->revo is bounded to [0.05, 20.0] (and non-NaN) by various CLAMP calls.
+  (TODO: Add precondition, given that those CLAMP calls are outside of this function.)
+  SAMPLE_SIZE equals 8.
   dstep is const and equals SAMPLE_STEP / spiral->revo / (SAMPLE_SIZE - 1),
   == 1 / (4 * [.05, 20.0] * 7)
   == 1 / [1.4, 560]
