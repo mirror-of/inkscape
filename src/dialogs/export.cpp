@@ -504,6 +504,8 @@ sp_export_dialog (void)
         // pressing enter in the filename field is the same as clicking export:
         g_signal_connect ( G_OBJECT (fe), "activate", 
                            G_CALLBACK (sp_export_export_clicked), dlg );
+        // focus is in the filename initially:
+        gtk_widget_grab_focus (GTK_WIDGET (fe));
 
         /* Buttons */
         hb = gtk_hbox_new (FALSE, 0);
