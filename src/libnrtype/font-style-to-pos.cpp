@@ -50,7 +50,7 @@ font_style_to_pos (SPStyle const &style)
 		break;
 
 	case SP_CSS_FONT_WEIGHT_LIGHTER:
-	case SP_CSS_FONT_WEIGHT_DARKER:
+	case SP_CSS_FONT_WEIGHT_BOLDER:
 	default:
 		g_warning("Unrecognized font_weight.computed value");
 		ret.weight = NR_POS_WEIGHT_NORMAL;

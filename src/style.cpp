@@ -220,7 +220,7 @@ static const SPStyleEnum enum_font_weight[] = {
     {"normal", SP_CSS_FONT_WEIGHT_NORMAL},
     {"bold", SP_CSS_FONT_WEIGHT_BOLD},
     {"lighter", SP_CSS_FONT_WEIGHT_LIGHTER},
-    {"darker", SP_CSS_FONT_WEIGHT_DARKER},
+    {"bolder", SP_CSS_FONT_WEIGHT_BOLDER},
     {NULL, -1}
 };
 
@@ -1050,7 +1050,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
                            ? parent_val
                            : parent_val - 1);
         g_assert (style->font_weight.computed <= (unsigned) SP_CSS_FONT_WEIGHT_900);
-    } else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_DARKER) {
+    } else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLDER) {
         unsigned const parent_val = parent->font_weight.computed;
         g_assert (parent_val <= SP_CSS_FONT_WEIGHT_900);
         style->font_weight.computed = (parent_val == SP_CSS_FONT_WEIGHT_900

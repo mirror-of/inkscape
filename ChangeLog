@@ -1,5 +1,8 @@
 2004-12-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/style.h, src/style.cpp, src/libnrtype/font-style-to-pos.cpp:
+	  Fix font-weight value: s/darker/bolder/.
+
 	* src/style.cpp (sp_style_merge_from_parent):
 	  Fix bug with specifying stroke-width with unit of em or ex.
 	  (We were ignoring the number, treating it as 1em or 1ex.)
