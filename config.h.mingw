@@ -7,8 +7,6 @@
  
 #define VERSION "0.37cvs20031230"
 
-#define INK_REINTERPRET_CAST( type, ptr ) reinterpret_cast< type >((ptr))
-
 #define INKSCAPE_VERSION      VERSION
 #define PACKAGE_LOCALE_DIR    "locale"
 #define INKSCAPE_DATADIR      "."

@@ -163,7 +163,7 @@ static void sp_color_notebook_menuitem_response (GtkMenuItem *menuitem, gpointer
 	gboolean active = FALSE;
 
 	active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem));
-	SPColorNotebookTracker *entry = INK_REINTERPRET_CAST( SPColorNotebookTracker*, user_data );
+	SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (user_data);
 	if ( entry )
 	{
 		if ( active )
@@ -226,7 +226,7 @@ void ColorNotebook::init()
 				howmany = MAX (1, ck->submode_count);
 				for ( j = 0; j < howmany; j++ )
 				{
-					SPColorNotebookTracker *entry = INK_REINTERPRET_CAST (SPColorNotebookTracker*, malloc(sizeof(SPColorNotebookTracker)));
+					SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (malloc(sizeof(SPColorNotebookTracker)));
 					if ( entry )
 					{
 						memset( entry, 0, sizeof(SPColorNotebookTracker) );
@@ -246,7 +246,8 @@ void ColorNotebook::init()
 
 	for ( i = 0; i < _trackerList->len; i++ )
 	{
-		SPColorNotebookTracker *entry = INK_REINTERPRET_CAST (SPColorNotebookTracker*, g_ptr_array_index (_trackerList, i));
+		SPColorNotebookTracker *entry = 
+          reinterpret_cast< SPColorNotebookTracker* > (g_ptr_array_index (_trackerList, i));
 		if ( entry )
 		{
 			addPage(entry->type, entry->submode);
@@ -275,7 +276,7 @@ void ColorNotebook::init()
 
 		for ( i = 0; i < _trackerList->len; i++ )
 		{
-			SPColorNotebookTracker *entry = INK_REINTERPRET_CAST (SPColorNotebookTracker*, g_ptr_array_index (_trackerList, i));
+			SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (g_ptr_array_index (_trackerList, i));
 			if ( entry )
 			{
 				item = gtk_check_menu_item_new_with_label (entry->name);
@@ -285,7 +286,7 @@ void ColorNotebook::init()
 
 				g_signal_connect (G_OBJECT (item), "activate",
 								  G_CALLBACK (sp_color_notebook_menuitem_response),
-								  INK_REINTERPRET_CAST(gpointer, entry));
+								  reinterpret_cast< gpointer > (entry) );
 				found = TRUE;
 			}
 		}
