@@ -1,5 +1,14 @@
 2003-11-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/utest/Makefile.am, src/utest/utest.c, src/utest/utest.inc,
+	  src/utest/utest.h, src/xml/Makefile.am, src/xml/repr-action-test.c:
+	  Split utest.inc into utest.h and utest.c.  Update users.
+
+	  Make utest.c,utest.h formatting conform more to doc/coding-style.txt.
+
+	  Have utest.c built into libutest.a (see src/utest/Makefile.am
+	  comments).
+
 	* src/xml/repr-action.c (reverse_log): Add doc comment.  Rename some vars.
 
 	* src/xml/repr-action.c (sp_repr_replay_log, sp_repr_undo_log),

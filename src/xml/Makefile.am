@@ -26,4 +26,4 @@ libspxml_a_SOURCES = \
 
 repr_action_test_SOURCES = repr-action-test.c repr-action.c repr.c repr-util.c
 
-repr_action_test_LDADD = $(INKSCAPE_LIBS)
+repr_action_test_LDADD = ../utest/libutest.a $(INKSCAPE_LIBS)

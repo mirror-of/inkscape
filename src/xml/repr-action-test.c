@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <glib.h>
-#include "../utest/utest.inc"
+#include "../utest/utest.h"
 
 #include "repr.h"
 #include "repr-private.h"
