@@ -1967,14 +1967,6 @@ radial_to_xy (radial const *r, NRPoint const *origin, NRPoint *p)
 	}
 }
 
-static double
-angle_normalize (double a)
-{
-	if (a > M_PI) return a - 2*M_PI;
-	if (a < -M_PI) return a + 2*M_PI;
-	return a;
-}
-
 /**
 \brief The point on a line, given by its angle, closest to the given point
 \param p   point

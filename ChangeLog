@@ -1,5 +1,7 @@
 2004-01-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/nodepath.cpp (angle_normalize): Remove no-longer-used function.
+
 	* src/draw-context.cpp (spdc_endpoint_snap_internal): Fix for
 	negative options.rotationsnapsperpi.
 
