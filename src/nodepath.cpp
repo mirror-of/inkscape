@@ -419,12 +419,11 @@ static SPCurve *
 create_curve (SPNodePath * np)
 {
 	SPCurve * curve;
-	GList * spl;
 	NRPoint p1, p2, p3;
 
 	curve = sp_curve_new ();
 
-	for (spl = np->subpaths; spl != NULL; spl = spl->next) {
+	for (GList *spl = np->subpaths; spl != NULL; spl = spl->next) {
 		SPNodeSubPath * sp;
 		SPPathNode * n;
 		sp = (SPNodeSubPath *) spl->data;
@@ -1320,7 +1319,7 @@ sp_node_selected_delete (void)
 
 	update_repr (nodepath);
 
-	if (g_list_length (nodepath->subpaths) == 0) { // if the entire nodepath is removed, delete the selected object
+	if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
 		sp_nodepath_destroy (nodepath);
 		sp_selection_delete (NULL, NULL);
 	}
@@ -1642,25 +1641,23 @@ sp_nodepath_select_rect (SPNodePath *nodepath, NRRect *b, gboolean incremental)
 */
 GList *save_nodepath_selection (SPNodePath *nodepath)
 {
+	if (!nodepath->selected) {
+		return NULL;
+	}
+
 	GList *r = NULL;
-	SPPathNode *node = NULL;
-	SPNodeSubPath * subpath;
-	GList * spl, * nl = NULL;
 	guint i = 0;
-
-	if (!nodepath->selected) return NULL; 
-
-		for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-			subpath = (SPNodeSubPath *) spl->data;
-			for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
-				node = (SPPathNode *) nl->data;
-				i ++; 
-				if (node->selected) {
-					r = g_list_append (r, GINT_TO_POINTER (i));
-					}
-				}
+	for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
+		SPNodeSubPath *subpath = (SPNodeSubPath *) spl->data;
+		for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
+			SPPathNode *node = (SPPathNode *) nl->data;
+			i++;
+			if (node->selected) {
+				r = g_list_append (r, GINT_TO_POINTER (i));
 			}
-		return r;
+		}
+	}
+	return r;
 }
 
 /**
@@ -1668,23 +1665,19 @@ GList *save_nodepath_selection (SPNodePath *nodepath)
 */
 void restore_nodepath_selection (SPNodePath *nodepath, GList *r)
 {
-	SPPathNode *node = NULL;
-	SPNodeSubPath * subpath;
-	GList * spl, * nl = NULL;
+	sp_nodepath_deselect (nodepath);
+
 	guint i = 0;
-
-		sp_nodepath_deselect (nodepath);
-
-		for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-			subpath = (SPNodeSubPath *) spl->data;
-			for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
-				node = (SPPathNode *) nl->data;
-				i ++; 
-				if (g_list_find (r, GINT_TO_POINTER (i))) {
-					sp_nodepath_node_select (node, TRUE, TRUE);
-					}
-				}
+	for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
+		SPNodeSubPath *subpath = (SPNodeSubPath *) spl->data;
+		for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
+			SPPathNode *node = (SPPathNode *) nl->data;
+			i++;
+			if (g_list_find (r, GINT_TO_POINTER (i))) {
+				sp_nodepath_node_select (node, TRUE, TRUE);
 			}
+		}
+	}
 
 }
 
@@ -1936,7 +1929,7 @@ node_clicked (SPKnot * knot, guint state, gpointer data)
 		} else { //ctrl+click: delete node
 			SPNodePath *nodepath = n->subpath->nodepath;
 			sp_nodepath_node_destroy (n);
-			if (g_list_length (nodepath->subpaths) == 0) { // if the entire nodepath is removed, delete the selected object
+			if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
 				sp_nodepath_destroy (nodepath);
 				sp_selection_delete (NULL, NULL);
 			} else {
@@ -1975,7 +1968,7 @@ node_ungrabbed (SPKnot * knot, guint state, gpointer data)
 	update_repr (n->subpath->nodepath);
 }
 
-void
+static void
 xy_to_radial (double x, double y, radial *r)
 {
 	r->r = sqrt(x*x + y*y);
@@ -1983,8 +1976,8 @@ xy_to_radial (double x, double y, radial *r)
 	else r->a = HUGE_VAL; //undefined
 }
 
-void
-radial_to_xy (radial *r, NRPoint *origin, NRPoint *p)
+static void
+radial_to_xy (radial const *r, NRPoint const *origin, NRPoint *p)
 {
 	if (r->a == HUGE_VAL) {
 		p->x = origin->x;
@@ -1995,27 +1988,18 @@ radial_to_xy (radial *r, NRPoint *origin, NRPoint *p)
 	}
 }
 
-double
-closest_of_three (double x, double a, double b, double c)
-{
-	double result = 0.0;
+/** Returns the closest of a,b,...,f to x.
 
-	if (fabs(x-a) <= fabs(x-b) && fabs(x-a) <= fabs(x-c))
-		result = a;
-	else if (fabs(x-b) <= fabs(x-a) && fabs(x-b) <= fabs(x-c))
-		result = b;
-	else if (fabs(x-c) <= fabs(x-a) && fabs(x-c) <= fabs(x-b))
-		result = c;
-	else
-		g_assert_not_reached ();
+    In case of equidistance, chooses a in preference to b ... in
+    preference to f.
 
-	return result;
-}
-
-double
+    The current implementation aborts if any argument is NaN.
+*/
+static double
 closest_of_six (double x, double a, double b, double c, double d, double e, double f)
 {
-	double result = 0.0;
+	/* Let's hope that the compiler does common subexpression elimination and knows that fabs is a pure function... */
+	double result;
 
 	if (fabs(x-a) <= fabs(x-b) && fabs(x-a) <= fabs(x-c) && fabs(x-a) <= fabs(x-d) && fabs(x-a) <= fabs(x-e) && fabs(x-a) <= fabs(x-f))
 		result = a;
@@ -2029,13 +2013,15 @@ closest_of_six (double x, double a, double b, double c, double d, double e, doub
 		result = e;
 	else if (fabs(x-f) <= fabs(x-a) && fabs(x-f) <= fabs(x-b) && fabs(x-f) <= fabs(x-c) && fabs(x-f) <= fabs(x-d) && fabs(x-f) <= fabs(x-e))
 		result = f;
-	else
+	else {
 		g_assert_not_reached ();
+		result = a;
+	}
 
 	return result;
 }
 
-double
+static double
 angle_normalize (double a)
 {
 	if (a > M_PI) return a - 2*M_PI;
@@ -2053,8 +2039,8 @@ void
 point_line_closest (NRPoint *p, double a, NRPoint *closest)
 {
 	if (a == HUGE_VAL) { // vertical
-		closest->x = 0; 
-		closest->y = p->y; 
+		closest->x = 0;
+		closest->y = p->y;
 	} else {
 		closest->x = (a*p->y + p->x)/(a*a + 1);
 		closest->y = a*closest->x;
@@ -2085,7 +2071,7 @@ node_request (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 	double d_an, d_ap, d_na, d_pa;
 	gboolean collinear = FALSE;
 	NRPoint c;
-	NRPoint pr; 
+	NRPoint pr;
 
 	n = (SPPathNode *) data;
 
@@ -2278,7 +2264,6 @@ node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 {
 	SPPathNode * n;
 	SPPathNodeSide *me, *other;
-	double r_down, r_up;
 	radial rme, rother, rnew; 
 	NRPoint o;
 
@@ -2301,8 +2286,27 @@ node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 	xy_to_radial (p->x - n->pos.x, p->y - n->pos.y, &rnew);
 
 	if (state & GDK_CONTROL_MASK && rnew.a != HUGE_VAL) { 
+		/* FIXME: This code is inefficient, and probably buggy if rnew.a is near (or outside of) +/-M_PI.
+		   Suggested untested replacement:
+		   double origin_diff = rnew.a - me->origin.a;
+		   double rounded_origin_diff = ceil( origin_diff / (M_PI/2) - .5 ) * (M_PI/2);
+		   double origin_snapped = me->origin.a + rounded_origin_diff;
+		   double rounded_rnewa = floor( rnew.a / (M_PI/12) + .5 ) * (M_PI/12);
+		   if(fabs(rnew.a - rounded_rnewa) < fabs(rnew.a - origin_snapped)) {
+			rnew.a = rounded_rnewa;
+		   } else {
+			rnew.a = origin_snapped;
+		   }
+		   rnew.a = angle_normalize (rnew.a);
+
+		   Caveats before using this suggested replacement:
+		   - Ties are broken in a slightly different order for origin_snapped.
+		   - The differences in behaviour (bug-looking things) may be intentional
+		     for all I know, I haven't looked at the surrounding code.
+		*/
 		// restrict to 15 degree steps
 		double opposite, plus90, minus90;
+		double r_down, r_up;
 
 		// the two closest 15 degree steps
 		r_down = floor(rnew.a/(M_PI/12))*M_PI/12;
@@ -2713,9 +2717,6 @@ void
 sp_nodepath_update_statusbar (SPNodePath *nodepath)
 {
 	gint total, selected;
-	SPNodeSubPath * subpath;
-	GList * spl;
-	SPSelection *sel;
 
 	if (!nodepath) return;
 
@@ -2723,17 +2724,16 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 
 	total = selected = 0;
 
-	for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-		subpath = (SPNodeSubPath *) spl->data;
+	for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
+		SPNodeSubPath *subpath = (SPNodeSubPath *) spl->data;
 		total += g_list_length (subpath->nodes);
 	}
 
 	selected = g_list_length (nodepath->selected);
 
 	if (selected == 0) {
-		sel = nodepath->desktop->selection;
-
-		if (g_slist_length (sel->items) == 0)
+		SPSelection *sel = nodepath->desktop->selection;
+		if (sel->items == NULL)
 			sp_view_set_statusf (SP_VIEW(nodepath->desktop), "Select one path object with selector first, then switch back to node editor.");
 		else 
 			sp_view_set_statusf (SP_VIEW(nodepath->desktop), "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select.", total);

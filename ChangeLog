@@ -1,5 +1,10 @@
 2004-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/nodepath.cpp: Miscellaneous cleanups including fixing
+	erroneous indentation, changing `g_list_length(foo) == 0' to `foo
+	== NULL', removing unused function closest_of_three, specifying
+	some functions as `static', adding doc.
+
 	* src/inkscape.cpp (inkscape_remove_desktop): Change
 	`g_slist_length (foo) == 0' to `foo == NULL'.
 
