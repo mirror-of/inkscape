@@ -113,6 +113,7 @@ struct NRArenaItem : public NRObject {
 
 struct NRArenaItemClass : public NRObjectClass {
 	NRArenaItem * (* children) (NRArenaItem *item);
+	NRArenaItem * (* last_child) (NRArenaItem *item);
 	void (* add_child) (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref);
 	void (* remove_child) (NRArenaItem *item, NRArenaItem *child);
 	void (* set_child_position) (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref);
@@ -131,6 +132,7 @@ NRArenaItem *nr_arena_item_ref (NRArenaItem *item);
 NRArenaItem *nr_arena_item_unref (NRArenaItem *item);
 
 NRArenaItem *nr_arena_item_children (NRArenaItem *item);
+NRArenaItem *nr_arena_item_last_child (NRArenaItem *item);
 void nr_arena_item_add_child (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref);
 void nr_arena_item_remove_child (NRArenaItem *item, NRArenaItem *child);
 void nr_arena_item_set_child_position (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref);

@@ -139,6 +139,22 @@ nr_arena_item_children (NRArenaItem *item)
 	return NULL;
 }
 
+NRArenaItem *
+nr_arena_item_last_child (NRArenaItem *item)
+{
+	nr_return_val_if_fail (item != NULL, NULL);
+	nr_return_val_if_fail (NR_IS_ARENA_ITEM (item), NULL);
+
+	if (NR_ARENA_ITEM_VIRTUAL (item, last_child)) {
+		return NR_ARENA_ITEM_VIRTUAL (item, children) (item);
+	} else {
+		NRArenaItem *ref;
+		ref = nr_arena_item_children (item);
+		if (ref) while (ref->next) ref = ref->next;
+		return ref;
+	}
+}
+
 void
 nr_arena_item_add_child (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref)
 {
@@ -757,8 +773,6 @@ nr_arena_item_unparent (NRArenaItem *item)
 void
 nr_arena_item_append_child (NRArenaItem *parent, NRArenaItem *child)
 {
-	NRArenaItem *ref;
-
 	nr_return_if_fail (parent != NULL);
 	nr_return_if_fail (NR_IS_ARENA_ITEM (parent));
 	nr_return_if_fail (child != NULL);
@@ -768,10 +782,7 @@ nr_arena_item_append_child (NRArenaItem *parent, NRArenaItem *child)
 	nr_return_if_fail (child->prev == NULL);
 	nr_return_if_fail (child->next == NULL);
 
-	ref = nr_arena_item_children (parent);
-	if (ref) while (ref->next) ref = ref->next;
-
-	nr_arena_item_add_child (parent, child, ref);
+	nr_arena_item_add_child (parent, child, nr_arena_item_last_child (parent));
 }
 
 void

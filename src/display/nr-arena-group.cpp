@@ -23,6 +23,7 @@ static void nr_arena_group_class_init (NRArenaGroupClass *klass);
 static void nr_arena_group_init (NRArenaGroup *group);
 
 static NRArenaItem *nr_arena_group_children (NRArenaItem *item);
+static NRArenaItem *nr_arena_group_last_child (NRArenaItem *item);
 static void nr_arena_group_add_child (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref);
 static void nr_arena_group_remove_child (NRArenaItem *item, NRArenaItem *child);
 static void nr_arena_group_set_child_position (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref);
@@ -63,6 +64,7 @@ nr_arena_group_class_init (NRArenaGroupClass *klass)
 	object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaGroup>;
 
 	item_class->children = nr_arena_group_children;
+	item_class->last_child = nr_arena_group_last_child;
 	item_class->add_child = nr_arena_group_add_child;
 	item_class->set_child_position = nr_arena_group_set_child_position;
 	item_class->remove_child = nr_arena_group_remove_child;
@@ -92,6 +94,14 @@ nr_arena_group_children (NRArenaItem *item)
 	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
 	return group->children;
+}
+
+static NRArenaItem *
+nr_arena_group_last_child (NRArenaItem *item)
+{
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
+
+	return group->last;
 }
 
 static void

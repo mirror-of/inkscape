@@ -1,3 +1,10 @@
+2005-03-14  MenTaLguY  <mental@rydia.net>
+
+	* src/display/nr-arena-item.h, src/display/nr-arena-item.cpp,
+	  src/display/nr-arena-group.cpp:
+
+	  added virtual accessor for last child
+
 2005-03-14  Jon A. Cruz  <jon@joncruz.org>
 	* src/interface.cpp, src/verb.cpp, src/verbs.h,
 	  src/ui/widget/panel.cpp, src/dialogs/Makefile_insert,
