@@ -115,25 +115,21 @@ sp_repr_set_length_list (SPRepr *repr, const gchar *key, GList *l)
 /**
  *
  */
-guint 
-sp_count_chars_recursive (SPObject *o, SPObject *target)
+bool
+sp_count_chars_recursive (SPObject *o, SPObject *target, unsigned *total)
 {
-
     if ( o == target ) {
-        return INT_MAX; // INT_MAX is a signal to stop searching the tree
+        return false; // INT_MAX is a signal to stop searching the tree
     } else if (SP_IS_STRING(o)) {
-	return SP_STRING(o)->length;
+	*total += SP_STRING(o)->length;
     } else {
-        guint n = 0;
         for ( SPObject *child = sp_object_first_child(o) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-            guint i = sp_count_chars_recursive (child, target);
-            if ( i == INT_MAX ) { // somewhere under us, target was hit
-                break;
-            }
-            n += i;
+            if (!sp_count_chars_recursive(child, target, total)) {
+                return false;
+	    }
         }
-        return n;
     }
+    return true;
 }
 
 
@@ -145,10 +141,9 @@ sp_count_chars_recursive (SPObject *o, SPObject *target)
 guint 
 sp_count_chars (SPObject *o, SPObject *target)
 {
-    guint n = sp_count_chars_recursive (o, target);
-    if (n == INT_MAX)
-        return 0;
-    return n;
+    unsigned total=0;
+    sp_count_chars_recursive(o, target, &total);
+    return total;
 }
 
 

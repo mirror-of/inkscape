@@ -9,19 +9,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef SEEN_INKSCAPE_AST_INVALID_TRANSFORMATION_H
-#define SEEN_INKSCAPE_AST_INVALID_TRANSFORMATION_H
+#ifndef SEEN_INKSCAPE_AST_NULL_POINTER_H
+#define SEEN_INKSCAPE_AST_NULL_POINTER_H
 
 #include <stdexcept>
 
 namespace Inkscape {
 namespace AST {
 
-class InvalidTransformation : public std::runtime_error {
+class NullPointer : public std::runtime_error {
 public:
-    InvalidTransformation() {}
-    const char *what() const { return _("Invalid transformation"); }
-};
+    char const *what() const { return "null pointer"; }
+}
 
 };
 };
