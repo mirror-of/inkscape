@@ -729,17 +729,28 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
     if ((state & GDK_CONTROL_MASK) || gtk_toggle_button_get_active (lock)) {
         /* Scale is locked to a 1:1 aspect ratio, so that s[X] must be made to equal s[Y] */
 
+        NR::Dim2 locked_dim;
+
         /* Lock aspect ratio, using the smaller of the x and y factors */
         if (fabs(s[NR::X]) > fabs(s[NR::Y])) {
             s[NR::X] = fabs(s[NR::Y]) * sign(s[NR::X]);
+            locked_dim = NR::X;
         } else {
             s[NR::Y] = fabs(s[NR::X]) * sign(s[NR::Y]);
+            locked_dim = NR::Y;
         }
 
         /* Snap the scale factor */
-        double r = fabs(namedview_vector_snap_list(desktop->namedview,
-                                                   Snapper::SNAP_POINT, seltrans->snap_points,
-                                                   norm, s));
+        std::pair<double, bool> bb = namedview_vector_snap_list(desktop->namedview,
+                                                                Snapper::BBOX_POINT, seltrans->bbox_points,
+                                                                norm, s);
+        std::pair<double, bool> sn = namedview_vector_snap_list(desktop->namedview,
+                                                                Snapper::SNAP_POINT, seltrans->snap_points,
+                                                                norm, s);
+
+        double bd = bb.second ? fabs(bb.first - s[locked_dim]) : NR_HUGE;
+        double sd = sn.second ? fabs(sn.first - s[locked_dim]) : NR_HUGE;
+        double r = (bd < sd) ? bb.first : sn.first;
         
         for ( unsigned int i = 0 ; i < 2 ; i++ ) {
             s[i] = r * sign(s[i]);
@@ -777,7 +788,6 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 {
 	using NR::X;
 	using NR::Y;
-	double ratio;
 
 	SPDesktop *desktop = seltrans->desktop;
  
@@ -814,13 +824,30 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 	}
 	if ( state & GDK_CONTROL_MASK ) {
 		s[perp] = fabs(s[axis]);
-		ratio = namedview_vector_snap_list(desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points, norm, s);
-		s[axis] = fabs(ratio) * sign(s[axis]);
+                
+                std::pair<double, bool> sn = namedview_vector_snap_list(desktop->namedview,
+                                                                        Snapper::BBOX_POINT,
+                                                                        seltrans->bbox_points, norm, s);
+		std::pair<double, bool> bb = namedview_vector_snap_list(desktop->namedview,
+                                                                        Snapper::SNAP_POINT,
+                                                                        seltrans->snap_points, norm, s);
+
+                double bd = bb.second ? fabs(bb.first - s[axis]) : NR_HUGE;
+                double sd = sn.second ? fabs(sn.first - s[axis]) : NR_HUGE;
+                double ratio = (bd < sd) ? bb.first : sn.first;
+                
+                s[axis] = fabs(ratio) * sign(s[axis]);
 		s[perp] = fabs(s[axis]);
 	} else {
+            std::pair<NR::Coord, bool> bb = namedview_dim_snap_list_scale(desktop->namedview, Snapper::BBOX_POINT,
+                                                                          seltrans->bbox_points, norm, s[axis], axis);
             std::pair<NR::Coord, bool> sn = namedview_dim_snap_list_scale(desktop->namedview, Snapper::SNAP_POINT,
                                                                           seltrans->snap_points, norm, s[axis], axis);
-            s[axis] = sn.first;
+
+            /* Pick the snap that puts us closest to the original scale */
+            NR::Coord bd = bb.second ? fabs(bb.first - s[axis]) : NR_HUGE;
+            NR::Coord sd = sn.second ? fabs(sn.first - s[axis]) : NR_HUGE;
+            s[axis] = (bd < sd) ? bb.first : sn.first;
 	}
 
 	pt = ( point - norm ) * NR::scale(s) + norm;
