@@ -1,3 +1,8 @@
+2004-05-08  Carl Hetherington <inkscape@carlh.net>
+
+	* src/dialogs/desktop-properties.cpp: the usual cleanups.  Also
+	add some sp_document_done()s in various places.
+
 2004-05-08  bulia byak <bulia@users.sourceforge.net>
 
 	* widgets/paint-selector.cpp: Tooltips, slight cosmetics
