@@ -72,6 +72,8 @@
 #include "dialogs/dialog-events.h"
 
 #include "select-toolbar.h"
+#include "gradient-toolbar.h"
+
 #include "star-context.h"
 #include "spiral-context.h"
 #include "gradient-context.h"
@@ -81,7 +83,6 @@
 #include "sp-spiral.h"
 #include "sp-pattern.h"
 #include "sp-ellipse.h"
-#include "sp-gradient.h"
 #include "selection.h"
 #include "document-private.h"
 
@@ -100,7 +101,6 @@ static GtkWidget *sp_rect_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_spiral_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_calligraphy_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
-static GtkWidget *sp_gradient_toolbox_new(SPDesktop *desktop);
 
 static struct {
     gchar const *type_name;
@@ -1136,7 +1136,7 @@ sp_stb_defaults(GtkWidget *widget, SPWidget *tbl)
 
 
 void
-sp_toolbox_add_label(GtkWidget *tbl, gchar const *title, bool wide = true)
+sp_toolbox_add_label(GtkWidget *tbl, gchar const *title, bool wide)
 {
     GtkWidget *boxl = gtk_hbox_new(FALSE, 0);
     if (wide) gtk_widget_set_size_request(boxl, MODE_LABEL_WIDTH, -1);
@@ -2226,142 +2226,6 @@ sp_arc_toolbox_new(SPDesktop *desktop)
 
     gtk_widget_show_all(tbl);
     sp_set_font_size(tbl, AUX_FONT_SIZE);
-
-    return tbl;
-}
-
-
-
-//########################
-//##       Gradient     ##
-//########################
-
-static void gr_toggle_type (GtkWidget *button, gpointer data) {
-    GtkWidget *linear = (GtkWidget *) g_object_get_data (G_OBJECT(data), "linear");
-    GtkWidget *radial = (GtkWidget *) g_object_get_data (G_OBJECT(data), "radial");
-    if (button == linear && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (linear))) {
-        prefs_set_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
-        if (radial) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radial), FALSE);
-    } else if (button == radial && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radial))) {
-        prefs_set_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_RADIAL);
-        if (linear) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (linear), FALSE);
-    }
-}
-
-static void gr_toggle_fillstroke (GtkWidget *button, gpointer data) {
-    GtkWidget *fill = (GtkWidget *) g_object_get_data (G_OBJECT(data), "fill");
-    GtkWidget *stroke = (GtkWidget *) g_object_get_data (G_OBJECT(data), "stroke");
-    if (button == fill && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (fill))) {
-        prefs_set_int_attribute ("tools.gradient", "newfillorstroke", 1);
-        if (stroke) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (stroke), FALSE);
-    } else if (button == stroke && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (stroke))) {
-        prefs_set_int_attribute ("tools.gradient", "newfillorstroke", 0);
-        if (fill) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fill), FALSE);
-    }
-}
-
-static GtkWidget *
-sp_gradient_toolbox_new(SPDesktop *desktop)
-{
-    GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
-
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
-    gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
-
-    GtkTooltips *tt = gtk_tooltips_new();
-
-    sp_toolbox_add_label(tbl, _("<b>New:</b>"));
-
-    aux_toolbox_space(tbl, AUX_SPACING);
-
-    {
-    GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
-    GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
-
-    {
-    GtkWidget *button = sp_button_new_from_data(11,
-                                              SP_BUTTON_TYPE_TOGGLE,
-                                              NULL,
-                                              "fill_gradient",
-                                              _("Create linear gradient"),
-                                              tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_type), tbl);
-    g_object_set_data(G_OBJECT(tbl), "linear", button);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
-                                  prefs_get_int_attribute ("tools.gradient", "newgradient", 1) == SP_GRADIENT_TYPE_LINEAR);
-    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
-    }
-
-    {
-    GtkWidget *button = sp_button_new_from_data(11,
-                                              SP_BUTTON_TYPE_TOGGLE,
-                                              NULL,
-                                              "fill_radial",
-                                              _("Create radial (elliptic or circular) gradient"),
-                                              tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_type), tbl);
-    g_object_set_data(G_OBJECT(tbl), "radial", button);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
-                                  prefs_get_int_attribute ("tools.gradient", "newgradient", 1) == SP_GRADIENT_TYPE_RADIAL);
-    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
-    }
-
-    gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(tbl), cvbox, FALSE, FALSE, 0);
-    }
-
-    aux_toolbox_space(tbl, AUX_SPACING);
-
-    sp_toolbox_add_label(tbl, _("on"), false);
-
-    aux_toolbox_space(tbl, AUX_SPACING);
-
-    {
-    GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
-    GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
-
-    {
-    GtkWidget *button = sp_button_new_from_data(11,
-                                              SP_BUTTON_TYPE_TOGGLE,
-                                              NULL,
-                                              "controls_fill",
-                                              _("Create gradient in the fill"),
-                                              tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_fillstroke), tbl);
-    g_object_set_data(G_OBJECT(tbl), "fill", button);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
-                                  prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1) == 1);
-    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
-    }
-
-    {
-    GtkWidget *button = sp_button_new_from_data(11,
-                                              SP_BUTTON_TYPE_TOGGLE,
-                                              NULL,
-                                              "controls_stroke",
-                                              _("Create gradient in the stroke"),
-                                              tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_fillstroke), tbl);
-    g_object_set_data(G_OBJECT(tbl), "stroke", button);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
-                                  prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1) == 0);
-    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
-    }
-
-    gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(tbl), cvbox, FALSE, FALSE, 0);
-    }
-
-
-    gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
-
-/* // wait when we have the Change part
-    sigc::connection *connection = new sigc::connection(
-        SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_gradient_toolbox_selection_changed), (GtkObject *)tbl))
-        );
-    g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
-*/
 
     return tbl;
 }

@@ -38,6 +38,8 @@ GtkWidget *sp_toolbox_button_normal_new_from_verb(GtkWidget *t,
 
 void aux_toolbox_space(GtkWidget *tb, gint space);
 
+// utility
+void sp_toolbox_add_label(GtkWidget *tbl, gchar const *title, bool wide = true);
 
 #endif /* !SEEN_TOOLBOX_H */
 
