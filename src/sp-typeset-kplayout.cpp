@@ -122,8 +122,10 @@ int              break_holder::AddBrk(int st,int en,const box_solution &pos,int 
         brks[cur].end_ind=en;
         brks[cur].score_to_prev=delta;
         brks[cur].no_justification=noJust;
+//        printf(" replaced %i\n",cur);
         return -1;
       } else {
+//        printf("%i -> %i  dumped\n",st,en);
         return -1;
       }
     }
@@ -134,6 +136,7 @@ int              break_holder::AddBrk(int st,int en,const box_solution &pos,int 
       brks=(one_break*)realloc(brks,max_brk*sizeof(one_break));
     }
     int n=nb_brk;
+//    printf("add %i  s=%i e=%i\n",n,st,en);
     brks[n].start_ind=st;
     brks[n].end_ind=en;
     brks[n].pos=pos;
@@ -250,9 +253,52 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
       typeset->theDst=new dest_col_chunker(theData->width);
     }
   }
+  char*   combined_src=NULL;
+  int     combined_type=has_no_src;
+  {
+    // gather source text
+    if ( typeset->srcType == has_std_txt ) {
+      combined_src=strdup(typeset->srcText);
+      if ( combined_type == has_no_src ) combined_type=has_std_txt;
+    } else if ( typeset->srcType == has_pango_txt ) {
+      combined_src=strdup(typeset->srcText);
+      combined_type=has_pango_txt;
+    }
+    // kill children
+    {
+      for (	SPObject * child = sp_object_first_child(SP_OBJECT(typeset)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if ( SP_IS_TYPESET(child) ) {
+          SPTypeset*  child_t=SP_TYPESET(child);
+          if ( child_t->srcType == has_std_txt ) {
+            if ( combined_src ) {
+              int old_len=strlen(combined_src);
+              combined_src=(char*)realloc(combined_src,(strlen(combined_src)+strlen(child_t->srcText)+1+1)*sizeof(char));
+              combined_src[old_len]='\n';
+              memcpy(combined_src+(strlen(combined_src)+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
+            } else {
+              combined_src=strdup(child_t->srcText);
+            }
+            if ( combined_type == has_no_src ) combined_type=has_std_txt;
+          } else if ( child_t->srcType == has_pango_txt ) {
+            if ( combined_src ) {
+              int old_len=strlen(combined_src);
+              combined_src=(char*)realloc(combined_src,(old_len+strlen(child_t->srcText)+1+1)*sizeof(char));
+              combined_src[old_len]='\n';
+              memcpy(combined_src+(old_len+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
+            } else {
+              combined_src=strdup(child_t->srcText);
+            }
+            combined_type=has_pango_txt;
+          }
+        }
+      }
+    }
+    
+  }
+  
   if ( typeset->theSrc ) delete typeset->theSrc;
   typeset->theSrc=NULL;
-  if ( typeset->srcType == has_std_txt ) {
+  if ( combined_type == has_std_txt ) {
     SPCSSAttr *css;
     css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
     const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
@@ -260,11 +306,11 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
     if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
     const gchar *val_family = sp_repr_css_property (css, "font-family", NULL);
     if ( val_family ) {
-      typeset->theSrc = new pango_text_chunker(typeset->srcText, (gchar *) val_family, fsize, p_t_c_none,false);
+      typeset->theSrc = new pango_text_chunker(combined_src, (gchar *) val_family, fsize, p_t_c_none,false);
     } else {
-      typeset->theSrc = new pango_text_chunker(typeset->srcText, "Luxi Sans", fsize, p_t_c_none,false);
+      typeset->theSrc = new pango_text_chunker(combined_src, "Luxi Sans", fsize, p_t_c_none,false);
     }
-  } else if ( typeset->srcType == has_pango_txt ) {
+  } else if ( combined_type == has_pango_txt ) {
     SPCSSAttr *css;
     css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
     const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
@@ -272,23 +318,26 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
     if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
     const gchar *val_family = sp_repr_css_property (css, "font-family", NULL);
     if ( val_family ) {
-      typeset->theSrc = new pango_text_chunker(typeset->srcText, (gchar *) val_family, fsize, p_t_c_none,true);
+      typeset->theSrc = new pango_text_chunker(combined_src, (gchar *) val_family, fsize, p_t_c_none,true);
     } else {
-      typeset->theSrc = new pango_text_chunker(typeset->srcText, "Luxi Sans", fsize, p_t_c_none,true);
+      typeset->theSrc = new pango_text_chunker(combined_src, "Luxi Sans", fsize, p_t_c_none,true);
     }
   }
-
-
+  
+  
   // kill children
   {
     GSList *l=NULL;
     for (	SPObject * child = sp_object_first_child(SP_OBJECT(typeset)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-      l=g_slist_prepend(l,child);
+      if ( SP_IS_TYPESET(child) ) {
+      } else {
+        l=g_slist_prepend(l,child);
+      }
     }
     while ( l ) {
       SPObject *child=(SPObject*)l->data;
+      //      sp_object_unref(child, SP_OBJECT(typeset));
       child->deleteObject();
-//      sp_object_unref(child, SP_OBJECT(typeset));
       l=g_slist_remove(l,child);
     }
   }
@@ -395,7 +444,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
                     pen_list->AddPending(n_brk,a,d,true);
                   }
                 } else {
-                  printf("qu'est ce que c'est que cette longueur nulle: %i %i \n",sol[i].start_ind,sol[i].end_ind);
+//                  printf("qu'est ce que c'est que cette longueur nulle: %i %i \n",sol[i].start_ind,sol[i].end_ind);
                 }
               } else if ( sol[i].length > 1.5*1.2*nLen ) {
                 int n_brk=brk_list->AddBrk(brk_list->brks[cur_brk].end_ind+1,brk_list->brks[cur_brk].end_ind,cur_box,cur_brk,0,true);
@@ -406,10 +455,12 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
                 }
               } else {
                 double   delta=0;
-                if ( sol[i].length > nLen ) {
-                  delta=(sol[i].length/nLen)-1;
-                } else {
-                  delta=(nLen/sol[i].length)-1;
+                if ( sol[i].endOfParagraph == false ) {
+                  if ( sol[i].length > nLen ) {
+                    delta=(sol[i].length/nLen)-1;
+                  } else {
+                    delta=(nLen/sol[i].length)-1;
+                  }
                 }
                 int n_brk=brk_list->AddBrk(sol[i].start_ind,sol[i].end_ind,cur_box,cur_brk,delta,false);
                 if ( n_brk >= 0 ) {
@@ -498,4 +549,9 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     sp_document_done (SP_DT_DOCUMENT (desktop));
   }
+  if ( typeset->theSrc ) delete typeset->theSrc;
+  typeset->theSrc=NULL;
+  if ( typeset->theDst ) delete typeset->theDst;
+  typeset->theDst=NULL;
+  if ( combined_src ) free(combined_src);
 }

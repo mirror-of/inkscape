@@ -649,13 +649,14 @@ text_chunk_solution* pango_text_chunker::StuffThatBox(int start_ind,double minLe
     } else {
       // last character of the text
       breaksAfter=true;
+      curSol.endOfParagraph=true;
     }
     
     if ( words[cur_ind].is_white ) {
     } else {
       lastWord=curSol;
     }
-    if ( words[cur_ind].is_return ) {
+    if ( words[cur_ind].is_return || cur_ind >= nbWord-1 ) {
       lastWord.endOfParagraph=true;
     }
     if ( curSol.length < minLength ) {
@@ -738,6 +739,7 @@ void                 pango_text_chunker::GlyphsInfo(int start_ind,int end_ind,in
   nbG=0;
   totLength=0;
   while ( start_ind <= end_ind && words[end_ind].is_white ) end_ind--;
+  while ( start_ind <= end_ind && words[start_ind].is_white ) start_ind++;
   if ( end_ind < start_ind ) return;
   
   int      char_st=words[start_ind].t_first,char_en=words[end_ind].t_last;
@@ -746,6 +748,7 @@ void                 pango_text_chunker::GlyphsInfo(int start_ind,int end_ind,in
 }
 void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int end_ind,to_SVG_context *hungry)
 {
+  while ( start_ind <= end_ind && words[start_ind].is_white ) start_ind++;
   while ( start_ind <= end_ind && words[end_ind].is_white ) end_ind--;
   if ( end_ind < start_ind ) return;
   
@@ -763,7 +766,7 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
     attr_st=char_en+1;
     attr_en=char_en+2;
   }
-  double     cumul=0;
+  double     cumul=words[start_ind].x_pos;
   while ( char_st <= char_en) {
     if ( attr_st > char_st ) {
       AddDullGlyphs(hungry,cumul,char_st,(char_en < attr_st-1)?char_en:attr_st-1);        
@@ -803,29 +806,28 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
   words[nbWord].is_white=whit;
   words[nbWord].is_return=retu;
   words[nbWord].end_of_word=true;
-  words[nbWord].x_pos=cumul[0]+(1/((double)PANGO_SCALE))*((double)(logical_rect.x));
+  words[nbWord].x_pos=cumul[0];
   words[nbWord].x_length=(1/((double)PANGO_SCALE))*((double)(logical_rect.width));
   
   PangoFontMetrics *metrics = pango_font_get_metrics (theFont, NULL);
   
   words[nbWord].y_ascent = (1/((double)PANGO_SCALE))*((double)(pango_font_metrics_get_ascent (metrics)));  
   words[nbWord].y_descent = (1/((double)PANGO_SCALE))*((double)(pango_font_metrics_get_descent (metrics)));  
-  words[nbWord].y_ascent+=cumul[1];
-  words[nbWord].y_descent-=cumul[1];
+  words[nbWord].y_ascent-=cumul[1];
+  words[nbWord].y_descent+=cumul[1];
   
-  //  words[nbWord].y_ascent=(1/((double)PANGO_SCALE))*((double)(-logical_rect.y));
-  //  words[nbWord].y_descent=(1/((double)PANGO_SCALE))*((double)(logical_rect.height+logical_rect.y));
-  double   cur_pos=cumul[0];
+  double   cur_pos=words[nbWord].x_pos;
   int      cur_g=0;
   for (int i=st;i<=en;i++) {
     while ( cur_g < from->num_glyphs-1 && from->log_clusters[cur_g+1] <= i-offset ) cur_g++;
     pango_glyph_string_extents_range(from,i-offset,i+1-offset,theFont,&ink_rect,&logical_rect);
-    charas[i].x_pos=cur_pos+(1/((double)PANGO_SCALE))*((double)(logical_rect.x));
+    charas[i].x_pos=cur_pos;
     charas[i].x_adv=(1/((double)PANGO_SCALE))*((double)(logical_rect.width));
     charas[i].y_pos=cumul[1];
     charas[i].x_dpos=(1/((double)PANGO_SCALE))*((double)(from->glyphs[cur_g].geometry.x_offset));
     charas[i].y_dpos=(1/((double)PANGO_SCALE))*((double)(from->glyphs[cur_g].geometry.y_offset));
-    cur_pos=charas[i].x_pos+charas[i].x_dpos+(1/((double)PANGO_SCALE))*((double)(logical_rect.width));
+    
+    cur_pos+=charas[i].x_adv;
   }
   cumul[0]+=words[nbWord].x_length;
   charas[en+1].x_pos=cumul[0];
@@ -876,6 +878,42 @@ void                         pango_text_chunker::SetTextWithAttrs(char* inText,P
     PangoGlyphString*  nGl=pango_glyph_string_new();
     pango_shape(inText+theItem->offset,theItem->length,&theItem->analysis,nGl);
     pGlyphs=g_list_append(pGlyphs,nGl);
+  }
+  {
+    for (int i=0;i<=srcLen;i++) charas[i].code_point=0;
+    int  cur_c=0;
+    for (char* p=theText;*p;) {
+      gchar*      np=g_utf8_find_next_char(p,NULL);
+      int         c_st=p-theText,c_en;
+      if ( np == NULL ) {
+        c_en=srcLen;
+        for (int i=c_st;i<c_en;i++) charas[i].code_point=cur_c;
+        cur_c++;
+        charas[c_en].code_point=cur_c;
+        return;
+      }
+      c_en=np-theText;
+      for (int i=c_st;i<c_en;i++) charas[i].code_point=cur_c;
+      p=np;
+      cur_c++;
+    }
+    
+    for (int i=srcLen;i>=0;i--) {
+      cur_c=charas[i].code_point;
+      if ( cur_c < 0 ) cur_c=0;
+      if ( cur_c > srcLen ) cur_c=srcLen;
+      pAttrs[i]=pAttrs[cur_c];
+      if ( pAttrs[i].is_word_start ) {
+        if ( i > 0 && charas[i-1].code_point == charas[i].code_point ) {
+          pAttrs[i].is_word_start=0;
+        }
+      }
+      if ( pAttrs[i].is_word_end ) {
+        if ( i < srcLen && charas[i+1].code_point == charas[i].code_point ) {
+          pAttrs[i].is_word_end=0;
+        }
+      }
+    }
   }
   
   int       t_pos=0/*,l_pos=0*/;
@@ -929,69 +967,18 @@ void                         pango_text_chunker::SetTextWithAttrs(char* inText,P
     if ( nbWord > 0 && pAttrs[t_pos].is_word_end == false && pAttrs[t_pos].is_word_start == false ) {
       words[nbWord-1].end_of_word=false;
     }
-/*    bool is_retu=(t_pos >= next_par_end);
-    for (int g_pos=0;g_pos<theItem->length;g_pos++) {
-      if ( pAttrs[t_pos].is_white ) {
-        if ( inWhite ) {
-          if ( flags&p_t_c_mergeWhite ) {
-          } else {
-            if ( l_pos < t_pos ) {
-              AddBox(l_pos,t_pos-1,true,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
-              l_pos=t_pos;
-            }
-          }
-        } else {
-          if ( l_pos < t_pos ) {
-            AddBox(l_pos,t_pos-1,false,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
-            l_pos=t_pos;
-          }
-        }
-        inWhite=true;
-      } else {
-        if ( inWhite ) {
-          if ( l_pos < t_pos ) {
-            AddBox(l_pos,t_pos-1,true,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
-            l_pos=t_pos;
-          }
-        } else if ( pAttrs[t_pos].is_word_start ) {
-          if ( l_pos < t_pos ) {
-            AddBox(l_pos,t_pos-1,false,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
-            l_pos=t_pos;
-          }
-        }
-        inWhite=false;
-      }
-      is_retu=(t_pos >= next_par_end);
-      if ( t_pos >= next_par_start ) {
-        int old_dec=next_par_start;
-        pango_find_paragraph_boundary(inText+old_dec,-1,&next_par_end,&next_par_start);
-        next_par_end+=old_dec;
-        next_par_start+=old_dec;
-        is_retu=(t_pos >= next_par_end);
-      }
-      
-      t_pos++;
-    }
-    if ( l_pos < t_pos ) {
-      AddBox(l_pos,t_pos-1,inWhite,false,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
-      if ( pAttrs[t_pos-1].is_word_end ) {
-      } else {
-        words[nbWord-1].end_of_word=false;
-      }
-      l_pos=t_pos;
-    }*/
   }
   
-  //  printf("%i mots\n",nbWord);
-  //  for (int i=0;i<nbWord;i++) {
-  //    printf("%i->%i  x=%f l=%f a=%f d=%f w=%i r=%i ew=%i\n",words[i].t_first,words[i].t_last,words[i].x_pos,words[i].x_length,words[i].y_ascent,words[i].y_descent
-  //           ,words[i].is_white,words[i].is_return,words[i].end_of_word);
-  //    printf("chars: ");
-  //    for (int j=words[i].t_first;j<=words[i].t_last;j++) {
-  //      printf("(%f %f d= %f) ",charas[j].x_pos,charas[j].y_pos,charas[j].y_dpos);
-  //    }
-  //    printf("\n");
-  //  }
+//  printf("%i mots\n",nbWord);
+//  for (int i=0;i<nbWord;i++) {
+//    printf("%i->%i  x=%f l=%f a=%f d=%f w=%i r=%i ew=%i\n",words[i].t_first,words[i].t_last,words[i].x_pos,words[i].x_length,words[i].y_ascent,words[i].y_descent
+//           ,words[i].is_white,words[i].is_return,words[i].end_of_word);
+//    printf("chars: ");
+//    for (int j=words[i].t_first;j<=words[i].t_last;j++) {
+//      printf("(%f %f a=%f) ",charas[j].x_pos,charas[j].y_pos,charas[j].x_adv);
+//    }
+//    printf("\n");
+//  }
   
   if ( theIt ) pango_attr_iterator_destroy(theIt);
   
@@ -1015,12 +1002,11 @@ void                         pango_text_chunker::AddDullGlyphs(to_SVG_context *h
   hungry->ResetStyle();
   hungry->AddFontFamily(theFace);
   hungry->AddFontSize(theSize);
-  double startX=charas[c_st].x_pos-cumul;
+  double startX=cumul;
   for (int i=c_st;i<=c_en;i++) {
     NR::Point at(charas[i].x_pos-startX,charas[i].y_pos);
     hungry->AddGlyph(i,i,at,charas[i].x_adv);
   }
-  cumul+=charas[c_en+1].x_pos-charas[c_st].x_pos;
 }
 void                         pango_text_chunker::AddAttributedGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en,PangoAttrIterator *theIt) 
 {
@@ -1059,12 +1045,11 @@ void                         pango_text_chunker::AddAttributedGlyphs(to_SVG_cont
     hungry->AddFontStretch(((PangoAttrInt*)one_attr)->value);
   }
   
-  double startX=charas[c_st].x_pos-cumul;
+  double startX=cumul;
   for (int i=c_st;i<=c_en;i++) {
     NR::Point at(charas[i].x_pos-startX,charas[i].y_pos);
     hungry->AddGlyph(i,i,at,charas[i].x_adv);
   }
-  cumul+=charas[c_en+1].x_pos-charas[c_st].x_pos;
 }
 
 /*
@@ -1075,7 +1060,7 @@ box_to_SVG_context::box_to_SVG_context(SPRepr* in_repr,double y,double x_start,d
   dxs=dys=xs=ys=NULL;
   letter_spacing=0;
   text=NULL;
-  st=-1;
+  orig_st=st=-1;
   en=-2;
   ng=0;
   
@@ -1187,7 +1172,7 @@ void            box_to_SVG_context::AddLetterSpacing(double n_spc)
 void            box_to_SVG_context::SetText(char*  n_txt,int /*n_len*/)
 {
   text=n_txt;
-  st=-1;
+  orig_st=st=-1;
   en=-2;
   ng=0;
 }
@@ -1303,9 +1288,10 @@ void            box_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &oa
   NR::Point at=oat;
   at[0]+=box_start;
   at[1]+=box_y;
-  if ( st >= 0 ) at[0]+=((double)(f_c-st))*letter_spacing;
+  if ( orig_st >= 0 ) at[0]+=((double)(f_c-orig_st))*letter_spacing;
+//  printf("add g  %i -> %i   at %f %f -> pos %f %f\n",f_c,l_c,oat[0],oat[1],at[0],at[1]);
 
-  if ( fabs(at[0]-cur_next-cur_spacing) < 0.01 ) {
+  if ( ng > 0 && fabs(at[0]-cur_next-cur_spacing) < 0.01 ) {
     cur_x=at[0];
     cur_next=cur_x+advance;
     SetY(f_c,l_c,at[1]);
@@ -1329,13 +1315,15 @@ void            box_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &oa
         cur_next=cur_x+advance;
       }
     } else {
-      cur_x=cur_start=at[0];
+      cur_x=at[0];
+      cur_start=at[0];
       cur_next=cur_x+advance;
       cur_spacing=letter_spacing;
       SetY(f_c,l_c,at[1]);
     }
   }
   if ( st < 0 || f_c < st ) st=f_c;
+  if ( orig_st < 0 || f_c < orig_st ) orig_st=f_c;
   if ( en < 0 || l_c > en ) en=l_c;
   ng++;
 }

@@ -462,7 +462,7 @@ void nr_pixblock_render_bpath_rgba (Shape* theS,uint32_t color,NRRectL &area,cha
     for (int i=0;i<4;i++) theI[i]=new BitLigne(il,ir);
     IntLigne*   theIL=new IntLigne();
   
-    theS->QuickScan(curY,curPt,(float)(it),true,0.25);
+    theS->DirectQuickScan(curY,curPt,(float)(it),true,0.25);
   
     char* mdata=(char*)destBuf;
     uint32_t* ligStart=((uint32_t*)(mdata+(3*(il-area.x0)+stride*(it-area.y0))));

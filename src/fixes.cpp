@@ -32,6 +32,7 @@
  *
  * This is the corrected function, lifted from 1.107 gstrfuncs.c in glib
  */
+extern "C" {
 #include <glib.h>
 #include <locale.h>
 #include <string.h>
@@ -181,6 +182,7 @@ fixed_g_ascii_strtod (const gchar *nptr,
     *endptr = fail_pos;
   
   return val;
+}
 }
 
 #endif /* BROKEN_G_ASCII_STRTOD */

@@ -132,6 +132,7 @@ public:
     double       x_pos,y_pos;
     double       x_dpos,y_dpos;
     double       x_adv;
+    int          code_point;
   } glyph_box;
 
   // source data
@@ -185,7 +186,7 @@ public:
   double           *ys;
   double           letter_spacing;
   char             *text;
-  int              st,en,ng;
+  int              st,en,ng,orig_st;
   
   SPRepr           *text_repr;
   

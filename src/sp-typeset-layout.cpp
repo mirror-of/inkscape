@@ -96,9 +96,53 @@ void   sp_typeset_relayout(SPTypeset *typeset)
       typeset->theDst=new dest_col_chunker(theData->width);
     }
   }
+  
+  char*   combined_src=NULL;
+  int     combined_type=has_no_src;
+  {
+    // gather source text
+    if ( typeset->srcType == has_std_txt ) {
+      combined_src=strdup(typeset->srcText);
+      if ( combined_type == has_no_src ) combined_type=has_std_txt;
+    } else if ( typeset->srcType == has_pango_txt ) {
+      combined_src=strdup(typeset->srcText);
+      combined_type=has_pango_txt;
+    }
+    // kill children
+    {
+      for (	SPObject * child = sp_object_first_child(SP_OBJECT(typeset)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if ( SP_IS_TYPESET(child) ) {
+          SPTypeset*  child_t=SP_TYPESET(child);
+          if ( child_t->srcType == has_std_txt ) {
+            if ( combined_src ) {
+              int old_len=strlen(combined_src);
+              combined_src=(char*)realloc(combined_src,(strlen(combined_src)+strlen(child_t->srcText)+1+1)*sizeof(char));
+              combined_src[old_len]='\n';
+              memcpy(combined_src+(strlen(combined_src)+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
+            } else {
+              combined_src=strdup(child_t->srcText);
+            }
+            if ( combined_type == has_no_src ) combined_type=has_std_txt;
+          } else if ( child_t->srcType == has_pango_txt ) {
+            if ( combined_src ) {
+              int old_len=strlen(combined_src);
+              combined_src=(char*)realloc(combined_src,(old_len+strlen(child_t->srcText)+1+1)*sizeof(char));
+              combined_src[old_len]='\n';
+              memcpy(combined_src+(old_len+1),child_t->srcText,(strlen(child_t->srcText)+1)*sizeof(char));
+            } else {
+              combined_src=strdup(child_t->srcText);
+            }
+            combined_type=has_pango_txt;
+          }
+        }
+      }
+    }
+    
+  }
+  
   if ( typeset->theSrc ) delete typeset->theSrc;
   typeset->theSrc=NULL;
-  if ( typeset->srcType == has_std_txt ) {
+  if ( combined_type == has_std_txt ) {
     SPCSSAttr *css;
     css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
     const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
@@ -106,11 +150,11 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
     const gchar *val_family = sp_repr_css_property (css, "font-family", NULL);
     if ( val_family ) {
-      typeset->theSrc = new pango_text_chunker(typeset->srcText, (gchar *) val_family, fsize, p_t_c_none,false);
+      typeset->theSrc = new pango_text_chunker(combined_src, (gchar *) val_family, fsize, p_t_c_none,false);
     } else {
-      typeset->theSrc = new pango_text_chunker(typeset->srcText, "Luxi Sans", fsize, p_t_c_none,false);
+      typeset->theSrc = new pango_text_chunker(combined_src, "Luxi Sans", fsize, p_t_c_none,false);
     }
-  } else if ( typeset->srcType == has_pango_txt ) {
+  } else if ( combined_type == has_pango_txt ) {
     SPCSSAttr *css;
     css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
     const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
@@ -118,9 +162,9 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
     const gchar *val_family = sp_repr_css_property (css, "font-family", NULL);
     if ( val_family ) {
-      typeset->theSrc = new pango_text_chunker(typeset->srcText, (gchar *) val_family, fsize, p_t_c_none,true);
+      typeset->theSrc = new pango_text_chunker(combined_src, (gchar *) val_family, fsize, p_t_c_none,true);
     } else {
-      typeset->theSrc = new pango_text_chunker(typeset->srcText, "Luxi Sans", fsize, p_t_c_none,true);
+      typeset->theSrc = new pango_text_chunker(combined_src, "Luxi Sans", fsize, p_t_c_none,true);
     }
   }
   
@@ -129,7 +173,10 @@ void   sp_typeset_relayout(SPTypeset *typeset)
   {
     GSList *l=NULL;
     for (	SPObject * child = sp_object_first_child(SP_OBJECT(typeset)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-      l=g_slist_prepend(l,child);
+      if ( SP_IS_TYPESET(child) ) {
+      } else {
+        l=g_slist_prepend(l,child);
+      }
     }
     while ( l ) {
       SPObject *child=(SPObject*)l->data;
@@ -347,4 +394,9 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     sp_document_done (SP_DT_DOCUMENT (desktop));
   }
+  if ( typeset->theSrc ) delete typeset->theSrc;
+  typeset->theSrc=NULL;
+  if ( typeset->theDst ) delete typeset->theDst;
+  typeset->theDst=NULL;
+  if ( combined_src ) free(combined_src);
 }

@@ -158,7 +158,7 @@ sp_typeset_init (SPTypeset *object)
   
   typeset->layoutDirty=false;
   typeset->destDirty=false;
-  typeset->stdLayoutAlgo=true;
+  typeset->stdLayoutAlgo=false;
   
   typeset->theSrc=NULL;
   typeset->theDst=NULL;
@@ -259,10 +259,14 @@ sp_typeset_update (SPObject *object, SPCtx *ctx, unsigned int flags)
     typeset->destDirty=false;
   }
   if ( typeset->layoutDirty ) {
-    if ( typeset->stdLayoutAlgo ) {
-      sp_typeset_relayout(typeset);
+    if ( SP_IS_TYPESET(SP_OBJECT_PARENT(typeset)) ) {
+      sp_object_request_update (SP_OBJECT(SP_OBJECT_PARENT(typeset)), SP_OBJECT_MODIFIED_FLAG);
     } else {
-      sp_typeset_rekplayout(typeset);
+      if ( typeset->stdLayoutAlgo ) {
+        sp_typeset_relayout(typeset);
+      } else {
+        sp_typeset_rekplayout(typeset);
+      }
     }
     typeset->layoutDirty=false;
   }
