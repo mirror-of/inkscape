@@ -1149,26 +1149,36 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
         filename = 0;
     }
 #else
+    Glib::ustring how( mode );
+    how.append("b");
     if ( PrintWin32::is_os_wide() )
     {
         gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
         if ( wideName )
         {
-            gunichar2 *wideMode = g_utf8_to_utf16( mode, -1, NULL, NULL, NULL );
+            gunichar2 *wideMode = g_utf8_to_utf16( how.c_str(), -1, NULL, NULL, NULL );
             if ( wideMode )
             {
                 fp = _wfopen( (wchar_t*)wideName, (wchar_t*)wideMode );
                 g_free( wideMode );
                 wideMode = 0;
             }
+            else
+            {
+                g_message("Unable to convert mode from UTF-8 to UTF-16");
+            }
             g_free( wideName );
             wideName = 0;
+        }
+        else
+        {
+            g_message("Unable to convert filename from UTF-8 to UTF-16");
         }
     }
     else
     {
         gchar *filename = Inkscape::URI::to_native_filename(utf8name);
-        fp = std::fopen(filename, mode);
+        fp = std::fopen(filename, how.c_str());
         g_free(filename);
         filename = 0;
     }
