@@ -326,31 +326,70 @@ sp_item_list_common_parent_group (const GSList *items)
 	return SP_GROUP (parent);
 }
 
-void sp_selection_raise()
+/** Finds out the minimum common bbox of the selected items
+ */
+NR::Rect 
+enclose_items (const GSList *items)
 {
-	SPDesktop *dt = SP_ACTIVE_DESKTOP;
-	if (!dt) return;
-	GSList const *items = sp_selection_item_list(SP_DT_SELECTION(dt));
-	if (!items) return;
-	SPGroup const *group = sp_item_list_common_parent_group(items);
-	if (!group) return;
+	g_assert (items != NULL);
+
+	NR::Rect r = sp_item_bbox_desktop ((SPItem *) items->data);
+
+	for (GSList *i = items->next; i; i = i->next)
+		r = NR::Rect::union_bounds (r, sp_item_bbox_desktop ((SPItem *) i->data));
+
+	return r;
+}
+
+SPObject *
+prev_sibling (SPObject *child)
+{
+	SPObject *parent = SP_OBJECT_PARENT (child); 
+	if (!SP_IS_GROUP (parent)) return NULL;
+	for (SPObject *i = SP_GROUP(parent)->children; i; i = i->next) {
+		if (i->next == child) 
+			return i;
+	}
+	return NULL;
+}
+
+void 
+sp_selection_raise()
+{
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!desktop) return;
+
+	GSList const *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+	if (!items) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select some objects to raise."));
+		return;
+	}
+
+	SPGroup const *group = sp_item_list_common_parent_group (items);
+	if (!group) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("You cannot raise/lower objects from different groups or layers."));
+		return;
+	}
+
 	SPRepr *grepr = SP_OBJECT_REPR(group);
 
 	/* construct reverse-ordered list of selected children */
-	GSList *rev = NULL;
-	SPObject *child;
-	for (child = group->children; child; child = child->next) {
-		if (g_slist_find ((GSList *) items, child)) {
-			rev = g_slist_prepend (rev, child);
-		}
-	}
+	GSList *rev = g_slist_copy((GSList *) items);
+	rev = g_slist_sort (rev, (GCompareFunc) sp_item_repr_compare_position);
 
+	// find out the common bbox of the selected items
+	NR::Rect selected = enclose_items (items);
+
+	// for all objects in the selection (starting from top)
 	while (rev) {
-		child = SP_OBJECT (rev->data);
+		SPObject *child = SP_OBJECT (rev->data);
+		// for each selected object, find the next sibling
 		for (SPObject *newref = child->next; newref; newref = newref->next) {
-			if (SP_IS_ITEM (newref)) {
+			// if the sibling is an item AND overlaps our selection,
+			if (SP_IS_ITEM (newref) && selected.intersects(sp_item_bbox_desktop(SP_ITEM(newref)))) {
+				// AND if it's not one of our selected objects,
 				if (!g_slist_find ((GSList *) items, newref)) {
-					/* Found available position */
+					// move the selected object after that sibling
 					sp_repr_change_order (grepr, SP_OBJECT_REPR (child), SP_OBJECT_REPR (newref));
 				}
 				break;
@@ -359,7 +398,7 @@ void sp_selection_raise()
 		rev = g_slist_remove (rev, child);
 	}
 
-	sp_document_done (SP_DT_DOCUMENT (dt));
+	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
 void sp_selection_raise_to_top()
@@ -369,9 +408,13 @@ void sp_selection_raise_to_top()
 	SPDocument *document = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
 	SPSelection *selection = SP_DT_SELECTION(SP_ACTIVE_DESKTOP);
 
-	if (sp_selection_is_empty (selection)) return;
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select some objects to raise to top."));
+		return;
+	}
 
-	GSList *rl = g_slist_copy((GSList *) sp_selection_repr_list(selection));
+	GSList *rl = g_slist_copy((GSList *) sp_selection_repr_list (selection));
+	rl = g_slist_sort (rl, (GCompareFunc) sp_repr_compare_position);
 
 	for (GSList *l = rl; l != NULL; l = l->next) {
 		SPRepr *repr = (SPRepr *) l->data;
@@ -383,64 +426,58 @@ void sp_selection_raise_to_top()
 	sp_document_done (document);
 }
 
-void sp_selection_lower()
+void 
+sp_selection_lower ()
 {
-	SPDesktop *dt = SP_ACTIVE_DESKTOP;
-	if (!dt) return;
-	GSList const *items = sp_selection_item_list(SP_DT_SELECTION(dt));
-	if (!items) return;
-	SPGroup *group = sp_item_list_common_parent_group(items);
-	if (!group) return;
-	SPRepr *grepr = SP_OBJECT_REPR(group);
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!desktop) return;
 
-	/* Start from beginning */
-	bool skip = true;
-	SPObject *newref = NULL;
-	SPObject *oldref = NULL;
-	SPObject *child = group->children;
-	while (child != NULL) {
-		if (SP_IS_ITEM (child)) {
-			/* We are item */
-			skip = false;
-			/* fixme: Remove from list (Lauris) */
-			if (g_slist_find ((GSList *) items, child)) {
-				/* Need lower */
-				if (newref != oldref) {
-					if (sp_repr_change_order (grepr, SP_OBJECT_REPR (child), (newref) ? SP_OBJECT_REPR (newref) : NULL)) {
-						/* Order change succeeded */
-						/* Next available position */
-						newref = child;
-						/* Oldref is just what it was */
-						/* Continue from oldref */
-						child = oldref->next;
-					} else {
-						/* Order change did not succeed */
-						newref = oldref;
-						oldref = child;
-						child = child->next;
-					}
-				} else {
-					/* Item position will not change */
-					/* Other items will lower only following positions */
-					newref = child;
-					oldref = child;
-					child = child->next;
-				}
-			} else {
-				/* We were item, but not in list */
-				newref = oldref;
-				oldref = child;
-				child = child->next;
-			}
-		} else {
-			/* We want to refind newref only to skip initial non-items */
-			if (skip) newref = child;
-			oldref = child;
-			child = child->next;
-		}
+	GSList const *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+	if (!items) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select some objects to lower."));
+		return;
 	}
 
-	sp_document_done (SP_DT_DOCUMENT (dt));
+	SPGroup const *group = sp_item_list_common_parent_group(items);
+	if (!group) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("You cannot raise/lower objects from different groups or layers."));
+		return;
+	}
+
+	SPRepr *grepr = SP_OBJECT_REPR(group);
+
+	// find out the common bbox of the selected items
+	NR::Rect selected = enclose_items (items);
+
+	/* construct direct-ordered list of selected children */
+	GSList *rev = g_slist_copy((GSList *) items);
+	rev = g_slist_sort (rev, (GCompareFunc) sp_item_repr_compare_position);
+	rev = g_slist_reverse (rev);
+
+	// for all objects in the selection (starting from top)
+	while (rev) {
+		SPObject *child = SP_OBJECT (rev->data);
+		// for each selected object, find the prev sibling
+		for (SPObject *newref = prev_sibling (child); newref; newref = prev_sibling (newref)) {
+			// if the sibling is an item AND overlaps our selection,
+			if (SP_IS_ITEM (newref) && selected.intersects(sp_item_bbox_desktop(SP_ITEM(newref)))) {
+				// AND if it's not one of our selected objects,
+				if (!g_slist_find ((GSList *) items, newref)) {
+					// move the selected object before that sibling
+					SPObject *put_after = prev_sibling (newref);
+					if (put_after)
+						sp_repr_change_order (grepr, SP_OBJECT_REPR (child), SP_OBJECT_REPR (put_after));
+					else 
+						sp_repr_set_position_absolute (SP_OBJECT_REPR (child), 0);
+				}
+				break;
+			}
+		}
+		rev = g_slist_remove (rev, child);
+	}
+
+	sp_document_done (SP_DT_DOCUMENT (desktop));
+
 }
 
 void sp_selection_lower_to_bottom()
@@ -450,10 +487,14 @@ void sp_selection_lower_to_bottom()
 	SPDocument *document = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
 	SPSelection *selection = SP_DT_SELECTION(SP_ACTIVE_DESKTOP);
 
-	if (sp_selection_is_empty (selection)) return;
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select some objects to lower to bottom."));
+		return;
+	}
 
 	GSList *rl;
-	rl = g_slist_copy((GSList *) sp_selection_repr_list(selection));
+	rl = g_slist_copy((GSList *) sp_selection_repr_list (selection));
+	rl = g_slist_sort (rl, (GCompareFunc) sp_repr_compare_position);
 	rl = g_slist_reverse(rl);
 
 	for (GSList *l = rl; l != NULL; l = l->next) {
