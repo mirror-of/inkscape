@@ -237,8 +237,8 @@ Matrix rotate (const NR::Coord theta)
 	Matrix m;
 	NR::Coord sn = sin (theta);
 	NR::Coord cs = cos (theta);
-	m.c[0] = cs; m.c[2] = -sn; // this may be backwards (anglewise)
-	m.c[1] = sn; m.c[3] = cs;  // from standard maths def.
+	m.c[0] = cs; m.c[2] = -sn;
+	m.c[1] = sn; m.c[3] = cs;
 	// translation
 	m.c[4] = 0.0;
 	m.c[5] = 0.0;
