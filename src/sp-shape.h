@@ -33,7 +33,9 @@ struct SPShape {
 
 	SPCurve *curve;
 
-        SPObject *marker[SP_MARKER_LOC_QTY];
+      SPObject *marker[SP_MARKER_LOC_QTY];
+      gulong release_connect [SP_MARKER_LOC_QTY];
+      gulong modified_connect [SP_MARKER_LOC_QTY];
 };
 
 struct SPShapeClass {
