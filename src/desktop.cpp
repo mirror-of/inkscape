@@ -442,11 +442,7 @@ sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
 static void
 sp_dt_update_snap_distances (SPDesktop *desktop)
 {
-    static SPUnit const *px = NULL;
-
-    if (!px) {
-	px = &sp_unit_get_by_id(SP_UNIT_PX);
-    }
+    SPUnit const &px = sp_unit_get_by_id(SP_UNIT_PX);
 
     SPNamedView &nv = *desktop->namedview;
 
@@ -455,12 +451,12 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
     NR::Coord const grid_tolerance_val = ( nv.grid_snapper.getEnabled() ? nv.gridtolerance : 0.0 );
     nv.grid_snapper.setDistance(sp_convert_distance_full(grid_tolerance_val,
                                                          *nv.gridtoleranceunit,
-                                                         *px,
+                                                         px,
                                                          px2doc));
     NR::Coord const guide_tolerance_val = ( nv.guide_snapper.getEnabled() ? nv.guidetolerance : 0.0 );
     nv.guide_snapper.setDistance(sp_convert_distance_full(guide_tolerance_val,
                                                           *nv.guidetoleranceunit,
-                                                          *px,
+                                                          px,
                                                           px2doc));
 }
 
