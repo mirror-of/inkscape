@@ -150,26 +150,89 @@ sp_dropper_context_finish (SPEventContext *ec)
 	}
 }
 
+
+/**
+ * Copies the current context color to the clipboard.
+ */
 void
 sp_dropper_context_copy (SPEventContext *ec)
 {
-	SPDropperContext *dc = SP_DROPPER_CONTEXT (ec);
+    SPDropperContext *dc = SP_DROPPER_CONTEXT (ec);
 
-	guint32 c32 = SP_RGBA32_F_COMPOSE (dc->R, dc->G, dc->B, dc->alpha);
+    guint32 c32 = SP_RGBA32_F_COMPOSE (dc->R, dc->G, dc->B, dc->alpha);
 
-	gchar c[64];
+    gchar c[64];
 
-	int pick = prefs_get_int_attribute ("tools.dropper", "pick", SP_DROPPER_PICK_VISIBLE);
+    int pick = prefs_get_int_attribute ("tools.dropper", "pick",
+                                        SP_DROPPER_PICK_VISIBLE);
 
-	g_snprintf (c, 64, "%06x%02x", c32 >> 8, pick == SP_DROPPER_PICK_ACTUAL? SP_COLOR_F_TO_U(dc->alpha) : 255);
+    g_snprintf (c, 64, "%06x%02x", c32 >> 8, 
+        pick == SP_DROPPER_PICK_ACTUAL? SP_COLOR_F_TO_U(dc->alpha) : 255);
 
-	Glib::ustring text;
-	text += c;
-	if (!text.empty()) {
-		Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
-		refClipboard->set_text(text);
-	}
+    Glib::ustring text;
+    text += c;
+    if (!text.empty()) 
+    {
+        Glib::RefPtr<Gtk::Clipboard> refClipboard = 
+            Gtk::Clipboard::get();
+        refClipboard->set_text(text);
+    }
 }
+
+/**
+ * Makes a copy of the current desktop color to the clipboard.
+ */
+void
+sp_dropper_c32_color_copy (guint32 c32)
+{
+    gchar c[64];
+
+    int pick = prefs_get_int_attribute ("tools.dropper", "pick", 
+                                        SP_DROPPER_PICK_VISIBLE);
+
+    g_snprintf (c, 64, "%06x%02x", c32 >> 8, 
+        pick == SP_DROPPER_PICK_ACTUAL? SP_RGBA32_A_U(c32) : 255);
+
+    Glib::ustring text;
+    text += c;
+    if (!text.empty()) {
+            Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+            refClipboard->set_text(text);
+    }
+}
+
+
+/**
+ * Makes a copy of the current color as a hex value. This should always compute
+ * the current color without alpha, but the on-screen representation.
+ */
+void
+sp_dropper_c32_color_copy_hex (guint32 c32)
+{
+    gchar c[48];
+
+    
+    int pick = prefs_get_int_attribute ("tools.dropper", "pick", 
+                                    SP_DROPPER_PICK_VISIBLE);
+
+    /*
+    
+    if ( pick == SP_DROPPER_PICK_ACTUAL )
+        ; // process c32 so that it computes against page
+    // else just can cut off that last 2 hex digits....
+    
+    */
+    
+    g_snprintf (c, 48, "%06x", c32 >> 8);
+
+    Glib::ustring text;
+    text += c;
+    if (!text.empty()) {
+            Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+            refClipboard->set_text(text);
+    }
+}
+
 
 static gint
 sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
@@ -321,16 +384,25 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
-		if (event->button.button == 1) {
-			sp_canvas_item_hide (dc->area);
-			dc->dragging = FALSE;
+		if (event->button.button == 1) 
+                {
+                    sp_canvas_item_hide (dc->area);
+                    dc->dragging = FALSE;
 
-			// do the actual color setting
-			sp_desktop_set_color (ec->desktop, ColorRGBA(dc->R, dc->G, dc->B, dc->alpha), false, !(event->button.state & GDK_SHIFT_MASK));
-			if (!(ec->desktop->selection->isEmpty()))
-				sp_document_done (SP_DT_DOCUMENT(ec->desktop));
+                    // do the actual color setting
+                    sp_desktop_set_color (ec->desktop, 
+                                          ColorRGBA(dc->R, dc->G, dc->B, 
+                                                    dc->alpha), 
+                                          false, 
+                                       !(event->button.state & GDK_SHIFT_MASK));
+                    
+                    // REJON: set aux. toolbar input to hex color!
+                    
+                    
+                    if (!(ec->desktop->selection->isEmpty()))
+                            sp_document_done (SP_DT_DOCUMENT(ec->desktop));
 
-			ret = TRUE;
+                    ret = TRUE;
 		}
 		break;
 	case GDK_KEY_PRESS:

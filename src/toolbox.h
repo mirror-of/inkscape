@@ -41,6 +41,13 @@ void aux_toolbox_space(GtkWidget *tb, gint space);
 // utility
 void sp_toolbox_add_label(GtkWidget *tbl, gchar const *title, bool wide = true);
 
+
+static void sp_dropper_copy( GtkWidget *widget, GtkObject *obj);
+
+static void sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj);
+
+bool sp_style_changed (const SPCSSAttr *css, gpointer data);
+
 #endif /* !SEEN_TOOLBOX_H */
 
 /*

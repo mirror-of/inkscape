@@ -63,6 +63,7 @@
 #include <glibmm/i18n.h>
 #include "helper/unit-menu.h"
 #include "helper/units.h"
+#include "desktop-style.h"
 
 #include "dialogs/object-properties.h"
 #include "dialogs/transformation.h"
@@ -74,6 +75,7 @@
 #include "select-toolbar.h"
 #include "gradient-toolbar.h"
 
+#include "dropper-context.h"
 #include "star-context.h"
 #include "spiral-context.h"
 #include "gradient-context.h"
@@ -100,6 +102,7 @@ static GtkWidget *sp_arc_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_rect_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_spiral_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_calligraphy_toolbox_new(SPDesktop *desktop);
+static GtkWidget *sp_dropper_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
 
 static struct {
@@ -141,7 +144,7 @@ static struct {
     { "SPDynaDrawContext", "calligraphy_toolbox", sp_calligraphy_toolbox_new },
     { "SPTextContext", "text_toolbox", NULL },
     { "SPGradientContext", "gradient_toolbox", sp_gradient_toolbox_new },
-    { "SPDropperContext", "dropper_toolbox", NULL },
+    { "SPDropperContext", "dropper_toolbox", sp_dropper_toolbox_new },
     { NULL, NULL, NULL }
 };
 
@@ -153,6 +156,12 @@ static void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_aux_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
+
+
+/* Global text entry widgets necessary for update */
+GtkWidget *dropper_rgb_entry, 
+          *dropper_opacity_entry ;
+
 
 static void delete_connection(GObject *obj, sigc::connection *connection) {
     connection->disconnect();
@@ -1307,6 +1316,8 @@ sp_rtb_ry_value_changed(GtkAdjustment *adj, SPWidget *tbl)
     sp_rtb_rxry_value_changed(adj, tbl, "ry", sp_rect_set_visible_ry);
 }
 
+
+
 static void
 sp_rtb_defaults( GtkWidget *widget, GtkObject *obj)
 {
@@ -2225,6 +2236,238 @@ sp_arc_toolbox_new(SPDesktop *desktop)
 
     return tbl;
 }
+
+
+
+
+// toggle button callbacks and updaters
+
+static void toggle_dropper_color_pick (GtkWidget *button, gpointer data) {
+    prefs_set_int_attribute ("tools.dropper", "pick", 
+        // 0 and 1 are backwards here because of pref
+        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 0 : 1);
+}
+
+
+
+/**
+ * Dropper auxiliary toolbar construction and setup.
+ *
+ * TODO: Would like to add swatch of current color.
+ * TODO: Add queue of last 5 or so colors selected with new swatches so that
+ *       can drag and drop places. Will provide a nice mixing palette.
+ */
+static GtkWidget *
+sp_dropper_toolbox_new(SPDesktop *desktop)
+{
+    GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
+
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
+
+    GtkTooltips *tt = gtk_tooltips_new();
+
+    
+    gtk_box_pack_start(GTK_BOX(tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, 
+                       AUX_BETWEEN_BUTTON_GROUPS);
+    // sp_toolbox_add_label(tbl, _("<b>New:</b>"));
+
+
+    
+    /* RGB Input Field */
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        GtkWidget *dropper_rgba_label = gtk_label_new ("Color:");
+        gtk_widget_show (dropper_rgba_label);
+        gtk_container_add(GTK_CONTAINER(hb), dropper_rgba_label);
+        
+      	dropper_rgb_entry = gtk_entry_new ();
+	sp_dialog_defocus_on_enter (dropper_rgb_entry);
+	gtk_entry_set_max_length (GTK_ENTRY (dropper_rgb_entry), 7);
+	gtk_entry_set_width_chars (GTK_ENTRY (dropper_rgb_entry), 7);
+        gtk_tooltips_set_tip(tt, dropper_rgb_entry, 
+                         _("Hexidecimal representation of last selected "
+                           "dropper pick"), 
+                         NULL);
+	gtk_widget_show (dropper_rgb_entry);
+        gtk_container_add(GTK_CONTAINER(hb), dropper_rgb_entry);
+        
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
+                           AUX_BETWEEN_BUTTON_GROUPS);
+    }
+    
+    /* Opacity Input Field */
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        GtkWidget *dropper_opacity_label = gtk_label_new ( _("Opacity:") );
+        gtk_widget_show (dropper_opacity_label);
+        gtk_container_add(GTK_CONTAINER(hb), dropper_opacity_label);
+        
+      	dropper_opacity_entry = gtk_entry_new ();
+	sp_dialog_defocus_on_enter (dropper_opacity_entry);
+	gtk_entry_set_max_length (GTK_ENTRY (dropper_opacity_entry), 11);
+	gtk_entry_set_width_chars (GTK_ENTRY (dropper_opacity_entry), 11);
+        gtk_tooltips_set_tip(tt, dropper_opacity_entry, 
+                         _("Opacity of last selected dropper pick"), 
+                         NULL);
+	gtk_widget_show (dropper_opacity_entry);
+        gtk_container_add(GTK_CONTAINER(hb), dropper_opacity_entry);
+        
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
+                           AUX_BETWEEN_BUTTON_GROUPS);
+    }
+    
+    
+    /* Copy to Clipboard */
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        GtkWidget *b = gtk_button_new_with_label(_("Copy as RGBA"));
+        gtk_tooltips_set_tip(tt, b, _("Copy last saved color as RGBA to "
+                                      "clipboard"), 
+                             NULL);
+        gtk_widget_show(b);
+        gtk_container_add(GTK_CONTAINER(hb), b);
+        gtk_signal_connect(GTK_OBJECT(b), "clicked", 
+            GTK_SIGNAL_FUNC(sp_dropper_copy), tbl);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
+                           AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
+
+    /* Copy to Clipboard as HEX */
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        GtkWidget *b = gtk_button_new_with_label(_("Copy as HEX"));
+        gtk_tooltips_set_tip(tt, b, _("Copy last saved color to clipboard as a "                                         
+                                      "Hexidecimal representation"), NULL);
+        gtk_widget_show(b);
+        gtk_container_add(GTK_CONTAINER(hb), b);
+        gtk_signal_connect(GTK_OBJECT(b), "clicked", 
+            GTK_SIGNAL_FUNC(sp_dropper_copy_as_hex), tbl);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
+                           AUX_BETWEEN_BUTTON_GROUPS);
+    }
+    
+    aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+    
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        
+        GtkWidget *button = 
+            sp_button_new_from_data( GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                     SP_BUTTON_TYPE_TOGGLE,
+                                     NULL,
+                                     "pick_color",
+                                     _("Pick visible color (no alpha)"),
+                                     tt);
+
+        gtk_widget_show(button);
+        gtk_container_add (GTK_CONTAINER (hb), button);
+
+        g_signal_connect_after (G_OBJECT (button), "clicked", 
+                                G_CALLBACK (toggle_dropper_color_pick), NULL);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
+                                      !prefs_get_int_attribute ("tools.dropper", 
+                                                               "pick", 0));
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
+                   AUX_BETWEEN_BUTTON_GROUPS);
+    }
+    
+    
+    gtk_widget_show_all(tbl);
+    sp_set_font_size(tbl, AUX_FONT_SIZE);
+
+    sigc::connection *connection = new sigc::connection(
+        desktop->connectSetStyle(
+            sigc::bind(sigc::ptr_fun(sp_style_changed), 
+                       desktop)) );
+    
+    g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), 
+                     connection);
+    
+    return tbl;
+}
+
+
+/**
+ * Copy the current saved desktop color to the clipboard as full hex + alpha
+ * color representation. This is useful for passing values between various 
+ * input boxes, or directly to xml.
+ */
+static void
+sp_dropper_copy( GtkWidget *widget, GtkObject *obj)
+{
+    GtkWidget *tbl = GTK_WIDGET(obj);
+    
+    SPDesktop *desktop = 
+        (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
+
+   
+    sp_dropper_c32_color_copy( sp_desktop_get_color(desktop, true) );
+}
+
+
+/**
+ * Copies currently saved desktop color to the clipboard as a hex value. This 
+ * is useful for editing webpages and needing a value quickly for web
+ * colors.
+ * 
+ * TODO: When the toggle of the dropper is set to not mix color against 
+ *       page background, this still just gets the color of the page and 
+ *       doesn't get the actual mixed against background which is needed 
+ *       for the hex value ppl. want for web pages, etc.
+ */
+
+static void
+sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj)
+{
+    GtkWidget *tbl = GTK_WIDGET(obj);
+    
+    SPDesktop *desktop = 
+        (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
+    
+    sp_dropper_c32_color_copy_hex( sp_desktop_get_color(desktop, true) );
+}
+
+
+/**
+ * Sets the input boxes with the changed color and opacity. This is used as a 
+ * callback for style changing.
+ */
+bool
+sp_style_changed (const SPCSSAttr *css, gpointer data)
+{
+    // GrDrag *drag = (GrDrag *) data;
+    
+    
+    // set fill of text entry box
+    if (css->attribute("fill"))
+        gtk_entry_set_text((GtkEntry *)dropper_rgb_entry, 
+            css->attribute("fill")); 
+
+    // set opacity of text entry box
+    if (css->attribute("fill-opacity"))
+        gtk_entry_set_text((GtkEntry *)dropper_opacity_entry, 
+            css->attribute("fill-opacity")); 
+    
+    // set fill of text entry box
+    if (css->attribute("stroke"))
+        gtk_entry_set_text((GtkEntry *)dropper_rgb_entry, 
+            css->attribute("stroke")); 
+
+    // set opacity of text entry box
+    if (css->attribute("stroke-opacity"))
+        gtk_entry_set_text((GtkEntry *)dropper_opacity_entry, 
+            css->attribute("stroke-opacity"));
+
+    return false;
+
+}
+
+
+
+
+
 
 /*
   Local Variables:

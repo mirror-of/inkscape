@@ -1,3 +1,11 @@
+2005-03-21  Jon Phillips <jon@rejon.org>
+
+	* share/icons/icons.svg src/dropper-context.cpp
+	  src/dropper-context.h src/toolbox.cpp src/toolbox.h
+	  src/dialogs/display-settings.cpp: Added controls for eye dropper
+	  so that I could get color values. Removed option from application
+	  preferences.
+
 2005-03-21  MenTaLguY  <mental@rydia.net>
 
     * src/util/Makefile_insert, src/util/glib-list.h,

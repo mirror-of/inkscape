@@ -155,14 +155,6 @@ options_scale_origin_toggled (GtkToggleButton *button)
 	}
 }
 
-static void
-options_dropper_pick_toggled (GtkToggleButton *button)
-{
-	if (gtk_toggle_button_get_active (button)) {
-		guint const val = get_int_value_data(button);
-		prefs_set_int_attribute ("tools.dropper", "pick", val);
-	}
-}
 
 /**
 * Small helper function to make options_selector a little less
@@ -811,37 +803,11 @@ new_objects_style (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
 static GtkWidget *
 options_dropper ()
 {
-    GtkWidget *vb, *f, *fb, *b;
+    GtkWidget *vb, *b;
 
     GtkTooltips *tt = gtk_tooltips_new();
 
     vb = gtk_vbox_new (FALSE, VB_MARGIN);
-
-    {
-        f = gtk_frame_new (_("Picking colors:"));
-        gtk_widget_show (f);
-        gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-        fb = gtk_vbox_new (FALSE, 0);
-        gtk_widget_show (fb);
-        gtk_container_add (GTK_CONTAINER (f), fb);
-
-        guint pick = prefs_get_int_attribute ("tools.dropper", "pick", 0);
-
-        b = sp_select_context_add_radio (
-            NULL, fb, tt, _("Pick visible color (no alpha)"), _("Pick the visible color under cursor, taking into account the page background and disregarding the transparency of objects"), 
-            NULL, SP_DROPPER_PICK_VISIBLE, true,
-            (pick == SP_DROPPER_PICK_VISIBLE),
-            options_dropper_pick_toggled
-            );
-
-        b = sp_select_context_add_radio (
-            b, fb, tt, _("Pick objects' color (including alpha)"), _("Pick the actual color of object(s) under cursor, including their accumulated transparency"), 
-            NULL, SP_DROPPER_PICK_ACTUAL, true,
-            (pick == SP_DROPPER_PICK_ACTUAL),
-            options_dropper_pick_toggled
-            );
-    }
 
     selcue_checkbox (vb, tt, "tools.dropper");
     gradientdrag_checkbox (vb, tt, "tools.dropper");

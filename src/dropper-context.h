@@ -53,4 +53,8 @@ GType sp_dropper_context_get_type (void);
 
 void sp_dropper_context_copy (SPEventContext *ec);
 
+void sp_dropper_c32_color_copy (guint32 c32);
+
+void sp_dropper_c32_color_copy_hex (guint32 c32);
+
 #endif
