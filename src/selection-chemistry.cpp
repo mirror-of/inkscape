@@ -1041,7 +1041,7 @@ sp_selection_scale(SPSelection *selection, gdouble grow)
     double const max_len = bbox.maxExtent();
 
     // you can't scale "do nizhe pola" (below zero)
-    if ( max_len + 2 * grow <= 0 ) {
+    if ( max_len + grow <= 1e-3 ) {
         return;
     }
 
