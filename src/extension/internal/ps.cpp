@@ -116,8 +116,8 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	tt = gtk_tooltips_new ();
 	g_object_ref ((GObject *) tt);
 	gtk_object_sink ((GtkObject *) tt);
-  
-     dlg = gtk_dialog_new_with_buttons (_("Print Destination"), 
+
+     dlg = gtk_dialog_new_with_buttons (_("Print Destination"),
 						 (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"),
                                        (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_DESTROY_WITH_PARENT),
                                        GTK_STOCK_CANCEL,
@@ -202,7 +202,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	gtk_entry_set_activates_default (GTK_ENTRY(e), TRUE);
 
 	gtk_widget_show_all (vbox);
-	
+
 	response = gtk_dialog_run (GTK_DIALOG (dlg));
 
 	g_object_unref ((GObject *) tt);
@@ -307,7 +307,7 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 #if !defined(_WIN32) && !defined(__WIN32__)
 		(void) signal(SIGPIPE, SIG_IGN);
 #endif
-	}	
+	}
 
 	res = fprintf (_stream, "%%!PS-Adobe-2.0\n");
 	/* flush this to test output stream as early as possible */
@@ -386,22 +386,22 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 						<< d.x1 << " "
 						<< d.y1 << "\n";
 		}
-		
+
 		os << "%%EndComments\n";
 		// This will become problematic if we print
 		// multi paged documents:
 		os << "%%Page: 1 1\n";
-		
+
 		if (pageLandscape) {
 			os << 90 << " rotate\n";
 			if (_bitmap) {
 				os << "0 " << (int) -ceil (_height) << " translate\n";
 			}
-		} else 
+		} else
 			if (!_bitmap) {
 				os << "0 " << (int) ceil (_height) << " translate\n";
 			}
-		
+
 		if (!_bitmap) {
 			os << "0.8 -0.8 scale\n";
 		}
@@ -666,18 +666,18 @@ PrintPS::PSFontName (const SPStyle *style)
 		tf->PSName(name_buf, sizeof(name_buf));
 		n = name_buf;
 		tf->Unref();
-	} else { 
+	} else {
 		// this system does not have this font, so just use the name from SVG in the hope that PS interpreter will make sense of it
 		bool i = (style->font_style.value == SP_CSS_FONT_STYLE_ITALIC);
 		bool o = (style->font_style.value == SP_CSS_FONT_STYLE_OBLIQUE);
-		bool b = (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLD) || 
+		bool b = (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLD) ||
 			(style->font_weight.value >= SP_CSS_FONT_WEIGHT_500 && style->font_weight.value <= SP_CSS_FONT_WEIGHT_900);
 
-		n = g_strdup_printf ("%s%s%s%s", 
+		n = g_strdup_printf ("%s%s%s%s",
 								 g_strdelimit (style->text->font_family.value, " ", '-'),
-								 (b || i || o) ? "-" : "", 
-								 (b) ? "Bold" : "", 
-								 (i) ? "Italic" : ((o) ? "Oblique" : "") ); 
+								 (b || i || o) ? "-" : "",
+								 (b) ? "Bold" : "",
+								 (i) ? "Italic" : ((o) ? "Oblique" : "") );
 	}
 
 	return g_strdup (n);
@@ -732,7 +732,7 @@ PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
 
   return 0;
 }
-	
+
 
 
 /* PostScript helpers */
@@ -1059,7 +1059,7 @@ void
 PrintPS::init (void)
 {
 	Inkscape::Extension::Extension * ext;
-	
+
 	/* SVG in */
     ext = Inkscape::Extension::build_from_mem(
 		"<inkscape-extension>\n"
