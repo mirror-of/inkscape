@@ -161,7 +161,7 @@ guint32 JarFile::get_crc(guint8 *bytes, guint16 flags)
 	crc = UNPACK_UB4(bytes, LOC_CRC);
 	
 #ifdef DEBUG
-	std::printf("CRC is %x\n", crc);
+	std::printf("CRC from file is %x\n", crc);
 #endif
     }
     
@@ -308,34 +308,11 @@ guint8 *JarFile::get_uncompressed_file(guint32 compressed_size, guint32 crc,
 #endif
     }
     lseek(fd, eflen, SEEK_CUR);
-	
-    
-    /* if there is a data descriptor left, compare the CRC */
-    if(flags & 0x0008) {
-	g_free(bytes);
-	bytes = (guint8 *)g_malloc(sizeof(guint8) * 16);
-	if (!read(bytes, 16)) {
-	    g_free(bytes);
-	    return NULL;
-	}
-	
-	guint32 signature = UNPACK_UB4(bytes, 0);
-	
-	if(signature != 0x08074b50) {
-	    fprintf(stderr, "missing data descriptor!\n");
-	    exit(1);
-	}
-	
-	crc2 = UNPACK_UB4(bytes, 4);
-	
-    }
     g_free(bytes);
-    bytes = gba->data;
-    g_byte_array_free(gba, FALSE);//FALSE argument does not free actual data
 
-    if(crc2 != crc) {
-	std::fprintf(stderr, "Error! CRCs do not match! Got %x, expected %x\n",
-		     crc2, crc);
+    if (!check_crc(crc, crc2, flags)) {
+        bytes = gba->data;
+        g_byte_array_free(gba, FALSE);//FALSE argument does not free actual data
 	return NULL;
     }
     
@@ -363,11 +340,11 @@ guint8 *JarFile::get_compressed_file(guint32 compressed_size,
     guint8 out_buffer[RDSZ];
     int nbytes;
     unsigned int leftover_in = compressed_size;
-    guint32 crc2 = 0;
     GByteArray *gba = g_byte_array_new();
     
     _zs.avail_in = 0;
     guint32 crc = crc32(crc, Z_NULL, 0);
+    
     do {
 		
 	if (!_zs.avail_in) {
@@ -409,37 +386,41 @@ guint8 *JarFile::get_compressed_file(guint32 compressed_size,
 #endif
     
     guint8 *ret_bytes;
-    if (gba->len > 0)
+    if (check_crc(oldcrc, crc, flags) && gba->len > 0)
 	ret_bytes = gba->data;
     else 
 	ret_bytes = NULL;
     g_byte_array_free(gba, FALSE);
 
-    /* if there is a data descriptor left, compare the CRC */
+    inflateReset(&_zs); 
+    return ret_bytes;
+}
+
+bool JarFile::check_crc(guint32 oldcrc, guint32 crc, guint16 flags)
+{
+    //fixme: does not work yet
+	
     if(flags & 0x0008) {
 	guint8 *bytes = (guint8 *)g_malloc(sizeof(guint8) * 16);
 	if (!read(bytes, 16)) {
 	    g_free(bytes);
-	    return NULL;
+	    return false;
 	}
 	
 	guint32 signature = UNPACK_UB4(bytes, 0);
 	g_free(bytes);
 	if(signature != 0x08074b50) {
 	    fprintf(stderr, "missing data descriptor!\n");
-	    //exit(1);
 	}
 	
-	crc2 = UNPACK_UB4(bytes, 4);
+	crc = UNPACK_UB4(bytes, 4);
 	
     }
-
-    if(crc2 != crc) {
+    if (oldcrc != crc) {
 	std::fprintf(stderr, "Error! CRCs do not match! Got %x, expected %x\n",
 		     oldcrc, crc);
     }
-    inflateReset(&_zs); 
-    return ret_bytes;
+    return true;
 }
 
 JarFile::JarFile(JarFile const& rhs)
