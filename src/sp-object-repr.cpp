@@ -122,6 +122,7 @@ sp_object_type_lookup (const gchar * name)
 			{ "star", SP_TYPE_STAR },
 			{ "stop", SP_TYPE_STOP },
 			{ "svg", SP_TYPE_ROOT },
+			{ "switch", SP_TYPE_GROUP },
 			{ "symbol", SP_TYPE_SYMBOL },
 			{ "text", SP_TYPE_TEXT },
 			{ "textPath", SP_TYPE_TEXTPATH },

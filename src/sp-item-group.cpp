@@ -465,7 +465,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
 	SPRepr *prepr = SP_OBJECT_REPR (pitem);
 
-	g_return_if_fail (!strcmp (sp_repr_name (grepr), "g") || !strcmp (sp_repr_name (grepr), "a"));
+	g_return_if_fail (!strcmp (sp_repr_name (grepr), "g") || !strcmp (sp_repr_name (grepr), "a") || !strcmp (sp_repr_name (grepr), "switch"));
 
 	/* Step 1 - generate lists of children objects */
 	GSList *items = NULL;

@@ -337,7 +337,7 @@ void sp_selection_ungroup()
         SPItem *group = (SPItem *) items->data;
 
         /* We do not allow ungrouping <svg> etc. (lauris) */
-        if (strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "g")) {
+        if (strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "g") && strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "switch")) {
             // keep the non-group item in the new selection
             new_select = g_slist_prepend(new_select, group);
             continue;
