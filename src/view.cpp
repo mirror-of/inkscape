@@ -15,7 +15,6 @@
 #include <time.h>
 #include <gtk/gtk.h>
 #include "macros.h"
-#include "helper/action.h"
 #include "helper/sp-marshal.h"
 #include "document.h"
 #include "view.h"

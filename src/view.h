@@ -22,7 +22,6 @@
 #include <sigc++/sigc++.h>
 #include <gtk/gtkeventbox.h>
 
-#include "helper/action.h"
 #include "forward.h"
 #include "message.h"
 #include "message-stack.h"
