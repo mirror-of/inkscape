@@ -827,7 +827,7 @@ static const SPVerbActionDef props[] = {
         N_("Save document under new name"), GTK_STOCK_SAVE_AS },
     {SP_VERB_FILE_PRINT, "FilePrint", N_("_Print..."), N_("Print document"),
         GTK_STOCK_PRINT },
-    {SP_VERB_FILE_VACUUM, "FileVacuum", N_("Vac_uum Defs"), N_("Remove unused stuff from the <defs> of the document"),
+    {SP_VERB_FILE_VACUUM, "FileVacuum", N_("Vac_uum Defs"), N_("Remove unused stuff from the &lt;defs&gt; of the document"),
      NULL },
     {SP_VERB_FILE_PRINT_DIRECT, "FilePrintDirect", N_("Print _Direct"),
         N_("Print directly to file or pipe"), NULL },
