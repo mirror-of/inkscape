@@ -221,7 +221,7 @@ void SPObject::deleteObject(bool propagate) {
 		_delete_signal.emit(this);
 	}
 	SPRepr *repr=SP_OBJECT_REPR(this);
-	if (sp_repr_parent(repr)) {
+	if (repr && sp_repr_parent(repr)) {
 		sp_repr_unparent(repr);
 	}
 }
