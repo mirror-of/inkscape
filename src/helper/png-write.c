@@ -150,9 +150,11 @@ sp_png_write_rgba (const gchar *filename, const guchar *px, int width, int heigh
 #endif
 
 	/* Optionally write comments into the image */
-	text_ptr[0].key = "Title";
-	text_ptr[0].text = "Made with Inkscape";
+	text_ptr[0].key = "Software";
+	text_ptr[0].text = "Inkscape";
 	text_ptr[0].compression = PNG_TEXT_COMPRESSION_NONE;
+
+#if 0
 	text_ptr[1].key = "Author";
 	text_ptr[1].text = "Unknown";
 	text_ptr[1].compression = PNG_TEXT_COMPRESSION_NONE;
@@ -160,6 +162,9 @@ sp_png_write_rgba (const gchar *filename, const guchar *px, int width, int heigh
 	text_ptr[2].text = "a picture";
 	text_ptr[2].compression = PNG_TEXT_COMPRESSION_zTXt;
 	png_set_text(png_ptr, info_ptr, text_ptr, 3);
+#endif
+
+	png_set_text(png_ptr, info_ptr, text_ptr, 1);
 
 	/* other optional chunks like cHRM, bKGD, tRNS, tIME, oFFs, pHYs, */
 	/* note that if sRGB is present the cHRM chunk must be ignored
