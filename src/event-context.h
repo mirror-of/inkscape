@@ -38,7 +38,7 @@ struct _SPEventContextClass {
 	GObjectClass parent_class;
 	void (* setup) (SPEventContext *ec);
 	void (* finish) (SPEventContext *ec);
-	void (* set) (SPEventContext *ec, const guchar *key, const guchar *val);
+	void (* set) (SPEventContext *ec, const gchar *key, const gchar *val);
 	void (* activate) (SPEventContext *ec);
 	void (* desactivate) (SPEventContext *ec);
 	gint (* root_handler) (SPEventContext *ec, GdkEvent *event);
@@ -54,7 +54,7 @@ struct _SPEventContextClass {
 
 SPEventContext *sp_event_context_new (GType type, SPDesktop *desktop, SPRepr *repr, unsigned int key);
 void sp_event_context_finish (SPEventContext *ec);
-void sp_event_context_read (SPEventContext *ec, const guchar *key);
+void sp_event_context_read (SPEventContext *ec, const gchar *key);
 void sp_event_context_activate (SPEventContext *ec);
 void sp_event_context_desactivate (SPEventContext *ec);
 

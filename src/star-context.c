@@ -41,7 +41,7 @@ static void sp_star_context_init (SPStarContext * star_context);
 static void sp_star_context_dispose (GObject *object);
 
 static void sp_star_context_setup (SPEventContext *ec);
-static void sp_star_context_set (SPEventContext *ec, const guchar *key, const guchar *val);
+static void sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
 static gint sp_star_context_root_handler (SPEventContext *ec, GdkEvent *event);
 static GtkWidget *sp_star_context_config_widget (SPEventContext *ec);
 
@@ -64,7 +64,7 @@ sp_star_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_star_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPStarContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPStarContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -78,7 +78,7 @@ sp_star_context_class_init (SPStarContextClass * klass)
 	object_class = (GObjectClass *) klass;
 	event_context_class = (SPEventContextClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_star_context_dispose;
 
@@ -133,7 +133,7 @@ sp_star_context_setup (SPEventContext *ec)
 }
 
 static void
-sp_star_context_set (SPEventContext *ec, const guchar *key, const guchar *val)
+sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 {
 	SPStarContext *sc;
 
@@ -315,7 +315,7 @@ sp_sc_make_sides_flat_clicked(GtkWidget *widget, GtkObject *obj)
 	gfloat proportion;
 	gdouble k;
 	
-	adj = gtk_object_get_data (obj, "magnitude");
+	adj = (GtkAdjustment*)gtk_object_get_data (obj, "magnitude");
 	n   = (gint)adj->value;
 	
 	
@@ -323,7 +323,7 @@ sp_sc_make_sides_flat_clicked(GtkWidget *widget, GtkObject *obj)
 	k = (1 - k) * (1 + k);
 	proportion = (gfloat)sqrt((double)k);
 
-	adj = gtk_object_get_data (obj, "proportion");
+	adj = (GtkAdjustment*)gtk_object_get_data (obj, "proportion");
 	gtk_adjustment_set_value (adj, proportion);
 }
 

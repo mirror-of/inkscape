@@ -59,7 +59,7 @@ void sp_view_set_document (SPView *view, SPDocument *doc);
 
 void sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
 void sp_view_set_position (SPView *view, gdouble x, gdouble y);
-void sp_view_set_status (SPView *view, const guchar *status, gboolean isdefault);
+void sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault);
 
 gboolean sp_view_shutdown (SPView *view);
 void sp_view_request_redraw (SPView *view);
