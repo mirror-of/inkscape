@@ -138,6 +138,8 @@ DB::input_internal (Extension * in_plug, gpointer data)
 			name = in_plug->get_name();
 		}
 
+		extension = imod->get_extension();
+
 		tooltip = imod->get_filetypetooltip();
 
 		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
@@ -164,6 +166,8 @@ DB::output_internal (Extension * in_plug, gpointer data)
 		if (name == NULL) {
 			name = in_plug->get_name();
 		}
+
+		extension = omod->get_extension();
 
 		tooltip = omod->get_filetypetooltip();
 
