@@ -42,6 +42,7 @@ xml_libspxml_a_SOURCES =	\
 	xml/sp-repr-event-vector.h \
 	xml/sp-repr-iterators.h	\
 	xml/sp-repr-listener.h \
+	xml/sp-css-attr.h \
 	xml/text-node.h \
 	xml/transaction-logger.h \
 	xml/xml-forward.h
