@@ -927,7 +927,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
  count(descendant::k:mouse)*$space-mouse + 
  count(descendant::k:note)*$space-note"/>
   <rect
-     style="fill:#{@color};fill-rule:evenodd;stroke:#000000;stroke-width:2.0"
+     style="fill:#{@color};fill-rule:evenodd;stroke:none"
      width="{$section-width}"
      height="{$h}"
      x="0"

@@ -7,7 +7,7 @@ can leave your ideas and requests there.</p>
 
 <column>
 
-*<section title="Tools" color="e1f0c5">
+*<section title="Tools" color="f5fdf6">
 
 <group>
 <keys><key><keyf f="F1"/></key><key>s</key>    <action>selector</action></keys>
@@ -27,7 +27,7 @@ can leave your ideas and requests there.</p>
 </group>
 </section>
 
-*<section title="File" color="e8e2ea">
+*<section title="File" color="eeeff3">
 
 <group>
 <keys><key><ctrl/>N</key>	 <action>create new document</action></keys>
@@ -42,7 +42,7 @@ can leave your ideas and requests there.</p>
 
 </section>
 
-*<section title="Window" color="ece3c3">
+*<section title="Window" color="e8fae1">
 
 <group>
 <keys><key><ctrl/>R</key> <action>toggle rulers</action></keys>
@@ -66,7 +66,7 @@ can leave your ideas and requests there.</p>
 
 </section>
 
-*<section title="Dialogs" color="dae7d0">
+*<section title="Dialogs" color="f0eae7">
 <group>
 <keys><key><shift/><ctrl/>F</key> <action>Fill and Stroke</action></keys>
 <keys><key><shift/><ctrl/>T</key> <action>Text and Font</action></keys>
@@ -98,7 +98,7 @@ can leave your ideas and requests there.</p>
 </group>
 </section>
 
-*<section title="Top panel" color="eae0dc">
+*<section title="Top panel" color="f8f3e9">
 
 <group>
 <note>The panel at the top of the document window provides different fields and controls for each tool.</note>
@@ -130,7 +130,7 @@ can leave your ideas and requests there.</p>
 
 <column>
 
-*<section title="Canvas" color="d6e0dd">
+*<section title="Canvas" color="e5f1e7">
 
 <group>
 <title>Zoom</title>
@@ -183,7 +183,7 @@ can leave your ideas and requests there.</p>
 </section>
 
 
-*<section title="Object" color="efeec7">
+*<section title="Object" color="f5f1cc">
 
 <group>
 <title>Undo/redo</title>
@@ -229,7 +229,7 @@ can leave your ideas and requests there.</p>
 
 </section>
 
-*<section title="Path" color="d8f7d9">
+*<section title="Path" color="f9f1d9">
 
 <group>
 <title>Convert to path</title>
@@ -257,10 +257,16 @@ can leave your ideas and requests there.</p>
 <title>Offsets</title>
 <keys><key><ctrl/>(</key>  <action>inset path (towards center)</action></keys>
 <keys><key><ctrl/>)</key>  <action>outset path (away from center)</action></keys>
-<note>These convert the object to path, if necessary, and produce regular path.</note>
+<note>The default offset distance is 2 pt.</note>
+<keys><key><alt/>(</key>  <action>inset path by 1px</action></keys>
+<keys><key><alt/>)</key>  <action>outset path by 1px</action></keys>
+<keys><key><shift/><alt/>(</key>  <action>inset path by 10px</action></keys>
+<keys><key><shift/><alt/>)</key>  <action>outset path by 10px</action></keys>
+<note>The actual distance for pixel offsets depends on zoom level. Zoom in for finer adjustment.</note>
+<note>All the (, ) commands convert the object to path, if necessary, and produce regular path.</note>
 <keys><key><ctrl/>J</key>  <action>create dynamic offset</action></keys>
 <keys><key><ctrl/><alt/>J</key>  <action>create linked offset</action></keys>
-<note>These produce an offset object, editable by the node tool, standalone or linked to the original.</note>
+<note>These commands produce an offset object, editable by the node tool, standalone or linked to the original.</note>
 </group>
 
 <group>
@@ -285,7 +291,7 @@ can leave your ideas and requests there.</p>
 
 <column>
 
-*<section title="Selector" color="efe2ca">
+*<section title="Selector" color="eee4dc">
 
 <group>
 <title>Keyboard select</title>
@@ -402,10 +408,46 @@ can leave your ideas and requests there.</p>
 
 </section>
 
+*<section title="Freehand tool" color="e9efc5">
+<group>
+<mouse><key><left-drag/></key> <action>draw a freehand line</action></mouse>
+<keys><key>a</key>    <action>toggle new/append</action></keys>
+<note>This switches between creating a new line or appending to the selected line (anchors are displayed for appending).</note>
+</group>
+</section>
+
+*<section title="Bezier tool" color="e7f5d7">
+
+<group>
+<title>Create nodes</title>
+<mouse><key><left-click/></key> <action>create a sharp node</action></mouse>
+<mouse><key><left-drag/></key> <action>create a bezier node with two handles</action></mouse>
+<mouse><key><shift/><left-drag/></key> <action>move only one handle</action></mouse>
+<note>This moves only one handle (instead of both) to create a cusp node.</note> 
+<mouse><key><ctrl/><left-drag/></key> <action>snap the handle to angle steps</action></mouse>
+<note>The default angle step is 15 degrees.</note>
+</group>
+
+<group>
+<title>Create segments</title>
+<keys><key><ctrl/></key> <action>snap the segment to angle steps</action></keys>
+<note>This snaps the new node's angle, relative to the previous node, to angle steps (default 15 degrees).</note>
+</group>
+
+<group>
+<title>Keyboard</title>
+<keys><key>a</key>    <action>toggle new/append</action></keys>
+<note>This switches between creating a new line or appending to the selected line (anchors are displayed for appending).</note>
+<keys><key><misc-wide f="Enter"/></key>  <action>finish current line</action></keys>
+<keys><key><misc f="Esc"/></key>  <action>cancel current line</action></keys>
+<keys><key><misc-wide f="Backspace"/></key> <action>erase last segment of current line</action></keys>
+</group>
+</section>
+
 </column>
 
 <column>
-*<section title="Node tool" color="e8ecc3">
+*<section title="Node tool" color="f9f1d9">
 
 <group>
 <title>Keyboard select</title>
@@ -513,7 +555,7 @@ can leave your ideas and requests there.</p>
 <title>Mouse select</title>
 <mouse><key><left-click/></key> <action>select an object</action></mouse> 
 <note>Clicking on an object selects it.</note> 
-<note>The nodes or controls of the newly selected object become editable (this saves you a switch to selector).</note>
+<note>The nodes or handles of the newly selected object become editable (this saves you a switch to selector).</note>
 <mouse><key><left-click/></key> <action>select a node</action></mouse> 
 <note>Clicking on a node selects it.</note>
 <mouse><key><shift/><left-click/></key> <action>toggle selection of a node</action></mouse>
@@ -533,7 +575,7 @@ can leave your ideas and requests there.</p>
 <mouse><key><left-drag/></key> <action>move selected nodes</action></mouse>
 <mouse><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></mouse>
 <mouse><key><ctrl/><alt/><left-drag/></key> <action>move along handles</action></mouse>
-<note>This restricts movement to the directions of the node's control handles, their continuations and perpendiculars (total 8 snaps).</note>
+<note>This restricts movement to the directions of the node's handles, their continuations and perpendiculars (total 8 snaps).</note>
 <mouse><key><left-drag/><misc-wide f="Space"/></key> <action>drop a copy</action></mouse>
 <note>When dragging nodes with mouse, each Space leaves a copy of the selected object.</note> 
 <note>You can press and hold Space while dragging for a nice "trail."</note>
@@ -550,16 +592,24 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>Editing ellipse</title>
-<mouse><key><ctrl/><left-drag/></key> <action>restrict the arc or segment to angle steps</action></mouse>
-<note>The default angle step is 15 degrees.</note>
+<title>Editing shapes</title>
+<note>Node tool can also drag the handles of shapes (rectangles, ellipses, stars, spirals). Click on a shape to select it.</note> 
+<note>See the corresponding shape tools for their editing shortcuts, all of which also work in node tool.</note>
 </group>
 
+
+<!--
 <group>
 <title>Editing rectangle</title>
 <mouse><key><ctrl/><left-drag/></key> <action>lock the rounded corner circular</action></mouse>
 <note>When rounding corners of a rectangle, dragging only one control will ensure the corner is always circular.</note>
 <note>You can drag both controls for an elliptic rounded corner, or drag one with Ctrl to make sure the other one is synchronized.</note>
+</group>
+
+<group>
+<title>Editing ellipse</title>
+<mouse><key><ctrl/><left-drag/></key> <action>restrict the arc or segment to angle steps</action></mouse>
+<note>The default angle step is 15 degrees.</note>
 </group>
 
 <group>
@@ -574,19 +624,17 @@ can leave your ideas and requests there.</p>
 <mouse><key><alt/><left-drag/></key> <action>lock spiral radius</action></mouse>
 <note>This has effect when dragging the outer control of the spiral.</note>
 </group>
+-->
 
 <group>
 <title>Cancel</title>
 <keys><key><misc f="Esc"/></key> <action>cancel rubberband or move</action></keys>
-<note>Press Esc while mouse button is still down to cancel rubberband selection, node move, handle move, or control move.</note>
+<note>Press Esc while mouse button is still down to cancel rubberband selection, node move, handle move, or handle move.</note>
 </group>
 
 </section>
 
-</column>
-<column>
-
-*<section title="Zoom tool" color="f3e3be">
+*<section title="Zoom tool" color="e7e9f3">
 <group>
 <mouse><key><left-click/></key> <action>zoom in</action></mouse>
 <mouse><key><shift/><left-click/></key> <action>zoom out</action></mouse>  
@@ -594,80 +642,87 @@ can leave your ideas and requests there.</p>
 </group>
 </section>
 
-*<section title="Rectangle tool" color="dae2f1">
+</column>
+<column>
+
+
+*<section title="Rectangle tool" color="ebf1fd">
 <group>
+<title>Drawing</title>
 <mouse><key><left-drag/></key> <action>draw a rectangle</action></mouse>
-<mouse><key><ctrl/><left-drag/></key>	<action>make square or integer-ratio rectangle</action></mouse>
+<mouse><key><ctrl/><left-drag/></key>	<action>make a square or integer-ratio rectangle</action></mouse>
 <note>This restricts rectangle so its height/width ratio is a whole number.</note>
 <mouse><key><shift/><left-drag/></key> <action>draw around the starting point</action></mouse>
 <note>This creates a rectangle symmetric around the starting point of the mouse drag.</note>
 </group>
+<group>
+<title>Editing</title>
+<mouse><key><left-click/></key> <action>click a rectangle to select</action></mouse>
+<mouse><key><left-drag/></key> <action>drag a handle to round corners</action></mouse>
+<mouse><key><ctrl/><left-drag/></key> <action>lock the rounded corner circular</action></mouse>
+<note>When rounding corners of a rectangle, dragging only one handle (with the other at the corner) keeps the corner circular.</note>
+<note>You can drag both handles for an elliptic rounded corner, or drag one with Ctrl to make sure the other one is synchronized.</note>
+<keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
+</group>
 </section>
 
-*<section title="Ellipse tool" color="f7d2cc">
+*<section title="Ellipse tool" color="ffece8">
 <group>
+<title>Drawing</title>
 <mouse><key><left-drag/></key> <action>draw an ellipse</action></mouse>
 <mouse><key><ctrl/><left-drag/></key>	<action>make circle or integer-ratio ellipse</action></mouse>
 <note>This restricts ellipse so its height/width ratio is a whole number.</note>
 <mouse><key><shift/><left-drag/></key> <action>draw around the starting point</action></mouse>
 <note>This creates an ellipse symmetric around the starting point of the mouse drag.</note>
 </group>
-</section>
-
-*<section title="Spiral tool" color="dedad4">
 <group>
-<mouse><key><left-drag/></key> <action>draw a spiral</action></mouse>
-<mouse><key><ctrl/><left-drag/></key>	<action>snap spiral to angle steps</action></mouse>
+<title>Editing</title>
+<mouse><key><left-click/></key> <action>click an ellipse to select</action></mouse>
+<mouse><key><left-drag/></key> <action>drag a handle to make arc or segment</action></mouse>
+<mouse><key><ctrl/><left-drag/></key> <action>restrict the arc or segment to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
+<keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 </group>
 </section>
 
-*<section title="Star tool" color="f2f1d0">
+*<section title="Star tool" color="f8f7d5">
 <group>
+<title>Drawing</title>
 <mouse><key><left-drag/></key> <action>draw a star</action></mouse>
 <mouse><key><ctrl/><left-drag/></key> <action>snap star to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
 </group>
-</section>
-
-*<section title="Freehand tool" color="efdbc5">
 <group>
-<mouse><key><left-drag/></key> <action>draw a freehand line</action></mouse>
-<keys><key>a</key>    <action>toggle new/append</action></keys>
-<note>This switches between creating a new line or appending to the selected line (anchors are displayed for appending).</note>
+<title>Editing</title>
+<mouse><key><left-click/></key> <action>click a star to select</action></mouse>
+<mouse><key><left-drag/></key> <action>drag a handle to vary the star shape</action></mouse>
+<mouse><key><ctrl/><left-drag/></key> <action>keep star rays radial (no skew)</action></mouse>
+<keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 </group>
 </section>
 
-*<section title="Bezier tool" color="f5ead7">
-
+*<section title="Spiral tool" color="ebe7e0">
 <group>
-<title>Create nodes</title>
-<mouse><key><left-click/></key> <action>create a sharp node</action></mouse>
-<mouse><key><left-drag/></key> <action>create a bezier node with two handles</action></mouse>
-<mouse><key><shift/><left-drag/></key> <action>move only one handle</action></mouse>
-<note>This moves only one handle (instead of both) to create a cusp node.</note> 
-<mouse><key><ctrl/><left-drag/></key> <action>snap the handle to angle steps</action></mouse>
+<title>Drawing</title>
+<mouse><key><left-drag/></key> <action>draw a spiral</action></mouse>
+<mouse><key><ctrl/><left-drag/></key>	<action>snap spiral to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
 </group>
-
 <group>
-<title>Create segments</title>
-<keys><key><ctrl/></key> <action>snap the segment to angle steps</action></keys>
-<note>This snaps the new node's angle, relative to the previous node, to angle steps (default 15 degrees).</note>
-</group>
-
-<group>
-<title>Keyboard</title>
-<keys><key>a</key>    <action>toggle new/append</action></keys>
-<note>This switches between creating a new line or appending to the selected line (anchors are displayed for appending).</note>
-<keys><key><misc-wide f="Enter"/></key>  <action>finish current line</action></keys>
-<keys><key><misc f="Esc"/></key>  <action>cancel current line</action></keys>
-<keys><key><misc-wide f="Backspace"/></key> <action>erase last segment of current line</action></keys>
+<title>Editing</title>
+<mouse><key><left-click/></key> <action>click a spiral to select</action></mouse>
+<mouse><key><left-drag/></key> <action>drag a handle to vary the spiral shape</action></mouse>
+<note>Dragging internal handle "unrolls" the spiral from inside. Dragging the external handle adjusts spiral size.</note>
+<mouse><key><ctrl/><left-drag/></key> <action>snap handles to angle steps</action></mouse>
+<note>The default angle step is 15 degrees.</note>
+<mouse><key><alt/><left-drag/></key> <action>lock spiral radius</action></mouse>
+<note>This has effect when dragging the outer handle of the spiral.</note>
+<keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 </group>
 </section>
 
 
-*<section title="Text tool" color="e5edf3">
+*<section title="Text tool" color="f5fdf6">
 
 <group>
 <mouse><key><left-click/></key> <action>create/activate a text object</action></mouse>
