@@ -1,3 +1,9 @@
+2003-12-28  Daniel Borgmann  <spark@mayl.de>
+
+	* src/main.cpp: Include gtkmm/main.h and gtkmmify the main loop
+	
+	* src/desktop.cpp: convert save confirmation dialog to Gtkmm
+
 2003-12-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/Makefile.am: Try not to require Gnu make.

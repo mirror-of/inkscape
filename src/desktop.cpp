@@ -23,6 +23,13 @@
 
 #include <gtk/gtk.h>
 
+#include <gtkmm/dialog.h>
+#include <gtkmm/label.h>
+#include <gtkmm/box.h>
+#include <gtkmm/image.h>
+#include <gtkmm/stock.h>
+#include <gtkmm/alignment.h>
+
 #include "macros.h"
 #include "helper/sp-intl.h"
 #include "helper/sp-marshal.h"
@@ -971,94 +978,74 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 
 	if (doc && (((GObject *) doc)->ref_count == 1)) {
 		if (sp_repr_attr (sp_document_repr_root (doc), "sodipodi:modified") != NULL) {
-			GtkWidget *dlg;
-			GtkWidget *lbl;
-			GtkWidget *warn_icon;
-			GtkWidget *close_btn;
-			GtkWidget *close_lbl;
-			GtkWidget *close_icon;
-			GtkWidget *close_box;
-			GtkWidget *close_align;
-			GtkWidget *hbox1;
 			gchar *markup;
 			gint b;
 			
-			// The dialog label
+			Gtk::Dialog *dialog = new Gtk::Dialog();
+			Gtk::Button *close_button = new Gtk::Button();
+			Gtk::HBox *hbox;
+			
+			dialog->set_title("");
+			dialog->set_border_width(6);
+			dialog->set_resizable(false);
+			dialog->set_has_separator(false);
+			
+			
+			hbox = new Gtk::HBox(false, 12);
+			hbox->set_border_width(6);
+
+			Gtk::Image *image = new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG);
+			image->set_alignment(0.5, 0);
+			hbox->pack_start(*Gtk::manage(image), false, false);
+
 			markup = g_strdup_printf(
-			        "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n" \
-			        "If you close without saving, your changes will be discarded.",
+			        _("<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n" \
+			        "If you close without saving, your changes will be discarded."),
 				SP_DOCUMENT_NAME(doc));
 			
-			lbl = gtk_label_new (NULL);
-			gtk_label_set_markup (GTK_LABEL (lbl), markup);
-			gtk_label_set_selectable (GTK_LABEL (lbl), TRUE);
-			gtk_label_set_line_wrap (GTK_LABEL (lbl), TRUE);
-			gtk_misc_set_alignment (GTK_MISC (lbl), 0.5, 0);
+			Gtk::Label *label = new Gtk::Label("", 0.5, 0);
+			label->set_markup(markup);
+			g_free(markup);
 			
-			g_free (markup);
+			label->set_selectable();
+			label->set_line_wrap();
+			hbox->pack_start(*Gtk::manage(label), false, false);
+			hbox->show_all();
 			
-			// The dialog icon
-			warn_icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
-			gtk_misc_set_alignment (GTK_MISC (warn_icon), 0.5, 0);
-			
-			
-			// The dialog content (icon + label)
-			hbox1 = gtk_hbox_new (FALSE, 0);
-			gtk_box_set_spacing (GTK_BOX (hbox1), 12);
-			gtk_container_set_border_width (GTK_CONTAINER (hbox1), 6);
-			
-			gtk_box_pack_start (GTK_BOX (hbox1), warn_icon, FALSE, FALSE, 0);
-			gtk_box_pack_start (GTK_BOX (hbox1), lbl, FALSE, FALSE, 0);
+			dialog->get_vbox()->add(*Gtk::manage(hbox));
+			dialog->get_vbox()->set_spacing(12);
 			
 			
-			// The "Close without Saving" button
-			close_btn = gtk_button_new ();
+			hbox = new Gtk::HBox(false, 3);
+			hbox->pack_start(*Gtk::manage(
+			                 new Gtk::Image(Gtk::Stock::QUIT, Gtk::ICON_SIZE_BUTTON)),
+					 true, false);
+			hbox->pack_start(*Gtk::manage(
+			                 new Gtk::Label(_("Close _without Saving"), true)),
+					 true, false);
+			Gtk::Alignment *align = new Gtk::Alignment(0.5, 0.5, 0, 0);
+			align->add(*Gtk::manage(hbox));
+			close_button->add(*Gtk::manage(align));
+			close_button->show_all();
 			
-			close_box = gtk_hbox_new (FALSE, 3);
+			dialog->add_action_widget(*Gtk::manage(close_button), GTK_RESPONSE_NO);
+			dialog->add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
+			dialog->add_button(Gtk::Stock::SAVE, GTK_RESPONSE_YES);
+			dialog->set_default_response(GTK_RESPONSE_YES);
 			
-			close_icon = gtk_image_new_from_stock (GTK_STOCK_QUIT, GTK_ICON_SIZE_BUTTON);
-			close_lbl = gtk_label_new_with_mnemonic ("C_lose without Saving");
+			// TODO: A more elegant way to set the parent window perhaps?
+			sp_transientize(GTK_WIDGET(dialog->gobj()));
 			
-			gtk_box_pack_start (GTK_BOX (close_box), close_icon, TRUE, FALSE, 0);
-			gtk_box_pack_start (GTK_BOX (close_box), close_lbl, TRUE, FALSE, 0);
-			
-			close_align = gtk_alignment_new (0.5, 0.5, 0, 0);
-			gtk_container_add (GTK_CONTAINER (close_align), close_box);
-			
-			gtk_container_add (GTK_CONTAINER (GTK_BUTTON (close_btn)), close_align);
-			
-			gtk_widget_show_all (close_btn);
-			
-
-			// The dialog			
-			dlg = gtk_dialog_new ();
-			gtk_window_set_title (GTK_WINDOW (dlg), "");
-			gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
-			gtk_dialog_set_has_separator (GTK_DIALOG (dlg), FALSE);
-			gtk_container_set_border_width (GTK_CONTAINER (dlg), 6);
-			
-			gtk_dialog_add_action_widget (GTK_DIALOG (dlg), close_btn, GTK_RESPONSE_NO);
-			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
-			gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_RESPONSE_YES);
-			
-			gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dlg)->vbox), hbox1);
-			gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dlg)->vbox), 12);
-					  
-			gtk_widget_show_all (GTK_DIALOG (dlg)->vbox);
-	
-			sp_transientize (dlg);
-
-			b = gtk_dialog_run (GTK_DIALOG(dlg));
-			gtk_widget_destroy (dlg);
+			b = dialog->run();
+			delete (dialog);
 			switch (b) {
 			case GTK_RESPONSE_YES:
-				sp_document_ref (doc);
-				if (sp_file_save_document (doc)) {
-					sp_document_unref (doc);
+				sp_document_ref(doc);
+				if (sp_file_save_document(doc)) {
+					sp_document_unref(doc);
 					break;
 				} else { // save dialog canceled or save failed
-					sp_document_unref (doc);
+					sp_document_unref(doc);
 					return TRUE;
 				}
 			case GTK_RESPONSE_NO:

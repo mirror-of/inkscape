@@ -44,6 +44,8 @@
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkbox.h>
 
+#include <gtkmm/main.h>
+
 #include "macros.h"
 #include "file.h"
 #include "document.h"
@@ -213,8 +215,8 @@ sp_main_gui (int argc, const char **argv)
 	poptContext ctx;
 #endif
 	GSList *fl = NULL;
-
-	gtk_init (&argc, (char ***) &argv);
+	
+	Gtk::Main kit = Gtk::Main(&argc, (char ***) &argv);
 
 	sp_modules_init();
 
@@ -294,7 +296,7 @@ sp_main_gui (int argc, const char **argv)
 		}
 	}
 
-	gtk_main ();
+	kit.run();
 
 #ifdef WIN32
 	sp_win32_finish ();
