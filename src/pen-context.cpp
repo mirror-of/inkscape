@@ -587,13 +587,16 @@ pen_handle_key_press(SPPenContext *const pc, guint const keyval)
             }
             break;
         case GDK_Escape:
-            pc->state = SP_PEN_CONTEXT_STOP;
-            spdc_reset_colors(pc);
-            sp_canvas_item_hide(pc->c0);
-            sp_canvas_item_hide(pc->c1);
-            sp_canvas_item_hide(pc->cl0);
-            sp_canvas_item_hide(pc->cl1);
-            ret = TRUE;
+            if (pc->npoints != 0) {
+                // if drawing, cancel, otherwise pass it up for deselecting
+                pc->state = SP_PEN_CONTEXT_STOP;
+                spdc_reset_colors(pc);
+                sp_canvas_item_hide(pc->c0);
+                sp_canvas_item_hide(pc->c1);
+                sp_canvas_item_hide(pc->cl0);
+                sp_canvas_item_hide(pc->cl1);
+                ret = TRUE;
+            }
             break;
         case GDK_BackSpace:
             if (sp_curve_is_empty(pc->green_curve)) {
@@ -605,7 +608,6 @@ pen_handle_key_press(SPPenContext *const pc, guint const keyval)
                 sp_canvas_item_hide(pc->cl0);
                 sp_canvas_item_hide(pc->cl1);
                 ret = TRUE;
-                break;
             } else {
                 /* Reset red curve */
                 sp_curve_reset(pc->red_curve);

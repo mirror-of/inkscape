@@ -40,6 +40,7 @@
 #include "pen-context.h"
 #include "prefs-utils.h"
 #include "selection.h"
+#include "selection-chemistry.h"
 #include "snap.h"
 #include "sp-path.h"
 
@@ -219,29 +220,45 @@ sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
     gint ret = FALSE;
 
     switch (event->type) {
-    case GDK_KEY_PRESS:
-        switch (get_group0_keyval (&event->key)) {
-        case GDK_A:
-        case GDK_a:
-            if (dc->attach) {
-                spdc_set_attach(dc, FALSE);
-            } else {
-                spdc_set_attach(dc, TRUE);
-            }
-            ret = TRUE;
-            break;
-        case GDK_Escape:
-            SP_DT_SELECTION(desktop)->clear();
-        case GDK_Up:
-        case GDK_Down:
-        case GDK_KP_Up:
-        case GDK_KP_Down:
-            // prevent the zoom field from activation
-            if (!MOD__CTRL_ONLY) {
-                ret = TRUE;
-            }
-            break;
-        default:
+        case GDK_KEY_PRESS:
+            switch (get_group0_keyval (&event->key)) {
+                case GDK_A:
+                case GDK_a:
+                    if (!MOD__CTRL && !MOD__SHIFT && !MOD__ALT) {
+                        if (dc->attach) {
+                            spdc_set_attach(dc, FALSE);
+                        } else {
+                            spdc_set_attach(dc, TRUE);
+                        }
+                        ret = TRUE;
+                    }
+                    break;
+                case GDK_Escape:
+                    SP_DT_SELECTION(desktop)->clear();
+                    ret = TRUE;
+                    break;
+                case GDK_Tab: // Tab - cycle selection forward
+                    if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
+                        sp_selection_item_next();
+                        ret = TRUE;
+                    }
+                    break;
+                case GDK_ISO_Left_Tab: // Shift Tab - cycle selection backward
+                    if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
+                        sp_selection_item_prev();
+                        ret = TRUE;
+                    }
+                    break;
+                case GDK_Up:
+                case GDK_Down:
+                case GDK_KP_Up:
+                case GDK_KP_Down:
+                    // prevent the zoom field from activation
+                    if (!MOD__CTRL_ONLY) {
+                        ret = TRUE;
+                    }
+                    break;
+                default:
             break;
         }
         break;
