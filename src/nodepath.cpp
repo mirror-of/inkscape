@@ -43,15 +43,15 @@
 
 #define NODE_FILL          0xafafaf00
 #define NODE_STROKE        0x000000ff
-#define NODE_FILL_HI       0xaf907000
+#define NODE_FILL_HI       0xff669900
 #define NODE_STROKE_HI     0x000000ff
-#define NODE_FILL_SEL      0xffbb0000
+#define NODE_FILL_SEL      0x5020ffff
 #define NODE_STROKE_SEL    0x000000ff
-#define NODE_FILL_SEL_HI   0xffee0000
+#define NODE_FILL_SEL_HI   0xff669900
 #define NODE_STROKE_SEL_HI 0x000000ff
-#define KNOT_FILL          0x000000
+#define KNOT_FILL          0x00000000
 #define KNOT_STROKE        0x000000ff
-#define KNOT_FILL_HI       0xffee0000
+#define KNOT_FILL_HI       0xff669900
 #define KNOT_STROKE_HI     0x000000ff
 
 static GMemChunk *nodechunk = NULL;
