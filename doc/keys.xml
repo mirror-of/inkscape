@@ -142,6 +142,8 @@ can leave your ideas and requests there.</p>
 <mouse><key><mid-click/></key>  <key><ctrl/><right-click/></key>   <action>zoom in</action></mouse>
 <mouse><key><shift/><mid-click/></key>  <key><shift/><right-click/></key> <action>zoom out</action></mouse>
 <mouse><key><ctrl/><wheel/></key> <action>zoom in or out</action></mouse>
+<keys><key><alt/>Z</key> <action>activate zoom field</action></keys>
+<note>The zoom field in the lower left corner of the window allows you to specify zoom level precisely.</note>
 </group>
 
 <group>
