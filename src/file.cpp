@@ -64,8 +64,6 @@
  * Static globals are evil.  This will be gone soon
  * as C++ification continues
  */
-static gchar *open_path   = NULL;
-static gchar *save_path   = NULL;
 static gchar *import_path = NULL;
 
 
@@ -220,6 +218,21 @@ sp_file_revert_dialog()
 void
 sp_file_open_dialog(gpointer object, gpointer data)
 {
+    gchar * open_path = NULL;
+    gchar * open_path2 = NULL;
+
+    open_path = g_strdup(prefs_get_string_attribute("dialogs.open", "path"));
+    if (open_path != NULL && open_path[0] == '\0') {
+        g_free(open_path);
+        open_path = NULL;
+    }
+    if (!g_file_test(open_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
+        g_free(open_path);
+        open_path = NULL;
+    }
+    if (open_path == NULL)
+        open_path = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, NULL);
+
     Inkscape::UI::Dialogs::FileOpenDialog *dlg =
         new Inkscape::UI::Dialogs::FileOpenDialog(
                  (char const *)open_path,
@@ -231,6 +244,7 @@ sp_file_open_dialog(gpointer object, gpointer data)
                         : NULL );
     Inkscape::Extension::Extension *selection = dlg->getSelectionType();
     delete dlg;
+    g_free(open_path);
 
     if (!success) return;
     if (fileName) {
@@ -261,9 +275,12 @@ sp_file_open_dialog(gpointer object, gpointer data)
         }
 
 
-        g_free(open_path);
         open_path = g_dirname(fileName);
-        if (open_path) open_path = g_strconcat(open_path, G_DIR_SEPARATOR_S, NULL);
+        open_path2 = g_strconcat(open_path, G_DIR_SEPARATOR_S, NULL);
+        prefs_set_string_attribute("dialogs.open", "path", open_path2);
+        g_free(open_path);
+        g_free(open_path2);
+
         sp_file_open(fileName, selection);
         g_free(fileName);
     }
@@ -321,6 +338,7 @@ sp_file_save_dialog(SPDocument *doc)
     gchar const *default_extension = NULL;
     gchar *save_loc;
     Inkscape::Extension::Output *extension;
+    gchar *save_path = NULL;
 
     default_extension = sp_repr_attr(repr, "inkscape:output_extension");
     if (default_extension == NULL) {
@@ -340,6 +358,15 @@ sp_file_save_dialog(SPDocument *doc)
             filename_extension = extension->get_extension();
         }
 
+        save_path = g_strdup(prefs_get_string_attribute("dialogs.save_as", "path"));
+        if (save_path != NULL && save_path[0] == '\0') {
+            g_free(save_path);
+            save_path = NULL;
+        }
+        if (!g_file_test(save_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
+            g_free(save_path);
+            save_path = NULL;
+        }
         if (save_path == NULL)
             save_path = g_strdup(g_get_home_dir());
         temp_filename = g_strdup_printf(_("drawing%s"), filename_extension);
@@ -370,6 +397,7 @@ sp_file_save_dialog(SPDocument *doc)
     Inkscape::Extension::Extension *selectionType = dlg->getSelectionType();
     delete dlg;
     g_free(save_loc);
+    g_free(save_path);
     if (!success) return success;
 
     if (fileName && *fileName) {
@@ -400,15 +428,13 @@ sp_file_save_dialog(SPDocument *doc)
         }
 
         success = file_save(doc, fileName, selectionType, TRUE);
-        g_free(save_path);
 
         if (success)
             prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
 
         save_path = g_dirname(fileName);
-
-        if (save_path)
-            save_path = g_strconcat(save_path, G_DIR_SEPARATOR_S, NULL);
+        prefs_set_string_attribute("dialogs.save_as", "path", save_path);
+        g_free(save_path);
 
         g_free(fileName);
         return success;
