@@ -1,8 +1,9 @@
 #define __SP_BEZIER_UTILS_C__
 
+/** \file
+ * Bezier interpolation for inkscape drawing code.
+ */
 /*
- * Bezier interpolation for inkscape drawing code
- *
  * Original code published in:
  *   An Algorithm for Automatically Fitting Digitized Curves
  *   by Philip J. Schneider
@@ -550,7 +551,7 @@ bezier_pt(unsigned const degree, NR::Point const V[], gdouble const t)
     Unlike the center and right versions, this calculates the tangent in the way one might expect,
     i.e. wrt increasing index into d.
 
-    Requires: len >= 2 && d[0] != d[1].
+    \pre (2 \<= len) and (d[0] != d[1]).
 **/
 static NR::Point
 sp_darray_left_tangent(NR::Point const d[], unsigned const len)
@@ -565,7 +566,7 @@ sp_darray_left_tangent(NR::Point const d[], unsigned const len)
     N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
     increasing index.
 
-    Requires: len >= 2 && d[len - 1] != d[len - 2].
+    \pre (2 \<= len) and (d[len - 1] != d[len - 2]).
 */
 static NR::Point
 sp_darray_right_tangent(NR::Point const d[], unsigned const len)
@@ -583,7 +584,7 @@ sp_darray_right_tangent(NR::Point const d[], unsigned const len)
     N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
     increasing index.
 
-    Requires: (0 < center < len - 1) && d is uniqued (at least in the immediate vicinity of
+    \pre (0 \< center \< len - 1) and d is uniqued (at least in the immediate vicinity of
     \a center).
 */
 static NR::Point
@@ -653,8 +654,8 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
  *  Find the maximum squared distance of digitized points to fitted curve, and (if this maximum
  *  error is non-zero) set \a *splitPoint to the corresponding index.
  *
- *  Requires: 2 <= len.
- *  Ensures: ret == 0.0 || (0 < *splitPoint && *splitPoint < len - 1).
+ *  \pre 2 \<= len.
+ *  \post (ret == 0.0) || ((0 \< *splitPoint) \&\& (*splitPoint \< len - 1)).
  */
 static gdouble
 compute_max_error(NR::Point const d[], double const u[], unsigned const len, BezierCurve const bezCurve,

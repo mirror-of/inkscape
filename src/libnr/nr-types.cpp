@@ -1,3 +1,4 @@
+/** \file */
 #include <libnr/nr-types.h>
 #include <glib.h>
 #include <math.h>
@@ -6,12 +7,12 @@
 
 /** Scales this vector to make it a unit vector (within rounding error).
  *
- *  Requires: *this != (0, 0).
- *	      Neither coordinate is NaN.
- *  Ensures: L2(*this) very near 1.0.
- *
  *  The current version tries to handle infinite coordinates gracefully,
  *  but it's not clear that any callers need that.
+ *
+ *  \pre *this != Point(0, 0).
+ *  \pre Neither coordinate is NaN.
+ *  \post L2(*this) very near 1.0.
  */
 void NR::Point::normalize() {
 	double len = hypot(_pt[0], _pt[1]);

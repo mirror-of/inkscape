@@ -1,12 +1,11 @@
 #define __SP_PAINT_SELECTOR_C__
 
+/** \file
+ * SPPaintSelector: Generic paint selector widget.
+ */
+
 /*
- * SPPaintSelector
- *
- * Generic paint selector widget
- *
  * Copyright (C) Lauris 2002
- *
  */
 
 #define noSP_PS_VERBOSE
@@ -439,7 +438,7 @@ sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnit
 }
 
 /**
- * Ensures: (alpha == NULL) || (*alpha in [0.0, 1.0]).
+ * \post (alpha == NULL) || (*alpha in [0.0, 1.0]).
  */
 void
 sp_paint_selector_get_color_alpha (SPPaintSelector *psel, SPColor *color, gfloat *alpha)

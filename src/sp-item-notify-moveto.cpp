@@ -1,3 +1,4 @@
+/** \file */
 #include "sp-item-notify-moveto.h"
 #include <sp-item.h>
 #include <libnr/nr-matrix.h>
@@ -12,7 +13,7 @@ using std::vector;
  * Called by sp_guide_moveto to indicate that the guide line corresponding to g has been moved, and
  * that consequently this item should move with it.
  *
- * Requires: &exist;[cn &isin; item.constraints] g eq cn.g.
+ * \pre exist [cn in item.constraints] g eq cn.g.
  */
 void sp_item_notify_moveto(SPItem &item, SPGuide const &mv_g, int const snappoint_ix,
                            double const position, bool const commit)

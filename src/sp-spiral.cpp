@@ -1,8 +1,9 @@
 #define __SP_SPIRAL_C__
 
-/*
+/** \file
  * <sodipodi:spiral> implementation
- *
+ */
+/*
  * Authors:
  *   Mitsuru Oka <oka326@parkcity.ne.jp>
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -279,10 +280,10 @@ is_unit_vector (NR::Point const &p)
 }
 
 
-/** Requires: dstep > 0.
-	is_unit_vector(*hat1).
+/** \pre dstep \> 0.
+    \pre is_unit_vector(*hat1).
 
-    Ensures: is_unit_vector(*hat2).
+    \post is_unit_vector(*hat2).
 **/
 static void
 sp_spiral_fit_and_draw (SPSpiral const *spiral,
@@ -440,7 +441,7 @@ static void sp_spiral_snappoints(SPItem const *item, SnapPointsIter p)
 
 /** Set *p to one of the points on the spiral; t specifies how far along the spiral.
  *
- *  Requires: t \in [0.0, 2.03].  (It doesn't make sense for t to be much more than 1.0,
+ *  \pre \a t in [0.0, 2.03].  (It doesn't make sense for t to be much more than 1.0,
  *	though some callers go slightly beyond 1.0 for curve-fitting purposes.)
  */
 NR::Point sp_spiral_get_xy (SPSpiral const *spiral, gdouble t)
@@ -465,10 +466,10 @@ NR::Point sp_spiral_get_xy (SPSpiral const *spiral, gdouble t)
 /** Returns the derivative of sp_spiral_get_xy with respect to t,
  *  scaled to a unit vector.
  *
- *  Requires: spiral != 0.
- *	t >= 0.
- *	p != NULL.
- *  Ensures: is_unit_vector(*p).
+ *  \pre spiral != 0.
+ *  \pre 0 \<= t.
+ *  \pre p != NULL.
+ *  \post is_unit_vector(*p).
  */
 static NR::Point
 sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t)

@@ -1,3 +1,6 @@
+/** \file
+ * Various geometrical calculations.
+ */
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
@@ -103,7 +106,7 @@ sp_intersector_ccw(const NR::Point p0, const NR::Point p1, const NR::Point p2)
     the point of intersection, use the line_intersect function above,
     or the segment_intersection interface below.
 
-    Requires: neither segment is zero-length; i.e. p00!=p01 && p10!=p11.
+    \pre neither segment is zero-length; i.e. p00 != p01 and p10 != p11.
  */
 static bool
 sp_intersector_segment_intersectp(NR::Point const &p00, NR::Point const &p01,
@@ -122,11 +125,11 @@ sp_intersector_segment_intersectp(NR::Point const &p00, NR::Point const &p01,
 }
 
 
-/** Determine whether & where two line segments intersect.
+/** Determine whether \& where two line segments intersect.
 
     If the two segments don't intersect, then \a result remains unchanged.
 
-    Requires: neither segment is zero-length; i.e. p00!=p01 && p10!=p11.
+    \pre neither segment is zero-length; i.e. p00 != p01 and p10 != p11.
 **/
 static sp_intersector_kind
 sp_intersector_segment_intersect(NR::Point const &p00, NR::Point const &p01,
