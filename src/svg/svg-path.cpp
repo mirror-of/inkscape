@@ -122,10 +122,36 @@ rsvg_path_arc (RSVGParsePathCtx *ctx,
   double x0, y0, x1, y1, xc, yc;
   double d, sfactor, sfactor_sq;
   double th0, th1, th_arc;
+  double px, py, pl;
   int i, n_segs;
 
   sin_th = sin (x_axis_rotation * (M_PI / 180.0));
   cos_th = cos (x_axis_rotation * (M_PI / 180.0));
+
+  /*                                                                            
+     Correction of out-of-range radii as described in Appendix F.6.6:           
+
+     1. Ensure radii are non-zero (Done?).                                      
+     2. Ensure that radii are positive.                                         
+     3. Ensure that radii are large enough.                                     
+  */                                                                            
+
+  if(rx < 0.0) rx = -rx;                                                        
+  if(ry < 0.0) ry = -ry;                                                        
+
+  px = cos_th * (ctx->cpx - x) * 0.5 + sin_th * (ctx->cpy - y) * 0.5;           
+  py = cos_th * (ctx->cpy - y) * 0.5 - sin_th * (ctx->cpx - x) * 0.5;           
+  pl = (px * px) / (rx * rx) + (py * py) / (ry * ry);                           
+
+  if(pl > 1.0)                                                                  
+  {                                                                             
+      pl  = sqrt(pl);                                                           
+      rx *= pl;                                                                 
+      ry *= pl;                                                                 
+  }                                                                             
+
+  /* Proceed with computations as described in Appendix F.6.5 */                
+
   a00 = cos_th / rx;
   a01 = sin_th / rx;
   a10 = -sin_th / ry;

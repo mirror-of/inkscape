@@ -154,7 +154,7 @@ sp_stop_write (SPObject *object, SPRepr *repr, guint flags)
 
 	stop = SP_STOP (object);
 
-	if ((flags & SP_OBJECT_WRITE_BUILD) & !repr) {
+	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("stop");
 	}
 
