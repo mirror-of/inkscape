@@ -152,8 +152,8 @@ inkscape_gtk_stock_init (void) {
 
     for (int i = 0; i < stock_icon_count; i++) {
 
-        gchar *filename = (gchar *) g_build_filename (INKSCAPE_PIXMAPDIR,
-                      stock_icons[i].filename, NULL);
+        gchar *filename = g_build_filename(INKSCAPE_PIXMAPDIR,
+					   stock_icons[i].filename, NULL);
 
         // TODO: bulia, please look over
         gsize bytesRead = 0;
