@@ -1367,7 +1367,7 @@ msgstr "Utilizar la extensión del archivo para elegir el tipo de archivo"
 
 #: src/extension/system.cpp:102
 msgid "Format autodetect failed. The file is being opened as SVG."
-msgstr ""
+msgstr "La autodetección de formato falló. El archivo se abrirá como SVG."
 
 #: src/extension/internal/gnome.cpp:71
 msgid "Select printer"
