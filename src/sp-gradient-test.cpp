@@ -36,8 +36,8 @@ test_gradient()
     /* Create the global inkscape object. */
     static_cast<void>(g_object_new(inkscape_get_type(), NULL));
 
-    SPDocument *doc = static_cast<SPDocument *>(g_object_new(SP_TYPE_DOCUMENT, NULL));
-    inkscape_add_document(doc);
+
+    SPDocument *doc = sp_document_new_dummy();
 
     UTEST_TEST("sp_object_set(\"gradientTransform\")") {
         SPGradient *gr = static_cast<SPGradient *>(g_object_new(SP_TYPE_GRADIENT, NULL));

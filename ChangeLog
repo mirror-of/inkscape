@@ -1,5 +1,11 @@
 2004-02-12  MenTaLguY  <mental@rydia.net>
 
+	* src/document.cpp, src/document.h, src/sp-gradient-test.cpp:
+
+	  SPDocument is now a "real C++ class", managed by the garbage collector
+
+2004-02-12  MenTaLguY  <mental@rydia.net>
+
 	* src/document-private.h, src/document.cpp, src/document.h, src/view.cpp,
 	  src/view.h, src/dialogs/xml-tree.cpp:
 

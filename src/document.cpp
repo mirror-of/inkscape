@@ -52,67 +52,30 @@
 #include <locale>
 #include <sstream>
 
-static void sp_document_class_init(SPDocumentClass *klass);
-static void sp_document_init(SPDocument *document);
-static void sp_document_dispose(GObject *object);
-
 static gint sp_document_idle_handler(gpointer data);
 
 gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer data);
 
-static GObjectClass *parent_class;
 static gint doc_count = 0;
 
-GType
-sp_document_get_type (void)
-{
-	static GType type = 0;
-	if (!type) {
-		GTypeInfo info = {
-			sizeof (SPDocumentClass),
-			NULL, NULL,
-			(GClassInitFunc) sp_document_class_init,
-			NULL, NULL,
-			sizeof (SPDocument),
-			4,
-			(GInstanceInitFunc) sp_document_init,
-			NULL
-		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPDocument", &info, (GTypeFlags)0);
-	}
-	return type;
-}
-
-static void
-sp_document_class_init(SPDocumentClass *klass)
-{
-	GObjectClass *object_class = (GObjectClass *) klass;
-
-	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
-
-	object_class->dispose = sp_document_dispose;
-}
-
-static void
-sp_document_init (SPDocument *doc)
-{
+SPDocument::SPDocument() {
 	SPDocumentPrivate *p;
 
-	doc->advertize = FALSE;
-	doc->keepalive = FALSE;
-	doc->virgin    = TRUE;
+	advertize = FALSE;
+	keepalive = FALSE;
+	virgin    = TRUE;
 
-	doc->modified_id = 0;
+	modified_id = 0;
 
-	doc->rdoc = NULL;
-	doc->rroot = NULL;
-	doc->root = NULL;
+	rdoc = NULL;
+	rroot = NULL;
+	root = NULL;
 
-	doc->uri = NULL;
-	doc->base = NULL;
-	doc->name = NULL;
+	uri = NULL;
+	base = NULL;
+	name = NULL;
 
-	doc->_collection_queue = NULL;
+	_collection_queue = NULL;
 
 	p = new SPDocumentPrivate();
 
@@ -127,7 +90,66 @@ sp_document_init (SPDocument *doc)
 	p->undo = NULL;
 	p->redo = NULL;
 
-	doc->priv = p;
+	priv = p;
+}
+
+SPDocument::~SPDocument() {
+	SPDocumentPrivate *priv = priv;
+
+	collectOrphans();
+
+	if (priv) {
+		inkscape_remove_document (this);
+
+		if (priv->partial) {
+			sp_repr_free_log (priv->partial);
+			priv->partial = NULL;
+		}
+
+		sp_document_clear_redo (this);
+		sp_document_clear_undo (this);
+
+		if (root) {
+			sp_object_invoke_release (root);
+			g_object_unref (G_OBJECT (root));
+			root = NULL;
+		}
+
+		if (priv->iddef) g_hash_table_destroy (priv->iddef);
+		if (priv->reprdef) g_hash_table_destroy (priv->reprdef);
+
+		if (rdoc) sp_repr_document_unref (rdoc);
+
+		/* Free resources */
+		g_hash_table_foreach_remove (priv->resources, sp_document_resource_list_free, this);
+		g_hash_table_destroy (priv->resources);
+
+		delete priv;
+		priv = NULL;
+	}
+
+	if (name) {
+		g_free (name);
+		name = NULL;
+	}
+	if (base) {
+		g_free (base);
+		base = NULL;
+	}
+	if (uri) {
+		g_free (uri);
+		uri = NULL;
+	}
+
+	if (modified_id) {
+		gtk_idle_remove (modified_id);
+		modified_id = 0;
+	}
+
+	if (keepalive) {
+		inkscape_unref ();
+		keepalive = FALSE;
+	}
 }
 
 void SPDocument::queueForOrphanCollection(SPObject *object) {
@@ -151,76 +173,6 @@ void SPDocument::collectOrphans() {
 	}
 }
 
-/**
- *  This routine removes the given document object from the application,
- *  clearing the undo/redo information, releasing its root object, releasing
- *  other resources, and destructing its data members.
- */
-static void
-sp_document_dispose (GObject *object)
-{
-	SPDocument *doc = (SPDocument *) object;
-	SPDocumentPrivate *priv = doc->priv;
-
-	doc->collectOrphans();
-
-	if (priv) {
-		inkscape_remove_document (doc);
-
-		if (priv->partial) {
-			sp_repr_free_log (priv->partial);
-			priv->partial = NULL;
-		}
-
-		sp_document_clear_redo (doc);
-		sp_document_clear_undo (doc);
-
-		if (doc->root) {
-			sp_object_invoke_release (doc->root);
-			g_object_unref (G_OBJECT (doc->root));
-			doc->root = NULL;
-		}
-
-		if (priv->iddef) g_hash_table_destroy (priv->iddef);
-		if (priv->reprdef) g_hash_table_destroy (priv->reprdef);
-
-		if (doc->rdoc) sp_repr_document_unref (doc->rdoc);
-
-		/* Free resources */
-		g_hash_table_foreach_remove (priv->resources, sp_document_resource_list_free, doc);
-		g_hash_table_destroy (priv->resources);
-
-		delete priv;
-		doc->priv = NULL;
-	}
-
-	if (doc->name) {
-		g_free (doc->name);
-		doc->name = NULL;
-	}
-	if (doc->base) {
-		g_free (doc->base);
-		doc->base = NULL;
-	}
-	if (doc->uri) {
-		g_free (doc->uri);
-		doc->uri = NULL;
-	}
-
-	if (doc->modified_id) {
-		gtk_idle_remove (doc->modified_id);
-		doc->modified_id = 0;
-	}
-
-	if (doc->keepalive) {
-		inkscape_unref ();
-		doc->keepalive = FALSE;
-	}
-
-	G_OBJECT_CLASS (parent_class)->dispose (object);
-}
-
-
 static SPDocument *
 sp_document_create (SPReprDoc *rdoc,
 		    const gchar *uri,
@@ -235,7 +187,7 @@ sp_document_create (SPReprDoc *rdoc,
 
 	rroot = sp_repr_document_root (rdoc);
 
-	document = (SPDocument*)g_object_new (SP_TYPE_DOCUMENT, NULL);
+	document = new SPDocument();
 
 	document->advertize = advertize;
 	document->keepalive = keepalive;
@@ -417,13 +369,17 @@ sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int adverti
 	return doc;
 }
 
+SPDocument *sp_document_new_dummy() {
+	SPDocument *document = new SPDocument();
+	inkscape_add_document(document);
+	return document;
+}
+
 SPDocument *
 sp_document_ref (SPDocument *doc)
 {
 	g_return_val_if_fail (doc != NULL, NULL);
-
-	g_object_ref (G_OBJECT (doc));
-
+	Inkscape::GC::anchor(doc);
 	return doc;
 }
 
@@ -431,9 +387,7 @@ SPDocument *
 sp_document_unref (SPDocument *doc)
 {
 	g_return_val_if_fail (doc != NULL, NULL);
-
-	g_object_unref (G_OBJECT (doc));
-
+	Inkscape::GC::release(doc);
 	return NULL;
 }
 

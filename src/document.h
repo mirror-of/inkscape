@@ -24,19 +24,27 @@
 #include "forward.h"
 #include "libnr/nr-forward.h"
 
+#include "gc-managed.h"
+#include "gc-finalized.h"
+#include "gc-anchored.h"
+
 class SPRepr;
 class SPReprDoc;
 
 class SPDocumentPrivate;
 
-struct SPDocument {
+struct SPDocument : public Inkscape::GC::Managed<>,
+                    public Inkscape::GC::Finalized,
+		    public Inkscape::GC::Anchored
+{
 	typedef sigc::signal<void, SPObject *> IDChangedSignal;
 	typedef sigc::signal<void> ResourcesChangedSignal;
 	typedef sigc::signal<void, guint> ModifiedSignal;
 	typedef sigc::signal<void, gchar const *> URISetSignal;
 	typedef sigc::signal<void, double, double> ResizedSignal;
 
-	GObject object;
+	SPDocument();
+	~SPDocument();
 
 	unsigned int advertize : 1;
 	unsigned int keepalive : 1;
@@ -74,10 +82,10 @@ struct SPDocument {
 	void _emitModified();
 
 	GSList *_collection_queue;
-};
 
-struct SPDocumentClass {
-	GObjectClass parent_class;
+private:
+	SPDocument(SPDocument const &); // no copy
+	void operator=(SPDocument const &); // no assign
 };
 
 /* Fetches document from URI, or creates new, if NULL
@@ -86,6 +94,7 @@ struct SPDocumentClass {
 
 SPDocument *sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepalive, bool make_new = false);
 SPDocument *sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int advertize, unsigned int keepalive);
+SPDocument *sp_document_new_dummy(); 
 
 SPDocument *sp_document_ref (SPDocument *doc);
 SPDocument *sp_document_unref (SPDocument *doc);
