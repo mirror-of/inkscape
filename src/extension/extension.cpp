@@ -657,10 +657,12 @@ Input::open (const gchar *uri)
 
     doc = imp->open(this, uri);
 
-	repr = sp_document_repr_root(doc);
-	sp_document_set_undo_sensitive (doc, FALSE);
-	sp_repr_set_attr(repr, "inkscape:output_extension", output_extension);
-	sp_document_set_undo_sensitive (doc, TRUE);
+	if (doc != NULL) {
+		repr = sp_document_repr_root(doc);
+		sp_document_set_undo_sensitive (doc, FALSE);
+		sp_repr_set_attr(repr, "inkscape:output_extension", output_extension);
+		sp_document_set_undo_sensitive (doc, TRUE);
+	}
 
 	return doc;
 }

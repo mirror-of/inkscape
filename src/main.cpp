@@ -285,15 +285,6 @@ sp_main_gui (int argc, const char **argv)
 					doc = NULL;
 				}
 
-				if (doc == NULL) {
-					try {
-						doc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), (gchar *)fl->data);
-					} catch (Inkscape::Extension::Input::no_extension_found &e) {
-						doc = NULL;
-					} catch (Inkscape::Extension::Input::open_failed &e) {
-						doc = NULL;
-					}
-				}
 				if (doc != NULL) {
 					if (sp_export_png) {
 						sp_do_export_png (doc);

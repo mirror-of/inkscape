@@ -1,3 +1,10 @@
+2004-04-04  Ted Gould <ted@gould.cx>
+
+	* src/main.cpp, src/extension/extension.cpp, src/extension/system.cpp:
+	Now the input autodetect will try the SVG filter if the autodetect
+	fails.  This was done by the command line, but now it is done
+	everywhere.
+
 2004-04-04  MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr-io.cpp, src/xml/repr.cpp, src/xml/repr.h:

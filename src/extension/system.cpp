@@ -14,6 +14,8 @@
 
 #include <string.h>
 
+#include <interface.h>
+#include <helper/sp-intl.h>
 #include <xml/repr.h>
 #include <document.h>
 #include <inkscape.h>
@@ -61,6 +63,7 @@ sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filen
 	GtkDialog * prefs = NULL;
 	SPDocument * doc;
 	SPRepr * repr;
+	bool last_chance_svg = FALSE;
 
 	if (key == NULL) {
 		parray[0] = (gpointer)filename;
@@ -68,6 +71,11 @@ sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filen
 		Inkscape::Extension::db.foreach(open_internal, (gpointer)&parray);
 	} else {
 		imod = dynamic_cast<Inkscape::Extension::Input *>(key);
+	}
+
+	if (key == NULL && imod == NULL) {
+		last_chance_svg = TRUE;
+		imod = dynamic_cast<Inkscape::Extension::Input *>(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG));
 	}
 
 	if (imod == NULL) {
@@ -89,6 +97,10 @@ sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filen
 
 	if(!doc)
 		return NULL;
+
+	if (last_chance_svg == TRUE) {
+		sp_ui_error_dialog(_("Autodetect failed, but the file was able to be opened using the SVG input filter"));
+	}
 	
 	/* This kinda overkill as most of these are already set, but I want
 	   to make sure for this release -- TJG */
