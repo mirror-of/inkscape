@@ -1,3 +1,13 @@
+2005-03-12  MenTaLguY  <mental@rydia.net>
+
+	* src/gc-alloc.h: minor cosmetic adjustments
+
+	* src/util/list-container.h: pedantically correct implementation of
+	  ListContainer::max_size()
+
+    * src/xml/simple-node.cpp: use Util::ListContainer iterators in a more
+	  STL-ish fashion
+
 2005-03-12  Jon A. Cruz  <jon@joncruz.org>
 	* src/ui/widget/panel.h, src/ui/widget/panel.cpp,
 	  src/ui/widget/Makefile_insert, src/dialogs/iconpreview.h,

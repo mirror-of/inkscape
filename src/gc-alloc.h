@@ -47,17 +47,15 @@ public:
     }
 
     pointer allocate(size_type count, void const * =NULL) {
-        return reinterpret_cast<pointer>(::operator new(count, SCANNED, collect));
+        return static_cast<pointer>(::operator new(count, SCANNED, collect));
     }
 
     void construct(pointer p, reference value) {
-        new (reinterpret_cast<void *>(p)) T(value);
+        new (static_cast<void *>(p)) T(value);
     }
     void destroy(pointer p) { p->~T(); }
 
-    void deallocate(pointer p, size_type) {
-        ::operator delete(p, GC);
-    }
+    void deallocate(pointer p, size_type) { ::operator delete(p, GC); }
 };
 
 // allocators with the same collection policy are interchangable

@@ -13,6 +13,7 @@
 #ifndef SEEN_INKSCAPE_UTIL_LIST_CONTAINER_H
 #define SEEN_INKSCAPE_UTIL_LIST_CONTAINER_H
 
+#include <limits>
 #include "util/list.h"
 
 namespace Inkscape {
@@ -98,7 +99,9 @@ public:
         }
         return size;
     }
-    size_type max_size() const { return -1; }
+    size_type max_size() const {
+        return std::numeric_limits<std::size_t>::max();
+    }
     bool empty() const { return !_head; }
 
     /* sequence */
