@@ -221,7 +221,7 @@ sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
         return;
     }
 
-    GSList const *objects = sp_selection_item_list(sel);
+    GSList const *objects = sel->itemList();
     SPObject *object = SP_OBJECT(objects->data);
     SPPaintSelectorMode pselmode =
         sp_stroke_style_determine_paint_selector_mode(SP_OBJECT_STYLE(object));
@@ -301,7 +301,7 @@ sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
                                        SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR);
             sp_paint_selector_set_gradient_linear(psel, vector);
             NRRect fbb;
-            sp_selection_bbox_document(sel, &fbb);
+            sel->boundsInDocument(&fbb);
             sp_paint_selector_set_gradient_bbox( psel, fbb.x0, fbb.y0,
                                                  fbb.x1, fbb.y1 );
 
@@ -354,7 +354,7 @@ sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
 
             sp_paint_selector_set_gradient_radial(psel, vector);
             NRRect fbb;
-            sp_selection_bbox_document(sel, &fbb);
+            sel->boundsInDocument(&fbb);
             sp_paint_selector_set_gradient_bbox( psel, fbb.x0, fbb.y0,
                                                  fbb.x1, fbb.y1);
 
@@ -1141,7 +1141,9 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
     SPCSSAttr *css = sp_repr_css_attr_new();
     gchar *menu_id = (gchar *) g_object_get_data(G_OBJECT(mnu), "menu_id");
     sp_repr_css_set_property(css, menu_id, marker);
-    GSList const *items = sp_selection_item_list(SP_DT_SELECTION(desktop));
+
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+    GSList const *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
         if (selrepr) {
@@ -1432,7 +1434,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
         return;
     }
 
-    GSList const * const objects = sp_selection_item_list(sel);
+    GSList const * const objects = sel->itemList();
 
     /* Determine average stroke width and miterlimit */
     gdouble avgwidth = 0.0;

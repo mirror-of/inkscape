@@ -701,7 +701,7 @@ get_dt_select (void)
     if (!current_desktop) 
         return NULL;
 
-    return sp_selection_repr (SP_DT_SELECTION (current_desktop));
+    return SP_DT_SELECTION(current_desktop)->singleRepr();
 }
 
 
