@@ -1170,11 +1170,10 @@ sp_style_paint_server_release (SPPaintServer *server, SPStyle *style)
 {
     if ((style->fill.type == SP_PAINT_TYPE_PAINTSERVER) && (server == style->fill.value.paint.server)) {
         sp_style_paint_clear (style, &style->fill, TRUE, FALSE);
-    } else if ((style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) && (server == style->stroke.value.paint.server)) {
+    } 
+    if ((style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) && (server == style->stroke.value.paint.server)) {
         sp_style_paint_clear (style, &style->stroke, TRUE, FALSE);
-    } else {
-        g_assert_not_reached ();
-    }
+    } 
 }
 
 
