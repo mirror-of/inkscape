@@ -25,6 +25,7 @@
 
 #include "sp-object.h"
 #include "algorithms/longest-common-suffix.h"
+using std::memcpy;
 using std::strchr;
 using std::strcmp;
 using std::strlen;
