@@ -12,6 +12,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include <string.h>
 
 #include <libnr/nr-path.h>
@@ -23,6 +26,7 @@
 
 #include "helper/sp-intl.h"
 #include "svg/svg.h"
+#include "xml/repr.h"
 #include "attributes.h"
 #include "style.h"
 #include "version.h"
