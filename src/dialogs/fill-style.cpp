@@ -754,9 +754,13 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
     switch (psel->mode) {
 
         case SP_PAINT_SELECTOR_MODE_EMPTY:
-        case SP_PAINT_SELECTOR_MODE_MULTIPLE:
+            // This should not happen.
             g_warning ( "file %s: line %d: Paint %d should not emit 'changed'",
                         __FILE__, __LINE__, psel->mode);
+            break;
+        case SP_PAINT_SELECTOR_MODE_MULTIPLE:
+            // This happens when you switch multiple objects with different gradients to flat color;
+            // nothing to do here.
             break;
 
         case SP_PAINT_SELECTOR_MODE_NONE:

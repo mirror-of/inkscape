@@ -576,9 +576,13 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 
     switch (psel->mode) {
         case SP_PAINT_SELECTOR_MODE_EMPTY:
+            // This should not happen.
+            g_warning ( "file %s: line %d: Paint %d should not emit 'changed'",
+                        __FILE__, __LINE__, psel->mode);
+            break;
         case SP_PAINT_SELECTOR_MODE_MULTIPLE:
-            g_warning( "file %s: line %d: Paint %d should not emit 'changed'",
-                       __FILE__, __LINE__, psel->mode);
+            // This happens when you switch multiple objects with different gradients to flat color;
+            // nothing to do here.
             break;
 
         case SP_PAINT_SELECTOR_MODE_NONE:
