@@ -65,6 +65,9 @@ public:
     unsigned int _g;
     unsigned int _b;
     Glib::ustring _name;
+
+private:
+    Gtk::Tooltips tips;
 };
 
 ColorItem::ColorItem( unsigned int r, unsigned int g, unsigned int b, Glib::ustring& name ) :
@@ -119,6 +122,9 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, Gtk::BuiltinIconSize size
         btn->modify_bg(Gtk::STATE_ACTIVE, color);
         btn->modify_bg(Gtk::STATE_PRELIGHT, color);
         btn->modify_bg(Gtk::STATE_SELECTED, color);
+
+        tips.set_tip((*btn), _name);
+
         btn->signal_clicked().connect( sigc::mem_fun(*this, &ColorItem::buttonClicked) );
         widget = btn;
     }
