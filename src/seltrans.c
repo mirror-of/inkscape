@@ -826,7 +826,7 @@ sp_sel_trans_scale_request (SPSelTrans *seltrans, SPSelTransHandle *handle, NRPo
 	sp_sel_trans_point_desktop (seltrans, &point);
 	sp_sel_trans_origin_desktop (seltrans, &norm);
 
-	if (fabs (point.x - norm.x) > 0.0625) {
+	if (fabs (point.x - norm.x) > 0.001) {
 		sx = (p->x - norm.x) / (point.x - norm.x);
 		if (fabs (sx) < 1e-9) sx = 1e-9;
 		xd = TRUE;
@@ -834,7 +834,7 @@ sp_sel_trans_scale_request (SPSelTrans *seltrans, SPSelTransHandle *handle, NRPo
 		sx = 0.0;
 		xd = FALSE;
 	}
-	if (fabs (point.y - norm.y) > 0.0625) {
+	if (fabs (point.y - norm.y) > 0.001) {
 		sy = (p->y - norm.y) / (point.y - norm.y);
 		if (fabs (sy) < 1e-9) sy = 1e-9;
 		yd = TRUE;
