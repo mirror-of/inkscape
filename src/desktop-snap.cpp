@@ -91,8 +91,6 @@ sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Poi
 	SPNamedView * nv = desktop->namedview;
 	NR::Point actual = req;
 	
-	printf("snaptoguids %d, snaptogrid %d\n", desktop->guidesnap, nv->snaptogrid);
-	printf("requested point %f, %f\n", req.pt[0], req.pt[1]);
 	if (nv->snaptoguides) {
 		upper = desktop->guidesnap;
 		for (GSList * l = nv->vguides; l != NULL; l = l->next) {
@@ -130,12 +128,12 @@ sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Poi
 		{
 			NR::Point trial = req;
 			double iv = floor(((req.pt[NR::Y] - nv->gridorigin.pt[NR::Y]) / nv->gridspacingy)+0.5);
-			printf("vertical grid (%f, %f) %f\n", trial.pt[0], trial.pt[1], iv);
+
 			double dist = sp_intersector_a_vector_snap (trial,
 							     v,
 							     vertical,
 							     iv*nv->gridspacingy + nv->gridorigin.pt[NR::Y]);
-			printf("vertical grid (%f, %f) %f\n", trial.pt[0], trial.pt[1], dist);
+
 			upper = MIN(best, desktop->gridsnap);
 			if (dist < upper) {
 				upper = best = dist;
@@ -147,12 +145,12 @@ sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Poi
 					   nv->gridspacingx)+0.5);
 			
 			NR::Point trial = req;
-			printf("horizontal grid (%f, %f) %f\n", trial.pt[0], trial.pt[1], ih);
+
 			double dist = sp_intersector_a_vector_snap (trial,
 							     v,
 							     horizontal,
 							     ih*nv->gridspacingx + nv->gridorigin.pt[NR::X]);
-			printf("horizontal grid (%f, %f) %f\n", trial.pt[0], trial.pt[1], dist);
+
 			if (dist < upper) {
 				upper = best = dist;
 				actual = trial;
@@ -160,7 +158,6 @@ sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Poi
 		}
 	}
 	req = actual;
-	printf("requested point %f, %f\n", req.pt[0], req.pt[1]);
 	return best;
 }
 
