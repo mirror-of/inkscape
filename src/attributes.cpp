@@ -69,6 +69,13 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_GUIDEHIOPACITY, "guidehiopacity"},
 	{SP_ATTR_SHOWBORDER, "showborder"},
 	{SP_ATTR_BORDERLAYER, "borderlayer"},
+	{SP_ATTR_INKSCAPE_ZOOM, "inkscape:zoom"},
+	{SP_ATTR_INKSCAPE_CX, "inkscape:cx"},
+	{SP_ATTR_INKSCAPE_CY, "inkscape:cy"},
+	{SP_ATTR_INKSCAPE_WINDOW_WIDTH, "inkscape:window-width"},
+	{SP_ATTR_INKSCAPE_WINDOW_HEIGHT, "inkscape:window-height"},
+	{SP_ATTR_INKSCAPE_WINDOW_X, "inkscape:window-x"},
+	{SP_ATTR_INKSCAPE_WINDOW_Y, "inkscape:window-y"},
 	/* SPGuide */
 	{SP_ATTR_ORIENTATION, "orientation"},
 	{SP_ATTR_POSITION, "position"},
