@@ -127,6 +127,7 @@ sp_text_context_setup (SPEventContext *ec)
 
 	tc->cursor = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
 	sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), 100, 0, 100, 100);
+	sp_ctrlline_set_rgba32 (SP_CTRLLINE (tc->cursor), 0x000000ff);
 	sp_canvas_item_hide (tc->cursor);
 
 	tc->indicator = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLRECT, NULL);
@@ -299,13 +300,19 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			sp_selection_empty (SP_DT_SELECTION (ec->desktop));
 			NR::Point dtp = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
 			tc->pdoc = sp_desktop_dt2root_xy_point (ec->desktop, dtp);
-			/* Cursor */
+
 			tc->show = TRUE;
 			tc->phase = 1;
 			tc->nascent_object = 1; // new object was just created
+
+			/* Cursor */
 			sp_canvas_item_show (tc->cursor);
-			//NR::Point dtp = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
-			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp, dtp + NR::Point(32, 0));
+			// the cursor right after click has height == 0.8 * 12px (corresponds to the default 12 px font in preferences-skeleton)
+			// It needs to be set articifically, for the text object does not exist yet.
+			// Properly, we need to look up the current default font size in tools.text, but this may be more trouble than it's worth
+			// (parsing, units conversion, etc...)
+			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp, dtp + NR::Point(0, 9.6)); 
+
 			/* Processed */
 			return TRUE;
 		}
