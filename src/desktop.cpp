@@ -1580,11 +1580,9 @@ sp_desktop_zoom_page_width (SPDesktop *dt)
 void
 sp_desktop_zoom_selection (SPDesktop *dt)
 {
-    SPSelection *selection = SP_DT_SELECTION (dt);
-    g_return_if_fail (selection != NULL);
-
     NRRect d;
-    selection->bounds(&d);
+    SP_DT_SELECTION(dt)->bounds(&d);
+    
     if ((fabs (d.x1 - d.x0) < 0.1) || (fabs (d.y1 - d.y0) < 0.1)) return;
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }
