@@ -88,8 +88,7 @@ clonetiler_dialog_destroy (GtkObject *object, gpointer data)
     wd.win = dlg = NULL;
     wd.stop = 0;
     
-} // edn of sp_display_dialog_destroy()
-
+}
 
 
 static gboolean
@@ -105,7 +104,50 @@ clonetiler_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 
     return FALSE; // which means, go ahead and destroy it
 
-} // end of sp_display_dialog_delete()
+}
+
+static guint clonetiler_number_of_clones (SPObject *obj);
+
+static void
+clonetiler_change_selection (Inkscape::Application * /*inkscape*/, SPSelection *selection, GtkWidget *dlg)
+{
+    GtkWidget *buttons = (GtkWidget *) g_object_get_data (G_OBJECT(dlg), "buttons_on_tiles");
+    GtkWidget *status = (GtkWidget *) g_object_get_data (G_OBJECT(dlg), "status");
+
+    if (selection->isEmpty()) {
+        gtk_widget_set_sensitive (buttons, FALSE);
+        gtk_label_set_markup (GTK_LABEL(status), _("<small>Nothing selected.</small>"));
+        return;
+    }
+
+    if (g_slist_length ((GSList *) selection->itemList()) > 1) {
+        gtk_widget_set_sensitive (buttons, FALSE);
+        gtk_label_set_markup (GTK_LABEL(status), _("<small>More than one object selected.</small>"));
+        return;
+    }
+
+    guint n = clonetiler_number_of_clones(selection->singleItem());
+    if (n > 0) {
+        gtk_widget_set_sensitive (buttons, TRUE);
+        gchar *sta = g_strdup_printf (_("<small>Object has <b>%d</b> tiled clones.</small>"), n);
+        gtk_label_set_markup (GTK_LABEL(status), sta);
+        g_free (sta);
+    } else {
+        gtk_widget_set_sensitive (buttons, FALSE);
+        gtk_label_set_markup (GTK_LABEL(status), _("<small>Object has no tiled clones.</small>"));
+    }
+}
+
+static void
+clonetiler_external_change (Inkscape::Application * /*inkscape*/, GtkWidget *dlg)
+{
+    clonetiler_change_selection (NULL, SP_DT_SELECTION(SP_ACTIVE_DESKTOP), dlg);
+}
+
+static void clonetiler_disconnect_gsignal (GObject *widget, gpointer source) {
+    if (source && G_IS_OBJECT(source))
+        sp_signal_disconnect_by_data (source, widget);
+}
 
 
 enum {
@@ -595,6 +637,26 @@ clonetiler_get_transform (
     return NR::identity();
 }
 
+static bool 
+clonetiler_is_a_clone_of (SPObject *tile, SPObject *obj)
+{
+    Inkscape::XML::Node *obj_repr = SP_OBJECT_REPR(obj);
+    char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
+
+    if (SP_IS_USE(tile) && 
+        SP_OBJECT_REPR(tile)->attribute("xlink:href") &&
+        !strcmp(id_href, SP_OBJECT_REPR(tile)->attribute("xlink:href")) && 
+        SP_OBJECT_REPR(tile)->attribute("inkscape:tiled-clone-of") &&
+        !strcmp(id_href, SP_OBJECT_REPR(tile)->attribute("inkscape:tiled-clone-of"))) 
+    {
+        g_free (id_href);
+        return true;
+    } else {
+        g_free (id_href);
+        return false;
+    }
+}
+
 static void
 clonetiler_unclump (GtkWidget *widget, void *)
 {
@@ -611,18 +673,12 @@ clonetiler_unclump (GtkWidget *widget, void *)
     }
 
     SPObject *obj = SP_OBJECT(selection->singleItem());
-    Inkscape::XML::Node *obj_repr = SP_OBJECT_REPR(obj);
-    const char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     SPObject *parent = SP_OBJECT_PARENT (obj);
 
-    GSList *to_unclump = NULL;
+    GSList *to_unclump = NULL; // not including the original
 
     for (SPObject *child = sp_object_first_child(parent); child != NULL; child = SP_OBJECT_NEXT(child)) {
-        if (SP_IS_USE(child) && 
-            SP_OBJECT_REPR(child)->attribute("xlink:href") &&
-            !strcmp(id_href, SP_OBJECT_REPR(child)->attribute("xlink:href")) && 
-            SP_OBJECT_REPR(child)->attribute("inkscape:tiled-clone-of") &&
-            !strcmp(id_href, SP_OBJECT_REPR(child)->attribute("inkscape:tiled-clone-of"))) {
+        if (clonetiler_is_a_clone_of (child, obj)) {
             to_unclump = g_slist_prepend (to_unclump, child);
         }
     }
@@ -636,6 +692,21 @@ clonetiler_unclump (GtkWidget *widget, void *)
     sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
+static guint
+clonetiler_number_of_clones (SPObject *obj)
+{
+    SPObject *parent = SP_OBJECT_PARENT (obj);
+
+    guint n = 0;
+
+    for (SPObject *child = sp_object_first_child(parent); child != NULL; child = SP_OBJECT_NEXT(child)) {
+        if (clonetiler_is_a_clone_of (child, obj)) {
+            n ++;
+        }
+    }
+
+    return n;
+}
 
 static void
 clonetiler_remove (GtkWidget *widget, void *, bool do_undo = true)
@@ -653,18 +724,12 @@ clonetiler_remove (GtkWidget *widget, void *, bool do_undo = true)
     }
 
     SPObject *obj = SP_OBJECT(selection->singleItem());
-    Inkscape::XML::Node *obj_repr = SP_OBJECT_REPR(obj);
-    const char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     SPObject *parent = SP_OBJECT_PARENT (obj);
 
 // remove old tiling
     GSList *to_delete = NULL;
     for (SPObject *child = sp_object_first_child(parent); child != NULL; child = SP_OBJECT_NEXT(child)) {
-        if (SP_IS_USE(child) && 
-            SP_OBJECT_REPR(child)->attribute("xlink:href") &&
-            !strcmp(id_href, SP_OBJECT_REPR(child)->attribute("xlink:href")) && 
-            SP_OBJECT_REPR(child)->attribute("inkscape:tiled-clone-of") &&
-            !strcmp(id_href, SP_OBJECT_REPR(child)->attribute("inkscape:tiled-clone-of"))) {
+        if (clonetiler_is_a_clone_of (child, obj)) {
             to_delete = g_slist_prepend (to_delete, child);
         }
     }
@@ -672,6 +737,8 @@ clonetiler_remove (GtkWidget *widget, void *, bool do_undo = true)
         SP_OBJECT(i->data)->deleteObject();
     }
     g_slist_free (to_delete);
+
+    clonetiler_change_selection (NULL, selection, dlg);
 
     if (do_undo)
         sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -850,6 +917,8 @@ clonetiler_apply (GtkWidget *widget, void *)
             sp_repr_unref (clone);
         }
     }
+
+    clonetiler_change_selection (NULL, selection, dlg);
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
 }
@@ -1045,7 +1114,6 @@ clonetiler_table_x_y_rand (int values)
 
     return table;
 }
-
 
 void
 clonetiler_dialog (void)
@@ -1631,7 +1699,14 @@ clonetiler_dialog (void)
 
             gtk_signal_connect(GTK_OBJECT(b), "toggled",
                                GTK_SIGNAL_FUNC(clonetiler_keep_bbox_toggled), NULL);
+        }
 
+        {
+            GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+            gtk_box_pack_end (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
+            GtkWidget *l = gtk_label_new("");
+            g_object_set_data (G_OBJECT(dlg), "status", (gpointer) l);
+            gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
         }
 
         {
@@ -1648,18 +1723,32 @@ clonetiler_dialog (void)
                 gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
             }
 
-           {
-                GtkWidget *b = gtk_button_new_with_mnemonic (_(" _Unclump "));
-                gtk_tooltips_set_tip (tt, b, _("Spread out clones to reduce clumping; can be applied repeatedly"), NULL);
-                gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_unclump), NULL);
-                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
-            }
+            { // buttons which are enabled only when there are tiled clones
+                GtkWidget *sb = gtk_hbox_new(FALSE, 0);
+                gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, 0);
+                g_object_set_data (G_OBJECT(dlg), "buttons_on_tiles", (gpointer) sb);
+                {
+                    GtkWidget *b = gtk_button_new_with_mnemonic (_(" _Unclump "));
+                    gtk_tooltips_set_tip (tt, b, _("Spread out clones to reduce clumping; can be applied repeatedly"), NULL);
+                    gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_unclump), NULL);
+                    gtk_box_pack_end (GTK_BOX (sb), b, FALSE, FALSE, 0);
+                }
 
-            {
-                GtkWidget *b = gtk_button_new_with_mnemonic (_(" Re_move "));
-                gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
-                gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_remove), NULL);
-                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
+                {
+                    GtkWidget *b = gtk_button_new_with_mnemonic (_(" Re_move "));
+                    gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
+                    gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_remove), NULL);
+                    gtk_box_pack_end (GTK_BOX (sb), b, FALSE, FALSE, 0);
+                }
+
+                // connect to global selection changed signal (so we can change desktops) and
+                // external_change (so we're not fooled by undo)
+                g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (clonetiler_change_selection), dlg);
+                g_signal_connect (G_OBJECT (INKSCAPE), "external_change", G_CALLBACK (clonetiler_external_change), dlg);
+                g_signal_connect(G_OBJECT(dlg), "destroy", G_CALLBACK(clonetiler_disconnect_gsignal), G_OBJECT (INKSCAPE));
+
+                // update now
+                clonetiler_change_selection (NULL, SP_DT_SELECTION(SP_ACTIVE_DESKTOP), dlg);
             }
 
             {
