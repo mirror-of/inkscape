@@ -12,23 +12,12 @@
 #ifndef INKSCAPE_URI_H
 #define INKSCAPE_URI_H
 
-#include <glib.h>
+#include <glib/gtypes.h>
 #include <exception>
 #include <libxml/uri.h>
+#include "bad-uri-exception.h"
 
 namespace Inkscape {
-
-class BadURIException : public std::exception {};
-
-class UnsupportedURIException : public BadURIException {
-public:
-	const char *what() const throw() { return "Unsupported URI"; }
-};
-
-class MalformedURIException : public BadURIException {
-public:
-	const char *what() const throw() { return "Malformed URI"; }
-};
 
 class URI {
 public:
@@ -41,23 +30,8 @@ public:
 	const gchar *getQuery() const { return _impl->getQuery(); }
 	const gchar *getFragment() const { return _impl->getFragment(); }
 
-	/* TODO !!! proper error handling */
-	static gchar *to_native_filename(const URI &uri) throw(BadURIException) {
-		gchar *string = uri.toString();
-		gchar *filename = g_filename_from_uri(string, NULL, NULL);
-		g_free(string);
-		if (filename) {
-			return filename;
-		} else {
-			throw MalformedURIException();
-		}
-	}
-
-	/* TODO !!! proper error handling */
-	static URI from_native_filename(const gchar *path) throw(BadURIException) {
-		gchar *uri = g_filename_to_uri(path, NULL, NULL);
-		return URI(uri);
-	}
+	static gchar *to_native_filename(URI const &uri) throw(BadURIException);
+	static URI from_native_filename(gchar const *path) throw(BadURIException);
 
 	gchar *toString() const { return _impl->toString(); }
 private:

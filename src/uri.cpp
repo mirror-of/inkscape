@@ -76,6 +76,24 @@ const gchar *URI::Impl::getFragment() const {
 	return (gchar *)_uri->fragment;
 }
 
+/* TODO !!! proper error handling */
+gchar *URI::to_native_filename(URI const &uri) throw(BadURIException) {
+	gchar *string = uri.toString();
+	gchar *filename = g_filename_from_uri(string, NULL, NULL);
+	g_free(string);
+	if (filename) {
+		return filename;
+	} else {
+		throw MalformedURIException();
+	}
+}
+
+/* TODO !!! proper error handling */
+URI from_native_filename(gchar const *path) throw(BadURIException) {
+	gchar *uri = g_filename_to_uri(path, NULL, NULL);
+	return URI(uri);
+}
+
 gchar *URI::Impl::toString() const {
 	xmlChar *string = xmlSaveUri(_uri);
 	if (string) {
