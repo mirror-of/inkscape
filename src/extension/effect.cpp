@@ -15,6 +15,8 @@
 namespace Inkscape {
 namespace Extension {
 
+Effect * Effect::_last_effect = NULL;
+
 Effect::Effect (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
     return;
@@ -22,24 +24,28 @@ Effect::Effect (SPRepr * in_repr, Implementation::Implementation * in_imp) : Ext
 
 Effect::~Effect (void)
 {
+    if (_last_effect == this)
+        _last_effect = NULL;
     return;
 }
 
 bool
 Effect::check (void)
 {
-	return Extension::check();
+    return Extension::check();
 }
 
 GtkDialog *
 Effect::prefs (void)
 {
+    _last_effect = this;
     return imp->prefs_effect(this);
 }
 
 void
 Effect::effect (SPDocument * doc)
 {
+    _last_effect = this;
     return imp->effect(this, doc);
 }
 

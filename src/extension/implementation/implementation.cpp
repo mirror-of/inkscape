@@ -33,9 +33,6 @@ Implementation::load (Inkscape::Extension::Extension * module) {
 
 void 
 Implementation::unload (Inkscape::Extension::Extension * module) {
-	if (module->loaded()) {
-		return module->set_state(Inkscape::Extension::Extension::STATE_UNLOADED);
-	}
 	return;
 } /* Implementation::unload */
 

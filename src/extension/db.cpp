@@ -20,6 +20,7 @@
 #include "db.h"
 #include "input.h"
 #include "output.h"
+#include "effect.h"
 
 /* Globals */
 
@@ -110,130 +111,119 @@ DB::foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in
 /**
 	\return    none
 	\brief     The function to look at each module and see if it is
-	           an input module, then add it to the open menu.
+	           an input module, then add it to the list.
 	\param     in_plug  Module to be examined
 	\param     data     The list to be attached to
 
 	The first thing that is checked is if this module is an input
-	module.  If it is, then it is turned into a...
+	module.  If it is, then it is added to the list which is passed
+	in through \c data.
 */
 void
 DB::input_internal (Extension * in_plug, gpointer data)
 {
 	if (dynamic_cast<Input *>(in_plug)) {
-		const gchar * name              = NULL;
-		const gchar * tooltip           = NULL;
-		const gchar * extension         = NULL;
-		const gchar * mimetype          = NULL;
-		Input * imod                    = NULL;
-		IOExtensionDescription * desc   = NULL;
+		InputList * ilist;
+		Input * imod;
 
 		imod = dynamic_cast<Input *>(in_plug);
+		ilist = reinterpret_cast<InputList *>(data);
 
-		name = imod->get_filetypename();
-		if (name == NULL) {
-			name = in_plug->get_name();
-		}
-
-		extension = imod->get_extension();
-		mimetype  = imod->get_mimetype();
-		tooltip   = imod->get_filetypetooltip();
-
-		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
-		g_slist_append((GSList *)data, (gpointer)desc);
+		ilist->push_front(imod);
 	}
 }
 
+/**
+	\return    none
+	\brief     The function to look at each module and see if it is
+	           an output module, then add it to the list.
+	\param     in_plug  Module to be examined
+	\param     data     The list to be attached to
+
+	The first thing that is checked is if this module is an output
+	module.  If it is, then it is added to the list which is passed
+	in through \c data.
+*/
 void
 DB::output_internal (Extension * in_plug, gpointer data)
 {
 	if (dynamic_cast<Output *>(in_plug)) {
-		const gchar * name              = NULL;
-		const gchar * tooltip           = NULL;
-		const gchar * extension         = NULL;
-		const gchar * mimetype          = NULL;
-		Output * omod                   = NULL;
-		IOExtensionDescription * desc   = NULL;
+		OutputList * olist;
+		Output * omod;
 
 		omod = dynamic_cast<Output *>(in_plug);
+		olist = reinterpret_cast<OutputList *>(data);
 
-		name = omod->get_filetypename();
-		if (name == NULL) {
-			name = in_plug->get_name();
-		}
-
-		extension = omod->get_extension();
-		mimetype  = omod->get_mimetype();
-		tooltip   = omod->get_filetypetooltip();
-
-		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
-		g_slist_append((GSList *)data, (gpointer)desc);
+		olist->push_front(omod);
 	}
+
+	return;
 }
 
-GSList *
-DB::get_input_list (void)
-{
-	GSList * retlist = NULL;
-	IOExtensionDescription * desc;
+/**
+	\return    none
+	\brief     The function to look at each module and see if it is
+	           an effect module, then add it to the list.
+	\param     in_plug  Module to be examined
+	\param     data     The list to be attached to
 
-	desc = new IOExtensionDescription(_("Autodetect"), NULL, NULL, NULL, TRUE);
-	retlist = g_slist_append(retlist, (gpointer)desc);
-	foreach(input_internal, (gpointer)retlist);
-
-	return retlist;
-}
-
-GSList *
-DB::get_output_list (void)
-{
-	GSList * retlist = NULL;
-	IOExtensionDescription * desc;
-
-	desc = new IOExtensionDescription(_("Autodetect"), NULL, NULL, NULL, TRUE);
-	retlist = g_slist_append(retlist, (gpointer)desc);
-	foreach(output_internal, (gpointer)retlist);
-
-	return retlist;
-}
-
+	The first thing that is checked is if this module is an effect
+	module.  If it is, then it is added to the list which is passed
+	in through \c data.
+*/
 void
-DB::free_list (GSList * in_list)
+DB::effect_internal (Extension * in_plug, gpointer data)
 {
+	if (dynamic_cast<Effect *>(in_plug)) {
+		EffectList * elist;
+		Effect * emod;
+
+		emod = dynamic_cast<Effect *>(in_plug);
+		elist = reinterpret_cast<EffectList *>(data);
+
+		elist->push_front(emod);
+	}
+
+	return;
 }
 
-DB::IOExtensionDescription::IOExtensionDescription(const gchar * in_name, const gchar * in_file_extension, const gchar * in_mime, Extension * in_extension, bool in_sensitive)
+/**
+	\brief  Creates a list of all the Input extensions
+	\param  ou_list  The list that is used to put all the extensions in
+
+	Calls the database \c foreach function with \c input_internal.
+*/
+DB::InputList &
+DB::get_input_list (DB::InputList &ou_list)
 {
-    name = in_name;
-    file_extension = in_file_extension;
-    mimetype = in_mime;
-    extension = in_extension;
-    sensitive = in_sensitive;
-    pattern.clear();
-    if ( in_extension )
-    {
-        Glib::ustring tmp(in_file_extension);
-        for ( guint i = 0; i < tmp.length(); i++ )
-        {
-            Glib::ustring::value_type ch = tmp.at(i);
-            if ( Glib::Unicode::isalpha(ch) )
-            {
-                pattern += '[';
-                pattern += Glib::Unicode::toupper(ch);
-                pattern += Glib::Unicode::tolower(ch);
-                pattern += ']';
-            }
-            else
-            {
-                pattern += ch;
-            }
-        }
-        //g_message(" processed glob from '%s' to be '%s'", tmp.c_str(), pattern.c_str() );
-    }
+	foreach(input_internal, (gpointer)&ou_list);
+	return ou_list;
 }
 
-DB::IOExtensionDescription::~IOExtensionDescription(void)
+/**
+	\brief  Creates a list of all the Output extensions
+	\param  ou_list  The list that is used to put all the extensions in
+
+	Calls the database \c foreach function with \c output_internal.
+*/
+DB::OutputList &
+DB::get_output_list (DB::OutputList &ou_list)
 {
+	foreach(output_internal, (gpointer)&ou_list);
+	return ou_list;
+}
+
+/**
+	\brief  Creates a list of all the Effect extensions
+	\param  ou_list  The list that is used to put all the extensions in
+
+	Calls the database \c foreach function with \c effect_internal.
+*/
+DB::EffectList &
+DB::get_effect_list (DB::EffectList &ou_list)
+{
+	foreach(effect_internal, (gpointer)&ou_list);
+	return ou_list;
 }
 
 } } /* namespace Extension, Inkscape */

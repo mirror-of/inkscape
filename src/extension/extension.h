@@ -80,6 +80,7 @@ private:
 protected:
     SPRepr *repr;                         /**< The XML description of the Extension */
     Implementation::Implementation * imp; /**< An object that holds all the functions for making this work */
+    ExpirationTimer * timer;              /**< Timeout to unload after a given time */
 
 public:
                   Extension    (SPRepr * in_repr,

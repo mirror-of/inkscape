@@ -16,6 +16,8 @@
 #define __MODULES_DB_H__
 
 #include <map>
+#include <list>
+
 #include <glib.h>
 #include <gtkmm.h>
 #include <extension/extension.h>
@@ -45,36 +47,19 @@ public:
     void unregister_ext (Extension *module);
     void foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data);
 
-    /* Lists for UI stuff */
-    /** A class that holds all the data to create a fun menu of
-        the IO extensions.  It only has a constructor and destructor
-        to make it clean itself up nicely */
-    class IOExtensionDescription {
-    public:
-        const gchar *     name;           /**< Name of the extension */
-        const gchar *     file_extension; /**< Extension of file for this extension */
-        const gchar *     mimetype;       /**< MIME type of file */
-        Extension *       extension;      /**< Key used to pass back to the extension system */
-        bool              sensitive;      /**< Whether or not the extension should be sensitive in UI elements */
-        Glib::ustring     pattern;        /**< Pattern for shell style glob */
-
-        IOExtensionDescription   (const gchar *      in_name,
-                                  const gchar *      in_file_extension,
-                                  const gchar *      in_mime,
-                                  Extension *        in_extension,
-                                  bool               in_sensitive);
-        ~IOExtensionDescription(void);
-    };
-
 private:
     static void input_internal (Extension * in_plug, gpointer data);
     static void output_internal (Extension * in_plug, gpointer data);
+    static void effect_internal (Extension * in_plug, gpointer data);
 
 public:
-    GSList *  get_input_list (void);
-    GSList *  get_output_list (void);
-    void      free_list (GSList * in_list);
+    typedef std::list<Output *> OutputList;
+    typedef std::list<Input *> InputList;
+    typedef std::list<Effect *> EffectList;
 
+    InputList  &get_input_list (InputList &ou_list);
+    OutputList &get_output_list (OutputList &ou_list);
+    EffectList &get_effect_list (EffectList &ou_list);
 }; /* class DB */
 
 extern DB db;

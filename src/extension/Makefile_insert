@@ -17,6 +17,8 @@ extension_libextension_a_SOURCES =	\
 	extension/init.h	\
 	extension/system.cpp	\
 	extension/system.h \
+	extension/timer.cpp \
+	extension/timer.h \
 	\
 	extension/input.h \
 	extension/input.cpp \

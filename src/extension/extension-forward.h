@@ -12,6 +12,7 @@ class Print;
 
 class Dependency;
 class Parameter;
+class ExpirationTimer;
 
 namespace Implementation {
 class Implementation;

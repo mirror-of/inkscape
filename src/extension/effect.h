@@ -19,6 +19,7 @@ namespace Inkscape {
 namespace Extension {
 
 class Effect : public Extension {
+    static Effect * _last_effect;
 
 public:
                  Effect  (SPRepr * in_repr,
@@ -27,6 +28,7 @@ public:
     virtual bool check                (void);
     GtkDialog *  prefs   (void);
     void         effect  (SPDocument * doc);
+    Effect *     get_last_effect (void) { return _last_effect; };
 };
 
 } }  /* namespace Inkscape, Extension */

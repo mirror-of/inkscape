@@ -48,6 +48,8 @@
 
 #include <dialogs/dialog-events.h>
 #include <extension/extension.h>
+#include <extension/input.h>
+#include <extension/output.h>
 #include <extension/db.h>
 
 //for the preview widget
@@ -67,6 +69,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialogs {
 
+void FileDialogExtensionToPattern (Glib::ustring &pattern, gchar * in_file_extension);
 
 /*#########################################################################
 ### SVG Preview Widget
@@ -772,56 +775,31 @@ void FileOpenDialogImpl::createFilterMenu()
     extensionMap[Glib::ustring(_("All Inkscape Files"))]=NULL;
     add_filter(allInkscapeFilter);
 
-    Gtk::FileFilter svgFilter;
-    svgFilter.set_name(_("SVG Files"));
-    extensionMap[Glib::ustring(_("SVG Files"))]=NULL;
-    svgFilter.add_pattern("*.[Ss][Vv][Gg]");
-    add_filter(svgFilter);
+    Inkscape::Extension::DB::InputList extension_list;
+    Inkscape::Extension::db.get_input_list(extension_list);
 
-    Gtk::FileFilter svgzFilter;
-    svgzFilter.set_name(_("Compressed SVG Files"));
-    extensionMap[Glib::ustring(_("Compressed SVG Files"))]=NULL;
-    svgzFilter.add_pattern("*.[Ss][Vv][Gg][Zz]");
-    add_filter(svgzFilter);
-
-    /*We need to find out how to do a menu separator
-    Gtk::FileFilter spacer;
-    svgzFilter.set_name("-");
-    add_filter(spacer);
-    */
-
-    GSList *extension_list = Inkscape::Extension::db.get_input_list();
-    if (extension_list == NULL) {
-        // Another exception
-        g_warning("Internal error.  We need extensions.\n");
-        return;
-    }
-
-    for (GSList *current_item = g_slist_next(extension_list);
-         current_item; current_item = g_slist_next(current_item))
+    for (Inkscape::Extension::DB::InputList::iterator current_item = extension_list.begin();
+         current_item != extension_list.end(); current_item++)
         {
-        Inkscape::Extension::DB::IOExtensionDescription * ioext =
-              reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
+        Inkscape::Extension::Input * imod = *current_item;
 
         Glib::ustring upattern("*");
-        upattern += ioext->pattern;
-        if (!( strcmp(".svg",  ioext->file_extension)==0 ||
-               strcmp(".svgz", ioext->file_extension)==0   ))
-            {
-            Gtk::FileFilter filter;
-            Glib::ustring uname(_(ioext->name));
-            filter.set_name(uname);
-            filter.add_pattern(upattern);
-            add_filter(filter);
-            extensionMap[uname]=ioext->extension;
-            }
+        FileDialogExtensionToPattern (upattern, imod->get_extension());
+
+        Gtk::FileFilter filter;
+        Glib::ustring uname(_(imod->get_filetypename()));
+        filter.set_name(uname);
+        filter.add_pattern(upattern);
+        add_filter(filter);
+        extensionMap[uname] = imod;
+
         //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
         allInkscapeFilter.add_pattern(upattern);
-        if ( strncmp("image", ioext->mimetype, 5)==0 )
+        if ( strncmp("image", imod->get_mimetype(), 5)==0 )
             allImageFilter.add_pattern(upattern);
         }
 
-    Inkscape::Extension::db.free_list(extension_list);
+    return;
 }
 
 
@@ -1156,50 +1134,22 @@ void FileSaveDialogImpl::fileTypeChangedCallback()
 
 void FileSaveDialogImpl::createFileTypeMenu()
 {
-    FileType inkscapeType;
-    inkscapeType.name = _("Inkscape SVG");
-    inkscapeType.pattern = "*.svg";
-    inkscapeType.extension = Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
-    fileTypeComboBox.append_text(inkscapeType.name);
-    fileTypes.push_back(inkscapeType);
+    Inkscape::Extension::DB::OutputList extension_list;
+    Inkscape::Extension::db.get_output_list(extension_list);
 
-    FileType plainType;
-    plainType.name = _("Plain SVG");
-    plainType.pattern = "*.svg";
-    plainType.extension = Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG);
-    fileTypeComboBox.append_text(plainType.name);
-    fileTypes.push_back(plainType);
-
-    GSList *extension_list = Inkscape::Extension::db.get_output_list();
-    if (extension_list == NULL) {
-        // Another exception
-        g_warning("Internal error.  We need extensions.\n");
-        return;
-    }
-
-    for (GSList *current_item = g_slist_next(extension_list);
-         current_item; current_item = g_slist_next(current_item))
+    for (Inkscape::Extension::DB::OutputList::iterator current_item = extension_list.begin();
+         current_item != extension_list.end(); current_item++)
         {
-        Inkscape::Extension::DB::IOExtensionDescription * ioext =
-              reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
+        Inkscape::Extension::Output * omod = *current_item;
 
-        if ( ( strcmp(".svg",  ioext->file_extension)==0 ))
-            {
-            //Skip these. we already did them
-            }
-        else
-            {
-            FileType type;
-            type.name     = (_(ioext->name));
-            type.pattern  = "*";
-            type.pattern += ioext->file_extension;
-            type.extension=ioext->extension;
-            fileTypeComboBox.append_text(type.name);
-            fileTypes.push_back(type);
-            }
+        FileType type;
+        type.name     = (_(omod->get_filetypename()));
+        type.pattern  = "*";
+        FileDialogExtensionToPattern (type.pattern, omod->get_extension());
+        type.extension= omod;
+        fileTypeComboBox.append_text(type.name);
+        fileTypes.push_back(type);
         }
-
-    Inkscape::Extension::db.free_list(extension_list);
 
     //#Let user choose
     FileType guessType;
@@ -1428,8 +1378,34 @@ FileSaveDialogImpl::getFilename()
     return g_strdup(myFilename.c_str());
 }
 
+/**
+    \brief  A quick function to turn a standard extension into a searchable
+            pattern for the file dialogs
+    \param  pattern  The patter that the extension should be written to
+    \param  in_file_extension  The C string that represents the extension
 
+    This function just goes through the string, and takes all characters
+    and puts a [<upper><lower>] so that both are searched and shown in
+    the file dialog.  This function edits the pattern string to make
+    this happen.
+*/
+void
+FileDialogExtensionToPattern (Glib::ustring &pattern, gchar * in_file_extension)
+{
+    Glib::ustring tmp(in_file_extension);
 
+    for ( guint i = 0; i < tmp.length(); i++ ) {
+        Glib::ustring::value_type ch = tmp.at(i);
+        if ( Glib::Unicode::isalpha(ch) ) {
+            pattern += '[';
+            pattern += Glib::Unicode::toupper(ch);
+            pattern += Glib::Unicode::tolower(ch);
+            pattern += ']';
+        } else {
+            pattern += ch;
+        }
+    }
+}
 
 } //namespace Dialogs
 } //namespace UI

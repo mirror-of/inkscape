@@ -1425,12 +1425,69 @@ SPActionEventVector DialogVerb::vector =
 SPActionEventVector HelpVerb::vector =
             {{NULL},HelpVerb::perform, NULL, NULL, NULL};
 
+
+/* *********** Effect Last ********** */
 /**
  * Action vector to define functions called if a staticly defined tutorial verb
  * is called
  */
 SPActionEventVector TutorialVerb::vector =
             {{NULL},TutorialVerb::perform, NULL, NULL, NULL};
+
+/** \brief A class to represent the last effect issued */
+class EffectLastVerb : public Verb {
+private:
+    static void perform (SPAction * action, void * mydata, void * otherdata);
+    static SPActionEventVector vector;
+protected:
+    virtual SPAction * make_action (SPView * view);
+public:
+    /** \brief Use the Verb initializer with the same parameters. */
+    EffectLastVerb(const unsigned int code,
+                   gchar const * id,
+                   gchar const * name,
+                   gchar const * tip,
+                   gchar const * image) :
+            Verb(code, id, name, tip, image) {
+    }
+}; /* EffectLastVerb class */
+
+/**
+ * The vector to attach in the last effect verb.
+ */
+SPActionEventVector EffectLastVerb::vector =
+            {{NULL},EffectLastVerb::perform, NULL, NULL, NULL};
+
+/** \brief  Create an action for a \c EffectLastVerb
+    \param  view  Which view the action should be created for
+    \return The built action.
+
+    Calls \c make_action_helper with the \c vector.
+*/
+SPAction *
+EffectLastVerb::make_action (SPView * view)
+{
+    return make_action_helper(view, &vector);
+}
+
+/** \brief  Decode the verb code and take appropriate action */
+void
+EffectLastVerb::perform (SPAction *action, void * data, void *pdata)
+{
+#if 0
+    /* These aren't used, but are here to remind people not to use
+       the CURRENT_DOCUMENT macros unless they really have to. */
+    SPView * current_view = sp_action_get_view(action);
+    SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
+#endif
+    switch ((long) data) {
+        default:
+            return;
+    }
+
+    return;
+}
+/* *********** End Effect Last ********** */
 
 /* these must be in the same order as the SP_VERB_* enum in "verbs.h" */
 Verb * Verb::_base_verbs[] = {
@@ -1765,6 +1822,12 @@ Verb * Verb::_base_verbs[] = {
         N_("Principles of design in the tutorial form"), NULL/*"tutorial_design"*/),
     new TutorialVerb(SP_VERB_TUTORIAL_TIPS, "TutorialsTips", N_("_Tips and Tricks"),
         N_("Miscellaneous tips and tricks"), NULL/*"tutorial_tips"*/),
+
+    /* Effect */
+    new EffectLastVerb(SP_VERB_EFFECT_LAST, "EffectLast", N_("Previous Effect"),
+        N_("Repeat the last effect with the same settings"), NULL/*"tutorial_tips"*/),
+    new EffectLastVerb(SP_VERB_EFFECT_LAST_PREF, "EffectLastPref", N_("Previous Effect..."),
+        N_("Repeat the last effect with new settings"), NULL/*"tutorial_tips"*/),
 
     /* Footer */
     new Verb(SP_VERB_LAST, NULL, NULL, NULL, NULL)

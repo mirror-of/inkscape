@@ -34,6 +34,7 @@
 
 #include "db.h"
 #include "dependency.h"
+#include "timer.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -91,6 +92,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
         db.register_ext (this);
     }
 //  printf("%s\n", name);
+	timer = NULL;
 
     return;
 }
@@ -112,6 +114,8 @@ Extension::~Extension (void)
     sp_repr_unref(repr);
     g_free(id);
     g_free(name);
+	delete timer;
+	timer = NULL;
     /** \todo Need to do parameters here */
 
 	for (unsigned int i = 0 ; i < _deps.size(); i++) {
@@ -143,13 +147,30 @@ Extension::set_state (state_t in_state)
 			case STATE_LOADED:
 				if (imp->load(this))
 					_state = STATE_LOADED;
+
+				if (timer != NULL) {
+					delete timer;
+				}
+				timer = new ExpirationTimer(this);
+
 				break;
 			case STATE_UNLOADED:
+				std::cout << "Unloading: " << name << std::endl;
 				imp->unload(this);
 				_state = STATE_UNLOADED;
+
+				if (timer != NULL) {
+					delete timer;
+					timer = NULL;
+				}
 				break;
 			case STATE_DEACTIVATED:
 				_state = STATE_DEACTIVATED;
+
+				if (timer != NULL) {
+					delete timer;
+					timer = NULL;
+				}
 				break;
 			default:
 				break;

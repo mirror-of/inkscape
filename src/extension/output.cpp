@@ -141,7 +141,10 @@ Output::get_extension(void)
 gchar *
 Output::get_filetypename(void)
 {
-    return filetypename;
+    if (filetypename != NULL)
+        return filetypename;
+    else
+        return get_name();
 }
 
 /**

@@ -150,18 +150,9 @@ public:
 }; //FileSaveDialog
 
 
-
-
-
-
-
-
 } //namespace Dialogs
 } //namespace UI
 } //namespace Inkscape
-
-
-
 
 
 #endif /* __FILE_DIALOG_H__ */

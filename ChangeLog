@@ -1,3 +1,33 @@
+2004-12-24  Ted Gould  <ted@gould.cx>
+
+	* src/interface.cpp, src/verbs.cpp, src/verbs.h:
+
+	Basic code for the effects menu.
+
+	* src/dialogs/filedialog.cpp, src/dialogs/filedialog.h,
+	src/extension/db.cpp, src/extension/db.h:
+
+	Changing the DB access functions to use std::list instead of GSList so
+	that it is more standard, and we get rid of a specialized class that
+	really isn't that useful.  Less memory usage, and fixes a leak.
+
+	* src/extension/effect.cpp, src/extension/effect.h:
+
+	Adding in a "Last Effect" to be used in the menus.
+
+	* src/extension/extension-forward.h, src/extension/extension.cpp,
+	src/extension/extension.h, src/extension/input.cpp,
+	src/extension/output.cpp, src/extension/timer.cpp, src/extension/timer.h,
+	src/extension/Makefile_insert:
+
+	Adding in the timer functions so that modules will unload in a given
+	amount of time.  For more information on this read the documentation
+	in the files.  Kinda a lazy deallocation.
+
+	* src/extension/implementation/implementation.cpp:
+
+	Fix unload so that it is not recursive.
+
 2004-12-23  MenTaLguY  <mental@rydia.net>
 
 	* src/arc-context.cpp, src/document.cpp, src/draw-context.cpp,

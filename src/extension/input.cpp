@@ -8,6 +8,7 @@
  */
 
 #include "implementation/implementation.h"
+#include "timer.h"
 #include "input.h"
 
 /* Inkscape::Extension::Input */
@@ -135,6 +136,12 @@ Input::check (void)
 SPDocument *
 Input::open (const gchar *uri)
 {
+        if (!loaded()) {
+            set_state(Extension::STATE_LOADED);
+        }
+        if (!loaded()) return NULL;
+        timer->touch();
+
 	SPDocument * doc;
 	SPRepr * repr;
 
@@ -191,7 +198,10 @@ Input::get_extension(void)
 gchar *
 Input::get_filetypename(void)
 {
-    return filetypename;
+    if (filetypename != NULL)
+        return filetypename;
+    else
+        return get_name();
 }
 
 /**
