@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-26 00:36+0200\n"
+"POT-Creation-Date: 2004-06-28 00:51+0200\n"
 "PO-Revision-Date: 2000-08-24 20:00-0000\n"
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -23,7 +23,7 @@ msgstr "Sodipodi"
 msgid "SVG Vector Illustrator"
 msgstr ""
 
-#: src/arc-context.cpp:466
+#: src/arc-context.cpp:465
 #, c-format
 msgid "Draw arc: %s x %s"
 msgstr ""
@@ -43,37 +43,37 @@ msgstr ""
 msgid "Move %s"
 msgstr "Nód"
 
-#: src/desktop.cpp:802
+#: src/desktop.cpp:804
 msgid "Zoom drawing if window size changes"
 msgstr ""
 
-#: src/desktop.cpp:824 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
+#: src/desktop.cpp:826 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
 msgid "Zoom"
 msgstr ""
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:848
+#: src/desktop.cpp:850
 msgid "Cursor coordinates"
 msgstr ""
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:858
+#: src/desktop.cpp:860
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:897
+#: src/desktop.cpp:899
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:899
+#: src/desktop.cpp:901
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1041
+#: src/desktop.cpp:1043
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -82,11 +82,11 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1055 src/desktop.cpp:1114
+#: src/desktop.cpp:1057 src/desktop.cpp:1116
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1099
+#: src/desktop.cpp:1101
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -95,25 +95,25 @@ msgid ""
 "Do you want to save this file in another format?"
 msgstr ""
 
-#: src/desktop.cpp:1456
+#: src/desktop.cpp:1458
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1485
+#: src/desktop.cpp:1487
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1884 src/dialogs/align.cpp:445
+#: src/desktop.cpp:1885 src/dialogs/align.cpp:445
 #: src/dialogs/desktop-properties.cpp:690 src/dialogs/export.cpp:277
 msgid "Page"
 msgstr "Leathanach"
 
-#: src/desktop.cpp:1888 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
+#: src/desktop.cpp:1889 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
 msgid "Drawing"
 msgstr ""
 
-#: src/desktop.cpp:1892 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
+#: src/desktop.cpp:1893 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
 msgid "Selection"
 msgstr ""
 
@@ -380,7 +380,7 @@ msgstr ""
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:810 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1371
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
 #: src/toolbox.cpp:1626
 #, fuzzy
 msgid "Width:"
@@ -1073,17 +1073,17 @@ msgstr ""
 msgid "No filename specified.  Unable to save."
 msgstr ""
 
-#: src/dialogs/fill-style.cpp:123
+#: src/dialogs/fill-style.cpp:124
 msgid "Fill style"
 msgstr ""
 
-#: src/dialogs/fill-style.cpp:171
+#: src/dialogs/fill-style.cpp:172
 #, fuzzy
 msgid "Fill:"
 msgstr "Comhad Nua"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
-#: src/dialogs/fill-style.cpp:182
+#: src/dialogs/fill-style.cpp:183
 msgid ""
 "Specifies the method of filling overlapping areas when an object intersects "
 "itself. With the \"winding fill\" method (fill-rule:nonzero), all "
@@ -1091,11 +1091,11 @@ msgid ""
 "rule:evenodd), every other of them is filled."
 msgstr ""
 
-#: src/dialogs/fill-style.cpp:190
+#: src/dialogs/fill-style.cpp:191
 msgid "winding"
 msgstr ""
 
-#: src/dialogs/fill-style.cpp:198
+#: src/dialogs/fill-style.cpp:199
 msgid "alternating"
 msgstr ""
 
@@ -1554,12 +1554,12 @@ msgstr ""
 msgid "License"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1068 src/widgets/gradient-vector.cpp:262
-#: src/widgets/paint-selector.cpp:812
+#: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
+#: src/widgets/paint-selector.cpp:832
 msgid "No document selected"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1378
+#: src/dialogs/stroke-style.cpp:1385
 #, fuzzy
 msgid "Stroke width"
 msgstr "Priontáil"
@@ -1567,28 +1567,28 @@ msgstr "Priontáil"
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1398
+#: src/dialogs/stroke-style.cpp:1405
 msgid "Join:"
 msgstr ""
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1412
+#: src/dialogs/stroke-style.cpp:1419
 msgid "Miter join"
 msgstr ""
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1422
+#: src/dialogs/stroke-style.cpp:1429
 msgid "Round join"
 msgstr ""
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1432
+#: src/dialogs/stroke-style.cpp:1439
 msgid "Bevel join"
 msgstr ""
 
@@ -1599,55 +1599,54 @@ msgstr ""
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1443
+#: src/dialogs/stroke-style.cpp:1450
 msgid "Miter limit:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1451
+#: src/dialogs/stroke-style.cpp:1458
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr ""
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1464
+#: src/dialogs/stroke-style.cpp:1471
 msgid "Cap:"
 msgstr ""
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1477
+#: src/dialogs/stroke-style.cpp:1484
 msgid "Butt cap"
 msgstr ""
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1486
+#: src/dialogs/stroke-style.cpp:1493
 msgid "Round cap"
 msgstr ""
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1495
+#: src/dialogs/stroke-style.cpp:1502
 msgid "Square cap"
 msgstr ""
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1501
-#, fuzzy
-msgid "Pattern:"
-msgstr "Priontáil comhad"
+#: src/dialogs/stroke-style.cpp:1508
+msgid "Dashes:"
+msgstr ""
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1522
+#: src/dialogs/stroke-style.cpp:1529
 msgid "Start Markers:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1532
+#: src/dialogs/stroke-style.cpp:1539
 msgid "Mid Markers:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1543
+#: src/dialogs/stroke-style.cpp:1550
 msgid "End Markers:"
 msgstr ""
 
@@ -1756,15 +1755,15 @@ msgstr ""
 msgid "Attribute value"
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1175
+#: src/dialogs/xml-tree.cpp:1171
 msgid "New element node..."
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1196
+#: src/dialogs/xml-tree.cpp:1192
 msgid "Cancel"
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1202
+#: src/dialogs/xml-tree.cpp:1198
 msgid "Create"
 msgstr ""
 
@@ -1807,37 +1806,37 @@ msgid "Creating anchor at (%g,%g)"
 msgstr ""
 
 #. Write curves to object
-#: src/draw-context.cpp:1065
+#: src/draw-context.cpp:1064
 msgid "Finishing freehand"
 msgstr ""
 
-#: src/draw-context.cpp:1834
+#: src/draw-context.cpp:1832
 msgid "Finishing pen"
 msgstr ""
 
 #. alpha of color under cursor, to show in the statusbar
 #. locale-sensitive printf is OK, since this goes to the UI, not into SVG
-#: src/dropper-context.cpp:272
+#: src/dropper-context.cpp:271
 #, c-format
 msgid " alpha %.3g"
 msgstr ""
 
 #. where the color is picked, to show in the statusbar
-#: src/dropper-context.cpp:274
+#: src/dropper-context.cpp:273
 #, c-format
 msgid ", averaged with radius %d"
 msgstr ""
 
-#: src/dropper-context.cpp:274
+#: src/dropper-context.cpp:273
 msgid " under cursor"
 msgstr ""
 
 #. message, to show in the statusbar
-#: src/dropper-context.cpp:276
+#: src/dropper-context.cpp:275
 msgid "Release mouse to set color."
 msgstr ""
 
-#: src/dropper-context.cpp:276
+#: src/dropper-context.cpp:275
 msgid ""
 "Click to pick fill color, Shift+click to pick stroke color. Drag to pick the "
 "average color of an area."
@@ -2613,21 +2612,21 @@ msgstr "Tóg"
 msgid "No paths to reverse in the selection."
 msgstr ""
 
-#: src/rect-context.cpp:516
+#: src/rect-context.cpp:515
 #, c-format
 msgid "Draw rectangle: %s x %s"
 msgstr ""
 
-#: src/select-context.cpp:646
+#: src/select-context.cpp:653
 msgid "Move canceled."
 msgstr ""
 
-#: src/select-context.cpp:652
+#: src/select-context.cpp:659
 #, fuzzy
 msgid "Selection canceled."
 msgstr "Tóg"
 
-#: src/select-context.cpp:801
+#: src/select-context.cpp:808
 #, fuzzy, c-format
 msgid "Move by %s, %s"
 msgstr "Nód"
@@ -2652,120 +2651,120 @@ msgstr ""
 msgid "Height of selection"
 msgstr ""
 
-#: src/selection-chemistry.cpp:68
+#: src/selection-chemistry.cpp:69
 msgid "Nothing was deleted."
 msgstr ""
 
-#: src/selection-chemistry.cpp:100
+#: src/selection-chemistry.cpp:101
 #, fuzzy
 msgid "Select some objects to duplicate."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:235
+#: src/selection-chemistry.cpp:236
 #, fuzzy
 msgid "Select two or more objects to group."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:243
+#: src/selection-chemistry.cpp:244
 #, fuzzy
 msgid "Select at least two objects to group."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:252
+#: src/selection-chemistry.cpp:253
 msgid "You cannot group objects from different groups or layers."
 msgstr ""
 
-#: src/selection-chemistry.cpp:300
+#: src/selection-chemistry.cpp:301
 msgid "Select a group to ungroup."
 msgstr ""
 
-#: src/selection-chemistry.cpp:334
+#: src/selection-chemistry.cpp:335
 msgid "No groups to ungroup in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:401
+#: src/selection-chemistry.cpp:402
 #, fuzzy
 msgid "Select some objects to raise."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:407 src/selection-chemistry.cpp:485
+#: src/selection-chemistry.cpp:408 src/selection-chemistry.cpp:486
 msgid "You cannot raise/lower objects from different groups or layers."
 msgstr ""
 
-#: src/selection-chemistry.cpp:451
+#: src/selection-chemistry.cpp:452
 #, fuzzy
 msgid "Select some objects to raise to top."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:479
+#: src/selection-chemistry.cpp:480
 #, fuzzy
 msgid "Select some objects to lower."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:535
+#: src/selection-chemistry.cpp:536
 #, fuzzy
 msgid "Select some objects to lower to bottom."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:569
+#: src/selection-chemistry.cpp:570
 msgid "Nothing to undo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:578
+#: src/selection-chemistry.cpp:579
 msgid "Nothing to redo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:654
+#: src/selection-chemistry.cpp:668
 msgid "Nothing was copied."
 msgstr ""
 
-#: src/selection-chemistry.cpp:716 src/selection-chemistry.cpp:777
+#: src/selection-chemistry.cpp:765 src/selection-chemistry.cpp:816
 #, fuzzy
 msgid "Nothing on the clipboard."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:783
+#: src/selection-chemistry.cpp:822
 #, fuzzy
 msgid "Select objects to paste style to."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:1267
+#: src/selection-chemistry.cpp:1272
 #, fuzzy
 msgid "Select an object to clone."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:1273
+#: src/selection-chemistry.cpp:1278
 msgid "If you want to clone several objects, group them and clone the group."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1304
+#: src/selection-chemistry.cpp:1309
 #, fuzzy
 msgid "Select a clone to unlink."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:1335
+#: src/selection-chemistry.cpp:1340
 msgid "No clones to unlink in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1352
+#: src/selection-chemistry.cpp:1357
 msgid "Select a single clone to go to its original."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1360
+#: src/selection-chemistry.cpp:1365
 msgid "This clone's original is not a visible object (it is in <defs>)"
 msgstr ""
 
-#: src/selection-chemistry.cpp:1387
+#: src/selection-chemistry.cpp:1392
 #, fuzzy
 msgid "Select an object to tile."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:1451
+#: src/selection-chemistry.cpp:1456
 #, fuzzy
 msgid "Select an object with pattern fill to untile."
 msgstr "Tóg"
 
-#: src/selection-chemistry.cpp:1502
+#: src/selection-chemistry.cpp:1507
 msgid "No pattern fills to untile in the selection."
 msgstr ""
 
@@ -2786,22 +2785,22 @@ msgid "%i objects selected. %s."
 msgstr ""
 
 #. status text
-#: src/seltrans.cpp:781 src/seltrans.cpp:843
+#: src/seltrans.cpp:766 src/seltrans.cpp:828
 #, c-format
 msgid "Scale %0.2f%%, %0.2f%%"
 msgstr ""
 
-#: src/seltrans.cpp:911
+#: src/seltrans.cpp:896
 #, c-format
 msgid "Skew %0.2f%c %0.2f%c"
 msgstr ""
 
-#: src/seltrans.cpp:958
+#: src/seltrans.cpp:943
 #, c-format
 msgid "Rotate by %0.2f deg"
 msgstr ""
 
-#: src/seltrans.cpp:987
+#: src/seltrans.cpp:972
 #, c-format
 msgid "Center at (%s,%s)"
 msgstr ""
@@ -2875,7 +2874,7 @@ msgstr "Meid pictiúr"
 msgid "Group of %d objects"
 msgstr ""
 
-#: src/sp-item.cpp:494
+#: src/sp-item.cpp:491
 msgid "Object"
 msgstr ""
 
@@ -2926,7 +2925,7 @@ msgstr ""
 msgid "Orphaned clone"
 msgstr ""
 
-#: src/spiral-context.cpp:438
+#: src/spiral-context.cpp:437
 #, c-format
 msgid "Draw spiral at (%s,%s)"
 msgstr ""
@@ -2983,30 +2982,30 @@ msgstr "Tóg"
 msgid "No paths to simplify in the selection."
 msgstr ""
 
-#: src/star-context.cpp:470
+#: src/star-context.cpp:469
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr ""
 
-#: src/star-context.cpp:471
+#: src/star-context.cpp:470
 #, fuzzy, c-format
 msgid "Draw star at (%s,%s)"
 msgstr "Scríobh teacs"
 
-#: src/text-context.cpp:393
+#: src/text-context.cpp:392
 msgid "No-break space"
 msgstr ""
 
-#: src/text-context.cpp:404
+#: src/text-context.cpp:403
 msgid "Unicode: "
 msgstr ""
 
-#: src/text-context.cpp:418
+#: src/text-context.cpp:417
 #, c-format
 msgid "Unicode: %c%c%c%c"
 msgstr ""
 
-#: src/text-context.cpp:431
+#: src/text-context.cpp:430
 msgid "Non-printable character"
 msgstr ""
 
@@ -4373,43 +4372,50 @@ msgstr "Dath"
 msgid "Gradient editor"
 msgstr "Priontáil comhad"
 
-#: src/widgets/paint-selector.cpp:167 src/widgets/paint-selector.cpp:624
+#: src/widgets/paint-selector.cpp:168 src/widgets/paint-selector.cpp:644
 #, fuzzy
 msgid "No paint"
 msgstr "Priontáil"
 
-#: src/widgets/paint-selector.cpp:169 src/widgets/paint-selector.cpp:695
+#: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:715
 #, fuzzy
 msgid "Flat color"
 msgstr "Dath"
 
-#: src/widgets/paint-selector.cpp:171 src/widgets/paint-selector.cpp:765
+#: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:785
 msgid "Linear gradient"
 msgstr ""
 
-#: src/widgets/paint-selector.cpp:173 src/widgets/paint-selector.cpp:768
+#: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:788
 msgid "Radial gradient"
 msgstr ""
 
-#: src/widgets/paint-selector.cpp:175
+#: src/widgets/paint-selector.cpp:176
 #, fuzzy
 msgid "Pattern Fill"
 msgstr "Priontáil comhad"
 
-#: src/widgets/paint-selector.cpp:596
+#: src/widgets/paint-selector.cpp:600
 msgid "No objects"
 msgstr ""
 
-#: src/widgets/paint-selector.cpp:610
+#: src/widgets/paint-selector.cpp:614
 msgid "Multiple styles"
 msgstr ""
 
-#: src/widgets/paint-selector.cpp:818
+#. TRANSLATORS: "Clone" is a noun here. This message is to notify the user
+#. that the currently selected object is a clone.
+#: src/widgets/paint-selector.cpp:630
+#, fuzzy
+msgid "Clone Selected"
+msgstr "Tóg"
+
+#: src/widgets/paint-selector.cpp:838
 #, fuzzy
 msgid "No patterns in document"
 msgstr "Sábháil Comhad"
 
-#: src/widgets/paint-selector.cpp:932
+#: src/widgets/paint-selector.cpp:952
 #, fuzzy
 msgid "Pattern fill"
 msgstr "Priontáil comhad"
@@ -4546,6 +4552,10 @@ msgid "Value"
 msgstr "Luach"
 
 #, fuzzy
+#~ msgid "Pattern:"
+#~ msgstr "Priontáil comhad"
+
+#, fuzzy
 #~ msgid "Sharpness:"
 #~ msgstr "Sábháil\t"
 
@@ -4578,10 +4588,6 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Delete selected objects"
-#~ msgstr "Tóg"
-
-#, fuzzy
-#~ msgid "Clone selected objects"
 #~ msgstr "Tóg"
 
 #, fuzzy
