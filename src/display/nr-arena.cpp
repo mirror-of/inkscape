@@ -55,8 +55,6 @@ nr_arena_init (NRArena *arena)
 static void
 nr_arena_finalize (NRObject *object)
 {
-	NRArena *arena = NR_ARENA (object);
-
 	((NRObjectClass *) (parent_class))->finalize (object);
 }
 
