@@ -92,7 +92,7 @@ endif
 
 
 
-VERSION = \"0.37-${DTG}\"
+VERSION = \"0.38cvs-${DTG}\"
 
 
 CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION)
