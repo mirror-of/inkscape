@@ -414,8 +414,10 @@ sp_text_description(SPItem *item)
 
 static void sp_text_snappoints(SPItem const *item, SnapPointsIter p)
 {
-    if (((SPItemClass *) text_parent_class)->snappoints) {
-        ((SPItemClass *) text_parent_class)->snappoints (item, p);
+    // the baseline anchor of the first char
+    Inkscape::Text::Layout const *layout = te_get_layout((SPItem *) item);
+    if(layout != NULL) {
+        *p = layout->characterAnchorPoint(layout->begin()) * sp_item_i2d_affine(item);
     }
 }
 
