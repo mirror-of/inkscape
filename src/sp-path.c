@@ -36,6 +36,7 @@ static void sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 
 static SPRepr *sp_path_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform);
+static gchar * sp_path_description (SPItem * item);
 
 static SPShapeClass *parent_class;
 
@@ -82,7 +83,30 @@ sp_path_class_init (SPPathClass * klass)
 	sp_object_class->set = sp_path_set;
 	sp_object_class->write = sp_path_write;
 
+	item_class->description = sp_path_description;
 	item_class->write_transform = sp_path_write_transform;
+}
+
+
+gint 
+sp_nodes_in_path (SPPath *path)
+{
+	SPCurve * curve;
+	gint r, i; 
+	curve = SP_SHAPE (path) -> curve;
+	r = curve->end; 
+	i = curve->length - 1;
+	if (i > r) i = r; // sometimes after switching from node editor length is wrong, e.g. f6 - draw - f2 - tab - f1, this fixes it
+	for (; i >= 0; i --) 
+		if ((curve->bpath + i) -> code == ART_MOVETO)
+			r --;
+	return r;
+}
+
+static gchar *
+sp_path_description (SPItem * item)
+{
+	return g_strdup_printf ("Path (%i nodes)", sp_nodes_in_path (SP_PATH (item)));
 }
 
 /**
