@@ -23,6 +23,7 @@ OBJECTS = \
 	desktop-properties.obj \
 	document-properties.obj \
 	object-properties.obj \
+	layer-properties.obj \
 	item-properties.obj \
 	object-attributes.obj \
 	tool-options.obj \
