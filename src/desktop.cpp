@@ -1600,7 +1600,16 @@ sp_desktop_zoom_drawing (SPDesktop *dt)
 
     NRRect d;
     sp_item_bbox_desktop (docitem, &d);
-    if ((fabs (d.x1 - d.x0) < 1.0) || (fabs (d.y1 - d.y0) < 1.0)) return;
+
+    /* Note that the second condition here indicates that
+    ** there are no items in the drawing.
+    */
+    if ( (fabs (d.x1 - d.x0) < 1.0 || fabs (d.y1 - d.y0) < 1.0) ||
+         (d.x0 > d.x1 && d.y0 > d.y1))
+    {
+        return;
+    }
+
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }
 
