@@ -218,7 +218,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
-
+	
 			if (!(event->button.state & GDK_SHIFT_MASK)) {
 				// if shift was pressed, do not move objects; 
 				// pass the event to root handler which will create a rubberband
@@ -227,11 +227,11 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 				sc->moved = FALSE;
 				sc->item = item;
 
-				sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->drawing),
-						 GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-						 GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-						 NULL, event->button.time);
-				sc->grabbed = SP_CANVAS_ITEM (desktop->drawing);
+ 				sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->drawing),
+ 						 GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+ 						 GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
+ 						 NULL, event->button.time);
+ 				sc->grabbed = SP_CANVAS_ITEM (desktop->drawing);
 			
 				ret = TRUE;
 			}
@@ -353,16 +353,22 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
+
+			// save drag origin
+			xp = (gint) event->button.x; 
+			yp = (gint) event->button.y;
+
 			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
 			sp_rubberband_start (desktop, p.x, p.y);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 					     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
 					     NULL, event->button.time);
 			sc->grabbed = SP_CANVAS_ITEM (desktop->acetate);
-#if 0
-			/* We cannot assign shift for partial selects, as it is used for add mode */
+			
+			// remember that shift was on before button press
+			// (originally intended by lauris for partial selects and then abandoned)
 			sc->button_press_shift = (event->button.state & GDK_SHIFT_MASK) ? TRUE : FALSE;
-#endif
+
 			ret = TRUE;
 		}
 		break;
@@ -401,9 +407,10 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					sc->moved = FALSE;
 					sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
 				} else {
-					// item has not been moved -> do selecting
+					// item has not been moved -> simply a click, do selecting
 					if (!sp_selection_is_empty (selection)) {
-						if (event->button.state & GDK_SHIFT_MASK) {
+						if (event->button.state & GDK_SHIFT_MASK) { 
+							// with shift, toggle selection
 							sp_sel_trans_reset_state (seltrans);
 							if (sp_selection_item_selected (selection, sc->item)) {
 								sp_selection_remove_item (selection, sc->item);
@@ -411,6 +418,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 								sp_selection_add_item (selection, sc->item);
 							}
 						} else {
+							// without shift, increase state (i.e. toggle scale/rotation handles)
 							if (sp_selection_item_selected (selection, sc->item)) {
 								sp_sel_trans_increase_state (seltrans);
 							} else {
@@ -426,17 +434,39 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				sc->dragging = FALSE;
 				sc->item = NULL;
 			} else {
-				if (sp_rubberband_rect (&b)) {
+				if (sp_rubberband_rect (&b) && fabs(b.x1 - b.x0) > tolerance && fabs(b.y1 - b.y0) > tolerance) {
+					// this was a rubberband drag
 					sp_rubberband_stop ();
 					sp_sel_trans_reset_state (seltrans);
-					if (sc->button_press_shift) {
-						l = sp_document_partial_items_in_box (SP_DT_DOCUMENT (desktop), &b);
-					} else {
-						l = sp_document_items_in_box (SP_DT_DOCUMENT (desktop), &b);
-					}
+					// find out affected items:
+					l = sp_document_items_in_box (SP_DT_DOCUMENT (desktop), &b);
 					if (event->button.state & GDK_SHIFT_MASK) {
+						// with shift, add to selection
 						while (l) {
 							item = SP_ITEM (l->data);
+							if (sp_selection_item_selected (selection, item)) {
+								// uncomment if you want toggle behavior for shift-rubberband
+								//	sp_selection_remove_item (selection, item);
+							} else {
+								sp_selection_add_item (selection, item);
+							}
+							l = g_slist_remove (l, item);
+						}
+					} else {
+						// without shift, simply select anew
+						sp_selection_set_item_list (selection, l);
+					}
+				} else { // it was just a click, or a too small rubberband
+					if (sp_rubberband_rect (&b)) sp_rubberband_stop ();
+					if (sc->button_press_shift) {
+						// this was a shift-click, select what was clicked upon
+						l = sp_document_partial_items_in_box (SP_DT_DOCUMENT (desktop), &b);
+						// we want to select only the topmost object, so we leave only the last one in the list
+						while (l && l->next)
+							l = g_slist_remove (l, l->data);
+						if (l) {
+							item = SP_ITEM (l->data);
+							// toggle selected status
 							if (sp_selection_item_selected (selection, item)) {
 								sp_selection_remove_item (selection, item);
 							} else {
@@ -444,15 +474,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 							}
 							l = g_slist_remove (l, item);
 						}
-					} else {
-						sp_selection_set_item_list (selection, l);
-					}
-				} else {
-					if (!sp_selection_is_empty (selection)) {
-						if (!(rb_escaped) && !(drag_escaped))
-							sp_selection_empty (selection);
-						rb_escaped = 0;
-						ret = TRUE;
+					} else { // click without shift, simply deselect
+						if (!sp_selection_is_empty (selection)) {
+							if (!(rb_escaped) && !(drag_escaped)) // unless something was cancelled
+								sp_selection_empty (selection);
+							rb_escaped = 0;
+							ret = TRUE;
+						}
 					}
 				}
 				ret = TRUE;
@@ -461,8 +489,8 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				sp_canvas_item_ungrab (sc->grabbed, event->button.time);
 				sc->grabbed = NULL;
 			}
-			sc->button_press_shift = FALSE;
 		} 
+		sc->button_press_shift = FALSE;
 		break;
 	case GDK_KEY_PRESS: // keybindings for select context
 		switch (event->key.keyval) {  
