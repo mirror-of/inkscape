@@ -105,7 +105,7 @@ sp_module_print_win32_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_print_win32_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE_PRINT, "SPModulePrintWin32", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE_PRINT, "SPModulePrintWin32", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -119,7 +119,7 @@ sp_module_print_win32_class_init (SPModulePrintWin32Class *klass)
 	g_object_class = (GObjectClass *)klass;
 	module_print_class = (SPModulePrintClass *) klass;
 
-	print_win32_parent_class = g_type_class_peek_parent (klass);
+	print_win32_parent_class = (SPModulePrintClass *)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_print_win32_finalize;
 
@@ -223,7 +223,7 @@ sp_module_print_win32_setup (SPModulePrint *mod)
 #endif
 	if (pd.hDevMode) {
 		DEVMODE *devmodep;
-		devmodep = pd.hDevMode;
+		devmodep = (DEVMODE *)pd.hDevMode;
 		if (devmodep->dmFields & DM_ORIENTATION) {
 			w32mod->landscape = (devmodep->dmOrientation == DMORIENT_LANDSCAPE);
 		}
@@ -404,7 +404,7 @@ sp_win32_get_open_filename (unsigned char *dir, unsigned char *filter, unsigned 
 		sizeof (OPENFILENAME),
 		NULL, /* hwndOwner */
 		NULL, /* hInstance */
-		filter, /* lpstrFilter */
+		(const CHAR *)filter, /* lpstrFilter */
 		NULL, /* lpstrCustomFilter */
 		0, /* nMaxCustFilter  */
 		1, /* nFilterIndex */
@@ -412,8 +412,8 @@ sp_win32_get_open_filename (unsigned char *dir, unsigned char *filter, unsigned 
 		sizeof (fnbuf), /* nMaxFile */
 		NULL, /* lpstrFileTitle */
 		0, /* nMaxFileTitle */
-		dir, /* lpstrInitialDir */
-		title, /* lpstrTitle */
+		(const CHAR *)dir, /* lpstrInitialDir */
+		(const CHAR *)title, /* lpstrTitle */
 		OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY, /* Flags */
 		0, /* nFileOffset */
 		0, /* nFileExtension */
@@ -469,7 +469,7 @@ sp_win32_get_save_filename (unsigned char *dir, unsigned int *spns)
 		sizeof (fnbuf), /* nMaxFile */
 		NULL, /* lpstrFileTitle */
 		0, /* nMaxFileTitle */
-		dir, /* lpstrInitialDir */
+		(const CHAR *)dir, /* lpstrInitialDir */
 		"Save document to file", /* lpstrTitle */
 		OFN_HIDEREADONLY, /* Flags */
 		0, /* nFileOffset */

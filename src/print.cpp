@@ -107,7 +107,7 @@ sp_print_preview_document (SPDocument *doc)
 	sp_document_ensure_up_to_date (doc);
 
 #ifdef WIN32
-	mod = g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
+	mod = (SPModulePrint *) g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
 #else
 // Some unix probably
 #ifdef WITH_GNOME_PRINT
@@ -157,10 +157,10 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 	mod = NULL;
 	if (direct) mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
 #ifdef WIN32
-	if (!direct) mod = g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
+	if (!direct) mod = (SPModulePrint *)g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
 #endif
 #ifdef WITH_GNOME_PRINT
-	if (!direct) mod = g_object_new (SP_TYPE_MODULE_PRINT_GNOME, NULL);
+	if (!direct) mod = (SPModulePrint *)g_object_new (SP_TYPE_MODULE_PRINT_GNOME, NULL);
 #endif
 	if (!mod) mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
 

@@ -134,8 +134,9 @@ sp_module_print_plain_finalize (GObject *object)
 	if (gpmod->stream) fclose (gpmod->stream);
 
 	/* restore default signal handling for SIGPIPE */
+#if !defined(_WIN32) && !defined(__WIN32__)
 	(void) signal(SIGPIPE, SIG_DFL);
-
+#endif
 	G_OBJECT_CLASS (print_plain_parent_class)->finalize (object);
 }
 
@@ -296,7 +297,9 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 		}
 		if (pmod->stream) {
 			/* fixme: this is kinda icky */
+#if !defined(_WIN32) && !defined(__WIN32__)
 			(void) signal(SIGPIPE, SIG_IGN);
+#endif
 			ret = TRUE;
 		}
 	}

@@ -11,6 +11,7 @@
  * This code is in public domain
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 

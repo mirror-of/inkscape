@@ -143,7 +143,9 @@ sp_file_open_dialog (gpointer object, gpointer data)
 {
 #ifdef WIN32
 	char *filename;
-	filename = sp_win32_get_open_filename (open_path, "SVG files\0*.svg;*.svgz\0All files\0*\0", _("Select file to open"));
+	filename = sp_win32_get_open_filename ((unsigned char *)open_path,
+                 (unsigned char *)"SVG files\0*.svg;*.svgz\0All files\0*\0", 
+                 (unsigned char *)_("Select file to open"));
 	if (filename) {
 		g_free (open_path);
 		open_path = g_dirname (filename);
@@ -202,7 +204,7 @@ sp_file_save_dialog (SPDocument *doc)
 #ifdef WIN32
 	char *filename;
 	unsigned int spns;
-	filename = sp_win32_get_save_filename (save_path, &spns);
+	filename = sp_win32_get_save_filename ((unsigned char *)save_path, &spns);
 	if (filename && *filename) {
 		sp_file_do_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE : SP_MODULE_KEY_OUTPUT_SVG);
 		g_free (save_path);
@@ -442,10 +444,10 @@ sp_file_import (GtkWidget * widget)
 	if (!SP_IS_DOCUMENT(doc)) return;
 
 #ifdef WIN32
-	filename = sp_win32_get_open_filename (import_path,
-					     "Image files\0*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.xpm\0"
+	filename = sp_win32_get_open_filename ((unsigned char *)import_path,
+					     (unsigned char *)"Image files\0*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.xpm\0"
 					     "SVG files\0*.svg\0"
-					     "All files\0*\0", _("Select file to import"));
+					     "All files\0*\0", (unsigned char *)_("Select file to import"));
 	if (filename) {
 		sp_file_do_import (doc, filename);
 		g_free (filename);

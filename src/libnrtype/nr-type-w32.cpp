@@ -33,7 +33,7 @@ static void nr_typeface_w32_finalize (NRObject *object);
 
 static void nr_typeface_w32_setup (NRTypeFace *tface, NRTypeFaceDef *def);
 
-static unsigned int nr_typeface_w32_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size);
+static unsigned int nr_typeface_w32_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 static NRBPath *nr_typeface_w32_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 static void nr_typeface_w32_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static NRPoint *nr_typeface_w32_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
@@ -131,12 +131,12 @@ void
 nr_type_w32_build_def (NRTypeFaceDef *def, const unsigned char *name, const unsigned char *family)
 {
     def->type = NR_TYPE_TYPEFACE_W32;
-    def->name = g_strdup (name);
-    def->family = g_strdup (family);
+    def->name = (gchar *)g_strdup ((const gchar *)name);
+    def->family = (gchar *)g_strdup ((const gchar *)family);
     def->typeface = NULL;
 }
 
-static void
+void
 nr_type_read_w32_list (void)
 {
 	NRNameList wnames, wfamilies;
@@ -153,7 +153,7 @@ nr_type_read_w32_list (void)
 			int len;
 			len = strlen (wfamilies.names[j]);
 			if (!strncmp (wfamilies.names[j], wnames.names[i], len)) {
-				family = wfamilies.names[j];
+				family = (const unsigned char *)wfamilies.names[j];
 				break;
 			}
 		}
@@ -161,7 +161,7 @@ nr_type_read_w32_list (void)
 			tdef = nr_new (NRTypeFaceDef, 1);
 			tdef->next = NULL;
 			tdef->pdef = NULL;
-			nr_type_w32_build_def (tdef, wnames.names[i], family);
+			nr_type_w32_build_def (tdef, (const unsigned char *)wnames.names[i], family);
 			nr_type_register (tdef);
 		}
 	}
@@ -181,7 +181,7 @@ nr_typeface_w32_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 	((NRTypeFaceClass *) (parent_class))->setup (tface, def);
 
 	tfw32->fonts = NULL;
-	tfw32->logfont = g_hash_table_lookup (namedict, def->name);
+	tfw32->logfont = (LOGFONT *)g_hash_table_lookup (namedict, def->name);
 	tfw32->logfont->lfHeight = 1000;
 	tfw32->logfont->lfWidth = 0;
 	tfw32->hfont = CreateFontIndirect (tfw32->logfont);
@@ -229,7 +229,7 @@ nr_typeface_w32_finalize (NRObject *object)
 }
 
 static unsigned int
-nr_typeface_w32_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size)
+nr_typeface_w32_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
 	NRTypeFaceW32 *tfw32;
 	const unsigned char *val;
@@ -237,96 +237,96 @@ nr_typeface_w32_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigne
 
 	tfw32 = (NRTypeFaceW32 *) tf;
 
-	if (!strcmp (key, "name")) {
-		val = tf->def->name;
-	} else if (!strcmp (key, "family")) {
-		val = tf->def->family;
-	} else if (!strcmp (key, "weight")) {
+	if (!strcmp ((const char *)key, "name")) {
+		val = (const unsigned char *)tf->def->name;
+	} else if (!strcmp ((const char *)key, "family")) {
+		val = (const unsigned char *)tf->def->family;
+	} else if (!strcmp ((const char *)key, "weight")) {
         switch (tfw32->logfont->lfWeight) {
 
         case FW_THIN:
 
-                val = "thin";
+                val = (const unsigned char *)"thin";
 
                 break;
 
         case FW_ULTRALIGHT:
 
-                val = "ultra light";
+                val = (const unsigned char *)"ultra light";
 
                 break;
 
         case FW_LIGHT:
 
-                val = "light";
+                val = (const unsigned char *)"light";
 
                 break;
 
         case FW_NORMAL:
 
-                val = "normal";
+                val = (const unsigned char *)"normal";
 
                 break;
 
         case FW_MEDIUM:
 
-                val = "medium";
+                val = (const unsigned char *)"medium";
 
                 break;
 
         case FW_DEMIBOLD:
 
-                val = "demi bold";
+                val = (const unsigned char *)"demi bold";
 
                 break;
 
         case FW_BOLD:
 
-                val = "bold";
+                val = (const unsigned char *)"bold";
 
                 break;
 
         case FW_ULTRABOLD:
 
-                val = "ultra bold";
+                val = (const unsigned char *)"ultra bold";
 
                 break;
 
         case FW_BLACK:
 
-                val = "black";
+                val = (const unsigned char *)"black";
 
                 break;
 
         default:
 
-  		val = "normal";
+  		val = (const unsigned char *)"normal";
   		        break;
 
   		}
 
-	} else if (!strcmp (key, "style")) {
+	} else if (!strcmp ((const char *)key, "style")) {
 	    if (tfw32->logfont->lfItalic) {
 
-                val = "italic";
+                val = (const unsigned char *)"italic";
 
         } else {
 
 		/* fixme: */
-		val = "normal";
+		val = (const unsigned char *)"normal";
         }
 
 	} else {
-		val = "";
+		val = (const unsigned char *)"";
 	}
 
-	len = MIN (size - 1, strlen (val));
+	len = MIN (size - 1, strlen ((const char *)val));
 	if (len > 0) memcpy (str, val, len);
 
 	if (size > 0) str[len] = '\0';
 
 
-	return strlen (val);
+	return strlen ((const char *)val);
 }
 
 static NRBPath *
@@ -655,12 +655,12 @@ nr_type_w32_inner_enum_proc (ENUMLOGFONTEX *elfex, NEWTEXTMETRICEX *tmex, DWORD 
     if (!g_hash_table_lookup (familydict, elfex->elfLogFont.lfFaceName)) {
         unsigned char *s;
         /* Register family */
-        s = g_strdup (elfex->elfLogFont.lfFaceName);
+        s = (unsigned char *)g_strdup (elfex->elfLogFont.lfFaceName);
         familylist = g_slist_prepend (familylist, s);
         g_hash_table_insert (familydict, s, GUINT_TO_POINTER (TRUE));
     }
 
-    name = g_strdup_printf ("%s %s", elfex->elfLogFont.lfFaceName, elfex->elfStyle);
+    name = (unsigned char *)g_strdup_printf ("%s %s", elfex->elfLogFont.lfFaceName, elfex->elfStyle);
     if (!g_hash_table_lookup (namedict, name)) {
         LOGFONT *plf;
         plf = g_new (LOGFONT, 1);
@@ -711,17 +711,17 @@ nr_type_w32_init (void)
 
     /* Fill in lists */
     NRW32Families.length = g_slist_length (familylist);
-    NRW32Families.names = g_new (unsigned char *, NRW32Families.length);
+    NRW32Families.names = g_new (gchar *, NRW32Families.length);
     pos = 0;
     for (l = familylist; l != NULL; l = l->next) {
-        NRW32Families.names[pos] = (unsigned char *) l->data;
+        NRW32Families.names[pos] = (gchar *) l->data;
         pos += 1;
     }
     NRW32Typefaces.length = g_slist_length (namelist);
-    NRW32Typefaces.names = g_new (unsigned char *, NRW32Typefaces.length);
+    NRW32Typefaces.names = g_new (gchar *, NRW32Typefaces.length);
     pos = 0;
     for (l = namelist; l != NULL; l = l->next) {
-        NRW32Typefaces.names[pos] = (unsigned char *) l->data;
+        NRW32Typefaces.names[pos] = (gchar *) l->data;
         pos += 1;
     }
 
@@ -900,6 +900,7 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
     double Ax, Ay, Bx, By, Cx, Cy;
 
 
+    Cx = Cy = 0.0;
 
 	/* Have to select font */
 

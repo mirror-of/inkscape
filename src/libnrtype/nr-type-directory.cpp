@@ -68,7 +68,7 @@ static float nr_type_distance_position_better (NRTypePosDef *ask, NRTypePosDef *
 
 static void nr_type_read_private_list (void);
 #ifdef WIN32
-static void nr_type_read_w32_list (void);
+void nr_type_read_w32_list (void);
 #endif
 
 static NRTypeDict *typedict = NULL;
@@ -427,7 +427,8 @@ nr_type_distance_position_better (NRTypePosDef *ask, NRTypePosDef *bid, float be
 
 static gchar privatename[] = "/.inkscape/private-fonts";
 
-#if 0
+/*#if 0*/
+#if defined (_WIN32) || defined(__WIN32__)
 static unsigned int
 nr_type_next_token (const gchar *img, unsigned int len, unsigned int p, int *tokenp)
 {
@@ -442,7 +443,10 @@ nr_type_next_token (const gchar *img, unsigned int len, unsigned int p, int *tok
 #endif
 
 #include <unistd.h>
+#if !defined (_WIN32) && !defined(__WIN32__)
 #include <sys/mman.h>
+#else
+#endif
 
 static void
 nr_type_read_private_list (void)
@@ -466,7 +470,8 @@ nr_type_read_private_list (void)
 #define O_BINARY 0
 #endif
 
-#if 1
+/*#if 1*/
+#if !defined (_WIN32) && !defined(__WIN32__)
 	if (!stat (filename, &st) && S_ISREG (st.st_mode) && (st.st_size > 8)) {
 		gchar *cdata;
 		ArikkeiToken ft, lt;

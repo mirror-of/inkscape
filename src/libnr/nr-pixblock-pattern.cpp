@@ -9,6 +9,8 @@
  * This code is in public domain
  */
 
+#include <stdlib.h>
+
 #include "nr-rect.h"
 #include "nr-pixops.h"
 #include "nr-pixblock-pattern.h"

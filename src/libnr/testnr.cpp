@@ -9,6 +9,10 @@
  * This code is in public domain
  */
 
+#if defined (_WIN32) || defined (__WIN32__)
+#include <windows.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/time.h>
@@ -24,11 +28,19 @@ NRPathElement toru[10];
 static double
 get_time (void)
 {
-	struct timeval tv;
+#if defined (_WIN32) || defined (__WIN32__)
 
-	gettimeofday (&tv, NULL);
+    DWORD millis;
+    millis = GetTickCount ();
+    return ((double)millis)/1000.0;
 
-	return tv.tv_sec + 1e-6 * tv.tv_usec;
+#else
+
+    struct timeval tv;
+    gettimeofday (&tv, NULL);
+    return tv.tv_sec + 1e-6 * tv.tv_usec;
+
+#endif
 }
 
 static unsigned int

@@ -9,6 +9,7 @@
  * This code is in public domain
  */
 
+#include <stdlib.h>
 #include "config.h"
 #include "nr-macros.h"
 

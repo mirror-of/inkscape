@@ -12,6 +12,7 @@
 /* This should be enough for approximately 10000 fonts */
 #define NR_DICTSIZE 2777
 
+#include <stdlib.h>
 #include <string.h>
 #include <libnr/nr-macros.h>
 #include "nr-type-primitives.h"

@@ -242,9 +242,16 @@ sp_main_gui (int argc, const char **argv)
    inkscape_gtk_stock_init();
    
 	/* Set default icon */
+#ifdef WIN32
+        /*NOTE from Bob: DATADIR has a bad name collision with an IDL structure and should be replaced*/
+	if (g_file_test (INKSCAPE_DATADIR "/pixmaps/inkscape.png", (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
+		gtk_window_set_default_icon_from_file (DATADIR "/pixmaps/inkscape.png", NULL);
+	}
+#else
 	if (g_file_test (DATADIR "/pixmaps/inkscape.png", (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
 		gtk_window_set_default_icon_from_file (DATADIR "/pixmaps/inkscape.png", NULL);
 	}
+#endif
 
 	if (!sp_global_slideshow) {
 		inkscape = inkscape_application_new ();
