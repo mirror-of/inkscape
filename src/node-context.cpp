@@ -464,6 +464,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			break;
 		case GDK_Delete:
 		case GDK_KP_Delete:
+		case GDK_BackSpace:		
 			// with any modifiers
 			sp_node_selected_delete ();
 			ret = TRUE;

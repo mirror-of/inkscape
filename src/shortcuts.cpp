@@ -206,6 +206,7 @@ sp_shortcut_init ()
 
 	sp_shortcut_set (GDK_Delete, Inkscape::Verb::get(SP_VERB_EDIT_DELETE), true);
 	sp_shortcut_set (GDK_KP_Delete, Inkscape::Verb::get(SP_VERB_EDIT_DELETE), false);
+	sp_shortcut_set (GDK_BackSpace, Inkscape::Verb::get(SP_VERB_EDIT_DELETE), false);
 
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_d, Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE), true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_D, Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE), false);
