@@ -21,6 +21,7 @@
 #include "xml/node.h"
 #include "xml/document.h"
 #include "xml/session.h"
+#include <cstring>
 
 using Inkscape::Util::List;
 using Inkscape::Util::reverse_list;
@@ -76,6 +77,16 @@ sp_repr_undo_log (Inkscape::XML::Event *log)
 
 	for ( action = log ; action ; action = action->next ) {
 		action->undoOne();
+	}
+}
+
+void
+sp_repr_debug_print_log(Inkscape::XML::Event const *log) {
+	List<Inkscape::XML::Event const &> reversed(
+		reverse_list<Inkscape::XML::Event::ConstIterator>(log, NULL)
+	);
+	for ( ; reversed ; ++reversed ) {
+		g_warning("Event %d: %s", reversed->serial, reversed->describe().c_str());
 	}
 }
 
@@ -279,3 +290,64 @@ Inkscape::XML::Event *Inkscape::XML::EventChgOrder::_optimizeOne() {
 		return this;
 	}
 }
+
+namespace {
+Glib::ustring node_to_string(Inkscape::XML::Node const &node) {
+	Glib::ustring result;
+	char const *type_name=NULL;
+	switch (node.type()) {
+	case Inkscape::XML::DOCUMENT_NODE:
+		type_name = "Document";
+		break;
+	case Inkscape::XML::ELEMENT_NODE:
+		type_name = "Element";
+		break;
+	case Inkscape::XML::TEXT_NODE:
+		type_name = "Text";
+		break;
+	case Inkscape::XML::COMMENT_NODE:
+		type_name = "Comment";
+		break;
+	default:
+		g_assert_not_reached();
+	}
+	char buffer[40];
+	result.append("#<");
+	result.append(type_name);
+	result.append(":");
+	std::snprintf(buffer, 40, "0x%p", &node);
+	result.append(buffer);
+	result.append(">");
+
+	return result;
+}
+}
+
+Glib::ustring Inkscape::XML::EventAdd::_describe() const {
+	return Glib::ustring("Added ") + node_to_string(*child) + Glib::ustring(" to ") + node_to_string(*repr) + " after " + ( ref ? node_to_string(*ref) : "NULL" );
+}
+
+Glib::ustring Inkscape::XML::EventDel::_describe() const {
+	return Glib::ustring("Removed ") + node_to_string(*child) + " from " + node_to_string(*repr);
+}
+
+Glib::ustring Inkscape::XML::EventChgAttr::_describe() const {
+	if (newval) {
+		return Glib::ustring("Set attribute ") + g_quark_to_string(key) + " on " + node_to_string(*repr) + Glib::ustring(" to ") + static_cast<char const *>(newval);
+	} else {
+		return Glib::ustring("Unset attribute ") + g_quark_to_string(key) + " on " + node_to_string(*repr);
+	}
+}
+
+Glib::ustring Inkscape::XML::EventChgContent::_describe() const {
+	if (newval) {
+		return Glib::ustring("Set content of ") + node_to_string(*repr) + Glib::ustring(" to ") + static_cast<char const *>(newval);
+	} else {
+		return Glib::ustring("Unset content of ") + node_to_string(*repr);
+	}
+}
+
+Glib::ustring Inkscape::XML::EventChgOrder::_describe() const {
+	return Glib::ustring("Moved ") + node_to_string(*child) + " in " + node_to_string(*repr) + " to after " + ( newref ? node_to_string(*newref) : "NULL" );
+}
+

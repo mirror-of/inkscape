@@ -3,6 +3,7 @@
 
 #include <glib/gtypes.h>
 #include <glib/gquark.h>
+#include <glibmm/ustring.h>
 
 #include <iterator>
 #include "util/shared-c-string-ptr.h"
@@ -38,6 +39,7 @@ public:
 	Event *optimizeOne() { return _optimizeOne(); }
 	void undoOne() const { return _undoOne(); }
 	void replayOne() const { return _replayOne(); }
+	Glib::ustring describe() const { return _describe(); }
 
 protected:
 	Event(Node *r, Event *n)
@@ -46,6 +48,7 @@ protected:
 	virtual Event *_optimizeOne()=0;
 	virtual void _undoOne() const=0;
 	virtual void _replayOne() const=0;
+	virtual Glib::ustring _describe() const=0;
 
 private:
 	static int _next_serial;
@@ -60,10 +63,10 @@ public:
 	Node *ref;
 
 private:
-
 	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
+	Glib::ustring _describe() const;
 };
 
 class EventDel : public Event {
@@ -78,6 +81,7 @@ private:
 	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
+	Glib::ustring _describe() const;
 };
 
 class EventChgAttr : public Event {
@@ -97,6 +101,7 @@ private:
 	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
+	Glib::ustring _describe() const;
 };
 
 class EventChgContent : public Event {
@@ -114,6 +119,7 @@ private:
 	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
+	Glib::ustring _describe() const;
 };
 
 class EventChgOrder : public Event {
@@ -129,6 +135,7 @@ private:
 	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
+	Glib::ustring _describe() const;
 };
 
 }
