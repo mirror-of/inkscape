@@ -1,3 +1,11 @@
+2004-01-17 Bryce <bryce@bryceharrington.com>
+
+	* src/sp-root.cpp, src/sp-symbol.cpp:  Fixing NRMatrix's a -> &a
+	  so codebase will build.
+
+	* Adding marker xpm's to Makefile.in so the button images display
+  	  in the stroke style dialog (must do a make install)
+
 2004-01-17 MenTaLguY <mental@rydia.net>
 
 	* src/uri.h, src/uri.cpp, src/uri-references.cpp:
