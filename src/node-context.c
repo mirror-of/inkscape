@@ -354,6 +354,9 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 				ret = TRUE;
 			}
 			break;
+		default:
+			ret = node_key (event);
+			break;
 		}
 		break;
 	default:
