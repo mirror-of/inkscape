@@ -1,3 +1,9 @@
+2004-02-13  Johan Ceuppens  <jceuppen@easynet.be>
+	
+	* src/inkjar/[jar.cpp|jar.h]: changed some file offsets,
+	uncompressing multiple files in a jar works now. There
+	is an improved testing program at the end of jar.cpp.
+	
 2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/seltrans.cpp (sp_sel_trans_update_volatile_state):
