@@ -30,9 +30,9 @@ public:
     List(typename Traits::Reference<T>::RValue data, List<T> *next)
     : _data(data), _next(next) {}
 
-    Traits::Reference<T>::LValue data() { return _data; }
-    Traits::Reference<T>::RValue data() const { return _data; }
-    Traits::Reference<T>::RValue setData(Traits::Reference<T>::RValue data) {
+    typename Traits::Reference<T>::LValue data() { return _data; }
+    typename Traits::Reference<T>::RValue data() const { return _data; }
+    typename Traits::Reference<T>::RValue setData(typename Traits::Reference<T>::RValue data) {
         return _data = data;
     }
 
