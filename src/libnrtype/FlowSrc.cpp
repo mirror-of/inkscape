@@ -872,7 +872,7 @@ void              div_flow_src::SetPositions(bool /*for_text*/,int &last_utf8,in
 		chunk=prev;
 	}
 	// extra tweaking
-	if ( type == txt_tline || ( type == txt_span && is_chunk_start ) || type == txt_textpath ) {
+	if ( type == txt_tline || ( type == txt_span && is_chunk_start )) {
 		// add a ghost newline for the on-canvas text edition
 		ucs4_en++;
 		utf8_en++;

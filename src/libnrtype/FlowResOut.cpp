@@ -185,8 +185,7 @@ void flow_res::ApplyPath(int no, Path *i_path)
                 letters[j].y = origin[NR::Y];
 
                 // glyph end: same as origin but to the other side of the midpoint
-                NR::Point end = midpoint + 0.5 * charwidth * tangent;
-                end -= letters[j].y * tangent.ccw();
+                NR::Point end = origin + charwidth * tangent;
                 letters[j].x_en = end[NR::X];
 
                 // rotation of the glyph
@@ -602,14 +601,15 @@ void               flow_res::LetterToPosition(int c,int s,int l,bool /*l_start*/
 		size=(curS)?curS->theSize:chunks[c].ascent; // just the ascent, it's nicer
 	}
 	if ( ChunkType(c) == txt_textpath ) {
-		if ( l_end ) {
-			px=letters[l].x_st+letters[l].x_en*cos(angle);
-			py=letters[l].y+letters[l].x_en*sin(angle);
+  		if ( l_end ) {
+			double width = fabs (letters[l].x_en - letters[l].x_st);
+			px = letters[l].x_st + width * cos(angle);
+			py = letters[l].y + width * sin(angle);
 		} else {
 			px=letters[l].x_st;
-		}
+	      }
 	} else {
-		if ( l_end ) {
+  		if ( l_end ) {
 			px=letters[l].x_en;
 		} else {
 			px=letters[l].x_st;
