@@ -90,8 +90,22 @@ public:
      */
     EcmaBinding *owner;
 
+
+protected:
+
+    /**
+     * Trace messages
+     */
+    void trace(char *fmt, ...);
+
+    /**
+     * Error messages
+     */
+    void error(char *fmt, ...);
+
+
 private:
-    
+
     /**
      * The node above me
      */
@@ -194,6 +208,19 @@ public:
      *
      */
     static int testMe();
+
+
+protected:
+
+    /**
+     * Trace messages
+     */
+    void trace(char *fmt, ...);
+
+    /**
+     * Error messages
+     */
+    void error(char *fmt, ...);
 
 
 private:

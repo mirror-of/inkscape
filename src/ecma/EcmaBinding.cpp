@@ -17,6 +17,9 @@
 #include <glib.h>
 #include <jsapi.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
+
 
 #include <inkscape.h>
 #include <xml/repr.h>
@@ -73,6 +76,32 @@ struct EcmaBindingPrivate
 //# EcmaObject    Methods
 //#########################################################################
 
+
+/**
+ * Trace messages
+ */
+void EcmaObject::trace(char *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(stdout, "EcmaObject:");
+    vfprintf(stdout, fmt, ap);
+    fprintf(stdout, "\n");
+    va_end(ap);
+}
+
+/**
+ * Error messages
+ */
+void EcmaObject::error(char *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(stderr, "EcmaObject error:");
+    vfprintf(stderr, fmt, ap);
+    fprintf(stderr, "\n");
+    va_end(ap);
+}
 
 /**
  * Constructor.
@@ -160,6 +189,33 @@ EcmaObject::~EcmaObject()
 //#########################################################################
 
 /**
+ * Trace messages
+ */
+void EcmaBinding::trace(char *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(stdout, "EcmaBinding:");
+    vfprintf(stdout, fmt, ap);
+    fprintf(stdout, "\n");
+    va_end(ap);
+}
+
+/**
+ * Error messages
+ */
+void EcmaBinding::error(char *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(stderr, "EcmaBinding error:");
+    vfprintf(stderr, fmt, ap);
+    fprintf(stderr, "\n");
+    va_end(ap);
+}
+
+
+/**
  * Constructor.
  *
  * @param theParent.  The Inkscape application who owns this EcmaBinding
@@ -197,6 +253,13 @@ EcmaBinding::EcmaBinding(Inkscape::Application *theParent) throw (EcmaException)
 EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent) 
                                             throw (EcmaException)
 {
+    static JSClass global_class = 
+        {
+        "global",0,
+        JS_PropertyStub,JS_PropertyStub,JS_PropertyStub,JS_PropertyStub,
+        JS_EnumerateStub,JS_ResolveStub,JS_ConvertStub,JS_FinalizeStub
+        };
+
     //Create an EcmaObject
     EcmaObject *obj = new EcmaObject(this, parent);
     
@@ -214,50 +277,62 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
         if (val && strcmp("text/ecmascript", val)==0)
             {
             //#2 get text
-            char *text = (char *)sp_repr_content(node);
+            //### look for text node beneath
+            char *text = "";
+            for (SPRepr *textChild = sp_repr_children(node) ; textChild ; textChild=sp_repr_next(textChild))
+                {
+                text = (char *)sp_repr_content(textChild);
+                if (text)
+                    break;
+                }
+            //trace("text:%s", text);
             if (text)
                 {
                 //#3 Process the script chunk
                 obj->pdata->context = JS_NewContext(parent->owner->pdata->runtime, 8192);
                 if (!obj->pdata->context)
                     throw("processNode: could not create context for script chunk");
-                JSClass classrec;
-                obj->pdata->globalObject = JS_NewObject(obj->pdata->context, &classrec, NULL, NULL);
+                //JSClass classrec;
+                obj->pdata->globalObject = JS_NewObject(obj->pdata->context, &global_class, NULL, NULL);
                 if (!obj->pdata->globalObject)
                     throw("processNode: could not create global object for script chunk");
                 if (!JS_InitStandardClasses(obj->pdata->context, obj->pdata->globalObject))
                     throw("processNode: could not initialize standard classes for script chunk");
                 }
+            else
+                {
+                //No text.  Error?
+                }
             }
-
+        //no children.
         }
     else
         {
         //we are a normal node
         //#1 check for onClick=""
         char *val = (char *)sp_repr_attr(node, "onclick");
+        //trace("val:%s", val);
         if (val)
             {
             //#2 Process the script chunk
             obj->pdata->context = JS_NewContext(parent->owner->pdata->runtime, 8192);
             if (!obj->pdata->context)
                 throw("processNode: could not create context for script chunk");
-            JSClass classrec;
-            obj->pdata->globalObject = JS_NewObject(obj->pdata->context, &classrec, NULL, NULL);
+            //JSClass classrec;
+            obj->pdata->globalObject = JS_NewObject(obj->pdata->context, &global_class, NULL, NULL);
             if (!obj->pdata->globalObject)
                 throw("processNode: could not create global object for script chunk");
             if (!JS_InitStandardClasses(obj->pdata->context, obj->pdata->globalObject))
                 throw("processNode: could not initialize standard classes for script chunk");
             }
+        //### descend down the tree
+        for (SPRepr *child = sp_repr_children(node) ; child ; child=sp_repr_next(child))
+            {
+            if (!processNode(child, obj))
+                return NULL;
+            }
         }
 
-
-    //### descend down the tree
-    for (SPRepr *child = sp_repr_children(node) ; child ; child=sp_repr_next(child))
-        {
-        if (!processNode(child, obj))
-            return NULL;
-        }
 
     return obj;
 }

@@ -11,6 +11,8 @@
 #include <document.h>
 #include <uri.h>
 
+#include "EcmaBinding.h"
+
 namespace Inkscape {
 
 class SVGViewer : public Gtk::ScrolledWindow
@@ -72,6 +74,13 @@ protected:
      *
      */
     SPDocument *document;
+
+private:
+
+    /*
+     *
+     */
+    EcmaBinding *engine;
 
 };
 

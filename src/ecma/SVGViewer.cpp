@@ -22,6 +22,9 @@ bool SVGViewer::setDocument(SPDocument *doc)
     GtkWidget *viewerGtk = sp_svg_view_widget_new(doc);
     Gtk::Widget *viewerMM = Glib::wrap(viewerGtk);
     mainVBox.pack_start(*viewerMM);
+
+    engine->processDocument(doc);
+
     viewerMM->show();
 
     return true;
@@ -94,6 +97,10 @@ SVGViewer::SVGViewer()
 
     if (!INKSCAPE)
         inkscape_application_init("");
+
+    //Make our new binding engine
+    engine = new EcmaBinding(INKSCAPE);
+
     document = NULL;
 }
 
@@ -102,6 +109,8 @@ SVGViewer::~SVGViewer()
 {
     if (document)
         sp_document_unref(document);
+
+    delete engine;
 }
 
 
