@@ -65,6 +65,7 @@
 #include "selection-chemistry.h"
 #include "sp-item-transform.h"
 #include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-ops.h"
 #include <libart_lgpl/art_affine.h>
 
 #include "select-toolbar.h"
@@ -176,19 +177,20 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	dy1 = fabs (y1 - bbox.y1) > 1e-6 ? fabs (y1 - bbox.y1) : 0;
 
 	if (dx0 || dx1 || dy0 || dy1) {
-		gdouble p2o[6], o2n[6], scale[6], s[6], t[6];
-
-		art_affine_translate (p2o, -bbox.x0, -bbox.y0);
-		if (fabs (bbox.x1 - bbox.x0) <= 1e-06)
-			art_affine_scale (scale, 1, (y1 - y0) / (bbox.y1 - bbox.y0));
-		else if (fabs (bbox.y1 - bbox.y0) <= 1e-06)
-			art_affine_scale (scale, (x1 - x0) / (bbox.x1 - bbox.x0), 1);
-		else 
-			art_affine_scale (scale, (x1 - x0) / (bbox.x1 - bbox.x0), (y1 - y0) / (bbox.y1 - bbox.y0));
-		art_affine_translate (o2n, x0, y0);
-		art_affine_multiply (s , p2o, scale);
-		art_affine_multiply (t , s, o2n);
-		sp_selection_apply_affine (sel, t);
+		NR::translate const p2o(-bbox.x0, -bbox.y0);
+		NR::scale scale(1, 1);
+		if ( fabs( bbox.x1 - bbox.x0 ) <= 1e-06 ) {
+			scale = NR::scale(1,
+					  ( y1 - y0 ) / ( bbox.y1 - bbox.y0 ));
+		} else if ( fabs( bbox.y1 - bbox.y0 ) <= 1e-06 ) {
+			scale = NR::scale(( x1 - x0 ) / ( bbox.x1 - bbox.x0 ),
+					  1);
+		} else {
+			scale = NR::scale(( x1 - x0 ) / ( bbox.x1 - bbox.x0 ),
+					  ( y1 - y0 ) / ( bbox.y1 - bbox.y0 ));
+		}
+		NR::translate const o2n(x0, y0);
+		sp_selection_apply_affine(sel, p2o * scale * o2n);
 
  		if (dx0) 
  			sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "selector:toolbar:move:horizontal");
