@@ -2595,6 +2595,17 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 			outsideW = Winding (fi);
 		      }
 		  }
+    if ( pts[fi].dI+pts[fi].dO == 1 ) {
+      if ( fi == aretes[startBord].en ) {
+        if ( eData[startBord].weight == 0 ) {
+          // on se contente d'inverser
+          Inverse(startBord);
+        } else {
+          // on passe le askForWinding (sinon ca va rester startBord)
+          pData[aretes[startBord].st].askForWindingB=pData[aretes[startBord].en].askForWindingB;
+        }
+      }
+    }
 		if (aretes[startBord].en == fi)
 		  outsideW += eData[startBord].weight;
 	      }

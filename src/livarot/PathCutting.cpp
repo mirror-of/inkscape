@@ -731,7 +731,8 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
           ShiftDData(lastPos,add);
           
           descr_cmd[i].dStart=lastPos; // dStart a ete changé par shift
-          
+          descr_cmd[i].flags&=~descr_type_mask;
+          descr_cmd[i].flags|=descr_lineto;
           path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
           int fp=i-1;
           while ( fp >= 0 && (descr_cmd[fp].flags&descr_type_mask) != descr_moveto ) fp--;
