@@ -38,6 +38,7 @@ libnr_a_SOURCES = \
 	nr-values.cpp nr-values.h	\
 	nr-point-fns.cpp nr-point-fns.h \
 	nr-matrix.cpp nr-matrix.h \
+	nr-matrix-fns.cpp nr-matrix-fns.h \
 	nr-rect.cpp nr-rect.h \
 	nr-pixops.h \
 	nr-compose.cpp nr-compose.h \
