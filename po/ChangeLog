@@ -1,3 +1,20 @@
+2004-04-14  a_b
+
+	* POTFILES.in: added src/extension/internal/eps-out.cpp,
+	removed src/extension/menu.cpp and src/extension/menu.h
+
+2004-04-12  a_b
+
+	* es.po: update from Lucas Vieites
+
+2004-04-11  a_b
+
+	* hu.po: update (a_b)
+
+2004-04-11  a_b
+
+	* es_MX.po: update from Daniel Díaz
+
 2004-04-07  buliabyak@users.sf.net
 
 	* ru.po: update from Alex Remizov and myself
