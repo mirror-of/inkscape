@@ -159,6 +159,8 @@ static void
 sp_quick_align_dialog_destroy (void)
 {
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
+
+    g_print ("destr, nulling dlg\n");
     wd.win = dlg = NULL;
     wd.stop = 0;
     
@@ -168,15 +170,8 @@ sp_quick_align_dialog_destroy (void)
 
 static gboolean sp_align_dialog_delete(GtkObject *, GdkEvent *, gpointer data)
 {
-    if ( data != static_cast<gpointer>(dlg) ) {
-        g_warning("Possible bug: different dlg value from passed data");
-        /* E.g. use of global x,y,w,h may also be wrong, or maybe we should use dlg instead of
-         * dead_dlg below. */
-    }
-    GtkWindow &dead_dlg = *static_cast<GtkWindow *>(data);
-
-    gtk_window_get_position(&dead_dlg, &x, &y);
-    gtk_window_get_size(&dead_dlg, &w, &h);
+    gtk_window_get_position(GTK_WINDOW (dlg), &x, &y);
+    gtk_window_get_size(GTK_WINDOW (dlg), &w, &h);
 
     prefs_set_int_attribute (prefs_path, "x", x);
     prefs_set_int_attribute (prefs_path, "y", y);
@@ -239,7 +234,7 @@ sp_quick_align_dialog (void)
         }
         
         if (w && h) {
-            gtk_window_resize ((GtkWindow *) dlg, w, h);
+            gtk_window_resize (GTK_WINDOW (dlg), w, h);
         }
         sp_transientize (dlg);
         wd.win = dlg;

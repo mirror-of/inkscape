@@ -131,14 +131,8 @@ static void sp_transformation_dialog_destroy(GtkObject *object, gpointer)
 
 static gboolean sp_transformation_dialog_delete(GtkObject *, GdkEvent *, gpointer data)
 {
-    if ( data != static_cast<gpointer>(dlg) ) {
-        g_warning("possible bug: dlg differs from passed data");
-        /* E.g. maybe we shouldn't update the global x,y,w,h, or maybe we should use dlg instead of
-           dead_dlg below. */
-    }
-    GtkWindow &dead_dlg = *static_cast<GtkWindow *>(data);
-    gtk_window_get_position(&dead_dlg, &x, &y);
-    gtk_window_get_size(&dead_dlg, &w, &h);
+    gtk_window_get_position (GTK_WINDOW (dlg), &x, &y);
+    gtk_window_get_size (GTK_WINDOW (dlg), &w, &h);
 
     prefs_set_int_attribute (prefs_path, "x", x);
     prefs_set_int_attribute (prefs_path, "y", y);
