@@ -243,9 +243,8 @@ sp_file_revert_dialog()
         return;
     }
 
+    bool do_revert = true;
     if (sp_repr_attr(repr, "sodipodi:modified") != NULL) {
-        bool reverted = FALSE;
-
         gchar *text = g_strdup_printf(_("Changes will be lost!  Are you sure you want to reload document %s?"), uri);
 
         GtkWidget *dialog = gtk_message_dialog_new(
@@ -258,19 +257,24 @@ sp_file_revert_dialog()
         gtk_widget_destroy(dialog);
         g_free(text);
 
-        if (response == GTK_RESPONSE_YES) {
-            // allow overwriting of current document
-            doc->virgin=TRUE;
-            reverted = sp_file_open(uri,NULL);
+        if (response != GTK_RESPONSE_YES) {
+            do_revert = false;
         }
+    }
 
-        if (reverted) {
-            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Document reverted."));
-        } else {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not reverted."));
-        }
+    bool reverted;
+    if (do_revert) {
+        // Allow overwriting of current document.
+        doc->virgin = TRUE;
+        reverted = sp_file_open(uri,NULL);
     } else {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Document not modified.  No need to revert."));
+        reverted = false;
+    }
+
+    if (reverted) {
+        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Document reverted."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not reverted."));
     }
 }
 
