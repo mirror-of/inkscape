@@ -1,5 +1,20 @@
 2004-01-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/nodepath.cpp (sp_nodepath_new),
+	src/path-chemistry.cpp (sp_selected_path_combine, sp_selected_path_break_apart),
+	src/selection-chemistry.cpp (sp_selection_apply_affine),
+	src/selection.cpp (sp_selection_bbox_document),
+	src/sp-item.cpp (sp_item_bbox_desktop, sp_item_private_snappoints),
+	src/sp-pattern.cpp (sp_pattern_painter_new),
+	src/modules/gnome.cpp (sp_module_print_gnome_fill),
+	src/widgets/icon.cpp (sp_icon_image_load_svg):
+	Remove uses of nr_matrix_d_from_f.
+	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp (nr_matrix_d_from_f):
+	Remove.
+
+	* src/sp-item.h, src/sp-item.cpp (sp_item_set_i2d_affine_d):
+	Merge with sp_item_set_i2d_affine.  Update callers.
+
 	* src/rubberband.h, src/rubberband.cpp (sp_rubberband_start):
 	Add NR::Point version.
 	Implement x,y version as call to NR::Point version.

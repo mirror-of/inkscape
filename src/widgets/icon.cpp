@@ -408,20 +408,18 @@ sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale
 		SPObject *object;
 		object = sp_document_lookup_id (doc, name);
 		if (object && SP_IS_ITEM (object)) {
-			NRMatrix i2docD;
-			NRMatrix i2docF;
-			NRRect dbox;
 			/* Find bbox in document */
-			sp_item_i2doc_affine (SP_ITEM (object), &i2docF);
-			nr_matrix_d_from_f (&i2docD, &i2docF);
-			sp_item_invoke_bbox (SP_ITEM (object), &dbox, &i2docD, TRUE);
+			NRMatrix i2doc;
+			sp_item_i2doc_affine(SP_ITEM(object), &i2doc);
+			NRRect dbox;
+			sp_item_invoke_bbox(SP_ITEM(object), &dbox, &i2doc, TRUE);
 			/* This is in document coordinates, i.e. pixels */
 			if (!nr_rect_f_test_empty (&dbox)) {
 				NRRectL ibox, area, ua;
 				NRMatrix t;
 				NRPixBlock B;
 				NRGC gc;
-				float sf;
+				double sf;
 				int width, height, dx, dy;
 				/* Update to renderable state */
 				sf = 0.8 * size / scale;

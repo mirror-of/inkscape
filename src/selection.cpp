@@ -591,12 +591,9 @@ sp_selection_bbox_document (SPSelection *selection, NRRect *bbox)
 	bbox->x1 = bbox->y1 = -1e18;
 
 	for (l = selection->items; l != NULL; l = l-> next) {
-		NRMatrix i2docf;
-		NRMatrix i2docd;
-
-		sp_item_i2doc_affine (SP_ITEM (l->data), &i2docf);
-		nr_matrix_d_from_f (&i2docd, &i2docf);
-		sp_item_invoke_bbox (SP_ITEM (l->data), bbox, &i2docd, FALSE);
+		NRMatrix i2doc;
+		sp_item_i2doc_affine(SP_ITEM(l->data), &i2doc);
+		sp_item_invoke_bbox(SP_ITEM(l->data), bbox, &i2doc, FALSE);
 	}
 
 	return bbox;
@@ -608,7 +605,6 @@ sp_selection_snappoints (SPSelection *selection, NRPoint *points, int size)
  * which are to be considered for snapping */
 {
         GSList *l;
-	NRRect bbox;
 
 	g_return_val_if_fail (selection != NULL, 0);
 	g_return_val_if_fail (SP_IS_SELECTION (selection), 0);
@@ -621,11 +617,11 @@ sp_selection_snappoints (SPSelection *selection, NRPoint *points, int size)
 		/* selection has only one item -> take snappoints of item */
 		return sp_item_snappoints (SP_ITEM (l->data), points, size);
 	} else {
-		int pos;
 		/* selection has more than one item -> take corners of selection */
+		NRRect bbox;
 		sp_selection_bbox (selection, &bbox);
 
-		pos = 0;
+		int pos = 0;
 		if (pos < size) {
 			points[pos].x = bbox.x0;
 			points[pos].y = bbox.y0;

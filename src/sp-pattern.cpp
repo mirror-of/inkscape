@@ -590,8 +590,7 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbo
 		}
 	}
 
-	nr_matrix_d_from_f (&gc.transform, &pp->pcs2px);
-
+	gc.transform = pp->pcs2px;
 	nr_arena_item_invoke_update (pp->root, NULL, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_ALL);
 
 	return (SPPainter *) pp;

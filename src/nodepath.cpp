@@ -119,7 +119,6 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 	const gchar * nodetypes;
 	gchar * typestr;
 	gint length;
-	NRMatrix i2d;
 	SPRepr *repr = SP_OBJECT (item)->repr;
 
 	if (!SP_IS_PATH (item)) return NULL;
@@ -151,8 +150,7 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 	// to a change in repr by regenerating nodepath     --bb
 	sp_object_read_attr (SP_OBJECT (item), "transform");
 
-	sp_item_i2d_affine (SP_ITEM (path), &i2d);
-	nr_matrix_d_from_f (&np->i2d, &i2d);
+	sp_item_i2d_affine(SP_ITEM(path), &np->i2d);
 	nr_matrix_invert (&np->d2i, &np->i2d);
 	np->repr = repr;
 

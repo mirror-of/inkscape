@@ -405,29 +405,23 @@ sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform,
 void
 sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
 {
-	NRMatrix i2d;
-	NRMatrix i2dd;
-
 	g_assert (item != NULL);
 	g_assert (SP_IS_ITEM (item));
 	g_assert (bbox != NULL);
 
-	sp_item_i2d_affine (item, &i2d);
-	nr_matrix_d_from_f (&i2dd, &i2d);
-
-	sp_item_invoke_bbox (item, bbox, &i2dd, TRUE);
+	NRMatrix i2d;
+	sp_item_i2d_affine(item, &i2d);
+	sp_item_invoke_bbox(item, bbox, &i2d, TRUE);
 }
 
 static int
 sp_item_private_snappoints (SPItem *item, NRPoint *p, int size)
 {
-        NRRect bbox;
-	NRMatrix i2d;
-	NRMatrix i2dd;
 	if (size < 4) return 0;
-	sp_item_i2d_affine (item, &i2d);
-	nr_matrix_d_from_f (&i2dd, &i2d);
-	sp_item_invoke_bbox (item, &bbox, &i2dd, TRUE);
+	NRMatrix i2d;
+	sp_item_i2d_affine(item, &i2d);
+        NRRect bbox;
+	sp_item_invoke_bbox(item, &bbox, &i2d, TRUE);
 	p[0].x = bbox.x0;
 	p[0].y = bbox.y0;
 	p[1].x = bbox.x1;
@@ -768,8 +762,7 @@ sp_item_i2d_affine (SPItem const *item, NRMatrix *affine_f)
 	return affine_f;
 }
 
-void
-sp_item_set_i2d_affine_d (SPItem *item, NRMatrix const *affine_d)
+void sp_item_set_i2d_affine(SPItem *item, NRMatrix const *affine)
 {
 	NRMatrix p2dt; /* item parent to desktop transform */
 	NRMatrix dt2p; /* desktop to item parent transform */
@@ -777,7 +770,7 @@ sp_item_set_i2d_affine_d (SPItem *item, NRMatrix const *affine_d)
 
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_ITEM (item));
-	g_return_if_fail (affine_d != NULL);
+	g_return_if_fail (affine != NULL);
 
 	if (SP_OBJECT_PARENT (item)) {
 		sp_item_i2d_affine_d ((SPItem *) SP_OBJECT_PARENT (item), &p2dt);
@@ -788,18 +781,9 @@ sp_item_set_i2d_affine_d (SPItem *item, NRMatrix const *affine_d)
 
 	nr_matrix_invert (&dt2p, &p2dt);
 
-	nr_matrix_multiply (&i2p, affine_d, &dt2p);
+	nr_matrix_multiply(&i2p, affine, &dt2p);
 
 	sp_item_set_item_transform (item, &i2p);
-}
-
-void
-sp_item_set_i2d_affine (SPItem *item, NRMatrix const *affine_f)
-{
-	NRMatrix affine_d;
-
-	nr_matrix_d_from_f (&affine_d, affine_f);
-	sp_item_set_i2d_affine_d (item, &affine_d);
 }
 
 

@@ -71,13 +71,11 @@ sp_selected_path_combine (void)
 
 	GString *dstring = g_string_new("");
 	for (l = il; l != NULL; l = l->next) {
-		NRMatrix i2root;
-		NRMatrix i2rootd;
 		path = (SPPath *) l->data;
 		c = sp_shape_get_curve (SP_SHAPE (path));
+		NRMatrix i2root;
 		sp_item_i2root_affine (SP_ITEM (path), &i2root);
-		nr_matrix_d_from_f (&i2rootd, &i2root);
-		abp = art_bpath_affine_transform (c->bpath, NR_MATRIX_D_TO_DOUBLE (&i2rootd));
+		abp = art_bpath_affine_transform(c->bpath, NR_MATRIX_D_TO_DOUBLE(&i2root));
 		sp_curve_unref (c);
 		gchar *str = sp_svg_write_path (abp);
 		art_free (abp);
@@ -109,8 +107,6 @@ sp_selected_path_break_apart (void)
 	SPPath * path;
 	SPCurve * curve;
 	ArtBpath * abp;
-	NRMatrix i2root;
-	NRMatrix d;
 	gchar * style, * str;
 	GSList * list, * l;
 	SPDesktop * desktop;
@@ -130,11 +126,11 @@ sp_selected_path_break_apart (void)
 	curve = sp_shape_get_curve (SP_SHAPE (path));
 	if (curve == NULL) return;
 
+	NRMatrix i2root;
 	sp_item_i2root_affine (SP_ITEM (path), &i2root);
-	nr_matrix_d_from_f (&d, &i2root);
 	style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
 
-	abp = art_bpath_affine_transform (curve->bpath, NR_MATRIX_D_TO_DOUBLE (&d));
+	abp = art_bpath_affine_transform(curve->bpath, NR_MATRIX_D_TO_DOUBLE(&i2root));
 
 	sp_curve_unref (curve);
 	sp_repr_unparent (SP_OBJECT_REPR (item));

@@ -297,16 +297,14 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 		}
 	} else if (style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
 		SPPainter *painter;
-		NRMatrix dctm;
 		NRRect dpbox;
 
 		/* fixme: */
-		nr_matrix_d_from_f (&dctm, ctm);
 		dpbox.x0 = pbox->x0;
 		dpbox.y0 = pbox->y0;
 		dpbox.x1 = pbox->x1;
 		dpbox.y1 = pbox->y1;
-		painter = sp_paint_server_painter_new (SP_STYLE_FILL_SERVER (style), NR_MATRIX_D_TO_DOUBLE (&dctm), &dpbox);
+		painter = sp_paint_server_painter_new(SP_STYLE_FILL_SERVER(style), NR_MATRIX_D_TO_DOUBLE(&ctm), &dpbox);
 		if (painter) {
 			NRRect cbox;
 			NRRectL ibox;

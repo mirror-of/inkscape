@@ -12,7 +12,7 @@
 #include "nr-matrix.h"
 
 NRMatrix *
-nr_matrix_d_from_f (NRMatrix *d, const NRMatrix *s)
+nr_matrix_f_from_d(NRMatrix *d, NRMatrix const *s)
 {
 	if (s) {
 		for(int i = 0; i < 6; i++)
@@ -22,12 +22,6 @@ nr_matrix_d_from_f (NRMatrix *d, const NRMatrix *s)
 	}
 
 	return d;
-}
-
-NRMatrix *
-nr_matrix_f_from_d (NRMatrix *d, const NRMatrix *s)
-{
-	return nr_matrix_d_from_f(d, s);
 }
 
 NRMatrix *

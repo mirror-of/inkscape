@@ -170,7 +170,6 @@ NRMatrix *sp_item_i2vp_affine (SPItem const *item, NRMatrix *transform);
 NRMatrix *sp_item_i2d_affine_d (SPItem const *item, NRMatrix *transform);
 NRMatrix *sp_item_i2d_affine (SPItem const *item, NRMatrix *transform);
 
-void sp_item_set_i2d_affine_d (SPItem *item, NRMatrix const *transform);
 void sp_item_set_i2d_affine (SPItem *item, NRMatrix const *transform);
 
 NRMatrix *sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrix *transform);
