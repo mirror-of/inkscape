@@ -2,6 +2,10 @@
 
 	* src/sp-object.cpp: disable recursive update warning for release
 
+	* src/select-context.cpp: work around probable cut-and-paste bug
+	  between sp_select_context_item_handler and
+	  sp_select_context_root_handler by checking for drag_escaped
+
 2004-07-13  MenTaLguY  <mental@rydia.net>
 
 	* src/make.exclude: omit extension/script/js/js.c from build

@@ -283,7 +283,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     // item has been moved
                     sp_sel_trans_ungrab(seltrans);
                     sc->moved = FALSE;
-                } else {
+                } else if (!drag_escaped) {
                     // item has not been moved -> do selecting
                     if (!selection->isEmpty()) {
                         if (event->button.state & GDK_SHIFT_MASK) {
@@ -460,7 +460,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         // item has been moved
                         sp_sel_trans_ungrab(seltrans);
                         sc->moved = FALSE;
-                    } else {
+                    } else if (!drag_escaped) {
                         // item has not been moved -> simply a click, do selecting
                         if (!selection->isEmpty()) {
                             if (event->button.state & GDK_SHIFT_MASK) {
