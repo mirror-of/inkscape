@@ -28,6 +28,20 @@ nr_rect_l_intersect (NRRectL *d, const NRRectL *r0, const NRRectL *r1)
 }
 
 NRRect *
+nr_rect_d_intersect (NRRect *d, const NRRect *r0, const NRRect *r1)
+{
+	NR::Coord t;
+	t = MAX (r0->x0, r1->x0);
+	d->x1 = MIN (r0->x1, r1->x1);
+	d->x0 = t;
+	t = MAX (r0->y0, r1->y0);
+	d->y1 = MIN (r0->y1, r1->y1);
+	d->y0 = t;
+	
+	return d;
+}
+
+NRRect *
 nr_rect_d_union (NRRect *d, const NRRect *r0, const NRRect *r1)
 {
 	if (NR_RECT_DFLS_TEST_EMPTY (r0)) {
