@@ -19,6 +19,7 @@
 #include <gtkmm/separator.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/table.h>
+#include <gtkmm/stock.h>
 
 #include "dialogs/dialog-events.h"
 #include "helper/sp-intl.h"
@@ -26,7 +27,6 @@
 #include "desktop.h"
 #include "document.h"
 #include "desktop-handles.h"
-#include "selection.h"
 
 #include "layer-properties.h"
 
@@ -35,6 +35,8 @@ namespace UI {
 namespace Dialogs {
 
 LayerPropertiesDialog::LayerPropertiesDialog()
+    : _button_apply(Gtk::Stock::APPLY),
+      _button_close(Gtk::Stock::CLOSE)
 {
     GtkWidget *dlg = GTK_WIDGET(gobj());
     g_assert(dlg);
@@ -43,21 +45,31 @@ LayerPropertiesDialog::LayerPropertiesDialog()
 
     Gtk::VBox *mainVBox = get_vbox();
 
+    // Rename Layer widgets
     gchar const * name = getLayerName();
     if (name != NULL) {
         _layer_name_entry.set_text(name);
     }
+    _layer_name_entry.signal_activate()
+        .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::apply));
+    _layer_name_entry.set_activates_default(true);
     _layer_name_hbox.pack_end(_layer_name_entry, false, false, 4);
     _layer_name_label.set_label(_("Layer Name:"));
     _layer_name_hbox.pack_end(_layer_name_label, false, false, 4);
     mainVBox->pack_start(_layer_name_hbox, false, false, 4);
 
     // Buttons
-    add_button(_("Apply"), Gtk::RESPONSE_APPLY)->signal_clicked()
+    _button_apply.signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::apply));
-    add_button(_("Close"), Gtk::RESPONSE_CLOSE)->signal_clicked()
+    _button_close.signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::close));
+    add_action_widget(_button_apply, Gtk::RESPONSE_APPLY);
+    add_action_widget(_button_close, Gtk::RESPONSE_CLOSE);
 
+    // TODO:  This gives an error...
+//    set_default_response(Gtk::RESPONSE_APPLY);
+
+    g_warning("Transientizing");
     sp_transientize(dlg);
 
     show_all_children();
@@ -74,9 +86,10 @@ LayerPropertiesDialog::apply()
     Glib::ustring name = _layer_name_entry.get_text();
 
     setLayerName((gchar*)name.c_str());
-        
+
     // Grey out the apply button
-    _button_apply.set_sensitive(false);
+// TODO:  Make entry in the entry box set this sensitive
+//    _button_apply.set_sensitive(false);
 }
 
 void
