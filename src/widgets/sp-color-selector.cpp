@@ -225,6 +225,7 @@ void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha )
     if ( !sp_color_is_close( &color, &_color, _epsilon )
          || (fabs ((_alpha) - (alpha)) >= _epsilon )
 	 // if the stored color is the initial black, change it no matter what, to update widgets (fixes the "empty rgba value" bug)
+       // FIXME: add a "virgin" flag to ColorSelector instead?
          || (_color.v.c[0] == 0 && _color.v.c[1] == 0 && _color.v.c[2] == 0 && _color.v.c[3] == 0))
     {
         sp_color_copy (&_color, &color);
