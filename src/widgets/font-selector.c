@@ -371,7 +371,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 		if (i >= fsel->styles.length) return;
 		gtk_clist_select_row (scl, i, 0);
 
-		g_snprintf (s, 8, "%.2g", NR_FONT_SIZE (font));
+		g_snprintf (s, 8, "%.5g", NR_FONT_SIZE (font));
 		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry), s);
 	}
 }
