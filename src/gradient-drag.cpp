@@ -131,21 +131,36 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
 
     dragger->point = *p;
 
-    for (GSList const* l = dragger->draggables; l != NULL; l = l->next) {
-        GrDraggable *draggable = (GrDraggable *) l->data;
+    for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
+        GrDraggable *draggable = (GrDraggable *) i->data;
         dragger->parent->local_change = true;
         sp_item_gradient_set_coords (draggable->item, draggable->point_num, *p, draggable->fill_or_stroke, false);
     }
 
     // See if we need to snap to another dragger
     double snap_dist = SNAP_DIST / SP_DESKTOP_ZOOM (dragger->parent->desktop);
-    for (GSList *l = dragger->parent->draggers; l != NULL; l = l->next) {
-        GrDragger *d_new = (GrDragger *) l->data;
+    for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
+        GrDragger *d_new = (GrDragger *) di->data;
         if (d_new == dragger)
             continue;
         if (NR::L2 (d_new->point - *p) < snap_dist) {
-            for (GSList const* l = dragger->draggables; l != NULL; l = l->next) { // for all draggables of dragger
-                GrDraggable *draggable = (GrDraggable *) l->data;
+
+            bool conflict = false;
+            for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+                GrDraggable *d1 = (GrDraggable *) i->data;
+                for (GSList const* j = d_new->draggables; j != NULL; j = j->next) { // for all draggables of dragger
+                    GrDraggable *d2 = (GrDraggable *) j->data;
+                    if ((d1->item == d2->item) && (d1->fill_or_stroke == d2->fill_or_stroke)) {
+                        // we must not snap together the points of the same gradient!
+                        conflict = true;
+                    }
+                }
+            }
+            if (conflict)
+                continue;
+
+            for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+                GrDraggable *draggable = (GrDraggable *) i->data;
                 // copy draggable to d_new:
                 GrDraggable *da_new = new GrDraggable (draggable->item, draggable->point_num, draggable->fill_or_stroke);
                 d_new->addDraggable (da_new); 
@@ -159,7 +174,6 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
             return;
         }
     }
-
 }
 
 static void
