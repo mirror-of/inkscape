@@ -53,7 +53,6 @@
 #include "interface.h"
 #include "print.h"
 #include "slideshow.h"
-#include "dialogs/dialog-events.h"
 
 #include "svg/svg.h"
 
@@ -248,6 +247,8 @@ sp_main_gui (int argc, const char **argv)
 	}
 
 	if (!sp_global_slideshow) {
+		gboolean create_new = TRUE; 
+		
 		inkscape = inkscape_application_new ();
 		inkscape_load_preferences (inkscape);
 
@@ -264,21 +265,19 @@ sp_main_gui (int argc, const char **argv)
 					dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
 					if (dtw) sp_create_window (dtw, TRUE);
 					sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
+					create_new = FALSE;
 				}
 				sp_document_unref (doc);
 			} else {
-				GtkWidget *msg;
-				gchar *text = g_strdup_printf (_("Failed to load the requested file %s"), (const gchar *) fl->data);
-				msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
-						GTK_BUTTONS_CLOSE, 
-						text);
-				sp_transientize (msg);
-				gtk_window_set_resizable (GTK_WINDOW (msg), FALSE);
-				gtk_dialog_run (GTK_DIALOG (msg));
-				gtk_widget_destroy (msg);
-				sp_file_new();
+				gchar *text = g_strdup_printf (_("Failed to load the requested file %s"), 
+						(const gchar *) fl->data);
+				sp_ui_error_dialog (text);
+				g_free (text);
 			}
 			fl = g_slist_remove (fl, fl->data);
+		}
+		if (create_new == TRUE) {
+			sp_file_new ();
 		}
 		inkscape_unref ();
 	} else {

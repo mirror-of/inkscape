@@ -94,16 +94,9 @@ sp_file_open (const gchar *uri, const gchar *key)
 		sp_create_window (dtw, TRUE);
 		sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
 	} else {
-		GtkWidget *msg;
 		gchar *text;
 		text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
-		msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
-				GTK_BUTTONS_CLOSE, 
-				text);
-		sp_transientize (msg);
-		gtk_window_set_resizable (GTK_WINDOW (msg), FALSE);
-		gtk_dialog_run (GTK_DIALOG (msg));
-		gtk_widget_destroy (msg);
+		sp_ui_error_dialog (text);
 		g_free (text);
 	}
 }

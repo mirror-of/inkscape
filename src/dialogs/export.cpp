@@ -391,7 +391,7 @@ sp_export_progress_callback (float value, void *data)
 static void
 sp_export_export_clicked (GtkButton *button, GtkObject *base)
 {
-	GtkWidget *fe, *msg;
+	GtkWidget *fe;
 	const gchar *filename;
 	float x0, y0, x1, y1;
 	int width, height;
@@ -413,13 +413,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 	height = (int) (sp_export_value_get (base, "bmheight") + 0.5);
 
 	if (strlen (filename) == 0) {
-		msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
-				GTK_BUTTONS_CLOSE, 
-				_("You have to enter a filename"));
-		sp_transientize (msg);
-		gtk_window_set_resizable (GTK_WINDOW (msg), FALSE);
-		gtk_dialog_run (GTK_DIALOG (msg));
-		gtk_widget_destroy (msg);
+		sp_ui_error_dialog (_("You have to enter a filename"));
 	} else {
 		if ((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0)) {
 			GtkWidget *dlg, *prg, *btn; /* progressbar-stuff */
@@ -451,13 +445,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 			gtk_widget_destroy (dlg);
 			g_object_set_data (G_OBJECT (base), "cancel", (gpointer) 0);
 		} else {
-			msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
-					GTK_BUTTONS_CLOSE, 
-					_("The chosen area to be exported is invalid"));
-			sp_transientize (msg);
-			gtk_window_set_resizable (GTK_WINDOW (msg), FALSE);
-			gtk_dialog_run (GTK_DIALOG (msg));
-			gtk_widget_destroy (msg);
+			sp_ui_error_dialog (_("The chosen area to be exported is invalid"));
 		}
 	}
 }

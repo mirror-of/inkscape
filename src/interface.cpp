@@ -49,6 +49,7 @@
 #include "helper/window.h"
 
 #include "dialogs/node-edit.h"
+#include "dialogs/dialog-events.h"
 
 static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
 
@@ -667,12 +668,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 		rnewdoc = sp_repr_read_mem (svgdata, data->length, SP_SVG_NS_URI);
 
 		if (rnewdoc == NULL) {
-			GtkWidget *msg;
-			msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
-					GTK_BUTTONS_CLOSE,
-					_("Could not parse SVG data"));
-			gtk_dialog_run (GTK_DIALOG (msg));
-			gtk_widget_destroy (msg);
+			sp_ui_error_dialog (_("Could not parse SVG data"));
 			return;
 		}
 	
@@ -794,4 +790,17 @@ sp_ui_import_one_file(gchar * filename)
 			gdk_pixbuf_unref (pb);
 		}
 	}
+}
+
+void
+sp_ui_error_dialog (const gchar * message)
+{
+	GtkWidget *dlg;
+	
+	dlg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR, 
+			GTK_BUTTONS_CLOSE, message);
+	sp_transientize (dlg);
+	gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
+	gtk_dialog_run (GTK_DIALOG (dlg));
+	gtk_widget_destroy (dlg);
 }

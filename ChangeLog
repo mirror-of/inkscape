@@ -1,3 +1,9 @@
+2003-12-27  Alexander Clausen <alex@skip86.com>
+	
+	* src/interface.{h,cpp} (sp_ui_error_dialog): new function.
+
+	* src/file.cpp src/main.cpp src/dialogs/export.cpp src/interface.cpp: use it
+
 2003-12-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/bezier-utils.cpp: Simplifications & documentation.
