@@ -27,13 +27,6 @@
 #include <time.h>
 #include <libnr/nr-pixops.h>
 #include <glib.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkfilesel.h>
 
 #include "macros.h"
 #include "xml/repr-private.h"
@@ -56,14 +49,8 @@
 #include "sp-namedview.h"
 
 #include "module.h"
-#include "modules/menu.h"
 #include "modules/system.h"
 
-#ifdef WIN32
-#include "modules/win32.h"
-#else
-static void sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, const gchar *key);
-#endif
 
 /**
  * 'Current' paths.  Used to remember which directory
@@ -144,71 +131,7 @@ sp_file_open (const gchar *uri, const gchar *key)
     }
 }
 
-/**
- * OK callback for GTK dialog
- */
-static void
-file_open_dialog_ok (GtkWidget *widget, GtkFileSelection *fs)
-{
-    const gchar *native_filename = gtk_file_selection_get_filename(fs);
-    if ( !native_filename || !strlen(native_filename) ) {
-        return;
-    }
 
-    gchar *filename = g_filename_to_utf8(native_filename, -1, NULL, NULL, NULL);                                                                                
-    if (g_file_test(native_filename, G_FILE_TEST_IS_DIR)) {
-        gchar *temp = g_strconcat(filename, G_DIR_SEPARATOR, NULL);
-        gchar *native = g_filename_from_utf8(temp, -1, NULL, NULL, NULL);
-        gtk_file_selection_set_filename(fs, native);
-        g_free(native);
-        g_free(temp);
-    } else {
-        const gchar *ext = sp_extension_from_path(filename);
-        if ( !ext || ( g_ascii_strcasecmp(ext, "svg") && g_ascii_strcasecmp(ext, "xml") ) ) {
-            gchar *temp = g_strconcat(filename, ".svg", NULL);
-            g_free(filename);
-            filename = temp;
-        }
-
-        if (open_path) {
-            g_free(open_path);
-        }
-        open_path = g_path_get_dirname(filename);
-        if (open_path) {
-            gchar *temp = g_strconcat(open_path, G_DIR_SEPARATOR_S, NULL);
-            g_free(open_path);
-            open_path = temp;
-        }
-
-        gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
-
-        gchar *key = (gchar*)g_object_get_data (G_OBJECT (fs), "type-key");
-        sp_file_open (filename, key);
-
-        gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
-        gtk_widget_destroy (GTK_WIDGET (fs));
-    }
-
-    g_free(filename);
-}
-
-/**
- * Cancel callback for GTK dialog
- */
-static void
-file_open_dialog_cancel (GtkButton *b, GtkFileSelection *fs)
-{
-    gtk_widget_destroy (GTK_WIDGET (fs));
-}
-
-/**
- * Type pulldown menu selection callback for GTK dialog
- */
-static void
-file_open_dialog_type_selected (SPMenu *menu, gpointer itemdata, GObject *fsel)
-{
-    g_object_set_data (fsel, "type-key", itemdata);
-}
 
 /**
  *  Display an file Open selector.  Open a document if OK is pressed.
@@ -216,7 +139,6 @@ file_open_dialog_type_selected (SPMenu *menu, gpointer itemdata, GObject *fsel)
 void
 sp_file_open_dialog (gpointer object, gpointer data)
 {
-#ifdef WIN32
     Inkscape::UI::Dialogs::FileOpenDialog *dlg =
         new Inkscape::UI::Dialogs::FileOpenDialog(
                  (const char *)open_path,
@@ -232,37 +154,6 @@ sp_file_open_dialog (gpointer object, gpointer data)
         g_free (fileName);
     }
 
-#else
-
-    GtkFileSelection *fsel = (GtkFileSelection *) gtk_file_selection_new (_("Select file to open"));
-    gtk_file_selection_hide_fileop_buttons (fsel);
-
-    g_signal_connect (G_OBJECT (fsel->ok_button), "clicked", G_CALLBACK (file_open_dialog_ok), fsel);
-    g_signal_connect (G_OBJECT (fsel->cancel_button), "clicked", G_CALLBACK (file_open_dialog_cancel), fsel);
-
-    if (open_path)
-        gtk_file_selection_set_filename (fsel, open_path);
-
-    /* Create file type box */
-    GtkWidget *hb = gtk_hbox_new (FALSE, 4);
-    gtk_box_pack_start (GTK_BOX (fsel->main_vbox), hb, FALSE, FALSE, 0);
-    GtkWidget *om = gtk_option_menu_new ();
-    gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, 0);
-
-    GtkWidget *m = GTK_WIDGET(sp_module_menu_open ());
-    g_object_set_data (G_OBJECT (fsel), "type-key", ((SPMenu *) m)->activedata);
-    g_signal_connect (G_OBJECT (m), "selected", G_CALLBACK (file_open_dialog_type_selected), fsel);
-    gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
-    GtkWidget *l = gtk_label_new (_("File type:"));
-    gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
-    gtk_widget_show_all (hb);
-
-    gtk_window_set_modal (GTK_WINDOW (fsel), TRUE);
-    sp_transientize ((GtkWidget *) fsel);
-
-    gtk_widget_show ((GtkWidget *) fsel);
-
-#endif
 
 }
 
@@ -292,7 +183,6 @@ file_save (SPDocument *doc, const gchar *uri, const gchar *key)
 static gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
-#ifdef WIN32
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
                  (const char *)save_path,
@@ -321,78 +211,8 @@ sp_file_save_dialog (SPDocument *doc)
     } else {
         return FALSE;
     }
-#else
-
-    GtkWidget *dlg = gtk_file_selection_new (_("Save file"));
-    g_object_set_data (G_OBJECT (dlg), "document", doc);
-    gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
-
-    GtkFileSelection *fs = GTK_FILE_SELECTION (dlg);
-
-    GtkWidget *hb = gtk_hbox_new (FALSE, 4);
-    gtk_box_pack_start (GTK_BOX (fs->main_vbox), hb, FALSE, FALSE, 0);
-    GtkWidget *om = gtk_option_menu_new ();
-    gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, 0);
-
-    GtkWidget *menu = GTK_WIDGET(sp_module_menu_save ());
-    gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
-    GtkWidget *l = gtk_label_new (_("File type:"));
-    gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
-    gtk_widget_show_all (hb);
-
-    gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
-    sp_transientize (dlg);
-    int b = gtk_dialog_run (GTK_DIALOG (dlg));
-
-    if (b == GTK_RESPONSE_OK) {
-        sp_file_save_ok (dlg, doc, (gchar const *)((SPMenu *) menu)->activedata);
-        gtk_widget_destroy (dlg);
-        return TRUE;
-    } else {
-        gtk_widget_destroy (dlg);
-        return FALSE;
-    }
-#endif
 }
 
-#ifndef WIN32
-/**
- * Callback for the OK button of the GTK save file selector
- */
-static void
-sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, gchar const *key)
-{
-
-    GtkFileSelection *fs = GTK_FILE_SELECTION (save_dialog);
-
-    const gchar *native_filename = gtk_file_selection_get_filename(fs);
-    if ( !native_filename || !strlen(native_filename) ) {
-        return;
-    }
-
-    gchar *filename = g_filename_to_utf8(native_filename, -1, NULL, NULL, NULL);
-
-    if (g_file_test(native_filename, G_FILE_TEST_IS_DIR)) {
-        gchar *temp = g_strconcat(filename, G_DIR_SEPARATOR, NULL);
-        gchar *native = g_filename_from_utf8(temp, -1, NULL, NULL, NULL);
-        gtk_file_selection_set_filename(fs, native);
-        g_free(native);
-        g_free(temp);
-    } else {
-        const gchar *ext = sp_extension_from_path(filename);
-        if ( !ext || ( g_ascii_strcasecmp(ext, "svg") && g_ascii_strcasecmp(ext, "xml") ) ) {
-            gchar *temp = g_strconcat(filename, ".svg", NULL);
-            g_free(filename);
-            filename = temp;
-        }
-        gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
-        file_save (doc, filename, key);
-        gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
-    }
-
-    g_free(filename);
-}
-#endif
 
 /**
  * Save a document, displaying a SaveAs dialog if necessary.
@@ -579,7 +399,6 @@ sp_file_import (GtkWidget * widget)
     if (!SP_IS_DOCUMENT(doc))
         return;
 
-#ifdef WIN32
     Inkscape::UI::Dialogs::FileOpenDialog *dlg =
         new Inkscape::UI::Dialogs::FileOpenDialog(
                  (const char *)import_path,
@@ -591,23 +410,7 @@ sp_file_import (GtkWidget * widget)
         file_import (doc, fileName);
         g_free (fileName);
     }
-#else
-    GtkWidget *w = gtk_file_selection_new (
-              _("Select file to import"));
-    gtk_file_selection_hide_fileop_buttons (GTK_FILE_SELECTION (w));
-    if (import_path) gtk_file_selection_set_filename (GTK_FILE_SELECTION (w), import_path);
-    gtk_window_set_modal (GTK_WINDOW (w), TRUE);
-    sp_transientize (w);
-    int b = gtk_dialog_run (GTK_DIALOG (w));
 
-    if (b == GTK_RESPONSE_OK) {
-        const gchar *filename;
-        filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (w));
-        file_import (doc, filename);
-    }
-
-    gtk_widget_destroy (w);
-#endif
 }
 
 
