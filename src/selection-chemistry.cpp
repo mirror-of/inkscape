@@ -28,6 +28,7 @@
 #include "document.h"
 #include "inkscape.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "selection.h"
 #include "tools-switch.h"
 #include "desktop-handles.h"
