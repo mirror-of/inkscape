@@ -1,3 +1,7 @@
+2004-06-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* share/extensions/dia2svg.sh: Fix bashism and insecure tempfile usage.
+
 2004-06-23  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/dropshadow.inkmod, share/extensions/roundhole.inkmod,
