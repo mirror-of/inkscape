@@ -113,7 +113,7 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
 }
 
 static GtkWidget *
-sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, unsigned int type, unsigned int verb, GtkTooltips *tt)
+sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, unsigned int verb, GtkTooltips *tt)
 {
 	SPAction *action;
 	GtkWidget *b;
