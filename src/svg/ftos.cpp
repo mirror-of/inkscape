@@ -13,13 +13,13 @@
 //
 //  DESCRIPTION
 //    This routine is intended to replace the typical use of sprintf for
-//    converting floating point numbers into strings. 
+//    converting floating point numbers into strings.
 //
-//    To one-up sprintf, an additional mode was created - 'h' mode - 
+//    To one-up sprintf, an additional mode was created - 'h' mode -
 //    which produces numbers in 'engineering notation' - exponents are
 //    always shown in multiples of 3.  To non-engineers this mode is
 //    probably irrelevant, but for engineers (and scientists) it is SOP.
-//    
+//
 //    One other new feature is an option to use 'x10^' instead of the
 //    conventional 'E' for exponental notation.  This is entirely for
 //    aesthetics since numbers in the 'x10^' form cannot be used as
@@ -38,7 +38,7 @@
 //    not post-pad a number with spaces (i.e., allow left-justification.)
 //
 //    If width control is this important, then the user will probably want to
-//    use the stdio routines, which really is well suited for outputting 
+//    use the stdio routines, which really is well suited for outputting
 //    columns of data with a brief amount of code.
 //
 //  PARAMETERS
@@ -46,12 +46,12 @@
 //    mode       - can be one of four possible values.  Default is 'g'
 //
 //                 e: Produces numbers in scientific notation.  One digit
-//                    is shown on the left side of the decimal, the rest 
+//                    is shown on the left side of the decimal, the rest
 //                    on the right, and the exponential is always shown.
 //                    EXAMPLE:  1.04e-4
 //
 //                 f: Produces numbers with fixed format.  Number is shown
-//                    exact, with no exponent.  
+//                    exact, with no exponent.
 //                    EXAMPLE:  0.000104
 //
 //                 g: If val is greater than 1e6 or less than 1e-3 it will
@@ -60,14 +60,14 @@
 //
 //                 h: Produces numbers in engineering format.  Result is
 //                    identical to 'f' format for numbers between 1 and
-//                    1e3, otherwise, the number is shown such that it 
+//                    1e3, otherwise, the number is shown such that it
 //                    always begins with a nonzero digit on the left side
 //                    (unless number equals zero), and the exponential is
 //                    a multiple of 3.
 //                    EXAMPLE:  104e-6
 //
 //                 If the mode is expressed as a capital letter (e.g., 'F')
-//                 then the exponential part of the number will also be 
+//                 then the exponential part of the number will also be
 //                 capitalized (e.g., '1E6' or '1X10^6'.)
 //
 //    sigfig     - the number of significant figures.  These are the digits
@@ -86,7 +86,7 @@
 //                 output.
 //
 //               FORCE_DECIMAL - require the decimal point to be shown for
-//                 numbers that do not have any fractional digits (or that 
+//                 numbers that do not have any fractional digits (or that
 //                 have a precision set to zero)
 //                 EXAMPLE:  1.e6
 //               FORCE_EXP_ZERO - pad the 10's zero in exponent if necessary
@@ -94,7 +94,7 @@
 //               FORCE_HUNDRED_EXP_ZERO - pad the 100's zero in exponent if
 //                 necessary.  Also pads 10's zero in exponent if necessary.
 //                 EXAMPLE:  1e006
-//               FORCE_EXP_PLUS - show the '+' in the exponent if exponent 
+//               FORCE_EXP_PLUS - show the '+' in the exponent if exponent
 //                 is used.
 //                 EXAMPLE:  1e+6
 //               FORCE_EXP - force the output to display the exponent
@@ -120,7 +120,7 @@
 //    it allows return of an object, not a pointer to an object; this may not
 //    be as efficient, but it is cleaner and safer than the alternative.  Third,
 //    the routine's return value can be directly assigned to a variable, i.e.
-//        string var = ftos(3.1415); 
+//        string var = ftos(3.1415);
 //    which makes code much easier to comprehend and modify.
 //
 //    Internally, the ftos routine uses fairly typical string operators (=, +=,
@@ -130,7 +130,7 @@
 //    alternate class is not named "string" then redefine "string" to whatever
 //    you wish to use.  For example,
 //        #define string CString
-//    
+//
 // November 1996 - Bryce Harrington
 //    Created ftoa and ftos
 //
@@ -165,6 +165,7 @@ using namespace std;
 
 #ifndef HAS_ECVT
 #include <cstdio>
+#include <glib.h>
 #endif
 
 #include "ftos.h"
@@ -207,7 +208,7 @@ string ftos(double val, char mode, int sigfig, int precision, int options)
     // These options allow the user to control some of the ornaments on the
     // number that is output.  By default they are all false.  Turning them
     // on helps to "fix" the format of the number so it lines up in columns
-    // better.  
+    // better.
     // - require the decimal point to be shown for numbers that do not have
     //   any fractional digits (or that have a precision set to zero
     bool forceDecimal = (options & FORCE_DECIMAL);
@@ -275,12 +276,12 @@ string ftos(double val, char mode, int sigfig, int precision, int options)
     int decimal=0;
 
 #ifdef HAS_ECVT
-     char *p = ecvt(val, count, &decimal, &sign);
+    char *p = ecvt(val, count, &decimal, &sign);
 #else
-    char *p;
-    asprintf(&p, "%.0f", val);
+    char *p = (char *) g_strdup_printf("%.0f", val);
+    // asprintf(&p, "%.0f", val);
 #endif
-    
+
 #ifdef DEBUG
     fprintf(stderr, "*** string rep is %s\n", p);
     fprintf(stderr, "*** decimal is %s\n", itos(decimal).c_str());
@@ -307,7 +308,7 @@ string ftos(double val, char mode, int sigfig, int precision, int options)
 
         case 'f':
             lhs = (decimal<1)? 1 : decimal;
-                                       // use one char on left for num < 1, 
+                                       // use one char on left for num < 1,
                                        // otherwise, use the number of decimal places.
             useExponent = false;       // don't want exponent for 'f' format
             break;
@@ -330,17 +331,17 @@ string ftos(double val, char mode, int sigfig, int precision, int options)
 
     // Figure out the number of digits to show in the right hand side
     int rhs=0;
-    if (precision>=0) 
+    if (precision>=0)
         rhs = precision;
     else if (val == 0.0)
         rhs = 0;
-    else if (useExponent || decimal>0) 
+    else if (useExponent || decimal>0)
         rhs = dig-lhs;
     else
         rhs = dig-decimal;
 
     // can't use a negative rhs value, so turn it to zero if that is the case
-    if (rhs<0) rhs = 0;      
+    if (rhs<0) rhs = 0;
 
 #ifdef DEBUG
     fprintf(stderr, "*** rhs is", itos(rhs).c_str());
@@ -354,14 +355,14 @@ string ftos(double val, char mode, int sigfig, int precision, int options)
 #endif
 
     string ascii;
-    
+
     // output the sign
     if (sign) ascii += "-";
     else if (forcePlus) ascii += "+";
 
     // output the left hand side
     if (!useExponent && decimal<=0)    // if fraction, put the 0 out front
-        ascii += '0';                  
+        ascii += '0';
     else                               // is either exponential or >= 1, so write the lhs
         for (; lhs>0; lhs--)
             ascii += (*p)? *p++ : int('0'); // now fill in the numbers before decimal
@@ -377,9 +378,9 @@ string ftos(double val, char mode, int sigfig, int precision, int options)
     // output the right hand side
     if (!useExponent && rhs>0)         // first fill in zeros after dp and before numbers
         while (decimal++ <0 && rhs-->0)
-            ascii += '0';              
+            ascii += '0';
     for (; rhs>0 ; rhs--)              // now fill in the numbers after decimal
-        ascii += (*p)? *p++ : int('0');     
+        ascii += (*p)? *p++ : int('0');
 
 #ifdef DEBUG
     fprintf(stderr, "*** ascii + . + rhs is %s\n", ascii.c_str());
@@ -452,7 +453,7 @@ int main()
   cout << "0.01  = " << ftos(0.01,  'h')  << endl;
   cout << "1.0e7 = " << ftos(1.0e7, 'h') << endl;
   cout << endl;
-  
+
   cout << "Sigfigs: " << endl;
   cout << "2 sf = " << ftos(1234, 'g', 2) << "  "
        << ftos(12.34,     'g', 2) << "  "
