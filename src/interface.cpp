@@ -1053,7 +1053,9 @@ sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
     };
 
     static Inkscape::Verb * help_verbs_two[] = {
-        Inkscape::Verb::get(SP_VERB_HELP_ABOUT), Inkscape::Verb::get(SP_VERB_LAST)
+        Inkscape::Verb::get(SP_VERB_HELP_ABOUT_EXTENSIONS),
+        Inkscape::Verb::get(SP_VERB_HELP_ABOUT),
+        Inkscape::Verb::get(SP_VERB_LAST)
     };
 
     sp_ui_menu_append (fm, help_verbs_one, view);
