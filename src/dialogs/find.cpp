@@ -312,6 +312,7 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
 
     if (n != NULL) {
         sp_view_set_statusf_flash(SP_VIEW(desktop), 
+                                  // TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
                                   _("%d object(s) found (out of %d), %s match."), 
                                   g_slist_length (n), all, exact? _("exact") : _("partial"));
         SPSelection *selection = SP_DT_SELECTION (desktop);
