@@ -24,6 +24,7 @@
 #include "inkscape.h"
 #include "xml/repr.h"
 #include "rdf.h"
+#include "sp-item-group.h"
 
 /*
 
@@ -948,6 +949,17 @@ void
 rdf_set_defaults ( SPDocument * document )
 {
     g_assert ( document != NULL );
+
+    // Create metadata node if it doesn't already exist
+    if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL,
+                                          XML_TAG_NAME_METADATA)) {
+        // create repr
+        SPRepr * rnew = sp_repr_new (XML_TAG_NAME_METADATA);
+        // insert into the document
+        sp_repr_add_child (document->rroot, rnew, NULL);
+        // clean up
+        sp_repr_unref (rnew);
+    }
 
     /* install defaults */
     for ( struct rdf_entity_default_t * rdf_default = rdf_defaults;

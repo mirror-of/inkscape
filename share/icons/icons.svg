@@ -8,7 +8,7 @@
    height="256pt"
    sodipodi:docname="icons.svg"
    inkscape:version="0.40+cvs"
-   sodipodi:docbase="/home/bcrowell/inkscape_icons"
+   sodipodi:docbase="/scratch/src/inkscape/inkscape/share/icons"
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -16,64 +16,6 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:xlink="http://www.w3.org/1999/xlink">
-  <svg:metadata
-     id="metadata33" />
-  <svg:metadata
-     id="metadata32" />
-  <svg:metadata
-     id="metadata31" />
-  <svg:metadata
-     id="metadata30" />
-  <svg:metadata
-     id="metadata29" />
-  <svg:metadata
-     id="metadata28" />
-  <svg:metadata
-     id="metadata27" />
-  <svg:metadata
-     id="metadata26" />
-  <svg:metadata
-     id="metadata25" />
-  <svg:metadata
-     id="metadata24" />
-  <svg:metadata
-     id="metadata23" />
-  <svg:metadata
-     id="metadata22" />
-  <svg:metadata
-     id="metadata21" />
-  <svg:metadata
-     id="metadata182" />
-  <svg:metadata
-     id="metadata20" />
-  <svg:metadata
-     id="metadata19" />
-  <svg:metadata
-     id="metadata18" />
-  <svg:metadata
-     id="metadata17" />
-  <svg:metadata
-     id="metadata16" />
-  <svg:metadata
-     id="metadata15" />
-  <svg:metadata
-     id="metadata14" />
-  <svg:metadata
-     id="metadata13" />
-  <svg:metadata
-     id="metadata12" />
-  <svg:metadata
-     id="metadata11" />
-  <svg:metadata
-     id="metadata10" />
-  <svg:metadata
-     id="metadata9" />
-  <svg:metadata
-     id="metadata8" />
-  <svg:metadata
-     id="metadata7" />
-  <svg:metadata
-     id="metadata6" />
   <svg:defs
      id="defs3">
     <svg:linearGradient
@@ -609,11 +551,11 @@
      showgrid="true"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="4.8060571"
-     inkscape:cx="227.01230"
-     inkscape:cy="242.69563"
-     inkscape:window-width="798"
-     inkscape:window-height="576"
+     inkscape:zoom="0.84959889"
+     inkscape:cx="480.63616"
+     inkscape:cy="155.96076"
+     inkscape:window-width="917"
+     inkscape:window-height="536"
      inkscape:window-x="0"
      inkscape:window-y="0"
      showguides="true"
