@@ -189,7 +189,6 @@ sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
 }
 
 static GtkWidget *
-//sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, GCallback callback, gpointer data)
 sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, GCallback callback, gpointer data, gboolean with_mnemonic = TRUE)
 {
 	GtkWidget *item;
