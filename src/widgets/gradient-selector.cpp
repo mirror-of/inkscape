@@ -162,7 +162,7 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 	gtk_widget_show (sel->units);
 	gtk_box_pack_end (GTK_BOX (hb), sel->units, FALSE, FALSE, 0);
 	gtk_tooltips_set_tip (ttips, sel->units,
-					_("Whether the gradient vector is defined in the coordinates of the user space "
+					_("Whether the gradient vector is defined in the user space coordinates "
 					"(gradientUnits=\"userSpaceOnUse\") or relative to the object's bounding box "
 					"(gradientUnits=\"objectBoundingBox\")"), NULL);
 
@@ -193,7 +193,7 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 	gtk_tooltips_set_tip (ttips, sel->spread,
 					_("Whether to fill with flat color beyond the ends of the gradient vector "
 					"(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
-					"(spreadMethod=\"repeat\"), or repeat the gradient in alternating "
+					"(spreadMethod=\"repeat\"), or repeat the gradient in alternating opposite "
 					"directions (spreadMethod=\"reflect\")"), NULL);
 
 	m = gtk_menu_new ();
