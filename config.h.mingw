@@ -20,7 +20,7 @@
 
 #define GETTEXT_PACKAGE "inkscape"
 
-#undef WITH_POPT
+#define WITH_POPT                  1
 
 #define HAVE_STRING_H              1
 #define HAVE_MALLOC_H              1

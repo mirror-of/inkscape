@@ -57,7 +57,7 @@ else
 
 
 # change me!!
-DTG := 20040112
+DTG := 20040209
 
 CC      = mingw32-gcc
 CXX     = mingw32-g++
@@ -115,6 +115,7 @@ CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION)
 ###########################
 # DYNAMIC LINKING
 ###########################
+POPT=c:/ink/popt
 
 GTKINC = -I$(GTK)/include/gtkmm-2.0 -I$(GTK)/lib/gtkmm-2.0/include \
 -I$(GTK)/include/sigc++-1.2 -I$(GTK)/lib/sigc++-1.2/include \
@@ -133,7 +134,7 @@ INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
 -I$(GTK)/include/freetype2
 
 LIBS = $(GTKLIB) -lxml2 $(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
--lfreetype -lpng $(GTK)/lib/libz.lib -mwindows -lws2_32
+-lfreetype -lpng -lpopt $(GTK)/lib/libz.lib -mwindows -lws2_32
 
 
 ###########################
