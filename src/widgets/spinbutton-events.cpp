@@ -84,6 +84,7 @@ spinbutton_keypress (GtkWidget *w, GdkEventKey *event, gpointer data)
 		return TRUE; // I consumed the event
 		break;
 	case GDK_Return: // defocus
+	case GDK_KP_Enter:
 		spinbutton_defocus (GTK_OBJECT (spw));
 		return TRUE; // I consumed the event
 		break;

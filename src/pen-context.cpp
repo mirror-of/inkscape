@@ -557,6 +557,7 @@ pen_handle_key_press(SPPenContext *const pc, guint const keyval)
     /* fixme: */
     switch (keyval) {
         case GDK_Return:
+        case GDK_KP_Enter:
             if (pc->npoints != 0) {
                 spdc_pen_finish(pc, FALSE);
                 ret = TRUE;
