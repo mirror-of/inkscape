@@ -17,6 +17,16 @@
 
 #include <sigc++/sigc++.h>
 
+#include "sp-item.h"
+#include "sp-string.h"
+
+#include "desktop.h"
+
+#include "display/curve.h"
+#include "libnr/nr-point.h"
+#include "libnrtype/FlowSrc.h"
+#include "svg/svg-types.h"
+
 
 #define SP_TYPE_TEXT (sp_text_get_type ())
 #define SP_TEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TEXT, SPText))
@@ -24,141 +34,32 @@
 #define SP_IS_TEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_TEXT))
 #define SP_IS_TEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_TEXT))
 
-#define SP_TYPE_TSPAN (sp_tspan_get_type ())
-#define SP_TSPAN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TSPAN, SPTSpan))
-#define SP_TSPAN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_TSPAN, SPTSpanClass))
-#define SP_IS_TSPAN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_TSPAN))
-#define SP_IS_TSPAN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_TSPAN))
-
-#define SP_TYPE_TEXTPATH (sp_textpath_get_type ())
-#define SP_TEXTPATH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TEXTPATH, SPTextPath))
-#define SP_TEXTPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_TEXTPATH, SPTextPathClass))
-#define SP_IS_TEXTPATH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_TEXTPATH))
-#define SP_IS_TEXTPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_TEXTPATH))
-
-#define SP_TYPE_STRING (sp_string_get_type ())
-#define SP_STRING(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_STRING, SPString))
-#define SP_STRING_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_STRING, SPStringClass))
-#define SP_IS_STRING(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_STRING))
-#define SP_IS_STRING_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_STRING))
-
 /* Text specific flags */
 #define SP_TEXT_CONTENT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 #define SP_TEXT_LAYOUT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-#define SP_TSPAN_STRING(t) ((SPString *) SP_TSPAN (t)->string)
-#define SP_TEXTPATH_STRING(t) ((SPString *) SP_TEXTPATH (t)->string)
 
-#include <libnr/nr-point.h>
-#include "svg/svg-types.h"
-#include "sp-chars.h"
-
-class SPLayoutData;
-class SPUseReference;
-
-struct SPLayoutData {
-	/* fixme: Vectors */
-	SPSVGLength x;
-	SPSVGLength y;
-	GList *dx; // list of SPSVGLength
-	GList *dy; // list of SPSVGLength
-	unsigned int rotate_set : 1;
-	float rotate;
-	float linespacing;
-};
-
-/*
- * The ultimate source of current mess is, that we have to derive string <- chars
- * This will be changed as soon as we have NRArenaGlyphList class
- */
-
-/* SPString */
-
-struct SPString {
-	SPChars chars;
-	/* Link to parent layout */
-	SPLayoutData *ly;
-	/* Content */
-	gchar *text;
-	NR::Point *p;
-	/* Bookkeeping */
-	guint start;
-	guint length;
-	/* Using current direction and style */
-	NRRect bbox;
-	NR::Point advance;
-};
-
-struct SPStringClass {
-	SPCharsClass parent_class;
-};
-
-#define SP_STRING_TEXT(s) (SP_STRING (s)->text)
-
-GType sp_string_get_type ();
-
-/* SPTSpan */
-
-enum {
-	SP_TSPAN_ROLE_UNSPECIFIED,
-	SP_TSPAN_ROLE_PARAGRAPH,
-	SP_TSPAN_ROLE_LINE
-};
-
-struct SPTSpan {
-	SPItem item;
-
-	guint role : 2;
-
-	SPLayoutData ly;
-
-	SPObject *string;
-};
-
-struct SPTSpanClass {
-	SPItemClass parent_class;
-};
-
-GType sp_tspan_get_type ();
-
-/* SPTextPath */
-
-class Path;
-struct SPTextPath {
-	SPItem        item;
-	SPLayoutData  ly;
-	SPObject      *string;
-
-  Path           *originalPath; // will be a livarot Path, just don't declare it here to please the gcc linker
-  char           *original;     // SVG description of the source path
-
-	bool           sourceDirty;
-	bool           isUpdating;
-	
-	gchar					 *sourceHref;
-	SPUseReference *sourceRef;
-  SPRepr         *sourceRepr; // the repr associated with that id
-	SPObject			 *sourceObject;
-	
-	gulong           _modified_connection;
-	SigC::Connection _delete_connection;
-	SigC::Connection _changed_connection;
-};
-
-struct SPTextPathClass {
-	SPItemClass  parent_class;
-};
-
-GType sp_textpath_get_type();
+class flow_src;
+class flow_res;
 
 /* SPText */
 
 struct SPText {
 	SPItem item;
 
-	SPLayoutData ly;
-
+	div_flow_src   contents;
+	SPSVGLength		 x,y;
+	SPSVGLength    linespacing;
+	
 	guint relayout : 1;
+	
+	flow_src*      f_src;
+	flow_res*      f_res;
+
+	void           ClearFlow(NRArenaGroup* in_arena);
+	void           BuildFlow(NRArenaGroup* in_arena);
+	void					 UpdateFlowSource(void);
+	void					 ComputeFlowRes(void);
 };
 
 struct SPTextClass {
