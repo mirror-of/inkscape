@@ -160,6 +160,37 @@ static void cmd_set_attr (GtkObject * object, gpointer data);
 
 static gboolean sp_xml_tree_key_press (GtkWidget *widget, GdkEventKey *event);
 
+
+/*
+ * \brief Sets the XML status bar when the tree is selected.
+ */
+void
+tree_reset_context ( void )
+{
+    _message_context->set(Inkscape::NORMAL_MESSAGE,
+                          _("<b>Click</b> to select nodes, <b>drag</b> to rearrange."));
+}
+
+
+/*
+ * \brief Sets the XML status bar, depending on which attr is selected.
+ */
+void
+attr_reset_context ( gint attr )
+{
+    if (attr == 0) {
+        _message_context->set(Inkscape::NORMAL_MESSAGE,
+                              _("<b>Click</b> attribute to edit."));
+    }
+    else {
+        const gchar * name = g_quark_to_string (attr);
+        gchar * message = g_strdup_printf(_("Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
+        _message_context->set(Inkscape::NORMAL_MESSAGE, message);
+        g_free(message);
+    }
+}
+
+
 void
 sp_xml_tree_dialog (void)
 {
@@ -256,7 +287,6 @@ sp_xml_tree_dialog (void)
 
         g_signal_connect_after ( G_OBJECT (tree), "tree_move",
                                  G_CALLBACK (after_tree_move), NULL);
-
 
         /* TODO: replace gtk_signal_connect_while_alive() with something
          * else...
@@ -580,8 +610,7 @@ sp_xml_tree_dialog (void)
 
         g_signal_connect ((GObject *) dlg, "key_press_event", (GCallback) sp_xml_tree_key_press, NULL);
 
-        _message_context->set(Inkscape::NORMAL_MESSAGE,
-                              _("<b>XML Editor</b> Select attributes and edit them."));
+        tree_reset_context();
     } // end of if (dlg == NULL)
 
     gtk_window_present ((GtkWindow *) dlg);
@@ -795,7 +824,6 @@ set_dt_select (SPRepr *repr)
 } // end of set_dt_select()
 
 
-
 void
 on_tree_select_row ( GtkCTree * tree,
                      GtkCTreeNode * node,
@@ -821,6 +849,8 @@ on_tree_select_row ( GtkCTree * tree,
     propagate_tree_select(selected_repr);
 
     set_dt_select(selected_repr);
+
+    tree_reset_context();
 }
 
 void
@@ -862,7 +892,6 @@ after_tree_move ( GtkCTree * tree,
         sp_document_cancel (current_document);
     }
 }
-
 
 
 static void
@@ -1017,13 +1046,14 @@ on_tree_unselect_row_clear_text ( GtkCTree * tree, GtkCTreeNode * node,
 }
 
 
-
 void
 on_attr_select_row ( GtkCList *list, gint row, gint column,
                      GdkEventButton *event, gpointer data )
 {
     selected_attr = sp_xmlview_attr_list_get_row_key (list, row);
     gtk_window_set_focus (GTK_WINDOW (dlg), GTK_WIDGET (attr_value));
+
+    attr_reset_context ( selected_attr );
 }
 
 
@@ -1032,6 +1062,7 @@ on_attr_unselect_row ( GtkCList *list, gint row, gint column,
                        GdkEventButton *event, gpointer data )
 {
     selected_attr = 0;
+    attr_reset_context ( selected_attr );
 }
 
 
@@ -1067,9 +1098,9 @@ on_attr_row_changed ( GtkCList *list, gint row, gpointer data )
         }
         g_free (text);
 
+        */
         gtk_clist_unselect_row ( GTK_CLIST(list), row, 0 );
         gtk_clist_select_row ( GTK_CLIST(list), row, 0 );
-        */
     }
 }
 
@@ -1430,7 +1461,11 @@ cmd_set_attr (GtkObject * object, gpointer data)
     value = gtk_text_buffer_get_text ( gtk_text_view_get_buffer (attr_value),
                                        &start, &end, TRUE );
 
-    sp_repr_set_attr (selected_repr, name, value, true);
+    if (!sp_repr_set_attr (selected_repr, name, value, true)) {
+        gchar * message = g_strdup_printf(_("Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"), name, value);
+        _message_stack->flash(Inkscape::WARNING_MESSAGE, message);
+        g_free(message);
+    }
 
     g_free (name);
     g_free (value);
