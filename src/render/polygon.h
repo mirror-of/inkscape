@@ -31,12 +31,11 @@ public:
     typedef Inkscape::Util::List<NR::Point> VertexList;
 
     Polygon() : _vertices(NULL), _is_closed(false) {}
-    Polygon(VertexList *vertices, bool closed=false)
+    Polygon(VertexList const *vertices, bool closed=false)
     : _vertices(vertices), _is_closed(false) {}
 
-    VertexList *vertices() { return _vertices; }
     VertexList const *vertices() const { return _vertices; }
-    VertexList *setVertices(VertexList *vertices) {
+    VertexList const *setVertices(VertexList const *vertices) {
         _vertices = vertices;
     }
 
@@ -44,7 +43,7 @@ public:
     void setClosed(bool closed=true) { _is_closed = closed; }
 
 private:
-    VertexList *_vertices;
+    VertexList const *_vertices;
     bool _is_closed;
 };
 
