@@ -12,6 +12,8 @@
 
 
 #include <config.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <glib.h>
 #include <gtkmm.h>
 #include <gtk/gtkdialog.h>
@@ -170,6 +172,67 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
 
     return fp;
 }
+
+
+int Inkscape::IO::mkdir_utf8name( char const *utf8name )
+{
+    static gint counter = 0;
+    int retval = -1;
+
+    DEBUG_MESSAGE( dumpMk, "entering mkdir_utf8name( '%s' )[%d]", utf8name, (counter++) );
+
+#ifndef WIN32
+    DEBUG_MESSAGE( dumpMk, "           STEP 0              ( '%s' )[%d]", utf8name, (counter++) );
+    gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
+    if ( filename )
+    {
+        DEBUG_MESSAGE( dumpMk, "           STEP 1              ( '%s' )[%d]", utf8name, (counter++) );
+        retval = ::mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP);
+        DEBUG_MESSAGE( dumpMk, "           STEP 2              ( '%s' )[%d]", utf8name, (counter++) );
+        g_free(filename);
+        DEBUG_MESSAGE( dumpMk, "           STEP 3              ( '%s' )[%d]", utf8name, (counter++) );
+        filename = 0;
+    }
+#else
+    DEBUG_MESSAGE( dumpMk, "   calling is_os_wide()       ( '%s' )[%d]", utf8name, (counter++) );
+    if ( PrintWin32::is_os_wide() )
+    {
+        DEBUG_MESSAGE( dumpMk, "           is_os_wide() true   ( '%s' )[%d]", utf8name, (counter++) );
+        gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
+        DEBUG_MESSAGE( dumpMk, "           STEP 1              ( '%s' )[%d]", utf8name, (counter++) );
+        if ( wideName )
+        {
+            DEBUG_MESSAGE( dumpMk, "           STEP 2              ( '%s' )[%d]", utf8name, (counter++) );
+            retval = _wmkdir( (wchar_t*)wideName );
+            DEBUG_MESSAGE( dumpMk, "           STEP 3              ( '%s' )[%d]", utf8name, (counter++) );
+            g_free( wideName );
+            DEBUG_MESSAGE( dumpMk, "           STEP 4              ( '%s' )[%d]", utf8name, (counter++) );
+            wideName = 0;
+        }
+        else
+        {
+            DEBUG_MESSAGE( dumpMk, "           STEP 5              ( '%s' )[%d]", utf8name, (counter++) );
+            g_message("Unable to convert filename from UTF-8 to UTF-16");
+        }
+    }
+    else
+    {
+        DEBUG_MESSAGE( dumpMk, "           is_os_wide() false  ( '%s' )[%d]", utf8name, (counter++) );
+        gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
+        DEBUG_MESSAGE( dumpMk, "           STEP 1              ( '%s' )[%d]", utf8name, (counter++) );
+        retval = std::mkdir(filename);
+        DEBUG_MESSAGE( dumpMk, "           STEP 2              ( '%s' )[%d]", utf8name, (counter++) );
+        g_free(filename);
+        DEBUG_MESSAGE( dumpMk, "           STEP 3              ( '%s' )[%d]", utf8name, (counter++) );
+        filename = 0;
+    }
+#endif
+
+    DEBUG_MESSAGE( dumpMk, "leaving mkdir_utf8name( '%s' )[%d]", utf8name, (counter++) );
+
+    return retval;
+}
+
 
 /*
   Local Variables:

@@ -25,6 +25,8 @@ void dump_fopen_call( char const *utf8name, char const *id );
 
 FILE *fopen_utf8name( char const *utf8name, char const *mode );
 
+int mkdir_utf8name( char const *utf8name );
+
 }
 }
 
