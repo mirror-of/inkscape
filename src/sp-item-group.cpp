@@ -47,6 +47,7 @@ static void sp_group_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_group_description (SPItem * item);
 static NRArenaItem *sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_group_hide (SPItem * item, unsigned int key);
+static std::vector<NR::Point> sp_group_snappoints (SPItem *item);
 
 static SPItemClass * parent_class;
 
@@ -99,6 +100,7 @@ sp_group_class_init (SPGroupClass *klass)
 	item_class->description = sp_group_description;
 	item_class->show = sp_group_show;
 	item_class->hide = sp_group_hide;
+	item_class->snappoints = sp_group_snappoints;
 }
 
 static void
@@ -379,6 +381,25 @@ sp_group_hide (SPItem *item, unsigned int key)
 	if (((SPItemClass *) parent_class)->hide)
 		((SPItemClass *) parent_class)->hide (item, key);
 }
+
+static std::vector<NR::Point> sp_group_snappoints (SPItem *item)
+{
+	SPGroup *g = (SPGroup *) item;
+	std::vector<NR::Point> points;
+
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(item));
+	     o != NULL;
+	     o = SP_OBJECT_NEXT(o))
+	{
+		if (SP_IS_ITEM(o)) {
+			std::vector<NR::Point> p = sp_item_snappoints(SP_ITEM(o));
+			copy(p.begin(), p.end(), back_inserter(points));
+		}
+	}
+
+	return points;
+}
+
 
 void
 sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
