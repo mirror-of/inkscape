@@ -111,7 +111,24 @@ public:
 	
 	// filling the structure with input data
 	void            SetDefaultFont(font_instance* iFont);
-	void            AppendUTF8(char* text,int len);
+
+	/**
+	 * Append the specified text to utf8_text and uni32_codepoint.
+	 *
+	 * Note: Despite the name, the current implementation is primarily suited for a single
+	 * call to set the text, rather than repeated calls to AppendUTF8: the implementation is
+	 * Omega(n) in the new total length of the string, rather than just in the length of the
+	 * text being appended.  This can probably be addressed fairly easily (see comments in
+	 * code) if this is an issue for new callers.
+	 *
+	 * Requires: text is valid UTF8, or null.
+	 *           Formally: text==NULL || g_utf8_validate(text,len,NULL).
+	 *
+	 * @param len Our sole existing caller (widgets/font_selector.cpp) uses len=-1.  N.B. The current
+	 *   implementation may be buggy for len >= 0, especially for len==0.
+	 */
+	void            AppendUTF8(char const *text, int len);
+
 	// adds dx or dy for the text added by the last AppendUTF8() call
 	void            KernXForLastAddition(double *i_kern_x,int i_len,double scale=1.0);
 	void            KernYForLastAddition(double *i_kern_y,int i_len,double scale=1.0);

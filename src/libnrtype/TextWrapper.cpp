@@ -73,14 +73,17 @@ void            text_wrapper::SetDefaultFont(font_instance* iFont)
 	if ( default_font ) default_font->Unref();
 	default_font=iFont;
 }
-void            text_wrapper::AppendUTF8(char* text,int len)
+
+void            text_wrapper::AppendUTF8(char const *text, int len)
 {
 	// appends text to what needs to be handled
 	if ( utf8_length <= 0 ) {
 		// a first check to prevent the text from containing a leading line return (which
 		// is probably a bug anyway)
 		if ( text[0] == '\n' || text[0] == '\r' ) {
-			//printf("string starts with a return: gonna eat it\n");
+			/* fixme: Should the below be `0 <= len' ?  The existing code looks wrong
+			 * for the case that len==0.
+			 * TODO: Document the meaning of the len parameter. */
 			if ( len > 0 ) {
 				while ( len > 0 && ( *text == '\n' || *text == '\r' ) ) {text++;len--;}
 			} else {
@@ -89,21 +92,21 @@ void            text_wrapper::AppendUTF8(char* text,int len)
 		}
 	}
 	if ( len == 0 || text == NULL || *text == 0 ) return;
-	if ( g_utf8_validate(text,len,NULL) ) {
-	} else {
-		printf("invalid utf8\n");
-		return;
-	}
+	g_return_if_fail(g_utf8_validate(text,len,NULL));
+
 	// compute the length
-	int nlen=len;
-	if ( nlen < 0 ) {
-		char* cur=text;
-		nlen=0;
-		while ( cur[nlen] != 0 ) nlen++;		
-	}
+	int const nlen = ( len < 0
+			   ? strlen(text)
+			   : len );
+	/* effic: Use g_utf8_validate's last param to do this. */
+
 	// prepare to store the additional text
+	/* effic: (Not an issue for the sole caller at the time of writing.)  This implementation
+	   takes quadratic time if the text is composed of n appends.  Use a proper data structure.
+	   STL vector would suffice. */
 	utf8_text=(char*)realloc(utf8_text,(utf8_length+nlen+1)*sizeof(char));
 	uni32_codepoint=(int*)realloc(uni32_codepoint,(utf8_length+nlen+1)*sizeof(int));
+
 	// copy the source text in the newly lengthened array
 	memcpy(utf8_text+utf8_length,text,nlen*sizeof(char));
 	utf8_length+=nlen;

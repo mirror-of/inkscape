@@ -1,3 +1,11 @@
+2004-08-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnrtype/TextWrapper.h, src/libnrtype/TextWrapper.cpp (AppendUTF8):
+	  Use strlen instead of for-loop.
+	  Change printf to g_return_if_fail (and document that the argument
+	  must be valid UTF-8).
+	  Mark the text pointer as not being written through (const).
+
 2004-08-23  MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr.cpp, src/xml/sp-repr-action.h:
@@ -35,14 +43,14 @@
 
 	   - Inkscape::GC::Finalized: objects for which the GC will call
 	                              destructors automatically; replaces
-								  Inkscape::GC::FinalizedObject
+	                              Inkscape::GC::FinalizedObject
 
 	   - Inkscape::GC::Anchored: managed objects which can be 'anchored'
 	                             to prevent collection while non-gc-aware
-								 objects are holding references; replaces
-								 Inkscape::Refcounted
+	                             objects are holding references; replaces
+	                             Inkscape::Refcounted
 
-      Note that they no longer inherit from each other(!), so you will
+	  Note that they no longer inherit from each other(!), so you will
 	  need to mix-and-match via multiple inheritance.  The latter two
 	  don't do anything useful without the first, however.
 
