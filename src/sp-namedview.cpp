@@ -179,6 +179,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "inkscape:grid-points");
 	sp_object_read_attr (object, "inkscape:guide-points");
 	sp_object_read_attr (object, "inkscape:current-layer");
+	sp_object_read_attr (object, "inkscape:document-units");
 
 	/* Construct guideline list */
 
@@ -442,6 +443,10 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_INKSCAPE_CURRENT_LAYER:
 		nv->default_layer_id = value ? g_quark_from_string(value) : 0;
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_DOCUMENT_UNITS:
+		nv->doc_units = value? sp_unit_get_by_abbreviation (value) : NULL;
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:

@@ -88,6 +88,7 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_INKSCAPE_GRID_POINTS, "inkscape:grid-points"},
 	{SP_ATTR_INKSCAPE_GUIDE_POINTS, "inkscape:guide-points"},
 	{SP_ATTR_INKSCAPE_CURRENT_LAYER, "inkscape:current-layer"},
+	{SP_ATTR_INKSCAPE_DOCUMENT_UNITS, "inkscape:document-units"},
 	/* SPGuide */
 	{SP_ATTR_ORIENTATION, "orientation"},
 	{SP_ATTR_POSITION, "position"},

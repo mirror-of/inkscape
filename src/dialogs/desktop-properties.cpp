@@ -751,6 +751,32 @@ sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
     sp_document_done ( SP_ACTIVE_DOCUMENT );
 }
 
+static gboolean set_doc_units (SPUnitSelector *,
+                             SPUnit const *old,
+                             SPUnit const *new_units,
+                             GObject *dlg)
+{
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+
+    if (!dt) {
+        return FALSE;
+    }
+
+    SPDocument *doc = SP_DT_DOCUMENT(dt);
+
+    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+
+    gboolean saved = sp_document_get_undo_sensitive(doc);
+    sp_document_set_undo_sensitive(doc, FALSE);
+    sp_repr_set_attr (repr, "inkscape:document-units", sp_unit_get_abbreviation (new_units));
+    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+    sp_document_set_undo_sensitive(doc, saved);
+    sp_document_done(doc);
+
+    return TRUE;
+}
+
+
 /*
  * \brief   Creates the desktop properties dialog
  *
@@ -939,7 +965,7 @@ sp_desktop_dialog(void)
         gtk_notebook_prepend_page(GTK_NOTEBOOK(nb), t, l);
         gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), 0);
 
-        sp_color_picker_button(dlg, t, _("Background (also for export)"),
+        sp_color_picker_button(dlg, t, _("Background (also for export):"),
                                "pagecolor", _("Background color"),
                                "inkscape:pageopacity", 0);
 
@@ -951,16 +977,28 @@ sp_desktop_dialog(void)
         spw_checkbutton(dlg, t, _("Border on top of drawing"),
                         "borderlayer", 0, 2, 0, cb);
 
-        sp_color_picker_button(dlg, t, _("Border color"),
+        sp_color_picker_button(dlg, t, _("Border color:"),
                                "bordercolor", _("Canvas border color"),
                                "borderopacity", 4);
 
+        l = gtk_label_new(_("Default units:"));
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show(l);
+        gtk_table_attach (GTK_TABLE (t), l, 0, 1, 5, 6,
+                    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+        GtkWidget *doc_units = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+        gtk_tooltips_set_tip(tooltips, doc_units, _("Units for the tool controls, ruler, and the statusbar"), NULL);
+        g_signal_connect(G_OBJECT(doc_units), "set_unit", G_CALLBACK(set_doc_units), NULL);
+        gtk_object_set_data (GTK_OBJECT (dlg), "doc_units", doc_units);
+        gtk_widget_show(doc_units);
+        gtk_table_attach (GTK_TABLE (t), doc_units, 1, 2, 5, 6,
+                    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
 
         // The following comes from the former "document settings" dialog
 
         GtkWidget *vb = gtk_vbox_new(FALSE, 4);
         gtk_widget_show(vb);
-        gtk_table_attach(GTK_TABLE(t), vb, 0, 2, 5, 6,
+        gtk_table_attach(GTK_TABLE(t), vb, 0, 2, 6, 7,
                          (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
                          (GtkAttachOptions)0, 0, 0);
 
@@ -1342,6 +1380,10 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         if (w) {
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
         }
+
+        o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "doc_units");
+        if (nv->doc_units) 
+            sp_unit_selector_set_unit (SP_UNIT_SELECTOR(o), nv->doc_units);
 
         // Start of former "document settings" stuff
 

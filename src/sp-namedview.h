@@ -54,6 +54,8 @@ struct SPNamedView : public SPObjectGroup {
 	gdouble gridspacing[2];
 	gint gridempspacing;
 
+	const SPUnit *doc_units;
+
 	const SPUnit *gridtoleranceunit;
 	gdouble gridtolerance;
 
