@@ -1301,6 +1301,8 @@ sp_stroke_style_line_widget_new (void)
     i++;
 
     /* Drop down marker selectors*/
+    // TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
+    // (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
     spw_label(t, _("Start Markers:"), 0, i);
     GtkWidget *mnu  = ink_marker_menu ( spw ,"marker-start");
     gtk_signal_connect ( GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_marker_select), spw );
