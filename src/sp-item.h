@@ -152,6 +152,8 @@ void sp_item_set_item_transform (SPItem *item, const NRMatrix *transform);
 
 /* Utility */
 
+NRArenaItem *sp_item_get_arenaitem (SPItem *item, unsigned int key);
+
 void sp_item_bbox_desktop (SPItem *item, NRRect *bbox);
 
 NRMatrix *sp_item_i2doc_affine (SPItem const *item, NRMatrix *transform);

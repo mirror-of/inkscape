@@ -992,3 +992,19 @@ sp_item_distance_to_svg_bbox (SPItem *item, gdouble distance, const SPUnit *unit
 	}
 }
 
+/**
+Return the arenaitem corresponding to the given item in the display with the given key
+ */
+NRArenaItem *
+sp_item_get_arenaitem (SPItem *item, unsigned int key)
+{
+	SPItemView *iv;
+
+	for ( iv = item->display ; iv ; iv = iv->next ) {
+		if ( iv->key == key ) {
+			return iv->arenaitem;
+		}
+	}
+
+	return NULL;
+}
