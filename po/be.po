@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: be\n"
-"POT-Creation-Date: 2003-10-23 23:31-0700\n"
+"POT-Creation-Date: 2003-11-02 19:50-0800\n"
 "PO-Revision-Date: 2003-07-20 16:00+0300\n"
 "Last-Translator: Vital Khilko <dojlid@mova.org>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -22,8 +22,7 @@ msgstr ""
 msgid "SVG Vector Illustrator"
 msgstr "Рэдактар вэктарнае графікі"
 
-#. Create window
-#: sodipodi.desktop.in.h:2 src/toolbox.c:119 src/toolbox.c:140
+#: sodipodi.desktop.in.h:2
 msgid "Sodipodi"
 msgstr "Sodipodi"
 
@@ -36,8 +35,8 @@ msgid "Zoom drawing if window size changes"
 msgstr "Маштабаваць рысунак калі зьмяняецца памер акна"
 
 #: src/desktop.c:830
-#, c-format
-msgid "Sodipodi: %s: %s: %d"
+#, fuzzy, c-format
+msgid "Inkscape: %s: %s: %d"
 msgstr "Sodipodi: %s: %s: %d"
 
 #: src/desktop.c:959
@@ -59,11 +58,11 @@ msgstr "Рысаваньне"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:570 src/toolbox.c:485 src/verbs.c:486
+#: src/interface.c:571 src/toolbox.c:494 src/verbs.c:486
 msgid "Selection"
 msgstr "Вылучэньне"
 
-#: src/dialogs/align.c:153 src/toolbox.c:445
+#: src/dialogs/align.c:153 src/toolbox.c:451
 msgid "Align objects"
 msgstr "Раўнае аб'екты"
 
@@ -346,8 +345,8 @@ msgstr "Адзінкі:"
 #: src/dialogs/document-properties.c:223 src/dialogs/export.c:163
 #: src/dialogs/export.c:187 src/dialogs/object-attributes.c:68
 #: src/dialogs/object-attributes.c:76 src/dialogs/object-properties.c:360
-#: src/dialogs/stroke-style.c:556 src/dialogs/tool-attributes.c:120
-#: src/dyna-draw-context.c:1079
+#: src/dialogs/stroke-style.c:556 src/dialogs/tool-attributes.c:121
+#: src/dyna-draw-context.c:1097
 msgid "Width:"
 msgstr "Шырыня:"
 
@@ -493,7 +492,7 @@ msgstr ""
 msgid "Title:"
 msgstr "Назва:"
 
-#: src/dialogs/object-attributes.c:37 src/dialogs/tool-attributes.c:110
+#: src/dialogs/object-attributes.c:37 src/dialogs/tool-attributes.c:111
 msgid "Show:"
 msgstr "Паказаць:"
 
@@ -530,12 +529,12 @@ msgid "ARG2:"
 msgstr "АРГ2:"
 
 #. Expansion
-#: src/dialogs/object-attributes.c:56 src/spiral-context.c:362
+#: src/dialogs/object-attributes.c:56 src/spiral-context.c:369
 msgid "Expansion:"
 msgstr "Пашырэньне:"
 
 #. Revolution
-#: src/dialogs/object-attributes.c:57 src/dialogs/tool-attributes.c:90
+#: src/dialogs/object-attributes.c:57 src/dialogs/tool-attributes.c:91
 #: src/spiral-context.c:350
 msgid "Revolution:"
 msgstr "Абарот:"
@@ -644,7 +643,7 @@ msgstr "Памер і пазыцыя аб'екта"
 msgid "Size and Position"
 msgstr "Памер і пазыцыя"
 
-#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:447
 msgid "Stroke settings"
 msgstr "Наладкі штрыхоўкі"
 
@@ -693,55 +692,55 @@ msgstr "Тэкст і шрыфт"
 msgid "Set as default"
 msgstr "Усталяваць як дапомнае"
 
-#: src/dialogs/tool-attributes.c:45 src/verbs.c:492
+#: src/dialogs/tool-attributes.c:46 src/verbs.c:492
 msgid "Tool attributes"
 msgstr "Атрыбуты інструмэнта"
 
-#: src/dialogs/tool-attributes.c:90
+#: src/dialogs/tool-attributes.c:91
 msgid "Expansion"
 msgstr "Пашырэньне"
 
-#: src/dialogs/tool-attributes.c:90
+#: src/dialogs/tool-attributes.c:91
 msgid "Inner radius"
 msgstr "Нутраны радыюс"
 
-#: src/dialogs/tool-attributes.c:94 src/dialogs/tool-attributes.c:104
-#: src/dialogs/tool-attributes.c:114 src/dialogs/tool-attributes.c:124
+#: src/dialogs/tool-attributes.c:95 src/dialogs/tool-attributes.c:105
+#: src/dialogs/tool-attributes.c:115 src/dialogs/tool-attributes.c:125
 msgid "Missing tool preferences"
 msgstr "Перавагі адсутнага інструмэнта"
 
 #. Magnitude
-#: src/dialogs/tool-attributes.c:100 src/star-context.c:355
+#: src/dialogs/tool-attributes.c:101 src/star-context.c:355
 msgid "Corners:"
 msgstr "Куты:"
 
-#: src/dialogs/tool-attributes.c:100
+#: src/dialogs/tool-attributes.c:101
 msgid "Proportion"
 msgstr "Прапорцыі"
 
-#: src/dialogs/tool-attributes.c:110
+#: src/dialogs/tool-attributes.c:111
 msgid "Transform:"
 msgstr "Трансфармаваньне:"
 
 #. Mass
-#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1043
+#: src/dialogs/tool-attributes.c:121 src/dyna-draw-context.c:1043
 msgid "Mass:"
 msgstr "Маса:"
 
 #. Drag
-#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1055
+#: src/dialogs/tool-attributes.c:121 src/dyna-draw-context.c:1061
 msgid "Drag:"
 msgstr "Градусы:"
 
-#: src/dialogs/tool-attributes.c:120
+#: src/dialogs/tool-attributes.c:121
 msgid "Angle"
 msgstr "Кут"
 
-#: src/dialogs/tool-attributes.c:127
+#: src/dialogs/tool-attributes.c:128
 msgid "Tool has no attributes"
 msgstr "Інструмэет ня мае атрыбутаў"
 
-#: src/dialogs/tool-attributes.c:130 src/dialogs/tool-options.c:88
+#: src/dialogs/tool-attributes.c:131 src/dialogs/tool-options.c:88
 msgid "No active tool"
 msgstr "Няма актыўных інструмэнтаў"
 
@@ -831,8 +830,8 @@ msgid "Attribute value"
 msgstr "Значэньне атрыбута"
 
 #: src/dialogs/xml-tree.c:826
-#, c-format
-msgid "Sodipodi: %s : XML View"
+#, fuzzy, c-format
+msgid "Inkscape: %s : XML View"
 msgstr "Sodipodi: %s : рэдактар XML"
 
 #: src/dialogs/xml-tree.c:849
@@ -877,13 +876,13 @@ msgstr ""
 "\"Стварыць\"."
 
 #. Angle
-#: src/dyna-draw-context.c:1067
+#: src/dyna-draw-context.c:1079
 msgid "Angle:"
 msgstr "Кут:"
 
 #. Reset
-#: src/dyna-draw-context.c:1091 src/rect-context.c:421
-#: src/spiral-context.c:386 src/star-context.c:386
+#: src/dyna-draw-context.c:1115 src/rect-context.c:433
+#: src/spiral-context.c:405 src/star-context.c:401
 msgid "Defaults"
 msgstr "Дапомнае"
 
@@ -896,7 +895,8 @@ msgid "Scalable Vector Graphic (SVG)"
 msgstr "Здольная маштабавацца вэктарная графіка (SVG)"
 
 #: src/file.c:190 src/module.c:548
-msgid "Sodipodi native file format and W3C standard"
+#, fuzzy
+msgid "Inkscape native file format and W3C standard"
 msgstr "Уласны фармат файлаў Sodipodi й стандарт W3C"
 
 #: src/file.c:196 src/file.c:309
@@ -912,8 +912,8 @@ msgid "Select file to import"
 msgstr "Выбярыце файл для імпартаваньня"
 
 #: src/help.c:49
-msgid "About sodipodi"
-msgstr "Пра sodipodi"
+msgid "About inkscape"
+msgstr ""
 
 #. Do not insert any elements before/between first 4
 #: src/helper/units.c:40
@@ -1054,94 +1054,94 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "X-квадрат"
 
-#: src/interface.c:303 src/interface.c:480
+#: src/interface.c:304 src/interface.c:481
 msgid "Open Recent"
 msgstr ""
 
-#: src/interface.c:323
+#: src/interface.c:324
 msgid "Close View"
 msgstr "Закрыць прагляд"
 
-#: src/interface.c:324 src/interface.c:495
+#: src/interface.c:325 src/interface.c:496
 msgid "Exit Program"
 msgstr "Выйсьці з праграмы"
 
-#: src/interface.c:326 src/interface.c:487
-msgid "About Sodipodi"
-msgstr "Пра Sodipodi"
+#: src/interface.c:327 src/interface.c:488
+msgid "About Inkscape"
+msgstr ""
 
 #. Modules need abouts too
-#: src/interface.c:329 src/interface.c:490
+#: src/interface.c:330 src/interface.c:491
 msgid "About Modules"
 msgstr "Пра модулі"
 
-#: src/interface.c:347
+#: src/interface.c:348
 msgid "Cleanup"
 msgstr "Ачысьціць"
 
 #. View:Zoom
-#: src/interface.c:417 src/toolbox.c:617 src/verbs.c:476
+#: src/interface.c:418 src/toolbox.c:632 src/verbs.c:476
 msgid "Zoom"
 msgstr "Маштабаваньне"
 
 #. View:New View
-#: src/interface.c:429
+#: src/interface.c:430
 msgid "New View"
 msgstr "Стварыць новае акно рэдагаваньня"
 
 #. View:New Preview
-#: src/interface.c:431
+#: src/interface.c:432
 msgid "New Preview"
 msgstr "Стварыць папярэдні прагляд"
 
-#: src/interface.c:433
+#: src/interface.c:434
 msgid "New Toplevel Toolbox"
 msgstr "Стварыць верхнюю панэлю інструмэнтаў"
 
-#: src/interface.c:434
+#: src/interface.c:435
 msgid "New Docked Toolbox"
 msgstr "Стварыць прычэпленую панэлю інструмэнтаў"
 
-#: src/interface.c:435
+#: src/interface.c:436
 msgid "Remove Docked Toolbox"
 msgstr "Выдаліць прычэпленую панэлю інструмэнта"
 
 #. File
-#: src/interface.c:477 src/verbs.c:429
+#: src/interface.c:478 src/verbs.c:429
 msgid "New"
 msgstr "Стварыць"
 
-#: src/interface.c:478
+#: src/interface.c:479
 msgid "Open"
 msgstr "Адкрыць"
 
 #. Generic menu
 #. File submenu
-#: src/interface.c:558 src/toolbox.c:348
+#: src/interface.c:559 src/toolbox.c:354
 msgid "File"
 msgstr "Файл"
 
 #. Edit submenu
-#: src/interface.c:564 src/toolbox.c:405 src/widgets/gradient-selector.c:135
+#: src/interface.c:565 src/toolbox.c:411 src/widgets/gradient-selector.c:135
 msgid "Edit"
 msgstr "Рэдагаваньне"
 
 #. View submenu
-#: src/interface.c:576
+#: src/interface.c:577
 msgid "View"
 msgstr "Выгляд"
 
 #. Drawing mode submenu
-#: src/interface.c:582
+#: src/interface.c:583
 msgid "Drawing Mode"
 msgstr "Рэжым рысаваньня"
 
 #. Dialog submenu
-#: src/interface.c:588
+#: src/interface.c:589
 msgid "Dialogs"
 msgstr "Дыялёгі"
 
-#: src/interface.c:595
+#: src/interface.c:596
 msgid "Filters"
 msgstr "Фільтары"
 
@@ -1238,7 +1238,8 @@ msgid "SVG with \"xmlns:sodipodi\" namespace"
 msgstr "SVG з прасторай імёнаў \"xmlns:sodipodi\""
 
 #: src/module.c:557
-msgid "Scalable Vector Graphics format with sodipodi extensions"
+#, fuzzy
+msgid "Scalable Vector Graphics format with inkscape extensions"
 msgstr "Фармат здольнай маштабавацца вэктарнае графікі з пашырэньнямі sodipodi"
 
 #: src/module.c:560
@@ -1254,8 +1255,8 @@ msgid "Select printer"
 msgstr "Выбярыце друкарку"
 
 #: src/modules/gnome.c:187
-#, c-format
-msgid "Sodipodi (doc name %s..): Print Preview"
+#, fuzzy, c-format
+msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Sodipodi (дакумэнт з назвай %s..): Папярэдні прагляд друку"
 
 #: src/modules/kde.cpp:159
@@ -1277,46 +1278,46 @@ msgid "Save document as"
 msgstr "Захаваць дакумэнт як"
 
 #. Print destination frame
-#: src/modules/ps.c:157 src/modules/ps.c:218
+#: src/modules/ps.c:159 src/modules/ps.c:220
 msgid "Print destination"
 msgstr "Друк"
 
 #. Print properties frame
-#: src/modules/ps.c:168
+#: src/modules/ps.c:170
 msgid "Print properties"
 msgstr "Уласьцівасьці друку"
 
-#: src/modules/ps.c:176
+#: src/modules/ps.c:178
 msgid "Print using PostScript operators"
 msgstr "Дроукаваць карыстаючыся апэратарамі PostScript"
 
-#: src/modules/ps.c:178
+#: src/modules/ps.c:180
 msgid ""
 "Use PostScript vector operators, resulting image will be (usually) smaller "
 "and can be arbitrarily scaled, but alpha transparency, markers and patterns "
 "will be lost"
 msgstr ""
 
-#: src/modules/ps.c:183
+#: src/modules/ps.c:185
 msgid "Print as bitmap"
 msgstr "Друкаваць як кропкавы відарыс"
 
-#: src/modules/ps.c:185
+#: src/modules/ps.c:187
 msgid ""
 "Print everything as bitmap, resulting image will be (usualy) larger and it "
 "quality depends on zoom factor, but all graphics will be rendered identical "
 "to display"
 msgstr ""
 
-#: src/modules/ps.c:199
+#: src/modules/ps.c:201
 msgid "Preferred resolution (dots per inch) of bitmap"
 msgstr ""
 
-#: src/modules/ps.c:214
+#: src/modules/ps.c:216
 msgid "Resolution:"
 msgstr "Разрозьненьне:"
 
-#: src/modules/ps.c:224
+#: src/modules/ps.c:226
 msgid ""
 "Enter destination lpr queue.\n"
 "Use '> filename' to print to file.\n"
@@ -1327,7 +1328,7 @@ msgstr ""
 "Выкарыстоўвайце '| праграма аргумэнты...' каб накіраваць праз канал у "
 "праграму"
 
-#: src/modules/ps.c:837
+#: src/modules/ps.c:840
 msgid "write error occured"
 msgstr "адбылася памылка запісу"
 
@@ -1409,7 +1410,7 @@ msgid "Image Properties"
 msgstr "Уласьцівасьці відарыса"
 
 #. Autotrace dialog
-#: src/object-ui.c:408 src/sp-image.c:780
+#: src/object-ui.c:408 src/sp-image.c:781
 msgid "Trace"
 msgstr "Трасыраваць"
 
@@ -1419,7 +1420,7 @@ msgid "Shape"
 msgstr "Фармаваньне"
 
 #. Item dialog
-#: src/object-ui.c:460 src/toolbox.c:442
+#: src/object-ui.c:460 src/toolbox.c:448
 msgid "Fill settings"
 msgstr "Наладкі запаўненьня"
 
@@ -1459,7 +1460,7 @@ msgid "Roundness ratio for x:"
 msgstr "Каэфіцэнт акругленьня для х:"
 
 #. ry_ratio
-#: src/rect-context.c:409
+#: src/rect-context.c:415
 msgid "Roundness ratio for y:"
 msgstr "Каэфіцэнт акругленьня для y:"
 
@@ -1488,34 +1489,36 @@ msgid "Preserve"
 msgstr "Зьберагчы"
 
 #: src/slideshow.c:88
-msgid "Sodipodi slideshow"
+#, fuzzy
+msgid "Inkscape slideshow"
 msgstr "Слайдшоў Sodipodi"
 
-#: src/sodipodi.c:398
+#: src/inkscape.c:399
 msgid "Untitled document"
 msgstr "Дакумэнт бяз назвы"
 
 #. Show nice dialog box
-#: src/sodipodi.c:423
-msgid "Sodipodi encountered an internal error and will close now.\n"
+#: src/inkscape.c:424
+#, fuzzy
+msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Sodipodi сустрэла памылку й будзе зараз закрыта.\n"
 
-#: src/sodipodi.c:424
+#: src/inkscape.c:425
 msgid ""
 "Automatic backups of unsaved documents were done to following locations:\n"
 msgstr ""
 "Азтаматычнае рэзэрваваньне незахаваных дакумэнтаў выканана ў наступныя "
 "мейсцы:\n"
 
-#: src/sodipodi.c:425
+#: src/inkscape.c:426
 msgid "Automatic backup of following documents failed:\n"
 msgstr "Збой аўтаматычнага рэзэрваваньня наступных дакумэнтаў:\n"
 
-#: src/sodipodi.c:564
-#, c-format
+#: src/inkscape.c:565
+#, fuzzy, c-format
 msgid ""
 "%s is not regular file.\n"
-"Although sodipodi will run, you can\n"
+"Although inkscape will run, you can\n"
 "neither load nor save preferences\n"
 msgstr ""
 "%s незвычайны файл.\n"
@@ -1523,12 +1526,12 @@ msgstr ""
 "здольныя загрузіць ці захаваць\n"
 "перавагі\n"
 
-#: src/sodipodi.c:567
-#, c-format
+#: src/inkscape.c:568
+#, fuzzy, c-format
 msgid ""
 "%s either is not valid xml file or\n"
 "you do not have read premissions on it.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1538,11 +1541,11 @@ msgstr ""
 "здольныя загрузіць ці захаваць\n"
 "перавагі."
 
-#: src/sodipodi.c:572
-#, c-format
+#: src/inkscape.c:573
+#, fuzzy, c-format
 msgid ""
-"%s is not valid sodipodi preferences file.\n"
-"Although sodipodi will run, you\n"
+"%s is not valid inkscape preferences file.\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1551,23 +1554,23 @@ msgstr ""
 "вы не здольныя загрузіць ці \n"
 "захаваць перавагі."
 
-#: src/sodipodi.c:584
-#, c-format
+#: src/inkscape.c:585
+#, fuzzy, c-format
 msgid ""
 "%s is not regular file.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "%s не зьяўляецца звычайным файлам.\n"
 "Хаця sodipodi  і працуе, вы не\n"
 "можаце выкарыстоўваць дадаткі\n"
 
-#: src/sodipodi.c:587
-#, c-format
+#: src/inkscape.c:588
+#, fuzzy, c-format
 msgid ""
 "%s either is not valid xml file or\n"
 "you do not have read premissions on it.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "%s нерэчаісны файл xml ці вы\n"
@@ -1575,22 +1578,22 @@ msgstr ""
 "Хаця sodipodi і працуе, вы не\n"
 "можаце выкарыстоўваць дадаткі\n"
 
-#: src/sodipodi.c:591
-#, c-format
+#: src/inkscape.c:592
+#, fuzzy, c-format
 msgid ""
-"%s is not valid sodipodi extensions file.\n"
-"Although sodipodi will run, you are\n"
+"%s is not valid inkscape extensions file.\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "%s не зьяўляецца файлам пашырэньняў.\n"
 "Хаця sodipodi  і працуе, вы не\n"
 "можаце выкарыстоўваць дадаткі\n"
 
-#: src/sodipodi.c:930
-#, c-format
+#: src/inkscape.c:931
+#, fuzzy, c-format
 msgid ""
 "Cannot create directory %s.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "%s."
 msgstr ""
@@ -1599,11 +1602,11 @@ msgstr ""
 "здольныя загрузіць ці захаваць\n"
 "%s."
 
-#: src/sodipodi.c:934
-#, c-format
+#: src/inkscape.c:935
+#, fuzzy, c-format
 msgid ""
 "%s is not a valid directory.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1612,11 +1615,11 @@ msgstr ""
 "здольныя загрузіць ці захаваць\n"
 "перавагі."
 
-#: src/sodipodi.c:938
-#, c-format
+#: src/inkscape.c:939
+#, fuzzy, c-format
 msgid ""
 "Cannot create file %s.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1625,11 +1628,11 @@ msgstr ""
 "здольныя загрузіць ці захаваць\n"
 "перавагі."
 
-#: src/sodipodi.c:942
-#, c-format
+#: src/inkscape.c:943
+#, fuzzy, c-format
 msgid ""
 "Cannot write file %s.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1638,44 +1641,44 @@ msgstr ""
 "здольныя загрузіць ці захаваць\n"
 "перавагі."
 
-#: src/sodipodi.c:952
-#, c-format
+#: src/inkscape.c:953
+#, fuzzy, c-format
 msgid ""
 "Cannot create directory %s.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Немагчыма стварыць тэчку %s.\n"
 "Хаця sodipodi  і працуе, вы не\n"
 "можаце выкарыстоўваць дадаткі\n"
 
-#: src/sodipodi.c:955
-#, c-format
+#: src/inkscape.c:956
+#, fuzzy, c-format
 msgid ""
 "%s is not a valid directory.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "%s нерэчаісная тэчка.\n"
 "Хаця sodipodi  і працуе, вы не\n"
 "можаце выкарыстоўваць дадаткі\n"
 
-#: src/sodipodi.c:958
-#, c-format
+#: src/inkscape.c:959
+#, fuzzy, c-format
 msgid ""
 "Cannot create file %s.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Немагчыма стварыць файл %s.\n"
 "Хаця sodipodi  і працуе, вы не\n"
 "можаце выкарыстоўваць дадаткі\n"
 
-#: src/sodipodi.c:961
-#, c-format
+#: src/inkscape.c:962
+#, fuzzy, c-format
 msgid ""
 "Cannot write file %s.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Немагчыма запісаць файл %s.\n"
@@ -1687,34 +1690,34 @@ msgstr ""
 msgid "Link to %s"
 msgstr "Злучыць з %s"
 
-#: src/sp-image.c:370
+#: src/sp-image.c:371
 #, c-format
 msgid "Image with bad reference: %s"
 msgstr "Відарыс з кепскай спасылкай: %s"
 
-#: src/sp-image.c:372
+#: src/sp-image.c:373
 #, c-format
 msgid "Color image %d x %d: %s"
 msgstr "Каляровы відарыс %d x %d: %s"
 
-#: src/sp-image.c:926
+#: src/sp-image.c:927
 #, c-format
 msgid "Error to write %s: %s"
 msgstr "Памылка запісу %s: %s"
 
-#: src/sp-image.c:960
+#: src/sp-image.c:961
 msgid "Untitled"
 msgstr "Бяз назвы"
 
-#: src/sp-image.c:965
+#: src/sp-image.c:966
 msgid "Document Name:"
 msgstr "Назва дакумэнта:"
 
-#: src/sp-image.c:978
+#: src/sp-image.c:979
 msgid "Unknown"
 msgstr "Невядома"
 
-#: src/sp-image.c:984
+#: src/sp-image.c:985
 msgid "Image URI:"
 msgstr "URI відарыса:"
 
@@ -1733,82 +1736,87 @@ msgid "Text object"
 msgstr "Аб'ект тэкста"
 
 #. T0
-#: src/spiral-context.c:374
+#: src/spiral-context.c:387
 msgid "Inner radius:"
 msgstr "Нутраны радыюс:"
 
 #. Proportion
-#: src/star-context.c:367
+#: src/star-context.c:373
 msgid "Proportion:"
 msgstr "Прапорцыі:"
 
 #. Making sides flat
-#: src/star-context.c:380
+#: src/star-context.c:392
 msgid "Make sides flat"
 msgstr "Рабіць бакі плоскімі"
 
-#: src/toolbox.c:439
+#. Create window
+#: src/toolbox.c:119 src/toolbox.c:140
+msgid "Inkscape"
+msgstr ""
+
+#: src/toolbox.c:445
 msgid "Object"
 msgstr "Аб'ект"
 
-#: src/toolbox.c:443 src/verbs.c:494
+#: src/toolbox.c:449 src/verbs.c:494
 msgid "Object size and position"
 msgstr "Памер і пазыцыя аб'екта"
 
-#: src/toolbox.c:444
+#: src/toolbox.c:450
 msgid "Text and font settings"
 msgstr "Усталёўкі тэкста й шрыфта"
 
-#: src/toolbox.c:446 src/verbs.c:495
+#: src/toolbox.c:452 src/verbs.c:495
 msgid "Object transformations"
 msgstr "Трансфармуе аб'ект"
 
-#: src/toolbox.c:519
+#: src/toolbox.c:528
 msgid "Draw"
 msgstr "Рысаваньне"
 
-#: src/toolbox.c:574
+#: src/toolbox.c:589
 msgid "Extension"
 msgstr "Пашырэньне"
 
-#: src/toolbox.c:651
+#: src/toolbox.c:666
 msgid "Nodes"
 msgstr "Вузлы"
 
-#: src/toolbox.c:653
+#: src/toolbox.c:668
 msgid "Insert new nodes into selected segments"
 msgstr "Устаўляе новыя вузлы ў вылучаныя сэгмэнты"
 
-#: src/toolbox.c:654
+#: src/toolbox.c:669
 msgid "Break line at selected nodes"
 msgstr "Абрывае рысу на вылучаным вузьле"
 
-#: src/toolbox.c:655
+#: src/toolbox.c:670
 msgid "Make selected nodes corner"
 msgstr "Робіць вылучаныя вузлы кутамі"
 
-#: src/toolbox.c:656
+#: src/toolbox.c:671
 msgid "Make selected segments lines"
 msgstr "Робіць вылучаныя сэгмэнты рысамі"
 
-#: src/toolbox.c:657
+#: src/toolbox.c:672
 msgid "Delete selected nodes"
 msgstr "Выдаляе вылучаныя вузлы"
 
-#: src/toolbox.c:658
+#: src/toolbox.c:673
 msgid "Join lines at selected nodes"
 msgstr "Далучае рысы да вылучаных вузлоў"
 
-#: src/toolbox.c:659
+#: src/toolbox.c:674
 #, fuzzy
 msgid "Join lines at selected nodes with new segment"
 msgstr "Далучае рысы да вылучаных вузлоў"
 
-#: src/toolbox.c:660
+#: src/toolbox.c:675
 msgid "Make selected nodes smooth"
 msgstr "Робіць вылучаныя вузлы згладжанымі"
 
-#: src/toolbox.c:661
+#: src/toolbox.c:676
 msgid "Make selected segments curves"
 msgstr "Робіць вылучаныя сэгмэнты дугамі"
 
@@ -2325,58 +2333,58 @@ msgstr "Канчатковы колер"
 msgid "Gradient vector"
 msgstr "Вэктар градыента"
 
-#: src/widgets/paint-selector.c:620
+#: src/widgets/paint-selector.c:622
 msgid "No objects"
 msgstr "Няма аб'ектаў"
 
-#: src/widgets/paint-selector.c:634
+#: src/widgets/paint-selector.c:636
 msgid "Multiple styles"
 msgstr "Шматлікія стылі"
 
-#: src/widgets/paint-selector.c:648
+#: src/widgets/paint-selector.c:650
 msgid "No paint"
 msgstr "Няма рафарбоўкі"
 
 #. Label
-#: src/widgets/paint-selector.c:738
+#: src/widgets/paint-selector.c:740
 msgid "Mode:"
 msgstr "Рэжым:"
 
-#: src/widgets/paint-selector.c:748
+#: src/widgets/paint-selector.c:750
 msgid "RGB"
 msgstr "RGB"
 
-#: src/widgets/paint-selector.c:748 src/widgets/paint-selector.c:749
+#: src/widgets/paint-selector.c:750 src/widgets/paint-selector.c:751
 msgid "RGB Colorspace"
 msgstr "Каляровая прастора RGB"
 
-#: src/widgets/paint-selector.c:749
+#: src/widgets/paint-selector.c:751
 msgid "HSV"
 msgstr "HSV"
 
-#: src/widgets/paint-selector.c:750
+#: src/widgets/paint-selector.c:752
 msgid "CMYK"
 msgstr "CMYK"
 
-#: src/widgets/paint-selector.c:750
+#: src/widgets/paint-selector.c:752
 #, fuzzy
 msgid "CMYK Colorspace"
 msgstr "Каляровая прастора CMYK"
 
 #. Use dropper
-#: src/widgets/paint-selector.c:757
+#: src/widgets/paint-selector.c:759
 msgid "Get from dropper"
 msgstr "Атрымаць праз піпетку"
 
-#: src/widgets/paint-selector.c:788
+#: src/widgets/paint-selector.c:790
 msgid "Color paint"
 msgstr "Фарбаваць"
 
-#: src/widgets/paint-selector.c:858
+#: src/widgets/paint-selector.c:860
 msgid "Linear gradient"
 msgstr "Лінэйны градыент"
 
-#: src/widgets/paint-selector.c:861
+#: src/widgets/paint-selector.c:863
 msgid "Radial gradient"
 msgstr "Кругавы градыент"
 
@@ -2436,6 +2444,12 @@ msgstr "Атрыбут"
 #: src/widgets/sp-xmlview-attr-list.c:56
 msgid "Value"
 msgstr "Значэньне"
+
+#~ msgid "About sodipodi"
+#~ msgstr "Пра sodipodi"
+
+#~ msgid "About Sodipodi"
+#~ msgstr "Пра Sodipodi"
 
 #~ msgid "Item is reference"
 #~ msgstr "Элемэнт зьяўляецца спасылкай"

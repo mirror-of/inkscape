@@ -1478,24 +1478,24 @@ msgstr ""
 msgid "Sodipodi slideshow"
 msgstr ""
 
-#: src/sodipodi.c:398
+#: src/inkscape.c:398
 msgid "Untitled document"
 msgstr ""
 
 #. Show nice dialog box
-#: src/sodipodi.c:423
+#: src/inkscape.c:423
 msgid "Sodipodi encountered an internal error and will close now.\n"
 msgstr ""
 
-#: src/sodipodi.c:424
+#: src/inkscape.c:424
 msgid "Automatic backups of unsaved documents were done to following locations:\n"
 msgstr ""
 
-#: src/sodipodi.c:425
+#: src/inkscape.c:425
 msgid "Automatic backup of following documents failed:\n"
 msgstr ""
 
-#: src/sodipodi.c:564
+#: src/inkscape.c:564
 #, c-format
 msgid ""
 "%s is not regular file.\n"
@@ -1503,7 +1503,7 @@ msgid ""
 "neither load nor save preferences\n"
 msgstr ""
 
-#: src/sodipodi.c:567
+#: src/inkscape.c:567
 #, c-format
 msgid ""
 "%s either is not valid xml file or\n"
@@ -1513,7 +1513,7 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: src/sodipodi.c:572
+#: src/inkscape.c:572
 #, c-format
 msgid ""
 "%s is not valid sodipodi preferences file.\n"
@@ -1522,7 +1522,7 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: src/sodipodi.c:584
+#: src/inkscape.c:584
 #, c-format
 msgid ""
 "%s is not regular file.\n"
@@ -1530,7 +1530,7 @@ msgid ""
 "not able to use extensions (plugins)\n"
 msgstr ""
 
-#: src/sodipodi.c:587
+#: src/inkscape.c:587
 #, c-format
 msgid ""
 "%s either is not valid xml file or\n"
@@ -1539,7 +1539,7 @@ msgid ""
 "not able to use extensions (plugins)\n"
 msgstr ""
 
-#: src/sodipodi.c:591
+#: src/inkscape.c:591
 #, c-format
 msgid ""
 "%s is not valid sodipodi extensions file.\n"
@@ -1547,7 +1547,7 @@ msgid ""
 "not able to use extensions (plugins)\n"
 msgstr ""
 
-#: src/sodipodi.c:930
+#: src/inkscape.c:930
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -1556,7 +1556,7 @@ msgid ""
 "%s."
 msgstr ""
 
-#: src/sodipodi.c:934
+#: src/inkscape.c:934
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -1565,7 +1565,7 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: src/sodipodi.c:938
+#: src/inkscape.c:938
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -1574,7 +1574,7 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: src/sodipodi.c:942
+#: src/inkscape.c:942
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -1583,7 +1583,7 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: src/sodipodi.c:952
+#: src/inkscape.c:952
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -1591,7 +1591,7 @@ msgid ""
 "not able to use extensions (plugins)\n"
 msgstr ""
 
-#: src/sodipodi.c:955
+#: src/inkscape.c:955
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -1599,7 +1599,7 @@ msgid ""
 "not able to use extensions (plugins)\n"
 msgstr ""
 
-#: src/sodipodi.c:958
+#: src/inkscape.c:958
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -1607,7 +1607,7 @@ msgid ""
 "not able to use extensions (plugins)\n"
 msgstr ""
 
-#: src/sodipodi.c:961
+#: src/inkscape.c:961
 #, c-format
 msgid ""
 "Cannot write file %s.\n"

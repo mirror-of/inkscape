@@ -37,7 +37,7 @@ src/print.c
 src/rect-context.c
 src/select-context.c
 src/slideshow.c
-src/sodipodi.c
+src/inkscape.c
 src/sp-anchor.c
 src/sp-image.c
 src/sp-item-group.c

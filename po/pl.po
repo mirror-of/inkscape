@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
-"POT-Creation-Date: 2003-10-23 23:31-0700\n"
+"POT-Creation-Date: 2003-11-02 19:50-0800\n"
 "PO-Revision-Date: 2003-07-28 02:03+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -22,8 +22,7 @@ msgstr ""
 msgid "SVG Vector Illustrator"
 msgstr "Program do tworzenia ilustracji wektorowych"
 
-#. Create window
-#: sodipodi.desktop.in.h:2 src/toolbox.c:119 src/toolbox.c:140
+#: sodipodi.desktop.in.h:2
 msgid "Sodipodi"
 msgstr "Sodipodi"
 
@@ -36,8 +35,8 @@ msgid "Zoom drawing if window size changes"
 msgstr "Rysowanie powiększania podczas zmiany rozmiaru okna"
 
 #: src/desktop.c:830
-#, c-format
-msgid "Sodipodi: %s: %s: %d"
+#, fuzzy, c-format
+msgid "Inkscape: %s: %s: %d"
 msgstr "Sodipodi: %s: %s: %d"
 
 #: src/desktop.c:959
@@ -59,11 +58,11 @@ msgstr "Rysunek"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:570 src/toolbox.c:485 src/verbs.c:486
+#: src/interface.c:571 src/toolbox.c:494 src/verbs.c:486
 msgid "Selection"
 msgstr "Zaznaczenie"
 
-#: src/dialogs/align.c:153 src/toolbox.c:445
+#: src/dialogs/align.c:153 src/toolbox.c:451
 msgid "Align objects"
 msgstr "Wyrównaj obiekty"
 
@@ -351,8 +350,8 @@ msgstr "Jednostki:"
 #: src/dialogs/document-properties.c:223 src/dialogs/export.c:163
 #: src/dialogs/export.c:187 src/dialogs/object-attributes.c:68
 #: src/dialogs/object-attributes.c:76 src/dialogs/object-properties.c:360
-#: src/dialogs/stroke-style.c:556 src/dialogs/tool-attributes.c:120
-#: src/dyna-draw-context.c:1079
+#: src/dialogs/stroke-style.c:556 src/dialogs/tool-attributes.c:121
+#: src/dyna-draw-context.c:1097
 msgid "Width:"
 msgstr "Szerokość:"
 
@@ -501,7 +500,7 @@ msgstr ""
 msgid "Title:"
 msgstr "Tytuł:"
 
-#: src/dialogs/object-attributes.c:37 src/dialogs/tool-attributes.c:110
+#: src/dialogs/object-attributes.c:37 src/dialogs/tool-attributes.c:111
 msgid "Show:"
 msgstr "Wyświetlenie:"
 
@@ -538,12 +537,12 @@ msgid "ARG2:"
 msgstr "ARG2:"
 
 #. Expansion
-#: src/dialogs/object-attributes.c:56 src/spiral-context.c:362
+#: src/dialogs/object-attributes.c:56 src/spiral-context.c:369
 msgid "Expansion:"
 msgstr "Ekspansja:"
 
 #. Revolution
-#: src/dialogs/object-attributes.c:57 src/dialogs/tool-attributes.c:90
+#: src/dialogs/object-attributes.c:57 src/dialogs/tool-attributes.c:91
 #: src/spiral-context.c:350
 msgid "Revolution:"
 msgstr "Rewolucja:"
@@ -653,7 +652,7 @@ msgstr "Rozmiar i położenie obiektu"
 msgid "Size and Position"
 msgstr "Rozmiar i położenie"
 
-#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:447
 msgid "Stroke settings"
 msgstr "Ustawienia kreski"
 
@@ -701,56 +700,56 @@ msgstr "Tekst i czcionka"
 msgid "Set as default"
 msgstr ""
 
-#: src/dialogs/tool-attributes.c:45 src/verbs.c:492
+#: src/dialogs/tool-attributes.c:46 src/verbs.c:492
 msgid "Tool attributes"
 msgstr "Atrybuty narzędzia"
 
-#: src/dialogs/tool-attributes.c:90
+#: src/dialogs/tool-attributes.c:91
 msgid "Expansion"
 msgstr "Rozszerzenie"
 
-#: src/dialogs/tool-attributes.c:90
+#: src/dialogs/tool-attributes.c:91
 msgid "Inner radius"
 msgstr "Wewnętrzny promień"
 
-#: src/dialogs/tool-attributes.c:94 src/dialogs/tool-attributes.c:104
-#: src/dialogs/tool-attributes.c:114 src/dialogs/tool-attributes.c:124
+#: src/dialogs/tool-attributes.c:95 src/dialogs/tool-attributes.c:105
+#: src/dialogs/tool-attributes.c:115 src/dialogs/tool-attributes.c:125
 msgid "Missing tool preferences"
 msgstr "Brakujące preferencje narzędzia"
 
 #. Magnitude
-#: src/dialogs/tool-attributes.c:100 src/star-context.c:355
+#: src/dialogs/tool-attributes.c:101 src/star-context.c:355
 msgid "Corners:"
 msgstr "Narożniki:"
 
-#: src/dialogs/tool-attributes.c:100
+#: src/dialogs/tool-attributes.c:101
 msgid "Proportion"
 msgstr "Proporcja"
 
-#: src/dialogs/tool-attributes.c:110
+#: src/dialogs/tool-attributes.c:111
 msgid "Transform:"
 msgstr "Przekształcenie:"
 
 #. Mass
-#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1043
+#: src/dialogs/tool-attributes.c:121 src/dyna-draw-context.c:1043
 msgid "Mass:"
 msgstr "Masa:"
 
 #. Drag
-#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1055
+#: src/dialogs/tool-attributes.c:121 src/dyna-draw-context.c:1061
 #, fuzzy
 msgid "Drag:"
 msgstr "Rysowanie"
 
-#: src/dialogs/tool-attributes.c:120
+#: src/dialogs/tool-attributes.c:121
 msgid "Angle"
 msgstr "Kąt"
 
-#: src/dialogs/tool-attributes.c:127
+#: src/dialogs/tool-attributes.c:128
 msgid "Tool has no attributes"
 msgstr "Narzędzie nie posiada atrybutów"
 
-#: src/dialogs/tool-attributes.c:130 src/dialogs/tool-options.c:88
+#: src/dialogs/tool-attributes.c:131 src/dialogs/tool-options.c:88
 msgid "No active tool"
 msgstr ""
 
@@ -845,8 +844,8 @@ msgid "Attribute value"
 msgstr "Wartość atrybutu"
 
 #: src/dialogs/xml-tree.c:826
-#, c-format
-msgid "Sodipodi: %s : XML View"
+#, fuzzy, c-format
+msgid "Inkscape: %s : XML View"
 msgstr "Sodipodi: %s: Widok XML"
 
 #: src/dialogs/xml-tree.c:849
@@ -885,13 +884,13 @@ msgid "Creating new curve. Press 'a' to toggle Append/New."
 msgstr ""
 
 #. Angle
-#: src/dyna-draw-context.c:1067
+#: src/dyna-draw-context.c:1079
 msgid "Angle:"
 msgstr "Kąt:"
 
 #. Reset
-#: src/dyna-draw-context.c:1091 src/rect-context.c:421
-#: src/spiral-context.c:386 src/star-context.c:386
+#: src/dyna-draw-context.c:1115 src/rect-context.c:433
+#: src/spiral-context.c:405 src/star-context.c:401
 msgid "Defaults"
 msgstr "Domyślne"
 
@@ -904,7 +903,8 @@ msgid "Scalable Vector Graphic (SVG)"
 msgstr "Skalowalna grafika wektorowa (SVG)"
 
 #: src/file.c:190 src/module.c:548
-msgid "Sodipodi native file format and W3C standard"
+#, fuzzy
+msgid "Inkscape native file format and W3C standard"
 msgstr "Rodzimy format pliku Sodipodi i standard W3C"
 
 #: src/file.c:196 src/file.c:309
@@ -920,8 +920,8 @@ msgid "Select file to import"
 msgstr "Wybór pliku do importu"
 
 #: src/help.c:49
-msgid "About sodipodi"
-msgstr "Informacje o Sodipodi"
+msgid "About inkscape"
+msgstr ""
 
 #. Do not insert any elements before/between first 4
 #: src/helper/units.c:40
@@ -1062,94 +1062,94 @@ msgstr ""
 msgid "Ex squares"
 msgstr ""
 
-#: src/interface.c:303 src/interface.c:480
+#: src/interface.c:304 src/interface.c:481
 msgid "Open Recent"
 msgstr ""
 
-#: src/interface.c:323
+#: src/interface.c:324
 msgid "Close View"
 msgstr "Zamknij widok"
 
-#: src/interface.c:324 src/interface.c:495
+#: src/interface.c:325 src/interface.c:496
 msgid "Exit Program"
 msgstr "Zakończ program"
 
-#: src/interface.c:326 src/interface.c:487
-msgid "About Sodipodi"
-msgstr "Informacje o Sodipodi"
+#: src/interface.c:327 src/interface.c:488
+msgid "About Inkscape"
+msgstr ""
 
 #. Modules need abouts too
-#: src/interface.c:329 src/interface.c:490
+#: src/interface.c:330 src/interface.c:491
 msgid "About Modules"
 msgstr "Informacje o modułach"
 
-#: src/interface.c:347
+#: src/interface.c:348
 msgid "Cleanup"
 msgstr ""
 
 #. View:Zoom
-#: src/interface.c:417 src/toolbox.c:617 src/verbs.c:476
+#: src/interface.c:418 src/toolbox.c:632 src/verbs.c:476
 msgid "Zoom"
 msgstr "Powiększenie"
 
 #. View:New View
-#: src/interface.c:429
+#: src/interface.c:430
 msgid "New View"
 msgstr "Nowy widok"
 
 #. View:New Preview
-#: src/interface.c:431
+#: src/interface.c:432
 msgid "New Preview"
 msgstr "Nowy podgląd"
 
-#: src/interface.c:433
+#: src/interface.c:434
 msgid "New Toplevel Toolbox"
 msgstr ""
 
-#: src/interface.c:434
+#: src/interface.c:435
 msgid "New Docked Toolbox"
 msgstr ""
 
-#: src/interface.c:435
+#: src/interface.c:436
 msgid "Remove Docked Toolbox"
 msgstr ""
 
 #. File
-#: src/interface.c:477 src/verbs.c:429
+#: src/interface.c:478 src/verbs.c:429
 msgid "New"
 msgstr "Nowy"
 
-#: src/interface.c:478
+#: src/interface.c:479
 msgid "Open"
 msgstr "Otwórz"
 
 #. Generic menu
 #. File submenu
-#: src/interface.c:558 src/toolbox.c:348
+#: src/interface.c:559 src/toolbox.c:354
 msgid "File"
 msgstr "Plik"
 
 #. Edit submenu
-#: src/interface.c:564 src/toolbox.c:405 src/widgets/gradient-selector.c:135
+#: src/interface.c:565 src/toolbox.c:411 src/widgets/gradient-selector.c:135
 msgid "Edit"
 msgstr "Edycja"
 
 #. View submenu
-#: src/interface.c:576
+#: src/interface.c:577
 msgid "View"
 msgstr "Widok"
 
 #. Drawing mode submenu
-#: src/interface.c:582
+#: src/interface.c:583
 msgid "Drawing Mode"
 msgstr "Tryb rysowania"
 
 #. Dialog submenu
-#: src/interface.c:588
+#: src/interface.c:589
 msgid "Dialogs"
 msgstr "Okna dialogowe"
 
-#: src/interface.c:595
+#: src/interface.c:596
 msgid "Filters"
 msgstr "Filtry"
 
@@ -1241,7 +1241,8 @@ msgid "SVG with \"xmlns:sodipodi\" namespace"
 msgstr "SVG z przestrzenią danych \"xmlns:sodipodi\""
 
 #: src/module.c:557
-msgid "Scalable Vector Graphics format with sodipodi extensions"
+#, fuzzy
+msgid "Scalable Vector Graphics format with inkscape extensions"
 msgstr "Format skalowalnej grafiki wektorowej z rozszerzeniami Sodipodi"
 
 #: src/module.c:560
@@ -1258,8 +1259,8 @@ msgid "Select printer"
 msgstr "Zaznaczenie"
 
 #: src/modules/gnome.c:187
-#, c-format
-msgid "Sodipodi (doc name %s..): Print Preview"
+#, fuzzy, c-format
+msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Sodipodi (dokument %s..): Podgląd wydruku"
 
 #: src/modules/kde.cpp:159
@@ -1282,55 +1283,55 @@ msgid "Save document as"
 msgstr "Zapisuje dokument pod inną nazwą"
 
 #. Print destination frame
-#: src/modules/ps.c:157 src/modules/ps.c:218
+#: src/modules/ps.c:159 src/modules/ps.c:220
 msgid "Print destination"
 msgstr "Przeznaczenie wydruku"
 
 #. Print properties frame
-#: src/modules/ps.c:168
+#: src/modules/ps.c:170
 msgid "Print properties"
 msgstr "Właściwości wydruku"
 
-#: src/modules/ps.c:176
+#: src/modules/ps.c:178
 msgid "Print using PostScript operators"
 msgstr ""
 
-#: src/modules/ps.c:178
+#: src/modules/ps.c:180
 msgid ""
 "Use PostScript vector operators, resulting image will be (usually) smaller "
 "and can be arbitrarily scaled, but alpha transparency, markers and patterns "
 "will be lost"
 msgstr ""
 
-#: src/modules/ps.c:183
+#: src/modules/ps.c:185
 #, fuzzy
 msgid "Print as bitmap"
 msgstr "Kolorowa bitmapa"
 
-#: src/modules/ps.c:185
+#: src/modules/ps.c:187
 msgid ""
 "Print everything as bitmap, resulting image will be (usualy) larger and it "
 "quality depends on zoom factor, but all graphics will be rendered identical "
 "to display"
 msgstr ""
 
-#: src/modules/ps.c:199
+#: src/modules/ps.c:201
 msgid "Preferred resolution (dots per inch) of bitmap"
 msgstr ""
 
-#: src/modules/ps.c:214
+#: src/modules/ps.c:216
 #, fuzzy
 msgid "Resolution:"
 msgstr "Rewolucja:"
 
-#: src/modules/ps.c:224
+#: src/modules/ps.c:226
 msgid ""
 "Enter destination lpr queue.\n"
 "Use '> filename' to print to file.\n"
 "Use '| prog arg...' to pipe to program"
 msgstr ""
 
-#: src/modules/ps.c:837
+#: src/modules/ps.c:840
 msgid "write error occured"
 msgstr ""
 
@@ -1412,7 +1413,7 @@ msgid "Image Properties"
 msgstr "Właściwości obrazu"
 
 #. Autotrace dialog
-#: src/object-ui.c:408 src/sp-image.c:780
+#: src/object-ui.c:408 src/sp-image.c:781
 msgid "Trace"
 msgstr "Ślad"
 
@@ -1422,7 +1423,7 @@ msgid "Shape"
 msgstr "Figura"
 
 #. Item dialog
-#: src/object-ui.c:460 src/toolbox.c:442
+#: src/object-ui.c:460 src/toolbox.c:448
 msgid "Fill settings"
 msgstr "Ustawienia wypełnienia"
 
@@ -1462,7 +1463,7 @@ msgid "Roundness ratio for x:"
 msgstr "Współczynnik zaokrąglenia dla x:"
 
 #. ry_ratio
-#: src/rect-context.c:409
+#: src/rect-context.c:415
 msgid "Roundness ratio for y:"
 msgstr "Współczynnik zaokrąglenia dla y:"
 
@@ -1493,32 +1494,33 @@ msgid "Preserve"
 msgstr ""
 
 #: src/slideshow.c:88
-msgid "Sodipodi slideshow"
+#, fuzzy
+msgid "Inkscape slideshow"
 msgstr "Pokaz slajdów Sodipodi"
 
-#: src/sodipodi.c:398
+#: src/inkscape.c:399
 msgid "Untitled document"
 msgstr "Dokument bez nazwy"
 
 #. Show nice dialog box
-#: src/sodipodi.c:423
-msgid "Sodipodi encountered an internal error and will close now.\n"
+#: src/inkscape.c:424
+msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr ""
 
-#: src/sodipodi.c:424
+#: src/inkscape.c:425
 msgid ""
 "Automatic backups of unsaved documents were done to following locations:\n"
 msgstr ""
 
-#: src/sodipodi.c:425
+#: src/inkscape.c:426
 msgid "Automatic backup of following documents failed:\n"
 msgstr ""
 
-#: src/sodipodi.c:564
-#, c-format
+#: src/inkscape.c:565
+#, fuzzy, c-format
 msgid ""
 "%s is not regular file.\n"
-"Although sodipodi will run, you can\n"
+"Although inkscape will run, you can\n"
 "neither load nor save preferences\n"
 msgstr ""
 "Plik %s nie jest zwykłym plikiem.\n"
@@ -1526,12 +1528,12 @@ msgstr ""
 "nie można ani odczytać, ani zapisać\n"
 "preferencji.\n"
 
-#: src/sodipodi.c:567
-#, c-format
+#: src/inkscape.c:568
+#, fuzzy, c-format
 msgid ""
 "%s either is not valid xml file or\n"
 "you do not have read premissions on it.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1541,11 +1543,11 @@ msgstr ""
 "nie można ani odczytać, ani zapisać\n"
 "preferencji."
 
-#: src/sodipodi.c:572
-#, c-format
+#: src/inkscape.c:573
+#, fuzzy, c-format
 msgid ""
-"%s is not valid sodipodi preferences file.\n"
-"Although sodipodi will run, you\n"
+"%s is not valid inkscape preferences file.\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1554,23 +1556,23 @@ msgstr ""
 "nie można ani odczytać, ani zapisać\n"
 "preferencji."
 
-#: src/sodipodi.c:584
-#, c-format
+#: src/inkscape.c:585
+#, fuzzy, c-format
 msgid ""
 "%s is not regular file.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Plik %s nie jest zwykłym plikiem.\n"
 "Sodipodi zostanie uruchomiony, lecz\n"
 "nie można użyć rozszerzeń (wtyczek)\n"
 
-#: src/sodipodi.c:587
-#, c-format
+#: src/inkscape.c:588
+#, fuzzy, c-format
 msgid ""
 "%s either is not valid xml file or\n"
 "you do not have read premissions on it.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Plik %s nie jest poprawnym plikiem XML\n"
@@ -1578,22 +1580,22 @@ msgstr ""
 "Sodipodi zostanie uruchomiony, lecz\n"
 "nie można użyć rozszerzeń (wtyczek)\n"
 
-#: src/sodipodi.c:591
-#, c-format
+#: src/inkscape.c:592
+#, fuzzy, c-format
 msgid ""
-"%s is not valid sodipodi extensions file.\n"
-"Although sodipodi will run, you are\n"
+"%s is not valid inkscape extensions file.\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Plik %s nie jest plikiem z rozszerzeniami Sodipodi.\n"
 "Sodipodi zostanie uruchomiony, lecz\n"
 "nie można użyć rozszerzeń (wtyczek)\n"
 
-#: src/sodipodi.c:930
-#, c-format
+#: src/inkscape.c:931
+#, fuzzy, c-format
 msgid ""
 "Cannot create directory %s.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "%s."
 msgstr ""
@@ -1602,11 +1604,11 @@ msgstr ""
 "nie można ani odczytać, ani zapisać\n"
 "%s."
 
-#: src/sodipodi.c:934
-#, c-format
+#: src/inkscape.c:935
+#, fuzzy, c-format
 msgid ""
 "%s is not a valid directory.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1615,11 +1617,11 @@ msgstr ""
 "nie można ani odczytać, ani zapisać\n"
 "preferencji."
 
-#: src/sodipodi.c:938
-#, c-format
+#: src/inkscape.c:939
+#, fuzzy, c-format
 msgid ""
 "Cannot create file %s.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1628,11 +1630,11 @@ msgstr ""
 "nie można ani odczytać, ani zapisać\n"
 "preferencji."
 
-#: src/sodipodi.c:942
-#, c-format
+#: src/inkscape.c:943
+#, fuzzy, c-format
 msgid ""
 "Cannot write file %s.\n"
-"Although sodipodi will run, you\n"
+"Although inkscape will run, you\n"
 "are neither able to load nor save\n"
 "preferences."
 msgstr ""
@@ -1641,44 +1643,44 @@ msgstr ""
 "nie można ani odczytać, ani zapisać\n"
 "preferencji."
 
-#: src/sodipodi.c:952
-#, c-format
+#: src/inkscape.c:953
+#, fuzzy, c-format
 msgid ""
 "Cannot create directory %s.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Nie można utworzyć katalogu %s.\n"
 "Sodipodi zostanie uruchomiony, lecz\n"
 "nie można użyć rozszerzeń (wtyczek)\n"
 
-#: src/sodipodi.c:955
-#, c-format
+#: src/inkscape.c:956
+#, fuzzy, c-format
 msgid ""
 "%s is not a valid directory.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Plik %s nie jest poprawnym katalogiem.\n"
 "Sodipodi zostanie uruchomiony, lecz\n"
 "nie można użyć rozszerzeń (wtyczek)\n"
 
-#: src/sodipodi.c:958
-#, c-format
+#: src/inkscape.c:959
+#, fuzzy, c-format
 msgid ""
 "Cannot create file %s.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Nie można utworzyć pliku %s.\n"
 "Sodipodi zostanie uruchomiony, lecz\n"
 "nie można użyć rozszerzeń (wtyczek).\n"
 
-#: src/sodipodi.c:961
-#, c-format
+#: src/inkscape.c:962
+#, fuzzy, c-format
 msgid ""
 "Cannot write file %s.\n"
-"Although sodipodi will run, you are\n"
+"Although inkscape will run, you are\n"
 "not able to use extensions (plugins)\n"
 msgstr ""
 "Nie można zapisać pliku %s.\n"
@@ -1690,34 +1692,34 @@ msgstr ""
 msgid "Link to %s"
 msgstr "Odnośnik do %s"
 
-#: src/sp-image.c:370
+#: src/sp-image.c:371
 #, c-format
 msgid "Image with bad reference: %s"
 msgstr "Obraz z niepoprawnym odwołaniem: %s"
 
-#: src/sp-image.c:372
+#: src/sp-image.c:373
 #, c-format
 msgid "Color image %d x %d: %s"
 msgstr "Obraz kolorowy %d x %d: %s"
 
-#: src/sp-image.c:926
+#: src/sp-image.c:927
 #, c-format
 msgid "Error to write %s: %s"
 msgstr "Błąd przy zapisie do %s: %s"
 
-#: src/sp-image.c:960
+#: src/sp-image.c:961
 msgid "Untitled"
 msgstr "Bez nazwy"
 
-#: src/sp-image.c:965
+#: src/sp-image.c:966
 msgid "Document Name:"
 msgstr "Nazwa dokumentu:"
 
-#: src/sp-image.c:978
+#: src/sp-image.c:979
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: src/sp-image.c:984
+#: src/sp-image.c:985
 msgid "Image URI:"
 msgstr "URI obrazu:"
 
@@ -1736,85 +1738,90 @@ msgid "Text object"
 msgstr "Obiekt tekstowy"
 
 #. T0
-#: src/spiral-context.c:374
+#: src/spiral-context.c:387
 msgid "Inner radius:"
 msgstr "Wewnętrzny promień:"
 
 #. Proportion
-#: src/star-context.c:367
+#: src/star-context.c:373
 msgid "Proportion:"
 msgstr "Proporcja:"
 
 #. Making sides flat
-#: src/star-context.c:380
+#: src/star-context.c:392
 #, fuzzy
 msgid "Make sides flat"
 msgstr "Ustaw jako czuły"
 
-#: src/toolbox.c:439
+#. Create window
+#: src/toolbox.c:119 src/toolbox.c:140
+msgid "Inkscape"
+msgstr ""
+
+#: src/toolbox.c:445
 msgid "Object"
 msgstr "Obiekt"
 
-#: src/toolbox.c:443 src/verbs.c:494
+#: src/toolbox.c:449 src/verbs.c:494
 msgid "Object size and position"
 msgstr "Rozmiar i położenie obiektu"
 
-#: src/toolbox.c:444
+#: src/toolbox.c:450
 msgid "Text and font settings"
 msgstr "Ustawienia tekstu i czcionki"
 
-#: src/toolbox.c:446 src/verbs.c:495
+#: src/toolbox.c:452 src/verbs.c:495
 msgid "Object transformations"
 msgstr ""
 
-#: src/toolbox.c:519
+#: src/toolbox.c:528
 msgid "Draw"
 msgstr "Rysowanie"
 
-#: src/toolbox.c:574
+#: src/toolbox.c:589
 msgid "Extension"
 msgstr "Rozszerzenie"
 
-#: src/toolbox.c:651
+#: src/toolbox.c:666
 msgid "Nodes"
 msgstr "Węzły"
 
-#: src/toolbox.c:653
+#: src/toolbox.c:668
 msgid "Insert new nodes into selected segments"
 msgstr "Dołącza nowe węzły do zaznaczonych segmentów"
 
-#: src/toolbox.c:654
+#: src/toolbox.c:669
 #, fuzzy
 msgid "Break line at selected nodes"
 msgstr "Ostrze krzywej przy zaznaczonych węzłach"
 
-#: src/toolbox.c:655
+#: src/toolbox.c:670
 msgid "Make selected nodes corner"
 msgstr "Konwertuje zaznaczone węzły na narożniki"
 
-#: src/toolbox.c:656
+#: src/toolbox.c:671
 msgid "Make selected segments lines"
 msgstr "Konwertuje zaznaczone segmenty na linie"
 
-#: src/toolbox.c:657
+#: src/toolbox.c:672
 msgid "Delete selected nodes"
 msgstr "Usuwa zaznaczone węzły"
 
-#: src/toolbox.c:658
+#: src/toolbox.c:673
 msgid "Join lines at selected nodes"
 msgstr "Łączy linie w zaznaczonych węzłach"
 
-#: src/toolbox.c:659
+#: src/toolbox.c:674
 #, fuzzy
 msgid "Join lines at selected nodes with new segment"
 msgstr "Łączy linie w zaznaczonych węzłach"
 
-#: src/toolbox.c:660
+#: src/toolbox.c:675
 #, fuzzy
 msgid "Make selected nodes smooth"
 msgstr "Usuwa zaznaczone węzły"
 
-#: src/toolbox.c:661
+#: src/toolbox.c:676
 msgid "Make selected segments curves"
 msgstr "Konwertuje zaznaczone segmenty na krzywe"
 
@@ -2313,57 +2320,57 @@ msgstr "Kolor końcowy"
 msgid "Gradient vector"
 msgstr "Wektor gradientu"
 
-#: src/widgets/paint-selector.c:620
+#: src/widgets/paint-selector.c:622
 msgid "No objects"
 msgstr "Brak obiektów"
 
-#: src/widgets/paint-selector.c:634
+#: src/widgets/paint-selector.c:636
 msgid "Multiple styles"
 msgstr "Wiele stylów"
 
-#: src/widgets/paint-selector.c:648
+#: src/widgets/paint-selector.c:650
 msgid "No paint"
 msgstr "Bez rysowania"
 
 #. Label
-#: src/widgets/paint-selector.c:738
+#: src/widgets/paint-selector.c:740
 msgid "Mode:"
 msgstr "Tryb:"
 
-#: src/widgets/paint-selector.c:748
+#: src/widgets/paint-selector.c:750
 msgid "RGB"
 msgstr "RGB"
 
-#: src/widgets/paint-selector.c:748 src/widgets/paint-selector.c:749
+#: src/widgets/paint-selector.c:750 src/widgets/paint-selector.c:751
 msgid "RGB Colorspace"
 msgstr "Przestrzeń kolorów RGB"
 
-#: src/widgets/paint-selector.c:749
+#: src/widgets/paint-selector.c:751
 msgid "HSV"
 msgstr "HSV"
 
-#: src/widgets/paint-selector.c:750
+#: src/widgets/paint-selector.c:752
 msgid "CMYK"
 msgstr "CMYK"
 
-#: src/widgets/paint-selector.c:750
+#: src/widgets/paint-selector.c:752
 msgid "CMYK Colorspace"
 msgstr "Przestrzeń kolorów CMYK"
 
 #. Use dropper
-#: src/widgets/paint-selector.c:757
+#: src/widgets/paint-selector.c:759
 msgid "Get from dropper"
 msgstr ""
 
-#: src/widgets/paint-selector.c:788
+#: src/widgets/paint-selector.c:790
 msgid "Color paint"
 msgstr "Rysowanie kolorem"
 
-#: src/widgets/paint-selector.c:858
+#: src/widgets/paint-selector.c:860
 msgid "Linear gradient"
 msgstr "Liniowy gradient"
 
-#: src/widgets/paint-selector.c:861
+#: src/widgets/paint-selector.c:863
 msgid "Radial gradient"
 msgstr "Kątowy gradient"
 
@@ -2423,6 +2430,12 @@ msgstr "Atrybut"
 #: src/widgets/sp-xmlview-attr-list.c:56
 msgid "Value"
 msgstr "Wartość"
+
+#~ msgid "About sodipodi"
+#~ msgstr "Informacje o Sodipodi"
+
+#~ msgid "About Sodipodi"
+#~ msgstr "Informacje o Sodipodi"
 
 #~ msgid "Item is reference"
 #~ msgstr "Element jest odniesieniem"
