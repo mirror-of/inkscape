@@ -118,7 +118,7 @@ sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType t
 	SPAction *action;
 	GtkWidget *b;
 
-	action = sp_verb_get_action (verb);
+	action = sp_verb_get_action (verb, NULL);
 	if (!action) return NULL;
 	/* fixme: Handle sensitive/unsensitive */
 	/* fixme: Implement sp_button_new_from_action */

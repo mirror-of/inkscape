@@ -261,7 +261,7 @@ sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
 	gchar *s; 
 	gchar key[256];
 
-	action = sp_verb_get_action (verb);
+	action = sp_verb_get_action (verb, NULL);
 	if (!action) return; 
 	s = g_stpcpy (c, action->name);
 	if (action->shortcut) {
@@ -281,7 +281,7 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb)
 	if (verb == SP_VERB_NONE) {
 		item = gtk_separator_menu_item_new ();
 	} else {
-		action = sp_verb_get_action (verb);
+		action = sp_verb_get_action (verb, NULL);
 		if (!action) return NULL;
 		if (action->shortcut) {
 			gchar c[256];

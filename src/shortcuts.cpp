@@ -25,7 +25,7 @@ sp_shortcut_run (unsigned int shortcut)
 	verb = sp_shortcut_get_verb (shortcut);
 	if (verb) {
 		SPAction *action;
-		action = sp_verb_get_action (verb);
+		action = sp_verb_get_action (verb, NULL);
 		if (action) {
 			sp_action_perform (action, NULL);
 			return TRUE;
@@ -279,7 +279,7 @@ sp_shortcut_set_verb (unsigned int shortcut, sp_verb_t verb, unsigned int primar
 	if (ex != verb) g_hash_table_insert (scdict, (gpointer) shortcut, (gpointer) verb);
 	if (primary) {
 		SPAction *action;
-		action = sp_verb_get_action (verb);
+		action = sp_verb_get_action (verb, NULL);
 		if (action && (shortcut != action->shortcut)) {
 			sp_action_set_shortcut (action, shortcut);
 		}
@@ -295,7 +295,7 @@ sp_shortcut_remove_verb (unsigned int shortcut)
 	if (ex) {
 		SPAction *action;
 		g_hash_table_insert (scdict, (void *) shortcut, (void *) 0);
-		action = sp_verb_get_action (ex);
+		action = sp_verb_get_action (ex, NULL);
 		if (action && (action->shortcut)) {
 			sp_action_set_shortcut (action, 0);
 		}

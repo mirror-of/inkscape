@@ -11,8 +11,9 @@
  */
 
 #include "helper/action.h"
+#include "view.h"
 
-typedef enum {
+enum {
 	/* Header */
 	SP_VERB_INVALID,
 	SP_VERB_NONE,
@@ -101,10 +102,16 @@ typedef enum {
 	SP_VERB_DIALOG_ITEM,
 	/* Footer */
 	SP_VERB_LAST
-} sp_verb_t;
+};
 
-SPAction * sp_verb_get_action (sp_verb_t verb);
-sp_verb_t  sp_verb_make_from_action (SPAction * action);
-void sp_verb_action_set_shortcut (SPAction *action, unsigned int shortcut, void * data);
+typedef int sp_verb_t;
+
+class SPVerbActionFactory {
+public:
+	virtual SPAction *make_action(sp_verb_t verb, SPView *view)=0;
+};
+
+SPAction *sp_verb_get_action (sp_verb_t verb, SPView *view);
+sp_verb_t sp_verb_register (SPVerbActionFactory *factory);
 
 #endif

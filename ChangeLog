@@ -1,3 +1,7 @@
+2003-12-18  MenTaLguY <mental@rydia.net>
+
+	* First steps towards making actions per-view
+
 2003-12-17  Jon A. Cruz <jon@joncruz.org>
 
 	* src/widgets/sp-color-notebook.cpp: fix for 859128; changed selectors to grow when
