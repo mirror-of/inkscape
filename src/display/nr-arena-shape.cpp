@@ -628,7 +628,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
           if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
           if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
           if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
-          thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value );
+          thePath->Stroke(theShape,false,0.5*width, join,butt,0.5*width*shape->style->stroke_miterlimit.value );
         } else {
           double dlen;
           dlen = 0.0;
@@ -663,7 +663,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
           if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
           if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
           if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
-          thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value);
+          thePath->Stroke(theShape,false,0.5*width, join,butt,0.5*width*shape->style->stroke_miterlimit.value);
         }
         if ( shape->cached_stroke->ConvertToShape(theShape,fill_nonZero) ) {
         }
