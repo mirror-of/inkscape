@@ -100,6 +100,57 @@ compare_warnings (const void *a, const void *b)
 	return ((gint) strcmp ((char *) a, (char *) b));
 }
 
+// A simple cache implementation, to speed up fuzzy lookup for documents with lots of text objects
+
+typedef struct {
+	gchar *fam;
+	guint spec;
+	NRTypeFace *face;
+} cache_unit;
+
+guint 
+spec_from_def (NRTypePosDef a)
+{
+	return a.italic + a.oblique * 10 + a.variant * 100 + a.weight * 1000 + a.stretch * 1000000;
+}
+
+static GSList *cache = NULL;
+
+gint 
+compare_cache (const void *a, const void *b)
+{
+	if ((((cache_unit *) a)->spec == ((cache_unit *) b)->spec) 
+		&& (!strcmp(((cache_unit *) a)->fam, ((cache_unit *) b)->fam))) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+NRTypeFace *
+search_cache (gchar *fam, NRTypePosDef a)
+{
+	cache_unit c;
+	c.fam = fam;
+	c.spec = spec_from_def (a);
+	GSList *found = g_slist_find_custom (cache, (gpointer) &c, compare_cache);
+	if (found) 
+		return ((cache_unit *) found->data)->face;
+	else 
+		return NULL;
+}
+
+void
+add_to_cache (gchar *fam, NRTypePosDef a, NRTypeFace *face)
+{
+	cache_unit *p = g_new (cache_unit, 1);
+	p->fam = g_strdup (fam);
+	p->spec = spec_from_def (a);
+	p->face = face;
+	cache = g_slist_prepend (cache, p);
+}
+
+
 NRTypeFace *
 nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 {
@@ -110,13 +161,19 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 
 	if (!typedict) nr_type_directory_build ();
 
+	NRTypeFace *from_cache = search_cache ((gchar *) family, apos);
+	if (from_cache) {
+		nr_typeface_ref (from_cache);
+		return from_cache;
+	}
+
 	unsigned fbest = ~0u;
 	bestfdef = NULL;
 
 	char **familytokens = g_strsplit(family, ",", 0);
 
 	for (int i = 0; familytokens[i] != NULL; i++) {
-		char *familytoken = g_strchug (g_strchomp (familytokens[i]));
+		char *familytoken = g_strstrip (familytokens[i]);
 		for (fdef = families; fdef; fdef = fdef->next) {
 			unsigned const dist = nr_type_distance_family (familytoken, fdef->name);
 			if (dist < fbest) {
@@ -134,13 +191,13 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 	// Fixme: modal box?
 	if (fbest != 0 && !g_slist_find_custom (family_warnings, (gpointer) family, compare_warnings)) {
 		g_warning ("font-family: No exact match for '%s', using '%s'", family, bestfdef->name);
-		family_warnings = g_slist_append (family_warnings, (gpointer) g_strdup (family));
+		family_warnings = g_slist_prepend (family_warnings, (gpointer) g_strdup (family));
 	}
 
 	double best = NR_HUGE;
 	besttdef = NULL;
 
-	/* fixme: In reality the latter method reqires full qualified name */
+	/* fixme: In reality the latter method reqires full qualified name (lauris) */
 
 	for (tdef = bestfdef->faces; tdef; tdef = tdef->next) {
 		double dist = nr_type_distance_position (&apos, tdef->pdef);
@@ -156,7 +213,7 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 	// Fixme: modal box?
 	if (best != 0 && !g_slist_find_custom (style_warnings, (gpointer) besttdef->name, compare_warnings)) {
 		g_warning ("In family '%s', required style not found, using '%s'", bestfdef->name, besttdef->name);
-		style_warnings = g_slist_append (style_warnings, (gpointer) g_strdup (besttdef->name));
+		style_warnings = g_slist_prepend (style_warnings, (gpointer) g_strdup (besttdef->name));
 	}
 
 	if (!besttdef->typeface) {
@@ -164,6 +221,8 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 	} else {
 		nr_typeface_ref (besttdef->typeface);
 	}
+
+	add_to_cache ((gchar *) family, apos, besttdef->typeface);
 
 	return besttdef->typeface;
 }
@@ -233,15 +292,33 @@ nr_type_directory_style_list_destructor (NRNameList *list)
 }
 
 bool
-ink_strstr (const char *a, const char *b)
+ink_strstr (const char *haystack, const char *pneedle)
 {
 #ifndef WIN32
-	return (strcasestr(a, b) != NULL);
+	return (strcasestr(haystack, pneedle) != NULL);
 #else
-	gchar *aa = g_ascii_strdown (a, -1);
-	gchar *bb = g_ascii_strdown (b, -1);
+	// windows has no strcasestr implementation, so here is ours...
+	// stolen from nmap
+	char buf[512];
+	register const char *p;
+	char *needle, *q, *foundto;
+	if (!*pneedle) return true;
+	if (!haystack) return false;
 
-	return (bool) strstr(aa, bb);
+	needle = buf;
+	p = pneedle; q = needle;
+	while((*q++ = tolower(*p++)))
+		;
+	p = haystack - 1; foundto = needle;
+	while(*++p) {
+		if(tolower(*p) == *foundto) {
+			if(!*++foundto) {
+				/* Yeah, we found it */
+				return true;
+			}
+		} else foundto = needle;
+	}
+	return false;
 #endif
 }
 
