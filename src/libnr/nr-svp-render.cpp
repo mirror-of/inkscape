@@ -300,7 +300,7 @@ struct _NRRun {
 	NR::Coord value;
 };
 
-static NRRun *nr_run_new (NRCoord x0, NRCoord y0, NRCoord x1, NRCoord y1, int wind);
+static NRRun *nr_run_new (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, int wind);
 static NRRun *nr_run_free_one (NRRun *run);
 static void nr_run_free_list (NRRun *run);
 static NRRun *nr_run_insert_sorted (NRRun *start, NRRun *run);
@@ -318,7 +318,7 @@ struct _NRSlice {
 	NR::Coord stepx;
 };
 
-static NRSlice *nr_slice_new (int wind, NRPoint *points, unsigned int length, NRCoord y);
+static NRSlice *nr_slice_new (int wind, NRPoint *points, unsigned int length, NR::Coord y);
 static NRSlice *nr_slice_free_one (NRSlice *s);
 static void nr_slice_free_list (NRSlice *s);
 static NRSlice *nr_slice_insert_sorted (NRSlice *start, NRSlice *slice);
@@ -590,7 +590,7 @@ nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs,
 static NRSlice *ffslice = NULL;
 
 static NRSlice *
-nr_slice_new (int wind, NRPoint *points, unsigned int length, NRCoord y)
+nr_slice_new (int wind, NRPoint *points, unsigned int length, NR::Coord y)
 {
 	NRSlice *s;
 	NRPoint *p;
@@ -752,7 +752,7 @@ struct _NRSliceL {
 	NR::Coord stepx;
 };
 
-static NRSliceL *nr_slice_new_l (NRSVL *svl, NRCoord y);
+static NRSliceL *nr_slice_new_l (NRSVL *svl, NR::Coord y);
 static NRSliceL *nr_slice_free_one_l (NRSliceL *s);
 static void nr_slice_free_list_l (NRSliceL *s);
 static NRSliceL *nr_slice_insert_sorted_l (NRSliceL *start, NRSliceL *slice);
@@ -823,7 +823,7 @@ nr_svl_render (NRSVL *svl, unsigned char *px, unsigned int bpp, unsigned int rs,
 			/* g_assert (cs->y >= y0); */
 			/* g_assert (cs->y < (y + 1)); */
 			while ((cs->y < (y + 1)) && (cs->vertex->next)) {
-				NRCoord x0, y0, x1, y1;
+				NR::Coord x0, y0, x1, y1;
 				NRRun * newrun;
 				x0 = cs->x;
 				y0 = cs->y;
@@ -982,7 +982,7 @@ nr_svl_render (NRSVL *svl, unsigned char *px, unsigned int bpp, unsigned int rs,
 static NRSliceL *ffslice_l = NULL;
 
 static NRSliceL *
-nr_slice_new_l (NRSVL * svl, NRCoord y)
+nr_slice_new_l (NRSVL * svl, NR::Coord y)
 {
 	NRSliceL *s;
 	NRVertex *v;
@@ -1132,7 +1132,7 @@ nr_slice_compare_l (NRSliceL *l, NRSliceL *r)
 static NRRun *ffrun = NULL;
 
 static NRRun *
-nr_run_new (NRCoord x0, NRCoord y0, NRCoord x1, NRCoord y1, int wind)
+nr_run_new (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, int wind)
 {
 	NRRun * r;
 

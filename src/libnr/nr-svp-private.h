@@ -26,7 +26,7 @@ struct _NRSVLBuild {
 	NRVertex *refvx;
 	int dir;
 	int reverse;
-	NRCoord sx, sy;
+	NR::Coord sx, sy;
 	NRRect bbox;
 };
 
@@ -48,7 +48,7 @@ ArtSVP *nr_art_svp_from_svl (NRSVL *svl);
 /* NRVertex */
 
 NRVertex *nr_vertex_new (void);
-NRVertex *nr_vertex_new_xy (NRCoord x, NRCoord y);
+NRVertex *nr_vertex_new_xy (NR::Coord x, NR::Coord y);
 void nr_vertex_free_one (NRVertex *v);
 void nr_vertex_free_list (NRVertex *v);
 
@@ -71,7 +71,7 @@ void nr_svl_calculate_bbox (NRSVL *svl);
 
 /* NRFlat */
 
-NRFlat *nr_flat_new_full (NRCoord y, NRCoord x0, NRCoord x1);
+NRFlat *nr_flat_new_full (NR::Coord y, NR::Coord x0, NR::Coord x1);
 void nr_flat_free_one (NRFlat *flat);
 void nr_flat_free_list (NRFlat *flat);
 

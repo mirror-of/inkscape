@@ -3,6 +3,12 @@
 	* src/toolbox.cpp: aux toolbar now expands properly when torn off
 	(fix for bug #874923)
 
+	* src/libnr/nr-svp.cpp, src/libnr/nr-stroke.cpp,
+	  src/libnr/nr-svp-private.h, src/libnr/nr-svp.h,
+	  src/libnr/nr-svp-render.cpp, src/libnr/nr-svp-uncross.cpp:
+
+	  NRCoord -> NR::Coord
+
 2004-01-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/seltrans.cpp: Various cleanups, including addressing some

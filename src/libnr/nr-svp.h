@@ -61,16 +61,13 @@ void nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear);
 
 /* Sorted vertex lists */
 
-/* fixme: Move/remove this (Lauris) */
-typedef NR::Coord NRCoord;
-
 typedef struct _NRVertex NRVertex;
 typedef struct _NRSVL NRSVL;
 typedef struct _NRFlat NRFlat;
 
 struct _NRVertex {
 	NRVertex *next;
-	NRCoord x, y;
+	NR::Coord x, y;
 };
 
 struct _NRSVL {
@@ -83,7 +80,7 @@ struct _NRSVL {
 
 struct _NRFlat {
 	NRFlat *next;
-	NRCoord y, x0, x1;
+	NR::Coord y, x0, x1;
 };
 
 NRSVP *nr_svp_from_svl (NRSVL *svl, NRFlat *flat);

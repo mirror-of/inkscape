@@ -38,8 +38,8 @@ struct _NRSVLStrokeBuild {
 	NR::Coord cosml;
 	int npoints;
 	NRRect bbox;
-	NRCoord x[4];
-	NRCoord y[4];
+	NR::Coord x[4];
+	NR::Coord y[4];
 	NRSVLBuild left, right;
 };
 

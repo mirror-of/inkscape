@@ -685,7 +685,7 @@ nr_vertex_new (void)
 }
 
 NRVertex *
-nr_vertex_new_xy (NRCoord x, NRCoord y)
+nr_vertex_new_xy (NR::Coord x, NR::Coord y)
 {
 	NRVertex * v;
 
@@ -952,7 +952,7 @@ nr_svl_calculate_bbox (NRSVL *svl)
 static NRFlat *ffflat = NULL;
 
 NRFlat *
-nr_flat_new_full (NRCoord y, NRCoord x0, NRCoord x1)
+nr_flat_new_full (NR::Coord y, NR::Coord x0, NR::Coord x1)
 {
 	NRFlat *flat;
 

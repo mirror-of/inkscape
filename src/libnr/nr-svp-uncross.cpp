@@ -33,19 +33,19 @@ struct _NRSVLSlice {
 	NRSVLSlice *next;
 	NRSVL *svl;
 	NRVertex *vertex;
-	NRCoord x;
-	NRCoord y;
+	NR::Coord x;
+	NR::Coord y;
 };
 
 static NRSVL *nr_svl_slice_break (NRSVLSlice *s, NR::Coord x, NR::Coord y, NRSVL *svl);
 static NRSVL *nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, NR::Coord y, NR::Coord x, NRSVL *svl, NR::Coord ytest, NRFlat **flats);
 
-static NRSVLSlice *nr_svl_slice_new (NRSVL *svl, NRCoord y);
+static NRSVLSlice *nr_svl_slice_new (NRSVL *svl, NR::Coord y);
 static void nr_svl_slice_free_one (NRSVLSlice *slice);
 static int nr_svl_slice_compare (NRSVLSlice *l, NRSVLSlice *r);
 static NRSVLSlice *nr_svl_slice_insert_sorted (NRSVLSlice *start, NRSVLSlice *slice);
 
-static NRSVLSlice *nr_svl_slice_stretch_list (NRSVLSlice *slices, NRCoord y);
+static NRSVLSlice *nr_svl_slice_stretch_list (NRSVLSlice *slices, NR::Coord y);
 
 static NR::Coord nr_vertex_segment_distance2 (NRVertex *v, NRVertex *s);
 static NR::Coord nr_segment_intersection (NRVertex const *s0, NRVertex const *s1, NR::Coord *x, NR::Coord *y);
@@ -115,7 +115,7 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 	NRSVL *lsvl, *csvl, *nsvl;
 	NRFlat *nflat, *fl, *f;
 	NRSVLSlice *slices, *s;
-	NRCoord yslice, ynew;
+	NR::Coord yslice, ynew;
 
 	if (!svl) return NULL;
 	assert (svl->vertex);
@@ -628,7 +628,7 @@ nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, NR::Coord y, NR::Coord x, NR
 static NRSVLSlice * ffslice = NULL;
 
 NRSVLSlice *
-nr_svl_slice_new (NRSVL * svl, NRCoord y)
+nr_svl_slice_new (NRSVL * svl, NR::Coord y)
 {
 	NRSVLSlice * s;
 	NRVertex * v;
@@ -716,7 +716,7 @@ nr_svl_slice_insert_sorted (NRSVLSlice * start, NRSVLSlice * slice)
 }
 
 NRSVLSlice *
-nr_svl_slice_stretch_list (NRSVLSlice * slices, NRCoord y)
+nr_svl_slice_stretch_list (NRSVLSlice * slices, NR::Coord y)
 {
 	NRSVLSlice * p, * s;
 
