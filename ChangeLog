@@ -1,3 +1,13 @@
+2004-12-18  Bob Jamison  <rjamison@titan.com>
+
+	* src/extensions/script/*:
+	  New files that enable embedding of scripting languages
+	  in Inkscape.  Currently using Swig to embed Perl and Python.
+
+	* autoconf.ac:
+	  Allow opting for perl or python with --with-perl=yes|no
+	  and --with-python=yes|no
+
 2004-12-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* streq.h (streq), strneq.h (strneq), memeq.h (memeq):
