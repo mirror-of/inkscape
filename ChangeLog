@@ -5,6 +5,9 @@
 
 2004-03-01  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-guide.cpp (sp_guide_set_property, sp_guide_get_property):
+	Minor cleanups.
+
 	* src/interface.h, src/interface.cpp
 	(sp_ui_new_view, sp_ui_new_view_preview): Make static.
 
