@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-26 00:36+0200\n"
-"PO-Revision-Date: 2004-06-26 01:15+0200\n"
+"POT-Creation-Date: 2004-06-26 22:19+0200\n"
+"PO-Revision-Date: 2004-06-26 22:34+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -118,16 +118,16 @@ msgid "No next zoom."
 msgstr "Nincs következõ nagyítás."
 
 #. Page page
-#: src/desktop.cpp:1884 src/dialogs/align.cpp:445
+#: src/desktop.cpp:1883 src/dialogs/align.cpp:445
 #: src/dialogs/desktop-properties.cpp:690 src/dialogs/export.cpp:277
 msgid "Page"
 msgstr "Lap"
 
-#: src/desktop.cpp:1888 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
+#: src/desktop.cpp:1887 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
 msgid "Drawing"
 msgstr "Rajz"
 
-#: src/desktop.cpp:1892 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
+#: src/desktop.cpp:1891 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
 msgid "Selection"
 msgstr "Kijelölés"
 
@@ -382,7 +382,7 @@ msgstr "Mértékegység:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:810 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1371
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
 #: src/toolbox.cpp:1626
 msgid "Width:"
 msgstr "Szélesség:"
@@ -488,7 +488,9 @@ msgstr "A legkülsõ ponton"
 
 #: src/dialogs/display-settings.cpp:270
 msgid "Default scale origin will be on the bounding box of the item's points"
-msgstr "Az átméretezés alapértelmezett origója az elem pontjainak határoló téglalapján lesz"
+msgstr ""
+"Az átméretezés alapértelmezett origója az elem pontjainak határoló "
+"téglalapján lesz"
 
 #: src/dialogs/display-settings.cpp:321
 msgid "degrees"
@@ -1116,16 +1118,16 @@ msgstr "Fájlkiterjesztés automatikus hozzáfûzése"
 msgid "No filename specified.  Unable to save."
 msgstr "Nem volt megadva fájlnév. Mentés nem lehetséges."
 
-#: src/dialogs/fill-style.cpp:123
+#: src/dialogs/fill-style.cpp:124
 msgid "Fill style"
 msgstr "Kitöltési stílus"
 
-#: src/dialogs/fill-style.cpp:171
+#: src/dialogs/fill-style.cpp:172
 msgid "Fill:"
 msgstr "Kitöltés:"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
-#: src/dialogs/fill-style.cpp:182
+#: src/dialogs/fill-style.cpp:183
 msgid ""
 "Specifies the method of filling overlapping areas when an object intersects "
 "itself. With the \"winding fill\" method (fill-rule:nonzero), all "
@@ -1137,11 +1139,11 @@ msgstr ""
 "esetében az összes átfedõ terület kitöltésre kerül; a \"váltakozó\" "
 "módszerrel (fill-rule:evenodd) pedig csak minden második terület."
 
-#: src/dialogs/fill-style.cpp:190
+#: src/dialogs/fill-style.cpp:191
 msgid "winding"
 msgstr "teljes"
 
-#: src/dialogs/fill-style.cpp:198
+#: src/dialogs/fill-style.cpp:199
 msgid "alternating"
 msgstr "váltakozó"
 
@@ -1576,40 +1578,40 @@ msgstr "Leírás"
 msgid "License"
 msgstr "Licenc"
 
-#: src/dialogs/stroke-style.cpp:1068 src/widgets/gradient-vector.cpp:262
-#: src/widgets/paint-selector.cpp:812
+#: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
+#: src/widgets/paint-selector.cpp:830
 msgid "No document selected"
 msgstr "Nincs kijelölve dokumentum"
 
-#: src/dialogs/stroke-style.cpp:1378
+#: src/dialogs/stroke-style.cpp:1385
 msgid "Stroke width"
 msgstr "Körvonalszélesség"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1398
+#: src/dialogs/stroke-style.cpp:1405
 msgid "Join:"
 msgstr "Sarok:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1412
+#: src/dialogs/stroke-style.cpp:1419
 msgid "Miter join"
 msgstr "Hegyes sarok"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1422
+#: src/dialogs/stroke-style.cpp:1429
 msgid "Round join"
 msgstr "Lekerekített sarok"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1432
+#: src/dialogs/stroke-style.cpp:1439
 msgid "Bevel join"
 msgstr "Levágott sarok"
 
@@ -1620,54 +1622,54 @@ msgstr "Levágott sarok"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1443
+#: src/dialogs/stroke-style.cpp:1450
 msgid "Miter limit:"
 msgstr "Túlnyúlási korlát:"
 
-#: src/dialogs/stroke-style.cpp:1451
+#: src/dialogs/stroke-style.cpp:1458
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "A csúcs maximális hossza (a körvonalszélesség arányában megadva)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1464
+#: src/dialogs/stroke-style.cpp:1471
 msgid "Cap:"
 msgstr "Vonalvég:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1477
+#: src/dialogs/stroke-style.cpp:1484
 msgid "Butt cap"
 msgstr "Szögletes, levágott vonalvég"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1486
+#: src/dialogs/stroke-style.cpp:1493
 msgid "Round cap"
 msgstr "Lekerekített vonalvég"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1495
+#: src/dialogs/stroke-style.cpp:1502
 msgid "Square cap"
 msgstr "Négyzetszerû vonalvég"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1501
-msgid "Pattern:"
-msgstr "Minta:"
+#: src/dialogs/stroke-style.cpp:1508
+msgid "Dashes:"
+msgstr "Vonalminta:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1522
+#: src/dialogs/stroke-style.cpp:1529
 msgid "Start Markers:"
 msgstr "Kezdet jelölése:"
 
-#: src/dialogs/stroke-style.cpp:1532
+#: src/dialogs/stroke-style.cpp:1539
 msgid "Mid Markers:"
 msgstr "Közép jelölése:"
 
-#: src/dialogs/stroke-style.cpp:1543
+#: src/dialogs/stroke-style.cpp:1550
 msgid "End Markers:"
 msgstr "Vég jelölése:"
 
@@ -2959,8 +2961,9 @@ msgstr "Tényleges szöveg nélkül nem állítható elõ tördelt szöveg."
 
 #: src/sp-use.cpp:306
 #, c-format
+# kiíráskor tesz egy pontot a végére
 msgid "Clone of: %s. Use Shift+D to look up original"
-msgstr "\"%s\" klónja. Az eredeti objektum meghatározása: Shift+D."
+msgstr "\"%s\" klónja. Az eredeti objektum meghatározása: Shift+D"
 
 #: src/sp-use.cpp:309
 msgid "Orphaned clone"
@@ -3795,8 +3798,8 @@ msgstr "Megfo_rdítás"
 #: src/verbs.cpp:925
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
 msgstr ""
-"A kijelölt lánc(ok) irányának megfordítása. Hasznos lehet például "
-"a jelölõelemek megfordításához."
+"A kijelölt lánc(ok) irányának megfordítása. Hasznos lehet például a "
+"jelölõelemek megfordításához."
 
 #: src/verbs.cpp:926
 msgid "_Combine"
@@ -4341,39 +4344,43 @@ msgstr "Fázis színe"
 msgid "Gradient editor"
 msgstr "Színátmenet-szerkesztõ"
 
-#: src/widgets/paint-selector.cpp:167 src/widgets/paint-selector.cpp:624
+#: src/widgets/paint-selector.cpp:168 src/widgets/paint-selector.cpp:642
 msgid "No paint"
 msgstr "Nincs megrajzolva"
 
-#: src/widgets/paint-selector.cpp:169 src/widgets/paint-selector.cpp:695
+#: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:713
 msgid "Flat color"
 msgstr "Egyenletes szín"
 
-#: src/widgets/paint-selector.cpp:171 src/widgets/paint-selector.cpp:765
+#: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:783
 msgid "Linear gradient"
 msgstr "Lineáris színátmenet"
 
-#: src/widgets/paint-selector.cpp:173 src/widgets/paint-selector.cpp:768
+#: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:786
 msgid "Radial gradient"
 msgstr "Sugárirányú színátmenet"
 
-#: src/widgets/paint-selector.cpp:175
+#: src/widgets/paint-selector.cpp:176
 msgid "Pattern Fill"
 msgstr "Mintával való kitöltés"
 
-#: src/widgets/paint-selector.cpp:596
+#: src/widgets/paint-selector.cpp:600
 msgid "No objects"
 msgstr "Nincs objektum"
 
-#: src/widgets/paint-selector.cpp:610
+#: src/widgets/paint-selector.cpp:614
 msgid "Multiple styles"
 msgstr "Többféle stílus"
 
-#: src/widgets/paint-selector.cpp:818
+#: src/widgets/paint-selector.cpp:628
+msgid "Clone Selected"
+msgstr "Klón van kijelölve"
+
+#: src/widgets/paint-selector.cpp:836
 msgid "No patterns in document"
 msgstr "Nincs minta a dokumentumban"
 
-#: src/widgets/paint-selector.cpp:932
+#: src/widgets/paint-selector.cpp:950
 msgid "Pattern fill"
 msgstr "Mintával való kitöltés"
 
@@ -4504,6 +4511,9 @@ msgstr "Attribútum"
 msgid "Value"
 msgstr "Érték"
 
+#~ msgid "Pattern:"
+#~ msgstr "Minta:"
+
 #~ msgid "Default action when moving with grid enabled:"
 #~ msgstr ""
 #~ "Alapértelmezett tevékenység bekapcsolt rács esetén való áthelyezésnél:"
@@ -4631,10 +4641,6 @@ msgstr "Érték"
 #~ msgstr "Kilépés"
 
 #~ msgid "Delete selected objects"
-#~ msgstr "A kijelölt objektumok eltávolítása"
-
-#, fuzzy
-#~ msgid "Clone selected objects"
 #~ msgstr "A kijelölt objektumok eltávolítása"
 
 #~ msgid "Cut the bottom path into pieces"
