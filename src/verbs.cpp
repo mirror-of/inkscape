@@ -42,6 +42,7 @@
 #include "dialogs/item-properties.h"
 #include "dialogs/find.h"
 #include "dialogs/debugdialog.h"
+#include "dialogs/scriptdialog.h"
 #include "dialogs/tracedialog.h"
 #include "dialogs/layer-properties.h"
 #include "dialogs/clonetiler.h"
@@ -1296,6 +1297,9 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_DIALOG_DEBUG:
             Inkscape::UI::Dialogs::DebugDialog::showInstance();
             break;
+        case SP_VERB_DIALOG_SCRIPT:
+            Inkscape::UI::Dialogs::ScriptDialog::showInstance();
+            break;
         case SP_VERB_DIALOG_TOGGLE:
             inkscape_dialogs_toggle ();
             break;
@@ -1730,6 +1734,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Find objects in document"), GTK_STOCK_FIND ),
     new DialogVerb(SP_VERB_DIALOG_DEBUG, "DialogDebug", N_("_Messages..."),
         N_("View debug messages"), NULL),
+    new DialogVerb(SP_VERB_DIALOG_SCRIPT, "DialogScript", N_("_Scripts..."),
+        N_("Run scripts"), NULL),
     new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/_Hide Dialogs"),
         N_("Show or hide all active dialogs"), "dialog_toggle"),
     new DialogVerb(SP_VERB_DIALOG_CLONETILER, "DialogsClonetiler", N_("Tile clones..."),

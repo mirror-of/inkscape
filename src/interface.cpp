@@ -892,7 +892,8 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 
         Inkscape::Verb::get(SP_VERB_NONE),
-      Inkscape::Verb::get(SP_VERB_DIALOG_DEBUG),
+        Inkscape::Verb::get(SP_VERB_DIALOG_DEBUG),
+        Inkscape::Verb::get(SP_VERB_DIALOG_SCRIPT),
         Inkscape::Verb::get(SP_VERB_NONE),
 	Inkscape::Verb::get(SP_VERB_FILE_PREV_DESKTOP),
 	Inkscape::Verb::get(SP_VERB_FILE_NEXT_DESKTOP),
