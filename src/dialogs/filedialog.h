@@ -1,19 +1,19 @@
 #ifndef __FILE_DIALOG_H__
 #define __FILE_DIALOG_H__
 
+/** \file Defines classes FileOpenDialog, FileSaveDialog,
+ *    and enums FileDialogType, FileDialogSelectionType. */
 
-#include <glib.h>
-#include <extension/db.h>
+#include <glib/gtypes.h>
 
-/* leave the implementation for the .cpp files */
-class Inkscape::Extension::Extension;
+namespace Inkscape {
 
-namespace Inkscape
-{
-namespace UI
-{
-namespace Dialogs
-{
+namespace Extension {
+class Extension;
+}
+
+namespace UI {
+namespace Dialogs {
 
 
 /**
