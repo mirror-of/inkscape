@@ -772,7 +772,11 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 			pp->cached_bbox.y0=0;
 			pp->cached_bbox.x1=tr_width;
 			pp->cached_bbox.y1=tr_height;
-			nr_pixblock_setup (&pp->cached_tile,NR_PIXBLOCK_MODE_R8G8B8A8N, pp->cached_bbox.x0, pp->cached_bbox.y0, pp->cached_bbox.x1, pp->cached_bbox.y1,TRUE);		
+
+			if (pp->use_cached_tile) {
+				nr_pixblock_setup (&pp->cached_tile,NR_PIXBLOCK_MODE_R8G8B8A8N, pp->cached_bbox.x0, pp->cached_bbox.y0, pp->cached_bbox.x1, pp->cached_bbox.y1,TRUE);
+			}
+
 			pp->pa2ca.c[0]=((double)tr_width)/(one_tile.x1-one_tile.x0);
 			pp->pa2ca.c[1]=0;
 			pp->pa2ca.c[2]=0;
