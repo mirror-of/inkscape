@@ -234,7 +234,8 @@ gchar *
 sp_key_name (guint keyval)
 {
 	gchar *n;
-	n = gdk_keyval_name (keyval);
+	n = gdk_keyval_name (gdk_keyval_to_upper (keyval));
+	
 	if (!strcmp (n, "asciicircum")) return "^";
 	else if (!strcmp (n, "parenleft")) return "(";
 	else if (!strcmp (n, "parenright")) return ")";
@@ -475,7 +476,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item (menu, NULL, _("_New View"), G_CALLBACK(sp_ui_new_view), NULL);
 	/* View:New Preview*/
-	sp_ui_menu_append_item (menu, NULL, _("New _Preview"), G_CALLBACK(sp_ui_new_view_preview), NULL);
+	sp_ui_menu_append_item (menu, NULL, _("New P_review"), G_CALLBACK(sp_ui_new_view_preview), NULL);
 }
 
 static void

@@ -149,7 +149,7 @@ sp_action_get_title (const SPAction *action)
 	s = g_new (gchar, 256);
 	
 	for (i = j = 0; i < strlen(action->name); i++)  {
-		if ( action->name[i] != '_' ) {
+		if ( action->name[i] != '_' && action->name[i] != '.' ) {
 			s[j] = action->name[i];
 			j++;
 		}
@@ -561,8 +561,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_FILE_SAVE, "FileSave", N_("_Save"), N_("Save document"), GTK_STOCK_SAVE },
 	{SP_VERB_FILE_SAVE_AS, "FileSaveAs", N_("Save _As..."), N_("Save document under new name"), GTK_STOCK_SAVE_AS },
 	{SP_VERB_FILE_PRINT, "FilePrint", N_("_Print..."), N_("Print document"), GTK_STOCK_PRINT },
-	{SP_VERB_FILE_PRINT_DIRECT, "FilePrintDirect", N_("Print Direct..."), N_("Print directly to file or pipe"), "file_print_direct" },
-	{SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Preview"), N_("Preview document printout"), GTK_STOCK_PRINT_PREVIEW },
+	{SP_VERB_FILE_PRINT_DIRECT, "FilePrintDirect", N_("Print _Direct"), N_("Print directly to file or pipe"), "file_print_direct" },
+	{SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Previe_w"), N_("Preview document printout"), GTK_STOCK_PRINT_PREVIEW },
 	{SP_VERB_FILE_IMPORT, "FileImport", N_("_Import..."), N_("Import bitmap or SVG image into document"), "file_import"},
 	{SP_VERB_FILE_EXPORT, "FileExport", N_("_Export Bitmap..."), N_("Export document as PNG bitmap"), "file_export"},
 	{SP_VERB_FILE_QUIT, "FileQuit", N_("_Quit"), N_("Quit"), GTK_STOCK_QUIT},
@@ -575,7 +575,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_EDIT_PASTE_STYLE, "EditPasteStyle", N_("Paste _Style"), N_("Apply style of copied object to selection"), NULL},
 	{SP_VERB_EDIT_DELETE, "EditDelete", N_("_Delete"), N_("Delete selected objects"), GTK_STOCK_DELETE},
 	{SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("D_uplicate"), N_("Duplicate selected objects"), "edit_duplicate"},
-	{SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("C_lear All"), N_("Delete all objects from document"), NULL},
+	{SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"), N_("Delete all objects from document"), NULL},
 	{SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select _All"), N_("Select all objects in document"), NULL},
 	/* Selection */
 	{SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Bring to _Front"), N_("Raise selected objects to top"), "selection_top"},
@@ -587,15 +587,15 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"), N_("Union of selected objects"), NULL},
 	{SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("_Intersection"), N_("Intersection of selected objects"), NULL},
 	{SP_VERB_SELECTION_DIFF, "SelectionDiff", N_("_Difference"), N_("Difference of selected objects"), NULL},
-	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("E_xclusion"), N_("Exclusive OR of selected objects"), NULL},
-	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("_Outset Path"), N_("Outset selected paths"), NULL},
-	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("In_set Path"), N_("Inset selected paths"), NULL},
+	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("_Exclusion"), N_("Exclusive OR of selected objects"), NULL},
+	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("O_utset Path"), N_("Outset selected paths"), NULL},
+	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset Path"), N_("Inset selected paths"), NULL},
 	{SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("_Stroke to Path"), N_("Convert selected stroke to path"), NULL},
-	{SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Simp_lify Path"), N_("Simplify selected path"), NULL},
+	{SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Simplify _Path"), N_("Simplify selected path"), NULL},
 	{SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"), N_("Combine multiple paths"), "selection_combine"},
 	{SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"), N_("Break selected path to subpaths"), "selection_break"},
 	/* Object */
-	{SP_VERB_OBJECT_ROTATE_90, "ObjectRotate90", N_("_Rotate 90 Degrees"), N_("Rotate object 90 degrees clockwise"), "object_rotate"},
+	{SP_VERB_OBJECT_ROTATE_90, "ObjectRotate90", N_("Rotate 90 _Degrees"), N_("Rotate object 90 degrees clockwise"), "object_rotate"},
 	{SP_VERB_OBJECT_FLATTEN, "ObjectFlatten", N_("Remove _Transformations"), N_("Remove transformations from object"), "object_reset"},
 	{SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("_Object to Path"), N_("Convert selected objects to paths"), "object_tocurve"},
 	{SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally", N_("Flip _Horizontally"),
@@ -622,24 +622,24 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("Guides"), N_("Toggle guides"), "toggle_guides"},
 	{SP_VERB_ZOOM_1_1, "Zoom1:0", N_("Zoom 1:_1"), N_("Zoom to 1:1"), "zoom_1_to_1"},
 	{SP_VERB_ZOOM_1_2, "Zoom1:2", N_("Zoom 1:_2"), N_("Zoom to 1:2"), "zoom_1_to_2"},
-	{SP_VERB_ZOOM_2_1, "Zoom2:1", N_("Zoo_m 2:1"), N_("Zoom to 2:1"), "zoom_2_to_1"},
+	{SP_VERB_ZOOM_2_1, "Zoom2:1", N_("_Zoom 2:1"), N_("Zoom to 2:1"), "zoom_2_to_1"},
 	{SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"), N_("Fit page in window"), "zoom_page"},
-	{SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _width"), N_("Fit page width in window"), NULL},
+	{SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"), N_("Fit page width in window"), NULL},
 	{SP_VERB_ZOOM_DRAWING, "ZoomDrawing", N_("_Drawing"), N_("Fit drawing in window"), "zoom_draw"},
 	{SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"), N_("Fit selection in window"), "zoom_select"},
 	/* Dialogs */
 	{SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Options"), N_("Global Inkscape options"), NULL},
-	{SP_VERB_DIALOG_DOCUMENT, "DialogDocument", N_("Document Settings"), N_("Settings for the current document"), NULL},
+	{SP_VERB_DIALOG_DOCUMENT, "DialogDocument", N_("Docum_ent Settings"), N_("Settings for the current document"), NULL},
 	{SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("E_diting Window"), N_("Editing window properties"), NULL},
-	{SP_VERB_DIALOG_TOOL_OPTIONS, "DialogToolOptions", N_("Too_l Options"), N_("Tool options"), NULL},
+	{SP_VERB_DIALOG_TOOL_OPTIONS, "DialogToolOptions", N_("Tool Optio_ns"), N_("Tool options"), NULL},
 	{SP_VERB_DIALOG_TOOL_ATTRIBUTES, "DialogToolAttributes", N_("Tool Attributes"), N_("Tool attributes"), NULL},
 	{SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke"), N_("Fill and stroke settings"), NULL},
-	{SP_VERB_DIALOG_SIZE_POSITION, "DialogSizePosition", N_("S_ize and Position"), N_("Object size and position"), "object_layout"},
+	{SP_VERB_DIALOG_SIZE_POSITION, "DialogSizePosition", N_("_Size and Position"), N_("Object size and position"), "object_layout"},
 	{SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m"), N_("Object transformations"), "object_trans"},
 	{SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute"), N_("Align and distribute objects"), "object_align"},
 	{SP_VERB_DIALOG_TEXT, "Dialogtext", N_("_Text and Font"), N_("Text editing and font settings"), "object_font"},
 	{SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor"), N_("XML Editor"), NULL},
-	{SP_VERB_DIALOG_ITEM, "DialogItem", N_("Item Properties"), N_("Item properties"), NULL},
+	{SP_VERB_DIALOG_ITEM, "DialogItem", N_("Item _Properties"), N_("Item properties"), NULL},
 	/* Footer */
 	{SP_VERB_LAST, NULL, NULL, NULL, NULL}
 };
