@@ -21,7 +21,6 @@ helper_libspchelp_a_SOURCES =	\
 	helper/helper-forward.h	\
 	helper/png-write.cpp	\
 	helper/png-write.h	\
-	helper/sp-intl.h	\
 	helper/sp-marshal.cpp	\
 	helper/sp-marshal.h	\
 	helper/stlport.h	\
