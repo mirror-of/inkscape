@@ -110,6 +110,10 @@ struct SPItem : public SPObject {
 
 	bool isHidden(unsigned display_key) const;
 
+	bool isExplicitlyHidden() const;
+
+	void setExplicitlyHidden(bool val);
+
 	bool isVisibleAndUnlocked() const;
 
 	bool isVisibleAndUnlocked(unsigned display_key) const;

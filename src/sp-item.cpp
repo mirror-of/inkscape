@@ -193,6 +193,32 @@ bool SPItem::isHidden(unsigned display_key) const {
     return true;
 }
 
+/** Returns something suitable for the `Hide' checkbox in the Object Properties dialog box.
+ *  Corresponds to setExplicitlyHidden.
+ */
+bool
+SPItem::isExplicitlyHidden() const
+{
+    return (this->style->visibility.set
+	    && !this->style->visibility.inherit
+	    && this->style->visibility.value != SP_CSS_VISIBILITY_VISIBLE);
+}
+
+/** Sets the visibility CSS property to `hidden' if \a val is true, otherwise makes it unset and
+ *  recalculates visibility from the parent. */
+void
+SPItem::setExplicitlyHidden(bool const val) {
+    this->style->visibility.set = val;
+    if (val) {
+	this->style->visibility.inherit = false;
+        this->style->visibility.computed = this->style->visibility.value = SP_CSS_VISIBILITY_HIDDEN;
+    } else {
+        this->style->visibility.computed = this->parent->style->visibility.computed;
+    }
+
+    this->updateRepr();
+}
+
 namespace {
 
 bool is_item(SPObject const &object) {
@@ -476,7 +502,7 @@ sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
         if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
                 nr_arena_item_set_opacity(v->arenaitem, SP_SCALE24_TO_FLOAT(object->style->opacity.value));
-                nr_arena_item_set_visible(v->arenaitem, object->visible());
+                nr_arena_item_set_visible(v->arenaitem, !item->isHidden());
             }
         }
     }
@@ -678,7 +704,7 @@ sp_item_invoke_show(SPItem *item, NRArena *arena, unsigned key, unsigned flags)
         item->display = sp_item_view_new_prepend(item->display, item, flags, key, ai);
         nr_arena_item_set_transform(ai, item->transform);
         nr_arena_item_set_opacity(ai, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
-        nr_arena_item_set_visible(ai, item->visible());
+        nr_arena_item_set_visible(ai, !item->isHidden());
         nr_arena_item_set_sensitive(ai, item->sensitive);
         if (flags & SP_ITEM_SHOW_PRINT) {
             nr_arena_item_set_visible(ai, item->printable);
