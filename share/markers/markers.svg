@@ -548,11 +548,11 @@
 
 
     <marker style="overflow:visible"
-       id="Arrow2S"
+       id="Arrow2Sstart"
        refX="0.0"
        refY="0.0"
        orient="auto"
-       inkscape:stockid="Arrow2S">
+       inkscape:stockid="Arrow2Sstart">
       <path
          transform="scale(0.3) translate(-5,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
@@ -561,11 +561,11 @@
          sodipodi:nodetypes="cccc" />
     </marker>
     <marker style="overflow:visible"
-       id="Arrow2M"
+       id="Arrow2Mstart"
        refX="0.0"
        refY="0.0"
        orient="auto"
-       inkscape:stockid="Arrow2M">
+       inkscape:stockid="Arrow2Mstart">
       <path
          transform="scale(0.6) translate(-5,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
@@ -574,11 +574,11 @@
          sodipodi:nodetypes="cccc" />
     </marker>
     <marker style="overflow:visible"
-       id="Arrow2L"
+       id="Arrow2Lstart"
        refX="0.0"
        refY="0.0"
        orient="auto"
-       inkscape:stockid="Arrow2L">
+       inkscape:stockid="Arrow2Lstart">
       <path
          transform="scale(1.1) translate(-5,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
@@ -587,14 +587,51 @@
          sodipodi:nodetypes="cccc" />
     </marker>
 
-
-
-    <marker style="overflow:visible"
-       id="Arrow1S"
+    <marker style="overflow:visible;"
+       id="Arrow2Send"
+       refX="0.0"
+      refY="0.0"
+      orient="auto"
+      inkscape:stockid="Arrow2Send">
+     <path
+        transform="scale(0.3) rotate(180) translate(-5,0)"
+        d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+        style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+        id="arrowMarkerPath2"
+        sodipodi:nodetypes="cccc" />
+   </marker>
+   <marker style="overflow:visible;"
+      id="Arrow2Mend"
+      refX="0.0"
+      refY="0.0"
+      orient="auto"
+      inkscape:stockid="Arrow2Mend">
+     <path
+        transform="scale(0.6) rotate(180) translate(-5,0)"
+        d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+        style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+        id="arrowMarkerPath2"
+        sodipodi:nodetypes="cccc" />
+   </marker>
+   <marker style="overflow:visible;"
+      id="Arrow2Lend"
+      refX="0.0"
+      refY="0.0"
+      orient="auto"
+      inkscape:stockid="Arrow2Lend">
+     <path
+        transform="scale(1.1) rotate(180) translate(-5,0)"
+        d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+        style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+        id="arrowMarkerPath2"
+        sodipodi:nodetypes="cccc" />
+   </marker>
+   <marker style="overflow:visible"
+       id="Arrow1Sstart"
        refX="0.0"
        refY="0.0"
        orient="auto"
-       inkscape:stockid="Arrow1S">
+       inkscape:stockid="Arrow1Sstart">
       <path
          transform="scale(0.2)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
@@ -603,11 +640,11 @@
          sodipodi:nodetypes="ccccc" />
     </marker>
     <marker style="overflow:visible"
-       id="Arrow1M"
+       id="Arrow1Mstart"
        refX="0.0"
        refY="0.0"
        orient="auto"
-       inkscape:stockid="Arrow1M">
+       inkscape:stockid="Arrow1Mstart">
       <path
          transform="scale(0.4)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
@@ -616,11 +653,11 @@
          sodipodi:nodetypes="ccccc" />
     </marker>
     <marker style="overflow:visible"
-       id="Arrow1L"
+       id="Arrow1Lstart"
        refX="0.0"
        refY="0.0"
        orient="auto"
-       inkscape:stockid="Arrow1L">
+       inkscape:stockid="Arrow1Lstart">
       <path
          transform="scale(0.8)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
@@ -629,4 +666,43 @@
          sodipodi:nodetypes="ccccc" />
     </marker>
   </defs>
+    <marker style="overflow:visible;"
+       id="Arrow1Send"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Send">
+      <path
+         transform="scale(0.2) rotate(180)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path983"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="Arrow1Mend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="scale(0.4) rotate(180)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path983"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="Arrow1Lend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="scale(0.8) rotate(180)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path983"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
 </svg>

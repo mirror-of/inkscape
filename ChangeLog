@@ -1,3 +1,8 @@
+2005-01-17  Kees Cook  <kees@outflux.net>
+
+    * share/markers/markers.svg: applied patch #990884, which provides a
+	  few mirrored arrows until marker transforms are finished.
+
 2005-01-16  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-object.cpp: non-elements no longer get ids assigned
