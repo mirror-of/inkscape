@@ -5,11 +5,11 @@
 #include <pango/pango-types.h>
 #include <pango/pango-font.h>
 #include <require-config.h>
-#ifdef WITH_XFT
-//# include <freetype/freetype.h>
+
+/* Freetype2 info. */
 # include <ft2build.h>
 # include FT_FREETYPE_H
-#endif
+
 #ifdef WIN32
 # include <windows.h>
 # include <windowsx.h>
@@ -41,15 +41,10 @@ public:
 	// the real source of the font
     PangoFont*            pFont;
 		// depending on the rendering backend, different temporary data
-#if defined(WITH_XFT)
-    FT_Face               theFace; // it's a pointer in fact; no worries to ref/unref it, pango does its magic
-		                               // as long as pFont is valid, theFace is too
-#elif defined(WIN32)
-		// windows data. the HDC device is a field in the font_factory, so use daddy->wDevice to get it
-    LOGFONT*              theLogFont;
-    HFONT                 wFont;
-    OUTLINETEXTMETRIC     otm;
-#endif
+
+    FT_Face               theFace; 
+                // it's a pointer in fact; no worries to ref/unref it, pango does its magic
+                // as long as pFont is valid, theFace is too
 		// that's the font's fingerprint; this particular PangoFontDescription gives the entry at which this font_instance
 		// resides in the font_factory loadedFaces hash_map
     PangoFontDescription* descr;

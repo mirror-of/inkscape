@@ -18,17 +18,15 @@
 #include <livarot/Shape.h>
 
 #include "RasterFont.h"
-#if defined(WITH_XFT)
+
+/* Freetype 2 */
 # include <freetype/ftoutln.h>
 # include <freetype/ftbbox.h>
 # include <freetype/internal/tttypes.h>
 # include <freetype/internal/ftstream.h>
 # include <freetype/tttags.h>
 # include <pango/pangoft2.h>
-#elif defined(WIN32)
-# include <pango/pangowin32.h>
-# include <windows.h>
-#endif
+
 
 #include <glib.h>
 
@@ -100,8 +98,6 @@ bool  font_style_equal::operator()(const font_style &a,const font_style &b) {
 /*
  * Outline extraction
  */
-
-#ifdef WITH_XFT
 typedef struct ft2_to_liv {
 	Path*        theP;
 	double       scale;
@@ -152,7 +148,7 @@ static int ft2_cubic_to (FT_Vector * control1, FT_Vector * control2, FT_Vector *
 	user->last=p;
 	return 0;
 }
-#endif
+
 
 /*
  *
@@ -167,12 +163,7 @@ font_instance::font_instance(void)
 	daddy=NULL;
 	nbGlyph=maxGlyph=0;
 	glyphs=NULL;
-#if defined(WITH_XFT)
 	theFace=NULL;
-#elif defined(WIN32)
-	theLogFont=NULL;
-	wFont=NULL;
-#endif
 }
 
 font_instance::~font_instance(void)
@@ -183,16 +174,9 @@ font_instance::~font_instance(void)
 	pFont=NULL;
 	if ( descr ) pango_font_description_free(descr);
 	descr=NULL;
-#ifdef WITH_XFT
 	//	if ( theFace ) FT_Done_Face(theFace); // owned by pFont. don't touch
 	theFace=NULL;
-#elif defined(WIN32)
-	if ( wFont ) {
-		font_factory* f_src=daddy;
-		if ( f_src == NULL ) f_src=font_factory::Default();
-		if ( f_src ) pango_win32_font_cache_unload(f_src->wCache,wFont);
-	}
-#endif
+
 	for (int i=0;i<nbGlyph;i++) {
 		if ( glyphs[i].outline ) delete glyphs[i].outline;
 		if ( glyphs[i].artbpath ) free(glyphs[i].artbpath);
@@ -328,7 +312,7 @@ void font_instance::InstallFace(PangoFont* iFace)
         if ( !iFace )
             return;
 	pFont=iFace;
-#ifdef WITH_XFT
+
 	theFace=pango_ft2_font_get_face(pFont);
 	FT_Error ftresult=FT_Select_Charmap(theFace,ft_encoding_unicode);
 	if ( ftresult ) {
@@ -341,33 +325,9 @@ void font_instance::InstallFace(PangoFont* iFace)
 			theFace=NULL;
 		}
 	}
-#elif defined(WIN32)
-	HDC  wDev=NULL;
-	if ( daddy ) {
-		wDev=daddy->wDevice;
-		if ( theLogFont == NULL ) {
-			theLogFont=pango_win32_font_logfont(pFont);
-			wFont=pango_win32_font_cache_load(daddy->wCache,theLogFont);
-			if ( wFont ) {
-				SelectFont (wDev,wFont);
-				GetOutlineTextMetrics(wDev,sizeof(OUTLINETEXTMETRIC),&otm);
-			} else {
-				theLogFont=NULL;
-				if ( pFont ) g_object_unref(pFont);
-				pFont=NULL;
-			}
-		}
-	}
-#endif
+
 	if ( pFont && IsOutlineFont() == false ) {
-#ifdef WITH_XFT
 		theFace=NULL;
-#elif defined(WIN32)
-		if ( wFont && daddy ) {
-			pango_win32_font_cache_unload(daddy->wCache,wFont);
-			wFont=NULL;
-		}
-#endif
 		if ( pFont ) g_object_unref(pFont);
 		pFont=NULL;
 	}
@@ -376,47 +336,20 @@ void font_instance::InstallFace(PangoFont* iFace)
 bool	font_instance::IsOutlineFont(void)
 {
 	if ( pFont == NULL ) return false;
-#ifdef WITH_XFT
 	theFace=pango_ft2_font_get_face(pFont);
 	return FT_IS_SCALABLE(theFace);
-#elif defined(WIN32)
-	HDC  wDev=NULL;
-	if ( daddy ) {
-		wDev=daddy->wDevice;
-		if ( theLogFont == NULL ) {
-			theLogFont=pango_win32_font_logfont(pFont);
-			wFont=pango_win32_font_cache_load(daddy->wCache,theLogFont);
-		}
-	}
-	if ( wFont ) {
-		TEXTMETRIC  test;
-		SelectFont (wDev,wFont);
-		if ( GetTextMetrics(wDev,&test) ) {
-			if ( test.tmPitchAndFamily&TMPF_VECTOR || test.tmPitchAndFamily&TMPF_TRUETYPE ) return true;
-		}
-	}
-#endif
-	return false;
 }
 
 int font_instance::MapUnicodeChar(gunichar c)
 {
 	if ( pFont == NULL ) return 0;
 	int res=0;
-#ifdef WITH_XFT
 	theFace=pango_ft2_font_get_face(pFont);
 	if ( c > 0xf0000 ) {
 		res=CLAMP(c,0xf0000,0x1fffff)-0xf0000;
 	} else {
 		res=FT_Get_Char_Index(theFace, c);
 	}
-#elif defined(WIN32)
-	if ( c > 0xf0000 ) {
-		res=CLAMP(c,0xf0000,0x1fffff)-0xf0000;
-	} else {
-		res=pango_win32_font_get_glyph_index(pFont,c);
-	}
-#endif
 	return res;
 }
 
@@ -427,19 +360,9 @@ int font_instance::MapUnicodeChar(gunichar c)
 void font_instance::LoadGlyph(int glyph_id)
 {
 	if ( pFont == NULL ) return;
-#ifdef WITH_XFT
 	theFace=pango_ft2_font_get_face(pFont);
 	if ( theFace->units_per_EM == 0 ) return; // bitmap font
-#elif defined(WIN32)
-	HDC  wDev=NULL;
-	if ( daddy ) {
-		wDev=daddy->wDevice;
-		if ( theLogFont == NULL ) {
-			theLogFont=pango_win32_font_logfont(pFont);
-			wFont=pango_win32_font_cache_load(daddy->wCache,theLogFont);
-		}
-	}
-#endif
+
 	if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
 		if ( nbGlyph >= maxGlyph ) {
 			maxGlyph=2*nbGlyph+1;
@@ -450,7 +373,7 @@ void font_instance::LoadGlyph(int glyph_id)
 		n_g.artbpath=NULL;
 		n_g.bbox[0]=n_g.bbox[1]=n_g.bbox[2]=n_g.bbox[3]=0;
 		bool   doAdd=false;
-#ifdef WITH_XFT
+
 		if (FT_Load_Glyph (theFace, glyph_id, FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) {
 			// shit happened
 		} else {
@@ -483,73 +406,7 @@ void font_instance::LoadGlyph(int glyph_id)
 			}
 			doAdd=true;
 		}
-#elif defined(WIN32)
-		if ( wFont ) {
-			MAT2          mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
-			GLYPHMETRICS  gmetrics;
-			double        g_scale=1.0;
-			
-			SelectFont (wDev,wFont);
-			
-			g_scale=1.0/512;
-			
-			int   outl_size=GetGlyphOutline(wDev,glyph_id,GGO_NATIVE | GGO_GLYPH_INDEX,&gmetrics,0,NULL,&mat);
-			char* buffer=(char*)malloc(outl_size*sizeof(char));
-			GetGlyphOutline(wDev,glyph_id,GGO_NATIVE | GGO_GLYPH_INDEX,&gmetrics,outl_size,buffer,&mat);
-			
-			n_g.outline=new Path;
-			for (int start=0;start<outl_size;) {	
-				// one LPTTPOLYGONHEADER with several LPTTPOLYCURVE in it
-				LPTTPOLYGONHEADER     pgh=(LPTTPOLYGONHEADER) (buffer+start);
-				int         end=start+pgh->cb;
-				NR::Point   lastP(FIXED_TO_FLOAT(&pgh->pfxStart.x),FIXED_TO_FLOAT(&pgh->pfxStart.y));
-				lastP*=g_scale;
-				n_g.outline->MoveTo(lastP);
-				
-				start+=sizeof(TTPOLYGONHEADER);
-				for (;start<end;) {
-					LPTTPOLYCURVE    pc=(LPTTPOLYCURVE) (buffer+start);
-					if ( pc->wType == TT_PRIM_LINE ) { // simple polyline
-						for (int i=0;i<pc->cpfx;i++) {
-							lastP=NR::Point(FIXED_TO_FLOAT (&pc->apfx[i].x),FIXED_TO_FLOAT (&pc->apfx[i].y));
-							lastP*=g_scale;
-							n_g.outline->LineTo(lastP);
-						}
-					} else if ( pc->wType == TT_PRIM_QSPLINE ) { // quadratic bezier segments
-						for (int i=0;i<pc->cpfx-1;i++) {
-							NR::Point  p(FIXED_TO_FLOAT (&pc->apfx[i].x),FIXED_TO_FLOAT (&pc->apfx[i].y));
-							NR::Point  np(FIXED_TO_FLOAT (&pc->apfx[i+1].x),FIXED_TO_FLOAT (&pc->apfx[i+1].y));
-							np*=g_scale;
-							p*=g_scale;
-							if ( i+1 < pc->cpfx-1 ) {
-								np=0.5*(p+np);
-							} else {
-							}
-							n_g.outline->BezierTo(np);
-							n_g.outline->IntermBezierTo(p);
-							n_g.outline->EndBezierTo();
-							lastP=np;
-						}
-						//					} else if ( pc->wType == TT_PRIM_CSPLINE ) { // cubic bezier segments
-						// needs to be done (tho fonts are usually quadratic bezier
-                    }
-					start+=sizeof(TTPOLYCURVE)+(pc->cpfx-1)*sizeof(POINTFX);
-                }	
-				n_g.outline->Close();
-            }
-			{
-				static MAT2 mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
-				GetGlyphOutline(wDev,glyph_id,GGO_NATIVE | GGO_METRICS,&gmetrics,0,NULL,&mat);
-				n_g.h_advance=g_scale*((double)gmetrics.gmCellIncX);
-				n_g.h_width=g_scale*((double)gmetrics.gmBlackBoxX);
-				n_g.v_advance=g_scale*((double)gmetrics.gmCellIncY);
-				n_g.v_width=g_scale*((double)gmetrics.gmBlackBoxY);
-			}
-			
-			free(buffer);
-			doAdd=true;
-        }
-#endif
+
 		if ( doAdd ) {
 			if ( n_g.outline ) {
 				n_g.outline->FastBBox(n_g.bbox[0],n_g.bbox[1],n_g.bbox[2],n_g.bbox[3]);
@@ -565,38 +422,16 @@ void font_instance::LoadGlyph(int glyph_id)
 
 bool font_instance::FontMetrics(double &ascent,double &descent,double &leading)
 {
-#ifdef WITH_XFT
 	theFace=pango_ft2_font_get_face(pFont);
 	if ( theFace->units_per_EM == 0 ) return false; // bitmap font
-#elif defined(WIN32)
-	HDC  wDev=NULL;
-	if ( daddy ) {
-		wDev=daddy->wDevice;
-		if ( theLogFont == NULL ) {
-			theLogFont=pango_win32_font_logfont(pFont);
-			wFont=pango_win32_font_cache_load(daddy->wCache,theLogFont);
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
-#endif
 	
 	if ( pFont == NULL ) return false;
 	
-#ifdef WITH_XFT
 	if ( theFace == NULL ) return false;
 	ascent=fabs(((double)theFace->ascender)/((double)theFace->units_per_EM));
 	descent=fabs(((double)theFace->descender)/((double)theFace->units_per_EM));
 	leading=fabs(((double)theFace->height)/((double)theFace->units_per_EM));
 	leading-=ascent+descent;
-#elif defined(WIN32)
-	if ( wFont == NULL ) return false;
-	ascent=fabs(((double)otm.otmAscent)/((double)otm.otmEMSquare));
-	descent=fabs(((double)otm.otmDescent)/((double)otm.otmEMSquare));
-	leading=fabs(((double)otm.otmLineGap)/((double)otm.otmEMSquare));
-#endif
 	return true;
 }
 

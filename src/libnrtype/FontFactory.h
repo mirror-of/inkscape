@@ -20,15 +20,10 @@
 #include "nr-type-pos-def.h"
 #include <libnrtype/nrtype-forward.h>
 
-#ifdef WITH_XFT
+/* Freetype */
 #include <pango/pangoft2.h>
 #include <freetype/freetype.h>
-#endif
-#ifdef WIN32
-#include <windows.h>
-#include <windowsx.h>
-#include <pango/pangowin32.h>
-#endif
+
 
 // the font_factory keeps a hashmap of all the loaded font_instances, and uses the PangoFontDescription
 // as index (nota: since pango already does that, using the PangoFont could work too)
@@ -57,11 +52,6 @@ public:
 	PangoContext*         fontContext;
 	double                fontSize; // the huge fontsize used as workaround for hinting.
 	                        // different between freetype and win32
-#ifdef WIN32
-	// windows-specific data
-	HDC                   wDevice;
-	PangoWin32FontCache*  wCache;
-#endif
 	
 	__gnu_cxx::hash_map<PangoFontDescription*,font_instance*,font_descr_hash,font_descr_equal>     loadedFaces;
 	
@@ -92,7 +82,8 @@ public:
 };
 
 
-#endif
+#endif /* my_font_factory */
+
 
 
 

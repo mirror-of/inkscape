@@ -14,11 +14,9 @@
 # include <config.h>
 #endif
 
-#ifdef WITH_XFT
+/* Freetype2 */
 # include <pango/pangoft2.h>
-#elif defined(WIN32)
-# include <pango/pangowin32.h>
-#endif
+
 
 // need to avoid using the size field
 size_t  font_descr_hash::operator()( PangoFontDescription* const&x) const {
@@ -268,16 +266,15 @@ void noop (...) {}
 
 
 ///////////////////// FontFactory
-#ifdef WITH_XFT
 // the substitute function to tell fontconfig to enforce outline fonts
-void        FactorySubstituteFunc(FcPattern *pattern,gpointer data)
+void FactorySubstituteFunc(FcPattern *pattern,gpointer data)
 {
 	FcPatternAddBool (pattern, "FC_OUTLINE",FcTrue);
 //	char* fam=NULL;
 //	FcPatternGetString (pattern, "FC_FAMILY",0, &fam);
 //	printf("subst_f on %s\n",fam);
 }
-#endif
+
 
 font_factory*  font_factory::lUsine=NULL;
 
@@ -293,32 +290,22 @@ font_factory::font_factory(void)
 	nbEnt=0;
 	maxEnt=32;
 	ents=(font_entry*)malloc(maxEnt*sizeof(font_entry));
-#ifdef WITH_XFT
+
 	fontServer=pango_ft2_font_map_new();
 	pango_ft2_font_map_set_resolution((PangoFT2FontMap*)fontServer, 72, 72);
 	fontContext=pango_ft2_font_map_create_context((PangoFT2FontMap*)fontServer);
 	pango_ft2_font_map_set_default_substitute((PangoFT2FontMap*)fontServer,FactorySubstituteFunc,this,NULL);
-#elif defined(WIN32)
-	fontContext=pango_win32_get_context();
-	fontServer=pango_win32_font_map_for_display();
-	wCache=pango_win32_font_map_get_font_cache(fontServer);
-	wDevice = CreateDC ("DISPLAY", NULL, NULL, NULL);
-	//	wDevice=pango_win32_get_dc();
-	fontSize*= 67.55223 ;
-	fontSize/= ((double)GetDeviceCaps (wDevice, LOGPIXELSY));
-#endif
+
 }
 
 font_factory::~font_factory(void)
 {
 	for (int i=0;i<nbEnt;i++) ents[i].f->Unref();
 	if ( ents ) free(ents);
-#ifdef WITH_XFT
+
 	g_object_unref(fontServer);
 	//	pango_ft2_shutdown_display();
-#elif defined(WIN32)
-	pango_win32_shutdown_display();
-#endif
+
 	//	g_object_unref(fontContext);
 }
 

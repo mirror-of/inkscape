@@ -395,14 +395,12 @@ sp_main_console(int argc, char const **argv)
 
     /* We are started in text mode */
 
-#ifdef WITH_XFT
-    /* Still have to init gdk, or Xft does not work */
-    //gdk_init(&argc, (char ***) &argv);
-    /* Actually, it seems that only g_type_init is required for
-     * pango and Xft. -- njh
-     * http://mail.gnome.org/archives/gtk-list/2003-December/msg00063.html */
+    /* Do this g_type_init(), so that we can use Xft/Freetype2 (Pango)
+     * in a non-Gtk environment.  Used in libnrtype's
+     * FontInstance.cpp and FontFactory.cpp.
+     * http://mail.gnome.org/archives/gtk-list/2003-December/msg00063.html
+     */
     g_type_init();
-#endif
 
     /* fixme: Move these to some centralized location (Lauris) */
     sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
