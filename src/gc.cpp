@@ -108,33 +108,27 @@ Ops disabled_ops = {
     &std::free
 };
 
-enum Mode {
-    ENABLE,
-    DEBUG,
-    DISABLE
-};
-
-class InvalidModeError : public std::runtime_error {
+class InvalidGCModeError : public std::runtime_error {
 public:
-    InvalidModeError(const char *mode)
+    InvalidGCModeError(const char *mode)
     : runtime_error(std::string("Unknown GC mode \"") + mode + "\"")
     {}
 };
 
-Mode get_mode() throw (InvalidModeError) {
+Ops const &get_ops() throw (InvalidGCModeError) {
     char *mode_string=std::getenv("_INKSCAPE_GC");
     if (mode_string) {
         if (!std::strcmp(mode_string, "enable")) {
-            return ENABLE;
+            return enabled_ops;
         } else if (!std::strcmp(mode_string, "debug")) {
-            return DEBUG;
+            return debug_ops;
         } else if (!std::strcmp(mode_string, "disable")) {
-            return DISABLE;
+            return disabled_ops;
         } else {
-            throw InvalidModeError(mode_string);
+            throw InvalidGCModeError(mode_string);
         }
     } else {
-        return ENABLE;
+        return enabled_ops;
     }
 }
 
@@ -152,26 +146,14 @@ Ops ops = {
 };
 
 void init() {
-    Mode mode;
     try {
-        mode = get_mode();
-    } catch (InvalidModeError &e) {
+        ops = get_ops();
+    } catch (InvalidGCModeError &e) {
         g_warning("%s; enabling normal collection", e.what());
-        mode = ENABLE;
+        ops = enabled_ops;
     }
 
-    switch (mode) {
-        case ENABLE: {
-            ops = enabled_ops;
-        } break;
-        case DEBUG: {
-            ops = debug_ops;
-        } break;
-        case DISABLE: {
-            ops = disabled_ops;
-        } break;
-    }
-    if ( mode != DISABLE ) {
+    if ( ops.malloc != std::malloc ) {
         GC_no_dls = 1;
         GC_all_interior_pointers = 1;
         GC_finalize_on_demand = 0;
