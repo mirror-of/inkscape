@@ -289,7 +289,7 @@ sp_star_description (SPItem *item)
 /**
 Returns a unit-length vector at 90 degrees to the direction from o to n
  */
-NR::Point
+static NR::Point
 rot90_rel (NR::Point o, NR::Point n)
 {
 	return ((1/NR::L2(n - o)) * NR::Point ((n - o)[NR::Y],  (o - n)[NR::X]));
@@ -301,7 +301,7 @@ Obvious (but acceptable for my purposes) limits to uniqueness:
 - returned value for x,y repeats for x+n*1024,y+n*1024
 - returned value is unchanged when the point is moved by less than 1/1024 of px
 */
-guint32
+static guint32
 point_unique_int (NR::Point o)
 {
 	return ((guint32) 
@@ -317,27 +317,25 @@ Returns the next pseudorandom value using the Linear Congruential Generator algo
 with the parameters (m = 2^32, a = 69069, b = 1). These parameters give a full-period generator,
 i.e. it is guaranteed to go through all integers < 2^32 (see http://random.mat.sbg.ac.at/~charly/server/server.html)
 */
-guint32
-lcg_next (guint32 prev)
+static inline guint32
+lcg_next(guint32 const prev)
 {
-	return (guint32) (( 69069 * (guint64) prev + 1 ) % 4294967296ll);
+	return (guint32) ( 69069 * prev + 1 );
 }
 
 /**
-Returns a random number in the range [-0.5, 0.5] from the given seed, stepping the given number of steps from the seed
+Returns a random number in the range [-0.5, 0.5) from the given seed, stepping the given number of steps from the seed.
 */
-double
-rnd (guint32 seed, uint steps) {
-
+static double
+rnd (guint32 const seed, unsigned steps) {
 	guint32 lcg = seed;
-
 	for (; steps > 0; steps --)
 		lcg = lcg_next (lcg);
 
-	return ((double) lcg / 4294967296ll) - 0.5;
+	return ( lcg / 4294967296. ) - 0.5;
 }
 
-NR::Point
+static NR::Point
 sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 {
 	// the point whose neighboring curve handle we're calculating

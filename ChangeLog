@@ -1,3 +1,9 @@
+2004-08-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-star.cpp: Use cast to guint32 instead of using modulo 2**32.
+	  Fix a uint compilation bug on Windows reported by mrchapp.
+	  Mark a few functions as static.
+
 2004-08-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-conn-end.cpp (change_endpts):
