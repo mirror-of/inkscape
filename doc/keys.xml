@@ -381,9 +381,16 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>Selecting within group</title>
+<title>Select within group, select under</title>
 <mouse><key><ctrl/><left-click/></key> <action>select within group</action></mouse>
+<note>Ctrl+click selects the object at click point disregarding any levels of grouping that this object might belong to.</note>
 <mouse><key><ctrl/><shift/><left-click/></key> <action>toggle selection within group</action></mouse>
+<mouse><key><alt/><left-click/></key> <action>select under</action></mouse>
+<note>Alt+click selects the object at click point which is beneath (in z-order) the lowest selected object at click point.</note>
+<note>If the bottom object is reached, Alt+click again selects the top object. So, several Alt+clicks cycle through z-order stack at point.</note>
+<mouse><key><shift/><alt/><left-click/></key> <action>toggle under</action></mouse>
+<mouse><key><ctrl/><alt/><left-click/></key> <action>select under, in groups</action></mouse>
+<mouse><key><shift/><ctrl/><alt/><left-click/></key> <action>toggle under, in groups</action></mouse>
 </group>
 
 <group>
@@ -397,8 +404,10 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Mouse move</title>
-<mouse><key><left-drag/></key> <action>move selected objects</action></mouse>
+<mouse><key><left-drag/></key> <action>select + move</action></mouse>
 <note>Dragging an object selects it if it was not selected, then moves selection.</note>
+<mouse><key><alt/><left-drag/></key> <action>move selected</action></mouse>
+<note>Alt+drag moves the current selection (without selecting what is under cursor), no matter where you start the drag.</note>
 <mouse><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></mouse>
 <mouse><key><shift/><left-drag/></key> <action>temporarily disable snapping</action></mouse>
 <note>This temporaily disables snapping to grid or guides when you are dragging with grid or guides on.</note>
