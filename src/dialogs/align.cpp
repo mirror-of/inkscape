@@ -707,7 +707,7 @@ DialogAlign::DialogAlign():
                    _("Align left sides"),
                    0, 1);
     addAlignButton("al_center_hor",
-                   _("Center horizontally"),
+                   _("Center on vertical axis"),
                    0, 2);
     addAlignButton("al_right_in",
                    _("Align right sides"),
@@ -722,7 +722,7 @@ DialogAlign::DialogAlign():
                    _("Align tops"),
                    1, 1);
     addAlignButton("al_center_ver",
-                   _("Center vertically"),
+                   _("Center on horizontal axis"),
                    1, 2);
     addAlignButton("al_bottom_in",
                    _("Align bottoms"),
