@@ -253,7 +253,7 @@ sp_rect_description (SPItem * item)
 
 	rect = SP_RECT (item);
 
-	return g_strdup_printf ("Rectangle %0.2f %0.2f %0.2f %0.2f", rect->x.computed, rect->y.computed, rect->width.computed, rect->height.computed);
+	return g_strdup_printf ("Rectangle");
 }
 
 #define C1 0.554
