@@ -1001,8 +1001,8 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	}
 
 	// status text
-	GString *xs = SP_PT_TO_METRIC_STRING(pt[X], sp_desktop_get_default_metric(desktop));
-	GString *ys = SP_PT_TO_METRIC_STRING(pt[Y], sp_desktop_get_default_metric(desktop));
+	GString *xs = SP_PX_TO_METRIC_STRING(pt[X], sp_desktop_get_default_metric(desktop));
+	GString *ys = SP_PX_TO_METRIC_STRING(pt[Y], sp_desktop_get_default_metric(desktop));
       seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"), xs->str, ys->str);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);

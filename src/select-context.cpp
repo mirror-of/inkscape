@@ -912,8 +912,8 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     sp_sel_trans_transform(seltrans, move, norm);
 
     // status text
-    GString *xs = SP_PT_TO_METRIC_STRING(dxy[X], sp_desktop_get_default_metric(desktop));
-    GString *ys = SP_PT_TO_METRIC_STRING(dxy[Y], sp_desktop_get_default_metric(desktop));
+    GString *xs = SP_PX_TO_METRIC_STRING(dxy[X], sp_desktop_get_default_metric(desktop));
+    GString *ys = SP_PX_TO_METRIC_STRING(dxy[Y], sp_desktop_get_default_metric(desktop));
     seltrans->messageContext().setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
     g_string_free(xs, TRUE);
     g_string_free(ys, TRUE);
