@@ -1,3 +1,11 @@
+2003-10-19  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/repr-io.c (sp_repr_svg_read_node): handle CDATA
+	  sections properly
+
+	* Most of the tree.  Unsodipodified pretty much everything I could
+  	  find.  New temporary icons, etc etc...
+
 2003-10-23  Ted Gould  <ted@gould.cx>
 
 	* src/*/Makefile.am: Changing the include paths to make distcheck

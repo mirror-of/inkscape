@@ -184,7 +184,8 @@ sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default
 	g_print ("Node %d %s contains %s\n", node->type, node->name, node->content);
 #endif
 
-	if (node->type == XML_TEXT_NODE) {
+	if (node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE)
+	{
 		xmlChar *p;
 		for (p = node->content; p && *p; p++) {
 			if (!isspace (*p)) {
