@@ -1327,7 +1327,6 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	ret = FALSE;
 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
-
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
@@ -1384,6 +1383,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					} else {
 						/* Set end anchor */
 						dc->ea = anchor;
+						spdc_endpoint_snap (dc, &p, event->motion.state);
 						spdc_pen_set_subsequent_point (pc, &p);
 						if (dc->green_anchor && dc->green_anchor->active) {
 							pc->state = SP_PEN_CONTEXT_CLOSE;
@@ -1440,6 +1440,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				if (dc->npoints != 0) {
 					/* Only set point, if we are already appending */
 					/* fixme: Snapping */
+					spdc_endpoint_snap (dc, &p, event->motion.state);
 					spdc_pen_set_subsequent_point (pc, &p);
 					ret = TRUE;
 				}
@@ -1448,6 +1449,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			case SP_PEN_CONTEXT_CLOSE:
 				/* Placing controls is last operation in CLOSE state */
 				/* fixme: Snapping */
+				spdc_endpoint_snap (dc, &p, event->motion.state);
 				spdc_pen_set_ctrl (pc, &p, event->motion.state);
 				ret = TRUE;
 				break;
@@ -1506,6 +1508,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							p = anchor->dp;
 						}
 						dc->sa = anchor;
+						spdc_endpoint_snap (dc, &p, event->motion.state);
 						spdc_pen_set_initial_point (pc, &p);
 					} else {
 						/* Set end anchor here */
@@ -1516,12 +1519,14 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					break;
 				case SP_PEN_CONTEXT_CONTROL:
 					/* End current segment */
+					spdc_endpoint_snap (dc, &p, event->motion.state);
 					spdc_pen_finish_segment (pc, &p, event->button.state);
 					pc->state = SP_PEN_CONTEXT_POINT;
 					ret = TRUE;
 					break;
 				case SP_PEN_CONTEXT_CLOSE:
 					/* End current segment */
+					spdc_endpoint_snap (dc, &p, event->motion.state);
 					spdc_pen_finish_segment (pc, &p, event->button.state);
 					spdc_pen_finish (pc, TRUE);
 					pc->state = SP_PEN_CONTEXT_POINT;
@@ -1540,9 +1545,11 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				switch (pc->state) {
 				case SP_PEN_CONTEXT_POINT:
 				case SP_PEN_CONTEXT_CONTROL:
+					spdc_endpoint_snap (dc, &p, event->motion.state);
 					spdc_pen_finish_segment (pc, &p, event->button.state);
 					break;
 				case SP_PEN_CONTEXT_CLOSE:
+					spdc_endpoint_snap (dc, &p, event->motion.state);
 					spdc_pen_finish_segment (pc, &p, event->button.state);
 					spdc_pen_finish (pc, TRUE);
 					break;
