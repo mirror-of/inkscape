@@ -147,6 +147,8 @@ bool SVGPreview::setFileName(Glib::ustring &fileName)
 
     setDocument(doc);
 
+    sp_document_unref(doc);
+
     return true;
 }
 
