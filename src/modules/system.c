@@ -145,11 +145,11 @@ open_internal (SPModule * in_plug, gpointer in_data)
 	\param    doc       The document to be saved
 	\param    filename  The file that the document should be saved to
 
-	First things first, are we looking at an autodetection?  We'll if
+	First things first, are we looking at an autodetection?  Well if
 	that's the case then the module needs to be found, and that is done
 	with a database lookup through the module DB.  The foreach function
 	is called, with the parameter being a gpointer array.  It contains
-	both the filename (to find it's extension) and where to write the
+	both the filename (to find its extension) and where to write the
 	module when it is found.
 
 	If there is no autodetection the module database is queried with
@@ -172,6 +172,7 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 	if (!strcmp(key, SP_MODULE_KEY_AUTODETECT)) {
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&omod;
+		omod = NULL;
 		sp_module_db_foreach(save_internal, (gpointer)&parray);
 	} else {
 		omod = SP_MODULE_OUTPUT(sp_module_db_get(key));
