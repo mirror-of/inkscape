@@ -76,6 +76,7 @@ sp_file_new (void)
 	g_return_if_fail (dtw != NULL);
 
 	sp_create_window (dtw, TRUE);
+      sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
 }
 
 void
@@ -91,6 +92,7 @@ sp_file_open (const gchar *uri, const gchar *key)
 		dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
 		sp_document_unref (doc);
 		sp_create_window (dtw, TRUE);
+		sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
 	}
 }
 
@@ -144,7 +146,7 @@ sp_file_open_dialog (gpointer object, gpointer data)
 #ifdef WIN32
 	char *filename;
 	filename = sp_win32_get_open_filename ((unsigned char *)open_path,
-                 (unsigned char *)"SVG files\0*.svg;*.svgz\0All files\0*\0", 
+                 (unsigned char *)"SVG files\0*.svg;*.svgz\0All files\0*\0",
                  (unsigned char *)_("Select file to open"));
 	if (filename) {
 		g_free (open_path);
@@ -223,7 +225,6 @@ sp_file_save_dialog (SPDocument *doc)
 
 	dlg = gtk_file_selection_new (_("Save file"));
 	g_object_set_data (G_OBJECT (dlg), "document", doc);
-	/* fixme: Remove modality (Lauris) */
 	gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
 
 	fs = GTK_FILE_SELECTION (dlg);
@@ -333,6 +334,8 @@ sp_file_save (gpointer object, gpointer data)
 {
 	if (!SP_ACTIVE_DOCUMENT) return;
 
+	sp_namedview_document_from_window (SP_ACTIVE_DESKTOP);
+
 	sp_file_save_document (SP_ACTIVE_DOCUMENT);
 }
 
@@ -340,6 +343,8 @@ void
 sp_file_save_as (gpointer object, gpointer data)
 {
 	if (!SP_ACTIVE_DOCUMENT) return;
+
+	sp_namedview_document_from_window (SP_ACTIVE_DESKTOP);
 
 	sp_file_save_dialog (SP_ACTIVE_DOCUMENT);
 
@@ -445,7 +450,7 @@ sp_file_import (GtkWidget * widget)
 
 #ifdef WIN32
 	filename = sp_win32_get_open_filename ((unsigned char *)import_path,
-					     (unsigned char *)"Image files\0*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.xpm\0"
+                                     (unsigned char *)"Image files\0*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.xpm\0"
 					     "SVG files\0*.svg\0"
 					     "All files\0*\0", (unsigned char *)_("Select file to import"));
 	if (filename) {

@@ -269,6 +269,7 @@ sp_main_gui (int argc, const char **argv)
 					SPViewWidget *dtw;
 					dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
 					if (dtw) sp_create_window (dtw, TRUE);
+					sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
 				}
 				sp_document_unref (doc);
 			}

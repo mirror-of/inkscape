@@ -131,6 +131,7 @@ sp_ui_new_view (GtkWidget * widget)
 	g_return_if_fail (dtw != NULL);
 
 	sp_create_window (dtw, TRUE);
+      sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
 }
 
 /* fixme: */
