@@ -74,16 +74,8 @@ void sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode
 void sp_paint_selector_set_color_alpha (SPPaintSelector *psel, const SPColor *color, float alpha);
 
 void sp_paint_selector_set_gradient_linear (SPPaintSelector *psel, SPGradient *vector);
-void sp_paint_selector_set_lgradient_position (SPPaintSelector *psel, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
 
 void sp_paint_selector_set_gradient_radial (SPPaintSelector *psel, SPGradient *vector);
-void sp_paint_selector_set_rgradient_position (SPPaintSelector *psel, gdouble cx, gdouble cy, gdouble fx, gdouble fy, gdouble r);
-
-void sp_paint_selector_set_gradient_bbox (SPPaintSelector *psel, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
-
-void sp_paint_selector_set_gradient_gs2d_matrix(SPPaintSelector *psel, NR::Matrix const &gs2d);
-void sp_paint_selector_set_gradient_gs2d_matrix_f(SPPaintSelector *psel, NRMatrix const *gs2d);
-void sp_paint_selector_get_gradient_gs2d_matrix_f(SPPaintSelector const *psel, NRMatrix *gs2d);
 
 void sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, SPGradientUnits units, SPGradientSpread spread);
 void sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnits *units, SPGradientSpread *spread);
@@ -93,11 +85,6 @@ void sp_gradient_selector_attrs_to_gradient (SPGradient *gr, SPPaintSelector *ps
 void sp_paint_selector_get_color_alpha (SPPaintSelector *psel, SPColor *color, gfloat *alpha);
 
 SPGradient *sp_paint_selector_get_gradient_vector (SPPaintSelector *psel);
-
-void sp_paint_selector_get_gradient_position_floatv (SPPaintSelector *psel, gfloat *pos);
-
-void sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient *lg, SPItem *item);
-void sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient *rg, SPItem *item);
 
 void sp_paint_selector_system_color_set (SPPaintSelector *psel, const SPColor *color, float opacity);
 

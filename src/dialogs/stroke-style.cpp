@@ -294,35 +294,13 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
                 }
             } // end of for loop
 
-
-            /* TODO: Probably we should set multiple mode here too */
-
             sp_paint_selector_set_mode(psel,
                                        SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR);
-            sp_paint_selector_set_gradient_linear(psel, vector);
-            NRRect fbb;
-            sel->boundsInDocument(&fbb);
-            sp_paint_selector_set_gradient_bbox( psel, fbb.x0, fbb.y0,
-                                                 fbb.x1, fbb.y1 );
-
-            /* TODO: This is plain wrong */
 
             SPLinearGradient *lg = SP_LINEARGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object));
-            sp_item_invoke_bbox(SP_ITEM(object), &fbb, NR::identity(), TRUE);
-            NRMatrix fctm;
-            sp_item_i2doc_affine(SP_ITEM(object), &fctm);
-            NRMatrix gs2d;
-            sp_gradient_get_gs2d_matrix_f( SP_GRADIENT(lg), &fctm,
-                                           &fbb, &gs2d );
-            sp_paint_selector_set_gradient_gs2d_matrix_f(psel, &gs2d);
             sp_paint_selector_set_gradient_properties(psel,
                                                       SP_GRADIENT_UNITS(lg),
                                                       SP_GRADIENT_SPREAD(lg));
-            sp_paint_selector_set_lgradient_position( psel,
-                                                      lg->x1.computed,
-                                                      lg->y1.computed,
-                                                      lg->x2.computed,
-                                                      lg->y2.computed );
             break;
         }
 
@@ -350,34 +328,12 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
                 }
             }
 
-            /* TODO: Probably we should set multiple mode here too */
-
             sp_paint_selector_set_gradient_radial(psel, vector);
-            NRRect fbb;
-            sel->boundsInDocument(&fbb);
-            sp_paint_selector_set_gradient_bbox( psel, fbb.x0, fbb.y0,
-                                                 fbb.x1, fbb.y1);
-
-            /* TODO: This is plain wrong */
 
             SPRadialGradient *rg = SP_RADIALGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object));
-            sp_item_invoke_bbox(SP_ITEM(object), &fbb, NR::identity(), TRUE);
-            NRMatrix fctm;
-            sp_item_i2doc_affine(SP_ITEM(object), &fctm);
-            NRMatrix gs2d;
-            sp_gradient_get_gs2d_matrix_f( SP_GRADIENT(rg), &fctm,
-                                           &fbb, &gs2d );
-            sp_paint_selector_set_gradient_gs2d_matrix_f(psel, &gs2d);
             sp_paint_selector_set_gradient_properties(psel,
                                                       SP_GRADIENT_UNITS(rg),
                                                       SP_GRADIENT_SPREAD(rg) );
-
-            sp_paint_selector_set_rgradient_position( psel,
-                                                      rg->cx.computed,
-                                                      rg->cy.computed,
-                                                      rg->fx.computed,
-                                                      rg->fy.computed,
-                                                      rg->r.computed );
             break;
         }
 
@@ -504,38 +460,18 @@ sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw)
 
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
         {
-            SPGradient *vector = sp_paint_selector_get_gradient_vector(psel);
-            if (vector) {
-                vector = sp_gradient_ensure_vector_normalized(vector);
-                GSList const *items = sp_widget_get_item_list(spw);
-                for (GSList const *i = items; i != NULL; i = i->next) {
-                    SPGradient *lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
-                    sp_paint_selector_write_lineargradient(psel,
-                                                           SP_LINEARGRADIENT(lg),
-                                                           SP_ITEM(i->data) );
-                }
-            }
+            // gradient in fill&stroke does not drag anymore...
             break;
         }
 
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
         {
-            SPGradient *vector = sp_paint_selector_get_gradient_vector(psel);
-            if (vector) {
-                vector = sp_gradient_ensure_vector_normalized(vector);
-                GSList const *items = sp_widget_get_item_list(spw);
-                for (GSList const *i = items; i != NULL; i = i->next) {
-                    SPGradient *rg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
-                    sp_paint_selector_write_radialgradient(psel,
-                                                           SP_RADIALGRADIENT(rg),
-                                                           SP_ITEM(i->data));
-                }
-            }
+            // gradient in fill&stroke does not drag anymore...
             break;
         }
 
         case SP_PAINT_SELECTOR_MODE_PATTERN:
-            /*user selected existing pattern from list*/
+            // pattern in fill&stroke does not drag
             break;
 
 

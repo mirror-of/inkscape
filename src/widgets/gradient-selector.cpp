@@ -1,7 +1,7 @@
 #define __SP_GRADIENT_SELECTOR_C__
 
 /*
- * Gradient vector and position widget
+ * Gradient vector widget
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -30,7 +30,6 @@
 #include <xml/repr.h>
 
 #include "gradient-vector.h"
-#include "gradient-position.h"
 
 #include "gradient-selector.h"
 
@@ -48,8 +47,6 @@ static void sp_gradient_selector_destroy (GtkObject *object);
 
 /* Signal handlers */
 static void sp_gradient_selector_vector_set (SPGradientVectorSelector *gvs, SPGradient *gr, SPGradientSelector *sel);
-static void sp_gradient_selector_position_dragged (SPGradientPosition *pos, SPGradientSelector *sel);
-static void sp_gradient_selector_position_changed (SPGradientPosition *pos, SPGradientSelector *sel);
 static void sp_gradient_selector_edit_vector_clicked (GtkWidget *w, SPGradientSelector *sel);
 static void sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel);
 
@@ -146,14 +143,7 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 
 	gtk_widget_show_all (hb);
 
-	/* Create gradient position widget */
-	sel->position = sp_gradient_position_new (NULL);
-	gtk_widget_show (sel->position);
-	gtk_box_pack_start (GTK_BOX (sel), sel->position, TRUE, TRUE, 4);
-	g_signal_connect (G_OBJECT (sel->position), "dragged", G_CALLBACK (sp_gradient_selector_position_dragged), sel);
-	g_signal_connect (G_OBJECT (sel->position), "changed", G_CALLBACK (sp_gradient_selector_position_changed), sel);
-
-	/* Unit and spread selectors */
+	/* Spread selector */
 	hb = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hb);
 	gtk_box_pack_start (GTK_BOX (sel), hb, FALSE, FALSE, 0);
@@ -218,8 +208,6 @@ sp_gradient_selector_set_mode (SPGradientSelector *sel, guint mode)
 	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
 
 	sel->mode = mode;
-
-	sp_gradient_position_set_mode (SP_GRADIENT_POSITION (sel->position), mode);
 }
 
 void
@@ -238,8 +226,6 @@ sp_gradient_selector_set_spread (SPGradientSelector *sel, guint spread)
 	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
 
 	sel->gradientSpread = (SPGradientSpread)spread;
-
-	sp_gradient_position_set_spread (SP_GRADIENT_POSITION (sel->position), sel->gradientSpread);
 
 	gtk_option_menu_set_history (GTK_OPTION_MENU (sel->spread), sel->gradientSpread);
 }
@@ -263,10 +249,14 @@ sp_gradient_selector_set_vector (SPGradientSelector *sel, SPDocument *doc, SPGra
 	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
 	g_return_if_fail (!vector || SP_IS_GRADIENT (vector));
 	g_return_if_fail (!vector || (SP_OBJECT_DOCUMENT (vector) == doc));
-	g_return_if_fail (!vector || SP_GRADIENT_HAS_STOPS (vector));
+
+	if (vector && !SP_GRADIENT_HAS_STOPS (vector))
+		return; // this happens when undoing change from gradient to flat color, as this
+				// does sp_document_done twice, and the mid-state (after the first ctrl+z
+				// before the second) may be bogus. This will be fixed when (and if)
+				// fill&stroke will be castrated to not set gradients/patterns
 
 	sp_gradient_vector_selector_set_gradient (SP_GRADIENT_VECTOR_SELECTOR (sel->vectors), doc, vector);
-	sp_gradient_position_set_gradient (SP_GRADIENT_POSITION (sel->position), vector);
 
 	if (vector) {
 		gtk_widget_set_sensitive (sel->edit, TRUE);
@@ -277,53 +267,6 @@ sp_gradient_selector_set_vector (SPGradientSelector *sel, SPDocument *doc, SPGra
 	}
 }
 
-void
-sp_gradient_selector_set_bbox (SPGradientSelector *sel, gdouble x0, gdouble y0, gdouble x1, gdouble y1)
-{
-	g_return_if_fail (sel != NULL);
-	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
-
-	sp_gradient_position_set_bbox (SP_GRADIENT_POSITION (sel->position), x0, y0, x1, y1);
-}
-
-void
-sp_gradient_selector_set_gs2d_matrix(SPGradientSelector *gsel, NR::Matrix const &gs2d)
-{
-	sp_gradient_position_set_gs2d_matrix(SP_GRADIENT_POSITION(gsel->position), gs2d);
-}
-
-void
-sp_gradient_selector_set_gs2d_matrix_f(SPGradientSelector *gsel, NRMatrix const *gs2d)
-{
-	sp_gradient_position_set_gs2d_matrix_f (SP_GRADIENT_POSITION (gsel->position), gs2d);
-}
-
-void
-sp_gradient_selector_get_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrix *gs2d)
-{
-	sp_gradient_position_get_gs2d_matrix_f (SP_GRADIENT_POSITION (gsel->position), gs2d);
-}
-
-void
-sp_gradient_selector_set_lgradient_position (SPGradientSelector *sel, gdouble x0, gdouble y0, gdouble x1, gdouble y1)
-{
-	g_return_if_fail (sel != NULL);
-	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
-	g_return_if_fail (sel->mode == SP_GRADIENT_SELECTOR_MODE_LINEAR);
-
-	sp_gradient_position_set_linear_position (SP_GRADIENT_POSITION (sel->position), x0, y0, x1, y1);
-}
-
-void
-sp_gradient_selector_set_rgradient_position (SPGradientSelector *sel, gdouble cx, gdouble cy, gdouble fx, gdouble fy, gdouble r)
-{
-	g_return_if_fail (sel != NULL);
-	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
-	g_return_if_fail (sel->mode == SP_GRADIENT_SELECTOR_MODE_RADIAL);
-
-	sp_gradient_position_set_radial_position (SP_GRADIENT_POSITION (sel->position), cx, cy, fx, fy, r);
-}
-
 SPGradient *
 sp_gradient_selector_get_vector (SPGradientSelector *sel)
 {
@@ -332,34 +275,6 @@ sp_gradient_selector_get_vector (SPGradientSelector *sel)
 
 	/* fixme: */
 	return SP_GRADIENT_VECTOR_SELECTOR (sel->vectors)->gr;
-}
-
-void
-sp_gradient_selector_get_lgradient_position_floatv (SPGradientSelector *gsel, gfloat *pos)
-{
-	g_return_if_fail (gsel != NULL);
-	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (gsel));
-	g_return_if_fail (gsel->mode == SP_GRADIENT_SELECTOR_MODE_LINEAR);
-
-	sp_gradient_position_get_linear_position_floatv (SP_GRADIENT_POSITION (gsel->position), pos);
-}
-
-void
-sp_gradient_selector_get_rgradient_position_floatv (SPGradientSelector *gsel, gfloat *pos)
-{
-	gfloat p[5];
-
-	g_return_if_fail (gsel != NULL);
-	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (gsel));
-	g_return_if_fail (gsel->mode == SP_GRADIENT_SELECTOR_MODE_RADIAL);
-
-	sp_gradient_position_get_radial_position_floatv (SP_GRADIENT_POSITION (gsel->position), p);
-
-	pos[0] = p[0];
-	pos[1] = p[1];
-	pos[2] = p[2];
-	pos[3] = p[3];
-	pos[4] = p[4];
 }
 
 static void
@@ -374,18 +289,6 @@ sp_gradient_selector_vector_set (SPGradientVectorSelector *gvs, SPGradient *gr, 
 		g_signal_emit (G_OBJECT (sel), signals[CHANGED], 0, gr);
 		blocked = FALSE;
 	}
-}
-
-static void
-sp_gradient_selector_position_dragged (SPGradientPosition *pos, SPGradientSelector *sel)
-{
-	g_signal_emit (G_OBJECT (sel), signals[DRAGGED], 0);
-}
-
-static void
-sp_gradient_selector_position_changed (SPGradientPosition *pos, SPGradientSelector *sel)
-{
-	g_signal_emit (G_OBJECT (sel), signals[CHANGED], 0);
 }
 
 static void
@@ -438,7 +341,6 @@ static void
 sp_gradient_selector_spread_activate (GtkWidget *widget, SPGradientSelector *sel)
 {
 	sel->gradientSpread = (SPGradientSpread)GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "gradientSpread"));
-	sp_gradient_position_set_spread (SP_GRADIENT_POSITION (sel->position), sel->gradientSpread);
 
 	g_signal_emit (G_OBJECT (sel), signals[CHANGED], 0);
 }
