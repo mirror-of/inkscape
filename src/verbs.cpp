@@ -401,7 +401,7 @@ static void sp_verb_action_object_perform ( SPAction *action, void *data,
     NR::Point const center(sp_selection_bbox(sel).midpoint());
 
     switch ((int) data) {
-        case SP_VERB_OBJECT_ROTATE_90:
+        case SP_VERB_OBJECT_ROTATE_90_CW:
             sp_selection_rotate_90 ();
             break;
         case SP_VERB_OBJECT_FLATTEN:
@@ -683,7 +683,7 @@ static SPActionEventVector action_dialog_vector =
 #define SP_VERB_IS_FILE(v) ((v >= SP_VERB_FILE_NEW) && (v <= SP_VERB_FILE_QUIT))
 #define SP_VERB_IS_EDIT(v) ((v >= SP_VERB_EDIT_UNDO) && (v <= SP_VERB_EDIT_DESELECT))
 #define SP_VERB_IS_SELECTION(v) ((v >= SP_VERB_SELECTION_TO_FRONT) && (v <= SP_VERB_SELECTION_BREAK_APART))
-#define SP_VERB_IS_OBJECT(v) ((v >= SP_VERB_OBJECT_ROTATE_90) && (v <= SP_VERB_OBJECT_FLIP_VERTICAL))
+#define SP_VERB_IS_OBJECT(v) ((v >= SP_VERB_OBJECT_ROTATE_90_CW) && (v <= SP_VERB_OBJECT_FLIP_VERTICAL))
 #define SP_VERB_IS_CONTEXT(v) ((v >= SP_VERB_CONTEXT_SELECT) && (v <= SP_VERB_CONTEXT_DROPPER))
 #if HAVE_GTK_WINDOW_FULLSCREEN
 #define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_FULLSCREEN))
@@ -814,7 +814,7 @@ static const SPVerbActionDef props[] = {
         N_("Break selected path to subpaths"), "selection_break"},
 
     /* Object */
-    {SP_VERB_OBJECT_ROTATE_90, "ObjectRotate90", N_("Rotate _90 deg CW"),
+    {SP_VERB_OBJECT_ROTATE_90_CW, "ObjectRotate90", N_("Rotate _90 deg CW"),
         N_("Rotate selection 90 degrees clockwise"), "object_rotate"},
     {SP_VERB_OBJECT_FLATTEN, "ObjectFlatten", N_("Remove _Transformations"),
         N_("Remove transformations from object"), "object_reset"},

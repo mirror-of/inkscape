@@ -461,7 +461,7 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
         SP_VERB_NONE,
         //		SP_VERB_OBJECT_FLATTEN,
-        SP_VERB_OBJECT_ROTATE_90,
+        SP_VERB_OBJECT_ROTATE_90_CW,
         SP_VERB_OBJECT_FLIP_HORIZONTAL,
         SP_VERB_OBJECT_FLIP_VERTICAL,
 
@@ -590,35 +590,41 @@ static gboolean window_policy_update(GtkWidget *widget,
 static void
 sp_ui_dialogs_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-        static const sp_verb_t dialog_verbs[] = {
-                SP_VERB_DIALOG_FILL_STROKE,
-                SP_VERB_DIALOG_TEXT,
-								//                SP_VERB_DIALOG_SIZE_POSITION,
-                SP_VERB_DIALOG_TRANSFORM,
-                SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                SP_VERB_DIALOG_ITEM,
-                SP_VERB_DIALOG_XML_EDITOR,
-								//                SP_VERB_DIALOG_DOCUMENT,
-                SP_VERB_DIALOG_NAMEDVIEW,
-                SP_VERB_DIALOG_TOOL_OPTIONS,
-								//                SP_VERB_DIALOG_TOOL_ATTRIBUTES,
-                SP_VERB_DIALOG_DISPLAY,
+    static const sp_verb_t dialog_verbs[] = {
+       SP_VERB_DIALOG_FILL_STROKE,
+       SP_VERB_DIALOG_TEXT,
+//                SP_VERB_DIALOG_SIZE_POSITION,
+       SP_VERB_DIALOG_TRANSFORM,
+       SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
+       SP_VERB_DIALOG_ITEM,
+       SP_VERB_DIALOG_XML_EDITOR,
+//                SP_VERB_DIALOG_DOCUMENT,
+       SP_VERB_DIALOG_NAMEDVIEW,
+       SP_VERB_DIALOG_TOOL_OPTIONS,
+//                SP_VERB_DIALOG_TOOL_ATTRIBUTES,
+       SP_VERB_DIALOG_DISPLAY,
 
-		   SP_VERB_NONE,
-		   SP_VERB_DIALOG_TOGGLE,
+       SP_VERB_NONE,
+       SP_VERB_DIALOG_TOGGLE,
 
-                SP_VERB_LAST
-        };
+       SP_VERB_LAST
+};
 
-	sp_ui_menu_append (menu, dialog_verbs, view);
+    sp_ui_menu_append (menu, dialog_verbs, view);
 
 #ifndef WIN32
-	GtkWidget *window_policy_check = gtk_check_menu_item_new_with_label(_("Autoraise Dialogs"));
-	gtk_widget_show(window_policy_check);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), window_policy_check);
+    GtkWidget *window_policy_check = 
+        gtk_check_menu_item_new_with_label(_("Autoraise Dialogs"));
 
-	g_signal_connect(G_OBJECT(window_policy_check), "toggled", (GCallback)window_policy_toggled, NULL);
-	g_signal_connect(G_OBJECT(window_policy_check), "expose_event", (GCallback)window_policy_update, NULL);
+    gtk_widget_show(window_policy_check);
+
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), window_policy_check);
+
+    g_signal_connect( G_OBJECT(window_policy_check), "toggled",
+                      (GCallback)window_policy_toggled, NULL );
+
+    g_signal_connect( G_OBJECT(window_policy_check), "expose_event",
+                      (GCallback)window_policy_update, NULL);
 #endif
 }
 
