@@ -295,13 +295,13 @@ sp_knot_init (SPKnot * knot)
 	knot->hx = knot->hy = 0.0;
 	knot->anchor = GTK_ANCHOR_CENTER;
 	knot->shape = SP_KNOT_SHAPE_SQUARE;
-	knot->mode = SP_KNOT_MODE_COLOR;
+	knot->mode = SP_KNOT_MODE_XOR;
 
-	knot->fill [SP_KNOT_STATE_NORMAL] = 0x000000ff;
+	knot->fill [SP_KNOT_STATE_NORMAL] = 0xffffff00;
 	knot->fill [SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
 	knot->fill [SP_KNOT_STATE_DRAGGING] = 0x0000ffff;
 
-	knot->stroke [SP_KNOT_STATE_NORMAL] = 0x000000ff;
+	knot->stroke [SP_KNOT_STATE_NORMAL] = 0xffffff77;
 	knot->stroke [SP_KNOT_STATE_MOUSEOVER] = 0x000000ff;
 	knot->stroke [SP_KNOT_STATE_DRAGGING] = 0x000000ff;
 
@@ -607,9 +607,9 @@ sp_knot_new (SPDesktop * desktop)
 		"anchor", GTK_ANCHOR_CENTER,
 		"size", 8.0,
 		"filled", TRUE,
-		"fill_color", 0x000000ff,
+		"fill_color", 0xffffff00,
 		"stroked", TRUE,
-		"stroke_color", 0x000000ff,
+		"stroke_color", 0xffffff77,
 		NULL);
 
 	gtk_signal_connect (GTK_OBJECT (knot->item), "event",

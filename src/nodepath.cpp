@@ -38,18 +38,18 @@
 
 /* fixme: Implement these via preferences */
 
-#define NODE_FILL 0xbfbfbf7f
+#define NODE_FILL 0xbfbfbfff
 #define NODE_STROKE 0x3f3f3f7f
-#define NODE_FILL_HI 0xff7f7f7f
-#define NODE_STROKE_HI 0xff3f3fbf
-#define NODE_FILL_SEL 0x7f7fff7f
-#define NODE_STROKE_SEL 0x3f3fffbf
-#define NODE_FILL_SEL_HI 0x3f3fffbf
-#define NODE_STROKE_SEL_HI 0x3f3fffff
-#define KNOT_FILL 0xbfbfbf7f
-#define KNOT_STROKE 0x3f3f3f7f
-#define KNOT_FILL_HI 0xff7f7f7f
-#define KNOT_STROKE_HI 0xff3f3fbf
+#define NODE_FILL_HI 0xff7f7fff
+#define NODE_STROKE_HI 0xff3f3f7f
+#define NODE_FILL_SEL 0x3333ffff
+#define NODE_STROKE_SEL 0x0000ff7f
+#define NODE_FILL_SEL_HI 0x3f3fffff
+#define NODE_STROKE_SEL_HI 0x3f3fff7f
+#define KNOT_FILL 0xffffffff
+#define KNOT_STROKE 0xffffff00
+#define KNOT_FILL_HI 0xff7f7fff
+#define KNOT_STROKE_HI 0xff3f3f00
 
 GMemChunk * nodechunk = NULL;
 
