@@ -291,6 +291,30 @@ static SPStyleEnum const enum_display[] = {
     {NULL, -1}
 };
 
+static SPStyleEnum const enum_shape_rendering[] = {
+    {"auto", 0},
+    {"optimizeSpeed", 0},
+    {"crispEdges", 0},
+    {"geometricPrecision", 0},
+    {NULL, -1}
+};
+
+static SPStyleEnum const enum_color_rendering[] = {
+    {"auto", 0},
+    {"optimizeSpeed", 0},
+    {"optimizeQuality", 0},
+    {NULL, -1}
+};
+
+static SPStyleEnum const *const enum_image_rendering = enum_color_rendering;
+
+static SPStyleEnum const enum_text_rendering[] = {
+    {"auto", 0},
+    {"optimizeSpeed", 0},
+    {"optimizeLegibility", 0},
+    {"geometricPrecision", 0},
+    {NULL, -1}
+};
 
 /**
  *
@@ -753,9 +777,12 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
     case SP_PROP_COLOR_PROFILE:
         g_warning ("Unimplemented style property SP_PROP_COLOR_PROFILE: value: %s", val);
         break;
-    case SP_PROP_COLOR_RENDERING:
-        g_warning ("Unimplemented style property SP_PROP_COLOR_RENDERING: value: %s", val);
+    case SP_PROP_COLOR_RENDERING: {
+        /* Ignore the hint. */
+        SPIEnum dummy;
+        SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_color_rendering, true);
         break;
+    }
     case SP_PROP_FILL:
         if (!style->fill.set) {
             sp_style_read_ipaint (&style->fill, val, style, (style->object) ? SP_OBJECT_DOCUMENT (style->object) : NULL);
@@ -771,9 +798,12 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
             sp_style_read_ienum(&style->fill_rule, val, enum_fill_rule, true);
         }
         break;
-    case SP_PROP_IMAGE_RENDERING:
-        g_warning ("Unimplemented style property SP_PROP_IMAGE_RENDERING: value: %s", val);
+    case SP_PROP_IMAGE_RENDERING: {
+        /* Ignore the hint. */
+        SPIEnum dummy;
+        SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_image_rendering, true);
         break;
+    }
     case SP_PROP_MARKER:
         /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
         /* style->marker[SP_MARKER_LOC] = g_quark_from_string(val); */
@@ -817,9 +847,13 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         }
         break;
 
-    case SP_PROP_SHAPE_RENDERING:
-        g_warning ("Unimplemented style property SP_PROP_SHAPE_RENDERING: value: %s", val);
+    case SP_PROP_SHAPE_RENDERING: {
+        /* Ignore the hint. */
+        SPIEnum dummy;
+        SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_shape_rendering, true);
         break;
+    }
+
     case SP_PROP_STROKE:
         if (!style->stroke.set) {
             sp_style_read_ipaint (&style->stroke, val, style, (style->object) ? SP_OBJECT_DOCUMENT (style->object) : NULL);
@@ -865,9 +899,12 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         break;
                
     /* Text */
-    case SP_PROP_TEXT_RENDERING:
-        g_warning ("Unimplemented style property SP_PROP_TEXT_RENDERING: value: %s", val);
+    case SP_PROP_TEXT_RENDERING: {
+        /* Ignore the hint. */
+        SPIEnum dummy;
+        SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_text_rendering, true);
         break;
+    }
     case SP_PROP_ALIGNMENT_BASELINE:
         g_warning ("Unimplemented style property SP_PROP_ALIGNMENT_BASELINE: value: %s", val);
         break;
