@@ -61,6 +61,7 @@ src/display/sp-ctrlline.cpp
 src/display/testnr.cpp
 src/document-undo.cpp
 src/document.cpp
+src/draw-anchor.cpp
 src/draw-context.cpp
 src/dropper-context.cpp
 src/dyna-draw-context.cpp
@@ -166,6 +167,8 @@ src/nodepath.cpp
 src/object-edit.cpp
 src/object-ui.cpp
 src/path-chemistry.cpp
+src/pen-context.cpp
+src/pencil-context.cpp
 src/prefix.cpp
 src/prefs-utils.cpp
 src/print.cpp
