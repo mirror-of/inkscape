@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    UTEST_TEST("compute_max_error") {
+    UTEST_TEST("compute_max_error_ratio") {
         Point d[G_N_ELEMENTS(err_tst)];
         double u[G_N_ELEMENTS(err_tst)];
         for (unsigned i = 0; i < G_N_ELEMENTS(err_tst); ++i) {
@@ -211,7 +211,8 @@ int main(int argc, char *argv[]) {
         g_assert( G_N_ELEMENTS(u) == G_N_ELEMENTS(d) );
         unsigned max_ix = ~0u;
 
-        UTEST_ASSERT( err_tst[4].err == compute_max_error(d, u, G_N_ELEMENTS(d), c, &max_ix) );
+        double const err_ratio = compute_max_error_ratio(d, u, G_N_ELEMENTS(d), c, 1.0, &max_ix);
+        UTEST_ASSERT( sqrt(err_tst[4].err) == err_ratio );
         UTEST_ASSERT( max_ix == 4 );
     }
 

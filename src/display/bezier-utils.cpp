@@ -52,7 +52,9 @@ static NR::Point bezier_pt(unsigned degree, NR::Point const V[], gdouble t);
 static NR::Point sp_darray_center_tangent(NR::Point const d[], unsigned center, unsigned length);
 static unsigned copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len, NR::Point dest[]);
 static void chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned len);
-static double compute_max_error(NR::Point const d[], double const u[], unsigned len, BezierCurve const bezCurve, unsigned *splitPoint);
+static double compute_max_error_ratio(NR::Point const d[], double const u[], unsigned len,
+                                      BezierCurve const bezCurve, double tolerance,
+                                      unsigned *splitPoint);
 static double compute_error(NR::Point const &d, double const u, BezierCurve const bezCurve);
 
 
@@ -210,21 +212,22 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
         reparameterize(data, len, u, bezier);
 
         /* Find max deviation of points to fitted curve. */
-        double maxError = compute_max_error(data, u, len, bezier, &splitPoint);
+        double const tolerance = sqrt(error + 1e-9);
+        double maxErrorRatio = compute_max_error_ratio(data, u, len, bezier, tolerance, &splitPoint);
 
-        if ( maxError <= error ) {
+        if ( maxErrorRatio <= 1.0 ) {
             BEZIER_ASSERT(bezier);
             g_free(u);
             return 1;
         }
 
         /* If error not too large, then try some reparameterization and iteration. */
-        if ( maxError <= error * 9.0 ) {
+        if ( maxErrorRatio <= 3.0 ) {
             for (int i = 0; i < maxIterations; i++) {
                 generate_bezier(bezier, data, u, len, tHat1, tHat2);
                 reparameterize(data, len, u, bezier);
-                maxError = compute_max_error(data, u, len, bezier, &splitPoint);
-                if ( maxError <= error ) {
+                maxErrorRatio = compute_max_error_ratio(data, u, len, bezier, tolerance, &splitPoint);
+                if ( maxErrorRatio <= 1.0 ) {
                     BEZIER_ASSERT(bezier);
                     g_free(u);
                     return 1;
@@ -720,15 +723,18 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
 
 
 /**
- *  Find the maximum squared distance of digitized points to fitted curve, and (if this maximum
- *  error is non-zero) set \a *splitPoint to the corresponding index.
+ * Find the maximum squared distance of digitized points to fitted curve, and (if this maximum
+ * error is non-zero) set \a *splitPoint to the corresponding index.
  *
- *  \pre 2 \<= len.
- *  \post (ret == 0.0) || ((0 \< *splitPoint) \&\& (*splitPoint \< len - 1)).
+ * \pre 2 \<= len.
+ * \pre u[0] == 0.
+ * \pre u[len - 1] == 1.0.
+ * \post ((ret == 0.0)
+ *        || ((0 \< *splitPoint) \&\& (*splitPoint \< len - 1))).
  */
 static gdouble
-compute_max_error(NR::Point const d[], double const u[], unsigned const len, BezierCurve const bezCurve,
-                  unsigned *splitPoint)
+compute_max_error_ratio(NR::Point const d[], double const u[], unsigned const len,
+                        BezierCurve const bezCurve, double const tolerance, unsigned *splitPoint)
 {
     g_assert( 2 <= len );
     unsigned const last = len - 1;
@@ -753,7 +759,7 @@ compute_max_error(NR::Point const d[], double const u[], unsigned const len, Bez
     g_assert( maxDistsq == 0.0
               || ( ( 0 < *splitPoint )
                    && ( *splitPoint < last ) ) );
-    return maxDistsq;
+    return sqrt(maxDistsq) / tolerance;
 }
 
 static double compute_error(NR::Point const &d, double const u, BezierCurve const bezCurve) {
@@ -766,9 +772,9 @@ static double compute_error(NR::Point const &d, double const u, BezierCurve cons
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
