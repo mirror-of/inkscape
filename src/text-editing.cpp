@@ -1252,6 +1252,7 @@ static bool redundant_double_nesting_processor(SPObject **item, SPObject *child,
         insert_after_repr = move_repr;      // I think this will stay valid long enough. It's garbage collected these days.
     }
     child->deleteObject();
+    return true;
 }
 
 /**    redundant double nesting: <font b><font a><font b>abc</font>def</font>ghi</font>
@@ -1272,11 +1273,58 @@ static bool tidy_operator_redundant_double_nesting(SPObject **item)
     return false;
 }
 
+/** helper for tidy_operator_redundant_semi_nesting(). Checks a few things,
+then dumps the full style string for \a child, and predicts the full style
+string if \a child were a child of the parent of *item and compares the
+two. */
+static bool redundant_semi_nesting_processor(SPObject **item, SPObject *child, bool prepend)
+{
+    if (SP_IS_STRING(child)) return false;
+    if (is_line_break_object(child)) return false;
+    TextTagAttributes *attrs = attributes_for_object(child);
+    if (attrs && attrs->anyAttributesSet()) return false;
+    attrs = attributes_for_object(*item);
+    if (attrs && attrs->anyAttributesSet()) return false;
+    gchar *child_style_all = sp_style_write_string(SP_OBJECT_STYLE(child), SP_STYLE_FLAG_ALWAYS);
+    gchar const *child_style = SP_OBJECT_REPR(child)->attribute("style");
+    SPStyle *style_skipping_item = sp_style_new();
+    sp_style_merge_from_style_string(style_skipping_item, child_style);
+    sp_style_merge_from_parent(style_skipping_item, SP_OBJECT_STYLE(SP_OBJECT_PARENT(*item)));
+    gchar *style_skipping_item_all = sp_style_write_string(style_skipping_item, SP_STYLE_FLAG_ALWAYS);
+    sp_style_unref(style_skipping_item);
+    bool styles_differ = strcmp(style_skipping_item_all, child_style_all) != 0;
+    g_free(style_skipping_item_all);
+    g_free(child_style_all);
+    if (styles_differ) return false;
+
+    Inkscape::XML::Node *new_span = sp_repr_new(SP_OBJECT_REPR(*item)->name());
+    if (prepend)
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(new_span, SP_OBJECT_REPR(SP_OBJECT_PREV(*item)));
+    else
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(new_span, SP_OBJECT_REPR(*item));
+    new_span->setAttribute("style", SP_OBJECT_REPR(child)->attribute("style"));
+    move_child_nodes(SP_OBJECT_REPR(child), new_span);
+    sp_repr_unref(new_span);
+    child->deleteObject();
+    return true;
+}
+
+/**    redundant semi-nesting: <font a><font b>abc</font>def</font>
+                                -> <font b>abc</font><font>def</font>   */
+static bool tidy_operator_redundant_semi_nesting(SPObject **item)
+{
+    if (!(*item)->hasChildren()) return false;
+    if ((*item)->firstChild() == (*item)->lastChild()) return false;     // this is redundant nesting, done above
+    if (redundant_semi_nesting_processor(item, (*item)->firstChild(), true))
+        return true;
+    if (redundant_semi_nesting_processor(item, (*item)->lastChild(), false))
+        return true;
+    return false;
+}
+
 /* possible tidy operators that are not yet implemented, either because
 they are difficult, occur infrequently, or because I'm not sure that the
 output is tidier in all cases:
-    redundant semi-nesting: <font a><font b>abc</font>def</font>
-                             -> <font b>abc</font><font>def</font>
     style inversion: <font a>abc<font b>def<font a>ghi</font>jkl</font>mno</font>
                       -> <font a>abc<font b>def</font>ghi<font b>jkl</font>mno</font>
     mistaken precedence: <font a,size 1>abc</font><size 1>def</size>
@@ -1289,7 +1337,12 @@ every child. Returns true if any changes were made to the tree.
 All the tidy operators return true if they made changes, and alter their
 parameter to point to the next object that should be processed, or NULL.
 They must not significantly alter (ie delete) any ancestor elements of the
-one they are passed. */
+one they are passed.
+
+It may be that some of the later tidy operators that I wrote are actually
+general cases of the earlier operators, and hence the special-case-only
+versions can be removed. I haven't analysed my work in detail to figure
+out if this is so. */
 static bool tidy_xml_tree_recursively(SPObject *root)
 {
     static bool (* const tidy_operators[])(SPObject**) = {
@@ -1297,7 +1350,8 @@ static bool tidy_xml_tree_recursively(SPObject *root)
         tidy_operator_inexplicable_spans,
         tidy_operator_repeated_spans,
         tidy_operator_excessive_nesting,
-        tidy_operator_redundant_double_nesting
+        tidy_operator_redundant_double_nesting,
+        tidy_operator_redundant_semi_nesting
     };
     bool changes = false;
 
