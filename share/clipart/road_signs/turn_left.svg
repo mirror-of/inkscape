@@ -8,7 +8,7 @@
    inkscape:version="0.37cvs040123.1035"
    width="210mm"
    height="297mm"
-   sodipodi:docname="ahead_only.svg"
+   sodipodi:docname="turn_left.svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -16,7 +16,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   sodipodi:docbase=".">
+   sodipodi:docbase="C:\tmp\svg\signs\svg">
   <defs
      id="defs3">
     <linearGradient
@@ -56,33 +56,8 @@
      inkscape:pageopacity="0.0"
      inkscape:window-x="-4"
      inkscape:window-y="-4" />
-  <path
-     sodipodi:type="arc"
-     style="font-size:12;fill:#ffffff;fill-rule:evenodd;stroke:#0075bd;stroke-width:5.66193;"
-     id="path586"
-     d="M 827.751114 586.662231 A 248.325333 248.325333 0 1 0 331.100449,586.662231 A 248.325 248.325 0 1 0 827.751 586.662 L 579.425781 586.662231 z"
-     sodipodi:cx="579.425781"
-     sodipodi:cy="586.662231"
-     sodipodi:rx="248.325333"
-     sodipodi:ry="248.325333"
-     transform="matrix(1.324637,0.000000,0.000000,1.324637,-390.8194,-391.7596)" />
-  <path
-     sodipodi:type="arc"
-     style="font-size:12;fill:#0075bd;fill-rule:evenodd;stroke:#0075bd;stroke-width:5.66193;"
-     id="path591"
-     d="M 827.751114 586.662231 A 248.325333 248.325333 0 1 0 331.100449,586.662231 A 248.325 248.325 0 1 0 827.751 586.662 L 579.425781 586.662231 z"
-     sodipodi:cx="579.425781"
-     sodipodi:cy="586.662231"
-     sodipodi:rx="248.325333"
-     sodipodi:ry="248.325333"
-     transform="matrix(1.255072,0.000000,0.000000,1.255072,-350.5116,-350.9484)" />
-  <path
-     style="font-size:12;fill:#ffffff;fill-rule:evenodd;stroke-width:3.57779pt;"
-     d="M 335.61116 634.00323 L 335.61117 261.49935 L 252.08541 345.96358 L 252.08542 221.41234 L 376.70943 95.900257 L 501.33346 221.41234 L 501.33345 345.96358 L 417.80769 261.49935 L 417.80769 634.00323 L 335.61116 634.00323 z "
-     id="path707"
-     sodipodi:nodetypes="cccccccccc" />
   <rdf:RDF
-     id="RDF586">
+     id="RDF625">
     <ns:Work
        rdf:about="">
       <dc:title>SVG Road Signs</dc:title>
@@ -106,4 +81,33 @@
          rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
     </ns:License>
   </rdf:RDF>
+  <g
+     id="g643"
+     transform="matrix(0.707107,0.707107,-0.707107,0.707107,382.9259,-153.4632)">
+    <path
+       sodipodi:type="arc"
+       style="font-size:12;fill:#ffffff;fill-rule:evenodd;stroke:#0075bd;stroke-width:5.66193;"
+       id="path586"
+       d="M 827.751114 586.662231 A 248.325333 248.325333 0 1 0 331.100449,586.662231 A 248.325 248.325 0 1 0 827.751 586.662 L 579.425781 586.662231 z"
+       sodipodi:cx="579.425781"
+       sodipodi:cy="586.662231"
+       sodipodi:rx="248.325333"
+       sodipodi:ry="248.325333"
+       transform="matrix(1.324637,0.000000,0.000000,1.324637,-390.8194,-391.6136)" />
+    <path
+       sodipodi:type="arc"
+       style="font-size:12;fill:#0075bd;fill-rule:evenodd;stroke:#0075bd;stroke-width:5.66193;"
+       id="path591"
+       d="M 827.751114 586.662231 A 248.325333 248.325333 0 1 0 331.100449,586.662231 A 248.325 248.325 0 1 0 827.751 586.662 L 579.425781 586.662231 z"
+       sodipodi:cx="579.425781"
+       sodipodi:cy="586.662231"
+       sodipodi:rx="248.325333"
+       sodipodi:ry="248.325333"
+       transform="matrix(1.255072,0.000000,0.000000,1.255072,-350.5117,-350.8025)" />
+    <path
+       style="font-size:12;fill:#ffffff;fill-rule:evenodd;stroke-width:3.57779pt;"
+       d="M 581.488 238.84405 L 318.08797 502.24406 L 436.87483 501.58046 L 348.8038 589.65148 L 171.93087 590.27944 L 172.55882 413.4065 L 260.62985 325.33548 L 259.96625 444.12234 L 523.36627 180.72232 L 581.488 238.84405 z "
+       id="path707"
+       sodipodi:nodetypes="cccccccccc" />
+  </g>
 </svg>
