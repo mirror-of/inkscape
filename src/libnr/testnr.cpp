@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <time.h>
+#include <glib.h>
 
 #include "nr-types.h"
 #include "nr-pixblock.h"
@@ -25,22 +26,12 @@
 
 NRPathElement toru[10];
 
-static NR::Coord
+static double
 get_time (void)
 {
-#if defined (_WIN32) || defined (__WIN32__)
-
-    DWORD millis;
-    millis = GetTickCount ();
-    return ((NR::Coord)millis)/1000.0;
-
-#else
-
-    struct timeval tv;
-    gettimeofday (&tv, NULL);
+    GTimeVal tv;
+    g_get_current_time (&tv);
     return tv.tv_sec + 1e-6 * tv.tv_usec;
-
-#endif
 }
 
 static unsigned int
@@ -52,7 +43,7 @@ rand_byte (void)
 int
 main (int argc, const char **argv)
 {
-	NR::Coord start, end;
+	double start, end;
 	NRPixBlock d, m[16];
 	int count, i;
 
