@@ -21,7 +21,119 @@
 
 
 /*#########################################################################
-### C A N N Y
+### G A U S S I A N  (smoothing)
+#########################################################################*/
+
+static int gaussMatrix[] =
+{
+     2,  4,  5,  4, 2,
+     4,  9, 12,  9, 4,
+     5, 12, 15, 12, 5,
+     4,  9, 12,  9, 4,
+     2,  4,  5,  4, 2
+};
+
+GrayMap *grayMapGaussian(GrayMap *me)
+{
+    int width  = me->width;
+    int height = me->height;
+    int firstX = 2;
+    int lastX  = width-3;
+    int firstY = 2;
+    int lastY  = height-3;
+
+    GrayMap *newGm = GrayMapCreate(width, height);
+    if (!newGm)
+        return NULL;
+
+    for (int y = 0 ; y<height ; y++)
+        {
+        for (int x = 0 ; x<width ; x++)
+            {
+	    /* image boundaries */
+            if (x<firstX || x>lastX || y<firstY || y>lastY)
+                {
+                newGm->setPixel(newGm, x, y, me->getPixel(me, x, y));
+                continue;
+                }
+
+            /* all other pixels */
+            int gaussIndex = 0;
+            unsigned long sum = 0;
+            for (int i= y-2 ; i<=y+2 ; i++)
+                {
+                for (int j= x-2; j<=x+2 ; j++)
+                    {
+                    int weight = gaussMatrix[gaussIndex++];
+                    sum += me->getPixel(me, j, i) * weight;
+		    }
+	        }
+            sum /= 115;
+	    newGm->setPixel(newGm, x, y, sum);
+	    }
+	}
+
+    return newGm;
+}
+
+
+
+
+RgbMap *rgbMapGaussian(RgbMap *me)
+{
+    int width  = me->width;
+    int height = me->height;
+    int firstX = 2;
+    int lastX  = width-3;
+    int firstY = 2;
+    int lastY  = height-3;
+
+    RgbMap *newGm = RgbMapCreate(width, height);
+    if (!newGm)
+        return NULL;
+
+    for (int y = 0 ; y<height ; y++)
+        {
+        for (int x = 0 ; x<width ; x++)
+            {
+	    /* image boundaries */
+            if (x<firstX || x>lastX || y<firstY || y>lastY)
+                {
+                newGm->setPixelRGB(newGm, x, y, me->getPixel(me, x, y));
+                continue;
+                }
+
+            /* all other pixels */
+            int gaussIndex = 0;
+            int sumR = 0;
+            int sumG = 0;
+            int sumB = 0;
+            for (int i= y-2 ; i<=y+2 ; i++)
+                {
+                for (int j= x-2; j<=x+2 ; j++)
+                    {
+                    int weight = gaussMatrix[gaussIndex++];
+                    RGB rgb = me->getPixel(me, j, i);
+                    sumR += weight * (int)rgb.r;
+                    sumG += weight * (int)rgb.g;
+                    sumB += weight * (int)rgb.b;
+		    }
+	        }
+            RGB rout;
+            rout.r = ( sumR / 115 ) & 0xff;
+            rout.g = ( sumG / 115 ) & 0xff;
+            rout.b = ( sumB / 115 ) & 0xff;
+	    newGm->setPixelRGB(newGm, x, y, rout);
+	    }
+	}
+
+    return newGm;
+
+}
+
+
+/*#########################################################################
+### C A N N Y    E D G E    D E T E C T I O N
 #########################################################################*/
 
 
@@ -202,7 +314,7 @@ grayMapCanny(GrayMap *gm, double lowThreshold, double highThreshold)
 {
     if (!gm)
         return NULL;
-    GrayMap *gaussGm = gm->getGaussian(gm);
+    GrayMap *gaussGm = grayMapGaussian(gm);
     if (!gaussGm)
         return NULL;
     /*gaussGm->writePPM(gaussGm, "gauss.ppm");*/

@@ -34,6 +34,12 @@
 extern "C" {
 #endif
 
+
+GrayMap *grayMapGaussian(GrayMap *me);
+
+RgbMap *rgbMapGaussian(RgbMap *me);
+
+
 GrayMap *grayMapCanny(GrayMap *gm, 
              double lowThreshold, double highThreshold);
 

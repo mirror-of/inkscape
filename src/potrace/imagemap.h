@@ -40,11 +40,6 @@ struct GrayMap_def
     /**
      *
      */
-    GrayMap * (*getGaussian)(GrayMap *me);
-
-    /**
-     *
-     */
     int (*writePPM)(GrayMap *me, char *fileName);
 
 
@@ -130,11 +125,6 @@ struct RgbMap_def
      *
      */
     RGB (*getPixel)(RgbMap *me, int x, int y);
-
-    /**
-     *
-     */
-    RgbMap * (*getGaussian)(RgbMap *me);
 
     /**
      *
