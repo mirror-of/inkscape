@@ -38,6 +38,8 @@
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "sp-rect.h"
+#include "sp-use.h"
+#include "sp-text.h"
 #include "sp-item.h"
 #include "sp-item-rm-unsatisfied-cns.h"
 #include "prefs-utils.h"
@@ -814,6 +816,10 @@ sp_item_adjust_rects_recursive(SPItem *item, NR::Matrix advertized_transform)
 void
 sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, NR::Matrix t_ancestors, bool is_pattern)
 {
+// A clone must not touch the style (it's that of its parent!) and has no children, so quit now
+    if (item && SP_IS_USE(item))
+        return;
+
 // _Before_ full pattern/gradient transform: t_paint * t_item * t_ancestors
 // _After_ full pattern/gradient transform: t_paint_new * t_item * t_ancestors * advertised_transform
 // By equating these two expressions we get t_paint_new = t_paint * paint_delta, where:
@@ -824,6 +830,10 @@ sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, N
         sp_shape_adjust_pattern (item, paint_delta);
     else 
         sp_shape_adjust_gradient (item, paint_delta);
+
+// Within text, we do not fork gradients, and so must not compensate to avoid double compensation
+    if (item && SP_IS_TEXT(item))
+        return;
 
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o)) {
