@@ -822,7 +822,8 @@ sp_desktop_widget_destroy (GtkObject *object)
 
 /*
  * set the title in the desktop-window (if desktop has an own window)
- * the title has form sodipodi: file name: namedview name: desktop number
+ * the title has form file name: desktop number - Inkscape
+ * desktop number is only shown if it's 2 or higher
  * the file name is read from the respective document
  */
 static void
@@ -839,7 +840,11 @@ sp_desktop_widget_set_title (SPDesktopWidget *dtw)
 		if (SPShowFullFielName) fname = uri;
 		else fname = g_basename (uri);
 		name = g_string_new ("");
-		g_string_sprintf (name, _("Inkscape: %s: %s: %d"), fname, nv_name, dtw->desktop->number);
+		if (dtw->desktop->number > 1) {
+			g_string_sprintf (name, _("%s: %d - Inkscape"), fname, dtw->desktop->number);
+		} else {
+			g_string_sprintf (name, _("%s - Inkscape"), fname);
+		}
 		gtk_window_set_title (window, name->str);
 		g_string_free (name, TRUE);
 	}
