@@ -628,7 +628,10 @@ sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
 } // end of sp_fill_style_widget_paint_mode_changed()
 
 
-
+/**
+This is called repeatedly while you are dragging a color slider or a gradient node. Therefore it
+must not update repr (for efficiency).
+ */
 static void
 sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 {
@@ -707,7 +710,13 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 } // end of sp_fill_style_widget_paint_dragged()
 
 
-
+/**
+This is called (at least) when: 
+1  paint selector mode is switched (e.g. flat color -> gradient)
+2  you finished dragging a gradient node and released mouse
+3  you changed a gradient selector parameter (e.g. spread)
+Must update repr.
+ */
 static void
 sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                                      SPWidget *spw )
@@ -835,16 +844,14 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                         sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
                     }
                 } else {
-
+                     // We have changed from another gradient type, or modified spread/units within this gradient type
                     vector = sp_gradient_ensure_vector_normalized (vector);
                     for (const GSList *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
 
-                        SPGradient *lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
-                        sp_paint_selector_write_lineargradient ( psel,
-                                SP_LINEARGRADIENT (lg), SP_ITEM (i->data));
-                        SP_OBJECT(lg)->updateRepr();
+                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
+                        sp_gradient_selector_attrs_to_gradient (gr, psel);
                     }
                 }
 
@@ -880,11 +887,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     for (const GSList *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
-
-                        SPGradient *rg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
-                        sp_paint_selector_write_radialgradient (psel,
-                                SP_RADIALGRADIENT (rg), SP_ITEM (i->data));
-                        SP_OBJECT(rg)->updateRepr();
+                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
+                        sp_gradient_selector_attrs_to_gradient (gr, psel);
                     }
                 } 
 

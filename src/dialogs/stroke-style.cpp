@@ -624,7 +624,6 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 
             if (items) {
                 SPGradient *vector = sp_paint_selector_get_gradient_vector(psel);
-                SPGradient *lg;
 
                 if (!vector) {
                     /* No vector in paint selector should mean that we just
@@ -633,15 +632,13 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
                         vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), false);
-                        lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
-                        SP_OBJECT(lg)->updateRepr();
+                        sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
                     }
                 } else {
                     vector = sp_gradient_ensure_vector_normalized(vector);
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
-                        sp_paint_selector_write_lineargradient(psel, SP_LINEARGRADIENT(lg), SP_ITEM(i->data));
-                        SP_OBJECT(lg)->updateRepr();
+                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
+                        sp_gradient_selector_attrs_to_gradient (gr, psel);
                     }
                 }
 
@@ -664,11 +661,8 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                 } else {
                     vector = sp_gradient_ensure_vector_normalized(vector);
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        SPGradient *lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
-                        sp_paint_selector_write_radialgradient(psel,
-                                                               SP_RADIALGRADIENT(lg),
-                                                               SP_ITEM(i->data));
-                        SP_OBJECT(lg)->updateRepr();
+                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
+                        sp_gradient_selector_attrs_to_gradient (gr, psel);
                     }
                 }
                 sp_document_done(SP_WIDGET_DOCUMENT(spw));
