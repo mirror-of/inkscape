@@ -144,13 +144,18 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 
     //multiple path scanning
     Gtk::Frame            potraceMultiScanFrame;
-    Gtk::HBox             potraceMultiScanBox;
     Gtk::VBox             potraceMultiScanVBox;
+
+    Gtk::HBox             potraceMultiScanUpperBox;
     Gtk::RadioButton      potraceMultiScanBrightnessRadioButton;
     Gtk::RadioButton      potraceMultiScanColorRadioButton;
     Gtk::RadioButton      potraceMultiScanMonoRadioButton;
     Gtk::Label            potraceMultiScanNrColorLabel;
     Gtk::SpinButton       potraceMultiScanNrColorSpinner;
+
+    Gtk::HBox             potraceMultiScanLowerBox;
+    Gtk::CheckButton      potraceMultiScanStackButton;
+
 
     //preview
     Gtk::Frame            potracePreviewFrame;
@@ -226,6 +231,7 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     //##### Get multiple-scan settings
     int multiScanNrColors = potraceMultiScanNrColorSpinner.get_value_as_int();
     pte.setMultiScanNrColors(multiScanNrColors);
+    bool do_i_stack = potraceMultiScanStackButton.get_active();
 
     //##### Get intermediate bitmap image
     GdkPixbuf *pixbuf = tracer.getSelectedImage();
@@ -454,29 +460,37 @@ TraceDialogImpl::TraceDialogImpl()
     potraceQuantFrame.add(potraceQuantVBox);
     potraceBox.pack_start(potraceQuantFrame, false, false, 0);
   
-    /*#### quantization for multiple scanning####*/
+    /*#### Multiple scanning####*/
+    //----Upper hbox
     potraceMultiScanBrightnessRadioButton.set_label(_("Brightness"));
     potraceMultiScanBrightnessRadioButton.set_group(potraceGroup);
-    potraceMultiScanBox.pack_start(potraceMultiScanBrightnessRadioButton, false, false, MARGIN);
+    potraceMultiScanUpperBox.pack_start(potraceMultiScanBrightnessRadioButton, false, false, MARGIN);
 
     potraceMultiScanColorRadioButton.set_label(_("Color"));
     potraceMultiScanColorRadioButton.set_group(potraceGroup);
-    potraceMultiScanBox.pack_start(potraceMultiScanColorRadioButton, false, false, MARGIN);
+    potraceMultiScanUpperBox.pack_start(potraceMultiScanColorRadioButton, false, false, MARGIN);
 
     potraceMultiScanMonoRadioButton.set_label(_("Monochrome"));
     potraceMultiScanMonoRadioButton.set_group(potraceGroup);
-    potraceMultiScanBox.pack_start(potraceMultiScanMonoRadioButton, false, false, MARGIN);
+    potraceMultiScanUpperBox.pack_start(potraceMultiScanMonoRadioButton, false, false, MARGIN);
 
     potraceMultiScanNrColorSpinner.set_digits(2);
     potraceMultiScanNrColorSpinner.set_increments(1.0, 4.0);
     potraceMultiScanNrColorSpinner.set_range(2.0, 64.0);
     potraceMultiScanNrColorSpinner.set_value(8.0);
-    potraceMultiScanBox.pack_end(potraceMultiScanNrColorSpinner, false, false, MARGIN);
+    potraceMultiScanUpperBox.pack_end(potraceMultiScanNrColorSpinner, false, false, MARGIN);
 
     potraceMultiScanNrColorLabel.set_label(_("Colors:"));
-    potraceMultiScanBox.pack_end(potraceMultiScanNrColorLabel, false, false, MARGIN);
+    potraceMultiScanUpperBox.pack_end(potraceMultiScanNrColorLabel, false, false, MARGIN);
 
-    potraceMultiScanVBox.pack_start(potraceMultiScanBox, false, false, MARGIN);
+    potraceMultiScanVBox.pack_start(potraceMultiScanUpperBox, false, false, MARGIN);
+
+    //---Lower hbox
+    potraceMultiScanStackButton.set_label(_("Stack"));
+    potraceMultiScanStackButton.set_active(false);
+    potraceMultiScanLowerBox.pack_end(potraceMultiScanStackButton, false, false, MARGIN);
+
+    potraceMultiScanVBox.pack_start(potraceMultiScanLowerBox, false, false, MARGIN);
 
     potraceMultiScanFrame.set_label(_("Multiple Scanning"));
     //potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
