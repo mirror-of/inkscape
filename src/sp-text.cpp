@@ -2868,15 +2868,12 @@ static void sp_text_snappoints(SPItem const *item, SnapPointsIter p)
  * Transform x, y, set x, y, clear translation
  */
 static NR::Matrix
-sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
+sp_text_set_transform(SPItem *item, NR::Matrix const &xform)
 {
-    SPText *text = SP_TEXT (item);
+    SPText *text = SP_TEXT(item);
 
-    NR::Matrix i2p(xform);
-    // translate?
-    i2p[4] = 0.0;
-    i2p[5] = 0.0;
-    NR::Matrix p2i=i2p.inverse();
+    NR::Matrix const i2p(NR::transform(xform));
+    NR::Matrix const p2i(i2p.inverse());
 
     NR::Point pos=NR::Point(text->ly.x.computed, text->ly.y.computed) * xform * p2i;
     text->ly.x = pos[NR::X];
