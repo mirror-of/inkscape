@@ -1,3 +1,13 @@
+2004-04-03  Ted Gould <ted@gould.cx>
+
+	* src/file.cpp, src/main.cpp, src/extension/extension.cpp,
+      src/extension/extension.h, src/extension/system.cpp,
+      src/extension/internal/svg.cpp:
+	Fixing the output_extension flag to not be saved in a file, but also
+	to be able to be specified by the input module.  Also, this fixes
+	the commandline processing of files to make them use the extension
+	system.
+
 2004-04-02  Ted Gould <ted@gould.cx>
 
 	* src/file.cpp, src/extension/db.cpp, src/extension/internal/svg.cpp:

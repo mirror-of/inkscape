@@ -627,6 +627,8 @@ Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Exten
 
     }
 
+	output_extension = NULL;
+
     return;
 }
 
@@ -636,13 +638,24 @@ Input::~Input (void)
     g_free(extension);
     g_free(filetypename);
     g_free(filetypetooltip);
+	g_free(output_extension);
     return;
 }
 
 SPDocument *
 Input::open (const gchar *uri)
 {
-    return imp->open(this, uri);
+	SPDocument * doc;
+	SPRepr * repr;
+
+    doc = imp->open(this, uri);
+
+	repr = sp_document_repr_root(doc);
+	sp_document_set_undo_sensitive (doc, FALSE);
+	sp_repr_set_attr(repr, "inkscape:output_extension", output_extension);
+	sp_document_set_undo_sensitive (doc, TRUE);
+
+	return doc;
 }
 
 gchar *
@@ -769,7 +782,18 @@ Output::prefs (void)
 void
 Output::save (SPDocument * doc, const gchar * uri)
 {
-    return imp->save(this, doc, uri);
+	SPRepr * repr;
+	repr = sp_document_repr_root(doc);
+
+	sp_document_set_undo_sensitive (doc, FALSE);
+	sp_repr_set_attr(repr, "inkscape:output_extension", NULL);
+	sp_document_set_undo_sensitive (doc, TRUE);
+
+    imp->save(this, doc, uri);
+
+	sp_document_set_undo_sensitive (doc, FALSE);
+	sp_repr_set_attr(repr, "inkscape:output_extension", get_id());
+	sp_document_set_undo_sensitive (doc, TRUE);
 }
 
 /* Inkscape::Extension::Effect */

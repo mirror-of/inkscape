@@ -313,12 +313,14 @@ sp_file_save_document (SPDocument *doc)
 			fn = g_strdup (doc->uri);
 			
 			const gchar *ext = sp_repr_attr(repr, "inkscape:output_extension");
+#if 0
 			if (ext == NULL) { 
 			// plain svg files do not know no inkscape:output_extensions; 
 			// old Inkscape or Sodipodi documents also don't have it
 			// Save as Inkscape SVG in that case
 			          ext = SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE;
 			}
+#endif
 			success = file_save (doc, fn, Inkscape::Extension::db.get(ext));
 
 			g_free ((void *) fn);

@@ -55,6 +55,8 @@ Svg::init(void)
 				"<filetypetooltip>Inkscape native file format and W3C standard</filetypetooltip>\n"
 			"</input>\n"
 		"</spmodule>", new Svg());
+	/* TODO: a hack, this will go in the XML above shortly */
+	dynamic_cast<Inkscape::Extension::Input *>(ext)->output_extension = g_strdup(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
 
 	/* SVG out Inkscape*/
     ext = sp_module_system_build_from_mem(
@@ -97,17 +99,7 @@ Svg::init(void)
 SPDocument *
 Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
-	SPDocument * doc;
-	SPRepr * repr;
-
-	doc = sp_document_new (uri, TRUE, TRUE);
-	repr = sp_document_repr_root(doc);
-
-	sp_document_set_undo_sensitive(doc, FALSE);
-	sp_repr_set_attr(repr, "inkscape:output_extension", SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
-	sp_document_set_undo_sensitive(doc, TRUE);
-
-	return doc;
+	return sp_document_new (uri, TRUE, TRUE);
 }
 
 /**

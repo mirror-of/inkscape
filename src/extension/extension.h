@@ -165,6 +165,9 @@ class Input : public Extension {
     gchar *filetypename;         /**< A userfriendly name for the file type */
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
+public: /* this is a hack for this release, this will be private shortly */
+	gchar *output_extension;     /**< Setting of what output extension should be used */
+
 public:
 	class open_failed {};        /**< Generic failure for an undescribed reason */
 	class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */

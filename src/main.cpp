@@ -65,6 +65,10 @@
 #include "sp-guide.h"
 #include "sp-object-repr.h"
 
+#include <extension/extension.h>
+#include <extension/system.h>
+#include <extension/db.h>
+
 #ifdef WIN32
 #include "extension/internal/win32.h"
 #endif
@@ -272,8 +276,12 @@ sp_main_gui (int argc, const char **argv)
 		if (fl) { // no documents on command line
 			while (fl) {
 				SPDocument *doc;
-				doc = sp_document_new ((const gchar *) fl->data, TRUE, TRUE);
-				if (doc) {
+
+				doc = sp_module_system_open(NULL, (gchar *)fl->data);
+				if (doc == NULL) {
+					doc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), (gchar *)fl->data);
+				}
+				if (doc != NULL) {
 					if (sp_export_png) {
 						sp_do_export_png (doc);
 					} else {
@@ -384,7 +392,11 @@ sp_main_console (int argc, const char **argv)
 
 	while (fl) {
 		SPDocument *doc;
-		doc = sp_document_new ((gchar *) fl->data, FALSE, TRUE);
+
+		doc = sp_module_system_open(NULL, (gchar *)fl->data);
+		if (doc == NULL) {
+			doc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), (gchar *)fl->data);
+		}
 		if (doc == NULL) {
 			g_warning ("Specified document %s cannot be opened (is it valid SVG file?)", (gchar *) fl->data);
 		} else {

@@ -220,7 +220,6 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 		repr = sp_document_repr_root (doc);
 		sp_document_set_undo_sensitive (doc, FALSE);
 		sp_repr_set_attr (repr, "sodipodi:modified", NULL);
-		sp_repr_set_attr (repr, "inkscape:output_extension", omod->get_id());
 		sp_document_set_undo_sensitive (doc, TRUE);
 	}
 
