@@ -1269,8 +1269,7 @@ Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
   drx += (iS.pt[0] + iE.pt[0]) / 2;
   dry += (iS.pt[1] + iE.pt[1]) / 2;
   
-  if (wise)
-  {
+  if (wise) {
     if (sang < eang)
       sang += 2 * M_PI;
     double b = sang * (1 - at) + eang * at;
@@ -1283,11 +1282,8 @@ Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
     dtgt.pt[0] = -ca * rx * cb + sa * ry * sb;
     dtgt.pt[1] = -sa * rx * cb - ca * ry * sb;
     len = L2(tgt);
-    rad =
-      len * (tgt.pt[0] * tgt.pt[0] + tgt.pt[1] * tgt.pt[1]) / (tgt.pt[0] * dtgt.pt[1] -
-                                                               tgt.pt[1] * dtgt.pt[0]);
-    tgt.pt[0] /= len;
-    tgt.pt[1] /= len;
+    rad = len * dot(tgt, tgt) / (tgt.pt[0] * dtgt.pt[1] - tgt.pt[1] * dtgt.pt[0]);
+    tgt /= len;
   }
   else
   {
@@ -1303,12 +1299,8 @@ Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
     dtgt.pt[0] = -ca * rx * cb + sa * ry * sb;
     dtgt.pt[1] = -sa * rx * cb - ca * ry * sb;
     len = L2(tgt);
-    rad =
-      len * (tgt.pt[0] * tgt.pt[0] + tgt.pt[1] * tgt.pt[1]) / (tgt.pt[0] * dtgt.pt[1] -
-                                                               tgt.pt[1] * dtgt.pt[0]);
-    tgt.pt[0] /= len;
-    tgt.pt[1] /= len;
-    
+    rad = len * dot(tgt, tgt) / (tgt.pt[0] * dtgt.pt[1] - tgt.pt[1] * dtgt.pt[0]);
+    tgt /= len;
   }
 }
 void
