@@ -395,6 +395,14 @@ spdc_endpoint_snap_internal(SPDrawContext *dc, NR::Point &p, NR::Point const o, 
 }
 
 
+static SPCurve *
+reverse_then_unref(SPCurve *orig)
+{
+    SPCurve *ret = sp_curve_reverse(orig);
+    sp_curve_unref(orig);
+    return ret;
+}
+
 /**
  * Concats red, blue and green.
  * If any anchors are defined, process these, optionally removing curves from white list
@@ -435,57 +443,38 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
     }
 
     /* Step B - both start and end anchored to same curve */
-    if ( dc->sa && dc->ea && ( dc->sa->curve == dc->ea->curve ) ) {
-      bool doItLad=true;
-      if ( dc->sa == dc->ea ) {
-        doItLad=false;
-        // ouch: anchored to same point
-        if ( dc->sa->curve->closed ) {
-          doItLad=true;
-        } else {
-        }
-      }
-      if ( doItLad ) {
+    if ( dc->sa && dc->ea
+         && ( dc->sa->curve == dc->ea->curve )
+         && ( ( dc->sa != dc->ea )
+              || dc->sa->curve->closed ) )
+    {
         // We hit bot start and end of single curve, closing paths
-          SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
+        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
         if (dc->sa->start && !(dc->sa->curve->closed) ) {
-            SPCurve *r;
-            // Reversing curve
-            r = sp_curve_reverse(c);
-            sp_curve_unref(c);
-            c = r;
+            c = reverse_then_unref(c);
         }
         sp_curve_append_continuous(dc->sa->curve, c, 0.0625);
         sp_curve_unref(c);
         sp_curve_closepath_current(dc->sa->curve);
         spdc_flush_white(dc, NULL);
         return;
-       }
-     }
+    }
 
     /* Step C - test start */
     if (dc->sa) {
-        SPCurve *s;
-        s = dc->sa->curve;
+        SPCurve *s = dc->sa->curve;
         dc->white_curves = g_slist_remove(dc->white_curves, s);
         if (dc->sa->start) {
-            SPCurve *r;
-            r = sp_curve_reverse(s);
-            sp_curve_unref(s);
-            s = r;
+            s = reverse_then_unref(s);
         }
         sp_curve_append_continuous(s, c, 0.0625);
         sp_curve_unref(c);
         c = s;
     } else /* Step D - test end */ if (dc->ea) {
-        SPCurve *e;
-        e = dc->ea->curve;
+        SPCurve *e = dc->ea->curve;
         dc->white_curves = g_slist_remove(dc->white_curves, e);
         if (!dc->ea->start) {
-            SPCurve *r;
-            r = sp_curve_reverse(e);
-            sp_curve_unref(e);
-            e = r;
+            e = reverse_then_unref(e);
         }
         sp_curve_append_continuous(c, e, 0.0625);
         sp_curve_unref(e);
@@ -495,6 +484,14 @@ spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
     spdc_flush_white(dc, c);
 
     sp_curve_unref(c);
+}
+
+static char const *
+tool_name(SPDrawContext *dc)
+{
+    return ( SP_IS_PEN_CONTEXT(dc)
+             ? "tools.freehand.pen"
+             : "tools.freehand.pencil" );
 }
 
 /*
@@ -542,11 +539,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
         } else {
             repr = sp_repr_new("path");
             /* Set style */
-            if (SP_IS_PEN_CONTEXT(dc)) {
-                sp_desktop_apply_style_tool (desktop, repr, "tools.freehand.pen", false);
-            } else {
-                sp_desktop_apply_style_tool (desktop, repr, "tools.freehand.pencil", false);
-            }
+            sp_desktop_apply_style_tool(desktop, repr, tool_name(dc), false);
         }
 
         gchar *str = sp_svg_write_path(SP_CURVE_BPATH(c));

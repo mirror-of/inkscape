@@ -1,5 +1,8 @@
 2004-10-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/draw-context.cpp (spdc_concat_colors_and_flush,
+	  spdc_flush_white): Misc readability cleanups.
+
 	* src/display/curve.cpp (sp_curve_reverse): Fix a bug where the
 	  reversed curve wrongly included a trailing moveto command.  (Bug
 	  introduced in my 2004-09-05 change: one of the callers I didn't
