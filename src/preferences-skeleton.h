@@ -114,6 +114,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"transformation\"/>\n"
 "    <group id=\"align\"/>\n"
 "    <group id=\"xml\"/>\n"
+"    <group id=\"find\"/>\n"
 "    <group id=\"documentoptions\"/>\n"
 "    <group id=\"preferences\"/>\n"
 "    <group id=\"gradienteditor\"/>\n"
