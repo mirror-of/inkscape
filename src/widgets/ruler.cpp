@@ -124,7 +124,12 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget;
   GdkGC *gc, *bg_gc;
-  GdkFont *font;
+  PangoFont *pangofont;
+  PangoFontDescription *pango_desc;
+  PangoContext *pango_context;
+  PangoLayout *pango_layout;
+  PangoLanguage *pango_lang;
+  PangoFontMetrics *pango_metrics;
   gint i;
   gint width, height;
   gint xthickness;
@@ -150,29 +155,31 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 
   gc = widget->style->fg_gc[GTK_STATE_NORMAL];
   bg_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-  font = gtk_style_get_font(widget->style);
-
+  
+  pango_desc = widget->style->font_desc;
+  
+  // Create the pango layout
+  pango_context = gtk_widget_get_pango_context (widget);
+  pango_layout = pango_layout_new (pango_context);
+  pango_lang = pango_context_get_language (pango_context);
+  pango_metrics = pango_context_get_metrics (pango_context, pango_desc, pango_lang);
+  
+  digit_height = pango_font_metrics_get_ascent (pango_metrics) / PANGO_SCALE;
+  
+  
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
-  digit_height = font->ascent; /* assume descent == 0 ? */
 
   width = widget->allocation.width;
   height = widget->allocation.height;// - ythickness * 2;
 
    
-   gtk_paint_box (widget->style, ruler->backing_store,
-		  GTK_STATE_NORMAL, GTK_SHADOW_NONE, 
-		  NULL, widget, "hruler",
-		  0, 0, 
-		  widget->allocation.width, widget->allocation.height);
+  gtk_paint_box (widget->style, ruler->backing_store,
+		 GTK_STATE_NORMAL, GTK_SHADOW_NONE, 
+		 NULL, widget, "hruler",
+		 0, 0, 
+		 widget->allocation.width, widget->allocation.height);
 
-   /*
-   gdk_draw_line (ruler->backing_store, gc,
-		 xthickness,
-		 height + ythickness,
-		 widget->allocation.width - xthickness,
-		 height + ythickness);
-   */
   upper = ruler->upper / ruler->metric->pixels_per_unit;
   lower = ruler->lower / ruler->metric->pixels_per_unit;
 
@@ -236,9 +243,12 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 	  if (i == 0)
 	    {
 	      sprintf (unit_str, "%d", (int) cur);
-	      gdk_draw_string (ruler->backing_store, font, gc,
-			       pos + 2, ythickness + font->ascent - 1,
-			       unit_str);
+	
+	      pango_layout_set_text (pango_layout, unit_str, -1);
+	      
+             gdk_draw_layout (ruler->backing_store, gc,
+	                       pos + 2, ythickness,
+			       pango_layout);
 	    }
 	}
     }
@@ -405,7 +415,12 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget;
   GdkGC *gc, *bg_gc;
-  GdkFont *font;
+  PangoFont *pangofont;
+  PangoFontDescription *pango_desc;
+  PangoContext *pango_context;
+  PangoLayout *pango_layout;
+  PangoLanguage *pango_lang;
+  PangoFontMetrics *pango_metrics;
   gint i, j;
   gint width, height;
   gint xthickness;
@@ -432,26 +447,29 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 
   gc = widget->style->fg_gc[GTK_STATE_NORMAL];
   bg_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-  font = gtk_style_get_font(widget->style);
+  
+  pango_desc = widget->style->font_desc;
+  
+  // Create the pango layout
+  pango_context = gtk_widget_get_pango_context (widget);
+  pango_layout = pango_layout_new (pango_context);
+  pango_lang = pango_context_get_language (pango_context);
+  pango_metrics = pango_context_get_metrics (pango_context, pango_desc, pango_lang);
+  
+  digit_height = pango_font_metrics_get_ascent (pango_metrics) / PANGO_SCALE;
+  
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
-  digit_height = font->ascent; /* assume descent == 0 ? */
 
   width = widget->allocation.height;
   height = widget->allocation.width;// - ythickness * 2;
 
-   gtk_paint_box (widget->style, ruler->backing_store,
-		  GTK_STATE_NORMAL, GTK_SHADOW_NONE, 
-		  NULL, widget, "vruler",
-		  0, 0, 
-		  widget->allocation.width, widget->allocation.height);
-   /*
-   gdk_draw_line (ruler->backing_store, gc,
-		 height + xthickness,
-		 ythickness,
-		 height + xthickness,
-		 widget->allocation.height - ythickness);
-   */
+  gtk_paint_box (widget->style, ruler->backing_store,
+		 GTK_STATE_NORMAL, GTK_SHADOW_NONE, 
+		 NULL, widget, "vruler",
+		 0, 0, 
+		 widget->allocation.width, widget->allocation.height);
+  
   upper = ruler->upper / ruler->metric->pixels_per_unit;
   lower = ruler->lower / ruler->metric->pixels_per_unit;
 
@@ -503,6 +521,7 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 	  end   = ceil  (lower / subd_incr) * subd_incr;
 	}
 
+        
       for (cur = start; cur <= end; cur += subd_incr)
 	{
 	  pos = ROUND ((cur - lower) * increment);
@@ -514,14 +533,18 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 	  /* draw label */
 	  if (i == 0)
 	    {
+
 	      sprintf (unit_str, "%d", (int) cur);
 	      for (j = 0; j < (int) strlen (unit_str); j++)
 		{
 		  digit_str[0] = unit_str[j];
-		  gdk_draw_string (ruler->backing_store, font, gc,
-				   xthickness + 1,
-				   pos + digit_height * (j + 1) + 1,
-				   digit_str);
+                  
+                  pango_layout_set_text (pango_layout, digit_str, 1);
+      
+                  gdk_draw_layout (ruler->backing_store, gc,
+	                           xthickness + 1, 
+				   pos + digit_height * (j) + 1,
+		                   pango_layout); 
 		}
 	    }
 	}
