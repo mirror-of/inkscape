@@ -1,3 +1,20 @@
+inkscape (0.40cvs) unstable; urgency=low
+
+  * CVS package
+
+ -- Nathan Hurst <njh@mail.csse.monash.edu.au>  Tue, 20 Jul 2004 17:24:55 +1100
+
+inkscape (0.39) unstable; urgency=high
+
+  * Pango: smoother text display, auto kerning, better i18n (automatic font substitution, right-to-left text, bi-directional text), less platform dependence
+  * New SVG features: markers (aka arrowheads), clones (svg:use), pattern tiles, RDF metadata; many SVG compliance bugfixes
+  * New dialogs: Preferences, Find, Metadata
+  * Pure convenience: usable dropper, scale switches, Commands bar, more tool controls (including rounded stars), more import formats, more paper sizes, Revert command, edit inside group, better selection cues, spell checking, window layout configurable, streamlined Fill & Stroke, snapping improvements, better rounded corners in rects, path reversing, persistent rotation crosshair, per-object export hints, and much more
+  * Internals: speedups, more C++ification, garbage collection, SigC++ signals, wider use of new data structures, extensive cleanup
+  * Plus: new documentation, new translations, lots of assorted bugfixes 
+
+ -- Nathan Hurst <njh@mail.csse.monash.edu.au>  Tue, 20 Jul 2004 17:12:55 +1100
+
 inkscape (0.39cvs) unstable; urgency=low
 
   * CVS package
