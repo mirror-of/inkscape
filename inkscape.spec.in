@@ -71,6 +71,7 @@ rm -rf %{buildroot}
 %{_datadir}/pixmaps/*
 %{_datadir}/inkscape/*
 %{_mandir}/man1/*
+%{_libdir}/inkscape/plugins/*
 
 %changelog
 * Wed Nov 24 2004 Kees Cook <kees@outflux.net>
