@@ -19,20 +19,21 @@ Node const *Node::traverse(BranchName const &branch, unsigned pos) const {
 }
 
 Node const &Node::insert(BranchName const &branch, unsigned pos,
-                         Node const *node)
-throw(InvalidTransformation) const
+                         Node const *node) const
+throw(InvalidTransformation)
 {
     throw InvalidTransformation();
 }
 
-Node const &Node::replace(BranchName const &branch, unsigned pos, Node const *node)
-throw(InvalidTransformation) const
+Node const &Node::replace(BranchName const &branch, unsigned pos,
+                          Node const *node) const
+throw(InvalidTransformation)
 {
     throw InvalidTransformation();
 }
 
-Node const &Node::remove(BranchName const &branch, unsigned pos)
-throw(InvalidTransformation) const
+Node const &Node::remove(BranchName const &branch, unsigned pos) const
+throw(InvalidTransformation)
 {
     throw InvalidTransformation();
 }

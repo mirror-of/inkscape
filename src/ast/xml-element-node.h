@@ -22,11 +22,16 @@ class XMLElementNode : public Node {
 public:
     Node const *traverse(BranchName const &branch, unsigned pos) const;
 
-    Node const &insertBefore(BranchName const &branch, unsigned pos, Node const *node) const throw(InvalidTransformation);
-    Node const &replaceWith(BranchName const &branch, unsigned pos, Node const *node) const throw(InvalidTransformation);
-    Node const &removeAt(BranchName const &branch, unsigned pos) const throw(InvalidTransformation);
+    Node const &insertBefore(BranchName const &branch, unsigned pos,
+                             Node const *node) const
+    throw(InvalidTransformation);
 
-    Node const &deepClone() const;
+    Node const &replaceWith(BranchName const &branch, unsigned pos,
+                            Node const *node) const
+    throw(InvalidTransformation);
+
+    Node const &removeAt(BranchName const &branch, unsigned pos) const
+    throw(InvalidTransformation);
 
     void write(std::ostream &os) const;
     CString const &toString() const;

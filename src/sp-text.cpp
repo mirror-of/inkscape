@@ -1658,7 +1658,7 @@ sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
     SPObject *ochild = sp_object_get_child_by_repr(object, rch);
     if (ochild) {
         if (SP_IS_STRING(ochild)) {
-	    SPString *string;
+	    SPString *string=SP_STRING(ochild);
             string->ly = &text->ly;
 	} else if (!SP_IS_TSPAN(ochild)) {
             /* ugly, but right now SPText assumes it won't have any non-tspan children :/ */

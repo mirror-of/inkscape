@@ -15,7 +15,6 @@
 #include <glib/glib.h>
 #include <gc/gc_cpp.h>
 #include "ast/branch-name.h"
-#include "ast/node.h"
 
 namespace Inkscape {
 namespace AST {
@@ -40,24 +39,8 @@ public:
                   _pos == path._pos;
     }
 
-    Node const *resolve(Node const &node) const {
-        return resolve(node, &Path::_resolve);
-    }
-
-    template <typename Memo>
-    Node const *resolve(Node const &node, Memo const &memo) {
-        return _traverse(( _parent ? memo(_parent, &node) : &node ));
-    }
-
 private:
     void operator=(Path const &);
-
-    static Node const *_resolve(Path const *path, Node const *node) {
-        return path->resolve(*node);
-    }
-    Node const *_traverse(Node const *node) const {
-        return ( node ? node->traverse(_branch, _pos) : NULL );
-    }
 
     Path const *_parent;
     BranchName _branch;

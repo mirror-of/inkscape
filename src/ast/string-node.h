@@ -23,8 +23,6 @@ public:
     StringNode(CString const &value) : _value(value) {}
     StringNode(StringNode const &node) : _value(node._value) {}
 
-    Node const &deepClone() const { return *( new StringNode(*this) ); }
-
     CString const &toString() const { return _value; }
 
 private:
