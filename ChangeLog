@@ -1,3 +1,7 @@
+2004-12-25  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-event-context.cpp: removed unused handler
+
 2004-12-25  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/svg_dropshadow:

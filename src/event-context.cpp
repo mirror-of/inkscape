@@ -570,18 +570,6 @@ sp_event_context_private_item_handler (SPEventContext *ec, SPItem *item, GdkEven
 	return ret;
 }
 
-static unsigned int
-sp_ec_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
-{
-	SPEventContext *ec;
-
-	ec = SP_EVENT_CONTEXT (data);
-
-	/* In theory we could verify values here */
-
-	return TRUE;
-}
-
 static void
 sp_ec_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
 {
@@ -598,7 +586,7 @@ SPReprEventVector sp_ec_event_vector = {
 	NULL, /* Child added */
 	NULL, /* Remove child */
 	NULL, /* Child removed */
-	sp_ec_repr_change_attr,
+	NULL, /* Change attr */
 	sp_ec_repr_attr_changed,
 	NULL, /* Change content */
 	NULL, /* Content changed */
