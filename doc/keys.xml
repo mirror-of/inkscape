@@ -32,8 +32,8 @@ can leave your ideas and requests there.</p>
 <group>
 <keys><key><ctrl/>N</key>	 <action>create new document</action></keys>
 <keys><key><ctrl/>O</key>	 <action>open an SVG document</action></keys>
-<keys><key><ctrl/>E</key>	 <action>export document to PNG</action></keys>
-<keys><key><ctrl/>I</key>	 <action>import image</action></keys>
+<keys><key><shift/><ctrl/>E</key>	 <action>export to PNG</action></keys>
+<keys><key><ctrl/>I</key>	 <action>import bitmap or SVG</action></keys>
 <keys><key><ctrl/>P</key>	 <action>print document</action></keys>
 <keys><key><ctrl/>S</key>	 <action>save document</action></keys>
 <keys><key><shift/><ctrl/>S</key>	 <action>save under a new name</action></keys>
@@ -75,6 +75,7 @@ can leave your ideas and requests there.</p>
 <keys><key><shift/><ctrl/>X</key> <action>XML Editor</action></keys>
 <keys><key><shift/><ctrl/>D</key> <action>Document Options</action></keys>
 <keys><key><shift/><ctrl/>O</key> <action>Inkscape Options</action></keys>
+<keys><key><shift/><ctrl/>E</key>	 <action>Export to PNG</action></keys>
 <note>These open a new dialog window if it wasn't open yet, otherwise the corresponding dialog gets focus.</note>
 </group>
 
@@ -148,7 +149,7 @@ can leave your ideas and requests there.</p>
 <keys><key>3</key>	<action>zoom to selection</action></keys>
 <keys><key>4</key>	<action>zoom to drawing</action></keys>
 <keys><key>5</key>	<action>zoom to page</action></keys>
-<keys><key>6</key>	<action>zoom to page width</action></keys>
+<keys><key><ctrl/>E</key><key>6</key>	<action>zoom to page width</action></keys>
 </group>
 
 <group>
@@ -241,6 +242,7 @@ can leave your ideas and requests there.</p>
 <keys><key><ctrl/>-</key>  <action>difference</action></keys>
 <keys><key><ctrl/>*</key>  <action>intersection</action></keys>
 <keys><key><ctrl/>^</key>  <action>exclusive OR (XOR)</action></keys>
+<keys><key><ctrl/>/</key>  <action>division (cutting)</action></keys>
 </group>
 
 <group>
