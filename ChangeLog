@@ -1,3 +1,18 @@
+2004-01-20  bulia byak <bulia@users.sourceforge.net>
+
+	* src/selection-chemistry.cpp,h: New scaling utility functions
+
+	* src/select-context.cpp: <> [] with modifiers to scale/rotate objects
+
+	* src/nodepath.cpp,h: New functions for scaling and rotating nodes
+
+	* src/node-context.cpp: <> [] with modifiers to scale/rotate nodes, left/right
+	modifiers affect one of the two handles
+
+	* src/node-context.h: New node context members for tracking left/right alt/ctrl
+
+	* src/event-context.cpp: Use cursor coords when zooming by scrollwheel (fixme)
+
 2004-01-19 MenTaLguY <mental@rydia.net>
 
 	* src/dialogs/xml-tree.cpp: automatically scroll tree view to show selected item
