@@ -33,6 +33,7 @@
 #include "../color.h"
 #include "../helper/sp-intl.h"
 #include "../dialogs/dialog-events.h"
+#include "../prefs-utils.h"
 #include "sp-color-preview.h"
 #include "sp-color-notebook.h"
 
@@ -109,6 +110,10 @@ sp_color_notebook_switch_page(GtkNotebook *notebook,
 	{
         ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
         nb->switchPage( notebook, page, page_num );
+
+	// remember the page we seitched to
+        prefs_set_int_attribute ("colorselector", "page", page_num);
+
 	}
 }
 
@@ -216,9 +221,6 @@ void ColorNotebook::init()
 	_book = gtk_notebook_new ();
 	gtk_widget_show (_book);
 
-	_switchId = g_signal_connect(GTK_OBJECT (_book), "switch-page",
-								GTK_SIGNAL_FUNC (sp_color_notebook_switch_page), SP_COLOR_NOTEBOOK(_csel));
-
 	selector_types = g_type_children (SP_TYPE_COLOR_SELECTOR, &selector_type_count);
 
 	for ( i = 0; i < selector_type_count; i++ )
@@ -266,11 +268,14 @@ void ColorNotebook::init()
 
 	gtk_box_pack_start (GTK_BOX (_csel), table, TRUE, TRUE, 0);
 
-
 	gtk_table_attach (GTK_TABLE (table), _book, 0, 2, row, row + 1,
                       static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
                       static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
                       XPAD, YPAD);
+
+	// restore the last active page
+	gtk_notebook_set_current_page (GTK_NOTEBOOK (_book), prefs_get_int_attribute ("colorselector", "page", 0));
+
 	{
 		gboolean found = FALSE;
 		GtkWidget* arrow;
@@ -337,6 +342,9 @@ void ColorNotebook::init()
 	gtk_widget_show (_p);
 	gtk_table_attach (GTK_TABLE (table), _p, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
 #endif
+
+	_switchId = g_signal_connect(GTK_OBJECT (_book), "switch-page",
+								GTK_SIGNAL_FUNC (sp_color_notebook_switch_page), SP_COLOR_NOTEBOOK(_csel));
 
 	_entryId = gtk_signal_connect (GTK_OBJECT (_rgbae), "changed", GTK_SIGNAL_FUNC (ColorNotebook::_rgbaEntryChangedHook), _csel);
 }

@@ -107,6 +107,7 @@ static char const preferences_skeleton[] =
 "      <dash id=\"dash-0150-0150\" style=\"stroke-dasharray:0.02 0.02;\"/>\n"
 "    </group>\n"
 "  </group>\n"
+"  <group id=\"colorselector\" page=\"0\"/>\n"
 "  <group id=\"dialogs\">\n"
 "    <group id=\"toolbox\"/>\n"
 "    <group id=\"fillstroke\"/>\n"
