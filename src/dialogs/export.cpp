@@ -90,6 +90,7 @@ static float sp_export_value_get    ( GtkObject *base, const gchar *key );
 static float sp_export_value_get_pt ( GtkObject *base, const gchar *key );
 
 static void sp_export_filename_modified (GtkObject * object, gpointer data);
+static inline void sp_export_find_default_selection(GtkWidget * dlg);
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
@@ -423,6 +424,14 @@ sp_export_dialog (void)
         /*
          * set the default filename to be that of the current path + document 
          * with .png extension
+         *
+         * One thing to notice here is that this filename may get
+         * overwritten, but it won't happen here.  The filename gets
+         * written into the text field, but then the button to select
+         * the area gets set.  In that code the filename can be changed
+         * if there are some with presidence in the document.  So, while
+         * this code sets the name first, it may not be the one users
+         * really see.
          */
         if (SP_ACTIVE_DOCUMENT && SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT))
         {
@@ -499,40 +508,53 @@ sp_export_dialog (void)
     
     } // end of if (!dlg)
     
+    sp_export_find_default_selection(dlg);
 
     gtk_window_present ((GtkWindow *) dlg);
-
-    // restore area setting
-    const gchar *what = NULL;
-    int i;
-
-    what = prefs_get_string_attribute ("dialogs.export.exportarea", "value");
-    
-    // printf("Doing selection: ");
-    for (i = 0; i < SELECTION_NUMBER_OF; i++) {
-        if (what && !strcmp (what, selection_names[i])) {
-            GtkWidget *button;
-
-            // printf("%s\n", selection_names[i]);
-            button = (GtkWidget *)g_object_get_data(G_OBJECT(dlg), selection_names[i]);
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-            break;
-        }
-    }
-
-    if (i == SELECTION_NUMBER_OF) {
-        // either selection or no preference; 
-        // set up to export selection by default    
-        GtkWidget *button;
-    
-        // printf("selection\n");
-        button = (GtkWidget *)g_object_get_data(G_OBJECT(dlg), selection_names[SELECTION_SELECTION]);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    }
     
     return;
 } // end of sp_export_dialog()
 
+static inline void
+sp_export_find_default_selection(GtkWidget * dlg)
+{
+    selection_type key = SELECTION_NUMBER_OF;
+
+    if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
+        key = SELECTION_SELECTION;
+    }
+
+    /* Try using the preferences */
+    if (key == SELECTION_NUMBER_OF) {
+        const gchar *what = NULL;
+        int i = SELECTION_NUMBER_OF;
+
+        what = prefs_get_string_attribute ("dialogs.export.exportarea", "value");
+        
+        if (what != NULL) {
+            for (i = 0; i < SELECTION_NUMBER_OF; i++) {
+                if (!strcmp (what, selection_names[i])) {
+                    break;
+                }
+            }
+        }
+
+        key = (selection_type)i;
+    }
+
+    if (key == SELECTION_NUMBER_OF) {
+        key = SELECTION_SELECTION;
+    }
+
+    if (key != SELECTION_NUMBER_OF) {
+        GtkWidget *button;
+    
+        button = (GtkWidget *)g_object_get_data(G_OBJECT(dlg), selection_names[key]);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+    }
+
+    return;
+}
 
 
 /**
@@ -995,19 +1017,17 @@ sp_export_detect_size(GtkObject * base) {
     // std::cout << "Current " << current_bbox;
 
     if (key == SELECTION_NUMBER_OF && SP_ACTIVE_DESKTOP) {
-        SPDocument *doc;
+        if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
+            NRRect bbox;
 
-        doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+            (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
+            NR::Rect bbox2(bbox);
 
-        NR::Point x(0.0, 0.0);
-        NR::Point y(sp_document_width(doc),
-                    sp_document_height(doc));
-        NR::Rect bbox(x, y);
-        bbox.round(2);
-
-        // std::cout << "Page " << bbox;
-        if (bbox == current_bbox) {
-            key = SELECTION_PAGE;
+            bbox2.round(2);
+            // std::cout << "Selection " << bbox2;
+            if (bbox2 == current_bbox) {
+                key = SELECTION_SELECTION;
+            }
         }
     }
 
@@ -1027,17 +1047,19 @@ sp_export_detect_size(GtkObject * base) {
     }
 
     if (key == SELECTION_NUMBER_OF && SP_ACTIVE_DESKTOP) {
-        if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
-            NRRect bbox;
+        SPDocument *doc;
 
-            (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
-            NR::Rect bbox2(bbox);
+        doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
 
-            bbox2.round(2);
-            // std::cout << "Selection " << bbox2;
-            if (bbox2 == current_bbox) {
-                key = SELECTION_SELECTION;
-            }
+        NR::Point x(0.0, 0.0);
+        NR::Point y(sp_document_width(doc),
+                    sp_document_height(doc));
+        NR::Rect bbox(x, y);
+        bbox.round(2);
+
+        // std::cout << "Page " << bbox;
+        if (bbox == current_bbox) {
+            key = SELECTION_PAGE;
         }
     }
 
