@@ -358,10 +358,10 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         // than it is tall (e.g., small figures for inclusion in LaTeX).
         // The original patch by WQ only had the w>h condition.
         {
-             double w = fabs (d.x1 - d.x0); // width and height of bounding box, in points
-             double h = fabs (d.y1 - d.y0);
+             double w = (d.x1 - d.x0); // width and height of bounding box, in points
+             double h = (d.y1 - d.y0);
              pageLandscape = (
-                 ((int) w > 0 && (int) h > 0) // empty documents fail this sanity check
+                 (w > 0. && h > 0.) // empty documents fail this sanity check, have w<0, h<0
                  && (w > h)   // implies, but does not prove, the user wanted landscape
                  && (w > 600) // approximate maximum printable width of an A4
              )
