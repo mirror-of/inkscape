@@ -314,11 +314,11 @@ can leave your ideas and requests there.</p>
 <title>Offsets</title>
 <keys><key><ctrl/>(</key>  <action>inset path (towards center)</action></keys>
 <keys><key><ctrl/>)</key>  <action>outset path (away from center)</action></keys>
-<note>The default offset distance is 2 pt.</note>
-<keys><key><alt/>(</key>  <action>inset path by 1px</action></keys>
-<keys><key><alt/>)</key>  <action>outset path by 1px</action></keys>
-<keys><key><shift/><alt/>(</key>  <action>inset path by 10px</action></keys>
-<keys><key><shift/><alt/>)</key>  <action>outset path by 10px</action></keys>
+<note>The default offset distance is 2 px (SVG pixel units, not screen pixels).</note>
+<keys><key><alt/>(</key>  <action>inset path by 1 pixel</action></keys>
+<keys><key><alt/>)</key>  <action>outset path by 1 pixel</action></keys>
+<keys><key><shift/><alt/>(</key>  <action>inset path by 10 pixels</action></keys>
+<keys><key><shift/><alt/>)</key>  <action>outset path by 10 pixels</action></keys>
 <note>The actual distance for pixel offsets depends on zoom level. Zoom in for finer adjustment.</note>
 <note>All the (, ) commands convert the object to path, if necessary, and produce regular path.</note>
 <keys><key><ctrl/>J</key>  <action>create dynamic offset</action></keys>
@@ -397,7 +397,7 @@ can leave your ideas and requests there.</p>
 <title>Keyboard scale</title>
 <keys><key>.</key> <key>&gt;</key> <action>scale selection up by the scale step</action></keys> 
 <keys><key>,</key> <key>&lt;</key> <action>scale selection down by the scale step</action></keys> 
-<note>The default scale step is 2 pt.</note>
+<note>The default scale step is 2 px (SVG pixel units, not screen pixels).</note>
 <keys><key><ctrl/>.</key> <key><ctrl/>&gt;</key> <action>scale selection to 200%</action></keys>
 <keys><key><ctrl/>,</key> <key><ctrl/>&lt;</key> <action>scale selection to 50%</action></keys>
 <keys><key><alt/>.</key> <key><alt/>&gt;</key> <action>scale selection up by 1 pixel</action></keys>
@@ -586,7 +586,7 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Keyboard handle scale</title>
 <keys><key>&lt;</key> <key>&gt;</key> <action>contract/expand both handles by scale step</action></keys> 
-<note>The default scale step is 2 pt. May apply to more than one node.</note>
+<note>The default scale step is 2 px (SVG pixel units, not screen pixels). May apply to more than one node.</note>
 <keys>
 <key><left/><ctrl/>&lt;</key> 
 <key><left/><ctrl/>&gt;</key> 
