@@ -51,41 +51,51 @@ unclump_center (SPItem *item)
     return c; 
 }
 
-double
-unclump_radius (SPItem *item)
+NR::Point
+unclump_wh (SPItem *item)
 {
-    double w;
-    double h;
+    NR::Point wh;
     std::map<const gchar *, NR::Point>::iterator i = wh_cache.find(SP_OBJECT_ID(item));
     if ( i != wh_cache.end() ) {
-        w = i->second[NR::X];
-        h = i->second[NR::Y];
+        wh = i->second;
     } else {
         NRRect r;
         sp_item_invoke_bbox(item, &r, sp_item_i2d_affine(item), TRUE);
-        w = fabs (r.x1 - r.x0);
-        h = fabs (r.y1 - r.y0);
-        wh_cache[SP_OBJECT_ID(item)] = NR::Point(w, h);
+        wh = NR::Point (fabs (r.x1 - r.x0), fabs (r.y1 - r.y0));
+        wh_cache[SP_OBJECT_ID(item)] = wh;
     }
 
-    return sqrt (w * h / M_PI); // the radius of the equal-area circle
+    return wh;
 }
 
 /**
-Distance between "edges" of item1 and item2. "Edge" is defined as that of an equal-area circle with
-the same center. May be negative if the edge of item1 is between the center and the edge of
-item2.
+Distance between "edges" of item1 and item2. An item is considered to be an ellipse inscribed into its w/h, 
+so its radius (distance from center to edge) depends on the w/h and the angle towards the other item.
+May be negative if the edge of item1 is between the center and the edge of item2.
 */
 double
 unclump_dist (SPItem *item1, SPItem *item2)
 {
-    NR::Point c1 = unclump_center (item1);
-    NR::Point c2 = unclump_center (item2);
+	NR::Point c1 = unclump_center (item1);
+	NR::Point c2 = unclump_center (item2);
 
-    double r1 = unclump_radius (item1);
-    double r2 = unclump_radius (item2);
+	NR::Point wh1 = unclump_wh (item1);
+	NR::Point wh2 = unclump_wh (item2);
 
-    return (NR::L2 (c2 - c1) - r1 - r2);
+	// angle from each item's center to the other's, unsqueezed by its w/h, normalized to 0..pi/2
+	double a1 = atan2 ((c2 - c1)[NR::Y], (c2 - c1)[NR::X] * wh1[NR::Y]/wh1[NR::X]);
+	a1 = fabs (a1);
+	if (a1 > M_PI/2) a1 = M_PI - a1;
+
+	double a2 = atan2 ((c1 - c2)[NR::Y], (c1 - c2)[NR::X] * wh2[NR::Y]/wh2[NR::X]);
+	a2 = fabs (a2);
+	if (a2 > M_PI/2) a2 = M_PI - a2;
+
+	// get the radius of each item for the given angle
+	double r1 = wh1[NR::X] + (wh1[NR::Y] - wh1[NR::X]) * (a1/(M_PI/2));
+	double r2 = wh2[NR::X] + (wh2[NR::Y] - wh2[NR::X]) * (a2/(M_PI/2));
+
+	return (NR::L2 (c2 - c1) - r1 - r2);
 }
 
 /**
