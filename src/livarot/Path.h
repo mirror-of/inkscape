@@ -461,11 +461,12 @@ private:
 		      int &lastLeft, int &lastRight, int nbDash,
 		      one_dash * dashs);
 
-  void DoCoalesce (Path * dest, double tresh);
-
-  void DoSimplify (double treshhold,int recLevel=0);
+  void DoSimplify(double treshhold);
   bool AttemptSimplify (double treshhold, path_descr_cubicto & res,int &worstP);
-  static bool FitCubic(NR::Point &start,path_descr_cubicto & res,double* Xk,double* Yk,double* Qk,double* tk,int nbPt);
+  static bool FitCubic(NR::Point const &start,
+		       path_descr_cubicto &res,
+		       double *Xk, double *Yk, double *Qk, double *tk, int nbPt);
+  
   struct fitting_tables {
     int      nbPt,maxPt,inPt;
     double   *Xk;
