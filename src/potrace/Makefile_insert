@@ -23,10 +23,8 @@ potrace_libpotrace_a_SOURCES =	\
 	potrace/flate.h \
 	potrace/imagemap-gdk.cpp	\
 	potrace/imagemap-gdk.h	\
-	potrace/graymap.cpp	\
-	potrace/graymap.h	\
-	potrace/rgbmap.cpp	\
-	potrace/rgbmap.h	\
+	potrace/imagemap.cpp	\
+	potrace/imagemap.h	\
 	potrace/quantize.cpp	\
 	potrace/quantize.h	\
 	potrace/greymap.cpp \

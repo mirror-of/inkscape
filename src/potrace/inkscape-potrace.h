@@ -15,7 +15,7 @@
 #include <glib.h>
 #include <trace.h>
 
-#include "graymap.h"
+#include "imagemap.h"
 
 namespace Inkscape
 {

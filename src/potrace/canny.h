@@ -1,7 +1,8 @@
 #ifndef __CANNY_H__
 #define __CANNY_H__
 
-#include "graymap.h"
+#include "imagemap.h"
+
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #ifndef TRUE

@@ -1,8 +1,7 @@
 #ifndef __QUANTIZE_H__
 #define __QUANTIZE_H__
 
-#include "graymap.h"
-#include "rgbmap.h"
+#include "imagemap.h"
 
 #ifndef TRUE
 #define TRUE  1

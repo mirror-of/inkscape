@@ -1,5 +1,5 @@
-#ifndef __GRAYMAP_H__
-#define __GRAYMAP_H__
+#ifndef __IMAGEMAP_H__
+#define __IMAGEMAP_H__
 
 #ifndef TRUE
 #define TRUE  1
@@ -88,7 +88,105 @@ GrayMap *GrayMapCreate(int width, int height);
 #endif
 
 
-#endif /* __GRAYMAP_H__ */
+
+
+/*#########################################################################
+### R G B   M A P
+#########################################################################*/
+
+typedef struct
+{
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+} RGB;
+
+
+
+typedef struct RgbMap_def RgbMap;
+
+/**
+ *
+ */
+struct RgbMap_def
+{
+
+    /*#################
+    ### METHODS
+    #################*/
+
+    /**
+     *
+     */
+    void (*setPixel)(RgbMap *me, int x, int y, int r, int g, int b);
+
+
+    /**
+     *
+     */
+    void (*setPixelRGB)(RgbMap *me, int x, int y, RGB rgb);
+
+    /**
+     *
+     */
+    RGB (*getPixel)(RgbMap *me, int x, int y);
+
+    /**
+     *
+     */
+    RgbMap * (*getGaussian)(RgbMap *me);
+
+    /**
+     *
+     */
+    int (*writePPM)(RgbMap *me, char *fileName);
+
+
+
+    /**
+     *
+     */
+    void (*destroy)(RgbMap *me);
+
+
+
+    /*#################
+    ### FIELDS
+    #################*/
+
+    /**
+     *
+     */
+    int width;
+
+    /**
+     *
+     */
+    int height;
+
+    /**
+     *
+     */
+    RGB *pixels;
+
+};
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+RgbMap *RgbMapCreate(int width, int height);
+
+#ifdef __cplusplus
+}
+#endif
+
+
+
+
+#endif /* __IMAGEMAP_H__ */
 
 /*#########################################################################
 ### E N D    O F    F I L E

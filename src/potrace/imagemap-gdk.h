@@ -9,8 +9,7 @@
 #define FALSE 0
 #endif
 
-#include "graymap.h"
-#include "rgbmap.h"
+#include "imagemap.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
