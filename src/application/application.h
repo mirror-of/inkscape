@@ -35,9 +35,7 @@ public:
     gboolean        loadPreferences();
     gboolean        savePreferences();
 
-    const gchar*    etcdir() const;
     const gchar*    homedir() const;
-    const gchar*    sharedir() const;
 
     gint            run();
     void            exit();
@@ -52,9 +50,7 @@ protected:
     Inkscape::XML::Document      *_preferences;
     AppPrototype   *_app_impl;
 
-    gchar const    *_path_home;
-    gchar const    *_path_etc;
-    gchar const    *_path_share;
+    mutable gchar  *_path_home;
 
     gboolean        _save_preferences;
     gboolean        _use_gui;

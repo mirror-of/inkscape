@@ -35,6 +35,8 @@ ui_dialog_libuidialog_a_SOURCES =		\
 	ui/dialog/messages.h			\
 	ui/dialog/text-properties.cpp		\
 	ui/dialog/text-properties.h		\
+	ui/dialog/transformation.cpp		\
+	ui/dialog/transformation.h		\
 	ui/dialog/tree-editor.cpp		\
 	ui/dialog/tree-editor.h			\
 	ui/dialog/xml-editor.cpp		\

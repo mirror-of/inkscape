@@ -1,3 +1,26 @@
+2005-03-13  Bryce Harrington <bryce@bryceharrington.org>
+
+	* src/path-prefix.h: Rearranging linking of libui and libutil
+	
+	* src/application/application.cpp, src/application/application.h
+	  src/application/editor-impl.cpp, 
+	  src/ui/dialog/dialog-manager.cpp,  src/ui/dialog/dialog.cpp,
+	  src/ui/dialog/dialog.h, src/ui/widget/labelled.cpp,
+	  src/ui/dialog/transformation.h, src/ui/dialog/transformation.cpp,
+	  src/ui/widget/unit-menu.h, src/util/units.cpp:
+	  Integrating Transformation dialog.  Removing hardcoded paths.
+	
+	* share/icons/Makefile.in, share/icons/arrows-horiz.svg,
+	  share/icons/arrows-vert.svg, share/icons/arrows_hor.xpm,
+	  share/icons/arrows_ver.xpm, share/icons/rotate.svg,
+	  share/icons/rotate.xpm, share/icons/scale_hor.xpm,
+	  share/icons/scale_ver.xpm, share/icons/Makefile.am:
+	  Adding icons needed by transformation dialog
+	
+	* share/ui/units.txt,  share/ui/units.xml:
+	  Moving units into ui/ subdir.  Dunno if this is the best
+	  location for them, but pjrm thought it'd be ok for now.
+
 2005-03-12  MenTaLguY  <mental@rydia.net>
 
 	* src/node-context.cpp, src/node-context.h, src/nodepath.cpp,

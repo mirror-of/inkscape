@@ -16,6 +16,7 @@
 #endif
 
 #include "labelled.h"
+#include "path-prefix.h"
 
 namespace Inkscape {
 namespace UI {
@@ -40,10 +41,12 @@ Labelled::Labelled(Glib::ustring const &label,
                    bool mnemonic)
     : _widget(widget),
       _label(new Gtk::Label(label, 0.0, 0.5, mnemonic)),
-      _suffix(new Gtk::Label(suffix, 0.0, 0.5)),
-      _icon(new Gtk::Image(icon))
+      _suffix(new Gtk::Label(suffix, 0.0, 0.5))
 {
     if (icon != "") {
+        gchar * filename = g_build_filename(INKSCAPE_PIXMAPDIR, icon, NULL);
+        _icon = new Gtk::Image(filename);
+        g_free(filename);
         pack_start(*Gtk::manage(_icon), Gtk::PACK_SHRINK);
     }
     pack_start(*Gtk::manage(_label), Gtk::PACK_EXPAND_WIDGET, 6);

@@ -45,7 +45,7 @@ public:
     bool          isAbsolute() const;
 
 protected:
-    UnitTable static  _unit_table;
+    static UnitTable  _unit_table;
     UnitType          _type;
 };
 

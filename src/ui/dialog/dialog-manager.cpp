@@ -26,7 +26,7 @@
 #include "layer-editor.h"
 #include "messages.h"
 #include "text-properties.h"
-//#include "transformation.h"
+#include "transformation.h"
 #include "xml-editor.h"
 
 
@@ -295,7 +295,6 @@ Dialog* DialogManager::getTraceDialog() {
 }
 */
 
-/*
 Dialog* DialogManager::getTransformationDialog() {
     if (_transformation_dialog == NULL) {
         _transformation_dialog = new Transformation;
@@ -310,7 +309,6 @@ Dialog* DialogManager::getTransformationDialog() {
     }
     return _transformation_dialog;
 }
-*/
 
 Dialog* DialogManager::getXmlEditorDialog() {
     if (_xml_editor_dialog == NULL) {

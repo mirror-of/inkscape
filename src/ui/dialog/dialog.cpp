@@ -207,7 +207,7 @@ Dialog::onShowF12()
 #define SP_ACTIVE_DESKTOP (false)
 #endif
 
-Selection*
+SPSelection*
 Dialog::_getSelection()
 {
     if (!_desktop) {

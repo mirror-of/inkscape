@@ -41,8 +41,6 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
       _preferences(NULL),
       _app_impl(NULL),
       _path_home(NULL),
-      _path_etc(NULL),
-      _path_share(NULL),
       _save_preferences(false),
       _use_gui(use_gui)
 {
@@ -65,17 +63,11 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
     // TODO:  Initialize _preferences with the preferences skeleton
     _save_preferences = loadPreferences();
 
-    // TODO:  Set up paths
-/*
-    _path_home  = "/home/bryce";
-    _path_etc   = "/etc/inkscape";
-    _path_share = "/usr/share/inkscape";
-*/
-
 }
 
 Application::~Application()
 {
+    g_free(_path_home);
 }
 
 gboolean
@@ -92,22 +84,32 @@ Application::savePreferences()
     return true;
 }
 
-char const*
-Application::etcdir() const
-{
-    return _path_etc;
-}
-
-char const*
+/** Returns the current home directory location */
+gchar const*
 Application::homedir() const
 {
+    if ( !_path_home ) {
+        _path_home = g_strdup(g_get_home_dir());
+        gchar* utf8Path = g_filename_to_utf8( _path_home, -1, NULL, NULL, NULL );
+        if ( utf8Path ) {
+            _path_home = utf8Path;
+            if ( !g_utf8_validate(_path_home, -1, NULL) ) {
+                g_warning( "Home directory is non-UTF-8" );
+            }
+        }
+    }
+    if ( !_path_home && _argv != NULL) {
+        gchar * path = g_path_get_dirname(_argv[0]);
+        gchar * utf8Path = g_filename_to_utf8( path, -1, NULL, NULL, NULL );
+        g_free(path);
+        if (utf8Path) {
+            _path_home = utf8Path;
+            if ( !g_utf8_validate(_path_home, -1, NULL) ) {
+                g_warning( "Application run directory is non-UTF-8" );
+            }
+        }
+    }
     return _path_home;
-}
-
-char const*
-Application::sharedir() const
-{
-    return _path_share;
 }
 
 gint

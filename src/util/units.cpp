@@ -5,9 +5,11 @@
 #include <cmath>
 #include <cerrno>
 #include <glib/gmessages.h>
+#include <glib.h>
 
 #include "io/simple-sax.h"
 #include "util/units.h"
+#include "path-prefix.h"
 #include "streq.h"
 
 namespace Inkscape {
@@ -53,9 +55,10 @@ int Unit::defaultDigits() const {
  */
 UnitTable::UnitTable() 
 {
-    // TODO:  This should be an absolute path
-    //    load("share/units.xml");  // <-- Buggy 
-    loadText("share/units.txt");
+    //    load("share/ui/units.xml");  // <-- Buggy 
+    gchar *filename = g_build_filename(INKSCAPE_UIDIR, "units.txt", NULL);
+    loadText(filename);
+    g_free(filename);
 }
 
 UnitTable::~UnitTable() {

@@ -224,23 +224,23 @@ libinkpost_a_SOURCES =	\
 	unit-constants.h
 
 inkscape_private_libs =	\
-	libinkpre.a	\
+	libinkpre.a		\
 	application/libinkapp.a	\
 	dialogs/libspdialogs.a	\
-	trace/libtrace.a  \
-	xml/libspxml.a	\
-	svg/libspsvg.a	\
+	trace/libtrace.a	\
+	xml/libspxml.a		\
+	svg/libspsvg.a		\
 	widgets/libspwidgets.a	\
 	display/libspdisplay.a	\
 	helper/libspchelp.a	\
-	io/libio.a	        \
 	libnrtype/libnrtype.a	\
-	libnr/libnr.a	\
+	libnr/libnr.a		\
 	livarot/libvarot.a	\
-	ui/libui.a	\
+	ui/libui.a		\
 	ui/dialog/libuidialog.a	\
 	ui/widget/libuiwidget.a	\
-	util/libinkutil.a \
+	util/libinkutil.a	\
+	io/libio.a	        \
 	extension/libextension.a	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\

@@ -31,6 +31,7 @@ extern "C" {
 #  define INKSCAPE_TUTORIALSDIR   BR_DATADIR( "/inkscape/tutorials" )
 #  define INKSCAPE_PLUGINDIR      BR_LIBDIR(  "/inkscape/plugins" )
 #  define INKSCAPE_TEMPLATESDIR   BR_DATADIR( "/inkscape/templates" )
+#  define INKSCAPE_UIDIR          BR_DATADIR( "/inkscape/ui" )
 #else
 #  ifdef WIN32
 #    define INKSCAPE_APPICONDIR   "pixmaps"
@@ -43,6 +44,7 @@ extern "C" {
 #    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
 #    define INKSCAPE_PLUGINDIR    "plugins"
 #    define INKSCAPE_TEMPLATESDIR "share\\templates"
+#    define INKSCAPE_UIDIR        "share\\ui"
 #  elif defined ENABLE_OSX_APP_LOCATIONS
 #    define INKSCAPE_APPICONDIR   "Inkscape.app/Contents/Resources/pixmaps"
 #    define INKSCAPE_EXTENSIONDIR "Inkscape.app/Contents/Resources/extensions"
@@ -54,6 +56,7 @@ extern "C" {
 #    define INKSCAPE_TUTORIALSDIR "Inkscape.app/Contents/Resources/tutorials"
 #    define INKSCAPE_PLUGINDIR    "Inkscape.app/Contents/Resources/plugins"
 #    define INKSCAPE_TEMPLATESDIR "Inkscape.app/Contents/Resources/templates"
+#    define INKSCAPE_UIDIR        "Inkscape.app/Contents/Resources/ui"
 #  else
 #    define INKSCAPE_APPICONDIR   INKSCAPE_DATADIR "/pixmaps"
 #    define INKSCAPE_EXTENSIONDIR INKSCAPE_DATADIR "/inkscape/extensions"
@@ -65,6 +68,7 @@ extern "C" {
 #    define INKSCAPE_TUTORIALSDIR INKSCAPE_DATADIR "/inkscape/tutorials"
 #    define INKSCAPE_PLUGINDIR    INKSCAPE_LIBDIR  "/inkscape/plugins"
 #    define INKSCAPE_TEMPLATESDIR INKSCAPE_DATADIR "/inkscape/templates"
+#    define INKSCAPE_UIDIR        INKSCAPE_DATADIR "/inkscape/ui"
 #  endif
 #endif
 

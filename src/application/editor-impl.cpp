@@ -31,6 +31,7 @@
 #include <gtkmm/accelmap.h>
 #include <glibmm/i18n.h>
 
+#include "path-prefix.h"
 #include "editor.h"
 #include "editor-impl.h"
 #include "ui/stock.h"
@@ -75,10 +76,11 @@ Editor::EditorImpl::initUIManager()
     _ui_mgr->insert_action_group(_act_grp);
     add_accel_group(_ui_mgr->get_accel_group());
 
-    // TODO:  Path should not be hardcoded
-    if (_ui_mgr->add_ui_from_file("/usr/share/inkscape/ui/menus-bars.xml") == 0) {
-        g_warning("Error merging ui from file /usr/share/inkscape/ui/menus-bars.xml");
+    gchar *filename = g_build_filename(INKSCAPE_UIDIR, "menus-bars.xml", NULL);
+    if (_ui_mgr->add_ui_from_file(filename) == 0) {
+        g_warning("Error merging ui from file '%s'", filename);
     }
+    g_free(filename);
 }
 
 void
@@ -307,13 +309,11 @@ Editor::EditorImpl::onDialogTrace()
 void 
 Editor::EditorImpl::onDialogTransformation()
 {
-/*
     Gtk::Dialog *dlg = _dlg_mgr.getTransformationDialog();
     g_assert(dlg);
 
     dlg->show();
     dlg->raise();
-*/
 }
 
 void
@@ -911,8 +911,9 @@ Editor::EditorImpl::initToolbarActions()
 void
 Editor::EditorImpl::initAccelMap()
 {
-    // TODO:  Don't hardcode this path
-    Gtk::AccelMap::load("/usr/share/inkscape/ui/keybindings.rc");
+    gchar *filename = g_build_filename(INKSCAPE_UIDIR, "keybindings.rc", NULL);
+    Gtk::AccelMap::load(filename);
+    g_free(filename);
 }
 
 void
