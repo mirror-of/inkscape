@@ -235,8 +235,7 @@ spus_rebuild_menu(SPUnitSelector *us)
         gtk_object_set_data(GTK_OBJECT(i), "unit", (gpointer) u);
         gtk_signal_connect(GTK_OBJECT(i), "activate", GTK_SIGNAL_FUNC(spus_unit_activate), us);
 
-        // fixme: hardwiring the font size here is evil, but it does not work elsewhere
-        sp_set_font_size(i, AUX_FONT_SIZE);
+        sp_set_font_size_smaller (i);
 
         gtk_widget_show(i);
 

@@ -733,7 +733,7 @@ sp_empty_toolbox_new(SPDesktop *desktop)
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (tbl);
 
     return tbl;
 }
@@ -1170,16 +1170,6 @@ sp_star_toolbox_new(SPDesktop *desktop)
 
     sp_toolbox_add_label(tbl, _("<b>New:</b>"));
 
-    /* Magnitude */
-    {
-        GtkWidget *hb = sp_tb_spinbutton(_("Corners:"), _("Number of corners of a polygon or star"),
-                                         "tools.shapes.star", "magnitude", 3,
-                                         NULL, (SPWidget *) tbl, TRUE, "altx-star",
-                                         3, 1024, 1, 1,
-                                         sp_stb_magnitude_value_changed, 1, 0);
-        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-    }
-
     gchar const *flatsidedstr = NULL;
 
     /* Flatsided checkbox */
@@ -1197,7 +1187,19 @@ sp_star_toolbox_new(SPDesktop *desktop)
         gtk_object_set_data(GTK_OBJECT(tbl), "flat_checkbox", fscb);
         gtk_container_add(GTK_CONTAINER(hb), fscb);
         g_signal_connect(G_OBJECT(fscb), "toggled", GTK_SIGNAL_FUNC(sp_stb_sides_flat_state_changed ), tbl);
-        gtk_box_pack_start(GTK_BOX(tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start(GTK_BOX(tbl),hb, FALSE, FALSE, AUX_SPACING);
+    }
+
+    aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+
+    /* Magnitude */
+    {
+        GtkWidget *hb = sp_tb_spinbutton(_("Corners:"), _("Number of corners of a polygon or star"),
+                                         "tools.shapes.star", "magnitude", 3,
+                                         NULL, (SPWidget *) tbl, TRUE, "altx-star",
+                                         3, 1024, 1, 1,
+                                         sp_stb_magnitude_value_changed, 1, 0);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
     /* Spoke ratio */
@@ -1210,7 +1212,7 @@ sp_star_toolbox_new(SPDesktop *desktop)
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          0.01, 1.0, 0.01, 0.1,
                                          sp_stb_proportion_value_changed);
-        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
         g_object_set_data(G_OBJECT(tbl), "prop_widget", hb);
         if (!flatsidedstr || (flatsidedstr && !strcmp(flatsidedstr, "false")))
             gtk_widget_set_sensitive(GTK_WIDGET(hb), TRUE);
@@ -1225,7 +1227,7 @@ sp_star_toolbox_new(SPDesktop *desktop)
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          -100.0, 100.0, 0.01, 0.1,
                                          sp_stb_rounded_value_changed);
-        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
     /* Randomization */
@@ -1235,8 +1237,10 @@ sp_star_toolbox_new(SPDesktop *desktop)
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          -10.0, 10.0, 0.001, 0.01,
                                          sp_stb_randomized_value_changed, 0.1, 3);
-        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
+
+    aux_toolbox_space(tbl, AUX_SPACING);
 
     /* Reset */
     {
@@ -1246,11 +1250,11 @@ sp_star_toolbox_new(SPDesktop *desktop)
         gtk_widget_show(b);
         gtk_container_add(GTK_CONTAINER(hb), b);
         gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(sp_stb_defaults), tbl);
-        gtk_box_pack_start(GTK_BOX(tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start(GTK_BOX(tbl),hb, FALSE, FALSE, AUX_SPACING);
     }
 
     gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (tbl);
 
     sigc::connection *connection = new sigc::connection(
         SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_star_toolbox_selection_changed), (GtkObject *)tbl))
@@ -1490,7 +1494,7 @@ sp_rect_toolbox_new(SPDesktop *desktop)
     }
 
     gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (tbl);
 
     sigc::connection *connection = new sigc::connection(
         SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_rect_toolbox_selection_changed), (GtkObject *)tbl))
@@ -1692,7 +1696,7 @@ sp_spiral_toolbox_new(SPDesktop *desktop)
                                          NULL, (SPWidget *) tbl, TRUE, "altx-spiral",
                                          0.01, 1024.0, 0.1, 1.0,
                                          sp_spl_tb_revolution_value_changed, 1, 2);
-        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
     /* Expansion */
@@ -1702,7 +1706,7 @@ sp_spiral_toolbox_new(SPDesktop *desktop)
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          0.0, 1000.0, 0.01, 1.0,
                                          sp_spl_tb_expansion_value_changed);
-        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
     /* T0 */
@@ -1712,8 +1716,10 @@ sp_spiral_toolbox_new(SPDesktop *desktop)
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          0.0, 0.999, 0.01, 1.0,
                                          sp_spl_tb_t0_value_changed);
-        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
+
+    aux_toolbox_space(tbl, AUX_SPACING);
 
     /* Reset */
     {
@@ -1727,7 +1733,7 @@ sp_spiral_toolbox_new(SPDesktop *desktop)
     }
 
     gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (tbl);
 
     sigc::connection *connection = new sigc::connection(
         SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_spiral_toolbox_selection_changed), (GtkObject *)tbl))
@@ -1902,7 +1908,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
     }
 
     gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (tbl);
 
     return tbl;
 }
@@ -2237,7 +2243,7 @@ sp_arc_toolbox_new(SPDesktop *desktop)
     g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 
     gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (tbl);
 
     return tbl;
 }
@@ -2385,7 +2391,7 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
     
     
     gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (tbl);
 
     sigc::connection *connection = new sigc::connection(
         desktop->connectSetStyle(

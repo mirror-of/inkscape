@@ -204,6 +204,15 @@ sp_set_font_size (GtkWidget *w, guint font)
 	sp_set_font_size_recursive (w, GUINT_TO_POINTER(font));
 }
 
+void
+sp_set_font_size_smaller (GtkWidget *w)
+{
+	PangoContext *pc = gtk_widget_get_pango_context (w);
+	PangoFontDescription* pfd = pango_context_get_font_description (pc);
+	guint size = pango_font_description_get_size (pfd);
+	sp_set_font_size_recursive (w, GUINT_TO_POINTER((int) (0.8*size)));
+}
+
 /**
 \brief  Finds the descendant of w which has the data with the given key and returns the data, or NULL if there's none
 */

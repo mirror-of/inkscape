@@ -673,7 +673,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     }
 
     gtk_widget_show_all(tbl);
-    sp_set_font_size(tbl, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (tbl);
 
     return tbl;
 }

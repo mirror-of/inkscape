@@ -429,7 +429,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     gtk_object_set_data(GTK_OBJECT(spw), "units", us);
 
     // Set font size.
-    sp_set_font_size(vb, AUX_FONT_SIZE);
+    sp_set_font_size_smaller (vb);
 
     // Force update when selection changes.
     gtk_signal_connect(GTK_OBJECT(spw), "modify_selection", GTK_SIGNAL_FUNC(sp_selection_layout_widget_modify_selection), desktop);
