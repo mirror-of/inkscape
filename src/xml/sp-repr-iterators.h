@@ -1,5 +1,5 @@
 /*
- * SPRepr iterators
+ * Node iterators
  *
  * Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -15,32 +15,38 @@
 #include "util/forward-pointer-iterator.h"
 #include "xml/repr.h"
 
-struct SPReprSiblingIteratorStrategy {
-    static SPRepr const *next(SPRepr const *repr) {
-        return sp_repr_next(const_cast<SPRepr *>(repr));
+namespace Inkscape {
+namespace XML {
+
+struct NodeSiblingIteratorStrategy {
+    static Node const *next(Node const *repr) {
+        return sp_repr_next(const_cast<Node *>(repr));
     }
 };
-struct SPReprParentIteratorStrategy {
-    static SPRepr const *next(SPRepr const *repr) {
-        return sp_repr_parent(const_cast<SPRepr *>(repr));
+struct NodeParentIteratorStrategy {
+    static Node const *next(Node const *repr) {
+        return sp_repr_parent(const_cast<Node *>(repr));
     }
 };
 
-typedef Inkscape::Util::ForwardPointerIterator<SPRepr,
-                                               SPReprSiblingIteratorStrategy>
-        SPReprSiblingIterator;
+typedef Inkscape::Util::ForwardPointerIterator<Node,
+                                               NodeSiblingIteratorStrategy>
+        NodeSiblingIterator;
 
-typedef Inkscape::Util::ForwardPointerIterator<SPRepr const,
-                                               SPReprSiblingIteratorStrategy>
-        SPReprConstSiblingIterator;
+typedef Inkscape::Util::ForwardPointerIterator<Node const,
+                                               NodeSiblingIteratorStrategy>
+        NodeConstSiblingIterator;
 
-typedef Inkscape::Util::ForwardPointerIterator<SPRepr,
-                                               SPReprParentIteratorStrategy>
-        SPReprParentIterator;
+typedef Inkscape::Util::ForwardPointerIterator<Node,
+                                               NodeParentIteratorStrategy>
+        NodeParentIterator;
 
-typedef Inkscape::Util::ForwardPointerIterator<SPRepr const,
-                                               SPReprParentIteratorStrategy>
-        SPReprConstParentIterator;
+typedef Inkscape::Util::ForwardPointerIterator<Node const,
+                                               NodeParentIteratorStrategy>
+        NodeConstParentIterator;
+
+}
+}
 
 #endif
 /*

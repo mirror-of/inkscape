@@ -193,13 +193,13 @@ sp_desktop_get_color(SPDesktop *desktop, bool is_fill)
 }
 
 void
-sp_desktop_apply_style_tool(SPDesktop *desktop, SPRepr *repr, char const *tool, bool with_text)
+sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, char const *tool, bool with_text)
 {
     SPCSSAttr *css_current = sp_desktop_get_style(desktop, with_text);
     if ((prefs_get_int_attribute(tool, "usecurrent", 0) != 0) && css_current) {
         sp_repr_css_set(repr, css_current, "style");
     } else {
-        SPRepr *tool_repr = inkscape_get_repr(INKSCAPE, tool);
+        Inkscape::XML::Node *tool_repr = inkscape_get_repr(INKSCAPE, tool);
         if (tool_repr) {
             SPCSSAttr *css = sp_repr_css_attr_inherited(tool_repr, "style");
             sp_repr_css_set(repr, css, "style");
@@ -222,7 +222,7 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
     if ((prefs_get_int_attribute("tools.text", "usecurrent", 0) != 0) && desktop_style) {
         style_str = desktop_style;
     } else {
-        SPRepr *tool_repr = inkscape_get_repr(INKSCAPE, "tools.text");
+        Inkscape::XML::Node *tool_repr = inkscape_get_repr(INKSCAPE, "tools.text");
         if (tool_repr) {
             style_str = sp_repr_attr(tool_repr, "style");
         }

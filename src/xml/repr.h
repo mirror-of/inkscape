@@ -36,41 +36,41 @@
 
 /**
 
-Though SPRepr provides "signals" for notification when individual nodes
+Though Inkscape::XML::Node provides "signals" for notification when individual nodes
 change, there is no mechanism to receive notification for overall
 document changes.
 
 However, with the addition of the transactions code, it would not be
 very hard to implement if you wanted it.
 
-SPRepr itself doesn't use GObject signals at present -- SPReprs maintain
-lists of SPReprEventVectors (added via sp_repr_add_listener), which are
+Inkscape::XML::Node itself doesn't use GObject signals at present -- Inkscape::XML::Nodes maintain
+lists of Inkscape::XML::NodeEventVectors (added via sp_repr_add_listener), which are
 used to specify callbacks when something changes.
 
 Here are the current callbacks in an event vector (they may be NULL):
 
-        void (* child_added) (SPRepr *repr, SPRepr *child, SPRepr *ref,
+        void (* child_added) (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref,
 void *data);
 
 Called once a child has been added.
 
-        void (* child_removed) (SPRepr *repr, SPRepr *child, SPRepr
+        void (* child_removed) (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node
 	*ref, void *data);
 
 Called after a child is removed; ref is the child that used to precede
 the removed child.
 
-        void (* attr_changed) (SPRepr *repr, gchar const *key, gchar const *oldval, gchar const *newval, void *data);
+        void (* attr_changed) (Inkscape::XML::Node *repr, gchar const *key, gchar const *oldval, gchar const *newval, void *data);
 
 Called after an attribute has been changed.
 
-        void (* content_changed) (SPRepr *repr, gchar const *oldcontent,
+        void (* content_changed) (Inkscape::XML::Node *repr, gchar const *oldcontent,
 gchar const *newcontent, void *data);
 
 Called after an element's content has been changed.
 
-        void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr
-	*oldref, SPRepr *newref, void *data);
+        void (* order_changed) (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node
+	*oldref, Inkscape::XML::Node *newref, void *data);
 
 Called once the child has been moved to its new position in the child
 order.
@@ -80,13 +80,13 @@ order.
 
 /*
 
-   SPRepr mini-FAQ
+   Inkscape::XML::Node mini-FAQ
 
 Since I'm not very familiar with this section of code but I need to use
 it heavily for the RDF work, I'm going to answer various questions I run
 into with my best-guess answers so others can follow along too.
 
-Q: How do I find the root SPRepr?
+Q: How do I find the root Inkscape::XML::Node?
 A: If you have an SPDocument, use doc->rroot.  For example:
 
      SP_ACTIVE_DOCUMENT->rroot
@@ -95,25 +95,25 @@ A: If you have an SPDocument, use doc->rroot.  For example:
       document rather than assuming it's necessarily the active one and
       using SP_ACTIVE_DOCUMENT)
 
-Q: How do I find an SPRepr by unique key/value?
+Q: How do I find an Inkscape::XML::Node by unique key/value?
 A: Use sp_repr_lookup_child
 
-Q: How do I find an SPRepr by unique namespace name?
+Q: How do I find an Inkscape::XML::Node by unique namespace name?
 A: Use sp_repr_lookup_name
 
-Q: How do I make an SPRepr namespace prefix constant in the application?
+Q: How do I make an Inkscape::XML::Node namespace prefix constant in the application?
 A: Add the XML namespace URL as a #define to repr.h at the top with the
    other SP_<NAMESPACE>_NS_URI #define's, and then in repr-util.cpp,
    in sp_xml_ns_register_defaults, bump "defaults" up in size one, and
    add another section.  Don't forget to increment the array offset and
    keep ".next" pointed to the next (if any) array entry.
 
-Q: How do I create a new SPRepr?
+Q: How do I create a new Inkscape::XML::Node?
 A: Use "sp_repr_new*".  Then attach it to a parent somewhere with
    parent->appendChild(child), and then use Inkscape::GC::release(child) to
    let go of it (the parent will hold it in memory).
 
-Q: How do I destroy an SPRepr?
+Q: How do I destroy an Inkscape::XML::Node?
 A: Just call "sp_repr_unparent" on it and release any references
    you may be retaining to it.  Any attached SPObjects will
    clean themselves up automatically, as will any children.
@@ -134,155 +134,155 @@ A: The current hack is in document.cpp:sp_document_create
 const  char *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested);
 const  char *sp_xml_ns_prefix_uri(gchar const *prefix);
 
-SPRepr *sp_repr_new(gchar const *name);
-SPRepr *sp_repr_new_text(gchar const *content);
-SPRepr *sp_repr_new_comment(gchar const *comment);
+Inkscape::XML::Node *sp_repr_new(gchar const *name);
+Inkscape::XML::Node *sp_repr_new_text(gchar const *content);
+Inkscape::XML::Node *sp_repr_new_comment(gchar const *comment);
 
-inline SPRepr *sp_repr_ref(SPRepr *repr) {
+inline Inkscape::XML::Node *sp_repr_ref(Inkscape::XML::Node *repr) {
 	return Inkscape::GC::anchor(repr);
 }
-inline SPRepr *sp_repr_unref(SPRepr *repr) {
+inline Inkscape::XML::Node *sp_repr_unref(Inkscape::XML::Node *repr) {
 	Inkscape::GC::release(repr);
 	return NULL;
 }
-inline SPRepr *sp_repr_duplicate(SPRepr const *repr) {
+inline Inkscape::XML::Node *sp_repr_duplicate(Inkscape::XML::Node const *repr) {
 	return repr->duplicate();
 }
 
-SPReprDoc *sp_repr_document_new(gchar const *rootname);
-inline void sp_repr_document_ref(SPReprDoc *doc) {
+Inkscape::XML::Document *sp_repr_document_new(gchar const *rootname);
+inline void sp_repr_document_ref(Inkscape::XML::Document *doc) {
 	Inkscape::GC::anchor(doc);
 }
-inline void sp_repr_document_unref(SPReprDoc *doc) {
+inline void sp_repr_document_unref(Inkscape::XML::Document *doc) {
 	Inkscape::GC::release(doc);
 }
 
-inline SPRepr *sp_repr_document_root(SPReprDoc const *doc) {
-	return const_cast<SPRepr *>(doc->root());
+inline Inkscape::XML::Node *sp_repr_document_root(Inkscape::XML::Document const *doc) {
+	return const_cast<Inkscape::XML::Node *>(doc->root());
 }
-inline SPReprDoc *sp_repr_document(SPRepr const *repr) {
-	return const_cast<SPReprDoc *>(repr->document());
+inline Inkscape::XML::Document *sp_repr_document(Inkscape::XML::Node const *repr) {
+	return const_cast<Inkscape::XML::Document *>(repr->document());
 }
 
 
-inline unsigned int sp_repr_document_merge(SPReprDoc *doc,
-		                           SPReprDoc const *src,
+inline unsigned int sp_repr_document_merge(Inkscape::XML::Document *doc,
+		                           Inkscape::XML::Document const *src,
 					   char const *key)
 {
 	doc->root()->mergeFrom(src->root(), key);
 	return true;
 }
 
-inline unsigned int sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key) {
+inline unsigned int sp_repr_merge(Inkscape::XML::Node *repr, Inkscape::XML::Node const *src, gchar const *key) {
 	repr->mergeFrom(src, key);
 	return true;
 }
 
 /* Contents */
-inline const char *sp_repr_attr(SPRepr const *repr, gchar const *key) {
+inline const char *sp_repr_attr(Inkscape::XML::Node const *repr, gchar const *key) {
 	return repr->attribute(key);
 }
-inline unsigned int sp_repr_set_content(SPRepr *repr, gchar const *content) {
+inline unsigned int sp_repr_set_content(Inkscape::XML::Node *repr, gchar const *content) {
 	repr->setContent(content);
 	return true;
 }
 
-inline unsigned int sp_repr_set_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_interactive=false) {
+inline unsigned int sp_repr_set_attr(Inkscape::XML::Node *repr, gchar const *key, gchar const *value, bool is_interactive=false) {
 	repr->setAttribute(key, value, is_interactive);
 	return true;
 }
 
 /* Tree */
-inline SPRepr *sp_repr_parent(SPRepr const *repr) {
-	return const_cast<SPRepr *>(repr->parent());
+inline Inkscape::XML::Node *sp_repr_parent(Inkscape::XML::Node const *repr) {
+	return const_cast<Inkscape::XML::Node *>(repr->parent());
 }
-inline SPRepr *sp_repr_children(SPRepr *repr) {
+inline Inkscape::XML::Node *sp_repr_children(Inkscape::XML::Node *repr) {
 	return ( repr ? repr->firstChild() : NULL );
 }
-inline SPRepr *sp_repr_next(SPRepr *repr) {
+inline Inkscape::XML::Node *sp_repr_next(Inkscape::XML::Node *repr) {
 	return ( repr ? repr->next() : NULL );
 }
 
-inline unsigned int sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
+inline unsigned int sp_repr_add_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	repr->addChild(child, ref);
 	return true;
 }
-inline unsigned int sp_repr_remove_child(SPRepr *repr, SPRepr *child) {
+inline unsigned int sp_repr_remove_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child) {
 	repr->removeChild(child);
 	return true;
 }
 
 /* IO */
 
-SPReprDoc *sp_repr_read_file(gchar const *filename, gchar const *default_ns);
-SPReprDoc *sp_repr_read_mem(gchar const *buffer, int length, gchar const *default_ns);
-void sp_repr_save_stream(SPReprDoc *doc, FILE *to_file, gchar const *default_ns=NULL, bool compress = false);
-gboolean sp_repr_save_file(SPReprDoc *doc, gchar const *filename, gchar const *default_ns=NULL);
+Inkscape::XML::Document *sp_repr_read_file(gchar const *filename, gchar const *default_ns);
+Inkscape::XML::Document *sp_repr_read_mem(gchar const *buffer, int length, gchar const *default_ns);
+void sp_repr_save_stream(Inkscape::XML::Document *doc, FILE *to_file, gchar const *default_ns=NULL, bool compress = false);
+gboolean sp_repr_save_file(Inkscape::XML::Document *doc, gchar const *filename, gchar const *default_ns=NULL);
 
-void sp_repr_print(SPRepr *repr);
+void sp_repr_print(Inkscape::XML::Node *repr);
 
 /* CSS stuff */
 
 SPCSSAttr *sp_repr_css_attr_new(void);
 void sp_repr_css_attr_unref(SPCSSAttr *css);
-SPCSSAttr *sp_repr_css_attr(SPRepr *repr, gchar const *attr);
-SPCSSAttr *sp_repr_css_attr_inherited(SPRepr *repr, gchar const *attr);
+SPCSSAttr *sp_repr_css_attr(Inkscape::XML::Node *repr, gchar const *attr);
+SPCSSAttr *sp_repr_css_attr_inherited(Inkscape::XML::Node *repr, gchar const *attr);
 
 gchar const *sp_repr_css_property(SPCSSAttr *css, gchar const *name, gchar const *defval);
 void sp_repr_css_set_property(SPCSSAttr *css, gchar const *name, gchar const *value);
 double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double defval);
 
-void sp_repr_css_set(SPRepr *repr, SPCSSAttr *css, gchar const *key);
+void sp_repr_css_set(Inkscape::XML::Node *repr, SPCSSAttr *css, gchar const *key);
 void sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src);
 void sp_repr_css_attr_add_from_string (SPCSSAttr *css, const gchar *data);
-void sp_repr_css_change(SPRepr *repr, SPCSSAttr *css, gchar const *key);
-void sp_repr_css_change_recursive(SPRepr *repr, SPCSSAttr *css, gchar const *key);
+void sp_repr_css_change(Inkscape::XML::Node *repr, SPCSSAttr *css, gchar const *key);
+void sp_repr_css_change_recursive(Inkscape::XML::Node *repr, SPCSSAttr *css, gchar const *key);
 
 void sp_repr_css_print (SPCSSAttr * css);
 
 /* Utility finctions */
 
-inline void sp_repr_unparent(SPRepr *repr) {
-	SPRepr *parent=repr->parent();
+inline void sp_repr_unparent(Inkscape::XML::Node *repr) {
+	Inkscape::XML::Node *parent=repr->parent();
 	if (parent) {
 		parent->removeChild(repr);
 	}
 }
 
 /* Convenience */
-unsigned int sp_repr_get_boolean(SPRepr *repr, gchar const *key, unsigned int *val);
-unsigned int sp_repr_get_int(SPRepr *repr, gchar const *key, int *val);
-unsigned int sp_repr_get_double(SPRepr *repr, gchar const *key, double *val);
-unsigned int sp_repr_set_boolean(SPRepr *repr, gchar const *key, unsigned int val);
-unsigned int sp_repr_set_int(SPRepr *repr, gchar const *key, int val);
-unsigned int sp_repr_set_double(SPRepr *repr, gchar const *key, double val);
+unsigned int sp_repr_get_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned int *val);
+unsigned int sp_repr_get_int(Inkscape::XML::Node *repr, gchar const *key, int *val);
+unsigned int sp_repr_get_double(Inkscape::XML::Node *repr, gchar const *key, double *val);
+unsigned int sp_repr_set_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned int val);
+unsigned int sp_repr_set_int(Inkscape::XML::Node *repr, gchar const *key, int val);
+unsigned int sp_repr_set_double(Inkscape::XML::Node *repr, gchar const *key, double val);
 /* Defaults */
-unsigned int sp_repr_set_double_default(SPRepr *repr, gchar const *key, double val, double def, double e);
+unsigned int sp_repr_set_double_default(Inkscape::XML::Node *repr, gchar const *key, double val, double def, double e);
 
 /* Deprecated */
-double sp_repr_get_double_attribute(SPRepr *repr, gchar const *key, double def);
-int sp_repr_get_int_attribute(SPRepr *repr, gchar const *key, int def);
+double sp_repr_get_double_attribute(Inkscape::XML::Node *repr, gchar const *key, double def);
+int sp_repr_get_int_attribute(Inkscape::XML::Node *repr, gchar const *key, int def);
 /* End Deprecated? */
 
-int sp_repr_compare_position(SPRepr *first, SPRepr *second);
+int sp_repr_compare_position(Inkscape::XML::Node *first, Inkscape::XML::Node *second);
 
 /* Searching */
-SPRepr       *sp_repr_lookup_name   (SPRepr             *repr,
+Inkscape::XML::Node       *sp_repr_lookup_name   (Inkscape::XML::Node             *repr,
 		                     gchar const        *name,
 				     gint               maxdepth = -1 );
-SPRepr       *sp_repr_lookup_child  (SPRepr    	        *repr,
+Inkscape::XML::Node       *sp_repr_lookup_child  (Inkscape::XML::Node    	        *repr,
 				     gchar const        *key,
 				     gchar const        *value);
 
-inline unsigned int sp_repr_change_order (SPRepr *repr, SPRepr *child, SPRepr *ref) {
+inline unsigned int sp_repr_change_order (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	repr->changeOrder(child, ref);
 	return true;
 }
                                                                                 
-SPReprDoc *sp_repr_document_new_list (GSList *reprs);
-inline SPRepr *sp_repr_document_first_child(SPReprDoc const *doc) {
-	return const_cast<SPRepr *>(doc->firstChild());
+Inkscape::XML::Document *sp_repr_document_new_list (GSList *reprs);
+inline Inkscape::XML::Node *sp_repr_document_first_child(Inkscape::XML::Document const *doc) {
+	return const_cast<Inkscape::XML::Node *>(doc->firstChild());
 }
 
 #endif

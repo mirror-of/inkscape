@@ -51,12 +51,12 @@
 static void sp_namedview_class_init (SPNamedViewClass * klass);
 static void sp_namedview_init (SPNamedView * namedview);
 
-static void sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_namedview_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_namedview_release (SPObject *object);
 static void sp_namedview_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
-static void sp_namedview_remove_child (SPObject *object, SPRepr *child);
-static SPRepr *sp_namedview_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_namedview_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
+static void sp_namedview_remove_child (SPObject *object, Inkscape::XML::Node *child);
+static Inkscape::XML::Node *sp_namedview_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static void sp_namedview_setup_guides (SPNamedView * nv);
 
@@ -128,7 +128,7 @@ sp_namedview_init (SPNamedView * nv)
 }
 
 static void
-sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
+sp_namedview_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
 	SPNamedView * nv;
 	SPObjectGroup * og;
@@ -490,7 +490,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 static void
-sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
+sp_namedview_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref)
 {
 	SPNamedView * nv;
 	SPObject * no;
@@ -533,7 +533,7 @@ sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
 }
 
 static void
-sp_namedview_remove_child (SPObject * object, SPRepr * child)
+sp_namedview_remove_child (SPObject * object, Inkscape::XML::Node * child)
 {
 	SPNamedView * nv;
 
@@ -557,8 +557,8 @@ sp_namedview_remove_child (SPObject * object, SPRepr * child)
 		(* ((SPObjectClass *) (parent_class))->remove_child) (object, child);
 }
 
-static SPRepr *
-sp_namedview_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_namedview_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPNamedView *nv;
 
@@ -668,7 +668,7 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 void 
 sp_namedview_document_from_window (SPDesktop *desktop)
 {
-	SPRepr *view;
+	Inkscape::XML::Node *view;
 	NRRect r;
 	gint w, h, x, y;
 	GtkWindow *win = GTK_WINDOW(gtk_object_get_data (GTK_OBJECT(desktop->owner), "window"));
@@ -766,7 +766,7 @@ sp_namedview_setup_guides (SPNamedView *nv)
 }
 
 void
-sp_namedview_toggle_guides (SPDocument *doc, SPRepr *repr)
+sp_namedview_toggle_guides (SPDocument *doc, Inkscape::XML::Node *repr)
 {
 	unsigned int v;
 	unsigned int set = sp_repr_get_boolean (repr, "showguides", &v);
@@ -786,7 +786,7 @@ sp_namedview_toggle_guides (SPDocument *doc, SPRepr *repr)
 }
 
 void
-sp_namedview_toggle_grid (SPDocument *doc, SPRepr *repr)
+sp_namedview_toggle_grid (SPDocument *doc, Inkscape::XML::Node *repr)
 {
 	unsigned int v;
 	sp_repr_get_boolean (repr, "showgrid", &v);

@@ -14,7 +14,12 @@
 
 #include "forward.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 #define INKSCAPE inkscape_get_instance()
 
@@ -23,7 +28,7 @@ void inkscape_application_init (const gchar *argv0, gboolean use_gui);
 /* Preference management */
 gboolean inkscape_load_preferences (Inkscape::Application * inkscape);
 gboolean inkscape_save_preferences (Inkscape::Application * inkscape);
-SPRepr *inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key);
+Inkscape::XML::Node *inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key);
 
 Inkscape::Application *inkscape_get_instance();
 

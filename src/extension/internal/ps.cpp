@@ -104,7 +104,7 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     int response;
     unsigned int ret;
 #ifdef TED
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
 #endif
     bool p2bm;
 

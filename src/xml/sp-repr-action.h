@@ -10,34 +10,37 @@
 #include "gc-managed.h"
 #include "xml/sp-repr.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
 
-class SPReprAction
+class Node;
+
+class Event
 : public Inkscape::GC::Managed<Inkscape::GC::SCANNED, Inkscape::GC::MANUAL>
 {
 public:
-	SPReprAction *next;
+	Event *next;
 	int serial;
-	SPRepr *repr;
+	Node *repr;
 
 	struct IteratorStrategy {
-		static SPReprAction const *next(SPReprAction const *action) {
+		static Event const *next(Event const *action) {
 			return action->next;
 		}
 	};
 
-	typedef Inkscape::Util::ForwardPointerIterator<SPReprAction, IteratorStrategy> Iterator;
-	typedef Inkscape::Util::ForwardPointerIterator<SPReprAction const, IteratorStrategy> ConstIterator;
+	typedef Inkscape::Util::ForwardPointerIterator<Event, IteratorStrategy> Iterator;
+	typedef Inkscape::Util::ForwardPointerIterator<Event const, IteratorStrategy> ConstIterator;
 
-	SPReprAction *optimizeOne() { return _optimizeOne(); }
+	Event *optimizeOne() { return _optimizeOne(); }
 	void undoOne() const { return _undoOne(); }
 	void replayOne() const { return _replayOne(); }
 
 protected:
-	SPReprAction(SPRepr *r, SPReprAction *n)
+	Event(Node *r, Event *n)
 	: next(n), serial(_next_serial++), repr(r) {}
 
-	virtual SPReprAction *_optimizeOne()=0;
+	virtual Event *_optimizeOne()=0;
 	virtual void _undoOne() const=0;
 	virtual void _replayOne() const=0;
 
@@ -45,46 +48,42 @@ private:
 	static int _next_serial;
 };
 
-class SPReprActionAdd : public SPReprAction {
+class EventAdd : public Event {
 public:
-	SPReprActionAdd(SPRepr *repr,
-			SPRepr *c, SPRepr *rr,
-			SPReprAction *next)
-	: SPReprAction(repr, next), child(c), ref(rr) {}
+	EventAdd(Node *repr, Node *c, Node *rr, Event *next)
+	: Event(repr, next), child(c), ref(rr) {}
 
-	SPRepr *child;
-	SPRepr *ref;
+	Node *child;
+	Node *ref;
 
 private:
 
-	SPReprAction *_optimizeOne();
+	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
 };
 
-class SPReprActionDel : public SPReprAction {
+class EventDel : public Event {
 public:
-	SPReprActionDel(SPRepr *repr,
-			SPRepr *c, SPRepr *rr,
-			SPReprAction *next)
-	: SPReprAction(repr, next), child(c), ref(rr) {}
+	EventDel(Node *repr, Node *c, Node *rr, Event *next)
+	: Event(repr, next), child(c), ref(rr) {}
 
-	SPRepr *child;
-	SPRepr *ref;
+	Node *child;
+	Node *ref;
 
 private:
-	SPReprAction *_optimizeOne();
+	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
 };
 
-class SPReprActionChgAttr : public SPReprAction {
+class EventChgAttr : public Event {
 public:
-	SPReprActionChgAttr(SPRepr *repr, GQuark k,
-			    Inkscape::Util::SharedCStringPtr ov,
-                            Inkscape::Util::SharedCStringPtr nv,
-                            SPReprAction *next)
-	: SPReprAction(repr, next), key(k),
+	EventChgAttr(Node *repr, GQuark k,
+		     Inkscape::Util::SharedCStringPtr ov,
+                     Inkscape::Util::SharedCStringPtr nv,
+                     Event *next)
+	: Event(repr, next), key(k),
 	  oldval(ov), newval(nv) {}
 
 	GQuark key;
@@ -92,43 +91,44 @@ public:
 	Inkscape::Util::SharedCStringPtr newval;
 
 private:
-	SPReprAction *_optimizeOne();
+	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
 };
 
-class SPReprActionChgContent : public SPReprAction {
+class EventChgContent : public Event {
 public:
-	SPReprActionChgContent(SPRepr *repr,
-                               Inkscape::Util::SharedCStringPtr ov,
-                               Inkscape::Util::SharedCStringPtr nv,
-                               SPReprAction *next)
-	: SPReprAction(repr, next), oldval(ov), newval(nv) {}
+	EventChgContent(Node *repr,
+                        Inkscape::Util::SharedCStringPtr ov,
+                        Inkscape::Util::SharedCStringPtr nv,
+                        Event *next)
+	: Event(repr, next), oldval(ov), newval(nv) {}
 
 	Inkscape::Util::SharedCStringPtr oldval;
 	Inkscape::Util::SharedCStringPtr newval;
 
 private:
-	SPReprAction *_optimizeOne();
+	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
 };
 
-class SPReprActionChgOrder : public SPReprAction {
+class EventChgOrder : public Event {
 public:
-	SPReprActionChgOrder(SPRepr *repr, SPRepr *c,
-			     SPRepr *orr, SPRepr *nrr,
-			     SPReprAction *next)
-	: SPReprAction(repr, next), child(c),
+	EventChgOrder(Node *repr, Node *c, Node *orr, Node *nrr, Event *next)
+	: Event(repr, next), child(c),
 	  oldref(orr), newref(nrr) {}
 
-	SPRepr *child;
-	SPRepr *oldref, *newref;
+	Node *child;
+	Node *oldref, *newref;
 
 private:
-	SPReprAction *_optimizeOne();
+	Event *_optimizeOne();
 	void _undoOne() const;
 	void _replayOne() const;
 };
+
+}
+}
 
 #endif

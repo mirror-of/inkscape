@@ -119,7 +119,7 @@ static Path::Node *active_node = NULL;
 */
 Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 {
-    SPRepr *repr = SP_OBJECT(item)->repr;
+    Inkscape::XML::Node *repr = SP_OBJECT(item)->repr;
 
     // FIXME: remove this. We don't want to edit paths inside flowtext.
     // Instead we will build our flowtext with cloned paths, so that the
@@ -401,7 +401,7 @@ static void update_repr_internal(Path::Path *np)
 {
     g_assert(np);
 
-    SPRepr *repr = SP_OBJECT(np->path)->repr;
+    Inkscape::XML::Node *repr = SP_OBJECT(np->path)->repr;
 
     SPCurve *curve = create_curve(np);
     gchar *typestr = create_typestr(np);
@@ -432,13 +432,13 @@ static void stamp_repr(Path::Path *np)
 {
     g_assert(np);
 
-    SPRepr *old_repr = SP_OBJECT(np->path)->repr;
-    SPRepr *new_repr = sp_repr_duplicate(old_repr);
+    Inkscape::XML::Node *old_repr = SP_OBJECT(np->path)->repr;
+    Inkscape::XML::Node *new_repr = sp_repr_duplicate(old_repr);
 
     // remember the position of the item
     gint pos = old_repr->position();
     // remember parent
-    SPRepr *parent = sp_repr_parent(old_repr);
+    Inkscape::XML::Node *parent = sp_repr_parent(old_repr);
 
     SPCurve *curve = create_curve(np);
     gchar *typestr = create_typestr(np);

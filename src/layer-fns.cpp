@@ -38,7 +38,7 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
         id = g_strdup_printf("layer%d", layer_suffix++);
     } while (document->getObjectById(id));
 
-    SPRepr *repr=sp_repr_new("svg:g");
+    Inkscape::XML::Node *repr=sp_repr_new("svg:g");
     sp_repr_set_attr(repr, "inkscape:groupmode", "layer");
     sp_repr_set_attr(repr, "id", id);
     g_free(id);
@@ -46,7 +46,7 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
     if ( root == layer ) {
         SP_OBJECT_REPR(root)->appendChild(repr);
     } else {
-        SPRepr *layer_repr=SP_OBJECT_REPR(layer);
+        Inkscape::XML::Node *layer_repr=SP_OBJECT_REPR(layer);
         sp_repr_add_child(sp_repr_parent(layer_repr), repr, layer_repr);
     }
 

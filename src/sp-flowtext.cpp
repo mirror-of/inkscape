@@ -71,12 +71,12 @@ static void sp_flowtext_class_init(SPFlowtextClass *klass);
 static void sp_flowtext_init(SPFlowtext *group);
 static void sp_flowtext_dispose(GObject *object);
 
-static void sp_flowtext_child_added(SPObject *object, SPRepr *child, SPRepr *ref);
-static void sp_flowtext_remove_child(SPObject *object, SPRepr *child);
+static void sp_flowtext_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
+static void sp_flowtext_remove_child(SPObject *object, Inkscape::XML::Node *child);
 static void sp_flowtext_update(SPObject *object, SPCtx *ctx, guint flags);
 static void sp_flowtext_modified(SPObject *object, guint flags);
-static SPRepr *sp_flowtext_write(SPObject *object, SPRepr *repr, guint flags);
-static void sp_flowtext_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static Inkscape::XML::Node *sp_flowtext_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
+static void sp_flowtext_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_flowtext_set(SPObject *object, unsigned key, gchar const *value);
 
 static void sp_flowtext_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
@@ -162,7 +162,7 @@ sp_flowtext_dispose(GObject *object)
 }
 
 static void
-sp_flowtext_child_added(SPObject *object, SPRepr *child, SPRepr *ref)
+sp_flowtext_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
     if (((SPObjectClass *) (parent_class))->child_added)
         (* ((SPObjectClass *) (parent_class))->child_added)(object, child, ref);
@@ -173,7 +173,7 @@ sp_flowtext_child_added(SPObject *object, SPRepr *child, SPRepr *ref)
 /* fixme: hide (Lauris) */
 
 static void
-sp_flowtext_remove_child(SPObject *object, SPRepr *child)
+sp_flowtext_remove_child(SPObject *object, Inkscape::XML::Node *child)
 {
     if (((SPObjectClass *) (parent_class))->remove_child)
         (* ((SPObjectClass *) (parent_class))->remove_child)(object, child);
@@ -230,7 +230,7 @@ sp_flowtext_modified(SPObject */*object*/, guint /*flags*/)
 }
 
 static void
-sp_flowtext_build(SPObject *object, SPDocument *document, SPRepr *repr)
+sp_flowtext_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     sp_object_read_attr(object, "inkscape:layoutOptions");
 
@@ -278,7 +278,7 @@ sp_flowtext_set(SPObject *object, unsigned key, gchar const *value)
                 if ( val == NULL ) {
                     group->par_indent = 0.0;
                 } else {
-                    sp_repr_get_double((SPRepr*)opts, "par-indent", &group->par_indent);
+                    sp_repr_get_double((Inkscape::XML::Node*)opts, "par-indent", &group->par_indent);
                 }
             }
             sp_repr_css_attr_unref(opts);
@@ -293,14 +293,14 @@ sp_flowtext_set(SPObject *object, unsigned key, gchar const *value)
     }
 }
 
-static SPRepr *
-sp_flowtext_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_flowtext_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) repr = sp_repr_new("svg:flowRoot");
         GSList *l = NULL;
         for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-            SPRepr *c_repr = NULL;
+            Inkscape::XML::Node *c_repr = NULL;
             if ( SP_IS_FLOWDIV(child) ) {
                 c_repr = child->updateRepr(NULL, flags);
             } else if ( SP_IS_FLOWREGION(child) ) {
@@ -311,8 +311,8 @@ sp_flowtext_write(SPObject *object, SPRepr *repr, guint flags)
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
         while ( l ) {
-            sp_repr_add_child(repr, (SPRepr *) l->data, NULL);
-            sp_repr_unref((SPRepr *) l->data);
+            sp_repr_add_child(repr, (Inkscape::XML::Node *) l->data, NULL);
+            sp_repr_unref((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {
@@ -606,8 +606,8 @@ void convert_to_text(void)
 
     selection->clear();
 
-    SPRepr *parent = SP_OBJECT_REPR(object)->parent();
-    SPRepr *repr = sp_repr_new("svg:text");
+    Inkscape::XML::Node *parent = SP_OBJECT_REPR(object)->parent();
+    Inkscape::XML::Node *repr = sp_repr_new("svg:text");
     sp_repr_set_attr(repr, "style", sp_repr_attr(SP_OBJECT_REPR(object), "style"));
     parent->appendChild(repr);
     // add a tspan for each chunk of the flow
@@ -617,7 +617,7 @@ void convert_to_text(void)
         if ( comp->chunks[i].rtl ) chunk_spc = -chunk_spc;
         for (int j = comp->chunks[i].s_st; j < comp->chunks[i].s_en; j++) {
             if ( comp->spans[j].l_st < comp->spans[j].l_en && comp->spans[j].c_style && comp->spans[j].c_style->with_style ) {
-                SPRepr *srepr = sp_repr_new("svg:tspan");
+                Inkscape::XML::Node *srepr = sp_repr_new("svg:tspan");
                 // set the good font family (may differ if pango needed a different one)
                 gchar *nstyle = NULL;
                 text_style *curS = comp->spans[j].c_style;
@@ -728,7 +728,7 @@ void convert_to_text(void)
                 int t_en = comp->letters[comp->spans[j].l_en-1].t_en;
                 char savC = comp->chars[t_en];
                 comp->chars[t_en] = 0;
-                SPRepr *rstr = sp_repr_new_text(&comp->chars[t_st]);
+                Inkscape::XML::Node *rstr = sp_repr_new_text(&comp->chars[t_st]);
                 comp->chars[t_en] = savC;
                 srepr->appendChild(rstr);
                 sp_repr_unref(rstr);

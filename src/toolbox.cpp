@@ -802,7 +802,7 @@ sp_stb_magnitude_value_changed (GtkAdjustment *adj, SPWidget *tbl)
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR ((SPItem *) items->data))	{
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_int(repr,"sodipodi:sides",(gint)adj->value);
             sp_repr_set_double(repr,"sodipodi:arg2",sp_repr_get_double_attribute (repr, "sodipodi:arg1", 0.5) + M_PI / (gint)adj->value);
             SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
@@ -838,7 +838,7 @@ sp_stb_proportion_value_changed (GtkAdjustment *adj, SPWidget *tbl)
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR ((SPItem *) items->data)) {
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
 
             gdouble r1 = sp_repr_get_double_attribute (repr, "sodipodi:r1", 1.0);
             gdouble r2 = sp_repr_get_double_attribute (repr, "sodipodi:r2", 1.0);
@@ -889,7 +889,7 @@ sp_stb_sides_flat_state_changed (GtkWidget *widget, GtkObject *tbl)
         gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), FALSE);
         for (; items != NULL; items = items->next) {
             if (SP_IS_STAR ((SPItem *) items->data))
-            { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+            { Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_attr(repr, "inkscape:flatsided", "true");
             SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
@@ -899,7 +899,7 @@ sp_stb_sides_flat_state_changed (GtkWidget *widget, GtkObject *tbl)
         gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), TRUE);
         for (; items != NULL; items = items->next) {
             if (SP_IS_STAR ((SPItem *) items->data))	{
-                SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
                 sp_repr_set_attr(repr, "inkscape:flatsided", "false");
                 SP_OBJECT (items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
@@ -936,7 +936,7 @@ sp_stb_rounded_value_changed (GtkAdjustment *adj, SPWidget *tbl)
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR ((SPItem *) items->data)) {
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_double (repr, "inkscape:rounded", (gdouble) adj->value);
             SP_OBJECT (items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
@@ -973,7 +973,7 @@ sp_stb_randomized_value_changed (GtkAdjustment *adj, SPWidget *tbl)
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR ((SPItem *) items->data)) {
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_double (repr, "inkscape:randomized", (gdouble) adj->value);
             SP_OBJECT (items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
@@ -987,7 +987,7 @@ sp_stb_randomized_value_changed (GtkAdjustment *adj, SPWidget *tbl)
 }
 
 
-static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data) 
+static void star_tb_event_attr_changed (Inkscape::XML::Node * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data) 
 {
     GtkWidget *tbl = GTK_WIDGET(data);
 
@@ -1036,7 +1036,7 @@ static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
 }
 
 
-static SPReprEventVector star_tb_repr_events =
+static Inkscape::XML::NodeEventVector star_tb_repr_events =
 {
     NULL, /* child_added */
     NULL, /* child_removed */
@@ -1053,8 +1053,8 @@ static void
 sp_star_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
     int n_selected = 0;
-    SPRepr *repr = NULL;
-    SPRepr *oldrepr = NULL;
+    Inkscape::XML::Node *repr = NULL;
+    Inkscape::XML::Node *oldrepr = NULL;
     
     for (const GSList *items = selection->itemList();
          items != NULL;
@@ -1073,7 +1073,7 @@ sp_star_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
     } else if (n_selected == 1) {
         gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
 
-        oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
+        oldrepr = (Inkscape::XML::Node *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data (oldrepr, tbl);
             sp_repr_unref (oldrepr);
@@ -1328,7 +1328,7 @@ sp_rtb_defaults ( GtkWidget *widget, GtkObject *obj)
     spinbutton_defocus (GTK_OBJECT (tbl));
 }
 
-static void rect_tb_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data)
+static void rect_tb_event_attr_changed (Inkscape::XML::Node * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data)
 {
     GtkWidget *tbl = GTK_WIDGET(data);
 
@@ -1362,7 +1362,7 @@ static void rect_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
 }
 
 
-static SPReprEventVector rect_tb_repr_events = {
+static Inkscape::XML::NodeEventVector rect_tb_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
     rect_tb_event_attr_changed,
@@ -1377,9 +1377,9 @@ static void
 sp_rect_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
     int n_selected = 0;
-    SPRepr *repr = NULL;
+    Inkscape::XML::Node *repr = NULL;
     SPItem *item = NULL;
-    SPRepr *oldrepr = NULL;
+    Inkscape::XML::Node *oldrepr = NULL;
   
     for (const GSList *items = selection->itemList();
          items != NULL;
@@ -1398,7 +1398,7 @@ sp_rect_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
     } else if (n_selected == 1) {
         gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
 
-        oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
+        oldrepr = (Inkscape::XML::Node *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data (oldrepr, tbl);
             sp_repr_unref (oldrepr);
@@ -1513,7 +1513,7 @@ sp_spl_tb_value_changed (GtkAdjustment *adj, SPWidget *tbl, const gchar* value_n
          items = items->next)
     {
         if (SP_IS_SPIRAL ((SPItem *) items->data)) {
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_double( repr, namespaced_name, adj->value );
             SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
@@ -1577,7 +1577,7 @@ sp_spl_tb_defaults (GtkWidget *widget, GtkObject *obj)
 }
 
 
-static void spiral_tb_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data) 
+static void spiral_tb_event_attr_changed (Inkscape::XML::Node * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data) 
 {
     GtkWidget *tbl = GTK_WIDGET(data);
 
@@ -1603,7 +1603,7 @@ static void spiral_tb_event_attr_changed (SPRepr * repr, const gchar * name, con
 }
 
 
-static SPReprEventVector spiral_tb_repr_events = {
+static Inkscape::XML::NodeEventVector spiral_tb_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
     spiral_tb_event_attr_changed,
@@ -1615,8 +1615,8 @@ static void
 sp_spiral_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
     int n_selected = 0;
-    SPRepr *repr = NULL;
-    SPRepr *oldrepr = NULL;
+    Inkscape::XML::Node *repr = NULL;
+    Inkscape::XML::Node *oldrepr = NULL;
   
     for (const GSList *items = selection->itemList();
          items != NULL;
@@ -1635,7 +1635,7 @@ sp_spiral_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
     } else if (n_selected == 1) {
         gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
         
-        oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
+        oldrepr = (Inkscape::XML::Node *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data (oldrepr, tbl);
             sp_repr_unref (oldrepr);
@@ -2004,7 +2004,7 @@ sp_arctb_open_state_changed (GtkWidget *widget, GtkObject *tbl)
             items = items->next)
        {
            if (SP_IS_ARC ((SPItem *) items->data)) {
-               SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+               Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
                sp_repr_set_attr(repr, "sodipodi:open", "true");
                SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                modmade = true;
@@ -2016,7 +2016,7 @@ sp_arctb_open_state_changed (GtkWidget *widget, GtkObject *tbl)
              items = items->next)
         {
             if (SP_IS_ARC ((SPItem *) items->data))    {
-                SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
                 sp_repr_set_attr(repr, "sodipodi:open", NULL);
                 SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
@@ -2049,7 +2049,7 @@ static void sp_arctb_defaults(GtkWidget *, GtkObject *obj)
     spinbutton_defocus (GTK_OBJECT (tbl));
 }
 
-static void arc_tb_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data)
+static void arc_tb_event_attr_changed (Inkscape::XML::Node * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data)
 {
     GtkWidget *tbl = GTK_WIDGET(data);
 
@@ -2088,7 +2088,7 @@ static void arc_tb_event_attr_changed (SPRepr * repr, const gchar * name, const 
     g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
 }
 
-static SPReprEventVector arc_tb_repr_events = {
+static Inkscape::XML::NodeEventVector arc_tb_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
     arc_tb_event_attr_changed,
@@ -2101,8 +2101,8 @@ static void
 sp_arc_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
   int n_selected = 0;
-  SPRepr *repr = NULL;
-  SPRepr *oldrepr = NULL;
+  Inkscape::XML::Node *repr = NULL;
+  Inkscape::XML::Node *oldrepr = NULL;
   
   for (const GSList *items = selection->itemList();
        items != NULL;
@@ -2121,7 +2121,7 @@ sp_arc_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
     } else if (n_selected == 1) {
         gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
 
-        oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
+        oldrepr = (Inkscape::XML::Node *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
      
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data (oldrepr, tbl);

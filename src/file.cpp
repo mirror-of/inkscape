@@ -201,7 +201,7 @@ sp_file_revert_dialog()
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
     g_assert(doc != NULL);
 
-    SPRepr     *repr = sp_document_repr_root(doc);
+    Inkscape::XML::Node     *repr = sp_document_repr_root(doc);
     g_assert(repr != NULL);
 
     gchar const *uri = doc->uri;
@@ -505,7 +505,7 @@ static Inkscape::UI::Dialogs::FileSaveDialog *saveDialogInstance = NULL;
 gboolean
 sp_file_save_dialog(SPDocument *doc)
 {
-    SPRepr *repr = sp_document_repr_root(doc);
+    Inkscape::XML::Node *repr = sp_document_repr_root(doc);
     gchar const *default_extension = NULL;
     gchar *save_loc;
     Inkscape::Extension::Output *extension;
@@ -651,7 +651,7 @@ sp_file_save_document(SPDocument *doc)
 {
     gboolean success = TRUE;
 
-    SPRepr *repr = sp_document_repr_root(doc);
+    Inkscape::XML::Node *repr = sp_document_repr_root(doc);
 
     gchar const *fn = repr->attribute("sodipodi:modified");
     if (fn != NULL) {
@@ -739,7 +739,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
         // move imported defs to our document's defs
         SPObject *in_defs = SP_DOCUMENT_DEFS(in_doc);
         SPObject *defs = SP_DOCUMENT_DEFS(doc);
-        SPRepr *last_def = sp_repr_last_child(SP_OBJECT_REPR(in_defs));
+        Inkscape::XML::Node *last_def = sp_repr_last_child(SP_OBJECT_REPR(in_defs));
         for (SPObject *child = sp_object_first_child(defs);
              child != NULL; child = SP_OBJECT_NEXT(child))
         {
@@ -747,7 +747,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             sp_repr_add_child(SP_OBJECT_REPR(in_defs), sp_repr_duplicate(SP_OBJECT_REPR(child)), last_def);
         }
 
-        SPRepr *repr = sp_document_repr_root(doc);
+        Inkscape::XML::Node *repr = sp_document_repr_root(doc);
         guint items_count = 0;
         for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc));
              child != NULL; child = SP_OBJECT_NEXT(child)) {
@@ -760,7 +760,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
 
         if (style || items_count > 1) {
             // create group
-            SPRepr *newgroup = sp_repr_new("svg:g");
+            Inkscape::XML::Node *newgroup = sp_repr_new("svg:g");
             sp_repr_set_attr(newgroup, "style", style);
 
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
@@ -783,7 +783,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             // just add one item
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
-                    SPRepr *newitem = sp_repr_duplicate(SP_OBJECT_REPR(child));
+                    Inkscape::XML::Node *newitem = sp_repr_duplicate(SP_OBJECT_REPR(child));
 
                     if (desktop) {
                         // Add it to the current layer
@@ -1215,7 +1215,7 @@ void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns
 
     GSList const *images = sp_document_get_resource_list(doc, "image");
     for (GSList const *l = images; l != NULL; l = l->next) {
-        SPRepr *ir = SP_OBJECT_REPR(l->data);
+        Inkscape::XML::Node *ir = SP_OBJECT_REPR(l->data);
 
         const gchar *href = ir->attribute("xlink:href");
 

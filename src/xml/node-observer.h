@@ -18,7 +18,12 @@
 #include <glib/gquark.h>
 #include "util/shared-c-string-ptr.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 namespace Inkscape {
 
@@ -26,20 +31,20 @@ namespace XML {
 
 class NodeObserver {
 public:
-    virtual void notifyChildAdded(SPRepr &node, SPRepr &child,
-                                  SPRepr *prev)=0;
+    virtual void notifyChildAdded(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
+                                  Inkscape::XML::Node *prev)=0;
 
-    virtual void notifyChildRemoved(SPRepr &node, SPRepr &child,
-                                    SPRepr *prev)=0;
+    virtual void notifyChildRemoved(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
+                                    Inkscape::XML::Node *prev)=0;
 
-    virtual void notifyChildOrderChanged(SPRepr &node, SPRepr &child,
-                                         SPRepr *old_prev, SPRepr *new_prev)=0;
+    virtual void notifyChildOrderChanged(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
+                                         Inkscape::XML::Node *old_prev, Inkscape::XML::Node *new_prev)=0;
 
-    virtual void notifyContentChanged(SPRepr &node,
+    virtual void notifyContentChanged(Inkscape::XML::Node &node,
                                       Util::SharedCStringPtr old_content,
                                       Util::SharedCStringPtr new_content)=0;
 
-    virtual void notifyAttributeChanged(SPRepr &node, GQuark name,
+    virtual void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark name,
                                         Util::SharedCStringPtr old_value,
                                         Util::SharedCStringPtr new_value)=0;
 };

@@ -7,10 +7,10 @@
  *
  *  Suitable for use with sp_repr_add_child.
  */
-SPRepr *
-sp_repr_last_child(SPRepr const * const parent)
+Inkscape::XML::Node *
+sp_repr_last_child(Inkscape::XML::Node const * const parent)
 {
-    return const_cast<SPRepr *>(parent)->lastChild();
+    return const_cast<Inkscape::XML::Node *>(parent)->lastChild();
 }
 
 /** Returns the sibling before \a child in \a child's parent's children, or NULL if \a child is the
@@ -27,15 +27,15 @@ sp_repr_last_child(SPRepr const * const parent)
  *        ? child == NULL || child.parent == NULL || child.parent.children == child
  *        : sp_repr_next(ret) == child).
  */
-SPRepr *
-sp_repr_prev(SPRepr const *const child)
+Inkscape::XML::Node *
+sp_repr_prev(Inkscape::XML::Node const *const child)
 {
     if (!child || !child->parent()) {
         return NULL;
     }
 
-    SPRepr const *prev = NULL;
-    for (SPRepr const *curr = child->parent()->firstChild(); curr != child; curr = curr->next()) {
+    Inkscape::XML::Node const *prev = NULL;
+    for (Inkscape::XML::Node const *curr = child->parent()->firstChild(); curr != child; curr = curr->next()) {
         if (!curr) {
             g_warning("child repr not found in its parent's list of children");
             return NULL;
@@ -47,7 +47,7 @@ sp_repr_prev(SPRepr const *const child)
     g_assert(prev == NULL
              ? child->parent()->firstChild() == child
              : prev->next() == child);
-    return const_cast<SPRepr *>(prev);
+    return const_cast<Inkscape::XML::Node *>(prev);
 }
 
 

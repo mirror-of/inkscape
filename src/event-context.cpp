@@ -575,7 +575,7 @@ sp_event_context_private_item_handler(SPEventContext *ec, SPItem *item, GdkEvent
 }
 
 static void
-sp_ec_repr_attr_changed(SPRepr *repr, gchar const *key, gchar const *oldval, gchar const *newval,
+sp_ec_repr_attr_changed(Inkscape::XML::Node *repr, gchar const *key, gchar const *oldval, gchar const *newval,
                         bool is_interactive, gpointer data)
 {
     SPEventContext *ec;
@@ -587,7 +587,7 @@ sp_ec_repr_attr_changed(SPRepr *repr, gchar const *key, gchar const *oldval, gch
     }
 }
 
-SPReprEventVector sp_ec_event_vector = {
+Inkscape::XML::NodeEventVector sp_ec_event_vector = {
     NULL, /* Child added */
     NULL, /* Child removed */
     sp_ec_repr_attr_changed,
@@ -596,7 +596,7 @@ SPReprEventVector sp_ec_event_vector = {
 };
 
 SPEventContext *
-sp_event_context_new(GType type, SPDesktop *desktop, SPRepr *repr, unsigned int key)
+sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *repr, unsigned int key)
 {
     g_return_val_if_fail(g_type_is_a(type, SP_TYPE_EVENT_CONTEXT), NULL);
     g_return_val_if_fail(desktop != NULL, NULL);

@@ -25,7 +25,12 @@
 class SPDesktop;
 class SPDocument;
 class SPObject;
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 namespace Inkscape {
 namespace Widgets {
@@ -45,7 +50,7 @@ private:
     public:
         Gtk::TreeModelColumn<unsigned> depth;
         Gtk::TreeModelColumn<SPObject *> object;
-        Gtk::TreeModelColumn<SPRepr *> repr;
+        Gtk::TreeModelColumn<Inkscape::XML::Node *> repr;
         Gtk::TreeModelColumn<void *> callbacks;
 
         LayerModelColumns() {

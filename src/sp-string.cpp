@@ -50,7 +50,7 @@
 static void sp_string_class_init(SPStringClass *classname);
 static void sp_string_init(SPString *string);
 
-static void sp_string_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_string_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_string_release(SPObject *object);
 static void sp_string_read_content(SPObject *object);
 static void sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags);
@@ -106,7 +106,7 @@ sp_string_init(SPString *string)
 }
 
 static void
-sp_string_build(SPObject *object, SPDocument *doc, SPRepr *repr)
+sp_string_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
     //SPString *string = SP_STRING(object);
     sp_string_read_content(object);

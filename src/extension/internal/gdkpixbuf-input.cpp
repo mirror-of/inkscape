@@ -24,12 +24,12 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
     SPDocument * doc = sp_document_new(NULL, TRUE, TRUE);
     sp_document_set_undo_sensitive (doc, FALSE); // no need to undo in this temporary document
     GdkPixbuf* pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
-    SPRepr *rdoc = sp_document_repr_root (doc);
+    Inkscape::XML::Node *rdoc = sp_document_repr_root (doc);
     const gchar *docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
     const gchar *relname = sp_relative_path_from_path (uri, docbase);
 
     if (pb) {         /* We are readable */
-        SPRepr *repr = NULL;
+        Inkscape::XML::Node *repr = NULL;
 
         double width = gdk_pixbuf_get_width(pb);
         double height = gdk_pixbuf_get_height(pb);
@@ -65,7 +65,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 
         } else {
             // import as pattern-filled rect
-            SPRepr *pat = sp_repr_new ("svg:pattern");
+            Inkscape::XML::Node *pat = sp_repr_new ("svg:pattern");
             sp_repr_set_attr(pat, "inkscape:collect", "always");
             sp_repr_set_attr (pat, "patternUnits", "userSpaceOnUse");
             sp_repr_set_double (pat, "width", width);
@@ -74,7 +74,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             const gchar *pat_id = sp_repr_attr(pat, "id");
             SPObject *pat_object = doc->getObjectById(pat_id);
 
-            SPRepr *im = sp_repr_new ("svg:image");
+            Inkscape::XML::Node *im = sp_repr_new ("svg:image");
             sp_repr_set_attr (im, "xlink:href", relname);
             sp_repr_set_attr (im, "sodipodi:absref", uri);
             sp_repr_set_double (im, "width", width);

@@ -28,7 +28,12 @@ protected:
 };
 
 class Path;
-struct SPRepr;
+namespace Inkscape {
+namespace XML {
+struct Node;
+}
+}
+
 
 class SPUsePath : public SPUseReference {
 public:	
@@ -37,7 +42,7 @@ public:
 	
 	SPObject       *owner;
 	gchar					 *sourceHref;
-  SPRepr         *sourceRepr;
+  Inkscape::XML::Node         *sourceRepr;
 	SPObject			 *sourceObject;
 	
 	gulong           _modified_connection;

@@ -21,7 +21,12 @@ namespace NSApplication {
 class SPDesktop;
 class SPDocument;
 class SPEventContext;
-class SPReprDoc;
+namespace Inkscape {
+namespace XML {
+class Document;
+}
+}
+
 class GSList;
 
 class Editor
@@ -56,7 +61,7 @@ protected:
     Editor(Editor const &);
     Editor& operator=(Editor const &);
 
-    SPReprDoc      *_preferences;
+    Inkscape::XML::Document      *_preferences;
     GSList         *_documents;
     GSList         *_desktops;
     gchar          *_argv0;

@@ -31,22 +31,22 @@ public:
     void beginTransaction();
     void rollback();
     void commit();
-    SPReprAction *commitUndoable();
+    Inkscape::XML::Event *commitUndoable();
 
     Session &session() { return *this; }
 
-    void notifyChildAdded(SPRepr &parent, SPRepr &child, SPRepr *prev);
+    void notifyChildAdded(Inkscape::XML::Node &parent, Inkscape::XML::Node &child, Inkscape::XML::Node *prev);
 
-    void notifyChildRemoved(SPRepr &parent, SPRepr &child, SPRepr *prev);
+    void notifyChildRemoved(Inkscape::XML::Node &parent, Inkscape::XML::Node &child, Inkscape::XML::Node *prev);
 
-    void notifyChildOrderChanged(SPRepr &parent, SPRepr &child,
-                                 SPRepr *old_prev, SPRepr *new_prev);
+    void notifyChildOrderChanged(Inkscape::XML::Node &parent, Inkscape::XML::Node &child,
+                                 Inkscape::XML::Node *old_prev, Inkscape::XML::Node *new_prev);
 
-    void notifyContentChanged(SPRepr &node,
+    void notifyContentChanged(Inkscape::XML::Node &node,
                               Util::SharedCStringPtr old_content,
                               Util::SharedCStringPtr new_content);
 
-    void notifyAttributeChanged(SPRepr &node, GQuark name,
+    void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark name,
                                 Util::SharedCStringPtr old_value,
                                 Util::SharedCStringPtr new_value);
 
@@ -55,7 +55,7 @@ private:
     void operator=(SimpleSession const &); // no assign
 
     bool _in_transaction;
-    SPReprAction *_log;
+    Inkscape::XML::Event *_log;
 };
 
 }

@@ -537,7 +537,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
     if ( c && !sp_curve_empty(c) ) {
         /* We actually have something to write */
 
-        SPRepr *repr;
+        Inkscape::XML::Node *repr;
         if (dc->white_item) {
             repr = SP_OBJECT_REPR(dc->white_item);
         } else {

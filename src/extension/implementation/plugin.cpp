@@ -68,7 +68,7 @@ Plugin::load(Inkscape::Extension::Extension *module)
         return TRUE;
     }
 
-    SPRepr * child_repr = sp_repr_children(module->get_repr());
+    Inkscape::XML::Node * child_repr = sp_repr_children(module->get_repr());
     const gchar * name = NULL;
     while (child_repr != NULL) {
         if (!strcmp(child_repr->name(), "plugin")) {
@@ -152,7 +152,7 @@ Plugin::unload(Inkscape::Extension::Extension *module)
 bool
 Plugin::check(Inkscape::Extension::Extension *module)
 {
-    SPRepr * child_repr = sp_repr_children(module->get_repr());
+    Inkscape::XML::Node * child_repr = sp_repr_children(module->get_repr());
     const gchar * name = NULL;
     while (child_repr != NULL) {
         if (!strcmp(child_repr->name(), "plugin")) {

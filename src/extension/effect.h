@@ -46,7 +46,7 @@ class Effect : public Extension {
     };
     EffectVerb _verb;
 public:
-                 Effect  (SPRepr * in_repr,
+                 Effect  (Inkscape::XML::Node * in_repr,
                           Implementation::Implementation * in_imp);
     virtual     ~Effect  (void);
     virtual bool check                (void);

@@ -18,23 +18,29 @@
 
 #include "xml/sp-repr.h"
 
-struct SPReprEventVector {
+namespace Inkscape {
+namespace XML {
+
+struct NodeEventVector {
 	/* Immediate signals */
-	void (* child_added) (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
-	void (* child_removed) (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
-	void (* attr_changed) (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, void * data);
-	void (* content_changed) (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data);
-	void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr *oldref, SPRepr *newref, void * data);
+	void (* child_added) (Node *repr, Node *child, Node *ref, void * data);
+	void (* child_removed) (Node *repr, Node *child, Node *ref, void * data);
+	void (* attr_changed) (Node *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, void * data);
+	void (* content_changed) (Node *repr, const gchar *oldcontent, const gchar *newcontent, void * data);
+	void (* order_changed) (Node *repr, Node *child, Node *oldref, Node *newref, void * data);
 };
 
-inline void sp_repr_synthesize_events (SPRepr *repr, const SPReprEventVector *vector, void * data) {
+}
+}
+
+inline void sp_repr_synthesize_events (Inkscape::XML::Node *repr, const Inkscape::XML::NodeEventVector *vector, void * data) {
 	repr->synthesizeEvents(vector, data);
 }
                                                                                 
-inline void sp_repr_add_listener (SPRepr *repr, const SPReprEventVector *vector, void * data) {
+inline void sp_repr_add_listener (Inkscape::XML::Node *repr, const Inkscape::XML::NodeEventVector *vector, void * data) {
 	repr->addListener(vector, data);
 }
-inline void sp_repr_remove_listener_by_data (SPRepr *repr, void * data) {
+inline void sp_repr_remove_listener_by_data (Inkscape::XML::Node *repr, void * data) {
 	repr->removeListenerByData(data);
 }
 

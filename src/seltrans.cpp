@@ -394,14 +394,14 @@ void sp_sel_trans_stamp(SPSelTrans *seltrans)
 
         while (l) {
             SPItem *original_item = SP_ITEM(l->data);
-            SPRepr *original_repr = SP_OBJECT_REPR(original_item);
+            Inkscape::XML::Node *original_repr = SP_OBJECT_REPR(original_item);
 
             // remember the position of the item
             gint pos = original_repr->position();
             // remember parent
-            SPRepr *parent = sp_repr_parent(original_repr);
+            Inkscape::XML::Node *parent = sp_repr_parent(original_repr);
 
-            SPRepr *copy_repr = sp_repr_duplicate(original_repr);
+            Inkscape::XML::Node *copy_repr = sp_repr_duplicate(original_repr);
 
             // add the new repr to the parent
             parent->appendChild(copy_repr);

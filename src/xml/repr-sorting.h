@@ -1,6 +1,11 @@
 /** \file Some functions relevant sorting reprs by position within document. */
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
 
-SPRepr *LCA(SPRepr *a, SPRepr *b);
-SPRepr *AncetreFils(SPRepr *descendent, SPRepr *ancestor);
+
+Inkscape::XML::Node *LCA(Inkscape::XML::Node *a, Inkscape::XML::Node *b);
+Inkscape::XML::Node *AncetreFils(Inkscape::XML::Node *descendent, Inkscape::XML::Node *ancestor);

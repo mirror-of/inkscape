@@ -35,11 +35,11 @@ static void sp_flowregion_class_init (SPFlowregionClass *klass);
 static void sp_flowregion_init (SPFlowregion *group);
 static void sp_flowregion_dispose (GObject *object);
 
-static void sp_flowregion_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
-static void sp_flowregion_remove_child (SPObject * object, SPRepr * child);
+static void sp_flowregion_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
+static void sp_flowregion_remove_child (SPObject * object, Inkscape::XML::Node * child);
 static void sp_flowregion_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_flowregion_modified (SPObject *object, guint flags);
-static SPRepr *sp_flowregion_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_flowregion_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static gchar * sp_flowregion_description (SPItem * item);
 
@@ -49,11 +49,11 @@ static void sp_flowregionexclude_class_init (SPFlowregionExcludeClass *klass);
 static void sp_flowregionexclude_init (SPFlowregionExclude *group);
 static void sp_flowregionexclude_dispose (GObject *object);
 
-static void sp_flowregionexclude_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
-static void sp_flowregionexclude_remove_child (SPObject * object, SPRepr * child);
+static void sp_flowregionexclude_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
+static void sp_flowregionexclude_remove_child (SPObject * object, Inkscape::XML::Node * child);
 static void sp_flowregionexclude_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_flowregionexclude_modified (SPObject *object, guint flags);
-static SPRepr *sp_flowregionexclude_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_flowregionexclude_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static gchar * sp_flowregionexclude_description (SPItem * item);
 
@@ -126,7 +126,7 @@ sp_flowregion_dispose(GObject *object)
 }
 
 static void
-sp_flowregion_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_flowregion_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	SPItem *item;
 	
@@ -141,7 +141,7 @@ sp_flowregion_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 /* fixme: hide (Lauris) */
 
 static void
-sp_flowregion_remove_child (SPObject * object, SPRepr * child)
+sp_flowregion_remove_child (SPObject * object, Inkscape::XML::Node * child)
 {
 	if (((SPObjectClass *) (flowregion_parent_class))->remove_child)
 		(* ((SPObjectClass *) (flowregion_parent_class))->remove_child) (object, child);
@@ -246,8 +246,8 @@ sp_flowregion_modified (SPObject *object, guint flags)
 	}
 }
 
-static SPRepr *
-sp_flowregion_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_flowregion_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPFlowregion *group;
 	
@@ -338,7 +338,7 @@ sp_flowregionexclude_dispose(GObject *object)
 }
 
 static void
-sp_flowregionexclude_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_flowregionexclude_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	SPItem *item;
 	
@@ -353,7 +353,7 @@ sp_flowregionexclude_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 /* fixme: hide (Lauris) */
 
 static void
-sp_flowregionexclude_remove_child (SPObject * object, SPRepr * child)
+sp_flowregionexclude_remove_child (SPObject * object, Inkscape::XML::Node * child)
 {
 	if (((SPObjectClass *) (flowregionexclude_parent_class))->remove_child)
 		(* ((SPObjectClass *) (flowregionexclude_parent_class))->remove_child) (object, child);
@@ -450,8 +450,8 @@ sp_flowregionexclude_modified (SPObject *object, guint flags)
 	}
 }
 
-static SPRepr *
-sp_flowregionexclude_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_flowregionexclude_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPFlowregionExclude *group;
 	

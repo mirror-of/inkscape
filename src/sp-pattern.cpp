@@ -64,10 +64,10 @@ struct SPPatPainter {
 static void sp_pattern_class_init (SPPatternClass *klass);
 static void sp_pattern_init (SPPattern *gr);
 
-static void sp_pattern_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_pattern_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_pattern_release (SPObject *object);
 static void sp_pattern_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_pattern_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
+static void sp_pattern_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
 static void sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_pattern_modified (SPObject *object, unsigned int flags);
 
@@ -149,7 +149,7 @@ sp_pattern_init (SPPattern *pat)
 }
 
 static void
-sp_pattern_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_pattern_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) pattern_parent_class)->build)
 		(* ((SPObjectClass *) pattern_parent_class)->build) (object, document, repr);
@@ -321,7 +321,7 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 static void
-sp_pattern_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_pattern_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	SPPattern *pat = SP_PATTERN (object);
 
@@ -449,9 +449,9 @@ SPPattern *
 pattern_chain (SPPattern *pattern)
 {
 	SPDocument *document = SP_OBJECT_DOCUMENT (pattern);
-	SPRepr *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
+	Inkscape::XML::Node *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
 
-	SPRepr *repr = sp_repr_new ("svg:pattern");
+	Inkscape::XML::Node *repr = sp_repr_new ("svg:pattern");
 	sp_repr_set_attr(repr, "inkscape:collect", "always");
 	gchar *parent_ref = g_strconcat ("#", sp_repr_attr(SP_OBJECT_REPR(pattern), "id"), NULL);
 	sp_repr_set_attr (repr, "xlink:href",  parent_ref);
@@ -505,9 +505,9 @@ sp_pattern_transform_multiply (SPPattern *pattern, NR::Matrix postmul, bool set)
 const gchar *
 pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix transform, NR::Matrix move)
 {
-	SPRepr *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
+	Inkscape::XML::Node *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
 
-	SPRepr *repr = sp_repr_new ("svg:pattern");
+	Inkscape::XML::Node *repr = sp_repr_new ("svg:pattern");
 	sp_repr_set_attr (repr, "patternUnits", "userSpaceOnUse");
 	sp_repr_set_double (repr, "width", bounds.extent(NR::X));
 	sp_repr_set_double (repr, "height", bounds.extent(NR::Y));
@@ -527,7 +527,7 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 	gchar m[256];
 
 	for (GSList *i = reprs; i != NULL; i = i->next) {
-		SPRepr *dup = sp_repr_duplicate (((SPRepr *) i->data));
+		Inkscape::XML::Node *dup = sp_repr_duplicate (((Inkscape::XML::Node *) i->data));
 		sp_repr_add_child(SP_OBJECT_REPR(pat_object), dup, NULL);
 
 		NR::Matrix dup_transform;

@@ -47,11 +47,11 @@ static gint sp_node_context_root_handler(SPEventContext *event_context, GdkEvent
 static gint sp_node_context_item_handler(SPEventContext *event_context,
                                          SPItem *item, GdkEvent *event);
 
-static void nodepath_event_attr_changed(SPRepr *repr, gchar const *name,
+static void nodepath_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
                                         gchar const *old_value, gchar const *new_value,
                                         bool is_interactive, gpointer data);
 
-static SPReprEventVector nodepath_repr_events = {
+static Inkscape::XML::NodeEventVector nodepath_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
     nodepath_event_attr_changed,
@@ -136,7 +136,7 @@ sp_node_context_dispose(GObject *object)
     nc->sel_changed_connection.disconnect();
     nc->sel_changed_connection.~connection();
 
-    SPRepr *repr = NULL;
+    Inkscape::XML::Node *repr = NULL;
     if (nc->nodepath) {
         repr = nc->nodepath->repr;
     }
@@ -202,7 +202,7 @@ sp_node_context_setup(SPEventContext *ec)
 
         if (nc->nodepath || nc->knot_holder) {
             // setting listener
-            SPRepr *repr = SP_OBJECT_REPR(item);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
             if (repr) {
                 sp_repr_ref(repr);
                 sp_repr_add_listener(repr, &nodepath_repr_events, ec);
@@ -233,7 +233,7 @@ sp_node_context_selection_changed(SPSelection *selection, gpointer data)
     SPNodeContext *nc = SP_NODE_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(nc);
 
-    SPRepr *old_repr = NULL;
+    Inkscape::XML::Node *old_repr = NULL;
 
     if (nc->nodepath) {
         old_repr = nc->nodepath->repr;
@@ -263,7 +263,7 @@ sp_node_context_selection_changed(SPSelection *selection, gpointer data)
 
         if (nc->nodepath || nc->knot_holder) {
             // setting new listener
-            SPRepr *repr = SP_OBJECT_REPR(item);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
             if (repr) {
                 sp_repr_ref(repr);
                 sp_repr_add_listener(repr, &nodepath_repr_events, ec);
@@ -312,7 +312,7 @@ sp_nodepath_update_from_item(SPNodeContext *nc, SPItem *item)
 \brief  Callback that is fired whenever an attribute of the selected item (which we have in the nodepath) changes
 */
 static void
-nodepath_event_attr_changed(SPRepr *repr, gchar const *name,
+nodepath_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
                             gchar const *old_value, gchar const *new_value,
                             bool is_interactive, gpointer data)
 {

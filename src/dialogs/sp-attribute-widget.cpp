@@ -196,7 +196,7 @@ sp_attribute_widget_new ( SPObject *object, const gchar *attribute )
 
 
 GtkWidget *
-sp_attribute_widget_new_repr ( SPRepr *repr, const gchar *attribute )
+sp_attribute_widget_new_repr ( Inkscape::XML::Node *repr, const gchar *attribute )
 {
     SPAttributeWidget *spaw;
 
@@ -268,7 +268,7 @@ sp_attribute_widget_set_object ( SPAttributeWidget *spaw,
 
 void
 sp_attribute_widget_set_repr ( SPAttributeWidget *spaw, 
-                               SPRepr *repr, 
+                               Inkscape::XML::Node *repr, 
                                const gchar *attribute )
 {
 
@@ -484,7 +484,7 @@ sp_attribute_table_new ( SPObject *object,
 
 
 GtkWidget *
-sp_attribute_table_new_repr ( SPRepr *repr, 
+sp_attribute_table_new_repr ( Inkscape::XML::Node *repr, 
                               gint num_attr, 
                               const gchar **labels, 
                               const gchar **attributes )
@@ -613,7 +613,7 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
 
 void
 sp_attribute_table_set_repr ( SPAttributeTable *spat, 
-                              SPRepr *repr, 
+                              Inkscape::XML::Node *repr, 
                               gint num_attr, 
                               const gchar **labels, 
                               const gchar **attributes )

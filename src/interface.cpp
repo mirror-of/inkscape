@@ -1258,21 +1258,21 @@ sp_ui_drag_data_received (GtkWidget * widget,
 
 		SPDocument *doc = SP_ACTIVE_DOCUMENT;
 
-		SPReprDoc *rnewdoc = sp_repr_read_mem (svgdata, data->length, SP_SVG_NS_URI);
+		Inkscape::XML::Document *rnewdoc = sp_repr_read_mem (svgdata, data->length, SP_SVG_NS_URI);
 
 		if (rnewdoc == NULL) {
 			sp_ui_error_dialog (_("Could not parse SVG data"));
 			return;
 		}
 
-		SPRepr *repr = sp_repr_document_root (rnewdoc);
+		Inkscape::XML::Node *repr = sp_repr_document_root (rnewdoc);
 		const gchar *style = repr->attribute("style");
 
-		SPRepr *newgroup = sp_repr_new ("svg:g");
+		Inkscape::XML::Node *newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);
 
-		for (SPRepr *child = repr->firstChild(); child != NULL; child = child->next()) {
-			SPRepr * newchild = sp_repr_duplicate (child);
+		for (Inkscape::XML::Node *child = repr->firstChild(); child != NULL; child = child->next()) {
+			Inkscape::XML::Node * newchild = sp_repr_duplicate (child);
 			newgroup->appendChild(newchild);
 		}
 

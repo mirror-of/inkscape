@@ -464,7 +464,7 @@ sp_export_dialog (void)
             gchar *name;
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
             const gchar *uri = SP_DOCUMENT_URI (doc);
-            SPRepr * repr = sp_document_repr_root(doc);
+            Inkscape::XML::Node * repr = sp_document_repr_root(doc);
             const gchar * text_extension = repr->attribute("inkscape:output_extension");
             Inkscape::Extension::Output * oextension = NULL;
 
@@ -757,7 +757,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
             case SELECTION_PAGE:
             case SELECTION_DRAWING: {
                 SPDocument * doc = SP_ACTIVE_DOCUMENT;
-                SPRepr * repr = sp_document_repr_root(doc);
+                Inkscape::XML::Node * repr = sp_document_repr_root(doc);
                 const gchar * dpi_string;
 
                 filename = repr->attribute("inkscape:export-filename");
@@ -798,7 +798,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                             ydpi_search;
                             reprlst = reprlst->next) {
                         const gchar * dpi_string;
-                        SPRepr * repr = (SPRepr *)reprlst->data;
+                        Inkscape::XML::Node * repr = (Inkscape::XML::Node *)reprlst->data;
 
                         if (filename_search) {
                             filename = repr->attribute("inkscape:export-filename");
@@ -831,7 +831,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                         const gchar * id = NULL;
                         reprlst = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->reprList();
                         for(; reprlst != NULL; reprlst = reprlst->next) {
-                            SPRepr * repr = (SPRepr *)reprlst->data;
+                            Inkscape::XML::Node * repr = (Inkscape::XML::Node *)reprlst->data;
                             if (repr->attribute("id")) {
                                 id = repr->attribute("id");
                                 break;
@@ -1040,7 +1040,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
         case SELECTION_PAGE:
         case SELECTION_DRAWING: {
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
-            SPRepr * repr = sp_document_repr_root(doc);
+            Inkscape::XML::Node * repr = sp_document_repr_root(doc);
             bool modified = FALSE;
             const gchar * temp_string;
 
@@ -1078,7 +1078,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             reprlst = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->reprList();
 
             for(; reprlst != NULL; reprlst = reprlst->next) {
-                SPRepr * repr = (SPRepr *)reprlst->data;
+                Inkscape::XML::Node * repr = (Inkscape::XML::Node *)reprlst->data;
                 const gchar * temp_string;
 
                 if (repr->attribute("id") == NULL ||
@@ -1104,7 +1104,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             }
 
             if (modified) {
-                SPRepr * repr = sp_document_repr_root(doc);
+                Inkscape::XML::Node * repr = sp_document_repr_root(doc);
                 sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
             }
 

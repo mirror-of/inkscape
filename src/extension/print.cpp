@@ -15,7 +15,7 @@
 namespace Inkscape {
 namespace Extension {
 
-Print::Print (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
+Print::Print (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
     base = NULL;
     arena = NULL;

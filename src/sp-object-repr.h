@@ -14,11 +14,16 @@
 
 #include "forward.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
 
-SPObject *sp_object_repr_build_tree (SPDocument *document, SPRepr *repr);
 
-GType sp_repr_type_lookup (SPRepr *repr);
+SPObject *sp_object_repr_build_tree (SPDocument *document, Inkscape::XML::Node *repr);
+
+GType sp_repr_type_lookup (Inkscape::XML::Node *repr);
 
 void sp_object_type_register(gchar const *name, GType type);
 

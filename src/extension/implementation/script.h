@@ -15,7 +15,12 @@
 
 #include "implementation.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 namespace Inkscape {
 namespace Extension {
@@ -37,7 +42,7 @@ private:
                                 gchar const *fileout);
     /** Just a quick function to find and resolve relative paths for
         the incoming scripts */
-    gchar *       solve_reldir (SPRepr *reprin);
+    gchar *       solve_reldir (Inkscape::XML::Node *reprin);
     bool          check_existance (gchar const *command);
 
 public:

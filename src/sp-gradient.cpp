@@ -57,9 +57,9 @@
 static void sp_stop_class_init(SPStopClass *klass);
 static void sp_stop_init(SPStop *stop);
 
-static void sp_stop_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_stop_set(SPObject *object, unsigned key, gchar const *value);
-static SPRepr *sp_stop_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static SPObjectClass *stop_parent_class;
 
@@ -101,7 +101,7 @@ sp_stop_init (SPStop *stop)
 	sp_color_set_rgb_rgba32 (&stop->color, 0x000000ff);
 }
 
-static void sp_stop_build(SPObject *object, SPDocument *document, SPRepr *repr)
+static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) stop_parent_class)->build)
 		(* ((SPObjectClass *) stop_parent_class)->build) (object, document, repr);
@@ -162,8 +162,8 @@ sp_stop_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 }
 
-static SPRepr *
-sp_stop_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_stop_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPStop *stop = SP_STOP (object);
 
@@ -194,13 +194,13 @@ sp_stop_write (SPObject *object, SPRepr *repr, guint flags)
 static void sp_gradient_class_init (SPGradientClass *klass);
 static void sp_gradient_init (SPGradient *gr);
 
-static void sp_gradient_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_gradient_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_gradient_release (SPObject *object);
 static void sp_gradient_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_gradient_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
-static void sp_gradient_remove_child (SPObject *object, SPRepr *child);
+static void sp_gradient_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
+static void sp_gradient_remove_child (SPObject *object, Inkscape::XML::Node *child);
 static void sp_gradient_modified (SPObject *object, guint flags);
-static SPRepr *sp_gradient_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_gradient_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static void gradient_ref_modified (SPObject *href, guint flags, SPGradient *gradient);
 
@@ -275,7 +275,7 @@ sp_gradient_init (SPGradient *gr)
 }
 
 static void
-sp_gradient_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_gradient_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	SPGradient *gradient = SP_GRADIENT (object);
 
@@ -419,7 +419,7 @@ gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gr)
 }
 
 static void
-sp_gradient_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_gradient_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	SPGradient *gr = SP_GRADIENT (object);
 
@@ -438,7 +438,7 @@ sp_gradient_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 }
 
 static void
-sp_gradient_remove_child (SPObject *object, SPRepr *child)
+sp_gradient_remove_child (SPObject *object, Inkscape::XML::Node *child)
 {
 	SPGradient *gr = SP_GRADIENT (object);
 
@@ -489,8 +489,8 @@ sp_gradient_modified (SPObject *object, guint flags)
 	}
 }
 
-static SPRepr *
-sp_gradient_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_gradient_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPGradient *gr = SP_GRADIENT (object);
 
@@ -501,13 +501,13 @@ sp_gradient_write (SPObject *object, SPRepr *repr, guint flags)
 		GSList *l;
 		l = NULL;
 		for ( SPObject *child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-			SPRepr *crepr;
+			Inkscape::XML::Node *crepr;
 			crepr = child->updateRepr(NULL, flags);
 			if (crepr) l = g_slist_prepend (l, crepr);
 		}
 		while (l) {
-			sp_repr_add_child (repr, (SPRepr *) l->data, NULL);
-			sp_repr_unref ((SPRepr *) l->data);
+			sp_repr_add_child (repr, (Inkscape::XML::Node *) l->data, NULL);
+			sp_repr_unref ((Inkscape::XML::Node *) l->data);
 			l = g_slist_remove (l, l->data);
 		}
 	}
@@ -613,7 +613,7 @@ sp_gradient_set_spread (SPGradient *gr, SPGradientSpread spread)
 }
 
 void
-sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vector)
+sp_gradient_repr_set_vector (SPGradient *gr, Inkscape::XML::Node *repr, SPGradientVector *vector)
 {
 	g_return_if_fail (gr != NULL);
 	g_return_if_fail (SP_IS_GRADIENT (gr));
@@ -625,7 +625,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 		for (int i = 0; i < vector->nstops; i++) {
 			gchar c[64];
 			Inkscape::SVGOStringStream os;
-			SPRepr *child = sp_repr_new ("svg:stop");
+			Inkscape::XML::Node *child = sp_repr_new ("svg:stop");
 			sp_repr_set_double (child, "offset",
 						      vector->stops[i].offset * (vector->end - vector->start) + vector->start);
 			sp_svg_write_color (c, 64, sp_color_get_rgba32_ualpha (&vector->stops[i].color, 0x00));
@@ -638,7 +638,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 
 	/* Now collect stops from original repr */
 	GSList *sl = NULL;
-	for (SPRepr *child = repr->firstChild() ; child != NULL; child = child->next() ) {
+	for (Inkscape::XML::Node *child = repr->firstChild() ; child != NULL; child = child->next() ) {
 		if (!strcmp (child->name(), "svg:stop")) {
 			sl = g_slist_prepend (sl, child);
 		}
@@ -647,13 +647,13 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 	while (sl) {
 		/* fixme: This should work, unless we make gradient
 		 *        into generic group */
-		sp_repr_unparent ((SPRepr *)sl->data);
+		sp_repr_unparent ((Inkscape::XML::Node *)sl->data);
 		sl = g_slist_remove (sl, sl->data);
 	}
 
 	/* And insert new children from list */
 	while (cl) {
-		SPRepr *child = static_cast<SPRepr *>(cl->data);
+		Inkscape::XML::Node *child = static_cast<Inkscape::XML::Node *>(cl->data);
 		sp_repr_add_child(repr, child, NULL);
 		sp_repr_unref(child);
 		cl = g_slist_remove(cl, child);
@@ -1057,9 +1057,9 @@ struct SPLGPainter {
 static void sp_lineargradient_class_init(SPLinearGradientClass *klass);
 static void sp_lineargradient_init(SPLinearGradient *lg);
 
-static void sp_lineargradient_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_lineargradient_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value);
-static SPRepr *sp_lineargradient_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_lineargradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static SPPainter *sp_lineargradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, NRRect const *bbox);
 static void sp_lineargradient_painter_free (SPPaintServer *ps, SPPainter *painter);
@@ -1111,7 +1111,7 @@ static void sp_lineargradient_init(SPLinearGradient *lg)
 	sp_svg_length_unset (&lg->y2, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
 }
 
-static void sp_lineargradient_build(SPObject *object, SPDocument *document, SPRepr *repr)
+static void sp_lineargradient_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) lg_parent_class)->build)
 		(* ((SPObjectClass *) lg_parent_class)->build) (object, document, repr);
@@ -1159,8 +1159,8 @@ sp_lineargradient_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 }
 
-static SPRepr *
-sp_lineargradient_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_lineargradient_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPLinearGradient *lg = SP_LINEARGRADIENT (object);
 
@@ -1280,13 +1280,13 @@ sp_lineargradient_set_position (SPLinearGradient *lg, gdouble x1, gdouble y1, gd
 
 /* Builds flattened repr tree of gradient - i.e. no href */
 
-SPRepr *
+Inkscape::XML::Node *
 sp_lineargradient_build_repr (SPLinearGradient *lg, gboolean vector)
 {
 	g_return_val_if_fail (lg != NULL, NULL);
 	g_return_val_if_fail (SP_IS_LINEARGRADIENT (lg), NULL);
 
-	SPRepr *repr = sp_repr_new ("svg:linearGradient");
+	Inkscape::XML::Node *repr = sp_repr_new ("svg:linearGradient");
 
 	SP_OBJECT(lg)->updateRepr(repr, SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
 
@@ -1321,9 +1321,9 @@ struct SPRGPainter {
 static void sp_radialgradient_class_init (SPRadialGradientClass *klass);
 static void sp_radialgradient_init (SPRadialGradient *rg);
 
-static void sp_radialgradient_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_radialgradient_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_radialgradient_set (SPObject *object, unsigned int key, const gchar *value);
-static SPRepr *sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_radialgradient_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static SPPainter *sp_radialgradient_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, const NRRect *bbox);
 static void sp_radialgradient_painter_free (SPPaintServer *ps, SPPainter *painter);
@@ -1378,7 +1378,7 @@ sp_radialgradient_init (SPRadialGradient *rg)
 }
 
 static void
-sp_radialgradient_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_radialgradient_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) rg_parent_class)->build)
 		(* ((SPObjectClass *) rg_parent_class)->build) (object, document, repr);
@@ -1441,8 +1441,8 @@ sp_radialgradient_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 }
 
-static SPRepr *
-sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_radialgradient_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPRadialGradient *rg = SP_RADIALGRADIENT (object);
 
@@ -1534,13 +1534,13 @@ sp_radialgradient_set_position (SPRadialGradient *rg, gdouble cx, gdouble cy, gd
 
 /* Builds flattened repr tree of gradient - i.e. no href */
 
-SPRepr *
+Inkscape::XML::Node *
 sp_radialgradient_build_repr (SPRadialGradient *rg, gboolean vector)
 {
 	g_return_val_if_fail (rg != NULL, NULL);
 	g_return_val_if_fail (SP_IS_RADIALGRADIENT (rg), NULL);
 
-	SPRepr *repr = sp_repr_new ("svg:radialGradient");
+	Inkscape::XML::Node *repr = sp_repr_new ("svg:radialGradient");
 
 	SP_OBJECT(rg)->updateRepr(repr, SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
 

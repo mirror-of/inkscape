@@ -44,10 +44,10 @@ static void sp_path_init(SPPath *path);
 static void sp_path_finalize(GObject *obj);
 static void sp_path_release(SPObject *object);
 
-static void sp_path_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_path_set(SPObject *object, unsigned key, gchar const *value);
 
-static SPRepr *sp_path_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_path_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 static NR::Matrix sp_path_set_transform(SPItem *item, NR::Matrix const &xform);
 static gchar * sp_path_description(SPItem *item);
 
@@ -149,7 +149,7 @@ sp_path_finalize(GObject *obj)
  *  fill & style attributes, markers, and CSS properties.
  */
 static void
-sp_path_build(SPObject *object, SPDocument *document, SPRepr *repr)
+sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPPath *path = SP_PATH(object);
 
@@ -274,10 +274,10 @@ sp_path_set(SPObject *object, unsigned int key, gchar const *value)
 
 /**
  *
- * Writes the path object into a SPRepr
+ * Writes the path object into a Inkscape::XML::Node
  */
-static SPRepr *
-sp_path_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_path_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPShape *shape = (SPShape *) object;
 

@@ -23,7 +23,12 @@
 
 #include "forward.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 struct GrDrag;
 
@@ -37,7 +42,7 @@ struct SPEventContext : public GObject {
     SPEventContext *next;
     unsigned key;
     SPDesktop *desktop;
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
     gchar **cursor_shape;
     gint hot_x, hot_y;
     GdkCursor *cursor;
@@ -74,7 +79,7 @@ struct SPEventContextClass : public GObjectClass {
 
 #define SP_EVENT_CONTEXT_STATIC 0
 
-SPEventContext *sp_event_context_new(GType type, SPDesktop *desktop, SPRepr *repr, unsigned key);
+SPEventContext *sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *repr, unsigned key);
 void sp_event_context_finish(SPEventContext *ec);
 void sp_event_context_read(SPEventContext *ec, gchar const *key);
 void sp_event_context_activate(SPEventContext *ec);

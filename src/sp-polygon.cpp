@@ -28,8 +28,8 @@
 static void sp_polygon_class_init(SPPolygonClass *pc);
 static void sp_polygon_init(SPPolygon *polygon);
 
-static void sp_polygon_build(SPObject *object, SPDocument *document, SPRepr *repr);
-static SPRepr *sp_polygon_write(SPObject *object, SPRepr *repr, guint flags);
+static void sp_polygon_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
+static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 static void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value);
 
 static gchar *sp_polygon_description(SPItem *item);
@@ -76,7 +76,7 @@ static void sp_polygon_init(SPPolygon *polygon)
     /* Nothing here */
 }
 
-static void sp_polygon_build(SPObject *object, SPDocument *document, SPRepr *repr)
+static void sp_polygon_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     if (((SPObjectClass *) parent_class)->build) {
         ((SPObjectClass *) parent_class)->build(object, document, repr);
@@ -115,7 +115,7 @@ static gchar *sp_svg_write_polygon(const NArtBpath *bpath)
     return g_strdup(os.str().c_str());
 }
 
-static SPRepr *sp_polygon_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPShape *shape = SP_SHAPE(object);
     // Tolerable workaround: we need to update the object's curve before we set points=

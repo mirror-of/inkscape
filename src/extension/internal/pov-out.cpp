@@ -67,14 +67,14 @@ PovOutput::check (Inkscape::Extension::Extension * module)
  * and adds refs to all nodes with the given name, to the result vector
  */
 static void
-findElementsByTagName(std::vector<SPRepr *> &results, SPRepr *node, const char *name)
+findElementsByTagName(std::vector<Inkscape::XML::Node *> &results, Inkscape::XML::Node *node, const char *name)
 {
     if (!name)
         results.push_back(node);
     else if (strcmp(node->name(), name) == 0)
         results.push_back(node);
 
-    for (SPRepr *child = node->firstChild() ; child ; child = child->next())
+    for (Inkscape::XML::Node *child = node->firstChild() ; child ; child = child->next())
         findElementsByTagName ( results, child, name );
 
 }
@@ -103,7 +103,7 @@ class PovShapeInfo
 void
 PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 {
-    std::vector<SPRepr *>results;
+    std::vector<Inkscape::XML::Node *>results;
     //findElementsByTagName(results, SP_ACTIVE_DOCUMENT->rroot, "path");
     findElementsByTagName(results, SP_ACTIVE_DOCUMENT->rroot, NULL);//Check all nodes
     if (results.size() == 0)
@@ -132,7 +132,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
     for (indx = 0; indx < results.size() ; indx++)
         {
         //### Fetch the object from the repr info
-        SPRepr *rpath = results[indx];
+        Inkscape::XML::Node *rpath = results[indx];
         gchar *id  = (gchar *)sp_repr_attr(rpath, "id");
         SPObject *reprobj = SP_ACTIVE_DOCUMENT->getObjectByRepr(rpath);
         if (!reprobj)

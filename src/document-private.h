@@ -22,14 +22,19 @@
 
 #define SP_DOCUMENT_DEFS(d) ((SPObject *) SP_ROOT (SP_DOCUMENT_ROOT (d))->defs)
 
-class SPReprAction;
+namespace Inkscape {
+namespace XML {
+class Event;
+}
+}
+
 
 struct SPDocumentPrivate {
 	typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
 	typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
 
 	GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
-	GHashTable *reprdef;   /**< Dictionary of SPRepr -> SPObject mappings */
+	GHashTable *reprdef;   /**< Dictionary of Inkscape::XML::Node -> SPObject mappings */
 
 	/** Dictionary of signals for id changes */
 	IDChangedSignalMap id_changed_signals;
@@ -45,7 +50,7 @@ struct SPDocumentPrivate {
 
 	/* Undo/Redo state */
 	guint sensitive: 1; /* If we save actions to undo stack */
-	SPReprAction * partial; /* partial undo log when interrupted */
+	Inkscape::XML::Event * partial; /* partial undo log when interrupted */
 	int history_size;
 	GSList * undo; /* Undo stack of reprs */
 	GSList * redo; /* Redo stack of reprs */

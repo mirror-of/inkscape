@@ -34,7 +34,7 @@
 
 /* Helper functions for sp_selected_path_to_curves */
 static void sp_selected_path_to_curves0 (gboolean do_document_done, guint32 text_grouping_policy);
-static SPRepr * sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy);
+static Inkscape::XML::Node * sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy);
 enum {				
   /* Not used yet. This is the placeholder of Lauris's idea. */
 	SP_TOCURVE_INTERACTIVE       = 1 << 0,
@@ -66,7 +66,7 @@ sp_selected_path_combine (void)
 		}
 	}
 
-	SPRepr *parent = SP_OBJECT_REPR ((SPItem *) items->data)->parent();
+	Inkscape::XML::Node *parent = SP_OBJECT_REPR ((SPItem *) items->data)->parent();
 	for (GSList *i = items; i != NULL; i = i->next) {
 		if ( SP_OBJECT_REPR ((SPItem *) i->data)->parent() != parent ) {
 		    desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot combine objects from <b>different groups</b> or <b>layers</b>."));
@@ -119,7 +119,7 @@ sp_selected_path_combine (void)
 
 	g_slist_free (items);
 
-	SPRepr *repr = sp_repr_new ("svg:path");
+	Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
 
 	// restore id
 	sp_repr_set_attr (repr, "id", id);
@@ -176,7 +176,7 @@ sp_selected_path_break_apart (void)
 
 		did = true;
 
-		SPRepr *parent = SP_OBJECT_REPR (item)->parent();
+		Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
 		gint pos = SP_OBJECT_REPR (item)->position();
 		const char *id = sp_repr_attr(SP_OBJECT_REPR (item), "id");
 
@@ -199,7 +199,7 @@ sp_selected_path_break_apart (void)
 		for (GSList *l = g_slist_reverse(list); l != NULL; l = l->next) {
 			curve = (SPCurve *) l->data;
 
-			SPRepr *repr = sp_repr_new ("svg:path");
+			Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
 			sp_repr_set_attr (repr, "style", style);
 
 			gchar *str = sp_svg_write_path (curve->bpath);
@@ -264,7 +264,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 
 		SPItem *item = SP_ITEM (items->data);
 
-		SPRepr *repr = sp_selected_item_to_curved_repr (item, 0);
+		Inkscape::XML::Node *repr = sp_selected_item_to_curved_repr (item, 0);
 		if (!repr)
 			continue;
 		
@@ -273,7 +273,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		// remember the position of the item
 		gint pos = SP_OBJECT_REPR (item)->position();
 		// remember parent
-		SPRepr *parent = SP_OBJECT_REPR (item)->parent();
+		Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
 		// remember id
 		const char *id = sp_repr_attr(SP_OBJECT_REPR (item), "id");
 
@@ -303,7 +303,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 	}
 }
 
-static SPRepr *
+static Inkscape::XML::Node *
 sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 {
 	if (!item)
@@ -319,7 +319,7 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 	if (!curve)
 	  return NULL;
 	
-	SPRepr *repr = sp_repr_new ("svg:path");
+	Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
 	/* Transformation */
 	sp_repr_set_attr (repr, "transform", 
 			  sp_repr_attr(SP_OBJECT_REPR (item), "transform"));

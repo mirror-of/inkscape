@@ -437,14 +437,14 @@ rdf_string(struct rdf_t * rdf)
  *  
  */
 const gchar *
-rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
+rdf_get_repr_text ( Inkscape::XML::Node * repr, struct rdf_work_entity_t * entity )
 {
     g_return_val_if_fail (repr != NULL, NULL);
     g_return_val_if_fail (entity != NULL, NULL);
     static gchar * bag = NULL;
     gchar * holder = NULL;
 
-    SPRepr * temp=NULL;
+    Inkscape::XML::Node * temp=NULL;
     switch (entity->datatype) {
         case RDF_CONTENT:
             temp = sp_repr_children(repr);
@@ -509,7 +509,7 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
 }
 
 unsigned int
-rdf_set_repr_text ( SPRepr * repr,
+rdf_set_repr_text ( Inkscape::XML::Node * repr,
                     struct rdf_work_entity_t * entity,
                     gchar const * text )
 {
@@ -520,9 +520,9 @@ rdf_set_repr_text ( SPRepr * repr,
     gchar** strlist = NULL;
     int i;
 
-    SPRepr * temp=NULL;
-    SPRepr * child=NULL;
-    SPRepr * parent=repr;
+    Inkscape::XML::Node * temp=NULL;
+    Inkscape::XML::Node * child=NULL;
+    Inkscape::XML::Node * parent=repr;
     switch (entity->datatype) {
         case RDF_CONTENT:
             temp = sp_repr_children(parent);
@@ -628,22 +628,22 @@ rdf_set_repr_text ( SPRepr * repr,
     return 0;
 }
 
-SPRepr *
+Inkscape::XML::Node *
 rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
 {
     g_return_val_if_fail (doc        != NULL, NULL);
     g_return_val_if_fail (doc->rroot != NULL, NULL);
 
-    SPRepr * rdf = sp_repr_lookup_name ( doc->rroot, XML_TAG_NAME_RDF );
+    Inkscape::XML::Node * rdf = sp_repr_lookup_name ( doc->rroot, XML_TAG_NAME_RDF );
 
     if (rdf == NULL) {
         //printf("missing XML '%s'\n",XML_TAG_NAME_RDF);
         if (!build) return NULL;
 
-        SPRepr * svg = sp_repr_lookup_name ( doc->rroot, XML_TAG_NAME_SVG );
+        Inkscape::XML::Node * svg = sp_repr_lookup_name ( doc->rroot, XML_TAG_NAME_SVG );
         g_return_val_if_fail ( svg != NULL, NULL );
 
-        SPRepr * parent = sp_repr_lookup_name ( svg, XML_TAG_NAME_METADATA );
+        Inkscape::XML::Node * parent = sp_repr_lookup_name ( svg, XML_TAG_NAME_METADATA );
         if ( parent == NULL ) {
             parent = sp_repr_new( XML_TAG_NAME_METADATA );
             g_return_val_if_fail ( parent != NULL, NULL);
@@ -663,10 +663,10 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
      * some implementations do not put RDF stuff inside <metadata>,
      * so we need to check for it and add it if we don't see it
      */
-    SPRepr * want_metadata = sp_repr_parent ( rdf );
+    Inkscape::XML::Node * want_metadata = sp_repr_parent ( rdf );
     g_return_val_if_fail (want_metadata != NULL, NULL);
     if (strcmp( want_metadata->name(), XML_TAG_NAME_METADATA )) {
-            SPRepr * metadata = sp_repr_new( XML_TAG_NAME_METADATA );
+            Inkscape::XML::Node * metadata = sp_repr_new( XML_TAG_NAME_METADATA );
             g_return_val_if_fail (metadata != NULL, NULL);
 
             /* attach the metadata node */
@@ -683,17 +683,17 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
     return rdf;
 }
 
-SPRepr *
+Inkscape::XML::Node *
 rdf_get_xml_repr( SPDocument * doc, gchar const * name, bool build )
 {
     g_return_val_if_fail (name       != NULL, NULL);
     g_return_val_if_fail (doc        != NULL, NULL);
     g_return_val_if_fail (doc->rroot != NULL, NULL);
 
-    SPRepr * rdf = rdf_get_rdf_root_repr ( doc, build );
+    Inkscape::XML::Node * rdf = rdf_get_rdf_root_repr ( doc, build );
     if (!rdf) return NULL;
 
-    SPRepr * xml = sp_repr_lookup_name ( rdf, name );
+    Inkscape::XML::Node * xml = sp_repr_lookup_name ( rdf, name );
     if (xml == NULL) {
         //printf("missing XML '%s'\n",name);
         if (!build) return NULL;
@@ -710,17 +710,17 @@ rdf_get_xml_repr( SPDocument * doc, gchar const * name, bool build )
     return xml;
 }
 
-SPRepr *
+Inkscape::XML::Node *
 rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
 {
     g_return_val_if_fail (name       != NULL, NULL);
     g_return_val_if_fail (doc        != NULL, NULL);
     g_return_val_if_fail (doc->rroot != NULL, NULL);
 
-    SPRepr * work = rdf_get_xml_repr ( doc, XML_TAG_NAME_WORK, build );
+    Inkscape::XML::Node * work = rdf_get_xml_repr ( doc, XML_TAG_NAME_WORK, build );
     if (!work) return NULL;
 
-    SPRepr * item = sp_repr_lookup_name ( work, name, 1 );
+    Inkscape::XML::Node * item = sp_repr_lookup_name ( work, name, 1 );
     if (item == NULL) {
         //printf("missing XML '%s'\n",name);
         if (!build) return NULL;
@@ -750,7 +750,7 @@ rdf_get_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity)
     if ( entity == NULL ) return NULL;
     //printf("want '%s'\n",entity->title);
 
-    SPRepr * item;
+    Inkscape::XML::Node * item;
     if ( entity->datatype == RDF_XML ) {
         item = rdf_get_xml_repr ( doc, entity->tag, FALSE );
     }
@@ -787,7 +787,7 @@ rdf_set_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity,
         text);
     */
 
-    SPRepr * item = rdf_get_work_repr( doc, entity->tag, TRUE );
+    Inkscape::XML::Node * item = rdf_get_work_repr( doc, entity->tag, TRUE );
     g_return_val_if_fail ( item != NULL, 0 );
 
     return rdf_set_repr_text ( item, entity, text );
@@ -796,7 +796,7 @@ rdf_set_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity,
 #undef DEBUG_MATCH
 
 bool
-rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
+rdf_match_license ( Inkscape::XML::Node * repr, struct rdf_license_t * license )
 {
     g_assert ( repr != NULL );
     g_assert ( license != NULL );
@@ -813,7 +813,7 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
     }
     bool * matched = (bool*)calloc(count,sizeof(bool));
 
-    for (SPRepr * current = sp_repr_children ( repr );
+    for (Inkscape::XML::Node * current = sp_repr_children ( repr );
          current;
          current = sp_repr_next ( current ) ) {
 
@@ -889,7 +889,7 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
 struct rdf_license_t *
 rdf_get_license(SPDocument * document)
 {
-    SPRepr * repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, FALSE );
+    Inkscape::XML::Node * repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, FALSE );
     if (repr) {
         for (struct rdf_license_t * license = rdf_licenses;
              license->name; license++ ) {
@@ -914,7 +914,7 @@ void
 rdf_set_license(SPDocument * document, struct rdf_license_t * license)
 {
     // drop old license section
-    SPRepr * repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, FALSE );
+    Inkscape::XML::Node * repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, FALSE );
     if (repr) sp_repr_unparent(repr);
 
     if (!license) return;
@@ -927,7 +927,7 @@ rdf_set_license(SPDocument * document, struct rdf_license_t * license)
 
     for (struct rdf_double_t * detail = license->details;
          detail->name; detail++) {
-        SPRepr * child = sp_repr_new( detail->name );
+        Inkscape::XML::Node * child = sp_repr_new( detail->name );
         g_assert ( child != NULL );
 
         sp_repr_set_attr ( child, "rdf:resource", detail->resource );
@@ -955,7 +955,7 @@ rdf_set_defaults ( SPDocument * document )
     if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL,
                                           XML_TAG_NAME_METADATA)) {
         // create repr
-        SPRepr * rnew = sp_repr_new (XML_TAG_NAME_METADATA);
+        Inkscape::XML::Node * rnew = sp_repr_new (XML_TAG_NAME_METADATA);
         // insert into the document
         sp_repr_add_child (document->rroot, rnew, NULL);
         // clean up

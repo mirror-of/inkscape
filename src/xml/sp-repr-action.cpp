@@ -25,12 +25,12 @@
 using Inkscape::Util::List;
 using Inkscape::Util::reverse_list;
 
-int SPReprAction::_next_serial=0;
+int Inkscape::XML::Event::_next_serial=0;
 
 using Inkscape::XML::Session;
 
 void
-sp_repr_begin_transaction (SPReprDoc *doc)
+sp_repr_begin_transaction (Inkscape::XML::Document *doc)
 {
 	g_assert(doc != NULL);
 	Session *session=doc->session();
@@ -39,7 +39,7 @@ sp_repr_begin_transaction (SPReprDoc *doc)
 }
 
 void
-sp_repr_rollback (SPReprDoc *doc)
+sp_repr_rollback (Inkscape::XML::Document *doc)
 {
 	g_assert(doc != NULL);
 	Session *session=doc->session();
@@ -48,7 +48,7 @@ sp_repr_rollback (SPReprDoc *doc)
 }
 
 void
-sp_repr_commit (SPReprDoc *doc)
+sp_repr_commit (Inkscape::XML::Document *doc)
 {
 	g_assert(doc != NULL);
 	Session *session=doc->session();
@@ -56,8 +56,8 @@ sp_repr_commit (SPReprDoc *doc)
 	session->commit();
 }
 
-SPReprAction *
-sp_repr_commit_undoable (SPReprDoc *doc)
+Inkscape::XML::Event *
+sp_repr_commit_undoable (Inkscape::XML::Document *doc)
 {
 	g_assert(doc != NULL);
 	Session *session=doc->session();
@@ -66,9 +66,9 @@ sp_repr_commit_undoable (SPReprDoc *doc)
 }
 
 void
-sp_repr_undo_log (SPReprAction *log)
+sp_repr_undo_log (Inkscape::XML::Event *log)
 {
-	SPReprAction *action;
+	Inkscape::XML::Event *action;
 
 	if (log) {
 		g_assert(!log->repr->session()->inTransaction());
@@ -79,66 +79,66 @@ sp_repr_undo_log (SPReprAction *log)
 	}
 }
 
-void SPReprActionAdd::_undoOne() const {
+void Inkscape::XML::EventAdd::_undoOne() const {
 	sp_repr_remove_child(this->repr, this->child);
 }
 
-void SPReprActionDel::_undoOne() const {
+void Inkscape::XML::EventDel::_undoOne() const {
 	sp_repr_add_child(this->repr, this->child, this->ref);
 }
 
-void SPReprActionChgAttr::_undoOne() const {
+void Inkscape::XML::EventChgAttr::_undoOne() const {
 	sp_repr_set_attr(this->repr, g_quark_to_string(this->key), this->oldval);
 }
 
-void SPReprActionChgContent::_undoOne() const {
+void Inkscape::XML::EventChgContent::_undoOne() const {
 	sp_repr_set_content(this->repr, this->oldval);
 }
 
-void SPReprActionChgOrder::_undoOne() const {
+void Inkscape::XML::EventChgOrder::_undoOne() const {
 	sp_repr_change_order(this->repr, this->child, this->oldref);
 }
 
 void
-sp_repr_replay_log (SPReprAction *log)
+sp_repr_replay_log (Inkscape::XML::Event *log)
 {
 	if (log) {
 		g_assert(!log->repr->session()->inTransaction());
 	}
 
-	List<SPReprAction &> reversed(
-		reverse_list<SPReprAction::Iterator>(log, NULL)
+	List<Inkscape::XML::Event &> reversed(
+		reverse_list<Inkscape::XML::Event::Iterator>(log, NULL)
 	);
 	for ( ; reversed ; ++reversed ) {
 		reversed->replayOne();
 	}
 }
 
-void SPReprActionAdd::_replayOne() const {
+void Inkscape::XML::EventAdd::_replayOne() const {
 	sp_repr_add_child(this->repr, this->child, this->ref);
 }
 
-void SPReprActionDel::_replayOne() const {
+void Inkscape::XML::EventDel::_replayOne() const {
 	sp_repr_remove_child(this->repr, this->child);
 }
 
-void SPReprActionChgAttr::_replayOne() const {
+void Inkscape::XML::EventChgAttr::_replayOne() const {
 	sp_repr_set_attr(this->repr, g_quark_to_string(this->key), this->newval);
 }
 
-void SPReprActionChgContent::_replayOne() const {
+void Inkscape::XML::EventChgContent::_replayOne() const {
 	sp_repr_set_content(this->repr, this->newval);
 }
 
-void SPReprActionChgOrder::_replayOne() const {
+void Inkscape::XML::EventChgOrder::_replayOne() const {
 	sp_repr_change_order(this->repr, this->child, this->newref);
 }
 
-SPReprAction *
-sp_repr_coalesce_log (SPReprAction *a, SPReprAction *b)
+Inkscape::XML::Event *
+sp_repr_coalesce_log (Inkscape::XML::Event *a, Inkscape::XML::Event *b)
 {
-	SPReprAction *action;
-	SPReprAction **prev_ptr;
+	Inkscape::XML::Event *action;
+	Inkscape::XML::Event **prev_ptr;
 
 	if (!b) return a;
 	if (!a) return b;
@@ -161,10 +161,10 @@ sp_repr_coalesce_log (SPReprAction *a, SPReprAction *b)
 }
 
 void
-sp_repr_free_log (SPReprAction *log)
+sp_repr_free_log (Inkscape::XML::Event *log)
 {
 	while (log) {
-		SPReprAction *action;
+		Inkscape::XML::Event *action;
 		action = log;
 		log = action->next;
 		delete action;
@@ -176,17 +176,17 @@ namespace {
 template <typename T> struct ActionRelations;
 
 template <>
-struct ActionRelations<SPReprActionAdd> {
-	typedef SPReprActionDel Opposite;
+struct ActionRelations<Inkscape::XML::EventAdd> {
+	typedef Inkscape::XML::EventDel Opposite;
 };
 
 template <>
-struct ActionRelations<SPReprActionDel> {
-	typedef SPReprActionAdd Opposite;
+struct ActionRelations<Inkscape::XML::EventDel> {
+	typedef Inkscape::XML::EventAdd Opposite;
 };
 
 template <typename A>
-SPReprAction *cancel_add_or_remove(A *action) {
+Inkscape::XML::Event *cancel_add_or_remove(A *action) {
 	typedef typename ActionRelations<A>::Opposite Opposite;
 	Opposite *opposite=dynamic_cast<Opposite *>(action->next);
 
@@ -194,7 +194,7 @@ SPReprAction *cancel_add_or_remove(A *action) {
 	     opposite->child == action->child &&
 	     opposite->ref == action->ref )
 	{
-		SPReprAction *remaining=opposite->next;
+		Inkscape::XML::Event *remaining=opposite->next;
 
 		delete opposite;
 		delete action;
@@ -207,16 +207,16 @@ SPReprAction *cancel_add_or_remove(A *action) {
 
 }
 
-SPReprAction *SPReprActionAdd::_optimizeOne() {
+Inkscape::XML::Event *Inkscape::XML::EventAdd::_optimizeOne() {
 	return cancel_add_or_remove(this);
 }
 
-SPReprAction *SPReprActionDel::_optimizeOne() {
+Inkscape::XML::Event *Inkscape::XML::EventDel::_optimizeOne() {
 	return cancel_add_or_remove(this);
 }
 
-SPReprAction *SPReprActionChgAttr::_optimizeOne() {
-	SPReprActionChgAttr *chg_attr=dynamic_cast<SPReprActionChgAttr *>(this->next);
+Inkscape::XML::Event *Inkscape::XML::EventChgAttr::_optimizeOne() {
+	Inkscape::XML::EventChgAttr *chg_attr=dynamic_cast<Inkscape::XML::EventChgAttr *>(this->next);
 
 	/* consecutive chgattrs on the same key can be combined */
 	if ( chg_attr && chg_attr->repr == this->repr &&
@@ -233,8 +233,8 @@ SPReprAction *SPReprActionChgAttr::_optimizeOne() {
 	return this;
 }
 
-SPReprAction *SPReprActionChgContent::_optimizeOne() {
-	SPReprActionChgContent *chg_content=dynamic_cast<SPReprActionChgContent *>(this->next);
+Inkscape::XML::Event *Inkscape::XML::EventChgContent::_optimizeOne() {
+	Inkscape::XML::EventChgContent *chg_content=dynamic_cast<Inkscape::XML::EventChgContent *>(this->next);
 
 	/* consecutive content changes can be combined */
 	if ( chg_content && chg_content->repr == this->repr ) {
@@ -249,8 +249,8 @@ SPReprAction *SPReprActionChgContent::_optimizeOne() {
 	return this;
 }
 
-SPReprAction *SPReprActionChgOrder::_optimizeOne() {
-	SPReprActionChgOrder *chg_order=dynamic_cast<SPReprActionChgOrder *>(this->next);
+Inkscape::XML::Event *Inkscape::XML::EventChgOrder::_optimizeOne() {
+	Inkscape::XML::EventChgOrder *chg_order=dynamic_cast<Inkscape::XML::EventChgOrder *>(this->next);
 
 	/* consecutive chgorders for the same child may be combined or
 	 * canceled out */
@@ -259,7 +259,7 @@ SPReprAction *SPReprActionChgOrder::_optimizeOne() {
 	{
 		if ( chg_order->oldref == this->newref ) {
 			/* cancel them out */
-			SPReprAction *after=chg_order->next;
+			Inkscape::XML::Event *after=chg_order->next;
 
 			delete chg_order;
 			delete this;

@@ -47,7 +47,7 @@ std::ofstream Extension::error_file;
 
 /**
     \return  none
-    \brief   Constructs an Extension from a SPRepr
+    \brief   Constructs an Extension from a Inkscape::XML::Node
     \param   in_repr    The repr that should be used to build it
 
     This function is the basis of building an extension for Inkscape.  It
@@ -56,7 +56,7 @@ std::ofstream Extension::error_file;
     not related to the module directly.  If the Repr does not include
     a name and an ID the module will be left in an errored state.
 */
-Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
+Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
 {
     repr = in_repr;
     sp_repr_ref(in_repr);
@@ -74,7 +74,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 
 //  printf("Extension Constructor: ");
     if (repr != NULL) {
-        SPRepr *child_repr = sp_repr_children(repr);
+        Inkscape::XML::Node *child_repr = sp_repr_children(repr);
         /* TODO: Handle what happens if we don't have these two */
         while (child_repr != NULL) {
             if (!strcmp(child_repr->name(), "id")) {
@@ -280,7 +280,7 @@ Extension::printFailure (Glib::ustring reason)
     \return  The XML tree that is used to define the extension
     \brief   A getter for the internal Repr, does not add a reference.
 */
-SPRepr *
+Inkscape::XML::Node *
 Extension::get_repr (void)
 {
     return repr;
@@ -374,7 +374,7 @@ Extension::deactivated (void)
     in the preferences somewhere.  This needs to be figured out.
 */
 void
-Extension::make_param (SPRepr * paramrepr)
+Extension::make_param (Inkscape::XML::Node * paramrepr)
 {
     const char * name;
     const char * type;
@@ -507,7 +507,7 @@ Extension::param_shared (const gchar * name, GSList * list)
     the parameter is placed in value.
 */
 const gchar *
-Extension::get_param_string (const gchar * name, const SPReprDoc * doc)
+Extension::get_param_string (const gchar * name, const Inkscape::XML::Document * doc)
 {
     Extension::param_t * param;
     
@@ -541,7 +541,7 @@ Extension::get_param_string (const gchar * name, const SPReprDoc * doc)
     the parameter is placed in value.
 */
 bool
-Extension::get_param_bool (const gchar * name, const SPReprDoc * doc)
+Extension::get_param_bool (const gchar * name, const Inkscape::XML::Document * doc)
 {
     Extension::param_t * param;
     
@@ -575,7 +575,7 @@ Extension::get_param_bool (const gchar * name, const SPReprDoc * doc)
     the parameter is placed in value.
 */
 int
-Extension::get_param_int (const gchar * name, const SPReprDoc * doc)
+Extension::get_param_int (const gchar * name, const Inkscape::XML::Document * doc)
 {
     Extension::param_t * param;
     
@@ -609,7 +609,7 @@ Extension::get_param_int (const gchar * name, const SPReprDoc * doc)
     the parameter is placed in value.
 */
 float
-Extension::get_param_float (const gchar * name, const SPReprDoc * doc)
+Extension::get_param_float (const gchar * name, const Inkscape::XML::Document * doc)
 {
     Extension::param_t * param;
     
@@ -644,7 +644,7 @@ Extension::get_param_float (const gchar * name, const SPReprDoc * doc)
 	in is placed in the param.
 */
 bool
-Extension::set_param_bool (const gchar * name, bool value, SPReprDoc * doc)
+Extension::set_param_bool (const gchar * name, bool value, Inkscape::XML::Document * doc)
 {
     Extension::param_t * param;
 	gchar * param_name;
@@ -686,7 +686,7 @@ Extension::set_param_bool (const gchar * name, bool value, SPReprDoc * doc)
 	in is placed in the param.
 */
 int
-Extension::set_param_int (const gchar * name, int value, SPReprDoc * doc)
+Extension::set_param_int (const gchar * name, int value, Inkscape::XML::Document * doc)
 {
     Extension::param_t * param;
 	gchar * param_name;
@@ -728,7 +728,7 @@ Extension::set_param_int (const gchar * name, int value, SPReprDoc * doc)
 	in is placed in the param.
 */
 float
-Extension::set_param_float (const gchar * name, float value, SPReprDoc * doc)
+Extension::set_param_float (const gchar * name, float value, Inkscape::XML::Document * doc)
 {
     Extension::param_t * param;
 	gchar * param_name;
@@ -773,7 +773,7 @@ Extension::set_param_float (const gchar * name, float value, SPReprDoc * doc)
 	the incoming value is duplicated and placed in the parameter.
 */
 const gchar *
-Extension::set_param_string (const gchar * name, const gchar * value, SPReprDoc * doc)
+Extension::set_param_string (const gchar * name, const gchar * value, Inkscape::XML::Document * doc)
 {
     Extension::param_t * param;
 	gchar * param_name;

@@ -152,7 +152,7 @@ sp_spiral_context_dispose(GObject *object)
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
-static void shape_event_attr_changed(SPRepr *repr, gchar const *name,
+static void shape_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
                                      gchar const *old_value, gchar const *new_value,
                                      bool is_interactive, gpointer data)
 {
@@ -172,7 +172,7 @@ static void shape_event_attr_changed(SPRepr *repr, gchar const *name,
     }
 }
 
-static SPReprEventVector shape_repr_events = {
+static Inkscape::XML::NodeEventVector shape_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
     shape_event_attr_changed,
@@ -204,7 +204,7 @@ sp_spiral_context_selection_changed(SPSelection *selection, gpointer data)
     SPItem *item = selection->singleItem();
     if (item) {
         sc->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        SPRepr *repr = SP_OBJECT_REPR(item);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
         if (repr) {
             sc->repr = repr;
             sp_repr_ref(repr);
@@ -231,7 +231,7 @@ sp_spiral_context_setup(SPEventContext *ec)
     SPItem *item = selection->singleItem();
     if (item) {
         sc->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        SPRepr *repr = SP_OBJECT_REPR(item);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
         if (repr) {
             sc->repr = repr;
             sp_repr_ref(repr);
@@ -440,7 +440,7 @@ sp_spiral_drag(SPSpiralContext *sc, NR::Point p, guint state)
         }
 
         /* Create object */
-        SPRepr *repr = sp_repr_new("svg:path");
+        Inkscape::XML::Node *repr = sp_repr_new("svg:path");
         sp_repr_set_attr(repr, "sodipodi:type", "spiral");
 
         /* Set style */

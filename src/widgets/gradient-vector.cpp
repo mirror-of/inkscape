@@ -426,7 +426,7 @@ static void update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_
 
 static gboolean blocked = FALSE;
 
-static void grad_edit_dia_stop_added_or_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
+static void grad_edit_dia_stop_added_or_removed (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data)
 {
    GtkWidget *vb = GTK_WIDGET(data);
    GtkWidget *mnu = (GtkWidget *)g_object_get_data (G_OBJECT(vb), "stopmenu");
@@ -437,7 +437,7 @@ static void grad_edit_dia_stop_added_or_removed (SPRepr *repr, SPRepr *child, SP
 //FIXME!!! We must also listen to attr changes on all children (i.e. stops) too,
 //otherwise the dialog does not reflect undoing color or offset change. This is a major
 //hassle, unless we have a "one of the descendants changed in some way" signal.
-static SPReprEventVector grad_edit_dia_repr_events =
+static Inkscape::XML::NodeEventVector grad_edit_dia_repr_events =
 {
     grad_edit_dia_stop_added_or_removed, /* child_added */
     grad_edit_dia_stop_added_or_removed, /* child_removed */
@@ -466,7 +466,7 @@ verify_grad(SPGradient *gradient)
 		Inkscape::SVGOStringStream os;
 		os << "stop-color:" << c << ";stop-opacity:" << 1.0 << ";";
 
-		SPRepr *child;
+		Inkscape::XML::Node *child;
 
 		child = sp_repr_new ("svg:stop");
 		sp_repr_set_double (child, "offset", 0.0);
@@ -480,7 +480,7 @@ verify_grad(SPGradient *gradient)
 	}
 	if (i < 2) {
 		sp_repr_set_double (SP_OBJECT_REPR(stop), "offset", 0.0);
-		SPRepr *child = sp_repr_duplicate(SP_OBJECT_REPR(stop));
+		Inkscape::XML::Node *child = sp_repr_duplicate(SP_OBJECT_REPR(stop));
 		sp_repr_set_double (child, "offset", 1.0);
 		sp_repr_add_child (SP_OBJECT_REPR(gradient), child, SP_OBJECT_REPR (stop));
 	}
@@ -559,7 +559,7 @@ update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
 				gtk_widget_show (cpv);
 				gtk_container_add ( GTK_CONTAINER (hb), cpv );
 				g_object_set_data ( G_OBJECT (i), "preview", cpv );
-				SPRepr *repr = SP_OBJECT_REPR((SPItem *) sl->data);
+				Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) sl->data);
 				GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
 				gtk_widget_show (l);
 				gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
@@ -698,7 +698,7 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 	if (stop == NULL) 
 		return;
 
-	SPRepr *new_stop_repr = NULL;
+	Inkscape::XML::Node *new_stop_repr = NULL;
 
 	SPStop *next = sp_next_stop (stop);
 

@@ -276,7 +276,7 @@ sp_xml_ns_prefix_uri (const gchar *prefix)
     return uri;
 }
 
-double sp_repr_get_double_attribute (SPRepr * repr, const char * key, double def)
+double sp_repr_get_double_attribute (Inkscape::XML::Node * repr, const char * key, double def)
 {
     char * result;
 
@@ -290,7 +290,7 @@ double sp_repr_get_double_attribute (SPRepr * repr, const char * key, double def
     return g_ascii_strtod (result, NULL);
 }
 
-int sp_repr_get_int_attribute (SPRepr * repr, const char * key, int def)
+int sp_repr_get_int_attribute (Inkscape::XML::Node * repr, const char * key, int def)
 {
     char * result;
 
@@ -311,7 +311,7 @@ int sp_repr_get_int_attribute (SPRepr * repr, const char * key, int def)
  *   -1    first object's position is less than the second
  */
 int
-sp_repr_compare_position(SPRepr *first, SPRepr *second)
+sp_repr_compare_position(Inkscape::XML::Node *first, Inkscape::XML::Node *second)
 {
     int p1, p2;
     if (sp_repr_parent(first) == sp_repr_parent(second)) {
@@ -324,7 +324,7 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
            instance. */
 
         // Find the lowest common ancestor (LCA)
-        SPRepr *ancestor = LCA(first, second);
+        Inkscape::XML::Node *ancestor = LCA(first, second);
         g_assert(ancestor != NULL);
 
         if (ancestor == first) {
@@ -332,8 +332,8 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
         } else if (ancestor == second) {
             return -1;
         } else {
-            SPRepr const *to_first = AncetreFils(first, ancestor);
-            SPRepr const *to_second = AncetreFils(second, ancestor);
+            Inkscape::XML::Node const *to_first = AncetreFils(first, ancestor);
+            Inkscape::XML::Node const *to_second = AncetreFils(second, ancestor);
             g_assert(sp_repr_parent(to_second) == sp_repr_parent(to_first));
             p1 = to_first->position();
             p2 = to_second->position();
@@ -364,13 +364,13 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
 /**
  * lookup child by \a key, \a value.
  */
-SPRepr *
-sp_repr_lookup_child (SPRepr       *repr,
+Inkscape::XML::Node *
+sp_repr_lookup_child (Inkscape::XML::Node       *repr,
                       const gchar *key,
                       const gchar *value)
 {
     g_return_val_if_fail(repr != NULL, NULL);
-    for ( SPRepr *child = repr->firstChild() ; child ; child = child->next() ) {
+    for ( Inkscape::XML::Node *child = repr->firstChild() ; child ; child = child->next() ) {
         gchar const *child_value = child->attribute(key);
         if ( child_value == value ||
              value && child_value && !strcmp(child_value, value) )
@@ -382,14 +382,14 @@ sp_repr_lookup_child (SPRepr       *repr,
 }
 
 /**
- *  \brief   Recursively find the SPRepr matching the given XML name.
- *  \return  A pointer to the matching SPRepr
- *  \param   repr    The SPRepr to start from
+ *  \brief   Recursively find the Inkscape::XML::Node matching the given XML name.
+ *  \return  A pointer to the matching Inkscape::XML::Node
+ *  \param   repr    The Inkscape::XML::Node to start from
  *  \param   name    The desired XML name
  *  
  */
-SPRepr *
-sp_repr_lookup_name ( SPRepr *repr, gchar const *name, gint maxdepth )
+Inkscape::XML::Node *
+sp_repr_lookup_name ( Inkscape::XML::Node *repr, gchar const *name, gint maxdepth )
 {
     g_return_val_if_fail (repr != NULL, NULL);
     g_return_val_if_fail (name != NULL, NULL);
@@ -402,8 +402,8 @@ sp_repr_lookup_name ( SPRepr *repr, gchar const *name, gint maxdepth )
     // maxdepth == -1 means unlimited
     if ( maxdepth == -1 ) maxdepth = 0;
 
-    SPRepr * found = NULL;
-    for (SPRepr *child = repr->firstChild() ; child && !found; child = child->next() ) {
+    Inkscape::XML::Node * found = NULL;
+    for (Inkscape::XML::Node *child = repr->firstChild() ; child && !found; child = child->next() ) {
         found = sp_repr_lookup_name ( child, name, maxdepth-1 );
     }
 
@@ -417,7 +417,7 @@ sp_repr_lookup_name ( SPRepr *repr, gchar const *name, gint maxdepth )
  * \return TRUE if the attr was set, FALSE otherwise.
  */
 unsigned int
-sp_repr_get_boolean (SPRepr *repr, const gchar *key, unsigned int *val)
+sp_repr_get_boolean (Inkscape::XML::Node *repr, const gchar *key, unsigned int *val)
 {
     const gchar *v;
 
@@ -444,7 +444,7 @@ sp_repr_get_boolean (SPRepr *repr, const gchar *key, unsigned int *val)
 }
 
 unsigned int
-sp_repr_get_int (SPRepr *repr, const gchar *key, int *val)
+sp_repr_get_int (Inkscape::XML::Node *repr, const gchar *key, int *val)
 {
     const gchar *v;
 
@@ -463,7 +463,7 @@ sp_repr_get_int (SPRepr *repr, const gchar *key, int *val)
 }
 
 unsigned int
-sp_repr_get_double (SPRepr *repr, const gchar *key, double *val)
+sp_repr_get_double (Inkscape::XML::Node *repr, const gchar *key, double *val)
 {
     const gchar *v;
 
@@ -482,7 +482,7 @@ sp_repr_get_double (SPRepr *repr, const gchar *key, double *val)
 }
 
 unsigned int
-sp_repr_set_boolean (SPRepr *repr, const gchar *key, unsigned int val)
+sp_repr_set_boolean (Inkscape::XML::Node *repr, const gchar *key, unsigned int val)
 {
     g_return_val_if_fail (repr != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
@@ -491,7 +491,7 @@ sp_repr_set_boolean (SPRepr *repr, const gchar *key, unsigned int val)
 }
 
 unsigned int
-sp_repr_set_int (SPRepr *repr, const gchar *key, int val)
+sp_repr_set_int (Inkscape::XML::Node *repr, const gchar *key, int val)
 {
     gchar c[32];
 
@@ -504,7 +504,7 @@ sp_repr_set_int (SPRepr *repr, const gchar *key, int val)
 }
 
 unsigned int
-sp_repr_set_double (SPRepr *repr, const gchar *key, double val)
+sp_repr_set_double (Inkscape::XML::Node *repr, const gchar *key, double val)
 {
 	Inkscape::SVGOStringStream os;
 	
@@ -517,7 +517,7 @@ sp_repr_set_double (SPRepr *repr, const gchar *key, double val)
 }
 
 unsigned int
-sp_repr_set_double_default (SPRepr *repr, const gchar *key, double val, double def, double e)
+sp_repr_set_double_default (Inkscape::XML::Node *repr, const gchar *key, double val, double def, double e)
 {
     g_return_val_if_fail (repr != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);

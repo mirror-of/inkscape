@@ -31,7 +31,12 @@
 #define SP_IS_ATTRIBUTE_TABLE(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_ATTRIBUTE_TABLE))
 #define SP_IS_ATTRIBUTE_TABLE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_ATTRIBUTE_TABLE))
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 struct SPAttributeWidget;
 struct SPAttributeWidgetClass;
@@ -50,7 +55,7 @@ struct SPAttributeWidget {
     guint hasobj : 1;
     union {
         SPObject *object;
-        SPRepr *repr;
+        Inkscape::XML::Node *repr;
     } src;
     gchar *attribute;
 };
@@ -62,13 +67,13 @@ struct SPAttributeWidgetClass {
 GtkType sp_attribute_widget_get_type (void);
 
 GtkWidget *sp_attribute_widget_new (SPObject *object, const gchar *attribute);
-GtkWidget *sp_attribute_widget_new_repr (SPRepr *repr, const gchar *attribute);
+GtkWidget *sp_attribute_widget_new_repr (Inkscape::XML::Node *repr, const gchar *attribute);
 
 void sp_attribute_widget_set_object ( SPAttributeWidget *spw, 
                                       SPObject *object, 
                                       const gchar *attribute );
 void sp_attribute_widget_set_repr ( SPAttributeWidget *spw, 
-                                    SPRepr *repr, 
+                                    Inkscape::XML::Node *repr, 
                                     const gchar *attribute );
 
 /* SPAttributeTable */
@@ -80,7 +85,7 @@ struct SPAttributeTable {
     GtkWidget *table;
     union {
         SPObject *object;
-        SPRepr *repr;
+        Inkscape::XML::Node *repr;
     } src;
     gint num_attr;
     gchar **attributes;
@@ -96,7 +101,7 @@ GtkType sp_attribute_table_get_type (void);
 GtkWidget *sp_attribute_table_new ( SPObject *object, gint num_attr, 
                                     const gchar **labels, 
                                     const gchar **attributes );
-GtkWidget *sp_attribute_table_new_repr ( SPRepr *repr, gint num_attr, 
+GtkWidget *sp_attribute_table_new_repr ( Inkscape::XML::Node *repr, gint num_attr, 
                                          const gchar **labels, 
                                          const gchar **attributes );
 void sp_attribute_table_set_object ( SPAttributeTable *spw, 
@@ -104,7 +109,7 @@ void sp_attribute_table_set_object ( SPAttributeTable *spw,
                                      const gchar **labels, 
                                      const gchar **attrs );
 void sp_attribute_table_set_repr ( SPAttributeTable *spw, 
-                                   SPRepr *repr, gint num_attr, 
+                                   Inkscape::XML::Node *repr, gint num_attr, 
                                    const gchar **labels, 
                                    const gchar **attrs );
 

@@ -44,10 +44,10 @@ static void sp_use_class_init(SPUseClass *classname);
 static void sp_use_init(SPUse *use);
 static void sp_use_finalize(GObject *obj);
 
-static void sp_use_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_use_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_use_release(SPObject *object);
 static void sp_use_set(SPObject *object, unsigned key, gchar const *value);
-static SPRepr *sp_use_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_use_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 static void sp_use_update(SPObject *object, SPCtx *ctx, guint flags);
 static void sp_use_modified(SPObject *object, guint flags);
 
@@ -146,7 +146,7 @@ sp_use_finalize(GObject *obj)
 }
 
 static void
-sp_use_build(SPObject *object, SPDocument *document, SPRepr *repr)
+sp_use_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     if (((SPObjectClass *) parent_class)->build) {
         (* ((SPObjectClass *) parent_class)->build)(object, document, repr);
@@ -247,8 +247,8 @@ sp_use_set(SPObject *object, unsigned key, gchar const *value)
     }
 }
 
-static SPRepr *
-sp_use_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_use_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPUse *use = SP_USE(object);
 
@@ -486,7 +486,7 @@ sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use)
     if (use->href) {
         SPItem *refobj = use->ref->getObject();
         if (refobj) {
-            SPRepr *childrepr = SP_OBJECT_REPR(refobj);
+            Inkscape::XML::Node *childrepr = SP_OBJECT_REPR(refobj);
             GType type = sp_repr_type_lookup(childrepr);
             g_return_if_fail(type > G_TYPE_NONE);
             if (g_type_is_a(type, SP_TYPE_ITEM)) {
@@ -605,10 +605,10 @@ sp_use_unlink(SPUse *use)
 {
     if (!use) return NULL;
 
-    SPRepr *repr = SP_OBJECT_REPR(use);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(use);
     if (!repr) return NULL;
 
-    SPRepr *parent = sp_repr_parent(repr);
+    Inkscape::XML::Node *parent = sp_repr_parent(repr);
     SPDocument *document = SP_OBJECT(use)->document;
 
     //track the ultimate source of a chain of uses
@@ -618,7 +618,7 @@ sp_use_unlink(SPUse *use)
     NR::Matrix t = sp_use_get_root_transform(use);
 
     // create copy of the original
-    SPRepr *copy = sp_repr_duplicate(SP_OBJECT_REPR(orig));
+    Inkscape::XML::Node *copy = sp_repr_duplicate(SP_OBJECT_REPR(orig));
 
     // add the duplicate repr just after the existing one
     sp_repr_add_child(parent, copy, repr);

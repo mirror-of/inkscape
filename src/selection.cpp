@@ -212,7 +212,7 @@ void SPSelection::setReprList(GSList const *list) {
     _clear();
 
     for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
-        SPObject *obj=_objectForRepr(reinterpret_cast<SPRepr *>(iter->data));
+        SPObject *obj=_objectForRepr(reinterpret_cast<Inkscape::XML::Node *>(iter->data));
         if (obj) {
             _add(obj);
         }
@@ -283,7 +283,7 @@ SPItem *SPSelection::singleItem() {
     }
 }
 
-SPRepr *SPSelection::singleRepr() {
+Inkscape::XML::Node *SPSelection::singleRepr() {
     SPObject *obj=single();
     return obj ? SP_OBJECT_REPR(obj) : NULL;
 }
@@ -386,7 +386,7 @@ void SPSelection::_removeObjectChildren(SPObject *obj) {
     }
 }
 
-SPObject *SPSelection::_objectForRepr(SPRepr *repr) const {
+SPObject *SPSelection::_objectForRepr(Inkscape::XML::Node *repr) const {
     g_return_val_if_fail(repr != NULL, NULL);
     gchar const *id = repr->attribute("id");
     g_return_val_if_fail(id != NULL, NULL);

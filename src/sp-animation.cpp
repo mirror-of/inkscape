@@ -19,7 +19,7 @@
 static void sp_animation_class_init (SPAnimationClass *klass);
 static void sp_animation_init (SPAnimation *animation);
 
-static void sp_animation_build (SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_animation_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_animation_release (SPObject *object);
 static void sp_animation_set (SPObject *object, unsigned int key, const gchar *value);
 
@@ -69,7 +69,7 @@ sp_animation_init (SPAnimation *animation)
 
 
 static void
-sp_animation_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_animation_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) animation_parent_class)->build)
 		((SPObjectClass *) animation_parent_class)->build (object, document, repr);
@@ -111,7 +111,7 @@ sp_animation_set (SPObject *object, unsigned int key, const gchar *value)
 static void sp_ianimation_class_init (SPIAnimationClass *klass);
 static void sp_ianimation_init (SPIAnimation *animation);
 
-static void sp_ianimation_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_ianimation_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_ianimation_release (SPObject *object);
 static void sp_ianimation_set (SPObject *object, unsigned int key, const gchar *value);
 
@@ -161,7 +161,7 @@ sp_ianimation_init (SPIAnimation *animation)
 
 
 static void
-sp_ianimation_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_ianimation_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) ianimation_parent_class)->build)
 		((SPObjectClass *) ianimation_parent_class)->build (object, document, repr);
@@ -200,7 +200,7 @@ sp_ianimation_set (SPObject *object, unsigned int key, const gchar *value)
 static void sp_animate_class_init (SPAnimateClass *klass);
 static void sp_animate_init (SPAnimate *animate);
 
-static void sp_animate_build (SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_animate_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_animate_release (SPObject *object);
 static void sp_animate_set (SPObject *object, unsigned int key, const gchar *value);
 
@@ -250,7 +250,7 @@ sp_animate_init (SPAnimate *animate)
 
 
 static void
-sp_animate_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_animate_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) animate_parent_class)->build)
 		((SPObjectClass *) animate_parent_class)->build (object, document, repr);

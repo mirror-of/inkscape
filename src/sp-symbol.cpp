@@ -29,13 +29,13 @@
 static void sp_symbol_class_init (SPSymbolClass *klass);
 static void sp_symbol_init (SPSymbol *symbol);
 
-static void sp_symbol_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_symbol_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_symbol_release (SPObject *object);
 static void sp_symbol_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_symbol_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
+static void sp_symbol_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
 static void sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_symbol_modified (SPObject *object, guint flags);
-static SPRepr *sp_symbol_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_symbol_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static NRArenaItem *sp_symbol_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_symbol_hide (SPItem *item, unsigned int key);
@@ -100,7 +100,7 @@ sp_symbol_init (SPSymbol *symbol)
 }
 
 static void
-sp_symbol_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_symbol_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	SPGroup *group;
 	SPSymbol *symbol;
@@ -234,7 +234,7 @@ sp_symbol_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 static void
-sp_symbol_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_symbol_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	SPSymbol *symbol;
 	SPGroup *group;
@@ -380,8 +380,8 @@ sp_symbol_modified (SPObject *object, guint flags)
 		(* ((SPObjectClass *) (parent_class))->modified) (object, flags);
 }
 
-static SPRepr *
-sp_symbol_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_symbol_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPSymbol *symbol;
 

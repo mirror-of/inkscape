@@ -30,7 +30,7 @@ public:
     class save_failed {};        /**< Generic failure for an undescribed reason */
     class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
 
-                 Output (SPRepr * in_repr,
+                 Output (Inkscape::XML::Node * in_repr,
                          Implementation::Implementation * in_imp);
     virtual     ~Output (void);
     virtual bool check                (void);

@@ -51,7 +51,7 @@ struct SPDynaDrawContext
     gint npoints;
 
     /* repr */
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
 
     /* time_id if use timeout */
     gint timer_id;

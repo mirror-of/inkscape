@@ -205,27 +205,27 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
 		return;
 	}
 
-    SPRepr *root_repr = sp_repr_new ("svg:flowRoot");
+    Inkscape::XML::Node *root_repr = sp_repr_new ("svg:flowRoot");
     SP_OBJECT_REPR (SP_OBJECT_PARENT (item))->appendChild(root_repr);
     SPObject *root_object = doc->getObjectByRepr(root_repr);
     g_return_if_fail (SP_IS_FLOWTEXT (root_object));
 
-    SPRepr *region_repr = sp_repr_new ("svg:flowRegion");
+    Inkscape::XML::Node *region_repr = sp_repr_new ("svg:flowRegion");
     root_repr->appendChild(region_repr);
     SPObject *object = doc->getObjectByRepr(region_repr);
     g_return_if_fail (SP_IS_FLOWREGION (object));
 
     /* Add clones */
     SPSelection *selection = SP_DT_SELECTION(desktop);
-    SPRepr *clone;
+    Inkscape::XML::Node *clone;
 
     GSList *reprs = g_slist_copy((GSList *) selection->reprList());
     for (GSList *i = reprs; i; i = i->next) {
-         if (!SP_IS_IMAGE(doc->getObjectByRepr((SPRepr *)i->data))){
+         if (!SP_IS_IMAGE(doc->getObjectByRepr((Inkscape::XML::Node *)i->data))){
             clone = sp_repr_new("svg:use");
             sp_repr_set_attr(clone, "x", "0");
             sp_repr_set_attr(clone, "y", "0");
-            sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr((SPRepr *)i->data, "id")));
+            sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr((Inkscape::XML::Node *)i->data, "id")));
 
             // add the new clone to the top of the original's parent
             region_repr->appendChild(clone);
@@ -233,17 +233,17 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
 
     }
 
-    SPRepr *div_repr = sp_repr_new ("svg:flowDiv");
+    Inkscape::XML::Node *div_repr = sp_repr_new ("svg:flowDiv");
     root_repr->appendChild(div_repr);
     SPObject *div_object = doc->getObjectByRepr(div_repr);
     g_return_if_fail (SP_IS_FLOWDIV (div_object));
 
-    SPRepr *para_repr = sp_repr_new ("svg:flowPara");
+    Inkscape::XML::Node *para_repr = sp_repr_new ("svg:flowPara");
     div_repr->appendChild(para_repr);
     object = doc->getObjectByRepr(para_repr);
     g_return_if_fail (SP_IS_FLOWPARA (object));
 
-    SPRepr *text = sp_repr_new_text ("This is flowed text. Currently, you can only edit it by using the XML editor. You can paste style (Ctrl+Shift+V) from regular text objects to it.");
+    Inkscape::XML::Node *text = sp_repr_new_text ("This is flowed text. Currently, you can only edit it by using the XML editor. You can paste style (Ctrl+Shift+V) from regular text objects to it.");
     para_repr->appendChild(text);
 
 
@@ -263,13 +263,13 @@ sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	SPRepr *repr = sp_repr_new ("svg:a");
+	Inkscape::XML::Node *repr = sp_repr_new ("svg:a");
 	sp_repr_add_child (SP_OBJECT_REPR (SP_OBJECT_PARENT (item)), repr, SP_OBJECT_REPR (item));
 	SPObject *object = SP_OBJECT_DOCUMENT (item)->getObjectByRepr(repr);
 	g_return_if_fail (SP_IS_ANCHOR (object));
 
 	const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
-	SPRepr *child = sp_repr_duplicate (SP_OBJECT_REPR (item));
+	Inkscape::XML::Node *child = sp_repr_duplicate (SP_OBJECT_REPR (item));
 	SP_OBJECT (item)->deleteObject(false);
 	sp_repr_add_child (repr, child, NULL);
 	sp_repr_set_attr (child, "id", id);

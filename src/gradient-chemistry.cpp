@@ -43,8 +43,8 @@
 // radial). It references a vector for the actual colors. Each private is only used by one
 // object. It is either linear or radial.
 
-static void sp_gradient_repr_set_link(SPRepr *repr, SPGradient *gr);
-static void sp_item_repr_set_style_gradient(SPRepr *repr, gchar const *property,
+static void sp_gradient_repr_set_link(Inkscape::XML::Node *repr, SPGradient *gr);
+static void sp_item_repr_set_style_gradient(Inkscape::XML::Node *repr, gchar const *property,
                                             SPGradient *gr, bool recursive);
 
 /* fixme: One more step is needed - normalization vector to 0-1 (not sure 100% still) */
@@ -70,7 +70,7 @@ sp_gradient_ensure_vector_normalized(SPGradient *gr)
 
     if (SP_OBJECT_PARENT(gr) != SP_OBJECT(defs)) {
         SPGradient *spnew;
-        SPRepr *repr;
+        Inkscape::XML::Node *repr;
         /* Lonely gradient */
         /* Ensure vector, so we can know some our metadata */
         sp_gradient_ensure_vector(gr);
@@ -146,7 +146,7 @@ sp_gradient_get_private_normalized(SPDocument *document, SPGradient *vector, SPG
     SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS(document);
 
     // create a new private gradient of the requested type
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
     if (type == SP_GRADIENT_TYPE_LINEAR) {
         repr = sp_repr_new("svg:linearGradient");
     } else {
@@ -253,8 +253,8 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
         SPGradient *gr_new = sp_gradient_get_private_normalized(doc, vector, type);
 
         // copy all the attributes to it
-        SPRepr *repr_new = SP_OBJECT_REPR(gr_new);
-        SPRepr *repr = SP_OBJECT_REPR(gr);
+        Inkscape::XML::Node *repr_new = SP_OBJECT_REPR(gr_new);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR(gr);
         sp_repr_set_attr(repr_new, "gradientUnits", repr->attribute("gradientUnits"));
         sp_repr_set_attr(repr_new, "gradientTransform", repr->attribute("gradientTransform"));
         sp_repr_set_attr(repr_new, "spreadMethod", repr->attribute("spreadMethod"));
@@ -294,7 +294,7 @@ sp_gradient_convert_to_userspace(SPGradient *gr, SPItem *item, gchar const *prop
 
     if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
 
-        SPRepr *repr = SP_OBJECT_REPR(gr);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR(gr);
 
         // calculate the bbox of the item
         NRRect bbox;
@@ -444,7 +444,7 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
     p *= (gradient->gradientTransform).inverse();
     // now p is in gradient's original coordinates
 
-    SPRepr *repr = SP_OBJECT_REPR(gradient);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(gradient);
 
     if (SP_IS_LINEARGRADIENT(gradient)) {
 		switch (point_num) {
@@ -739,7 +739,7 @@ sp_item_set_gradient(SPItem *item, SPGradient *gr, SPGradientType type, bool is_
 }
 
 static void
-sp_gradient_repr_set_link(SPRepr *repr, SPGradient *link)
+sp_gradient_repr_set_link(Inkscape::XML::Node *repr, SPGradient *link)
 {
     g_return_if_fail(repr != NULL);
     g_return_if_fail(link != NULL);
@@ -760,7 +760,7 @@ sp_gradient_repr_set_link(SPRepr *repr, SPGradient *link)
 }
 
 static void
-sp_item_repr_set_style_gradient(SPRepr *repr, gchar const *property,
+sp_item_repr_set_style_gradient(Inkscape::XML::Node *repr, gchar const *property,
                                 SPGradient *gr, bool recursive)
 {
     g_return_if_fail(repr != NULL);
@@ -789,7 +789,7 @@ sp_document_default_gradient_vector(SPDocument *document, guint32 color)
 {
     SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS(document);
 
-    SPRepr *repr = sp_repr_new("svg:linearGradient");
+    Inkscape::XML::Node *repr = sp_repr_new("svg:linearGradient");
 
     sp_repr_set_attr(repr, "inkscape:collect", "always");
     // set here, but removed when it's edited in the gradient editor
@@ -797,7 +797,7 @@ sp_document_default_gradient_vector(SPDocument *document, guint32 color)
     // (1) here, search gradients by color and return what is found without duplication
     // (2) in fill & stroke, show only one copy of each gradient in list
 
-    SPRepr *stop = sp_repr_new("svg:stop");
+    Inkscape::XML::Node *stop = sp_repr_new("svg:stop");
 
     gchar b[64];
     sp_svg_write_color(b, 64, color);

@@ -1219,7 +1219,7 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
 
     SPDocument *doc = SP_DT_DOCUMENT (dt);
 
-    SPRepr *repr = SP_OBJECT_REPR (dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR (dt->namedview);
 
     gdouble zoom_inc =
         prefs_get_double_attribute_limited ( "options.zoomincrement",

@@ -20,7 +20,7 @@ namespace Extension {
     \return   None
     \brief    Builds a SPModuleOutput object from a XML description
     \param    module  The module to be initialized
-    \param    repr    The XML description in a SPRepr tree
+    \param    repr    The XML description in a Inkscape::XML::Node tree
 
     Okay, so you want to build a SPModuleOutput object.
 
@@ -32,7 +32,7 @@ namespace Extension {
     Overall, there are many levels of indentation, just to handle the
     levels of indentation in the XML file.
 */
-Output::Output (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
+Output::Output (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
     mimetype = NULL;
     extension = NULL;
@@ -41,7 +41,7 @@ Output::Output (SPRepr * in_repr, Implementation::Implementation * in_imp) : Ext
 	dataloss = TRUE;
 
     if (repr != NULL) {
-        SPRepr * child_repr;
+        Inkscape::XML::Node * child_repr;
 
         child_repr = sp_repr_children(repr);
 
@@ -194,7 +194,7 @@ void
 Output::save (SPDocument * doc, const gchar * uri)
 {
 	bool modified = false;
-	SPRepr * repr = sp_document_repr_root(doc);
+	Inkscape::XML::Node * repr = sp_document_repr_root(doc);
 
         gboolean saved = sp_document_get_undo_sensitive(doc);
 	sp_document_set_undo_sensitive (doc, FALSE);

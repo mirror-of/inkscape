@@ -250,7 +250,7 @@ EcmaBinding::EcmaBinding(Inkscape::Application *theParent) throw (EcmaException)
  * a soft error.  Throw an exception for a 'hard' error.
  *
  */
-EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent) 
+EcmaObject *EcmaBinding::processNode(Inkscape::XML::Node *node, EcmaObject *parent) 
                                             throw (EcmaException)
 {
     static JSClass global_class = 
@@ -279,7 +279,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
             //#2 get text
             //### look for text node beneath
             char *text = "";
-            for (SPRepr *textChild = sp_repr_children(node) ; textChild ; textChild=sp_repr_next(textChild))
+            for (Inkscape::XML::Node *textChild = sp_repr_children(node) ; textChild ; textChild=sp_repr_next(textChild))
                 {
                 text = (char *)textChild->content();
                 if (text)
@@ -326,7 +326,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
                 throw("processNode: could not initialize standard classes for script chunk");
             }
         //### descend down the tree
-        for (SPRepr *child = sp_repr_children(node) ; child ; child=sp_repr_next(child))
+        for (Inkscape::XML::Node *child = sp_repr_children(node) ; child ; child=sp_repr_next(child))
             {
             if (!processNode(child, obj))
                 return NULL;

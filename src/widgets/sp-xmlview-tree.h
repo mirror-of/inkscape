@@ -31,7 +31,7 @@ struct SPXMLViewTree
 {
 	GtkCTree tree;
 
-	SPRepr * repr;
+	Inkscape::XML::Node * repr;
 	gint blocked;
 };
 
@@ -41,14 +41,14 @@ struct SPXMLViewTreeClass
 };
 
 GtkType sp_xmlview_tree_get_type (void);
-GtkWidget * sp_xmlview_tree_new (SPRepr * repr, void * factory, void * data);
+GtkWidget * sp_xmlview_tree_new (Inkscape::XML::Node * repr, void * factory, void * data);
 
 #define SP_XMLVIEW_TREE_REPR(tree) (SP_XMLVIEW_TREE (tree)->repr)
 
-void sp_xmlview_tree_set_repr (SPXMLViewTree * tree, SPRepr * repr);
+void sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr);
 
-SPRepr * sp_xmlview_tree_node_get_repr (SPXMLViewTree * tree, GtkCTreeNode * node);
-GtkCTreeNode * sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, SPRepr * repr);
+Inkscape::XML::Node * sp_xmlview_tree_node_get_repr (SPXMLViewTree * tree, GtkCTreeNode * node);
+GtkCTreeNode * sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, Inkscape::XML::Node * repr);
 
 
 

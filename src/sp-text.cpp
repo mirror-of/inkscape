@@ -87,13 +87,13 @@ static void sp_text_class_init (SPTextClass *classname);
 static void sp_text_init (SPText *text);
 static void sp_text_release (SPObject *object);
 
-static void sp_text_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_text_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_text_set (SPObject *object, unsigned key, gchar const *value);
-static void sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref);
-static void sp_text_remove_child (SPObject *object, SPRepr *rch);
+static void sp_text_child_added (SPObject *object, Inkscape::XML::Node *rch, Inkscape::XML::Node *ref);
+static void sp_text_remove_child (SPObject *object, Inkscape::XML::Node *rch);
 static void sp_text_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_text_modified (SPObject *object, guint flags);
-static SPRepr *sp_text_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static void sp_text_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned key, unsigned flags);
@@ -182,7 +182,7 @@ sp_text_release (SPObject *object)
 }
 
 static void
-sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
+sp_text_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
     SPText *text = SP_TEXT (object);
 
@@ -254,7 +254,7 @@ sp_text_set(SPObject *object, unsigned key, gchar const *value)
 }
 
 static void
-sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
+sp_text_child_added (SPObject *object, Inkscape::XML::Node *rch, Inkscape::XML::Node *ref)
 {
     //SPItem *item = SP_ITEM (object);
     SPText *text = SP_TEXT (object);
@@ -268,7 +268,7 @@ sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
 }
 
 static void
-sp_text_remove_child (SPObject *object, SPRepr *rch)
+sp_text_remove_child (SPObject *object, Inkscape::XML::Node *rch)
 {
     SPText *text = SP_TEXT (object);
 
@@ -348,8 +348,8 @@ sp_text_modified (SPObject *object, guint flags)
     }
 }
 
-static SPRepr *
-sp_text_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPText *text = SP_TEXT (object);
 
@@ -363,7 +363,7 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
             repr = sp_repr_new ("svg:text");
         GSList *l = NULL;
         for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-            SPRepr *crepr = NULL;
+            Inkscape::XML::Node *crepr = NULL;
             if (SP_IS_TSPAN (child)) {
                 crepr = child->updateRepr(NULL, flags);
             } else if (SP_IS_TEXTPATH (child)) {
@@ -374,8 +374,8 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
             if (crepr) l = g_slist_prepend (l, crepr);
         }
         while (l) {
-            sp_repr_add_child (repr, (SPRepr *) l->data, NULL);
-            sp_repr_unref ((SPRepr *) l->data);
+            sp_repr_add_child (repr, (Inkscape::XML::Node *) l->data, NULL);
+            sp_repr_unref ((Inkscape::XML::Node *) l->data);
             l = g_slist_remove (l, l->data);
         }
     } else {
@@ -852,7 +852,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
     g_return_if_fail (text != NULL);
     g_return_if_fail (SP_IS_TEXT (text));
 
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
     bool is_textpath = false;
     if (SP_IS_TEXT_TEXTPATH (text)) {
         repr = SP_OBJECT_REPR (sp_object_first_child(SP_OBJECT (text)));
@@ -879,7 +879,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
             if (e) *e = ' '; // no lines for textpath, replace newlines with spaces
         } else {
             if (e) *e = '\0'; // create a tspan for each line
-            SPRepr *rtspan = sp_repr_new ("svg:tspan");
+            Inkscape::XML::Node *rtspan = sp_repr_new ("svg:tspan");
             sp_repr_set_double (rtspan, "x", cp[NR::X]);
             sp_repr_set_double (rtspan, "y", cp[NR::Y]);
             if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
@@ -888,7 +888,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
                 cp[NR::Y] += style->font_size.computed;
             }
             sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-            SPRepr *rstr = sp_repr_new_text(p);
+            Inkscape::XML::Node *rstr = sp_repr_new_text(p);
             sp_repr_add_child (rtspan, rstr, NULL);
             sp_repr_unref(rstr);
             repr->appendChild(rtspan);
@@ -897,7 +897,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
         p = (e) ? e + 1 : NULL;
     }
     if (is_textpath) { 
-        SPRepr *rstr = sp_repr_new_text(content);
+        Inkscape::XML::Node *rstr = sp_repr_new_text(content);
         sp_repr_add_child (repr, rstr, NULL);
         sp_repr_unref(rstr);
     }
@@ -952,7 +952,7 @@ sp_text_append_line(SPText *text)
     }
 
     /* Create <tspan> */
-    SPRepr *rtspan = sp_repr_new ("svg:tspan");
+    Inkscape::XML::Node *rtspan = sp_repr_new ("svg:tspan");
     if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
         /* fixme: real line height */
         /* fixme: What to do with mixed direction tspans? */
@@ -965,7 +965,7 @@ sp_text_append_line(SPText *text)
     sp_repr_set_attr (rtspan, "sodipodi:role", "line");
 
     /* Create TEXT */
-    SPRepr *rstring = sp_repr_new_text("");
+    Inkscape::XML::Node *rstring = sp_repr_new_text("");
     sp_repr_add_child (rtspan, rstring, NULL);
     sp_repr_unref (rstring);
     /* Append to text */
@@ -980,7 +980,7 @@ int
 sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 {
     int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
-    // no updateRepr in this function because SPRepr are handled directly
+    // no updateRepr in this function because Inkscape::XML::Node are handled directly
     if ( text->f_src == NULL ) return 0;
 
     // Disable newlines in a textpath; TODO: maybe on Enter in a textpath, separate it into two
@@ -994,9 +994,9 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 
     if ( into == NULL ) {
         // it's a 'append line' in fact
-        SPRepr*   rtspan = sp_repr_new ("svg:tspan");
+        Inkscape::XML::Node*   rtspan = sp_repr_new ("svg:tspan");
         sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-        SPRepr*   rstring = sp_repr_new_text("");
+        Inkscape::XML::Node*   rstring = sp_repr_new_text("");
         sp_repr_add_child (rtspan, rstring, NULL);
         sp_repr_unref (rstring);
         SP_OBJECT_REPR (text)->appendChild(rtspan);
@@ -1012,14 +1012,14 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
             // we need to split into->me in 2 parts
             if ( into->dad->Type() == txt_span || into->dad->Type() == txt_tline || into->dad->Type() == txt_firstline ) {
                 div_flow_src* into_dad=dynamic_cast<div_flow_src*>(into->dad);
-                SPRepr*       into_repr=SP_OBJECT_REPR(into_dad->me);
+                Inkscape::XML::Node*       into_repr=SP_OBJECT_REPR(into_dad->me);
                 if ( into->dad->dad ) {
                     // just in case
                     //sp_repr_set_attr (into_repr, "sodipodi:role", "line");
                     // create the new tspan
-                    SPRepr*   rtspan = sp_repr_new ("svg:tspan");
+                    Inkscape::XML::Node*   rtspan = sp_repr_new ("svg:tspan");
                     sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-                    SPRepr*   rstring = NULL;
+                    Inkscape::XML::Node*   rstring = NULL;
                     if ( into_obj->utf8_st < into_obj->utf8_en ) {
                         rstring=sp_repr_new_text(into_obj->cleaned_up.utf8_text+(utf8_pos-into_obj->utf8_st));
                     } else {
@@ -1083,7 +1083,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                     }
                     for (GList *l = templ; l; l = l->next) {
                         SPObject *child = (SPObject*) l->data;
-                        SPRepr *c_repr = SP_OBJECT_REPR(child);
+                        Inkscape::XML::Node *c_repr = SP_OBJECT_REPR(child);
                         sp_repr_ref(c_repr);
                         sp_repr_remove_child(into_repr, c_repr);
                         rtspan->appendChild(c_repr);
@@ -1100,12 +1100,12 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 
             } else if ( into->dad->Type() == txt_text ) {
                 // special case
-                SPRepr*   firstspan = sp_repr_new ("svg:tspan");
-                SPRepr*   rtspan = sp_repr_new ("svg:tspan");
+                Inkscape::XML::Node*   firstspan = sp_repr_new ("svg:tspan");
+                Inkscape::XML::Node*   rtspan = sp_repr_new ("svg:tspan");
                 sp_repr_set_attr (firstspan, "sodipodi:role", "line");
                 sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-                SPRepr*   firststring =NULL;
-                SPRepr*   rstring =NULL;
+                Inkscape::XML::Node*   firststring =NULL;
+                Inkscape::XML::Node*   rstring =NULL;
                 if ( into_obj->utf8_st < into_obj->utf8_en ) {
                     char savC=into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st];
                     into_obj->cleaned_up.utf8_text[utf8_pos-into_obj->utf8_st]=0;
@@ -1139,9 +1139,9 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
         } else if ( into->Type() == txt_firstline || into->Type() == txt_tline ) {
             // insert a new empty tspan in front of this one
             if ( into->dad ) {
-                SPRepr*   rtspan = sp_repr_new ("svg:tspan");
+                Inkscape::XML::Node*   rtspan = sp_repr_new ("svg:tspan");
                 sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-                SPRepr*   rstring = sp_repr_new_text("");
+                Inkscape::XML::Node*   rstring = sp_repr_new_text("");
                 SPObject* prec=NULL;
                 for (SPObject* child = sp_object_first_child(into->dad->me) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
                     if ( child == into->me ) break;

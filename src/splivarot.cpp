@@ -49,7 +49,7 @@
 #include "livarot/LivarotDefs.h"
 
 Path   *Path_for_item (SPItem * item,bool doTransformation, bool transformFull = true);
-bool   Ancetre (SPRepr * a, SPRepr * who);
+bool   Ancetre (Inkscape::XML::Node * a, Inkscape::XML::Node * who);
 
 void sp_selected_path_boolop (bool_op bop);
 void sp_selected_path_do_offset (bool expand, double prefOffset);
@@ -123,8 +123,8 @@ sp_selected_path_boolop (bool_op bop)
     // mettre les elements de la liste dans l'ordre pour ces operations
     if (bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice) {
         // check in the tree to find which element of the selection list is topmost (for 2-operand commands only)
-        SPRepr *a = SP_OBJECT_REPR (il->data);
-        SPRepr *b = SP_OBJECT_REPR (il->next->data);
+        Inkscape::XML::Node *a = SP_OBJECT_REPR (il->data);
+        Inkscape::XML::Node *b = SP_OBJECT_REPR (il->next->data);
 
         if (a == NULL || b == NULL) {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
@@ -140,18 +140,18 @@ sp_selected_path_boolop (bool_op bop)
 
             // objects are not in parent/child relationship;
             // find their lowest common ancestor
-            SPRepr *dad = LCA (a, b);
+            Inkscape::XML::Node *dad = LCA (a, b);
             if (dad == NULL) {
                 desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
                 return;
             }
 
             // find the children of the LCA that lead from it to the a and b
-            SPRepr *as = AncetreFils (a, dad);
-            SPRepr *bs = AncetreFils (b, dad);
+            Inkscape::XML::Node *as = AncetreFils (a, dad);
+            Inkscape::XML::Node *bs = AncetreFils (b, dad);
 
             // find out which comes first
-            for (SPRepr * child = dad->firstChild(); child; child = child->next()) {
+            for (Inkscape::XML::Node * child = dad->firstChild(); child; child = child->next()) {
                 if (child == as) {
                     // a en premier->mauvais sens
                     reverseOrderForOp = true;
@@ -408,7 +408,7 @@ sp_selected_path_boolop (bool_op bop)
     }
   
     // remember important aspects of the source path, to be restored
-    SPRepr *repr_source;
+    Inkscape::XML::Node *repr_source;
     if ( bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice ) {
         if (reverseOrderForOp) {
              repr_source = SP_OBJECT_REPR (il->data);
@@ -420,11 +420,11 @@ sp_selected_path_boolop (bool_op bop)
         GSList *sorted = 	g_slist_copy ((GSList *) selection->reprList());
 
         sorted = g_slist_sort (sorted, (GCompareFunc) sp_repr_compare_position);
-        repr_source = ((SPRepr *) sorted->data);
+        repr_source = ((Inkscape::XML::Node *) sorted->data);
         g_slist_free (sorted);
     }
     gint pos = repr_source->position();
-    SPRepr *parent = sp_repr_parent (repr_source);
+    Inkscape::XML::Node *parent = sp_repr_parent (repr_source);
     const char *id = sp_repr_attr (repr_source, "id");
     const char *style = sp_repr_attr (repr_source, "style");
     
@@ -478,7 +478,7 @@ sp_selected_path_boolop (bool_op bop)
         for (int i=0;i<nbRP;i++) {
             gchar *d = resPath[i]->svg_dump_path ();
       
-            SPRepr *repr = sp_repr_new ("svg:path");
+            Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
             sp_repr_set_attr (repr, "style", style);
             sp_repr_set_attr (repr, "d", d);
             g_free (d);
@@ -518,7 +518,7 @@ sp_selected_path_boolop (bool_op bop)
     } else {
         gchar *d = res->svg_dump_path ();
 
-        SPRepr *repr = sp_repr_new ("svg:path");
+        Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
         sp_repr_set_attr (repr, "style", style);
 
         sp_repr_set_attr (repr, "d", d);
@@ -703,7 +703,7 @@ sp_selected_path_outline ()
         // remember the position of the item
         gint pos = SP_OBJECT_REPR (item)->position();
         // remember parent
-        SPRepr *parent = SP_OBJECT_REPR (item)->parent();
+        Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
         const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
@@ -712,7 +712,7 @@ sp_selected_path_outline ()
 
         if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
 
-            SPRepr *repr = sp_repr_new ("svg:path");
+            Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
 
             // restore old style
             sp_repr_set_attr (repr, "style", style);
@@ -818,7 +818,7 @@ void
 sp_selected_path_create_offset_object (int expand, bool updating)
 {
     SPSelection *selection;
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
     SPItem *item;
     SPCurve *curve;
     gchar *style, *str;
@@ -863,7 +863,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     // remember the position of the item
     gint pos = SP_OBJECT_REPR (item)->position();
     // remember parent
-    SPRepr *parent = SP_OBJECT_REPR (item)->parent();
+    Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
   
     {
         SPStyle *i_style = SP_OBJECT (item)->style;
@@ -1234,7 +1234,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         // remember the position of the item
         gint pos = SP_OBJECT_REPR (item)->position();
         // remember parent
-        SPRepr *parent = SP_OBJECT_REPR (item)->parent();
+        Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
         const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
@@ -1247,7 +1247,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
             tstr[79] = '\0';
 
-            SPRepr *repr = sp_repr_new ("svg:path");
+            Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
 
             sp_repr_set_attr (repr, "style", style);
 
@@ -1348,7 +1348,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
     // remember the position of the item
     gint pos = SP_OBJECT_REPR (item)->position();
     // remember parent
-    SPRepr *parent = SP_OBJECT_REPR (item)->parent();
+    Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
     // remember id
     const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
@@ -1365,7 +1365,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
         orig->Simplify (threshold * size);
     }
 
-    SPRepr *repr = sp_repr_new ("svg:path");
+    Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
 
     sp_repr_set_attr (repr, "style", style);
 
@@ -1489,7 +1489,7 @@ sp_selected_path_simplify (void)
 // fonctions utilitaires
 
 bool
-Ancetre (SPRepr * a, SPRepr * who)
+Ancetre (Inkscape::XML::Node * a, Inkscape::XML::Node * who)
 {
     if (who == NULL || a == NULL)
         return false;

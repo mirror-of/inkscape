@@ -26,7 +26,7 @@ public:
     explicit ElementNode(int code)
     : SimpleNode(code) {}
 
-    SPReprType type() const { return SP_XML_ELEMENT_NODE; }
+    Inkscape::XML::NodeType type() const { return Inkscape::XML::ELEMENT_NODE; }
 
 protected:
     SimpleNode *_duplicate() const { return new ElementNode(*this); }

@@ -1,5 +1,5 @@
 /*
- * SPReprDoc - interface for XML documents
+ * Inkscape::XML::Document - interface for XML documents
  *
  * Copyright 2005 MenTaLguY <mental@rydia.net>
  *
@@ -17,8 +17,14 @@
 
 #include "xml/sp-repr.h"
 
-struct SPReprDoc : virtual public SPRepr {
+namespace Inkscape {
+namespace XML {
+
+struct Document : virtual public Node {
 };
+
+}
+}
 
 #endif
 /*

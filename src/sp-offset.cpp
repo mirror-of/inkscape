@@ -76,8 +76,8 @@ static void sp_offset_init (SPOffset * offset);
 static void sp_offset_finalize(GObject *obj);
 
 static void sp_offset_build (SPObject * object, SPDocument * document,
-                             SPRepr * repr);
-static SPRepr *sp_offset_write (SPObject * object, SPRepr * repr,
+                             Inkscape::XML::Node * repr);
+static Inkscape::XML::Node *sp_offset_write (SPObject * object, Inkscape::XML::Node * repr,
                                 guint flags);
 static void sp_offset_set (SPObject * object, unsigned int key,
                            const gchar * value);
@@ -194,7 +194,7 @@ sp_offset_finalize(GObject *obj)
 }
 
 static void
-sp_offset_build(SPObject *object, SPDocument *document, SPRepr *repr)
+sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     if (((SPObjectClass *) parent_class)->build)
         ((SPObjectClass *) parent_class)->build (object, document, repr);
@@ -235,8 +235,8 @@ sp_offset_build(SPObject *object, SPDocument *document, SPRepr *repr)
     }
 }
 
-static SPRepr *
-sp_offset_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_offset_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPOffset *offset = SP_OFFSET (object);
   

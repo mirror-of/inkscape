@@ -53,7 +53,7 @@ static unsigned const N_NAME_TYPES = SODIPODI_TYPE + 1;
 static GType name_to_gtype(NameType name_type, gchar const *name);
 
 SPObject *
-sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
+sp_object_repr_build_tree (SPDocument *document, Inkscape::XML::Node *repr)
 {
 	g_assert (document != NULL);
 	g_assert (repr != NULL);
@@ -72,11 +72,11 @@ sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
 }
 
 GType
-sp_repr_type_lookup (SPRepr *repr)
+sp_repr_type_lookup (Inkscape::XML::Node *repr)
 {
-	if ( repr->type() == SP_XML_TEXT_NODE ) {
+	if ( repr->type() == Inkscape::XML::TEXT_NODE ) {
 		return SP_TYPE_STRING;
-	} else if ( repr->type() == SP_XML_ELEMENT_NODE ) {
+	} else if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
 		gchar const * const type_name = sp_repr_attr(repr, "sodipodi:type");
 		return ( type_name
 			 ? name_to_gtype(SODIPODI_TYPE, type_name)

@@ -146,7 +146,7 @@ static void sp_arc_context_dispose(GObject *object)
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
-static void shape_event_attr_changed(SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
+static void shape_event_attr_changed(Inkscape::XML::Node * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
     SPArcContext *ac = SP_ARC_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(ac);
@@ -165,7 +165,7 @@ static void shape_event_attr_changed(SPRepr * repr, const gchar * name, const gc
     }
 }
 
-static SPReprEventVector shape_repr_events = {
+static Inkscape::XML::NodeEventVector shape_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
     shape_event_attr_changed,
@@ -197,7 +197,7 @@ sp_arc_context_selection_changed(SPSelection * selection, gpointer data)
     SPItem *item = selection ? selection->singleItem() : NULL;
     if (item) {
         ac->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        SPRepr *repr = SP_OBJECT_REPR(item);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
         if (repr) {
             ac->repr = repr;
             sp_repr_ref(repr);
@@ -221,7 +221,7 @@ sp_arc_context_setup(SPEventContext *ec)
 
     if (item) {
         ac->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        SPRepr *repr = SP_OBJECT_REPR(item);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
         if (repr) {
             ac->repr = repr;
             sp_repr_ref(repr);
@@ -436,7 +436,7 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
         }
 
         /* Create object */
-        SPRepr *repr = sp_repr_new("svg:path");
+        Inkscape::XML::Node *repr = sp_repr_new("svg:path");
         sp_repr_set_attr(repr, "sodipodi:type", "arc");
 
         /* Set style */

@@ -21,7 +21,7 @@ namespace Extension {
     \return   None
     \brief    Builds a SPModuleInput object from a XML description
     \param    module  The module to be initialized
-    \param    repr    The XML description in a SPRepr tree
+    \param    repr    The XML description in a Inkscape::XML::Node tree
 
     Okay, so you want to build a SPModuleInput object.
 
@@ -33,7 +33,7 @@ namespace Extension {
     Overall, there are many levels of indentation, just to handle the
     levels of indentation in the XML file.
 */
-Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
+Input::Input (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
     mimetype = NULL;
     extension = NULL;
@@ -42,7 +42,7 @@ Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Exten
 	output_extension = NULL;
 
     if (repr != NULL) {
-        SPRepr * child_repr;
+        Inkscape::XML::Node * child_repr;
 
         child_repr = sp_repr_children(repr);
 
@@ -144,7 +144,7 @@ Input::open (const gchar *uri)
         timer->touch();
 
 	SPDocument * doc;
-	SPRepr * repr;
+	Inkscape::XML::Node * repr;
 
 	gsize bytesRead = 0;
 	gsize bytesWritten = 0;

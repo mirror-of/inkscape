@@ -14,7 +14,12 @@
 
 #include <gtkmm/main.h>
 
-class SPReprDoc;
+namespace Inkscape {
+namespace XML {
+class Document;
+}
+}
+
 
 namespace Inkscape {
 namespace NSApplication {
@@ -44,7 +49,7 @@ protected:
     Gtk::Main      *_gtk_main;
     gint            _argc;
     char           **_argv;
-    SPReprDoc      *_preferences;
+    Inkscape::XML::Document      *_preferences;
     AppPrototype   *_app_impl;
 
     gchar const    *_path_home;

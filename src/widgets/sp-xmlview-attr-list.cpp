@@ -31,11 +31,11 @@ static void sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass);
 static void sp_xmlview_attr_list_init (SPXMLViewAttrList * list);
 static void sp_xmlview_attr_list_destroy (GtkObject * object);
 
-static void event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
+static void event_attr_changed (Inkscape::XML::Node * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
 
 static GtkCListClass * parent_class = NULL;
 
-static SPReprEventVector repr_events = {
+static Inkscape::XML::NodeEventVector repr_events = {
 	NULL, /* child_added */
 	NULL, /* child_removed */
 	event_attr_changed,
@@ -44,7 +44,7 @@ static SPReprEventVector repr_events = {
 };
 
 GtkWidget *
-sp_xmlview_attr_list_new (SPRepr * repr)
+sp_xmlview_attr_list_new (Inkscape::XML::Node * repr)
 {
 	SPXMLViewAttrList * list;
 
@@ -66,7 +66,7 @@ sp_xmlview_attr_list_new (SPRepr * repr)
 }
 
 void
-sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, SPRepr * repr)
+sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, Inkscape::XML::Node * repr)
 {
 	if ( repr == list->repr ) return;
 	gtk_clist_freeze (GTK_CLIST (list));
@@ -143,7 +143,7 @@ sp_xmlview_attr_list_destroy (GtkObject * object)
 }
 
 void
-event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
+event_attr_changed (Inkscape::XML::Node * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
 	gint row;
 	SPXMLViewAttrList * list;

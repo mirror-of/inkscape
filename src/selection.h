@@ -27,7 +27,12 @@
 
 #include <list>
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 /**
  * @brief The set of selected SPObjects for a given desktop.
@@ -80,7 +85,7 @@ public:
 	 *
 	 * @param the xml node of the item to add
 	 */
-	void addRepr(SPRepr *repr) { add(_objectForRepr(repr)); }
+	void addRepr(Inkscape::XML::Node *repr) { add(_objectForRepr(repr)); }
 
 	/**
 	 * @brief Set the selection to a single specific object
@@ -101,7 +106,7 @@ public:
 	 *
 	 * @param repr the xml node of the item to select
 	 */
-	void setRepr(SPRepr *repr) { set(_objectForRepr(repr)); }
+	void setRepr(Inkscape::XML::Node *repr) { set(_objectForRepr(repr)); }
 
 	/**
 	 * @brief Removes an item from the set of selected objects
@@ -128,7 +133,7 @@ public:
 	 *
 	 * @param repr the xml node of the item to remove
 	 */
-	void removeRepr(SPRepr *repr) { remove(_objectForRepr(repr)); }
+	void removeRepr(Inkscape::XML::Node *repr) { remove(_objectForRepr(repr)); }
 
 	/**
 	 * @brief Selects exactly the specified objects
@@ -181,7 +186,7 @@ public:
 	/**
 	 * @brief Returns true if the given item is selected
 	 */
-	bool includesRepr(SPRepr *repr) const {
+	bool includesRepr(Inkscape::XML::Node *repr) const {
 		return includes(_objectForRepr(repr));
 	}
 
@@ -204,7 +209,7 @@ public:
 	 *
 	 * @return NULL unless exactly one object is selected
 	 */
-	SPRepr *singleRepr();
+	Inkscape::XML::Node *singleRepr();
 
 	/** @brief Returns the list of selected objects */
 	GSList const *list();
@@ -311,7 +316,7 @@ private:
 	/** @brief removes an object (without issuing a notification) */
 	void _remove(SPObject *obj);
 	/** @brief returns the SPObject corresponding to an xml node (if any) */
-	SPObject *_objectForRepr(SPRepr *repr) const;
+	SPObject *_objectForRepr(Inkscape::XML::Node *repr) const;
 
 	GSList *_objs;
 	mutable GSList *_reprs;

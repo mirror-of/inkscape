@@ -6,20 +6,20 @@
 #include "xml/sp-repr-iterators.h"
 
 static bool
-same_repr(SPRepr &a, SPRepr &b)
+same_repr(Inkscape::XML::Node &a, Inkscape::XML::Node &b)
 {
   /* todo: I'm not certain that it's legal to take the address of a reference.  Check the exact wording of the spec on this matter. */
     return &a == &b;
 }
 
-SPRepr *
-LCA(SPRepr *a, SPRepr *b)
+Inkscape::XML::Node *
+LCA(Inkscape::XML::Node *a, Inkscape::XML::Node *b)
 {
     using Inkscape::Algorithms::longest_common_suffix;
-    SPRepr *ancestor = longest_common_suffix<SPReprParentIterator>(
+    Inkscape::XML::Node *ancestor = longest_common_suffix<Inkscape::XML::NodeParentIterator>(
         a, b, NULL, &same_repr
     );
-    if ( ancestor && ancestor->type() != SP_XML_DOCUMENT_NODE ) {
+    if ( ancestor && ancestor->type() != Inkscape::XML::DOCUMENT_NODE ) {
         return ancestor;
     } else {
         return NULL;
@@ -32,8 +32,8 @@ LCA(SPRepr *a, SPRepr *b)
  * The current version returns NULL if ancestor or descendent is NULL, though future versions may
  * call g_log.  Please update this comment if you rely on the current behaviour.
  */
-SPRepr *
-AncetreFils(SPRepr *descendent, SPRepr *ancestor)
+Inkscape::XML::Node *
+AncetreFils(Inkscape::XML::Node *descendent, Inkscape::XML::Node *ancestor)
 {
     if (descendent == NULL || ancestor == NULL)
         return NULL;

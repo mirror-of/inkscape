@@ -56,7 +56,7 @@ test_gradient()
         SPGradient *gr = static_cast<SPGradient *>(g_object_new(SP_TYPE_GRADIENT, NULL));
         SP_OBJECT(gr)->document = doc;
         sp_object_set(SP_OBJECT(gr), SP_ATTR_GRADIENTTRANSFORM, "matrix(0, 1, -1, 0, 0, 0)");
-        SPRepr *repr = sp_repr_new("svg:radialGradient");
+        Inkscape::XML::Node *repr = sp_repr_new("svg:radialGradient");
         SP_OBJECT(gr)->updateRepr(repr, SP_OBJECT_WRITE_ALL);
         {
             gchar const *tr = repr->attribute("gradientTransform");

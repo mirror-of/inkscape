@@ -896,7 +896,7 @@ ink_pattern_menu (GtkWidget *mnu)
 				//        g_signal_connect (G_OBJECT (i), "activate", G_CALLBACK (sp_gvs_gradient_activate), gvs);
 				GtkWidget *hb = gtk_hbox_new (FALSE, 4);
 				gtk_widget_show (hb);
-				SPRepr *repr = SP_OBJECT_REPR((SPItem *) pl->data);
+				Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) pl->data);
 				GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
 				gtk_widget_show (l);
 				gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);

@@ -34,14 +34,14 @@
 static void sp_root_class_init (SPRootClass *klass);
 static void sp_root_init (SPRoot *root);
 
-static void sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_root_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_root_release (SPObject *object);
 static void sp_root_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
-static void sp_root_remove_child (SPObject *object, SPRepr *child);
+static void sp_root_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
+static void sp_root_remove_child (SPObject *object, Inkscape::XML::Node *child);
 static void sp_root_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_root_modified (SPObject *object, guint flags);
-static SPRepr *sp_root_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_root_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static NRArenaItem *sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_root_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
@@ -137,12 +137,12 @@ sp_root_init (SPRoot *root)
 
 /** sp_root_build(object, document, repr)
  *
- *  This fills in the data for an SPObject from its SPRepr object.
+ *  This fills in the data for an SPObject from its Inkscape::XML::Node object.
  *  It fills in data such as version, x, y, width, height, etc.
  *  It then calls the object's parent class object's build function.
  */
 static void
-sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_root_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	SPGroup *group = (SPGroup *) object;
 	SPRoot *root = (SPRoot *) object;
@@ -354,7 +354,7 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
  *  The SPRoot object is taken to be an SPGroup.
  */
 static void
-sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_root_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	SPRoot *root = (SPRoot *) object;
 	SPGroup *group = (SPGroup *) object;
@@ -382,7 +382,7 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
  *  
  *  Removes the given child from this SPRoot object.
  */
-static void sp_root_remove_child(SPObject *object, SPRepr *child)
+static void sp_root_remove_child(SPObject *object, Inkscape::XML::Node *child)
 {
 	SPRoot *root = (SPRoot *) object;
 
@@ -588,8 +588,8 @@ sp_root_modified (SPObject *object, guint flags)
  *
  *  This writes the object into the repr object, then calls the parent's write routine
  */
-static SPRepr *
-sp_root_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_root_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPRoot *root = SP_ROOT (object);
 

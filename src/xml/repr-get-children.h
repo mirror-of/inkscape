@@ -1,10 +1,15 @@
 #ifndef SEEN_REPR_GET_CHILDREN_H
 #define SEEN_REPR_GET_CHILDREN_H
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
 
-SPRepr *sp_repr_last_child(SPRepr const *parent);
-SPRepr *sp_repr_prev(SPRepr const *child);
+
+Inkscape::XML::Node *sp_repr_last_child(Inkscape::XML::Node const *parent);
+Inkscape::XML::Node *sp_repr_prev(Inkscape::XML::Node const *child);
 
 #endif /* !SEEN_REPR_GET_CHILDREN_H */
 

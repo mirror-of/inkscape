@@ -6,8 +6,8 @@
 #include "sp-repr-action-fns.h"
 
 int main(int argc, char *argv[]) {
-	SPReprDoc *document;
-	SPRepr *a, *b, *c, *root;
+	Inkscape::XML::Document *document;
+	Inkscape::XML::Node *a, *b, *c, *root;
 
 	Inkscape::GC::init();
 

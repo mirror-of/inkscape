@@ -171,14 +171,14 @@ void SPDocument::collectOrphans() {
 }
 
 static SPDocument *
-sp_document_create (SPReprDoc *rdoc,
+sp_document_create (Inkscape::XML::Document *rdoc,
 		    const gchar *uri,
 		    const gchar *base,
 		    const gchar *name,
 		    unsigned int keepalive)
 {
 	SPDocument *document;
-	SPRepr *rroot;
+	Inkscape::XML::Node *rroot;
 	SPVersion sodipodi_version;
 
 	rroot = sp_repr_document_root (rdoc);
@@ -240,8 +240,8 @@ sp_document_create (SPReprDoc *rdoc,
 	// creating namedview
 	if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL, "sodipodi:namedview")) {
 		// if there's none in the document already,
-		SPRepr *r = NULL;
-		SPRepr *rnew = NULL;
+		Inkscape::XML::Node *r = NULL;
+		Inkscape::XML::Node *rnew = NULL;
 		r = inkscape_get_repr (INKSCAPE, "template.base");
 		// see if there's a template with id="base" in the preferences 
 		if (!r) {
@@ -260,7 +260,7 @@ sp_document_create (SPReprDoc *rdoc,
 	
 	/* Defs */
 	if (!SP_ROOT (document->root)->defs) {
-		SPRepr *r;
+		Inkscape::XML::Node *r;
 		r = sp_repr_new ("svg:defs");
 		sp_repr_add_child (rroot, r, NULL);
 		sp_repr_unref (r);
@@ -292,12 +292,12 @@ SPDocument *
 sp_document_new (const gchar *uri, unsigned int keepalive, bool make_new)
 {
 	SPDocument *doc;
-	SPReprDoc *rdoc;
+	Inkscape::XML::Document *rdoc;
 	gchar *base = NULL;
         gchar *name = NULL;
 
 	if (uri) {
-		SPRepr *rroot;
+		Inkscape::XML::Node *rroot;
 		gchar *s, *p;
 		/* Try to fetch repr from file */
 		rdoc = sp_repr_read_file (uri, SP_SVG_NS_URI);
@@ -343,8 +343,8 @@ SPDocument *
 sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int keepalive)
 {
 	SPDocument *doc;
-	SPReprDoc *rdoc;
-	SPRepr *rroot;
+	Inkscape::XML::Document *rdoc;
+	Inkscape::XML::Node *rroot;
 	gchar *name;
 
 	rdoc = sp_repr_read_mem (buffer, length, SP_SVG_NS_URI);
@@ -441,7 +441,7 @@ void sp_document_set_uri(SPDocument *document, gchar const *uri)
 	}
 
 	// Update saveable repr attributes.
-	SPRepr *repr = sp_document_repr_root(document);
+	Inkscape::XML::Node *repr = sp_document_repr_root(document);
 	// changing uri in the document repr must not be not undoable
 	gboolean saved = sp_document_get_undo_sensitive(document);
 	sp_document_set_undo_sensitive (document, FALSE);
@@ -517,7 +517,7 @@ sigc::connection SPDocument::connectIdChanged(const gchar *id, SPDocument::IDCha
 	return priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
 }
 
-void SPDocument::bindObjectToRepr(SPRepr *repr, SPObject *object) {
+void SPDocument::bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object) {
 	if (object) {
 		g_assert(g_hash_table_lookup(priv->reprdef, repr) == NULL);
 		g_hash_table_insert(priv->reprdef, repr, object);
@@ -527,7 +527,7 @@ void SPDocument::bindObjectToRepr(SPRepr *repr, SPObject *object) {
 	}
 }
 
-SPObject *SPDocument::getObjectByRepr(SPRepr *repr) {
+SPObject *SPDocument::getObjectByRepr(Inkscape::XML::Node *repr) {
 	g_return_val_if_fail (repr != NULL, NULL);
 	return (SPObject*)g_hash_table_lookup(priv->reprdef, repr);
 }

@@ -17,7 +17,12 @@
 
 #include "xml/node-observer.h"
 
-class SPReprAction;
+namespace Inkscape {
+namespace XML {
+class Event;
+}
+}
+
 
 namespace Inkscape {
 

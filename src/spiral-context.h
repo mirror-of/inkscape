@@ -36,7 +36,7 @@ struct SPSpiralContext : public SPEventContext {
 	gdouble t0;
 
     SPKnotHolder *knot_holder;
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
 
     sigc::connection sel_changed_connection;
 

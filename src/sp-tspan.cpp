@@ -119,12 +119,12 @@ char *write_length_array(int nb, SPSVGLength *array)
 static void sp_tspan_class_init(SPTSpanClass *classname);
 static void sp_tspan_init(SPTSpan *tspan);
 
-static void sp_tspan_build(SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_tspan_build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_tspan_release(SPObject *object);
 static void sp_tspan_set(SPObject *object, unsigned key, gchar const *value);
 static void sp_tspan_update(SPObject *object, SPCtx *ctx, guint flags);
 static void sp_tspan_modified(SPObject *object, unsigned flags);
-static SPRepr *sp_tspan_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static SPItemClass *tspan_parent_class;
 
@@ -192,7 +192,7 @@ sp_tspan_release(SPObject *object)
 }
 
 static void
-sp_tspan_build(SPObject *object, SPDocument *doc, SPRepr *repr)
+sp_tspan_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
     //SPTSpan *tspan = SP_TSPAN(object);
 	
@@ -204,15 +204,15 @@ sp_tspan_build(SPObject *object, SPDocument *doc, SPRepr *repr)
     sp_object_read_attr(object, "sodipodi:role");
 	
     bool no_content = true;
-    for (SPRepr* rch = repr->firstChild() ; rch != NULL; rch = rch->next()) {
-        if ( rch->type() == SP_XML_TEXT_NODE ) {
+    for (Inkscape::XML::Node* rch = repr->firstChild() ; rch != NULL; rch = rch->next()) {
+        if ( rch->type() == Inkscape::XML::TEXT_NODE ) {
             no_content = false;
             break;
         }
     }
 
     if ( no_content ) {
-        SPRepr* rch = sp_repr_new_text("");
+        Inkscape::XML::Node* rch = sp_repr_new_text("");
         sp_repr_add_child(repr, rch, NULL);
     }
 	
@@ -311,8 +311,8 @@ sp_tspan_modified(SPObject *object, unsigned flags)
     }
 }
 
-static SPRepr *
-sp_tspan_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPTSpan *tspan = SP_TSPAN(object);
 	
@@ -378,7 +378,7 @@ sp_tspan_write(SPObject *object, SPRepr *repr, guint flags)
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         GSList *l = NULL;
         for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-            SPRepr* c_repr=NULL;
+            Inkscape::XML::Node* c_repr=NULL;
             if ( SP_IS_TSPAN(child) ) {
                 c_repr = child->updateRepr(NULL, flags);
             } else if ( SP_IS_TEXTPATH(child) ) {
@@ -389,8 +389,8 @@ sp_tspan_write(SPObject *object, SPRepr *repr, guint flags)
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
         while ( l ) {
-            sp_repr_add_child(repr, (SPRepr *) l->data, NULL);
-            sp_repr_unref((SPRepr *) l->data);
+            sp_repr_add_child(repr, (Inkscape::XML::Node *) l->data, NULL);
+            sp_repr_unref((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {
@@ -419,12 +419,12 @@ static void sp_textpath_class_init(SPTextPathClass *classname);
 static void sp_textpath_init(SPTextPath *textpath);
 static void sp_textpath_finalize(GObject *obj);
 
-static void sp_textpath_build(SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_textpath_build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_textpath_release(SPObject *object);
 static void sp_textpath_set(SPObject *object, unsigned key, gchar const *value);
 static void sp_textpath_update(SPObject *object, SPCtx *ctx, guint flags);
 static void sp_textpath_modified(SPObject *object, unsigned flags);
-static SPRepr *sp_textpath_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static SPItemClass *textpath_parent_class;
 
@@ -513,7 +513,7 @@ sp_textpath_release(SPObject *object)
 }
 
 static void
-sp_textpath_build(SPObject *object, SPDocument *doc, SPRepr *repr)
+sp_textpath_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
     //SPTextPath *textpath = SP_TEXTPATH(object);
 	
@@ -525,12 +525,12 @@ sp_textpath_build(SPObject *object, SPDocument *doc, SPRepr *repr)
     sp_object_read_attr(object, "xlink:href");
 	
     bool  no_content=true;
-    for (SPRepr* rch = repr->firstChild() ; rch != NULL; rch = rch->next()) {
-        if ( rch->type() == SP_XML_TEXT_NODE ) {no_content=false;break;}
+    for (Inkscape::XML::Node* rch = repr->firstChild() ; rch != NULL; rch = rch->next()) {
+        if ( rch->type() == Inkscape::XML::TEXT_NODE ) {no_content=false;break;}
     }
 	
     if ( no_content ) {
-        SPRepr* rch = sp_repr_new_text("");
+        Inkscape::XML::Node* rch = sp_repr_new_text("");
         sp_repr_add_child(repr, rch, NULL);
     }
 	
@@ -649,8 +649,8 @@ sp_textpath_modified(SPObject *object, unsigned flags)
         }
     }
 }
-static SPRepr *
-sp_textpath_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPTextPath *textpath = SP_TEXTPATH(object);
 	
@@ -694,7 +694,7 @@ sp_textpath_write(SPObject *object, SPRepr *repr, guint flags)
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         GSList *l = NULL;
         for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-            SPRepr* c_repr=NULL;
+            Inkscape::XML::Node* c_repr=NULL;
             if ( SP_IS_TSPAN(child) ) {
                 c_repr = child->updateRepr(NULL, flags);
             } else if ( SP_IS_TEXTPATH(child) ) {
@@ -705,8 +705,8 @@ sp_textpath_write(SPObject *object, SPRepr *repr, guint flags)
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
         while ( l ) {
-            sp_repr_add_child(repr, (SPRepr *) l->data, NULL);
-            sp_repr_unref((SPRepr *) l->data);
+            sp_repr_add_child(repr, (Inkscape::XML::Node *) l->data, NULL);
+            sp_repr_unref((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {
@@ -756,9 +756,9 @@ sp_textpath_to_text(SPObject *tp)
 
     for ( GSList *i = tp_reprs ; i ; i = i->next ) {
         // make a copy of each textpath child
-        SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
+        Inkscape::XML::Node *copy = sp_repr_duplicate((Inkscape::XML::Node *) i->data);
         // remove the old repr from under textpath
-        sp_repr_remove_child(SP_OBJECT_REPR(tp), (SPRepr *) i->data); 
+        sp_repr_remove_child(SP_OBJECT_REPR(tp), (Inkscape::XML::Node *) i->data); 
         // put its copy into under textPath
         sp_repr_add_child(SP_OBJECT_REPR(text), copy, NULL); // fixme: copy id
     }

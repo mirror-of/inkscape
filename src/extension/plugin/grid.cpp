@@ -140,8 +140,8 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
 
     // std::cout << "Path Data: " << path_data << std::endl;
 
-    SPRepr * current_layer = SP_OBJECT_REPR(((SPDesktop *)document)->currentLayer());
-    SPRepr * path = sp_repr_new("svg:path");
+    Inkscape::XML::Node * current_layer = SP_OBJECT_REPR(((SPDesktop *)document)->currentLayer());
+    Inkscape::XML::Node * path = sp_repr_new("svg:path");
 
     sp_repr_set_attr(path, "d", path_data.c_str());
 

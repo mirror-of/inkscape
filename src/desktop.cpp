@@ -639,7 +639,7 @@ sp_desktop_set_event_context (SPDesktop *dt, GtkType type, const gchar *config)
         g_object_unref (G_OBJECT (ec));
     }
 
-    SPRepr *repr = (config) ? inkscape_get_repr (INKSCAPE, config) : NULL;
+    Inkscape::XML::Node *repr = (config) ? inkscape_get_repr (INKSCAPE, config) : NULL;
     ec = sp_event_context_new (type, dt, repr, SP_EVENT_CONTEXT_STATIC);
     ec->next = dt->event_context;
     dt->event_context = ec;
@@ -651,7 +651,7 @@ void
 sp_desktop_push_event_context (SPDesktop *dt, GtkType type, const gchar *config, unsigned int key)
 {
     SPEventContext *ref, *ec;
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
 
     if (dt->event_context && dt->event_context->key == key) return;
     ref = dt->event_context;

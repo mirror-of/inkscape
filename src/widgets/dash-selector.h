@@ -27,7 +27,7 @@ struct SPDashSelector;
 
 GtkType sp_dash_selector_get_type (void);
 
-GtkWidget *sp_dash_selector_new (SPRepr *repr);
+GtkWidget *sp_dash_selector_new (Inkscape::XML::Node *repr);
 
 void sp_dash_selector_set_dash (SPDashSelector *dsel, int ndash, double *dash, double offset);
 void sp_dash_selector_get_dash (SPDashSelector *dsel, int *ndash, double **dash, double *offset);

@@ -19,7 +19,12 @@
 
 #include <list>
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 /** Radial objects are represented by an angle and a distance from
  * 0,0.  0,0 is represented by a == big_num.
@@ -119,7 +124,7 @@ class Path {
 	 njh: I'd be guessing that these are item <-> desktop transforms.*/
 	NR::Matrix i2d, d2i;
 /**  The DOM node which describes this NodePath */
-	SPRepr *repr;
+	Inkscape::XML::Node *repr;
 	//STL compliant method to get the selected nodes
 	void selection(std::list<Node *> &l);
 };

@@ -87,12 +87,12 @@ private:
     static std::ofstream error_file;      /**< This is the place where errors get reported */
 
 protected:
-    SPRepr *repr;                         /**< The XML description of the Extension */
+    Inkscape::XML::Node *repr;                         /**< The XML description of the Extension */
     Implementation::Implementation * imp; /**< An object that holds all the functions for making this work */
     ExpirationTimer * timer;              /**< Timeout to unload after a given time */
 
 public:
-                  Extension    (SPRepr * in_repr,
+                  Extension    (Inkscape::XML::Node * in_repr,
                                 Implementation::Implementation * in_imp);
     virtual      ~Extension    (void);
 
@@ -100,7 +100,7 @@ public:
     state_t       get_state    (void);
     bool          loaded       (void);
     virtual bool  check        (void);
-    SPRepr *      get_repr     (void);
+    Inkscape::XML::Node *      get_repr     (void);
     gchar *       get_id       (void);
     gchar *       get_name     (void);
     void          deactivate   (void);
@@ -154,30 +154,30 @@ public:
                                     already exists, but the user doesn't
                                     want to overwrite it */
 private:
-    void             make_param       (SPRepr * paramrepr);
+    void             make_param       (Inkscape::XML::Node * paramrepr);
     inline param_t * param_shared     (const gchar * name,
                                        GSList * list);
 public:
     bool             get_param_bool   (const gchar * name,
-                                       const SPReprDoc *   doc = NULL);
+                                       const Inkscape::XML::Document *   doc = NULL);
     int              get_param_int    (const gchar * name,
-                                       const SPReprDoc *   doc = NULL);
+                                       const Inkscape::XML::Document *   doc = NULL);
     float            get_param_float  (const gchar * name,
-                                       const SPReprDoc *   doc = NULL);
+                                       const Inkscape::XML::Document *   doc = NULL);
     const gchar *    get_param_string (const gchar * name,
-                                       const SPReprDoc *   doc = NULL);
+                                       const Inkscape::XML::Document *   doc = NULL);
     bool             set_param_bool   (const gchar * name,
                                        bool          value,
-                                       SPReprDoc *   doc = NULL);
+                                       Inkscape::XML::Document *   doc = NULL);
     int              set_param_int    (const gchar * name,
                                        int           value,
-                                       SPReprDoc *   doc = NULL);
+                                       Inkscape::XML::Document *   doc = NULL);
     float            set_param_float  (const gchar * name,
                                        float         value,
-                                       SPReprDoc *   doc = NULL);
+                                       Inkscape::XML::Document *   doc = NULL);
     const gchar *    set_param_string (const gchar * name,
                                        const gchar * value,
-                                       SPReprDoc *   doc = NULL);
+                                       Inkscape::XML::Document *   doc = NULL);
 
     /* Error file handling */
 public:

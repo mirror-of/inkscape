@@ -9,7 +9,12 @@
 #include "sp-gradient-units.h"
 class SPGradient;
 class SPGradientVector;
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 
 #define SP_TYPE_GRADIENT (sp_gradient_get_type())
@@ -40,7 +45,7 @@ void sp_gradient_set_units(SPGradient *gr, SPGradientUnits units);
 void sp_gradient_set_spread(SPGradient *gr, SPGradientSpread spread);
 
 /* Gradient repr methods */
-void sp_gradient_repr_set_vector(SPGradient *gradient, SPRepr *repr, SPGradientVector *vector);
+void sp_gradient_repr_set_vector(SPGradient *gradient, Inkscape::XML::Node *repr, SPGradientVector *vector);
 
 /**
  * Renders gradient vector to buffer

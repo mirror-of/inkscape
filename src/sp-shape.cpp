@@ -55,7 +55,7 @@
 static void sp_shape_class_init (SPShapeClass *klass);
 static void sp_shape_init (SPShape *shape);
 
-static void sp_shape_build (SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_shape_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_shape_release (SPObject *object);
 
 static void sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags);
@@ -125,7 +125,7 @@ sp_shape_init (SPShape *shape)
 }
 
 static void
-sp_shape_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_shape_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	SPVersion version;
 

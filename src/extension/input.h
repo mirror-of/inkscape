@@ -33,7 +33,7 @@ public:
     class open_failed {};        /**< Generic failure for an undescribed reason */
     class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
 
-                  Input                (SPRepr * in_repr,
+                  Input                (Inkscape::XML::Node * in_repr,
                                         Implementation::Implementation * in_imp);
     virtual      ~Input                (void);
     virtual bool  check                (void);

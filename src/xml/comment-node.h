@@ -29,7 +29,7 @@ struct CommentNode : public SimpleNode {
         setContent(content);
     }
 
-    SPReprType type() const { return SP_XML_COMMENT_NODE; }
+    Inkscape::XML::NodeType type() const { return Inkscape::XML::COMMENT_NODE; }
 
 protected:
     SimpleNode *_duplicate() const { return new CommentNode(*this); }

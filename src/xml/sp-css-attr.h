@@ -17,7 +17,7 @@
 
 #include "xml/sp-repr.h"
 
-class SPCSSAttr : virtual public SPRepr {
+class SPCSSAttr : virtual public Inkscape::XML::Node {
 };
 
 #endif

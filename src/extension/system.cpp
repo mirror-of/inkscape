@@ -39,7 +39,7 @@ namespace Extension {
 
 static void open_internal(Inkscape::Extension::Extension *in_plug, gpointer in_data);
 static void save_internal(Inkscape::Extension::Extension *in_plug, gpointer in_data);
-static Extension *build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp);
+static Extension *build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp);
 
 /**
  * \return   A new document created from the filename passed in
@@ -110,7 +110,7 @@ open(Extension *key, gchar const *filename)
 
     /* This kinda overkill as most of these are already set, but I want
        to make sure for this release -- TJG */
-    SPRepr *repr = sp_document_repr_root(doc);
+    Inkscape::XML::Node *repr = sp_document_repr_root(doc);
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_attr(repr, "sodipodi:modified", NULL);
@@ -326,7 +326,7 @@ get_print(gchar const *key)
 
 /**
  * \return   The built module
- * \brief    Creates a module from a SPReprDoc describing the module
+ * \brief    Creates a module from a Inkscape::XML::Document describing the module
  * \param    doc  The XML description of the module
  *
  * This function basically has two segments.  The first is that it goes through the Repr tree
@@ -340,7 +340,7 @@ get_print(gchar const *key)
  * case could apply to modules that are built in (like the SVG load/save functions).
  */
 static Extension *
-build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
+build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp)
 {
     enum {
         MODULE_EXTENSION,
@@ -357,7 +357,7 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
 
     g_return_val_if_fail(doc != NULL, NULL);
 
-    SPRepr *repr = sp_repr_document_root(doc);
+    Inkscape::XML::Node *repr = sp_repr_document_root(doc);
 
     /* sp_repr_print(repr); */
 
@@ -366,7 +366,7 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
         return NULL;
     }
 
-    SPRepr *child_repr = sp_repr_children(repr);
+    Inkscape::XML::Node *child_repr = sp_repr_children(repr);
     while (child_repr != NULL) {
         char const *element_name = child_repr->name();
         /* printf("Child: %s\n", child_repr->name()); */
@@ -384,7 +384,7 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
             module_implementation_type = MODULE_PLUGIN;
         }
 
-        //SPRepr *old_repr = child_repr;
+        //Inkscape::XML::Node *old_repr = child_repr;
         child_repr = sp_repr_next(child_repr);
         //sp_repr_unref(old_repr);
     }
@@ -450,7 +450,7 @@ build_from_file(gchar const *filename)
 {
     /* TODO: Need to define namespace here, need to write the
        DTD in general for this stuff */
-    SPReprDoc *doc = sp_repr_read_file(filename, NULL);
+    Inkscape::XML::Document *doc = sp_repr_read_file(filename, NULL);
     Extension *ext = build_from_reprdoc(doc, NULL);
     sp_repr_document_unref(doc);
     if (ext == NULL)
@@ -470,7 +470,7 @@ build_from_file(gchar const *filename)
 Extension *
 build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp)
 {
-    SPReprDoc *doc = sp_repr_read_mem(buffer, strlen(buffer), NULL);
+    Inkscape::XML::Document *doc = sp_repr_read_mem(buffer, strlen(buffer), NULL);
     Extension *ext = build_from_reprdoc(doc, in_imp);
     sp_repr_document_unref(doc);
     return ext;

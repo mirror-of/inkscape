@@ -47,7 +47,7 @@ struct SPOffset : public SPShape {
 
 	gchar					 *sourceHref;
 	SPUseReference *sourceRef;
-  SPRepr         *sourceRepr; // the repr associated with that id
+  Inkscape::XML::Node         *sourceRepr; // the repr associated with that id
 	SPObject			 *sourceObject;
 	
 	gulong           _modified_connection;

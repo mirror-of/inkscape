@@ -35,13 +35,13 @@ struct SPMaskView {
 static void sp_mask_class_init (SPMaskClass *klass);
 static void sp_mask_init (SPMask *mask);
 
-static void sp_mask_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_mask_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_mask_release (SPObject * object);
 static void sp_mask_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_mask_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
+static void sp_mask_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
 static void sp_mask_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_mask_modified (SPObject *object, guint flags);
-static SPRepr *sp_mask_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_mask_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 SPMaskView *sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, NRArenaItem *arenaitem);
 SPMaskView *sp_mask_view_list_remove (SPMaskView *list, SPMaskView *view);
@@ -96,7 +96,7 @@ sp_mask_init (SPMask *mask)
 }
 
 static void
-sp_mask_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_mask_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) parent_class)->build) {
 		((SPObjectClass *) parent_class)->build (object, document, repr);
@@ -168,7 +168,7 @@ sp_mask_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 static void
-sp_mask_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_mask_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	/* Invoke SPObjectGroup implementation */
 	((SPObjectClass *) (parent_class))->child_added (object, child, ref);
@@ -255,8 +255,8 @@ sp_mask_modified (SPObject *object, guint flags)
 	}
 }
 
-static SPRepr *
-sp_mask_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_mask_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("svg:mask");

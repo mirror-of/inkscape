@@ -42,11 +42,11 @@ struct SPMarkerView {
 static void sp_marker_class_init (SPMarkerClass *klass);
 static void sp_marker_init (SPMarker *marker);
 
-static void sp_marker_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_marker_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_marker_release (SPObject *object);
 static void sp_marker_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_marker_update (SPObject *object, SPCtx *ctx, guint flags);
-static SPRepr *sp_marker_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_marker_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static NRArenaItem *sp_marker_private_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_marker_private_hide (SPItem *item, unsigned int key);
@@ -111,7 +111,7 @@ sp_marker_init (SPMarker *marker)
 }
 
 static void
-sp_marker_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_marker_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	SPGroup *group;
 	SPMarker *marker;
@@ -447,8 +447,8 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	}
 }
 
-static SPRepr *
-sp_marker_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_marker_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPMarker *marker;
 

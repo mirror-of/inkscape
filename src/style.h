@@ -17,7 +17,12 @@
 #include "forward.h"
 #include "sp-marker-loc.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 class SPCSSAttr;
 
 namespace Inkscape {
@@ -278,7 +283,7 @@ void sp_style_read_from_object (SPStyle *style, SPObject *object);
 /**
  *
  */
-void sp_style_read_from_repr (SPStyle *style, SPRepr *repr);
+void sp_style_read_from_repr (SPStyle *style, Inkscape::XML::Node *repr);
 
 /**
  *

@@ -141,10 +141,10 @@ void sp_selection_duplicate()
 
     selection->clear();
 
-    SPRepr *parent = ((SPRepr *) reprs->data)->parent();
+    Inkscape::XML::Node *parent = ((Inkscape::XML::Node *) reprs->data)->parent();
     gboolean sort = TRUE;
     for (GSList *i = reprs->next; i; i = i->next) {
-        if ((((SPRepr *) i->data)->parent()) != parent) {
+        if ((((Inkscape::XML::Node *) i->data)->parent()) != parent) {
             // We can duplicate items from different parents, but we need not do sorting in this
             // case because dupes will remain in their own parents. FIXME: However, we need to sort those
             // subsets of selection which are siblings (how?).
@@ -158,8 +158,8 @@ void sp_selection_duplicate()
     GSList *newsel = NULL;
 
     while (reprs) {
-        parent = ((SPRepr *) reprs->data)->parent();
-        SPRepr *copy = sp_repr_duplicate((SPRepr *) reprs->data);
+        parent = ((Inkscape::XML::Node *) reprs->data)->parent();
+        Inkscape::XML::Node *copy = sp_repr_duplicate((Inkscape::XML::Node *) reprs->data);
 
         parent->appendChild(copy);
 
@@ -366,9 +366,9 @@ void sp_selection_group()
 
     // Check if all selected objects have common parent.
     GSList *reprs = g_slist_copy((GSList *) selection->reprList());
-    SPRepr *parent = ((SPRepr *) reprs->data)->parent();
+    Inkscape::XML::Node *parent = ((Inkscape::XML::Node *) reprs->data)->parent();
     for (GSList *i = reprs->next; i; i = i->next) {
-        if ((((SPRepr *) i->data)->parent()) != parent) {
+        if ((((Inkscape::XML::Node *) i->data)->parent()) != parent) {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot group objects from <b>different groups</b> or <b>layers</b>."));
             return;
         }
@@ -381,13 +381,13 @@ void sp_selection_group()
     p = g_slist_sort(p, (GCompareFunc) sp_repr_compare_position);
 
     // Remember the position of the topmost object.
-    gint topmost = ((SPRepr *) g_slist_last(p)->data)->position();
+    gint topmost = ((Inkscape::XML::Node *) g_slist_last(p)->data)->position();
 
-    SPRepr *group = sp_repr_new("svg:g");
+    Inkscape::XML::Node *group = sp_repr_new("svg:g");
 
     while (p) {
-        SPRepr *spnew;
-        SPRepr *current = (SPRepr *) p->data;
+        Inkscape::XML::Node *spnew;
+        Inkscape::XML::Node *current = (Inkscape::XML::Node *) p->data;
         spnew = sp_repr_duplicate(current);
         sp_repr_unparent(current);
         group->appendChild(spnew);
@@ -528,7 +528,7 @@ sp_selection_raise()
         return;
     }
 
-    SPRepr *grepr = SP_OBJECT_REPR(group);
+    Inkscape::XML::Node *grepr = SP_OBJECT_REPR(group);
 
     /* construct reverse-ordered list of selected children */
     GSList *rev = g_slist_copy((GSList *) items);
@@ -584,7 +584,7 @@ void sp_selection_raise_to_top()
     rl = g_slist_sort(rl, (GCompareFunc) sp_repr_compare_position);
 
     for (GSList *l = rl; l != NULL; l = l->next) {
-        SPRepr *repr = (SPRepr *) l->data;
+        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) l->data;
         repr->setPosition(-1);
     }
 
@@ -614,7 +614,7 @@ sp_selection_lower()
         return;
     }
 
-    SPRepr *grepr = SP_OBJECT_REPR(group);
+    Inkscape::XML::Node *grepr = SP_OBJECT_REPR(group);
 
     // find out the common bbox of the selected items
     NR::Rect selected = enclose_items(items);
@@ -680,7 +680,7 @@ void sp_selection_lower_to_bottom()
     for (GSList *l = rl; l != NULL; l = l->next) {
         gint minpos;
         SPObject *pp, *pc;
-        SPRepr *repr = (SPRepr *) l->data;
+        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) l->data;
         pp = document->getObjectByRepr(sp_repr_parent(repr));
         minpos = 0;
         g_assert(SP_IS_GROUP(pp));
@@ -729,7 +729,7 @@ void sp_copy_gradient (GSList **defs_clip, SPGradient *gradient)
 
     while (ref) { 
         // climb up the refs, copying each one in the chain
-        SPRepr *grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(ref));
+        Inkscape::XML::Node *grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(ref));
         *defs_clip = g_slist_prepend (*defs_clip, grad_repr);
 
         ref = ref->ref->getObject();
@@ -742,7 +742,7 @@ void sp_copy_pattern (GSList **defs_clip, SPPattern *pattern)
 
     while (ref) {
         // climb up the refs, copying each one in the chain
-        SPRepr *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(ref));
+        Inkscape::XML::Node *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(ref));
         *defs_clip = g_slist_prepend (*defs_clip, pattern_repr);
 
         // items in the pattern may also use gradients and other patterns, so we need to recurse here as well
@@ -758,7 +758,7 @@ void sp_copy_pattern (GSList **defs_clip, SPPattern *pattern)
 
 void sp_copy_marker (GSList **defs_clip, SPMarker *marker)
 {
-    SPRepr *marker_repr = sp_repr_duplicate(SP_OBJECT_REPR(marker));
+    Inkscape::XML::Node *marker_repr = sp_repr_duplicate(SP_OBJECT_REPR(marker));
     *defs_clip = g_slist_prepend (*defs_clip, marker_repr);
 }
 
@@ -770,7 +770,7 @@ void sp_copy_textpath_path (GSList **defs_clip, SPTextPath *tp, const GSList *it
         return;
     if (items && g_slist_find ((GSList *) items, path)) // do not copy it to defs if it is already in the list of items copied
         return;
-    SPRepr *repr = sp_repr_duplicate (SP_OBJECT_REPR(path));
+    Inkscape::XML::Node *repr = sp_repr_duplicate (SP_OBJECT_REPR(path));
     *defs_clip = g_slist_prepend (*defs_clip, repr);
 }
 
@@ -880,9 +880,9 @@ void sp_selection_copy_impl (const GSList *items, GSList **clip, GSList **defs_c
         // Copy item reprs:
         for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
 
-            SPRepr *repr = SP_OBJECT_REPR (i->data);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR (i->data);
 
-            SPRepr *copy = sp_repr_duplicate(repr);
+            Inkscape::XML::Node *copy = sp_repr_duplicate(repr);
 
             // copy complete inherited style
             SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
@@ -948,7 +948,7 @@ void sp_selection_copy()
 
     // clear old defs clipboard
     while (defs_clipboard) {
-        sp_repr_unref((SPRepr *) defs_clipboard->data);
+        sp_repr_unref((Inkscape::XML::Node *) defs_clipboard->data);
         defs_clipboard = g_slist_remove (defs_clipboard, defs_clipboard->data);
     }
 
@@ -959,7 +959,7 @@ void sp_selection_copy()
   
     //clear main clipboard 
     while (clipboard) {
-        sp_repr_unref((SPRepr *) clipboard->data);
+        sp_repr_unref((Inkscape::XML::Node *) clipboard->data);
         clipboard = g_slist_remove(clipboard, clipboard->data);
     }
 
@@ -980,10 +980,10 @@ paste_defs (GSList **defs_clip, SPDocument *doc)
 
     for (GSList *gl = *defs_clip; gl != NULL; gl = gl->next) {
         SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
-        SPRepr *repr = (SPRepr *) gl->data;
+        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) gl->data;
         gchar const *id = sp_repr_attr(repr, "id");
         if (!id || !doc->getObjectById(id)) {
-            SPRepr *copy = sp_repr_duplicate(repr);
+            Inkscape::XML::Node *copy = sp_repr_duplicate(repr);
             sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
             sp_repr_unref(copy);
         }
@@ -997,8 +997,8 @@ GSList *sp_selection_paste_impl (SPDocument *document, SPObject *parent, GSList 
     GSList *copied = NULL;
     // add objects to document
     for (GSList *l = *clip; l != NULL; l = l->next) {
-        SPRepr *repr = (SPRepr *) l->data;
-        SPRepr *copy = sp_repr_duplicate(repr);
+        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) l->data;
+        Inkscape::XML::Node *copy = sp_repr_duplicate(repr);
 
         // premultiply the item transform by the accumulated parent transform in the paste layer
         NR::Matrix local = sp_item_i2doc_affine(SP_ITEM(parent));
@@ -1222,7 +1222,7 @@ void sp_selection_remove_transform()
 
     GSList const *l = (GSList *) selection->reprList();
     while (l != NULL) {
-        sp_repr_set_attr((SPRepr*)l->data,"transform", NULL);
+        sp_repr_set_attr((Inkscape::XML::Node*)l->data,"transform", NULL);
         l = l->next;
     }
 
@@ -1737,10 +1737,10 @@ sp_selection_clone()
         return;
     }
 
-    SPRepr *sel_repr = SP_OBJECT_REPR(selection->singleItem());
-    SPRepr *parent = sp_repr_parent(sel_repr);
+    Inkscape::XML::Node *sel_repr = SP_OBJECT_REPR(selection->singleItem());
+    Inkscape::XML::Node *parent = sp_repr_parent(sel_repr);
 
-    SPRepr *clone = sp_repr_new("svg:use");
+    Inkscape::XML::Node *clone = sp_repr_new("svg:use");
     sp_repr_set_attr(clone, "x", "0");
     sp_repr_set_attr(clone, "y", "0");
     sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr(sel_repr, "id")));
@@ -1890,7 +1890,7 @@ sp_selection_tile(bool apply)
     // create a list of duplicates
     GSList *repr_copies = NULL;
     for (GSList *i = items; i != NULL; i = i->next) {
-        SPRepr *dup = sp_repr_duplicate ((SP_OBJECT_REPR (i->data)));
+        Inkscape::XML::Node *dup = sp_repr_duplicate ((SP_OBJECT_REPR (i->data)));
         repr_copies = g_slist_prepend (repr_copies, dup);
     }
     
@@ -1906,7 +1906,7 @@ sp_selection_tile(bool apply)
             item->deleteObject (false);
         }
 
-        SPRepr *rect = sp_repr_new ("svg:rect");
+        Inkscape::XML::Node *rect = sp_repr_new ("svg:rect");
         sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
         sp_repr_set_double (rect, "width", bounds.extent(NR::X));
         sp_repr_set_double (rect, "height", bounds.extent(NR::Y));
@@ -1974,7 +1974,7 @@ sp_selection_untile()
         pat_transform *= item->transform;
 
         for (SPObject *child = sp_object_first_child(SP_OBJECT(pattern)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-            SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(child));
+            Inkscape::XML::Node *copy = sp_repr_duplicate (SP_OBJECT_REPR(child));
             SPItem *i = SP_ITEM (desktop->currentLayer()->appendChildRepr(copy));
 
            // FIXME: relink clones to the new canvas objects
@@ -2049,7 +2049,7 @@ sp_selection_create_bitmap_copy ()
     // Remember parent and z-order of the topmost one
     gint pos = SP_OBJECT_REPR(g_slist_last(items)->data)->position();
     SPObject *parent_object = SP_OBJECT_PARENT(g_slist_last(items)->data);
-    SPRepr *parent = SP_OBJECT_REPR(parent_object);
+    Inkscape::XML::Node *parent = SP_OBJECT_REPR(parent_object);
 
     // Calculate resolution
     double res;
@@ -2117,7 +2117,7 @@ sp_selection_create_bitmap_copy ()
     GdkPixbuf *pb = gdk_pixbuf_new_from_file (filepath, NULL);
     if (pb) {
         // Create the repr for the image
-        SPRepr * repr = sp_repr_new ("svg:image");
+        Inkscape::XML::Node * repr = sp_repr_new ("svg:image");
         sp_repr_set_attr (repr, "xlink:href", filename);
         sp_repr_set_attr (repr, "sodipodi:absref", filepath);
         sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));

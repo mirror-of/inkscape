@@ -28,8 +28,18 @@
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 
-class SPRepr;
-class SPReprDoc;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
+namespace Inkscape {
+namespace XML {
+class Document;
+}
+}
+
 
 class SPDocumentPrivate;
 
@@ -49,8 +59,8 @@ struct SPDocument : public Inkscape::GC::Managed<>,
 	unsigned int keepalive : 1;
 	unsigned int virgin    : 1; /* Has the document never been touched? */
 
-	SPReprDoc *rdoc; /* Our SPReprDoc */
-	SPRepr *rroot; /* Root element of SPReprDoc */
+	Inkscape::XML::Document *rdoc; /* Our Inkscape::XML::Document */
+	Inkscape::XML::Node *rroot; /* Root element of Inkscape::XML::Document */
 	SPObject *root; /* Our SPRoot */
 
 	gchar *uri; /* URI string or NULL */
@@ -72,8 +82,8 @@ struct SPDocument : public Inkscape::GC::Managed<>,
 	SPObject *getObjectById(gchar const *id);
 	sigc::connection connectIdChanged(const gchar *id, IDChangedSignal::slot_type slot);
 
-	void bindObjectToRepr(SPRepr *repr, SPObject *object);
-	SPObject *getObjectByRepr(SPRepr *repr);
+	void bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object);
+	SPObject *getObjectByRepr(Inkscape::XML::Node *repr);
 
 	void queueForOrphanCollection(SPObject *object);
 	void collectOrphans();
@@ -127,11 +137,11 @@ gboolean sp_document_get_undo_sensitive (SPDocument const * document);
 void sp_document_clear_undo (SPDocument * document);
 void sp_document_clear_redo (SPDocument * document);
 
-void sp_document_child_added (SPDocument *doc, SPObject *object, SPRepr *child, SPRepr *ref);
-void sp_document_child_removed (SPDocument *doc, SPObject *object, SPRepr *child, SPRepr *ref);
+void sp_document_child_added (SPDocument *doc, SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
+void sp_document_child_removed (SPDocument *doc, SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
 void sp_document_attr_changed (SPDocument *doc, SPObject *object, const gchar *key, const gchar *oldval, const gchar *newval);
 void sp_document_content_changed (SPDocument *doc, SPObject *object, const gchar *oldcontent, const gchar *newcontent);
-void sp_document_order_changed (SPDocument *doc, SPObject *object, SPRepr *child, SPRepr *oldref, SPRepr *newref);
+void sp_document_order_changed (SPDocument *doc, SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *oldref, Inkscape::XML::Node *newref);
 
 /* Object modification root handler */
 void sp_document_request_modified (SPDocument *doc);

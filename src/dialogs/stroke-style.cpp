@@ -81,7 +81,7 @@ static void sp_stroke_style_paint_selection_modified (SPWidget *spw, SPSelection
 static void sp_stroke_style_paint_selection_changed (SPWidget *spw, SPSelection *selection, SPPaintSelector *psel);
 static void sp_stroke_style_paint_attr_changed(SPWidget *spw, gchar const *key, gchar const *oldval, gchar const *newval);
 static void sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel);
-static void sp_stroke_style_paint_update_repr(SPWidget *spw, SPRepr *repr);
+static void sp_stroke_style_paint_update_repr(SPWidget *spw, Inkscape::XML::Node *repr);
 
 static void sp_stroke_style_paint_mode_changed(SPPaintSelector *psel, SPPaintSelectorMode mode, SPWidget *spw);
 static void sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw);
@@ -401,7 +401,7 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 
 
 static void
-sp_stroke_style_paint_update_repr(SPWidget *spw, SPRepr *repr)
+sp_stroke_style_paint_update_repr(SPWidget *spw, Inkscape::XML::Node *repr)
 {
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;
@@ -678,13 +678,13 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                      */
 
                 } else {
-                    SPRepr *patrepr = SP_OBJECT_REPR(pattern);
+                    Inkscape::XML::Node *patrepr = SP_OBJECT_REPR(pattern);
                     SPCSSAttr *css = sp_repr_css_attr_new ();
                     gchar *urltext = g_strdup_printf ("url(#%s)", patrepr->attribute("id"));
                     sp_repr_css_set_property (css, "stroke", urltext);
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                         SPRepr *selrepr = SP_OBJECT_REPR (i->data);
+                         Inkscape::XML::Node *selrepr = SP_OBJECT_REPR (i->data);
                          SPObject *selobj = SP_OBJECT (i->data);
                          if (!selrepr)
                              continue;
@@ -749,7 +749,7 @@ static void sp_stroke_style_line_attr_changed (SPWidget *spw,
                                               gchar const *newval);
 
 static void sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel);
-static void sp_stroke_style_line_update_repr(SPWidget *spw, SPRepr *repr);
+static void sp_stroke_style_line_update_repr(SPWidget *spw, Inkscape::XML::Node *repr);
 
 static void sp_stroke_style_set_join_buttons(SPWidget *spw,
                                              GtkWidget *active);
@@ -819,11 +819,11 @@ sp_marker_prev_new(unsigned size, gchar const *mname,
         return NULL;
 
     // the repr of the marker; make a copy with id="sample"
-    SPRepr *mrepr = sp_repr_duplicate (SP_OBJECT_REPR (marker));
+    Inkscape::XML::Node *mrepr = sp_repr_duplicate (SP_OBJECT_REPR (marker));
     sp_repr_set_attr (mrepr, "id", "sample");
 
     // replace the old sample in the sandbox by the new one
-    SPRepr *defsrepr = SP_OBJECT_REPR (sandbox->getObjectById("defs"));
+    Inkscape::XML::Node *defsrepr = SP_OBJECT_REPR (sandbox->getObjectById("defs"));
     SPObject *oldmarker = sandbox->getObjectById("sample");
     if (oldmarker)
         oldmarker->deleteObject(false);
@@ -952,7 +952,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
         if (!SP_IS_MARKER(ml->data))
             continue;
 
-        SPRepr *repr = SP_OBJECT_REPR((SPItem *) ml->data);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) ml->data);
 
         if (markers_doc && repr->attribute("inkscape:stockid")) {
             // find out if markers_doc has a marker with the same stockid, and if so, skip this
@@ -1148,7 +1148,7 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
        if (!strcmp(stockid,"true")) markurn = g_strconcat("urn:inkscape:marker:",markid,NULL);
        SPObject *mark = get_stock_item(markurn);
        if (mark) {
-            SPRepr *repr = SP_OBJECT_REPR(mark);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR(mark);
             marker = g_strconcat("url(#", repr->attribute("id"), ")", NULL);
         }
     } else {
@@ -1165,7 +1165,7 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
          SPItem *item = (SPItem *) items->data;
          if (!SP_IS_SHAPE(item) || SP_IS_RECT(item)) // can't set marker to rect, until it's converted to using <path>
              continue;
-         SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
+         Inkscape::XML::Node *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
          if (selrepr) {
              sp_repr_css_change_recursive(selrepr, css, "style");
          }
@@ -1786,7 +1786,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
  *
  */
 static void
-sp_stroke_style_line_update_repr(SPWidget *spw, SPRepr *repr)
+sp_stroke_style_line_update_repr(SPWidget *spw, Inkscape::XML::Node *repr)
 {
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;

@@ -179,7 +179,7 @@ public:
      * an exception for a 'hard' error.
      *
      */
-    EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
+    EcmaObject *EcmaBinding::processNode(Inkscape::XML::Node *node, EcmaObject *parent)
                                                 throw (EcmaException);
 
 
@@ -238,7 +238,7 @@ private:
     /**
      * The REPR tree root to which we will bind
      */
-    SPRepr                *root;
+    Inkscape::XML::Node                *root;
 
 
 

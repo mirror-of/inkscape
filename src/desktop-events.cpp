@@ -90,7 +90,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 	int wx, wy;
 
 	SPDesktop *desktop = dtw->desktop;
-	SPRepr *repr = SP_OBJECT_REPR (desktop->namedview);
+	Inkscape::XML::Node *repr = SP_OBJECT_REPR (desktop->namedview);
 
 	gdk_window_get_pointer (GTK_WIDGET (dtw->canvas)->window, &wx, &wy, NULL);
 	NR::Point const event_win(wx, wy);
@@ -144,7 +144,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 			       : wx )
 			     >= 0 )
 			{
-				SPRepr *repr = sp_repr_new("sodipodi:guide");
+				Inkscape::XML::Node *repr = sp_repr_new("sodipodi:guide");
 				sp_repr_set_attr (repr, "orientation", (horiz) ? "horizontal" : "vertical");
 				double const guide_pos_dt = event_dt[ horiz
 								      ? NR::Y

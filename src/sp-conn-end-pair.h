@@ -6,7 +6,12 @@
 #include "forward.h"
 
 class SPConnEnd;
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 class SPConnEndPair {
 public:
@@ -14,7 +19,7 @@ public:
     ~SPConnEndPair();
     void release();
     void setAttr(unsigned const key, gchar const *const value);
-    void writeRepr(SPRepr *const repr) const;
+    void writeRepr(Inkscape::XML::Node *const repr) const;
     void getAttachedItems(SPItem *[2]) const;
 
 private:

@@ -26,7 +26,12 @@ int sp_main_console(int argc, char const **argv);
 namespace Inkscape {
 namespace NSApplication {
 
-class SPReprDoc;
+namespace Inkscape {
+namespace XML {
+class Document;
+}
+}
+
 class GSList;
 
 Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_gui)

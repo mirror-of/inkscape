@@ -32,7 +32,7 @@ struct SPXMLViewContent
 {
 	GtkTextView textview;
 
-	SPRepr * repr;
+	Inkscape::XML::Node * repr;
 	gint blocked;
 };
 
@@ -42,11 +42,11 @@ struct SPXMLViewContentClass
 };
 
 GtkType sp_xmlview_content_get_type (void);
-GtkWidget * sp_xmlview_content_new (SPRepr * repr);
+GtkWidget * sp_xmlview_content_new (Inkscape::XML::Node * repr);
 
 #define SP_XMLVIEW_CONTENT_GET_REPR(text) (SP_XMLVIEW_CONTENT (text)->repr)
 
-void sp_xmlview_content_set_repr (SPXMLViewContent * text, SPRepr * repr);
+void sp_xmlview_content_set_repr (SPXMLViewContent * text, Inkscape::XML::Node * repr);
 
 
 

@@ -66,7 +66,12 @@
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 typedef void (* SPObjectMethod) (SPObject *object, gpointer data);
 
@@ -148,7 +153,7 @@ struct SPObject : public GObject {
 	SPObject *children; /* Our children */
 	SPObject *_last_child; /* Remembered last child */
 	SPObject *next; /* Next object in linked list */
-	SPRepr *repr; /* Our xml representation */
+	Inkscape::XML::Node *repr; /* Our xml representation */
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
 
@@ -185,7 +190,7 @@ struct SPObject : public GObject {
 	SPObject *lastChild() { return _last_child; }
 	SPObject const *lastChild() const { return _last_child; }
 
-	SPObject *appendChildRepr(SPRepr *repr);
+	SPObject *appendChildRepr(Inkscape::XML::Node *repr);
 
 	/** @brief Gets the author-visible label for this object. */ 
         gchar const *label() const;
@@ -348,7 +353,7 @@ struct SPObject : public GObject {
 	 *
 	 *  @return the updated repr
 	 */
-	SPRepr *updateRepr(unsigned int flags=SP_OBJECT_WRITE_EXT);
+	Inkscape::XML::Node *updateRepr(unsigned int flags=SP_OBJECT_WRITE_EXT);
 
 	/** @brief Updates the given repr based on the object's
 	 *         state.
@@ -371,7 +376,7 @@ struct SPObject : public GObject {
 	 *
 	 *  @return the updated repr
 	 */
-	SPRepr *updateRepr(SPRepr *repr, unsigned int flags);
+	Inkscape::XML::Node *updateRepr(Inkscape::XML::Node *repr, unsigned int flags);
 
 	/** @brief Queues an deferred update of this object's display.
 	 *
@@ -442,14 +447,14 @@ struct SPObject : public GObject {
 struct SPObjectClass {
 	GObjectClass parent_class;
 
-	void (* build) (SPObject *object, SPDocument *doc, SPRepr *repr);
+	void (* build) (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr);
 	void (* release) (SPObject *object);
 
 	/* Virtual handlers of repr signals */
-	void (* child_added) (SPObject *object, SPRepr *child, SPRepr *ref);
-	void (* remove_child) (SPObject *object, SPRepr *child);
+	void (* child_added) (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
+	void (* remove_child) (SPObject *object, Inkscape::XML::Node *child);
 
-	void (* order_changed) (SPObject *object, SPRepr *child, SPRepr *old, SPRepr *new_repr);
+	void (* order_changed) (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *new_repr);
 
 	void (* set) (SPObject *object, unsigned int key, const gchar *value);
 
@@ -460,7 +465,7 @@ struct SPObjectClass {
 	/* Modification handler */
 	void (* modified) (SPObject *object, unsigned int flags);
 
-	SPRepr * (* write) (SPObject *object, SPRepr *repr, unsigned int flags);
+	Inkscape::XML::Node * (* write) (SPObject *object, Inkscape::XML::Node *repr, unsigned int flags);
 };
 
 
@@ -479,9 +484,9 @@ void sp_object_detach_unref (SPObject *parent, SPObject *object);
 inline SPObject *sp_object_first_child(SPObject *parent) {
 	return parent->firstChild();
 }
-SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr);
+SPObject *sp_object_get_child_by_repr(SPObject *object, Inkscape::XML::Node *repr);
 
-void sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr, unsigned int cloned);
+void sp_object_invoke_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr, unsigned int cloned);
 void sp_object_invoke_release (SPObject *object);
 
 void sp_object_set (SPObject *object, unsigned int key, const gchar *value);

@@ -9,20 +9,24 @@
 #define SP_REPR_ATTRIBUTE_KEY(a) g_quark_to_string((a)->key)
 #define SP_REPR_ATTRIBUTE_VALUE(a) ((a)->value)
 
-struct SPReprAttr : public Inkscape::GC::Managed<> {
-    SPReprAttr(GQuark k,
-               Inkscape::Util::SharedCStringPtr v,
-               SPReprAttr *n=NULL)
+namespace Inkscape {
+namespace XML {
+
+struct AttributeRecord : public Inkscape::GC::Managed<> {
+    AttributeRecord(GQuark k, Inkscape::Util::SharedCStringPtr v,
+                    AttributeRecord *n=NULL)
     : next(n), key(k), value(v) {}
 
-    SPReprAttr(SPReprAttr const &attr, SPReprAttr *n=NULL)
+    AttributeRecord(AttributeRecord const &attr, AttributeRecord *n=NULL)
     : next(n), key(attr.key), value(attr.value) {}
 
-    SPReprAttr *next;
+    AttributeRecord *next;
     GQuark key;
     Inkscape::Util::SharedCStringPtr value;
 };
 
+}
+}
 
 #endif /* !SEEN_XML_SP_REPR_ATTR_H */
 

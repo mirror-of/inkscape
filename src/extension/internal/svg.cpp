@@ -143,8 +143,8 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 	  || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE)
 	  || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVGZ_INKSCAPE));
 
-	SPReprDoc *rdoc = NULL;
-	SPRepr *repr = NULL;
+	Inkscape::XML::Document *rdoc = NULL;
+	Inkscape::XML::Node *repr = NULL;
 	if (spns) {
 		repr = sp_document_repr_root (doc);
 	} else {

@@ -191,8 +191,8 @@ void Tracer::traceThread()
         }
 
     //### Get pointers to the <image> and its parent
-    SPRepr *imgRepr   = SP_OBJECT(img)->repr;
-    SPRepr *par       = sp_repr_parent(imgRepr);
+    Inkscape::XML::Node *imgRepr   = SP_OBJECT(img)->repr;
+    Inkscape::XML::Node *par       = sp_repr_parent(imgRepr);
 
     //### Get some information for the new transform()
     double x      = 0.0;
@@ -229,7 +229,7 @@ void Tracer::traceThread()
 
     //#OK.  Now let's start making new nodes
 
-    SPRepr *groupRepr = NULL;
+    Inkscape::XML::Node *groupRepr = NULL;
 
     //# if more than 1, make a <g>roup of <path>s
     if (nrPaths > 1)
@@ -241,7 +241,7 @@ void Tracer::traceThread()
     for (TracingEngineResult *result=results ;
                   result ; result=result->next)
         {
-        SPRepr *pathRepr = sp_repr_new("svg:path");
+        Inkscape::XML::Node *pathRepr = sp_repr_new("svg:path");
         sp_repr_set_attr(pathRepr, "style", result->getStyle());
         sp_repr_set_attr(pathRepr, "d",     result->getPathData());
 

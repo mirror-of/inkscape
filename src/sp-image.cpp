@@ -52,11 +52,11 @@
 static void sp_image_class_init (SPImageClass * klass);
 static void sp_image_init (SPImage * image);
 
-static void sp_image_build (SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_image_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_image_release (SPObject * object);
 static void sp_image_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_image_update (SPObject *object, SPCtx *ctx, unsigned int flags);
-static SPRepr *sp_image_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_image_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static void sp_image_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_image_print (SPItem * item, SPPrintContext *ctx);
@@ -65,7 +65,7 @@ static void sp_image_snappoints(SPItem const *item, SnapPointsIter p);
 static NRArenaItem *sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static NR::Matrix sp_image_set_transform (SPItem *item, NR::Matrix const &xform);
 
-GdkPixbuf * sp_image_repr_read_image (SPRepr * repr);
+GdkPixbuf * sp_image_repr_read_image (Inkscape::XML::Node * repr);
 static GdkPixbuf *sp_image_pixbuf_force_rgba (GdkPixbuf * pixbuf);
 static void sp_image_update_canvas_image (SPImage *image);
 static GdkPixbuf * sp_image_repr_read_dataURI (const gchar * uri_data);
@@ -474,7 +474,7 @@ sp_image_init (SPImage *image)
 }
 
 static void
-sp_image_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_image_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) parent_class)->build)
 		((SPObjectClass *) parent_class)->build (object, document, repr);
@@ -740,8 +740,8 @@ sp_image_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	sp_image_update_canvas_image ((SPImage *) object);
 }
 
-static SPRepr *
-sp_image_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_image_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPImage *image;
 
@@ -885,7 +885,7 @@ sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
  */
 
 GdkPixbuf *
-sp_image_repr_read_image (SPRepr * repr)
+sp_image_repr_read_image (Inkscape::XML::Node * repr)
 {
 	const gchar * filename, * docbase;
 	gchar * fullname;

@@ -21,7 +21,7 @@
 void
 prefs_set_int_attribute(gchar const *path, gchar const *attr, gint value)
 {
-    SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         sp_repr_set_int(repr, attr, value);
     }
@@ -30,7 +30,7 @@ prefs_set_int_attribute(gchar const *path, gchar const *attr, gint value)
 gint
 prefs_get_int_attribute(gchar const *path, gchar const *attr, gint def)
 {
-    SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         return sp_repr_get_int_attribute(repr, attr, def);
     } else {
@@ -44,7 +44,7 @@ prefs_get_int_attribute(gchar const *path, gchar const *attr, gint def)
 gint
 prefs_get_int_attribute_limited(gchar const *path, gchar const *attr, gint def, gint min, gint max)
 {
-    SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         gint const v = sp_repr_get_int_attribute(repr, attr, def);
         if (v >= min && v <= max) {
@@ -60,7 +60,7 @@ prefs_get_int_attribute_limited(gchar const *path, gchar const *attr, gint def, 
 void
 prefs_set_double_attribute(gchar const *path, gchar const *attr, double value)
 {
-    SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         sp_repr_set_double(repr, attr, value);
     }
@@ -69,7 +69,7 @@ prefs_set_double_attribute(gchar const *path, gchar const *attr, double value)
 double
 prefs_get_double_attribute(gchar const *path, gchar const *attr, double def)
 {
-    SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         return sp_repr_get_double_attribute(repr, attr, def);
     } else {
@@ -83,7 +83,7 @@ prefs_get_double_attribute(gchar const *path, gchar const *attr, double def)
 double
 prefs_get_double_attribute_limited(gchar const *path, gchar const *attr, double def, double min, double max)
 {
-    SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         double const v = sp_repr_get_double_attribute(repr, attr, def);
         if (v >= min && v <= max) {
@@ -99,7 +99,7 @@ prefs_get_double_attribute_limited(gchar const *path, gchar const *attr, double 
 gchar const *
 prefs_get_string_attribute(gchar const *path, gchar const *attr)
 {
-    SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         return (char *) sp_repr_attr(repr, attr);
     }
@@ -109,7 +109,7 @@ prefs_get_string_attribute(gchar const *path, gchar const *attr)
 void
 prefs_set_string_attribute(gchar const *path, gchar const *attr, gchar const *value)
 {
-    SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         sp_repr_set_attr(repr, attr, value);
     }
@@ -121,9 +121,9 @@ prefs_set_recent_file(gchar const *uri, gchar const *name)
     unsigned const max_documents = prefs_get_int_attribute("options.maxrecentdocuments", "value", 20);
 
     if (uri != NULL) {
-        SPRepr *recent = inkscape_get_repr(INKSCAPE, "documents.recent");
+        Inkscape::XML::Node *recent = inkscape_get_repr(INKSCAPE, "documents.recent");
         if (recent) {
-            SPRepr *child = sp_repr_lookup_child(recent, "uri", uri);
+            Inkscape::XML::Node *child = sp_repr_lookup_child(recent, "uri", uri);
             if (child) {
                 sp_repr_change_order(recent, child, NULL);
             } else {
@@ -150,13 +150,13 @@ prefs_set_recent_file(gchar const *uri, gchar const *name)
 gchar const **
 prefs_get_recent_files()
 {
-    SPRepr *recent = inkscape_get_repr(INKSCAPE, "documents.recent");
+    Inkscape::XML::Node *recent = inkscape_get_repr(INKSCAPE, "documents.recent");
     if (recent) {
         unsigned const docs = recent->childCount();
         gchar const **datalst = (gchar const **) g_malloc(sizeof(gchar *) * ((docs * 2) + 1));
 
         gint i;
-        SPRepr *child;
+        Inkscape::XML::Node *child;
         for (i = 0, child = recent->firstChild();
              child != NULL;
              child = child->next(), i += 2)

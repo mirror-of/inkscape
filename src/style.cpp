@@ -136,9 +136,9 @@ static void sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *st
 static void sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ifontsize (SPIFontSize *val, const gchar *str);
 
-static void sp_style_read_penum(SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, bool can_explicitly_inherit);
-static void sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key);
-static void sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key);
+static void sp_style_read_penum(SPIEnum *val, Inkscape::XML::Node *repr, const gchar *key, const SPStyleEnum *dict, bool can_explicitly_inherit);
+static void sp_style_read_plength (SPILength *val, Inkscape::XML::Node *repr, const gchar *key);
+static void sp_style_read_pfontsize (SPIFontSize *val, Inkscape::XML::Node *repr, const gchar *key);
 
 static gint sp_style_write_ifloat(gchar *p, gint len, gchar const *key, SPIFloat const *val, SPIFloat const *base, guint flags);
 static gint sp_style_write_iscale24(gchar *p, gint len, gchar const *key, SPIScale24 const *val, SPIScale24 const *base, guint flags);
@@ -432,7 +432,7 @@ sp_style_unref (SPStyle *style)
  *  Reads the various style parameters for an object
  */
 static void
-sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
+sp_style_read (SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
 {
     const gchar *val;
 
@@ -604,7 +604,7 @@ sp_style_read_from_object (SPStyle *style, SPObject *object)
     g_return_if_fail (object != NULL);
     g_return_if_fail (SP_IS_OBJECT (object));
 
-    SPRepr *repr = SP_OBJECT_REPR(object);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(object);
     g_return_if_fail(repr != NULL);
 
     sp_style_read(style, object, repr);
@@ -615,7 +615,7 @@ sp_style_read_from_object (SPStyle *style, SPObject *object)
  *
  */
 void
-sp_style_read_from_repr (SPStyle *style, SPRepr *repr)
+sp_style_read_from_repr (SPStyle *style, Inkscape::XML::Node *repr)
 {
     g_return_if_fail (style != NULL);
     g_return_if_fail (repr != NULL);
@@ -2222,7 +2222,7 @@ sp_style_read_ifontsize (SPIFontSize *val, const gchar *str)
  *
  */
 static void
-sp_style_read_penum(SPIEnum *val, SPRepr *repr, gchar const *key, SPStyleEnum const *dict,
+sp_style_read_penum(SPIEnum *val, Inkscape::XML::Node *repr, gchar const *key, SPStyleEnum const *dict,
                     bool const can_explicitly_inherit)
 {
     const gchar *str;
@@ -2238,7 +2238,7 @@ sp_style_read_penum(SPIEnum *val, SPRepr *repr, gchar const *key, SPStyleEnum co
  *
  */
 static void
-sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key)
+sp_style_read_plength (SPILength *val, Inkscape::XML::Node *repr, const gchar *key)
 {
     const gchar *str;
     str = repr->attribute(key);
@@ -2253,7 +2253,7 @@ sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key)
  *
  */
 static void
-sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key)
+sp_style_read_pfontsize (SPIFontSize *val, Inkscape::XML::Node *repr, const gchar *key)
 {
     const gchar *str;
     str = repr->attribute(key);
@@ -2579,7 +2579,7 @@ sp_style_unset_property_attrs (SPObject *o)
     SPStyle *style = SP_OBJECT_STYLE (o);
     if (!style) return;
 
-    SPRepr *repr = SP_OBJECT_REPR (o);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR (o);
     if (!repr) return;
 
     if (style->opacity.set) {

@@ -605,7 +605,7 @@ clonetiler_remove (GtkWidget *widget, void *)
     }
 
     SPObject *obj = SP_OBJECT(selection->singleItem());
-    SPRepr *obj_repr = SP_OBJECT_REPR(obj);
+    Inkscape::XML::Node *obj_repr = SP_OBJECT_REPR(obj);
     const char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     SPObject *parent = SP_OBJECT_PARENT (obj);
 
@@ -648,7 +648,7 @@ clonetiler_apply (GtkWidget *widget, void *)
     }
 
     SPObject *obj = SP_OBJECT(selection->singleItem());
-    SPRepr *obj_repr = SP_OBJECT_REPR(obj);
+    Inkscape::XML::Node *obj_repr = SP_OBJECT_REPR(obj);
     const char *id_href = g_strdup_printf("#%s", sp_repr_attr (obj_repr, "id"));
     SPObject *parent = SP_OBJECT_PARENT (obj);
 
@@ -719,7 +719,7 @@ clonetiler_apply (GtkWidget *widget, void *)
             if (y == 0 && x == 0) // original
                 continue;
 
-            SPRepr *clone = sp_repr_new("svg:use");
+            Inkscape::XML::Node *clone = sp_repr_new("svg:use");
             sp_repr_set_attr(clone, "x", "0");
             sp_repr_set_attr(clone, "y", "0");
             sp_repr_set_attr(clone, "inkscape:tiled-clone-of", id_href);

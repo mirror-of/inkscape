@@ -15,7 +15,12 @@
 #ifndef SEEN_INKSCAPE_XML_SESSION_H
 #define SEEN_INKSCAPE_XML_SESSION_H
 
-class SPReprAction;
+namespace Inkscape {
+namespace XML {
+class Event;
+}
+}
+
 
 namespace Inkscape {
 
@@ -28,7 +33,7 @@ public:
     virtual void beginTransaction()=0;
     virtual void rollback()=0;
     virtual void commit()=0;
-    virtual SPReprAction *commitUndoable()=0;
+    virtual Inkscape::XML::Event *commitUndoable()=0;
 };
 
 }

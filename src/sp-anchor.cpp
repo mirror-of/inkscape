@@ -30,10 +30,10 @@
 static void sp_anchor_class_init(SPAnchorClass *ac);
 static void sp_anchor_init(SPAnchor *anchor);
 
-static void sp_anchor_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_anchor_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_anchor_release(SPObject *object);
 static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value);
-static SPRepr *sp_anchor_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static gchar *sp_anchor_description(SPItem *item);
 static gint sp_anchor_event(SPItem *item, SPEvent *event);
@@ -84,7 +84,7 @@ static void sp_anchor_init(SPAnchor *anchor)
     anchor->href = NULL;
 }
 
-static void sp_anchor_build(SPObject *object, SPDocument *document, SPRepr *repr)
+static void sp_anchor_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     if (((SPObjectClass *) (parent_class))->build) {
         ((SPObjectClass *) (parent_class))->build(object, document, repr);
@@ -144,7 +144,7 @@ static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value
 
 #define COPY_ATTR(rd,rs,key) sp_repr_set_attr((rd), (key), sp_repr_attr(rs, key));
 
-static SPRepr *sp_anchor_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPAnchor *anchor = SP_ANCHOR(object);
 

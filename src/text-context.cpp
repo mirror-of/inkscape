@@ -310,7 +310,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 	SPEventContext *ec = SP_EVENT_CONTEXT (tc);
 
 	/* Create <text> */
-	SPRepr *rtext = sp_repr_new ("svg:text");
+	Inkscape::XML::Node *rtext = sp_repr_new ("svg:text");
 	sp_repr_set_attr (rtext, "xml:space", "preserve"); // we preserve spaces in the text objects we create
 
 	/* Set style */
@@ -320,13 +320,13 @@ sp_text_context_setup_text (SPTextContext *tc)
 	sp_repr_set_double (rtext, "y", tc->pdoc[NR::Y]);
 
 	/* Create <tspan> */
-	SPRepr *rtspan = sp_repr_new ("svg:tspan");
+	Inkscape::XML::Node *rtspan = sp_repr_new ("svg:tspan");
 	sp_repr_set_attr (rtspan, "sodipodi:role", "line"); // otherwise, why bother creating the tspan?
 	sp_repr_add_child (rtext, rtspan, NULL);
 	sp_repr_unref (rtspan);
 
 	/* Create TEXT */
-	SPRepr *rstring = sp_repr_new_text("");
+	Inkscape::XML::Node *rstring = sp_repr_new_text("");
 	sp_repr_add_child (rtspan, rstring, NULL);
 	sp_repr_unref (rstring);
 	SPItem *text_item = SP_ITEM(ec->desktop->currentLayer()->appendChildRepr(rtext));
@@ -808,7 +808,7 @@ sp_text_context_forget_text (SPTextContext *tc)
 	 * or selection changed signal messes everything up */
 	tc->text = NULL;
 	if ((SP_IS_TEXT(ti) || SP_IS_FLOWTEXT(ti)) && sp_te_is_empty (ti)) {
-		SPRepr *text_repr=SP_OBJECT_REPR(ti);
+		Inkscape::XML::Node *text_repr=SP_OBJECT_REPR(ti);
 		// the repr may already have been unparented
 		// if we were called e.g. as the result of
 		// an undo or the element being removed from

@@ -20,7 +20,12 @@
 #include "forward.h"
 #include "libnr/nr-forward.h"
 
-class SPRepr;
+namespace Inkscape {
+namespace XML {
+class Node;
+}
+}
+
 
 typedef void (* SPKnotHolderSetFunc) (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state);
 typedef NR::Point (* SPKnotHolderGetFunc) (SPItem *item);
@@ -34,7 +39,7 @@ struct SPKnotHolder {
 
     SPKnotHolderReleasedFunc released;
 
-    SPRepr *repr; ///< repr of the item, for setting and releasing listeners.
+    Inkscape::XML::Node *repr; ///< repr of the item, for setting and releasing listeners.
 
     gboolean local_change; ///< if true, no need to recreate knotholder if repr was changed.
 };

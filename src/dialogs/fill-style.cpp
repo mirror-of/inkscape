@@ -85,7 +85,7 @@ static void sp_fill_style_widget_update             ( SPWidget *spw,
                                                       SPSelection *sel );
 
 static void sp_fill_style_widget_update_repr        ( SPWidget *spw,
-                                                      SPRepr *repr );
+                                                      Inkscape::XML::Node *repr );
 
 static void sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
                                                       SPPaintSelectorMode mode,
@@ -526,7 +526,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
 
 
 static void
-sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
+sp_fill_style_widget_update_repr (SPWidget *spw, Inkscape::XML::Node *repr)
 {
     if (g_object_get_data (G_OBJECT (spw), "update"))
         return;
@@ -890,13 +890,13 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                      */
 
                 } else {
-                    SPRepr *patrepr = SP_OBJECT_REPR(pattern);
+                    Inkscape::XML::Node *patrepr = SP_OBJECT_REPR(pattern);
                     SPCSSAttr *css = sp_repr_css_attr_new ();
                     gchar *urltext = g_strdup_printf ("url(#%s)", patrepr->attribute("id"));
                     sp_repr_css_set_property (css, "fill", urltext);
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                         SPRepr *selrepr = SP_OBJECT_REPR (i->data);
+                         Inkscape::XML::Node *selrepr = SP_OBJECT_REPR (i->data);
                          SPObject *selobj = SP_OBJECT (i->data);
                          if (!selrepr)
                              continue;

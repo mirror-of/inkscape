@@ -32,7 +32,7 @@ struct SPWidget {
 
 	Inkscape::Application *inkscape;
 	SPObject *object;
-	SPRepr *repr;
+	Inkscape::XML::Node *repr;
 
 	/* fixme: We do not need these probably (Lauris) */
 	/* fixme: Or maybe configurable? For text widget? (Lauris) */
@@ -58,7 +58,7 @@ GtkType sp_widget_get_type (void);
 /* Generic constructor for global widget */
 GtkWidget *sp_widget_new_global (Inkscape::Application *inkscape);
 GtkWidget *sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape);
-GtkWidget *sp_widget_construct_repr (SPWidget *spw, SPRepr *repr);
+GtkWidget *sp_widget_construct_repr (SPWidget *spw, Inkscape::XML::Node *repr);
 
 void sp_widget_set_dirty (SPWidget *spw, gboolean dirty);
 void sp_widget_set_autoupdate (SPWidget *spw, gboolean autoupdate);

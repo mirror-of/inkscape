@@ -21,7 +21,7 @@ namespace Extension {
             this class takes care of all of them. */
 class Dependency {
     /** \brief  The XML representation of the dependency. */
-    SPRepr * _repr;
+    Inkscape::XML::Node * _repr;
     /** \brief  The string that is in the XML tags pulled out. */
     const gchar * _string;
     /** \brief  The description of the dependency for the users. */
@@ -56,7 +56,7 @@ class Dependency {
     static gchar const * _location_str[LOCATION_CNT]; 
 
 public:
-    Dependency  (SPRepr * in_repr);
+    Dependency  (Inkscape::XML::Node * in_repr);
     ~Dependency (void);
     bool check  (void) const;
     Glib::ustring &get_help (void) const;

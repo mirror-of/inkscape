@@ -651,7 +651,7 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
 
     SPText *text = sp_ted_get_selected_text_item ();
 
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
     SPStyle *style;
     if (text)
     {

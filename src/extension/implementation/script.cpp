@@ -75,7 +75,7 @@ Script::Script() :
                and returns that data with the relative directory expanded.
                Mostly it is here so that relative directories all get used
                the same way.
-    \param     reprin   The SPRepr with the reldir in it.
+    \param     reprin   The Inkscape::XML::Node with the reldir in it.
 
     Basically this function looks at an attribute of the Repr, and makes
     a decision based on that.  Currently, it is only working with the
@@ -85,7 +85,7 @@ Script::Script() :
     free what they are given (and should do it too!).
 */
 gchar *
-Script::solve_reldir (SPRepr * reprin) {
+Script::solve_reldir (Inkscape::XML::Node * reprin) {
     const gchar * reldir;
 
     reldir = sp_repr_attr(reprin, "reldir");
@@ -206,7 +206,7 @@ Script::check_existance (const gchar * command)
 bool
 Script::load (Inkscape::Extension::Extension * module)
 {
-    SPRepr * child_repr;
+    Inkscape::XML::Node * child_repr;
     gchar * command_text = NULL;
 
     if (module->loaded()) {
@@ -268,7 +268,7 @@ Script::unload (Inkscape::Extension::Extension * module)
 bool
 Script::check (Inkscape::Extension::Extension * module)
 {
-    SPRepr * child_repr;
+    Inkscape::XML::Node * child_repr;
     gchar * command_text;
 
     child_repr = sp_repr_children(module->get_repr());

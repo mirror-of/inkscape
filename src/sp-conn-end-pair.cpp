@@ -57,7 +57,7 @@ SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
 }
 
 void
-SPConnEndPair::writeRepr(SPRepr *const repr) const
+SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
 {
     for (unsigned handle_ix = 0; handle_ix < 2; ++handle_ix) {
         if (this->_connEnd[handle_ix]->ref.getURI()) {

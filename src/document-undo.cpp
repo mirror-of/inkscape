@@ -96,7 +96,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 
 	sp_document_clear_redo (doc);
 
-	SPReprAction *log = sp_repr_coalesce_log (doc->priv->partial, sp_repr_commit_undoable (doc->rdoc));
+	Inkscape::XML::Event *log = sp_repr_coalesce_log (doc->priv->partial, sp_repr_commit_undoable (doc->rdoc));
 	doc->priv->partial = NULL;
 
 	if (!log) {
@@ -105,7 +105,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 	}
 
 	if (key && doc->actionkey && !strcmp (key, doc->actionkey) && doc->priv->undo) {
-		doc->priv->undo->data = sp_repr_coalesce_log ((SPReprAction *)doc->priv->undo->data, log);
+		doc->priv->undo->data = sp_repr_coalesce_log ((Inkscape::XML::Event *)doc->priv->undo->data, log);
 	} else {
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
 		doc->priv->history_size++;
@@ -142,7 +142,7 @@ sp_document_cancel (SPDocument *doc)
 gboolean
 sp_document_undo (SPDocument *doc)
 {
-	SPReprAction *log;
+	Inkscape::XML::Event *log;
 	gboolean ret;
 
 	g_assert (doc != NULL);
@@ -159,7 +159,7 @@ sp_document_undo (SPDocument *doc)
 		doc->priv->partial = sp_repr_coalesce_log (doc->priv->partial, log);
 		ret = FALSE;
 	} else if (doc->priv->undo) {
-		log = (SPReprAction *) doc->priv->undo->data;
+		log = (Inkscape::XML::Event *) doc->priv->undo->data;
 		doc->priv->undo = g_slist_remove (doc->priv->undo, log);
 		sp_repr_undo_log (log);
 		doc->priv->redo = g_slist_prepend (doc->priv->redo, log);
@@ -181,7 +181,7 @@ sp_document_undo (SPDocument *doc)
 gboolean
 sp_document_redo (SPDocument *doc)
 {
-	SPReprAction *log;
+	Inkscape::XML::Event *log;
 	gboolean ret;
 
 	g_assert (doc != NULL);
@@ -198,7 +198,7 @@ sp_document_redo (SPDocument *doc)
 		doc->priv->partial = sp_repr_coalesce_log (doc->priv->partial, log);
 		ret = FALSE;
 	} else if (doc->priv->redo) {
-		log = (SPReprAction *) doc->priv->redo->data;
+		log = (Inkscape::XML::Event *) doc->priv->redo->data;
 		doc->priv->redo = g_slist_remove (doc->priv->redo, log);
 		sp_repr_replay_log (log);
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
@@ -227,7 +227,7 @@ sp_document_clear_undo (SPDocument *doc)
 		doc->priv->undo = current->next;
 		doc->priv->history_size--;
 
-		sp_repr_free_log ((SPReprAction *)current->data);
+		sp_repr_free_log ((Inkscape::XML::Event *)current->data);
 		g_slist_free_1 (current);
 	}
 }
@@ -242,7 +242,7 @@ sp_document_clear_redo (SPDocument *doc)
 		doc->priv->redo = current->next;
 		doc->priv->history_size--;
 
-		sp_repr_free_log ((SPReprAction *)current->data);
+		sp_repr_free_log ((Inkscape::XML::Event *)current->data);
 		g_slist_free_1 (current);
 	}
 }

@@ -49,26 +49,26 @@ static void sp_object_class_init (SPObjectClass * klass);
 static void sp_object_init (SPObject * object);
 static void sp_object_finalize (GObject * object);
 
-static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
-static void sp_object_remove_child (SPObject * object, SPRepr * child);
-static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref);
+static void sp_object_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
+static void sp_object_remove_child (SPObject * object, Inkscape::XML::Node * child);
+static void sp_object_order_changed (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node * new_ref);
 
 static void sp_object_release(SPObject *object);
-static void sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_object_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 
 static void sp_object_private_set (SPObject *object, unsigned int key, const gchar *value);
-static SPRepr *sp_object_private_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_object_private_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 /* Real handlers of repr signals */
 
-static void sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data);
+static void sp_object_repr_attr_changed (Inkscape::XML::Node *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data);
 
-static void sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data);
+static void sp_object_repr_content_changed (Inkscape::XML::Node *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data);
 
-static void sp_object_repr_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data);
-static void sp_object_repr_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, void *data);
+static void sp_object_repr_child_added (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data);
+static void sp_object_repr_child_removed (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, void *data);
 
-static void sp_object_repr_order_changed (SPRepr *repr, SPRepr *child, SPRepr *old, SPRepr *newer, gpointer data);
+static void sp_object_repr_order_changed (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data);
 
 static gchar * sp_object_get_unique_id (SPObject * object, const gchar * defid);
 
@@ -76,7 +76,7 @@ guint update_in_progress = 0; // guard against update-during-update
 
 enum {RELEASE, MODIFIED, LAST_SIGNAL};
 
-SPReprEventVector object_event_vector = {
+Inkscape::XML::NodeEventVector object_event_vector = {
 	sp_object_repr_child_added,
 	sp_object_repr_child_removed,
 	sp_object_repr_attr_changed,
@@ -329,7 +329,7 @@ sp_object_compare_position(SPObject const *first, SPObject const *second)
 }
 
 
-SPObject *SPObject::appendChildRepr(SPRepr *repr) {
+SPObject *SPObject::appendChildRepr(Inkscape::XML::Node *repr) {
 	if (!SP_OBJECT_IS_CLONED(this)) {
 		SP_OBJECT_REPR(this)->appendChild(repr);
 		return SP_OBJECT_DOCUMENT(this)->getObjectByRepr(repr);
@@ -407,7 +407,7 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 		this->_sendDeleteSignalRecursive();
 	}
 
-	SPRepr *repr=SP_OBJECT_REPR(this);
+	Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
 	if (repr && sp_repr_parent(repr)) {
 		sp_repr_unparent(repr);
 	}
@@ -534,7 +534,7 @@ void sp_object_detach_unref (SPObject *parent, SPObject *object)
 	sp_object_unref(object, parent);
 }
 
-SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr)
+SPObject *sp_object_get_child_by_repr(SPObject *object, Inkscape::XML::Node *repr)
 {
 	g_return_val_if_fail(object != NULL, NULL);
 	g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
@@ -549,7 +549,7 @@ SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr)
 	return NULL;
 }
 
-static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
+static void sp_object_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref)
 {
 	GType type = sp_repr_type_lookup(child);
 	if (!type) {
@@ -562,7 +562,7 @@ static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * r
 	sp_object_invoke_build(ochild, object->document, child, SP_OBJECT_IS_CLONED(object));
 }
 
-static void sp_object_remove_child (SPObject * object, SPRepr * child)
+static void sp_object_remove_child (SPObject * object, Inkscape::XML::Node * child)
 {
 	debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
 	SPObject *ochild = sp_object_get_child_by_repr(object, child);
@@ -570,8 +570,8 @@ static void sp_object_remove_child (SPObject * object, SPRepr * child)
 	sp_object_detach_unref(object, ochild);
 }
 
-static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref,
-				     SPRepr * new_ref)
+static void sp_object_order_changed (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * old_ref,
+				     Inkscape::XML::Node * new_ref)
 {
 	SPObject *ochild = sp_object_get_child_by_repr(object, child);
 	g_return_if_fail(ochild != NULL);
@@ -592,7 +592,7 @@ static void sp_object_release(SPObject *object)
  */
 
 static void
-sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
+sp_object_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
 	/* Nothing specific here */
 	debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
@@ -601,7 +601,7 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "inkscape:label");
 	sp_object_read_attr (object, "inkscape:collect");
 
-        for (SPRepr *rchild = repr->firstChild() ; rchild != NULL; rchild = rchild->next()) {
+        for (Inkscape::XML::Node *rchild = repr->firstChild() ; rchild != NULL; rchild = rchild->next()) {
 		GType type = sp_repr_type_lookup (rchild);
 		if (!type) {
 			continue;
@@ -613,7 +613,7 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 }
 
 void
-sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr, unsigned int cloned)
+sp_object_invoke_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr, unsigned int cloned)
 {
 	debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
 
@@ -636,7 +636,7 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 	if (!SP_OBJECT_IS_CLONED (object)) {
 		object->document->bindObjectToRepr(object->repr, object);
 
-		if ( object->repr->type() == SP_XML_ELEMENT_NODE ) {
+		if ( object->repr->type() == Inkscape::XML::ELEMENT_NODE ) {
 			/* If we are not cloned, force unique id */
 			const gchar *id = object->repr->attribute("id");
 			gchar *realid = sp_object_get_unique_id (object, id);
@@ -712,7 +712,7 @@ sp_object_invoke_release (SPObject *object)
 }
 
 static void
-sp_object_repr_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
+sp_object_repr_child_added (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data)
 {
 	SPObject *object = SP_OBJECT (data);
 
@@ -721,7 +721,7 @@ sp_object_repr_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer d
 }
 
 static void
-sp_object_repr_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
+sp_object_repr_child_removed (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data)
 {
 	SPObject *object = SP_OBJECT (data);
 
@@ -733,7 +733,7 @@ sp_object_repr_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer
 /* fixme: */
 
 static void
-sp_object_repr_order_changed (SPRepr * repr, SPRepr * child, SPRepr * old, SPRepr * newer, gpointer data)
+sp_object_repr_order_changed (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * old, Inkscape::XML::Node * newer, gpointer data)
 {
 	SPObject * object = SP_OBJECT (data);
 
@@ -749,7 +749,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 
 	switch (key) {
 	case SP_ATTR_ID:
-		if ( !SP_OBJECT_IS_CLONED (object) && object->repr->type() == SP_XML_ELEMENT_NODE ) {
+		if ( !SP_OBJECT_IS_CLONED (object) && object->repr->type() == Inkscape::XML::ELEMENT_NODE ) {
 			SPObject *conflict=NULL;
 			if (value) {
 				conflict = object->document->getObjectById((const char *)value);
@@ -848,7 +848,7 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 }
 
 static void
-sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
+sp_object_repr_attr_changed (Inkscape::XML::Node *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
 {
 	SPObject *object = SP_OBJECT (data);
 
@@ -862,7 +862,7 @@ sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval
 }
 
 static void
-sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data)
+sp_object_repr_content_changed (Inkscape::XML::Node *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data)
 {
 	SPObject * object = SP_OBJECT (data);
 
@@ -884,8 +884,8 @@ sp_xml_get_space_string(unsigned int space)
 	}
 }
 
-static SPRepr *
-sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_object_private_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
 		repr = sp_repr_duplicate (SP_OBJECT_REPR (object));
@@ -913,9 +913,9 @@ sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 	return repr;
 }
 
-SPRepr *SPObject::updateRepr(unsigned int flags) {
+Inkscape::XML::Node *SPObject::updateRepr(unsigned int flags) {
 	if (!SP_OBJECT_IS_CLONED(this)) {
-		SPRepr *repr=SP_OBJECT_REPR(this);
+		Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
 		if (repr) {
 			return updateRepr(repr, flags);
 		} else {
@@ -928,7 +928,7 @@ SPRepr *SPObject::updateRepr(unsigned int flags) {
 	}
 }
 
-SPRepr *SPObject::updateRepr(SPRepr *repr, unsigned int flags) {
+Inkscape::XML::Node *SPObject::updateRepr(Inkscape::XML::Node *repr, unsigned int flags) {
 	if (SP_OBJECT_IS_CLONED(this)) {
 		/* cloned objects have no repr */
 		return NULL;

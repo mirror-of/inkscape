@@ -75,9 +75,9 @@ static void sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags)
 static void sp_genericellipse_snappoints(SPItem const *item, SnapPointsIter p);
 
 static void sp_genericellipse_set_shape (SPShape *shape);
-static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_genericellipse_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
-static gboolean sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr);
+static gboolean sp_arc_set_elliptical_path_attribute (SPArc *arc, Inkscape::XML::Node *repr);
 
 static SPShapeClass *ge_parent_class;
 
@@ -283,7 +283,7 @@ sp_genericellipse_normalize (SPGenericEllipse *ellipse)
 	/* Now we keep: 0 <= start < end <= 2*PI */
 }
 
-static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *sp_genericellipse_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPGenericEllipse *ellipse = SP_GENERICELLIPSE (object);
 
@@ -312,8 +312,8 @@ static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint fl
 static void sp_ellipse_class_init (SPEllipseClass *klass);
 static void sp_ellipse_init (SPEllipse *ellipse);
 
-static void sp_ellipse_build(SPObject *object, SPDocument *document, SPRepr *repr);
-static SPRepr *sp_ellipse_write(SPObject *object, SPRepr *repr, guint flags);
+static void sp_ellipse_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
+static Inkscape::XML::Node *sp_ellipse_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 static void sp_ellipse_set(SPObject *object, unsigned int key, gchar const *value);
 static gchar *sp_ellipse_description(SPItem *item);
 
@@ -362,7 +362,7 @@ sp_ellipse_init (SPEllipse *ellipse)
 }
 
 static void
-sp_ellipse_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_ellipse_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) ellipse_parent_class)->build)
 		(* ((SPObjectClass *) ellipse_parent_class)->build) (object, document, repr);
@@ -373,8 +373,8 @@ sp_ellipse_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	sp_object_read_attr (object, "ry");
 }
 
-static SPRepr *
-sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_ellipse_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPGenericEllipse *ellipse;
 
@@ -463,8 +463,8 @@ sp_ellipse_position_set (SPEllipse *ellipse, gdouble x, gdouble y, gdouble rx, g
 static void sp_circle_class_init (SPCircleClass *klass);
 static void sp_circle_init (SPCircle *circle);
 
-static void sp_circle_build(SPObject *object, SPDocument *document, SPRepr *repr);
-static SPRepr *sp_circle_write(SPObject *object, SPRepr *repr, guint flags);
+static void sp_circle_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
+static Inkscape::XML::Node *sp_circle_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 static void sp_circle_set(SPObject *object, unsigned int key, const gchar *value);
 static gchar *sp_circle_description(SPItem *item);
 
@@ -514,7 +514,7 @@ sp_circle_init (SPCircle *circle)
 }
 
 static void
-sp_circle_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_circle_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) circle_parent_class)->build)
 		(* ((SPObjectClass *) circle_parent_class)->build) (object, document, repr);
@@ -524,8 +524,8 @@ sp_circle_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	sp_object_read_attr (object, "r");
 }
 
-static SPRepr *
-sp_circle_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_circle_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPGenericEllipse *ellipse;
 
@@ -589,8 +589,8 @@ static gchar *sp_circle_description (SPItem *item)
 static void sp_arc_class_init (SPArcClass *klass);
 static void sp_arc_init (SPArc *arc);
 
-static void sp_arc_build(SPObject *object, SPDocument *document, SPRepr *repr);
-static SPRepr *sp_arc_write(SPObject *object, SPRepr *repr, guint flags);
+static void sp_arc_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
+static Inkscape::XML::Node *sp_arc_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 static void sp_arc_set(SPObject *object, unsigned int key, gchar const *value);
 static void sp_arc_modified(SPObject *object, guint flags);
 
@@ -643,7 +643,7 @@ sp_arc_init (SPArc *arc)
 }
 
 static void
-sp_arc_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_arc_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	if (((SPObjectClass *) arc_parent_class)->build)
 		(* ((SPObjectClass *) arc_parent_class)->build) (object, document, repr);
@@ -687,7 +687,7 @@ sp_arc_build (SPObject *object, SPDocument *document, SPRepr *repr)
  * ``F.6 Ellptical arc implementation notes'' for more detail.
  */
 static gboolean
-sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
+sp_arc_set_elliptical_path_attribute (SPArc *arc, Inkscape::XML::Node *repr)
 {
 	gint fa, fs;
 	gdouble  dt;
@@ -727,8 +727,8 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 	return sp_repr_set_attr (repr, "d", os.str().c_str());
 }
 
-static SPRepr *
-sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_arc_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (object);
 	SPArc *arc = SP_ARC (object);

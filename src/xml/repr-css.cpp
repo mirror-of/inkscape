@@ -15,13 +15,13 @@ struct SPCSSAttrImpl : public Inkscape::XML::SimpleNode, public SPCSSAttr {
 public:
 	SPCSSAttrImpl() : SimpleNode(g_quark_from_static_string("css")) {}
 
-	SPReprType type() const { return SP_XML_ELEMENT_NODE; }
+	Inkscape::XML::NodeType type() const { return Inkscape::XML::ELEMENT_NODE; }
 
 protected:
 	SimpleNode *_duplicate() const { return new SPCSSAttrImpl(*this); }
 };
 
-static void sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr);
+static void sp_repr_css_add_components (SPCSSAttr * css, Inkscape::XML::Node * repr, const gchar * attr);
 
 SPCSSAttr *
 sp_repr_css_attr_new (void)
@@ -33,10 +33,10 @@ void
 sp_repr_css_attr_unref (SPCSSAttr * css)
 {
 	g_assert (css != NULL);
-	sp_repr_unref ((SPRepr *) css);
+	sp_repr_unref ((Inkscape::XML::Node *) css);
 }
 
-SPCSSAttr * sp_repr_css_attr (SPRepr * repr, const gchar * attr)
+SPCSSAttr * sp_repr_css_attr (Inkscape::XML::Node * repr, const gchar * attr)
 {
 	SPCSSAttr * css;
 
@@ -50,10 +50,10 @@ SPCSSAttr * sp_repr_css_attr (SPRepr * repr, const gchar * attr)
 	return css;
 }
 
-SPCSSAttr * sp_repr_css_attr_inherited (SPRepr * repr, const gchar * attr)
+SPCSSAttr * sp_repr_css_attr_inherited (Inkscape::XML::Node * repr, const gchar * attr)
 {
 	SPCSSAttr * css;
-	SPRepr * current;
+	Inkscape::XML::Node * current;
 
 	g_assert (repr != NULL);
 	g_assert (attr != NULL);
@@ -72,7 +72,7 @@ SPCSSAttr * sp_repr_css_attr_inherited (SPRepr * repr, const gchar * attr)
 }
 
 static void
-sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr)
+sp_repr_css_add_components (SPCSSAttr * css, Inkscape::XML::Node * repr, const gchar * attr)
 {
 	g_assert (css != NULL);
 	g_assert (repr != NULL);
@@ -93,7 +93,7 @@ sp_repr_css_property (SPCSSAttr * css, const gchar * name, const gchar * defval)
 	g_assert (css != NULL);
 	g_assert (name != NULL);
 
-	attr = ((SPRepr *)css)->attribute(name);
+	attr = ((Inkscape::XML::Node *)css)->attribute(name);
 
 	if (attr == NULL) return defval;
 
@@ -106,7 +106,7 @@ sp_repr_css_set_property (SPCSSAttr * css, const gchar * name, const gchar * val
 	g_assert (css != NULL);
 	g_assert (name != NULL);
 
-	sp_repr_set_attr ((SPRepr *) css, name, value);
+	sp_repr_set_attr ((Inkscape::XML::Node *) css, name, value);
 }
 
 double
@@ -115,13 +115,13 @@ sp_repr_css_double_property (SPCSSAttr * css, const gchar * name, double defval)
 	g_assert (css != NULL);
 	g_assert (name != NULL);
 
-	return sp_repr_get_double_attribute ((SPRepr *) css, name, defval);
+	return sp_repr_get_double_attribute ((Inkscape::XML::Node *) css, name, defval);
 }
 
 void
-sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
+sp_repr_css_set (Inkscape::XML::Node * repr, SPCSSAttr * css, const gchar * attr)
 {
-	SPReprAttr const * a;
+	Inkscape::XML::AttributeRecord const * a;
 	const char *key;
 	const char *val;
 	char c[4096], *p;
@@ -152,7 +152,7 @@ sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 void
 sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src)
 {
-	SPReprAttr const * attr;
+	Inkscape::XML::AttributeRecord const * attr;
 	const char * key, * val;
 
 	g_assert (dst != NULL);
@@ -161,7 +161,7 @@ sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src)
 	for (attr = src->attributeList() ; attr != NULL; attr = attr->next) {
 		key = SP_REPR_ATTRIBUTE_KEY (attr);
 		val = SP_REPR_ATTRIBUTE_VALUE (attr);
-		sp_repr_set_attr ((SPRepr *) dst, key, val);
+		sp_repr_set_attr ((Inkscape::XML::Node *) dst, key, val);
 	}
 }
 
@@ -184,7 +184,7 @@ sp_repr_css_attr_add_from_string (SPCSSAttr *css, const gchar *data)
 			if (*val == '\0') break;
 
 			if (!css->attribute(key))
-				sp_repr_set_attr ((SPRepr *) css, key, val);
+				sp_repr_set_attr ((Inkscape::XML::Node *) css, key, val);
 		}
 		g_strfreev (token);
 		g_free (new_str);
@@ -195,13 +195,13 @@ void
 sp_repr_css_print (SPCSSAttr * css)
 {
 	g_print ("== SPCSSAttr:\n");
-	for (SPReprAttr const *attr = css->attributeList(); attr != NULL; attr = attr->next) {
+	for (Inkscape::XML::AttributeRecord const *attr = css->attributeList(); attr != NULL; attr = attr->next) {
 		g_print("%s: %s\n", SP_REPR_ATTRIBUTE_KEY(attr), SP_REPR_ATTRIBUTE_VALUE(attr).cString());
 	}
 }
 
 void
-sp_repr_css_change (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
+sp_repr_css_change (Inkscape::XML::Node * repr, SPCSSAttr * css, const gchar * attr)
 {
 	SPCSSAttr * current;
 
@@ -217,9 +217,9 @@ sp_repr_css_change (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 }
 
 void
-sp_repr_css_change_recursive (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
+sp_repr_css_change_recursive (Inkscape::XML::Node * repr, SPCSSAttr * css, const gchar * attr)
 {
-	SPRepr * child;
+	Inkscape::XML::Node * child;
 
 	g_assert (repr != NULL);
 	g_assert (css != NULL);

@@ -21,7 +21,7 @@ namespace Extension {
 
 Effect * Effect::_last_effect = NULL;
 
-Effect::Effect (SPRepr * in_repr, Implementation::Implementation * in_imp)
+Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
     : Extension(in_repr, in_imp), _verb(get_id(), get_name(), NULL, NULL, this)
 {
     return;

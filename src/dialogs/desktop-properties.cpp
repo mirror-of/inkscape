@@ -202,7 +202,7 @@ static PaperSize const inkscape_papers[] = {
 };
 
 static void
-docoptions_event_attr_changed(SPRepr *, gchar const *, gchar const *, gchar const *, bool, gpointer)
+docoptions_event_attr_changed(Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer)
 {
     if (g_object_get_data(G_OBJECT(dlg), "update")) {
         return;
@@ -213,7 +213,7 @@ docoptions_event_attr_changed(SPRepr *, gchar const *, gchar const *, gchar cons
     }
 }
 
-static SPReprEventVector docoptions_repr_events = {
+static Inkscape::XML::NodeEventVector docoptions_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
     docoptions_event_attr_changed,
@@ -261,7 +261,7 @@ sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
     gchar const *key = (gchar const *)gtk_object_get_data(GTK_OBJECT(tb), "key");
 
     gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
@@ -291,7 +291,7 @@ sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
 
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
@@ -321,7 +321,7 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
     }
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
     gchar const *key = (gchar const *)gtk_object_get_data(GTK_OBJECT(adjustment), "key");
     SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(adjustment),
                                                                 "unit_selector");
@@ -423,7 +423,7 @@ sp_doc_dialog_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
 
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    SPRepr *repr = sp_document_repr_root(doc);
+    Inkscape::XML::Node *repr = sp_document_repr_root(doc);
     gchar const *key = (gchar const *) gtk_object_get_data(GTK_OBJECT(adjustment), "key");
     SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(adjustment),
                                                                 "unit_selector");
@@ -484,7 +484,7 @@ sp_dtw_grid_snap_distance_changed(GtkAdjustment *adjustment,
         return;
     }
 
-    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
 
     SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(dialog),
                                                                 "grid_snap_units");
@@ -509,7 +509,7 @@ sp_dtw_grid_emp_spacing_changed (GtkAdjustment *adjustment,
         return;
     }
 
-    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
 
     Inkscape::SVGOStringStream os;
     int value = int(adjustment->value);
@@ -533,7 +533,7 @@ sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
         return;
     }
 
-    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
 
     SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(dialog),
                                                                 "guide_snap_units");
@@ -833,7 +833,7 @@ static gboolean set_doc_units (SPUnitSelector *,
 
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
 
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
@@ -1690,7 +1690,7 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
     gchar *alphakey = (gchar *)g_object_get_data(G_OBJECT(cp), "alphakey");
     sp_color_preview_set_rgba32(cpv, rgba);
 
-    SPRepr *repr = SP_OBJECT_REPR(SP_ACTIVE_DESKTOP->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_ACTIVE_DESKTOP->namedview);
 
     gchar c[32];
     sp_svg_write_color(c, 32, rgba);

@@ -29,7 +29,7 @@ struct TextNode : public SimpleNode {
         setContent(content);
     }
 
-    SPReprType type() const { return SP_XML_TEXT_NODE; }
+    Inkscape::XML::NodeType type() const { return Inkscape::XML::TEXT_NODE; }
 
 protected:
     SimpleNode *_duplicate() const { return new TextNode(*this); }

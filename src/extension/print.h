@@ -28,7 +28,7 @@ public: /* TODO: These are public for the short term, but this should be fixed *
     unsigned int dkey;       /**< TODO: Document these */
 
 public:
-                  Print       (SPRepr * in_repr,
+                  Print       (Inkscape::XML::Node * in_repr,
                                Implementation::Implementation * in_imp);
                  ~Print       (void);
     virtual bool  check       (void);

@@ -43,7 +43,7 @@ sp_knot_holder_debug (GtkObject *object, gpointer data)
 SPKnotHolder *
 sp_knot_holder_new (SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler)
 {
-	SPRepr *repr = SP_OBJECT (item)->repr;
+	Inkscape::XML::Node *repr = SP_OBJECT (item)->repr;
 
 	g_return_val_if_fail (desktop != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP(desktop), NULL);

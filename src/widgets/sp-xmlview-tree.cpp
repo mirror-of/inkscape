@@ -27,7 +27,7 @@
 struct NodeData {
 	SPXMLViewTree * tree;
 	GtkCTreeNode * node;
-	SPRepr * repr;
+	Inkscape::XML::Node * repr;
 };
 
 #define NODE_DATA(node) ((NodeData *)(GTK_CTREE_ROW ((node))->row.data))
@@ -36,30 +36,30 @@ static void sp_xmlview_tree_class_init (SPXMLViewTreeClass * klass);
 static void sp_xmlview_tree_init (SPXMLViewTree * tree);
 static void sp_xmlview_tree_destroy (GtkObject * object);
 
-static NodeData * node_data_new (SPXMLViewTree * tree, GtkCTreeNode * node, SPRepr * repr);
+static NodeData * node_data_new (SPXMLViewTree * tree, GtkCTreeNode * node, Inkscape::XML::Node * repr);
 static void node_data_free (gpointer data);
 
-static GtkCTreeNode * add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SPRepr * repr);
+static GtkCTreeNode * add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, Inkscape::XML::Node * repr);
 
-static void element_child_added (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer data);
-static void element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
-static void element_child_removed (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer data);
-static void element_order_changed (SPRepr * repr, SPRepr * child, SPRepr * oldref, SPRepr * newref, gpointer data);
+static void element_child_added (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * ref, gpointer data);
+static void element_attr_changed (Inkscape::XML::Node * repr, const gchar * key, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
+static void element_child_removed (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * ref, gpointer data);
+static void element_order_changed (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * oldref, Inkscape::XML::Node * newref, gpointer data);
 
-static void text_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data);
-static void comment_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data);
+static void text_content_changed (Inkscape::XML::Node * repr, const gchar * old_content, const gchar * new_content, gpointer data);
+static void comment_content_changed (Inkscape::XML::Node * repr, const gchar * old_content, const gchar * new_content, gpointer data);
 
 static void tree_move (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkCTreeNode * new_sibling);
 
 static gboolean check_drag (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkCTreeNode * new_sibling);
 
-static GtkCTreeNode * ref_to_sibling (GtkCTreeNode * parent, SPRepr * ref);
-static GtkCTreeNode * repr_to_child (GtkCTreeNode * parent, SPRepr * repr);
-static SPRepr * sibling_to_ref (GtkCTreeNode * parent, GtkCTreeNode * sibling);
+static GtkCTreeNode * ref_to_sibling (GtkCTreeNode * parent, Inkscape::XML::Node * ref);
+static GtkCTreeNode * repr_to_child (GtkCTreeNode * parent, Inkscape::XML::Node * repr);
+static Inkscape::XML::Node * sibling_to_ref (GtkCTreeNode * parent, GtkCTreeNode * sibling);
 
 static gint match_node_data_by_repr(gconstpointer data_p, gconstpointer repr);
 
-static const SPReprEventVector element_repr_events = {
+static const Inkscape::XML::NodeEventVector element_repr_events = {
         element_child_added,
         element_child_removed,
         element_attr_changed,
@@ -67,7 +67,7 @@ static const SPReprEventVector element_repr_events = {
         element_order_changed
 };
 
-static const SPReprEventVector text_repr_events = {
+static const Inkscape::XML::NodeEventVector text_repr_events = {
         NULL, /* child_added */
         NULL, /* child_removed */
         NULL, /* attr_changed */
@@ -75,7 +75,7 @@ static const SPReprEventVector text_repr_events = {
         NULL  /* order_changed */
 };
 
-static const SPReprEventVector comment_repr_events = {
+static const Inkscape::XML::NodeEventVector comment_repr_events = {
         NULL, /* child_added */
         NULL, /* child_removed */
         NULL, /* attr_changed */
@@ -86,7 +86,7 @@ static const SPReprEventVector comment_repr_events = {
 static GtkCTreeClass * parent_class = NULL;
 
 GtkWidget *
-sp_xmlview_tree_new (SPRepr * repr, void * factory, void * data)
+sp_xmlview_tree_new (Inkscape::XML::Node * repr, void * factory, void * data)
 {
 	SPXMLViewTree * tree;
 
@@ -105,7 +105,7 @@ sp_xmlview_tree_new (SPRepr * repr, void * factory, void * data)
 }
 
 void
-sp_xmlview_tree_set_repr (SPXMLViewTree * tree, SPRepr * repr)
+sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr)
 {
 	if ( tree->repr == repr ) return;
 	gtk_clist_freeze (GTK_CLIST (tree));
@@ -176,17 +176,17 @@ sp_xmlview_tree_destroy (GtkObject * object)
 }
 
 GtkCTreeNode *
-add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SPRepr * repr)
+add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, Inkscape::XML::Node * repr)
 {
 	NodeData * data;
 	GtkCTreeNode * node;
-	const SPReprEventVector * vec;
+	const Inkscape::XML::NodeEventVector * vec;
 	static const gchar *default_text[] = { "???" };
 
 	g_assert (tree != NULL);
 	g_assert (repr != NULL);
 
-	node = gtk_ctree_insert_node (GTK_CTREE (tree), parent, before, (gchar **)default_text, 2, NULL, NULL, NULL, NULL, ( repr->type() != SP_XML_ELEMENT_NODE ), FALSE);
+	node = gtk_ctree_insert_node (GTK_CTREE (tree), parent, before, (gchar **)default_text, 2, NULL, NULL, NULL, NULL, ( repr->type() != Inkscape::XML::ELEMENT_NODE ), FALSE);
 	g_assert (node != NULL);
 
 	data = node_data_new (tree, node, repr);
@@ -194,11 +194,11 @@ add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SP
 
 	gtk_ctree_node_set_row_data_full (GTK_CTREE (tree), data->node, data, node_data_free);
 
-	if ( repr->type() == SP_XML_TEXT_NODE ) {
+	if ( repr->type() == Inkscape::XML::TEXT_NODE ) {
 		vec = &text_repr_events;
-	} else if ( repr->type() == SP_XML_COMMENT_NODE ) {
+	} else if ( repr->type() == Inkscape::XML::COMMENT_NODE ) {
 		vec = &comment_repr_events;
-	} else if ( repr->type() == SP_XML_ELEMENT_NODE ) {
+	} else if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
 		vec = &element_repr_events;
 	} else {
 		vec = NULL;
@@ -207,7 +207,7 @@ add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SP
 	if (vec) {
 		gtk_clist_freeze (GTK_CLIST (tree));
 		/* cheat a little to get the id upated properly */
-		if (repr->type() == SP_XML_ELEMENT_NODE) {
+		if (repr->type() == Inkscape::XML::ELEMENT_NODE) {
 			element_attr_changed (repr, "id", NULL, NULL, false, data);
 		}
 		sp_repr_add_listener (repr, vec, data);
@@ -219,7 +219,7 @@ add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SP
 }
 
 NodeData *
-node_data_new (SPXMLViewTree * tree, GtkCTreeNode * node, SPRepr * repr)
+node_data_new (SPXMLViewTree * tree, GtkCTreeNode * node, Inkscape::XML::Node * repr)
 {
 	NodeData * data;
 	data = g_new (NodeData, 1);
@@ -241,7 +241,7 @@ node_data_free (gpointer ptr) {
 }
 
 void
-element_child_added (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer ptr)
+element_child_added (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * ref, gpointer ptr)
 {
 	NodeData * data;
 	GtkCTreeNode * before;
@@ -256,7 +256,7 @@ element_child_added (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer ptr)
 }
 
 void
-element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer ptr)
+element_attr_changed (Inkscape::XML::Node * repr, const gchar * key, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer ptr)
 {
 	NodeData * data;
 	gchar *label;
@@ -277,7 +277,7 @@ element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value,
 }
 
 void
-element_child_removed (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer ptr)
+element_child_removed (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * ref, gpointer ptr)
 {
 	NodeData * data;
 
@@ -289,7 +289,7 @@ element_child_removed (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer ptr
 }
 
 void
-element_order_changed (SPRepr * repr, SPRepr * child, SPRepr * oldref, SPRepr * newref, gpointer ptr)
+element_order_changed (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * oldref, Inkscape::XML::Node * newref, gpointer ptr)
 {
 	NodeData * data;
 	GtkCTreeNode * before, * node;
@@ -307,7 +307,7 @@ element_order_changed (SPRepr * repr, SPRepr * child, SPRepr * oldref, SPRepr * 
 }
 
 void
-text_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer ptr)
+text_content_changed (Inkscape::XML::Node * repr, const gchar * old_content, const gchar * new_content, gpointer ptr)
 {
 	NodeData *data;
 	gchar *label;
@@ -322,7 +322,7 @@ text_content_changed (SPRepr * repr, const gchar * old_content, const gchar * ne
 }
 
 void
-comment_content_changed (SPRepr *repr, const gchar * old_content, const gchar *new_content, gpointer ptr)
+comment_content_changed (Inkscape::XML::Node *repr, const gchar * old_content, const gchar *new_content, gpointer ptr)
 {
 	NodeData *data;
 	gchar *label;
@@ -340,7 +340,7 @@ void
 tree_move (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkCTreeNode * new_sibling)
 {
 	GtkCTreeNode * old_parent;
-	SPRepr * ref;
+	Inkscape::XML::Node * ref;
 	int ok;
 
 	old_parent = GTK_CTREE_ROW (node)->parent;
@@ -367,7 +367,7 @@ tree_move (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkC
 }
 
 GtkCTreeNode *
-ref_to_sibling (GtkCTreeNode * parent, SPRepr * ref)
+ref_to_sibling (GtkCTreeNode * parent, Inkscape::XML::Node * ref)
 {
 	if (ref) {
 		GtkCTreeNode * before;
@@ -381,7 +381,7 @@ ref_to_sibling (GtkCTreeNode * parent, SPRepr * ref)
 }
 
 GtkCTreeNode *
-repr_to_child (GtkCTreeNode * parent, SPRepr * repr)
+repr_to_child (GtkCTreeNode * parent, Inkscape::XML::Node * repr)
 {
 	GtkCTreeNode * child;
 	child = GTK_CTREE_ROW (parent)->children;
@@ -391,7 +391,7 @@ repr_to_child (GtkCTreeNode * parent, SPRepr * repr)
 	return child;
 }
 
-SPRepr *
+Inkscape::XML::Node *
 sibling_to_ref (GtkCTreeNode * parent, GtkCTreeNode * sibling)
 {
 	GtkCTreeNode * child;
@@ -411,21 +411,21 @@ check_drag (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, Gtk
 	old_parent = GTK_CTREE_ROW (node)->parent;
 
 	if (!old_parent || !new_parent) return FALSE;
-	if (NODE_DATA (new_parent)->repr->type() != SP_XML_ELEMENT_NODE) return FALSE;
+	if (NODE_DATA (new_parent)->repr->type() != Inkscape::XML::ELEMENT_NODE) return FALSE;
 
 	/* fixme: we need add_child/remove_child/etc repr events without side-effects, so we can check here and give better visual feedback */
 
 	return TRUE;
 }
 
-SPRepr *
+Inkscape::XML::Node *
 sp_xmlview_tree_node_get_repr (SPXMLViewTree * tree, GtkCTreeNode * node)
 {
 	return NODE_DATA (node)->repr;
 }
 
 GtkCTreeNode *
-sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, SPRepr * repr)
+sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, Inkscape::XML::Node * repr)
 {
 	return gtk_ctree_find_by_row_data_custom (GTK_CTREE (tree), NULL, repr, match_node_data_by_repr);
 }
@@ -433,5 +433,5 @@ sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, SPRepr * repr)
 gint
 match_node_data_by_repr(gconstpointer data_p, gconstpointer repr)
 {
-	return ((const NodeData *)data_p)->repr != (const SPRepr *)repr;
+	return ((const NodeData *)data_p)->repr != (const Inkscape::XML::Node *)repr;
 }

@@ -45,7 +45,7 @@
 
 using Inkscape::Util::SharedCStringPtr;
 
-SPRepr *
+Inkscape::XML::Node *
 sp_repr_new(gchar const *name)
 {
     g_return_val_if_fail(name != NULL, NULL);
@@ -54,49 +54,49 @@ sp_repr_new(gchar const *name)
     return new Inkscape::XML::ElementNode(g_quark_from_string(name));
 }
 
-SPRepr *
+Inkscape::XML::Node *
 sp_repr_new_text(gchar const *content)
 {
     g_return_val_if_fail(content != NULL, NULL);
     return new Inkscape::XML::TextNode(SharedCStringPtr::copy(content));
 }
 
-SPRepr *
+Inkscape::XML::Node *
 sp_repr_new_comment(gchar const *comment)
 {
     g_return_val_if_fail(comment != NULL, NULL);
     return new Inkscape::XML::CommentNode(SharedCStringPtr::copy(comment));
 }
 
-SPReprDoc *
+Inkscape::XML::Document *
 sp_repr_document_new(char const *rootname)
 {
-    SPReprDoc *doc = new Inkscape::XML::SimpleDocument(g_quark_from_static_string("xml"));
+    Inkscape::XML::Document *doc = new Inkscape::XML::SimpleDocument(g_quark_from_static_string("xml"));
     if (!strcmp(rootname, "svg:svg")) {
         sp_repr_set_attr(doc, "version", "1.0");
         sp_repr_set_attr(doc, "standalone", "no");
-        SPRepr *comment = sp_repr_new_comment(" Created with Inkscape (http://www.inkscape.org/) ");
+        Inkscape::XML::Node *comment = sp_repr_new_comment(" Created with Inkscape (http://www.inkscape.org/) ");
         doc->appendChild(comment);
         sp_repr_unref(comment);
     }
 
-    SPRepr *root = sp_repr_new(rootname);
+    Inkscape::XML::Node *root = sp_repr_new(rootname);
     doc->appendChild(root);
     sp_repr_unref(root);
 
     return doc;
 }
 
-SPReprDoc *
+Inkscape::XML::Document *
 sp_repr_document_new_list(GSList *reprs)
 {
     g_assert(reprs != NULL);
 
-    SPReprDoc *doc = sp_repr_document_new("void");
+    Inkscape::XML::Document *doc = sp_repr_document_new("void");
     doc->removeChild(doc->firstChild());
 
     for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
-        SPRepr *repr = (SPRepr *) iter->data;
+        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) iter->data;
         doc->appendChild(repr);
     }
 

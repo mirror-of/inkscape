@@ -29,7 +29,7 @@ struct SPXMLViewAttrList
 {
 	GtkCList list;
 
-	SPRepr * repr;
+	Inkscape::XML::Node * repr;
 };
 
 struct SPXMLViewAttrListClass
@@ -40,14 +40,14 @@ struct SPXMLViewAttrListClass
 };
 
 GtkType sp_xmlview_attr_list_get_type (void);
-GtkWidget * sp_xmlview_attr_list_new (SPRepr * repr);
+GtkWidget * sp_xmlview_attr_list_new (Inkscape::XML::Node * repr);
 
 #define SP_XMLVIEW_ATTR_LIST_GET_REPR(list) (SP_XMLVIEW_ATTR_LIST (list)->repr)
 
 #define sp_xmlview_attr_list_get_row_key(list, row) (GPOINTER_TO_INT (gtk_clist_get_row_data ((list), (row))))
 #define sp_xmlview_attr_list_find_row_from_key(list, key) (gtk_clist_find_row_from_data ((list), GINT_TO_POINTER ((key))))
 
-void sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, SPRepr * repr);
+void sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, Inkscape::XML::Node * repr);
 
 
 

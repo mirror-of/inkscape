@@ -37,13 +37,13 @@ struct SPClipPathView {
 static void sp_clippath_class_init (SPClipPathClass *klass);
 static void sp_clippath_init (SPClipPath *clippath);
 
-static void sp_clippath_build (SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_clippath_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_clippath_release (SPObject * object);
 static void sp_clippath_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_clippath_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
+static void sp_clippath_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
 static void sp_clippath_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_clippath_modified (SPObject *object, guint flags);
-static SPRepr *sp_clippath_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_clippath_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 SPClipPathView *sp_clippath_view_new_prepend (SPClipPathView *list, unsigned int key, NRArenaItem *arenaitem);
 SPClipPathView *sp_clippath_view_list_remove (SPClipPathView *list, SPClipPathView *view);
@@ -100,7 +100,7 @@ sp_clippath_init (SPClipPath *cp)
 }
 
 static void
-sp_clippath_build (SPObject *object, SPDocument *document, SPRepr *repr)
+sp_clippath_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	SPClipPath *cp;
 
@@ -165,7 +165,7 @@ sp_clippath_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 static void
-sp_clippath_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_clippath_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	SPClipPath *cp;
 	SPObject *ochild;
@@ -263,8 +263,8 @@ sp_clippath_modified (SPObject *object, guint flags)
 	}
 }
 
-static SPRepr *
-sp_clippath_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_clippath_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPClipPath *cp;
 

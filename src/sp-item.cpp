@@ -67,11 +67,11 @@
 static void sp_item_class_init(SPItemClass *klass);
 static void sp_item_init(SPItem *item);
 
-static void sp_item_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_item_release(SPObject *object);
 static void sp_item_set(SPObject *object, unsigned key, gchar const *value);
 static void sp_item_update(SPObject *object, SPCtx *ctx, guint flags);
-static SPRepr *sp_item_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_item_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static gchar *sp_item_private_description(SPItem *item);
 static void sp_item_private_snappoints(SPItem const *item, SnapPointsIter p);
@@ -234,7 +234,7 @@ void SPItem::raiseToTop() {
         SP_OBJECT_NEXT(this), NULL, &is_item
     );
     if (topmost) {
-        SPRepr *repr=SP_OBJECT_REPR(this);
+        Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
         sp_repr_change_order(sp_repr_parent(repr), repr, SP_OBJECT_REPR(topmost));
     }
 }
@@ -244,8 +244,8 @@ void SPItem::raiseOne() {
         SP_OBJECT_NEXT(this), NULL, &is_item
     );
     if (next_higher) {
-        SPRepr *repr=SP_OBJECT_REPR(this);
-        SPRepr *ref=SP_OBJECT_REPR(next_higher);
+        Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
+        Inkscape::XML::Node *ref=SP_OBJECT_REPR(next_higher);
         sp_repr_change_order(sp_repr_parent(repr), repr, ref);
     }
 }
@@ -263,8 +263,8 @@ void SPItem::lowerOne() {
     );
     if (next_lower) {
         ++next_lower;
-        SPRepr *repr=SP_OBJECT_REPR(this);
-        SPRepr *ref=( next_lower ? SP_OBJECT_REPR(&*next_lower) : NULL );
+        Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
+        Inkscape::XML::Node *ref=( next_lower ? SP_OBJECT_REPR(&*next_lower) : NULL );
         sp_repr_change_order(sp_repr_parent(repr), repr, ref);
     }
 }
@@ -283,14 +283,14 @@ void SPItem::lowerToBottom() {
     );
     if (bottom) {
         ++bottom;
-        SPRepr *repr=SP_OBJECT_REPR(this);
-        SPRepr *ref=( bottom ? SP_OBJECT_REPR(&*bottom) : NULL );
+        Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
+        Inkscape::XML::Node *ref=( bottom ? SP_OBJECT_REPR(&*bottom) : NULL );
         sp_repr_change_order(sp_repr_parent(repr), repr, ref);
     }
 }
 
 static void
-sp_item_build(SPObject *object, SPDocument *document, SPRepr *repr)
+sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     sp_object_read_attr(object, "style");
     sp_object_read_attr(object, "transform");
@@ -500,8 +500,8 @@ sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
     }
 }
 
-static SPRepr *
-sp_item_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_item_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPItem *item = SP_ITEM(object);
 
@@ -923,7 +923,7 @@ sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, N
 A temporary wrapper for the next function accepting the NRMatrix instead of NR::Matrix
 */
 void
-sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix const *transform, NR::Matrix const *adv)
+sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NRMatrix const *transform, NR::Matrix const *adv)
 {
     if (transform == NULL)
         sp_item_write_transform(item, repr, NR::identity(), adv);
@@ -938,7 +938,7 @@ stored optimized. Send _transformed_signal. Invoke _write method so that the rep
 updated with the new transform.
  */
 void
-sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix const *adv)
+sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NR::Matrix const &transform, NR::Matrix const *adv)
 {
     g_return_if_fail(item != NULL);
     g_return_if_fail(SP_IS_ITEM(item));

@@ -151,7 +151,7 @@ static void sp_rect_context_dispose(GObject *object)
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
-static void shape_event_attr_changed(SPRepr *repr,
+static void shape_event_attr_changed(Inkscape::XML::Node *repr,
                                      gchar const *name, gchar const *old_value, gchar const *new_value,
                                      bool const is_interactive, gpointer const data)
 {
@@ -172,7 +172,7 @@ static void shape_event_attr_changed(SPRepr *repr,
     }
 }
 
-static SPReprEventVector shape_repr_events = {
+static Inkscape::XML::NodeEventVector shape_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
     shape_event_attr_changed,
@@ -203,7 +203,7 @@ void sp_rect_context_selection_changed(SPSelection *selection, gpointer data)
     SPItem *item = selection->singleItem();
     if (item) {
         rc->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        SPRepr *repr = SP_OBJECT_REPR(item);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
         if (repr) {
             rc->repr = repr;
             sp_repr_ref(repr);
@@ -224,7 +224,7 @@ static void sp_rect_context_setup(SPEventContext *ec)
     SPItem *item = SP_DT_SELECTION(ec->desktop)->singleItem();
     if (item) {
         rc->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        SPRepr *repr = SP_OBJECT_REPR(item);
+        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
         if (repr) {
             rc->repr = repr;
             sp_repr_ref(repr);
@@ -473,7 +473,7 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
         }
 
         /* Create object */
-        SPRepr *repr = sp_repr_new("svg:rect");
+        Inkscape::XML::Node *repr = sp_repr_new("svg:rect");
 
         /* Set style */
         sp_desktop_apply_style_tool (desktop, repr, "tools.shapes.rect", false);

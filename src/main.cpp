@@ -461,8 +461,8 @@ sp_main_console(int argc, char const **argv)
                 sp_do_export_png(doc);
             }
             if (sp_export_svg) {
-                SPReprDoc *rdoc;
-                SPRepr *repr;
+                Inkscape::XML::Document *rdoc;
+                Inkscape::XML::Node *repr;
                 rdoc = sp_repr_document_new("svg:svg");
                 repr = rdoc->root();
                 repr = sp_document_root(doc)->updateRepr(repr, SP_OBJECT_WRITE_BUILD);
@@ -622,7 +622,7 @@ sp_do_export_png(SPDocument *doc)
         bgcolor |= 0xff; // default is no opacity
     } else {
         // read from namedview
-        SPRepr *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
+        Inkscape::XML::Node *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
         if (nv && nv->attribute("pagecolor"))
             bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
         if (nv && nv->attribute("inkscape:pageopacity"))

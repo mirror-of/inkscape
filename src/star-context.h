@@ -44,7 +44,7 @@ struct SPStarContext : public SPEventContext {
 	gdouble randomized;
 
     SPKnotHolder *knot_holder;
-    SPRepr *repr;
+    Inkscape::XML::Node *repr;
 
     sigc::connection sel_changed_connection;
 

@@ -40,10 +40,10 @@
 static void sp_rect_class_init(SPRectClass *klass);
 static void sp_rect_init(SPRect *rect);
 
-static void sp_rect_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_rect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_rect_set(SPObject *object, unsigned key, gchar const *value);
 static void sp_rect_update(SPObject *object, SPCtx *ctx, guint flags);
-static SPRepr *sp_rect_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_rect_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static gchar *sp_rect_description(SPItem *item);
 static NR::Matrix sp_rect_set_transform(SPItem *item, NR::Matrix const &xform);
@@ -108,7 +108,7 @@ sp_rect_init(SPRect *rect)
 }
 
 static void
-sp_rect_build(SPObject *object, SPDocument *document, SPRepr *repr)
+sp_rect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPRect *rect = SP_RECT(object);
 
@@ -215,8 +215,8 @@ sp_rect_update(SPObject *object, SPCtx *ctx, guint flags)
         ((SPObjectClass *) parent_class)->update(object, ctx, flags);
 }
 
-static SPRepr *
-sp_rect_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_rect_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     SPRect *rect = SP_RECT(object);
 

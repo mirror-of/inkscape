@@ -51,18 +51,18 @@ static GtkBinClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
 
 static void
-spw_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
+spw_repr_attr_changed (Inkscape::XML::Node *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
 {
 	g_signal_emit (G_OBJECT (data), signals[ATTR_CHANGED], 0, key, oldval, newval);
 }
 
 static void
-spw_repr_content_changed (SPRepr *repr, const gchar *oldval, const gchar *newval, gpointer data)
+spw_repr_content_changed (Inkscape::XML::Node *repr, const gchar *oldval, const gchar *newval, gpointer data)
 {
 	/* Signalling goes here */
 }
 
-SPReprEventVector spw_event_vector = {
+Inkscape::XML::NodeEventVector spw_event_vector = {
 	NULL, /* Child added */
 	NULL, /* Child removed */
 	spw_repr_attr_changed,
@@ -310,7 +310,7 @@ sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape)
 }
 
 GtkWidget *
-sp_widget_construct_repr (SPWidget *spw, SPRepr *repr)
+sp_widget_construct_repr (SPWidget *spw, Inkscape::XML::Node *repr)
 {
 	g_return_val_if_fail (spw != NULL, NULL);
 	g_return_val_if_fail (SP_IS_WIDGET (spw), NULL);

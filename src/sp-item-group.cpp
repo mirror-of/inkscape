@@ -34,16 +34,16 @@
 
 static void sp_group_class_init (SPGroupClass *klass);
 static void sp_group_init (SPGroup *group);
-static void sp_group_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_group_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_group_release(SPObject *object);
 static void sp_group_dispose (GObject *object);
 
-static void sp_group_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
-static void sp_group_remove_child (SPObject * object, SPRepr * child);
-static void sp_group_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref);
+static void sp_group_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
+static void sp_group_remove_child (SPObject * object, Inkscape::XML::Node * child);
+static void sp_group_order_changed (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node * new_ref);
 static void sp_group_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_group_modified (SPObject *object, guint flags);
-static SPRepr *sp_group_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_group_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 static void sp_group_set(SPObject *object, unsigned key, char const *value);
 
 static void sp_group_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
@@ -117,7 +117,7 @@ sp_group_init (SPGroup *group)
 	new (&group->_display_modes) std::map<unsigned int, SPGroup::LayerMode>();
 }
 
-static void sp_group_build(SPObject *object, SPDocument *document, SPRepr *repr)
+static void sp_group_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
 	sp_object_read_attr(object, "inkscape:groupmode");
 
@@ -142,7 +142,7 @@ sp_group_dispose(GObject *object)
 }
 
 static void
-sp_group_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
+sp_group_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
 	SPItem *item;
 
@@ -176,7 +176,7 @@ sp_group_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 /* fixme: hide (Lauris) */
 
 static void
-sp_group_remove_child (SPObject * object, SPRepr * child)
+sp_group_remove_child (SPObject * object, Inkscape::XML::Node * child)
 {
 	if (((SPObjectClass *) (parent_class))->remove_child)
 		(* ((SPObjectClass *) (parent_class))->remove_child) (object, child);
@@ -185,7 +185,7 @@ sp_group_remove_child (SPObject * object, SPRepr * child)
 }
 
 static void
-sp_group_order_changed (SPObject *object, SPRepr *child, SPRepr *old_ref, SPRepr *new_ref)
+sp_group_order_changed (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref)
 {
 	if (((SPObjectClass *) (parent_class))->order_changed)
 		(* ((SPObjectClass *) (parent_class))->order_changed) (object, child, old_ref, new_ref);
@@ -272,12 +272,12 @@ sp_group_modified (SPObject *object, guint flags)
 	}
 }
 
-static SPRepr *
-sp_group_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_group_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPGroup *group;
 	SPObject *child;
-	SPRepr *crepr;
+	Inkscape::XML::Node *crepr;
 
 	group = SP_GROUP (object);
 
@@ -290,8 +290,8 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 			if (crepr) l = g_slist_prepend (l, crepr);
 		}
 		while (l) {
-			sp_repr_add_child (repr, (SPRepr *) l->data, NULL);
-			sp_repr_unref ((SPRepr *) l->data);
+			sp_repr_add_child (repr, (Inkscape::XML::Node *) l->data, NULL);
+			sp_repr_unref ((Inkscape::XML::Node *) l->data);
 			l = g_slist_remove (l, l->data);
 		}
 	} else {
@@ -463,11 +463,11 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	SPObject *defs = SP_OBJECT (SP_ROOT (root)->defs);
 
 	SPItem *gitem = SP_ITEM (group);
-	SPRepr *grepr = SP_OBJECT_REPR (gitem);
+	Inkscape::XML::Node *grepr = SP_OBJECT_REPR (gitem);
 	SPCSSAttr *gstyle = sp_css_attr_from_style (SP_OBJECT (gitem));
 
 	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
-	SPRepr *prepr = SP_OBJECT_REPR (pitem);
+	Inkscape::XML::Node *prepr = SP_OBJECT_REPR (pitem);
 
 	g_return_if_fail (!strcmp (grepr->name(), "svg:g") || !strcmp (grepr->name(), "svg:a") || !strcmp (grepr->name(), "svg:switch"));
 
@@ -476,7 +476,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	GSList *objects = NULL;
 	for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 
-		SPRepr *nrepr = sp_repr_duplicate (SP_OBJECT_REPR (child));
+		Inkscape::XML::Node *nrepr = sp_repr_duplicate (SP_OBJECT_REPR (child));
 
 		if (SP_IS_ITEM (child)) {
 			gchar affinestr[80];
@@ -534,10 +534,10 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 	/* Step 3 - add nonitems */
 	if (objects) {
-	    SPRepr *last_def = sp_repr_last_child(SP_OBJECT_REPR(defs));
+	    Inkscape::XML::Node *last_def = sp_repr_last_child(SP_OBJECT_REPR(defs));
 	    while (objects) {
-		sp_repr_add_child(SP_OBJECT_REPR(defs), (SPRepr *) objects->data, last_def);
-		sp_repr_unref ((SPRepr *) objects->data);
+		sp_repr_add_child(SP_OBJECT_REPR(defs), (Inkscape::XML::Node *) objects->data, last_def);
+		sp_repr_unref ((Inkscape::XML::Node *) objects->data);
 		objects = g_slist_remove (objects, objects->data);
 	    }
 	}
@@ -545,7 +545,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	/* Step 4 - add items */
 	gint const preserve = prefs_get_int_attribute("options.preservetransform", "value", 0);
 	while (items) {
-		SPRepr *repr = (SPRepr *) items->data;
+		Inkscape::XML::Node *repr = (Inkscape::XML::Node *) items->data;
 		// add item
 		prepr->appendChild(repr);
 		// restore position; since the items list was prepended (i.e. reverse), we now add

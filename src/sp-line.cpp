@@ -31,9 +31,9 @@
 static void sp_line_class_init (SPLineClass *klass);
 static void sp_line_init (SPLine *line);
 
-static void sp_line_build (SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_line_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_line_set (SPObject *object, unsigned int key, const gchar *value);
-static SPRepr *sp_line_write (SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_line_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static gchar *sp_line_description (SPItem * item);
 static NR::Matrix sp_line_set_transform(SPItem *item, NR::Matrix const &xform);
@@ -97,7 +97,7 @@ sp_line_init (SPLine * line)
 
 
 static void
-sp_line_build (SPObject * object, SPDocument * document, SPRepr * repr)
+sp_line_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
         if (((SPObjectClass *) parent_class)->build) {
 		((SPObjectClass *) parent_class)->build (object, document, repr);
@@ -171,8 +171,8 @@ sp_line_update (SPObject *object, SPCtx *ctx, guint flags)
 }
 
 
-static SPRepr *
-sp_line_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_line_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPLine *line  = SP_LINE (object);
 

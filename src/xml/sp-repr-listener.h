@@ -18,19 +18,25 @@
 
 #include "gc-managed.h"
 
-struct SPReprEventVector;
+namespace Inkscape {
+namespace XML {
 
-struct SPReprListener : public Inkscape::GC::Managed<> {
-	SPReprListener(SPReprEventVector const *v, void *d,
-	               SPReprListener *n=NULL)
+struct NodeEventVector;
+
+struct NodeListener : public Inkscape::GC::Managed<> {
+	NodeListener(NodeEventVector const *v, void *d,
+	               NodeListener *n=NULL)
 	: next(n), vector(v), data(d) {}
 
-	SPReprListener(SPReprListener const &listener, SPReprListener *n=NULL)
+	NodeListener(NodeListener const &listener, NodeListener *n=NULL)
 	: next(n), vector(listener.vector), data(listener.data) {}
 
-	SPReprListener *next;
-	const SPReprEventVector *vector;
+	NodeListener *next;
+	const NodeEventVector *vector;
 	void * data;
 };
+
+}
+}
 
 #endif

@@ -355,7 +355,7 @@ struct Callbacks {
     sigc::slot<void> update_list;
 };
 
-void attribute_changed(SPRepr *repr, gchar const *name,
+void attribute_changed(Inkscape::XML::Node *repr, gchar const *name,
                        gchar const *old_value, gchar const *new_value,
                        bool is_interactive, void *data) 
 {
@@ -366,22 +366,22 @@ void attribute_changed(SPRepr *repr, gchar const *name,
     }
 }
 
-void node_added(SPRepr *parent, SPRepr *child, SPRepr *ref, void *data) {
+void node_added(Inkscape::XML::Node *parent, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, void *data) {
     gchar const *mode=child->attribute("inkscape:groupmode");
     if ( mode && !std::strcmp(mode, "layer") ) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     }
 }
 
-void node_removed(SPRepr *parent, SPRepr *child, SPRepr *ref, void *data) {
+void node_removed(Inkscape::XML::Node *parent, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, void *data) {
     gchar const *mode=child->attribute("inkscape:groupmode");
     if ( mode && !std::strcmp(mode, "layer") ) {
         reinterpret_cast<Callbacks *>(data)->update_list();
     }
 }
 
-void node_reordered(SPRepr *parent, SPRepr *child,
-                    SPRepr *old_ref, SPRepr *new_ref, void *data)
+void node_reordered(Inkscape::XML::Node *parent, Inkscape::XML::Node *child,
+                    Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref, void *data)
 {
     gchar const *mode=child->attribute("inkscape:groupmode");
     if ( mode && !std::strcmp(mode, "layer") ) {
@@ -415,7 +415,7 @@ void rebuild_all_rows(sigc::slot<void, SPObject *> rebuild, SPDesktop *desktop)
 /** Builds and appends a row in the layer model object.
  */
 void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
-    SPReprEventVector *vector;
+    Inkscape::XML::NodeEventVector *vector;
 
     Callbacks *callbacks=new Callbacks();
 
@@ -432,7 +432,7 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
             _desktop
         );
 
-        SPReprEventVector events = {
+        Inkscape::XML::NodeEventVector events = {
             &node_added,
             &node_removed,
             &attribute_changed,
@@ -440,9 +440,9 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
             &node_reordered
         };
 
-        vector = new SPReprEventVector(events);
+        vector = new Inkscape::XML::NodeEventVector(events);
     } else {
-        SPReprEventVector events = {
+        Inkscape::XML::NodeEventVector events = {
             NULL,
             NULL,
             &attribute_changed,
@@ -450,7 +450,7 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
             NULL
         };
 
-        vector = new SPReprEventVector(events);
+        vector = new Inkscape::XML::NodeEventVector(events);
     }
 
     Gtk::ListStore::iterator row(_layer_model->append());
@@ -477,7 +477,7 @@ void LayerSelector::_destroyEntry(Gtk::ListStore::iterator const &row) {
     if (object) {
         sp_object_unref(object, NULL);
     }
-    SPRepr *repr=row->get_value(_model_columns.repr);
+    Inkscape::XML::Node *repr=row->get_value(_model_columns.repr);
     if (repr) {
         sp_repr_remove_listener_by_data(repr, callbacks);
         sp_repr_unref(repr);

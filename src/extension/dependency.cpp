@@ -49,7 +49,7 @@ gchar const * Dependency::_location_str[] = {
     a little bit easier to use later.  Also, a pointer to the core
     content is pulled out -- also to make things easier.
 */
-Dependency::Dependency (SPRepr * in_repr)
+Dependency::Dependency (Inkscape::XML::Node * in_repr)
 {
     _type = TYPE_CNT;
     _location = LOCATION_PATH;

@@ -26,7 +26,7 @@ static void sp_defs_init(SPDefs *defs);
 static void sp_defs_release(SPObject *object);
 static void sp_defs_update(SPObject *object, SPCtx *ctx, guint flags);
 static void sp_defs_modified(SPObject *object, guint flags);
-static SPRepr *sp_defs_write(SPObject *object, SPRepr *repr, guint flags);
+static Inkscape::XML::Node *sp_defs_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 static SPObjectClass *parent_class;
 
@@ -128,7 +128,7 @@ static void sp_defs_modified(SPObject *object, guint flags)
     }
 }
 
-static SPRepr *sp_defs_write(SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *sp_defs_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
     if (flags & SP_OBJECT_WRITE_BUILD) {
         
@@ -138,13 +138,13 @@ static SPRepr *sp_defs_write(SPObject *object, SPRepr *repr, guint flags)
         
         GSList *l = NULL;
         for ( SPObject *child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-            SPRepr *crepr = child->updateRepr(NULL, flags);
+            Inkscape::XML::Node *crepr = child->updateRepr(NULL, flags);
             if (crepr) l = g_slist_prepend(l, crepr);
         }
         
         while (l) {
-            sp_repr_add_child(repr, (SPRepr *) l->data, NULL);
-            sp_repr_unref((SPRepr *) l->data);
+            sp_repr_add_child(repr, (Inkscape::XML::Node *) l->data, NULL);
+            sp_repr_unref((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
         

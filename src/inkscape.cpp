@@ -107,7 +107,7 @@ static void inkscape_dispose (GObject *object);
 static void inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 static void inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 
-static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, 
+static void inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, const gchar *skeleton, 
 				  unsigned int skel_size,
 				  const gchar *e_mkdir,
 				  const gchar *e_notdir,
@@ -121,7 +121,7 @@ static void inkscape_init_preferences (Inkscape::Application * inkscape);
 
 struct Inkscape::Application {
     GObject object;
-    SPReprDoc *preferences;
+    Inkscape::XML::Document *preferences;
     gboolean save_preferences;
     GSList *documents;
     GSList *desktops;
@@ -412,7 +412,7 @@ inkscape_segv_handler (int signum)
     GSList *failednames = NULL;
     for (GSList *l = inkscape->documents; l != NULL; l = l->next) {
         SPDocument *doc;
-        SPRepr *repr;
+        Inkscape::XML::Node *repr;
         doc = (SPDocument *) l->data;
         repr = sp_document_repr_root (doc);
         if (repr->attribute("sodipodi:modified")) {
@@ -612,7 +612,7 @@ gboolean inkscape_app_use_gui( Inkscape::Application const * app )
  * Returns TRUE if the config file was successfully loaded, FALSE if not.
  */
 static gboolean
-inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *skeleton, 
+inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, const gchar *skeleton, 
 		      unsigned int skel_size, const gchar *e_notreg, const gchar *e_notxml, 
 		      const gchar *e_notsp, const gchar *warn)
 {
@@ -635,7 +635,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
         return FALSE;
     }
 
-    SPReprDoc *doc = sp_repr_read_file (fn, NULL);
+    Inkscape::XML::Document *doc = sp_repr_read_file (fn, NULL);
     if (doc == NULL) {
         /* Not an valid xml file */
         gchar *safeFn = Inkscape::IO::sanitizeString(fn);
@@ -647,7 +647,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
         return FALSE;
     }
 
-    SPRepr *root = sp_repr_document_root (doc);
+    Inkscape::XML::Node *root = sp_repr_document_root (doc);
     if (strcmp (root->name(), "inkscape")) {
         gchar *safeFn = Inkscape::IO::sanitizeString(fn);
         GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, safeFn, warn);
@@ -706,14 +706,14 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
 /**
  * We use '.' as separator
  */
-SPRepr *
+Inkscape::XML::Node *
 inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
 {
     if (key == NULL) {
         return NULL;
     }
 
-    SPRepr *repr = sp_repr_document_root (inkscape->preferences);
+    Inkscape::XML::Node *repr = sp_repr_document_root (inkscape->preferences);
     g_assert (!(strcmp (repr->name(), "inkscape")));
 
     gchar const *s = key;
@@ -728,7 +728,7 @@ inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
             len = strlen (s);
         }
         
-        SPRepr* child;
+        Inkscape::XML::Node* child;
         for (child = repr->firstChild(); child != NULL; child = child->next()) {
             gchar const *id = child->attribute("id");
             if ((id) && (strlen (id) == len) && (!strncmp (id, s, len)))
@@ -1122,7 +1122,7 @@ inkscape_active_event_context (void)
 #####################*/
 
 static void 
-inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, 
+inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, const gchar *skeleton, 
 		      unsigned int skel_size,
 		      const gchar *e_mkdir, 
 		      const gchar *e_notdir, 

@@ -42,7 +42,7 @@ static void sp_guide_init(SPGuide *guide);
 static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 
-static void sp_guide_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_guide_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_guide_release(SPObject *object);
 static void sp_guide_set(SPObject *object, unsigned int key, const gchar *value);
 
@@ -142,7 +142,7 @@ static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value,
     }
 }
 
-static void sp_guide_build(SPObject *object, SPDocument *document, SPRepr *repr)
+static void sp_guide_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     if (((SPObjectClass *) (parent_class))->build) {
         (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);

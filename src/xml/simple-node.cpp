@@ -30,7 +30,7 @@ namespace XML {
 using Inkscape::Util::SharedCStringPtr;
 
 SimpleNode::SimpleNode(int code)
-: SPRepr(), _name(code), _child_count(0), _cached_positions_valid(false)
+: Inkscape::XML::Node(), _name(code), _child_count(0), _cached_positions_valid(false)
 {
     this->_logger = NULL;
     this->_document = NULL;
@@ -41,7 +41,7 @@ SimpleNode::SimpleNode(int code)
 }
 
 SimpleNode::SimpleNode(SimpleNode const &node)
-: SPRepr(),
+: Inkscape::XML::Node(),
   _name(node._name), _content(node._content),
   _child_count(node._child_count),
   _cached_positions_valid(node._cached_positions_valid),
@@ -54,10 +54,10 @@ SimpleNode::SimpleNode(SimpleNode const &node)
     this->_attributes = NULL;
     this->_last_listener = this->_listeners = NULL;
 
-    for ( SPRepr *child = node._first_child ;
+    for ( Inkscape::XML::Node *child = node._first_child ;
           child != NULL ; child = child->next() )
     {
-        SPRepr *child_copy=child->duplicate();
+        Inkscape::XML::Node *child_copy=child->duplicate();
 
         child_copy->_setParent(this);
         if (_last_child) {
@@ -70,9 +70,9 @@ SimpleNode::SimpleNode(SimpleNode const &node)
         child_copy->release(); // release to avoid a leak
     }
 
-    SPReprAttr *prev_attr_copy=NULL;
-    for ( SPReprAttr *attr = node._attributes ; attr != NULL ; attr = attr->next ) {
-        SPReprAttr *attr_copy=new SPReprAttr(*attr);
+    Inkscape::XML::AttributeRecord *prev_attr_copy=NULL;
+    for ( Inkscape::XML::AttributeRecord *attr = node._attributes ; attr != NULL ; attr = attr->next ) {
+        Inkscape::XML::AttributeRecord *attr_copy=new Inkscape::XML::AttributeRecord(*attr);
 
         if (prev_attr_copy) {
             prev_attr_copy->next = attr_copy;
@@ -97,7 +97,7 @@ gchar const *SimpleNode::attribute(gchar const *name) const {
 
     GQuark const key = g_quark_from_string(name);
 
-    for ( SPReprAttr const *attribute = _attributes ;
+    for ( Inkscape::XML::AttributeRecord const *attribute = _attributes ;
           attribute ; attribute = attribute->next ) 
     {
         if ( attribute->key == key ) {
@@ -113,10 +113,10 @@ unsigned SimpleNode::position() const {
     return _parent->_childPosition(*this);
 }
 
-unsigned SimpleNode::_childPosition(SPRepr const &child) const {
+unsigned SimpleNode::_childPosition(Inkscape::XML::Node const &child) const {
     if (!_cached_positions_valid) {
         unsigned position=0;
-        for ( SPRepr *sibling = _first_child ;
+        for ( Inkscape::XML::Node *sibling = _first_child ;
               sibling ; sibling = sibling->next() )
         {
             sibling->_setCachedPosition(position);
@@ -127,8 +127,8 @@ unsigned SimpleNode::_childPosition(SPRepr const &child) const {
     return child._cachedPosition();
 }
 
-SPRepr *SimpleNode::nthChild(unsigned index) {
-    SPRepr *child = _first_child;
+Inkscape::XML::Node *SimpleNode::nthChild(unsigned index) {
+    Inkscape::XML::Node *child = _first_child;
     for ( ; index > 0 && child ; child = child->next() ) {
         index--;
     }
@@ -138,7 +138,7 @@ SPRepr *SimpleNode::nthChild(unsigned index) {
 bool SimpleNode::matchAttributeName(gchar const *partial_name) const {
     g_return_val_if_fail(partial_name != NULL, false);
 
-    for ( SPReprAttr const *attribute = _attributes ;
+    for ( Inkscape::XML::AttributeRecord const *attribute = _attributes ;
           attribute ; attribute = attribute->next )
     {
         gchar const *name = g_quark_to_string(attribute->key);
@@ -159,7 +159,7 @@ void SimpleNode::setContent(gchar const *new_content) {
             _logger->notifyContentChanged(*this, old_content, _content);
         }
 
-        for ( SPReprListener *listener = _listeners ;
+        for ( Inkscape::XML::NodeListener *listener = _listeners ;
               listener ; listener = listener->next )
         {
             if (listener->vector->content_changed) {
@@ -176,8 +176,8 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
 
     GQuark const key = g_quark_from_string(name);
 
-    SPReprAttr **ref=&_attributes;
-    SPReprAttr *attribute;
+    Inkscape::XML::AttributeRecord **ref=&_attributes;
+    Inkscape::XML::AttributeRecord *attribute;
     for ( attribute = _attributes ;
           attribute ; attribute = attribute->next )
     {
@@ -193,7 +193,7 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
     if (value) {
         new_value = SharedCStringPtr::copy(value);
         if (!attribute) {
-            _attributes = new SPReprAttr(key, new_value, _attributes);
+            _attributes = new Inkscape::XML::AttributeRecord(key, new_value, _attributes);
         } else {
             attribute->value = new_value;
         }
@@ -210,7 +210,7 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
             _logger->notifyAttributeChanged(*this, key, old_value, new_value);
         }
 
-        for ( SPReprListener *listener = _listeners ;
+        for ( Inkscape::XML::NodeListener *listener = _listeners ;
               listener ; listener = listener->next )
         {
             if (listener->vector->attr_changed) {
@@ -220,12 +220,12 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
     }
 }
 
-void SimpleNode::addChild(SPRepr *child, SPRepr *ref) {
+void SimpleNode::addChild(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
     g_assert(child);
     g_assert(!ref || ref->parent() == this);
     g_assert(!child->parent());
 
-    SPRepr *next;
+    Inkscape::XML::Node *next;
     if (ref) {
         next = ref->next();
         ref->_setNext(child);
@@ -260,7 +260,7 @@ void SimpleNode::addChild(SPRepr *child, SPRepr *ref) {
         _logger->notifyChildAdded(*this, *child, ref);
     }
 
-    for ( SPReprListener *listener = _listeners ;
+    for ( Inkscape::XML::NodeListener *listener = _listeners ;
           listener ; listener = listener->next )
     {
         if (listener->vector->child_added) {
@@ -269,13 +269,13 @@ void SimpleNode::addChild(SPRepr *child, SPRepr *ref) {
     }
 }
 
-void SimpleNode::_bindDocument(SPReprDoc &document) {
+void SimpleNode::_bindDocument(Inkscape::XML::Document &document) {
     g_assert(!_document || _document == &document);
 
     if (!_document) {
         _document = &document;
 
-        for ( SPRepr *child = _first_child ; child != NULL ; child = child->next() ) {
+        for ( Inkscape::XML::Node *child = _first_child ; child != NULL ; child = child->next() ) {
             child->_bindDocument(document);
         }
     }
@@ -287,19 +287,19 @@ void SimpleNode::_bindLogger(Inkscape::XML::TransactionLogger &logger) {
     if (!_logger) {
         _logger = &logger;
 
-        for ( SPRepr *child = _first_child ; child != NULL ; child = child->next() ) {
+        for ( Inkscape::XML::Node *child = _first_child ; child != NULL ; child = child->next() ) {
             child->_bindLogger(logger);
         }
     }
 }
 
-void SimpleNode::removeChild(SPRepr *child) {
+void SimpleNode::removeChild(Inkscape::XML::Node *child) {
     g_assert(child);
     g_assert(child->parent() == this);
 
-    SPRepr *ref = ( child != _first_child ? sp_repr_prev(child) : NULL );
+    Inkscape::XML::Node *ref = ( child != _first_child ? sp_repr_prev(child) : NULL );
 
-    SPRepr *next = child->next();
+    Inkscape::XML::Node *next = child->next();
     if (ref) {
         ref->_setNext(next);
     } else {
@@ -320,7 +320,7 @@ void SimpleNode::removeChild(SPRepr *child) {
         _logger->notifyChildRemoved(*this, *child, ref);
     }
 
-    for ( SPReprListener *listener = _listeners ;
+    for ( Inkscape::XML::NodeListener *listener = _listeners ;
           listener ; listener = listener->next )
     {
         if (listener->vector->child_removed) {
@@ -329,17 +329,17 @@ void SimpleNode::removeChild(SPRepr *child) {
     }
 }
 
-void SimpleNode::changeOrder(SPRepr *child, SPRepr *ref) {
+void SimpleNode::changeOrder(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
     g_return_if_fail(child);
     g_return_if_fail(child->parent() == this);
     g_return_if_fail(child != ref);
     g_return_if_fail(!ref || ref->parent() == this);
 
-    SPRepr *const prev = sp_repr_prev(child);
+    Inkscape::XML::Node *const prev = sp_repr_prev(child);
 
     if (prev == ref) { return; }
 
-    SPRepr *next;
+    Inkscape::XML::Node *next;
 
     /* Remove from old position. */
     next=child->next();
@@ -371,7 +371,7 @@ void SimpleNode::changeOrder(SPRepr *child, SPRepr *ref) {
         _logger->notifyChildOrderChanged(*this, *child, prev, ref);
     }
 
-    for ( SPReprListener *listener = _listeners ;
+    for ( Inkscape::XML::NodeListener *listener = _listeners ;
           listener ; listener = listener->next )
     {
         if (listener->vector->order_changed) {
@@ -386,8 +386,8 @@ void SimpleNode::setPosition(int pos) {
     // a position beyond the end of the list means the end of the list;
     // a negative position is the same as an infinitely large position
 
-    SPRepr *ref=NULL;
-    for ( SPRepr *sibling = _parent->firstChild() ;
+    Inkscape::XML::Node *ref=NULL;
+    for ( Inkscape::XML::Node *sibling = _parent->firstChild() ;
           sibling && pos ; sibling = sibling->next() )
     {
         if ( sibling != this ) {
@@ -399,15 +399,15 @@ void SimpleNode::setPosition(int pos) {
     _parent->changeOrder(this, ref);
 }
 
-void SimpleNode::synthesizeEvents(SPReprEventVector const *vector, void *data) {
+void SimpleNode::synthesizeEvents(Inkscape::XML::NodeEventVector const *vector, void *data) {
     if (vector->attr_changed) {
-        for (SPReprAttr *attr = this->_attributes ; attr ; attr = attr->next ) {
+        for (Inkscape::XML::AttributeRecord *attr = this->_attributes ; attr ; attr = attr->next ) {
             vector->attr_changed(this, g_quark_to_string(attr->key), NULL, attr->value, false, data);
         }
     }
     if (vector->child_added) {
-        SPRepr *ref = NULL;
-        for ( SPRepr *child = this->_first_child ;
+        Inkscape::XML::Node *ref = NULL;
+        for ( Inkscape::XML::Node *child = this->_first_child ;
               child ; child = child->next() )
         {
             vector->child_added(this, child, ref, data);
@@ -419,10 +419,10 @@ void SimpleNode::synthesizeEvents(SPReprEventVector const *vector, void *data) {
     }
 }
 
-void SimpleNode::addListener(SPReprEventVector const *vector, void *data) {
+void SimpleNode::addListener(Inkscape::XML::NodeEventVector const *vector, void *data) {
     g_assert(vector);
 
-    SPReprListener *listener = new SPReprListener(vector, data);
+    Inkscape::XML::NodeListener *listener = new Inkscape::XML::NodeListener(vector, data);
 
     if (_last_listener) {
         _last_listener->next = listener;
@@ -433,8 +433,8 @@ void SimpleNode::addListener(SPReprEventVector const *vector, void *data) {
 }
 
 void SimpleNode::removeListenerByData(void *data) {
-    SPReprListener *prev = NULL;
-    for (SPReprListener *rl = _listeners; rl != NULL; rl = rl->next) {
+    Inkscape::XML::NodeListener *prev = NULL;
+    for (Inkscape::XML::NodeListener *rl = _listeners; rl != NULL; rl = rl->next) {
         if (rl->data == data) {
             if (prev) {
                 prev->next = rl->next;
@@ -450,39 +450,39 @@ void SimpleNode::removeListenerByData(void *data) {
     }
 }
 
-SPRepr *SimpleNode::root() {
-    SPRepr *parent=this;
+Inkscape::XML::Node *SimpleNode::root() {
+    Inkscape::XML::Node *parent=this;
     while (parent->parent()) {
         parent = parent->parent();
     }
 
-    if ( parent->type() == SP_XML_DOCUMENT_NODE ) {
-        for ( SPRepr *child = _document->firstChild() ;
+    if ( parent->type() == Inkscape::XML::DOCUMENT_NODE ) {
+        for ( Inkscape::XML::Node *child = _document->firstChild() ;
               child ; child = child->next() )
         {
-            if ( child->type() == SP_XML_ELEMENT_NODE ) {
+            if ( child->type() == Inkscape::XML::ELEMENT_NODE ) {
                 return child;
             }
         }
         return NULL;
-    } else if ( parent->type() == SP_XML_ELEMENT_NODE ) {
+    } else if ( parent->type() == Inkscape::XML::ELEMENT_NODE ) {
         return parent;
     } else {
         return NULL;
     }
 }
 
-void SimpleNode::mergeFrom(SPRepr const *src, gchar const *key) {
+void SimpleNode::mergeFrom(Inkscape::XML::Node const *src, gchar const *key) {
     g_return_if_fail(src != NULL);
     g_return_if_fail(key != NULL);
 
     setContent(src->content());
 
-    for ( SPRepr const *child = src->firstChild() ; child != NULL ; child = child->next() )
+    for ( Inkscape::XML::Node const *child = src->firstChild() ; child != NULL ; child = child->next() )
     {
         gchar const *id = child->attribute(key);
         if (id) {
-            SPRepr *rch=sp_repr_lookup_child(this, key, id);
+            Inkscape::XML::Node *rch=sp_repr_lookup_child(this, key, id);
             if (rch) {
                 rch->mergeFrom(child, key);
             } else {
@@ -491,13 +491,13 @@ void SimpleNode::mergeFrom(SPRepr const *src, gchar const *key) {
                 rch->release();
             }
         } else {
-            SPRepr *rch=child->duplicate();
+            Inkscape::XML::Node *rch=child->duplicate();
             appendChild(rch);
             rch->release();
         }
     }
 
-    for ( SPReprAttr const *attribute = src->attributeList() ; attribute ; attribute = attribute->next ) {
+    for ( Inkscape::XML::AttributeRecord const *attribute = src->attributeList() ; attribute ; attribute = attribute->next ) {
         setAttribute(g_quark_to_string(attribute->key), attribute->value);
     }
 }

@@ -38,8 +38,8 @@
 static void sp_star_class_init (SPStarClass *klass);
 static void sp_star_init (SPStar *star);
 
-static void sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr);
-static SPRepr *sp_star_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_star_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
+static Inkscape::XML::Node *sp_star_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 static void sp_star_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_star_update (SPObject *object, SPCtx *ctx, guint flags);
 
@@ -113,7 +113,7 @@ sp_star_init (SPStar * star)
 }
 
 static void
-sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr)
+sp_star_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
 	if (((SPObjectClass *) parent_class)->build)
 		((SPObjectClass *) parent_class)->build (object, document, repr);
@@ -130,8 +130,8 @@ sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "inkscape:randomized");
 }
 
-static SPRepr *
-sp_star_write (SPObject *object, SPRepr *repr, guint flags)
+static Inkscape::XML::Node *
+sp_star_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
 	SPStar *star = SP_STAR (object);
 

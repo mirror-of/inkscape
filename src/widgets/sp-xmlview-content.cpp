@@ -32,11 +32,11 @@ static void sp_xmlview_content_destroy (GtkObject * object);
 
 void sp_xmlview_content_changed (GtkTextBuffer *tb, SPXMLViewContent *text);
 
-static void event_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data);
+static void event_content_changed (Inkscape::XML::Node * repr, const gchar * old_content, const gchar * new_content, gpointer data);
 
 static GtkTextViewClass * parent_class = NULL;
 
-static SPReprEventVector repr_events = {
+static Inkscape::XML::NodeEventVector repr_events = {
 	NULL, /* child_added */
 	NULL, /* child_removed */
 	NULL, /* attr_changed */
@@ -45,7 +45,7 @@ static SPReprEventVector repr_events = {
 };
 
 GtkWidget *
-sp_xmlview_content_new (SPRepr * repr)
+sp_xmlview_content_new (Inkscape::XML::Node * repr)
 {
 	GtkTextBuffer *tb;
 	SPXMLViewContent *text;
@@ -65,7 +65,7 @@ sp_xmlview_content_new (SPRepr * repr)
 }
 
 void
-sp_xmlview_content_set_repr (SPXMLViewContent * text, SPRepr * repr)
+sp_xmlview_content_set_repr (SPXMLViewContent * text, Inkscape::XML::Node * repr)
 {
 	if ( repr == text->repr ) return;
 	if (text->repr) {
@@ -135,7 +135,7 @@ sp_xmlview_content_destroy (GtkObject * object)
 }
 
 void
-event_content_changed (SPRepr * repr, const gchar * old_content, const gchar * new_content, gpointer data)
+event_content_changed (Inkscape::XML::Node * repr, const gchar * old_content, const gchar * new_content, gpointer data)
 {
 	SPXMLViewContent * text;
 	text = SP_XMLVIEW_CONTENT (data);

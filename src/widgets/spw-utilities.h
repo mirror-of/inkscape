@@ -14,7 +14,7 @@
 
 /* The following are helper routines for making Inkscape dialog widgets.
    All are prefixed with spw_, short for inkscape_widget.  This is not to
-   be confused with SPWidget, an existing datatype associated with SPRepr/
+   be confused with SPWidget, an existing datatype associated with Inkscape::XML::Node/
    SPObject, that reacts to modification.
 */
 

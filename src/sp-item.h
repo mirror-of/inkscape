@@ -182,8 +182,8 @@ void sp_item_adjust_pattern (SPItem *item, /* NR::Matrix const &premul, */ NR::M
 void sp_item_adjust_gradient (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
 void sp_item_adjust_stroke (SPItem *item, gdouble ex);
 
-void sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix const *transform, NR::Matrix const *adv = NULL);
-void sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix const *adv = NULL);
+void sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NRMatrix const *transform, NR::Matrix const *adv = NULL);
+void sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NR::Matrix const &transform, NR::Matrix const *adv = NULL);
 
 void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform);
 

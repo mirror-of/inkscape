@@ -22,15 +22,15 @@ namespace Inkscape {
 
 namespace XML {
 
-struct SimpleDocument : public SimpleNode, public SPReprDoc {
+struct SimpleDocument : public SimpleNode, public Inkscape::XML::Document {
     explicit SimpleDocument(int code) : SimpleNode(code) {
         _initBindings();
     }
 
-    SPReprType type() const { return SP_XML_DOCUMENT_NODE; }
+    Inkscape::XML::NodeType type() const { return Inkscape::XML::DOCUMENT_NODE; }
 
 protected:
-    SimpleDocument(SimpleDocument const &doc) : SPRepr(), SimpleNode(doc), SPReprDoc() {
+    SimpleDocument(SimpleDocument const &doc) : Inkscape::XML::Node(), SimpleNode(doc), Inkscape::XML::Document() {
         _initBindings();
     }
 

@@ -187,7 +187,7 @@ void TileDialogImpl::Grid_Arrange ()
     rev = g_slist_sort(rev, (GCompareFunc) sp_item_repr_compare_position);
     int noPerRow = NoPerRowSpinner.get_value_as_int();
     for (; rev != NULL; rev = rev->next) {
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) rev->data);
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) rev->data);
             SPItem *item=SP_ITEM(rev->data);
             NRRect b;
             sp_item_bbox_desktop((SPItem *) rev->data, &b);
