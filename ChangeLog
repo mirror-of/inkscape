@@ -1,5 +1,11 @@
 2004-02-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile.am (inkscapelib_src):
+	marker-status.h, marker-status.cpp: New files.
+	* src/style.cpp, src/dialogs/stroke-style.cpp:
+	Change marker debugging status messages from conditional g_message
+	to unconditional marker_status call.
+
 	* src/dialogs/stroke-style.cpp (marker_id_to_string):
 	Remove unused function.
 

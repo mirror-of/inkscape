@@ -49,6 +49,7 @@
 #include "../gradient-chemistry.h"
 #include "../document.h"
 #include "../desktop-handles.h"
+#include "../marker-status.h"
 #include "../selection.h"
 #include "../sp-item.h"
 #include "../inkscape.h"
@@ -1819,7 +1820,7 @@ sp_stroke_style_update_marker_buttons ( SPWidget *spw,
     if ( marker_valid ) {
         gchar *widget_name;
         widget_name = g_strconcat(stock_type, ":", marker_type, NULL);
-        g_message("Widget name is '%s'", widget_name);
+        marker_status("Widget name is '%s'", widget_name);
         tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), widget_name));
         g_free(widget_name);
     }

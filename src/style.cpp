@@ -32,6 +32,7 @@
 #include "helper/canvas-bpath.h"
 #include "attributes.h"
 #include "document.h"
+#include "marker-status.h"
 #include "uri-references.h"
 #include "sp-paint-server.h"
 #include "style.h"
@@ -744,47 +745,40 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         g_warning ("Unimplemented style property SP_PROP_IMAGE_RENDERING: value: %s", val);
         break;
     case SP_PROP_MARKER:
-            /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+        /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
         /* style->marker[SP_MARKER_LOC] = g_quark_from_string(val); */
-#ifdef DEBUG_MARKERS
-      g_message("Setting SP_PROP_MARKER");
-#endif
+	marker_status("Setting SP_PROP_MARKER");
         if (!style->marker[SP_MARKER_LOC].set) {
             g_free (style->marker[SP_MARKER_LOC].value);
             style->marker[SP_MARKER_LOC].value = g_strdup (val);
             style->marker[SP_MARKER_LOC].set = TRUE;
             style->marker[SP_MARKER_LOC].inherit = (val && !strcmp (val, "inherit"));
         }
-                break;
-     case SP_PROP_MARKER_START:
+	break;
+
+    case SP_PROP_MARKER_START:
         /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-#ifdef DEBUG_MARKERS
-      g_message("Setting SP_PROP_MARKER_START");
-#endif
+	marker_status("Setting SP_PROP_MARKER_START");
         if (!style->marker[SP_MARKER_LOC_START].set) {
             g_free (style->marker[SP_MARKER_LOC_START].value);
             style->marker[SP_MARKER_LOC_START].value = g_strdup (val);
             style->marker[SP_MARKER_LOC_START].set = TRUE;
             style->marker[SP_MARKER_LOC_START].inherit = (val && !strcmp (val, "inherit"));
         }
-                break;
-     case SP_PROP_MARKER_MID:
-            /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-#ifdef DEBUG_MARKERS
-      g_message("Setting SP_PROP_MARKER_MID");
-#endif
+	break;
+    case SP_PROP_MARKER_MID:
+        /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+	marker_status("Setting SP_PROP_MARKER_MID");
         if (!style->marker[SP_MARKER_LOC_MID].set) {
             g_free (style->marker[SP_MARKER_LOC_MID].value);
             style->marker[SP_MARKER_LOC_MID].value = g_strdup (val);
             style->marker[SP_MARKER_LOC_MID].set = TRUE;
             style->marker[SP_MARKER_LOC_MID].inherit = (val && !strcmp (val, "inherit"));
         }
-                break;
-     case SP_PROP_MARKER_END:
-            /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-#ifdef DEBUG_MARKERS
-      g_message("Setting SP_PROP_MARKER_END");
-#endif
+	break;
+    case SP_PROP_MARKER_END:
+        /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+	marker_status("Setting SP_PROP_MARKER_END");
         if (!style->marker[SP_MARKER_LOC_END].set) {
             g_free (style->marker[SP_MARKER_LOC_END].value);
             style->marker[SP_MARKER_LOC_END].value = g_strdup (val);
@@ -792,7 +786,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
             style->marker[SP_MARKER_LOC_END].inherit = (val && !strcmp (val, "inherit"));
         }
         break;
-       
+
     case SP_PROP_SHAPE_RENDERING:
         g_warning ("Unimplemented style property SP_PROP_SHAPE_RENDERING: value: %s", val);
         break;
@@ -1265,9 +1259,7 @@ sp_style_write_string (SPStyle *style)
     p += sp_style_write_ienum (p, c + BMAX - p, "stroke-linecap", enum_stroke_linecap, &style->stroke_linecap, NULL, SP_STYLE_FLAG_IFSET);
     p += sp_style_write_ienum (p, c + BMAX - p, "stroke-linejoin", enum_stroke_linejoin, &style->stroke_linejoin, NULL, SP_STYLE_FLAG_IFSET);
 
-#ifdef DEBUG_MARKERS
-    g_message ("sp_style_write_string:  Writing markers");
-#endif
+    marker_status("sp_style_write_string:  Writing markers");
     if (&style->marker[SP_MARKER_LOC].value != NULL) {
         p += g_snprintf (p, c + BMAX - p, "marker:%s", style->marker[SP_MARKER_LOC].value);
     }
@@ -1366,9 +1358,7 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
     p += sp_style_write_iscale24 (p, c + BMAX - p, "stroke-opacity", &from->stroke_opacity, &to->stroke_opacity, SP_STYLE_FLAG_IFDIFF);
 
     /* markers */
-#ifdef DEBUG_MARKERS
-    g_message("sp_style_write_difference:  Writing markers");
-#endif
+    marker_status("sp_style_write_difference:  Writing markers");
     if (from->marker[SP_MARKER_LOC].value != NULL) {
         p += g_snprintf (p, c + BMAX - p, "marker:%s",       from->marker[SP_MARKER_LOC].value);
     }

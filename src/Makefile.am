@@ -75,6 +75,7 @@ inkscapelib_src = \
 	sp-animation.cpp sp-animation.h \
 	\
 	color.cpp color.h \
+	marker-status.cpp marker-status.h	\
 	style.cpp style.h \
 	\
 	document.cpp document.h document-private.h \
