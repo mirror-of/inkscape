@@ -178,9 +178,9 @@ attempt_command 'underquoted definition of|[\)\#]Extending' \
 	attempt_command '' autoheader
 }
 
+attempt_command '' libtoolize --copy --force
 attempt_command '' $AUTOMAKE --add-missing
 attempt_command '' autoconf
-attempt_command '' libtoolize --copy --force
 attempt_command '^(Please add the files|  codeset|  progtest|from the|or directly|You will also|ftp://ftp.gnu.org|$)' \
 	glib-gettextize --copy --force
 attempt_command '' intltoolize --copy --force --automake
