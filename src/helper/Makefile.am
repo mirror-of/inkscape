@@ -22,7 +22,7 @@ libspchelp_a_SOURCES = \
 	sp-intl.h \
 	helper-forward.h \
 	window.cpp window.h \
-	sp-marshal.c sp-marshal.h \
+	sp-marshal.cpp sp-marshal.h \
 	sp-canvas.cpp sp-canvas.h \
 	sp-canvas-util.cpp sp-canvas-util.h \
 	gnome-utils.cpp gnome-utils.h \
@@ -49,17 +49,17 @@ sp-marshal.h: sp-marshal.list
 	glib-genmarshal --prefix=sp_marshal --header $(srcdir)/sp-marshal.list > tmp.$$$$ && \
 	 mv tmp.$$$$ sp-marshal.h
 
-sp-marshal.c: sp-marshal.list sp-marshal.h
+sp-marshal.cpp: sp-marshal.list sp-marshal.h
 	( echo '#include "helper/sp-marshal.h"' &&	\
 	  glib-genmarshal --prefix=sp_marshal --body $(srcdir)/sp-marshal.list )	\
 	 > tmp.$$$$ &&	\
-	 mv tmp.$$$$ sp-marshal.c
+	 mv tmp.$$$$ sp-marshal.cpp
 
 sp-marshal.c sp-marshal.h: Makefile
 
 EXTRA_DIST = sp-marshal.list
 
-DISTCLEANFILES = sp-marshal.c sp-marshal.h
+DISTCLEANFILES = sp-marshal.cpp sp-marshal.h
 
 bezier_utils_test_SOURCES = bezier-utils-test.cpp
 bezier_utils_test_LDADD = ../libnr/nr-point-fns.o ../libnr/nr-types.o -lglib-2.0
