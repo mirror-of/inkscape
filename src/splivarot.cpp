@@ -171,7 +171,8 @@ sp_selected_path_boolop (bool_op bop)
 			theShapeB->ConvertToShape(theShape,fill_positive);
 		}
 		
-		theShape->Booleen(theShapeA,theShapeB,bop);
+		// les elements arrivent en ordre inverse dans la liste
+		theShape->Booleen(theShapeB,theShapeA,bop);
 		
 		{Shape* swap=theShape;theShape=theShapeA;theShapeA=swap;}
 		curOrig++;
@@ -340,7 +341,19 @@ void sp_selected_path_outline(void)
 		if (curve == NULL) return;
 	}
 	
-Shape::round_power=3;
+	{
+		SPCSSAttr *css;
+		const gchar *val;
+		
+		css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
+		val = sp_repr_css_property (css, "stroke", NULL);
+		
+		if ( strcmp(val,"none") == 0 ) {
+			// pas de stroke pas de chocolat
+			sp_curve_unref (curve);
+			return;
+		}
+	}
 	
 	sp_item_i2root_affine (item, &i2root);
 	style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
@@ -392,7 +405,7 @@ Shape::round_power=3;
 
 		orig->Outline(res,0.5*o_width,o_join,o_butt,o_miter);
 	
-		res->ConvertEvenLines(0.25*o_width);
+		res->ConvertEvenLines(0.1*o_width);
 		res->Simplify(0.05*o_width);
 
 		Shape*  theShape=new Shape;
@@ -498,11 +511,31 @@ void        sp_selected_path_do_offset(bool expand)
 	item = sp_selection_item (selection);
 	
 	if (item == NULL) return;
-	if (!SP_IS_PATH (item)) return;
-	path = SP_PATH (item);
-	curve = sp_shape_get_curve (SP_SHAPE (path));
-	if (curve == NULL) return;
+	if ( !SP_IS_PATH (item) && !SP_IS_TEXT (item) ) return;
+	if ( SP_IS_PATH(item) ) {
+		path = SP_PATH (item);
+		curve = sp_shape_get_curve (SP_SHAPE (path));
+		if (curve == NULL) return;
+	}
+	if ( SP_IS_TEXT(item) ) {
+		curve = sp_text_normalized_bpath (SP_TEXT (item));
+		if (curve == NULL) return;
+	}
 	
+	{
+		SPCSSAttr *css;
+		const gchar *val;
+		
+		css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
+		val = sp_repr_css_property (css, "stroke", NULL);
+		
+		if ( strcmp(val,"none") == 0 ) {
+			// pas de stroke pas de chocolat
+			sp_curve_unref (curve);
+			return;
+		}
+	}
+
 	sp_item_i2root_affine (item, &i2root);
 	style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
 	
@@ -556,7 +589,7 @@ void        sp_selected_path_do_offset(bool expand)
 		orig->ConvertWithBackData(1.0);
 		orig->Fill(theShape,0);
 		
-		css = sp_repr_css_attr (SP_OBJECT_REPR (path), "style");
+		css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
 		val = sp_repr_css_property (css, "fill-rule", NULL);
 		if ( val && strcmp (val,"nonzero") == 0 ) {
 			theRes->ConvertToShape(theShape,fill_nonZero);
@@ -575,6 +608,9 @@ void        sp_selected_path_do_offset(bool expand)
 		} else {
 			res->OutsideOutline(orig,-0.5*o_width,o_join,o_butt,o_miter);
 		}
+		orig->ConvertEvenLines(0.1*o_width);
+		orig->Simplify(0.05*o_width);
+
 		orig->ConvertWithBackData(1.0);
 		orig->Fill(theShape,0);
 		theRes->ConvertToShape(theShape,fill_positive);
@@ -585,8 +621,6 @@ void        sp_selected_path_do_offset(bool expand)
 		delete theShape;
 		delete theRes;
 
-		res->ConvertEvenLines(1.0);
-		res->Simplify(0.5);
 	}
 	
 	sp_curve_unref (curve);
@@ -660,10 +694,16 @@ void sp_selected_path_simplify(void)
 	item = sp_selection_item (selection);
 	
 	if (item == NULL) return;
-	if (!SP_IS_PATH (item)) return;
-	path = SP_PATH (item);
-	curve = sp_shape_get_curve (SP_SHAPE (path));
-	if (curve == NULL) return;
+	if ( !SP_IS_PATH (item) && !SP_IS_TEXT (item) ) return;
+	if ( SP_IS_PATH(item) ) {
+		path = SP_PATH (item);
+		curve = sp_shape_get_curve (SP_SHAPE (path));
+		if (curve == NULL) return;
+	}
+	if ( SP_IS_TEXT(item) ) {
+		curve = sp_text_normalized_bpath (SP_TEXT (item));
+		if (curve == NULL) return;
+	}
 		
 	sp_item_i2root_affine (item, &i2root);
 	style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
