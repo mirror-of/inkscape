@@ -1907,7 +1907,7 @@ static NR::Point radial_to_xy (radial const *r, NR::Point const *origin)
 	if (r->a == HUGE_VAL) {
 		return *origin;
 	} else {
-		return *origin + r->r*NR::Point(cos(r->a), sin(r->a));
+		return *origin + (r->r)*NR::Point(cos(r->a), sin(r->a));
 	}
 }
 
@@ -1924,8 +1924,10 @@ point_line_closest (NR::Point *p, double a, NR::Point *closest)
 	if (a == HUGE_VAL) { // vertical
 		*closest = NR::Point(0, (*p)[NR::Y]);
 	} else {
-		*closest = NR::Point(( ( a * (*p)[NR::Y] + (*p)[NR::X]) / (a*a + 1) ),
-				     a * (*closest)[NR::X]);
+		//		*closest = NR::Point(( ( a * (*p)[NR::Y] + (*p)[NR::X]) / (a*a + 1) ),
+		//				     a * (*closest)[NR::X]);
+		(*closest)[NR::X] = ( a * (*p)[NR::Y] + (*p)[NR::X]) / (a*a + 1);
+		(*closest)[NR::Y] = a * (*closest)[NR::X];
 	}
 }
 
@@ -1943,7 +1945,7 @@ point_line_distance (NR::Point *p, double a)
 }
 
 
-/* fixme: This goes to "moved" event? */
+/* fixme: This goes to "moved" event? (lauris) */
 static gboolean
 node_request (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 {
@@ -1999,7 +2001,7 @@ node_request (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 			// mouse point relative to the node's original pos
 			pr = (*p) - n->origin;
 
-			// distances to the four lines (two handles and to perpendiculars)
+			// distances to the four lines (two handles and two perpendiculars)
 			d_an = point_line_distance(&pr, an);
 			d_na = point_line_distance(&pr, na);
 			d_ap = point_line_distance(&pr, ap);
