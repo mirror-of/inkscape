@@ -108,7 +108,7 @@ msgstr ""
 
 #: src/desktop.cpp:1456
 msgid "No previous zoom."
-msgstr "Plus de zoom arrière."
+msgstr "Pas de zoom arrière."
 
 #: src/desktop.cpp:1485
 msgid "No next zoom."
