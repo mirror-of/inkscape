@@ -264,6 +264,7 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdou
 	seltrans->point = p;
 
 	seltrans->snap_points = selection->getSnapPoints ();
+	seltrans->bbox_points = selection->getBBoxPoints ();
 
 	seltrans->opposit = ( seltrans->box.min()
 			      + ( seltrans->box.dimensions()
