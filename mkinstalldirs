@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# automake 1.8 stopped including "mkinstalldirs", but intltool still
+# uses it.  As a result, we'll do our own trimmed-down version of it,
+# which will tide intltool over until they fix their stuff.  As of
+# 0.31, intltool has not fixed their problem.  2004-07-10
+#
+mkdir -p -- . "$@"

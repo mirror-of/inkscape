@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.39\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-06 20:17+0200\n"
+"POT-Creation-Date: 2004-07-10 01:28-0700\n"
 "PO-Revision-Date: 2004-06-29 11:07+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -19,8 +19,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: inkscape.desktop.in.h:1
-msgid "Inkscape"
-msgstr "Inkscape"
+#, fuzzy
+msgid "Inkscape SVG Vector Illustrator"
+msgstr "SVG-Vektorillustrator"
 
 #: inkscape.desktop.in.h:2
 msgid "SVG Vector Illustrator"
@@ -46,25 +47,26 @@ msgstr "%s bei %s"
 msgid "Move %s"
 msgstr "Verschiebe %s"
 
-#: src/desktop.cpp:864
+#: src/desktop.cpp:878
 msgid "Zoom drawing if window size changes"
 msgstr "Zeichnungsgröße ändern, sobald die Fenstergröße verändert wird"
 
-#: src/desktop.cpp:886 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
+#: src/desktop.cpp:900 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
 msgid "Zoom"
 msgstr "Größenfaktor"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:910
+#: src/desktop.cpp:924
 msgid "Cursor coordinates"
 msgstr "Zeigerkoordinaten"
 
-#: src/desktop.cpp:917
-msgid "Current layer"
-msgstr ""
+#: src/desktop.cpp:931
+#, fuzzy
+msgid "Active group"
+msgstr "Aktiv"
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:925
+#: src/desktop.cpp:939
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
@@ -72,17 +74,17 @@ msgstr ""
 "Willkommen zu Inkscape! Formen- und Freihandwerkzeuge erstellen Objekte; das "
 "Auswahlwerkzeug (Pfeil) verschiebt und verändert."
 
-#: src/desktop.cpp:964
+#: src/desktop.cpp:978
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr "%s: %d - Inkscape"
 
-#: src/desktop.cpp:966
+#: src/desktop.cpp:980
 #, c-format
 msgid "%s - Inkscape"
 msgstr "%s - Inkscape"
 
-#: src/desktop.cpp:1108
+#: src/desktop.cpp:1122
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -95,11 +97,11 @@ msgstr ""
 "\n"
 "Wenn Sie schließen, ohne zu speichern, dann gehen Ihre Änderungen verloren."
 
-#: src/desktop.cpp:1122 src/desktop.cpp:1181
+#: src/desktop.cpp:1136 src/desktop.cpp:1195
 msgid "Close _without saving"
 msgstr "Schließen, _ohne zu speichern"
 
-#: src/desktop.cpp:1166
+#: src/desktop.cpp:1180
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -112,26 +114,26 @@ msgstr ""
 "\n"
 "Möchten Sie das Dokument noch in einem anderen Format speichern?"
 
-#: src/desktop.cpp:1566
+#: src/desktop.cpp:1577
 msgid "No previous zoom."
 msgstr "Kein vorheriger Größenfaktor."
 
-#: src/desktop.cpp:1595
+#: src/desktop.cpp:1606
 msgid "No next zoom."
 msgstr "Kein nächster Größenfaktor."
 
 #. Page page
-#: src/desktop.cpp:1993 src/dialogs/align.cpp:445
-#: src/dialogs/desktop-properties.cpp:866 src/dialogs/export.cpp:113
+#: src/desktop.cpp:2004 src/dialogs/align.cpp:445
+#: src/dialogs/desktop-properties.cpp:871 src/dialogs/export.cpp:113
 msgid "Page"
 msgstr "Seite"
 
 # not sure here -cm-
-#: src/desktop.cpp:1997 src/dialogs/align.cpp:448 src/dialogs/export.cpp:113
+#: src/desktop.cpp:2008 src/dialogs/align.cpp:448 src/dialogs/export.cpp:113
 msgid "Drawing"
 msgstr "Zeichnung"
 
-#: src/desktop.cpp:2001 src/dialogs/align.cpp:451 src/dialogs/export.cpp:113
+#: src/desktop.cpp:2012 src/dialogs/align.cpp:451 src/dialogs/export.cpp:113
 msgid "Selection"
 msgstr "Auswahl"
 
@@ -237,171 +239,171 @@ msgid "Smallest item"
 msgstr "Kleinstes Objekt"
 
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:773
+#: src/dialogs/desktop-properties.cpp:778
 msgid "Grid"
 msgstr "Raster"
 
 #. Checkbuttons
-#: src/dialogs/desktop-properties.cpp:781
+#: src/dialogs/desktop-properties.cpp:786
 msgid "Show grid"
 msgstr "Raster anzeigen"
 
-#: src/dialogs/desktop-properties.cpp:782
+#: src/dialogs/desktop-properties.cpp:787
 msgid "Snap to grid"
 msgstr "Im Raster einrasten"
 
-#: src/dialogs/desktop-properties.cpp:783
+#: src/dialogs/desktop-properties.cpp:788
 #, fuzzy
 msgid "Snap bounding boxes to grid"
 msgstr "Umrandungs-Box am Raster einrasten"
 
-#: src/dialogs/desktop-properties.cpp:784
+#: src/dialogs/desktop-properties.cpp:789
 #, fuzzy
 msgid "Snap points to grid"
 msgstr "noten (Punkte) am Raster einrasten"
 
-#: src/dialogs/desktop-properties.cpp:802
+#: src/dialogs/desktop-properties.cpp:807
 msgid "Grid units:"
 msgstr "Rastereinheit:"
 
-#: src/dialogs/desktop-properties.cpp:804
+#: src/dialogs/desktop-properties.cpp:809
 msgid "Origin X:"
 msgstr "Ursprung X:"
 
-#: src/dialogs/desktop-properties.cpp:807
+#: src/dialogs/desktop-properties.cpp:812
 msgid "Origin Y:"
 msgstr "Ursprung Y:"
 
-#: src/dialogs/desktop-properties.cpp:810
+#: src/dialogs/desktop-properties.cpp:815
 msgid "Spacing X:"
 msgstr "Abstand X:"
 
-#: src/dialogs/desktop-properties.cpp:813
+#: src/dialogs/desktop-properties.cpp:818
 msgid "Spacing Y:"
 msgstr "Abstand Y:"
 
-#: src/dialogs/desktop-properties.cpp:817
-#: src/dialogs/desktop-properties.cpp:850
+#: src/dialogs/desktop-properties.cpp:822
+#: src/dialogs/desktop-properties.cpp:855
 msgid "Snap units:"
 msgstr "Einrasteinheit:"
 
-#: src/dialogs/desktop-properties.cpp:820
-#: src/dialogs/desktop-properties.cpp:853
+#: src/dialogs/desktop-properties.cpp:825
+#: src/dialogs/desktop-properties.cpp:858
 msgid "Snap distance:"
 msgstr "Einrastabstand:"
 
-#: src/dialogs/desktop-properties.cpp:823
+#: src/dialogs/desktop-properties.cpp:828
 msgid "Grid color:"
 msgstr "Rasterfarbe:"
 
-#: src/dialogs/desktop-properties.cpp:824
+#: src/dialogs/desktop-properties.cpp:829
 msgid "Grid color"
 msgstr "Rasterfarbe"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:828
+#: src/dialogs/desktop-properties.cpp:833
 msgid "Guides"
 msgstr "Führungen"
 
-#: src/dialogs/desktop-properties.cpp:836
+#: src/dialogs/desktop-properties.cpp:841
 msgid "Show guides"
 msgstr "Führungen anzeigen"
 
-#: src/dialogs/desktop-properties.cpp:837
+#: src/dialogs/desktop-properties.cpp:842
 msgid "Snap to guides"
 msgstr "In Führungen einrasten"
 
-#: src/dialogs/desktop-properties.cpp:838
+#: src/dialogs/desktop-properties.cpp:843
 #, fuzzy
 msgid "Snap bounding boxes to guides"
 msgstr "Umrandungs-Box an Führungen einrasten"
 
-#: src/dialogs/desktop-properties.cpp:839
+#: src/dialogs/desktop-properties.cpp:844
 #, fuzzy
 msgid "Snap points to guides"
 msgstr "Im Raster einrasten"
 
-#: src/dialogs/desktop-properties.cpp:857
+#: src/dialogs/desktop-properties.cpp:862
 #, fuzzy
 msgid "Guide color:"
 msgstr "Führungsfarbe:"
 
-#: src/dialogs/desktop-properties.cpp:858
+#: src/dialogs/desktop-properties.cpp:863
 msgid "Guideline color"
 msgstr "Farbe der Führungslinien"
 
-#: src/dialogs/desktop-properties.cpp:860
+#: src/dialogs/desktop-properties.cpp:865
 msgid "Highlight color:"
 msgstr "Hervorhebungsfarbe:"
 
-#: src/dialogs/desktop-properties.cpp:861
+#: src/dialogs/desktop-properties.cpp:866
 msgid "Highlighted guideline color"
 msgstr "Farbe der hervorgehobenen Führungslinien"
 
-#: src/dialogs/desktop-properties.cpp:875
+#: src/dialogs/desktop-properties.cpp:880
 msgid "Background (also for export):"
 msgstr "Hintergrund (auch für das Exportieren)"
 
-#: src/dialogs/desktop-properties.cpp:876
+#: src/dialogs/desktop-properties.cpp:881
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#: src/dialogs/desktop-properties.cpp:880
+#: src/dialogs/desktop-properties.cpp:885
 msgid "Show canvas border"
 msgstr "Rand der Zeichenfläche anzeigen"
 
-#: src/dialogs/desktop-properties.cpp:883
+#: src/dialogs/desktop-properties.cpp:888
 msgid "Border on top of drawing"
 msgstr "Rand am oberen Ende der Zeichnung"
 
-#: src/dialogs/desktop-properties.cpp:893
+#: src/dialogs/desktop-properties.cpp:898
 msgid "Border color:"
 msgstr "Randfarbe:"
 
-#: src/dialogs/desktop-properties.cpp:894
+#: src/dialogs/desktop-properties.cpp:899
 msgid "Canvas border color"
 msgstr "Randfarbe der Zeichenfläche"
 
-#: src/dialogs/desktop-properties.cpp:910
+#: src/dialogs/desktop-properties.cpp:915
 msgid "Paper size:"
 msgstr "Papiergröße:"
 
-#: src/dialogs/desktop-properties.cpp:934 src/dialogs/export.cpp:113
+#: src/dialogs/desktop-properties.cpp:939 src/dialogs/export.cpp:113
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: src/dialogs/desktop-properties.cpp:945
+#: src/dialogs/desktop-properties.cpp:950
 msgid "Paper orientation:"
 msgstr "Papierausrichtung:"
 
-#: src/dialogs/desktop-properties.cpp:957
+#: src/dialogs/desktop-properties.cpp:962
 msgid "Landscape"
 msgstr "Querformat"
 
-#: src/dialogs/desktop-properties.cpp:963
+#: src/dialogs/desktop-properties.cpp:968
 msgid "Portrait"
 msgstr "Hochformat"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:972
+#: src/dialogs/desktop-properties.cpp:977
 msgid "Custom paper"
 msgstr "Benutzerdefiniertes Papier"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:984 src/dialogs/export.cpp:239
+#: src/dialogs/desktop-properties.cpp:989 src/dialogs/export.cpp:239
 #: src/dialogs/transformation.cpp:519 src/dialogs/transformation.cpp:716
 msgid "Units:"
 msgstr "Einheit:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:986 src/dialogs/export.cpp:277
+#: src/dialogs/desktop-properties.cpp:991 src/dialogs/export.cpp:277
 #: src/dialogs/export.cpp:384 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
 #: src/toolbox.cpp:1753
 msgid "Width:"
 msgstr "Breite:"
 
-#: src/dialogs/desktop-properties.cpp:1008 src/dialogs/export.cpp:293
+#: src/dialogs/desktop-properties.cpp:1013 src/dialogs/export.cpp:293
 #: src/dialogs/export.cpp:399 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
@@ -411,20 +413,20 @@ msgstr "Höhe:"
 #.
 #. * Ownership metadata tab
 #.
-#: src/dialogs/desktop-properties.cpp:1034
+#: src/dialogs/desktop-properties.cpp:1039
 msgid "Metadata"
 msgstr ""
 
 #. add license selector pull-down
-#: src/dialogs/desktop-properties.cpp:1054
+#: src/dialogs/desktop-properties.cpp:1058
 msgid "License"
 msgstr "Nutzungsbedingungen - Lizenz"
 
-#: src/dialogs/desktop-properties.cpp:1084
+#: src/dialogs/desktop-properties.cpp:1088
 msgid "Proprietary"
 msgstr "Proprietär"
 
-#: src/dialogs/desktop-properties.cpp:1579
+#: src/dialogs/desktop-properties.cpp:1598
 msgid "Close"
 msgstr "Schließen"
 
@@ -456,7 +458,7 @@ msgstr "visuelle Auswahlmarkierung für Objekte:"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
 #: src/dialogs/display-settings.cpp:420 src/dialogs/display-settings.cpp:1206
-#: src/interface.cpp:996 src/verbs.cpp:797
+#: src/interface.cpp:1008 src/verbs.cpp:797
 msgid "None"
 msgstr "Deaktiviert"
 
@@ -1101,29 +1103,29 @@ msgstr ""
 msgid "Export"
 msgstr "Exportieren"
 
-#: src/dialogs/export.cpp:786
+#: src/dialogs/export.cpp:797
 msgid "You have to enter a filename"
 msgstr "Sie müssen einen Dateinamen angeben"
 
-#: src/dialogs/export.cpp:791
+#: src/dialogs/export.cpp:802
 msgid "The chosen area to be exported is invalid"
 msgstr "Der zum Exportieren gewählte Bereich ist ungültig"
 
-#: src/dialogs/export.cpp:798
+#: src/dialogs/export.cpp:809
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr ""
 
-#: src/dialogs/export.cpp:812
+#: src/dialogs/export.cpp:823
 msgid "Export in progress"
 msgstr "Exportieren läuft"
 
-#: src/dialogs/export.cpp:818
+#: src/dialogs/export.cpp:829
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Exportiere [%d x %d] %s"
 
-#: src/dialogs/export.cpp:885
+#: src/dialogs/export.cpp:910
 msgid "Select a filename for exporting"
 msgstr "Wählen Sie einen Namen für die zu exportierende Datei"
 
@@ -1726,7 +1728,7 @@ msgid "XML fragment for the RDF 'License' section."
 msgstr ""
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
-#: src/widgets/paint-selector.cpp:832
+#: src/widgets/paint-selector.cpp:849
 msgid "No document selected"
 msgstr "Kein Dokument gewählt"
 
@@ -1923,15 +1925,15 @@ msgstr "Attribut festlegen"
 msgid "Attribute value"
 msgstr "Attributwert"
 
-#: src/dialogs/xml-tree.cpp:1171
+#: src/dialogs/xml-tree.cpp:1172
 msgid "New element node..."
 msgstr "Neuer Elementknoten..."
 
-#: src/dialogs/xml-tree.cpp:1192
+#: src/dialogs/xml-tree.cpp:1193
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/dialogs/xml-tree.cpp:1198
+#: src/dialogs/xml-tree.cpp:1199
 msgid "Create"
 msgstr "Erstellen"
 
@@ -1969,19 +1971,19 @@ msgstr "Pfad (%i Knoten)"
 msgid "Closing path."
 msgstr "Geschlossener Pfad."
 
-#: src/draw-context.cpp:814
+#: src/draw-context.cpp:810
 #, c-format
 msgid "Creating anchor at (%g,%g)"
 msgstr "Erzeuge Verankerung bei (%g,%g)"
 
 # !!!
 #. Write curves to object
-#: src/draw-context.cpp:1066
+#: src/draw-context.cpp:1060
 msgid "Finishing freehand"
 msgstr "Fertig mit Freihand"
 
 # !!!
-#: src/draw-context.cpp:1834
+#: src/draw-context.cpp:1826
 msgid "Finishing pen"
 msgstr "Fertig mit Füller"
 
@@ -2015,7 +2017,7 @@ msgstr ""
 "Clicken um die Füllfarbe aufzunehmen, Umschalt+Click um die Umrißfarbe "
 "aufzunehmen. Ziehen um die Durchschnittsfarbe innerhalb des Radius zu wählen"
 
-#: src/extension/init.cpp:105
+#: src/extension/init.cpp:106
 #, c-format
 msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
@@ -2515,30 +2517,30 @@ msgstr "_Pfad"
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: src/interface.cpp:934
-msgid "Edit parent layer"
+#: src/interface.cpp:949
+#, fuzzy, c-format
+msgid "Edit group #%s"
+msgstr "Bearbeiten"
+
+#: src/interface.cpp:961
+msgid "Edit parent group"
 msgstr ""
 
-#: src/interface.cpp:940
+#: src/interface.cpp:967
 #, fuzzy
 msgid "Edit root"
 msgstr "Bearbeiten"
 
-#: src/interface.cpp:947
-#, c-format
-msgid "Edit group #%s as layer"
-msgstr ""
-
-#: src/interface.cpp:1032
+#: src/interface.cpp:1044
 msgid "Could not parse SVG data"
 msgstr "SVG Daten konnten nicht gelesen werden"
 
-#: src/interface.cpp:1194
+#: src/interface.cpp:1206
 #, c-format
 msgid "Overwrite %s"
 msgstr "Überschreibe %s"
 
-#: src/interface.cpp:1212
+#: src/interface.cpp:1224
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -2903,128 +2905,128 @@ msgstr "Höhen- und Breitenverhältnis beibehalten"
 msgid "Height of selection"
 msgstr "Höhe der Auswahl"
 
-#: src/selection-chemistry.cpp:69
+#: src/selection-chemistry.cpp:73
 msgid "Nothing was deleted."
 msgstr "Es wurde nichts gelöscht."
 
-#: src/selection-chemistry.cpp:101
+#: src/selection-chemistry.cpp:113
 #, fuzzy
 msgid "Select some objects to duplicate."
 msgstr "Die gewählten Objekte in die Zwischenablage verschieben"
 
-#: src/selection-chemistry.cpp:236
+#: src/selection-chemistry.cpp:248
 #, fuzzy
 msgid "Select two or more objects to group."
 msgstr "Die gewählten Objekte nach ganz oben anheben"
 
-#: src/selection-chemistry.cpp:244
+#: src/selection-chemistry.cpp:256
 #, fuzzy
 msgid "Select at least two objects to group."
 msgstr "Alle Objekte im Dokument auswählen"
 
-#: src/selection-chemistry.cpp:253
+#: src/selection-chemistry.cpp:265
 msgid "You cannot group objects from different groups or layers."
 msgstr ""
 "Objekte aus unterschiedlichen Gruppen oder Ebenen können nicht gruppiert "
 "werden."
 
-#: src/selection-chemistry.cpp:301
+#: src/selection-chemistry.cpp:313
 msgid "Select a group to ungroup."
 msgstr "Eine Gruppe auswählen um die Gruppierung aufzuheben"
 
-#: src/selection-chemistry.cpp:335
+#: src/selection-chemistry.cpp:347
 msgid "No groups to ungroup in the selection."
 msgstr "Keine Gruppe zum Aufheben in dieser Auswahl"
 
-#: src/selection-chemistry.cpp:402
+#: src/selection-chemistry.cpp:414
 #, fuzzy
 msgid "Select some objects to raise."
 msgstr "Die gewählten Objekte in die Zwischenablage verschieben"
 
-#: src/selection-chemistry.cpp:408 src/selection-chemistry.cpp:486
+#: src/selection-chemistry.cpp:420 src/selection-chemistry.cpp:498
 msgid "You cannot raise/lower objects from different groups or layers."
 msgstr ""
 "Objekte aus verschiedenen Gruppen oder Ebenen können nicht angehoben oder "
 "abgesenkt werden."
 
-#: src/selection-chemistry.cpp:452
+#: src/selection-chemistry.cpp:464
 #, fuzzy
 msgid "Select some objects to raise to top."
 msgstr "Das gewählte Objekt in einen Pfad umwandeln"
 
-#: src/selection-chemistry.cpp:480
+#: src/selection-chemistry.cpp:492
 #, fuzzy
 msgid "Select some objects to lower."
 msgstr "Die gewählten Objekte in die Zwischenablage verschieben"
 
-#: src/selection-chemistry.cpp:536
+#: src/selection-chemistry.cpp:548
 #, fuzzy
 msgid "Select some objects to lower to bottom."
 msgstr "Die gewählten Objekte in die Zwischenablage verschieben"
 
 # !!! just make the menu item insensitive
-#: src/selection-chemistry.cpp:570
+#: src/selection-chemistry.cpp:582
 msgid "Nothing to undo."
 msgstr "Es gibt nichts rückgängig zu machen."
 
 # # !!! just make the menu item insensitive
-#: src/selection-chemistry.cpp:579
+#: src/selection-chemistry.cpp:591
 msgid "Nothing to redo."
 msgstr "Es gibt nichts zu wiederholen."
 
-#: src/selection-chemistry.cpp:668
+#: src/selection-chemistry.cpp:680
 msgid "Nothing was copied."
 msgstr "Es wurde nichts kopiert."
 
-#: src/selection-chemistry.cpp:766 src/selection-chemistry.cpp:817
+#: src/selection-chemistry.cpp:778 src/selection-chemistry.cpp:829
 msgid "Nothing on the clipboard."
 msgstr "Es ist nichts in der Zwischenablage."
 
-#: src/selection-chemistry.cpp:823
+#: src/selection-chemistry.cpp:835
 msgid "Select objects to paste style to."
 msgstr "Objekte auswählen, um Stil anzuwenden."
 
-#: src/selection-chemistry.cpp:1273
+#: src/selection-chemistry.cpp:1350
 #, fuzzy
 msgid "Select an object to clone."
 msgstr "Die gewählten Objekte in die Zwischenablage verschieben"
 
-#: src/selection-chemistry.cpp:1279
+#: src/selection-chemistry.cpp:1356
 msgid "If you want to clone several objects, group them and clone the group."
 msgstr ""
 "Wenn mehrere Objekte geklont werden sollen, sollten sie gruppiert und dann "
 "als Gruppe geklont werden."
 
-#: src/selection-chemistry.cpp:1310
+#: src/selection-chemistry.cpp:1387
 #, fuzzy
 msgid "Select a clone to unlink."
 msgstr "Wählen Sie die zu öffnende Datei"
 
-#: src/selection-chemistry.cpp:1341
+#: src/selection-chemistry.cpp:1418
 msgid "No clones to unlink in the selection."
 msgstr "Keine Klone in der Auswahl, deren Verknüpfung aufgehoben werden kann."
 
-#: src/selection-chemistry.cpp:1358
+#: src/selection-chemistry.cpp:1435
 msgid "Select a single clone to go to its original."
 msgstr "Einen einzelnen Klon auswählen um das Original zu aktivieren"
 
-#: src/selection-chemistry.cpp:1366
+#: src/selection-chemistry.cpp:1443
 msgid "This clone's original is not a visible object (it is in <defs>)"
 msgstr ""
 "Die Originalvorlage des Klons ist kein sichtbares Objekt (es befindet sich "
 "in einem <defs> Element)"
 
-#: src/selection-chemistry.cpp:1393
+#: src/selection-chemistry.cpp:1470
 #, fuzzy
 msgid "Select an object to tile."
 msgstr "Die gewählten Objekte in die Zwischenablage verschieben"
 
-#: src/selection-chemistry.cpp:1457
+#: src/selection-chemistry.cpp:1534
 #, fuzzy
 msgid "Select an object with pattern fill to untile."
 msgstr "Die gewählten Objekte in die Zwischenablage verschieben"
 
-#: src/selection-chemistry.cpp:1508
+#: src/selection-chemistry.cpp:1585
 #, fuzzy
 msgid "No pattern fills to untile in the selection."
 msgstr "Die Auswahl enthält keine Pfade zum Schrumpfen/Vergrößern."
@@ -3049,23 +3051,23 @@ msgid "%i objects selected. %s."
 msgstr "%i Objekte ausgewählt. %s."
 
 #. status text
-#: src/seltrans.cpp:767 src/seltrans.cpp:829
+#: src/seltrans.cpp:768 src/seltrans.cpp:830
 #, c-format
 msgid "Scale %0.2f%%, %0.2f%%"
 msgstr "Skaliere %0.2f%%, %0.2f%%"
 
 # !!!
-#: src/seltrans.cpp:897
+#: src/seltrans.cpp:898
 #, c-format
 msgid "Skew %0.2f%c %0.2f%c"
 msgstr "Verzerre %0.2f%c %0.2f%c"
 
-#: src/seltrans.cpp:944
+#: src/seltrans.cpp:945
 #, c-format
 msgid "Rotate by %0.2f deg"
 msgstr "Rotiere um %0.2f Grad"
 
-#: src/seltrans.cpp:973
+#: src/seltrans.cpp:974
 #, c-format
 msgid "Center at (%s,%s)"
 msgstr "Zentriere bei (%s,%s)"
@@ -3131,7 +3133,7 @@ msgstr "Unbekannt"
 msgid "Image URI:"
 msgstr "Bild-URI:"
 
-#: src/sp-item-group.cpp:328
+#: src/sp-item-group.cpp:330
 #, c-format
 msgid "Group of %d objects"
 msgstr "Gruppe von %d Objekten"
@@ -3155,7 +3157,7 @@ msgstr "Stern mit %d Seiten"
 msgid "Polygon of %d sides"
 msgstr "Polygon mit %d Seiten"
 
-#: src/sp-text.cpp:2009
+#: src/sp-text.cpp:2006
 #, c-format
 msgid "Text (%s, %.5gpt)"
 msgstr "Text (%s, %.5gpt)"
@@ -4487,7 +4489,7 @@ msgstr "Stil"
 msgid "Font size:"
 msgstr "Schriftgröße:"
 
-#: src/widgets/font-selector.cpp:544
+#: src/widgets/font-selector.cpp:543
 msgid "AaBbCcIiPpQq12368.;/()"
 msgstr "AaBbCcIiPpQq12368.;/()ÄäÖöÜü"
 
@@ -4601,20 +4603,20 @@ msgstr "Farbe des Verlaufsschritts"
 msgid "Gradient editor"
 msgstr "Farbverlaufs Editor"
 
-#: src/widgets/paint-selector.cpp:168 src/widgets/paint-selector.cpp:644
+#: src/widgets/paint-selector.cpp:168 src/widgets/paint-selector.cpp:660
 msgid "No paint"
 msgstr "Nicht zeichnen"
 
-#: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:715
+#: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:728
 #, fuzzy
 msgid "Flat color"
 msgstr "Zielfarbe"
 
-#: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:785
+#: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:795
 msgid "Linear gradient"
 msgstr "Linearer Farbverlauf"
 
-#: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:788
+#: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:798
 msgid "Radial gradient"
 msgstr "Radialer Farbverlauf"
 
@@ -4623,27 +4625,27 @@ msgstr "Radialer Farbverlauf"
 msgid "Pattern Fill"
 msgstr "Füllmuster:"
 
-#: src/widgets/paint-selector.cpp:600
+#: src/widgets/paint-selector.cpp:625
 msgid "No objects"
 msgstr "Keine Objekte"
 
-#: src/widgets/paint-selector.cpp:614
+#: src/widgets/paint-selector.cpp:636
 msgid "Multiple styles"
 msgstr "Mehrfachstile"
 
 #. TRANSLATORS: "Clone" is a noun here. This message is to notify the user
 #. that the currently selected object is a clone.
-#: src/widgets/paint-selector.cpp:630
+#: src/widgets/paint-selector.cpp:649
 #, fuzzy
 msgid "Clone Selected"
 msgstr "Gewählte Objekte klonen"
 
-#: src/widgets/paint-selector.cpp:838
+#: src/widgets/paint-selector.cpp:855
 #, fuzzy
 msgid "No patterns in document"
 msgstr "Keine Füllmuster im Dokument"
 
-#: src/widgets/paint-selector.cpp:952
+#: src/widgets/paint-selector.cpp:983
 #, fuzzy
 msgid "Pattern fill"
 msgstr "Füllmuster:"
@@ -4776,6 +4778,9 @@ msgstr "Attribut"
 #: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
 msgstr "Wert"
+
+#~ msgid "Inkscape"
+#~ msgstr "Inkscape"
 
 #~ msgid "Owner"
 #~ msgstr "Eigentümer"

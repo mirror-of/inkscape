@@ -25,6 +25,7 @@ EXTRA_DIST = \
 	intltool-extract.in	\
 	intltool-merge.in	\
 	intltool-update.in	\
+	mkinstalldirs		\
 	$(Graphics_in_files)	\
 	inkscape.spec.in	\
 	inkscape.spec		\
