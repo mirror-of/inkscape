@@ -31,7 +31,7 @@
 #include <libart_lgpl/art_uta_rect.h>
 
 
-#include "sp-marshal.h"
+#include "helper/sp-marshal.h"
 
 #include "sp-canvas.h"
 

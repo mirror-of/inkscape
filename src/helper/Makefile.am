@@ -14,9 +14,9 @@ INCLUDES = \
 
 libspchelp_a_SOURCES = \
 	sp-intl.h \
-	sp-marshal.c sp-marshal.h \
 	helper-forward.h \
 	window.c window.h \
+	sp-marshal.c sp-marshal.h \
 	sp-canvas.c sp-canvas.h \
 	sp-canvas-util.c sp-canvas-util.h \
 	gnome-utils.c gnome-utils.h \
@@ -40,12 +40,11 @@ libspchelp_a_SOURCES = \
 #	pathops.c pathops.h
 
 sp-marshal.h: sp-marshal.list
-	rm -f $@
 	glib-genmarshal --prefix=sp_marshal --header sp-marshal.list > $@
-
+                                                                                
 sp-marshal.c: sp-marshal.h sp-marshal.list
-	rm -f $@
-	glib-genmarshal --prefix=sp_marshal --body sp-marshal.list > $@
+	echo '#include "helper/sp-marshal.h"' > $@
+	glib-genmarshal --prefix=sp_marshal --body sp-marshal.list >> $@
 
 EXTRA_DIST = sp-marshal.list
 

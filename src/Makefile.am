@@ -187,12 +187,6 @@ spsvgview_LDADD = \
 	$(FREETYPE_LIBS) \
 	$(kdeldadd)
 
-# widgets/libspwidgets.a
-# dialogs/libspdialogs.a
-
-EXTRA_DIST = \
-	brokenimage.xpm
-
 dist-hook:
 	mkdir $(distdir)/pixmaps
 	cp $(srcdir)/pixmaps/*xpm $(distdir)/pixmaps
