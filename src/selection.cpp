@@ -314,9 +314,8 @@ std::vector<NR::Point> SPSelection::getBBoxPoints() const {
     GSList const *items = const_cast<SPSelection *>(this)->itemList();
     std::vector<NR::Point> p;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-	SPItem *item = SP_ITEM(iter->data);
 	NRRect b;
-	sp_item_bbox_desktop(item, &b);
+	sp_item_bbox_desktop(SP_ITEM(iter->data), &b);
 	p.push_back(NR::Point(b.x0, b.y0));
 	p.push_back(NR::Point(b.x1, b.y1));
     }
