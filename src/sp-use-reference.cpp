@@ -63,9 +63,7 @@ SPUsePath::SPUsePath(SPObject* i_owner):SPUseReference(i_owner)
 
 SPUsePath::~SPUsePath(void)
 {
-    if (originalPath) {
-        delete originalPath;
-    }
+    delete originalPath;
     originalPath = NULL;
 
     _changed_connection.disconnect(); // to do before unlinking
@@ -210,7 +208,7 @@ sp_usepath_source_modified(SPObject *iSource, guint flags, SPItem *item)
 void SPUsePath::refresh_source()
 {
     sourceDirty = false;
-    if ( originalPath ) delete originalPath;
+    delete originalPath;
     originalPath = NULL;
 
     // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
