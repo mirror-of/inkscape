@@ -366,8 +366,8 @@ static void rsvg_parse_path_do_cmd(RSVGParsePathCtx *ctx, gboolean final)
 #endif
             rsvg_bpath_def_curveto(ctx->bpath,
                                    x1, y1, x2, y2, x3, y3);
-            ctx->rpx = x2;
-            ctx->rpy = y2;
+            ctx->rpx = ctx->params[0];
+            ctx->rpy = ctx->params[1];
             ctx->cpx = x3;
             ctx->cpy = y3;
             ctx->param = 0;
