@@ -49,7 +49,6 @@
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 Caption "${PRODUCT_NAME} -- Open Source Scalable Vector Graphics Editor"
-Icon "inkscape\inkscape32x16col.ico"
 OutFile "Inkscape-${PRODUCT_VERSION}-1.win32.exe"
 InstallDir "$PROGRAMFILES\Inkscape"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
