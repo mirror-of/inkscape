@@ -186,7 +186,7 @@ sp_repr_css_print (SPCSSAttr * css)
 {
 	g_print ("== SPCSSAttr:\n");
 	for (SPReprAttr *attr = ((SPRepr *) css)->attributes; attr != NULL; attr = attr->next) {
-		g_print ("%s: %s\n", SP_REPR_ATTRIBUTE_KEY (attr), SP_REPR_ATTRIBUTE_VALUE (attr));
+		g_print("%s: %s\n", SP_REPR_ATTRIBUTE_KEY(attr), SP_REPR_ATTRIBUTE_VALUE(attr).cString());
 	}
 }
 
