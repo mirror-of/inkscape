@@ -1,5 +1,7 @@
 2003-12-19  MenTaLguY <mental@rydia.net>
 
+	* Fixed most shortcut key regressions from the SPAction rework
+
 	* Renamed the Inkscape class (struct really) to Inkscape::Application; we can now
 	  use the Inkscape namespace.
 

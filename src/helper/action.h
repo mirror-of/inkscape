@@ -50,7 +50,6 @@ struct _SPAction {
 	gchar *name;                 /**< Full text name of the action */
 	gchar *tip;                  /**< A tooltip to describe the action */
 	gchar *image;                /**< An image to visually identify the action */
-	unsigned int shortcut;       /**< A holder for the shortcut assigned to this action */
 };
 
 /** The action class is the same as its parent */
@@ -70,7 +69,6 @@ SPAction *sp_action_setup (SPAction *action,
 void sp_action_perform (SPAction *action, void * data);
 void sp_action_set_active (SPAction *action, unsigned int active);
 void sp_action_set_sensitive (SPAction *action, unsigned int sensitive);
-void sp_action_set_shortcut (SPAction *action, unsigned int shortcut);
 SPView *sp_action_get_view (SPAction *action);
 
 #endif

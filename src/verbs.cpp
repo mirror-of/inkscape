@@ -69,7 +69,6 @@
 #include "verbs.h"
 
 static SPAction *make_action (sp_verb_t verb, SPView *view);
-static void sp_verb_action_set_shortcut (SPAction *action, unsigned int shortcut, void *data);
 
 /* FIXME !!! we should probably go ahead and use GHashTables, actually -- more portable */
 namespace __gnu_cxx {
@@ -498,19 +497,19 @@ sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
 }
 
 /** Action vector to define functions called if a staticly defined file verb is called */
-static SPActionEventVector action_file_vector = {{NULL}, sp_verb_action_file_perform, NULL, NULL, sp_verb_action_set_shortcut};
+static SPActionEventVector action_file_vector = {{NULL}, sp_verb_action_file_perform, NULL, NULL, NULL};
 /** Action vector to define functions called if a staticly defined edit verb is called */
-static SPActionEventVector action_edit_vector = {{NULL}, sp_verb_action_edit_perform, NULL, NULL, sp_verb_action_set_shortcut};
+static SPActionEventVector action_edit_vector = {{NULL}, sp_verb_action_edit_perform, NULL, NULL, NULL};
 /** Action vector to define functions called if a staticly defined selection verb is called */
-static SPActionEventVector action_selection_vector = {{NULL}, sp_verb_action_selection_perform, NULL, NULL, sp_verb_action_set_shortcut};
+static SPActionEventVector action_selection_vector = {{NULL}, sp_verb_action_selection_perform, NULL, NULL, NULL};
 /** Action vector to define functions called if a staticly defined object editing verb is called */
-static SPActionEventVector action_object_vector = {{NULL}, sp_verb_action_object_perform, NULL, NULL, sp_verb_action_set_shortcut};
+static SPActionEventVector action_object_vector = {{NULL}, sp_verb_action_object_perform, NULL, NULL, NULL};
 /** Action vector to define functions called if a staticly defined context verb is called */
-static SPActionEventVector action_ctx_vector = {{NULL}, sp_verb_action_ctx_perform, NULL, NULL, sp_verb_action_set_shortcut};
+static SPActionEventVector action_ctx_vector = {{NULL}, sp_verb_action_ctx_perform, NULL, NULL, NULL};
 /** Action vector to define functions called if a staticly defined zoom verb is called */
-static SPActionEventVector action_zoom_vector = {{NULL}, sp_verb_action_zoom_perform, NULL, NULL, sp_verb_action_set_shortcut};
+static SPActionEventVector action_zoom_vector = {{NULL}, sp_verb_action_zoom_perform, NULL, NULL, NULL};
 /** Action vector to define functions called if a staticly defined dialog verb is called */
-static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog_perform, NULL, NULL, sp_verb_action_set_shortcut};
+static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog_perform, NULL, NULL, NULL};
 
 #define SP_VERB_IS_FILE(v) ((v >= SP_VERB_FILE_NEW) && (v <= SP_VERB_FILE_QUIT))
 #define SP_VERB_IS_EDIT(v) ((v >= SP_VERB_EDIT_UNDO) && (v <= SP_VERB_EDIT_SELECT_ALL))
@@ -666,17 +665,6 @@ make_action (sp_verb_t verb, SPView *view)
 					       (void *) verb);
 	}
 	return action;
-}
-
-static void
-sp_verb_action_set_shortcut (SPAction *action, unsigned int shortcut, void *data)
-{
-	sp_verb_t verb, ex;
-	verb = (sp_verb_t)((int)data);
-	ex = sp_shortcut_get_verb (shortcut);
-	if (verb != ex) {
-		sp_shortcut_set_verb (shortcut, verb, FALSE);
-	}
 }
 
 sp_verb_t

@@ -11,19 +11,24 @@
 
 #include <gtk/gtkwindow.h>
 
+#include "inkscape.h"
 #include "shortcuts.h"
 
 #include "window.h"
 
-static int
-sp_window_key_press (GtkWidget *widgt, GdkEventKey *event)
+static gboolean
+sp_window_key_press (GtkWidget *widget, GdkEventKey *event)
 {
 	unsigned int shortcut;
 	shortcut = event->keyval;
-	if (event->state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
-	if (event->state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
-	if (event->state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
-	return sp_shortcut_run (shortcut);
+	shortcut = event->keyval |
+	           ( event->state & GDK_SHIFT_MASK ?
+	             SP_SHORTCUT_SHIFT_MASK : 0 ) |
+	           ( event->state & GDK_CONTROL_MASK ?
+	             SP_SHORTCUT_CONTROL_MASK : 0 ) |
+	           ( event->state & GDK_MOD1_MASK ?
+	             SP_SHORTCUT_ALT_MASK : 0 );
+	return sp_shortcut_invoke (shortcut, SP_VIEW (SP_ACTIVE_DESKTOP));
 }
 
 GtkWidget *

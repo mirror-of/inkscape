@@ -260,9 +260,6 @@ inkscape_init (SPObject * object)
 
 	inkscape->preferences = sp_repr_read_mem (preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
 
-	/* Initialize shortcuts */
-	sp_shortcut_table_load (NULL);
-
 	inkscape->documents = NULL;
 	inkscape->desktops = NULL;
 }

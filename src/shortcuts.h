@@ -18,22 +18,12 @@
 #define SP_SHORTCUT_CONTROL_MASK (1 << 25)
 #define SP_SHORTCUT_ALT_MASK (1 << 26)
 
-/* Returns TRUE is action was performed */
+/* Returns true if action was performed */
+bool sp_shortcut_invoke (unsigned int shortcut, SPView *view);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-unsigned int sp_shortcut_run (unsigned int shortcut);
-#ifdef __cplusplus
-}
-#endif
-
-/* Loads named shortcut table */
-
-void sp_shortcut_table_load (const unsigned char *name);
-
-void sp_shortcut_set_verb (unsigned int shortcut, sp_verb_t verb, unsigned int primary);
-void sp_shortcut_remove_verb (unsigned int shortcut);
+void sp_shortcut_set (unsigned int shortcut, sp_verb_t verb, bool is_primary);
+void sp_shortcut_clear (unsigned int shortcut);
 sp_verb_t sp_shortcut_get_verb (unsigned int shortcut);
+unsigned int sp_shortcut_get_primary (sp_verb_t verb);
 
 #endif

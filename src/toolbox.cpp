@@ -146,7 +146,7 @@ sp_tool_toolbox_new ()
 	tb = gtk_vbox_new (FALSE, 0);
 
 	g_object_set_data (G_OBJECT (tb), "desktop", NULL);
-	g_object_set_data (G_OBJECT (tt), "tooltips", tt);
+	g_object_set_data (G_OBJECT (tb), "tooltips", tt);
 
 	gtk_widget_set_sensitive (tb, FALSE);
 

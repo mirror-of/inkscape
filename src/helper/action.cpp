@@ -180,34 +180,10 @@ sp_action_set_sensitive (SPAction *action, unsigned int sensitive)
 	}
 }
 
-void
-sp_action_set_shortcut (SPAction *action, unsigned int shortcut)
-{
-	nr_return_if_fail (action != NULL);
-	nr_return_if_fail (SP_IS_ACTION (action));
-
-	if (shortcut != action->shortcut) {
-		NRActiveObject *aobject;
-		action->shortcut = shortcut;
-		aobject = (NRActiveObject *) action;
-		if (aobject->callbacks) {
-			unsigned int i;
-			for (i = 0; i < aobject->callbacks->length; i++) {
-				NRObjectListener *listener;
-				SPActionEventVector *avector;
-				listener = aobject->callbacks->listeners + i;
-				avector = (SPActionEventVector *) listener->vector;
-				if ((listener->size >= sizeof (SPActionEventVector)) && avector->set_shortcut) {
-					avector->set_shortcut (action, shortcut, listener->data);
-				}
-			}
-		}
-	}
-}
-
 SPView *
 sp_action_get_view (SPAction *action)
 {
 	g_return_val_if_fail (SP_IS_ACTION (action), NULL);
 	return action->view;
 }
+

@@ -253,13 +253,15 @@ sp_button_action_set_shortcut (SPAction *action, unsigned int shortcut, void *da
 static void
 sp_button_set_composed_tooltip (GtkTooltips *tooltips, GtkWidget *widget, SPAction *action)
 {
-	if (action && action->shortcut) {
+	unsigned int shortcut=0;
+	/* FIXME !!! determine appropriate shortcut, if any, here */
+	if (action && shortcut) {
 		gchar *tip;
 		gchar *as, *cs, *ss;
-		as = (gchar*)((action->shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "");
-		cs = (gchar*)((action->shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "");
-		ss = (gchar*)((action->shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "");
-		tip = g_strdup_printf ("%s [%s%s%s%s]", action->tip, as, cs, ss, gdk_keyval_name (action->shortcut & 0xffffff));
+		as = (gchar*)((shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "");
+		cs = (gchar*)((shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "");
+		ss = (gchar*)((shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "");
+		tip = g_strdup_printf ("%s [%s%s%s%s]", action->tip, as, cs, ss, gdk_keyval_name (shortcut & 0xffffff));
 		gtk_tooltips_set_tip (tooltips, widget, tip, NULL);
 		g_free (tip);
 	} else if (action) {

@@ -212,14 +212,12 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 {
 	if (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) {
 		unsigned int shortcut;
-		sp_verb_t verb;
 
 		shortcut = event->keyval;
 		if (event->state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
 		if (event->state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
 		if (event->state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
-		verb = (sp_verb_t)((int)data);
-		sp_shortcut_set_verb (shortcut, verb, TRUE);
+		sp_shortcut_set (shortcut, (sp_verb_t)((int)data), true);
 	}
 }
 
@@ -258,15 +256,18 @@ void
 sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
 {
 	SPAction *action;
+	unsigned int shortcut;
 	gchar *s; 
 	gchar key[256];
 
 	action = sp_verb_get_action (verb, NULL);
 	if (!action) return; 
+
 	s = g_stpcpy (c, action->name);
-	if (action->shortcut) {
+	shortcut = sp_shortcut_get_primary (verb);
+	if (shortcut) {
 		s = g_stpcpy (s, " (");
-		sp_ui_shortcut_string (action->shortcut, key);
+		sp_ui_shortcut_string (shortcut, key);
 		s = g_stpcpy (s, key);
 		s = g_stpcpy (s, ")");
 	}
@@ -281,12 +282,16 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
 	if (verb == SP_VERB_NONE) {
 		item = gtk_separator_menu_item_new ();
 	} else {
+		unsigned int shortcut;
+
 		action = sp_verb_get_action (verb, view);
 		if (!action) return NULL;
-		if (action->shortcut) {
+
+		shortcut = sp_shortcut_get_primary (verb);
+		if (shortcut) {
 			gchar c[256];
 			GtkWidget *hb, *l;
-			sp_ui_shortcut_string (action->shortcut, c);
+			sp_ui_shortcut_string (shortcut, c);
 			hb = gtk_hbox_new (FALSE, 16);
 			l = gtk_label_new (action->name);
 			gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
