@@ -100,8 +100,8 @@ public:
   int numberOfEdges() const { return nbAr; }
   bool hasEdges() const { return (nbAr != 0); }
 
-  bool needPointsSorting() { flags |= need_points_sorting; }
-  bool needEdgesSorting()  { flags |= need_edges_sorting; }
+  void needPointsSorting() { flags |= need_points_sorting; }
+  void needEdgesSorting()  { flags |= need_edges_sorting; }
 
 private:
 
