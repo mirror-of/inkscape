@@ -163,12 +163,10 @@ gint
 sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 {
 	static gboolean dragging = FALSE, moved = FALSE;
-	SPGuide * guide;
-	SPDesktop * desktop;
 	gint ret = FALSE;
 
-	guide = SP_GUIDE (data);
-	desktop = SP_DESKTOP (gtk_object_get_data (GTK_OBJECT (item->canvas), "SPDesktop"));
+	SPGuide *guide = SP_GUIDE(data);
+	SPDesktop *desktop = SP_DESKTOP(gtk_object_get_data(GTK_OBJECT(item->canvas), "SPDesktop"));
 
 	switch (event->type) {
 	case GDK_2BUTTON_PRESS:
@@ -189,35 +187,36 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (dragging) {
-			NRPoint p;
-			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
-			sp_guide_moveto(guide, sp_guide_position_from_pt(guide, p));
+			NR::Point const motion_w(event->motion.x,
+						 event->motion.y);
+			NR::Point const motion_dt( motion_w * desktop->w2d );
+			sp_guide_moveto(guide, sp_guide_position_from_pt(guide, motion_dt));
 			moved = TRUE;
-			sp_desktop_set_coordinate_status (desktop, p.x, p.y, 0);
-			sp_view_set_position (SP_VIEW (desktop), p.x, p.y);
-			ret=TRUE;
+			sp_desktop_set_coordinate_status(desktop, motion_dt, 0);
+			sp_view_set_position(SP_VIEW(desktop), motion_dt);
+			ret = TRUE;
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
 		if (dragging && event->button.button == 1) {
 			if (moved) {
-				GtkWidget *w;
+				NR::Point const event_w(event->button.x,
+							event->button.y);
+				NR::Point const event_dt = event_w * desktop->w2d;
 				double winx, winy;
-				NRPoint p;
-				w = GTK_WIDGET (item->canvas);
 				sp_canvas_world_to_window (item->canvas, event->button.x, event->button.y, &winx, &winy);
-				sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
+				GtkWidget *w = GTK_WIDGET(item->canvas);
 				if ((winx >= 0) && (winy >= 0) &&
 				    (winx < w->allocation.width) &&
 				    (winy < w->allocation.height)) {
-					sp_guide_position_set(guide, sp_guide_position_from_pt(guide, p));
+					sp_guide_position_set(guide, sp_guide_position_from_pt(guide, event_dt));
 				} else {
 					sp_guide_remove(guide);
 				}
 				moved = FALSE;
 				sp_document_done (SP_DT_DOCUMENT (desktop));
-				sp_desktop_set_coordinate_status (desktop, p.x, p.y, 0);
-				sp_view_set_position (SP_VIEW (desktop), p.x, p.y);
+				sp_desktop_set_coordinate_status(desktop, event_dt, 0);
+				sp_view_set_position(SP_VIEW(desktop), event_dt);
 			}
 			dragging = FALSE;
 			sp_canvas_item_ungrab (item, event->button.time);
