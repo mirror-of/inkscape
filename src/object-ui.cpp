@@ -98,7 +98,6 @@ sp_object_type_menu (GType type, SPObject *object, SPDesktop *desktop, GtkMenu *
 static void sp_item_properties (GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_select_this (GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_reset_transformation (GtkMenuItem *menuitem, SPItem *item);
-static void sp_item_toggle_sensitivity (GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_create_link (GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item);
 
@@ -109,7 +108,6 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 {
 	SPItem *item;
 	GtkWidget *w;
-	gboolean insensitive;
 
 	item = (SPItem *) object;
 
@@ -136,12 +134,6 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 	/* Reset transformations */
 	w = gtk_menu_item_new_with_mnemonic (_("Reset _Transformation"));
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_reset_transformation), item);
-	gtk_widget_show (w);
-	gtk_menu_append (GTK_MENU (m), w);
-	/* Toggle sensitivity */
-	insensitive = (sp_repr_attr (SP_OBJECT_REPR (item), "sodipodi:insensitive") != NULL);
-	w = gtk_menu_item_new_with_mnemonic (insensitive ? _("Make s_ensitive") : _("Make i_nsensitive"));
-	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_toggle_sensitivity), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Create link */
@@ -196,24 +188,6 @@ sp_item_reset_transformation (GtkMenuItem * menuitem, SPItem * item)
 	g_assert (SP_IS_ITEM (item));
 
 	sp_repr_set_attr (((SPObject *) item)->repr, "transform", NULL);
-	sp_document_done (SP_OBJECT_DOCUMENT (item));
-}
-
-static void
-sp_item_toggle_sensitivity (GtkMenuItem * menuitem, SPItem * item)
-{
-	const gchar * val;
-
-	g_assert (SP_IS_ITEM (item));
-
-	/* fixme: reprs suck */
-	val = sp_repr_attr (SP_OBJECT_REPR (item), "sodipodi:insensitive");
-	if (val != NULL) {
-		val = NULL;
-	} else {
-		val = "1";
-	}
-	sp_repr_set_attr (SP_OBJECT_REPR (item), "sodipodi:insensitive", val);
 	sp_document_done (SP_OBJECT_DOCUMENT (item));
 }
 
