@@ -2186,8 +2186,11 @@ static void
 xy_to_radial (double x, double y, radial *r)
 {
 	r->r = sqrt(x*x + y*y);
-	if (r->r > 0) r->a = atan2 (y, x);
-	else r->a = HUGE_VAL; //undefined
+	if (r->r > 0) {
+		r->a = atan2 (y, x);
+	} else {
+		r->a = HUGE_VAL; //undefined
+	}
 }
 
 static void
@@ -2561,15 +2564,14 @@ node_rotate (SPPathNode *n, gdouble angle, int which)
 	radial_to_xy (&rme, &(n->pos), &o);
 	me->pos.x = o.x;
 	me->pos.y = o.y;
-	sp_knot_set_position (me->knot, &(me->pos), 0);
 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) {
 		radial_to_xy (&rother, &(n->pos), &o);
 		other->pos.x = o.x;
 		other->pos.y = o.y;
-		sp_knot_set_position (other->knot, &(other->pos), 0);
 	}
 
+	sp_node_ensure_ctrls (n);
 	update_object (n->subpath->nodepath);
 }
 
@@ -2613,15 +2615,14 @@ node_rotate_screen (SPPathNode *n, gdouble angle, int which)
 	radial_to_xy (&rme, &(n->pos), &o);
 	me->pos.x = o.x;
 	me->pos.y = o.y;
-	sp_knot_set_position (me->knot, &(me->pos), 0);
 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) {
 		radial_to_xy (&rother, &(n->pos), &o);
 		other->pos.x = o.x;
 		other->pos.y = o.y;
-		sp_knot_set_position (other->knot, &(other->pos), 0);
 	}
 
+	sp_node_ensure_ctrls (n);
 	update_object (n->subpath->nodepath);
 }
 
@@ -2677,21 +2678,31 @@ node_scale (SPPathNode *n, gdouble grow, int which)
 	xy_to_radial (other->pos.x - n->pos.x, other->pos.y - n->pos.y, &rother);
 
 	rme.r += grow; 
-	if (both || n->type == SP_PATHNODE_SYMM) 
+	if (rme.r < 0) rme.r = 1e-6; // not 0, so that direction is not lost
+	if (rme.a == HUGE_VAL) {
+		rme.a = 0; // if direction is unknown, initialize to 0
+		sp_node_selected_set_line_type (ART_CURVETO);
+	}
+	if (both || n->type == SP_PATHNODE_SYMM) {
 		rother.r += grow;
+		if (rother.r < 0) rother.r = 1e-6;
+		if (rother.r == HUGE_VAL) {
+			rother.a = 0;
+			sp_node_selected_set_line_type (ART_CURVETO);
+		}
+	}
 
 	radial_to_xy (&rme, &(n->pos), &o);
 	me->pos.x = o.x;
 	me->pos.y = o.y;
-	sp_knot_set_position (me->knot, &(me->pos), 0);
 
 	if (both || n->type == SP_PATHNODE_SYMM) {
 		radial_to_xy (&rother, &(n->pos), &o);
 		other->pos.x = o.x;
 		other->pos.y = o.y;
-		sp_knot_set_position (other->knot, &(other->pos), 0);
 	}
 
+	sp_node_ensure_ctrls (n);
 	update_object (n->subpath->nodepath);
 }
 
