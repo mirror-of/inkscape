@@ -1,3 +1,10 @@
+2004-05-13  Carl Hetherington  <cth103@houllier.home>
+
+	* sp-color-notebook.cpp: Fix uninitialised value spotted by valgrind.
+
+	* stroke-style.cpp:
+	Fix ink_extract_marker_name returning a pointer into a free()d buffer.
+
 2004-05-13  Ted Gould <ted@gould.cx>
 
 	* src/file.cpp:
