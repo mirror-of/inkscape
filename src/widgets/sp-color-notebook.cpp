@@ -17,19 +17,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkcolorsel.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkcheckmenuitem.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkalignment.h>
-#include "gtk/gtkarrow.h"
+#include <gtk/gtk.h>
 #include "../color.h"
 #include "../helper/sp-intl.h"
 #include "../dialogs/dialog-events.h"
@@ -278,20 +266,16 @@ void ColorNotebook::init()
 
 	{
 		gboolean found = FALSE;
-		GtkWidget* arrow;
-		GtkWidget* align;
-		GtkMenu* menu;
-		GtkWidget* item;
 
 		_popup = gtk_menu_new();
-		menu = GTK_MENU (_popup);
+		GtkMenu *menu = GTK_MENU (_popup);
 
 		for ( i = 0; i < _trackerList->len; i++ )
 		{
 			SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (g_ptr_array_index (_trackerList, i));
 			if ( entry )
 			{
-				item = gtk_check_menu_item_new_with_label (_(entry->name));
+				GtkWidget *item = gtk_check_menu_item_new_with_label (_(entry->name));
 				gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), entry->enabledFull);
 				gtk_widget_show (item);
 				gtk_menu_append (menu, item);
@@ -303,18 +287,20 @@ void ColorNotebook::init()
 			}
 		}
 
-		arrow = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_OUT);
+		GtkWidget *arrow = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
 		gtk_widget_show (arrow);
 
 		_btn = gtk_button_new ();
 		gtk_widget_show (_btn);
 		gtk_container_add (GTK_CONTAINER (_btn), arrow);
 
-		align = gtk_alignment_new (0.0, 0.0, 0.0, 0.0);
+		GtkWidget *align = gtk_alignment_new (1.0, 0.0, 0.0, 0.0);
 		gtk_widget_show (align);
 		gtk_container_add (GTK_CONTAINER (align), _btn);
 
-		gtk_table_attach (GTK_TABLE (table), align, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+		// uncomment to reenable the "show/hide modes" menu, 
+		// but first fix it so it remembers its settings in prefs and does not take that much space (entire vertical column!)
+		//gtk_table_attach (GTK_TABLE (table), align, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
 
 		gtk_signal_connect_object(GTK_OBJECT(_btn), "event", GTK_SIGNAL_FUNC (sp_color_notebook_menu_handler), GTK_OBJECT(_csel));
 		if ( !found )
