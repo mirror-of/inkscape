@@ -768,7 +768,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
 	/* Canvas */
 	w = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (w), GTK_SHADOW_IN);
+	//	gtk_frame_set_shadow_type (GTK_FRAME (w), GTK_SHADOW_IN);
 	gtk_table_attach (GTK_TABLE (tbl), w, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
 	dtw->canvas = SP_CANVAS (sp_canvas_new_aa ());
 	GTK_WIDGET_SET_FLAGS (GTK_WIDGET (dtw->canvas), GTK_CAN_FOCUS);
@@ -1187,43 +1187,32 @@ sp_desktop_widget_set_focus (GtkWidget *widget, GdkEvent *event, SPDesktopWidget
 
 	return FALSE;
 }
- 
-void
-sp_desktop_widget_show_decorations (SPDesktopWidget *dtw, gboolean show)
-{
-	g_return_if_fail (dtw != NULL);
-	g_return_if_fail (SP_IS_DESKTOP_WIDGET (dtw));
 
-	if (!dtw->decorations != !show) {
-		dtw->decorations = show;
-		if (show) {
-			gtk_widget_show (GTK_WIDGET (dtw->hscrollbar));
-			gtk_widget_show (GTK_WIDGET (dtw->vscrollbar));
-			gtk_widget_show (GTK_WIDGET (dtw->hruler));
-			gtk_widget_show (GTK_WIDGET (dtw->vruler));
-			gtk_widget_show (GTK_WIDGET (dtw->sticky_zoom));
-		} else {
-			gtk_widget_hide (GTK_WIDGET (dtw->hscrollbar));
-			gtk_widget_hide (GTK_WIDGET (dtw->vscrollbar));
-			gtk_widget_hide (GTK_WIDGET (dtw->hruler));
-			gtk_widget_hide (GTK_WIDGET (dtw->vruler));
-			gtk_widget_hide (GTK_WIDGET (dtw->sticky_zoom));
-		}
+
+/* fixme: this are UI functions - find a better place for them (lauris) */
+
+void
+sp_desktop_toggle_rulers (SPDesktop *dt)
+{
+	if (GTK_WIDGET_VISIBLE (dt->owner->hruler)) {
+		gtk_widget_hide_all (dt->owner->hruler);
+		gtk_widget_hide_all (dt->owner->vruler);
+	} else {
+		gtk_widget_show_all (dt->owner->hruler);
+		gtk_widget_show_all (dt->owner->vruler);
 	}
 }
 
-/* fixme: this are UI functions - find a better place for them */
-
 void
-sp_desktop_toggle_borders (GtkWidget * widget)
+sp_desktop_toggle_scrollbars (SPDesktop *dt)
 {
-	SPDesktop * desktop;
-
-	desktop = SP_ACTIVE_DESKTOP;
-
-	if (desktop == NULL) return;
-
-	sp_desktop_widget_show_decorations (SP_DESKTOP_WIDGET (desktop->owner), !desktop->owner->decorations);
+	if (GTK_WIDGET_VISIBLE (dt->owner->hscrollbar)) {
+		gtk_widget_hide_all (dt->owner->hscrollbar);
+		gtk_widget_hide_all (dt->owner->vscrollbar);
+	} else {
+		gtk_widget_show_all (dt->owner->hscrollbar);
+		gtk_widget_show_all (dt->owner->vscrollbar);
+	}
 }
 
 /*

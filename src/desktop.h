@@ -92,13 +92,11 @@ gboolean SPShowFullFielName = TRUE;
 #endif
 
 /* Show/hide rulers & scrollbars */
+void sp_desktop_toggle_rulers (SPDesktop *dt);
+void sp_desktop_toggle_scrollbars (SPDesktop *dt);
 
 void sp_desktop_activate_guides (SPDesktop *desktop, gboolean activate);
-
 void sp_desktop_change_document (SPDesktop *desktop, SPDocument * document);
-
-/* fixme: */
-void sp_desktop_toggle_borders (GtkWidget * widget);
 
 /* Context */
 void sp_desktop_set_event_context (SPDesktop *desktop, GtkType type, const gchar *config);
