@@ -150,7 +150,7 @@ sp_color_selector_init (SPColorSelector *csel)
 	gtk_box_pack_start (GTK_BOX (csel), t, TRUE, TRUE, 0);
 
 	/* Create components */
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i <= 4; i++) {
 		/* Label */
 		csel->l[i] = gtk_label_new ("");
 		gtk_misc_set_alignment (GTK_MISC (csel->l[i]), 1.0, 0.5);
@@ -165,6 +165,7 @@ sp_color_selector_init (SPColorSelector *csel)
 
 		/* Spinbutton */
 		csel->b[i] = gtk_spin_button_new (GTK_ADJUSTMENT (csel->a[i]), 0.01, 2);
+		sp_dialog_defocus_on_enter (csel->b[i]);
 		gtk_widget_show (csel->b[i]);
 		gtk_table_attach (GTK_TABLE (t), csel->b[i], 2, 3, i, i + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD);
 
@@ -187,6 +188,7 @@ sp_color_selector_init (SPColorSelector *csel)
 	gtk_widget_show (csel->rgbal);
 	gtk_table_attach (GTK_TABLE (t), csel->rgbal, 0, 1, i, i + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
 	csel->rgbae = gtk_entry_new ();
+	sp_dialog_defocus_on_enter (csel->rgbae);
 	gtk_entry_set_max_length (GTK_ENTRY (csel->rgbae), 16);
 	gtk_entry_set_width_chars (GTK_ENTRY (csel->rgbae), 10);
 	gtk_widget_show (csel->rgbae);
