@@ -258,37 +258,22 @@ sp_rect_set_shape(SPShape *shape)
     double const h = rect->height.computed;
     double const w2 = w / 2;
     double const h2 = h / 2;
+    double const rx = std::min(( rect->rx.set
+                                 ? rect->rx.computed
+                                 : ( rect->ry.set
+                                     ? rect->ry.computed
+                                     : 0.0 ) ),
+                               .5 * rect->width.computed);
+    double const ry = std::min(( rect->ry.set
+                                 ? rect->ry.computed
+                                 : ( rect->rx.set
+                                     ? rect->rx.computed
+                                     : 0.0 ) ),
+                               .5 * rect->height.computed);
 
-    /* FIXME: It looks very suspicious that the behaviour for rx.set && !ry.set doesn't mirror
-     * the behaviour for ry.set && !rx.set.
-     *
-     * My reading of the spec (http://www.w3.org/TR/SVG11/shapes.html#RectElementRXAttribute)
-     * is that we're doing the wrong thing.
-     *
-     * It also appears that we do the wrong thing for erroneous (e.g. negative) values.
-     */
-    double rx;
-    if (rect->rx.set) {
-        rx = CLAMP(rect->rx.computed, 0.0, rect->width.computed / 2);
-    } else if (rect->ry.set) {
-        rx = CLAMP(rect->ry.computed, 0.0, MIN(rect->width.computed, rect->height.computed) / 2);
-    } else {
-        rx = 0.0;
-    }
-
-    double ry;
-    if (rect->ry.set) {
-        if (rect->rx.set) {
-            ry = CLAMP(rect->ry.computed, 0.0, rect->height.computed / 2);
-        } else {
-            ry = CLAMP(rect->ry.computed, 0.0, MIN(rect->width.computed, rect->height.computed) / 2);
-        }
-    } else if (rect->rx.set) {
-        ry = CLAMP(rect->rx.computed, 0.0, rect->height.computed / 2);
-    } else {
-        ry = 0.0;
-    }
-
+    /* TODO: Handle negative rx or ry as per
+     * http://www.w3.org/TR/SVG11/shapes.html#RectElementRXAttribute once Inkscape has proper error
+     * handling (see http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing). */
     if ((rx > 1e-18) && (ry > 1e-18)) {
         sp_curve_moveto(c, x + rx, y + 0.0);
         sp_curve_curveto(c, x + rx * (1 - C1), y + 0.0, x + 0.0, y + ry * (1 - C1), x + 0.0, y + ry);
@@ -403,7 +388,7 @@ sp_rect_set_transform(SPItem *item, NR::Matrix const &xform)
     rect->x = pos[NR::X];
     rect->y = pos[NR::Y];
 
-    // Adjust stroke width 
+    // Adjust stroke width
     sp_shape_adjust_stroke(item, sqrt(fabs(sw * sh)));
 
     // Adjust pattern fill
@@ -488,7 +473,7 @@ sp_rect_compensate_rxry(SPRect *rect, NR::Matrix xform)
 
     // test unit vectors to find out compensation:
     NR::Point c(rect->x.computed, rect->y.computed);
-    NR::Point cx = c + NR::Point(1, 0); 
+    NR::Point cx = c + NR::Point(1, 0);
     NR::Point cy = c + NR::Point(0, 1);
 
     // apply previous transform if any
@@ -511,7 +496,7 @@ sp_rect_compensate_rxry(SPRect *rect, NR::Matrix xform)
         rect->ry.computed = rect->ry.computed / eY;
     }
 
-    // Note that a radius may end up larger than half-side if the rect is scaled down; 
+    // Note that a radius may end up larger than half-side if the rect is scaled down;
     // that's ok because this preserves the intended radii in case the rect is enlarged again,
     // and set_shape will take care of trimming too large radii when generating d=
 
