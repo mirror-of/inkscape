@@ -233,8 +233,12 @@ sp_chars_normalized_bpath (SPChars *chars)
 
 	cc = g_slist_reverse (cc);
 
-	curve = sp_curve_concat (cc);
-
+  if ( cc ) {
+    curve = sp_curve_concat (cc);
+  } else {
+      curve=sp_curve_new();
+  }
+  
 	while (cc) {
 		/* fixme: This is dangerous, as we are mixing art_alloc and g_new */
 		sp_curve_unref ((SPCurve *) cc->data);

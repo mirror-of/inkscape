@@ -22,6 +22,10 @@ void sp_selected_path_symdiff ();
 // offset amount is the stroke-width of the curve
 void sp_selected_path_offset ();
 void sp_selected_path_inset ();
+void sp_selected_path_create_offset ();
+void sp_selected_path_create_inset ();
+void sp_selected_path_create_updating_offset ();
+void sp_selected_path_create_updating_inset ();
 // outline of a curve
 // uses the stroke-width
 void sp_selected_path_outline ();

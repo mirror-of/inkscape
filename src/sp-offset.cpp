@@ -58,22 +58,41 @@ static void sp_offset_get_tangent (SPOffset const *offset, gdouble t,
 
 Path *bpath_to_liv_path (ArtBpath * bpath);
 
+void   refresh_offset_source(SPOffset* offset);
+
 // pour recevoir les changements de l'objet source
-void sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
+static void sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
 				    const gchar * oldval,
 				    const gchar * newval, void *data);
-void sp_offset_source_destroy (SPRepr * repr, void *data);
+static void sp_offset_source_destroy (SPRepr * repr, void *data);
+static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
+static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
+static void sp_offset_source_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data);
 
 SPReprEventVector offset_source_event_vector = {
+  sp_offset_source_destroy,
+  NULL,				/* Add child */
+  sp_offset_source_child_added,
+  NULL,
+  sp_offset_source_child_removed,				/* Child removed */
+  NULL,
+  sp_offset_source_attr_changed,
+  NULL,				/* Change content */
+  sp_offset_source_content_changed,
+  NULL,				/* change_order */
+  NULL
+};
+
+SPReprEventVector offset_source_child_event_vector = {
   sp_offset_source_destroy,
   NULL,				/* Add child */
   NULL,
   NULL,
   NULL,				/* Child removed */
   NULL,
-  sp_offset_source_attr_changed,
-  NULL,				/* Change content */
   NULL,
+  NULL,				/* Change content */
+  sp_offset_source_content_changed,
   NULL,				/* change_order */
   NULL
 };
@@ -143,6 +162,7 @@ sp_offset_init (SPOffset * offset)
   offset->knotSet = false;
   offset->sourceObject = NULL;
   offset->sourceRepr = NULL;
+  offset->sourceDirty=false;
 }
 
 static void
@@ -237,6 +257,8 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
   offset = SP_OFFSET (object);
   shape = SP_SHAPE (object);
 
+  if ( offset->sourceDirty ) refresh_offset_source(offset);
+
   /* fixme: we should really collect updates */
   switch (key)
     {
@@ -307,6 +329,13 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 	    {
 	      sp_repr_add_listener (offset->sourceRepr,
 				    &offset_source_event_vector, offset);
+        // et les enfants s'il y en a (pour le texte)
+        SPRepr   *cur_child=offset->sourceRepr->children;
+        while ( cur_child ) {
+          sp_repr_add_listener (cur_child,
+              &offset_source_child_event_vector, offset);
+          cur_child=cur_child->next;
+        }
 	    }
 	  else
 	    {
@@ -315,13 +344,8 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 	    }
 	  if (offset->sourceRepr)
 	    {
-	      const char *npath = sp_repr_attr (offset->sourceRepr, "d");
-	      if (npath)
-		{
-		  sp_repr_set_attr (SP_OBJECT (offset)->repr,
-				    "sodipodi:original", npath);
-		}
-	    }
+      refresh_offset_source(offset);
+      }
 	}
       else
 	{
@@ -348,6 +372,8 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 static void
 sp_offset_update (SPObject * object, SPCtx * ctx, guint flags)
 {
+  SPOffset* offset=SP_OFFSET(object);
+  if ( offset->sourceDirty ) refresh_offset_source(offset);
   if (flags &
       (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
        SP_OBJECT_VIEWPORT_MODIFIED_FLAG))
@@ -815,19 +841,23 @@ sp_offset_top_point (SPOffset * offset, double *px, double *py)
   sp_curve_unref (curve);
 }
 
-void
+static void
 sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
 			       const gchar * oldval, const gchar * newval,
 			       void *data)
 {
   SPOffset *offset = (SPOffset *) data;
-  if (repr == NULL || offset == NULL || repr != offset->sourceRepr)
-    return;
-
+  if ( offset == NULL ) return;
+  if (repr == NULL ||  repr != offset->sourceRepr ) {
+     return; 
+  }
+  
   // deux dans lesquels on ne fera rien
-  if (strcmp ((const char *) key, "style") == 0)
-    return;
   if (strcmp ((const char *) key, "id") == 0)
+    return;
+  if (strcmp ((const char *) key, "transform") == 0)
+    return;
+  if (strcmp ((const char *) key, "sodipodi:original") == 0)
     return;
 
   Path *orig = NULL;
@@ -856,7 +886,7 @@ sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
 			       offset->sourceObject);
       SPItem *item = SP_ITEM (refobj);
 
-      SPCurve *curve;
+      SPCurve *curve=NULL;
       if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
 	return;
       if (SP_IS_SHAPE (item))
@@ -919,12 +949,13 @@ sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
 
 }
 
-void
+static void
 sp_offset_source_destroy (SPRepr * repr, void *data)
 {
   SPOffset *offset = (SPOffset *) data;
   if (offset == NULL)
     return;
+   if ( repr == NULL || repr != offset->sourceRepr ) return;
   if (offset->sourceObject)
     {
       free (offset->sourceObject);
@@ -936,3 +967,117 @@ sp_offset_source_destroy (SPRepr * repr, void *data)
       // pas besoin d'enlever le listener
     }
 }
+static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data)
+{
+  SPOffset *offset = (SPOffset *) data;
+  if (offset == NULL)
+    return;
+  if ( child == NULL ) return;
+  if ( repr == NULL || offset->sourceRepr != repr ) return; // juste le premier niveau.
+
+  sp_repr_add_listener (child,&offset_source_child_event_vector, offset);
+
+  offset->sourceDirty=true;
+  sp_object_request_update (SP_OBJECT(offset), SP_OBJECT_MODIFIED_FLAG);
+}
+static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data)
+{
+  SPOffset *offset = (SPOffset *) data;
+  if (offset == NULL)
+    return;
+  if ( child == NULL ) return;
+  if ( repr == NULL || offset->sourceRepr != repr ) return; // juste le premier niveau.
+
+  sp_repr_remove_listener_by_data (child, offset);
+
+  offset->sourceDirty=true;
+  sp_object_request_update (SP_OBJECT(offset), SP_OBJECT_MODIFIED_FLAG);
+}
+static void sp_offset_source_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data)
+{
+  SPOffset *offset = (SPOffset *) data;
+  if (offset == NULL)
+    return;
+
+   offset->sourceDirty=true;
+ sp_object_request_update (SP_OBJECT(offset), SP_OBJECT_MODIFIED_FLAG);
+}
+
+ void   refresh_offset_source(SPOffset* offset)
+ {
+   if ( offset == NULL ) return;
+   offset->sourceDirty=false;
+    Path *orig = NULL;
+
+        // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
+     SPObject *refobj;
+     refobj = sp_document_lookup_id (SP_OBJECT (offset)->document,
+ 	       offset->sourceObject);
+    if ( refobj == NULL ) return;
+
+        SPItem *item = SP_ITEM (refobj);
+
+        SPCurve *curve=NULL;
+        if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
+  	return;
+        if (SP_IS_SHAPE (item))
+  	{
+  	  curve = sp_shape_get_curve (SP_SHAPE (item));
+  	  if (curve == NULL)
+  	    return;
+  	}
+       if (SP_IS_TEXT (item))
+ 	{
+ 	  curve = sp_text_normalized_bpath (SP_TEXT (item));
+ 	  if (curve == NULL)
+	    return;
+}
+       orig = bpath_to_liv_path (curve->bpath);
+       sp_curve_unref (curve);
+
+
+   // finalisons
+   {
+     SPCSSAttr *css;
+     const gchar *val;
+     Shape *theShape = new Shape;
+     Shape *theRes = new Shape;
+
+     orig->ConvertWithBackData (1.0);
+     orig->Fill (theShape, 0);
+
+     css = sp_repr_css_attr (offset->sourceRepr , "style");
+     val = sp_repr_css_property (css, "fill-rule", NULL);
+     if (val && strcmp (val, "nonzero") == 0)
+       {
+ 	theRes->ConvertToShape (theShape, fill_nonZero);
+       }
+     else if (val && strcmp (val, "evenodd") == 0)
+       {
+ 	theRes->ConvertToShape (theShape, fill_oddEven);
+       }
+     else
+       {
+ 	theRes->ConvertToShape (theShape, fill_nonZero);
+       }
+
+     Path *originaux[1];
+     originaux[0] = orig;
+     Path *res = new Path;
+     theRes->ConvertToForme (res, 1, originaux);
+
+     delete theShape;
+     delete theRes;
+
+     char *res_d = liv_svg_dump_path2 (res);
+     delete res;
+     delete orig;
+
+     sp_repr_set_attr (SP_OBJECT (offset)->repr, "sodipodi:original", res_d);
+
+     free (res_d);
+   }
+ }
+
+ 
+

@@ -40,7 +40,7 @@ Path *Path_for_item (SPItem * item);
 gchar *liv_svg_dump_path (Path * path);
 void sp_selected_path_boolop (bool_op bop);
 void sp_selected_path_do_offset (bool expand);
-void sp_selected_path_create_offset_object (bool expand);
+void sp_selected_path_create_offset_object (bool expand,bool updating);
 SPRepr *LCA (SPRepr * a, SPRepr * b);
 bool Ancetre (SPRepr * a, SPRepr * who);
 SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
@@ -339,6 +339,7 @@ sp_selected_path_boolop (bool_op bop)
   sp_document_done (SP_DT_DOCUMENT (desktop));
   sp_repr_unref (repr);
 
+     sp_selection_empty (selection);
   sp_selection_set_item (selection, item);
 }
 
@@ -688,6 +689,7 @@ sp_selected_path_outline ()
     g_free (str);
     item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
     sp_repr_unref (repr);
+    sp_selection_empty (selection);
     sp_selection_add_item (selection, item);
 
     {
@@ -719,17 +721,34 @@ sp_selected_path_outline ()
 void
 sp_selected_path_offset ()
 {
-  sp_selected_path_create_offset_object (true);
+  //  sp_selected_path_do_offset (true);
+  sp_selected_path_create_offset();
 }
-
 void
 sp_selected_path_inset ()
 {
-  sp_selected_path_create_offset_object (false);
+  //  sp_selected_path_do_offset (false);
+  sp_selected_path_create_inset();
+}
+void sp_selected_path_create_offset ()
+{
+  sp_selected_path_create_offset_object (true,false);
+}
+void sp_selected_path_create_inset ()
+{
+  sp_selected_path_create_offset_object (false,false);
+}
+void sp_selected_path_create_updating_offset ()
+{
+  sp_selected_path_create_offset_object (true,true);
+}
+void sp_selected_path_create_updating_inset ()
+{
+  sp_selected_path_create_offset_object (false,true);
 }
 
 void
-sp_selected_path_create_offset_object (bool expand)
+sp_selected_path_create_offset_object (bool expand,bool updating)
 {
   SPSelection *selection;
   SPRepr *repr;
@@ -857,8 +876,12 @@ sp_selected_path_create_offset_object (bool expand)
   }
 
   sp_curve_unref (curve);
- // sp_repr_unparent (SP_OBJECT_REPR (item));
-
+  if ( updating ) {
+    // on conserve l'original
+  } else {
+    sp_repr_unparent (SP_OBJECT_REPR (item));
+  }
+     
   if (res->descr_nb <= 1)
     {
       // pas vraiment de points sur le resultat
@@ -892,9 +915,13 @@ sp_selected_path_create_offset_object (bool expand)
     str = liv_svg_dump_path (res);
     sp_repr_set_attr (repr, "sodipodi:original", str);
     g_free (str);
-    
-    sp_repr_set_attr (repr, "xlink:href", sp_repr_attr(SP_OBJECT(item)->repr,"id"));
 
+    if ( updating ) {
+      sp_repr_set_attr (repr, "xlink:href", sp_repr_attr(SP_OBJECT(item)->repr,"id"));
+    } else {
+      sp_repr_set_attr (repr, "xlink:href", NULL);
+    }
+    
     if (sp_svg_transform_write (tstr, 80, &i2root))
       {
 	sp_repr_set_attr (repr, "transform", tstr);
@@ -907,6 +934,7 @@ sp_selected_path_create_offset_object (bool expand)
     sp_repr_set_attr (repr, "style", style);
     SPItem* nitem = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
     sp_repr_unref (repr);
+    sp_selection_empty (selection);
     sp_selection_add_item (selection, nitem);
 
   }
@@ -1128,6 +1156,7 @@ sp_selected_path_do_offset (bool expand)
     g_free (str);
     item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
     sp_repr_unref (repr);
+     sp_selection_empty (selection);
     sp_selection_add_item (selection, item);
 
     // on laisse le style en place (peut-etre fill=none serait plus approprié? ou changer l'epaisseur du trait?)
@@ -1234,6 +1263,7 @@ sp_selected_path_simplify ()
     g_free (str);
     item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
     sp_repr_unref (repr);
+     sp_selection_empty (selection);
     sp_selection_add_item (selection, item);
 
   }

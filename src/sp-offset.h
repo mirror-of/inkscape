@@ -41,6 +41,7 @@ struct _SPOffset
   float rad;			/* offset radius */
   char *sourceObject;
   SPRepr *sourceRepr;
+  bool   sourceDirty;
 
   bool knotSet;
   double knotx, knoty;

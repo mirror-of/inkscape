@@ -1778,8 +1778,12 @@ sp_text_normalized_bpath (SPText *text)
 
 	cc = g_slist_reverse (cc);
 
-	curve = sp_curve_concat (cc);
-
+  if ( cc ) {
+    curve = sp_curve_concat (cc);
+  } else {
+    curve=sp_curve_new();
+  }
+  
 	while (cc) {
 		sp_curve_unref ((SPCurve *) cc->data);
 		cc = g_slist_remove (cc, cc->data);
