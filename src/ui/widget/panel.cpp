@@ -46,6 +46,7 @@ void Panel::init()
     tabButton.set_label("<");
     closeButton.set_label("X");
 
+/*
     topBar.pack_start(tabTitle);
 
 
@@ -53,6 +54,7 @@ void Panel::init()
     topBar.pack_end(tabButton, false, false);
 
     pack_start( topBar, false, false );
+*/
 
     show_all_children();
 }
