@@ -245,13 +245,19 @@ sp_cgrid_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flag
 	grid->sw -= NR::Point(affine[4], affine[5]);
 
 	for(int dim = 0; dim < 2; dim++) {
+		gint scaling_factor = grid->empspacing;
+
+		if (scaling_factor <= 1)
+			scaling_factor = 5;
+
 		grid->scaled[dim] = FALSE;
 		grid->sw[dim] = fabs (grid->sw[dim]);
 		while (grid->sw[dim] < 8.0) {
 			grid->scaled[dim] = TRUE;
-			grid->sw[dim] *= 5.0;
-			if (grid->sw[dim] < 8.0)
-				grid->sw[dim] *= 2.0;
+			grid->sw[dim] *= scaling_factor;
+			/* First pass, go up to the major line spacing, then
+			   keep increasing by two. */
+			scaling_factor = 2;
 		}
 	}
 
