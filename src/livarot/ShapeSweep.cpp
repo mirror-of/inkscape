@@ -862,7 +862,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     if (b->type != shape_polygon)
       return shape_input_err;
   }
-  
+
   a->ResetSweep ();
   b->ResetSweep ();
 
@@ -1162,8 +1162,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 	  intersL->SwapWithRight (*sTree, *sEvts);
 
-	  TesteIntersection (intersL, RIGHT, true);
-	  TesteIntersection (intersR, LEFT, true);
+	  TesteIntersection (intersL, LEFT, true);
+	  TesteIntersection (intersR, RIGHT, true);
 	}
       else
 	{
