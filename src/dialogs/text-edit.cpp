@@ -76,7 +76,7 @@ static const gchar *spacings[] = {"90%", "100%", "110%", "120%", "133%", "150%",
 static GtkWidget *dlg = NULL;
 static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
-static gchar *prefs_path = "dialogs.textandfont";
+static gchar const *prefs_path = "dialogs.textandfont";
 
 static void
 sp_text_edit_dialog_destroy (GtkObject *object, gpointer data)
@@ -441,11 +441,9 @@ sp_text_edit_dialog_close (GtkButton *button, GtkWidget *dlg)
 }
 
 static gchar *
-sp_text_edit_dialog_font_style_to_lookup (SPStyle *style)
+sp_text_edit_dialog_font_style_to_lookup (SPStyle const *style)
 {
-	static gchar c[256];
-	gchar *wstr, *sstr, *p;
-
+	char const *wstr;
 	switch (style->font_weight.computed) {
 	case SP_CSS_FONT_WEIGHT_100:
 		wstr = "extra light";
@@ -458,7 +456,7 @@ sp_text_edit_dialog_font_style_to_lookup (SPStyle *style)
 		break;
 	case SP_CSS_FONT_WEIGHT_400:
 	case SP_CSS_FONT_WEIGHT_NORMAL:
-		wstr = NULL;
+		wstr = "";
 		break;
 	case SP_CSS_FONT_WEIGHT_500:
 		wstr = "medium";
@@ -477,13 +475,14 @@ sp_text_edit_dialog_font_style_to_lookup (SPStyle *style)
 		wstr = "black";
 		break;
 	default:
-		wstr = NULL;
+		wstr = "";
 		break;
 	}
 
+	char const *sstr;
 	switch (style->font_style.computed) {
 	case SP_CSS_FONT_STYLE_NORMAL:
-		sstr = NULL;
+		sstr = "";
 		break;
 	case SP_CSS_FONT_STYLE_ITALIC:
 		sstr = "italic";
@@ -492,23 +491,18 @@ sp_text_edit_dialog_font_style_to_lookup (SPStyle *style)
 		sstr = "oblique";
 		break;
 	default:
-		sstr = NULL;
+		sstr = "";
 		break;
 	}
 
-	p = c;
-	if (wstr) {
-		if (p != c) *p++ = ' ';
-		memcpy (p, wstr, strlen (wstr));
-		p += strlen (wstr);
-	}
-	if (sstr) {
-		if (p != c) *p++ = ' ';
-		memcpy (p, sstr, strlen (sstr));
-		p += strlen (sstr);
-	}
-	*p = '\0';
-
+	char const *maybe_space = ( *wstr && *sstr
+				    ? " "
+				    : "" );
+	static gchar c[256];
+	g_snprintf(c, sizeof(c), "%s%s%s",
+		   wstr,
+		   maybe_space,
+		   sstr);
 	return c;
 }
 

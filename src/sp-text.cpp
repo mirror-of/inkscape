@@ -48,7 +48,7 @@
 
 #include "sp-text.h"
 
-static gchar *sp_text_font_style_to_lookup (SPStyle *style);
+static gchar *sp_text_font_style_to_lookup (SPStyle const *style);
 
 static void sp_text_update_length (SPSVGLength *length, gdouble em, gdouble ex, gdouble scale);
 
@@ -1301,11 +1301,9 @@ sp_text_description (SPItem * item)
 /* 'lighter' and 'darker' have to be resolved earlier */
 
 static gchar *
-sp_text_font_style_to_lookup (SPStyle *style)
+sp_text_font_style_to_lookup (SPStyle const *style)
 {
-	static gchar c[256];
-	gchar *wstr, *sstr, *p;
-
+	char const *wstr;
 	switch (style->font_weight.computed) {
 	case SP_CSS_FONT_WEIGHT_100:
 		wstr = "extra light";
@@ -1325,6 +1323,12 @@ sp_text_font_style_to_lookup (SPStyle *style)
 		break;
 	case SP_CSS_FONT_WEIGHT_600:
 		wstr = "semi";
+		/* FIXME: `semi' is ignored by nr_type_calculate_position (as called by
+		 * nr_type_directory_lookup_fuzzy).  Should probably be `semibold' instead.
+		 *
+		 * [For that matter, we should probably be passing constants directly rather than
+		 * formatting a string and then having nr_type_calculate_position parsing it.]
+		 */
 		break;
 	case SP_CSS_FONT_WEIGHT_700:
 	case SP_CSS_FONT_WEIGHT_BOLD:
@@ -1337,13 +1341,14 @@ sp_text_font_style_to_lookup (SPStyle *style)
 		wstr = "black";
 		break;
 	default:
-		wstr = NULL;
+		wstr = "";
 		break;
 	}
 
+	char const *sstr;
 	switch (style->font_style.computed) {
 	case SP_CSS_FONT_STYLE_NORMAL:
-		sstr = NULL;
+		sstr = "";
 		break;
 	case SP_CSS_FONT_STYLE_ITALIC:
 		sstr = "italic";
@@ -1352,23 +1357,18 @@ sp_text_font_style_to_lookup (SPStyle *style)
 		sstr = "oblique";
 		break;
 	default:
-		sstr = NULL;
+		sstr = "";
 		break;
 	}
 
-	p = c;
-	if (wstr) {
-		if (p != c) *p++ = ' ';
-		memcpy (p, wstr, strlen (wstr));
-		p += strlen (wstr);
-	}
-	if (sstr) {
-		if (p != c) *p++ = ' ';
-		memcpy (p, sstr, strlen (sstr));
-		p += strlen (sstr);
-	}
-	*p = '\0';
-
+	char const *maybe_space = ( *wstr && *sstr
+				    ? " "
+				    : "" );
+	static gchar c[256];
+	g_snprintf(c, sizeof(c), "%s%s%s",
+		   wstr,
+		   maybe_space,
+		   sstr);
 	return c;
 }
 
