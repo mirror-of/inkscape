@@ -49,11 +49,11 @@ GType sp_polygon_get_type(void)
             sizeof(SPPolygon),
             16,
             (GInstanceInitFunc) sp_polygon_init,
-            NULL,	/* value_table */
+            NULL,   /* value_table */
         };
         polygon_type = g_type_register_static(SP_TYPE_SHAPE, "SPPolygon", &polygon_info, (GTypeFlags) 0);
     }
-    
+
     return polygon_type;
 }
 
@@ -88,7 +88,7 @@ static void sp_polygon_build(SPObject *object, SPDocument *document, SPRepr *rep
 
 /*
  * sp_svg_write_polygon: Write points attribute for polygon tag.
- * @bpath: 
+ * @bpath:
  *
  * Return value: points attribute string.
  */
@@ -97,7 +97,7 @@ static gchar *sp_svg_write_polygon(const NArtBpath *bpath)
     g_return_val_if_fail(bpath != NULL, NULL);
 
     Inkscape::SVGOStringStream os;
-	
+
     for (int i = 0; bpath[i].code != NR_END; i++) {
         switch (bpath [i].code) {
             case NR_LINETO:
@@ -105,13 +105,13 @@ static gchar *sp_svg_write_polygon(const NArtBpath *bpath)
             case NR_MOVETO_OPEN:
                 os << bpath [i].x3 << "," << bpath [i].y3 << " ";
                 break;
-                
+
             case NR_CURVETO:
             default:
                 g_assert_not_reached();
         }
     }
-	
+
     return g_strdup(os.str().c_str());
 }
 
@@ -140,7 +140,7 @@ static SPRepr *sp_polygon_write(SPObject *object, SPRepr *repr, guint flags)
 }
 
 
-gboolean polygon_get_value(gchar const **p, gdouble *v)
+static gboolean polygon_get_value(gchar const **p, gdouble *v)
 {
     while (**p != '\0' && (**p == ',' || **p == '\x20' || **p == '\x9' || **p == '\xD' || **p == '\xA')) {
         (*p)++;
@@ -160,32 +160,29 @@ gboolean polygon_get_value(gchar const **p, gdouble *v)
     return true;
 }
 
-    
+
 static void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
 {
     SPPolygon *polygon = SP_POLYGON(object);
-    g_print("sp_polygon_set\n");
 
     switch (key) {
-	case SP_ATTR_POINTS: {
+        case SP_ATTR_POINTS: {
             if (!value) {
                 break;
             }
-	    SPCurve *curve = sp_curve_new();
-	    gboolean hascpt = FALSE;
+            SPCurve *curve = sp_curve_new();
+            gboolean hascpt = FALSE;
 
-	    const gchar *cptr = value;
+            const gchar *cptr = value;
 
             while (TRUE) {
                 gdouble x;
-                gboolean got = polygon_get_value(&cptr, &x);
-                if (got == FALSE) {
+                if (!polygon_get_value(&cptr, &x)) {
                     break;
                 }
 
                 gdouble y;
-                got = polygon_get_value(&cptr, &y);
-                if (got == FALSE) {
+                if (!polygon_get_value(&cptr, &y)) {
                     break;
                 }
 
@@ -196,13 +193,17 @@ static void sp_polygon_set(SPObject *object, unsigned int key, const gchar *valu
                     hascpt = TRUE;
                 }
             }
-		
+
+            /* TODO: if *cptr != '\0' or if the break came after parsing an x without a y then
+             * there's an error, which should be handled according to
+             * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing. */
+
             sp_curve_closepath(curve);
             sp_shape_set_curve(SP_SHAPE(polygon), curve, TRUE);
             sp_curve_unref(curve);
             break;
-	}
-	default:
+        }
+        default:
             if (((SPObjectClass *) parent_class)->set) {
                 ((SPObjectClass *) parent_class)->set(object, key, value);
             }
