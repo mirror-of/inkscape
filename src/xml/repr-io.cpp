@@ -547,7 +547,7 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
                 fputs ("  ", file);
             }
         }
-        fprintf (file, "</%s>", sp_repr_name (repr));
+        fprintf (file, "</%s>", element_name);
     } else {
         fputs (" />", file);
     }
