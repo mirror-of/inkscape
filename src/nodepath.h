@@ -13,6 +13,7 @@
 #include "knot.h"
 #include "sp-path.h"
 #include "desktop-handles.h"
+#include "libnr/nr-path-code.h"
 #include "xml/xml-forward.h"
 
 #include <list>

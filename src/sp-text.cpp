@@ -56,6 +56,7 @@
 #include "xml/repr-private.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
+#include "display/curve.h"
 #include "display/nr-arena-group.h"
 #include "display/nr-arena-glyphs.h"
 #include "attributes.h"

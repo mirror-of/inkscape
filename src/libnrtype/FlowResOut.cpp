@@ -36,6 +36,7 @@
 #include "libnrtype/font-instance.h"
 #include "libnrtype/font-style-to-pos.h"
 
+#include "display/curve.h"
 #include "display/nr-arena-item.h"
 #include "display/nr-arena-group.h"
 #include "display/nr-arena-glyphs.h"

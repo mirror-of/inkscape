@@ -1,6 +1,7 @@
 #include <glib/gmessages.h>
 #include <glib/gstrfuncs.h>
 
+#include "display/curve.h"
 #include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"

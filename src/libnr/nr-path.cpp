@@ -9,6 +9,7 @@
  * This code is in public domain
  */
 
+#include "n-art-bpath.h"
 #include "nr-matrix.h"
 #include "nr-matrix-ops.h"
 #include "nr-rect.h"

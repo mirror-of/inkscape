@@ -32,10 +32,12 @@
 #include "desktop.h"
 #include "splivarot.h"
 #include "display/canvas-bpath.h"
+#include "display/curve.h"
 #include "helper/sp-intl.h"
 #include "view.h"
 #include "prefs-utils.h"
 
+#include "libnr/n-art-bpath.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-point.h"
 #include "xml/repr.h"

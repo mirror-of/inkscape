@@ -30,6 +30,7 @@
 #include <errno.h>
 #include <math.h>
 
+#include <libnr/n-art-bpath.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
 

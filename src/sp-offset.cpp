@@ -24,6 +24,7 @@
 #include "attributes.h"
 #include "document.h"
 #include "display/bezier-utils.h"
+#include "display/curve.h"
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
 #include "xml/repr-private.h"
@@ -38,6 +39,7 @@
 #include "sp-use-reference.h"
 #include "prefs-utils.h"
 
+#include "libnr/n-art-bpath.h"
 #include "libnr/nr-point.h"
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-point-ops.h>

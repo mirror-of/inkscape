@@ -18,12 +18,14 @@
 
 #include <gtkmm.h>
 
+#include <libnr/n-art-bpath.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 
 #include "macros.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
+#include "display/curve.h"
 #include "helper/sp-intl.h"
 #include "svg/svg.h"
 #include "enums.h"

@@ -24,6 +24,7 @@
 #include <libnrtype/font-instance.h>
 
 #include "macros.h"
+#include "display/curve.h"
 #include "display/nr-arena-glyphs.h"
 #include "print.h"
 #include "style.h"

@@ -20,6 +20,7 @@
 #include "attributes.h"
 #include "style.h"
 #include "sp-line.h"
+#include "display/curve.h"
 #include "helper/sp-intl.h"
 #include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>

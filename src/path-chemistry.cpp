@@ -20,6 +20,7 @@
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 #include "svg/svg.h"
+#include "display/curve.h"
 #include "helper/sp-intl.h"
 #include "sp-object.h"
 #include "sp-path.h"

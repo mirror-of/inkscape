@@ -17,6 +17,7 @@
 #include <math.h>
 #include <string.h>
 
+#include <display/curve.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-ops.h>

@@ -12,6 +12,7 @@
 #include "sp-object.h"
 #include "sp-item.h"
 
+#include "display/curve.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 

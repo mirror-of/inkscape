@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include "attributes.h"
 #include "sp-polyline.h"
+#include "display/curve.h"
 #include "helper/sp-intl.h"
 #include "xml/repr.h"
 

@@ -18,6 +18,7 @@
 #include <glib/gmessages.h>
 
 #include <display/curve.h>
+#include <libnr/n-art-bpath.h>
 #include <libnr/nr-point.h>
 #include <libnr/nr-path.h>
 #include <libnr/nr-macros.h>
@@ -1041,7 +1042,7 @@ sp_curve_nonzero_distance_including_space(SPCurve const *const curve, double seg
     if (real_dist >= 1e-18) {
         return real_dist;
     } else {
-        unsigned const nSegs = SP_CURVE_LENGTH(curve) - 2;
+        unsigned const nSegs = SP_CURVE_LENGTH(curve) - 1;
         for (unsigned i = 0; i < nSegs; ++i) {
             seg2len[i] = 1.;
         }

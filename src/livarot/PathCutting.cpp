@@ -8,9 +8,10 @@
  */
 
 #include "Path.h"
-#include "../libnr/nr-point-fns.h"
-#include "../libnr/nr-point-ops.h"
-#include "../libnr/nr-matrix-ops.h"
+#include "libnr/n-art-bpath.h"
+#include "libnr/nr-point-fns.h"
+#include "libnr/nr-point-ops.h"
+#include "libnr/nr-matrix-ops.h"
 
 /** Returns ceil( (double) numerator / denominator ). */
 static inline unsigned roundup_div(unsigned const numerator, unsigned const denominator)

@@ -16,22 +16,23 @@
 #include <math.h>
 #include <string.h>
 #include <glib.h>
+
+#include <display/curve.h>
+#include <display/nr-arena.h>
+#include <display/nr-arena-shape.h>
+#include <libnr/n-art-bpath.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-path.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-blit.h>
-
-#include <style.h>
-#include "nr-arena.h"
-#include "nr-arena-shape.h"
-
 #include <livarot/Shape.h>
 #include <livarot/Path.h>
 #include <livarot/AlphaLigne.h>
 #include <livarot/Ligne.h>
 #include <livarot/BitLigne.h>
 #include <libnr/nr-matrix-ops.h>
+#include <style.h>
 
 //int  showRuns=0;
 void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);

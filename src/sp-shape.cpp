@@ -17,6 +17,7 @@
 
 #include <string.h>
 
+#include <libnr/n-art-bpath.h>
 #include <libnr/nr-pixblock.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
@@ -26,6 +27,7 @@
 #include "helper/sp-intl.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
+#include "display/curve.h"
 #include "display/nr-arena-shape.h"
 #include "uri-references.h"
 #include "print.h"

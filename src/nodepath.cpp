@@ -15,10 +15,12 @@
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
 #include "svg/svg.h"
+#include "display/curve.h"
 #include "display/sp-canvas-util.h"
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
 #include "helper/sp-intl.h"
+#include "libnr/n-art-bpath.h"
 #include "knot.h"
 #include "inkscape.h"
 #include "document.h"

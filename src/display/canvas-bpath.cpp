@@ -12,11 +12,12 @@
  *
  */
 
+#include <config.h>
+#include "curve.h"
 #include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "canvas-bpath.h"
 
-#include <config.h>
 #include <livarot/Shape.h>
 #include <livarot/Path.h>
 #include <livarot/AlphaLigne.h>

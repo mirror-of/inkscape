@@ -22,6 +22,7 @@
 #include "svg/svg.h"
 #include "attributes.h"
 #include "display/bezier-utils.h"
+#include "display/curve.h"
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
 #include "xml/repr.h"

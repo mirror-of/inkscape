@@ -61,7 +61,8 @@
 #include "sp-desktop-widget.h"
 #include "dyna-draw-context.h"
 #include "widgets/spw-utilities.h"
-#include <libnr/nr-point-fns.h>
+#include "libnr/n-art-bpath.h"
+#include "libnr/nr-point-fns.h"
 #include "xml/repr.h"
 
 #define DDC_RED_RGBA 0xff0000ff

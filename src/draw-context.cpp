@@ -45,6 +45,7 @@
 #include "draw-context.h"
 #include "message-stack.h"
 
+#include <libnr/n-art-bpath.h>
 #include <libnr/nr-point-fns.h>
 
 #define SPDC_EVENT_MASK ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK )
