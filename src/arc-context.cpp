@@ -36,6 +36,7 @@
 #include "object-edit.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
+#include "desktop.h"
 
 #include "arc-context.h"
 

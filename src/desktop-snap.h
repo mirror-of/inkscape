@@ -14,7 +14,9 @@
  */
 
 #include <vector>
-#include "desktop.h"
+
+struct SPDesktop;
+namespace NR { class scale; }
 
 /* Single point methods */
 double sp_desktop_free_snap (SPDesktop const *desktop, NR::Point &req);

@@ -35,6 +35,7 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "desktop-snap.h"
+#include "desktop.h"
 #include "pixmaps/cursor-star.xpm"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
