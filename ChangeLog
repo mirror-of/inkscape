@@ -2,6 +2,8 @@
 
 	* src/dialogs/item-properties.cpp, src/sp-object.h:  Cleaning up
 	stubs, disabling some more of the desc code to prevent crash.	  
+	Mentals change to SPObject::label() broke the label editing code;
+	fixing it.
 
 2004-10-30  Kees Cook  <kees@outflux.net>
 

@@ -410,7 +410,11 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
         
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
         SPObject *obj = (SPObject*)item;
-        gtk_entry_set_text (GTK_ENTRY (w), obj->label());
+        if (obj->label() != NULL) {
+            gtk_entry_set_text (GTK_ENTRY (w), obj->label());
+        } else {
+            gtk_entry_set_text (GTK_ENTRY (w), obj->defaultLabel());
+        }
         gtk_widget_set_sensitive (w, TRUE);
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label_label"));
         gtk_label_set_text (GTK_LABEL (w), _("Label"));
