@@ -144,8 +144,6 @@ sp_ctrlrect_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba, gui
 		y0 = MAX (buf->rect.y0, ys);
 		y1 = MIN (buf->rect.y1, ye + 1);
 		p = buf->buf + (y0 - buf->rect.y0) * buf->buf_rowstride + (x - buf->rect.x0) * 3;
-                guint dash_on = 1;
-                guint dash_counter = 0;
 		for (y = y0; y < y1; y++) {
                 if (!dashed || ((y / DASH_LENGTH) % 2)) {
 			p[0] = COMPOSE (p[0], r, a);
