@@ -626,16 +626,17 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	SP_VERB_TOGGLE_RULERS,
 	SP_VERB_TOGGLE_SCROLLBARS,
 
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
+        SP_VERB_NONE,
+	SP_VERB_FULLSCREEN,
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+
         SP_VERB_NONE,
 	SP_VERB_DIALOG_TOGGLE,
         SP_VERB_LAST
 	};
 
     static const sp_verb_t view_verbs2[] = {
-#ifdef HAVE_GTK_WINDOW_FULLSCREEN
-        SP_VERB_NONE,
-	SP_VERB_FULLSCREEN,
-#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
         SP_VERB_NONE,
 	SP_VERB_FILE_NEXT_DESKTOP,
 	SP_VERB_FILE_PREV_DESKTOP,
