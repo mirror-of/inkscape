@@ -174,6 +174,12 @@ sp_use_release (SPObject *object)
 
 	use->ref->detach();
 
+      if (use->repr) { 	 
+           sp_repr_remove_listener_by_data (use->repr, use); 	 
+           sp_repr_unref (use->repr); 	 
+           use->repr = NULL; 	 
+      } 	 
+
 	if (((SPObjectClass *) parent_class)->release)
 		((SPObjectClass *) parent_class)->release (object);
 }
@@ -733,9 +739,9 @@ sp_use_unlink (SPUse *use)
 	SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(orig));
 
 	// remove the use
-	sp_repr_unparent (SP_OBJECT_REPR (use));
-
-	// add it to the document, preserving id, parent, and position
+	SP_OBJECT(use)->deleteObject();
+	
+	// add unlinked object to the document, preserving id, parent, and position
 	sp_repr_append_child (parent, copy);
       sp_repr_set_position_absolute (copy, pos > 0 ? pos : 0);
 	sp_repr_set_attr (copy, "id", id);
@@ -750,7 +756,7 @@ sp_use_unlink (SPUse *use)
 		sp_item_write_transform (item, SP_OBJECT_REPR (item), &ctrans);
 	}
 
-	return SP_ITEM(unlinked);
+	return SP_ITEM (unlinked);
 }
 
 SPItem *
