@@ -22,6 +22,7 @@ double sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Poi
 gdouble sp_desktop_horizontal_snap(SPDesktop const *dt, NR::Point* req);
 
 gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NR::Point* req);
+gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point& req, unsigned const dim);
 
 /* List of points methods */
 double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NR::Point const p[], int const length, NR::Point const norm, double const sy, unsigned const dim);

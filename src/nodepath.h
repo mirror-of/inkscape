@@ -91,8 +91,9 @@ struct _SPNodePath {
 	GList * subpaths;
 /**  A list of nodes which are currently selected */
 	GList * selected;
-/**  Transforms (userspace <---> virtual space?   someone please describe )*/
-	NRMatrix i2d, d2i;
+/**  Transforms (userspace <---> virtual space?   someone please describe )
+	 njh: I'd be guessing that these are item <-> desktop transforms.*/
+	NR::Matrix i2d, d2i;
 /**  The DOM node which describes this NodePath */
 	SPRepr *repr;
 };

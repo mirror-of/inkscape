@@ -30,7 +30,7 @@
 
 #define SNAP_ON(d) (((d)->gridsnap > 0.0) || ((d)->guidesnap > 0.0))
 
-static gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point &req, unsigned const dim)
+gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point &req, unsigned const dim)
 {
 	g_assert( dim < 2 );
 	return sp_desktop_vector_snap (dt, req, component_vectors[dim]);
