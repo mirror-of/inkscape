@@ -79,6 +79,10 @@ static void sp_export_xdpi_value_changed         ( GtkAdjustment *adj,
 static void sp_export_selection_changed ( Inkscape::Application *inkscape, 
                                           SPDesktop *desktop, 
                                           GtkObject *base);
+static void sp_export_selection_modified ( Inkscape::Application *inkscape, 
+                                           SPDesktop *desktop, 
+                                           guint flags,
+                                           GtkObject *base );
 
 static void sp_export_set_area      ( GtkObject *base, float x0, float y0, 
                                       float x1, float y1 );
@@ -259,6 +263,8 @@ sp_export_dialog_area_frame (GtkWidget * dlg)
 
     g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", 
                        G_CALLBACK (sp_export_selection_changed), dlg );
+    g_signal_connect ( G_OBJECT (INKSCAPE), "modify_selection", 
+                       G_CALLBACK (sp_export_selection_modified), dlg );
     g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", 
                        G_CALLBACK (sp_export_selection_changed), dlg );
     
@@ -568,18 +574,57 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
                               SPDesktop *desktop, 
                               GtkObject *base )
 {
-//    std::cout << "Selection Changed" << std::endl;
+//  std::cout << "Selection Changed" << std::endl;
+    selection_type current_key;
+    current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
     if (inkscape &&
             SP_IS_INKSCAPE (inkscape) &&
             desktop &&
-            SELECTION_CUSTOM != (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"))) {
-        sp_export_detect_size(base);
+            SELECTION_CUSTOM != current_key) {
+        GtkToggleButton * button;
+        button = (GtkToggleButton *)gtk_object_get_data(base, selection_names[current_key]);
+        sp_export_area_toggled(button, base);
     } // end of if()
 
     return;
 } // end of sp_export_selection_changed()
 
+static void
+sp_export_selection_modified ( Inkscape::Application *inkscape, 
+                               SPDesktop *desktop,  /* Not sure that this is right */
+                               guint flags,
+                               GtkObject *base )
+{
+    selection_type current_key;
+    current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
 
+    switch (current_key) {
+        case SELECTION_DRAWING:
+            if ( SP_ACTIVE_DESKTOP ) {
+                SPDocument *doc;
+                NRRect bbox;
+                doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+                sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
+
+                if (!(bbox.x0 > bbox.x1 && bbox.y0 > bbox.y1)) { 
+                    sp_export_set_area (base, bbox.x0, bbox.y0, bbox.x1, bbox.y1);
+                }
+            }
+            break;
+        case SELECTION_SELECTION:
+            if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
+                NRRect bbox;
+                (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
+                sp_export_set_area (base, bbox.x0, bbox.y0, bbox.x1, bbox.y1);
+            }
+            break;
+        default:
+            /* Do nothing for page or for custom */
+            break;
+    }
+
+    return;
+}
 
 static void
 sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
@@ -730,6 +775,8 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                     /* Only if there is a selection that we can set
                        do we break, otherwise we fall through to the
                        drawing */
+                    // std::cout << "Using selection: SELECTION" << std::endl;
+                    key = SELECTION_SELECTION;
                     break;
                 }
             case SELECTION_DRAWING:
@@ -742,6 +789,8 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                 /* If the drawing is valid, then we'll use it and break
                    otherwise we drop through to the page settings */
                 if (!(bbox.x0 > bbox.x1 && bbox.y0 > bbox.y1)) { 
+                    // std::cout << "Using selection: DRAWING" << std::endl;
+                    key = SELECTION_DRAWING;
                     break;
                 }
             case SELECTION_PAGE:
@@ -749,6 +798,8 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                 bbox.y0 = 0.0;
                 bbox.x1 = sp_document_width (doc);
                 bbox.y1 = sp_document_height (doc);
+                // std::cout << "Using selection: PAGE" << std::endl;
+                key = SELECTION_PAGE;
                 break;
             case SELECTION_CUSTOM:
             default:
@@ -998,8 +1049,33 @@ sp_export_browse_store (GtkButton *button, gpointer userdata)
     return;
 } // end of sp_export_browse_store()
 
+/**
+    \brief  This function is used to detect the current selection setting
+            based on the values in the x0, y0, x1 and y0 fields.
+    \param  base  The export dialog itself
+
+    One of the most confusing parts of this function is why the array
+    is built at the beginning.  What needs to happen here is that we
+    should always check the current selection to see if it is the valid
+    one.  While this is a performance improvement it is also a usability
+    one during the cases where things like selections and drawings match
+    size.  This way buttons change less 'randomly' (atleast in the eyes
+    of the user).  To do this an array is built where the current selection
+    type is placed first, and then the others in an order from smallest
+    to largest (this can be configured by reshuffling \c test_order).
+
+    All of the values in this function are rounded to two decimal places
+    because that is what is shown to the user.  While everything is kept
+    more accurate than that, the user can't control more acurrate than
+    that, so for this to work for them - it needs to check on that level
+    of accuracy.
+
+    \todo finish writing this up 
+*/
 static void
 sp_export_detect_size(GtkObject * base) {
+    static const selection_type test_order[SELECTION_NUMBER_OF] = {SELECTION_SELECTION, SELECTION_DRAWING, SELECTION_PAGE, SELECTION_CUSTOM};
+    selection_type this_test[SELECTION_NUMBER_OF + 1];
     selection_type key = SELECTION_NUMBER_OF;
 
     NR::Point x(sp_export_value_get_pt (base, "x0"),
@@ -1010,52 +1086,71 @@ sp_export_detect_size(GtkObject * base) {
     current_bbox.round(2);
     // std::cout << "Current " << current_bbox;
 
-    if (key == SELECTION_NUMBER_OF && SP_ACTIVE_DESKTOP) {
-        if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
-            NRRect bbox;
+    this_test[0] = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+    for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
+        this_test[i + 1] = test_order[i];
+    }
 
-            (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
-            NR::Rect bbox2(bbox);
+    for (int i = 0;
+            i < SELECTION_NUMBER_OF + 1 &&
+                key == SELECTION_NUMBER_OF &&
+                SP_ACTIVE_DESKTOP != NULL;
+            i++) {
+        // std::cout << "Looking at: " << selection_names[this_test[i]] << std::endl;
+        switch (this_test[i]) {
+            case SELECTION_SELECTION:
+                if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
+                    NRRect bbox;
 
-            bbox2.round(2);
-            // std::cout << "Selection " << bbox2;
-            if (bbox2 == current_bbox) {
-                key = SELECTION_SELECTION;
+                    (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
+                    NR::Rect bbox2(bbox);
+
+                    bbox2.round(2);
+                    // std::cout << "Selection " << bbox2;
+                    if (bbox2 == current_bbox) {
+                        key = SELECTION_SELECTION;
+                    }
+                }
+                break;
+            case SELECTION_DRAWING: {
+                SPDocument *doc;
+                NRRect bbox;
+                doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+
+                sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
+                NR::Rect bbox2(bbox);
+
+                bbox2.round(2);
+                // std::cout << "Drawing " << bbox2;
+                if (bbox2 == current_bbox) {
+                    key = SELECTION_DRAWING;
+                }
+                break;
             }
+
+            case SELECTION_PAGE: {
+                SPDocument *doc;
+
+                doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+
+                NR::Point x(0.0, 0.0);
+                NR::Point y(sp_document_width(doc),
+                            sp_document_height(doc));
+                NR::Rect bbox(x, y);
+                bbox.round(2);
+
+                // std::cout << "Page " << bbox;
+                if (bbox == current_bbox) {
+                    key = SELECTION_PAGE;
+                }
+
+                break;
+           }
+        default:
+           break;
         }
     }
-
-    if (key == SELECTION_NUMBER_OF && SP_ACTIVE_DESKTOP) {
-        SPDocument *doc;
-        NRRect bbox;
-        doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
-
-        sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
-        NR::Rect bbox2(bbox);
-
-        bbox2.round(2);
-        // std::cout << "Drawing " << bbox2;
-        if (bbox2 == current_bbox) {
-            key = SELECTION_DRAWING;
-        }
-    }
-
-    if (key == SELECTION_NUMBER_OF && SP_ACTIVE_DESKTOP) {
-        SPDocument *doc;
-
-        doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
-
-        NR::Point x(0.0, 0.0);
-        NR::Point y(sp_document_width(doc),
-                    sp_document_height(doc));
-        NR::Rect bbox(x, y);
-        bbox.round(2);
-
-        // std::cout << "Page " << bbox;
-        if (bbox == current_bbox) {
-            key = SELECTION_PAGE;
-        }
-    }
+    // std::cout << std::endl;
 
     if (key == SELECTION_NUMBER_OF) {
         key = SELECTION_CUSTOM;
@@ -1234,7 +1329,14 @@ sp_export_area_height_value_changed (GtkAdjustment *adj, GtkObject *base)
     return;
 } // end of sp_export_area_height_value_changed()
 
+/**
+    \brief  A function to set the ydpi
+    \param  base  The export dialog
 
+    This function grabs all of the y values and then figures out the
+    new bitmap size based on the changing dpi value.  The dpi value is
+    gotten from the xdpi setting as these can not currently be independent.
+*/
 static void
 sp_export_set_image_y (GtkObject *base)
 {
@@ -1285,7 +1387,34 @@ sp_export_bitmap_width_value_changed (GtkAdjustment *adj, GtkObject *base)
     return;
 } // end of sp_export_bitmap_width_value_changed()
 
+/**
+    \brief  A function to adjust the bitmap width when the xdpi value changes
+    \param  adj  The adjustment that was changed
+    \param  base The export dialog itself
 
+    The first thing this function checks is to see if we are doing an
+    update.  If we are, this function just returns because there is another
+    instance of it that will handle everything for us.  If there is a
+    units change, we also assume that everyone is being updated appropriately
+    and there is nothing for us to do.
+
+    If we're the highest level function, we set the update flag, and 
+    continue on our way.
+
+    All of the values are grabbed using the \c sp_export_value_get functions
+    (call to the _pt ones for x0 and x1 but just standard for xdpi).  The
+    xdpi value is saved in the preferences for the next time the dialog
+    is opened.  (does the selection dpi need to be set here?)
+
+    A check is done to to ensure that we aren't outputing an invalid width,
+    this is set by SP_EXPORT_MIN_SIZE.  If that is the case the dpi is
+    changed to make it valid.
+
+    After all of this the bitmap width is changed.
+
+    We also change the ydpi.  This is a temporary hack as these can not
+    currently be independent.  This is likely to change in the future.
+*/
 void
 sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base)
 {
@@ -1341,18 +1470,25 @@ sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base)
     This function just calls \c sp_export_value_set_pt for each of the
     parameters that is passed in.  This allows for setting them all in
     one convient area.
+
+    Update is set to suspend all of the other test running while all the
+    values are being set up.  This allows for a performance increase, but
+    it also means that the wrong type won't be detected with only some of
+    the values set.  After all the values are set everyone is told that
+    there has been an update.
 */
 static void
 sp_export_set_area ( GtkObject *base, float x0, float y0, float x1, float y1 )
 {
-    // std::cout << "Setting X1" << std::endl;
+    gtk_object_set_data ( base, "update", GUINT_TO_POINTER (TRUE) );
     sp_export_value_set_pt (base, "x1", x1);
-    // std::cout << "Setting Y1" << std::endl;
     sp_export_value_set_pt (base, "y1", y1);
-    // std::cout << "Setting X0" << std::endl;
     sp_export_value_set_pt (base, "x0", x0);
-    // std::cout << "Setting Y0" << std::endl;
     sp_export_value_set_pt (base, "y0", y0);
+    gtk_object_set_data ( base, "update", GUINT_TO_POINTER (FALSE) );
+
+    sp_export_area_x_value_changed ((GtkAdjustment *)gtk_object_get_data (base, "x1"), base);
+    sp_export_area_y_value_changed ((GtkAdjustment *)gtk_object_get_data (base, "y1"), base);
 
     return;
 } // end of sp_export_set_area()
