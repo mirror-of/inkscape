@@ -344,14 +344,15 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Keyboard scale</title>
-<keys><key>&lt;</key> <key>&gt;</key> <action>scale selection by the scale step</action></keys> 
+<keys><key>.</key> <key>&gt;</key> <action>scale selection up by the scale step</action></keys> 
+<keys><key>,</key> <key>&lt;</key> <action>scale selection down by the scale step</action></keys> 
 <note>The default scale step is 2 pt.</note>
-<keys><key><ctrl/>&lt;</key> <action>scale selection to 50%</action></keys>
-<keys><key><ctrl/>&gt;</key> <action>scale selection to 200%</action></keys>
-<keys><key><alt/>&lt;</key> <key><alt/>&gt;</key> <action>scale selection by 1 pixel</action></keys>
+<keys><key><ctrl/>.</key> <key><ctrl/>&gt;</key> <action>scale selection to 200%</action></keys>
+<keys><key><ctrl/>,</key> <key><ctrl/>&lt;</key> <action>scale selection to 50%</action></keys>
+<keys><key><alt/>.</key> <key><alt/>&gt;</key> <action>scale selection up by 1 pixel</action></keys>
+<keys><key><alt/>,</key> <key><alt/>&lt;</key> <action>scale selection down by 1 pixel</action></keys>
 <note>The actual size increment for pixel scaling depends on zoom level. Zoom in for finer scaling.</note>
 <note>Scaling is uniform around the center, so that the size increment applies to the larger of the two dimensions.</note>
-<note>Instead of the &lt; and &gt; keys, you can use the , (comma) and . (period) keys respectively.</note>
 </group>
 
 <group>
@@ -641,6 +642,17 @@ can leave your ideas and requests there.</p>
 
 </column>
 <column>
+
+*<section title="Dropper tool" color="feeffa">
+<group>
+<mouse><key><left-click/></key> <action>pick fill color</action></mouse>
+<mouse><key><shift/><left-click/></key> <action>pick stroke color</action></mouse>
+<mouse><key><left-drag/></key> <action>average fill color</action></mouse>
+<mouse><key><shift/><left-drag/></key> <action>average stroke color</action></mouse>
+<note>Dropper applies the colors to the current selection. Dragging a radius calculates the average color of a circular area.</note>
+</group>
+</section>
+
 
 
 *<section title="Rectangle tool" color="ebf1fd">
