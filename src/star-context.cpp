@@ -276,40 +276,6 @@ sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 }
 
 static gint
-sp_star_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event)
-{
-    SPDesktop *desktop = event_context->desktop;
-
-    gint ret = FALSE;
-
-    switch (event->type) {
-    case GDK_BUTTON_PRESS:
-        if (event->button.button == 1) {
-
-            // save drag origin
-            event_context->xp = (gint) event->button.x;
-            event_context->yp = (gint) event->button.y;
-            event_context->within_tolerance = true;
-
-            // remember clicked item, disregarding groups
-            event_context->item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
-
-            ret = TRUE;
-        }
-        break;
-        // motion and release are always on root (why?)
-    default:
-        break;
-    }
-
-    if (((SPEventContextClass *) parent_class)->item_handler)
-        ret = ((SPEventContextClass *) parent_class)->item_handler (event_context, item, event);
-
-    return ret;
-}
-
-
-static gint
 sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 {
     static gboolean dragging;
@@ -468,12 +434,11 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
     /* status text */
     GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
-    gchar *status = g_strdup_printf(( isflat
+    sc->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
+                                      ( isflat
                                       ? _("Draw polygon at (%s,%s)")
                                       : _("Draw star at (%s,%s)") ),
-                                    xs->str, ys->str);
-    sp_view_set_status(SP_VIEW(desktop), status, FALSE);
-    g_free(status);
+                                      xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);
 }
