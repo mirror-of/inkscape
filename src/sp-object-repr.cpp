@@ -55,7 +55,9 @@ sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
 	g_assert (name != NULL);
 	GType const type = sp_object_type_lookup(name);
 	g_assert (g_type_is_a (type, SP_TYPE_ROOT));
-	SPObject * const object = SP_OBJECT(g_object_new(type, 0));
+        gpointer newobj = g_object_new(type, 0);
+	g_assert(newobj != NULL);
+	SPObject * const object = SP_OBJECT(newobj);
 	g_assert(object != NULL);
 	sp_object_invoke_build(object, document, repr, FALSE);
 
