@@ -687,7 +687,14 @@ private:
     inline unsigned _sourceToCharacter(unsigned source_index) const
         {return std::lower_bound(_characters.begin(), _characters.end(), source_index, PredicateSourceToCharacter(this)) - _characters.begin();}
 
+    /** given an x coordinate and a line number, returns an iterator
+    pointing to the closest cursor position on that line to the
+    coordinate. */
     iterator _cursorXOnLineToIterator(unsigned line_index, double local_x) const;
+
+    /** calculates the width of a chunk, which is the largest x
+    coordinate (start or end) of the spans contained within it. */
+    double _getChunkWidth(unsigned chunk_index) const;
 };
 
 /** \brief Holds a position within the glyph output of Layout.

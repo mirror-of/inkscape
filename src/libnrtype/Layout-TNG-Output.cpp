@@ -279,6 +279,17 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
             offset = startOffset.computed;
     }
 
+    switch (_paragraphs.front().alignment) {
+        case CENTER:
+            offset -= _getChunkWidth(0) * 0.5;
+            break;
+        case RIGHT:
+            offset -= _getChunkWidth(0);
+            break;
+        default:
+            break;
+    }
+
     for (unsigned span_index = 0 ; span_index < _spans.size() ; span_index++) {
         _spans[span_index].x_start += offset;
         _spans[span_index].x_end += offset;

@@ -49,6 +49,20 @@ Layout::iterator Layout::_cursorXOnLineToIterator(unsigned line_index, double lo
     return iterator(this, best_char_index);
 }
 
+double Layout::_getChunkWidth(unsigned chunk_index) const
+{
+    double chunk_width = 0.0;
+    unsigned span_index;
+    if (chunk_index) {
+        span_index = _lineToSpan(_chunks[chunk_index].in_line);
+        for ( ; span_index < _spans.size() && _spans[span_index].in_chunk < chunk_index ; span_index++);
+    } else
+        span_index = 0;
+    for ( ; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++)
+        chunk_width = std::max(chunk_width, (double)std::max(_spans[span_index].x_start, _spans[span_index].x_end));
+    return chunk_width;
+}
+
 /* this function really belongs to Path. I'll probably move it there eventually,
 hence the Path-esque coding style */
 template<typename T> inline static T square(T x) {return x*x;}
@@ -309,13 +323,7 @@ NR::Point Layout::chunkAnchorPoint(iterator const &it) const
     if (alignment == LEFT || alignment == FULL)
         return NR::Point(_chunks[chunk_index].left_x, _lines[chunk_index].baseline_y);
 
-    double chunk_width = 0.0;
-    unsigned span_index = _lineToSpan(_chunks[chunk_index].in_line);
-    for ( ; span_index < _spans.size() && _spans[span_index].in_chunk < chunk_index ; span_index++);
-    for ( ; span_index < _spans.size() && _spans[span_index].in_chunk <= chunk_index ; span_index++) {
-        if (_spans[span_index].in_chunk < chunk_index) continue;
-        chunk_width = std::max(chunk_width, (double)std::max(_spans[span_index].x_start, _spans[span_index].x_end));
-    }
+    double chunk_width = _getChunkWidth(chunk_index);
     if (alignment == RIGHT)
         return NR::Point(_chunks[chunk_index].left_x + chunk_width, _lines[chunk_index].baseline_y);
     //centre
