@@ -1246,7 +1246,7 @@ sp_nodepath_select_all (SPNodePath *nodepath)
 }
 
 /**
-\brief select the node after the last selected; if none is selected, select first
+\brief select the node after the last selected; if none is selected, select the first within path
 */
 void
 sp_nodepath_select_next (SPNodePath *nodepath)
@@ -1282,7 +1282,7 @@ sp_nodepath_select_next (SPNodePath *nodepath)
 }
 
 /**
-\brief select the node after the last selected; if none is selected, select first
+\brief select the node before the first selected; if none is selected, select the last within path
 */
 void
 sp_nodepath_select_prev (SPNodePath *nodepath)
