@@ -37,7 +37,7 @@ libnr/nr-types-test.cpp
 livarot/Path-test.cpp
 main.cpp
 mod360-test.cpp
-potrace/potest.cpp
+trace/potrace/potest.cpp
 
 render
 
