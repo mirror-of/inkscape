@@ -17,40 +17,52 @@
 #include "libnr/nr-point.h"
 struct SPKnotHolder;
 
-#define SP_TYPE_GRADIENT_CONTEXT            (sp_gradient_context_get_type ())
-#define SP_GRADIENT_CONTEXT(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_GRADIENT_CONTEXT, SPGradientContext))
-#define SP_GRADIENT_CONTEXT_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), SP_TYPE_GRADIENT_CONTEXT, SPGradientContextClass))
-#define SP_IS_GRADIENT_CONTEXT(obj)         (GTK_CHECK_TYPE ((obj), SP_TYPE_GRADIENT_CONTEXT))
-#define SP_IS_GRADIENT_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_GRADIENT_CONTEXT))
+#define SP_TYPE_GRADIENT_CONTEXT            (sp_gradient_context_get_type())
+#define SP_GRADIENT_CONTEXT(obj)            (GTK_CHECK_CAST((obj), SP_TYPE_GRADIENT_CONTEXT, SPGradientContext))
+#define SP_GRADIENT_CONTEXT_CLASS(klass)    (GTK_CHECK_CLASS_CAST((klass), SP_TYPE_GRADIENT_CONTEXT, SPGradientContextClass))
+#define SP_IS_GRADIENT_CONTEXT(obj)         (GTK_CHECK_TYPE((obj), SP_TYPE_GRADIENT_CONTEXT))
+#define SP_IS_GRADIENT_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE((klass), SP_TYPE_GRADIENT_CONTEXT))
 
 class SPGradientContext;
 class SPGradientContextClass;
 
 struct SPGradientContext : public SPEventContext {
-	SPItem *item;
-	NR::Point center;
+    SPItem *item;
+    NR::Point center;
 
-	SPKnotHolder *knot_holder;
-	Inkscape::XML::Node *repr;
-	
-  	gdouble rx;	/* roundness radius (x direction) */
-  	gdouble ry;	/* roundness radius (y direction) */
+    SPKnotHolder *knot_holder;
+    Inkscape::XML::Node *repr;
 
-	sigc::connection sel_changed_connection;
+    gdouble rx;  /**< roundness radius (x direction) */
+    gdouble ry;  /**< roundness radius (y direction) */
 
-	bool vector_created;
+    sigc::connection sel_changed_connection;
 
-	NR::Point origin;
+    bool vector_created;
 
-	Inkscape::MessageContext *_message_context;
+    NR::Point origin;
+
+    Inkscape::MessageContext *_message_context;
 };
 
 struct SPGradientContextClass {
-	SPEventContextClass parent_class;
+    SPEventContextClass parent_class;
 };
 
 /* Standard Gtk function */
 
-GtkType sp_gradient_context_get_type (void);
+GtkType sp_gradient_context_get_type();
 
 #endif
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
