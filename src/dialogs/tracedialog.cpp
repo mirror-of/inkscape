@@ -122,6 +122,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     Gtk::Label            potraceBrightnessSpinnerLabel;
     Gtk::SpinButton       potraceBrightnessSpinner;
 
+
     //edge detection
     Gtk::Frame            potraceCannyFrame;
     Gtk::HBox             potraceCannyBox;
@@ -141,14 +142,15 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     Gtk::Label            potraceQuantNrColorLabel;
     Gtk::SpinButton       potraceQuantNrColorSpinner;
 
-    //quantized multiple path scanning
-    Gtk::Frame            potraceQuantScanFrame;
-    Gtk::HBox             potraceQuantScanBox;
-    Gtk::VBox             potraceQuantScanVBox;
-    Gtk::RadioButton      potraceQuantScanColorRadioButton;
-    Gtk::RadioButton      potraceQuantScanMonoRadioButton;
-    Gtk::Label            potraceQuantScanNrColorLabel;
-    Gtk::SpinButton       potraceQuantScanNrColorSpinner;
+    //multiple path scanning
+    Gtk::Frame            potraceMultiScanFrame;
+    Gtk::HBox             potraceMultiScanBox;
+    Gtk::VBox             potraceMultiScanVBox;
+    Gtk::RadioButton      potraceMultiScanBrightnessRadioButton;
+    Gtk::RadioButton      potraceMultiScanColorRadioButton;
+    Gtk::RadioButton      potraceMultiScanMonoRadioButton;
+    Gtk::Label            potraceMultiScanNrColorLabel;
+    Gtk::SpinButton       potraceMultiScanNrColorSpinner;
 
     //preview
     Gtk::Frame            potracePreviewFrame;
@@ -192,16 +194,18 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     /* which one? */
     if (potraceBrightnessRadioButton.get_active())
         pte.setTraceType(Inkscape::Trace::Potrace::TRACE_BRIGHTNESS);
+    else if (potraceMultiScanBrightnessRadioButton.get_active())
+        pte.setTraceType(Inkscape::Trace::Potrace::TRACE_BRIGHTNESS_MULTI);
     else if (potraceCannyRadioButton.get_active())
         pte.setTraceType(Inkscape::Trace::Potrace::TRACE_CANNY);
     else if (potraceQuantRadioButton.get_active())
         pte.setTraceType(Inkscape::Trace::Potrace::TRACE_QUANT);
-    else if (potraceQuantScanColorRadioButton.get_active())
+    else if (potraceMultiScanColorRadioButton.get_active())
         {
         pte.setTraceType(Inkscape::Trace::Potrace::TRACE_QUANT_COLOR);
         pte.setInvert(false);
         }
-    else if (potraceQuantScanMonoRadioButton.get_active())
+    else if (potraceMultiScanMonoRadioButton.get_active())
         {
         pte.setTraceType(Inkscape::Trace::Potrace::TRACE_QUANT_MONO);
         pte.setInvert(false);
@@ -220,8 +224,8 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     pte.setQuantizationNrColors(quantNrColors);
 
     //##### Get multiple-scan settings
-    int quantScanNrColors = potraceQuantScanNrColorSpinner.get_value_as_int();
-    pte.setQuantScanNrColors(quantScanNrColors);
+    int multiScanNrColors = potraceMultiScanNrColorSpinner.get_value_as_int();
+    pte.setMultiScanNrColors(multiScanNrColors);
 
     //##### Get intermediate bitmap image
     GdkPixbuf *pixbuf = tracer.getSelectedImage();
@@ -451,29 +455,33 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBox.pack_start(potraceQuantFrame, false, false, 0);
   
     /*#### quantization for multiple scanning####*/
-    potraceQuantScanColorRadioButton.set_label(_("Color"));
-    potraceQuantScanColorRadioButton.set_group(potraceGroup);
-    potraceQuantScanBox.pack_start(potraceQuantScanColorRadioButton, false, false, MARGIN);
+    potraceMultiScanBrightnessRadioButton.set_label(_("Brightness"));
+    potraceMultiScanBrightnessRadioButton.set_group(potraceGroup);
+    potraceMultiScanBox.pack_start(potraceMultiScanBrightnessRadioButton, false, false, MARGIN);
 
-    potraceQuantScanMonoRadioButton.set_label(_("Monochrome"));
-    potraceQuantScanMonoRadioButton.set_group(potraceGroup);
-    potraceQuantScanBox.pack_start(potraceQuantScanMonoRadioButton, false, false, MARGIN);
+    potraceMultiScanColorRadioButton.set_label(_("Color"));
+    potraceMultiScanColorRadioButton.set_group(potraceGroup);
+    potraceMultiScanBox.pack_start(potraceMultiScanColorRadioButton, false, false, MARGIN);
 
-    potraceQuantScanNrColorSpinner.set_digits(2);
-    potraceQuantScanNrColorSpinner.set_increments(1.0, 4.0);
-    potraceQuantScanNrColorSpinner.set_range(2.0, 64.0);
-    potraceQuantScanNrColorSpinner.set_value(8.0);
-    potraceQuantScanBox.pack_end(potraceQuantScanNrColorSpinner, false, false, MARGIN);
+    potraceMultiScanMonoRadioButton.set_label(_("Monochrome"));
+    potraceMultiScanMonoRadioButton.set_group(potraceGroup);
+    potraceMultiScanBox.pack_start(potraceMultiScanMonoRadioButton, false, false, MARGIN);
 
-    potraceQuantScanNrColorLabel.set_label(_("Colors:"));
-    potraceQuantScanBox.pack_end(potraceQuantScanNrColorLabel, false, false, MARGIN);
+    potraceMultiScanNrColorSpinner.set_digits(2);
+    potraceMultiScanNrColorSpinner.set_increments(1.0, 4.0);
+    potraceMultiScanNrColorSpinner.set_range(2.0, 64.0);
+    potraceMultiScanNrColorSpinner.set_value(8.0);
+    potraceMultiScanBox.pack_end(potraceMultiScanNrColorSpinner, false, false, MARGIN);
 
-    potraceQuantScanVBox.pack_start(potraceQuantScanBox, false, false, MARGIN);
+    potraceMultiScanNrColorLabel.set_label(_("Colors:"));
+    potraceMultiScanBox.pack_end(potraceMultiScanNrColorLabel, false, false, MARGIN);
 
-    potraceQuantScanFrame.set_label(_("Quantization & Scanning"));
+    potraceMultiScanVBox.pack_start(potraceMultiScanBox, false, false, MARGIN);
+
+    potraceMultiScanFrame.set_label(_("Multiple Scanning"));
     //potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
-    potraceQuantScanFrame.add(potraceQuantScanVBox);
-    potraceBox.pack_start(potraceQuantScanFrame, false, false, 0);
+    potraceMultiScanFrame.add(potraceMultiScanVBox);
+    potraceBox.pack_start(potraceMultiScanFrame, false, false, 0);
   
     /*#### Preview ####*/
     potracePreviewButton.set_label(_("Preview"));

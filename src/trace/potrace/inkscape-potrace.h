@@ -29,6 +29,7 @@ namespace Potrace {
 typedef enum
     {
     TRACE_BRIGHTNESS,
+    TRACE_BRIGHTNESS_MULTI,
     TRACE_CANNY,
     TRACE_QUANT,
     TRACE_QUANT_COLOR,
@@ -112,13 +113,13 @@ class PotraceTracingEngine : public TracingEngine
     /**
      * Sets the number of colors for quant multiscan
      */
-    void setQuantScanNrColors(int val)
+    void setMultiScanNrColors(int val)
         {
-        quantScanNrColors = val;
+        multiScanNrColors = val;
         }
-    int getQuantScanNrColors()
+    int getMultiScanNrColors()
         {
-        return quantScanNrColors;
+        return multiScanNrColors;
         }
 
 
@@ -164,11 +165,12 @@ class PotraceTracingEngine : public TracingEngine
     double cannyHighThreshold;
 
     //## Color-->multiscan quantization
-    int quantScanNrColors;
+    int multiScanNrColors;
 
     char *grayMapToPath(GrayMap *gm);
     
-    TracingEngineResult *traceMultiple(GdkPixbuf *pixbuf, int *nrPaths);
+    TracingEngineResult *traceBrightnessMulti(GdkPixbuf *pixbuf, int *nrPaths);
+    TracingEngineResult *traceQuant(GdkPixbuf *pixbuf, int *nrPaths);
     TracingEngineResult *traceSingle(GdkPixbuf *pixbuf, int *nrPaths);
 
 

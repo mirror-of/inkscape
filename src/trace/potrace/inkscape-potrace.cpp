@@ -257,7 +257,8 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         }
 
     /*### Brightness threshold ###*/
-    else if (engine.getTraceType() == TRACE_BRIGHTNESS)
+    else if ( engine.getTraceType() == TRACE_BRIGHTNESS || 
+              engine.getTraceType() == TRACE_BRIGHTNESS_MULTI )
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
 
@@ -322,7 +323,7 @@ filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         {
         RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
         RgbMap *gaussMap = rgbMapGaussian(gm);
-        newGm = rgbMapQuantize(gaussMap, 4, engine.getQuantScanNrColors());
+        newGm = rgbMapQuantize(gaussMap, 4, engine.getMultiScanNrColors());
         gaussMap->destroy(gaussMap);
         gm->destroy(gm);
         }
@@ -332,7 +333,7 @@ filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         {
         RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
         RgbMap *gaussMap = rgbMapGaussian(gm);
-        newGm = rgbMapQuantize(gaussMap, 4, engine.getQuantScanNrColors());
+        newGm = rgbMapQuantize(gaussMap, 4, engine.getMultiScanNrColors());
         gaussMap->destroy(gaussMap);
         gm->destroy(gm);
 
@@ -488,6 +489,9 @@ PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
     
     //g_message("### GOT '%s' \n", d);
     TracingEngineResult *result = new TracingEngineResult(style, d);
+
+    free(d);
+    
     *nrPaths = 1;
     
     return result;
@@ -498,7 +502,76 @@ PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
  *  Called for multiple-scanning algorithms
  */
 TracingEngineResult *
-PotraceTracingEngine::traceMultiple(GdkPixbuf * thePixbuf, int *nrPaths)
+PotraceTracingEngine::traceBrightnessMulti(GdkPixbuf * thePixbuf, int *nrPaths)
+{
+
+    if (!thePixbuf)
+        return NULL;
+        
+    double low  = 0.2;
+    double high = 0.9;
+    double delta = (high - low ) / ((double)multiScanNrColors);
+
+    TracingEngineResult *results = NULL;
+    for ( brightnessThreshold = low ;
+          brightnessThreshold <= high ;
+          brightnessThreshold += delta)
+    
+        {
+        
+        GrayMap *grayMap = filter(*this, thePixbuf);
+        if (!grayMap)
+            return NULL;
+
+        char *d = grayMapToPath(grayMap);
+    
+        grayMap->destroy(grayMap);
+    
+        if (!d)
+            {
+            *nrPaths = 0;
+            return NULL;
+            }
+            
+        int grayVal = (int)(256.0 * brightnessThreshold);
+        char style[13];
+        sprintf(style, "fill:#%02x%02x%02x", grayVal, grayVal, grayVal);
+    
+        //g_message("### GOT '%s' \n", d);
+        TracingEngineResult *result = new TracingEngineResult(style, d);
+        
+        free(d);
+    
+        if (!results)
+            {
+            results = result; //first one
+            }
+        else
+            {
+            //walk to end of list
+            TracingEngineResult *r;
+            for (r=results ; r->next ; r=r->next)
+                {}
+            r->next = result;
+            }
+
+
+
+        }
+    
+    //report the count of paths processed
+    *nrPaths = multiScanNrColors;
+
+    
+    return results;
+}
+
+
+/**
+ *  Quantization
+ */
+TracingEngineResult *
+PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
 {
 
     if (!thePixbuf)
@@ -544,6 +617,9 @@ PotraceTracingEngine::traceMultiple(GdkPixbuf * thePixbuf, int *nrPaths)
     
         //g_message("### GOT '%s' \n", d);
         TracingEngineResult *result = new TracingEngineResult(style, d);
+
+        free(d);
+    
         if (!results)
             {
             results = result; //first one
@@ -571,7 +647,6 @@ PotraceTracingEngine::traceMultiple(GdkPixbuf * thePixbuf, int *nrPaths)
 }
 
 
-
 /**
  *  This is the working method of this interface, and all
  *  implementing classes.  Take a GdkPixbuf, trace it, and
@@ -590,7 +665,11 @@ PotraceTracingEngine::trace(GdkPixbuf * thePixbuf, int *nrPaths)
     if ( traceType == TRACE_QUANT_COLOR ||
          traceType == TRACE_QUANT_MONO   )
         {
-        return traceMultiple(thePixbuf, nrPaths);
+        return traceQuant(thePixbuf, nrPaths);
+        }
+    else if ( traceType == TRACE_BRIGHTNESS_MULTI )
+        {
+        return traceBrightnessMulti(thePixbuf, nrPaths);
         }
     else
         {
