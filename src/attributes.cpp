@@ -192,6 +192,8 @@ static const SPStyleProp props[] = {
   {SP_ATTR_TEXT_ONPATH, "inkscape:dstPath"},
   {SP_ATTR_TEXT_INBOX,"inkscape:dstBox"},
   {SP_ATTR_TEXT_INCOLUMN,"inkscape:dstColumn"},
+  {SP_ATTR_TEXT_EXCLUDE,"inkscape:excludeShape"},
+  {SP_ATTR_LAYOUT_OPTIONS,"inkscape:layoutOptions"},
     
 	/* CSS2 */
 	/* Font */

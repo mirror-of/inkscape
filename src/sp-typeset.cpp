@@ -59,6 +59,8 @@ static void sp_typeset_hide (SPItem * item, unsigned int key);
 
 
 void   sp_typeset_relayout(SPTypeset *typeset);
+void   sp_typeset_rekplayout(SPTypeset *typeset);
+
 void   sp_typeset_ditch_dest(SPTypeset *typeset);
 void   refresh_typeset_source(SPTypeset *typeset,shape_dest *nDst);
 void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst);
@@ -156,6 +158,7 @@ sp_typeset_init (SPTypeset *object)
   
   typeset->layoutDirty=false;
   typeset->destDirty=false;
+  typeset->stdLayoutAlgo=false;
   
   typeset->theSrc=NULL;
   typeset->theDst=NULL;
@@ -256,7 +259,11 @@ sp_typeset_update (SPObject *object, SPCtx *ctx, unsigned int flags)
     typeset->destDirty=false;
   }
   if ( typeset->layoutDirty ) {
-    sp_typeset_relayout(typeset);
+    if ( typeset->stdLayoutAlgo ) {
+      sp_typeset_relayout(typeset);
+    } else {
+      sp_typeset_rekplayout(typeset);
+    }
     typeset->layoutDirty=false;
   }
   

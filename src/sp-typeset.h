@@ -117,6 +117,7 @@ struct SPTypeset {
   
   bool        layoutDirty;
   bool        destDirty;
+  bool        stdLayoutAlgo;
   
   int         srcType;
   char*       srcText;
