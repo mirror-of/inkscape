@@ -66,6 +66,8 @@
 #include "sp-pattern.h"
 #include "sp-ellipse.h"
 #include "sp-gradient.h"
+#include "sp-linear-gradient.h"
+#include "sp-radial-gradient.h"
 #include "gradient-chemistry.h"
 #include "selection.h"
 
@@ -103,11 +105,47 @@ static void gr_toggle_fillstroke (GtkWidget *button, gpointer data) {
 
 
 void
-gr_item_activate (GtkMenuItem *item, gpointer data)
+gr_item_activate (GtkMenuItem *menuitem, gpointer data)
 {
-    SPGradient *gr = (SPGradient *) g_object_get_data (G_OBJECT (item), "gradient");
+    SPGradient *gr = (SPGradient *) g_object_get_data (G_OBJECT (menuitem), "gradient");
+    gr = sp_gradient_ensure_vector_normalized(gr);
 
-    g_print ("setting %s\n", SP_OBJECT_ID(gr));
+    SPDesktop *desktop = (SPDesktop *) data;
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+
+    SPGradientType new_type = (SPGradientType) prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
+    guint new_fill = prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1);
+
+   for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
+        SPItem *item = SP_ITEM(i->data);
+        SPStyle *style = SP_OBJECT_STYLE (item);
+
+        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER) && 
+            SP_IS_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (item))) {
+            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
+            if (SP_IS_LINEARGRADIENT (server)) {
+                sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, true);
+            } else if (SP_IS_RADIALGRADIENT (server)) {
+                sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, true);
+            } 
+        } else if (new_fill) {
+                sp_item_set_gradient(item, gr, new_type, true);
+        }
+
+        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) && 
+            SP_IS_GRADIENT (SP_OBJECT_STYLE_STROKE_SERVER (item))) {
+            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
+            if (SP_IS_LINEARGRADIENT (server)) {
+                sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, false);
+            } else if (SP_IS_RADIALGRADIENT (server)) {
+                sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, false);
+            } 
+        } else if (!new_fill) {
+                sp_item_set_gradient(item, gr, new_type, false);
+        }
+   }
+
+   sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
 gchar *
@@ -119,8 +157,10 @@ gr_prepare_label (gchar *id)
 }
 
 GtkWidget *
-gr_vector_list (SPDocument *document, bool selection_empty, SPGradient *gr_selected, bool gr_multi)
+gr_vector_list (SPDesktop *desktop, bool selection_empty, SPGradient *gr_selected, bool gr_multi)
 {
+    SPDocument *document = SP_DT_DOCUMENT (desktop);
+
     GtkWidget *om = gtk_option_menu_new ();
     GtkWidget *m = gtk_menu_new ();
 
@@ -157,20 +197,20 @@ gr_vector_list (SPDocument *document, bool selection_empty, SPGradient *gr_selec
     } else {
 
         if (gr_selected == NULL) {
-        GtkWidget *l = gtk_label_new("");
-        gtk_label_set_markup (GTK_LABEL(l), _("<small>No gradients</small>"));
-        GtkWidget *i = gtk_menu_item_new ();
-        gtk_container_add (GTK_CONTAINER (i), l);
+            GtkWidget *l = gtk_label_new("");
+            gtk_label_set_markup (GTK_LABEL(l), _("<small>No gradients in selection</small>"));
+            GtkWidget *i = gtk_menu_item_new ();
+            gtk_container_add (GTK_CONTAINER (i), l);
 
             gtk_widget_show (i);
             gtk_menu_append (GTK_MENU (m), i);
         }
 
         if (gr_multi) {
-        GtkWidget *l = gtk_label_new("");
-        gtk_label_set_markup (GTK_LABEL(l), _("<small>Multiple gradients</small>"));
-        GtkWidget *i = gtk_menu_item_new ();
-        gtk_container_add (GTK_CONTAINER (i), l);
+            GtkWidget *l = gtk_label_new("");
+            gtk_label_set_markup (GTK_LABEL(l), _("<small>Multiple gradients</small>"));
+            GtkWidget *i = gtk_menu_item_new ();
+            gtk_container_add (GTK_CONTAINER (i), l);
 
             gtk_widget_show (i);
             gtk_menu_append (GTK_MENU (m), i);
@@ -182,7 +222,7 @@ gr_vector_list (SPDocument *document, bool selection_empty, SPGradient *gr_selec
 
             GtkWidget *i = gtk_menu_item_new ();
             g_object_set_data (G_OBJECT (i), "gradient", gradient);
-            g_signal_connect (G_OBJECT (i), "activate", G_CALLBACK (gr_item_activate), NULL);
+            g_signal_connect (G_OBJECT (i), "activate", G_CALLBACK (gr_item_activate), desktop);
 
             GtkWidget *image = sp_gradient_image_new (gradient);
 
@@ -291,7 +331,7 @@ gr_tb_selection_changed (SPSelection *sel_sender, gpointer data)
 
     gr_read_selection (selection, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
 
-    om = gr_vector_list (SP_DT_DOCUMENT(desktop), selection->isEmpty(), gr_selected, gr_multi);
+    om = gr_vector_list (desktop, selection->isEmpty(), gr_selected, gr_multi);
     g_object_set_data (G_OBJECT (widget), "menu", om);
   
     gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
@@ -329,7 +369,7 @@ gr_change_widget (SPDesktop *desktop)
     GtkWidget *widget = gtk_hbox_new(FALSE, FALSE);
     g_object_set_data (G_OBJECT (widget), "desktop", desktop);
 
-    GtkWidget *om = gr_vector_list (document, selection->isEmpty(), gr_selected, gr_multi);
+    GtkWidget *om = gr_vector_list (desktop, selection->isEmpty(), gr_selected, gr_multi);
     g_object_set_data (G_OBJECT (widget), "menu", om);
   
     gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
@@ -377,7 +417,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_type), tbl);
     g_object_set_data(G_OBJECT(tbl), "linear", button);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
-                                  prefs_get_int_attribute ("tools.gradient", "newgradient", 1) == SP_GRADIENT_TYPE_LINEAR);
+              prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR) == SP_GRADIENT_TYPE_LINEAR);
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
 
@@ -391,7 +431,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_type), tbl);
     g_object_set_data(G_OBJECT(tbl), "radial", button);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
-                                  prefs_get_int_attribute ("tools.gradient", "newgradient", 1) == SP_GRADIENT_TYPE_RADIAL);
+              prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR) == SP_GRADIENT_TYPE_RADIAL);
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
 
