@@ -1111,7 +1111,7 @@ class Layout::Calculator
 
                 if (new_span.direction != para.direction) {
                     new_span.x_end = new_span.x_start;
-                    new_span.x_start = new_span.x_end - x_in_span;
+                    new_span.x_start = new_span.x_end - it_span->width - add_to_each_whitespace * it_span->whitespace_count;
                 } else
                     new_span.x_end = new_span.x_start + x_in_span;
                 _flow._spans.push_back(new_span);
