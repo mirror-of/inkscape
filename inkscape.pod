@@ -266,6 +266,17 @@ It should import png, bmp, jpg, xpm & gif bitmaps and svg vector images.
 
 Open can handle only svg graphics
 
+Wacom tablets do work with Inkscape if they are configured to act as
+regular pointing devices.
+
+It works "out of the box" with Apple's X server, but with XFree86 you
+will need to have the "SendCoreEvents" option turned on if you do not
+already. 
+
+Note that we do not support pressure/tilt sensitivity or any
+tablet-specific features yet.
+
+
 =head1 BUGS
 
 Many bugs are known; please refer to the website for reviewing the
