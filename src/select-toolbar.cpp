@@ -306,10 +306,10 @@ static gboolean aux_set_unit(SPUnitSelector *,
 
         NR::Rect bbox = selection->bounds();
 
-        gtk_adjustment_set_value(ax, 100.0 * x / bbox.min()[NR::X]);
-        gtk_adjustment_set_value(ay, 100.0 * y / bbox.min()[NR::Y]);
-        gtk_adjustment_set_value(aw, 100.0 * w / bbox.extent(NR::X));
-        gtk_adjustment_set_value(ah, 100.0 * h / bbox.extent(NR::Y));
+        gtk_adjustment_set_value(ax, fabs(bbox.min()[NR::X]) > 1e-6? 100.0 * x / bbox.min()[NR::X] : 100.0);
+        gtk_adjustment_set_value(ay, fabs(bbox.min()[NR::Y]) > 1e-6? 100.0 * y / bbox.min()[NR::Y] : 100.0);
+        gtk_adjustment_set_value(aw, fabs(bbox.extent(NR::X)) > 1e-6? 100.0 * w / bbox.extent(NR::X) : 100.0);
+        gtk_adjustment_set_value(ah, fabs(bbox.extent(NR::Y)) > 1e-6? 100.0 * h / bbox.extent(NR::Y) : 100.0);
 
         g_object_set_data(dlg, "update", GUINT_TO_POINTER(FALSE));
         return TRUE;
