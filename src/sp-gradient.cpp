@@ -570,7 +570,11 @@ sp_gradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     return repr;
 }
 
-/** Forces the vector to be built, if not present (i.e. changed) */
+/**
+ * Forces the vector to be built, if not present (i.e.\ changed).
+ *
+ * \pre SP_IS_GRADIENT(gradient).
+ */
 void
 sp_gradient_ensure_vector(SPGradient *gradient)
 {
@@ -610,11 +614,13 @@ sp_gradient_set_spread(SPGradient *gr, SPGradientSpread spread)
  * The raison d'être of this routine is that it correctly handles cycles in the href chain (e.g. if
  * a gradient gives itself as its href, or if each of two gradients gives the other as its href).
  *
- * @precondition src != NULL.
+ * \pre SP_IS_GRADIENT(src).
  */
 static SPGradient *
 chase_hrefs(SPGradient *const src, bool (*match)(SPGradient const *))
 {
+    g_return_val_if_fail(SP_IS_GRADIENT(src), NULL);
+
     /* Use a pair of pointers for detecting loops: p1 advances half as fast as p2.  If there is a
        loop, then once p1 has entered the loop, we'll detect it the next time the distance between
        p1 and p2 is a multiple of the loop size. */
@@ -659,7 +665,8 @@ has_spread_set(SPGradient const *gr)
  * Returns private vector of given gradient (the gradient at the end of the href chain which has
  * stops), optionally normalizing it.
  *
- * @precondition There exists a gradient in the chain that has stops.
+ * \pre SP_IS_GRADIENT(gradient).
+ * \pre There exists a gradient in the chain that has stops.
  */
 SPGradient *
 sp_gradient_get_vector(SPGradient *gradient, gboolean force_vector)
@@ -674,11 +681,15 @@ sp_gradient_get_vector(SPGradient *gradient, gboolean force_vector)
 }
 
 /**
- * Returns the effective spread of given gradient (climbing up the refs chain if needed)
+ * Returns the effective spread of given gradient (climbing up the refs chain if needed).
+ *
+ * \pre SP_IS_GRADIENT(gradient).
  */
 SPGradientSpread
 sp_gradient_get_spread(SPGradient *gradient)
 {
+    g_return_val_if_fail(SP_IS_GRADIENT(gradient), SP_GRADIENT_SPREAD_PAD);
+
     SPGradient const *src = chase_hrefs(gradient, has_spread_set);
     return ( src
              ? src->spread
