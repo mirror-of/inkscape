@@ -12,55 +12,36 @@
 
 #include <libnr/nr_config.h>
 
-typedef struct _NRMatrixD NRMatrixD;
-typedef struct _NRMatrixF NRMatrixF;
-typedef struct _NRPointD NRPointD;
-typedef struct _NRPointF NRPointF;
-typedef struct _NRPointL NRPointL;
-typedef struct _NRPointS NRPointS;
-typedef struct _NRRectD NRRectD;
-typedef struct _NRRectF NRRectF;
-typedef struct _NRRectL NRRectL;
-typedef struct _NRRectS NRRectS;
-
-struct _NRMatrixD {
+typedef struct _NRMatrix {
 	double c[6];
-};
+} NRMatrix;
 
-struct _NRMatrixF {
-	double c[6];
-};
-
-struct _NRPointD {
+typedef struct _NRPoint {
 	double x, y;
-};
+} NRPoint;
 
-struct _NRPointF {
-	double x, y;
-};
-
-struct _NRPointL {
+typedef struct _NRPointL {
 	NRLong x, y;
-};
+} NRPointL;
 
-struct _NRPointS {
+typedef struct _NRPointS {
 	NRShort x, y;
-};
+} NRPointS;
 
-struct _NRRectD {
+typedef struct _NRRectD {
 	double x0, y0, x1, y1;
-};
+} NRRectD;
 
-struct _NRRectF {
+typedef struct _NRRectF {
 	double x0, y0, x1, y1;
-};
+} NRRectF;
 
-struct _NRRectL {
+typedef struct _NRRectL {
 	NRLong x0, y0, x1, y1;
-};
+} NRRectL;
 
-struct _NRRectS {
+typedef struct _NRRectS {
 	NRShort x0, y0, x1, y1;
-};
+} NRRectS;
 
 #endif
