@@ -531,7 +531,7 @@ void FloatLigne::Affiche()
 
 int FloatLigne::AddRun(float st, float en, float vst, float ven)
 {
-    AddRun(st, en, vst, ven, (ven - vst) / (en - st));
+    return AddRun(st, en, vst, ven, (ven - vst) / (en - st));
 }
 
 
