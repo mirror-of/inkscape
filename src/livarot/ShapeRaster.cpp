@@ -508,7 +508,7 @@ int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
   }
   if ( guess < 0 || guess >= nbQRas ) {
     int c=firstQRas;
-    while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) < 0 ) c=qrsData[c].next;
+    while ( c >= 0 && c < nbQRas && CmpQRs(qrsData[c],qrsData[no]) < 0 ) c=qrsData[c].next;
     if ( c < 0 || c >= nbQRas ) {
       qrsData[no].prev=lastQRas;
       qrsData[lastQRas].next=no;
@@ -525,7 +525,7 @@ int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
     }
 	} else {
 		int c=guess;
-    int stTst=CmpQRs(qrsData+c,qrsData+no);
+    int stTst=CmpQRs(qrsData[c],qrsData[no]);
 		if ( stTst == 0 ) {
 			qrsData[no].prev=qrsData[c].prev;
 			if ( qrsData[no].prev >= 0 ) {
@@ -536,7 +536,7 @@ int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
 			qrsData[no].next=c;
 			qrsData[c].prev=no;
 		} else if ( stTst > 0 ) {
-			while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) > 0 ) c=qrsData[c].prev;
+			while ( c >= 0 && c < nbQRas && CmpQRs(qrsData[c],qrsData[no]) > 0 ) c=qrsData[c].prev;
 			if ( c < 0 || c >= nbQRas ) {
 				qrsData[no].next=firstQRas;
 				qrsData[firstQRas].prev=no; // firstQRas != -1
@@ -552,7 +552,7 @@ int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
 				qrsData[c].next=no;
 			}
 		} else {
-			while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) < 0 ) c=qrsData[c].next;
+			while ( c >= 0 && c < nbQRas && CmpQRs(qrsData[c],qrsData[no]) < 0 ) c=qrsData[c].next;
 			if ( c < 0 || c >= nbQRas ) {
 				qrsData[no].prev=lastQRas;
 				qrsData[lastQRas].next=no;
@@ -636,7 +636,7 @@ void              Shape::QuickRasterSort(void)
     int nI=qrsData[bI].next;
     if ( nI < 0 ) break;
     int ncb=qrsData[nI].bord;
-    if ( CmpQRs(qrsData+nI,qrsData+bI) < 0 ) {
+    if ( CmpQRs(qrsData[nI],qrsData[bI]) < 0 ) {
       QuickRasterSwapEdge(cb,ncb);
       int pI=qrsData[bI].prev; // ca reste bI, puisqu'on a juste echange les contenus
       if ( pI < 0 ) {

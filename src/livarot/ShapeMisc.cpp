@@ -543,8 +543,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     {
       maxPt = numberOfPoints();
       if (_has_points_data)
-        pData =
-          (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
+        pData.resize(maxPt);
     }
     
     _aretes = a->_aretes;
@@ -552,21 +551,15 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     {
       maxAr = numberOfEdges();
       if (_has_edges_data)
-        eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
+	eData.resize(maxAr);
       if (_has_sweep_src_data)
-        swsData =
-          (sweep_src_data *) g_realloc(swsData,
-                                      maxAr * sizeof (sweep_src_data));
+        swsData.resize(maxAr);
       if (_has_sweep_dest_data)
-        swdData =
-          (sweep_dest_data *) g_realloc(swdData,
-                                       maxAr * sizeof (sweep_dest_data));
+        swdData.resize(maxAr);
       if (_has_raster_data)
-        swrData =
-          (raster_data *) g_realloc(swrData, maxAr * sizeof (raster_data));
+        swrData.resize(maxAr);
       if (_has_back_data)
-        ebData =
-          (back_data *) g_realloc(ebData, maxAr * sizeof (back_data));
+        ebData.resize(maxAr);
     }
     return 0;
   }

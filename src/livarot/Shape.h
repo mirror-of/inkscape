@@ -210,20 +210,20 @@ private:
 
   // the arrays of temporary data
   // these ones are dynamically kept at a length of maxPt or maxAr
-  edge_data *eData;
-  sweep_src_data *swsData;
-  sweep_dest_data *swdData;
-  raster_data *swrData;
-  point_data *pData;
+  std::vector<edge_data> eData;
+  std::vector<sweep_src_data> swsData;
+  std::vector<sweep_dest_data> swdData;
+  std::vector<raster_data> swrData;
+  std::vector<point_data> pData;
 public:
-    back_data * ebData;
-  voronoi_point *vorpData;
-  voronoi_edge *voreData;
+  std::vector<back_data> ebData;
+  std::vector<voronoi_point> vorpData;
+  std::vector<voronoi_edge> voreData;
 
   //private:
   int nbQRas;
   int firstQRas,lastQRas;
-  quick_raster_data *qrsData;
+  std::vector<quick_raster_data> qrsData;
   // these ones are dynamically allocated
   int nbChgt, maxChgt;
   sTreeChange *chgts;
@@ -521,13 +521,13 @@ private:
   void             QuickRasterSubEdge(int bord);
   void             QuickRasterSwapEdge(int a,int b);
   void             QuickRasterSort(void);
-  static int       CmpQRs(const void * p1, const void * p2) {
-		quick_raster_data* d1=(quick_raster_data*)p1;
-		quick_raster_data* d2=(quick_raster_data*)p2;
-		if ( fabs(d1->x-d2->x) < 0.00001 ) {
-			return 0;
-		}
-		return (( d1->x < d2->x )?-1:1);
+
+  static int CmpQRs(const quick_raster_data &p1, const quick_raster_data &p2) {
+    if ( fabs(p1.x - p2.x) < 0.00001 ) {
+      return 0;
+    }
+    
+    return ( ( p1.x < p2.x ) ? -1 : 1 );
   };
   
 };

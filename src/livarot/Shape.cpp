@@ -36,30 +36,11 @@ Shape::Shape (void)
   maxAr = 0;
 
   type = shape_polygon;
-
-  pData = NULL;
-  eData = NULL;
-  ebData = NULL;
-  swsData = NULL;
-  swdData = NULL;
-  swrData = NULL;
-  qrsData = NULL;
-  vorpData = NULL;
-  voreData = NULL;
 }
 Shape::~Shape (void)
 {
   maxPt = 0;
   maxAr = 0;
-  g_free(eData);
-  g_free(ebData);
-  g_free(swsData);
-  g_free(swdData);
-  g_free(swrData);
-  g_free(qrsData);
-  g_free(pData);
-  g_free(vorpData);
-  g_free(voreData);
 }
 
 void Shape::Affiche(void)
@@ -83,8 +64,7 @@ Shape::MakePointData (bool nVal)
       if (_has_points_data == false)
 	{
 	  _has_points_data = true;
-	  g_free(pData);
-	  pData = (point_data *) g_malloc(maxPt * sizeof (point_data));
+	  pData.resize(maxPt);
 	}
     }
   else
@@ -92,8 +72,7 @@ Shape::MakePointData (bool nVal)
       if (_has_points_data)
 	{
 	  _has_points_data = false;
-	  g_free(pData);
-	  pData = NULL;
+	  pData.clear();
 	}
     }
 }
@@ -105,8 +84,7 @@ Shape::MakeEdgeData (bool nVal)
       if (_has_edges_data == false)
 	{
 	  _has_edges_data = true;
-	  g_free(eData);
-	  eData = (edge_data *) g_malloc(maxAr * sizeof (edge_data));
+	  eData.resize(maxAr);
 	}
     }
   else
@@ -114,8 +92,7 @@ Shape::MakeEdgeData (bool nVal)
       if (_has_edges_data)
 	{
 	  _has_edges_data = false;
-	  g_free(eData);
-	  eData = NULL;
+	  eData.clear();
 	}
     }
 }
@@ -127,8 +104,7 @@ Shape::MakeRasterData (bool nVal)
       if (_has_raster_data == false)
 	{
 	  _has_raster_data = true;
-	  g_free(swrData);
-	  swrData = (raster_data *) g_malloc(maxAr * sizeof (raster_data));
+	  swrData.resize(maxAr);
 	}
     }
   else
@@ -136,8 +112,7 @@ Shape::MakeRasterData (bool nVal)
       if (_has_raster_data)
 	{
 	  _has_raster_data = false;
-	  g_free(swrData);
-	  swrData = NULL;
+	  swrData.clear();
 	}
     }
 }
@@ -149,9 +124,7 @@ Shape::MakeQuickRasterData (bool nVal)
       if (_has_quick_raster_data == false)
 	{
 	  _has_quick_raster_data = true;
-	  g_free(qrsData);
-	  qrsData =
-	    (quick_raster_data *) g_malloc(maxAr * sizeof (quick_raster_data));
+	  qrsData.resize(maxAr);
 	}
     }
   else
@@ -159,8 +132,7 @@ Shape::MakeQuickRasterData (bool nVal)
       if (_has_quick_raster_data)
 	{
 	  _has_quick_raster_data = false;
-	  g_free(qrsData);
-	  qrsData = NULL;
+	  qrsData.clear();
 	}
     }
 }
@@ -172,9 +144,7 @@ Shape::MakeSweepSrcData (bool nVal)
       if (_has_sweep_src_data == false)
 	{
 	  _has_sweep_src_data = true;
-	  g_free(swsData);
-	  swsData =
-	    (sweep_src_data *) g_malloc(maxAr * sizeof (sweep_src_data));
+	  swsData.resize(maxAr);
 	}
     }
   else
@@ -182,8 +152,7 @@ Shape::MakeSweepSrcData (bool nVal)
       if (_has_sweep_src_data)
 	{
 	  _has_sweep_src_data = false;
-	  g_free(swsData);
-	  swsData = NULL;
+	  swsData.clear();
 	}
     }
 }
@@ -195,9 +164,7 @@ Shape::MakeSweepDestData (bool nVal)
       if (_has_sweep_dest_data == false)
 	{
 	  _has_sweep_dest_data = true;
-	  g_free(swdData);
-	  swdData =
-	    (sweep_dest_data *) g_malloc(maxAr * sizeof (sweep_dest_data));
+	  swdData.resize(maxAr);
 	}
     }
   else
@@ -205,8 +172,7 @@ Shape::MakeSweepDestData (bool nVal)
       if (_has_sweep_dest_data)
 	{
 	  _has_sweep_dest_data = false;
-	  g_free(swdData);
-	  swdData = NULL;
+	  swdData.clear();
 	}
     }
 }
@@ -218,8 +184,7 @@ Shape::MakeBackData (bool nVal)
       if (_has_back_data == false)
 	{
 	  _has_back_data = true;
-	  g_free(ebData);
-	  ebData = (back_data *) g_malloc(maxAr * sizeof (back_data));
+	  ebData.resize(maxAr);
 	}
     }
   else
@@ -227,8 +192,7 @@ Shape::MakeBackData (bool nVal)
       if (_has_back_data)
 	{
 	  _has_back_data = false;
-	  g_free(ebData);
-	  ebData = NULL;
+	  ebData.clear();
 	}
     }
 }
@@ -240,11 +204,8 @@ Shape::MakeVoronoiData (bool nVal)
       if (_has_voronoi_data == false)
 	{
 	  _has_voronoi_data = true;
-	  g_free(vorpData);
-	  g_free(voreData);
-	  vorpData =
-	    (voronoi_point *) g_malloc(maxPt * sizeof (voronoi_point));
-	  voreData = (voronoi_edge *) g_malloc(maxAr * sizeof (voronoi_edge));
+	  vorpData.resize(maxPt);
+	  voreData.resize(maxAr);
 	}
     }
   else
@@ -252,10 +213,8 @@ Shape::MakeVoronoiData (bool nVal)
       if (_has_voronoi_data)
 	{
 	  _has_voronoi_data = false;
-	  g_free(vorpData);
-	  vorpData = NULL;
-	  g_free(voreData);
-	  voreData = NULL;
+	  vorpData.clear();
+	  voreData.clear();
 	}
     }
 }
@@ -316,30 +275,23 @@ Shape::Reset (int n, int m)
     {
       maxPt = n;
       if (_has_points_data)
-	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
+	pData.resize(maxPt);
       if (_has_voronoi_data)
-	vorpData =
-	  (voronoi_point *) g_realloc(vorpData,
-				     maxPt * sizeof (voronoi_point));
+	vorpData.resize(maxPt);
     }
   if (m > maxAr)
     {
       maxAr = m;
       if (_has_edges_data)
-	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
+	eData.resize(maxAr);
       if (_has_sweep_dest_data)
-	swdData =
-	  (sweep_dest_data *) g_realloc(swdData,
-				       maxAr * sizeof (sweep_dest_data));
+	swdData.resize(maxAr);
       if (_has_sweep_src_data)
-	swsData =
-	  (sweep_src_data *) g_realloc(swsData,
-				      maxAr * sizeof (sweep_src_data));
+	swsData.resize(maxAr);
       if (_has_back_data)
-	ebData = (back_data *) g_realloc(ebData, maxAr * sizeof (back_data));
+	ebData.resize(maxAr);
       if (_has_voronoi_data)
-	voreData =
-	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
+	voreData.resize(maxAr);
     }
   _need_points_sorting = false;
   _need_edges_sorting = false;
@@ -352,11 +304,9 @@ Shape::AddPoint (const NR::Point x)
     {
       maxPt = 2 * numberOfPoints() + 1;
       if (_has_points_data)
-	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
+	pData.resize(maxPt);
       if (_has_voronoi_data)
-	vorpData =
-	  (voronoi_point *) g_realloc(vorpData,
-				     maxPt * sizeof (voronoi_point));
+	vorpData.resize(maxPt);
     }
 
   dg_point p;
@@ -1157,23 +1107,17 @@ Shape::AddEdge (int st, int en)
     {
       maxAr = 2 * numberOfEdges() + 1;
       if (_has_edges_data)
-	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
+	eData.resize(maxAr);
       if (_has_sweep_src_data)
-	swsData =
-	  (sweep_src_data *) g_realloc(swsData,
-				      maxAr * sizeof (sweep_src_data));
+	swsData.resize(maxAr);
       if (_has_sweep_dest_data)
-	swdData =
-	  (sweep_dest_data *) g_realloc(swdData,
-				       maxAr * sizeof (sweep_dest_data));
+	swdData.resize(maxAr);
       if (_has_raster_data)
-	swrData =
-	  (raster_data *) g_realloc(swrData, maxAr * sizeof (raster_data));
+	swrData.resize(maxAr);
       if (_has_back_data)
-	ebData = (back_data *) g_realloc(ebData, maxAr * sizeof (back_data));
+	ebData.resize(maxAr);
       if (_has_voronoi_data)
-	voreData =
-	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
+	voreData.resize(maxAr);
     }
 
   dg_arete a;
@@ -1238,23 +1182,17 @@ Shape::AddEdge (int st, int en, int leF, int riF)
     {
       maxAr = 2 * numberOfEdges() + 1;
       if (_has_edges_data)
-	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
+	eData.resize(maxAr);
       if (_has_sweep_src_data)
-	swsData =
-	  (sweep_src_data *) g_realloc(swsData,
-				      maxAr * sizeof (sweep_src_data));
+	swsData.resize(maxAr);
       if (_has_sweep_dest_data)
-	swdData =
-	  (sweep_dest_data *) g_realloc(swdData,
-				       maxAr * sizeof (sweep_dest_data));
+	swdData.resize(maxAr);
       if (_has_raster_data)
-	swrData =
-	  (raster_data *) g_realloc(swrData, maxAr * sizeof (raster_data));
+	swrData.resize(maxAr);
       if (_has_back_data)
-	ebData = (back_data *) g_realloc(ebData, maxAr * sizeof (back_data));
+	ebData.resize(maxAr);
       if (_has_voronoi_data)
-	voreData =
-	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
+	voreData.resize(maxAr);
     }
 
   dg_arete a;
