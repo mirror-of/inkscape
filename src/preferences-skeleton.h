@@ -106,6 +106,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"autoscrollspeed\" value=\"0.7\"/>"
 "    <group id=\"autoscrolldistance\" value=\"-10\"/>"
 "    <group id=\"simplifythreshold\" value=\"0.003\"/>"
+"    <group id=\"dialogsskiptaskbar\" value=\"1\"/>"
 "  </group>"
 
 "</inkscape>";
