@@ -68,6 +68,7 @@ struct SPSlideShow {
     int current;
     SPDocument *doc;
     GtkWidget *view;
+    GtkWindow *window;
     bool fullscreen;
 };
 
@@ -134,6 +135,7 @@ sp_svgview_main_key_press (GtkWidget *widget, GdkEventKey *event, struct SPSlide
     default:
 	break;
     }
+    gtk_window_set_title(GTK_WINDOW(widget), SP_DOCUMENT_NAME(ss->doc));
     return FALSE;
 }
 
@@ -456,3 +458,15 @@ SPRepr *inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key) {r
 #include "widgets/menu.h"
 void sp_menu_append (SPMenu *menu, const gchar *name, const gchar *tip, const void *data) {}
 #endif
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

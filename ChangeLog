@@ -1,5 +1,9 @@
 2004-07-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/inkview.cpp: 
+
+	* src/round-test.cpp: New unit-test file.
+
 	* src/desktop.h, src/sp-desktop-widget.h:
 	  Move SPDesktopWidget stuff from desktop.h to new file
 	  sp-desktop-widget.h.
