@@ -155,7 +155,6 @@ src/livarot/ShapeDraw.cpp
 src/livarot/ShapeMisc.cpp
 src/livarot/ShapeRaster.cpp
 src/livarot/ShapeSweep.cpp
-src/livarot/ShapeSweepUtils.cpp
 src/main.cpp
 src/marker-status.cpp
 src/message-context.cpp
@@ -276,7 +275,6 @@ src/widgets/spw-utilities.cpp
 src/widgets/test-widgets.cpp
 src/winmain.cpp
 src/xml/repr-action-test.cpp
-src/xml/repr-action.cpp
 src/xml/repr-css.cpp
 src/xml/repr-get-children.cpp
 src/xml/repr-io.cpp
