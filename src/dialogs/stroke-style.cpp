@@ -760,13 +760,11 @@ static void sp_stroke_style_update_marker_buttons( SPWidget *spw,
 * Helper function for creating radio buttons.  This should probably be re-thought out
 * when reimplementing this with Gtkmm.  
 */
-GtkWidget*
+static GtkWidget *
 sp_stroke_radio_button ( GtkWidget* tb, const char* n, const char* xpm,
                          GtkWidget* hb, GtkWidget* spw,
-                         const gchar* key, const gchar* data )
+                         gchar const *key, gchar const *data )
 {
-    GtkWidget *px;
-
     g_assert(xpm != NULL);
     g_assert(hb  != NULL);
     g_assert(spw != NULL);
@@ -786,7 +784,7 @@ sp_stroke_radio_button ( GtkWidget* tb, const char* n, const char* xpm,
     gtk_signal_connect (GTK_OBJECT (tb), "toggled",
                 GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled),
                 spw);
-    px = gtk_image_new_from_stock ( n,GTK_ICON_SIZE_LARGE_TOOLBAR );
+    GtkWidget *px = gtk_image_new_from_stock(n, GTK_ICON_SIZE_LARGE_TOOLBAR);
     g_assert(px != NULL);
     gtk_widget_show (px);
     gtk_container_add (GTK_CONTAINER (tb), px);
@@ -1762,9 +1760,6 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 static void
 sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gchar *marker_name)
 {
-    /* A toggle button */
-    GtkWidget *tb;
-
     /* Set up the various xpm's as an array so that new kinds of markers 
      * can be added without having to cut and paste the code itself.
      */
@@ -1778,12 +1773,12 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gcha
     marker_xpm[3] = NULL;
 
     for (int i=0; marker_xpm[i] ; i++) {
-        tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), marker_xpm[i]));
+        GtkWidget *tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), marker_xpm[i]));
         g_assert(tb != NULL);
         if (tb != NULL) {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), (active == tb));
         }
-        g_free(marker_xpm);
+        g_free(marker_xpm[i]);
     }
 }
 
@@ -1797,32 +1792,29 @@ sp_stroke_style_update_marker_buttons ( SPWidget *spw,
                                         unsigned int loc, 
                                         const gchar *stock_type) 
 {
-    GtkWidget *tb         = NULL;
-    gboolean marker_valid = TRUE;
-    SPObject *object      = SP_OBJECT (objects->data);
-    gchar *marker_type    = object->style->marker[loc].value;
-
-    //g_message("'%s' marker is '%s'", stock_type, marker_type);
-    
-    if (! marker_type) {
+    SPObject *object = SP_OBJECT(objects->data);
+    gchar const *marker_type = object->style->marker[loc].value;
+    if (!marker_type) {
         return;
     }
 
     /* Iterate through the objects and check the styles */
+    bool marker_valid = true;
     for (GSList *l = objects->next; l != NULL; l = l->next) {
-        SPObject *o;
-        o = SP_OBJECT (l->data);
+        SPObject *o = SP_OBJECT(l->data);
         if (! g_ascii_strcasecmp(o->style->marker[loc].value, marker_type)) {
-            marker_valid = FALSE;
+            marker_valid = false;
         }
     }
 
-    if ( marker_valid ) {
-        gchar *widget_name;
-        widget_name = g_strconcat(stock_type, ":", marker_type, NULL);
+    GtkWidget *tb;
+    if (marker_valid) {
+        gchar *widget_name = g_strconcat(stock_type, ":", marker_type, NULL);
         marker_status("Widget name is '%s'", widget_name);
         tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), widget_name));
         g_free(widget_name);
+    } else {
+        tb = NULL;
     }
     sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), stock_type);
 

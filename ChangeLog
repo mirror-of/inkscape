@@ -1,5 +1,9 @@
 2004-02-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dialogs/stroke-style.cpp:
+	Fix: free marker_xpm[i] instead of marker_xpm.
+	Misc cleanups.
+
 	* src/Makefile.am: New files extract-uri.cpp, extract-uri.h.
 	New unit test extract-uri-test.cpp.
 	* src/style.cpp (extract_uri): Move to src/extract-uri.cpp, and fix.
