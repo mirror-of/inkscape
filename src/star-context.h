@@ -38,6 +38,8 @@ struct SPStarContext {
 	gdouble proportion;
 	/* flat sides or not? */
 	bool isflatsided;
+	/* rounded corners ratio */
+	gdouble rounded;
 
     SPKnotHolder *knot_holder;
     SPRepr *repr;

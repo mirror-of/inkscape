@@ -26,6 +26,10 @@
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
 #include "xml/repr.h"
+#include "libnr/nr-point.h"
+#include "libnr/nr-point-fns.h"
+#include "libnr/nr-point-ops.h"
+#include "libnr/nr-point-l.h"
 
 #include "sp-star.h"
 
@@ -42,7 +46,7 @@ static std::vector<NR::Point> sp_star_snappoints(SPItem *item);
 
 static void sp_star_set_shape (SPShape *shape);
 
-static SPPolygonClass *parent_class;
+static SPShapeClass *parent_class;
 
 GType
 sp_star_get_type (void)
@@ -60,7 +64,7 @@ sp_star_get_type (void)
 			(GInstanceInitFunc) sp_star_init,
 			NULL,	/* value_table */
 		};
-		type = g_type_register_static (SP_TYPE_POLYGON, "SPStar", &info, (GTypeFlags)0);
+		type = g_type_register_static (SP_TYPE_SHAPE, "SPStar", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -80,7 +84,7 @@ sp_star_class_init (SPStarClass *klass)
 	path_class = (SPPathClass *) klass;
 	shape_class = (SPShapeClass *) klass;
 
-	parent_class = (SPPolygonClass *)g_type_class_ref (SP_TYPE_POLYGON);
+	parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
 
 	sp_object_class->build = sp_star_build;
 	sp_object_class->write = sp_star_write;
@@ -101,7 +105,8 @@ sp_star_init (SPStar * star)
 	star->r[0] = 1.0;
 	star->r[1] = 0.001;
 	star->arg[0] = star->arg[1] = 0.0;
-	star->flatsided=0;
+	star->flatsided = 0;
+	star->rounded = 0.0;
 }
 
 static void
@@ -118,6 +123,7 @@ sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "sodipodi:arg1");
 	sp_object_read_attr (object, "sodipodi:arg2");
 	sp_object_read_attr (object, "inkscape:flatsided");
+	sp_object_read_attr (object, "inkscape:rounded");
 }
 
 static SPRepr *
@@ -126,7 +132,7 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 	SPStar *star = SP_STAR (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("polygon");
+		repr = sp_repr_new ("path");
 	}
 
 	if (flags & SP_OBJECT_WRITE_EXT) {
@@ -139,7 +145,13 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 		sp_repr_set_double (repr, "sodipodi:arg1", star->arg[0]);
 		sp_repr_set_double (repr, "sodipodi:arg2", star->arg[1]);
 		sp_repr_set_boolean (repr, "inkscape:flatsided", star->flatsided);
+		sp_repr_set_double (repr, "inkscape:rounded", star->rounded);
 	}
+
+	sp_star_set_shape ((SPShape *) star);
+	char *d = sp_svg_write_path (((SPShape *) star)->curve->bpath);
+	sp_repr_set_attr (repr, "d", d);
+	g_free (d);
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
@@ -221,7 +233,15 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_INKSCAPE_FLATSIDED:
 		if (value && !strcmp (value, "true"))
 			star->flatsided = true;
-        else star->flatsided = false;
+		else star->flatsided = false;
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_ROUNDED:
+		if (value) {
+			star->rounded = g_ascii_strtod (value, NULL);
+		} else {
+			star->rounded = 0.0;
+		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
@@ -254,6 +274,48 @@ sp_star_description (SPItem *item)
 	else return g_strdup_printf (_("Polygon of %d sides"), star->sides);
 }
 
+NR::Point
+rot90_rel (NR::Point o, NR::Point n)
+{
+	return ((1/NR::L2(n - o)) * NR::Point ((n - o)[NR::Y],  (o - n)[NR::X]));
+}
+
+NR::Point
+sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
+{
+	NR::Point o = sp_star_get_xy (star, point, index);
+
+	gint pi = (index > 0)? (index - 1) : (star->sides - 1);
+	gint ni = (index < star->sides - 1)? (index + 1) : 0;
+
+	SPStarPoint other = (point == SP_STAR_POINT_KNOT2? SP_STAR_POINT_KNOT1 : SP_STAR_POINT_KNOT2);
+
+	NR::Point prev = (star->flatsided? sp_star_get_xy (star, point, pi) : sp_star_get_xy (star, other, point == SP_STAR_POINT_KNOT2? index : pi));
+	NR::Point next = (star->flatsided? sp_star_get_xy (star, point, ni) : sp_star_get_xy (star, other, point == SP_STAR_POINT_KNOT1? index : ni));
+
+	NR::Point mid =  0.5 * (prev + next);
+	NR::Point biss =  mid + 1000 * rot90_rel (mid, next); // just a far enough point on the midline
+
+	gdouble prev_len = NR::L2 (prev - o);
+	gdouble next_len = NR::L2 (next - o);
+
+	NR::Point rot = rot90_rel (o, biss);
+
+	NR::Point ret;
+
+	if (previ) {
+		ret = (star->rounded * prev_len) * rot;
+	} else {
+		ret = (star->rounded * next_len * -1) * rot;
+	}
+
+	return o + ret;
+}
+
+
+#define NEXT false
+#define PREV true
+
 static void
 sp_star_set_shape (SPShape *shape)
 {
@@ -262,25 +324,75 @@ sp_star_set_shape (SPShape *shape)
 	SPCurve *c = sp_curve_new ();
 	
 	gint sides = star->sides;
+	bool not_rounded = (fabs (star->rounded) < 1e-4);
 
+	// draw 1st segment
 	sp_curve_moveto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
-	if (star->flatsided == false)
-	sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
-	
-	for (gint i = 1; i < sides; i++)
-	    {
-		sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i));
-		if (star->flatsided == false)
-		    sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i));
+	if (star->flatsided == false) {
+		if (not_rounded) {
+			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
+		} else {
+			sp_curve_curveto (c, 
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, 0, NEXT),
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, 0, PREV),
+				sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
+		}
+	}
+
+	// draw all middle segments
+	for (gint i = 1; i < sides; i++) {
+		if (not_rounded) {
+			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i));
+		} else {
+		if (star->flatsided == false) {
+			sp_curve_curveto (c, 
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, i - 1, NEXT),
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i, PREV),
+				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i));
+		} else {
+			sp_curve_curveto (c, 
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i - 1, NEXT),
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i, PREV),
+				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i));
+		}
+		}
+		if (star->flatsided == false) {
+
+			if (not_rounded) {
+                       sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i));
+			} else {
+				sp_curve_curveto (c,
+					sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, i, NEXT),
+					sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, i, PREV),
+					sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i));
+			}
+		}
 	}
 	
+	// draw last segment
+		if (star->rounded == 0) {
+			sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+		} else {
+			if (star->flatsided == false) {
+			sp_curve_curveto (c, 
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT2, sides - 1, NEXT),
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, 0, PREV),
+				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+			} else {
+			sp_curve_curveto (c, 
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, sides - 1, NEXT),
+				sp_star_get_curvepoint (star, SP_STAR_POINT_KNOT1, 0, PREV),
+				sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+			}
+		}
+
 	sp_curve_closepath (c);
 	sp_shape_set_curve_insync (SP_SHAPE (star), c, TRUE);
 	sp_curve_unref (c);
 }
 
 void
-sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat)
+sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded)
 {
 	g_return_if_fail (star != NULL);
 	g_return_if_fail (SP_IS_STAR (star));
@@ -288,14 +400,15 @@ sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gd
 	star->sides = CLAMP (sides, 3, 32);
 	star->center = center;
 	star->r[0] = MAX (r1, 0.001);
-	if (isflat == false)
-	star->r[1] = CLAMP (r2, 0.0, star->r[0]);
-	else {
-		              star->r[1] =CLAMP ( r1*cos(M_PI/sides) ,0.0, star->r[0] );
-	      }
+	if (isflat == false) {
+		star->r[1] = CLAMP (r2, 0.0, star->r[0]);
+	} else {
+		star->r[1] = CLAMP ( r1*cos(M_PI/sides) ,0.0, star->r[0] );
+	}
 	star->arg[0] = arg1;
 	star->arg[1] = arg2;
 	star->flatsided = isflat;
+	star->rounded = rounded;
 	SP_OBJECT(star)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 

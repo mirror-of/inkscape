@@ -232,6 +232,7 @@ sp_star_context_setup (SPEventContext *ec)
     sp_event_context_read (ec, "magnitude");
     sp_event_context_read (ec, "proportion");
     sp_event_context_read (ec, "isflatsided");
+    sp_event_context_read (ec, "rounded");
 
     SPSelection *selection = SP_DT_SELECTION(ec->desktop);
 
@@ -269,7 +270,9 @@ sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
             sc->isflatsided = true;
         else
             sc->isflatsided = false;
-    }
+    } else if (!strcmp (key, "rounded")) {
+        sc->rounded = (val) ? g_ascii_strtod (val, NULL) : 0.0;
+    }    
 }
 
 static gint
@@ -427,7 +430,7 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
 
     if (!sc->item) {
         /* Create object */
-        SPRepr *repr = sp_repr_new ("polygon");
+        SPRepr *repr = sp_repr_new ("path");
         sp_repr_set_attr (repr, "sodipodi:type", "star");
         /* Set style */
         SPRepr *style = inkscape_get_repr (INKSCAPE, "tools.shapes.star");
@@ -456,8 +459,10 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
                  * (M_PI/snaps) );
     }
     bool isflat = sc->isflatsided;
+    double rounded = sc->rounded;
+
     sp_star_position_set(star, sc->magnitude, p0, r1, r1 * sc->proportion,
-                         arg1, arg1 + M_PI / sides, isflat);
+                         arg1, arg1 + M_PI / sides, isflat, rounded);
 
     /* status text */
     GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);

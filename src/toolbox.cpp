@@ -751,12 +751,45 @@ sp_stb_sides_flat_state_changed (GtkWidget *widget, GtkObject *tbl)
             if (SP_IS_STAR ((SPItem *) items->data))	{
                 SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
                 sp_repr_set_attr(repr, "inkscape:flatsided", "false");
-                SP_OBJECT ((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
+                SP_OBJECT (items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
             }
         }
     }
     if (modmade) sp_document_done (SP_DT_DOCUMENT (desktop));
+
+    g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
+
+    spinbutton_defocus (GTK_OBJECT (tbl));
+}
+
+static void
+sp_stb_rounded_value_changed (GtkAdjustment *adj, SPWidget *tbl) 
+{
+    prefs_set_double_attribute ("tools.shapes.star", "rounded", (gdouble) adj->value);
+
+    // quit if run by the attr_changed listener
+    if (g_object_get_data (G_OBJECT (tbl), "freeze")) {
+        return;
+    }
+
+    // in turn, prevent listener from responding
+    g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (TRUE));
+
+    SPDesktop *desktop = (SPDesktop *) gtk_object_get_data (GTK_OBJECT (tbl), "desktop");
+    bool modmade = FALSE;
+
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+    const GSList *items = selection->itemList();
+    for (; items != NULL; items = items->next) {
+        if (SP_IS_STAR ((SPItem *) items->data)) {
+            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+            sp_repr_set_double (repr, "inkscape:rounded", (gdouble) adj->value);
+            SP_OBJECT (items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
+            modmade = true;
+        }
+    }
+    if (modmade)  sp_document_done (SP_DT_DOCUMENT (desktop));
 
     g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
 
@@ -789,6 +822,9 @@ static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
     } else {
         gtk_adjustment_set_value (adj, r1/r2);
     }
+
+    adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "rounded");
+    gtk_adjustment_set_value (adj, sp_repr_get_double_attribute (repr, "inkscape:rounded", 0.0));
 
     GtkWidget *fscb = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "flat_checkbox");
     GtkWidget *prop_widget = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "prop_widget");
@@ -885,6 +921,8 @@ sp_stb_defaults (GtkWidget *widget,  SPWidget *tbl)
 	gtk_adjustment_set_value (adj, mag);
 	adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "proportion");
 	gtk_adjustment_set_value (adj, prop);
+	adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "rounded");
+	gtk_adjustment_set_value (adj, 0.0);
 
 	bool modmade=FALSE;
 	SPDesktop *desktop = SP_DESKTOP (g_object_get_data (G_OBJECT (tbl), "desktop"));
@@ -899,6 +937,8 @@ sp_stb_defaults (GtkWidget *widget,  SPWidget *tbl)
 				// we assume arg1 and r1 are set and do not change them
 				sp_repr_set_double(repr,"sodipodi:arg2", sp_repr_get_double_attribute (repr, "sodipodi:arg1", 0) + M_PI / mag);
 				sp_repr_set_double(repr,"sodipodi:r2", sp_repr_get_double_attribute (repr, "sodipodi:r1", 1.0)*prop);
+				sp_repr_set_double(repr,"inkscape:rounded", 0.0);
+				SP_OBJECT (items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
 			}
 			modmade = true;
 		}
@@ -951,11 +991,11 @@ sp_star_toolbox_new (SPDesktop *desktop)
         gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
-    /* Sharpness */
+    /* Spoke ratio */
     {
         // TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
         // Base radius is the same for the closest handle.
-        GtkWidget *hb = sp_tb_spinbutton (_("Sharpness:"), _("Base radius to tip radius ratio"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Spoke ratio:"), _("Base radius to tip radius ratio"), 
                                           "tools.shapes.star", "proportion", 0.5,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           0.01, 1.0, 0.01, 0.1,
@@ -967,6 +1007,18 @@ sp_star_toolbox_new (SPDesktop *desktop)
         else
             gtk_widget_set_sensitive (GTK_WIDGET (hb), FALSE);
     }
+
+    /* Roundedness */
+    {
+        GtkWidget *hb = sp_tb_spinbutton (_("Roundedness:"), _("How much rounded are the corners (0 for sharp)"), 
+                                          "tools.shapes.star", "rounded", 0.0,
+                                          NULL, (SPWidget *) tbl, FALSE, NULL,
+                                          -100.0, 100.0, 0.01, 0.1,
+                                          sp_stb_rounded_value_changed);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
+
 
     /* Reset */
     {

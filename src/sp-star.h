@@ -41,6 +41,8 @@ struct SPStar {
 	double r[2];
 	double arg[2];
 	bool flatsided;
+
+	double rounded;
 };
 
 struct SPStarClass {
@@ -49,7 +51,7 @@ struct SPStarClass {
 
 GType sp_star_get_type (void);
 
-void sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat);
+void sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded);
 
 NR::Point sp_star_get_xy (SPStar *star, SPStarPoint point, gint index);
 
