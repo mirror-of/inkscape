@@ -44,6 +44,7 @@
 
 #include "helper/sp-intl.h"
 #include "display/nr-arena-item.h"
+#include "helper/canvas-bpath.h"
 #include "enums.h"
 #include "document.h"
 #include "style.h"

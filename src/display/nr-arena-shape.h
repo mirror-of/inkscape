@@ -20,6 +20,7 @@
 #include <libnr/nr-svp.h>
 
 #include "helper/curve.h"
+#include "helper/canvas-bpath.h"
 #include "forward.h"
 #include "sp-paint-server.h"
 #include "nr-arena-item.h"
