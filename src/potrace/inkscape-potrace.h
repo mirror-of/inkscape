@@ -30,7 +30,9 @@ class PotraceTracingEngine : public TracingEngine
      *
      */
     PotraceTracingEngine()
-        {}
+        {
+        brightnessThreshold = 0.5;
+        }
 
     /**
      *
@@ -39,9 +41,21 @@ class PotraceTracingEngine : public TracingEngine
         {}
 
     /**
+     * Sets the halfway point for black/white
+     */
+    void setBrightnessThreshold(double val)
+        {
+        brightnessThreshold = val;
+        }
+
+    /**
      *
      */
     virtual char *getPathDataFromPixbuf(GdkPixbuf *pixbuf);
+
+    private:
+
+    double brightnessThreshold;
 
 };//class PotraceTracingEngine
 

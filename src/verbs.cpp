@@ -39,7 +39,7 @@
 #include "dialogs/find.h"
 #include "dialogs/debugdialog.h"
 
-#include "potrace/inkscape-potrace.h"
+#include "trace.h"
 
 #include "tools-switch.h"
 #include "inkscape-private.h"
@@ -408,7 +408,7 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
             sp_selected_path_reverse ();
             break;
         case SP_VERB_SELECTION_POTRACE:
-            Inkscape::Trace::convertImageToPath();
+            Inkscape::Trace::staticShowTraceDialog();
             break;
 
         case SP_VERB_SELECTION_COMBINE:

@@ -10,11 +10,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+
 #include <glib.h>
 
 #include <trace.h>
 
 #include <potrace/inkscape-potrace.h>
+#include <dialogs/tracedialog.h>
 
 #include <inkscape.h>
 #include <desktop.h>
@@ -34,7 +36,7 @@ namespace Inkscape
  */
 Trace::Trace()
 {
-    engine = new Inkscape::Potrace::PotraceTracingEngine();
+
 }
 
 
@@ -44,8 +46,6 @@ Trace::Trace()
  */
 Trace::~Trace()
 {
-    if (engine)
-        delete engine;
 }
 
 
@@ -55,8 +55,6 @@ Trace::~Trace()
  */
 void Trace::setTracingEngine(TracingEngine *newEngine)
 {
-    if (engine)
-        delete engine;
     engine = newEngine;
 }
 
@@ -72,12 +70,10 @@ TracingEngine *Trace::getTracingEngine()
 
 
 /**
- *
+ *  Static no-knowledge version
  */
 gboolean Trace::convertImageToPath()
 {
-    Trace trace;
-
     if (!SP_ACTIVE_DESKTOP)
         {
         g_warning("Trace::convertImageToPath: no active desktop\n");
@@ -121,7 +117,7 @@ gboolean Trace::convertImageToPath()
         return false;
         }
 
-    char *d = trace.engine->getPathDataFromPixbuf(pixbuf);
+    char *d = engine->getPathDataFromPixbuf(pixbuf);
 
     SPRepr *pathRepr    = sp_repr_new("path");
     SPRepr *imgRepr     = SP_OBJECT(img)->repr;
@@ -154,7 +150,29 @@ gboolean Trace::convertImageToPath()
 
 }
 
+/**
+ *  Static no-knowledge version
+ */
+gboolean Trace::staticConvertImageToPath()
+{
+    Trace trace;
+    trace.convertImageToPath();
+    return true;
+}
 
+
+/**
+ *  Static no-knowledge version
+ */
+gboolean Trace::staticShowTraceDialog()
+{
+    Inkscape::UI::Dialogs::TraceDialog *dlg = 
+          Inkscape::UI::Dialogs::TraceDialog::getInstance();
+    dlg->setTrace(NULL);
+    dlg->show();
+    
+    return true;
+}
 
 
 

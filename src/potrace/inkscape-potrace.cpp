@@ -79,8 +79,6 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * pixbuf)
     if (!pixbuf)
         return NULL;
 
-    double threshold = 0.5;
-
     //##Get the dimensions
     int width       = gdk_pixbuf_get_width(pixbuf);
     int height      = gdk_pixbuf_get_height(pixbuf);
@@ -94,7 +92,8 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * pixbuf)
     bitmap_t *bm = bm_new(width, height);
     bm_clear(bm, 0);
 
-    double cutoff =  3.0 * ( threshold * 256.0 );
+    double cutoff =  3.0 * ( brightnessThreshold * 256.0 );
+    //g_message("threshold:%f  cutoff:%f\n", brightnessThreshold, cutoff);
 
     //##Read the data out of the Pixbuf
     int x,y;

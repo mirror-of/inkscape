@@ -17,6 +17,8 @@
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
+
+
 namespace Inkscape
 {
 
@@ -94,7 +96,17 @@ class Trace
     /**
      *
      */
-    static gboolean convertImageToPath();
+    gboolean convertImageToPath();
+
+    /**
+     *
+     */
+    static gboolean staticConvertImageToPath();
+
+    /**
+     *
+     */
+    static gboolean staticShowTraceDialog();
 
 
 
@@ -105,7 +117,6 @@ class Trace
 
 
     TracingEngine *engine;
-
 
 
 };//class Trace
