@@ -205,7 +205,7 @@ sp_selected_path_boolop (bool_op bop)
                 origWind[curOrig]= fill_nonZero;
             }
 
-            originaux[curOrig] = Path_for_item ((SPItem *) l->data, true, false);
+            originaux[curOrig] = Path_for_item ((SPItem *) l->data, true, true);
             if (originaux[curOrig] == NULL || originaux[curOrig]->descr_cmd.size() <= 1)
             {
                 for (int i = curOrig; i >= 0; i--) delete originaux[i];
@@ -448,6 +448,15 @@ sp_selected_path_boolop (bool_op bop)
     }
     g_slist_free (il);
 
+    // premultiply by the inverse of parent's repr
+    SPItem *parent_item = SP_ITEM(SP_DT_DOCUMENT(desktop)->getObjectByRepr(parent));
+    NR::Matrix local = sp_item_i2doc_affine(parent_item);
+    gchar affinestr[80];
+    gchar *transform = NULL;
+    if (!local.test_identity() && sp_svg_transform_write(affinestr, 79, local.inverse())) {
+        transform = affinestr;
+    }
+
     // now that we have the result, add it on the canvas
     if ( bop == bool_op_cut || bop == bool_op_slice ) {
         int    nbRP=0;
@@ -496,12 +505,14 @@ sp_selected_path_boolop (bool_op bop)
             // a better algorithm might figure out e.g. the biggest piece
             sp_repr_set_attr (repr, "id", id);
 
+            sp_repr_set_attr (repr, "transform", transform);
+
             // add the new repr to the parent
             sp_repr_append_child (parent, repr);
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
-      
+  
             selection->addRepr(repr);
             sp_repr_unref (repr);
 
@@ -517,6 +528,8 @@ sp_selected_path_boolop (bool_op bop)
 
         sp_repr_set_attr (repr, "d", d);
         g_free (d);
+
+        sp_repr_set_attr (repr, "transform", transform);
 
         sp_repr_set_attr (repr, "id", id);
         sp_repr_append_child (parent, repr);
