@@ -1,5 +1,17 @@
 2004-08-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/curve.h, src/display/curve.cpp
+	  (sp_curve_first_point, sp_curve_last_point): New functions.
+
+	  (sp_curve_transform): Re-implement with NR::Matrix/NR::Point.
+	  The old code appears to be buggy for sheer/rotate matrices
+	  due to calculating each y coord using the new corresponding x coord
+	  instead of the previous value.
+
+	  Also add NR::translate version.
+
+	  Get rid of the return value.  Callers updated.
+
 	* src/sp-item.h, src/sp-item.cpp: (i2anc_affine): New function
 	  (essentially a rename of existing private partial_xform function, but
 	  differing behaviour on encountering non-SPItem in the hierarchy).

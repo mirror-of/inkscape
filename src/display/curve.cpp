@@ -21,6 +21,8 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-path.h>
 #include <libnr/nr-macros.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-translate-ops.h>
 
 #define SP_CURVE_LENSTEP 32
 
@@ -298,39 +300,46 @@ sp_curve_split(SPCurve *curve)
     return l;
 }
 
-SPCurve *
-sp_curve_transform(SPCurve *curve, gdouble const t[])
+template<class M>
+static void
+tmpl_curve_transform(SPCurve *const curve, M const &m)
 {
-    g_return_val_if_fail(curve != NULL, NULL);
-    g_return_val_if_fail(!curve->sbpath, NULL);
-    g_return_val_if_fail(t != NULL, curve);
+    g_return_if_fail(curve != NULL);
+    g_return_if_fail(!curve->sbpath);
 
     for (gint i = 0; i < curve->end; i++) {
         NArtBpath *p = curve->bpath + i;
         switch (p->code) {
             case NR_MOVETO:
             case NR_MOVETO_OPEN:
-            case NR_LINETO:
-                p->x3 = t[0] * p->x3 + t[2] * p->y3 + t[4];
-                p->y3 = t[1] * p->x3 + t[3] * p->y3 + t[5];
+            case NR_LINETO: {
+                p->setC(3, p->c(3) * m);
                 break;
+            }
             case NR_CURVETO:
-                p->x1 = t[0] * p->x1 + t[2] * p->y1 + t[4];
-                p->y1 = t[1] * p->x1 + t[3] * p->y1 + t[5];
-                p->x2 = t[0] * p->x2 + t[2] * p->y2 + t[4];
-                p->y2 = t[1] * p->x2 + t[3] * p->y2 + t[5];
-                p->x3 = t[0] * p->x3 + t[2] * p->y3 + t[4];
-                p->y3 = t[1] * p->x3 + t[3] * p->y3 + t[5];
+                for (unsigned i = 1; i <= 3; ++i) {
+                    p->setC(i, p->c(i) * m);
+                }
                 break;
             default:
                 g_warning("Illegal pathcode %d", p->code);
-                return NULL;
                 break;
         }
     }
-
-    return curve;
 }
+
+void
+sp_curve_transform(SPCurve *const curve, NR::Matrix const &m)
+{
+    tmpl_curve_transform<NR::Matrix>(curve, m);
+}
+
+void
+sp_curve_transform(SPCurve *const curve, NR::translate const &m)
+{
+    tmpl_curve_transform<NR::translate>(curve, m);
+}
+
 
 /* Methods */
 
@@ -636,6 +645,22 @@ sp_curve_first_bpath(SPCurve const *curve)
     }
 
     return curve->bpath;
+}
+
+NR::Point
+sp_curve_first_point(SPCurve const *const curve)
+{
+    NArtBpath *const bpath = sp_curve_first_bpath(curve);
+    g_return_val_if_fail(bpath != NULL, NR::Point(0, 0));
+    return bpath->c(1);
+}
+
+NR::Point
+sp_curve_last_point(SPCurve const *const curve)
+{
+    NArtBpath *const bpath = sp_curve_last_bpath(curve);
+    g_return_val_if_fail(bpath != NULL, NR::Point(0, 0));
+    return bpath->c(3);
 }
 
 SPCurve *

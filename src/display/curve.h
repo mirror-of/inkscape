@@ -53,7 +53,8 @@ void sp_curve_ensure_space(SPCurve *curve, gint space);
 SPCurve *sp_curve_copy(SPCurve *curve);
 SPCurve *sp_curve_concat(GSList const *list);
 GSList *sp_curve_split(SPCurve *curve);
-SPCurve *sp_curve_transform(SPCurve *curve, gdouble const transform[]);
+void sp_curve_transform(SPCurve *curve, NR::Matrix const &);
+void sp_curve_transform(SPCurve *curve, NR::translate const &);
 
 /* Methods */
 
@@ -75,6 +76,8 @@ SPCurve *sp_curve_append_continuous(SPCurve *c0, SPCurve const *c1, gdouble tole
 gboolean sp_curve_empty(SPCurve *curve);
 NArtBpath *sp_curve_last_bpath(SPCurve const *curve);
 NArtBpath *sp_curve_first_bpath(SPCurve const *curve);
+NR::Point sp_curve_first_point(SPCurve const *curve);
+NR::Point sp_curve_last_point(SPCurve const *curve);
 
 void sp_curve_append(SPCurve *curve, SPCurve const *curve2, gboolean use_lineto);
 SPCurve *sp_curve_reverse(SPCurve *curve);

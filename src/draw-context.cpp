@@ -330,15 +330,13 @@ spdc_attach_selection(SPDrawContext *dc, SPSelection *sel)
     SPItem *item = dc->selection ? dc->selection->singleItem() : NULL;
 
     if ( item && SP_IS_PATH(item) ) {
-        NRMatrix i2dt;
         /* Create new white data */
         /* Item */
         dc->white_item = item;
         /* Curve list */
         /* We keep it in desktop coordinates to eliminate calculation errors */
         SPCurve *norm = sp_shape_get_curve(SP_SHAPE(item));
-        sp_item_i2d_affine(dc->white_item, &i2dt);
-        norm = sp_curve_transform(norm, NR_MATRIX_D_TO_DOUBLE(&i2dt));
+        sp_curve_transform(norm, sp_item_i2d_affine(dc->white_item));
         g_return_if_fail( norm != NULL );
         dc->white_curves = sp_curve_split(norm);
         sp_curve_unref(norm);
@@ -579,15 +577,9 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
     }
 
     /* Now we have to go back to item coordinates at last */
-    if (dc->white_item) {
-        NRMatrix d2item;
-        sp_item_dt2i_affine(dc->white_item, SP_EVENT_CONTEXT_DESKTOP(dc), &d2item);
-        c = sp_curve_transform(c, NR_MATRIX_D_TO_DOUBLE(&d2item));
-    } else {
-        gdouble d2item[6];
-        sp_desktop_dt2root_affine(SP_EVENT_CONTEXT_DESKTOP(dc), (NRMatrix *) d2item);
-        c = sp_curve_transform(c, d2item);
-    }
+    sp_curve_transform(c, ( dc->white_item
+                            ? sp_item_dt2i_affine(dc->white_item, SP_EVENT_CONTEXT_DESKTOP(dc))
+                            : sp_desktop_dt2root_affine(SP_EVENT_CONTEXT_DESKTOP(dc)) ));
 
     if ( c && !sp_curve_empty(c) ) {
         SPDesktop *dt;
@@ -625,7 +617,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
             SPItem *item = SP_ITEM(dt->currentLayer()->appendChildRepr(repr));
             dc->selection->setRepr(repr);
             sp_repr_unref(repr);
-            item->transform = SP_ITEM(dt->currentRoot())->getRelativeTransform(dt->currentLayer());
+            item->transform = i2i_affine(dt->currentRoot(), dt->currentLayer());
             item->updateRepr();
         }
 
