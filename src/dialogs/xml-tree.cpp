@@ -251,13 +251,13 @@ sp_xml_tree_dialog (void)
         gtk_container_add (GTK_CONTAINER (dlg), vbox);
 
         GtkWidget * hbox = gtk_hbox_new (FALSE, 0);
-        gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+        gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 2);
 
         status = gtk_label_new (NULL);
         gtk_misc_set_alignment (GTK_MISC (status), 0.0, 0.5);
         gtk_widget_set_size_request (status, 1, -1);
         gtk_label_set_markup (GTK_LABEL (status), "");
-        gtk_box_pack_start (GTK_BOX (hbox), gtk_hbox_new(FALSE, 0), FALSE, FALSE, 2);
+        gtk_box_pack_start (GTK_BOX (hbox), gtk_hbox_new(FALSE, 0), FALSE, FALSE, 4);
         gtk_box_pack_start (GTK_BOX (hbox), status, TRUE, TRUE, 0);
 
         paned = gtk_hpaned_new ();
@@ -527,9 +527,9 @@ sp_xml_tree_dialog (void)
         gtk_tooltips_set_tip ( tooltips, GTK_WIDGET (set_attr),
                                // TRANSLATORS: "Set" is a verb here
                                _("Set attribute"), NULL );
-        gtk_container_add (GTK_CONTAINER (set_attr),
-                    gtk_image_new_from_stock ( INKSCAPE_STOCK_SET,
-                                               GTK_ICON_SIZE_LARGE_TOOLBAR) );
+        GtkWidget *set_label = gtk_label_new ("Set");
+        gtk_container_add (GTK_CONTAINER (set_attr), set_label);
+
         gtk_signal_connect ( GTK_OBJECT (set_attr), "clicked",
                              (GCallback) cmd_set_attr, NULL);
         gtk_signal_connect ( GTK_OBJECT (attr_name), "changed",
@@ -543,9 +543,11 @@ sp_xml_tree_dialog (void)
         gtk_scrolled_window_set_policy ( GTK_SCROLLED_WINDOW (sw),
                                          GTK_POLICY_AUTOMATIC,
                                          GTK_POLICY_AUTOMATIC );
+        gtk_scrolled_window_set_shadow_type ( GTK_SCROLLED_WINDOW(sw), GTK_SHADOW_IN );
         gtk_box_pack_start (GTK_BOX (toolbar), sw, TRUE, TRUE, 0);
 
         attr_value = (GtkTextView *) gtk_text_view_new ();
+        gtk_text_view_set_wrap_mode ((GtkTextView *) attr_value, GTK_WRAP_CHAR);
         gtk_tooltips_set_tip ( tooltips, GTK_WIDGET (attr_value),
                                // TRANSLATORS: "Attribute" is a noun here
                                _("Attribute value"), NULL );
