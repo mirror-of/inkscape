@@ -812,7 +812,7 @@ sp_te_adjust_kerning_screen (SPItem *item, Inkscape::Text::Layout::iterator cons
 
     if (!SP_IS_STRING(source_item)) return;
     Glib::ustring *string = &SP_STRING(source_item)->string;
-    unsigned char_index = 0;
+    unsigned char_index = sum_sibling_text_lengths_before(source_item);
     for (Glib::ustring::iterator it = string->begin() ; it != source_text_iter ; it++)
         char_index++;
 
