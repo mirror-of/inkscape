@@ -978,12 +978,12 @@ sp_gradient_render_vector_block_rgba (SPGradient *gradient, guchar *buf, gint wi
 			memcpy (buf + y * rowstride, buf, 4 * width);
 		}
 	} else {
-		gchar *tmp;
+		guchar *tmp;
 		gint x, y;
-		tmp = (gchar *)alloca (4 * height);
+		tmp = (guchar *)alloca (4 * height);
 		sp_gradient_render_vector_line_rgba (gradient, tmp, height, pos, span);
 		for (y = 0; y < height; y++) {
-			gchar *b;
+			guchar *b;
 			b = buf + y * rowstride;
 			for (x = 0; x < width; x++) {
 				*b++ = tmp[0];
@@ -1010,12 +1010,12 @@ sp_gradient_render_vector_block_rgb (SPGradient *gradient, guchar *buf, gint wid
 	g_return_if_fail (span > 0);
 
 	if (horizontal) {
-		gchar *tmp;
+		guchar *tmp;
 		gint x, y;
-		tmp = alloca (4 * width);
+		tmp = (guchar*)alloca (4 * width);
 		sp_gradient_render_vector_line_rgba (gradient, tmp, width, pos, span);
 		for (y = 0; y < height; y++) {
-			gchar *b, *t;
+			guchar *b, *t;
 			b = buf + y * rowstride;
 			t = tmp;
 			for (x = 0; x < width; x++) {
@@ -1032,12 +1032,12 @@ sp_gradient_render_vector_block_rgb (SPGradient *gradient, guchar *buf, gint wid
 			}
 		}
 	} else {
-		gchar *tmp;
+		guchar *tmp;
 		gint x, y;
-		tmp = alloca (4 * height);
+		tmp = (guchar*)alloca (4 * height);
 		sp_gradient_render_vector_line_rgba (gradient, tmp, height, pos, span);
 		for (y = 0; y < height; y++) {
-			gchar *b, *t;
+			guchar *b, *t;
 			b = buf + y * rowstride;
 			t = tmp + 4 * y;
 			for (x = 0; x < width; x++) {
@@ -1247,7 +1247,7 @@ sp_lineargradient_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_lineargradient_init,
 		};
-		type = g_type_register_static (SP_TYPE_GRADIENT, "SPLinearGradient", &info, 0);
+		type = g_type_register_static (SP_TYPE_GRADIENT, "SPLinearGradient", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -1265,7 +1265,7 @@ sp_lineargradient_class_init (SPLinearGradientClass * klass)
 	ps_class = (SPPaintServerClass *) klass;
 	gr_class = SP_GRADIENT_CLASS (klass);
 
-	lg_parent_class = g_type_class_ref (SP_TYPE_GRADIENT);
+	lg_parent_class = (SPGradientClass*)g_type_class_ref (SP_TYPE_GRADIENT);
 
 	sp_object_class->build = sp_lineargradient_build;
 	sp_object_class->set = sp_lineargradient_set;
@@ -1589,7 +1589,7 @@ sp_radialgradient_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_radialgradient_init,
 		};
-		type = g_type_register_static (SP_TYPE_GRADIENT, "SPRadialGradient", &info, 0);
+		type = g_type_register_static (SP_TYPE_GRADIENT, "SPRadialGradient", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -1607,7 +1607,7 @@ sp_radialgradient_class_init (SPRadialGradientClass * klass)
 	ps_class = (SPPaintServerClass *) klass;
 	gr_class = SP_GRADIENT_CLASS (klass);
 
-	rg_parent_class = g_type_class_ref (SP_TYPE_GRADIENT);
+	rg_parent_class = (SPGradientClass*)g_type_class_ref (SP_TYPE_GRADIENT);
 
 	sp_object_class->build = sp_radialgradient_build;
 	sp_object_class->set = sp_radialgradient_set;
