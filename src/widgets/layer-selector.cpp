@@ -312,31 +312,19 @@ void LayerSelector::_prepareLabelRenderer(
         if ( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ||
              layer == root && SP_OBJECT_PARENT(object) == root
         ) {
-            format="<small>%*s%s%s%s</small>";
+            format="<small>%*s%s</small>";
         } else {
-            format="<small>%*s<small>%s%s%s</small></small>";
+            format="<small>%*s<small>%s</small></small>";
         }
-
-        gchar const *prefix="";
-        gchar const *suffix="";
 
         gchar const *label;
         if (depth) {
-            if (object->label()) {
-                label = object->label();
-            } else {
-                prefix = "(#";
-                label = SP_OBJECT_ID(object);
-                suffix = ")";
-            }
+            label = object->label();
         } else {
-            prefix = "<";
-            label = "root";
-            suffix = ">";
+            label = "<root>";
         }
 
-        gchar *text=g_markup_printf_escaped(format, depth*3, "",
-                                            prefix, label, suffix);
+        gchar *text=g_markup_printf_escaped(format, depth*3, "", label);
         _label_renderer.property_markup() = text;
         g_free(text);
     } else {

@@ -194,6 +194,15 @@ struct SPObject : public GObject {
 	 */
 	void setLabel(gchar const *label);
 
+        bool visible() const;
+        /** @brief Sets the visibility of this object
+	 * 
+	 * Sets the visibility for the object.
+	 *
+	 * @param 
+	 */
+        void setVisible(bool val);
+
 	/** @brief Set the policy under which this object will be
 	 *         orphan-collected.
 	 *

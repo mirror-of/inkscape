@@ -354,11 +354,7 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
         
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
         SPObject *obj = (SPObject*)item;
-        if (obj->label() != NULL) {
-            gtk_entry_set_text (GTK_ENTRY (w), obj->label());
-        } else {
-            gtk_entry_set_text (GTK_ENTRY (w), SP_OBJECT_ID(item));
-        }
+        gtk_entry_set_text (GTK_ENTRY (w), obj->label());
         gtk_widget_set_sensitive (w, TRUE);
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label_label"));
         gtk_label_set_text (GTK_LABEL (w), _("Label"));
@@ -418,22 +414,8 @@ sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw)
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    SPException ex;
-    SP_EXCEPTION_INIT (&ex);
-    
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-    
-        sp_object_removeAttribute ( SP_OBJECT (item), 
-                                    "visibility", 
-                                    &ex );
-    
-    } else {
-        
-        sp_object_setAttribute ( SP_OBJECT (item), 
-                                 "visibility", 
-                                 "hidden", 
-                                 &ex );
-    }
+    SPObject* obj = SP_OBJECT(item);
+    obj->setVisible(gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
 
     sp_document_maybe_done ( SP_WIDGET_DOCUMENT (spw), 
                              "ItemDialog:visiblity" );

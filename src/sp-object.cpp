@@ -288,23 +288,46 @@ SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 	}
 }
 
-/** Gets the label property for the object or NULL if no label is defined */
+/** Gets the label property for the object or a default if no label 
+ *  is defined 
+ */
 gchar const *
 SPObject::label() const {
-    return sp_repr_attr(SP_OBJECT_REPR(this), "label");
+    gchar const *text = sp_repr_attr(SP_OBJECT_REPR(this), "inkscape:label");
+    if (text == NULL) {
+	return defaultLabel();
+    }
+    return text;
 }
 
 /** Returns a default label property for the object */
 gchar const *
 SPObject::defaultLabel() const {
-    g_assert(SP_OBJECT_ID(this));
-    return SP_OBJECT_ID(this);
+    if (SP_OBJECT_ID(this) == NULL) {
+	return "(unnamed)";
+    }
+    return g_markup_printf_escaped("(#%s)", SP_OBJECT_ID(this));
 }
 
 /** Sets the label property for the object */
 void SPObject::setLabel(gchar const *label) {
-    sp_repr_set_attr(SP_OBJECT_REPR(this), "label", label, false);
+    sp_repr_set_attr(SP_OBJECT_REPR(this), "inkscape:label", label, false);
 }
+
+/** Returns true if the object is visible */
+bool
+SPObject::visible() const {
+    return style->visibility;
+}
+
+/** Sets the object state to visible if \a val is true, hidden otherwise */
+void
+SPObject::setVisible(bool val) {
+    style->visibility = val;
+    style->visibility_set = TRUE;
+    this->updateRepr();
+}
+
 
 /** Queues the object for orphan collection */
 void SPObject::requestOrphanCollection() {
