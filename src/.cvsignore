@@ -1,8 +1,11 @@
 Makefile
 Makefile.in
-sodipodi
+inkscape
 .deps
 *.o
+*.lo
+*.la
 tmp
 toru
 spsvgview
+.libs
