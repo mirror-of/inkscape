@@ -16,31 +16,6 @@
 #include <sigc++/sigc++.h>
 #include "svg/svg-types.h"
 #include "sp-item.h"
-#include "uri-references.h"
-
-class SPUseReference : public Inkscape::URIReference {
-public:
-	SPUseReference(SPObject *owner) : URIReference(owner) {}
-
-	SPItem *getObject() const {
-		return (SPItem *)URIReference::getObject();
-	}
-protected:
-	virtual bool _acceptObject(SPObject * const obj) const {
-		if (SP_IS_ITEM(obj)) {
-			SPObject * const owner = getOwner();
-			/* Refuse references to us or to an ancestor. */
-			for ( SPObject *iter = owner ; iter ; iter = SP_OBJECT_PARENT(iter) ) {
-				if ( iter == obj ) {
-					return false;
-				}
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-};
 
 
 #define SP_TYPE_USE            (sp_use_get_type ())
@@ -51,6 +26,7 @@ protected:
 
 class SPUse;
 class SPUseClass;
+class SPUseReference;
 
 struct SPUse {
 	// this item (invisible)

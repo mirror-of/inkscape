@@ -29,8 +29,8 @@
 #include "sp-item.h"
 #include "enums.h"
 #include "prefs-utils.h"
-
 #include "sp-use.h"
+#include "sp-use-reference.h"
 
 /* fixme: */
 #include "desktop-events.h"

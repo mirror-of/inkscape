@@ -42,6 +42,7 @@
 #include "document-private.h"
 #include "sp-gradient.h"
 #include "sp-pattern.h"
+#include "sp-use-reference.h"
 using NR::X;
 using NR::Y;
 
@@ -1267,20 +1268,19 @@ sp_selection_clone()
         return;
     }
 
-    // check if more than two objects are selected
+    // Check if more than one object is selected.
     if (g_slist_length((GSList *) selection->itemList()) > 1) {
         sp_view_set_statusf_error(SP_VIEW(desktop), _("If you want to clone several objects, group them and clone the group."));
         return;
     }
 
-    SPItem *i = selection->singleItem();
-    SPRepr *repr = SP_OBJECT_REPR(i);
-    SPRepr *parent = sp_repr_parent(repr);
+    SPRepr *sel_repr = SP_OBJECT_REPR(selection->singleItem());
+    SPRepr *parent = sp_repr_parent(sel_repr);
 
     SPRepr *clone = sp_repr_new("use");
     sp_repr_set_attr(clone, "x", "0");
     sp_repr_set_attr(clone, "y", "0");
-    sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr(repr, "id")));
+    sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr(sel_repr, "id")));
 
     // add the new clone to the top of the original's parent
     sp_repr_append_child(parent, clone);

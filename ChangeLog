@@ -1,5 +1,13 @@
 2004-06-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile_insert:
+	* src/sp-use-reference.cpp:
+	* src/sp-use-reference.h:
+	* src/sp-use.cpp:
+	* src/sp-use.h:
+	  Move SPUseReference from sp-use.h to new files sp-use-reference.h,
+	  sp-use-reference.cpp.
+
 	* src/sp-use.h (_acceptObject): Fix can't-use-ancestor check.
 
 	* src/uri-references.h (getOwner): Fix copy&paste bug.
