@@ -1,5 +1,3 @@
-FilePath.cpp
-FilePath.h
 application.cpp
 application.h
 arc-context.cpp
@@ -220,6 +218,8 @@ libnrtype/cp932.cpp
 libnrtype/cp936.cpp
 libnrtype/cp949.cpp
 libnrtype/cp950.cpp
+libnrtype/font-style-to-pos.cpp
+libnrtype/font-style-to-pos.h
 libnrtype/nr-font.cpp
 libnrtype/nr-font.h
 libnrtype/nr-rasterfont.cpp
