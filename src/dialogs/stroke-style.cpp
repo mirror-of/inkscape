@@ -1498,7 +1498,7 @@ sp_stroke_style_line_widget_new(void)
 
 
     /* Dash */
-    spw_label(t, _("Pattern:"), 0, i);
+    spw_label(t, _("Dashes:"), 0, i);
     ds = sp_dash_selector_new( inkscape_get_repr( INKSCAPE,
                                                   "palette.dashes") );
 
@@ -1944,8 +1944,9 @@ sp_stroke_style_scale_line(SPWidget *spw)
             sp_stroke_style_set_scaled_dash(css, ndash, dash, offset, width);
 
             sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
-            g_free(dash);
         }
+
+        g_free(dash);
 
         if (unit->base != SP_UNIT_ABSOLUTE) {
             // reset to 100 percent
