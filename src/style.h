@@ -405,4 +405,6 @@ SPCSSAttr * sp_css_attr_unset_text (SPCSSAttr *css);
 SPCSSAttr * sp_css_attr_unset_uris (SPCSSAttr *css);
 SPCSSAttr * sp_css_attr_scale (SPCSSAttr *css, double ex);
 
+void sp_style_unset_property_attrs (SPObject *o);
+
 #endif

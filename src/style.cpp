@@ -2424,6 +2424,71 @@ sp_style_paint_clear (SPStyle *style, SPIPaint *paint,
     }
 }
 
+void
+sp_style_unset_property_attrs (SPObject *o)
+{
+    SPStyle *style = SP_OBJECT_STYLE (o);
+    SPRepr *repr = SP_OBJECT_REPR (o);
+
+    if (style->opacity.set) {
+        sp_repr_set_attr (repr, "opacity", NULL);
+    }
+    if (style->color.set) {
+        sp_repr_set_attr (repr, "color", NULL);
+    }
+    if (style->fill.set) {
+        sp_repr_set_attr (repr, "fill", NULL);
+    }
+    if (style->fill_opacity.set) {
+        sp_repr_set_attr (repr, "fill-opacity", NULL);
+    }
+    if (style->fill_rule.set) {
+        sp_repr_set_attr (repr, "fill-rule", NULL);
+    }
+    if (style->stroke.set) {
+        sp_repr_set_attr (repr, "stroke", NULL);
+    }
+    if (style->stroke_width.set) {
+        sp_repr_set_attr (repr, "stroke-width", NULL);
+    }
+    if (style->stroke_linecap.set) {
+        sp_repr_set_attr (repr, "stroke-linecap", NULL);
+    }
+    if (style->stroke_linejoin.set) {
+        sp_repr_set_attr (repr, "stroke-linejoin", NULL);
+    }
+    if (style->marker[SP_MARKER_LOC].set) {
+        sp_repr_set_attr (repr, "marker", NULL);
+    }
+    if (style->marker[SP_MARKER_LOC_START].set) {
+        sp_repr_set_attr (repr, "marker-start", NULL);
+    }
+    if (style->marker[SP_MARKER_LOC_MID].set) {
+        sp_repr_set_attr (repr, "marker-mid", NULL);
+    }
+    if (style->marker[SP_MARKER_LOC_END].set) {
+        sp_repr_set_attr (repr, "marker-end", NULL);
+    }
+    if (style->stroke_opacity.set) {
+        sp_repr_set_attr (repr, "stroke-opacity", NULL);
+    }
+    if (style->stroke_dasharray_set) {
+        sp_repr_set_attr (repr, "stroke-dasharray", NULL);
+    }
+    if (style->stroke_dashoffset_set) {
+        sp_repr_set_attr (repr, "stroke-dashoffset", NULL);
+    }
+    if (style->text_private && style->text->font_family.set) {
+        sp_repr_set_attr (repr, "font-family", NULL);
+    }
+    if (style->text_anchor.set) {
+        sp_repr_set_attr (repr, "text-anchor", NULL);
+    }
+    if (style->writing_mode.set) {
+        sp_repr_set_attr (repr, "writing_mode", NULL);
+    }
+}
+
 /**
  * \pre object != NULL
  */

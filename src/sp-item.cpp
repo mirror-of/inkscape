@@ -467,6 +467,12 @@ sp_item_write(SPObject *object, SPRepr *repr, guint flags)
             sp_repr_set_attr(repr, "style", (*s) ? s : NULL);
             g_free(s);
         }
+        // Since differencing with parent may remove some of the properties in style=, this may
+        // unexpectedly reveal (and enable) the css attrs of the same names if they are present
+        // (they are lower priority than style= but are read if there's no corresponding inline
+        // property). So here we unset any style attrs that correspond to our object's
+        // SPStyle. This means all properties will end up in style= and the attrs will be gone.
+        sp_style_unset_property_attrs (object);
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
