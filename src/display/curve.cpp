@@ -988,20 +988,6 @@ bezier_len(NR::Point const &c0,
             using NR::X; using NR::Y;
             g_warning("ret=%f outside of expected bounds [%f, %f] for {(%.0f %.0f) (%.0f %.0f) (%.0f %.0f) (%.0f %.0f)}",
                       ret, lbound, ubound, c0[X], c0[Y], c1[X], c1[Y], c2[X], c2[Y], c3[X], c3[Y]);
-        } else {
-            /* Collect information about a good fraction between lbound and ubound to use. */
-            static unsigned n;
-            static double sum;
-            static double sum_squares;
-            double const this_frac = (ret - lbound) / (ubound - lbound);
-            sum += this_frac;
-            sum_squares += this_frac * this_frac;
-            ++n;
-            if ((n & (n - 1)) == 0 && 2 <= n) {
-                double const mean = sum / n;
-                double const var = (sum_squares - sum * mean) / (n - 1);
-                fprintf(stderr, "bez frac: n=%u, avg=%f, stdev=%f\n", n, mean, sqrt(var));
-            }
         }
     }
     return ret;
@@ -1069,10 +1055,9 @@ sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &new_p0, NR::Point co
     if (sp_curve_empty(curve)) {
         return;
     }
-    g_assert(unsigned(SP_CURVE_LENGTH(curve)) == sp_bpath_length(curve->bpath));
-    unsigned const nCmds = SP_CURVE_LENGTH(curve);   // includes the initial moveto and NR_END.
-    g_assert(3 <= nCmds);
-    unsigned const nSegs = nCmds - 2;
+    g_assert(unsigned(SP_CURVE_LENGTH(curve)) + 1 == sp_bpath_length(curve->bpath));
+    unsigned const nSegs = SP_CURVE_LENGTH(curve) - 1;
+    g_assert(nSegs != 0);
     double *const seg2len = new double[nSegs];
     double const tot_len = sp_curve_nonzero_distance_including_space(curve, seg2len);
     NR::Point const offset0( new_p0 - sp_curve_first_point(curve) );
