@@ -1250,7 +1250,7 @@ msgstr "Inkscape: _Basique"
 
 #: src/interface.cpp:684
 msgid "tutorial-basic.svg"
-msgstr ""
+msgstr "tutorial-basic.fr.svg"
 
 #: src/interface.cpp:685
 msgid "Inkscape: _Advanced"
