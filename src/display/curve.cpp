@@ -58,6 +58,9 @@ sp_curve_new_sized (gint length)
 	return curve;
 }
 
+/**
+* \return new SPCurve, or NULL if the curve was not created for some reason.
+*/
 SPCurve *
 sp_curve_new_from_bpath (NArtBpath *bpath)
 {
@@ -65,7 +68,9 @@ sp_curve_new_from_bpath (NArtBpath *bpath)
 
 	if (!sp_bpath_good (bpath)) {
 		NArtBpath *new_bpath = sp_bpath_clean (bpath);
-		g_return_val_if_fail (new_bpath != NULL, NULL);
+		if (new_bpath == NULL) {
+		  return NULL;
+		}
 		nr_free (bpath);
 		bpath = new_bpath;
 	}
@@ -862,10 +867,14 @@ static NArtBpath const *sp_bpath_check_subpath(NArtBpath const bpath[])
 	}
 
 	if (closed) {
-		if (len < 1) return NULL;
-		if ((bpath->x3 != bpath[i-1].x3) || (bpath->y3 != bpath[i-1].y3)) return NULL;
+		if (len < 1)
+		  return NULL;
+
+		if ((bpath->x3 != bpath[i-1].x3) || (bpath->y3 != bpath[i-1].y3))
+		  return NULL;
 	} else {
-		if (len < 1) return NULL;
+		if (len < 1)
+		  return NULL;
 	}
 
 	return bpath + i;
