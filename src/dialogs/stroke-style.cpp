@@ -51,6 +51,7 @@
 #include "dialogs/dialog-events.h"
 #include "sp-root.h"
 #include "sp-defs.h"
+#include "sp-text.h"
 #include "document-private.h"
 #include "xml/repr-private.h"
 #include "display/nr-arena.h"
@@ -986,8 +987,10 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
         GtkWidget *i = gtk_menu_item_new();
         gtk_widget_show(i);
 
-        if (sp_repr_attr(repr,"inkscape:stockid"))  g_object_set_data (G_OBJECT(i), "stockid", (void *)"true");
-        else g_object_set_data (G_OBJECT(i), "stockid", (void *)"false");
+        if (sp_repr_attr(repr, "inkscape:stockid"))
+            g_object_set_data (G_OBJECT(i), "stockid", (void *) "true");
+        else 
+            g_object_set_data (G_OBJECT(i), "stockid", (void *) "false");
 
         const gchar *markid = sp_repr_attr (repr, "id");
         g_object_set_data (G_OBJECT(i), "marker", (void *) markid);
@@ -2269,10 +2272,12 @@ static void
 ink_marker_menu_set_current(SPObject *marker, GtkOptionMenu *mnu)
 {
     gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(TRUE));
+
     GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu(mnu));
     if (marker != NULL) {
         bool mark_is_stock = false;
-        if (sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid")) mark_is_stock = true;
+        if (sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid")) 
+            mark_is_stock = true;
 
         gchar *markname;
         if (mark_is_stock)
@@ -2294,6 +2299,8 @@ ink_marker_menu_set_current(SPObject *marker, GtkOptionMenu *mnu)
             i++;
         }
         gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), markpos);
+
+        g_free (markname);
     }
     else {
         gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), 0);
@@ -2305,50 +2312,55 @@ static void
 sp_stroke_style_update_marker_menus( SPWidget *spw,
                                      GSList const *objects)
 {
+    struct { char const *key; int loc; } const keyloc[] = {
+        { "start_mark_menu", SP_MARKER_LOC_START },
+        { "mid_mark_menu", SP_MARKER_LOC_MID },
+        { "end_mark_menu", SP_MARKER_LOC_END }
+    };
+
+    bool all_texts = true;
+    for (GSList *i = (GSList *) objects; i != NULL; i = i->next) {
+        if (!SP_IS_TEXT (i->data)) {
+            all_texts = false;
+        }
+    }
+
+    for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
+        GtkOptionMenu *mnu = (GtkOptionMenu *) g_object_get_data(G_OBJECT(spw), keyloc[i].key);
+        if (all_texts) {
+            // Per SVG spec, text objects cannot have markers; disable menus if only texts are selected
+            gtk_widget_set_sensitive (GTK_WIDGET(mnu), FALSE);
+        } else {
+            gtk_widget_set_sensitive (GTK_WIDGET(mnu), TRUE);
+        }
+    }
+
+    // We show markers of the first object in the list only
+    // FIXME: use the first in the list that has the marker of each type, if any
     SPObject *object = SP_OBJECT(objects->data);
-    if (object->style->marker[SP_MARKER_LOC_START].value != NULL) {
-        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data(G_OBJECT(spw), "start_mark_menu");
 
+    for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
+        // For all three marker types,
+
+        // find the corresponding menu
+        GtkOptionMenu *mnu = (GtkOptionMenu *) g_object_get_data(G_OBJECT(spw), keyloc[i].key);
+
+        // Quit if we're in update state
         if (gtk_object_get_data(GTK_OBJECT(mnu), "update")) {
             return;
         }
 
-        SPObject *marker = ink_extract_marker_name(object->style->marker[SP_MARKER_LOC_START].value);
-        ink_marker_menu_set_current(marker,mnu);
+        if (object->style->marker[keyloc[i].loc].value != NULL && !all_texts) {
+            // If the object has this type of markers,
 
+            // Extract the name of the marker that the object uses
+            SPObject *marker = ink_extract_marker_name(object->style->marker[keyloc[i].loc].value);
+            // Scroll the menu to that marker
+            ink_marker_menu_set_current (marker, mnu);
 
-    } else {
-        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data(G_OBJECT(spw), "start_mark_menu");
-        gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), 0);
-    }
-    if (object->style->marker[SP_MARKER_LOC_MID].value != NULL) {
-        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data(G_OBJECT(spw), "mid_mark_menu");
-
-        if (gtk_object_get_data(GTK_OBJECT(mnu), "update")) {
-            return;
+        } else {
+            gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), 0);
         }
-
-        SPObject *marker = ink_extract_marker_name(object->style->marker[SP_MARKER_LOC_MID].value);
-        ink_marker_menu_set_current(marker,mnu);
-
-    } else {
-        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data(G_OBJECT(spw), "mid_mark_menu");
-        gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), 0);
-    }
-
-    if (object->style->marker[SP_MARKER_LOC_END].value != NULL) {
-        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data(G_OBJECT(spw), "end_mark_menu");
-
-        if (gtk_object_get_data(GTK_OBJECT(mnu), "update")) {
-            return;
-        }
-
-        SPObject *marker = ink_extract_marker_name(object->style->marker[SP_MARKER_LOC_END].value);
-        ink_marker_menu_set_current(marker,mnu);
-
-    } else {
-        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data(G_OBJECT(spw), "end_mark_menu");
-        gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), 0);
     }
 }
 
