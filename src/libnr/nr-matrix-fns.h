@@ -1,3 +1,6 @@
+#ifndef __NR_MATRIX_FNS_H__
+#define __NR_MATRIX_FNS_H__
+
 #include "nr-matrix.h"
 
 namespace NR{
@@ -16,3 +19,5 @@ class Eigen{
 };
 
 };
+
+#endif

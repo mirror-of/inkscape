@@ -1,9 +1,12 @@
 #include "../utest/utest.h"
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 using NR::Matrix;
 using NR::X;
 using NR::Y;
 
+#include <libnr/nr-point-fns.cpp> // bad!
+#include <libnr/nr-matrix-fns.cpp> // bad!
 
 inline bool point_equalp(NR::Point const &a, NR::Point const &b)
 {
@@ -229,6 +232,19 @@ int main(int argc, char *argv[]) {
 		UTEST_ASSERT( Matrix(s2).inverse() == Matrix(sp5) );
 	}
 
+	UTEST_TEST("elliptic quadratic form") {
+		NR::Matrix const aff(1.0, 1.0,
+							 0.0, 1.0,
+							 5.0, 6.0);
+		NR::Matrix const invaff = aff.inverse();
+		UTEST_ASSERT( invaff[1] == -1.0 );
+		
+		NR::Matrix ef = elliptic_quadratic_form(invaff);
+		for(int i = 0; i < 3; i++)
+			g_print("%f %f\n", ef[i*2], ef[i*2+1]);
+		
+		
+	}
 	if (!utest_end()) {
 		rc = EXIT_FAILURE;
 	}
