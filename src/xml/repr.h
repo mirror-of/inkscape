@@ -20,6 +20,7 @@
 #define SP_INKSCAPE_NS_URI "http://www.inkscape.org/namespaces/inkscape"
 #define SP_XLINK_NS_URI "http://www.w3.org/1999/xlink"
 #define SP_SVG_NS_URI "http://www.w3.org/2000/svg"
+#define SP_RDF_NS_URI "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 
 /*
  * NB! Unless explicitly stated all methods are noref/nostrcpy

@@ -135,7 +135,7 @@ static SPXMLNs *namespaces=NULL;
 static void
 sp_xml_ns_register_defaults ()
 {
-    static SPXMLNs defaults[4];
+    static SPXMLNs defaults[5];
 
     defaults[0].uri = g_quark_from_static_string (SP_SODIPODI_NS_URI);
     defaults[0].prefix = g_quark_from_static_string ("sodipodi");
@@ -151,7 +151,11 @@ sp_xml_ns_register_defaults ()
 
     defaults[3].uri = g_quark_from_static_string (SP_INKSCAPE_NS_URI);
     defaults[3].prefix = g_quark_from_static_string ("inkscape");
-    defaults[3].next = NULL;
+    defaults[3].next = &defaults[4];
+
+    defaults[4].uri = g_quark_from_static_string (SP_RDF_NS_URI);
+    defaults[4].prefix = g_quark_from_static_string ("rdf");
+    defaults[4].next = NULL;
 
     namespaces = &defaults[0];
 }

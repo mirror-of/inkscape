@@ -1,3 +1,7 @@
+2004-02-21  MenTaLguY <mental@rydia.net>
+
+    * src/xml/repr-util.cpp, src/xml/repr.h: added RDF namespace by default
+
 2004-02-20  bulia byak <bulia@users.sourceforge.net>
 
 	* src/text-context.cpp: [shift+]alt+arrows to kern
