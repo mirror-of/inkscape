@@ -300,9 +300,9 @@ public:
     void Scan(float &pos, int &curP, float to, FillRule directed, BitLigne *line, bool exact, float step);
     void Scan(float &pos, int &curP, float to, AlphaLigne *line, bool exact, float step);
 
-    void QuickScan(float &pos, int &curP, float to, FloatLigne* line, bool exact, float step);
-    void QuickScan(float &pos, int &curP, float to, FillRule directed, BitLigne* line, bool exact,float step);
-    void QuickScan(float &pos, int &curP, float to, AlphaLigne* line, bool exact, float step);
+    void QuickScan(float &pos, int &curP, float to, FloatLigne* line, float step);
+    void QuickScan(float &pos, int &curP, float to, FillRule directed, BitLigne* line, float step);
+    void QuickScan(float &pos, int &curP, float to, AlphaLigne* line, float step);
 
     std::vector<back_data> ebData;
     std::vector<voronoi_point> vorpData;

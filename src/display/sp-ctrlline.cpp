@@ -372,17 +372,10 @@ void nr_pixblock_render_ctrl_rgba (Shape* theS,uint32_t color,NRRectL &area,char
     uint32_t* ligStart=((uint32_t*)(mdata+(3*(il-area.x0)+stride*(it-area.y0))));
     for (int y=it;y<ib;y++) {
         for (int i=0;i<4;i++) theI[i]->Reset();
-        if ( y&3 ) {
-            theS->QuickScan(curY,curPt,((float)(y+0.25)),fill_oddEven,theI[0],false,0.25);
-            theS->QuickScan(curY,curPt,((float)(y+0.5)),fill_oddEven,theI[1],false,0.25);
-            theS->QuickScan(curY,curPt,((float)(y+0.75)),fill_oddEven,theI[2],false,0.25);
-            theS->QuickScan(curY,curPt,((float)(y+1.0)),fill_oddEven,theI[3],false,0.25);
-        } else {
-            theS->QuickScan(curY,curPt,((float)(y+0.25)),fill_oddEven,theI[0],true,0.25);
-            theS->QuickScan(curY,curPt,((float)(y+0.5)),fill_oddEven,theI[1],true,0.25);
-            theS->QuickScan(curY,curPt,((float)(y+0.75)),fill_oddEven,theI[2],true,0.25);
-            theS->QuickScan(curY,curPt,((float)(y+1.0)),fill_oddEven,theI[3],true,0.25);
-        }
+        theS->QuickScan(curY,curPt,((float)(y+0.25)),fill_oddEven,theI[0],0.25);
+        theS->QuickScan(curY,curPt,((float)(y+0.5)),fill_oddEven,theI[1],0.25);
+        theS->QuickScan(curY,curPt,((float)(y+0.75)),fill_oddEven,theI[2],0.25);
+        theS->QuickScan(curY,curPt,((float)(y+1.0)),fill_oddEven,theI[3],0.25);
         theIL->Copy(4,theI);
     
         raster_info  dest;

@@ -473,7 +473,7 @@ void nr_pixblock_render_bpath_rgba (Shape* theS,uint32_t color,NRRectL &area,cha
 	
 	for (int i = 0; i < 4; i++)
 	    theS->QuickScan(curY, curPt, ((float)(y+0.25*(i+1))), 
-			    fill_oddEven, theI[i], !(y&3), 0.25);
+			    fill_oddEven, theI[i], 0.25);
 	
 	theIL->Copy(4,theI);
 	//   theI[0]->Affiche();

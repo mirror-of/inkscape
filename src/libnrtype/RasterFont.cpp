@@ -343,11 +343,7 @@ void      raster_glyph::LoadSubPixelPosition(int no)
   
   for (int y=it-1;y<ib;y++) {
     theI->Reset();
-    if ( y&0x00000003 ) {
-	    polygon->QuickScan(curY,curPt,((float)(y+1))+sub_delta,theI,false,1.0);
-    } else {
-	    polygon->QuickScan(curY,curPt,((float)(y+1))+sub_delta,theI,true,1.0);
-    }
+    polygon->QuickScan(curY,curPt,((float)(y+1))+sub_delta,theI,1.0);
     theI->Flatten();
     
     sub_pixel[no].AppendRuns(theI->nbRun,theI->runs,y);

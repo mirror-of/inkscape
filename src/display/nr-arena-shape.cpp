@@ -1170,11 +1170,7 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     uint32_t* ligStart=((uint32_t*)(mdata+((il-m.area.x0)+m.rs*(it-m.area.y0))));
     for (int y=it;y<ib;y++) {
 	theI->Reset();
-	if ( y&0x00000003 ) {
-	    theS->QuickScan(curY,curPt,((float)(y+1)),theI,false,1.0);
-	} else {
-	    theS->QuickScan(curY,curPt,((float)(y+1)),theI,true,1.0);
-	}
+        theS->QuickScan(curY,curPt,((float)(y+1)),theI,1.0);
 	theI->Flatten();
 	theIL->Copy(theI);
     
