@@ -1,3 +1,10 @@
+2004-11-03  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* po/check-markup: New script: detects <b>markup<b> <b>problems<7b>
+	  in the <b>translated strings.  (~10 such problems found.)
+	* Makefile.am (all, check, distcheck): Run po/check-markup (with
+	  varying permissiveness of errors).
+
 2004-11-02  MenTaLguY  <mental@rydia.net>
 
 	* doc/keys.xml: added documentation of layer keys

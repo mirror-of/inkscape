@@ -62,3 +62,21 @@ inkscape.1: inkscape.pod fix-roff-punct Makefile.am
 	  | perl $(srcdir)/fix-roff-punct \
 	  > tmp.$$$$ \
 	 && mv tmp.$$$$ inkscape.1
+
+
+.PHONY: warn_markup
+noinst_DATA = warn_markup
+warn_markup:
+	@if perl $(srcdir)/po/check-markup $(srcdir)/po/*.po; [ $$? = 1 ]; then \
+	  echo "WARNING: Bad markup found in translations.  Please consider fixing the above problems." >&2; \
+	fi
+
+.PHONY: check_markup
+check_DATA = check_markup
+check_markup:
+	perl $(srcdir)/po/check-markup $(srcdir)/po/*.po || [ $$? = 127 ]
+#	# `make check' probably shouldn't require perl to be installed, hence ignoring 127.
+
+distcheck-hook:
+	perl $(srcdir)/po/check-markup $(srcdir)/po/*.po
+
