@@ -252,7 +252,7 @@ static gint sp_gradient_context_item_handler(SPEventContext *event_context, SPIt
             event_context->within_tolerance = true;
 
             // remember clicked item, disregarding groups
-            event_context->item_to_select = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
+            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
             ret = TRUE;
         }
@@ -274,6 +274,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
     static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
+    SPSelection *selection = SP_DT_SELECTION (desktop);
  
     SPGradientContext *rc = SP_GRADIENT_CONTEXT(event_context);
 
@@ -287,8 +288,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
     switch (event->type) {
     case GDK_BUTTON_PRESS:
         if ( event->button.button == 1 ) {
-            NR::Point const button_w(event->button.x,
-                                     event->button.y);
+            NR::Point const button_w(event->button.x, event->button.y);
 
             // save drag origin
             event_context->xp = (gint) button_w[NR::X];
@@ -296,7 +296,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             event_context->within_tolerance = true;
 
             // remember clicked item, disregarding groups
-            event_context->item_to_select = sp_desktop_item_at_point(desktop, button_w, TRUE);
+            event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state, TRUE);
 
             dragging = true;
             /* Position center */
@@ -337,14 +337,21 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             dragging = false;
 
             if (!event_context->within_tolerance) {
-                // we've been dragging, finish
-                //sp_gradient_finish(rc);
+                // we've been dragging, do nothing (grdrag handles that)
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
-                SP_DT_SELECTION(desktop)->setItem(event_context->item_to_select);
+                if (event->button.state & GDK_SHIFT_MASK) {
+                    selection->toggleItem(event_context->item_to_select);
+                } else {
+                    selection->setItem(event_context->item_to_select);
+                }
             } else {
-                // click in an empty space
-                SP_DT_SELECTION(desktop)->clear();
+                // click in an empty space; do the same as Esc
+                if (drag->selected) {
+                    drag->setSelected (NULL);
+                } else {
+                    selection->clear();
+                }
             }
 
             event_context->item_to_select = NULL;
@@ -382,7 +389,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             if (drag->selected) {
                 drag->setSelected (NULL);
             } else {
-                SP_DT_SELECTION(desktop)->clear();
+                selection->clear();
             }
             ret = TRUE;
             //TODO: make dragging escapable by Esc
