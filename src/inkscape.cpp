@@ -68,14 +68,6 @@
 #define mkdir(d,m) _mkdir((d))
 #endif
 
-/**
- * this kludge was removed from main.cpp, 
- * so that it will work in both inkscape
- * and inkview.
- * This should be removed entirely, eventually.
- */
-gboolean sp_bitmap_icons = FALSE;
-
 static Inkscape::Application *inkscape = NULL;
 
 /* Backbones of configuration xml data */

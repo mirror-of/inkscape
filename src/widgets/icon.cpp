@@ -37,11 +37,6 @@
 
 #include "icon.h"
 
-/** This is located in inkscape.cpp
- * this really needs to be removed.. Bob
- */
-extern gboolean sp_bitmap_icons;
-
 static void sp_icon_class_init (SPIconClass *klass);
 static void sp_icon_init (SPIcon *icon);
 static void sp_icon_destroy (GtkObject *object);
@@ -197,13 +192,8 @@ sp_icon_image_load (const gchar *name, unsigned int size, unsigned int scale)
 {
 	guchar *px;
 
-	if (!sp_bitmap_icons) {
-		px = sp_icon_image_load_svg (name, size, scale);
-		if (!px) px = sp_icon_image_load_pixmap (name, size, scale);
-	} else {
-		px = sp_icon_image_load_pixmap (name, size, scale);
-		if (!px) px = sp_icon_image_load_svg (name, size, scale);
-	}
+	px = sp_icon_image_load_svg (name, size, scale);
+	if (!px) px = sp_icon_image_load_pixmap (name, size, scale);
 
 	return px;
 }

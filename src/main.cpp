@@ -114,11 +114,6 @@ enum {
     SP_ARG_LAST
 };
 
-/** This is located in inkscape.cpp
- * this really needs to be removed.. Bob
- */
-extern gboolean sp_bitmap_icons;
-
 int sp_main_gui(int argc, char const **argv);
 int sp_main_console(int argc, char const **argv);
 static void sp_do_export_png(SPDocument *doc);
@@ -225,11 +220,6 @@ struct poptOption options[] = {
     {"slideshow", 's', 
      POPT_ARG_NONE, &sp_global_slideshow, SP_ARG_SLIDESHOW,
      N_("Show given files one-by-one, switch to next on any key/mouse event"), 
-     NULL},
-
-    {"bitmap-icons", 'x', 
-     POPT_ARG_NONE, &sp_bitmap_icons, SP_ARG_BITMAP_ICONS,
-     N_("Prefer bitmap (XPM) icons to SVG ones"),
      NULL},
 
     POPT_AUTOHELP POPT_TABLEEND
