@@ -15,6 +15,10 @@
 #include "Layout-TNG-Scanline-Maker.h"
 #include "svg/svg-types.h"
 #include "libnr/nr-matrix-rotate-ops.h"
+#include "libnr/nr-matrix-translate-ops.h"
+#include "libnr/nr-rotate-matrix-ops.h"
+#include "libnr/nr-translate-matrix-ops.h"
+#include "libnr/nr-translate-rotate-ops.h"
 #include "display/curve.h"
 
 namespace Inkscape {
@@ -337,42 +341,102 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
     NR::Point top_left, bottom_right;
     unsigned char_index = it._char_index;
 
-    if (it._char_index == _characters.size()) {
-        top_left[NR::X] = bottom_right[NR::X] = _chunks.back().left_x + _spans.back().x_end;
-        char_index--;
+    if (_path_fitted) {
+        double cluster_half_width = 0.0;
+        for (int glyph_index = _characters[char_index].in_glyph ; _glyphs[glyph_index].in_character == char_index ; glyph_index++)
+            cluster_half_width += _glyphs[glyph_index].width;
+        cluster_half_width *= 0.5;
+
+        double midpoint_offset = _characters[char_index].span(this).x_start + _characters[char_index].x + cluster_half_width;
+        int unused = 0;
+        Path::cut_position *midpoint_otp = const_cast<Path*>(_path_fitted)->CurvilignToPosition(1, &midpoint_offset, unused);
+        if (midpoint_offset >= 0.0 && midpoint_otp != NULL && midpoint_otp[0].piece >= 0) {
+            NR::Point midpoint;
+            NR::Point tangent;
+            Span const &span = _characters[char_index].span(this);
+            double top = span.baseline_shift - span.line_height.ascent;
+            double bottom = span.baseline_shift + span.line_height.descent;
+
+            const_cast<Path*>(_path_fitted)->PointAndTangentAt(midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, tangent);
+            top_left[NR::X] = midpoint[NR::X] - cluster_half_width;
+            top_left[NR::Y] = midpoint[NR::Y] + top;
+            bottom_right[NR::X] = midpoint[NR::X] + cluster_half_width;
+            bottom_right[NR::Y] = midpoint[NR::Y] + bottom;
+            if (rotation)
+                *rotation = atan2(tangent[1], tangent[0]);
+        }
+        g_free(midpoint_otp);
     } else {
-        double span_x = _spans[_characters[it._char_index].in_span].x_start + _characters[it._char_index].chunk(this).left_x;
-        top_left[NR::X] = span_x + _characters[it._char_index].x;
-        if (it._char_index + 1 == _characters.size() || _characters[it._char_index + 1].in_span != _characters[it._char_index].in_span)
-            bottom_right[NR::X] = _spans[_characters[it._char_index].in_span].x_end + _characters[it._char_index].chunk(this).left_x;
-        else
-            bottom_right[NR::X] = span_x + _characters[it._char_index + 1].x;
+        if (it._char_index == _characters.size()) {
+            top_left[NR::X] = bottom_right[NR::X] = _chunks.back().left_x + _spans.back().x_end;
+            char_index--;
+        } else {
+            double span_x = _spans[_characters[it._char_index].in_span].x_start + _characters[it._char_index].chunk(this).left_x;
+            top_left[NR::X] = span_x + _characters[it._char_index].x;
+            if (it._char_index + 1 == _characters.size() || _characters[it._char_index + 1].in_span != _characters[it._char_index].in_span)
+                bottom_right[NR::X] = _spans[_characters[it._char_index].in_span].x_end + _characters[it._char_index].chunk(this).left_x;
+            else
+                bottom_right[NR::X] = span_x + _characters[it._char_index + 1].x;
+        }
+
+        double baseline_y = _characters[char_index].line(this).baseline_y + _characters[char_index].span(this).baseline_shift;
+        top_left[NR::Y] = baseline_y - _spans[_characters[char_index].in_span].line_height.ascent;
+        bottom_right[NR::Y] = baseline_y + _spans[_characters[char_index].in_span].line_height.descent;
+
+        if (rotation) {
+            if (it._glyph_index == -1)
+                *rotation = 0.0;
+            else if (it._glyph_index == (int)_glyphs.size())
+                *rotation = _glyphs.back().rotation;
+            else
+                *rotation = _glyphs[it._glyph_index].rotation;
+        }
     }
 
-    double baseline_y = _characters[char_index].line(this).baseline_y + _characters[char_index].span(this).baseline_shift;
-    top_left[NR::Y] = baseline_y - _spans[_characters[char_index].in_span].line_height.ascent;
-    bottom_right[NR::Y] = baseline_y + _spans[_characters[char_index].in_span].line_height.descent;
-
-    if (rotation) {
-        if (it._glyph_index == (int)_glyphs.size())
-            *rotation = _glyphs.back().rotation;
-        else
-            *rotation = _glyphs[it._glyph_index].rotation;
-    }
     return NR::Rect(top_left, bottom_right);
 }
 
 SPCurve* Layout::createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const
 {
-    double rotation_angle;
     SPCurve *selection_curve = sp_curve_new();
 
-    for (iterator it = it_start ; it < it_end ; it.nextCharacter()) {
-        NR::Rect box = characterBoundingBox(it, &rotation_angle);
-        NR::Matrix total_transform = transform * NR::rotate(rotation_angle);
-        sp_curve_moveto(selection_curve, box.corner(0) * total_transform);
+    for (unsigned char_index = it_start._char_index ; char_index < it_end._char_index ; ) {
+        if (_characters[char_index].in_glyph == -1) {
+            char_index++;
+            continue;
+        }
+        double char_rotation;
+        unsigned span_index = _characters[char_index].in_span;
+
+        NR::Point top_left, bottom_right;
+        if (_path_fitted) {
+            NR::Rect box = characterBoundingBox(iterator(this, char_index), &char_rotation);
+            top_left = box.min();
+            bottom_right = box.max();
+            char_index++;
+        } else {   // for straight text we can be faster by combining all the character boxes in a span into one box
+            char_rotation = _glyphs[_characters[char_index].in_glyph].rotation;
+            double span_x = _spans[span_index].x_start + _spans[span_index].chunk(this).left_x;
+            top_left[NR::X] = span_x + _characters[char_index].x;
+            while (char_index < it_end._char_index && _characters[char_index].in_span == span_index)
+                char_index++;
+            if (_characters[char_index].in_span != span_index)
+                bottom_right[NR::X] = _spans[span_index].x_end + _spans[span_index].chunk(this).left_x;
+            else
+                bottom_right[NR::X] = span_x + _characters[char_index].x;
+
+            double baseline_y = _spans[span_index].line(this).baseline_y + _spans[span_index].baseline_shift;
+            top_left[NR::Y] = baseline_y - _spans[span_index].line_height.ascent;
+            bottom_right[NR::Y] = baseline_y + _spans[span_index].line_height.descent;
+        }
+
+        NR::Rect char_box(top_left, bottom_right);
+        NR::Point center_of_rotation((top_left[NR::X] + bottom_right[NR::X]) * 0.5,
+                                     top_left[NR::Y] + _spans[span_index].line_height.ascent);
+        NR::Matrix total_transform = NR::translate(-center_of_rotation) * NR::rotate(char_rotation) * NR::translate(center_of_rotation) * transform;
+        sp_curve_moveto(selection_curve, char_box.corner(0) * total_transform);
         for(int i = 1; i < 4; i ++)
-            sp_curve_lineto(selection_curve, box.corner(i) * total_transform);
+            sp_curve_lineto(selection_curve, char_box.corner(i) * total_transform);
         sp_curve_closepath(selection_curve);
     }
     return selection_curve;
