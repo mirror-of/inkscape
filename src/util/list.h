@@ -216,6 +216,10 @@ public:
  * memory; if it has a non-trivial destructor, that destructor will not
  * be automatically called when the list is destroyed.
  *
+ * An exception to this is if the value type derives from
+ * Inkscape::GC::Finalized; such objects will have their destructors
+ * called even when the list is automatically destroyed.
+ *
  * cons() is synonymous with List<T>(first, rest), except that the
  * compiler will usually be able to infer T from the type of 'rest'
  *

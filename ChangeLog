@@ -12,6 +12,8 @@
 	* src/layer-fns.cpp: make ordering of layers complete; not just among
 	                     siblings
 
+	* src/util/list.h: documentation update
+
 2004-10-29  Bryce Harrington <bryce@bryceharrington.org>
 
 	* layer-fns.cpp:  documenting
