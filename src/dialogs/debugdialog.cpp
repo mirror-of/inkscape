@@ -157,6 +157,10 @@ DebugDialogImpl::DebugDialogImpl()
 
     show_all_children();
 
+    message("ready.");
+    message("enable log display by setting ");
+    message("dialogs.debug 'redirect' attribute to 1 in preferences.xml");
+
     dialogHandler = 0;
 }
 
@@ -207,6 +211,8 @@ void DebugDialogImpl::message(char *msg)
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = messageText.get_buffer();
     Glib::ustring uMsg = msg;
+    if (uMsg[uMsg.length()-1] != '\n')
+        uMsg += '\n';
     buffer->insert (buffer->end(), uMsg);
 }
 
@@ -263,6 +269,7 @@ void DebugDialogImpl::captureLogMessages()
               dialogLoggingFunction,
               (gpointer)this);
         }
+    message("log capture started");
 }
 
 void DebugDialogImpl::releaseLogMessages()
@@ -272,6 +279,7 @@ void DebugDialogImpl::releaseLogMessages()
         g_log_remove_handler(NULL, dialogHandler);
         dialogHandler = 0;
         }
+    message("log capture discontinued");
 }
 
 
