@@ -39,7 +39,6 @@ src/display/nr-arena-image.cpp
 src/display/nr-arena-item.cpp
 src/display/nr-arena-shape.cpp
 src/display/nr-arena.cpp
-src/display/nr-uta.cpp
 src/display/testnr.cpp
 src/document-undo.cpp
 src/document.cpp
@@ -100,7 +99,6 @@ src/libnr/nr-svp-render.cpp
 src/libnr/nr-svp.cpp
 src/libnr/nr-types-test.cpp
 src/libnr/nr-types.cpp
-src/libnr/nr-uta.cpp
 src/libnr/nr-values.cpp
 src/libnr/testnr.cpp
 src/libnrtype/cp1250.cpp
