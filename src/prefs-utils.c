@@ -56,6 +56,26 @@ prefs_get_int_attribute (gchar *path, gchar *attr, gint def)
 		return def;
 }
 
+/**
+\brief Retrieves an int attribute guarding against screwed-up data; if the value is beyond limits, default is returned
+*/
+gint
+prefs_get_int_attribute_limited (gchar *path, gchar *attr, gint def, gint min, gint max)
+{
+	gint v; 
+
+	SPRepr *repr;
+	repr = inkscape_get_repr (INKSCAPE, path);
+	if (repr) {
+		v = sp_repr_get_int_attribute (repr, attr, def);
+		if (v >= min && v <= max)
+			return v;
+		else
+			return def;
+	} else 
+		return def;
+}
+
 void
 prefs_set_double_attribute (gchar *path, gchar *attr, double value)
 {
@@ -77,3 +97,22 @@ prefs_get_double_attribute (gchar *path, gchar *attr, double def)
 		return def;
 }
 
+/**
+\brief Retrieves an int attribute guarding against screwed-up data; if the value is beyond limits, default is returned
+*/
+double
+prefs_get_double_attribute_limited (gchar *path, gchar *attr, double def, double min, double max)
+{
+	double v; 
+
+	SPRepr *repr;
+	repr = inkscape_get_repr (INKSCAPE, path);
+	if (repr) {
+		v = sp_repr_get_double_attribute (repr, attr, def);
+		if (v >= min && v <= max)
+			return v;
+		else
+			return def;
+	} else 
+		return def;
+}
