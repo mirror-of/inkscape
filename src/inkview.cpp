@@ -85,7 +85,7 @@ static int sp_svgview_show_prev_cb (GtkWidget *widget, void *data);
 static int sp_svgview_goto_first_cb (GtkWidget *widget, void *data);
 static int sp_svgview_goto_last_cb (GtkWidget *widget, void *data);
 #ifdef WITH_INKJAR
-static bool is_jar(const gchar *filename);
+static bool is_jar(char const *filename);
 #endif
 static void usage();
 
@@ -434,15 +434,17 @@ sp_svgview_goto_last (struct SPSlideShow *ss)
 
 #ifdef WITH_INKJAR
 static bool
-is_jar(const gchar *filename)
+is_jar(char const *filename)
 {
-    //fixme: mime check or something
-    char *extension;
-    if ((extension = strrchr(filename, '.')) != NULL) {
-	if (strcmp(extension, ".jar") == 0 || strcmp(extension, ".sxw") == 0)
-	    return true;
+    /* fixme: Check MIME type or something.  /usr/share/misc/file/magic suggests that checking for
+       initial string "PK\003\004" in content should suffice. */
+    size_t const filename_len = strlen(filename);
+    if (filename_len < 5) {
+        return false;
     }
-    return false;
+    char const *extension = filename + filename_len - 4;
+    return ((memcmp(extension, ".jar", 4) == 0) ||
+            (memcmp(extension, ".sxw", 4) == 0)   );
 }
 #endif /* WITH_INKJAR */
 
