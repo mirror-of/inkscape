@@ -131,7 +131,7 @@ object {
     rotate <-90,   0,   0>   //x first
     rotate <  0,   0,   0>   //z second
     rotate < 20,   0,   0>   //whatever else
-    rotate <  0,  -20,   0>   //whatever else
+    rotate <  0, -27,   0>   //whatever else
 
 }//object
 

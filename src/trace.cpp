@@ -11,7 +11,7 @@
  */
 
 
-#include <glib.h>
+#include <glibmm.h>
 
 #include <trace.h>
 
@@ -102,23 +102,23 @@ Trace::getSelectedImage()
 
 
 
-
-
 /**
- *  Static no-knowledge version
+ *  Threaded method that actually does the conversion
  */
-gboolean Trace::convertImageToPath(TracingEngine *theEngine)
+void Trace::convertImageToPathThread()
 {
-    //## Set our internal engine
     //## Remember. NEVER leave this method without setting
-    //## back to NULL
-    engine = theEngine;
+    //## engine back to NULL
+
+    //## Prepare our kill flag.  We will watch this later to
+    //## see if the main thread wants us to stop
+    keepGoing = true;
 
     if (!SP_ACTIVE_DOCUMENT)
         {
         g_warning("Trace::convertImageToPath: no active document\n");
         engine = NULL;
-        return false;
+        return;
         }
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
 
@@ -126,7 +126,7 @@ gboolean Trace::convertImageToPath(TracingEngine *theEngine)
     if (!img)
         {
         engine = NULL;
-        return false;
+        return;
         }
 
     GdkPixbuf *pixbuf = img->pixbuf;
@@ -135,10 +135,17 @@ gboolean Trace::convertImageToPath(TracingEngine *theEngine)
         {
         g_warning("Trace::convertImageToPath: image has no bitmap data\n");
         engine = NULL;
-        return false;
+        return;
         }
 
     char *d = engine->getPathDataFromPixbuf(pixbuf);
+
+    //## EXAMPLE:  Check if we should stop
+    if (!keepGoing)
+        {
+        engine = NULL;
+        return;
+        }
 
     SPRepr *pathRepr    = sp_repr_new("path");
     SPRepr *imgRepr     = SP_OBJECT(img)->repr;
@@ -169,7 +176,30 @@ gboolean Trace::convertImageToPath(TracingEngine *theEngine)
 
     engine = NULL;
 
-    return true;
+}
+
+/**
+ *  Static no-knowledge version
+ */
+void Trace::convertImageToPath(TracingEngine *theEngine)
+{
+    //Check if we are already running
+    if (engine)
+        return;
+
+    engine = theEngine;
+
+#if HAVE_THREADS
+    //Ensure that thread support is running
+    if (!Glib::thread_supported())
+        Glib::thread_init();
+
+    //Create our thread and run it
+    Glib::Thread::create(
+        sigc::mem_fun(*this, &Trace::convertImageToPathThread), false);
+#else
+    convertImageToPathThread();
+#endif
 
 }
 
@@ -182,6 +212,9 @@ void Trace::abort()
 {
 
     g_message("Trace::abort() soon to be implemented\n");
+
+    //## Inform Trace's working thread
+    keepGoing = false;
 
     if (engine)
         {

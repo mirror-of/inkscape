@@ -103,7 +103,7 @@ class Trace
      * any, and create a <path> element from it, inserting it into
      * the current document.
      */
-    gboolean convertImageToPath(TracingEngine *engine);
+    void convertImageToPath(TracingEngine *engine);
 
 
     /**
@@ -123,13 +123,31 @@ class Trace
      */
     static gboolean staticShowTraceDialog();
 
+
+
+
+
     private:
+
+    /**
+     * This is the thread code that is called by its counterpart above.
+     */
+    void convertImageToPathThread();
+
+    /**
+     * This is true during execution. Setting it to false (like abort()
+     * does) should inform the threaded code that it needs to stop
+     */
+    bool keepGoing;
 
     /**
      *  During tracing, this is Non-null, and refers to the
      *  engine that is currently doing the tracing.
      */
     TracingEngine *engine;
+
+
+
 
 };//class Trace
 
