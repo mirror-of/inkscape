@@ -343,24 +343,18 @@ Transformation::updatePageSkew(SPSelection *selection)
 void 
 Transformation::applyPageMove(SPSelection *selection)
 {
-    double x = _scalar_move_horizontal.getValue("px");
-    double y = _scalar_move_vertical.getValue("px");
+    //double x = _scalar_move_horizontal.getValue("px");
+    //double y = _scalar_move_vertical.getValue("px");
 
     if (_check_move_relative.get_active()) {
-/*
-        sp_selection_move_relative(x, y);
-*/
+        //sp_selection_move_relative(x, y);
     } else {
         NR::Rect bbox = selection->bounds();
-/*
-        sp_selection_move_relative(x - bbox.min()[NR::X], y - bbox.min()[NR::Y]);
-*/
+        //sp_selection_move_relative(x - bbox.min()[NR::X], y - bbox.min()[NR::Y]);
     }
 
     if (selection) {
-/*
-        sp_document_done ( SP_DT_DOCUMENT (selection->desktop()) );
-*/
+        //sp_document_done ( SP_DT_DOCUMENT (selection->desktop()) );
     }
 }
 
@@ -485,13 +479,15 @@ Transformation::onMoveRelativeToggled()
         return;
     }
 
+
+
+/* TODO:
+    NR::Rect bbox = selection->bounds();
+
     // Read values from widget 
     double x = _scalar_move_horizontal.getValue("px");
     double y = _scalar_move_vertical.getValue("px");
-
-    NR::Rect bbox = selection->bounds();
-
-/* TODO:
+    
     set_data("update", GUINT_TO_POINTER (TRUE));
 
     if (_check_move_relative.get_active(tb)) {

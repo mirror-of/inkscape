@@ -27,7 +27,7 @@ XmlEditor::XmlEditor()
     transientize();
 
     // Top level vbox
-    Gtk::VBox *vbox = get_vbox();
+    //Gtk::VBox *vbox = get_vbox();
 
     // TODO:  Insert widgets
 
