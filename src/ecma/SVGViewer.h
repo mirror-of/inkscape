@@ -19,27 +19,40 @@ class SVGViewer : public Gtk::ScrolledWindow
 {
 public:
 
-    /*
-     *
-     */
-    SVGViewer();
-
     /**
-     *
+     *  Sets the already-parsed document with the SVG to be displayed.
+     *  Normally called from within Inkscape.
      */
     bool setDocument(SPDocument *doc);
 
     /**
-     *
+     *  Sets the URI of the SVG to be displayed.  Normally called
+     *  by user-written code.
      */
     bool setURI(URI &uri);
 
     /*
-     *
+     *  Constructor
+     */
+    SVGViewer();
+
+    /*
+     *  Destructor
      */
     virtual ~SVGViewer();
 
 protected:
+
+    /**
+     * Trace messages
+     */
+    void trace(char *fmt, ...);
+
+    /**
+     * Error messages
+     */
+    void error(char *fmt, ...);
+
 
     //Overridden default signal handlers:
 

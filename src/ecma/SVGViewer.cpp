@@ -1,6 +1,10 @@
 //#########################################################################
 //## $Id$
 //#########################################################################
+
+#include <stdio.h>
+#include <stdarg.h>
+
 #include "SVGViewer.h"
 
 #include "inkscape.h"
@@ -11,6 +15,7 @@ namespace Inkscape {
 //#########################################################################
 //## PUBLIC METHODS
 //#########################################################################
+
 bool SVGViewer::setDocument(SPDocument *doc)
 {
     if (document)
@@ -19,10 +24,11 @@ bool SVGViewer::setDocument(SPDocument *doc)
     sp_document_ref(doc);
     document = doc;
 
-    GtkWidget *viewerGtk = sp_svg_view_widget_new(doc);
+    GtkWidget *viewerGtk  = sp_svg_view_widget_new(doc);
     Gtk::Widget *viewerMM = Glib::wrap(viewerGtk);
     mainVBox.pack_start(*viewerMM);
 
+    //"engine" is the EcmaBinding/javascript engine
     engine->processDocument(doc);
 
     viewerMM->show();
@@ -36,7 +42,7 @@ bool SVGViewer::setURI(URI &uri)
     SPDocument *doc = sp_document_new (uri.toString(), 0, 0);
     if (!doc)
         {
-        printf("SVGView: error loading document '%s'\n", uri.toString());
+        error("SVGView: error loading document '%s'\n", uri.toString());
         return false;
         }
 
@@ -45,6 +51,37 @@ bool SVGViewer::setURI(URI &uri)
     return true;
 }
 
+
+//#########################################################################
+//## NON-PUBLIC METHODS
+//#########################################################################
+
+/**
+ * Trace messages
+ */
+void SVGViewer::trace(char *fmt, ...)
+{
+    //TODO: work this into the g_message() scheme later
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(stdout, "SVGViewer:");
+    vfprintf(stdout, fmt, ap);
+    fprintf(stdout, "\n");
+    va_end(ap);
+}
+
+/**
+ * Error messages
+ */
+void SVGViewer::error(char *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(stderr, "SVGViewer error:");
+    vfprintf(stderr, fmt, ap);
+    fprintf(stderr, "\n");
+    va_end(ap);
+}
 
 //#########################################################################
 //## EVENTS
