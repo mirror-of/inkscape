@@ -598,14 +598,14 @@ sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
 
     
 	for (l = selection->items; l != NULL; l = l-> next) {
-		NRMatrixF curaff, newaff;
+		NRMatrixD curaff, newaff;
 
 		item = SP_ITEM (l->data);
 
-		sp_item_i2d_affine (item, &curaff);
-		nr_matrix_multiply_ffd (&newaff, &curaff, NR_MATRIX_D_FROM_DOUBLE (affine));
+		sp_item_i2d_affine_d (item, &curaff);
+		nr_matrix_multiply_ddd (&newaff, &curaff, NR_MATRIX_D_FROM_DOUBLE (affine));
 		/* fixme: This is far from elegant (Lauris) */
-		sp_item_set_i2d_affine (item, &newaff);
+		sp_item_set_i2d_affine_d (item, &newaff);
 		/* update repr -  needed for undo */
 		sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
 		/* fixme: Check, whether anything changed */
