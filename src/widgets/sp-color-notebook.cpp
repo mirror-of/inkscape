@@ -24,6 +24,7 @@
 #include "../prefs-utils.h"
 #include "sp-color-preview.h"
 #include "sp-color-notebook.h"
+#include "spw-utilities.h"
 
 #include "sp-color-scales.h"
 #include "sp-color-wheel-selector.h"
@@ -191,6 +192,8 @@ void ColorNotebook::init()
 	GType *selector_types = 0;
 	guint	selector_type_count = 0;
 
+	GtkTooltips *tt = gtk_tooltips_new ();
+
 	/* tempory hardcoding to get types loaded */
 	SP_TYPE_COLOR_SCALES;
 	SP_TYPE_COLOR_WHEEL_SELECTOR;
@@ -312,16 +315,23 @@ void ColorNotebook::init()
 	row++;
 
 	/* Create RGBA entry and color preview */
-	_rgbal = gtk_label_new ("RGBA:");
-/*	   gtk_misc_set_alignment (GTK_MISC (_l[i]), 1.0, 0.5); */
-	gtk_widget_show (_rgbal);
-	gtk_table_attach (GTK_TABLE (table), _rgbal, 0, 1, row, row + 1, GTK_FILL, GTK_SHRINK, XPAD, YPAD);
+	GtkWidget *rgbabox = gtk_hbox_new (FALSE, 0);
+
+	_rgbal = gtk_label_new_with_mnemonic ("RGBA_:");
+	gtk_misc_set_alignment (GTK_MISC (_rgbal), 1.0, 0.5);
+	gtk_box_pack_start(GTK_BOX(rgbabox), _rgbal, TRUE, TRUE, 2);
+
 	_rgbae = gtk_entry_new ();
 	sp_dialog_defocus_on_enter (_rgbae);
-	gtk_entry_set_max_length (GTK_ENTRY (_rgbae), 16);
-	gtk_entry_set_width_chars (GTK_ENTRY (_rgbae), 10);
-	gtk_widget_show (_rgbae);
-	gtk_table_attach (GTK_TABLE (table), _rgbae, 1, 2, row, row + 1, GTK_FILL, GTK_SHRINK, XPAD, YPAD);
+	gtk_entry_set_max_length (GTK_ENTRY (_rgbae), 8);
+	gtk_entry_set_width_chars (GTK_ENTRY (_rgbae), 8);
+	gtk_tooltips_set_tip (tt, _rgbae, _("Hexadecimal RGBA value of the color"), NULL);
+	gtk_box_pack_start(GTK_BOX(rgbabox), _rgbae, FALSE, FALSE, 0);
+	gtk_label_set_mnemonic_widget (GTK_LABEL(_rgbal), _rgbae);
+
+	sp_set_font_size_smaller (rgbabox);
+	gtk_widget_show_all (rgbabox);
+	gtk_table_attach (GTK_TABLE (table), rgbabox, 1, 2, row, row + 1, GTK_FILL, GTK_SHRINK, XPAD, YPAD);
 
 #ifdef SPCS_PREVIEW
 	_p = sp_color_preview_new (0xffffffff);

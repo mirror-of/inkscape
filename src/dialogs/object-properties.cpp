@@ -193,7 +193,7 @@ sp_object_properties_dialog (void)
     gtk_box_pack_start (GTK_BOX (hb), s, TRUE, TRUE, 4);
     gtk_label_set_mnemonic_widget (GTK_LABEL(l), s);
 
-    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
+    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 3);
     gtk_box_pack_start (GTK_BOX (hb), sb, FALSE, FALSE, 0);
 
     gtk_signal_connect ( a, "value_changed",
