@@ -80,6 +80,48 @@ SPReprDoc::Log::~Log() {
     sp_repr_free_log(actions);
 }
 
+void SPReprDoc::Log::notifyChildAdded(SPRepr &parent, SPRepr &child,
+                                      SPRepr *prev)
+{
+    if (is_logging) {
+        actions = (new SPReprActionAdd(&parent, &child, prev, actions))->optimizeOne();
+    }
+}
+
+void SPReprDoc::Log::notifyChildRemoved(SPRepr &parent, SPRepr &child,
+                                        SPRepr *prev)
+{
+    if (is_logging) {
+        actions = (new SPReprActionDel(&parent, &child, prev, actions))->optimizeOne();
+    }
+}
+
+void SPReprDoc::Log::notifyChildOrderChanged(SPRepr &parent, SPRepr &child,
+                                             SPRepr *old_prev, SPRepr *new_prev)
+{
+    if (is_logging) {
+        actions = (new SPReprActionChgOrder(&parent, &child, old_prev, new_prev, actions))->optimizeOne();
+    }
+}
+
+void SPReprDoc::Log::notifyContentChanged(SPRepr &node,
+                                          SharedCStringPtr old_content,
+                                          SharedCStringPtr new_content)
+{
+    if (is_logging) {
+        actions = (new SPReprActionChgContent(&node, old_content, new_content, actions))->optimizeOne();
+    }
+}
+
+void SPReprDoc::Log::notifyAttributeChanged(SPRepr &node, GQuark name,
+                                            SharedCStringPtr old_value,
+                                            SharedCStringPtr new_value)
+{
+    if (is_logging) {
+        actions = (new SPReprActionChgAttr(&node, name, old_value, new_value, actions))->optimizeOne();
+    }
+}
+
 SPRepr *sp_repr_ref(SPRepr *repr) {
     return Inkscape::GC::anchor(repr);
 }
@@ -230,9 +272,7 @@ SPRepr::setContent(gchar const *newcontent)
         this->_content = SharedCStringPtr();
     }
     if (_document) {
-        if (_document->_log->is_logging) {
-            _document->_log->actions = (new SPReprActionChgContent(this, oldcontent, this->_content, _document->_log->actions))->optimizeOne();
-        }
+        _document->_log->notifyContentChanged(*this, oldcontent, this->_content);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -269,9 +309,7 @@ SPRepr::_deleteAttribute(gchar const *key, bool is_interactive)
             this->_attributes = attr->next;
         }
         if (_document) {
-            if (_document->_log->is_logging) {
-                _document->_log->actions = (new SPReprActionChgAttr(this, q, attr->value, SharedCStringPtr(), _document->_log->actions))->optimizeOne();
-            }
+            _document->_log->notifyAttributeChanged(*this, q, attr->value, SharedCStringPtr());
         }
 
         for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -312,9 +350,7 @@ SPRepr::_changeAttribute(gchar const *key, gchar const *value, bool is_interacti
         }
     }
     if (_document) {
-        if (_document->_log->is_logging) {
-            _document->_log->actions = (new SPReprActionChgAttr(this, q, oldval, attr->value, _document->_log->actions))->optimizeOne();
-        }
+        _document->_log->notifyAttributeChanged(*this, q, oldval, attr->value);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -388,9 +424,7 @@ SPRepr::addChild(SPRepr *child, SPRepr *ref)
 
     if (_document) {
         if (!child->document()) child->_bindDocument(*_document);
-        if (_document->_log->is_logging) {
-            _document->_log->actions = (new SPReprActionAdd(this, child, ref, _document->_log->actions))->optimizeOne();
-        }
+        _document->_log->notifyChildAdded(*this, *child, ref);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -454,9 +488,7 @@ void SPRepr::removeChild(SPRepr *child) {
     _child_count--;
 
     if (_document) {
-        if (_document->_log->is_logging) {
-            _document->_log->actions = (new SPReprActionDel(this, child, ref, _document->_log->actions))->optimizeOne();
-        }
+        _document->_log->notifyChildRemoved(*this, *child, ref);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -502,9 +534,7 @@ void SPRepr::changeOrder(SPRepr *child, SPRepr *ref) {
     this->_cached_positions_valid = false;
 
     if (_document) {
-        if (_document->_log->is_logging) {
-            _document->_log->actions = (new SPReprActionChgOrder(this, child, prev, ref, _document->_log->actions))->optimizeOne();
-        }
+        _document->_log->notifyChildOrderChanged(*this, *child, prev, ref);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {

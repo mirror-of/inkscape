@@ -25,6 +25,7 @@
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include "xml/xml-forward.h"
+#include "xml/node-observer.h"
 #include "util/shared-c-string-ptr.h"
 
 struct SPReprClass;
@@ -192,13 +193,28 @@ struct SPReprDoc : public SPRepr {
 
 protected:
 	struct Log : public Inkscape::GC::Managed<Inkscape::GC::ATOMIC>,
-	             public Inkscape::GC::Finalized
+	             public Inkscape::GC::Finalized,
+		     public Inkscape::XML::NodeObserver
         {
 		Log() : is_logging(false), actions(NULL) {}
 		~Log();
 
 		bool is_logging;
 		SPReprAction *actions;
+
+		void notifyChildAdded(SPRepr &parent, SPRepr &child,
+				      SPRepr *prev);
+		void notifyChildRemoved(SPRepr &parent, SPRepr &child,
+				        SPRepr *prev);
+		void notifyChildOrderChanged(SPRepr &parent, SPRepr &child,
+                                             SPRepr *old_prev,
+					     SPRepr *new_prev);
+		void notifyContentChanged(SPRepr &node,
+				          Inkscape::Util::SharedCStringPtr old_content,
+					  Inkscape::Util::SharedCStringPtr new_content);
+		void notifyAttributeChanged(SPRepr &node, GQuark name,
+				            Inkscape::Util::SharedCStringPtr old_value,
+					    Inkscape::Util::SharedCStringPtr new_value);
 	};
 
 	Log *_log;

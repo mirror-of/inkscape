@@ -1,3 +1,10 @@
+2004-01-22  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/Makefile_insert, src/xml/node-observer.h,
+	  src/xml/repr-private.h, src/xml/repr.cpp:
+
+	  moved repr loging behind generic observer interface
+
 2005-01-22  Ted Gould  <ted@gould.cx>
 
 	* src/display/canvas-grid.cpp, src/display/canvas-grid.h;
