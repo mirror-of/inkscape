@@ -8,6 +8,11 @@
       
     * extension/*: I converted all files to coding style.
 
+    * src/dialogs/align.cpp, src/dialogs/align.h, 
+      src/dialogs/desktop-properties.cpp, src/dialogs/desktop-properties.h, 
+      src/dialogs/dialog-events.cpp, src/dialogs/dialog-events.h: Converted 
+      the following files to use our coding convention.
+
 
 2004-02-04  bulia byak <bulia@users.sourceforge.net>
 
