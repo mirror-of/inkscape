@@ -160,7 +160,6 @@ sp_quick_align_dialog_destroy (void)
 {
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
 
-    g_print ("destr, nulling dlg\n");
     wd.win = dlg = NULL;
     wd.stop = 0;
     
