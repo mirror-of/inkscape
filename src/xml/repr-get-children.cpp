@@ -22,31 +22,40 @@ sp_repr_last_child(SPRepr const * const parent)
 }
 
 /** Returns the sibling before \a child in \a child's parent's children, or NULL if \a child is the
- *  first of those children.
+ *  first of those children (or if child is NULL or has no parent).
  *
  *  Useful in combination with sp_repr_add_child, when you want to insert a new child _before_ a
  *  given existing child.
+ *
+ *  Note: Involves a linear search (unlike sp_repr_next).
+
+ * \pre Links are correct, i.e. \a child isin its parent's children.
+ *
+ * \post (ret == NULL
+ *        ? child == NULL || child.parent == NULL || child.parent.children == child
+ *        : sp_repr_next(ret) == child).
  */
 SPRepr *
-sp_repr_prev_sibling(SPRepr const * const child)
+sp_repr_prev(SPRepr const *const child)
 {
-    g_return_val_if_fail(child != NULL, NULL);
-    SPRepr const &parent = *sp_repr_parent(child);
+    if (!child || !child->parent) {
+        return NULL;
+    }
 
     SPRepr *prev = NULL;
-    for (SPRepr *curr = parent.children;;) {
-        if ( curr == child ) {
-            return prev;
-        }
+    for (SPRepr *curr = child->parent->children; curr != child; curr = curr->next) {
         if (!curr) {
             g_warning("child repr not found in its parent's list of children");
             return NULL;
         }
 
         prev = curr;
-        curr = curr->next;
     }
-    /* never reached */
+
+    g_assert(prev == NULL
+             ? child->parent->children == child
+             : prev->next == child);
+    return prev;
 }
 
 

@@ -1,5 +1,10 @@
 2004-10-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/xml/repr-get-children.h, src/xml/repr-get-children.cpp
+	  (sp_repr_prev_sibling): Rename to sp_repr_prev for consistency
+	  with sp_repr_next.  Don't consider it an error for child to be
+	  NULL or parentless.  Callers updated.
+
 	* src/draw-context.cpp (spdc_concat_colors_and_flush,
 	  spdc_flush_white): Misc readability cleanups.
 

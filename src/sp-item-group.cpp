@@ -511,7 +511,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 	/* Step 2 - clear group */
 	// remember the position of the group
-	SPRepr *g_prev_sibling = sp_repr_prev_sibling(SP_OBJECT_REPR(group));
+	SPRepr *g_prev_sibling = sp_repr_prev(SP_OBJECT_REPR(group));
 
 	// the group is leaving forever, no heir, clones should take note; its children however are going to reemerge
 	SP_OBJECT (group)->deleteObject(true, false);

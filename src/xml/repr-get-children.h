@@ -4,7 +4,7 @@
 #include <xml/xml-forward.h>
 
 SPRepr *sp_repr_last_child(SPRepr const *parent);
-SPRepr *sp_repr_prev_sibling(SPRepr const *child);
+SPRepr *sp_repr_prev(SPRepr const *child);
 
 
 #endif /* !SEEN_REPR_GET_CHILDREN_H */
