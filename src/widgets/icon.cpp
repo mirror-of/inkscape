@@ -404,8 +404,11 @@ sp_icon_image_load_svg ( const gchar *name,
                 /* Find button visible area */
                 width = ibox.x1 - ibox.x0;
                 height = ibox.y1 - ibox.y0;
-                dx = (size - width) / 2;
-                dy = (size - height) / 2;
+                //dx = (size - width) / 2;
+                //dy = (size - height) / 2;
+                dx=dy=size;
+                dx=(dx-width)/2; // watch out for size, since 'unsigned'-'signed' can cause problems if the result is negative
+                dy=(dy-height)/2;
                 area.x0 = ibox.x0 - dx;
                 area.y0 = ibox.y0 - dy;
                 area.x1 = area.x0 + size;
