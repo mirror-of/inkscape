@@ -12,6 +12,7 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtksignal.h>
+#include <string.h>
 #include "macros.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
@@ -31,6 +32,8 @@
 #include "pixmaps/cursor-node-d.xpm"
 #include "document.h"
 #include "prefs-utils.h"
+#include "xml/repr.h"
+#include "xml/repr-private.h"
 
 static void sp_node_context_class_init (SPNodeContextClass * klass);
 static void sp_node_context_init (SPNodeContext * node_context);
@@ -40,8 +43,22 @@ static void sp_node_context_setup (SPEventContext *ec);
 static gint sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
 
-static void sp_node_context_selection_changed (SPSelection * selection, gpointer data);
 static gboolean sp_node_context_stamp (SPNodeContext * node_context);
+
+static void nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data);
+static SPReprEventVector nodepath_repr_events = {
+	NULL, /* destroy */
+	NULL, /* add_child */
+	NULL, /* child_added */
+	NULL, /* remove_child */
+	NULL, /* child_removed */
+	NULL, /* change_attr */
+	nodepath_event_attr_changed,
+	NULL, /* change_list */
+	NULL, /* content_changed */
+	NULL, /* change_order */
+	NULL  /* order_changed */
+};
 
 static SPEventContextClass * parent_class;
 GdkCursor * CursorNodeMouseover = NULL, * CursorNodeDragging = NULL;
@@ -108,15 +125,21 @@ static void
 sp_node_context_dispose (GObject *object)
 {
 	SPNodeContext * nc;
+	SPEventContext * ec;
 
 	nc = SP_NODE_CONTEXT (object);
+	ec = SP_EVENT_CONTEXT (object);
 
 	if (nc->nodepath) {
+		sp_repr_remove_listener_by_data (nc->nodepath->repr, ec);
+		sp_repr_unref (nc->nodepath->repr);
 		sp_nodepath_destroy (nc->nodepath);
 		nc->nodepath = NULL;
 	}
 
 	if (nc->knot_holder) {
+		sp_repr_remove_listener_by_data (nc->knot_holder->repr, ec);
+		sp_repr_unref (nc->knot_holder->repr);
 		sp_knot_holder_destroy (nc->knot_holder);
 		nc->knot_holder = NULL;
 	}
@@ -133,8 +156,8 @@ sp_node_context_setup (SPEventContext *ec)
 {
 	SPNodeContext *nc;
 	SPItem *item;
-
 	nc = SP_NODE_CONTEXT (ec);
+	SPRepr *repr;
 
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
@@ -145,13 +168,157 @@ sp_node_context_setup (SPEventContext *ec)
 
 	nc->nodepath = NULL;
 	nc->knot_holder = NULL;
+
 	if (item) {
 		nc->nodepath = sp_nodepath_new (ec->desktop, item);
 		if (! nc->nodepath) {
 			nc->knot_holder = sp_item_knot_holder (item, ec->desktop);
 		}
+		// setting listener
+		repr = SP_OBJECT (item)->repr;
+		if (repr) {
+			sp_repr_ref (repr);
+			sp_repr_add_listener (repr, &nodepath_repr_events, ec);
+			sp_repr_synthesize_events (repr, &nodepath_repr_events, ec);
+		}
+	}
+
+	sp_nodepath_update_statusbar (nc->nodepath);
+}
+
+/**
+\brief  Callback that processes the "changed" signal on the selection; 
+destroys old and creates new nodepath and reassigns listeners to the new selected item's repr
+*/
+void
+sp_node_context_selection_changed (SPSelection * selection, gpointer data)
+{
+	SPNodeContext * nc;
+	SPEventContext * ec;
+	SPDesktop *desktop;
+	SPItem * item;
+	SPRepr *old_repr, *repr;
+
+	nc = SP_NODE_CONTEXT (data);
+	ec = SP_EVENT_CONTEXT (nc);
+
+	if (nc->nodepath) {
+		old_repr = nc->nodepath->repr;
+		sp_nodepath_destroy (nc->nodepath);
+	} 
+	if (nc->knot_holder) {
+		old_repr = nc->knot_holder->repr;
+		sp_knot_holder_destroy (nc->knot_holder);
+	}
+
+	// remove old listener
+	sp_repr_remove_listener_by_data (old_repr, ec);
+	sp_repr_unref (old_repr);
+
+	item = sp_selection_item (selection);
+	
+	desktop = selection->desktop;
+	nc->nodepath = NULL;
+	nc->knot_holder = NULL;
+	if (item) {
+		nc->nodepath = sp_nodepath_new (desktop, item);
+		if (! nc->nodepath) {
+			nc->knot_holder = sp_item_knot_holder (item, desktop);
+		}
+		// setting new listener
+		repr = SP_OBJECT (item)->repr;
+		if (repr) {
+			sp_repr_ref (repr);
+			sp_repr_add_listener (repr, &nodepath_repr_events, ec);
+			sp_repr_synthesize_events (repr, &nodepath_repr_events, ec);
+		}
 	}
 	sp_nodepath_update_statusbar (nc->nodepath);
+}
+
+/**
+\brief  Regenerates nodepath when the item's repr was change outside of node edit
+(e.g. by undo, or xml editor, or edited in another view). The item is assumed to be the same 
+(otherwise sp_node_context_selection_changed() would have been called), so repr and listeners
+are not changed.
+*/
+void
+sp_nodepath_update_from_item (SPNodeContext *nc, SPItem *item)
+{
+	g_assert(nc);
+
+	SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP (SP_EVENT_CONTEXT (nc));
+	g_assert(desktop);
+
+	if (nc->nodepath) {
+		sp_nodepath_destroy (nc->nodepath);
+	}
+
+	if (nc->knot_holder) {
+		sp_knot_holder_destroy (nc->knot_holder);
+	}
+
+	item = sp_selection_item (SP_DT_SELECTION (desktop));
+
+	nc->nodepath = NULL;
+	nc->knot_holder = NULL;
+	if (item) {
+		nc->nodepath = sp_nodepath_new (desktop, item);
+		if (! nc->nodepath) {
+			nc->knot_holder = sp_item_knot_holder (item, desktop);
+		}
+	}
+	sp_nodepath_update_statusbar (nc->nodepath);
+}
+
+/**
+\brief  Callback that is fired whenever an attribute of the selected item (which we have in the nodepath) changes
+*/
+static void 
+nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data)
+{
+	SPItem *item;
+	const char *newd = NULL, *newtypestr = NULL;
+	gboolean changed = FALSE;
+
+	g_assert (data);
+	SPNodeContext *nc = ((SPNodeContext *) data);
+	g_assert(nc);
+	SPNodePath *np = nc->nodepath;
+	SPKnotHolder *kh = nc->knot_holder;
+
+	if (np) {
+		item = SP_ITEM (np->path);
+		if (!strcmp(name, "d")) {
+			newd = new_value;
+			changed = nodepath_repr_d_changed (np, new_value);
+		} else if (!strcmp(name, "sodipodi:nodetypes")) {
+			newtypestr = new_value;
+			changed = nodepath_repr_typestr_changed (np, new_value);
+		} else return; 	// with paths, we only need to act if one of the path-affecting attributes has changed	
+	} else if (kh) {
+		item = SP_ITEM (kh->item);
+		changed = !(kh->local_change);
+		kh->local_change = FALSE;
+	}
+	if (np && changed) {
+		GList *saved = NULL;
+		SPDesktop *desktop = np->desktop;
+		g_assert(desktop);
+		SPSelection *selection = desktop->selection;
+		g_assert(selection);
+
+		saved = save_nodepath_selection (nc->nodepath);
+		sp_nodepath_update_from_item (nc, item);
+ 		if (nc->nodepath && saved) restore_nodepath_selection (nc->nodepath, saved);
+
+		sp_nodepath_update_statusbar (nc->nodepath);
+
+	} else if (kh && changed) {
+		sp_nodepath_update_from_item (nc, item);
+
+		sp_nodepath_update_statusbar (nc->nodepath);
+	}
 }
 
 static gint
@@ -432,31 +599,6 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	}
 
 	return ret;
-}
-
-static void
-sp_node_context_selection_changed (SPSelection * selection, gpointer data)
-{
-	SPNodeContext * nc;
-	SPDesktop *desktop;
-	SPItem * item;
-
-	nc = SP_NODE_CONTEXT (data);
-
-	if (nc->nodepath) sp_nodepath_destroy (nc->nodepath);
-	if (nc->knot_holder) sp_knot_holder_destroy (nc->knot_holder);
-
-	item = sp_selection_item (selection);
-	
-	desktop = selection->desktop;
-	nc->nodepath = NULL;
-	nc->knot_holder = NULL;
-	if (item) {
-		nc->nodepath = sp_nodepath_new (desktop, item);
-		if (! nc->nodepath)
-			nc->knot_holder = sp_item_knot_holder (item, desktop);
-	}
-	sp_nodepath_update_statusbar (nc->nodepath);
 }
 
 static gboolean

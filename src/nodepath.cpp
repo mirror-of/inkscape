@@ -30,6 +30,9 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "selection.h"
+#include "xml/repr.h"
+#include "xml/repr-private.h"
+#include "object-edit.h"
 
 #define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
 
@@ -108,7 +111,6 @@ static SPPathNode * active_node = NULL;
 /**
 \brief Creates new nodepath from item 
 */
-
 SPNodePath *
 sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 {
@@ -120,6 +122,7 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 	gchar * typestr;
 	gint length;
 	NRMatrix i2d;
+	SPRepr *repr = SP_OBJECT (item)->repr;
 
 	if (!SP_IS_PATH (item)) return NULL;
 	path = SP_PATH (item);
@@ -128,7 +131,9 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 
 	bpath = sp_curve_first_bpath (curve);
 	length = curve->end;
-	nodetypes = sp_repr_attr (SP_OBJECT (item)->repr, "sodipodi:nodetypes");
+	if (length == 0) return NULL; // prevent crash for one-node paths
+
+	nodetypes = sp_repr_attr (repr, "sodipodi:nodetypes");
 	typestr = parse_nodetypes (nodetypes, length);
 
 	np = g_new (SPNodePath, 1);
@@ -137,11 +142,18 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 	np->path = path;
 	np->subpaths = NULL;
 	np->selected = NULL;
+
+	// we need to update item's transform from the repr here,
+	// because they may be out of sinc when we respond 
+	// to a change in repr by regenerating nodepath     --bb
+	sp_object_read_attr (SP_OBJECT (item), "transform");
+
 	sp_item_i2d_affine (SP_ITEM (path), &i2d);
 	nr_matrix_d_from_f (&np->i2d, &i2d);
 	nr_matrix_invert (&np->d2i, &np->i2d);
+	np->repr = repr;
 
-	/* Now the bitchy part */
+	/* Now the bitchy part (lauris) */
 
 	b = bpath;
 
@@ -153,6 +165,80 @@ sp_nodepath_new (SPDesktop * desktop, SPItem * item)
 	sp_curve_unref (curve);
 
 	return np;
+}
+
+void
+sp_nodepath_destroy (SPNodePath * np)
+{
+	g_assert (np);
+
+	while (np->subpaths) {
+		sp_nodepath_subpath_destroy ((SPNodeSubPath *) np->subpaths->data);
+	}
+
+	g_assert (!np->selected);
+
+	g_free (np);
+}
+
+/**
+\brief Returns true if the argument nodepath and the d attribute in its repr do not match. 
+ This may happen if repr was changed in e.g. XML editor or by undo.
+*/
+gboolean
+nodepath_repr_d_changed (SPNodePath * np, const char *newd)
+{
+	SPCurve * curve;
+	gchar * svgpath;
+	const char *attr_d;
+	gboolean r; 
+
+	g_assert (np);
+
+	curve = create_curve (np);
+
+	svgpath = sp_svg_write_path (curve->bpath);
+
+	if (newd) {
+		attr_d = newd;
+	} else {
+		attr_d = sp_repr_attr (SP_OBJECT (np->path)->repr, "d");
+	}
+
+	r = strcmp (attr_d, svgpath);
+
+	g_free (svgpath);
+	sp_curve_unref (curve);
+
+	return r;
+}
+
+/**
+\brief Returns true if the argument nodepath and the sodipodi:nodetypes attribute in its repr do not match. 
+ This may happen if repr was changed in e.g. XML editor or by undo.
+*/
+gboolean
+nodepath_repr_typestr_changed (SPNodePath * np, const char *newtypestr)
+{
+	gchar * typestr;
+	const char *attr_typestr;
+	gboolean r; 
+
+	g_assert (np);
+
+	typestr = create_typestr (np);
+
+	if (newtypestr) {
+		attr_typestr = newtypestr;
+	} else {
+		attr_typestr = sp_repr_attr (SP_OBJECT (np->path)->repr, "sodipodi:nodetypes");
+	}
+
+	r = (attr_typestr && strcmp (attr_typestr, typestr));
+
+	g_free (typestr);
+
+	return r;
 }
 
 static ArtBpath *
@@ -183,7 +269,6 @@ subpath_from_bpath (SPNodePath * np, ArtBpath * b, const gchar * t)
 
 	b++;
 	t++;
-
 	while ((b->code == ART_CURVETO) || (b->code == ART_LINETO)) {
 		pos.x = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b->x3, b->y3);
 		pos.y = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b->x3, b->y3);
@@ -260,43 +345,13 @@ update_object (SPNodePath * np)
 	sp_curve_unref (curve);
 }
 
-/**
-\brief Returns true if the argument nodepath and its repr do not match. This may happen if repr was changed in e.g. XML editor or by undo.
-*/
-gboolean
-nodepath_repr_changed (SPNodePath * np)
-{
-	SPCurve * curve;
-	gchar * typestr;
-	gchar * svgpath;
-	const char *attr_d;
-	const char *attr_typestr;
-	gboolean r; 
-
-	g_assert (np);
-
-	curve = create_curve (np);
-	typestr = create_typestr (np);
-
-	svgpath = sp_svg_write_path (curve->bpath);
-
-	attr_d = sp_repr_attr (SP_OBJECT (np->path)->repr, "d");
-	attr_typestr = sp_repr_attr (SP_OBJECT (np->path)->repr, "sodipodi:nodetypes");
-
-	r = strcmp (attr_d, svgpath) || (attr_typestr && strcmp (attr_typestr, typestr));
-
-	g_free (svgpath);
-	g_free (typestr);
-	sp_curve_unref (curve);
-	return r;
-}
-
 void
 update_repr_internal (SPNodePath * np)
 {
 	SPCurve * curve;
 	gchar * typestr;
 	gchar * svgpath;
+	SPRepr *repr = SP_OBJECT (np->path)->repr;
 
 	g_assert (np);
 
@@ -305,8 +360,8 @@ update_repr_internal (SPNodePath * np)
 
 	svgpath = sp_svg_write_path (curve->bpath);
 
-	sp_repr_set_attr (SP_OBJECT (np->path)->repr, "d", svgpath);
-	sp_repr_set_attr (SP_OBJECT (np->path)->repr, "sodipodi:nodetypes", typestr);
+	sp_repr_set_attr (repr, "d", svgpath);
+	sp_repr_set_attr (repr, "sodipodi:nodetypes", typestr);
 
 	g_free (svgpath);
 	g_free (typestr);
@@ -475,20 +530,6 @@ create_typestr (SPNodePath * np)
 	typestr[pos++] = '\0';
 
 	return typestr;
-}
-
-void
-sp_nodepath_destroy (SPNodePath * np)
-{
-	g_assert (np);
-
-	while (np->subpaths) {
-		sp_nodepath_subpath_destroy ((SPNodeSubPath *) np->subpaths->data);
-	}
-
-	g_assert (!np->selected);
-
-	g_free (np);
 }
 
 static SPNodePath *

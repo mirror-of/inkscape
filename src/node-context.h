@@ -40,4 +40,6 @@ struct _SPNodeContextClass {
 
 GtkType sp_node_context_get_type (void);
 
+void sp_node_context_selection_changed (SPSelection * selection, gpointer data);
+
 #endif

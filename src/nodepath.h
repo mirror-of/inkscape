@@ -37,6 +37,7 @@ struct _SPNodePath {
 	GList * subpaths;
 	GList * selected;
 	NRMatrix i2d, d2i;
+	SPRepr *repr;
 };
 
 struct _SPNodeSubPath {
@@ -79,7 +80,8 @@ void sp_nodepath_select_prev (SPNodePath *nodepath);
 void sp_nodepath_select_rect (SPNodePath * nodepath, NRRect * b, gboolean incremental);
 GList *save_nodepath_selection (SPNodePath *nodepath);
 void restore_nodepath_selection (SPNodePath *nodepath, GList *r);
-gboolean nodepath_repr_changed (SPNodePath * np);
+gboolean nodepath_repr_d_changed (SPNodePath * np, const char *newd);
+gboolean nodepath_repr_typestr_changed (SPNodePath * np, const char *newtypestr);
 void update_repr (SPNodePath * np);
 gboolean node_key (GdkEvent * event);
 void sp_nodepath_update_statusbar (SPNodePath *nodepath);

@@ -38,6 +38,7 @@ SPKnotHolder *
 sp_knot_holder_new (SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler)
 {
 	SPKnotHolder *knot_holder;
+	SPRepr *repr = SP_OBJECT (item)->repr;
 
 	g_return_val_if_fail (desktop != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP(desktop), NULL);
@@ -51,6 +52,9 @@ sp_knot_holder_new (SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc r
 	knot_holder->entity = NULL;
 
 	knot_holder->released = relhandler;
+
+	knot_holder->repr = repr;
+	knot_holder->local_change = FALSE;
 
 #ifdef KNOT_HOLDER_DEBUG
 	g_signal_connect (G_OBJECT (desktop), "destroy", sp_knot_holder_debug, (gpointer)"SPKnotHolder::item");
@@ -151,6 +155,9 @@ knot_moved_handler (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 	knot_holder = (SPKnotHolder *) data;
 	item  = SP_ITEM (knot_holder->item);
 	object = SP_OBJECT (item);
+
+	// this was a local change and the knotholder does not need to be recreated:
+	knot_holder->local_change = TRUE; 
 
 	for (el = knot_holder->entity; el; el = el->next) {
 		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;

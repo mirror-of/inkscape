@@ -41,6 +41,10 @@ struct _SPKnotHolder {
 	GSList *entity;
 
 	SPKnotHolderReleasedFunc released;
+
+	SPRepr *repr; // repr of the item, for setting and releasing listeners
+
+	gboolean local_change; // if true, no need to recreate knotholder if repr was changed
 };
 
 
