@@ -140,6 +140,9 @@ public:
                                     called on a type it is not */
     class param_not_exist {};  /**< An error class for when a parameter is
                                     looked for that just simply doesn't exist */
+    class no_overwrite {};     /**< An error class for when a filename
+                                    already exists, but the user doesn't
+									want to overwrite it */
 private:
     void             make_param       (SPRepr * paramrepr);
     inline param_t * param_shared     (gchar * name,

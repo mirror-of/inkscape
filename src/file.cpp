@@ -202,13 +202,13 @@ sp_file_open_dialog (gpointer object, gpointer data)
  * This 'save' function called by the others below
  */
 static bool
-file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *key)
+file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *key, bool saveas)
 {
     if (!doc || !uri) //Safety check
         return FALSE;
 
 	try {
-		sp_module_system_save (key, doc, uri, true); // save officially, with inkscape: attributes set
+		sp_module_system_save (key, doc, uri, (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1), saveas); // save officially, with inkscape: attributes set
 	} catch (Inkscape::Extension::Output::no_extension_found &e) {
 		gchar * text;
 		text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);
@@ -221,6 +221,8 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
 		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
 		sp_ui_error_dialog (text);
 		return FALSE;
+	} catch (Inkscape::Extension::Output::no_overwrite &e) {
+		return sp_file_save_dialog(doc);
 	}
 
 	sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
@@ -283,7 +285,7 @@ sp_file_save_dialog (SPDocument *doc)
             g_warning( "INPUT FILENAME IS NOT UTF-8" );
         }
 
-        sucess = file_save (doc, fileName, selectionType);
+        sucess = file_save (doc, fileName, selectionType, TRUE);
         g_free (save_path);
         save_path = g_dirname (fileName);
         save_path = g_strdup (save_path);
@@ -314,7 +316,7 @@ sp_file_save_document (SPDocument *doc)
 			fn = g_strdup (doc->uri);
 			
 			const gchar *ext = sp_repr_attr(repr, "inkscape:output_extension");
-			success = file_save (doc, fn, Inkscape::Extension::db.get(ext));
+			success = file_save (doc, fn, Inkscape::Extension::db.get(ext), FALSE);
 
 			g_free ((void *) fn);
 		}

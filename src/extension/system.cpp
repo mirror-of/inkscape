@@ -194,12 +194,12 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 	Lastly, the save function is called in the module itself.
 */
 void
-sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, const gchar * filename, bool official)
+sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, const gchar * filename, bool setextension, bool check_overwrite)
 {
 	Inkscape::Extension::Output * omod;
 	gpointer parray[2];
 	GtkDialog * prefs;
-	SPRepr *repr;
+	gchar * fileName = NULL;
 
 	if (key == NULL) {
 		parray[0] = (gpointer)filename;
@@ -210,6 +210,10 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 		/* This is a nasty hack, but it is required to ensure that
 		   autodetect will always save with the Inkscape extensions
 		   if they are available. */
+		if (omod != NULL && !strcmp(omod->get_id(), SP_MODULE_KEY_OUTPUT_SVG)) {
+			omod = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+		}
+		/* If autodetect fails, save as Inkscape SVG */
 		if (omod == NULL) {
 			omod = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
 		}
@@ -233,7 +237,31 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 		gtk_dialog_run(prefs);
 	}
 
-	return omod->save(doc, filename);
+	if (setextension) {
+		gchar * lowerfile = g_utf8_strdown(filename, g_utf8_strlen(filename, -1));
+		gchar * lowerext = g_utf8_strdown(omod->get_extension(), g_utf8_strlen(omod->get_extension(), -1));
+
+		if (!g_str_has_suffix(lowerfile, lowerext)) {
+			fileName = g_strdup_printf("%s%s", filename, omod->get_extension());
+		}
+
+		g_free(lowerfile);
+		g_free(lowerext);
+	} 
+
+	if (fileName == NULL) {
+		fileName = g_strdup(filename);
+	}
+
+	if (check_overwrite && !sp_ui_overwrite_file(fileName)) {
+		g_free(fileName);
+		throw Inkscape::Extension::Output::no_overwrite();
+	}
+
+	omod->save(doc, fileName);
+
+	g_free(fileName);
+	return;
 }
 
 /**
