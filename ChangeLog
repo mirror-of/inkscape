@@ -5,6 +5,8 @@
 
 	  inlined legacy wrappers
 
+	* src/xml/simple-node.cpp: really fixed #1108231 now
+
 2005-01-25  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/interface.cpp: Passed file import call to shared code.

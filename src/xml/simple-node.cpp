@@ -113,7 +113,7 @@ unsigned SimpleNode::position() const {
 unsigned SimpleNode::_childPosition(SPRepr const &child) const {
     if (!_cached_positions_valid) {
         unsigned position=0;
-        for ( SPRepr *sibling = _children->next() ;
+        for ( SPRepr *sibling = _children ;
               sibling ; sibling = sibling->next() )
         {
             sibling->_setCachedPosition(position);
