@@ -93,8 +93,10 @@ can leave your ideas and requests there.</p>
 <keys><key><ctrl/><keyf f="F4"/></key> <key><ctrl/>W</key> <action>close the dialog</action></keys>
 <keys><key><misc f="Tab"/></key> <action>jump to next widget</action></keys>
 <keys><key><shift/><misc f="Tab"/></key> <action>jump to previous widget</action></keys>
-<keys><key><misc-wide f="Enter"/></key> <action>accept the new value</action></keys>
+<keys><key><misc-wide f="Enter"/></key> <action>set the new value</action></keys>
 <note>This accepts the new value you typed in a text field and returns focus to canvas.</note>
+<keys><key><ctrl/><misc-wide f="Enter"/></key> <action>in XML Editor, set the attr value</action></keys>
+<note>When editing an attribute value in XML Editor, this sets the new value (same as clicking the "Set attribute" button).</note>
 <keys><key><misc-wide f="Space"/></key> <key><misc-wide f="Enter"/></key> <action>activate current button or list</action></keys>
 <keys><key><ctrl/><misc f="PgUp"/></key> <key><ctrl/><misc f="PgDn"/></key> <action>in a multi-tab dialog, switch tabs</action></keys>
 </group>
@@ -198,7 +200,7 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Clipboard</title>
 <keys><key><ctrl/>C</key>	 <action>copy selection</action></keys>
-<note>This places a copy of the selection to the Inkscape clipboard. Text from text objects is also placed into the system clipboard.</note>
+<note>This places a copy of the selection to the Inkscape clipboard. Text from text objects is also placed onto the system clipboard.</note>
 <keys><key><ctrl/>X</key>	 <action>cut selection</action></keys>
 <note>This works the same as "copy selection" followed by deleting the selection.</note>
 <keys><key><ctrl/>V</key>	 <action>paste clipboard</action></keys>
