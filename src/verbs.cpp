@@ -1482,8 +1482,10 @@ Verb * Verb::_base_verbs[] = {
         N_("Cut the clone's link to its original"), "edit_unlink_clone"),
     new EditVerb(SP_VERB_EDIT_CLONE_ORIGINAL, "EditCloneOriginal", N_("Select _Original"),
         N_("Select the object to which the clone is linked"), NULL),
+    // TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
     new EditVerb(SP_VERB_EDIT_TILE, "EditTile", N_("O_bject(s) to Pattern"),
         N_("Convert selection to a rectangle with tiled pattern fill"), NULL),
+    // TRANSLATORS: Extract objects from a tiled pattern fill
     new EditVerb(SP_VERB_EDIT_UNTILE, "EditUnTile", N_("Pattern to Ob_ject(s)"),
         N_("Extract objects from a tiled pattern fill"), NULL),
     new EditVerb(SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"),
