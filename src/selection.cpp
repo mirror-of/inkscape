@@ -51,21 +51,19 @@ SPSelection::_release_item(SPItem *item, SPSelection *selection)
 /* Handler for selected objects "modified" signal */
 
 void
-SPSelection::_item_modified(SPItem *item, guint flags, SPSelection *selection)
+SPSelection::_schedule_modified(SPItem *item, guint flags, SPSelection *selection)
 {
 	if (!selection->_idle) {
 		/* Request handling to be run in _idle loop */
-		selection->_idle = gtk_idle_add_priority (SP_SELECTION_UPDATE_PRIORITY, (GtkFunction)&SPSelection::_idle_handler, selection);
+		selection->_idle = gtk_idle_add_priority (SP_SELECTION_UPDATE_PRIORITY, (GtkFunction)&SPSelection::_emit_modified, selection);
 	}
 
 	/* Collect all flags */
 	selection->_flags |= flags;
 }
 
-/* Our _idle loop handler */
-
 gboolean
-SPSelection::_idle_handler(SPSelection *selection)
+SPSelection::_emit_modified(SPSelection *selection)
 {
 	/* force new handler to be created if requested before we return */
 	selection->_idle = 0;
@@ -125,7 +123,7 @@ void SPSelection::addItem(SPItem *item) {
 	g_signal_connect (G_OBJECT (item), "release",
 			  G_CALLBACK(&SPSelection::_release_item), this);
 	g_signal_connect (G_OBJECT (item), "modified",
-			  G_CALLBACK(&SPSelection::_item_modified), this);
+			  G_CALLBACK(&SPSelection::_schedule_modified), this);
 
 	// unselect any of the item's children which may be selected
 	// (to prevent double-selection)
@@ -176,7 +174,7 @@ void SPSelection::setItemList(GSList const *list) {
 			g_signal_connect (G_OBJECT (i), "release",
 					  G_CALLBACK (&SPSelection::_release_item), this);
 			g_signal_connect (G_OBJECT (i), "modified",
-					  G_CALLBACK (&SPSelection::_item_modified), this);
+					  G_CALLBACK (&SPSelection::_schedule_modified), this);
 		}
 	}
 

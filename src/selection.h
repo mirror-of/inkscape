@@ -18,74 +18,224 @@
 #include "xml/repr.h"
 #include "libnr/nr-rect.h"
 
+/**
+ * @brief The set of selected SPItems for a given desktop.
+ *
+ * This class represents the set of selected SPItems for a given
+ * SPDesktop.
+ *
+ * An SPItem and its parent cannot be simultaneously selected;
+ * selecting an SPItem has the side-effect of unselecting any of its
+ * children which might have been selected.
+ *
+ */
 struct SPSelection {
 public:
+	/**
+	 * Constructs an selection object, bound to a particular
+	 * SPDesktop
+	 *
+	 * @param desktop the desktop in question
+	 */
 	SPSelection(SPDesktop *desktop);
 	~SPSelection();
 
+	/**
+	 * @brief Returns the desktop the seoection is bound to
+	 *
+	 * @return the desktop the selection is bound to
+	 */
 	SPDesktop *desktop() { return _desktop; }
 
-	SPSelection &reference() {
+	/**
+	 * Increment the selection's reference count
+	 *
+	 * @return the selection's own self
+	 */
+	SPSelection *reference() {
 		++_refcount;
-		return *this;
+		return this;
 	}
-	SPSelection const &reference() const {
+	/**
+	 * Increment the selection's reference count
+	 *
+	 * @return the selection's own self
+	 */
+	SPSelection const *reference() const {
 		++_refcount;
-		return *this;
+		return this;
 	}
+	/**
+	 * Decrement the selection's reference count
+	 */
 	void unreference() const {
 		if (!--_refcount) {
 			delete const_cast<SPSelection *>(this);
 		}
 	}
 
+	/**
+	 * @brief Add an SPItem to the set of selected items.
+	 *
+	 * @param item the item to add
+	 */
 	void addItem(SPItem *item);
+	/**
+	 * @brief Add an SPRepr to the set of selected items
+	 *
+	 * @param the xml node of the item to add
+	 */
 	void addRepr(SPRepr *repr);
+	/**
+	 * @brief Clear the existing set of items and select a new one
+	 *
+	 * @param item the item to select
+	 */
 	void setItem(SPItem *item);
+	/**
+	 * @brief Clear the existing set of items and select a new one
+	 *
+	 * @param repr the xml node of the item to select
+	 */
 	void setRepr(SPRepr *repr);
+	/**
+	 * @brief Removes an item from the set of selected items
+	 *
+	 * @param item the item to unselect
+	 */
 	void removeItem(SPItem *item);
+	/**
+	 * @brief Removes an item from the set of selected items
+	 *
+	 * @param repr the xml node of the item to remove
+	 */
 	void removeRepr(SPRepr *repr);
+	/**
+	 * @brief Clears the selection and selects the specified items
+	 *
+	 * @param items a list of items to select
+	 */
 	void setItemList(GSList const *items);
+	/**
+	 * @brief Clears the selection and selects the specified items
+	 *
+	 * @param repr a list of xml nodes for the items to select
+	 */
 	void setReprList(GSList const *reprs);
+	/**
+	 * @brief Unselects all selected items.
+	 */
 	void clear();
 
+	/**
+	 * @brief Returns true if no items are selected
+	 */
 	bool isEmpty() const { return _items == NULL; }
+	/**
+	 * @brief Returns true if the given item is selected
+	 */
 	bool includesItem(SPItem *item) const;
+	/**
+	 * @brief Returns true if the given item is selected
+	 */
 	bool includesRepr(SPRepr *repr) const;
 
+	/**
+	 * @brief Returns a single selected item
+	 *
+	 * @return NULL unless exactly one item is selected
+	 */
 	SPItem *singleItem();
+	/**
+	 * @brief Returns a single selected item's xml node
+	 *
+	 * @return NULL unless exactly one item is selected
+	 */
 	SPRepr *singleRepr();
+	/** @brief Returns the list of selected items */
 	GSList const *itemList();
+	/** @brief Returns a list of the xml nodes of all selected items */
 	GSList const *reprList();
 
+	/** @brief Returns the bounding rectangle of the selection */
 	NRRect *bounds(NRRect *dest) const;
+	/** @brief Returns the bounding rectangle of the selection */
 	NR::Rect bounds() const;
 
+	/**
+	 * @brief Returns the bounding rectangle of the selection
+	 *
+	 * TODO: how is this different from bounds()?
+	 */ 
 	NRRect *boundsInDocument(NRRect *dest) const;
+	/**
+	 * @brief Returns the bounding rectangle of the selection
+	 *
+	 * TODO: how is this different from bounds()?
+	 */
 	NR::Rect boundsInDocument() const;
 
-	/* Returns number of points used */
+	/**
+	 * @brief Gets the selection's snap points.
+	 *
+	 * This method populates the given NR::Point array with the
+	 * selection's snap points.
+	 *
+	 * @param points the array to populate
+	 * @param max_points the size of the array
+	 *
+	 * @return the number of snap points placed in the array
+	 */
 	int getSnapPoints(NR::Point points[], int max_points) const;
 
-	static SPSelection *create(SPDesktop *desktop);
-
+	/**
+	 * @brief Connects a slot to be notified of selection changes
+	 *
+	 * This method connects the given slot such that it will
+	 * be called upon any change in the set of selected items.
+	 *
+	 * @param slot the slot to connect
+	 *
+	 * @return the resulting connection
+	 */
 	SigC::Connection connectChanged(SigC::Slot1<void, SPSelection *> slot) {
 		return _changed_signal.connect(slot);
 	}
+	/**
+	 * @brief Connects a slot to be notified of selected 
+	 *        object modifications 
+	 *
+	 * This method connects the given slot such that it will
+	 * receive notifications whenever any selected item is
+	 * modified.
+	 *
+	 * @param slot the slot to connect
+	 *
+	 * @return the resulting connection
+	 *
+	 */
 	SigC::Connection connectModified(SigC::Slot2<void, SPSelection *, guint> slot) {
 		return _modified_signal.connect(slot);
 	}
 
 private:
+	/** @brief no copy */
 	SPSelection(SPSelection const &);
+	/** @brief no assign */
 	void operator=(SPSelection const &);
 
-	static gboolean _idle_handler(SPSelection *selection);
-	static void _item_modified(SPItem *item, guint flags, SPSelection *selection);
+	/** @brief Issues modification notification signals */
+	static gboolean _emit_modified(SPSelection *selection);
+	/** @brief Schedules an item modification signal to be sent */
+	static void _schedule_modified(SPItem *item, guint flags, SPSelection *selection);
+	/** @brief Releases a selected item that is being removed */
 	static void _release_item(SPItem *item, SPSelection *selection);
 
+	/** @brief unselect all children of the given item */
 	void _removeItemChildren(SPItem *item);
+	/** @brief clears the selection (without issuing a notification) */
 	void _clear();
+	/** @brief returns the SPItem corresponding to an xml node (if any) */
 	SPItem *_itemForRepr(SPRepr *repr);
 
 	GSList *_reprs;

@@ -8,6 +8,9 @@
 	  some additional work is now required in SPSelectContext to update
 	  the message properly in all cases.
 
+    * src/selection.h, src/selection.cpp: touched up and documented
+	  SPSelection
+
 2004-04-20  Kees Cook <kees@outflux.net>
 
 	* src/file.cpp, src/desktop.cpp: moved sp_file_open unselection code into
