@@ -1,5 +1,9 @@
 2003-12-16  bulia byak <bulia@dr.com>
 
+	* src/nodepath.cpp src/nodepath.h: node drag is now restricted to hor/vert by ctrl
+
+2003-12-16  bulia byak <bulia@dr.com>
+
 	* src/seltrans.cpp: fix for 860201; ctrl restricts rotation by 15 degrees (from
 	sodipodi); used new status display function
 
