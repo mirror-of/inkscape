@@ -36,6 +36,27 @@ check_version ()
     fi
 }
 
+attempt_command () {
+    IGNORE=$1
+    shift
+
+    echo "Running $@ ..."
+    ERR="`$@ 2>&1`"
+    errcode=$?
+    if [ "x$IGNORE" = "x" ]; then
+        ERR=`echo "$ERR"`
+    else
+        ERR=`echo "$ERR" | egrep -v "$IGNORE"`
+    fi
+    if [ "x$ERR" != "x" ]; then
+        echo "$ERR" | awk '{print "  " $0}'
+    fi
+    if [ $errcode -gt 0 ]; then
+        echo "Please fix the error conditions and try again."
+        exit 1
+    fi
+}
+
 echo
 echo "I am testing that you have the required versions of libtool, autoconf," 
 echo "automake, glib-gettextize and intltoolize. This test is not foolproof,"
@@ -143,37 +164,24 @@ if test -z "$ACLOCAL_FLAGS"; then
     done
 fi
 
-echo "Running $ACLOCAL ..."
-if ! $ACLOCAL $ACLOCAL_FLAGS; then
-   echo "$ACLOCAL gave errors. Please fix the error conditions and try again."
-   exit 1
-fi
+echo ""
 
-# Until binreloc is a full-fledged pkg-config's tool, we need to include
-# their m4 file manually.  But, since the "auto" option seems broken
-# we'll need to turn this off for now and just continue to use our
-# own autoconf macros.
-#cat binreloc.m4 >> aclocal.m4
+attempt_command 'underquoted definition of|[\)\#]Extending' \
+	$ACLOCAL $ACLOCAL_FLAGS
 
 # optionally feature autoheader
 (autoheader --version)  < /dev/null > /dev/null 2>&1 && {
-	echo "Running autoheader ..."
-	autoheader
+	attempt_command '' autoheader
 }
 
-echo "Running $AUTOMAKE ..."
-$AUTOMAKE --add-missing
+attempt_command '' $AUTOMAKE --add-missing
+attempt_command '' autoconf
+attempt_command '' libtoolize --copy --force
+attempt_command '^(Please add the files|  codeset|  progtest|from the|or directly|You will also|ftp://ftp.gnu.org|$)' \
+	glib-gettextize --copy --force
+attempt_command '' intltoolize --copy --force --automake
 
-echo "Running autoconf ..."
-autoconf
-
-echo "Running libtoolize ..."
-libtoolize --copy --force
-
-echo "Running glib-gettextize ..."
-glib-gettextize --copy --force
-
-echo "Running intltoolize ..."
-intltoolize --copy --force --automake
+echo ""
+echo "Done!  Please run './configure' now."
 
 cd $ORIGDIR
