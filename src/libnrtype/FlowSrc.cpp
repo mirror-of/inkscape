@@ -125,7 +125,8 @@ void                flow_src::Affiche(void)
 	for (int i=0;i<nbElem;i++) {
 		printf("%i: ",i);
 		if ( elems[i].type == flw_text ) {
-			printf("texte %i boites (st=%p en=%p)\n",elems[i].text->nbBox,elems[i].text->source_start,elems[i].text->source_end);
+			printf("texte %i boites (st=%p en=%p); utf8_st %i\n", 
+						 elems[i].text->nbBox, elems[i].text->source_start, elems[i].text->source_end, elems[i].obj->utf8_st);
 			elems[i].text->AfficheBoxes();
 		} else if ( elems[i].type == flw_line_brk ) {
 			printf("line break\n");
@@ -140,11 +141,11 @@ void                flow_src::Affiche(void)
 		} else if ( elems[i].type == flw_para ) {
 			printf("flow para\n");
 		} else if ( elems[i].type == txt_text ) {
-			printf("text %p\n",elems[i].obj);
+			printf("text %p; utf8_st %i\n", elems[i].obj, elems[i].obj->utf8_st);
 		} else if ( elems[i].type == txt_firstline ) {
-			printf("tspan firstline %p\n",elems[i].obj);
+			printf("tspan firstline %p; utf8_st %i\n", elems[i].obj, elems[i].obj->utf8_st);
 		} else if ( elems[i].type == txt_tline ) {
-			printf("tspan line %p\n",elems[i].obj);
+			printf("tspan line %p; utf8_st %i\n", elems[i].obj, elems[i].obj->utf8_st);
 		} else if ( elems[i].type == txt_textpath ) {
 			printf("textpath %p\n",elems[i].obj);
 		} else {
@@ -327,11 +328,11 @@ void              one_flow_src::Link(one_flow_src* after,one_flow_src* inside)
 	if ( prev ) prev->next=this;
 	dad=inside;
 }
-void              one_flow_src::SetPositions(bool /*for_text*/,int &last_utf8,int &last_ucs4,bool &/*in_white*/)
+void              one_flow_src::SetPositions(bool /*for_text*/, int &last_utf8, int &last_ucs4, bool &/*in_white*/)
 {
-	ucs4_st=ucs4_en=last_ucs4;
-	utf8_st=utf8_en=last_utf8;
-	chunk=prev; // this is not a chunk start
+	ucs4_st = ucs4_en = last_ucs4;
+	utf8_st = utf8_en = last_utf8;
+	chunk = prev; // this is not a chunk start
 	// in_white is unchanged
 }
 text_style*          one_flow_src::GetStyle(void)
@@ -415,11 +416,11 @@ one_flow_src*     one_flow_src::Locate(int utf8_pos,int &ucs4_pos,bool src_start
 }
 void              one_flow_src::DoFill(flow_src* what)
 {
-	one_flow_src* cur=this;
-	what->cur_holder=NULL;
+	one_flow_src* cur = this;
+	what->cur_holder = NULL;
 	while ( cur ) {
 		cur->Fill(what);
-		cur=cur->next;
+		cur = cur->next;
 	}
 }
 void              one_flow_src::DoPositions(bool for_text)
@@ -429,7 +430,7 @@ void              one_flow_src::DoPositions(bool for_text)
 	int           cur_last_utf8=0;
 	bool          cur_white=true;
 	while ( cur ) {
-		cur->SetPositions(for_text,cur_last_ucs4,cur_last_utf8,cur_white);
+		cur->SetPositions(for_text, cur_last_ucs4, cur_last_utf8, cur_white);
 		cur=cur->next;
 	}
 }
@@ -460,14 +461,14 @@ void              text_flow_src::SetStringText(partial_text* iTxt)
 	string_to_me.nbSrc=0;
 	string_to_me.AddSource(iTxt);
 }
-void              text_flow_src::SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white)
+void              text_flow_src::SetPositions(bool for_text, int &last_utf8, int &last_ucs4, bool &in_white)
 {
 	chunk=prev;
 	bool preserve=(me->xml_space.value == SP_XML_SPACE_PRESERVE);
 	if ( for_text ) {
-		string_to_me.PrepareForText(preserve,in_white);
+		string_to_me.PrepareForText(preserve, in_white);
 	} else {
-		string_to_me.PrepareForFlow(preserve,in_white);
+		string_to_me.PrepareForFlow(preserve, in_white);
 	}
 	ucs4_st=last_ucs4;
 	ucs4_en=last_ucs4+cleaned_up.ucs4_length;
@@ -487,7 +488,8 @@ void              text_flow_src::Fill(flow_src* what)
 	th->AppendUTF8(&cleaned_up);
 	int     added_utf8_st=0,added_utf8_en=0;
 	int     added_ucs4_st=0,added_ucs4_en=0;
-	th->LastAddition(added_utf8_st,added_ucs4_st,added_utf8_en,added_ucs4_en);
+	th->LastAddition(added_utf8_st, added_ucs4_st, added_utf8_en, added_ucs4_en);
+
 	if ( added_utf8_st < 0 || added_utf8_st >= added_utf8_en ) return; // no codepoint -> basta
 	// percolate styles from parent elements
 	if ( dad ) {
@@ -872,10 +874,8 @@ void              div_flow_src::SetPositions(bool /*for_text*/,int &last_utf8,in
 	// extra tweaking
 	if ( type == txt_tline || ( type == txt_span && is_chunk_start ) || type == txt_textpath ) {
 		// add a ghost newline for the on-canvas text edition
-		if ( ucs4_st > 0 ) { // if it's the first line, nothing to do anyway
-			ucs4_en++;
-			utf8_en++;
-		}
+		ucs4_en++;
+		utf8_en++;
 		last_ucs4=ucs4_en;
 		last_utf8=utf8_en;
 	}
