@@ -260,7 +260,7 @@ Extension::deactivated (void)
     \param  paramrepr  The XML describing the parameter
 
     This function first grabs all of the data out of the Repr and puts
-    it into local variables.  Actually these are just pointers, and the
+    it into local variables.  Actually, these are just pointers, and the
     data is not duplicated so we need to be careful with it.  If there
     isn't a name or a type in the XML, then no parameter is created as
     the function just returns.

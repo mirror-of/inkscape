@@ -74,10 +74,10 @@ public:
     } state_t;
 
 private:
-    gchar *id;                            /**< The unique identifier for the Extension */
-    gchar *name;                          /**< A user friendly name for the Extension */
-    state_t state;                        /**< Which state the Extension is currently in */
-    bool   _deactivated;                   /**< If the extension still exists, but shouldn't be used */
+    gchar   *id;                          /**< The unique identifier for the Extension */
+    gchar   *name;                        /**< A user friendly name for the Extension */
+    state_t  state;                       /**< Which state the Extension is currently in */
+    bool    _deactivated;                 /**< If the extension still exists, but shouldn't be used */
 
 protected:
     SPRepr *repr;                         /**< The XML description of the Extension */

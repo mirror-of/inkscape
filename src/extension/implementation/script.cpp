@@ -51,7 +51,7 @@ namespace Implementation {
 /* Real functions */
 /**
 	\return    A script object
-	\breif     This function creates a script object and sets up the
+	\brief     This function creates a script object and sets up the
 	           variables.
 
    This function just sets the command to NULL.  It should get built
@@ -75,7 +75,7 @@ Script::Script (void) : Implementation::Implementation()
 
 	Basically this function looks at an attribute of the Repr, and makes
 	a decision based on that.  Currently, it is only working with the
-	'exetensions' relative directory, but there will be more of them.
+	'extensions' relative directory, but there will be more of them.
 	One thing to notice is that this function always returns an allocated
 	string.  This means that the caller of this function can always
 	free what they are given (and should do it too!).
@@ -257,7 +257,7 @@ Script::unload (Inkscape::Extension::Extension * module)
 
 /**
 	\return   Whether the check passed or not
-	\breif    Check every dependency that was given to make sure we should keep this extension
+	\brief    Check every dependency that was given to make sure we should keep this extension
 	\param    module  The Extension in question
 
 */
@@ -312,7 +312,7 @@ Script::check (Inkscape::Extension::Extension * module)
 	\return   A dialog for preferences
 	\brief    A stub funtion right now
 	\param    module    Module who's preferences need getting
-	\param    filename  Hey, the file your getting might be important
+	\param    filename  Hey, the file you're getting might be important
 
 	This function should really do something, right now it doesn't.
 */
@@ -326,7 +326,7 @@ Script::prefs_input (Inkscape::Extension::Input * module, const gchar * filename
 /**
 	\return   A dialog for preferences
 	\brief    A stub funtion right now
-	\param    module    Module who's preferences need getting
+	\param    module    Module whose preferences need getting
 
 	This function should really do something, right now it doesn't.
 */

@@ -23,7 +23,7 @@ namespace Implementation {
 
 /**
 	\return   Was the load sucessful?
-	\breif    This function is the stub load.  It just returns sucess.
+	\brief    This function is the stub load.  It just returns sucess.
 	\param    module   The Extension that should be loaded.
 */
 bool 
@@ -152,7 +152,7 @@ Implementation::text (Inkscape::Extension::Print * module, const char *text,
    \retval FALSE Render text using the text function (above)
  
     Default value is FALSE because most printing engines will support
-    paths more than they'll support text.  (atleast they do today)
+    paths more than they'll support text.  (at least they do today)
 */
 bool
 Implementation::textToPath(Inkscape::Extension::Print * ext)
