@@ -218,7 +218,7 @@ sp_line_set_transform (SPItem *item, NR::Matrix const &xform)
 	line->x2.computed = points[1][NR::X];
 	line->y2.computed = points[1][NR::Y];
 
-	sp_shape_adjust_stroke(item, NR::expansion(xform));
+	sp_item_adjust_stroke(item, NR::expansion(xform));
 
 	SP_OBJECT (item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 

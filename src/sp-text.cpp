@@ -68,7 +68,7 @@
 #include "sp-metrics.h"
 #include "xml/repr.h"
 
-#include "sp-shape.h"
+#include "sp-item.h"
 #include "sp-text.h"
 #include "sp-tspan.h"
 #include "sp-string.h"
@@ -803,13 +803,13 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
     sp_text_adjust_fontsize_recursive (item, ex);
 
     // Adjust stroke width
-    sp_shape_adjust_stroke(item, ex);
+    sp_item_adjust_stroke(item, ex);
 
     // Adjust pattern fill
-    sp_shape_adjust_pattern(item, xform * ret.inverse());
+    sp_item_adjust_pattern(item, xform * ret.inverse());
 
     // Adjust gradient fill
-    sp_shape_adjust_gradient(item, xform * ret.inverse());
+    sp_item_adjust_gradient(item, xform * ret.inverse());
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 

@@ -42,7 +42,11 @@
 #include "sp-text.h"
 #include "sp-item.h"
 #include "sp-item-rm-unsatisfied-cns.h"
+#include "sp-pattern.h"
+#include "sp-gradient.h"
+#include "gradient-chemistry.h"
 #include "prefs-utils.h"
+
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-fns.h"
@@ -757,6 +761,81 @@ sp_item_invoke_hide(SPItem *item, unsigned key)
     }
 }
 
+// Adjusters
+
+void
+sp_item_adjust_pattern (SPItem *item, NR::Matrix const &postmul, bool set)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
+        if (SP_IS_PATTERN (server)) {
+            SPPattern *pattern = sp_pattern_clone_if_necessary (item, SP_PATTERN (server), "fill");
+            sp_pattern_transform_multiply (pattern, postmul, set);
+        }
+    }
+
+    if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+        SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
+        if (SP_IS_PATTERN (server)) {
+            SPPattern *pattern = sp_pattern_clone_if_necessary (item, SP_PATTERN (server), "stroke");
+            sp_pattern_transform_multiply (pattern, postmul, set);
+        }
+    }
+
+}
+
+void
+sp_item_adjust_gradient (SPItem *item, NR::Matrix const &postmul, bool set)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+        if (SP_IS_GRADIENT (server)) {
+
+            // Bbox units for a gradient are generally a bad idea because with them, you cannot
+            // preserve the relative position of the object and its gradient after rotation or
+            // skew. So now we convert them to userspace units which are easy to keep in sync just
+            // by adding the object's transform to gradientTransform.  FIXME: convert back to bbox
+            // units after transforming with the item, so as to preserve the original units.
+            SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "fill");
+
+            sp_gradient_transform_multiply (gradient, postmul, set);
+        }
+    }
+
+    if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
+        SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
+        if (SP_IS_GRADIENT (server)) {
+            SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "stroke");
+            sp_gradient_transform_multiply (gradient, postmul, set);
+        }
+    }
+}
+
+void
+sp_item_adjust_stroke (SPItem *item, gdouble ex)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+
+    if (style && style->stroke.type != SP_PAINT_TYPE_NONE && !NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
+
+        style->stroke_width.computed *= ex;
+
+        if (style->stroke_dash.n_dash != 0) {
+            int i;
+            for (i = 0; i < style->stroke_dash.n_dash; i++) {
+                style->stroke_dash.dash[i] *= ex;
+            }
+            style->stroke_dash.offset *= ex;
+        }
+
+        SP_OBJECT(item)->updateRepr();
+    }
+}
+
 /**
 Find out the inverse of previous transform of an item (from its repr)
 */
@@ -782,7 +861,7 @@ sp_item_transform_repr (SPItem *item)
 void
 sp_item_adjust_stroke_width_recursive(SPItem *item, double expansion)
 {
-    sp_shape_adjust_stroke (item, expansion);
+    sp_item_adjust_stroke (item, expansion);
 
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o))
@@ -823,9 +902,9 @@ sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, N
     NR::Matrix paint_delta = t_item * t_ancestors * advertized_transform * t_ancestors.inverse() * t_item.inverse();
 
     if (is_pattern)
-        sp_shape_adjust_pattern (item, paint_delta);
+        sp_item_adjust_pattern (item, paint_delta);
     else 
-        sp_shape_adjust_gradient (item, paint_delta);
+        sp_item_adjust_gradient (item, paint_delta);
 
 // Within text, we do not fork gradients, and so must not recurse to avoid double compensation
     if (item && SP_IS_TEXT(item))

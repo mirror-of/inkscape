@@ -339,13 +339,13 @@ sp_path_set_transform(SPItem *item, NR::Matrix const &xform)
     }
 
     // Adjust stroke
-    sp_shape_adjust_stroke(item, NR::expansion(xform));
+    sp_item_adjust_stroke(item, NR::expansion(xform));
 
     // Adjust pattern fill
-    sp_shape_adjust_pattern(item, xform);
+    sp_item_adjust_pattern(item, xform);
 
     // Adjust gradient fill
-    sp_shape_adjust_gradient(item, xform);
+    sp_item_adjust_gradient(item, xform);
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 

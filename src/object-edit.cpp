@@ -16,6 +16,7 @@
 #include <glib.h>
 #include <math.h>
 
+#include "sp-item.h"
 #include "sp-rect.h"
 #include "sp-ellipse.h"
 #include "sp-star.h"
@@ -103,7 +104,7 @@ sp_pattern_xy_set (SPItem *item, const NR::Point &p, const NR::Point &origin, gu
 
      if (state)  {
 	 const NR::Point q = p - sp_pattern_extract_trans(pat);
-         sp_shape_adjust_pattern (item, NR::Matrix(NR::translate(q)));
+         sp_item_adjust_pattern (item, NR::Matrix(NR::translate(q)));
      }
 
      item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -153,7 +154,7 @@ sp_pattern_angle_set (SPItem *item, const NR::Point &p, const NR::Point &origin,
     const NR::Point t = sp_pattern_extract_trans(pat);
     rot[4] = t[NR::X];
     rot[5] = t[NR::Y];
-    sp_shape_adjust_pattern (item, rot, true);
+    sp_item_adjust_pattern (item, rot, true);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -178,7 +179,7 @@ sp_pattern_scale_set (SPItem *item, const NR::Point &p, const NR::Point &origin,
     const NR::Point t = sp_pattern_extract_trans(pat);
     rot[4] = t[NR::X];
     rot[5] = t[NR::Y];
-    sp_shape_adjust_pattern (item, rot, true);
+    sp_item_adjust_pattern (item, rot, true);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
 }
