@@ -984,6 +984,7 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 	}
 	sp_stroke_style_set_cap_buttons (spw, tb);
 
+#ifdef MARKERS
 	/* Toggle buttons for markers - marker-start, marker-mid, and marker-end */
 	/* TODO:  There's also a generic 'marker' that applies to all, but we'll leave that for later */
 	tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), marker_id_to_string(style->marker_start.value));
@@ -994,7 +995,7 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 	
 	tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), marker_id_to_string(style->marker_end.value));
 	sp_stroke_style_set_marker_buttons (spw, tb);
-
+#endif
 	/* Dash */
 	if (style->stroke_dash.n_dash > 0) {
 		double d[64];
