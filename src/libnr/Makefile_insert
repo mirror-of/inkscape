@@ -35,6 +35,8 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-matrix-fns.cpp	\
 	libnr/nr-matrix-fns.h	\
 	libnr/nr-matrix-ops.h	\
+	libnr/nr-matrix-scale-ops.h	\
+	libnr/nr-matrix-translate-ops.h	\
 	libnr/nr-matrix.cpp	\
 	libnr/nr-matrix.h	\
 	libnr/nr-maybe.h	\
