@@ -61,7 +61,7 @@ enum {
     SP_ALIGN_SMALLEST,
     SP_ALIGN_PAGE,
     SP_ALIGN_DRAWING,
-    SP_ALIGN_SELECTION,
+    SP_ALIGN_SELECTION
 };
 
 enum align_ixT {
@@ -74,7 +74,7 @@ enum align_ixT {
     SP_ALIGN_LEFT_IN,
     SP_ALIGN_LEFT_OUT,
     SP_ALIGN_CENTER_HOR,
-    SP_ALIGN_CENTER_VER,
+    SP_ALIGN_CENTER_VER
 };
 
 enum {
