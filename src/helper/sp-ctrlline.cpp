@@ -157,6 +157,11 @@ sp_ctrlline_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
 	ctrlline = SP_CTRLLINE (item);
 
+	if (buf->is_bg) {
+		sp_canvas_clear_buffer (buf);
+		buf->is_bg = FALSE;
+		buf->is_buf = TRUE;
+	}
 #ifdef ctrl_liv
   NRRectL  area;
   area.x0=buf->rect.x0;
@@ -195,6 +200,7 @@ sp_ctrlline_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	sp_canvas_item_reset_bounds (item);
 
 #ifdef ctrl_liv
+  dbox.x0=dbox.x1=dbox.y0=dbox.y1=0;
 	if (cl->shp) {
 		delete cl->shp;
 		cl->shp = NULL;
@@ -400,6 +406,8 @@ void nr_pixblock_render_ctrl_rgba (Shape* theS,uint32_t color,NRRectL &area,char
   ir=(int)ceilf(r);
   it=(int)floorf(t);
   ib=(int)ceilf(b);
+  
+//  printf("bbox %i %i %i %i  render %i %i %i %i\n",il,it,ir,ib,area.x0,area.y0,area.x1,area.y1);
   
   if ( il >= area.x1 || ir <= area.x0 || it >= area.y1 || ib <= area.y0 ) return;
   if ( il < area.x0 ) il=area.x0;
