@@ -12,6 +12,7 @@
 	  g_file_test with new Inkscape::IO::file_test since g_file_test isn't 
 	  utf8-safe.
 	* src/inkscape.cpp: removed call to g_free on non-alloced string.
+	* src/extension/extension.cpp: convert from utf8 before open.
 
 2004-01-28  MenTaLguY  <mental@rydia.net>
 

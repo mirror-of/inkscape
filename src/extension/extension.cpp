@@ -805,7 +805,13 @@ void
 Extension::error_file_open (void)
 {
 	gchar * ext_error_file = profile_path(EXTENSION_ERROR_LOG_FILENAME);
-	error_file.open(ext_error_file);
+	gchar * filename = g_filename_from_utf8( ext_error_file, -1, NULL, NULL, NULL );
+	error_file.open(filename);
+	if (!error_file.is_open()) {
+		g_warning(_("Could not create extension error log file '%s'"),
+		          filename);	
+	}
+	g_free(filename);
 	g_free(ext_error_file);
 };
 
