@@ -150,14 +150,23 @@ void Shape::Scan(float &pos, int &curP, float to, float step)
         int dnNo;
         _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 
-        if ( nbDn <= 0 ) {
+				if ( d == DOWNWARDS ) {
+					if ( nbDn <= 0 ) {
             upNo = -1;
-        }
-        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+					}
+					if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
             upNo = -1;
-        }
+					}
+				} else {
+					if ( nbUp <= 0 ) {
+            dnNo = -1;
+					}
+					if ( dnNo >= 0 && swrData[dnNo].misc == NULL ) {
+            dnNo = -1;
+					}
+				}
         
-        if ( nbUp > 0 ) {
+        if ( ( d == DOWNWARDS && nbUp > 0 ) || ( d == UPWARDS && nbDn > 0 ) ) {
             // first remove edges coming from above or below, as appropriate
             int cb = getPoint(nPt).incidentEdge[FIRST];
             while ( cb >= 0 && cb < numberOfEdges() ) {
@@ -166,7 +175,7 @@ void Shape::Scan(float &pos, int &curP, float to, float step)
                 if ( (d == DOWNWARDS && nPt == std::max(e.st, e.en)) ||
                      (d == UPWARDS   && nPt == std::min(e.st, e.en)) )
                 {
-                    if ( cb != upNo ) {
+                    if ( ( d == DOWNWARDS && cb != upNo ) || ( d == UPWARDS && cb != dnNo ) ) {
                         // we salvage the edge upNo to plug the edges we'll be addingat its place
                         // but the other edge don't have this chance
                         SweepTree *node = swrData[cb].misc;
@@ -178,42 +187,57 @@ void Shape::Scan(float &pos, int &curP, float to, float step)
                 }
                 cb = NextAt(nPt, cb);
             }
-        }
+ 				}
       
         // if there is one edge going down and one edge coming from above, we don't Insert() the new edge,
         // but replace the upNo edge by the new one (faster)
         SweepTree* insertionNode = NULL;
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
-                SweepTree* node = swrData[upNo].misc;
-                swrData[upNo].misc = NULL;
+							int    rmNo=(d == DOWNWARDS) ? upNo:dnNo;
+							int    neNo=(d == DOWNWARDS) ? dnNo:upNo;
+							  SweepTree* node = swrData[rmNo].misc;
+                swrData[rmNo].misc = NULL;
 
-                int const P = (d == DOWNWARDS) ? nPt : Other(nPt, dnNo);
-                node->ConvertTo(this, dnNo, 1, P);
+                int const P = (d == DOWNWARDS) ? nPt : Other(nPt, neNo);
+                node->ConvertTo(this, neNo, 1, P);
                 
-                swrData[dnNo].misc = node;
+                swrData[neNo].misc = node;
                 insertionNode = node;
-                CreateEdge(dnNo, to, step);
+                CreateEdge(neNo, to, step);
             } else {
+							// always DOWNWARDS
                 SweepTree* node = sTree->add(this, dnNo, 1, nPt, this);
                 swrData[dnNo].misc = node;
                 node->Insert(*sTree, *sEvts, this, nPt, true);
-                if (d == UPWARDS) {
-                    node->startPoint = Other(nPt, dnNo);
-                }
+                //if (d == UPWARDS) {
+                //    node->startPoint = Other(nPt, dnNo);
+                //}
                 insertionNode = node;
                 CreateEdge(dnNo,to,step);
             }
-        }
+        } else {
+					if ( upNo >= 0 ) {
+						// always UPWARDS
+						SweepTree* node = sTree->add(this, upNo, 1, nPt, this);
+						swrData[upNo].misc = node;
+						node->Insert(*sTree, *sEvts, this, nPt, true);
+						//if (d == UPWARDS) {
+							node->startPoint = Other(nPt, upNo);
+						//}
+						insertionNode = node;
+						CreateEdge(upNo,to,step);
+					}
+				}
       
         // add the remaining edges
-        if ( nbDn > 1 ) {
+        if ( ( d == DOWNWARDS && nbDn > 1 ) || ( d == UPWARDS && nbUp > 1 ) ) {
             // si nbDn == 1 , alors dnNo a deja ete traite
             int cb = getPoint(nPt).incidentEdge[FIRST];
             while ( cb >= 0 && cb < numberOfEdges() ) {
                 Shape::dg_arete const &e = getEdge(cb);
                 if ( nPt == std::min(e.st, e.en) ) {
-                    if ( cb != dnNo ) {
+                    if ( cb != dnNo && cb != upNo ) {
                         SweepTree *node = sTree->add(this, cb, 1, nPt, this);
                         swrData[cb].misc = node;
                         node->InsertAt(*sTree, *sEvts, this, insertionNode, nPt, true);

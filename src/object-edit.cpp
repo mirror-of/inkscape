@@ -43,6 +43,8 @@
 
 #include "xml/repr.h"
 
+#include "isnan.h"
+
 #define sp_round(v,m) (((v) < 0.0) ? ((ceil ((v) / (m) - 0.5)) * (m)) : ((floor ((v) / (m) + 0.5)) * (m)))
 
 static SPKnotHolder *sp_rect_knot_holder (SPItem *item, SPDesktop *desktop);
@@ -840,7 +842,7 @@ sp_spiral_outer_set (SPItem *item, const NR::Point &p, const NR::Point &origin, 
 			spiral->rad = rad_new;
 			spiral->t0 = pow (r0 / spiral->rad, 1/spiral->exp);
 		}
-		if (!std::isfinite(spiral->t0)) spiral->t0 = 0.0;
+		if (!isFinite(spiral->t0)) spiral->t0 = 0.0;
 		spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);	
 	}
 

@@ -22,6 +22,7 @@
 
 /* MacOSX definition */
 #define isNaN(a) (__isnan(a))
+#define isFinite(a) (__isfinite(a))
 
 #else
 
@@ -29,11 +30,13 @@
 
 /* Win32 definition */
 #define isNaN(a) (_isnan(a))
+#define isFinite(a) (std::isfinite(a))
 
 #else
 
 /* Linux definition */
 #define isNaN(a) (isnan(a))
+#define isFinite(a) (std::isfinite(a))
 
 #endif /* WIN32 */
 
