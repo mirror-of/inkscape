@@ -35,8 +35,11 @@ public:
         NodeEventVector const &vector;
         void * const data;
 
-        // default copy
-        // default assign
+        // Use default copy constructor.
+
+    private:
+        /// No assignment operator: can't assign to a reference or to a const member.
+        Listener &operator=(Listener const &);
     };
 
     Session *session() {
