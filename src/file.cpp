@@ -57,6 +57,7 @@
 #include "sp-namedview.h"
 #include "desktop-handles.h"
 
+#include "extension/db.h"
 #include "extension/extension.h"
 #include "extension/input.h"
 #include "extension/output.h"
