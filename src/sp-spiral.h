@@ -16,7 +16,15 @@
 
 #include "sp-shape.h"
 
+#define noSPIRAL_VERBOSE
 
+#define SP_EPSILON       1e-5
+#define SP_EPSILON_2     (SP_EPSILON * SP_EPSILON)
+#define SP_HUGE          1e5
+
+#define SPIRAL_TOLERANCE 3.0
+#define SAMPLE_STEP      (1.0/4.0) /* step per 2PI */
+#define SAMPLE_SIZE      8      /* sample size per one bezier */
 
 #define SP_TYPE_SPIRAL            (sp_spiral_get_type ())
 #define SP_SPIRAL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SPIRAL, SPSpiral))
