@@ -45,6 +45,9 @@ static FT_Library ft_library = NULL;
 
 static NRTypeFaceClass *parent_class;
 
+/**
+ * Gets the class type for NRTypeFaceFT2
+ */
 unsigned int
 nr_typeface_ft2_get_type (void)
 {
@@ -60,6 +63,9 @@ nr_typeface_ft2_get_type (void)
 	return type;
 }
 
+/**
+ * Initializes a freetype typeface class with its virtual functions
+ */
 static void
 nr_typeface_ft2_class_init (NRTypeFaceFT2Class *klass)
 {
@@ -84,6 +90,9 @@ nr_typeface_ft2_class_init (NRTypeFaceFT2Class *klass)
 	tface_class->font_free = nr_typeface_ft2_font_free;
 }
 
+/**
+ * Initializes a freetype typeface object
+ */
 static void
 nr_typeface_ft2_init (NRTypeFaceFT2 *tff)
 {
@@ -106,6 +115,9 @@ nr_typeface_ft2_init (NRTypeFaceFT2 *tff)
 	tff->slots_size = 0;
 }
 
+/**
+ * Finalizes the freetype typeface object to prepare it for destruction
+ */
 static void
 nr_typeface_ft2_finalize (NRObject *object)
 {
@@ -135,6 +147,10 @@ nr_typeface_ft2_finalize (NRObject *object)
 	((NRObjectClass *) (parent_class))->finalize (object);
 }
 
+/**
+ * Sets up the given typeface as a freetype typeface using the given 
+ * typeface definition.
+ */
 static void
 nr_typeface_ft2_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 {
@@ -208,6 +224,10 @@ static NRTypeFaceGlyphFT2 *nr_typeface_ft2_ensure_slot_h (NRTypeFaceFT2 *tff, un
 static NRTypeFaceGlyphFT2 *nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph);
 static NRBPath *nr_typeface_ft2_ensure_outline (NRTypeFaceFT2 *tff, NRTypeFaceGlyphFT2 *slot, unsigned int glyph, unsigned int metrics);
 
+/**
+ * Builds/initializes the definition of a freetype object dft2
+ * using the given parameters.
+ */
 void
 nr_type_ft2_build_def (NRTypeFaceDefFT2 *dft2,
 		       const gchar *name,
@@ -224,6 +244,11 @@ nr_type_ft2_build_def (NRTypeFaceDefFT2 *dft2,
 	dft2->face = face;
 }
 
+/**
+ * Builds/initializes the definition of a freetype object dft2
+ * using the given parameters.  This differs from nr_type_ft2_build_def
+ * it takes its data directly rather than from a file.
+ */
 void
 nr_type_ft2_build_def_data (NRTypeFaceDefFT2 *dft2,
 			    const gchar *name,
@@ -242,6 +267,9 @@ nr_type_ft2_build_def_data (NRTypeFaceDefFT2 *dft2,
 	dft2->face = face;
 }
 
+/**
+ * Gets the attribute specified by key with the value given by str from the typeface
+ */
 static unsigned int
 nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
@@ -291,6 +319,9 @@ nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, uns
 	return strlen (val);
 }
 
+/**
+ * Gets the outline path for the glyph with the given metrics from the typeface
+ */
 static NRBPath *
 nr_typeface_ft2_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref)
 {
@@ -316,6 +347,9 @@ nr_typeface_ft2_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned 
 	return d;
 }
 
+/**
+ * Dereferences the freetype glyph with the given metrics from the typeface
+ */
 static void
 nr_typeface_ft2_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
@@ -343,6 +377,10 @@ nr_typeface_ft2_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigne
 	}
 }
 
+/**
+ * Retrieves the horizontal positional advancement for the glyph in the
+ * given font.
+ */
 static NR::Point nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
 	NRTypeFaceGlyphFT2 *slot;
@@ -363,6 +401,12 @@ static NR::Point nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int
 	return NR::Point(0,0);
 }
 
+/**
+ * Looks up the char index for a given rule and unival of a typeface
+ * 
+ * Q:  What does the rule represent?
+ * Q:  What does the unival represent?
+ */
 static unsigned int
 nr_typeface_ft2_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 {
@@ -390,6 +434,9 @@ nr_typeface_ft2_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 	return 0;
 }
 
+/**
+ * Creates a new freetype font object with the given metrics and transform
+ */
 static NRFont *
 nr_typeface_ft2_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
 {
@@ -416,6 +463,9 @@ nr_typeface_ft2_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const
 	return font;
 }
 
+/**
+ * Frees a freetype font object
+ */
 static void
 nr_typeface_ft2_font_free (NRFont *font)
 {
@@ -437,6 +487,11 @@ nr_typeface_ft2_font_free (NRFont *font)
 	nr_font_generic_free (font);
 }
 
+/**
+ * Ensures a vgidx exists for the given typeface font, creating it if
+ * necessary, then creates the slots and initializes their areas.
+ * This is for horizontal text.
+ */
 static NRTypeFaceGlyphFT2 *
 nr_typeface_ft2_ensure_slot_h (NRTypeFaceFT2 *tff, unsigned int glyph)
 {
@@ -476,6 +531,14 @@ nr_typeface_ft2_ensure_slot_h (NRTypeFaceFT2 *tff, unsigned int glyph)
 	return tff->slots + tff->hgidx[glyph];
 }
 
+/**
+ * Ensures a vgidx exists for the given typeface font, creating it if
+ * necessary, then creates the slots and initializes their areas.
+ * This is for vertical text.
+ *
+ * Q:  What is a vgidx?
+ * Q:  What are slots?
+ */
 static NRTypeFaceGlyphFT2 *
 nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph)
 {
@@ -527,6 +590,10 @@ nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph)
 
 static NArtBpath *tff_ol2bp (FT_Outline *ol, float transform[]);
 
+/**
+ * Loads the glyph from freetype, does some transforming for vertical text,
+ * and returns the slot outline
+ */
 static NRBPath *
 nr_typeface_ft2_ensure_outline (NRTypeFaceFT2 *tff, NRTypeFaceGlyphFT2 *slot, unsigned int glyph, unsigned int metrics)
 {
@@ -560,12 +627,20 @@ nr_typeface_ft2_ensure_outline (NRTypeFaceFT2 *tff, NRTypeFaceGlyphFT2 *slot, un
 
 /* Bpath methods */
 
+/**
+ * A structure for the outline data, defining its start, end, and path.
+ *
+ * Q:  What is the t member?
+ */
 typedef struct {
 	NArtBpath *bp;
 	int start, end;
 	float *t;
 } TFFT2OutlineData;
 
+/**
+ * Moves the outline data according to a given vector (??)
+ */
 static int tfft2_move_to (FT_Vector * to, void * user)
 {
 	NRPoint p;
@@ -587,6 +662,9 @@ static int tfft2_move_to (FT_Vector * to, void * user)
 	return 0;
 }
 
+/**
+ * Calculates a line for the outline data
+ */
 static int tfft2_line_to (FT_Vector * to, void * user)
 {
 	NRPoint p;
@@ -608,6 +686,9 @@ static int tfft2_line_to (FT_Vector * to, void * user)
 	return 0;
 }
 
+/**
+ * Calculates the conic for the outline data
+ */
 static int tfft2_conic_to (FT_Vector * control, FT_Vector * to, void * user)
 {
 	TFFT2OutlineData *od;
@@ -635,6 +716,9 @@ static int tfft2_conic_to (FT_Vector * control, FT_Vector * to, void * user)
 	return 0;
 }
 
+/**
+ * Q:  Calculates the cubic for the outline data
+ */
 static int tfft2_cubic_to (FT_Vector * control1, FT_Vector * control2, FT_Vector * to, void * user)
 {
 	TFFT2OutlineData * od;
@@ -653,6 +737,9 @@ static int tfft2_cubic_to (FT_Vector * control1, FT_Vector * control2, FT_Vector
 	return 0;
 }
 
+/**
+ * Q:  What is this?
+ */
 FT_Outline_Funcs tfft2_outline_funcs = {
 	tfft2_move_to,
 	tfft2_line_to,
@@ -661,10 +748,10 @@ FT_Outline_Funcs tfft2_outline_funcs = {
 	0, 0
 };
 
-/*
+/**
+ * Gets the NArtBPath for the outline object with the given transform.
  * We support only 4x4 matrix here (do you need more?)
  */
-
 static NArtBpath *
 tff_ol2bp (FT_Outline * ol, float transform[])
 {

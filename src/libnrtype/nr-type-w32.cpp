@@ -46,6 +46,9 @@ static void nr_typeface_w32_font_free (NRFont *font);
 
 static NRTypeFaceClass *parent_class;
 
+/**
+ * Gets the type of a NRTypeFaceW32
+ */
 NRType
 nr_typeface_w32_get_type (void)
 {
@@ -61,6 +64,9 @@ nr_typeface_w32_get_type (void)
     return type;
 }
 
+/**
+ * Initializes the Win32 typeface class object
+ */
 static void
 nr_typeface_w32_class_init (NRTypeFaceW32Class *klass)
 {
@@ -85,6 +91,9 @@ nr_typeface_w32_class_init (NRTypeFaceW32Class *klass)
     tface_class->font_free = nr_typeface_w32_font_free;
 }
 
+/**
+ * Initializes a Win32 typeface instance object
+ */
 static void
 nr_typeface_w32_init (NRTypeFaceW32 *tfw32)
 {
@@ -119,6 +128,9 @@ static NRTypeFaceGlyphW32 *nr_typeface_w32_ensure_slot (NRTypeFaceW32 *tfw32, un
 static NRBPath *nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, unsigned int glyph, unsigned int metrics);
 
 
+/**
+ * Gets the namelist object for the Win32 typefaces
+ */
 void
 nr_type_w32_typefaces_get (NRNameList *names)
 {
@@ -127,6 +139,9 @@ nr_type_w32_typefaces_get (NRNameList *names)
     *names = NRW32Typefaces;
 }
 
+/**
+ * Gets the namelist object for the Win32 families
+ */
 void
 nr_type_w32_families_get (NRNameList *names)
 {
@@ -135,6 +150,9 @@ nr_type_w32_families_get (NRNameList *names)
     *names = NRW32Families;
 }
 
+/**
+ * Builds the typeface def object using the given name and family
+ */
 void
 nr_type_w32_build_def (NRTypeFaceDef *def, const unsigned char *name, const unsigned char *family)
 {
@@ -144,6 +162,10 @@ nr_type_w32_build_def (NRTypeFaceDef *def, const unsigned char *name, const unsi
     def->typeface = NULL;
 }
 
+/**
+ * Reads the typefaces and families, builds defs for the Win32 
+ * typedefs, 
+ */
 void
 nr_type_read_w32_list (void)
 {
@@ -172,6 +194,10 @@ nr_type_read_w32_list (void)
     nr_name_list_release (&wnames);
 }
 
+/**
+ * Sets up the typeface with given typeface definition.
+ * Assigns the logfont object, indirect font, metrics, etc.
+ */
 static void
 nr_typeface_w32_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 { 
@@ -204,6 +230,9 @@ nr_typeface_w32_setup (NRTypeFace *tface, NRTypeFaceDef *def)
     tfw32->slots_size = 0;
 }
 
+/**
+ * Finalizes the object to prepare it for destruction
+ */
 static void
 nr_typeface_w32_finalize (NRObject *object)
 {
@@ -230,6 +259,9 @@ nr_typeface_w32_finalize (NRObject *object)
     ((NRObjectClass *) (parent_class))->finalize (object);
 }
 
+/**
+ * Retrieves the attribute key with value str
+ */
 static unsigned int
 nr_typeface_w32_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
@@ -312,6 +344,9 @@ nr_typeface_w32_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, uns
     return strlen ((const char *)val);
 }
 
+/**
+ * Gets the outline path of the glyph in the given typeface with the given metrics
+ */
 static NRBPath *
 nr_typeface_w32_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref)
 {
@@ -337,6 +372,9 @@ nr_typeface_w32_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned 
     return d;
 }
 
+/**
+ * Dereferences the glyph in the given typeface
+ */
 static void
 nr_typeface_w32_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
@@ -356,6 +394,10 @@ nr_typeface_w32_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigne
 
 
 
+/**
+ * Retrieves the horizontal positional advancement for the glyph in the
+ * given font.
+ */
 static NR::Point nr_typeface_w32_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
 
@@ -373,7 +415,9 @@ static NR::Point nr_typeface_w32_glyph_advance_get (NRTypeFace *tf, unsigned int
 }
 
 
-
+/**
+ * Q:  What does this look up an dreturn
+ */
 static unsigned int
 nr_typeface_w32_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 {
@@ -474,6 +518,9 @@ nr_typeface_w32_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 }
 
 
+/**
+ * Creates a new Win32 typeface font object with the given metrics and transform
+ */
 static NRFont *
 nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics, 
                         NR::Matrix const transform)
@@ -498,6 +545,9 @@ nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics,
     return font;
 }
 
+/**
+ * Frees the given font object
+ */
 static void
 nr_typeface_w32_font_free (NRFont *font)
 {
@@ -522,6 +572,9 @@ nr_typeface_w32_font_free (NRFont *font)
 
 /* W32 initialization */
 
+/**
+ * Q:  What does this do?
+ */
 static int CALLBACK
 nr_type_w32_inner_enum_proc (ENUMLOGFONTEX *elfex, NEWTEXTMETRICEX *tmex, DWORD fontType, LPARAM lParam)
 {
@@ -609,6 +662,9 @@ nr_type_w32_inner_enum_proc (ENUMLOGFONTEX *elfex, NEWTEXTMETRICEX *tmex, DWORD 
     return 1;
 }
 
+/**
+ * Q:  What does this do?
+ */
 static int CALLBACK
 nr_type_w32_typefaces_enum_proc (LOGFONT *lfp, TEXTMETRIC *metrics, DWORD fontType, LPARAM lParam)
 {
@@ -633,6 +689,10 @@ nr_type_w32_typefaces_enum_proc (LOGFONT *lfp, TEXTMETRIC *metrics, DWORD fontTy
 #include <pango/pango.h>
 #include <pango/pangowin32.h>
 
+/**
+ * Initializes the Win32 font type system.  Gets the families, totals
+ * the face count, and populates typefaces.
+ */
 static void
 nr_type_w32_init (void)
 {
@@ -691,6 +751,9 @@ nr_type_w32_init (void)
 
 #else
 
+/**
+ * Initializes the Win32 typeface system
+ */
 static void
 nr_type_w32_init (void)
 {
@@ -734,6 +797,9 @@ nr_type_w32_init (void)
 
 
 
+/**
+ * Get ths glyph object for the glyph of the given typeface and metrics
+ */
 static NRTypeFaceGlyphW32 *
 nr_typeface_w32_ensure_slot (NRTypeFaceW32 *tfw32, unsigned int glyph, unsigned int metrics)
 {
@@ -826,6 +892,9 @@ nr_typeface_w32_ensure_slot (NRTypeFaceW32 *tfw32, unsigned int glyph, unsigned 
 
 
 
+/**
+ * Get the glyph outline path for the glyph of the given typeface and metrics
+ */
 static NRBPath *
 nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, unsigned int glyph, unsigned int metrics)
 

@@ -3,7 +3,8 @@
 #include <string.h>
 
 /**
-Given a font name or style name, returns a constant describing its apparent style (normal/italic/oblique).
+ * Given a font name or style name, returns a constant describing its
+ * apparent style (normal/italic/oblique).
 */
 int
 parse_name_for_style (char const *cc)
@@ -26,7 +27,8 @@ parse_name_for_style (char const *cc)
 
 
 /**
-Given a font name or style name, returns a constant describing its apparent weight.
+ * Given a font name or style name, returns a constant describing its
+ * apparent weight.
 */
 int
 parse_name_for_weight (char const *cc)
@@ -72,7 +74,8 @@ parse_name_for_weight (char const *cc)
 }
 
 /**
-Given a font name or style name, returns a constant describing its apparent stretch.
+ * Given a font name or style name, returns a constant describing its
+ * apparent stretch.
 */
 int
 parse_name_for_stretch (char const *cc)
@@ -101,7 +104,8 @@ parse_name_for_stretch (char const *cc)
 }
 
 /**
-Given a font name or style name, returns a constant describing its apparent variant (normal/smallcaps).
+ * Given a font name or style name, returns a constant describing its
+ * apparent variant (normal/smallcaps).
 */
 int
 parse_name_for_variant (char const *cc)
@@ -120,7 +124,7 @@ parse_name_for_variant (char const *cc)
 }
 
 /**
-Given a style constant, returns the CSS value for font-style.
+ * Given a style constant, returns the CSS value for font-style.
 */
 const char *
 style_to_css (int style)
@@ -143,7 +147,7 @@ style_to_css (int style)
 
 
 /**
-Given a weight constant, returns the CSS value for font-weight.
+ * Given a weight constant, returns the CSS value for font-weight.
 */
 const char *
 weight_to_css (int weight)
@@ -183,7 +187,7 @@ weight_to_css (int weight)
 }
 
 /**
-Given a stretch constant, returns the CSS value for font-stretch.
+ * Given a stretch constant, returns the CSS value for font-stretch.
 */
 const char *
 stretch_to_css (int stretch)
@@ -217,7 +221,7 @@ stretch_to_css (int stretch)
 }
 
 /**
-Given a variant constant, returns the CSS value for font-variant.
+ * Given a variant constant, returns the CSS value for font-variant.
 */
 const char *
 variant_to_css (int stretch)
@@ -236,6 +240,10 @@ variant_to_css (int stretch)
 }
 
 
+/**
+ * Constructor for NRTypePostDef.  Sets the italic, oblique, weight,
+ * stretch, and variant.
+ */
 NRTypePosDef::NRTypePosDef(char const *description) {
 	// we cannot use strcasestr, it's linux only... so we must lowercase the string first
 	gchar *c = g_ascii_strdown (description, -1);

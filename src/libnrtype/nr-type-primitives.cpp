@@ -17,12 +17,18 @@
 #include <libnr/nr-macros.h>
 #include "nr-type-primitives.h"
 
+/**
+ * An entry in a list of key->value pairs
+ */
 struct NRTDEntry {
 	NRTDEntry *next;
 	const gchar *key;
 	void *val;
 };
 
+/**
+ * Type Dictionary, consisting of size number of key-value entries
+ */
 struct NRTypeDict {
 	unsigned int size;
 	NRTDEntry **entries;
@@ -30,6 +36,9 @@ struct NRTypeDict {
 
 static NRTDEntry *nr_td_entry_new (void);
 
+/**
+ * Calls the destructor for each item in list
+ */
 void
 nr_name_list_release (NRNameList *list)
 {
@@ -38,6 +47,10 @@ nr_name_list_release (NRNameList *list)
 	}
 }
 
+/**
+ * Creates a new typeface dictionary of size NR_DICTSIZE
+ * and initalizes all the entries to NULL
+ */
 NRTypeDict *
 nr_type_dict_new (void)
 {
@@ -55,6 +68,9 @@ nr_type_dict_new (void)
 	return td;
 }
 
+/**
+ * Hashes a string and returns the int
+ */
 static unsigned int
 nr_str_hash (const gchar *p)
 {
@@ -69,6 +85,9 @@ nr_str_hash (const gchar *p)
 	return h;
 }
 
+/**
+ * Inserts a key/value into a typeface dictionary
+ */
 void
 nr_type_dict_insert (NRTypeDict *td, const gchar *key, void *val)
 {
@@ -93,6 +112,9 @@ nr_type_dict_insert (NRTypeDict *td, const gchar *key, void *val)
 	}
 }
 
+/**
+ * Looks up the given key from the typeface dictionary
+ */
 void *
 nr_type_dict_lookup (NRTypeDict *td, const gchar *key)
 {
@@ -112,6 +134,9 @@ nr_type_dict_lookup (NRTypeDict *td, const gchar *key)
 
 static NRTDEntry *nr_tde_free_list;
 
+/**
+ * Creates a new TDEntry
+ */
 static NRTDEntry *
 nr_td_entry_new (void)
 {

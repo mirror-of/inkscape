@@ -31,9 +31,10 @@
 
 	* libnrtype/nr-type-xft.cpp, libnrtype/nr-font.cpp,
   	  libnrtype/nr-rasterfont.cpp, libnrtype/nr-type-directory.cpp,
-	  libnrtype/nr-typeface.cpp:   
+	  libnrtype/nr-typeface.cpp, nr-type-win32.cpp:   
 
-	Documenting the routines
+	Documenting the routines.  This adds basic code docs for
+	everything in libnrtype.  
 
 2004-06-06  Ted Gould  <ted@gould.cx>
 
