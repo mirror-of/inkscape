@@ -651,6 +651,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_signal_connect (GTK_OBJECT (ds), "changed", GTK_SIGNAL_FUNC (sp_stroke_style_line_dash_changed), spw);
 	i++;
 
+#ifdef DEBUG_MARKERS
 	/* Start Marker */
 	spw_label(t, _("Start Markers:"), 0, i);
 	hb = spw_hbox(t, 3, 1, i);
@@ -701,7 +702,7 @@ sp_stroke_style_line_widget_new (void)
 			       INKSCAPE_GLADEDIR "/marker_arrow_end.xpm",
 			       hb, spw, "end_marker", "url(#mArrow)");
 	i++;
-
+#endif
 
 	/* General (I think) style dialog signals */
 	gtk_signal_connect (GTK_OBJECT (spw), "construct", GTK_SIGNAL_FUNC (sp_stroke_style_line_construct), NULL);
@@ -1409,7 +1410,7 @@ sp_stroke_style_update_marker_buttons(SPWidget *spw, const GSList *objects,
   
   if ( marker_valid ) {
     gchar *widget_name[2];
-    widget_name[0] = g_strconcat(stock_type, marker_type, NULL);
+    widget_name[0] = g_strconcat(stock_type, ":", marker_type, NULL);
     widget_name[1] = NULL;
     g_message("Widget name is '%s'", widget_name[0]);
     tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), widget_name[0]));
