@@ -186,6 +186,102 @@ RgbMap *RgbMapCreate(int width, int height);
 
 
 
+/*#########################################################################
+### I N D E X E D     M A P
+#########################################################################*/
+
+
+typedef struct IndexedMap_def IndexedMap;
+
+/**
+ *
+ */
+struct IndexedMap_def
+{
+
+    /*#################
+    ### METHODS
+    #################*/
+
+    /**
+     *
+     */
+    void (*setPixel)(IndexedMap *me, int x, int y, unsigned int index);
+
+
+    /**
+     *
+     */
+    unsigned int (*getPixel)(IndexedMap *me, int x, int y);
+
+    /**
+     *
+     */
+    RGB (*getPixelValue)(IndexedMap *me, int x, int y);
+
+    /**
+     *
+     */
+    int (*writePPM)(IndexedMap *me, char *fileName);
+
+
+
+    /**
+     *
+     */
+    void (*destroy)(IndexedMap *me);
+
+
+
+    /*#################
+    ### FIELDS
+    #################*/
+
+    /**
+     *
+     */
+    int width;
+
+    /**
+     *
+     */
+    int height;
+
+    /**
+     * The allocated array of pixels
+     */
+    unsigned int *pixels;
+
+    /**
+     * Pointers to the beginning of each row of pixels
+     */
+    unsigned int **rows;
+
+    /**
+     *
+     */
+    int nrColors;
+    
+    /**
+     * Color look up table
+     */
+    RGB clut[256];
+
+};
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+IndexedMap *IndexedMapCreate(int width, int height);
+
+#ifdef __cplusplus
+}
+#endif
+
+
 #endif /* __IMAGEMAP_H__ */
 
 /*#########################################################################

@@ -61,7 +61,7 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img,
  * Quantize an RGB image to a reduced number of colors.  bitsPerSample
  * is usually 3 - 5 out of 8 to conserve cpu and memory
  */
-RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors);
+IndexedMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors);
 
 /**
  *

@@ -18,7 +18,7 @@
 
 #include <glib.h>
 #include <trace/trace.h>
-
+#include <trace/imagemap.h>
 
 namespace Inkscape {
 
@@ -166,6 +166,8 @@ class PotraceTracingEngine : public TracingEngine
     //## Color-->multiscan quantization
     int quantScanNrColors;
 
+    char *grayMapToPath(GrayMap *gm);
+    
     TracingEngineResult *traceMultiple(GdkPixbuf *pixbuf, int *nrPaths);
     TracingEngineResult *traceSingle(GdkPixbuf *pixbuf, int *nrPaths);
 

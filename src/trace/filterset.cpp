@@ -786,11 +786,12 @@ RGB *makeRGBPalette(OctreeNode *root, int nrColors)
 /**
  *  Return the closest color in the palette to the request
  */
-RGB lookupQuantizedRGB(RGB *rgbpalette, int paletteSize, RGB candidate)
+RGB lookupQuantizedRGB(RGB *rgbpalette, int paletteSize, RGB candidate, int *closestIndex)
 {
     /* slow method */
     unsigned long closestMatch = 10000000;
     RGB closestRGB = { 0 , 0, 0 };
+    *closestIndex = 0;
     for (int i=0 ; i<paletteSize ; i++)
         {
         RGB entry = rgbpalette[i];
@@ -800,8 +801,9 @@ RGB lookupQuantizedRGB(RGB *rgbpalette, int paletteSize, RGB candidate)
         unsigned long match = dr * dr + dg * dg + db * db;
         if (match < closestMatch)
             {
-            closestMatch = match;
-            closestRGB   = entry;
+            *closestIndex = i;
+            closestMatch  = match;
+            closestRGB    = entry;
             }
         }
 
@@ -813,7 +815,7 @@ RGB lookupQuantizedRGB(RGB *rgbpalette, int paletteSize, RGB candidate)
  * Quantize an RGB image to a reduced number of colors.  bitsPerSample
  * is usually 3 - 5 out of 8 to conserve cpu and memory
  */
-RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
+IndexedMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
 {
     if (!rgbMap)
         return NULL;
@@ -832,13 +834,20 @@ RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
         }
 
     /*We have our original and palette. Make the new one*/
-    RgbMap *newMap = RgbMapCreate(rgbMap->width, rgbMap->height);
+    IndexedMap *newMap = IndexedMapCreate(rgbMap->width, rgbMap->height);
     if (!newMap)
         {
         free(rgbpal);
         octreeNodeDelete(otree);
         return NULL;
         }
+     
+    /* fill in the color lookup table */
+    for (int i=0 ; i< nrColors ; i++)
+        {
+        newMap->clut[i] = rgbpal[i];
+        }
+    newMap->nrColors = nrColors;
 
     for (int y=0 ; y<rgbMap->height ; y++)
         {
@@ -848,8 +857,9 @@ RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
             //int indexNr = octreeNodeFind(otree, rgb, bitsPerSample);
             //printf("i:%d\n", indexNr);
             //RGB quantRgb = rgbpal[indexNr];
-            RGB quantRgb = lookupQuantizedRGB(rgbpal, nrColors, rgb);
-            newMap->setPixelRGB(newMap, x, y, quantRgb); 
+            int closestIndex;
+            RGB quantRgb = lookupQuantizedRGB(rgbpal, nrColors, rgb, &closestIndex);
+            newMap->setPixel(newMap, x, y, (unsigned int)closestIndex); 
             }
         }
 
@@ -872,19 +882,18 @@ GrayMap *quantizeBand(RgbMap *rgbMap, int nrColors)
     RgbMap *gaussMap = rgbMapGaussian(rgbMap);
     //gaussMap->writePPM(gaussMap, "rgbgauss.ppm");
 
-    RgbMap *qMap = rgbMapQuantize(gaussMap, bitsPerSample, nrColors);
+    IndexedMap *qMap = rgbMapQuantize(gaussMap, bitsPerSample, nrColors);
     //qMap->writePPM(qMap, "rgbquant.ppm");
     gaussMap->destroy(gaussMap);
 
-    RgbMap  *rm = qMap;
     GrayMap *gm = GrayMapCreate(rgbMap->width, rgbMap->height);
 
     /* RGB is quantized.  There should now be a small set of (R+G+B) */
-    for (int y=0 ; y<rm->height ; y++)
+    for (int y=0 ; y<qMap->height ; y++)
         {
-        for (int x=0 ; x<rm->width ; x++)
+        for (int x=0 ; x<qMap->width ; x++)
             {
-            RGB rgb = rm->getPixel(rm, x, y);
+            RGB rgb = qMap->getPixelValue(qMap, x, y);
             int sum = rgb.r + rgb.g + rgb.b;
             if (sum & 1)
                 sum = 765;

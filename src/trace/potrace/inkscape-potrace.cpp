@@ -309,41 +309,40 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 }
 
 
-static RgbMap *
-filterColor(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
+static IndexedMap *
+filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 {
     if (!pixbuf)
         return NULL;
 
-    RgbMap *newGm = NULL;
+    IndexedMap *newGm = NULL;
 
     /*### Color quant multiscan ###*/
     if (engine.getTraceType() == TRACE_QUANT_COLOR)
         {
         RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
         newGm = rgbMapQuantize(gm, 4, engine.getQuantScanNrColors());
-
+        gm->destroy(gm);
         }
 
     /*### Quant multiscan ###*/
     else if (engine.getTraceType() == TRACE_QUANT_MONO)
         {
-        RgbMap *gm    = gdkPixbufToRgbMap(pixbuf);
-        RgbMap *newGm = rgbMapQuantize(gm, 4, engine.getQuantScanNrColors());
+        RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
+        newGm      = rgbMapQuantize(gm, 4, engine.getQuantScanNrColors());
+        gm->destroy(gm);
+
         //Turn to grays
-        for (int y=0 ; y<newGm->height ; y++)
+        for (int i=0 ; i<newGm->nrColors ; i++)
             {
-            for (int x=0 ; x<newGm->width ; x++)
-                {
-                RGB rgb = newGm->getPixel(newGm, x, y);
-                int grayVal = (rgb.r + rgb.g + rgb.b) / 3;
-                rgb.r = rgb.g = rgb.b = grayVal;
-                newGm->setPixelRGB(newGm, x, y, rgb);
-                }
+            RGB rgb = newGm->clut[i];
+            int grayVal = (rgb.r + rgb.g + rgb.b) / 3;
+            rgb.r = rgb.g = rgb.b = grayVal;
+            newGm->clut[i] = rgb;
             }
         }
 
-    return newGm;//none of the above
+    return newGm;
 }
 
 
@@ -355,11 +354,11 @@ PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
     if ( traceType == TRACE_QUANT_COLOR ||
          traceType == TRACE_QUANT_MONO   )
         {
-        RgbMap *gm = filterColor(*this, pixbuf);
+        IndexedMap *gm = filterIndexed(*this, pixbuf);
         if (!gm)
             return NULL;
 
-        GdkPixbuf *newBuf = rgbMapToGdkPixbuf(gm);
+        GdkPixbuf *newBuf = indexedMapToGdkPixbuf(gm);
 
         gm->destroy(gm);
 
@@ -380,19 +379,9 @@ PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
 }
 
 
-/**
- *  This is called for a single scan
- */
-TracingEngineResult *
-PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
+//*This is the core inkscape-to-potrace binding
+char *PotraceTracingEngine::grayMapToPath(GrayMap *grayMap)
 {
-
-    if (!thePixbuf)
-        return NULL;
-
-    GrayMap *grayMap = filter(*this, thePixbuf);
-    if (!grayMap)
-        return NULL;
 
     bitmap_t *bm = bm_new(grayMap->width, grayMap->height);
     bm_clear(bm, 0);
@@ -405,8 +394,6 @@ PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
             BM_UPUT(bm, x, y, grayMap->getPixel(grayMap, x, y) ? 0 : 1);
             }
         }
-
-    grayMap->destroy(grayMap);
 
     //##Debug
     /*
@@ -462,13 +449,43 @@ PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
     if (!keepGoing)
         return NULL;
 
-    //# get the svg <path> 'd' attribute
-    char *style = (char *)"";
-    char *d     = (char *)data.str().c_str();
+    char *d     = strdup((char *)data.str().c_str());
+    
+    return d;
+
+}
+
+
+
+/**
+ *  This is called for a single scan
+ */
+TracingEngineResult *
+PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
+{
+
+    if (!thePixbuf)
+        return NULL;
+
+    GrayMap *grayMap = filter(*this, thePixbuf);
+    if (!grayMap)
+        return NULL;
+
+    char *d = grayMapToPath(grayMap);
+    
+    grayMap->destroy(grayMap);
+    
+    if (!d)
+        {
+        *nrPaths = 0;
+        return NULL;
+        }
+    char *style = "fill:#000000";
+    
     //g_message("### GOT '%s' \n", d);
     TracingEngineResult *result = new TracingEngineResult(style, d);
     *nrPaths = 1;
-
+    
     return result;
 }
 
@@ -483,12 +500,69 @@ PotraceTracingEngine::traceMultiple(GdkPixbuf * thePixbuf, int *nrPaths)
     if (!thePixbuf)
         return NULL;
 
-    RgbMap *rgbMap = filterColor(*this, thePixbuf);
-    if (!rgbMap)
+    IndexedMap *iMap = filterIndexed(*this, thePixbuf);
+    if (!iMap)
         return NULL;
 
     TracingEngineResult *results = NULL;
+    
+    GrayMap *gm = GrayMapCreate(iMap->width, iMap->height);
+    
+    for (int colorIndex=0 ; colorIndex<iMap->nrColors ; colorIndex++)
+        {
+        
+        /*Make a gray map for each color index */
+        for (int row=0 ; row<iMap->height ; row++)
+            {
+            for (int col=0 ; col<iMap->width ; col++)
+                {
+                int indx = (int) iMap->getPixel(iMap, col, row);
+                if (indx == colorIndex)
+                    gm->setPixel(gm, col, row, 765);
+                else
+                    gm->setPixel(gm, col, row, 0);
+                }
+            }
 
+        //## Now we have a traceable graymap
+        char *d = grayMapToPath(gm);
+    
+        if (!d)
+            {
+            *nrPaths = 0;
+            return NULL;
+            }
+        
+        //### get style info
+        char style[13];
+        RGB rgb = iMap->clut[colorIndex];
+        sprintf(style, "fill:#%02x%02x%02x", rgb.r, rgb.g, rgb.b);
+    
+        //g_message("### GOT '%s' \n", d);
+        TracingEngineResult *result = new TracingEngineResult(style, d);
+        if (!results)
+            {
+            results = result; //first one
+            }
+        else
+            {
+            //walk to end of list
+            TracingEngineResult *r;
+            for (r=results ; r->next ; r=r->next)
+                {}
+            r->next = result;
+            }
+
+
+
+        }
+    
+    //report the count of paths processed
+    *nrPaths = iMap->nrColors;
+
+    gm->destroy(gm);
+    iMap->destroy(iMap);  
+    
     return results;
 }
 

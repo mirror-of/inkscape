@@ -31,6 +31,8 @@ RgbMap *gdkPixbufToRgbMap(GdkPixbuf *buf);
 
 GdkPixbuf *rgbMapToGdkPixbuf(RgbMap *rgbMap);
 
+GdkPixbuf *indexedMapToGdkPixbuf(IndexedMap *iMap);
+
 
 #ifdef __cplusplus
 }
