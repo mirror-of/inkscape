@@ -14,8 +14,7 @@
 #include "event-context.h"
 #include "forward.h"
 #include "nodepath.h"
-#include "knotholder.h"
-
+struct SPKnotHolder;
 class SPSelection;
 
 #define SP_TYPE_NODE_CONTEXT            (sp_node_context_get_type ())
