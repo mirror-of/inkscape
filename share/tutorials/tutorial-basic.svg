@@ -890,7 +890,9 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="text">
+     inkscape:label="text"
+     style="display:block"
+     sodipodi:insensitive="1">
     <text
        xml:space="preserve"
        style="font-size:7.5000000;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
@@ -934,9 +936,9 @@
          y="114.18279">check out the Advanced tutorial in the Help menu.</tspan></text>
     <text
        xml:space="preserve"
-       style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:8;text-anchor:start;writing-mode:lr;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;"
-       x="5.51562548"
-       y="213.95619697"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
+       x="5.5156255"
+       y="213.95619"
        id="text763"
        sodipodi:linespacing="100%"><tspan
          x="5.5156255"
@@ -945,7 +947,7 @@
          id="tspan763">Inkscape tools</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.2992187"
        y="708.58868"
        id="text899"
@@ -965,7 +967,7 @@
          y="730.93268">also create ellipses, stars, and spirals:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.5156245"
        y="940.21887"
        id="text867"
@@ -977,7 +979,7 @@
          id="tspan767">Moving, scaling, rotating</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.344336"
        y="1073.2407"
        id="text882"
@@ -993,7 +995,7 @@
          y="1084.4127">Now you can:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="5.8398433"
        y="1173.6302"
        id="text916"
@@ -1005,7 +1007,7 @@
          id="tspan917">Now click the rectangle again. The handles change. Now you can:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.344336"
        y="2364.0828"
        id="text977"
@@ -1073,7 +1075,7 @@
          y="2520.4908">current color. Play with these samples or create your own:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="5.8562503"
        y="2584.9443"
        id="text1015"
@@ -1089,7 +1091,7 @@
          y="2596.1163">object, or assign any color or transparency to it:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.1679688"
        y="2662.8977"
        id="text1018"
@@ -1109,7 +1111,7 @@
          y="2685.2417"></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="5.8316402"
        y="2744.3943"
        id="text1040"
@@ -1129,7 +1131,7 @@
          y="2766.7383"></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.8515625"
        y="1926.3359"
        id="text1857"
@@ -1141,7 +1143,7 @@
          id="tspan1349">Grouping</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="5.8316407"
        y="1942.4282"
        id="text1579"
@@ -1165,7 +1167,7 @@
          y="1975.9442">grouped. Try to drag the group.</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.515625"
        y="3415.6335"
        id="text1692"
@@ -1177,7 +1179,7 @@
          id="tspan1523">Conclusion</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.344336"
        y="1258.67"
        id="text1982"
@@ -1193,7 +1195,7 @@
          y="1269.8420">values for coordinates (X and Y) and size (W and H) of the selection.</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.8515625"
        y="1926.3359"
        id="text2466"
@@ -1205,49 +1207,49 @@
          id="tspan2467">Selecting under and dragging selected</tspan></text>
     <path
        sodipodi:type="arc"
-       style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt"
        id="path914"
        sodipodi:cx="14.112748"
        sodipodi:cy="926.59326"
        sodipodi:rx="5.8803120"
        sodipodi:ry="5.8803120"
-       d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 0 8.2324362,926.59326 A 5.8803120 5.8803120 0 1 0 19.993060 926.59326 z"
+       d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 1  8.2324362,926.59326 A 5.8803120 5.8803120 0 1 1  19.993060 926.59326 z"
        transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,649.4005)" />
     <path
        sodipodi:type="arc"
-       style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt"
        id="path915"
        sodipodi:cx="14.112748"
        sodipodi:cy="926.59326"
        sodipodi:rx="5.8803120"
        sodipodi:ry="5.8803120"
-       d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 0 8.2324362,926.59326 A 5.8803120 5.8803120 0 1 0 19.993060 926.59326 z"
+       d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 1  8.2324362,926.59326 A 5.8803120 5.8803120 0 1 1  19.993060 926.59326 z"
        transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,683.3087)" />
     <path
        sodipodi:type="arc"
-       style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt"
        id="path941"
        sodipodi:cx="14.112748"
        sodipodi:cy="926.59326"
        sodipodi:rx="5.8803120"
        sodipodi:ry="5.8803120"
-       d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 0 8.2324362,926.59326 A 5.8803120 5.8803120 0 1 0 19.993060 926.59326 z"
+       d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 1  8.2324362,926.59326 A 5.8803120 5.8803120 0 1 1  19.993060 926.59326 z"
        transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,737.9832)" />
     <path
        sodipodi:type="arc"
-       style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
+       style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt"
        id="path942"
        sodipodi:cx="14.112748"
        sodipodi:cy="926.59326"
        sodipodi:rx="5.8803120"
        sodipodi:ry="5.8803120"
-       d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 0 8.2324362,926.59326 A 5.8803120 5.8803120 0 1 0 19.993060 926.59326 z"
+       d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 1  8.2324362,926.59326 A 5.8803120 5.8803120 0 1 1  19.993060 926.59326 z"
        transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,782.8803)" />
     <text
        xml:space="preserve"
-       style="fill:#000000;fill-opacity:1.0000000;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:8.0000000;text-anchor:start;writing-mode:lr;stroke-opacity:1.0000000;stroke-width:3.0000000pt;stroke-linejoin:miter;stroke-linecap:butt;"
-       x="5.51562500"
-       y="119.79954261"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
+       x="5.515625"
+       y="119.79955"
        id="text732"
        sodipodi:linespacing="100%"><tspan
          x="5.5156250"
@@ -1348,7 +1350,7 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.8515625"
        y="579.11066"
        id="text824"
@@ -1360,7 +1362,7 @@
          id="tspan796">Creating shapes</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.1679688"
        y="595.20282"
        id="text892"
@@ -1382,9 +1384,9 @@
          y="617.54682">right here:</tspan></text>
     <text
        xml:space="preserve"
-       style="fill:#000000;fill-opacity:1.0000000;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:8.0000000;text-anchor:start;writing-mode:lr;stroke-opacity:1.0000000;stroke-width:3.0000000pt;stroke-linejoin:miter;stroke-linecap:butt;"
-       x="6.42198658"
-       y="328.23337060"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
+       x="6.4219866"
+       y="328.23337"
        id="text716"
        sodipodi:linespacing="100%"><tspan
          x="6.4219866"
@@ -1393,7 +1395,7 @@
          id="tspan717">Zooming in or out</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.2992187"
        y="344.32565"
        id="text719"
@@ -1470,7 +1472,7 @@
          y="456.04565"></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.8515625"
        y="442.94778"
        id="text761"
@@ -1482,7 +1484,7 @@
          id="tspan762">Creating and managing documents</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.2992187"
        y="459.04007"
        id="text764"
@@ -1552,7 +1554,7 @@
          y="559.58807">now and switch between it and this document for practice.)</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.1679688"
        y="956.31104"
        id="text769"
@@ -1582,7 +1584,7 @@
          y="989.82703">rectangle below.</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.1679688"
        y="818.43048"
        id="text841"
@@ -1638,7 +1640,7 @@
    id="tspan19660">Shift+Ctrl+Z</tspan>.)</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="21.711798"
        y="1093.7947"
        id="text868"
@@ -1671,7 +1673,7 @@
          id="tspan911">the original height/width ratio.)</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="21.711798"
        y="1182.3776"
        id="text928"
@@ -1706,7 +1708,7 @@
          y="1238.2376"></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.5156245"
        y="1533.0282"
        id="text849"
@@ -1718,7 +1720,7 @@
          id="tspan843">Multiple selections</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.344336"
        y="1549.1205"
        id="text845"
@@ -1754,7 +1756,7 @@
          y="1604.9805">rubberband.) Practice by selecting all three of the shapes below:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.5156245"
        y="2252.3208"
        id="text897"
@@ -1766,7 +1768,7 @@
          id="tspan898">Fill and stroke</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.008008"
        y="2268.4131"
        id="text901"
@@ -1794,7 +1796,7 @@
          y="2301.9291">shape below and open the Fill and Stroke dialog.</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.1679688"
        y="2920.3816"
        id="text1460"
@@ -1830,7 +1832,7 @@
          y="2976.2416">between them are equal. Other alignment and distribution examples:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.515625"
        y="2829.8796"
        id="text1471"
@@ -1842,7 +1844,7 @@
          id="tspan1092">Duplication, alignment, distribution</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.2746091"
        y="2845.9719"
        id="text1450"
@@ -1894,7 +1896,7 @@
    id="tspan19802">Help &gt; Tutorials</tspan>.</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:nonzero;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif;letter-spacing:0.00000000;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:nonzero;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif;letter-spacing:0.00000000;text-anchor:start;writing-mode:lr"
        x="7.1420732"
        y="1964.4854"
        id="text2469"
@@ -1932,16 +1934,16 @@
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif"
          dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.8888889"
          dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0">This is what <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan19822">Alt+click</tspan> is for. First <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan19825">Alt+click</tspan> selects the top object</tspan><tspan
          sodipodi:role="line"
          id="tspan2480"
          x="7.1420732"
          y="2031.5174"
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif">just like the regular click; however, the next <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan19830">Alt+click</tspan> at the</tspan><tspan
          sodipodi:role="line"
          id="tspan2482"
@@ -1955,7 +1957,7 @@
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif"
          dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.8888889"
          dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0">the object still lower, etc. Thus, several <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan19837">Alt+clicks</tspan> in a row will</tspan><tspan
          sodipodi:role="line"
          id="tspan2486"
@@ -1969,7 +1971,7 @@
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif">the click point. </tspan><tspan
          id="tspan2488"
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif">When the bottom object is reached, next <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan19846">Alt+click</tspan></tspan><tspan
          sodipodi:role="line"
          id="tspan2500"
@@ -2018,7 +2020,7 @@
          x="7.1420732"
          y="2176.7533"
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif">is selected already without selecting anything else, use <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan19868">Alt+drag</tspan>.</tspan><tspan
          sodipodi:role="line"
          id="tspan2516"
@@ -2042,9 +2044,9 @@
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
          dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.88888896 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.3333334"
          dy="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0">Practice <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan19879">Alt+click</tspan> and <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan19882">Alt+drag</tspan> on the two brown shapes under </tspan><tspan
          sodipodi:role="line"
          id="tspan3200"
@@ -2053,7 +2055,7 @@
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none">the green transparent rectangle:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.2992187"
        y="3310.1438"
        id="text1555"
@@ -2105,7 +2107,7 @@
    id="tspan19933">Shift+Tab</tspan> keys on the stack of ellipses above.</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.8906255"
        y="3067.28"
        id="text1690"
@@ -2117,7 +2119,7 @@
          id="tspan1691">Z-order</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.1679688"
        y="3083.3723"
        id="text1693"
@@ -2195,7 +2197,7 @@
          y="3228.6083">one is at the bottom:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.344336"
        y="2071.2231"
        id="text1595"
@@ -2287,7 +2289,7 @@
          y="2227.6311">the group normally to see that it still remains grouped.</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="5.8316407"
        y="1758.1758"
        id="text1907"
@@ -2371,7 +2373,7 @@
          y="1925.7558">as this one).</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.008008"
        y="1674.3136"
        id="text956"
@@ -2389,7 +2391,7 @@
          y="1685.4856">but not the rectangle:</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="5.5156245"
        y="1291.512"
        id="text1969"
@@ -2401,7 +2403,7 @@
          id="tspan1970">Transforming by keys</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
        x="6.3443336"
        y="1308.2764"
        id="text947"

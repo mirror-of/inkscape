@@ -322,7 +322,7 @@
      inkscape:window-y="0"
      showguides="true"
      snaptoguides="true"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer3"
      bordercolor="#000000"
      borderopacity="0.65490196" />
   <metadata
@@ -876,7 +876,8 @@ http://www.inkscape.org/</dc:description>
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="text">
+     inkscape:label="text"
+     sodipodi:insensitive="1">
     <text
        xml:space="preserve"
        style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:nonzero;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif;letter-spacing:0.00000000;text-anchor:start;writing-mode:lr"

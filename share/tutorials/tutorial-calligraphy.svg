@@ -382,7 +382,7 @@
      inkscape:window-height="580"
      showguides="true"
      snaptoguides="true"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer3"
      bordercolor="#000000"
      borderopacity="0.65490196"
      inkscape:guide-bbox="true"
@@ -1711,7 +1711,8 @@ http://www.inkscape.org/</dc:description>
      inkscape:groupmode="layer"
      id="layer2"
      style="display:block"
-     inkscape:label="text">
+     inkscape:label="text"
+     sodipodi:insensitive="1">
     <g
        id="g8744"
        transform="translate(0.000000,175.0000)">
@@ -2685,7 +2686,7 @@ http://www.inkscape.org/</dc:description>
          style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:nonzero;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif;letter-spacing:0.0000000;text-anchor:start;writing-mode:lr"
          x="11.150325"
          y="119.30886"
-         id="text1582"
+         id="text1828"
          transform="translate(-4.737985,-10.20668)"
          sodipodi:linespacing="130%"><tspan
            x="11.150325"
@@ -2865,7 +2866,7 @@ http://www.inkscape.org/</dc:description>
        style="font-size:12.000000;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
        x="404.43192"
        y="155.73715"
-       id="text1460"
+       id="text1896"
        sodipodi:linespacing="100%"
        transform="matrix(0.712981,0.000000,0.000000,0.712981,-273.3344,3506.288)"><tspan
          x="404.43192"
