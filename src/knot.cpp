@@ -722,6 +722,18 @@ sp_knot_set_position (SPKnot * knot, NR::Point *p, guint state)
 		       state);
 }
 
+void
+sp_knot_moveto (SPKnot * knot, NR::Point *p)
+{
+	g_return_if_fail (knot != NULL);
+	g_return_if_fail (SP_IS_KNOT (knot));
+
+	knot->pos = *p;
+
+	if (knot->item)
+		SP_CTRL (knot->item)->moveto (*p);
+}
+
 NR::Point sp_knot_position (SPKnot const * knot)
 {
 	g_assert(knot != NULL);

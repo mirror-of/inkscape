@@ -93,9 +93,11 @@ void sp_knot_hide (SPKnot *knot);
 void sp_knot_request_position (SPKnot * knot, NR::Point *pos, guint state);
 gdouble sp_knot_distance (SPKnot * knot, NR::Point *p, guint state);
 
-/* Unconditional */
 
-void sp_knot_set_position(SPKnot *knot, NR::Point *p, guint state);
+/** Moves knot and emits "moved" signal */
+void sp_knot_set_position (SPKnot *knot, NR::Point *p, guint state);
+/** Moves knot without any signal */
+void sp_knot_moveto (SPKnot *knot, NR::Point *p);
 
 NR::Point sp_knot_position (SPKnot const *knot);
 
