@@ -392,7 +392,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc)
                 SP_VERB_DIALOG_DOCUMENT,
                 SP_VERB_DIALOG_NAMEDVIEW,
                 SP_VERB_DIALOG_TOOL_OPTIONS,
-                SP_VERB_DIALOG_TOOL_ATTRIBUTES,
+								//                SP_VERB_DIALOG_TOOL_ATTRIBUTES,
                 SP_VERB_DIALOG_DISPLAY,
                 SP_VERB_LAST
         };
