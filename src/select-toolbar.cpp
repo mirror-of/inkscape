@@ -81,36 +81,32 @@ sp_selection_layout_widget_update(SPWidget *spw, SPSelection *sel)
 
     GtkWidget *f = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(spw), "frame");
 
+    using NR::X;
+    using NR::Y;
     if ( sel && !sel->isEmpty() ) {
-        NRRect bbox;
-
-        sel->bounds(&bbox);
-
-        if ((bbox.x1 - bbox.x0 > 1e-6) || (bbox.y1 - bbox.y0 > 1e-6)) {
+        NR::Rect const bbox(sel->bounds());
+        NR::Point const dimensions(bbox.dimensions());
+        if ((dimensions[X] > 1e-6) || (dimensions[Y] > 1e-6)) {
             GtkWidget *us = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(spw), "units");
-            SPUnit const *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us));
+            SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us));
 
-            if (unit->base == SP_UNIT_ABSOLUTE) {
-                GtkAdjustment *a;
-                a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "X");
-                gtk_adjustment_set_value(a, sp_points_get_units(bbox.x0, unit));
-                a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "Y");
-                gtk_adjustment_set_value(a, sp_points_get_units(bbox.y0, unit));
-                a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "width");
-                gtk_adjustment_set_value(a, sp_points_get_units(bbox.x1 - bbox.x0, unit));
-                a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "height");
-                gtk_adjustment_set_value(a, sp_points_get_units(bbox.y1 - bbox.y0, unit));
+            if (unit.base == SP_UNIT_DIMENSIONLESS) {
+                char const * const keys[] = {"X", "Y", "width", "height"};
+                for (unsigned i = 0; i < G_N_ELEMENTS(keys); ++i) {
+                    GtkAdjustment *a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), keys[i]);
+                    gtk_adjustment_set_value(a, 100.0);
+                }
             } else {
-                GtkAdjustment *a;
-                a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "X");
-                gtk_adjustment_set_value(a, 100.0);
-                a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "Y");
-                gtk_adjustment_set_value(a, 100.0);
-                a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "width");
-                gtk_adjustment_set_value(a, 100.0);
-                a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "height");
-                gtk_adjustment_set_value(a, 100.0);
-
+                struct { char const *key; double val; } const keyval[] = {
+                    { "X", bbox.min()[X] },
+                    { "Y", bbox.min()[Y] },
+                    { "width", dimensions[X] },
+                    { "height", dimensions[Y] }
+                };
+                for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
+                    GtkAdjustment *a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), keyval[i].key);
+                    gtk_adjustment_set_value(a, sp_points_get_units(keyval[i].val, &unit));
+                }
             }
 
             gtk_widget_set_sensitive(f, TRUE);
@@ -129,10 +125,12 @@ static void
 sp_selection_layout_widget_modify_selection(SPWidget *spw, SPSelection *selection, guint flags, gpointer data)
 {
     SPDesktop *desktop = (SPDesktop *) data;
-    if (desktop->selection == selection) { // only respond to changes in our desktop
-        if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)) {
-            sp_selection_layout_widget_update(spw, selection);
-        }
+    if ((desktop->selection == selection) // only respond to changes in our desktop
+        && (flags & (SP_OBJECT_MODIFIED_FLAG        |
+                     SP_OBJECT_PARENT_MODIFIED_FLAG |
+                     SP_OBJECT_CHILD_MODIFIED_FLAG   )))
+    {
+        sp_selection_layout_widget_update(spw, selection);
     }
 }
 
@@ -152,7 +150,7 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     }
 
     GtkWidget *us = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(spw), "units");
-    SPUnit const *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us));
+    SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us));
     if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(us))) {
         /*
          * When only units are being changed, don't treat changes
@@ -171,7 +169,7 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
 
     gdouble x0, y0, x1, y1, xrel, yrel;
 
-    if (unit->base == SP_UNIT_ABSOLUTE) {
+    if (unit.base == SP_UNIT_ABSOLUTE) {
         GtkAdjustment *a;
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "X");
         x0 = sp_units_get_points(a->value, unit);
@@ -186,14 +184,16 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     } else {
         GtkAdjustment *a;
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "X");
-        x0 = a->value * bbox.min()[NR::X] / 100.0;
+        double const x0_propn = a->value * unit.unittobase;
+        x0 = bbox.min()[NR::X] * x0_propn;
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "Y");
-        y0 = a->value * bbox.min()[NR::Y] / 100.0;
+        double const y0_propn = a->value * unit.unittobase;
+        y0 = y0_propn * bbox.min()[NR::Y];
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "width");
-        xrel = a->value * 0.01;
+        xrel = a->value * unit.unittobase;
         x1 = x0 + xrel * bbox.extent(NR::X);
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "height");
-        yrel = a->value * 0.01;
+        yrel = a->value * unit.unittobase;
         y1 = y0 + yrel * bbox.extent(NR::Y);
     }
 
@@ -206,12 +206,16 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
         }
     }
 
-    double const dx0 = fabs(x0 - bbox.min()[NR::X]) > 1e-6 ? fabs(x0 - bbox.min()[NR::X]) : 0;
-    double const dx1 = fabs(x1 - bbox.max()[NR::X]) > 1e-6 ? fabs(x1 - bbox.max()[NR::X]) : 0;
-    double const dy0 = fabs(y0 - bbox.min()[NR::Y]) > 1e-6 ? fabs(y0 - bbox.min()[NR::Y]) : 0;
-    double const dy1 = fabs(y1 - bbox.max()[NR::Y]) > 1e-6 ? fabs(y1 - bbox.max()[NR::Y]) : 0;
-
-    if (dx0 || dx1 || dy0 || dy1) {
+    char const * const actionkey = ( fabs(x0 - bbox.min()[NR::X]) > 1e-6
+                                     ? "selector:toolbar:move:horizontal"
+                                     : fabs(x1 - bbox.max()[NR::X]) > 1e-6
+                                     ? "selector:toolbar:scale:horizontal"
+                                     : fabs(y0 - bbox.min()[NR::Y]) > 1e-6
+                                     ? "selector:toolbar:move:vertical"
+                                     : fabs(y1 - bbox.max()[NR::Y]) > 1e-6
+                                     ? "selector:toolbar:scale:vertical"
+                                     : NULL );
+    if (actionkey != NULL) {
         NR::translate const p2o(-bbox.min());
         NR::scale scale(1, 1);
         if ( fabs( bbox.extent(NR::X) ) <= 1e-06 ) {
@@ -224,15 +228,7 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
         NR::translate const o2n(x0, y0);
         sp_selection_apply_affine(selection, p2o * scale * o2n);
 
-        if (dx0)
-            sp_document_maybe_done(SP_WIDGET_DOCUMENT(spw), "selector:toolbar:move:horizontal");
-        else if (dx1)
-            sp_document_maybe_done(SP_WIDGET_DOCUMENT(spw), "selector:toolbar:scale:horizontal");
-        else if (dy0)
-            sp_document_maybe_done(SP_WIDGET_DOCUMENT(spw), "selector:toolbar:move:vertical");
-        else if (dy1)
-            sp_document_maybe_done(SP_WIDGET_DOCUMENT(spw), "selector:toolbar:scale:vertical");
-        else sp_document_done(SP_WIDGET_DOCUMENT(spw));
+        sp_document_maybe_done(SP_WIDGET_DOCUMENT(spw), actionkey);
 
         // defocus spinbuttons by moving focus to the canvas, unless "stay" is on
         spinbutton_defocus(GTK_OBJECT(spw));

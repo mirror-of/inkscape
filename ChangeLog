@@ -1,5 +1,7 @@
 2004-06-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/select-toolbar.cpp: Cleanups and preparation for px units.
+
 	* src/helper/units.h, src/helper/units.cpp:
 	  Add reference version of sp_points_get_units, sp_units_get_points.
 	  Implement as simple multiplication instead of sp_convert_distance.
