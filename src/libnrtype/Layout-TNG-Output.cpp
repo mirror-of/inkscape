@@ -200,11 +200,12 @@ static char const * weight_to_text(PangoWeight w)
 {
     switch (w) {
         case PANGO_WEIGHT_ULTRALIGHT: return "ultralight";
-        case PANGO_WEIGHT_LIGHT: return "light";
-        case PANGO_WEIGHT_NORMAL: return "normalweight";
-        case PANGO_WEIGHT_BOLD: return "bold";
-        case PANGO_WEIGHT_ULTRABOLD: return "ultrabold";
-        case PANGO_WEIGHT_HEAVY: return "heavy";
+        case PANGO_WEIGHT_LIGHT     : return "light";
+        case PANGO_WEIGHT_SEMIBOLD  : return "semibold";
+        case PANGO_WEIGHT_NORMAL    : return "normalweight";
+        case PANGO_WEIGHT_BOLD      : return "bold";
+        case PANGO_WEIGHT_ULTRABOLD : return "ultrabold";
+        case PANGO_WEIGHT_HEAVY     : return "heavy";
     }
     return "???";
 }
