@@ -405,7 +405,12 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 			NRRect bbox;
 			int x0, y0, x1, y1, w, h;
 
-			NRMatrix a = rf->transform;
+			/* This odd construction replaces
+			** NRMatrix a = rf->transform;
+			** to prevent the GCC warning
+			** "conversion sequence for the argument is better"
+			*/
+			NRMatrix a = rf->transform.operator const NRMatrix&();
 			a[4] = 0.0;
 			a[5] = 0.0;
 #ifdef test_rf_liv
