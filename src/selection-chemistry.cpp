@@ -52,7 +52,7 @@ using NR::Y;
 /* fixme: find a better place */
 GSList *clipboard = NULL;
 GSList *gradient_clipboard = NULL;
-
+SPCSSAttr *style_clipboard = NULL;
 
 void sp_selection_delete()
 {
@@ -605,10 +605,14 @@ void sp_copy_gradient (SPGradient *gradient)
 
 void sp_copy_pattern (SPPattern *pattern)
 {
-    SPRepr *pattern_repr;
-
-    pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(pattern));
+    SPRepr *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(pattern));
     gradient_clipboard = g_slist_prepend(gradient_clipboard, pattern_repr);
+}
+
+void sp_copy_marker (SPMarker *marker)
+{
+    SPRepr *marker_repr = sp_repr_duplicate(SP_OBJECT_REPR(marker));
+    gradient_clipboard = g_slist_prepend(gradient_clipboard, marker_repr);
 }
 
 
@@ -634,6 +638,15 @@ void sp_copy_stuff_used_by_item (SPItem *item)
             sp_copy_pattern (SP_PATTERN(server));
     }
 
+    if (SP_IS_SHAPE (item)) { 
+        SPShape *shape = SP_SHAPE (item);
+        for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
+            if (shape->marker[i]) {
+                sp_copy_marker (SP_MARKER (shape->marker[i]));
+            }
+        }
+    }
+
     // recurse
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o))
@@ -657,22 +670,30 @@ void sp_selection_copy()
 
     const GSList *items = (GSList *) selection->itemList();
 
-    /* Clear old gradient clipboard */
+    // 1.  Store referenced stuff:
+    // clear old gradient clipboard
     while (gradient_clipboard) {
         sp_repr_unref((SPRepr *) gradient_clipboard->data);
         gradient_clipboard = g_slist_remove (gradient_clipboard, gradient_clipboard->data);
     }
-
-    // copy stuff referenced by the item to gradient_clipboard
-    for (; items != NULL; items = items->next) {
-        sp_copy_stuff_used_by_item (SP_ITEM (items->data));
+    // copy stuff referenced by all items to gradient_clipboard
+    for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
+        sp_copy_stuff_used_by_item (SP_ITEM (i->data));
     }
 
     GSList *reprs = g_slist_copy ((GSList *) selection->reprList());
 
-     SPRepr *parent = ((SPRepr *) reprs->data)->parent;
-     gboolean sort = TRUE;
-     for (GSList *i = reprs->next; i; i = i->next) {
+    // 2.  Store style:
+    if (style_clipboard)
+        sp_repr_css_attr_unref (style_clipboard);
+    SPItem *item = SP_ITEM (items->data);
+    style_clipboard = sp_css_attr_from_style (SP_OBJECT(item));
+    //sp_repr_css_print (style_clipboard);
+
+    // 3.  Sort items:
+    SPRepr *parent = ((SPRepr *) reprs->data)->parent;
+    gboolean sort = TRUE;
+    for (GSList *i = reprs->next; i; i = i->next) {
          if ((((SPRepr *) i->data)->parent) != parent) {
              // We can copy items from different parents, but we cannot do sorting in this case
              sort = FALSE;
@@ -682,7 +703,8 @@ void sp_selection_copy()
      if (sort)
         reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
 
-    /* Clear old clipboard */
+    // 4.  Copy item reprs:
+    //clear old clipboard 
     while (clipboard) {
         sp_repr_unref((SPRepr *) clipboard->data);
         clipboard = g_slist_remove(clipboard, clipboard->data);
@@ -703,6 +725,24 @@ void sp_selection_copy()
     gradient_clipboard = g_slist_reverse(gradient_clipboard);
 }
 
+/**
+Add gradients/patterns/markers referenced by copied objects to defs
+*/
+void 
+paste_gradients (SPDocument *doc)
+{
+    for (GSList *gl = gradient_clipboard; gl != NULL; gl = gl->next) {
+        SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
+        SPRepr *repr = (SPRepr *) gl->data;
+        SPObject *exists = doc->getObjectByRepr(repr);
+        if (!exists){
+            SPRepr *copy = sp_repr_duplicate(repr);
+            sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
+            sp_repr_unref(copy);
+        }
+    }
+}
+
 void sp_selection_paste(bool in_place)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -718,18 +758,8 @@ void sp_selection_paste(bool in_place)
     }
 
     selection->clear();
-    SPDocument *doc = SP_DT_DOCUMENT(desktop);
-    SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
-    // add gradients referenced by copied objects to defs
-    for (GSList *gl = gradient_clipboard; gl != NULL; gl = gl->next) {
-        SPRepr *repr = (SPRepr *) gl->data;
-        SPObject *exists = doc->getObjectByRepr(repr);
-        if (!exists){
-            SPRepr *copy = sp_repr_duplicate(repr);
-            sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
-            sp_repr_unref(copy);
-        }
-    }
+
+    paste_gradients (SP_DT_DOCUMENT(desktop));
 
     GSList *copied = NULL;
     // add objects to document
@@ -784,45 +814,11 @@ void sp_selection_paste_style()
         return;
     }
 
-    // FIXME: use desktop's set_style method when it's done, to recursively merge with all children recursively
-    // FIXME: in set_style, compensate pattern and gradient fills for the object's own transform so that pasting fills does not depend on preserve/optimize
+    paste_gradients (SP_DT_DOCUMENT(desktop));
 
-    GSList *selected = g_slist_copy((GSList *) selection->itemList());
-    SPDocument *doc = SP_DT_DOCUMENT(desktop);
+    sp_desktop_set_style (desktop, style_clipboard);
 
-    for (GSList *l = selected; l != NULL; l = l->next) {
-
-        // take the style from first object on clipboard
-        SPStyle *style = sp_style_new();
-        sp_style_read_from_repr(style, (SPRepr *) clipboard->data);
-        // if its using a gradient we need the def too
-        if (style && style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {    /* Object has pattern or gradient fill*/
-            SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(SP_DT_DOCUMENT(desktop));
-            // add gradients referenced by clipboard objects to defs
-            for (GSList *gl = gradient_clipboard; gl != NULL; gl = gl->next) {
-                SPRepr *repr = (SPRepr *) gl->data;
-                SPObject *exists = doc->getObjectByRepr(repr);
-                if (!exists){
-                    SPRepr *copy = sp_repr_duplicate(repr);
-                    sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
-                    sp_repr_unref(copy);
-                }
-            }
-        }
-
-        // merge it with the current object's style, if any
-        const gchar *old_style = sp_repr_attr(SP_OBJECT_REPR(l->data), "style");
-        if (old_style)
-            sp_style_merge_from_style_string(style, old_style);
-
-        // calculate the difference between the current object and its parent styles
-        gchar *newcss = sp_style_write_difference(style, SP_OBJECT_STYLE(SP_OBJECT_PARENT(l->data)));
-
-        // write the result to the object repr
-        sp_repr_set_attr(SP_OBJECT_REPR(l->data), "style", (newcss && *newcss) ? newcss : NULL);
-    }
-
-    sp_document_done(SP_DT_DOCUMENT(desktop));
+    sp_document_done(SP_DT_DOCUMENT (desktop));
 }
 
 void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
