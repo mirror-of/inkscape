@@ -761,15 +761,11 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 
     NR::Point dxy = xy - sp_sel_trans_point_desktop(seltrans);
 
-    gchar const *pref = prefs_get_string_attribute("tools.select", "move_with_grid");
-    bool const snap = (pref == NULL || !strcmp(pref, "snap"));
-    bool const alternate = (state & GDK_SHIFT_MASK);
-
-    if (snap == alternate) {
-        /* Keep offset: snap the moved distance to the grid */
+    if (state & GDK_MOD1_MASK) {
+        /* Alt pressed means keep offset: snap the moved distance to the grid */
         namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, dxy);
-    } else if ((state & GDK_MOD1_MASK) == 0) {
-        /* Snap as normal.  Alt-drag will not snap to the grid even if it is enabled. */
+    } else if ((state & GDK_SHIFT_MASK) == 0) {
+        /* Snap as normal.  Shift-drag will not snap to the grid even if it is enabled. */
         for (unsigned int dim = 0 ; dim < 2 ; ++dim) {
             std::pair<NR::Coord, bool> b = namedview_dim_snap_list (desktop->namedview, Snapper::BBOX_POINT, seltrans->bbox_points,
                                                                     dxy[dim], NR::Dim2(dim));
