@@ -146,10 +146,10 @@ void SPSelection::add(SPObject *obj) {
 }
 
 void SPSelection::_add(SPObject *obj) {
-    // unselect any of the item's children which may be selected
+    // unselect any of the item's ancestors and descendants which may be selected
     // (to prevent double-selection)
-    // TODO: what if we are adding the child of an already selected object?
-    _removeObjectChildren(obj);
+    _removeObjectDescendants(obj);
+    _removeObjectAncestors(obj);
 
     _objs = g_slist_prepend(_objs, obj);
     g_signal_connect(G_OBJECT(obj), "release",
@@ -161,6 +161,14 @@ void SPSelection::_add(SPObject *obj) {
 void SPSelection::set(SPObject *object) {
     _clear();
     add(object);
+}
+
+void SPSelection::toggle(SPObject *obj) {
+    if (includes (obj)) {
+        remove (obj);
+    } else {
+        add(obj);
+    }
 }
 
 void SPSelection::remove(SPObject *obj) {
@@ -370,7 +378,7 @@ std::vector<NR::Point> SPSelection::getBBoxPoints() const {
     return p;
 }
 
-void SPSelection::_removeObjectChildren(SPObject *obj) {
+void SPSelection::_removeObjectDescendants(SPObject *obj) {
     GSList *iter, *next;
     for ( iter = _objs ; iter ; iter = next ) {
         next = iter->next;
@@ -384,6 +392,16 @@ void SPSelection::_removeObjectChildren(SPObject *obj) {
             parent = SP_OBJECT_PARENT(parent);
         }
     }
+}
+
+void SPSelection::_removeObjectAncestors(SPObject *obj) {
+        SPObject *parent=SP_OBJECT_PARENT(obj);
+        while (parent) {
+            if (includes(parent)) {
+                _remove(parent);
+            }
+            parent = SP_OBJECT_PARENT(parent);
+        }
 }
 
 SPObject *SPSelection::_objectForRepr(Inkscape::XML::Node *repr) const {
@@ -401,7 +419,7 @@ guint SPSelection::numberOfLayers() {
 	for (GSList const *iter = items; iter != NULL; iter = iter->next) {
 		SPObject *layer = desktop()->layerForObject(SP_OBJECT(iter->data));
 		if (g_slist_find (layers, layer) == NULL) {
-				layers = g_slist_prepend (layers, layer);
+			layers = g_slist_prepend (layers, layer);
 		}
 	}
 	guint ret = g_slist_length (layers);

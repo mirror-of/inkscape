@@ -118,6 +118,14 @@ public:
 	void remove(SPObject *obj);
 
 	/**
+	 * @brief Removes an item if selected, adds otherwise
+	 *
+	 * @param item the item to unselect
+	 */
+	void toggle(SPObject *obj);
+	void toggleItem(SPItem *item) { toggle (item); }
+
+	/**
 	 * @brief Removes an item from the set of selected objects
 	 *
 	 * It is ok to call this method for an unselected item.
@@ -307,8 +315,10 @@ private:
 
 	void _invalidateCachedLists();
 
-	/** @brief unselect all children of the given item */
-	void _removeObjectChildren(SPObject *obj);
+	/** @brief unselect all descendants of the given item */
+	void _removeObjectDescendants(SPObject *obj);
+	/** @brief unselect all ancestors of the given item */
+	void _removeObjectAncestors(SPObject *obj);
 	/** @brief clears the selection (without issuing a notification) */
 	void _clear();
 	/** @brief adds an object (without issuing a notification) */
