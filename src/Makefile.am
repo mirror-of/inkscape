@@ -5,10 +5,15 @@ win32_sources = winmain.cpp
 win32ldflags = -lcomdlg32
 endif 
 
+if INKJAR
+inkjar_dir = inkjar
+inkjar_libs = inkjar/libinkjar.a
+endif
+
 module_libs = modules/libspmodules.a
 module_src = module.cpp module.h
 
-SUBDIRS = libarikkei libnr livarot libnrtype xml svg helper widgets dialogs display modules utest
+SUBDIRS = libarikkei libnr livarot libnrtype xml svg helper widgets dialogs display modules utest $(inkjar_dir)
 
 AM_CPPFLAGS = \
 	-DINKSCAPE_VERSION=\""$(VERSION)"\"
@@ -166,7 +171,8 @@ inkscape_private_libs = \
 	libnr/libnr.a \
 	libarikkei/libarikkei.a \
 	livarot/libvarot.a \
-	$(module_libs)
+	$(module_libs) \
+	$(inkjar_libs)
 
 
 inkscape_LDADD = \
@@ -208,7 +214,8 @@ inkview_LDADD = \
 	$(XFT_LIBS) \
 	$(FREETYPE_LIBS) \
 	$(kdeldadd) \
-	$(win32ldflags)
+	$(win32ldflags) \
+	$(inkjar_libs)
 
 dist-hook:
 	mkdir $(distdir)/pixmaps
