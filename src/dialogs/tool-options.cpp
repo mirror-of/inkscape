@@ -1,7 +1,7 @@
 #define __TOOL_OPTIONS_C__
 
-/*
- * Event context configuration
+/**
+ * \brief  Event context configuration
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -26,70 +26,87 @@
 #include "tool-options.h"
 
 static void sp_tool_options_dialog_destroy (GtkObject *object, gpointer data);
-static void sp_tool_options_dialog_set_eventcontext (Inkscape::Application *inkscape, SPEventContext *ec, gpointer data);
+
+static void 
+sp_tool_options_dialog_set_eventcontext ( Inkscape::Application *inkscape, 
+                                          SPEventContext *ec, gpointer data );
 
 static void sp_tool_options_dialog_setup (SPEventContext *ec);
 
 static GtkWidget *dlg = NULL;
 static GtkWidget *tbl = NULL;
 
+
+
 void
 sp_tool_options_dialog (void)
 {
-	SPEventContext *ec;
+    SPEventContext *ec;
 
-	ec = SP_DT_EVENTCONTEXT (SP_ACTIVE_DESKTOP);
+    ec = SP_DT_EVENTCONTEXT (SP_ACTIVE_DESKTOP);
 
-	if (!dlg) {
-		dlg = sp_window_new (_("Tool options"), TRUE);
-		g_signal_connect (G_OBJECT (dlg), "destroy", G_CALLBACK (sp_tool_options_dialog_destroy), NULL);
+    if (!dlg) {
+        dlg = sp_window_new (_("Tool options"), TRUE);
+        g_signal_connect ( G_OBJECT (dlg), "destroy", 
+                           G_CALLBACK (sp_tool_options_dialog_destroy), NULL );
 
-		sp_tool_options_dialog_setup (ec);
+        sp_tool_options_dialog_setup (ec);
 
-		g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (sp_tool_options_dialog_set_eventcontext), dlg);
+        g_signal_connect ( G_OBJECT (INKSCAPE), "set_eventcontext", 
+                           G_CALLBACK 
+                               (sp_tool_options_dialog_set_eventcontext), 
+                           dlg );
 
-		gtk_widget_show (dlg);
-	}
+        gtk_widget_show (dlg);
+    }
 }
+
+
 
 static void
 sp_tool_options_dialog_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (INKSCAPE, dlg);
+    sp_signal_disconnect_by_data (INKSCAPE, dlg);
 
-	dlg = NULL;
-	tbl = NULL;
+    dlg = NULL;
+    tbl = NULL;
 }
+
+
 
 static void
-sp_tool_options_dialog_set_eventcontext (Inkscape::Application *inkscape, SPEventContext *ec, gpointer data)
+sp_tool_options_dialog_set_eventcontext ( Inkscape::Application *inkscape, 
+                                          SPEventContext *ec, 
+                                          gpointer data )
 {
-	g_assert (dlg != NULL);
-	g_assert (tbl != NULL);
+    g_assert (dlg != NULL);
+    g_assert (tbl != NULL);
 
-	sp_tool_options_dialog_setup (ec);
+    sp_tool_options_dialog_setup (ec);
 }
+
+
 
 static void
 sp_tool_options_dialog_setup (SPEventContext *ec)
 {
-	g_assert (dlg != NULL);
+    g_assert (dlg != NULL);
 
-	if (tbl) {
-		gtk_object_destroy (GTK_OBJECT (tbl));
-	}
+    if (tbl) {
+        gtk_object_destroy (GTK_OBJECT (tbl));
+    }
 
-	if (ec) {
-		tbl = sp_event_context_config_widget (ec);
-		if (!tbl) {
-			tbl = gtk_label_new (_("Tool has no options"));
-		}
-	} else {
-		tbl = gtk_label_new (_("No active tool"));
-	}
+    if (ec) {
+        tbl = sp_event_context_config_widget (ec);
+        if (!tbl) {
+            tbl = gtk_label_new (_("Tool has no options"));
+        }
+    } else {
+        tbl = gtk_label_new (_("No active tool"));
+    }
 
-	gtk_widget_show (tbl);
+    gtk_widget_show (tbl);
 
-	gtk_container_add (GTK_CONTAINER (dlg), tbl);
+    gtk_container_add (GTK_CONTAINER (dlg), tbl);
 }
 

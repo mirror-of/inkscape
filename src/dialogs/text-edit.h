@@ -1,8 +1,8 @@
 #ifndef SP_TEXT_EDIT_H
 #define SP_TEXT_EDIT_H
 
-/*
- * text-edit
+/**
+ * \brief text-edit
  *
  * Text editing and font changes
  *

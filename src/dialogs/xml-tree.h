@@ -1,8 +1,8 @@
 #ifndef SP_XML_TREE_H
 #define SP_XML_TREE_H
 
-/*
- * XML tree editing dialog for Inkscape
+/**
+ * \brief  XML tree editing dialog for Inkscape
  *
  * Copyright Lauris Kaplinski, 2000
  *

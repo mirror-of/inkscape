@@ -1,8 +1,8 @@
 #ifndef __TOOL_OPTIONS_H__
 #define __TOOL_OPTIONS_H__
 
-/*
- * Event context configuration
+/**
+ * \brief  Event context configuration
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>

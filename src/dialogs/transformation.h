@@ -1,8 +1,8 @@
 #ifndef __SP_TRANSFORMATION_H__
 #define __SP_TRANSFORMATION_H__
 
-/*
- * Object transformation dialog
+/**
+ * \brief  Object transformation dialog
  *
  * Authors:
  *   Frank Felfe <innerspace@iname.com>
