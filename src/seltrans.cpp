@@ -676,6 +676,11 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
 
 	if (!seltrans->grabbed) {
 		sp_sel_trans_update_volatile_state(*seltrans);
+		if (!seltrans->changed) { // do not reset center if the change was by seltrans itself; otherwise reset
+                seltrans->center = seltrans->box.midpoint();
+		} else {
+                seltrans->changed = FALSE;
+             }
 		sp_sel_trans_update_handles(*seltrans);
 	}
 
