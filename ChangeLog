@@ -1,5 +1,8 @@
 2004-02-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-spiral.cpp (sp_spiral_fit_and_draw, sp_spiral_set_shape):
+	Address NRPoint warning.
+
 	* src/widgets/icon.cpp (sp_icon_paint): Cleanup.
 
 	* src/libnr/nr-types.h: Change deprecated-cast warning from runtime

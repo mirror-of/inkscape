@@ -293,8 +293,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 	int depth, i;
 
 	for (d = *t, i = 0; i <= SAMPLE_SIZE; d += dstep, i++) {
-		NRPoint tmp = sp_spiral_get_xy (spiral, d);
-		darray[i] = tmp;
+		darray[i] = sp_spiral_get_xy(spiral, d);
 
 		/* Avoid useless adjacent dups.  (Otherwise we can have all of darray filled with
 		   the same value, which upsets chord_length_parameterize.) */
@@ -375,10 +374,7 @@ sp_spiral_set_shape (SPShape *shape)
 #endif
 
 	/* Initial moveto. */
-	{
-		NRPoint t0_pt = sp_spiral_get_xy (spiral, spiral->t0);
-		sp_curve_moveto (c, t0_pt.x, t0_pt.y);
-	}
+	sp_curve_moveto(c, sp_spiral_get_xy(spiral, spiral->t0));
 
 	double const tstep = SAMPLE_STEP / spiral->revo;
 	double const dstep = tstep / (SAMPLE_SIZE - 1);
