@@ -27,11 +27,6 @@ class SPGradientContext;
 class SPGradientContextClass;
 
 struct SPGradientContext : public SPEventContext {
-    Inkscape::XML::Node *repr;
-
-    SPKnotHolder *knot_holder;
-
-    sigc::connection sel_changed_connection;
 
     NR::Point origin;
 

@@ -21,7 +21,6 @@
 
 #include "macros.h"
 #include "display/sp-canvas.h"
-#include "sp-rect.h"
 #include "inkscape.h"
 #include "document.h"
 #include "selection.h"
@@ -35,10 +34,6 @@
 #include "sp-desktop-widget.h"
 #include "sp-metrics.h"
 #include <glibmm/i18n.h>
-#include "object-edit.h"
-#include "knotholder.h"
-#include "xml/repr.h"
-#include "xml/node-event-vector.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
 #include "selcue.h"
@@ -47,13 +42,12 @@
 #include "gradient-chemistry.h"
 
 static void sp_gradient_context_class_init(SPGradientContextClass *klass);
-static void sp_gradient_context_init(SPGradientContext *rect_context);
+static void sp_gradient_context_init(SPGradientContext *gr_context);
 static void sp_gradient_context_dispose(GObject *object);
 
 static void sp_gradient_context_setup(SPEventContext *ec);
 
 static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-static gint sp_gradient_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
 static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint state, guint32 etime);
 
@@ -90,12 +84,11 @@ static void sp_gradient_context_class_init(SPGradientContextClass *klass)
 
     event_context_class->setup = sp_gradient_context_setup;
     event_context_class->root_handler  = sp_gradient_context_root_handler;
-    event_context_class->item_handler  = sp_gradient_context_item_handler;
 }
 
-static void sp_gradient_context_init(SPGradientContext *rect_context)
+static void sp_gradient_context_init(SPGradientContext *gr_context)
 {
-    SPEventContext *event_context = SP_EVENT_CONTEXT(rect_context);
+    SPEventContext *event_context = SP_EVENT_CONTEXT(gr_context);
 
     event_context->cursor_shape = cursor_gradient_xpm;
     event_context->hot_x = 4;
@@ -105,10 +98,6 @@ static void sp_gradient_context_init(SPGradientContext *rect_context)
     event_context->tolerance = 0;
     event_context->within_tolerance = false;
     event_context->item_to_select = NULL;
-
-    rect_context->knot_holder = NULL;
-
-    new (&rect_context->sel_changed_connection) sigc::connection();
 }
 
 static void sp_gradient_context_dispose(GObject *object)
@@ -118,87 +107,11 @@ static void sp_gradient_context_dispose(GObject *object)
 
     ec->enableGrDrag(false);
 
-    rc->sel_changed_connection.disconnect();
-    rc->sel_changed_connection.~connection();
-
-    if (rc->knot_holder) {
-        sp_knot_holder_destroy(rc->knot_holder);
-        rc->knot_holder = NULL;
-    }
-
-    if (rc->repr) { // remove old listener
-        sp_repr_remove_listener_by_data(rc->repr, ec);
-        sp_repr_unref(rc->repr);
-        rc->repr = 0;
-    }
-
     if (rc->_message_context) {
         delete rc->_message_context;
     }
 
     G_OBJECT_CLASS(parent_class)->dispose(object);
-}
-
-static void shape_event_attr_changed(Inkscape::XML::Node *repr,
-                                     gchar const *name, gchar const *old_value, gchar const *new_value,
-                                     bool const is_interactive, gpointer const data)
-{
-    SPGradientContext *rc = SP_GRADIENT_CONTEXT(data);
-    SPEventContext *ec = SP_EVENT_CONTEXT(rc);
-
-    if (rc->knot_holder) {
-        sp_knot_holder_destroy(rc->knot_holder);
-    }
-    rc->knot_holder = NULL;
-
-    SPDesktop *desktop = ec->desktop;
-
-    SPItem *item = SP_DT_SELECTION(desktop)->singleItem();
-
-    if (item) {
-        rc->knot_holder = sp_item_knot_holder(item, desktop);
-    }
-}
-
-static Inkscape::XML::NodeEventVector shape_repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
-    shape_event_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
-};
-
-/**
-\brief  Callback that processes the "changed" signal on the selection;
-destroys old and creates new knotholder
-*/
-void sp_gradient_context_selection_changed(SPSelection *selection, gpointer data)
-{
-    SPGradientContext *rc = SP_GRADIENT_CONTEXT(data);
-    SPEventContext *ec = SP_EVENT_CONTEXT(rc);
-
-    if (rc->knot_holder) { // destroy knotholder
-        sp_knot_holder_destroy(rc->knot_holder);
-        rc->knot_holder = NULL;
-    }
-
-    if (rc->repr) { // remove old listener
-        sp_repr_remove_listener_by_data(rc->repr, ec);
-        sp_repr_unref(rc->repr);
-        rc->repr = 0;
-    }
-
-    SPItem *item = selection->singleItem();
-    if (item) {
-        rc->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
-        if (repr) {
-            rc->repr = repr;
-            sp_repr_ref(repr);
-            sp_repr_add_listener(repr, &shape_repr_events, ec);
-            sp_repr_synthesize_events(repr, &shape_repr_events, ec);
-        }
-    }
 }
 
 static void sp_gradient_context_setup(SPEventContext *ec)
@@ -209,23 +122,6 @@ static void sp_gradient_context_setup(SPEventContext *ec)
         ((SPEventContextClass *) parent_class)->setup(ec);
     }
 
-    SPItem *item = SP_DT_SELECTION(ec->desktop)->singleItem();
-    if (item) {
-        rc->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
-        if (repr) {
-            rc->repr = repr;
-            sp_repr_ref(repr);
-            sp_repr_add_listener(repr, &shape_repr_events, ec);
-            sp_repr_synthesize_events(repr, &shape_repr_events, ec);
-        }
-    }
-
-    rc->sel_changed_connection.disconnect();
-    rc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(
-        sigc::bind(sigc::ptr_fun(&sp_gradient_context_selection_changed), (gpointer)rc)
-    );
-
     if (prefs_get_int_attribute("tools.gradient", "selcue", 1) != 0) {
         ec->enableSelectionCue();
     }
@@ -233,40 +129,6 @@ static void sp_gradient_context_setup(SPEventContext *ec)
     ec->enableGrDrag();
 
     rc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
-}
-
-
-static gint sp_gradient_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-    SPDesktop *desktop = event_context->desktop;
-
-    gint ret = FALSE;
-
-    switch (event->type) {
-    case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1 ) {
-
-            // save drag origin
-            event_context->xp = (gint) event->button.x;
-            event_context->yp = (gint) event->button.y;
-            event_context->within_tolerance = true;
-
-            // remember clicked item, disregarding groups, honoring Alt
-            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
-
-            ret = TRUE;
-        }
-        break;
-        // motion and release are always on root (why?)
-    default:
-        break;
-    }
-
-    if (((SPEventContextClass *) parent_class)->item_handler) {
-        ret = ((SPEventContextClass *) parent_class)->item_handler(event_context, item, event);
-    }
-
-    return ret;
 }
 
 static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
@@ -286,6 +148,24 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
 
     gint ret = FALSE;
     switch (event->type) {
+    case GDK_2BUTTON_PRESS:
+        if ( event->button.button == 1 ) {
+            for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
+                SPItem *item = SP_ITEM(i->data);
+                SPGradientType new_type = (SPGradientType) prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
+                guint new_fill = prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1);
+
+                SPGradient *vector = sp_gradient_vector_for_object(SP_DT_DOCUMENT(desktop), desktop,                                                                                   SP_OBJECT (item), new_fill);
+
+                SPGradient *priv = sp_item_set_gradient(item, vector, new_type, new_fill);
+                sp_gradient_reset_to_userspace(priv, item);
+            }
+
+            sp_document_done (SP_DT_DOCUMENT (desktop));
+
+            ret = TRUE;
+        }
+        break;
     case GDK_BUTTON_PRESS:
         if ( event->button.button == 1 ) {
             NR::Point const button_w(event->button.x, event->button.y);
@@ -295,8 +175,10 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             event_context->yp = (gint) button_w[NR::Y];
             event_context->within_tolerance = true;
 
-            // remember clicked item, disregarding groups, honoring Alt
-            event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state, TRUE);
+            // remember clicked item, disregarding groups, honoring Alt; do nothing with Crtl to
+            // enable Ctrl+doubleclick of exactly the selected item(s)
+            if (!(event->button.state & GDK_CONTROL_MASK))
+                event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state, TRUE);
 
             dragging = true;
             /* Position center */
@@ -335,6 +217,12 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
         event_context->xp = event_context->yp = 0;
         if ( event->button.button == 1 ) {
             dragging = false;
+
+            // unless clicked with Ctrl (to enable Ctrl+doubleclick)
+            if (event->button.state & GDK_CONTROL_MASK) {
+                ret = TRUE;
+                break;
+            }
 
             if (!event_context->within_tolerance) {
                 // we've been dragging, do nothing (grdrag handles that)
