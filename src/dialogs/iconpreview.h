@@ -13,58 +13,60 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm.h>
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
+#include <gtkmm/toggletoolbutton.h>
+
+#include "sp-object.h"
+#include "ui/widget/panel.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Dialogs {
 
 
 /**
- * A dialog that displays an icon preview
+ * A panel that displays an icon preview
  */
-class IconPreview
+class IconPreviewPanel : public Inkscape::UI::Widget::Panel
 {
-
 public:
+    IconPreviewPanel();
+    //IconPreviewPanel(Glib::ustring const &label);
+
+    static IconPreviewPanel& getInstance();
+
+    void refreshPreview();
+
+private:
+    IconPreviewPanel(IconPreviewPanel const &); // no copy
+    IconPreviewPanel &operator=(IconPreviewPanel const &); // no assign
 
 
-    /**
-     * Constructor
-     */
-    IconPreview() {};
+    void on_button_clicked(int which);
+    void renderPreview( SPObject* obj );
+    void updateMagnify();
 
+    static IconPreviewPanel* instance;
 
-    /**
-     * Factory method
-     */
-    static IconPreview *create();
+    Gtk::Tooltips   tips;
 
-    /**
-     * Destructor
-     */
-    virtual ~IconPreview() {};
+    Gtk::VBox       iconBox;
+    Gtk::HPaned     splitter;
 
+    int hot;
+    int numEntries;
+    int* sizes;
 
-    /**
-     * Show the dialog
-     */
-    virtual void show() = 0;
+    Gtk::Button           *refreshButton;
 
-    /**
-     * Do not show the dialog
-     */
-    virtual void hide() = 0;
-
-    /**
-     * Get a shared singleton instance
-     */
-    static IconPreview *getInstance();
-
-    /**
-     * Show the instance above
-     */
-    static void showInstance();
+    guchar** pixMem;
+    Gtk::Image** images;
+    Gtk::Image* magnified;
+    Glib::ustring** labels;
+    Gtk::ToggleToolButton** buttons;
 };
-
 
 } //namespace Dialogs
 } //namespace UI

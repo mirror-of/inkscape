@@ -47,6 +47,7 @@
 #include "dialogs/tiledialog.h"
 #include "dialogs/layer-properties.h"
 #include "dialogs/clonetiler.h"
+#include "ui/widget/panel.h"
 #include "dialogs/iconpreview.h"
 
 #include "extension/effect.h"
@@ -102,6 +103,28 @@ sp_action_get_title (const SPAction *action)
 
 
 namespace Inkscape {
+
+/** \brief Utility function to get a panel displayed. */
+static void show_panel( Inkscape::UI::Widget::Panel &panel )
+{
+    Gtk::Container* container = panel.get_toplevel();
+    if ( &panel == container ) { // safe check?
+        //g_message("Creating new dialog to hold it");
+        Gtk::Dialog* dia = new Gtk::Dialog();
+        Gtk::VBox *mainVBox = dia->get_vbox();
+        mainVBox->pack_start(panel);
+        dia->show_all_children();
+        dia->show();
+    } else {
+        Gtk::Dialog* dia = dynamic_cast<Gtk::Dialog*>(container);
+        if ( dia ) {
+            //g_message("Found an existing dialog");
+            dia->show();
+        } else {
+            g_message("Failed to find an existing dialog");
+        }
+    }
+}
 
 /** \brief A class to encompass all of the verbs which deal with
            file operations. */
@@ -1303,7 +1326,7 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
             sp_ui_new_view_preview ();
             break;
         case SP_VERB_VIEW_ICON_PREVIEW:
-            Inkscape::UI::Dialogs::IconPreview::showInstance();
+            show_panel( Inkscape::UI::Dialogs::IconPreviewPanel::getInstance() );
             break;
         default:
             break;

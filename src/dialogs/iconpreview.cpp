@@ -17,12 +17,6 @@
 
 #include "iconpreview.h"
 
-#include <gtkmm.h>
-#include <gtkmm/box.h>
-#include <gtkmm/dialog.h>
-#include <gtkmm/button.h>
-#include <gtkmm/toggletoolbutton.h>
-
 #include <gtk/gtk.h>
 
 #include <dialogs/dialog-events.h>
@@ -37,7 +31,6 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "display/nr-arena.h"
-#include "ui/widget/panel.h"
 #include <glib.h>
 
 extern "C" {
@@ -52,45 +45,19 @@ namespace UI {
 namespace Dialogs {
 
 
+IconPreviewPanel* IconPreviewPanel::instance = 0;
 
-//#########################################################################
-//## I M P L E M E N T A T I O N
-//#########################################################################
 
-class IconPreviewPanel : public Inkscape::UI::Widget::Panel
+IconPreviewPanel& IconPreviewPanel::getInstance()
 {
-public:
-    IconPreviewPanel();
-    //IconPreviewPanel(Glib::ustring const &label);
+    if ( !instance ) {
+        instance = new IconPreviewPanel();
+    }
 
-    void refreshPreview();
-    void renderPreview( SPObject* obj );
+    instance->refreshPreview();
 
-private:
-    IconPreviewPanel(IconPreviewPanel const &); // no copy
-    IconPreviewPanel &operator=(IconPreviewPanel const &); // no assign
-
-
-    void on_button_clicked(int which);
-    void updateMagnify();
-
-    Gtk::Tooltips   tips;
-
-    Gtk::VBox       iconBox;
-    Gtk::HPaned     splitter;
-
-    int hot;
-    int numEntries;
-    int* sizes;
-
-    Gtk::Button           *refreshButton;
-
-    guchar** pixMem;
-    Gtk::Image** images;
-    Gtk::Image* magnified;
-    Glib::ustring** labels;
-    Gtk::ToggleToolButton** buttons;
-};
+    return *instance;
+}
 
 //#########################################################################
 //## E V E N T S
@@ -267,261 +234,6 @@ void IconPreviewPanel::updateMagnify()
     magnified->get_parent()->queue_draw();
 }
 
-//-------------------------------------------------------------------------
-
-
-//#########################################################################
-//## I M P L E M E N T A T I O N
-//#########################################################################
-
-/**
- * A simple dialog for previewing icon representation.
- */
-class IconPreviewImpl : public IconPreview, public Gtk::Dialog
-{
-public:
-
-
-    /**
-     * Constructor
-     */
-    IconPreviewImpl();
-
-    /**
-     * Destructor
-     */
-    ~IconPreviewImpl();
-
-
-    /**
-     * Show the dialog
-     */
-    void show();
-    void showF12();
-
-    /**
-     * Do not show the dialog
-     */
-    void hide();
-    void hideF12();
-
-    /**
-     * Callback from OK or Cancel
-     */
-    void responseCallback(int response_id);
-
-    void refreshPreview() {panel.refreshPreview();}
-
-private:
-    IconPreviewImpl(IconPreviewImpl const &); // no copy
-    IconPreviewImpl &operator=(IconPreviewImpl const &); // no assign
-
-    //void _setDesktop(SPDesktop *desktop);
-
-    bool userHidden;
-
-    //SPDesktop *_desktop;
-
-    Gtk::Notebook   notebook;
-
-    IconPreviewPanel panel;
-};
-
-
-
-//#########################################################################
-//## E V E N T S
-//#########################################################################
-
-/**
- * Default response from the dialog.  Let's intercept it
- */
-void IconPreviewImpl::responseCallback(int response_id)
-{
-
-    if (response_id == GTK_RESPONSE_OK)
-        {
-        int panelNr = notebook.get_current_page();
-        //g_message("selected panel:%d\n", panelNr);
-
-        if (panelNr == 0)
-            {
-//             potraceProcess(true);
-            }
-        }
-    else if ( response_id == GTK_RESPONSE_APPLY ) {
-        // do it.
-        panel.refreshPreview();
-    }
-    else if (response_id == GTK_RESPONSE_CANCEL)
-        {
-//         abort();
-        }
-    else
-        {
-        hide();
-        return;
-        }
-}
-
-
-
-/*##########################
-## Experimental
-##########################*/
-static void hideCallback(GtkObject *object, gpointer dlgPtr)
-{
-    (void)object;
-
-    IconPreviewImpl *dlg = (IconPreviewImpl *) dlgPtr;
-    dlg->hideF12();
-}
-
-static void unhideCallback(GtkObject *object, gpointer dlgPtr)
-{
-    (void)object;
-
-    IconPreviewImpl *dlg = (IconPreviewImpl *) dlgPtr;
-    dlg->showF12();
-}
-
-
-
-//#########################################################################
-//## C O N S T R U C T O R    /    D E S T R U C T O R
-//#########################################################################
-/**
- * Constructor
- */
-IconPreviewImpl::IconPreviewImpl() :
-    panel()
-{
-    {
-    // This block is a much simplified version of the code used in all other dialogs for
-    // saving/restoring geometry, transientising, passing events to the aplication, and
-    // hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
-    // mutilated somewhat. This block should be removed when the same functionality is made
-    // available to all gtkmm dialogs via a base class.
-        GtkWidget *dlg = GTK_WIDGET(gobj());
-
-        gchar title[500];
-        sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_VIEW_ICON_PREVIEW), title);
-        set_title(title);
-
-        gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
-
-        sp_transientize (dlg);
-
-        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
-
-        //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
-        //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
-
-        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (hideCallback), (void *)this );
-        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (unhideCallback), (void *)this );
-    }
-
-    panel.setLabel(_("Icon"));
-
-    Gtk::VBox *mainVBox = get_vbox();
-
-    /*done */
-    notebook.append_page(panel, panel.getLabel());
-    notebook.set_show_tabs(false); // turn on when more than one
-
-    panel.refreshPreview();
-
-    //##Put the notebook on the dialog
-    mainVBox->pack_start(notebook);
-
-    show_all_children();
-
-    //## Connect the signal
-    signal_response().connect(
-         sigc::mem_fun(*this, &IconPreviewImpl::responseCallback) );
-}
-
-/**
- * Factory method.  Use this to create a new IconPreview
- */
-IconPreview *IconPreview::create()
-{
-    IconPreview *dialog = new IconPreviewImpl();
-    return dialog;
-}
-
-
-/**
- * Destructor
- */
-IconPreviewImpl::~IconPreviewImpl()
-{
-
-
-}
-
-
-/* static instance, to reduce dependencies */
-static IconPreviewImpl *iconPreviewInstance = NULL;
-
-IconPreview *IconPreview::getInstance()
-{
-    if ( !iconPreviewInstance )
-        {
-        iconPreviewInstance = new IconPreviewImpl();
-        }
-    iconPreviewInstance->refreshPreview();
-    return iconPreviewInstance;
-}
-
-
-
-void IconPreview::showInstance()
-{
-    IconPreview *iconPreviewDialog = getInstance();
-    iconPreviewDialog->show();
-}
-
-
-//#########################################################################
-//## M E T H O D S
-//#########################################################################
-
-void IconPreviewImpl::show()
-{
-    userHidden = false;
-    //call super()
-    Gtk::Dialog::show();
-    //sp_transientize((GtkWidget *)gobj());  //Make transient
-    raise();
-    Gtk::Dialog::present();
-}
-
-void IconPreviewImpl::showF12()
-{
-    if (userHidden)
-        return;
-    //call super()
-    Gtk::Dialog::show();
-    //sp_transientize((GtkWidget *)gobj());  //Make transient
-    raise();
-
-}
-
-
-void IconPreviewImpl::hide()
-{
-    userHidden = true;
-    //call super()
-    Gtk::Dialog::hide();
-}
-
-void IconPreviewImpl::hideF12()
-{
-    //userHidden = true;
-    //call super()
-    Gtk::Dialog::hide();
-}
 
 } //namespace Dialogs
 } //namespace UI
