@@ -939,8 +939,6 @@ sp_pencil_context_setup (SPEventContext *ec)
 static void
 sp_pencil_context_dispose(GObject *object)
 {
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
-
     G_OBJECT_CLASS(pencil_parent_class)->dispose(object);
 }
 
