@@ -81,11 +81,11 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
                                                        / h2i2anc[h] ));
             h2endPt_pcoordsys[h] = h2endPt_icoordsys[h] * h2i2anc[h] / path2anc;
         }
-        change_endpts(path->shape.curve, h2endPt_pcoordsys);
+        change_endpts(path->curve, h2endPt_pcoordsys);
     } else {
         /* Only one end attached.  Do translate. */
         unsigned const att_h = ( h2attItem[0] == NULL );
-        SPCurve const *const curve = path->shape.curve;
+        SPCurve const *const curve = path->curve;
         NR::Point const h2oldEndPt_pcoordsys[2] = { sp_curve_first_point(curve),
                                                     sp_curve_last_point(curve) };
         NR::Point const dirn_pcoordsys = ( h2oldEndPt_pcoordsys[!att_h] -
@@ -98,7 +98,7 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
         NR::Point const ctr_icoordsys = bbox_icoordsys.midpoint();
         NR::Point const connPt = calc_bbox_conn_pt(bbox_icoordsys,
                                                 ctr_icoordsys + dirn_icoordsys);
-        sp_curve_transform(path->shape.curve,
+        sp_curve_transform(path->curve,
                            NR::translate(connPt - h2oldEndPt_pcoordsys[att_h]));
     }
     SP_OBJECT(path)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

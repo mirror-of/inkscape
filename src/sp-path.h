@@ -21,8 +21,7 @@
 #define SP_PATH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_PATH, SPPath))
 #define SP_IS_PATH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_PATH))
 
-struct SPPath {
-    SPShape shape;
+struct SPPath : public SPShape {
     SPConnEndPair connEndPair;
 };
 

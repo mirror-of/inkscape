@@ -20,8 +20,7 @@
 #define SP_IS_DEFS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_DEFS))
 #define SP_IS_DEFS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_DEFS))
 
-struct SPDefs {
-    SPObject object;
+struct SPDefs : public SPObject {
 };
 
 struct SPDefsClass {

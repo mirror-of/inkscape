@@ -3,8 +3,18 @@
 	* src/attributes.cpp, src/attributes.h, src/sp-object.cpp, src/sp-object.h:
 	  add inkscape:label attribute
 
-	* src/sp-offset.cpp, src/sp-shape.h:
-	  derive SPShape from SPItem the C++ way
+	* src/file.cpp, src/sp-anchor.h, src/sp-animation.h, src/sp-chars.h,
+	  src/sp-clippath.h, src/sp-conn-end.cpp, src/sp-defs.h, src/sp-ellipse.h,
+	  src/sp-gradient.h, src/sp-guide.h, src/sp-image.h, src/sp-line.h,
+	  src/sp-linear-gradient.h, src/sp-marker.h, src/sp-mask.h,
+	  src/sp-namedview.h, src/sp-object-group.h, src/sp-offset.h, src/sp-path.h,
+	  src/sp-pattern.h, src/sp-polygon.h, src/sp-polyline.h,
+	  src/sp-radial-gradient.h, src/sp-rect.cpp, src/sp-rect.h, src/sp-root.h,
+	  src/sp-spiral.h, src/sp-star.h, src/sp-stop.h, src/sp-string.h,
+	  src/sp-symbol.h, src/sp-text.h, src/sp-tspan.h, src/sp-use.h,
+	  src/sp-offset.cpp, src/sp-shape.h:
+
+	  make inheritance actual
 
 2004-10-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 

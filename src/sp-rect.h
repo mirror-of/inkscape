@@ -28,9 +28,7 @@
 class SPRect;
 class SPRectClass;
 
-struct SPRect {
-	SPShape shape;
-
+struct SPRect : public SPShape {
 	SPSVGLength x;
 	SPSVGLength y;
 	SPSVGLength width;

@@ -394,7 +394,7 @@ sp_rect_set_transform(SPItem *item, NR::Matrix const &xform)
     rect->x = pos[NR::X];
     rect->y = pos[NR::Y];
 
-    sp_rect_set_shape(&rect->shape);
+    sp_rect_set_shape(rect);
 
     // Adjust stroke width
     sp_shape_adjust_stroke(item, sqrt(fabs(sw * sh)));

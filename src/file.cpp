@@ -324,7 +324,7 @@ sp_file_vacuum()
     SPDocument* doc = SP_ACTIVE_DOCUMENT;
     SPDefs *defs = SP_ROOT(SP_DOCUMENT_ROOT(doc))->defs;
 
-    for ( SPObject* def = defs->object.firstChild () ;
+    for ( SPObject* def = defs->firstChild () ;
           def ; def = SP_OBJECT_NEXT (def) )
     {
 

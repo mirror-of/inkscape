@@ -7,9 +7,7 @@
 #include "sp-linear-gradient-fns.h"
 
 /** Linear gradient. */
-struct SPLinearGradient {
-    SPGradient gradient;
-
+struct SPLinearGradient : public SPGradient {
     SPSVGLength x1;
     SPSVGLength y1;
     SPSVGLength x2;

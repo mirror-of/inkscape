@@ -26,10 +26,8 @@ class SPClipPathView;
 #include "uri-references.h"
 #include <libnr/nr-forward.h>
 
-struct SPClipPath {
+struct SPClipPath : public SPObjectGroup {
 	class Reference;
-
-	SPObjectGroup group;
 
 	unsigned int clipPathUnits_set : 1;
 	unsigned int clipPathUnits : 1;

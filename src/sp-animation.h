@@ -25,8 +25,7 @@
 class SPAnimation;
 class SPAnimationClass;
 
-struct SPAnimation {
-	SPObject object;
+struct SPAnimation : public SPObject {
 };
 
 struct SPAnimationClass {
@@ -44,8 +43,7 @@ GType sp_animation_get_type (void);
 class SPIAnimation;
 class SPIAnimationClass;
 
-struct SPIAnimation {
-	SPAnimation animation;
+struct SPIAnimation : public SPAnimation {
 };
 
 struct SPIAnimationClass {
@@ -63,8 +61,7 @@ GType sp_ianimation_get_type (void);
 class SPAnimate;
 class SPAnimateClass;
 
-struct SPAnimate {
-	SPIAnimation animation;
+struct SPAnimate : public SPIAnimation {
 };
 
 struct SPAnimateClass {

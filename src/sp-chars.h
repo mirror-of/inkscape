@@ -32,8 +32,7 @@ struct SPCharElement {
 	NRMatrix transform;
 };
 
-struct SPChars {
-	SPItem item;
+struct SPChars : public SPItem {
 	SPCharElement *elements;
 	NRRect paintbox;
 };

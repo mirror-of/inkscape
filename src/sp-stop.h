@@ -9,9 +9,7 @@
 
 
 /** Gradient stop. */
-struct SPStop {
-    SPObject object;
-
+struct SPStop : public SPObject {
     /* fixme: Should be SPSVGPercentage */
     gfloat offset;
 

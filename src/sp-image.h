@@ -34,9 +34,7 @@ class SPImageClass;
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-struct SPImage {
-	SPItem item;
-
+struct SPImage : public SPItem {
 	SPSVGLength x;
 	SPSVGLength y;
 	SPSVGLength width;

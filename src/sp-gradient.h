@@ -42,8 +42,7 @@ typedef enum {
 	SP_GRADIENT_STATE_PRIVATE
 } SPGradientState;
 
-struct SPGradient {
-	SPPaintServer paint_server;
+struct SPGradient : public SPPaintServer {
 	/* Reference (href) */
 	SPGradientReference *ref;
 	/* State in Inkscape gradient system */

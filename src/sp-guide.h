@@ -24,8 +24,7 @@ class SPGuideAttachment;
 #define SP_IS_GUIDE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GUIDE))
 
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
-struct SPGuide {
-	SPObject object;
+struct SPGuide : public SPObject {
 	NR::Point normal;
 	gdouble position;
 	guint32 color;

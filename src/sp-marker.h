@@ -33,9 +33,7 @@ class SPMarkerView;
 #include "sp-marker-loc.h"
 #include "uri-references.h"
 
-struct SPMarker {
-	SPGroup group;
-
+struct SPMarker : public SPGroup {
 	/* units */
 	unsigned int markerUnits_set : 1;
 	unsigned int markerUnits : 1;

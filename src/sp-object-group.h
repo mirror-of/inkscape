@@ -21,8 +21,7 @@
 #define SP_IS_OBJECTGROUP(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_OBJECTGROUP))
 #define SP_IS_OBJECTGROUP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_OBJECTGROUP))
 
-struct SPObjectGroup {
-	SPObject object;
+struct SPObjectGroup : public SPObject {
 };
 
 struct SPObjectGroupClass {

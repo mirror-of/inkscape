@@ -35,8 +35,7 @@ enum {
 	SP_TSPAN_ROLE_LINE
 };
 
-struct SPTSpan {
-	SPItem       item;
+struct SPTSpan : public SPItem {
 	guint        role : 2;
 	bool         last_tspan;
 	
@@ -53,9 +52,7 @@ GType sp_tspan_get_type ();
 
 /* SPTextPath */
 
-struct SPTextPath {
-	SPItem        item;
-
+struct SPTextPath : public SPItem {
 	div_flow_src	contents;
 	SPSVGLength		 x,y;
 	

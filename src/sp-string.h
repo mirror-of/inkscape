@@ -23,9 +23,7 @@
 #define SP_IS_STRING_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_STRING))
 
 
-struct SPString {
-	SPObject         chars;
-	
+struct SPString : public SPObject {
 	partial_text     svg_contents;
 	text_flow_src    contents;
 };

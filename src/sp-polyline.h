@@ -15,8 +15,7 @@
 class SPPolyLine;
 class SPPolyLineClass;
 
-struct SPPolyLine {
-	SPShape shape;
+struct SPPolyLine : public SPShape {
 };
 
 struct SPPolyLineClass {

@@ -32,9 +32,7 @@ typedef enum {
 	SP_STAR_POINT_KNOT2
 } SPStarPoint;
 
-struct SPStar {
-	SPPolygon polygon;
-
+struct SPStar : public SPPolygon {
 	gint sides;
 
 	NR::Point center;

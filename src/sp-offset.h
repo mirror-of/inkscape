@@ -28,10 +28,7 @@ class SPOffset;
 class SPOffsetClass;
 class SPUseReference;
 
-struct SPOffset
-{
-  SPShape shape;
-
+struct SPOffset : public SPShape {
   /*
    * offset is defined by curve and radius
    * the original curve is kept as a path in a sodipodi:original attribute

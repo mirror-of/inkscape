@@ -35,9 +35,7 @@
 class SPSpiral;
 class SPSpiralClass;
 
-struct SPSpiral {
-	SPShape shape;
-	
+struct SPSpiral : public SPShape {
 	/*
 	 * Spiral shape is defined as:
 	 * x(t) = rad * t^exp cos(2 * Pi * revo*t + arg) + cx

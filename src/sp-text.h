@@ -42,9 +42,7 @@ class flow_res;
 
 /* SPText */
 
-struct SPText {
-	SPItem item;
-
+struct SPText : public SPItem {
 	div_flow_src   contents;
 	SPSVGLength		 x,y;
 	SPSVGLength    linespacing;

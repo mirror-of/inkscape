@@ -49,9 +49,7 @@ enum {
 	SP_PATTERN_UNITS_OBJECTBOUNDINGBOX
 };
 
-struct SPPattern {
-	SPPaintServer paint_server;
-
+struct SPPattern : public SPPaintServer {
 	/* Reference (href) */
 	gchar *href;
 	SPPatternReference *ref;

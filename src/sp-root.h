@@ -25,9 +25,7 @@
 #include "sp-item-group.h"
 #include "version.h"
 
-struct SPRoot {
-	SPGroup group;
-
+struct SPRoot : public SPGroup {
 	struct {
 		SPVersion svg, sodipodi, inkscape;
 	} version, original;

@@ -27,9 +27,7 @@ class SPMaskView;
 #include "sp-object-group.h"
 #include "uri-references.h"
 
-struct SPMask {
-	SPObjectGroup group;
-
+struct SPMask : public SPObjectGroup {
 	unsigned int maskUnits_set : 1;
 	unsigned int maskUnits : 1;
 

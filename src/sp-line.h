@@ -26,9 +26,7 @@
 class SPLine;
 class SPLineClass;
 
-struct SPLine {
-	SPShape shape;
-
+struct SPLine : public SPShape {
 	SPSVGLength x1;
 	SPSVGLength y1;
 	SPSVGLength x2;

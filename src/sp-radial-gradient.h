@@ -8,9 +8,7 @@
 #include "sp-radial-gradient-fns.h"
 
 /** Radial gradient. */
-struct SPRadialGradient {
-    SPGradient gradient;
-
+struct SPRadialGradient : public SPGradient {
     SPSVGLength cx;
     SPSVGLength cy;
     SPSVGLength r;

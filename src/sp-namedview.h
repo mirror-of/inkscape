@@ -30,8 +30,7 @@ enum {
 	SP_BORDER_LAYER_TOP
 };
 
-struct SPNamedView {
-	SPObjectGroup objectgroup;
+struct SPNamedView : public SPObjectGroup {
 	unsigned int editable : 1;
 	unsigned int showgrid : 1;
 	unsigned int showguides : 1;

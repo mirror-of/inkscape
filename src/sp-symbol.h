@@ -30,9 +30,7 @@ class SPSymbolClass;
 #include "enums.h"
 #include "sp-item-group.h"
 
-struct SPSymbol {
-	SPGroup group;
-
+struct SPSymbol : public SPGroup {
 	/* viewBox; */
 	unsigned int viewBox_set : 1;
 	NRRect viewBox;

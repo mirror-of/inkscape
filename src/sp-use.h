@@ -28,10 +28,7 @@ class SPUse;
 class SPUseClass;
 class SPUseReference;
 
-struct SPUse {
-	// this item (invisible)
-	SPItem item;
-
+struct SPUse : public SPItem {
 	// item built from the original's repr (the visible clone)
 	// relative to the SPUse itself, it is treated as a child, similar to a grouped item relative to its group
 	SPObject *child;

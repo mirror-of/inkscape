@@ -21,9 +21,7 @@
 #define SP_IS_ANCHOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ANCHOR))
 #define SP_IS_ANCHOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_ANCHOR))
 
-struct SPAnchor {
-	SPGroup group;
-
+struct SPAnchor : public SPGroup {
 	gchar *href;
 };
 
