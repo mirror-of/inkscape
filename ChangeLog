@@ -17,6 +17,22 @@
 	src/livarot/PathSimplify.cpp, src/livarot/Shape.cpp,
 	src/livarot/ShapeSweepUtils.cpp: it's ok to free NULL.
 
+	* src/livarot/Shape.h, src/sp-offset.cpp, src/splivarot.cpp,
+	src/display/nr-arena-shape.cpp: Make Shape::pts private and offer
+	a read-only accessor.
+
+	* src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeDraw.cpp, src/livarot/ShapeMisc.cpp,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp, src/
+	livarot/ShapeSweepUtils.cpp, src/livarot/ShapeUtils.h: Rename
+	Shape::pts to Shape::_pts, and use getPoint() wherever possible.
+
+	* src/sp-offset.cpp, src/splivarot.cpp, src/livarot/Shape.cpp,
+	src/livarot/Shape.h, src/livarot/ShapeMisc.cpp,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: Add
+	dg_point::totalDegree() and make use of it.
+
+
 2004-09-08  MenTaLguY  <mental@rydia.net>
 
 	* src/libnr/nr-object.h, src/libnr/nr-object.cpp: fix NRObject
