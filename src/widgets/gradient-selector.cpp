@@ -330,8 +330,8 @@ sp_gradient_selector_set_rgradient_position (SPGradientSelector *sel, gdouble cx
 SPGradient *
 sp_gradient_selector_get_vector (SPGradientSelector *sel)
 {
-	g_return_val_if_fail (sel != NULL, NULL);
-	g_return_val_if_fail (SP_IS_GRADIENT_SELECTOR (sel), NULL);
+	if (sel == NULL || !SP_IS_GRADIENT_SELECTOR (sel))
+		return NULL;
 
 	/* fixme: */
 	return SP_GRADIENT_VECTOR_SELECTOR (sel->vectors)->gr;
