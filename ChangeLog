@@ -1,3 +1,7 @@
+2004-07-14  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-object.cpp: disable recursive update warning for release
+
 2004-07-13  MenTaLguY  <mental@rydia.net>
 
 	* src/make.exclude: omit extension/script/js/js.c from build
