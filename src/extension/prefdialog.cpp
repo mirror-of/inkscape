@@ -16,12 +16,15 @@ namespace Extension {
 
 PrefDialog::PrefDialog (Glib::ustring name, Gdk::NativeWindow win_id) {
     Gtk::Dialog::Dialog(name + " Preferences", true, true);
+
+#ifndef WIN32
     _socket = new Gtk::Socket();
 
     this->get_vbox()->pack_start(*_socket, true, true, 5);
 
     _socket->add_id(win_id);
     _socket->show();
+#endif
 
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
     add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
