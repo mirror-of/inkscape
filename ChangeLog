@@ -461,6 +461,11 @@
 	* autogen.sh: cleanups and more debugging.
 	* share/extensions/sk2svg.sh: tempfile cleanups from pjrm (patch #990009)
 
+2004-07-20 Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+	* debian/changelog, configure.in: Moved to 0.40cvs and updated
+	  debian stuff.
+	
 2004-07-18  MenTaLguY  <mental@rydia.net>
 
 	* configure.in, src/Makefile.am, src/algorithms/Makefile_insert,
