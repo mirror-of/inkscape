@@ -734,6 +734,7 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_NONE),
         Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE),
         Inkscape::Verb::get(SP_VERB_EDIT_CLONE),
+        Inkscape::Verb::get(SP_VERB_DIALOG_CLONETILER),
         Inkscape::Verb::get(SP_VERB_EDIT_UNLINK_CLONE),
         Inkscape::Verb::get(SP_VERB_EDIT_CLONE_ORIGINAL),
         Inkscape::Verb::get(SP_VERB_SELECTION_CREATE_BITMAP),

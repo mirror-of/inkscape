@@ -44,6 +44,7 @@
 #include "dialogs/debugdialog.h"
 #include "dialogs/tracedialog.h"
 #include "dialogs/layer-properties.h"
+#include "dialogs/clonetiler.h"
 
 #include "tools-switch.h"
 #include "inkscape-private.h"
@@ -1298,6 +1299,9 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_DIALOG_TOGGLE:
             inkscape_dialogs_toggle ();
             break;
+        case SP_VERB_DIALOG_CLONETILER:
+            clonetiler_dialog ();
+            break;
         case SP_VERB_DIALOG_ITEM:
             sp_item_dialog ();
             break;
@@ -1728,6 +1732,8 @@ Verb * Verb::_base_verbs[] = {
         N_("View debug messages"), NULL),
     new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/_Hide Dialogs"),
         N_("Show or hide all active dialogs"), "dialog_toggle"),
+    new DialogVerb(SP_VERB_DIALOG_CLONETILER, "DialogsClonetiler", N_("Tile clones..."),
+        N_("Create and arrange multiple clones of selection"), NULL),
     new DialogVerb(SP_VERB_DIALOG_ITEM, "DialogItem", N_("_Object Properties..."),
         N_("Object Properties dialog"), "dialog_item_properties"),
 

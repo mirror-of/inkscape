@@ -59,7 +59,9 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/rdf.cpp	\
 	dialogs/rdf.h      \
 	dialogs/find.cpp        \
-	dialogs/find.h
+	dialogs/find.h \
+	dialogs/clonetiler.cpp        \
+	dialogs/clonetiler.h
 
 #	dialogs/sp-widget.c	\
 #	dialogs/sp-widget.h	\
