@@ -103,7 +103,13 @@ class DebugDialogImpl : public DebugDialog, public Gtk::Dialog
 
     Gtk::TextView messageText;
 
-    guint dialogHandler;
+    //Handler ID's
+    guint handlerDefault;
+    guint handlerGlibmm;
+    guint handlerAtkmm;
+    guint handlerPangomm;
+    guint handlerGdkmm;
+    guint handlerGtkmm;
 
 
 
@@ -161,7 +167,12 @@ DebugDialogImpl::DebugDialogImpl()
     message("enable log display by setting ");
     message("dialogs.debug 'redirect' attribute to 1 in preferences.xml");
 
-    dialogHandler = 0;
+    handlerDefault = 0;
+    handlerGlibmm  = 0;
+    handlerAtkmm   = 0;
+    handlerPangomm = 0;
+    handlerGdkmm   = 0;
+    handlerGtkmm   = 0;
 }
 
 /**
@@ -259,25 +270,73 @@ void DebugDialogImpl::captureLogMessages()
     This might likely need more code, to capture Gtkmm
     and Glibmm warnings, or maybe just simply grab stdout/stderr
     */
-
-    if ( !dialogHandler )
-        {
-        dialogHandler = g_log_set_handler(NULL,
-            (GLogLevelFlags)(G_LOG_LEVEL_ERROR   | G_LOG_LEVEL_CRITICAL |
+   GLogLevelFlags flags = (GLogLevelFlags) (G_LOG_LEVEL_ERROR   | G_LOG_LEVEL_CRITICAL |
                              G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE  |
-                             G_LOG_LEVEL_INFO    | G_LOG_LEVEL_DEBUG),
-              dialogLoggingFunction,
-              (gpointer)this);
+                             G_LOG_LEVEL_INFO    | G_LOG_LEVEL_DEBUG);
+    if ( !handlerDefault )
+        {
+        handlerDefault = g_log_set_handler(NULL, flags,
+              dialogLoggingFunction, (gpointer)this);
+        }
+    if ( !handlerGlibmm )
+        {
+        handlerGlibmm = g_log_set_handler("glibmm", flags,
+              dialogLoggingFunction, (gpointer)this);
+        }
+    if ( !handlerAtkmm )
+        {
+        handlerAtkmm = g_log_set_handler("atkmm", flags,
+              dialogLoggingFunction, (gpointer)this);
+        }
+    if ( !handlerPangomm )
+        {
+        handlerPangomm = g_log_set_handler("pangomm", flags,
+              dialogLoggingFunction, (gpointer)this);
+        }
+    if ( !handlerGdkmm )
+        {
+        handlerGdkmm = g_log_set_handler("gdkmm", flags,
+              dialogLoggingFunction, (gpointer)this);
+        }
+    if ( !handlerGtkmm )
+        {
+        handlerGtkmm = g_log_set_handler("gtkmm", flags,
+              dialogLoggingFunction, (gpointer)this);
         }
     message("log capture started");
 }
 
 void DebugDialogImpl::releaseLogMessages()
 {
-    if ( dialogHandler )
+    if ( handlerDefault )
         {
-        g_log_remove_handler(NULL, dialogHandler);
-        dialogHandler = 0;
+        g_log_remove_handler(NULL, handlerDefault);
+        handlerDefault = 0;
+        }
+    if ( handlerGlibmm )
+        {
+        g_log_remove_handler("glibmm", handlerGlibmm);
+        handlerGlibmm = 0;
+        }
+    if ( handlerAtkmm )
+        {
+        g_log_remove_handler("atkmm", handlerAtkmm);
+        handlerAtkmm = 0;
+        }
+    if ( handlerPangomm )
+        {
+        g_log_remove_handler("atkmm", handlerPangomm);
+        handlerPangomm = 0;
+        }
+    if ( handlerGdkmm )
+        {
+        g_log_remove_handler("gdkmm", handlerGdkmm);
+        handlerGdkmm = 0;
+        }
+    if ( handlerGtkmm )
+        {
+        g_log_remove_handler("gtkmm", handlerGtkmm);
+        handlerGtkmm = 0;
         }
     message("log capture discontinued");
 }
