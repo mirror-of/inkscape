@@ -36,6 +36,7 @@
 #include "pixmaps/cursor-star.xpm"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
+#include "prefs-utils.h"
 
 #include "star-context.h"
 #include <libnr/nr-point-fns.h>
@@ -230,6 +231,8 @@ sp_star_drag (SPStarContext * sc, double x, double y, guint state)
 
 	desktop = SP_EVENT_CONTEXT (sc)->desktop;
 
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+
 	if (!sc->item) {
 		SPRepr * repr, * style;
 		SPCSSAttr * css;
@@ -247,11 +250,6 @@ sp_star_drag (SPStarContext * sc, double x, double y, guint state)
 		sp_repr_unref (repr);
 	}
 
-	/* This is bit ugly, but so we are */
-
-/*  	if (state & GDK_CONTROL_MASK) { */
-/*  	} else if (state & GDK_SHIFT_MASK) { */
-
 	/* Free movement for corner point */
 	NRPoint fp;
 	sp_desktop_dt2root_xy_point (desktop, &fp, sc->center[NR::X], sc->center[NR::Y]);
@@ -266,6 +264,10 @@ sp_star_drag (SPStarContext * sc, double x, double y, guint state)
 	NR::Point d = p1 - p0;
 	gdouble r1 = NR::L2 (d);
 	gdouble arg1 = atan2 (d);
+
+  	if (state & GDK_CONTROL_MASK) { 
+		arg1 = round (arg1/(M_PI/snaps))*(M_PI/snaps);
+  	} 
 	
 	sp_star_position_set (star, sc->magnitude, p0, r1, r1 * sc->proportion, arg1, arg1 + M_PI / sides);
 

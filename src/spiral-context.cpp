@@ -37,6 +37,7 @@
 #include "spiral-context.h"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
+#include "prefs-utils.h"
 
 static void sp_spiral_context_class_init (SPSpiralContextClass * klass);
 static void sp_spiral_context_init (SPSpiralContext * spiral_context);
@@ -238,6 +239,8 @@ sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state)
 
 	desktop = SP_EVENT_CONTEXT (sc)->desktop;
 
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+
 	if (!sc->item) {
 		SPRepr * repr, * style;
 		SPCSSAttr * css;
@@ -258,11 +261,6 @@ sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state)
 		sp_repr_unref (repr);
 	}
 
-	/* This is bit ugly, but so we are */
-
-/*  	if (state & GDK_CONTROL_MASK) { */
-/*  	} else if (state & GDK_SHIFT_MASK) { */
-
 	/* Free movement for corner point */
 	sp_desktop_dt2root_xy_point (desktop, &fp, sc->center.x, sc->center.y);
 	p0.x = fp.x;
@@ -277,7 +275,12 @@ sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state)
 	dx = p1.x - p0.x;
 	dy = p1.y - p0.y;
 	rad = hypot (dx, dy);
+
 	arg = atan2 (dy, dx) - 2.0*M_PI*spiral->revo;
+
+  	if (state & GDK_CONTROL_MASK) { 
+		arg = round (arg/(M_PI/snaps))*(M_PI/snaps);
+	} 
 	
         /* Fixme: these parameters should be got from dialog box */
 	sp_spiral_position_set (spiral, p0.x, p0.y,
