@@ -64,6 +64,7 @@ typedef struct text_chunk_solution {
   int           start_ind,end_ind;
   double        length;
   double        ascent,descent; // may differ from the initial one
+  bool          endOfParagraph;
 } text_chunk_solution;
 
 typedef struct box_solution {

@@ -462,7 +462,7 @@ public:
   typedef struct elem_box {
     double       x_pos,y_ascent,y_descent,x_length;
     int          t_first,t_last;
-    bool         is_white;
+    bool         is_white,is_return;
   } elem_box;
   typedef struct glyph_box {
     double       x_pos,y_pos;
@@ -533,7 +533,7 @@ public:
   virtual text_chunk_solution* StuffThatBox(int start_ind,double minLength,double /*nominalLength*/,double maxLength,bool strict);
   
   virtual void                 GlyphsAndPositions(int start_ind,int end_ind,int &nbS,glyphs_for_span* &spans);
-  void                         AddBox(int st,int en,bool whit,PangoGlyphString* from,int offset,PangoFont* theFont,double &cumul);
+  void                         AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,NR::Point &cumul);
   void                         SetTextWithMarkup(char* inText,int flags);
   void                         SetTextWithAttrs(char* inText,PangoAttrList* resAttr,int flags);
   void                         AddDullGlyphs(glyphs_for_span &dest,double &cumul,int c_st,int c_en);
@@ -555,6 +555,7 @@ text_chunk_solution* pango_text_chunker::StuffThatBox(int start_ind,double minLe
   text_chunk_solution lastWord;
   text_chunk_solution curSol;
   curSol.end_of_array=false;
+  curSol.endOfParagraph=false;
   curSol.start_ind=start_ind;
   curSol.end_ind=-1;
   curSol.start_ind=0;
@@ -586,7 +587,8 @@ text_chunk_solution* pango_text_chunker::StuffThatBox(int start_ind,double minLe
     if ( nAscent > curSol.ascent ) curSol.ascent=nAscent;
     if ( nDescent > curSol.descent ) curSol.descent=nDescent;
     bool breaksAfter=false;
-    if ( cur_ind < textLength-1 ) {
+    curSol.endOfParagraph=false;
+    if ( cur_ind < nbWord-1 ) {
       if ( 1 /*pAttrs[cur_ind+1].is_white || pAttrs[cur_ind].is_word_end*/ ) { // already chunked in words
         breaksAfter=true;
       }
@@ -599,9 +601,21 @@ text_chunk_solution* pango_text_chunker::StuffThatBox(int start_ind,double minLe
     } else {
       lastWord=curSol;
     }
+    if ( cur_ind >= nbWord-1 || words[cur_ind+1].is_return ) {
+      lastWord.endOfParagraph=true;
+    }
     if ( curSol.length < minLength ) {
       if ( breaksAfter ) {
         if ( lastWord.end_ind >= lastWord.start_ind ) {
+          if ( lastBefore.end_ind >= lastBefore.start_ind ) {
+            if ( lastBefore.endOfParagraph ) {
+              sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
+              sol[solSize]=sol[solSize-1];
+              sol[solSize-1]=lastBefore;
+              lastBefore.end_ind=lastBefore.start_ind-1;
+              solSize++;
+            }
+          }
           lastBefore=lastWord;
           lastWord.end_ind=lastWord.start_ind-1;
         }
@@ -716,10 +730,12 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
   nbS=nbSpan;
   if ( theIt ) pango_attr_iterator_destroy(theIt);
 }
-void                         pango_text_chunker::AddBox(int st,int en,bool whit,PangoGlyphString* from,int offset,PangoFont* theFont,double &cumul) {
+void                         pango_text_chunker::AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,NR::Point &cumul) {
   if ( en < st ) return;
   PangoRectangle ink_rect,logical_rect;
   pango_glyph_string_extents_range(from,st-offset,en+1-offset,theFont,&ink_rect,&logical_rect);
+  
+  if ( retu ) whit=false; // so that returns don't get aggregated
   
   if ( nbWord >= maxWord ) {
     maxWord=2*nbWord+1;
@@ -728,24 +744,33 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
   words[nbWord].t_first=st;
   words[nbWord].t_last=en;
   words[nbWord].is_white=whit;
-  words[nbWord].x_pos=cumul+(1/((double)PANGO_SCALE))*((double)(logical_rect.x));
-  words[nbWord].y_ascent=(1/((double)PANGO_SCALE))*((double)(-logical_rect.y));
-  words[nbWord].y_descent=(1/((double)PANGO_SCALE))*((double)(logical_rect.height+logical_rect.y));
+  words[nbWord].is_return=retu;
+  words[nbWord].x_pos=cumul[0]+(1/((double)PANGO_SCALE))*((double)(logical_rect.x));
   words[nbWord].x_length=(1/((double)PANGO_SCALE))*((double)(logical_rect.width));
-  double   cur_pos=cumul;
+
+  PangoFontMetrics *metrics = pango_font_get_metrics (theFont, NULL);
+  
+  words[nbWord].y_ascent = (1/((double)PANGO_SCALE))*((double)(pango_font_metrics_get_ascent (metrics)));  
+  words[nbWord].y_descent = (1/((double)PANGO_SCALE))*((double)(pango_font_metrics_get_descent (metrics)));  
+  words[nbWord].y_ascent+=cumul[1];
+  words[nbWord].y_descent-=cumul[1];
+  
+//  words[nbWord].y_ascent=(1/((double)PANGO_SCALE))*((double)(-logical_rect.y));
+//  words[nbWord].y_descent=(1/((double)PANGO_SCALE))*((double)(logical_rect.height+logical_rect.y));
+  double   cur_pos=cumul[0];
   int      cur_g=0;
   for (int i=st;i<=en;i++) {
     while ( cur_g < from->num_glyphs-1 && from->log_clusters[cur_g+1] <= i-offset ) cur_g++;
     pango_glyph_string_extents_range(from,i-offset,i+1-offset,theFont,&ink_rect,&logical_rect);
     charas[i].x_pos=cur_pos+(1/((double)PANGO_SCALE))*((double)(logical_rect.x));
-    charas[i].y_pos=0;
+    charas[i].y_pos=cumul[1];
     charas[i].x_dpos=(1/((double)PANGO_SCALE))*((double)(from->glyphs[cur_g].geometry.x_offset));
     charas[i].y_dpos=(1/((double)PANGO_SCALE))*((double)(from->glyphs[cur_g].geometry.y_offset));
     cur_pos=charas[i].x_pos+charas[i].x_dpos+(1/((double)PANGO_SCALE))*((double)(logical_rect.width));
   }
-  cumul+=words[nbWord].x_length;
-  charas[en+1].x_pos=cumul;
-  charas[en+1].y_pos=0;
+  cumul[0]+=words[nbWord].x_length;
+  charas[en+1].x_pos=cumul[0];
+  charas[en+1].y_pos=cumul[1];
   charas[en+1].x_dpos=0;
   charas[en+1].y_dpos=0;
   nbWord++;
@@ -790,26 +815,54 @@ void                         pango_text_chunker::SetTextWithAttrs(char* inText,P
     pGlyphs=g_list_append(pGlyphs,nGl);
   }
   
-  int    t_pos=0,l_pos=0;
-  double cumul=0;
-  bool   inWhite=false;
+  int       t_pos=0,l_pos=0;
+  NR::Point cumul(0,0);
+  bool      inWhite=false;
+  
+  int       next_par_end=0;
+  int       next_par_start=0;
+  pango_find_paragraph_boundary(inText,-1,&next_par_end,&next_par_start);
+  
+  PangoAttrIterator* theIt=(resAttr)?pango_attr_list_get_iterator (resAttr):NULL;
+
   for (GList* l=pItems,*g=pGlyphs;l&&g;l=l->next,g=g->next) {
     PangoItem*         theItem=(PangoItem*)l->data;
     PangoGlyphString*  theGlyphs=(PangoGlyphString*)g->data;
     
+    int      char_st=t_pos,char_en=char_st+theItem->length-1;
+    int      attr_st=char_st,attr_en=char_st;
+    if ( theIt ) {
+      do {
+        pango_attr_iterator_range(theIt,&attr_st,&attr_en);
+        if ( attr_en > char_st ) break;
+      } while ( pango_attr_iterator_next(theIt) );
+    } else {
+      attr_st=char_en+1;
+      attr_en=char_en+2;
+    }
+    cumul[1]=0;
+    if ( attr_st <= char_st ) {
+      PangoAttribute* one_attr=NULL;
+      one_attr=pango_attr_iterator_get(theIt,PANGO_ATTR_RISE);
+      if ( one_attr ) {
+        cumul[1]=(1/((double)PANGO_SCALE))*((double)((PangoAttrInt*)one_attr)->value);
+      }
+    }
+    
+    bool is_retu=(t_pos >= next_par_end);
     for (int g_pos=0;g_pos<theItem->length;g_pos++) {
       if ( pAttrs[t_pos].is_white ) {
         if ( inWhite ) {
           if ( flags&p_t_c_mergeWhite ) {
           } else {
             if ( l_pos < t_pos ) {
-              AddBox(l_pos,t_pos-1,true,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
+              AddBox(l_pos,t_pos-1,true,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
               l_pos=t_pos;
             }
           }
         } else {
           if ( l_pos < t_pos ) {
-            AddBox(l_pos,t_pos-1,false,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
+            AddBox(l_pos,t_pos-1,false,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
             l_pos=t_pos;
           }
         }
@@ -817,35 +870,47 @@ void                         pango_text_chunker::SetTextWithAttrs(char* inText,P
       } else {
         if ( inWhite ) {
           if ( l_pos < t_pos ) {
-            AddBox(l_pos,t_pos-1,true,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
+            AddBox(l_pos,t_pos-1,true,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
             l_pos=t_pos;
           }
         } else if ( pAttrs[t_pos].is_word_start ) {
           if ( l_pos < t_pos ) {
-            AddBox(l_pos,t_pos-1,false,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
+            AddBox(l_pos,t_pos-1,false,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
             l_pos=t_pos;
           }
         }
         inWhite=false;
       }
+      is_retu=(t_pos >= next_par_end);
+      if ( t_pos >= next_par_start ) {
+        int old_dec=next_par_start;
+        pango_find_paragraph_boundary(inText+old_dec,-1,&next_par_end,&next_par_start);
+        next_par_end+=old_dec;
+        next_par_start+=old_dec;
+        is_retu=(t_pos >= next_par_end);
+      }
+      
       t_pos++;
-    }
+   }
     if ( l_pos < t_pos ) {
-      AddBox(l_pos,t_pos-1,inWhite,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
+      AddBox(l_pos,t_pos-1,inWhite,false,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
       l_pos=t_pos;
     }
   }
   
-/*  printf("%i mots\n",nbWord);
-  for (int i=0;i<nbWord;i++) {
-    printf("%i->%i  x=%f l=%f a=%f d=%f\n",words[i].t_first,words[i].t_last,words[i].x_pos,words[i].x_length,words[i].y_ascent,words[i].y_descent);
-    printf("chars: ");
-    for (int j=words[i].t_first;j<=words[i].t_last;j++) {
-      printf("(%f %f d= %f) ",charas[j].x_pos,charas[j].y_pos,charas[j].y_dpos);
-    }
-    printf("\n");
-  }*/
+//  printf("%i mots\n",nbWord);
+//  for (int i=0;i<nbWord;i++) {
+//    printf("%i->%i  x=%f l=%f a=%f d=%f w=%i r=%i\n",words[i].t_first,words[i].t_last,words[i].x_pos,words[i].x_length,words[i].y_ascent,words[i].y_descent
+//           ,words[i].is_white,words[i].is_return);
+//    printf("chars: ");
+//    for (int j=words[i].t_first;j<=words[i].t_last;j++) {
+//      printf("(%f %f d= %f) ",charas[j].x_pos,charas[j].y_pos,charas[j].y_dpos);
+//    }
+//    printf("\n");
+//  }
   
+  if ( theIt ) pango_attr_iterator_destroy(theIt);
+
   while ( pGlyphs ) {
     PangoGlyphString*  nGl=(PangoGlyphString*)pGlyphs->data;
     pGlyphs=g_list_remove(pGlyphs,nGl);
@@ -935,6 +1000,7 @@ typedef struct typeset_step {
   box_solution      box;
   int               start_ind,end_ind;
   int               nbGlyph;
+  bool              no_justification;
 } typeset_step;
 
 void   sp_typeset_relayout(SPTypeset *typeset)
@@ -1030,13 +1096,26 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     } else {
       int           last_step=0;
       int           prev_line_step=0;
+      bool          jump_to_next_line=false;
+      bool          start_need_reach=false;
+      int           need_to_reach_ind=-1;
+      typeset_step* sav_steps=NULL;
+      int           nb_sav_step=0;
+      
       steps[prev_line_step].box=typeset->theDst->VeryFirst();
       last_step=prev_line_step;
             
       do {
         int           cur_pos=steps[last_step].end_ind+1;
         bool          sameLine=false;
-        box_solution  cur_box=typeset->theDst->NextBox(steps[last_step].box,nAscent,nDescent,2.0,sameLine);
+        box_solution  cur_box;
+        if ( jump_to_next_line ) {
+//          printf("it's just a jump to the left\n");
+          cur_box=typeset->theDst->NextLine(steps[last_step].box,nAscent,nDescent,0.0);
+          jump_to_next_line=false;
+        } else {
+          cur_box=typeset->theDst->NextBox(steps[last_step].box,nAscent,nDescent,0.0,sameLine);
+        }
         if ( cur_box.finished ) break;
         double nLen=cur_box.x_end-cur_box.x_start;
         text_chunk_solution* sol=typeset->theSrc->StuffThatBox(cur_pos,0.8*nLen,nLen,1.2*nLen,false);
@@ -1049,11 +1128,43 @@ void   sp_typeset_relayout(SPTypeset *typeset)
         }
         
         int     best=0;
-        for (int i=1;sol[i].end_of_array==false;i++) {
-          if ( sol[i].length < nLen ) {
-            best=i;
+        if ( sol[best].endOfParagraph ) {
+        } else {
+          for (int i=1;sol[i].end_of_array==false;i++) {
+            if ( sol[i].length < nLen ) {
+              best=i;
+              if ( sol[best].endOfParagraph ) {
+                break;
+              }
+            }
           }
         }
+        if ( sameLine == false ) {
+          if ( start_need_reach ) {
+            start_need_reach=false;
+          } else {
+            if ( need_to_reach_ind >= 0 ) {
+              if ( sol[best].end_ind <= need_to_reach_ind ) {
+                // didn't improve, revert to saved steps
+                last_step=prev_line_step+nb_sav_step;
+                memcpy(steps+(prev_line_step+1),sav_steps,nb_sav_step*sizeof(typeset_step));
+                need_to_reach_ind=-1;
+                if ( sav_steps ) free(sav_steps);
+                sav_steps=NULL;
+                nb_sav_step=0;
+                prev_line_step=last_step;
+                jump_to_next_line=true;
+                continue;
+              } else {
+                need_to_reach_ind=-1;
+                if ( sav_steps ) free(sav_steps);
+                sav_steps=NULL;
+                nb_sav_step=0;
+              }
+            }
+          }
+        }
+
         if ( sol[best].length > nLen ) {
           // ouchie: doesn't fit in line
           steps=(typeset_step*)realloc(steps,(nb_step+1)*sizeof(typeset_step));
@@ -1078,11 +1189,21 @@ void   sp_typeset_relayout(SPTypeset *typeset)
           nAscent=sol[best].ascent;
           nDescent=sol[best].descent;
           free(sol);
+          start_need_reach=true;
+          need_to_reach_ind=steps[last_step].end_ind;
+          nb_sav_step=last_step-prev_line_step;
+          sav_steps=(typeset_step*)malloc(nb_sav_step*sizeof(typeset_step));
+          memcpy(sav_steps,steps+(prev_line_step+1),nb_sav_step*sizeof(typeset_step));
           if ( last_step > prev_line_step ) {
             nb_step=prev_line_step+1;
             last_step=prev_line_step;
           }
-          if ( steps[last_step].end_ind+1 >= maxIndex ) break;
+          if ( steps[last_step].end_ind+1 >= maxIndex ) {
+            free(sav_steps);
+            sav_steps=NULL;
+            nb_sav_step=0;
+            break;
+          }
           continue;
         }
         
@@ -1091,6 +1212,12 @@ void   sp_typeset_relayout(SPTypeset *typeset)
         steps[nb_step].start_ind=sol[best].start_ind;
         steps[nb_step].end_ind=sol[best].end_ind;
         steps[nb_step].nbGlyph=0;
+        steps[nb_step].no_justification=false;
+        jump_to_next_line=false;
+        if ( sol[best].endOfParagraph ) {
+          steps[nb_step].no_justification=true;
+          jump_to_next_line=true;
+        }
         nb_step++;
         
         last_step=nb_step-1;
@@ -1102,6 +1229,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
         
         free(sol);
       } while ( steps[last_step].end_ind+1 < maxIndex );
+      if ( sav_steps ) free(sav_steps);
     }
   }
   // create offspring
@@ -1133,7 +1261,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
           }
         }
         if ( nbSrcChar > 1 ) {
-          if ( steps[i].end_ind < maxIndex-1 || spacing < 0 ) {
+          if ( ( steps[i].end_ind < maxIndex-1 && steps[i].no_justification == false ) || spacing < 0 ) {
             spacing/=(nbSrcChar-1);
           } else {
             spacing=0;
@@ -1173,7 +1301,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
             if ( do_dy ) {
               gchar c[32];
               gchar *s = NULL;
-              double    lastY=0;
+              double    lastY=span_info[k].g_pos[0][1];
               for (int j = 0; j < span_info[k].nbG ; j ++) {
                 int     t_st=span_info[k].g_start[j];
                 int     t_en=span_info[k].g_end[j];
