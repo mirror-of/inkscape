@@ -28,38 +28,42 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
     const gchar *docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
     const gchar *relname = sp_relative_path_from_path (uri, docbase);
 
-    if (pb) {
+    if (pb) {         /* We are readable */
         SPRepr *repr = NULL;
 
-        /* We are readable */
+        double width = gdk_pixbuf_get_width(pb);
+        double height = gdk_pixbuf_get_height(pb);
+        const gchar* str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
+        if ( str )
+        {
+            gint dpi = atoi(str);
+            if ( dpi > 0 && dpi != 72 )
+            {
+                double scale = 72.0 / (double)dpi;
+                width *= scale;
+            }
+        }
+        str = gdk_pixbuf_get_option( pb, "Inkscape::DpiY" );
+        if ( str )
+        {
+            gint dpi = atoi(str);
+            if ( dpi > 0 && dpi != 72 )
+            {
+                double scale = 72.0 / (double)dpi;
+                height *= scale;
+            }
+        }
+
+        // we calculated w/h in pt, but we set them in anon svg pixels
+        width *= 1.25;
+        height *= 1.25;
 
         if (prefs_get_int_attribute("options.importbitmapsasimages", "value", 1) == 1) {
             // import as <image>
             repr = sp_repr_new ("image");
             sp_repr_set_attr (repr, "xlink:href", relname);
             sp_repr_set_attr (repr, "sodipodi:absref", uri);
-            double width = gdk_pixbuf_get_width(pb);
-            double height = gdk_pixbuf_get_height(pb);
-            const gchar* str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
-            if ( str )
-            {
-                gint dpi = atoi(str);
-                if ( dpi > 0 && dpi != 72 )
-                {
-                    double scale = 72.0 / (double)dpi;
-                    width *= scale;
-                }
-            }
-            str = gdk_pixbuf_get_option( pb, "Inkscape::DpiY" );
-            if ( str )
-            {
-                gint dpi = atoi(str);
-                if ( dpi > 0 && dpi != 72 )
-                {
-                    double scale = 72.0 / (double)dpi;
-                    height *= scale;
-                }
-            }
+
             sp_repr_set_double (repr, "width", width);
             sp_repr_set_double (repr, "height", height);
 
@@ -68,8 +72,8 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             SPRepr *pat = sp_repr_new ("pattern");
             sp_repr_set_attr(pat, "inkscape:collect", "always");
             sp_repr_set_attr (pat, "patternUnits", "userSpaceOnUse");
-            sp_repr_set_double (pat, "width", gdk_pixbuf_get_width (pb));
-            sp_repr_set_double (pat, "height", gdk_pixbuf_get_height (pb));
+            sp_repr_set_double (pat, "width", width);
+            sp_repr_set_double (pat, "height", height);
             sp_repr_append_child (SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc)), pat);
             const gchar *pat_id = sp_repr_attr(pat, "id");
             SPObject *pat_object = doc->getObjectById(pat_id);
@@ -77,14 +81,14 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             SPRepr *im = sp_repr_new ("image");
             sp_repr_set_attr (im, "xlink:href", relname);
             sp_repr_set_attr (im, "sodipodi:absref", uri);
-            sp_repr_set_double (im, "width", gdk_pixbuf_get_width (pb));
-            sp_repr_set_double (im, "height", gdk_pixbuf_get_height (pb));
+            sp_repr_set_double (im, "width", width);
+            sp_repr_set_double (im, "height", height);
             sp_repr_add_child (SP_OBJECT_REPR(pat_object), im, NULL);
 
             repr = sp_repr_new ("rect");
             sp_repr_set_attr (repr, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
-            sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
-            sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
+            sp_repr_set_double (repr, "width", width);
+            sp_repr_set_double (repr, "height", height);
         }
 
         SP_DOCUMENT_ROOT(doc)->appendChildRepr(repr);
