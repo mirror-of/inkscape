@@ -467,6 +467,12 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 	case SP_VERB_ZOOM_SELECTION:
 		sp_desktop_zoom_selection (dt);
 		break;
+	case SP_VERB_ZOOM_NEXT:
+		sp_desktop_next_zoom (dt);
+		break;
+	case SP_VERB_ZOOM_PREV:
+		sp_desktop_prev_zoom (dt);
+		break;
 	case SP_VERB_TOGGLE_GUIDES:
 		sp_repr_get_boolean (repr, "showguides", &v);
 		sp_repr_set_boolean (repr, "showguides", !(v));
@@ -578,8 +584,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Previe_w"), N_("Preview document printout"), GTK_STOCK_PRINT_PREVIEW },
 	{SP_VERB_FILE_IMPORT, "FileImport", N_("_Import..."), N_("Import bitmap or SVG image into document"), "file_import"},
 	{SP_VERB_FILE_EXPORT, "FileExport", N_("_Export Bitmap..."), N_("Export document as PNG bitmap"), "file_export"},
-	{SP_VERB_FILE_NEXT_DESKTOP, "FileNextDesktop", N_("_Next window"), N_("Switch to the next document window"), NULL},
-	{SP_VERB_FILE_PREV_DESKTOP, "FilePrevDesktop", N_("_Prev window"), N_("Switch to the previous document window"), NULL},
+	{SP_VERB_FILE_NEXT_DESKTOP, "FileNextDesktop", N_("N_ext window"), N_("Switch to the next document window"), NULL},
+	{SP_VERB_FILE_PREV_DESKTOP, "FilePrevDesktop", N_("P_rev window"), N_("Switch to the previous document window"), NULL},
 	{SP_VERB_FILE_QUIT, "FileQuit", N_("_Quit"), N_("Quit"), GTK_STOCK_QUIT},
 	/* Edit */
 	{SP_VERB_EDIT_UNDO, "EditUndo", N_("_Undo"), N_("Undo last action"), GTK_STOCK_UNDO},
@@ -636,6 +642,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), "zoom_out"},
 	{SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Grid"), N_("Toggle grid"), "toggle_grid"},
 	{SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("Guides"), N_("Toggle guides"), "toggle_guides"},
+	{SP_VERB_ZOOM_NEXT, "ZoomNext", N_("Nex_t zoom"), N_("Next zoom"), NULL},
+	{SP_VERB_ZOOM_PREV, "ZoomPrev", N_("Pre_v zoom"), N_("Previous zoom"), NULL},
 	{SP_VERB_ZOOM_1_1, "Zoom1:0", N_("Zoom 1:_1"), N_("Zoom to 1:1"), "zoom_1_to_1"},
 	{SP_VERB_ZOOM_1_2, "Zoom1:2", N_("Zoom 1:_2"), N_("Zoom to 1:2"), "zoom_1_to_2"},
 	{SP_VERB_ZOOM_2_1, "Zoom2:1", N_("_Zoom 2:1"), N_("Zoom to 2:1"), "zoom_2_to_1"},
