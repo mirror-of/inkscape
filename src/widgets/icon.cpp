@@ -615,10 +615,8 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
     sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, iconsvg.c_str(), NULL));
     sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, "icons.svg", NULL));
 
-    // use this loop to iterate through a list of possible document locations
-    std::list<gchar *>::iterator it;
-    while ( (it = sources.begin()) != sources.end() ) {
-        gchar *doc_filename = *it;
+    while (!sources.empty()) {
+        gchar *doc_filename = sources.front();
 
         //g_warning("trying to load '%s' from '%s'", name, doc_filename);
 
@@ -655,7 +653,7 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
 
         // toss the filename
         g_free(doc_filename);
-        sources.erase(it);
+        sources.pop_front();
 
         // move on to the next document
         if (!info && !doc) continue;

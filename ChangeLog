@@ -1,3 +1,7 @@
+2005-03-03  MenTaLguY  <mental@rydia.net>
+
+	* src/widgets/icon.cpp: more idiomatic iteration
+
 2005-03-02  Jon A. Cruz  <jon@joncruz.org>
 	* src/toolbox.cpp: Added preference to make the top toolbox 'small'.
 
