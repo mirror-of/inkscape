@@ -339,6 +339,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
     } else {
       typeset->theSrc = new pango_text_chunker(combined_src, "Luxi Sans", fsize, p_t_c_none,false);
     }
+    if ( css ) sp_repr_css_attr_unref(css);
   } else if ( combined_type == has_pango_txt ) {
     SPCSSAttr *css;
     css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
@@ -351,6 +352,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
     } else {
       typeset->theSrc = new pango_text_chunker(combined_src, "Luxi Sans", fsize, p_t_c_none,true);
     }
+    if ( css ) sp_repr_css_attr_unref(css);
   }
   
   

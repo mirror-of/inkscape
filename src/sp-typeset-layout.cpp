@@ -164,6 +164,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     } else {
       typeset->theSrc = new pango_text_chunker(combined_src, "Luxi Sans", fsize, p_t_c_none,false);
     }
+    if ( css ) sp_repr_css_attr_unref(css);
   } else if ( combined_type == has_pango_txt ) {
     SPCSSAttr *css;
     css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
@@ -176,6 +177,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     } else {
       typeset->theSrc = new pango_text_chunker(combined_src, "Luxi Sans", fsize, p_t_c_none,true);
     }
+    if ( css ) sp_repr_css_attr_unref(css);
   }
   
   
@@ -245,9 +247,9 @@ void   sp_typeset_relayout(SPTypeset *typeset)
           free(sol);
           break;
         }
-        for (int i=0;sol[i].end_of_array==false;i++) {
-          printf("sol %i : s=%i e=%i l=%f ep=%i\n",i,sol[i].start_ind,sol[i].end_ind,sol[i].length,(sol[i].endOfParagraph)?1:0);
-        }
+//        for (int i=0;sol[i].end_of_array==false;i++) {
+//          printf("sol %i : s=%i e=%i l=%f ep=%i\n",i,sol[i].start_ind,sol[i].end_ind,sol[i].length,(sol[i].endOfParagraph)?1:0);
+//        }
         
         int     best=0;
         if ( sol[best].endOfParagraph ) {
@@ -329,7 +331,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
           continue;
         }
         
-        printf("best=%i\n",best);
+//        printf("best=%i\n",best);
         steps=(typeset_step*)realloc(steps,(nb_step+1)*sizeof(typeset_step));
         steps[nb_step].box=cur_box;
         steps[nb_step].start_ind=sol[best].start_ind;

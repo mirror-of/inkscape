@@ -762,6 +762,7 @@ void                 pango_text_chunker::GlyphsInfo(int start_ind,int end_ind,in
   int      char_st=words[start_ind].t_first,char_en=words[end_ind].t_last;
   nbG=charas[char_en].code_point-charas[char_st].code_point+1;
   totLength=charas[char_en].x_pos+charas[char_en].x_adv-charas[char_st].x_pos;
+//  printf("%i -> %i  = %f\n",start_ind,end_ind,totLength);
 }
 void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int end_ind,to_SVG_context *hungry)
 {
@@ -975,16 +976,17 @@ void                         pango_text_chunker::SetTextWithAttrs(char* inText,P
     
     for (int g_pos=t_pos;g_pos<t_pos+theItem->length;) {
       int h_pos=g_pos+1;
-      while ( h_pos < t_pos+theItem->length && pAttrs[h_pos].is_word_end == false && pAttrs[h_pos].is_word_start == false ) h_pos++;
+      while ( h_pos < t_pos+theItem->length && pAttrs[h_pos].is_white == false && pAttrs[h_pos].is_word_end == false && pAttrs[h_pos].is_word_start == false ) h_pos++;
+      if ( pAttrs[h_pos].is_white || pAttrs[h_pos].is_word_start ) h_pos--;
       bool  is_retu=(h_pos>=next_par_end);
-      AddBox(g_pos,(pAttrs[h_pos].is_word_end)?h_pos:h_pos-1,pAttrs[g_pos].is_white,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
-      if ( h_pos >= next_par_start ) {
+      AddBox(g_pos,h_pos,pAttrs[g_pos].is_white,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
+      if ( h_pos >= next_par_end ) {
         int old_dec=next_par_start;
         pango_find_paragraph_boundary(inText+old_dec,-1,&next_par_end,&next_par_start);
         next_par_end+=old_dec;
         next_par_start+=old_dec;
       }      
-      g_pos=(pAttrs[h_pos].is_word_end)?h_pos+1:h_pos;
+      g_pos=h_pos+1;
     }
     t_pos+=theItem->length;
     if ( nbWord > 0 && pAttrs[t_pos].is_word_end == false && pAttrs[t_pos].is_word_start == false ) {
