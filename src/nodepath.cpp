@@ -772,23 +772,25 @@ static void sp_node_moveto(Path::Node *node, NR::Point p)
 	sp_node_ensure_ctrls (node);
 }
 
-static void sp_nodepath_selected_nodes_move(Path::Path *nodepath, gdouble dx, gdouble dy)
+static void sp_nodepath_selected_nodes_move(Path::Path *nodepath, NR::Coord dx, NR::Coord dy,
+					    bool snap = true)
 {
-	gdouble dist, best[2];
-
-	best[0] = best[1] = 1e18;
+	NR::Coord best[2] = { NR_HUGE, NR_HUGE };
 	NR::Point delta(dx, dy);
 	NR::Point best_pt = delta;
 
-	for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-		Path::Node *n = (Path::Node *) l->data;
-		NR::Point p = n->pos + delta;
-		for(int dim = 0; dim < 2; dim++) {
-			dist = namedview_dim_snap (nodepath->desktop->namedview, Snapper::SNAP_POINT, p, NR::Dim2(dim));
-			if (dist < best[dim]) {
-				g_message("Snapping %d", dim);
-				best[dim] = dist;
-				best_pt[dim] = p[dim] - n->pos[dim];
+	if (snap) {
+		for (GList *l = nodepath->selected; l != NULL; l = l->next) {
+			Path::Node *n = (Path::Node *) l->data;
+			NR::Point p = n->pos + delta;
+			for(int dim = 0; dim < 2; dim++) {
+				NR::Coord dist = namedview_dim_snap (nodepath->desktop->namedview,
+								     Snapper::SNAP_POINT, p,
+								     NR::Dim2(dim));
+				if (dist < best[dim]) {
+					best[dim] = dist;
+					best_pt[dim] = p[dim] - n->pos[dim];
+				}
 			}
 		}
 	}
@@ -2037,7 +2039,9 @@ node_request (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 			}
 
 			// move the node to the closest point
-			sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin[NR::X] + c[NR::X] - n->pos[NR::X], n->origin[NR::Y] + c[NR::Y] - n->pos[NR::Y]);
+			sp_nodepath_selected_nodes_move (n->subpath->nodepath,
+							 n->origin[NR::X] + c[NR::X] - n->pos[NR::X],
+							 n->origin[NR::Y] + c[NR::Y] - n->pos[NR::Y]);
 
 		} else {  // constraining to hor/vert
 
@@ -2048,7 +2052,10 @@ node_request (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 			}
 		}
 	} else { // move freely
-		sp_nodepath_selected_nodes_move (n->subpath->nodepath, (*p)[NR::X] - n->pos[NR::X], (*p)[NR::Y] - n->pos[NR::Y]);
+		sp_nodepath_selected_nodes_move (n->subpath->nodepath,
+						 (*p)[NR::X] - n->pos[NR::X],
+						 (*p)[NR::Y] - n->pos[NR::Y],
+						 (state & GDK_SHIFT_MASK) == 0);
 	}
 
 	sp_desktop_scroll_to_point (n->subpath->nodepath->desktop, p);
