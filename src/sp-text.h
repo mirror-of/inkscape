@@ -66,7 +66,6 @@ struct SPTextClass {
 
 GType sp_text_get_type ();
 
-int sp_text_is_empty (SPText *text);
 gchar *sp_text_get_string_multiline (SPText *text);
 void sp_text_set_repr_text_multiline (SPText *text, const gchar *str);
 
@@ -77,21 +76,7 @@ SPCurve *sp_text_normalized_bpath (SPText *text);
 SPTSpan *sp_text_append_line (SPText *text);
 int sp_text_insert_line (SPText *text, gint pos);
 
-/* This gives us SUM (strlen (STRING)) + (LINES - 1) */
-gint sp_text_get_length (SPText *text);
 gint sp_text_append (SPText *text, const gchar *utf8);
-/* Returns position after inserted */
-gint sp_text_insert (SPText *text, gint pos, const gchar *utf8);
-/* Returns start position */
-gint sp_text_delete (SPText *text, gint start, gint end);
-
-gint sp_text_up (SPText *text, gint pos);
-gint sp_text_down (SPText *text, gint pos);
-gint sp_text_start_of_line (SPText *text, gint pos);
-gint sp_text_end_of_line (SPText *text, gint pos);
-
-void sp_text_get_cursor_coords (SPText *text, gint position, NR::Point &p0, NR::Point &p1);
-guint sp_text_get_position_by_coords (SPText *text, NR::Point &p);
 
 void sp_adjust_kerning_screen (SPText *text, gint pos, SPDesktop *desktop, NR::Point by);
 void sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop, gdouble by);

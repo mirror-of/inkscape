@@ -71,6 +71,8 @@
 #include "sp-tspan.h"
 #include "sp-string.h"
 
+#include "text-editing.h"
+
 //#include "sp-use-reference.h"
 //#include "prefs-utils.h"
 
@@ -719,15 +721,6 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
 }
 
 
-
-int
-sp_text_is_empty (SPText *text)
-{
-    int tlen=sp_text_get_length(text);
-    if ( tlen > 0 ) return FALSE;
-    return TRUE;
-}
-
 gchar *
 sp_text_get_string_multiline (SPText *text)
 {
@@ -821,20 +814,6 @@ sp_text_request_relayout (SPText *text, guint flags)
     text->relayout = TRUE;
 
     SP_OBJECT (text)->requestDisplayUpdate(flags);
-}
-
-
-gint
-sp_text_get_length (SPText *text)
-{
-    if ( text->f_src == NULL ) text->UpdateFlowSource();
-    one_flow_src *cur = &text->contents;
-    gint length = 0;
-    while (cur) {
-			length += cur->ucs4_en-cur->ucs4_st;
-			cur = cur->next;
-    }
-    return length;
 }
 
 
@@ -1082,264 +1061,6 @@ sp_text_append (SPText */*text*/, gchar const */*utf8*/)
     return 0;
 }
 
-/**
- * \pre \a utf8[] is valid UTF-8 text.
- */
-gint
-sp_text_insert(SPText *text, gint i_ucs4_pos, gchar const *utf8)
-{
-    if ( g_utf8_validate(utf8,-1,NULL) != TRUE ) {
-        g_warning("Trying to insert invalid utf8");
-        return i_ucs4_pos;
-    }
- 	int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
-   //printf("insert %s at %i\n",utf8,pos);
-    int  utf8_len=strlen(utf8);
-    int  ucs4_len=0;
-    for (gchar const *p = utf8; *p; p = g_utf8_next_char(p)) {
-        ucs4_len++;
-    }
-    if ( text->f_src == NULL ) { // no source text?
-        return i_ucs4_pos;
-    }
-    if ( text->f_res == NULL ) {
-        // no output but some input means: totally empty text
-        int  ucs4_pos=0;
-        one_flow_src* into=text->contents.Locate(0,ucs4_pos,true,false,true);
-        if ( into && into->Type() == flw_text ) {
-            // found our guy
-            bool done=false;
-            into->Insert(0,ucs4_pos,utf8,utf8_len,ucs4_len,done);
-            SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
-            SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            return ucs4_len;
-        }
-        return i_ucs4_pos;
-    }
-
-    // round to the letter granularity
-    int    c_st=-1,s_st=-1,l_st=-1;
-    bool   l_start_st=false,l_end_st=false;
-    text->f_res->OffsetToLetter(utf8_pos,c_st,s_st,l_st,l_start_st,l_end_st);
-    if ( l_st < 0 ) return i_ucs4_pos;
-    text->f_res->LetterToOffset(c_st,s_st,l_st,l_start_st,l_end_st,utf8_pos);
-    //utf8_pos=text->f_res->letters[l_st].utf8_offset;
-    int  ucs4_pos=text->f_res->letters[l_st].ucs4_offset;
-
-    one_flow_src* cur=&text->contents;
-    bool  done=false;
-    while ( cur && done == false ) {
-        cur->Insert(utf8_pos,ucs4_pos,utf8,utf8_len,ucs4_len,done);
-        cur=cur->next;
-    }
-    SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
-    SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return i_ucs4_pos+ucs4_len;
-}
-
-SPObject *
-object_prev_sibling(SPObject *child)      // TEMPORARY, until spobject provides this
-{
-    SPObject *parent = SP_OBJECT_PARENT(child);
-    for ( SPObject *i = sp_object_first_child(parent) ; i; i = SP_OBJECT_NEXT(i) ) {
-        if (i->next == child)
-            return i;
-    }
-    return NULL;
-}
-
-
-gint
-sp_text_delete (SPText *text, gint i_start, gint i_end)
-{
-    int start = text->contents.Do_UCS4_2_UTF8(i_start);
-    int end = text->contents.Do_UCS4_2_UTF8(i_end);
- 	//printf("delete %i -> %i\n",start,end);
-
-    if ( text->f_src == NULL || text->f_res == NULL ) 
-        return i_start;
-
-    // round to the letter granularity
-    int    c_st=-1, s_st=-1, l_st=-1;
-    int    c_en=-1, s_en=-1, l_en=-1;
-    bool   l_start_st=false, l_end_st=false;
-    bool   l_start_en=false, l_end_en=false;
-    text->f_res->OffsetToLetter(start, c_st, s_st, l_st, l_start_st, l_end_st);
-    text->f_res->OffsetToLetter(end, c_en, s_en, l_en, l_start_en, l_end_en);
-    if ( l_start_st == false && l_end_st == false ) l_start_st=true;
-    if ( l_start_en == false && l_end_en == false ) l_end_en=true;
-    if ( l_st < 0 || l_en < 0 || l_st > l_en ) return i_start;
-    if ( l_st == l_en && ( l_start_st == l_start_en || l_end_st == l_end_en ) ) return i_start;
-    text->f_res->LetterToOffset(c_st, s_st, l_st, l_start_st, l_end_st, start);
-    text->f_res->LetterToOffset(c_en, s_en, l_en, l_start_en, l_end_en, end);
-
-    // Find the last ofc
-    one_flow_src* last=NULL;
-    for (one_flow_src* cur=&text->contents; cur; cur=cur->next) {
-        last=cur;
-    }
-
-    // list of line tspans that are to be merged
-    GSList *lines_to_merge = NULL;
-
-    for (one_flow_src* cur=last; cur; cur=cur->prev) {
-        if (start <= cur->utf8_st && end >= cur->utf8_en && 
-            SP_IS_TSPAN(cur->me) && SP_TSPAN(cur->me)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
-            // If the delete range fully covers this ofc and it comes from a line tspan, remember to merge it
-            lines_to_merge = g_slist_prepend (lines_to_merge, cur->me);
-        }
-        // only those ofc's that overlap the delete range will be affected:
-        cur->Delete(start, end);
-    }
-
-    SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
-
-    for (GSList *i = lines_to_merge; i; i = i->next) {
-        SPObject *prev = object_prev_sibling (SP_OBJECT (i->data));
-        if (prev && SP_IS_TSPAN(prev) && SP_TSPAN(prev)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
-            // If the line to be merged has a prev sibling and it's also a line,
-            for (SPObject *child = sp_object_first_child(SP_OBJECT(i->data)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-                // copy all children to it
-                SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR (child));
-                sp_repr_append_child(SP_OBJECT_REPR(prev), copy);
-                sp_repr_unref (copy);
-            }
-            // delete line to be merged
-            SP_OBJECT(i->data)->deleteObject();
-        }
-    }
-    g_slist_free (lines_to_merge);
-
-    SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return i_start;
-}
-
-gint
-sp_text_up (SPText *text, gint i_position)
-{
-    int position=text->contents.Do_UCS4_2_UTF8(i_position);
-
-   if ( text->f_res == NULL ) return i_position;
-    int    c_p=-1,s_p=-1,l_p=-1;
-    bool   l_start=false,l_end=false;
-    text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-
-    if ( c_p >= 0 ) {
-        int l_o = l_p - text->f_res->chunks[c_p].l_st;
-        if ( l_end ) {
-            l_end=false;
-            l_o++;
-        }
-        c_p--;
-        if ( c_p < 0 ) {
-            c_p=0;
-            if ( text->f_res->chunks[c_p].l_st < text->f_res->chunks[c_p].l_en ) l_p=text->f_res->chunks[c_p].l_st; else l_p=0;
-        } else {
-            if ( text->f_res->chunks[c_p].l_st < text->f_res->chunks[c_p].l_en ) {
-                l_p=text->f_res->chunks[c_p].l_st+l_o;
-                if ( l_p >= text->f_res->chunks[c_p].l_en ) l_p=text->f_res->chunks[c_p].l_en-1;
-            } else l_p=text->f_res->chunks[c_p].l_st;
-        }
-        int   res=position;
-        text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return text->contents.Do_UTF8_2_UCS4(res);
-    }
-    return i_position;
-}
-
-gint
-sp_text_down (SPText *text, gint i_position)
-{
-	int position=text->contents.Do_UCS4_2_UTF8(i_position);
-    if ( text->f_res == NULL ) return i_position;
-    int    c_p=-1,s_p=-1,l_p=-1;
-    bool   l_start=false,l_end=false;
-    text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-    if ( c_p >= 0 ) {
-        int c_o=l_p-text->f_res->chunks[c_p].l_st;
-        if ( l_end ) {l_end=false;c_o++;}
-        c_p++;
-        if ( c_p >= text->f_res->nbChunk ) {
-            c_p=text->f_res->nbChunk-1;
-            if ( text->f_res->chunks[c_p].l_st < text->f_res->chunks[c_p].l_en ) l_p=text->f_res->chunks[c_p].l_en; else l_p=text->f_res->nbLetter;
-        } else {
-            if ( text->f_res->chunks[c_p].l_st < text->f_res->chunks[c_p].l_en ) {
-                l_p=text->f_res->chunks[c_p].l_st+c_o;
-                if ( l_p >= text->f_res->chunks[c_p].l_en ) l_p=text->f_res->chunks[c_p].l_en-1;
-            } else l_p=text->f_res->nbLetter;
-        }
-        int   res=position;
-        text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return text->contents.Do_UTF8_2_UCS4(res);
-    }
-    return i_position;
-}
-
-gint
-sp_text_start_of_line (SPText *text, gint i_position)
-{
- 	int position=text->contents.Do_UCS4_2_UTF8(i_position);
-   if ( text->f_res == NULL ) return i_position;
-    int    c_p=-1,s_p=-1,l_p=-1;
-    bool   l_start=false,l_end=false;
-    text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-    if ( c_p >= 0 ) {
-        if ( l_p >= 0 ) {
-            l_p=text->f_res->chunks[c_p].l_st;
-        }
-        l_start=true;
-        l_end=false;
-        int   res=position;
-        text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return text->contents.Do_UTF8_2_UCS4(res);
-    }
-    return i_position;
-}
-
-gint
-sp_text_end_of_line (SPText *text, gint i_position)
-{
- 	int position=text->contents.Do_UCS4_2_UTF8(i_position);
-   if ( text->f_res == NULL ) return i_position;
-    int    c_p=-1,s_p=-1,l_p=-1;
-    bool   l_start=false,l_end=false;
-    text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-    if ( c_p >= 0 ) {
-        if ( l_p >= 0 ) {
-            l_p=text->f_res->chunks[c_p].l_en-1;
-        }
-        l_start=true; // otherwise ends up at beginning of next line
-        l_end=false;
-				if ( c_p >= text->f_res->nbChunk-1 ) {l_start=false;l_end=true;}
-        int   res=position;
-        text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return text->contents.Do_UTF8_2_UCS4(res);
-    }
-    return i_position;
-}
-void
-sp_text_get_cursor_coords (SPText *text, gint i_position, NR::Point &p0, NR::Point &p1)
-{
-	int position=text->contents.Do_UCS4_2_UTF8(i_position);
-    p0=p1=NR::Point(text->x.computed,text->y.computed);
-    if ( text->f_res == NULL ) return;
-    int c_p = -1, s_p = -1, l_p = -1;
-    bool l_start = false, l_end = false;
-    //printf("letter at offset %i : ",position);
-    text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
-    //printf(" c=%i s=%i l=%i st=%i en=%i ",c_p,s_p,l_p,(l_start)?1:0,(l_end)?1:0);
-    if ( l_p >= 0 ) {
-        double npx,npy,npa,nps;
-        text->f_res->LetterToPosition(c_p,s_p,l_p,l_start,l_end,npx,npy,nps,npa);
-        p0=NR::Point(npx,npy);
-        p1=NR::Point(-sin(npa),cos(npa));
-        p1=p0-nps*p1;
-        //printf(" -> coord %f %f \n",npx,npy);
-    } else {
-        //printf("none\n");
-    }
-}
-
 static SPObject *
 sp_text_get_child_by_position (SPText *text, gint i_ucs4_pos)
 {
@@ -1352,29 +1073,6 @@ sp_text_get_child_by_position (SPText *text, gint i_ucs4_pos)
         if ( into->dad ) return into->dad->me;
     }
     return NULL;
-}
-
-guint
-sp_text_get_position_by_coords (SPText *text, NR::Point &i_p)
-{
-    if ( text->f_res == NULL ) return 0;
-    NR::Matrix  im=sp_item_i2d_affine(SP_ITEM(text));
-    im=im.inverse();
-    NR::Point p = i_p * im;
-    int    c_p=-1,s_p=-1,l_p=-1;
-    bool   l_start=false,l_end=false;
-    //printf("letter at position %f %f : ",p[0],p[1]);
-    text->f_res->PositionToLetter(p[0],p[1],c_p,s_p,l_p,l_start,l_end);
-    if ( l_p >= 0 || c_p >= 0 ) {
-        //printf(" c=%i s=%i l=%i st=%i en=%i ",c_p,s_p,l_p,(l_start)?1:0,(l_end)?1:0);
-        int position=0;
-        text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,position);
-        //printf(" -> offset %i \n",position);
-        return text->contents.Do_UTF8_2_UCS4(position);
-    } else {
-        //printf("none\n");
-    }
-    return 0;
 }
 
 void

@@ -30,6 +30,7 @@
 
 #include "macros.h"
 #include "sp-text.h"
+#include "sp-flowtext.h"
 #include "inkscape.h"
 #include "document.h"
 #include "style.h"
@@ -44,6 +45,8 @@
 #include "helper/sp-intl.h"
 #include "xml/repr.h"
 #include "prefs-utils.h"
+
+#include "text-editing.h"
 
 #include "text-context.h"
 
@@ -250,13 +253,13 @@ sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 		if (event->button.button == 1) {
 			// find out clicked item, disregarding groups
 			item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
-			if (SP_IS_TEXT (item_ungrouped)) {
+			if (SP_IS_TEXT (item_ungrouped) || SP_IS_FLOWTEXT (item_ungrouped)) {
 				SP_DT_SELECTION(ec->desktop)->setItem(item_ungrouped);
 				if (tc->text) {
 					// find out click point in document coordinates
 					NR::Point p = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
 					// set the cursor closest to that point
-					tc->ipos = sp_text_get_position_by_coords (SP_TEXT (tc->text), p);
+					tc->ipos = sp_te_get_position_by_coords (tc->text, p);
 					// update display
 					sp_text_context_update_cursor (tc);
 				}
@@ -267,7 +270,7 @@ sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 	case GDK_MOTION_NOTIFY:
 		// find out item under mouse, disregarding groups
 		item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
-		if (SP_IS_TEXT (item_ungrouped)) {
+		if (SP_IS_TEXT (item_ungrouped) || SP_IS_FLOWTEXT (item_ungrouped)) {
 			NRRect bbox;
 			sp_item_bbox_desktop(item_ungrouped, &bbox);
 			sp_canvas_item_show (tc->indicator);
@@ -405,7 +408,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							sp_text_context_setup_text (tc);
 							tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
 						}
-						tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, "\302\240");
+						tc->ipos = sp_te_insert (tc->text, tc->ipos, "\302\240");
 						ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No-break space"));
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
@@ -450,7 +453,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 										sp_text_context_setup_text (tc);                                                 
 										tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
 									}
-									tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, u);
+									tc->ipos = sp_te_insert (tc->text, tc->ipos, u);
 									sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 								}
 								return TRUE;
@@ -479,14 +482,14 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						return TRUE;
 					case GDK_BackSpace:
 						if (tc->text) { // if nascent_object, do nothing, but return TRUE; same for all other delete and move keys
-							tc->ipos = sp_text_delete (SP_TEXT (tc->text), MAX (tc->ipos - 1, 0), tc->ipos);
+							tc->ipos = sp_te_delete (tc->text, MAX (tc->ipos - 1, 0), tc->ipos);
 							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						}
 						return TRUE;
 					case GDK_Delete:
 					case GDK_KP_Delete:
 						if (tc->text) {
-							tc->ipos = sp_text_delete (SP_TEXT (tc->text), tc->ipos, MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text))));
+							tc->ipos = sp_te_delete (tc->text, tc->ipos, MIN (tc->ipos + 1, sp_te_get_length (tc->text)));
 							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						}
 						return TRUE;
@@ -503,7 +506,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
 								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-									tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+									tc->ipos = sp_te_down (tc->text, tc->ipos);
 								} else {
 									tc->ipos = MAX (tc->ipos - 1, 0);
 								}
@@ -524,9 +527,9 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
 								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-									tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+									tc->ipos = sp_te_up (tc->text, tc->ipos);
 								} else {
-									tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+									tc->ipos = MIN (tc->ipos + 1, sp_te_get_length (tc->text));
 								}
 							}
 							sp_text_context_update_cursor (tc);
@@ -547,7 +550,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 									tc->ipos = MAX (tc->ipos - 1, 0);
 								} else {
-									tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+									tc->ipos = sp_te_up (tc->text, tc->ipos);
 								}
 							}
 							sp_text_context_update_cursor (tc);
@@ -566,9 +569,9 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
 								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-									tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+									tc->ipos = MIN (tc->ipos + 1, sp_te_get_length (tc->text));
 								} else {
-									tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+									tc->ipos = sp_te_down (tc->text, tc->ipos);
 								}
 							}
 							sp_text_context_update_cursor (tc);
@@ -577,14 +580,14 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_Home:
 					case GDK_KP_Home:
 						if (tc->text) {
-							tc->ipos = sp_text_start_of_line (SP_TEXT (tc->text), tc->ipos);
+							tc->ipos = sp_te_start_of_line (tc->text, tc->ipos);
 							sp_text_context_update_cursor (tc);
 						}
 						return TRUE;
 					case GDK_End:
 					case GDK_KP_End:
 						if (tc->text) {
-							tc->ipos = sp_text_end_of_line (SP_TEXT (tc->text), tc->ipos);
+							tc->ipos = sp_te_end_of_line (tc->text, tc->ipos);
 							sp_text_context_update_cursor (tc);
 						}
 						return TRUE;
@@ -688,7 +691,7 @@ sp_text_paste_inline(SPEventContext *ec)
 				tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
 			}
 
-			tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, text.c_str());
+			tc->ipos = sp_te_insert (tc->text, tc->ipos, text.c_str());
 			sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 
 			return true;
@@ -713,9 +716,9 @@ sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc)
 	}
 	tc->text = NULL;
 
-	if (SP_IS_TEXT (item)) {
+	if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
 		tc->text = item;
-		tc->ipos = sp_text_get_length (SP_TEXT (tc->text));
+		tc->ipos = sp_te_get_length (tc->text);
 	} else {
 		tc->text = NULL;
 	}
@@ -741,9 +744,10 @@ sp_text_context_update_cursor (SPTextContext *tc,  bool scroll_to_see)
 
 		// text length may have changed elsewhere without updating ipos, e.g. by undo;
 		// in that case we position at the end
-		guint pos = (tc->ipos >= sp_text_get_length (SP_TEXT(tc->text)))? sp_text_get_length (SP_TEXT(tc->text)) : tc->ipos;
+		int pos = sp_te_get_length (tc->text);
+		pos = (tc->ipos >= pos)? pos : tc->ipos;
 
-		sp_text_get_cursor_coords (SP_TEXT (tc->text), pos, p0, p1);
+		sp_te_get_cursor_coords (tc->text, pos, p0, p1);
 		NR::Point const d0 = p0 * sp_item_i2d_affine(SP_ITEM(tc->text));
 		NR::Point const d1 = p1 * sp_item_i2d_affine(SP_ITEM(tc->text));
 
@@ -801,7 +805,7 @@ sp_text_context_forget_text (SPTextContext *tc)
 	/* We have to set it to zero,
 	 * or selection changed signal messes everything up */
 	tc->text = NULL;
-	if (SP_IS_TEXT(ti) && sp_text_is_empty(SP_TEXT (ti))) {
+	if ((SP_IS_TEXT(ti) || SP_IS_FLOWTEXT(ti)) && sp_te_is_empty (ti)) {
 		SPRepr *text_repr=SP_OBJECT_REPR(ti);
 		// the repr may already have been unparented
 		// if we were called e.g. as the result of
@@ -837,7 +841,7 @@ sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc)
 
 	if (!tc->preedit_string ) sp_text_context_preedit_reset (tc);
 
-	tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, string);
+	tc->ipos = sp_te_insert (tc->text, tc->ipos, string);
 
 	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
 }
@@ -853,7 +857,7 @@ sptc_preedit_changed (GtkIMContext *imc, SPTextContext *tc)
 					   &tc->preedit_string, NULL,
 					   &cursor_pos);
 	if(tc->preedit_string != NULL) {
-		sp_text_insert (SP_TEXT (tc->text), tc->ipos, tc->preedit_string);
+		sp_te_insert (tc->text, tc->ipos, tc->preedit_string);
 	}
 	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
 }
@@ -862,7 +866,7 @@ static void
 sp_text_context_preedit_reset (SPTextContext *tc)
 {
        if( tc->preedit_string != NULL ) {
-               sp_text_delete (SP_TEXT (tc->text), tc->ipos, tc->ipos + g_utf8_strlen(tc->preedit_string, -1));
+               sp_te_delete (tc->text, tc->ipos, tc->ipos + g_utf8_strlen(tc->preedit_string, -1));
 
                g_free(tc->preedit_string);
                tc->preedit_string = NULL;
