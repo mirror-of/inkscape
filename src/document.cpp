@@ -274,7 +274,7 @@ sp_document_create (SPReprDoc *rdoc,
 	prepend_current_dir_if_relative (&(document->uri), uri);
 #else
 	// FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
-	document->uri = g_strdup (uri);
+	document->uri = uri? g_strdup (uri) : NULL;
 #endif
 
 	// base is simply the part of the path before filename; e.g. when running "inkscape ../file.svg" the base is "../"
@@ -414,6 +414,7 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 
 	if (make_new) {
 		base = NULL;
+		uri = NULL;
 		name = g_strdup_printf (_("New document %d"), ++doc_count);
 	}
 
