@@ -67,6 +67,7 @@ struct SPKnotClass {
      */
 
     void (* clicked) (SPKnot *knot, guint state);
+    void (* doubleclicked) (SPKnot *knot, guint state);
     void (* grabbed) (SPKnot *knot, guint state);
     void (* ungrabbed) (SPKnot *knot, guint state);
     void (* moved) (SPKnot *knot, NR::Point *position, guint state);

@@ -72,6 +72,7 @@ enum {
 enum {
 	EVENT,
 	CLICKED,
+	DOUBLECLICKED,
 	GRABBED,
 	UNGRABBED,
 	MOVED,
@@ -248,6 +249,14 @@ sp_knot_class_init (SPKnotClass * klass)
 					    G_TYPE_FROM_CLASS(klass),
 					    G_SIGNAL_RUN_FIRST,
 					    G_STRUCT_OFFSET (SPKnotClass, clicked),
+					    NULL, NULL,
+					    sp_marshal_NONE__UINT,
+					    G_TYPE_NONE, 1,
+					    G_TYPE_UINT);
+	knot_signals[DOUBLECLICKED] = g_signal_new ("doubleclicked",
+					    G_TYPE_FROM_CLASS(klass),
+					    G_SIGNAL_RUN_FIRST,
+					    G_STRUCT_OFFSET (SPKnotClass, doubleclicked),
 					    NULL, NULL,
 					    sp_marshal_NONE__UINT,
 					    G_TYPE_NONE, 1,
@@ -495,6 +504,15 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	if (consumed) return TRUE;
 
 	switch (event->type) {
+	case GDK_2BUTTON_PRESS:
+		if (event->button.button == 1) {
+			g_signal_emit (G_OBJECT (knot), knot_signals[DOUBLECLICKED], 0, event->button.state);
+
+			grabbed = FALSE;
+			moved = FALSE;
+			consumed = TRUE;
+		}
+		break;
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
 			NR::Point p;
