@@ -18,6 +18,7 @@ SweepTreeList::SweepTreeList(int s) :
 SweepTreeList::~SweepTreeList()
 {
     g_free(trees);
+    trees = NULL;
 }
 
 
