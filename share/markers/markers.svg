@@ -15,482 +15,578 @@
    sodipodi:docbase="/home/d/ink/inkscape/share/markers">
   <defs
      id="defs3">
-    <marker
-       id="Template"
-       refX="0.00000000"
-       refY="0.00000000"
+
+    <marker style="overflow:visible;"
+       id="Club"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
+      <path transform="scale(0.6)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:0.74587913pt;marker-start:none;"
+         d="M -1.5971367,-7.0977635 C -3.4863874,-7.0977635 -5.0235187,-5.5606321 -5.0235187,-3.6713813 C -5.0235187,-3.0147015 -4.7851656,-2.4444556 -4.4641095,-1.9232271 C -4.5028609,-1.8911157 -4.5437814,-1.8647646 -4.5806531,-1.8299921 C -5.2030765,-2.6849849 -6.1700514,-3.2751330 -7.3077730,-3.2751330 C -9.1970245,-3.2751331 -10.734155,-1.7380016 -10.734155,0.15124914 C -10.734155,2.0404999 -9.1970245,3.5776313 -7.3077730,3.5776313 C -6.3143268,3.5776313 -5.4391540,3.1355702 -4.8137404,2.4588126 C -4.9384274,2.8137041 -5.0235187,3.1803000 -5.0235187,3.5776313 C -5.0235187,5.4668819 -3.4863874,7.0040135 -1.5971367,7.0040135 C 0.29211394,7.0040135 1.8292454,5.4668819 1.8292454,3.5776313 C 1.8292454,2.7842354 1.5136868,2.0838028 1.0600576,1.5031550 C 2.4152718,1.7663868 3.7718375,2.2973711 4.7661444,3.8340272 C 4.0279463,3.0958289 3.5540908,1.7534117 3.5540908,-0.058529361 L 2.9247554,-0.10514681 L 3.5074733,-0.12845553 C 3.5074733,-1.9403966 3.9580199,-3.2828138 4.6962183,-4.0210121 C 3.7371277,-2.5387813 2.4390549,-1.9946496 1.1299838,-1.7134486 C 1.5341802,-2.2753578 1.8292454,-2.9268556 1.8292454,-3.6713813 C 1.8292454,-5.5606319 0.29211394,-7.0977635 -1.5971367,-7.0977635 z "
+         id="path1015" />
+    </marker>
+
+    <marker style="overflow:visible;"
+       id="Torso"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+  <g transform="scale(0.7)"
+     id="g2045">
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;marker-start:none;marker-mid:none;marker-end:none;"
+       d="M -4.7792281,-3.2395420 C -2.4288541,-2.8736027 0.52103922,-1.3019943 0.25792722,0.38794346 C -0.0051877922,2.0778819 -2.2126741,2.6176539 -4.5630471,2.2517169 C -6.9134221,1.8857769 -8.5210350,0.75201414 -8.2579220,-0.93792336 C -7.9948090,-2.6278615 -7.1296041,-3.6054813 -4.7792281,-3.2395420 z "
+       id="path1128"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-end:none;"
+       d="M 4.4598789,0.088665736 C -2.5564571,-4.3783320 5.2248769,-3.9061806 -0.84829578,-8.7197331"
+       id="path1909"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+       d="M 4.9298719,0.057520736 C -1.3872731,1.7494689 1.8027579,5.4782079 -4.9448731,7.5462725"
+       id="path1910"
+       sodipodi:nodetypes="cc" />
+    <rect
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none;"
+       id="rect2035"
+       width="2.6366582"
+       height="2.7608147"
+       x="-10.391706"
+       y="-1.7408575"
+       transform="matrix(0.527536,-0.849533,0.887668,0.460484,0.000000,0.000000)" />
+    <rect
+       style="fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none;"
+       id="rect2036"
+       width="2.7327356"
+       height="2.8614161"
+       x="4.9587269"
+       y="-7.9629307"
+       transform="matrix(0.671205,-0.741272,0.790802,0.612072,0.000000,0.000000)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+       id="path2037"
+       sodipodi:cx="16.172634"
+       sodipodi:cy="-28.685045"
+       sodipodi:rx="0.60731727"
+       sodipodi:ry="0.60731727"
+       d="M 16.779951 -28.685045 A 0.60731727 0.60731727 0 1 0 15.565317,-28.685045 A 0.60731727 0.60731727 0 1 0 16.779951 -28.685045 z"
+       transform="matrix(6.793608e-17,-1.109517,1.109517,6.793608e-17,25.96648,19.71619)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+       id="path2038"
+       sodipodi:cx="16.172634"
+       sodipodi:cy="-28.685045"
+       sodipodi:rx="0.60731727"
+       sodipodi:ry="0.60731727"
+       d="M 16.779951 -28.685045 A 0.60731727 0.60731727 0 1 0 15.565317,-28.685045 A 0.60731727 0.60731727 0 1 0 16.779951 -28.685045 z"
+       transform="matrix(6.793608e-17,-1.109517,1.109517,6.793608e-17,26.82450,16.99126)" />
+  </g>
+    </marker>
+
+    <marker style="overflow:visible;"
+       id="Legs"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+  <g transform="scale(0.7)"
+     id="g1163">
+    <g
+       id="g2032"
+       transform="matrix(-1.836909e-16,-1.000000,-1.000000,1.836909e-16,20.70862,21.31391)">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-         d="M 0.00000000,0.00000000 L 5.0000000,-5.0000000 L -12.500000,0.00000000 L 5.0000000,5.0000000 L 0.00000000,0.00000000 z "
-         id="path828"
-         sodipodi:nodetypes="ccccc" />
-    </marker>
-    <marker
-       id="mArrow"
-       markerWidth="12.5"
-       markerHeight="12.5"
-       refX="6.25"
-       refY="6.25"
-       orient="auto">
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+         d="M 21.221250,20.675360 C 14.311099,25.396517 18.766725,27.282204 15.380179,34.118595"
+         id="path2019"
+         sodipodi:nodetypes="cc" />
       <path
-         id="path907"
-         d="M 0.0068092 6.28628 L 12.4563 12.5487 C 8.66061 8.58881 8.89012 4.05564 12.2688 0.0725591 L 0.0068092 6.28628 z" />
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+         d="M 21.398110,20.548120 C 20.037601,28.895644 24.934182,29.318060 25.903151,34.373078"
+         id="path2026"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <path
+       style="fill:#030300;fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none;"
+       d="M -14.090070,-6.7318716 L -15.012238,-2.6884886 L -11.049487,-3.9115586 L -14.090070,-6.7318716 z "
+       id="polygon2039" />
+    <path
+       style="fill:#030300;fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none;"
+       d="M -15.215679,4.5567534 L -13.341552,8.2563664 L -11.074678,4.7835114 L -15.215679,4.5567534 z "
+       id="path2041" />
+  </g>
     </marker>
-    <marker
-       id="INK_mArrow1"
-       markerWidth="12.500000"
-       markerHeight="12.500000"
-       refX="6.2500000"
-       refY="6.2500000"
+
+
+
+
+<!-- non-filled semicircles -->
+    <marker style="overflow:visible;"
+       id="CurvyCross"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
-      <path
-         d="M 0.0068092000,6.2862800 L 12.456300,12.548700 C 8.6606100,8.5888100 8.8901200,4.0556400 12.268800,0.072559100 L 0.0068092000,6.2862800 z "
-         style="font-size:12.000000;fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:0.62500000;stroke-linejoin:round;"
-         id="arrowMarkerPath"
-         sodipodi:nodetypes="cccc" />
-    </marker>
-    <marker
-       id="INK_mArrow2"
-       markerWidth="12.500000"
-       markerHeight="12.500000"
-       refX="6.2500000"
-       refY="6.2500000"
-       orient="auto">
-      <path
-         d="M 0.0068092000,6.2862800 L 12.456300,12.548700 C 8.6606100,8.5888100 8.8901200,4.0556400 12.268800,0.072559100 L 0.0068092000,6.2862800 z "
-         style="font-size:12.000000;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
-         id="arrowMarkerPath2"
-         sodipodi:nodetypes="cccc" />
-    </marker>
-    <marker
-       id="INK_mArrow3"
-       markerWidth="8.0000000"
-       markerHeight="10.000000"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <path
-         d="M 10.000000,4.0000000 C 10.000000,4.0000000 0.00000000,0.00000000 0.00000000,0.00000000 C 0.00000000,0.00000000 10.000000,-4.0000000 10.000000,-4.0000000"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
-         id="path1057"
-         sodipodi:nodetypes="cs" />
-    </marker>
-    <marker
-       id="INK_mArrow4"
-       markerWidth="10.000000"
-       markerHeight="10.000000"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <circle
-         cx="5.0000000"
-         cy="5.0000000"
-         r="4.0000000"
-         style="fill:none;stroke:#000000;"
-         id="circleMarkerPath" />
-    </marker>
-    <marker
-       id="INK_mArrow5"
-       markerWidth="20.000000"
-       markerHeight="20.000000"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <polygon
-         points="2.7015115,4.2073549 -1.2484405,2.7278923 -2.2929205,4.4432551 -2.9866443,0.28276494 -4.9944320,0.23590015 -1.7382038,-2.4451273 -2.7015115,-4.2073549 1.2484405,-2.7278923 2.2929205,-4.4432551 2.9866443,-0.28276494 4.9944320,-0.23590015 1.7382038,2.4451273 2.7015115,4.2073549 "
-         sodipodi:arg1="1"
-         sodipodi:arg2="2"
-         sodipodi:cx="0"
-         sodipodi:cy="0"
-         sodipodi:r1="5"
-         sodipodi:r2="3"
-         sodipodi:sides="6"
-         sodipodi:type="star"
-         style="fill:none;stroke:#000000;stroke-width:1.0000000pt;"
-         id="starMarkerPath" />
-    </marker>
-    <marker
-       id="INK_mArrow6"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-         d="M 0.00000000,0.00000000 L 5.0000000,-5.0000000 L -12.500000,0.00000000 L 5.0000000,5.0000000 L 0.00000000,0.00000000 z "
-         id="path983"
-         sodipodi:nodetypes="ccccc" />
-    </marker>
-    <marker
-       id="INK_mArrow7"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <path
-         style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
-         d="M 0.00000000,2.6847391e-005 L 5.0000000,-9.3986498 L -12.500000,2.6847391e-005 L 5.0000000,9.3987035 L 0.00000000,2.6847391e-005 z "
-         id="path830" />
-    </marker>
-    <marker
-       id="INK_mArrowTail3"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <g
-         id="g1087">
+      <g id="g948"
+         transform="scale(0.6)">
         <path
-           d="M -2.9265417,4.0000000 C -2.9265417,4.0000000 7.0734583,0.00000000 7.0734583,0.00000000 C 7.0734583,0.00000000 -2.9265417,-4.0000000 -2.9265417,-4.0000000"
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-           id="path1059"
-           sodipodi:nodetypes="cs" />
-        <path
-           d="M 3.5627464,4.0000000 C 3.5627464,4.0000000 13.562746,0.00000000 13.562746,0.00000000 C 13.562746,0.00000000 3.5627464,-4.0000000 3.5627464,-4.0000000"
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-           id="path8"
-           sodipodi:nodetypes="cs" />
-        <path
-           d="M -9.9247935,4.0000000 C -9.9247935,4.0000000 0.075206511,0.00000000 0.075206511,0.00000000 C 0.075206511,0.00000000 -9.9247935,-4.0000000 -9.9247935,-4.0000000"
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-           id="path1060"
-           sodipodi:nodetypes="cs" />
-      </g>
-    </marker>
-    <marker
-       id="INK_mCurveIn"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;fill:none;"
-         d="M 4.6254930,-5.0456926 C 1.8654930,-5.0456926 -0.37450702,-2.8056926 -0.37450702,-0.045692580 C -0.37450702,2.7143074 1.8654930,4.9543074 4.6254930,4.9543074"
-         id="path942"
-         sodipodi:nodetypes="ccc" />
-    </marker>
-    <marker
-       id="INK_mCurveOut"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <path
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
-         d="M -5.4129913,-5.0456926 C -2.6529913,-5.0456926 -0.41299131,-2.8056926 -0.41299131,-0.045692580 C -0.41299131,2.7143074 -2.6529913,4.9543074 -5.4129913,4.9543074"
-         id="path945"
-         sodipodi:nodetypes="ccc" />
-    </marker>
-    <marker
-       id="INK_mCurvyCross"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <g
-         id="g948">
-        <path
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
            d="M 4.6254930,-5.0456926 C 1.8654930,-5.0456926 -0.37450702,-2.8056926 -0.37450702,-0.045692580 C -0.37450702,2.7143074 1.8654930,4.9543074 4.6254930,4.9543074"
            id="path946"
            sodipodi:nodetypes="ccc" />
         <path
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
            d="M -5.4129913,-5.0456926 C -2.6529913,-5.0456926 -0.41299131,-2.8056926 -0.41299131,-0.045692580 C -0.41299131,2.7143074 -2.6529913,4.9543074 -5.4129913,4.9543074"
            id="path947"
            sodipodi:nodetypes="ccc" />
       </g>
     </marker>
-    <marker
-       id="INK_mDiamond"
-       refX="0.00000000"
-       refY="0.00000000"
+    <marker style="overflow:visible;"
+       id="CurveOut"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-         d="M -2.1579186e-005,-7.0710768 L -7.0710894,-8.9383918e-006 L -2.1579186e-005,7.0710589 L 7.0710462,-8.9383918e-006 L -2.1579186e-005,-7.0710768 z "
-         id="path840" />
+         transform="scale(0.6)"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
+         d="M -5.4129913,-5.0456926 C -2.6529913,-5.0456926 -0.41299131,-2.8056926 -0.41299131,-0.045692580 C -0.41299131,2.7143074 -2.6529913,4.9543074 -5.4129913,4.9543074"
+         id="path945"
+         sodipodi:nodetypes="ccc" />
     </marker>
-    <marker
-       id="INK_mDot"
-       refX="0.00000000"
-       refY="0.00000000"
+    <marker style="overflow:visible;"
+       id="CurveIn"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <path
-         transform="translate(7.125493,0.763446)"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
-         d="M -2.5000000,-1.0000000 C -2.5000000,1.7600000 -4.7400000,4.0000000 -7.5000000,4.0000000 C -10.260000,4.0000000 -12.500000,1.7600000 -12.500000,-1.0000000 C -12.500000,-3.7600000 -10.260000,-6.0000000 -7.5000000,-6.0000000 C -4.7400000,-6.0000000 -2.5000000,-3.7600000 -2.5000000,-1.0000000 z "
-         id="path933" />
+         transform="scale(0.6)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;fill:none;"
+         d="M 4.6254930,-5.0456926 C 1.8654930,-5.0456926 -0.37450702,-2.8056926 -0.37450702,-0.045692580 C -0.37450702,2.7143074 1.8654930,4.9543074 4.6254930,4.9543074"
+         id="path942"
+         sodipodi:nodetypes="ccc" />
     </marker>
-    <marker
-       id="INK_mSquare"
-       refX="0.00000000"
-       refY="0.00000000"
+
+
+<!-- filled semicircles -->
+    <marker style="overflow:visible;"
+       id="SemiCircleOut"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-         d="M -5.0000000,-5.0000000 L -5.0000000,5.0000000 L 5.0000000,5.0000000 L 5.0000000,-5.0000000 L -5.0000000,-5.0000000 z "
-         id="path948"
-         sodipodi:nodetypes="ccccc" />
+         transform="scale(0.6) translate(7.125493,0.763446)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
+         d="M -2.5,-0.80913858 C -2.5,1.9508614 -4.7400000,4.1908614 -7.5,4.1908614 L -7.5,-5.8091386 C -4.7400000,-5.8091386 -2.5,-3.5691386 -2.5,-0.80913858 z "
+         id="path953"
+         sodipodi:nodetypes="cccc" />
     </marker>
-    <marker
-       id="INK_mStop"
-       refX="0.00000000"
-       refY="0.00000000"
+    <marker style="overflow:visible;"
+       id="SemiCircleIn"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <path
-         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.0000000pt;"
-         d="M 0.00000000,5.0000000 L 0.00000000,-5.0000000"
-         id="path934" />
-    </marker>
-    <marker
-       id="INK_mSemiCircle2"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
+         transform="scale(0.6)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
          d="M -0.37450702,-0.045692580 C -0.37450702,2.7143074 1.8654930,4.9543074 4.6254930,4.9543074 L 4.6254930,-5.0456926 C 1.8654930,-5.0456926 -0.37450702,-2.8056926 -0.37450702,-0.045692580 z "
          id="path941"
          sodipodi:nodetypes="cccc" />
     </marker>
-    <marker
-       id="INK_mSemiCircle1"
-       refX="0.00000000"
-       refY="0.00000000"
+
+
+<!-- stops -->
+    <marker style="overflow:visible;"
+       id="StopS"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <path
-         transform="translate(7.125493,0.763446)"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none;"
-         d="M -2.5000000,-0.80913858 C -2.5000000,1.9508614 -4.7400000,4.1908614 -7.5000000,4.1908614 L -7.5000000,-5.8091386 C -4.7400000,-5.8091386 -2.5000000,-3.5691386 -2.5000000,-0.80913858 z "
-         id="path953"
-         sodipodi:nodetypes="cccc" />
+         transform="scale(0.2)"
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         d="M 0.0,5.65 L 0.0,-5.65"
+         id="path934" />
     </marker>
-    <marker
-       id="INK_mTria"
-       refX="0.00000000"
-       refY="0.00000000"
+    <marker style="overflow:visible;"
+       id="StopM"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-         d="M 2.5000000,0.00000000 L -5.0000000,5.0000000 L -5.0000000,-5.0000000 L 2.5000000,0.00000000 z "
+         transform="scale(0.4)"
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         d="M 0.0,5.65 L 0.0,-5.65"
+         id="path934" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="StopL"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.8)"
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         d="M 0.0,5.65 L 0.0,-5.65"
+         id="path934" />
+    </marker>
+
+
+<!-- triangles -->
+<!--10*sin(60) = 8.66025403784 - 2.88675134595 = 5.77350269189
+5*tan(30) = 2.88675134595
+-->
+    <marker style="overflow:visible;"
+       id="TriangleOutS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.2)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path1051"
          sodipodi:nodetypes="cccc" />
     </marker>
-    <marker
-       id="mTriangle"
-       markerWidth="12.5"
-       markerHeight="12.5"
-       refX="6.25"
-       refY="6.25"
+    <marker style="overflow:visible;"
+       id="TriangleOutM"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <path
-         id="path904"
-         d="M 0.0068092 6.28628 L 12.4563 12.5487 L 12.2688 0.0725591 L 0.0068092 6.28628 z" />
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1051"
+         sodipodi:nodetypes="cccc" />
     </marker>
-    <marker
-       id="INK_mDistance1a"
-       refX="0.00000000"
-       refY="0.00000000"
+    <marker style="overflow:visible;"
+       id="TriangleOutL"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.8)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1051"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="TriangleInS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(-0.2)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1051"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="TriangleInM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(-0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1051"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="TriangleInL"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(-0.8)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1051"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+
+
+
+
+<!-- diamonds -->
+    <marker style="overflow:visible;"
+       id="DiamondS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.2)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M -2.1579186e-005,-7.0710768 L -7.0710894,-8.9383918e-006 L -2.1579186e-005,7.0710589 L 7.0710462,-8.9383918e-006 L -2.1579186e-005,-7.0710768 z "
+         id="path840" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="DiamondM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M -2.1579186e-005,-7.0710768 L -7.0710894,-8.9383918e-006 L -2.1579186e-005,7.0710589 L 7.0710462,-8.9383918e-006 L -2.1579186e-005,-7.0710768 z "
+         id="path840" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="DiamondL"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.8)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M -2.1579186e-005,-7.0710768 L -7.0710894,-8.9383918e-006 L -2.1579186e-005,7.0710589 L 7.0710462,-8.9383918e-006 L -2.1579186e-005,-7.0710768 z "
+         id="path840" />
+    </marker>
+
+
+
+<!-- squares -->
+    <marker style="overflow:visible;"
+       id="SquareS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.2)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M -5.0,-5.0 L -5.0,5.0 L 5.0,5.0 L 5.0,-5.0 L -5.0,-5.0 z "
+         id="path948"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="SquareM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M -5.0,-5.0 L -5.0,5.0 L 5.0,5.0 L 5.0,-5.0 L -5.0,-5.0 z "
+         id="path948"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="SquareL"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.8)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M -5.0,-5.0 L -5.0,5.0 L 5.0,5.0 L 5.0,-5.0 L -5.0,-5.0 z "
+         id="path948"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+
+
+<!-- round dots -->
+    <marker style="overflow:visible;"
+       id="Dot_s"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.2) translate(7.125493, 1)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
+         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         id="path933" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="Dot_m"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.4) translate(7.125493, 1)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
+         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         id="path39" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="Dot_l"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.8) translate(7.125493, 1)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
+         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         id="path41" />
+    </marker>
+
+
+
+
+
+<!-- distance markers -->
+    <marker style="overflow:visible;"
+       id="DistanceRight"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <g
          id="g990"
-         transform="matrix(1.000000,0.000000,0.000000,-1.000000,0.000000,-5.342547e-3)">
+         transform="scale(0.6,-0.6) translate(8,0)">
         <path
-           style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-           d="M 0.00000000,0.00000000 L 5.0000000,-5.0000000 L -12.500000,0.00000000 L 5.0000000,5.0000000 L 0.00000000,0.00000000 z "
+           style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+           d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
            id="path991"
            sodipodi:nodetypes="ccccc" />
         <path
-           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-           d="M -14.759949,-9.0817535 L -14.759949,23.237446"
+           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2pt;marker-start:none;"
+           d="M -14.759949,-7 L -14.759949,65"
            id="path992" />
       </g>
     </marker>
-    <marker
-       id="INK_mDistance1b"
-       refX="0.00000000"
-       refY="0.00000000"
+
+    <marker style="overflow:visible;"
+       id="DistanceLeft"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <g
-         id="g987">
+         id="g987"
+         transform="scale(0.6,0.6) translate(8,0)">
         <path
-           style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-           d="M 0.00000000,0.00000000 L 5.0000000,-5.0000000 L -12.500000,0.00000000 L 5.0000000,5.0000000 L 0.00000000,0.00000000 z "
+           style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+           d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
            id="path974"
            sodipodi:nodetypes="ccccc" />
         <path
-           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-           d="M -14.759949,-9.0817535 L -14.759949,23.237446"
+           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2pt;marker-start:none;"
+           d="M -14.759949,-7 L -14.759949,65"
            id="path976" />
       </g>
     </marker>
-    <marker
-       id="INK_mClub"
-       refX="0.00000000"
-       refY="0.00000000"
+
+
+<!-- Tail -->
+    <marker style="overflow:visible;"
+       id="Tail"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
-      <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:0.74587913pt;marker-start:none;"
-         d="M -1.5971367,-7.0977635 C -3.4863874,-7.0977635 -5.0235187,-5.5606321 -5.0235187,-3.6713813 C -5.0235187,-3.0147015 -4.7851656,-2.4444556 -4.4641095,-1.9232271 C -4.5028609,-1.8911157 -4.5437814,-1.8647646 -4.5806531,-1.8299921 C -5.2030765,-2.6849849 -6.1700514,-3.2751330 -7.3077730,-3.2751330 C -9.1970245,-3.2751331 -10.734155,-1.7380016 -10.734155,0.15124914 C -10.734155,2.0404999 -9.1970245,3.5776313 -7.3077730,3.5776313 C -6.3143268,3.5776313 -5.4391540,3.1355702 -4.8137404,2.4588126 C -4.9384274,2.8137041 -5.0235187,3.1803000 -5.0235187,3.5776313 C -5.0235187,5.4668819 -3.4863874,7.0040135 -1.5971367,7.0040135 C 0.29211394,7.0040135 1.8292454,5.4668819 1.8292454,3.5776313 C 1.8292454,2.7842354 1.5136868,2.0838028 1.0600576,1.5031550 C 2.4152718,1.7663868 3.7718375,2.2973711 4.7661444,3.8340272 C 4.0279463,3.0958289 3.5540908,1.7534117 3.5540908,-0.058529361 L 2.9247554,-0.10514681 L 3.5074733,-0.12845553 C 3.5074733,-1.9403966 3.9580199,-3.2828138 4.6962183,-4.0210121 C 3.7371277,-2.5387813 2.4390549,-1.9946496 1.1299838,-1.7134486 C 1.5341802,-2.2753578 1.8292454,-2.9268556 1.8292454,-3.6713813 C 1.8292454,-5.5606319 0.29211394,-7.0977635 -1.5971367,-7.0977635 z "
-         id="path1015" />
-    </marker>
-    <marker
-       id="INK_mTorso"
-       refX="0.00000000"
-       refY="0.00000000"
-       orient="auto">
-      <g
-         id="g1077"
-         style="fill:none;">
-        <path
-           style="fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
-           d="M -10.688239,-14.680315 L 0.00000000,-0.17484805 L -12.469612,18.911292"
-           id="path1073" />
-        <path
-           style="fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
-           d="M -0.50896375,-0.17484805 L -7.3799743,0.079633825"
-           id="path1074" />
-        <path
-           sodipodi:type="arc"
-           style="fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;"
-           id="path1076"
-           sodipodi:cx="-15.268912"
-           sodipodi:cy="0.46135664"
-           sodipodi:rx="7.3799744"
-           sodipodi:ry="6.9982514"
-           d="M -7.8889380 0.46135664 A 7.3799744 6.9982514 0 1 0 -22.648887,0.46135664 A 7.3799744 6.9982514 0 1 0 -7.8889380 0.46135664 z" />
+      <g          transform="scale(1.2)"
+         id="g1087">
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round;"
+     d="M -3.8048674,-3.9585227 L 0.54352094,-0.00068114835"
+     id="path1126" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round;"
+     d="M -1.2866832,-3.9585227 L 3.0617053,-0.00068114835"
+     id="path1127" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round;"
+     d="M 1.3053582,-3.9585227 L 5.6537466,-0.00068114835"
+     id="path1128" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round;"
+     d="M -3.8048674,4.1775838 L 0.54352094,0.21974226"
+     id="path1848" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round;"
+     d="M -1.2866832,4.1775838 L 3.0617053,0.21974226"
+     id="path1849" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round;"
+     d="M 1.3053582,4.1775838 L 5.6537466,0.21974226"
+     id="path1850" />
       </g>
     </marker>
-    <marker
-       id="INK_mLegs"
-       refX="0.00000000"
-       refY="0.00000000"
+
+
+
+
+    <marker style="overflow:visible;"
+       id="Arrow2S"
+       refX="0.0"
+       refY="0.0"
        orient="auto">
       <path
-         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;"
-         d="M -15.523394,-20.278916 L -19.722345,-14.807556 L -0.25448187,-0.17484805 L -19.849586,13.567173 L -17.050286,18.656811"
-         id="path1173"
+         transform="scale(0.3) translate(-5,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="arrowMarkerPath2"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="Arrow2M"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.6) translate(-5,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="arrowMarkerPath2"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="Arrow2L"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(1.1) translate(-5,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="arrowMarkerPath2"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+
+
+
+    <marker style="overflow:visible;"
+       id="Arrow1S"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.2)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path983"
          sodipodi:nodetypes="ccccc" />
     </marker>
+    <marker style="overflow:visible;"
+       id="Arrow1M"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path983"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+    <marker style="overflow:visible;"
+       id="Arrow1L"
+       refX="0.0"
+       refY="0.0"
+       orient="auto">
+      <path
+         transform="scale(0.8)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path983"
+         sodipodi:nodetypes="ccccc" />
+    </marker>
+
+
+
+
+
+
   </defs>
-  <sodipodi:namedview
-     id="base"
-     inkscape:zoom="14.367677"
-     inkscape:cx="36.649643"
-     inkscape:cy="710.52414"
-     inkscape:window-width="799"
-     inkscape:window-height="633"
-     inkscape:window-x="31"
-     inkscape:window-y="344" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mClub);"
-     d="M 199.84936,691.11178 L 155.55576,691.11178"
-     id="INK_mClub_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mCurveIn);"
-     d="M 78.744175,618.72708 L 34.450577,618.72708"
-     id="INK_mCurveIn_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#mArrow);"
-     d="M 78.744175,515.71808 L 34.450577,515.71808"
-     id="mArrow_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrowTail3);"
-     d="M 86.190775,588.10278 L 41.897180,588.10278"
-     id="INK_mArrowTail3_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow2);"
-     d="M 33.408323,263.99290 L 84.912821,263.99290"
-     id="INK_mArrow2_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow3);"
-     d="M 33.408323,360.25510 L 84.912821,360.25510"
-     id="INK_mArrow3_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow4);"
-     d="M 32.424021,399.62719 L 83.928519,399.62719"
-     id="INK_mArrow4_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow5);"
-     d="M 35.376927,443.92079 L 86.881425,443.92079"
-     id="INK_mArrow5_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow6);"
-     d="M 77.352161,735.65622 L 33.058563,735.65622"
-     id="INK_mArrow6_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow7);"
-     d="M 199.84936,735.65621 L 155.55576,735.65621"
-     id="INK_mArrow7_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#mTriangle);marker-end:none;"
-     d="M 82.681384,483.23610 L 38.387785,483.23610"
-     id="mTriangle_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mCurveOut);"
-     d="M 78.744175,653.52742 L 34.450577,653.52742"
-     id="INK_mCurveOut_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mCurvyCross);"
-     d="M 78.744175,693.89581 L 34.450577,693.89581"
-     id="INK_mCurvyCross_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mDiamond);"
-     d="M 198.45734,263.87612 L 154.16374,263.87612"
-     id="INK_mDiamond_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mDot);"
-     d="M 198.45734,361.20458 L 154.16374,361.20458"
-     id="INK_mDot_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mSquare);"
-     d="M 198.45734,404.35700 L 154.16374,404.35700"
-     id="INK_mSquare_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mStop);"
-     d="M 198.45734,448.90143 L 154.16374,448.90143"
-     id="INK_mStop_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mSemiCircle2);"
-     d="M 197.06533,487.87781 L 152.77173,487.87781"
-     id="INK_mSemiCircle2_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mSemiCircle1);"
-     d="M 195.67332,522.67815 L 151.37972,522.67815"
-     id="INK_mSemiCircle1_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mTria);"
-     d="M 197.06533,551.91043 L 152.77173,551.91043"
-     id="INK_mTria_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mDistance1a);"
-     d="M 197.06533,588.10278 L 152.77173,588.10278"
-     id="INK_mDistance1a_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mDistance1b);"
-     d="M 197.06533,653.52742 L 152.77173,653.52742"
-     id="INK_mDistance1b_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#Template);"
-     d="M 77.352171,547.73439 L 33.058571,547.73439"
-     id="Template_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mTorso);marker-end:none;"
-     d="M 74.568134,780.20065 L 30.274536,780.20065"
-     id="INK_mTorso_prev" />
-  <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mLegs);"
-     d="M 198.45735,780.20064 L 154.16375,780.20064"
-     id="INK_mLegs_prev" />
-  <g
-     id="INK_mArrow1_prev">
-    <path
-       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0391427pt;marker-start:url(#INK_mArrow1);marker-mid:none;marker-end:none;"
-       d="M 34.793212,164.31109 L 50.376814,164.31109"
-       id="asda"
-       sodipodi:nodetypes="cc" />
-    <rect
-       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:0.0000000;"
-       id="rect1120"
-       width="24.341282"
-       height="25.000000"
-       x="26.017609"
-       y="151.69437" />
-  </g>
 </svg>
