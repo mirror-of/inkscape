@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <functional>
 
 #include <utest/test-1ary-cases.h>
 #include <utest/utest.h>

@@ -1,6 +1,7 @@
 /* Initial author: Peter Moulder.
    Hereby released into the Public Domain. */
 
+#include <functional>
 #include "utest/test-1ary-cases.h"
 
 /* mental disclaims all responsibility for this evil idea for testing
