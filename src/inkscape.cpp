@@ -599,6 +599,11 @@ inkscape_get_instance()
         return inkscape;
 }
 
+gboolean inkscape_app_use_gui( Inkscape::Application const * app )
+{
+    return app->use_gui;
+}
+
 /**
  * Preference management
  * We use '.' as separator

@@ -47,6 +47,8 @@
 #include "error-file.h"
 #include "io/sys.h"
 
+extern gboolean inkscape_app_use_gui( Inkscape::Application const * app );
+
 namespace Inkscape {
 namespace Extension {
 
@@ -221,9 +223,12 @@ check_extensions (void)
 
 	if (anyfail) {
 		/* show dialog here */
-		Inkscape::Extension::ErrorFileNotice dialog;
-		dialog.run();
-		// std::cout << "Check the error log" << std::endl;
+        if ( inkscape_app_use_gui( inkscape_get_instance() ) ) {
+            Inkscape::Extension::ErrorFileNotice dialog;
+            dialog.run();
+        } else {
+            std::cout << "One or more extensions failed to load. The failed extensions have been skipped. Inkscape will continue to run normally but those extensions will be unavailable.  For details to troubleshoot this problem, please refer to the error log." << std::endl;
+        }
 	}
 
 	return;
