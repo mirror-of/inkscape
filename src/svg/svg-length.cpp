@@ -271,6 +271,9 @@ sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, flo
 			return 1;
 		}
 	} else if (e[1] && !g_ascii_isalnum (e[2])) {
+		/* TODO: Allow the number of px per inch to vary (document preferences, X server
+		 * or whatever).  E.g. don't fill in computed here, do it at the same time as
+		 * percentage units are done. */
 		unsigned int uval;
 		/* Units */
 		uval = UVAL (e[0], e[1]);

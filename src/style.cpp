@@ -1879,6 +1879,9 @@ sp_style_read_ilength (SPILength *val, const gchar *str)
         /* fixme: Move this to standard place (Lauris) */
         value = g_ascii_strtod (str, &e);
         if ((const gchar *) e != str) {
+            /* TODO: Allow the number of px per inch to vary (document preferences, X server or
+             * whatever).  E.g. don't fill in computed here, do it at the same time as percentage
+             * units are done. */
             if (!*e) {
                 /* Userspace */
                 val->unit = SP_CSS_UNIT_NONE;
