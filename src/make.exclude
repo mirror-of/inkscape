@@ -40,6 +40,7 @@ main.cpp
 mod360-test.cpp
 trace/potrace/potest.cpp
 round-test.cpp
+sp-gradient-test.cpp
 svg/ftos.cpp
 utest
 widgets/test-widgets.cpp
