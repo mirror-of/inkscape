@@ -60,7 +60,7 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (GDK_F4, SP_VERB_CONTEXT_RECT, TRUE);
 	sp_shortcut_set_verb (GDK_r, SP_VERB_CONTEXT_RECT, TRUE);
 	sp_shortcut_set_verb (GDK_F5, SP_VERB_CONTEXT_ARC, TRUE);
-	sp_shortcut_set_verb (GDK_c, SP_VERB_CONTEXT_ARC, TRUE);
+	sp_shortcut_set_verb (GDK_e, SP_VERB_CONTEXT_ARC, TRUE);
 	sp_shortcut_set_verb (GDK_F6, SP_VERB_CONTEXT_PENCIL, TRUE);
 	sp_shortcut_set_verb (GDK_p, SP_VERB_CONTEXT_PENCIL, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_F6, SP_VERB_CONTEXT_PEN, TRUE);
