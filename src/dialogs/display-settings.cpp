@@ -261,7 +261,7 @@ options_selector ()
     b = sp_select_context_add_radio (
         NULL, fb, tt, _("Snap points to the grid"),
         _("Default action is to snap the points of objects to the grid, even if the object was not "
-          "previously snapped.  Shift-drag selects the alternative behaviour."),
+          "previously snapped.  Shift+drag selects the alternative behaviour."),
         "snap", 0, false, move_with_grid == NULL || !strcmp(move_with_grid, "snap"),
         options_selector_move_with_grid_toggled
         );
@@ -269,7 +269,7 @@ options_selector ()
     b = sp_select_context_add_radio (
         b, fb, tt, _("Snap objects to their current grid offset"),
         _("Default action is to snap objects to having the same offset from the grid as they did "
-          "before the move.  Shift-drag selects the alternative behaviour."),
+          "before the move.  Shift+drag selects the alternative behaviour."),
         "keep_offset", 0, false, move_with_grid && !strcmp(move_with_grid, "keep_offset"),
         options_selector_move_with_grid_toggled
         );

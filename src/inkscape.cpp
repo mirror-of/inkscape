@@ -493,7 +493,7 @@ inkscape_segv_handler (int signum)
     /* Show nice dialog box */
 
     char const *istr = N_("Inkscape encountered an internal error and will close now.\n");
-    char const *sstr = N_("Automatic backups of unsaved documents were done to following locations:\n");
+    char const *sstr = N_("Automatic backups of unsaved documents were done to the following locations:\n");
     char const *fstr = N_("Automatic backup of the following documents failed:\n");
     nllen = strlen ("\n");
     len = strlen (istr) + strlen (sstr) + strlen (fstr);
