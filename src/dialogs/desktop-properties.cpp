@@ -46,8 +46,6 @@
 
 #include "desktop-properties.h"
 
-static GtkWidget *sp_desktop_dialog_new (void);
-
 static void sp_dtw_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 static void sp_dtw_deactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 static void sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop);
@@ -508,7 +506,7 @@ sp_color_picker_set_rgba32 (GtkWidget *cp, guint32 rgba)
 	if (csel)
 	{
 		sp_color_set_rgb_rgba32 (&color, rgba);
-		sp_color_selector_set_color_alpha (csel, &color, SP_RGBA32_A_F(rgba));
+		csel->base->setColorAlpha( color, SP_RGBA32_A_F(rgba) );
 	}
 
 	g_object_set_data (G_OBJECT (cp), "color", GUINT_TO_POINTER (rgba));
@@ -540,7 +538,7 @@ sp_color_picker_color_mod (SPColorSelector *csel, GObject *cp)
 
 	if (g_object_get_data (G_OBJECT (cp), "update")) return;
 
-	sp_color_selector_get_color_alpha (csel, &color, &alpha);
+	csel->base->getColorAlpha( color, &alpha );
 	rgba = sp_color_get_rgba32_falpha (&color, alpha);
 
 	g_object_set_data (G_OBJECT (cp), "color", GUINT_TO_POINTER (rgba));
@@ -589,7 +587,7 @@ sp_color_picker_clicked (GObject *cp, void *data)
 		gtk_box_pack_start (GTK_BOX (vb), csel, TRUE, TRUE, 0);
 		rgba = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (cp), "color"));
 		sp_color_set_rgb_rgba32 (&color, rgba);
-		sp_color_selector_set_color_alpha (SP_COLOR_SELECTOR (csel), &color, SP_RGBA32_A_F(rgba));
+		SP_COLOR_SELECTOR(csel)->base->setColorAlpha( color, SP_RGBA32_A_F(rgba) );
 		g_signal_connect (G_OBJECT (csel), "dragged", G_CALLBACK (sp_color_picker_color_mod), cp);
 		g_signal_connect (G_OBJECT (csel), "changed", G_CALLBACK (sp_color_picker_color_mod), cp);
 		g_object_set_data (cp, "selector", csel);
