@@ -622,30 +622,12 @@ sp_item_transform_old_inverse (SPItem *item)
 
 
 /**
- Scale stroke width in the item; both style field and the CSS in the repr are written to
-*/
-void
-sp_item_adjust_stroke_width(SPItem *item, double expansion)
-{
-    if (!SP_OBJECT_STYLE(item))
-        return;
-
-    SP_OBJECT_STYLE(item)->stroke_width.computed *= expansion;
-
-    SPCSSAttr *css = sp_repr_css_attr_new();
-    Inkscape::SVGOStringStream os_width;
-    os_width << SP_OBJECT_STYLE(item)->stroke_width.computed;
-    sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
-    sp_repr_css_change(SP_OBJECT_REPR(item), css, "style");
-}
-
-/**
  Recursively scale stroke width in \a item and its children by \a expansion
 */
 void
 sp_item_adjust_stroke_width_recursive(SPItem *item, double expansion)
 {
-    sp_item_adjust_stroke_width(item, expansion);
+    sp_shape_adjust_stroke (item, expansion);
 
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o))

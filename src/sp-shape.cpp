@@ -857,20 +857,19 @@ sp_shape_adjust_stroke (SPItem *item, gdouble ex)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
-    if (style->stroke.type != SP_PAINT_TYPE_NONE) {
-        if (!NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
-            /* Scale changed, so we have to adjust stroke width */
-            style->stroke_width.computed *= ex;
-            if (style->stroke_dash.n_dash != 0) {
-                int i;
-                for (i = 0; i < style->stroke_dash.n_dash; i++) {
-                    style->stroke_dash.dash[i] *= ex;
-                }
-                style->stroke_dash.offset *= ex;
-            }
+    if (style && style->stroke.type != SP_PAINT_TYPE_NONE && !NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
 
-            SP_OBJECT(item)->updateRepr();
+        style->stroke_width.computed *= ex;
+
+        if (style->stroke_dash.n_dash != 0) {
+            int i;
+            for (i = 0; i < style->stroke_dash.n_dash; i++) {
+                style->stroke_dash.dash[i] *= ex;
+            }
+            style->stroke_dash.offset *= ex;
         }
+
+        SP_OBJECT(item)->updateRepr();
     }
 }
 
