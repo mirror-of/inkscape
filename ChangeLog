@@ -1,3 +1,9 @@
+2004-01-08  Nathan Hurst  <njh@mail.csse.monash.edu.au>
+
+	* src/helper, src/libnr and various: removed senescent code inside
+	#if 0s and changed scoping of variables to be close to use.  minor
+	performance tweeks.
+
 2004-01-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/widgets/sp-color-notebook.cpp (getCurrentSelector): Address
