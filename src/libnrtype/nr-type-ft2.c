@@ -17,7 +17,7 @@
 #include <freetype/ftbbox.h>
 #include "nr-type-ft2.h"
 
-#define NRTFFT2_DEBUG
+#define noNRTFFT2_DEBUG
 
 #ifdef NRTFFT2_DEBUG
 static int olcount = 0;
