@@ -4,12 +4,12 @@
 /*
  * Temporary fix for various misdefinitions of isnan().
  * isnan() is becoming undef'd in some .h files. 
- * #include thislast in your .cpp file to get it right.
+ * #include this last in your .cpp file to get it right.
  *
  * Authors:
  *   Inkscape groupies and obsessive-compulsives
  *
- * Copyright (C) 1999-2002 authors
+ * Copyright (C) 2004 authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
