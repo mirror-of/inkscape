@@ -8,6 +8,9 @@
  */
 
 #include <cstdio>
+#ifdef faster_flatten
+# include <cmath>  // std::abs(float)
+#endif
 #include "livarot/float-line.h"
 #include "livarot/int-line.h"
 
@@ -41,8 +44,8 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, int gues
     float pente = (eval - sval) / (epos - spos);
     
 #ifdef faster_flatten
-    if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
-        return;
+    if ( std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000 ) {
+        return -1;
         epos = spos;
         pente = 0;
     }
@@ -91,8 +94,8 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pe
     }
 
 #ifdef faster_flatten
-    if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
-        return;
+    if ( std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000 ) {
+        return -1;
         epos = spos;
         pente = 0;
     }
@@ -164,8 +167,8 @@ int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float p
     }
     
 #ifdef faster_flatten
-    if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
-        return;
+    if ( std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000 ) {
+        return -1;
         epos = spos;
         pente = 0;
     }
@@ -239,10 +242,10 @@ int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float
     }
     
 #ifdef faster_flatten
-    if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
-        return;
-        epos=spos;
-        pente=0;
+    if ( std::abs(epos - spos) < 0.001 || std::abs(pente) > 1000 ) {
+        return -1;
+        epos = spos;
+        pente = 0;
     }
 #endif
     
