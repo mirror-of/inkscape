@@ -187,3 +187,28 @@ sp_set_font_size (GtkWidget *w, guint font)
 {
 	sp_set_font_size_recursive (w, GUINT_TO_POINTER(font));
 }
+
+/**
+\brief  Returns the descendant of w which has the data with the given key, or NULL if there's none
+*/
+gpointer
+sp_search_by_data_recursive (GtkWidget *w, gpointer key)
+{
+	gpointer r = NULL;
+
+	if (w && GTK_IS_OBJECT(w)) {
+		r = gtk_object_get_data (GTK_OBJECT(w), (gchar *) key);
+	}
+	if (r) return r;
+	
+	if (GTK_IS_CONTAINER(w)) {
+		GList *ch = gtk_container_get_children (GTK_CONTAINER(w));
+		for (GList *i = ch; i != NULL; i = i->next) {
+			r = sp_search_by_data_recursive(GTK_WIDGET(i->data), key);
+			if (r) return r;
+		}
+	}
+
+	return NULL;
+}
+
