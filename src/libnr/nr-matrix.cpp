@@ -232,6 +232,13 @@ double expansion(Matrix const &m) {
         return sqrt(fabs(m.det()));
 }
                                                                                 
+bool Matrix::is_translation(const Coord eps) const {
+    return ( fabs(_c[0]-1.0) < eps && 
+             fabs(_c[3]-1.0) < eps &&
+             fabs(_c[1]) < eps && 
+             fabs(_c[2]) < eps );
+}
+
 bool Matrix::test_identity() const {
         return NR_MATRIX_DF_TEST_CLOSE (this, &NR_MATRIX_IDENTITY, NR_EPSILON);
 }

@@ -72,9 +72,7 @@ nr_rasterfont_new (NRFont *font, NR::Matrix transform)
 
 /* Generic implementation */
 
-typedef struct _NRFontGeneric NRFontGeneric;
-
-struct _NRFontGeneric {
+struct NRFontGeneric {
 	NRFont font;
 
 	NRRasterFont *rfonts;

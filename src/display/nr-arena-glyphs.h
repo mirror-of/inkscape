@@ -28,7 +28,7 @@
 
 class Shape;
 
-struct _NRArenaGlyphs {
+struct NRArenaGlyphs {
 	NRArenaItem item;
 
 	/* Glyphs data */
@@ -49,7 +49,7 @@ struct _NRArenaGlyphs {
 	Shape  *stroke_shp;
 };
 
-struct _NRArenaGlyphsClass {
+struct NRArenaGlyphsClass {
 	NRArenaItemClass parent_class;
 };
 
@@ -63,8 +63,8 @@ void nr_arena_glyphs_set_style (NRArenaGlyphs *glyphs, SPStyle *style);
 
 /* Integrated group of component glyphss */
 
-typedef struct _NRArenaGlyphsGroup NRArenaGlyphsGroup;
-typedef struct _NRArenaGlyphsGroupClass NRArenaGlyphsGroupClass;
+typedef struct NRArenaGlyphsGroup NRArenaGlyphsGroup;
+typedef struct NRArenaGlyphsGroupClass NRArenaGlyphsGroupClass;
 
 #include "nr-arena-group.h"
 
@@ -72,7 +72,7 @@ typedef struct _NRArenaGlyphsGroupClass NRArenaGlyphsGroupClass;
 #define NR_ARENA_GLYPHS_GROUP(obj) (NR_CHECK_INSTANCE_CAST ((obj), NR_TYPE_ARENA_GLYPHS_GROUP, NRArenaGlyphsGroup))
 #define NR_IS_ARENA_GLYPHS_GROUP(obj) (NR_CHECK_INSTANCE_TYPE ((obj), NR_TYPE_ARENA_GLYPHS_GROUP))
 
-struct _NRArenaGlyphsGroup {
+struct NRArenaGlyphsGroup {
 	NRArenaGroup group;
 	SPStyle *style;
 	NRRect paintbox;
@@ -81,7 +81,7 @@ struct _NRArenaGlyphsGroup {
 	SPPainter *stroke_painter;
 };
 
-struct _NRArenaGlyphsGroupClass {
+struct NRArenaGlyphsGroupClass {
 	NRArenaGroupClass parent_class;
 };
 

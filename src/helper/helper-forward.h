@@ -14,12 +14,12 @@
 
 #include <glib-object.h>
 
-typedef struct _SPCanvas SPCanvas;
-typedef struct _SPCanvasClass SPCanvasClass;
-typedef struct _SPCanvasItem SPCanvasItem;
-typedef struct _SPCanvasItemClass SPCanvasItemClass;
-typedef struct _SPCanvasGroup SPCanvasGroup;
-typedef struct _SPCanvasGroupClass SPCanvasGroupClass;
+struct SPCanvas;
+struct SPCanvasClass;
+struct SPCanvasItem;
+struct SPCanvasItemClass;
+struct SPCanvasGroup;
+struct SPCanvasGroupClass;
 
 #define SP_TYPE_CANVAS_ITEM (sp_canvas_item_get_type ())
 #define SP_CANVAS_ITEM(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_CANVAS_ITEM, SPCanvasItem))

@@ -24,10 +24,10 @@
 #define SP_IS_XMLVIEW_TREE(o) (GTK_CHECK_TYPE ((o), SP_TYPE_XMLVIEW_TREE))
 #define SP_XMLVIEW_TREE_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_XMLVIEW_TREE))
 
-typedef struct _SPXMLViewTree SPXMLViewTree;
-typedef struct _SPXMLViewTreeClass SPXMLViewTreeClass;
+struct SPXMLViewTree;
+struct SPXMLViewTreeClass;
 
-struct _SPXMLViewTree
+struct SPXMLViewTree
 {
 	GtkCTree tree;
 
@@ -35,7 +35,7 @@ struct _SPXMLViewTree
 	gint blocked;
 };
 
-struct _SPXMLViewTreeClass
+struct SPXMLViewTreeClass
 {
 	GtkCTreeClass parent_class;
 };

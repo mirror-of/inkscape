@@ -32,6 +32,8 @@ class NArtBpath {
 
 NArtBpath* nr_artpath_affine(NArtBpath *s, NR::Matrix const &transform);
 
+//ArtBpath* nr_artpath_to_art_bpath(NArtBpath *s); // this lives in src/extension/internal/gnome.cpp to avoid requiring libart everywhere
+
 struct NRBPath {
 	NArtBpath *path;
 };

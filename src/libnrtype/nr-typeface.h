@@ -14,10 +14,10 @@
 #define NR_TYPEFACE(o) (NR_CHECK_INSTANCE_CAST ((o), NR_TYPE_TYPEFACE, NRTypeFace))
 #define NR_IS_TYPEFACE(o) (NR_CHECK_INSTANCE_TYPE ((o), NR_TYPE_TYPEFACE))
 
-typedef struct _NRTypeFace NRTypeFace;
-typedef struct _NRTypeFaceClass NRTypeFaceClass;
+struct NRTypeFace;
+struct NRTypeFaceClass;
 
-typedef struct _NRTypeFaceDef NRTypeFaceDef;
+struct NRTypeFaceDef;
 class NRTypePosDef;
 
 #include <libnr/nr-forward.h>
@@ -36,7 +36,7 @@ enum {
 	NR_TYPEFACE_LOOKUP_RULE_DEFAULT
 };
 
-struct _NRTypeFaceDef {
+struct NRTypeFaceDef {
 	NRTypeFaceDef *next;
 	NRType type;
 	NRTypePosDef *pdef;
@@ -46,7 +46,7 @@ struct _NRTypeFaceDef {
 	NRTypeFace *typeface;
 };
 
-struct _NRTypeFaceClass {
+struct NRTypeFaceClass {
 	NRObjectClass parent_class;
 
 	/* NRTypeFace *(* new) (NRTypeFaceDef *def); */
@@ -74,7 +74,7 @@ struct _NRTypeFaceClass {
 	void (* rasterfont_glyph_mask_render) (NRRasterFont *rfont, unsigned int glyph, NRPixBlock *m, float x, float y);
 };
 
-struct _NRTypeFace {
+struct NRTypeFace {
 	NRObject object;
 
 	/* NRTypeFaceVMV *vmv; */

@@ -153,14 +153,11 @@ nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size)
 
 #define NR_TYPE_TYPEFACE_EMPTY (nr_typeface_empty_get_type ())
 
-typedef struct _NRTypeFaceEmpty NRTypeFaceEmpty;
-typedef struct _NRTypeFaceEmptyClass NRTypeFaceEmptyClass;
-
-struct _NRTypeFaceEmpty {
+struct NRTypeFaceEmpty {
 	NRTypeFace typeface;
 };
 
-struct _NRTypeFaceEmptyClass {
+struct NRTypeFaceEmptyClass {
 	NRTypeFaceClass typeface_class;
 };
 

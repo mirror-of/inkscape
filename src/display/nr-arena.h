@@ -21,19 +21,17 @@
 #include <libnr/nr-object.h>
 #include "nr-arena-forward.h"
 
-typedef struct _NRArenaEventVector NRArenaEventVector;
-
-struct _NRArenaEventVector {
+struct NRArenaEventVector {
 	NRObjectEventVector object_vector;
 	void (* request_update) (NRArena *arena, NRArenaItem *item, void *data);
 	void (* request_render) (NRArena *arena, NRRectL *area, void *data);
 };
 
-struct _NRArena {
+struct NRArena {
 	NRActiveObject object;
 };
 
-struct _NRArenaClass {
+struct NRArenaClass {
 	NRActiveObjectClass parent_class;
 };
 

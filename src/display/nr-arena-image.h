@@ -20,7 +20,7 @@
 #include <libnr/nr-matrix.h>
 #include "nr-arena-item.h"
 
-struct _NRArenaImage {
+struct NRArenaImage {
 	NRArenaItem item;
 
 	unsigned char *px;
@@ -35,7 +35,7 @@ struct _NRArenaImage {
 	NR::Matrix grid2px;
 };
 
-struct _NRArenaImageClass {
+struct NRArenaImageClass {
 	NRArenaItemClass parent_class;
 };
 

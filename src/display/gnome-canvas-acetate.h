@@ -25,16 +25,16 @@
 #define GNOME_IS_CANVAS_ACETATE(obj) (GTK_CHECK_TYPE ((obj), GNOME_TYPE_CANVAS_ACETATE))
 #define GNOME_IS_CANVAS_ACETATE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GNOME_TYPE_CANVAS_ACETATE))
 
-typedef struct _SPCanvasAcetate SPCanvasAcetate;
-typedef struct _SPCanvasAcetateClass SPCanvasAcetateClass;
+struct SPCanvasAcetate;
+struct SPCanvasAcetateClass;
 
 #include "sp-canvas.h"
 
-struct _SPCanvasAcetate {
+struct SPCanvasAcetate {
 	SPCanvasItem item;
 };
 
-struct _SPCanvasAcetateClass {
+struct SPCanvasAcetateClass {
 	SPCanvasItemClass parent_class;
 };
 

@@ -19,8 +19,6 @@
 
 #define NR_ARENA_ITEM_VIRTUAL(i,m) (((NRArenaItemClass *) NR_OBJECT_GET_CLASS (i))->m)
 
-typedef struct _NRGC NRGC;
-
 /*
  * NRArenaItem state flags
  */
@@ -62,11 +60,11 @@ typedef struct _NRGC NRGC;
 
 #define arena_item_tile_cache
 
-struct _NRGC {
+struct NRGC {
 	NRMatrix transform;
 };
 
-struct _NRArenaItem {
+struct NRArenaItem {
 	NRObject object;
 	NRArena *arena;
 	NRArenaItem *parent;
@@ -106,7 +104,7 @@ struct _NRArenaItem {
 	void *data;
 };
 
-struct _NRArenaItemClass {
+struct NRArenaItemClass {
 	NRObjectClass parent_class;
 
 	NRArenaItem * (* children) (NRArenaItem *item);

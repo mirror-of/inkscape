@@ -21,10 +21,7 @@
 #define SP_IS_CGRID_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_CGRID))
 
 
-typedef struct _SPCGrid SPCGrid;
-typedef struct _SPCGridClass SPCGridClass;
-
-struct _SPCGrid {
+struct SPCGrid {
 	SPCanvasItem item;
 
 	NR::Point origin;
@@ -34,7 +31,7 @@ struct _SPCGrid {
 	NR::Point ow, sw;
 };
 
-struct _SPCGridClass {
+struct SPCGridClass {
 	SPCanvasItemClass parent_class;
 };
 

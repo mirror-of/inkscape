@@ -28,7 +28,7 @@
 
 #include "repr-private.h"
 
-typedef struct _SPReprListener SPListener;
+typedef struct SPReprListener SPListener;
 
 static void repr_init (SPRepr *repr);
 static void repr_doc_init (SPRepr *repr);

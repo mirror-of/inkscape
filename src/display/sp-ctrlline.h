@@ -20,8 +20,8 @@
 #define SP_CTRLLINE(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_CTRLLINE, SPCtrlLine))
 #define SP_IS_CTRLLINE(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_CTRLLINE))
 
-typedef struct _SPCtrlLine SPCtrlLine;
-typedef struct _SPCtrlLineClass SPCtrlLineClass;
+struct SPCtrlLine;
+struct SPCtrlLineClass;
 
 GtkType sp_ctrlline_get_type (void);
 

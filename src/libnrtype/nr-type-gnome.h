@@ -14,14 +14,14 @@
 #define NR_TYPEFACE_GNOME(o) (NR_CHECK_INSTANCE_CAST ((o), NR_TYPE_TYPEFACE_GNOME, NRTypeFaceGnome))
 #define NR_IS_TYPEFACE_GNOME(o) (NR_CHECK_INSTANCE_TYPE ((o), NR_TYPE_TYPEFACE_GNOME))
 
-typedef struct _NRTypeFaceGnome NRTypeFaceGnome;
-typedef struct _NRTypeFaceGnomeClass NRTypeFaceGnomeClass;
+struct NRTypeFaceGnome;
+struct NRTypeFaceGnomeClass;
 
 #include <libnrtype/nr-rasterfont.h>
 #include <libnrtype/nr-type-directory.h>
 #include <libgnomeprint/gnome-font.h>
 
-struct _NRTypeFaceGnome {
+struct NRTypeFaceGnome {
 	NRTypeFace typeface;
 
 	GnomeFontFace *face;
@@ -30,7 +30,7 @@ struct _NRTypeFaceGnome {
 	NRBPath *voutlines;
 };
 
-struct _NRTypeFaceGnomeClass {
+struct NRTypeFaceGnomeClass {
 	NRTypeFaceClass typeface_class;
 };
 

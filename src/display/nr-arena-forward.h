@@ -13,26 +13,26 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-typedef struct _NRArena NRArena;
-typedef struct _NRArenaClass NRArenaClass;
+struct NRArena;
+struct NRArenaClass;
 
-typedef struct _NRArenaItem NRArenaItem;
-typedef struct _NRArenaItemClass NRArenaItemClass;
+struct NRArenaItem;
+struct NRArenaItemClass;
 
-typedef struct _NRArenaGroup NRArenaGroup;
-typedef struct _NRArenaGroupClass NRArenaGroupClass;
+struct NRArenaGroup;
+struct NRArenaGroupClass;
 
-typedef struct _NRArenaShape NRArenaShape;
-typedef struct _NRArenaShapeClass NRArenaShapeClass;
+struct NRArenaShape;
+struct NRArenaShapeClass;
 
-typedef struct _NRArenaShapeGroup NRArenaShapeGroup;
-typedef struct _NRArenaShapeGroupClass NRArenaShapeGroupClass;
+struct NRArenaShapeGroup;
+struct NRArenaShapeGroupClass;
 
-typedef struct _NRArenaImage NRArenaImage;
-typedef struct _NRArenaImageClass NRArenaImageClass;
+struct NRArenaImage;
+struct NRArenaImageClass;
 
-typedef struct _NRArenaGlyphs NRArenaGlyphs;
-typedef struct _NRArenaGlyphsClass NRArenaGlyphsClass;
+struct NRArenaGlyphs;
+struct NRArenaGlyphsClass;
 
 #endif
 

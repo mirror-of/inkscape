@@ -33,7 +33,9 @@ enum {
 	SP_CANVAS_UPDATE_AFFINE     = 1 << 1
 };
 
-typedef struct {
+struct SPCanvas;
+
+struct SPCanvasBuf{
 	guchar *buf;
 	int buf_rowstride;
 	NRRectL rect;
@@ -44,9 +46,9 @@ typedef struct {
 	unsigned int is_bg : 1;
 	/* Set when the render rectangle area is represented by the buf */
 	unsigned int is_buf : 1;
-} SPCanvasBuf;
+};
 
-struct _SPCanvasItem {
+struct SPCanvasItem {
 	GtkObject object;
 
 	SPCanvas *canvas;
@@ -56,7 +58,7 @@ struct _SPCanvasItem {
 	NR::Matrix xform;
 };
 
-struct _SPCanvasItemClass {
+struct SPCanvasItemClass {
 	GtkObjectClass parent_class;
 
 	void (* update) (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags);
@@ -93,7 +95,7 @@ gint sp_canvas_item_order (SPCanvasItem * item);
 
 /* SPCanvas */
 
-struct _SPCanvas {
+struct SPCanvas {
 	GtkWidget widget;
 
 	guint idle_id;

@@ -41,17 +41,17 @@ enum {
     SP_CANVAS_ITEM_NEED_AFFINE = 1 << 9
 };
 
-struct _SPCanvasGroup {
+struct SPCanvasGroup {
     SPCanvasItem item;
 
     GList *items, *last;
 };
 
-struct _SPCanvasGroupClass {
+struct SPCanvasGroupClass {
     SPCanvasItemClass parent_class;
 };
 
-struct _SPCanvasClass {
+struct SPCanvasClass {
     GtkWidgetClass parent_class;
 };
 

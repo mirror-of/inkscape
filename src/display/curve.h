@@ -18,9 +18,7 @@
 #include <libnr/nr-path.h>
 namespace NR { class Point; }
 
-typedef struct _SPCurve SPCurve;
-
-struct _SPCurve {
+struct SPCurve {
 	gint refcount;
 	NArtBpath * bpath;
 	gint end;		/* ART_END position */

@@ -14,11 +14,11 @@
 #define NR_TYPEFACE_FT2(o) (NR_CHECK_INSTANCE_CAST ((o), NR_TYPE_TYPEFACE_FT2, NRTypeFaceFT2))
 #define NR_IS_TYPEFACE_FT2(o) (NR_CHECK_INSTANCE_TYPE ((o), NR_TYPE_TYPEFACE_FT2))
 
-typedef struct _NRTypeFaceFT2 NRTypeFaceFT2;
-typedef struct _NRTypeFaceFT2Class NRTypeFaceFT2Class;
+struct NRTypeFaceFT2;
+struct NRTypeFaceFT2Class;
 
-typedef struct _NRTypeFaceDefFT2 NRTypeFaceDefFT2;
-typedef struct _NRTypeFaceGlyphFT2 NRTypeFaceGlyphFT2;
+struct NRTypeFaceDefFT2;
+struct NRTypeFaceGlyphFT2;
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -26,7 +26,7 @@ typedef struct _NRTypeFaceGlyphFT2 NRTypeFaceGlyphFT2;
 #include <libnr/nr-point.h>
 #include <libnr/nr-rect.h>
 
-struct _NRTypeFaceDefFT2 {
+struct NRTypeFaceDefFT2 {
 	NRTypeFaceDef def;
 	unsigned int is_file : 1;
 	union {
@@ -37,14 +37,14 @@ struct _NRTypeFaceDefFT2 {
 	unsigned int face;
 };
 
-struct _NRTypeFaceGlyphFT2 {
+struct NRTypeFaceGlyphFT2 {
 	NRRect area;
 	NR::Point advance;
 	int olref;
 	NRBPath outline;
 };
 
-struct _NRTypeFaceFT2 {
+struct NRTypeFaceFT2 {
 	NRTypeFace typeface;
 
 	FT_Face ft_face;
@@ -62,7 +62,7 @@ struct _NRTypeFaceFT2 {
 	unsigned int slots_size;
 };
 
-struct _NRTypeFaceFT2Class {
+struct NRTypeFaceFT2Class {
 	NRTypeFaceClass typeface_class;
 };
 

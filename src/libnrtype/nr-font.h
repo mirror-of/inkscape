@@ -10,12 +10,12 @@
  * This code is in public domain
  */
 
-typedef struct _NRFont NRFont;
+struct NRFont;
 
 #include <libnrtype/nr-typeface.h>
 #include <libnrtype/nr-rasterfont.h>
 
-struct _NRFont {
+struct NRFont {
 	unsigned int refcount;
 	NRFont *next;
 	NRTypeFace *face;

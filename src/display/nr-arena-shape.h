@@ -27,7 +27,7 @@
 
 #include "../livarot/Shape.h"
 
-struct _NRArenaShape {
+struct NRArenaShape {
 	NRArenaItem item;
 	/* Shape data */
 	SPCurve *curve;
@@ -64,7 +64,7 @@ struct _NRArenaShape {
 	NRArenaItem *markers;
 };
 
-struct _NRArenaShapeClass {
+struct NRArenaShapeClass {
 	NRArenaItemClass parent_class;
 };
 

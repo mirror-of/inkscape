@@ -38,7 +38,7 @@
 
 void nr_pixblock_render_ctrl_rgba (Shape* theS,uint32_t color,NRRectL &area,char* destBuf,int stride);
 
-struct _SPCtrlLine {
+struct SPCtrlLine {
     SPCanvasItem item;
 
     guint32 rgba;
@@ -46,7 +46,7 @@ struct _SPCtrlLine {
     Shape* shp;
 };
 
-struct _SPCtrlLineClass {
+struct SPCtrlLineClass {
     SPCanvasItemClass parent_class;
 };
 

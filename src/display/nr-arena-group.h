@@ -19,7 +19,7 @@
 
 #include "nr-arena-item.h"
 
-struct _NRArenaGroup {
+struct NRArenaGroup {
 	NRArenaItem item;
 	unsigned int transparent : 1;
 	NRArenaItem *children;
@@ -27,7 +27,7 @@ struct _NRArenaGroup {
 	NRMatrix child_transform;
 };
 
-struct _NRArenaGroupClass {
+struct NRArenaGroupClass {
 	NRArenaItemClass parent_class;
 };
 

@@ -28,10 +28,7 @@
 #define SP_IS_XMLVIEW_CONTENT(o) (GTK_CHECK_TYPE ((o), SP_TYPE_XMLVIEW_CONTENT))
 #define SP_XMLVIEW_CONTENT_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_XMLVIEW_CONTENT))
 
-typedef struct _SPXMLViewContent SPXMLViewContent;
-typedef struct _SPXMLViewContentClass SPXMLViewContentClass;
-
-struct _SPXMLViewContent
+struct SPXMLViewContent
 {
 	GtkTextView textview;
 
@@ -39,7 +36,7 @@ struct _SPXMLViewContent
 	gint blocked;
 };
 
-struct _SPXMLViewContentClass
+struct SPXMLViewContentClass
 {
 	GtkTextViewClass parent_class;
 };

@@ -20,10 +20,7 @@
 #define SP_GUIDELINE(o) (GTK_CHECK_CAST ((o), SP_TYPE_GUIDELINE, SPGuideLine))
 #define SP_IS_GUIDELINE(o) (GTK_CHECK_TYPE ((o), SP_TYPE_GUIDELINE))
 
-typedef struct _SPGuideLine SPGuideLine;
-typedef struct _SPGuideLineClass SPGuideLineClass;
-
-struct _SPGuideLine {
+struct SPGuideLine {
 	SPCanvasItem item;
 
 	guint32 rgba;
@@ -34,7 +31,7 @@ struct _SPGuideLine {
 	unsigned int sensitive : 1;
 };
 
-struct _SPGuideLineClass {
+struct SPGuideLineClass {
 	SPCanvasItemClass parent_class;
 };
 

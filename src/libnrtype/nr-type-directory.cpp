@@ -47,9 +47,7 @@
 #include "nr-type-directory.h"
 #include "nr-type-pos-def.h"
 
-typedef struct _NRFamilyDef NRFamilyDef;
-
-struct _NRFamilyDef {
+struct NRFamilyDef {
 	NRFamilyDef *next;
 	gchar *name;
 	NRTypeFaceDef *faces;
@@ -102,11 +100,11 @@ compare_warnings (const void *a, const void *b)
 
 // A simple cache implementation, to speed up fuzzy lookup for documents with lots of text objects
 
-typedef struct {
+struct cache_unit{
 	gchar *fam;
 	guint spec;
 	NRTypeFaceDef *face;
-} cache_unit;
+};
 
 guint 
 spec_from_def (NRTypePosDef a)

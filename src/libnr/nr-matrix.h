@@ -128,6 +128,8 @@ public:
 	Matrix(NRMatrix const *nr);
 
 	bool test_identity() const;
+	bool is_translation(const Coord eps=0.01) const;
+
 	Matrix inverse() const;
 
 	Matrix &operator*=(Matrix const &o);

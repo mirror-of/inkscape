@@ -20,9 +20,6 @@
 #define SP_IS_CTRL(obj)         (GTK_CHECK_TYPE ((obj), SP_TYPE_CTRL))
 #define SP_IS_CTRL_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_CTRL))
 
-typedef struct _SPCtrl SPCtrl;
-typedef struct _SPCtrlClass SPCtrlClass;
-
 typedef enum {
 	SP_CTRL_SHAPE_SQUARE,
 	SP_CTRL_SHAPE_DIAMOND,
@@ -38,7 +35,7 @@ typedef enum {
 	SP_CTRL_MODE_XOR
 } SPCtrlModeType;
 
-struct _SPCtrl {
+struct SPCtrl {
 	SPCanvasItem item;
 
 	SPCtrlShapeType shape;
@@ -58,7 +55,7 @@ struct _SPCtrl {
 	GdkPixbuf * pixbuf;
 };
 
-struct _SPCtrlClass {
+struct SPCtrlClass {
 	SPCanvasItemClass parent_class;
 };
 

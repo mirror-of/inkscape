@@ -26,12 +26,12 @@
  * NB! Unless explicitly stated all methods are noref/nostrcpy
  */
 
-typedef struct _SPRepr SPXMLNode;
-typedef struct _SPRepr SPXMLText;
-typedef struct _SPRepr SPXMLElement;
-typedef struct _SPReprAttr SPXMLAttribute;
-typedef struct _SPReprDoc SPXMLDocument;
-typedef struct _SPXMLNs SPXMLNs;
+typedef struct SPRepr SPXMLNode;
+typedef struct SPRepr SPXMLText;
+typedef struct SPRepr SPXMLElement;
+typedef struct SPReprAttr SPXMLAttribute;
+typedef struct SPReprDoc SPXMLDocument;
+typedef struct SPXMLNs SPXMLNs;
 
 
 /**
@@ -140,7 +140,7 @@ SPXMLDocument *sp_xml_node_get_Document (SPXMLNode *node);
  * SPRepr is opaque
  */
 
-typedef struct _SPRepr SPRepr;
+typedef struct SPRepr SPRepr;
 
 /* Create new repr & similar */
 
@@ -153,7 +153,7 @@ SPRepr *sp_repr_duplicate (const SPRepr *repr);
 
 /* Documents - 1st step in migrating to real XML */
 
-typedef struct _SPReprDoc SPReprDoc;
+typedef struct SPReprDoc SPReprDoc;
 
 SPReprDoc * sp_repr_document_new (const gchar * rootname);
 void sp_repr_document_ref (SPReprDoc * doc);
@@ -203,7 +203,7 @@ void sp_repr_print (SPRepr * repr);
 
 /* CSS stuff */
 
-typedef struct _SPCSSAttr SPCSSAttr;
+typedef struct SPCSSAttr SPCSSAttr;
 
 SPCSSAttr * sp_repr_css_attr_new (void);
 void sp_repr_css_attr_unref (SPCSSAttr * css);

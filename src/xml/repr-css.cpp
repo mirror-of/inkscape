@@ -9,7 +9,7 @@
 #include "repr.h"
 #include "repr-private.h"
 
-struct _SPCSSAttr {
+struct SPCSSAttr {
 	SPRepr repr;
 };
 

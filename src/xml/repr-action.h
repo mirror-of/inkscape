@@ -1,12 +1,12 @@
 #ifndef __SP_XML_REPR_ACTION_H__
 #define __SP_XML_REPR_ACTION_H__
 
-typedef struct _SPReprAction SPReprAction;
-typedef struct _SPReprActionAdd SPReprActionAdd;
-typedef struct _SPReprActionDel SPReprActionDel;
-typedef struct _SPReprActionChgAttr SPReprActionChgAttr;
-typedef struct _SPReprActionChgContent SPReprActionChgContent;
-typedef struct _SPReprActionChgOrder SPReprActionChgOrder;
+struct SPReprAction;
+struct SPReprActionAdd;
+struct SPReprActionDel;
+struct SPReprActionChgAttr;
+struct SPReprActionChgContent;
+struct SPReprActionChgOrder;
 
 typedef enum {
 	SP_REPR_ACTION_INVALID,
@@ -17,31 +17,31 @@ typedef enum {
 	SP_REPR_ACTION_CHGORDER
 } SPReprActionType;
 
-struct _SPReprActionAdd {
+struct SPReprActionAdd {
 	SPRepr *child;
 	SPRepr *ref;
 };
 
-struct _SPReprActionDel {
+struct SPReprActionDel {
 	SPRepr *child;
 	SPRepr *ref;
 };
 
-struct _SPReprActionChgAttr {
+struct SPReprActionChgAttr {
 	int key;
 	gchar *oldval, *newval;
 };
 
-struct _SPReprActionChgContent {
+struct SPReprActionChgContent {
 	gchar *oldval, *newval;
 };
 
-struct _SPReprActionChgOrder {
+struct SPReprActionChgOrder {
 	SPRepr *child;
 	SPRepr *oldref, *newref;
 };
 
-struct _SPReprAction {
+struct SPReprAction {
 	SPReprAction *next;
 	SPReprActionType type;
 	SPRepr *repr;

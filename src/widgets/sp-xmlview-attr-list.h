@@ -25,17 +25,14 @@
 #define SP_IS_XMLVIEW_ATTR_LIST(o) (GTK_CHECK_TYPE ((o), SP_TYPE_XMLVIEW_ATTR_LIST))
 #define SP_XMLVIEW_ATTR_LIST_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_XMLVIEW_ATTR_LIST))
 
-typedef struct _SPXMLViewAttrList SPXMLViewAttrList;
-typedef struct _SPXMLViewAttrListClass SPXMLViewAttrListClass;
-
-struct _SPXMLViewAttrList
+struct SPXMLViewAttrList
 {
 	GtkCList list;
 
 	SPRepr * repr;
 };
 
-struct _SPXMLViewAttrListClass
+struct SPXMLViewAttrListClass
 {
 	GtkCListClass parent_class;
 };

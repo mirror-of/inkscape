@@ -17,12 +17,12 @@
 #include "repr.h"
 #include "repr-action.h"
 
-typedef struct _SPReprClass SPReprClass;
-typedef struct _SPReprAttr SPReprAttr;
-typedef struct _SPReprListener SPReprListener;
-typedef struct _SPReprEventVector SPReprEventVector;
+struct SPReprClass;
+struct SPReprAttr;
+struct SPReprListener;
+struct SPReprEventVector;
 
-struct _SPReprClass {
+struct SPReprClass {
 	size_t size;
 	SPRepr *pool;
 	void (*init)(SPRepr *repr);
@@ -30,19 +30,19 @@ struct _SPReprClass {
 	void (*finalize)(SPRepr *repr);
 };
 
-struct _SPReprAttr {
+struct SPReprAttr {
 	SPReprAttr *next;
 	int key;
 	gchar *value;
 };
 
-struct _SPReprListener {
+struct SPReprListener {
 	SPReprListener *next;
 	const SPReprEventVector *vector;
 	void * data;
 };
 
-struct _SPReprEventVector {
+struct SPReprEventVector {
 	/* Immediate signals */
 	void (* destroy) (SPRepr *repr, void * data);
 	unsigned int (* add_child) (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
@@ -57,7 +57,7 @@ struct _SPReprEventVector {
 	void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr *oldref, SPRepr *newref, void * data);
 };
 
-struct _SPRepr {
+struct SPRepr {
 	SPReprClass *type;
 	int refcount;
 
@@ -74,13 +74,13 @@ struct _SPRepr {
 	gchar *content;
 };
 
-struct _SPReprDoc {
+struct SPReprDoc {
 	SPRepr repr;
 	bool is_logging;
 	SPReprAction *log;
 };
 
-struct _SPXMLNs {
+struct SPXMLNs {
 	SPXMLNs *next;
 	unsigned int uri, prefix;
 };

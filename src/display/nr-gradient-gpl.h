@@ -21,13 +21,11 @@
 
 
 
-typedef struct _NRLGradientRenderer NRLGradientRenderer;
-
 #include <libnr/nr-gradient.h>
 
 /* Linear */
 
-struct _NRLGradientRenderer {
+struct NRLGradientRenderer {
 	NRRenderer renderer;
 	const unsigned char *vector;
 	unsigned int spread;

@@ -13,8 +13,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-typedef struct _SPCanvasArena SPCanvasArena;
-typedef struct _SPCanvasArenaClass SPCanvasArenaClass;
+struct SPCanvasArena;
+struct SPCanvasArenaClass;
 
 #define SP_TYPE_CANVAS_ARENA (sp_canvas_arena_get_type ())
 #define SP_CANVAS_ARENA(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_CANVAS_ARENA, SPCanvasArena))
@@ -25,7 +25,7 @@ typedef struct _SPCanvasArenaClass SPCanvasArenaClass;
 #include "../display/sp-canvas.h"
 #include "nr-arena-item.h"
 
-struct _SPCanvasArena {
+struct SPCanvasArena {
 	SPCanvasItem item;
 
 	guint cursor : 1;
@@ -42,7 +42,7 @@ struct _SPCanvasArena {
 	gdouble delta;
 };
 
-struct _SPCanvasArenaClass {
+struct SPCanvasArenaClass {
 	SPCanvasItemClass parent_class;
 
 	gint (* arena_event) (SPCanvasArena *carena, NRArenaItem *item, GdkEvent *event);

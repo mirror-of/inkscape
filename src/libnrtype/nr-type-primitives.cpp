@@ -17,15 +17,13 @@
 #include <libnr/nr-macros.h>
 #include "nr-type-primitives.h"
 
-typedef struct _NRTDEntry NRTDEntry;
-
-struct _NRTDEntry {
+struct NRTDEntry {
 	NRTDEntry *next;
 	const gchar *key;
 	void *val;
 };
 
-struct _NRTypeDict {
+struct NRTypeDict {
 	unsigned int size;
 	NRTDEntry **entries;
 };

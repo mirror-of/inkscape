@@ -23,8 +23,8 @@
 #define SP_IS_CANVAS_BPATH(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_CANVAS_BPATH))
 #define SP_IS_CANVAS_BPATH_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_CANVAS_BPATH))
 
-typedef struct _SPCanvasBPath SPCanvasBPath;
-typedef struct _SPCanvasBPathClass SPCanvasBPathClass;
+struct SPCanvasBPath;
+struct SPCanvasBPathClass;
 
 #include <display/sp-canvas.h>
 #include <display/curve.h>
@@ -61,7 +61,7 @@ typedef enum {
 } SPWindRule;
 
 
-struct _SPCanvasBPath {
+struct SPCanvasBPath {
 	SPCanvasItem item;
 
 	/* Line def */
@@ -83,7 +83,7 @@ struct _SPCanvasBPath {
 	Shape  *stroke_shp;
 };
 
-struct _SPCanvasBPathClass {
+struct SPCanvasBPathClass {
 	SPCanvasItemClass parent_class;
 };
 

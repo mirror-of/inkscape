@@ -13,12 +13,12 @@
 
 #include <glib.h>
 
-typedef struct _NRNameList NRNameList;
-typedef struct _NRTypeDict NRTypeDict;
+struct NRNameList;
+struct NRTypeDict;
 
 typedef void (* NRNameListDestructor) (NRNameList *list);
 
-struct _NRNameList {
+struct NRNameList {
 	unsigned long length;
       guchar **names;
       guchar **families;

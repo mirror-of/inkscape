@@ -25,10 +25,7 @@
 #define SP_IS_CTRLRECT(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_CTRLRECT))
 #define SP_IS_CTRLRECT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_CTRLRECT))
 
-typedef struct _SPCtrlRect SPCtrlRect;
-typedef struct _SPCtrlRectClass SPCtrlRectClass;
-
-struct _SPCtrlRect {
+struct SPCtrlRect {
     SPCanvasItem item;
 
     guint has_fill : 1;
@@ -44,7 +41,7 @@ struct _SPCtrlRect {
     guint32 shadow_color;
 };
 
-struct _SPCtrlRectClass {
+struct SPCtrlRectClass {
     SPCanvasItemClass parent_class;
 };
 

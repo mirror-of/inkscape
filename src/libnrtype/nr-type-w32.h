@@ -14,10 +14,10 @@
 #define NR_TYPEFACE_W322(o) (NR_CHECK_INSTANCE_CAST ((o), NR_TYPE_TYPEFACE_W32, NRTypeFaceW32))
 #define NR_IS_TYPEFACE_W32(o) (NR_CHECK_INSTANCE_TYPE ((o), NR_TYPE_TYPEFACE_W32))
 
-typedef struct _NRTypeFaceW32 NRTypeFaceW32;
-typedef struct _NRTypeFaceW32Class NRTypeFaceW32Class;
+struct NRTypeFaceW32;
+struct NRTypeFaceW32Class;
 
-typedef struct _NRTypeFaceGlyphW32 NRTypeFaceGlyphW32;
+struct NRTypeFaceGlyphW32;
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

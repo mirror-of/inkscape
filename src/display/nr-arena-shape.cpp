@@ -370,16 +370,13 @@ int matrix_is_isometry(NR::Matrix p) {
         tp[i] = p[i] = 0;
     NR::Matrix   isom = tp*p; // A^T * A = adjunct?
     // Is the adjunct nearly an identity function?
-    if ( fabs(isom[0]-1.0) < 0.01 && 
-	 fabs(isom[3]-1.0) < 0.01 &&
-	 fabs(isom[1]) < 0.01 && 
-	 fabs(isom[2]) < 0.01 ) {
-	// the transformation is an isometry -> no need to recompute
-	// the uncrossed polygon
-	if ( p.det() < 0 )
-	    return -1; 
-	else
-	    return 1;
+    if (isom.is_translation(0.01)) {
+        // the transformation is an isometry -> no need to recompute
+        // the uncrossed polygon
+        if ( p.det() < 0 )
+            return -1; 
+        else
+            return 1;
     }
     return 0;
 }

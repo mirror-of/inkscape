@@ -10,14 +10,14 @@
  * This code is in public domain
  */
 
-typedef struct _NRRasterFont NRRasterFont;
-typedef struct _NRRFGlyphSlot NRRFGlyphSlot;
+struct NRRasterFont;
+struct NRRFGlyphSlot;
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 #include <libnrtype/nr-font.h>
 
-struct _NRRasterFont {
+struct NRRasterFont {
 	unsigned int refcount;
 	NRRasterFont *next;
 	NRFont *font;

@@ -102,7 +102,7 @@ enum {
     NRRF_TYPE_LIV
 };
 
-struct _NRRFGlyphTiny {
+struct NRRFGlyphTiny {
     /* 26.6 fixed point */
     NRPointL advance;
     /* 26.6 fixed point */
@@ -111,7 +111,7 @@ struct _NRRFGlyphTiny {
     unsigned char px[16];
 };
 
-struct _NRRFGlyphImage {
+struct NRRFGlyphImage {
     /* 26.6 fixed point */
     NRPointL advance;
     /* 26.6 fixed point */
@@ -120,7 +120,7 @@ struct _NRRFGlyphImage {
     unsigned char *px;
 };
 
-struct _NRRFGlyphSVP {
+struct NRRFGlyphSVP {
     /* 26.6 fixed point */
     NRPointL advance;
     /* 26.6 fixed point */
@@ -129,7 +129,7 @@ struct _NRRFGlyphSVP {
     NRSVP *svp;
 };
 
-struct _NRRFGlyphLIV {
+struct NRRFGlyphLIV {
     /* 26.6 fixed point */
     NRPointL advance;
     /* 26.6 fixed point */
@@ -140,16 +140,16 @@ struct _NRRFGlyphLIV {
     NRRect shbbox;
 };
 
-struct _NRRFGlyphSlot {
+struct NRRFGlyphSlot {
     unsigned int type : 3;
     unsigned int has_advance : 1;
     unsigned int has_bbox : 1;
     unsigned int has_gmap : 1;
     union {
-        struct _NRRFGlyphTiny tg;
-        struct _NRRFGlyphImage ig;
-        struct _NRRFGlyphSVP sg;
-        struct _NRRFGlyphLIV lg;
+        struct NRRFGlyphTiny tg;
+        struct NRRFGlyphImage ig;
+        struct NRRFGlyphSVP sg;
+        struct NRRFGlyphLIV lg;
     } glyph;
 };
 
