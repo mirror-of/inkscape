@@ -587,9 +587,11 @@ pen_handle_key_press(SPPenContext *const pc, guint const keyval)
                 /* Reset red curve */
                 sp_curve_reset(pc->red_curve);
                 /* Destroy topmost green bpath */
-                gtk_object_destroy(GTK_OBJECT(pc->green_bpaths->data));
-                pc->green_bpaths = g_slist_remove(pc->green_bpaths, pc->green_bpaths->data);
-
+                if (pc->green_bpaths) {
+                    if (pc->green_bpaths->data)
+                        gtk_object_destroy(GTK_OBJECT(pc->green_bpaths->data));
+                    pc->green_bpaths = g_slist_remove(pc->green_bpaths, pc->green_bpaths->data);
+                }    
                 /* Get last segment */
                 NArtBpath const *const p = SP_CURVE_BPATH(pc->green_curve);
                 gint const e = SP_CURVE_LENGTH(pc->green_curve);
