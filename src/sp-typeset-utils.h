@@ -18,8 +18,6 @@
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
-#include "libnrtype/FontInstance.h"
-
 #include <pango/pango.h>
 #include <glib.h>
 
