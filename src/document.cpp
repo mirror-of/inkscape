@@ -703,19 +703,25 @@ sp_document_idle_handler (gpointer data)
 }
 
 static int
-is_within (const NRRect *what, const NRRect *box)
+is_within (const NRRect *area, const NRRect *box)
 {
-	return (box->x0 > what->x0) && (box->x1 < what->x1)
-	    && (box->y0 > what->y0) && (box->y1 < what->y1);
+	if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
+		return false;
+
+	return (box->x0 > area->x0) && (box->x1 < area->x1)
+	    && (box->y0 > area->y0) && (box->y1 < area->y1);
 }
 
 static int
-overlaps (const NRRect *what, const NRRect *box)
+overlaps (const NRRect *area, const NRRect *box)
 {
-	return (((what->x0 > box->x0) && (what->x0 < box->x1)) ||
-	        ((what->x1 > box->x0) && (what->x1 < box->x1))) &&
-	       (((what->y0 > box->y0) && (what->y0 < box->y1)) ||
-	        ((what->y1 > box->y0) && (what->y1 < box->y1)));
+	if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
+		return false;
+
+	return (((area->x0 > box->x0) && (area->x0 < box->x1)) ||
+	        ((area->x1 > box->x0) && (area->x1 < box->x1))) &&
+	       (((area->y0 > box->y0) && (area->y0 < box->y1)) ||
+	        ((area->y1 > box->y0) && (area->y1 < box->y1)));
 }
 
 static GSList *
