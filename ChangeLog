@@ -1,3 +1,10 @@
+2003-11-17 Ted Gould <ted@gould.cx>
+
+	* src/modules/init.c: Changing the process for handeling a directory
+	  that doesn't exist.  Now passing out a warning, and then returning.
+	  The warning is on the command line so most users won't have to deal
+	  with it (it _shouldn't_ happen anyway ;)  Fixes: #843333.
+
 2003-11-17 Kees Cook <inkscape@outflux.net>
 
 	* SF Patch #841940: autoconf update from joncruz

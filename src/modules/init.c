@@ -67,7 +67,10 @@ build_module_from_dir (const gchar * dirname)
 	struct dirent * dentry;
 
 	directory = opendir(dirname);
-	g_return_if_fail(directory != NULL);
+	if (directory == NULL) {
+		g_warning("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded.", dirname);
+		return;
+	}
 
 	while ((dentry = readdir(directory)) != NULL) {
 		gchar * filename;
