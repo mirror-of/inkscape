@@ -45,33 +45,22 @@
 
 namespace Inkscape {
 
-
-
-gchar *parse_css_url(const gchar *string) {
-    const gchar *iter;
-    gchar *result;
-    gchar end_char;
-    GString *temp;
-
+gchar *parse_css_url(gchar const *string) {
     if (!string)
         return NULL;
 
-    iter = string;
-
+    gchar const *iter = string;
     for ( ; g_ascii_isspace(*iter) ; iter = g_utf8_next_char(iter) );
     if (strncmp(iter, "url(", 4))
         return NULL;
     iter += 4;
 
+    gchar const end_char = *iter;
     if ( *iter == '"' || *iter == '\'' ) {
-        end_char = *iter;
         iter += 1;
-    } else {
-        end_char = *iter;
     }
 
-    temp = g_string_new(NULL);
-
+    GString *temp = g_string_new(NULL);
     for ( ; *iter ; iter = g_utf8_next_char(iter) ) {
         if ( *iter == '(' || *iter == ')'  ||
              *iter == '"' || *iter == '\'' ||
@@ -93,6 +82,7 @@ gchar *parse_css_url(const gchar *string) {
     if ( *iter == end_char && end_char != ')' ) {
         iter = g_utf8_next_char(iter);
     }
+    gchar *result;
     if ( *iter == ')' ) {
         result = temp->str;
         g_string_free(temp, FALSE);
@@ -3051,7 +3041,6 @@ sp_css_attr_scale (SPCSSAttr *css, double ex)
 
     return css;
 }
-
 
 
 /*
