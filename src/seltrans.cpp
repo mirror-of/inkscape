@@ -323,7 +323,10 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 				NR::Matrix const i2dnew( sp_item_i2d_affine(item) * seltrans->current );
 				sp_item_set_i2d_affine(item, i2dnew);
 			}
+#if 0 /* Re-enable this once persistent guides have a graphical indication.
+	 At the time of writing, this is the only place to re-enable. */
 			sp_item_update_cns(*item, *seltrans->desktop);
+#endif
 			if (seltrans->transform == SP_SELTRANS_TRANSFORM_OPTIMIZE) {
 				sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
 				/* because item/repr affines may be out of sync, invoke reread */

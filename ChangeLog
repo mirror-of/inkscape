@@ -1,5 +1,8 @@
 2004-03-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/seltrans.cpp (sp_sel_trans_ungrab): Disable the persistent
+	snapping stuff added 2004-02-19.
+
 	* src/desktop-events.cpp (sp_dt_ruler_event): Minor cleanup.
 
 2004-03-19  bulia byak <bulia@users.sourceforge.net>
