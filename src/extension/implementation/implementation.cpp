@@ -64,7 +64,7 @@ Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, co
 	return;
 } /* Implementation::save */
 
-Gdk::NativeWindow
+Gtk::Widget *
 Implementation::prefs_effect (Inkscape::Extension::Effect * module, SPView * view) {
 	return (Gdk::NativeWindow)0;
 } /* Implementation::prefs_effect */

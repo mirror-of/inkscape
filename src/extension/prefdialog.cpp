@@ -15,18 +15,10 @@
 namespace Inkscape {
 namespace Extension {
 
-PrefDialog::PrefDialog (Glib::ustring name, Gdk::NativeWindow win_id) :
+PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls) :
     Gtk::Dialog::Dialog(name + _(" Preferences"), true, true)
 {
-
-#ifndef WIN32
-    _socket = new Gtk::Socket();
-
-    this->get_vbox()->pack_start(*_socket, true, true, 5);
-
-    _socket->add_id(win_id);
-    _socket->show();
-#endif
+    this->get_vbox()->pack_start(*controls, true, true, 5);
 
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
     add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);

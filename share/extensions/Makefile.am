@@ -33,7 +33,10 @@ modules = \
 	epsi_output.inx \
 	txt2svg.inx \
 	gimpgrad.inx \
-	grid.inx
+	grid.inx \
+	bluredge.inx \
+	randompnt.inx \
+	randompos.inx
 
 extension_SCRIPTS = \
 	$(extensions)

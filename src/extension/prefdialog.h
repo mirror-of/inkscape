@@ -24,7 +24,7 @@ class PrefDialog : public Gtk::Dialog {
     Gtk::Socket * _socket;
 
 public:
-    PrefDialog (Glib::ustring name, Gdk::NativeWindow win_id);
+    PrefDialog (Glib::ustring name, Gtk::Widget * controls);
 };
 
 

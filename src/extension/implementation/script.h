@@ -58,7 +58,7 @@ public:
     virtual void          save         (Inkscape::Extension::Output *module,
                                         SPDocument *doc,
                                         gchar const *filename);
-    virtual Gdk::NativeWindow
+    virtual Gtk::Widget *
                           prefs_effect (Inkscape::Extension::Effect *module,
                                         SPView * view);
     virtual void          effect       (Inkscape::Extension::Effect *module,

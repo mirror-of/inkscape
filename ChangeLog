@@ -1,3 +1,31 @@
+2005-02-22  Ted Gould  <ted@gould.cx>
+
+	* src/extension/effect.cpp, src/extension/prefdialog.cpp,
+	src/extension/prefdialog.h,
+	src/extension/implementation/implementation.cpp,
+	src/extension/implementation/implementation.h,
+	src/extension/implementation/plugin-link.h,
+	src/extension/implementation/plugin.cpp,
+	src/extension/implementation/plugin.h,
+	src/extension/implementation/script.cpp,
+	src/extension/implementation/script.h, src/extension/plugin/grid.cpp:
+
+	Changing the API of the effects preferences so that it doesn't use
+	sockets and plugs anymore.  Now there is a generic widget passed down so
+	that should work on every platform.
+
+	* src/extension/plugin/grid.cpp:
+
+	Fixing the grid so that it uses the right axis.
+
+	* share/extensions/Makefile.am, share/extensions/bluredge.inx,
+	share/extensions/randompnt.inx, share/extensions/randompos.inx,
+	src/extension/plugin/Makefile_insert, src/extension/plugin/bluredge.cpp,
+	src/extension/plugin/randompnt.cpp, src/extension/plugin/randompos.cpp:
+
+	Adding some cool new effects, well, they're not really done yet,
+	but getting the basis code into CVS so I don't loose it :)
+
 2005-02-21  MenTaLguY  <mental@rydia.net>
 
 	* src/file.cpp, src/sp-item-group.cpp, src/xml/Makefile_insert,

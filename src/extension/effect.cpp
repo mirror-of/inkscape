@@ -47,14 +47,14 @@ Effect::prefs (SPView * doc)
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return false;
 
-    Gdk::NativeWindow plug;
-    plug = imp->prefs_effect(this, doc);
-    if (plug == 0) {
+    Gtk::Widget * controls;
+    controls = imp->prefs_effect(this, doc);
+    if (controls == NULL) {
         std::cout << "No preferences for Effect" << std::endl;
         return true;
     }
 
-    PrefDialog * dialog = new PrefDialog(this->get_name(), plug);
+    PrefDialog * dialog = new PrefDialog(this->get_name(), controls);
     int response = dialog->run();
     dialog->hide();
 
@@ -100,7 +100,7 @@ Effect::EffectVerb::perform (SPAction *action, void * data, void *pdata)
     if (effect == NULL) return;
     if (current_view == NULL) return;
 
-    std::cout << "Executing: " << effect->get_name() << std::endl;
+    // std::cout << "Executing: " << effect->get_name() << std::endl;
     if (effect->prefs(current_view))
         effect->effect(current_view);
 

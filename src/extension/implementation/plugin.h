@@ -58,7 +58,7 @@ public:
 
     /* ----- Effect functions ----- */
     /** Find out information about the file. */
-    virtual Gdk::NativeWindow prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
+    virtual Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
     /* TODO: need to figure out what we need here */
 
     virtual void effect(Inkscape::Extension::Effect *module,

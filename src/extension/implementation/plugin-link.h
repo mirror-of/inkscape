@@ -16,6 +16,7 @@
 #define __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_LINK_H__
 
 #include <gtk/gtkdialog.h>
+#include <gtkmm/widget.h>
 
 /** \todo  This needs to go away eventually. */
 #include <document.h>
@@ -36,7 +37,7 @@ typedef GtkDialog * (*inkscape_plugin_prefs_input)(inkscape_extension * in_ext, 
 /** \brief  The C prototype of an effect function.  */
 typedef void (*inkscape_plugin_effect)(inkscape_extension * in_ext, SPView * view);
 /** \brief  The C prototype of an effect prefs function.  */
-typedef unsigned int (*inkscape_plugin_prefs_effect)(inkscape_extension * in_ext, SPView * view);
+typedef Gtk::Widget * (*inkscape_plugin_prefs_effect)(inkscape_extension * in_ext, SPView * view);
 
 /** \brief  The name of the symbol for the plugin.  Should match
             \c INKSCAPE_PLUGIN_NAME_STR (minus the quotes). */

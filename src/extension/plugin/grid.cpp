@@ -14,7 +14,6 @@
 
 #include <glibmm/ustring.h>
 #include <gtkmm/enums.h>
-#include <gtkmm/plug.h>
 #include <gtkmm/label.h>
 #include <gtkmm/box.h>
 #include <gtkmm/adjustment.h>
@@ -45,7 +44,7 @@ class Grid : public Inkscape::Extension::Implementation::Implementation {
 public:
     bool load(Inkscape::Extension::Extension *module);
     void effect(Inkscape::Extension::Effect *module, SPView *document);
-    Gdk::NativeWindow prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
+    Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
 };
 
 /**
@@ -79,6 +78,12 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
                                            sp_document_height(doc)));
     } else {
         bounding_area = selection->bounds();
+
+        gdouble doc_height  =  sp_document_height(document->doc);
+        NR::Rect temprec = NR::Rect(NR::Point(bounding_area.min()[NR::X], doc_height - bounding_area.min()[NR::Y]),
+                                    NR::Point(bounding_area.max()[NR::X], doc_height - bounding_area.max()[NR::Y]));
+
+        bounding_area = temprec;
     }
 
 
@@ -207,13 +212,9 @@ PrefAdjustment::val_changed (void)
     the code very generic.  This will probably have to change if someone
     wants to make this dialog look nicer.
 */
-Gdk::NativeWindow
+Gtk::Widget *
 Grid::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
 {
-    Gtk::Plug * plug;
-
-    plug = new Gtk::Plug((unsigned int)0);
-
     Gtk::VBox * vbox;
     vbox = new Gtk::VBox();
 
@@ -249,10 +250,8 @@ Grid::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
 #undef NUM_PREFERENCES
 
     vbox->show();
-    plug->add(*vbox);
-    plug->show();
 
-    return plug->get_id();
+    return vbox;
 }
 
 
@@ -300,10 +299,10 @@ effect (inkscape_extension * in_ext, SPView * view)
     return myplug->effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
 }
 
-unsigned int
+Gtk::Widget *
 prefs_effect (inkscape_extension * in_ext, SPView * view)
 {
-    return (unsigned int)myplug->prefs_effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
+    return myplug->prefs_effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
 }
 
 /**

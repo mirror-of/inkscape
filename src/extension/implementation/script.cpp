@@ -348,7 +348,7 @@ Script::prefs_output (Inkscape::Extension::Output * module)
 
     This function should really do something, right now it doesn't.
 */
-Gdk::NativeWindow
+Gtk::Widget *
 Script::prefs_effect (Inkscape::Extension::Effect * module, SPView * view)
 {
     /* Sad, this should really do something... */
