@@ -604,28 +604,40 @@ void sp_selection_cut()
     sp_selection_delete();
 }
 
+void sp_copy_stuff_used_by_item (SPItem *item);
+
 void sp_copy_gradient (SPGradient *gradient)
 {
     SPGradient *ref = gradient;
     SPRepr *grad_repr;
 
-    while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
-
-        grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(gradient));
+    while (ref) { 
+        // climb up the refs, copying each one in the chain
+        grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(ref));
         defs_clipboard = g_slist_prepend(defs_clipboard, grad_repr);
 
-        gradient = ref;
-        ref = gradient->ref->getObject();
+        ref = ref->ref->getObject();
     }
-
-    grad_repr = sp_repr_duplicate(SP_OBJECT_REPR(gradient));
-    defs_clipboard = g_slist_prepend(defs_clipboard, grad_repr);
 }
 
 void sp_copy_pattern (SPPattern *pattern)
 {
-    SPRepr *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(pattern));
-    defs_clipboard = g_slist_prepend(defs_clipboard, pattern_repr);
+    SPPattern *ref = pattern;
+
+    while ( ref ) {
+
+        SPRepr *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(ref));
+        defs_clipboard = g_slist_prepend(defs_clipboard, pattern_repr);
+
+        // items in the pattern may also use gradients and other patterns, so we need to recurse here as well
+        for (SPObject *child = sp_object_first_child(SP_OBJECT(ref)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+            if (!SP_IS_ITEM (child))
+                continue;
+            sp_copy_stuff_used_by_item ((SPItem *) child);
+        }
+
+        ref = ref->ref->getObject();
+    }
 }
 
 void sp_copy_marker (SPMarker *marker)

@@ -511,7 +511,7 @@ pattern_getroot (SPPattern *pat)
 			return pat_i;
 		}
 	}
-	return NULL;
+	return pat; // document is broken, we can't get to root; but at least we can return pat which is supposedly a valid pattern
 }
 
 
