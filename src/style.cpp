@@ -122,6 +122,7 @@ static void sp_style_read_iscale24 (SPIScale24 *val, const gchar *str);
 static void sp_style_read_ienum (SPIEnum *val, const gchar *str, const SPStyleEnum *dict, unsigned int inherit);
 static void sp_style_read_istring (SPIString *val, const gchar *str);
 static void sp_style_read_ilength (SPILength *val, const gchar *str);
+static void sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ifontsize (SPIFontSize *val, const gchar *str);
 
@@ -392,6 +393,14 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 			sp_style_read_iscale24 (&style->opacity, val);
 		}
 	}
+      /* color */
+       if (!style->color.set) {
+               val = sp_repr_attr (repr, "color");
+               if (val) {
+                       /* fixme: Disallow parsing paintservers */
+			 sp_style_read_icolor (&style->color, val, style, (object) ? SP_OBJECT_DOCUMENT (object) : NULL);
+               }
+       }
 	/* fill */
 	if (!style->fill.set) {
 		val = sp_repr_attr (repr, "fill");
@@ -586,8 +595,10 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		g_warning ("Unimplemented style property SP_PROP_CLIP: value: %s", val);
 		break;
 	case SP_PROP_COLOR:
-		g_warning ("Unimplemented style property SP_PROP_COLOR: value: %s", val);
-		break;
+             if (!style->color.set) {
+                      sp_style_read_icolor (&style->color, val, style, (style->object) ? SP_OBJECT_DOCUMENT (style->object) : NULL);
+             }
+             break;
 	case SP_PROP_CURSOR:
 		g_warning ("Unimplemented style property SP_PROP_CURSOR: value: %s", val);
 		break;
@@ -814,6 +825,28 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 	}
 }
 
+static void
+trim_space (const gchar *str, gint length, gint *left, gint *right)
+{
+       const gchar *p;
+       gint i;
+
+       if (left) {
+               for (i = 0, p = str;
+                        p && isspace (*p) && i < length;
+                        i++, p++)
+                       ;
+               *left = i;
+       }
+       if (right) {
+               for (i = length - 1, p = str + i;
+                        p && isspace (*p) && i >= 0;
+                        i--, p--)
+                       ;
+               *right = i + 1;
+       }
+}
+
 /*
  * Parses style="fill:red;fill-rule:evenodd;" type string
  */
@@ -825,7 +858,7 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 
 	while (*p) {
 		const gchar *s, *e;
-		gint len, idx;
+		gint len, idx, left, right;
 		/* fixme: Use of isalpha seems to assume that p is valid.  E.g. it skips over
 		   punctuation, and the behaviour for accented characters varies according to
 		   LC_CTYPE. */
@@ -849,14 +882,25 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 			g_warning ("Zero length style property at: %s", p);
 			return;
 		}
-		memcpy (c, p, len);
-		c[len] = '\0';
+             trim_space (p, len, &left, &right);
+             memcpy (c, &p[left], right);
+             c[right] = '\0';
+						 //		memcpy (c, p, len);
+						 //		c[len] = '\0';
 		idx = sp_attribute_lookup (c);
 		if (idx > 0) {
 			len = MIN (e - s - 1, 4095);
-			if (len > 0) memcpy (c, s + 1, len);
-			c[len] = '\0';
-			sp_style_merge_property (style, idx, c);
+			//			if (len > 0) memcpy (c, s + 1, len);
+			//			c[len] = '\0';
+			//			sp_style_merge_property (style, idx, c);
+                   if (len > 0) {
+                           trim_space (s + 1, len, &left, &right);
+                           memcpy (c, s + 1 + left, right);
+                           c[right] = '\0';
+                           sp_style_merge_property (style, idx, c);
+                   } else {
+                           g_warning ("Strange style property value at: %s", p);
+                   }
 		} else {
 			g_warning ("Unknown style property at: %s", p);
 		}
@@ -957,7 +1001,15 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 		style->visibility = parent->visibility;
 		style->visibility_set = TRUE;
 	}
-	if (!style->fill.set || style->fill.inherit) {
+	//	if (!style->fill.set || style->fill.inherit) {
+
+       /* Color */
+       if (!style->color.set || style->color.inherit) {
+               /* We can use paint merge here because parent is guaranteed to be color */
+               sp_style_merge_ipaint (style, &style->color, &parent->color);
+       }
+       if (!style->fill.set || style->fill.inherit || style->fill.currentcolor) {
+
 		sp_style_merge_ipaint (style, &style->fill, &parent->fill);
 	}
 	if (!style->fill_opacity.set || style->fill_opacity.inherit) {
@@ -967,7 +1019,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 		style->fill_rule.computed = parent->fill_rule.computed;
 	}
 	/* Stroke */
-	if (!style->stroke.set || style->stroke.inherit) {
+	if (!style->stroke.set || style->stroke.inherit || style->stroke.currentcolor) {
 		sp_style_merge_ipaint (style, &style->stroke, &parent->stroke);
 	}
 	if (!style->stroke_width.set || style->stroke_width.inherit) {
@@ -1065,6 +1117,14 @@ static void
 sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent)
 {
 	sp_style_paint_clear (style, paint, TRUE, FALSE);
+
+      if ((paint->set && paint->currentcolor) || parent->currentcolor) {
+               paint->currentcolor = TRUE;
+               paint->type = SP_PAINT_TYPE_COLOR;
+               sp_color_copy (&paint->value.color, &style->color.value.color);
+               return;
+       }
+
 	paint->type = parent->type;
 	switch (paint->type) {
 	case SP_PAINT_TYPE_COLOR:
@@ -1110,6 +1170,7 @@ sp_style_write_string (SPStyle *style)
 	if (style->opacity.set && style->opacity.value != SP_SCALE24_MAX) {
 		p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &style->opacity, NULL, SP_STYLE_FLAG_IFSET);
 	}
+	p += sp_style_write_ipaint (p, c + BMAX - p, "color", &style->color, NULL, SP_STYLE_FLAG_IFSET);
 	p += sp_style_write_ipaint (p, c + BMAX - p, "fill", &style->fill, NULL, SP_STYLE_FLAG_IFSET);
 	p += sp_style_write_iscale24 (p, c + BMAX - p, "fill-opacity", &style->fill_opacity, NULL, SP_STYLE_FLAG_IFSET);
 	p += sp_style_write_ienum (p, c + BMAX - p, "fill-rule", enum_fill_rule, &style->fill_rule, NULL, SP_STYLE_FLAG_IFSET);
@@ -1184,6 +1245,7 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
 	if (from->opacity.set && from->opacity.value != SP_SCALE24_MAX) {
 		p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &from->opacity, &to->opacity, SP_STYLE_FLAG_IFDIFF);
 	}
+	p += sp_style_write_ipaint (p, c + BMAX - p, "color", &from->color, &to->color, SP_STYLE_FLAG_IFSET);
 	p += sp_style_write_ipaint (p, c + BMAX - p, "fill", &from->fill, &to->fill, SP_STYLE_FLAG_IFDIFF);
 	p += sp_style_write_iscale24 (p, c + BMAX - p, "fill-opacity", &from->fill_opacity, &to->fill_opacity, SP_STYLE_FLAG_IFDIFF);
 	p += sp_style_write_ienum (p, c + BMAX - p, "fill-rule", enum_fill_rule, &from->fill_rule, &to->fill_rule, SP_STYLE_FLAG_IFDIFF);
@@ -1286,6 +1348,9 @@ sp_style_clear (SPStyle *style)
 	style->opacity.value = SP_SCALE24_MAX;
 	style->display = TRUE;
 	style->visibility = TRUE;
+
+	style->color.type = SP_PAINT_TYPE_COLOR;
+	sp_color_set_rgb_float (&style->color.value.color, 0.0, 0.0, 0.0);
 
 	style->fill.type = SP_PAINT_TYPE_COLOR;
 	sp_color_set_rgb_float (&style->fill.value.color, 0.0, 0.0, 0.0);
@@ -1609,6 +1674,27 @@ sp_style_read_ilength (SPILength *val, const gchar *str)
 }
 
 static void
+sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document)
+{
+       if (!strcmp (str, "inherit")) {
+               paint->set = TRUE;
+               paint->inherit = TRUE;
+               paint->currentcolor = FALSE;
+       } else {
+               guint32 color;
+
+               paint->type = SP_PAINT_TYPE_COLOR;
+               color = sp_color_get_rgba32_ualpha (&paint->value.color, 0);
+               color = sp_svg_read_color (str, color);
+               sp_color_set_rgb_rgba32 (&paint->value.color, color);
+               paint->set = TRUE;
+               paint->inherit = FALSE;
+               paint->currentcolor = FALSE;
+       }
+}
+
+
+static void
 sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document)
 {
 	while (isspace (*str)) {
@@ -1617,6 +1703,11 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
 	if (!strcmp (str, "inherit")) {
 		paint->set = TRUE;
 		paint->inherit = TRUE;
+		paint->currentcolor = FALSE;
+	} else if (!strcmp (str, "currentColor")) {
+		paint->set = TRUE;
+		paint->inherit = FALSE;
+		paint->currentcolor = TRUE;
 	} else {
 		guint32 color;
 		if (!strncmp (str, "url", 3)) {
@@ -1636,6 +1727,7 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
 						  G_CALLBACK (sp_style_paint_server_modified), style);
 				paint->set = TRUE;
 				paint->inherit = FALSE;
+				paint->currentcolor = FALSE;
 				return;
 			} else {
 				paint->set = FALSE;
@@ -1645,6 +1737,7 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
 			paint->type = SP_PAINT_TYPE_NONE;
 			paint->set = TRUE;
 			paint->inherit = FALSE;
+			paint->currentcolor = FALSE;
 			return;
 		}
 
@@ -1654,6 +1747,7 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
 		sp_color_set_rgb_rgba32 (&paint->value.color, color);
 		paint->set = TRUE;
 		paint->inherit = FALSE;
+		paint->currentcolor = FALSE;
 	}
 }
 
@@ -1901,6 +1995,8 @@ sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SP
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && sp_paint_differ (paint, base))) {
 		if (paint->inherit) {
 			return g_snprintf (b, len, "%s:inherit;", key);
+		} else if (paint->currentcolor) {
+			return g_snprintf (b, len, "%s:currentColor;", key);
 		} else {
 			switch (paint->type) {
 			case SP_PAINT_TYPE_COLOR:
