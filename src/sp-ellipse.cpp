@@ -873,7 +873,10 @@ sp_arc_position_set (SPArc *arc, gdouble x, gdouble y, gdouble rx, gdouble ry)
 		ge->start = prefs_get_double_attribute ("tools.shapes.arc", "start", 0.0);
 	if (prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0) != 0) 
 		ge->end = prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0);
-	if (!prefs_get_string_attribute ("tools.shapes.arc", "open")) ge->closed = 1;
+	if (!prefs_get_string_attribute ("tools.shapes.arc", "open")) 
+		ge->closed = 1; 
+	else 
+		ge->closed = 0;
 
 	((SPObject *)arc)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
