@@ -31,8 +31,6 @@ sp_help_about_delete (GtkWidget *widget, GdkEvent *event, gpointer data)
 	return FALSE;
 }
 
-#define INK_STATIC_CAST(t,v) static_cast< t >((v))
-
 #define WINDOW_MIN 20
 #define WINDOW_MAX INT_MAX
 
