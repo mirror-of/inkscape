@@ -200,7 +200,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 
 	desktop = event_context->desktop;
 	nc = SP_NODE_CONTEXT (event_context);
-	nudge = prefs_get_double_attribute ("options.nudgedistance", "value", 2.8346457); // default is 1 mm
+	nudge = prefs_get_double_attribute_limited ("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
