@@ -68,7 +68,7 @@ void sp_selection_duplicate (gpointer object, gpointer data)
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 
-	SPSelection *selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION(desktop);
 
 	// check if something is selected
 	if (sp_selection_is_empty (selection)) {
@@ -133,15 +133,14 @@ sp_edit_clear_all (gpointer object, gpointer data)
 	sp_document_done (doc);
 }
 
-void
-sp_edit_select_all (gpointer object, gpointer data)
+void sp_edit_select_all(gpointer object, gpointer data)
 {
 	SPDesktop *dt = SP_ACTIVE_DESKTOP;
-	if (!dt) return ;
-	SPDocument *doc = SP_DT_DOCUMENT (dt);
-	SPSelection *selection = SP_DT_SELECTION (dt);
-	GSList *items = sp_item_group_item_list (SP_GROUP (sp_document_root (doc)));
-	
+	if (!dt) return;
+	SPDocument *doc = SP_DT_DOCUMENT(dt);
+	SPSelection *selection = SP_DT_SELECTION(dt);
+
+	GSList *items = sp_item_group_item_list(SP_GROUP(sp_document_root(doc)));
 	while (items) {
 		SPRepr *repr = SP_OBJECT_REPR (items->data);
 		if (!sp_selection_repr_selected (selection, repr))
@@ -201,20 +200,13 @@ sp_edit_cleanup (gpointer object, gpointer data)
 
 /* fixme: sequencing */
 
-void
-sp_selection_group (gpointer object, gpointer data)
+void sp_selection_group(gpointer object, gpointer data)
 {
-	SPRepr * current;
-	SPRepr * group;
-	const GSList * l;
-	GSList *p, *i, *reprs;
-	SPRepr *parent;
-
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
 	if (desktop == NULL) return;
 
-	SPSelection *selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION(desktop);
 
 	// check if something is selected
 	if (sp_selection_is_empty (selection)) {
@@ -222,7 +214,7 @@ sp_selection_group (gpointer object, gpointer data)
 		return;
 	}
 
-	l = sp_selection_repr_list (selection);
+	GSList const *l = sp_selection_repr_list(selection);
 
 	// check if at least two objects are selected
 	if (l->next == NULL) {
@@ -231,26 +223,26 @@ sp_selection_group (gpointer object, gpointer data)
 	}
 
 	// check if all selected objects have common parent
-	reprs = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
-	parent = ((SPRepr *) reprs->data)->parent;
-	for (i = reprs->next; i; i = i->next) {
+	GSList *reprs = g_slist_copy((GSList *) sp_selection_repr_list(selection));
+	SPRepr *parent = ((SPRepr *) reprs->data)->parent;
+	for (GSList *i = reprs->next; i; i = i->next) {
 		if ((((SPRepr *) i->data)->parent) != parent) {
 			sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot group objects from different groups or layers."));
 			return;
 		}
 	}
 
-	p = g_slist_copy ((GSList *) l);
+	GSList *p = g_slist_copy((GSList *) l);
 
-	sp_selection_empty (SP_DT_SELECTION (desktop));
+	sp_selection_empty(SP_DT_SELECTION(desktop));
 
 	p = g_slist_sort (p, (GCompareFunc) sp_repr_compare_position);
 
-	group = sp_repr_new ("g");
+	SPRepr *group = sp_repr_new("g");
 
 	while (p) {
 		SPRepr *spnew;
-		current = (SPRepr *) p->data;
+		SPRepr *current = (SPRepr *) p->data;
 		spnew = sp_repr_duplicate (current);
 		sp_repr_unparent (current);
 		sp_repr_append_child (group, spnew);
@@ -266,27 +258,24 @@ sp_selection_group (gpointer object, gpointer data)
 	sp_repr_unref (group);
 }
 
-void
-sp_selection_ungroup (gpointer object, gpointer data)
+void sp_selection_ungroup(gpointer object, gpointer data)
 {
-	SPItem *group;
-	GSList *children, *items;
-	GSList *new_select = NULL;
-	int ungrouped = 0;
-
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (!desktop) return;
 
-	if (sp_selection_is_empty (SP_DT_SELECTION(desktop))) {
+	if (sp_selection_is_empty(SP_DT_SELECTION(desktop))) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select a group to ungroup."));
 		return;
 	}
 
 	// get a copy of current selection
-	items = g_slist_copy ((GSList *) sp_selection_item_list (SP_DT_SELECTION (desktop)));
-
-	for ( ; items ; items = items->next) {
-		group = ((SPItem *) items->data);
+	GSList *new_select = NULL;
+	bool ungrouped = false;
+	for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
+	     items != NULL;
+	     items = items->next)
+	{
+		SPItem *group = (SPItem *) items->data;
 
 		/* We do not allow ungrouping <svg> etc. (lauris) */
 		if (strcmp (sp_repr_name (SP_OBJECT_REPR (group)), "g")) {
@@ -295,18 +284,18 @@ sp_selection_ungroup (gpointer object, gpointer data)
 			continue;
 		}
 
-		children = NULL;
+		GSList *children = NULL;
 		/* This is not strictly required, but is nicer to rely on group ::destroy (lauris) */
 		sp_item_group_ungroup (SP_GROUP (group), &children);
-		ungrouped = 1;
-		// add ungrouped items to the new selection
+		ungrouped = true;
+		// Add ungrouped items to the new selection.
 		new_select = g_slist_concat (new_select, children);
 	}
 
 	if (new_select) { // set new selection
-		sp_selection_empty (SP_DT_SELECTION (desktop));
-		sp_selection_set_item_list (SP_DT_SELECTION (desktop), new_select);
-		g_slist_free (new_select);
+		sp_selection_empty(SP_DT_SELECTION(desktop));
+		sp_selection_set_item_list(SP_DT_SELECTION(desktop), new_select);
+		g_slist_free(new_select);
 	}
 	if (!ungrouped) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("No groups to ungroup in the selection."));
@@ -327,15 +316,15 @@ sp_item_list_common_parent_group (const GSList *items)
 	return SP_GROUP (parent);
 }
 
-void sp_selection_raise (GtkWidget * widget)
+void sp_selection_raise(GtkWidget *widget)
 {
 	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
-	GSList const *items = sp_selection_item_list (SP_DT_SELECTION (dt));
+	GSList const *items = sp_selection_item_list(SP_DT_SELECTION(dt));
 	if (!items) return;
-	SPGroup const *group = sp_item_list_common_parent_group (items);
+	SPGroup const *group = sp_item_list_common_parent_group(items);
 	if (!group) return;
-	SPRepr *grepr = SP_OBJECT_REPR (group);
+	SPRepr *grepr = SP_OBJECT_REPR(group);
 
 	/* construct reverse-ordered list of selected children */
 	GSList *rev = NULL;
@@ -363,16 +352,16 @@ void sp_selection_raise (GtkWidget * widget)
 	sp_document_done (SP_DT_DOCUMENT (dt));
 }
 
-void sp_selection_raise_to_top (GtkWidget * widget)
+void sp_selection_raise_to_top(GtkWidget *widget)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
-	SPDocument *document = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
-	SPSelection *selection = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
+	SPDocument *document = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
+	SPSelection *selection = SP_DT_SELECTION(SP_ACTIVE_DESKTOP);
 
 	if (sp_selection_is_empty (selection)) return;
 
-	GSList *rl = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+	GSList *rl = g_slist_copy((GSList *) sp_selection_repr_list(selection));
 
 	for (GSList *l = rl; l != NULL; l = l->next) {
 		SPRepr *repr = (SPRepr *) l->data;
@@ -387,30 +376,23 @@ void sp_selection_raise_to_top (GtkWidget * widget)
 void
 sp_selection_lower (GtkWidget *widget)
 {
-	SPDesktop *dt;
-	const GSList *items;
-	SPGroup *group;
-	SPRepr *grepr;
-	SPObject *child, *newref, *oldref;
-	gboolean skip;
-
-	dt = SP_ACTIVE_DESKTOP;
+	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
-	items = sp_selection_item_list (SP_DT_SELECTION (dt));
+	GSList const *items = sp_selection_item_list(SP_DT_SELECTION(dt));
 	if (!items) return;
-	group = sp_item_list_common_parent_group (items);
+	SPGroup *group = sp_item_list_common_parent_group(items);
 	if (!group) return;
-	grepr = SP_OBJECT_REPR (group);
+	SPRepr *grepr = SP_OBJECT_REPR(group);
 
 	/* Start from beginning */
-	skip = TRUE;
-	newref = NULL;
-	oldref = NULL;
-	child = group->children;
+	bool skip = true;
+	SPObject *newref = NULL;
+	SPObject *oldref = NULL;
+	SPObject *child = group->children;
 	while (child != NULL) {
 		if (SP_IS_ITEM (child)) {
 			/* We are item */
-			skip = FALSE;
+			skip = false;
 			/* fixme: Remove from list (Lauris) */
 			if (g_slist_find ((GSList *) items, child)) {
 				/* Need lower */
@@ -452,30 +434,23 @@ sp_selection_lower (GtkWidget *widget)
 	sp_document_done (SP_DT_DOCUMENT (dt));
 }
 
-void sp_selection_lower_to_bottom (GtkWidget * widget)
+void sp_selection_lower_to_bottom(GtkWidget *widget)
 {
-	SPDocument * document;
-	SPSelection * selection;
-	SPDesktop * desktop;
-	SPRepr * repr;
-	GSList * rl;
-	GSList * l;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
-	document = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
-	selection = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
+	SPDocument *document = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
+	SPSelection *selection = SP_DT_SELECTION(SP_ACTIVE_DESKTOP);
 
 	if (sp_selection_is_empty (selection)) return;
 
-	rl = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+	GSList *rl;
+	rl = g_slist_copy((GSList *) sp_selection_repr_list(selection));
+	rl = g_slist_reverse(rl);
 
-	rl = g_slist_reverse (rl);
-
-	for (l = rl; l != NULL; l = l->next) {
+	for (GSList *l = rl; l != NULL; l = l->next) {
 		gint minpos;
 		SPObject *pp, *pc;
-		repr = (SPRepr *) l->data;
+		SPRepr *repr = (SPRepr *) l->data;
 		pp = sp_document_lookup_id (document, sp_repr_attr (sp_repr_parent (repr), "id"));
 		minpos = 0;
 		g_assert (SP_IS_GROUP (pp));
@@ -510,26 +485,18 @@ sp_redo (SPDesktop *desktop, SPDocument *doc)
 	}
 }
 
-void
-sp_selection_cut (GtkWidget * widget)
+void sp_selection_cut(GtkWidget *widget)
 {
 	sp_selection_copy (widget);
 	sp_selection_delete (NULL, NULL);
 }
 
-void
-sp_selection_copy (GtkWidget * widget)
+void sp_selection_copy(GtkWidget *widget)
 {
-	SPDesktop *desktop;
-	SPSelection *selection;
-	SPRepr *repr, *copy;
-	SPCSSAttr *css;
-	GSList *sl;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION(desktop);
 
 	// check if something is selected
 	if (sp_selection_is_empty (selection)) {
@@ -537,6 +504,7 @@ sp_selection_copy (GtkWidget * widget)
 		return;
 	}
 
+	GSList *sl;
 	sl = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 	sl = g_slist_sort (sl, (GCompareFunc) sp_repr_compare_position);
 
@@ -547,10 +515,10 @@ sp_selection_copy (GtkWidget * widget)
 	}
 
 	while (sl != NULL) {
-		repr = (SPRepr *) sl->data;
+		SPRepr *repr = (SPRepr *) sl->data;
 		sl = g_slist_remove (sl, repr);
-		css = sp_repr_css_attr_inherited (repr, "style");
-		copy = sp_repr_duplicate (repr);
+		SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
+		SPRepr *copy = sp_repr_duplicate(repr);
 		sp_repr_css_set (copy, css, "style");
 		sp_repr_css_attr_unref (css);
 
@@ -560,19 +528,13 @@ sp_selection_copy (GtkWidget * widget)
 	clipboard = g_slist_reverse (clipboard);
 }
 
-void
-sp_selection_paste (GtkWidget * widget)
+void sp_selection_paste(GtkWidget *widget)
 {
-	SPDesktop * desktop;
-	SPSelection * selection;
-	GSList * l;
-	SPRepr * repr, * copy;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 	g_assert (SP_IS_DESKTOP (desktop));
 
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION(desktop);
 	g_assert (selection != NULL);
 	g_assert (SP_IS_SELECTION (selection));
 
@@ -584,9 +546,9 @@ sp_selection_paste (GtkWidget * widget)
 
 	sp_selection_empty (selection);
 
-	for (l = clipboard; l != NULL; l = l->next) {
-		repr = (SPRepr *) l->data;
-		copy = sp_repr_duplicate (repr);
+	for (GSList *l = clipboard; l != NULL; l = l->next) {
+		SPRepr *repr = (SPRepr *) l->data;
+		SPRepr *copy = sp_repr_duplicate(repr);
 		sp_document_add_repr (SP_DT_DOCUMENT (desktop), copy);
 		sp_selection_add_repr (selection, copy);
 		sp_repr_unref (copy);
@@ -595,19 +557,13 @@ sp_selection_paste (GtkWidget * widget)
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
-void
-sp_selection_paste_style (GtkWidget * widget)
+void sp_selection_paste_style(GtkWidget *widget)
 {
-	SPDesktop * desktop;
-	SPSelection * selection;
-	GSList *l, *selected;
-	SPCSSAttr *css;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 	g_assert (SP_IS_DESKTOP (desktop));
 
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION(desktop);
 	g_assert (selection != NULL);
 	g_assert (SP_IS_SELECTION (selection));
 
@@ -623,28 +579,25 @@ sp_selection_paste_style (GtkWidget * widget)
 		return;
 	}
 
-	selected = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+	GSList *selected = g_slist_copy((GSList *) sp_selection_repr_list(selection));
 
-	for (l = selected; l != NULL; l = l->next) {
-		css = sp_repr_css_attr_inherited ((SPRepr *) clipboard->data, "style"); // take the css from first object on clipboard
+	for (GSList *l = selected; l != NULL; l = l->next) {
+		// take the css from first object on clipboard
+		SPCSSAttr *css = sp_repr_css_attr_inherited((SPRepr *) clipboard->data, "style");
 		sp_repr_css_set ((SPRepr *) l->data, css, "style");
 	}
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
-void
-sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
-	SPItem * item;
-	GSList * l;
-
+void sp_selection_apply_affine(SPSelection *selection, double affine[6])
+{
 	g_assert (SP_IS_SELECTION (selection));
 
-	for (l = selection->items; l != NULL; l = l-> next) {
+	for (GSList *l = selection->items; l != NULL; l = l-> next) {
 		NRMatrix curaff, newaff;
 
-		item = SP_ITEM (l->data);
-
+		SPItem *item = SP_ITEM(l->data);
 		sp_item_i2d_affine(item, &curaff);
 		nr_matrix_multiply (&newaff, &curaff, NR_MATRIX_D_FROM_DOUBLE (affine));
 		/* fixme: This is far from elegant (Lauris) */
@@ -656,20 +609,14 @@ sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
 	}
 }
 
-void
-sp_selection_remove_transform (void)
+void sp_selection_remove_transform()
 {
-	SPDesktop * desktop;
-	SPSelection * selection;
-	const GSList * l;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION(desktop);
 	if (!SP_IS_SELECTION (selection)) return;
 
-	l = sp_selection_repr_list (selection);
-
+	GSList const *l = sp_selection_repr_list (selection);
 	while (l != NULL) {
 		sp_repr_set_attr ((SPRepr*)l->data,"transform", NULL);
 		l = l->next;
@@ -758,31 +705,22 @@ sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, d
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
 }
 
-void
-sp_selection_move_relative (SPSelection * selection, double dx, double dy)
+void sp_selection_move_relative(SPSelection *selection, double dx, double dy)
 {
 	NRMatrix move;
-
 	nr_matrix_set_translate (&move, dx, dy);
-
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&move));
 }
 
-void
-sp_selection_rotate_90 (void)
+void sp_selection_rotate_90()
 {
-	SPDesktop * desktop;
-	SPSelection * selection;
-	SPItem * item;
-	GSList * l, * l2;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (!SP_IS_DESKTOP(desktop)) return;
-	selection = SP_DT_SELECTION(desktop);
+	SPSelection *selection = SP_DT_SELECTION(desktop);
 	if sp_selection_is_empty(selection) return;
-	l = selection->items;
-	for (l2 = l; l2 != NULL; l2 = l2-> next) {
-		item = SP_ITEM (l2->data);
+	GSList *l = selection->items;
+	for (GSList *l2 = l ; l2 != NULL ; l2 = l2->next) {
+		SPItem *item = SP_ITEM(l2->data);
 		sp_item_rotate_rel (item,-90);
 	}
 
@@ -920,12 +858,9 @@ sp_selection_scale_times (SPSelection *selection, gdouble times)
 void
 sp_selection_move (gdouble dx, gdouble dy)
 {
-	SPDesktop *desktop;
-	SPSelection *selection;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	g_return_if_fail(SP_IS_DESKTOP (desktop));
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION(desktop);
 	if (!SP_IS_SELECTION(selection)) {
 		return;
 	}
@@ -1096,6 +1031,8 @@ sp_selection_item_prev (void)
  */
 static void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 {
+	using NR::X;
+	using NR::Y;
 	NRRect dbox;
 	sp_desktop_get_display_area (desktop, &dbox);
 	NRRect sbox;
@@ -1105,20 +1042,16 @@ static void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 	     dbox.x1 < sbox.x1  ||
 	     dbox.y1 < sbox.y1 )
 	{
-		double x, y;
-		x = (sbox.x0 + sbox.x1) / 2;
-		y = (sbox.y0 + sbox.y1) / 2;
-		ArtPoint s;
-		s.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-		s.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-		x = (dbox.x0 + dbox.x1) / 2;
-		y = (dbox.y0 + dbox.y1) / 2;
-		ArtPoint d;
-		d.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-		d.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-		gint dx = (gint) (d.x - s.x);
-		gint dy = (gint) (d.y - s.y);
-		sp_desktop_scroll_world (desktop, dx, dy);
+		NR::Point const s_dt(( sbox.x0 + sbox.x1 ) / 2,
+				     ( sbox.y0 + sbox.y1 ) / 2);
+		NR::Point const s_w( s_dt * desktop->d2w );
+		NR::Point const d_dt(( dbox.x0 + dbox.x1 ) / 2,
+				     ( dbox.y0 + dbox.y1 ) / 2);
+		NR::Point const d_w( d_dt * desktop->d2w );
+		NR::Point const moved_w( d_w - s_w );
+		gint const dx = (gint) moved_w[X];
+		gint const dy = (gint) moved_w[Y];
+		sp_desktop_scroll_world(desktop, dx, dy);
 	}
 }
 

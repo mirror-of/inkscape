@@ -37,14 +37,14 @@
 /* Has to be power of 2 */
 #define NCOLORS NR_GRADIENT_VECTOR_LENGTH
 
-static void sp_stop_class_init (SPStopClass * klass);
-static void sp_stop_init (SPStop * stop);
+static void sp_stop_class_init(SPStopClass *klass);
+static void sp_stop_init(SPStop *stop);
 
-static void sp_stop_build (SPObject * object, SPDocument * document, SPRepr * repr);
-static void sp_stop_set (SPObject *object, unsigned int key, const gchar *value);
-static SPRepr *sp_stop_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_stop_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_stop_set(SPObject *object, unsigned key, gchar const *value);
+static SPRepr *sp_stop_write(SPObject *object, SPRepr *repr, guint flags);
 
-static SPObjectClass * stop_parent_class;
+static SPObjectClass *stop_parent_class;
 
 GType
 sp_stop_get_type (void)
@@ -66,12 +66,11 @@ sp_stop_get_type (void)
 	return type;
 }
 
-static void
-sp_stop_class_init (SPStopClass * klass)
+static void sp_stop_class_init(SPStopClass *klass)
 {
 	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
-	stop_parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
+	stop_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
 	sp_object_class->build = sp_stop_build;
 	sp_object_class->set = sp_stop_set;
@@ -85,8 +84,7 @@ sp_stop_init (SPStop *stop)
 	sp_color_set_rgb_rgba32 (&stop->color, 0x000000ff);
 }
 
-static void
-sp_stop_build (SPObject * object, SPDocument * document, SPRepr * repr)
+static void sp_stop_build(SPObject *object, SPDocument *document, SPRepr *repr)
 {
 	if (((SPObjectClass *) stop_parent_class)->build)
 		(* ((SPObjectClass *) stop_parent_class)->build) (object, document, repr);
@@ -190,7 +188,7 @@ static void sp_gradient_rebuild_vector (SPGradient *gr);
 
 static void gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gradient);
 
-static SPPaintServerClass * gradient_parent_class;
+static SPPaintServerClass *gradient_parent_class;
 
 GType
 sp_gradient_get_type (void)
@@ -1110,14 +1108,14 @@ struct _SPLGPainter {
 	NRLGradientRenderer lgr;
 };
 
-static void sp_lineargradient_class_init (SPLinearGradientClass * klass);
-static void sp_lineargradient_init (SPLinearGradient * lg);
+static void sp_lineargradient_class_init(SPLinearGradientClass *klass);
+static void sp_lineargradient_init(SPLinearGradient *lg);
 
-static void sp_lineargradient_build (SPObject *object, SPDocument * document, SPRepr * repr);
-static void sp_lineargradient_set (SPObject *object, unsigned int key, const gchar *value);
-static SPRepr *sp_lineargradient_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_lineargradient_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value);
+static SPRepr *sp_lineargradient_write(SPObject *object, SPRepr *repr, guint flags);
 
-static SPPainter *sp_lineargradient_painter_new (SPPaintServer *ps, const double *affine, const NRRect *bbox);
+static SPPainter *sp_lineargradient_painter_new (SPPaintServer *ps, double const *affine, NRRect const *bbox);
 static void sp_lineargradient_painter_free (SPPaintServer *ps, SPPainter *painter);
 
 static void sp_lg_fill (SPPainter *painter, NRPixBlock *pb);
@@ -1144,8 +1142,7 @@ sp_lineargradient_get_type (void)
 	return type;
 }
 
-static void
-sp_lineargradient_class_init (SPLinearGradientClass * klass)
+static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
 {
 	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 	SPPaintServerClass *ps_class = (SPPaintServerClass *) klass;
@@ -1160,8 +1157,7 @@ sp_lineargradient_class_init (SPLinearGradientClass * klass)
 	ps_class->painter_free = sp_lineargradient_painter_free;
 }
 
-static void
-sp_lineargradient_init (SPLinearGradient * lg)
+static void sp_lineargradient_init(SPLinearGradient *lg)
 {
 	sp_svg_length_unset (&lg->x1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
 	sp_svg_length_unset (&lg->y1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
@@ -1169,8 +1165,7 @@ sp_lineargradient_init (SPLinearGradient * lg)
 	sp_svg_length_unset (&lg->y2, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
 }
 
-static void
-sp_lineargradient_build (SPObject * object, SPDocument * document, SPRepr * repr)
+static void sp_lineargradient_build(SPObject *object, SPDocument *document, SPRepr *repr)
 {
 	if (((SPObjectClass *) lg_parent_class)->build)
 		(* ((SPObjectClass *) lg_parent_class)->build) (object, document, repr);
@@ -1444,8 +1439,7 @@ sp_radialgradient_get_type (void)
 	return type;
 }
 
-static void
-sp_radialgradient_class_init (SPRadialGradientClass * klass)
+static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
 {
 	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 	SPPaintServerClass *ps_class = (SPPaintServerClass *) klass;
