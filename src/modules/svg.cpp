@@ -116,7 +116,7 @@ svg_open (SPModule *mod, const gchar *uri)
 	\param     doc   Document to save.
 	\param     uri   The filename to save the file to.
 
-	This function first checks it's parameters, and makes sure that
+	This function first checks its parameters, and makes sure that
 	we're getting good data.  It also checks the module ID of the
 	incoming module to figure out if this is save should include
 	the Inkscape namespace stuff or not.  The result of that comparison
