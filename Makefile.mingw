@@ -7,7 +7,7 @@ all:	config.h
 	$(MAKE) -C src -f Makefile.mingw
 
 config.h: config.h.mingw
-	copy config.h.mingw config.h
+	$(CP) config.h.mingw config.h
 
 dist:
 	deltree /y inkscape
