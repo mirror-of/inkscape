@@ -1,7 +1,7 @@
 <inkscape-extension>
     <name>GIMP Gradients</name>
     <id>org.inkscape.input.gimpgrad</id>
-	<dependency type="plugin" location="plugins">gimpgrad</dependency>
+    <dependency type="plugin" location="plugins">gimpgrad</dependency>
     <input>
         <extension>.ggr</extension>
         <mimetype>application/x-gimp-gradient</mimetype>
@@ -9,6 +9,6 @@
         <filetypetooltip>Gradients used in GIMP</filetypetooltip>
     </input>
     <plugin>
-		<name>gimpgrad</name>
+        <name>gimpgrad</name>
     </plugin>
 </inkscape-extension>

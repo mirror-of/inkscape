@@ -1,14 +1,14 @@
 <inkscape-extension>
     <name>AI Input</name>
     <id>org.inkscape.input.ai</id>
-	<dependency type="executable" location="absolute">/usr/bin/perl</dependency>
-	<dependency type="executable" location="extensions">ill2svg.pl</dependency>
+    <dependency type="executable" location="absolute">/usr/bin/perl</dependency>
+    <dependency type="executable" location="extensions">ill2svg.pl</dependency>
     <input>
         <extension>.ai</extension>
         <mimetype>image/x-adobe-illustrator</mimetype>
         <filetypename>Adobe Illustrator (*.ai)</filetypename>
         <filetypetooltip>Open files saved with Adobe Illustrator</filetypetooltip>
-		<output_extension>org.inkscape.output.ai</output_extension>
+        <output_extension>org.inkscape.output.ai</output_extension>
     </input>
     <script>
         <command reldir="extensions">ill2svg.pl</command>

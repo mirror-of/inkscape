@@ -1,8 +1,8 @@
 <inkscape-extension>
     <name>Sketch Input</name>
     <id>org.inkscape.input.sk</id>
-	<dependency type="executable" location="extensions">sk2svg.sh</dependency>
-	<dependency type="executable">skconvert</dependency>
+    <dependency type="executable" location="extensions">sk2svg.sh</dependency>
+    <dependency type="executable">skconvert</dependency>
     <input>
         <extension>.sk</extension>
         <mimetype>application/x-sketch</mimetype>
