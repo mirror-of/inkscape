@@ -30,11 +30,11 @@
 
 #define noRECT_VERBOSE
 
-static void sp_rect_class_init (SPRectClass *class);
+static void sp_rect_class_init (SPRectClass *klass);
 static void sp_rect_init (SPRect *rect);
 
 static void sp_rect_build (SPObject *object, SPDocument *document, SPRepr *repr);
-static void sp_rect_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_rect_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_rect_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_rect_write (SPObject *object, SPRepr *repr, guint flags);
 
@@ -63,25 +63,25 @@ sp_rect_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_rect_init,
 		};
-		type = g_type_register_static (SP_TYPE_SHAPE, "SPRect", &info, 0);
+		type = g_type_register_static (SP_TYPE_SHAPE, "SPRect", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-sp_rect_class_init (SPRectClass *class)
+sp_rect_class_init (SPRectClass *klass)
 {
 	GObjectClass * object_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
 	SPShapeClass * shape_class;
 
-	object_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
-	shape_class = (SPShapeClass *) class;
+	object_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
+	shape_class = (SPShapeClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_SHAPE);
+	parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
 
 	sp_object_class->build = sp_rect_build;
 	sp_object_class->write = sp_rect_write;
@@ -158,7 +158,7 @@ sp_rect_build (SPObject *object, SPDocument *document, SPRepr *repr)
 }
 
 static void
-sp_rect_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_rect_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPRect *rect;
 
@@ -427,7 +427,7 @@ sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 	SPRect *rect;
 	NRMatrixF rev;
 	gdouble px, py, sw, sh;
-	guchar c[80];
+	gchar c[80];
 	SPStyle *style;
 
 	rect = SP_RECT (item);
@@ -479,7 +479,7 @@ sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
 		if (!NR_DF_TEST_CLOSE (sw, 1.0, NR_EPSILON_D) || !NR_DF_TEST_CLOSE (sh, 1.0, NR_EPSILON_D)) {
 			double scale;
-			guchar *str;
+			gchar *str;
 			/* Scale changed, so we have to adjust stroke width */
 			scale = sqrt (fabs (sw * sh));
 			style->stroke_width.computed *= scale;

@@ -32,12 +32,12 @@
 
 #define SP_EPSILON 1e-9
 
-static void sp_star_class_init (SPStarClass *class);
+static void sp_star_class_init (SPStarClass *klass);
 static void sp_star_init (SPStar *star);
 
 static void sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static SPRepr *sp_star_write (SPObject *object, SPRepr *repr, guint flags);
-static void sp_star_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_star_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_star_update (SPObject *object, SPCtx *ctx, guint flags);
 
 static gchar * sp_star_description (SPItem * item);
@@ -62,13 +62,13 @@ sp_star_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_star_init,
 		};
-		type = g_type_register_static (SP_TYPE_POLYGON, "SPStar", &info, 0);
+		type = g_type_register_static (SP_TYPE_POLYGON, "SPStar", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-sp_star_class_init (SPStarClass *class)
+sp_star_class_init (SPStarClass *klass)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
@@ -76,13 +76,13 @@ sp_star_class_init (SPStarClass *class)
 	SPPathClass * path_class;
 	SPShapeClass * shape_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
-	path_class = (SPPathClass *) class;
-	shape_class = (SPShapeClass *) class;
+	gobject_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
+	path_class = (SPPathClass *) klass;
+	shape_class = (SPShapeClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_POLYGON);
+	parent_class = (SPPolygonClass *)g_type_class_ref (SP_TYPE_POLYGON);
 
 	sp_object_class->build = sp_star_build;
 	sp_object_class->write = sp_star_write;
@@ -151,7 +151,7 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_star_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPShape *shape;
 	SPStar *star;

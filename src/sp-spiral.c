@@ -38,12 +38,12 @@
 #define SAMPLE_SIZE      8      /* sample size per one bezier */
 
 
-static void sp_spiral_class_init (SPSpiralClass *class);
+static void sp_spiral_class_init (SPSpiralClass *klass);
 static void sp_spiral_init (SPSpiral *spiral);
 
 static void sp_spiral_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static SPRepr *sp_spiral_write (SPObject *object, SPRepr *repr, guint flags);
-static void sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_spiral_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_spiral_update (SPObject *object, SPCtx *ctx, guint flags);
 
 static gchar * sp_spiral_description (SPItem * item);
@@ -69,25 +69,25 @@ sp_spiral_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_spiral_init,
 		};
-		spiral_type = g_type_register_static (SP_TYPE_SHAPE, "SPSPiral", &spiral_info, 0);
+		spiral_type = g_type_register_static (SP_TYPE_SHAPE, "SPSPiral", &spiral_info, (GTypeFlags)0);
 	}
 	return spiral_type;
 }
 
 static void
-sp_spiral_class_init (SPSpiralClass *class)
+sp_spiral_class_init (SPSpiralClass *klass)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
 	SPShapeClass *shape_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
-	shape_class = (SPShapeClass *) class;
+	gobject_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
+	shape_class = (SPShapeClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_SHAPE);
+	parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
 
 	sp_object_class->build = sp_spiral_build;
 	sp_object_class->write = sp_spiral_write;
@@ -164,7 +164,7 @@ sp_spiral_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPSpiral *spiral;
 	SPShape  *shape;
