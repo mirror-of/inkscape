@@ -83,6 +83,28 @@ typedef struct glyphs_for_span {
   char            *g_text;
 } glyphs_for_span;
 
+class to_SVG_context {
+public:  
+  to_SVG_context(SPRepr* /*in_repr*/) {};
+  virtual ~to_SVG_context(void) {};
+  
+  virtual void            Finalize(void) {};
+  
+  virtual void            ResetStyle(void) {};
+  virtual void            AddFontFamily(char* /*n_fam*/) {};
+  virtual void            AddFontSize(double /*n_siz*/) {};
+  virtual void            AddFontVariant(int /*n_var*/) {};
+  virtual void            AddFontStretch(int /*n_str*/) {};
+  virtual void            AddFontWeight(int /*n_wei*/) {};
+  virtual void            AddLetterSpacing(double /*n_spc*/) {};
+  
+  virtual void            SetText(char*  /*n_txt*/,int /*n_len*/) {};
+  virtual void            SetLetterSpacing(double /*n_spc*/) {};
+  
+  virtual void            AddGlyph(int /*f_c*/,int /*l_c*/,const NR::Point &/*at*/,double /*advance*/) {};
+};
+
+
 class text_chunker {
 public:
   
@@ -95,7 +117,8 @@ public:
   
   virtual void                 InitialMetricsAt(int /*startPos*/,double &/*ascent*/,double &/*descent*/) {};
   virtual text_chunk_solution* StuffThatBox(int /*start_ind*/,double /*minLength*/,double /*nominalLength*/,double /*maxLength*/,bool /*strict*/) {return NULL;};
-  virtual void                 GlyphsAndPositions(int /*start_ind*/,int /*end_ind*/,int &nbS,glyphs_for_span* &spans) {nbS=0;spans=NULL;};
+  virtual void                 GlyphsAndPositions(int /*start_ind*/,int /*end_ind*/,to_SVG_context */*hungry*/) {};
+  virtual void                 GlyphsInfo(int /*start_ind*/,int /*end_ind*/,int &nbG,double &totLength) {nbG=0;totLength=0;};
 };
 
 class dest_chunker {

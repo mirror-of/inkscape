@@ -158,7 +158,7 @@ sp_typeset_init (SPTypeset *object)
   
   typeset->layoutDirty=false;
   typeset->destDirty=false;
-  typeset->stdLayoutAlgo=false;
+  typeset->stdLayoutAlgo=true;
   
   typeset->theSrc=NULL;
   typeset->theDst=NULL;
@@ -465,7 +465,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
             }
             epos++;
           }
-          if ( epos < max ) {
+          if ( epos <= max ) {
             char savC=dup_value[epos];
             dup_value[epos]=0;
             path_dest  *nSrc=(path_dest*)malloc(sizeof(path_dest));
@@ -585,13 +585,15 @@ void sp_typeset_ditch_dest(SPTypeset *typeset)
 }
 
 // the listening functions
-static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * /*key*/,
+static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
                                const gchar * /*oldval*/, const gchar * newval,
                                bool /*is_interactive*/, void * data)
 {
   SPTypeset *typeset = (SPTypeset *) data;
   printf("attrchg %x of %x to %s\n",(int)repr,(int)typeset,newval);
   if ( typeset == NULL || repr == NULL ) return;
+  
+  if ( strcmp(key,"point") != 0 && strcmp(key,"d") != 0 && strcmp(key,"transform") != 0 ) return;
   
   if ( typeset->dstType == has_shape_dest ) {
     GSList *l=typeset->dstElems;

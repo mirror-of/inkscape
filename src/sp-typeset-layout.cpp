@@ -73,6 +73,14 @@ void   sp_typeset_relayout(SPTypeset *typeset)
       l=l->next;
     }
   } else if ( typeset->dstType == has_path_dest ) {
+    GSList* l=typeset->dstElems;
+    dest_path_chunker* nd=new dest_path_chunker();
+    typeset->theDst=nd;
+    while ( l && l->data ) {
+      path_dest* theData=(path_dest*)l->data;
+      if ( theData->thePath ) nd->AppendPath(theData->thePath);
+      l=l->next;
+    }
   } else if ( typeset->dstType == has_box_dest ) {
     GSList* l=typeset->dstElems;
     dest_box_chunker* nd=new dest_box_chunker();
@@ -125,11 +133,12 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     }
     while ( l ) {
       SPObject *child=(SPObject*)l->data;
-      child->deleteObject();
 //      sp_object_unref(child, SP_OBJECT(typeset));
+      child->deleteObject();
       l=g_slist_remove(l,child);
     }
   }
+  
   // do layout
   typeset_step  *steps=(typeset_step*)malloc(sizeof(typeset_step));
   int           nb_step=1;
@@ -288,7 +297,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
   // create offspring
   {
     int           maxIndex=(typeset->theSrc)?typeset->theSrc->MaxIndex():0;
-
+    
     SPRepr *parent = SP_OBJECT_REPR(SP_OBJECT(typeset));
     char const *style = sp_repr_attr (parent, "style");
     if (!style) {
@@ -299,20 +308,14 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     sp_repr_set_attr (text_repr, "style", style);
     sp_repr_append_child (parent, text_repr);
     sp_repr_unref (text_repr);
-
-    for (int i=1;i<nb_step;i++) {
-      if ( steps[i].end_ind >= steps[i].start_ind ) {
-        int              nbS=0;
-        glyphs_for_span  *span_info=NULL;
-        typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nbS,span_info);
+    
+    for (int i=0;i<nb_step;i++) {
+      if ( steps[i].start_ind >= 0 && steps[i].end_ind >= steps[i].start_ind ) {
         double spacing=steps[i].box.x_end-steps[i].box.x_start;
+        double used=0;
         int    nbSrcChar=0;
-        for (int k=0;k<nbS;k++) {
-          if ( span_info[k].nbG > 0 ) {
-            spacing-=span_info[k].g_pos[span_info[k].nbG][0]-span_info[k].g_pos[0][0];
-            for (int j=0;j<span_info[k].nbG;j++) nbSrcChar+=span_info[k].g_end[j]-span_info[k].g_start[j]+1;
-          }
-        }
+        typeset->theSrc->GlyphsInfo(steps[i].start_ind,steps[i].end_ind,nbSrcChar,used);
+        spacing-=used;
         if ( nbSrcChar > 1 ) {
           if ( ( steps[i].end_ind < maxIndex-1 && steps[i].no_justification == false ) || spacing < 0 ) {
             spacing/=(nbSrcChar-1);
@@ -323,86 +326,20 @@ void   sp_typeset_relayout(SPTypeset *typeset)
           spacing=0;
         }
         
-        for (int k=0;k<nbS;k++) {
-          SPRepr* span_repr = sp_repr_new ("tspan");
-          
-          if ( span_info[k].style[0] != 0 ) {
-            sp_repr_set_attr (span_repr, "style", span_info[k].style);
+        if ( typeset->dstType == has_path_dest ) {
+          dest_path_chunker* dpc=(dest_path_chunker*)typeset->theDst;
+          if ( steps[i].box.frame_no >= 0 && steps[i].box.frame_no < dpc->nbPath ) {
+            path_to_SVG_context*  nCtx=new path_to_SVG_context(text_repr,dpc->paths[steps[i].box.frame_no].theP,dpc->paths[steps[i].box.frame_no].length);
+            nCtx->SetLetterSpacing(spacing);
+            typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nCtx);
+            delete nCtx;
           }
-          
-          if ( span_info[k].g_pos && span_info[k].g_start && span_info[k].g_end && span_info[k].nbG > 0 ) {
-            NR::Point   textPos(steps[i].box.x_start,steps[i].box.y);
-            textPos+=span_info[k].g_pos[0];
-            int nbPrevChar=span_info[k].g_start[0]-span_info[0].g_start[0];
-            sp_repr_set_double (span_repr, "x", textPos[0]+spacing*((double)(nbPrevChar)));
-            sp_repr_set_double (span_repr, "y", textPos[1]);
-            
-            {
-              SPCSSAttr *ocss;
-              ocss = sp_repr_css_attr (span_repr, "style");              
-              sp_repr_set_double ((SPRepr*)ocss, "letter-spacing", spacing);
-              sp_repr_css_change (span_repr, ocss, "style");
-              sp_repr_css_attr_unref (ocss);
-            }
-            bool  do_dy=false;
-            for (int j = 0; j < span_info[k].nbG ; j ++) {
-              if ( fabs(span_info[k].g_pos[j][1]) > 0.001 ) {
-                do_dy=true;
-                break;
-              }
-            }
-            if ( do_dy ) {
-              gchar c[32];
-              gchar *s = NULL;
-              double    lastY=span_info[k].g_pos[0][1];
-              for (int j = 0; j < span_info[k].nbG ; j ++) {
-                int     t_st=span_info[k].g_start[j];
-                int     t_en=span_info[k].g_end[j];
-                for (int g=t_st;g<=t_en;g++) {
-                  g_ascii_formatd (c, sizeof (c), "%.8g", span_info[k].g_pos[j][1]-lastY);
-                  lastY=span_info[k].g_pos[j][1];
-                  if (s == NULL) {
-                    s = g_strdup (c);
-                  }  else {
-                    s = g_strjoin (" ", s, c, NULL);
-                  }
-                }
-              }
-              sp_repr_set_attr (span_repr, "dy", s);
-              g_free(s);
-            }
-          } else {
-            sp_repr_set_double (span_repr, "x", steps[i].box.x_start);
-            sp_repr_set_double (span_repr, "y", steps[i].box.y);
-          }
-          
-          int   content_length=0;
-          char* temp_content=NULL;
-          for (int j = 0; j < span_info[k].nbG ; j ++) {
-            int     t_st=span_info[k].g_start[j];
-            int     t_en=span_info[k].g_end[j];
-            if ( t_en >= t_st ) {
-              temp_content=(char*)realloc(temp_content,(content_length+t_en-t_st+1)*sizeof(char));
-              memcpy(temp_content+content_length,span_info[k].g_text+t_st,(t_en-t_st+1)*sizeof(char));
-              content_length+=t_en-t_st+1;
-            }
-          }
-          temp_content=(char*)realloc(temp_content,(content_length+1)*sizeof(char));
-          temp_content[content_length]=0;
-          SPRepr* rstr = sp_xml_document_createTextNode (sp_repr_document (parent), temp_content);
-          sp_repr_append_child (span_repr, rstr);
-          sp_repr_unref (rstr);
-          free(temp_content);
-          
-          sp_repr_append_child (text_repr, span_repr);
-          sp_repr_unref (span_repr);
+        } else {
+          box_to_SVG_context*  nCtx=new box_to_SVG_context(text_repr,steps[i].box.y,steps[i].box.x_start,steps[i].box.x_end);
+          nCtx->SetLetterSpacing(spacing);
+          typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nCtx);
+          delete nCtx;
         }
-        for (int k=0;k<nbS;k++) {
-          if ( span_info[k].g_start ) free(span_info[k].g_start);
-          if ( span_info[k].g_end ) free(span_info[k].g_end);
-          if ( span_info[k].g_pos ) free(span_info[k].g_pos);
-        }
-        if ( span_info ) free(span_info);
       }
     }
     free(steps);
