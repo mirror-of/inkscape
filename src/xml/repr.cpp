@@ -316,33 +316,34 @@ unsigned int
 sp_repr_set_content (SPRepr *repr, const gchar *newcontent)
 {
 	SPReprListener *rl;
-	gchar *oldcontent;
 	unsigned int allowed;
 
 	g_return_val_if_fail (repr != NULL, FALSE);
 
-	oldcontent = SP_REPR_CONTENT (repr);
-
 	allowed = TRUE;
 	for (rl = repr->listeners; rl && allowed; rl = rl->next) {
 		if (rl->vector->change_content) {
-			allowed = (* rl->vector->change_content) (repr, oldcontent, newcontent, rl->data);
+			allowed = (* rl->vector->change_content) (repr, repr->content, newcontent, rl->data);
 		}
 	}
 
 	if (allowed) {
+		gchar *oldcontent=repr->content;
+
 		if (newcontent) {
-			newcontent = repr->content = g_strdup (newcontent);
+			repr->content = g_strdup (newcontent);
 		} else {
 			repr->content = NULL;
 		}
 		if ( repr->doc && repr->doc->is_logging ) {
 			repr->doc->log = sp_repr_log_chgcontent (repr->doc->log, repr, oldcontent, newcontent);
 		}
+
 		for (rl = repr->listeners; rl != NULL; rl = rl->next) {
 			if (rl->vector->content_changed) (* rl->vector->content_changed) (repr, oldcontent, newcontent, rl->data);
 		}
-		if ( oldcontent && ( !repr->doc || !repr->doc->is_logging ) ) {
+
+		if (oldcontent) {
 			g_free (oldcontent);
 		}
 	}
@@ -372,12 +373,8 @@ sp_repr_del_attr (SPRepr *repr, const gchar *key, bool is_interactive)
 	}
 
 	if (attr) {
-		gchar *oldval;
-
-		oldval = attr->value;
-
 		for (rl = repr->listeners; rl && allowed; rl = rl->next) {
-			if (rl->vector->change_attr) allowed = (* rl->vector->change_attr) (repr, key, oldval, NULL, rl->data);
+			if (rl->vector->change_attr) allowed = (* rl->vector->change_attr) (repr, key, attr->value, NULL, rl->data);
 		}
 
 		if (allowed) {
@@ -386,15 +383,12 @@ sp_repr_del_attr (SPRepr *repr, const gchar *key, bool is_interactive)
 			} else {
 				repr->attributes = attr->next;
 			}
+			if ( repr->doc && repr->doc->is_logging ) {
+				repr->doc->log = sp_repr_log_chgattr (repr->doc->log, repr, q, attr->value, NULL);
+			}
 
-			if ( repr->doc && repr->doc->is_logging ) {
-				repr->doc->log = sp_repr_log_chgattr (repr->doc->log, repr, q, oldval, NULL);
-			}
 			for (rl = repr->listeners; rl != NULL; rl = rl->next) {
-				if (rl->vector->attr_changed) (* rl->vector->attr_changed) (repr, key, oldval, NULL, is_interactive, rl->data);
-			}
-			if ( repr->doc && repr->doc->is_logging ) {
-				attr->value = NULL;
+				if (rl->vector->attr_changed) (* rl->vector->attr_changed) (repr, key, attr->value, NULL, is_interactive, rl->data);
 			}
 
 			sp_attribute_free (attr);
@@ -410,14 +404,12 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value, bool is_in
 	SPReprAttr *prev, *attr;
 	SPReprListener *rl;
 	unsigned int allowed;
-	gchar *oldval;
 	unsigned int q;
 
 	g_return_val_if_fail (repr != NULL, FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (*key != '\0', FALSE);
 
-	oldval = NULL;
 	q = g_quark_from_string (key);
 	prev = NULL;
 	for (attr = repr->attributes; attr && (attr->key != static_cast<int>(q)); attr = attr->next)
@@ -425,17 +417,18 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value, bool is_in
 		prev = attr;
 	}
 
-	if (attr) {
-		if (!strcmp (attr->value, value)) return TRUE;
-		oldval = attr->value;
+	if ( attr && !strcmp(attr->value, value) ) {
+		return TRUE;
 	}
 
 	allowed = TRUE;
 	for (rl = repr->listeners; rl && allowed; rl = rl->next) {
-		if (rl->vector->change_attr) allowed = (* rl->vector->change_attr) (repr, key, oldval, value, rl->data);
+		if (rl->vector->change_attr) allowed = (* rl->vector->change_attr) (repr, key, ( attr ? attr->value : NULL ), value, rl->data);
 	}
 
 	if (allowed) {
+		gchar *oldval=( attr ? attr->value : NULL );
+
 		if (attr) {
 			attr->value = g_strdup (value);
 		} else {
@@ -446,7 +439,6 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value, bool is_in
 				repr->attributes = attr;
 			}
 		}
-
 		if ( repr->doc && repr->doc->is_logging ) {
 			repr->doc->log = sp_repr_log_chgattr (repr->doc->log, repr, q, oldval, value);
 		}
@@ -455,7 +447,7 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value, bool is_in
 			if (rl->vector->attr_changed) (* rl->vector->attr_changed) (repr, key, oldval, value, is_interactive, rl->data);
 		}
 
-		if ( oldval && ( !repr->doc || !repr->doc->is_logging ) ) {
+		if (oldval) {
 			g_free (oldval);
 		}
 	}
@@ -496,7 +488,6 @@ sp_repr_remove_attribute (SPRepr *repr, SPReprAttr *attr)
 		prev->next = attr->next;
 	}
 
-	g_free (attr->value);
 	sp_attribute_free (attr);
 }
 
@@ -1060,6 +1051,10 @@ sp_attribute_alloc (void)
 static void
 sp_attribute_free (SPReprAttr *attribute)
 {
+	if (attribute->value) {
+		g_free(attribute->value);
+		attribute->value = NULL;
+	}
 	attribute->next = free_attribute;
 	free_attribute = attribute;
 }

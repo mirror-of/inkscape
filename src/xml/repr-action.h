@@ -70,13 +70,10 @@ SPReprAction *sp_repr_log_add (SPReprAction *log, SPRepr *repr,
 SPReprAction *sp_repr_log_remove (SPReprAction *log, SPRepr *repr,
                                   SPRepr *child, SPRepr *ref);
 
-/* these two reference oldval directly */
 SPReprAction *sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr, int key,
-                                   gchar *oldval,
-                                   const gchar *newval);
+                                   const gchar *oldval, const gchar *newval);
 SPReprAction *sp_repr_log_chgcontent (SPReprAction *log, SPRepr *repr,
-                                      gchar *oldval,
-                                      const gchar *newval);
+                                      const gchar *oldval, const gchar *newval);
 
 SPReprAction *sp_repr_log_chgorder (SPReprAction *log, SPRepr *repr,
                                     SPRepr *child,

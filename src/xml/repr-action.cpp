@@ -264,9 +264,8 @@ sp_repr_log_remove (SPReprAction *log, SPRepr *repr,
 }
 
 SPReprAction *
-sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr,
-                     int key, gchar *oldval,
-                     const gchar *newval)
+sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr, int key,
+                     const gchar *oldval, const gchar *newval)
 {
 	SPReprAction *action;
 
@@ -274,23 +273,23 @@ sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr,
 
 	action = new_action (log, SP_REPR_ACTION_CHGATTR, repr);
 	action->chgattr.key = key;
-	action->chgattr.oldval = oldval;
-	action->chgattr.newval = ( newval ? g_strdup (newval) : NULL );
+	action->chgattr.oldval = ( oldval ? g_strdup(oldval) : NULL );
+	action->chgattr.newval = ( newval ? g_strdup(newval) : NULL );
 
 	return coalesce_action(action);
 }
 
 SPReprAction *
 sp_repr_log_chgcontent (SPReprAction *log, SPRepr *repr,
-                        gchar *oldval, const gchar *newval)
+                        const gchar *oldval, const gchar *newval)
 {
 	SPReprAction *action;
 
 	g_assert (repr != NULL);
 
 	action = new_action (log, SP_REPR_ACTION_CHGCONTENT, repr);
-	action->chgcontent.oldval = oldval;
-	action->chgcontent.newval = ( newval ? g_strdup (newval) : NULL );
+	action->chgcontent.oldval = ( oldval ? g_strdup(oldval) : NULL );
+	action->chgcontent.newval = ( newval ? g_strdup(newval) : NULL );
 
 	return coalesce_action(action);
 }
