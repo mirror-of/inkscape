@@ -382,7 +382,7 @@ sp_dyna_draw_timeout_handler(gpointer data)
         return TRUE;
     }
     p = sp_dyna_draw_get_curr_vpoint(dc);
-    sp_desktop_free_snap(desktop, Snapper::SNAP_POINT, p);
+    namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, p);
     // something's not right here
     if ( dc->cur != dc->last ) {
         sp_dyna_draw_brush(dc);
@@ -411,7 +411,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
             sp_dyna_draw_reset(dc, button_dt);
             sp_dyna_draw_apply(dc, button_dt);
             NR::Point p = sp_dyna_draw_get_curr_vpoint(dc);
-            sp_desktop_free_snap(desktop, Snapper::SNAP_POINT, p);
+            namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, p);
             /* TODO: p isn't subsequently used; we should probably get rid of the last
                1-2 statements (or use p).  Same for MOTION_NOTIFY below. */
             sp_curve_reset(dc->accumulated);
@@ -452,7 +452,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                 break;
             }
             NR::Point p = sp_dyna_draw_get_curr_vpoint(dc);
-            sp_desktop_free_snap(desktop, Snapper::SNAP_POINT, p);
+            namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, p);
             /* p unused; see comments above in BUTTON_PRESS. */
 
             if ( dc->cur != dc->last ) {

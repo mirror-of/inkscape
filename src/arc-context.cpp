@@ -297,7 +297,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 			ac->center = sp_desktop_w2d_xy_point (event_context->desktop, 
 													NR::Point(event->button.x, event->button.y));
 			/* Snap center to nearest magnetic point */
-			sp_desktop_free_snap (event_context->desktop, Snapper::SNAP_POINT, ac->center);
+			namedview_free_snap (event_context->desktop->namedview, Snapper::SNAP_POINT, ac->center);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 						GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
 						NULL, event->button.time);
@@ -415,8 +415,8 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 		p1 = ac->center + delta;
 		if (state & GDK_SHIFT_MASK) {
 			p0 = ac->center - delta;
-			const NR::Coord l0 = sp_desktop_vector_snap (desktop, Snapper::SNAP_POINT, p0, p0 - p1);
-			const NR::Coord l1 = sp_desktop_vector_snap (desktop, Snapper::SNAP_POINT, p1, p1 - p0);
+			const NR::Coord l0 = namedview_vector_snap (desktop->namedview, Snapper::SNAP_POINT, p0, p0 - p1);
+			const NR::Coord l1 = namedview_vector_snap (desktop->namedview, Snapper::SNAP_POINT, p1, p1 - p0);
 			
 			if (l0 < l1) {
 				p1 = 2 * ac->center - p0;
@@ -425,7 +425,7 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 			}
 		} else {
 			p0 = ac->center;
-			sp_desktop_vector_snap (desktop, Snapper::SNAP_POINT, p1, p1 - p0);
+			namedview_vector_snap (desktop->namedview, Snapper::SNAP_POINT, p1, p1 - p0);
 		}
 	} else if (state & GDK_SHIFT_MASK) {
 		/* Corner point movements are bound */
@@ -433,8 +433,8 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 		p0 = 2 * ac->center - p1;
 		for (int d = 0 ; d < 2 ; ++d) {
 			NR::Coord snap_movement[2];
-			snap_movement[0] = sp_desktop_dim_snap(desktop, Snapper::SNAP_POINT, p0, NR::Dim2(d));
-			snap_movement[1] = sp_desktop_dim_snap(desktop, Snapper::SNAP_POINT, p1, NR::Dim2(d));
+			snap_movement[0] = namedview_dim_snap(desktop->namedview, Snapper::SNAP_POINT, p0, NR::Dim2(d));
+			snap_movement[1] = namedview_dim_snap(desktop->namedview, Snapper::SNAP_POINT, p1, NR::Dim2(d));
 			if ( snap_movement[0] <
 			     snap_movement[1] ) {
 				/* Use point 0 position. */
@@ -447,7 +447,7 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 		/* Free movement for corner point */
 		p0 = ac->center;
 		p1 = pt;
-		sp_desktop_free_snap (desktop, Snapper::SNAP_POINT, p1);
+		namedview_free_snap (desktop->namedview, Snapper::SNAP_POINT, p1);
 	}
 
 	p0 = sp_desktop_dt2root_xy_point (desktop, p0);

@@ -757,7 +757,7 @@ void sp_selection_paste(bool in_place)
         /* FIXME: this gridsnap fiddling is a hack. */
         gdouble const curr_gridsnap = desktop->namedview->grid_snapper.getDistance();
         desktop->namedview->grid_snapper.setDistance(NR_HUGE);
-        sp_desktop_free_snap(desktop, Snapper::SNAP_POINT, m);
+        namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, m);
         desktop->namedview->grid_snapper.setDistance(curr_gridsnap);
         sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
     }

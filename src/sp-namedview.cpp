@@ -117,8 +117,8 @@ sp_namedview_init (SPNamedView * nv)
 	nv->guides = NULL;
 	nv->viewcount = 0;
 
-	new (&nv->grid_snapper) GridSnapper(0);
-	new (&nv->guide_snapper) GuideSnapper(0);
+	new (&nv->grid_snapper) GridSnapper(nv, 0);
+	new (&nv->guide_snapper) GuideSnapper(nv, 0);
 }
 
 static void
