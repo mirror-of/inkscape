@@ -1,3 +1,8 @@
+2004-11-07  MenTaLguY  <mental@rydia.net>
+
+	* src/gc-finalized.h: fix for Debian bug #279991 (cast to ptrdiff_t
+	                      rather than int)
+
 2004-11-06  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-item.cpp: fix desktop-specific version of SPItem::isHidden()

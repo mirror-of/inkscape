@@ -17,6 +17,7 @@
 #define SEEN_INKSCAPE_GC_FINALIZED_H
 
 #include <new>
+#include <cstddef>
 #include "gc-core.h"
 
 namespace Inkscape {
@@ -63,7 +64,8 @@ private:
     }
     static Finalized *_unoffset(void *base, void *offset) {
         return reinterpret_cast<Finalized *>(
-            reinterpret_cast<char *>(base) + reinterpret_cast<int>(offset)
+            reinterpret_cast<char *>(base) +
+            reinterpret_cast<std::ptrdiff_t>(offset)
         );
     }
 };
