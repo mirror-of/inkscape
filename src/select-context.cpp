@@ -366,7 +366,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     // item has been moved
                     sp_sel_trans_ungrab(seltrans);
                     sc->moved = FALSE;
-                } else if (!drag_escaped) {
+                } else if (sc->item && !drag_escaped) {
                     // item has not been moved -> do selecting
                     if (!selection->isEmpty()) {
                         if (event->button.state & GDK_SHIFT_MASK) { // shift-click, with previous selection
