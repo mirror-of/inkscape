@@ -654,6 +654,9 @@ sp_export_selection_modified ( Inkscape::Application *inkscape,
 static void
 sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 {
+    if (gtk_object_get_data (base, "update"))
+        return;
+
     selection_type key, old_key;
     key = (selection_type)((int)gtk_object_get_data (GTK_OBJECT (tb), "key"));
     old_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
@@ -678,6 +681,64 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
             ( GTK_TOGGLE_BUTTON ( gtk_object_get_data (base, selection_names[old_key])), 
               FALSE );
     }
+
+    if ( SP_ACTIVE_DESKTOP )
+    {
+        SPDocument *doc;
+        NRRect bbox;
+        doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+        
+        /* Notice how the switch is used to 'fall through' here to get
+           various backups.  If you modify this without noticing you'll
+           probabaly screw something up. */
+        switch (key) {
+            case SELECTION_SELECTION:
+                if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false)
+                {
+                    (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
+                    /* Only if there is a selection that we can set
+                       do we break, otherwise we fall through to the
+                       drawing */
+                    // std::cout << "Using selection: SELECTION" << std::endl;
+                    key = SELECTION_SELECTION;
+                    break;
+                }
+            case SELECTION_DRAWING:
+                /* 
+                 * TODO: this returns wrong values if the document has a 
+                 * viewBox
+                 */
+                sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
+                
+                /* If the drawing is valid, then we'll use it and break
+                   otherwise we drop through to the page settings */
+                if (!(bbox.x0 > bbox.x1 && bbox.y0 > bbox.y1)) { 
+                    // std::cout << "Using selection: DRAWING" << std::endl;
+                    key = SELECTION_DRAWING;
+                    break;
+                }
+            case SELECTION_PAGE:
+                bbox.x0 = 0.0;
+                bbox.y0 = 0.0;
+                bbox.x1 = sp_document_width (doc);
+                bbox.y1 = sp_document_height (doc);
+                // std::cout << "Using selection: PAGE" << std::endl;
+                key = SELECTION_PAGE;
+                break;
+            case SELECTION_CUSTOM:
+            default:
+                break;
+        } // switch
+        
+        // remember area setting
+        prefs_set_string_attribute ( "dialogs.export.exportarea", 
+                                     "value", selection_names[key]);
+
+        if (key != SELECTION_CUSTOM)
+            sp_export_set_area (base, bbox.x0, bbox.y0, bbox.x1, bbox.y1);
+    
+    } // end of if ( SP_ACTIVE_DESKTOP )
+
 
     if (SP_ACTIVE_DESKTOP && !gtk_object_get_data(GTK_OBJECT(base), "filename-modified")) {
         GtkWidget * file_entry;
@@ -824,67 +885,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
             sp_export_value_set(base, "ydpi", ydpi);
         }
     }
-
-    if (gtk_object_get_data (base, "update"))
-        return;
-
-    if ( SP_ACTIVE_DESKTOP )
-    {
-        SPDocument *doc;
-        NRRect bbox;
-        doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
-        
-        /* Notice how the switch is used to 'fall through' here to get
-           various backups.  If you modify this without noticing you'll
-           probabaly screw something up. */
-        switch (key) {
-            case SELECTION_SELECTION:
-                if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false)
-                {
-                    (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
-                    /* Only if there is a selection that we can set
-                       do we break, otherwise we fall through to the
-                       drawing */
-                    // std::cout << "Using selection: SELECTION" << std::endl;
-                    key = SELECTION_SELECTION;
-                    break;
-                }
-            case SELECTION_DRAWING:
-                /* 
-                 * TODO: this returns wrong values if the document has a 
-                 * viewBox
-                 */
-                sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
-                
-                /* If the drawing is valid, then we'll use it and break
-                   otherwise we drop through to the page settings */
-                if (!(bbox.x0 > bbox.x1 && bbox.y0 > bbox.y1)) { 
-                    // std::cout << "Using selection: DRAWING" << std::endl;
-                    key = SELECTION_DRAWING;
-                    break;
-                }
-            case SELECTION_PAGE:
-                bbox.x0 = 0.0;
-                bbox.y0 = 0.0;
-                bbox.x1 = sp_document_width (doc);
-                bbox.y1 = sp_document_height (doc);
-                // std::cout << "Using selection: PAGE" << std::endl;
-                key = SELECTION_PAGE;
-                break;
-            case SELECTION_CUSTOM:
-            default:
-                break;
-        } // switch
-        
-        // remember area setting
-        prefs_set_string_attribute ( "dialogs.export.exportarea", 
-                                     "value", selection_names[key]);
-
-        if (key != SELECTION_CUSTOM)
-            sp_export_set_area (base, bbox.x0, bbox.y0, bbox.x1, bbox.y1);
-    
-    } // end of if ( SP_ACTIVE_DESKTOP )
-    
+   
     return;
 } // end of sp_export_area_toggled()
 
@@ -1287,7 +1288,10 @@ sp_export_detect_size(GtkObject * base) {
 
     /* We're now using a custom size, not a fixed one */
     /* printf("Detecting state: %s\n", selection_names[key]); */
+    selection_type old = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(gtk_object_get_data(base, selection_names[old])), FALSE);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(gtk_object_get_data(base, selection_names[key])), TRUE);
+    gtk_object_set_data(GTK_OBJECT(base), "selection-type", (gpointer)key);
 
     return;
 } /* sp_export_detect_size */
@@ -1640,9 +1644,7 @@ sp_export_value_set ( GtkObject *base, const gchar *key, float val )
     adj = (GtkAdjustment *)gtk_object_get_data (base, key);
 
     gtk_adjustment_set_value (adj, val);
-
-    return;
-} // end of sp_export_value_set()
+}
 
 /**
     \brief  A function to set a value using the units points
