@@ -55,6 +55,7 @@ GType sp_defs_get_type(void)
 
 static void sp_defs_class_init(SPDefsClass *dc)
 {
+    parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
     SPObjectClass *sp_object_class = (SPObjectClass *) dc;
     
     sp_object_class->release = sp_defs_release;
