@@ -181,7 +181,8 @@ void Tracer::traceThread()
 
     int nrPaths;
     TracingEngineResult *results = engine->trace(pixbuf, &nrPaths);
-
+    //printf("nrPaths:%d\n", nrPaths);
+    
     //### Check if we should stop
     if (!keepGoing || !results || nrPaths<1)
         {

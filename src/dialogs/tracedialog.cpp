@@ -488,7 +488,7 @@ TraceDialogImpl::TraceDialogImpl()
     potracePreviewFrame.add(potracePreviewBox);
     potraceBox.pack_start(potracePreviewFrame, true, true, 0);
 
-    /*#### quantization ####*/
+    /*#### swap black and white ####*/
     potraceInvertButton.set_label(_("Invert"));
     potraceInvertButton.set_active(false);
     potraceInvertBox.pack_end(potraceInvertButton, false, false, MARGIN);

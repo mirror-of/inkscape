@@ -518,9 +518,9 @@ PotraceTracingEngine::traceMultiple(GdkPixbuf * thePixbuf, int *nrPaths)
                 {
                 int indx = (int) iMap->getPixel(iMap, col, row);
                 if (indx == colorIndex)
-                    gm->setPixel(gm, col, row, 765);
-                else
                     gm->setPixel(gm, col, row, 0);
+                else
+                    gm->setPixel(gm, col, row, 765);
                 }
             }
 
