@@ -4,6 +4,10 @@
 #include <xml/repr-private.h>
 
 
+/** Returns the last child of \a parent, or NULL if parent has no children.
+ *
+ *  Suitable for use with sp_repr_add_child.
+ */
 SPRepr *
 sp_repr_last_child(SPRepr const * const parent)
 {
