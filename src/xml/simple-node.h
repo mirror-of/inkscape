@@ -103,8 +103,11 @@ public:
     }
 
     void synthesizeEvents(NodeEventVector const *vector, void *data);
+    void synthesizeEvents(NodeObserver &observer);
     void addListener(NodeEventVector const *vector, void *data);
+    void addObserver(NodeObserver &observer);
     void removeListenerByData(void *data);
+    void removeObserver(NodeObserver &observer);
 
 protected:
     SimpleNode(int code);

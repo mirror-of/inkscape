@@ -28,7 +28,7 @@ class TransactionLogger;
 class AttributeRecord;
 class Document;
 class NodeEventVector;
-
+class NodeObserver;
 
 enum NodeType {
     DOCUMENT_NODE,
@@ -94,7 +94,10 @@ public:
     virtual Inkscape::Util::List<AttributeRecord const> attributeList() const=0;
 
     virtual void synthesizeEvents(NodeEventVector const *vector, void *data)=0;
+    virtual void synthesizeEvents(NodeObserver &observer)=0;
+    virtual void addObserver(NodeObserver &observer)=0;
     virtual void addListener(NodeEventVector const *vector, void *data)=0;
+    virtual void removeObserver(NodeObserver &observer)=0;
     virtual void removeListenerByData(void *data)=0;
 
 protected:

@@ -1,3 +1,10 @@
+2005-03-01  MenTaLguY  <mental@rydia.net<
+
+	* src/xml/node.h, src/xml/simple-node.cpp, src/xml/simple-node.h:
+
+	  begin migration of notification interface to use NodeObserver
+	  rather than NodeEventVector
+
 2005-03-01  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/Makefile_insert, src/xml/node-listener.h, src/xml/repr.cpp,

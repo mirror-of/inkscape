@@ -23,6 +23,7 @@
 #include "xml/node-event-vector.h"
 #include "xml/node-fns-tree.h"
 #include "xml/repr.h"
+#include "xml/node-observer.h"
 
 namespace Inkscape {
 
@@ -386,6 +387,38 @@ void SimpleNode::setPosition(int pos) {
     _parent->changeOrder(this, ref);
 }
 
+namespace {
+
+void child_added(Node *node, Node *child, Node *ref, void *data) {
+    reinterpret_cast<NodeObserver *>(data)->notifyChildAdded(*node, *child, ref);
+}
+
+void child_removed(Node *node, Node *child, Node *ref, void *data) {
+    reinterpret_cast<NodeObserver *>(data)->notifyChildRemoved(*node, *child, ref);
+}
+
+void content_changed(Node *node, gchar const *old_content, gchar const *new_content, void *data) {
+    reinterpret_cast<NodeObserver *>(data)->notifyContentChanged(*node, Util::SharedCStringPtr::coerce((const char *)old_content), Util::SharedCStringPtr::coerce((const char *)new_content));
+}
+
+void attr_changed(Node *node, gchar const *name, gchar const *old_value, gchar const *new_value, bool is_interactive, void *data) {
+    reinterpret_cast<NodeObserver *>(data)->notifyAttributeChanged(*node, g_quark_from_string(name), Util::SharedCStringPtr::coerce((const char *)old_value), Util::SharedCStringPtr::coerce((const char *)new_value));
+}
+
+void order_changed(Node *node, Node *child, Node *old_ref, Node *new_ref, void *data) {
+    reinterpret_cast<NodeObserver *>(data)->notifyChildOrderChanged(*node, *child, old_ref, new_ref);
+}
+
+const NodeEventVector OBSERVER_EVENT_VECTOR = {
+    &child_added,
+    &child_removed,
+    &attr_changed,
+    &content_changed,
+    &order_changed
+};
+
+};
+
 void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
     if (vector->attr_changed) {
         for ( List<AttributeRecord const> iter = _attributes ;
@@ -408,9 +441,17 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
     }
 }
 
+void SimpleNode::synthesizeEvents(NodeObserver &observer) {
+    synthesizeEvents(&OBSERVER_EVENT_VECTOR, &observer);
+}
+
 void SimpleNode::addListener(NodeEventVector const *vector, void *data) {
     g_assert(vector);
     _listeners.push_back(Listener(*vector, data));
+}
+
+void SimpleNode::addObserver(NodeObserver &observer) {
+    addListener(&OBSERVER_EVENT_VECTOR, &observer);
 }
 
 namespace {
@@ -440,6 +481,10 @@ void SimpleNode::removeListenerByData(void *data) {
             _listeners.erase_after(pos);
         }
     }
+}
+
+void SimpleNode::removeObserver(NodeObserver &observer) {
+    removeListenerByData(&observer);
 }
 
 Node *SimpleNode::root() {
