@@ -297,11 +297,6 @@ sp_main_gui (int argc, const char **argv)
 		}
 	}
 
-
-#ifdef WIN32
-	Inkscape::Extension::Internal::PrintWin32::init();
-#endif	
-	
 	gtk_main();
 
 #ifdef WIN32

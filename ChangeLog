@@ -1,3 +1,10 @@
+2004-06-08  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/main.cpp: remove the call to
+	Extension::Internal::PrintWin32::init() entirely after Ted pointed
+	out that it would be called by code in src/extension/init.cpp
+	anyway.
+
 2004-06-08  Ted Gould  <ted@gould.cx>
 
 	* src/main.cpp:
