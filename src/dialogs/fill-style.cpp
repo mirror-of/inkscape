@@ -862,7 +862,6 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     sp_repr_css_unset_property (css, "fill");
 
                     sp_desktop_set_style (desktop, css);
-
                     sp_repr_css_attr_unref (css);
 
                     sp_document_done (SP_WIDGET_DOCUMENT (spw));
