@@ -39,7 +39,7 @@
 #include "dir-util.h"
 #include "helper/png-write.h"
 #include "dialogs/export.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "inkscape.h"
 #include "desktop.h"
 #include "selection.h"

@@ -26,7 +26,7 @@
 #include "display/sp-canvas.h"
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "libnr/n-art-bpath.h"
 
 static void sp_pen_context_class_init(SPPenContextClass *klass);

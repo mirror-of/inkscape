@@ -21,7 +21,7 @@
 #include <glib/gmain.h>
 #include "macros.h"
 #include "helper/sp-marshal.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "inkscape-private.h"
 #include "desktop.h"
 #include "desktop-handles.h"

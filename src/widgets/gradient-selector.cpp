@@ -26,7 +26,7 @@
 #include "../document-private.h"
 #include "../gradient-chemistry.h"
 
-#include "../helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include <xml/repr.h>
 
 #include "gradient-vector.h"

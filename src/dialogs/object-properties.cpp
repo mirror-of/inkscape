@@ -20,7 +20,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "widgets/sp-widget.h"
 #include "widgets/icon.h"

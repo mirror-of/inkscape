@@ -26,7 +26,7 @@
 #include <sp-item.h>
 #include <sp-guide-constraint.h>
 #include <libnr/nr-values.h>
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include <xml/repr.h>
 #include <remove-last.h>
 using std::vector;

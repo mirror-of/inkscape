@@ -34,7 +34,7 @@
 #include "select-context.h"
 #include "file.h"
 #include "interface.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "selection-chemistry.h"
 #include "dialogs/desktop-properties.h"
 #include "macros.h"

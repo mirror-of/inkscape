@@ -11,7 +11,7 @@
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtktooltips.h>
 #include "../color.h"
-#include "../helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
 #include "sp-color-preview.h"
 #include "sp-color-wheel-selector.h"

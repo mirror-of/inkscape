@@ -49,7 +49,7 @@
 #include "seltrans.h"
 #include "selection-chemistry.h"
 #include "sp-metrics.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "widgets/spw-utilities.h"
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrlrect.h"

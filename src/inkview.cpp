@@ -45,7 +45,7 @@
 
 #include "gc-core.h"
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "document.h"
 #include "svg-view.h"
 

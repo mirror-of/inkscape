@@ -22,7 +22,7 @@
 #include "xml/repr.h"
 #include "xml/sp-repr-action-fns.h"
 #include "helper/sp-marshal.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "inkscape-private.h"
 #include "inkscape_version.h"
 #include "sp-object-repr.h"

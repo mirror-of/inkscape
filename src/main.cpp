@@ -80,7 +80,7 @@
 #endif
 #include "extension/init.h"
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #ifndef HAVE_BIND_TEXTDOMAIN_CODESET
 #define bind_textdomain_codeset(p,c)

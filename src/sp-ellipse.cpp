@@ -28,7 +28,7 @@
 #include "style.h"
 #include "version.h"
 #include "display/curve.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include "sp-ellipse.h"
 

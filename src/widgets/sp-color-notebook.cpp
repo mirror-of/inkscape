@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include "../color.h"
-#include "../helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
 #include "../prefs-utils.h"
 #include "sp-color-preview.h"

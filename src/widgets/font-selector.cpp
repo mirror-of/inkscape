@@ -47,7 +47,7 @@
 #include <gtk/gtkdrawingarea.h>
 
 #include "../display/nr-plain-stuff-gdk.h"
-#include "../helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include "font-selector.h"
 

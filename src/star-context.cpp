@@ -40,7 +40,7 @@
 #include "pixmaps/cursor-star.xpm"
 #include "sp-desktop-widget.h"
 #include "sp-metrics.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "prefs-utils.h"
 #include "knotholder.h"
 #include "xml/repr.h"

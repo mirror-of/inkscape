@@ -15,7 +15,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <gtk/gtksignal.h>
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "macros.h"
 #include "sp-anchor.h"

@@ -22,7 +22,7 @@
 #include <libnr/nr-macros.h>
 #include <gtk/gtk.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "../xml/repr-private.h"
 #include "../style.h"
 #include "../dialogs/dialog-events.h"

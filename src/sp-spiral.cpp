@@ -25,7 +25,7 @@
 #include "display/bezier-utils.h"
 #include "display/curve.h"
 #include "dialogs/object-attributes.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "xml/repr.h"
 
 #include "sp-spiral.h"

@@ -22,7 +22,7 @@
 #include <gtk/gtklist.h>
 #include <gtk/gtkadjustment.h>
 #include "helper/sp-marshal.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "../xml/repr.h"
 #include "../xml/sp-repr-event-vector.h"
 #include "sp-xmlview-attr-list.h"

@@ -32,7 +32,7 @@
 
 #include "selection.h"
 #include "style.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "sp-root.h"
 #include "sp-anchor.h"
 #include "sp-clippath.h"

@@ -41,7 +41,7 @@
 #include "sp-tspan.h"
 #include "text-context.h"
 #include "dropper-context.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "display/sp-canvas.h"
 #include "path-chemistry.h"
 #include "desktop-affine.h"

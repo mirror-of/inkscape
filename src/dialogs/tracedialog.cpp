@@ -27,7 +27,7 @@
 
 #include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "interface.h"
 #include "verbs.h"
 #include "prefs-utils.h"

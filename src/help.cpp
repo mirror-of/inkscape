@@ -24,7 +24,7 @@
 #include "svg-view.h"
 #include "help.h"
 #include "file.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "libnr/nr-macros.h"
 #include "inkscape_version.h"
 

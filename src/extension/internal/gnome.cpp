@@ -35,7 +35,7 @@
 #include <libgnomeprintui/gnome-print-master-preview.h>
 #endif
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "enums.h"
 #include "document.h"
 #include "style.h"

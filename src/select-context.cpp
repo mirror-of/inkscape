@@ -30,7 +30,7 @@
 #include "pixmaps/cursor-select-m.xpm"
 #include "pixmaps/cursor-select-d.xpm"
 #include "pixmaps/handles.xpm"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "widgets/spw-utilities.h"
 #include "message-context.h"
 

@@ -32,7 +32,7 @@
 #include "sp-root.h"
 #include "sp-shape.h"
 #include "sp-rect.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "xml/repr.h"
 
 #define noRECT_VERBOSE

@@ -22,7 +22,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "macros.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "display/sp-canvas.h"
 #include "inkscape.h"
 #include "sp-ellipse.h"

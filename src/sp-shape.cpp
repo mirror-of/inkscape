@@ -29,7 +29,7 @@
 #include <xml/repr.h>
 
 #include "macros.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "display/curve.h"

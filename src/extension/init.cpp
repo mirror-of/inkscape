@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include <xml/repr.h>
-#include <helper/sp-intl.h>
+#include <glibmm/i18n.h>
 
 #include "extension/extension.h"
 #include "system.h"

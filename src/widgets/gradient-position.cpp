@@ -22,7 +22,7 @@
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-pixblock.h>
 #include <gtk/gtksignal.h>
-#include "../helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "../display/nr-plain-stuff.h"
 #include "../display/nr-plain-stuff-gdk.h"
 #include "../macros.h"

@@ -25,7 +25,7 @@
 #include "desktop-affine.h"
 #include "dialogs/object-attributes.h"
 #include "display/curve.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "xml/repr.h"
 #include "libnr/nr-point.h"
 #include "libnr/nr-point-fns.h"

@@ -46,7 +46,7 @@
 #include <glib.h>
 //#include <gtk/gtk.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "xml/repr-private.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"

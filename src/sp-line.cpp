@@ -21,7 +21,7 @@
 #include "style.h"
 #include "sp-line.h"
 #include "display/curve.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>

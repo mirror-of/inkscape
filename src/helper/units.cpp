@@ -20,7 +20,7 @@
 #include <string.h>
 #include <glib.h>
 #include "helper/units.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "sp-metrics.h"
 #include "unit-constants.h"
 

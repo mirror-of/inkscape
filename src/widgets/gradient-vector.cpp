@@ -30,7 +30,7 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkwindow.h>
 #include "macros.h"
-#include "../helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "../widgets/gradient-image.h"
 #include "../inkscape.h"
 #include "../document-private.h"

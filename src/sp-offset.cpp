@@ -27,7 +27,7 @@
 #include "document.h"
 #include "display/curve.h"
 #include "dialogs/object-attributes.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "xml/repr-private.h"
 
 #include "livarot/Path.h"

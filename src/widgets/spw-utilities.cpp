@@ -33,7 +33,7 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkframe.h>
  
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "widgets/button.h"
 #include "inkscape.h"

@@ -23,7 +23,7 @@
 #include <gtk/gtk.h>
 
 #include "xml/repr.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/unit-menu.h"
 #include "helper/units.h"
 #include "helper/window.h"

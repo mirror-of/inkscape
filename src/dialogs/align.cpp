@@ -15,7 +15,7 @@
 
 
 #include <config.h>
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include "dialogs/align.h"
 #include "dialogs/docker.h"
@@ -679,7 +679,7 @@ void sp_quick_align_dialog (void)
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtklabel.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "widgets/button.h"
 #include "widgets/sp-widget.h"

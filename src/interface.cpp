@@ -53,7 +53,7 @@
 #include "xml/repr-private.h"
 #include "helper/action.h"
 #include "helper/gnome-utils.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/window.h"
 
 #include "dialogs/dialog-events.h"

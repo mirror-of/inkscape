@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 #include "macros.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "../widgets/font-selector.h"
 #include "../forward.h"

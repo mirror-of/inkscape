@@ -28,7 +28,7 @@
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "svg/svg.h"
 #include "xml/repr.h"
 #include "attributes.h"

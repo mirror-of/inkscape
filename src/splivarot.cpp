@@ -33,7 +33,7 @@
 #include "splivarot.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "view.h"
 #include "prefs-utils.h"
 

@@ -35,7 +35,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "svg/svg.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
 #include "display/sodipodi-ctrl.h"

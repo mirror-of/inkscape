@@ -17,7 +17,7 @@
 #include "macros.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "display/sp-canvas-util.h"
 #include "object-edit.h"
 #include "sp-path.h"

@@ -48,7 +48,7 @@
 #include "toolbox.h"
 #include "xml/repr-private.h"
 #include "helper/gnome-utils.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "widgets/sp-widget.h"
 #include "helper/unit-menu.h"
 #include "helper/units.h"

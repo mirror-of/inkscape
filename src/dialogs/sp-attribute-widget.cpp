@@ -24,7 +24,7 @@
 #include "macros.h"
 #include "document.h"
 #include "sp-object.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include "sp-attribute-widget.h"
 

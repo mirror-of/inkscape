@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 #include "xml/repr.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "dir-util.h"
 #include "inkscape.h"
 #include "sp-object.h"

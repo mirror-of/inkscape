@@ -42,7 +42,7 @@
 #include "pixmaps/cursor-text.xpm"
 #include "pixmaps/cursor-text-insert.xpm"
 #include "view.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "xml/repr.h"
 #include "prefs-utils.h"
 

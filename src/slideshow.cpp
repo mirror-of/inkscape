@@ -18,7 +18,7 @@
 #include <gtk/gtkwindow.h>
 #include <gtk/gtksignal.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "document.h"
 #include "sp-text.h"
 #include "svg-view.h"

@@ -24,7 +24,7 @@
 #include <gtkmm/button.h>
 
 #include <dialogs/dialog-events.h>
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include <glib.h>
 

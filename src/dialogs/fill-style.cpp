@@ -34,7 +34,7 @@
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-path.h>
 
-#include <helper/sp-intl.h>
+#include <glibmm/i18n.h>
 #include <helper/window.h>
 #include <svg/svg.h>
 #include <svg/stringstream.h>

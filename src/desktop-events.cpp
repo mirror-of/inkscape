@@ -39,7 +39,7 @@
 #include "sp-metrics.h"
 #include "sp-item.h"
 #include "desktop-events.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "dialogs/dialog-events.h"
 #include "message-context.h"
 #include "xml/repr.h"

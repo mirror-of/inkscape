@@ -46,7 +46,7 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtktooltips.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "display/nr-arena-item.h"
 #include "display/canvas-bpath.h"
 #include "enums.h"

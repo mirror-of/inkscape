@@ -26,7 +26,7 @@
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "display/curve.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "svg/svg.h"
 #include "enums.h"
 #include "color.h"

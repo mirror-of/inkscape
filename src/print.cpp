@@ -18,7 +18,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "enums.h"
 #include "document.h"
 #include "sp-item.h"

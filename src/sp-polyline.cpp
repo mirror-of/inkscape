@@ -19,7 +19,7 @@
 #include "attributes.h"
 #include "sp-polyline.h"
 #include "display/curve.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "xml/repr.h"
 
 static void sp_polyline_class_init (SPPolyLineClass *klass);

@@ -43,7 +43,7 @@
 
 #include "interface.h"
 #include "filedialog.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "prefs-utils.h"
 
 #include <dialogs/dialog-events.h>

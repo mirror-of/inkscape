@@ -9,7 +9,7 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkcolorsel.h>
 #include "../color.h"
-#include "../helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "sp-color-preview.h"
 #include "sp-color-selector.h"
 

@@ -45,7 +45,7 @@
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmessagedialog.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/sp-marshal.h"
 #include "xml/repr-private.h"
 #include "dialogs/debugdialog.h"

@@ -27,7 +27,7 @@
 #include "display/bezier-utils.h"
 #include "display/canvas-bpath.h"
 #include "display/sp-canvas.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "libnr/in-svg-plane.h"
 #include "libnr/n-art-bpath.h"
 

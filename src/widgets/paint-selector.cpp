@@ -35,7 +35,7 @@
 
 #include "../sp-item.h"
 #include "../sp-pattern.h"
-#include "../helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "../widgets/icon.h"
 #include "../inkscape-stock.h"
 #include "widgets/widget-sizes.h"

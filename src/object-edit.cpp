@@ -29,7 +29,7 @@
 #include "sp-path.h"
 
 #include "macros.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include "object-edit.h"
 

@@ -36,7 +36,7 @@ sp_object_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtksignal.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include "sp-item-group.h"
 #include "sp-anchor.h"

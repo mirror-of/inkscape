@@ -19,7 +19,7 @@
 #include "display/sp-canvas-util.h"
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "libnr/n-art-bpath.h"
 #include "knot.h"
 #include "inkscape.h"

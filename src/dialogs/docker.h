@@ -14,7 +14,7 @@
  */
 
 #include <config.h>
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include <gtkmm/window.h>
 #include <gtkmm/notebook.h>

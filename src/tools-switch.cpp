@@ -22,7 +22,7 @@
 #include "path-chemistry.h"
 #include "shortcuts.h"
 #include "verbs.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include <xml/repr.h>
 

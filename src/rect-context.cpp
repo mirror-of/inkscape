@@ -36,7 +36,7 @@
 #include "rect-context.h"
 #include "sp-desktop-widget.h"
 #include "sp-metrics.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "object-edit.h"
 #include "knotholder.h"
 #include "xml/repr.h"

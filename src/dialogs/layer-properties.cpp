@@ -22,7 +22,7 @@
 #include <gtkmm/stock.h>
 
 #include "dialogs/dialog-events.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "inkscape.h"
 #include "desktop.h"
 #include "document.h"

@@ -17,7 +17,7 @@
 #include <config.h>
 #include <string.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "display/sp-canvas.h"
 #include "dialogs/object-attributes.h"
 #include "xml/repr.h"

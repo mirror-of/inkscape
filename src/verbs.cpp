@@ -29,7 +29,7 @@
 #include <config.h>
 
 #include "helper/action.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 
 #include "dialogs/text-edit.h"
 #include "dialogs/export.h"

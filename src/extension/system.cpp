@@ -18,7 +18,7 @@
 #include <string.h>
 
 #include <interface.h>
-#include <helper/sp-intl.h>
+#include <glibmm/i18n.h>
 #include <xml/repr.h>
 #include <document.h>
 #include <inkscape.h>

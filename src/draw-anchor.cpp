@@ -22,7 +22,7 @@
 #include "message.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sp-canvas.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "libnr/nr-point-fns.h"
 #include "libnr/nr-point-ops.h"
 

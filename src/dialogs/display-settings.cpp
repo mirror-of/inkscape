@@ -16,7 +16,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "../inkscape.h"
 #include "../prefs-utils.h"

@@ -20,7 +20,7 @@
 #include "attributes.h"
 #include "sp-polygon.h"
 #include "display/curve.h"
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "libnr/n-art-bpath.h"
 #include "svg/stringstream.h"
 #include "xml/repr.h"

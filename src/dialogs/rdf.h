@@ -3,7 +3,7 @@
 
 #include <glib.h>
 
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "document.h"
 
 // yeah, it's not a triple yet...

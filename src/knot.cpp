@@ -19,7 +19,7 @@
 #include <glib-object.h>
 #include <gtk/gtksignal.h>
 #include <gdk/gdkkeysyms.h>
-#include "helper/sp-intl.h"
+#include <glibmm/i18n.h>
 #include "helper/sp-marshal.h"
 #include "display/sp-canvas-util.h"
 #include "display/sodipodi-ctrl.h"

@@ -21,7 +21,7 @@
 #include <desktop.h>
 #include <desktop-handles.h>
 #include <document.h>
-#include <helper/sp-intl.h>
+#include <glibmm/i18n.h>
 #include <selection.h>
 #include <sp-image.h>
 #include <sp-path.h>
