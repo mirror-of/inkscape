@@ -320,11 +320,11 @@ into a very usable illustration program over the course of several
 year's work, adding several new features, multi-lingual support, porting
 to Windows and other operating systems, and eliminating dependencies.
 
-Inkscape was formed in 2003 by a number of active Sodipodi developers
-wanting to take a different direction with the codebase in terms of
-focus on SVG-compliance, interface look-and-feel, and a desire to open
-development opportunities to more participants.  In a way, this
-direction marks a return to the codebase's Gill roots.
+Inkscape was formed in 2003 by four active Sodipodi developers, Bryce
+harrington, MenTaLguY, Nathan Hurst, and Ted Gould, wanting to take a
+different direction with the codebase in terms of focus on
+SVG-compliance, interface look-and-feel, and a desire to open
+development opportunities to more participants.  
 
 =head1 COPYRIGHT AND LICENSE
 
