@@ -529,11 +529,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
 					sp_document_undo (SP_DT_DOCUMENT (desktop));
 					drag_escaped = 1;
+					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), "Move cancelled.");
 				}
 			} else {
 				if (sp_rubberband_rect (&b)) { // cancel rubberband
 					sp_rubberband_stop ();
 					rb_escaped = 1;
+					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), "Selection cancelled.");
 				} else {
 					sp_selection_empty (selection); // deselect
 				}
