@@ -31,7 +31,7 @@
 #endif
 
 unsigned int
-sp_svg_boolean_read (const unsigned char *str, unsigned int *val)
+sp_svg_boolean_read (const gchar *str, unsigned int *val)
 {
 	unsigned int v;
 	char *e;
@@ -45,7 +45,7 @@ sp_svg_boolean_read (const unsigned char *str, unsigned int *val)
 		return 1;
 	}
 	v = strtoul (str, &e, 10);
-	if ((const unsigned char *) e != str) {
+	if ((const gchar *) e != str) {
 		*val = v;
 		return 1;
 	}
@@ -53,33 +53,33 @@ sp_svg_boolean_read (const unsigned char *str, unsigned int *val)
 }
 
 unsigned int
-sp_svg_number_read_f (const unsigned char *str, float *val)
+sp_svg_number_read_f (const gchar *str, float *val)
 {
 	char *e;
 	float v;
 
 	if (!str) return 0;
 	v = strtod (str, &e);
-	if ((const unsigned char *) e == str) return 0;
+	if ((const gchar *) e == str) return 0;
 	*val = v;
 	return 1;
 }
 
 unsigned int
-sp_svg_number_read_d (const unsigned char *str, double *val)
+sp_svg_number_read_d (const gchar *str, double *val)
 {
 	char *e;
 	double v;
 
 	if (!str) return 0;
 	v = strtod (str, &e);
-	if ((const unsigned char *) e == str) return 0;
+	if ((const gchar *) e == str) return 0;
 	*val = v;
 	return 1;
 }
 
 unsigned int
-sp_svg_number_write_i (unsigned char *buf, int val)
+sp_svg_number_write_i (gchar *buf, int val)
 {
 	char c[32];
 	int p, i;
@@ -100,7 +100,7 @@ sp_svg_number_write_i (unsigned char *buf, int val)
 }
 
 unsigned int
-sp_svg_number_write_d (unsigned char *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf)
+sp_svg_number_write_d (gchar *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf)
 {
 	double dival, fval;
 	int idigits, ival, i;
@@ -142,7 +142,7 @@ sp_svg_number_write_d (unsigned char *buf, double val, unsigned int tprec, unsig
 }
 
 unsigned int
-sp_svg_number_write_de (unsigned char *buf, double val, unsigned int tprec, unsigned int padf)
+sp_svg_number_write_de (gchar *buf, double val, unsigned int tprec, unsigned int padf)
 {
 	if ((val == 0.0) || ((fabs (val) >= 0.1) && (fabs(val) < 10000000))) {
 		return sp_svg_number_write_d (buf, val, tprec, 0, padf);
@@ -161,7 +161,7 @@ sp_svg_number_write_de (unsigned char *buf, double val, unsigned int tprec, unsi
 /* Length */
 
 unsigned int
-sp_svg_length_read (const unsigned char *str, SPSVGLength *length)
+sp_svg_length_read (const gchar *str, SPSVGLength *length)
 {
 	unsigned long unit;
 	float value, computed;
@@ -181,9 +181,9 @@ sp_svg_length_read (const unsigned char *str, SPSVGLength *length)
 #define UVAL(a,b) (((unsigned int) (a) << 8) | (unsigned int) (b))
 
 unsigned int
-sp_svg_length_read_lff (const unsigned char *str, unsigned long *unit, float *val, float *computed)
+sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float *computed)
 {
-	const unsigned char *e;
+	const gchar *e;
 	float v;
 
 	if (!str) return 0;

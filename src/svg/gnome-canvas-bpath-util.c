@@ -84,7 +84,7 @@ gnome_canvas_bpath_def_moveto (GnomeCanvasBpathDef *bpd, double x, double y)
 	n_bpath = bpd->n_bpath++;
 
 	if (n_bpath == bpd->n_bpath_max)
-		bpd->bpath = g_realloc (bpd->bpath,
+		bpd->bpath = (ArtBpath*)g_realloc (bpd->bpath,
 					(bpd->n_bpath_max <<= 1) * sizeof (ArtBpath));
 	bpath = bpd->bpath;
 	bpath[n_bpath].code = ART_MOVETO_OPEN;
@@ -105,7 +105,7 @@ gnome_canvas_bpath_def_lineto (GnomeCanvasBpathDef *bpd, double x, double y)
 	n_bpath = bpd->n_bpath++;
 
 	if (n_bpath == bpd->n_bpath_max)
-		bpd->bpath = g_realloc (bpd->bpath,
+		bpd->bpath = (ArtBpath*)g_realloc (bpd->bpath,
 					(bpd->n_bpath_max <<= 1) * sizeof (ArtBpath));
 	bpath = bpd->bpath;
 	bpath[n_bpath].code = ART_LINETO;
@@ -125,7 +125,7 @@ gnome_canvas_bpath_def_curveto (GnomeCanvasBpathDef *bpd, double x1, double y1, 
 	n_bpath = bpd->n_bpath++;
 
 	if (n_bpath == bpd->n_bpath_max)
-		bpd->bpath = g_realloc (bpd->bpath,
+		bpd->bpath = (ArtBpath*)g_realloc (bpd->bpath,
 					(bpd->n_bpath_max <<= 1) * sizeof (ArtBpath));
 	bpath = bpd->bpath;
 	bpath[n_bpath].code = ART_CURVETO;
@@ -171,7 +171,7 @@ gnome_canvas_bpath_def_art_finish (GnomeCanvasBpathDef *bpd)
 	n_bpath = bpd->n_bpath++;
 
 	if (n_bpath == bpd->n_bpath_max)
-		bpd->bpath = g_realloc (bpd->bpath,
+		bpd->bpath = (ArtBpath*)g_realloc (bpd->bpath,
 					(bpd->n_bpath_max <<= 1) * sizeof (ArtBpath));
 	bpd->bpath [n_bpath].code = ART_END;
 }

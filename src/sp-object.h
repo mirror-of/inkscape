@@ -120,9 +120,9 @@ struct _SPObjectClass {
 	void (* child_added) (SPObject *object, SPRepr *child, SPRepr *ref);
 	void (* remove_child) (SPObject *object, SPRepr *child);
 
-	void (* order_changed) (SPObject *object, SPRepr *child, SPRepr *old, SPRepr *new);
+	void (* order_changed) (SPObject *object, SPRepr *child, SPRepr *old, SPRepr *new_repr);
 
-	void (* set) (SPObject *object, unsigned int key, const unsigned char *value);
+	void (* set) (SPObject *object, unsigned int key, const gchar *value);
 
 	void (* read_content) (SPObject *object);
 
@@ -165,7 +165,7 @@ SPObject *sp_object_detach_unref (SPObject *parent, SPObject *object);
 void sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr, unsigned int cloned);
 void sp_object_invoke_release (SPObject *object);
 
-void sp_object_set (SPObject *object, unsigned int key, const unsigned char *value);
+void sp_object_set (SPObject *object, unsigned int key, const gchar *value);
 
 void sp_object_read_attr (SPObject *object, const gchar *key);
 
@@ -190,17 +190,17 @@ SPRepr *sp_object_invoke_write (SPObject *object, SPRepr *repr, unsigned int fla
  * These are inefficent, so they are not intended to be used interactively
  */
 
-const unsigned char *sp_object_title_get (SPObject *object);
-const unsigned char *sp_object_description_get (SPObject *object);
-unsigned int sp_object_title_set (SPObject *object, const unsigned char *title);
-unsigned int sp_object_description_set (SPObject *object, const unsigned char *desc);
+const gchar *sp_object_title_get (SPObject *object);
+const gchar *sp_object_description_get (SPObject *object);
+unsigned int sp_object_title_set (SPObject *object, const gchar *title);
+unsigned int sp_object_description_set (SPObject *object, const gchar *desc);
 
 /* Public */
 
-const unsigned char *sp_object_tagName_get (const SPObject *object, SPException *ex);
-const unsigned char *sp_object_getAttribute (const SPObject *object, const unsigned char *key, SPException *ex);
-void sp_object_setAttribute (SPObject *object, const unsigned char *key, const unsigned char *value, SPException *ex);
-void sp_object_removeAttribute (SPObject *object, const unsigned char *key, SPException *ex);
+const gchar *sp_object_tagName_get (const SPObject *object, SPException *ex);
+const gchar *sp_object_getAttribute (const SPObject *object, const gchar *key, SPException *ex);
+void sp_object_setAttribute (SPObject *object, const gchar *key, const gchar *value, SPException *ex);
+void sp_object_removeAttribute (SPObject *object, const gchar *key, SPException *ex);
 
 /* Style */
 

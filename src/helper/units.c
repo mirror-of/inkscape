@@ -87,7 +87,7 @@ sp_unit_get_default (void)
 }
 
 const SPUnit *
-sp_unit_get_by_name (const guchar *name)
+sp_unit_get_by_name (const gchar *name)
 {
 	gint i;
 
@@ -107,7 +107,7 @@ sp_unit_get_by_name (const guchar *name)
 }
 
 const SPUnit *
-sp_unit_get_by_abbreviation (const guchar *abbreviation)
+sp_unit_get_by_abbreviation (const gchar *abbreviation)
 {
 	gint i;
 

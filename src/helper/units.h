@@ -65,10 +65,10 @@ struct _SPUnit {
 	guint base : 8; /* Base */
 	gdouble unittobase;
 	/* I am not absolutely sure, but seems that gettext can do the magic */
-	guchar *name;
-	guchar *abbr;
-	guchar *plural;
-	guchar *abbr_plural;
+	gchar *name;
+	gchar *abbr;
+	gchar *plural;
+	gchar *abbr_plural;
 };
 
 struct _SPDistance {
@@ -82,8 +82,8 @@ struct _SPDistance {
 
 const SPUnit *sp_unit_get_identity (guint base);
 const SPUnit *sp_unit_get_default (void);
-const SPUnit *sp_unit_get_by_name (const guchar *name);
-const SPUnit *sp_unit_get_by_abbreviation (const guchar *abbreviation);
+const SPUnit *sp_unit_get_by_name (const gchar *name);
+const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 
 #define SP_UNITS_ALL (SP_UNIT_DIMENSIONLESS | SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE | SP_UNIT_USERSPACE | SP_UNIT_VOLATILE)
 

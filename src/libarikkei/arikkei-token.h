@@ -18,8 +18,7 @@
  * In plain C is is not half as nice, but still quite useful
  */
 
-//#include <glib.h>
-typedef char gchar;
+#include <glib.h>
 
 typedef struct _ArikkeiToken ArikkeiToken;
 

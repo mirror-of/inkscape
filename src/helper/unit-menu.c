@@ -42,7 +42,7 @@ struct _SPUnitSelector {
 struct _SPUnitSelectorClass {
 	GtkHBoxClass parent_class;
 
-	gboolean (* set_unit) (SPUnitSelector *us, const SPUnit *old, const SPUnit *new);
+	gboolean (* set_unit) (SPUnitSelector *us, const SPUnit *old, const SPUnit *new_unit);
 };
 
 enum {SET_UNIT, LAST_SIGNAL};
@@ -81,7 +81,7 @@ sp_unit_selector_class_init (SPUnitSelectorClass *klass)
 	object_class = G_OBJECT_CLASS (klass);
 	widget_class = GTK_WIDGET_CLASS (klass);
 
-	unit_selector_parent_class = gtk_type_class (GTK_TYPE_HBOX);
+	unit_selector_parent_class = (GtkHBoxClass*)gtk_type_class (GTK_TYPE_HBOX);
 
 	signals[SET_UNIT] = g_signal_new ("set_unit",
 					  G_TYPE_FROM_CLASS (klass),
@@ -138,7 +138,7 @@ sp_unit_selector_new (guint bases)
 {
 	SPUnitSelector *us;
 
-	us = gtk_type_new (SP_TYPE_UNIT_SELECTOR);
+	us = (SPUnitSelector*)gtk_type_new (SP_TYPE_UNIT_SELECTOR);
 
 	sp_unit_selector_set_bases (us, bases);
 
@@ -161,7 +161,7 @@ spus_unit_activate (GtkWidget *widget, SPUnitSelector *us)
 	gboolean consumed;
 	GSList *l;
 
-	unit = gtk_object_get_data (GTK_OBJECT (widget), "unit");
+	unit = (SPUnit*)gtk_object_get_data (GTK_OBJECT (widget), "unit");
 	g_return_if_fail (unit != NULL);
 
 #ifdef UNIT_SELECTOR_VERBOSE
@@ -214,7 +214,7 @@ spus_rebuild_menu (SPUnitSelector *us)
 	pos = p = 0;
 	for (l = us->units; l != NULL; l = l->next) {
 		const SPUnit *u;
-		u = l->data;
+		u = (SPUnit*)l->data;
 		i = gtk_menu_item_new_with_label ((us->abbr) ? (us->plural) ? u->abbr_plural : u->abbr : (us->plural) ? u->plural : u->name);
 		gtk_object_set_data (GTK_OBJECT (i), "unit", (gpointer) u);
 		gtk_signal_connect (GTK_OBJECT (i), "activate", GTK_SIGNAL_FUNC (spus_unit_activate), us);
@@ -243,7 +243,7 @@ sp_unit_selector_set_bases (SPUnitSelector *us, guint bases)
 	g_return_if_fail (units != NULL);
 	sp_unit_free_list (us->units);
 	us->units = units;
-	us->unit = units->data;
+	us->unit = (SPUnit*)units->data;
 
 	spus_rebuild_menu (us);
 }

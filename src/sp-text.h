@@ -70,7 +70,7 @@ struct _SPString {
 	/* Link to parent layout */
 	SPLayoutData *ly;
 	/* Content */
-	guchar *text;
+	gchar *text;
 	NRPointF *p;
 	/* Bookkeeping */
 	guint start;
@@ -134,7 +134,7 @@ GType sp_text_get_type (void);
 
 int sp_text_is_empty (SPText *text);
 gchar *sp_text_get_string_multiline (SPText *text);
-void sp_text_set_repr_text_multiline (SPText *text, const guchar *str);
+void sp_text_set_repr_text_multiline (SPText *text, const gchar *str);
 
 SPCurve *sp_text_normalized_bpath (SPText *text);
 
@@ -145,9 +145,9 @@ SPTSpan *sp_text_insert_line (SPText *text, gint pos);
 
 /* This gives us SUM (strlen (STRING)) + (LINES - 1) */
 gint sp_text_get_length (SPText *text);
-gint sp_text_append (SPText *text, const guchar *utf8);
+gint sp_text_append (SPText *text, const gchar *utf8);
 /* Returns position after inserted */
-gint sp_text_insert (SPText *text, gint pos, const guchar *utf8, gboolean preservews);
+gint sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews);
 /* Returns start position */
 gint sp_text_delete (SPText *text, gint start, gint end);
 

@@ -188,7 +188,7 @@ static SPSVGColor sp_svg_color_named[] = {
 static GHashTable *sp_svg_create_color_hash (void);
 
 guint32
-sp_svg_read_color (const guchar *str, guint32 def)
+sp_svg_read_color (const gchar *str, guint32 def)
 {
 	static GHashTable *colors = NULL;
 	gchar c[32];

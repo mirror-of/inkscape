@@ -47,7 +47,7 @@
 
 #include "sp-text.h"
 
-static guchar *sp_text_font_style_to_lookup (SPStyle *style);
+static gchar *sp_text_font_style_to_lookup (SPStyle *style);
 
 static void sp_text_update_length (SPSVGLength *length, gdouble em, gdouble ex, gdouble scale);
 
@@ -148,7 +148,7 @@ static void
 sp_string_read_content (SPObject *object)
 {
 	SPString *string;
-	const guchar *t;
+	const gchar *t;
 
 	string = SP_STRING (object);
 
@@ -220,7 +220,7 @@ sp_string_calculate_dimensions (SPString *string)
 	}
 
 	if (string->text) {
-		const guchar *p;
+		const gchar *p;
 		gboolean inspace, intext;
 
 		inspace = FALSE;
@@ -284,7 +284,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 	gint spglyph;
 	gdouble x, y;
 	NRMatrixF a;
-	const guchar *p;
+	const gchar *p;
 	gboolean intext;
 	gint len, pos;
 	unsigned int metrics;
@@ -878,7 +878,7 @@ sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 
 	version = sp_text_find_version (object);
 	if ((version > 0) && (version < 25)) {
-		const guchar *content;
+		const gchar *content;
 		/* Old inkscape */
 		for (rch = repr->children; rch != NULL; rch = rch->next) {
 			if (rch->type == SP_XML_TEXT_NODE) {
@@ -1307,11 +1307,11 @@ sp_text_description (SPItem * item)
 
 /* 'lighter' and 'darker' have to be resolved earlier */
 
-static guchar *
+static gchar *
 sp_text_font_style_to_lookup (SPStyle *style)
 {
-	static guchar c[256];
-	guchar *wstr, *sstr, *p;
+	static gchar c[256];
+	gchar *wstr, *sstr, *p;
 
 	switch (style->font_weight.computed) {
 	case SP_CSS_FONT_WEIGHT_100:
@@ -1577,7 +1577,7 @@ sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 	NRMatrixF i2p, p2i;
 	gdouble px, py, x, y;
 	SPObject *child;
-	guchar c[80];
+	gchar c[80];
 
 	text = SP_TEXT (item);
 
@@ -1671,7 +1671,7 @@ sp_text_get_string_multiline (SPText *text)
 	SPObject *ch;
 	GSList *strs, *l;
 	gint len;
-	guchar *str, *p;
+	gchar *str, *p;
 
 	strs = NULL;
 	for (ch = text->children; ch != NULL; ch = ch->next) {
@@ -1698,7 +1698,7 @@ sp_text_get_string_multiline (SPText *text)
 
 	strs = g_slist_reverse (strs);
 
-	str = g_new (guchar, len);
+	str = g_new (gchar, len);
 	p = str;
 	while (strs) {
 		memcpy (p, strs->data, strlen (strs->data));
@@ -1712,11 +1712,11 @@ sp_text_get_string_multiline (SPText *text)
 }
 
 void
-sp_text_set_repr_text_multiline (SPText *text, const guchar *str)
+sp_text_set_repr_text_multiline (SPText *text, const gchar *str)
 {
 	SPRepr *repr;
 	SPStyle *style;
-	guchar *content, *p;
+	gchar *content, *p;
 	ArtPoint cp;
 
 	g_return_if_fail (text != NULL);
@@ -1740,7 +1740,7 @@ sp_text_set_repr_text_multiline (SPText *text, const guchar *str)
 
 	while (p) {
 		SPRepr *rtspan, *rstr;
-		guchar *e;
+		gchar *e;
 		e = strchr (p, '\n');
 		if (e) *e = '\0';
 		rtspan = sp_repr_new ("tspan");
@@ -1914,7 +1914,7 @@ sp_text_insert_line (SPText *text, gint pos)
 	SPObject *child;
 	SPString *string;
 	SPRepr *rtspan, *rstring;
-	guchar *ip;
+	gchar *ip;
 
 	g_return_val_if_fail (text != NULL, NULL);
 	g_return_val_if_fail (SP_IS_TEXT (text), NULL);
@@ -1945,13 +1945,13 @@ sp_text_insert_line (SPText *text, gint pos)
 }
 
 gint
-sp_text_append (SPText *text, const guchar *utf8)
+sp_text_append (SPText *text, const gchar *utf8)
 {
 	SPObject *child;
 	SPString *string;
-	const guchar *content;
+	const gchar *content;
 	gint clen, ulen, cchars, uchars;
-	guchar b[1024], *p;
+	gchar b[1024], *p;
 
 	g_return_val_if_fail (text != NULL, -1);
 	g_return_val_if_fail (SP_IS_TEXT (text), -1);
@@ -1992,7 +1992,7 @@ sp_text_append (SPText *text, const guchar *utf8)
 	if ((clen + ulen) < 1024) {
 		p = b;
 	} else {
-		p = g_new (guchar, clen + ulen + 1);
+		p = g_new (gchar, clen + ulen + 1);
 	}
 
 	if (clen > 0) memcpy (p, content, clen);
@@ -2009,11 +2009,11 @@ sp_text_append (SPText *text, const guchar *utf8)
 /* Returns position after inserted */
 
 gint
-sp_text_insert (SPText *text, gint pos, const guchar *utf8, gboolean preservews)
+sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews)
 {
 	SPObject *child;
 	SPString *string;
-	guchar *new, *ip;
+	gchar *new, *ip;
 	int slen, ulen, i;
 
 	g_return_val_if_fail (text != NULL, -1);
@@ -2035,7 +2035,7 @@ sp_text_insert (SPText *text, gint pos, const guchar *utf8, gboolean preservews)
 
 	slen = ip - string->text;
 	ulen = strlen (utf8);
-	new = g_new (guchar, strlen (string->text) + ulen + 1);
+	new = g_new (gchar, strlen (string->text) + ulen + 1);
 	/* Copy start */
 	memcpy (new, string->text, slen);
 	/* Copy string */
@@ -2072,14 +2072,14 @@ sp_text_delete (SPText *text, gint start, gint end)
 	if (schild != echild) {
 		SPString *sstring, *estring;
 		SPObject *child;
-		guchar *utf8, *sp, *ep;
+		gchar *utf8, *sp, *ep;
 		GSList *cl;
 		/* Easy case */
 		sstring = SP_TEXT_CHILD_STRING (schild);
 		estring = SP_TEXT_CHILD_STRING (echild);
 		sp = g_utf8_offset_to_pointer (sstring->text, start - sstring->start);
 		ep = g_utf8_offset_to_pointer (estring->text, end - estring->start);
-		utf8 = g_new (guchar, (sp - sstring->text) + strlen (ep) + 1);
+		utf8 = g_new (gchar, (sp - sstring->text) + strlen (ep) + 1);
 		if (sp > sstring->text) memcpy (utf8, sstring->text, sp - sstring->text);
 		memcpy (utf8 + (sp - sstring->text), ep, strlen (ep) + 1);
 		sp_repr_set_content (SP_OBJECT_REPR (sstring), utf8);
