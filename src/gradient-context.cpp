@@ -379,7 +379,12 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             break;
 
         case GDK_Escape:
-            SP_DT_SELECTION(desktop)->clear();
+            if (drag->selected) {
+                drag->setSelected (NULL);
+            } else {
+                SP_DT_SELECTION(desktop)->clear();
+            }
+            ret = TRUE;
             //TODO: make dragging escapable by Esc
             break;
 
