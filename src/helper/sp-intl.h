@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <config.h>
+#include <require-config.h>
 
 #ifdef ENABLE_NLS
 #include<libintl.h>
