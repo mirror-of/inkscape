@@ -202,17 +202,25 @@ if pkg-config --exists gtkspell-2.0; then
 	AC_DEFINE(WITH_GTKSPELL, 1, [enable gtk spelling widget])
 fi
 
+dnl ******************************
+dnl   Use sigc-2.0 and gtkmm-2.4 only if both present
+dnl ******************************
+ink_sigc_pkg=sigc++-1.2
 ink_gtkmm_pkg=gtkmm-2.0
 if pkg-config --exists gtkmm-2.4; then
-       ink_gtkmm_pkg=gtkmm-2.4
-       AC_DEFINE(WITH_GTKMM_2_4, 1, [enable gtkmm version 2.4])
+       if pkg-config --exists sigc++-2.0; then
+              ink_sigc_pkg=sigc++-2.0
+              ink_gtkmm_pkg=gtkmm-2.4
+              AC_DEFINE(WITH_SIGC_2_0,  1, [enable sigc++ version 2.0])
+              AC_DEFINE(WITH_GTKMM_2_4, 1, [enable gtkmm version 2.4])
+       fi
 fi
 
 dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
 
-PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.0.0  libxml-2.0 >= 2-2.4.24  sigc++-1.2  $ink_gtkmm_pkg $ink_spell_pkg)
+PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.0.0  libxml-2.0 >= 2-2.4.24  $ink_sigc_pkg $ink_gtkmm_pkg $ink_spell_pkg)
 
 dnl Shouldn't we test for libpng and libz?
 INKSCAPE_LIBS="$INKSCAPE_LIBS -lpng -lz"
