@@ -29,7 +29,6 @@ trace_libtrace_a_SOURCES =	\
 	trace/potrace/greymap.cpp \
 	trace/potrace/greymap.h \
 	trace/potrace/lists.h \
-	trace/potrace/lzw.h	\
 	trace/potrace/main.h	\
 	trace/potrace/path.cpp \
 	trace/potrace/path.h \

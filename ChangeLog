@@ -1,3 +1,8 @@
+2004-10-29  Kees Cook  <kees@outflux.net>
+
+	* src/Makefile_insert, src/trace/Makefile_insert,
+	src/util/Makefile_insert: distcheck cleanups.
+
 2004-10-29  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/layer-selector.cpp: default labels in italic
