@@ -1067,23 +1067,26 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
   while ( start_ind <= end_ind && words[end_ind].is_white ) end_ind--;
   if ( end_ind < start_ind ) return;
   
-  int      char_st=words[start_ind].t_first,char_en=words[end_ind].t_last;
+  int      real_st=words[start_ind].t_first;
+  int      real_en=words[end_ind].t_last;
   hungry->SetText(theText->UTF8Text(),theText->UTF8Length());
   
   PangoAttrIterator* theIt=NULL;
   if ( theText->markupType == 1 ) theIt=pango_attr_list_get_iterator ((PangoAttrList*)theText->markup);
-  int      attr_st=char_st,attr_en=char_st;
+  int      attr_st=real_st,attr_en=real_st;
   if ( theIt ) {
     do {
       pango_attr_iterator_range(theIt,&attr_st,&attr_en);
-      if ( attr_en > char_st ) break;
+      if ( attr_en > real_st ) break;
     } while ( pango_attr_iterator_next(theIt) );
   } else {
-    attr_st=char_en+1;
-    attr_en=char_en+2;
+    attr_st=real_en+1;
+    attr_en=real_en+2;
   }
   double     cumul=words[start_ind].x_pos;
-  while ( char_st <= char_en) {
+  int        cur_ind=start_ind;
+  int        char_st=words[cur_ind].t_first,char_en=words[cur_ind].t_last;
+  while ( char_st <= real_en) {
     if ( attr_st > char_st ) {
       AddDullGlyphs(hungry,cumul,char_st,(char_en < attr_st-1)?char_en:attr_st-1);        
       char_st=(char_en+1 < attr_st)?char_en+1:attr_st;
@@ -1099,8 +1102,15 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
       } else {
         AddAttributedGlyphs(hungry,cumul,char_st,char_en,theIt);
         char_st=char_en+1;
-        break;
       }
+    }
+    if ( char_st > char_en ) {
+      do {
+        cur_ind++;
+      } while ( cur_ind <= end_ind && words[cur_ind].is_white );
+      if ( cur_ind > end_ind ) break;
+      char_st=words[cur_ind].t_first;
+      char_en=words[cur_ind].t_last;
     }
   }
   if ( theIt ) pango_attr_iterator_destroy(theIt);
