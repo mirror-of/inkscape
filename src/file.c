@@ -558,8 +558,8 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
 	g_return_if_fail (doc != NULL);
 	g_return_if_fail (SP_IS_DOCUMENT (doc));
 	g_return_if_fail (filename != NULL);
-	g_return_if_fail (width >= 16);
-	g_return_if_fail (height >= 16);
+	g_return_if_fail (width >= 1);
+	g_return_if_fail (height >= 1);
 
 	sp_document_ensure_up_to_date (doc);
 

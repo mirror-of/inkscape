@@ -45,7 +45,7 @@
 
 #include "export.h"
 
-#define SP_EXPORT_MIN_SIZE 16.0
+#define SP_EXPORT_MIN_SIZE 1.0
 
 static void sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base);
 static void sp_export_export_clicked (GtkButton *button, GtkObject *base);
@@ -236,7 +236,7 @@ sp_export_dialog (void)
 		gtk_container_set_border_width (GTK_CONTAINER (t), 4);
 		gtk_container_add (GTK_CONTAINER (f), t);
 
-		sp_export_spinbutton_new ("bmwidth", 16.0, 16.0, 1000000.0, 1.0, 10.0, NULL, t, 0, 0,
+		sp_export_spinbutton_new ("bmwidth", 16.0, 1.0, 1000000.0, 1.0, 10.0, NULL, t, 0, 0,
 					  _("Width:"), _("pixels"), 0, 1,
 					  G_CALLBACK (sp_export_bitmap_width_value_changed), dlg);
 
@@ -244,7 +244,7 @@ sp_export_dialog (void)
 					  NULL, _("dpi"), 2, 1,
 					  G_CALLBACK (sp_export_xdpi_value_changed), dlg);
 
-		sp_export_spinbutton_new ("bmheight", 16.0, 16.0, 1000000.0, 1, 10.0, NULL, t, 0, 1,
+		sp_export_spinbutton_new ("bmheight", 16.0, 1.0, 1000000.0, 1, 10.0, NULL, t, 0, 1,
 					  _("Height:"), _("pixels"), 0, 0,
 					  NULL, dlg);
 
@@ -259,6 +259,8 @@ sp_export_dialog (void)
 		gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 		/* fixme: add browse button, make the direcrory of the document current */
 		fe = gtk_entry_new ();
+
+		// set the default filename to be that of the current document with .png extension
 		if (SP_ACTIVE_DOCUMENT && SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT)) {
 			const gchar *name, *dot;
 			gchar c[1024];
@@ -272,11 +274,13 @@ sp_export_dialog (void)
 			memcpy (c + len, ".png", 4);
 			c[len + 4] = 0;
 			gtk_entry_set_text (GTK_ENTRY (fe), c);
-
 		}
+
 		gtk_container_add (GTK_CONTAINER (f), fe);
 		gtk_object_set_data (GTK_OBJECT (dlg), "filename", fe);
 		gtk_widget_show_all (f);
+		// enter in filename field is the same as clicking export:
+		g_signal_connect (G_OBJECT (fe), "activate", G_CALLBACK (sp_export_export_clicked), dlg);
 
 		/* Buttons */
 		hb = gtk_hbox_new (FALSE, 0);
