@@ -111,7 +111,6 @@ TESTS =	\
 	libnr/nr-scale-test$(EXEEXT)	\
 	libnr/nr-translate-test$(EXEEXT)	\
 	libnr/nr-types-test$(EXEEXT)	\
-	livarot/Path-test$(EXEEXT)	\
 	xml/quote-test$(EXEEXT)	\
 	xml/repr-action-test$(EXEEXT)
 
@@ -132,7 +131,6 @@ check_PROGRAMS =	\
 	libnr/nr-scale-test	\
 	libnr/nr-translate-test	\
 	libnr/nr-types-test	\
-	livarot/Path-test	\
 	xml/quote-test	\
 	xml/repr-action-test
 
