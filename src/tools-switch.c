@@ -77,6 +77,7 @@ tools_id2num (const char *id)
     if (strcmp (tool_ids[i], id) == 0)
       return i; 
     else i++;
+  return 0; /* FIXME !!! what should we return here on failure? */
 }
 
 char* 
