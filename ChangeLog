@@ -2,6 +2,9 @@
 
     * src/interface.cpp: disabled the autoraise checkbox on Windows
 
+    * src/widgets/paint-selector.cpp, src/widgets/paint-selector.h:
+      removed unused selector-type buttons (with Bulia)
+
 2004-02-09  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/widgets/sp-color-wheel.h, src/widgets/sp-color-wheel.cpp,

@@ -64,8 +64,6 @@ static void sp_paint_selector_set_mode_multiple (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_none (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mode);
 static void sp_paint_selector_set_mode_gradient (SPPaintSelector *psel, SPPaintSelectorMode mode);
-static void sp_paint_selector_set_mode_pattern (SPPaintSelector *psel);
-static void sp_paint_selector_set_mode_fractal (SPPaintSelector *psel);
 
 static void sp_paint_selector_set_style_buttons (SPPaintSelector *psel, GtkWidget *active);
 
@@ -251,12 +249,6 @@ sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode)
 		case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 		case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
 			sp_paint_selector_set_mode_gradient (psel, mode);
-			break;
-		case SP_PAINT_SELECTOR_MODE_PATTERN:
-			sp_paint_selector_set_mode_pattern (psel);
-			break;
-		case SP_PAINT_SELECTOR_MODE_FRACTAL:
-			sp_paint_selector_set_mode_fractal (psel);
 			break;
 		default:
 			g_warning ("file %s: line %d: Unknown paint mode %d", __FILE__, __LINE__, mode);
@@ -824,22 +816,6 @@ sp_paint_selector_set_mode_gradient (SPPaintSelector *psel, SPPaintSelectorMode 
 	}
 #ifdef SP_PS_VERBOSE
 	g_print ("Gradient req\n");
-#endif
-}
-
-static void
-sp_paint_selector_set_mode_pattern (SPPaintSelector *psel)
-{
-#ifdef SP_PS_VERBOSE
-	g_print ("Pattern req\n");
-#endif
-}
-
-static void
-sp_paint_selector_set_mode_fractal (SPPaintSelector *psel)
-{
-#ifdef SP_PS_VERBOSE
-	g_print ("Fractal req\n");
 #endif
 }
 

@@ -34,9 +34,7 @@ typedef enum {
 	SP_PAINT_SELECTOR_MODE_COLOR_RGB,
 	SP_PAINT_SELECTOR_MODE_COLOR_CMYK,
 	SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR,
-	SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL,
-	SP_PAINT_SELECTOR_MODE_PATTERN,
-	SP_PAINT_SELECTOR_MODE_FRACTAL
+	SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL
 } SPPaintSelectorMode;
 
 struct _SPPaintSelector {
@@ -47,7 +45,7 @@ struct _SPPaintSelector {
 	SPPaintSelectorMode mode;
 
 	GtkWidget *style;
-	GtkWidget *none, *solid, *gradient, *radial, *pattern, *fractal;
+	GtkWidget *none, *solid, *gradient, *radial;
 	GtkWidget *frame, *selector;
 
 	SPColor color;
