@@ -6,34 +6,59 @@
 #RECURSIVE = yes
 # find -name '*.cpp' -o -name '*.h'|xargs grep -l '\\file'|sort|sed 's,^./,    ,;s,$,    \\,'
 INPUT = \
+	color-rgba.h	\
 	dialogs/export.cpp	\
 	display/bezier-utils.cpp	\
 	display/curve.cpp	\
 	display/curve.h	\
+	draw-anchor.cpp	\
+	draw-anchor.h	\
 	extension/extension.cpp	\
 	extension/extension.h	\
+	extension/implementation/plugin-link.h	\
+	extension/implementation/plugin.cpp	\
+	extension/implementation/plugin.h	\
+	extension/plugin/gimpgrad.cpp	\
 	geom.cpp	\
 	helper/action.h	\
-	libnr/nr-matrix.h	\
+	knot-enums.h	\
+	knot-holder-entity.h	\
+	libnr/nr-matrix-scale-ops.h	\
+	libnr/nr-matrix-translate-ops.h	\
 	libnr/nr-matrix.cpp	\
+	libnr/nr-matrix.h	\
 	libnr/nr-point.h	\
-	libnr/nr-rotate.h	\
 	libnr/nr-rotate-fns.cpp	\
 	libnr/nr-rotate-fns.h	\
+	libnr/nr-rotate.h	\
+	libnr/nr-scale-matrix-ops.h	\
 	libnr/nr-types.cpp	\
+	livarot/float-line.cpp	\
+	livarot/int-line.cpp	\
+	livarot/sweep-event-queue.h	\
+	livarot/sweep-event.h	\
 	message-context.h	\
 	message-stack.h	\
+	modifier-fns.h	\
 	nodepath.h	\
+	pen-context.cpp	\
+	pen-context.h	\
+	pencil-context.cpp	\
 	snap.cpp	\
 	snap.h	\
+	sp-gradient-fns.h	\
 	sp-item-notify-moveto.cpp	\
 	sp-item.cpp	\
 	sp-item.h	\
+	sp-linear-gradient-fns.h	\
+	sp-linear-gradient.h	\
+	sp-offset.cpp	\
+	sp-radial-gradient-fns.h	\
+	sp-radial-gradient.h	\
 	sp-spiral.cpp	\
-	uri.cpp	\
-	uri.h	\
 	verbs.cpp	\
 	widgets/paint-selector.cpp	\
+	xml/quote.cpp	\
 	xml/repr-private.h	\
 	xml/repr-util.cpp	\
 	xml/repr.cpp
