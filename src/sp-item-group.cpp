@@ -408,6 +408,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 	SPItem *gitem = SP_ITEM (group);
 	SPRepr *grepr = SP_OBJECT_REPR (gitem);
+	SPCSSAttr *gstyle = sp_css_attr_from_style (SP_OBJECT (gitem));
 
 	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
 	SPRepr *prepr = SP_OBJECT_REPR (pitem);
@@ -422,12 +423,10 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 		SPRepr *nrepr = sp_repr_duplicate (SP_OBJECT_REPR (child));
 
 		if (SP_IS_ITEM (child)) {
-			SPItem *citem;
 			NRMatrix ctrans;
 			gchar affinestr[80];
-			gchar *ss;
 
-			citem = SP_ITEM (child);
+			SPItem *citem = SP_ITEM (child);
 
 			if (SP_IS_USE(citem) && (SP_OBJECT_PARENT (sp_use_get_original (SP_USE(citem))) == SP_OBJECT(group))) {
 				// make sure a clone's effective transform is the same as was under group
@@ -447,10 +446,12 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			}
 
 			/* Merging of style */
-			/* fixme: We really should respect presentation attributes too */
-			ss = sp_style_write_difference (SP_OBJECT_STYLE (citem), SP_OBJECT_STYLE (pitem));
-			sp_repr_set_attr (nrepr, "style", ss);
-			g_free (ss);
+			// we do this by merging SPCSSAttrs, because there's no easy way to do this with SPStyle
+			// perhaps we need to program some sort of sp_style_combine_with_parent (SPStyle *, SPStyle *)
+			SPCSSAttr *cstyle = sp_repr_css_attr_new ();
+			sp_repr_css_merge (cstyle, gstyle);
+			sp_repr_css_merge (cstyle, sp_css_attr_from_style (SP_OBJECT (citem)));
+			sp_repr_css_change (nrepr, cstyle, "style");
 
 			items = g_slist_prepend (items, nrepr);
 		} else {
