@@ -23,7 +23,7 @@ gchar *extract_uri(gchar const *s)
     }
 
     if ( sb < se ) {
-        return g_strndup(sb, se - sb);
+        return g_strndup(sb, se - sb + 1);
     } else {
         return NULL;
     }

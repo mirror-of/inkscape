@@ -1901,7 +1901,9 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
                                      G_CALLBACK(sp_style_paint_server_release), style);
                     g_signal_connect(G_OBJECT(paint->value.paint.server), "modified",
                                      G_CALLBACK(sp_style_paint_server_modified), style);
-                }
+                } else {
+		    paint->value.paint.server = NULL;
+		}
             } 
             return;
         } else if (!strncmp(str, "none", 4)) {
