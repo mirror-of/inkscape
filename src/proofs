@@ -21,6 +21,16 @@ For the n_segs > 0 && unsigned(pc->npoints) < G_N_ELEMENTS(pc->p) condition to f
 we must have at least 3 distinct points, which means that a previous call had 2 distinct points,
 in which case we'd have filled in pc->red_curve to a non-empty curve.
 
+Expansion of the above claim of at least 3 distinct points: We know n_segs <= 0 ||
+unsigned(dc->npoints) >= G_N_ELEMENTS(pc->p) from the negation of the containing `if' condition.
+G_N_ELEMENTS(pc->p) is greater than 3 (in int arithmetic), from SPPencilContext::p array definition
+in pencil-context.h.  npoints grows by no more than one per fit_and_split invocation; we should be
+able to establish that dc->npoints == G_N_ELEMENTS(pc->p) if unsigned(dc->npoints) >=
+G_N_ELEMENTS(pc->p), in which case 3 <= dc->npoints in int arithmetic.  We know that dc->npoints >=
+2 from assertion at head of fit_and_split; in which case if n_segs <= 0 then fit_and_split has
+failed, which implies that dc->npoints > 2 (since the fitter can always exactly fit 2 points,
+i.e. it never fails if npoints == 2; TODO: add sp_bezier_fit_cubic postcondition for this).
+
 
 src/pencil-context.cpp:fit_and_split
 
@@ -130,6 +140,36 @@ For inner lg_max_beziers >= 0: recursions are conditional on outer
 and passing rec_lg_max_beziers as inner lg_max_beziers value,
 so we have outer lg_max_beziers >= 1 so inner lg_max_beziers >= 0.
 lg_max_beziers and rec_lg_max_beziers are both const.
+
+
+src/display/bezier-utils.cpp:sp_darray_right_tangent(Point const[], unsigned)
+
+Proof of unit_vector precondition that a != Point(0, 0): our unequal precondition.
+
+Loose (incorrect) proof of unit_vector precondition that neither
+coordinate is NaN: our in_svg_plane precondition, and fact that
+in_svg_plane returns false if either argument is infinite.  HOWEVER,
+the unchecked in_svg_plane precondition isn't currently guaranteed, so
+we're just relying on the input points never being infinity (which
+might occur with strange zoom settings).
+
+
+src/display/bezier-utils.cpp:sp_darray_right_tangent(Point const[], unsigned, double)
+
+Loose proof of unit_vector precondition that a != Point(0, 0) for first call to unit_vector:
+
+We've asserted that 0 <= tolerance_sq; combine with tolerance_sq <
+distsq and transitivity of <=/< show that 0 < distsq.  Definition of
+dot should give us that t != 0.0, given that 0.0 * 0.0 == +0.0, and 0
+< +0.0 is false.
+
+Loose proof for the second unit_vector invocation: distsq != 0 from ?:
+condition, which should give us that t != Point(0, 0) in the same way
+as in the above proof.
+
+Proof of sp_darray_right_tangent(Point[], unsigned) preconditions: We
+have the same preconditions, and pass the same arguments.  d, *d and
+len are const.
 
 
 
