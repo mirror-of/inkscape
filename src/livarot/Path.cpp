@@ -881,7 +881,7 @@ Path::AddForcedPoint (NR::Point const &iPt)
 	return n;
 }
 int
-Path::AddForcedPoint (NR::Point const &iPt, int ip, double it)
+Path::AddForcedPoint (NR::Point const &iPt, int /*ip*/, double /*it*/)
 {
 	/* FIXME: ip & it aren't used.  Is this deliberate? */
 	if (!back) {

@@ -24,12 +24,15 @@
 #include <libnr/nr-svp-render.h>
 
 #define test_rf_liv
+
+#ifdef test_rf_liv
 #include "../livarot/Shape.h"
 #include "../livarot/Path.h"
 #include "../livarot/Ligne.h"
 #include "../livarot/LivarotDefs.h"
 
 void nrrf_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);
+#endif
 
 #include <libnr/nr-svp-private.h>
 
@@ -137,6 +140,8 @@ struct _NRRFGlyphLIV {
 	NRRectL bbox;
 	/* Image */
 	Shape *shp;
+  Path  *delayed;
+	NRRect shbbox;
 };
 
 struct _NRRFGlyphSlot {
@@ -193,6 +198,7 @@ nr_rasterfont_generic_free (NRRasterFont *rf)
 						nr_svp_free (slots[s].glyph.sg.svp);
 					} else if (slots[s].type == NRRF_TYPE_LIV) {
 						delete slots[s].glyph.lg.shp;
+            if ( slots[s].glyph.lg.delayed ) delete slots[s].glyph.lg.delayed;
 					}
 				}
 				nr_free (rf->pages[p]);
@@ -231,11 +237,15 @@ nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRe
 		break;
   case NRRF_TYPE_LIV:
   {
-    slot->glyph.lg.shp->CalcBBox();
-    area->x0=slot->glyph.lg.shp->leftX;
-    area->x1=slot->glyph.lg.shp->rightX;
-    area->y0=slot->glyph.lg.shp->topY;
-    area->y1=slot->glyph.lg.shp->bottomY;
+    if ( slot->glyph.lg.delayed ) {
+      *area=slot->glyph.lg.shbbox;
+    } else {
+      slot->glyph.lg.shp->CalcBBox();
+      area->x0=slot->glyph.lg.shp->leftX;
+      area->x1=slot->glyph.lg.shp->rightX;
+      area->y0=slot->glyph.lg.shp->topY;
+      area->y1=slot->glyph.lg.shp->bottomY;
+    }
   }
     break;
 	default:
@@ -293,6 +303,15 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
     // rasterization is position independent? wtf?
     // maybe translating/transforming the shape prior rendering would be more clever
     // or are each glyph given a slot? (very inefficient)
+    if (slot->glyph.lg.delayed ) {
+      Shape* theShape=new Shape;
+      slot->glyph.lg.delayed->Convert(0.25);
+      slot->glyph.lg.delayed->Fill(theShape,0);
+      slot->glyph.lg.shp->ConvertToShape(theShape,fill_nonZero);
+      delete theShape;
+      delete slot->glyph.lg.delayed;
+      slot->glyph.lg.delayed=NULL;
+    }
 		nr_pixblock_setup_extern (&spb, NR_PIXBLOCK_MODE_A8,
                               m->area.x0 - sx, m->area.y0 - sy, m->area.x1 - sx, m->area.y1 - sy,
                               NR_PIXBLOCK_PX (m), m->rs, FALSE, FALSE);
@@ -383,7 +402,6 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 		slot->glyph.tg.px[0] = 0;
 		slot->type = NRRF_TYPE_TINY;
 		if (nr_font_glyph_outline_get (rf->font, glyph, &gbp, 0) && (gbp.path && (gbp.path->code == ART_MOVETO))) {
-			NRSVL *svl;
 			NRSVP *svp;
 			NRMatrix a;
 			NRRect bbox;
@@ -392,13 +410,25 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 			a = rf->transform;
 			a[4] = 0.0;
 			a[5] = 0.0;
+#ifdef test_rf_liv
+      {
+        NRBPath bp;
+        /* fixme: */
+        bbox.x0 = bbox.y0 = NR_HUGE;
+        bbox.x1 = bbox.y1 = -NR_HUGE;
+        bp.path = gbp.path;
+        nr_path_matrix_f_bbox_f_union(&bp, &a, &bbox, 1.0);
+      }
+#else 
+			NRSVL *svl;
 
 			svl = nr_svl_from_art_bpath (gbp.path, &a, NR_WIND_RULE_NONZERO, TRUE, 0.25);
 			svp = nr_svp_from_svl (svl, NULL);
 			nr_svl_free_list (svl);
 
 			nr_svp_bbox (svp, &bbox, TRUE);
-
+#endif
+      
 			if (!nr_rect_f_test_empty (&bbox)) {
 				x0 = NRRF_COORD_FROM_FLOAT_LOWER (bbox.x0);
 				y0 = NRRF_COORD_FROM_FLOAT_LOWER (bbox.y0);
@@ -426,8 +456,16 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 					slot->glyph.lg.bbox.y1 = MIN (y1, 32767);
 					slot->type = NRRF_TYPE_LIV;
 					slot->glyph.lg.shp = new Shape;
+          slot->glyph.lg.delayed=NULL;
+          slot->glyph.lg.shbbox=bbox;
           
-          Path*  thePath=new Path;
+          slot->glyph.lg.delayed=new Path;
+          {
+            NR::Matrix   tempMat(&a);
+            slot->glyph.lg.delayed->LoadArtBPath(gbp.path,tempMat,true);
+          }
+ 
+/*          Path*  thePath=new Path;
           Shape* theShape=new Shape;
           {
             NR::Matrix   tempMat(&a);
@@ -437,11 +475,16 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
           thePath->Fill(theShape,0);
           slot->glyph.lg.shp->ConvertToShape(theShape,fill_nonZero);
           delete theShape;
-          delete thePath;
-          
-          nr_svp_free(svp);
+          delete thePath;*/
 #endif
 				} else {
+#ifdef  test_rf_liv
+          NRSVL *svl;
+          
+          svl = nr_svl_from_art_bpath (gbp.path, &a, NR_WIND_RULE_NONZERO, TRUE, 0.25);
+          svp = nr_svp_from_svl (svl, NULL);
+          nr_svl_free_list (svl);
+#endif
 					NRPixBlock spb;
 					slot->glyph.ig.bbox.x0 = MAX (x0, -32768);
 					slot->glyph.ig.bbox.y0 = MAX (y0, -32768);
@@ -472,7 +515,7 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 // duplicate of the one in nr-arena-shape.cpp
 
 static void
-shape_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
+shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float ven)
 {
   //	printf("%i %f -> %i %f\n",st,vst,en,ven);
   if ( st >= en ) return;

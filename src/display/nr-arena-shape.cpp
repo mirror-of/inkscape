@@ -941,14 +941,14 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
 #ifdef test_liv
   if ( shape->delayed_shp ) {
     NRRectL  area;
-    area.x0=floor(x);
-    area.x1=ceil(x);
-    area.y0=floor(y);
-    area.y1=ceil(y);
-    area.x0-=ceil(delta);
-    area.x1+=ceil(delta);
-    area.y0-=ceil(delta);
-    area.y1+=ceil(delta);
+    area.x0=(int)floor(x);
+    area.x1=(int)ceil(x);
+    area.y0=(int)floor(y);
+    area.y1=(int)ceil(y);
+    area.x0-=(int)ceil(delta);
+    area.x1+=(int)ceil(delta);
+    area.y0-=(int)ceil(delta);
+    area.y1+=(int)ceil(delta);
     area.x0-=1;
     area.x1+=1;
     area.y0-=1;

@@ -311,6 +311,8 @@ private:
   void InsertCubicTo (NR::Point const &ip,  NR::Point const &iStD,  NR::Point const &iEnD,int at);
   void InsertBezierTo (NR::Point const &iPt,int iNb,int at);
   void InsertIntermBezierTo (NR::Point const &iPt,int at);
+  
+  int  DataPosForAfter(int cmd);
  
   // creation of dashes: take the polyline given by spP (length spL) and dash it according to head, body, etc. put the result in
   // the polyline of this instance

@@ -668,6 +668,7 @@ void        Path::ConvertForcedToMoveTo(void)
   NR::Point  lastMove;
   lastSeen[0]=lastSeen[1]=0;
   lastMove=lastSeen;
+    
   bool       hasMoved=false;
     
   {
@@ -792,7 +793,7 @@ Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut
   double   len=0;
   NR::Point  lastM;
   NR::Point  lastP;
-  double     lastT;
+  double     lastT=0;
   lastM=((path_lineto_b *) pts)[0].p;
   
   lastP=lastM;
@@ -822,7 +823,20 @@ Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut
   }
   return res;
 }
-
+int         Path::DataPosForAfter(int cmd)
+{
+  if ( cmd < 0 ) return 0;
+  if ( cmd >= descr_nb-1 ) return ddata_nb;
+  do {
+    int ntyp=descr_cmd[cmd].flags&descr_type_mask;
+    if ( ntyp == descr_moveto || ntyp == descr_lineto || ntyp == descr_cubicto || ntyp == descr_arcto 
+         || ntyp == descr_bezierto || ntyp == descr_interm_bezier ) {
+      return descr_cmd[cmd].dStart;
+    }
+    cmd++;
+  } while ( cmd < descr_nb );
+  return ddata_nb;
+}
 void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
 {
   if ( nbPos <= 0 )  return;
@@ -887,7 +901,7 @@ void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
     float ct=poss[curP].t;
     if ( ct < 0 ) continue;
     if ( ct > 1 ) continue;
-    
+        
     int typ=descr_cmd[cp].flags&descr_type_mask;
     if ( typ == descr_moveto || typ == descr_forced || typ == descr_close ) {
       // ponctuel= rien a faire
@@ -1119,7 +1133,158 @@ void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
 void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
 {
   ConvertPositionsToForced(nbPos,poss);
-  ConvertForcedToMoveTo();
+//  ConvertForcedToMoveTo();
+  // on fait une version customizee a la place
+  
+  Path*  res=new Path;
+  
+  NR::Point    lastP(0,0);
+  bool         hasMoved=false;
+  for (int i=0;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    if ( typ == descr_moveto ) {
+      NR::Point  np;
+      {
+        path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[i].dStart );
+        np=nData->p;
+      }
+      NR::Point  endP;
+      bool       hasClose=false;
+      int        hasForced=-1;
+      bool       doesClose=false;
+      int        j=i+1;
+      for (;j<descr_nb;j++) {
+        int ntyp=descr_cmd[j].flags&descr_type_mask;
+        if ( ntyp == descr_moveto ) {
+          j--;
+          break;
+        } else if ( ntyp == descr_forced ) {
+          if ( hasForced < 0 ) hasForced=j;
+        } else if ( ntyp == descr_close ) {
+          hasClose=true;
+          break;
+        } else if ( ntyp == descr_lineto ) {
+          path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[j].dStart );
+          endP=nData->p;
+        } else if ( ntyp == descr_arcto ) {
+          path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[j].dStart );
+          endP=nData->p;
+        } else if ( ntyp == descr_cubicto ) {
+          path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[j].dStart );
+          endP=nData->p;
+        } else if ( ntyp == descr_bezierto ) {
+          path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[j].dStart );
+          endP=nData->p;
+        } else {
+        }
+      }
+      if ( NR::LInfty(endP-np) < 0.00001 ) {
+        doesClose=true;
+      }
+      if ( ( doesClose || hasClose ) && hasForced >= 0 ) {
+ //       printf("nasty i=%i j=%i frc=%i\n",i,j,hasForced);
+        // aghhh.
+        NR::Point   nMvtP=PrevPoint(hasForced);
+        res->MoveTo(nMvtP);
+        NR::Point   nLastP=nMvtP;
+        for (int k=hasForced+1;k<=j;k++) {
+          int ntyp=descr_cmd[k].flags&descr_type_mask;
+          if ( ntyp == descr_moveto ) {
+            // ne doit pas arriver
+          } else if ( ntyp == descr_forced ) {
+            res->MoveTo(nLastP);
+          } else if ( ntyp == descr_close ) {
+            // rien a faire ici; de plus il ne peut y en avoir qu'un
+          } else if ( ntyp == descr_lineto ) {
+            path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[k].dStart );
+            res->LineTo(nData->p);
+            nLastP=nData->p;
+          } else if ( ntyp == descr_arcto ) {
+            path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[k].dStart );
+            res->ArcTo(nData->p,nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
+            nLastP=nData->p;
+          } else if ( ntyp == descr_cubicto ) {
+            path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[k].dStart );
+            res->CubicTo(nData->p,nData->stD,nData->enD);
+            nLastP=nData->p;
+          } else if ( ntyp == descr_bezierto ) {
+            path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[k].dStart );
+            res->BezierTo(nData->p);
+            nLastP=nData->p;
+          } else if ( ntyp == descr_interm_bezier ) {
+            path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[k].dStart );
+            res->IntermBezierTo(nData->p);
+          } else {
+          }
+        }
+        if ( doesClose == false ) res->LineTo(np);
+        nLastP=np;
+        for (int k=i+1;k<hasForced;k++) {
+          int ntyp=descr_cmd[k].flags&descr_type_mask;
+          if ( ntyp == descr_moveto ) {
+            // ne doit pas arriver
+          } else if ( ntyp == descr_forced ) {
+            res->MoveTo(nLastP);
+          } else if ( ntyp == descr_close ) {
+            // rien a faire ici; de plus il ne peut y en avoir qu'un
+          } else if ( ntyp == descr_lineto ) {
+            path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[k].dStart );
+            res->LineTo(nData->p);
+            nLastP=nData->p;
+          } else if ( ntyp == descr_arcto ) {
+            path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[k].dStart );
+            res->ArcTo(nData->p,nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
+            nLastP=nData->p;
+          } else if ( ntyp == descr_cubicto ) {
+            path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[k].dStart );
+            res->CubicTo(nData->p,nData->stD,nData->enD);
+            nLastP=nData->p;
+          } else if ( ntyp == descr_bezierto ) {
+            path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[k].dStart );
+            res->BezierTo(nData->p);
+            nLastP=nData->p;
+          } else if ( ntyp == descr_interm_bezier ) {
+            path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[k].dStart );
+            res->IntermBezierTo(nData->p);
+          } else {
+          }
+        }
+        lastP=nMvtP;
+        i=j;
+      } else {
+        // regular, just move on
+        res->MoveTo(np);
+        lastP=np;
+      }
+    } else if ( typ == descr_close ) {
+      res->Close();
+    } else if ( typ == descr_forced ) {
+      res->MoveTo(lastP);
+    } else if ( typ == descr_lineto ) {
+      path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
+      res->LineTo(nData->p);
+      lastP=nData->p;
+    } else if ( typ == descr_arcto ) {
+      path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[i].dStart );
+      res->ArcTo(nData->p,nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
+      lastP=nData->p;
+    } else if ( typ == descr_cubicto ) {
+      path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[i].dStart );
+      res->CubicTo(nData->p,nData->stD,nData->enD);
+      lastP=nData->p;
+    } else if ( typ == descr_bezierto ) {
+      path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[i].dStart );
+      res->BezierTo(nData->p);
+      lastP=nData->p;
+    } else if ( typ == descr_interm_bezier ) {
+      path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[i].dStart );
+      res->IntermBezierTo(nData->p);
+    } else {
+    }
+  }
+  
+  Copy(res);
+  delete res;
   return;
 }
 
