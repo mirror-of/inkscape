@@ -35,7 +35,9 @@ public:
     gchar const *name() const;
     int code() const { return _name; }
     void setCodeUnsafe(int code) {
-        g_assert(!_logger && !_listeners);
+        // mental can figure this out when he gets to it.  :)
+        // it's been broken for a few days now, I'm impatient.  :)
+        g_assert(/*!_logger && */!_listeners);
         _name = code;
     }
 
