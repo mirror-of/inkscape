@@ -132,11 +132,11 @@ The others are fairly simple.
 
 For error >= 0: error is const, and we pass it to all recursions.
 
-For inner max_depth >= 0: recursions are conditional on outer
-max_depth > 1 before setting rec_max_depth to max_depth - 1,
-and passing rec_max_depth as inner max_depth value,
-so we have inner max_depth >= 1 so inner max_depth >= 0.
-max_depth and rec_max_depth are both const.
+For inner lg_max_beziers >= 0: recursions are conditional on outer
+0 < lg_max_beziers before setting rec_lg_max_beziers to lg_max_beziers - 1,
+and passing rec_lg_max_beziers as inner lg_max_beziers value,
+so we have outer lg_max_beziers >= 1 so inner lg_max_beziers >= 0.
+lg_max_beziers and rec_lg_max_beziers are both const.
 
 
 

@@ -272,7 +272,7 @@ int main(int argc, char *argv[]) {
 
     UTEST_TEST("sp_bezier_fit_cubic_full") {
         Point est_b[4];
-        gint const succ = sp_bezier_fit_cubic_full(est_b, d, n, tHat1, tHat2, square(1.2), 1);
+        gint const succ = sp_bezier_fit_cubic_full(est_b, d, n, tHat1, tHat2, square(1.2), 0);
         UTEST_ASSERT( succ == 1 );
 
         Point const exp_est_b[4] = {

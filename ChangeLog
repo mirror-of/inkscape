@@ -1,5 +1,10 @@
 2004-10-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/bezier-utils.h, src/display/bezier-utils.cpp
+	  (sp_bezier_fit_cubic_r, sp_bezier_fit_cubic_full): Change the meaning
+	  of the last parameter: was max_depth, now lg_max_beziers, with the
+	  relationship lg_max_beziers = max_depth + 1.  Callers updated.
+
 	* src/xml/repr.cpp (sp_repr_change_order):
 	  Add g_return_if_fail for some conditions that would break structural
 	  integrity, and add a TODO comment indicating incompleteness.
