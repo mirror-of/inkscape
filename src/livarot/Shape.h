@@ -440,6 +440,9 @@ private:
     void initialiseEdgeData();
     void clearIncidenceData();
 
+    void _countUpDown(int P, int *numberUp, int *numberDown, int *upEdge, int *downEdge) const;
+    void _countUpDownTotalDegree2(int P, int *numberUp, int *numberDown, int *upEdge, int *downEdge) const;
+    
     // activation/deactivation of the temporary data arrays
     void MakePointData(bool nVal);
     void MakeEdgeData(bool nVal);
@@ -488,11 +491,11 @@ private:
     void CreateEdge(int no, float to, float step);
     void DestroyEdge(int no, float to, float step);
     void AvanceEdge(int no, float to, bool exact, float step);
-    void DestroyEdge(int no, float to, FloatLigne *line, float step);
+    void DestroyEdge(int no, float to, FloatLigne *line);
     void AvanceEdge(int no, float to, FloatLigne *line, bool exact, float step);
-    void DestroyEdge(int no, float to, BitLigne *line, float step);
+    void DestroyEdge(int no, BitLigne *line);
     void AvanceEdge(int no, float to, BitLigne *line, bool exact, float step);
-    void DestroyEdge(int no, float to, AlphaLigne *line, float step);
+    void DestroyEdge(int no, AlphaLigne *line);
     void AvanceEdge(int no, float to, AlphaLigne *line, bool exact, float step);
   
     void AddContour(Path * dest, int nbP, Path **orig, int startBord,
