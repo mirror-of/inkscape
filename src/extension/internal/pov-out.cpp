@@ -41,8 +41,9 @@ PovOutput::check (Inkscape::Extension::Extension * module)
 static void
 findElementsByTagName(std::vector<SPRepr *> &results, SPRepr *node, const char *name)
 {
-
-    if (strcmp(sp_repr_name(node), name) == 0)
+    if (!name)
+        results.push_back(node);
+    else if (strcmp(sp_repr_name(node), name) == 0)
         results.push_back(node);
 
     for (SPRepr *child = node->children; child ; child = child->next)
@@ -58,7 +59,8 @@ void
 PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 {
     std::vector<SPRepr *>results;
-    findElementsByTagName(results, SP_ACTIVE_DOCUMENT->rroot, "path");
+    //findElementsByTagName(results, SP_ACTIVE_DOCUMENT->rroot, "path");
+    findElementsByTagName(results, SP_ACTIVE_DOCUMENT->rroot, NULL);//Check all nodes
     if (results.size() == 0)
         return;
     FILE *f = fopen(uri, "w");
@@ -74,7 +76,9 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         if (!reprobj)
             continue;
         if (!SP_IS_SHAPE(reprobj))//Bulia's suggestion.  Allow all shapes
+            {
             continue;
+            }
         SPShape *shape = SP_SHAPE(reprobj);
         SPCurve *curve = shape->curve; 
         if (sp_curve_empty(curve))
