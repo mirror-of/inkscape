@@ -120,6 +120,8 @@ static void sp_arc_context_dispose(GObject *object)
     SPEventContext *ec = SP_EVENT_CONTEXT(object);
     SPArcContext *ac = SP_ARC_CONTEXT(object);
 
+    ec->enableGrDrag(false);
+
     ac->sel_changed_connection.disconnect();
     ac->sel_changed_connection.~connection();
 
@@ -233,6 +235,10 @@ sp_arc_context_setup(SPEventContext *ec)
 
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
         ec->enableSelectionCue();
+    }
+
+    if (prefs_get_int_attribute("tools.shapes", "gradientdrag", 0) != 0) {
+        ec->enableGrDrag();
     }
 
     ac->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());

@@ -141,6 +141,9 @@ static void
 sp_select_context_dispose(GObject *object)
 {
     SPSelectContext *sc = SP_SELECT_CONTEXT(object);
+    SPEventContext * ec = SP_EVENT_CONTEXT (object);
+
+    ec->enableGrDrag(false);
 
     if (sc->grabbed) {
         sp_canvas_item_ungrab(sc->grabbed, GDK_CURRENT_TIME);
@@ -172,6 +175,10 @@ sp_select_context_setup(SPEventContext *ec)
 
     sp_event_context_read(ec, "show");
     sp_event_context_read(ec, "transform");
+
+    if (prefs_get_int_attribute("tools.select", "gradientdrag", 0) != 0) {
+        ec->enableGrDrag();
+    }
 }
 
 static void

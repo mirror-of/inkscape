@@ -131,12 +131,18 @@ sp_dropper_context_setup (SPEventContext *ec)
 	if (prefs_get_int_attribute("tools.dropper", "selcue", 0) != 0) {
 		ec->enableSelectionCue();
 	}
+
+	if (prefs_get_int_attribute("tools.dropper", "gradientdrag", 0) != 0) {
+		ec->enableGrDrag();
+	}
 }
 
 static void
 sp_dropper_context_finish (SPEventContext *ec)
 {
 	SPDropperContext *dc = SP_DROPPER_CONTEXT (ec);
+
+	ec->enableGrDrag(false);
 
 	if (dc->area) {
 		gtk_object_destroy (GTK_OBJECT (dc->area));

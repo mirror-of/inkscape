@@ -123,6 +123,8 @@ static void sp_rect_context_dispose(GObject *object)
     SPRectContext *rc = SP_RECT_CONTEXT(object);
     SPEventContext *ec = SP_EVENT_CONTEXT(object);
 
+    ec->enableGrDrag(false);
+
     rc->sel_changed_connection.disconnect();
     rc->sel_changed_connection.~connection();
 
@@ -241,6 +243,10 @@ static void sp_rect_context_setup(SPEventContext *ec)
 
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
         ec->enableSelectionCue();
+    }
+
+    if (prefs_get_int_attribute("tools.shapes", "gradientdrag", 0) != 0) {
+        ec->enableGrDrag();
     }
 
     rc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());

@@ -131,7 +131,7 @@ sp_node_context_dispose (GObject *object)
 	SPNodeContext * nc = SP_NODE_CONTEXT (object);
 	SPEventContext * ec = SP_EVENT_CONTEXT (object);
 
-	//	ec->enableGrDrag(false);
+	ec->enableGrDrag(false);
 
 	nc->sel_changed_connection.disconnect();
 	nc->sel_changed_connection.~connection();
@@ -206,7 +206,9 @@ sp_node_context_setup (SPEventContext *ec)
 		ec->enableSelectionCue();
 	}
 
-	//	ec->enableGrDrag();
+	if (prefs_get_int_attribute("tools.nodes", "gradientdrag", 0) != 0) {
+		ec->enableGrDrag();
+	}
 
 	nc -> _node_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
 	sp_nodepath_update_statusbar (nc->nodepath);

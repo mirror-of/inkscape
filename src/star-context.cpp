@@ -126,8 +126,9 @@ static void
 sp_star_context_dispose (GObject *object)
 {
     SPEventContext *ec = SP_EVENT_CONTEXT (object);
-
     SPStarContext *sc = SP_STAR_CONTEXT (object);
+
+    ec->enableGrDrag(false);
 
     sc->sel_changed_connection.disconnect();
     sc->sel_changed_connection.~connection();
@@ -250,6 +251,10 @@ sp_star_context_setup (SPEventContext *ec)
 
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
         ec->enableSelectionCue();
+    }
+
+    if (prefs_get_int_attribute("tools.shapes", "gradientdrag", 0) != 0) {
+        ec->enableGrDrag();
     }
 
     sc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());

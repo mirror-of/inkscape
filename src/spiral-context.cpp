@@ -124,8 +124,9 @@ static void
 sp_spiral_context_dispose (GObject *object)
 {
 	SPSpiralContext *sc = SP_SPIRAL_CONTEXT (object);
+	SPEventContext *ec = SP_EVENT_CONTEXT (object);
 
-    SPEventContext *ec = SP_EVENT_CONTEXT (object);
+    ec->enableGrDrag(false);
 
     sc->sel_changed_connection.disconnect();
     sc->sel_changed_connection.~connection();
@@ -244,6 +245,10 @@ sp_spiral_context_setup (SPEventContext *ec)
 
 	if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
 		ec->enableSelectionCue();
+	}
+
+	if (prefs_get_int_attribute("tools.shapes", "gradientdrag", 0) != 0) {
+		ec->enableGrDrag();
 	}
 
 	sc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
