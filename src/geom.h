@@ -1,169 +1,37 @@
 /*
- *  MyMath.h
- *  nlivarot
+ *  geom.h
  *
- *  Created by fred on Wed Jun 18 2003.
- * moving to geom and C++ified by njh
+ *  Authors:
+ *   Nathan Hurst <njh@mail.csse.monash.edu.au>
+ *
+ * Copyright (C) 1999-2002 authors
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
  *
  */
 
-#ifndef my_math
-#define my_math
+#include "libnr/nr-types.h"
 
-enum dimT { X, Y };
+typedef enum sp_intersector_kind{
+	intersects = 0,
+	parallel,
+	coincident,
+	no_intersection
+} sp_intersector_kind;
 
-class Point{
- public:
-	double pt[2];
-
-	Point() {
-	}
-
-	Point(double x, double y) {
-		pt[X] = x;
-		pt[Y] = y;
-	}
-
-	/** Return a point like this point but rotated -90 degrees.
-	    (If the y axis grows downwards and the x axis grows to the
-	    right, then this is 90 degrees counter-clockwise.)
-	 **/
-	Point ccw() const {
-		return Point(pt[Y], -pt[X]);
-	}
-
-	/** Return a point like this point but rotated +90 degrees.
-	    (If the y axis grows downwards and the x axis grows to the
-	    right, then this is 90 degrees clockwise.)
-	 **/
-	Point cw() {
-		return Point(-pt[Y], pt[X]);
-	}
-
-	double L2();
-/** Compute the L2 or euclidean norm of this vector */
-};
-
-Point
-operator+(Point const &a, Point const &b) {
-	Point r;
-	for(int i = 0; i < 2; i++) {
-		r.pt[i] = a.pt[i] + b.pt[i];
-	}
-	return r;
-}
-
-Point
-operator-(Point const &a, Point const &b) {
-	Point r;
-	for(int i = 0; i < 2; i++) {
-		r.pt[i] = a.pt[i] - b.pt[i];
-	}
-	return r;
-}
-
-Point
-operator*(Point const &a, Point const &b) {
-	Point r;
-	for(int i = 0; i < 2; i++)
-		r.pt[i] = a.pt[i]*b.pt[i];
-	return r;
-}
-
-Point
-operator*(double s, Point const &b) {
-	Point ret;
-	for(int i = 0; i < 2; i++) {
-		ret.pt[i] = s * b.pt[i];
-	}
-	return ret;
-}
-
-inline double
-dot(Point const &a, Point const &b) {
-	double ret = 0;
-	for(int i = 0; i < 2; i++) {
-		ret += a.pt[i] * b.pt[i];
-	}
-	return ret;
-}
-
-inline double
-cross(Point const &a, Point const &b) {
-	double ret = 0;
-	for(int i = 0; i < 2; i++)
-		ret = a.pt[i] * b.pt[1-i] - ret;
-	return ret;
-}
-
-/* FIXME: What's this?  Is it intended to be yet another sp_vector_normalize variant?
-   If so, shouldn't we be dividing by the length instead of multiplying? */
-Point::Normalize() {
-	d = L2();
-	if(d > 0.0001)
-		*this = d**this;
-}
-
-typedef double vec2d[2];
-
-typedef struct mat2 {
-	float     xx,xy,yx,yy;
-} mat2;
-
-#define L_VAL_Cmp(a,b) ((fabs(a - b) < 1e-7)	\
-			? 0		\
-			:((a > b)	\
-			  ? 1		\
-			  : -1))
-
-#define L_VEC_Distance(a,b,d) { \
-	d=sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)); \
-}
+/* Define here various primatives, such as line, line segment, circle, bezier path etc. */
 
 
-#define L_VAL_Zero(a) ((fabs(a)<0.00000001)?0:((a>0)?1:-1)) 
 
-#define L_VEC_Cross(a,b,r) { \
-	r=a.x*b.x+a.y*b.y; \
-}
+/* intersectors */
 
-#define L_VEC_Dot(a,b,r) { \
-	r=a.x*b.y-a.y*b.x; \
-}
+/* Do p0, p1, p2 move in an anticlockwise direction, or clockwise? */
+static int sp_intersector_ccw(const NR::Point p0, const NR::Point p1, const NR::Point p2);
 
+sp_intersector_kind sp_intersector_line_intersection(const NR::Point n0, const double d0, const NR::Point n1, const double d1, NR::Point& result);
 
-#define	L_MAT(m,a,b) {c[0][0].Set(ica.x);c[0][1].Set(icb.x);c[1][0].Set(ica.y);c[1][1].Set(icb.y);};
+int
+sp_intersector_segment_intersectp(const NR::Point p00, const NR::Point p01, const NR::Point p10, const NR::Point p11);
 
-#define L_MAT_SetC(m,a,b) {m.xx=a.x;m.xy=b.x;m.yx=a.y;m.yy=b.y;};
-	
-#define L_MAT_Det(m,d) {d=m.xx*m.yy-m.xy*m.yx;};
-	
-#define L_MAT_Inv(m) { \
-	double d; \
-	L_MAT_Det(m,d); \
-	m.yx=-m.yx; \
-	m.xy=-m.xy; \
-	double t=m.xx;m.xx=m.yy;m.yy=t; \
-	m.xx/=d; \
-	m.xy/=d; \
-	m.yx/=d; \
-	m.yy/=d; \
-};
-
-#define L_MAT_Mul(u,v,m) { \
-	mat2d r; \
-	r.xx=u.xx*v.xx+u.xy*v.yx; \
-	r.yx=u.yx*v.xx+u.yy*y.yx; \
-	r.xy=u.xx*v.xy+u.xy*v.yy; \
-	r.yy=u.yx*v.xy+u.yy*v.yy; \
-	m=r; \
-}
-
-#define L_MAT_MulV(m,v,r) { \
-	vec2d t; \
-	t.x=m.xx*v.x+m.xy*v.y; \
-	t.y=m.yx*v.x+m.yy*v.y; \
-	r=t; \
-};
-
-#endif
+sp_intersector_kind
+sp_intersector_segment_intersect(const NR::Point p00, const NR::Point p01, const NR::Point p10, const NR::Point p11, NR::Point& result);

@@ -79,6 +79,7 @@ inkscape_SOURCES = \
 	sp-namedview.cpp sp-namedview.h \
 	sp-guide.cpp sp-guide.h \
 	\
+	geom.cpp geom.h \
 	view.cpp view.h \
 	svg-view.cpp svg-view.h \
 	selection.cpp selection.h \
