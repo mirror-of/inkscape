@@ -30,7 +30,7 @@
 
 enum {
 	SP_CANVAS_UPDATE_REQUESTED  = 1 << 0,
-	SP_CANVAS_UPDATE_AFFINE     = 1 << 1,
+	SP_CANVAS_UPDATE_AFFINE     = 1 << 1
 };
 
 typedef struct {

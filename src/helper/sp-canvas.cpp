@@ -45,7 +45,7 @@
 enum {
 	SP_CANVAS_ITEM_VISIBLE = 1 << 7,
 	SP_CANVAS_ITEM_NEED_UPDATE = 1 << 8,
-	SP_CANVAS_ITEM_NEED_AFFINE = 1 << 9,
+	SP_CANVAS_ITEM_NEED_AFFINE = 1 << 9
 };
 
 struct _SPCanvasGroup {
