@@ -58,7 +58,7 @@
 #include "interface.h"
 #include "dialogs/dialog-events.h"
 #include "toolbox.h"
-
+#include "prefs-utils.h"
 
 /* fixme: Lauris */
 #include "file.h"
@@ -728,6 +728,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_end (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+	gtk_widget_show (hbox);
 
 	dtw->aux_toolbox = sp_aux_toolbox_new ();
 	gtk_box_pack_end (GTK_BOX (vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
@@ -747,6 +748,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
+
 	/* Vertical ruler */
 	eventbox = gtk_event_box_new ();
 	dtw->vruler = sp_vruler_new ();
@@ -827,6 +829,16 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->select_status, TRUE, TRUE, 0);
 
 	gtk_widget_show_all (vbox);
+
+	if (prefs_get_int_attribute ("options.showscrollbars", "value", 1) == 0) {
+		gtk_widget_hide_all (dtw->hscrollbar);
+		gtk_widget_hide_all (dtw->vscrollbar);
+	}
+
+	if (prefs_get_int_attribute ("options.showrulers", "value", 1) == 0) {
+		gtk_widget_hide_all (dtw->hruler);
+		gtk_widget_hide_all (dtw->vruler);
+	}
 }
 
 static void
@@ -1197,9 +1209,11 @@ sp_desktop_toggle_rulers (SPDesktop *dt)
 	if (GTK_WIDGET_VISIBLE (dt->owner->hruler)) {
 		gtk_widget_hide_all (dt->owner->hruler);
 		gtk_widget_hide_all (dt->owner->vruler);
+		prefs_set_int_attribute ("options.showrulers", "value", 0);
 	} else {
 		gtk_widget_show_all (dt->owner->hruler);
 		gtk_widget_show_all (dt->owner->vruler);
+		prefs_set_int_attribute ("options.showrulers", "value", 1);
 	}
 }
 
@@ -1209,9 +1223,11 @@ sp_desktop_toggle_scrollbars (SPDesktop *dt)
 	if (GTK_WIDGET_VISIBLE (dt->owner->hscrollbar)) {
 		gtk_widget_hide_all (dt->owner->hscrollbar);
 		gtk_widget_hide_all (dt->owner->vscrollbar);
+		prefs_set_int_attribute ("options.showscrollbars", "value", 0);
 	} else {
 		gtk_widget_show_all (dt->owner->hscrollbar);
 		gtk_widget_show_all (dt->owner->vscrollbar);
+		prefs_set_int_attribute ("options.showscrollbars", "value", 1);
 	}
 }
 
