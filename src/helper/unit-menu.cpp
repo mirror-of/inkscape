@@ -34,7 +34,7 @@ struct SPUnitSelector {
     guint bases;
     GSList *units;
     const SPUnit *unit;
-    gdouble ctmscale, devicescale;
+    gdouble ctmscale;
     guint plural : 1;
     guint abbr : 1;
 
@@ -103,7 +103,6 @@ static void
 sp_unit_selector_init (SPUnitSelector *us)
 {
     us->ctmscale = 1.0;
-    us->devicescale = 1.0;
     us->abbr = FALSE;
     us->plural = TRUE;
 
@@ -183,7 +182,12 @@ spus_unit_activate (GtkWidget *widget, SPUnitSelector *us)
     gboolean consumed = FALSE;
     g_signal_emit (G_OBJECT (us), signals[SET_UNIT], 0, old, unit, &consumed);
 
-    if (!consumed && (unit->base == old->base)) {
+    if (!consumed && 
+				(unit->base == old->base || 
+				 (unit->base == SP_UNIT_ABSOLUTE && old->base == SP_UNIT_DEVICE) || 
+				 (old->base == SP_UNIT_ABSOLUTE && unit->base == SP_UNIT_DEVICE))
+				) {
+        // Either the same base, or absolute<->device:
         /* Recalculate adjustments. */
         for (GSList *l = us->adjustments; l != NULL; l = g_slist_next(l)) {
             GtkAdjustment *adj = GTK_ADJUSTMENT(l->data);
@@ -191,7 +195,7 @@ spus_unit_activate (GtkWidget *widget, SPUnitSelector *us)
 #ifdef UNIT_SELECTOR_VERBOSE
             g_print ("Old val %g ... ", val);
 #endif
-            val = sp_convert_distance_full(val, *old, *unit, us->devicescale);
+            val = sp_convert_distance_full(val, *old, *unit, DEVICESCALE);
 #ifdef UNIT_SELECTOR_VERBOSE
             g_print ("new val %g\n", val);
 #endif
@@ -309,7 +313,7 @@ sp_unit_selector_set_unit (SPUnitSelector *us, const SPUnit *unit)
     /* Recalculate adjustments */
     for (l = us->adjustments; l != NULL; l = l->next) {
         GtkAdjustment *adj = GTK_ADJUSTMENT(l->data);
-        gdouble const val = sp_convert_distance_full(adj->value, *old, *unit, us->devicescale);
+        gdouble const val = sp_convert_distance_full(adj->value, *old, *unit, DEVICESCALE);
         gtk_adjustment_set_value (adj, val);
     }
 }

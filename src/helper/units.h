@@ -93,10 +93,10 @@ struct SPUnit {
 	gchar const *abbr_plural;
 };
 
-struct SPDistance {
-	const SPUnit *unit;
-	gdouble distance;
-};
+// 72 points per inch divided by the SVG-recommended value of 90 pixels per inch for computer screen
+// For now it is constant throughout Inkscape, later we may make it changeable 
+// (though this define is far from the only place to change it!)
+#define DEVICESCALE 0.8    
 
 /* Base units are the ones used by gnome-print and paper descriptions */
 
@@ -138,9 +138,6 @@ gdouble sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SP
 
 /* Some more convenience */
 /* Be careful to not mix bases */
-
-gdouble sp_distance_get_units (SPDistance *distance, const SPUnit *unit);
-gdouble sp_distance_get_points (SPDistance *distance);
 
 gdouble sp_points_get_units(gdouble const points, SPUnit const &unit);
 gdouble sp_units_get_points(gdouble const units, SPUnit const &unit);

@@ -200,50 +200,29 @@ sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit con
 /* Be careful to not mix bases */
 
 gdouble
-sp_distance_get_units(SPDistance *distance, SPUnit const *unit)
-{
-	gdouble val;
-
-	g_return_val_if_fail (distance != NULL, 0.0);
-	g_return_val_if_fail (unit != NULL, 0.0);
-
-	val = distance->distance;
-	sp_convert_distance (&val, distance->unit, unit);
-
-	return val;
-}
-
-gdouble
-sp_distance_get_points (SPDistance *distance)
-{
-	gdouble val;
-
-	g_return_val_if_fail (distance != NULL, 0.0);
-
-	val = distance->distance;
-	sp_convert_distance (&val, distance->unit, &sp_units[SP_UNIT_PT]);
-
-	return val;
-}
-
-gdouble
 sp_units_get_points(gdouble const units, SPUnit const &unit)
 {
-	gdouble const ret = units * unit.unittobase;
-	if (unit.base != SP_UNIT_ABSOLUTE) {
-		g_warning("no exact unit conversion available");
+	if (unit.base == SP_UNIT_ABSOLUTE) {
+		return units * unit.unittobase;
+	} else if (unit.base == SP_UNIT_DEVICE) {
+		return units * unit.unittobase * DEVICESCALE;
+	} else {
+		g_warning("Different unit bases: No exact unit conversion available");
+		return units * unit.unittobase;
 	}
-	return ret;
 }
 
 gdouble
 sp_points_get_units(gdouble const points, SPUnit const &unit)
 {
-	gdouble const ret = points / unit.unittobase;
-	if (unit.base != SP_UNIT_ABSOLUTE) {
-		g_warning("no exact unit conversion available");
+	if (unit.base == SP_UNIT_ABSOLUTE) {
+		return points / unit.unittobase;
+	} else if (unit.base == SP_UNIT_DEVICE) {
+		return points / (unit.unittobase * DEVICESCALE);
+	} else {
+		g_warning("Different unit bases: No exact unit conversion available");
+		return points / unit.unittobase;
 	}
-	return ret;
 }
 
 bool
