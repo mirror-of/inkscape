@@ -234,7 +234,7 @@ sp_mask_update (SPObject *object, SPCtx *ctx, guint flags)
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
 	l = NULL;
-	for (child = og->children; child != NULL; child = child->next) {
+	for (child = sp_object_first_child(SP_OBJECT(og)); child != NULL; child = SP_OBJECT_NEXT(child)) {
 		g_object_ref (G_OBJECT (child));
 		l = g_slist_prepend (l, child);
 	}
@@ -276,7 +276,7 @@ sp_mask_modified (SPObject *object, guint flags)
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
 	l = NULL;
-	for (child = og->children; child != NULL; child = child->next) {
+	for (child = sp_object_first_child(SP_OBJECT(og)); child != NULL; child = SP_OBJECT_NEXT(child)) {
 		g_object_ref (G_OBJECT (child));
 		l = g_slist_prepend (l, child);
 	}
@@ -322,7 +322,7 @@ sp_mask_show (SPMask *mask, NRArena *arena, unsigned int key)
 	ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
 	mask->display = sp_mask_view_new_prepend (mask->display, key, ai);
 
-	for (child = SP_OBJECTGROUP (mask)->children; child != NULL; child = child->next) {
+	for (child = sp_object_first_child(SP_OBJECT(mask)) ; child != NULL; child = SP_OBJECT_NEXT(child)) {
 		if (SP_IS_ITEM (child)) {
 			ac = sp_item_invoke_show (SP_ITEM (child), arena, key, SP_ITEM_REFERENCE_FLAGS);
 			if (ac) {
@@ -353,7 +353,7 @@ sp_mask_hide (SPMask *cp, unsigned int key)
 	g_return_if_fail (cp != NULL);
 	g_return_if_fail (SP_IS_MASK (cp));
 
-	for (child = SP_OBJECTGROUP (cp)->children; child != NULL; child = child->next) {
+	for (child = sp_object_first_child(SP_OBJECT(cp)); child != NULL; child = SP_OBJECT_NEXT(child)) {
 		if (SP_IS_ITEM (child)) {
 			sp_item_invoke_hide (SP_ITEM (child), key);
 		}

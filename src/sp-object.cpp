@@ -31,6 +31,11 @@ static void sp_object_class_init (SPObjectClass * klass);
 static void sp_object_init (SPObject * object);
 static void sp_object_finalize (GObject * object);
 
+static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
+static void sp_object_remove_child (SPObject * object, SPRepr * child);
+static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref);
+
+static void sp_object_release(SPObject *object);
 static void sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr);
 
 static void sp_object_private_set (SPObject *object, unsigned int key, const gchar *value);
@@ -115,6 +120,12 @@ sp_object_class_init (SPObjectClass * klass)
 
 	object_class->finalize = sp_object_finalize;
 
+	klass->child_added = sp_object_child_added;
+	klass->remove_child = sp_object_remove_child;
+	klass->order_changed = sp_object_order_changed;
+
+	klass->release = sp_object_release;
+
 	klass->build = sp_object_build;
 
 	klass->set = sp_object_private_set;
@@ -130,6 +141,7 @@ sp_object_init (SPObject * object)
 
 	object->hrefcount = 0;
 	object->document = NULL;
+	object->children = NULL;
 	object->parent = object->next = NULL;
 	object->repr = NULL;
 	object->id = NULL;
@@ -236,6 +248,33 @@ sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next)
 	return object;
 }
 
+void sp_object_reorder(SPObject *object, SPObject *next) {
+	g_return_if_fail(object != NULL);
+	g_return_if_fail(SP_IS_OBJECT(object));
+	g_return_if_fail(object->parent != NULL);
+	g_return_if_fail(object != next);
+	g_return_if_fail(!next || SP_IS_OBJECT(next));
+	g_return_if_fail(!next || next->parent != object->parent);
+
+	SPObject *parent=object->parent;
+	SPObject **ref, **old_ref, **new_ref;
+	old_ref = new_ref = NULL;
+	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
+		if ( *ref == object ) {
+			old_ref = ref;
+		}
+		if ( *ref == next ) {
+			new_ref = ref;
+		}
+	}
+	g_assert(old_ref != NULL);
+	g_assert(new_ref != NULL);
+
+	*old_ref = object->next;
+	object->next = *new_ref;
+	*new_ref = object;
+}
+
 static SPObject *detach_object(SPObject *parent, SPObject *object, bool unref) {
 	g_return_val_if_fail (parent != NULL, NULL);
 	g_return_val_if_fail (SP_IS_OBJECT (parent), NULL);
@@ -266,19 +305,76 @@ static SPObject *detach_object(SPObject *parent, SPObject *object, bool unref) {
 }
 
 SPObject *sp_object_detach (SPObject *parent, SPObject *object) {
-	detach_object(parent, object, false);
+	return detach_object(parent, object, false);
 }
 
 SPObject *sp_object_detach_unref (SPObject *parent, SPObject *object) {
-	detach_object(parent, object, true);
+	return detach_object(parent, object, true);
 }
 
 SPObject *sp_object_first_child(SPObject *parent) {
 	return parent->children;
 }
 
-SPObject *sp_object_next(SPObject *object) {
-	return object;
+SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr) {
+	g_return_val_if_fail(object != NULL, NULL);
+	g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
+	g_return_val_if_fail(repr != NULL, NULL);
+
+	SPObject *child;
+	for ( child = object->children ; child ; child = child->next ) {
+		if ( SP_OBJECT_REPR(child) == repr ) {
+			return child;
+		}
+	}
+
+	return NULL;
+}
+
+static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * ref) {
+	GType type;
+	type = sp_repr_type_lookup(child);
+	if (!type) {
+		return;
+	}
+	SPObject *ochild = SP_OBJECT(g_object_new(type, 0));
+	SPObject *prev = ref ? sp_object_get_child_by_repr(object, ref) : NULL;
+	if (prev) {
+		sp_object_attach_reref(object, ochild, SP_OBJECT_NEXT(prev));
+	} else {
+		if (ref) {
+			g_critical("Unable to find previous child; adding new child out of order");
+		}
+		sp_object_attach_reref(object, ochild, sp_object_first_child(object));
+	}
+
+	sp_object_invoke_build(ochild, object->document, child, SP_OBJECT_IS_CLONED(object));
+}
+
+static void sp_object_remove_child (SPObject * object, SPRepr * child) {
+	SPObject *ochild = sp_object_get_child_by_repr(object, child);
+	g_return_if_fail(ochild != NULL);
+	sp_object_detach_unref(object, ochild);
+}
+
+static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref) {
+	SPObject *ochild = sp_object_get_child_by_repr(object, child);
+	g_return_if_fail(ochild != NULL);
+	SPObject *prev = new_ref ? sp_object_get_child_by_repr(object, new_ref) : NULL;
+	if (prev) {
+		sp_object_reorder(ochild, SP_OBJECT_NEXT(prev));
+	} else {
+		if (new_ref) {
+			g_critical("Unable to find new previous child; reordering child to start of list");
+		}
+		sp_object_reorder(ochild, sp_object_first_child(object));
+	}
+}
+
+static void sp_object_release(SPObject *object) {
+	while (object->children) {
+		sp_object_detach_unref(object, object->children);
+	}
 }
 
 /*
@@ -294,6 +390,19 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 #endif
 
 	sp_object_read_attr (object, "xml:space");
+
+	SPRepr * rchild;
+        for (rchild = repr->children; rchild != NULL; rchild = rchild->next) {
+		GType type;
+		SPObject * child;
+		type = sp_repr_type_lookup (rchild);
+		if (!type) {
+			continue;
+		}
+		child = SP_OBJECT(g_object_new (type, 0));
+		sp_object_attach_reref (object, child, NULL);
+		sp_object_invoke_build (child, document, rchild, SP_OBJECT_IS_CLONED (object));
+	}
 }
 
 void

@@ -668,7 +668,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 
 	/* Set start parameters */
 	/* We rely on normalized vector, i.e. stops HAVE to exist */
-	for (child = ngr->stops; child != NULL; child = child->next) {
+	for ( child = sp_object_first_child(SP_OBJECT(ngr)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
 		if (SP_IS_STOP (child)) break;
 	}
 	g_return_if_fail (child != NULL);

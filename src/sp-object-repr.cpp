@@ -38,6 +38,7 @@
 #include "sp-anchor.h"
 #include "sp-animation.h"
 #include "sp-object-repr.h"
+#include "xml/repr-private.h"
 
 SPObject *
 sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
@@ -66,10 +67,16 @@ sp_repr_type_lookup (SPRepr *repr)
 {
 	const gchar *name;
 
-	name = sp_repr_attr (repr, "sodipodi:type");
-	if (!name) name = sp_repr_name (repr);
+	if ( repr->type == SP_XML_TEXT_NODE ) {
+		return SP_TYPE_STRING;
+	} else if ( repr->type == SP_XML_ELEMENT_NODE ) {
+		name = sp_repr_attr (repr, "sodipodi:type");
+		if (!name) name = sp_repr_name (repr);
 
-	return sp_object_type_lookup (name);
+		return sp_object_type_lookup (name);
+	} else {
+		return 0;
+	}
 }
 
 static GHashTable *dtable = NULL;

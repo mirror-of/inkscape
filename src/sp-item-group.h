@@ -28,7 +28,6 @@ typedef enum _SPGroupMode {
 
 struct _SPGroup {
 	SPItem item;
-	SPObject *children;
 	SPGroupMode mode;
 };
 

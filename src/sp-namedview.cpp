@@ -162,7 +162,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 
 	/* Construct guideline list */
 
-	for (o = og->children; o != NULL; o = o->next) {
+	for (o = sp_object_first_child(SP_OBJECT(og)) ; o != NULL; o = SP_OBJECT_NEXT(o) ) {
 		if (SP_IS_GUIDE (o)) {
 			SPGuide * g;
 			g = SP_GUIDE (o);

@@ -136,6 +136,8 @@ struct _SPItemClass {
 void sp_item_invoke_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int clear);
 void sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags, unsigned int clear);
 
+unsigned sp_item_pos_in_parent(SPItem *item);
+
 gchar * sp_item_description (SPItem * item);
 void sp_item_invoke_print (SPItem *item, SPPrintContext *ctx);
 

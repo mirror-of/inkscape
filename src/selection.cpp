@@ -259,7 +259,7 @@ void sp_selection_deselect_under_group(SPSelection *selection, SPGroup *group)
 {
 	if (!SP_IS_GROUP (group)) return;
 
-	for (SPObject *o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (sp_selection_item_selected (selection, SP_ITEM(o))) {
 			sp_selection_remove_item (selection, SP_ITEM(o));
 		}

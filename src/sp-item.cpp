@@ -399,6 +399,31 @@ sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform,
 		((SPItemClass *) G_OBJECT_GET_CLASS (item))->bbox (item, bbox, transform, flags);
 }
 
+unsigned sp_item_pos_in_parent(SPItem *item) {
+	g_assert(item != NULL);
+	g_assert(SP_IS_ITEM(item));
+
+	SPObject *parent = SP_OBJECT_PARENT(item);
+	g_assert(parent != NULL);
+	g_assert(SP_IS_OBJECT(parent));
+
+	SPObject *object = SP_OBJECT(item);
+
+	SPObject *iter;
+	unsigned pos=0;
+	for ( iter = sp_object_first_child(parent) ; iter ; iter = SP_OBJECT_NEXT(iter)) {
+		if ( iter == object ) {
+			return pos;
+		}
+		if (SP_IS_ITEM(iter)) {
+			pos++;
+		}
+	}
+
+	g_assert_not_reached();
+	return 0;
+}
+
 void
 sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
 {

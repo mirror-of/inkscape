@@ -173,11 +173,12 @@ SPObject *sp_object_hunref (SPObject *object, gpointer owner);
  */
 
 SPObject *sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next);
+void sp_object_reorder(SPObject *object, SPObject *next);
 SPObject *sp_object_detach (SPObject *parent, SPObject *object);
 SPObject *sp_object_detach_unref (SPObject *parent, SPObject *object);
 
 SPObject *sp_object_first_child(SPObject *parent);
-SPObject *sp_object_next(SPObject *object);
+SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr);
 
 void sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr, unsigned int cloned);
 void sp_object_invoke_release (SPObject *object);

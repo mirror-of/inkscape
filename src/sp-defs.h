@@ -22,7 +22,6 @@
 
 struct _SPDefs {
 	SPObject object;
-	SPObject *children;
 };
 
 struct _SPDefsClass {

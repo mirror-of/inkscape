@@ -160,7 +160,7 @@ static void
 sp_group_cleanup (SPGroup *group)
 {
 	GSList *l = NULL;
-	for (SPObject *child = group->children; child != NULL; child = child->next) {
+	for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 		sp_object_ref (child, NULL);
 		l = g_slist_prepend (l, child);
 	}
@@ -179,7 +179,7 @@ sp_group_cleanup (SPGroup *group)
 	if (!strcmp (sp_repr_name (SP_OBJECT_REPR (group)), "g")) {
 		gint numitems;
 		numitems = 0;
-		for (SPObject *child = group->children; child != NULL; child = child->next) {
+		for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 			if (SP_IS_ITEM (child)) numitems += 1;
 		}
 		if (numitems <= 1) {
@@ -346,7 +346,7 @@ prev_sibling (SPObject *child)
 {
 	SPObject *parent = SP_OBJECT_PARENT (child); 
 	if (!SP_IS_GROUP (parent)) return NULL;
-	for (SPObject *i = SP_GROUP(parent)->children; i; i = i->next) {
+	for ( SPObject *i = sp_object_first_child(parent) ; i; i = SP_OBJECT_NEXT(i) ) {
 		if (i->next == child) 
 			return i;
 	}
@@ -504,7 +504,7 @@ void sp_selection_lower_to_bottom()
 		pp = sp_document_lookup_id (document, sp_repr_attr (sp_repr_parent (repr), "id"));
 		minpos = 0;
 		g_assert (SP_IS_GROUP (pp));
-		pc = SP_GROUP (pp)->children;
+		pc = sp_object_first_child(pp);
 		while (!SP_IS_ITEM (pc)) {
 			minpos += 1;
 			pc = pc->next;

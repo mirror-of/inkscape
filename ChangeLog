@@ -7,8 +7,17 @@
 	  src/libnr/nr-rect-ops.h:
 	  basic cleanups and work on NR::ConvexHull
 
-    * src/sp-object.h, src/sp-object.cpp: first steps in refactoring
-	  child list code
+    * src/document.cpp, src/gradient-chemistry.cpp,
+	  src/selection-chemistry.cpp, src/selection.cpp, src/sp-clippath.cpp,
+	  src/sp-defs.cpp, src/sp-defs.h, src/sp-gradient.cpp, src/sp-gradient.h,
+	  src/sp-item-group.cpp, src/sp-item-group.h, src/sp-item.cpp,
+	  src/sp-item.h, src/sp-mask.cpp, src/sp-namedview.cpp,
+	  src/sp-object-group.cpp, src/sp-object-group.h, src/sp-object-repr.cpp,
+	  src/sp-object.cpp, src/sp-object.h, src/sp-pattern.cpp, src/sp-pattern.h,
+	  src/sp-root.cpp, src/sp-text.cpp, src/sp-text.h,
+	  src/widgets/gradient-vector.cpp:
+
+	  children are now uniformly handled by SPObject
 
 2004-03-05  bulia byak <bulia@users.sourceforge.net>
 

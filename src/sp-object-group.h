@@ -23,8 +23,6 @@
 
 struct _SPObjectGroup {
 	SPObject object;
-
-	SPObject *children;
 };
 
 struct _SPObjectGroupClass {

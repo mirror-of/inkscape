@@ -166,7 +166,7 @@ sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	group->mode = SP_GROUP_MODE_LAYER;
 
 	/* Search for first <defs> node */
-	for (SPObject *o = group->children; o != NULL; o = o->next) {
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL; o = SP_OBJECT_NEXT(o) ) {
 		if (SP_IS_DEFS (o)) {
 			root->defs = SP_DEFS (o);
 			break;
@@ -365,7 +365,7 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	if (SP_IS_DEFS (co)) {
 		SPObject *c;
 		/* We search for first <defs> node - it is not beautiful, but works */
-		for (c = group->children; c != NULL; c = c->next) {
+		for (c = sp_object_first_child(SP_OBJECT(group)) ; c != NULL; c = SP_OBJECT_NEXT(c) ) {
 			if (SP_IS_DEFS (c)) {
 				root->defs = SP_DEFS (c);
 				break;

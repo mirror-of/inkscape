@@ -34,9 +34,6 @@ enum {
 struct _SPPattern {
 	SPPaintServer paint_server;
 
-	/* Children list */
-	SPObject *children;
-
 	/* Reference (href) */
 	SPPattern *href;
 	/* patternUnits and patternContentUnits attribute */

@@ -726,7 +726,7 @@ find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
 {
 	g_return_val_if_fail (SP_IS_GROUP (group), s);
 
-	for (SPObject *o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) &&
 		    SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER)
@@ -752,7 +752,7 @@ find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_
 {
 	SPItem *seen = NULL, *newseen = NULL;
 
-	for (SPObject *o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) && (SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER || into_groups))	{
 			// if nothing found yet, recurse into the group
@@ -780,7 +780,7 @@ find_group_at_point (gint dkey, SPGroup *group, NR::Point const p)
 {
 	SPItem *seen = NULL;
 
-	for (SPObject *o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) && SP_GROUP (o)->mode != SP_GROUP_MODE_LAYER) {
 			SPItem *child = SP_ITEM(o);
