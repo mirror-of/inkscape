@@ -49,6 +49,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialogs {
 
+
 /*#########################################################################
 ### SVG Preview Widget
 #########################################################################*/
@@ -503,82 +504,6 @@ SVGPreview::~SVGPreview()
 
 
 
-/*#########################################################################
-### C O M M O N    C O D E   ---  used by both open and save
-#########################################################################*/
-static void createFilterMenu(Gtk::FileChooserDialog *dlg,
-        std::map<Glib::ustring, Inkscape::Extension::Extension *> *extensionMap)
-{
-    //patterns added dynamically below
-    Gtk::FileFilter allImageFilter;
-    allImageFilter.set_name(_("All Images"));
-    (*extensionMap)[Glib::ustring(_("All Images"))]=NULL;
-    dlg->add_filter(allImageFilter);
-
-    Gtk::FileFilter allFilter;
-    allFilter.set_name(_("All Files"));
-    (*extensionMap)[Glib::ustring(_("All Files"))]=NULL;
-    allFilter.add_pattern("*");
-    dlg->add_filter(allFilter);
-
-    //patterns added dynamically below
-    Gtk::FileFilter allInkscapeFilter;
-    allInkscapeFilter.set_name(_("All Inkscape Files"));
-    (*extensionMap)[Glib::ustring(_("All Inkscape Files"))]=NULL;
-    dlg->add_filter(allInkscapeFilter);
-
-    Gtk::FileFilter svgFilter;
-    svgFilter.set_name(_("SVG Files"));
-    (*extensionMap)[Glib::ustring(_("SVG Files"))]=NULL;
-    svgFilter.add_pattern("*.svg");
-    dlg->add_filter(svgFilter);
-
-    Gtk::FileFilter svgzFilter;
-    svgzFilter.set_name(_("Compressed SVG Files"));
-    (*extensionMap)[Glib::ustring(_("Compressed SVG Files"))]=NULL;
-    svgzFilter.add_pattern("*.svgz");
-    dlg->add_filter(svgzFilter);
-
-    /*We need to find out how to do a menu separator
-    Gtk::FileFilter spacer;
-    svgzFilter.set_name("-");
-    dlg->add_filter(spacer);
-    */
-
-    GSList *extension_list = Inkscape::Extension::db.get_input_list();
-    if (extension_list == NULL) {
-        // Another exception
-        g_warning("Internal error.  We need extensions.\n");
-        return;
-    }
-
-    for (GSList *current_item = g_slist_next(extension_list);
-         current_item; current_item = g_slist_next(current_item))
-    {
-        Inkscape::Extension::DB::IOExtensionDescription * ioext = 
-              reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
-
-        Glib::ustring upattern("*");
-        upattern += ioext->file_extension;
-        if (!( strcmp(".svg",  ioext->file_extension)==0 ||
-               strcmp(".svgz", ioext->file_extension)==0   ))
-        {
-            Gtk::FileFilter filter;
-            Glib::ustring uname(_(ioext->name));
-            filter.set_name(uname);
-            filter.add_pattern(upattern);
-            dlg->add_filter(filter);
-            (*extensionMap)[uname]=ioext->extension;
-        }
-        //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
-        allInkscapeFilter.add_pattern(upattern);
-        if ( strncmp("image", ioext->mimetype, 5)==0 )
-            allImageFilter.add_pattern(upattern);
-    }
-
-    Inkscape::Extension::db.free_list(extension_list);
-}
-
 
 
 /*#########################################################################
@@ -630,6 +555,11 @@ private:
      * Fix to allow the user to type the file name 
      */
     Gtk::Entry fileNameEntry;
+
+    /**
+     *  Create a filter menu for this type of dialog
+     */
+    void createFilterMenu();
 
     /**
      * Callback for user input into fileNameEntry
@@ -730,6 +660,78 @@ void FileOpenDialogImpl::fileSelectedCallback()
 
 
 
+void FileOpenDialogImpl::createFilterMenu()
+{
+    //patterns added dynamically below
+    Gtk::FileFilter allImageFilter;
+    allImageFilter.set_name(_("All Images"));
+    extensionMap[Glib::ustring(_("All Images"))]=NULL;
+    add_filter(allImageFilter);
+
+    Gtk::FileFilter allFilter;
+    allFilter.set_name(_("All Files"));
+    extensionMap[Glib::ustring(_("All Files"))]=NULL;
+    allFilter.add_pattern("*");
+    add_filter(allFilter);
+
+    //patterns added dynamically below
+    Gtk::FileFilter allInkscapeFilter;
+    allInkscapeFilter.set_name(_("All Inkscape Files"));
+    extensionMap[Glib::ustring(_("All Inkscape Files"))]=NULL;
+    add_filter(allInkscapeFilter);
+
+    Gtk::FileFilter svgFilter;
+    svgFilter.set_name(_("SVG Files"));
+    extensionMap[Glib::ustring(_("SVG Files"))]=NULL;
+    svgFilter.add_pattern("*.svg");
+    add_filter(svgFilter);
+
+    Gtk::FileFilter svgzFilter;
+    svgzFilter.set_name(_("Compressed SVG Files"));
+    extensionMap[Glib::ustring(_("Compressed SVG Files"))]=NULL;
+    svgzFilter.add_pattern("*.svgz");
+    add_filter(svgzFilter);
+
+    /*We need to find out how to do a menu separator
+    Gtk::FileFilter spacer;
+    svgzFilter.set_name("-");
+    add_filter(spacer);
+    */
+
+    GSList *extension_list = Inkscape::Extension::db.get_input_list();
+    if (extension_list == NULL) {
+        // Another exception
+        g_warning("Internal error.  We need extensions.\n");
+        return;
+    }
+
+    for (GSList *current_item = g_slist_next(extension_list);
+         current_item; current_item = g_slist_next(current_item))
+    {
+        Inkscape::Extension::DB::IOExtensionDescription * ioext = 
+              reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
+
+        Glib::ustring upattern("*");
+        upattern += ioext->file_extension;
+        if (!( strcmp(".svg",  ioext->file_extension)==0 ||
+               strcmp(".svgz", ioext->file_extension)==0   ))
+        {
+            Gtk::FileFilter filter;
+            Glib::ustring uname(_(ioext->name));
+            filter.set_name(uname);
+            filter.add_pattern(upattern);
+            add_filter(filter);
+            extensionMap[uname]=ioext->extension;
+        }
+        //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
+        allInkscapeFilter.add_pattern(upattern);
+        if ( strncmp("image", ioext->mimetype, 5)==0 )
+            allImageFilter.add_pattern(upattern);
+    }
+
+    Inkscape::Extension::db.free_list(extension_list);
+}
+
 
 
 /**
@@ -738,7 +740,7 @@ void FileOpenDialogImpl::fileSelectedCallback()
 FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
                                        FileDialogType fileTypes,
                                        char const *title) :
-    Gtk::FileChooserDialog(Glib::ustring(title))
+                 Gtk::FileChooserDialog(Glib::ustring(title))
 {
 
     /* One file at a time */
@@ -758,7 +760,7 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
         set_current_folder(dir);
 
     //###### Add the file types menu
-    createFilterMenu(this, &extensionMap);
+    createFilterMenu();
 
     //###### Add a preview widget
     set_preview_widget(svgPreview);
@@ -917,6 +919,11 @@ private:
     void updatePreviewCallback();
 
     /**
+     *  Create a filter menu for this type of dialog
+     */
+    void createFilterMenu();
+
+    /**
      * Filter name->extension lookup
      */
     std::map<Glib::ustring, Inkscape::Extension::Extension *> extensionMap;
@@ -954,6 +961,80 @@ void FileSaveDialogImpl::updatePreviewCallback()
 
 
 
+void FileSaveDialogImpl::createFilterMenu()
+{
+    //patterns added dynamically below
+    Gtk::FileFilter allImageFilter;
+    allImageFilter.set_name(_("All Images"));
+    extensionMap[Glib::ustring(_("All Images"))]=NULL;
+    add_filter(allImageFilter);
+
+    Gtk::FileFilter allFilter;
+    allFilter.set_name(_("All Files"));
+    extensionMap[Glib::ustring(_("All Files"))]=NULL;
+    allFilter.add_pattern("*");
+    add_filter(allFilter);
+
+    //patterns added dynamically below
+    Gtk::FileFilter allInkscapeFilter;
+    allInkscapeFilter.set_name(_("All Inkscape Files"));
+    extensionMap[Glib::ustring(_("All Inkscape Files"))]=NULL;
+    add_filter(allInkscapeFilter);
+
+    Gtk::FileFilter svgFilter;
+    svgFilter.set_name(_("SVG Files"));
+    extensionMap[Glib::ustring(_("SVG Files"))]=NULL;
+    svgFilter.add_pattern("*.svg");
+    add_filter(svgFilter);
+
+    Gtk::FileFilter svgzFilter;
+    svgzFilter.set_name(_("Compressed SVG Files"));
+    extensionMap[Glib::ustring(_("Compressed SVG Files"))]=NULL;
+    svgzFilter.add_pattern("*.svgz");
+    add_filter(svgzFilter);
+
+    /*We need to find out how to do a menu separator
+    Gtk::FileFilter spacer;
+    svgzFilter.set_name("-");
+    add_filter(spacer);
+    */
+
+    GSList *extension_list = Inkscape::Extension::db.get_output_list();
+    if (extension_list == NULL) {
+        // Another exception
+        g_warning("Internal error.  We need extensions.\n");
+        return;
+    }
+
+    for (GSList *current_item = g_slist_next(extension_list);
+         current_item; current_item = g_slist_next(current_item))
+    {
+        Inkscape::Extension::DB::IOExtensionDescription * ioext = 
+              reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
+
+        Glib::ustring upattern("*");
+        upattern += ioext->file_extension;
+        if (!( strcmp(".svg",  ioext->file_extension)==0 ||
+               strcmp(".svgz", ioext->file_extension)==0   ))
+        {
+            Gtk::FileFilter filter;
+            Glib::ustring uname(_(ioext->name));
+            filter.set_name(uname);
+            filter.add_pattern(upattern);
+            add_filter(filter);
+            extensionMap[uname]=ioext->extension;
+        }
+        //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
+        allInkscapeFilter.add_pattern(upattern);
+        if ( strncmp("image", ioext->mimetype, 5)==0 )
+            allImageFilter.add_pattern(upattern);
+    }
+
+    Inkscape::Extension::db.free_list(extension_list);
+}
+
+
+
 /**
  * Constructor
  */
@@ -961,8 +1042,8 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
                                        FileDialogType fileTypes,
                                        char const *title,
                                        char const *default_key) :
-    FileChooserDialog(Glib::ustring(title),
-                      Gtk::FILE_CHOOSER_ACTION_SAVE)
+                                       Gtk::FileChooserDialog(Glib::ustring(title),
+                                           Gtk::FILE_CHOOSER_ACTION_SAVE)
 {
     append_extension = (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1);
 
@@ -982,7 +1063,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
         set_current_folder(dir);
 
     //###### Add the file types menu
-    createFilterMenu(this, &extensionMap);
+    createFilterMenu();
 
     //###### Do we want the .xxx extension automatically added?
     checkbox.set_label(Glib::ustring(_("Append filename extension automatically")));
