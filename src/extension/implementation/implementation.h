@@ -93,6 +93,10 @@ public:
                                        unsigned int rs,
                                        const NRMatrix *transform,
                                        const SPStyle *style);
+    virtual unsigned int  text        (Inkscape::Extension::Print * module,
+                                       const char *text,
+                                       NR::Point p,
+                                       const SPStyle *style);
 };
 
 }; /* namespace Implementation */

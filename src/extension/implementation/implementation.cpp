@@ -12,6 +12,7 @@
 
 #include "../extension.h"
 #include "implementation.h"
+#include <libnr/nr-point.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -131,6 +132,13 @@ Implementation::stroke (Inkscape::Extension::Print * module, const NRBPath *bpat
 unsigned int
 Implementation::image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
 			const NRMatrix *transform, const SPStyle *style)
+{
+	return 0;
+}
+
+unsigned int
+Implementation::text (Inkscape::Extension::Print * module, const char *text,
+                      NR::Point p, const SPStyle* style)
 {
 	return 0;
 }

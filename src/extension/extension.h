@@ -262,6 +262,9 @@ public:
                                unsigned int rs,
                                const NRMatrix *transform,
                                const SPStyle *style);
+    unsigned int  text        (const char* text,
+                               NR::Point p,
+                               const SPStyle* style);
 };
 
 }; /* namespace Extension */

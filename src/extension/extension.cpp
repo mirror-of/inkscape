@@ -29,6 +29,7 @@
 #include "document.h"
 #include "prefs-utils.h"
 #include "extension.h"
+#include <libnr/nr-point.h>
 
 #include "db.h"
 
@@ -931,6 +932,12 @@ Print::image (unsigned char *px, unsigned int w, unsigned int h, unsigned int rs
                 const NRMatrix *transform, const SPStyle *style)
 {
     return imp->image (this, px, w, h, rs, transform, style);
+}
+
+unsigned int
+Print::text (const char* text, NR::Point p, const SPStyle* style)
+{
+    return imp->text (this, text, p, style);
 }
 
 
