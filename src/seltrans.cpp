@@ -345,7 +345,7 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 			// If this is a clone and it's selected along with its original, do not move it;
 			// it will feel the transform of its original and respond to it itself. 
 			// WIthout this, a clone is doubly transformed, very unintuitive.
-			if (seltrans->current.is_translation() && SP_IS_USE(item) && selection->includesItem(SP_USE(item)->ref->getObject())) {
+			if (seltrans->current.is_translation() && SP_IS_USE(item) && selection->includesItem(sp_use_get_original (SP_USE(item)))) {
 				// just restore the transform field from the repr
 				sp_object_read_attr (SP_OBJECT (item), "transform");
 			} else {
