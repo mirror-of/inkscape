@@ -3,7 +3,6 @@ templatesdir = $(datadir)/inkscape/templates
 
 templates_DATA = \
 	README \
-	default.svg \
-	layers.svg
+	default.svg
 
 EXTRA_DIST = $(templates_DATA)
