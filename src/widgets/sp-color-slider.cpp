@@ -19,7 +19,7 @@
 
 #define SLIDER_WIDTH 96
 #define SLIDER_HEIGHT 8
-#define ARROW_SIZE 8
+#define ARROW_SIZE 7
 
 enum {
 	GRABBED,
@@ -435,6 +435,7 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 	GdkRectangle warea, carea, aarea;
 	GdkRectangle wpaint, cpaint, apaint;
 	const guchar *b;
+	gint x1, x2, y1, yb, xm;
 
 	widget = GTK_WIDGET (slider);
 
@@ -505,11 +506,25 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 
 	if (gdk_rectangle_intersect (area, &aarea, &apaint)) {
 		/* Draw arrow */
-		gtk_draw_arrow (widget->style, widget->window,
-				(GtkStateType)widget->state, GTK_SHADOW_OUT,
-				GTK_ARROW_UP, TRUE,
-				aarea.x, aarea.y,
-				ARROW_SIZE, ARROW_SIZE);
+		y1 = aarea.y + 1;
+		yb = aarea.y + ARROW_SIZE - 1;
+		x1 = aarea.x + 1;
+		x2 = aarea.x + ARROW_SIZE - 2;
+		xm = (x1 + x2) / 2;
+
+		/* Center fill */
+		while ( x2 > x1 && yb > y1 ) {
+			gdk_draw_line (widget->window, widget->style->black_gc, x1, yb, xm, y1);
+			gdk_draw_line (widget->window, widget->style->black_gc, x2, yb, xm, y1);
+			x1++;
+			x2--;
+			y1++;
+		}
+
+		/* Outer contrast line */
+		gdk_draw_line (widget->window, widget->style->black_gc, xm, yb, xm, y1);
+		gdk_draw_line (widget->window, widget->style->white_gc, aarea.x, yb, xm, aarea.y);
+		gdk_draw_line (widget->window, widget->style->white_gc, aarea.x + ARROW_SIZE - 1, yb, xm, aarea.y);
 	}
 }
 
