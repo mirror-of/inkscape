@@ -48,13 +48,18 @@ sp_selection_delete (gpointer object, gpointer data)
 
 	selection = SP_DT_SELECTION (desktop);
 
-	if (sp_selection_is_empty (selection)) return;
+	// check if something is selected
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing was cut."));
+		return;
+	}
 
 	selected = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 	sp_selection_empty (selection);
 
 	while (selected) {
-		sp_repr_unparent ((SPRepr *) selected->data);
+		SPRepr *repr = (SPRepr *) selected->data;                               
+		if (sp_repr_parent (repr)) sp_repr_unparent (repr);             
 		selected = g_slist_remove (selected, selected->data);
 	}
 
@@ -593,9 +598,13 @@ sp_selection_copy (GtkWidget * widget)
 	desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 
-	/* Return if selection is empty */
 	selection = SP_DT_SELECTION (desktop);
-	if (sp_selection_is_empty (selection)) return;
+
+	// check if something is selected
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing was copied."));
+		return;
+	}
 
 	sl = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 	sl = g_slist_sort (sl, (GCompareFunc) sp_repr_compare_position);
@@ -636,6 +645,12 @@ sp_selection_paste (GtkWidget * widget)
 	g_assert (selection != NULL);
 	g_assert (SP_IS_SELECTION (selection));
 
+	// check if something is in the clipboard
+	if (clipboard == NULL) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing in the clipboard."));
+		return;
+	}
+
 	sp_selection_empty (selection);
 
 	for (l = clipboard; l != NULL; l = l->next) {
@@ -665,8 +680,17 @@ sp_selection_paste_style (GtkWidget * widget)
 	g_assert (selection != NULL);
 	g_assert (SP_IS_SELECTION (selection));
 
-	if (sp_selection_is_empty (selection)) return;
-	if (clipboard == NULL) return;
+	// check if something is in the clipboard
+	if (clipboard == NULL) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing in the clipboard."));
+		return;
+	}
+
+	// check if something is selected
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select objects to paste style to."));
+		return;
+	}
 
 	selected = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 
@@ -702,7 +726,6 @@ sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
 	}
 }
 
-
 void
 sp_selection_remove_transform (void)
 {
@@ -725,7 +748,6 @@ sp_selection_remove_transform (void)
 	sp_selection_changed (selection);
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
-
 
 void
 sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, double y0, double y1)
