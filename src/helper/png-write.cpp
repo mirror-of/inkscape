@@ -140,7 +140,7 @@ sp_png_write_rgba_striped (const gchar *filename, int width, int height,
 
 	/* Made by Inkscape comment */
 	text_ptr[0].key = "Software";
-	text_ptr[0].text = "Inkscape";
+	text_ptr[0].text = "www.inkscape.org";
 	text_ptr[0].compression = PNG_TEXT_COMPRESSION_NONE;
 	png_set_text(png_ptr, info_ptr, text_ptr, 1);
 
