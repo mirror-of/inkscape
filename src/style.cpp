@@ -1144,10 +1144,12 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
 
 
 /**
- *
+ * Inherits properties from \a parent into \a style (per CSS, this is done only if the target is
+ * not set or is equal to 'inherit'). Optionally copies the set flag from parent (used e.g. when
+ * unlinking clones to inherit the style of the svg:use into the new object).
  */
 void
-sp_style_merge_from_parent(SPStyle *style, SPStyle *parent)
+sp_style_merge_from_parent(SPStyle *style, SPStyle *parent, bool inherit_set)
 {
     g_return_if_fail(style != NULL);
 
@@ -1161,6 +1163,8 @@ sp_style_merge_from_parent(SPStyle *style, SPStyle *parent)
         /* I think inheriting computed value is correct here */
         style->font_size.type = SP_FONT_SIZE_LENGTH;
         style->font_size.computed = parent->font_size.computed;
+        if (inherit_set) 
+            style->font_size.set = parent->font_size.set;
     } else if (style->font_size.type == SP_FONT_SIZE_LITERAL) {
         static gfloat sizetable[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
         /* fixme: SVG and CSS do not specify clearly, whether we should use user or screen coordinates (Lauris) */
@@ -1178,17 +1182,26 @@ sp_style_merge_from_parent(SPStyle *style, SPStyle *parent)
         /* it says the parent's. --mental */
         style->font_size.computed = parent->font_size.computed * SP_F8_16_TO_FLOAT(style->font_size.value);
     }
+
     /* 'font-style' */
     if (!style->font_style.set || style->font_style.inherit) {
         style->font_style.computed = parent->font_style.computed;
+        if (inherit_set) 
+            style->font_style.set = parent->font_style.set;
     }
+
     /* 'font-variant' */
     if (!style->font_variant.set || style->font_variant.inherit) {
         style->font_variant.computed = parent->font_variant.computed;
+        if (inherit_set) 
+            style->font_variant.set = parent->font_variant.set;
     }
+
     /* 'font-weight' */
     if (!style->font_weight.set || style->font_weight.inherit) {
         style->font_weight.computed = parent->font_weight.computed;
+        if (inherit_set) 
+            style->font_weight.set = parent->font_weight.set;
     } else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_NORMAL) {
         /* fixme: This is unconditional, i.e. happens even if parent not present */
         style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
@@ -1209,9 +1222,12 @@ sp_style_merge_from_parent(SPStyle *style, SPStyle *parent)
                            : parent_val + 1);
         g_assert(style->font_weight.computed <= (unsigned) SP_CSS_FONT_WEIGHT_900);
     }
+
     /* 'font-stretch' */
     if (!style->font_stretch.set || style->font_stretch.inherit) {
         style->font_stretch.computed = parent->font_stretch.computed;
+        if (inherit_set) 
+            style->font_stretch.set = parent->font_stretch.set;
     } else if (style->font_stretch.value == SP_CSS_FONT_STRETCH_NARROWER) {
         unsigned const parent_val = parent->font_stretch.computed;
         style->font_stretch.computed = (parent_val == SP_CSS_FONT_STRETCH_ULTRA_CONDENSED
@@ -1226,46 +1242,78 @@ sp_style_merge_from_parent(SPStyle *style, SPStyle *parent)
                         : parent_val + 1);
         g_assert(style->font_stretch.computed <= (unsigned) SP_CSS_FONT_STRETCH_ULTRA_EXPANDED);
     }
+
     /* text (css2) */
     if (!style->text_indent.set || style->text_indent.inherit) {
         style->text_indent.computed = parent->text_indent.computed;
+        if (inherit_set) 
+            style->text_indent.set = parent->text_indent.set;
     }
+
     if (!style->text_align.set || style->text_align.inherit) {
         style->text_align.computed = parent->text_align.computed;
+        if (inherit_set) 
+            style->text_align.set = parent->text_align.set;
     }
+
     if (!style->text_decoration.set || style->text_decoration.inherit) {
         style->text_decoration.underline = parent->text_decoration.underline;
         style->text_decoration.overline = parent->text_decoration.overline;
         style->text_decoration.line_through = parent->text_decoration.line_through;
         style->text_decoration.blink = parent->text_decoration.blink;
+        if (inherit_set) 
+            style->text_decoration.set = parent->text_decoration.set;
     }
+
     if (!style->line_height.set || style->line_height.inherit) {
         style->line_height.computed = parent->line_height.computed;
         style->line_height.normal = parent->line_height.normal;
+        if (inherit_set) 
+            style->line_height.set = parent->line_height.set;
     }
+
     if (!style->letter_spacing.set || style->letter_spacing.inherit) {
         style->letter_spacing.computed = parent->letter_spacing.computed;
         style->letter_spacing.normal = parent->letter_spacing.normal;
+        if (inherit_set) 
+            style->letter_spacing.set = parent->letter_spacing.set;
     }
+
     if (!style->word_spacing.set || style->word_spacing.inherit) {
         style->word_spacing.computed = parent->word_spacing.computed;
         style->word_spacing.normal = parent->word_spacing.normal;
+        if (inherit_set) 
+            style->word_spacing.set = parent->word_spacing.set;
     }
+
     if (!style->text_transform.set || style->text_transform.inherit) {
         style->text_transform.computed = parent->text_transform.computed;
+        if (inherit_set) 
+            style->text_transform.set = parent->text_transform.set;
     }
+
     if (!style->direction.set || style->direction.inherit) {
         style->direction.computed = parent->direction.computed;
+        if (inherit_set) 
+            style->direction.set = parent->direction.set;
     }
+
     if (!style->block_progression.set || style->block_progression.inherit) {
         style->block_progression.computed = parent->block_progression.computed;
+        if (inherit_set) 
+            style->block_progression.set = parent->block_progression.set;
     }
+
     if (!style->writing_mode.set || style->writing_mode.inherit) {
         style->writing_mode.computed = parent->writing_mode.computed;
+        if (inherit_set) 
+            style->writing_mode.set = parent->writing_mode.set;
     }
-    /* 'text-anchor' */
+
     if (!style->text_anchor.set || style->text_anchor.inherit) {
         style->text_anchor.computed = parent->text_anchor.computed;
+        if (inherit_set) 
+            style->text_anchor.set = parent->text_anchor.set;
     }
 
     if (style->opacity.inherit) {
@@ -1275,22 +1323,40 @@ sp_style_merge_from_parent(SPStyle *style, SPStyle *parent)
     /* Color */
     if (!style->color.set || style->color.inherit) {
         sp_style_merge_ipaint(style, &style->color, &parent->color);
+        if (inherit_set) 
+            style->color.set = parent->color.set;
     }
+
+    /* Fill */
     if (!style->fill.set || style->fill.inherit || style->fill.currentcolor) {
         sp_style_merge_ipaint(style, &style->fill, &parent->fill);
+        if (inherit_set) 
+            style->fill.set = parent->fill.set;
     }
+
     if (!style->fill_opacity.set || style->fill_opacity.inherit) {
         style->fill_opacity.value = parent->fill_opacity.value;
+        if (inherit_set) 
+            style->fill_opacity.set = parent->fill_opacity.set;
     }
+
     if (!style->fill_rule.set || style->fill_rule.inherit) {
         style->fill_rule.computed = parent->fill_rule.computed;
+        if (inherit_set) 
+            style->fill_rule.set = parent->fill_rule.set;
     }
+
     /* Stroke */
     if (!style->stroke.set || style->stroke.inherit || style->stroke.currentcolor) {
         sp_style_merge_ipaint(style, &style->stroke, &parent->stroke);
+        if (inherit_set) 
+            style->stroke.set = parent->stroke.set;
     }
+
     if (!style->stroke_width.set || style->stroke_width.inherit) {
         style->stroke_width.computed = parent->stroke_width.computed;
+        if (inherit_set) 
+            style->stroke_width.set = parent->stroke_width.set;
     } else {
         /* Update computed value for any change in font inherited from parent. */
         double const em = style->font_size.computed;
@@ -1301,37 +1367,53 @@ sp_style_merge_from_parent(SPStyle *style, SPStyle *parent)
             style->stroke_width.computed = style->stroke_width.value * ex;
         }
     }
+
     if (!style->stroke_linecap.set || style->stroke_linecap.inherit) {
         style->stroke_linecap.computed = parent->stroke_linecap.computed;
+        if (inherit_set) 
+            style->stroke_linecap.set = parent->stroke_linecap.set;
     }
+
     if (!style->stroke_linejoin.set || style->stroke_linejoin.inherit) {
         style->stroke_linejoin.computed = parent->stroke_linejoin.computed;
+        if (inherit_set) 
+            style->stroke_linejoin.set = parent->stroke_linejoin.set;
     }
+
     if (!style->stroke_miterlimit.set || style->stroke_miterlimit.inherit) {
         style->stroke_miterlimit.value = parent->stroke_miterlimit.value;
+        if (inherit_set) 
+            style->stroke_miterlimit.set = parent->stroke_miterlimit.set;
     }
+
     if (!style->stroke_dasharray_set && parent->stroke_dasharray_set) {
-        /* TODO: This code looks wrong.  Why does the logic differ from the above properties?
-         * Similarly dashoffset below. */
         style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
         if (style->stroke_dash.n_dash > 0) {
             style->stroke_dash.dash = g_new(gdouble, style->stroke_dash.n_dash);
             memcpy(style->stroke_dash.dash, parent->stroke_dash.dash, style->stroke_dash.n_dash * sizeof(gdouble));
         }
-        style->stroke_dasharray_set = TRUE;
+        if (inherit_set) 
+            style->stroke_dasharray_set = parent->stroke_dasharray_set;
     }
+
     if (!style->stroke_dashoffset_set && parent->stroke_dashoffset_set) {
         style->stroke_dash.offset = parent->stroke_dash.offset;
-        style->stroke_dashoffset_set = TRUE;
+        if (inherit_set) 
+            style->stroke_dashoffset_set = parent->stroke_dashoffset_set;
     }
+
     if (!style->stroke_opacity.set || style->stroke_opacity.inherit) {
         style->stroke_opacity.value = parent->stroke_opacity.value;
+        if (inherit_set) 
+            style->stroke_opacity.set = parent->stroke_opacity.set;
     }
 
     if (style->text && parent->text) {
         if (!style->text->font_family.set || style->text->font_family.inherit) {
             g_free(style->text->font_family.value);
             style->text->font_family.value = g_strdup(parent->text->font_family.value);
+            if (inherit_set) 
+                style->text->font_family.set = parent->text->font_family.set;
         }
     }
 
@@ -1340,6 +1422,8 @@ sp_style_merge_from_parent(SPStyle *style, SPStyle *parent)
         if (!style->marker[i].set || style->marker[i].inherit) {
             g_free(style->marker[i].value);
             style->marker[i].value = g_strdup(parent->marker[i].value);
+            if (inherit_set) 
+                style->marker[i].set = parent->marker[i].set;
         }
     }
 }
