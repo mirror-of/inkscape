@@ -162,7 +162,7 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
         void updatePreviewCallback();
 
         /**
-         * Fix to allow typing of the file name 
+         * Fix to allow the user to type the file name 
          */
         Gtk::Entry fileNameEntry;
 
@@ -172,7 +172,7 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
         void fileNameEntryChangedCallback();
 
         /**
-         * Callback for user input into fileNameEntry
+         * Callback for user changing which item is selected on the list
          */
         void fileSelectedCallback();
 
@@ -207,7 +207,10 @@ void FileOpenDialogImpl::updatePreviewCallback()
     if (!(  g_file_test(fName, G_FILE_TEST_EXISTS) && 
            (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz")
          )))
+        {
+        set_preview_widget_active(false);
         return;
+        }
 
     if (svgPreview.setFileName(fName))
         set_preview_widget_active(true);
