@@ -91,7 +91,7 @@ sp_text_context_get_type()
             sizeof(SPTextContext),
             4,
             (GInstanceInitFunc) sp_text_context_init,
-            NULL,	/* value_table */
+            NULL,   /* value_table */
         };
         type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPTextContext", &info, (GTypeFlags)0);
     }
@@ -206,10 +206,10 @@ sp_text_context_setup(SPEventContext *ec)
 
     tc->sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(
         sigc::bind(sigc::ptr_fun(&sp_text_context_selection_changed), tc)
-	);
+        );
     tc->sel_modified_connection = SP_DT_SELECTION(desktop)->connectModified(
         sigc::bind(sigc::ptr_fun(&sp_text_context_selection_modified), tc)
-	);
+        );
     tc->style_set_connection = desktop->connectSetStyle(
         sigc::bind(sigc::ptr_fun(&sp_text_context_style_set), tc)
         );
@@ -241,7 +241,7 @@ sp_text_context_finish(SPEventContext *ec)
         g_object_unref(G_OBJECT(tc->imc));
         tc->imc = NULL;
     }
-	
+
     if (tc->timeout) {
         gtk_timeout_remove(tc->timeout);
         tc->timeout = 0;
@@ -282,7 +282,7 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
     sp_text_context_validate_cursor_iterators(tc);
 
     switch (event->type) {
-	case GDK_BUTTON_PRESS:
+        case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
                 // find out clicked item, disregarding groups
                 item_ungrouped = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
@@ -308,7 +308,7 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
                 ret = TRUE;
             }
             break;
-	case GDK_MOTION_NOTIFY:
+        case GDK_MOTION_NOTIFY:
             if (event->motion.state & GDK_BUTTON1_MASK && tc->dragging) {
                 // find out click point in document coordinates
                 NR::Point p = sp_desktop_w2d_xy_point(ec->desktop, NR::Point(event->button.x, event->button.y));
@@ -329,8 +329,8 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
                 NRRect bbox;
                 sp_item_bbox_desktop(item_ungrouped, &bbox);
                 sp_canvas_item_show(tc->indicator);
-                sp_ctrlrect_set_area(SP_CTRLRECT(tc->indicator), 
-                                     bbox.x0, bbox.y0, 
+                sp_ctrlrect_set_area(SP_CTRLRECT(tc->indicator),
+                                     bbox.x0, bbox.y0,
                                      bbox.x1, bbox.y1);
 
                 ec->cursor_shape = cursor_text_insert_xpm;
@@ -342,7 +342,7 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
                 ret = TRUE;
             }
             break;
-	default:
+        default:
             break;
     }
 
@@ -399,13 +399,13 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
     sp_text_context_validate_cursor_iterators(tc);
 
     switch (event->type) {
-	case GDK_MOTION_NOTIFY:
+        case GDK_MOTION_NOTIFY:
             ec->cursor_shape = cursor_text_xpm;
             ec->hot_x = 7;
             ec->hot_y = 7;
             sp_event_context_update_cursor(ec);
             break;
-	case GDK_BUTTON_PRESS:
+        case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
 
                 SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(ec);
@@ -433,13 +433,13 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 // Cursor height is defined by the new text object's font size; it needs to be set
                 // articifically here, for the text object does not exist yet:
                 double cursor_height = sp_desktop_get_font_size_tool(ec->desktop);
-                sp_ctrlline_set_coords(SP_CTRLLINE(tc->cursor), dtp, dtp + NR::Point(0, cursor_height)); 
+                sp_ctrlline_set_coords(SP_CTRLLINE(tc->cursor), dtp, dtp + NR::Point(0, cursor_height));
 
                 /* Processed */
                 return TRUE;
             }
             break;
-	case GDK_KEY_PRESS:
+        case GDK_KEY_PRESS:
 
             if (get_group0_keyval(&event->key) == GDK_KP_Add || get_group0_keyval(&event->key) == GDK_KP_Subtract)
                 break; // pass on keypad +/- so they can zoom
@@ -529,10 +529,10 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             if (isxdigit((guchar) get_group0_keyval(&event->key))) {
                                 tc->uni[tc->unipos] = get_group0_keyval(&event->key);
                                 ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
-                                                                  _("Unicode: %c%c%c%c"), 
-                                                                  tc->uni[0], 
-                                                                  tc->unipos > 0 ? tc->uni[1] : ' ', 
-                                                                  tc->unipos > 1 ? tc->uni[2] : ' ', 
+                                                                  _("Unicode: %c%c%c%c"),
+                                                                  tc->uni[0],
+                                                                  tc->unipos > 0 ? tc->uni[1] : ' ',
+                                                                  tc->unipos > 1 ? tc->uni[2] : ' ',
                                                                   tc->unipos > 2 ? tc->uni[3] : ' ');
                                 if (tc->unipos == 3) {
                                     gchar u[7];
@@ -545,7 +545,7 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                                         ec->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Non-printable character")); // this may be due to bad input, so it goes to statusbar
                                     } else {
                                         if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
-                                            sp_text_context_setup_text(tc);                                                 
+                                            sp_text_context_setup_text(tc);
                                             tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
                                         }
                                         tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, u);
@@ -573,7 +573,7 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             case GDK_Return:
                             case GDK_KP_Enter:
                                 if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
-                                    sp_text_context_setup_text(tc);                                                 
+                                    sp_text_context_setup_text(tc);
                                     tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
                                 }
                                 tc->text_sel_start = tc->text_sel_end = sp_te_delete(tc->text, tc->text_sel_start, tc->text_sel_end);
@@ -607,7 +607,7 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             case GDK_KP_Left:
                             case GDK_KP_4:
                                 if (tc->text) {
-                                    if (MOD__ALT) { 
+                                    if (MOD__ALT) {
                                         if (MOD__SHIFT)
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_end, ec->desktop, NR::Point(-10, 0));
                                         else
@@ -625,7 +625,7 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             case GDK_KP_Right:
                             case GDK_KP_6:
                                 if (tc->text) {
-                                    if (MOD__ALT) { 
+                                    if (MOD__ALT) {
                                         if (MOD__SHIFT)
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_end, ec->desktop, NR::Point(10, 0));
                                         else
@@ -643,10 +643,10 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             case GDK_KP_Up:
                             case GDK_KP_8:
                                 if (tc->text) {
-                                    if (MOD__ALT) { 
+                                    if (MOD__ALT) {
                                         if (MOD__SHIFT)
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_end, ec->desktop, NR::Point(0, -10));
-                                        else 
+                                        else
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_end, ec->desktop, NR::Point(0, -1));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
@@ -661,10 +661,10 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             case GDK_KP_Down:
                             case GDK_KP_2:
                                 if (tc->text) {
-                                    if (MOD__ALT) { 
+                                    if (MOD__ALT) {
                                         if (MOD__SHIFT)
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_end, ec->desktop, NR::Point(0, 10));
-                                        else 
+                                        else
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_end, ec->desktop, NR::Point(0, 1));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
@@ -695,16 +695,16 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             case GDK_less:
                             case GDK_comma:
                                 if (tc->text) {
-                                    if (MOD__ALT) { 
+                                    if (MOD__ALT) {
                                         if (MOD__CTRL) {
                                             if (MOD__SHIFT)
                                                 sp_te_adjust_linespacing_screen(tc->text, ec->desktop, -10);
-                                            else 
+                                            else
                                                 sp_te_adjust_linespacing_screen(tc->text, ec->desktop, -1);
                                         } else {
                                             if (MOD__SHIFT)
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_end, ec->desktop, -10);
-                                            else 
+                                            else
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_end, ec->desktop, -1);
                                         }
                                         sp_document_done(SP_DT_DOCUMENT(ec->desktop));
@@ -717,16 +717,16 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             case GDK_greater:
                             case GDK_period:
                                 if (tc->text) {
-                                    if (MOD__ALT) { 
+                                    if (MOD__ALT) {
                                         if (MOD__CTRL) {
                                             if (MOD__SHIFT)
                                                 sp_te_adjust_linespacing_screen(tc->text, ec->desktop, 10);
-                                            else 
+                                            else
                                                 sp_te_adjust_linespacing_screen(tc->text, ec->desktop, 1);
                                         } else {
                                             if (MOD__SHIFT)
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_end, ec->desktop, 10);
-                                            else 
+                                            else
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_end, ec->desktop, 1);
                                         }
                                         sp_document_done(SP_DT_DOCUMENT(ec->desktop));
@@ -754,21 +754,21 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                         }
                     }
                 } else return TRUE; // return the "I took care of it" value if it was consumed by the IM
-            } else { // do nothing if there's no object to type in - the key will be sent to parent context, 
+            } else { // do nothing if there's no object to type in - the key will be sent to parent context,
                 // except up/down that are swallowed to prevent the zoom field from activation
-                if ((get_group0_keyval(&event->key) == GDK_Up || 
+                if ((get_group0_keyval(&event->key) == GDK_Up ||
                      get_group0_keyval(&event->key) == GDK_Down ||
-                     get_group0_keyval(&event->key) == GDK_KP_Up || 
-                     get_group0_keyval(&event->key) == GDK_KP_Down) && !MOD__CTRL_ONLY) 
+                     get_group0_keyval(&event->key) == GDK_KP_Up ||
+                     get_group0_keyval(&event->key) == GDK_KP_Down) && !MOD__CTRL_ONLY)
                     return TRUE;
             }
             break;
-	case GDK_KEY_RELEASE:
+        case GDK_KEY_RELEASE:
             if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress(tc->imc, (GdkEventKey*) event)) {
                 return TRUE;
             }
             break;
-	default:
+        default:
             break;
     }
 
@@ -821,7 +821,7 @@ static void
 sp_text_context_selection_changed(Inkscape::Selection *selection, SPTextContext *tc)
 {
     g_assert(selection != NULL);
-	
+
     SPItem *item = selection->singleItem();
 
     if (tc->text && (item != tc->text)) {
@@ -909,7 +909,7 @@ sp_text_context_update_cursor(SPTextContext *tc,  bool scroll_to_see)
         tc->show = TRUE;
         tc->phase = 1;
     } else {
-		
+
         sp_canvas_item_hide(tc->cursor);
         tc->show = FALSE;
     }
@@ -994,7 +994,7 @@ static void
 sptc_commit(GtkIMContext *imc, gchar *string, SPTextContext *tc)
 {
     if (!tc->text) {
-        sp_text_context_setup_text(tc);                                                 
+        sp_text_context_setup_text(tc);
         tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
     }
 
