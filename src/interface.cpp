@@ -48,7 +48,6 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 
-#include "dialogs/node-edit.h"
 #include "dialogs/dialog-events.h"
 
 static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);

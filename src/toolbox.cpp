@@ -46,6 +46,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "interface.h"
+#include "nodepath.cpp"
 #include "xml/repr-private.h"
 #include "helper/gnome-utils.h"
 #include "helper/sp-intl.h"
@@ -55,7 +56,6 @@
 #include "dialogs/text-edit.h"
 #include "dialogs/align.h"
 #include "dialogs/export.h"
-#include "dialogs/node-edit.h"
 #include "dialogs/dialog-events.h"
 
 #include "select-toolbar.h"
@@ -206,6 +206,82 @@ sp_aux_toolbox_new ()
 	return hb;
 }
 
+
+//####################################
+//# node editing callbacks
+//####################################
+
+void
+sp_node_path_edit_add (void)
+{
+	sp_node_selected_add_node ();
+}
+
+void
+sp_node_path_edit_delete (void)
+{
+	sp_node_selected_delete ();
+}
+
+void
+sp_node_path_edit_delete_segment (void)
+{
+	sp_node_selected_delete_segment ();
+}
+
+void
+sp_node_path_edit_break (void)
+{
+	sp_node_selected_break ();
+}
+
+void
+sp_node_path_edit_join (void)
+{
+	sp_node_selected_join ();
+}
+
+void
+sp_node_path_edit_join_segment (void)
+{
+	sp_node_selected_join_segment ();
+}
+
+void
+sp_node_path_edit_toline (void)
+{
+	sp_node_selected_set_line_type (ART_LINETO);
+}
+
+void
+sp_node_path_edit_tocurve (void)
+{
+	sp_node_selected_set_line_type (ART_CURVETO);
+}
+
+void
+sp_node_path_edit_cusp (void)
+{
+	sp_node_selected_set_type (SP_PATHNODE_CUSP);
+}
+
+void
+sp_node_path_edit_smooth (void)
+{
+	sp_node_selected_set_type (SP_PATHNODE_SMOOTH);
+}
+
+void
+sp_node_path_edit_symmetric (void)
+{
+	sp_node_selected_set_type (SP_PATHNODE_SYMM);
+}
+
+
+
+//####################################
+//# node editing toolbox
+//####################################
 
 static GtkWidget *
 sp_node_toolbox_new (SPDesktop *desktop)
