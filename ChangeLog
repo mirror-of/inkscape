@@ -2,7 +2,9 @@
 
         * src/document-undo.cpp src/document.h: Undo and redo now return gbooleans
 
-        * src/selection-chemistry.{cpp|h}: sp_undo, sp_redo: new, with statusbar diagnostics
+        * src/selection-chemistry.{cpp|h}: sp_undo, sp_redo: new, with statusbar
+        diagnostics. Duplicate command adds statusbar diagnostics, places duplicate
+        into the source's parent instead of document root
 
         * src/verbs.cpp: Use sp_undo, sp_redo. Tooltip edits
 
