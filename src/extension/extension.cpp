@@ -651,6 +651,10 @@ Input::open (const gchar *uri)
 	SPDocument * doc;
 	SPRepr * repr;
 
+	if (!g_file_test(uri, G_FILE_TEST_EXISTS)) {
+		return NULL;
+	}
+
     doc = imp->open(this, uri);
 
 	repr = sp_document_repr_root(doc);
