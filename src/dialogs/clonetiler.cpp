@@ -18,6 +18,7 @@
 #include "helper/window.h"
 #include "helper/unit-menu.h"
 #include "helper/units.h"
+#include "widgets/icon.h"
 #include "../inkscape.h"
 #include "../prefs-utils.h"
 #include "dialog-events.h"
@@ -96,6 +97,8 @@ enum {
     PICK_S,
     PICK_L
 };
+
+static GtkSizeGroup* table_row_labels = NULL;
 
 static void
 clonetiler_dialog_destroy (GtkObject *object, gpointer data)
@@ -1408,18 +1411,32 @@ clonetiler_table_x_y_rand (int values)
     GtkWidget *table = gtk_table_new (values + 2, 5, FALSE);
     gtk_container_set_border_width (GTK_CONTAINER (table), VB_MARGIN);
     gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-    gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+    gtk_table_set_col_spacings (GTK_TABLE (table), 8);
 
     {
+        GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+
+        GtkWidget *i = sp_icon_new (GTK_ICON_SIZE_MENU, "clonetiler_per_row");
+        gtk_box_pack_start (GTK_BOX (hb), i, FALSE, FALSE, 2);
+
         GtkWidget *l = gtk_label_new ("");
         gtk_label_set_markup (GTK_LABEL(l), "<small>Per row:</small>");
-        clonetiler_table_attach (table, l, 0, 1, 2);
+        gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 2);
+
+        clonetiler_table_attach (table, hb, 0, 1, 2);
     }
 
     {
+        GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+
+        GtkWidget *i = sp_icon_new (GTK_ICON_SIZE_MENU, "clonetiler_per_column");
+        gtk_box_pack_start (GTK_BOX (hb), i, FALSE, FALSE, 2);
+
         GtkWidget *l = gtk_label_new ("");
         gtk_label_set_markup (GTK_LABEL(l), "<small>Per column:</small>");
-        clonetiler_table_attach (table, l, 0, 1, 3);
+        gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 2);
+
+        clonetiler_table_attach (table, hb, 0, 1, 3);
     }
 
     {
@@ -1623,6 +1640,8 @@ clonetiler_dialog (void)
             gtk_option_menu_set_history ( GTK_OPTION_MENU (om), current);
         }
 
+        table_row_labels = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+
 // Shift
         {
             GtkWidget *vb = clonetiler_new_tab (nb, _("S_hift"));
@@ -1636,6 +1655,7 @@ clonetiler_dialog (void)
                     // TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
                     // xgettext:no-c-format
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Shift X:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 2, 1);
             }
 
@@ -1668,6 +1688,7 @@ clonetiler_dialog (void)
                     // TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
                     // xgettext:no-c-format
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Shift Y:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 3, 1);
             }
 
@@ -1698,6 +1719,7 @@ clonetiler_dialog (void)
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Exponent:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 4, 1);
             }
 
@@ -1719,6 +1741,7 @@ clonetiler_dialog (void)
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 5, 1);
             }
 
@@ -1746,6 +1769,7 @@ clonetiler_dialog (void)
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Scale X:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 2, 1);
             }
 
@@ -1776,6 +1800,7 @@ clonetiler_dialog (void)
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Scale Y:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 3, 1);
             }
 
@@ -1806,6 +1831,7 @@ clonetiler_dialog (void)
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 4, 1);
             }
 
@@ -1833,6 +1859,7 @@ clonetiler_dialog (void)
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Angle:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 2, 1);
             }
 
@@ -1863,6 +1890,7 @@ clonetiler_dialog (void)
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 3, 1);
             }
 
@@ -1888,7 +1916,8 @@ clonetiler_dialog (void)
             // Dissolve
             {
                 GtkWidget *l = gtk_label_new ("");
-                gtk_label_set_markup (GTK_LABEL(l), _("<b>Dissolve:</b>"));
+                gtk_label_set_markup (GTK_LABEL(l), _("<b>Fade out:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 2, 1);
             }
 
@@ -1917,6 +1946,7 @@ clonetiler_dialog (void)
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 3, 1);
             }
 
@@ -1959,6 +1989,7 @@ clonetiler_dialog (void)
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>H:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 2, 1);
             }
 
@@ -1988,6 +2019,7 @@ clonetiler_dialog (void)
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>S:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 3, 1);
             }
 
@@ -2016,6 +2048,7 @@ clonetiler_dialog (void)
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>L:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 4, 1);
             }
 
@@ -2044,6 +2077,7 @@ clonetiler_dialog (void)
             { // alternates
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 5, 1);
             }
 
@@ -2241,7 +2275,7 @@ clonetiler_dialog (void)
                     GtkWidget *b  = gtk_check_button_new_with_label (_("Color"));
                     gint old = prefs_get_int_attribute (prefs_path, "pick_to_color", 0);
                     gtk_toggle_button_set_active ((GtkToggleButton *) b, old != 0);
-                    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("If color is picked, it is reproduced exactly; other values are mapped to hue"), NULL);
+                    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Each clone is painted by the picked color (the original must have unset fill or stroke)"), NULL);
                     clonetiler_table_attach (table, b, 0.0, 1, 2);
                     gtk_signal_connect(GTK_OBJECT(b), "toggled",
                                        GTK_SIGNAL_FUNC(clonetiler_pick_to), (gpointer) "pick_to_color");
