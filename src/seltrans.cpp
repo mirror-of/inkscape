@@ -520,15 +520,11 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
 					"anchor", handle[i].anchor, 
 					"shape", SP_CTRL_SHAPE_BITMAP,
 					"size", 13,
-					"mode", SP_KNOT_MODE_COLOR,
-					"fill", 0x4040ffa0,
-					"fill_mouseover", 0xff4040f0,
-					"stroke", 0x000000a0,
-					"stroke_mouseover", 0x000000FF,
-					//"fill", 0xffff0080,
-					//"fill_mouseover", 0x00ffff80,
-					//"stroke", 0xFFFFFFff,
-					//"stroke_mouseover", 0xb0b0b0FF,
+					"mode", SP_KNOT_MODE_XOR,
+					"fill", 0x000000ff, // inversion
+ 					"fill_mouseover", 0x00ff6600, // green
+					"stroke", 0x000000ff, // inversion
+					"stroke_mouseover", 0x000000ff, // inversion
 					"pixbuf", handles[handle[i].control],
 					NULL);
 

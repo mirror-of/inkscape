@@ -438,8 +438,10 @@ sp_ctrl_build_cache (SPCtrl *ctrl)
 	
 }
 
-#define COMPOSEP11(fc,fa,bc) (((255 - (fa)) * (bc) + (fc) * 255 + 127) / 255)
-#define COMPOSEN11(fc,fa,bc) (((255 - (fa)) * (bc) + (fc) * (fa) + 127) / 255)
+// composite background, foreground, alpha for xor mode
+#define COMPOSE_X(b,f,a) ( ( ((guchar) b) * ((guchar) (0xff - a)) + ((guchar) ((b ^ ~f) + b/4 - (b>127? 63 : 0))) * ((guchar) a) ) / 0xff )
+// composite background, foreground, alpha for color mode
+#define COMPOSE_N(b,f,a) ( ( ((guchar) b) * ((guchar) (0xff - a)) + ((guchar) f) * ((guchar) a) ) / 0xff )
 
 static void
 sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
@@ -464,26 +466,32 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 	y1 = MIN (ctrl->box.y1, buf->rect.y1 - 1);
 	x0 = MAX (ctrl->box.x0, buf->rect.x0);
 	x1 = MIN (ctrl->box.x1, buf->rect.x1 - 1);
+
+	bool colormode;
+
 	for (y = y0; y <= y1; y++) {
 		p = buf->buf +    (y - buf->rect.y0) * buf->buf_rowstride + (x0 - buf->rect.x0) * 3;
 		q = ctrl->cache + ((y - ctrl->box.y0) * (ctrl->span*2+1) + (x0 - ctrl->box.x0)) * 4;
 		for (x = x0; x <= x1; x++) {
 			a = *(q + 3);
-			switch (ctrl->mode) {
-			case SP_CTRL_MODE_COLOR:
-				p[0] = COMPOSEN11 (q[0], a, p[0]);
-				p[1] = COMPOSEN11 (q[1], a, p[1]);
-				p[2] = COMPOSEN11 (q[2], a, p[2]);
+			// 00000000 is the only way to get invisible; all other colors with alpha 00 are treated as mode_color with alpha ff
+			colormode = false;
+			if (a == 0x00 && !(q[0] == 0x00 && q[1] == 0x00 && q[2] == 0x00)) {
+				a = 0xff;
+				colormode = true;
+			}
+			if (ctrl->mode == SP_CTRL_MODE_COLOR || colormode) {
+				p[0] = COMPOSE_N (p[0], q[0], a);
+				p[1] = COMPOSE_N (p[1], q[1], a);
+				p[2] = COMPOSE_N (p[2], q[2], a);
 				q += 4;
 				p += 3;
-				break;
-			case SP_CTRL_MODE_XOR:
-				p[0] = COMPOSEN11 (q[0], a, p[0] ^ q[0]);
-				p[1] = COMPOSEN11 (q[1], a, p[1] ^ q[1]);
-				p[2] = COMPOSEN11 (q[2], a, p[2] ^ q[2]);
+			} else if (ctrl->mode == SP_CTRL_MODE_XOR) {
+				p[0] = COMPOSE_X (p[0], q[0], a);
+				p[1] = COMPOSE_X (p[1], q[1], a);
+				p[2] = COMPOSE_X (p[2], q[2], a);
 				q += 4;
 				p += 3;
-				break;
 			}
 		}
 	}

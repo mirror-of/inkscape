@@ -146,7 +146,7 @@ sp_knot_class_init (SPKnotClass * klass)
 					 g_param_spec_int ("mode", "Mode", "",
 							   SP_KNOT_MODE_COLOR,
 							   SP_KNOT_MODE_XOR,
-							   SP_KNOT_MODE_COLOR,
+							   SP_KNOT_MODE_XOR,
 							   (GParamFlags)G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_FILL,
@@ -174,21 +174,21 @@ sp_knot_class_init (SPKnotClass * klass)
 					 g_param_spec_uint ("stroke", "Stroke", "",
 							    0,
 							    0xffffffff,
-							    0xff000000,
+							    0x01000000,
 							    (GParamFlags)G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_STROKE_MOUSEOVER,
 					 g_param_spec_uint ("stroke_mouseover", "Stroke mouseover", "",
 							    0,
 							    0xffffffff,
-							    0xff000000,
+							    0x01000000,
 							    (GParamFlags)G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_STROKE_DRAGGING,
 					 g_param_spec_uint ("stroke_dragging", "Stroke dragging", "",
 							    0,
 							    0xffffffff,
-							    0xff000000,
+							    0x01000000,
 							    (GParamFlags)G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_IMAGE,
@@ -301,9 +301,9 @@ sp_knot_init (SPKnot * knot)
 	knot->fill [SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
 	knot->fill [SP_KNOT_STATE_DRAGGING] = 0x0000ffff;
 
-	knot->stroke [SP_KNOT_STATE_NORMAL] = 0xffffffb0;
-	knot->stroke [SP_KNOT_STATE_MOUSEOVER] = 0x000000ff;
-	knot->stroke [SP_KNOT_STATE_DRAGGING] = 0x000000ff;
+	knot->stroke [SP_KNOT_STATE_NORMAL] = 0x01000000;
+	knot->stroke [SP_KNOT_STATE_MOUSEOVER] = 0x01000000;
+	knot->stroke [SP_KNOT_STATE_DRAGGING] = 0x01000000;
 
 	knot->image [SP_KNOT_STATE_NORMAL] = NULL;
 	knot->image [SP_KNOT_STATE_MOUSEOVER] = NULL;
@@ -599,7 +599,8 @@ sp_knot_new (SPDesktop * desktop)
 		"filled", TRUE,
 		"fill_color", 0xffffff00,
 		"stroked", TRUE,
-		"stroke_color", 0xffffffb0,
+		"stroke_color", 0x01000000,
+		"mode", SP_KNOT_MODE_XOR,
 		NULL);
 
 	gtk_signal_connect (GTK_OBJECT (knot->item), "event",
