@@ -1228,10 +1228,6 @@ sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float 
 	sp_desktop_widget_update_rulers (dtw);
 	sp_desktop_update_scrollbars (dt);
 	sp_desktop_widget_update_zoom (dtw);
-
-#if 0
-	sp_dt_update_snap_distances (desktop);
-#endif
 }
 
 NRRectF *
@@ -1535,36 +1531,30 @@ sp_dtw_zoom_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data)
 }
 
 void
-sp_dtw_zoom_50 (GtkMenuItem *item, gpointer data)
+sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor)
 {
 	NRRectF d;
-	SPDesktop *dt;
 
-	dt = SP_DESKTOP (data);
 	sp_desktop_get_display_area (dt, &d);
-	sp_desktop_zoom_absolute (dt, ( d.x0 + d.x1 ) / 2, ( d.y0 + d.y1 ) / 2, 0.5);
+	sp_desktop_zoom_absolute (dt, ( d.x0 + d.x1 ) / 2, ( d.y0 + d.y1 ) / 2, factor);
+}
+
+void
+sp_dtw_zoom_50 (GtkMenuItem *item, gpointer data)
+{
+	sp_dtw_zoom_menu_handler (SP_DESKTOP (data), 0.5);
 }
 
 void
 sp_dtw_zoom_100 (GtkMenuItem *item, gpointer data)
 {
-	NRRectF d;
-	SPDesktop *dt;
-
-	dt = SP_DESKTOP (data);
-	sp_desktop_get_display_area (dt, &d);
-	sp_desktop_zoom_absolute (dt, ( d.x0 + d.x1 ) / 2, ( d.y0 + d.y1 ) / 2, 1.0);
+	sp_dtw_zoom_menu_handler (SP_DESKTOP (data), 1.0);
 }
 
 void
 sp_dtw_zoom_200 (GtkMenuItem *item, gpointer data)
 {
-	NRRectF d;
-	SPDesktop *dt;
-
-	dt = SP_DESKTOP (data);
-	sp_desktop_get_display_area (dt, &d);
-	sp_desktop_zoom_absolute (dt, ( d.x0 + d.x1 ) / 2, ( d.y0 + d.y1 ) / 2, 2.0);
+	sp_dtw_zoom_menu_handler (SP_DESKTOP (data), 2.0);
 }
 
 void

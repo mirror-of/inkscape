@@ -1,3 +1,7 @@
+2003-12-17 Nathan Hurst <njh@csse.monash.edu.au>
+
+	* partial currying of zoom menu
+	
 2003-12-17  MenTaLguY <mental@rydia.net>
 
 	* src/toolbox.cpp: removed spiral button
