@@ -38,6 +38,7 @@
 #include "internal/win32.h"
 #endif
 #include "internal/ps-out.h"
+#include "internal/pov-out.h"
 #include "internal/eps-out.h"
 #include "internal/gdkpixbuf-input.h"
 #include "prefs-utils.h"
@@ -109,6 +110,8 @@ init (void)
 #ifdef WIN32
 	Internal::PrintWin32::init();
 #endif
+	Internal::PovOutput::init();
+
 	build_module_from_dir(INKSCAPE_EXTENSIONDIR);
 
 	/* now we need to check and make sure everyone is happy */
