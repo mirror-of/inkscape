@@ -7,7 +7,6 @@ OBJECTS = \
 	desktop-affine.o \
 	desktop-events.o \
 	desktop-handles.o \
-	desktop-snap.o \
 	desktop.o \
 	dialogs/align.o \
 	dialogs/desktop-properties.o \
@@ -289,6 +288,7 @@ OBJECTS = \
 	seltrans.o \
 	shortcuts.o \
 	slideshow.o \
+	snap.o \
 	sp-anchor.o \
 	sp-animation.o \
 	sp-chars.o \
@@ -398,7 +398,6 @@ LINTS = \
 	desktop-affine.lint \
 	desktop-events.lint \
 	desktop-handles.lint \
-	desktop-snap.lint \
 	desktop.lint \
 	dialogs/align.lint \
 	dialogs/desktop-properties.lint \
@@ -680,6 +679,7 @@ LINTS = \
 	seltrans.lint \
 	shortcuts.lint \
 	slideshow.lint \
+	snap.lint \
 	sp-anchor.lint \
 	sp-animation.lint \
 	sp-chars.lint \

@@ -30,7 +30,7 @@
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "pixmaps/cursor-arc.xpm"
 #include "sp-metrics.h"
 #include "knotholder.h"

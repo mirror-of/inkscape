@@ -40,7 +40,7 @@
 #include "desktop-events.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "style.h"
 #include "draw-context.h"
 #include "message-stack.h"

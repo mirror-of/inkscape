@@ -147,7 +147,7 @@ OBJECTS = \
 	desktop-events.obj \
 	desktop-handles.obj \
 	desktop-affine.obj \
-	desktop-snap.obj \
+	snap.obj \
 	sp-metrics.obj \
 	toolbox.obj \
 	verbs.obj \

@@ -21,7 +21,7 @@
 #include "helper/helper-forward.h"
 #include "sp-object-group.h"
 #include "libnr/nr-point.h"
-#include "desktop-snap.h"
+#include "snap.h"
 
 
 

@@ -57,7 +57,7 @@
 #include "desktop-events.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "dyna-draw-context.h"
 #include "widgets/spw-utilities.h"
 #include <libnr/nr-point-fns.h>

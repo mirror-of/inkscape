@@ -33,7 +33,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "selection.h"
 #include "select-context.h"
 #include "uri-references.h"

@@ -6,7 +6,6 @@ arc-context.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
@@ -135,7 +134,6 @@ desktop-events.o: \
 	desktop-affine.h \
 	desktop-events.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dialogs/dialog-events.h \
 	display/guideline.h \
@@ -245,36 +243,12 @@ desktop-handles.o: \
 	view.h \
 	xml/xml-forward.h
 
-desktop-snap.o: \
-	desktop-snap.cpp \
-	desktop-snap.h \
-	forward.h \
-	geom.h \
-	helper/helper-forward.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-macros.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-scale-ops.h \
-	libnr/nr-scale.h \
-	libnr/nr-values.h \
-	sp-guide.h \
-	sp-namedview.h \
-	sp-object-group.h \
-	sp-object.h \
-	version.h \
-	xml/xml-forward.h
-
 desktop.o: \
 	desktop.cpp \
 	color.h \
 	desktop-affine.h \
 	desktop-events.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dialogs/dialog-events.h \
 	display/canvas-arena.h \
@@ -427,7 +401,6 @@ dialogs/desktop-properties.o: \
 	color.h \
 	color.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dialogs/desktop-properties.h \
 	dialogs/dialog-events.h \
@@ -605,7 +578,6 @@ dialogs/export.o: \
 	dialogs/export.cpp \
 	color.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dialogs/dialog-events.h \
 	dialogs/export.h \
@@ -2010,7 +1982,6 @@ document.o: \
 	document.cpp \
 	color.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dir-util.h \
 	display/canvas-arena.h \
@@ -2082,7 +2053,6 @@ draw-context.o: \
 	desktop-affine.h \
 	desktop-events.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/bezier-utils.h \
 	display/canvas-bpath.h \
@@ -2153,7 +2123,6 @@ dropper-context.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/canvas-arena.h \
 	display/canvas-bpath.h \
@@ -2228,7 +2197,6 @@ dyna-draw-context.o: \
 	desktop-affine.h \
 	desktop-events.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/bezier-utils.h \
 	display/canvas-bpath.h \
@@ -2473,7 +2441,6 @@ extension/implementation/script.o: \
 	extension/implementation/script.cpp \
 	color.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
@@ -4178,7 +4145,6 @@ file.o: \
 	file.cpp \
 	color.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dialogs/dialog-events.h \
 	dialogs/export.h \
@@ -4571,7 +4537,6 @@ interface.o: \
 	interface.cpp \
 	color.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dialogs/dialog-events.h \
 	dir-util.h \
@@ -5722,7 +5687,6 @@ nodepath.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
@@ -6064,7 +6028,6 @@ rect-context.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
@@ -6186,7 +6149,6 @@ satisfied-guide-cns.o: \
 	satisfied-guide-cns.cpp \
 	approx-equal.h \
 	color.h \
-	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	enums.h \
@@ -6289,7 +6251,6 @@ select-context.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dialogs/object-properties.h \
 	display/nr-arena-forward.h \
@@ -6449,7 +6410,6 @@ selection-chemistry.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
@@ -6647,7 +6607,6 @@ seltrans.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	display/sodipodi-ctrl.h \
@@ -6775,6 +6734,28 @@ slideshow.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
+	xml/xml-forward.h
+
+snap.o: \
+	snap.cpp \
+	forward.h \
+	geom.h \
+	helper/helper-forward.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-macros.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-scale-ops.h \
+	libnr/nr-scale.h \
+	libnr/nr-values.h \
+	sp-guide.h \
+	sp-namedview.h \
+	sp-object-group.h \
+	sp-object.h \
+	version.h \
 	xml/xml-forward.h
 
 sp-anchor.o: \
@@ -7465,7 +7446,6 @@ sp-marker.o: \
 	sp-marker.cpp \
 	attributes.h \
 	color.h \
-	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
@@ -7582,7 +7562,6 @@ sp-namedview.o: \
 	color.h \
 	desktop-events.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/canvas-grid.h \
 	display/nr-arena-forward.h \
@@ -7651,7 +7630,6 @@ sp-object-group.o: \
 sp-object-repr.o: \
 	sp-object-repr.cpp \
 	color.h \
-	desktop-snap.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
@@ -8336,7 +8314,6 @@ sp-symbol.o: \
 	sp-symbol.cpp \
 	attributes.h \
 	color.h \
-	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
@@ -8861,7 +8838,6 @@ spiral-context.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
@@ -9014,7 +8990,6 @@ star-context.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
@@ -9557,7 +9532,6 @@ verbs.o: \
 	arc-context.h \
 	color.h \
 	desktop-handles.h \
-	desktop-snap.h \
 	desktop.h \
 	dialogs/align.h \
 	dialogs/desktop-properties.h \

@@ -22,7 +22,7 @@
 #include <utility>
 #include "sp-guide.h"
 #include "sp-namedview.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "geom.h"
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-scale.h>

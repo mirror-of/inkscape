@@ -29,7 +29,7 @@
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "desktop.h"
 #include "pixmaps/cursor-rect.xpm"
 #include "rect-context.h"

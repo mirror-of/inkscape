@@ -44,7 +44,7 @@ libinkpre_a_SOURCES =	\
 	desktop.cpp desktop.h	\
 	desktop-events.cpp desktop-events.h	\
 	desktop-handles.cpp desktop-handles.h	\
-	desktop-snap.cpp desktop-snap.h	\
+	snap.cpp snap.h	\
 	desktop-units.h	\
 	dir-util.cpp dir-util.h	\
 	document.cpp document.h document-private.h	\

@@ -40,7 +40,7 @@
 #include "dialogs/object-properties.h"
 #include "sp-metrics.h"
 #include "sp-item.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "prefs-utils.h"
 #include "message-context.h"
 #include "message-stack.h"

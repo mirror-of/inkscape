@@ -25,7 +25,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "node-context.h"
 #include "nodepath.h"
 #include "selection-chemistry.h"

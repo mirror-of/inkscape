@@ -11,8 +11,6 @@ desktop-events.cpp
 desktop-events.h
 desktop-handles.cpp
 desktop-handles.h
-desktop-snap.cpp
-desktop-snap.h
 desktop-units.h
 desktop.cpp
 desktop.h
@@ -531,6 +529,8 @@ shortcuts.cpp
 shortcuts.h
 slideshow.cpp
 slideshow.h
+snap.cpp
+snap.h
 sp-anchor.cpp
 sp-anchor.h
 sp-animation.cpp

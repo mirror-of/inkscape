@@ -34,7 +34,7 @@
 #include "display/sp-canvas.h"
 #include "path-chemistry.h"
 #include "desktop-affine.h"
-#include "desktop-snap.h"
+#include "snap.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-rotate-fns.h"
