@@ -81,6 +81,7 @@
 #include "sp-spiral.h"
 #include "sp-pattern.h"
 #include "sp-ellipse.h"
+#include "sp-gradient.h"
 #include "selection.h"
 #include "document-private.h"
 
@@ -2235,6 +2236,18 @@ sp_arc_toolbox_new(SPDesktop *desktop)
 //##       Gradient     ##
 //########################
 
+static void gr_toggle_type (GtkWidget *button, gpointer data) {
+    GtkWidget *linear = (GtkWidget *) g_object_get_data (G_OBJECT(data), "linear");
+    GtkWidget *radial = (GtkWidget *) g_object_get_data (G_OBJECT(data), "radial");
+    if (button == linear && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (linear))) {
+        prefs_set_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
+        if (radial) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radial), FALSE);
+    } else if (button == radial && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radial))) {
+        prefs_set_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_RADIAL);
+        if (linear) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (linear), FALSE);
+    }
+}
+
 static GtkWidget *
 sp_gradient_toolbox_new(SPDesktop *desktop)
 {
@@ -2246,6 +2259,44 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     GtkTooltips *tt = gtk_tooltips_new();
 
     sp_toolbox_add_label(tbl, _("<b>New:</b>"));
+
+    aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+
+    {
+    GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
+    GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
+
+    {
+    GtkWidget *button = sp_button_new_from_data(11,
+                                              SP_BUTTON_TYPE_TOGGLE,
+                                              NULL,
+                                              "fill_gradient",
+                                              _("Create linear gradient"),
+                                              tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_type), tbl);
+    g_object_set_data(G_OBJECT(tbl), "linear", button);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
+                                  prefs_get_int_attribute ("tools.gradient", "newgradient", 1) == SP_GRADIENT_TYPE_LINEAR);
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    {
+    GtkWidget *button = sp_button_new_from_data(11,
+                                              SP_BUTTON_TYPE_TOGGLE,
+                                              NULL,
+                                              "fill_radial",
+                                              _("Create radial (elliptic or circular) gradient"),
+                                              tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (gr_toggle_type), tbl);
+    g_object_set_data(G_OBJECT(tbl), "radial", button);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
+                                  prefs_get_int_attribute ("tools.gradient", "newgradient", 1) == SP_GRADIENT_TYPE_RADIAL);
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(tbl), cvbox, FALSE, FALSE, 0);
+    }
 
     gtk_widget_show_all(tbl);
     sp_set_font_size(tbl, AUX_FONT_SIZE);
