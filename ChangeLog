@@ -1,3 +1,9 @@
+2004-12-31  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/repr-io.cpp, src/xml/repr.h: initial scaffoliding for more
+	  cosmetic use of prefixes in output files (and eventually more proper
+	  namespace handling for output as well)
+
 2004-12-31  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-text.cpp (sp_text_set_transform): Change scaling of font size.

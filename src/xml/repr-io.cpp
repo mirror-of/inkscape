@@ -38,8 +38,9 @@ static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
 static SPRepr *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
 static void sp_repr_set_xmlns_attr (const gchar *prefix, const gchar *uri, SPRepr *repr);
 static gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
-static void sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace);
-static void sp_repr_write_stream_element (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace);
+static void sp_repr_write_root_stream (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns);
+static void sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, gchar const *elide_prefix);
+static void sp_repr_write_stream_element (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, gchar const *elide_prefix);
 
 #ifdef HAVE_LIBWMF
 static xmlDocPtr sp_wmf_convert (const char * file_name);
@@ -270,7 +271,7 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
 }
 
 void
-sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
+sp_repr_save_stream (SPReprDoc *doc, FILE *fp, gchar const *default_ns)
 {
     SPRepr *repr;
     const gchar *str;
@@ -286,9 +287,13 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
     for ( repr = sp_repr_document_first_child(doc) ;
           repr ; repr = sp_repr_next(repr) )
     {
-        sp_repr_write_stream(repr, fp, 0, TRUE);
-        if ( repr->type() == SP_XML_COMMENT_NODE ) {
+        if ( repr->type() == SP_XML_ELEMENT_NODE ) {
+            sp_repr_write_root_stream(repr, fp, TRUE, default_ns);
+        } else if ( repr->type() == SP_XML_COMMENT_NODE ) {
+            sp_repr_write_stream(repr, fp, 0, TRUE, NULL);
             fputc('\n', fp);
+        } else {
+            sp_repr_write_stream(repr, fp, 0, TRUE, NULL);
         }
     }
 }
@@ -296,7 +301,8 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
 /* Returns TRUE if file successfully saved; FALSE if not
  */
 gboolean
-sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
+sp_repr_save_file (SPReprDoc *doc, const gchar *filename,
+                   gchar const *default_ns)
 {
     if (filename == NULL) {
         return FALSE;
@@ -319,7 +325,7 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
 void
 sp_repr_print (SPRepr * repr)
 {
-    sp_repr_write_stream (repr, stdout, 0, TRUE);
+    sp_repr_write_stream (repr, stdout, 0, TRUE, NULL);
 
     return;
 }
@@ -342,15 +348,21 @@ repr_quote_write (FILE * file, const gchar * val)
 }
 
 void
+sp_repr_write_root_stream (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns)
+{
+    return sp_repr_write_stream(repr, file, 0, add_whitespace, NULL);
+}
+
+void
 sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level,
-                      gboolean add_whitespace)
+                      gboolean add_whitespace, gchar const *elide_prefix)
 {
     if (repr->type() == SP_XML_TEXT_NODE) {
         repr_quote_write (file, sp_repr_content (repr));
     } else if (repr->type() == SP_XML_COMMENT_NODE) {
         fprintf (file, "<!--%s-->", sp_repr_content (repr));
     } else if (repr->type() == SP_XML_ELEMENT_NODE) {
-        sp_repr_write_stream_element(repr, file, indent_level, add_whitespace);
+        sp_repr_write_stream_element(repr, file, indent_level, add_whitespace, elide_prefix);
     } else {
         g_assert_not_reached();
     }
@@ -358,7 +370,8 @@ sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level,
 
 void
 sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
-                              gboolean add_whitespace)
+                              gboolean add_whitespace,
+                              gchar const *elide_prefix)
 {
     SPReprAttr *attr;
     SPRepr *child;
@@ -411,7 +424,7 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
             fputs ("\n", file);
         }
         for (child = repr->children; child != NULL; child = child->next) {
-            sp_repr_write_stream (child, file, (loose) ? (indent_level + 1) : 0, add_whitespace);
+            sp_repr_write_stream (child, file, (loose) ? (indent_level + 1) : 0, add_whitespace, elide_prefix);
         }
 
         if (loose && add_whitespace) {
