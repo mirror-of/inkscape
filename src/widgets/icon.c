@@ -51,8 +51,8 @@ static int sp_icon_expose (GtkWidget *widget, GdkEventExpose *event);
 
 static void sp_icon_paint (SPIcon *icon, GdkRectangle *area);
 
-static unsigned char *sp_icon_image_load_pixmap (const unsigned char *name, unsigned int size, unsigned int scale);
-static unsigned char *sp_icon_image_load_svg (const unsigned char *name, unsigned int size, unsigned int scale);
+static guchar *sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int scale);
+static guchar *sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale);
 
 static GtkWidgetClass *parent_class;
 
@@ -83,7 +83,7 @@ sp_icon_class_init (SPIconClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	widget_class = (GtkWidgetClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (GtkWidgetClass*)g_type_class_peek_parent (klass);
 
 	object_class->destroy = sp_icon_destroy;
 
@@ -147,7 +147,7 @@ sp_icon_expose (GtkWidget *widget, GdkEventExpose *event)
 }
 
 static GtkWidget *
-sp_icon_new_full (unsigned int size, unsigned int scale, const unsigned char *name)
+sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 {
 	static GHashTable *iconlib = NULL;
 	char c[256];
@@ -155,11 +155,11 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const unsigned char *na
 
 	if (!iconlib) iconlib = g_hash_table_new (g_str_hash, g_str_equal);
 
-	icon = g_object_new (SP_TYPE_ICON, NULL);
+	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
 
 	icon->size = CLAMP (size, 1, 128);
 	g_snprintf (c, 256, "%d:%d:%s", icon->size, scale, name);
-	icon->px = g_hash_table_lookup (iconlib, c);
+	icon->px = (guchar *)g_hash_table_lookup (iconlib, c);
 	if (!icon->px) {
 		icon->px = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 		g_hash_table_insert (iconlib, g_strdup (c), icon->px);
@@ -171,36 +171,36 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const unsigned char *na
 }
 
 GtkWidget *
-sp_icon_new (unsigned int size, const unsigned char *name)
+sp_icon_new (unsigned int size, const gchar *name)
 {
 	return sp_icon_new_full (size, size, name);
 }
 
 GtkWidget *
-sp_icon_new_scaled (unsigned int size, const unsigned char *name)
+sp_icon_new_scaled (unsigned int size, const gchar *name)
 {
 	return sp_icon_new_full (size, 24, name);
 }
 
 GtkWidget *
-sp_icon_new_from_data (unsigned int size, const unsigned char *px)
+sp_icon_new_from_data (unsigned int size, const guchar *px)
 {
 	SPIcon *icon;
 
-	icon = g_object_new (SP_TYPE_ICON, NULL);
+	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
 
 	icon->size = CLAMP (size, 1, 128);
 
 	GTK_OBJECT_FLAGS (icon) |= SP_ICON_FLAG_STATIC_DATA;
-	icon->px = (unsigned char *) px;
+	icon->px = (guchar*)px; // Why are we losing const here?
 
 	return (GtkWidget *) icon;
 }
 
-unsigned char *
-sp_icon_image_load (const unsigned char *name, unsigned int size, unsigned int scale)
+guchar *
+sp_icon_image_load (const gchar *name, unsigned int size, unsigned int scale)
 {
-	unsigned char *px;
+	guchar *px;
 
 	if (!sp_bitmap_icons) {
 		px = sp_icon_image_load_svg (name, size, scale);
@@ -213,10 +213,10 @@ sp_icon_image_load (const unsigned char *name, unsigned int size, unsigned int s
 	return px;
 }
 
-int
+GtkIconSize
 sp_icon_get_gtk_size (int size)
 {
-	static int map[64] = {0};
+	static GtkIconSize map[64] = {(GtkIconSize)0};
 	size = CLAMP (size, 4, 63);
 	if (!map[size]) {
 		static int count = 0;
@@ -227,20 +227,21 @@ sp_icon_get_gtk_size (int size)
 	return map[size];
 }
 
-unsigned char *
-sp_icon_image_load_gtk (GtkWidget *widget, const unsigned char *name, unsigned int size, unsigned int scale)
+guchar *
+sp_icon_image_load_gtk (GtkWidget *widget, const gchar *name, unsigned int size, unsigned int scale)
 {
 	/* fixme: Make stock/nonstock configurable */
 	if (!strncmp (name, "gtk-", 4)) {
 		GdkPixbuf *pb;
-		unsigned char *px, *spx;
-		int gtksize, srs, y;
+		guchar *px, *spx; // pixel data is unsigned
+		GtkIconSize gtksize;
+		int srs, y;
 		gtksize = sp_icon_get_gtk_size (size);
 		pb = gtk_widget_render_icon (widget, name, gtksize, NULL);
 		if (!gdk_pixbuf_get_has_alpha (pb)) gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
 		spx = gdk_pixbuf_get_pixels (pb);
 		srs = gdk_pixbuf_get_rowstride (pb);
-		px = nr_new (unsigned char, 4 * size * size);
+		px = nr_new (guchar, 4 * size * size);
 		for (y = 0; y < size; y++) {
 			memcpy (px + 4 * y * size, spx + y * srs, 4 * size);
 		}
@@ -289,8 +290,8 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 				bb = (color->blue & 0xff00) >> 8;
 
 				for (yy = y; yy < ye; yy++) {
-					const unsigned char *s;
-					unsigned char *d;
+					const guchar *s;
+					guchar *d;
 					d = NR_PIXBLOCK_PX (&bpb) + (yy - y) * bpb.rs;
 					s = icon->px + 4 * (yy - pady - widget->allocation.y) * icon->size + 4 * (x - padx - widget->allocation.x);
 					for (xx = x; xx < xe; xx++) {
@@ -316,23 +317,23 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 	}
 }
 
-static unsigned char *
-sp_icon_image_load_pixmap (const unsigned char *name, unsigned int size, unsigned int scale)
+static guchar *
+sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int scale)
 {
-	unsigned char *path;
-	unsigned char *px;
+	gchar *path;
+	guchar *px;
 	GdkPixbuf *pb;
 
-	path = (unsigned char *) g_strdup_printf ("%s/%s.png", INKSCAPE_PIXMAPDIR, name);
+	path = (gchar *) g_strdup_printf ("%s/%s.png", INKSCAPE_PIXMAPDIR, name);
 	pb = gdk_pixbuf_new_from_file ((const char *) path, NULL);
 	g_free (path);
 	if (!pb) {
-		path = (unsigned char *) g_strdup_printf ("%s/%s.xpm", INKSCAPE_PIXMAPDIR, name);
+		path = (gchar *) g_strdup_printf ("%s/%s.xpm", INKSCAPE_PIXMAPDIR, name);
 		pb = gdk_pixbuf_new_from_file ((const char *) path, NULL);
 		g_free (path);
 	}
 	if (pb) {
-		unsigned char *spx;
+		guchar *spx;
 		int srs, y;
 		if (!gdk_pixbuf_get_has_alpha (pb)) gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
 		if ((gdk_pixbuf_get_width (pb) != size) || (gdk_pixbuf_get_height (pb) != size)) {
@@ -343,7 +344,7 @@ sp_icon_image_load_pixmap (const unsigned char *name, unsigned int size, unsigne
 		}
 		spx = gdk_pixbuf_get_pixels (pb);
 		srs = gdk_pixbuf_get_rowstride (pb);
-		px = nr_new (unsigned char, 4 * size * size);
+		px = nr_new (guchar, 4 * size * size);
 		for (y = 0; y < size; y++) {
 			memcpy (px + 4 * y * size, spx + y * srs, 4 * size);
 		}
@@ -355,14 +356,14 @@ sp_icon_image_load_pixmap (const unsigned char *name, unsigned int size, unsigne
 	return NULL;
 }
 
-static unsigned char *
-sp_icon_image_load_svg (const unsigned char *name, unsigned int size, unsigned int scale)
+static guchar *
+sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale)
 {
 	static SPDocument *doc = NULL;
 	static NRArena *arena = NULL;
 	static NRArenaItem *root = NULL;
 	static unsigned int edoc = FALSE;
-	unsigned char *px;
+	guchar *px;
 
 	/* Try to load from document */
 	if (!edoc && !doc) {
@@ -432,7 +433,7 @@ sp_icon_image_load_svg (const unsigned char *name, unsigned int size, unsigned i
 				ua.x1 = MIN (ibox.x1, area.x1);
 				ua.y1 = MIN (ibox.y1, area.y1);
 				/* Set up pixblock */
-				px = nr_new (unsigned char, 4 * size * size);
+				px = nr_new (guchar, 4 * size * size);
 				memset (px, 0x00, 4 * size * size);
 				/* Render */
 				nr_pixblock_setup_extern (&B, NR_PIXBLOCK_MODE_R8G8B8A8N,
