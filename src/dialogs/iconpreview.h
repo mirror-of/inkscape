@@ -25,7 +25,7 @@ class IconPreview
 {
 
 public:
-    
+
 
     /**
      * Constructor
