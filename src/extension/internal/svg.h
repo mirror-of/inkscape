@@ -21,15 +21,15 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-class Svg : Inkscape::Extension::Implementation::Implementation {
+class Svg : public Inkscape::Extension::Implementation::Implementation {
 
 public:
-	void          save  (Inkscape::Extension::Output *mod,
-	                     SPDocument *doc,
-	                     const gchar *uri);
-	SPDocument *  open  (Inkscape::Extension::Input *mod,
-	                     const gchar *uri);
-	static void   init  (void);
+    virtual void        save( Inkscape::Extension::Output *mod,
+                               SPDocument *doc,
+                               const gchar *uri );
+    virtual SPDocument *open( Inkscape::Extension::Input *mod,
+                                const gchar *uri );
+    static void         init( void );
 
 };
 
