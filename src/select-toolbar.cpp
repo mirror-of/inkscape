@@ -31,6 +31,7 @@
 #include "widgets/button.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
+#include "widgets/spinbutton-events.h"
 
 #include "prefs-utils.h"
 #include "inkscape-stock.h"
@@ -143,7 +144,6 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	NRRect bbox;
 	gdouble x0, y0, x1, y1;
 	SPSelection *sel;
-	GtkWidget *canvas;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 
@@ -185,123 +185,14 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 		sp_document_done (SP_WIDGET_DOCUMENT (spw));
 
 		// defocus spinbuttons by moving focus to the canvas, unless "stay" is on
-		gboolean tab = GPOINTER_TO_INT(gtk_object_get_data (GTK_OBJECT (spw), "stay"));
-		if (tab) {
-			gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER (FALSE));
-		} else {
-			canvas = (GtkWidget *) gtk_object_get_data (GTK_OBJECT (spw), "dtw");
-			if (canvas) {
-				gtk_widget_grab_focus (GTK_WIDGET(canvas));
-			}
-		}
+		spinbutton_defocus (GTK_OBJECT (spw));
 	}
 
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 }
 
-gboolean
-spinbutton_focus_in (GtkWidget *w, GdkEventKey *event, gpointer data)
-{
-	//SPWidget *spw = (SPWidget *) data;
-
-	gchar *ini;
-
-	ini = (gchar *) gtk_object_get_data (GTK_OBJECT (w), "ini");
-	if (ini) g_free (ini); // free the old value if any
-
-	// retrieve the text
-	ini = gtk_editable_get_chars (GTK_EDITABLE(w), 0, -1);
-
-	// remember it
-	gtk_object_set_data (GTK_OBJECT (w), "ini", g_strdup(ini));
-
-	if (ini) g_free (ini);
-
-	return FALSE; // I didn't consume the event
-}
-
-void
-spinbutton_undo (GtkWidget *w)
-{
-	gdouble v;
-
-	gchar *ini = (gchar *) gtk_object_get_data (GTK_OBJECT (w), "ini");
-	if (ini) {
-		v = atof (ini);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
-	}
-}
-
-gboolean
-spinbutton_keypress (GtkWidget *w, GdkEventKey *event, gpointer data)
-{
-	SPWidget *spw = (SPWidget *) data;
-	GtkWidget *canvas = (GtkWidget *) gtk_object_get_data (GTK_OBJECT (spw), "dtw");
-	gdouble v;
-
-	switch (event->keyval) {
-	case GDK_Escape: // defocus
-		spinbutton_undo (w);
-		if (canvas) {
-			gtk_widget_grab_focus (GTK_WIDGET(canvas));
-		}
-		return TRUE; // I consumed the event
-		break;
-	case GDK_Tab:
-	case GDK_ISO_Left_Tab:
-		// set the flag meaning "do not leave toolbar when changing value"
-		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
-		return FALSE; // I didn't consume the event
-		break;
-	case GDK_Up:
-	case GDK_KP_Up:
-		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
-		v = gtk_spin_button_get_value(GTK_SPIN_BUTTON (w));
-		v += SPIN_STEP;
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
-		return TRUE; // I consumed the event
-		break;
-	case GDK_Down:
-	case GDK_KP_Down:
-		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
-		v = gtk_spin_button_get_value(GTK_SPIN_BUTTON (w));
-		v -= SPIN_STEP;
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
-		return TRUE; // I consumed the event
-		break;
-	case GDK_Page_Up:
-	case GDK_KP_Page_Up:
-		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
-		v = gtk_spin_button_get_value(GTK_SPIN_BUTTON (w));
-		v += SPIN_PAGE_STEP;
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
-		return TRUE; // I consumed the event
-		break;
-	case GDK_Page_Down:
-	case GDK_KP_Page_Down:
-		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
-		v = gtk_spin_button_get_value(GTK_SPIN_BUTTON (w));
-		v -= SPIN_PAGE_STEP;
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
-		return TRUE; // I consumed the event
-		break;
-	case GDK_z:
-	case GDK_Z:
-		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
-		if (event->state & GDK_CONTROL_MASK) {
-			spinbutton_undo (w);
-			return TRUE; // I consumed the event
-		}
-		break;
-	default:
-		return FALSE;
-		break;
-	}
-	return FALSE; // I didn't consume the event
-}
-
-static GtkWidget *
-sp_select_toolbox_spinbutton (gchar const *label, gchar const *data, float lower_limit, GtkWidget *us, GtkWidget *spw, gchar const *tooltip, gboolean altx)
+GtkWidget *
+sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkWidget *us, GtkWidget *spw, gchar *tooltip, gboolean altx)
 {
 	GtkTooltips *tt;
 	GtkWidget *hb, *l, *sb;
