@@ -149,9 +149,10 @@ private :
                     (a.mx1 != 0.0) )
                 );
             //remove the master from the selection
+            SPItem * thing = *master;
             selected.erase(master);
             //Compute the anchor point
-            NR::Rect b = sp_item_bbox_desktop (*master);
+            NR::Rect b = sp_item_bbox_desktop (thing);
             mp = NR::Point(a.mx0 * b.min()[NR::X] + a.mx1 * b.max()[NR::X],
                            a.my0 * b.min()[NR::Y] + a.my1 * b.max()[NR::Y]);
             break;
