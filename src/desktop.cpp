@@ -1390,7 +1390,7 @@ sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
 }
 
 void
-sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom)
+sp_desktop_zoom_absolute_keep_point (SPDesktop *dt, float cx, float cy, float px, float py, float zoom)
 {
 	SPDesktopWidget *dtw;
 	NRRect viewbox;
@@ -1409,10 +1409,38 @@ sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom)
 
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 
-	width2 = 0.5 * (viewbox.x1 - viewbox.x0) / zoom;
-	height2 = 0.5 * (viewbox.y1 - viewbox.y0) / zoom;
+	width2 = (viewbox.x1 - viewbox.x0) / zoom;
+	height2 = (viewbox.y1 - viewbox.y0) / zoom;
 
-	sp_desktop_set_display_area (dt, cx - width2, cy - height2, cx + width2, cy + height2, 0.0);
+	sp_desktop_set_display_area (dt, cx - px * width2, cy - py * height2, cx + (1 - px) * width2, cy + (1 - py) * height2, 0.0);
+}
+
+void
+sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom)
+{
+	sp_desktop_zoom_absolute_keep_point (dt, cx, cy, 0.5, 0.5, zoom);
+}
+
+void
+sp_desktop_zoom_relative_keep_point (SPDesktop *dt, float cx, float cy, float zoom)
+{
+	NRRect area;
+	sp_desktop_get_display_area (dt, &area);
+
+	if (cx < area.x0)
+		cx = area.x0;
+	if (cx > area.x1)
+		cx = area.x1;
+	if (cy < area.y0)
+		cy = area.y0;
+	if (cy > area.y1)
+		cy = area.y1;
+
+	gdouble scale = SP_DESKTOP_ZOOM (dt) * zoom;
+	float px = (cx - area.x0)/(area.x1 - area.x0);
+	float py = (cy - area.y0)/(area.y1 - area.y0);
+
+	sp_desktop_zoom_absolute_keep_point (dt, cx, cy, px, py, scale);
 }
 
 void

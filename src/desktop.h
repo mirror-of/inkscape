@@ -116,6 +116,7 @@ NRRect *sp_desktop_get_display_area (SPDesktop *dt, NRRect *area);
 void sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float y1, float border);
 void sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom);
 void sp_desktop_zoom_relative (SPDesktop *dt, float cx, float cy, float zoom);
+void sp_desktop_zoom_relative_keep_point (SPDesktop *dt, float cx, float cy, float zoom);
 void sp_desktop_zoom_page (SPDesktop *dt);
 void sp_desktop_zoom_page_width (SPDesktop *dt);
 void sp_desktop_zoom_drawing (SPDesktop *dt);
