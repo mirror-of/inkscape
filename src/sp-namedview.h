@@ -21,6 +21,7 @@
 #include "helper/helper-forward.h"
 #include "sp-object-group.h"
 #include "libnr/nr-point.h"
+#include "desktop-snap.h"
 
 
 
@@ -56,6 +57,9 @@ struct SPNamedView {
 	/* Bitmasks of flags SNAP_TO_POINTS, SNAP_TO_BBOX etc. */
 	unsigned int grid_snap_to;
 	unsigned int guide_snap_to;
+
+	GridSnapper grid_snapper;
+	GuideSnapper guide_snapper;
 
 	const SPUnit *gridunit;
 	/* Grid data is in points regardless of unit */

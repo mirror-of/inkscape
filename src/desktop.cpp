@@ -200,8 +200,6 @@ sp_desktop_init (SPDesktop *desktop)
     desktop->is_fullscreen = FALSE;
 
     new (&desktop->sel_modified_connection) SigC::Connection();
-    new (&desktop->grid_snapper) GridSnapper(0);
-    new (&desktop->guide_snapper) GuideSnapper(0);
 }
 
 static void
@@ -238,8 +236,6 @@ sp_desktop_dispose (GObject *object)
 
     dt->sel_modified_connection.disconnect();
     dt->sel_modified_connection.~Connection();
-    dt->grid_snapper.~GridSnapper();
-    dt->guide_snapper.~GuideSnapper();
 }
 
 SPObject *SPDesktop::currentRoot() {
@@ -444,22 +440,20 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
 	px = &sp_unit_get_by_id(SP_UNIT_PX);
     }
 
+    SPNamedView &nv = *desktop->namedview;
+
     // Fixme: expansion?
     gdouble const px2doc = sqrt (fabs (desktop->w2d[0] * desktop->w2d[3]));
-    NR::Coord const grid_tolerance_val = ( desktop->namedview->snaptogrid
-                                           ? desktop->namedview->gridtolerance
-                                           : 0.0 );
-    desktop->grid_snapper.setDistance(sp_convert_distance_full(grid_tolerance_val,
-                                                               *desktop->namedview->gridtoleranceunit,
-                                                               *px,
-                                                               px2doc));
-    NR::Coord const guide_tolerance_val = ( desktop->namedview->snaptoguides
-                                            ? desktop->namedview->guidetolerance
-                                            : 0.0 );
-    desktop->guide_snapper.setDistance(sp_convert_distance_full(guide_tolerance_val,
-                                                                *desktop->namedview->guidetoleranceunit,
-                                                                *px,
-                                                                px2doc));
+    NR::Coord const grid_tolerance_val = ( nv.snaptogrid ? nv.gridtolerance : 0.0 );
+    nv.grid_snapper.setDistance(sp_convert_distance_full(grid_tolerance_val,
+                                                         *nv.gridtoleranceunit,
+                                                         *px,
+                                                         px2doc));
+    NR::Coord const guide_tolerance_val = ( nv.snaptoguides ? nv.guidetolerance : 0.0 );
+    nv.guide_snapper.setDistance(sp_convert_distance_full(guide_tolerance_val,
+                                                          *nv.guidetoleranceunit,
+                                                          *px,
+                                                          px2doc));
 }
 
 void

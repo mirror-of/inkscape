@@ -32,7 +32,7 @@
 /* Minimal distance to norm before point is considered for snap. */
 #define MIN_DIST_NORM 1.0
 
-#define SNAP_ON(d) (((d)->grid_snapper.getDistance() > 0.0) || ((d)->guide_snapper.getDistance() > 0.0))
+#define SNAP_ON(d) (((d)->namedview->grid_snapper.getDistance() > 0.0) || ((d)->namedview->guide_snapper.getDistance() > 0.0))
 
 /**
  *    Try to snap `req' in one dimension.
@@ -135,7 +135,7 @@ NR::Coord sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::
     NR::Point snapped = req;
 
     if (nv.snaptoguides) {
-        upper = desktop->guide_snapper.getDistance();
+        upper = nv.guide_snapper.getDistance();
         for (GSList const *l = nv.guides; l != NULL; l = l->next) {
             SPGuide const &g = *SP_GUIDE(l->data);
             NR::Point trial(req);
@@ -156,7 +156,7 @@ NR::Coord sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::
          *  the vector to the requested point.  If the distance along the
          *  vector is less than the snap distance then snap.
          */
-        upper = MIN(best, desktop->grid_snapper.getDistance());
+        upper = MIN(best, nv.grid_snapper.getDistance());
         
         for (unsigned int i = 0; i < 2; ++i) {
             NR::Point trial(req);

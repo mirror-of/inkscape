@@ -43,6 +43,7 @@
 #include "sp-gradient.h"
 #include "sp-pattern.h"
 #include "sp-use-reference.h"
+#include "sp-namedview.h"
 using NR::X;
 using NR::Y;
 
@@ -754,10 +755,10 @@ void sp_selection_paste(bool in_place)
 
         /* Snap the offset of the new item(s) to the grid */
         /* FIXME: this gridsnap fiddling is a hack. */
-        gdouble const curr_gridsnap = desktop->grid_snapper.getDistance();
-        desktop->grid_snapper.setDistance(NR_HUGE);
+        gdouble const curr_gridsnap = desktop->namedview->grid_snapper.getDistance();
+        desktop->namedview->grid_snapper.setDistance(NR_HUGE);
         sp_desktop_free_snap(desktop, m);
-        desktop->grid_snapper.setDistance(curr_gridsnap);
+        desktop->namedview->grid_snapper.setDistance(curr_gridsnap);
         sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
     }
 

@@ -119,6 +119,9 @@ sp_namedview_init (SPNamedView * nv)
 
 	nv->guides = NULL;
 	nv->viewcount = 0;
+
+	new (&nv->grid_snapper) GridSnapper(0);
+	new (&nv->guide_snapper) GuideSnapper(0);
 }
 
 static void
@@ -198,6 +201,9 @@ sp_namedview_release (SPObject * object)
 		gtk_object_destroy (GTK_OBJECT (namedview->gridviews->data));
 		namedview->gridviews = g_slist_remove (namedview->gridviews, namedview->gridviews->data);
 	}
+
+	namedview->grid_snapper.~GridSnapper();
+	namedview->guide_snapper.~GuideSnapper();
 
 	if (((SPObjectClass *) parent_class)->release)
 		((SPObjectClass *) parent_class)->release (object);
