@@ -669,7 +669,6 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	GtkWidget *eventbox;
 	GtkTooltips *tt;
 	GtkStyle *style;
-	GtkWidget *mbar;
 
 	widget = GTK_WIDGET (dtw);
 
@@ -684,14 +683,14 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (dtw), vbox);
 
-	mbar = sp_ui_main_menubar ();
-	gtk_box_pack_start (GTK_BOX (vbox), mbar, FALSE, FALSE, 0);
-
-	dtw->aux_toolbox = sp_aux_toolbox_new ();
-	gtk_box_pack_start (GTK_BOX (vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
+       	sbar = gtk_hbox_new (FALSE, 0);
+	gtk_box_pack_end (GTK_BOX (vbox), sbar, FALSE, TRUE, 0);
 
 	hbox = gtk_hbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+	gtk_box_pack_end (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+
+	dtw->aux_toolbox = sp_aux_toolbox_new ();
+	gtk_box_pack_end (GTK_BOX (vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
 
 	dtw->tool_toolbox = sp_tool_toolbox_new ();
 	gtk_box_pack_start (GTK_BOX (hbox), dtw->tool_toolbox, FALSE, TRUE, 0);
@@ -740,8 +739,6 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
       	gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (dtw->canvas));
 
 	/* Status bars */
-       	sbar = gtk_hbox_new (FALSE,0);
-	gtk_box_pack_start (GTK_BOX (vbox), sbar, FALSE, TRUE, 0);
 
 	dtw->sticky_zoom = sp_button_new_from_data (SP_ICON_SIZE_BUTTON,
 						    SP_BUTTON_TYPE_TOGGLE,
@@ -994,6 +991,7 @@ SPViewWidget *
 sp_desktop_widget_new (SPNamedView *namedview)
 {
 	SPDesktopWidget *dtw;
+	GtkWidget *mbar;
 
 	dtw = (SPDesktopWidget*)gtk_type_new (SP_TYPE_DESKTOP_WIDGET);
 
@@ -1022,6 +1020,10 @@ sp_desktop_widget_new (SPNamedView *namedview)
 
 	/* Listen on namedview modification */
 	g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
+
+	mbar = sp_ui_main_menubar (SP_VIEW (dtw->desktop));
+	gtk_widget_show_all (mbar);
+	gtk_box_pack_start (GTK_BOX (gtk_bin_get_child (GTK_BIN (dtw))), mbar, FALSE, FALSE, 0);
 
 	sp_tool_toolbox_set_desktop (dtw->tool_toolbox, dtw->desktop);
 	sp_aux_toolbox_set_desktop (dtw->aux_toolbox, dtw->desktop);

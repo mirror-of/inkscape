@@ -2,9 +2,8 @@
 /**
 	\file verbs.cpp
 
-	All of the code to use verbs, a front end to actions.  Basically you
-	need to use a verb to get an action.  So call a verb and make something
-	happen!
+	This file implements routines necessary to deal with verbs.  A verb is a
+	numeric identifier used to retrieve standard SPActions for particular views.
 */
 
 /*
@@ -183,7 +182,7 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
 	SPDesktop *dt;
 	SPEventContext *ec;
 
-	dt = SP_ACTIVE_DESKTOP;
+	dt = SP_DESKTOP (sp_action_get_view (action));
 	if (!dt) return;
 
 	ec = dt->event_context;
@@ -233,7 +232,7 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
 {
 	SPDesktop *dt;
 
-	dt = SP_ACTIVE_DESKTOP;
+	dt = SP_DESKTOP (sp_action_get_view (action));
 	if (!dt) return;
 
 	switch ((int) data) {
@@ -301,7 +300,7 @@ sp_verb_action_object_perform (SPAction *action, void * data, void * pdata)
 	NRRect bbox;
 	NRPoint center;
 
-	dt = SP_ACTIVE_DESKTOP;
+	dt = SP_DESKTOP (sp_action_get_view (action));
 	if (!dt) return;
 	sel = SP_DT_SELECTION (dt);
 	if (sp_selection_is_empty (sel)) return;
@@ -341,7 +340,7 @@ sp_verb_action_ctx_perform (SPAction *action, void * data, void * pdata)
 	sp_verb_t verb;
 	int vidx;
 
-	dt = SP_ACTIVE_DESKTOP;
+	dt = SP_DESKTOP (sp_action_get_view (action));
 	if (!dt) return;
 	verb = (sp_verb_t)GPOINTER_TO_INT((gpointer)data);
 
@@ -403,7 +402,7 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 	SPRepr *repr;
 	unsigned int v = 0;
 
-	dt = SP_ACTIVE_DESKTOP;
+	dt = SP_DESKTOP (sp_action_get_view (action));
 	if (!dt) return;
 	repr = SP_OBJECT_REPR (dt->namedview);
 

@@ -1,6 +1,10 @@
 2003-12-19  MenTaLguY <mental@rydia.net>
 
-	* SPActions now know their desktop, and toolbar buttons get it assigned correctly -- still need to see about the menus, however
+	* src/toolbox.cpp, src/helper/action.cpp, src/helper/action.h:
+	  SPActions now know their desktop, and toolbar buttons get it assigned correctly
+
+	* src/desktop.cpp, src/interface.h, src/interface.cpp, src/verbs.cpp:
+	  Verbs now use the desktop associated with an action rather than SP_ACTIVE_DESKTOP
 
 2003-12-18  Jon A. Cruz <jon@joncruz.org>
 

@@ -208,6 +208,6 @@ sp_action_set_shortcut (SPAction *action, unsigned int shortcut)
 SPView *
 sp_action_get_view (SPAction *action)
 {
-	g_return_val_if_fail (SP_IS_VIEW (action), NULL);
+	g_return_val_if_fail (SP_IS_ACTION (action), NULL);
 	return action->view;
 }
