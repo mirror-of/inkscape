@@ -57,7 +57,7 @@ sp_help_about (void)
             sp_text_set_repr_text_multiline ( SP_TEXT (version), 
                                               INKSCAPE_VERSION);
         }
-		
+
         sp_document_ensure_up_to_date (doc);
 
 
@@ -99,16 +99,16 @@ sp_help_about (void)
 void
 sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data)
 {
-	gchar *name = (gchar *) data;
-	gchar *c = g_strconcat (INKSCAPE_TUTORIALSDIR, "/", name, NULL);
-	sp_file_open (c, NULL);
-	g_free (c);
+    gchar *name = (gchar *) data;
+    gchar *c = g_strconcat (INKSCAPE_TUTORIALSDIR, "/", name, NULL);
+    sp_file_open (c, NULL);
+    g_free (c);
 }
 
 void
 sp_help_keys (void)
 {
-	gchar *c = g_strconcat (INKSCAPE_SCREENSDIR, _("/keys.svg"), NULL);
-	sp_file_open (c, NULL);
-	g_free (c);
+    gchar *c = g_strconcat (INKSCAPE_SCREENSDIR, _("/keys.svg"), NULL);
+    sp_file_open (c, NULL);
+    g_free (c);
 }
