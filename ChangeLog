@@ -1,3 +1,18 @@
+2004-09-08  MenTaLguY  <mental@rydia.net>
+
+	* src/libnr/nr-object.h, src/libnr/nr-object.cpp: fix NRObject
+	  initialization
+
+	* configure.in, src/gc-core.h, src/gc-managed.h, src/gc-anchored,
+	  src/gc-finalized.h:
+
+	  add a --disable-gc ./configure option to omit garbage collection
+	  from the build (the normal allocator will be used, although
+	  memory will obviously leak since it does not get explicitly freed)
+
+	* src/xml/repr.cpp: SPRepr's copy constructor needs to properly
+	  initialize its fields
+
 2004-09-08  Carl Hetherington <inkscape@carlh.net>
 
 	* src/helper/stock-items.cpp: fix a bad free().  Improve coding
