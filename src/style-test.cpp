@@ -1,15 +1,15 @@
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 #include <cmath>
 #include "utest/utest.h"
 #include "style.h"
 
 static bool streq(char const *a, char const *b) {
-    return strcmp(a, b) == 0;
+    return std::strcmp(a, b) == 0;
 }
 
 static bool strneq(char const *a, char const *b, size_t const len) {
-    return strncmp(a, b, len) == 0;
+    return std::strncmp(a, b, len) == 0;
 }
 
 /* Extracted mechanically from http://www.w3.org/TR/SVG11/types.html#ColorKeywords:
@@ -283,7 +283,7 @@ number_val(char const prop[], double const min, double const max, double const e
     assert(min <= max);
     /* TODO */
     double const propns[] = {0., 1e-7, 1e-5, 0.13, 1/7., 2/3., 10/11., 1.0};
-    size_t const prop_len = strlen(prop);
+    size_t const prop_len = std::strlen(prop);
     for (unsigned i = 0; i < G_N_ELEMENTS(propns); ++i) {
         double const propn = propns[i];
         double const val = ( propn == 0
