@@ -54,7 +54,7 @@ static Inkscape::Extension::Extension * build_from_reprdoc (SPReprDoc * doc, Ink
 	Lastly, the open function is called in the module itself.
 */
 SPDocument *
-sp_module_system_open (const gchar * key, const gchar * filename)
+sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filename)
 {
 	gpointer parray[2];
 	Inkscape::Extension::Input * imod = NULL;
@@ -62,12 +62,12 @@ sp_module_system_open (const gchar * key, const gchar * filename)
 	SPDocument * doc;
 	SPRepr * repr;
 
-	if (!strcmp(key, SP_MODULE_KEY_AUTODETECT)) {
+	if (key == NULL) {
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&imod;
 		Inkscape::Extension::db.foreach(open_internal, (gpointer)&parray);
 	} else {
-		imod = dynamic_cast<Inkscape::Extension::Input *>(Inkscape::Extension::db.get(key));
+		imod = dynamic_cast<Inkscape::Extension::Input *>(key);
 	}
 
 	if (imod == NULL) {
@@ -183,20 +183,20 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 	Lastly, the save function is called in the module itself.
 */
 void
-sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filename)
+sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, const gchar * filename)
 {
 	Inkscape::Extension::Output * omod;
 	gpointer parray[2];
 	GtkDialog * prefs;
 	SPRepr *repr;
 
-	if (!strcmp(key, SP_MODULE_KEY_AUTODETECT)) {
+	if (key == NULL) {
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&omod;
 		omod = NULL;
 		Inkscape::Extension::db.foreach(save_internal, (gpointer)&parray);
 	} else {
-		omod = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(key));
+		omod = dynamic_cast<Inkscape::Extension::Output *>(key);
 	}
 
 	if (!dynamic_cast<Inkscape::Extension::Output *>(omod)) {

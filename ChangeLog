@@ -1,3 +1,16 @@
+2004-03-30  Ted Gould  <ted@gould.cx>
+
+    * src/file.cpp, src/file.h, src/dialogs/filedialog-win32.cpp,
+      src/dialogs/filedialog.cpp, src/dialogs/filedialog.h
+      src/extension/system.cpp, src/extension/system.h,
+      src/extension/implementation/script.cpp:
+	  
+	  Making all of the file operations have lists of the extensions
+	  that can be used to save and open.  This also fixes the bug
+	  which talks about mis-saving file without an error - there is
+	  and error message now.  Probably not the most clear, but you
+	  won't miss it.
+
 2004-03-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/bezier-utils-test.cpp: Finish the sp_bezier_fit_cubic test.

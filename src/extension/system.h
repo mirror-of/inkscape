@@ -20,9 +20,9 @@
 #include <extension/extension.h>
 
 
-SPDocument * sp_module_system_open                (const gchar * key,
+SPDocument * sp_module_system_open                (Inkscape::Extension::Extension * key,
                                                    const gchar *  filename);
-void         sp_module_system_save                (const gchar * key,
+void         sp_module_system_save                (Inkscape::Extension::Extension * key,
                                                    SPDocument *   doc,
                                                    const gchar *  filename);
 void         sp_module_system_filter              (GtkObject * object,

@@ -72,6 +72,8 @@ FileOpenDialog::FileOpenDialog(
     nativeData->fileTypes = fileTypes;
     nativeData->title     = g_strdup(title);
 
+	extension = NULL;
+	filename = NULL;
 }
 
 
@@ -84,19 +86,22 @@ FileOpenDialog::~FileOpenDialog() {
         g_free(nativeData->title);
         g_free( nativeData );
     }
+
+	if (filename != NULL)
+		g_free(filename);
+	extension = NULL;
 }
 
 
 
-char *
+bool
 FileOpenDialog::show() {
 
     if ( !nativeData ) {
         //error
-        return NULL;
+        return FALSE;
     }
 
-    gchar *result = NULL;
     gint  retval  = FALSE;
 
 
@@ -139,7 +144,7 @@ FileOpenDialog::show() {
 
         retval = GetOpenFileNameW (&ofn);
         if (retval)
-            result = g_utf16_to_utf8( fnbufW, -1, NULL, NULL, NULL );
+            filename = g_utf16_to_utf8( fnbufW, -1, NULL, NULL, NULL );
 
         g_free( dirW );
         g_free( titleW );
@@ -182,11 +187,11 @@ FileOpenDialog::show() {
 
         retval = GetOpenFileNameA (&ofn);
         if ( retval ) {
-            result = g_strdup( fnbuf );
+            filename = g_strdup( fnbuf );
             /* ### We need to try something like this instead:
             GError *err = NULL;
-            result = g_filename_to_utf8(fnbuf, -1, NULL, NULL, &err);
-            if ( !result && err ) {
+            filename = g_filename_to_utf8(fnbuf, -1, NULL, NULL, &err);
+            if ( !filename && err ) {
                 g_warning("Charset conversion in show()[%d]%s\n",
                            err->code, err->message);
             }
@@ -196,10 +201,10 @@ FileOpenDialog::show() {
 
     if ( !retval ) {
         //int errcode = CommDlgExtendedError();
-        return NULL;
+        return FALSE;
     }
 
-    return result;
+    return TRUE;
 
 }
 
@@ -217,7 +222,7 @@ struct FileSaveNativeData_def {
 
 
 FileSaveDialog::FileSaveDialog(
-   const char *dir, FileDialogType fileTypes, const char *title) {
+   const char *dir, FileDialogType fileTypes, const char *title, const char * default_key) {
 
     nativeData = (FileSaveNativeData *)
             g_malloc(sizeof (FileSaveNativeData));
@@ -260,6 +265,8 @@ FileSaveDialog::FileSaveDialog(
         };
     nativeData->ofn = ofn;
 
+	extension = NULL;
+	filename = NULL;
 }
 
 FileSaveDialog::~FileSaveDialog() {
@@ -267,13 +274,16 @@ FileSaveDialog::~FileSaveDialog() {
     //do any cleanup here
     if ( nativeData )
         g_free( nativeData );
+	if ( filename != NULL)
+		g_free(filename);
+	extension = NULL;
 }
 
-char *
+bool
 FileSaveDialog::show() {
 
     if (!nativeData)
-        return NULL;
+        return FALSE;
     int retval = GetSaveFileName (&(nativeData->ofn));
     if (!retval) {
         //int errcode = CommDlgExtendedError();
@@ -285,8 +295,8 @@ FileSaveDialog::show() {
     else
         selectionType = SVG_NAMESPACE;
 
-    return g_strdup (nativeData->fnbuf);
-
+    filename = g_strdup (nativeData->fnbuf);
+	return TRUE;
 }
 
 

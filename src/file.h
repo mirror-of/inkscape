@@ -42,7 +42,7 @@ void sp_file_exit (void);
 /**
  * Opens a new file and window from the given URI
  */
-void sp_file_open (const gchar *uri, const gchar *key);
+void sp_file_open (const gchar *uri, Inkscape::Extension::Extension *key);
 
 /**
  * Displays a file open dialog. Calls sp_file_open on

@@ -3,6 +3,7 @@
 
 
 #include <glib.h>
+#include <extension/db.h>
 
 namespace Inkscape
 {
@@ -65,9 +66,29 @@ public:
      * Show an OpenFile file selector.
      * @return the selected path if user selected one, else NULL
      */
-    char *show();
+    bool show();
+
+    /**
+     * Return the 'key' (filetype) of the selection, if any
+     * @return a pointer to a string if successful (which must
+     * be later freed with g_free(), else NULL.
+     */
+	Inkscape::Extension::Extension * getSelectionType()
+        { return extension; }
+	gchar * getFilename (void) { return filename; }
 
 private:
+
+    /**
+     * The extension to use to write this file
+     */
+	Inkscape::Extension::Extension * extension;
+
+	/**
+	 * Filename that was given
+	 */
+	gchar * filename;
+
 
     /**
      * Architecture-specific data
@@ -101,7 +122,7 @@ public:
      * @param title the title of the dialog
      * @param key a list of file types from which the user can select
      */
-    FileSaveDialog(const char *path, FileDialogType fileTypes, const char *title);
+    FileSaveDialog(const char *path, FileDialogType fileTypes, const char *title, const char * default_key);
 
 
     /**
@@ -115,22 +136,28 @@ public:
      * Show an SaveAs file selector.
      * @return the selected path if user selected one, else NULL
      */
-    char *show();
+    bool show();
 
     /**
      * Return the 'key' (filetype) of the selection, if any
      * @return a pointer to a string if successful (which must
      * be later freed with g_free(), else NULL.
      */
-    gint getSelectionType()
-        { return selectionType; }
+	Inkscape::Extension::Extension * getSelectionType()
+        { return extension; }
+	gchar * getFilename (void) { return filename; }
 
 private:
 
     /**
-     * The type of selected file
+     * The extension to use to write this file
      */
-    FileDialogSelectionType selectionType;
+	Inkscape::Extension::Extension * extension;
+
+	/**
+	 * Filename that was given
+	 */
+	gchar * filename;
 
     /**
      * Architecture-specific data

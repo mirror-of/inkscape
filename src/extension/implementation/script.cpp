@@ -31,7 +31,8 @@
 
 #include "../system.h"
 
-#include "../extension.h"
+#include <extension/extension.h>
+#include <extension/db.h>
 #include "implementation.h"
 #include "script.h"
 
@@ -253,7 +254,7 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 
 	execute(command, (gchar *)filename, (gchar *)tempfilename_out);
 
-	mydoc = sp_module_system_open(SP_MODULE_KEY_INPUT_SVG, tempfilename_out);
+	mydoc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
 	sp_document_set_uri(mydoc, (const gchar *)filename);
 
 	unlink((char *)tempfilename_out);
@@ -309,7 +310,7 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 		}
 	}
 
-	sp_module_system_save(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE, doc, tempfilename_in);
+	sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in);
 
 	execute(command, (gchar *)tempfilename_in, (gchar *)filename);
 
@@ -398,7 +399,7 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 		}
 	}
 
-	sp_module_system_save(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE, doc, tempfilename_in);
+	sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in);
 
 	/* TODO: I don't think this is the best way to do this, plus,
 	         it needs to handle all of the cases where there is more
@@ -417,7 +418,7 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 	execute(command, tempfilename_in, tempfilename_out);
 	g_free(command);
 
-	mydoc = sp_module_system_open(SP_MODULE_KEY_INPUT_SVG, tempfilename_out);
+	mydoc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
 
 	unlink(tempfilename_in);
 	unlink(tempfilename_out);

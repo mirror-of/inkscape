@@ -14,6 +14,9 @@
 #include "filedialog.h"
 #include "helper/sp-intl.h"
 
+#include <extension/db.h>
+
+#define IO_STORAGE_NAME "IOExtension"
 
 namespace Inkscape
 {
@@ -21,6 +24,21 @@ namespace UI
 {
 namespace Dialogs
 {
+
+/*#################################
+# U T I L I T Y
+#################################*/
+
+static void
+menu_switch (GtkWidget * widget, const Inkscape::Extension::Extension ** extension)
+{
+	Inkscape::Extension::DB::IOExtensionDescription * desc;
+
+	desc = reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(g_object_get_data(G_OBJECT(widget), IO_STORAGE_NAME));
+	// printf("The menu has changed to: %s\n", desc->name);
+	*extension = desc->extension;
+	return;
+}
 
 
 /*#################################
@@ -31,15 +49,31 @@ struct FileOpenNativeData_def {
     GtkWidget  *dlg;
 };
 
-
 FileOpenDialog::FileOpenDialog(const char *dir,
            FileDialogType fileTypes, const char *title) {
+	GSList *    extension_list;
+	GSList *    current_item;
+    GtkWidget * menu;
+    GtkWidget * item;
 
     nativeData = (FileOpenNativeData *) g_malloc( sizeof(FileOpenNativeData));
     if ( !nativeData ) {
         //do we want an exception?
         return;
     }
+
+	/* Initalize to Autodetect */
+	extension = NULL;
+	/* No filename to start out with */
+	filename  = NULL;
+
+	extension_list = Inkscape::Extension::db.get_input_list();
+	if (extension_list == NULL) {
+		// Another exception
+		printf("Ted, you messed up somewhere\n");
+		return;
+	}
+
     /*
     We will want to use FileChooserDialog here, but that will
     have to wait until Gtk2.4 is on all platforms
@@ -49,8 +83,46 @@ FileOpenDialog::FileOpenDialog(const char *dir,
         dir = "";
 	gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
 
+    /*
+    Add the selection type menu (svg/with extensions/etc) to the dialog
+    */
+    GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+    gtk_box_pack_start (GTK_BOX (GTK_FILE_SELECTION(dlg)->main_vbox),
+        hb, FALSE, FALSE, 0);
+    GtkWidget *om = gtk_option_menu_new ();
+    gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, 0);
+
+    menu = gtk_menu_new();
+    item = gtk_menu_item_new_with_label(_("Autodetect"));
+	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
+	g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, extension_list->data);
+    gtk_menu_append(GTK_MENU(menu), item);
+
+	/* Seperator for looks */
+	item = gtk_menu_item_new();
+    gtk_menu_append(GTK_MENU(menu), item);
+
+	/* First one gets skipped, it is the autodetect one that is handled
+	   above. */
+	for (current_item = g_slist_next(extension_list);
+            current_item != NULL;
+            current_item = g_slist_next(current_item)) {
+		item = gtk_menu_item_new_with_label((reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data))->name);
+		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
+		g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, current_item->data);
+		gtk_widget_show(item);
+		gtk_menu_append(GTK_MENU(menu), item);
+	}
+
+    gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
+    GtkWidget *l = gtk_label_new (_("File type:"));
+    gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    gtk_widget_show_all (hb);
 
     nativeData->dlg      = dlg;
+	Inkscape::Extension::db.free_list(extension_list);
+
+	return;
 }
 
 FileOpenDialog::~FileOpenDialog()
@@ -59,32 +131,35 @@ FileOpenDialog::~FileOpenDialog()
         gtk_widget_destroy( nativeData->dlg );
         g_free( nativeData );
     }
+	if (filename != NULL)
+		g_free(filename);
 }
 
 
-char *
+bool
 FileOpenDialog::show()
 {
 
     if ( !nativeData ) {
         //do we want an exception?
-        return NULL;
+        return FALSE;
     }
    
     GtkWidget *dlg = nativeData->dlg;
 
     gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
     gint b = gtk_dialog_run (GTK_DIALOG (dlg));
+	gtk_widget_hide(GTK_WIDGET(dlg));
 
     if (b == GTK_RESPONSE_OK)
         {
-        gchar *filename = g_strdup (
+        filename = g_strdup (
             gtk_file_selection_get_filename (GTK_FILE_SELECTION(dlg)));
-        return g_strdup(filename);
+        return TRUE;
         }
     else
         {
-	    return NULL;
+	    return FALSE;
 	    }
 }
 
@@ -100,9 +175,13 @@ struct FileSaveNativeData_def {
 };
 
 FileSaveDialog::FileSaveDialog(
-    const char *dir, FileDialogType fileTypes, const char *title)
+    const char *dir, FileDialogType fileTypes, const char *title, const char * default_key)
 
 {
+	GSList *    extension_list;
+	GSList *    current_item;
+    GtkWidget * menu;
+    GtkWidget * item;
 
     nativeData = (FileSaveNativeData *) g_malloc( sizeof(FileSaveNativeData));
     if ( !nativeData ) {
@@ -110,14 +189,30 @@ FileSaveDialog::FileSaveDialog(
         return;
     }
 
+	/* Initalize to Autodetect */
+	extension = NULL;
+	/* No filename to start out with */
+	filename  = NULL;
+
+	extension_list = Inkscape::Extension::db.get_output_list();
+	if (extension_list == NULL) {
+		// Another exception
+		printf("Ted, you messed up somewhere\n");
+		return;
+	}
+
     /*
     We will want to use FileChooserDialog here, but that will
     have to wait until Gtk2.4 is on all platforms
     */
     GtkWidget *dlg = gtk_file_selection_new (title);
+
+	/* This doesn't seem to do anything useful, so I'm dropping it */
+	/*
     if ( !dir )
         dir = "*.svg";
 	gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
+	*/
 
     /*
     Add the selection type menu (svg/with extensions/etc) to the dialog
@@ -128,12 +223,27 @@ FileSaveDialog::FileSaveDialog(
     GtkWidget *om = gtk_option_menu_new ();
     gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, 0);
 
-    GtkWidget *menu = gtk_menu_new();
-    GtkWidget *item = gtk_menu_item_new_with_label(_("Autodetect"));
+    menu = gtk_menu_new();
+    item = gtk_menu_item_new_with_label(_("Autodetect"));
+	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
+	g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, extension_list->data);
     gtk_menu_append(GTK_MENU(menu), item);
-    item = gtk_menu_item_new_with_label(
-        _("Use the extension of the file to choose a filetype"));
+
+	/* Seperator for looks */
+	item = gtk_menu_item_new();
     gtk_menu_append(GTK_MENU(menu), item);
+
+	/* First one gets skipped, it is the autodetect one that is handled
+	   above. */
+	for (current_item = g_slist_next(extension_list);
+            current_item != NULL;
+            current_item = g_slist_next(current_item)) {
+		item = gtk_menu_item_new_with_label((reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data))->name);
+		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
+		g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, current_item->data);
+		gtk_widget_show(item);
+		gtk_menu_append(GTK_MENU(menu), item);
+	}
 
 
     gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
@@ -142,7 +252,9 @@ FileSaveDialog::FileSaveDialog(
     gtk_widget_show_all (hb);
 
     nativeData->dlg      = dlg;
+	Inkscape::Extension::db.free_list(extension_list);
 
+	return;
 }
 
 FileSaveDialog::~FileSaveDialog()
@@ -151,39 +263,40 @@ FileSaveDialog::~FileSaveDialog()
         gtk_widget_destroy( nativeData->dlg );
         g_free( nativeData );
     }
+	if (filename != NULL)
+		g_free(filename);
 }
 
-char *
+bool
 FileSaveDialog::show() {
 
     if ( !nativeData ) {
         //do we want an exception?
-        return NULL;
+        return FALSE;
     }
    
     GtkWidget *dlg = nativeData->dlg;
 
+	/* Reset the default back to autodetect */
+	extension = NULL;
     gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
     gint b = gtk_dialog_run (GTK_DIALOG (dlg));
+	gtk_widget_hide(GTK_WIDGET(dlg));
 
     if (b == GTK_RESPONSE_OK)
         {
-        gchar *filename =
+        gchar * dialog_filename =
             (gchar *)gtk_file_selection_get_filename (GTK_FILE_SELECTION(dlg));
-        selectionType = SVG_NAMESPACE_WITH_EXTENSIONS;
-        //if ( strcmp(key, "xxx") == 0 )
-        //    selectionType = SVG_NAMESPACE;
-	    return g_strdup(filename);
+		g_free(filename);
+	    filename = g_strdup(dialog_filename);
+		return TRUE;
         }
     else
         {
-	    return NULL;
+	    return FALSE;
 	    }
 
 }
-
-
-
 
 
 

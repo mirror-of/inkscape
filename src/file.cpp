@@ -110,13 +110,10 @@ sp_file_exit (void)
  *  Open a file, add the document to the desktop
  */
 void
-sp_file_open (const gchar *uri, const gchar *key)
+sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
 {
-
-    if (!key)
-        key = SP_MODULE_KEY_INPUT_DEFAULT;
-
     SPDocument *doc = sp_module_system_open (key, uri);
+
     if (doc) {
         SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
         sp_document_unref (doc);
@@ -142,8 +139,11 @@ sp_file_open_dialog (gpointer object, gpointer data)
                  (const char *)open_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (const char *)_("Select file to open"));
-    gchar *fileName = dlg->show();
+    bool success = dlg->show();
+    gchar *fileName = success ? g_strdup(dlg->getFilename()) : NULL;
+	Inkscape::Extension::Extension * selection = dlg->getSelectionType();
     delete dlg;
+	if (!success) return;
     if (fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
@@ -175,7 +175,7 @@ sp_file_open_dialog (gpointer object, gpointer data)
         g_free (open_path);
         open_path = g_dirname (fileName);
         if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
-        sp_file_open (fileName, NULL);
+        sp_file_open (fileName, selection);
         g_free (fileName);
     }
 
@@ -193,12 +193,10 @@ sp_file_open_dialog (gpointer object, gpointer data)
  * This 'save' function called by the others below
  */
 static bool
-file_save (SPDocument *doc, const gchar *uri, const gchar *key)
+file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *key)
 {
     if (!doc || !uri) //Safety check
         return FALSE;
-    if (!key)
-        key = SP_MODULE_KEY_OUTPUT_DEFAULT;
 	try {
 		sp_module_system_save (key, doc, uri);
 	} catch (Inkscape::Extension::Output::no_extension_found &e) {
@@ -215,27 +213,19 @@ file_save (SPDocument *doc, const gchar *uri, const gchar *key)
 static gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
-	bool sucess = FALSE;
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
                  (const char *)save_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
-                 (const char *)_("Select file to save"));
-    char *fileName = dlg->show();
-    gint selectionType = dlg->getSelectionType();
-    //Convert to old types
-    gchar *oldSelectionType = SP_MODULE_KEY_OUTPUT_SVG;
-    if (selectionType == Inkscape::UI::Dialogs::SVG_NAMESPACE_WITH_EXTENSIONS)
-        oldSelectionType = SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE;
+                 (const char *)_("Select file to save"), NULL);
+	bool sucess = dlg->show();
+    char *fileName = g_strdup(dlg->getFilename());
+	Inkscape::Extension::Extension * selectionType = dlg->getSelectionType();
+
+	if (!sucess) return sucess;
+
     delete dlg;
     if (fileName && *fileName) {
-        gchar *ext = (gchar *)sp_extension_from_path ((const gchar *)fileName);
-        if (!ext || (strcmp(ext, "svg") && strcmp(ext, "xml"))) {
-            gchar *oldFileName = fileName;
-            fileName = g_strconcat (oldFileName, ".svg", NULL);
-            g_free (oldFileName);
-        }
-
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
         GError *error;
@@ -263,7 +253,7 @@ sp_file_save_dialog (SPDocument *doc)
         }
 
 
-        sucess = file_save (doc, fileName, oldSelectionType);
+        sucess = file_save (doc, fileName, selectionType);
         g_free (save_path);
         save_path = g_dirname (fileName);
         save_path = g_strdup (save_path);
@@ -294,14 +284,18 @@ sp_file_save_document (SPDocument *doc)
 			/* TODO: This currently requires a recognizable extension to
 				 be on the file name - odd stuff won't work */
 			fn = g_strdup (doc->uri);
-			success = file_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
+			success = file_save(doc, fn, NULL);
 			g_free ((void *) fn);
 		}
 
         if (success)
             sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
-        else
+        else {
+			gchar * text;
             sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+			text = g_strdup_printf(_("File %s unable to be saved."), doc->uri);
+			sp_ui_error_dialog (text);
+		}
 
     } else {
         sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("No changes need to be saved."));
@@ -342,7 +336,10 @@ sp_file_save_as (gpointer object, gpointer data)
 	if (sucess == TRUE) {
 		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
 	} else {
+		gchar * text;
 		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+		text = g_strdup_printf(_("File %s unable to be saved."), SP_ACTIVE_DOCUMENT->uri);
+		sp_ui_error_dialog (text);
 	}
 
 	return sucess;
@@ -481,8 +478,10 @@ sp_file_import (GtkWidget * widget)
                  (const char *)import_path,
                  Inkscape::UI::Dialogs::IMPORT_TYPES,
                  (const char *)_("Select file to import"));
-    char *fileName = dlg->show();
+    bool success = dlg->show();
+    char *fileName = success ? g_strdup(dlg->getFilename()) : NULL;
     delete dlg;
+	if (!success) return;
     if (fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
