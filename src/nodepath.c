@@ -724,6 +724,17 @@ sp_nodepath_selected_nodes_move (SPNodePath * nodepath, gdouble dx, gdouble dy)
 	update_object (nodepath);
 }
 
+void
+sp_node_selected_move (gdouble dx, gdouble dy)
+{
+	SPNodePath * nodepath;
+
+	nodepath = sp_nodepath_current ();
+	if (!nodepath) return;
+
+	sp_nodepath_selected_nodes_move (nodepath, dx, dy);
+}
+
 static void
 sp_node_ensure_knot (SPPathNode * node, gint which, gboolean show_knot)
 {

@@ -270,6 +270,27 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 				sp_node_selected_set_line_type (ART_CURVETO);
 				ret = TRUE;
 				break;
+				// arrow keys, with shift:
+			case GDK_Left: 
+			case GDK_KP_Left: 
+				sp_node_selected_move (-10, 0);
+				ret = TRUE;
+				break;
+			case GDK_Right: 
+			case GDK_KP_Right: 
+				sp_node_selected_move (10, 0);
+				ret = TRUE;
+				break;
+			case GDK_Up: 
+			case GDK_KP_Up: 
+				sp_node_selected_move (0, 10);
+				ret = TRUE;
+				break;
+			case GDK_Down: 
+			case GDK_KP_Down: 
+				sp_node_selected_move (0, -10);
+				ret = TRUE;
+				break;
 			default:
 				break;
 			}
@@ -281,6 +302,27 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 				    && (nc->nodepath == NULL)) {
 					ret = sp_node_context_stamp(nc);
 				}
+				break;
+				// arrow keys, without shift:
+			case GDK_Left: 
+			case GDK_KP_Left: 
+				sp_node_selected_move (-1, 0);
+				ret = TRUE;
+				break;
+			case GDK_Right: 
+			case GDK_KP_Right: 
+				sp_node_selected_move (1, 0);
+				ret = TRUE;
+				break;
+			case GDK_Up: 
+			case GDK_KP_Up: 
+				sp_node_selected_move (0, 1);
+				ret = TRUE;
+				break;
+			case GDK_Down: 
+			case GDK_KP_Down: 
+				sp_node_selected_move (0, -1);
+				ret = TRUE;
 				break;
 			default:
 				ret = node_key (event);

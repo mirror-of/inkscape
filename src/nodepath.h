@@ -75,5 +75,6 @@ void sp_node_selected_join (void);
 void sp_node_selected_join_segment (void);
 void sp_node_selected_set_type (SPPathNodeType type);
 void sp_node_selected_set_line_type (ArtPathcode code);
+void sp_node_selected_move (gdouble dx, gdouble dy);
 
 #endif
