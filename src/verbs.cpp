@@ -973,7 +973,7 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Stretch this document window to full screen"),
         "fullscreen"},
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
-    {SP_VERB_VIEW_NEW, "ViewNew", N_("_New Window"), N_("Open a new window with the same document"),
+    {SP_VERB_VIEW_NEW, "ViewNew", N_("D_uplicate Window"), N_("Open a new window with the same document view"),
         "view_new"},
     {SP_VERB_VIEW_NEW_PREVIEW, "ViewNewPreview", N_("_New View Preview"),
 	N_("New View Preview"), NULL/*"view_new_preview"*/},
