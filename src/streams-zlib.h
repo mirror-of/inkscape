@@ -14,6 +14,8 @@
 
 #include "streams-handles.h"
 
+#include <glib/gtypes.h>
+#include <glib/garray.h>
 #include <zlib.h>
 #include <iostream>
 
