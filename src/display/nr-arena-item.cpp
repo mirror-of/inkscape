@@ -279,7 +279,7 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
 					  item->px, 4 * (item->bbox.x1 - item->bbox.x0), FALSE, FALSE);
 		nr_blit_pixblock_pixblock (pb, &cpb);
 		nr_pixblock_release (&cpb);
-		cpb.empty = FALSE;
+		pb->empty = FALSE;
 		return item->state | NR_ARENA_ITEM_STATE_RENDER;
 	}
 

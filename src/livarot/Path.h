@@ -263,7 +263,7 @@ public:
   
   // dash the polyline
   // the result is stored in the polyline, so you lose the original. make a copy before if needed
-  void  DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain);
+  void  DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset);
   
   //utilitaire pour inkscape
   void  LoadArtBPath(void *iP,NR::Matrix &tr,bool doTransformation);
@@ -316,7 +316,7 @@ private:
  
   // creation of dashes: take the polyline given by spP (length spL) and dash it according to head, body, etc. put the result in
   // the polyline of this instance
-  void DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain);
+  void DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset);
 
   // Functions used by the conversion.
   // they append points to the polyline

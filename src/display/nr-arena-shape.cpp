@@ -502,6 +502,13 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 		}
   }
 }
+static int       CmpFloat(const void * p1, const void * p2) {
+		float* d1=(float*)p1;
+		float* d2=(float*)p2;
+		if ( fabsf(*d2-*d1) < 0.0001) return 0;
+		return (( *d1 < *d2 )?-1:1);
+};
+
 void
 nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 {
@@ -624,12 +631,14 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
               dash.dash[i] = style->stroke_dash.dash[i] * scale;
             }
             int    nbD=dash.n_dash;
-            float  *dashs=(float*)malloc(nbD*sizeof(float));
-            dashs[0]=dash.dash[0]-dash.offset;
+            float  *dashs=(float*)malloc((nbD+1)*sizeof(float));
+            while ( dash.offset >= dlen ) dash.offset-=dlen;
+            dashs[0]=dash.dash[0];
             for (int i=1;i<nbD;i++) {
               dashs[i]=dashs[i-1]+dash.dash[i];
             }
-            thePath->DashPolyline(0.0,0.0,dlen,nbD-1,dashs,true);
+            // modulo dlen
+            thePath->DashPolyline(0.0,0.0,dlen,nbD,dashs,true,dash.offset);
             free(dashs);
             g_free (dash.dash);
           }

@@ -1592,10 +1592,14 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 			}
 			int chg=(i+1-theSt)&7;
 			if ( chg == 0 ) {
-				c_full[0]=as[0]->fullB[(i+1-theSt)>>3] | as[0]->partB[(i+1-theSt)>>3];
-				c_full[1]=as[1]->fullB[(i+1-theSt)>>3] | as[1]->partB[(i+1-theSt)>>3];
-				c_full[2]=as[2]->fullB[(i+1-theSt)>>3] | as[2]->partB[(i+1-theSt)>>3];
-				c_full[3]=as[3]->fullB[(i+1-theSt)>>3] | as[3]->partB[(i+1-theSt)>>3];
+        if ( i < curMax ) {
+          c_full[0]=as[0]->fullB[(i+1-theSt)>>3] | as[0]->partB[(i+1-theSt)>>3];
+          c_full[1]=as[1]->fullB[(i+1-theSt)>>3] | as[1]->partB[(i+1-theSt)>>3];
+          c_full[2]=as[2]->fullB[(i+1-theSt)>>3] | as[2]->partB[(i+1-theSt)>>3];
+          c_full[3]=as[3]->fullB[(i+1-theSt)>>3] | as[3]->partB[(i+1-theSt)>>3];
+        } else {
+        // end of line. byebye
+        }
 			} else {
 				c_full[0]<<=4;
 				c_full[1]<<=4;
@@ -1684,10 +1688,14 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
         // move to the right: shift bits in the c_full[], and if we shifted everything, load the next c_full[]
 			int chg=(i+1-theSt)&7;
 			if ( chg == 0 ) {
-				for (int j=0;j<nbSub;j++) {
-					c_full[j]=as[j]->fullB[(i+1-theSt)>>3] | as[j]->partB[(i+1-theSt)>>3];
-				//			c_part[j]=as[j]->partB[(i+1-theSt)>>3];
-				}
+        if ( i < curMax ) {
+          for (int j=0;j<nbSub;j++) {
+            c_full[j]=as[j]->fullB[(i+1-theSt)>>3] | as[j]->partB[(i+1-theSt)>>3];
+            //			c_part[j]=as[j]->partB[(i+1-theSt)>>3];
+          }
+        } else {
+          // end of line. byebye
+        }        
 			} else {
 				for (int j=0;j<nbSub;j++) {
 					c_full[j]<<=4;

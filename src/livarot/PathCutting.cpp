@@ -53,7 +53,7 @@ static inline unsigned SizeForData(int const typ)
 	return roundup_div(res, sizeof(NR::Point));
 }
 
-void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain)
+void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset)
 {
   if ( nbD <= 0 || body <= 0.0001 ) return; // pas de tirets, en fait
   
@@ -75,7 +75,7 @@ void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,b
     }
     if ( typ == polyline_moveto ) {
       if ( lastMI >= 0 && lastMI < i-1 ) { // au moins 2 points
-        DashSubPath(i-lastMI,lastMP,head,tail,body,nbD,dashs,stPlain);
+        DashSubPath(i-lastMI,lastMP,head,tail,body,nbD,dashs,stPlain,stOffset);
       }
       lastMI=i;
       lastMP=curP;
@@ -89,7 +89,7 @@ void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,b
     }
   }
   if ( lastMI >= 0 && lastMI < origNb-1 ) {
-    DashSubPath(origNb-lastMI,lastMP,head,tail,body,nbD,dashs,stPlain);
+    DashSubPath(origNb-lastMI,lastMP,head,tail,body,nbD,dashs,stPlain,stOffset);
   }
   
   if ( back ) {
@@ -111,7 +111,7 @@ void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,b
 
 
 
-void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain)
+void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset)
 {
 /*  printf("%f [%f : %i ",head,body,nbD);
   for (int i=0;i<nbD;i++) printf("%f ",dashs[i]);
@@ -183,8 +183,17 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
         nl-=head-curLength;
         curLength=head;
         dashInd=0;
-        dashPos=0;
+        dashPos=stOffset;
         bool nPlain=stPlain;
+        while ( dashs[dashInd] < stOffset ) {
+          dashInd++;
+          nPlain=!(nPlain);
+          if ( dashInd >= nbD ) {
+            dashPos=0;
+            dashInd=0;
+            break;
+          }
+        }
         if ( nPlain == true && dashPlain == false ) {
           NR::Point  p=(enLength-curLength)*lastP+(curLength-stLength)*n;
           p/=(enLength-stLength);
@@ -242,7 +251,8 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
             } else {
               dashInd=0;
               dashPos=0;
-              nPlain=stPlain;
+              //nPlain=stPlain;
+              nPlain=dashPlain;
             }
             if ( nPlain == true && dashPlain == false ) {
               NR::Point  p=(enLength-curLength-leftInDash)*lastP+(curLength+leftInDash-stLength)*n;
