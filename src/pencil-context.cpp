@@ -20,7 +20,7 @@
 #include "desktop-handles.h"
 #include "draw-anchor.h"
 #include "draw-context.h"
-#include "macros.h"
+#include "modifier-fns.h"
 #include "prefs-utils.h"
 #include "snap.h"
 #include "display/bezier-utils.h"
@@ -35,6 +35,10 @@ static void sp_pencil_context_setup(SPEventContext *ec);
 static void sp_pencil_context_dispose(GObject *object);
 
 static gint sp_pencil_context_root_handler(SPEventContext *event_context, GdkEvent *event);
+static gint pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &bevent);
+static gint pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mevent);
+static gint pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &revent);
+static gint pencil_handle_key_press(SPPencilContext *const pc, guint const keyval, guint const state);
 
 static void spdc_set_startpoint(SPPencilContext *pc, NR::Point p, guint state);
 static void spdc_set_endpoint(SPPencilContext *pc, NR::Point p, guint state);
@@ -113,17 +117,52 @@ gint
 sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
 {
     SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
-    SPDesktop *const dt = ec->desktop;
 
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if ( event->button.button == 1 ) {
-                NR::Point const button_w(event->button.x,
-                                         event->button.y);
+            ret = pencil_handle_button_press(pc, event->button);
+            break;
+
+        case GDK_MOTION_NOTIFY:
+            ret = pencil_handle_motion_notify(pc, event->motion);
+            break;
+
+        case GDK_BUTTON_RELEASE:
+            ret = pencil_handle_button_release(pc, event->button);
+            break;
+
+        case GDK_KEY_PRESS:
+            ret = pencil_handle_key_press(pc,
+                                          event->key.keyval,
+                                          event->key.state);
+            break;
+
+        default:
+            break;
+    }
+
+    if (!ret) {
+        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
+            = ((SPEventContextClass *) pencil_parent_class)->root_handler;
+        if (parent_root_handler) {
+            ret = parent_root_handler(ec, event);
+        }
+    }
+
+    return ret;
+}
+
+static gint
+pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &bevent)
+{
+            gint ret = FALSE;
+            if ( bevent.button == 1 ) {
+                NR::Point const button_w(bevent.x,
+                                         bevent.y);
                 /* Find desktop coordinates */
-                NR::Point p = sp_desktop_w2d_xy_point(dt, button_w);
+                NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, button_w);
 
                 /* Test whether we hit any anchor. */
                 SPDrawAnchor *anchor = spdc_test_inside(pc, button_w);
@@ -139,29 +178,33 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
                             p = anchor->dp;
                         }
                         pc->sa = anchor;
-                        spdc_set_startpoint(pc, p, event->button.state);
+                        spdc_set_startpoint(pc, p, bevent.state);
                         ret = TRUE;
                         break;
                 }
             }
-            break;
+            return ret;
+}
 
-        case GDK_MOTION_NOTIFY: {
-
-            if ( ( event->motion.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
+static gint
+pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mevent)
+{
+            gint ret = FALSE;
+            SPDesktop *const dt = pc->desktop;
+            if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
                 /* Grab mouse, so release will not pass unnoticed */
                 pc->grab = SP_CANVAS_ITEM(dt->acetate);
                 sp_canvas_item_grab(pc->grab, ( GDK_BUTTON_PRESS_MASK   |
                                                 GDK_BUTTON_RELEASE_MASK |
                                                 GDK_POINTER_MOTION_MASK  ),
-                                    NULL, event->button.time);
+                                    NULL, mevent.time);
             }
 
             /* Find desktop coordinates */
-            NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(event->motion.x, event->motion.y));
+            NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(mevent.x, mevent.y));
 
             /* Test whether we hit any anchor. */
-            SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(event->button.x, event->button.y));
+            SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(mevent.x, mevent.y));
 
             switch (pc->state) {
                 case SP_PENCIL_CONTEXT_ADDLINE:
@@ -169,12 +212,12 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
                     if (anchor) {
                         p = anchor->dp;
                     }
-                    spdc_set_endpoint(pc, p, event->motion.state);
+                    spdc_set_endpoint(pc, p, mevent.state);
                     ret = TRUE;
                     break;
                 default:
                     /* We may be idle or already freehand */
-                    if ( event->motion.state & GDK_BUTTON1_MASK ) {
+                    if ( mevent.state & GDK_BUTTON1_MASK ) {
                         pc->state = SP_PENCIL_CONTEXT_FREEHAND;
                         if ( !pc->sa && !pc->green_anchor ) {
                             /* Create green anchor */
@@ -183,27 +226,33 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
                         /* fixme: I am not sure whether we want to snap to anchors in middle of freehand (Lauris) */
                         if (anchor) {
                             p = anchor->dp;
-                        } else if ((event->button.state & GDK_SHIFT_MASK) == 0) {
+                        } else if ((mevent.state & GDK_SHIFT_MASK) == 0) {
                             namedview_free_snap_all_types(dt->namedview, p);
                         }
                         if ( pc->npoints != 0 ) { // buttonpress may have happened before we entered draw context!
-                            spdc_add_freehand_point(pc, p, event->motion.state);
+                            spdc_add_freehand_point(pc, p, mevent.state);
                             ret = TRUE;
                         }
                     }
                     break;
             }
-            break;
-        }
+            return ret;
+}
 
-        case GDK_BUTTON_RELEASE:
-            if ( event->button.button == 1 ) {
+static gint
+pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &revent)
+{
+            gint ret = FALSE;
+            if ( revent.button == 1 ) {
+                SPDesktop *const dt = pc->desktop;
+
                 /* Find desktop coordinates */
-                NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(event->motion.x, event->motion.y));
+                NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(revent.x,
+                                                                    revent.y));
 
                 /* Test whether we hit any anchor. */
-                SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(event->button.x,
-                                                                      event->button.y));
+                SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(revent.x,
+                                                                      revent.y));
 
                 switch (pc->state) {
                     case SP_PENCIL_CONTEXT_IDLE:
@@ -218,7 +267,7 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
                             p = anchor->dp;
                         }
                         pc->ea = anchor;
-                        spdc_finish_endpoint(pc, p, !anchor, event->button.state);
+                        spdc_finish_endpoint(pc, p, !anchor, revent.state);
                         pc->state = SP_PENCIL_CONTEXT_IDLE;
                         ret = TRUE;
                         break;
@@ -248,40 +297,34 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
 
                 if (pc->grab) {
                     /* Release grab now */
-                    sp_canvas_item_ungrab(pc->grab, event->button.time);
+                    sp_canvas_item_ungrab(pc->grab, revent.time);
                     pc->grab = NULL;
                 }
 
                 pc->grab = NULL;
                 ret = TRUE;
             }
-            break;
+            return ret;
+}
 
-        case GDK_KEY_PRESS:
-            switch (event->key.keyval) {
+static gint
+pencil_handle_key_press(SPPencilContext *const pc, guint const keyval, guint const state)
+{
+            gint ret = FALSE;
+            switch (keyval) {
                 case GDK_Up:
                 case GDK_Down:
                 case GDK_KP_Up:
                 case GDK_KP_Down:
-                    // prevent the zoom field from activation
-                    if (!MOD__CTRL_ONLY)
+                    // Prevent the zoom field from activation.
+                    if (!mod_ctrl_only(state)) {
                         ret = TRUE;
+                    }
                     break;
                 default:
                     break;
             }
-            break;
-
-        default:
-            break;
-    }
-
-    if (!ret) {
-        if (((SPEventContextClass *) pencil_parent_class)->root_handler)
-            ret = ((SPEventContextClass *) pencil_parent_class)->root_handler(ec, event);
-    }
-
-    return ret;
+            return ret;
 }
 
 /** Snaps new node relative to the previous node. */

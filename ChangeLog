@@ -1,5 +1,9 @@
 2004-10-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/pencil-context.cpp (sp_pencil_context_root_handler): Split into
+	  many functions, fixing some illegal union aliasing along the way (as
+	  was done for sp_pen_context_root_handler).
+
 	* src/modifier-fns.h: New file of inline functions based on macros.h
 	  MOD__CTRL etc. macros.
 	* src/Makefile_insert: Add the new file.
