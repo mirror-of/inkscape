@@ -20,7 +20,7 @@ typedef void (* NRNameListDestructor) (NRNameList *list);
 
 struct _NRNameList {
 	unsigned long length;
-	gchar **names;
+    guchar **names;
 	NRNameListDestructor destructor;
 };
 
