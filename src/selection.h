@@ -24,9 +24,10 @@
 #include "gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
-#include "xml/xml-forward.h"
 
 #include <list>
+
+class SPRepr;
 
 /**
  * @brief The set of selected SPObjects for a given desktop.

@@ -17,7 +17,6 @@
 #include <glib/gtypes.h>
 #include "gc-anchored.h"
 
-#include "xml/xml-forward.h"
 #include "xml/sp-repr.h"
 #include "xml/sp-repr-doc.h"
 #include "xml/sp-css-attr.h"

@@ -21,10 +21,11 @@
 #include <libnr/nr-matrix-fns.h>
 #include "display/display-forward.h"
 #include "helper/helper-forward.h"
-#include "xml/xml-forward.h"
 #include "forward.h"
 #include "sp-metric.h"
 #include "view.h"
+
+class SPCSSAttr;
 
 namespace Inkscape { class ObjectHierarchy; }
 

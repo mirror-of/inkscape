@@ -4,13 +4,10 @@
 #include <glib/gquark.h>
 #include <glib/gtypes.h>
 #include "gc-managed.h"
-#include "xml/xml-forward.h"
 #include "util/shared-c-string-ptr.h"
-
 
 #define SP_REPR_ATTRIBUTE_KEY(a) g_quark_to_string((a)->key)
 #define SP_REPR_ATTRIBUTE_VALUE(a) ((a)->value)
-
 
 struct SPReprAttr : public Inkscape::GC::Managed<> {
     SPReprAttr(GQuark k,

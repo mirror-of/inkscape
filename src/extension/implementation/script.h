@@ -14,7 +14,8 @@
 #define __INKSCAPE_EXTENSION_IMPEMENTATION_SCRIPT_H__
 
 #include "implementation.h"
-#include "xml/xml-forward.h"
+
+class SPRepr;
 
 namespace Inkscape {
 namespace Extension {

@@ -16,9 +16,10 @@
 #include "sp-path.h"
 #include "desktop-handles.h"
 #include "libnr/nr-path-code.h"
-#include "xml/xml-forward.h"
 
 #include <list>
+
+class SPRepr;
 
 /** Radial objects are represented by an angle and a distance from
  * 0,0.  0,0 is represented by a == big_num.

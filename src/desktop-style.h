@@ -13,7 +13,7 @@
  */
 
 #include <glib/gtypes.h>
-#include "xml/xml-forward.h"
+
 class ColorRGBA;
 struct SPCSSAttr;
 struct SPDesktop;

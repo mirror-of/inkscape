@@ -16,7 +16,8 @@
 
 #include "forward.h"
 #include "libnr/nr-forward.h"
-#include "xml/xml-forward.h"
+
+class SPCSSAttr;
 
 void sp_selection_cleanup();
 

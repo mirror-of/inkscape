@@ -31,6 +31,8 @@
 #define SP_IS_ATTRIBUTE_TABLE(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_ATTRIBUTE_TABLE))
 #define SP_IS_ATTRIBUTE_TABLE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_ATTRIBUTE_TABLE))
 
+class SPRepr;
+
 struct SPAttributeWidget;
 struct SPAttributeWidgetClass;
 
@@ -41,7 +43,6 @@ struct SPAttributeTableClass;
 #include <gtk/gtkvbox.h>
 
 #include <forward.h>
-#include <xml/xml-forward.h>
 
 struct SPAttributeWidget {
     GtkEntry entry;

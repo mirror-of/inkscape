@@ -13,7 +13,8 @@
  */
 
 #include "forward.h"
-#include <xml/xml-forward.h>
+
+class SPRepr;
 
 SPObject *sp_object_repr_build_tree (SPDocument *document, SPRepr *repr);
 

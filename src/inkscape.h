@@ -13,7 +13,8 @@
  */
 
 #include "forward.h"
-#include "xml/xml-forward.h"
+
+class SPRepr;
 
 #define INKSCAPE inkscape_get_instance()
 

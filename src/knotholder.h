@@ -18,8 +18,9 @@
 #include <glib/gtypes.h>
 #include "knot-enums.h"
 #include "forward.h"
-#include <libnr/nr-forward.h>
-#include <xml/xml-forward.h>
+#include "libnr/nr-forward.h"
+
+class SPRepr;
 
 typedef void (* SPKnotHolderSetFunc) (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state);
 typedef NR::Point (* SPKnotHolderGetFunc) (SPItem *item);

@@ -21,7 +21,9 @@
 
 #include "forward.h"
 #include "libnr/nr-forward.h"
-#include "xml/xml-forward.h"
+
+class SPRepr;
+class SPReprDoc;
 
 class SPDocumentPrivate;
 

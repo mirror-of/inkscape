@@ -19,10 +19,11 @@
 
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>
-#include "xml/xml-forward.h"
 #include "selcue.h"
 
 #include "forward.h"
+
+class SPRepr;
 
 namespace Inkscape { class MessageContext; }
 

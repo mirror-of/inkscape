@@ -64,7 +64,8 @@
 #include "forward.h"
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
-#include "xml/xml-forward.h"
+
+class SPRepr;
 
 typedef void (* SPObjectMethod) (SPObject *object, gpointer data);
 

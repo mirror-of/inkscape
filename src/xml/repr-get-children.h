@@ -1,11 +1,10 @@
 #ifndef SEEN_REPR_GET_CHILDREN_H
 #define SEEN_REPR_GET_CHILDREN_H
 
-#include <xml/xml-forward.h>
+class SPRepr;
 
 SPRepr *sp_repr_last_child(SPRepr const *parent);
 SPRepr *sp_repr_prev(SPRepr const *child);
-
 
 #endif /* !SEEN_REPR_GET_CHILDREN_H */
 

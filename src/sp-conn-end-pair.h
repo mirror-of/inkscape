@@ -3,10 +3,10 @@
 
 #include <glib/gtypes.h>
 
-#include "xml/xml-forward.h"
 #include "forward.h"
-class SPConnEnd;
 
+class SPConnEnd;
+class SPRepr;
 
 class SPConnEndPair {
 public:
