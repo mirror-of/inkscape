@@ -16,6 +16,7 @@ INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
 	-DINKSCAPE_PIXMAPDIR=\""$(datadir)/inkscape/icons"\" \
 	-DINKSCAPE_SCREENSDIR=\""$(datadir)/inkscape/screens"\" \
+	-DINKSCAPE_TUTORIALSDIR=\""$(datadir)/inkscape/tutorials"\" \
 	-DINKSCAPE_DATADIR=\""$(datadir)"\" \
 	-I$(srcdir) \
 	-I$(srcdir)/xml \

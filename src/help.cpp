@@ -104,7 +104,8 @@ sp_help_about (void)
 void
 sp_help_tutorial (void)
 {
-	gchar *c = g_strconcat (INKSCAPE_SCREENSDIR, _("/tutorial.svg"), NULL);
+	gchar *c = g_strconcat (INKSCAPE_TUTORIALSDIR, _("/tutorial.svg"), 
+                                NULL);
 	sp_file_open (c, NULL);
 	g_free (c);
 }
