@@ -146,6 +146,14 @@ sp_item_init(SPItem *item)
     new (&item->_transformed_signal) sigc::signal<void, NR::Matrix const *, SPItem *>();
 }
 
+bool SPItem::isVisibleAndUnlocked() const {
+    return (!isHidden() && !isLocked());
+}
+
+bool SPItem::isVisibleAndUnlocked(unsigned display_key) const {
+    return (!isHidden(display_key) && !isLocked());
+}
+
 bool SPItem::isLocked() const {
     return !sensitive;
 }

@@ -110,6 +110,10 @@ struct SPItem : public SPObject {
 
 	bool isHidden(unsigned display_key) const;
 
+	bool isVisibleAndUnlocked() const;
+
+	bool isVisibleAndUnlocked(unsigned display_key) const;
+
 	NR::Matrix getRelativeTransform(SPObject const *obj) const;
 
 	void raiseOne();
