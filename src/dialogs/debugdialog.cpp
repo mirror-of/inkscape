@@ -174,6 +174,25 @@ void DebugDialogImpl::message(char *msg)
 }
 
 
+/* static instance, to reduce dependencies */
+static DebugDialog *debugDialogInstance = NULL;
+
+DebugDialog *DebugDialog::getInstance()
+{
+    if ( !debugDialogInstance )
+        {
+        debugDialogInstance = new DebugDialogImpl();
+        }
+    return debugDialogInstance;
+}
+
+
+
+void DebugDialog::showInstance()
+{
+    DebugDialog *debugDialog = getInstance();
+    debugDialog->show();
+}
 
 
 

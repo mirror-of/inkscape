@@ -70,10 +70,20 @@ class DebugDialog
      */
     virtual void message(char *msg) = 0;
 
+    /**
+     * Get a shared singleton instance
+     */
+    static DebugDialog *getInstance();
+
+    /**
+     * Show the instance above
+     */
+    static void showInstance();
+
+
     
 
 };
-
 
 
 }; //namespace Dialogs
