@@ -32,7 +32,7 @@ public:
 
     bool check(Inkscape::Extension::Extension *module);
 
-    GtkDialog *prefs(Inkscape::Extension::Output *module);
+    GtkDialog *prefs_output(Inkscape::Extension::Output *module);
 
     void save(Inkscape::Extension::Output *mod,
               SPDocument *doc,

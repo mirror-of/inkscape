@@ -819,7 +819,7 @@ Input::get_filetypetooltip(void)
 GtkDialog *
 Input::prefs (const gchar *uri)
 {
-    return imp->prefs(this, uri);
+    return imp->prefs_input(this, uri);
 }
 
 
@@ -972,7 +972,7 @@ Output::get_filetypetooltip(void)
 GtkDialog *
 Output::prefs (void)
 {
-    return imp->prefs(this);
+    return imp->prefs_output(this);
 }
 
 /**
@@ -1042,7 +1042,7 @@ Effect::check (void)
 GtkDialog *
 Effect::prefs (void)
 {
-    return imp->prefs(this);
+    return imp->prefs_effect(this);
 }
 
 void

@@ -318,7 +318,7 @@ Script::check (Inkscape::Extension::Extension * module)
 	This function should really do something, right now it doesn't.
 */
 GtkDialog *
-Script::prefs (Inkscape::Extension::Input * module, const gchar * filename)
+Script::prefs_input (Inkscape::Extension::Input * module, const gchar * filename)
 {
 	/* Sad, this should really do something... */
 	return NULL;
@@ -332,7 +332,7 @@ Script::prefs (Inkscape::Extension::Input * module, const gchar * filename)
 	This function should really do something, right now it doesn't.
 */
 GtkDialog *
-Script::prefs (Inkscape::Extension::Output * module)
+Script::prefs_output (Inkscape::Extension::Output * module)
 {
 	/* Sad, this should really do something... */
 	return NULL;
@@ -346,7 +346,7 @@ Script::prefs (Inkscape::Extension::Output * module)
 	This function should really do something, right now it doesn't.
 */
 GtkDialog *
-Script::prefs (Inkscape::Extension::Effect * module)
+Script::prefs_effect (Inkscape::Extension::Effect * module)
 {
 	/* Sad, this should really do something... */
 	return NULL;

@@ -46,9 +46,9 @@ Implementation::check (Inkscape::Extension::Extension * module) {
 } /* Implemenation::check */
 
 GtkDialog *
-Implementation::prefs (Inkscape::Extension::Input * module, const gchar * filename) {
+Implementation::prefs_input (Inkscape::Extension::Input * module, const gchar * filename) {
 	return NULL;
-} /* Implementation::prefs */
+} /* Implementation::prefs_input */
 
 SPDocument *
 Implementation::open (Inkscape::Extension::Input * module, const gchar * filename) {
@@ -57,9 +57,9 @@ Implementation::open (Inkscape::Extension::Input * module, const gchar * filenam
 } /* Implementation::open */
 
 GtkDialog *
-Implementation::prefs (Inkscape::Extension::Output * module) {
+Implementation::prefs_output (Inkscape::Extension::Output * module) {
 	return NULL;
-} /* Implementation::prefs */
+} /* Implementation::prefs_output */
 
 void
 Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, const gchar * filename) {
@@ -68,10 +68,10 @@ Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, co
 } /* Implementation::save */
 
 GtkDialog *
-Implementation::prefs (Inkscape::Extension::Effect * module) {
+Implementation::prefs_effect (Inkscape::Extension::Effect * module) {
 
 	return NULL;
-} /* Implementation::prefs */
+} /* Implementation::prefs_effect */
 
 void
 Implementation::effect (Inkscape::Extension::Effect * module, SPDocument * document) {

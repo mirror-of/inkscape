@@ -59,7 +59,7 @@ EpsOutput::textToPathToggle (GtkWidget * widget, Inkscape::Extension::Output * o
 }
 
 GtkDialog *
-EpsOutput::prefs (Inkscape::Extension::Output * module)
+EpsOutput::prefs_output (Inkscape::Extension::Output * module)
 {
     GtkWidget * checkbox;
 
