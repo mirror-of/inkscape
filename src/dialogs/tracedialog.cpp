@@ -72,11 +72,13 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
      * Show the dialog
      */
     void show();
+    void showF12();
 
     /**
      * Do not show the dialog
      */
     void hide();
+    void hideF12();
 
     /**
      * Callback from OK or Cancel
@@ -84,6 +86,8 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     void responseCallback(int response_id);
 
     private:
+
+    bool userHidden;
 
     /**
      * This is the big almighty McGuffin
@@ -293,6 +297,23 @@ void TraceDialogImpl::responseCallback(int response_id)
 }
 
 
+/*##########################
+## Experimental
+##########################*/
+static void hideCallback(GtkObject *object, gpointer dlgPtr)
+{
+    TraceDialogImpl *dlg = (TraceDialogImpl *) dlgPtr;
+    dlg->hideF12();
+}
+
+static void unhideCallback(GtkObject *object, gpointer dlgPtr)
+{
+    TraceDialogImpl *dlg = (TraceDialogImpl *) dlgPtr;
+    dlg->showF12();
+}
+
+
+
 //#########################################################################
 //## C O N S T R U C T O R    /    D E S T R U C T O R
 //#########################################################################
@@ -301,28 +322,30 @@ void TraceDialogImpl::responseCallback(int response_id)
  */
 TraceDialogImpl::TraceDialogImpl()
 {
-	
     { 
-// This block is a much simplified version of the code used in all other dialogs for
-// saving/restoring geometry, transientising, passing events to the aplication, and
-// hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
-// mutilated somewhat. This block should be removed when the same functionality is made
-// available to all gtkmm dialogs via a base class.
-	GtkWidget *dlg = GTK_WIDGET(gobj());
+    // This block is a much simplified version of the code used in all other dialogs for
+    // saving/restoring geometry, transientising, passing events to the aplication, and
+    // hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
+    // mutilated somewhat. This block should be removed when the same functionality is made
+    // available to all gtkmm dialogs via a base class.
+        GtkWidget *dlg = GTK_WIDGET(gobj());
 
-	gchar title[500];
-	sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), title);
+        gchar title[500];
+        sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), title);
 	set_title(title);
 
-      gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+        gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
 
-      sp_transientize (dlg);
+        sp_transientize (dlg);
                            
-      gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
+        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
                         
-      g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
-      g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
-   }
+        //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
+        //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
+
+        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (hideCallback), (void *)this );
+        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (unhideCallback), (void *)this );
+    }
 
     Gtk::VBox *mainVBox = get_vbox();
 
@@ -502,6 +525,18 @@ void TraceDialog::showInstance()
 
 void TraceDialogImpl::show()
 {
+    userHidden = false;
+    //call super()
+    Gtk::Dialog::show();
+    //sp_transientize((GtkWidget *)gobj());  //Make transient
+    raise();
+
+}
+
+void TraceDialogImpl::showF12()
+{
+    if (userHidden)
+        return;
     //call super()
     Gtk::Dialog::show();
     //sp_transientize((GtkWidget *)gobj());  //Make transient
@@ -510,9 +545,16 @@ void TraceDialogImpl::show()
 }
 
 
-
 void TraceDialogImpl::hide()
 {
+    userHidden = true;
+    //call super()
+    Gtk::Dialog::hide();
+}
+
+void TraceDialogImpl::hideF12()
+{
+    //userHidden = true;
     //call super()
     Gtk::Dialog::hide();
 }
