@@ -30,6 +30,7 @@
 #include "pixmaps/cursor-select-d.xpm"
 #include "pixmaps/handles.xpm"
 #include "helper/sp-intl.h"
+#include "widgets/spw-utilities.h"
 
 #include "select-context.h"
 #include "selection-chemistry.h"
@@ -657,15 +658,24 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				ret = TRUE;
 			} 
 			break;
-	  case GDK_space:
-	    /* stamping mode: show outline mode moving */
-	    /* FIXME: Is next condition ok? */
-	    if (sc->dragging && sc->grabbed) {
+		case GDK_space:
+		/* stamping mode: show outline mode moving */
+		/* FIXME: Is next condition ok? (lauris) */
+			if (sc->dragging && sc->grabbed) {
 				sp_sel_trans_stamp(seltrans);
 				ret = TRUE;
 			}
-	    break;
-		}
+			break;
+ 		case GDK_x:
+ 		case GDK_X:
+ 			if (MOD__ALT_ONLY) {
+ 				gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) "altx");
+ 				if (hb && GTK_IS_WIDGET(hb)) {
+					gtk_widget_grab_focus (GTK_WIDGET (hb));
+				}
+ 				ret = TRUE;
+ 			}
+ 		}
 	  break;
 	default:
 	  break;
