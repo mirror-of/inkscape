@@ -751,7 +751,7 @@ find_items_in_area (GSList *s, SPGroup *group, unsigned int dkey, NRRect const *
 			SPItem *child = SP_ITEM(o);
 			NRRect box;
 			sp_item_bbox_desktop (child, &box);
-			if (test (area, &box) && (take_insensitive || child->sensitive)) {
+			if (test (area, &box) && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
 				s = g_slist_append (s, child);
 			}
 		}
@@ -793,7 +793,7 @@ sp_document_item_from_list_at_point_bottom (unsigned int dkey, SPGroup *group, c
 		SPItem *item = SP_ITEM (o);
 		NRArenaItem *arenaitem = sp_item_get_arenaitem(item, dkey);
 		if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL 
-                      && (take_insensitive || item->sensitive)) {
+                      && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
 			if (g_slist_find((GSList *) list, item) != NULL)
 				return item;
 		}
@@ -844,7 +844,7 @@ find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboole
 
 			// seen remembers the last (topmost) of items pickable at this point
 			if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL 
-                           && (take_insensitive || child->sensitive)) {
+                           && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
 				seen = child;
 			}
 		}
