@@ -16,7 +16,8 @@
 	src/seltrans.cpp, src/sp-namedview.cpp, src/spiral-context.cpp,
 	src/star-context.cpp: Adapt for changes to snap code naming.
 
-	* src/seltrans.cpp: cleanups to sp_sel_trans_skew_request.
+	* src/seltrans.cpp: cleanups to sp_sel_trans_skew_request and
+	sp_sel_trans_scale_request.
 
 2004-06-20  Ted Gould  <ted@gould.cx>
 
