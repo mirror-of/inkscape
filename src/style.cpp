@@ -126,14 +126,14 @@ static void sp_style_privatize_text (SPStyle *style);
 
 static void sp_style_read_ifloat (SPIFloat *val, const gchar *str);
 static void sp_style_read_iscale24 (SPIScale24 *val, const gchar *str);
-static void sp_style_read_ienum (SPIEnum *val, const gchar *str, const SPStyleEnum *dict, unsigned int inherit);
+static void sp_style_read_ienum(SPIEnum *val, gchar const *str, SPStyleEnum const *dict, bool can_explicitly_inherit);
 static void sp_style_read_istring (SPIString *val, const gchar *str);
 static void sp_style_read_ilength (SPILength *val, const gchar *str);
 static void sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ifontsize (SPIFontSize *val, const gchar *str);
 
-static void sp_style_read_penum (SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, unsigned int inherit);
+static void sp_style_read_penum(SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, bool can_explicitly_inherit);
 static void sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key);
 static void sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key);
 
@@ -424,14 +424,14 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 
     /* 4. Presentation attributes */
     /* CSS2 */
-    SPS_READ_PENUM_IF_UNSET (&style->visibility, repr, "visibility", enum_visibility, TRUE);
-    SPS_READ_PENUM_IF_UNSET (&style->display, repr, "display", enum_display, TRUE);
+    SPS_READ_PENUM_IF_UNSET(&style->visibility, repr, "visibility", enum_visibility, true);
+    SPS_READ_PENUM_IF_UNSET(&style->display, repr, "display", enum_display, true);
     /* Font */
     SPS_READ_PFONTSIZE_IF_UNSET (&style->font_size, repr, "font-size");
-    SPS_READ_PENUM_IF_UNSET (&style->font_style, repr, "font-style", enum_font_style, TRUE);
-    SPS_READ_PENUM_IF_UNSET (&style->font_variant, repr, "font-variant", enum_font_variant, TRUE);
-    SPS_READ_PENUM_IF_UNSET (&style->font_weight, repr, "font-weight", enum_font_weight, TRUE);
-    SPS_READ_PENUM_IF_UNSET (&style->font_stretch, repr, "font-stretch", enum_font_stretch, TRUE);
+    SPS_READ_PENUM_IF_UNSET(&style->font_style, repr, "font-style", enum_font_style, true);
+    SPS_READ_PENUM_IF_UNSET(&style->font_variant, repr, "font-variant", enum_font_variant, true);
+    SPS_READ_PENUM_IF_UNSET(&style->font_weight, repr, "font-weight", enum_font_weight, true);
+    SPS_READ_PENUM_IF_UNSET(&style->font_stretch, repr, "font-stretch", enum_font_stretch, true);
 
     /* opacity */
     if (!style->opacity.set) {
@@ -463,7 +463,7 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
         }
     }
     /* fill-rule */
-    SPS_READ_PENUM_IF_UNSET (&style->fill_rule, repr, "fill-rule", enum_fill_rule, TRUE);
+    SPS_READ_PENUM_IF_UNSET(&style->fill_rule, repr, "fill-rule", enum_fill_rule, true);
     /* stroke */
     if (!style->stroke.set) {
         val = sp_repr_attr (repr, "stroke");
@@ -472,8 +472,8 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
         }
     }
     SPS_READ_PLENGTH_IF_UNSET (&style->stroke_width, repr, "stroke-width");
-    SPS_READ_PENUM_IF_UNSET (&style->stroke_linecap, repr, "stroke-linecap", enum_stroke_linecap, TRUE);
-    SPS_READ_PENUM_IF_UNSET (&style->stroke_linejoin, repr, "stroke-linejoin", enum_stroke_linejoin, TRUE);
+    SPS_READ_PENUM_IF_UNSET(&style->stroke_linecap, repr, "stroke-linecap", enum_stroke_linecap, true);
+    SPS_READ_PENUM_IF_UNSET(&style->stroke_linejoin, repr, "stroke-linejoin", enum_stroke_linejoin, true);
  
     /* markers */
     if (!style->marker[SP_MARKER_LOC].set) {
@@ -535,10 +535,10 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     }
 
     /* SVG */
-    SPS_READ_PENUM_IF_UNSET (&style->text_anchor, repr, "text-anchor",
-                enum_text_anchor, TRUE);
-    SPS_READ_PENUM_IF_UNSET (&style->writing_mode, repr, "writing-mode",
-                enum_writing_mode, TRUE);
+    SPS_READ_PENUM_IF_UNSET(&style->text_anchor, repr, "text-anchor",
+                            enum_text_anchor, true);
+    SPS_READ_PENUM_IF_UNSET(&style->writing_mode, repr, "writing-mode",
+                            enum_writing_mode, true);
 
     /* 5. Merge from parent */
     if (object) {
@@ -629,16 +629,16 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         }
         break;
     case SP_PROP_FONT_STYLE:
-        SPS_READ_IENUM_IF_UNSET (&style->font_style, val, enum_font_style, TRUE);
+        SPS_READ_IENUM_IF_UNSET(&style->font_style, val, enum_font_style, true);
         break;
     case SP_PROP_FONT_VARIANT:
-        SPS_READ_IENUM_IF_UNSET (&style->font_variant, val, enum_font_variant, TRUE);
+        SPS_READ_IENUM_IF_UNSET(&style->font_variant, val, enum_font_variant, true);
         break;
     case SP_PROP_FONT_WEIGHT:
-        SPS_READ_IENUM_IF_UNSET (&style->font_weight, val, enum_font_weight, TRUE);
+        SPS_READ_IENUM_IF_UNSET(&style->font_weight, val, enum_font_weight, true);
         break;
     case SP_PROP_FONT_STRETCH:
-        SPS_READ_IENUM_IF_UNSET (&style->font_stretch, val, enum_font_stretch, TRUE);
+        SPS_READ_IENUM_IF_UNSET(&style->font_stretch, val, enum_font_stretch, true);
         break;
     case SP_PROP_FONT:
         if (!style->text_private) sp_style_privatize_text (style);
@@ -682,7 +682,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         g_warning ("Unimplemented style property SP_PROP_CURSOR: value: %s", val);
         break;
     case SP_PROP_DISPLAY:
-        SPS_READ_IENUM_IF_UNSET(&style->display, val, enum_display, TRUE);
+        SPS_READ_IENUM_IF_UNSET(&style->display, val, enum_display, true);
         break;
     case SP_PROP_OVERFLOW:
         // FIXME: temporaily disabled, for our markers.svg uses overflow: visible to show properly in batik.
@@ -692,7 +692,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         //g_warning ("Unimplemented style property SP_PROP_OVERFLOW: %d value: %s", id, val);
         break;
     case SP_PROP_VISIBILITY:
-        SPS_READ_IENUM_IF_UNSET(&style->visibility, val, enum_visibility, TRUE);
+        SPS_READ_IENUM_IF_UNSET(&style->visibility, val, enum_visibility, true);
         break;
     /* SVG */
     /* Clip/Mask */
@@ -762,7 +762,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         break;
     case SP_PROP_FILL_RULE:
         if (!style->fill_rule.set) {
-            sp_style_read_ienum (&style->fill_rule, val, enum_fill_rule, TRUE);
+            sp_style_read_ienum(&style->fill_rule, val, enum_fill_rule, true);
         }
         break;
     case SP_PROP_IMAGE_RENDERING:
@@ -840,12 +840,12 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         break;
     case SP_PROP_STROKE_LINECAP:
         if (!style->stroke_linecap.set) {
-            sp_style_read_ienum (&style->stroke_linecap, val, enum_stroke_linecap, TRUE);
+            sp_style_read_ienum(&style->stroke_linecap, val, enum_stroke_linecap, true);
         }
         break;
     case SP_PROP_STROKE_LINEJOIN:
         if (!style->stroke_linejoin.set) {
-            sp_style_read_ienum (&style->stroke_linejoin, val, enum_stroke_linejoin, TRUE);
+            sp_style_read_ienum(&style->stroke_linejoin, val, enum_stroke_linejoin, true);
         }
         break;
     case SP_PROP_STROKE_MITERLIMIT:
@@ -882,10 +882,10 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         g_warning ("Unimplemented style property SP_PROP_KERNING: value: %s", val);
         break;
     case SP_PROP_TEXT_ANCHOR:
-        SPS_READ_IENUM_IF_UNSET (&style->text_anchor, val, enum_text_anchor, TRUE);
+        SPS_READ_IENUM_IF_UNSET(&style->text_anchor, val, enum_text_anchor, true);
         break;
     case SP_PROP_WRITING_MODE:
-        SPS_READ_IENUM_IF_UNSET (&style->writing_mode, val, enum_writing_mode, TRUE);
+        SPS_READ_IENUM_IF_UNSET(&style->writing_mode, val, enum_writing_mode, true);
         break;
     default:
         g_warning ("Invalid style property id: %d value: %s", id, val);
@@ -1813,9 +1813,10 @@ sp_style_read_iscale24 (SPIScale24 *val, const gchar *str)
  * Reads a style value and performs lookup based on the given style value enumerations
  */
 static void
-sp_style_read_ienum (SPIEnum *val, const gchar *str, const SPStyleEnum *dict, unsigned int inherit)
+sp_style_read_ienum(SPIEnum *val, gchar const *str, SPStyleEnum const *dict,
+                    bool const can_explicitly_inherit)
 {
-    if (inherit && !strcmp (str, "inherit")) {
+    if ( can_explicitly_inherit && !strcmp(str, "inherit") ) {
         val->set = TRUE;
         val->inherit = TRUE;
     } else {
@@ -2090,12 +2091,13 @@ sp_style_read_ifontsize (SPIFontSize *val, const gchar *str)
  *
  */
 static void
-sp_style_read_penum (SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, unsigned int inherit)
+sp_style_read_penum(SPIEnum *val, SPRepr *repr, gchar const *key, SPStyleEnum const *dict,
+                    bool const can_explicitly_inherit)
 {
     const gchar *str;
     str = sp_repr_attr (repr, key);
     if (str) {
-        sp_style_read_ienum (val, str, dict, inherit);
+        sp_style_read_ienum(val, str, dict, can_explicitly_inherit);
     }
 }
 
