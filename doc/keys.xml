@@ -361,9 +361,17 @@ can leave your ideas and requests there.</p>
 <note>These keys pick objects in their z-order (Tab cycles from bottom to top, Shift+Tab cycles from top to bottom).</note> 
 <note>Unless you did manual rearrangements, the last object you created is always on top.</note> 
 <note>As a result, if nothing is selected, pressing Shift+Tab once conveniently selects the object you created last.</note>
-<keys><key><ctrl/>A</key>	 <action>select all objects</action></keys>
-<keys><key><misc f="Del"/></key>	 <action>delete selection</action></keys>
+<note>This works on objects within the current layer (unless you change that in preferences).</note>
+<keys><key><ctrl/>A</key>	 <action>select all (current layer)</action></keys>
+<note>This works on objects within the current layer (unless you change that in preferences).</note>
+<keys><key><ctrl/><alt/>A</key>	 <action>select all (all layers)</action></keys>
+<note>This works on objects in all visible and unlocked layers.</note>
+<keys><key>!</key> <action>invert selection (current layer)</action></keys>
+<note>This inverts selection (deselects what was selected and selects everything else) in the current layer.</note>
+<keys><key><alt/>!</key> <action>invert selection (all layers)</action></keys>
+<note>This inverts selection (deselects what was selected and selects everything else) in visible and unlocked layers.</note>
 <keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
+<keys><key><misc-wide f="Backspace"/></key><key><misc f="Del"/></key>	 <action>delete selection</action></keys>
 </group>
 
 <group>
@@ -628,7 +636,7 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Delete, create, duplicate</title>
-<keys><key><misc f="Del"/></key> <action>delete selected node(s)</action></keys>
+<keys><key><misc-wide f="Backspace"/></key><key><misc f="Del"/></key> <action>delete selected node(s)</action></keys>
 <mouse><key><ctrl/><alt/><left-click/></key> <action>delete node</action></mouse>
 <keys><key><misc f="Ins"/></key> <action>insert new node(s)</action></keys>
 <note>This adds new node(s) in the middle(s) of selected segment(s), so it requires that more than two adjacent nodes be selected.</note>

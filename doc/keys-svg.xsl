@@ -85,9 +85,9 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
    sodipodi:docbase="/home/d/ink/inkscape">
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="0.81000000"
-     inkscape:cx="431.35996512"
-     inkscape:cy="562.68988715"
+     inkscape:zoom="0.65"
+     inkscape:cx="540"
+     inkscape:cy="740"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
