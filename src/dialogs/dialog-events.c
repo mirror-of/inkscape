@@ -99,6 +99,6 @@ sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, win_data *wd)
 		gtk_window_present (w); // without this, a transient window not always emerges on top
 	}
 	// we're done, allow next retransientizing not sooner than after 10 msec
-	gtk_timeout_add (20, (GtkFunction) sp_allow_again, (gpointer) wd);  
+	gtk_timeout_add (6, (GtkFunction) sp_allow_again, (gpointer) wd);  
 }
 
