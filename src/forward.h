@@ -119,6 +119,8 @@ class SPArcClass;
 class SPChars;
 class SPCharsClass;
 
+class SPSelection;
+
 class SPText;
 class SPTextClass;
 
