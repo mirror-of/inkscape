@@ -721,11 +721,27 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
     if (SP_IS_TEXT_TEXTPATH (text))
         return xform;
 
-    /* This function takes care of scaling only, we return whatever parts we can't
+    /* This function takes care of scaling & translation only, we return whatever parts we can't
        handle. */
-    double ex = xform.expansion();
-    if (ex == 0)
+#if 0
+    /* Let ex = the length after transforming a vertical line of length 1. */
+    double const ex = hypot(xform[2], xform[3]);
+    if (ex == 0) {
         return xform;
+    }
+#else  /* Alternative that behaves differently (better?) for horizontal skew but has more edge
+          cases. */
+    /* Let ex = the distance from the baseline of a point at (0, 1). */
+    double const denom(hypot(xform[0], xform[1]));
+    if (!(denom > 1e-100)) {
+        return xform;
+    }
+    double const numer(xform.descrim2());
+    if (!(numer > 1e-100)) {
+        return xform;
+    }
+    double const ex = numer / denom;
+#endif
 
     NR::Matrix ret(NR::transform(xform));
     ret[0] /= ex;

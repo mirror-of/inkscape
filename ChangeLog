@@ -1,3 +1,10 @@
+2004-12-31  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-text.cpp (sp_text_set_transform): Change scaling of font size.
+	  The result should be closer to what CorelDraw, XaraX, Canvas 7 and
+	  Expression3 do according to vellum, though I don't know the exact
+	  rule that they use.
+
 2004-12-25  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/grid.inx, src/extension/extension.cpp,
