@@ -85,6 +85,8 @@
 #define gtk_window_set_default_icon_from_file(f,v)
 #endif
 
+
+#include <gtkmm/main.h>
 enum {
     SP_ARG_NONE,
     SP_ARG_NOGUI,
@@ -247,8 +249,8 @@ sp_main_gui(int argc, char const **argv)
 {
     GSList *fl = NULL;
 
-    gtk_init(&argc, const_cast<char ***>(&argv));
-
+    //gtk_init(&argc, const_cast<char ***>(&argv));
+	Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
     /* fixme: Move these to some centralized location (Lauris) */
     sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
     sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
@@ -308,7 +310,7 @@ sp_main_gui(int argc, char const **argv)
         }
     }
 
-    gtk_main();
+	main_instance.run();
 
 #ifdef WIN32
     //We might not need anything here

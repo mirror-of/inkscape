@@ -62,7 +62,7 @@ private:
 	Inkscape::MessageContext *_tips_message_context;
 	Inkscape::MessageContext *_legacy_message_context;
 
-	SigC::Connection _message_changed_connection;
+	sigc::connection _message_changed_connection;
 };
 
 struct SPViewClass {

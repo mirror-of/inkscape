@@ -147,8 +147,8 @@ sp_draw_context_init(SPDrawContext *dc)
     dc->npoints = 0;
     dc->red_curve_is_valid=0x00;
 
-    new (&dc->sel_changed_connection) SigC::Connection();
-    new (&dc->sel_modified_connection) SigC::Connection();
+    new (&dc->sel_changed_connection) sigc::connection();
+    new (&dc->sel_modified_connection) sigc::connection();
 }
 
 static void
@@ -156,8 +156,8 @@ sp_draw_context_dispose(GObject *object)
 {
     SPDrawContext *dc = SP_DRAW_CONTEXT(object);
 
-    dc->sel_changed_connection.~Connection();
-    dc->sel_modified_connection.~Connection();
+    dc->sel_changed_connection.~connection();
+    dc->sel_modified_connection.~connection();
 
     if (dc->grab) {
         sp_canvas_item_ungrab(dc->grab, GDK_CURRENT_TIME);
@@ -187,10 +187,10 @@ sp_draw_context_setup(SPEventContext *ec)
 
     /* Connect signals to track selection changes */
     dc->sel_changed_connection = dc->selection->connectChanged(
-        SigC::bind(SigC::slot(&spdc_selection_changed), dc)
+        sigc::bind(sigc::ptr_fun(&spdc_selection_changed), dc)
     );
     dc->sel_modified_connection = dc->selection->connectModified(
-        SigC::bind(SigC::slot(&spdc_selection_modified), dc)
+        sigc::bind(sigc::ptr_fun(&spdc_selection_modified), dc)
     );
 
     /* Create red bpath */

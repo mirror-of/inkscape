@@ -120,14 +120,14 @@ sp_use_init(SPUse *use)
     sp_svg_length_unset(&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
     use->href = NULL;
 
-    new (&use->_delete_connection) SigC::Connection();
-    new (&use->_changed_connection) SigC::Connection();
+    new (&use->_delete_connection) sigc::connection();
+    new (&use->_changed_connection) sigc::connection();
 
-    new (&use->_transformed_connection) SigC::Connection();
+    new (&use->_transformed_connection) sigc::connection();
 
     use->ref = new SPUseReference(SP_OBJECT(use));
 
-    use->_changed_connection = use->ref->changedSignal().connect(SigC::bind(SigC::slot(sp_use_href_changed), use));
+    use->_changed_connection = use->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_use_href_changed), use));
 }
 
 static void
@@ -137,10 +137,10 @@ sp_use_finalize(GObject *obj)
 
     delete use->ref;
 
-    use->_delete_connection.~Connection();
-    use->_changed_connection.~Connection();
+    use->_delete_connection.~connection();
+    use->_changed_connection.~connection();
 
-    use->_transformed_connection.~Connection();
+    use->_transformed_connection.~connection();
 }
 
 static void
@@ -502,8 +502,8 @@ sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use)
                 }
 
             }
-            use->_delete_connection = SP_OBJECT(refobj)->connectDelete(SigC::bind(SigC::slot(&sp_use_delete_self), use));
-            use->_transformed_connection = SP_ITEM(refobj)->connectTransformed(SigC::bind(SigC::slot(&sp_use_move_compensate), use));
+            use->_delete_connection = SP_OBJECT(refobj)->connectDelete(sigc::bind(sigc::ptr_fun(&sp_use_delete_self), use));
+            use->_transformed_connection = SP_ITEM(refobj)->connectTransformed(sigc::bind(sigc::ptr_fun(&sp_use_move_compensate), use));
         }
     }
 }

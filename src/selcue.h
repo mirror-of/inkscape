@@ -29,8 +29,8 @@ struct SPSelCue {
 
 	SPDesktop *desktop;
 	SPSelection *selection;
-	SigC::Connection sel_changed_connection;
-	SigC::Connection sel_modified_connection;
+	sigc::connection sel_changed_connection;
+	sigc::connection sel_modified_connection;
 	GSList *item_bboxes;
 };
 

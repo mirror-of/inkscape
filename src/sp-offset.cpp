@@ -169,12 +169,12 @@ sp_offset_init (SPOffset * offset)
   offset->sourceHref = NULL;
   offset->sourceRepr = NULL;
   offset->sourceObject = NULL;
-	new (&offset->_delete_connection) SigC::Connection();
-	new (&offset->_changed_connection) SigC::Connection();
-	new (&offset->_transformed_connection) SigC::Connection();
+	new (&offset->_delete_connection) sigc::connection();
+	new (&offset->_changed_connection) sigc::connection();
+	new (&offset->_transformed_connection) sigc::connection();
 	// set up the uri reference
 	offset->sourceRef = new SPUseReference(SP_OBJECT(offset));
-	offset->_changed_connection = offset->sourceRef->changedSignal().connect(SigC::bind(SigC::slot(sp_offset_href_changed), offset));
+	offset->_changed_connection = offset->sourceRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_offset_href_changed), offset));
 }
 static void
 sp_offset_finalize(GObject *obj)
@@ -182,9 +182,9 @@ sp_offset_finalize(GObject *obj)
 	SPOffset *offset = (SPOffset *) obj;
 	
 	delete offset->sourceRef;
-	offset->_delete_connection.~Connection();
-	offset->_changed_connection.~Connection();
-	offset->_transformed_connection.~Connection();
+	offset->_delete_connection.~connection();
+	offset->_changed_connection.~connection();
+	offset->_transformed_connection.~connection();
 }
 
 static void
@@ -1060,8 +1060,8 @@ static void sp_offset_start_listening(SPOffset *offset,SPObject* to)
 //	if (offset->sourceRepr) {
 //		sp_repr_add_listener (offset->sourceRepr, &offset_source_event_vector, offset);
 //	}
-	offset->_delete_connection = SP_OBJECT(to)->connectDelete(SigC::bind(SigC::slot(&sp_offset_delete_self), offset));
-	offset->_transformed_connection = SP_ITEM(to)->connectTransformed(SigC::bind(SigC::slot(&sp_offset_move_compensate), offset));
+	offset->_delete_connection = SP_OBJECT(to)->connectDelete(sigc::bind(sigc::ptr_fun(&sp_offset_delete_self), offset));
+	offset->_transformed_connection = SP_ITEM(to)->connectTransformed(sigc::bind(sigc::ptr_fun(&sp_offset_move_compensate), offset));
 	offset->_modified_connection = g_signal_connect (G_OBJECT (to), "modified", G_CALLBACK (sp_offset_source_modified), offset);
 }
 static void sp_offset_quit_listening(SPOffset *offset)

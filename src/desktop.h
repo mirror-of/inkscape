@@ -53,7 +53,29 @@ enum ColorComponent {
   COMPONENT_K
 };
 
+
+
+
+
+
+
+struct StopOnTrue {
+  typedef bool result_type;
+
+  template<typename T_iterator>
+  result_type operator()(T_iterator first, T_iterator last) const{	
+	for (; first != last; ++first)
+		if (*first) return true;
+	return false;      
+  }
+};
+
+
+
+
+
 // the marshaler for the set_color signals
+/*
 struct StopOnTrue {
       typedef bool InType;
       typedef bool OutType;
@@ -64,7 +86,7 @@ struct StopOnTrue {
       bool marshal(const InType& val) { return_value_ = val; return val; }
 
       StopOnTrue() : return_value_(false) {}
-};
+};*/
 
 
 class SPSelection;
@@ -79,8 +101,12 @@ struct SPDesktop : public SPView {
 
 	SPNamedView *namedview;
 	SPSelection *selection; ///< current selection; will never generally be NULL
-	SigC::Connection sel_modified_connection;
-	SigC::Connection sel_changed_connection;
+	sigc::connection sel_modified_connection;
+
+	sigc::connection sel_changed_connection;
+
+
+
 	SPEventContext *event_context;
 
 	unsigned int dkey;
@@ -113,7 +139,7 @@ struct SPDesktop : public SPView {
 	SPObject *currentRoot();
 	SPObject *currentLayer();
 	void setCurrentLayer(SPObject *object);
-	SigC::Connection connectCurrentLayerChanged(SigC::Slot1<void, SPObject *> slot) {
+	sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
 		return _layer_changed_signal.connect(slot);
 	}
 	SPObject *layerForObject(SPObject *object);
@@ -128,10 +154,14 @@ struct SPDesktop : public SPView {
 	static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
 	static void _selection_changed(SPSelection *selection, SPDesktop *desktop);
 
-	SigC::Signal4<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
-	SigC::Signal1<bool, const SPCSSAttr *, StopOnTrue> _set_style_signal;
+	sigc::signal<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
 
-	SigC::Signal1<void, SPObject *> _layer_changed_signal;
+	sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
+
+	sigc::signal<void, SPObject *> _layer_changed_signal;
+
+
+
 
 	Inkscape::MessageContext *_guides_message_context;
 

@@ -222,7 +222,7 @@ public:
 	 *
 	 * @return the resulting connection
 	 */
-	SigC::Connection connectChanged(SigC::Slot1<void, SPSelection *> slot) {
+	sigc::connection connectChanged( const sigc::slot<void, SPSelection *> &slot) {
 		return _changed_signal.connect(slot);
 	}
 	/**
@@ -238,7 +238,7 @@ public:
 	 * @return the resulting connection
 	 *
 	 */
-	SigC::Connection connectModified(SigC::Slot2<void, SPSelection *, guint> slot) {
+	sigc::connection connectModified(sigc::slot<void, SPSelection *, guint> slot) {
 		return _modified_signal.connect(slot);
 	}
 
@@ -283,8 +283,8 @@ private:
 
 	mutable unsigned _refcount;
 
-	SigC::Signal1<void, SPSelection *> _changed_signal;
-	SigC::Signal2<void, SPSelection *, guint> _modified_signal;
+	sigc::signal<void, SPSelection *> _changed_signal;
+	sigc::signal<void, SPSelection *, guint> _modified_signal;
 };
 
 struct SPSelectionClass {

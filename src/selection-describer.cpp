@@ -20,7 +20,7 @@ namespace Inkscape {
 SelectionDescriber::SelectionDescriber(SPSelection *selection, MessageStack *stack)
 : _context(stack)
 {
-    selection->connectChanged(SigC::slot(*this, &SelectionDescriber::_updateMessageFromSelection));
+    selection->connectChanged(sigc::mem_fun(*this, &SelectionDescriber::_updateMessageFromSelection));
     _updateMessageFromSelection(selection);
 }
 

@@ -37,7 +37,7 @@ struct SPRectContext : public SPEventContext {
   	gdouble rx;	/* roundness radius (x direction) */
   	gdouble ry;	/* roundness radius (y direction) */
 
-	SigC::Connection sel_changed_connection;
+	sigc::connection sel_changed_connection;
 };
 
 struct SPRectContextClass {

@@ -173,7 +173,7 @@ struct SPObject : public GObject {
 		deleteObject(propagate, propagate);
 	}
 
-	SigC::Connection connectDelete(SigC::Slot1<void, SPObject *> slot) {
+	sigc::connection connectDelete(sigc::slot<void, SPObject *> slot) {
 		return _delete_signal.connect(slot);
 	}
 
@@ -292,7 +292,7 @@ struct SPObject : public GObject {
 	void _sendDeleteSignalRecursive();
 	void _updateTotalHRefCount(int increment);
 
-	SigC::Signal1<void, SPObject *> _delete_signal;
+	sigc::signal<void, SPObject *> _delete_signal;
 	SPObject *_successor;
 	CollectionPolicy _collection_policy;
 };

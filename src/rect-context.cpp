@@ -113,7 +113,7 @@ static void sp_rect_context_init(SPRectContext *rect_context)
     rect_context->rx = 0.0;
     rect_context->ry = 0.0;
 
-    new (&rect_context->sel_changed_connection) SigC::Connection();
+    new (&rect_context->sel_changed_connection) sigc::connection();
 }
 
 static void sp_rect_context_dispose(GObject *object)
@@ -122,7 +122,7 @@ static void sp_rect_context_dispose(GObject *object)
     SPEventContext *ec = SP_EVENT_CONTEXT(object);
 
     rc->sel_changed_connection.disconnect();
-    rc->sel_changed_connection.~Connection();
+    rc->sel_changed_connection.~connection();
 
     /* fixme: This is necessary because we do not grab */
     if (rc->item) {
@@ -233,7 +233,7 @@ static void sp_rect_context_setup(SPEventContext *ec)
 
     rc->sel_changed_connection.disconnect();
     rc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(
-        SigC::bind(SigC::slot(&sp_rect_context_selection_changed), (gpointer)rc)
+        sigc::bind(sigc::ptr_fun(&sp_rect_context_selection_changed), (gpointer)rc)
     );
 
     sp_event_context_read(ec, "rx");

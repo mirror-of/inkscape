@@ -41,13 +41,13 @@ public:
 
     bool contains(SPObject *object);
 
-    SigC::Connection connectAdded(SigC::Slot1<void, SPObject *> slot) {
+    sigc::connection connectAdded(const sigc::slot<void, SPObject *> &slot) {
         return _added_signal.connect(slot);
     }
-    SigC::Connection connectRemoved(SigC::Slot1<void, SPObject *> slot) {
+    sigc::connection connectRemoved(const sigc::slot<void, SPObject *> &slot) {
         return _removed_signal.connect(slot);
     }
-    SigC::Connection connectChanged(SigC::Slot2<void, SPObject *, SPObject *> slot)
+    sigc::connection connectChanged(const sigc::slot<void, SPObject *, SPObject *> &slot)
     {
         return _changed_signal.connect(slot);
     }
@@ -97,9 +97,9 @@ private:
     static void _trim_for_release(SPObject *released, ObjectHierarchy *hier);
 
     std::list<Record> _hierarchy;
-    SigC::Signal1<void, SPObject *> _added_signal;
-    SigC::Signal1<void, SPObject *> _removed_signal;
-    SigC::Signal2<void, SPObject *, SPObject *> _changed_signal;
+    sigc::signal<void, SPObject *> _added_signal;
+    sigc::signal<void, SPObject *> _removed_signal;
+    sigc::signal<void, SPObject *, SPObject *> _changed_signal;
 };
 
 }

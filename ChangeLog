@@ -1,3 +1,25 @@
+2004-07-18  MenTaLguY  <mental@rydia.net>
+
+	* Makefile.am, configure.in, m4/Makefile.am, m4/codeset.m4, m4/gettext.m4,
+	  m4/glibc21.m4, m4/iconv.m4, m4/isc-posix.m4, m4/lcmessage.m4,
+	  m4/progtest.m4, src/arc-context.cpp, src/arc-context.h, src/desktop.cpp,
+	  src/desktop.h, src/document.cpp, src/document.h, src/draw-context.cpp,
+	  src/draw-context.h, src/event-context.h, src/main.cpp,
+	  src/message-stack.h, src/node-context.cpp, src/node-context.h,
+	  src/nodepath.cpp, src/nodepath.h, src/object-hierarchy.h,
+	  src/rect-context.cpp, src/rect-context.h, src/selcue.cpp, src/selcue.h,
+	  src/selection-describer.cpp, src/selection-describer.h,
+	  src/selection.h, src/seltrans.cpp, src/sp-gradient.cpp,
+	  src/sp-item.cpp, src/sp-item.h, src/sp-object.cpp, src/sp-object.h,
+	  src/sp-offset.cpp, src/sp-offset.h, src/sp-pattern.cpp, src/sp-use.cpp,
+	  src/sp-use.h, src/spiral-context.cpp, src/spiral-context.h,
+	  src/star-context.cpp, src/star-context.h, src/text-context.cpp,
+	  src/text-context.h, src/toolbox.cpp, src/uri-references.cpp,
+	  src/uri-references.h, src/view.cpp, src/view.h,
+	  src/dialogs/xml-tree.cpp:
+
+	  merged Aubanel MONNIER's gtkmm upgrade patch
+
 2004-07-17  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/sp-use.cpp: fix a compiler warning (closes #992960)

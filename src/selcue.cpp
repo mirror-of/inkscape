@@ -39,21 +39,40 @@ sp_sel_cue_sel_modified (SPSelection *selection, guint flags, gpointer data)
 
 
 SPSelCue::SPSelCue(SPDesktop *desktop) {
+
 	this->desktop = desktop;
+
 	this->selection = SP_DT_SELECTION(desktop);
+
         this->item_bboxes = NULL;
 
+
+
 	this->sel_changed_connection = this->selection->connectChanged(
-            SigC::bind(
-                SigC::slot(&sp_sel_cue_sel_changed),
-                (gpointer)this
-            )
+
+            sigc::bind (
+
+                sigc::ptr_fun(&sp_sel_cue_sel_changed), 
+
+                (gpointer)this )
+
+            
+
+
+
 	);
 	this->sel_modified_connection = this->selection->connectModified(
-            SigC::bind(
-                SigC::slot(&sp_sel_cue_sel_modified),
-                (gpointer)this
-            )
+
+            sigc::bind(
+
+                sigc::ptr_fun(&sp_sel_cue_sel_modified),
+
+                (gpointer)this )
+
+            
+
+
+
 	);
 	sp_sel_cue_update_item_bboxes (this);
 }

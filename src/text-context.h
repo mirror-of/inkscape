@@ -33,8 +33,8 @@ class SPTextContextClass;
 struct SPTextContext {
 	SPEventContext event_context;
 
-	SigC::Connection sel_changed_connection;
-	SigC::Connection sel_modified_connection;
+	sigc::connection sel_changed_connection;
+	sigc::connection sel_modified_connection;
 
 	GtkIMContext *imc;
 

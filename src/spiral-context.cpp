@@ -115,7 +115,7 @@ sp_spiral_context_init (SPSpiralContext * spiral_context)
 	spiral_context->exp = 1.0;
 	spiral_context->t0 = 0.0;
 
-	new (&spiral_context->sel_changed_connection) SigC::Connection();
+	new (&spiral_context->sel_changed_connection) sigc::connection();
 }
 
 static void
@@ -126,7 +126,7 @@ sp_spiral_context_dispose (GObject *object)
     SPEventContext *ec = SP_EVENT_CONTEXT (object);
 
     sc->sel_changed_connection.disconnect();
-    sc->sel_changed_connection.~Connection();
+    sc->sel_changed_connection.~connection();
 
 	/* fixme: This is necessary because we do not grab */
 	if (sc->item) sp_spiral_finish (sc);
@@ -246,7 +246,7 @@ sp_spiral_context_setup (SPEventContext *ec)
       }
 
 	sc->sel_changed_connection.disconnect();
-	sc->sel_changed_connection = selection->connectChanged(SigC::bind(SigC::slot(&sp_spiral_context_selection_changed), (gpointer)sc));
+	sc->sel_changed_connection = selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_spiral_context_selection_changed), (gpointer)sc));
 
 	if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
 		ec->enableSelectionCue();

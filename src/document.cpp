@@ -125,7 +125,7 @@ sp_document_class_init(SPDocumentClass *klass)
 static void
 free_id_signal(gpointer p)
 {
-	SigC::Signal1<void, SPObject *> *signal = reinterpret_cast<SigC::Signal1<void, SPObject *> *>(p);
+	sigc::signal<void, SPObject *> *signal = reinterpret_cast<sigc::signal<void, SPObject *> *>(p);
 	if (!signal->empty()) {
 		g_warning("Lingering document id observers");
 	}
@@ -571,8 +571,8 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 void sp_document_def_id(SPDocument *document, gchar const *id, SPObject *object)
 {
 	GQuark idq = g_quark_from_string(id);
-	SigC::Signal1<void, SPObject *> *signal
-	  = reinterpret_cast<SigC::Signal1<void, SPObject *> *>(g_hash_table_lookup(document->priv->idsignals,
+	sigc::signal<void, SPObject *> *signal
+	  = reinterpret_cast<sigc::signal<void, SPObject *> *>(g_hash_table_lookup(document->priv->idsignals,
 										    GINT_TO_POINTER(idq)));
 
 	if (object) {
@@ -596,15 +596,15 @@ void sp_document_def_id(SPDocument *document, gchar const *id, SPObject *object)
 
 SigC::Connection
 sp_document_id_changed_connect(SPDocument *doc, const gchar *id,
-                               SigC::Slot1<void, SPObject *> slot)
+                               sigc::slot<void, SPObject *> slot)
 {
-	SigC::Signal1<void, SPObject *> *signal;
+	sigc::signal<void, SPObject *> *signal;
 	GQuark idq;
 
 	idq = g_quark_from_string(id);
-	signal = reinterpret_cast<SigC::Signal1<void, SPObject *> *>(g_hash_table_lookup(doc->priv->idsignals, GINT_TO_POINTER(idq)));
+	signal = reinterpret_cast<sigc::signal<void, SPObject *> *>(g_hash_table_lookup(doc->priv->idsignals, GINT_TO_POINTER(idq)));
 	if (!signal) {
-		signal = new SigC::Signal1<void, SPObject *>();
+		signal = new sigc::signal<void, SPObject *>();
 		g_hash_table_insert(doc->priv->idsignals, GINT_TO_POINTER(idq), reinterpret_cast<gpointer>(signal));
 	}
 

@@ -40,7 +40,7 @@ struct SPNodeContext {
 	gboolean leftctrl;
 	gboolean rightctrl;
 
-	SigC::Connection sel_changed_connection;
+	sigc::connection sel_changed_connection;
 };
 
 struct SPNodeContextClass {

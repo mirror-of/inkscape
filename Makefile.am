@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src doc share po
+SUBDIRS = m4 src doc share po
 
 appicondir = $(datadir)/pixmaps
 appicon_DATA = inkscape.png
@@ -21,7 +21,7 @@ Graphics_DATA = $(Graphics_in_files:.desktop.in=.desktop)
 man_MANS = inkscape.1 \
 		inkview.1
 
-EXTRA_DIST = \
+EXTRA_DIST = config.rpath mkinstalldirs  \
 	intltool-extract.in	\
 	intltool-merge.in	\
 	intltool-update.in	\
@@ -44,3 +44,5 @@ DISTCLEANFILES = inkscape.desktop \
                  intltool-update
 
 #ACLOCAL_AMFLAGS = -I m4
+
+ACLOCAL_AMFLAGS = -I m4

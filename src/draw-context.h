@@ -66,8 +66,8 @@ struct SPDrawContext : public SPEventContext{
     /* End anchor */
     SPDrawAnchor *ea;
 
-    SigC::Connection sel_changed_connection;
-    SigC::Connection sel_modified_connection;
+    sigc::connection sel_changed_connection;
+    sigc::connection sel_modified_connection;
 
     NR::Point p[SP_DRAW_POINTS_MAX];
     gint npoints;

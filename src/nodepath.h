@@ -115,6 +115,7 @@ class Path {
 	NR::Matrix i2d, d2i;
 /**  The DOM node which describes this NodePath */
 	SPRepr *repr;
+	
 };
 
 

@@ -21,6 +21,7 @@
 #include <gtk/gtkwidget.h>
 #include "xml/xml-forward.h"
 #include "selcue.h"
+
 #include "forward.h"
 
 namespace Inkscape { class MessageContext; }

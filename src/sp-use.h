@@ -47,11 +47,11 @@ struct SPUse {
 	SPUseReference *ref;
 
 	// a sigc connection for delete notifications
-	SigC::Connection _delete_connection;
-	SigC::Connection _changed_connection;
+	sigc::connection _delete_connection;
+	sigc::connection _changed_connection;
 
 	// a sigc connection for transformed signal, used to do move compensation
-	SigC::Connection _transformed_connection;
+	sigc::connection _transformed_connection;
 };
 
 struct SPUseClass {

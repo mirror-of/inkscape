@@ -117,7 +117,7 @@ sp_star_context_init (SPStarContext * star_context)
     star_context->proportion = 0.5;
     star_context->isflatsided = false;
 
-    new (&star_context->sel_changed_connection) SigC::Connection();
+    new (&star_context->sel_changed_connection) sigc::connection();
 }
 
 static void
@@ -128,7 +128,7 @@ sp_star_context_dispose (GObject *object)
     SPStarContext *sc = SP_STAR_CONTEXT (object);
 
     sc->sel_changed_connection.disconnect();
-    sc->sel_changed_connection.~Connection();
+    sc->sel_changed_connection.~connection();
 
     if (sc->knot_holder) {
         sp_knot_holder_destroy (sc->knot_holder);
@@ -247,7 +247,7 @@ sp_star_context_setup (SPEventContext *ec)
         }
 
     sc->sel_changed_connection.disconnect();
-    sc->sel_changed_connection = selection->connectChanged(SigC::bind(SigC::slot(&sp_star_context_selection_changed), (gpointer)sc));
+    sc->sel_changed_connection = selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_star_context_selection_changed), (gpointer)sc));
 
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
         ec->enableSelectionCue();

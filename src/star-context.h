@@ -44,7 +44,7 @@ struct SPStarContext {
     SPKnotHolder *knot_holder;
     SPRepr *repr;
 
-    SigC::Connection sel_changed_connection;
+    sigc::connection sel_changed_connection;
 };
 
 struct SPStarContextClass {

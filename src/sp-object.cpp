@@ -153,7 +153,7 @@ sp_object_init (SPObject * object)
 
 	object->_collection_policy = SPObject::COLLECT_WITH_PARENT;
 
-	new (&object->_delete_signal) SigC::Signal1<void, SPObject *>();
+	new (&object->_delete_signal) sigc::signal<void, SPObject *>();
 	object->_successor = NULL;
 }
 
@@ -171,7 +171,7 @@ sp_object_finalize (GObject * object)
 		(* ((GObjectClass *) (parent_class))->finalize) (object);
 	}
 
-	spobject->_delete_signal.~Signal1();
+	spobject->_delete_signal.~signal();
 }
 
 /*

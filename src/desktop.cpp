@@ -208,12 +208,20 @@ sp_desktop_init (SPDesktop *desktop)
     desktop->can_go_forward = FALSE;
     desktop->is_fullscreen = FALSE;
 
-    new (&desktop->sel_modified_connection) SigC::Connection();
-    new (&desktop->sel_changed_connection) SigC::Connection();
+    new (&desktop->sel_modified_connection) sigc::connection();
 
-    new (&desktop->_set_colorcomponent_signal) SigC::Signal4<bool, ColorComponent, float, bool, bool>();
-    new (&desktop->_set_style_signal) SigC::Signal1<bool, const SPCSSAttr *, StopOnTrue>();
-    new (&desktop->_layer_changed_signal) SigC::Signal1<void, SPObject *>();
+    new (&desktop->sel_changed_connection) sigc::connection();
+
+
+
+    new (&desktop->_set_colorcomponent_signal) sigc::signal<bool, ColorComponent, float, bool, bool>();
+
+    new (&desktop->_set_style_signal) sigc::signal<bool, const SPCSSAttr *, StopOnTrue>();
+
+    new (&desktop->_layer_changed_signal) sigc::signal<void, SPObject *>();
+
+
+
 
     desktop->_guides_message_context = new Inkscape::MessageContext(desktop->messageStack());
 
@@ -228,14 +236,14 @@ sp_desktop_dispose (GObject *object)
     SPDesktop *dt = SP_DESKTOP (object);
 
     dt->sel_modified_connection.disconnect();
-    dt->sel_modified_connection.~Connection();
+    dt->sel_modified_connection.~connection();
 
     dt->sel_changed_connection.disconnect();
-    dt->sel_changed_connection.~Connection();
+    dt->sel_changed_connection.~connection();
 
-    dt->_set_colorcomponent_signal.~Signal4();
-    dt->_set_style_signal.~Signal1();
-    dt->_layer_changed_signal.~Signal1();
+    dt->_set_colorcomponent_signal.~signal();
+    dt->_set_style_signal.~accumulated();
+    dt->_layer_changed_signal.~signal();
 
     if (dt->_layer_hierarchy) {
         delete dt->_layer_hierarchy;
@@ -429,16 +437,16 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 
     desktop->sel_modified_connection.disconnect();
     desktop->sel_modified_connection = desktop->selection->connectModified(
-        SigC::bind(
-            SigC::slot(&sp_desktop_selection_modified),
+        sigc::bind(
+            sigc::ptr_fun(&sp_desktop_selection_modified),
             desktop
         )
     );
 
     desktop->sel_changed_connection.disconnect();
     desktop->sel_changed_connection = desktop->selection->connectChanged(
-        SigC::bind(
-            SigC::slot(&SPDesktop::_selection_changed),
+        sigc::bind(
+            sigc::ptr_fun(&SPDesktop::_selection_changed),
             desktop
         )
     );
@@ -543,9 +551,9 @@ sp_desktop_set_document (SPView *view, SPDocument *doc)
         delete desktop->_layer_hierarchy;
     }
     desktop->_layer_hierarchy = new Inkscape::ObjectHierarchy(NULL);
-    desktop->_layer_hierarchy->connectAdded(SigC::bind(SigC::slot(&SPDesktop::_layer_activated), desktop));
-    desktop->_layer_hierarchy->connectRemoved(SigC::bind(SigC::slot(&SPDesktop::_layer_deactivated), desktop));
-    desktop->_layer_hierarchy->connectChanged(SigC::bind(SigC::slot(&SPDesktop::_layer_hierarchy_changed), desktop));
+    desktop->_layer_hierarchy->connectAdded(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_activated), desktop));
+    desktop->_layer_hierarchy->connectRemoved(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_deactivated), desktop));
+    desktop->_layer_hierarchy->connectChanged(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_hierarchy_changed), desktop));
     desktop->_layer_hierarchy->setTop(SP_DOCUMENT_ROOT(doc));
 
     /* fixme: */
@@ -1317,7 +1325,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
 
-    dtw->desktop->connectCurrentLayerChanged(SigC::bind(SigC::slot(&SPDesktopWidget::_update_layer_display), dtw));
+    dtw->desktop->connectCurrentLayerChanged(sigc::bind(sigc::ptr_fun(&SPDesktopWidget::_update_layer_display), dtw));
     SPDesktopWidget::_update_layer_display(dtw->desktop->currentLayer(), dtw);
 
     dtw->menubar = sp_ui_main_menubar (SP_VIEW (dtw->desktop));

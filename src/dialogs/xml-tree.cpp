@@ -64,7 +64,7 @@ struct EditableDest {
 };
 
 static GtkWidget * dlg = NULL;
-static SigC::Connection sel_changed_connection;
+static sigc::connection sel_changed_connection;
 static win_data wd;
 // impossible original values to make sure they are read from prefs
 static gint x = -1000, y = -1000, w = 0, h = 0; 
@@ -569,7 +569,7 @@ set_tree_desktop (SPDesktop * desktop)
     }
     current_desktop = desktop;
     if (desktop) {
-        sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(SigC::slot(&on_desktop_selection_changed)); 
+        sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(&on_desktop_selection_changed); 
         set_tree_document (SP_DT_DOCUMENT (desktop));
     } else {
         set_tree_document (NULL);

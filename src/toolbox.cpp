@@ -141,7 +141,7 @@ static void update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext
 static void setup_commands_toolbox (GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 
-static void delete_connection(GObject *obj, SigC::Connection *connection) {
+static void delete_connection(GObject *obj, sigc::connection *connection) {
 	connection->disconnect();
 	delete connection;
 }
@@ -1162,8 +1162,8 @@ sp_star_toolbox_new (SPDesktop *desktop)
     gtk_widget_show_all (tbl);
     sp_set_font_size (tbl, AUX_FONT_SIZE);
 
-    SigC::Connection *connection = new SigC::Connection(
-        SP_DT_SELECTION(desktop)->connectChanged(SigC::bind(SigC::slot(sp_star_toolbox_selection_changed), (GtkObject *)tbl))
+    sigc::connection *connection = new sigc::connection(
+        SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_star_toolbox_selection_changed), (GtkObject *)tbl))
     );
     g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 
@@ -1426,8 +1426,8 @@ sp_rect_toolbox_new (SPDesktop *desktop)
     gtk_widget_show_all (tbl);
     sp_set_font_size (tbl, AUX_FONT_SIZE);
 
-    SigC::Connection *connection = new SigC::Connection(
-        SP_DT_SELECTION(desktop)->connectChanged(SigC::bind(SigC::slot(sp_rect_toolbox_selection_changed), (GtkObject *)tbl))
+    sigc::connection *connection = new sigc::connection(
+        SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_rect_toolbox_selection_changed), (GtkObject *)tbl))
     );
     g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 
@@ -1675,8 +1675,8 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
     gtk_widget_show_all (tbl);
     sp_set_font_size (tbl, AUX_FONT_SIZE);
 
-    SigC::Connection *connection = new SigC::Connection(
-        SP_DT_SELECTION(desktop)->connectChanged(SigC::bind(SigC::slot(sp_spiral_toolbox_selection_changed), (GtkObject *)tbl))
+    sigc::connection *connection = new sigc::connection(
+        SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_spiral_toolbox_selection_changed), (GtkObject *)tbl))
     );
     g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 
@@ -2150,8 +2150,8 @@ sp_arc_toolbox_new (SPDesktop *desktop)
         gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
-    SigC::Connection *connection = new SigC::Connection(
-        SP_DT_SELECTION(desktop)->connectChanged(SigC::bind(SigC::slot(sp_arc_toolbox_selection_changed), (GtkObject *)tbl))
+    sigc::connection *connection = new sigc::connection(
+        SP_DT_SELECTION(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_arc_toolbox_selection_changed), (GtkObject *)tbl))
     );
     g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), connection);
 

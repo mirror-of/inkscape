@@ -555,6 +555,9 @@ static Path::Path *sp_nodepath_current()
 	return SP_NODE_CONTEXT (event_context)->nodepath;
 }
 
+
+
+
 /**
  \brief Fills node and control positions for three nodes, splitting line
   marked by end at distance t

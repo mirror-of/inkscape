@@ -237,7 +237,7 @@ static void
 sp_gradient_init (SPGradient *gr)
 {
 	gr->ref = new SPGradientReference(SP_OBJECT(gr));
-	gr->ref->changedSignal().connect(SigC::bind(SigC::slot(gradient_ref_changed), gr));
+	gr->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(gradient_ref_changed), gr));
 
 	/* Fixme: reprs being rearranged (e.g. via the XML editor)
 	 *        may require us to clear the state */

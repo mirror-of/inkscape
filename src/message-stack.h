@@ -56,7 +56,7 @@ public:
     /** @brief connects to the "changed" signal which is emitted whenever
       *        the topmost message on the stack changes.
       */
-    SigC::Connection connectChanged(SigC::Slot2<void, MessageType, gchar const *> slot)
+    sigc::connection connectChanged(sigc::slot<void, MessageType, gchar const *> slot)
     {
         return _changed_signal.connect(slot);
     }
@@ -143,7 +143,7 @@ private:
     void _emitChanged(); ///< emits the "changed" signal
     static gboolean _timeout(gpointer data); ///< callback to expire flashed messages
 
-    SigC::Signal2<void, MessageType, gchar const *> _changed_signal;
+    sigc::signal<void, MessageType, gchar const *> _changed_signal;
     Message *_messages; ///< the stack of messages as a linked list
     MessageId _next_id; ///< the next message id to assign
 };

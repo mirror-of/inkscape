@@ -155,17 +155,24 @@ SPSelTrans::SPSelTrans(SPDesktop *desktop)
 
 	this->stamp_cache = NULL;
 
-        _sel_changed_connection = this->selection->connectChanged(
-            SigC::bind(
-                SigC::slot(&sp_sel_trans_sel_changed),
-                (gpointer)this
-            )
+        _sel_changed_connection = this->selection->connectChanged (
+
+            sigc::bind (
+
+                sigc::ptr_fun(&sp_sel_trans_sel_changed),
+
+                (gpointer)this )
+
+            
+
+
+
 	);
-	_sel_modified_connection = this->selection->connectModified(
-            SigC::bind(
-                SigC::slot(&sp_sel_trans_sel_modified),
+	_sel_modified_connection = this->selection->connectModified (
+            sigc::bind (
+                sigc::ptr_fun(&sp_sel_trans_sel_modified),
                 (gpointer)this
-            )
+	)            
 	);
 }
 

@@ -95,7 +95,10 @@ gdouble sp_document_height (SPDocument * document);
  */
 
 void sp_document_def_id(SPDocument *document, const gchar *id, SPObject *object);
-SigC::Connection sp_document_id_changed_connect(SPDocument *document, const gchar *id, SigC::Slot1<void, SPObject *>);
+sigc::connection sp_document_id_changed_connect(SPDocument *document, const gchar *id, sigc::slot<void, SPObject *>);
+
+
+
 
 /*
  * Undo & redo

@@ -131,16 +131,16 @@ sp_text_context_init (SPTextContext *tc)
 
 	tc->preedit_string = NULL;
 
-	new (&tc->sel_changed_connection) SigC::Connection();
-	new (&tc->sel_modified_connection) SigC::Connection();
+	new (&tc->sel_changed_connection) sigc::connection();
+	new (&tc->sel_modified_connection) sigc::connection();
 }
 
 static void
 sp_text_context_dispose(GObject *obj)
 {
 	SPTextContext *tc=SP_TEXT_CONTEXT(obj);
-	tc->sel_changed_connection.~Connection();
-	tc->sel_modified_connection.~Connection();
+	tc->sel_changed_connection.~connection();
+	tc->sel_modified_connection.~connection();
 	if (G_OBJECT_CLASS(parent_class)->dispose) {
 		G_OBJECT_CLASS(parent_class)->dispose(obj);
 	}
@@ -185,10 +185,10 @@ sp_text_context_setup (SPEventContext *ec)
 		((SPEventContextClass *) parent_class)->setup (ec);
 
 	tc->sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(
-		SigC::bind(SigC::slot(&sp_text_context_selection_changed), tc)
+		sigc::bind(sigc::ptr_fun(&sp_text_context_selection_changed), tc)
 	);
 	tc->sel_modified_connection = SP_DT_SELECTION(desktop)->connectModified(
-		SigC::bind(SigC::slot(&sp_text_context_selection_modified), tc)
+		sigc::bind(sigc::ptr_fun(&sp_text_context_selection_modified), tc)
 	);
 
 	sp_text_context_selection_changed (SP_DT_SELECTION (desktop), tc);

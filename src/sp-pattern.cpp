@@ -126,7 +126,7 @@ static void
 sp_pattern_init (SPPattern *pat)
 {
 	pat->ref = new SPPatternReference(SP_OBJECT(pat));
-	pat->ref->changedSignal().connect(SigC::bind(SigC::slot(pattern_ref_changed), pat));
+	pat->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(pattern_ref_changed), pat));
 
 	pat->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
 	pat->patternUnits_set = FALSE;

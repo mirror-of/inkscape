@@ -110,7 +110,7 @@ static void sp_arc_context_init(SPArcContext *arc_context)
 
 	arc_context->item = NULL;
 
-	new (&arc_context->sel_changed_connection) SigC::Connection();
+	new (&arc_context->sel_changed_connection) sigc::connection();
 }
 
 static void sp_arc_context_dispose(GObject *object)
@@ -119,7 +119,7 @@ static void sp_arc_context_dispose(GObject *object)
 	SPArcContext *ac = SP_ARC_CONTEXT(object);
 
 	ac->sel_changed_connection.disconnect();
-	ac->sel_changed_connection.~Connection();
+	ac->sel_changed_connection.~connection();
 
 	if (ac->knot_holder) {
 		sp_knot_holder_destroy (ac->knot_holder);
@@ -229,7 +229,7 @@ sp_arc_context_setup (SPEventContext *ec)
         }
 
     ac->sel_changed_connection.disconnect();
-    ac->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_arc_context_selection_changed), (gpointer)ac));
+    ac->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(sigc::bind(sigc::ptr_fun(&sp_arc_context_selection_changed), (gpointer)ac));
 
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
 	    ec->enableSelectionCue();

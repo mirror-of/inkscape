@@ -118,14 +118,14 @@ sp_item_init(SPItem *item)
     item->display = NULL;
 
     item->clip_ref = new SPClipPathReference(SP_OBJECT(item));
-    item->clip_ref->changedSignal().connect(SigC::bind(SigC::slot(clip_ref_changed), item));
+    item->clip_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(clip_ref_changed), item));
 
     item->mask_ref = new SPMaskReference(SP_OBJECT(item));
-    item->mask_ref->changedSignal().connect(SigC::bind(SigC::slot(mask_ref_changed), item));
+    item->mask_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(mask_ref_changed), item));
 
     if (!object->style) object->style = sp_style_new_from_object(SP_OBJECT(item));
 
-    new (&item->_transformed_signal) SigC::Signal2<void, NR::Matrix const *, SPItem *>();
+    new (&item->_transformed_signal) sigc::signal<void, NR::Matrix const *, SPItem *>();
 }
 
 namespace {
@@ -191,7 +191,7 @@ sp_item_release(SPObject *object)
         item->display = sp_item_view_list_remove(item->display, item->display);
     }
 
-    item->_transformed_signal.~Signal2();
+    item->_transformed_signal.~signal();
 }
 
 static void

@@ -97,11 +97,16 @@ struct SPItem : public SPObject {
 
 	std::vector<SPGuideConstraint> constraints;
 
-	SigC::Signal2<void, NR::Matrix const *, SPItem *> _transformed_signal;
+	sigc::signal<void, NR::Matrix const *, SPItem *> _transformed_signal;
 
 	NR::Matrix getRelativeTransform(SPObject *obj);
 
-	SigC::Connection connectTransformed(SigC::Slot2<void, NR::Matrix const *, SPItem *> slot) {
+
+
+	sigc::connection connectTransformed(sigc::slot<void, NR::Matrix const *, SPItem *> slot)  {
+
+
+
                 return _transformed_signal.connect(slot);
         }
 };

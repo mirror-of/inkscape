@@ -32,7 +32,7 @@ namespace Inkscape {
  * @see sp_object_href
  * @see sp_object_hunref
  */
-class URIReference : public SigC::Object {
+class URIReference : public sigc::trackable {
 public:
 	/**
 	 * Constructor.
@@ -90,7 +90,7 @@ public:
 	 *
 	 * @returns a signal
 	 */
-	SigC::Signal2<void, SPObject *, SPObject *> changedSignal() {
+	sigc::signal<void, SPObject *, SPObject *> changedSignal() {
 		return _changed_signal;
 	}
 
@@ -118,11 +118,11 @@ protected:
 
 private:
 	SPObject *_owner;
-	SigC::Connection _connection;
+	sigc::connection _connection;
 	SPObject *_obj;
 	URI *_uri;
 
-	SigC::Signal2<void, SPObject *, SPObject *> _changed_signal;
+	sigc::signal<void, SPObject *, SPObject *> _changed_signal;
 
 	void _setObject(SPObject *object);
 	static void _release(SPObject *object, URIReference *reference);

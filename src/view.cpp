@@ -145,14 +145,14 @@ sp_view_class_init (SPViewClass *klass)
 void SPView::init(SPView *view) {
 	view->doc = NULL;
 
-	new (&view->_message_changed_connection) SigC::Connection();
+	new (&view->_message_changed_connection) sigc::connection();
 
 	view->_message_stack = new Inkscape::MessageStack();
 
 	view->_tips_message_context = new Inkscape::MessageContext(view->_message_stack);
 	view->_legacy_message_context = new Inkscape::MessageContext(view->_message_stack);
 
-	view->_message_changed_connection = view->_message_stack->connectChanged(SigC::bind(SigC::slot(&SPView::_set_status_message), view));
+	view->_message_changed_connection = view->_message_stack->connectChanged(sigc::bind(sigc::ptr_fun(&SPView::_set_status_message), view));
 }
 
 void SPView::dispose(GObject *object) {
@@ -176,7 +176,7 @@ void SPView::dispose(GObject *object) {
 		view->doc = sp_document_unref (view->doc);
 	}
 
-	view->_message_changed_connection.~Connection();
+	view->_message_changed_connection.~connection();
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }

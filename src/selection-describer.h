@@ -21,7 +21,7 @@ namespace Inkscape {
 
 class MessageStack;
 
-class SelectionDescriber : public SigC::Object {
+class SelectionDescriber : public sigc::trackable {
 public:
     SelectionDescriber(SPSelection *selection, MessageStack *stack);
 
