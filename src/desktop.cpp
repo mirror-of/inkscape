@@ -817,8 +817,8 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->coord_status, FALSE, FALSE, 2);
 
 	dtw->select_status = gtk_statusbar_new ();
-	// initially, display the selector message
-	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, "Click, Shift+click, drag around objects to select.");
+	// display the initial welcome message in the statusbar
+	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, _("Welcome to Inkscape! Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->select_status), TRUE);
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->select_status, TRUE, TRUE, 0);
 
