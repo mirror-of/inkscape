@@ -224,6 +224,7 @@ static const SPStyleProp props[] = {
 	{SP_PROP_TEXT_DECORATION, "text-decoration"},
 	{SP_PROP_UNICODE_BIDI, "unicode-bidi"},
 	{SP_PROP_WORD_SPACING, "word-spacing"},
+	{SP_PROP_LINE_HEIGHT, "line-height"},
 	/* Misc */
 	{SP_PROP_CLIP, "clip"},
 	{SP_PROP_COLOR, "color"},

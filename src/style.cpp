@@ -711,6 +711,9 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
             g_warning("Unimplemented style property SP_PROP_WORD_SPACING: value: %s", val);
         }
         break;
+    case SP_PROP_LINE_HEIGHT:
+        // TODO: FIXME: store in style too, eliminate sodipodi:linespacing except for backwards commpatibility
+        break;
     /* Misc */
     case SP_PROP_CLIP:
         g_warning ("Unimplemented style property SP_PROP_CLIP: value: %s", val);
