@@ -79,8 +79,7 @@ sp_repr_set_length_list (SPRepr *repr, const gchar *key, GList *l)
     gchar c[32];
     gchar *s = NULL;
 
-    GList *i;
-    for (i = l; i != NULL; i = i->next) {
+    for (GList *i = l; i != NULL; i = i->next) {
 	if (i->data) {
 		g_ascii_formatd (c, sizeof (c), "%.8g", ((SPSVGLength *) i->data)->computed);
 	if (i == l) {
@@ -261,7 +260,7 @@ sp_set_dxdy (SPObject *o, GList *dx, GList *dy)
 \brief   Ensures the dx and dy lists of child are exactly end positions long, either
 appending 0 values or cutting extra values from the lists
 */
-static void
+void
 sp_fill_dxdy (SPObject *child, guint end)
 {
 	guint dx_offset, dy_offset;
@@ -365,6 +364,97 @@ sp_delete_dxdy (SPObject *child, gint start, gint end)
 	sp_set_dxdy (child, dxnew, dynew);
 }
 
+void
+sp_insert_dxdy (SPObject *child, guint pos, float dx_computed, float dy_computed)
+{
+	guint dx_offset, dy_offset;
+	GList *dxnew, *dx = sp_effective_dx (child, &dx_offset);
+	GList *dynew, *dy = sp_effective_dy (child, &dy_offset);
+
+	dxnew = g_list_copy (g_list_nth (dx, dx_offset));
+	dynew = g_list_copy (g_list_nth (dy, dy_offset));
+
+	if (g_list_length (dxnew) < pos) {
+		if (dx != 0) {
+			for (guint i = g_list_length(dxnew); i < pos; i++) {
+				SPSVGLength *length = g_new (SPSVGLength, 1);
+				length->value = 0;
+				if (i == pos - 1)	
+					length->computed = dx_computed;
+				else 
+					length->computed = 0;
+				dxnew = g_list_append (dxnew, length);
+			}
+		}
+	} else {
+		SPSVGLength *length = g_new (SPSVGLength, 1);
+		length->value = 0;
+		length->computed = dx_computed;
+		dxnew = g_list_insert (dxnew, (gpointer) length, pos);
+	}
+
+	if (g_list_length (dynew) < pos) {
+		if (dy != 0) {
+			for (guint i = g_list_length(dynew); i < pos; i++) {
+				SPSVGLength *length = g_new (SPSVGLength, 1);
+				length->value = 0;
+				if (i == pos - 1)	
+					length->computed = dy_computed;
+				else 
+					length->computed = 0;
+				dynew = g_list_append (dynew, length);
+			}
+		}
+	} else {
+		SPSVGLength *length = g_new (SPSVGLength, 1);
+		length->value = 0;
+		length->computed = dy_computed;
+		dynew = g_list_insert (dynew, (gpointer) length, pos);
+	}
+
+	sp_set_dxdy (child, dxnew, dynew);
+}
+
+void
+sp_insert_multiple_dxdy (SPObject *child, guint pos, guint len, float dx_computed, float dy_computed)
+{
+	for (guint i = 0; i < len; i++)
+		sp_insert_dxdy (child, pos + i, dx_computed, dy_computed);
+}
+
+/**
+\brief  Split the dx/dy of child1 at pos, assign the remainder to child2 (assuming it had none of its own)
+*/
+void
+sp_split_dxdy (SPObject *child1, SPObject *child2, guint pos)
+{
+	guint dx_offset, dy_offset;
+	GList *dxnew, *dx = sp_effective_dx (child1, &dx_offset);
+	GList *dynew, *dy = sp_effective_dy (child1, &dy_offset);
+
+	dxnew = g_list_copy (g_list_nth (dx, dx_offset + pos));
+	dynew = g_list_copy (g_list_nth (dy, dy_offset + pos));
+
+	sp_set_dxdy (child2, dxnew, dynew);
+
+	sp_fill_dxdy (child1, pos); 
+}
+
+/**
+\brief  There's no limited copy of lists in glib. I had to write it myself.
+*/
+GList *
+sp_list_copy_n (GList *src, guint len)
+{
+	GList *l = NULL;
+	while (src && len) {
+		l = g_list_append (l, src->data);
+		src = src->next;
+		len --;
+	}
+	return l;
+}
+
 /**
 \brief   Writes dx and dy lists from a text object to its tspan children, with appropriate
 offsets. Inkscape-created text always stores dx and dy in tspans, so this is only needed
@@ -394,13 +484,13 @@ sp_distribute_dxdy (SPText *text)
 
 		if (SP_TSPAN(child)->ly.dx == NULL) {
 			dx = sp_effective_dx (child, &dx_offset);
-			dxnew = g_list_copy (g_list_nth (dx, dx_offset));
+			dxnew = sp_list_copy_n (g_list_nth (dx, dx_offset), SP_TEXT_CHILD_STRING(child)->length);
 		} else 
 			dxnew = SP_TSPAN(child)->ly.dx;
 
 		if (SP_TSPAN(child)->ly.dy == NULL) {
 			dy = sp_effective_dy (child, &dy_offset);
-			dynew = g_list_copy (g_list_nth (dy, dy_offset));
+			dynew = sp_list_copy_n (g_list_nth (dy, dy_offset), SP_TEXT_CHILD_STRING(child)->length);
 		} else 
 			dynew = SP_TSPAN(child)->ly.dy;
 
@@ -2115,14 +2205,18 @@ sp_text_insert_line (SPText *text, gint pos)
 	sp_repr_add_child (SP_OBJECT_REPR (text), rtspan, SP_OBJECT_REPR (child));
 	sp_repr_unref (rtspan);
 
+	SPTSpan *newline = (SPTSpan *) sp_document_lookup_id (SP_OBJECT_DOCUMENT (text), sp_repr_attr (rtspan, "id"));
+
 	if (string->text) {
 		gchar *ip = g_utf8_offset_to_pointer (string->text, pos - string->start);
 		sp_repr_set_content (rstring, ip);
 		*ip = '\0';
 		sp_repr_set_content (SP_OBJECT_REPR (string), string->text);
+
+		sp_split_dxdy (child, (SPObject *) newline, (guint) pos - string->start);
 	}
 
-	return (SPTSpan *) sp_document_lookup_id (SP_OBJECT_DOCUMENT (text), sp_repr_attr (rtspan, "id"));
+	return newline;
 }
 
 gint
@@ -2210,6 +2304,8 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8)
 		return pos;
 	}
 
+	sp_distribute_dxdy (text);
+
 	SPObject *child = sp_text_get_child_by_position (text, pos);
 	if (!child) return sp_text_append (text, utf8);
 	SPString *string = SP_TEXT_CHILD_STRING (child);
@@ -2228,6 +2324,8 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8)
 	strcpy (spnew + slen + ulen, ip);
 	sp_repr_set_content (SP_OBJECT_REPR (string), spnew);
 	g_free (spnew);
+
+	sp_insert_multiple_dxdy (child, pos - string->start, g_utf8_strlen (utf8, -1), 0, 0);
 
 	return pos + g_utf8_strlen (utf8, -1);
 }
