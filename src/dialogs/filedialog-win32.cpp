@@ -1,6 +1,7 @@
 
 #include "filedialog.h"
-#include "extension/internal/win32.h"
+
+//#include "extension/internal/win32.h"
 
 #include <windows.h>
 
@@ -15,6 +16,35 @@ namespace UI
 namespace Dialogs
 {
 
+/*#################################
+# U T I L I T Y
+#################################*/
+static gboolean
+win32_is_os_wide()
+{
+	static gboolean initialized = FALSE;
+	static gboolean is_wide = FALSE;
+	static OSVERSIONINFOA osver;
+
+	if ( !initialized )
+	{
+		BOOL result;
+
+		initialized = TRUE;
+
+		memset (&osver, 0, sizeof(OSVERSIONINFOA));
+		osver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+		result = GetVersionExA (&osver);
+		if (result)
+		{
+			if (osver.dwPlatformId == VER_PLATFORM_WIN32_NT)
+				is_wide = TRUE;
+		}
+		// If we can't even call to get the version, fall back to ANSI API
+	}
+
+	return is_wide;
+}
 
 /*#################################
 # F I L E    O P E N
@@ -71,7 +101,7 @@ FileOpenDialog::show() {
 
 
     //Jon's UNICODE patch
-    if ( sp_win32_is_os_wide() ) {
+    if ( win32_is_os_wide() ) {
         gunichar2 fnbufW[UNSAFE_SCRATCH_BUFFER_SIZE * sizeof(gunichar2)] = {0};
         gunichar2* dirW    =
             g_utf8_to_utf16( nativeData->dir,    -1, NULL, NULL, NULL );
