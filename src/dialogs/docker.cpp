@@ -70,8 +70,6 @@ void Docker::init()
     // available to all gtkmm dialogs via a base class.
         GtkWidget *dlg = GTK_WIDGET(_window.gobj());
 
-        gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
-
         sp_transientize (dlg);
                            
         gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
@@ -97,21 +95,24 @@ void Docker::get_geometry(int &x, int &y, int &w, int &h)
 
 void Docker::geometry_request(Dockable &dockable)
 {
-  int x, y, w, h;
-  dockable.get_prefered_geometry(x, y, w, h);
-  if (_docked.empty())
-    {
-      _window.move(x, y);
-    }
-  else
-    {
-      int xc, yc, wc, hc;
-      get_geometry(xc, yc, wc, hc);
-      if (wc > w) w=wc;
-      if (hc > h) h=hc;
+    int x, y, w, h;
+    dockable.get_prefered_geometry(x, y, w, h);
+    if (_docked.empty()) {
+        if (x > 0 || y > 0) {
+            _window.move(x, y);
+        } else {
+            _window.set_position(Gtk::WIN_POS_CENTER);
+        }
+    } else {
+        int xc, yc, wc, hc;
+        get_geometry(xc, yc, wc, hc);
+        if (wc > w) w=wc;
+        if (hc > h) h=hc;
 
     }
-  _window.resize(w, h);
+    if (w > 0 || h > 0) {
+        _window.resize(w, h);
+    }
 }
 
 //class Docker::Menu
@@ -148,3 +149,14 @@ void Docker::Menu::add(Dockable &dockable)
   pItem->show();
   _removePopup.attach(*pItem, 0, 1, 0, 1);
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
