@@ -23,14 +23,7 @@ namespace Inkscape {
 
 namespace GC {
 
-inline void init() {
-#ifndef SUPPRESS_LIBGC
-    GC_finalize_on_demand = 0;
-    GC_no_dls = 1;
-    GC_INIT();
-    GC_set_free_space_divisor(128);
-#endif
-}
+void init();
 
 enum ScanPolicy {
     SCANNED,

@@ -1,7 +1,11 @@
 2004-09-21  MenTaLguY <mental@rydia.net>
 
-	* src/gc-finalized.h: fix for stupid bug preventing these objects
+	* src/gc-finalized.h: fix for stupid bug preventing finalizable objects
 	  from being collected
+
+	* src/Makefile_insert, src/gc.cpp, src/gc-core.h:
+	  move Inkscape::GC::init out-of-line, and funnel GC warnings through
+	  glib
 
 2004-09-21  Peter Moulder  <pmoulder@river>
 
