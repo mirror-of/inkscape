@@ -422,7 +422,7 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 		SP_VERB_SELECTION_LOWER,
 
 		SP_VERB_NONE,
-		SP_VERB_OBJECT_FLATTEN,
+		//		SP_VERB_OBJECT_FLATTEN,
 		SP_VERB_OBJECT_ROTATE_90,
 		SP_VERB_OBJECT_FLIP_HORIZONTAL,
 		SP_VERB_OBJECT_FLIP_VERTICAL,
@@ -485,13 +485,12 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_SCROLLBARS, view);
 
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item (menu, NULL, _("_New View"), G_CALLBACK(sp_ui_new_view), NULL);
-	sp_ui_menu_append_item (menu, NULL, _("New P_review"), G_CALLBACK(sp_ui_new_view_preview), NULL);
-
-	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_NEXT_DESKTOP, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_PREV_DESKTOP, view);
 
+	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
+	sp_ui_menu_append_item (menu, NULL, _("_New View"), G_CALLBACK(sp_ui_new_view), NULL);
+	//	sp_ui_menu_append_item (menu, NULL, _("New P_review"), G_CALLBACK(sp_ui_new_view_preview), NULL);
 }
 
 static void
