@@ -40,8 +40,8 @@ static gint pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotio
 static gint pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &revent);
 static gint pencil_handle_key_press(SPPencilContext *const pc, guint const keyval, guint const state);
 
-static void spdc_set_startpoint(SPPencilContext *pc, NR::Point p, guint state);
-static void spdc_set_endpoint(SPPencilContext *pc, NR::Point p);
+static void spdc_set_startpoint(SPPencilContext *pc, NR::Point const p);
+static void spdc_set_endpoint(SPPencilContext *pc, NR::Point const p);
 static void spdc_finish_endpoint(SPPencilContext *pc);
 static void spdc_add_freehand_point(SPPencilContext *pc, NR::Point p, guint state);
 static void fit_and_split(SPPencilContext *pc);
@@ -183,9 +183,11 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
                 /* Set first point of sequence */
                 if (anchor) {
                     p = anchor->dp;
+                } else if (!(bevent.state & GDK_SHIFT_MASK)) {
+                    namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(pc)->namedview, p);
                 }
                 pc->sa = anchor;
-                spdc_set_startpoint(pc, p, bevent.state);
+                spdc_set_startpoint(pc, p);
                 ret = TRUE;
                 break;
         }
@@ -343,12 +345,8 @@ pencil_handle_key_press(SPPencilContext *const pc, guint const keyval, guint con
  * Reset points and set new starting point.
  */
 static void
-spdc_set_startpoint(SPPencilContext *const pc, NR::Point p, guint const state)
+spdc_set_startpoint(SPPencilContext *const pc, NR::Point const p)
 {
-    if ((state & GDK_SHIFT_MASK) == 0) {
-        namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(pc)->namedview, p);
-    }
-
     pc->npoints = 0;
     pc->p[pc->npoints++] = p;
     pc->red_curve_is_valid = false;
@@ -380,10 +378,9 @@ spdc_set_endpoint(SPPencilContext *const pc, NR::Point const p)
 }
 
 /**
- * Set endpoint final position and end addline mode.
+ * Finalize addline.
  * fixme: I'd like remove red reset from concat colors (lauris).
  * fixme: Still not sure, how it will make most sense.
- * todo: Update this comment.  Check for overlap with set_endpoint.
  */
 static void
 spdc_finish_endpoint(SPPencilContext *const pc)
