@@ -831,7 +831,7 @@ sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, N
     else 
         sp_shape_adjust_gradient (item, paint_delta);
 
-// Within text, we do not fork gradients, and so must not compensate to avoid double compensation
+// Within text, we do not fork gradients, and so must not recurse to avoid double compensation
     if (item && SP_IS_TEXT(item))
         return;
 
