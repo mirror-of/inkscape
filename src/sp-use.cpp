@@ -14,6 +14,8 @@
 
 #include <string.h>
 #include <glib-object.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include "helper/sp-intl.h"
 #include "svg/svg.h"
 #include "display/nr-arena-group.h"
@@ -433,4 +435,57 @@ sp_use_modified (SPObject *object, guint flags)
 		}
 		g_object_unref (G_OBJECT (child));
 	}
+}
+
+SPItem *
+sp_use_unlink (SPUse *use)
+{
+	SPRepr *repr = SP_OBJECT_REPR(use);
+	SPRepr *parent = sp_repr_parent (repr);
+      gint pos = sp_repr_position (repr);
+	SPDocument *document = SP_OBJECT(use)->document;
+
+	SPObject *orig = use->child;
+	NR::Matrix t;
+	t.set_identity();
+	//track the ultimate source of a chain of uses
+	while (SP_IS_USE(orig)) {
+		t = t * NR::Matrix (&(SP_ITEM(orig)->transform));
+		orig = SP_USE(orig)->child;
+	}
+	t = t * NR::Matrix (&(SP_ITEM(orig)->transform));
+ 
+	SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(orig));
+
+	sp_repr_append_child (parent, copy);
+      sp_repr_set_position_absolute (copy, pos > 0 ? pos : 0);
+	SPObject *unlinked = sp_document_lookup_id (document, sp_repr_attr (copy, "id"));
+
+	SPItem *item = SP_ITEM(unlinked);
+
+	{
+		NR::Matrix const trans( t * NR::Matrix (&(SP_ITEM(use)->transform)));
+		NRMatrix ctrans = trans;
+		gchar affinestr[80];
+		if (sp_svg_transform_write (affinestr, 79, &ctrans)) {
+			sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", affinestr);
+		} else {
+			sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", NULL);
+		}
+	}
+
+	// "An additional transformation translate(x,y) is appended to the end (i.e.,
+	// right-side) of the transform attribute on the generated 'g', where x and y
+	// represent the values of the x and y attributes on the 'use' element." - http://www.w3.org/TR/SVG11/struct.html#UseElement
+
+ 	if (use->x.set || use->y.set) {
+		NR::Matrix const xy( NR::translate (use->x.set ? use->x.computed : 0, use->y.set ? use->y.computed : 0) );
+		NR::Matrix const i2dnew( xy * sp_item_i2d_affine(item) );
+		sp_item_set_i2d_affine(item, i2dnew);
+		sp_item_write_transform (item, SP_OBJECT_REPR (item), &(item->transform));
+ 	}
+
+	sp_repr_unparent (SP_OBJECT_REPR (use));
+
+	return SP_ITEM(unlinked);
 }

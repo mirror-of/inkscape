@@ -43,6 +43,6 @@ struct SPUseClass {
 
 GType sp_use_get_type (void);
 
-
+SPItem *sp_use_unlink (SPUse *use);
 
 #endif

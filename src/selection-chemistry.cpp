@@ -28,6 +28,7 @@
 #include "sp-item-transform.h" 
 #include "sp-item-group.h"
 #include "sp-path.h"
+#include "sp-use.h"
 #include "helper/sp-intl.h"
 #include "display/sp-canvas.h"
 #include "path-chemistry.h"
@@ -285,6 +286,8 @@ void sp_selection_ungroup()
 		return;
 	}
 
+	SPDocument *doc = SP_DT_DOCUMENT (desktop);
+
 	// get a copy of current selection
 	GSList *new_select = NULL;
 	bool ungrouped = false;
@@ -303,7 +306,7 @@ void sp_selection_ungroup()
 
 		GSList *children = NULL;
 		/* This is not strictly required, but is nicer to rely on group ::destroy (lauris) */
-		sp_item_group_ungroup (SP_GROUP (group), &children);
+		sp_item_group_ungroup (SP_GROUP (group), &children, false);
 		ungrouped = true;
 		// Add ungrouped items to the new selection.
 		new_select = g_slist_concat (new_select, children);
@@ -317,6 +320,8 @@ void sp_selection_ungroup()
 	if (!ungrouped) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("No groups to ungroup in the selection."));
 	}
+
+	sp_document_done (doc);
 }
 
 static SPGroup *
@@ -1243,4 +1248,50 @@ sp_selection_clone ()
 
 	sp_selection_set_repr (selection, clone);
 	sp_repr_unref (clone);
+}
+
+void
+sp_selection_unlink ()
+{
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!desktop) return;
+
+	if (sp_selection_is_empty(SP_DT_SELECTION(desktop))) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select a clone to unlink."));
+		return;
+	}
+
+	SPDocument *doc = SP_DT_DOCUMENT (desktop);
+
+	// get a copy of current selection
+	GSList *new_select = NULL;
+	bool unlinked = false;
+	for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list (SP_DT_SELECTION(desktop)));
+	     items != NULL;
+	     items = items->next)
+	{
+		SPItem *use = (SPItem *) items->data;
+
+		if (!SP_IS_USE (use)) {
+			// keep the non-yse item in the new selection
+			new_select = g_slist_prepend (new_select, use);
+			continue;
+		}
+
+		SPItem *unlink = sp_use_unlink (SP_USE (use));
+		unlinked = true;
+		// Add ungrouped items to the new selection.
+		new_select = g_slist_prepend (new_select, unlink);
+	}
+
+	if (new_select) { // set new selection
+		sp_selection_empty(SP_DT_SELECTION(desktop));
+		sp_selection_set_item_list(SP_DT_SELECTION(desktop), new_select);
+		g_slist_free(new_select);
+	}
+	if (!unlinked) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("No clones to unlink in the selection."));
+	}
+
+	sp_document_done (doc);
 }
