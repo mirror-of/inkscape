@@ -111,7 +111,8 @@ sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, win_data *wd)
 	if (w && wd->win) {
 		wd->stop = 1; // disallow other attempts to retranzientize this dialog
 		gtk_window_set_transient_for ((GtkWindow *) wd->win, w);
-		gtk_window_present (w); // without this, a transient window not always emerges on top
+		//switched off for testing
+		//gtk_window_present (w); // without this, a transient window not always emerges on top
 	}
 	// we're done, allow next retransientizing not sooner than after 10 msec
 	gtk_timeout_add (6, (GtkFunction) sp_allow_again, (gpointer) wd);  
