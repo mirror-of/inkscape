@@ -122,7 +122,7 @@ if test "x$gc_ok" == "xyes"; then
 	AC_MSG_RESULT([$gc_ok])
 fi
 if test "x$gc_ok" != "xyes"; then
-	AC_MSG_ERROR([libgc (the Boehm Conservative Collector) 6.4+, is needed to compile inkscape])
+	AC_MSG_ERROR([libgc (the Boehm Conservative Collector) 6.4+, is needed to compile inkscape -- http://www.hpl.hp.com/personal/Hans_Boehm/gc])
 fi
 
 AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
