@@ -1295,3 +1295,26 @@ sp_selection_unlink ()
 
 	sp_document_done (doc);
 }
+
+void
+sp_select_clone_original ()
+{
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+	if (desktop == NULL) return;
+
+	SPSelection *selection = SP_DT_SELECTION(desktop);
+
+	// check if more than two objects are selected, or not an SPUse is selected
+	if (g_slist_length ((GSList *) selection->itemList()) != 1 || !SP_IS_USE(selection->singleItem())) {
+			sp_view_set_statusf_error (SP_VIEW (desktop), _("Select a single clone to go to its original."));
+			return;
+	}
+
+	SPItem *original = sp_use_get_original (SP_USE (selection->singleItem()));
+
+	if (original) {
+		selection->clear();
+		selection->setItem(original);
+	}
+}

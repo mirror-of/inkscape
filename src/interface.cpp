@@ -495,6 +495,9 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         SP_VERB_EDIT_DUPLICATE,
         SP_VERB_EDIT_CLONE,
         SP_VERB_EDIT_UNLINK_CLONE,
+        SP_VERB_EDIT_CLONE_ORIGINAL,
+
+        SP_VERB_NONE,
         SP_VERB_EDIT_DELETE,
 
         SP_VERB_NONE,

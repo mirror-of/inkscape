@@ -276,6 +276,9 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_EDIT_UNLINK_CLONE:
             sp_selection_unlink();
             break;
+        case SP_VERB_EDIT_CLONE_ORIGINAL:
+            sp_select_clone_original();
+            break;
         case SP_VERB_EDIT_CLEAR_ALL:
             sp_edit_clear_all();
             break;
@@ -832,6 +835,8 @@ static const SPVerbActionDef props[] = {
         N_("Clone selected objects"), NULL},
     {SP_VERB_EDIT_UNLINK_CLONE, "EditUnlinkClone", N_("Unlin_k Clone"),
         N_("Cut the clone's link to its original"), NULL},
+    {SP_VERB_EDIT_CLONE_ORIGINAL, "EditCloneOriginal", N_("Select _Original"),
+        N_("Select the original object to which the clone is linked"), NULL},
     {SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"),
         N_("Delete all objects from document"), NULL},
     {SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select _All"),
