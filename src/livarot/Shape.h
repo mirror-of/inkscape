@@ -73,13 +73,17 @@ public:
 	int    ind;       // index of qrsData elem for edge (ie inverse of the bord)
 	int    next,prev; // dbl linkage
     };
-    
+
+    enum sTreeChangeType
+    {
+	EDGE_INSERTED = 0,
+	EDGE_REMOVED = 1,
+	INTERSECTION = 2
+    };
+  
     struct sTreeChange
     {
-	int type;			// type of modification to the sweepline:
-	// 0=edge inserted
-	// 1=edge removed
-	// 2=intersection
+	sTreeChangeType type;		// type of modification to the sweepline:
 	int ptNo;			// point at which the modification takes place
 	
 	Shape *src;			// left edge (or unique edge if not an intersection) involved in the event
@@ -469,7 +473,7 @@ private:
     int AssemblePoints(int st, int en);
     void AssembleAretes(FillRule directed = fill_nonZero);
     void AddChgt(int lastPointNo, int lastChgtPt, Shape *&shapeHead,
-		 int &edgeHead, int type, Shape *lS, int lB, Shape *rS,
+		 int &edgeHead, sTreeChangeType type, Shape *lS, int lB, Shape *rS,
 		 int rB);
     void CheckAdjacencies(int lastPointNo, int lastChgtPt, Shape *shapeHead, int edgeHead);
     void CheckEdges(int lastPointNo, int lastChgtPt, Shape *a, Shape *b, BooleanOp mod);
