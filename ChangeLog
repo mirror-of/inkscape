@@ -1,5 +1,8 @@
 2004-11-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/bezier-utils.cpp: Make end tangent/s be unconstrained for
+	  sp_bezier_fit_cubic, sp_bezier_fit_cubic_r, and around corner nodes.
+
 	* src/pencil-context.cpp (fit_and_split): Allow the bezier fitter to
 	  choose the middle control points freely except to the extent required
 	  for smooth nodes.

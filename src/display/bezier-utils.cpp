@@ -66,6 +66,9 @@ static double compute_hook(NR::Point const &a, NR::Point const &b, double const 
                            double const tolerance);
 
 
+static NR::Point const unconstrained_tangent(0, 0);
+
+
 /*
  *  B0, B1, B2, B3 : Bezier multipliers
  */
@@ -127,12 +130,10 @@ sp_bezier_fit_cubic_r(NR::Point bezier[], NR::Point const data[], gint const len
         return 0;
     }
 
-    NR::Point tHat1 = sp_darray_left_tangent(uniqued_data, uniqued_len);
-    NR::Point tHat2 = sp_darray_right_tangent(uniqued_data, uniqued_len, error);
-
     /* Call fit-cubic function with recursion. */
     gint const ret = sp_bezier_fit_cubic_full(bezier, uniqued_data, uniqued_len,
-                                              tHat1, tHat2, error, lg_max_beziers);
+                                              unconstrained_tangent, unconstrained_tangent,
+                                              error, lg_max_beziers);
     g_free(uniqued_data);
     return ret;
 }
@@ -194,8 +195,12 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
             bezier[1] = bezier[0];
             bezier[2] = bezier[3];
         } else {
-            bezier[1] = bezier[0] + dist * tHat1;
-            bezier[2] = bezier[3] + dist * tHat2;
+            bezier[1] = ( is_zero(tHat1)
+                          ? ( 2 * bezier[0] + bezier[3] ) / 3.
+                          : bezier[0] + dist * tHat1 );
+            bezier[2] = ( is_zero(tHat2)
+                          ? ( bezier[0] + 2 * bezier[3] ) / 3.
+                          : bezier[3] + dist * tHat2 );
         }
         BEZIER_ASSERT(bezier);
         return 1;
@@ -250,24 +255,18 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
     if (is_corner) {
         g_assert(splitPoint < unsigned(len));
         if (splitPoint == 0) {
-            NR::Point newTHat1 = sp_darray_left_tangent(data, len, error);
-            if (newTHat1 == tHat1) {
-                newTHat1 = sp_darray_left_tangent(data, len);
-                if (newTHat1 == tHat1) {
-                    return -1;
-                }
+            if (is_zero(tHat1)) {
+                g_warning("Got spike even with unconstrained initial tangent.");
+                return -1;
             }
-            return sp_bezier_fit_cubic_full(bezier, data, len, newTHat1, tHat2,
+            return sp_bezier_fit_cubic_full(bezier, data, len, unconstrained_tangent, tHat2,
                                             error, lg_max_beziers);
         } else if (splitPoint == unsigned(len - 1)) {
-            NR::Point newTHat2 = sp_darray_right_tangent(data, len, error);
-            if (newTHat2 == tHat2) {
-                newTHat2 = sp_darray_right_tangent(data, len);
-                if (newTHat2 == tHat2) {
-                    return -1;
-                }
+            if (is_zero(tHat2)) {
+                g_warning("Got spike even with unconstrained final tangent.");
+                return -1;
             }
-            return sp_bezier_fit_cubic_full(bezier, data, len, tHat1, newTHat2,
+            return sp_bezier_fit_cubic_full(bezier, data, len, tHat1, unconstrained_tangent,
                                             error, lg_max_beziers);
         }
     }
@@ -281,10 +280,7 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
         NR::Point recTHat2, recTHat1;
         if (is_corner) {
             g_return_val_if_fail(0 < splitPoint && splitPoint < unsigned(len - 1), -1);
-            /* Relevance: preconditions. */
-
-            recTHat2 = sp_darray_right_tangent(data, splitPoint + 1, error);
-            recTHat1 = sp_darray_left_tangent(data + splitPoint, len - splitPoint, error);
+            recTHat1 = recTHat2 = unconstrained_tangent;
         } else {
             /* Unit tangent vector at splitPoint. */
             recTHat2 = sp_darray_center_tangent(data, splitPoint, len);
