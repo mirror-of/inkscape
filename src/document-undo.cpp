@@ -41,7 +41,6 @@ sp_document_set_undo_sensitive (SPDocument *doc, gboolean sensitive)
 	g_assert (doc != NULL);
 	g_assert (SP_IS_DOCUMENT (doc));
 	g_assert (doc->priv != NULL);
-	g_return_if_fail ( !(sensitive) != !(doc->priv->sensitive) );
 
 	if ( !(sensitive) == !(doc->priv->sensitive) )
 		return;
@@ -55,7 +54,15 @@ sp_document_set_undo_sensitive (SPDocument *doc, gboolean sensitive)
 		);
 	}
 
-	doc->priv->sensitive = sensitive;
+	doc->priv->sensitive = !!sensitive;
+}
+
+gboolean sp_document_get_undo_sensitive(SPDocument const *document) {
+	g_assert(document != NULL);
+	g_assert(SP_IS_DOCUMENT(document));
+	g_assert(document->priv != NULL);
+
+	return document->priv->sensitive;
 }
 
 void

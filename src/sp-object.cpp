@@ -580,7 +580,11 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 
 		/* Redefine ID, if required */
 		if ((id == NULL) || (strcmp (id, realid) != 0)) {
+			gboolean undo_sensitive=sp_document_get_undo_sensitive(document);
+			sp_document_set_undo_sensitive(document, FALSE);
 			int ret = sp_repr_set_attr (object->repr, "id", realid);
+			sp_document_set_undo_sensitive(document, undo_sensitive);
+
 			if (!ret) {
 				g_error ("Update id %s to unique id %s has been vetoed; cannot maintain SPObject <-> SPRepr binding", id, realid);
 			}

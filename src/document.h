@@ -102,6 +102,7 @@ SigC::Connection sp_document_id_changed_connect(SPDocument *document, const gcha
  */
 
 void sp_document_set_undo_sensitive (SPDocument * document, gboolean sensitive);
+gboolean sp_document_get_undo_sensitive (SPDocument const * document);
 
 void sp_document_clear_undo (SPDocument * document);
 void sp_document_clear_redo (SPDocument * document);

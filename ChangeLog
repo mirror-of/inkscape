@@ -1,3 +1,12 @@
+2004-07-11  MenTaLguY  <mental@rydia.net>
+
+	* src/document.h, src/document-undo.cpp:
+	  added sp_document_get_undo_sensitive() for capturing and restoring
+	  undo sensitivity
+
+	* src/sp-object.cpp: don't log id changes made to resolve
+	  duplicate ids (to avoid undo badness) (fix for bug #989023)
+
 2004-07-11  Kees Cook  <kees@outflux.net>
 
 	* src/preferences-skeleton.h, src/extension/init.cpp: with simarilius,
