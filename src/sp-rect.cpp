@@ -367,6 +367,8 @@ static int sp_rect_snappoints(SPItem *item, NR::Point p[], int size)
 
 	NR::Matrix const i2d(sp_item_i2d_affine(item));
 
+	/* Note: these are the transformed corner points, not the corners of the bounding box of
+	   the transformed rect. */
 	int i = 0;
 	if (i < size) {
 		p[i++] = NR::Point(x0, y0) * i2d;
@@ -467,3 +469,13 @@ sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 }
 
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"bsd"
+  c-file-offsets:((innamespace . 0) (inline-open . 0))
+  indent-tabs-mode:t
+  fill-column:99
+  End:
+  vim: filetype=c++:noexpandtab :
+*/
