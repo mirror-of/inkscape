@@ -14,6 +14,7 @@
 	  INKSCAPE_MARKERSDIR, INKSCAPE_PIXMAPDIR, INKSCAPE_SCREENSDIR,
 	  INKSCAPE_TUTORIALSDIR, with the understanding that these are to be
 	  provided by prefix.h.
+	* src/prefix.h: Define INKSCAPE_MARKERSDIR.
 
 	* src/extension/extension.cpp (Extension):
 	* src/extension/init.cpp (check_extensions): 
