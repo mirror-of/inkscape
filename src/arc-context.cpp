@@ -143,8 +143,7 @@ static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const g
 
     SPDesktop *desktop = ec->desktop;
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
-    SPItem *item = selection ? selection->singleItem() : NULL;
+    SPItem *item = SP_DT_SELECTION(desktop)->singleItem();
 
     if (item) {
         ac->knot_holder = sp_item_knot_holder (item, desktop);
@@ -209,9 +208,8 @@ sp_arc_context_setup (SPEventContext *ec)
    if (((SPEventContextClass *) parent_class)->setup)
         ((SPEventContextClass *) parent_class)->setup (ec);
 
-   SPSelection *selection = SP_DT_SELECTION (ec->desktop);
+   SPItem *item = SP_DT_SELECTION(ec->desktop)->singleItem();
    
-   SPItem *item = selection ? selection->singleItem() : NULL;
         if (item) {
             ac->knot_holder = sp_item_knot_holder (item, ec->desktop);
             SPRepr *repr = SP_OBJECT_REPR (item);
