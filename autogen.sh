@@ -143,6 +143,7 @@ if test -z "$ACLOCAL_FLAGS"; then
     done
 fi
 
+echo "Running $ACLOCAL ..."
 if ! $ACLOCAL $ACLOCAL_FLAGS; then
    echo "$ACLOCAL gave errors. Please fix the error conditions and try again."
    exit 1
@@ -155,13 +156,24 @@ fi
 #cat binreloc.m4 >> aclocal.m4
 
 # optionally feature autoheader
-(autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
+(autoheader --version)  < /dev/null > /dev/null 2>&1 && {
+	echo "Running autoheader ..."
+	autoheader
+}
 
+echo "Running $AUTOMAKE ..."
 $AUTOMAKE --add-missing
+
+echo "Running autoconf ..."
 autoconf
 
+echo "Running libtoolize ..."
 libtoolize --copy --force
+
+echo "Running glib-gettextize ..."
 glib-gettextize --copy --force
+
+echo "Running intltoolize ..."
 intltoolize --copy --force --automake
 
 cd $ORIGDIR
