@@ -16,11 +16,11 @@
 #include "desktop.h"
 
 /* Single point methods */
-double sp_desktop_free_snap (SPDesktop *desktop, NRPoint const *req);
+double sp_desktop_free_snap (SPDesktop *desktop, NRPoint *req);
 #define sp_desktop_horizontal_snap(dt,req) sp_desktop_vector_snap (dt, req, 1.0, 0.0);
 #define sp_desktop_vertical_snap(dt,req) sp_desktop_vector_snap (dt, req, 0.0, 1.0);
-double sp_desktop_vector_snap (SPDesktop *desktop, NRPoint const *req, double dx, double dy);
-double sp_desktop_circular_snap (SPDesktop *desktop, NRPoint const *req, double cx, double cy);
+double sp_desktop_vector_snap (SPDesktop *desktop, NRPoint *req, double dx, double dy);
+double sp_desktop_circular_snap (SPDesktop *desktop, NRPoint *req, double cx, double cy);
 
 /* List of points methods */
 double sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint const *p, int length, double dx);
