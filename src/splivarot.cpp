@@ -836,7 +836,13 @@ sp_selected_path_create_offset_object (int expand,bool updating)
             return;
     }
   
+    NR::Matrix const transform = NR::Matrix (item->transform);
     style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
+
+    // remember the position of the item
+    gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+    // remember parent
+    SPRepr *parent = SP_OBJECT_REPR (item)->parent;
   
     {
         SPStyle *i_style = SP_OBJECT (item)->style;
@@ -881,7 +887,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
         o_miter = i_style->stroke_miterlimit.value * o_width;
     }
   
-    Path *orig = Path_for_item (item,true);
+    Path *orig = Path_for_item (item, true, false);
     if (orig == NULL)
     {
         g_free (style);
@@ -978,7 +984,15 @@ sp_selected_path_create_offset_object (int expand,bool updating)
         }
       
         sp_repr_set_attr (repr, "style", style);
-        SPItem* nitem = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+
+        // add the new repr to the parent
+        sp_repr_append_child (parent, repr);
+
+        // move to the saved position 
+        sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+        SPItem *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
+        sp_item_write_transform (nitem, repr, transform);
 
         // The object just created from a temporary repr is only a seed. 
         // We need to invoke its write which will update its real repr (in particular adding d=)
@@ -1045,6 +1059,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
                 continue;
         }
 
+        NR::Matrix const transform = NR::Matrix (item->transform);
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         float o_width, o_miter;
@@ -1090,7 +1105,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
             o_miter = i_style->stroke_miterlimit.value * o_width;
         }
 
-        Path *orig = Path_for_item (item, true);
+        Path *orig = Path_for_item (item, true, false);
         if (orig == NULL) {
             g_free (style);
             sp_curve_unref (curve);
@@ -1212,6 +1227,9 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+            SPItem *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
+            sp_item_write_transform (nitem, repr, transform);
 
             selection->addRepr (repr);
 
