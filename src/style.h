@@ -237,6 +237,9 @@ struct SPStyle {
 
 	/** Marker list */
 	SPIString marker[SP_MARKER_LOC_QTY];
+
+	// style belongs to a cloned object, must not href anything
+	bool cloned; 
 };
 
 /**

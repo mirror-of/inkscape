@@ -299,6 +299,8 @@ sp_style_new (void)
 
     sp_style_clear (style);
 
+    style->cloned = false;
+
     return style;
 }
 
@@ -318,6 +320,10 @@ sp_style_new_from_object (SPObject *object)
 
     style->object = object;
     g_signal_connect (G_OBJECT (object), "release", G_CALLBACK (sp_style_object_release), style);
+
+    if (object && SP_OBJECT_IS_CLONED (object)) {
+        style->cloned = true;
+    }
 
     return style;
 }
@@ -378,6 +384,10 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     g_assert (!object || (SP_OBJECT_REPR (object) == repr));
 
     sp_style_clear (style);
+
+    if (object && SP_OBJECT_IS_CLONED (object)) {
+        style->cloned = true;
+    }
 
     /* 1. Style itself */
     val = sp_repr_attr (repr, "style");
@@ -1197,7 +1207,9 @@ sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent)
             paint->value.paint.server = parent->value.paint.server;
             paint->value.paint.uri = parent->value.paint.uri;
             if (paint->value.paint.server) {
-                sp_object_href (SP_OBJECT (paint->value.paint.server), style);
+                if (!style->cloned) {
+                    sp_object_href (SP_OBJECT (paint->value.paint.server), style);
+                } 
                 g_signal_connect (G_OBJECT (paint->value.paint.server), "release",
                       G_CALLBACK (sp_style_paint_server_release), style);
                 g_signal_connect (G_OBJECT (paint->value.paint.server), "modified",
@@ -1938,7 +1950,9 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
                 ps = sp_uri_reference_resolve(document, str);
                 if (ps && SP_IS_PAINT_SERVER(ps)) {
                     paint->value.paint.server = SP_PAINT_SERVER(ps);
-                    sp_object_href(SP_OBJECT(paint->value.paint.server), style);
+                    if (!style->cloned) {
+                        sp_object_href(SP_OBJECT(paint->value.paint.server), style);
+                    } 
                     g_signal_connect(G_OBJECT(paint->value.paint.server), "release",
                                      G_CALLBACK(sp_style_paint_server_release), style);
                     g_signal_connect(G_OBJECT(paint->value.paint.server), "modified",
@@ -2359,7 +2373,9 @@ sp_style_paint_clear (SPStyle *style, SPIPaint *paint,
             unsigned int hunref, unsigned int unset)
 {
     if (hunref && (paint->type == SP_PAINT_TYPE_PAINTSERVER) && paint->value.paint.server) {
-        sp_object_hunref (SP_OBJECT (paint->value.paint.server), style);
+        if (!style->cloned) {
+            sp_object_hunref (SP_OBJECT (paint->value.paint.server), style);
+        } 
         // gtk_signal_disconnect_by_data (GTK_OBJECT (paint->value.server),
         //        style);
         g_signal_handlers_disconnect_matched (G_OBJECT(paint->value.paint.server),
