@@ -30,6 +30,7 @@ include extension/plugin/Makefile_insert
 include extension/script/Makefile_insert
 include helper/Makefile_insert
 include inkjar/Makefile_insert
+include io/Makefile_insert
 include libnr/Makefile_insert
 include libnrtype/Makefile_insert
 include livarot/Makefile_insert
@@ -53,6 +54,7 @@ noinst_LIBRARIES =	\
 	extension/libextension.a	\
 	extension/script/libscript.a	\
 	helper/libspchelp.a	\
+	io/libio.a	\
 	util/libinkutil.a \
 	$(inkjar_libs)	\
 	libnr/libnr.a	\
@@ -79,6 +81,7 @@ EXTRA_DIST =	\
 	extension/internal/makefile.in	\
 	helper/makefile.in	\
 	inkjar/makefile.in	\
+	io/makefile.in  	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\
 	livarot/makefile.in	\

@@ -226,6 +226,7 @@ inkscape_private_libs =	\
 	widgets/libspwidgets.a	\
 	display/libspdisplay.a	\
 	helper/libspchelp.a	\
+	io/libio.a	        \
 	libnrtype/libnrtype.a	\
 	libnr/libnr.a	\
 	livarot/libvarot.a	\

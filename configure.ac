@@ -579,6 +579,7 @@ src/extension/internal/makefile
 src/extension/script/makefile
 src/helper/makefile
 src/inkjar/makefile
+src/io/makefile
 src/libnr/makefile
 src/libnrtype/makefile
 src/livarot/makefile
