@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-08 06:48-0700\n"
+"POT-Creation-Date: 2004-05-09 17:25-0700\n"
 "PO-Revision-Date: 2004-04-11 23:36+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
@@ -115,7 +115,7 @@ msgstr "Nincs következõ nagyítás."
 
 #. Page page
 #: src/desktop.cpp:1819 src/dialogs/align.cpp:452
-#: src/dialogs/desktop-properties.cpp:504 src/dialogs/export.cpp:273
+#: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:273
 msgid "Page"
 msgstr "Lap"
 
@@ -227,151 +227,166 @@ msgstr "Legkisebb elem"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:412
+#: src/dialogs/desktop-properties.cpp:519
 msgid "Grid"
 msgstr "Rács"
 
-#: src/dialogs/desktop-properties.cpp:425
+#: src/dialogs/desktop-properties.cpp:532
 msgid "Show grid"
 msgstr "Rács megjelenítése"
 
-#: src/dialogs/desktop-properties.cpp:426
+#: src/dialogs/desktop-properties.cpp:533
 msgid "Snap to grid"
 msgstr "Rácsra illesztés"
 
-#: src/dialogs/desktop-properties.cpp:429
+#: src/dialogs/desktop-properties.cpp:536
 msgid "Horizontal lines"
 msgstr "Vízszintes vonalak"
 
-#: src/dialogs/desktop-properties.cpp:431
+#: src/dialogs/desktop-properties.cpp:538
 msgid "Vertical lines"
 msgstr "Függõleges vonalak"
 
-#: src/dialogs/desktop-properties.cpp:442
+#: src/dialogs/desktop-properties.cpp:549
 msgid "Grid units:"
 msgstr "Rács-mértékegység:"
 
-#: src/dialogs/desktop-properties.cpp:444
+#: src/dialogs/desktop-properties.cpp:551
 msgid "Origin X:"
 msgstr "X origó:"
 
-#: src/dialogs/desktop-properties.cpp:447
+#: src/dialogs/desktop-properties.cpp:554
 msgid "Origin Y:"
 msgstr "Y origó:"
 
-#: src/dialogs/desktop-properties.cpp:450
+#: src/dialogs/desktop-properties.cpp:557
 msgid "Spacing X:"
 msgstr "X távolság:"
 
-#: src/dialogs/desktop-properties.cpp:453
+#: src/dialogs/desktop-properties.cpp:560
 msgid "Spacing Y:"
 msgstr "Y távolság:"
 
-#: src/dialogs/desktop-properties.cpp:457
-#: src/dialogs/desktop-properties.cpp:488
+#: src/dialogs/desktop-properties.cpp:564
+#: src/dialogs/desktop-properties.cpp:595
 msgid "Snap units:"
 msgstr "Illesztési mértékegység:"
 
-#: src/dialogs/desktop-properties.cpp:460
-#: src/dialogs/desktop-properties.cpp:491
+#: src/dialogs/desktop-properties.cpp:567
+#: src/dialogs/desktop-properties.cpp:598
 msgid "Snap distance:"
 msgstr "Illesztési távolság:"
 
-#: src/dialogs/desktop-properties.cpp:463
+#: src/dialogs/desktop-properties.cpp:570
 msgid "Grid color:"
 msgstr "Rács színe:"
 
-#: src/dialogs/desktop-properties.cpp:464
+#: src/dialogs/desktop-properties.cpp:571
 msgid "Grid color"
 msgstr "Rács színe"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:470
+#: src/dialogs/desktop-properties.cpp:577
 msgid "Guides"
 msgstr "Segédvonalak"
 
-#: src/dialogs/desktop-properties.cpp:481
+#: src/dialogs/desktop-properties.cpp:588
 msgid "Show guides"
 msgstr "Segédvonalak megjelenítése"
 
-#: src/dialogs/desktop-properties.cpp:483
+#: src/dialogs/desktop-properties.cpp:590
 msgid "Snap to guides"
 msgstr "Segédvonalakra illesztés"
 
-#: src/dialogs/desktop-properties.cpp:495
+#: src/dialogs/desktop-properties.cpp:602
 msgid "Guides color:"
 msgstr "Segédvonalak színe:"
 
-#: src/dialogs/desktop-properties.cpp:496
+#: src/dialogs/desktop-properties.cpp:603
 msgid "Guideline color"
 msgstr "Segédvonalak színe"
 
-#: src/dialogs/desktop-properties.cpp:498
+#: src/dialogs/desktop-properties.cpp:605
 msgid "Highlight color:"
 msgstr "Kijelölési szín:"
 
-#: src/dialogs/desktop-properties.cpp:499
+#: src/dialogs/desktop-properties.cpp:606
 msgid "Highlighted guideline color"
 msgstr "Kijelölt segédvonal színe"
 
-#: src/dialogs/desktop-properties.cpp:513
+#: src/dialogs/desktop-properties.cpp:620
 msgid "Background (also for export):"
 msgstr "Háttér (exportáláshoz is):"
 
-#: src/dialogs/desktop-properties.cpp:514
+#: src/dialogs/desktop-properties.cpp:621
 msgid "Background color"
 msgstr "Háttérszín"
 
-#: src/dialogs/desktop-properties.cpp:518
+#: src/dialogs/desktop-properties.cpp:625
 msgid "Show canvas border"
 msgstr "A rajzvászon keretének megjelenítése"
 
-#: src/dialogs/desktop-properties.cpp:521
+#: src/dialogs/desktop-properties.cpp:628
 msgid "Border on top of drawing"
 msgstr "A keret a rajz elõtt legyen"
 
-#: src/dialogs/desktop-properties.cpp:531
+#: src/dialogs/desktop-properties.cpp:638
 msgid "Border color:"
 msgstr "Keret színe:"
 
-#: src/dialogs/desktop-properties.cpp:532
+#: src/dialogs/desktop-properties.cpp:639
 msgid "Canvas border color"
 msgstr "A rajzvászon keretének színe"
 
-#: src/dialogs/desktop-properties.cpp:549
+#: src/dialogs/desktop-properties.cpp:655
 msgid "Paper size:"
 msgstr "Papírméret:"
 
-#: src/dialogs/desktop-properties.cpp:561
+#: src/dialogs/desktop-properties.cpp:679
 msgid "Custom"
 msgstr "Egyéni"
 
+#: src/dialogs/desktop-properties.cpp:690
+#, fuzzy
+msgid "Paper orientation:"
+msgstr "Irány:"
+
+#: src/dialogs/desktop-properties.cpp:702
+#, fuzzy
+msgid "Landscape"
+msgstr "Inkscape"
+
+#: src/dialogs/desktop-properties.cpp:708
+#, fuzzy
+msgid "Portrait"
+msgstr "Pont"
+
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:570
+#: src/dialogs/desktop-properties.cpp:717
 msgid "Custom paper"
 msgstr "Egyéni papír"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:582 src/dialogs/export.cpp:301
+#: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:301
 #: src/dialogs/transformation.cpp:534 src/dialogs/transformation.cpp:757
 msgid "Units:"
 msgstr "Mértékegység:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:596 src/dialogs/export.cpp:317
+#: src/dialogs/desktop-properties.cpp:743 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1188
 #: src/toolbox.cpp:1525
 msgid "Width:"
 msgstr "Szélesség:"
 
-#: src/dialogs/desktop-properties.cpp:618 src/dialogs/export.cpp:333
+#: src/dialogs/desktop-properties.cpp:765 src/dialogs/export.cpp:333
 #: src/dialogs/export.cpp:367 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Magasság:"
 
-#: src/dialogs/desktop-properties.cpp:1043
+#: src/dialogs/desktop-properties.cpp:1220
 msgid "Close"
 msgstr "Bezárás"
 
@@ -2195,7 +2210,7 @@ msgstr "Jelölje ki a hátulra helyezendõ objektumokat."
 msgid "No objects to convert to path in the selection."
 msgstr "A kijelölésben nincs szétbontható csoport."
 
-#: src/rect-context.cpp:515
+#: src/rect-context.cpp:516
 #, c-format
 msgid "Draw rectangle: %s x %s"
 msgstr "Téglalaprajzolás: %s x %s"
@@ -2471,7 +2486,7 @@ msgstr ""
 msgid "Orphaned clone"
 msgstr ""
 
-#: src/spiral-context.cpp:431
+#: src/spiral-context.cpp:432
 #, c-format
 msgid "Draw spiral at (%s,%s)"
 msgstr "Spirálrajzolás (%s,%s)"
@@ -2531,12 +2546,12 @@ msgstr "Jelölje ki az egyszerûsítendõ láncokat."
 msgid "No paths to simplify in the selection."
 msgstr "A kijelölésben nincs egyszerûsíthetõ lánc."
 
-#: src/star-context.cpp:460
+#: src/star-context.cpp:461
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr "Sokszögrajzolás (%s,%s)"
 
-#: src/star-context.cpp:461
+#: src/star-context.cpp:462
 #, c-format
 msgid "Draw star at (%s,%s)"
 msgstr "Csillagrajzolás (%s,%s)"

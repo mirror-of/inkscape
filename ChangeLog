@@ -1,3 +1,7 @@
+2004-05-12  Kees Cook <kees@outflux.net>
+
+	* config.h.mingw: added g_ascii_strtod macro.
+
 2004-05-12  Carl Hetherington <inkscape@carlh.net>
 
 	* src/dialogs/export.cpp: fix faulty logic with exporting of

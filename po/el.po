@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-08 06:48-0700\n"
+"POT-Creation-Date: 2004-05-09 17:25-0700\n"
 "PO-Revision-Date: 2001-12-28 21:07+0000\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -102,7 +102,7 @@ msgstr ""
 
 #. Page page
 #: src/desktop.cpp:1819 src/dialogs/align.cpp:452
-#: src/dialogs/desktop-properties.cpp:504 src/dialogs/export.cpp:273
+#: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:273
 msgid "Page"
 msgstr "Σελίδα"
 
@@ -223,182 +223,198 @@ msgstr "Μικρή καταιγίδα με χαλάζι"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:412
+#: src/dialogs/desktop-properties.cpp:519
 msgid "Grid"
 msgstr "Πλέγμα"
 
-#: src/dialogs/desktop-properties.cpp:425
+#: src/dialogs/desktop-properties.cpp:532
 msgid "Show grid"
 msgstr "Εμφάνιση πλέγματος"
 
-#: src/dialogs/desktop-properties.cpp:426
+#: src/dialogs/desktop-properties.cpp:533
 #, fuzzy
 msgid "Snap to grid"
 msgstr "Τοπο_θέτηση Σε Πλέγμα"
 
-#: src/dialogs/desktop-properties.cpp:429
+#: src/dialogs/desktop-properties.cpp:536
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "οριζόντιο"
 
-#: src/dialogs/desktop-properties.cpp:431
+#: src/dialogs/desktop-properties.cpp:538
 #, fuzzy
 msgid "Vertical lines"
 msgstr "Κατακόρυφες Ρίγες"
 
 #
-#: src/dialogs/desktop-properties.cpp:442
+#: src/dialogs/desktop-properties.cpp:549
 #, fuzzy
 msgid "Grid units:"
 msgstr "Γραμματοσειρά Πλέγματος"
 
-#: src/dialogs/desktop-properties.cpp:444
+#: src/dialogs/desktop-properties.cpp:551
 #, fuzzy
 msgid "Origin X:"
 msgstr "Προέλευση:"
 
-#: src/dialogs/desktop-properties.cpp:447
+#: src/dialogs/desktop-properties.cpp:554
 #, fuzzy
 msgid "Origin Y:"
 msgstr "Προέλευση:"
 
 #
-#: src/dialogs/desktop-properties.cpp:450
+#: src/dialogs/desktop-properties.cpp:557
 #, fuzzy
 msgid "Spacing X:"
 msgstr "Διάστιχο:"
 
 #
-#: src/dialogs/desktop-properties.cpp:453
+#: src/dialogs/desktop-properties.cpp:560
 #, fuzzy
 msgid "Spacing Y:"
 msgstr "Διάστιχο:"
 
-#: src/dialogs/desktop-properties.cpp:457
-#: src/dialogs/desktop-properties.cpp:488
+#: src/dialogs/desktop-properties.cpp:564
+#: src/dialogs/desktop-properties.cpp:595
 #, fuzzy
 msgid "Snap units:"
 msgstr "Τοποθέτηση σε:"
 
-#: src/dialogs/desktop-properties.cpp:460
-#: src/dialogs/desktop-properties.cpp:491
+#: src/dialogs/desktop-properties.cpp:567
+#: src/dialogs/desktop-properties.cpp:598
 #, fuzzy
 msgid "Snap distance:"
 msgstr "Ίσες Αποστάσεις"
 
-#: src/dialogs/desktop-properties.cpp:463
+#: src/dialogs/desktop-properties.cpp:570
 #, fuzzy
 msgid "Grid color:"
 msgstr " χρώμα"
 
-#: src/dialogs/desktop-properties.cpp:464
+#: src/dialogs/desktop-properties.cpp:571
 #, fuzzy
 msgid "Grid color"
 msgstr " χρώμα"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:470
+#: src/dialogs/desktop-properties.cpp:577
 #, fuzzy
 msgid "Guides"
 msgstr "Γουϊνέα"
 
 #
-#: src/dialogs/desktop-properties.cpp:481
+#: src/dialogs/desktop-properties.cpp:588
 #, fuzzy
 msgid "Show guides"
 msgstr "Εμφάνιση κόμβων-δ"
 
-#: src/dialogs/desktop-properties.cpp:483
+#: src/dialogs/desktop-properties.cpp:590
 #, fuzzy
 msgid "Snap to guides"
 msgstr "Τοπο_θέτηση Σε Πλέγμα"
 
-#: src/dialogs/desktop-properties.cpp:495
+#: src/dialogs/desktop-properties.cpp:602
 #, fuzzy
 msgid "Guides color:"
 msgstr "Χρώμα μη-ολοκληρωμένων εγγραφών:"
 
-#: src/dialogs/desktop-properties.cpp:496
+#: src/dialogs/desktop-properties.cpp:603
 #, fuzzy
 msgid "Guideline color"
 msgstr "Επιλογή χρώματος"
 
-#: src/dialogs/desktop-properties.cpp:498
+#: src/dialogs/desktop-properties.cpp:605
 #, fuzzy
 msgid "Highlight color:"
 msgstr "Χρώμα Μαρκαρίσματος"
 
-#: src/dialogs/desktop-properties.cpp:499
+#: src/dialogs/desktop-properties.cpp:606
 #, fuzzy
 msgid "Highlighted guideline color"
 msgstr "Χρώμα Ψευδωνύμου σε Έμφαση"
 
-#: src/dialogs/desktop-properties.cpp:513
+#: src/dialogs/desktop-properties.cpp:620
 msgid "Background (also for export):"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:514
+#: src/dialogs/desktop-properties.cpp:621
 #, fuzzy
 msgid "Background color"
 msgstr " χρώμα"
 
-#: src/dialogs/desktop-properties.cpp:518
+#: src/dialogs/desktop-properties.cpp:625
 #, fuzzy
 msgid "Show canvas border"
 msgstr "Εμφάνιση πλέγματος"
 
-#: src/dialogs/desktop-properties.cpp:521
+#: src/dialogs/desktop-properties.cpp:628
 #, fuzzy
 msgid "Border on top of drawing"
 msgstr "Αλλαγή κλίμακας για _ταίριασμα"
 
-#: src/dialogs/desktop-properties.cpp:531
+#: src/dialogs/desktop-properties.cpp:638
 #, fuzzy
 msgid "Border color:"
 msgstr " χρώμα"
 
-#: src/dialogs/desktop-properties.cpp:532
+#: src/dialogs/desktop-properties.cpp:639
 msgid "Canvas border color"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:549
+#: src/dialogs/desktop-properties.cpp:655
 #, fuzzy
 msgid "Paper size:"
 msgstr "Μέγ. _χαρτιού:"
 
 # Translation of "custom" sucks!  ("kata paraggelia"???  nah!)
-#: src/dialogs/desktop-properties.cpp:561
+#: src/dialogs/desktop-properties.cpp:679
 msgid "Custom"
 msgstr "Προσαρμοσμένο"
 
+#
+#: src/dialogs/desktop-properties.cpp:690
+#, fuzzy
+msgid "Paper orientation:"
+msgstr "Κορεσμός:"
+
+#: src/dialogs/desktop-properties.cpp:702
+#, fuzzy
+msgid "Landscape"
+msgstr "Συμπαγές"
+
+#: src/dialogs/desktop-properties.cpp:708
+#, fuzzy
+msgid "Portrait"
+msgstr "Σημείο"
+
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:570
+#: src/dialogs/desktop-properties.cpp:717
 #, fuzzy
 msgid "Custom paper"
 msgstr "Διαστάσεις"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:582 src/dialogs/export.cpp:301
+#: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:301
 #: src/dialogs/transformation.cpp:534 src/dialogs/transformation.cpp:757
 #, fuzzy
 msgid "Units:"
 msgstr "&Μονάδες:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:596 src/dialogs/export.cpp:317
+#: src/dialogs/desktop-properties.cpp:743 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1188
 #: src/toolbox.cpp:1525
 msgid "Width:"
 msgstr "Πλάτος:"
 
-#: src/dialogs/desktop-properties.cpp:618 src/dialogs/export.cpp:333
+#: src/dialogs/desktop-properties.cpp:765 src/dialogs/export.cpp:333
 #: src/dialogs/export.cpp:367 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Ύψος:"
 
-#: src/dialogs/desktop-properties.cpp:1043
+#: src/dialogs/desktop-properties.cpp:1220
 #, fuzzy
 msgid "Close"
 msgstr "Νέα Προβολή"
@@ -2318,7 +2334,7 @@ msgid "No objects to convert to path in the selection."
 msgstr ""
 
 #
-#: src/rect-context.cpp:515
+#: src/rect-context.cpp:516
 #, fuzzy, c-format
 msgid "Draw rectangle: %s x %s"
 msgstr "Δημιουργία ορθογωνίου"
@@ -2621,7 +2637,7 @@ msgstr ""
 msgid "Orphaned clone"
 msgstr ""
 
-#: src/spiral-context.cpp:431
+#: src/spiral-context.cpp:432
 #, c-format
 msgid "Draw spiral at (%s,%s)"
 msgstr ""
@@ -2679,12 +2695,12 @@ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
 msgid "No paths to simplify in the selection."
 msgstr ""
 
-#: src/star-context.cpp:460
+#: src/star-context.cpp:461
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr ""
 
-#: src/star-context.cpp:461
+#: src/star-context.cpp:462
 #, fuzzy, c-format
 msgid "Draw star at (%s,%s)"
 msgstr "Ημέρα έναρξης:"

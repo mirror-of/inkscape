@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-08 06:48-0700\n"
+"POT-Creation-Date: 2004-05-09 17:25-0700\n"
 "PO-Revision-Date: 2003-07-28 02:03+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -105,7 +105,7 @@ msgstr ""
 
 #. Page page
 #: src/desktop.cpp:1819 src/dialogs/align.cpp:452
-#: src/dialogs/desktop-properties.cpp:504 src/dialogs/export.cpp:273
+#: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:273
 msgid "Page"
 msgstr "Strona"
 
@@ -222,156 +222,171 @@ msgstr "Najmniejszy element"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:412
+#: src/dialogs/desktop-properties.cpp:519
 msgid "Grid"
 msgstr "Siatka"
 
-#: src/dialogs/desktop-properties.cpp:425
+#: src/dialogs/desktop-properties.cpp:532
 msgid "Show grid"
 msgstr "Wyświetlanie siatki"
 
-#: src/dialogs/desktop-properties.cpp:426
+#: src/dialogs/desktop-properties.cpp:533
 msgid "Snap to grid"
 msgstr "Przyciąganie do siatki"
 
-#: src/dialogs/desktop-properties.cpp:429
+#: src/dialogs/desktop-properties.cpp:536
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "Odbij poziomo"
 
-#: src/dialogs/desktop-properties.cpp:431
+#: src/dialogs/desktop-properties.cpp:538
 #, fuzzy
 msgid "Vertical lines"
 msgstr "Odbij pionowo"
 
-#: src/dialogs/desktop-properties.cpp:442
+#: src/dialogs/desktop-properties.cpp:549
 msgid "Grid units:"
 msgstr "Jednostki siatki:"
 
-#: src/dialogs/desktop-properties.cpp:444
+#: src/dialogs/desktop-properties.cpp:551
 msgid "Origin X:"
 msgstr "Początek X:"
 
-#: src/dialogs/desktop-properties.cpp:447
+#: src/dialogs/desktop-properties.cpp:554
 msgid "Origin Y:"
 msgstr "Początek Y:"
 
-#: src/dialogs/desktop-properties.cpp:450
+#: src/dialogs/desktop-properties.cpp:557
 msgid "Spacing X:"
 msgstr "Odstępy X:"
 
-#: src/dialogs/desktop-properties.cpp:453
+#: src/dialogs/desktop-properties.cpp:560
 msgid "Spacing Y:"
 msgstr "Odstępy Y:"
 
-#: src/dialogs/desktop-properties.cpp:457
-#: src/dialogs/desktop-properties.cpp:488
+#: src/dialogs/desktop-properties.cpp:564
+#: src/dialogs/desktop-properties.cpp:595
 msgid "Snap units:"
 msgstr "Jednostki przyciągania"
 
-#: src/dialogs/desktop-properties.cpp:460
-#: src/dialogs/desktop-properties.cpp:491
+#: src/dialogs/desktop-properties.cpp:567
+#: src/dialogs/desktop-properties.cpp:598
 msgid "Snap distance:"
 msgstr "Odległość przyciągania:"
 
-#: src/dialogs/desktop-properties.cpp:463
+#: src/dialogs/desktop-properties.cpp:570
 msgid "Grid color:"
 msgstr "Kolor siatki:"
 
-#: src/dialogs/desktop-properties.cpp:464
+#: src/dialogs/desktop-properties.cpp:571
 msgid "Grid color"
 msgstr "Kolor siatki"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:470
+#: src/dialogs/desktop-properties.cpp:577
 msgid "Guides"
 msgstr "Prowadnice"
 
-#: src/dialogs/desktop-properties.cpp:481
+#: src/dialogs/desktop-properties.cpp:588
 msgid "Show guides"
 msgstr "Wyświetlanie prowadnic"
 
-#: src/dialogs/desktop-properties.cpp:483
+#: src/dialogs/desktop-properties.cpp:590
 msgid "Snap to guides"
 msgstr "Przyciąganie do prowadnic"
 
-#: src/dialogs/desktop-properties.cpp:495
+#: src/dialogs/desktop-properties.cpp:602
 msgid "Guides color:"
 msgstr "Kolor prowadnic:"
 
-#: src/dialogs/desktop-properties.cpp:496
+#: src/dialogs/desktop-properties.cpp:603
 msgid "Guideline color"
 msgstr "Kolor prowadnic"
 
-#: src/dialogs/desktop-properties.cpp:498
+#: src/dialogs/desktop-properties.cpp:605
 msgid "Highlight color:"
 msgstr "Kolor podświetlenia:"
 
-#: src/dialogs/desktop-properties.cpp:499
+#: src/dialogs/desktop-properties.cpp:606
 msgid "Highlighted guideline color"
 msgstr "Kolor podświetlenia prowadnic"
 
-#: src/dialogs/desktop-properties.cpp:513
+#: src/dialogs/desktop-properties.cpp:620
 msgid "Background (also for export):"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:514
+#: src/dialogs/desktop-properties.cpp:621
 #, fuzzy
 msgid "Background color"
 msgstr "Kolor końcowy"
 
-#: src/dialogs/desktop-properties.cpp:518
+#: src/dialogs/desktop-properties.cpp:625
 #, fuzzy
 msgid "Show canvas border"
 msgstr "Wyświetlanie krawędzi"
 
-#: src/dialogs/desktop-properties.cpp:521
+#: src/dialogs/desktop-properties.cpp:628
 msgid "Border on top of drawing"
 msgstr "Krawędź na wierzchu rysunku"
 
-#: src/dialogs/desktop-properties.cpp:531
+#: src/dialogs/desktop-properties.cpp:638
 #, fuzzy
 msgid "Border color:"
 msgstr "Kolor siatki:"
 
-#: src/dialogs/desktop-properties.cpp:532
+#: src/dialogs/desktop-properties.cpp:639
 msgid "Canvas border color"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:549
+#: src/dialogs/desktop-properties.cpp:655
 msgid "Paper size:"
 msgstr "Rozmiar papieru:"
 
-#: src/dialogs/desktop-properties.cpp:561
+#: src/dialogs/desktop-properties.cpp:679
 msgid "Custom"
 msgstr "Dowolny"
 
+#: src/dialogs/desktop-properties.cpp:690
+#, fuzzy
+msgid "Paper orientation:"
+msgstr "Ułożenie:"
+
+#: src/dialogs/desktop-properties.cpp:702
+#, fuzzy
+msgid "Landscape"
+msgstr "Pokaz slajdów Sodipodi"
+
+#: src/dialogs/desktop-properties.cpp:708
+#, fuzzy
+msgid "Portrait"
+msgstr "Punkt"
+
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:570
+#: src/dialogs/desktop-properties.cpp:717
 msgid "Custom paper"
 msgstr "Dowolny papier"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:582 src/dialogs/export.cpp:301
+#: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:301
 #: src/dialogs/transformation.cpp:534 src/dialogs/transformation.cpp:757
 msgid "Units:"
 msgstr "Jednostki:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:596 src/dialogs/export.cpp:317
+#: src/dialogs/desktop-properties.cpp:743 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1188
 #: src/toolbox.cpp:1525
 msgid "Width:"
 msgstr "Szerokość:"
 
-#: src/dialogs/desktop-properties.cpp:618 src/dialogs/export.cpp:333
+#: src/dialogs/desktop-properties.cpp:765 src/dialogs/export.cpp:333
 #: src/dialogs/export.cpp:367 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Wysokość:"
 
-#: src/dialogs/desktop-properties.cpp:1043
+#: src/dialogs/desktop-properties.cpp:1220
 msgid "Close"
 msgstr "Zamknij"
 
@@ -2167,7 +2182,7 @@ msgstr "Wycina zaznaczone obiekty do schowka"
 msgid "No objects to convert to path in the selection."
 msgstr ""
 
-#: src/rect-context.cpp:515
+#: src/rect-context.cpp:516
 #, c-format
 msgid "Draw rectangle: %s x %s"
 msgstr ""
@@ -2448,7 +2463,7 @@ msgstr ""
 msgid "Orphaned clone"
 msgstr ""
 
-#: src/spiral-context.cpp:431
+#: src/spiral-context.cpp:432
 #, c-format
 msgid "Draw spiral at (%s,%s)"
 msgstr ""
@@ -2503,12 +2518,12 @@ msgstr "Wycina zaznaczone obiekty do schowka"
 msgid "No paths to simplify in the selection."
 msgstr ""
 
-#: src/star-context.cpp:460
+#: src/star-context.cpp:461
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr ""
 
-#: src/star-context.cpp:461
+#: src/star-context.cpp:462
 #, c-format
 msgid "Draw star at (%s,%s)"
 msgstr ""

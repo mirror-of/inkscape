@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-08 06:48-0700\n"
+"POT-Creation-Date: 2004-05-09 17:25-0700\n"
 "PO-Revision-Date: 2004-04-05 01:29-0600\n"
 "Last-Translator: Daniel Díaz <yosoy@danieldiaz.org>\n"
 "Language-Team: none <none>\n"
@@ -115,7 +115,7 @@ msgstr "No hay más zoom."
 
 #. Page page
 #: src/desktop.cpp:1819 src/dialogs/align.cpp:452
-#: src/dialogs/desktop-properties.cpp:504 src/dialogs/export.cpp:273
+#: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:273
 msgid "Page"
 msgstr "Página"
 
@@ -227,151 +227,166 @@ msgstr "Elemento menor"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:412
+#: src/dialogs/desktop-properties.cpp:519
 msgid "Grid"
 msgstr "Rejilla"
 
-#: src/dialogs/desktop-properties.cpp:425
+#: src/dialogs/desktop-properties.cpp:532
 msgid "Show grid"
 msgstr "Mostrar la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:426
+#: src/dialogs/desktop-properties.cpp:533
 msgid "Snap to grid"
 msgstr "Ajustar a la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:429
+#: src/dialogs/desktop-properties.cpp:536
 msgid "Horizontal lines"
 msgstr "Líneas horizontales"
 
-#: src/dialogs/desktop-properties.cpp:431
+#: src/dialogs/desktop-properties.cpp:538
 msgid "Vertical lines"
 msgstr "Líneas verticales"
 
-#: src/dialogs/desktop-properties.cpp:442
+#: src/dialogs/desktop-properties.cpp:549
 msgid "Grid units:"
 msgstr "Unidades de la rejilla:"
 
-#: src/dialogs/desktop-properties.cpp:444
+#: src/dialogs/desktop-properties.cpp:551
 msgid "Origin X:"
 msgstr "Origen X:"
 
-#: src/dialogs/desktop-properties.cpp:447
+#: src/dialogs/desktop-properties.cpp:554
 msgid "Origin Y:"
 msgstr "Origen Y:"
 
-#: src/dialogs/desktop-properties.cpp:450
+#: src/dialogs/desktop-properties.cpp:557
 msgid "Spacing X:"
 msgstr "Espaciado X:"
 
-#: src/dialogs/desktop-properties.cpp:453
+#: src/dialogs/desktop-properties.cpp:560
 msgid "Spacing Y:"
 msgstr "Espaciado Y:"
 
-#: src/dialogs/desktop-properties.cpp:457
-#: src/dialogs/desktop-properties.cpp:488
+#: src/dialogs/desktop-properties.cpp:564
+#: src/dialogs/desktop-properties.cpp:595
 msgid "Snap units:"
 msgstr "Unidades para el autoajuste:"
 
-#: src/dialogs/desktop-properties.cpp:460
-#: src/dialogs/desktop-properties.cpp:491
+#: src/dialogs/desktop-properties.cpp:567
+#: src/dialogs/desktop-properties.cpp:598
 msgid "Snap distance:"
 msgstr "Distancia de autoajuste:"
 
-#: src/dialogs/desktop-properties.cpp:463
+#: src/dialogs/desktop-properties.cpp:570
 msgid "Grid color:"
 msgstr "Color de la rejilla:"
 
-#: src/dialogs/desktop-properties.cpp:464
+#: src/dialogs/desktop-properties.cpp:571
 msgid "Grid color"
 msgstr "Color de la rejilla"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:470
+#: src/dialogs/desktop-properties.cpp:577
 msgid "Guides"
 msgstr "Guías"
 
-#: src/dialogs/desktop-properties.cpp:481
+#: src/dialogs/desktop-properties.cpp:588
 msgid "Show guides"
 msgstr "Mostrar las guías"
 
-#: src/dialogs/desktop-properties.cpp:483
+#: src/dialogs/desktop-properties.cpp:590
 msgid "Snap to guides"
 msgstr "Ajustar a las guías"
 
-#: src/dialogs/desktop-properties.cpp:495
+#: src/dialogs/desktop-properties.cpp:602
 msgid "Guides color:"
 msgstr "Color de las guías:"
 
-#: src/dialogs/desktop-properties.cpp:496
+#: src/dialogs/desktop-properties.cpp:603
 msgid "Guideline color"
 msgstr "Color de las líneas guía"
 
-#: src/dialogs/desktop-properties.cpp:498
+#: src/dialogs/desktop-properties.cpp:605
 msgid "Highlight color:"
 msgstr "Color del resaltado:"
 
-#: src/dialogs/desktop-properties.cpp:499
+#: src/dialogs/desktop-properties.cpp:606
 msgid "Highlighted guideline color"
 msgstr "Color de resaltado de las líneas guías"
 
-#: src/dialogs/desktop-properties.cpp:513
+#: src/dialogs/desktop-properties.cpp:620
 msgid "Background (also for export):"
 msgstr "Fondo (también para exportación):"
 
-#: src/dialogs/desktop-properties.cpp:514
+#: src/dialogs/desktop-properties.cpp:621
 msgid "Background color"
 msgstr "Color de fondo"
 
-#: src/dialogs/desktop-properties.cpp:518
+#: src/dialogs/desktop-properties.cpp:625
 msgid "Show canvas border"
 msgstr "Mostrar contorno del papel"
 
-#: src/dialogs/desktop-properties.cpp:521
+#: src/dialogs/desktop-properties.cpp:628
 msgid "Border on top of drawing"
 msgstr "Contorno encima del dibujo"
 
-#: src/dialogs/desktop-properties.cpp:531
+#: src/dialogs/desktop-properties.cpp:638
 msgid "Border color:"
 msgstr "Color del contorno:"
 
-#: src/dialogs/desktop-properties.cpp:532
+#: src/dialogs/desktop-properties.cpp:639
 msgid "Canvas border color"
 msgstr "Color del contorno del papel"
 
-#: src/dialogs/desktop-properties.cpp:549
+#: src/dialogs/desktop-properties.cpp:655
 msgid "Paper size:"
 msgstr "Tamaño del papel:"
 
-#: src/dialogs/desktop-properties.cpp:561
+#: src/dialogs/desktop-properties.cpp:679
 msgid "Custom"
 msgstr "Personalizar"
 
+#: src/dialogs/desktop-properties.cpp:690
+#, fuzzy
+msgid "Paper orientation:"
+msgstr "Orientación:"
+
+#: src/dialogs/desktop-properties.cpp:702
+#, fuzzy
+msgid "Landscape"
+msgstr "Inkscape"
+
+#: src/dialogs/desktop-properties.cpp:708
+#, fuzzy
+msgid "Portrait"
+msgstr "Punto"
+
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:570
+#: src/dialogs/desktop-properties.cpp:717
 msgid "Custom paper"
 msgstr "Personalizar papel"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:582 src/dialogs/export.cpp:301
+#: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:301
 #: src/dialogs/transformation.cpp:534 src/dialogs/transformation.cpp:757
 msgid "Units:"
 msgstr "Unidades:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:596 src/dialogs/export.cpp:317
+#: src/dialogs/desktop-properties.cpp:743 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1188
 #: src/toolbox.cpp:1525
 msgid "Width:"
 msgstr "Ancho:"
 
-#: src/dialogs/desktop-properties.cpp:618 src/dialogs/export.cpp:333
+#: src/dialogs/desktop-properties.cpp:765 src/dialogs/export.cpp:333
 #: src/dialogs/export.cpp:367 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Alto:"
 
-#: src/dialogs/desktop-properties.cpp:1043
+#: src/dialogs/desktop-properties.cpp:1220
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2181,7 +2196,7 @@ msgstr "Seleccione objetos para bajar al fondo."
 msgid "No objects to convert to path in the selection."
 msgstr "No hay grupos desagrupables en la selección."
 
-#: src/rect-context.cpp:515
+#: src/rect-context.cpp:516
 #, c-format
 msgid "Draw rectangle: %s x %s"
 msgstr "Trazar rectángulo: %s x %s"
@@ -2454,7 +2469,7 @@ msgstr ""
 msgid "Orphaned clone"
 msgstr ""
 
-#: src/spiral-context.cpp:431
+#: src/spiral-context.cpp:432
 #, c-format
 msgid "Draw spiral at (%s,%s)"
 msgstr "Trazar espiral en (%s,%s)"
@@ -2515,12 +2530,12 @@ msgstr "Seleccione objetos para simplificar."
 msgid "No paths to simplify in the selection."
 msgstr "No hay grupos simplificables en la selección."
 
-#: src/star-context.cpp:460
+#: src/star-context.cpp:461
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr "Trazar polígono en (%s,%s)"
 
-#: src/star-context.cpp:461
+#: src/star-context.cpp:462
 #, c-format
 msgid "Draw star at (%s,%s)"
 msgstr "Trazar estrella en (%s,%s)"
