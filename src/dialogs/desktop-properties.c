@@ -275,6 +275,7 @@ sp_desktop_dialog_new (void)
 	gtk_table_set_col_spacings (GTK_TABLE (t), 4);
 	gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
+	cb = G_CALLBACK(sp_dtw_whatever_toggled);
 	spw_checkbutton(dialog, t, _("Show border"), "showborder", 0, row, 0, cb);
 
 	b = gtk_check_button_new_with_label (_("Border on top of drawing"));

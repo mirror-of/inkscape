@@ -1,3 +1,14 @@
+
+2003-11-08  Bryce Harrington <brycehar@bryceharrington.com>
+	* Updated About dialog
+	* Fixed bug on Editing Windows dialog
+	
+2003-11-08  Manny the Gnome
+	* Remove KDE dialog option
+
+2003-11-06 Bulia Byak
+	* Add cursor-key support
+
 2003-10-19  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-io.c (sp_repr_svg_read_node): handle CDATA
