@@ -13,5 +13,6 @@
  */
 
 gboolean sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data);
+void sp_transientize (GtkWidget *win);
 
 #endif
