@@ -32,11 +32,7 @@ static bool sp_bpath_closed(ArtBpath const bpath[]);
 SPCurve *
 sp_curve_new (void)
 {
-	SPCurve * curve;
-
-	curve = sp_curve_new_sized (SP_CURVE_LENSTEP);
-
-	return curve;
+	return sp_curve_new_sized (SP_CURVE_LENSTEP);
 }
 
 SPCurve *

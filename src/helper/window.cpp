@@ -20,7 +20,7 @@ static gboolean
 sp_window_key_press (GtkWidget *widget, GdkEventKey *event)
 {
 	unsigned int shortcut;
-	shortcut = event->keyval;
+	shortcut = event->keyval; // Huh?
 	shortcut = event->keyval |
 	           ( event->state & GDK_SHIFT_MASK ?
 	             SP_SHORTCUT_SHIFT_MASK : 0 ) |
@@ -34,9 +34,7 @@ sp_window_key_press (GtkWidget *widget, GdkEventKey *event)
 GtkWidget *
 sp_window_new (const gchar *title, unsigned int resizeable)
 {
-	GtkWidget *window;
-
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title ((GtkWindow *) window, title);
 	gtk_window_set_resizable ((GtkWindow *) window, resizeable);
 	g_signal_connect_after ((GObject *) window, "key_press_event", (GCallback) sp_window_key_press, NULL);

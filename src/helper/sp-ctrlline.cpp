@@ -35,18 +35,18 @@
 
 #ifdef ctrl_liv
 #include <config.h>
-#include "../livarot/Shape.h"
-#include "../livarot/Path.h"
-#include "../livarot/AlphaLigne.h"
-#include "../livarot/Ligne.h"
-#include "../livarot/BitLigne.h"
-#include "../libnr/nr-point.h"
-#include "../libnr/nr-matrix.h"
-#include "../libnr/nr-point-ops.h"
-#include "../libnr/nr-matrix-ops.h"
-#include "../libnr/nr-rect-l.h"
-#include "../libnr/nr-pixops.h"
-#include "../libnr/nr-compose.h"
+#include <livarot/Shape.h>
+#include <livarot/Path.h>
+#include <livarot/AlphaLigne.h>
+#include <livarot/Ligne.h>
+#include <livarot/BitLigne.h>
+#include <libnr/nr-point.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-point-ops.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-rect-l.h>
+#include <libnr/nr-pixops.h>
+#include <libnr/nr-compose.h>
 
 void nr_pixblock_render_ctrl_rgba (Shape* theS,uint32_t color,NRRectL &area,char* destBuf,int stride);
 #endif
@@ -71,7 +71,7 @@ static void sp_ctrlline_class_init (SPCtrlLineClass *klass);
 static void sp_ctrlline_init (SPCtrlLine *ctrlline);
 static void sp_ctrlline_destroy (GtkObject *object);
 
-static void sp_ctrlline_update (SPCanvasItem *item, double *affine, unsigned int flags);
+static void sp_ctrlline_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags);
 static void sp_ctrlline_render (SPCanvasItem *item, SPCanvasBuf *buf);
 
 static SPCanvasItemClass *parent_class;
@@ -183,14 +183,11 @@ sp_ctrlline_render (SPCanvasItem *item, SPCanvasBuf *buf)
 }
 
 static void
-sp_ctrlline_update (SPCanvasItem *item, double *affine, unsigned int flags)
+sp_ctrlline_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags)
 {
-	SPCtrlLine *cl;
-	ArtPoint p;
-	ArtDRect dbox;
-	ArtIRect ibox;
+	NRRect dbox;
 
-	cl = SP_CTRLLINE (item);
+	SPCtrlLine *cl = SP_CTRLLINE (item);
 
 	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 
@@ -200,75 +197,39 @@ sp_ctrlline_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	sp_canvas_item_reset_bounds (item);
 
 #ifdef ctrl_liv
-  dbox.x0=dbox.x1=dbox.y0=dbox.y1=0;
+	dbox.x0=dbox.x1=dbox.y0=dbox.y1=0;
 	if (cl->shp) {
 		delete cl->shp;
 		cl->shp = NULL;
 	}
-  Path* thePath=new Path;
-	p.x = cl->s.x;
-	p.y = cl->s.y;
-	art_affine_point (&p, &p, affine);
-  thePath->MoveTo(NR::Point(p.x,p.y));
+	Path* thePath = new Path;
+	thePath->MoveTo(NR::Point(cl->s.x, cl->s.y) * affine);
+	thePath->LineTo(NR::Point(cl->e.x, cl->e.y) * affine);
   
-	p.x = cl->e.x;
-	p.y = cl->e.y;
-	art_affine_point (&p, &p, affine);
-  thePath->LineTo(NR::Point(p.x,p.y));
-  
-  thePath->Convert(1.0);
-  if ( cl->shp == NULL ) cl->shp=new Shape;
-  thePath->Stroke(cl->shp,false,0.5,join_straight,butt_straight,20.0,false);
-  cl->shp->CalcBBox();
-  if ( cl->shp->leftX < cl->shp->rightX ) {
-    if ( dbox.x0 >= dbox.x1 ) {
-      dbox.x0=cl->shp->leftX;dbox.x1=cl->shp->rightX;
-      dbox.y0=cl->shp->topY;dbox.y1=cl->shp->bottomY;
-    } else {
-      if ( cl->shp->leftX < dbox.x0 ) dbox.x0=cl->shp->leftX;
-      if ( cl->shp->rightX > dbox.x1 ) dbox.x1=cl->shp->rightX;
-      if ( cl->shp->topY < dbox.y0 ) dbox.y0=cl->shp->topY;
-      if ( cl->shp->bottomY > dbox.y1 ) dbox.y1=cl->shp->bottomY;
-    }
-  }
-  delete thePath;
-#else
-	ArtVpath vpath[3];
-	if (cl->svp) {
-		art_svp_free (cl->svp);
-		cl->svp = NULL;
+	thePath->Convert(1.0);
+	if ( cl->shp == NULL ) cl->shp=new Shape;
+	thePath->Stroke(cl->shp,false,0.5,join_straight,butt_straight,20.0,false);
+	cl->shp->CalcBBox();
+	if ( cl->shp->leftX < cl->shp->rightX ) {
+		if ( dbox.x0 >= dbox.x1 ) {
+			dbox.x0=cl->shp->leftX;dbox.x1=cl->shp->rightX;
+			dbox.y0=cl->shp->topY;dbox.y1=cl->shp->bottomY;
+		} else {
+			if ( cl->shp->leftX < dbox.x0 ) dbox.x0=cl->shp->leftX;
+			if ( cl->shp->rightX > dbox.x1 ) dbox.x1=cl->shp->rightX;
+			if ( cl->shp->topY < dbox.y0 ) dbox.y0=cl->shp->topY;
+			if ( cl->shp->bottomY > dbox.y1 ) dbox.y1=cl->shp->bottomY;
+		}
 	}
-	p.x = cl->s.x;
-	p.y = cl->s.y;
-	art_affine_point (&p, &p, affine);
-
-	vpath[0].code = ART_MOVETO_OPEN;
-	vpath[0].x = p.x;
-	vpath[0].y = p.y;
-
-	p.x = cl->e.x;
-	p.y = cl->e.y;
-	art_affine_point (&p, &p, affine);
-
-	vpath[1].code = ART_LINETO;
-	vpath[1].x = p.x;
-	vpath[1].y = p.y;
-
-	vpath[2].code = ART_END;
-	// XXX: the ART_PATH_STROKE_JOIN_MITER,
-	// ART_PATH_STROKE_CAP_BUTT parameters appear to have been
-	// swapped
-	cl->svp = art_svp_vpath_stroke (vpath, ART_PATH_STROKE_JOIN_MITER, ART_PATH_STROKE_CAP_BUTT, 1, 4, 0.25);
-
-	art_drect_svp (&dbox, cl->svp);
+	delete thePath;
+#else
+// clearly wrong.
 #endif
   
-	art_drect_to_irect (&ibox, &dbox);
-
-	item->x1 = ibox.x0;
-	item->y1 = ibox.y0;
-	item->x2 = ibox.x1;
-	item->y2 = ibox.y1;
+	item->x1 = (int)dbox.x0;
+	item->y1 = (int)dbox.y0;
+	item->x2 = (int)dbox.x1;
+	item->y2 = (int)dbox.y1;
 
 	sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }

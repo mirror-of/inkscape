@@ -34,7 +34,7 @@ static void sp_canvas_arena_class_init(SPCanvasArenaClass *klass);
 static void sp_canvas_arena_init(SPCanvasArena *group);
 static void sp_canvas_arena_destroy(GtkObject *object);
 
-static void sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags);
+static void sp_canvas_arena_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags);
 static void sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf);
 static double sp_canvas_arena_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item);
 static gint sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event);
@@ -144,22 +144,17 @@ sp_canvas_arena_destroy (GtkObject *object)
 }
 
 static void
-sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags)
+sp_canvas_arena_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags)
 {
-	guint reset;
-
 	SPCanvasArena *arena = SP_CANVAS_ARENA (item);
 
 	if (((SPCanvasItemClass *) parent_class)->update)
 		(* ((SPCanvasItemClass *) parent_class)->update) (item, affine, flags);
 
-	memcpy (NR_MATRIX_D_TO_DOUBLE (&arena->gc.transform), affine, 6 * sizeof (double));
+	arena->gc.transform = affine;
 
-	if (flags & SP_CANVAS_UPDATE_AFFINE) {
-		reset = NR_ARENA_ITEM_STATE_ALL;
-	} else {
-		reset = NR_ARENA_ITEM_STATE_NONE;
-	}
+	guint reset;
+	reset = (flags & SP_CANVAS_UPDATE_AFFINE)? NR_ARENA_ITEM_STATE_ALL : NR_ARENA_ITEM_STATE_NONE;
 
 	nr_arena_item_invoke_update (arena->root, NULL, &arena->gc, NR_ARENA_ITEM_STATE_ALL, reset);
 
@@ -169,9 +164,8 @@ sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	item->y2 = arena->root->bbox.y1 + 1;
 
 	if (arena->cursor) {
-		NRArenaItem *new_arena;
 		/* Mess with enter/leave notifiers */
-		new_arena = nr_arena_item_invoke_pick (arena->root, arena->c, nr_arena_global_delta, arena->sticky);
+		NRArenaItem *new_arena = nr_arena_item_invoke_pick (arena->root, arena->c, nr_arena_global_delta, arena->sticky);
 		if (new_arena != arena->active) {
 			GdkEventCrossing ec;
 			ec.window = GTK_WIDGET (item->canvas)->window;

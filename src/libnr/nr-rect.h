@@ -69,8 +69,8 @@ NRRect *nr_rect_d_union_xy (NRRect *d, NR::Coord x, NR::Coord y);
 NRRect *nr_rect_f_union_xy (NRRect *d, float x, float y);
 NRRectL *nr_rect_l_union_xy (NRRectL *d, NR::ICoord x, NR::ICoord y);
 
-NRRect *nr_rect_d_matrix_d_transform (NRRect *d, NRRect *s, NRMatrix *m);
-NRRect *nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix *m);
+NRRect *nr_rect_d_matrix_d_transform (NRRect *d, NRRect *s, NRMatrix const *m);
+NRRect *nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix const *m);
 
 #include <stdexcept>
 #include <typeinfo>

@@ -34,15 +34,15 @@ sp_canvas_render_svp_translated (SPCanvasBuf *buf, ArtSVP *svp, guint32 rgba, gi
 
 /* get i2p (item to parent) affine transformation as general 6-element array */
 
-void sp_canvas_item_i2p_affine (SPCanvasItem * item, double affine[]);
+NR::Matrix sp_canvas_item_i2p_affine (SPCanvasItem * item);
 
 /* get i2i (item to item) affine transformation as general 6-element array */
 
-void sp_canvas_item_i2i_affine (SPCanvasItem * from, SPCanvasItem * to, double affine[]);
+NR::Matrix sp_canvas_item_i2i_affine (SPCanvasItem * from, SPCanvasItem * to);
 
 /* set item affine matrix to achieve given i2w matrix */
 
-void sp_canvas_item_set_i2w_affine (SPCanvasItem * item, double i2w[]);
+void sp_canvas_item_set_i2w_affine (SPCanvasItem * item, NR::Matrix const & aff);
 
 void sp_canvas_item_move_to_z (SPCanvasItem * item, gint z);
 

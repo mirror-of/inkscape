@@ -28,11 +28,11 @@ typedef struct _SPCGridClass SPCGridClass;
 struct _SPCGrid {
 	SPCanvasItem item;
 
-	ArtPoint origin;
-	ArtPoint spacing;
+	NR::Point origin;
+	NR::Point spacing;
 	guint32 color;
 
-	ArtPoint ow, sw;
+	NR::Point ow, sw;
 };
 
 struct _SPCGridClass {

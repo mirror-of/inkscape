@@ -252,9 +252,7 @@ sp_desktop_document_resized (SPView *view, SPDocument *doc, gdouble width, gdoub
 
     desktop->doc2dt[5] = height;
 
-    NR::Coord xform[6];
-    desktop->doc2dt.copyto(xform);
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), xform);
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
 
     sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, width, height);
 }
@@ -347,9 +345,7 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 
     /* Connect event for page resize */
     desktop->doc2dt[5] = sp_document_height (document);
-    NR::Coord xform[6];
-    desktop->doc2dt.copyto(xform);
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), xform);
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
 
     g_signal_connect (G_OBJECT (desktop->selection), "modified", G_CALLBACK (sp_desktop_selection_modified), desktop);
 
@@ -1385,12 +1381,10 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
 
     int clear = FALSE;
     if (!NR_DF_TEST_CLOSE (newscale, scale, 1e-4 * scale)) {
-        NR::Coord xform[6];
         /* Set zoom factors */
         dt->d2w = NR::Matrix(NR::scale(newscale, -newscale));
         dt->w2d = NR::Matrix(NR::scale(1/newscale, 1/-newscale));
-        dt->d2w.copyto(xform);
-        sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), xform);
+        sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), dt->d2w);
         clear = TRUE;
     }
 
@@ -1481,11 +1475,7 @@ sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
 void
 sp_desktop_zoom_absolute_keep_point (SPDesktop *dt, double cx, double cy, double px, double py, double zoom)
 {
-    SPDesktopWidget *dtw;
-    NRRect viewbox;
-    double width2, height2;
-
-    dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
+    SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
     if (!dtw) return;
 
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
@@ -1496,10 +1486,11 @@ sp_desktop_zoom_absolute_keep_point (SPDesktop *dt, double cx, double cy, double
     if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.025 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01)) 
         return;
 
+    NRRect viewbox;
     sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 
-    width2 = (viewbox.x1 - viewbox.x0) / zoom;
-    height2 = (viewbox.y1 - viewbox.y0) / zoom;
+    const double width2 = (viewbox.x1 - viewbox.x0) / zoom;
+    const double height2 = (viewbox.y1 - viewbox.y0) / zoom;
 
     sp_desktop_set_display_area (dt, cx - px * width2, cy - py * height2, cx + (1 - px) * width2, cy + (1 - py) * height2, 0.0);
 }
@@ -1598,11 +1589,10 @@ sp_desktop_zoom_drawing (SPDesktop *dt)
 
 void sp_desktop_scroll_world(SPDesktop *dt, double dx, double dy)
 {
-    NRRect viewbox;
-
     SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
     if (!dtw) return;
 
+    NRRect viewbox;
     sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 
     sp_canvas_scroll_to (dtw->canvas, viewbox.x0 - dx, viewbox.y0 - dy, FALSE);

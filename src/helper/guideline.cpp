@@ -18,12 +18,13 @@
 
 #include "sp-canvas-util.h"
 #include "guideline.h"
+#include <libnr/nr-matrix-fns.h>
 
 static void sp_guideline_class_init (SPGuideLineClass *klass);
 static void sp_guideline_init (SPGuideLine *guideline);
 static void sp_guideline_destroy (GtkObject *object);
 
-static void sp_guideline_update (SPCanvasItem *item, double *affine, unsigned int flags);
+static void sp_guideline_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags);
 static void sp_guideline_render (SPCanvasItem *item, SPCanvasBuf *buf);
 
 static double sp_guideline_point (SPCanvasItem *item, NR::Point p, SPCanvasItem ** actual_item);
@@ -90,12 +91,11 @@ sp_guideline_destroy (GtkObject *object)
 static void
 sp_guideline_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
-	SPGuideLine *gl;
 	unsigned int r, g, b, a;
 	int p, p0, p1, step;
 	unsigned char *d;
 
-	gl = SP_GUIDELINE (item);
+	SPGuideLine *gl = SP_GUIDELINE (item);
 
 	sp_canvas_buf_ensure_buf (buf);
 	buf->is_bg = FALSE;
@@ -130,11 +130,9 @@ sp_guideline_render (SPCanvasItem *item, SPCanvasBuf *buf)
 }
 
 static void
-sp_guideline_update (SPCanvasItem *item, double *affine, unsigned int flags)
+sp_guideline_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags)
 {
-	SPGuideLine *gl;
-
-	gl = SP_GUIDELINE (item);
+	SPGuideLine *gl = SP_GUIDELINE (item);
 
 	if (((SPCanvasItemClass *) parent_class)->update)
 		((SPCanvasItemClass *) parent_class)->update (item, affine, flags);
@@ -151,9 +149,7 @@ sp_guideline_update (SPCanvasItem *item, double *affine, unsigned int flags)
 static double
 sp_guideline_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
-	SPGuideLine *gl;
-
-	gl = SP_GUIDELINE (item);
+	SPGuideLine *gl = SP_GUIDELINE (item);
 
 	if (!gl->sensitive) return 1e18;
 
@@ -169,12 +165,9 @@ sp_guideline_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 SPCanvasItem *
 sp_guideline_new (SPCanvasGroup *parent, double position, unsigned int vertical)
 {
-	SPCanvasItem *item;
-	SPGuideLine *gl;
+	SPCanvasItem *item = sp_canvas_item_new (parent, SP_TYPE_GUIDELINE, NULL);
 
-	item = sp_canvas_item_new (parent, SP_TYPE_GUIDELINE, NULL);
-
-	gl = SP_GUIDELINE (item);
+	SPGuideLine *gl = SP_GUIDELINE (item);
 
 	gl->vertical = vertical;
 	sp_guideline_set_position (gl, position);
@@ -185,11 +178,8 @@ sp_guideline_new (SPCanvasGroup *parent, double position, unsigned int vertical)
 void
 sp_guideline_set_position (SPGuideLine *gl, double position)
 {
-	NRMatrix i2b;
-
-	nr_matrix_set_translate (&i2b, position, position);
-
-	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (gl), NR_MATRIX_D_TO_DOUBLE (&i2b));
+	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (gl), 
+					NR::Matrix(NR::translate(position, position)));
 }
 
 void

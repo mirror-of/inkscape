@@ -313,7 +313,7 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
 }
 #include "../helper/canvas-bpath.h"
 
-void  Path::LoadArtBPath(void *iV,NR::Matrix &trans,bool doTransformation)
+void  Path::LoadArtBPath(void *iV,NR::Matrix const &trans,bool doTransformation)
 {
   if ( iV == NULL ) return;
   ArtBpath *bpath = (ArtBpath*)iV;
@@ -865,7 +865,7 @@ void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
           int  add=SizeForData(descr_lineto);
           ShiftDData(lastPos,add);
           
-          descr_cmd[i].dStart=lastPos; // dStart a ete changŽ par shift
+          descr_cmd[i].dStart=lastPos; // dStart a ete changÂŽ par shift
           descr_cmd[i].flags&=~descr_type_mask;
           descr_cmd[i].flags|=descr_lineto;
           path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );

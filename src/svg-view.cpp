@@ -84,9 +84,7 @@ sp_svg_view_init (SPSVGView *view)
 static void
 sp_svg_view_dispose (GObject *object)
 {
-	SPSVGView *svgview;
-
-	svgview = SP_SVG_VIEW (object);
+	SPSVGView *svgview = SP_SVG_VIEW (object);
 
 	if (svgview->drawing) {
 		sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (svgview))), svgview->dkey);
@@ -103,10 +101,9 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPSVGView
 {
 	static gdouble x, y;
 	static gboolean active = FALSE;
-	SPItem *spitem;
 	SPEvent spev;
 
-	spitem = (ai) ? (SPItem*)NR_ARENA_ITEM_GET_DATA (ai) : NULL;
+	SPItem *spitem = (ai) ? (SPItem*)NR_ARENA_ITEM_GET_DATA (ai) : NULL;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -148,9 +145,7 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPSVGView
 static void
 sp_svg_view_set_document (SPView *view, SPDocument *doc)
 {
-	SPSVGView *svgview;
-
-	svgview = SP_SVG_VIEW (view);
+	SPSVGView *svgview = SP_SVG_VIEW (view);
 
 	if (view->doc) {
 		sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (view))), svgview->dkey);
@@ -162,8 +157,7 @@ sp_svg_view_set_document (SPView *view, SPDocument *doc)
 	}
 
 	if (doc) {
-		NRArenaItem *ai;
-		ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), SP_CANVAS_ARENA (svgview->drawing)->arena,
+		NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), SP_CANVAS_ARENA (svgview->drawing)->arena,
 					  svgview->dkey, SP_ITEM_SHOW_PRINT);
 		if (ai) {
 			nr_arena_item_add_child (SP_CANVAS_ARENA (svgview->drawing)->root, ai, NULL);
@@ -176,9 +170,7 @@ sp_svg_view_set_document (SPView *view, SPDocument *doc)
 static void
 sp_svg_view_document_resized (SPView *view, SPDocument *doc, gdouble width, gdouble height)
 {
-	SPSVGView *svgview;
-
-	svgview = SP_SVG_VIEW (view);
+	SPSVGView *svgview = SP_SVG_VIEW (view);
 
 	sp_svg_view_rescale (svgview, !svgview->rescale);
 }
@@ -186,12 +178,10 @@ sp_svg_view_document_resized (SPView *view, SPDocument *doc, gdouble width, gdou
 SPView *
 sp_svg_view_new (SPCanvasGroup *parent)
 {
-	SPSVGView *svgview;
-
 	g_return_val_if_fail (parent != NULL, NULL);
 	g_return_val_if_fail (SP_IS_CANVAS_GROUP (parent), NULL);
 
-	svgview = (SPSVGView*)g_object_new (SP_TYPE_SVG_VIEW, NULL);
+	SPSVGView *svgview = (SPSVGView*)g_object_new (SP_TYPE_SVG_VIEW, NULL);
 
 	svgview->parent = parent;
 
@@ -230,9 +220,7 @@ sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepaspect,
 static void
 sp_svg_view_rescale (SPSVGView *svgview, gboolean event)
 {
-	SPDocument *doc;
-
-	doc = SP_VIEW_DOCUMENT (svgview);
+	SPDocument *doc = SP_VIEW_DOCUMENT (svgview);
 
 	if (!doc) return;
 	if (sp_document_width (doc) < 1e-9) return;
@@ -254,9 +242,7 @@ sp_svg_view_rescale (SPSVGView *svgview, gboolean event)
 	}
 
 	if (svgview->drawing) {
-		gdouble affine[6];
-		art_affine_scale (affine, svgview->hscale, svgview->vscale);
-		sp_canvas_item_affine_absolute (svgview->drawing, affine);
+		sp_canvas_item_affine_absolute (svgview->drawing, NR::Matrix(NR::scale(svgview->hscale, svgview->vscale)));
 	}
 
 	if (event) {
@@ -358,9 +344,7 @@ sp_svg_view_widget_init (SPSVGViewWidget *vw)
 static void
 sp_svg_view_widget_destroy (GtkObject *object)
 {
-	SPSVGViewWidget *vw;
-
-	vw = SP_SVG_VIEW_WIDGET (object);
+	SPSVGViewWidget *vw = SP_SVG_VIEW_WIDGET (object);
 
 	vw->canvas = NULL;
 
@@ -371,11 +355,8 @@ sp_svg_view_widget_destroy (GtkObject *object)
 static void
 sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req)
 {
-	SPSVGViewWidget *vw;
-	SPView *v;
-
-	vw = SP_SVG_VIEW_WIDGET (widget);
-	v = SP_VIEW_WIDGET_VIEW (widget);
+	SPSVGViewWidget *vw = SP_SVG_VIEW_WIDGET (widget);
+	SPView *v = SP_VIEW_WIDGET_VIEW (widget);
 
 	if (((GtkWidgetClass *) (widget_parent_class))->size_request)
 		(* ((GtkWidgetClass *) (widget_parent_class))->size_request) (widget, req);
@@ -410,9 +391,7 @@ sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req)
 static void
 sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
-	SPSVGViewWidget *svgvw;
-
-	svgvw = SP_SVG_VIEW_WIDGET (widget);
+	SPSVGViewWidget *svgvw = SP_SVG_VIEW_WIDGET (widget);
 
 	if (((GtkWidgetClass *) (widget_parent_class))->size_allocate)
 		(* ((GtkWidgetClass *) (widget_parent_class))->size_allocate) (widget, allocation);
@@ -427,9 +406,7 @@ sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 static void
 sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdouble width, gdouble height)
 {
-	SPSVGViewWidget *svgvw;
-
-	svgvw = SP_SVG_VIEW_WIDGET (vw);
+	SPSVGViewWidget *svgvw = SP_SVG_VIEW_WIDGET (vw);
 
 	if (svgvw->resize) {
 		gtk_widget_set_usize (svgvw->canvas, (int)width, (int)height);

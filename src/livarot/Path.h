@@ -266,7 +266,7 @@ public:
   void  DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset);
   
   //utilitaire pour inkscape
-  void  LoadArtBPath(void *iP,NR::Matrix &tr,bool doTransformation);
+  void  LoadArtBPath(void *iP,NR::Matrix const &tr,bool doTransformation);
   
   // decompose le chemin en ses sous-chemin
   // killNoSurf=true -> oublie les chemins de surface nulle

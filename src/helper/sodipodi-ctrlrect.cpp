@@ -29,7 +29,7 @@ static void sp_ctrlrect_class_init (SPCtrlRectClass *klass);
 static void sp_ctrlrect_init (SPCtrlRect *ctrlrect);
 static void sp_ctrlrect_destroy (GtkObject *object);
 
-static void sp_ctrlrect_update (SPCanvasItem *item, double *affine, unsigned int flags);
+static void sp_ctrlrect_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags);
 static void sp_ctrlrect_render (SPCanvasItem *item, SPCanvasBuf *buf);
 
 static SPCanvasItemClass *parent_class;
@@ -95,9 +95,7 @@ sp_ctrlrect_init (SPCtrlRect *cr)
 static void
 sp_ctrlrect_destroy (GtkObject *object)
 {
-	SPCtrlRect *cr;
-
-	cr = SP_CTRLRECT (object);
+	SPCtrlRect *cr = SP_CTRLRECT (object);
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)
 		(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -181,6 +179,7 @@ sp_ctrlrect_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba, gui
 	}
 }
 
+/** Fills the pixels in [xs, xe)*[ys,ye) clipped to the tile with rgb * a. */
 static void
 sp_ctrlrect_area (SPCanvasBuf *buf, gint xs, gint ys, gint xe, gint ye, guint32 rgba)
 {
@@ -210,9 +209,7 @@ sp_ctrlrect_area (SPCanvasBuf *buf, gint xs, gint ys, gint xe, gint ye, guint32 
 static void
 sp_ctrlrect_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
-	SPCtrlRect *cr;
-
-	cr = SP_CTRLRECT (item);
+	SPCtrlRect *cr = SP_CTRLRECT (item);
 	
 	if ((cr->area.x0 < buf->rect.x1) &&
 	    (cr->area.y0 < buf->rect.y1) &&
@@ -249,12 +246,9 @@ sp_ctrlrect_render (SPCanvasItem *item, SPCanvasBuf *buf)
 }
 
 static void
-sp_ctrlrect_update (SPCanvasItem *item, double *affine, unsigned int flags)
+sp_ctrlrect_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags)
 {
-	SPCtrlRect *cr;
-	ArtDRect bbox;
-
-	cr = SP_CTRLRECT (item);
+        SPCtrlRect *cr = SP_CTRLRECT (item);
 
 	if (((SPCanvasItemClass *) parent_class)->update)
 		((SPCanvasItemClass *) parent_class)->update (item, affine, flags);
@@ -285,7 +279,9 @@ sp_ctrlrect_update (SPCanvasItem *item, double *affine, unsigned int flags)
 					     cr->area.x1 + cr->shadow_size + 1, cr->area.y1 + cr->shadow_size + 1);
 	}
 
-	art_drect_affine_transform (&bbox, &cr->rect, affine);
+	NRRect bbox;
+
+	nr_rect_d_matrix_d_transform (&bbox, &cr->rect, affine);
 
 	cr->area.x0 = (int) (bbox.x0 + 0.5);
 	cr->area.y0 = (int) (bbox.y0 + 0.5);
@@ -364,7 +360,7 @@ sp_ctrlrect_set_shadow (SPCtrlRect *cr, gint shadow_size, guint32 shadow_color)
 }
 
 void
-sp_ctrlrect_set_rect (SPCtrlRect * cr, ArtDRect * r)
+sp_ctrlrect_set_rect (SPCtrlRect * cr, NRRect * r)
 {
 	cr->rect.x0 = MIN (r->x0, r->x1);
 	cr->rect.y0 = MIN (r->y0, r->y1);

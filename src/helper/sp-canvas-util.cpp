@@ -14,10 +14,11 @@
 
 #include <string.h>
 #include <libart_lgpl/art_misc.h>
-#include <libart_lgpl/art_affine.h>
-#include <libart_lgpl/art_svp.h>
+//#include <libart_lgpl/art_affine.h>
+//#include <libart_lgpl/art_svp.h>
 #include <libart_lgpl/art_rgb_svp.h>
 #include "sp-canvas-util.h"
+#include <libnr/nr-matrix-ops.h>
 
 void
 sp_canvas_update_bbox (SPCanvasItem *item, int x1, int y1, int x2, int y2)
@@ -144,59 +145,35 @@ sp_canvas_render_svp_translated (SPCanvasBuf * buf, ArtSVP * svp,
 	}
 }
 
-void sp_canvas_item_i2p_affine (SPCanvasItem * item, double affine[])
+NR::Matrix sp_canvas_item_i2p_affine (SPCanvasItem * item)
 {
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (affine != NULL);
-
-	if (item->xform == NULL) {
-		art_affine_identity (affine);
-		return;
-	}
-
-	affine[0] = item->xform[0];
-	affine[1] = item->xform[1];
-	affine[2] = item->xform[2];
-	affine[3] = item->xform[3];
-	affine[4] = item->xform[4];
-	affine[5] = item->xform[5];
-}
-
-void sp_canvas_item_i2i_affine (SPCanvasItem * from, SPCanvasItem * to, double affine[])
-{
-	double f2w[6], t2w[6], w2t[6];
-
-	g_return_if_fail (from != NULL);
-	g_return_if_fail (to != NULL);
-	g_return_if_fail (affine != NULL);
-
-	sp_canvas_item_i2w_affine (from, f2w);
-	sp_canvas_item_i2w_affine (to, t2w);
-	art_affine_invert (w2t, t2w);
-
-	art_affine_multiply (affine, f2w, w2t);
-}
-
-void sp_canvas_item_set_i2w_affine (SPCanvasItem * item, double i2w[])
-{
-	double p2w[6],w2p[6],i2p[6];
+	g_assert (item != NULL); // this may be overly zealous - it is
+				 // plausible that this gets called
+				 // with item == 0
 	
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (i2w != NULL);
+	return item->xform;
+}
 
-	sp_canvas_item_i2w_affine (item->parent, p2w);
-	art_affine_invert (w2p, p2w);
-	art_affine_multiply (i2p, i2w, w2p);
-	sp_canvas_item_affine_absolute (item, i2p);
+NR::Matrix  sp_canvas_item_i2i_affine (SPCanvasItem * from, SPCanvasItem * to)
+{
+	g_assert (from != NULL);
+	g_assert (to != NULL);
+
+	return sp_canvas_item_i2w_affine (from) * sp_canvas_item_i2w_affine (to).inverse();
+}
+
+void sp_canvas_item_set_i2w_affine (SPCanvasItem * item,  NR::Matrix const &i2w)
+{
+	g_assert (item != NULL);
+
+	sp_canvas_item_affine_absolute (item, i2w * sp_canvas_item_i2w_affine (item->parent).inverse());
 }
 
 void sp_canvas_item_move_to_z (SPCanvasItem * item, gint z)
 {
-	gint current_z;
-
 	g_assert (item != NULL);
 
-	current_z = sp_canvas_item_order (item);
+	gint current_z = sp_canvas_item_order (item);
 
 	if (z == current_z)
 		return;
@@ -210,12 +187,10 @@ void sp_canvas_item_move_to_z (SPCanvasItem * item, gint z)
 gint
 sp_canvas_item_compare_z (SPCanvasItem * a, SPCanvasItem * b)
 {
-	gint o_a, o_b;
+	const gint o_a = sp_canvas_item_order (a);
+	const gint o_b = sp_canvas_item_order (b);
 
-	o_a = sp_canvas_item_order (a);
-	o_b = sp_canvas_item_order (b);
-
-	if (a > b) return -1;
+	if (a > b) return -1; // XXX: shouldn't these be o_a, o_b ?
 	if (a < b) return 1;
 	return 0;
 }

@@ -35,7 +35,7 @@ struct _SPCtrlRect {
 	guint has_fill : 1;
     guint dashed : 1;
     
-	ArtDRect rect;
+	NRRect rect;
 	gint shadow;
 
 	ArtIRect area;
@@ -59,7 +59,7 @@ void sp_ctrlrect_set_shadow (SPCtrlRect *rect, gint shadow_size, guint32 shadow_
 void sp_ctrlrect_set_dashed (SPCtrlRect *rect, guint dashed);
 
 /* Deprecated */
-void sp_ctrlrect_set_rect (SPCtrlRect * rect, ArtDRect * box);
+void sp_ctrlrect_set_rect (SPCtrlRect * rect, NRRect * box);
 
 
 
