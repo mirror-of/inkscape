@@ -748,7 +748,7 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
     if (!dt)
         return;
 
-    switch (reintperpret_cast<std::size_t>(data)) {
+    switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_SELECTION_TO_FRONT:
             sp_selection_raise_to_top();
             break;
@@ -997,7 +997,7 @@ ObjectVerb::perform ( SPAction *action, void *data, void *pdata )
 
     NR::Point const center(sel->bounds().midpoint());
 
-    switch (reintperpret_cast<std::size_t>(data)) {
+    switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_OBJECT_ROTATE_90_CW:
             sp_selection_rotate_90_cw ();
             break;
@@ -1182,7 +1182,7 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
         prefs_get_double_attribute_limited ( "options.zoomincrement",
                                              "value", 1.414213562, 1.01, 10 );
 
-    switch (reintperpret_cast<std::size_t>(data)) {
+    switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_ZOOM_IN:
             sp_desktop_get_display_area (dt, &d);
             sp_desktop_zoom_relative ( dt, (d.x0 + d.x1) / 2,
@@ -1264,7 +1264,7 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
         inkscape_dialogs_unhide ();
     }
 
-    switch (reintperpret_cast<std::size_t>(data)) {
+    switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_DIALOG_DISPLAY:
             sp_display_dialog ();
             break;
@@ -1308,7 +1308,7 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
 void
 HelpVerb::perform (SPAction *action, void * data, void * pdata)
 {
-    switch (reintperpret_cast<std::size_t>(data)) {
+    switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_KEYS:
             sp_help_open_screen (_("keys.svg"));
             break;
@@ -1324,7 +1324,7 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
 void
 TutorialVerb::perform (SPAction *action, void * data, void * pdata)
 {
-    switch (reintperpret_cast<std::size_t>(data)) {
+    switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_TUTORIAL_BASIC:
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-basic.svg"));
             break;
