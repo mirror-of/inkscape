@@ -49,7 +49,7 @@ protected:
 
     SPColorSelector* _csel;
     SPColor _color;
-    gfloat _alpha;
+    gfloat _alpha;	/* guaranteed to be in [0, 1]. */
 
 private:
     // By default, disallow copy constructor and assignment operator
