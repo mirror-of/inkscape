@@ -95,13 +95,15 @@ sp_help_about (void)
 void
 sp_help_tutorial (void)
 {
-	sp_file_open (INKSCAPE_PIXMAPDIR "/tutorial.svg", NULL);
-	//	sp_view_set_statusf_error (SP_VIEW(SP_ACTIVE_DESKTOP), "Scroll down to read more.");
+	gchar *c = g_strconcat (INKSCAPE_PIXMAPDIR, _("/tutorial.svg"), NULL);
+	sp_file_open (c, NULL);
+	g_free (c);
 }
 
 void
 sp_help_keys (void)
 {
-	sp_file_open (INKSCAPE_PIXMAPDIR "/keys.svg", NULL);
-	//	sp_view_set_statusf_error (SP_VIEW(SP_ACTIVE_DESKTOP), "Zoom in to read.");
+	gchar *c = g_strconcat (INKSCAPE_PIXMAPDIR, _("/keys.svg"), NULL);
+	sp_file_open (c, NULL);
+	g_free (c);
 }
