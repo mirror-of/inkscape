@@ -27,6 +27,8 @@
 #include "desktop-affine.h"
 #include "sp-item.h"
 #include "pixmaps/cursor-zoom.xpm"
+#include "prefs-utils.h"
+
 #include "zoom-context.h"
 
 static void sp_zoom_context_class_init (SPZoomContextClass * klass);
@@ -39,6 +41,10 @@ static gint sp_zoom_context_item_handler (SPEventContext * event_context, SPItem
 void sp_zoom_string (const gchar * zoom_str);
 
 static SPEventContextClass * parent_class;
+
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
+static gboolean within_tolerance = FALSE;
 
 GType
 sp_zoom_context_get_type (void)
@@ -120,10 +126,18 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 
 	desktop = event_context->desktop;
 
+	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		switch (event->button.button) {
 		case 1:
+
+			// save drag origin
+			xp = (gint) event->button.x; 
+			yp = (gint) event->button.y;
+			within_tolerance = TRUE;
+
 			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
 			sp_rubberband_start (desktop, p.x, p.y);
 			break;
@@ -133,6 +147,11 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (event->motion.state & GDK_BUTTON1_MASK) {
+
+			if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+				break; // do not drag if we're within tolerance from origin
+			within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 			sp_rubberband_move (p.x, p.y);
 		}
@@ -140,8 +159,7 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	case GDK_BUTTON_RELEASE:
 		switch (event->button.button) {
 		case 1:
-			if (sp_rubberband_rect (&b)) {
-				sp_rubberband_stop ();
+			if (sp_rubberband_rect (&b) && !within_tolerance) {
 				sp_desktop_set_display_area (desktop, b.x0, b.y0, b.x1, b.y1, 10);
 			} else {
 				sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
@@ -153,18 +171,11 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			}
 			ret = TRUE;
 			break;
-#if 0
-		case 3:
-			p.x = event->button.x;
-			p.y = event->button.y;
-			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
-			sp_desktop_zoom_relative (desktop, p.x, p.y, 1/SP_DESKTOP_ZOOM_INC);
-			ret = TRUE;
-			break;
-#endif
 		default:
 			break;
 		}
+		if (sp_rubberband_rect (&b)) sp_rubberband_stop ();
+		xp = yp = 0; 
 		break;
 	default:
 		break;
