@@ -651,22 +651,24 @@ PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
   if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
   if (_bitmap) return 0;
 
-  NRMatrix m;
-  nr_matrix_set_scale (&m, 1, -1);
-  m.c[5] = 2 * p[NR::Y];
-  bind(mod, &m, 0);
-  
   Inkscape::SVGOStringStream os;
 
-  os << "/" << style->text->font_family.value << " findfont\n";
+	// FlowResOut feeds us text char by char
+	if (!strcmp (text, "(")) {
+		text = "\\(";
+	} else if (!strcmp (text, ")")) {
+		text = "\\)";
+	} else if (!strcmp (text, "\\")) {
+		text = "\\\\";
+	}
+
+  os << "/" << g_strdelimit (style->text->font_family.value, " ", '-') << " findfont\n";
   os << style->font_size.computed << " scalefont\n";
   os << "setfont newpath\n";
   os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
   os << "(" << text << ") show\n";
 
   fprintf (_stream, "%s", os.str().c_str());
-
-  release(mod);
 
   return 0;
 }
