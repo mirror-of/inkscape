@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-27 21:39+0200\n"
-"PO-Revision-Date: 2004-10-27 22:49+0200\n"
+"PO-Revision-Date: 2004-10-28 22:05+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -3165,7 +3165,7 @@ msgstr "Ké_p tulajdonságai"
 #. Autotrace dialog
 #: src/object-ui.cpp:354
 msgid "_Trace"
-msgstr "_Nyomkövetés"
+msgstr "Vekt_orizálás"
 
 #. Item dialog
 #: src/object-ui.cpp:395
@@ -3556,7 +3556,7 @@ msgstr "%d x %d méretű <b>kép</b>: %s"
 
 #: src/sp-image.cpp:720
 msgid "Trace"
-msgstr "Nyomkövetés"
+msgstr "Vektorizálás"
 
 #: src/sp-image.cpp:867
 #, c-format
