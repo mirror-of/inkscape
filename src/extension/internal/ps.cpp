@@ -268,6 +268,8 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 		}
 	}
 
+	g_free(fn);
+
 	if (_stream) {
 		/* fixme: this is kinda icky */
 #if !defined(_WIN32) && !defined(__WIN32__)

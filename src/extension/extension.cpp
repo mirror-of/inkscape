@@ -660,8 +660,10 @@ Input::open (const gchar *uri)
                                  -1,  &bytesRead,  &bytesWritten, &error);
 
 	if (!g_file_test(local_uri, G_FILE_TEST_EXISTS)) {
+		g_free(local_uri);
 		return NULL;
 	}
+	g_free(local_uri);
 
 	doc = imp->open(this, uri);
 

@@ -270,6 +270,8 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 
 	execute(command, local_filename, (gchar *)tempfilename_out);
 
+	g_free(local_filename);
+
 	if (helper_extension == NULL) {
 		mydoc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
 	} else {
@@ -344,6 +346,8 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
                                  -1,  &bytesRead,  &bytesWritten, &error);
 
 	execute(command, (gchar *)tempfilename_in, local_filename);
+
+	g_free(local_filename);
 
 	unlink(tempfilename_in);
 
