@@ -157,9 +157,9 @@ void flow_res::ApplyPath(int no, Path *i_path)
                 NR::Point mid_tangent;
                 i_path->PointAndTangentAt(midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, mid_tangent);
 
-                if (startpoint_otp && startpoint_otp[0].piece >= 0 && endpoint_otp && endpoint_otp[0].piece >= 0) {
-
-                    // if both start and endpoints are also on the path,
+                if (startpoint_otp && startpoint_otp[0].piece >= 0 && endpoint_otp && endpoint_otp[0].piece >= 0 && 
+                    startpoint_otp[0].piece == endpoint_otp[0].piece) {
+                    // if both start and endpoints are also on the path and on the same subpath,
 
                     // find out coords and tangent at startpoint and endpoint
                     NR::Point startpoint;
@@ -174,12 +174,12 @@ void flow_res::ApplyPath(int no, Path *i_path)
                     tangent.normalize();
                     
                 } else {
-                    
+
                     // The spec is a bit bogus here; it says to render glyph if one of the start/end points is on path,
                     // but the algorithm for tangent (see sibling branch above) needs both of them.
                     // We work around this by just taking the path tangent at the midpoint.
+                    // We also use it when startpoint and endpoint are on different subpaths.
                     tangent = mid_tangent;
-
                 }
 
                 // glyph origin: baseline of glyph must be on midpoint, so we step back half of charwidth from midpoint
