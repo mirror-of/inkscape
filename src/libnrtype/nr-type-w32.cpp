@@ -36,7 +36,7 @@ static void nr_typeface_w32_setup (NRTypeFace *tface, NRTypeFaceDef *def);
 static unsigned int nr_typeface_w32_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 static NRBPath *nr_typeface_w32_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 static void nr_typeface_w32_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
-static NRPoint *nr_typeface_w32_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
+static NR::Point nr_typeface_w32_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static unsigned int nr_typeface_w32_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
 static NRFont *nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
@@ -405,29 +405,18 @@ nr_typeface_w32_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigne
 
 }
 
-static NRPoint *
-nr_typeface_w32_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv)
+static NR::Point nr_typeface_w32_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
-	NRTypeFaceW32 *tfw32;
-	NRTypeFaceGlyphW32 *slot;
+	NRTypeFaceW32 *tfw32 = (NRTypeFaceW32 *) tf;
 
-
-	tfw32 = (NRTypeFaceW32 *) tf;
-
-	slot = nr_typeface_w32_ensure_slot (tfw32, glyph, metrics);
-
-
+	NRTypeFaceGlyphW32 *slot = nr_typeface_w32_ensure_slot (tfw32, glyph, metrics);
+	
 	if (slot) {
-
-		*adv = slot->advance;
-
-    return adv;
+		return slot->advance;
 	}
-
-
-
-	return NULL;
-
+	
+	// What does Null slot mean exactly?
+	return NR::Point(0,0);
 }
 
 static unsigned int
@@ -822,17 +811,15 @@ nr_typeface_w32_ensure_slot (NRTypeFaceW32 *tfw32, unsigned int glyph, unsigned 
 
 			slot->area.y0 = slot->area.y1 - gmetrics.gmBlackBoxY;
 
-			slot->advance.x = 0.0;
-
-        		slot->advance.y = -1000.0;
+			slot->advance = NR::Point(0.0, -1000.0);
 
 		} else {
 			slot->area.x0 = (float) gmetrics.gmptGlyphOrigin.x;
 			slot->area.y1 = (float) gmetrics.gmptGlyphOrigin.y;
 			slot->area.x1 = slot->area.x0 + gmetrics.gmBlackBoxX;
 			slot->area.y0 = slot->area.y1 - gmetrics.gmBlackBoxY;
-			slot->advance.x = gmetrics.gmCellIncX;
-			slot->advance.y = gmetrics.gmCellIncY;
+			slot->advance = NR::Point(gmetrics.gmCellIncX,
+						  gmetrics.gmCellIncY);
 
 		}
 

@@ -71,13 +71,13 @@ struct _SPString {
 	SPLayoutData *ly;
 	/* Content */
 	gchar *text;
-	NRPoint *p;
+	NR::Point *p;
 	/* Bookkeeping */
 	guint start;
 	guint length;
 	/* Using current direction and style */
 	NRRect bbox;
-	NRPoint advance;
+	NR::Point advance;
 };
 
 struct _SPStringClass {
@@ -156,7 +156,7 @@ gint sp_text_down (SPText *text, gint pos);
 gint sp_text_start_of_line (SPText *text, gint pos);
 gint sp_text_end_of_line (SPText *text, gint pos);
 
-void sp_text_get_cursor_coords (SPText *text, gint position, ArtPoint *p0, ArtPoint *p1);
+void sp_text_get_cursor_coords (SPText *text, gint position, NR::Point &p0, NR::Point &p1);
 
 
 

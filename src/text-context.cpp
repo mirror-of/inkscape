@@ -512,21 +512,17 @@ sp_text_context_update_cursor (SPTextContext *tc)
 	GdkRectangle im_cursor = { 0, 0, 1, 1 };
 
 	if (tc->text) {
-		ArtPoint p0, p1, d0, d1;
-		NRMatrix i2d;
-		sp_text_get_cursor_coords (SP_TEXT (tc->text), tc->ipos, &p0, &p1);
-		sp_item_i2d_affine (SP_ITEM (tc->text), &i2d);
-		d0.x = NR_MATRIX_DF_TRANSFORM_X (&i2d, p0.x, p0.y);
-		d0.y = NR_MATRIX_DF_TRANSFORM_Y (&i2d, p0.x, p0.y);
-		d1.x = NR_MATRIX_DF_TRANSFORM_X (&i2d, p1.x, p1.y);
-		d1.y = NR_MATRIX_DF_TRANSFORM_Y (&i2d, p1.x, p1.y);
+		NR::Point p0, p1;
+		sp_text_get_cursor_coords (SP_TEXT (tc->text), tc->ipos, p0, p1);
+		NR::Point d0 = sp_item_i2d_affine (SP_ITEM (tc->text)) * p0;
+		NR::Point d1 = sp_item_i2d_affine (SP_ITEM (tc->text)) * p1;
 		sp_canvas_item_show (tc->cursor);
-		sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), d0.x, d0.y, d1.x, d1.y);
+		sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), d0[0], d0[1], d1[0], d1[1]);
 		/* fixme: ... need another transformation to get canvas widget coordinate space? */
-		im_cursor.x = (int) floor (d0.x);
-		im_cursor.y = (int) floor (d0.y);
-		im_cursor.width = (int) floor (d1.x) - im_cursor.x;
-		im_cursor.height = (int) floor (d1.y) - im_cursor.y;
+		im_cursor.x = (int) floor (d0[NR::X]);
+		im_cursor.y = (int) floor (d0[NR::Y]);
+		im_cursor.width = (int) floor (d1[NR::X]) - im_cursor.x;
+		im_cursor.height = (int) floor (d1[NR::Y]) - im_cursor.y;
 
 		tc->show = TRUE;
 		tc->phase = 1;

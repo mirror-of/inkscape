@@ -732,6 +732,12 @@ NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *affine)
 	return affine;
 }
 
+NR::Matrix sp_item_i2d_affine(SPItem const *item) {
+	NRMatrix i2d;
+	sp_item_i2d_affine(item, &i2d);
+	return NR::Matrix(&i2d);
+}
+
 void sp_item_set_i2d_affine(SPItem *item, NRMatrix const *affine)
 {
 	NRMatrix p2dt; /* item parent to desktop transform */

@@ -168,6 +168,7 @@ NRMatrix *sp_item_i2vp_affine (SPItem const *item, NRMatrix *transform);
  * Returns TRANSFORM.
  */
 NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *transform);
+NR::Matrix sp_item_i2d_affine(SPItem const *item);
 
 void sp_item_set_i2d_affine (SPItem *item, NRMatrix const *transform);
 

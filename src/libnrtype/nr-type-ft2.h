@@ -37,7 +37,7 @@ struct _NRTypeFaceDefFT2 {
 
 struct _NRTypeFaceGlyphFT2 {
 	NRRect area;
-	NRPoint advance;
+	NR::Point advance;
 	int olref;
 	NRBPath outline;
 };

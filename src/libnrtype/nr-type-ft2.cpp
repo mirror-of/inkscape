@@ -439,8 +439,7 @@ nr_typeface_ft2_ensure_slot_h (NRTypeFaceFT2 *tff, unsigned int glyph)
 		slot->area.y1 = tff->ft_face->glyph->metrics.horiBearingY * tff->ft2ps;
 		slot->area.y0 = slot->area.y1 - tff->ft_face->glyph->metrics.height * tff->ft2ps;
 		slot->area.x1 = slot->area.x0 + tff->ft_face->glyph->metrics.width * tff->ft2ps;
-		slot->advance.x = tff->ft_face->glyph->metrics.horiAdvance * tff->ft2ps;
-		slot->advance.y = 0.0;
+		slot->advance = NR::Point(tff->ft_face->glyph->metrics.horiAdvance * tff->ft2ps, 0.0);
 
 		slot->olref = 0;
 		slot->outline.path = NULL;
@@ -479,12 +478,11 @@ nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph)
 			slot->area.x1 = slot->area.x0 + tff->ft_face->glyph->metrics.width * tff->ft2ps;
 			slot->area.y1 = -tff->ft_face->glyph->metrics.vertBearingY * tff->ft2ps;
 			slot->area.y0 = slot->area.y1 - tff->ft_face->glyph->metrics.height * tff->ft2ps;
-			slot->advance.x = 0.0;
-			slot->advance.y = -tff->ft_face->glyph->metrics.vertAdvance * tff->ft2ps;
+			slot->advance = NR::Point(0.0, -tff->ft_face->glyph->metrics.vertAdvance * tff->ft2ps);
 #if 0
 			printf ("VM %d - %f %f %f %f - %f %f\n", glyph,
 				slot->area.x0, slot->area.y0, slot->area.x1, slot->area.y1,
-				slot->advance.x, slot->advance.y);
+				slot->advance[NR::X], slot->advance[NR::Y]);
 #endif
 		} else {
 			FT_Load_Glyph (tff->ft_face, glyph, FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP);
@@ -492,8 +490,7 @@ nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph)
 			slot->area.x1 = 0.5 * tff->ft_face->glyph->metrics.width * tff->ft2ps;
 			slot->area.y1 = tff->ft_face->glyph->metrics.horiBearingY * tff->ft2ps - 1000.0;
 			slot->area.y0 = slot->area.y1 - tff->ft_face->glyph->metrics.height * tff->ft2ps;
-			slot->advance.x = 0.0;
-			slot->advance.y = -1000.0;
+			slot->advance = NR::Point(0.0, -1000.0);
 		}
 
 		slot->olref = 0;
