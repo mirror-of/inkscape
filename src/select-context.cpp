@@ -652,14 +652,14 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					sp_document_undo (SP_DT_DOCUMENT (desktop));
 					drag_escaped = 1;
 					sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
-					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), "Move cancelled.");
+					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), _("Move cancelled."));
 				}
 			} else {
 				if (sp_rubberband_rect (&b)) { // cancel rubberband
 					sp_rubberband_stop ();
 					rb_escaped = 1;
 					sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
-					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), "Selection cancelled.");
+					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), _("Selection cancelled."));
 				} else {
 					sp_selection_empty (selection); // deselect
 				}
@@ -796,7 +796,7 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 	// status text
 	GString *xs = SP_PT_TO_METRIC_STRING(dxy[X], SP_DEFAULT_METRIC);
 	GString *ys = SP_PT_TO_METRIC_STRING(dxy[Y], SP_DEFAULT_METRIC);
-	gchar *status = g_strdup_printf("Move  %s, %s", xs->str, ys->str);
+	gchar *status = g_strdup_printf(_("Move by %s, %s"), xs->str, ys->str);
 	g_string_free(xs, TRUE);
 	g_string_free(ys, TRUE);
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
