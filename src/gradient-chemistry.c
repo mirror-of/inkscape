@@ -35,8 +35,8 @@ static SPGradient *sp_gradient_get_private_normalized (SPDocument *document, SPG
 static SPGradient *sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vector);
 
 static void sp_gradient_repr_set_link (SPRepr *repr, SPGradient *gr);
-static void sp_item_repr_set_style_gradient (SPRepr *repr, const guchar *property, SPGradient *gr);
-static guchar *sp_style_change_property (const guchar *sstr, const guchar *key, const guchar *value);
+static void sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr);
+static gchar *sp_style_change_property (const gchar *sstr, const gchar *key, const gchar *value);
 
 /* fixme: One more step is needed - normalization vector to 0-1 (not sure 100% still) */
 
@@ -63,7 +63,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 	defs = (SPDefs *) SP_DOCUMENT_DEFS (doc);
 
 	if (SP_OBJECT_PARENT (gr) != SP_OBJECT (defs)) {
-		SPGradient *new;
+		SPGradient *spnew;
 		SPRepr *repr;
 		/* Lonely gradient */
 		/* Ensure vector, so we can know some our metadata */
@@ -80,24 +80,24 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		/* Step 2 - create new empty gradient and prepend it to <defs> */
 		repr = sp_repr_new ("linearGradient");
 		sp_repr_add_child (SP_OBJECT_REPR (defs), repr, NULL);
-		new = (SPGradient *) sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));
+		spnew = (SPGradient *) sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));
 		g_assert (gr != NULL);
 		g_assert (SP_IS_GRADIENT (gr));
-		g_print ("GVECTORNORM: Created new vector gradient %s\n", SP_OBJECT_ID (new));
+		g_print ("GVECTORNORM: Created new vector gradient %s\n", SP_OBJECT_ID (spnew));
 		/* Step 3 - set vector of new gradient */
-		sp_gradient_repr_set_vector (new, SP_OBJECT_REPR (new), gr->vector);
-		g_print ("GVECTORNORM: Added stops to %s\n", SP_OBJECT_ID (new));
+		sp_gradient_repr_set_vector (spnew, SP_OBJECT_REPR (spnew), gr->vector);
+		g_print ("GVECTORNORM: Added stops to %s\n", SP_OBJECT_ID (spnew));
 		/* Step 4 - set state flag */
-		new->state = SP_GRADIENT_STATE_VECTOR;
-		g_print ("GVECTORNORM: Set of %s to vector normalized\n", SP_OBJECT_ID (new));
+		spnew->state = SP_GRADIENT_STATE_VECTOR;
+		g_print ("GVECTORNORM: Set of %s to vector normalized\n", SP_OBJECT_ID (spnew));
 		/* Step 5 - set href of old vector */
-		sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), new);
-		g_print ("GVECTORNORM: Set href of %s to %s\n", SP_OBJECT_ID (gr), SP_OBJECT_ID (new));
+		sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), spnew);
+		g_print ("GVECTORNORM: Set href of %s to %s\n", SP_OBJECT_ID (gr), SP_OBJECT_ID (spnew));
 		/* Step 6 - clear stops of old gradient */
 		sp_gradient_repr_set_vector (gr, SP_OBJECT_REPR (gr), NULL);
 		g_print ("GVECTORNORM: Cleared all stops of %s\n", SP_OBJECT_ID (gr));
 		/* Now we have successfully created new normalized vector, and cleared old stops */
-		return new;
+		return spnew;
 	} else {
 		SPObject *child;
 		/* Gradient is in <defs> */
@@ -678,7 +678,7 @@ sp_item_force_stroke_radialgradient_vector (SPItem *item, SPGradient *gr)
 static void
 sp_gradient_repr_set_link (SPRepr *repr, SPGradient *link)
 {
-	const guchar *id;
+	const gchar *id;
 	gchar *ref;
 	gint len;
 
@@ -689,7 +689,7 @@ sp_gradient_repr_set_link (SPRepr *repr, SPGradient *link)
 	if (link) {
 		id = SP_OBJECT_ID (link);
 		len = strlen (id);
-		ref = alloca (len + 2);
+		ref = (gchar*) alloca (len + 2);
 		*ref = '#';
 		memcpy (ref + 1, id, len + 1);
 	} else {
@@ -700,10 +700,10 @@ sp_gradient_repr_set_link (SPRepr *repr, SPGradient *link)
 }
 
 static void
-sp_item_repr_set_style_gradient (SPRepr *repr, const guchar *property, SPGradient *gr)
+sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr)
 {
 	SPCSSAttr *css;
-	guchar *val;
+	gchar *val;
 
 	g_return_if_fail (repr != NULL);
 	g_return_if_fail (gr != NULL);
@@ -812,9 +812,9 @@ sp_object_ensure_fill_gradient_normalized (SPObject *object)
 	lg = SP_LINEARGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
 
 	if (SP_OBJECT_HREFCOUNT (lg) > 1) {
-		const guchar *sstr;
+		const gchar *sstr;
 		SPRepr *repr;
-		guchar *val, *newval;
+		gchar *val, *newval;
 		/* We have to clone gradient */
 		sp_gradient_ensure_vector (SP_GRADIENT (lg));
 		repr = sp_lineargradient_build_repr (lg, TRUE);
@@ -837,11 +837,11 @@ sp_object_ensure_stroke_gradient_normalized (SPObject *object)
 
 /* Fixme: This belongs to SVG/style eventually */
 
-static guchar *
-sp_style_change_property (const guchar *sstr, const guchar *key, const guchar *value)
+static gchar *
+sp_style_change_property (const gchar *sstr, const gchar *key, const gchar *value)
 {
-	const guchar *s;
-	guchar *buf, *d;
+	const gchar *s;
+	gchar *buf, *d;
 	gint len;
 
 	g_print ("%s <- %s:%s\n", sstr, key, value);
@@ -853,16 +853,16 @@ sp_style_change_property (const guchar *sstr, const guchar *key, const guchar *v
 
 	s = sstr;
 	len = strlen (key);
-	buf = alloca (strlen (sstr) + strlen (key) + ((value) ? strlen (value) : 0) + 2);
+	buf = (gchar*)alloca (strlen (sstr) + strlen (key) + ((value) ? strlen (value) : 0) + 2);
 	d = buf;
 
 	while (*s) {
 		while (*s && isspace (*s)) s += 1;
 		if (*s) {
-			const guchar *q;
+			const gchar *q;
 			q = strchr (s, ':');
 			if (q) {
-				const guchar *e;
+				const gchar *e;
 				e = strchr (q, ';');
 				if (e) {
 					if (((q - s) == len) && !strncmp (s, key, len)) {

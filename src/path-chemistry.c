@@ -210,8 +210,8 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 {
 	SPCurve *curve;
 	SPRepr  *repr;
-	guchar  *style_str;
-	guchar  *def_str;
+	gchar  *style_str;
+	gchar  *def_str;
 	
 	if (!item)
 		return NULL;
@@ -285,7 +285,7 @@ sp_path_cleanup (SPPath *path)
 	if (sp_curve_is_empty (curve)) {
 		sp_repr_unparent (SP_OBJECT_REPR (path));
 	} else if (dropped) {
-		guchar *svgpath;
+		gchar *svgpath;
 		svgpath = sp_svg_write_path (curve->bpath);
 		sp_repr_set_attr (SP_OBJECT_REPR (path), "d", svgpath);
 		g_free (svgpath);
