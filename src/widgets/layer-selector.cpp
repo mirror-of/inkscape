@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <functional>
 #include <gtkmm/liststore.h>
+#include "desktop-handles.h"
+#include "selection.h"
 #include "widgets/layer-selector.h"
 #include "widgets/document-tree-model.h"
 #include "util/list.h"
@@ -148,6 +150,7 @@ void LayerSelector::_setDesktopLayer() {
         _layer_changed_connection.block();
         _desktop->setCurrentLayer(layer);
         _layer_changed_connection.unblock();
+        SP_DT_SELECTION(_desktop)->clear();
         _selectLayer(_desktop->currentLayer());
     }
 }
