@@ -698,10 +698,10 @@ sp_knot_set_position (SPKnot * knot, NRPoint * p, guint state)
 		       state);
 }
 
-void
-sp_knot_set_position (SPKnot * knot, NR::Point const pp, guint state) {
-	NRPoint p = pp;
-	sp_knot_set_position(knot, &p, state);
+void sp_knot_set_position(SPKnot *knot, NR::Point const &p, guint state)
+{
+	NRPoint pp = p;
+	sp_knot_set_position(knot, &pp, state);
 }
 
 NRPoint *

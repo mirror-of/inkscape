@@ -122,7 +122,7 @@ gdouble sp_knot_distance (SPKnot * knot, NRPoint *p, guint state);
 /* Unconditional */
 
 void sp_knot_set_position (SPKnot *knot, NRPoint *p, guint state);
-void sp_knot_set_position (SPKnot *knot, const NR::Point p, guint state);
+void sp_knot_set_position(SPKnot *knot, NR::Point const &p, guint state);
 
 NRPoint *sp_knot_position (SPKnot *knot, NRPoint *p);
 NR::Point sp_knot_position (SPKnot const *knot);

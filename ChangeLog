@@ -1,5 +1,8 @@
 2004-01-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/knot.h, src/knot.cpp (sp_knot_set_position): Change from
+	pass-by-value to pass-by-const-reference.
+
 	* src/geom.cpp (sp_intersector_line_intersection): Restore
 	  definition of previous local `cross' function, but "inline" the
 	  dot(rot90(a), b) definition.  This makes the definition conform to
