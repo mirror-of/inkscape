@@ -414,12 +414,12 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
         switch (module_implementation_type) {
             case MODULE_EXTENSION: {
                 Implementation::Script *script = new Implementation::Script();
-                imp = dynamic_cast<Implementation::Implementation *>(script);
+                imp = static_cast<Implementation::Implementation *>(script);
                 break;
             }
             case MODULE_PLUGIN: {
                 Implementation::Plugin *plugin = new Implementation::Plugin();
-                imp = dynamic_cast<Implementation::Implementation *>(plugin);
+                imp = static_cast<Implementation::Implementation *>(plugin);
                 break;
             }
             default: {
