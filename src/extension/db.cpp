@@ -46,10 +46,12 @@ DB::register_ext (Extension *module)
 {
 	g_return_if_fail(module->get_id() != NULL);
 
-	// printf("Registering: %s\n", module->get_id());
 	// only add to list if it's a never-before-seen module
-	bool add_to_list=((*moduledict.find(module->get_id())).second == NULL);
-
+	//bool add_to_list=((*moduledict.find(module->get_id())).second == NULL);
+        bool add_to_list = 
+               ( moduledict.find(module->get_id()) == moduledict.end());
+        
+	//printf("Registering: '%s' add:%d\n", module->get_id(), add_to_list);
 	moduledict[module->get_id()] = module;
 
 	if (add_to_list) modulelist.push_back(module);
