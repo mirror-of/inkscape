@@ -1151,7 +1151,7 @@ executable_path(void)
 #endif
   if (strLen <= 0)
     {
-    g_print("Unable to read /proc/self/exe\n");
+    g_print("Unable to retrieve the path of the executable.\n");
     return NULL;
     }
   path = g_strdup(pathBuf);
