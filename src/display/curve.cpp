@@ -38,12 +38,23 @@ static bool sp_bpath_closed(NArtBpath const bpath[]);
 
 /* Constructors */
 
+/**
+ * The returned curve's state is as if sp_curve_reset has just been called on it.
+ */
 SPCurve *
 sp_curve_new()
 {
     return sp_curve_new_sized(SP_CURVE_LENSTEP);
 }
 
+/**
+ * Like sp_curve_new, but overriding the default initial capacity.
+ *
+ * The returned curve's state is as if sp_curve_reset has just been called on it.
+ *
+ * \param length Initial number of NArtBpath elements allocated for bpath (including NR_END
+ *    element).
+ */
 SPCurve *
 sp_curve_new_sized(gint length)
 {
