@@ -41,7 +41,7 @@ URIReference::URIReference(SPDocument *rel_document, const gchar *uri) {
 
 URIReference::~URIReference() {
 	/* SigC::Object's destructor will disconnect the connection for us
-	 * automagically, but we store it and disconnect it here avoid a
+	 * automagically, but we store it and disconnect it here to avoid a
 	 * potential race condition from the hunref triggering document
 	 * changes.
 	 */

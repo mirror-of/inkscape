@@ -57,7 +57,11 @@ public:
 
 	/**
 	 * Accessor for the reference's change notification signal.
-	 * @returns a signal; its parameter is a newly referenced SPObject or NULL
+	 * The signal has one parameter: the new SPObject that the
+	 * URIReference references.  It has already been hreffed,
+	 * and the old one will not be hunreffed until the signal
+	 * emission has completed.
+	 * @returns a signal
 	 */
 	inline SigC::Signal1<void, SPObject *> changedSignal();
 
