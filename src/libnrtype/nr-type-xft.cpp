@@ -24,8 +24,8 @@ static void nr_type_xft_init (void);
 
 static unsigned int nrxfti = FALSE;
 
-static NRNameList NRXftTypefaces = {0, NULL, NULL};
-static NRNameList NRXftFamilies = {0, NULL, NULL};
+static NRNameList NRXftTypefaces = {0, NULL, NULL, NULL};
+static NRNameList NRXftFamilies = {0, NULL, NULL, NULL};
 
 static XftFontSet *NRXftPatterns = NULL;
 static GHashTable *NRXftNamedict = NULL;
@@ -70,7 +70,6 @@ nr_type_read_xft_list (void)
 	NRNameList gnames, gfamilies;
 	const char *debugenv;
 	int debug;
-	int i, j;
 
 	debugenv = getenv ("INKSCAPE_DEBUG_XFT");
 	debug = (debugenv && *debugenv && (*debugenv != '0'));
@@ -83,18 +82,10 @@ nr_type_read_xft_list (void)
 		fprintf (stderr, "Number of usable Xft typefaces: %lu\n", gnames.length);
 	}
 
-	for (i = gnames.length - 1; i >= 0; i--) {
+	for (int i = gnames.length - 1; i >= 0; i--) {
+		const gchar *family = (gchar *) (gnames.families[i]);
+
 		NRTypeFaceDefFT2 *tdef;
-		const gchar *family;
-		family = NULL;
-		for (j = gfamilies.length - 1; j >= 0; j--) {
-			int len;
-			len = strlen ((gchar *)(gfamilies.names[j]));
-			if (!strncmp ((gchar *)(gfamilies.names[j]), (gchar*)(gnames.names[i]), len)) {
-				family = (gchar *)(gfamilies.names[j]);
-				break;
-			}
-		}
 		if (family) {
 			tdef = nr_new (NRTypeFaceDefFT2, 1);
 			tdef->def.next = NULL;
@@ -142,9 +133,10 @@ nr_type_xft_init (void)
 	/* Get typeface list */
 	NRXftPatterns = XftListFonts (GDK_DISPLAY (), 0,
 				      XFT_SCALABLE, XftTypeBool, 1, XFT_OUTLINE, XftTypeBool, 1, 0,
-				      XFT_FAMILY, XFT_WEIGHT, XFT_SLANT, XFT_FILE, XFT_INDEX, 0);
-	NRXftTypefaces.length = NRXftPatterns->nfont;
-	NRXftTypefaces.names = nr_new (guchar *, NRXftTypefaces.length);
+				      XFT_FAMILY, XFT_STYLE, XFT_WEIGHT, XFT_SLANT, XFT_FILE, XFT_INDEX, 0);
+	NRXftTypefaces.length = NRXftPatterns->nfont * 2;
+	NRXftTypefaces.names = nr_new (guchar *, NRXftPatterns->nfont);
+	NRXftTypefaces.families = nr_new (guchar *, NRXftPatterns->nfont);
 	NRXftTypefaces.destructor = NULL;
 	NRXftNamedict = g_hash_table_new (g_str_hash, g_str_equal);
 	NRXftFamilydict = g_hash_table_new (g_str_hash, g_str_equal);
@@ -160,7 +152,7 @@ nr_type_xft_init (void)
 			char const *name;
 			XftPatternGetString (NRXftPatterns->fonts[i], XFT_FAMILY, 0, &name);
 			if (debug) {
-				fprintf (stderr, "Typeface %s\n", name);
+				fprintf (stderr, "%d\t Typeface %s\n", i, name);
 			}
 		}
 		char const *file;
@@ -168,13 +160,13 @@ nr_type_xft_init (void)
 		if (file) {
 			int len;
 			if (debug) {
-				fprintf (stderr, "Got filename %s\n", file);
+				fprintf (stderr, "%d\t Got filename %s\n", i, file);
 			}
 			len = strlen (file);
 			/* fixme: This is silly and evil */
 			/* But Freetype just does not load pfa reliably (Lauris) */
 			/* Changed to exclude pfa, better for OSX */
-			if ((len > 4) &&
+			if ((len > 4) //&&
 			/*
 			    (!strcmp (file + len - 4, ".ttf") ||
 			     !strcmp (file + len - 4, ".TTF") ||
@@ -185,15 +177,18 @@ nr_type_xft_init (void)
 			     !strcmp (file + len - 4, ".pfb") ||
 			     !strcmp (file + len - 4, ".PFB"))) {
 			  */
-			     strcmp (file + len - 4, ".pfa") &&
-			     strcmp (file + len - 4, ".PFA")) {
-				char const *fn, *wn, *sn;
+					// Commented out; needs to be investigated whether there are really any problems with pfa! --bb
+					//  strcmp (file + len - 4, ".pfa") &&
+					//			     strcmp (file + len - 4, ".PFA")
+					) {
+				char const *fn = NULL, *styn = NULL, *wn = NULL, *sn = NULL;
 				int weight;
 				int slant;
 				if (debug) {
-					fprintf (stderr, "Seems valid\n");
+					fprintf (stderr, "%d\t Seems valid\n", i);
 				}
 				XftPatternGetString (NRXftPatterns->fonts[i], XFT_FAMILY, 0, &fn);
+				XftPatternGetString (NRXftPatterns->fonts[i], XFT_STYLE, 0, &styn);
 				XftPatternGetInteger (NRXftPatterns->fonts[i], XFT_WEIGHT, 0, &weight);
 				XftPatternGetInteger (NRXftPatterns->fonts[i], XFT_SLANT, 0, &slant);
 				switch (weight) {
@@ -213,7 +208,7 @@ nr_type_xft_init (void)
 					wn = "Black";
 					break;
 				default:
-					wn = "Normal";
+					wn = "";
 					break;
 				}
 				switch (slant) {
@@ -227,18 +222,29 @@ nr_type_xft_init (void)
 					sn = "Oblique";
 					break;
 				default:
-					sn = "Normal";
+					sn = "";
 					break;
 				}
-				char *name = g_strdup_printf ("%s %s %s", fn, wn, sn);
+
+				char *name = g_strdup_printf (
+                                    "%s%s%s%s%s%s%s", 
+                                    fn, 
+                                    styn ? " " : "", styn ? styn : "", 
+                                    (wn && !styn) ? " " : "", (wn && !styn) ? wn : "", 
+                                    (sn  && !styn) ? " " : "", (sn  && !styn) ? sn : "");
+
 				if (!g_hash_table_lookup (NRXftNamedict, name)) {
 					if (!g_hash_table_lookup (NRXftFamilydict, fn)) {
 						NRXftFamilies.names[fpos] = (guchar *)g_strdup (fn);
-						g_hash_table_insert (NRXftFamilydict, NRXftFamilies.names[fpos++], (void *) TRUE);
+						g_hash_table_insert (NRXftFamilydict, NRXftFamilies.names[fpos], (void *) TRUE);
+						fpos++;
 					}
-					NRXftTypefaces.names[pos++] = (guchar *)name;
+					NRXftTypefaces.names[pos] = (guchar *) name;
+					NRXftTypefaces.families[pos] = (guchar *) g_strdup (fn);
+					pos++;
 					g_hash_table_insert (NRXftNamedict, name, NRXftPatterns->fonts[i]);
 				} else {
+					// Not inserted, dupe; most likely the same font is available from different locations
 					g_free (name);
 				}
 			}

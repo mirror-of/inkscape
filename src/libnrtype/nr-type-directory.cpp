@@ -205,6 +205,67 @@ nr_type_directory_style_list_destructor (NRNameList *list)
 	if (list->names) nr_free (list->names);
 }
 
+// FIXME: make this UTF8, add non-English style names
+bool
+is_regular (const char *s)
+{
+	if (strstr(s, " Regular")) return true;
+	if (strstr(s, " Roman")) return true;
+	if (strstr(s, " Normal")) return true;
+	return false;
+}
+
+bool
+is_nonbold (const char *s)
+{
+	if (strstr(s, " Medium")) return true;
+	if (strstr(s, " Book")) return true;
+	return false;
+}
+
+bool
+is_italic (const char *s)
+{
+	if (strstr(s, " Italic")) return true;
+	if (strstr(s, " Oblique")) return true;
+	if (strstr(s, " Slanted")) return true;
+	return false;
+}
+
+bool
+is_bold (const char *s)
+{
+	if (strstr(s, " Bold")) return true;
+	return false;
+}
+
+static int
+style_name_compare (const void *aa, const void *bb)
+{
+	const char *a = *((char **) aa);
+	const char *b = *((char **) bb);
+
+#ifndef WIN32
+ if (is_regular(a) && !is_regular(b)) return -1;
+ if (is_regular(b) && !is_regular(a)) return 1;
+
+ if (is_bold(a) && !is_bold(b)) return 1;
+ if (is_bold(b) && !is_bold(a)) return -1;
+
+ if (is_italic(a) && !is_italic(b)) return 1;
+ if (is_italic(b) && !is_italic(a)) return -1;
+
+ if (is_nonbold(a) && !is_nonbold(b)) return 1;
+ if (is_nonbold(b) && !is_nonbold(a)) return -1;
+
+ return strcasecmp (a, b);
+
+#else
+	return stricmp ((const char *)a, (const char *)b);
+#endif
+}
+
+
 NRNameList *
 nr_type_directory_style_list_get (const gchar *family, NRNameList *styles)
 {
@@ -228,6 +289,7 @@ nr_type_directory_style_list_get (const gchar *family, NRNameList *styles)
 			styles->names[pos] = (guchar *)tdef->name;
 			pos += 1;
 		}
+		qsort (styles->names, pos, sizeof (guchar *), style_name_compare);
 	} else {
 		styles->length = 0;
 		styles->names = NULL;
