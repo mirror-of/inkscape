@@ -54,12 +54,18 @@ static void set_event_location (SPDesktop * desktop, GdkEvent * event);
 
 static GObjectClass *parent_class;
 
+// globals for temporary switching to selector by space
 static gboolean selector_toggled = FALSE;
 static int switch_selector_to = 0;
 
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
 static bool within_tolerance = false;
+
+// globals for keeping track of keyboard scroll events in order to accelerate
+static guint32 scroll_event_time = 0;
+static gdouble scroll_multiply = 1;
+static guint scroll_keyval = 0;
 
 GType
 sp_event_context_get_type (void)
@@ -193,6 +199,47 @@ gint gobble_key_events (guint keyval, gint mask)
 	return i;
 }
 
+/**
+\brief   Gobbles next motion notify events on the queue with the same mask. Returns the number of events consumed.
+*/
+gint gobble_motion_events (gint mask)
+{
+	GdkEvent *event_next;
+	gint i = 0;
+
+	event_next = gdk_event_get ();
+	// while the next event is also a key notify with the same keyval and mask,
+	while (event_next && event_next->type == GDK_MOTION_NOTIFY && 
+                (event_next->motion.state & mask)) {
+		// kill it
+		gdk_event_free (event_next);
+		// get next
+		event_next = gdk_event_get ();
+		i ++;
+	}
+	// otherwise, put it back onto the queue
+	if (event_next) gdk_event_put (event_next);
+
+	return i;
+}
+
+gdouble accelerate_scroll (GdkEvent *event, gdouble acceleration)
+{
+      guint32 time_diff = ((GdkEventKey *) event)->time - scroll_event_time;
+
+      /* key pressed within 125ms ? (1/8 second) */
+      if (time_diff > 125 || event->key.keyval != scroll_keyval) {
+		scroll_multiply = 1;
+	} else {
+		scroll_multiply += acceleration;
+	}
+
+      scroll_event_time = ((GdkEventKey *) event)->time;
+      scroll_keyval = event->key.keyval;
+
+	return scroll_multiply;
+}
+
 // This is a hack that is necessary because when middle-clicking too fast, button_press
 // events come for all clicks but there's button_release only for the first one. So
 // after a release, we must prohibit the next grab for some time, or the grab will
@@ -215,14 +262,13 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 	static unsigned int panning = 0;
 	gint ret;
 	SPDesktop * desktop;
-	GdkEvent *event_next;
 	ret = FALSE;
 
 	desktop = event_context->desktop;
 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 	gdouble zoom_inc = prefs_get_double_attribute_limited ("options.zoomincrement", "value", 1.414213562, 1.01, 10);
-	gdouble acceleration = prefs_get_double_attribute_limited ("options.scrollingacceleration", "value", 1, 1, 6);
+	gdouble acceleration = prefs_get_double_attribute_limited ("options.scrollingacceleration", "value", 0, 0, 6);
 	int key_scroll = prefs_get_int_attribute_limited ("options.keyscroll", "value", 10, 0, 1000);
 	int wheel_scroll = prefs_get_int_attribute_limited ("options.wheelscroll", "value", 40, 0, 1000);
 
@@ -301,18 +347,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				within_tolerance = false; 
 
 				// gobble subsequent motion events to prevent "sticking" when scrolling is slow
-				event_next = gdk_event_get ();
-				// while the next event is also a motion notify with the same button,
-				while (event_next && event_next->type == GDK_MOTION_NOTIFY && 
-						     ((panning == 2 && (event_next->motion.state & GDK_BUTTON2_MASK)) ||
-							(panning == 3 && (event_next->motion.state & GDK_BUTTON3_MASK)))) {
-					// kill it
-					gdk_event_free (event_next);
-					// get next
-					event_next = gdk_event_get ();
-				}
-				// otherwise, put it back onto the queue
-				if (event_next) gdk_event_put (event_next);
+				gobble_motion_events (panning == 2 ? GDK_BUTTON2_MASK : GDK_BUTTON3_MASK);
 
 				sp_desktop_scroll_world (event_context->desktop, event->motion.x - s.x, event->motion.y - s.y);
 				ret = TRUE;
@@ -382,8 +417,8 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		case GDK_KP_Left:
 		case GDK_KP_4:
 			if (event->key.state & GDK_CONTROL_MASK) {
-				int i = 1 + gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
-				i = (int) floor (key_scroll * pow (i,  acceleration));
+				int i = (int) floor (key_scroll * accelerate_scroll (event, acceleration));
+				gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
 				sp_desktop_scroll_world (event_context->desktop, i, 0);
 				ret = TRUE;
 			}
@@ -392,8 +427,8 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		case GDK_KP_Up:
 		case GDK_KP_8:
 			if (event->key.state & GDK_CONTROL_MASK) {
-				int i = 1 + gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
-				i = (int) floor (key_scroll * pow (i,  acceleration));
+				int i = (int) floor (key_scroll * accelerate_scroll (event, acceleration));
+				gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
 				sp_desktop_scroll_world (event_context->desktop, 0, i);
 				ret = TRUE;
 			}
@@ -402,9 +437,9 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		case GDK_KP_Right:
 		case GDK_KP_6:
 			if (event->key.state & GDK_CONTROL_MASK) {
-				int i = 1 + gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
-				i = (int) floor (-key_scroll * pow (i,  acceleration));
-				sp_desktop_scroll_world (event_context->desktop, i, 0);
+				int i = (int) floor (key_scroll * accelerate_scroll (event, acceleration));
+				gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
+				sp_desktop_scroll_world (event_context->desktop, -i, 0);
 				ret = TRUE;
 			}
 			break;
@@ -412,9 +447,9 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 		case GDK_KP_Down:
 		case GDK_KP_2:
 			if (event->key.state & GDK_CONTROL_MASK) {
-				int i = 1 + gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
-				i = (int) floor (-key_scroll * pow (i,  acceleration));
-				sp_desktop_scroll_world (event_context->desktop, 0, i);
+				int i = (int) floor (key_scroll * accelerate_scroll (event, acceleration));
+				gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
+				sp_desktop_scroll_world (event_context->desktop, 0, -i);
 				ret = TRUE;
 			}
 			break;
