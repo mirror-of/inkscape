@@ -643,6 +643,7 @@ can leave your ideas and requests there.</p>
 <mouse><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></mouse>
 <mouse><key><ctrl/><alt/><left-drag/></key> <action>move along handles</action></mouse>
 <note>This restricts movement to the directions of the node's handles, their continuations and perpendiculars (total 8 snaps).</note>
+<note>If the node has straight lines on one or both sides, this will snap it to these lines' directions and perpendiculars instead.</note>
 <mouse><key><shift/><left-drag/></key> <action>temporarily disable snapping</action></mouse>
 <note>Snapping nodes is enabled in Document Preferences. By default, only bounding box of objects snaps to grid/guides.</note>
 <mouse><key><left-drag/><misc-wide f="Space"/></key> <action>drop a copy</action></mouse>
@@ -756,6 +757,10 @@ can leave your ideas and requests there.</p>
 <mouse><key><left-click/></key> <action>click a star to select</action></mouse>
 <mouse><key><left-drag/></key> <action>drag a handle to vary the star shape</action></mouse>
 <mouse><key><ctrl/><left-drag/></key> <action>keep star rays radial (no skew)</action></mouse>
+<mouse><key><shift/><left-drag/></key> <action>round the star</action></mouse>
+<mouse><key><shift/><left-click/></key> <action>remove rounding</action></mouse>
+<mouse><key><alt/><left-drag/></key> <action>randomize the star</action></mouse>
+<mouse><key><alt/><left-click/></key> <action>remove randomization</action></mouse>
 <keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 </group>
 </section>
