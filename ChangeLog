@@ -2,6 +2,8 @@
 
 	* src/libnr/nr-point-fns.cpp (LInfty): Fix bug with NaN coordinates:
 	  return NaN (rather than unspecified behaviour).
+	* src/libnr/nr-point-fns-test.cpp: Add test cases for L1,L2,LInfty
+	  handling of NaN.
 
 	* src/pencil-context.cpp: Fix bug: undesirable interaction between
 	  snapping and snap-to-anchor.
