@@ -24,6 +24,7 @@
 #include "helper/sp-intl.h"
 #include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <xml/repr.h>
 

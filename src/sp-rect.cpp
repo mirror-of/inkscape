@@ -20,6 +20,7 @@
 #include <display/curve.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-div.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 

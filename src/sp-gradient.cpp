@@ -22,6 +22,7 @@
 
 #include <libnr/nr-gradient.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-scale-ops.h>

@@ -29,6 +29,7 @@
 #include "libnr/nr-point-ops.h"
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include "svg/svg.h"
 

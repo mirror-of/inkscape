@@ -19,6 +19,7 @@
 #include <glib-object.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include "libnr/nr-matrix-translate-ops.h"
 #include "helper/sp-intl.h"
 #include "svg/svg.h"
 #include "display/nr-arena-group.h"

@@ -46,6 +46,7 @@
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-matrix-scale-ops.h"
+#include "libnr/nr-matrix-translate-ops.h"
 #include "libnr/nr-translate-scale-ops.h"
 #include "libnr/nr-rect.h"
 #include "svg/stringstream.h"
