@@ -5,7 +5,9 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   David Turner <novalis@gnu.org>
  *
+ * Copyright (C) 2004 David Turner
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
@@ -144,6 +146,12 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 
 	sp_object_read_attr (object, "d");
 
+	/* d is a required attribute */
+	const gchar* d = sp_object_getAttribute (object, "d", NULL);
+	if (d == NULL) {
+	  sp_object_set (object, sp_attribute_lookup ("d"), strdup (""));
+	}
+
 	/* Are these calls actually necessary? */
 	sp_object_read_attr (object, "marker");
 	sp_object_read_attr (object, "marker-start");
@@ -249,9 +257,13 @@ sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 
 	if ( shape->curve != NULL ) {
 		NArtBpath *abp = sp_curve_first_bpath(shape->curve);
-		gchar *str = sp_svg_write_path(abp);
-		sp_repr_set_attr(repr, "d", str);
-		g_free(str);
+		if (abp) {
+		  gchar *str = sp_svg_write_path(abp);
+		  sp_repr_set_attr(repr, "d", str);
+		  g_free(str);
+		} else {
+		  sp_repr_set_attr(repr, "d", "");
+		}
 	} else {
 		sp_repr_set_attr(repr, "d", NULL);
 	}
