@@ -650,8 +650,8 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	SP_VERB_ZOOM_PAGE_WIDTH,
 
         SP_VERB_NONE,
-	SP_VERB_ZOOM_NEXT,
 	SP_VERB_ZOOM_PREV,
+	SP_VERB_ZOOM_NEXT,
 
         SP_VERB_NONE,
 	SP_VERB_TOGGLE_GRID,
