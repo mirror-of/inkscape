@@ -175,6 +175,11 @@ class SPPrintContext;
 
 class StopOnTrue;
 
+namespace Inkscape {
+class URI;
+class URIReference;
+};
+
 struct box_solution;
 
 #endif /* !__FORWARD_H__ */
