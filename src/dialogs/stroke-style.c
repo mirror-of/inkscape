@@ -533,7 +533,7 @@ static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed (SPDashSelector *dsel, SPWidget *spw);
 
-void
+GtkWidget*
 sp_stroke_radio_button(GtkWidget* tb, const char* n, const char* xpm,
 		       GtkWidget* hb, GtkWidget* spw,
 		       const gchar* key, const gchar* data) {
@@ -555,6 +555,8 @@ sp_stroke_radio_button(GtkWidget* tb, const char* n, const char* xpm,
   px = gtk_image_new_from_file (xpm);
   gtk_widget_show (px);
   gtk_container_add (GTK_CONTAINER (tb), px);
+
+	return (tb);
 }
 
 
@@ -620,13 +622,13 @@ sp_stroke_style_line_widget_new (void)
 
 	tb = NULL;
 
-	sp_stroke_radio_button(tb, "join-miter",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_MITER,
 			       INKSCAPE_GLADEDIR "/join_miter.xpm",
 			       hb, spw, "join", "miter");
-	sp_stroke_radio_button(tb, "join-round",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_ROUND,
 			       INKSCAPE_GLADEDIR "/join_round.xpm",
 			       hb, spw, "join", "round");
-	sp_stroke_radio_button(tb, "join-bevel",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_BEVEL,
 			       INKSCAPE_GLADEDIR "/join_bevel.xpm",
 			       hb, spw, "join", "bevel");
 	i++;  
@@ -642,13 +644,13 @@ sp_stroke_style_line_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, i, i+1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
 	tb = NULL;
-	sp_stroke_radio_button(tb, "cap-butt",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_BUTT,
 			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
 			       hb, spw, "cap", "butt");
-	sp_stroke_radio_button(tb, "cap-round",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_ROUND,
 			       INKSCAPE_GLADEDIR "/cap_round.xpm",
 			       hb, spw, "cap", "round");
-	sp_stroke_radio_button(tb, "cap-square",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_SQUARE,
 			       INKSCAPE_GLADEDIR "/cap_square.xpm",
 			       hb, spw, "cap", "square");
 	i++;
@@ -680,13 +682,13 @@ sp_stroke_style_line_widget_new (void)
 			  (GtkAttachOptions)0, 0, 0);
 	
 	tb = NULL;
-	sp_stroke_radio_button(tb, "start_marker-none",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_NONE,
 			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
 			       hb, spw, "start_marker", "none");
-	sp_stroke_radio_button(tb, "start_marker-filled_arrow",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_FILLED_ARROW,
 			       INKSCAPE_GLADEDIR "/cap_round.xpm",
 			       hb, spw, "start_marker", "mTriangle");
-	sp_stroke_radio_button(tb, "start_marker-hollow_arrow",
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_HOLLOW_ARROW,
 			       INKSCAPE_GLADEDIR "/cap_square.xpm",
 			       hb, spw, "start_marker", "mArrow");
 	i++;
@@ -1308,11 +1310,11 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active)
 {
   GtkWidget *tb;
   
-  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "marker-none"));
+  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_NONE));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "marker-triangle"));
+  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_FILLED_ARROW));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "marker-arrow"));
+  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_HOLLOW_ARROW));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
                                                                                                                                         

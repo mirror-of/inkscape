@@ -37,6 +37,9 @@
 #define INKSCAPE_STOCK_CAP_BUTT        "cap_butt"
 #define INKSCAPE_STOCK_CAP_ROUND       "cap_round"
 #define INKSCAPE_STOCK_CAP_SQUARE      "cap_square"
+#define INKSCAPE_STOCK_START_NONE      "start_marker-none"
+#define INKSCAPE_STOCK_START_FILLED_ARROW      "start_marker-filled_arrow"
+#define INKSCAPE_STOCK_START_HOLLOW_ARROW      "start_marker-hollow_arrow"
 /*object properties*/
 #define INKSCAPE_STOCK_ROTATE_LEFT      "rotate_left"
 #define INKSCAPE_STOCK_SCALE_HOR      "scale_hor"
