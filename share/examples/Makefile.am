@@ -6,6 +6,7 @@ example_DATA = \
 	gradient.svg \
 	tiger.svgz \
 	markers.svg \
-	i18n.svg
+	i18n.svg \
+	stars.svgz
 
 EXTRA_DIST = $(example_DATA)
