@@ -219,9 +219,11 @@ sp_desktop_dialog_new (void)
 	spw_checkbutton(dialog, t, _("Horizontal lines"), "vertgrid", 0, row, 0, cb);
 	spw_checkbutton(dialog, t, _("Vertical lines"), "horizgrid", 1, row++, 0, cb);
 
+	/*
+	  Commenting out until Nathan implements the grids -- bryce
 	spw_checkbutton(dialog, t, _("Iso grid"), "isogrid", 0, row, 0, cb);
 	spw_checkbutton(dialog, t, _("Hex grid"), "hexgrid", 1, row++, 0, cb);
-
+	*/
 	cb = G_CALLBACK(sp_dtw_whatever_changed);
 
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
