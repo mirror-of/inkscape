@@ -170,10 +170,9 @@ inline Point operator*(Point const &v, translate const &t)
  * and the rows of the matrix correspond to columns (elements) of the "input").
  */
 class Matrix {
-private:
-	Matrix();
-
 public:
+	explicit Matrix() { }
+
 	Matrix(Matrix const &m) {
 		for ( int i = 0 ; i < 6 ; i++ ) {
 			_c[i] = m._c[i];
@@ -299,6 +298,7 @@ Matrix operator*(Matrix const &a, Matrix const &b);
 
 bool transform_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
 bool translate_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
+bool matrix_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
 
 void assert_close(Matrix const &a, Matrix const &b);
 

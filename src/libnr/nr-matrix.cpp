@@ -245,10 +245,15 @@ bool translate_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilo
         return NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (&m0, &m1, epsilon);
 }
 
+bool matrix_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon)
+{
+	return ( NR_MATRIX_DF_TEST_TRANSFORM_CLOSE(&m0, &m1, epsilon) &&
+		 NR_MATRIX_DF_TEST_TRANSLATE_CLOSE(&m0, &m1, epsilon) );
+}
+
 void assert_close(Matrix const &a, Matrix const &b)
 {
-	if (!( transform_equalp(a, b, 1e-3) &&
-	       translate_equalp(a, b, 1e-3) )) {
+	if (!matrix_equalp(a, b, 1e-3)) {
 		fprintf(stderr,
 			"a = | %g %g |,\tb = | %g %g |\n"
 			"    | %g %g | \t    | %g %g |\n"

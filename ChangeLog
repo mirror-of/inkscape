@@ -1,5 +1,9 @@
 2004-02-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp (matrix_equalp):
+	New function.
+	(assert_close): Use matrix_equalp.
+
 	* src/seltrans.h, src/seltrans.cpp (sp_sel_trans_transform):
 	Get rid of non-NR::Point version.  Make affine argument const.
 	Update callers.
