@@ -760,6 +760,8 @@ sp_file_save_as(gpointer object, gpointer data)
 void
 file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension *key)
 {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
     DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
     SPDocument *doc;
     try {
@@ -812,26 +814,50 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
                 }
             }
 
-            new_obj = SP_DOCUMENT_ROOT(in_doc)->appendChildRepr(newgroup);
+            if (desktop) {
+                // Add it to the current layer
+                new_obj = desktop->currentLayer()->appendChildRepr(newgroup);
+            } else {
+                // There's no desktop (command line run?)
+                // FIXME: For such cases we need a document:: method to return the current layer
+                new_obj = SP_DOCUMENT_ROOT(in_doc)->appendChildRepr(newgroup);
+            }
+
             sp_repr_unref(newgroup);
         } else {
             // just add one item
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
                     SPRepr *newitem = sp_repr_duplicate(SP_OBJECT_REPR(child));
-                    new_obj = SP_DOCUMENT_ROOT(in_doc)->appendChildRepr(newitem);
+
+                    if (desktop) {
+                        // Add it to the current layer
+                        new_obj = desktop->currentLayer()->appendChildRepr(newitem);
+                    } else {
+                        // There's no desktop (command line run?)
+                        // FIXME: For such cases we need a document:: method to return the current layer
+                        new_obj = SP_DOCUMENT_ROOT(in_doc)->appendChildRepr(newitem);
+                    }
+
                 }
             }
         }
 
         // select and move the imported item
         if (new_obj && SP_IS_ITEM(new_obj)) {
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             SPSelection *selection = SP_DT_SELECTION(desktop);
             selection->setItem(SP_ITEM(new_obj));
+
+            // to move the imported object, we must temporarily set the "transform pattern with
+            // object" option
+            {
+            int saved_pref = prefs_get_int_attribute("options.transform", "pattern", 1);
+            prefs_set_int_attribute ("options.transform", "pattern", 1);
             sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
             NR::Point m( sp_desktop_point(desktop) - selection->bounds().midpoint() );
             sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
+            prefs_set_int_attribute ("options.transform", "pattern", saved_pref);
+            }
         }
 
         sp_document_unref(doc);
