@@ -8,6 +8,9 @@ example_DATA = \
 	tiger.svgz \
 	markers.svg \
 	i18n.svg \
-	stars.svgz
+	stars.svgz \
+	text-on-path.svg \
+	flowsample.svg \
+	data_uri.svg
 
 EXTRA_DIST = $(example_DATA)
