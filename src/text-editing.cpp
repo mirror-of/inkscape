@@ -714,7 +714,7 @@ sp_te_get_cursor_coords (SPItem *item, gint i_position, NR::Point &p0, NR::Point
 
 static void sp_te_get_ustring_multiline(SPObject const *root, Glib::ustring *string)
 {
-    if (is_line_break_object(root))
+    if (!SP_IS_TEXT(root) && !SP_IS_TEXTPATH(root) && is_line_break_object(root))
         *string += '\n';
     for (SPObject const *child = root->firstChild() ; child ; child = SP_OBJECT_NEXT(child)) {
         if (SP_IS_STRING(child))
