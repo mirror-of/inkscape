@@ -56,7 +56,7 @@ static void sp_paint_selector_class_init (SPPaintSelectorClass *klass);
 static void sp_paint_selector_init (SPPaintSelector *slider);
 static void sp_paint_selector_destroy (GtkObject *object);
 
-static GtkWidget *sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *px, SPPaintSelectorMode mode, GtkRadioButton *last);
+static GtkWidget *sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *px, SPPaintSelectorMode mode, GtkRadioButton *last, GtkTooltips *tt, const gchar *tip);
 static void sp_paint_selector_style_button_toggled (GtkToggleButton *tb, SPPaintSelector *psel);
 
 static void sp_paint_selector_set_mode_empty (SPPaintSelector *psel);
@@ -139,7 +139,7 @@ sp_paint_selector_class_init (SPPaintSelectorClass *klass)
 static void
 sp_paint_selector_init (SPPaintSelector *psel)
 {
-	GtkWidget *w;
+	GtkTooltips *tt = gtk_tooltips_new();
 
 	psel->mode = (SPPaintSelectorMode)-1; // huh?  do you mean 0xff?
 
@@ -151,23 +151,18 @@ sp_paint_selector_init (SPPaintSelector *psel)
 
 	/* Buttons */
 	psel->none = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_NONE,
-							 SP_PAINT_SELECTOR_MODE_NONE, NULL);
+							 SP_PAINT_SELECTOR_MODE_NONE, NULL, tt, _("No paint"));
 	psel->solid = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_SOLID,
-							  SP_PAINT_SELECTOR_MODE_COLOR_RGB, GTK_RADIO_BUTTON (psel->none));
+							  SP_PAINT_SELECTOR_MODE_COLOR_RGB, GTK_RADIO_BUTTON (psel->none), tt, _("Flat color"));
 	psel->gradient = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_GRADIENT,
-							     SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR, GTK_RADIO_BUTTON (psel->solid));
+							     SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR, GTK_RADIO_BUTTON (psel->solid), tt, _("Linear gradient"));
 	psel->radial = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_RADIAL,
-							   SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL, GTK_RADIO_BUTTON (psel->gradient));
-
-	/* Horizontal separator */
-	w = gtk_hseparator_new ();
-	gtk_widget_show (w);
-	gtk_box_pack_start (GTK_BOX (psel), w, FALSE, FALSE, 0);
+							   SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL, GTK_RADIO_BUTTON (psel->gradient), tt, _("Radial gradient"));
 
 	/* Frame */
 	psel->frame = gtk_frame_new ("");
 	gtk_widget_show (psel->frame);
-	gtk_container_set_border_width (GTK_CONTAINER (psel->frame), 4);
+	gtk_container_set_border_width (GTK_CONTAINER (psel->frame), 0);
 	gtk_box_pack_start (GTK_BOX (psel), psel->frame, TRUE, TRUE, 0);
 
 	/* Last used color */
@@ -187,11 +182,12 @@ sp_paint_selector_destroy (GtkObject *object)
 }
 
 static GtkWidget *
-sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *pixmap, SPPaintSelectorMode mode, GtkRadioButton *last)
+sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *pixmap, SPPaintSelectorMode mode, GtkRadioButton *last, GtkTooltips *tt, const gchar *tip)
 {
 	GtkWidget *b, *w;
 
 	b = gtk_radio_button_new ((last) ? gtk_radio_button_group (last) : NULL);
+	gtk_tooltips_set_tip (tt, b, tip, NULL);
 	gtk_widget_show (b);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 	gtk_object_set_data (GTK_OBJECT (b), "mode", GUINT_TO_POINTER (mode));
@@ -739,7 +735,7 @@ sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mod
 */
 	}
 
-	gtk_frame_set_label (GTK_FRAME (psel->frame), _("Color paint"));
+	gtk_frame_set_label (GTK_FRAME (psel->frame), _("Flat color"));
 #ifdef SP_PS_VERBOSE
 	g_print ("Color req\n");
 #endif
