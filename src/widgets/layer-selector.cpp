@@ -19,20 +19,73 @@
 
 #include "desktop-handles.h"
 #include "selection.h"
+
 #include "widgets/layer-selector.h"
 #include "widgets/document-tree-model.h"
 #include "widgets/shrink-wrap-button.h"
+#include "widgets/icon.h"
+
 #include "util/list.h"
 #include "util/reverse-list.h"
 #include "util/filter-list.h"
-#include "widgets/icon.h"
+
 #include "sp-object.h"
+#include "sp-item.h"
 #include "desktop.h"
+
 #include "xml/repr.h"
 #include "xml/sp-repr-event-vector.h"
 
 namespace Inkscape {
 namespace Widgets {
+
+namespace {
+
+class AlternateIcons : public Gtk::HBox {
+public:
+    AlternateIcons(unsigned size, gchar const *a, gchar const *b)
+    : _a(NULL), _b(NULL)
+    {
+        if (a) {
+            _a = Gtk::manage(Glib::wrap(sp_icon_new(size, a)));
+            _a->set_no_show_all(true);
+            add(*_a);
+        }
+        if (b) {
+            _b = Gtk::manage(Glib::wrap(sp_icon_new(size, b)));
+            _b->set_no_show_all(true);
+            add(*_b);
+        }
+        setState(false);
+    }
+
+    bool state() const { return _state; }
+    void setState(bool state) {
+        _state = state;
+        if (_state) {
+            if (_a) {
+                _a->hide();
+            }
+            if (_b) {
+                _b->show();
+            }
+        } else {
+            if (_a) {
+                _a->show();
+            }
+            if (_b) {
+                _b->hide();
+            }
+        }
+    }
+
+private:
+    Gtk::Widget *_a; 
+    Gtk::Widget *_b;
+    bool _state;
+};
+
+}
 
 /** LayerSelector constructor.  Creates lock and hide buttons, 
  *  initalizes the layer dropdown selector with a label renderer,
@@ -42,17 +95,31 @@ namespace Widgets {
 LayerSelector::LayerSelector(SPDesktop *desktop)
 : _desktop(NULL)
 {
-    Gtk::Widget *icon;
+    AlternateIcons *label;
 
-    icon = Glib::wrap(sp_icon_new(11, "visible"));
-    _visibility_toggle.add(*icon);
+    label = Gtk::manage(new AlternateIcons(11, "visible", "hidden"));
+    _visibility_toggle.add(*label);
+    _visibility_toggle.signal_toggled().connect(
+        sigc::compose(
+            sigc::mem_fun(*label, &AlternateIcons::setState),
+            sigc::mem_fun(_visibility_toggle, &Gtk::ToggleButton::get_active)
+        )
+    );
+
     _visibility_toggle.set_relief(Gtk::RELIEF_NONE);
     shrink_wrap_button(_visibility_toggle);
     _tooltips.set_tip(_visibility_toggle, _("Toggle current layer visibility"));
     pack_start(_visibility_toggle, Gtk::PACK_EXPAND_PADDING);
 
-    icon = Glib::wrap(sp_icon_new(11, "width_height_lock"));
-    _lock_toggle.add(*icon);
+    label = Gtk::manage(new AlternateIcons(11, "blank", "width_height_lock"));
+    _lock_toggle.add(*label);
+    _lock_toggle.signal_toggled().connect(
+        sigc::compose(
+            sigc::mem_fun(*label, &AlternateIcons::setState),
+            sigc::mem_fun(_lock_toggle, &Gtk::ToggleButton::get_active)
+        )
+    );
+
     _lock_toggle.set_relief(Gtk::RELIEF_NONE);
     shrink_wrap_button(_lock_toggle);
     _tooltips.set_tip(_lock_toggle, _("Lock or unlock current layer"));
@@ -163,9 +230,9 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         _layer_model->erase(first_row);
     }
 
-    if (layer) {
-        SPObject *root(_desktop->currentRoot());
+    SPObject *root(_desktop->currentRoot());
 
+    if (layer) {
         _buildEntries(0, cons(*root,
             reverse_list<SPObject::ParentIterator>(layer, root)
         ));
@@ -180,6 +247,20 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         if ( row != _layer_model->children().end() ) {
             _selector.set_active(row);
         }
+    }
+
+    if ( !layer || layer == root ) {
+        _visibility_toggle.set_sensitive(false);
+        _visibility_toggle.set_active(false);
+        _lock_toggle.set_sensitive(false);
+        _lock_toggle.set_active(false);
+    } else {
+        _visibility_toggle.set_sensitive(true);
+        _visibility_toggle.set_active(false);
+        //_visibility_toggle.set_active(( SP_IS_ITEM(layer) ? !SP_ITEM(layer)->isVisible() : false ));
+        _lock_toggle.set_sensitive(true);
+        _lock_toggle.set_active(false);
+        //_lock_toggle.set_active(( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false ));
     }
 
     _selection_changed_connection.unblock();
@@ -407,7 +488,11 @@ void LayerSelector::_prepareLabelRenderer(
         if ( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ||
              layer == root && SP_OBJECT_PARENT(object) == root
         ) {
-            format="<small>%*s%s</small>";
+            if ( object == layer && object != root ) {
+                format="<small>%*s<b>%s</b></small>";
+            } else {
+                format="<small>%*s%s</small>";
+            }
         } else {
             format="<small>%*s<small>%s</small></small>";
         }
@@ -427,11 +512,10 @@ void LayerSelector::_prepareLabelRenderer(
         _label_renderer.property_markup() = text;
         g_free(text);
     } else {
-        _label_renderer.property_markup() = "<small></small>";
+        _label_renderer.property_markup() = "<small> </small>";
     }
 
     _label_renderer.property_ypad() = 1;
-    _label_renderer.property_yalign() = 0.25;
     _label_renderer.property_style() = ( label_defaulted ?
                                          Pango::STYLE_ITALIC :
                                          Pango::STYLE_NORMAL );
