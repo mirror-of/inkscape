@@ -28,9 +28,6 @@
 #include <libnr/nr-values.h>
 #include "nr-type-primitives.h"
 #include "nr-type-ft2.h"
-#ifdef WITH_GNOME_PRINT
-#include "nr-type-gnome.h"
-#endif
 #ifdef WITH_XFT
 #include "nr-type-xft.h"
 #endif
@@ -475,10 +472,6 @@ nr_type_directory_build (void)
 
 #ifdef WITH_XFT
 	nr_type_read_xft_list ();
-#endif
-
-#ifdef WITH_GNOME_PRINT
-	nr_type_read_gnome_list ();
 #endif
 
 	if (!families) {

@@ -1,3 +1,10 @@
+2004-05-23  MenTaLguY  <mental@rydia.net>
+
+	* src/libnrtype/Makefile_insert, src/libnrtype/nr-type-gnome.cpp,
+	  src/libnrtype/nr-type-gnome.h, src/libnrtype/nr-type-dictionary:
+
+	  removed gnome-print libnrtype backend
+
 2004-05-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/xml/repr.h, src/xml/repr-util.cpp:

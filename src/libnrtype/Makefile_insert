@@ -5,12 +5,6 @@ libnrtype/all: libnrtype/libnrtype.a
 libnrtype/clean:
 	rm -f libnrtype/libnrtype.a $(libnrtype_libnrtype_a_OBJECTS)
 
-if USE_GNOME_PRINT
-libnrtype_gnome_print_sources =	\
-	libnrtype/nr-type-gnome.cpp	\
-	libnrtype/nr-type-gnome.h
-endif
-
 if USE_XFT
 libnrtype_xft_sources =	\
 	libnrtype/nr-type-xft.cpp	\
@@ -61,5 +55,4 @@ libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/nr-typeface.cpp	\
 	libnrtype/nr-typeface.h	\
 	$(libnrtype_win32_sources)	\
-	$(libnrtype_gnome_print_sources)	\
 	$(libnrtype_xft_sources)
