@@ -712,6 +712,58 @@ sp_text_adjust_fontsize_recursive (SPItem *item, double ex)
     }
 }
 
+void
+sp_text_adjust_coords_recursive (SPItem *item, NR::Matrix const &m, double ex)
+{
+    div_flow_src *contents = NULL; 
+    SPSVGLength *x = NULL, *y = NULL;
+    // if someone knows how to make this less ugly, you're welcome:
+    if (SP_IS_TSPAN(item)) {
+        contents = &(SP_TSPAN(item)->contents);
+        x = &(SP_TSPAN(item)->x);
+        y = &(SP_TSPAN(item)->y);
+    } else if (SP_IS_TEXT(item)) {
+        contents = &(SP_TEXT(item)->contents);
+        x = &(SP_TEXT(item)->x);
+        y = &(SP_TEXT(item)->y);
+    }
+
+    if (contents) {
+        if (!(SP_IS_TSPAN(item) && SP_TSPAN(item)->role == SP_TSPAN_ROLE_LINE)) {
+            // Do not touch x/y for line tspans, because they will get updated automatically from parent
+
+            /* Recalculate x/y lists */
+            contents->TransformXY (m, SP_IS_TEXT(item));
+            if ( contents->nb_x > 0 ) {
+                *x = contents->x_s[0];
+                x->set = 1;
+            } else {
+                x->set = 0;
+            }
+            if ( contents->nb_y > 0 ) {
+                *y = contents->y_s[0];
+                y->set = 1;
+            } else {
+                y->set = 0;
+            }
+        }
+
+        /* Recalculate dx/dy lists */
+        if (sp_repr_attr(SP_OBJECT_REPR(item), "dx") || sp_repr_attr(SP_OBJECT_REPR(item), "dy")) {
+          // FIXME: The entire chain of ancestors share the same dx/dy lists, but we only want to
+          // scale it once, so we do it for the element that has the actual attributes. This is
+          // STILL not 100% correct because the actual list may be the result of a combination of
+          // several dx/dy attrs in an ancestor chain.
+            contents->ScaleDXDY (ex);
+        }
+    }
+
+    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+        if (SP_IS_ITEM(o))
+            sp_text_adjust_coords_recursive (SP_ITEM(o), m, ex);
+    }
+}
+
 static NR::Matrix
 sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 {
@@ -749,22 +801,8 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
     ret[2] /= ex;
     ret[3] /= ex;
 
-    /* Recalculate x/y lists */
-    text->contents.TransformXY (xform * ret.inverse());
-    if ( text->contents.nb_x > 0 ) {
-        text->x=text->contents.x_s[0];
-        text->x.set=1;
-    } else {
-        text->x.set=0;
-    }
-    if ( text->contents.nb_y > 0 ) {
-        text->y=text->contents.y_s[0];
-        text->y.set=1;
-    } else {
-        text->y.set=0;
-    }
-
-    text->contents.ScaleDXDY (ex);
+    // Adjust x/y, dx/dy
+    sp_text_adjust_coords_recursive (item, xform * ret.inverse(), ex);
 
     // Adjust font size
     sp_text_adjust_fontsize_recursive (item, ex);
