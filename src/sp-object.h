@@ -144,6 +144,7 @@ struct SPObject : public GObject {
 	SPDocument *document; /* Document we are part of */
 	SPObject *parent; /* Our parent (only one allowed) */
 	SPObject *children; /* Our children */
+	SPObject *_last_child; /* Remembered last child */
 	SPObject *next; /* Next object in linked list */
 	SPRepr *repr; /* Our xml representation */
 	gchar *id; /* Our very own unique id */
@@ -177,8 +178,10 @@ struct SPObject : public GObject {
 
 	bool hasChildren() const { return ( children != NULL ); }
 
-	SPObject const *firstChild() const { return children; }
 	SPObject *firstChild() { return children; }
+	SPObject const *firstChild() const { return children; }
+	SPObject *lastChild() { return _last_child; }
+	SPObject const *lastChild() const { return _last_child; }
 
 	SPObject *appendChildRepr(SPRepr *repr);
 
@@ -466,13 +469,14 @@ struct SPObjectClass {
  * Detach returns next object, NULL on error
  */
 
-void sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next);
-void sp_object_reorder(SPObject *object, SPObject *next);
+void sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *prev);
+void sp_object_reorder(SPObject *object, SPObject *prev);
 void sp_object_detach (SPObject *parent, SPObject *object);
 void sp_object_detach_unref (SPObject *parent, SPObject *object);
 
-SPObject *sp_object_first_child(SPObject *parent);
-SPObject *sp_object_last_child(SPObject *parent);
+inline SPObject *sp_object_first_child(SPObject *parent) {
+	return parent->firstChild();
+}
 SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr);
 
 void sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr, unsigned int cloned);

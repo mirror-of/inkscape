@@ -153,7 +153,7 @@ sp_object_init (SPObject * object)
 	object->hrefcount = 0;
 	object->_total_hrefcount = 0;
 	object->document = NULL;
-	object->children = NULL;
+	object->children = object->_last_child = NULL;
 	object->parent = object->next = NULL;
 	object->repr = NULL;
 	object->id = NULL;
@@ -423,65 +423,72 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
  */
 
 void
-sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next)
+sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *prev)
 {
 	g_return_if_fail (parent != NULL);
 	g_return_if_fail (SP_IS_OBJECT (parent));
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_OBJECT (object));
-	g_return_if_fail (!next || SP_IS_OBJECT (next));
+	g_return_if_fail (!prev || SP_IS_OBJECT (prev));
+	g_return_if_fail (!prev || prev->parent == parent);
 	g_return_if_fail (!object->parent);
-	g_return_if_fail (!object->next);
-
-	SPObject **ref;
-	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
-		if ( *ref == next ) {
-			break;
-		}
-	}
-	if ( *ref != next ) {
-		g_critical("sp_object_attach_reref: next is not a child of parent");
-	}
 
 	sp_object_ref (object, parent);
 	g_object_unref (G_OBJECT (object));
 	object->parent = parent;
 	parent->_updateTotalHRefCount(object->_total_hrefcount);
 
+	SPObject *next;
+	if (prev) {
+		next = prev->next;
+		prev->next = object;
+	} else {
+		next = parent->children;
+		parent->children = object;
+	}
 	object->next = next;
-	*ref = object;
+	if (!next) {
+		parent->_last_child = object;
+	}
 }
 
-void sp_object_reorder(SPObject *object, SPObject *next)
-{
+void sp_object_reorder(SPObject *object, SPObject *prev) {
 	g_return_if_fail(object != NULL);
 	g_return_if_fail(SP_IS_OBJECT(object));
 	g_return_if_fail(object->parent != NULL);
-	g_return_if_fail(object != next);
-	g_return_if_fail(!next || SP_IS_OBJECT(next));
-	g_return_if_fail(!next || next->parent == object->parent);
+	g_return_if_fail(object != prev);
+	g_return_if_fail(!prev || SP_IS_OBJECT(prev));
+	g_return_if_fail(!prev || prev->parent == object->parent);
 
-	SPObject *parent = object->parent;
-	SPObject **ref;
-	SPObject **old_ref = NULL;
-	SPObject **new_ref = NULL;
-	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
-		if ( *ref == object ) {
-			old_ref = ref;
-		}
-		if ( *ref == next ) {
-			new_ref = ref;
-		}
-	}
-	if ( !new_ref && !next ) {
-		new_ref = ref;
-	}
-	g_assert(old_ref != NULL);
-	g_assert(new_ref != NULL);
+	SPObject * const parent=object->parent;
 
-	*old_ref = object->next;
-	object->next = *new_ref;
-	*new_ref = object;
+	SPObject *old_prev=NULL;
+	for ( SPObject *child = parent->children ; child && child != object ;
+	      child = child->next )
+	{
+		old_prev = child;
+	}
+
+	SPObject *next=object->next;
+	if (old_prev) {
+		old_prev->next = next;
+	} else {
+		parent->children = next;
+	}
+	if (!next) {
+		parent->_last_child = old_prev;
+	}
+	if (prev) {
+		next = prev->next;
+		prev->next = object;
+	} else {
+		next = parent->children;
+		parent->children = object;
+	}
+	object->next = next;
+	if (!next) {
+		parent->_last_child = object;
+	}
 }
 
 void sp_object_detach (SPObject *parent, SPObject *object) {
@@ -491,15 +498,23 @@ void sp_object_detach (SPObject *parent, SPObject *object) {
 	g_return_if_fail (SP_IS_OBJECT (object));
 	g_return_if_fail (object->parent == parent);
 
-	SPObject **ref;
-	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
-		if ( *ref == object ) {
-			break;
-		}
+	SPObject *prev=NULL;
+	for ( SPObject *child = parent->children ; child && child != object ;
+	      child = child->next )
+	{
+		prev = child;
 	}
-	g_assert(*ref == object);
 
-	*ref = object->next;
+	SPObject *next=object->next;
+	if (prev) {
+		prev->next = next;
+	} else {
+		parent->children = next;
+	}
+	if (!next) {
+		parent->_last_child = prev;
+	}
+
 	object->next = NULL;
 	object->parent = NULL;
 
@@ -517,21 +532,6 @@ void sp_object_detach_unref (SPObject *parent, SPObject *object)
 
 	sp_object_detach(parent, object);
 	sp_object_unref(object, parent);
-}
-
-SPObject *sp_object_first_child(SPObject *parent)
-{
-	return parent->children;
-}
-
-SPObject *sp_object_last_child(SPObject *parent)
-{
-	if (!sp_object_first_child(parent))
-		return NULL;
-	SPObject *child;
-	for (child = sp_object_first_child(parent); SP_OBJECT_NEXT (child); child = SP_OBJECT_NEXT (child)) 
-		;
-	return child;
 }
 
 SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr)
@@ -557,14 +557,7 @@ static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * r
 	}
 	SPObject *ochild = SP_OBJECT(g_object_new(type, 0));
 	SPObject *prev = ref ? sp_object_get_child_by_repr(object, ref) : NULL;
-	if (prev) {
-		sp_object_attach_reref(object, ochild, SP_OBJECT_NEXT(prev));
-	} else {
-		if (ref) {
-			g_critical("Unable to find previous child; adding new child out of order");
-		}
-		sp_object_attach_reref(object, ochild, sp_object_first_child(object));
-	}
+	sp_object_attach_reref(object, ochild, prev);
 
 	sp_object_invoke_build(ochild, object->document, child, SP_OBJECT_IS_CLONED(object));
 }
@@ -583,14 +576,7 @@ static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr *
 	SPObject *ochild = sp_object_get_child_by_repr(object, child);
 	g_return_if_fail(ochild != NULL);
 	SPObject *prev = new_ref ? sp_object_get_child_by_repr(object, new_ref) : NULL;
-	if (prev) {
-		sp_object_reorder(ochild, SP_OBJECT_NEXT(prev));
-	} else {
-		if (new_ref) {
-			g_critical("Unable to find new previous child; reordering child to start of list");
-		}
-		sp_object_reorder(ochild, sp_object_first_child(object));
-	}
+	sp_object_reorder(ochild, prev);
 }
 
 static void sp_object_release(SPObject *object)
@@ -621,7 +607,7 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 			continue;
 		}
 		SPObject *child = SP_OBJECT(g_object_new (type, 0));
-		sp_object_attach_reref (object, child, NULL);
+		sp_object_attach_reref (object, child, object->lastChild());
 		sp_object_invoke_build (child, document, rchild, SP_OBJECT_IS_CLONED (object));
 	}
 }

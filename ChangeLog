@@ -1,3 +1,8 @@
+2004-01-28  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-object.h, src/sp-object.cpp:
+      efficiency fixes which should be helpful when loading large documents
+
 2005-01-29  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/file.h, src/file.cpp, src/inkscape.cpp, src/sp-image.cpp,

@@ -821,7 +821,7 @@ take_style_from_item (SPItem *item)
         (SP_IS_TEXT (item) && SP_OBJECT(item)->children && SP_OBJECT(item)->children->next == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its first child
-        SPCSSAttr *temp = sp_css_attr_from_style (sp_object_last_child (item), SP_STYLE_FLAG_IFSET);
+        SPCSSAttr *temp = sp_css_attr_from_style (item->lastChild(), SP_STYLE_FLAG_IFSET);
         sp_repr_css_merge (css, temp);
         sp_repr_css_attr_unref (temp);
     }
