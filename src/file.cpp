@@ -533,7 +533,7 @@ file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extensi
             }
 
             sp_document_add_repr (in_doc, newgroup);
-            new_obj = sp_document_lookup_id (in_doc, sp_repr_attr(newgroup, "id"));
+            new_obj = in_doc->getObjectByRepr(newgroup);
             sp_repr_unref (newgroup);
         } else {
             // just add one item
@@ -541,7 +541,7 @@ file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extensi
                 if (SP_IS_ITEM(child)) {
                     SPRepr *newitem = sp_repr_duplicate(SP_OBJECT_REPR(child));
                     sp_document_add_repr (in_doc, newitem);
-                    new_obj = sp_document_lookup_id (in_doc, sp_repr_attr(newitem, "id"));
+                    new_obj = in_doc->getObjectByRepr(newitem);
                 }
             }
         }

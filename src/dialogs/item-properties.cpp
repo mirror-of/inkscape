@@ -532,7 +532,7 @@ sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw)
         gtk_label_set_text (GTK_LABEL (w), _("ID"));
     } else if (!*id || !isalnum (*id)) {
         gtk_label_set_text (GTK_LABEL (w), _("ID invalid"));
-    } else if (sp_document_lookup_id (SP_WIDGET_DOCUMENT (spw), id)) {
+    } else if (SP_WIDGET_DOCUMENT (spw)->getObjectById(id)) {
         gtk_label_set_text (GTK_LABEL (w), _("ID exists"));
     } else {
         gtk_label_set_text (GTK_LABEL (w), _("ID"));

@@ -174,7 +174,7 @@ sp_mask_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	((SPObjectClass *) (parent_class))->child_added (object, child, ref);
 
 	/* Show new object */
-	SPObject *ochild = sp_document_lookup_id (SP_OBJECT_DOCUMENT (object), sp_repr_attr (child, "id"));
+	SPObject *ochild = SP_OBJECT_DOCUMENT (object)->getObjectByRepr(child);
 	if (SP_IS_ITEM (ochild)) {
 		SPMask *cp = SP_MASK (object);
 		for (SPMaskView *v = cp->display; v != NULL; v = v->next) {

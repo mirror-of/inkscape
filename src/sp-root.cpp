@@ -361,7 +361,7 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
 	gchar const *id = sp_repr_attr(child, "id");
-	SPObject *co = sp_document_lookup_id(object->document, id);
+	SPObject *co = object->document->getObjectById(id);
 	g_assert (co != NULL);
 
 	if (SP_IS_DEFS (co)) {

@@ -632,7 +632,7 @@ sp_use_unlink(SPUse *use)
     sp_repr_unref(repr);
 
     // retrieve the SPItem of the resulting repr
-    SPObject *unlinked = sp_document_lookup_id(document, sp_repr_attr(copy, "id"));
+    SPObject *unlinked = document->getObjectByRepr(copy);
     // establish the succession and let go of our object
     SP_OBJECT(use)->setSuccessor(unlinked);
     sp_object_unref(SP_OBJECT(use), NULL);

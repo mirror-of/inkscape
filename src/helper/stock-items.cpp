@@ -70,12 +70,12 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
     }
     if (!edoc && doc) {
         /* Get the marker we want */
-        SPObject *object = sp_document_lookup_id(doc, name);
+        SPObject *object = doc->getObjectById(name);
         if (object && SP_IS_MARKER(object)) {
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             SPRepr *mark_repr = sp_repr_duplicate(SP_OBJECT_REPR(object));
             sp_repr_add_child (SP_OBJECT_REPR(defs), mark_repr, NULL);
-            SPObject *cloned_item = sp_document_lookup_id(current_doc, sp_repr_attr(mark_repr,"id"));
+            SPObject *cloned_item = current_doc->getObjectByRepr(mark_repr);
             sp_repr_unref(mark_repr);
             return cloned_item;
         }
@@ -113,7 +113,7 @@ sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
     }
     if (!edoc && doc) {
         /* Get the pattern we want */
-        SPObject *object = sp_document_lookup_id(doc, name);
+        SPObject *object = doc->getObjectById(name);
         if (object && SP_IS_PATTERN(object)) {
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             SPRepr *pat_repr = sp_repr_duplicate(SP_OBJECT_REPR(object));
@@ -155,7 +155,7 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
     }
     if (!edoc && doc) {
         /* Get the gradient we want */
-        SPObject *object = sp_document_lookup_id(doc, name);
+        SPObject *object = doc->getObjectById(name);
         if (object && SP_IS_GRADIENT(object)) {
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             SPRepr *pat_repr = sp_repr_duplicate(SP_OBJECT_REPR(object));
@@ -260,7 +260,7 @@ get_stock_item(gchar const *urn)
     else {
          SPDesktop *desktop = inkscape_active_desktop();
          SPDocument *doc = SP_DT_DOCUMENT(desktop);
-         SPObject *object =  sp_document_lookup_id (doc, urn);
+         SPObject *object =  doc->getObjectById(urn);
 
          return object;
     }

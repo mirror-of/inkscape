@@ -418,7 +418,7 @@ sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
 	id = sp_repr_attr (child, "id");
-	no = sp_document_lookup_id (object->document, id);
+	no = object->document->getObjectById(id);
 	g_assert (SP_IS_OBJECT (no));
 
 	if (SP_IS_GUIDE (no)) {

@@ -375,7 +375,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
         offset->sourceRepr = NULL;
         SPObject *refobj;
         refobj =
-          sp_document_lookup_id (SP_OBJECT (offset)->document,
+          SP_OBJECT (offset)->document->getObjectById(
                                  offset->sourceObject);
         if (refobj)
           offset->sourceRepr = refobj->repr;
@@ -1153,7 +1153,7 @@ sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
     // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
     SPObject *refobj;
     refobj =
-      sp_document_lookup_id (SP_OBJECT (offset)->document,
+      SP_OBJECT (offset)->document->getObjectById(
                              offset->sourceObject);
     SPItem *item = SP_ITEM (refobj);
     
@@ -1282,7 +1282,7 @@ void   refresh_offset_source(SPOffset* offset)
   
   // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
   SPObject *refobj;
-  refobj = sp_document_lookup_id (SP_OBJECT (offset)->document,
+  refobj = SP_OBJECT (offset)->document->getObjectById(
                                   offset->sourceObject);
   if ( refobj == NULL ) return;
   

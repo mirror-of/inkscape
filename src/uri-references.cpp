@@ -74,7 +74,7 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
 	_uri = new URI(uri);
 
 	_connection.disconnect();
-	_setObject(sp_document_lookup_id(document, id));
+	_setObject(document->getObjectById(id));
 	_connection = sp_document_id_changed_connect(document, id, SigC::slot(*this, &URIReference::_setObject));
 
 	g_free(id);
@@ -161,7 +161,7 @@ sp_uri_reference_resolve (SPDocument *document, const gchar *uri)
 	if (!id) return NULL;
 
 	SPObject *ref;
-	ref = sp_document_lookup_id (document, id);
+	ref = document->getObjectById(id);
 	g_free(id);
 	return ref;
 }

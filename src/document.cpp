@@ -602,18 +602,17 @@ sp_document_id_changed_connect(SPDocument *doc, const gchar *id,
 	return signal->connect(slot);
 }
 
-SPObject *
-sp_document_lookup_id (SPDocument *doc, const gchar *id)
+SPObject *SPDocument::getObjectById(const gchar *id)
 {
-	GQuark idq;
-
-	g_return_val_if_fail (doc != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (doc), NULL);
 	g_return_val_if_fail (id != NULL, NULL);
 
-	idq = g_quark_from_string(id);
+	GQuark idq = g_quark_from_string(id);
+	return (SPObject*)g_hash_table_lookup (this->priv->iddef, GINT_TO_POINTER(idq));
+}
 
-	return (SPObject*)g_hash_table_lookup (doc->priv->iddef, GINT_TO_POINTER(idq));
+SPObject *SPDocument::getObjectByRepr(SPRepr *repr)
+{
+	return getObjectById(sp_repr_attr(repr, "id"));
 }
 
 /* Object modification root handler */
@@ -733,7 +732,7 @@ sp_document_add_repr (SPDocument *document, SPRepr *repr)
 		sp_repr_append_child (SP_OBJECT_REPR (SP_DOCUMENT_DEFS(document)), repr);
 	}
 
-	return sp_document_lookup_id (document, sp_repr_attr (repr, "id"));
+	return document->getObjectByRepr(repr);
 }
 
 static int

@@ -337,7 +337,7 @@ SPObject *SPSelection::_objectForRepr(SPRepr *repr) const {
     g_return_val_if_fail(repr != NULL, NULL);
     gchar const *id = sp_repr_attr(repr, "id");
     g_return_val_if_fail(id != NULL, NULL);
-    SPObject *object=sp_document_lookup_id(SP_DT_DOCUMENT(_desktop), id);
+    SPObject *object=SP_DT_DOCUMENT(_desktop)->getObjectById(id);
     g_return_val_if_fail(object != NULL, NULL);
     return object;
 }

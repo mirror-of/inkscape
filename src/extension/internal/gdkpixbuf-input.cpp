@@ -55,7 +55,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             sp_repr_set_double (pat, "height", gdk_pixbuf_get_height (pb));
             sp_repr_add_child (SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc)), pat, NULL);
             const gchar *pat_id = sp_repr_attr(pat, "id");
-            SPObject *pat_object = sp_document_lookup_id (doc, pat_id);
+            SPObject *pat_object = doc->getObjectById(pat_id);
 
             SPRepr *im = sp_repr_new ("image");
             sp_repr_set_attr (im, "xlink:href", relname);

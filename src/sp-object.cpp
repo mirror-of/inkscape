@@ -612,7 +612,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 		if (!SP_OBJECT_IS_CLONED (object)) {
 			g_assert (value != NULL);
 			g_assert (strcmp ((const char*)value, object->id));
-			g_assert (!sp_document_lookup_id (object->document, (const char*)value));
+			g_assert (!object->document->getObjectById((const char*)value));
 			sp_document_def_id (object->document, object->id, NULL);
 			g_free (object->id);
 			object->id = g_strdup ((const char*)value);
@@ -691,7 +691,7 @@ sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval,
 		if (!newval) {
 			return FALSE;
 		}
-		gpointer defid = sp_document_lookup_id (object->document, newval);
+		gpointer defid = object->document->getObjectById(newval);
 		if (defid == object) {
 			return TRUE;
 		}
@@ -1019,7 +1019,7 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 	gchar *realid = NULL;
 
 	if (id != NULL) {
-		if (sp_document_lookup_id (object->document, id) == NULL) {
+		if (object->document->getObjectById(id) == NULL) {
 			realid = g_strdup (id);
 			g_assert (realid != NULL);
 		}
@@ -1027,7 +1027,7 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 
 	while (realid == NULL) {
 		g_snprintf (b, len, "%s%d", name, count);
-		if (sp_document_lookup_id (object->document, b) == NULL) {
+		if (object->document->getObjectById(b) == NULL) {
 			realid = g_strdup (b);
 			g_assert (realid != NULL);
 		} else {

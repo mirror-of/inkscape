@@ -449,7 +449,7 @@ pattern_chain (SPPattern *pattern)
 
 	sp_repr_add_child (defsrepr, repr, NULL);
 	const gchar *child_id = sp_repr_attr(repr, "id");
-	SPObject *child = sp_document_lookup_id (document, child_id);
+	SPObject *child = document->getObjectById(child_id);
 	g_assert (SP_IS_PATTERN (child));
 
 	return SP_PATTERN (child);
@@ -478,7 +478,7 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 
 	sp_repr_add_child (defsrepr, repr, NULL);
 	const gchar *pat_id = sp_repr_attr (repr, "id");
-	SPObject *pat_object = sp_document_lookup_id (document, pat_id);
+	SPObject *pat_object = document->getObjectById(pat_id);
 
 	for (GSList *i = reprs; i != NULL; i = i->next) {
 		SPRepr *dup = sp_repr_duplicate (((SPRepr *) i->data));

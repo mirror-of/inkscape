@@ -682,7 +682,7 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 		sp_repr_add_child (SP_OBJECT_REPR(gradient), new_stop_repr, SP_OBJECT_REPR(sp_prev_stop(stop, gradient)));
 	}
 
-	SPStop *newstop = (SPStop *) sp_document_lookup_id (SP_OBJECT_DOCUMENT(gradient), sp_repr_attr (new_stop_repr, "id"));
+	SPStop *newstop = (SPStop *) SP_OBJECT_DOCUMENT(gradient)->getObjectByRepr(new_stop_repr);
    
 	newstop->offset = (stop->offset + next->offset) * 0.5 ;
 

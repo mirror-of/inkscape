@@ -714,7 +714,7 @@ sp_selected_path_outline ()
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
-            SPItem *newitem = (SPItem *) sp_document_lookup_id (SP_DT_DOCUMENT (desktop), sp_repr_attr (repr, "id"));
+            SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
             sp_item_write_transform (newitem, repr, &i2root);
 
             selection->addRepr (repr);
@@ -1349,7 +1349,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
-            SPItem *newitem = (SPItem *) sp_document_lookup_id (SP_DT_DOCUMENT (desktop), sp_repr_attr (repr, "id"));
+            SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
             sp_item_write_transform (newitem, repr, &i2root);
 
             selection->addRepr (repr);

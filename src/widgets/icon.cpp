@@ -373,7 +373,7 @@ sp_icon_image_load_svg ( const gchar *name,
 
     if (!edoc && doc) {
         SPObject *object;
-        object = sp_document_lookup_id (doc, name);
+        object = doc->getObjectById(name);
         if (object && SP_IS_ITEM (object)) {
             /* Find bbox in document */
 	    NR::Matrix const i2doc(sp_item_i2doc_affine(SP_ITEM(object)));

@@ -823,7 +823,7 @@ GtkWidget *
 sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, SPDocument *sandbox, gchar *menu_id)
 {
     // the object of the marker
-    const SPObject *marker = sp_document_lookup_id (source, mname);
+    const SPObject *marker = source->getObjectById(mname);
     if (marker == NULL)
         return NULL;
 
@@ -832,8 +832,8 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     sp_repr_set_attr (mrepr, "id", "sample");
 
     // replace the old sample in the sandbox by the new one
-    SPRepr *defsrepr = SP_OBJECT_REPR (sp_document_lookup_id (sandbox, "defs"));
-    SPObject *oldmarker = sp_document_lookup_id (sandbox, "sample");
+    SPRepr *defsrepr = SP_OBJECT_REPR (sandbox->getObjectById("defs"));
+    SPObject *oldmarker = sandbox->getObjectById("sample");
     if (oldmarker)
         oldmarker->deleteObject(false);
     sp_repr_append_child (defsrepr, mrepr);
@@ -853,7 +853,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     NRArenaItem *root = sp_item_invoke_show( SP_ITEM(SP_DOCUMENT_ROOT (sandbox)), arena, visionkey, SP_ITEM_SHOW_PRINT );
 
     // object to render; note that the id is the same as that of the menu we're building
-    SPObject *object = sp_document_lookup_id (sandbox, menu_id);
+    SPObject *object = sandbox->getObjectById(menu_id);
     sp_document_root (sandbox)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
     if (object == NULL || !SP_IS_ITEM(object))
@@ -2370,7 +2370,7 @@ ink_extract_marker_name(gchar const *n)
 
     SPDesktop *desktop = inkscape_active_desktop();
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
-    SPObject *marker = sp_document_lookup_id (doc, b);
+    SPObject *marker = doc->getObjectById(b);
     return marker;
 }
 

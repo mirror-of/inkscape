@@ -80,7 +80,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		repr = sp_repr_new ("linearGradient");
 		sp_repr_set_attr(repr, "inkscape:collect", "always");
 		sp_repr_add_child (SP_OBJECT_REPR (defs), repr, NULL);
-		spnew = (SPGradient *) sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));
+		spnew = (SPGradient *) doc->getObjectByRepr(repr);
 		g_assert (gr != NULL);
 		g_assert (SP_IS_GRADIENT (gr));
 		g_print ("GVECTORNORM: Created new vector gradient %s\n", SP_OBJECT_ID (spnew));
@@ -345,7 +345,7 @@ sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector)
 	sp_repr_unref (repr);
 	/* fixme: This does not look like nice */
 	SPGradient *gr;
-	gr = (SPGradient *) sp_document_lookup_id (document, sp_repr_attr (repr, "id"));
+	gr = (SPGradient *) document->getObjectByRepr(repr);
 	g_assert (gr != NULL);
 	g_assert (SP_IS_GRADIENT (gr));
 	/* fixme: Maybe add extra sanity check here */
@@ -416,7 +416,7 @@ sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vec
 	sp_repr_unref (repr);
 	/* fixme: This does not look like nice */
 	SPGradient *gr;
-	gr = (SPGradient *) sp_document_lookup_id (document, sp_repr_attr (repr, "id"));
+	gr = (SPGradient *) document->getObjectByRepr(repr);
 	g_assert (gr != NULL);
 	g_assert (SP_IS_GRADIENT (gr));
 	/* fixme: Maybe add extra sanity check here */
@@ -692,7 +692,7 @@ sp_document_default_gradient_vector (SPDocument *document)
 
 	/* fixme: This does not look like nice */
 	SPGradient *gr;
-	gr = (SPGradient *) sp_document_lookup_id (document, sp_repr_attr (repr, "id"));
+	gr = (SPGradient *) document->getObjectByRepr(repr);
 	g_assert (gr != NULL);
 	g_assert (SP_IS_GRADIENT (gr));
 	/* fixme: Maybe add extra sanity check here */

@@ -211,7 +211,7 @@ sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 
 	SPRepr *repr = sp_repr_new ("a");
 	sp_repr_add_child (SP_OBJECT_REPR (SP_OBJECT_PARENT (item)), repr, SP_OBJECT_REPR (item));
-	SPObject *object = sp_document_lookup_id (SP_OBJECT_DOCUMENT (item), sp_repr_attr (repr, "id"));
+	SPObject *object = SP_OBJECT_DOCUMENT (item)->getObjectByRepr(repr);
 	g_return_if_fail (SP_IS_ANCHOR (object));
 
 	const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");

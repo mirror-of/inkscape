@@ -547,7 +547,7 @@ void sp_selection_lower_to_bottom()
         gint minpos;
         SPObject *pp, *pc;
         SPRepr *repr = (SPRepr *) l->data;
-        pp = sp_document_lookup_id(document, sp_repr_attr(sp_repr_parent(repr), "id"));
+        pp = document->getObjectByRepr(sp_repr_parent(repr));
         minpos = 0;
         g_assert(SP_IS_GROUP(pp));
         pc = sp_object_first_child(pp);
@@ -725,7 +725,7 @@ void sp_selection_paste(bool in_place)
     // add gradients referenced by copied objects to defs
     for (GSList *gl = gradient_clipboard; gl != NULL; gl = gl->next) {
         SPRepr *repr = (SPRepr *) gl->data;
-        SPObject *exists = sp_document_lookup_id(doc, sp_repr_attr(repr, "id"));
+        SPObject *exists = doc->getObjectByRepr(repr);
         if (!exists){
             SPRepr *copy = sp_repr_duplicate(repr);
             sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
@@ -800,7 +800,7 @@ void sp_selection_paste_style()
             // add gradients referenced by clipboard objects to defs
             for (GSList *gl = gradient_clipboard; gl != NULL; gl = gl->next) {
                 SPRepr *repr = (SPRepr *) gl->data;
-                SPObject *exists = sp_document_lookup_id(doc, sp_repr_attr(repr, "id"));
+                SPObject *exists = doc->getObjectByRepr(repr);
                 if (!exists){
                     SPRepr *copy = sp_repr_duplicate(repr);
                     sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
@@ -1409,13 +1409,13 @@ sp_selection_tile()
 
     // FIXME: to current layer!
     sp_document_add_repr (document, rect);
-    SPItem *rectangle = SP_ITEM (sp_document_lookup_id (document, sp_repr_attr (rect, "id")));
+    SPItem *rectangle = SP_ITEM (document->getObjectByRepr(rect));
     sp_repr_unref (rect);
 
     selection->clear();
 
     for (GSList *i = reprs; i != NULL; i = i->next) {
-        SPObject *item = sp_document_lookup_id (document, sp_repr_attr (((SPRepr *) i->data), "id"));
+        SPObject *item = document->getObjectByRepr(((SPRepr *) i->data));
         item->deleteObject();
     }
 

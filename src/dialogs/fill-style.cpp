@@ -572,7 +572,7 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
         case SP_PAINT_SELECTOR_MODE_PATTERN:
             {
             sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_PATTERN);
-            SPObject *object = (SPObject *) sp_document_lookup_id (SP_ACTIVE_DOCUMENT, sp_repr_attr (repr, "id"));
+            SPObject *object = (SPObject *) SP_ACTIVE_DOCUMENT->getObjectByRepr(repr);
 
             SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object)));
             sp_update_pattern_list ( psel, pat);

@@ -46,10 +46,13 @@ struct SPDocument {
 	/* Handler ID */
 	guint modified_id;
 
-	GSList *_collection_queue;
+	SPObject *getObjectById(gchar const *id);
+	SPObject *getObjectByRepr(SPRepr *repr);
 
 	void queueForOrphanCollection(SPObject *object);
 	void collectOrphans();
+
+	GSList *_collection_queue;
 };
 
 struct SPDocumentClass {
@@ -91,7 +94,11 @@ gdouble sp_document_height (SPDocument * document);
 
 void sp_document_def_id(SPDocument *document, const gchar *id, SPObject *object);
 SigC::Connection sp_document_id_changed_connect(SPDocument *document, const gchar *id, SigC::Slot1<void, SPObject *>);
-SPObject *sp_document_lookup_id(SPDocument *document, const gchar *id);
+inline __attribute__((deprecated)) SPObject *sp_document_lookup_id(SPDocument *document, const gchar *id)
+{
+	g_assert(document != NULL);
+	return document->getObjectById(id);
+}
 
 /*
  * Undo & redo

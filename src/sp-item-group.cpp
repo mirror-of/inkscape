@@ -481,7 +481,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 		sp_repr_add_child(prepr, repr, g_prev_sibling);
 
 		// fill in the children list if non-null
-		SPItem *nitem = (SPItem *) sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));
+		SPItem *nitem = (SPItem *) doc->getObjectByRepr(repr);
 		sp_repr_unref (repr);
 		if (children && SP_IS_ITEM (nitem)) 
 			*children = g_slist_prepend (*children, nitem);

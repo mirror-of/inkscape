@@ -884,7 +884,7 @@ void   refresh_typeset_source(SPTypeset *typeset,shape_dest *nDst)
 {
   if ( nDst == NULL ) return;
   
-  SPObject *refobj = sp_document_lookup_id (SP_OBJECT (typeset)->document, nDst->originalID);
+  SPObject *refobj = SP_OBJECT (typeset)->document->getObjectById(nDst->originalID);
 
   if ( nDst->originalObj == NULL ) {
     if ( refobj == NULL ) return;
@@ -949,7 +949,7 @@ void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
 {
   if ( nDst == NULL ) return;
   
-  SPObject *refobj = sp_document_lookup_id (SP_OBJECT (typeset)->document, nDst->originalID);
+  SPObject *refobj = SP_OBJECT (typeset)->document->getObjectById(nDst->originalID);
   nDst->originalObj=NULL;
   if ( refobj == NULL ) return;
   nDst->originalObj=refobj->repr;

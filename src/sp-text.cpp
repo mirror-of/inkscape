@@ -2518,7 +2518,7 @@ sp_text_append_line (SPText *text)
     sp_repr_append_child (SP_OBJECT_REPR (text), rtspan);
     sp_repr_unref (rtspan);
 
-    return (SPTSpan *) sp_document_lookup_id (SP_OBJECT_DOCUMENT (text), sp_repr_attr (rtspan, "id"));
+    return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
 }
 
 
@@ -2547,7 +2547,7 @@ sp_text_insert_line (SPText *text, gint pos)
     sp_repr_add_child (SP_OBJECT_REPR (text), rtspan, SP_OBJECT_REPR (child));
     sp_repr_unref (rtspan);
 
-    SPTSpan *newline = (SPTSpan *) sp_document_lookup_id (SP_OBJECT_DOCUMENT (text), sp_repr_attr (rtspan, "id"));
+    SPTSpan *newline = (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
 
     if (string->text) {
         gchar *ip = g_utf8_offset_to_pointer (string->text, pos - string->start);

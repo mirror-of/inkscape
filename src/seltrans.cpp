@@ -422,7 +422,7 @@ void sp_sel_trans_stamp (SPSelTrans *seltrans)
 			// move to the saved position 
 			sp_repr_set_position_absolute (copy_repr, pos > 0 ? pos : 0);
 
-			SPItem *copy_item = (SPItem *) sp_document_lookup_id (SP_DT_DOCUMENT(seltrans->desktop), sp_repr_attr (copy_repr, "id"));
+			SPItem *copy_item = (SPItem *) SP_DT_DOCUMENT(seltrans->desktop)->getObjectByRepr(copy_repr);
 
 			NRMatrix *new_affine;
 			if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {

@@ -42,6 +42,23 @@
 
     * src/sp-object.h: added a little documentation
 
+	* src/document.cpp, src/document.h, src/file.cpp,
+	  src/gradient-chemistry.cpp, src/help.cpp, src/object-ui.cpp,
+	  src/selection-chemistry.cpp, src/selection.cpp, src/seltrans.cpp,
+	  src/sp-clippath.cpp, src/sp-item-group.cpp, src/sp-mask.cpp,
+	  src/sp-namedview.cpp, src/sp-object.cpp, src/sp-offset.cpp,
+	  src/sp-pattern.cpp, src/sp-root.cpp, src/sp-text.cpp,
+	  src/sp-typeset.cpp, src/sp-use.cpp, src/splivarot.cpp,
+	  src/uri-references.cpp, src/dialogs/fill-style.cpp,
+	  src/dialogs/item-properties.cpp, src/dialogs/stroke-style.cpp,
+	  src/helper/stock-items.cpp, src/widgets/gradient-selector.cpp,
+	  src/widgets/gradient-vector.cpp, src/widgets/icon.cpp:
+
+	  replaced sp_document_lookup_id with SPDocument::getObjectById,
+	  and SPDocument::getObjectByRepr
+
+	  (left deprecated stub in place, but it should be unused at this point)
+
 2004-06-11  Ted Gould  <ted@gould.cx>
 
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp, src/prefs-utils.cpp,

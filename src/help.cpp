@@ -56,7 +56,7 @@ sp_help_about (void)
         doc = sp_document_new (about, FALSE, TRUE);
 	 g_free(about);
         g_return_if_fail (doc != NULL);
-        version = sp_document_lookup_id (doc, "version");
+        version = doc->getObjectById("version");
         
         if (version && SP_IS_TEXT (version)) {
             sp_text_set_repr_text_multiline ( SP_TEXT (version), 
