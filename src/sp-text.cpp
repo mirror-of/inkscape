@@ -349,6 +349,10 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 {
     SPText *text = SP_TEXT (object);
 
+    // when stamping, _write is called on the newly created object before _set_shape, so we need to
+    // reflow here too (bug 1077559)
+    text->UpdateFlowSource();
+
     if (flags & SP_OBJECT_WRITE_BUILD) {
         if (!repr)
             repr = sp_repr_new ("text");
