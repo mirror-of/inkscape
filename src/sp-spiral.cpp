@@ -270,15 +270,6 @@ sp_spiral_description (SPItem * item)
 	return g_strdup_printf (_("<b>Spiral</b> with %3f turns"), SP_SPIRAL(item)->revo);
 }
 
-static bool
-is_unit_vector (NR::Point const &p)
-{
-	return fabs(1.0 - L2(p)) <= 1e-4;
-	/* The tolerance of 1e-4 is somewhat arbitrary.  NR::Point::normalize is believed to return
-	   points well within this tolerance.  I'm not aware of any callers that want a small
-	   tolerance; most callers would be ok with a tolerance of 0.25. */
-}
-
 
 /** \pre dstep \> 0.
     \pre is_unit_vector(*hat1).

@@ -26,6 +26,15 @@ NR::is_zero(Point const &p)
              p[1] == 0   );
 }
 
+bool
+NR::is_unit_vector(Point const &p)
+{
+    return fabs(1.0 - L2(p)) <= 1e-4;
+    /* The tolerance of 1e-4 is somewhat arbitrary.  NR::Point::normalize is believed to return
+       points well within this tolerance.  I'm not aware of any callers that want a small
+       tolerance; most callers would be ok with a tolerance of 0.25. */
+}
+
 NR::Coord NR::atan2(Point const p) {
     return std::atan2(p[NR::Y], p[NR::X]);
 }

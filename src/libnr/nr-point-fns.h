@@ -25,6 +25,8 @@ extern double LInfty(Point const &p);
 
 bool is_zero(Point const &p);
 
+bool is_unit_vector(Point const &p);
+
 extern double atan2(Point const p);
 
 inline bool point_equalp(NR::Point const &a, NR::Point const &b, double const eps)
