@@ -107,7 +107,7 @@ static void sp_style_clear(SPStyle *style);
 
 static void sp_style_merge_property(SPStyle *style, gint id, gchar const *val);
 
-static void sp_style_merge_ipaint(SPStyle *style, SPIPaint *paint, SPIPaint *parent);
+static void sp_style_merge_ipaint(SPStyle *style, SPIPaint *paint, SPIPaint const *parent);
 static void sp_style_read_dash(SPStyle *style, gchar const *str);
 
 static SPTextStyle *sp_text_style_new(void);
@@ -1149,7 +1149,7 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
  * unlinking clones to inherit the style of the svg:use into the new object).
  */
 void
-sp_style_merge_from_parent(SPStyle *style, SPStyle *parent, bool inherit_set)
+sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent, bool inherit_set)
 {
     g_return_if_fail(style != NULL);
 
@@ -1484,7 +1484,7 @@ sp_style_paint_server_modified(SPPaintServer *server, guint flags, SPStyle *styl
  *
  */
 static void
-sp_style_merge_ipaint(SPStyle *style, SPIPaint *paint, SPIPaint *parent)
+sp_style_merge_ipaint(SPStyle *style, SPIPaint *paint, SPIPaint const *parent)
 {
     sp_style_paint_clear(style, paint, TRUE, FALSE);
 

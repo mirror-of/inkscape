@@ -333,7 +333,7 @@ void sp_style_merge_from_style_string (SPStyle *style, const gchar *p);
 /**
  *
  */
-void sp_style_merge_from_parent (SPStyle *style, SPStyle *parent, bool inherit_set = false);
+void sp_style_merge_from_parent(SPStyle *style, SPStyle const *parent, bool inherit_set = false);
 
 /**
  *
