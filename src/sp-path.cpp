@@ -247,10 +247,14 @@ sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("path");
 	}
 
-	NArtBpath *abp = sp_curve_first_bpath(shape->curve);
-	gchar *str = sp_svg_write_path(abp);
-	sp_repr_set_attr (repr, "d", str);
-	g_free (str);
+	if ( shape->curve != NULL ) {
+		NArtBpath *abp = sp_curve_first_bpath(shape->curve);
+		gchar *str = sp_svg_write_path(abp);
+		sp_repr_set_attr(repr, "d", str);
+		g_free(str);
+	} else {
+		sp_repr_set_attr(repr, "d", NULL);
+	}
 
 	if (((SPObjectClass *) (parent_class))->write) {
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
