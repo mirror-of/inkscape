@@ -446,7 +446,6 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
     gint ret = FALSE;
     NRRect b;
-    GSList *l;
 
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
@@ -597,23 +596,15 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         sp_rubberband_stop();
                         sp_sel_trans_reset_state(seltrans);
                         // find out affected items:
-                        l = sp_document_items_in_box(SP_DT_DOCUMENT(desktop), desktop->dkey, &b);
+                        GSList *l = sp_document_items_in_box(SP_DT_DOCUMENT(desktop), desktop->dkey, &b);
                         if (event->button.state & GDK_SHIFT_MASK) {
                             // with shift, add to selection
-                            while (l) {
-                                item = SP_ITEM(l->data);
-                                if (selection->includesItem(item)) {
-                                    // Uncomment if you want toggle behavior for shift-rubberband.
-                                    //selection->removeItem(item);
-                                } else {
-                                    selection->addItem(item);
-                                }
-                                l = g_slist_remove(l, item);
-                            }
+                            selection->addList(l);
                         } else {
                             // without shift, simply select anew
                             selection->setItemList(l);
                         }
+                        g_slist_free (l);
                     } else { // it was just a click, or a too small rubberband
                         sp_rubberband_stop();
                         if (sc->button_press_shift && !rb_escaped && !drag_escaped) {
