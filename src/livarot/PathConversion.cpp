@@ -12,6 +12,7 @@
 void            Path::ConvertWithBackData(float treshhold)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
+	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
 	
 	SetBackData(true);
 	ResetPoints(descr_nb);
@@ -205,6 +206,7 @@ void            Path::ConvertWithBackData(float treshhold)
 void            Path::Convert(float treshhold)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
+	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
 	
 	SetBackData(false);
 	ResetPoints(descr_nb);
@@ -468,7 +470,8 @@ void            Path::Convert(float treshhold)
 void            Path::ConvertEvenLines(float treshhold)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
-	
+	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
+
 	SetBackData(false);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;

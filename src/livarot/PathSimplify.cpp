@@ -13,15 +13,13 @@
 // algo d'origine: http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/CURVE-APP-global.html
 
 // need the b-spline basis for cubic splines
-// Don't forget that this is a clamped b-spline
-// and that it corresponds to a normal bezier curve.
 // pas oublier que c'est une b-spline clampee
 // et que ca correspond a une courbe de bezier normale
 #define N03(t) ((1.0-t)*(1.0-t)*(1.0-t))
 #define N13(t) (3*t*(1.0-t)*(1.0-t))
 #define N23(t) (3*t*t*(1.0-t))
 #define N33(t) (t*t*t)
-// quadratic b-splines (just in case)
+// quadratic b-splines (jsut in case)
 #define N02(t) ((1.0-t)*(1.0-t))
 #define N12(t) (2*t*(1.0-t))
 #define N22(t) (t*t)
@@ -496,7 +494,6 @@ bool                   Path::AttemptSimplify(float treshhold,path_descr_cubicto 
 float                  Path::RaffineTk(vec2 pt,vec2 p0,vec2 p1,vec2 p2,vec2 p3,float it)
 {
 	// raffinement des tk
-	// A single iteration of Newton-Raphson,
 	// une seule iteration de newtow rhapston, vu que de toute facon la courbe est approchée
 	double   Ax,Bx,Cx;
 	double   Ay,By,Cy;
@@ -518,6 +515,7 @@ float                  Path::RaffineTk(vec2 pt,vec2 p0,vec2 p1,vec2 p2,vec2 p3,f
 void            Path::Coalesce(float tresh)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
+	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
 	if ( descr_nb <= 2 ) return;
 	
 	SetWeighted(false);
@@ -544,6 +542,7 @@ void            Path::Coalesce(float tresh)
 			firstP.x=descr_data[curP].d.m.x;
 			firstP.y=descr_data[curP].d.m.y;
 			lastA=descr_data[curP].associated;
+			lastP=curP;
 		} else if ( typ == descr_close ) {
 			nextA=descr_data[curP].associated;
 			if ( lastAddition.flags != descr_moveto ) {
@@ -575,6 +574,7 @@ void            Path::Coalesce(float tresh)
 			}
 			lastAddition.flags=descr_moveto;
 			lastA=nextA;
+			lastP=curP;
 		} else if ( typ == descr_lineto || typ == descr_cubicto || typ == descr_arcto) {
 			nextA=descr_data[curP].associated;
 			if ( lastAddition.flags != descr_moveto ) {
@@ -593,8 +593,10 @@ void            Path::Coalesce(float tresh)
 					lastAddition.d.c.stDy=res.stDy;
 					lastAddition.d.c.enDx=res.enDx;
 					lastAddition.d.c.enDy=res.enDy;
+					lastAddition.associated=lastA;
+					lastP=curP;
 				} else {
-					lastA=descr_data[curP-1].associated; // pourrait etre surecrit par la ligne suivante
+					lastA=descr_data[lastP].associated; // pourrait etre surecrit par la ligne suivante
 					descr_data[writeP++]=lastAddition;
 					lastAddition=descr_data[curP];
 				}
@@ -612,6 +614,7 @@ void            Path::Coalesce(float tresh)
 			} else {
 			}
 			lastA=descr_data[curP].associated;
+			lastP=curP;
 			for (int i=1;i<=descr_data[curP].d.b.nb;i++) descr_data[writeP++]=descr_data[curP+i];
 			curP+=descr_data[curP].d.b.nb;
 		} else if ( typ == descr_interm_bezier ) {

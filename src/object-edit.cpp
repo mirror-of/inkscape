@@ -18,6 +18,7 @@
 #include "sp-ellipse.h"
 #include "sp-star.h"
 #include "sp-spiral.h"
+#include "sp-offset.h"
 
 #include "object-edit.h"
 
@@ -27,6 +28,7 @@ static SPKnotHolder *sp_rect_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_arc_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_star_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop);
+static SPKnotHolder *sp_offset_knot_holder (SPItem * item, SPDesktop *desktop);
 
 SPKnotHolder *
 sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
@@ -41,6 +43,8 @@ sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
 		return sp_star_knot_holder (item, desktop);
 	} else if (SP_IS_SPIRAL (item)) {
 		return sp_spiral_knot_holder (item, desktop);
+	} else if (SP_IS_OFFSET (item)) {
+		return sp_offset_knot_holder (item, desktop);
 	}
 	return NULL;
 }
@@ -390,7 +394,7 @@ sp_spiral_outer_set (SPItem *item, const NRPoint *p, guint state)
 	SPSpiral *spiral;
 	gdouble   dx, dy;
 /*  	gdouble arg; */
-	
+
 	spiral = SP_SPIRAL (item);
 
 	dx = p->x - spiral->cx;
@@ -445,6 +449,51 @@ sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 	sp_knot_holder_add (knot_holder,
 			    sp_spiral_outer_set,
 			    sp_spiral_outer_get);
+
+	return knot_holder;
+}
+
+/* SPOffset */
+
+static void
+sp_offset_offset_set (SPItem *item, const NRPoint *p, guint state)
+{
+	SPOffset *offset;
+	gdouble   dx, dy;
+
+	offset = SP_OFFSET (item);
+
+	offset->rad = sp_offset_distance_to_original(offset,p->x,p->y);
+  offset->knotx=p->x;
+  offset->knoty=p->y;
+  offset->knotSet=true;
+
+  sp_object_request_update ((SPObject *) offset, SP_OBJECT_MODIFIED_FLAG);
+}
+
+
+static void
+sp_offset_offset_get (SPItem *item, NRPoint *p)
+{
+	SPOffset *offset;
+
+	offset = SP_OFFSET (item);
+
+  sp_offset_top_point(offset,&(p->x),&(p->y));
+}
+
+static SPKnotHolder *
+sp_offset_knot_holder (SPItem * item, SPDesktop *desktop)
+{
+	SPOffset *offset;
+	SPKnotHolder *knot_holder;
+
+	offset = SP_OFFSET (item);
+	knot_holder = sp_knot_holder_new (desktop, item, NULL);
+
+	sp_knot_holder_add (knot_holder,
+			    sp_offset_offset_set,
+			    sp_offset_offset_get);
 
 	return knot_holder;
 }

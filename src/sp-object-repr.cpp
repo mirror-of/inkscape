@@ -26,6 +26,7 @@
 #include "sp-ellipse.h"
 #include "sp-star.h" 
 #include "sp-spiral.h" 
+#include "sp-offset.h"
 #include "sp-line.h"
 #include "sp-polyline.h"
 #include "sp-polygon.h"
@@ -100,6 +101,7 @@ sp_object_type_lookup (const gchar * name)
 		g_hash_table_insert (dtable, (void *)"radialGradient", GINT_TO_POINTER (SP_TYPE_RADIALGRADIENT));
 		g_hash_table_insert (dtable, (void *)"rect", GINT_TO_POINTER (SP_TYPE_RECT));
 		g_hash_table_insert (dtable, (void *)"spiral", GINT_TO_POINTER (SP_TYPE_SPIRAL));
+		g_hash_table_insert (dtable, (void *)"offset", GINT_TO_POINTER (SP_TYPE_OFFSET));
 		g_hash_table_insert (dtable, (void *)"star", GINT_TO_POINTER (SP_TYPE_STAR));
 		g_hash_table_insert (dtable, (void *)"stop", GINT_TO_POINTER (SP_TYPE_STOP));
 		g_hash_table_insert (dtable, (void *)"svg", GINT_TO_POINTER (SP_TYPE_ROOT));

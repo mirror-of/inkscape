@@ -45,6 +45,7 @@ inkscapelib_src = \
 	sp-ellipse.cpp sp-ellipse.h \
 	sp-star.cpp sp-star.h \
 	sp-spiral.cpp sp-spiral.h \
+	sp-offset.cpp sp-offset.h \
 	sp-line.cpp sp-line.h \
 	sp-polyline.cpp sp-polyline.h \
 	sp-polygon.cpp sp-polygon.h \

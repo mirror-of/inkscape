@@ -14,6 +14,7 @@
 void						Path::Outline(Path* dest,float width,JoinType join,ButtType butt,float miter)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
+	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
 	if ( descr_nb <= 2 ) return;
 	if ( dest == NULL ) return;
 	dest->Reset();
@@ -166,6 +167,7 @@ void						Path::Outline(Path* dest,float width,JoinType join,ButtType butt,float
 void            Path::OutsideOutline(Path* dest,float width,JoinType join,ButtType butt,float miter)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
+	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
 	if ( descr_nb <= 2 ) return;
 	if ( dest == NULL ) return;
 	dest->Reset();
@@ -182,6 +184,7 @@ void            Path::OutsideOutline(Path* dest,float width,JoinType join,ButtTy
 void            Path::InsideOutline(Path* dest,float width,JoinType join,ButtType butt,float miter)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
+	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
 	if ( descr_nb <= 2 ) return;
 	if ( dest == NULL ) return;
 	dest->Reset();

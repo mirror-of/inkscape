@@ -110,6 +110,8 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_SODIPODI_RADIUS, "sodipodi:radius"},
 	{SP_ATTR_SODIPODI_ARGUMENT, "sodipodi:argument"},
 	{SP_ATTR_SODIPODI_T0, "sodipodi:t0"},
+  /* SPOffset */
+ 	{SP_ATTR_SODIPODI_ORIGINAL, "sodipodi:original"},
 	/* SPLine */
 	{SP_ATTR_X1, "x1"},
 	{SP_ATTR_Y1, "y1"},
@@ -245,7 +247,7 @@ static const SPStyleProp props[] = {
 	{SP_PROP_GLYPH_ORIENTATION_VERTICAL, "glyph-orientation-vertical"},
 	{SP_PROP_KERNING, "kerning"},
 	{SP_PROP_TEXT_ANCHOR, "text-anchor"},
-	{SP_PROP_WRITING_MODE, "writing-mode"}
+	{SP_PROP_WRITING_MODE, "writing-mode"} 
 };
 
 #define n_attrs (sizeof (props) / sizeof (props[0]))
