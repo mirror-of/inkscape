@@ -97,9 +97,9 @@ static FILE *fopen_utf8name( char const *utf8name, int mode )
 
 /**
  *
- */ 
+ */
 UriInputStream::UriInputStream(Inkscape::URI &source)
-                    throw (StreamException): uri(source) 
+                    throw (StreamException): uri(source)
 {
     //get information from uri
     char *schemestr = (char *) uri.getScheme();
@@ -140,7 +140,7 @@ UriInputStream::UriInputStream(Inkscape::URI &source)
 
 /**
  *
- */ 
+ */
 UriInputStream::~UriInputStream() throw(StreamException)
 {
     close();
@@ -150,17 +150,17 @@ UriInputStream::~UriInputStream() throw(StreamException)
  * Returns the number of bytes that can be read (or skipped over) from
  * this input stream without blocking by the next caller of a method for
  * this input stream.
- */ 
+ */
 int UriInputStream::available() throw(StreamException)
 {
     return 0;
 }
 
-    
+
 /**
  *  Closes this input stream and releases any system resources
  *  associated with the stream.
- */ 
+ */
 void UriInputStream::close() throw(StreamException)
 {
     if (closed)
@@ -184,35 +184,43 @@ void UriInputStream::close() throw(StreamException)
 
     closed = true;
 }
-    
+
 /**
  * Reads the next byte of data from the input stream.  -1 if EOF
- */ 
+ */
 int UriInputStream::get() throw(StreamException)
 {
-    if (closed)
-        return -1;
+    int retVal = -1;
+    if (!closed)
+    {
+        switch (scheme) {
 
-    switch (scheme) {
+            case SCHEME_FILE:
+                if (!inf || feof(inf))
+                {
+                    retVal = -1;
+                }
+                else
+                {
+                    retVal = fgetc(inf);
+                }
+                break;
 
-        case SCHEME_FILE:
-            if (!inf || feof(inf))
-                return -1;
-            return fgetc(inf);
-        break;
-
-        case SCHEME_DATA:
-            if (dataPos >= dataLen)
-                return -1;
-            return data[dataPos++];
-        break;
-
-
-    }//switch
-
-        
+            case SCHEME_DATA:
+                if (dataPos >= dataLen)
+                {
+                    retVal = -1;
+                }
+                else
+                {
+                    retVal = data[dataPos++];
+                }
+                break;
+        }//switch
+    }
+    return retVal;
 }
-   
+
 
 
 
@@ -242,7 +250,7 @@ int UriReader::available() throw(StreamException)
 {
     return inputStream->available();
 }
-    
+
 /**
  *
  */
@@ -250,7 +258,7 @@ void UriReader::close() throw(StreamException)
 {
     inputStream->close();
 }
-    
+
 /**
  *
  */
@@ -267,9 +275,9 @@ gunichar UriReader::get() throw(StreamException)
 
 /**
  *
- */ 
+ */
 UriOutputStream::UriOutputStream(Inkscape::URI &destination)
-                    throw (StreamException): uri(destination) 
+                    throw (StreamException): uri(destination)
 {
     //get information from uri
     char *schemestr = (char *) uri.getScheme();
@@ -308,7 +316,7 @@ UriOutputStream::UriOutputStream(Inkscape::URI &destination)
 
 /**
  *
- */ 
+ */
 UriOutputStream::~UriOutputStream() throw(StreamException)
 {
     close();
@@ -317,7 +325,7 @@ UriOutputStream::~UriOutputStream() throw(StreamException)
 /**
  * Closes this output stream and releases any system resources
  * associated with this stream.
- */ 
+ */
 void UriOutputStream::close() throw(StreamException)
 {
     if (closed)
@@ -341,11 +349,11 @@ void UriOutputStream::close() throw(StreamException)
 
     closed = true;
 }
-    
+
 /**
  *  Flushes this output stream and forces any buffered output
  *  bytes to be written out.
- */ 
+ */
 void UriOutputStream::flush() throw(StreamException)
 {
     if (closed)
@@ -366,10 +374,10 @@ void UriOutputStream::flush() throw(StreamException)
     }//switch
 
 }
-    
+
 /**
  * Writes the specified byte to this output stream.
- */ 
+ */
 void UriOutputStream::put(int ch) throw(StreamException)
 {
     if (closed)
@@ -425,7 +433,7 @@ void UriWriter::close() throw(StreamException)
 {
     outputStream->close();
 }
-    
+
 /**
  *
  */
@@ -433,7 +441,7 @@ void UriWriter::flush() throw(StreamException)
 {
     outputStream->flush();
 }
-    
+
 /**
  *
  */
