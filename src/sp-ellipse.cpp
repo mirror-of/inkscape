@@ -701,9 +701,9 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 		NR::Point ph = sp_arc_get_xy (arc, (ge->start + ge->end) / 2.0);
 		os << "M " << p1[NR::X] << " " <<  p1[NR::Y]
 			<< " A " << ge->rx.computed << " " << ge->ry.computed
-			<< " 0 1 " << ((dt > 0)?1:0) << " " << ph[NR::X] << "," << ph[NR::Y]
+			<< " 0 1 1 " << " " << ph[NR::X] << "," << ph[NR::Y]
 			<< " A " << ge->rx.computed << " " << ge->ry.computed
-			<< " 0 1 " << ((dt > 0)?1:0) << " " << p2[NR::X] << " " << p2[NR::Y] << " z";
+			<< " 0 1 1 " << " " << p2[NR::X] << " " << p2[NR::Y] << " z";
 	} else {
 		fa = (fabs (dt) > M_PI) ? 1 : 0;
 		fs = (dt > 0) ? 1 : 0;
