@@ -909,6 +909,7 @@ sp_desktop_dialog(void)
 
 
         /* Checkbuttons */
+        // FIXME: gray out snapping when grid is off
         spw_vbox_checkbutton(dlg, v, _("Show grid"), "showgrid", cb);
         spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to grid"), "inkscape:grid-bbox", cb);
         spw_vbox_checkbutton(dlg, v, _("Snap points to grid"), "inkscape:grid-points", cb);
@@ -990,6 +991,7 @@ sp_desktop_dialog(void)
         gtk_notebook_append_page(GTK_NOTEBOOK(nb), v, l);
 
         /* Checkbuttons */
+        // FIXME: gray out snapping when guides are off
         cb = G_CALLBACK(sp_dtw_whatever_toggled);
         spw_vbox_checkbutton(dlg, v, _("Show guides"), "showguides", cb);
         spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to guides"), "inkscape:guide-bbox", cb);
