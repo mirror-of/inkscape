@@ -156,17 +156,6 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
 	return floor((x - c0) / c1 + .5) * c1 + c0;
 }
 
-/* look for snappoint on a circle given by center (cx,cy) and distance center-req) */
-// fixme: replace with line+circle intersector.
-
-#if 0
-double
-sp_desktop_circular_snap (SPDesktop const * desktop, NR::Point& req, const NR::Point center)
-{
-}
-#endif
-
-
 /* 
  * functions for lists of points
  *
@@ -194,46 +183,6 @@ double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], i
 
 	return xdist;
 }
-
-#if 0
-static inline NR::Point
-map_mul(NR::Point const &a, NR::Point const &b)
-// map mul is probably actually a scale matrix.
-{
-	using NR::X;
-	using NR::Y;
-	return NR::Point(a[X] * b[X],
-			 a[Y] * b[Y]);
-}
-
-double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length, NR::Point const norm, NR::Point const s)
-{
-	if (!SNAP_ON(desktop)) {
-		return L2(s);
-	}
-
-	double dist = NR_HUGE;
-	double ratio = L2(s);
-	for (int i = 0 ; i < length ; i++) {
-		NR::Point p_from_norm = p[i] - norm;
-		NR::Point check = map_mul(p_from_norm, s) + norm;
-		if ( ( fabs p_from_norm[X] > MIN_DIST_NORM )  ||
-		     ( fabs p_from_norm[Y] > MIN_DIST_NORM ) ) {
-			double d = sp_desktop_vector_snap(desktop, check, check - *norm);
-			if ((d < 1e18) && (d < dist)) {
-				dist = d;
-				unsigned dominant = ( ( fabs(p_from_norm[X]) > fabs(p_from_norm[Y]) )
-						      ? X
-						      : Y );
-				ratio = ( ( check[dominant] - norm[dominant] )
-					  / p_from_norm[dominant] );
-			}
-		}
-	}
-  
-	return ratio;
-}
-#endif /* to be deleted */
 
 double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length, NR::Point const norm, NR::Point s)
 {

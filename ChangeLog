@@ -1,3 +1,8 @@
+2004-02-04  Ted Gould <ted@gould.cx>
+
+	* src/desktop-snap.cpp: Removing some unused code that had
+	  been replaced.
+
 2004-02-04  jon phillips <kidproto@user.sf.net>
 
     * COPYING, COPYING.LIB, ChangeLog, Makefile.am, Makefile.mingw, 
