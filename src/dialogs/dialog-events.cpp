@@ -152,6 +152,8 @@ void
 sp_transientize (GtkWidget *dialog)
 {
 
+    gtk_window_set_type_hint (GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_UTILITY);
+
     gint transient_policy = 
         prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 
                                           1, 0, 2 );
