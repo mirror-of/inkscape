@@ -253,12 +253,12 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const p, gdouble x, gdoub
 	g_return_if_fail(seltrans->stamp_cache == NULL);
 }
 
-static void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix &affine, NR::Point const &norm)
+void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, NR::Point const &norm)
 {
 	g_return_if_fail (seltrans->grabbed);
 	g_return_if_fail (!seltrans->empty);
 
-	affine = NR::translate(-norm) * affine * NR::translate(norm);
+	NR::Matrix const affine( NR::translate(-norm) * rel_affine * NR::translate(norm) );
 
 	if (seltrans->show == SP_SELTRANS_SHOW_CONTENT) {
 	        // update the content
@@ -283,14 +283,6 @@ static void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix &affine, NR:
 	seltrans->changed = TRUE;
 
 	sp_sel_trans_update_handles (seltrans);
-}
-
-void sp_sel_trans_transform(SPSelTrans *seltrans, NRMatrix *affine, NRPoint const *norm)
-{
-	NR::Point const n(*norm);
-	NR::Matrix a(*affine);
-	sp_sel_trans_transform(seltrans, a, n);
-	*affine = a;
 }
 
 void sp_sel_trans_ungrab(SPSelTrans *seltrans)

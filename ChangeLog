@@ -1,5 +1,9 @@
 2004-02-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/seltrans.h, src/seltrans.cpp (sp_sel_trans_transform):
+	Get rid of non-NR::Point version.  Make affine argument const.
+	Update callers.
+
 	* src/desktop-events.cpp (sp_dt_guide_event): NR::Point'ification.
 
 	* src/view.h (sp_view_set_position): Add NR::Point version.

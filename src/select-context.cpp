@@ -778,10 +778,9 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 		}
 	}
 
-	NRMatrix move;
-	nr_matrix_set_translate(&move, dxy[X], dxy[Y]);
-	NRPoint norm = {0, 0};
-	sp_sel_trans_transform (seltrans, &move, &norm);
+	NR::Matrix const move((NR::translate(dxy)));
+	NR::Point const norm(0, 0);
+	sp_sel_trans_transform(seltrans, move, norm);
 
 	// status text
 	GString *xs = SP_PT_TO_METRIC_STRING(dxy[X], SP_DEFAULT_METRIC);
