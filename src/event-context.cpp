@@ -508,10 +508,10 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 			double rel_zoom;
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:   
-				rel_zoom = 1 / zoom_inc;
+				rel_zoom = zoom_inc;
 				break;
 			case GDK_SCROLL_DOWN: 
-				rel_zoom = zoom_inc;
+				rel_zoom = 1 / zoom_inc;
 				break;
 			default:              
 				rel_zoom = 0.0;
