@@ -367,11 +367,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     if (!selection->isEmpty()) {
                         if (event->button.state & GDK_SHIFT_MASK) { // shift-click, with previous selection
                             sp_sel_trans_reset_state(seltrans);
-                            if (selection->includesItem(sc->item)) {
-                                selection->removeItem(sc->item);
-                            } else {
-                                selection->addItem(sc->item);
-                            }
+                            selection->toggleItem(sc->item);
                         } else { // simple click, with previous selection
                             if (selection->includesItem(sc->item)) {
                                 sp_sel_trans_increase_state(seltrans);
@@ -438,7 +434,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
 static gint
 sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
-    SPItem *item = NULL, *group = NULL;
+    SPItem *item = NULL;
     SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
     gint ret = FALSE;
     NRRect b;
@@ -562,11 +558,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             if (event->button.state & GDK_SHIFT_MASK) {
                                 // with shift, toggle selection
                                 sp_sel_trans_reset_state(seltrans);
-                                if (selection->includesItem(sc->item)) {
-                                    selection->removeItem(sc->item);
-                                } else {
-                                    selection->addItem(sc->item);
-                                }
+                                selection->toggleItem(sc->item);
                             } else {
                                 // without shift, increase state (i.e. toggle scale/rotation handles)
                                 if (selection->includesItem(sc->item)) {
@@ -611,30 +603,14 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             if (sc->button_press_ctrl) {
                                 // go into groups
                                 item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
-                                group = sp_desktop_group_at_point(desktop, NR::Point(event->button.x, event->button.y));
                                 sc->button_press_ctrl = FALSE;
                             } else {
                                 // don't go into groups
                                 item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
                             }
 
-                            // if there's both a group and an item at point, deselect group to
-                            // prevent double selection. FIXME: this only prevents double select for
-                            // top-level groups and bottom-level objects, but fails if a mid-level
-                            // group is selected without entering the top-level as a layer (though
-                            // this currently only possible by XML editor)
-                            if (group) {
-                                if (selection->includesItem(group)) {
-                                    selection->removeItem(group);
-                                }
-                            }
                             if (item) {
-                                // toggle selected status
-                                if (selection->includesItem(item)) {
-                                    selection->removeItem(item);
-                                } else {
-                                    selection->addItem(item);
-                                }
+                                selection->toggleItem(item);
                                 item = NULL;
                             }
 
