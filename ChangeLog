@@ -5,6 +5,9 @@
 
 	* src/sp-polygon.cpp: coding style and a few other small cleanups.
 
+	* src/sp-anchor.cpp: coding style cleanups.  Remove unnecessary
+	static variable.
+
 2004-08-18  Bryce Harrington <bryce@bryceharrington.com>
 
 	* autogen.sh:  Fixing the 'missing ltmain.sh' bug
