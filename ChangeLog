@@ -20,9 +20,9 @@
 
     * src/dialogs/desktop-properties.cpp, src/dialogs/desktop-properties.h, 
       src/dialogs/display-settings.cpp, src/dialogs/display-settings.h, 
-      src/dialogs/export.cpp, src/dialogs/export.h: converted the aforementioned
-      files to new coding conventions.
-      
+      src/dialogs/export.cpp, src/dialogs/export.h, 
+      src/dialogs/fill-style.cpp, src/dialogs/fill-style.h: converted the 
+      aforementioned files to new coding conventions.
 
 2004-02-04  bulia byak <bulia@users.sourceforge.net>
 
