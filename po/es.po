@@ -4,12 +4,12 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-06-29 19:18+0200\n"
-"PO-Revision-Date: 2004-06-29 17:36+0200\n"
+"PO-Revision-Date: 2004-06-30 09:24+0200\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -2267,22 +2267,19 @@ msgstr ""
 #. checkitem_toggled, checkitem_update, 0);
 #: src/interface.cpp:778
 msgid "Commands Bar"
-msgstr ""
+msgstr "Barra de comandos"
 
 #: src/interface.cpp:778
-#, fuzzy
 msgid "Show or hide the Commands bar (under the menu)"
-msgstr "Mostrar u ocultar el panel superior (bajo el men�)"
+msgstr "Mostrar u ocultar la barra de comandos (bajo el men�)"
 
 #: src/interface.cpp:780
-#, fuzzy
 msgid "Tool Controls"
-msgstr "Opciones de la herramienta"
+msgstr "Controles de herramienta"
 
 #: src/interface.cpp:780
-#, fuzzy
 msgid "Show or hide the Tool Controls panel"
-msgstr "Mostrar u ocultar la caja de herramientas principal (a la izquierda)"
+msgstr "Mostrar u ocultar la barra de controles"
 
 #: src/interface.cpp:782
 msgid "_Toolbox"
@@ -2338,7 +2335,7 @@ msgstr "A_yuda"
 
 #: src/interface.cpp:925
 msgid "Leave Group"
-msgstr ""
+msgstr "Salir del grupo"
 
 #: src/interface.cpp:1007
 msgid "Could not parse SVG data"
@@ -2565,7 +2562,7 @@ msgstr "Desagr_upar"
 
 #: src/object-ui.cpp:250
 msgid "Enter Group"
-msgstr ""
+msgstr "Entrar en el grupo"
 
 #. Link dialog
 #: src/object-ui.cpp:298
@@ -3197,7 +3194,7 @@ msgstr "Cu�nta inercia afecta al movimiento de la pluma"
 #. TRANSLATORS: "drag" means "resistance" here
 #: src/toolbox.cpp:1779
 msgid "Drag:"
-msgstr "Arrastrar:"
+msgstr "Resistencia:"
 
 #: src/toolbox.cpp:1779
 msgid "How much resistance affects the movement of the pen"
@@ -4480,19 +4477,19 @@ msgid "Value"
 msgstr "Valor"
 
 #~ msgid "_Menu"
-#~ msgstr "_Men�"
+#~ msgstr "_Menú"
 
 #~ msgid "Show or hide the menu bar"
-#~ msgstr "Mostrar/ocultar la barra de men�"
+#~ msgstr "Mostrar/ocultar la barra de menú"
 
 #~ msgid "Top _Panel"
 #~ msgstr "_Panel superior"
 
 #~ msgid "Pattern:"
-#~ msgstr "Patrón:"
+#~ msgstr "PatrÃ³n:"
 
 #~ msgid "Default action when moving with grid enabled:"
-#~ msgstr "Acción predeterminada al mover con la rejilla activa:"
+#~ msgstr "AcciÃ³n predeterminada al mover con la rejilla activa:"
 
 #~ msgid "Snap points to the grid"
 #~ msgstr "Ajustar los puntos a la rejilla"
@@ -4502,8 +4499,8 @@ msgstr "Valor"
 #~ "object was not previously snapped.  Shift+drag selects the alternative "
 #~ "behaviour."
 #~ msgstr ""
-#~ "La acción predeterminada es ajustar los puntos de los objetos a la "
-#~ "rejilla, aún cuando el objeto no estaba ajustado anteriormente. Mayús"
+#~ "La acciÃ³n predeterminada es ajustar los puntos de los objetos a la "
+#~ "rejilla, aÃºn cuando el objeto no estaba ajustado anteriormente. MayÃºs"
 #~ "+arrastrar selecciona el comportamiento alternativo."
 
 #~ msgid "Snap objects to their current grid offset"
@@ -4514,18 +4511,18 @@ msgstr "Valor"
 #~ "as they did before the move.  Shift+drag selects the alternative "
 #~ "behaviour."
 #~ msgstr ""
-#~ "La acción predeterminada es ajustar los objetos para que tengan el mismo "
-#~ "offset de la rejilla que tenían antes de moverlos. Mayús+arrastrar "
+#~ "La acciÃ³n predeterminada es ajustar los objetos para que tengan el mismo "
+#~ "offset de la rejilla que tenÃ­an antes de moverlos. MayÃºs+arrastrar "
 #~ "selecciona el comportamiento alternativo."
 
 #~ msgid "Sharpness:"
 #~ msgstr "Agudeza:"
 
 #~ msgid "Rect"
-#~ msgstr "RectÃ¡ngulo"
+#~ msgstr "RectÃÂ¡ngulo"
 
 #~ msgid "Rects"
-#~ msgstr "RectÃ¡ngulos"
+#~ msgstr "RectÃÂ¡ngulos"
 
 #~ msgid "meters"
 #~ msgstr "metros"
@@ -4534,10 +4531,10 @@ msgstr "Valor"
 #~ msgstr "Zoom an_terior"
 
 #~ msgid "Horizontal lines"
-#~ msgstr "LÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­neas horizontales"
+#~ msgstr "LÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­neas horizontales"
 
 #~ msgid "Vertical lines"
-#~ msgstr "LÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­neas verticales"
+#~ msgstr "LÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­neas verticales"
 
 #~ msgid "Userspace unit"
 #~ msgstr "Unidad del espacio de usuario"
@@ -4564,16 +4561,16 @@ msgstr "Valor"
 #~ msgid "Click to pick, click and drag to pick the average color of an area."
 #~ msgstr ""
 #~ "Haga clic para seleccionar un color, clic y arrastre para seleccionar la "
-#~ "media de color de un ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡rea."
+#~ "media de color de un ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡rea."
 
 #~ msgid "Corner radius to half-width ratio"
 #~ msgstr ""
-#~ "Radio de la esquina a relaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de mitad "
+#~ "Radio de la esquina a relaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de mitad "
 #~ "de ancho"
 
 #~ msgid "Corner radius to half-height ratio"
 #~ msgstr ""
-#~ "Radio de la esquina a relaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de mitad "
+#~ "Radio de la esquina a relaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de mitad "
 #~ "de alto"
 
 #, fuzzy
@@ -4612,8 +4609,8 @@ msgstr "Valor"
 
 #~ msgid "Autoraise Dialogs"
 #~ msgstr ""
-#~ "Mostrar diÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡logos de "
-#~ "confirmaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n"
+#~ "Mostrar diÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡logos de "
+#~ "confirmaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n"
 
 #~ msgid "Quit"
 #~ msgstr "Salir"
@@ -4625,7 +4622,7 @@ msgstr "Valor"
 #~ msgstr "Cortar el trazo del fondo en pedazos"
 
 #~ msgid "Combine multiple paths"
-#~ msgstr "Combinar mÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂºltiples trazos"
+#~ msgstr "Combinar mÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂºltiples trazos"
 
 #~ msgid "Next zoom"
 #~ msgstr "Zoom siguiente"
@@ -4648,12 +4645,12 @@ msgstr "Valor"
 
 #~ msgid "Text editing and font settings"
 #~ msgstr ""
-#~ "Propiedades de ediciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de texto y "
-#~ "tipografÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­a"
+#~ "Propiedades de ediciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de texto y "
+#~ "tipografÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­a"
 
 #, fuzzy
 #~ msgid "Display help for Keys and Mouse"
-#~ msgstr "_Teclas y ratÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n"
+#~ msgstr "_Teclas y ratÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n"
 
 #, fuzzy
 #~ msgid "Tutorial for the Advanced"
@@ -4673,7 +4670,7 @@ msgstr "Valor"
 
 #~ msgid "Use the extension of the file to choose a filetype"
 #~ msgstr ""
-#~ "Utilizar la extensiÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n del archivo para "
+#~ "Utilizar la extensiÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n del archivo para "
 #~ "elegir el tipo de archivo"
 
 #~ msgid "Roundness ratio for x:"
@@ -4683,7 +4680,7 @@ msgstr "Valor"
 #~ msgstr "Radio de curvatura para y:"
 
 #~ msgid "Visual transformation"
-#~ msgstr "TransformaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n visual"
+#~ msgstr "TransformaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n visual"
 
 #~ msgid "Show content"
 #~ msgstr "Mostrar contenido"
@@ -4719,7 +4716,7 @@ msgstr "Valor"
 #~ msgstr "Unidades de gradiente"
 
 #~ msgid "gradientSpread"
-#~ msgstr "SeparaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de gradiente"
+#~ msgstr "SeparaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de gradiente"
 
 #~ msgid "nonzero"
 #~ msgstr "no cero"
@@ -4733,8 +4730,8 @@ msgstr "Valor"
 #~ "neither load nor save preferences\n"
 #~ msgstr ""
 #~ "%s no es un archivo normal.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias\n"
+#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias\n"
 
 #~ msgid ""
 #~ "%s either is not valid xml file or\n"
@@ -4743,10 +4740,10 @@ msgstr "Valor"
 #~ "are neither able to load nor save\n"
 #~ "preferences."
 #~ msgstr ""
-#~ "%s o no es archivo xml vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido\n"
+#~ "%s o no es archivo xml vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido\n"
 #~ "o no tiene permisos para leerlo.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
 
 #~ msgid ""
 #~ "%s is not valid inkscape preferences file.\n"
@@ -4755,9 +4752,9 @@ msgstr "Valor"
 #~ "preferences."
 #~ msgstr ""
 #~ "%s no es un archivo de preferencias "
-#~ "vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido.\n"
+#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
 
 #~ msgid ""
 #~ "Cannot create directory %s.\n"
@@ -4766,8 +4763,8 @@ msgstr "Valor"
 #~ "%s."
 #~ msgstr ""
 #~ "No se pudo crear el directorio %s.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar %s."
+#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar %s."
 
 #~ msgid ""
 #~ "%s is not a valid directory.\n"
@@ -4775,9 +4772,9 @@ msgstr "Valor"
 #~ "are neither able to load nor save\n"
 #~ "preferences."
 #~ msgstr ""
-#~ "%s no es un directorio vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "%s no es un directorio vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido.\n"
+#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
 
 #~ msgid ""
 #~ "Cannot create file %s.\n"
@@ -4786,8 +4783,8 @@ msgstr "Valor"
 #~ "preferences."
 #~ msgstr ""
 #~ "No se pudo crear el fichero %s.\n"
-#~ "Aunque Inkscape seejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "Aunque Inkscape seejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
 
 #~ msgid ""
 #~ "Cannot write file %s.\n"
@@ -4796,8 +4793,8 @@ msgstr "Valor"
 #~ "preferences."
 #~ msgstr ""
 #~ "No se pudo escribir el fichero %s.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
 
 #~ msgid "Make sides flat"
 #~ msgstr "Aplanar lados"
