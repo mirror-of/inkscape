@@ -185,9 +185,7 @@ sp_use_release (SPObject *object)
 static void
 sp_use_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPUse *use;
-
-	use = SP_USE (object);
+	SPUse *use = SP_USE(object);
 
 	switch (key) {
 	case SP_ATTR_X:
@@ -529,15 +527,10 @@ sp_use_delete_self(SPObject *deleted, SPUse *self)
 static void
 sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
-	SPItem *item;
-	SPUse *use;
-	SPItemCtx *ictx, cctx;
-	SPItemView *v;
-
-	item = SP_ITEM (object);
-	use = SP_USE (object);
-	ictx = (SPItemCtx *) ctx;
-	cctx = *ictx;
+	SPItem *item = SP_ITEM(object);
+	SPUse *use = SP_USE(object);
+	SPItemCtx *ictx = (SPItemCtx *) ctx;
+	SPItemCtx cctx = *ictx;
 
 	if (((SPObjectClass *) (parent_class))->update)
 		((SPObjectClass *) (parent_class))->update (object, ctx, flags);
@@ -582,7 +575,7 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	}
 
 	/* As last step set additional transform of arena group */
-	for (v = item->display; v != NULL; v = v->next) {
+	for (SPItemView *v = item->display; v != NULL; v = v->next) {
 		NRMatrix t;
 		nr_matrix_set_translate (&t, use->x.computed, use->y.computed);
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &t);
