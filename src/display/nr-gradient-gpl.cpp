@@ -130,8 +130,7 @@ nr_lgradient_render_R8G8B8A8N_EMPTY (NRLGradientRenderer *lgr, unsigned char *px
 		pos = (y + y0 - lgr->y0) * lgr->dy + (0 + x0 - lgr->x0) * lgr->dx;
 		if (lgr->spread == NR_GRADIENT_SPREAD_PAD) {
 			for (x = 0; x < width; x++) {
-				idx = (int) pos;
-				idx = CLAMP (idx, 0, NRG_MASK);
+				idx = (int) CLAMP (pos, 0, (double) NRG_MASK);
 				s = lgr->vector + 4 * idx;
 				d[0] = s[0];
 				d[1] = s[1];
@@ -142,8 +141,7 @@ nr_lgradient_render_R8G8B8A8N_EMPTY (NRLGradientRenderer *lgr, unsigned char *px
 			}
 		} else if (lgr->spread == NR_GRADIENT_SPREAD_REFLECT) {
 			for (x = 0; x < width; x++) {
-				idx = (int) pos;
-				idx = idx & NRG_2MASK;
+				idx = (int) ((long long) pos & NRG_2MASK);
 				if (idx > NRG_MASK) idx = NRG_2MASK - idx;
 				s = lgr->vector + 4 * idx;
 				d[0] = s[0];
@@ -155,8 +153,7 @@ nr_lgradient_render_R8G8B8A8N_EMPTY (NRLGradientRenderer *lgr, unsigned char *px
 			}
 		} else {
 			for (x = 0; x < width; x++) {
-				idx = (int) pos;
-				idx = idx & NRG_MASK;
+				idx = (int) ((long long) pos & NRG_MASK);
 				s = lgr->vector + 4 * idx;
 				d[0] = s[0];
 				d[1] = s[1];
@@ -180,20 +177,19 @@ nr_lgradient_render_R8G8B8A8N (NRLGradientRenderer *lgr, unsigned char *px, int 
 		d = px + y * rs;
 		pos = (y + y0 - lgr->y0) * lgr->dy + (0 + x0 - lgr->x0) * lgr->dx;
 		for (x = 0; x < width; x++) {
-			int ip, idx;
+			int idx;
 			unsigned int ca;
 			const unsigned char *s;
-			ip = (int) pos;
 			switch (lgr->spread) {
 			case NR_GRADIENT_SPREAD_PAD:
-				idx = CLAMP (ip, 0, NRG_MASK);
+				idx = (int) CLAMP (pos, 0, (double) NRG_MASK);
 				break;
 			case NR_GRADIENT_SPREAD_REFLECT:
-				idx = ip & NRG_2MASK;
+				idx = (int) ((long long) pos & NRG_2MASK);
 				if (idx > NRG_MASK) idx = NRG_2MASK - idx;
 				break;
 			case NR_GRADIENT_SPREAD_REPEAT:
-				idx = ip & NRG_MASK;
+				idx = (int) ((long long) pos & NRG_MASK);
 				break;
 			default:
 				idx = 0;
@@ -230,19 +226,18 @@ nr_lgradient_render_R8G8B8 (NRLGradientRenderer *lgr, unsigned char *px, int x0,
 		d = px + y * rs;
 		pos = (y + y0 - lgr->y0) * lgr->dy + (0 + x0 - lgr->x0) * lgr->dx;
 		for (x = 0; x < width; x++) {
-			int ip, idx;
+			int idx;
 			const unsigned char *s;
-			ip = (int) pos;
 			switch (lgr->spread) {
 			case NR_GRADIENT_SPREAD_PAD:
-				idx = CLAMP (ip, 0, NRG_MASK);
+				idx = (int) CLAMP (pos, 0, (double) NRG_MASK);
 				break;
 			case NR_GRADIENT_SPREAD_REFLECT:
-				idx = ip & NRG_2MASK;
+				idx = (int) ((long long) pos & NRG_2MASK);
 				if (idx > NRG_MASK) idx = NRG_2MASK - idx;
 				break;
 			case NR_GRADIENT_SPREAD_REPEAT:
-				idx = ip & NRG_MASK;
+				idx = (int) ((long long) pos & NRG_MASK);
 				break;
 			default:
 				idx = 0;
@@ -285,19 +280,18 @@ nr_lgradient_render_generic (NRLGradientRenderer *lgr, NRPixBlock *pb)
 		d = NR_PIXBLOCK_PX (pb) + y * rs;
 		pos = (y + y0 - lgr->y0) * lgr->dy + (0 + x0 - lgr->x0) * lgr->dx;
 		for (x = 0; x < width; x++) {
-			int ip, idx;
+			int idx;
 			const unsigned char *s;
-			ip = (int) pos;
 			switch (lgr->spread) {
 			case NR_GRADIENT_SPREAD_PAD:
-				idx = CLAMP (ip, 0, NRG_MASK);
+				idx = (int) CLAMP (pos, 0, (double) NRG_MASK);
 				break;
 			case NR_GRADIENT_SPREAD_REFLECT:
-				idx = ip & NRG_2MASK;
+				idx = (int) ((long long) pos & NRG_2MASK);
 				if (idx > NRG_MASK) idx = NRG_2MASK - idx;
 				break;
 			case NR_GRADIENT_SPREAD_REPEAT:
-				idx = ip & NRG_MASK;
+				idx = (int) ((long long) pos & NRG_MASK);
 				break;
 			default:
 				idx = 0;
