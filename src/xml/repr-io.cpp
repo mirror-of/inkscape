@@ -18,6 +18,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <strings.h>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -29,23 +30,170 @@
 #include "xml/sp-repr-attr.h"
 
 #include "io/sys.h"
+#include "io/inkscapestream.h"
+#include "io/uristream.h"
+#include "io/gzipstream.h"
 
 #include <map>
 #include <glibmm/ustring.h>
 #include <glibmm/quark.h>
 #include "util/shared-c-string-ptr.h"
 
+using Inkscape::IO::Writer;
+
 static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
 static SPRepr *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
 static gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
-static void sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns);
-static void sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix);
-static void sp_repr_write_stream_element (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix, SPReprAttr const *attributes);
+static void sp_repr_write_stream_root_element (SPRepr *repr, Writer &out, gboolean add_whitespace, gchar const *default_ns);
+static void sp_repr_write_stream (SPRepr *repr, Writer &out, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix);
+static void sp_repr_write_stream_element (SPRepr *repr, Writer &out, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix, SPReprAttr const *attributes);
 
 #ifdef HAVE_LIBWMF
 static xmlDocPtr sp_wmf_convert (const char * file_name);
 static char * sp_wmf_image_name (void * context);
 #endif /* HAVE_LIBWMF */
+
+
+class XmlSource
+{
+public:
+    XmlSource()
+        : filename(0),
+          fp(0),
+          first(false),
+          dummy("x"),
+          instr(0),
+          gzin(0)
+    {
+    }
+    virtual ~XmlSource()
+    {
+        close();
+    }
+
+    void setFile( char const * filename );
+
+    static int readCb( void * context, char * buffer, int len);
+    static int closeCb(void * context);
+
+
+    int read( char * buffer, int len );
+    int close();
+private:
+    const char* filename;
+    FILE* fp;
+    bool first;
+    Inkscape::URI dummy;
+    Inkscape::IO::UriInputStream* instr;
+    Inkscape::IO::GzipInputStream* gzin;
+};
+
+void XmlSource::setFile( char const * filename ) {
+    this->filename = filename;
+    fp = Inkscape::IO::fopen_utf8name(filename, "r");
+    first = true;
+}
+
+
+int XmlSource::readCb( void * context, char * buffer, int len )
+{
+    int retVal = -1;
+    if ( context ) {
+        XmlSource* self = static_cast<XmlSource*>(context);
+        retVal = self->read( buffer, len );
+    }
+    return retVal;
+}
+
+int XmlSource::closeCb(void * context)
+{
+    if ( context ) {
+        XmlSource* self = static_cast<XmlSource*>(context);
+        self->close();
+    }
+    return 0;
+}
+
+int XmlSource::read( char *buffer, int len )
+{
+    int retVal = 0;
+    size_t got = 0;
+
+    if ( first ) {
+        first = false;
+        char tmp[] = {0,0};
+        size_t some = fread( tmp, 1, 2, fp );
+
+        if ( (some >= 2) && (tmp[0] == 0x1f) && ((unsigned char)(tmp[1]) == 0x8b) ) {
+            //g_message(" the file being read is gzip'd. extract it");
+            fclose(fp);
+            fp = 0;
+            fp = Inkscape::IO::fopen_utf8name(filename, "r");
+            instr = new Inkscape::IO::UriInputStream(fp, dummy);
+            gzin = new Inkscape::IO::GzipInputStream(*instr);
+            int single = 0;
+            while ( (int)got < len && single >= 0 )
+            {
+                single = gzin->get();
+                if ( single >= 0 ) {
+                    buffer[got++] = 0x0ff & single;
+                } else {
+                    break;
+                }
+            }
+            //g_message(" extracted %d bytes this pass", got );
+        } else {
+            memcpy( buffer, tmp, some );
+            got = some;
+        }
+    } else if ( gzin ) {
+        int single = 0;
+        while ( (int)got < len && single >= 0 )
+        {
+            single = gzin->get();
+            if ( single >= 0 ) {
+                buffer[got++] = 0x0ff & single;
+            } else {
+                break;
+            }
+        }
+        //g_message(" extracted %d bytes this pass  b", got );
+    } else {
+        got = fread( buffer, 1, len, fp );
+    }
+
+    if ( feof(fp) ) {
+        retVal = got;
+    }
+    else if ( ferror(fp) ) {
+        retVal = -1;
+    }
+    else {
+        retVal = got;
+    }
+
+    return retVal;
+}
+
+int XmlSource::close()
+{
+    if ( gzin ) {
+        gzin->close();
+        delete gzin;
+        gzin = 0;
+    }
+    if ( instr ) {
+        instr->close();
+        fp = 0;
+        delete instr;
+        instr = 0;
+    }
+    if ( fp ) {
+        fclose(fp);
+        fp = 0;
+    }
+    return 0;
+}
 
 /**
  * Reads XML from a file, including WMF files, and returns the SPReprDoc.
@@ -54,8 +202,8 @@ static char * sp_wmf_image_name (void * context);
 SPReprDoc *
 sp_repr_read_file (const gchar * filename, const gchar *default_ns)
 {
-    xmlDocPtr doc;
-    SPReprDoc * rdoc;
+    xmlDocPtr doc = 0;
+    SPReprDoc * rdoc = 0;
 
     xmlSubstituteEntitiesDefault(1);
 
@@ -69,6 +217,19 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
     gchar* localFilename = g_filename_from_utf8 ( filename,
                                  -1,  &bytesRead,  &bytesWritten, &error);
 
+    Inkscape::IO::dump_fopen_call( filename, "N" );
+
+    XmlSource src;
+    src.setFile(filename);
+
+    xmlDocPtr doubleDoc = xmlReadIO( XmlSource::readCb,
+                                     XmlSource::closeCb,
+                                     &src,
+                                     localFilename,
+                                     NULL, //"UTF-8",
+                                     0 );
+
+
 #ifdef HAVE_LIBWMF
     if (strlen (localFilename) > 4) {
         if ( (strcmp (localFilename + strlen (localFilename) - 4,".wmf") == 0)
@@ -81,15 +242,21 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
         doc = xmlParseFile (localFilename);
     }
 #else /* !HAVE_LIBWMF */
-    doc = xmlParseFile (localFilename);
+    //doc = xmlParseFile (localFilename);
 #endif /* !HAVE_LIBWMF */
 
-    rdoc = sp_repr_do_read (doc, default_ns);
+    //rdoc = sp_repr_do_read (doc, default_ns);
+    rdoc = sp_repr_do_read (doubleDoc, default_ns);
     if (doc)
         xmlFreeDoc (doc);
 
     if ( localFilename != NULL )
         g_free (localFilename);
+
+    if ( doubleDoc != NULL )
+    {
+        xmlFreeDoc( doubleDoc );
+    }
 
     return rdoc;
 }
@@ -302,30 +469,45 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
 }
 
 void
-sp_repr_save_stream (SPReprDoc *doc, FILE *fp, gchar const *default_ns)
+sp_repr_save_stream (SPReprDoc *doc, FILE *fp, gchar const *default_ns, bool compress)
 {
     SPRepr *repr;
     const gchar *str;
 
+    Inkscape::URI dummy("x");
+    Inkscape::IO::UriOutputStream bout(fp, dummy);
+    Inkscape::IO::GzipOutputStream *gout = compress ? new Inkscape::IO::GzipOutputStream(bout) : NULL;
+    Inkscape::IO::OutputStreamWriter *out  = compress ? new Inkscape::IO::OutputStreamWriter( *gout ) : new Inkscape::IO::OutputStreamWriter( bout );
+
     /* fixme: do this The Right Way */
 
-    fputs ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n", fp);
+    out->writeString( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" );
 
     str = sp_repr_attr ((SPRepr *) doc, "doctype");
-    if (str) fputs (str, fp);
+    if (str) {
+        out->writeString( str );
+    }
 
     repr = sp_repr_document_first_child(doc);
     for ( repr = sp_repr_document_first_child(doc) ;
           repr ; repr = sp_repr_next(repr) )
     {
         if ( repr->type() == SP_XML_ELEMENT_NODE ) {
-            sp_repr_write_stream_root_element(repr, fp, TRUE, default_ns);
+            sp_repr_write_stream_root_element(repr, *out, TRUE, default_ns);
         } else if ( repr->type() == SP_XML_COMMENT_NODE ) {
-            sp_repr_write_stream(repr, fp, 0, TRUE, GQuark(0));
-            fputc('\n', fp);
+            sp_repr_write_stream(repr, *out, 0, TRUE, GQuark(0));
+            out->writeChar( '\n' );
         } else {
-            sp_repr_write_stream(repr, fp, 0, TRUE, GQuark(0));
+            sp_repr_write_stream(repr, *out, 0, TRUE, GQuark(0));
         }
+    }
+    if ( out ) {
+        delete out;
+        out = NULL;
+    }
+    if ( gout ) {
+        delete gout;
+        gout = NULL;
     }
 }
 
@@ -338,13 +520,27 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename,
     if (filename == NULL) {
         return FALSE;
     }
+    bool compress = false;
+    {
+        if (strlen (filename) > 5) {
+            gchar tmp[] = {0,0,0,0,0,0};
+            strncpy( tmp, filename + strlen (filename) - 5, 6 );
+            tmp[5] = 0;
+            if ( strcasecmp(".svgz", tmp ) == 0 )
+            {
+                //g_message("TIME TO COMPRESS THE OUTPUT FOR SVGZ");
+                compress = true;
+            }
+        }
+    }
+
     Inkscape::IO::dump_fopen_call( filename, "B" );
     FILE *file = Inkscape::IO::fopen_utf8name(filename, "w");
     if (file == NULL) {
         return FALSE;
     }
 
-    sp_repr_save_stream (doc, file, default_ns);
+    sp_repr_save_stream (doc, file, default_ns, compress);
 
     if (fclose (file) != 0) {
         return FALSE;
@@ -356,24 +552,27 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename,
 void
 sp_repr_print (SPRepr * repr)
 {
-    sp_repr_write_stream (repr, stdout, 0, TRUE, GQuark(0));
+    Inkscape::IO::StdOutputStream bout;
+    Inkscape::IO::OutputStreamWriter out(bout);
+
+    sp_repr_write_stream (repr, out, 0, TRUE, GQuark(0));
 
     return;
 }
 
 /* (No doubt this function already exists elsewhere.) */
 static void
-repr_quote_write (FILE * file, const gchar * val)
+repr_quote_write (Writer &out, const gchar * val)
 {
     if (!val) return;
 
     for (; *val != '\0'; val++) {
         switch (*val) {
-        case '"': fputs ("&quot;", file); break;
-        case '&': fputs ("&amp;", file); break;
-        case '<': fputs ("&lt;", file); break;
-        case '>': fputs ("&gt;", file); break;
-        default: putc (*val, file); break;
+        case '"': out.writeString( "&quot;" ); break;
+        case '&': out.writeString( "&amp;" ); break;
+        case '<': out.writeString( "&lt;" ); break;
+        case '>': out.writeString( "&gt;" ); break;
+        default: out.writeChar( *val ); break;
         }
     }
 }
@@ -441,7 +640,7 @@ void populate_ns_map(NSMap &ns_map, SPRepr &repr) {
 }
 
 void
-sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns)
+sp_repr_write_stream_root_element (SPRepr *repr, Writer &out, gboolean add_whitespace, gchar const *default_ns)
 {
     using Inkscape::Util::SharedCStringPtr;
     g_assert(repr != NULL);
@@ -476,26 +675,26 @@ sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whites
         }
     }
 
-    return sp_repr_write_stream_element(repr, file, 0, add_whitespace, elide_prefix, attributes);
+    return sp_repr_write_stream_element(repr, out, 0, add_whitespace, elide_prefix, attributes);
 }
 
 void
-sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level,
+sp_repr_write_stream (SPRepr *repr, Writer &out, gint indent_level,
                       gboolean add_whitespace, Glib::QueryQuark elide_prefix)
 {
     if (repr->type() == SP_XML_TEXT_NODE) {
-        repr_quote_write (file, sp_repr_content (repr));
+        repr_quote_write (out, sp_repr_content (repr));
     } else if (repr->type() == SP_XML_COMMENT_NODE) {
-        fprintf (file, "<!--%s-->", sp_repr_content (repr));
+        out.printf( "<!--%s-->", sp_repr_content (repr) );
     } else if (repr->type() == SP_XML_ELEMENT_NODE) {
-        sp_repr_write_stream_element(repr, file, indent_level, add_whitespace, elide_prefix, repr->attributeList());
+        sp_repr_write_stream_element(repr, out, indent_level, add_whitespace, elide_prefix, repr->attributeList());
     } else {
         g_assert_not_reached();
     }
 }
 
 void
-sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
+sp_repr_write_stream_element (SPRepr * repr, Writer & out, gint indent_level,
                               gboolean add_whitespace,
                               Glib::QueryQuark elide_prefix,
                               SPReprAttr const *attributes)
@@ -505,14 +704,13 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
     gint i;
 
     g_return_if_fail (repr != NULL);
-    g_return_if_fail (file != NULL);
 
     if ( indent_level > 16 )
         indent_level = 16;
 
     if (add_whitespace) {
         for ( i = 0 ; i < indent_level ; i++ ) {
-            fputs ("  ", file);
+            out.writeString( "  " );
         }
     }
 
@@ -523,7 +721,7 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
     } else {
         element_name = g_quark_to_string(code);
     }
-    fprintf (file, "<%s", element_name);
+    out.printf( "<%s", element_name );
 
     // TODO: this should depend on xml:space, not the element name
 
@@ -537,13 +735,13 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
     for ( SPReprAttr const *attr = attributes ; attr != NULL ; attr = attr->next ) {
         gchar const * const key = SP_REPR_ATTRIBUTE_KEY(attr);
         gchar const * const val = SP_REPR_ATTRIBUTE_VALUE(attr);
-        fputs ("\n", file);
+        out.writeString( "\n" );
         for ( i = 0 ; i < indent_level + 1 ; i++ ) {
-            fputs ("  ", file);
+            out.writeString( "  " );
         }
-        fprintf (file, " %s=\"", key);
-        repr_quote_write (file, val);
-        putc ('"', file);
+        out.printf( " %s=\"", key );
+        repr_quote_write (out, val);
+        out.writeChar( '"' );
     }
 
     loose = TRUE;
@@ -554,29 +752,29 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
         }
     }
     if (repr->firstChild()) {
-        fputs (">", file);
+        out.writeString( ">" );
         if (loose && add_whitespace) {
-            fputs ("\n", file);
+            out.writeString( "\n" );
         }
         for (child = repr->firstChild(); child != NULL; child = child->next()) {
-            sp_repr_write_stream (child, file, (loose) ? (indent_level + 1) : 0, add_whitespace, elide_prefix);
+            sp_repr_write_stream (child, out, (loose) ? (indent_level + 1) : 0, add_whitespace, elide_prefix);
         }
 
         if (loose && add_whitespace) {
             for (i = 0; i < indent_level; i++) {
-                fputs ("  ", file);
+                out.writeString( "  " );
             }
         }
-        fprintf (file, "</%s>", element_name);
+        out.printf( "</%s>", element_name );
     } else {
-        fputs (" />", file);
+        out.writeString( " />" );
     }
 
     // text elements cannot nest, so we can output newline
     // after closing text
 
     if (add_whitespace || !strcmp (sp_repr_name (repr), "svg:text")) {
-        fputs("\n", file);
+        out.writeString( "\n" );
     }
 }
 

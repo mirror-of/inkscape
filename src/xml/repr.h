@@ -229,7 +229,7 @@ inline unsigned int sp_repr_remove_child(SPRepr *repr, SPRepr *child) {
 
 SPReprDoc *sp_repr_read_file(gchar const *filename, gchar const *default_ns);
 SPReprDoc *sp_repr_read_mem(gchar const *buffer, int length, gchar const *default_ns);
-void sp_repr_save_stream(SPReprDoc *doc, FILE *to_file, gchar const *default_ns=NULL);
+void sp_repr_save_stream(SPReprDoc *doc, FILE *to_file, gchar const *default_ns=NULL, bool compress = false);
 gboolean sp_repr_save_file(SPReprDoc *doc, gchar const *filename, gchar const *default_ns=NULL);
 
 void sp_repr_print(SPRepr *repr);
