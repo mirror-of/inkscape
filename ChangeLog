@@ -1,3 +1,8 @@
+2004-03-07  MenTaLguY  <mental@rydia.net>
+
+    * src/sp-item.cpp: the item's arenaitems shouldn't be destroyed until
+	  its children have had a chance to clean up
+
 2004-03-06  MenTaLguY  <mental@rydia.net>
 
     * src/ast/*: initial work on AST code

@@ -152,13 +152,14 @@ sp_item_release (SPObject * object)
 		item->mask_ref = NULL;
 	}
 
+	if (((SPObjectClass *) (parent_class))->release)
+		((SPObjectClass *) parent_class)->release (object);
+
 	while (item->display) {
 		nr_arena_item_unparent (item->display->arenaitem);
 		item->display = sp_item_view_list_remove (item->display, item->display);
 	}
 
-	if (((SPObjectClass *) (parent_class))->release)
-		((SPObjectClass *) parent_class)->release (object);
 }
 
 static void
