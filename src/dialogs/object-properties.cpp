@@ -13,7 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-
 #include <config.h>
 
 #include <glib.h>
@@ -40,7 +39,6 @@
 #include "desktop-style.h"
 #include "document.h"
 
-
 static GtkWidget *dlg = NULL;
 static win_data wd;
 
@@ -48,11 +46,9 @@ static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0;
 static gchar *prefs_path = "dialogs.fillstroke";
 
-
 static void sp_fillstroke_selection_modified ( Inkscape::Application *inkscape, SPDesktop *desktop, guint flags, GtkObject *base );
 static void sp_fillstroke_selection_changed ( Inkscape::Application *inkscape, SPDesktop *desktop, GtkObject *base );
 static void sp_fillstroke_opacity_changed (GtkAdjustment *a, SPWidget *dlg);
-
 
 static void
 sp_object_properties_dialog_destroy (GtkObject *object, gpointer data)
@@ -60,10 +56,7 @@ sp_object_properties_dialog_destroy (GtkObject *object, gpointer data)
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;
-
 }
-
-
 
 static gboolean
 sp_object_properties_dialog_delete ( GtkObject *object,
@@ -91,7 +84,6 @@ sp_object_properties_page( GtkWidget *nb,
                            char *dlg_name,
                            char *label_image )
 {
-
     GtkWidget *hb, *l, *px;
 
     hb = gtk_hbox_new (FALSE, 0);
@@ -101,7 +93,7 @@ sp_object_properties_page( GtkWidget *nb,
     gtk_widget_show (px);
     gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
 
-    l = gtk_label_new (_(label));
+    l = gtk_label_new_with_mnemonic (label);
     gtk_widget_show (l);
     gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
 
@@ -110,9 +102,7 @@ sp_object_properties_page( GtkWidget *nb,
     gtk_object_set_data (GTK_OBJECT (dlg), dlg_name, page);
 
     return 0;
-
 }
-
 
 void
 sp_object_properties_dialog (void)
@@ -162,21 +152,21 @@ sp_object_properties_dialog (void)
         /* Fill page */
         {
         GtkWidget *page = sp_fill_style_widget_new ();
-        sp_object_properties_page(nb, page, _("Fill"), "fill",
+        sp_object_properties_page(nb, page, _("_Fill"), "fill",
                     INKSCAPE_STOCK_PROPERTIES_FILL_PAGE);
         }
 
         /* Stroke paint page */
         {
         GtkWidget *page = sp_stroke_style_paint_widget_new ();
-        sp_object_properties_page(nb, page, _("Stroke paint"), "stroke-paint",
+        sp_object_properties_page(nb, page, _("_Stroke paint"), "stroke-paint",
                     INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE);
         }
 
         /* Stroke line page */
         {
         GtkWidget *page = sp_stroke_style_line_widget_new ();
-        sp_object_properties_page(nb, page, _("Stroke style"), "stroke-line",
+        sp_object_properties_page(nb, page, _("Stroke st_yle"), "stroke-line",
                     INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE);
         }
 
@@ -228,7 +218,6 @@ sp_object_properties_dialog (void)
 } // end of sp_object_properties_dialog()
 
 
-
 void sp_object_properties_stroke (void)
 {
     GtkWidget *nb;
@@ -240,8 +229,6 @@ void sp_object_properties_stroke (void)
     gtk_notebook_set_page (GTK_NOTEBOOK (nb), 1);
 }
 
-
-
 void sp_object_properties_fill (void)
 {
     GtkWidget *nb;
@@ -251,7 +238,6 @@ void sp_object_properties_fill (void)
     nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
 
     gtk_notebook_set_page (GTK_NOTEBOOK (nb), 0);
-
 }
 
 
