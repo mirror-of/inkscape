@@ -459,6 +459,13 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
 
     if (!rc.item) {
+        SPItem *layer=SP_ITEM(desktop->currentLayer());
+
+        if ( !layer || !layer->isVisibleAndUnlocked() ) {
+            rc._message_context->set(Inkscape::ERROR_MESSAGE, _("Layer is not editable."));
+            return;
+        }
+
         /* Create object */
         SPRepr *repr = sp_repr_new("rect");
 
