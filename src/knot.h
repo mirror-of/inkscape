@@ -93,7 +93,7 @@ void sp_knot_hide (SPKnot *knot);
 void sp_knot_request_position (SPKnot * knot, NR::Point *pos, guint state);
 gdouble sp_knot_distance (SPKnot * knot, NR::Point *p, guint state);
 
-void sp_knot_start_dragging (SPKnot *knot, NR::Point p, guint32 etime);
+void sp_knot_start_dragging (SPKnot *knot, NR::Point p, gint x, gint y, guint32 etime);
 
 /** Moves knot and emits "moved" signal */
 void sp_knot_set_position (SPKnot *knot, NR::Point *p, guint state);

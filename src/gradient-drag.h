@@ -108,7 +108,7 @@ struct GrDrag {
 
 	GrDragger *getDraggerFor (SPItem *item, guint point_num, bool fill_or_stroke);
 
-	void grabKnot (SPItem *item, guint point_num, bool fill_or_stroke, guint32 etime);
+	void grabKnot (SPItem *item, guint point_num, bool fill_or_stroke, gint x, gint y, guint32 etime);
 
 	bool local_change;
 

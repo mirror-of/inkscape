@@ -705,11 +705,11 @@ GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stro
 Artificially grab the knot of the dragger with this draggable; used by the gradient context
 */
 void
-GrDrag::grabKnot (SPItem *item, guint point_num, bool fill_or_stroke, guint32 etime)
+GrDrag::grabKnot (SPItem *item, guint point_num, bool fill_or_stroke, gint x, gint y, guint32 etime)
 {
     GrDragger *dragger = getDraggerFor (item, point_num, fill_or_stroke);
     if (dragger) {
-        sp_knot_start_dragging (dragger->knot, dragger->point, etime);
+        sp_knot_start_dragging (dragger->knot, dragger->point, x, y, etime);
     }
 }
 

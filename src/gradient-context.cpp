@@ -55,8 +55,7 @@ static void sp_gradient_context_setup(SPEventContext *ec);
 static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 static gint sp_gradient_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
-static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint state);
-static void sp_gradient_finish(SPGradientContext *rc);
+static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint state, guint32 etime);
 
 static SPEventContextClass *parent_class;
 
@@ -107,12 +106,7 @@ static void sp_gradient_context_init(SPGradientContext *rect_context)
     event_context->within_tolerance = false;
     event_context->item_to_select = NULL;
 
-    rect_context->item = NULL;
-    rect_context->repr = NULL;
     rect_context->knot_holder = NULL;
-
-    rect_context->rx = 0.0;
-    rect_context->ry = 0.0;
 
     new (&rect_context->sel_changed_connection) sigc::connection();
 }
@@ -126,11 +120,6 @@ static void sp_gradient_context_dispose(GObject *object)
 
     rc->sel_changed_connection.disconnect();
     rc->sel_changed_connection.~connection();
-
-    /* fixme: This is necessary because we do not grab */
-    if (rc->item) {
-        sp_gradient_finish(rc);
-    }
 
     if (rc->knot_holder) {
         sp_knot_holder_destroy(rc->knot_holder);
@@ -243,8 +232,6 @@ static void sp_gradient_context_setup(SPEventContext *ec)
 
     ec->enableGrDrag();
 
-    rc->vector_created = false;
-
     rc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
 }
 
@@ -287,9 +274,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
     static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
-    SPSelection *selection = SP_DT_SELECTION(desktop);
-    SPDocument *document = SP_DT_DOCUMENT(desktop);
-
+ 
     SPGradientContext *rc = SP_GRADIENT_CONTEXT(event_context);
 
     event_context->tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
@@ -315,17 +300,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             /* Snap center to nearest magnetic point */
 
             rc->origin = button_dt;
-/*
-            rc->center = button_dt;
-            namedview_free_snap_all_types(event_context->desktop->namedview, rc->center);
-            sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                ( GDK_KEY_PRESS_MASK | 
-                                  GDK_BUTTON_RELEASE_MASK       |
-                                  GDK_POINTER_MOTION_MASK       |
-                                  GDK_POINTER_MOTION_HINT_MASK  |
-                                  GDK_BUTTON_PRESS_MASK ),
-                                NULL, event->button.time);
-*/
+
             ret = TRUE;
         }
         break;
@@ -346,24 +321,8 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             NR::Point const motion_w(event->motion.x,
                                      event->motion.y);
             NR::Point const motion_dt(sp_desktop_w2d_xy_point(event_context->desktop, motion_w));
-            //sp_gradient_drag(*rc, motion_dt, event->motion.state);
-
-            if (rc->vector_created == false) {
-            NR::Point const button_w(event->button.x,
-                                     event->button.y);
-            NR::Point const button_dt(sp_desktop_w2d_xy_point(event_context->desktop, button_w));
-                SPGradient *vector = sp_gradient_vector_for_object(document, desktop, event_context->item_to_select, true);
-                for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
-                    sp_item_set_gradient(SP_ITEM(i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
-                    sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc->origin, true, true);
-                    sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, button_dt, true, true);
-                }
-                if (event_context->_grdrag) {
-                    event_context->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data), POINT_LG_P2, true, event->button.time);
-                }
-                rc->vector_created = true;
-                sp_document_done (document);
-            }
+            
+            sp_gradient_drag(*rc, motion_dt, event->motion.state, event->motion.time);
 
             ret = TRUE;
         }
@@ -372,7 +331,6 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
         event_context->xp = event_context->yp = 0;
         if ( event->button.button == 1 ) {
             dragging = false;
-            rc->vector_created = false;
 
             if (!event_context->within_tolerance) {
                 // we've been dragging, finish
@@ -387,8 +345,6 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
 
             event_context->item_to_select = NULL;
             ret = TRUE;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                                  event->button.time);
         }
         break;
     case GDK_KEY_PRESS:
@@ -462,134 +418,42 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
     return ret;
 }
 
-static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint state)
+static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint state, guint32 etime)
 {
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+    SPDocument *document = SP_DT_DOCUMENT(desktop);
+    SPEventContext *ec = SP_EVENT_CONTEXT(&rc);
 
-    if (!rc.item) {
-
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer)) {
-            rc._message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
-            return;
-        }
-        if ( !layer || layer->isLocked()) {
-            rc._message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
-            return;
-        }
-
-        /* Create object */
-        Inkscape::XML::Node *repr = sp_repr_new("svg:rect");
-
-        /* Set style */
-        sp_desktop_apply_style_tool (desktop, repr, "tools.shapes.rect", false);
-
-        rc.item = (SPItem *) desktop->currentLayer()->appendChildRepr(repr);
-        sp_repr_unref(repr);
-        rc.item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());
-        rc.item->updateRepr();
-    }
-
-    NR::Point p0, p1;
-    if ( state & GDK_CONTROL_MASK ) {
-        NR::Point delta = pt - rc.center;
-        /* fixme: Snapping */
-        if ( ( fabs(delta[0]) > fabs(delta[1]) )
-             && ( delta[1] != 0.0) )
-        {
-            delta[0] = floor( delta[0] / delta[1] + 0.5 ) * delta[1];
-        } else if ( delta[0] != 0.0 ) {
-            delta[1] = floor( delta[1] / delta[0] + 0.5 ) * delta[0];
-        }
-        p1 = rc.center + delta;
-        if ( state & GDK_SHIFT_MASK ) {
-            p0 = rc.center - delta;
-            NR::Coord const l0 = namedview_vector_snap_all_types(desktop->namedview, p0, p0 - p1);
-            NR::Coord const l1 = namedview_vector_snap_all_types(desktop->namedview, p1, p1 - p0);
-
-            if (l0 < l1) {
-                p1 = 2 * rc.center - p0;
-            } else {
-                p0 = 2 * rc.center - p1;
+            if (!selection->isEmpty()) {
+                SPGradient *vector;
+                if (ec->item_to_select) {
+                    vector = sp_gradient_vector_for_object(document, desktop, ec->item_to_select, true);
+                } else {
+                    vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(selection->itemList()->data), true);
+                }
+                for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
+                    sp_item_set_gradient(SP_ITEM(i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
+                    sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, true, true);
+                    sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, true, true);
+                    SP_OBJECT (i->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+                }
+                if (ec->_grdrag) {
+                    ec->_grdrag->updateDraggers();
+                    // prevent regenerating draggers by selection modified signal, which sometimes
+                    // comes too late and thus destroys the knot which we will now grab:
+                    ec->_grdrag->local_change = true;
+                    // give the grab out-of-bounds values of xp/yp because we're already dragging
+                    // and therefore are already out of tolerance
+                    ec->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data), POINT_LG_P2, true, 99999, 99999, etime);
+                }
+                sp_document_done (document);
             }
-        } else {
-            p0 = rc.center;
-            namedview_vector_snap_all_types(desktop->namedview, p1, p1 - p0);
-        }
-    } else if ( state & GDK_SHIFT_MASK ) {
-        /* Corner point movements are bound */
-        p1 = pt;
-        p0 = 2 * rc.center - p1;
-        for (unsigned d = 0 ; d < 2 ; ++d) {
-            double snap_movement[2];
-            snap_movement[0] = namedview_dim_snap_all_types(desktop->namedview, p0, NR::Dim2(d));
-            snap_movement[1] = namedview_dim_snap_all_types(desktop->namedview, p1, NR::Dim2(d));
-            if ( snap_movement[0] <
-                 snap_movement[1] )
-            {
-                /* Use point 0 position. */
-                p1[d] = 2 * rc.center[d] - p0[d];
-            } else {
-                p0[d] = 2 * rc.center[d] - p1[d];
-            }
-        }
-    } else {
-        /* Free movement for corner point */
-        p0 = rc.center;
-        p1 = pt;
-        namedview_free_snap_all_types(desktop->namedview, p1);
-    }
-
-    p0 = sp_desktop_dt2root_xy_point(desktop, p0);
-    p1 = sp_desktop_dt2root_xy_point(desktop, p1);
-
-    // TODO: use NR::Rect
-    using NR::X;
-    using NR::Y;
-    NR::Coord const x0 = MIN(p0[X], p1[X]);
-    NR::Coord const y0 = MIN(p0[Y], p1[Y]);
-    NR::Coord const x1 = MAX(p0[X], p1[X]);
-    NR::Coord const y1 = MAX(p0[Y], p1[Y]);
-//    NR::Coord const w  = x1 - x0;
-//    NR::Coord const h  = y1 - y0;
-
-    //sp_gradient_position_set(SP_RECT(rc.item), x0, y0, w, h);
-    if ( rc.rx != 0.0 ) {
-        //sp_gradient_set_rx (SP_RECT(rc.item), TRUE, rc.rx);
-    }
-    if ( rc.ry != 0.0 ) {
-        if (rc.rx == 0.0) {
-            //sp_gradient_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, MIN(w, h)/2));
-        } else {
-            //sp_gradient_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, h));
-        }
-    }
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(fabs( x1 - x0 ), sp_desktop_get_default_metric(desktop));
-    GString *ys = SP_PX_TO_METRIC_STRING(fabs( y1 - y0 ), sp_desktop_get_default_metric(desktop));
-    rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Gradient</b>: %s x %s; with <b>Ctrl</b> to make square or integer-ratio rectangle; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
-    g_string_free(xs, FALSE);
-    g_string_free(ys, FALSE);
+    rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"), g_slist_length((GSList *) selection->itemList()));
 }
 
-static void sp_gradient_finish(SPGradientContext *rc)
-{
-    rc->_message_context->clear();
-
-    if ( rc->item != NULL ) {
-        SPDesktop * dt;
-
-        dt = SP_EVENT_CONTEXT_DESKTOP(rc);
-
-        SP_OBJECT(rc->item)->updateRepr();
-
-        SP_DT_SELECTION(dt)->setItem(rc->item);
-        sp_document_done(SP_DT_DOCUMENT(dt));
-
-        rc->item = NULL;
-    }
-}
 
 /*
   Local Variables:

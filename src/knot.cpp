@@ -459,8 +459,13 @@ static void sp_knot_get_property(GObject *, guint, GValue *, GParamSpec *)
 	g_assert_not_reached ();
 }
 
-void sp_knot_start_dragging (SPKnot *knot, NR::Point p, guint32 etime)
+void sp_knot_start_dragging (SPKnot *knot, NR::Point p, gint x, gint y, guint32 etime)
 {
+	// save drag origin
+	xp = x; 
+	yp = y;
+	within_tolerance = true;
+
 	knot->grabbed_rel_pos = p - knot->pos;
 	knot->drag_origin = knot->pos;
 	if (!nograb) {
@@ -494,14 +499,9 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		if (event->button.button == 1) {
 			NR::Point p;
 
-			// save drag origin
-			xp = (gint) event->button.x; 
-			yp = (gint) event->button.y;
-			within_tolerance = true;
-
 			p = sp_desktop_w2d_xy_point (knot->desktop, NR::Point(event->button.x, event->button.y));
 
-			sp_knot_start_dragging (knot, p, event->button.time);
+			sp_knot_start_dragging (knot, p, (gint) event->button.x, (gint) event->button.y, event->button.time);
 			consumed = TRUE;
 		}
 		break;
@@ -542,6 +542,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 			     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
 				break; // do not drag if we're within tolerance from origin
 			}
+
 			// Once the user has moved farther than tolerance from the original location 
 			// (indicating they intend to move the object, not click), then always process the 
 			// motion notify coordinates as given (no snapping back to origin)
