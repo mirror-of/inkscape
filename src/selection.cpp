@@ -24,6 +24,7 @@
 #include "selection.h"
 #include "tools-switch.h"
 #include "sp-item-group.h"
+#include "inkscape.h"
 #include <algorithm>
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
@@ -70,13 +71,20 @@ SPSelection::_emit_modified(SPSelection *selection)
 	guint flags = selection->_flags;
 	selection->_flags = 0;
 
-	selection->_modified_signal.emit(selection, flags);
-
-	/* Request "selection_modified" signal on Inkscape::Application */
-	inkscape_selection_modified (selection, flags);
+        selection->_emitModified(flags);
 
 	/* drop this handler */
 	return FALSE;
+}
+
+void SPSelection::_emitModified(guint flags) {
+    inkscape_selection_modified(this, flags);
+    _modified_signal.emit(this, flags);
+}
+
+void SPSelection::_emitChanged() {
+    inkscape_selection_changed(this);
+    _changed_signal.emit(this);
 }
 
 void SPSelection::_clear()
@@ -129,7 +137,7 @@ void SPSelection::addItem(SPItem *item) {
 	// (to prevent double-selection)
 	_removeItemChildren(item);
 
-	_changed_signal.emit(this);
+        _emitChanged();
 }
 
 void SPSelection::addRepr(SPRepr *repr) {
@@ -156,7 +164,7 @@ void SPSelection::removeItem(SPItem *item) {
  	sp_signal_disconnect_by_data (item, this);
 	_items = g_slist_remove (_items, item);
 
-	_changed_signal.emit(this);
+        _emitChanged();
 }
 
 void SPSelection::removeRepr(SPRepr *repr) {
@@ -178,7 +186,7 @@ void SPSelection::setItemList(GSList const *list) {
 		}
 	}
 
-	_changed_signal.emit(this);
+        _emitChanged();
 }
 
 void SPSelection::setReprList(GSList const *list) {
@@ -200,7 +208,7 @@ void SPSelection::setReprList(GSList const *list) {
 
 void SPSelection::clear() {
 	_clear();
-	_changed_signal.emit(this);
+        _emitChanged();
 }
 
 GSList const *SPSelection::itemList() {

@@ -235,6 +235,11 @@ private:
 	/** @brief Releases a selected item that is being removed */
 	static void _release_item(SPItem *item, SPSelection *selection);
 
+	/** @breif Issues modified selection signal */
+	void _emitModified(guint flags);
+	/** @breif Issues changed selection signal */
+	void _emitChanged();
+
 	/** @brief unselect all children of the given item */
 	void _removeItemChildren(SPItem *item);
 	/** @brief clears the selection (without issuing a notification) */

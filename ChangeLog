@@ -3,6 +3,8 @@
 	* src/display/nr-arena-glyphs.h: fixed cut-and-paste error in
 	  NRArenaGlyphsGroup::create()
 
+	* src/selection.cpp, src/selection.h: fixed global "changed" propagation
+
 2004-05-02  MenTaLguY <mental@rydia.net>
 
 	* src/file.cpp, src/print.cpp, src/sp-chars.cpp, src/sp-clippath.cpp,
