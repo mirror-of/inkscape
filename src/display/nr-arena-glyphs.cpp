@@ -455,9 +455,7 @@ nr_arena_glyphs_group_finalize (NRObject *object)
 static guint
 nr_arena_glyphs_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, guint reset)
 {
-	NRArenaGlyphsGroup *group;
-
-	group = NR_ARENA_GLYPHS_GROUP (item);
+	NRArenaGlyphsGroup *group = NR_ARENA_GLYPHS_GROUP (item);
 
 	if (group->fill_painter) {
 		sp_painter_free (group->fill_painter);
@@ -474,18 +472,19 @@ nr_arena_glyphs_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint 
 		group->fill_painter = sp_paint_server_painter_new (SP_STYLE_FILL_SERVER (group->style),
 							 NR::Matrix (&gc->transform), NR::Matrix (&gc->parent->transform),
 							 &group->paintbox);
-	item->render_opacity = FALSE;
+		item->render_opacity = FALSE;
 	}
 
 	if (group->style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {
 		group->stroke_painter = sp_paint_server_painter_new (SP_STYLE_STROKE_SERVER (group->style),
 							 NR::Matrix (&gc->transform), NR::Matrix (&gc->parent->transform),
 							 &group->paintbox);
-	item->render_opacity = FALSE;
+		item->render_opacity = FALSE;
 	}
-  if ( item->render_opacity == TRUE && group->style->stroke.type != SP_PAINT_TYPE_NONE && group->style->fill.type != SP_PAINT_TYPE_NONE ) {
-    item->render_opacity=FALSE;
-  }
+
+	if ( item->render_opacity == TRUE && group->style->stroke.type != SP_PAINT_TYPE_NONE && group->style->fill.type != SP_PAINT_TYPE_NONE ) {
+		item->render_opacity=FALSE;
+	}
 
 	if (((NRArenaItemClass *) group_parent_class)->update)
 		return ((NRArenaItemClass *) group_parent_class)->update (item, area, gc, state, reset);
@@ -498,17 +497,13 @@ nr_arena_glyphs_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint 
 static unsigned int
 nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags)
 {
-	NRArenaGroup *group;
-	NRArenaGlyphsGroup *ggroup;
 	NRArenaItem *child;
-	SPStyle *style;
-	guint ret;
 
-	group = NR_ARENA_GROUP (item);
-	ggroup = NR_ARENA_GLYPHS_GROUP (item);
-	style = ggroup->style;
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
+	NRArenaGlyphsGroup *ggroup = NR_ARENA_GLYPHS_GROUP (item);
+	SPStyle const *style = ggroup->style;
 
-	ret = item->state;
+	guint ret = item->state;
 
 	/* Fill */
 	if (style->fill.type != SP_PAINT_TYPE_NONE) {
@@ -526,14 +521,13 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
 		/* Composite into buffer */
 		switch (style->fill.type) {
 		case SP_PAINT_TYPE_COLOR:
-      if ( item->render_opacity ) {
-        rgba = sp_color_get_rgba32_falpha (&style->fill.value.color,
+			if ( item->render_opacity ) {
+				rgba = sp_color_get_rgba32_falpha (&style->fill.value.color,
                                            SP_SCALE24_TO_FLOAT (style->fill_opacity.value) *
                                            SP_SCALE24_TO_FLOAT (style->opacity.value));
-      } else {
-        rgba = sp_color_get_rgba32_falpha (&style->fill.value.color,
-							   SP_SCALE24_TO_FLOAT (style->fill_opacity.value));
-      }
+			} else {
+				rgba = sp_color_get_rgba32_falpha (&style->fill.value.color, SP_SCALE24_TO_FLOAT (style->fill_opacity.value));
+			}
 			nr_blit_pixblock_mask_rgba32 (pb, &m, rgba);
 			pb->empty = FALSE;
 			break;
@@ -564,14 +558,14 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
 		/* Composite into buffer */
 		switch (style->stroke.type) {
 		case SP_PAINT_TYPE_COLOR:
-      if ( item->render_opacity ) {
-        rgba = sp_color_get_rgba32_falpha (&style->stroke.value.color,
+			if ( item->render_opacity ) {
+				rgba = sp_color_get_rgba32_falpha (&style->stroke.value.color,
                                            SP_SCALE24_TO_FLOAT (style->stroke_opacity.value) *
                                            SP_SCALE24_TO_FLOAT (style->opacity.value));
-      } else {
-        rgba = sp_color_get_rgba32_falpha (&style->stroke.value.color,
-							   SP_SCALE24_TO_FLOAT (style->stroke_opacity.value));
-      }
+			} else {
+				rgba = sp_color_get_rgba32_falpha (&style->stroke.value.color,
+							 SP_SCALE24_TO_FLOAT (style->stroke_opacity.value));
+			}
 			nr_blit_pixblock_mask_rgba32 (pb, &m, rgba);
 			pb->empty = FALSE;
 			break;
