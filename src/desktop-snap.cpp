@@ -345,14 +345,14 @@ double sp_desktop_vector_snap (SPDesktop const *desktop, NRPoint *req, double dx
 
 gdouble sp_desktop_horizontal_snap(SPDesktop const *dt, NRPoint* req) {
 	NR::Point p = *req;
-	double d = sp_desktop_vector_snap (dt, p, NR::Point(1.0, 0.0));
+	double d = sp_desktop_dim_snap (dt, p, NR::X);
 	*req = p;
 	return d;
 }
 
 gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NRPoint* req) {
 	NR::Point p = *req;
-	double d = sp_desktop_vector_snap (dt, p, NR::Point(0.0, 1.0));
+	double d = sp_desktop_dim_snap (dt, p, NR::Y);
 	*req = p;
 	return d;
 }
